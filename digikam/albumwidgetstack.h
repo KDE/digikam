@@ -27,9 +27,9 @@
 
 // KDE includes.
 
-#include <q3widgetstack.h>
-#include <q3cstring.h>
-#include <qstring.h>
+#include <QStackedWidget>
+#include <QByteArray>
+#include <QString>
 
 // Local includes
 
@@ -45,7 +45,7 @@ class AlbumIconView;
 class ImagePreviewView;
 class AlbumWidgetStackPriv;
 
-class DIGIKAM_EXPORT AlbumWidgetStack : public Q3WidgetStack
+class DIGIKAM_EXPORT AlbumWidgetStack : public QStackedWidget
 {
 Q_OBJECT
 
@@ -68,7 +68,7 @@ public:
     ImagePreviewView *imagePreviewView();
 
     void setPreviewItem(ImageInfo* info=0, ImageInfo *previous=0, ImageInfo *next=0);
-    int  previewMode(void);
+    int  previewMode();
     void setPreviewMode(int mode);
     void previewLoaded();
     

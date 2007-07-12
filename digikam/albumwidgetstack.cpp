@@ -24,7 +24,7 @@
 
 // Qt includes.
 
-#include <qfileinfo.h>
+#include <QFileInfo>
 
 // KDE includes.
 
@@ -67,7 +67,7 @@ public:
 };
 
 AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
-                : Q3WidgetStack(parent, 0, Qt::WDestructiveClose)
+                : QStackedWidget(parent)
 {
     d = new AlbumWidgetStackPriv;
 
@@ -76,12 +76,13 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
     d->welcomePageView  = new WelcomePageView(this);
     d->mediaPlayerView  = new MediaPlayerView(this);
 
-    addWidget(d->albumIconView,           PreviewAlbumMode);
-    addWidget(d->imagePreviewView,        PreviewImageMode);
-    addWidget(d->welcomePageView->view(), WelcomePageMode);
-    addWidget(d->mediaPlayerView,         MediaPlayerMode);
+    insertWidget(PreviewAlbumMode, d->albumIconView);
+    insertWidget(PreviewImageMode, d->imagePreviewView);
+    insertWidget(WelcomePageMode,  d->welcomePageView->view());
+    insertWidget(MediaPlayerMode,  d->mediaPlayerView);
 
     setPreviewMode(PreviewAlbumMode);
+    setAttribute(Qt::WA_DeleteOnClose);
 
     // -----------------------------------------------------------------
 
@@ -145,7 +146,7 @@ void AlbumWidgetStack::setPreviewItem(ImageInfo* info, ImageInfo *previous, Imag
     else
     {
         AlbumSettings *settings      = AlbumSettings::componentData();
-        QString currentFileExtension = QFileInfo(info->kurl().path()).extension(false);
+        QString currentFileExtension = QFileInfo(info->fileUrl().path()).suffix();
         QString mediaplayerfilter    = settings->getMovieFileFilter().toLower() +
                                        settings->getMovieFileFilter().toUpper() +
                                        settings->getAudioFileFilter().toLower() +
@@ -153,7 +154,7 @@ void AlbumWidgetStack::setPreviewItem(ImageInfo* info, ImageInfo *previous, Imag
         if (mediaplayerfilter.contains(currentFileExtension) )
         {
             setPreviewMode(AlbumWidgetStack::MediaPlayerMode);
-            d->mediaPlayerView->setMediaPlayerFromUrl(info->kurl());
+            d->mediaPlayerView->setMediaPlayerFromUrl(info->fileUrl());
         }
         else
         {
@@ -170,9 +171,9 @@ void AlbumWidgetStack::setPreviewItem(ImageInfo* info, ImageInfo *previous, Imag
     }
 }
 
-int AlbumWidgetStack::previewMode(void)
+int AlbumWidgetStack::previewMode()
 {
-    return id(visibleWidget());
+    return indexOf(currentWidget());
 }
 
 void AlbumWidgetStack::setPreviewMode(int mode)
@@ -185,12 +186,12 @@ void AlbumWidgetStack::setPreviewMode(int mode)
     {
         d->albumIconView->setFocus();   
         setPreviewItem();
-        raiseWidget(mode);
+        setCurrentIndex(mode);
         emit signalToggledToPreviewMode(false);
     }
     else
     { 
-        raiseWidget(mode);
+        setCurrentIndex(mode);
     }
 }
 
@@ -215,7 +216,7 @@ void AlbumWidgetStack::slotItemsUpdated(const KUrl::List& list)
         previewMode() == AlbumWidgetStack::MediaPlayerMode)    // What we can do with media player ?
         return;
 
-    if (list.contains(imagePreviewView()->getImageInfo()->kurl()))
+    if (list.contains(imagePreviewView()->getImageInfo()->fileUrl()))
         d->imagePreviewView->reload();
 }
 
