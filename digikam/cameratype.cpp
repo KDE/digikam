@@ -28,6 +28,7 @@
 
 // Local includes.
 
+#include "cameraui.h"
 #include "cameratype.h"
 
 namespace Digikam
@@ -39,26 +40,27 @@ public:
 
     CameraTypePrivate()
     {
+        valid  = false;
         action = 0;
     }
 
-    QString   title;
-    QString   model;
-    QString   port;
-    QString   path;
+    bool                valid;
 
-    QDateTime lastAccess;
+    QString             title;
+    QString             model;
+    QString             port;
+    QString             path;
 
-    KAction  *action;
-    bool      valid;
+    QDateTime           lastAccess;
 
-    QPointer<CameraUI> currentCameraUI;
+    KAction            *action;
+
+    QPointer<CameraUI>  currentCameraUI;
 };
 
 CameraType::CameraType()
 {
     d = new CameraTypePrivate;
-    d->valid  = false;    
 }
 
 CameraType::CameraType(const QString& title, const QString& model,

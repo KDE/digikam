@@ -93,7 +93,7 @@ SET(digikam_LIB_SRCS
                       albumwidgetstack.cpp 
                       cameradragobject.cpp 
                       cameralist.cpp 
-#                      cameratype.cpp 
+                      cameratype.cpp 
                       datefolderview.cpp 
 #                      dcopiface.cpp 
                       digikamfirstrun.cpp 
