@@ -99,7 +99,7 @@ SET(digikam_LIB_SRCS
                       digikamfirstrun.cpp 
 #                      digikamview.cpp 
                       dio.cpp 
-#                      dragobjects.cpp 
+                      dragobjects.cpp 
                       firstrun.cpp 
 #                      folderitem.cpp 
 #                      folderview.cpp 

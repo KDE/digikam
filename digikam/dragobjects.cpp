@@ -22,15 +22,16 @@
  * 
  * ============================================================ */
 
+// Qt includes.
+
+#include <QByteArray>
+
 // Local includes.
 
 #include "ddebug.h"
 #include "album.h"
 #include "albummanager.h"
 #include "dragobjects.h"
-//Added by qt3to4:
-#include <Q3CString>
-#include <Q3ValueList>
 
 namespace Digikam
 {
@@ -40,10 +41,11 @@ ItemDrag::ItemDrag(const KUrl::List &urls,
                    const Q3ValueList<int>& albumIDs,
                    const Q3ValueList<int>& imageIDs,
                    QWidget* dragSource, const char* name)
-    : K3URLDrag(urls, dragSource, name),
-      m_kioURLs(kioURLs),
-      m_albumIDs(albumIDs), m_imageIDs(imageIDs)
+        : K3URLDrag(urls, dragSource),
+              m_kioURLs(kioURLs),
+              m_albumIDs(albumIDs), m_imageIDs(imageIDs)
 {
+    setObjectName(name);
 }
 
 bool ItemDrag::canDecode(const QMimeSource* e)
@@ -72,14 +74,14 @@ bool ItemDrag::decode(const QMimeSource* e, KUrl::List &urls, KUrl::List &kioURL
         {
             int id;
             
-            QDataStream dsAlbums(albumarray, QIODevice::ReadOnly);
+            QDataStream dsAlbums(&albumarray, QIODevice::ReadOnly);
             while (!dsAlbums.atEnd())
             {
                 dsAlbums >> id;
                 albumIDs.append(id);
             }
             
-            QDataStream dsImages(imagearray, QIODevice::ReadOnly);
+            QDataStream dsImages(&imagearray, QIODevice::ReadOnly);
             while (!dsImages.atEnd())
             {
                 dsImages >> id;
@@ -87,7 +89,7 @@ bool ItemDrag::decode(const QMimeSource* e, KUrl::List &urls, KUrl::List &kioURL
             }
 
             KUrl u;
-            QDataStream dsKio(kioarray, QIODevice::ReadOnly);
+            QDataStream dsKio(&kioarray, QIODevice::ReadOnly);
             while (!dsKio.atEnd())
             {
                 dsKio >> u;
@@ -103,12 +105,12 @@ bool ItemDrag::decode(const QMimeSource* e, KUrl::List &urls, KUrl::List &kioURL
 
 QByteArray ItemDrag::encodedData(const char* mime) const
 {
-    Q3CString mimetype(mime);
+    QByteArray mimetype(mime);
     
     if (mimetype == "digikam/album-ids")
     {
         QByteArray byteArray;
-        QDataStream ds(byteArray, QIODevice::WriteOnly);
+        QDataStream ds(&byteArray, QIODevice::WriteOnly);
 
         Q3ValueList<int>::const_iterator it;
         for (it = m_albumIDs.begin(); it != m_albumIDs.end(); ++it)
@@ -121,7 +123,7 @@ QByteArray ItemDrag::encodedData(const char* mime) const
     else if (mimetype == "digikam/image-ids")
     {
         QByteArray byteArray;
-        QDataStream ds(byteArray, QIODevice::WriteOnly);
+        QDataStream ds(&byteArray, QIODevice::WriteOnly);
 
         Q3ValueList<int>::const_iterator it;
         for (it = m_imageIDs.begin(); it != m_imageIDs.end(); ++it)
@@ -134,7 +136,7 @@ QByteArray ItemDrag::encodedData(const char* mime) const
     else if (mimetype == "digikam/digikamalbums")
     {
         QByteArray byteArray;
-        QDataStream ds(byteArray, QIODevice::WriteOnly);
+        QDataStream ds(&byteArray, QIODevice::WriteOnly);
 
         KUrl::List::const_iterator it;
         for (it = m_kioURLs.begin(); it != m_kioURLs.end(); ++it)
@@ -166,11 +168,11 @@ const char* ItemDrag::format(int i) const
         return 0;
 }
 
-TagDrag::TagDrag( int albumid, QWidget *dragSource, 
-                  const char *name ) :
-    Q3DragObject( dragSource, name )
+TagDrag::TagDrag(int albumid, QWidget *dragSource, const char *name)
+       : Q3DragObject(dragSource)
 {
     mAlbumID = albumid;
+    setObjectName(name);
 }
 
 bool TagDrag::canDecode( const QMimeSource* e )
@@ -189,17 +191,16 @@ const char* TagDrag::format( int i ) const
 QByteArray TagDrag::encodedData( const char* ) const
 {
     QByteArray ba;
-    QDataStream ds(ba, QIODevice::WriteOnly);
+    QDataStream ds(&ba, QIODevice::WriteOnly);
     ds << mAlbumID;
     return ba;
 }
 
-AlbumDrag::AlbumDrag(const KUrl &url, int albumid, 
-                     QWidget *dragSource, 
-                     const char *name) :
-    K3URLDrag(url, dragSource, name)
+AlbumDrag::AlbumDrag(const KUrl &url, int albumid, QWidget *dragSource, const char *name) :
+    K3URLDrag(url, dragSource)
 {
     mAlbumID = albumid;
+    setObjectName(name);
 }
 
 bool AlbumDrag::canDecode( const QMimeSource* e )
@@ -219,11 +220,12 @@ const char* AlbumDrag::format( int i ) const
 
 QByteArray AlbumDrag::encodedData(const char *mime) const
 {
-    Q3CString mimetype( mime );
+    QByteArray mimetype( mime );
+
     if(mimetype == "digikam/album-id")
     {
         QByteArray ba;
-        QDataStream ds(ba, QIODevice::WriteOnly);
+        QDataStream ds(&ba, QIODevice::WriteOnly);
         ds << mAlbumID;
         return ba;
     }
@@ -244,7 +246,7 @@ bool AlbumDrag::decode(const QMimeSource* e, KUrl::List &urls,
         QByteArray ba = e->encodedData("digikam/album-id");
         if (ba.size())
         {
-            QDataStream ds(ba, QIODevice::ReadOnly);
+            QDataStream ds(&ba, QIODevice::ReadOnly);
             if(!ds.atEnd())
             {
                 ds >> albumID;
@@ -256,11 +258,11 @@ bool AlbumDrag::decode(const QMimeSource* e, KUrl::List &urls,
     return false;
 }
 
-TagListDrag::TagListDrag(const Q3ValueList<int>& tagIDs, QWidget *dragSource,
-                         const char *name)
-    : Q3DragObject( dragSource, name )
+TagListDrag::TagListDrag(const Q3ValueList<int>& tagIDs, QWidget *dragSource, const char *name)
+           : Q3DragObject(dragSource)
 {
     m_tagIDs = tagIDs;
+    setObjectName(name);
 }
 
 bool TagListDrag::canDecode(const QMimeSource* e)
@@ -271,7 +273,7 @@ bool TagListDrag::canDecode(const QMimeSource* e)
 QByteArray TagListDrag::encodedData(const char*) const
 {
     QByteArray ba;
-    QDataStream ds(ba, QIODevice::WriteOnly);
+    QDataStream ds(&ba, QIODevice::WriteOnly);
     ds << m_tagIDs;
     return ba;
 }

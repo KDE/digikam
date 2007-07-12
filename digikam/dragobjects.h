@@ -27,9 +27,9 @@
 
 // Qt includes.
 
-#include <q3dragobject.h>
-#include <qstringlist.h>
-#include <q3valuelist.h>
+#include <Q3DragObject>
+#include <Q3ValueList>
+#include <QStringList>
 
 // KDE includes.
 
