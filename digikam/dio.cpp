@@ -144,16 +144,16 @@ KIO::CopyJob *rename(const KUrl& src, const KUrl& dest)
     srcdir.setDirectory(src.directory());
     KUrl dstdir;
     dstdir.setDirectory(dest.directory());
-    Digikam::PAlbum* srcAlbum = Digikam::AlbumManager::componentData().findPAlbum(srcdir);
-    Digikam::PAlbum* dstAlbum = Digikam::AlbumManager::componentData().findPAlbum(dstdir);
+    Digikam::PAlbum* srcAlbum = Digikam::AlbumManager::componentData()->findPAlbum(srcdir);
+    Digikam::PAlbum* dstAlbum = Digikam::AlbumManager::componentData()->findPAlbum(dstdir);
     if (!srcAlbum || !dstAlbum)
     {
         DWarning() << "Source Album " << src.directory() << " not found" << endl;
         return false;
     }
 
-    QString srcPath = Digikam::AlbumManager::componentData().getLi braryPath() + src.path();
-    QString dstPath = Digikam::AlbumManager::componentData().getLi braryPath() + dest.path();
+    QString srcPath = Digikam::AlbumManager::componentData()->getLi braryPath() + src.path();
+    QString dstPath = Digikam::AlbumManager::componentData()->getLi braryPath() + dest.path();
     QString newDstPath;
 
     bool overwrite = false;
@@ -188,7 +188,7 @@ KIO::CopyJob *rename(const KUrl& src, const KUrl& dest)
             break;
     }
 
-    Digikam::AlbumDB* db = Digikam::AlbumManager::componentData().albumD();
+    Digikam::AlbumDB* db = Digikam::AlbumManager::componentData()->albumD();
     if (::rename(QFile::encodeName(srcPath), QFile::encodeName(dstPath)) == 0)
     {
         db->moveItem(srcAlbum->id(), src.fileName(),
@@ -227,7 +227,7 @@ Watch::Watch(KIO::Job* job)
 
 void Watch::slotDone(KIO::Job*)
 {
-    Digikam::AlbumManager::componentData().refresh();
+    Digikam::AlbumManager::componentData()->refresh();
     Digikam::AlbumLister::componentData().refresh();
     m_runCount--;
 

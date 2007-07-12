@@ -57,8 +57,8 @@ int AlbumIconGroupItem::compare(IconGroupItem* group)
 {
     AlbumIconGroupItem* agroup = (AlbumIconGroupItem*)group;
     
-    PAlbum* mine = AlbumManager::componentData().findPAlbum(m_albumID);
-    PAlbum* his = AlbumManager::componentData().findPAlbum(agroup->m_albumID);
+    PAlbum* mine = AlbumManager::componentData()->findPAlbum(m_albumID);
+    PAlbum* his = AlbumManager::componentData()->findPAlbum(agroup->m_albumID);
 
     if (!mine || !his)
         return 0;

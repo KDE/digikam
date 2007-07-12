@@ -181,11 +181,11 @@ void DateFolderView::slotAlbumAdded(Album* a)
     if (!parent)
     {
         parent = new DateFolderItem(d->listview, yr);
-        parent->setPixmap(0, SmallIcon("date", AlbumSettings::componentData().getDefaultTreeIconSize()));
+        parent->setPixmap(0, SmallIcon("date", AlbumSettings::componentData()->getDefaultTreeIconSize()));
     }
 
     DateFolderItem* item = new DateFolderItem(parent, mo, album);
-    item->setPixmap(0, SmallIcon("date", AlbumSettings::componentData().getDefaultTreeIconSize()));
+    item->setPixmap(0, SmallIcon("date", AlbumSettings::componentData()->getDefaultTreeIconSize()));
 
     album->setExtraData(this, item);
 }
@@ -227,7 +227,7 @@ void DateFolderView::slotSelectionChanged()
     
     if (!selItem)
     {
-        AlbumManager::componentData().setCurrentAlbum(0);
+        AlbumManager::componentData()->setCurrentAlbum(0);
         return;
     }
 
@@ -235,12 +235,12 @@ void DateFolderView::slotSelectionChanged()
     
     if (!dateItem || !dateItem->m_album)
     {
-        AlbumManager::componentData().setCurrentAlbum(0);
+        AlbumManager::componentData()->setCurrentAlbum(0);
         d->monthview->setActive(false);
     }
     else
     {
-        AlbumManager::componentData().setCurrentAlbum(dateItem->m_album);
+        AlbumManager::componentData()->setCurrentAlbum(dateItem->m_album);
 
         QDate date = dateItem->m_album->date();        
         d->monthview->setActive(true);
@@ -262,7 +262,7 @@ void DateFolderView::loadViewState()
     QStringList openFolders;
     if(config->hasKey("OpenFolders"))
     {
-        openFolders = group.readListEntry("OpenFolders",QStringList());
+        openFolders = group.readEntry("OpenFolders",QStringList());
     }
     
     DateFolderItem *item;

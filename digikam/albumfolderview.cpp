@@ -385,7 +385,7 @@ void AlbumFolderView::slotThumbnailLost(Album *)
 
 void AlbumFolderView::slotReloadThumbnails()
 {
-    AlbumList tList = AlbumManager::componentData().allPAlbums();
+    AlbumList tList = AlbumManager::componentData()->allPAlbums();
     for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
     {
         PAlbum* album  = (PAlbum*)(*it);
@@ -549,7 +549,7 @@ void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, 
         case 13:
         {
             QString err;
-            AlbumManager::componentData().updatePAlbumIcon(item->getAlbum(), 0, err);
+            AlbumManager::componentData()->updatePAlbumIcon(item->getAlbum(), 0, err);
             break;
         }
         case 14:
@@ -1023,7 +1023,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
             if(id == 12)
             {
                 QString errMsg;
-                AlbumManager::componentData().updatePAlbumIcon(destAlbum, imageIDs.first(), errMsg);
+                AlbumManager::componentData()->updatePAlbumIcon(destAlbum, imageIDs.first(), errMsg);
             }
             return;
         }
@@ -1075,7 +1075,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
             case 12:
             {
                 QString errMsg;
-                AlbumManager::componentData().updatePAlbumIcon(destAlbum, imageIDs.first(), errMsg);
+                AlbumManager::componentData()->updatePAlbumIcon(destAlbum, imageIDs.first(), errMsg);
             }
             default:
                 break;
@@ -1357,7 +1357,7 @@ void AlbumFolderView::resort()
     if (prevSelectedItem && prevSelectedItem->isGroupItem())
         prevSelectedItem = 0;
 
-    AlbumList pList(AlbumManager::componentData().allPAlbums());
+    AlbumList pList(AlbumManager::componentData()->allPAlbums());
     for (AlbumList::iterator it = pList.begin(); it != pList.end(); ++it)
     {
         PAlbum *album = (PAlbum*)(*it);

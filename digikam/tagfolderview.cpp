@@ -354,7 +354,7 @@ void TagFolderView::slotThumbnailLost(Album *)
 
 void TagFolderView::slotReloadThumbnails()
 {
-    AlbumList tList = AlbumManager::componentData().allTAlbums();
+    AlbumList tList = AlbumManager::componentData()->allTAlbums();
     for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
     {
         TAlbum* tag  = (TAlbum*)(*it);
@@ -446,7 +446,7 @@ void TagFolderView::slotContextMenu(Q3ListViewItem *item, const QPoint &, int)
         case 13:
         {
             QString errMsg;
-            AlbumManager::componentData().updateTAlbumIcon(tag->getTag(), QString("tag"), 0, errMsg);
+            AlbumManager::componentData()->updateTAlbumIcon(tag->getTag(), QString("tag"), 0, errMsg);
             break;
         }
         default:
@@ -799,7 +799,7 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
             if(id == 12)
             {
                 QString errMsg;
-                AlbumManager::componentData().updateTAlbumIcon(destAlbum, QString(),
+                AlbumManager::componentData()->updateTAlbumIcon(destAlbum, QString(),
                                                            imageIDs.first(), errMsg);
             }
             return;

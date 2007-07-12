@@ -474,7 +474,7 @@ void TagFilterView::contentsDropEvent(QDropEvent *e)
             if (!itemDrop)
             {
                 // move dragItem to the root
-                newParentTag = AlbumManager::componentData().findTAlbum(0);
+                newParentTag = AlbumManager::componentData()->findTAlbum(0);
             }
             else
             {
@@ -483,7 +483,7 @@ void TagFilterView::contentsDropEvent(QDropEvent *e)
             }
 
             QString errMsg;
-            if (!AlbumManager::componentData().moveTAlbum(talbum, newParentTag, errMsg))
+            if (!AlbumManager::componentData()->moveTAlbum(talbum, newParentTag, errMsg))
             {
                 KMessageBox::error(this, errMsg);
             }
@@ -568,7 +568,7 @@ void TagFilterView::contentsDropEvent(QDropEvent *e)
         else if(id == 11)
         {
             QString errMsg;
-            AlbumManager::componentData().updateTAlbumIcon(destAlbum, QString(),
+            AlbumManager::componentData()->updateTAlbumIcon(destAlbum, QString(),
                                                        imageIDs.first(), errMsg);
         }
     }
@@ -722,7 +722,7 @@ void TagFilterView::slotThumbnailLost(Album *)
 
 void TagFilterView::slotReloadThumbnails()
 {
-    AlbumList tList = AlbumManager::componentData().allTAlbums();
+    AlbumList tList = AlbumManager::componentData()->allTAlbums();
     for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
     {
         TAlbum* tag  = (TAlbum*)(*it);
@@ -855,7 +855,7 @@ void TagFilterView::slotContextMenu(Q3ListViewItem* it, const QPoint&, int)
         case 13:    // Reset Tag Icon.
         {
             QString errMsg;
-            AlbumManager::componentData().updateTAlbumIcon(item->m_tag, QString("tag"), 0, errMsg);
+            AlbumManager::componentData()->updateTAlbumIcon(item->m_tag, QString("tag"), 0, errMsg);
             break;
         }        
         case 14:    // Select All Tags.

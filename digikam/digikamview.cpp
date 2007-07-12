@@ -380,7 +380,7 @@ void DigikamView::saveViewState()
     KConfigGroup group = config->group("MainWindow");
     group.writeEntry("SplitterSizes", d->splitter->sizes());
 
-    Album *album = AlbumManager::componentData().currentAlbum();
+    Album *album = AlbumManager::componentData()->currentAlbum();
     if(album)
     {
         group.writeEntry("InitialAlbumID", album->globalID());
@@ -1202,7 +1202,7 @@ void DigikamView::slotSlideShowSelection()
 
 void DigikamView::slotSlideShowRecursive()
 {
-    Album *album = AlbumManager::componentData().currentAlbum();
+    Album *album = AlbumManager::componentData()->currentAlbum();
     if(album)
     {
         AlbumList albumList;

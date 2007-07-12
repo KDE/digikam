@@ -511,7 +511,7 @@ void AlbumFileTip::updateText()
 
         if (settings->getToolTipsShowAlbumName())
         {
-            PAlbum* album = AlbumManager::componentData().findPAlbum(info->albumId());
+            PAlbum* album = AlbumManager::componentData()->findPAlbum(info->albumId());
             if (album)
                 tip += cellSpecBeg + i18n("Album:") + cellSpecMid + album->albumPath().remove(0, 1) + cellSpecEnd;
         }
@@ -525,7 +525,7 @@ void AlbumFileTip::updateText()
 
         if (settings->getToolTipsShowTags())
         {
-            QStringList tagPaths = AlbumManager::componentData().tagPaths(info->tagIds(), false);
+            QStringList tagPaths = AlbumManager::componentData()->tagPaths(info->tagIds(), false);
 
             str = tagPaths.join(", ");
             if (str.isEmpty()) str = QString("---");

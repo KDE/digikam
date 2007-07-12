@@ -133,7 +133,7 @@ void SearchFolderView::quickSearchNew()
     if ( ! checkName( url ) )
         return;
 
-    SAlbum* album = AlbumManager::componentData().createSAlbum(url, true);
+    SAlbum* album = AlbumManager::componentData()->createSAlbum(url, true);
 
     if (album)
     {
@@ -160,7 +160,7 @@ void SearchFolderView::extendedSearchNew()
     if ( ! checkName( url ) )
         return;
 
-    SAlbum* album = AlbumManager::componentData().createSAlbum(url, false);
+    SAlbum* album = AlbumManager::componentData()->createSAlbum(url, false);
 
     if (album)
     {
@@ -229,7 +229,7 @@ void SearchFolderView::quickSearchEdit(SAlbum* album)
     if (dlg.exec() != KDialog::Accepted)
         return;
 
-    AlbumManager::componentData().updateSAlbum(album, url);
+    AlbumManager::componentData()->updateSAlbum(album, url);
 
     ((SearchFolderItem*)album->extraData(this))->setText(0, album->title());
 
@@ -248,7 +248,7 @@ void SearchFolderView::extendedSearchEdit(SAlbum* album)
     if (dlg.exec() != KDialog::Accepted)
         return;
 
-    AlbumManager::componentData().updateSAlbum(album, url);
+    AlbumManager::componentData()->updateSAlbum(album, url);
 
     ((SearchFolderItem*)album->extraData(this))->setText(0, album->title());
 
@@ -261,7 +261,7 @@ void SearchFolderView::searchDelete(SAlbum* album)
     if (!album)
         return;
 
-    AlbumManager::componentData().deleteSAlbum(album);
+    AlbumManager::componentData()->deleteSAlbum(album);
 }
 
 void SearchFolderView::slotAlbumAdded(Album* a)
@@ -310,7 +310,7 @@ void SearchFolderView::slotSelectionChanged()
 
     if (!selItem)
     {
-        AlbumManager::componentData().setCurrentAlbum(0);
+        AlbumManager::componentData()->setCurrentAlbum(0);
         return;
     }
 
@@ -318,11 +318,11 @@ void SearchFolderView::slotSelectionChanged()
     
     if (!searchItem || !searchItem->m_album)
     {
-        AlbumManager::componentData().setCurrentAlbum(0);
+        AlbumManager::componentData()->setCurrentAlbum(0);
     }
     else
     {
-        AlbumManager::componentData().setCurrentAlbum(searchItem->m_album);
+        AlbumManager::componentData()->setCurrentAlbum(searchItem->m_album);
     }
 }
 
@@ -406,7 +406,7 @@ void SearchFolderView::slotDoubleClicked(Q3ListViewItem* item, const QPoint&, in
 
 void SearchFolderView::selectItem(int id)
 {
-    SAlbum *album = AlbumManager::componentData().findSAlbum(id);
+    SAlbum *album = AlbumManager::componentData()->findSAlbum(id);
     if(!album)
         return;
 

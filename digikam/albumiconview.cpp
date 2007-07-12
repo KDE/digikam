@@ -392,7 +392,7 @@ void AlbumIconView::slotImageListerNewItems(const ImageInfoList& itemList)
             d->albumDict.insert((*it)->albumId(), group);
         }
 
-        PAlbum *album = AlbumManager::componentData().findPAlbum((*it)->albumId());
+        PAlbum *album = AlbumManager::componentData()->findPAlbum((*it)->albumId());
         if (!album)
         {
             DWarning() << "No album for item: " << (*it)->name()
@@ -791,7 +791,7 @@ void AlbumIconView::slotSetAlbumThumbnail(AlbumIconItem *iconItem)
         PAlbum *album = static_cast<PAlbum*>(d->currentAlbum);
 
         QString err;
-        AlbumManager::componentData().updatePAlbumIcon( album,
+        AlbumManager::componentData()->updatePAlbumIcon( album,
                                                     iconItem->imageInfo()->id(),
                                                     err );
     }
@@ -800,7 +800,7 @@ void AlbumIconView::slotSetAlbumThumbnail(AlbumIconItem *iconItem)
         TAlbum *album = static_cast<TAlbum*>(d->currentAlbum);
 
         QString err;
-        AlbumManager::componentData().updateTAlbumIcon( album,
+        AlbumManager::componentData()->updateTAlbumIcon( album,
                                                     QString(),
                                                     iconItem->imageInfo()->id(),
                                                     err );

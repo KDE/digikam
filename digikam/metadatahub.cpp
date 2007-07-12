@@ -680,14 +680,14 @@ MetadataHub::TagStatus MetadataHub::tagStatus(int albumId) const
 {
     if (d->dbmode == NewTagsImport)
         return TagStatus(MetadataInvalid);
-    return tagStatus(AlbumManager::componentData().findTAlbum(albumId));
+    return tagStatus(AlbumManager::componentData()->findTAlbum(albumId));
 }
 
 MetadataHub::TagStatus MetadataHub::tagStatus(const QString &tagPath) const
 {
     if (d->dbmode == NewTagsImport)
         return TagStatus(MetadataInvalid);
-    return tagStatus(AlbumManager::componentData().findTAlbum(tagPath));
+    return tagStatus(AlbumManager::componentData()->findTAlbum(tagPath));
 }
 
 MetadataHub::TagStatus MetadataHub::tagStatus(TAlbum *album) const
@@ -837,7 +837,7 @@ void MetadataHub::setTag(TAlbum *tag, bool hasTag, Status status)
 void MetadataHub::setTag(int albumID, bool hasTag, Status status)
 {
     // DatabaseMode == ManagedTags is assumed
-    TAlbum *album = AlbumManager::componentData().findTAlbum(albumID);
+    TAlbum *album = AlbumManager::componentData()->findTAlbum(albumID);
     if (!album)
     {
         DWarning() << k_funcinfo << "Tag ID " << albumID << " not found in database." << endl;
