@@ -62,7 +62,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
             cameraiconitem.cpp                  Gilles                  X       DONE
             cameraiconview.cpp                  Gilles                  X       DONE
             camerainfodialog.cpp                Gilles                  X       DONE
-            cameraui.cpp                                                X       DONE
+            cameraui.cpp                        Gilles                  X       DONE                 Depreciate methods to fix
             dkcamera.cpp                        Gilles                  X       DONE
             gpcamera.cpp                        Gilles                  X       DONE
             gpiteminfo.cpp                      Gilles                  X       DONE
@@ -74,7 +74,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
         |-----editor
             editorwindow.cpp                    Gilles          X       X       UNCOMPLETE           Compile, but port not yet fully complete
             imageiface.cpp                      Gilles          X       X       DONE
-            imagewindow.cpp                     Gilles                  X       DONE
+            imagewindow.cpp                     Gilles                  X       DONE                 Depreciate methods to fix
         |-----tools                             Laurent         X       X       DONE
         |---lighttable                                                  
             lighttablepreview.cpp               Gilles                  X       DONE
