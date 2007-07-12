@@ -121,7 +121,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
             digikamfirstrun.cpp                 Laurent                 X       DONE
             digikamview.cpp                                             X
             dio.cpp                             Laurent                 X       DONE
-            dragobjects.cpp                                             X
+            dragobjects.cpp                     Gilles                  X       DONE
             firstrun.cpp                        Gilles                  X       DONE
             folderitem.cpp                                              X
             folderview.cpp                                              X
