@@ -373,7 +373,8 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
     ImageInfoList newItemsList;
     ImageInfoList newFilteredItemsList;
 
-    QDataStream ds(data, QIODevice::ReadOnly);
+    QByteArray tmp(data);
+    QDataStream ds(&tmp, QIODevice::ReadOnly);
 
     while (!ds.atEnd())
     {

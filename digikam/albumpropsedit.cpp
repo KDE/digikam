@@ -40,7 +40,7 @@
 #include <qpushbutton.h>
 //Added by qt3to4:
 #include <Q3GridLayout>
-
+#include <Q3TextEdit>
 // KDE includes.
 
 #include <kdatepicker.h>
@@ -53,7 +53,7 @@
 
 #include <kdeversion.h>
 #include <kinputdialog.h>
-
+#include <KHBox>
 // Local includes.
 
 #include "album.h"
@@ -95,9 +95,7 @@ public:
 };
 
 AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
-              : KDialog( Plain, create ? i18n("New Album") : i18n("Edit Album"),
-                             Help|Ok|Cancel, Ok,
-                             0, 0, true, true )
+              : KDialog( 0L )
 {
     setCaption(create ? i18n("New Album") : i18n("Edit Album"));
     setButtons(Help|Ok|Cancel);
@@ -161,8 +159,9 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
     topLayout->addWidget( d->commentsEdit, 4, 1 );
     commentsLabel->setBuddy( d->commentsEdit );
     d->commentsEdit->setCheckSpellingEnabled(true);
-    d->commentsEdit->setWordWrap(Q3TextEdit::WidgetWidth);
-    d->commentsEdit->setWrapPolicy(Q3TextEdit::AtWhiteSpace);
+    //TODO port it
+    //d->commentsEdit->setWordWrap(Q3TextEdit::WidgetWidth);
+    //d->commentsEdit->setWrapPolicy(Q3TextEdit::AtWhiteSpace);
 
     QLabel *dateLabel = new QLabel( page );
     dateLabel->setText( i18n( "Album &date:" ) );
@@ -174,13 +173,13 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
 
     KHBox *buttonRow = new KHBox( page );
     QPushButton *dateLowButton = new QPushButton( 
-            i18n("Selects the date of the oldest image",
+            i18nc("Selects the date of the oldest image",
                  "&Oldest" ), buttonRow );
     QPushButton *dateAvgButton = new QPushButton( 
-            i18n("Calculates the average date",
+            i18nc("Calculates the average date",
                  "&Average" ), buttonRow );
     QPushButton *dateHighButton = new QPushButton( 
-            i18n("Selects the date of the newest image",
+            i18nc("Selects the date of the newest image",
                  "Newest" ), buttonRow );
         
     topLayout->addWidget( buttonRow, 6, 1);
@@ -366,7 +365,7 @@ void AlbumPropsEdit::slotDateAverageButtonClicked()
     if ( avDate.isValid() )
         d->datePicker->setDate( avDate );
     else
-        KMessageBox::error( plainPage( ),
+        KMessageBox::error( this,
                             i18n( "Could not calculate an average."),
                             i18n( "Could Not Calculate Average" ) );
 }
