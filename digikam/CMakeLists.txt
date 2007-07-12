@@ -91,7 +91,7 @@ SET(digikam_LIB_SRCS
 #                      albumthumbnailloader.cpp 
 #                      albumwidgetstack.cpp 
 #                      cameradragobject.cpp 
-#                      cameralist.cpp 
+                      cameralist.cpp 
 #                      cameratype.cpp 
 #                      datefolderview.cpp 
 #                      dcopiface.cpp 
@@ -115,14 +115,14 @@ SET(digikam_LIB_SRCS
 #                      pixmapmanager.cpp 
 #                      ratingpopupmenu.cpp 
 #                      ratingwidget.cpp 
-#                      scanlib.cpp 
+                      scanlib.cpp 
 #                      searchadvanceddialog.cpp 
 #                      searchfolderview.cpp 
 #                      searchquickdialog.cpp 
 #                      searchresultsview.cpp 
 #                      searchresultsitem.cpp 
 #                      searchwidgets.cpp 
-#                      syncjob.cpp 
+                      syncjob.cpp 
 #                      tagcreatedlg.cpp 
 #                      tagfilterview.cpp 
 #                      tagfolderview.cpp 

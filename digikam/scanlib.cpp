@@ -47,7 +47,7 @@ extern "C"
 
 // KDE includes.
 
-#include <kprogress.h>
+#include <qprogressbar.h>
 #include <kmessagebox.h>
 #include <kapplication.h>
 #include <klocale.h>
@@ -104,7 +104,7 @@ void ScanLib::startScan()
 {
     struct timeval tv1, tv2;
     QPixmap pix = KIconLoader::global()->loadIcon(
-                  "run", KIcon::NoGroup, 32);
+                  "run", K3Icon::NoGroup, 32);
 
     QString message = i18n("Finding non-existing Albums");
     m_progressBar->addedAction(pix, message);
@@ -158,7 +158,7 @@ void ScanLib::findFoldersWhichDoNotExist()
                  "from the database because all views depend on the information "
                  "in the database. Do you want them to be removed from the "
                  "database?",
-                 toBeDeleted.count()),
+                 QString::number(toBeDeleted.count())),
             toBeDeleted,
             i18n("Albums are Missing"));
 
@@ -175,7 +175,7 @@ void ScanLib::findMissingItems()
     m_progressBar->showCancelButton (false );
     m_progressBar->progressBar()->setProgress( 0 );
     m_progressBar->setLabel(i18n("Scanning items, please wait..."));
-    kapp->processEvents();
+    qApp->processEvents();
 
     m_scanner.scanAlbums();
 
@@ -185,45 +185,45 @@ void ScanLib::findMissingItems()
 
 void ScanLib::slotTotalFilesToScan(int count)
 {
-    m_progressBar->progressBar()->setTotalSteps( count );
+    m_progressBar->progressBar()->setMaximum( count );
     if (count > 0)
         m_progressBar->show();
-    kapp->processEvents();
+    qApp->processEvents();
 }
 
 void ScanLib::slotStartScanningAlbum(const QString &albumRoot, const QString &album)
 {
     QPixmap pix = KIconLoader::global()->loadIcon(
-                  "folder_image", KIcon::NoGroup, 32);
+                  "folder_image", K3Icon::NoGroup, 32);
     m_progressBar->addedAction(pix, albumRoot + album);
-    kapp->processEvents();
+    qApp->processEvents();
 }
 
 void ScanLib::slotFinishedScanningAlbum(const QString &, const QString &, int filesScanned)
 {
     m_progressBar->progressBar()->advance(filesScanned);
-    kapp->processEvents();
+    qApp->processEvents();
 }
 
 void ScanLib::slotScanningFile(const QString &)
 {
     m_progressBar->progressBar()->advance(1);
-    if (m_progressBar->progressBar()->progress() % 30 == 0)
-        kapp->processEvents();
+    if (m_progressBar->progressBar()->value() % 30 == 0)
+        qApp->processEvents();
 }
 
 void ScanLib::updateItemsWithoutDate()
 {
     m_progressBar->setAllowCancel( false );
     m_progressBar->showCancelButton (false );
-    m_progressBar->progressBar()->setProgress(0);
+    m_progressBar->progressBar()->setValue(0);
     m_progressBar->setLabel(i18n("Updating items, please wait..."));
     kapp->processEvents();
 
     m_scanner.updateItemsWithoutDate();
 
     m_progressBar->hide();
-    kapp->processEvents();
+    qApp->processEvents();
 }
 
 void ScanLib::deleteStaleEntries()
@@ -241,7 +241,7 @@ void ScanLib::deleteStaleEntries()
                "the database because all views depend on the information "
                "in the database. Do you want it to be removed from the "
                "database?",
-               "<p>There are %n items in the database which do not "
+               "<p>There are %1 items in the database which do not "
                "appear to be on disk or are located in the root album of "
                "the path. These files should be removed from the "
                "database, however you may lose information.<p>"

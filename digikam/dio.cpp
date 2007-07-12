@@ -47,6 +47,8 @@ extern "C"
 #include <kio/renamedlg.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kio/copyjob.h>
+#include <kio/deletejob.h>
 
 // Local includes.
 
@@ -102,18 +104,11 @@ KIO::Job* del(const KUrl& src, bool useTrash)
     
     if (useTrash)
     {
-        KUrl dest("trash:/");
-
-        if (!KProtocolInfo::isKnownProtocol(dest))
-        {
-            dest = KGlobalSettings::trashPath();
-        }
-        
-        job = KIO::move( src, dest );
+        job = KIO::trash( src );
     }   
     else
     {
-        job = KIO::del(src);
+	job = KIO::del(src);
     }
     
     new Watch(job);
@@ -126,14 +121,7 @@ KIO::Job* del(const KUrl::List& srcList, bool useTrash)
 
     if (useTrash)
     {
-        KUrl dest("trash:/");
-
-        if (!KProtocolInfo::isKnownProtocol(dest))
-        {
-            dest = KGlobalSettings::trashPath();
-        }
-        
-        job = KIO::move( srcList, dest );
+        job = KIO::trash( srcList);
     }   
     else
     {
