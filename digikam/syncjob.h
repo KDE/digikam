@@ -52,6 +52,7 @@ namespace Digikam
 
 class Album;
 class TAlbum;
+class SyncJobPriv;
 
 class SyncJob : public QObject
 {
@@ -98,15 +99,10 @@ private slots:
 
 private:
 
-    static int       lastErrorCode_;
-    static QString  *lastErrorMsg_;
-    bool             success_;
-    
-    int              thumbnailSize_;
-    Album           *album_;
-    QPixmap         *thumbnail_;
+    static int       m_lastErrorCode;
+    static QString  *m_lastErrorMsg;
 
-    QEventLoop      *waitingLoop_;
+    SyncJobPriv     *d;
 };
 
 }  // namespace Digikam

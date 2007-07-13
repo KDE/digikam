@@ -57,8 +57,46 @@
 namespace Digikam
 {
 
-QString* SyncJob::lastErrorMsg_  = 0;
-int      SyncJob::lastErrorCode_ = 0;
+QString* SyncJob::m_lastErrorMsg  = 0;
+int      SyncJob::m_lastErrorCode = 0;
+
+class SyncJobPriv
+{
+public:
+
+    SyncJobPriv()
+    {
+        success     = false;
+        album       = 0;
+        thumbnail   = 0;
+        waitingLoop = 0;
+    }
+
+    bool             success;
+    
+    int              thumbnailSize;
+
+    QPixmap         *thumbnail;
+
+    QEventLoop      *waitingLoop;
+
+    Album           *album;
+};
+
+SyncJob::SyncJob()
+{
+    d = new SyncJobPriv;
+    d->waitingLoop = new QEventLoop(this);
+}
+
+SyncJob::~SyncJob()
+{
+    if (d->thumbnail)
+        delete d->thumbnail;
+
+    d->thumbnail = 0;
+    delete d;
+}
 
 bool SyncJob::del(const KUrl::List& urls, bool useTrash)
 {
@@ -88,47 +126,32 @@ QPixmap SyncJob::getTagThumbnail(const QString &name, int size)
     return sj.getTagThumbnailPriv(name, size);
 }
 
-SyncJob::SyncJob()
-{
-    thumbnail_   = 0;
-    album_       = 0;
-    waitingLoop_ = new QEventLoop(this);
-}
-
-SyncJob::~SyncJob()
-{
-    if (thumbnail_)
-        delete thumbnail_;
-
-    thumbnail_ = 0;
-}
-
 bool SyncJob::delPriv(const KUrl::List& urls)
 {
-    success_ = true;
+    d->success = true;
 
     KIO::Job* job = KIO::del( urls );
     connect( job, SIGNAL(result( KIO::Job* )),
              this, SLOT(slotResult( KIO::Job*)) );
 
     enterWaitingLoop();
-    return success_;
+    return d->success;
 }
 
 bool SyncJob::trashPriv(const KUrl::List& urls)
 {
-    success_ = true;
+    d->success = true;
     KIO::Job* job = KIO::trash( urls );
     connect( job, SIGNAL(result( KIO::Job* )),
              this, SLOT(slotResult( KIO::Job*)) );
 
     enterWaitingLoop();
-    return success_;
+    return d->success;
 }
 
 bool SyncJob::fileMovePriv(const KUrl &src, const KUrl &dest)
 {
-    success_ = true;
+    d->success = true;
 
     KIO::FileCopyJob* job = KIO::file_move(src, dest, -1,
                                            true, false, false);
@@ -136,40 +159,40 @@ bool SyncJob::fileMovePriv(const KUrl &src, const KUrl &dest)
              this, SLOT(slotResult( KIO::Job*)) );
 
     enterWaitingLoop();
-    return success_;
+    return d->success;
 }
 
 void SyncJob::slotResult( KIO::Job * job )
 {
-    lastErrorCode_ = job->error();
-    success_ = !(lastErrorCode_);
-    if ( !success_ )
+    m_lastErrorCode = job->error();
+    d->success = !(m_lastErrorCode);
+    if ( !d->success )
     {
-        if ( !lastErrorMsg_ )
-            lastErrorMsg_ = new QString;
-        *lastErrorMsg_ = job->errorString();
+        if ( !m_lastErrorMsg )
+            m_lastErrorMsg = new QString;
+        *m_lastErrorMsg = job->errorString();
     }
     quitWaitingLoop();
 }
 
 QPixmap SyncJob::getTagThumbnailPriv(TAlbum *album)
 {
-    if (thumbnail_)
-        delete thumbnail_;
+    if (d->thumbnail)
+        delete d->thumbnail;
 
-    thumbnail_ = new QPixmap();
+    d->thumbnail = new QPixmap();
 
     AlbumThumbnailLoader *loader = AlbumThumbnailLoader::componentData();
 
-    if (!loader->getTagThumbnail(album, *thumbnail_))
+    if (!loader->getTagThumbnail(album, *d->thumbnail))
     {
-        if (thumbnail_->isNull())
+        if (d->thumbnail->isNull())
         {
             return loader->getStandardTagIcon(album);
         }
         else
         {
-            return loader->blendIcons(loader->getStandardTagIcon(), *thumbnail_);
+            return loader->blendIcons(loader->getStandardTagIcon(), *d->thumbnail);
         }
     }
     else
@@ -180,16 +203,16 @@ QPixmap SyncJob::getTagThumbnailPriv(TAlbum *album)
         connect(loader, SIGNAL(signalFailed(Album *)),
                 this, SLOT(slotLoadThumbnailFailed(Album *)));
 
-        album_ = album;
+        d->album = album;
         enterWaitingLoop();
     }
-    return *thumbnail_;
+    return *d->thumbnail;
 }
 
 void SyncJob::slotLoadThumbnailFailed(Album *album)
 {
     // TODO: setting _lastError*
-    if (album == album_)
+    if (album == d->album)
     {
         quitWaitingLoop();
     }
@@ -197,21 +220,21 @@ void SyncJob::slotLoadThumbnailFailed(Album *album)
 
 void SyncJob::slotGotThumbnailFromIcon(Album *album, const QPixmap& pix)
 {
-    if (album == album_)
+    if (album == d->album)
     {
-        *thumbnail_ = pix;
+        *d->thumbnail = pix;
         quitWaitingLoop();
     }
 }
 
 QPixmap SyncJob::getTagThumbnailPriv(const QString &name, int size)
 {
-    thumbnailSize_ = size;
+    d->thumbnailSize = size;
 
-    if (thumbnail_)
-        delete thumbnail_;
+    if (d->thumbnail)
+        delete d->thumbnail;
 
-    thumbnail_ = new QPixmap;
+    d->thumbnail = new QPixmap;
 
     if(name.startsWith("/"))
     {
@@ -232,10 +255,10 @@ QPixmap SyncJob::getTagThumbnailPriv(const QString &name, int size)
     else
     {
         KIconLoader *iconLoader = KIconLoader::global();
-        *thumbnail_ = iconLoader->loadIcon(name, K3Icon::NoGroup, thumbnailSize_,
+        *d->thumbnail = iconLoader->loadIcon(name, K3Icon::NoGroup, d->thumbnailSize,
                                            K3Icon::DefaultState, 0, true);
     }
-    return *thumbnail_;
+    return *d->thumbnail;
 }
 
 void SyncJob::slotLoadThumbnailFailed()
@@ -246,24 +269,24 @@ void SyncJob::slotLoadThumbnailFailed()
 
 void SyncJob::slotGotThumbnailFromIcon(const KUrl&, const QPixmap& pix)
 {
-    if(!pix.isNull() && (thumbnailSize_ < ThumbnailSize::Tiny))
+    if(!pix.isNull() && (d->thumbnailSize < ThumbnailSize::Tiny))
     {
         int w1 = pix.width();
-        int w2 = thumbnailSize_;
+        int w2 = d->thumbnailSize;
         int h1 = pix.height();
-        int h2 = thumbnailSize_;
+        int h2 = d->thumbnailSize;
 
-        if (thumbnail_)
-            delete thumbnail_;
+        if (d->thumbnail)
+            delete d->thumbnail;
 
-        thumbnail_ = new QPixmap(w2, h2);
-        QPainter p(thumbnail_);
+        d->thumbnail = new QPixmap(w2, h2);
+        QPainter p(d->thumbnail);
         p.drawPixmap(0, 0, pix, (w1-w2)/2, (h1-h2)/2, w2, h2);
         p.end();
     }
     else
     {
-        *thumbnail_ = pix;
+        *d->thumbnail = pix;
     }
 
     quitWaitingLoop();
@@ -271,22 +294,22 @@ void SyncJob::slotGotThumbnailFromIcon(const KUrl&, const QPixmap& pix)
 
 QString SyncJob::lastErrorMsg()
 {
-    return (lastErrorMsg_ ? *lastErrorMsg_ : QString());
+    return (m_lastErrorMsg ? *m_lastErrorMsg : QString());
 }
 
 int SyncJob::lastErrorCode()
 {
-    return lastErrorCode_;
+    return m_lastErrorCode;
 }
 
 void SyncJob::enterWaitingLoop()
 {
-    waitingLoop_->exec(QEventLoop::ExcludeUserInputEvents);
+    d->waitingLoop->exec(QEventLoop::ExcludeUserInputEvents);
 }
 
 void SyncJob::quitWaitingLoop()
 {
-    waitingLoop_->quit();
+    d->waitingLoop->quit();
 }
 
 }  // namespace Digikam
