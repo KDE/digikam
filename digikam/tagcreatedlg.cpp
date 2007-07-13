@@ -137,7 +137,7 @@ TagCreateDlg::TagCreateDlg(QWidget *parent, TAlbum* album)
     gl->addWidget(d->titleEdit, 0, 1, 1, 1);
     gl->addWidget(iconTextLabel, 1, 0, 1, 1);
     gl->addWidget(d->iconButton, 1, 1, 1, 1);
-    gl->add(spacer, 2, 1, 1, 1);
+    gl->addItem(spacer, 2, 1, 1, 1);
     gl->setMargin(KDialog::spacingHint());
     gl->setSpacing(0);
 
@@ -309,7 +309,7 @@ TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album)
     gl->addWidget(iconTextLabel, 1, 0, 1, 1);
     gl->addWidget(d->iconButton, 1, 1, 1, 1);
     gl->addWidget(d->resetIconButton, 1, 2, 1, 1);
-    gl->add(spacer, 1, 3, 1, 1);
+    gl->addItem(spacer, 1, 3, 1, 1);
     gl->setMargin(KDialog::spacingHint());
     gl->setSpacing(0);
     
