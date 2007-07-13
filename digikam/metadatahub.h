@@ -26,10 +26,10 @@
 
 // Qt includes
 
-#include <qstringlist.h>
-#include <qdatetime.h>
-#include <qmap.h>
-#include <q3valuelist.h>
+#include <Q3ValueList>
+#include <QStringList>
+#include <QDateTime>
+#include <QMap>
 
 // KDE includes
 
@@ -358,4 +358,3 @@ private:
 } // namespace Digikam
 
 #endif // METADATAHUB_H
-

@@ -23,9 +23,7 @@
 
 // Qt includes
 
-#include <qfileinfo.h>
-//Added by qt3to4:
-#include <Q3ValueList>
+#include <QFileInfo>
 
 // KDE includes
 
@@ -78,7 +76,7 @@ public:
     int                 count;
 
     QMap<TAlbum *, MetadataHub::TagStatus> tags;
-    QStringList            tagList;
+    QStringList         tagList;
 
     MetadataHub::DatabaseMode dbmode;
 
@@ -570,7 +568,7 @@ bool MetadataHub::write(const QString &filePath, WriteMode writeMode, const Meta
     if (write(metadata, writeMode, settings))
     {
         bool success = metadata.applyChanges();
-        ImageAttributesWatch::componentData().fileMetadataChanged(filePath);
+        ImageAttributesWatch::componentData()->fileMetadataChanged(filePath);
         return success;
     }
     return false;
