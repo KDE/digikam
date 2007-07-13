@@ -64,6 +64,7 @@ extern "C"
 
 #include <kapplication.h>
 #include <kurl.h>
+#include <k3urldrag.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kmessagebox.h>
@@ -763,7 +764,7 @@ void AlbumIconView::slotPaste()
             KUrl destURL(palbum->databaseUrl());
 
             KUrl::List srcURLs;
-            KURLDrag::decode(data, srcURLs);
+            K3URLDrag::decode(data, srcURLs);
 
             KIO::Job* job = DIO::copy(srcURLs, destURL);
             connect(job, SIGNAL(result(KIO::Job*)),
@@ -1186,8 +1187,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
         PAlbum* palbum = (PAlbum*)d->currentAlbum;
         KUrl destURL(palbum->databaseUrl());
 
-        KUrl::List srcURLs;
-        KURLDrag::decode(event, srcURLs);
+        KUrl::List srcURLs = KUrl::List::fromMimeData( event->mimeData() );
 
         Q3PopupMenu popMenu(this);
         popMenu.insertItem( SmallIcon("goto"), i18n("&Move Here"), 10 );
