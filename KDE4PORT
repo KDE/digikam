@@ -117,7 +117,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
             cameratype.cpp                      Gilles                  X       DONE
             datefolderview.cpp                  Laurent                 X       DONE
             dcopiface.cpp                                               X
-            digikamapp.cpp                                              X
+            digikamapp.cpp                      Gilles                  X
             digikamfirstrun.cpp                 Laurent                 X       DONE
             digikamview.cpp                     Gilles                  X       DONE
             dio.cpp                             Laurent                 X       DONE
