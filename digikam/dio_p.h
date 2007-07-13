@@ -26,7 +26,7 @@
 
 // QT includes.
 
-#include <qobject.h>
+#include <QObject>
 
 namespace KIO
 {

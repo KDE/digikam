@@ -36,19 +36,18 @@ extern "C"
 
 // QT includes.
 
-#include <qfile.h>
-#include <q3cstring.h>
-#include <qdatastream.h>
+#include <QFile>
+#include <QByteArray>
+#include <QDataStream>
 
 // KDE includes.
 
-#include <kprotocolinfo.h>
-#include <kglobalsettings.h>
 #include <kio/renamedlg.h>
+#include <kio/deletejob.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kio/copyjob.h>
-#include <kio/deletejob.h>
+#include <kprotocolinfo.h>
+#include <kglobalsettings.h>
 
 // Local includes.
 
@@ -222,7 +221,7 @@ Watch::Watch(KIO::Job* job)
 {
     m_runCount++;
     connect(job, SIGNAL(result(KIO::Job*)),
-            SLOT(slotDone(KIO::Job*)));
+            this, SLOT(slotDone(KIO::Job*)));
 }
 
 void Watch::slotDone(KIO::Job*)
@@ -237,4 +236,3 @@ void Watch::slotDone(KIO::Job*)
 uint Watch::m_runCount = 0;
 
 }  // namespace DIO
-

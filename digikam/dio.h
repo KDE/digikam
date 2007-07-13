@@ -27,6 +27,7 @@
 // KDE includes.
 
 #include <kio/job.h>
+#include <kio/copyjob.h>
 
 namespace DIO
 {
