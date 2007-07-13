@@ -33,21 +33,17 @@ extern "C"
 #include <ctime>
 #include <cstdlib>
 
-
 // Qt includes.
 
-#include <qapplication.h>
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qmap.h>
-#include <qdir.h>
-#include <qfileinfo.h>
-
-#include <qpixmap.h>
+#include <QApplication>
+#include <QStringList>
+#include <QDir>
+#include <QFileInfo>
+#include <QPixmap>
+#include <QProgressBar>
 
 // KDE includes.
 
-#include <qprogressbar.h>
 #include <kmessagebox.h>
 #include <kapplication.h>
 #include <klocale.h>
