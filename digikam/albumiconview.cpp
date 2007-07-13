@@ -62,9 +62,9 @@ extern "C"
 
 // KDE includes.
 
-#include <kapplication.h>
-#include <kurl.h>
 #include <k3urldrag.h>
+#include <kurl.h>
+#include <kapplication.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kmessagebox.h>
@@ -79,6 +79,7 @@ extern "C"
 #include <kdeversion.h>
 #include <kcalendarsystem.h>
 #include <kinputdialog.h>
+#include <kio/jobuidelegate.h>
 
 // LibKipi includes.
 
@@ -428,7 +429,7 @@ void AlbumIconView::slotImageListerDeleteItem(ImageInfo* item)
 
     delete iconItem;
 
-    d->itemInfoMap.erase(item);
+    d->itemInfoMap.remove(item);
     d->itemDict.remove(item->fileUrl().url());
 
     IconGroupItem* group = firstGroup();
@@ -809,7 +810,7 @@ void AlbumIconView::slotRename(AlbumIconItem* item)
     ImageInfo renameInfo(*item->imageInfo());
 
     QFileInfo fi(item->imageInfo()->name());
-    QString ext  = QString(".") + fi.extension(false);
+    QString ext  = QString(".") + fi.suffix();
     QString name = fi.fileName();
     name.truncate(fi.fileName().length() - ext.length());
 
@@ -979,7 +980,7 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item)
         AlbumIconItem *iconItem = static_cast<AlbumIconItem *>(it);
         QString fileExtension = iconItem->imageInfo()->fileUrl().fileName().section( '.', -1 );
 
-        if ( imagefilter.find(fileExtension) != -1 )
+        if ( imagefilter.indexOf(fileExtension) != -1 )
         {
             ImageInfo *info = new ImageInfo(*iconItem->imageInfo());
             imageInfoList.append(info);
@@ -1860,12 +1861,18 @@ void AlbumIconView::updateItemRectsPixmap()
 void AlbumIconView::slotThemeChanged()
 {
     QPalette plt(palette());
-    QColorGroup cg(plt.active());
-    cg.setColor(QColorGroup::Base, ThemeEngine::componentData()->baseColor());
-    cg.setColor(QColorGroup::Text, ThemeEngine::componentData()->textRegColor());
-    cg.setColor(QColorGroup::HighlightedText, ThemeEngine::componentData()->textSelColor());
-    plt.setActive(cg);
-    plt.setInactive(cg);
+    plt.setColor(QPalette::Active, QPalette::Base, 
+                 ThemeEngine::componentData()->baseColor());
+    plt.setColor(QPalette::Active, QPalette::Text, 
+                 ThemeEngine::componentData()->textRegColor());
+    plt.setColor(QPalette::Active, QPalette::HighlightedText, 
+                 ThemeEngine::componentData()->textSelColor());
+    plt.setColor(QPalette::Inactive, QPalette::Base, 
+                 ThemeEngine::componentData()->baseColor());
+    plt.setColor(QPalette::Inactive, QPalette::Text, 
+                 ThemeEngine::componentData()->textRegColor());
+    plt.setColor(QPalette::Inactive, QPalette::HighlightedText, 
+                 ThemeEngine::componentData()->textSelColor());
     setPalette(plt);
 
     QPainter painter(&d->ratingPixmap);
@@ -2015,13 +2022,16 @@ void AlbumIconView::slotAssignRatingFiveStar()
 void AlbumIconView::slotDIOResult(KIO::Job* job)
 {
     if (job->error())
-        job->showErrorDialog(this);
+    {
+        job->ui()->setWindow(this);
+        job->ui()->showErrorMessage();
+    }
 }
 
 void AlbumIconView::slotImageAttributesChanged(qlonglong imageId)
 {
     AlbumIconItem *firstItem = static_cast<AlbumIconItem *>(findFirstVisibleItem());
-    AlbumIconItem *lastItem = static_cast<AlbumIconItem *>(findLastVisibleItem());
+    AlbumIconItem *lastItem  = static_cast<AlbumIconItem *>(findLastVisibleItem());
     for (AlbumIconItem *item = firstItem; item;
          item = static_cast<AlbumIconItem *>(item->nextItem()))
     {
