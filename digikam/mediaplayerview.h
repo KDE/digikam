@@ -26,7 +26,7 @@
 
 // Qt includes.
 
-#include <q3widgetstack.h>
+#include <QStackedWidget>
 
 // KDE includes.
 
@@ -41,7 +41,7 @@ namespace Digikam
 
 class MediaPlayerViewPriv;
 
-class DIGIKAM_EXPORT MediaPlayerView : public Q3WidgetStack
+class DIGIKAM_EXPORT MediaPlayerView : public QStackedWidget
 {
 Q_OBJECT
 
@@ -59,7 +59,7 @@ private slots:
 
 private:
 
-    int  previewMode(void);
+    int  previewMode();
     void setPreviewMode(int mode);
 
 private:

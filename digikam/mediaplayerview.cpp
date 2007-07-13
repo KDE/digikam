@@ -23,18 +23,17 @@
 
 // Qt includes.
 
-#include <qlabel.h>
-#include <qstring.h>
-#include <qlayout.h>
-#include <q3frame.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QLabel>
+#include <QString>
+#include <QFrame>
+#include <QGridLayout>
 
 // KDE includes.
 
 #include <kparts/componentfactory.h>
 #include <kmimetype.h>
-#include <kuserprofile.h>
+#include <kmimetypetrader.h>
+#include <kservice.h>
 #include <kdialog.h>
 #include <klocale.h>
 
@@ -69,55 +68,57 @@ public:
         mediaPlayerView   = 0;
     }
 
-    Q3Frame               *errorView;
+    QFrame               *errorView;
 
-    Q3Frame               *mediaPlayerView;
+    QFrame               *mediaPlayerView;
 
-    Q3GridLayout          *grid;
+    QGridLayout          *grid;
 
     KParts::ReadOnlyPart *mediaPlayerPart;
 };
     
 MediaPlayerView::MediaPlayerView(QWidget *parent)
-               : Q3WidgetStack(parent, 0, Qt::WDestructiveClose)
+               : QStackedWidget(parent)
 {
     d = new MediaPlayerViewPriv;
+    
+    setAttribute(Qt::WA_DeleteOnClose);
 
     // --------------------------------------------------------------------------
 
-    d->errorView          = new Q3Frame(this);
-    QLabel *errorMsg      = new QLabel(i18n("No media player available..."), d->errorView);
-    Q3GridLayout *grid     = new Q3GridLayout(d->errorView, 2, 2, 
-                                            KDialogBase::marginHint(), KDialogBase::spacingHint());
+    d->errorView      = new QFrame(this);
+    QLabel *errorMsg  = new QLabel(i18n("No media player available..."), d->errorView);
+    QGridLayout *grid = new QGridLayout(d->errorView);
 
     errorMsg->setAlignment(Qt::AlignCenter);
-    d->errorView->setFrameStyle(Q3Frame::GroupBoxPanel|Q3Frame::Plain);
-    d->errorView->setMargin(0);
+    d->errorView->setFrameStyle(QFrame::GroupBoxPanel|QFrame::Plain);
     d->errorView->setLineWidth(1);
 
     grid->addMultiCellWidget(errorMsg, 1, 1, 0, 2);
-    grid->setColStretch(0, 10),
-    grid->setColStretch(2, 10),
+    grid->setColumnStretch(0, 10),
+    grid->setColumnStretch(2, 10),
     grid->setRowStretch(0, 10),
     grid->setRowStretch(2, 10),
+    grid->setMargin(KDialog::spacingHint());
+    grid->setSpacing(KDialog::spacingHint());
 
-    addWidget(d->errorView, MediaPlayerViewPriv::ErrorView);
+    insertWidget(MediaPlayerViewPriv::ErrorView, d->errorView);
 
     // --------------------------------------------------------------------------
 
-    d->mediaPlayerView    = new Q3Frame(this);
-    d->grid               = new Q3GridLayout(d->mediaPlayerView, 2, 2, 
-                                            KDialogBase::marginHint(), KDialogBase::spacingHint());
+    d->mediaPlayerView = new QFrame(this);
+    d->grid            = new QGridLayout(d->mediaPlayerView);
 
-    d->mediaPlayerView->setFrameStyle(Q3Frame::GroupBoxPanel|Q3Frame::Plain);
-    d->mediaPlayerView->setMargin(0);
+    d->mediaPlayerView->setFrameStyle(QFrame::GroupBoxPanel|QFrame::Plain);
     d->mediaPlayerView->setLineWidth(1);
 
-    d->grid->setColStretch(0, 10),
-    d->grid->setColStretch(2, 10),
+    d->grid->setColumnStretch(0, 10),
+    d->grid->setColumnStretch(2, 10),
     d->grid->setRowStretch(0, 10),
+    d->grid->setMargin(KDialog::spacingHint());
+    d->grid->setSpacing(KDialog::spacingHint());
 
-    addWidget(d->mediaPlayerView, MediaPlayerViewPriv::PlayerView);
+    insertWidget(MediaPlayerViewPriv::PlayerView, d->mediaPlayerView);
     setPreviewMode(MediaPlayerViewPriv::PlayerView);
 
     // --------------------------------------------------------------------------
@@ -130,7 +131,7 @@ MediaPlayerView::~MediaPlayerView()
 {
     if (d->mediaPlayerPart)
     {
-        d->mediaPlayerPart->closeURL();
+        d->mediaPlayerPart->closeUrl();
         delete d->mediaPlayerPart;
         d->mediaPlayerPart = 0;
     }
@@ -144,30 +145,31 @@ void MediaPlayerView::setMediaPlayerFromUrl(const KUrl& url)
     {
         if (d->mediaPlayerPart)
         {
-            d->mediaPlayerPart->closeURL();
+            d->mediaPlayerPart->closeUrl();
             delete d->mediaPlayerPart;
             d->mediaPlayerPart = 0;
         }
         return;
     }
 
-    KMimeType::Ptr mimePtr = KMimeType::findByURL(url, 0, true, true);
-    KServiceTypeProfile::OfferList services = KServiceTypeProfile::offers(mimePtr->name(),
-                         QString::fromLatin1("KParts/ReadOnlyPart"));    
+    KMimeType::Ptr mimePtr = KMimeType::findByUrl(url, 0, true, true);
+
+    const KService::List services = KMimeTypeTrader::self()->query(mimePtr->name(),
+                                    QString::fromLatin1("KParts/ReadOnlyPart"));
 
     if (d->mediaPlayerPart)
     {
-        d->mediaPlayerPart->closeURL();
+        d->mediaPlayerPart->closeUrl();
         delete d->mediaPlayerPart;
         d->mediaPlayerPart = 0;
     }
 
     QWidget *mediaPlayerWidget = 0;
 
-    for( KServiceTypeProfile::OfferList::Iterator it = services.begin(); it != services.end(); ++it ) 
+    for( KService::List::ConstIterator it = services.begin() ; it != services.end() ; ++it ) 
     {
         // Ask for a part for this mime type
-        KService::Ptr service = (*it).service();
+        KService::Ptr service = *it;
     
         if (!service.data()) 
         {
@@ -184,11 +186,14 @@ void MediaPlayerView::setMediaPlayerFromUrl(const KUrl& url)
             continue;
         }
 
+        int error = 0;
         d->mediaPlayerPart = KParts::ComponentFactory::createPartInstanceFromService
-                             <KParts::ReadOnlyPart>(service, d->mediaPlayerView, 0, d->mediaPlayerView, 0);
+                             <KParts::ReadOnlyPart>(service, d->mediaPlayerView, d->mediaPlayerView,
+                                                    QStringList(), &error);
         if (!d->mediaPlayerPart) 
         {
-            DWarning() << "Failed to instantiate KPart from library " << library << endl;
+            DWarning() << "Failed to instantiate KPart from library " << library 
+                       << " error=" << error << endl;
             continue;
         }
     
@@ -210,7 +215,7 @@ void MediaPlayerView::setMediaPlayerFromUrl(const KUrl& url)
     
     d->grid->addMultiCellWidget(mediaPlayerWidget, 0, 0, 0, 2);
     mediaPlayerWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    d->mediaPlayerPart->openURL(url);
+    d->mediaPlayerPart->openUrl(url);
     setPreviewMode(MediaPlayerViewPriv::PlayerView);
 }
 
@@ -218,7 +223,7 @@ void MediaPlayerView::escapePreview()
 {
     if (d->mediaPlayerPart)
     {
-        d->mediaPlayerPart->closeURL();
+        d->mediaPlayerPart->closeUrl();
         delete d->mediaPlayerPart;
         d->mediaPlayerPart = 0;
     }
@@ -226,13 +231,18 @@ void MediaPlayerView::escapePreview()
 
 void MediaPlayerView::slotThemeChanged()
 {
-    d->errorView->setPaletteBackgroundColor(ThemeEngine::componentData()->baseColor());
-    d->mediaPlayerView->setPaletteBackgroundColor(ThemeEngine::componentData()->baseColor());
+    QPalette palette;
+    palette.setColor(d->errorView->backgroundRole(), ThemeEngine::componentData()->baseColor());
+    d->errorView->setPalette(palette);
+
+    QPalette palette2;
+    palette2.setColor(d->mediaPlayerView->backgroundRole(), ThemeEngine::componentData()->baseColor());
+    d->mediaPlayerView->setPalette(palette2);
 }
 
-int MediaPlayerView::previewMode(void)
+int MediaPlayerView::previewMode()
 {
-    return id(visibleWidget());
+    return indexOf(currentWidget());
 }
 
 void MediaPlayerView::setPreviewMode(int mode)
@@ -240,8 +250,7 @@ void MediaPlayerView::setPreviewMode(int mode)
     if (mode != MediaPlayerViewPriv::ErrorView && mode != MediaPlayerViewPriv::PlayerView)
         return;
 
-    raiseWidget(mode);
+    setCurrentIndex(mode);
 }
 
 }  // NameSpace Digikam
-
