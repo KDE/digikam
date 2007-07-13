@@ -82,7 +82,7 @@ SET(digikam_LIB_SRCS
                       albumicongroupitem.cpp 
                       albumiconitem.cpp 
                       albumitemhandler.cpp 
-#                      albumfiletip.cpp 
+                      albumfiletip.cpp 
 #                      albumfolderview.cpp 
                       albumhistory.cpp 
                       albumlister.cpp 

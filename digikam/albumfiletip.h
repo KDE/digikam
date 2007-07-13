@@ -30,9 +30,8 @@
 
 // Qt includes.
 
-#include <q3frame.h>
-#include <qstring.h>
-//Added by qt3to4:
+#include <Q3Frame>
+#include <QString>
 #include <QEvent>
 #include <QResizeEvent>
 

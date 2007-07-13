@@ -27,20 +27,16 @@
 
 // Qt includes.
  
-#include <qtooltip.h>
-#include <qfileinfo.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qpixmap.h>
-#include <qdatetime.h>
-#include <q3stylesheet.h>
-#include <qpainter.h>
-#include <qapplication.h>
-//Added by qt3to4:
-#include <QResizeEvent>
-#include <Q3Frame>
-#include <QEvent>
-#include <Q3VBoxLayout>
+#include <Q3StyleSheet>
+#include <QToolTip>
+#include <QFileInfo>
+#include <QLabel>
+#include <QPixmap>
+#include <QDateTime>
+#include <QPainter>
+#include <QApplication>
+#include <QVBoxLayout>
+#include <QTextDocument>
 
 // KDE includes.
 
@@ -54,7 +50,6 @@
 // LibKDcraw includes. 
  
 #include <libkdcraw/rawfiles.h> 
-#include <QTextDocument>
  
 // Local includes.
 
@@ -83,7 +78,7 @@ public:
         iconItem = 0;
     }
 
-    const uint     maxStringLen;
+    const  int     maxStringLen;
     const uint     tipBorder;
 
     int            corner;
@@ -98,8 +93,7 @@ public:
 };
 
 AlbumFileTip::AlbumFileTip(AlbumIconView* view)
-            : Q3Frame(0, 0, Qt::WStyle_Customize | Qt::WStyle_NoBorder | Qt::WStyle_Tool |
-                     Qt::WStyle_StaysOnTop | Qt::WX11BypassWM)
+            : Q3Frame(0)
 {
     d = new AlbumFileTipPriv;
     d->view = view;
@@ -108,15 +102,19 @@ AlbumFileTip::AlbumFileTip(AlbumIconView* view)
     setPalette(QToolTip::palette());
     setFrameStyle(Q3Frame::Plain | Q3Frame::Box);
     setLineWidth(1);
+    setWindowFlags(Qt::WStyle_Customize | Qt::WStyle_NoBorder | Qt::WStyle_Tool |
+                   Qt::WStyle_StaysOnTop | Qt::WX11BypassWM);
 
-    Q3VBoxLayout *layout = new Q3VBoxLayout(this, d->tipBorder+1, 0);
+    QVBoxLayout *layout = new QVBoxLayout(this);
 
     d->label = new QLabel(this);
     d->label->setMargin(0);
     d->label->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 
     layout->addWidget(d->label);
-    layout->setResizeMode(QLayout::Fixed);
+    layout->setSizeConstraint(QLayout::SetFixedSize);
+    layout->setMargin(d->tipBorder+1);
+    layout->setSpacing(0);
 
     renderArrows();
 }
@@ -202,8 +200,8 @@ void AlbumFileTip::renderArrows()
     // -- left top arrow -------------------------------------
 
     QPixmap& pix0 = d->corners[0];
-    pix0.resize(w, w);
-    pix0.fill(colorGroup().background());
+    pix0 = QPixmap(w, w);
+    pix0.fill(palette().color(QPalette::Background));
 
     QPainter p0(&pix0);
     p0.setPen(QPen(Qt::black, 1));
@@ -216,8 +214,8 @@ void AlbumFileTip::renderArrows()
     // -- right top arrow ------------------------------------
 
     QPixmap& pix1 = d->corners[1];
-    pix1.resize(w, w);
-    pix1.fill(colorGroup().background());
+    pix1 = QPixmap(w, w);
+    pix1.fill(palette().color(QPalette::Background));
 
     QPainter p1(&pix1);
     p1.setPen(QPen(Qt::black, 1));
@@ -230,8 +228,8 @@ void AlbumFileTip::renderArrows()
     // -- left bottom arrow ----------------------------------
 
     QPixmap& pix2 = d->corners[2];
-    pix2.resize(w, w);
-    pix2.fill(colorGroup().background());
+    pix2 = QPixmap(w, w);
+    pix2.fill(palette().color(QPalette::Background));
 
     QPainter p2(&pix2);
     p2.setPen(QPen(Qt::black, 1));
@@ -244,8 +242,8 @@ void AlbumFileTip::renderArrows()
     // -- right bottom arrow ---------------------------------
 
     QPixmap& pix3 = d->corners[3];
-    pix3.resize(w, w);
-    pix3.fill(colorGroup().background());
+    pix3 = QPixmap(w, w);
+    pix3.fill(palette().color(QPalette::Background));
 
     QPainter p3(&pix3);
     p3.setPen(QPen(Qt::black, 1));
@@ -356,7 +354,7 @@ void AlbumFileTip::updateText()
         if (settings->getToolTipsShowFileDate())
         {
             QDateTime modifiedDate = fileInfo.lastModified();
-            str = KGlobal::locale()->formatDateTime(modifiedDate, true, true);
+            str = KGlobal::locale()->formatDateTime(modifiedDate, KLocale::ShortDate, true);
             tip += cellBeg + i18n("Modified:") + cellMid + str + cellEnd;
         }
 
@@ -370,7 +368,7 @@ void AlbumFileTip::updateText()
 
         QSize   dims;
         QString rawFilesExt(raw_file_extentions);
-        QString ext = fileInfo.extension(false).toUpper();
+        QString ext = fileInfo.suffix().toUpper();
 
         if (!ext.isEmpty() && rawFilesExt.toUpper().contains(ext))
         {
@@ -382,6 +380,10 @@ void AlbumFileTip::updateText()
             str = fi.mimeComment();
 
             KFileMetaInfo meta = fi.metaInfo();
+    
+/*          TODO: KDE4PORT: KFileMetaInfo API as Changed.
+                            Check if new method to search "Dimensions" information is enough.
+
             if (meta.isValid())
             {
                 if (meta.containsGroup("Jpeg EXIF Data"))
@@ -390,6 +392,11 @@ void AlbumFileTip::updateText()
                     dims = meta.group("General").item("Dimensions").value().toSize();
                 else if (meta.containsGroup("Technical"))
                     dims = meta.group("Technical").item("Dimensions").value().toSize();
+            }*/
+
+            if (meta.isValid() && meta.item("Dimensions").isValid())
+            {
+                dims = meta.item("Dimensions").value().toSize();
             }
         }
 
@@ -438,7 +445,7 @@ void AlbumFileTip::updateText()
             {
                 if (photoInfo.dateTime.isValid())
                 {
-                    str = KGlobal::locale()->formatDateTime(photoInfo.dateTime, true, true);
+                    str = KGlobal::locale()->formatDateTime(photoInfo.dateTime, KLocale::ShortDate, true);
                     if (str.length() > d->maxStringLen) str = str.left(d->maxStringLen-3) + "...";
                     metaStr += cellBeg + i18n("Created:") + cellMid + Qt::escape( str ) + cellEnd;
                 }
@@ -549,16 +556,16 @@ void AlbumFileTip::updateText()
 QString AlbumFileTip::breakString(const QString& input)
 {
     QString str = input.simplified();
-    str = Qt::escape(str);
-    uint maxLen = d->maxStringLen;
+    str         = Qt::escape(str);
+    int maxLen  = d->maxStringLen;
 
     if (str.length() <= maxLen)
         return str;
 
     QString br;
 
-    uint i = 0;
-    uint count = 0;
+    int i     = 0;
+    int count = 0;
 
     while (i < str.length())
     {
