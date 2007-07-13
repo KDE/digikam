@@ -94,7 +94,7 @@ MediaPlayerView::MediaPlayerView(QWidget *parent)
     d->errorView->setFrameStyle(QFrame::GroupBoxPanel|QFrame::Plain);
     d->errorView->setLineWidth(1);
 
-    grid->addMultiCellWidget(errorMsg, 1, 1, 0, 2);
+    grid->addWidget(errorMsg, 1, 0, 1, 3 );
     grid->setColumnStretch(0, 10),
     grid->setColumnStretch(2, 10),
     grid->setRowStretch(0, 10),
@@ -213,7 +213,7 @@ void MediaPlayerView::setMediaPlayerFromUrl(const KUrl& url)
         return;
     }
     
-    d->grid->addMultiCellWidget(mediaPlayerWidget, 0, 0, 0, 2);
+    d->grid->addWidget(mediaPlayerWidget, 0, 0, 1, 3 );
     mediaPlayerWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     d->mediaPlayerPart->openUrl(url);
     setPreviewMode(MediaPlayerViewPriv::PlayerView);
