@@ -103,7 +103,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
             albumfolderview.cpp                                         X
             albumhistory.cpp                    Laurent                 X       DONE
             albumicongroupitem.cpp                                      X
-            albumiconitem.cpp                                           X
+            albumiconitem.cpp                   Gilles                  X       DONE
             albumiconview.cpp                                           X
             albumitemhandler.cpp                Laurent                 X       DONE
             albumlister.cpp                     Gilles                  X       DONE
