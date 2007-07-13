@@ -23,13 +23,13 @@
 
 // Qt includes.
 
-#include <qdatastream.h>
-//Added by qt3to4:
+#include <QDataStream>
 #include <QPixmap>
 
 // KDE includes.
 
 #include <kio/job.h>
+#include <kio/jobuidelegate.h>
 #include <kfileitem.h>
 #include <kurl.h>
 
@@ -47,12 +47,12 @@ namespace Digikam
 {
 
 SearchResultsView::SearchResultsView(QWidget* parent)
-    : Q3IconView(parent)
+                 : Q3IconView(parent)
 {
     m_listJob  = 0;
     m_thumbJob = 0;
 
-    m_filter      = AlbumSettings::componentData()->getAllFileFilter();
+    m_filter   = AlbumSettings::componentData()->getAllFileFilter();
 
     setAutoArrange(true);
     setResizeMode(Q3IconView::Adjust);
@@ -77,14 +77,15 @@ void SearchResultsView::openURL(const KUrl& url)
     m_thumbJob = 0;
 
     m_listJob = ImageLister::startListJob(DatabaseUrl::fromSearchUrl(url),
-                                          m_filter,
-                                          false, // getting dimensions (not needed here)
-                                          1);    // miniListing (Use 0 for full listing)
+                    m_filter,
+                    false, // getting dimensions (not needed here)
+                    1);    // miniListing (Use 0 for full listing)
 
     connect(m_listJob, SIGNAL(result(KIO::Job*)),
-            SLOT(slotResult(KIO::Job*)));
+            this, SLOT(slotResult(KIO::Job*)));
+
     connect(m_listJob, SIGNAL(data(KIO::Job*, const QByteArray&)),
-            SLOT(slotData(KIO::Job*, const QByteArray&)));
+            this, SLOT(slotData(KIO::Job*, const QByteArray&)));
 }
 
 void SearchResultsView::clear()
@@ -162,7 +163,10 @@ void SearchResultsView::slotData(KIO::Job*, const QByteArray &data)
 void SearchResultsView::slotResult(KIO::Job *job)
 {
     if (job->error())
-        job->showErrorDialog(this);
+    {
+        job->ui()->setWindow(this);
+        job->ui()->showErrorMessage();
+    }
     m_listJob = 0;
 }
 
@@ -182,5 +186,3 @@ void SearchResultsView::slotFailedThumbnail(const KUrl&)
 }
 
 }  // namespace Digikam
-
-

@@ -120,7 +120,7 @@ SET(digikam_LIB_SRCS
 #                      searchadvanceddialog.cpp 
 #                      searchfolderview.cpp 
                       searchquickdialog.cpp 
-#                      searchresultsview.cpp 
+                      searchresultsview.cpp 
                       searchresultsitem.cpp 
 #                      searchwidgets.cpp 
 #                      syncjob.cpp 

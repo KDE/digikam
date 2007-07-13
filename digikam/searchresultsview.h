@@ -26,12 +26,10 @@
 
 // Qt includes.
 
-#include <q3iconview.h>
-#include <q3cstring.h>
-#include <q3dict.h>
-#include <qpointer.h>
-//Added by qt3to4:
-#include <QPixmap>
+#include <Q3IconView>
+#include <Q3Dict>
+#include <QByteArray>
+#include <QPointer>
 
 // Local includes.
 
@@ -63,13 +61,13 @@ public:
 
 private:
 
-    KIO::TransferJob*         m_listJob;
+    KIO::TransferJob*      m_listJob;
 
     QPointer<ThumbnailJob> m_thumbJob;
 
-    Q3Dict<Q3IconViewItem>      m_itemDict;
+    Q3Dict<Q3IconViewItem> m_itemDict;
 
-    QString                   m_filter;
+    QString                m_filter;
 
 private slots:
 
