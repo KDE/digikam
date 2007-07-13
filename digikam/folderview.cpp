@@ -24,15 +24,8 @@
 
 // Qt includes.
 
-#include <qpixmap.h>
-#include <q3valuelist.h>
-//Added by qt3to4:
-#include <QDragMoveEvent>
-#include <QDropEvent>
-#include <QDragLeaveEvent>
-#include <QResizeEvent>
-#include <QMouseEvent>
-#include <QDragEnterEvent>
+#include <QList>
+#include <QPixmap>
 
 // KDE includes.
 
@@ -83,14 +76,15 @@ public:
 //-----------------------------------------------------------------------------
 
 FolderView::FolderView(QWidget *parent, const char *name)
-          : Q3ListView(parent, name)
+          : Q3ListView(parent)
 {
 
     d = new FolderViewPriv;
-
-    d->active = false;
+    d->active           = false;
     d->dragItem         = 0;
     d->oldHighlightItem = 0;
+
+    setObjectName(name);
 
     connect(ThemeEngine::componentData(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
@@ -181,7 +175,7 @@ void FolderView::contentsMouseMoveEvent(QMouseEvent *e)
 {
     Q3ListView::contentsMouseMoveEvent(e);
 
-    if(e->state() == NoButton)
+    if(e->buttons() == Qt::NoButton)
     {
         if(KGlobalSettings::changeCursorOverIcon())
         {
@@ -214,7 +208,8 @@ void FolderView::contentsMousePressEvent(QMouseEvent *e)
 
     QPoint vp        = contentsToViewport(e->pos());
     FolderItem *item = dynamic_cast<FolderItem*>(itemAt(vp));
-    if(item && e->button() == LeftButton) 
+
+    if(item && e->button() == Qt::LeftButton) 
     {
         d->dragStartPos = e->pos();
         d->dragItem     = item;
@@ -245,7 +240,7 @@ void FolderView::contentsDragEnterEvent(QDragEnterEvent *e)
 {
     Q3ListView::contentsDragEnterEvent(e);
     
-    e->accept(acceptDrop(e));
+    e->setAccepted(acceptDrop(e));
 }
 
 void FolderView::contentsDragLeaveEvent(QDragLeaveEvent * e)
@@ -277,7 +272,7 @@ void FolderView::contentsDragMoveEvent(QDragMoveEvent *e)
         d->oldHighlightItem = item;
         item->repaint();
     }
-    e->accept(acceptDrop(e));
+    e->setAccepted(acceptDrop(e));
 }
 
 void FolderView::contentsDropEvent(QDropEvent *e)
@@ -320,14 +315,26 @@ void FolderView::slotThemeChanged()
     d->itemSelPix = ThemeEngine::componentData()->listSelPixmap(w, h);
 
     QPalette plt(palette());
-    QColorGroup cg(plt.active());
-    cg.setColor(QColorGroup::Base, ThemeEngine::componentData()->baseColor());
-    cg.setColor(QColorGroup::Text, ThemeEngine::componentData()->textRegColor());
-    cg.setColor(QColorGroup::HighlightedText, ThemeEngine::componentData()->textSelColor());
-    cg.setColor(QColorGroup::Link, ThemeEngine::componentData()->textSpecialRegColor());
-    cg.setColor(QColorGroup::LinkVisited, ThemeEngine::componentData()->textSpecialSelColor());
-    plt.setActive(cg);
-    plt.setInactive(cg);
+    plt.setColor(QPalette::Active, QPalette::Base, 
+                 ThemeEngine::componentData()->baseColor());
+    plt.setColor(QPalette::Active, QPalette::Text, 
+                 ThemeEngine::componentData()->textRegColor());
+    plt.setColor(QPalette::Active, QPalette::HighlightedText, 
+                 ThemeEngine::componentData()->textSelColor());
+    plt.setColor(QPalette::Active, QPalette::Link, 
+                 ThemeEngine::componentData()->textSpecialRegColor());
+    plt.setColor(QPalette::Active, QPalette::LinkVisited,
+                 ThemeEngine::componentData()->textSpecialSelColor());
+    plt.setColor(QPalette::Inactive, QPalette::Base, 
+                 ThemeEngine::componentData()->baseColor());
+    plt.setColor(QPalette::Inactive, QPalette::Text, 
+                 ThemeEngine::componentData()->textRegColor());
+    plt.setColor(QPalette::Inactive, QPalette::HighlightedText, 
+                 ThemeEngine::componentData()->textSelColor());
+    plt.setColor(QPalette::Inactive, QPalette::Link, 
+                 ThemeEngine::componentData()->textSpecialRegColor());
+    plt.setColor(QPalette::Inactive, QPalette::LinkVisited,
+                 ThemeEngine::componentData()->textSpecialSelColor());
     setPalette(plt);
 
     viewport()->update();
@@ -343,7 +350,7 @@ void FolderView::slotAllAlbumsLoaded()
 void FolderView::loadViewState()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(name());
+    KConfigGroup group = config->group(objectName());
     
     int selectedItem = group.readEntry("LastSelectedItem", 0);
     
@@ -376,7 +383,7 @@ void FolderView::loadViewState()
 void FolderView::saveViewState()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(name());
+    KConfigGroup group        = config->group(objectName());
    
     FolderItem *item = dynamic_cast<FolderItem*>(selectedItem());
     if(item)
@@ -384,7 +391,7 @@ void FolderView::saveViewState()
     else
         group.writeEntry("LastSelectedItem", 0);
     
-    Q3ValueList<int> openFolders;
+    QList<int> openFolders;
     Q3ListViewItemIterator it(this);
     for( ; it.current(); ++it)
     {
@@ -405,4 +412,3 @@ void FolderView::selectItem(int)
 }
 
 }  // namespace Digikam
-    
