@@ -23,16 +23,12 @@
 
 // Qt includes.
 
-#include <qdatetime.h>
-#include <qfontmetrics.h>
-#include <qpainter.h>
-#include <qpixmap.h>
-#include <qpalette.h>
-//Added by qt3to4:
-#include <QResizeEvent>
-#include <Q3Frame>
 #include <Q3ValueList>
-#include <QMouseEvent>
+#include <QDateTime>
+#include <QFontMetrics>
+#include <QPainter>
+#include <QPixmap>
+#include <QPalette>
 
 // KDE includes.
 
@@ -52,8 +48,9 @@ namespace Digikam
 {
 
 MonthWidget::MonthWidget(QWidget* parent)
-    : Q3Frame(parent, 0, Qt::WNoAutoErase)
+    : QFrame(parent)
 {
+    setWindowFlags(Qt::WNoAutoErase);
     init();
 
     QDate date = QDate::currentDate();
@@ -126,15 +123,13 @@ void MonthWidget::drawContents(QPainter *)
     
     QPixmap pix(cr.width(), cr.height());
 
-    QColorGroup cg = colorGroup();
-
     QFont fnBold(font());
     QFont fnOrig(font());
     fnBold.setBold(true);
     fnOrig.setBold(false);
     
     QPainter p(&pix);
-    p.fillRect(0, 0, cr.width(), cr.height(), cg.background());
+    p.fillRect(0, 0, cr.width(), cr.height(), palette().color(QPalette::Background));
 
     QRect r(0, 0, m_currw, m_currh);
     QRect rsmall;
@@ -156,8 +151,8 @@ void MonthWidget::drawContents(QPainter *)
             {
                 if (m_days[index].selected)
                 {
-                    p.fillRect(r, cg.highlight());
-                    p.setPen(cg.highlightedText());
+                    p.fillRect(r, palette().color(QPalette::Highlight));
+                    p.setPen(palette().color(QPalette::HighlightedText));
 
                     if (m_days[index].active)
                     {
@@ -172,12 +167,12 @@ void MonthWidget::drawContents(QPainter *)
                 {
                     if (m_days[index].active)
                     {
-                        p.setPen(cg.text());
+                        p.setPen(palette().color(QPalette::Text));
                         p.setFont(fnBold);
                     }
                     else
                     {
-                        p.setPen(cg.mid());
+                        p.setPen(palette().color(QPalette::Mid));
                         p.setFont(fnOrig);
                     }
                 }
@@ -234,13 +229,15 @@ void MonthWidget::drawContents(QPainter *)
 
     p.end();
 
-    bitBlt(this, cr.x(), cr.y(), &pix);
+    QPainter p2(this);
+    p2.drawPixmap(cr.x(), cr.y(), pix);
+    p2.end();
 }
 
 void MonthWidget::mousePressEvent(QMouseEvent *e)
 {
     int firstSelected = 0, lastSelected = 0;
-    if (e->state() != Qt::ControlModifier)
+    if (e->modifiers() != Qt::ControlModifier)
     {
         for (int i=0; i<42; i++)
         {
@@ -282,7 +279,7 @@ void MonthWidget::mousePressEvent(QMouseEvent *e)
         int i, j;
         i = (e->pos().x() - m_currw)/m_currw;
         j = (e->pos().y() - 3*m_currh)/m_currh;
-        if (e->state() == Qt::ShiftModifier)
+        if (e->modifiers() == Qt::ShiftModifier)
         {
             int endSelection = j*7+i;
             if (endSelection > firstSelected) 
@@ -383,4 +380,3 @@ void MonthWidget::slotDeleteItem(ImageInfo* item)
 }
 
 }  // namespace Digikam
-
