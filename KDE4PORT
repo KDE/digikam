@@ -136,7 +136,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
             kipiinterface.cpp                   Gilles                  X       DONE
             main.cpp                            Gilles                  X       DONE
             mediaplayerview.cpp                 Gilles                  X       DONE
-            metadatahub.cpp                                             X
+            metadatahub.cpp                     Gilles                  X       DONE 
             monthwidget.cpp                     Gilles                  X       DONE
             pixmapmanager.cpp                   Gilles                  X       DONE
             ratingpopupmenu.cpp                 Gilles                  X       DONE
