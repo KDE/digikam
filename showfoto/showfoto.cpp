@@ -601,7 +601,7 @@ void ShowFoto::slotOpenFile()
 
     QString fileformats;
    
-    QStringList patternList = QStringList::split('\n', KImageIO::pattern(KImageIO::Reading));
+    QStringList patternList = KImageIO::pattern(KImageIO::Reading).split('\n', QString::SkipEmptyParts);
     
     // All Pictures from list must been always the first entry given by KDE API
     QString allPictures = patternList[0];
@@ -609,8 +609,8 @@ void ShowFoto::slotOpenFile()
     // Add other files format witch are missing to All Pictures" type mime provided by KDE and remplace current.
     if (KDcrawIface::DcrawBinary::componentData()->versionIsRight())
     {
-        allPictures.insert(allPictures.find("|"), QString(raw_file_extentions) + QString(" *.JPE *.TIF"));
-        patternList.remove(patternList[0]);
+        allPictures.insert(allPictures.indexOf("|"), QString(raw_file_extentions) + QString(" *.JPE *.TIF"));
+        patternList.removeAll(patternList[0]);
         patternList.prepend(allPictures);
     }
     
