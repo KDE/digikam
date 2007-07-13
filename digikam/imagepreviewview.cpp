@@ -399,7 +399,7 @@ void ImagePreviewView::slotContextMenu()
                 
                 if (action->objectName().toLatin1() == QString::fromLatin1("jpeglossless_rotate"))
                 {
-                    action->setMenu(&popmenu);
+                    popmenu.addAction(action);
                 }
             }
         }

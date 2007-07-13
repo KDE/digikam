@@ -490,7 +490,7 @@ void AlbumIconView::slotRightButtonClicked(const QPoint& pos)
         paste->setEnabled(false);
     }
 
-    paste->plug(&popmenu);
+    popmenu.addAction(paste);
     popmenu.exec(pos);
     delete paste;
 }
