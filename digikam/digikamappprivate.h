@@ -35,7 +35,6 @@
 #include <kconfig.h>
 #include <kaction.h>
 #include <kselectaction.h>
-#include <kaccel.h>
 #include <kmenu.h>
 #include <kstatusbar.h>
 
