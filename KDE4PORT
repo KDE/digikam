@@ -146,7 +146,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
             searchfolderview.cpp                                        X
             searchquickdialog.cpp               Laurent                 X       DONE
             searchresultsitem.cpp               Gilles                  X       DONE
-            searchresultsview.cpp                                       X
+            searchresultsview.cpp               Gilles                  X       DONE
             searchwidgets.cpp                                           X
             syncjob.cpp                                                 X
             tagcreatedlg.cpp                                            X
