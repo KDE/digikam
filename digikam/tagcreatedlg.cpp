@@ -76,62 +76,78 @@ TagCreateDlg::TagCreateDlg(QWidget *parent, TAlbum* album)
     setDefaultButton(Ok);
     setCaption(i18n("New Tag"));
     setModal(true);
-    QWidget *widget = new QWidget(this);
-    setMainWidget(widget);
-    d = new TagCreateDlgPriv;
     setHelp("tagscreation.anchor", "digikam");
 
-    Q3GridLayout* grid = new Q3GridLayout(widget, 1, 1, 0, spacingHint());
-    QLabel *logo = new QLabel(plainPage());
+    d = new TagCreateDlgPriv;
+
+    QWidget *widget = new QWidget(this);
+    setMainWidget(widget);
+
+    // --------------------------------------------------------
+ 
+    QGridLayout* grid = new QGridLayout(widget);
+
+    QLabel *logo = new QLabel(widget);
     KIconLoader* iconLoader = KIconLoader::global();
     logo->setPixmap(iconLoader->loadIcon("digikam", K3Icon::NoGroup, 96, K3Icon::DefaultState, 0, true));    
 
-    Q3VBoxLayout *topLayout = new Q3VBoxLayout(spacingHint());
+    QVBoxLayout *topLayout = new QVBoxLayout();
 
     QLabel *topLabel = new QLabel(widget);
     QString tagName  = album->prettyUrl();
     if (tagName.endsWith("/")) tagName.truncate(tagName.length()-1);
     topLabel->setText( i18n("<qt><b>Create New Tag in <i>\"%1\"</i></b></qt>",tagName));
     topLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine);
+
+    // --------------------------------------------------------
+
+    QFrame *topLine = new QFrame(widget);
+    topLine->setFrameShape(QFrame::HLine);
+    topLine->setFrameShadow(QFrame::Sunken);
+
     topLayout->addWidget(topLabel);
+    topLayout->addWidget(topLine);
+    topLayout->setMargin(KDialog::spacingHint());
+    topLayout->setSpacing(0);
 
     // --------------------------------------------------------
 
-    QFrame *topLine = new Q3Frame( widget );
-    topLine->setFrameShape( Q3Frame::HLine );
-    topLine->setFrameShadow( Q3Frame::Sunken );
-    topLayout->addWidget( topLine );
-
-    // --------------------------------------------------------
-
-    Q3GridLayout *gl = new Q3GridLayout(topLayout, spacingHint());
+    QGridLayout *gl = new QGridLayout();
+    topLayout->addLayout(gl);
 
     QLabel *titleLabel = new QLabel(widget);
     titleLabel->setText(i18n("&Title:"));
-    gl->addWidget(titleLabel, 0, 0);
 
     d->titleEdit = new KLineEdit(widget);
     titleLabel->setBuddy(d->titleEdit);
-    gl->addWidget(d->titleEdit, 0, 1);
 
     setFocusProxy(d->titleEdit);
 
     QLabel *iconTextLabel = new QLabel(widget);
     iconTextLabel->setText(i18n("&Icon:"));
-    gl->addWidget(iconTextLabel, 1, 0);
 
     d->iconButton = new QPushButton(widget);
     d->iconButton->setFixedSize(40, 40);
     iconTextLabel->setBuddy(d->iconButton);
-    gl->addWidget(d->iconButton, 1, 1);
 
-    QSpacerItem* spacer = new QSpacerItem(0, 0, QSizePolicy::Minimum,
-                                          QSizePolicy::Expanding);
-    gl->addItem(spacer, 2, 1);
+    QSpacerItem* spacer = new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+    // --------------------------------------------------------
+
+    gl->addMultiCellWidget(titleLabel, 0, 0, 0, 0);
+    gl->addMultiCellWidget(d->titleEdit, 0, 0, 1, 1);
+    gl->addMultiCellWidget(iconTextLabel, 1, 1, 0, 0);
+    gl->addMultiCellWidget(d->iconButton, 1, 1, 1, 1);
+    gl->addMultiCell(spacer, 2, 2, 1, 1);
+    gl->setMargin(KDialog::spacingHint());
+    gl->setSpacing(0);
 
     grid->addMultiCellWidget(logo, 0, 0, 0, 0);
     grid->addMultiCellLayout(topLayout, 0, 1, 1, 1);
     grid->setRowStretch(1, 10);
+    grid->setMargin(0);
+    grid->setSpacing(KDialog::spacingHint());
+
 
     // --------------------------------------------------------
 
@@ -148,7 +164,7 @@ TagCreateDlg::TagCreateDlg(QWidget *parent, TAlbum* album)
     if (!album->isRoot())
         d->icon = album->icon();
     
-    d->iconButton->setIconSet(SyncJob::getTagThumbnail(d->icon, 20));
+    d->iconButton->setIcon(SyncJob::getTagThumbnail(d->icon, 20));
 
     enableButtonOk(!d->titleEdit->text().isEmpty());
     adjustSize();
@@ -172,14 +188,14 @@ QString TagCreateDlg::icon() const
 void TagCreateDlg::slotIconChange()
 {
     KIconDialog dlg(this);
-    dlg.setup(KIcon::NoGroup, KIcon::Application, false, 20, false, false, false);
+    dlg.setup(K3Icon::NoGroup, K3Icon::Application, false, 20, false, false, false);
     QString icon = dlg.openDialog();
 
     if (icon.isEmpty() || d->icon == icon)
         return;
 
     d->icon = icon;
-    d->iconButton->setIconSet(SyncJob::getTagThumbnail(d->icon, 20));
+    d->iconButton->setIcon(SyncJob::getTagThumbnail(d->icon, 20));
 }
 
 void TagCreateDlg::slotTitleChanged(const QString& newtitle)
@@ -223,66 +239,86 @@ public:
 };
 
 TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album)
-          : KDialogBase(Plain, i18n("Edit Tag"), Help|Ok|Cancel, Ok, parent, 0, true, true )
+          : KDialog(parent)
 {
-    d = new TagEditDlgPriv;
+    setButtons(Help|Ok|Cancel);
+    setDefaultButton(Ok);
+    setCaption(i18n("Edit Tag"));
+    setModal(true);
     setHelp("tagscreation.anchor", "digikam");
 
-    Q3GridLayout* grid = new Q3GridLayout(plainPage(), 1, 1, 0, spacingHint());
-    QLabel *logo = new QLabel(plainPage());
+    d = new TagEditDlgPriv;
+
+    QWidget *widget = new QWidget(this);
+    setMainWidget(widget);
+
+    // --------------------------------------------------------
+
+    QGridLayout* grid = new QGridLayout(widget);
+
+    QLabel *logo = new QLabel(widget);
     KIconLoader* iconLoader = KIconLoader::global();
-    logo->setPixmap(iconLoader->loadIcon("digikam", KIcon::NoGroup, 96, KIcon::DefaultState, 0, true));    
+    logo->setPixmap(iconLoader->loadIcon("digikam", K3Icon::NoGroup, 96, K3Icon::DefaultState, 0, true));    
 
-    Q3VBoxLayout *topLayout = new Q3VBoxLayout(spacingHint());
+    QVBoxLayout *topLayout = new QVBoxLayout();
 
-    QLabel *topLabel = new QLabel(plainPage());
+    QLabel *topLabel = new QLabel(widget);
     QString tagName  = album->prettyUrl();
     if (tagName.endsWith("/")) tagName.truncate(tagName.length()-1);
     topLabel->setText( i18n("<qt><b>Tag <i>\"%1\"</i> Properties </b></qt>").arg(tagName));
     topLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine);
+
+    // --------------------------------------------------------
+
+    QFrame *topLine = new QFrame(widget);
+    topLine->setFrameShape(QFrame::HLine);
+    topLine->setFrameShadow(QFrame::Sunken);
+
     topLayout->addWidget(topLabel);
+    topLayout->addWidget(topLine);
+    topLayout->setMargin(KDialog::spacingHint());
+    topLayout->setSpacing(0);
 
     // --------------------------------------------------------
 
-    QFrame *topLine = new Q3Frame( plainPage() );
-    topLine->setFrameShape( Q3Frame::HLine );
-    topLine->setFrameShadow( Q3Frame::Sunken );
-    topLayout->addWidget( topLine );
+    QGridLayout *gl = new QGridLayout();
+    topLayout->addLayout(gl);
 
-    // --------------------------------------------------------
-
-    Q3GridLayout *gl = new Q3GridLayout(topLayout, spacingHint());
-
-    QLabel *titleLabel = new QLabel(plainPage());
+    QLabel *titleLabel = new QLabel(widget);
     titleLabel->setText(i18n("&Title:"));
 
-    d->titleEdit = new KLineEdit(plainPage());
+    d->titleEdit = new KLineEdit(widget);
     d->titleEdit->setText(album->title());
     titleLabel->setBuddy(d->titleEdit);
     setFocusProxy(d->titleEdit);
 
-    QLabel *iconTextLabel = new QLabel(plainPage());
+    QLabel *iconTextLabel = new QLabel(widget);
     iconTextLabel->setText(i18n("&Icon:"));
 
-    d->iconButton = new QPushButton(plainPage());
+    d->iconButton = new QPushButton(widget);
     d->iconButton->setFixedSize(40, 40);
     iconTextLabel->setBuddy(d->iconButton);
     
-    d->resetIconButton = new QPushButton(i18n("Reset"), plainPage());
+    d->resetIconButton = new QPushButton(i18n("Reset"), widget);
 
-    QSpacerItem* spacer = new QSpacerItem(0, 0, QSizePolicy::Minimum,
-                                           QSizePolicy::Expanding);
+    QSpacerItem* spacer = new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+    // --------------------------------------------------------
     
-    gl->addWidget(titleLabel, 0, 0);
+    gl->addMultiCellWidget(titleLabel, 0, 0, 0, 0);
     gl->addMultiCellWidget(d->titleEdit, 0, 0, 1, 3);
-    gl->addWidget(iconTextLabel, 1, 0);
-    gl->addWidget(d->iconButton, 1, 1);
-    gl->addWidget(d->resetIconButton, 1, 2);
-    gl->addItem(spacer, 1, 3);
+    gl->addMultiCellWidget(iconTextLabel, 1, 1, 0, 0);
+    gl->addMultiCellWidget(d->iconButton, 1, 1, 1, 1);
+    gl->addMultiCellWidget(d->resetIconButton, 1, 1, 2, 2);
+    gl->addMultiCell(spacer, 1, 1, 3, 3);
+    gl->setMargin(KDialog::spacingHint());
+    gl->setSpacing(0);
     
     grid->addMultiCellWidget(logo, 0, 0, 0, 0);
     grid->addMultiCellLayout(topLayout, 0, 1, 1, 1);
     grid->setRowStretch(1, 10);
+    grid->setMargin(0);
+    grid->setSpacing(KDialog::spacingHint());
 
     // --------------------------------------------------------
 
@@ -298,7 +334,7 @@ TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album)
     // --------------------------------------------------------
 
     d->icon = album->icon();
-    d->iconButton->setIconSet(SyncJob::getTagThumbnail(d->icon, 20));
+    d->iconButton->setIcon(SyncJob::getTagThumbnail(d->icon, 20));
 
     enableButtonOk(!d->titleEdit->text().isEmpty());
     adjustSize();
@@ -322,20 +358,20 @@ QString TagEditDlg::icon() const
 void TagEditDlg::slotIconResetClicked()
 {
     d->icon = QString("tag");
-    d->iconButton->setIconSet(SyncJob::getTagThumbnail(d->icon, 20));
+    d->iconButton->setIcon(SyncJob::getTagThumbnail(d->icon, 20));
 }
     
 void TagEditDlg::slotIconChange()
 {
     KIconDialog dlg(this);
-    dlg.setup(KIcon::NoGroup, KIcon::Application, false, 20, false, false, false);
+    dlg.setup(K3Icon::NoGroup, K3Icon::Application, false, 20, false, false, false);
     QString icon = dlg.openDialog();
     
     if (icon.isEmpty() || icon == d->icon)
         return;
 
     d->icon = icon;
-    d->iconButton->setIconSet(SyncJob::getTagThumbnail(d->icon, 20));
+    d->iconButton->setIcon(SyncJob::getTagThumbnail(d->icon, 20));
 }
 
 void TagEditDlg::slotTitleChanged(const QString& newtitle)
@@ -358,5 +394,3 @@ bool TagEditDlg::tagEdit(QWidget *parent, TAlbum* album, QString& title, QString
 }
 
 }  // namespace Digikam
-
-
