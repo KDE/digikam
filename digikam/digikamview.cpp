@@ -171,10 +171,10 @@ DigikamView::DigikamView(QWidget *parent)
     d->dateFolderView   = new DateFolderView(this);
     d->tagFolderView    = new TagFolderView(this);
     d->searchFolderView = new SearchFolderView(this);
-    d->leftSideBar->appendTab(d->folderView, SmallIcon("folder_image"), i18n("Albums"));
-    d->leftSideBar->appendTab(d->dateFolderView, SmallIcon("date"), i18n("Dates"));
+    d->leftSideBar->appendTab(d->folderView, SmallIcon("folder-image"), i18n("Albums"));
+    d->leftSideBar->appendTab(d->dateFolderView, SmallIcon("month"), i18n("Dates"));
     d->leftSideBar->appendTab(d->tagFolderView, SmallIcon("tag"), i18n("Tags"));
-    d->leftSideBar->appendTab(d->searchFolderView, SmallIcon("find"), i18n("Searches"));
+    d->leftSideBar->appendTab(d->searchFolderView, SmallIcon("file-find"), i18n("Searches"));
 
     // To the right.
     d->tagFilterView = new TagFilterView(this);
