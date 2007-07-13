@@ -24,15 +24,15 @@
  
 // Qt includes.
 
-#include <qpainter.h>
-#include <qpixmap.h>
-#include <qpalette.h>
-#include <qstring.h>
-#include <qpen.h>
-#include <qfontmetrics.h>
-#include <qfont.h>
-#include <qdatetime.h>
-#include <qstringlist.h>
+#include <QPainter>
+#include <QPixmap>
+#include <QPalette>
+#include <QString>
+#include <QPen>
+#include <QFontMetrics>
+#include <QFont>
+#include <QDateTime>
+#include <QStringList>
 
 // KDE includes.
 
@@ -77,7 +77,7 @@ public:
 
 static void dateToString(const QDateTime& datetime, QString& str)
 {
-    str = KGlobal::locale()->formatDateTime(datetime, true, false);
+    str = KGlobal::locale()->formatDateTime(datetime, KLocale::ShortDate, false);
 }
 
 AlbumIconItem::AlbumIconItem(IconGroupItem* parent, ImageInfo* info)
@@ -172,7 +172,7 @@ int AlbumIconItem::compare(IconItem *item)
         }
         case(AlbumSettings::ByIPath):
         {
-            return d->info->kurl().path().compare(iconItem->d->info->kurl().path());
+            return d->info->fileUrl().path().compare(iconItem->d->info->fileUrl().path());
         }
         case(AlbumSettings::ByIDate):
         {
@@ -218,7 +218,7 @@ QRect AlbumIconItem::clickToOpenRect()
     QRect pixmapRect = d->tightPixmapRect;
     QRect r          = rect();
 
-    pixmapRect.moveBy(r.x(), r.y());
+    pixmapRect.translate(r.x(), r.y());
     return pixmapRect;
 }
 
@@ -238,10 +238,9 @@ void AlbumIconItem::paintItem()
     QPainter p(&pix);
     p.setPen(isSelected() ? te->textSelColor() : te->textRegColor());
 
-
     d->dirty = true;
     
-    QPixmap *thumbnail = d->view->pixmapManager()->find(d->info->kurl());
+    QPixmap *thumbnail = d->view->pixmapManager()->find(d->info->fileUrl());
     if (thumbnail)
     {
         r = d->view->itemPixmapRect();
@@ -359,8 +358,9 @@ void AlbumIconItem::paintItem()
     r = QRect(d->view->contentsToViewport(QPoint(r.x(), r.y())),
               QSize(r.width(), r.height()));
 
-    bitBlt(d->view->viewport(), r.x(), r.y(), &pix,
-           0, 0, r.width(), r.height());
+    QPainter p2(d->view->viewport());
+    p2.drawPixmap(r.x(), r.y(), pix, 0, 0, r.width(), r.height());
+    p2.end();
 }
 
 QRect AlbumIconItem::thumbnailRect() const
@@ -368,7 +368,7 @@ QRect AlbumIconItem::thumbnailRect() const
     QRect pixmapRect = d->view->itemPixmapRect();
     QRect r          = rect();
 
-    pixmapRect.moveBy(r.x(), r.y());
+    pixmapRect.translated(r.x(), r.y());
     return pixmapRect;
 }
 
