@@ -107,7 +107,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
             albumiconview.cpp                   Gilles                  X       DONE
             albumitemhandler.cpp                Laurent                 X       DONE
             albumlister.cpp                     Gilles                  X       DONE
-            albummanager.cpp                                            X
+            albummanager.cpp                    Gilles                  X       DONE        Compile. 2 instances of "qSort" still unported.
             albumpropsedit.cpp                  Laurent                 X       DONE
             albumsettings.cpp                   Gilles                  X       DONE
             albumthumbnailloader.cpp            Gilles                  X       DONE
