@@ -21,9 +21,6 @@
  * 
  * ============================================================ */
 
-//Added by qt3to4:
-#include <Q3ValueList>
-
 // C Ansi includes.
 
 extern "C"
@@ -43,12 +40,13 @@ extern "C"
 
 // Qt includes.
 
-#include <qfile.h>
-#include <qdir.h>
-#include <q3dict.h>
-#include <q3intdict.h>
-#include <q3cstring.h>
-#include <qtextcodec.h>
+#include <Q3ValueList>
+#include <Q3Dict>
+#include <Q3IntDict>
+#include <QFile>
+#include <QDir>
+#include <QByteArray>
+#include <QTextCodec>
 
 // KDE includes.
 
@@ -83,14 +81,35 @@ extern "C"
 namespace Digikam
 {
 
-typedef Q3Dict<PAlbum>    PAlbumDict;
-typedef Q3IntDict<Album>  AlbumIntDict;
+typedef Q3Dict<PAlbum>   PAlbumDict;
+typedef Q3IntDict<Album> AlbumIntDict;
 
 class AlbumManagerPriv
 {
 public:
 
+    AlbumManagerPriv()
+    {
+        changed      = false;
+        dateListJob  = 0;
+        dirWatch     = 0;
+        itemHandler  = 0;
+        rootPAlbum   = 0;
+        rootTAlbum   = 0;
+        rootDAlbum   = 0;
+        rootSAlbum   = 0;
+        currentAlbum = 0;
+    }
+
+    bool              changed;
+
     QString           priorityAlbumRoot;
+
+    QStringList       dirtyAlbums;
+
+    KIO::TransferJob *dateListJob;
+
+    KDirWatch        *dirWatch;
 
     AlbumItemHandler *itemHandler;
 
@@ -99,19 +118,11 @@ public:
     DAlbum           *rootDAlbum;
     SAlbum           *rootSAlbum;
 
-    bool              changed;
-
     PAlbumDict        pAlbumDict;
     AlbumIntDict      albumIntDict;
 
     Album            *currentAlbum;
-
-    KIO::TransferJob *dateListJob;
-
-    KDirWatch        *dirWatch;
-    QStringList       dirtyAlbums;
 };
-
 
 AlbumManager* AlbumManager::m_instance = 0;
 
@@ -309,9 +320,9 @@ void AlbumManager::startScan()
 
     d->dirWatch = new KDirWatch(this);
     connect(d->dirWatch, SIGNAL(dirty(const QString&)),
-            SLOT(slotDirty(const QString&)));
+            this, SLOT(slotDirty(const QString&)));
 
-    QStringList albumRootPaths = CollectionManager::componentData().allAvailableAlbumRootPaths();
+    QStringList albumRootPaths = CollectionManager::instance()->allAvailableAlbumRootPaths();
     for (QStringList::iterator it = albumRootPaths.begin(); it != albumRootPaths.end(); ++it)
         d->dirWatch->addDir(*it);
 

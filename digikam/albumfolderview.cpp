@@ -1199,6 +1199,7 @@ void AlbumFolderView::albumImportFolder()
         return;
 
     KIO::Job* job = DIO::copy(urls, parent->kurl());
+
     connect(job, SIGNAL(result(KIO::Job *)),
             this, SLOT(slotDIOResult(KIO::Job *)));
 }
