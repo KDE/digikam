@@ -23,8 +23,7 @@
 
 // Qt includes.
 
-#include <qpainter.h>
-#include <qpixmap.h>
+#include <QPainter>
 
 // Local includes.
 
@@ -36,12 +35,12 @@ namespace Digikam
 QPixmap* SearchResultsItem::m_basePixmap = 0;
 
 SearchResultsItem::SearchResultsItem(Q3IconView* view, const QString& path)
-    : Q3IconViewItem(view), m_path(path)
+                 : Q3IconViewItem(view), m_path(path)
 {
     if (!m_basePixmap)
     {
         m_basePixmap = new QPixmap(128, 128);
-        m_basePixmap->fill(view->colorGroup().base());
+        m_basePixmap->fill(view->palette().color(QPalette::Base));
 
         QPainter p(m_basePixmap);
         p.setPen(Qt::lightGray);
@@ -56,7 +55,6 @@ SearchResultsItem::SearchResultsItem(Q3IconView* view, const QString& path)
 
 SearchResultsItem::~SearchResultsItem()
 {
-    
 }
 
 void SearchResultsItem::calcRect(const QString&)

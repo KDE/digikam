@@ -25,8 +25,7 @@
 
 // Qt includes.
 
-#include <q3iconview.h>
-//Added by qt3to4:
+#include <Q3IconView>
 #include <QPixmap>
 
 namespace Digikam
@@ -44,8 +43,8 @@ public:
 protected:
 
     void calcRect(const QString& text = QString());
-    void paintItem (QPainter * p, const QColorGroup & cg);
-    void paintFocus (QPainter * p, const QColorGroup & cg);
+    void paintItem(QPainter * p, const QColorGroup & cg);
+    void paintFocus(QPainter * p, const QColorGroup & cg);
 
 private:
 
