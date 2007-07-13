@@ -26,16 +26,14 @@
 
 // Qt includes
 
-#include <qobject.h>
-#include <qpixmap.h>
-//Added by qt3to4:
-#include <QCustomEvent>
+#include <QObject>
+#include <QPixmap>
 
 // KDE includes
 
 #include <kurl.h>
 
-class QCustomEvent;
+class QEvent;
 
 namespace Digikam
 {
@@ -159,7 +157,7 @@ protected slots:
 
 protected:
 
-    void customEvent(QCustomEvent *e);
+    void customEvent(QEvent *e);
 
 private:
 
@@ -168,11 +166,11 @@ private:
     AlbumThumbnailLoaderPrivate *d;
     static AlbumThumbnailLoader *m_componentData;
 
-    void addUrl(Album *album, const KUrl &url);
+    void    addUrl(Album *album, const KUrl &url);
     QPixmap loadIcon(const QString &name, int size = 0);
     QPixmap createTagThumbnail(const QPixmap &albumThumbnail);
-    int computeIconSize(RelativeSize size);
-    QRect computeBlendRect(int iconSize);
+    int     computeIconSize(RelativeSize size);
+    QRect   computeBlendRect(int iconSize);
 };
 
 } // namespace Digikam

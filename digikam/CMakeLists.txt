@@ -89,7 +89,7 @@ SET(digikam_LIB_SRCS
 #                      albummanager.cpp 
                       albumpropsedit.cpp 
                       albumsettings.cpp 
-#                      albumthumbnailloader.cpp 
+                      albumthumbnailloader.cpp 
                       albumwidgetstack.cpp 
                       cameradragobject.cpp 
                       cameralist.cpp 

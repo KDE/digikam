@@ -27,11 +27,10 @@
 
 // Qt includes
 
-#include <qmap.h>
-#include <qpainter.h>
-#include <q3valuelist.h>
-//Added by qt3to4:
-#include <QCustomEvent>
+#include <Q3ValueList>
+#include <QMap>
+#include <QPainter>
+#include <QEvent>
 #include <QPixmap>
 #include <QEvent>
 
@@ -44,12 +43,13 @@
 // Local includes
 
 #include "ddebug.h"
+#include "thumbnailjob.h"
+#include "thumbnailsize.h"
 #include "album.h"
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "albumthumbnailloader.h"
-#include "thumbnailjob.h"
-#include "thumbnailsize.h"
+#include "albumthumbnailloader.moc"
 
 namespace Digikam
 {
@@ -80,18 +80,19 @@ public:
 
     TagThumbnailMap         tagThumbnailMap;
 
-    //QCache<QPixmap>        *m_cache;
+    //QCache<QPixmap>        *cache;
 };
 
-class AlbumThumbnailLoaderEvent : public QCustomEvent
+class AlbumThumbnailLoaderEvent : public QEvent
 {
+
 public:
     AlbumThumbnailLoaderEvent(int albumID, const QPixmap &thumbnail)
-        : QCustomEvent(QEvent::User),
+        : QEvent(QEvent::User),
           albumID(albumID), thumbnail(thumbnail)
         {};
 
-    int albumID;
+    int     albumID;
     QPixmap thumbnail;
 };
 
@@ -194,8 +195,8 @@ QRect AlbumThumbnailLoader::computeBlendRect(int iconSize)
 QPixmap AlbumThumbnailLoader::loadIcon(const QString &name, int size)
 {
     KIconLoader *iconLoader = KIconLoader::global();
-    return iconLoader->loadIcon(name, KIcon::NoGroup,
-                                size, KIcon::DefaultState,
+    return iconLoader->loadIcon(name, K3Icon::NoGroup,
+                                size, K3Icon::DefaultState,
                                 0, true);
 }
 
@@ -396,18 +397,20 @@ void AlbumThumbnailLoader::slotGotThumbnailFromIcon(const KUrl &url, const QPixm
             }
         }
 
-        d->urlAlbumMap.remove(it);
+        d->urlAlbumMap.erase(it);
     }
 
 }
 
-void AlbumThumbnailLoader::customEvent(QCustomEvent *e)
+void AlbumThumbnailLoader::customEvent(QEvent *e)
 {
     // for cached thumbnails
 
-    AlbumThumbnailLoaderEvent *atle = (AlbumThumbnailLoaderEvent *)e;
+    AlbumThumbnailLoaderEvent *atle = dynamic_cast<AlbumThumbnailLoaderEvent *>(e);
+    if (!atle) return;
+    
     AlbumManager *manager = AlbumManager::componentData();
-    Album *album = manager->findAlbum(atle->albumID);
+    Album *album          = manager->findAlbum(atle->albumID);
     if (album)
     {
         if (atle->thumbnail.isNull())
@@ -434,13 +437,15 @@ QPixmap AlbumThumbnailLoader::createTagThumbnail(const QPixmap &albumThumbnail)
 
     if(!albumThumbnail.isNull() && thumbSize >= d->minBlendSize)
     {
-        QRect rect = computeBlendRect(thumbSize);
-        int w1 = albumThumbnail.width();
-        int w2 = rect.width();
-        int h1 = albumThumbnail.height();
-        int h2 = rect.height();
-        tagThumbnail.resize(w2,h2);
-        bitBlt(&tagThumbnail, 0, 0, &albumThumbnail, (w1-w2)/2, (h1-h2)/2, w2, h2);
+        QRect rect   = computeBlendRect(thumbSize);
+        int w1       = albumThumbnail.width();
+        int w2       = rect.width();
+        int h1       = albumThumbnail.height();
+        int h2       = rect.height();
+        tagThumbnail = QPixmap(w2, h2);
+        QPainter p(&tagThumbnail);
+        p.drawPixmap(0, 0, albumThumbnail, (w1-w2)/2, (h1-h2)/2, w2, h2);
+        p.end();
     }
     else
     {
@@ -466,7 +471,7 @@ void AlbumThumbnailLoader::slotThumbnailLost(const KUrl &url)
                 emit signalFailed(album);
         }
 
-        d->urlAlbumMap.remove(it);
+        d->urlAlbumMap.erase(it);
     }
 }
 
@@ -492,7 +497,3 @@ QPixmap AlbumThumbnailLoader::blendIcons(QPixmap dstIcon, const QPixmap &tagIcon
 }
 
 } // namespace Digikam
-
-#include "albumthumbnailloader.moc"
-
-
