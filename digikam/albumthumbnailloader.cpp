@@ -40,12 +40,13 @@
 // Local includes
 
 #include "ddebug.h"
+#include "thumbnailjob.h"
+#include "thumbnailsize.h"
 #include "album.h"
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "albumthumbnailloader.h"
-#include "thumbnailjob.h"
-#include "thumbnailsize.h"
+#include "albumthumbnailloader.moc"
 
 namespace Digikam
 {
@@ -76,7 +77,7 @@ public:
 
     TagThumbnailMap         tagThumbnailMap;
 
-    //QCache<QPixmap>        *m_cache;
+    //QCache<QPixmap>        *cache;
 };
 
 class AlbumThumbnailLoaderEvent : public QCustomEvent
@@ -87,7 +88,7 @@ public:
           albumID(albumID), thumbnail(thumbnail)
         {};
 
-    int albumID;
+    int     albumID;
     QPixmap thumbnail;
 };
 
@@ -488,7 +489,3 @@ QPixmap AlbumThumbnailLoader::blendIcons(QPixmap dstIcon, const QPixmap &tagIcon
 }
 
 } // namespace Digikam
-
-#include "albumthumbnailloader.moc"
-
-
