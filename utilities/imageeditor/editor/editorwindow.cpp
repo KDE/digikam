@@ -49,6 +49,7 @@ extern "C"
 #include <QProgressBar>
 #include <QWidgetAction>
 #include <QImageReader>
+#include <QEventLoop>
 
 // KDE includes.
 
