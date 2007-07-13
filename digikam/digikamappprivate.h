@@ -23,18 +23,18 @@
 
 // Qt includes.
 
-#include <q3cstring.h>
-#include <qstring.h>
-#include <qmap.h>
-#include <qtoolbutton.h>
-#include <qtimer.h>
-//Added by qt3to4:
 #include <Q3PtrList>
+#include <QByteArray>
+#include <QString>
+#include <QMap>
+#include <QToolButton>
+#include <QTimer>
 
 // KDE includes.
 
 #include <kconfig.h>
 #include <kaction.h>
+#include <kselectaction.h>
 #include <kaccel.h>
 #include <kmenu.h>
 #include <kstatusbar.h>
@@ -56,8 +56,15 @@
 #include "statusnavigatebar.h"
 #include "digikamview.h"
 
+class KToolBarPopupAction;
+class KToggleAction;
+class KActionMenu;
+class KSelectAction;
+
 namespace Digikam
 {
+
+class DCOPIface;
 
 class DigikamAppPriv
 {
@@ -68,7 +75,6 @@ public:
         fullScreen                           = false;
         validIccPath                         = true;
         cameraMediaList                      = 0;
-        accelerators                         = 0;
         config                               = 0;
         newAction                            = 0;
         deleteAction                         = 0;
@@ -144,20 +150,18 @@ public:
     bool                   validIccPath;
     
     // KIPI plugins support
-    Q3PtrList<KAction>      kipiFileActionsExport;
-    Q3PtrList<KAction>      kipiFileActionsImport;
-    Q3PtrList<KAction>      kipiImageActions;
-    Q3PtrList<KAction>      kipiToolsActions;
-    Q3PtrList<KAction>      kipiBatchActions;
-    Q3PtrList<KAction>      kipiAlbumActions;
+    Q3PtrList<KAction>     kipiFileActionsExport;
+    Q3PtrList<KAction>     kipiFileActionsImport;
+    Q3PtrList<KAction>     kipiImageActions;
+    Q3PtrList<KAction>     kipiToolsActions;
+    Q3PtrList<KAction>     kipiBatchActions;
+    Q3PtrList<KAction>     kipiAlbumActions;
 
     QMap<int, QString>     mediaItems;
 
     QString                cameraGuiPath;
 
-    KMenu            *cameraMediaList;
-
-    KAccel                *accelerators;
+    KMenu                 *cameraMediaList;
 
     KConfig               *config;    
     
@@ -247,4 +251,3 @@ public:
 };
 
 }  // namespace Digikam
-
