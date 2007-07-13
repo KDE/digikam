@@ -23,20 +23,20 @@
 
 // Qt includes.
 
-#include <qpixmap.h>
-#include <qpointer.h>
-#include <qdir.h>
-//Added by qt3to4:
+#include <Q3ValueList>
 #include <Q3PtrList>
+#include <QPixmap>
+#include <QPointer>
+#include <QDir>
 #include <QDropEvent>
-#include <kmenu.h>
-#include <qcursor.h>
-#include <qdatastream.h>
-#include <q3valuelist.h>
-#include <qdatetime.h>
+#include <QCursor>
+#include <QDataStream>
+#include <QDateTime>
 
 // KDE includes.
 
+#include <k3popupmenu.h>
+#include <kmenu.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kcalendarsystem.h>
@@ -45,7 +45,6 @@
 #include <kmessagebox.h>
 #include <kaction.h>
 #include <kfiledialog.h>
-
 #include <kdeversion.h>
 #include <kinputdialog.h>
 
@@ -151,7 +150,7 @@ int AlbumFolderViewItem::id() const
         else
         {
             return ( - (AlbumSettings::componentData()->getAlbumCollectionNames()
-                        .findIndex(text(0)) ) );
+                        .indexOf(text(0)) ) );
         }
     }
     else
@@ -436,11 +435,11 @@ void AlbumFolderView::slotSelectionChanged()
 
 void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, int)
 {
-    KActionMenu menuImport(i18n("Import"));
-    KActionMenu menuExport(i18n("Export"));
-    KActionMenu menuKIPIBatch(i18n("Batch Process"));
+    QMenu menuImport(i18n("Import"));
+    QMenu menuExport(i18n("Export"));
+    QMenu menuKIPIBatch(i18n("Batch Process"));
 
-    KMenu popmenu(this);
+    K3PopupMenu popmenu(this);
     popmenu.insertTitle(SmallIcon("digikam"), i18n("My Albums"));
     popmenu.insertItem(SmallIcon("albumfolder-new"), i18n("New Album..."), 10);
 
@@ -467,7 +466,7 @@ void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, 
             Q3PtrListIterator<KAction> it(albumActions);
             while((action = it.current()))
             {
-                action->plug(&popmenu);
+                popmenu.addAction(action);
                 ++it;
             }
         }
@@ -479,10 +478,10 @@ void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, 
             Q3PtrListIterator<KAction> it3(importActions);
             while((action = it3.current()))
             {
-                menuImport.insert(action);
+                menuImport.addAction(action);
                 ++it3;
             }
-            menuImport.plug(&popmenu);
+            popmenu.addMenu(&menuImport);
         }
 
         // Add All Export Actions
@@ -492,10 +491,10 @@ void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, 
             Q3PtrListIterator<KAction> it4(exportActions);
             while((action = it4.current()))
             {
-                menuExport.insert(action);
+                menuExport.addAction(action);
                 ++it4;
             }
-            menuExport.plug(&popmenu);
+            popmenu.addMenu(&menuExport);
         }
 
         // Add KIPI Batch processes plugins Actions
@@ -505,10 +504,10 @@ void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, 
             Q3PtrListIterator<KAction> it2(batchActions);
             while((action = it2.current()))
             {
-                menuKIPIBatch.insert(action);
+                menuKIPIBatch.addAction(action);
                 ++it2;
             }
-            menuKIPIBatch.plug(&popmenu);
+            popmenu.addMenu(&menuKIPIBatch);
         }
 
         if(!albumActions.isEmpty() || !batchActions.isEmpty() ||
@@ -613,7 +612,7 @@ void AlbumFolderView::albumNew(AlbumFolderViewItem *item)
     if (parent->isRoot())
     {
         //TODO: Let user choose an album root
-        albumRootPath = CollectionManager::componentData().oneAlbumRootPath();
+        albumRootPath = CollectionManager::instance()->oneAlbumRootPath();
     }
 
     QString     title;
@@ -915,7 +914,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
             == AlbumSettings::ByFolder)
         {
             // TODO: Copy?
-            KMenu popMenu(this);
+            K3PopupMenu popMenu(this);
             popMenu.insertTitle(SmallIcon("digikam"), i18n("My Albums"));
             popMenu.insertItem(SmallIcon("goto"), i18n("&Move Here"), 10);
             popMenu.insertSeparator(-1);
@@ -970,8 +969,8 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
         PAlbum *destAlbum = itemDrop->getAlbum();
         PAlbum *srcAlbum;
 
-        KUrl::List      urls;
-        KUrl::List      kioURLs;
+        KUrl::List       urls;
+        KUrl::List       kioURLs;
         Q3ValueList<int> albumIDs;
         Q3ValueList<int> imageIDs;
 
@@ -993,11 +992,11 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
 
         int id = 0;
         char keys_return[32];
-        XQueryKeymap(x11Display(), keys_return);
-        int key_1 = XKeysymToKeycode(x11Display(), 0xFFE3);
-        int key_2 = XKeysymToKeycode(x11Display(), 0xFFE4);
-        int key_3 = XKeysymToKeycode(x11Display(), 0xFFE1);
-        int key_4 = XKeysymToKeycode(x11Display(), 0xFFE2);
+        XQueryKeymap(x11Info().display(), keys_return);
+        int key_1 = XKeysymToKeycode(x11Info().display(), 0xFFE3);
+        int key_2 = XKeysymToKeycode(x11Info().display(), 0xFFE4);
+        int key_3 = XKeysymToKeycode(x11Info().display(), 0xFFE1);
+        int key_4 = XKeysymToKeycode(x11Info().display(), 0xFFE2);
 
         if(srcAlbum == destAlbum)
         {
@@ -1011,7 +1010,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
             }
             else
             {
-                KMenu popMenu(this);
+                K3PopupMenu popMenu(this);
                 popMenu.insertTitle(SmallIcon("digikam"), i18n("My Albums"));
                 popMenu.insertItem(i18n("Set as Album Thumbnail"), 12);
                 popMenu.insertSeparator(-1);
@@ -1044,7 +1043,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
         }
         else
         {
-            KMenu popMenu(this);
+            K3PopupMenu popMenu(this);
             popMenu.insertTitle(SmallIcon("digikam"), i18n("My Albums"));
             popMenu.insertItem( SmallIcon("goto"), i18n("&Move Here"), 10 );
             popMenu.insertItem( SmallIcon("editcopy"), i18n("&Copy Here"), 11 );
@@ -1101,17 +1100,16 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
 
         KUrl destURL(destAlbum->kurl());
 
-        KUrl::List srcURLs;
-        KURLDrag::decode(e, srcURLs);
+        KUrl::List srcURLs = KUrl::List::fromMimeData( e->mimeData() );
 
         char keys_return[32];
-        XQueryKeymap(x11Display(), keys_return);
+        XQueryKeymap(x11Info().display(), keys_return);
         int id = 0;
 
-        int key_1 = XKeysymToKeycode(x11Display(), 0xFFE3);
-        int key_2 = XKeysymToKeycode(x11Display(), 0xFFE4);
-        int key_3 = XKeysymToKeycode(x11Display(), 0xFFE1);
-        int key_4 = XKeysymToKeycode(x11Display(), 0xFFE2);
+        int key_1 = XKeysymToKeycode(x11Info().display(), 0xFFE3);
+        int key_2 = XKeysymToKeycode(x11Info().display(), 0xFFE4);
+        int key_3 = XKeysymToKeycode(x11Info().display(), 0xFFE1);
+        int key_4 = XKeysymToKeycode(x11Info().display(), 0xFFE2);
         // If shift key is pressed while dropping, move the drag object without
         // displaying popup menu -> move
         if(((keys_return[key_3 / 8]) && (1 << (key_3 % 8))) ||
@@ -1128,7 +1126,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
         }
         else
         {
-            KMenu popMenu(this);
+            K3PopupMenu popMenu(this);
             popMenu.insertTitle(SmallIcon("digikam"), i18n("My Albums"));
             popMenu.insertItem( SmallIcon("goto"), i18n("&Move Here"), 10 );
             popMenu.insertItem( SmallIcon("editcopy"), i18n("&Copy Here"), 11 );
@@ -1260,7 +1258,7 @@ AlbumFolderViewItem* AlbumFolderView::findParentByFolder(PAlbum* album, bool& fa
 
     if (album->parent()->isRoot())
     {
-        QStringList albumRoots = CollectionManager::componentData().allAvailableAlbumRootPaths();
+        QStringList albumRoots = CollectionManager::instance()->allAvailableAlbumRootPaths();
         if (albumRoots.count() > 1)
         {
             for (Q3ValueList<AlbumFolderViewItem*>::iterator it=d->groupItems.begin();

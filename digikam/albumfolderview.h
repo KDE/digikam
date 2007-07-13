@@ -33,10 +33,8 @@
 // Local includes.
 
 #include "folderview.h"
-//Added by qt3to4:
-#include <QPixmap>
-#include <QDropEvent>
 
+class QDropEvent;
 class QPixmap;
 
 class KUrl;
@@ -117,7 +115,6 @@ private:
 private:
 
     AlbumFolderViewPriv   *d;
-
 };
 
 }  // namespace Digikam
