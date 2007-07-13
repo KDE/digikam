@@ -28,19 +28,19 @@
 
 // Qt includes.
 
-#include <qstring.h>
-//Added by qt3to4:
 #include <Q3PtrList>
+#include <QString>
 
 // KDE includes.
 
-#include <kmainwindow.h>
+#include <kxmlguiwindow.h>
 #include <kio/global.h>
 #include <kio/netaccess.h>
 
 // Local includes.
 
 #include "digikam_export.h"
+
 class KAction;
 
 namespace Digikam
@@ -50,7 +50,7 @@ class ImageInfo;
 class CameraType;
 class DigikamAppPriv;
 
-class DIGIKAM_EXPORT DigikamApp : public KMainWindow
+class DIGIKAM_EXPORT DigikamApp : public KXmlGuiWindow
 {
     Q_OBJECT
 

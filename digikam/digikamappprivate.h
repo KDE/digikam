@@ -74,7 +74,6 @@ public:
         fullScreen                           = false;
         validIccPath                         = true;
         cameraMediaList                      = 0;
-        config                               = 0;
         newAction                            = 0;
         deleteAction                         = 0;
         imageDeletePermanentlyAction         = 0;
@@ -162,7 +161,7 @@ public:
 
     KMenu                 *cameraMediaList;
 
-    KConfig               *config;    
+    KSharedConfig::Ptr     config;    
     
     // Album Actions
     KAction               *newAction;

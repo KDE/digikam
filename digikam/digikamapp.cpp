@@ -25,26 +25,24 @@
 
 // Qt includes.
 
-#include <qdatastream.h>
-#include <qlabel.h>
-#include <qstringlist.h>
-#include <qtooltip.h>
-#include <qsignalmapper.h>
-#include <q3dockarea.h>
-#include <q3hbox.h>
-//Added by qt3to4:
+#include <Q3DockArea>
 #include <Q3PtrList>
+#include <QDataStream>
+#include <QLabel>
+#include <QStringList>
+#include <QSignalMapper>
 
 // KDE includes.
+
+#include <khbox.h>
 #include <kactioncollection.h>
 #include <kaboutdata.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kurl.h>
 #include <kstandardaction.h>
-#include <kstdaccel.h>
-#include <KShortcutsDialog>
-#include <KToggleAction>
+#include <kshortcutsdialog.h>
+#include <ktoggleaction.h>
 #include <kedittoolbar.h>
 #include <kiconloader.h>
 #include <ktip.h>
@@ -53,7 +51,10 @@
 #include <kmenubar.h>
 #include <kmessagebox.h>
 #include <kwindowsystem.h>
-#include <KActionMenu>
+#include <kactionmenu.h>
+#include <kglobal.h>
+#include <ktoolinvocation.h>
+
 // libKipi includes.
 
 #include <libkipi/plugin.h>
@@ -61,8 +62,6 @@
 // LibKDcraw includes.
 
 #include <libkdcraw/dcrawbinary.h>
-#include <kglobal.h>
-#include <ktoolinvocation.h>
 
 // Local includes.
 
@@ -82,6 +81,7 @@
 #include "thumbnailsize.h"
 #include "themeengine.h"
 #include "scanlib.h"
+#include "loadingcache.h"
 #include "loadingcacheinterface.h"
 #include "imageattributeswatch.h"
 #include "batchthumbsgenerator.h"
@@ -100,13 +100,15 @@ namespace Digikam
 DigikamApp* DigikamApp::m_instance = 0;
 
 DigikamApp::DigikamApp()
-          : KMainWindow( 0, "Digikam" )
+          : KXmlGuiWindow(0)
 {
     d = new DigikamAppPriv;
     m_instance = this;
     d->config  = KGlobal::config();
 
-    if(d->config->readEntry("Show Splash", true) &&
+    setObjectName("Digikam");
+
+    if(d->config->group("General Settings").readEntry("Show Splash", true) &&
        !kapp->isSessionRestored())
     {
         d->splashScreen = new SplashScreen("digikam-splash.png");
@@ -116,8 +118,8 @@ DigikamApp::DigikamApp()
     d->albumSettings = new AlbumSettings();
     d->albumSettings->readSettings();
 
-    d->albumManager = AlbumManager::instance();
-    AlbumLister::instance();
+    d->albumManager = AlbumManager::componentData();
+    AlbumLister::componentData();
 
     LoadingCache::cache();
 
@@ -126,7 +128,7 @@ DigikamApp::DigikamApp()
     connect(d->cameraMediaList, SIGNAL( aboutToShow() ),
             this, SLOT(slotCameraMediaMenu()));
 
-    d->cameraList = new CameraList(this, locateLocal("appdata", "cameras.xml"));
+    d->cameraList = new CameraList(this, KStandardDirs::locateLocal("appdata", "cameras.xml"));
 
     connect(d->cameraList, SIGNAL(signalCameraAdded(CameraType *)),
             this, SLOT(slotCameraAdded(CameraType *)));
@@ -139,7 +141,7 @@ DigikamApp::DigikamApp()
     setupAccelerators();
     setupActions();
 
-    applyMainWindowSettings(d->config);
+    applyMainWindowSettings(d->config->group("General Settings"));
 
     // Check ICC profiles repository availability
 
@@ -153,7 +155,7 @@ DigikamApp::DigikamApp()
     if(d->splashScreen)
         d->splashScreen->message(i18n("Checking dcraw version"), Qt::AlignLeft, Qt::white);
 
-    KDcrawIface::DcrawBinary::instance().checkSystem();
+    KDcrawIface::DcrawBinary::componentData()->checkSystem();
 
     // Actual file scanning is done in main() - is this necessary here?
     //d->albumManager->setLibraryPath(d->albumSettings->getAlbumLibraryPath());
@@ -189,12 +191,12 @@ DigikamApp::~DigikamApp()
     // Close and delete image editor instance.
 
     if (ImageWindow::imagewindowCreated())
-        ImageWindow::imagewindow()->close(true);
+        ImageWindow::imagewindow()->close();
 
     // Close and delete light table instance.
         
     if (LightTableWindow::lightTableWindowCreated())
-        LightTableWindow::lightTableWindow()->close(true);
+        LightTableWindow::lightTableWindow()->close();
 
     if (d->view)
         delete d->view;
@@ -203,7 +205,7 @@ DigikamApp::~DigikamApp()
     delete d->albumSettings;
 
     delete d->albumManager;
-    delete AlbumLister::instance();
+    delete AlbumLister::componentData();
 
     ImageAttributesWatch::cleanUp();
     LoadingCacheInterface::cleanUp();
@@ -248,22 +250,20 @@ void DigikamApp::show()
         {
             if (!setup(true))
             {
-                d->KConfigGroup group = config->group("Color Management");
-                d->group.writeEntry("EnableCM", false);
+                d->config->group("Color Management").writeEntry("EnableCM", false);
                 d->config->sync();
             }
         }
         else
         {
-            d->KConfigGroup group = config->group("Color Management");
-            d->group.writeEntry("EnableCM", false);
+            d->config->group("Color Management").writeEntry("EnableCM", false);
             d->config->sync();
         }
     }
 
     // Report errors from dcraw detection.
 
-    KDcrawIface::DcrawBinary::instance().checkReport();
+    KDcrawIface::DcrawBinary::componentData()->checkReport();
 
     // Init album icon view zoom factor. 
     slotThumbSizeChanged(d->albumSettings->getDefaultIconSize());
@@ -358,18 +358,18 @@ void DigikamApp::setupStatusBar()
     d->statusProgressBar = new StatusProgressBar(statusBar());
     d->statusProgressBar->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
     d->statusProgressBar->setMaximumHeight(fontMetrics().height()+2);
-    statusBar()->addWidget(d->statusProgressBar, 100, true);
+    statusBar()->addWidget(d->statusProgressBar, 100);
 
     //------------------------------------------------------------------------------
 
     d->statusZoomBar = new StatusZoomBar(statusBar());
-    statusBar()->addWidget(d->statusZoomBar, 1, true);
+    statusBar()->addWidget(d->statusZoomBar, 1);
 
     //------------------------------------------------------------------------------
 
     d->statusNavigateBar = new StatusNavigateBar(statusBar());
     d->statusNavigateBar->setMaximumHeight(fontMetrics().height()+2);
-    statusBar()->addWidget(d->statusNavigateBar, 1, true);
+    statusBar()->addWidget(d->statusNavigateBar, 1);
 
     //------------------------------------------------------------------------------
 
@@ -409,6 +409,9 @@ void DigikamApp::setupStatusBar()
 
 void DigikamApp::setupAccelerators()
 {
+#warning "TODO: kde4 port it";
+/*  // TODO: KDE4PORT: use KAction/QAction framework instead KAccel
+
     d->accelerators = new KAccel(this);
 
     d->accelerators->insert("Exit Preview Mode", i18n("Exit Preview"),
@@ -460,6 +463,7 @@ void DigikamApp::setupAccelerators()
                            i18n("Paste Album Items Selection"),
                            Qt::CTRL+Qt::Key_V, this, SIGNAL(signalPasteAlbumItemsSelection()),
                            false, true);
+*/
 }
 
 void DigikamApp::setupActions()
@@ -912,7 +916,7 @@ void DigikamApp::setupActions()
     advFindAction->setText(i18n("Advanced Search..."));
     advFindAction->setShortcut("Ctrl+Alt+F");
 
-    new KAction(i18n("Light Table"), "idea", Qt::ALT+Qt::Key_F6,
+    new KAction(i18n("Light Table"), "idea", Qt::CTRL+Qt::Key_F6,
                 d->view, SLOT(slotLightTable()), actionCollection(), 
                 "light_table");
 

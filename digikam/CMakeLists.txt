@@ -76,7 +76,7 @@ SET(digikam_LIB_SRCS
 
 #                      kdateedit.cpp 
                       metadatahub.cpp 
-#                      digikamapp.cpp 
+                      digikamapp.cpp 
                       album.cpp 
                       albumiconview.cpp 
                       albumicongroupitem.cpp 
