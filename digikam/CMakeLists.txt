@@ -97,7 +97,7 @@ SET(digikam_LIB_SRCS
                       datefolderview.cpp 
 #                      dcopiface.cpp 
                       digikamfirstrun.cpp 
-#                      digikamview.cpp 
+                      digikamview.cpp 
                       dio.cpp 
                       dragobjects.cpp 
                       firstrun.cpp 

@@ -24,19 +24,15 @@
 
 // Qt Includes.
 
-#include <qstring.h>
-#include <qstringlist.h>
-#include <q3strlist.h>
-#include <qfileinfo.h>
-#include <qdir.h>
-#include <qimage.h>
-#include <qevent.h>
-#include <qapplication.h>
-#include <qsplitter.h>
-#include <qtimer.h>
-//Added by qt3to4:
-#include <Q3PtrList>
-#include <Q3Frame>
+#include <QString>
+#include <QFileInfo>
+#include <QDir>
+#include <QImage>
+#include <QEvent>
+#include <QFrame>
+#include <QApplication>
+#include <QSplitter>
+#include <QTimer>
 
 // KDE includes.
 
@@ -50,6 +46,7 @@
 #include <kiconloader.h>
 #include <kstandarddirs.h>
 #include <kimageio.h>
+#include <kio/jobuidelegate.h>
 
 // LibKDcraw includes.
 
@@ -150,22 +147,24 @@ DigikamView::DigikamView(QWidget *parent)
     d = new DigikamViewPriv;
     d->parent       = static_cast<DigikamApp *>(parent);
     d->albumManager = AlbumManager::componentData();
-    d->leftSideBar  = new Sidebar(this, "Digikam Left Sidebar", Sidebar::Left);
+    d->leftSideBar  = new Sidebar(this, "Digikam Left Sidebar", Sidebar::DockLeft);
 
     d->splitter = new QSplitter(this);
-    d->splitter->setFrameStyle( Q3Frame::NoFrame );
-    d->splitter->setFrameShadow( Q3Frame::Plain );
-    d->splitter->setFrameShape( Q3Frame::NoFrame );
+    d->splitter->setFrameStyle( QFrame::NoFrame );
+    d->splitter->setFrameShadow( QFrame::Plain );
+    d->splitter->setFrameShape( QFrame::NoFrame );
     d->splitter->setOpaqueResize(false);
 
     d->leftSideBar->setSplitter(d->splitter);
     d->albumWidgetStack = new AlbumWidgetStack(d->splitter);
-    QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
+    QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+    rightSzPolicy.setHorizontalStretch(2);
+    rightSzPolicy.setVerticalStretch(1);
     d->albumWidgetStack->setSizePolicy(rightSzPolicy);
     d->iconView = d->albumWidgetStack->albumIconView();
 
     d->rightSideBar = new ImagePropertiesSideBarDB(this, "Digikam Right Sidebar", d->splitter, 
-                                                   Sidebar::Right, true);
+                                                   Sidebar::DockRight, true);
 
     // To the left.
     d->folderView       = new AlbumFolderView(this);
@@ -666,7 +665,7 @@ void DigikamView::slotAlbumOpenInKonqui()
 
     PAlbum* palbum = dynamic_cast<PAlbum*>(album);
 
-    new KRun(palbum->folderPath()); // KRun will delete itself.
+    new KRun(KUrl(palbum->folderPath()), this); // KRun will delete itself.
 }
 
 void DigikamView::slotAlbumRefresh()
@@ -678,9 +677,9 @@ void DigikamView::slotImageSelected()
 {
     // delay to slotDispatchImageSelected
     d->needDispatchSelection = true;
-    d->selectionTimer->start(75, true);
+    d->selectionTimer->setSingleShot(true);
+    d->selectionTimer->start(75);
 }
-
 
 void DigikamView::slotDispatchImageSelected()
 {
@@ -760,7 +759,8 @@ void DigikamView::setThumbSize(int size)
         d->thumbSizeTimer = new QTimer( this );
         connect(d->thumbSizeTimer, SIGNAL(timeout()),
                 this, SLOT(slotThumbSizeEffect()) );
-        d->thumbSizeTimer->start(300, true);    
+        d->thumbSizeTimer->setSingleShot(true);
+        d->thumbSizeTimer->start(300);    
     }
 }
 
@@ -905,14 +905,14 @@ void DigikamView::slotAlbumAddImages()
 
     QString fileformats;
     
-    QStringList patternList = QStringList::split('\n', KImageIO::pattern(KImageIO::Reading));
+    QStringList patternList = KImageIO::pattern(KImageIO::Reading).split('\n', QString::SkipEmptyParts);
     
     // All Pictures from list must been always the first entry given by KDE API
     QString allPictures = patternList[0];
     
     // Add other files format witch are missing to All Pictures" type mime provided by KDE and remplace current.
-    allPictures.insert(allPictures.find("|"), QString(raw_file_extentions) + QString(" *.JPE *.TIF"));
-    patternList.remove(patternList[0]);
+    allPictures.insert(allPictures.indexOf("|"), QString(raw_file_extentions) + QString(" *.JPE *.TIF"));
+    patternList.removeAll(patternList[0]);
     patternList.prepend(allPictures);
     
     // Added RAW file formats supported by dcraw program like a type mime. 
@@ -924,7 +924,7 @@ void DigikamView::slotAlbumAddImages()
 
     DDebug () << "fileformats=" << fileformats << endl;   
 
-    KUrl::List urls = KFileDialog::getOpenURLs(CollectionManager::componentData().oneAlbumRootPath(),
+    KUrl::List urls = KFileDialog::getOpenUrls(CollectionManager::instance()->oneAlbumRootPath(),
                                                fileformats, this, i18n("Select Image to Add"));
 
     if (!urls.isEmpty())
@@ -939,7 +939,10 @@ void DigikamView::slotAlbumAddImages()
 void DigikamView::slotImageCopyResult(KIO::Job* job)
 {
     if (job->error())
-        job->showErrorDialog(this);
+    {
+        job->ui()->setWindow(this);
+        job->ui()->showErrorMessage();
+    }
 }
 
 void DigikamView::slotAlbumImportFolder()
@@ -1256,20 +1259,20 @@ void DigikamView::slideShow(ImageInfoList &infoList)
          !d->cancelSlideShow && (it != infoList.end()) ; ++it)
     {
         ImageInfo *info = *it;
-        settings.fileList.append(info->kurl());
+        settings.fileList.append(info->fileUrl());
         SlidePictureInfo pictInfo;
         pictInfo.comment = info->comment();
 
         // Perform optimizations: only read pictures metadata if necessary.
         if (settings.printApertureFocal || settings.printExpoSensitivity || settings.printMakeModel)
         {
-            meta.load(info->kurl().path());
+            meta.load(info->fileUrl().path());
             pictInfo.photoInfo = meta.getPhotographInformations();
         }
 
         // In case of dateTime extraction from metadata failed 
         pictInfo.photoInfo.dateTime = info->dateTime(); 
-        settings.pictInfoMap.insert(info->kurl(), pictInfo);
+        settings.pictInfoMap.insert(info->fileUrl(), pictInfo);
 
         emit signalProgressValue((int)((i++/cnt)*100.0));
         kapp->processEvents();
@@ -1284,7 +1287,7 @@ void DigikamView::slideShow(ImageInfoList &infoList)
         {
             AlbumIconItem* current = dynamic_cast<AlbumIconItem*>(d->iconView->currentItem());
             if (current) 
-                slide->setCurrent(current->imageInfo()->kurl());
+                slide->setCurrent(current->imageInfo()->fileUrl());
         }
     
         slide->show();

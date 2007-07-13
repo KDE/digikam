@@ -27,12 +27,13 @@
 
 // Qt includes.
 
-
-#include <qstringlist.h>
-#include <qmap.h>
-//Added by qt3to4:
 #include <Q3PtrList>
-#include <kvbox.h>
+#include <QStringList>
+#include <QMap>
+
+// KDE includes.
+
+#include <khbox.h>
 
 // Local includes.
 
