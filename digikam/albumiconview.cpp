@@ -502,24 +502,25 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     
     AlbumIconItem* iconItem = static_cast<AlbumIconItem *>(item);
 
-    // --------------------------------------------------------
+    //-- Open With Actions ------------------------------------
 
-    KMimeType::Ptr mimePtr = KMimeType::findByURL(iconItem->imageInfo()->fileUrl(), 0, true, true);
+    KMimeType::Ptr mimePtr = KMimeType::findByUrl(iconItem->imageInfo()->fileUrl(), 0, true, true);
 
     Q3ValueVector<KService::Ptr> serviceVector;
-    KTrader::OfferList offers = KTrader::self()->query(mimePtr->name(), "Type == 'Application'");
+
+    const KService::List offers = KServiceTypeTrader::self()->query(mimePtr->name(), "Type == 'Application'");
+    KService::List::ConstIterator iter;
+    KService::Ptr ptr;
 
     Q3PopupMenu openWithMenu;
 
-    KTrader::OfferList::Iterator iter;
-    KService::Ptr ptr;
     int index = 100;
 
     for( iter = offers.begin(); iter != offers.end(); ++iter )
     {
         ptr = *iter;
-        openWithMenu.insertItem( ptr->pixmap(KIcon::Small), ptr->name(), index++);
-        serviceVector.push_back(ptr);
+        openWithMenu.insertItem(SmallIcon(ptr->icon()), ptr->name(), index++);
+        serviceVector.push_back(ptr); 
     }
 
     // --------------------------------------------------------
@@ -544,17 +545,16 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
         {
             DDebug() << "Found JPEGLossless plugin" << endl;
 
-            KActionPtrList actionList = plugin->actions();
+            QList<KAction*> actionList = plugin->actions();
             
-            for (KActionPtrList::const_iterator iter = actionList.begin();
-                 iter != actionList.end(); ++iter)
+            for (QList<KAction*>::const_iterator iter = actionList.begin();
+                iter != actionList.end(); ++iter)
             {
                 KAction* action = *iter;
                 
-                if (QString::fromLatin1(action->name())
-                    == QString::fromLatin1("jpeglossless_rotate"))
+                if (action->objectName().toLatin1() == QString::fromLatin1("jpeglossless_rotate"))
                 {
-                    action->plug(&popmenu);
+                    popmenu.addAction(action);
                 }
             }
         }
@@ -582,13 +582,14 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     KAction *copy     = KStandardAction::copy(this, SLOT(slotCopy()), 0);
     KAction *paste    = KStandardAction::paste(this, SLOT(slotPaste()), 0);
     QMimeSource *data = kapp->clipboard()->data(QClipboard::Clipboard);
+
     if(!data || !Q3UriDrag::canDecode(data))
     {
         paste->setEnabled(false);
     }    
-    copy->plug(&popmenu);
-    paste->plug(&popmenu);
-    
+
+    popmenu.addAction(copy);
+    popmenu.addAction(paste);    
     popmenu.insertSeparator();
 
     // --------------------------------------------------------
@@ -944,7 +945,7 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item)
     QString imagefilter = settings->getImageFileFilter().toLower() +
                           settings->getImageFileFilter().toUpper();
 
-    if (KDcrawIface::DcrawBinary::componentData().versionIsRight())
+    if (KDcrawIface::DcrawBinary::componentData()->versionIsRight())
     {
         // add raw files only if dcraw is available
         imagefilter += settings->getRawFileFilter().toLower() +
@@ -954,17 +955,16 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item)
     // If the current item is not an image file.
     if ( !imagefilter.contains(currentFileExtension) )
     {
-        KMimeType::Ptr mimePtr = KMimeType::findByURL(item->imageInfo()->fileUrl(),
-                                                      0, true, true);
-        KTrader::OfferList offers = KTrader::self()->query(mimePtr->name(),
-                                                           "Type == 'Application'");
-
+        KMimeType::Ptr mimePtr = KMimeType::findByUrl(item->imageInfo()->fileUrl(), 0, true, true);
+        const KService::List offers = KServiceTypeTrader::self()->query(mimePtr->name(), 
+                                                                        "Type == 'Application'");
+        
         if (offers.isEmpty())
             return;
 
         KService::Ptr ptr = offers.first();
         // Run the dedicated app to show the item.
-        KRun::run(*ptr, item->imageInfo()->fileUrl());
+        KRun::run(*ptr, item->imageInfo()->fileUrl(), this);
         return;
     }
 
