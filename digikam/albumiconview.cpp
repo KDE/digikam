@@ -827,8 +827,10 @@ void AlbumIconView::slotRename(AlbumIconItem* item)
     newURL.setFileName(newName + ext);
 
     KIO::CopyJob* job = DIO::rename(oldURL, newURL);
+
     connect(job, SIGNAL(result(KIO::Job*)),
             this, SLOT(slotDIOResult(KIO::Job*)));
+
     connect(job, SIGNAL(copyingDone(KIO::Job *, const KUrl &, const KUrl &, bool, bool)),
             this, SLOT(slotRenamed(KIO::Job*, const KUrl &, const KUrl&)));
 
@@ -883,6 +885,7 @@ void AlbumIconView::slotDeleteSelectedItems(bool deletePermanently)
 
     // trash does not like non-local URLs, put is not implemented
     KIO::Job* job = DIO::del(useTrash ? urlList : kioUrlList, useTrash);
+
     connect(job, SIGNAL(result(KIO::Job*)),
             this, SLOT(slotDIOResult(KIO::Job*)));
 
@@ -1098,8 +1101,8 @@ void AlbumIconView::startDrag()
     if (!d->currentAlbum)
         return;
 
-    KUrl::List      urls;
-    KUrl::List      kioURLs;
+    KUrl::List       urls;
+    KUrl::List       kioURLs;
     Q3ValueList<int> albumIDs;
     Q3ValueList<int> imageIDs;
 
