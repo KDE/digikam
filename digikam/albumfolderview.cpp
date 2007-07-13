@@ -1189,12 +1189,12 @@ void AlbumFolderView::albumImportFolder()
 
     QString libraryPath = parent->folderPath();
 
-    KFileDialog dlg(QString::null, "inode/directory", this, "importFolder", true);
+    KFileDialog dlg(KUrl(), "inode/directory", this);
     dlg.setMode(KFile::Directory |  KFile::Files);
     if(dlg.exec() != QDialog::Accepted)
         return;
 
-    KUrl::List urls = dlg.selectedURLs();
+    KUrl::List urls = dlg.selectedUrls();
     if(urls.empty())
         return;
 
