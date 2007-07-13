@@ -23,14 +23,14 @@
 
 // Qt includes.
 
-#include <qfont.h>
-#include <qpainter.h>
-#include <qstyle.h>
-#include <qcursor.h>
+#include <QFont>
+#include <QPainter>
+#include <QStyle>
+#include <QCursor>
 
 // KDe includes.
 
-#include <kmenu.h>
+#include <k3popupmenu.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kiconloader.h>
@@ -330,7 +330,7 @@ void SearchFolderView::slotContextMenu(Q3ListViewItem* item, const QPoint&, int)
 {
     if (!item)
     {
-        KMenu popmenu(this);
+        K3PopupMenu popmenu(this);
         popmenu.insertTitle(SmallIcon("digikam"), i18n("My Searches"));
         popmenu.insertItem(SmallIcon("filefind"), i18n("New Simple Search..."), 10);
         popmenu.insertItem(SmallIcon("find"),     i18n("New Advanced Search..."), 11);
@@ -355,7 +355,7 @@ void SearchFolderView::slotContextMenu(Q3ListViewItem* item, const QPoint&, int)
     {
         SearchFolderItem* sItem = dynamic_cast<SearchFolderItem*>(item);
 
-        KMenu popmenu(this);
+        K3PopupMenu popmenu(this);
         popmenu.insertTitle(SmallIcon("digikam"), i18n("My Searches"));
         popmenu.insertItem(SmallIcon("filefind"), i18n("Edit Search..."), 10);
 
