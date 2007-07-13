@@ -24,13 +24,12 @@
 
 // Qt includes.
 
-#include <qcombobox.h>
-#include <qlabel.h>
-#include <q3frame.h>
-#include <qlayout.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
-#include <Q3VBoxLayout>
+#include <QComboBox>
+#include <QLabel>
+#include <QFrame>
+#include <QLayout>
+#include <QGridLayout>
+#include <QVBoxLayout>
 
 // KDE includes.
 
@@ -87,7 +86,7 @@ TagCreateDlg::TagCreateDlg(QWidget *parent, TAlbum* album)
  
     QGridLayout* grid = new QGridLayout(widget);
 
-    QLabel *logo = new QLabel(widget);
+    QLabel *logo            = new QLabel(widget);
     KIconLoader* iconLoader = KIconLoader::global();
     logo->setPixmap(iconLoader->loadIcon("digikam", K3Icon::NoGroup, 96, K3Icon::DefaultState, 0, true));    
 
@@ -134,16 +133,16 @@ TagCreateDlg::TagCreateDlg(QWidget *parent, TAlbum* album)
 
     // --------------------------------------------------------
 
-    gl->addMultiCellWidget(titleLabel, 0, 0, 0, 0);
-    gl->addMultiCellWidget(d->titleEdit, 0, 0, 1, 1);
-    gl->addMultiCellWidget(iconTextLabel, 1, 1, 0, 0);
-    gl->addMultiCellWidget(d->iconButton, 1, 1, 1, 1);
-    gl->addMultiCell(spacer, 2, 2, 1, 1);
+    gl->addWidget(titleLabel, 0, 0, 1, 1);
+    gl->addWidget(d->titleEdit, 0, 1, 1, 1);
+    gl->addWidget(iconTextLabel, 1, 0, 1, 1);
+    gl->addWidget(d->iconButton, 1, 1, 1, 1);
+    gl->add(spacer, 2, 1, 1, 1);
     gl->setMargin(KDialog::spacingHint());
     gl->setSpacing(0);
 
-    grid->addMultiCellWidget(logo, 0, 0, 0, 0);
-    grid->addMultiCellLayout(topLayout, 0, 1, 1, 1);
+    grid->addWidget(logo, 0, 0, 1, 1);
+    grid->addLayout(topLayout, 0, 1, 2, 1);
     grid->setRowStretch(1, 10);
     grid->setMargin(0);
     grid->setSpacing(KDialog::spacingHint());
@@ -256,7 +255,7 @@ TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album)
 
     QGridLayout* grid = new QGridLayout(widget);
 
-    QLabel *logo = new QLabel(widget);
+    QLabel *logo            = new QLabel(widget);
     KIconLoader* iconLoader = KIconLoader::global();
     logo->setPixmap(iconLoader->loadIcon("digikam", K3Icon::NoGroup, 96, K3Icon::DefaultState, 0, true));    
 
@@ -305,17 +304,17 @@ TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album)
 
     // --------------------------------------------------------
     
-    gl->addMultiCellWidget(titleLabel, 0, 0, 0, 0);
-    gl->addMultiCellWidget(d->titleEdit, 0, 0, 1, 3);
-    gl->addMultiCellWidget(iconTextLabel, 1, 1, 0, 0);
-    gl->addMultiCellWidget(d->iconButton, 1, 1, 1, 1);
-    gl->addMultiCellWidget(d->resetIconButton, 1, 1, 2, 2);
-    gl->addMultiCell(spacer, 1, 1, 3, 3);
+    gl->addWidget(titleLabel, 0, 0, 1, 1);
+    gl->addWidget(d->titleEdit, 0, 1, 1, 3);
+    gl->addWidget(iconTextLabel, 1, 0, 1, 1);
+    gl->addWidget(d->iconButton, 1, 1, 1, 1);
+    gl->addWidget(d->resetIconButton, 1, 2, 1, 1);
+    gl->add(spacer, 1, 3, 1, 1);
     gl->setMargin(KDialog::spacingHint());
     gl->setSpacing(0);
     
-    grid->addMultiCellWidget(logo, 0, 0, 0, 0);
-    grid->addMultiCellLayout(topLayout, 0, 1, 1, 1);
+    grid->addWidget(logo, 0, 0, 1, 1);
+    grid->addLayout(topLayout, 0, 1, 2, 1);
     grid->setRowStretch(1, 10);
     grid->setMargin(0);
     grid->setSpacing(KDialog::spacingHint());
