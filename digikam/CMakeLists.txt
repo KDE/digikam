@@ -79,7 +79,7 @@ SET(digikam_LIB_SRCS
 #                      digikamapp.cpp 
                       album.cpp 
 #                      albumiconview.cpp 
-#                      albumicongroupitem.cpp 
+                      albumicongroupitem.cpp 
                       albumiconitem.cpp 
                       albumitemhandler.cpp 
 #                      albumfiletip.cpp 

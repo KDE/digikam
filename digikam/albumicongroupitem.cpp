@@ -23,8 +23,8 @@
 
 // Qt includes.
 
-#include <qpixmap.h>
-#include <qpainter.h>
+#include <QPixmap>
+#include <QPainter>
 
 // KDE includes.
 
@@ -58,7 +58,7 @@ int AlbumIconGroupItem::compare(IconGroupItem* group)
     AlbumIconGroupItem* agroup = (AlbumIconGroupItem*)group;
     
     PAlbum* mine = AlbumManager::componentData()->findPAlbum(m_albumID);
-    PAlbum* his = AlbumManager::componentData()->findPAlbum(agroup->m_albumID);
+    PAlbum* his  = AlbumManager::componentData()->findPAlbum(agroup->m_albumID);
 
     if (!mine || !his)
         return 0;
@@ -100,9 +100,9 @@ void AlbumIconGroupItem::paintBanner()
     {
         QDate  date  = album->date();
         
-        dateAndComments = i18n("%1 %2 - 1 Item", "%1 %2 - %n Items", count())
-                          .arg(KGlobal::locale()->calendar()->monthName(date, false))
-                          .arg(KGlobal::locale()->calendar()->year(date));
+        dateAndComments = i18np("%1 %2 - 1 Item", "%1 %2 - %n Items", count(),
+                                KGlobal::locale()->calendar()->monthName(date, false),
+                                KGlobal::locale()->calendar()->year(date));
         
         if (!album->caption().isEmpty())
         {
@@ -139,8 +139,8 @@ void AlbumIconGroupItem::paintBanner()
 
     QRect tr;
     p.drawText(5, 5, r.width(), r.height(),
-               Qt::AlignLeft | Qt::AlignTop, prettyUrl,
-               -1, &tr);
+               Qt::AlignLeft | Qt::AlignTop, 
+               prettyUrl.left(-1), &tr);
 
     r.setY(tr.height() + 2);
 
@@ -161,8 +161,9 @@ void AlbumIconGroupItem::paintBanner()
     r = QRect(iconView()->contentsToViewport(QPoint(r.x(), r.y())),
               QSize(r.width(), r.height()));
     
-    bitBlt(iconView()->viewport(), r.x(), r.y(), &pix,
-           0, 0, r.width(), r.height());
+    QPainter p2(iconView()->viewport());
+    p2.drawPixmap(r.x(), r.y(), pix, 0, 0, r.width(), r.height());
+    p2.end();
 }
 
 }  // namespace Digikam

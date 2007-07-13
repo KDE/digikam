@@ -35,6 +35,7 @@ class AlbumIconView;
 
 class AlbumIconGroupItem : public IconGroupItem
 {
+
 public:
 
     AlbumIconGroupItem(AlbumIconView* view, int albumID);
