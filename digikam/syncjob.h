@@ -32,14 +32,15 @@
 
 // Qt includes.
 
-#include <qobject.h>
-#include <qpixmap.h>
+#include <QObject>
+#include <QPixmap>
 
 // KDe includes.
 
 #include <kurl.h>
 
 class QString;
+class QEventLoop;
 
 namespace KIO
 {
@@ -76,6 +77,9 @@ private:
     SyncJob();
     ~SyncJob();
 
+    void enterWaitingLoop();
+    void quitWaitingLoop();
+
     bool delPriv(const KUrl::List& urls);
     bool trashPriv(const KUrl::List& urls);
 
@@ -84,16 +88,6 @@ private:
     QPixmap getTagThumbnailPriv(TAlbum *album);
     QPixmap getTagThumbnailPriv(const QString &name, int size);
 
-    void enter_loop();
-    
-    static int      lastErrorCode_;
-    static QString* lastErrorMsg_;
-    bool            success_;
-    
-    QPixmap         *thumbnail_;
-    Album           *album_;
-    int             thumbnailSize_;
-
 private slots:
 
     void slotResult( KIO::Job * job );
@@ -101,6 +95,18 @@ private slots:
     void slotLoadThumbnailFailed(Album *album);
     void slotGotThumbnailFromIcon(const KUrl& url, const QPixmap& pix);
     void slotLoadThumbnailFailed();
+
+private:
+
+    static int       lastErrorCode_;
+    static QString  *lastErrorMsg_;
+    bool             success_;
+    
+    int              thumbnailSize_;
+    Album           *album_;
+    QPixmap         *thumbnail_;
+
+    QEventLoop      *waitingLoop_;
 };
 
 }  // namespace Digikam

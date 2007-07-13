@@ -123,7 +123,7 @@ SET(digikam_LIB_SRCS
                       searchresultsview.cpp 
                       searchresultsitem.cpp 
 #                      searchwidgets.cpp 
-#                      syncjob.cpp 
+                      syncjob.cpp 
 #                      tagcreatedlg.cpp 
                       tagfilterview.cpp 
                       tagfolderview.cpp 
