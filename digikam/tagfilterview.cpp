@@ -24,21 +24,19 @@
 
 // Qt includes.
 
-#include <q3header.h>
-#include <qpixmap.h>
-#include <qpainter.h>
-#include <qtimer.h>
-#include <qcursor.h>
-//Added by qt3to4:
 #include <Q3ValueList>
+#include <Q3Header>
+#include <QPixmap>
+#include <QPainter>
+#include <QTimer>
+#include <QCursor>
 #include <QDropEvent>
-#include <Q3PopupMenu>
 #include <QMouseEvent>
 
 // KDE includes.
 
+#include <k3popupmenu.h>
 #include <kabc/stdaddressbook.h>
-#include <kmenu.h>
 #include <klocale.h>
 #include <kapplication.h>
 #include <kconfig.h>
@@ -255,9 +253,9 @@ TagFilterView::TagFilterView(QWidget* parent)
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("Tag Filters View");
     d->matchingCond = (AlbumLister::MatchingCondition)(group.readEntry("Matching Condition", 
-                                                       AlbumLister::OrCondition));
+                                                       (int)AlbumLister::OrCondition));
 
-    d->toggleAutoTags = (ToggleAutoTags)(group.readEntry("Toggle Auto Tags", NoToggleAuto));
+    d->toggleAutoTags = (ToggleAutoTags)(group.readEntry("Toggle Auto Tags", (int)NoToggleAuto));
 }
 
 TagFilterView::~TagFilterView()
@@ -303,14 +301,15 @@ void TagFilterView::stateChanged(TagFilterViewItem* item)
 
 void TagFilterView::triggerChange()
 {
-    d->timer->start(50, true);
+    d->timer->setSingleShot(true);
+    d->timer->start(50);
 }
 
 void TagFilterView::contentsMouseMoveEvent(QMouseEvent *e)
 {
     Q3ListView::contentsMouseMoveEvent(e);
 
-    if(e->state() == NoButton)
+    if(e->buttons() == Qt::NoButton)
     {
         if(KGlobalSettings::changeCursorOverIcon())
         {
@@ -342,7 +341,7 @@ void TagFilterView::contentsMousePressEvent(QMouseEvent *e)
     QPoint vp = contentsToViewport(e->pos());
     TagFilterViewItem *item = dynamic_cast<TagFilterViewItem*>(itemAt(vp));
 
-    if(item && e->button() == RightButton) 
+    if(item && e->button() == Qt::RightButton) 
     {
         bool isOn = item->isOn();
         Q3ListView::contentsMousePressEvent(e);
@@ -353,7 +352,7 @@ void TagFilterView::contentsMousePressEvent(QMouseEvent *e)
 
     Q3ListView::contentsMousePressEvent(e);
 
-    if(item && e->button() == LeftButton) 
+    if(item && e->button() == Qt::LeftButton) 
     {
         d->dragStartPos = e->pos();
         d->dragItem     = item;
@@ -446,7 +445,7 @@ void TagFilterView::contentsDropEvent(QDropEvent *e)
     if(TagDrag::canDecode(e))
     {
         QByteArray ba = e->encodedData("digikam/tag-id");
-        QDataStream ds(ba, QIODevice::ReadOnly);
+        QDataStream ds(&ba, QIODevice::ReadOnly);
         int tagID;
         ds >> tagID;
 
@@ -459,7 +458,7 @@ void TagFilterView::contentsDropEvent(QDropEvent *e)
         if (talbum == itemDrop->m_tag)
             return;
 
-        KMenu popMenu(this);
+        K3PopupMenu popMenu(this);
         popMenu.insertTitle(SmallIcon("digikam"), i18n("Tag Filters"));
         popMenu.insertItem(SmallIcon("goto"), i18n("&Move Here"), 10);
         popMenu.insertSeparator(-1);
@@ -512,9 +511,9 @@ void TagFilterView::contentsDropEvent(QDropEvent *e)
 
         int id = 0;
         char keys_return[32];
-        XQueryKeymap(x11Display(), keys_return);
-        int key_1 = XKeysymToKeycode(x11Display(), 0xFFE3);
-        int key_2 = XKeysymToKeycode(x11Display(), 0xFFE4);
+        XQueryKeymap(x11Info().display(), keys_return);
+        int key_1 = XKeysymToKeycode(x11Info().display(), 0xFFE3);
+        int key_2 = XKeysymToKeycode(x11Info().display(), 0xFFE4);
 
         // If a ctrl key is pressed while dropping the drag object,
         // the tag is assigned to the images without showing a
@@ -526,10 +525,10 @@ void TagFilterView::contentsDropEvent(QDropEvent *e)
         }
         else
         {
-            KMenu popMenu(this);
+            K3PopupMenu popMenu(this);
             popMenu.insertTitle(SmallIcon("digikam"), i18n("Tag Filters"));
             popMenu.insertItem(SmallIcon("tag"), i18n("Assign Tag '%1' to Items")
-                                .arg(destAlbum->prettyUrl()), 10) ;
+                               .arg(destAlbum->prettyUrl()), 10) ;
             popMenu.insertItem(i18n("Set as Tag Thumbnail"),  11);
             popMenu.insertSeparator(-1);
             popMenu.insertItem(SmallIcon("cancel"), i18n("C&ancel"));
@@ -777,7 +776,7 @@ void TagFilterView::slotContextMenu(Q3ListViewItem* it, const QPoint&, int)
     connect(d->ABCMenu, SIGNAL( aboutToShow() ),
             this, SLOT( slotABCContextMenu() ));
 
-    KMenu popmenu(this);
+    K3PopupMenu popmenu(this);
     popmenu.insertTitle(SmallIcon("digikam"), i18n("Tag Filters"));
     popmenu.insertItem(SmallIcon("tag-new"), i18n("New Tag..."), 10);
     popmenu.insertItem(SmallIcon("tag-addressbook"), i18n("Create Tag From AddressBook"), d->ABCMenu);
@@ -1118,17 +1117,18 @@ void TagFilterView::tagDelete(TagFilterViewItem* item)
     if (children)
     {
         int result = KMessageBox::warningContinueCancel(this,
-                     i18n("Tag '%1' has one subtag. "
-                          "Deleting this will also delete "
-                          "the subtag. "
-                          "Do you want to continue?",
-                          "Tag '%1' has %n subtags. "
-                          "Deleting this will also delete "
-                          "the subtags. "
-                          "Do you want to continue?",
-                          children).arg(tag->title()),
-                          i18n("Delete Tag"),
-                          KGuiItem(i18n("Delete"),"editdelete"));
+                     i18np("Tag '%1' has one subtag. "
+                           "Deleting this will also delete "
+                           "the subtag. "
+                           "Do you want to continue?",
+                           "Tag '%1' has %n subtags. "
+                           "Deleting this will also delete "
+                           "the subtags. "
+                           "Do you want to continue?",
+                           children, tag->title()),
+                     i18n("Delete Tag"),
+                     KGuiItem(i18n("Delete"),
+                     "editdelete"));
 
         if(result == KMessageBox::Continue)
         {

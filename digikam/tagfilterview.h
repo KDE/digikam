@@ -25,13 +25,15 @@
 #ifndef TAGFILTERVIEW_H
 #define TAGFILTERVIEW_H
 
-// Local includes.
+// Qt includes.
 
-#include "folderview.h"
-//Added by qt3to4:
 #include <QPixmap>
 #include <QDropEvent>
 #include <QMouseEvent>
+
+// Local includes.
+
+#include "folderview.h"
 
 namespace Digikam
 {

@@ -125,7 +125,7 @@ SET(digikam_LIB_SRCS
 #                      searchwidgets.cpp 
 #                      syncjob.cpp 
 #                      tagcreatedlg.cpp 
-#                      tagfilterview.cpp 
+                      tagfilterview.cpp 
                       tagfolderview.cpp 
 #                      tagspopupmenu.cpp 
                       welcomepageview.cpp 
