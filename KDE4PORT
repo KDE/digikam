@@ -119,7 +119,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
             dcopiface.cpp                                               X
             digikamapp.cpp                                              X
             digikamfirstrun.cpp                 Laurent                 X       DONE
-            digikamview.cpp                                             X
+            digikamview.cpp                     Gilles                  X       DONE
             dio.cpp                             Laurent                 X       DONE
             dragobjects.cpp                     Gilles                  X       DONE
             firstrun.cpp                        Gilles                  X       DONE
