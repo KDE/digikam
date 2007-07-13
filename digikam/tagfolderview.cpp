@@ -35,7 +35,7 @@
 
 // KDE includes.
 
-#include <kmenu.h>
+#include <k3popupmenu.h>
 #include <klocale.h>
 #include <kabc/stdaddressbook.h>
 #include <kiconloader.h>
@@ -412,7 +412,7 @@ void TagFolderView::slotContextMenu(Q3ListViewItem *item, const QPoint &, int)
 
     TagFolderViewItem *tag = dynamic_cast<TagFolderViewItem*>(item);
 
-    KMenu popmenu(this);
+    K3PopupMenu popmenu(this);
     popmenu.insertTitle(SmallIcon("digikam"), i18n("My Tags"));
     popmenu.insertItem(SmallIcon("tag-new"), i18n("New Tag..."), 10);
     popmenu.insertItem(SmallIcon("tag-addressbook"), i18n("Create Tag From AddressBook"), d->ABCMenu);
@@ -593,17 +593,19 @@ void TagFolderView::tagDelete(TagFolderViewItem *item)
     if(children)
     {
         int result = KMessageBox::warningContinueCancel(this,
-                       i18n("Tag '%1' has one subtag. "
-                            "Deleting this will also delete "
-                            "the subtag. "
-                            "Do you want to continue?",
-                            "Tag '%1' has %n subtags. "
-                            "Deleting this will also delete "
-                            "the subtags. "
-                            "Do you want to continue?",
-                            children,tag->title()),
-                            i18n("Delete Tag"), KGuiItem(i18n("Delete"),
-                            "editdelete"));
+                       i18np("Tag '%1' has one subtag. "
+                             "Deleting this will also delete "
+                             "the subtag. "
+                             "Do you want to continue?",
+                             "Tag '%1' has %n subtags. "
+                             "Deleting this will also delete "
+                             "the subtags. "
+                             "Do you want to continue?",
+                             children, 
+                             tag->title()),
+                       i18n("Delete Tag"), 
+                       KGuiItem(i18n("Delete"),
+                       "editdelete"));
 
         if(result == KMessageBox::Continue)
         {
@@ -693,7 +695,7 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
     if(TagDrag::canDecode(e))
     {
         QByteArray ba = e->encodedData("digikam/tag-id");
-        QDataStream ds(ba, QIODevice::ReadOnly);
+        QDataStream ds(&ba, QIODevice::ReadOnly);
         int tagID;
         ds >> tagID;
 
@@ -706,7 +708,7 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
         if (talbum == itemDrop->getTag())
             return;
 
-        KMenu popMenu(this);
+        K3PopupMenu popMenu(this);
         popMenu.insertTitle(SmallIcon("digikam"), i18n("My Tags"));
         popMenu.insertItem(SmallIcon("goto"), i18n("&Move Here"), 10);
         popMenu.insertSeparator(-1);
@@ -770,9 +772,9 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
 
         int id = 0;
         char keys_return[32];
-        XQueryKeymap(x11Display(), keys_return);
-        int key_1 = XKeysymToKeycode(x11Display(), 0xFFE3);
-        int key_2 = XKeysymToKeycode(x11Display(), 0xFFE4);
+        XQueryKeymap(x11Info().display(), keys_return);
+        int key_1 = XKeysymToKeycode(x11Info().display(), 0xFFE3);
+        int key_2 = XKeysymToKeycode(x11Info().display(), 0xFFE4);
 
         if(srcAlbum == destAlbum)
         {
@@ -786,7 +788,7 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
             }
             else
             {
-                KMenu popMenu(this);
+                K3PopupMenu popMenu(this);
                 popMenu.insertTitle(SmallIcon("digikam"), i18n("My Tags"));
                 popMenu.insertItem(i18n("Set as Tag Thumbnail"), 12);
                 popMenu.insertSeparator(-1);
@@ -815,7 +817,7 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
         }
         else
         {
-            KMenu popMenu(this);
+            K3PopupMenu popMenu(this);
             popMenu.insertTitle(SmallIcon("digikam"), i18n("My Tags"));
             popMenu.insertItem( SmallIcon("tag"), i18n("Assign Tag '%1' to Items")
                                 .arg(destAlbum->prettyUrl()), 10) ;
@@ -872,4 +874,3 @@ void TagFolderView::selectItem(int id)
 }
 
 }  // namespace Digikam
-
