@@ -43,6 +43,7 @@ extern "C"
 #include <Q3ValueList>
 #include <Q3Dict>
 #include <Q3IntDict>
+#include <QList>
 #include <QFile>
 #include <QDir>
 #include <QByteArray>
@@ -373,7 +374,11 @@ void AlbumManager::scanPAlbums()
 
     // scan db and get a list of all albums
     AlbumInfo::List aList = DatabaseAccess().db()->scanAlbums();
+
+#warning "TODO: kde4 port it";
+    /* TODO: KDE4PORT: Won't compile. Why ?
     qSort(aList);
+    */
 
     AlbumInfo::List newAlbumList;
     
@@ -416,7 +421,11 @@ void AlbumManager::scanPAlbums()
         delete album;
     }
 
+#warning "TODO: kde4 port it";
+    /* TODO: KDE4PORT: Won't compile. Why ?
     qSort(newAlbumList);
+    */
+
     for (AlbumInfo::List::iterator it = newAlbumList.begin(); it != newAlbumList.end(); ++it)
     {
         AlbumInfo info = *it;
@@ -429,13 +438,13 @@ void AlbumManager::scanPAlbums()
         u.setPath(info.url);
         QString name = u.fileName();
         // Get its parent
-        QString purl = u.upUrl().path(-1);
+        QString purl = u.upUrl().path(KUrl::RemoveTrailingSlash);
 
         PAlbum* parent = d->pAlbumDict.find(purl);
         if (!parent)
         {
             DWarning() << k_funcinfo <<  "Could not find parent with url: "
-                        << purl << " for: " << info.url << endl;
+                       << purl << " for: " << info.url << endl;
             continue;
         }
 
@@ -706,7 +715,7 @@ Album* AlbumManager::currentAlbum() const
 
 PAlbum* AlbumManager::findPAlbum(const KUrl& url) const
 {
-    return d->pAlbumDict.find(CollectionManager::componentData().album(url));
+    return d->pAlbumDict.find(CollectionManager::instance()->album(url));
 }
 
 PAlbum* AlbumManager::findPAlbum(int id) const
@@ -905,11 +914,11 @@ bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName,
     QString oldAlbumPath = album->albumPath();
 
     KUrl u = album->fileUrl();
-    u = u.upUrl();
+    u      = u.upUrl();
     u.addPath(newName);
 
     if (::rename(QFile::encodeName(album->folderPath()),
-                 QFile::encodeName(u.path(-1))) != 0)
+                 QFile::encodeName(u.path(KUrl::RemoveTrailingSlash))) != 0)
     {
         errMsg = i18n("Failed to rename Album");
         return false;
@@ -1031,14 +1040,14 @@ TAlbum* AlbumManager::createTAlbum(TAlbum* parent, const QString& name,
 AlbumList AlbumManager::findOrCreateTAlbums(const QStringList &tagPaths)
 {
     // find tag ids for tag paths in list, create if they don't exist
-    IntList tagIDs = DatabaseAccess().db()->getTagsFromTagPaths(tagPaths);
+    QList<int> tagIDs = DatabaseAccess().db()->getTagsFromTagPaths(tagPaths, true);
 
     // create TAlbum objects for the newly created tags
     scanTAlbums();
 
     AlbumList resultList;
 
-    for (IntList::iterator it = tagIDs.begin(); it != tagIDs.end(); ++it)
+    for (QList<int>::iterator it = tagIDs.begin() ; it != tagIDs.end() ; ++it)
     {
         resultList.append(findTAlbum(*it));
     }
@@ -1173,11 +1182,11 @@ bool AlbumManager::updateTAlbumIcon(TAlbum* album, const QString& iconKDE,
 
 AlbumList AlbumManager::getRecentlyAssignedTags() const
 {
-    IntList tagIDs = DatabaseAccess().db()->getRecentlyAssignedTags();
+    QList<int> tagIDs = DatabaseAccess().db()->getRecentlyAssignedTags();
 
     AlbumList resultList;
 
-    for (IntList::iterator it = tagIDs.begin(); it != tagIDs.end(); ++it)
+    for (QList<int>::iterator it = tagIDs.begin() ; it != tagIDs.end() ; ++it)
     {
         resultList.append(findTAlbum(*it));
     }
@@ -1295,7 +1304,7 @@ void AlbumManager::removePAlbum(PAlbum *album)
     d->albumIntDict.remove(album->globalID());
 
     DatabaseUrl url = album->databaseUrl();
-    d->dirtyAlbums.remove(url.url());
+    d->dirtyAlbums.removeAll(url.url());
     d->dirWatch->removeDir(url.fileUrl().path());
 
     if (album == d->currentAlbum)
@@ -1379,7 +1388,7 @@ void AlbumManager::slotResult(KIO::Job* job)
 }
 
 
-void AlbumManager::slotData(KIO::Job* , const QByteArray& data)
+void AlbumManager::slotData(KIO::Job*, const QByteArray& data)
 {
     if (data.isEmpty())
         return;
@@ -1395,7 +1404,8 @@ void AlbumManager::slotData(KIO::Job* , const QByteArray& data)
         ++it;
     }
     
-    QDataStream ds(data, QIODevice::ReadOnly);
+    QByteArray di(data);
+    QDataStream ds(&di, QIODevice::ReadOnly);
     while (!ds.atEnd())
     {
         QDate date;
@@ -1433,7 +1443,7 @@ void AlbumManager::slotDirty(const QString& path)
     KUrl fileUrl;
     // we need to provide a trailing slash to DatabaseUrl to mark it as a directory
     fileUrl.setPath(QDir::cleanPath(path) + '/');
-    DatabaseUrl url = DatabaseUrl::fromFileUrl(fileUrl, CollectionManager::componentData().albumRoot(fileUrl));
+    DatabaseUrl url = DatabaseUrl::fromFileUrl(fileUrl, CollectionManager::instance()->albumRoot(fileUrl));
 
     if (d->dirtyAlbums.contains(url.url()))
         return;
@@ -1451,5 +1461,3 @@ void AlbumManager::slotDirty(const QString& path)
 }
 
 }  // namespace Digikam
-
-
