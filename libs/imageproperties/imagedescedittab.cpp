@@ -38,8 +38,8 @@
 
 // KDE includes.
 
-//#include <kabc/stdaddressbook.h>
 #include <k3popupmenu.h>
+#include <kabc/stdaddressbook.h>
 #include <klocale.h>
 #include <kurl.h>
 #include <kcursor.h>
@@ -1001,9 +1001,6 @@ void ImageDescEditTab::slotABCContextMenu()
 {
     d->ABCMenu->clear();
 
-#warning "TODO: kde4 port it";
-/*  // TODO: KDE4PORT: port this code to new libKABC API when it will be available
-
     int counter = 100;
     KABC::AddressBook* ab = KABC::StdAddressBook::self();
     QStringList names;
@@ -1025,7 +1022,7 @@ void ImageDescEditTab::slotABCContextMenu()
     {
         d->ABCMenu->insertItem( i18n("No AddressBook Entries Found"), ++counter );
         d->ABCMenu->setItemEnabled( counter, false );
-    }*/
+    }
 }
 
 void ImageDescEditTab::slotMoreMenu()
