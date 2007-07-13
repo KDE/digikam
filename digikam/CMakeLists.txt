@@ -116,7 +116,7 @@ SET(digikam_LIB_SRCS
                       pixmapmanager.cpp 
                       ratingpopupmenu.cpp 
                       ratingwidget.cpp 
-#                      scanlib.cpp 
+                      scanlib.cpp 
 #                      searchadvanceddialog.cpp 
                       searchfolderview.cpp 
                       searchquickdialog.cpp 
