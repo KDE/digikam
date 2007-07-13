@@ -35,7 +35,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
             cameraitempropertiestab.cpp         Gilles                  X       DONE
             imagepropertiessidebarcamgui.cpp    Gilles                  X       DONE
             imagepropertiessidebardb.cpp        Gilles                  X       DONE
-            imagedescedittab.cpp                Gilles                  X       UNCOMPLETE           Compile. KAdresseBook Code are not yet ported. Few depreciate methods to fix
+            imagedescedittab.cpp                Gilles                  X       DONE                 Few depreciate methods to fix
             talbumlistview.cpp                  Gilles                  X       DONE
         |---jpegutils                           Gilles                  X       DONE
         |---levels                              Gilles          X       X       DONE
