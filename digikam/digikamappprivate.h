@@ -54,8 +54,15 @@
 #include "statusnavigatebar.h"
 #include "digikamview.h"
 
+class KToolBarPopupAction;
+class KToggleAction;
+class KActionMenu;
+class KSelectAction;
+
 namespace Digikam
 {
+
+class DCOPIface;
 
 class DigikamAppPriv
 {
@@ -127,8 +134,8 @@ public:
         kipiInterface                        = 0;
         cameraList                           = 0;
         statusProgressBar                    = 0;
-        statusNavigateBar                    = 0;    
-        statusZoomBar                        = 0;    
+        statusNavigateBar                    = 0;
+        statusZoomBar                        = 0;
         kipiPluginLoader                     = 0;
         view                                 = 0;
         splashScreen                         = 0;
@@ -140,7 +147,7 @@ public:
 
     bool                   fullScreen;
     bool                   validIccPath;
-    
+
     // KIPI plugins support
     QPtrList<KAction>      kipiFileActionsExport;
     QPtrList<KAction>      kipiFileActionsImport;
@@ -157,8 +164,8 @@ public:
 
     KAccel                *accelerators;
 
-    KConfig               *config;    
-    
+    KConfig               *config;
+
     // Album Actions
     KAction               *newAction;
     KAction               *deleteAction;
@@ -174,12 +181,12 @@ public:
     KAction               *openInKonquiAction;
     KAction               *refreshAlbumAction;
     KAction               *syncAlbumMetadataAction;
-    
+
     // Tag Actions
     KAction               *newTagAction;
     KAction               *deleteTagAction;
     KAction               *editTagAction;
-    
+
     // Image Actions
     KToggleAction         *imagePreviewAction;
     KAction               *imageLightTableAction;
@@ -228,7 +235,7 @@ public:
     KAction               *donateMoneyAction;
     KActionMenu           *cameraMenuAction;
     KSelectAction         *themeMenuAction;
-    
+
     AlbumSettings         *albumSettings;
     AlbumManager          *albumManager;
     SplashScreen          *splashScreen;
@@ -239,10 +246,9 @@ public:
     CameraList            *cameraList;
     StatusZoomBar         *statusZoomBar;
     StatusProgressBar     *statusProgressBar;
-    StatusNavigateBar     *statusNavigateBar;    
+    StatusNavigateBar     *statusNavigateBar;
 
     KIPI::PluginLoader    *kipiPluginLoader;
 };
 
 }  // namespace Digikam
-
