@@ -24,14 +24,10 @@
 
 // Qt includes.
 
-#include <qpainter.h>
-#include <qcursor.h>
-#include <q3listview.h>
-//Added by qt3to4:
+#include <Q3ListView>
 #include <Q3ValueList>
-#include <QPixmap>
-#include <QDropEvent>
-#include <Q3PopupMenu>
+#include <QPainter>
+#include <QCursor>
 
 // KDE includes.
 

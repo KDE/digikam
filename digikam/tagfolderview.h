@@ -27,12 +27,14 @@
 #ifndef _TAGFOLDERVIEW_H_
 #define _TAGFOLDERVIEW_H_
 
+// Qt includes.
+
+#include <QDropEvent>
+#include <QPixmap>
+
 // Local includes.
 
 #include "folderview.h"
-//Added by qt3to4:
-#include <QDropEvent>
-#include <QPixmap>
 
 class QDropEvent;
 
