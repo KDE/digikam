@@ -141,7 +141,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
             pixmapmanager.cpp                   Gilles                  X       DONE
             ratingpopupmenu.cpp                 Gilles                  X       DONE
             ratingwidget.cpp                    Gilles                  X       DONE
-            scanlib.cpp                                                 X
+            scanlib.cpp                         Gilles                  X       DONE
             searchadvanceddialog.cpp                                    X
             searchfolderview.cpp                Gilles                  X       DONE
             searchquickdialog.cpp               Laurent                 X       DONE
