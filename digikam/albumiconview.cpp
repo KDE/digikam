@@ -23,12 +23,6 @@
  * 
  * ============================================================ */
 
-//Added by qt3to4:
-#include <QResizeEvent>
-#include <Q3ValueList>
-#include <QDropEvent>
-#include <QDragMoveEvent>
-
 // C Ansi includes.
 
 extern "C"
@@ -44,32 +38,32 @@ extern "C"
 
 // Qt includes.
 
-#include <qpixmap.h>
-#include <qimage.h>
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qevent.h>
-#include <qpainter.h>
-#include <qpoint.h>
-#include <q3popupmenu.h>
-#include <qdatetime.h>
-#include <qfileinfo.h>
-#include <qfile.h>
-#include <q3dragobject.h>
-#include <qcursor.h>
-#include <q3valuevector.h>
-#include <q3ptrlist.h>
-#include <q3intdict.h>
-#include <q3dict.h>
-#include <qdatastream.h>
-#include <qtimer.h>
-#include <qclipboard.h>
+#include <Q3DragObject>
+#include <Q3ValueVector>
+#include <Q3IntDict>
+#include <Q3Dict>
+#include <QImage>
+#include <QString>
+#include <QStringList>
+#include <QEvent>
+#include <QPainter>
+#include <QPoint>
+#include <QDateTime>
+#include <QFileInfo>
+#include <QFile>
+#include <QCursor>
+#include <QDataStream>
+#include <QTimer>
+#include <QClipboard>
+#include <QPixmap>
+#include <QDragMoveEvent>
+#include <QDropEvent>
+#include <QResizeEvent>
 
 // KDE includes.
 
 #include <kapplication.h>
 #include <kurl.h>
-#include <kurldrag.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kmessagebox.h>
@@ -81,10 +75,10 @@ extern "C"
 #include <kaction.h>
 #include <kstandarddirs.h>
 #include <kiconeffect.h>
-                            #include <kdebug.h>
 #include <kdeversion.h>
 #include <kcalendarsystem.h>
 #include <kinputdialog.h>
+
 // LibKipi includes.
 
 #include <libkipi/pluginloader.h>
@@ -145,43 +139,43 @@ public:
         toolTip       = 0;
     }
 
-    QString                       albumTitle;
-    QString                       albumDate;
-    QString                       albumComments;
+    QString                          albumTitle;
+    QString                          albumDate;
+    QString                          albumComments;
 
-    QRect                         itemRect;
-    QRect                         itemRatingRect;
-    QRect                         itemDateRect;
-    QRect                         itemModDateRect;
-    QRect                         itemPixmapRect;
-    QRect                         itemNameRect;
-    QRect                         itemCommentsRect;
-    QRect                         itemResolutionRect;
-    QRect                         itemSizeRect;
-    QRect                         itemTagRect;
-    QRect                         bannerRect;
+    QRect                            itemRect;
+    QRect                            itemRatingRect;
+    QRect                            itemDateRect;
+    QRect                            itemModDateRect;
+    QRect                            itemPixmapRect;
+    QRect                            itemNameRect;
+    QRect                            itemCommentsRect;
+    QRect                            itemResolutionRect;
+    QRect                            itemSizeRect;
+    QRect                            itemTagRect;
+    QRect                            bannerRect;
 
-    QPixmap                       itemRegPixmap;
-    QPixmap                       itemSelPixmap;
-    QPixmap                       bannerPixmap;
-    QPixmap                       ratingPixmap;
+    QPixmap                          itemRegPixmap;
+    QPixmap                          itemSelPixmap;
+    QPixmap                          bannerPixmap;
+    QPixmap                          ratingPixmap;
 
-    QFont                         fnReg;
-    QFont                         fnCom;
-    QFont                         fnXtra;
+    QFont                            fnReg;
+    QFont                            fnCom;
+    QFont                            fnXtra;
 
-    Q3Dict<AlbumIconItem>          itemDict;
+    Q3Dict<AlbumIconItem>            itemDict;
     QMap<ImageInfo*, AlbumIconItem*> itemInfoMap;
 
-    AlbumLister                  *imageLister;
-    Album                        *currentAlbum;
-    const AlbumSettings          *albumSettings;
-    Q3IntDict<AlbumIconGroupItem>  albumDict;
-    PixmapManager                *pixMan;
+    AlbumLister                     *imageLister;
+    Album                           *currentAlbum;
+    const AlbumSettings             *albumSettings;
+    Q3IntDict<AlbumIconGroupItem>    albumDict;
+    PixmapManager                   *pixMan;
 
-    ThumbnailSize                 thumbSize;
+    ThumbnailSize                    thumbSize;
     
-    AlbumFileTip                 *toolTip;
+    AlbumFileTip                    *toolTip;
 };
 
 AlbumIconView::AlbumIconView(QWidget* parent)
@@ -198,11 +192,7 @@ AlbumIconView::AlbumIconView(QWidget* parent)
 
     // -- Load rating Pixmap ------------------------------------------
 
-    KGlobal::dirs()->addResourceType("digikam_rating", KGlobal::dirs()->kde_default("data")
-                                     + "digikam/data");
-    QString ratingPixPath = KGlobal::dirs()->findResourceDir("digikam_rating", "rating.png");
-    ratingPixPath += "/rating.png";
-    d->ratingPixmap = QPixmap(ratingPixPath);
+    d->ratingPixmap = QPixmap(KStandardDirs::locate("data", "digikam/data/rating.png"));
 
     QPainter painter(&d->ratingPixmap);
     painter.fillRect(0, 0, d->ratingPixmap.width(), d->ratingPixmap.height(),
@@ -243,12 +233,12 @@ AlbumIconView::AlbumIconView(QWidget* parent)
     // -- ThemeEngine connections ---------------------------------------
 
     connect(ThemeEngine::componentData(), SIGNAL(signalThemeChanged()),
-            SLOT(slotThemeChanged()));
+            this, SLOT(slotThemeChanged()));
 
     // -- Pixmap manager connections ------------------------------------
 
     connect(d->pixMan, SIGNAL(signalPixmap(const KUrl&)),
-            SLOT(slotGotThumbnail(const KUrl&)));
+            this, SLOT(slotGotThumbnail(const KUrl&)));
 
     // -- ImageAttributesWatch connections ------------------------------
 
@@ -615,7 +605,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     }
 
     popmenu.insertItem(SmallIcon("edittrash"),
-                       i18n("Move to Trash", "Move %n Files to Trash" , selectedImageIDs.count() ), 16);
+                       i18np("Move to Trash", "Move %n Files to Trash" , selectedImageIDs.count() ), 16);
 
     popmenu.insertSeparator();
 
@@ -711,7 +701,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
             }
         }
         if (urlList.count())
-            KRun::run(*imageServicePtr, urlList);
+            KRun::run(*imageServicePtr, urlList, this);
     }
 
     serviceVector.clear();
@@ -1230,7 +1220,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
     else if(TagDrag::canDecode(event))
     {
         QByteArray ba = event->encodedData("digikam/tag-id");
-        QDataStream ds(ba, QIODevice::ReadOnly);
+        QDataStream ds(&ba, QIODevice::ReadOnly);
         int tagID;
         ds >> tagID;
 
@@ -1315,7 +1305,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
     else if(TagListDrag::canDecode(event))
     {
         QByteArray ba = event->encodedData("digikam/taglist");
-        QDataStream ds(ba, QIODevice::ReadOnly);
+        QDataStream ds(&ba, QIODevice::ReadOnly);
         Q3ValueList<int> tagIDs;
         ds >> tagIDs;
 
@@ -1605,12 +1595,12 @@ void AlbumIconView::slotSetExifOrientation( int orientation )
         if (!metadata.applyChanges())
         {
             KMessageBox::sorry(0, i18n("Failed to revise Exif orientation for file %1.")
-                               .arg((*it).filename()));
+                               .arg((*it).fileName()));
             return;
         }
         else
         {
-            ImageAttributesWatch::componentData().fileMetadataChanged((*it));
+            ImageAttributesWatch::componentData()->fileMetadataChanged((*it));
         }
 
         emit signalProgressValue((int)((i++/cnt)*100.0));

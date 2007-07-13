@@ -78,7 +78,7 @@ SET(digikam_LIB_SRCS
                       metadatahub.cpp 
 #                      digikamapp.cpp 
                       album.cpp 
-#                      albumiconview.cpp 
+                      albumiconview.cpp 
                       albumicongroupitem.cpp 
                       albumiconitem.cpp 
                       albumitemhandler.cpp 

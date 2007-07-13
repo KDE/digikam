@@ -28,15 +28,10 @@
 
 // KDE includes.
 
-#include <qrect.h>
-#include <qfont.h>
-//Added by qt3to4:
-#include <QDragMoveEvent>
-#include <QDropEvent>
-#include <QResizeEvent>
 #include <Q3ValueList>
-#include <QPixmap>
 #include <Q3PtrList>
+#include <QRect>
+#include <QFont>
 
 // Local includes.
 
