@@ -151,7 +151,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
             syncjob.cpp                                                 X
             tagcreatedlg.cpp                                            X
             tagfilterview.cpp                                           X
-            tagfolderview.cpp                                           X
+            tagfolderview.cpp                   Gilles                  X       DONE
             tagspopupmenu.cpp                                           X
             welcomepageview.cpp                 Laurent                 X       DONE
 
