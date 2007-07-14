@@ -54,6 +54,7 @@
 #include <kactionmenu.h>
 #include <kglobal.h>
 #include <ktoolinvocation.h>
+#include <ktoolbarpopupaction.h>
 
 // libKipi includes.
 
@@ -470,49 +471,47 @@ void DigikamApp::setupActions()
 {
     // -----------------------------------------------------------------
 
-    d->cameraMenuAction = new KActionMenu(i18n("&Camera"),
-                                    "digitalcam",
-                                    actionCollection(),
-                                    "camera_menu");
+    d->cameraMenuAction = new KActionMenu(KIcon("camera-photo"), i18n("&Camera"), this);
     d->cameraMenuAction->setDelayed(false);
+    actionCollection()->addAction("camera_menu", d->cameraMenuAction);
 
     // -----------------------------------------------------------------
 
-    d->themeMenuAction = new KSelectAction(i18n("&Themes"), 0, actionCollection(), "theme_menu");
-    connect(d->themeMenuAction, SIGNAL(activated(const QString&)),
-            this, SLOT(slotChangeTheme(const QString&)));
+    d->themeMenuAction = new KSelectAction(i18n("&Themes"), this);
+    connect(d->themeMenuAction, SIGNAL(triggered(const QString&)), this, SLOT(slotChangeTheme(const QString&)));
+    actionCollection()->addAction("theme_menu", d->themeMenuAction);
 
     // -----------------------------------------------------------------
 
-    d->backwardActionMenu = new KToolBarPopupAction(i18n("&Back"),
-                                    "back",
-                                    Qt::ALT+Qt::Key_Left,
-                                    d->view,
-                                    SLOT(slotAlbumHistoryBack()),
-                                    actionCollection(),
-                                    "album_back");
+    d->backwardActionMenu = new KToolBarPopupAction(KIcon("go-previous"), i18n("&Back"), this);
     d->backwardActionMenu->setEnabled(false);
+    d->backwardActionMenu->setShortcut(Qt::ALT+Qt::Key_Left);
+    connect(d->backwardActionMenu, SIGNAL(triggered()), d->view, SLOT(slotAlbumHistoryBack()));
+    actionCollection()->addAction("album_back", d->backwardActionMenu);
 
-    connect(d->backwardActionMenu->popupMenu(), SIGNAL(aboutToShow()),
+    connect(d->backwardActionMenu->menu(), SIGNAL(aboutToShow()),
             this, SLOT(slotAboutToShowBackwardMenu()));
     
-    connect(d->backwardActionMenu->popupMenu(), SIGNAL(activated(int)),
+    // TODO: KDE4PORT: this activated(int) have been replaced by triggered(QAction *)
+    connect(d->backwardActionMenu->menu(), SIGNAL(activated(int)),
             d->view, SLOT(slotAlbumHistoryBack(int)));
 
-    d->forwardActionMenu = new  KToolBarPopupAction(i18n("Forward"),
-                                    "forward",
-                                    Qt::ALT+Qt::Key_Right,
-                                    d->view,
-                                    SLOT(slotAlbumHistoryForward()),
-                                    actionCollection(),
-                                    "album_forward");
-    d->forwardActionMenu->setEnabled(false);
-    
-    connect(d->forwardActionMenu->popupMenu(), SIGNAL(aboutToShow()),
-            this, SLOT(slotAboutToShowForwardMenu()));
+    // -----------------------------------------------------------------
 
-    connect(d->forwardActionMenu->popupMenu(), SIGNAL(activated(int)),
+    d->forwardActionMenu = new KToolBarPopupAction(KIcon("go-next"), i18n("Forward"), this);
+    d->forwardActionMenu->setEnabled(false);
+    d->forwardActionMenu->setShortcut(Qt::ALT+Qt::Key_Right);
+    connect(d->forwardActionMenu, SIGNAL(triggered()), d->view, SLOT(slotAlbumHistoryForward()));
+    actionCollection()->addAction("album_forward", d->forwardActionMenu);
+
+    connect(d->forwardActionMenu->menu(), SIGNAL(aboutToShow()),
+            this, SLOT(slotAboutToShowForwardMenu()));
+    
+    // TODO: KDE4PORT: this activated(int) have been replaced by triggered(QAction *)
+    connect(d->forwardActionMenu->menu(), SIGNAL(activated(int)),
             d->view, SLOT(slotAlbumHistoryForward(int)));
+
+    // -----------------------------------------------------------------
 
     d->newAction = new KAction(i18n("&New Album..."),
                                    "albumfolder-new",
