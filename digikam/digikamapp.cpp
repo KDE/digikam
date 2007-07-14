@@ -41,6 +41,7 @@
 #include <kstandarddirs.h>
 #include <kurl.h>
 #include <kstandardaction.h>
+#include <kstandardshortcut.h>
 #include <kshortcutsdialog.h>
 #include <ktoggleaction.h>
 #include <kedittoolbar.h>
@@ -513,23 +514,17 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------------
 
-    d->newAction = new KAction(i18n("&New Album..."),
-                                   "albumfolder-new",
-                                   KStandardShortcut::shortcut(KStandardShortcut::New),
-                                   d->view,
-                                   SLOT(slotNewAlbum()),
-                                   actionCollection(),
-                                   "album_new");
+    d->newAction = new KAction(KIcon("albumfolder-new"), i18n("&New Album..."), this);
+    d->newAction->setShortcut(KStandardShortcut::New);
     d->newAction->setWhatsThis(i18n("Creates a new empty Album in the database."));
+    connect(d->newAction, SIGNAL(triggered()), d->view, SLOT(slotNewAlbum()));
+    actionCollection()->addAction("album_new", d->newAction);
 
-    d->albumSortAction = new KSelectAction(i18n("&Sort Albums"),
-                                    0,
-                                    0,
-                                    actionCollection(),
-                                    "album_sort");
+    // -----------------------------------------------------------------
 
-    connect(d->albumSortAction, SIGNAL(activated(int)),
-            d->view, SLOT(slotSortAlbums(int)));
+    d->albumSortAction = new KSelectAction(i18n("&Sort Albums"), this);
+    connect(d->albumSortAction, SIGNAL(triggered(int)), d->view, SLOT(slotSortAlbums(int)));
+    actionCollection()->addAction("album_sort", d->albumSortAction);
 
     // Use same list order as in albumsettings enum
     QStringList sortActionList;
@@ -538,59 +533,45 @@ void DigikamApp::setupActions()
     sortActionList.append(i18n("By Date"));
     d->albumSortAction->setItems(sortActionList);
 
-    d->deleteAction = new KAction(i18n("Delete Album"),
-                                    "editdelete",
-                                    0,
-                                    d->view,
-                                    SLOT(slotDeleteAlbum()),
-                                    actionCollection(),
-                                    "album_delete");
+    // -----------------------------------------------------------------
 
-    d->addImagesAction = new KAction( i18n("Add Images..."),
-                                    "albumfolder-importimages",
-                                    Qt::CTRL+Qt::Key_I,
-                                    d->view,
-                                    SLOT(slotAlbumAddImages()),
-                                    actionCollection(),
-                                    "album_addImages");
+    d->deleteAction = new KAction(KIcon("edit-delete"), i18n("Delete Album"), this);
+    connect(d->deleteAction, SIGNAL(triggered()), d->view, SLOT(slotDeleteAlbum()));
+    actionCollection()->addAction("album_delete", d->deleteAction);
+
+    // -----------------------------------------------------------------
+
+    d->addImagesAction = new KAction(KIcon("albumfolder-importdir"), i18n("Add Images..."), this);
+    d->addImagesAction->setShortcut(Qt::CTRL+Qt::Key_I);
     d->addImagesAction->setWhatsThis(i18n("Adds new items to the current Album."));
+    connect(d->addImagesAction, SIGNAL(triggered()), d->view, SLOT(slotAlbumAddImages()));
+    actionCollection()->addAction("album_addImages", d->addImagesAction);
 
-    d->albumImportAction = new KAction( i18n("Import Folders..."),
-                                    "albumfolder-importdir",
-                                    0,
-                                    d->view,
-                                    SLOT(slotAlbumImportFolder()),
-                                    actionCollection(),
-                                    "album_importFolder");
+    // -----------------------------------------------------------------
 
-    d->propsEditAction = new KAction( i18n("Edit Album Properties..."),
-                                    "albumfolder-properties",
-                                    0,
-                                    d->view,
-                                    SLOT(slotAlbumPropsEdit()),
-                                    actionCollection(),
-                                    "album_propsEdit");
+    d->propsEditAction = new KAction(KIcon("albumfolder-properties"), i18n("Edit Album Properties..."), this);
     d->propsEditAction->setWhatsThis(i18n("Edit Album Properties and Collection information."));
+    connect(d->propsEditAction, SIGNAL(triggered()), d->view, SLOT(slotAlbumPropsEdit()));
+    actionCollection()->addAction("album_propsEdit", d->propsEditAction);
 
-    d->refreshAlbumAction = new KAction( i18n("Refresh"),
-                                    "rebuild",
-                                    Qt::Key_F5,
-                                    d->view,
-                                    SLOT(slotAlbumRefresh()),
-                                    actionCollection(),
-                                    "album_refresh");
-    d->refreshAlbumAction->setWhatsThis(i18n("Refresh all album contents"));
+    // -----------------------------------------------------------------
 
-    d->syncAlbumMetadataAction = new KAction( i18n("Synchronize images with database"),
-                                    "rebuild",
-                                    0,
-                                    d->view,
-                                    SLOT(slotAlbumSyncPicturesMetadata()),
-                                    actionCollection(),
-                                    "album_syncmetadata");
+    d->refreshAlbumAction = new KAction(KIcon("view-refresh"), i18n("Refresh"), this);
+    d->refreshAlbumAction->setShortcut(Qt::Key_F5);
+    d->refreshAlbumAction->setWhatsThis(i18n("Refresh all album contents."));
+    connect(d->refreshAlbumAction, SIGNAL(triggered()), d->view, SLOT(slotAlbumRefresh()));
+    actionCollection()->addAction("album_refresh", d->refreshAlbumAction);
+
+    // -----------------------------------------------------------------
+
+    d->syncAlbumMetadataAction = new KAction(KIcon("rebuild"), i18n("Synchronize images with database"), this);
     d->syncAlbumMetadataAction->setWhatsThis(i18n("Updates all image metadata of the current "
-                                                "album with digiKam database contents "
-						"(image metadata will be over-written with data from the database)."));
+                                                  "album with digiKam database contents "
+                                                  "(image metadata will be over-written with data from the database)."));
+    connect(d->syncAlbumMetadataAction, SIGNAL(triggered()), d->view, SLOT(slotAlbumSyncPicturesMetadata()));
+    actionCollection()->addAction("album_syncmetadata", d->syncAlbumMetadataAction);
+
+    // -----------------------------------------------------------------
 
     d->openInKonquiAction = new KAction( i18n("Open in Konqueror"),
                                     "konqueror",
