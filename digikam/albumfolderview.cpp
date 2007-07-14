@@ -24,7 +24,7 @@
 // Qt includes.
 
 #include <Q3ValueList>
-#include <Q3PtrList>
+#include <QList>
 #include <QPixmap>
 #include <QPointer>
 #include <QDir>
@@ -47,6 +47,8 @@
 #include <kfiledialog.h>
 #include <kdeversion.h>
 #include <kinputdialog.h>
+#include <kio/job.h>
+#include <kio/jobuidelegate.h>
 
 // Local includes.
 
@@ -459,53 +461,44 @@ void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, 
         popmenu.insertSeparator();
 
         // Add KIPI Albums plugins Actions
-        KAction *action;
-        const Q3PtrList<KAction>& albumActions = DigikamApp::getinstance()->menuAlbumActions();
+        const QList<QAction*>& albumActions = DigikamApp::getinstance()->menuAlbumActions();
         if(!albumActions.isEmpty())
         {
-            Q3PtrListIterator<KAction> it(albumActions);
-            while((action = it.current()))
-            {
+            foreach(QAction *action, albumActions)
+            {            
                 popmenu.addAction(action);
-                ++it;
             }
         }
 
         // Add All Import Actions
-        const Q3PtrList<KAction> importActions = DigikamApp::getinstance()->menuImportActions();
+        const QList<QAction*> importActions = DigikamApp::getinstance()->menuImportActions();
         if(!importActions.isEmpty())
         {
-            Q3PtrListIterator<KAction> it3(importActions);
-            while((action = it3.current()))
+            foreach(QAction *action, importActions)
             {
                 menuImport.addAction(action);
-                ++it3;
             }
             popmenu.addMenu(&menuImport);
         }
 
         // Add All Export Actions
-        const Q3PtrList<KAction> exportActions = DigikamApp::getinstance()->menuExportActions();
+        const QList<QAction*> exportActions = DigikamApp::getinstance()->menuExportActions();
         if(!exportActions.isEmpty())
         {
-            Q3PtrListIterator<KAction> it4(exportActions);
-            while((action = it4.current()))
+            foreach(QAction *action, exportActions)
             {
                 menuExport.addAction(action);
-                ++it4;
             }
             popmenu.addMenu(&menuExport);
         }
 
         // Add KIPI Batch processes plugins Actions
-        const Q3PtrList<KAction>& batchActions = DigikamApp::getinstance()->menuBatchActions();
+        const QList<QAction*>& batchActions = DigikamApp::getinstance()->menuBatchActions();
         if(!batchActions.isEmpty())
         {
-            Q3PtrListIterator<KAction> it2(batchActions);
-            while((action = it2.current()))
+            foreach(QAction *action, batchActions)
             {
                 menuKIPIBatch.addAction(action);
-                ++it2;
             }
             popmenu.addMenu(&menuKIPIBatch);
         }
@@ -714,7 +707,10 @@ void AlbumFolderView::addAlbumChildrenToList(KUrl::List &list, Album *album)
 void AlbumFolderView::slotDIOResult(KIO::Job* job)
 {
     if (job->error())
-        job->showErrorDialog(this);
+    {
+        job->ui()->setWindow(this);
+        job->ui()->showErrorMessage();
+    }
 }
 
 void AlbumFolderView::albumRename()
