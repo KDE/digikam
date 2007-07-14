@@ -567,7 +567,8 @@ void DigikamApp::setupActions()
     d->syncAlbumMetadataAction = new KAction(KIcon("rebuild"), i18n("Synchronize images with database"), this);
     d->syncAlbumMetadataAction->setWhatsThis(i18n("Updates all image metadata of the current "
                                                   "album with digiKam database contents "
-                                                  "(image metadata will be over-written with data from the database)."));
+                                                  "(image metadata will be over-written with data from "
+                                                  "the database)."));
     connect(d->syncAlbumMetadataAction, SIGNAL(triggered()), d->view, SLOT(slotAlbumSyncPicturesMetadata()));
     actionCollection()->addAction("album_syncmetadata", d->syncAlbumMetadataAction);
 
@@ -629,49 +630,42 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------
 
     // Pop up dialog to ask user whether to move to trash
-    d->imageDeleteAction            = new KAction(i18n("Delete"),
-                                                "edittrash",
-                                                Qt::Key_Delete,
-                                                d->view,
-                                                SLOT(slotImageDelete()),
-                                                actionCollection(),
-                                                "image_delete");
+    d->imageDeleteAction = new KAction(KIcon("edit-trash"), i18n("Delete"), this);
+    d->imageDeleteAction->setShortcut(Qt::Key_Delete);
+    connect(d->imageDeleteAction, SIGNAL(triggered()), d->view, SLOT(slotImageDelete()));
+    actionCollection()->addAction("image_delete", d->imageDeleteAction);
+
+    // -----------------------------------------------------------
 
     // Pop up dialog to ask user whether to permanently delete
-    d->imageDeletePermanentlyAction = new KAction(i18n("Delete permanently"),
-                                                "editdelete",
-                                                SHIFT+Qt::Key_Delete,
-                                                d->view,
-                                                SLOT(slotImageDeletePermanently()),
-                                                actionCollection(),
-                                                "image_delete_permanently");
+    d->imageDeletePermanentlyAction = new KAction(KIcon("edit-delete"), i18n("Delete permanently"), this);
+    d->imageDeletePermanentlyAction->setShortcut(Qt::SHIFT+Qt::Key_Delete);
+    connect(d->imageDeletePermanentlyAction, SIGNAL(triggered()), d->view, SLOT(slotImageDeletePermanently()));
+    actionCollection()->addAction("image_delete_permanently", d->imageDeletePermanentlyAction);
+
+    // -----------------------------------------------------------
 
     // These two actions are hidden, no menu entry, no toolbar entry, no shortcut.
     // Power users may add them.
-    d->imageDeletePermanentlyDirectlyAction = new KAction(i18n("Delete permanently without confirmation"),
-                                                        "editdelete",
-                                                        0,
-                                                        d->view,
-                                                        SLOT(slotImageDeletePermanentlyDirectly()),
-                                                        actionCollection(),
-                                                        "image_delete_permanently_directly");
+    d->imageDeletePermanentlyDirectlyAction = new KAction(KIcon("edit-delete"),
+                                              i18n("Delete permanently without confirmation"), this);
+    connect(d->imageDeletePermanentlyDirectlyAction, SIGNAL(triggered()), 
+            d->view, SLOT(slotImageDeletePermanentlyDirectly()));
+    actionCollection()->addAction("image_delete_permanently_directly", d->imageDeletePermanentlyDirectlyAction);
 
-    d->imageTrashDirectlyAction = new KAction(i18n("Move to trash without confirmation"),
-                                              "edittrash",
-                                               0,
-                                               d->view,
-                                               SLOT(slotImageTrashDirectly()),
-                                               actionCollection(),
-                                               "image_trash_directly");
+    // -----------------------------------------------------------
 
-    d->imageSortAction = new KSelectAction(i18n("&Sort Images"),
-                                           0,
-                                           0,
-                                           actionCollection(),
-                                           "image_sort");
+    d->imageTrashDirectlyAction = new KAction(KIcon("edit-trash"),
+                                  i18n("Move to trash without confirmation"), this);
+    connect(d->imageTrashDirectlyAction, SIGNAL(triggered()), 
+            d->view, SLOT(slotImageTrashDirectly()));
+    actionCollection()->addAction("image_trash_directly", d->imageTrashDirectlyAction);
 
-    connect(d->imageSortAction, SIGNAL(activated(int)),
-            d->view, SLOT(slotSortImages(int)));
+    // -----------------------------------------------------------
+
+    d->imageSortAction = new KSelectAction(i18n("&Sort Images"), this);
+    connect(d->imageSortAction, SIGNAL(triggered(int)), d->view, SLOT(slotSortImages(int)));
+    actionCollection()->addAction("album_sort", d->imageSortAction);
 
     // Use same list order as in albumsettings enum
     QStringList sortImagesActionList;
@@ -684,93 +678,85 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------------
 
-    QSignalMapper *exifOrientationMapper = new QSignalMapper( d->view );
+    QSignalMapper *exifOrientationMapper = new QSignalMapper(d->view);
     
-    connect( exifOrientationMapper, SIGNAL( mapped( int ) ),
-             d->view, SLOT( slotImageExifOrientation( int ) ) );
+    connect(exifOrientationMapper, SIGNAL(mapped(int)),
+            d->view, SLOT(slotImageExifOrientation(int)));
 
-    d->imageExifOrientationActionMenu = new KActionMenu(i18n("Adjust Exif orientation tag"),
-                                                        actionCollection(),
-                                                        "image_set_exif_orientation");
+    d->imageExifOrientationActionMenu = new KActionMenu(i18n("Adjust Exif orientation tag"), this);
     d->imageExifOrientationActionMenu->setDelayed(false);
+    actionCollection()->addAction("image_set_exif_orientation", d->imageExifOrientationActionMenu);
 
     d->imageSetExifOrientation1Action =
-        new KAction(i18n("Normal"),0,d->imageExifOrientationActionMenu);
+        new KAction(i18n("Normal"), d->imageExifOrientationActionMenu);
     d->imageSetExifOrientation2Action =
-        new KAction(i18n("Flipped Horizontally"),0,d->imageExifOrientationActionMenu);
+        new KAction(i18n("Flipped Horizontally"), d->imageExifOrientationActionMenu);
     d->imageSetExifOrientation3Action =
-        new KAction(i18n("Rotated upside down"),0,d->imageExifOrientationActionMenu);
+        new KAction(i18n("Rotated upside down"), d->imageExifOrientationActionMenu);
     d->imageSetExifOrientation4Action =
-        new KAction(i18n("Flipped Vertically"),0,d->imageExifOrientationActionMenu);
+        new KAction(i18n("Flipped Vertically"), d->imageExifOrientationActionMenu);
     d->imageSetExifOrientation5Action =
-        new KAction(i18n("Rotated right / Horiz. Flipped"),
-                    0, d->imageExifOrientationActionMenu);
+        new KAction(i18n("Rotated right / Horiz. Flipped"), d->imageExifOrientationActionMenu);
     d->imageSetExifOrientation6Action =
-        new KAction(i18n("Rotated right"),0,d->imageExifOrientationActionMenu);
+        new KAction(i18n("Rotated right"), d->imageExifOrientationActionMenu);
     d->imageSetExifOrientation7Action =
-        new KAction(i18n("Rotated right / Vert. Flipped"),
-                    0, d->imageExifOrientationActionMenu);
+        new KAction(i18n("Rotated right / Vert. Flipped"), d->imageExifOrientationActionMenu);
     d->imageSetExifOrientation8Action =
-        new KAction(i18n("Rotated left"),0,d->imageExifOrientationActionMenu);
+        new KAction(i18n("Rotated left"), d->imageExifOrientationActionMenu);
 
-    d->imageExifOrientationActionMenu->insert(d->imageSetExifOrientation1Action);
-    d->imageExifOrientationActionMenu->insert(d->imageSetExifOrientation2Action);
-    d->imageExifOrientationActionMenu->insert(d->imageSetExifOrientation3Action);
-    d->imageExifOrientationActionMenu->insert(d->imageSetExifOrientation4Action);
-    d->imageExifOrientationActionMenu->insert(d->imageSetExifOrientation5Action);
-    d->imageExifOrientationActionMenu->insert(d->imageSetExifOrientation6Action);
-    d->imageExifOrientationActionMenu->insert(d->imageSetExifOrientation7Action);
-    d->imageExifOrientationActionMenu->insert(d->imageSetExifOrientation8Action);
+    d->imageExifOrientationActionMenu->addAction(d->imageSetExifOrientation1Action);
+    d->imageExifOrientationActionMenu->addAction(d->imageSetExifOrientation2Action);
+    d->imageExifOrientationActionMenu->addAction(d->imageSetExifOrientation3Action);
+    d->imageExifOrientationActionMenu->addAction(d->imageSetExifOrientation4Action);
+    d->imageExifOrientationActionMenu->addAction(d->imageSetExifOrientation5Action);
+    d->imageExifOrientationActionMenu->addAction(d->imageSetExifOrientation6Action);
+    d->imageExifOrientationActionMenu->addAction(d->imageSetExifOrientation7Action);
+    d->imageExifOrientationActionMenu->addAction(d->imageSetExifOrientation8Action);
 
-    connect( d->imageSetExifOrientation1Action, SIGNAL( activated() ), exifOrientationMapper, SLOT( map() ) );
-    connect( d->imageSetExifOrientation2Action, SIGNAL( activated() ), exifOrientationMapper, SLOT( map() ) );
-    connect( d->imageSetExifOrientation3Action, SIGNAL( activated() ), exifOrientationMapper, SLOT( map() ) );
-    connect( d->imageSetExifOrientation4Action, SIGNAL( activated() ), exifOrientationMapper, SLOT( map() ) );
-    connect( d->imageSetExifOrientation5Action, SIGNAL( activated() ), exifOrientationMapper, SLOT( map() ) );
-    connect( d->imageSetExifOrientation6Action, SIGNAL( activated() ), exifOrientationMapper, SLOT( map() ) );
-    connect( d->imageSetExifOrientation7Action, SIGNAL( activated() ), exifOrientationMapper, SLOT( map() ) );
-    connect( d->imageSetExifOrientation8Action, SIGNAL( activated() ), exifOrientationMapper, SLOT( map() ) );
+    connect(d->imageSetExifOrientation1Action, SIGNAL(triggered()), exifOrientationMapper, SLOT(map()));
+    connect(d->imageSetExifOrientation2Action, SIGNAL(triggered()), exifOrientationMapper, SLOT(map()));
+    connect(d->imageSetExifOrientation3Action, SIGNAL(triggered()), exifOrientationMapper, SLOT(map()));
+    connect(d->imageSetExifOrientation4Action, SIGNAL(triggered()), exifOrientationMapper, SLOT(map()));
+    connect(d->imageSetExifOrientation5Action, SIGNAL(triggered()), exifOrientationMapper, SLOT(map()));
+    connect(d->imageSetExifOrientation6Action, SIGNAL(triggered()), exifOrientationMapper, SLOT(map()));
+    connect(d->imageSetExifOrientation7Action, SIGNAL(triggered()), exifOrientationMapper, SLOT(map()));
+    connect(d->imageSetExifOrientation8Action, SIGNAL(triggered()), exifOrientationMapper, SLOT(map()));
 
-    exifOrientationMapper->setMapping( d->imageSetExifOrientation1Action, 1);
-    exifOrientationMapper->setMapping( d->imageSetExifOrientation2Action, 2);
-    exifOrientationMapper->setMapping( d->imageSetExifOrientation3Action, 3);
-    exifOrientationMapper->setMapping( d->imageSetExifOrientation4Action, 4);
-    exifOrientationMapper->setMapping( d->imageSetExifOrientation5Action, 5);
-    exifOrientationMapper->setMapping( d->imageSetExifOrientation6Action, 6);
-    exifOrientationMapper->setMapping( d->imageSetExifOrientation7Action, 7);
-    exifOrientationMapper->setMapping( d->imageSetExifOrientation8Action, 8);
+    exifOrientationMapper->setMapping(d->imageSetExifOrientation1Action, 1);
+    exifOrientationMapper->setMapping(d->imageSetExifOrientation2Action, 2);
+    exifOrientationMapper->setMapping(d->imageSetExifOrientation3Action, 3);
+    exifOrientationMapper->setMapping(d->imageSetExifOrientation4Action, 4);
+    exifOrientationMapper->setMapping(d->imageSetExifOrientation5Action, 5);
+    exifOrientationMapper->setMapping(d->imageSetExifOrientation6Action, 6);
+    exifOrientationMapper->setMapping(d->imageSetExifOrientation7Action, 7);
+    exifOrientationMapper->setMapping(d->imageSetExifOrientation8Action, 8);
 
     // -----------------------------------------------------------------
 
-    d->selectAllAction = new KAction(i18n("Select All"),
-                                     0,
-                                     Qt::CTRL+Qt::Key_A,
-                                     d->view,
-                                     SLOT(slotSelectAll()),
-                                     actionCollection(),
-                                     "selectAll");
+    d->selectAllAction = new KAction(i18n("Select All"), this);
+    d->selectAllAction->setShortcut(Qt::CTRL+Qt::Key_A);
+    connect(d->selectAllAction, SIGNAL(triggered()), d->view, SLOT(slotSelectAll()));
+    actionCollection()->addAction("selectAll", d->selectAllAction);
 
-    d->selectNoneAction = new KAction(i18n("Select None"),
-                                     0,
-                                     Qt::CTRL+Qt::SHIFT+Qt::Key_A,
-                                     d->view,
-                                     SLOT(slotSelectNone()),
-                                     actionCollection(),
-                                     "selectNone");
+    // -----------------------------------------------------------------
 
-    d->selectInvertAction = new KAction(i18n("Invert Selection"),
-                                        0,
-                                        Qt::CTRL+Qt::Key_Asterisk,
-                                        d->view,
-                                        SLOT(slotSelectInvert()),
-                                        actionCollection(),
-                                        "selectInvert");
+    d->selectNoneAction = new KAction(i18n("Select None"), this);
+    d->selectNoneAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_A);
+    connect(d->selectNoneAction, SIGNAL(triggered()), d->view, SLOT(slotSelectNone()));
+    actionCollection()->addAction("selectNone", d->selectNoneAction);
+
+    // -----------------------------------------------------------------
+
+    d->selectInvertAction = new KAction(i18n("Invert Selection"), this);
+    d->selectInvertAction->setShortcut(Qt::CTRL+Qt::Key_Asterisk);
+    connect(d->selectInvertAction, SIGNAL(triggered()), d->view, SLOT(slotSelectInvert()));
+    actionCollection()->addAction("selectInvert", d->selectInvertAction);
 
     // -----------------------------------------------------------
 
-    KStandardAction::keyBindings(this, SLOT(slotEditKeys()),           actionCollection());
+    KStandardAction::keyBindings(this,       SLOT(slotEditKeys()),     actionCollection());
     KStandardAction::configureToolbars(this, SLOT(slotConfToolbars()), actionCollection());
-    KStandardAction::preferences(this, SLOT(slotSetup()),              actionCollection());
+    KStandardAction::preferences(this,       SLOT(slotSetup()),        actionCollection());
 
     // -----------------------------------------------------------
 
