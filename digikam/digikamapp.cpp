@@ -1158,7 +1158,7 @@ void DigikamApp::slotImageSelected(const Q3PtrList<ImageInfo>& list, bool hasPre
             d->statusProgressBar->setText(i18n("No item selected"));
         break;
         case 1:
-            d->statusProgressBar->setText(selection.first()->kurl().fileName());
+            d->statusProgressBar->setText(selection.first()->fileUrl().fileName());
         break;
         default:
             d->statusProgressBar->setText(i18n("%1 items selected").arg(selection.count()));
@@ -1232,7 +1232,7 @@ void DigikamApp::slotDcopDownloadImages( const QString& folder )
     {
         // activate window when called by media menu and DCOP
         if (isMinimized())
-            KWindowSystem::deIconifyWindow(winId());
+            KWindowSystem::unminimizeWindow(winId());
         KWindowSystem::activateWindow(winId());
 
         slotDownloadImages(folder);
@@ -1243,7 +1243,7 @@ void DigikamApp::slotDcopCameraAutoDetect()
 {
     // activate window when called by media menu and DCOP
     if (isMinimized())
-        KWindowSystem::deIconifyWindow(winId());
+        KWindowSystem::unminimizeWindow(winId());
     KWindowSystem::activateWindow(winId());
 
     slotCameraAutoDetect();
@@ -1279,28 +1279,25 @@ void DigikamApp::slotDownloadImages()
 
     for (uint i = 0 ; i != actionCollection()->count() ; i++)
     {
-        if (actionCollection()->action(i)->name() == d->cameraGuiPath)
+        if (actionCollection()->action(i)->objectName() == d->cameraGuiPath)
             alreadyThere = true;
     }
 
     if (!alreadyThere)
     {
-        KAction *cAction  = new KAction(
-                 i18n("Browse %1").arg(KUrl(d->cameraGuiPath).prettyUrl()),
-                 "kipi",
-                 0,
-                 this,
-                 SLOT(slotDownloadImages()),
-                 actionCollection(),
-                 d->cameraGuiPath.toLatin1() );
+        KAction *cAction = new KAction(KIcon("camera-photo"), 
+                           i18n("Browse %1").arg(KUrl(d->cameraGuiPath).prettyUrl()), this);
+        connect(cAction, SIGNAL(triggered()), this, SLOT(slotDownloadImages()));
+        actionCollection()->addAction(d->cameraGuiPath.toLatin1(), cAction);
 
-        d->cameraMenuAction->insert(cAction, 0);
+        d->cameraMenuAction->insertAction(cAction, 0);
     }
 
     // the CameraUI will delete itself when it has finished
     CameraUI* cgui = new CameraUI(this,
                                   i18n("Images found in %1").arg(d->cameraGuiPath),
-                                  "directory browse","Fixed", localUrl, QDateTime::currentDateTime());
+                                  "directory browse", "Fixed", localUrl, 
+                                  QDateTime::currentDateTime());
     cgui->show();
 
     connect(cgui, SIGNAL(signalLastDestination(const KUrl&)),
@@ -1312,7 +1309,7 @@ void DigikamApp::slotDownloadImages()
 
 void DigikamApp::slotCameraConnect()
 {
-    CameraType* ctype = d->cameraList->find(QString::fromUtf8(sender()->name()));
+    CameraType* ctype = d->cameraList->find(sender()->objectName());
 
     if (ctype)
     {
@@ -1321,7 +1318,7 @@ void DigikamApp::slotCameraConnect()
         {
             // show and raise dialog
             if (ctype->currentCameraUI()->isMinimized())
-                KWindowSystem::deIconifyWindow(ctype->currentCameraUI()->winId());
+                KWindowSystem::unminimizeWindow(ctype->currentCameraUI()->winId());
             KWindowSystem::activateWindow(ctype->currentCameraUI()->winId());
         }
         else
@@ -1347,11 +1344,11 @@ void DigikamApp::slotCameraAdded(CameraType *ctype)
 {
     if (!ctype) return;
 
-    KAction *cAction = new KAction(ctype->title(), "camera", 0,
-                                   this, SLOT(slotCameraConnect()),
-                                   actionCollection(),
-                                   ctype->title().utf8());
-    d->cameraMenuAction->insert(cAction, 0);
+    KAction *cAction = new KAction(KIcon("camera-photo"), ctype->title(), this);
+    connect(cAction, SIGNAL(triggered()), this, SLOT(slotCameraConnect()));
+    actionCollection()->addAction(ctype->title().toUtf8(), cAction);
+
+    d->cameraMenuAction->insertAction(cAction, 0);
     ctype->setAction(cAction);
 }
 
@@ -1433,7 +1430,7 @@ void DigikamApp::slotCameraAutoDetect()
 
     if (ctype && ctype->action())
     {
-        ctype->action()->activate();
+        ctype->action()->activate(QAction::Trigger);
     }
 }
 
@@ -1444,7 +1441,7 @@ void DigikamApp::slotSetup()
 
 bool DigikamApp::setup(bool iccSetupPage)
 {
-    Setup setup(this, 0, iccSetupPage ? Setup::IccProfiles : Setup::LastPageUsed);
+    Setup setup(this, 0, iccSetupPage ? Setup::ICCPage : Setup::LastPageUsed);
 
     // To show the number of KIPI plugins in the setup dialog.
 
@@ -1463,7 +1460,7 @@ bool DigikamApp::setup(bool iccSetupPage)
 
 void DigikamApp::slotSetupCamera()
 {
-    Setup setup(this, 0, Setup::Camera);
+    Setup setup(this, 0, Setup::CameraPage);
 
     // For to show the number of KIPI plugins in the setup dialog.
 
@@ -1492,7 +1489,7 @@ void DigikamApp::slotSetupChanged()
 
     d->view->applySettings(d->albumSettings);
 
-    AlbumThumbnailLoader::instance().setThumbnailSize(d->albumSettings->getDefaultTreeIconSize());
+    AlbumThumbnailLoader::componentData()->setThumbnailSize(d->albumSettings->getDefaultTreeIconSize());
 
     if (ImageWindow::imagewindowCreated())
         ImageWindow::imagewindow()->applySettings();
@@ -1502,8 +1499,10 @@ void DigikamApp::slotSetupChanged()
 
 void DigikamApp::slotEditKeys()
 {
-    KShortcutsDialog* dialog = new KShortcutsDialog();
-    dialog->insert( actionCollection(), i18n( "General" ) );
+    KShortcutsDialog dialog(KShortcutsEditor::AllActions,
+                            KShortcutsEditor::LetterShortcutsAllowed, this);
+    dialog.addCollection( actionCollection(), i18n( "General" ) );
+
 
     KIPI::PluginLoader::PluginList list = d->kipiPluginLoader->pluginList();
 
@@ -1512,22 +1511,22 @@ void DigikamApp::slotEditKeys()
         KIPI::Plugin* plugin = (*it)->plugin();
 
         if ( plugin )
-           dialog->insert( plugin->actionCollection(), (*it)->comment() );
+           dialog.addCollection(plugin->actionCollection(), (*it)->comment());
     }
 
-    dialog->configure();
-    delete dialog;
+    dialog.configure();
 }
 
 void DigikamApp::slotConfToolbars()
 {
-    saveMainWindowSettings(KGlobal::config());
-    KEditToolBar *dlg = new KEditToolBar(actionCollection(), "digikamui.rc");
+    saveMainWindowSettings(d->config->group("General Settings"));
+    KEditToolBar *dlg = new KEditToolBar(actionCollection(), this);
+    dlg->setResourceFile("digikamui.rc");
 
-    if(dlg->exec());
+    if(dlg->exec())
     {
-        createGUI(QString::fromLatin1( "digikamui.rc" ), false);
-        applyMainWindowSettings(KGlobal::config());
+        createGUI("digikamui.rc");
+        applyMainWindowSettings(d->config->group("General Settings"));
         plugActionList( QString::fromLatin1("file_actions_import"), d->kipiFileActionsImport );
         plugActionList( QString::fromLatin1("image_actions"), d->kipiImageActions );
         plugActionList( QString::fromLatin1("tool_actions"), d->kipiToolsActions );
@@ -1550,31 +1549,36 @@ void DigikamApp::slotToggleFullScreen()
 #endif
         menuBar()->show();
         statusBar()->show();
+
+#warning "TODO: kde4 port it";
+/* TODO: KDE4PORT: Check these methods
         topDock()->show();
         bottomDock()->show();
         leftDock()->show();
         rightDock()->show();
+*/
         d->view->showSideBars();
-
         d->fullScreen = false;
     }
     else
     {
-        KSharedConfig::Ptr config = KGlobal::config();
-        KConfigGroup group = config->group("ImageViewer Settings");
+        KConfigGroup group         = d->config->group("ImageViewer Settings");
         bool fullScreenHideToolBar = group.readEntry("FullScreen Hide ToolBar", false);
 
         menuBar()->hide();
         statusBar()->hide();
+
+#warning "TODO: kde4 port it";
+/* TODO: KDE4PORT: Check these methods
+
         if (fullScreenHideToolBar)
             topDock()->hide();
         bottomDock()->hide();
         leftDock()->hide();
         rightDock()->hide();
+*/
         d->view->hideSideBars();
-
         showFullScreen();
-
         d->fullScreen = true;
     }
 }
@@ -1583,9 +1587,7 @@ void DigikamApp::slotShowTip()
 {
     QStringList tipsFiles;
     tipsFiles.append("digikam/tips");
-
     tipsFiles.append("kipi/tips");
-
     KTipDialog::showMultiTip(this, tipsFiles, true);
 }
 
@@ -1657,9 +1659,9 @@ void DigikamApp::slotKipiPluginPlug()
 
         // Plugin category identification using KAction method based.
 
-        KActionPtrList actions = plugin->actions();
+        QList<KAction*> actions = plugin->actions();
 
-        for( KActionPtrList::Iterator it2 = actions.begin(); it2 != actions.end(); ++it2 )
+        for( QList<KAction*>::Iterator it2 = actions.begin(); it2 != actions.end(); ++it2 )
         {
             if ( plugin->category(*it2) == KIPI::IMAGESPLUGIN )
                popup = &d->kipiImageActions;
@@ -1706,17 +1708,15 @@ void DigikamApp::slotKipiPluginPlug()
 void DigikamApp::loadCameras()
 {
     d->cameraList->load();
-    
+   
     d->cameraMenuAction->popupMenu()->insertSeparator();
-    
     d->cameraMenuAction->popupMenu()->insertItem(i18n("Browse Media"), d->cameraMediaList);
-    
     d->cameraMenuAction->popupMenu()->insertSeparator();
-    
-    d->cameraMenuAction->insert(new KAction(i18n("Add Camera..."), 0,
-                                          this, SLOT(slotSetupCamera()),
-                                          actionCollection(),
-                                          "camera_add"));
+
+    KAction *cameraAction = new KAction(i18n("Add Camera..."), this);
+    connect(cameraAction, SIGNAL(triggered()), this, SLOT(slotSetupCamera()));
+    actionCollection()->addAction("camera_add", cameraAction);
+    d->cameraMenuAction->addAction(cameraAction);
 }
 
 void DigikamApp::populateThemes()
@@ -1724,8 +1724,8 @@ void DigikamApp::populateThemes()
     if(d->splashScreen)
         d->splashScreen->message(i18n("Loading themes"), Qt::AlignLeft, Qt::white);
 
-    ThemeEngine::instance().scanThemes();
-    QStringList themes(ThemeEngine::instance().themeNames());
+    ThemeEngine::componentData()->scanThemes();
+    QStringList themes(ThemeEngine::componentData()->themeNames());
 
     d->themeMenuAction->setItems(themes);
     int index = themes.findIndex(d->albumSettings->getCurrentTheme());
@@ -1734,13 +1734,13 @@ void DigikamApp::populateThemes()
         index = themes.findIndex(i18n("Default"));
         
     d->themeMenuAction->setCurrentItem(index);
-    ThemeEngine::instance().slotChangeTheme(d->themeMenuAction->currentText());
+    ThemeEngine::componentData()->slotChangeTheme(d->themeMenuAction->currentText());
 }
 
 void DigikamApp::slotChangeTheme(const QString& theme)
 {
     d->albumSettings->setCurrentTheme(theme);
-    ThemeEngine::instance().slotChangeTheme(theme);
+    ThemeEngine::componentData()->slotChangeTheme(theme);
 }
 
 void DigikamApp::slotDatabaseRescan()
@@ -1792,7 +1792,7 @@ void DigikamApp::slotSyncAllPicturesMetadataDone()
 
 void DigikamApp::slotDonateMoney()
 {
-    KApplication::kApplication()->invokeBrowser("http://www.digikam.org/?q=donation");
+    KToolInvocation::invokeBrowser("http://www.digikam.org/?q=donation");
 }
 
 void DigikamApp::slotZoomSliderChanged(int size)
@@ -1835,4 +1835,3 @@ void DigikamApp::slotTooglePreview(bool t)
 }
 
 }  // namespace Digikam
-
