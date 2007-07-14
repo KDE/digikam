@@ -573,64 +573,60 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------------
 
-    d->openInKonquiAction = new KAction( i18n("Open in Konqueror"),
-                                    "konqueror",
-                                    0,
-                                    d->view,
-                                    SLOT(slotAlbumOpenInKonqui()),
-                                    actionCollection(),
-                                    "album_openinkonqui");
+    d->openInKonquiAction = new KAction(KIcon("konqueror"), i18n("Open in Konqueror"), this);
+    connect(d->openInKonquiAction, SIGNAL(triggered()), d->view, SLOT(slotAlbumOpenInKonqui()));
+    actionCollection()->addAction("album_openinkonqui", d->openInKonquiAction);
 
     // -----------------------------------------------------------
 
-    d->newTagAction = new KAction(i18n("New &Tag..."), "tag-new",
-                                0, d->view, SLOT(slotNewTag()),
-                                actionCollection(), "tag_new");
-
-    d->editTagAction = new KAction(i18n("Edit Tag Properties..."), "tag-properties",
-                                 0, d->view, SLOT(slotEditTag()),
-                                 actionCollection(), "tag_edit");
-
-    d->deleteTagAction = new KAction(i18n("Delete Tag"), "tag-delete",
-                                   0, d->view, SLOT(slotDeleteTag()),
-                                   actionCollection(), "tag_delete");
+    d->newTagAction = new KAction(KIcon("tag-new"), i18n("New &Tag..."), this);
+    connect(d->newTagAction, SIGNAL(triggered()), d->view, SLOT(slotNewTag()));
+    actionCollection()->addAction("tag_new", d->newTagAction);
 
     // -----------------------------------------------------------
 
-    d->imagePreviewAction = new KToggleAction(i18n("View..."),
-                                    "viewimage",
-                                    Qt::Key_F3,
-                                    d->view,
-                                    SLOT(slotImagePreview()),
-                                    actionCollection(),
-                                    "image_view");
+    d->editTagAction = new KAction(KIcon("tag-properties"), i18n("Edit Tag Properties..."), this);
+    connect(d->editTagAction, SIGNAL(triggered()), d->view, SLOT(slotEditTag()));
+    actionCollection()->addAction("tag_edit", d->editTagAction);
 
-    d->imageViewAction = new KAction(i18n("Edit..."),
-                                    "editimage",
-                                    Qt::Key_F4,
-                                    d->view,
-                                    SLOT(slotImageEdit()),
-                                    actionCollection(),
-                                    "image_edit");
+    // -----------------------------------------------------------
+
+    d->deleteTagAction = new KAction(KIcon("tag-delete"), i18n("Delete Tag"), this);
+    connect(d->deleteTagAction, SIGNAL(triggered()), d->view, SLOT(slotDeleteTag()));
+    actionCollection()->addAction("tag_delete", d->deleteTagAction);
+
+    // -----------------------------------------------------------
+
+    d->imagePreviewAction = new KToggleAction(KIcon("fileview-preview"), i18n("View..."), this);
+    d->imagePreviewAction->setShortcut(Qt::Key_F3);
+    connect(d->imagePreviewAction, SIGNAL(triggered()), d->view, SLOT(slotImagePreview()));
+    actionCollection()->addAction("image_view", d->imagePreviewAction);
+
+    // -----------------------------------------------------------
+
+    d->imageViewAction = new KAction(KIcon("editimage"), i18n("Edit..."), this);
+    d->imageViewAction->setShortcut(Qt::Key_F4);
     d->imageViewAction->setWhatsThis(i18n("Open the selected item in the image editor."));
+    connect(d->imageViewAction, SIGNAL(triggered()), d->view, SLOT(slotImageEdit()));
+    actionCollection()->addAction("image_edit", d->imageViewAction);
 
-    d->imageLightTableAction = new KAction(i18n("Place onto Light Table"),
-                                    "idea",
-                                    Qt::Key_F6,
-                                    d->view,
-                                    SLOT(slotImageLightTable()),
-                                    actionCollection(),
-                                    "image_lighttable");
+    // -----------------------------------------------------------
+
+    d->imageLightTableAction = new KAction(KIcon("idea"), i18n("Place onto Light Table"), this);
+    d->imageLightTableAction->setShortcut(Qt::Key_F6);
     d->imageLightTableAction->setWhatsThis(i18n("Insert the selected items into the light table thumbbar."));
+    connect(d->imageLightTableAction, SIGNAL(triggered()), d->view, SLOT(slotImageLightTable()));
+    actionCollection()->addAction("image_lighttable", d->imageLightTableAction);
 
-    d->imageRenameAction = new KAction(i18n("Rename..."),
-                                    "pencil",
-                                    Qt::Key_F2,
-                                    d->view,
-                                    SLOT(slotImageRename()),
-                                    actionCollection(),
-                                    "image_rename");
+    // -----------------------------------------------------------
+
+    d->imageRenameAction = new KAction(KIcon("pencil"), i18n("Rename..."), this);
+    d->imageRenameAction->setShortcut(Qt::Key_F2);
     d->imageRenameAction->setWhatsThis(i18n("Rename the filename of the currently selected item."));
+    connect(d->imageRenameAction, SIGNAL(triggered()), d->view, SLOT(slotImageRename()));
+    actionCollection()->addAction("image_rename", d->imageRenameAction);
+
+    // -----------------------------------------------------------
 
     // Pop up dialog to ask user whether to move to trash
     d->imageDeleteAction            = new KAction(i18n("Delete"),
