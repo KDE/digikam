@@ -835,52 +835,75 @@ void DigikamApp::setupActions()
 
     // -- Rating actions ---------------------------------------------------------------
 
-    d->rating0Star = new KAction(i18n("Assign Rating \"No Star\""), Qt:CTRL+Qt::Key_0,
-                          d->view, SLOT(slotAssignRatingNoStar()),
-                          actionCollection(), "imageview_ratenostar");
-    d->rating1Star = new KAction(i18n("Assign Rating \"One Star\""), Qt::CTRL+Qt::Key_1,
-                          d->view, SLOT(slotAssignRatingOneStar()),
-                          actionCollection(), "imageview_rateonestar");
-    d->rating2Star = new KAction(i18n("Assign Rating \"Two Stars\""), Qt::CTRL+Qt::Key_2, 
-                          d->view, SLOT(slotAssignRatingTwoStar()),
-                          actionCollection(), "imageview_ratetwostar");
-    d->rating3Star = new KAction(i18n("Assign Rating \"Three Stars\""), Qt::CTRL+Qt::Key_3, 
-                          d->view, SLOT(slotAssignRatingThreeStar()),
-                          actionCollection(), "imageview_ratethreestar");
-    d->rating4Star = new KAction(i18n("Assign Rating \"Four Stars\""), Qt::CTRL+Qt::Key_4, 
-                          d->view, SLOT(slotAssignRatingFourStar()),
-                          actionCollection(), "imageview_ratefourstar");
-    d->rating5Star = new KAction(i18n("Assign Rating \"Five Stars\""), Qt::CTRL+Qt::Key_5, 
-                          d->view, SLOT(slotAssignRatingFiveStar()),
-                          actionCollection(), "imageview_ratefivestar");
+    d->rating0Star = new KAction(i18n("Assign Rating \"No Star\""), this);
+    d->rating0Star->setShortcut(Qt::CTRL+Qt::Key_0);
+    connect(d->rating0Star, SIGNAL(triggered()), d->view, SLOT(slotAssignRatingNoStar()));
+    actionCollection()->addAction("ratenostar", d->rating0Star);
+
+    d->rating1Star = new KAction(i18n("Assign Rating \"One Star\""), this);
+    d->rating1Star->setShortcut(Qt::CTRL+Qt::Key_1);
+    connect(d->rating1Star, SIGNAL(triggered()), d->view, SLOT(slotAssignRatingOneStar()));
+    actionCollection()->addAction("rateonestar", d->rating1Star);
+
+    d->rating2Star = new KAction(i18n("Assign Rating \"Two Stars\""), this);
+    d->rating2Star->setShortcut(Qt::CTRL+Qt::Key_2);
+    connect(d->rating2Star, SIGNAL(triggered()), d->view, SLOT(slotAssignRatingTwoStar()));
+    actionCollection()->addAction("ratetwostar", d->rating2Star);
+
+    d->rating3Star = new KAction(i18n("Assign Rating \"Three Stars\""), this);
+    d->rating3Star->setShortcut(Qt::CTRL+Qt::Key_3);
+    connect(d->rating3Star, SIGNAL(triggered()), d->view, SLOT(slotAssignRatingThreeStar()));
+    actionCollection()->addAction("ratethreestar", d->rating3Star);
+
+    d->rating4Star = new KAction(i18n("Assign Rating \"Four Stars\""), this);
+    d->rating4Star->setShortcut(Qt::CTRL+Qt::Key_4);
+    connect(d->rating4Star, SIGNAL(triggered()), d->view, SLOT(slotAssignRatingFourStar()));
+    actionCollection()->addAction("ratefourstar", d->rating4Star);
+
+    d->rating5Star = new KAction(i18n("Assign Rating \"Five Stars\""), this);
+    d->rating5Star->setShortcut(Qt::CTRL+Qt::Key_5);
+    connect(d->rating5Star, SIGNAL(triggered()), d->view, SLOT(slotAssignRatingFiveStar()));
+    actionCollection()->addAction("ratefivestar", d->rating5Star);
 
     // -----------------------------------------------------------
 
-    KAction* findAction = KStandardAction::find(d->view, SLOT(slotNewQuickSearch()),
-                                           actionCollection(), "search_quick");
+    QAction* findAction = actionCollection()->addAction(KStandardAction::Find, "search_quick", 
+                                                        d->view, SLOT(slotNewQuickSearch()));
     findAction->setText(i18n("Quick Search..."));
-    findAction->setIconSet(BarIcon("filefind"));
+    findAction->setIcon(BarIcon("file-find"));
 
-    KAction* advFindAction = KStandardAction::find(d->view, SLOT(slotNewAdvancedSearch()),
-                                              actionCollection(), "search_advanced");
+    // -----------------------------------------------------------
+
+    QAction* advFindAction = actionCollection()->addAction(KStandardAction::Find, "search_advanced", 
+                                                           d->view, SLOT(slotNewAdvancedSearch()));
     advFindAction->setText(i18n("Advanced Search..."));
-    advFindAction->setShortcut("Ctrl+Alt+F");
+    advFindAction->setShortcut(Qt::CTRL+Qt::ALT+Qt::Key_F);
 
-    new KAction(i18n("Light Table"), "idea", Qt::CTRL+Qt::Key_F6,
-                d->view, SLOT(slotLightTable()), actionCollection(), 
-                "light_table");
+    // -----------------------------------------------------------
 
-    new KAction(i18n("Scan for New Images"), "reload_page", 0,
-                this, SLOT(slotDatabaseRescan()), actionCollection(), 
-                "database_rescan");
+    KAction *ltAction = new KAction(KIcon("idea"), i18n("Light Table"), this);
+    ltAction->setShortcut(Qt::CTRL+Qt::Key_F6); 
+    connect(ltAction, SIGNAL(triggered()), d->view, SLOT(slotLightTable()));
+    actionCollection()->addAction("light_table", ltAction);
 
-    new KAction(i18n("Rebuild all Thumbnails..."), "reload_page", 0,
-                this, SLOT(slotRebuildAllThumbs()), actionCollection(),
-                "thumbs_rebuild");
+    // -----------------------------------------------------------
 
-    new KAction(i18n("Update Metadata Database..."), "reload_page", 0,
-                this, SLOT(slotSyncAllPicturesMetadata()), actionCollection(),
-                "sync_metadata");
+    KAction *scanNewAction = new KAction(KIcon("rebuild"), i18n("Scan for New Images"), this);
+    connect(scanNewAction, SIGNAL(triggered()), this, SLOT(slotDatabaseRescan()));
+    actionCollection()->addAction("database_rescan", scanNewAction);
+
+    // -----------------------------------------------------------
+
+    KAction *rebuildThumbsAction = new KAction(KIcon("recycled"), i18n("Rebuild all Thumbnails..."), this);
+    connect(rebuildThumbsAction, SIGNAL(triggered()), this, SLOT(slotRebuildAllThumbs()));
+    actionCollection()->addAction("thumbs_rebuild", rebuildThumbsAction);
+
+    // -----------------------------------------------------------
+
+    KAction *syncMetadataAction = new KAction(KIcon("mimetypes/text-rdf"), 
+                                              i18n("Update Metadata Database..."), this);
+    connect(syncMetadataAction, SIGNAL(triggered()), this, SLOT(slotSyncAllPicturesMetadata()));
+    actionCollection()->addAction("sync_metadata", syncMetadataAction);
 
     // -----------------------------------------------------------
 
@@ -897,7 +920,7 @@ void DigikamApp::setupActions()
     
     loadCameras();
 
-    createGUI(QString::fromLatin1( "digikamui.rc" ), false);
+    createGUI("digikamui.rc");
 
     // Initialize Actions ---------------------------------------
 
