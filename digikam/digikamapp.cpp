@@ -1333,7 +1333,7 @@ void DigikamApp::slotDownloadImages()
     {
         KAction *cAction  = new KAction(
                  i18n("Browse %1").arg(KURL(d->cameraGuiPath).prettyURL()),
-                 "kipi",
+                 "camera",
                  0,
                  this,
                  SLOT(slotDownloadImages()),
