@@ -1569,7 +1569,7 @@ void DigikamApp::slotConfToolbars()
     saveMainWindowSettings(KGlobal::config());
     KEditToolbar *dlg = new KEditToolbar(actionCollection(), "digikamui.rc");
 
-    if(dlg->exec());
+    if(dlg->exec())
     {
         createGUI(QString::fromLatin1( "digikamui.rc" ), false);
         applyMainWindowSettings(KGlobal::config());
