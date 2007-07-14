@@ -888,22 +888,22 @@ void DigikamApp::setupActions()
 
     d->rating0Star = new KAction(i18n("Assign Rating \"No Star\""), CTRL+Key_0,
                           d->view, SLOT(slotAssignRatingNoStar()),
-                          actionCollection(), "imageview_ratenostar");
+                          actionCollection(), "ratenostar");
     d->rating1Star = new KAction(i18n("Assign Rating \"One Star\""), CTRL+Key_1,
                           d->view, SLOT(slotAssignRatingOneStar()),
-                          actionCollection(), "imageview_rateonestar");
+                          actionCollection(), "rateonestar");
     d->rating2Star = new KAction(i18n("Assign Rating \"Two Stars\""), CTRL+Key_2, 
                           d->view, SLOT(slotAssignRatingTwoStar()),
-                          actionCollection(), "imageview_ratetwostar");
+                          actionCollection(), "ratetwostar");
     d->rating3Star = new KAction(i18n("Assign Rating \"Three Stars\""), CTRL+Key_3, 
                           d->view, SLOT(slotAssignRatingThreeStar()),
-                          actionCollection(), "imageview_ratethreestar");
+                          actionCollection(), "ratethreestar");
     d->rating4Star = new KAction(i18n("Assign Rating \"Four Stars\""), CTRL+Key_4, 
                           d->view, SLOT(slotAssignRatingFourStar()),
-                          actionCollection(), "imageview_ratefourstar");
+                          actionCollection(), "ratefourstar");
     d->rating5Star = new KAction(i18n("Assign Rating \"Five Stars\""), CTRL+Key_5, 
                           d->view, SLOT(slotAssignRatingFiveStar()),
-                          actionCollection(), "imageview_ratefivestar");
+                          actionCollection(), "ratefivestar");
 
     // -----------------------------------------------------------
 
