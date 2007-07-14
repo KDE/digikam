@@ -286,7 +286,7 @@ const QList<QAction*>& DigikamApp::menuAlbumActions()
     return d->kipiAlbumActions;
 }
 
-const QList<QAction*>& DigikamApp::menuImportActions()
+QList<QAction*> DigikamApp::menuImportActions()
 {
     QList<QAction*> importMenu;
     importMenu = d->kipiFileActionsImport;
