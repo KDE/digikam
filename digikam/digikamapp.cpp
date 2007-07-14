@@ -343,8 +343,8 @@ void DigikamApp::setupView()
     connect(d->view, SIGNAL(signalTagSelected(bool)),
             this, SLOT(slotTagSelected(bool)));
 
-    connect(d->view, SIGNAL(signalImageSelected(const QPtrList<ImageInfo>&, bool, bool, const KURL::List&)),
-            this, SLOT(slotImageSelected(const QPtrList<ImageInfo>&, bool, bool, const KURL::List&)));
+    connect(d->view, SIGNAL(signalImageSelected(const QPtrList<ImageInfo>&, bool, bool)),
+            this, SLOT(slotImageSelected(const QPtrList<ImageInfo>&, bool, bool)));
 }
 
 void DigikamApp::setupStatusBar()
@@ -1168,16 +1168,10 @@ void DigikamApp::slotTagSelected(bool val)
     }
 }
 
-void DigikamApp::slotImageSelected(const QPtrList<ImageInfo>& list, bool hasPrev, bool hasNext, 
-                                   const KURL::List& listAll)
+void DigikamApp::slotImageSelected(const QPtrList<ImageInfo>& list, bool hasPrev, bool hasNext)
 {
     QPtrList<ImageInfo> selection = list;
-    KURL::List all                = listAll;
-    int num_images                = listAll.count();
-    bool val                      = selection.isEmpty() ? false : true;
-    QString text;
-    int index = 1;
-
+    bool val = selection.isEmpty() ? false : true;
     d->imageViewAction->setEnabled(val);
     d->imagePreviewAction->setEnabled(val);
     d->imageLightTableAction->setEnabled(val);
@@ -1189,33 +1183,13 @@ void DigikamApp::slotImageSelected(const QPtrList<ImageInfo>& list, bool hasPrev
     switch (selection.count())
     {
         case 0:
-            d->statusProgressBar->setText(i18n("No item selected (out of %1)")
-                                          .arg(QString::number(num_images)));
+            d->statusProgressBar->setText(i18n("No item selected"));
         break;
         case 1:
-        {
-            KURL first = selection.first()->kurl();
-
-            for (KURL::List::iterator it = all.begin();
-                it != all.end(); ++it)
-            {
-                if ((*it) == first)
-                    break;
-
-                index++;
-            }    
-
-            text = selection.first()->kurl().fileName()  
-                                   + i18n(" (%2 of %3)")
-                                   .arg(QString::number(index))
-                                   .arg(QString::number(num_images));
-            d->statusProgressBar->setText(text);
-            break;
-        }
+            d->statusProgressBar->setText(selection.first()->kurl().fileName());
+        break;
         default:
-          d->statusProgressBar->setText(i18n("%1 items selected (out of %2)")
-                                .arg(selection.count()).arg(QString::number(num_images)));
-
+            d->statusProgressBar->setText(i18n("%1 items selected").arg(selection.count()));
         break;
     }
 
