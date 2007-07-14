@@ -965,7 +965,7 @@ void DigikamApp::enableAlbumForwardHistory(bool enable)
 
 void DigikamApp::slotAboutToShowBackwardMenu()
 {
-    d->backwardActionMenu->popupMenu()->clear();
+    d->backwardActionMenu->menu()->clear();
     QStringList titles;
     d->view->getBackwardHistory(titles);
     if(!titles.isEmpty())
@@ -974,14 +974,14 @@ void DigikamApp::slotAboutToShowBackwardMenu()
         QStringList::Iterator iter = titles.begin();
         for(; iter != titles.end(); ++iter,++id)
         {
-            d->backwardActionMenu->popupMenu()->insertItem(*iter, id);
+            d->backwardActionMenu->menu()->insertItem(*iter, id);
         }
     }
 }
 
 void DigikamApp::slotAboutToShowForwardMenu()
 {
-    d->forwardActionMenu->popupMenu()->clear();
+    d->forwardActionMenu->menu()->clear();
     QStringList titles;
     d->view->getForwardHistory(titles);
     
@@ -991,7 +991,7 @@ void DigikamApp::slotAboutToShowForwardMenu()
         QStringList::Iterator iter = titles.begin();
         for(; iter != titles.end(); ++iter,++id)
         {
-            d->forwardActionMenu->popupMenu()->insertItem(*iter, id);
+            d->forwardActionMenu->menu()->insertItem(*iter, id);
         }
     }
 }
@@ -1413,7 +1413,7 @@ void DigikamApp::slotCameraRemoved(CameraType *ctype)
     KAction *cAction = ctype->action();
 
     if (cAction)
-        d->cameraMenuAction->remove(cAction);
+        d->cameraMenuAction->removeAction(cAction);
 }
 
 void DigikamApp::slotCameraAutoDetect()
@@ -1709,9 +1709,9 @@ void DigikamApp::loadCameras()
 {
     d->cameraList->load();
    
-    d->cameraMenuAction->popupMenu()->insertSeparator();
-    d->cameraMenuAction->popupMenu()->insertItem(i18n("Browse Media"), d->cameraMediaList);
-    d->cameraMenuAction->popupMenu()->insertSeparator();
+    d->cameraMenuAction->menu()->insertSeparator();
+    d->cameraMenuAction->menu()->insertItem(i18n("Browse Media"), d->cameraMediaList);
+    d->cameraMenuAction->menu()->insertSeparator();
 
     KAction *cameraAction = new KAction(i18n("Add Camera..."), this);
     connect(cameraAction, SIGNAL(triggered()), this, SLOT(slotSetupCamera()));
@@ -1728,10 +1728,10 @@ void DigikamApp::populateThemes()
     QStringList themes(ThemeEngine::componentData()->themeNames());
 
     d->themeMenuAction->setItems(themes);
-    int index = themes.findIndex(d->albumSettings->getCurrentTheme());
+    int index = themes.indexOf(d->albumSettings->getCurrentTheme());
     
     if (index == -1)
-        index = themes.findIndex(i18n("Default"));
+        index = themes.indexOf(i18n("Default"));
         
     d->themeMenuAction->setCurrentItem(index);
     ThemeEngine::componentData()->slotChangeTheme(d->themeMenuAction->currentText());
