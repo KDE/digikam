@@ -760,90 +760,78 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->zoomPlusAction = new KAction(i18n("Zoom in"),
-                                   "viewmag+",
-                                   Qt::CTRL+Qt::Key_Plus,
-                                   d->view,
-                                   SLOT(slotZoomIn()),
-                                   actionCollection(),
-                                   "album_zoomin");
+    d->zoomPlusAction = actionCollection()->addAction(KStandardAction::ZoomIn, "album_zoomin", 
+                                                      d->view, SLOT(slotZoomIn()));
 
-    d->zoomMinusAction = new KAction(i18n("Zoom out"),
-                                   "viewmag-",
-                                   Qt::CTRL+Qt::Key_Minus,
-                                   d->view,
-                                   SLOT(slotZoomOut()),
-                                   actionCollection(),
-                                   "album_zoomout");
+    // -----------------------------------------------------------
+ 
+    d->zoomMinusAction = actionCollection()->addAction(KStandardAction::ZoomOut, "album_zoomout", 
+                                                       d->view, SLOT(slotZoomOut()));
 
-    d->zoomTo100percents = new KAction(i18n("Zoom to 1:1"), 
-                                   "viewmag1",
-                                   Qt::ALT+Qt::CTRL+Qt::Key_0,      // NOTE: Photoshop 7 use ALT+CTRL+0.
-                                   d->view, 
-                                   SLOT(slotZoomTo100Percents()),
-                                   actionCollection(), 
-                                   "album_zoomto100percents");
+    // -----------------------------------------------------------
 
-    d->zoomFitToWindowAction = new KAction(i18n("Fit to &Window"), 
-                                   "view_fit_window",
-                                   Qt::CTRL+Qt::SHIFT+Qt::Key_E, 
-                                   d->view, 
-                                   SLOT(slotFitToWindow()),
-                                   actionCollection(), 
-                                   "album_zoomfit2window");
+    d->zoomTo100percents = new KAction(KIcon("viewmag1"), i18n("Zoom to 1:1"), this);
+    d->zoomTo100percents->setShortcut(Qt::ALT+Qt::CTRL+Qt::Key_0);       // NOTE: Photoshop 7 use ALT+CTRL+0
+    connect(d->zoomTo100percents, SIGNAL(triggered()), d->view, SLOT(slotZoomTo100Percents()));
+    actionCollection()->addAction("album_zoomto100percents", d->zoomTo100percents);
 
-    d->fullScreenAction = KStandardAction::fullScreen(this, SLOT(slotToggleFullScreen()),
-                                                 actionCollection(), this, "full_screen");
+    // -----------------------------------------------------------
 
-    d->slideShowAction = new KActionMenu(i18n("Slide Show"), "datashow",
-                                         actionCollection(), "slideshow");
+    d->zoomFitToWindowAction = new KAction(KIcon("zoom-best-fit"), i18n("Fit to &Window"), this);
+    d->zoomFitToWindowAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_E); // NOTE: Gimp 2 use CTRL+SHIFT+E.
+    connect(d->zoomFitToWindowAction, SIGNAL(triggered()), d->view, SLOT(slotFitToWindow()));
+    actionCollection()->addAction("album_zoomfit2window", d->zoomFitToWindowAction);
 
+    // -----------------------------------------------------------
+
+    d->fullScreenAction = actionCollection()->addAction(KStandardAction::FullScreen,
+                          "full_screen", this, SLOT(slotToggleFullScreen()));
+
+    // -----------------------------------------------------------
+
+    d->slideShowAction = new KActionMenu(KIcon("datashow"), i18n("Slide Show"), this);
     d->slideShowAction->setDelayed(false);
+    actionCollection()->addAction("slideshow", d->slideShowAction);
 
-    d->slideShowAllAction = new KAction(i18n("All"), 0, Qt::Key_F9,
-                                d->view, SLOT(slotSlideShowAll()),
-                                actionCollection(), "slideshow_all");
-    d->slideShowAction->insert(d->slideShowAllAction);
+    d->slideShowAllAction = new KAction(i18n("All"), this);
+    d->slideShowAllAction->setShortcut(Qt::Key_F9); 
+    connect(d->slideShowAllAction, SIGNAL(triggered()), d->view, SLOT(slotSlideShowAll()));
+    actionCollection()->addAction("slideshow_all", d->slideShowAllAction);
+    d->slideShowAction->addAction(d->slideShowAllAction);
 
-    d->slideShowSelectionAction = new KAction(i18n("Selection"), 0, Qt::ALT+Qt::Key_F9,
-                                              d->view, 
-                                              SLOT(slotSlideShowSelection()),
-                                              actionCollection(), 
-                                              "slideshow_selected");
-    d->slideShowAction->insert(d->slideShowSelectionAction);
+    d->slideShowSelectionAction = new KAction(i18n("Selection"), this);
+    d->slideShowSelectionAction->setShortcut(Qt::ALT+Qt::Key_F9); 
+    connect(d->slideShowSelectionAction, SIGNAL(triggered()), d->view, SLOT(slotSlideShowSelection()));
+    actionCollection()->addAction("slideshow_selected", d->slideShowSelectionAction);
+    d->slideShowAction->addAction(d->slideShowSelectionAction);
 
-    d->slideShowRecursiveAction = new KAction(i18n("With all sub-albums"), 0, Qt::SHIFT+Qt::Key_F9,
-                                              d->view, 
-                                              SLOT(slotSlideShowRecursive()),
-                                              actionCollection(), 
-                                              "slideshow_recursive");
-    d->slideShowAction->insert(d->slideShowRecursiveAction);
+    d->slideShowRecursiveAction = new KAction(i18n("With all sub-albums"), this);
+    d->slideShowRecursiveAction->setShortcut(Qt::SHIFT+Qt::Key_F9); 
+    connect(d->slideShowRecursiveAction, SIGNAL(triggered()), d->view, SLOT(slotSlideShowRecursive()));
+    actionCollection()->addAction("slideshow_recursive", d->slideShowRecursiveAction);
+    d->slideShowAction->addAction(d->slideShowRecursiveAction);
 
-    d->quitAction = KStandardAction::quit(this,
-                                   SLOT(slotExit()),
-                                   actionCollection(),
-                                   "app_exit");
+    // -----------------------------------------------------------
 
-    d->kipiHelpAction = new KAction(i18n("Kipi Plugins Handbook"),
-                                   "kipi",
-                                   0,
-                                   this,
-                                   SLOT(slotShowKipiHelp()),
-                                   actionCollection(),
-                                   "help_kipi");
+    d->quitAction = actionCollection()->addAction(KStandardAction::Quit, "app_exit", 
+                                                  this, SLOT(slotExit()));
 
-    d->tipAction = KStandardAction::tipOfDay(this,
-                                   SLOT(slotShowTip()),
-                                   actionCollection(),
-                                   "help_tipofday");
+    // -----------------------------------------------------------
 
-    d->donateMoneyAction = new KAction(i18n("Make a donation..."),
-                                   0,
-                                   0,
-                                   this,
-                                   SLOT(slotDonateMoney()),
-                                   actionCollection(),
-                                   "help_donatemoney");
+    d->kipiHelpAction = new KAction(KIcon("kipi"), i18n("Kipi Plugins Handbook"), this);
+    connect(d->kipiHelpAction, SIGNAL(triggered()), this, SLOT(slotShowKipiHelp()));
+    actionCollection()->addAction("help_kipi", d->kipiHelpAction);
+
+    // -----------------------------------------------------------
+
+    d->tipAction = actionCollection()->addAction(KStandardAction::TipofDay, "help_tipofday", 
+                                                 this, SLOT(slotShowTip()));
+
+    // -----------------------------------------------------------
+
+    d->donateMoneyAction = new KAction(i18n("Make a donation..."), this);
+    connect(d->donateMoneyAction, SIGNAL(triggered()), this, SLOT(slotDonateMoney()));
+    actionCollection()->addAction("help_donatemoney", d->donateMoneyAction);
 
     // -- Rating actions ---------------------------------------------------------------
 

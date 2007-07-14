@@ -206,17 +206,17 @@ public:
     KAction               *selectInvertAction;
 
     // View Actions
-    KAction               *fullScreenAction;
+    QAction               *fullScreenAction;
+    QAction               *zoomPlusAction;
+    QAction               *zoomMinusAction;
+    KAction               *zoomFitToWindowAction;
+    KAction               *zoomTo100percents;
     KActionMenu           *slideShowAction;
     KAction               *slideShowAllAction;
     KAction               *slideShowSelectionAction;
     KAction               *slideShowRecursiveAction;
     KSelectAction         *imageSortAction;
     KSelectAction         *albumSortAction;
-    KAction               *zoomPlusAction;
-    KAction               *zoomMinusAction;
-    KAction               *zoomFitToWindowAction;
-    KAction               *zoomTo100percents;
 
     KAction               *rating0Star;
     KAction               *rating1Star;
@@ -226,8 +226,8 @@ public:
     KAction               *rating5Star;
 
     // Application Actions
-    KAction               *quitAction;
-    KAction               *tipAction;
+    QAction               *quitAction;
+    QAction               *tipAction;
     KAction               *kipiHelpAction;
     KAction               *donateMoneyAction;
     KActionMenu           *cameraMenuAction;
