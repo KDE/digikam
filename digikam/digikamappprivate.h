@@ -23,7 +23,7 @@
 
 // Qt includes.
 
-#include <Q3PtrList>
+#include <QList>
 #include <QByteArray>
 #include <QString>
 #include <QMap>
@@ -148,12 +148,12 @@ public:
     bool                   validIccPath;
     
     // KIPI plugins support
-    Q3PtrList<KAction>     kipiFileActionsExport;
-    Q3PtrList<KAction>     kipiFileActionsImport;
-    Q3PtrList<KAction>     kipiImageActions;
-    Q3PtrList<KAction>     kipiToolsActions;
-    Q3PtrList<KAction>     kipiBatchActions;
-    Q3PtrList<KAction>     kipiAlbumActions;
+    QList<QAction*>        kipiFileActionsExport;
+    QList<QAction*>        kipiFileActionsImport;
+    QList<QAction*>        kipiImageActions;
+    QList<QAction*>        kipiToolsActions;
+    QList<QAction*>        kipiBatchActions;
+    QList<QAction*>        kipiAlbumActions;
 
     QMap<int, QString>     mediaItems;
 

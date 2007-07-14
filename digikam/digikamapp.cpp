@@ -26,7 +26,6 @@
 // Qt includes.
 
 #include <Q3DockArea>
-#include <Q3PtrList>
 #include <QDataStream>
 #include <QLabel>
 #include <QStringList>
@@ -272,31 +271,31 @@ void DigikamApp::show()
     slotZoomSliderChanged(d->albumSettings->getDefaultIconSize());
 }
 
-const Q3PtrList<KAction>& DigikamApp::menuImageActions()
+const QList<QAction*>& DigikamApp::menuImageActions()
 {
     return d->kipiImageActions;
 }
 
-const Q3PtrList<KAction>& DigikamApp::menuBatchActions()
+const QList<QAction*>& DigikamApp::menuBatchActions()
 {
     return d->kipiBatchActions;
 }
 
-const Q3PtrList<KAction>& DigikamApp::menuAlbumActions()
+const QList<QAction*>& DigikamApp::menuAlbumActions()
 {
     return d->kipiAlbumActions;
 }
 
-const Q3PtrList<KAction> DigikamApp::menuImportActions()
+const QList<QAction*>& DigikamApp::menuImportActions()
 {
-    Q3PtrList<KAction> importMenu;
+    QList<QAction*> importMenu;
     importMenu = d->kipiFileActionsImport;
     importMenu.append( d->albumImportAction );
     importMenu.append( d->addImagesAction );
     return importMenu;
 }
 
-const Q3PtrList<KAction> DigikamApp::menuExportActions()
+const QList<QAction*>& DigikamApp::menuExportActions()
 {
     return d->kipiFileActionsExport;
 }
@@ -1021,15 +1020,12 @@ void DigikamApp::slotAlbumSelected(bool val)
         d->newAction->setEnabled(false);
         d->albumImportAction->setEnabled(false);
         
-        KAction *action;
-        for (action = d->kipiFileActionsImport.first(); action;
-             action = d->kipiFileActionsImport.next())
+        foreach(QAction *action, d->kipiFileActionsImport)
         {
             action->setEnabled(false);
         }
 
-        for (action = d->kipiFileActionsExport.first(); action;
-             action = d->kipiFileActionsExport.next())
+        foreach(QAction *action, d->kipiFileActionsExport)
         {
             action->setEnabled(false);
         }
@@ -1044,15 +1040,12 @@ void DigikamApp::slotAlbumSelected(bool val)
         d->newAction->setEnabled(true);
         d->albumImportAction->setEnabled(true);
         
-        KAction *action;
-        for (action = d->kipiFileActionsImport.first(); action; 
-             action = d->kipiFileActionsImport.next())
+        foreach(QAction *action, d->kipiFileActionsImport)
         {
             action->setEnabled(true);
         }
 
-        for (action = d->kipiFileActionsExport.first(); action; 
-             action = d->kipiFileActionsExport.next())
+        foreach(QAction *action, d->kipiFileActionsExport)
         {
             action->setEnabled(true);    
         }        
@@ -1078,15 +1071,12 @@ void DigikamApp::slotAlbumSelected(bool val)
             d->albumImportAction->setEnabled(false);            
         }
         
-        KAction *action;
-        for (action = d->kipiFileActionsImport.first(); action; 
-             action = d->kipiFileActionsImport.next())
+        foreach(QAction *action, d->kipiFileActionsImport)
         {
             action->setEnabled(false);
         }
 
-        for (action = d->kipiFileActionsExport.first(); action; 
-             action = d->kipiFileActionsExport.next())
+        foreach(QAction *action, d->kipiFileActionsExport)
         {
             action->setEnabled(true);
         }
@@ -1107,15 +1097,12 @@ void DigikamApp::slotTagSelected(bool val)
         d->deleteTagAction->setEnabled(true);
         d->editTagAction->setEnabled(true);
         
-        KAction *action;
-        for (action = d->kipiFileActionsImport.first(); action;
-             action = d->kipiFileActionsImport.next())
+        foreach(QAction *action, d->kipiFileActionsImport)
         {
             action->setEnabled(false);
         }
 
-        for (action = d->kipiFileActionsExport.first(); action;
-             action = d->kipiFileActionsExport.next())
+        foreach(QAction *action, d->kipiFileActionsExport)
         {
             action->setEnabled(true);
         }
@@ -1125,15 +1112,12 @@ void DigikamApp::slotTagSelected(bool val)
         d->deleteTagAction->setEnabled(false);
         d->editTagAction->setEnabled(false);
         
-        KAction *action;
-        for (action = d->kipiFileActionsImport.first(); action; 
-             action = d->kipiFileActionsImport.next())
+        foreach(QAction *action, d->kipiFileActionsImport)
         {
             action->setEnabled(false);
         }
 
-        for (action = d->kipiFileActionsExport.first(); action; 
-             action = d->kipiFileActionsExport.next())
+        foreach(QAction *action, d->kipiFileActionsExport)
         {
             action->setEnabled(true);
         }
@@ -1655,7 +1639,6 @@ void DigikamApp::slotKipiPluginPlug()
           //  d->splashScreen->message(i18n("Loading: %1").arg((*it)->name()));
 
         plugin->setup( this );
-        Q3PtrList<KAction>* popup = 0;
 
         // Plugin category identification using KAction method based.
 
@@ -1664,45 +1647,44 @@ void DigikamApp::slotKipiPluginPlug()
         for( QList<KAction*>::Iterator it2 = actions.begin(); it2 != actions.end(); ++it2 )
         {
             if ( plugin->category(*it2) == KIPI::IMAGESPLUGIN )
-               popup = &d->kipiImageActions;
-
+            {
+                d->kipiImageActions.append(*it2);
+            }
             else if ( plugin->category(*it2) == KIPI::EXPORTPLUGIN )
-               popup = &d->kipiFileActionsExport;
-
+            {
+                d->kipiFileActionsExport.append(*it2);
+            }
             else if ( plugin->category(*it2) == KIPI::IMPORTPLUGIN )
-               popup = &d->kipiFileActionsImport;
-
+            {
+                d->kipiFileActionsImport.append(*it2);
+            }
             else if ( plugin->category(*it2) == KIPI::TOOLSPLUGIN )
-               popup = &d->kipiToolsActions;
-
+            {
+                d->kipiToolsActions.append(*it2);
+            }
             else if ( plugin->category(*it2) == KIPI::BATCHPLUGIN )
-               popup = &d->kipiBatchActions;
-
+            {
+                d->kipiBatchActions.append(*it2);
+            }
             else if ( plugin->category(*it2) == KIPI::COLLECTIONSPLUGIN )
-               popup = &d->kipiAlbumActions;
-
-            // Plug the KIPI plugins actions in according with the KAction method.
-
-            if ( popup )
-               popup->append( *it2 );
+            {
+                d->kipiAlbumActions.append(*it2);
+            }
             else
-               DDebug() << "No menu found for a plugin!!!" << endl;
+                DDebug() << "No menu found for a plugin!!!" << endl;
         }
 
         plugin->actionCollection()->readShortcutSettings();
     }
 
-    //if(d->splashScreen)
-      //  d->splashScreen->message(i18n("1 Kipi Plugin Loaded", "%n Kipi Plugins Loaded", cpt));
-
     // Create GUI menu in according with plugins.
 
     plugActionList( QString::fromLatin1("file_actions_export"), d->kipiFileActionsExport );
     plugActionList( QString::fromLatin1("file_actions_import"), d->kipiFileActionsImport );
-    plugActionList( QString::fromLatin1("image_actions"), d->kipiImageActions );
-    plugActionList( QString::fromLatin1("tool_actions"), d->kipiToolsActions );
-    plugActionList( QString::fromLatin1("batch_actions"), d->kipiBatchActions );
-    plugActionList( QString::fromLatin1("album_actions"), d->kipiAlbumActions );
+    plugActionList( QString::fromLatin1("image_actions"),       d->kipiImageActions );
+    plugActionList( QString::fromLatin1("tool_actions"),        d->kipiToolsActions );
+    plugActionList( QString::fromLatin1("batch_actions"),       d->kipiBatchActions );
+    plugActionList( QString::fromLatin1("album_actions"),       d->kipiAlbumActions );
 }
 
 void DigikamApp::loadCameras()

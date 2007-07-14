@@ -28,7 +28,8 @@
 
 // Qt includes.
 
-#include <Q3PtrList>
+#include <QList>
+#include <QAction>
 #include <QString>
 
 // KDE includes.
@@ -64,12 +65,12 @@ public:
     static DigikamApp* getinstance();
 
     // KIPI Actions collections access.
-    const Q3PtrList<KAction>& menuImageActions();
-    const Q3PtrList<KAction>& menuBatchActions();
-    const Q3PtrList<KAction>& menuAlbumActions();
+    const QList<QAction*>& menuImageActions();
+    const QList<QAction*>& menuBatchActions();
+    const QList<QAction*>& menuAlbumActions();
     
-    const Q3PtrList<KAction> menuImportActions();
-    const Q3PtrList<KAction> menuExportActions();
+    const QList<QAction*>& menuImportActions();
+    const QList<QAction*>& menuExportActions();
 
     void autoDetect();
     void downloadFrom(const QString &cameraGuiPath);
