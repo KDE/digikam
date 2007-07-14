@@ -1,9 +1,3 @@
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <QMouseEvent>
-#include <QLabel>
-#include <Q3ValueList>
-#include <kvbox.h>
 /* ============================================================
  *
  * This file is a part of digiKam project
@@ -33,14 +27,20 @@
 #ifndef SEARCHWIDGETS_H
 #define SEARCHWIDGETS_H
 
+// Qt includes.
+
+#include <Q3ValueList>
+#include <QMap>
+
 class KHBox;
 class KVBox;
 class QCheckBox;
 class QComboBox;
 class QLineEdit;
 class QLabel;
-class Q3VGroupBox;
+class QGroupBox;
 class QLabel;
+class QHBoxLayout;
 
 class KUrl;
 
@@ -69,10 +69,10 @@ public:
      * @param name The name
      * @param f Qt::WFlags
      */
-    SearchRuleLabel( const QString & text,
-               QWidget * parent,
-               const char * name=0,
-               Qt::WFlags f=0 );
+    SearchRuleLabel(const QString & text,
+                    QWidget * parent,
+                    const char * name=0,
+                    Qt::WFlags f=0 );
 private:
 
     void mouseDoubleClickEvent( QMouseEvent * e );
@@ -224,7 +224,7 @@ public:
      * Determines if the rule is checked or not
      * @return True if the rule is checked, false if not
      */
-    bool     isChecked() const;
+    bool    isChecked() const;
 
     /**
      * Sets the values of the rule.
@@ -303,7 +303,7 @@ private:
 
     KVBox*                  m_box;
     QWidget*                m_hbox;
-    Q3HBoxLayout*            m_hboxLayout;
+    QHBoxLayout*            m_hboxLayout;
 
     KHBox*                  m_valueBox;
 
@@ -385,10 +385,12 @@ public:
 
 private:
 
-    KHBox*                          m_box;
-    Q3VGroupBox*                     m_groupbox;
-    QCheckBox*                      m_check;
     Q3ValueList<SearchAdvancedRule*> m_childRules;
+
+    QGroupBox*                       m_groupbox;
+    QCheckBox*                       m_check;
+
+    KHBox*                           m_box;
 };
 
 }  // namespace Digikam

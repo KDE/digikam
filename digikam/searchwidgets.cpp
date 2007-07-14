@@ -26,20 +26,16 @@
 
 // Qt includes.
 
-
-
-#include <qlabel.h>
-#include <qcheckbox.h>
-#include <qcombobox.h>
-#include <qlineedit.h>
-#include <q3groupbox.h>
-#include <q3vgroupbox.h>
-#include <qlayout.h>
-#include <qdatetime.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3Frame>
 #include <Q3ValueList>
+#include <QLabel>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QLineEdit>
+#include <QGroupBox>
+#include <QLayout>
+#include <QDateTime>
+#include <QHBoxLayout>
+#include <QFrame>
 #include <QMouseEvent>
 
 // KDE includes.
@@ -91,7 +87,7 @@ static const int RuleKeyTableCount = 11;
 static struct
 {
     const char *keyText;
-    QString key;
+    QString     key;
     SearchAdvancedRule::valueWidgetTypes cat;
 }
 
@@ -179,14 +175,17 @@ SearchAdvancedRule::SearchAdvancedRule(QWidget* parent, SearchAdvancedRule::Opti
 
     m_box->show();
 
-    connect( m_key, SIGNAL( activated(int) ),
-             this, SLOT(slotKeyChanged(int)));
-    connect( m_key, SIGNAL( activated(int) ),
-             this, SIGNAL( signalPropertyChanged() ));
-    connect( m_operator, SIGNAL( activated(int) ),
-             this, SIGNAL( signalPropertyChanged() ));
-    connect( m_check, SIGNAL( toggled( bool ) ),
-             this, SIGNAL( signalBaseItemToggled() ));
+    connect(m_key, SIGNAL(activated(int)),
+            this, SLOT(slotKeyChanged(int)));
+
+    connect(m_key, SIGNAL(activated(int)),
+            this, SIGNAL(signalPropertyChanged()));
+
+    connect(m_operator, SIGNAL(activated(int)),
+            this, SIGNAL(signalPropertyChanged()));
+
+    connect(m_check, SIGNAL(toggled(bool)),
+            this, SIGNAL(signalBaseItemToggled()));
 }
 
 void SearchAdvancedRule::setValues(const KUrl& url)
@@ -561,4 +560,3 @@ void SearchAdvancedGroup::removeOption()
 }
 
 }  // namespace Digikam
-

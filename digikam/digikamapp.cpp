@@ -1261,7 +1261,7 @@ void DigikamApp::slotDownloadImages()
 
     bool alreadyThere = false;
 
-    for (uint i = 0 ; i != actionCollection()->count() ; i++)
+    for (int i = 0 ; i != actionCollection()->count() ; i++)
     {
         if (actionCollection()->action(i)->objectName() == d->cameraGuiPath)
             alreadyThere = true;
