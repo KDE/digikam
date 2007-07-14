@@ -1175,7 +1175,7 @@ QString DigikamApp::convertToLocalUrl( const QString& folder )
     if( !url.isLocalFile() )
     {
         // Support for system:/ and media:/ (c) Stephan Kulow
-        KUrl mlu = KIO::NetAccess::mostLocalURL( url, 0 );
+        KUrl mlu = KIO::NetAccess::mostLocalUrl( url, 0 );
         if (mlu.isLocalFile())
             return mlu.path();
 
@@ -1357,18 +1357,20 @@ void DigikamApp::slotCameraMediaMenuEntries( Job *, const UDSEntryList & list )
 
     for(KIO::UDSEntryList::ConstIterator it = list.begin() ; it != list.end() ; ++it)
     {
-        QString name;
-        QString path;
+        // TODO: KDE4PORT: check if this port is right.
+        QString name = (*it).stringValue(KIO::UDS_NAME);
+        QString path = (*it).stringValue(KIO::UDS_URL);
 
-        for ( UDSEntry::const_iterator et = (*it).begin() ; et != (*it).end() ; ++et ) 
+        /*for ( UDSEntry::const_iterator et = (*it).begin() ; et != (*it).end() ; ++et ) 
         {
             if ( (*et).m_uds == KIO::UDS_NAME)
                 name = ( *et ).m_str;
             if ( (*et).m_uds == KIO::UDS_URL)
                 path = ( *et ).m_str;
 
-            //DDebug() << ( *et ).m_str << endl;
-        }
+        }*/
+
+        //DDebug() << name << " : " << path << endl;
 
         if (!name.isEmpty() && !path.isEmpty())
         {
@@ -1552,7 +1554,7 @@ void DigikamApp::slotToggleFullScreen()
         menuBar()->hide();
         statusBar()->hide();
 
-#warning "TODO: kde4 port it";
+
 /* TODO: KDE4PORT: Check these methods
 
         if (fullScreenHideToolBar)
@@ -1674,7 +1676,10 @@ void DigikamApp::slotKipiPluginPlug()
                 DDebug() << "No menu found for a plugin!!!" << endl;
         }
 
+#warning "TODO: kde4 port it";
+/* TODO: KDE4PORT: how we can do it with KDE4 ?
         plugin->actionCollection()->readShortcutSettings();
+*/
     }
 
     // Create GUI menu in according with plugins.
