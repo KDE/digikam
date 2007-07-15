@@ -28,8 +28,8 @@
 
 // Qt includes.
 
-#include <Q3PopupMenu>
 #include <QDateTime>
+#include <QMenu>
 
 // KDE includes.
 
@@ -39,32 +39,34 @@ namespace Digikam
 {
 
 /**
-   @short This menu helps the user to select a past date quickly.
+   @short This menu helps the user to select a date quickly.
 
-   This menu helps the user to select a past date quickly. It offers various ways of selecting, e.g. with a KDatePicker or with words like "Yesterday".
+   This menu helps the user to select a date quicly. It offers various ways of selecting, e.g. with a KDatePicker or with words like "Tomorrow".
 
    The available items are:
 
    @li NoDate: A menu-item with "No Date". If chosen, the datepicker will emit a null QDate.
    @li DatePicker: Show a KDatePicker-widget.
-   @li Words: Show items like "Today", "Yesterday" or "Previous Week".
+   @li Words: Show items like "Today", "Tomorrow" or "Next Week".
 
    When supplying multiple items, separate each item with a bitwise OR.
 
-   @author Bram Schoenmakers <bram_s@softhome.net>, Mikolaj Machowski <mikmach@wp.pl>
+   @author Bram Schoenmakers <bram_s@softhome.net>
 */
-class KDatePickerPopup: public Q3PopupMenu
+class KDatePickerPopup: public QMenu
 {
-    Q_OBJECT
+  Q_OBJECT
 
-public:
+  public:
 
-    enum 
-    {
-        NoDate     = 1,
+    enum ItemFlag 
+    { 
+        NoDate     = 1, 
         DatePicker = 2,
-        Words      = 4
+        Words      = 4 
     };
+
+    Q_DECLARE_FLAGS( Items, ItemFlag )
 
     /**
        A constructor for the KDatePickerPopup.
@@ -74,8 +76,8 @@ public:
        @param parent The object's parent.
        @param name The object's name.
     */
-    KDatePickerPopup(int items = 2, const QDate &date = QDate::currentDate(),
-                     QWidget *parent = 0, const char *name = 0);
+    KDatePickerPopup( Items items = DatePicker, const QDate &date = QDate::currentDate(),
+                      QWidget *parent = 0 );
 
     /**
        @return A pointer to the private variable mDatePicker, an instance of
@@ -94,23 +96,28 @@ public:
     /** @return Returns the bitwise result of the active items in the popup. */
     int items() const { return mItems; }
 
-  signals:
+ signals:
 
     /**
       This signal emits the new date (selected with datepicker or other
       menu-items).
     */
-    void dateChanged ( QDate );
+    void dateChanged (const QDate&);
 
 protected slots:
 
-    void slotDateChanged(QDate);
+    void slotDateChanged(const QDate&);
     void slotToday();
+    void slotTomorrow();
+    void slotNextWeek();
+    void slotNextMonth();
+
     void slotYesterday();
     void slotPrevMonday();
     void slotPrevFriday();
     void slotPrevWeek();
     void slotPrevMonth();
+
     void slotNoDate();
 
 private:
@@ -119,10 +126,12 @@ private:
 
 private:
 
-    int          mItems;
-
     KDatePicker *mDatePicker;
+    
+    Items        mItems;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS( KDatePickerPopup::Items )
 
 }  // namespace Digikam
 
