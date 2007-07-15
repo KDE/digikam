@@ -872,10 +872,10 @@ void LightTableWindow::slotDeleteItem(ImageInfo* info)
     if (useTrash)
         kioURL = fileURL;
 
-    if (!SyncJob::del(kioURL, useTrash))
+    SyncJobResult deleteResult = SyncJob::del(kioURL, useTrash);
+    if (deleteResult)
     {
-        QString errMsg(SyncJob::lastErrorMsg());
-        KMessageBox::error(this, errMsg, errMsg);
+        KMessageBox::error(this, deleteResult.errorString);
         return;
     }
 

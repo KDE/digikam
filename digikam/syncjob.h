@@ -54,6 +54,16 @@ class Album;
 class TAlbum;
 class SyncJobPriv;
 
+class SyncJobResult
+{
+public:
+
+    bool success;
+    QString errorString;
+
+    operator bool() const { return success; }
+};
+
 class SyncJob : public QObject
 {
     Q_OBJECT
@@ -61,18 +71,12 @@ class SyncJob : public QObject
 public:
 
     /* this will delete the urls. */
-    static bool del(const KUrl::List& urls, bool useTrash);
+    static SyncJobResult del(const KUrl::List& urls, bool useTrash);
 
-    /* remove this when we move dependency upto kde 3.2 */
-    static bool file_move(const KUrl &src, const KUrl &dest);
-
-    /* Load the image or icon for the tag thumbnail */    
+    /* Load the image or icon for the tag thumbnail */
     static QPixmap getTagThumbnail(TAlbum *album);
     static QPixmap getTagThumbnail(const QString &name, int size);
 
-    static QString lastErrorMsg();
-    static int     lastErrorCode();
-    
 private:
 
     SyncJob();
@@ -81,11 +85,9 @@ private:
     void enterWaitingLoop();
     void quitWaitingLoop();
 
-    bool delPriv(const KUrl::List& urls);
-    bool trashPriv(const KUrl::List& urls);
+    SyncJobResult delPriv(const KUrl::List& urls);
+    SyncJobResult trashPriv(const KUrl::List& urls);
 
-    bool fileMovePriv(const KUrl &src, const KUrl &dest);
-    
     QPixmap getTagThumbnailPriv(TAlbum *album);
     QPixmap getTagThumbnailPriv(const QString &name, int size);
 
@@ -98,9 +100,6 @@ private slots:
     void slotLoadThumbnailFailed();
 
 private:
-
-    static int       m_lastErrorCode;
-    static QString  *m_lastErrorMsg;
 
     SyncJobPriv     *d;
 };

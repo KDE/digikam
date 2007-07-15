@@ -57,23 +57,20 @@
 namespace Digikam
 {
 
-QString* SyncJob::m_lastErrorMsg  = 0;
-int      SyncJob::m_lastErrorCode = 0;
-
 class SyncJobPriv
 {
 public:
 
     SyncJobPriv()
     {
-        success     = false;
-        album       = 0;
-        thumbnail   = 0;
-        waitingLoop = 0;
+        result.success = false;
+        album          = 0;
+        thumbnail      = 0;
+        waitingLoop    = 0;
     }
 
-    bool             success;
-    
+    SyncJobResult    result;
+
     int              thumbnailSize;
 
     QPixmap         *thumbnail;
@@ -98,20 +95,16 @@ SyncJob::~SyncJob()
     delete d;
 }
 
-bool SyncJob::del(const KUrl::List& urls, bool useTrash)
+SyncJobResult SyncJob::del(const KUrl::List& urls, bool useTrash)
 {
     SyncJob sj;
 
     if (useTrash)
-        return sj.trashPriv(urls);
+        sj.trashPriv(urls);
     else
-        return sj.delPriv(urls);
-}
+        sj.delPriv(urls);
 
-bool SyncJob::file_move(const KUrl &src, const KUrl &dest)
-{
-    SyncJob sj;
-    return sj.fileMovePriv(src, dest);
+    return sj.d->result;
 }
 
 QPixmap SyncJob::getTagThumbnail(TAlbum *album)
@@ -128,49 +121,30 @@ QPixmap SyncJob::getTagThumbnail(const QString &name, int size)
 
 bool SyncJob::delPriv(const KUrl::List& urls)
 {
-    d->success = true;
-
     KIO::Job* job = KIO::del( urls );
     connect( job, SIGNAL(result( KIO::Job* )),
              this, SLOT(slotResult( KIO::Job*)) );
 
     enterWaitingLoop();
-    return d->success;
+    return d->result;
 }
 
 bool SyncJob::trashPriv(const KUrl::List& urls)
 {
-    d->success = true;
     KIO::Job* job = KIO::trash( urls );
     connect( job, SIGNAL(result( KIO::Job* )),
              this, SLOT(slotResult( KIO::Job*)) );
 
     enterWaitingLoop();
-    return d->success;
-}
-
-bool SyncJob::fileMovePriv(const KUrl &src, const KUrl &dest)
-{
-    d->success = true;
-
-    KIO::FileCopyJob* job = KIO::file_move(src, dest, -1,
-                                           true, false, false);
-    connect( job, SIGNAL(result( KIO::Job* )),
-             this, SLOT(slotResult( KIO::Job*)) );
-
-    enterWaitingLoop();
-    return d->success;
+    return d->result;
 }
 
 void SyncJob::slotResult( KIO::Job * job )
 {
-    m_lastErrorCode = job->error();
-    d->success = !(m_lastErrorCode);
-    if ( !d->success )
+    d->result.success = !(job->error());
+    if ( !d->result )
     {
-        if ( !m_lastErrorMsg )
-            m_lastErrorMsg = new QString;
-        *m_lastErrorMsg = job->errorString();
+        d->result.errorString = job->errorString();
     }
     quitWaitingLoop();
 }
@@ -211,7 +185,6 @@ QPixmap SyncJob::getTagThumbnailPriv(TAlbum *album)
 
 void SyncJob::slotLoadThumbnailFailed(Album *album)
 {
-    // TODO: setting _lastError*
     if (album == d->album)
     {
         quitWaitingLoop();
