@@ -158,7 +158,7 @@ QByteArray IccTransform::loadICCProfilFile(const QString& filePath)
         return QByteArray();
 
     QByteArray data;
-    data.reserve(file.size());
+    data.resize(file.size());
     QDataStream stream( &file );
     stream.readRawData(data.data(), data.size());
     file.close();

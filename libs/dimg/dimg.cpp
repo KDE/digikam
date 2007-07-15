@@ -668,7 +668,7 @@ bool DImg::getICCProfilFromFile(const QString& filePath)
         return false;
     
     QByteArray data;
-    data.reserve(file.size());
+    data.resize(file.size());
     QDataStream stream( &file );
     stream.readRawData(data.data(), data.size());
     setICCProfil(data);

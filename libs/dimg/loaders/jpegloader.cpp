@@ -427,7 +427,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     if (profile_data != NULL) 
     {
         QByteArray profile_rawdata;
-        profile_rawdata.reserve(profile_size);
+        profile_rawdata.resize(profile_size);
         memcpy(profile_rawdata.data(), profile_data, profile_size);
         metaData.insert(DImg::ICC, profile_rawdata);
         free (profile_data);

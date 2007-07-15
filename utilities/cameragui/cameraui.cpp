@@ -1507,7 +1507,7 @@ void CameraUI::slotExifFromData(const QByteArray& exifData)
             DDebug() << "Exif header found at position " << i << endl;
             i = i + sizeof(exifHeader);
             QByteArray data;
-            data.reserve(exifData.size()-i);
+            data.resize(exifData.size()-i);
             memcpy(data.data(), exifData.data()+i, data.size());
             d->rightSidebar->itemChanged(item->itemInfo(), url, data, d->view, item);
             return;

@@ -425,7 +425,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                     QMap<int, QByteArray>& metaData = imageMetaData();
                     jas_stream_memobj_t *blob = (jas_stream_memobj_t *) icc_stream->obj_;
                     QByteArray profile_rawdata;
-                    profile_rawdata.reserve(blob->len_);
+                    profile_rawdata.resize(blob->len_);
                     memcpy(profile_rawdata.data(), blob->buf_, blob->len_);
                     metaData.insert(DImg::ICC, profile_rawdata);
                     jas_stream_close(icc_stream);

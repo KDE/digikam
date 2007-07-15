@@ -411,7 +411,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     if (profile_data != NULL) 
     {
         QByteArray profile_rawdata;
-        profile_rawdata.reserve(profile_size);
+        profile_rawdata.resize(profile_size);
         memcpy(profile_rawdata.data(), profile_data, profile_size);
         metaData.insert(DImg::ICC, profile_rawdata);
     }
@@ -682,7 +682,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
                     memcmp(ba.data(), "profile", 7) != 0)
                 {
                     profile = QByteArray();
-                    profile.reserve(ba.size() + sizeof(ExifHeader));
+                    profile.resize(ba.size() + sizeof(ExifHeader));
                     memcpy(profile.data(), ExifHeader, sizeof(ExifHeader));
                     memcpy(profile.data()+sizeof(ExifHeader), ba.data(), ba.size());
                 }
