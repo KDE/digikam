@@ -74,7 +74,7 @@ SET(digikam_LIB_SRCS
                      ${libgreycstoration_SRCS}
                      ${libdmetadata_SRCS}
 
-#                      kdateedit.cpp 
+                      kdateedit.cpp 
                       metadatahub.cpp 
                       digikamapp.cpp 
                       album.cpp 
