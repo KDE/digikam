@@ -159,7 +159,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
             ratingpopupmenu.cpp                 Gilles                  X       DONE
             ratingwidget.cpp                    Gilles                  X       DONE
             scanlib.cpp                         Gilles                  X       DONE
-            searchadvanceddialog.cpp                                    X
+            searchadvanceddialog.cpp            Gilles                  X       
             searchfolderview.cpp                Gilles                  X       DONE
             searchquickdialog.cpp               Laurent                 X       DONE
             searchresultsitem.cpp               Gilles                  X       DONE
