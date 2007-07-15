@@ -44,16 +44,15 @@ ICCProfileInfoDlg::ICCProfileInfoDlg(QWidget* parent, const QString& profilePath
     setModal(true);
     setHelp("iccprofile.anchor", "digikam");
     setCaption(profilePath);
-    QWidget *page = new QWidget(this);
-    setMainWidget(page); 
-    ICCProfileWidget *profileWidget = new ICCProfileWidget(page, 340, 256);
+
+    ICCProfileWidget *profileWidget = new ICCProfileWidget(this, 340, 256);
     
     if (profileData.isEmpty())
         profileWidget->loadFromURL(KUrl(profilePath));
     else
         profileWidget->loadFromData(profilePath, profileData); 
-                                     
-    setMainWidget(profileWidget);
+
+    setMainWidget(profileWidget); 
 }
 
 ICCProfileInfoDlg::~ICCProfileInfoDlg()
@@ -61,4 +60,3 @@ ICCProfileInfoDlg::~ICCProfileInfoDlg()
 }
 
 }  // NameSpace Digikam
-

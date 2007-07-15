@@ -50,7 +50,6 @@ public:
 
     ICCProfileInfoDlg(QWidget *parent, const QString& profilePath, const QByteArray& profileData=QByteArray());
     ~ICCProfileInfoDlg();
-
 };
 
 }  // Namespace Digikam
