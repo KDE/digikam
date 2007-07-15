@@ -85,8 +85,8 @@ private:
     void enterWaitingLoop();
     void quitWaitingLoop();
 
-    SyncJobResult delPriv(const KUrl::List& urls);
-    SyncJobResult trashPriv(const KUrl::List& urls);
+    bool delPriv(const KUrl::List& urls);
+    bool trashPriv(const KUrl::List& urls);
 
     QPixmap getTagThumbnailPriv(TAlbum *album);
     QPixmap getTagThumbnailPriv(const QString &name, int size);

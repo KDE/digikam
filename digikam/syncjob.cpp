@@ -265,16 +265,6 @@ void SyncJob::slotGotThumbnailFromIcon(const KUrl&, const QPixmap& pix)
     quitWaitingLoop();
 }
 
-QString SyncJob::lastErrorMsg()
-{
-    return (m_lastErrorMsg ? *m_lastErrorMsg : QString());
-}
-
-int SyncJob::lastErrorCode()
-{
-    return m_lastErrorCode;
-}
-
 void SyncJob::enterWaitingLoop()
 {
     d->waitingLoop->exec(QEventLoop::ExcludeUserInputEvents);
