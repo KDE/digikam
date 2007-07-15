@@ -7,13 +7,12 @@
  * Description : a dio-slave to process file operations on 
  *               digiKam albums.
  *
+ * Copyright (C) 2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
- * Lots of the file io code is copied from KDE file kioslave.
- * Copyright for the KDE file kioslave follows:
- *  Copyright (C) 2000-2002 Stephan Kulow <coolo@kde.org>
- *  Copyright (C) 2000-2002 David Faure <faure@kde.org>
- *  Copyright (C) 2000-2002 Waldo Bastian <bastian@kde.org>
+ * The forwarding code is copied from kdelibs' ForwardingSlavebase.
+ * Copyright for the KDE file forwardingslavebase follows:
+ * Copyright (c) 2004 Kevin Ottens <ervin@ipsquad.net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,22 +31,24 @@
 
 // Qt includes.
 
-#include <q3valuelist.h>
-#include <qdatetime.h>
-//Added by qt3to4:
-#include <Q3CString>
+#include <QObject>
+#include <QDateTime>
+#include <QEventLoop>
 
 // KDE includes
 
 #include <kio/slavebase.h>
+#include <kjob.h>
+#include <kio/job.h>
 
-class kio_digikamalbums : public KIO::SlaveBase
+class kio_digikamalbums : public QObject, public KIO::SlaveBase
 {
+    Q_OBJECT
 
 public:
 
-    kio_digikamalbums(const Q3CString &pool_socket,
-                      const Q3CString &app_socket);
+    kio_digikamalbums(const QByteArray &pool_socket,
+                      const QByteArray &app_socket);
     ~kio_digikamalbums();
 
     void special(const QByteArray& data);
@@ -66,18 +67,38 @@ public:
 private:
 
     void createDigikamPropsUDSEntry(KIO::UDSEntry& entry);
-
     bool createUDSEntry(const QString& path, KIO::UDSEntry& entry);
-    bool file_get( const KUrl& url );
-    bool file_put( const KUrl& url, int _mode, bool _overwrite, bool _resume );
-    bool file_copy( const KUrl &src, const KUrl &dest, int mode, bool overwrite );
-    bool file_rename( const KUrl &src, const KUrl &dest, bool overwrite );
-    bool file_stat( const KUrl& url );
-    bool file_listDir( const KUrl& url );
-    bool file_mkdir( const KUrl& url, int permissions );
-    bool file_chmod( const KUrl& url, int permissions );
-    bool file_del( const KUrl& url, bool isfile);
 
+    void connectJob(KIO::Job *job);
+    void connectSimpleJob(KIO::SimpleJob *job);
+    void connectListJob(KIO::ListJob *job);
+    void connectTransferJob(KIO::TransferJob *job);
+
+private slots:
+
+    // KIO::Job
+    void slotResult(KJob *job);
+    void slotWarning(KJob *job, const QString &msg);
+    void slotInfoMessage(KJob *job, const QString &msg);
+    void slotTotalSize(KJob *job, qulonglong size);
+    void slotProcessedSize(KJob *job, qulonglong size);
+    void slotSpeed(KJob *job, unsigned long bytesPerSecond);
+
+    // KIO::SimpleJob subclasses
+    void slotRedirection(KIO::Job *job, const KUrl &url);
+
+    // KIO::ListJob
+    void slotEntries(KIO::Job *job, const KIO::UDSEntryList &entries);
+
+    // KIO::TransferJob
+    void slotData(KIO::Job *job, const QByteArray &data);
+    void slotDataReq(KIO::Job *job, QByteArray &data);
+    void slotMimetype (KIO::Job *job, const QString &type);
+    void slotCanResume (KIO::Job *job, KIO::filesize_t offset);
+
+private:
+
+    QEventLoop *m_eventLoop;
 };
 
 

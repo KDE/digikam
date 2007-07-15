@@ -1,5 +1,3 @@
-//Added by qt3to4:
-#include <Q3CString>
 /* ============================================================
  *
  * This file is a part of digiKam project
@@ -9,13 +7,12 @@
  * Description : a kio-slave to process file operations on 
  *               digiKam albums. 
  * 
+ * Copyright (C) 2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
- * Lots of the file io code is copied from KDE file kioslave.
- * Copyright for the KDE file kioslave follows:
- *  Copyright (C) 2000-2002 Stephan Kulow <coolo@kde.org>
- *  Copyright (C) 2000-2002 David Faure <faure@kde.org>
- *  Copyright (C) 2000-2002 Waldo Bastian <bastian@kde.org>
+ * The forwarding code is copied from kdelibs' ForwardingSlavebase.
+ * Copyright for the KDE file forwardingslavebase follows:
+ * Copyright (c) 2004 Kevin Ottens <ervin@ipsquad.net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,34 +27,10 @@
  * 
  * ============================================================ */
 
-#define MAX_IPC_SIZE (1024*32)
-
-// C Ansi includes.
-
-extern "C" 
-{
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <sys/time.h>
-#include <utime.h>
-}
-
-// C++ includes.
-
-#include <cstdlib>
-#include <cstdio>
-#include <ctime>
-#include <cerrno>
-
 // Qt includes.
 
-#include <qfile.h>
 #include <qfileinfo.h>
 #include <qdatastream.h>
-#include <qregexp.h>
-#include <qdir.h>
 
 // KDE includes.
 
@@ -67,10 +40,7 @@ extern "C"
 #include <kfilemetainfo.h>
 #include <kmimetype.h>
 #include <kdebug.h>
-#include <kio/global.h>
-#include <kio/ioslave_defaults.h>
-#include <klargefile.h>
-#include <kdeversion.h>
+#include <kio/deletejob.h>
 
 // LibKDcraw includes.
 
@@ -85,18 +55,24 @@ extern "C"
 #include "collectionscanner.h"
 #include "digikamalbums.h"
 #include "imagelister.h"
+#include "digikamalbums.moc"
 
-kio_digikamalbums::kio_digikamalbums(const Q3CString &pool_socket,
-                                     const Q3CString &app_socket)
+
+
+kio_digikamalbums::kio_digikamalbums(const QByteArray &pool_socket,
+                                     const QByteArray &app_socket)
     : SlaveBase("kio_digikamalbums", pool_socket, app_socket)
 {
+    m_eventLoop = new QEventLoop(this);
 }
 
 kio_digikamalbums::~kio_digikamalbums()
 {
 }
 
+
 // ------------------------ Listing and Scanning ------------------------ //
+
 
 void kio_digikamalbums::special(const QByteArray& data)
 {
@@ -105,7 +81,7 @@ void kio_digikamalbums::special(const QByteArray& data)
     int     getDimensions;
     int     scan = 0;
 
-    QDataStream ds(data, QIODevice::ReadOnly);
+    QDataStream ds(data);
     ds >> kurl;
     ds >> filter;
     ds >> getDimensions;
@@ -133,7 +109,10 @@ void kio_digikamalbums::special(const QByteArray& data)
     finished();
 }
 
+
+
 // ------------------------ Implementation of KIO::SlaveBase ------------------------ //
+
 
 void kio_digikamalbums::get( const KUrl& url )
 {
@@ -143,7 +122,9 @@ void kio_digikamalbums::get( const KUrl& url )
 
     Digikam::DatabaseUrl dbUrl(url);
 
-    if (!file_get(dbUrl.fileUrl()))
+    KIO::TransferJob *job = KIO::get(dbUrl.fileUrl(), false, false);
+    connectTransferJob(job);
+    if (m_eventLoop->exec() != 0)
         return;
 
     finished();
@@ -166,7 +147,9 @@ void kio_digikamalbums::put(const KUrl& url, int permissions, bool overwrite, bo
         return;
     }
 
-    if (!file_put(dbUrl.fileUrl(), permissions, overwrite, resume))
+    KIO::TransferJob *job = KIO::put(dbUrl.fileUrl(), permissions, overwrite, resume, false);
+    connectTransferJob(job);
+    if (m_eventLoop->exec() != 0)
         return;
 
     // First check if the file is already in database
@@ -175,7 +158,7 @@ void kio_digikamalbums::put(const KUrl& url, int permissions, bool overwrite, bo
         // Now insert the file into the database
         Digikam::CollectionScanner::addItem(access, albumID, dbUrl.albumRootPath(), dbUrl.album(), dbUrl.name());
     }
-    
+
     // We have done our job => finish
     finished();
 }
@@ -236,7 +219,9 @@ void kio_digikamalbums::copy( const KUrl &src, const KUrl &dst, int mode, bool o
         return;
     }
 
-    if (!file_copy(dbUrlSrc.fileUrl(), dbUrlDst.fileUrl(), mode, overwrite))
+    KIO::Job *job = KIO::file_copy(dbUrlSrc.fileUrl(), dbUrlDst.fileUrl(), mode, overwrite, false);
+    connectJob(job);
+    if (m_eventLoop->exec() != 0)
         return;
 
     // now copy the metadata over
@@ -303,7 +288,9 @@ void kio_digikamalbums::rename( const KUrl& src, const KUrl& dst, bool overwrite
         }
     }
 
-    if (!file_rename(dbUrlSrc.fileUrl().path(), dbUrlDst.fileUrl(), overwrite))
+    KIO::Job *job = KIO::rename(dbUrlSrc.fileUrl(), dbUrlDst.fileUrl(), overwrite);
+    connectJob(job);
+    if (m_eventLoop->exec() != 0)
         return;
 
     // renaming done. now update the database
@@ -329,7 +316,9 @@ void kio_digikamalbums::mkdir( const KUrl& url, int permissions )
     Digikam::DatabaseAccess::setParameters(dbUrl);
     Digikam::DatabaseAccess access;
 
-    if (!file_mkdir(dbUrl.fileUrl(), permissions))
+    KIO::SimpleJob *job = KIO::mkdir(dbUrl.fileUrl(), permissions);
+    connectSimpleJob(job);
+    if (m_eventLoop->exec() != 0)
         return;
 
     access.db()->addAlbum(dbUrl.albumRootPath(), dbUrl.album(), QString(), QDate::currentDate(), QString());
@@ -343,7 +332,9 @@ void kio_digikamalbums::chmod( const KUrl& url, int permissions )
 
     Digikam::DatabaseUrl dbUrl(url);
 
-    if (!file_chmod(dbUrl.fileUrl(), permissions))
+    KIO::SimpleJob *job = KIO::chmod(dbUrl.fileUrl(), permissions);
+    connectSimpleJob(job);
+    if (m_eventLoop->exec() != 0)
         return;
 
     finished();
@@ -389,7 +380,17 @@ void kio_digikamalbums::del( const KUrl& url, bool isFile)
         }
     }
 
-    if (!file_del(dbUrl.fileUrl(), isFile))
+    if (isFile)
+    {
+        KIO::DeleteJob *job = KIO::del(dbUrl.fileUrl(), false, false);
+        connectJob(job);
+    }
+    else
+    {
+        KIO::SimpleJob *job = KIO::rmdir(dbUrl.fileUrl());
+        connectSimpleJob(job);
+    }
+    if (m_eventLoop->exec() != 0)
         return;
 
     if (isFile)
@@ -410,7 +411,9 @@ void kio_digikamalbums::stat( const KUrl& url )
 {
     Digikam::DatabaseUrl dbUrl(url);
 
-    if (!file_stat(dbUrl.fileUrl()))
+    KIO::SimpleJob *job = KIO::stat(dbUrl.fileUrl(), false);
+    connectSimpleJob(job);
+    if (m_eventLoop->exec() != 0)
         return;
 
     finished();
@@ -426,7 +429,9 @@ void kio_digikamalbums::listDir( const KUrl& url )
     createDigikamPropsUDSEntry(entry);
     listEntry(entry, false);
 
-    if (!file_listDir(dbUrl.fileUrl()))
+    KIO::ListJob *job = KIO::listDir(dbUrl.fileUrl(), false);
+    connectListJob(job);
+    if (m_eventLoop->exec() != 0)
         return;
 
     finished();
@@ -436,679 +441,170 @@ void kio_digikamalbums::createDigikamPropsUDSEntry(KIO::UDSEntry& entry)
 {
     entry.clear();
 
-    KIO::UDSAtom  atom;
-
-    atom.m_uds = KIO::UDS_FILE_TYPE;
-    atom.m_long = S_IFREG;
-    entry.append( atom );
-
-    atom.m_uds = KIO::UDS_ACCESS;
-    atom.m_long = 00666;
-    entry.append( atom );
-
-    atom.m_uds = KIO::UDS_SIZE;
-    atom.m_long = 0;
-    entry.append( atom );       
-
-    atom.m_uds = KIO::UDS_MODIFICATION_TIME;
-    atom.m_long = QDateTime::currentDateTime().toTime_t();
-    entry.append( atom );
-
-    atom.m_uds = KIO::UDS_ACCESS_TIME;
-    atom.m_long = QDateTime::currentDateTime().toTime_t();
-    entry.append( atom );   
-
-    atom.m_uds = KIO::UDS_NAME;
-    atom.m_str = ".digikam_properties";
-    entry.append(atom);
+    entry.insert(KIO::UDS_FILE_TYPE, S_IFREG);
+    entry.insert(KIO::UDS_ACCESS, 00666);
+    entry.insert(KIO::UDS_SIZE, 0);
+    entry.insert(KIO::UDS_MODIFICATION_TIME, QDateTime::currentDateTime().toTime_t());
+    entry.insert(KIO::UDS_ACCESS_TIME, QDateTime::currentDateTime().toTime_t());
+    entry.insert(KIO::UDS_NAME, QString(".digikam_properties"));
 }
 
-// ------------------------ Code that operates on files ------------------------ //
 
-// This code is mostly duplicated from the file:// ioslave.
-// When porting to KDE4, check if a chained ioslave is available to remove this here.
 
-bool kio_digikamalbums::file_stat( const KUrl& url )
+// ------------------------ Job forwarding code ------------------------ //
+
+
+void kio_digikamalbums::connectJob(KIO::Job *job)
 {
-    KIO::UDSEntry entry;
-    if (!createUDSEntry(url.path(), entry))
-    {
-        error(KIO::ERR_DOES_NOT_EXIST, url.path(-1));
-        return false;
-    }
+    // We will forward the warning message, no need to let the job
+    // display it itself
+    job->setUiDelegate( 0 );
 
-    statEntry(entry);
-    return true;
+    // Forward metadata (e.g. modification time for put())
+    job->setMetaData( allMetaData() );
+
+    connect( job, SIGNAL( result(KJob *) ),
+             this, SLOT( slotResult(KJob *) ) );
+    connect( job, SIGNAL( warning(KJob *, const QString &, const QString &) ),
+             this, SLOT( slotWarning(KJob *, const QString &) ) );
+    connect( job, SIGNAL( infoMessage(KJob *, const QString &, const QString &) ),
+             this, SLOT( slotInfoMessage(KJob *, const QString &) ) );
+    connect( job, SIGNAL( totalSize(KJob *, qulonglong) ),
+             this, SLOT( slotTotalSize(KJob *, qulonglong) ) );
+    connect( job, SIGNAL( processedSize(KJob *, qulonglong) ),
+             this, SLOT( slotProcessedSize(KJob *, qulonglong) ) );
+    connect( job, SIGNAL( speed(KJob *, unsigned long) ),
+             this, SLOT( slotSpeed(KJob *, unsigned long) ) );
 }
 
-bool kio_digikamalbums::file_listDir( const KUrl& url )
+void kio_digikamalbums::connectSimpleJob(KIO::SimpleJob *job)
 {
-    KDE_struct_stat stbuf;
-    if (KDE_stat(QFile::encodeName(url.path()), &stbuf) != 0)
+    connectJob(job);
+    connect( job, SIGNAL( redirection(KIO::Job *, const KUrl &) ),
+             this, SLOT( slotRedirection(KIO::Job *, const KUrl &) ) );
+}
+
+void kio_digikamalbums::connectListJob(KIO::ListJob *job)
+{
+    connectSimpleJob(job);
+    connect( job, SIGNAL( entries(KIO::Job *, const KIO::UDSEntryList &) ),
+             this, SLOT( slotEntries(KIO::Job *, const KIO::UDSEntryList &) ) );
+}
+
+void kio_digikamalbums::connectTransferJob(KIO::TransferJob *job)
+{
+    connectSimpleJob(job);
+    connect( job, SIGNAL( data(KIO::Job *, const QByteArray &) ),
+             this, SLOT( slotData(KIO::Job *, const QByteArray &) ) );
+    connect( job, SIGNAL( dataReq(KIO::Job *, QByteArray &) ),
+             this, SLOT( slotDataReq(KIO::Job *, QByteArray &) ) );
+    connect( job, SIGNAL( mimetype(KIO::Job *, const QString &) ),
+             this, SLOT( slotMimetype(KIO::Job *, const QString &) ) );
+    connect( job, SIGNAL( canResume(KIO::Job *, KIO::filesize_t) ),
+             this, SLOT( slotCanResume(KIO::Job *, KIO::filesize_t) ) );
+}
+
+void kio_digikamalbums::slotResult(KJob *job)
+{
+    if ( job->error() != 0)
     {
-        error(KIO::ERR_DOES_NOT_EXIST, url.path(-1));
-        return false;
+        error( job->error(), job->errorText() );
+        m_eventLoop->exit(1);
     }
-
-    QDir dir(url.path());
-    if (!dir.isReadable())
+    else
     {
-        error( KIO::ERR_CANNOT_ENTER_DIRECTORY, url.path());
-        return false;
-    }
-
-    const QFileInfoList *list = dir.entryInfoList(QDir::TypeMask|QDir::Hidden);
-    QFileInfoListIterator it( *list );
-    QFileInfo *fi;
-
-    KIO::UDSEntry entry;
-    while ((fi = it.current()) != 0)
-    {
-        if (fi->fileName() != "." && fi->fileName() != ".." || fi->extension(true) == "digikamtempfile.tmp")
+        KIO::StatJob *stat_job = qobject_cast<KIO::StatJob *>(job);
+        if ( stat_job!=0L )
         {
-            createUDSEntry(fi->absoluteFilePath(), entry);
-            listEntry(entry, false);
+            KIO::UDSEntry entry = stat_job->statResult();
+            //prepareUDSEntry(entry);
+            statEntry( entry );
         }
-        ++it;
+        //finished();
+        m_eventLoop->exit();
     }
-
-    entry.clear();
-    listEntry(entry, true);
-    return true;
 }
 
-bool kio_digikamalbums::createUDSEntry(const QString& path, KIO::UDSEntry& entry)
+void kio_digikamalbums::slotWarning(KJob* /*job*/, const QString &msg)
 {
-    entry.clear();
+    warning(msg);
+}
 
-    KDE_struct_stat stbuf;
-    if (KDE_stat(QFile::encodeName(path), &stbuf) != 0)
-        return false;
+void kio_digikamalbums::slotInfoMessage(KJob* /*job*/, const QString &msg)
+{
+    infoMessage(msg);
+}
 
-    KIO::UDSAtom  atom;
+void kio_digikamalbums::slotTotalSize(KJob* /*job*/, qulonglong size)
+{
+    totalSize(size);
+}
 
-    atom.m_uds = KIO::UDS_FILE_TYPE;
-    atom.m_long = stbuf.st_mode & S_IFMT;
-    entry.append( atom );
+void kio_digikamalbums::slotProcessedSize(KJob* /*job*/, qulonglong size)
+{
+    processedSize(size);
+}
 
-    atom.m_uds = KIO::UDS_ACCESS;
-    atom.m_long = stbuf.st_mode & 07777;
-    entry.append( atom );
+void kio_digikamalbums::slotSpeed(KJob* /*job*/, unsigned long bytesPerSecond)
+{
+    speed(bytesPerSecond);
+}
 
-    atom.m_uds = KIO::UDS_SIZE;
-    atom.m_long = stbuf.st_size;
-    entry.append( atom );       
+void kio_digikamalbums::slotRedirection(KIO::Job *job, const KUrl &url)
+{
+    redirection(url);
 
-    atom.m_uds = KIO::UDS_MODIFICATION_TIME;
-    atom.m_long = stbuf.st_mtime;
-    entry.append( atom );
+    // We've been redirected stop everything.
+    job->kill( KJob::Quietly );
+    //finished();
 
-    atom.m_uds = KIO::UDS_ACCESS_TIME;
-    atom.m_long = stbuf.st_atime;
-    entry.append( atom );   
+    m_eventLoop->exit();
+}
 
-    atom.m_uds = KIO::UDS_NAME;
-    atom.m_str = QFileInfo(path).fileName();
-    entry.append(atom);
-
+void kio_digikamalbums::slotEntries(KIO::Job* /*job*/,
+                                      const KIO::UDSEntryList &entries)
+{
     /*
-    // If we provide the local path, a KIO::CopyJob will optimize away
-    // the use of our custom digikamalbums:/ ioslave, which breaks
-    // copying the database entry:
-    // Disabling this as a temporary solution for bug #137282
-    // This code is intended as a fix for bug #122653.
+    KIO::UDSEntryList final_entries = entries;
+
+    KIO::UDSEntryList::iterator it = final_entries.begin();
+    const KIO::UDSEntryList::iterator end = final_entries.end();
+
+    for(; it!=end; ++it)
+    {
+        prepareUDSEntry(*it, true);
+    }
+
+    listEntries( final_entries );
     */
-
-    return true;
+    listEntries(entries);
 }
 
-static int write_all(int fd, const char *buf, size_t len)
+void kio_digikamalbums::slotData(KIO::Job* /*job*/, const QByteArray &_data)
 {
-    while (len > 0)
-    {
-        ssize_t written = write(fd, buf, len);
-        if (written < 0)
-        {
-            if (errno == EINTR)
-                continue;
-            return -1;
-        }
-        buf += written;
-        len -= written;
-    }
-    return 0;
+    data(_data);
 }
 
-bool kio_digikamalbums::file_get(const KUrl &url)
+void kio_digikamalbums::slotDataReq(KIO::Job* /*job*/, QByteArray &data)
 {
-    Q3CString path(QFile::encodeName(url.path()));
-    KDE_struct_stat buff;
-    if ( KDE_stat( path.data(), &buff ) == -1 )
-    {
-        if ( errno == EACCES )
-            error( KIO::ERR_ACCESS_DENIED, url.url() );
-        else
-            error( KIO::ERR_DOES_NOT_EXIST, url.url() );
-        return false;
-    }
-
-    if ( S_ISDIR( buff.st_mode ) )
-    {
-        error( KIO::ERR_IS_DIRECTORY, url.url() );
-        return false;
-    }
-    
-    if ( !S_ISREG( buff.st_mode ) )
-    {
-        error( KIO::ERR_CANNOT_OPEN_FOR_READING, url.url() );
-        return false;
-    }
-
-    int fd = KDE_open( path.data(), O_RDONLY);
-    if ( fd < 0 )
-    {
-        error( KIO::ERR_CANNOT_OPEN_FOR_READING, url.url() );
-        return false;
-    }
-
-    // Determine the mimetype of the file to be retrieved, and emit it.
-    // This is mandatory in all slaves (for KRun/BrowserRun to work).
-    KMimeType::Ptr mt = KMimeType::findByURL( url.path(), buff.st_mode, true);
-    emit mimeType( mt->name() );
-
-    totalSize( buff.st_size );
-
-    char buffer[ MAX_IPC_SIZE ];
-    QByteArray array;
-    KIO::filesize_t processed_size = 0;
-
-    while (1)
-    {
-        int n = ::read( fd, buffer, MAX_IPC_SIZE );
-        if (n == -1)
-        {
-            if (errno == EINTR)
-                continue;
-            error( KIO::ERR_COULD_NOT_READ, url.url());
-            close(fd);
-            return false;
-        }
-        if (n == 0)
-            break; // Finished
-
-        array.setRawData(buffer, n);
-        data( array );
-        array.resetRawData(buffer, n);
-
-        processed_size += n;
-        processedSize( processed_size );
-    }
-
-    data( QByteArray() );
-    close( fd );
-
-    processedSize( buff.st_size );
-    return true;
+    dataReq();
+    readData(data);
 }
 
-bool kio_digikamalbums::file_put(const KUrl& url, int permissions, bool overwrite, bool /*resume*/)
+void kio_digikamalbums::slotMimetype (KIO::Job* /*job*/, const QString &type)
 {
-    Q3CString _dest( QFile::encodeName(url.path()));
-
-    // check if the original file exists and we are not allowed to overwrite it
-    KDE_struct_stat buff;
-    bool origExists = (KDE_lstat( _dest.data(), &buff ) != -1);
-    if ( origExists && !overwrite)
-    {
-        if (S_ISDIR(buff.st_mode))
-            error( KIO::ERR_DIR_ALREADY_EXIST, url.url() );
-        else
-            error( KIO::ERR_FILE_ALREADY_EXIST, url.url() );
-        return false;
-    }
-
-    // get the permissions we are supposed to set
-    mode_t initialPerms;
-    if (permissions != -1)
-        initialPerms = permissions | S_IWUSR | S_IRUSR;
-    else
-        initialPerms = 0666;
-
-    // open the destination file
-    int fd = KDE_open(_dest.data(), O_CREAT | O_TRUNC | O_WRONLY, initialPerms);
-    if ( fd < 0 )
-    {
-        kWarning() << "####################### COULD NOT OPEN " << _dest << endl;
-        if ( errno == EACCES )
-            error( KIO::ERR_WRITE_ACCESS_DENIED, url.url() );
-        else
-            error( KIO::ERR_CANNOT_OPEN_FOR_WRITING, url.url() );
-        return false;
-    }
-
-    int result;
-    
-    // Loop until we get 0 (end of data)
-    do
-    {
-        QByteArray buffer;
-        dataReq();
-        result = readData( buffer );
-
-        if (result >= 0)
-        {
-            if (write_all( fd, buffer.data(), buffer.size()))
-            {
-                if ( errno == ENOSPC ) // disk full
-                {
-                    error( KIO::ERR_DISK_FULL, url.url());
-                    result = -1; 
-                }
-                else
-                {
-                    kWarning() << "Couldn't write. Error:" << strerror(errno) << endl;
-                    error( KIO::ERR_COULD_NOT_WRITE, url.url());
-                    result = -1;
-                }
-            }
-        }
-    }
-    while ( result > 0 );
-
-    // An error occurred deal with it.
-    if (result < 0)
-    {
-        kDebug() << "Error during 'put'. Aborting." << endl;
-
-        close(fd);
-        remove(_dest);
-        return false;
-    }
-
-    // close the file
-    if ( close(fd) )
-    {
-        kWarning() << "Error when closing file descriptor:" << strerror(errno) << endl;
-        error( KIO::ERR_COULD_NOT_WRITE, url.url());
-        return false;
-    }
-
-    // set final permissions
-    if ( permissions != -1 )
-    {
-        if (::chmod(_dest.data(), permissions) != 0)
-        {
-            // couldn't chmod. Eat the error if the filesystem apparently doesn't support it.
-            if ( KIO::testFileSystemFlag( _dest, KIO::SupportsChmod ) )
-                warning( i18n( "Could not change permissions for\n%1" ).arg( url.url() ) );
-        }
-    }
-
-    // set modification time
-    const QString mtimeStr = metaData( "modified" );
-    if ( !mtimeStr.isEmpty() ) {
-        QDateTime dt = QDateTime::fromString( mtimeStr, Qt::ISODate );
-        if ( dt.isValid() ) {
-            KDE_struct_stat dest_statbuf;
-            if (KDE_stat( _dest.data(), &dest_statbuf ) == 0) {
-                struct utimbuf utbuf;
-                utbuf.actime = dest_statbuf.st_atime; // access time, unchanged
-                utbuf.modtime = dt.toTime_t(); // modification time
-                kDebug() << k_funcinfo << "setting modtime to " << utbuf.modtime << endl;
-                utime( _dest.data(), &utbuf );
-            }
-        }
-
-    }
-
-    return true;
+    mimeType(type);
 }
 
-bool kio_digikamalbums::file_copy( const KUrl &src, const KUrl &dst, int mode, bool overwrite )
+void kio_digikamalbums::slotCanResume (KIO::Job* /*job*/, KIO::filesize_t offset)
 {
-    Q3CString _src( QFile::encodeName(src.path()));
-    Q3CString _dst( QFile::encodeName(dst.path()));
-
-    // stat the src file
-    KDE_struct_stat buff_src;
-    if ( KDE_stat( _src.data(), &buff_src ) == -1 )
-    {
-        if ( errno == EACCES )
-            error( KIO::ERR_ACCESS_DENIED, src.url() );
-        else
-            error( KIO::ERR_DOES_NOT_EXIST, src.url() );
-        return false;
-    }
-
-    // bail out if its a directory
-    if ( S_ISDIR( buff_src.st_mode ) )
-    {
-        error( KIO::ERR_IS_DIRECTORY, src.url() );
-        return false;
-    }
-
-    // bail out if its a socket or fifo
-    if ( S_ISFIFO( buff_src.st_mode ) || S_ISSOCK ( buff_src.st_mode ) )
-    {
-        error( KIO::ERR_CANNOT_OPEN_FOR_READING, src.url() );
-        return false;
-    } 
-
-    // stat the dst file
-    KDE_struct_stat buff_dest;
-    bool dest_exists = ( KDE_lstat( _dst.data(), &buff_dest ) != -1 );
-    if ( dest_exists )
-    {
-        // bail out if its a directory
-        if (S_ISDIR(buff_dest.st_mode))
-        {
-            error( KIO::ERR_DIR_ALREADY_EXIST, dst.url() );
-            return false;
-        }
-
-        // if !overwrite bail out
-        if (!overwrite)
-        {
-            error( KIO::ERR_FILE_ALREADY_EXIST, dst.url() );
-            return false;
-        }
-
-        // If the destination is a symlink and overwrite is true,
-        // remove the symlink first to prevent the scenario where
-        // the symlink actually points to current source!
-        if (overwrite && S_ISLNK(buff_dest.st_mode))
-        {
-            remove( _dst.data() );
-        }
-    }
-
-    // now open the src file
-    int src_fd = KDE_open( _src.data(), O_RDONLY);
-    if ( src_fd < 0 )
-    {
-        error( KIO::ERR_CANNOT_OPEN_FOR_READING, src.path() );
-        return false;
-    }
-
-    // get the permissions we are supposed to set
-    mode_t initialMode;
-    if (mode != -1)
-        initialMode = mode | S_IWUSR;
-    else
-        initialMode = 0666;
-
-    // open the destination file
-    int dest_fd = KDE_open(_dst.data(), O_CREAT | O_TRUNC | O_WRONLY, initialMode);
-    if ( dest_fd < 0 )
-    {
-        kDebug() << "###### COULD NOT WRITE " << dst.url() << endl;
-        if ( errno == EACCES )
-        {
-            error( KIO::ERR_WRITE_ACCESS_DENIED, dst.url() );
-        }
-        else
-        {
-            error( KIO::ERR_CANNOT_OPEN_FOR_WRITING, dst.url() );
-        }
-        close(src_fd);
-        return false;
-    }
-
-    // emit the total size for copying
-    totalSize( buff_src.st_size );
-
-    KIO::filesize_t processed_size = 0;
-    char buffer[ MAX_IPC_SIZE ];
-    int n;
-
-    while (1)
-    {
-        // read in chunks of MAX_IPC_SIZE 
-        n = ::read( src_fd, buffer, MAX_IPC_SIZE );
-
-        if (n == -1)
-        {
-            if (errno == EINTR)
-                continue;
-            error( KIO::ERR_COULD_NOT_READ, src.path());
-            close(src_fd);
-            close(dest_fd);
-            return false;
-        }
-       
-        // Finished ?
-        if (n == 0)
-            break; 
-
-        // write to the destination file
-        if (write_all( dest_fd, buffer, n))
-        {
-            close(src_fd);
-            close(dest_fd);
-
-            if ( errno == ENOSPC ) // disk full
-            {
-                error( KIO::ERR_DISK_FULL, dst.url());
-                remove( _dst.data() );
-            }
-            else
-            {
-                kWarning() << "Couldn't write[2]. Error:" << strerror(errno) << endl;
-                error( KIO::ERR_COULD_NOT_WRITE, dst.url());
-            }
-            return false;
-        }
-       
-        processedSize( processed_size );
-    }
-
-    
-    close( src_fd );
-
-    if (close( dest_fd))
-    {
-        kWarning() << "Error when closing file descriptor[2]:" << strerror(errno) << endl;
-        error( KIO::ERR_COULD_NOT_WRITE, dst.url());
-        return false;
-    }
-
-    // set final permissions
-    if ( mode != -1 )
-    {
-        if (::chmod(_dst.data(), mode) != 0)
-        {
-            // Eat the error if the filesystem apparently doesn't support chmod.
-            if ( KIO::testFileSystemFlag( _dst, KIO::SupportsChmod ) )
-                warning( i18n( "Could not change permissions for\n%1" ).arg( dst.url() ) );
-        }
-    }
-
-    // copy access and modification time
-    struct utimbuf ut;
-    ut.actime = buff_src.st_atime;
-    ut.modtime = buff_src.st_mtime;
-    if ( ::utime( _dst.data(), &ut ) != 0 )
-    {
-        kWarning() << QString::fromLatin1("Couldn't preserve access and modification time for\n%1")
-            .arg( dst.url() ) << endl;
-    }
-
-    processedSize( buff_src.st_size );
-    return true;
+    canResume(offset);
 }
 
-bool kio_digikamalbums::file_rename( const KUrl& src, const KUrl& dst, bool overwrite )
-{
-    Q3CString csrc( QFile::encodeName(src.path()));
-    Q3CString cdst( QFile::encodeName(dst.path()));
 
-    // stat the source file/folder
-    KDE_struct_stat buff_src;
-    if ( KDE_stat( csrc.data(), &buff_src ) == -1 )
-    {
-        if ( errno == EACCES )
-            error( KIO::ERR_ACCESS_DENIED, src.url() );
-        else
-            error( KIO::ERR_DOES_NOT_EXIST, src.url() );
-        return false;
-    }
 
-    // stat the destination file/folder
-    KDE_struct_stat buff_dest;
-    bool dest_exists = ( KDE_stat( cdst.data(), &buff_dest ) != -1 );
-    if ( dest_exists )
-    {
-        if (S_ISDIR(buff_dest.st_mode))
-        {
-            error( KIO::ERR_DIR_ALREADY_EXIST, dst.url() );
-            return false;
-        }
+// ------------------------ KIO slave registration ------------------------ //
 
-        if (!overwrite)
-        {
-            error( KIO::ERR_FILE_ALREADY_EXIST, dst.url() );
-            return false;
-        }
-    }
-
-    // actually rename the file/folder
-    if ( ::rename(csrc.data(), cdst.data()))
-    {
-        if (( errno == EACCES ) || (errno == EPERM))
-        {
-            QFileInfo toCheck(src.path());
-            if (!toCheck.isWritable())
-                error( KIO::ERR_CANNOT_RENAME_ORIGINAL, src.path() );
-            else
-                error( KIO::ERR_ACCESS_DENIED, dst.path() );
-        }
-        else if (errno == EXDEV)
-        {
-            error( KIO::ERR_UNSUPPORTED_ACTION, i18n("This file/folder is on a different "
-                                                     "filesystem through symlinks. "
-                                                     "Moving/Renaming files between "
-                                                     "them is currently unsupported "));
-        }
-        else if (errno == EROFS)
-        { // The file is on a read-only filesystem
-            error( KIO::ERR_CANNOT_DELETE, src.url() );
-        }
-        else {
-            error( KIO::ERR_CANNOT_RENAME, src.url() );
-        }
-        return false;
-    }
-
-    return true;
-}
-
-bool kio_digikamalbums::file_mkdir( const KUrl& url, int permissions )
-{
-    Q3CString _path( QFile::encodeName(url.path()));
-
-    KDE_struct_stat buff;
-    if ( KDE_stat( _path, &buff ) == -1 )
-    {
-        if ( ::mkdir( _path.data(), 0777 /*umask will be applied*/ ) != 0 )
-        {
-            if ( errno == EACCES )
-            {
-                error( KIO::ERR_ACCESS_DENIED, url.path() );
-                return false;
-            }
-            else if ( errno == ENOSPC )
-            {
-                error( KIO::ERR_DISK_FULL, url.path() );
-                return false;
-            }
-            else
-            {
-                error( KIO::ERR_COULD_NOT_MKDIR, url.path() );
-                return false;
-            }
-        }
-        else
-        {
-            if ( permissions != -1 )
-            {
-                if ( ::chmod( _path.data(), permissions ) == -1 )
-                {
-                    error( KIO::ERR_CANNOT_CHMOD, url.path() );
-                    return false;
-                }
-            }
-            return true;
-        }
-    }
-
-    if ( S_ISDIR( buff.st_mode ) )
-    {
-        error( KIO::ERR_DIR_ALREADY_EXIST, url.path() );
-        return false;
-    }
-
-    error( KIO::ERR_FILE_ALREADY_EXIST, url.path() );
-    return false;
-}
-
-bool kio_digikamalbums::file_chmod( const KUrl& url, int permissions )
-{
-    Q3CString path( QFile::encodeName(url.path()));
-    if ( ::chmod( path.data(), permissions ) == -1 )
-    {
-        error( KIO::ERR_CANNOT_CHMOD, url.url() );
-        return false;
-    }
-    else
-        return true;
-}
-
-bool kio_digikamalbums::file_del( const KUrl& url, bool isfile)
-{
-    Q3CString path( QFile::encodeName(url.path()));
-
-    if (isfile)
-    {
-        kDebug(  ) <<  "Deleting file "<< url.url() << endl;
-
-        // actually delete the file
-        if ( unlink( path.data() ) == -1 )
-        {
-            if ((errno == EACCES) || (errno == EPERM))
-                error( KIO::ERR_ACCESS_DENIED, url.url());
-            else if (errno == EISDIR)
-                error( KIO::ERR_IS_DIRECTORY, url.url());
-            else
-                error( KIO::ERR_CANNOT_DELETE, url.url() );
-            return false;
-        }
-    }
-    else
-    {
-        kDebug(  ) << "Deleting directory " << url.url() << endl;
-
-        if ( ::rmdir( path.data() ) == -1 )
-        {
-            // TODO handle symlink delete
-
-            if ((errno == EACCES) || (errno == EPERM))
-            {
-                error( KIO::ERR_ACCESS_DENIED, url.url());
-                return false;
-            }
-            else
-            {
-                kDebug() << "could not rmdir " << perror << endl;
-                error( KIO::ERR_COULD_NOT_RMDIR, url.url() );
-                return false;
-            }
-        }
-    }
-
-    return true;
-}
-
-/* KIO slave registration */
 
 extern "C"
 {
@@ -1117,7 +613,7 @@ extern "C"
         KLocale::setMainCatalog("digikam");
         KComponentData componentData( "kio_digikamalbums" );
         KGlobal::locale();
-        
+
         if (argc != 4) {
             kDebug() << "Usage: kio_digikamalbums  protocol domain-socket1 domain-socket2"
                       << endl;
@@ -1126,7 +622,7 @@ extern "C"
 
         kio_digikamalbums slave(argv[2], argv[3]);
         slave.dispatchLoop();
-        
+
         return 0;
     }
 }
