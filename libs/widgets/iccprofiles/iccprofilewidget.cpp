@@ -218,7 +218,8 @@ bool ICCProfileWidget::loadFromURL(const KUrl& url)
         }
 
         QByteArray iccData;
-        iccData.reserve(file.size());
+        iccData.resize(file.size());
+
         QDataStream stream( &file );
         stream.readRawData(iccData.data(), iccData.size());
         file.close();
