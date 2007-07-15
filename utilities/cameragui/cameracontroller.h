@@ -27,7 +27,7 @@
 
 // Qt includes.
 
-#include <QObject>
+#include <QThread>
 #include <QString>
 #include <QFileInfo>
 #include <QCustomEvent>
@@ -40,9 +40,11 @@
 namespace Digikam
 {
 
+class CameraCommand;
+class RenameResult;
 class CameraControllerPriv;
 
-class CameraController : public QObject
+class CameraController : public QThread
 {
     Q_OBJECT
 
@@ -66,7 +68,7 @@ public:
     void deleteFile(const QString& folder, const QString& file);
     void lockFile(const QString& folder, const QString& file, bool lock);
     void openFile(const QString& folder, const QString& file);
-    
+
 signals:
 
     void signalBusy(bool val);
@@ -85,27 +87,43 @@ signals:
     void signalThumbnail(const QString& folder, const QString& file, const QImage& thumb);
     void signalExifFromFile(const QString& folder, const QString& file);
     void signalExifData(const QByteArray& exifData);
-        
-protected:
 
-    void customEvent(QCustomEvent* e);
-    
 public slots:
 
     void slotCancel();
     void slotConnect();
 
+protected:
+
+    void run();
+    void executeCommand(CameraCommand *cmd);
+
+signals:
+    void signalInternalNeedRename(const QString &folder, const QString &file, const QString &dest, RenameResult *renameResult);
+    void signalInternalDownloadFailed(const QString &folder, const QString &file);
+    void signalInternalUploadFailed(const QString &folder, const QString &file, const QString &src);
+    void signalInternalDeleteFailed(const QString &folder, const QString &file);
+    void signalInternalLockFailed(const QString &folder, const QString &file);
+    void signalInternalOpen(const QString &folder, const QString &file, const QString &dest);
+
 private slots:
 
-    void slotProcessNext();
+    void slotNeedRename(const QString &folder, const QString &file, const QString &dest, RenameResult *renameResult);
+    void slotDownloadFailed(const QString &folder, const QString &file);
+    void slotUploadFailed(const QString &folder, const QString &file, const QString &src);
+    void slotDeleteFailed(const QString &folder, const QString &file);
+    void slotLockFailed(const QString &folder, const QString &file);
+    void slotOpen(const QString &folder, const QString &file, const QString &dest);
 
 private:
 
+    void sendBusy(bool val);
+    void sendError(const QString& msg);
+    void sendInfo(const QString& msg);
+
     CameraControllerPriv *d;
-    
-    friend class CameraThread;
 };
-    
+
 }  // namespace Digikam
 
 #endif /* CAMERACONTROLLER_H */

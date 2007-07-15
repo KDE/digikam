@@ -55,7 +55,7 @@ public:
     };
 
 public:
-    
+
     long    size;
     int     width;
     int     height;
@@ -73,7 +73,7 @@ public:
 QDataStream& operator<<( QDataStream &, const GPItemInfo & );
 QDataStream& operator>>( QDataStream &, GPItemInfo & );
 
-typedef Q3ValueList<GPItemInfo> GPItemInfoList;
+typedef QList<GPItemInfo> GPItemInfoList;
 
 }  // namespace Digikam
 
