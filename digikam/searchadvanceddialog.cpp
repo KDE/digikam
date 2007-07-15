@@ -27,23 +27,19 @@
 
 // Qt includes.
 
-#include <q3vbox.h>
-#include <qlayout.h>
-#include <qpushbutton.h>
-#include <qcombobox.h>
-#include <q3hgroupbox.h>
-#include <q3vgroupbox.h>
-#include <qlabel.h>
-#include <qtimer.h>
-
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3Frame>
 #include <Q3ValueList>
-#include <Q3VBoxLayout>
+#include <QPushButton>
+#include <QComboBox>
+#include <QGroupBox>
+#include <QLabel>
+#include <QTimer>
+#include <QHBoxLayout>
+#include <QFrame>
+#include <QVBoxLayout>
 
 // KDE includes.
 
+#include <kvbox.h>
 #include <kurl.h>
 #include <klocale.h>
 #include <klineedit.h>
@@ -76,31 +72,35 @@ public:
         rulesBox      = 0;
     }
 
-    Q3VGroupBox                      *rulesBox;
+    QGroupBox                        *rulesBox;
 
-    QPushButton                     *addButton;
-    QPushButton                     *delButton;
-    QPushButton                     *groupButton;
-    QPushButton                     *ungroupButton;
+    QPushButton                      *addButton;
+    QPushButton                      *delButton;
+    QPushButton                      *groupButton;
+    QPushButton                      *ungroupButton;
 
-    QComboBox                       *optionsCombo;
+    QComboBox                        *optionsCombo;
 
     Q3ValueList<SearchAdvancedBase*>  baseList;
 
-    QTimer                          *timer;
+    QTimer                           *timer;
 
-    KLineEdit                       *title;
+    KLineEdit                        *title;
 
-    SearchResultsView               *resultsView;
+    SearchResultsView                *resultsView;
 };
 
 SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KUrl& url)
-                    : KDialogBase(parent, 0, true, i18n("Advanced Search"),
-                                  Help|Ok|Cancel, Ok, true), m_url(url)
+                    : KDialog(parent), m_url(url)
 {
+    setButtons(Help|Ok|Cancel);
+    setDefaultButton(Ok);
+    setModal(true);
+    setCaption(i18n("Advanced Search"));
+    setHelp("advancedsearchtool.anchor", "digikam");
+
     d = new SearchAdvancedDialogPriv;
     d->timer = new QTimer(this);
-    setHelp("advancedsearchtool.anchor", "digikam");
 
     QWidget *page = new QWidget( this );
     setMainWidget(page);

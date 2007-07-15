@@ -23,7 +23,6 @@
  * 
  * ============================================================ */
 
-
 /** @file searchadvanceddialog.h */
 
 #ifndef SEARCHADVANCEDDIALOG_H

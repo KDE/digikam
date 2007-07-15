@@ -72,8 +72,8 @@ public:
 SearchQuickDialog::SearchQuickDialog(QWidget* parent, KUrl& url)
                  : KDialog(parent), m_url(url)
 {
-    setDefaultButton(Ok);
     setButtons(Help|Ok|Cancel);
+    setDefaultButton(Ok);
     setModal(true);
     setCaption(i18n("Quick Search"));
     setHelp("quicksearchtool.anchor", "digikam");

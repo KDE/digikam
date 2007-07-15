@@ -117,7 +117,7 @@ SET(digikam_LIB_SRCS
                       ratingpopupmenu.cpp 
                       ratingwidget.cpp 
                       scanlib.cpp 
-#                      searchadvanceddialog.cpp 
+                      searchadvanceddialog.cpp 
                       searchfolderview.cpp 
                       searchquickdialog.cpp 
                       searchresultsview.cpp 
