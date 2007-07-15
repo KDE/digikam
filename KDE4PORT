@@ -45,10 +45,27 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
         |---thumbbar                            Gilles          X       X       DONE
         |---whitebalance                        Gilles          X       X       DONE
         |---widgets
-        |-----common                            Gilles          X       X       DONE
-        |-----iccprofiles                       Gilles          X       X       DONE
-        |-----imageplugins                      Gilles          X       X       DONE
-        |-----metadata                          Gilles          X       X       DONE
+        |-----common                            
+            colorgradientwidget.cpp             Gilles          X       X       DONE        DONE
+            curveswidget.cpp                    Gilles          X       X       DONE        DONE
+            dcursortracker.cpp                  Gilles          X       X       DONE        DONE
+            dpopupmenu.cpp                      Gilles          X       X       DONE                 Left banner has disapear!
+            filesaveoptionsbox.cpp              Gilles          X       X       DONE        DONE
+            histogramwidget.cpp                 Gilles          X       X       DONE        DONE
+            paniconwidget.cpp                   Gilles          X       X       DONE        DONE
+            previewwidget.cpp                   Gilles          X       X       DONE        DONE
+            sidebar.cpp                         Gilles          X       X       DONE        DONE
+            splashscreen.cpp                    Gilles          X       X       DONE        DONE
+            squeezedcombobox.cpp                Gilles          X       X       DONE                 Widget crash indeep. Need investiguation.  
+            statusnavigatebar.cpp               Gilles          X       X       DONE        DONE
+            statusprogressbar.cpp               Gilles          X       X       DONE        DONE
+            statuszoombar.cpp	                Gilles          X       X       DONE        DONE
+        |-----iccprofiles                       
+            cietonguewidget.cpp                 Gilles          X       X       DONE                 Tongue color is a black hole!        
+            iccpreviewwidget.cpp                Gilles          X       X       DONE        DONE
+            iccprofilewidget.cpp                Gilles          X       X       DONE        DONE
+        |-----imageplugins                      Gilles          X       X       DONE        
+        |-----metadata                          Gilles          X       X       DONE       
 
  2      |-utilities 
         |---batch                               Gilles                  X       DONE
@@ -107,7 +124,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
             albumiconview.cpp                   Gilles                  X       DONE
             albumitemhandler.cpp                Laurent                 X       DONE
             albumlister.cpp                     Gilles                  X       DONE
-            albummanager.cpp                    Gilles                  X       DONE        Compile. 2 instances of "qSort" still unported.
+            albummanager.cpp                    Gilles                  X       DONE                 Compile. 2 instances of "qSort" still unported.
             albumpropsedit.cpp                  Laurent                 X       DONE
             albumsettings.cpp                   Gilles                  X       DONE
             albumthumbnailloader.cpp            Gilles                  X       DONE
@@ -117,7 +134,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
             cameratype.cpp                      Gilles                  X       DONE
             datefolderview.cpp                  Laurent                 X       DONE
             dcopiface.cpp                                               X
-            digikamapp.cpp                      Gilles                  X       DONE
+            digikamapp.cpp                      Gilles                  X       UNCOMPLETE           Compile. Some code to manage keyboard shorcuts are not yet ported.
             digikamfirstrun.cpp                 Laurent                 X       DONE
             digikamview.cpp                     Gilles                  X       DONE
             dio.cpp                             Laurent                 X       DONE
@@ -147,7 +164,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
             searchquickdialog.cpp               Laurent                 X       DONE
             searchresultsitem.cpp               Gilles                  X       DONE
             searchresultsview.cpp               Gilles                  X       DONE
-            searchwidgets.cpp                   Gilles                  X
+            searchwidgets.cpp                   Gilles                  X       DONE
             syncjob.cpp                         Gilles                  X       DONE
             tagcreatedlg.cpp                    Gilles                  X       DONE
             tagfilterview.cpp                   Gilles                  X       DONE
