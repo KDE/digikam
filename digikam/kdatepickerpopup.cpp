@@ -25,8 +25,7 @@
 
 // Qt includes.
 
-#include <qdatetime.h>
-#include <q3popupmenu.h>
+#include <QWidgetAction>
 
 // KDE includes.
 
@@ -40,13 +39,13 @@
 namespace Digikam
 {
 
-KDatePickerPopup::KDatePickerPopup(int items, const QDate &date, QWidget *parent,
-                                    const char *name)
-                : Q3PopupMenu( parent, name )
+KDatePickerPopup::KDatePickerPopup(int items, const QDate &date, QWidget *parent, const char *name)
+                : Q3PopupMenu(parent)
 {
     mItems      = items;
     mDatePicker = new KDatePicker( this );
     mDatePicker->setCloseButton( false );
+    setObjectName(name);
 
     connect( mDatePicker, SIGNAL( dateEntered( QDate ) ),
                this, SLOT( slotDateChanged( QDate ) ) );
@@ -65,7 +64,9 @@ void KDatePickerPopup::buildMenu()
 
     if ( mItems & DatePicker ) 
     {
-        insertItem( mDatePicker );
+        QWidgetAction *datePickerAction = new QWidgetAction(this);
+        datePickerAction->setDefaultWidget(mDatePicker);
+        addAction(datePickerAction);
 
         if ( ( mItems & NoDate ) || ( mItems & Words ) )
         insertSeparator();
@@ -156,5 +157,3 @@ void KDatePickerPopup::slotPrevMonth()
 }
 
 }  // namespace Digikam
-
-

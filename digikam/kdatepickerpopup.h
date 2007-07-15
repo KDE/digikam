@@ -28,8 +28,8 @@
 
 // Qt includes.
 
-#include <qdatetime.h>
-#include <q3popupmenu.h>
+#include <Q3PopupMenu>
+#include <QDateTime>
 
 // KDE includes.
 
@@ -61,9 +61,9 @@ public:
 
     enum 
     {
-    NoDate = 1,
-    DatePicker = 2,
-    Words = 4
+        NoDate     = 1,
+        DatePicker = 2,
+        Words      = 4
     };
 
     /**
