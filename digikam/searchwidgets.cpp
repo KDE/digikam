@@ -115,11 +115,13 @@ static const int RuleOpTableCount = 16;
 
 SearchRuleLabel::SearchRuleLabel(const QString& text, QWidget *parent,
                                  const char *name, Qt::WFlags f )
-               : QLabel(text, parent, name, f)
+               : QLabel(text, parent)
 {
+    setObjectName(name);    
+    setWindowFlags(f);    
 }
 
-void SearchRuleLabel::mouseDoubleClickEvent( QMouseEvent * e )
+void SearchRuleLabel::mouseDoubleClickEvent(QMouseEvent * e)
 {
    emit signalDoubleClick( e );
 }
@@ -128,50 +130,49 @@ SearchAdvancedRule::SearchAdvancedRule(QWidget* parent, SearchAdvancedRule::Opti
                   : SearchAdvancedBase(SearchAdvancedBase::RULE)
 {
     m_box = new KVBox(parent);
-    m_box->layout()->setSpacing( KDialog::spacingHint() );
-    m_box->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
+    m_box->layout()->setSpacing(KDialog::spacingHint());
+    m_box->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-    m_optionsBox   = 0;
-    m_option       = option;
+    m_optionsBox = 0;
+    m_option     = option;
     if (option != NONE)
     {
-        m_optionsBox  = new KHBox( m_box );
-        m_label = new SearchRuleLabel( option == AND ?
-                                       i18n("As well as") : i18n("Or"),
-                                       m_optionsBox);
-        Q3Frame* hline = new Q3Frame( m_optionsBox );
-        hline->setFrameStyle( Q3Frame::HLine|Q3Frame::Sunken );
-        m_label->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
-        hline->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
+        m_optionsBox  = new KHBox(m_box);
+        m_label       = new SearchRuleLabel(option == AND ? i18n("As well as") : i18n("Or"), m_optionsBox);
+        QFrame* hline = new QFrame(m_optionsBox);
+        hline->setFrameStyle(QFrame::HLine|QFrame::Sunken);
+        m_label->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+        hline->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-        connect( m_label, SIGNAL( signalDoubleClick( QMouseEvent* ) ),
-                 this,  SLOT( slotLabelDoubleClick() ));
-
+        connect(m_label, SIGNAL(signalDoubleClick(QMouseEvent*)),
+                this, SLOT(slotLabelDoubleClick()));
     }
 
-    m_hbox = new QWidget( m_box );
-    m_hbox->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
+    m_hbox = new QWidget(m_box);
+    m_hbox->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
-    m_key = new QComboBox( m_hbox, "key" );
-    m_key->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Minimum );
-    for (int i=0; i< RuleKeyTableCount; i++)
-        m_key->insertItem( i18n(RuleKeyTable[i].keyText), i );
+    m_key = new QComboBox(m_hbox);
+    m_key->setObjectName("key");
+    m_key->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
+    for (int i = 0; i < RuleKeyTableCount; i++)
+        m_key->insertItem(i, i18n(RuleKeyTable[i].keyText));
 
-    m_operator = new QComboBox( m_hbox );
+    m_operator = new QComboBox(m_hbox);
     m_operator->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
 
-    m_valueBox = new KHBox( m_hbox );
+    m_valueBox   = new KHBox(m_hbox);
     m_widgetType = NOWIDGET;
 
-    slotKeyChanged( 0 );
-    m_check = new QCheckBox( m_hbox );
+    slotKeyChanged(0);
+    m_check = new QCheckBox(m_hbox);
 
-    m_hboxLayout = new Q3HBoxLayout( m_hbox );
-    m_hboxLayout->setSpacing( KDialog::spacingHint() );
-    m_hboxLayout->addWidget( m_key );
-    m_hboxLayout->addWidget( m_operator );
-    m_hboxLayout->addWidget( m_valueBox );
-    m_hboxLayout->addWidget( m_check, 0, Qt::AlignRight );
+    m_hboxLayout = new QHBoxLayout(m_hbox);
+    m_hboxLayout->setMargin(KDialog::spacingHint());
+    m_hboxLayout->setSpacing(KDialog::spacingHint());
+    m_hboxLayout->addWidget(m_key);
+    m_hboxLayout->addWidget(m_operator);
+    m_hboxLayout->addWidget(m_valueBox);
+    m_hboxLayout->addWidget(m_check, 0, Qt::AlignRight);
 
     m_box->show();
 
@@ -201,7 +202,7 @@ void SearchAdvancedRule::setValues(const KUrl& url)
         }
 
     // set the operator and the last widget
-    slotKeyChanged( m_key->currentItem() );
+    slotKeyChanged( m_key->currentIndex() );
     for (int i=0; i< RuleOpTableCount; i++)
         if ( RuleOpTable[i].key == url.queryItem("1.op") &&
              RuleOpTable[i].cat == m_widgetType )
@@ -231,10 +232,10 @@ void SearchAdvancedRule::setValues(const KUrl& url)
         int  num = value.toInt(&ok);
         if (ok)
         {
-            QMapIterator<int,int> it;
+            QMap<int, int>::iterator it;
             for (it = m_itemsIndexIDMap.begin() ; it != m_itemsIndexIDMap.end(); ++it)
-                if (it.data() == num)
-                    m_valueCombo->setCurrentItem( it.key() );
+                if (it.value() == num)
+                    m_valueCombo->setCurrentIndex( it.key() );
         }
     }
 }
@@ -267,10 +268,10 @@ void SearchAdvancedRule::slotKeyChanged(int id)
     m_operator->clear();
     m_widgetType = RuleKeyTable[id].cat;
 
-    for (int i=0; i< RuleOpTableCount; i++)
+    for (int i = 0; i < RuleOpTableCount; i++)
         if ( RuleOpTable[i].cat == m_widgetType )
     {
-        m_operator->insertItem( i18n(RuleOpTable[i].keyText) );
+        m_operator->addItem( i18n(RuleOpTable[i].keyText) );
 
         if ( currentOperator == RuleOpTable[i].key )
             m_operator->setCurrentText( currentOperator );
@@ -298,7 +299,8 @@ void SearchAdvancedRule::setValueWidget(valueWidgetTypes oldType, valueWidgetTyp
 
     if (newType == DATE)
     {
-        m_dateEdit = new KDateEdit( m_valueBox,"datepicker");
+        m_dateEdit = new KDateEdit( m_valueBox);
+        m_dateEdit->setObjectName("datepicker");
         m_dateEdit->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
         m_dateEdit->show();
 
@@ -307,17 +309,19 @@ void SearchAdvancedRule::setValueWidget(valueWidgetTypes oldType, valueWidgetTyp
     }
     else if (newType == LINEEDIT)
     {
-        m_lineEdit = new QLineEdit( m_valueBox, "lineedit" );
+        m_lineEdit = new QLineEdit( m_valueBox);
+        m_lineEdit->setObjectName("lineedit");
         m_lineEdit->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
         m_lineEdit->show();
 
-        connect( m_lineEdit, SIGNAL ( textChanged(const QString&) ),
-                 this, SIGNAL(signalPropertyChanged()));
+        connect(m_lineEdit, SIGNAL(textChanged(const QString&)),
+                this, SIGNAL(signalPropertyChanged()));
 
     }
     else if (newType == ALBUMS)
     {
-        m_valueCombo = new SqueezedComboBox( m_valueBox, "albumscombo" );
+        m_valueCombo = new SqueezedComboBox(m_valueBox);
+        m_valueCombo->setObjectName("albumscombo");
         m_valueCombo->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
 
         AlbumManager* aManager = AlbumManager::componentData();
@@ -331,7 +335,7 @@ void SearchAdvancedRule::setValueWidget(valueWidgetTypes oldType, valueWidgetTyp
             PAlbum *album = (PAlbum*)(*it);
             if ( !album->isRoot() )
             {
-                m_valueCombo->insertSqueezedItem( album->url().remove(0,1), index );
+                m_valueCombo->insertSqueezedItem( album->albumPath().remove(0,1), index );
                 m_itemsIndexIDMap.insert(index, album->id());
                 index++;
             }
@@ -339,16 +343,17 @@ void SearchAdvancedRule::setValueWidget(valueWidgetTypes oldType, valueWidgetTyp
 
         m_valueCombo->show();
 
-        connect( m_valueCombo, SIGNAL( activated(int) ),
-                 this, SIGNAL( signalPropertyChanged() ));
+        connect(m_valueCombo, SIGNAL(activated(int)),
+                this, SIGNAL(signalPropertyChanged()));
     }
     else if (newType == TAGS)
     {
-        m_valueCombo = new SqueezedComboBox( m_valueBox, "tagscombo" );
-        m_valueCombo->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
+        m_valueCombo = new SqueezedComboBox(m_valueBox);
+        m_valueCombo->setObjectName("tagscombo");
+        m_valueCombo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
 
         AlbumManager* aManager = AlbumManager::componentData();
-        AlbumList tList = aManager->allTAlbums();
+        AlbumList tList        = aManager->allTAlbums();
 
         m_itemsIndexIDMap.clear();
         int index = 0;
@@ -366,22 +371,22 @@ void SearchAdvancedRule::setValueWidget(valueWidgetTypes oldType, valueWidgetTyp
 
         m_valueCombo->show();
 
-        connect( m_valueCombo, SIGNAL( activated(int) ),
-                 this, SIGNAL( signalPropertyChanged() ));
+        connect(m_valueCombo, SIGNAL(activated(int)),
+                this, SIGNAL(signalPropertyChanged()));
     }
     else if (newType == RATING)
     {
         m_ratingWidget = new RatingWidget( m_valueBox );
         m_ratingWidget->show();
 
-        connect( m_ratingWidget, SIGNAL( signalRatingChanged(int) ),
-                 this, SIGNAL( signalPropertyChanged() ));
+        connect(m_ratingWidget, SIGNAL(signalRatingChanged(int)),
+                this, SIGNAL(signalPropertyChanged()));
     }
 }
 
 QString SearchAdvancedRule::urlKey() const
 {
-    return RuleKeyTable[m_key->currentItem()].key;
+    return RuleKeyTable[m_key->currentIndex()].key;
 }
 
 QString SearchAdvancedRule::urlOperator() const
@@ -392,7 +397,7 @@ QString SearchAdvancedRule::urlOperator() const
     for (int i=0; i< RuleOpTableCount; i++)
         if ( RuleOpTable[i].cat == m_widgetType )
         {
-            if ( countItems == m_operator->currentItem() )
+            if ( countItems == m_operator->currentIndex() )
                 string = RuleOpTable[i].key;
             ++countItems;
         }
@@ -411,7 +416,7 @@ QString SearchAdvancedRule::urlValue() const
         string = m_dateEdit->date().toString(Qt::ISODate) ;
 
     else if (m_widgetType == TAGS || m_widgetType == ALBUMS)
-        string = QString::number(m_itemsIndexIDMap[ m_valueCombo->currentItem() ]);
+        string = QString::number(m_itemsIndexIDMap[ m_valueCombo->currentIndex() ]);
 
     else if (m_widgetType == RATING)
         string = QString::number(m_ratingWidget->rating()) ;
@@ -437,17 +442,17 @@ void SearchAdvancedRule::addOption(Option option)
         return;
     }
 
-    m_box->layout()->remove(m_hbox);
+    m_box->layout()->removeWidget(m_hbox);
 
     m_optionsBox = new KHBox(m_box);
     new QLabel(option == AND ? i18n("As well as") : i18n("Or"), m_optionsBox);
-    Q3Frame* hline = new Q3Frame(m_optionsBox);
-    hline->setFrameStyle(Q3Frame::HLine|Q3Frame::Sunken);
+    QFrame* hline = new QFrame(m_optionsBox);
+    hline->setFrameStyle(QFrame::HLine|QFrame::Sunken);
     hline->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     m_optionsBox->show();
 
-    m_box->layout()->add(m_hbox);
-    m_option =  option;
+    m_box->layout()->addWidget(m_hbox);
+    m_option = option;
 }
 
 void SearchAdvancedRule::removeOption()
@@ -464,8 +469,8 @@ void SearchAdvancedRule::addCheck()
     m_hboxLayout->addWidget( m_check, 0, Qt::AlignRight );
     m_check->show();
 
-    connect( m_check, SIGNAL( toggled( bool ) ),
-             this, SIGNAL( signalBaseItemToggled() ));
+    connect(m_check, SIGNAL(toggled(bool)),
+            this, SIGNAL(signalBaseItemToggled()));
 }
 
 void SearchAdvancedRule::removeCheck()
@@ -477,15 +482,18 @@ void SearchAdvancedRule::removeCheck()
 SearchAdvancedGroup::SearchAdvancedGroup(QWidget* parent)
                    : SearchAdvancedBase(SearchAdvancedBase::GROUP)
 {
-    m_box      = new KHBox(parent);
+    m_box          = new KHBox(parent);
     m_box->layout()->setSpacing(KDialog::spacingHint());
-    m_groupbox = new Q3VGroupBox(m_box);
-    m_check    = new QCheckBox(m_box);
-    m_option   = SearchAdvancedRule::NONE;
+    m_groupbox     = new QGroupBox(m_box);
+    m_groupboxVLay = new QVBoxLayout(m_groupbox);
+    m_groupboxVLay->setMargin(KDialog::spacingHint());
+    m_groupboxVLay->setSpacing(KDialog::spacingHint());
+    m_check        = new QCheckBox(m_box);
+    m_option       = SearchAdvancedRule::NONE;
     m_box->show();
 
-    connect( m_check, SIGNAL( toggled( bool ) ),
-             this, SIGNAL( signalBaseItemToggled() ));
+    connect(m_check, SIGNAL(toggled(bool)),
+            this, SIGNAL(signalBaseItemToggled()));
 }
 
 SearchAdvancedGroup::~SearchAdvancedGroup()
@@ -516,7 +524,8 @@ void SearchAdvancedGroup::addRule(SearchAdvancedRule* rule)
     rule->removeCheck();
 
     m_childRules.append(rule);
-    rule->widget()->reparent(m_groupbox, QPoint(0,0));
+    rule->widget()->setParent(m_groupbox);
+    m_groupboxVLay->addWidget(rule->widget());
     rule->widget()->show();
 }
 
@@ -532,9 +541,9 @@ void SearchAdvancedGroup::removeRules()
         {
             rule->addOption(m_option);
         }
-        rule->addCheck();
 
-        rule->widget()->reparent((QWidget*)m_box->parent(), QPoint(0,0));
+        rule->addCheck();
+        rule->widget()->setParent((QWidget*)m_box->parent());
         rule->widget()->show();
     }
 

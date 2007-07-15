@@ -41,6 +41,7 @@ class QLabel;
 class QGroupBox;
 class QLabel;
 class QHBoxLayout;
+class QVBoxLayout;
 
 class KUrl;
 
@@ -69,10 +70,8 @@ public:
      * @param name The name
      * @param f Qt::WFlags
      */
-    SearchRuleLabel(const QString & text,
-                    QWidget * parent,
-                    const char * name=0,
-                    Qt::WFlags f=0 );
+    SearchRuleLabel(const QString & text, QWidget * parent,
+                    const char * name=0, Qt::WFlags f=0 );
 private:
 
     void mouseDoubleClickEvent( QMouseEvent * e );
@@ -299,29 +298,34 @@ private slots:
 
 private:
 
-    QLabel*                 m_label;
+    QLabel                *m_label;
 
-    KVBox*                  m_box;
-    QWidget*                m_hbox;
-    QHBoxLayout*            m_hboxLayout;
+    QWidget               *m_hbox;
 
-    KHBox*                  m_valueBox;
+    QHBoxLayout           *m_hboxLayout;
 
-    QCheckBox*              m_check;
+    QCheckBox             *m_check;
 
-    QComboBox*              m_key;
-    QComboBox*              m_operator;
+    QComboBox             *m_key;
+    QComboBox             *m_operator;
 
-    QLineEdit*              m_lineEdit;
-    KDateEdit*              m_dateEdit;
-    SqueezedComboBox*       m_valueCombo;
-    RatingWidget*           m_ratingWidget;
+    QLineEdit             *m_lineEdit;
 
-    QMap<int, int>          m_itemsIndexIDMap;
+    KHBox                 *m_valueBox;
 
-    KHBox*                  m_optionsBox;
+    KVBox                 *m_box;
 
-    enum valueWidgetTypes   m_widgetType;
+    KDateEdit             *m_dateEdit;
+
+    SqueezedComboBox      *m_valueCombo;
+
+    RatingWidget          *m_ratingWidget;
+
+    QMap<int, int>         m_itemsIndexIDMap;
+
+    KHBox                 *m_optionsBox;
+
+    enum valueWidgetTypes  m_widgetType;
 };
 
 /** @class SearchAdvancedGroup
@@ -385,12 +389,15 @@ public:
 
 private:
 
-    Q3ValueList<SearchAdvancedRule*> m_childRules;
+    Q3ValueList<SearchAdvancedRule*>  m_childRules;
 
-    QGroupBox*                       m_groupbox;
-    QCheckBox*                       m_check;
+    QVBoxLayout                      *m_groupboxVLay;
 
-    KHBox*                           m_box;
+    QGroupBox                        *m_groupbox;
+
+    QCheckBox                        *m_check;
+
+    KHBox                            *m_box;
 };
 
 }  // namespace Digikam
