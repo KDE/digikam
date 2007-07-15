@@ -38,17 +38,11 @@ extern "C"
 
 // Qt includes.
 
-#include <Q3ValueList>
-#include <QThread>
 #include <QMutex>
 #include <QWaitCondition>
-#include <QEvent>
-#include <QApplication>
 #include <QVariant>
 #include <QImage>
-#include <QDataStream>
 #include <QFile>
-#include <QTimer>
 #include <QRegExp>
 
 // KDE includes.
@@ -68,7 +62,6 @@ extern "C"
 #include "umscamera.h"
 #include "dmetadata.h"
 #include "jpegutils.h"
-#include "mtqueue.h"
 #include "cameracontroller.h"
 #include "cameracontroller.moc"
 
@@ -674,7 +667,7 @@ void CameraController::slotDownloadFailed(const QString &folder, const QString &
 
     if (!d->canceled)
     {
-        if (d->commands.isEmpty())
+        if (queueIsEmpty())
         {
             KMessageBox::error(d->parent, msg);
         }
@@ -697,7 +690,7 @@ void CameraController::slotUploadFailed(const QString &folder, const QString &fi
 
     if (!d->canceled)
     {
-        if (d->commands.isEmpty())
+        if (queueIsEmpty())
         {
             KMessageBox::error(d->parent, msg);
         }
@@ -719,7 +712,7 @@ void CameraController::slotDeleteFailed(const QString &folder, const QString &fi
 
     if (!d->canceled)
     {
-        if (d->commands.isEmpty())
+        if (queueIsEmpty())
         {
             KMessageBox::error(d->parent, msg);
         }
@@ -741,7 +734,7 @@ void CameraController::slotLockFailed(const QString &folder, const QString &file
 
     if (!d->canceled)
     {
-        if (d->commands.isEmpty())
+        if (queueIsEmpty())
         {
             KMessageBox::error(d->parent, msg);
         }
@@ -775,6 +768,18 @@ void CameraController::slotOpen(const QString &folder, const QString &file, cons
     im->setFocus();
 }
 
+void CameraController::addCommand(CameraCommand *cmd)
+{
+    QMutexLocker lock(&d->mutex);
+    d->commands << cmd;
+    d->condVar.wakeAll();
+}
+
+bool CameraController::queueIsEmpty()
+{
+    QMutexLocker lock(&d->mutex);
+    return d->commands.isEmpty();
+}
 
 QString CameraController::getCameraPath()
 {
@@ -791,8 +796,7 @@ void CameraController::slotConnect()
     d->canceled = false;
     CameraCommand *cmd = new CameraCommand;
     cmd->action = CameraCommand::gp_connect;
-    QMutexLocker lock(&d->mutex);
-    d->commands << cmd;
+    addCommand(cmd);
 }
 
 void CameraController::listFolders()
@@ -800,8 +804,7 @@ void CameraController::listFolders()
     d->canceled = false;
     CameraCommand *cmd = new CameraCommand;
     cmd->action = CameraCommand::gp_listfolders;
-    QMutexLocker lock(&d->mutex);
-    d->commands << cmd;
+    addCommand(cmd);
 }
 
 void CameraController::listFiles(const QString& folder)
@@ -810,8 +813,7 @@ void CameraController::listFiles(const QString& folder)
     CameraCommand *cmd = new CameraCommand;
     cmd->action = CameraCommand::gp_listfiles;
     cmd->map.insert("folder", QVariant(folder));
-    QMutexLocker lock(&d->mutex);
-    d->commands << cmd;
+    addCommand(cmd);
 }
 
 void CameraController::getThumbnail(const QString& folder, const QString& file)
@@ -821,8 +823,7 @@ void CameraController::getThumbnail(const QString& folder, const QString& file)
     cmd->action = CameraCommand::gp_thumbnail;
     cmd->map.insert("folder", QVariant(folder));
     cmd->map.insert("file", QVariant(file));
-    QMutexLocker lock(&d->mutex);
-    d->commands << cmd;
+    addCommand(cmd);
 }
 
 void CameraController::getExif(const QString& folder, const QString& file)
@@ -832,8 +833,7 @@ void CameraController::getExif(const QString& folder, const QString& file)
     cmd->action = CameraCommand::gp_exif;
     cmd->map.insert("folder", QVariant(folder));
     cmd->map.insert("file", QVariant(file));
-    QMutexLocker lock(&d->mutex);
-    d->commands << cmd;
+    addCommand(cmd);
 }
 
 void CameraController::getCameraInformations()
@@ -841,8 +841,7 @@ void CameraController::getCameraInformations()
     d->canceled = false;
     CameraCommand *cmd = new CameraCommand;
     cmd->action = CameraCommand::gp_cameraInformations;
-    QMutexLocker lock(&d->mutex);
-    d->commands << cmd;
+    addCommand(cmd);
 }
 
 void CameraController::upload(const QFileInfo& srcFileInfo, const QString& destFile, const QString& destFolder)
@@ -853,10 +852,9 @@ void CameraController::upload(const QFileInfo& srcFileInfo, const QString& destF
     cmd->map.insert("srcFilePath", QVariant(srcFileInfo.filePath()));
     cmd->map.insert("destFile", QVariant(destFile));
     cmd->map.insert("destFolder", QVariant(destFolder));
+    addCommand(cmd);
     DDebug() << "Uploading '" << srcFileInfo.filePath() << "' into camera : '" << destFolder << 
                  "' (" << destFile << ")" << endl;
-    QMutexLocker lock(&d->mutex);
-    d->commands << cmd;
 }
 
 void CameraController::downloadPrep()
@@ -886,8 +884,7 @@ void CameraController::download(DownloadSettingsContainer downloadSettings)
     cmd->map.insert("copyright", QVariant(downloadSettings.copyright));
     cmd->map.insert("convertJpeg", QVariant(downloadSettings.convertJpeg));
     cmd->map.insert("losslessFormat", QVariant(downloadSettings.losslessFormat));
-    QMutexLocker lock(&d->mutex);
-    d->commands << cmd;
+    addCommand(cmd);
 }
 
 void CameraController::deleteFile(const QString& folder, const QString& file)
@@ -897,8 +894,7 @@ void CameraController::deleteFile(const QString& folder, const QString& file)
     cmd->action        = CameraCommand::gp_delete;
     cmd->map.insert("folder", QVariant(folder));
     cmd->map.insert("file", QVariant(file));
-    QMutexLocker lock(&d->mutex);
-    d->commands << cmd;
+    addCommand(cmd);
 }
 
 void CameraController::lockFile(const QString& folder, const QString& file, bool locked)
@@ -909,8 +905,7 @@ void CameraController::lockFile(const QString& folder, const QString& file, bool
     cmd->map.insert("folder", QVariant(folder));
     cmd->map.insert("file", QVariant(file));
     cmd->map.insert("lock", QVariant(locked));
-    QMutexLocker lock(&d->mutex);
-    d->commands << cmd;
+    addCommand(cmd);
 }
 
 void CameraController::openFile(const QString& folder, const QString& file)
@@ -921,8 +916,7 @@ void CameraController::openFile(const QString& folder, const QString& file)
     cmd->map.insert("folder", QVariant(folder));
     cmd->map.insert("file", QVariant(file));
     cmd->map.insert("dest", QVariant(KStandardDirs::locate("tmp", file)));
-    QMutexLocker lock(&d->mutex);
-    d->commands << cmd;
+    addCommand(cmd);
 }
 
 

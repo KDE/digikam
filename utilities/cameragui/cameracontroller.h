@@ -121,6 +121,9 @@ private:
     void sendError(const QString& msg);
     void sendInfo(const QString& msg);
 
+    void addCommand(CameraCommand *cmd);
+    bool queueIsEmpty();
+
     CameraControllerPriv *d;
 };
 
