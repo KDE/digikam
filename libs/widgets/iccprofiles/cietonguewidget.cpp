@@ -408,7 +408,7 @@ QRgb CIETongueWidget::colorByCoord(double x, double y)
 
 void CIETongueWidget::outlineTongue()
 {
-    int lx = 0, ly = 0;
+    int lx=0, ly=0;
     int fx=0, fy=0;
 
     for (int x = 380; x <= 700; x += 5)
@@ -453,11 +453,11 @@ void CIETongueWidget::fillTongue()
 
         for (x = 0; x < d->pxcols; x++)
         {
-            if ((QColor) Img.pixel(x + d->xBias, y) != Qt::black)
+            if (QColor(Img.pixel(x + d->xBias, y)) != QColor(Qt::black))
             {
                 for (xe = d->pxcols - 1; xe >= x; xe--)
                 {
-                    if ((QColor) Img.pixel(xe + d->xBias, y) != Qt::black)
+                    if (QColor(Img.pixel(xe + d->xBias, y)) != QColor(Qt::black))
                     {
                         break;
                     }
@@ -477,7 +477,7 @@ void CIETongueWidget::fillTongue()
         }
     }
 
-    d->pixmap.fromImage(Img, Qt::AvoidDither );
+    d->pixmap = QPixmap::fromImage(Img, Qt::AvoidDither);
 }
 
 void CIETongueWidget::drawTongueAxis()
@@ -790,10 +790,10 @@ void CIETongueWidget::paintEvent( QPaintEvent * )
     int pixrows = d->pixmap.height();
 
     d->gridside = (qMin(pixcols, pixrows)) / 512.0;
-    d->xBias = grids(32);
-    d->yBias = grids(20);
-    d->pxcols = pixcols - d->xBias;
-    d->pxrows = pixrows - d->yBias;
+    d->xBias    = grids(32);
+    d->yBias    = grids(20);
+    d->pxcols   = pixcols - d->xBias;
+    d->pxrows   = pixrows - d->yBias;
 
     d->painter.setBackground(QBrush(qRgb(0, 0, 0)));
     d->painter.setPen(qRgb(255, 255, 255));
@@ -829,5 +829,3 @@ void CIETongueWidget::slotBlinkTimerDone(void)
 }
 
 }  // namespace Digikam
-
-
