@@ -1655,7 +1655,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     m_savingContext->savingState    = SavingContextContainer::SavingStateSaveAs;
     m_savingContext->abortingSaving = false;
     m_savingContext->saveTempFile   = new KTemporaryFile();
-    m_savingContext->saveTempFile->setPrefix(newURL.directory(false));
+    m_savingContext->saveTempFile->setPrefix(newURL.directory());
     m_savingContext->saveTempFile->setSuffix(".digikamtempfile.tmp");
     m_savingContext->saveTempFile->setAutoRemove(true);
 
