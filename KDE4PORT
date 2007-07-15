@@ -103,7 +103,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
         |---slideshow                           Laurent         X       X       DONE                 
 
  3      |-kioslave
-            digikamalbums.cpp                   Marcel                  X
+            digikamalbums.cpp                   Marcel                  X       DONE
             digikamdates.cpp                    Marcel                  X       DONE
             digikamsearch.cpp                   Marcel                  X       DONE
             digikamtags.cpp                     Marcel                  X       DONE
