@@ -42,7 +42,7 @@ class SetupGeneral : public QWidget
 
 public:
 
-    SetupGeneral(QWidget* parent = 0, KPageDialog* dialog = 0);
+    SetupGeneral(KPageDialog* dialog, QWidget* parent=0);
     ~SetupGeneral();
 
     void applySettings();

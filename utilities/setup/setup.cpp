@@ -134,13 +134,13 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d = new SetupPrivate;
     setObjectName(name);
     setCaption(i18n("Configure"));
-    setButtons( KDialog::Help|KDialog::Ok|KDialog::Cancel );
-    setDefaultButton(KDialog::Ok);
+    setButtons(Help|Ok|Cancel );
+    setDefaultButton(Ok);
     setHelp("setupdialog.anchor", "digikam");
-    setFaceType(KPageDialog::List);
+    setFaceType(List);
     setModal(true);
 
-    d->generalPage  = new SetupGeneral();
+    d->generalPage  = new SetupGeneral(this);
     d->page_general = addPage( d->generalPage, i18n("Albums") );
     d->page_general->setHeader( i18n("Album Settings") );
     d->page_general->setIcon( KIcon("folder_image") );
@@ -352,4 +352,3 @@ Setup::Page Setup::activePageIndex()
     return GeneralPage;
 }
 }  // namespace Digikam
-

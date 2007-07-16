@@ -94,7 +94,7 @@ public:
     KPageDialog   *mainDialog;
 };
 
-SetupGeneral::SetupGeneral(QWidget* parent, KPageDialog* dialog )
+SetupGeneral::SetupGeneral(KPageDialog* dialog, QWidget* parent)
             : QWidget(parent)
 {
     d = new SetupGeneralPriv;
@@ -314,4 +314,3 @@ void SetupGeneral::slotPathEdited(const QString& newPath)
 }
 
 }  // namespace Digikam
-
