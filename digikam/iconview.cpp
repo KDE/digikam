@@ -39,6 +39,7 @@
 #include <QPaintEvent>
 #include <QDropEvent>
 #include <QMouseEvent>
+#include <QStyleOption>
 
 // KDE includes.
 
@@ -143,7 +144,7 @@ IconView::IconView(QWidget* parent, const char* name)
 
     viewport()->setBackgroundMode(Qt::NoBackground);
     viewport()->setFocusProxy(this);
-    viewport()->setFocusPolicy(QWidget::WheelFocus);
+    viewport()->setFocusPolicy(Qt::WheelFocus);
     viewport()->setMouseTracking(true);
 
     d = new IconViewPriv;
@@ -892,8 +893,8 @@ void IconView::contentsMousePressEvent(QMouseEvent* e)
         QPainter p;
         p.begin(viewport());
         p.setRasterOp(NotROP);
-        p.setPen(QPen(color0, 1));
-        p.setBrush(NoBrush);
+        p.setPen(QPen(Qt::color0, 1));
+        p.setBrush(Qt::NoBrush);
 
         drawRubber(&p);
         p.end();
@@ -1026,8 +1027,8 @@ void IconView::contentsMousePressEvent(QMouseEvent* e)
     QPainter p;
     p.begin( viewport() );
     p.setRasterOp( NotROP );
-    p.setPen( QPen( color0, 1 ) );
-    p.setBrush( NoBrush );
+    p.setPen( QPen( Qt::color0, 1 ) );
+    p.setBrush( Qt::NoBrush );
     drawRubber( &p );
     p.end();
 }
@@ -1168,8 +1169,8 @@ void IconView::contentsMouseMoveEvent(QMouseEvent* e)
     QPainter p;
     p.begin( viewport() );
     p.setRasterOp( NotROP );
-    p.setPen( QPen( color0, 1 ) );
-    p.setBrush( NoBrush );
+    p.setPen( QPen( Qt::color0, 1 ) );
+    p.setBrush( Qt::NoBrush );
     drawRubber( &p );
     p.end();
 
@@ -1185,8 +1186,8 @@ void IconView::contentsMouseMoveEvent(QMouseEvent* e)
 
     p.begin(viewport());
     p.setRasterOp(NotROP);
-    p.setPen(QPen(color0, 1));
-    p.setBrush(NoBrush);
+    p.setPen(QPen(Qt::color0, 1));
+    p.setBrush(Qt::NoBrush);
     drawRubber(&p);
     p.end();
 
@@ -1206,8 +1207,8 @@ void IconView::contentsMouseReleaseEvent(QMouseEvent* e)
         QPainter p;
         p.begin( viewport() );
         p.setRasterOp( NotROP );
-        p.setPen( QPen( color0, 1 ) );
-        p.setBrush( NoBrush );
+        p.setPen( QPen( Qt::color0, 1 ) );
+        p.setBrush( Qt::NoBrush );
 
         drawRubber( &p );
         p.end();
