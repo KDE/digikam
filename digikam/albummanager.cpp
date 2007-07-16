@@ -375,10 +375,7 @@ void AlbumManager::scanPAlbums()
     // scan db and get a list of all albums
     AlbumInfo::List aList = DatabaseAccess().db()->scanAlbums();
 
-#warning "TODO: kde4 port it";
-    /* TODO: KDE4PORT: Won't compile. Why ?
     qSort(aList);
-    */
 
     AlbumInfo::List newAlbumList;
     
@@ -421,10 +418,7 @@ void AlbumManager::scanPAlbums()
         delete album;
     }
 
-#warning "TODO: kde4 port it";
-    /* TODO: KDE4PORT: Won't compile. Why ?
     qSort(newAlbumList);
-    */
 
     for (AlbumInfo::List::iterator it = newAlbumList.begin(); it != newAlbumList.end(); ++it)
     {
@@ -564,8 +558,8 @@ void AlbumManager::scanTAlbums()
             continue;
         }
 
-        TAlbum* parent = iter.data();
-        
+        TAlbum* parent = iter.value();
+
         // Create the new TAlbum
         TAlbum* album = new TAlbum(info.name, info.id, false);
         album->m_icon = info.icon;
@@ -1431,7 +1425,7 @@ void AlbumManager::slotData(KIO::Job*, const QByteArray& data)
     for (QMap<QDate,DAlbum*>::iterator it = albumMap.begin();
          it != albumMap.end(); ++it)
     {
-        DAlbum* album = it.data();
+        DAlbum* album = it.value();
         emit signalAlbumDeleted(album);
         d->albumIntDict.remove(album->globalID());
         delete album;

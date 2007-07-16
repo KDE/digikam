@@ -64,7 +64,7 @@ public:
     /**
      * needed for sorting
      */
-    bool operator<(const AlbumInfo& info)
+    bool operator<(const AlbumInfo& info) const
     {
         return url < info.url;
     }
@@ -87,6 +87,11 @@ public:
     int      pid;
     QString  name;
     QString  icon;
+
+    bool operator<(const TagInfo& info) const
+    {
+        return name < info.name;
+    }
 };
 
 /**
@@ -109,7 +114,7 @@ public:
     /**
      * needed for sorting
      */
-    bool operator<(const SearchInfo& info)
+    bool operator<(const SearchInfo& info) const
     {
         return id < info.id;
     }
