@@ -423,7 +423,7 @@ void SetupICC::processLcmsUrl(const QString& url)
 void SetupICC::applySettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(QString("Color Management"));
+    KConfigGroup group        = config->group(QString("Color Management"));
 
     group.writeEntry("EnableCM", d->enableColorManagement->isChecked());
 
@@ -454,12 +454,12 @@ void SetupICC::applySettings()
 void SetupICC::readSettings(bool restore)
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(QString("Color Management"));
+    KConfigGroup group        = config->group(QString("Color Management"));
 
     if (!restore)
         d->enableColorManagement->setChecked(group.readEntry("EnableCM", false));
 
-    d->defaultPathKU->setUrl(KUrl(group.readEntry("DefaultPath", QString())));
+    d->defaultPathKU->setUrl(group.readEntry("DefaultPath", QString()));
     d->bpcAlgorithm->setChecked(group.readEntry("BPCAlgorithm", false));
     d->renderingIntentKC->setCurrentIndex(group.readEntry("RenderingIntent", 0));
     d->managedView->setChecked(group.readEntry("ManagedView", false));
