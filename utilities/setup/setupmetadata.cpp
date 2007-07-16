@@ -85,8 +85,8 @@ SetupMetadata::SetupMetadata(QWidget* parent )
              : QWidget(parent)
 {
     d = new SetupMetadataPriv;
+
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
-    mainLayout->setSpacing(KDialog::spacingHint());
 
     // --------------------------------------------------------
   
@@ -103,8 +103,6 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     gLayout1->addWidget(d->ExifSetOrientationBox);
     ExifGroup->setLayout(gLayout1);
 
-    mainLayout->addWidget(ExifGroup);
-  
     // --------------------------------------------------------
   
     QGroupBox *IptcGroup  = new QGroupBox(i18n("IPTC Actions"), this);
@@ -132,8 +130,6 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     gLayout2->addWidget(d->saveCreditsIptcBox);
     IptcGroup->setLayout(gLayout2);
                                                            
-    mainLayout->addWidget(IptcGroup);
-
     // --------------------------------------------------------
   
     QGroupBox *commonGroup = new QGroupBox(i18n("Common Metadata Actions"), this);
@@ -159,9 +155,6 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     gLayout3->addWidget(d->saveRatingBox);
     commonGroup->setLayout(gLayout3);
 
-    mainLayout->addWidget(commonGroup);
-    mainLayout->addSpacing(KDialog::spacingHint());
-
     // --------------------------------------------------------
     
     KHBox *hbox = new KHBox(this);
@@ -181,10 +174,19 @@ SetupMetadata::SetupMetadata(QWidget* parent )
                               "<p><b>IPTC</b> is another standard used in digital photography to store "
                               "embedded information in pictures. You can learn more "
                               "about IPTC at <a href='http://www.iptc.org/IIM'>www.iptc.org</a>.</p>"));
+
+    // --------------------------------------------------------
     
+    mainLayout->setMargin(KDialog::spacingHint());
+    mainLayout->setSpacing(KDialog::spacingHint());
+    mainLayout->addWidget(ExifGroup);
+    mainLayout->addWidget(IptcGroup);
+    mainLayout->addWidget(commonGroup);
+    mainLayout->addSpacing(KDialog::spacingHint());
     mainLayout->addWidget(hbox);
     mainLayout->addStretch();
-    mainLayout->addWidget(this);
+
+    // --------------------------------------------------------
 
     readSettings();
     adjustSize();
@@ -255,4 +257,3 @@ void SetupMetadata::slotExifAutoRotateToggled(bool b)
 }
 
 }  // namespace Digikam
-
