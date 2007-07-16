@@ -81,10 +81,7 @@ SetupCamera::SetupCamera( QWidget* parent )
 {
     d = new SetupCameraPriv;
 
-    QVBoxLayout *mainLayout     = new QVBoxLayout(this);
-    QGridLayout* groupBoxLayout = new QGridLayout( this );
-    groupBoxLayout->setSpacing( KDialog::spacingHint() );
-    groupBoxLayout->setAlignment( Qt::AlignTop );
+    QGridLayout* grid = new QGridLayout( this );
 
     d->listView = new K3ListView( this );
     d->listView->addColumn( i18n("Title") );
@@ -93,23 +90,18 @@ SetupCamera::SetupCamera( QWidget* parent )
     d->listView->addColumn( i18n("Path") );
     d->listView->addColumn( "Last Access Date", 0 ); // No i18n here. Hidden column with the last access date.
     d->listView->setAllColumnsShowFocus(true);
-    groupBoxLayout->addWidget( d->listView, 0, 5, 0, 0 );
     d->listView->setWhatsThis( i18n("<p>Here you can see the digital camera list used by digiKam "
                                     "via the Gphoto interface."));
 
     // -------------------------------------------------------------
 
     d->addButton = new QPushButton( this );
-    groupBoxLayout->addWidget( d->addButton, 0, 1 );
 
     d->removeButton = new QPushButton( this );
-    groupBoxLayout->addWidget( d->removeButton, 1, 1 );
 
     d->editButton = new QPushButton( this );
-    groupBoxLayout->addWidget( d->editButton, 2, 1 );
 
     d->autoDetectButton = new QPushButton( this );
-    groupBoxLayout->addWidget( d->autoDetectButton, 3, 1 );
 
     d->addButton->setText( i18n( "&Add..." ) );
     d->removeButton->setText( i18n( "&Remove" ) );
@@ -122,21 +114,27 @@ SetupCamera::SetupCamera( QWidget* parent )
     // -------------------------------------------------------------
 
     QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
-    groupBoxLayout->addItem( spacer, 4, 1 );
 
     KUrlLabel *gphotoLogoLabel = new KUrlLabel(this);
     gphotoLogoLabel->setText(QString());
     gphotoLogoLabel->setUrl("http://www.gphoto.org");
-    KGlobal::dirs()->addResourceType("logo-gphoto", KGlobal::dirs()->kde_default("data") + "digikam/data");
-    QString directory = KGlobal::dirs()->findResourceDir("logo-gphoto", "logo-gphoto.png");
-    gphotoLogoLabel->setPixmap( QPixmap( directory + "logo-gphoto.png" ) );
+    gphotoLogoLabel->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-gphoto.png")));
     gphotoLogoLabel->setToolTip(i18n("Visit Gphoto project website"));
-    groupBoxLayout->addWidget( gphotoLogoLabel, 5, 1 );
 
     // -------------------------------------------------------------
 
+    grid->setMargin(KDialog::spacingHint());
+    grid->setSpacing(KDialog::spacingHint());
+    grid->setAlignment(Qt::AlignTop);
+    grid->addWidget(d->listView, 0, 5, 0, 0);
+    grid->addWidget(d->addButton, 0, 1);
+    grid->addWidget(d->removeButton, 1, 1);
+    grid->addWidget(d->editButton, 2, 1);
+    grid->addWidget(d->autoDetectButton, 3, 1);
+    grid->addItem(spacer, 4, 1);
+    grid->addWidget(gphotoLogoLabel, 5, 1);
+
     adjustSize();
-    mainLayout->addWidget(this);
 
     // -------------------------------------------------------------
 
@@ -317,4 +315,3 @@ void SetupCamera::applySettings()
 }
 
 }  // namespace Digikam
-
