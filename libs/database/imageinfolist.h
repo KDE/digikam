@@ -33,11 +33,9 @@ namespace Digikam
 
 class ImageInfo;
 
-class DIGIKAM_EXPORT ImageInfoList : public Q3PtrList<ImageInfo>
+class DIGIKAM_EXPORT ImageInfoList : public QList<ImageInfo>
 {
 public:
-    ImageInfoList copy();
-
     //TODO: Connect change signals from album db,
     // to provide facilities to update contained ImageInfos
 };

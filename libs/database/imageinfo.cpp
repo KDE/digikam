@@ -125,6 +125,46 @@ bool ImageInfo::isNull() const
     return !m_data;
 }
 
+bool ImageInfo::operator==(const ImageInfo &info) const
+{
+    if (m_data && info.m_data)
+    {
+        // not null, compare id
+        return m_data->id == info.m_data->id;
+    }
+    else
+    {
+        // both null?
+        return m_data == info.m_data;
+    }
+}
+
+bool ImageInfo::operator<(const ImageInfo &info) const
+{
+    if (m_data)
+    {
+        if (info.m_data)
+            // both not null, sort by id
+            return m_data->id < info.m_data->id;
+        else
+            // only other is null, this is greater than
+            return false;
+    }
+    else
+    {
+        // this is less than if the other is not null
+        return info.m_data;
+    }
+}
+
+uint ImageInfo::hash() const
+{
+    if (m_data)
+        return qHash(m_data->id);
+    else
+        return qHash(0);
+}
+
 /**
  * Access rules for all methods in this class:
  * ImageInfoData members shall be accessed only under DatabaseAccess lock.

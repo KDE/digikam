@@ -27,17 +27,6 @@
 namespace Digikam
 {
 
-ImageInfoList ImageInfoList::copy()
-{
-    ImageInfoList copy;
-    for (iterator it = begin(); it != end(); ++it)
-    {
-        ImageInfo *info = new ImageInfo(*(*it));
-        copy.append(info);
-    }
-    return copy;
-}
-
 
 }
 

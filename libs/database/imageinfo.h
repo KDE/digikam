@@ -103,6 +103,10 @@ public:
 
     ImageInfo &operator=(const ImageInfo &info);
 
+    bool operator==(const ImageInfo &info) const;
+    bool operator<(const ImageInfo &info) const;
+    uint hash() const;
+
     /**
      * Returns if this objects contains valid data
      */
@@ -257,6 +261,8 @@ private:
 
     DSharedDataPointer<ImageInfoData> m_data;
 };
+
+inline uint qHash(const ImageInfo &info) { return info.hash(); }
 
 }  // namespace Digikam
 
