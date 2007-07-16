@@ -41,6 +41,7 @@
 #include <QDropEvent>
 #include <QMouseEvent>
 #include <QStyleOption>
+#include <QRubberBand>
 
 // KDE includes.
 
@@ -87,33 +88,32 @@ public:
         needEmitSelectionChanged = false;
     }
 
-    bool               clearing;
-    bool               showTips;
-    bool               pressedMoved;
-    bool               dragging;
-    bool               needEmitSelectionChanged; // store for slotRearrange
+    bool                 clearing;
+    bool                 showTips;
+    bool                 pressedMoved;
+    bool                 dragging;
+    bool                 needEmitSelectionChanged; // store for slotRearrange
 
-    int                spacing;
+    int                  rearrangeTimerInterval;
+    int                  spacing;
 
-    Q3PtrDict<IconItem> selectedItems;
-    Q3PtrDict<IconItem> prevSelectedItems;
+    Q3PtrDict<IconItem>  selectedItems;
+    Q3PtrDict<IconItem>  prevSelectedItems;
 
-    QRect*             rubber;
+    QRubberBand         *rubber;
 
-    QPoint             dragStartPos;
+    QPoint               dragStartPos;
 
-    QTimer*            rearrangeTimer;
-    QTimer*            toolTipTimer;
+    QTimer              *rearrangeTimer;
+    QTimer              *toolTipTimer;
 
-    IconItem*          toolTipItem;
-    IconItem*          currItem;
-    IconItem*          anchorItem;
-    IconItem*          storedVisibleItem; // store position for slotRearrange
+    IconItem            *toolTipItem;
+    IconItem            *currItem;
+    IconItem            *anchorItem;
+    IconItem            *storedVisibleItem; // store position for slotRearrange
 
-    IconGroupItem*     firstGroup;
-    IconGroupItem*     lastGroup;
-
-    int                rearrangeTimerInterval;
+    IconGroupItem       *firstGroup;
+    IconGroupItem       *lastGroup;
 
     struct ItemContainer 
     {
@@ -150,6 +150,8 @@ IconView::IconView(QWidget* parent, const char* name)
     d = new IconViewPriv;
     d->rearrangeTimer  = new QTimer(this);
     d->toolTipTimer    = new QTimer(this);
+    d->rubber          = new QRubberBand(QRubberBand::Rectangle, this);
+    d->rubber->hide();
     
     connect(d->rearrangeTimer, SIGNAL(timeout()),
             this, SLOT(slotRearrange()));
@@ -890,21 +892,8 @@ void IconView::contentsMousePressEvent(QMouseEvent* e)
     d->toolTipTimer->stop();
     slotToolTip();
     
-    // Delete any existing rubber -------------------------------
-
-    if ( d->rubber )
-    {
-        QPainter p;
-        p.begin(viewport());
-        p.setRasterOp(NotROP);
-        p.setPen(QPen(Qt::color0, 1));
-        p.setBrush(Qt::NoBrush);
-
-        drawRubber(&p);
-        p.end();
-        delete d->rubber;
-        d->rubber = 0;
-    }
+    // Clear any existing rubber -------------------------------
+    d->rubber->hide();
 
     if (e->button() == Qt::RightButton)
     {
@@ -1026,38 +1015,13 @@ void IconView::contentsMousePressEvent(QMouseEvent* e)
         }
     }
     
-    d->rubber = new QRect( e->x(), e->y(), 0, 0 );
-
-    QPainter p;
-    p.begin( viewport() );
-    p.setRasterOp( NotROP );
-    p.setPen( QPen( Qt::color0, 1 ) );
-    p.setBrush( Qt::NoBrush );
-    drawRubber( &p );
-    p.end();
-}
-
-void IconView::drawRubber(QPainter* p)
-{
-    if ( !p || !d->rubber )
-        return;
-
-    QRect r(d->rubber->normalized());
-
-    r = contentsRectToViewport(r);
-
-    QPoint pnt(r.x(), r.y());
-
-    style().drawPrimitive(QStyle::PE_FocusRect, p,
-                          QRect( pnt.x(), pnt.y(),
-                                 r.width(), r.height() ),
-                          colorGroup(), QStyle::Style_Default,
-                          QStyleOption(colorGroup().base()));
+    d->rubber->setGeometry(QRect(e->pos(), QSize()));
+    d->rubber->show();
 }
 
 void IconView::contentsMouseMoveEvent(QMouseEvent* e)
 {
-    if (e->buttons() == NoButton)
+    if (e->buttons() == Qt::NoButton)
     {
         IconItem* item = findItem(e->pos());
 
@@ -1080,7 +1044,7 @@ void IconView::contentsMouseMoveEvent(QMouseEvent* e)
                 if(acceptToolTip(item, e->pos()))
                 {
                     d->toolTipItem = item;
-                    d->toolTipTimer->setSingleShoot(true);
+                    d->toolTipTimer->setSingleShot(true);
                     d->toolTipTimer->start(500);
                 }
             }
@@ -1117,18 +1081,18 @@ void IconView::contentsMouseMoveEvent(QMouseEvent* e)
         return;
     }
 
-    if (!d->rubber)
+    if (!d->rubber->isVisible())
         return;
 
-    QRect oldRubber = QRect(*d->rubber);
+    QRect oldRubber = d->rubber->geometry();
+    QRect newRubber = oldRubber;
+    newRubber.setRight(e->pos().x());
+    newRubber.setBottom(e->pos().y());
+    d->rubber->setGeometry(newRubber);
 
-    d->rubber->setRight( e->pos().x() );
-    d->rubber->setBottom( e->pos().y() );
-
-    QRect nr = d->rubber->normalized();
+    QRect nr          = d->rubber->geometry().normalized();
     QRect rubberUnion = nr.unite(oldRubber.normalized());
-
-    bool changed = false;
+    bool changed      = false;
 
     QRegion paintRegion;
     viewport()->setUpdatesEnabled(false);
@@ -1168,16 +1132,10 @@ void IconView::contentsMouseMoveEvent(QMouseEvent* e)
     blockSignals(false);
     viewport()->setUpdatesEnabled(true);
 
-    QRect r = *d->rubber;
-    *d->rubber = oldRubber;
-
-    QPainter p;
-    p.begin( viewport() );
-    p.setRasterOp( NotROP );
-    p.setPen( QPen( Qt::color0, 1 ) );
-    p.setBrush( Qt::NoBrush );
-    drawRubber( &p );
-    p.end();
+    QRect r = d->rubber->geometry();
+    
+    d->rubber->setGeometry(oldRubber);
+    d->rubber->show();
 
     if (changed)
     {
@@ -1187,14 +1145,8 @@ void IconView::contentsMouseMoveEvent(QMouseEvent* e)
 
     ensureVisible(e->pos().x(), e->pos().y());
 
-    *d->rubber = r;
-
-    p.begin(viewport());
-    p.setRasterOp(NotROP);
-    p.setPen(QPen(Qt::color0, 1));
-    p.setBrush(Qt::NoBrush);
-    drawRubber(&p);
-    p.end();
+    d->rubber->setGeometry(r);
+    d->rubber->show();
 
     d->pressedMoved = true;
 
@@ -1207,21 +1159,9 @@ void IconView::contentsMouseReleaseEvent(QMouseEvent* e)
     d->dragging = false;
     d->prevSelectedItems.clear();
 
-    if (d->rubber)
-    {
-        QPainter p;
-        p.begin( viewport() );
-        p.setRasterOp( NotROP );
-        p.setPen( QPen( Qt::color0, 1 ) );
-        p.setBrush( Qt::NoBrush );
-
-        drawRubber( &p );
-        p.end();
-
-        delete d->rubber;
-        d->rubber = 0;
-    }
-
+    if (d->rubber->isVisible())
+        d->rubber->hide();
+    
     if (e->buttons() == Qt::LeftButton)
     {
         if (d->pressedMoved)

@@ -133,8 +133,6 @@ private:
     void appendContainer();
     void deleteContainers();
 
-    void drawRubber(QPainter* p);
-
     void itemClickedToOpen(IconItem* item);
 
     bool anchorIsBehind() const;
