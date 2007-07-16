@@ -2,10 +2,11 @@
 "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
 <node>
   <interface name="org.kde.digikam">
-    <method name="cameraAutoDetect">
+    <method name="autoDetect">
       <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
     </method>
-    <method name="downloadImages">
+    <method name="downloadFrom">
+      <arg name="path" type="s" direction="in"/>
       <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
     </method>
   </interface>
