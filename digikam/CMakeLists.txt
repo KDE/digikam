@@ -122,7 +122,7 @@ SET(digikam_LIB_SRCS
                       tagcreatedlg.cpp 
                       tagfilterview.cpp 
                       tagfolderview.cpp 
-#                      tagspopupmenu.cpp 
+                      tagspopupmenu.cpp 
                       welcomepageview.cpp 
                       main.cpp
    )

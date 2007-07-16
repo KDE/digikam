@@ -57,6 +57,9 @@
 namespace Digikam
 {
 
+#warning "TODO: kde4 port it";
+/*  // TODO: KDE4PORT: use KWidgetAction API instead QCustomMenuItem
+
 class TagsPopupCheckedMenuItem : public QCustomMenuItem
 {
 
@@ -114,6 +117,7 @@ private:
 
     QPixmap     m_pix;
 };
+*/
 
 // ------------------------------------------------------------------------
 
@@ -123,14 +127,14 @@ public:
 
     TagsPopupMenuPriv(){}
 
-    int                 addToID;
+    int                    addToID;
 
-    QPixmap             addTagPix;
+    QPixmap                addTagPix;
 
-    Q3ValueList<int>     assignedTags;
+    Q3ValueList<int>       assignedTags;
     Q3ValueList<qlonglong> selectedImageIDs;
 
-    TagsPopupMenu::Mode mode;
+    TagsPopupMenu::Mode    mode;
 };
 
 TagsPopupMenu::TagsPopupMenu(const Q3ValueList<qlonglong>& selectedImageIDs, int addToID, Mode mode)
@@ -142,11 +146,8 @@ TagsPopupMenu::TagsPopupMenu(const Q3ValueList<qlonglong>& selectedImageIDs, int
     d->mode             = mode;
 
     KIconLoader *iconLoader = KIconLoader::global();
-    d->addTagPix            = iconLoader->loadIcon("tag",
-                                        KIcon::NoGroup,
-                                        KIcon::SizeSmall,
-                                        KIcon::DefaultState,
-                                        0, true);
+    d->addTagPix            = iconLoader->loadIcon("tag", K3Icon::NoGroup, K3Icon::SizeSmall,
+                                                   K3Icon::DefaultState, 0, true);
     
     connect(this, SIGNAL(aboutToShow()),
             this, SLOT(slotAboutToShow()));
@@ -186,8 +187,10 @@ Q3PopupMenu* TagsPopupMenu::buildSubMenu(int tagid)
         QPixmap pix = SyncJob::getTagThumbnail(album);
         if ((d->mode == ASSIGN) && (d->assignedTags.contains(album->id())))
         {
+#warning "TODO: kde4 port it";
+/*  // TODO: KDE4PORT: use KWidgetAction API instead QCustomMenuItem
             popup->insertItem(new TagsPopupCheckedMenuItem(popup, album->title(), pix),
-                              d->addToID + album->id());
+                              d->addToID + album->id());*/
         }
         else
         {
@@ -231,8 +234,8 @@ void TagsPopupMenu::slotAboutToShow()
             return;
 
         // also add the parents of the assigned tags
-        IntList tList;
-        for (IntList::iterator it = d->assignedTags.begin();
+        QLinkedList<int> tList;
+        for (QLinkedList<int>::iterator it = d->assignedTags.begin();
              it != d->assignedTags.end(); ++it)
         {
             TAlbum* album = man->findTAlbum(*it);
@@ -247,7 +250,7 @@ void TagsPopupMenu::slotAboutToShow()
             }
         }
 
-        for (IntList::iterator it = tList.begin();
+        for (QLinkedList<int>::iterator it = tList.begin();
              it != tList.end(); ++it)
         {
             d->assignedTags.append(*it);
@@ -301,8 +304,7 @@ void TagsPopupMenu::iterateAndBuildMenu(Q3PopupMenu *menu, TAlbum *album)
         
         if (d->mode == REMOVE)
         {
-            IntList::iterator it = qFind(d->assignedTags.begin(), 
-                                         d->assignedTags.end(), a->id());
+            QLinkedList<int>::iterator it = qFind(d->assignedTags.begin(), d->assignedTags.end(), a->id());
             if (it == d->assignedTags.end())
                 continue;
         }
@@ -319,8 +321,12 @@ void TagsPopupMenu::iterateAndBuildMenu(Q3PopupMenu *menu, TAlbum *album)
         {
             if ((d->mode == ASSIGN) && (d->assignedTags.contains(a->id())))
             {
+#warning "TODO: kde4 port it";
+/*  // TODO: KDE4PORT: use KWidgetAction API instead QCustomMenuItem
+            
                 menu->insertItem(new TagsPopupCheckedMenuItem(this, a->title(), pix),
                                                               d->addToID + a->id());
+*/
             }
             else
             {
