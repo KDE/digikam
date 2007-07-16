@@ -30,21 +30,15 @@
 
 // Qt includes.
 
-#include <qtimer.h>
-#include <qpainter.h>
-#include <q3valuelist.h>
-#include <q3ptrdict.h>
-#include <qstyle.h>
-#include <qapplication.h>
-#include <qdrawutil.h>
-//Added by qt3to4:
-#include <QKeyEvent>
-#include <QResizeEvent>
-#include <QFocusEvent>
-#include <QMouseEvent>
-#include <QEvent>
+#include <Q3ValueList>
+#include <Q3PtrDict>
+#include <QTimer>
+#include <QPainter>
+#include <QStyle>
+#include <QApplication>
 #include <QPaintEvent>
-#include <QWheelEvent>
+#include <QDropEvent>
+#include <QMouseEvent>
 
 // KDE includes.
 
@@ -68,19 +62,19 @@ public:
 
     IconViewPriv()
     {
-        firstGroup          = 0;
-        lastGroup           = 0;
-        currItem            = 0;
-        anchorItem          = 0;
-        clearing            = false;
-        spacing             = 10;
+        firstGroup               = 0;
+        lastGroup                = 0;
+        currItem                 = 0;
+        anchorItem               = 0;
+        clearing                 = false;
+        spacing                  = 10;
 
-        rubber              = 0;
-        dragging            = false;
-        pressedMoved        = false;
+        rubber                   = 0;
+        dragging                 = false;
+        pressedMoved             = false;
 
-        firstContainer      = 0;
-        lastContainer       = 0;
+        firstContainer           = 0;
+        lastContainer            = 0;
 
         showTips                 = false;
         toolTipItem              = 0;
@@ -142,8 +136,11 @@ public:
 };
 
 IconView::IconView(QWidget* parent, const char* name)
-        : Q3ScrollView(parent, name, Qt::WStaticContents|Qt::WNoAutoErase)
+        : Q3ScrollView(parent)
 {
+    setObjectName(name);
+    setWindowFlags(Qt::WStaticContents|Qt::WNoAutoErase);
+
     viewport()->setBackgroundMode(Qt::NoBackground);
     viewport()->setFocusProxy(this);
     viewport()->setFocusPolicy(QWidget::WheelFocus);
@@ -1945,4 +1942,3 @@ int IconView::cmpItems(const void *n1, const void *n2)
 }
 
 }  // namespace Digikam
-
