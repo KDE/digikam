@@ -537,11 +537,17 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------------
 
-    d->addImagesAction = new KAction(KIcon("albumfolder-importdir"), i18n("Add Images..."), this);
+    d->addImagesAction = new KAction(KIcon("albumfolder-importimages"), i18n("Add Images..."), this);
     d->addImagesAction->setShortcut(Qt::CTRL+Qt::Key_I);
     d->addImagesAction->setWhatsThis(i18n("Adds new items to the current Album."));
     connect(d->addImagesAction, SIGNAL(triggered()), d->view, SLOT(slotAlbumAddImages()));
     actionCollection()->addAction("album_addImages", d->addImagesAction);
+
+    // -----------------------------------------------------------------
+
+    d->albumImportAction = new KAction(KIcon("albumfolder-importdir"), i18n("Import Folders..."), this);
+    connect(d->albumImportAction, SIGNAL(triggered()), d->view, SLOT(slotAlbumImportFolder()));
+    actionCollection()->addAction("album_importFolder", d->albumImportAction);
 
     // -----------------------------------------------------------------
 
