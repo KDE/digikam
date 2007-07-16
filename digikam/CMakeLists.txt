@@ -141,6 +141,7 @@ TARGET_LINK_LIBRARIES(digikam
                       ${KDE4_KDEUI_LIBS} 
                       ${KDE4_KUTILS_LIBS} 
                       ${KDE4_KABC_LIBS}
+                      -lkabc
 
                       ${SQLITE_LIBRARIES}
                       ${GPHOTO2_LIBRARIES}
@@ -158,3 +159,24 @@ TARGET_LINK_LIBRARIES(digikam
 
 SET_TARGET_PROPERTIES(digikam PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 INSTALL(TARGETS digikam DESTINATION ${LIB_INSTALL_DIR} )
+
+# digiKam binary progam #########################################################   
+      
+SET(digikam_bin_SRCS main.cpp )   
+      
+KDE4_AUTOMOC(${digikam_bin_SRCS})   
+      
+KDE4_ADD_EXECUTABLE(digikam_bin ${digikam_bin_SRCS})   
+      
+TARGET_LINK_LIBRARIES(digikam_bin ${KDE4_KPARTS_LIBS})   
+      
+SET_TARGET_PROPERTIES(digikam_bin PROPERTIES OUTPUT_NAME digikam)   
+      
+INSTALL(TARGETS digikam_bin DESTINATION ${BIN_INSTALL_DIR})   
+      
+      
+# Others Files to install #######################################################   
+      
+INSTALL( FILES digikam.desktop DESTINATION ${XDG_APPS_DIR} )   
+INSTALL( FILES digikamui.rc DESTINATION ${DATA_INSTALL_DIR}/digikam )   
+INSTALL( FILES digikam_export.h DESTINATION ${INCLUDE_INSTALL_DIR} )

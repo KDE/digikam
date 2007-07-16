@@ -119,5 +119,4 @@ void ImageAttributesWatch::fileMetadataChanged(const KUrl &url)
     emit signalFileMetadataChanged(url);
 }
 
-
 } // namespace Digikam
