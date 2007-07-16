@@ -140,7 +140,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
             dio.cpp                             Laurent                 X       DONE
             dragobjects.cpp                     Gilles                  X       DONE
             firstrun.cpp                        Gilles                  X       DONE
-            folderitem.cpp                                              X
+            folderitem.cpp                      Gilles                  X       DONE
             folderview.cpp                      Gilles                  X       DONE
             icongroupitem.cpp                   Gilles                  X       DONE
             iconitem.cpp                        Gilles                  X       DONE
