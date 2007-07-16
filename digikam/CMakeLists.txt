@@ -145,6 +145,7 @@ TARGET_LINK_LIBRARIES(digikam
                       ${KDE4_KHTML_LIBS} 
                       ${KDE4_KDEUI_LIBS} 
                       ${KDE4_KUTILS_LIBS} 
+		      ${KDE4_KABC_LIBS}
                       ${SQLITE_LIBRARIES}
                       ${GPHOTO2_LIBRARIES}
                       ${JPEG_LIBRARIES}
@@ -152,8 +153,8 @@ TARGET_LINK_LIBRARIES(digikam
                       ${PNG_LIBRARIES}
                       ${LCMS_LIBRARIES}
                       ${JASPER_LIBRARIES}
-                      ${KDCRAW_LIBRARIES}
                       ${LCMS_LIBRARIES}
+                      ${KDCRAW_LIBRARIES}
                       ${KEXIV2_LIBRARIES}
                       ${KIPI_LIBRARIES}
 	      )
