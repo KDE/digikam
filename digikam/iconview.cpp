@@ -753,7 +753,7 @@ void IconView::viewportPaintEvent(QPaintEvent* pe)
     }
 
     painter.setClipRegion(paintRegion);
-    painter.fillRect(r, colorGroup().base());
+    painter.fillRect(r, palette().color(QPalette::Base));
     painter.end();
 }
 
@@ -891,6 +891,7 @@ void IconView::contentsMousePressEvent(QMouseEvent* e)
     slotToolTip();
     
     // Delete any existing rubber -------------------------------
+
     if ( d->rubber )
     {
         QPainter p;
@@ -1001,7 +1002,7 @@ void IconView::contentsMousePressEvent(QMouseEvent* e)
         
         d->currItem->repaint();
 
-        d->dragging = true;
+        d->dragging     = true;
         d->dragStartPos = e->pos();
         
         return;
@@ -1883,24 +1884,18 @@ IconItem* IconView::findLastVisibleItem(const QRect& r, bool useThumbnailRect) c
 
 void IconView::drawFrameRaised(QPainter* p)
 {
-    QRect       r      = frameRect();
-    int         lwidth = lineWidth();
-
-    const QColorGroup & g = colorGroup();
-
-    qDrawShadeRect( p, r, g, false, lwidth,
-                    midLineWidth() );
+    QRect r               = frameRect();
+    int lwidth            = lineWidth();
+    const QColorGroup & g = QColorGroup(palette());
+    qDrawShadeRect( p, r, g, false, lwidth, midLineWidth() );
 }
 
 void IconView::drawFrameSunken(QPainter* p)
 {
-    QRect       r      = frameRect();
-    int         lwidth = lineWidth();
-
-    const QColorGroup & g = colorGroup();
-
-    qDrawShadeRect( p, r, g, true, lwidth,
-                    midLineWidth() );
+    QRect r               = frameRect();
+    int lwidth            = lineWidth();
+    const QColorGroup & g = QColorGroup(palette());
+    qDrawShadeRect( p, r, g, true, lwidth, midLineWidth() );
 }
 
 void IconView::setEnableToolTips(bool val)
