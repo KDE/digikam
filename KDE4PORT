@@ -168,7 +168,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
             tagcreatedlg.cpp                    Gilles                  X       DONE
             tagfilterview.cpp                   Gilles                  X       DONE
             tagfolderview.cpp                   Gilles                  X       DONE
-            tagspopupmenu.cpp                                           X
+            tagspopupmenu.cpp                   Gilles                  X       UNCOMPLETE           Compile. QCustomMenuItem code must be ported to QWidgetAction.
             welcomepageview.cpp                 Laurent                 X       DONE
 
  6      |-imageplugins
