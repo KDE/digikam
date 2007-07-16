@@ -112,11 +112,12 @@ void ImageAttributesWatch::imageCaptionChanged(qint64 imageId)
 {
     emit signalImageCaptionChanged(imageId);
 }
+*/
 
 void ImageAttributesWatch::fileMetadataChanged(const KUrl &url)
 {
     emit signalFileMetadataChanged(url);
 }
-*/
+
 
 } // namespace Digikam
