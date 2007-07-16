@@ -162,11 +162,11 @@ INSTALL(TARGETS digikam DESTINATION ${LIB_INSTALL_DIR} )
 
 # digiKam binary progam #########################################################   
       
-SET(digikam_bin_SRCS main.cpp )   
+SET(digikam_bin_SRCS main.cpp)   
       
 KDE4_ADD_EXECUTABLE(digikam_bin ${digikam_bin_SRCS})   
       
-TARGET_LINK_LIBRARIES(digikam_bin ${KDE4_KPARTS_LIBS})   
+TARGET_LINK_LIBRARIES(digikam_bin ${KDE4_KPARTS_LIBS} digikam)   
       
 SET_TARGET_PROPERTIES(digikam_bin PROPERTIES OUTPUT_NAME digikam)   
       
