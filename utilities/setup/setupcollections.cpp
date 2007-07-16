@@ -102,7 +102,7 @@ SetupCollections::SetupCollections(QWidget* parent )
 
     // --------------------------------------------------------
 
-    connect(d->albumCollectionBox, SIGNAL(selectionChanged()),
+    connect(d->albumCollectionBox, SIGNAL(itemSelectionChanged()),
             this, SLOT(slotCollectionSelectionChanged()));
     
     connect(d->addCollectionButton, SIGNAL(clicked()),
