@@ -1204,7 +1204,7 @@ void main_init(struct callback_data *data) {
   strcpy(continuePrompt,"   ...> ");
 }
 
-int main(int argc, char **argv){
+int main_main(int argc, char **argv){
   char *zErrMsg = 0;
   struct callback_data data;
   const char *zInitFile = 0;
@@ -1352,3 +1352,4 @@ int main(int argc, char **argv){
   if( db ) sqlite_close(db);
   return 0;
 }
+
