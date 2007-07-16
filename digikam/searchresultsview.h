@@ -72,7 +72,7 @@ private:
 private slots:
 
     void slotData(KIO::Job *job, const QByteArray &data);
-    void slotResult(KIO::Job *job);
+    void slotResult(KJob *job);
     void slotGotThumbnail(const KUrl& url, const QPixmap& pix);
     void slotFailedThumbnail(const KUrl& url);
 };

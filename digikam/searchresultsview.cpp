@@ -81,8 +81,8 @@ void SearchResultsView::openURL(const KUrl& url)
                     false, // getting dimensions (not needed here)
                     1);    // miniListing (Use 0 for full listing)
 
-    connect(m_listJob, SIGNAL(result(KIO::Job*)),
-            this, SLOT(slotResult(KIO::Job*)));
+    connect(m_listJob, SIGNAL(result(KJob*)),
+            this, SLOT(slotResult(KJob*)));
 
     connect(m_listJob, SIGNAL(data(KIO::Job*, const QByteArray&)),
             this, SLOT(slotData(KIO::Job*, const QByteArray&)));
@@ -160,8 +160,9 @@ void SearchResultsView::slotData(KIO::Job*, const QByteArray &data)
     }
 }
 
-void SearchResultsView::slotResult(KIO::Job *job)
+void SearchResultsView::slotResult(KJob *kjob)
 {
+    KIO::Job *job = static_cast<KIO::Job*>(kjob);
     if (job->error())
     {
         job->ui()->setWindow(this);

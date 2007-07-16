@@ -182,7 +182,7 @@ INSTALL( TARGETS kio_digikamthumbnail DESTINATION ${PLUGIN_INSTALL_DIR} )
 INSTALL( TARGETS kio_digikamtags DESTINATION ${PLUGIN_INSTALL_DIR} )
 INSTALL( TARGETS kio_digikamdates DESTINATION ${PLUGIN_INSTALL_DIR} )
 INSTALL( TARGETS kio_digikamsearch DESTINATION ${PLUGIN_INSTALL_DIR} )
-#INSTALL( TARGETS kio_digikamalbums DESTINATION ${PLUGIN_INSTALL_DIR} )
+INSTALL( TARGETS kio_digikamalbums DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 INSTALL( FILES digikamthumbnail.protocol
                digikamtags.protocol

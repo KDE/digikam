@@ -85,7 +85,7 @@ private slots:
 
     void slotContextMenu(Q3ListViewItem*, const QPoint&, int);
 
-    void slotDIOResult(KIO::Job* job);
+    void slotDIOResult(KJob* job);
 
 protected:
 

@@ -88,8 +88,8 @@ void ImageInfoJob::allItemsFromAlbum(Album *album)
     ImageLister lister;
     d->job = lister.startListJob(album->kurl(), d->imagefilter, false);
 
-    connect(d->job, SIGNAL(result(KIO::Job*)),
-            this, SLOT(slotResult(KIO::Job*)));
+    connect(d->job, SIGNAL(result(KJob*)),
+            this, SLOT(slotResult(KJob*)));
 
     connect(d->job, SIGNAL(data(KIO::Job*, const QByteArray&)),
             this, SLOT(slotData(KIO::Job*, const QByteArray&)));
@@ -104,7 +104,7 @@ void ImageInfoJob::stop()
     }
 }
 
-void ImageInfoJob::slotResult(KIO::Job* job)
+void ImageInfoJob::slotResult(KJob* job)
 {
     d->job = 0;
 

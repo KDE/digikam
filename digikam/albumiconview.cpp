@@ -768,8 +768,8 @@ void AlbumIconView::slotPaste()
             K3URLDrag::decode(data, srcURLs);
 
             KIO::Job* job = DIO::copy(srcURLs, destURL);
-            connect(job, SIGNAL(result(KIO::Job*)),
-                    this, SLOT(slotDIOResult(KIO::Job*)));
+            connect(job, SIGNAL(result(KJob*)),
+                    this, SLOT(slotDIOResult(KJob*)));
         }
     }
 }
@@ -828,8 +828,8 @@ void AlbumIconView::slotRename(AlbumIconItem* item)
 
     KIO::CopyJob* job = DIO::rename(oldURL, newURL);
 
-    connect(job, SIGNAL(result(KIO::Job*)),
-            this, SLOT(slotDIOResult(KIO::Job*)));
+    connect(job, SIGNAL(result(KJob*)),
+            this, SLOT(slotDIOResult(KJob*)));
 
     connect(job, SIGNAL(copyingDone(KIO::Job *, const KUrl &, const KUrl &, bool, bool)),
             this, SLOT(slotRenamed(KIO::Job*, const KUrl &, const KUrl&)));
@@ -887,8 +887,8 @@ void AlbumIconView::slotDeleteSelectedItems(bool deletePermanently)
     // trash does not like non-local URLs, put is not implemented
     KIO::Job* job = DIO::del(useTrash ? urlList : kioUrlList, useTrash);
 
-    connect(job, SIGNAL(result(KIO::Job*)),
-            this, SLOT(slotDIOResult(KIO::Job*)));
+    connect(job, SIGNAL(result(KJob*)),
+            this, SLOT(slotDIOResult(KJob*)));
 
     // The AlbumManager KDirWatch will trigger a DIO::scan.
     // When this is completed, DIO will call AlbumLister::componentData()->refresh().
@@ -919,8 +919,8 @@ void AlbumIconView::slotDeleteSelectedItemsDirectly(bool useTrash)
     // trash does not like non-local URLs, put is not implemented
     KIO::Job* job = DIO::del(useTrash ? urlList : kioUrlList , useTrash);
 
-    connect(job, SIGNAL(result(KIO::Job*)),
-            this, SLOT(slotDIOResult(KIO::Job*)));
+    connect(job, SIGNAL(result(KJob*)),
+            this, SLOT(slotDIOResult(KJob*)));
 }
 
 void AlbumIconView::slotFilesModified()
@@ -1208,15 +1208,15 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
             case 10: 
             {
                 KIO::Job* job = DIO::move(srcURLs, destURL);
-                connect(job, SIGNAL(result(KIO::Job*)),
-                        this, SLOT(slotDIOResult(KIO::Job*)));
+                connect(job, SIGNAL(result(KJob*)),
+                        this, SLOT(slotDIOResult(KJob*)));
                 break;
             }
             case 11: 
             {
                 KIO::Job* job = DIO::copy(srcURLs, destURL);
-                connect(job, SIGNAL(result(KIO::Job*)),
-                        this, SLOT(slotDIOResult(KIO::Job*)));
+                connect(job, SIGNAL(result(KJob*)),
+                        this, SLOT(slotDIOResult(KJob*)));
                 break;
             }
             default:
@@ -2021,8 +2021,9 @@ void AlbumIconView::slotAssignRatingFiveStar()
     slotAssignRating(5);
 }
 
-void AlbumIconView::slotDIOResult(KIO::Job* job)
+void AlbumIconView::slotDIOResult(KJob* kjob)
 {
+    KIO::Job *job = static_cast<KIO::Job*>(kjob);
     if (job->error())
     {
         job->ui()->setWindow(this);

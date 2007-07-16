@@ -70,7 +70,7 @@ signals:
 private slots:
         
     void blackFrameDataArrived(KIO::Job*, const QByteArray& data);
-    void slotResult(KIO::Job*);
+    void slotResult(KJob*);
 
 private:
 

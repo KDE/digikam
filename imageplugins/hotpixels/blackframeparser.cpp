@@ -86,8 +86,8 @@ void BlackFrameParser::parseBlackFrame(KUrl url)
     connect(job, SIGNAL(data( KIO::Job*, const QByteArray&)),
             this, SLOT( blackFrameDataArrived( KIO::Job *, const QByteArray& )));
     
-    connect(job, SIGNAL(result(KIO::Job* )), 
-            this, SLOT(slotResult(KIO::Job*)));
+    connect(job, SIGNAL(result(KJob* )),
+            this, SLOT(slotResult(KJob*)));
 }
 
 void BlackFrameParser::parseBlackFrame(QImage& img)
@@ -104,7 +104,7 @@ void BlackFrameParser::blackFrameDataArrived(KIO::Job*,const QByteArray& data)
     memcpy(mData.data()+size,data.data(),dataSize);
 }
 
-void BlackFrameParser::slotResult(KIO::Job*)
+void BlackFrameParser::slotResult(KJob*)
 {
     blackFrameParsing(true);
 }

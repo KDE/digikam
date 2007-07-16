@@ -626,8 +626,8 @@ void AlbumManager::scanDAlbums()
                                                0);
     d->dateListJob->addMetaData("folders", "yes");
 
-    connect(d->dateListJob, SIGNAL(result(KIO::Job*)),
-            SLOT(slotResult(KIO::Job*)));
+    connect(d->dateListJob, SIGNAL(result(KJob*)),
+            SLOT(slotResult(KJob*)));
     connect(d->dateListJob, SIGNAL(data(KIO::Job*, const QByteArray&)),
             SLOT(slotData(KIO::Job*, const QByteArray&)));
 }
@@ -1368,7 +1368,7 @@ void AlbumManager::refreshItemHandler(const KUrl::List& itemList)
         d->itemHandler->refreshItems(itemList);
 }
 
-void AlbumManager::slotResult(KIO::Job* job)
+void AlbumManager::slotResult(KJob* job)
 {
     d->dateListJob = 0;
 

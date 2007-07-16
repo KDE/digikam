@@ -48,7 +48,7 @@ public:
     
 private slots:
 
-   void slotDone(KIO::Job* job);
+   void slotDone(KJob* job);
 };
 
 } // namespace DIO

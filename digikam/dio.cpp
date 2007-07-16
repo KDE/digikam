@@ -220,11 +220,11 @@ bool running()
 Watch::Watch(KIO::Job* job)
 {
     m_runCount++;
-    connect(job, SIGNAL(result(KIO::Job*)),
-            this, SLOT(slotDone(KIO::Job*)));
+    connect(job, SIGNAL(result(KJob*)),
+            this, SLOT(slotDone(KJob*)));
 }
 
-void Watch::slotDone(KIO::Job*)
+void Watch::slotDone(KJob*)
 {
     Digikam::AlbumManager::componentData()->refresh();
     Digikam::AlbumLister::componentData()->refresh();

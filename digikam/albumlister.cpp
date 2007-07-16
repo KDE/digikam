@@ -148,8 +148,8 @@ void AlbumLister::openAlbum(Album *album)
                                        d->filter,
                                        AlbumSettings::componentData()->getIconShowResolution());
 
-    connect(d->job, SIGNAL(result(KIO::Job*)),
-            this, SLOT(slotResult(KIO::Job*)));
+    connect(d->job, SIGNAL(result(KJob*)),
+            this, SLOT(slotResult(KJob*)));
 
     connect(d->job, SIGNAL(data(KIO::Job*, const QByteArray&)),
             this, SLOT(slotData(KIO::Job*, const QByteArray&)));
@@ -177,8 +177,8 @@ void AlbumLister::refresh()
     ImageLister lister;
     d->job = lister.startListJob(d->currAlbum->kurl(), d->filter, AlbumSettings::componentData()->getIconShowResolution());
 
-    connect(d->job, SIGNAL(result(KIO::Job*)),
-            this, SLOT(slotResult(KIO::Job*)));
+    connect(d->job, SIGNAL(result(KJob*)),
+            this, SLOT(slotResult(KJob*)));
 
     connect(d->job, SIGNAL(data(KIO::Job*, const QByteArray&)),
             this, SLOT(slotData(KIO::Job*, const QByteArray&)));
@@ -334,7 +334,7 @@ void AlbumLister::slotFilterItems()
         kapp->restoreOverrideCursor();
 }
 
-void AlbumLister::slotResult(KIO::Job* job)
+void AlbumLister::slotResult(KJob* job)
 {
     d->job = 0;
 

@@ -685,8 +685,8 @@ void AlbumFolderView::albumDelete(AlbumFolderViewItem *item)
     u.setProtocol("file");
     u.setPath(album->folderPath());
     KIO::Job* job = DIO::del(u, useTrash);
-    connect(job, SIGNAL(result(KIO::Job *)),
-            this, SLOT(slotDIOResult(KIO::Job *)));
+    connect(job, SIGNAL(result(KJob *)),
+            this, SLOT(slotDIOResult(KJob *)));
 }
 
 void AlbumFolderView::addAlbumChildrenToList(KUrl::List &list, Album *album)
@@ -704,8 +704,9 @@ void AlbumFolderView::addAlbumChildrenToList(KUrl::List &list, Album *album)
     }
 }
 
-void AlbumFolderView::slotDIOResult(KIO::Job* job)
+void AlbumFolderView::slotDIOResult(KJob* kjob)
 {
+    KIO::Job *job = static_cast<KIO::Job*>(kjob);
     if (job->error())
     {
         job->ui()->setWindow(this);
@@ -933,8 +934,8 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
                     destAlbum = itemDrop->getAlbum();
                 }
                 KIO::Job* job = DIO::move(album->kurl(), destAlbum->kurl());
-                connect(job, SIGNAL(result(KIO::Job*)),
-                        this, SLOT(slotDIOResult(KIO::Job*)));
+                connect(job, SIGNAL(result(KJob*)),
+                        this, SLOT(slotDIOResult(KJob*)));
             }
         }
         else if (AlbumSettings::componentData()->getAlbumSortOrder()
@@ -1056,15 +1057,15 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
             case 10:
             {
                 KIO::Job* job = DIO::move(kioURLs, destAlbum->kurl());
-                connect(job, SIGNAL(result(KIO::Job*)),
-                        this, SLOT(slotDIOResult(KIO::Job*)));
+                connect(job, SIGNAL(result(KJob*)),
+                        this, SLOT(slotDIOResult(KJob*)));
                 break;
             }
             case 11:
             {
                 KIO::Job* job = DIO::copy(kioURLs, destAlbum->kurl());
-                connect(job, SIGNAL(result(KIO::Job*)),
-                        this, SLOT(slotDIOResult(KIO::Job*)));
+                connect(job, SIGNAL(result(KJob*)),
+                        this, SLOT(slotDIOResult(KJob*)));
                 break;
             }
             case 12:
@@ -1137,15 +1138,15 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
             case 10:
             {
                 KIO::Job* job = DIO::move(srcURLs, destAlbum->kurl());
-                connect(job, SIGNAL(result(KIO::Job*)),
-                        this, SLOT(slotDIOResult(KIO::Job*)));
+                connect(job, SIGNAL(result(KJob*)),
+                        this, SLOT(slotDIOResult(KJob*)));
                 break;
             }
             case 11:
             {
                 KIO::Job* job = DIO::copy(srcURLs, destAlbum->kurl());
-                connect(job, SIGNAL(result(KIO::Job*)),
-                        this, SLOT(slotDIOResult(KIO::Job*)));
+                connect(job, SIGNAL(result(KJob*)),
+                        this, SLOT(slotDIOResult(KJob*)));
                 break;
             }
             default:
@@ -1196,8 +1197,8 @@ void AlbumFolderView::albumImportFolder()
 
     KIO::Job* job = DIO::copy(urls, parent->kurl());
 
-    connect(job, SIGNAL(result(KIO::Job *)),
-            this, SLOT(slotDIOResult(KIO::Job *)));
+    connect(job, SIGNAL(result(KJob *)),
+            this, SLOT(slotDIOResult(KJob *)));
 }
 
 void AlbumFolderView::selectItem(int id)

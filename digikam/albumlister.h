@@ -114,7 +114,7 @@ private slots:
     void slotClear();
     void slotFilterItems();
 
-    void slotResult(KIO::Job* job);
+    void slotResult(KJob* job);
     void slotData(KIO::Job* job, const QByteArray& data);
 
 private:

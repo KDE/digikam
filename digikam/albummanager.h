@@ -42,6 +42,7 @@
 
 class QDate;
 
+class KJob;
 namespace KIO
 {
 class Job;
@@ -432,7 +433,7 @@ private:
 
 private slots:
 
-    void slotResult(KIO::Job* job);
+    void slotResult(KJob* job);
     void slotData(KIO::Job* job, const QByteArray& data);
     void slotDirty(const QString& path);
 
