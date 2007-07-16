@@ -111,19 +111,19 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     d->saveTagsIptcBox = new QCheckBox(IptcGroup);
     d->saveTagsIptcBox->setText(i18n("&Save image tags as \"Keywords\" tag"));
     d->saveTagsIptcBox->setWhatsThis( i18n("<p>Turn this option on to store the image tags "
-                                              "in the IPTC <i>Keywords</i> tag."));
+                                           "in the IPTC <i>Keywords</i> tag."));
   
     d->savePhotographerIdIptcBox = new QCheckBox(IptcGroup);
     d->savePhotographerIdIptcBox->setText(i18n("&Save default photographer identity as tags"));
     d->savePhotographerIdIptcBox->setWhatsThis( i18n("<p>Turn this option on to store the default "
-                                                        "photographer identity into the IPTC tags. You can set this "
-                                                        "value in the Identity setup page."));
+                                                     "photographer identity into the IPTC tags. You can set this "
+                                                     "value in the Identity setup page."));
 
     d->saveCreditsIptcBox = new QCheckBox(IptcGroup);
     d->saveCreditsIptcBox->setText(i18n("&Save default credit and copyright identity as tags"));
     d->saveCreditsIptcBox->setWhatsThis( i18n("<p>Turn this option on to store the default "
-                                                 "credit and copyright identity into the IPTC tags. "
-                                                 "You can set this value in the Identity setup page."));
+                                              "credit and copyright identity into the IPTC tags. "
+                                              "You can set this value in the Identity setup page."));
 
     gLayout2->addWidget(d->saveTagsIptcBox);
     gLayout2->addWidget(d->savePhotographerIdIptcBox);
@@ -138,17 +138,17 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     d->saveCommentsBox = new QCheckBox(commonGroup);
     d->saveCommentsBox->setText(i18n("&Save image comments as embedded text"));
     d->saveCommentsBox->setWhatsThis( i18n("<p>Turn this option on to store image comments "
-                                              "into the JFIF section, EXIF tag, and IPTC tag."));
+                                           "into the JFIF section, EXIF tag, and IPTC tag."));
 
     d->saveDateTimeBox = new QCheckBox(commonGroup);
     d->saveDateTimeBox->setText(i18n("&Save image timestamp as tags"));
     d->saveDateTimeBox->setWhatsThis( i18n("<p>Turn this option on to store the image date and time "
-                                              "into the EXIF and IPTC tags."));
+                                           "into the EXIF and IPTC tags."));
 
     d->saveRatingBox = new QCheckBox(commonGroup);
     d->saveRatingBox->setText(i18n("&Save image rating as tags"));
     d->saveRatingBox->setWhatsThis( i18n("<p>Turn this option on to store the image rating "
-                                            "into EXIF tag and IPTC <i>Urgency</i> tag."));
+                                         "into EXIF tag and IPTC <i>Urgency</i> tag."));
     
     gLayout3->addWidget(d->saveCommentsBox);
     gLayout3->addWidget(d->saveDateTimeBox);
@@ -162,9 +162,7 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     KUrlLabel *exiv2LogoLabel = new KUrlLabel(hbox);
     exiv2LogoLabel->setText(QString());
     exiv2LogoLabel->setUrl("http://www.exiv2.org");
-    KGlobal::dirs()->addResourceType("logo-exiv2", KGlobal::dirs()->kde_default("data") + "digikam/data");
-    QString directory = KGlobal::dirs()->findResourceDir("logo-exiv2", "logo-exiv2.png");
-    exiv2LogoLabel->setPixmap( QPixmap( directory + "logo-exiv2.png" ) );
+    exiv2LogoLabel->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-exiv2.png")));
     exiv2LogoLabel->setWhatsThis(i18n("Visit Exiv2 project website"));
 
     K3ActiveLabel* explanation = new K3ActiveLabel(hbox);
