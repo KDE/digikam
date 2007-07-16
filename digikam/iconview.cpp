@@ -143,14 +143,13 @@ IconView::IconView(QWidget* parent, const char* name)
     setObjectName(name);
     setWindowFlags(Qt::WStaticContents|Qt::WNoAutoErase);
 
-    viewport()->setBackgroundMode(Qt::NoBackground);
     viewport()->setFocusProxy(this);
     viewport()->setFocusPolicy(Qt::WheelFocus);
     viewport()->setMouseTracking(true);
 
     d = new IconViewPriv;
     d->rearrangeTimer  = new QTimer(this);
-    d->toolTipTimer = new QTimer(this);
+    d->toolTipTimer    = new QTimer(this);
     
     connect(d->rearrangeTimer, SIGNAL(timeout()),
             this, SLOT(slotRearrange()));
@@ -547,7 +546,10 @@ void IconView::startRearrangeTimer()
 {
     // We want to reduce the number of updates, but not remove all updates
     if (!d->rearrangeTimer->isActive())
-        d->rearrangeTimer->start(d->rearrangeTimerInterval, true);
+    {
+        d->rearrangeTimer->setSingleShot(true);
+        d->rearrangeTimer->start(d->rearrangeTimerInterval);
+    }
 }
 
 void IconView::sort()
@@ -931,11 +933,11 @@ void IconView::contentsMousePressEvent(QMouseEvent* e)
     IconItem *item = findItem(e->pos());
     if (item) 
     {
-        if (e->state() & Qt::ControlModifier)
+        if (e->modifiers() & Qt::ControlModifier)
         {
             item->setSelected(!item->isSelected(), false);
         }
-        else if (e->state() & Qt::ShiftModifier)
+        else if (e->modifiers() & Qt::ShiftModifier)
         {
             blockSignals(true);
 
@@ -1006,7 +1008,7 @@ void IconView::contentsMousePressEvent(QMouseEvent* e)
     }
 
     // Press outside any item. 
-    if (!(e->state() & Qt::ControlModifier))
+    if (!(e->modifiers() & Qt::ControlModifier))
     {
         // unselect all if the ctrl button is not pressed        
         clearSelection();
@@ -1039,7 +1041,7 @@ void IconView::drawRubber(QPainter* p)
     if ( !p || !d->rubber )
         return;
 
-    QRect r(d->rubber->normalize());
+    QRect r(d->rubber->normalized());
 
     r = contentsRectToViewport(r);
 
@@ -1054,7 +1056,7 @@ void IconView::drawRubber(QPainter* p)
 
 void IconView::contentsMouseMoveEvent(QMouseEvent* e)
 {
-    if (e->state() == NoButton)
+    if (e->buttons() == NoButton)
     {
         IconItem* item = findItem(e->pos());
 
@@ -1077,7 +1079,8 @@ void IconView::contentsMouseMoveEvent(QMouseEvent* e)
                 if(acceptToolTip(item, e->pos()))
                 {
                     d->toolTipItem = item;
-                    d->toolTipTimer->start(500, true);
+                    d->toolTipTimer->setSingleShoot(true);
+                    d->toolTipTimer->start(500);
                 }
             }
 
@@ -1103,7 +1106,7 @@ void IconView::contentsMouseMoveEvent(QMouseEvent* e)
     d->toolTipTimer->stop();
     slotToolTip();
 
-    if (d->dragging && (e->state() & Qt::LeftButton))
+    if (d->dragging && (e->buttons() & Qt::LeftButton))
     {
         if ( (d->dragStartPos - e->pos()).manhattanLength()
              > QApplication::startDragDistance() )
@@ -1121,8 +1124,8 @@ void IconView::contentsMouseMoveEvent(QMouseEvent* e)
     d->rubber->setRight( e->pos().x() );
     d->rubber->setBottom( e->pos().y() );
 
-    QRect nr = d->rubber->normalize();
-    QRect rubberUnion = nr.unite(oldRubber.normalize());
+    QRect nr = d->rubber->normalized();
+    QRect rubberUnion = nr.unite(oldRubber.normalized());
 
     bool changed = false;
 
@@ -1218,7 +1221,7 @@ void IconView::contentsMouseReleaseEvent(QMouseEvent* e)
         d->rubber = 0;
     }
 
-    if (e->state() == Qt::LeftButton)
+    if (e->buttons() == Qt::LeftButton)
     {
         if (d->pressedMoved)
         {
@@ -1326,7 +1329,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
             {
                 if (d->currItem->nextItem())
                 {
-                    if (e->state() & Qt::ControlModifier)
+                    if (e->modifiers() & Qt::ControlModifier)
                     {
                         IconItem* tmp = d->currItem;
                         d->currItem   = d->currItem->nextItem();
@@ -1336,7 +1339,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
     
                         item = d->currItem;
                     }
-                    else if (e->state() & Qt::ShiftModifier)
+                    else if (e->modifiers() & Qt::ShiftModifier)
                     {
                         IconItem* tmp = d->currItem;
                         d->currItem   = d->currItem->nextItem();
@@ -1385,7 +1388,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
             {
                 if (d->currItem->prevItem())
                 {
-                    if (e->state() & Qt::ControlModifier)
+                    if (e->modifiers() & Qt::ControlModifier)
                     {
                         IconItem* tmp = d->currItem;
                         d->currItem   = d->currItem->prevItem();
@@ -1395,7 +1398,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
     
                         item = d->currItem;
                     }
-                    else if (e->state() & Qt::ShiftModifier)
+                    else if (e->modifiers() & Qt::ShiftModifier)
                     {
                         IconItem* tmp = d->currItem;
                         d->currItem   = d->currItem->prevItem();
@@ -1455,7 +1458,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
     
                 if (it)            
                 {
-                    if (e->state() & Qt::ControlModifier)
+                    if (e->modifiers() & Qt::ControlModifier)
                     {
                         IconItem* tmp = d->currItem;
                         d->currItem   = it;
@@ -1465,7 +1468,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
     
                         item = d->currItem;
                     }
-                    else if (e->state() & Qt::ShiftModifier)
+                    else if (e->modifiers() & Qt::ShiftModifier)
                     {
                         IconItem* tmp = d->currItem;
                         d->currItem   = it;
@@ -1537,7 +1540,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
     
                 if (it)            
                 {
-                    if (e->state() & Qt::ControlModifier)
+                    if (e->modifiers() & Qt::ControlModifier)
                     {
                         IconItem* tmp = d->currItem;
                         d->currItem   = it;
@@ -1547,7 +1550,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
     
                         item = d->currItem;
                     }
-                    else if (e->state() & Qt::ShiftModifier)
+                    else if (e->modifiers() & Qt::ShiftModifier)
                     {
                         IconItem* tmp = d->currItem;
                         d->currItem   = it;
@@ -1686,7 +1689,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
         {
             if (d->currItem)
             {
-                if ( (e->state() & Qt::ControlModifier) || (e->state() & Qt::ShiftModifier) )
+                if ( (e->modifiers() & Qt::ControlModifier) || (e->modifiers() & Qt::ShiftModifier) )
                 {
                     d->currItem->setSelected(!d->currItem->isSelected(), false);
                 }
