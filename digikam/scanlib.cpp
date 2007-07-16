@@ -100,7 +100,7 @@ void ScanLib::startScan()
 {
     struct timeval tv1, tv2;
     QPixmap pix = KIconLoader::global()->loadIcon(
-                  "run", K3Icon::NoGroup, 32);
+                  "system-run", K3Icon::NoGroup, 32);
 
     QString message = i18n("Finding non-existing Albums");
     m_progressBar->addedAction(pix, message);
@@ -190,7 +190,7 @@ void ScanLib::slotTotalFilesToScan(int count)
 void ScanLib::slotStartScanningAlbum(const QString &albumRoot, const QString &album)
 {
     QPixmap pix = KIconLoader::global()->loadIcon(
-                  "folder_image", K3Icon::NoGroup, 32);
+                  "folder-image", K3Icon::NoGroup, 32);
     m_progressBar->addedAction(pix, albumRoot + album);
     qApp->processEvents();
 }
