@@ -152,13 +152,13 @@ void MetadataHub::load(ImageInfo *info)
     load(info->dateTime(), info->comment(), info->rating());
 
     AlbumManager *man = AlbumManager::componentData();
-    Q3ValueList<int> tagIds = info->tagIds();
-    Q3ValueList<TAlbum *> loadedTags;
+    QList<int> tagIds = info->tagIds();
+    QList<TAlbum *> loadedTags;
 
     if (d->dbmode == ManagedTags)
     {
-        Q3ValueList<TAlbum *> loadedTags;
-        for (Q3ValueList<int>::iterator it = tagIds.begin(); it != tagIds.end(); ++it)
+        QList<TAlbum *> loadedTags;
+        for (QList<int>::iterator it = tagIds.begin(); it != tagIds.end(); ++it)
         {
             TAlbum *album = man->findTAlbum(*it);
             if (!album)
@@ -166,7 +166,7 @@ void MetadataHub::load(ImageInfo *info)
                 DWarning() << k_funcinfo << "Tag id " << *it << " not found in database." << endl;
                 continue;
             }
-            loadedTags.append(album);
+            loadedTags << album;
         }
 
         loadTags(loadedTags);
@@ -217,7 +217,7 @@ void MetadataHub::load(const DMetadata &metadata)
     {
         AlbumManager *man = AlbumManager::componentData();
         QStringList tagPaths = metadata.getImageKeywords();
-        Q3ValueList<TAlbum *> loadedTags;
+        QList<TAlbum *> loadedTags;
 
         for (QStringList::iterator it = tagPaths.begin(); it != tagPaths.end(); ++it)
         {
@@ -227,7 +227,7 @@ void MetadataHub::load(const DMetadata &metadata)
                 DWarning() << k_funcinfo << "Tag id " << *it << " not found in database. Use NewTagsImport mode?" << endl;
                 continue;
             }
-            loadedTags.append(album);
+            loadedTags << album;
         }
 
         loadTags(loadedTags);
@@ -247,13 +247,13 @@ bool MetadataHub::load(const QString &filePath)
 }
 
 // private common code to merge tags
-void MetadataHub::loadTags(const Q3ValueList<TAlbum *> &loadedTags)
+void MetadataHub::loadTags(const QList<TAlbum *> &loadedTags)
 {
     // get copy of tags
-    Q3ValueList<TAlbum *> previousTags = d->tags.keys();
+    QList<TAlbum *> previousTags = d->tags.keys();
 
     // first go through all tags contained in this set
-    for (Q3ValueList<TAlbum *>::const_iterator it = loadedTags.begin(); it != loadedTags.end(); ++it)
+    for (QList<TAlbum *>::const_iterator it = loadedTags.constBegin(); it != loadedTags.constEnd(); ++it)
     {
         // that is a reference
         TagStatus &status = d->tags[*it];
@@ -281,7 +281,7 @@ void MetadataHub::loadTags(const Q3ValueList<TAlbum *> &loadedTags)
 
     // Those tags which had been set as MetadataAvailable before,
     // but are not contained in this set, have to be set to MetadataDisjoint
-    for (Q3ValueList<TAlbum *>::iterator it = previousTags.begin(); it != previousTags.end(); ++it)
+    for (QList<TAlbum *>::iterator it = previousTags.begin(); it != previousTags.end(); ++it)
     {
         QMap<TAlbum *, TagStatus>::iterator mapIt = d->tags.find(*it);
         if (mapIt != d->tags.end() && mapIt.data() == TagStatus(MetadataAvailable, true))

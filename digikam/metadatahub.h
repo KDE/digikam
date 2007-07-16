@@ -26,7 +26,7 @@
 
 // Qt includes
 
-#include <Q3ValueList>
+#include <QList>
 #include <QStringList>
 #include <QDateTime>
 #include <QMap>
@@ -346,7 +346,7 @@ public:
 private:
 
     void load(const QDateTime &dateTime, const QString &comment, int rating);
-    void loadTags(const Q3ValueList<TAlbum *> &loadedTags);
+    void loadTags(const QList<TAlbum *> &loadedTags);
     void loadTags(const QStringList &loadedTagPaths);
     bool needWriteMetadata(WriteMode writeMode, const MetadataWriteSettings &settings) const;
 
