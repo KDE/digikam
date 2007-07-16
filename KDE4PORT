@@ -133,7 +133,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
             cameralist.cpp                      Laurent                 X       DONE
             cameratype.cpp                      Gilles                  X       DONE
             datefolderview.cpp                  Laurent                 X       DONE
-            dcopiface.cpp                                               X
+            dcopiface.cpp                       Laurent                 X       DONE
             digikamapp.cpp                      Gilles                  X       UNCOMPLETE           Compile. Some code to manage keyboard shorcuts are not yet ported.
             digikamfirstrun.cpp                 Laurent                 X       DONE
             digikamview.cpp                     Gilles                  X       DONE
@@ -144,7 +144,7 @@ ORDER   DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO  DIGIKAM   
             folderview.cpp                      Gilles                  X       DONE
             icongroupitem.cpp                   Gilles                  X       DONE
             iconitem.cpp                        Gilles                  X       DONE
-            iconview.cpp                                                X
+            iconview.cpp                        Gilles                  X       DONE
             imageattributeswatch.cpp            Gilles                  X       DONE
             imagepreviewview.cpp                Gilles                  X       DONE
             kdateedit.cpp                       Gilles                  X       DONE
