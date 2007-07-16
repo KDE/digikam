@@ -242,23 +242,23 @@ void LightTableWindow::setupConnections()
 
     // Thumbs bar connections ---------------------------------------
 
-    connect(d->barView, SIGNAL(signalSetItemOnLeftPanel(ImageInfo*)),
-           this, SLOT(slotSetItemOnLeftPanel(ImageInfo*)));
+    connect(d->barView, SIGNAL(signalSetItemOnLeftPanel(const ImageInfo &)),
+           this, SLOT(slotSetItemOnLeftPanel(const ImageInfo &)));
 
-    connect(d->barView, SIGNAL(signalSetItemOnRightPanel(ImageInfo*)),
-           this, SLOT(slotSetItemOnRightPanel(ImageInfo*)));
+    connect(d->barView, SIGNAL(signalSetItemOnRightPanel(const ImageInfo &)),
+           this, SLOT(slotSetItemOnRightPanel(const ImageInfo &)));
 
-    connect(d->barView, SIGNAL(signalRemoveItem(ImageInfo*)),
-           this, SLOT(slotRemoveItem(ImageInfo*)));
+    connect(d->barView, SIGNAL(signalRemoveItem(const ImageInfo &)),
+           this, SLOT(slotRemoveItem(const ImageInfo &)));
 
-    connect(d->barView, SIGNAL(signalEditItem(ImageInfo*)),
-           this, SLOT(slotEditItem(ImageInfo*)));
+    connect(d->barView, SIGNAL(signalEditItem(const ImageInfo &)),
+           this, SLOT(slotEditItem(const ImageInfo &)));
 
     connect(d->barView, SIGNAL(signalClearAll()),
            this, SLOT(slotClearItemsList()));
 
-    connect(d->barView, SIGNAL(signalLightTableBarItemSelected(ImageInfo*)),
-           this, SLOT(slotItemSelected(ImageInfo*)));
+    connect(d->barView, SIGNAL(signalLightTableBarItemSelected(const ImageInfo &)),
+           this, SLOT(slotItemSelected(const ImageInfo &)));
 
     connect(d->barView, SIGNAL(signalDroppedItems(const ImageInfoList&)),
            this, SLOT(slotThumbbarDroppedItems(const ImageInfoList&)));
@@ -291,11 +291,11 @@ void LightTableWindow::setupConnections()
     connect(d->previewView, SIGNAL(signalRightZoomFactorChanged(double)),
            this, SLOT(slotRightZoomFactorChanged(double)));
 
-    connect(d->previewView, SIGNAL(signalEditItem(ImageInfo*)),
-           this, SLOT(slotEditItem(ImageInfo*)));
+    connect(d->previewView, SIGNAL(signalEditItem(const ImageInfo &)),
+           this, SLOT(slotEditItem(const ImageInfo &)));
 
-    connect(d->previewView, SIGNAL(signalDeleteItem(ImageInfo*)),
-           this, SLOT(slotDeleteItem(ImageInfo*)));
+    connect(d->previewView, SIGNAL(signalDeleteItem(const ImageInfo &)),
+           this, SLOT(slotDeleteItem(const ImageInfo &)));
 
     connect(d->previewView, SIGNAL(signalSlideShow()),
            this, SLOT(slotToggleSlideShow()));
@@ -529,11 +529,12 @@ void LightTableWindow::slotThumbbarDroppedItems(const ImageInfoList& list)
     loadImageInfos(list, 0);
 }
 
-void LightTableWindow::loadImageInfos(const ImageInfoList &list, ImageInfo *imageInfoCurrent)
+void LightTableWindow::loadImageInfos(const ImageInfoList &list, const ImageInfo &givenImageInfoCurrent)
 {
     ImageInfoList l = list;
+    ImageInfo imageInfoCurrent = givenImageInfoCurrent;
 
-    if (!imageInfoCurrent) 
+    if (imageInfoCurrent.isNull())
         imageInfoCurrent = l.first();
 
     AlbumSettings *settings = AlbumSettings::componentData();
@@ -551,11 +552,11 @@ void LightTableWindow::loadImageInfos(const ImageInfoList &list, ImageInfo *imag
     }
 
     d->barView->blockSignals(true);
-    for (Q3PtrList<ImageInfo>::const_iterator it = l.begin(); it != l.end(); ++it)
+    for (ImageInfoList::const_iterator it = l.begin(); it != l.end(); ++it)
     {
-        QString fileExtension = (*it)->fileUrl().fileName().section( '.', -1 );
+        QString fileExtension = (*it).fileUrl().fileName().section( '.', -1 );
 
-        if ( imagefilter.find(fileExtension) != -1 && 
+        if ( imagefilter.indexOf(fileExtension) != -1 &&
              !d->barView->findItemByInfo(*it) )
         {
             new LightTableBarItem(d->barView, *it);
@@ -602,18 +603,18 @@ void LightTableWindow::slotItemsUpdated(const KUrl::List& urls)
 
     for (KUrl::List::const_iterator it = urls.begin() ; it != urls.end() ; ++it)
     {
-        if (d->previewView->leftImageInfo())
+        if (!d->previewView->leftImageInfo().isNull())
         {
-            if (d->previewView->leftImageInfo()->fileUrl() == *it)
+            if (d->previewView->leftImageInfo().fileUrl() == *it)
             {
                 d->previewView->leftReload();
                 d->leftSidebar->itemChanged(d->previewView->leftImageInfo());
             }
         }
 
-        if (d->previewView->rightImageInfo())
+        if (!d->previewView->rightImageInfo().isNull())
         {
-            if (d->previewView->rightImageInfo()->fileUrl() == *it)
+            if (d->previewView->rightImageInfo().fileUrl() == *it)
             {
                 d->previewView->rightReload();
                 d->rightSidebar->itemChanged(d->previewView->rightImageInfo());
@@ -679,9 +680,9 @@ void LightTableWindow::slotRightPreviewLoaded(bool b)
     }
 }
 
-void LightTableWindow::slotItemSelected(ImageInfo* info)
+void LightTableWindow::slotItemSelected(const ImageInfo &info)
 {
-    if (info)
+    if (!info.isNull())
     {
         d->setItemLeftAction->setEnabled(true);
         d->setItemRightAction->setEnabled(true);
@@ -751,7 +752,7 @@ void LightTableWindow::slotItemSelected(ImageInfo* info)
 
 void LightTableWindow::slotLeftDroppedItems(const ImageInfoList& list)
 {
-    ImageInfo *info = *(list.begin());
+    ImageInfo info = list.first();
     loadImageInfos(list, info);
 
     // We will check if first item from list is already stored in thumbbar
@@ -763,7 +764,7 @@ void LightTableWindow::slotLeftDroppedItems(const ImageInfoList& list)
 
 void LightTableWindow::slotRightDroppedItems(const ImageInfoList& list)
 {
-    ImageInfo *info = *(list.begin());
+    ImageInfo info = list.first();
     loadImageInfos(list, info);
 
     // We will check if first item from list is already stored in thumbbar
@@ -775,7 +776,7 @@ void LightTableWindow::slotRightDroppedItems(const ImageInfoList& list)
 
 void LightTableWindow::slotSetItemLeft()
 {
-    if (d->barView->currentItemImageInfo())
+    if (!d->barView->currentItemImageInfo().isNull())
     {
         slotSetItemOnLeftPanel(d->barView->currentItemImageInfo());
     }
@@ -783,25 +784,25 @@ void LightTableWindow::slotSetItemLeft()
 
 void LightTableWindow::slotSetItemRight()
 {
-    if (d->barView->currentItemImageInfo())
+    if (d->barView->currentItemImageInfo().isNull())
     {
         slotSetItemOnRightPanel(d->barView->currentItemImageInfo());
     }
 }
 
-void LightTableWindow::slotSetItemOnLeftPanel(ImageInfo* info)
+void LightTableWindow::slotSetItemOnLeftPanel(const ImageInfo &info)
 {
     d->previewView->setLeftImageInfo(info);
-    if (info)
+    if (!info.isNull())
         d->leftSidebar->itemChanged(info);
     else
         d->leftSidebar->slotNoCurrentItem();
 }
 
-void LightTableWindow::slotSetItemOnRightPanel(ImageInfo* info)
+void LightTableWindow::slotSetItemOnRightPanel(const ImageInfo &info)
 {
     d->previewView->setRightImageInfo(info);
-    if (info)
+    if (!info.isNull())
         d->rightSidebar->itemChanged(info);
     else
         d->rightSidebar->slotNoCurrentItem();
@@ -809,13 +810,13 @@ void LightTableWindow::slotSetItemOnRightPanel(ImageInfo* info)
 
 void LightTableWindow::slotClearItemsList()
 {
-    if (d->previewView->leftImageInfo())
+    if (!d->previewView->leftImageInfo().isNull())
     {
         d->previewView->setLeftImageInfo();
         d->leftSidebar->slotNoCurrentItem();
     }
 
-    if (d->previewView->rightImageInfo())
+    if (!d->previewView->rightImageInfo().isNull())
     {
         d->previewView->setRightImageInfo();
         d->rightSidebar->slotNoCurrentItem();
@@ -827,22 +828,22 @@ void LightTableWindow::slotClearItemsList()
 
 void LightTableWindow::slotDeleteItem()
 {
-    if (d->barView->currentItemImageInfo())
+    if (!d->barView->currentItemImageInfo().isNull())
         slotDeleteItem(d->barView->currentItemImageInfo());
 }
 
-void LightTableWindow::slotDeleteItem(ImageInfo* info)
+void LightTableWindow::slotDeleteItem(const ImageInfo &info)
 {
     bool ask         = true;
     bool permanently = false;
 
-    KUrl u = info->fileUrl();
+    KUrl u = info.fileUrl();
     PAlbum *palbum = AlbumManager::componentData()->findPAlbum(u.directory());
     if (!palbum)
         return;
 
     // Provide a digikamalbums:// URL to KIO
-    KUrl kioURL  = info->databaseUrl();
+    KUrl kioURL  = info.databaseUrl();
     KUrl fileURL = u;
 
     bool useTrash;
@@ -886,24 +887,24 @@ void LightTableWindow::slotDeleteItem(ImageInfo* info)
 
 void LightTableWindow::slotRemoveItem()
 {
-    if (d->barView->currentItemImageInfo())
+    if (!d->barView->currentItemImageInfo().isNull())
         slotRemoveItem(d->barView->currentItemImageInfo());
 }
 
-void LightTableWindow::slotRemoveItem(ImageInfo* info)
+void LightTableWindow::slotRemoveItem(const ImageInfo &info)
 {
-    if (d->previewView->leftImageInfo())
+    if (!d->previewView->leftImageInfo().isNull())
     {
-        if (d->previewView->leftImageInfo()->id() == info->id())
+        if (d->previewView->leftImageInfo() == info)
         {
             d->previewView->setLeftImageInfo();
             d->leftSidebar->slotNoCurrentItem();
         }
     }
 
-    if (d->previewView->rightImageInfo())
+    if (!d->previewView->rightImageInfo().isNull())
     {
-        if (d->previewView->rightImageInfo()->id() == info->id())
+        if (d->previewView->rightImageInfo() == info)
         {
             d->previewView->setRightImageInfo();
             d->rightSidebar->slotNoCurrentItem();
@@ -917,11 +918,11 @@ void LightTableWindow::slotRemoveItem(ImageInfo* info)
 
 void LightTableWindow::slotEditItem()
 {
-    if (d->barView->currentItemImageInfo())
+    if (!d->barView->currentItemImageInfo().isNull())
         slotEditItem(d->barView->currentItemImageInfo());
 }
 
-void LightTableWindow::slotEditItem(ImageInfo* info)
+void LightTableWindow::slotEditItem(const ImageInfo &info)
 {
     ImageWindow *im    = ImageWindow::imagewindow();
     ImageInfoList list = d->barView->itemsImageInfoList();
@@ -976,22 +977,23 @@ void LightTableWindow::slideShow(bool startWithCurrent, SlideShowSettings& setti
 
     ImageInfoList list = d->barView->itemsImageInfoList();
 
-    for (ImageInfo *info = list.first() ; !d->cancelSlideShow && info ; info = list.next())
+    for (ImageInfoList::const_iterator it = list.constBegin();
+         !d->cancelSlideShow && it != list.constEnd() ; ++it)
     {
         SlidePictureInfo pictInfo;
-        pictInfo.comment = info->comment();
+        pictInfo.comment = (*it).comment();
 
         // Perform optimizations: only read pictures metadata if necessary.
         if (settings.printApertureFocal || settings.printExpoSensitivity || settings.printMakeModel)
         {
-            meta.load(info->fileUrl().path());
+            meta.load((*it).fileUrl().path());
             pictInfo.photoInfo = meta.getPhotographInformations();
         }
 
         // In case of dateTime extraction from metadata failed 
-        pictInfo.photoInfo.dateTime = info->dateTime(); 
-        settings.pictInfoMap.insert(info->fileUrl(), pictInfo);
-        settings.fileList.append(info->fileUrl());
+        pictInfo.photoInfo.dateTime = (*it).dateTime();
+        settings.pictInfoMap.insert((*it).fileUrl(), pictInfo);
+        settings.fileList.append((*it).fileUrl());
 
         d->statusProgressBar->setProgressValue((int)((i++/(float)list.count())*100.0));
         kapp->processEvents();
@@ -1006,7 +1008,7 @@ void LightTableWindow::slideShow(bool startWithCurrent, SlideShowSettings& setti
 
         SlideShow *slide = new SlideShow(settings);
         if (startWithCurrent)
-            slide->setCurrent(d->barView->currentItemImageInfo()->fileUrl());
+            slide->setCurrent(d->barView->currentItemImageInfo().fileUrl());
 
         slide->show();
     }

@@ -53,18 +53,18 @@ public:
     void   setSyncPreview(bool sync);
     void   setNavigateByPair(bool b);
 
-    void   setLeftImageInfo(ImageInfo* info=0);
-    void   setRightImageInfo(ImageInfo* info=0);
+    void   setLeftImageInfo(const ImageInfo &info = ImageInfo());
+    void   setRightImageInfo(const ImageInfo &info = ImageInfo());
 
-    ImageInfo* leftImageInfo() const;
-    ImageInfo* rightImageInfo() const;
+    ImageInfo leftImageInfo() const;
+    ImageInfo rightImageInfo() const;
 
     void   setLoadFullImageSize(bool b);
 
     void   setLeftZoomFactor(double z);
     void   setRightZoomFactor(double z);
 
-    void   checkForSelection(ImageInfo* info);
+    void   checkForSelection(const ImageInfo &info);
 
     double leftZoomMax();
     double leftZoomMin();
@@ -98,8 +98,8 @@ signals:
     void signalRightPanelLeftButtonClicked();
 
     void signalSlideShow();
-    void signalDeleteItem(ImageInfo*);
-    void signalEditItem(ImageInfo*);
+    void signalDeleteItem(const ImageInfo &);
+    void signalEditItem(const ImageInfo &);
     void signalToggleOnSyncPreview(bool);
 
 public slots:

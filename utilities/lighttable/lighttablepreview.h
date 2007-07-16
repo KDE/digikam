@@ -66,8 +66,8 @@ public:
 
     QSize getImageSize();
 
-    void setImageInfo(ImageInfo* info=0, ImageInfo *previous=0, ImageInfo *next=0);
-    ImageInfo* getImageInfo() const;
+    void setImageInfo(const ImageInfo &info = ImageInfo(), const ImageInfo &previous = ImageInfo(), const ImageInfo &next = ImageInfo());
+    ImageInfo getImageInfo() const;
 
     void reload();
     void setImagePath(const QString& path=QString());
@@ -82,8 +82,8 @@ public:
 signals:
 
     void signalDroppedItems(const ImageInfoList&);
-    void signalDeleteItem(ImageInfo*);
-    void signalEditItem(ImageInfo*);
+    void signalDeleteItem(const ImageInfo &);
+    void signalEditItem(const ImageInfo &);
     void signalPreviewLoaded(bool success);
     void signalSlideShow();
 

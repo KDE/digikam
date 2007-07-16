@@ -58,7 +58,7 @@ public:
     static LightTableWindow *lightTableWindow();
     static bool              lightTableWindowCreated();
 
-    void loadImageInfos(const ImageInfoList &list, ImageInfo *imageInfoCurrent);
+    void loadImageInfos(const ImageInfoList &list, const ImageInfo &imageInfoCurrent);
 
 signals: 
 
@@ -97,8 +97,8 @@ private slots:
 
     void slotSetItemLeft();
     void slotSetItemRight();
-    void slotSetItemOnLeftPanel(ImageInfo*);
-    void slotSetItemOnRightPanel(ImageInfo*);
+    void slotSetItemOnLeftPanel(const ImageInfo &);
+    void slotSetItemOnRightPanel(const ImageInfo &);
     void slotLeftDroppedItems(const ImageInfoList&);
     void slotRightDroppedItems(const ImageInfoList&);
 
@@ -116,15 +116,15 @@ private slots:
     void slotToggleNavigateByPair();
 
     void slotEditItem();
-    void slotEditItem(ImageInfo*);
+    void slotEditItem(const ImageInfo &);
 
     void slotDeleteItem();
-    void slotDeleteItem(ImageInfo*);
+    void slotDeleteItem(const ImageInfo &);
 
     void slotRemoveItem();
-    void slotRemoveItem(ImageInfo*);
+    void slotRemoveItem(const ImageInfo &);
 
-    void slotItemSelected(ImageInfo*);
+    void slotItemSelected(const ImageInfo &);
     void slotClearItemsList();
 
     void slotThumbbarDroppedItems(const ImageInfoList&);

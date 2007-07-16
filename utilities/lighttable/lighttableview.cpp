@@ -96,11 +96,11 @@ LightTableView::LightTableView(QWidget *parent)
     connect(d->leftPreview, SIGNAL(signalSlideShow()),
             this, SIGNAL(signalSlideShow()));
 
-    connect(d->leftPreview, SIGNAL(signalDeleteItem(ImageInfo*)),
-            this, SIGNAL(signalDeleteItem(ImageInfo*)));
+    connect(d->leftPreview, SIGNAL(signalDeleteItem(const ImageInfo &)),
+            this, SIGNAL(signalDeleteItem(const ImageInfo &)));
 
-    connect(d->leftPreview, SIGNAL(signalEditItem(ImageInfo*)),
-            this, SIGNAL(signalEditItem(ImageInfo*)));
+    connect(d->leftPreview, SIGNAL(signalEditItem(const ImageInfo &)),
+            this, SIGNAL(signalEditItem(const ImageInfo &)));
 
     connect(d->leftPreview, SIGNAL(signalDroppedItems(const ImageInfoList&)),
             this, SIGNAL(signalLeftDroppedItems(const ImageInfoList&)));
@@ -119,11 +119,11 @@ LightTableView::LightTableView(QWidget *parent)
     connect(d->rightPreview, SIGNAL(contentsMoving(int, int)),
             this, SLOT(slotRightContentsMoved(int, int)));
 
-    connect(d->rightPreview, SIGNAL(signalDeleteItem(ImageInfo*)),
-            this, SIGNAL(signalDeleteItem(ImageInfo*)));
+    connect(d->rightPreview, SIGNAL(signalDeleteItem(const ImageInfo &)),
+            this, SIGNAL(signalDeleteItem(const ImageInfo &)));
 
-    connect(d->rightPreview, SIGNAL(signalEditItem(ImageInfo*)),
-            this, SIGNAL(signalEditItem(ImageInfo*)));
+    connect(d->rightPreview, SIGNAL(signalEditItem(const ImageInfo &)),
+            this, SIGNAL(signalEditItem(const ImageInfo &)));
 
     connect(d->rightPreview, SIGNAL(signalDroppedItems(const ImageInfoList&)),
             this, SIGNAL(signalRightDroppedItems(const ImageInfoList&)));
@@ -349,23 +349,23 @@ void LightTableView::slotRightContentsMoved(int x, int y)
     }
 }
 
-ImageInfo* LightTableView::leftImageInfo() const
+ImageInfo LightTableView::leftImageInfo() const
 {
     return d->leftPreview->getImageInfo();
 }
 
-ImageInfo* LightTableView::rightImageInfo() const
+ImageInfo LightTableView::rightImageInfo() const
 {
     return d->rightPreview->getImageInfo();
 }
 
-void LightTableView::setLeftImageInfo(ImageInfo* info)
+void LightTableView::setLeftImageInfo(const ImageInfo &info)
 {
     d->leftLoading = true;
     d->leftPreview->setImageInfo(info);
 }
 
-void LightTableView::setRightImageInfo(ImageInfo* info)
+void LightTableView::setRightImageInfo(const ImageInfo &info)
 {
     d->rightLoading = true;
     d->rightPreview->setImageInfo(info);
@@ -393,8 +393,8 @@ void LightTableView::slotRightPreviewLoaded(bool success)
 
 void LightTableView::checkForSyncPreview()
 {
-    if (d->leftPreview->getImageInfo() && 
-        d->rightPreview->getImageInfo() &&
+    if (!d->leftPreview->getImageInfo().isNull() && 
+        !d->rightPreview->getImageInfo().isNull() &&
         d->leftPreview->getImageSize() == d->rightPreview->getImageSize())
     {
         d->syncPreview = true;
@@ -407,23 +407,23 @@ void LightTableView::checkForSyncPreview()
     emit signalToggleOnSyncPreview(d->syncPreview); 
 }
 
-void LightTableView::checkForSelection(ImageInfo* info)
+void LightTableView::checkForSelection(const ImageInfo &info)
 {
-    if (!info)
+    if (info.isNull())
     {
         d->leftPreview->setSelected(false);
         d->rightPreview->setSelected(false);
         return;
     }
 
-    if (d->leftPreview->getImageInfo())
+    if (!d->leftPreview->getImageInfo().isNull())
     {
-        d->leftPreview->setSelected(d->leftPreview->getImageInfo()->id() == info->id());
+        d->leftPreview->setSelected(d->leftPreview->getImageInfo() == info);
     }
 
-    if (d->rightPreview->getImageInfo())
+    if (!d->rightPreview->getImageInfo().isNull())
     {
-        d->rightPreview->setSelected(d->rightPreview->getImageInfo()->id() == info->id());
+        d->rightPreview->setSelected(d->rightPreview->getImageInfo() == info);
     }
 }
 

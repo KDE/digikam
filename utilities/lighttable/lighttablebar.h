@@ -54,31 +54,31 @@ public:
                   bool exifRotate=false);
     ~LightTableBar();
 
-    ImageInfo*    currentItemImageInfo() const;
+    ImageInfo     currentItemImageInfo() const;
     ImageInfoList itemsImageInfoList();
 
     void setSelectedItem(LightTableBarItem* ltItem);
 
-    LightTableBarItem* findItemByInfo(const ImageInfo* info) const;
+    LightTableBarItem* findItemByInfo(const ImageInfo &info) const;
     LightTableBarItem* findItemByPos(const QPoint& pos) const;
 
     /** Read tool tip settings from Album Settings instance */
     void readToolTipSettings();
 
-    void setOnLeftPanel(const ImageInfo* info);
-    void setOnRightPanel(const ImageInfo* info);
+    void setOnLeftPanel(const ImageInfo &info);
+    void setOnRightPanel(const ImageInfo &info);
 
-    void removeItem(const ImageInfo* info);
+    void removeItem(const ImageInfo &info);
 
     void setNavigateByPair(bool b);
 
 signals:
 
-    void signalLightTableBarItemSelected(ImageInfo*);
-    void signalSetItemOnLeftPanel(ImageInfo*);
-    void signalSetItemOnRightPanel(ImageInfo*);
-    void signalEditItem(ImageInfo*);
-    void signalRemoveItem(ImageInfo*);
+    void signalLightTableBarItemSelected(const ImageInfo &);
+    void signalSetItemOnLeftPanel(const ImageInfo &);
+    void signalSetItemOnRightPanel(const ImageInfo &);
+    void signalEditItem(const ImageInfo &);
+    void signalRemoveItem(const ImageInfo &);
     void signalClearAll();
     void signalDroppedItems(const ImageInfoList&);
 
@@ -116,10 +116,10 @@ class DIGIKAM_EXPORT LightTableBarItem : public ThumbBarItem
 {
 public:
 
-    LightTableBarItem(LightTableBar* view, ImageInfo* item);
+    LightTableBarItem(LightTableBar* view, const ImageInfo &item);
     ~LightTableBarItem();
 
-    ImageInfo* info();
+    ImageInfo info();
 
     void setOnLeftPanel(bool on);
     void setOnRightPanel(bool on);

@@ -92,7 +92,7 @@ public:
     bool       onLeftPanel;
     bool       onRightPanel;
 
-    ImageInfo *info;
+    ImageInfo  info;
 };
 
 LightTableBar::LightTableBar(QWidget* parent, int orientation, bool exifRotate)
@@ -147,7 +147,7 @@ void LightTableBar::slotImageRatingChanged(qlonglong imageId)
     for (ThumbBarItem *item = firstItem(); item; item = item->next())
     {
         LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(item);
-        if (ltItem->info()->id() == imageId)
+        if (ltItem->info().id() == imageId)
         {
             triggerUpdate();
             return;
@@ -232,14 +232,14 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent *e)
 void LightTableBar::slotAssignRating(int rating)
 {
     rating = qMin(5, qMax(0, rating));
-    ImageInfo *info = currentItemImageInfo();
-    if (info)
+    ImageInfo info = currentItemImageInfo();
+    if (!info.isNull())
     {
         MetadataHub hub;
         hub.load(info);
         hub.setRating(rating);
         hub.write(info, MetadataHub::PartialWrite);
-        hub.write(info->filePath(), MetadataHub::FullWriteIfChanged);
+        hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
     }
 }
 
@@ -273,16 +273,16 @@ void LightTableBar::slotAssignRatingFiveStar()
     slotAssignRating(5);
 }
 
-void LightTableBar::setOnLeftPanel(const ImageInfo* info)
+void LightTableBar::setOnLeftPanel(const ImageInfo &info)
 {
     for (ThumbBarItem *item = firstItem(); item; item = item->next())
     {
         LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(item);
         if (ltItem)
         {
-            if (info)
+            if (!info.isNull())
             {
-                if (ltItem->info()->id() == info->id())
+                if (ltItem->info() == info)
                 {
                     ltItem->setOnLeftPanel(true);
                     repaintItem(item);
@@ -302,16 +302,16 @@ void LightTableBar::setOnLeftPanel(const ImageInfo* info)
     }
 }
 
-void LightTableBar::setOnRightPanel(const ImageInfo* info)
+void LightTableBar::setOnRightPanel(const ImageInfo &info)
 {
     for (ThumbBarItem *item = firstItem(); item; item = item->next())
     {
         LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(item);
         if (ltItem)
         {
-            if (info)
+            if (!info.isNull())
             {
-                if (ltItem->info()->id() == info->id())
+                if (ltItem->info() == info)
                 {
                     ltItem->setOnRightPanel(true);
                     repaintItem(item);
@@ -346,7 +346,7 @@ void LightTableBar::slotItemSelected(ThumbBarItem* item)
     emit signalLightTableBarItemSelected(0);
 }
 
-ImageInfo* LightTableBar::currentItemImageInfo() const
+ImageInfo LightTableBar::currentItemImageInfo() const
 {
     if (currentItem())
     {
@@ -366,8 +366,7 @@ ImageInfoList LightTableBar::itemsImageInfoList()
         LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(item);
         if (ltItem) 
         {
-            ImageInfo *info = new ImageInfo(*(ltItem->info()));
-            list.append(info);
+            list << ltItem->info();
         }
     }
 
@@ -380,25 +379,25 @@ void LightTableBar::setSelectedItem(LightTableBarItem* ltItem)
     if (item) ThumbBarView::setSelected(item);
 }
 
-void LightTableBar::removeItem(const ImageInfo* info)
+void LightTableBar::removeItem(const ImageInfo &info)
 {
-    if (!info) return;
+    if (info.isNull()) return;
 
     LightTableBarItem* ltItem = findItemByInfo(info);
     ThumbBarItem *item        = static_cast<ThumbBarItem*>(ltItem);  
     if (item) ThumbBarView::removeItem(item);
 }
 
-LightTableBarItem* LightTableBar::findItemByInfo(const ImageInfo* info) const
+LightTableBarItem* LightTableBar::findItemByInfo(const ImageInfo &info) const
 {
-    if (info)
+    if (!info.isNull())
     {
         for (ThumbBarItem *item = firstItem(); item; item = item->next())
         {
             LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(item);
             if (ltItem)
             {
-                if (ltItem->info()->id() == info->id())
+                if (ltItem->info() == info)
                     return ltItem;
             }
         }
@@ -527,7 +526,7 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
 
                         QRect r(0, tile.height()-getMargin()-d->ratingPixmap.height(), 
                                 tile.width(), d->ratingPixmap.height());
-                        int rating = ltItem->info()->rating();
+                        int rating = ltItem->info().rating();
                         int xr     = (r.width() - rating * d->ratingPixmap.width())/2;
                         int wr     = rating * d->ratingPixmap.width();
                         p.drawTiledPixmap(xr, r.y(), wr, r.height(), d->ratingPixmap);
@@ -581,7 +580,7 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
 
                         QRect r(0, tile.height()-getMargin()-d->ratingPixmap.height(), 
                                 tile.width(), d->ratingPixmap.height());
-                        int rating = ltItem->info()->rating();
+                        int rating = ltItem->info().rating();
                         int xr     = (r.width() - rating * d->ratingPixmap.width())/2;
                         int wr     = rating * d->ratingPixmap.width();
                         p.drawTiledPixmap(xr, r.y(), wr, r.height(), d->ratingPixmap);
@@ -630,10 +629,10 @@ void LightTableBar::startDrag()
 
     LightTableBarItem *item = dynamic_cast<LightTableBarItem*>(currentItem());
 
-    urls.append(item->info()->fileUrl());
-    kioURLs.append(item->info()->databaseUrl());
-    imageIDs.append(item->info()->id());
-    albumIDs.append(item->info()->albumId());
+    urls.append(item->info().fileUrl());
+    kioURLs.append(item->info().databaseUrl());
+    imageIDs.append(item->info().id());
+    albumIDs.append(item->info().albumId());
 
     QPixmap icon(DesktopIcon("image", 48));
     int w = icon.width();
@@ -691,14 +690,10 @@ void LightTableBar::contentsDropEvent(QDropEvent *e)
         for (Q3ValueList<int>::const_iterator it = imageIDs.begin();
              it != imageIDs.end(); ++it)
         {
-            ImageInfo *info = new ImageInfo(*it);
+            ImageInfo info(*it);
             if (!findItemByInfo(info))
             {
                 imageInfoList.append(info);
-            }
-            else
-            {
-                delete info;
             }
         }
 
@@ -713,14 +708,10 @@ void LightTableBar::contentsDropEvent(QDropEvent *e)
         for (Q3ValueList<qlonglong>::const_iterator it = itemIDs.begin();
              it != itemIDs.end(); ++it)
         {
-            ImageInfo *info = new ImageInfo(*it);
+            ImageInfo info(*it);
             if (!findItemByInfo(info))
             {
                 imageInfoList.append(info);
-            }
-            else
-            {
-                delete info;
             }
         }
 
@@ -740,14 +731,10 @@ void LightTableBar::contentsDropEvent(QDropEvent *e)
         for (Q3ValueList<qlonglong>::const_iterator it = itemIDs.begin();
              it != itemIDs.end(); ++it)
         {
-            ImageInfo *info = new ImageInfo(*it);
+            ImageInfo info(*it);
             if (!findItemByInfo(info))
             {
                 imageInfoList.append(info);
-            }
-            else
-            {
-                delete info;
             }
         }
 
@@ -762,8 +749,8 @@ void LightTableBar::contentsDropEvent(QDropEvent *e)
 
 // -------------------------------------------------------------------------
 
-LightTableBarItem::LightTableBarItem(LightTableBar *view, ImageInfo *info)
-                 : ThumbBarItem(view, info->fileUrl())
+LightTableBarItem::LightTableBarItem(LightTableBar *view, const ImageInfo &info)
+                 : ThumbBarItem(view, info.fileUrl())
 {
     d = new LightTableBarItemPriv;
     d->info = info;
@@ -774,7 +761,7 @@ LightTableBarItem::~LightTableBarItem()
     delete d;
 }
 
-ImageInfo* LightTableBarItem::info()
+ImageInfo LightTableBarItem::info()
 {
     return d->info;
 }
@@ -810,7 +797,7 @@ QString LightTableBarToolTip::tipContentExtraData(ThumbBarItem* item)
 {
     QString tip, str;
     AlbumSettings* settings = AlbumSettings::componentData();
-    ImageInfo* info         = static_cast<LightTableBarItem *>(item)->info();
+    ImageInfo info          = static_cast<LightTableBarItem *>(item)->info();
 
     if (settings)
     {
@@ -823,7 +810,7 @@ QString LightTableBarToolTip::tipContentExtraData(ThumbBarItem* item)
 
             if (settings->getToolTipsShowAlbumName())
             {
-                PAlbum* album = AlbumManager::componentData()->findPAlbum(info->albumId());
+                PAlbum* album = AlbumManager::componentData()->findPAlbum(info.albumId());
                 if (album)
                     tip += m_cellSpecBeg + i18n("Album:") + m_cellSpecMid + 
                            album->albumPath().remove(0, 1) + m_cellSpecEnd;
@@ -831,14 +818,14 @@ QString LightTableBarToolTip::tipContentExtraData(ThumbBarItem* item)
 
             if (settings->getToolTipsShowComments())
             {
-                str = info->comment();
+                str = info.comment();
                 if (str.isEmpty()) str = QString("---");
                 tip += m_cellSpecBeg + i18n("Comments:") + m_cellSpecMid + breakString(str) + m_cellSpecEnd;
             }
 
             if (settings->getToolTipsShowTags())
             {
-                QStringList tagPaths = AlbumManager::componentData()->tagPaths(info->tagIds(), false);
+                QStringList tagPaths = AlbumManager::componentData()->tagPaths(info.tagIds(), false);
 
                 str = tagPaths.join(", ");
                 if (str.isEmpty()) str = QString("---");
@@ -848,7 +835,7 @@ QString LightTableBarToolTip::tipContentExtraData(ThumbBarItem* item)
 
             if (settings->getToolTipsShowRating())
             {
-                str.fill( '*', info->rating() );
+                str.fill( '*', info.rating() );
                 if (str.isEmpty()) str = QString("---");
                 tip += m_cellSpecBeg + i18n("Rating:") + m_cellSpecMid + str + m_cellSpecEnd;
             }
