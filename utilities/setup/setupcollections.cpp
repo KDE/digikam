@@ -74,48 +74,47 @@ SetupCollections::SetupCollections(QWidget* parent )
                 : QWidget(parent)
 {
     d = new SetupCollectionsPriv;
-    QVBoxLayout *mainLayout            = new QVBoxLayout(this);
-    QGridLayout *collectionGroupLayout = new QGridLayout( this );
-    collectionGroupLayout->setSpacing( KDialog::spacingHint() );
-    collectionGroupLayout->setAlignment( Qt::AlignTop );
 
-   // --------------------------------------------------------
+    QGridLayout *grid = new QGridLayout(this);
 
-   d->albumCollectionBox = new KListWidget(this);
-   d->albumCollectionBox->setWhatsThis( i18n("<p>You can add or remove Album "
-                                             "collection types here to improve how "
-                                             "your Albums are sorted in digiKam."));
+    // --------------------------------------------------------
+    
+    d->albumCollectionBox = new KListWidget(this);
+    d->albumCollectionBox->setWhatsThis( i18n("<p>You can add or remove Album "
+                                              "collection types here to improve how "
+                                              "your Albums are sorted in digiKam."));
+    
+    d->albumCollectionBox->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    
+    d->addCollectionButton = new QPushButton(i18n("&Add..."), this);
+    d->delCollectionButton = new QPushButton(i18n("&Delete"), this);
+    d->delCollectionButton->setEnabled(false);
 
-   d->albumCollectionBox->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    QSpacerItem* spacer = new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-   collectionGroupLayout->addWidget( d->albumCollectionBox, 0, 4, 0, 0 );
+    grid->setMargin(KDialog::spacingHint());
+    grid->setSpacing(KDialog::spacingHint());
+    grid->setAlignment(Qt::AlignTop);
+    grid->addWidget(d->albumCollectionBox, 0, 4, 0, 0);
+    grid->addWidget(d->addCollectionButton, 0, 1);
+    grid->addWidget(d->delCollectionButton, 1, 1);
+    grid->addItem(spacer, 4, 1);
 
-   d->addCollectionButton = new QPushButton( i18n("&Add..."), this);
-   collectionGroupLayout->addWidget( d->addCollectionButton, 0, 1);
+    // --------------------------------------------------------
 
-   d->delCollectionButton = new QPushButton( i18n("&Delete"), this);
-   collectionGroupLayout->addWidget( d->delCollectionButton, 1, 1);
-   d->delCollectionButton->setEnabled(false);
-
-   connect(d->albumCollectionBox, SIGNAL(selectionChanged()),
-           this, SLOT(slotCollectionSelectionChanged()));
-
-   connect(d->addCollectionButton, SIGNAL(clicked()),
-           this, SLOT(slotAddCollection()));
-
-   connect(d->delCollectionButton, SIGNAL(clicked()),
-           this, SLOT(slotDelCollection()));
-
-   QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum,
-                                          QSizePolicy::Expanding );
-   collectionGroupLayout->addItem( spacer, 4, 1 );
-
-   mainLayout->addWidget(this);
-
-   // --------------------------------------------------------
-
-   readSettings();
-   adjustSize();
+    connect(d->albumCollectionBox, SIGNAL(selectionChanged()),
+            this, SLOT(slotCollectionSelectionChanged()));
+    
+    connect(d->addCollectionButton, SIGNAL(clicked()),
+            this, SLOT(slotAddCollection()));
+    
+    connect(d->delCollectionButton, SIGNAL(clicked()),
+            this, SLOT(slotDelCollection()));
+    
+    // --------------------------------------------------------
+    
+    readSettings();
+    adjustSize();
 }
 
 SetupCollections::~SetupCollections()
@@ -191,4 +190,3 @@ void SetupCollections::slotDelCollection()
 }
 
 }  // namespace Digikam
-
