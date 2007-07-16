@@ -36,6 +36,7 @@ INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/histogram
 
 # Shared libdigikam ################################################################
 
+
 SET(digikam_LIB_SRCS 
                      ${libcameragui_SRCS}
                      ${liblighttable_SRCS}
@@ -95,7 +96,6 @@ SET(digikam_LIB_SRCS
                       cameralist.cpp 
                       cameratype.cpp 
                       datefolderview.cpp 
-#                      dcopiface.cpp 
                       digikamfirstrun.cpp 
                       digikamview.cpp 
                       dio.cpp 
@@ -134,8 +134,8 @@ SET(digikam_LIB_SRCS
 
 KDE4_ADD_UI_FILES(digikam_LIB_SRCS ${CMAKE_SOURCE_DIR}/digikam/libs/dialogs/deletedialogbase.ui)
 
+qt4_add_dbus_adaptor(digikam_LIB_SRCS org.kde.digikam.xml digikamapp.h Digikam::DigikamApp)
 
-#kde4_add_dcop_skels(libdigikam_LIB_SRCS MESSAGE(STATUS "DCOP stuff was remove into kde4, convert it to dbus please. kde4_add_dcop_skels macro doesn't exist now. We keep it just to remember to port to dbus")dcopiface.h )
 
 KDE4_ADD_LIBRARY(digikam SHARED ${digikam_LIB_SRCS})
 

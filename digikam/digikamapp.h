@@ -138,8 +138,8 @@ private slots:
     void slotCameraAdded(CameraType *ctype);
     void slotCameraRemoved(CameraType *ctype);
     void slotCameraAutoDetect();
-    void slotDcopDownloadImages(const QString& folder);
-    void slotDcopCameraAutoDetect();
+    void downloadImages(const QString& folder);
+    void cameraAutoDetect();
     void slotEditKeys();
     void slotConfToolbars();
     void slotToggleFullScreen();

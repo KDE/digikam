@@ -30,6 +30,8 @@
 #include <QLabel>
 #include <QStringList>
 #include <QSignalMapper>
+#include <QtDBus>
+
 
 // KDE includes.
 
@@ -55,6 +57,7 @@
 #include <kglobal.h>
 #include <ktoolinvocation.h>
 #include <ktoolbarpopupaction.h>
+#include <digikamadaptor.h>
 
 // libKipi includes.
 
@@ -106,6 +109,9 @@ DigikamApp::DigikamApp()
     d = new DigikamAppPriv;
     m_instance = this;
     d->config  = KGlobal::config();
+
+    new DigikamAdaptor(this);
+    QDBusConnection::sessionBus().registerObject("/Digikam", this);
 
     setObjectName("Digikam");
 
@@ -174,15 +180,6 @@ DigikamApp::DigikamApp()
     populateThemes();
 
     setAutoSaveSettings();
-#if 0
-    d->dcopIface = new DCOPIface(this, "camera");
-
-    connect(d->dcopIface, SIGNAL(signalCameraAutoDetect()), 
-            this, SLOT(slotDcopCameraAutoDetect()));
-
-    connect(d->dcopIface, SIGNAL(signalDownloadImages( const QString & )),
-            this, SLOT(slotDcopDownloadImages(const QString &)));
-#endif
 }
 
 DigikamApp::~DigikamApp()
@@ -1210,7 +1207,7 @@ QString DigikamApp::convertToLocalUrl( const QString& folder )
     return url.path();
 }
 
-void DigikamApp::slotDcopDownloadImages( const QString& folder )
+void DigikamApp::downloadImages( const QString& folder )
 {
     if (!folder.isNull())
     {
@@ -1223,7 +1220,7 @@ void DigikamApp::slotDcopDownloadImages( const QString& folder )
     }
 }
 
-void DigikamApp::slotDcopCameraAutoDetect()
+void DigikamApp::cameraAutoDetect()
 {
     // activate window when called by media menu and DCOP
     if (isMinimized())
