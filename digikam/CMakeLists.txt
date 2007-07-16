@@ -164,8 +164,6 @@ INSTALL(TARGETS digikam DESTINATION ${LIB_INSTALL_DIR} )
       
 SET(digikam_bin_SRCS main.cpp )   
       
-KDE4_AUTOMOC(${digikam_bin_SRCS})   
-      
 KDE4_ADD_EXECUTABLE(digikam_bin ${digikam_bin_SRCS})   
       
 TARGET_LINK_LIBRARIES(digikam_bin ${KDE4_KPARTS_LIBS})   
