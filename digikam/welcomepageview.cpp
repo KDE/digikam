@@ -24,11 +24,9 @@
 
 // Qt includes. 
 
-#include <qwidget.h>
-#include <qfile.h>
-#include <qfileinfo.h>
-//Added by qt3to4:
-#include <Q3CString>
+#include <QWidget>
+#include <QFile>
+#include <QFileInfo>
 
 // KDE includes.
 
@@ -122,6 +120,7 @@ QString WelcomePageView::infoPage()
         "%7: First-time user text (only shown on first start); "
         "%8: generated list of important changes; "
         "--- end of comment ---",
+        
         "<h2 style='margin-top: 0px;'>Welcome to digiKam %1</h2><p>"
         "digiKam is a photo-management program for the K Desktop Environment. "
         "It is designed to import, organize, and export your digital photographs on your computer."
@@ -130,37 +129,39 @@ QString WelcomePageView::infoPage()
         "<a href=\"%2\">documentation</a></li>\n"
         "<li>The <a href=\"%3\">digiKam homepage</A> provides information about "
         "new versions of digiKam</li></ul>\n"
-        "%8\n<p>" // important changes
+        "%8\n<p>"                        // important changes
         "Some of the new features in this release of digiKam include "
         "(compared to digiKam %4):</p>\n"
         "<ul>\n%5</ul>\n"
         "%6\n"
         "<p>We hope that you will enjoy digiKam.</p>\n"
         "<p>Thank you,</p>\n"
-        "<p style='margin-bottom: 0px'>&nbsp; &nbsp; The digiKam Team</p>"
-        ,QString(digikam_version)            // current digiKam version
-        ,"help:/digikam/index.html" // digiKam help:// URL
-        ,"http://www.digikam.org"   // digiKam homepage URL
-        ,"0.8.2"
-	,featureItems
-	,QString()
-	,QString(), QString());                   // previous digiKam release.
+        "<p style='margin-bottom: 0px'>&nbsp; &nbsp; The digiKam Team</p>",
+ 
+    QString(digikam_version),            // current digiKam version
+    "help:/digikam/index.html",          // digiKam help:// URL
+    "http://www.digikam.org",            // digiKam homepage URL
+    "0.8.2",
+	featureItems,
+	QString(),
+	QString(),
+    QString());                   // previous digiKam release.
     
     return info;
 }
 
-Q3CString WelcomePageView::fileToString(const QString &aFileName)
+QByteArray WelcomePageView::fileToString(const QString &aFileName)
 {
-    Q3CString result;
-    QFileInfo info(aFileName);
+    QByteArray   result;
+    QFileInfo    info(aFileName);
     unsigned int readLen;
     unsigned int len = info.size();
-    QFile file(aFileName);
+    QFile        file(aFileName);
     
     if (aFileName.isEmpty() || len <= 0 || 
         !info.exists() || info.isDir() || !info.isReadable() ||
         !file.open(QIODevice::Unbuffered|QIODevice::ReadOnly)) 
-        return Q3CString();
+        return QByteArray();
     
     result.resize(len + 2);
     readLen = file.read(result.data(), len);
@@ -172,7 +173,7 @@ Q3CString WelcomePageView::fileToString(const QString &aFileName)
     result[len] = '\0';
     
     if (readLen < len)
-        return Q3CString();
+        return QByteArray();
     
     return result;
 }

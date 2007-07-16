@@ -27,9 +27,8 @@
 
 // Qt includes.
 
-#include <qstring.h>
-//Added by qt3to4:
-#include <Q3CString>
+#include <QString>
+#include <QByteArray>
 
 // KDE includes.
 
@@ -53,8 +52,8 @@ public:
 
 private:
 
-    Q3CString fileToString(const QString &aFileName);
-    QString  infoPage();
+    QByteArray fileToString(const QString &aFileName);
+    QString    infoPage();
 
 private slots:
 
