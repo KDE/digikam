@@ -54,7 +54,7 @@ public:
         imageInfoJob = new ImageInfoJob();
         album        = 0;
         count        = 0;
-        imageInfo    = 0; 
+        imageInfoIndex = 0;
     }
 
     bool                   cancel;
@@ -67,7 +67,7 @@ public:
 
     ImageInfoList          imageInfoList;
 
-    ImageInfo             *imageInfo;
+    int                    imageInfoIndex;
 };
 
 BatchSyncMetadata::BatchSyncMetadata(QObject* parent, Album *album)
@@ -117,13 +117,13 @@ void BatchSyncMetadata::parseList()
     emit signalProgressBarMode(StatusProgressBar::CancelProgressBarMode, 
                                i18n("Sync pictures Metadata with database. Please wait..."));
 
-    d->imageInfo = d->imageInfoList.first();
+    d->imageInfoIndex = 0;
     parsePicture();
 }
 
 void BatchSyncMetadata::parsePicture()
 {
-    if (!d->imageInfo)     // All is done.
+    if (!d->imageInfoIndex >= d->imageInfoList.count())     // All is done.
     {
         complete();
         slotAbort();
@@ -134,15 +134,16 @@ void BatchSyncMetadata::parsePicture()
     }
     else 
     {
+        ImageInfo info = d->imageInfoList[d->imageInfoIndex];
         MetadataHub fileHub;
         // read in from database
-        fileHub.load(d->imageInfo);
+        fileHub.load(info);
         // write out to file DMetadata
-        fileHub.write(d->imageInfo->filePath());
+        fileHub.write(info.filePath());
 
         emit signalProgressValue((int)((d->count++/(float)d->imageInfoList.count())*100.0));
 
-        d->imageInfo = d->imageInfoList.next();
+        d->imageInfoIndex++;
 
         kapp->processEvents();
         parsePicture();

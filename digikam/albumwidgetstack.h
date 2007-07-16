@@ -34,13 +34,13 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "imageinfo.h"
 
 class KUrl::List;
 
 namespace Digikam
 {
 
-class ImageInfo;
 class AlbumIconView;
 class ImagePreviewView;
 class AlbumWidgetStackPriv;
@@ -67,11 +67,13 @@ public:
     AlbumIconView    *albumIconView();
     ImagePreviewView *imagePreviewView();
 
-    void setPreviewItem(ImageInfo* info=0, ImageInfo *previous=0, ImageInfo *next=0);
+    void setPreviewItem(const ImageInfo &info = ImageInfo(),
+                        const ImageInfo &previous = ImageInfo(),
+                        const ImageInfo &next = ImageInfo());
     int  previewMode();
     void setPreviewMode(int mode);
     void previewLoaded();
-    
+
     void   increaseZoom();
     void   decreaseZoom();
     void   fitToWindow();

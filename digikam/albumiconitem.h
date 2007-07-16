@@ -48,10 +48,10 @@ class AlbumIconItem : public IconItem
 
 public:
 
-    AlbumIconItem(IconGroupItem* parent, ImageInfo* info);
+    AlbumIconItem(IconGroupItem* parent, const ImageInfo &info);
     ~AlbumIconItem();
 
-    ImageInfo* imageInfo() const;
+    ImageInfo imageInfo() const;
 
     QRect thumbnailRect() const;
 
@@ -61,7 +61,7 @@ public:
 
     virtual int compare(IconItem *item);
     virtual QRect clickToOpenRect();
-    
+
 protected:
 
     virtual void paintItem();

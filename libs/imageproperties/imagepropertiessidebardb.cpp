@@ -70,7 +70,7 @@ public:
 
     bool                  dirtyDesceditTab;
 
-    Q3PtrList<ImageInfo>  currentInfos;
+    ImageInfoList         currentInfos;
 
     ImageDescEditTab     *desceditTab;
 
@@ -118,10 +118,10 @@ ImagePropertiesSideBarDB::~ImagePropertiesSideBarDB()
     delete d;
 }
 
-void ImagePropertiesSideBarDB::itemChanged(ImageInfo *info,
+void ImagePropertiesSideBarDB::itemChanged(const ImageInfo &info,
                                            const QRect &rect, DImg *img)
 {
-    itemChanged(info->fileUrl(), info, rect, img);
+    itemChanged(info.fileUrl(), info, rect, img);
 }
 
 void ImagePropertiesSideBarDB::itemChanged(const KUrl& url, const QRect &rect, DImg *img)
@@ -129,7 +129,7 @@ void ImagePropertiesSideBarDB::itemChanged(const KUrl& url, const QRect &rect, D
     itemChanged(url, 0, rect, img);
 }
 
-void ImagePropertiesSideBarDB::itemChanged(const KUrl& url, ImageInfo *info,
+void ImagePropertiesSideBarDB::itemChanged(const KUrl& url, const ImageInfo &info,
                                            const QRect &rect, DImg *img)
 {
     if ( !url.isValid() )
@@ -137,38 +137,28 @@ void ImagePropertiesSideBarDB::itemChanged(const KUrl& url, ImageInfo *info,
 
     m_currentURL = url;
 
-    Q3PtrList<ImageInfo> list;
-    if (info)
-        list.append(info);
+    ImageInfoList list;
+    if (!info.isNull())
+        list << info;
 
     itemChanged(list, rect, img);
 }
 
-void ImagePropertiesSideBarDB::itemChanged(Q3PtrList<ImageInfo> infos)
+void ImagePropertiesSideBarDB::itemChanged(const ImageInfoList &infos)
 {
     if (infos.isEmpty())
         return;
 
-    m_currentURL = infos.first()->fileUrl();
+    m_currentURL = infos.first().fileUrl();
 
     itemChanged(infos, QRect(), 0);
 }
 
-void ImagePropertiesSideBarDB::itemChanged(Q3PtrList<ImageInfo> infos,
+void ImagePropertiesSideBarDB::itemChanged(ImageInfoList infos,
                                            const QRect &rect, DImg *img)
 {
     m_currentRect = rect;
     m_image       = img;
-
-    // The list _may_ have autoDelete set to true.
-    // Keep old ImageInfo objects from being deleted
-    // until the tab has had the chance to save changes and clear lists.
-    Q3PtrList<ImageInfo> temporaryList;
-    if (d->hasImageInfoOwnership)
-    {
-        temporaryList = d->currentInfos;
-        d->hasImageInfoOwnership = false;
-    }
 
     d->currentInfos      = infos;
     m_dirtyPropertiesTab = false;
@@ -181,17 +171,6 @@ void ImagePropertiesSideBarDB::itemChanged(Q3PtrList<ImageInfo> infos,
     d->desceditTab->setItem();
 
     slotChangedTab( getActiveTab() );
-
-    // now delete old objects, after slotChangedTab
-    for (ImageInfo *info = temporaryList.first(); info; info = temporaryList.next())
-    {
-        delete info;
-    }
-}
-
-void ImagePropertiesSideBarDB::takeImageInfoOwnership(bool takeOwnership)
-{
-    d->hasImageInfoOwnership = takeOwnership;
 }
 
 void ImagePropertiesSideBarDB::slotNoCurrentItem(void)
@@ -201,18 +180,7 @@ void ImagePropertiesSideBarDB::slotNoCurrentItem(void)
     // All tabs that store the ImageInfo list and access it after selection change
     // must release the image info here. slotChangedTab only handles the active tab!
     d->desceditTab->setItem();
-
-    if (d->hasImageInfoOwnership)
-    {
-        for (ImageInfo *info = d->currentInfos.first(); info; info = d->currentInfos.next())
-        {
-            delete info;
-        }
-        d->hasImageInfoOwnership = false;
-    }
     d->currentInfos.clear();
-
-    d->desceditTab->setItem();
     d->dirtyDesceditTab = false;
 }
 

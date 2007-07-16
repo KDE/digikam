@@ -127,7 +127,7 @@ public:
             This situation occurs if new tags are imported from IPTC keywords.
             This means that the album manager is not accessed, all methods depending on TAlbum*
             (tags(), tagIDs(), setTag()) shall not be used.
-            The method write(ImageInfo*) will create not yet existing tags in the database.
+            The method write(ImageInfo) will create not yet existing tags in the database.
         */
         NewTagsImport,
         /**
@@ -181,7 +181,7 @@ public:
         can be called multiple times on the same MetadataHub object.
         In this case, the metadata will be combined.
     */
-    void load(ImageInfo *info);
+    void load(const ImageInfo &info);
 
     /**
         Add metadata information from the DMetadata object
@@ -202,7 +202,7 @@ public:
         to the given ImageInfo object.
         @return Returns true if the info object has been changed
     */
-    bool write(ImageInfo *info, WriteMode writeMode = FullWrite);
+    bool write(ImageInfo info, WriteMode writeMode = FullWrite);
 
     /**
         Applies the set of metadata contained in this MetadataHub

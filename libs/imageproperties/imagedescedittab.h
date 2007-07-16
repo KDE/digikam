@@ -28,7 +28,6 @@
 
 // Qt includes.
 
-#include <Q3PtrList>
 #include <QWidget>
 #include <QPixmap>
 #include <QEvent>
@@ -36,6 +35,7 @@
 // Local includes.
 
 #include "digikam_export.h"
+#include "imageinfolist.h"
 #include "navigatebartab.h"
 
 class Q3ListViewItem;
@@ -58,8 +58,8 @@ public:
     ~ImageDescEditTab();
 
     void assignRating(int rating);
-    void setItem(ImageInfo *info=0);
-    void setItems(Q3PtrList<ImageInfo> infos);
+    void setItem(const ImageInfo &info = ImageInfo());
+    void setItems(const ImageInfoList &infos);
     void populateTags();
 
 signals:
@@ -73,7 +73,7 @@ protected:
 
 private:
 
-    void setInfos(Q3PtrList<ImageInfo> infos);
+    void setInfos(const ImageInfoList &infos);
 
     void updateTagsView();
     void updateComments();

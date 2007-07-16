@@ -148,7 +148,7 @@ public:
     KAction                  *fileTrashDirectlyAction;
 
     ImageInfoList             imageInfoList;
-    ImageInfo                *imageInfoCurrent;
+    ImageInfo                 imageInfoCurrent;
 
     ImagePropertiesSideBarDB *rightSidebar;
 };
@@ -405,12 +405,12 @@ void ImageWindow::loadURL(const KUrl::List& urlList, const KUrl& urlCurrent,
     d->urlList          = urlList;
     d->urlCurrent       = urlCurrent;
     d->imageInfoList    = ImageInfoList();
-    d->imageInfoCurrent = 0;
+    d->imageInfoCurrent = ImageInfo();
 
     loadCurrentList(caption, allowSaving);
 }
 
-void ImageWindow::loadImageInfos(const ImageInfoList &imageInfoList, ImageInfo *imageInfoCurrent,
+void ImageWindow::loadImageInfos(const ImageInfoList &imageInfoList, const ImageInfo &imageInfoCurrent,
                                  const QString& caption, bool allowSaving)
 {
     // The ownership of objects of imageInfoList is passed to us.
@@ -418,28 +418,21 @@ void ImageWindow::loadImageInfos(const ImageInfoList &imageInfoList, ImageInfo *
 
     // Very first thing is to check for changes, user may choose to cancel operation
     if (!promptUserSave(d->urlCurrent))
-    {
-        // delete objects from list
-        for (ImageInfoList::iterator it = imageInfoList.begin(); it != imageInfoList.end(); ++it)
-            delete *it;
         return;
-    }
 
     // take over ImageInfo list
     d->imageInfoList    = imageInfoList;
     d->imageInfoCurrent = imageInfoCurrent;
 
-    d->imageInfoList.setAutoDelete(true);
-
     // create URL list
     d->urlList = KUrl::List();
 
-    for (ImageInfoListIterator it = d->imageInfoList.begin(); it != d->imageInfoList.end(); ++it)
+    for (ImageInfoList::iterator it = d->imageInfoList.begin(); it != d->imageInfoList.end(); ++it)
     {
-        d->urlList.append((*it)->fileUrl());
+        d->urlList.append(it->fileUrl());
     }
 
-    d->urlCurrent  = d->imageInfoCurrent->fileUrl();
+    d->urlCurrent  = d->imageInfoCurrent.fileUrl();
 
     loadCurrentList(caption, allowSaving);
 }
@@ -471,15 +464,14 @@ void ImageWindow::loadCurrentList(const QString& caption, bool allowSaving)
 
 void ImageWindow::slotLoadCurrent()
 {
-    KUrl::List::iterator it = d->urlList.find(d->urlCurrent);
+    int index = d->urlList.indexOf(d->urlCurrent);
 
-    if (it != d->urlList.end())
+    if (index != -1)
     {
         m_canvas->load(d->urlCurrent.path(), m_IOFileSettings);
 
-        ++it;
-        if (it != d->urlList.end())
-            m_canvas->preload((*it).path());
+        if (++index != d->urlList.size())
+            m_canvas->preload(d->urlList[index].path());
     }
 
     // Do this _after_ the canvas->load(), so that the main view histogram does not load
@@ -498,16 +490,15 @@ void ImageWindow::slotForward()
     if(!promptUserSave(d->urlCurrent))
         return;
 
-    KUrl::List::iterator it = d->urlList.find(d->urlCurrent);
-    int index = d->imageInfoList.find(d->imageInfoCurrent);
+    int index = d->urlList.indexOf(d->urlCurrent);
 
-    if (it != d->urlList.end()) 
+    if (index != -1)
     {
-        if (d->urlCurrent != d->urlList.last())
+        ++index;
+        if (index != d->urlList.size())
         {
-           KUrl urlNext = *(++it);
-           d->imageInfoCurrent = d->imageInfoList.at(index + 1);
-           d->urlCurrent = urlNext;
+           d->imageInfoCurrent = d->imageInfoList[index];
+           d->urlCurrent = d->urlList[index];
            slotLoadCurrent();
         }
     }
@@ -518,17 +509,17 @@ void ImageWindow::slotBackward()
     if(!promptUserSave(d->urlCurrent))
         return;
 
-    KUrl::List::iterator it = d->urlList.find(d->urlCurrent);
-    int index = d->imageInfoList.find(d->imageInfoCurrent);
+    int index = d->urlList.indexOf(d->urlCurrent);
 
-    if (it != d->urlList.begin()) 
+    if (index != -1)
     {
-        if (d->urlCurrent != d->urlList.first())
+        index--;
+
+        if (index != d->urlList.size())
         {
-            KUrl urlPrev = *(--it);
-            d->imageInfoCurrent = d->imageInfoList.at(index - 1);
-            d->urlCurrent = urlPrev;
-            slotLoadCurrent();
+           d->imageInfoCurrent = d->imageInfoList[index];
+           d->urlCurrent = d->urlList[index];
+           slotLoadCurrent();
         }
     }
 }
@@ -560,24 +551,23 @@ void ImageWindow::slotContextMenu()
         RatingPopupMenu *ratingMenu     = 0;
         TagsPopupMenu   *assignTagsMenu = 0;
         TagsPopupMenu   *removeTagsMenu = 0;
-        int separatorID1 = -1;
-        int separatorID2 = -1;
 
-        if (d->imageInfoCurrent)
+        if (!d->imageInfoCurrent.isNull())
         {
             // Bulk assignment/removal of tags --------------------------
 
-            qlonglong id = d->imageInfoCurrent->id();
-            Q3ValueList<qlonglong> idList;
-            idList.append(id);
+            QList<qlonglong> idList;
+            idList << d->imageInfoCurrent.id();
 
-            assignTagsMenu = new TagsPopupMenu(idList, 1000, TagsPopupMenu::ASSIGN);
-            removeTagsMenu = new TagsPopupMenu(idList, 2000, TagsPopupMenu::REMOVE);
+            assignTagsMenu = new TagsPopupMenu(idList, TagsPopupMenu::ASSIGN);
+            removeTagsMenu = new TagsPopupMenu(idList, TagsPopupMenu::REMOVE);
+            assignTagsMenu->menuAction()->setText(i18n("Assign Tag"));
+            removeTagsMenu->menuAction()->setText(i18n("Remove Tag"));
 
-            separatorID1 = m_contextMenu->insertSeparator();
+            m_contextMenu->addSeparator();
 
-            m_contextMenu->insertItem(i18n("Assign Tag"), assignTagsMenu);
-            int i = m_contextMenu->insertItem(i18n("Remove Tag"), removeTagsMenu);
+            m_contextMenu->addMenu(assignTagsMenu);
+            m_contextMenu->addMenu(removeTagsMenu);
 
             connect(assignTagsMenu, SIGNAL(signalTagActivated(int)),
                     this, SLOT(slotAssignTag(int)));
@@ -585,30 +575,23 @@ void ImageWindow::slotContextMenu()
             connect(removeTagsMenu, SIGNAL(signalTagActivated(int)),
                     this, SLOT(slotRemoveTag(int)));
 
-            {
-                DatabaseAccess access;
-                if (!access.db()->hasTags( idList ))
-                    m_contextMenu->setItemEnabled(i, false);
-            }
+            if (!DatabaseAccess().db()->hasTags( idList ))
+                m_contextMenu->menuAction()->setEnabled(false);
 
-            separatorID2 = m_contextMenu->insertSeparator();
+            m_contextMenu->addSeparator();
 
             // Assign Star Rating -------------------------------------------
-        
+
             ratingMenu = new RatingPopupMenu();
-            
-            connect(ratingMenu, SIGNAL(activated(int)),
+            ratingMenu->menuAction()->setText(i18n("Assign Rating"));
+
+            connect(ratingMenu, SIGNAL(rating(int)),
                     this, SLOT(slotAssignRating(int)));
-        
-            m_contextMenu->insertItem(i18n("Assign Rating"), ratingMenu);
+
+            m_contextMenu->addMenu(ratingMenu);
         }
 
         m_contextMenu->exec(QCursor::pos());
-
-        if (separatorID1 != -1)
-            m_contextMenu->removeItem(separatorID1);
-        if (separatorID2 != -1)
-            m_contextMenu->removeItem(separatorID2);
 
         delete assignTagsMenu;
         delete removeTagsMenu;
@@ -632,7 +615,7 @@ void ImageWindow::slotChanged()
 
         DImg* img = m_canvas->interface()->getImg();
 
-        if (d->imageInfoCurrent)
+        if (!d->imageInfoCurrent.isNull())
         {
             d->rightSidebar->itemChanged(d->imageInfoCurrent,
                                          m_canvas->getSelectedArea(), img);
@@ -659,47 +642,47 @@ void ImageWindow::slotUndoStateChanged(bool moreUndo, bool moreRedo, bool canSav
 
 void ImageWindow::slotAssignTag(int tagID)
 {
-    if (d->imageInfoCurrent)
+    if (!d->imageInfoCurrent.isNull())
     {
         MetadataHub hub;
         hub.load(d->imageInfoCurrent);
         hub.setTag(tagID, true);
         hub.write(d->imageInfoCurrent, MetadataHub::PartialWrite);
-        hub.write(d->imageInfoCurrent->filePath(), MetadataHub::FullWriteIfChanged);
+        hub.write(d->imageInfoCurrent.filePath(), MetadataHub::FullWriteIfChanged);
     }
 }
 
 void ImageWindow::slotRemoveTag(int tagID)
 {
-    if (d->imageInfoCurrent)
+    if (!d->imageInfoCurrent.isNull())
     {
         MetadataHub hub;
         hub.load(d->imageInfoCurrent);
         hub.setTag(tagID, false);
         hub.write(d->imageInfoCurrent, MetadataHub::PartialWrite);
-        hub.write(d->imageInfoCurrent->filePath(), MetadataHub::FullWriteIfChanged);
+        hub.write(d->imageInfoCurrent.filePath(), MetadataHub::FullWriteIfChanged);
     }
 }
 
 void ImageWindow::slotAssignRating(int rating)
 {
     rating = qMin(RatingMax, qMax(RatingMin, rating));
-    if (d->imageInfoCurrent)
+    if (!d->imageInfoCurrent.isNull())
     {
         MetadataHub hub;
         hub.load(d->imageInfoCurrent);
         hub.setRating(rating);
         hub.write(d->imageInfoCurrent, MetadataHub::PartialWrite);
-        hub.write(d->imageInfoCurrent->filePath(), MetadataHub::FullWriteIfChanged);
+        hub.write(d->imageInfoCurrent.filePath(), MetadataHub::FullWriteIfChanged);
     }
 }
 
 void ImageWindow::slotUpdateItemInfo()
 {
-    int index = d->urlList.findIndex(d->urlCurrent);
+    int index = d->urlList.indexOf(d->urlCurrent);
 
     m_rotatedOrFlipped = false;
-    
+
     QString text = d->urlCurrent.fileName() + i18n(" (%2 of %3)", QString::number(index+1),
                                                                   QString::number(d->urlList.count()));
     m_nameLabel->setText(text);
@@ -782,20 +765,20 @@ void ImageWindow::saveIsComplete()
     emit signalFileModified(m_savingContext->destinationURL);
 
     // all that is done in slotLoadCurrent, except for loading
-    KUrl::List::iterator it = d->urlList.find(d->urlCurrent);
-    setViewToURL(*it);
+    int index = d->urlList.indexOf(d->urlCurrent);
 
-    if (++it != d->urlList.end()) 
+    if (index != -1)
     {
-        m_canvas->preload((*it).path());
+        if (++index != d->urlList.size())
+            m_canvas->preload(d->urlList[index].path());
     }
-    //slotLoadCurrent();
+    setViewToURL(d->urlCurrent);
 }
 
 void ImageWindow::saveAsIsComplete()
 {
     // Nothing to be done if operating without database
-    if (!d->imageInfoCurrent)
+    if (d->imageInfoCurrent.isNull())
         return;
 
     // Find the src and dest albums ------------------------------------------
@@ -810,25 +793,26 @@ void ImageWindow::saveAsIsComplete()
     {
         // Now copy the metadata of the original file to the new file ------------
 
-        ImageInfo newInfo(d->imageInfoCurrent->copyItem(dstAlbum->id(), m_savingContext->destinationURL.fileName()));
+        ImageInfo newInfo(d->imageInfoCurrent.copyItem(dstAlbum->id(), m_savingContext->destinationURL.fileName()));
 
-        if ( d->urlList.find(m_savingContext->destinationURL) == d->urlList.end() )
-        {   // The image file did not exist in the list.
-            KUrl::List::iterator it = d->urlList.find(m_savingContext->srcURL);
-            int index = d->urlList.findIndex(m_savingContext->srcURL);
-            d->urlList.insert(it, m_savingContext->destinationURL);
-            d->imageInfoCurrent = new ImageInfo(newInfo);
+        if ( !d->urlList.contains(m_savingContext->destinationURL) )
+        {
+            // The image file did not exist in the list.
+            int index = d->urlList.indexOf(m_savingContext->srcURL);
+            d->urlList.insert(index, m_savingContext->destinationURL);
+            d->imageInfoCurrent = newInfo;
             d->imageInfoList.insert(index, d->imageInfoCurrent);
         }
         else if (d->urlCurrent != m_savingContext->destinationURL)
         {
-            for (ImageInfo *info = d->imageInfoList.first(); info; info = d->imageInfoList.next())
+            for (int i=0; i<d->imageInfoList.count(); i++)
             {
-                if (info->fileUrl() == m_savingContext->destinationURL)
+                ImageInfo info = d->imageInfoList[i];
+                if (info.fileUrl() == m_savingContext->destinationURL)
                 {
-                    d->imageInfoCurrent = new ImageInfo(newInfo);
+                    d->imageInfoCurrent = newInfo;
                     // setAutoDelete is true
-                    d->imageInfoList.replace(d->imageInfoList.at(), d->imageInfoCurrent);
+                    d->imageInfoList.replace(i, d->imageInfoCurrent);
                     break;
                 }
             }
@@ -852,12 +836,13 @@ void ImageWindow::saveAsIsComplete()
             emit signalFileAdded(m_savingContext->destinationURL);
 
         // all that is done in slotLoadCurrent, except for loading
-        KUrl::List::iterator it = d->urlList.find(d->urlCurrent);
+        int index = d->urlList.indexOf(d->urlCurrent);
 
-        if (it != d->urlList.end()) 
+        if (index != -1)
         {
-            setViewToURL(*it);
-            m_canvas->preload((*++it).path());
+            setViewToURL(d->urlCurrent);
+            if (++index != d->urlList.count())
+                m_canvas->preload(d->urlList[index].path());
         }
     }
     else
@@ -921,8 +906,8 @@ void ImageWindow::deleteCurrentItem(bool ask, bool permanently)
 
     // if available, provide a digikamalbums:// URL to KIO
     KUrl kioURL;
-    if (d->imageInfoCurrent)
-        kioURL = d->imageInfoCurrent->databaseUrl();
+    if (!d->imageInfoCurrent.isNull())
+        kioURL = d->imageInfoCurrent.databaseUrl();
     else
         kioURL = d->urlCurrent;
     KUrl fileURL = d->urlCurrent;
@@ -970,32 +955,31 @@ void ImageWindow::deleteCurrentItem(bool ask, bool permanently)
     emit signalFileDeleted(d->urlCurrent);
 
     KUrl CurrentToRemove = d->urlCurrent;
-    KUrl::List::iterator it = d->urlList.find(d->urlCurrent);
-    int index = d->imageInfoList.find(d->imageInfoCurrent);
+    int index = d->urlList.indexOf(d->urlCurrent);
 
-    if (it != d->urlList.end())
+    if (index != -1)
     {
-        if (d->urlCurrent != d->urlList.last())
+        if (index + 1 != d->urlList.size())
         {
             // Try to get the next image in the current Album...
 
-            KUrl urlNext = *(++it);
-            d->urlCurrent = urlNext;
-            d->imageInfoCurrent = d->imageInfoList.at(index + 1);
-            d->urlList.remove(CurrentToRemove);
-            d->imageInfoList.remove(index);
+            ++index;
+            d->urlCurrent = d->urlList[index];
+            d->imageInfoCurrent = d->imageInfoList[index];
+            d->urlList.removeAt(index);
+            d->imageInfoList.removeAt(index);
             slotLoadCurrent();
             return;
         }
-        else if (d->urlCurrent != d->urlList.first())
+        else if (index - 1 != 0)
         {
             // Try to get the previous image in the current Album.
 
-            KUrl urlPrev = *(--it);
-            d->urlCurrent = urlPrev;
-            d->imageInfoCurrent = d->imageInfoList.at(index - 1);
-            d->urlList.remove(CurrentToRemove);
-            d->imageInfoList.remove(index);
+            --index;
+            d->urlCurrent = d->urlList[index];
+            d->imageInfoCurrent = d->imageInfoList[index];
+            d->urlList.removeAt(index);
+            d->imageInfoList.removeAt(index);
             slotLoadCurrent();
             return;
         }
@@ -1045,22 +1029,22 @@ void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
 
         cnt = (float)d->imageInfoList.count();
 
-        for (ImageInfo *info = d->imageInfoList.first() ; 
-             !m_cancelSlideShow && info ; info = d->imageInfoList.next())
+        for (ImageInfoList::iterator it = d->imageInfoList.begin();
+             !m_cancelSlideShow && it != d->imageInfoList.end(); ++it)
         {
             SlidePictureInfo pictInfo;
-            pictInfo.comment = info->comment();
+            pictInfo.comment = it->comment();
 
             // Perform optimizations: only read pictures metadata if necessary.
             if (settings.printApertureFocal || settings.printExpoSensitivity || settings.printMakeModel)
             {
-                meta.load(info->fileUrl().path());
+                meta.load(it->fileUrl().path());
                 pictInfo.photoInfo = meta.getPhotographInformations();
             }
 
             // In case of dateTime extraction from metadata failed 
-            pictInfo.photoInfo.dateTime = info->dateTime(); 
-            settings.pictInfoMap.insert(info->fileUrl(), pictInfo);
+            pictInfo.photoInfo.dateTime = it->dateTime();
+            settings.pictInfoMap.insert(it->fileUrl(), pictInfo);
 
             m_nameLabel->setProgressValue((int)((i++/cnt)*100.0));
             kapp->processEvents();
@@ -1138,8 +1122,8 @@ void ImageWindow::dropEvent(QDropEvent *e)
         for (Q3ValueList<int>::const_iterator it = imageIDs.begin();
              it != imageIDs.end(); ++it)
         {
-            ImageInfo *info = new ImageInfo(*it);
-            imageInfoList.append(info);
+            ImageInfo info(*it);
+            imageInfoList << info;
         }
 
         if (imageInfoList.isEmpty())
@@ -1169,8 +1153,8 @@ void ImageWindow::dropEvent(QDropEvent *e)
         for (Q3ValueList<qlonglong>::const_iterator it = itemIDs.begin();
              it != itemIDs.end(); ++it)
         {
-            ImageInfo *info = new ImageInfo(*it);
-            imageInfoList.append(info);
+            ImageInfo info(*it);
+            imageInfoList << info;
         }
 
         if (imageInfoList.isEmpty())
@@ -1201,8 +1185,8 @@ void ImageWindow::dropEvent(QDropEvent *e)
         for (Q3ValueList<qlonglong>::const_iterator it = itemIDs.begin();
              it != itemIDs.end(); ++it)
         {
-            ImageInfo *info = new ImageInfo(*it);
-            imageInfoList.append(info);
+            ImageInfo info(*it);
+            imageInfoList << info;
         }
 
         if (imageInfoList.isEmpty())

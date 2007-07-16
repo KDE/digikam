@@ -82,30 +82,30 @@ public:
      */
     void openAlbum(Album *album);
     void stop();
-    
+
     /**
      * Reread an albums item list
-     */    
+     */
     void refresh();
 
     void setNameFilter(const QString& nameFilter);
 
-    void setDayFilter(const Q3ValueList<int>& days);
-    void setTagFilter(const Q3ValueList<int>& tags, const MatchingCondition& matchingCond, 
+    void setDayFilter(const QList<int>& days);
+    void setTagFilter(const QList<int>& tags, const MatchingCondition& matchingCond,
                       bool showUnTagged=false);
 
     /**
       * Trigger a recreation of the given ImageInfo object
       * for the next refresh.
       */
-    void invalidateItem(const ImageInfo *item);
-    
+    void invalidateItem(const ImageInfo &item);
+
 signals:
 
     void signalNewItems(const ImageInfoList& items);
-    void signalDeleteItem(ImageInfo* item);
+    void signalDeleteItem(const ImageInfo &item);
     void signalNewFilteredItems(const ImageInfoList& items);
-    void signalDeleteFilteredItem(ImageInfo* item);
+    void signalDeleteFilteredItem(const ImageInfo &item);
     void signalClear();
     void signalCompleted();
 
@@ -120,8 +120,8 @@ private slots:
 private:
 
     AlbumLister();
-    bool matchesFilter(const ImageInfo* info) const;
-    
+    bool matchesFilter(const ImageInfo &info) const;
+
 private:
 
     AlbumListerPriv    *d;

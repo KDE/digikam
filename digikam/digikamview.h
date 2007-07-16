@@ -74,7 +74,7 @@ signals:
 
     void signalAlbumSelected(bool val);
     void signalTagSelected(bool val);
-    void signalImageSelected(const Q3PtrList<ImageInfo>& list, bool, bool);
+    void signalImageSelected(const ImageInfoList& list, bool, bool);
     void signalNoCurrentItem();
     void signalProgressBarMode(int, const QString&);
     void signalProgressValue(int);

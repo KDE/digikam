@@ -48,10 +48,11 @@ RatingPopupMenu::RatingPopupMenu(QWidget* parent)
 {
     QString ratingPixPath = KStandardDirs::locate("data", "digikam/data/rating.png");
 
-    insertItem(i18n("None"), 0);
+    QAction *action = addAction(i18n("None"));
+    action->setData(0);
 
     QBitmap starbm(ratingPixPath);
-    QBitmap clearbm(starbm.width(), starbm.height());    
+    QBitmap clearbm(starbm.width(), starbm.height());
     clearbm.clear();
 
     for (int i = 1 ; i <= RatingMax ; i++)
@@ -68,12 +69,19 @@ RatingPopupMenu::RatingPopupMenu(QWidget* parent)
                                 clearbm);
         painter.end();
         pix.setMask(mask);
-        insertItem(pix, i);
+        QAction *action = addAction(pix, QString(), this, SLOT(slotRatingTriggered()));
+        action->setData(i);
     }
 }
 
 RatingPopupMenu::~RatingPopupMenu()
 {
+}
+
+void RatingPopupMenu::slotRatingTriggered()
+{
+    int r = qobject_cast<QAction*>(sender())->data().toInt();
+    emit rating(r);
 }
 
 }  // namespace Digikam

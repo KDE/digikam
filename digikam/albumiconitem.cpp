@@ -70,7 +70,7 @@ public:
 
     QRect          tightPixmapRect;
 
-    ImageInfo     *info;
+    ImageInfo      info;
 
     AlbumIconView *view;
 };
@@ -80,7 +80,7 @@ static void dateToString(const QDateTime& datetime, QString& str)
     str = KGlobal::locale()->formatDateTime(datetime, KLocale::ShortDate, false);
 }
 
-AlbumIconItem::AlbumIconItem(IconGroupItem* parent, ImageInfo* info)
+AlbumIconItem::AlbumIconItem(IconGroupItem* parent, const ImageInfo &info)
              : IconItem(parent)
 {
     d = new AlbumIconItemPriv;
@@ -154,7 +154,7 @@ bool AlbumIconItem::isDirty()
     return d->dirty;
 }
 
-ImageInfo* AlbumIconItem::imageInfo() const
+ImageInfo AlbumIconItem::imageInfo() const
 {
     return d->info;
 }
@@ -168,25 +168,25 @@ int AlbumIconItem::compare(IconItem *item)
     {
         case(AlbumSettings::ByIName):
         {
-            return d->info->name().localeAwareCompare(iconItem->d->info->name());
+            return d->info.name().localeAwareCompare(iconItem->d->info.name());
         }
         case(AlbumSettings::ByIPath):
         {
-            return d->info->fileUrl().path().compare(iconItem->d->info->fileUrl().path());
+            return d->info.fileUrl().path().compare(iconItem->d->info.fileUrl().path());
         }
         case(AlbumSettings::ByIDate):
         {
-            if (d->info->dateTime() < iconItem->d->info->dateTime())
+            if (d->info.dateTime() < iconItem->d->info.dateTime())
                 return -1;
-            else if (d->info->dateTime() > iconItem->d->info->dateTime())
+            else if (d->info.dateTime() > iconItem->d->info.dateTime())
                 return 1;
             else
                 return 0;
         }
         case(AlbumSettings::ByISize):
         {
-            int mysize(d->info->fileSize());
-            int hissize(iconItem->d->info->fileSize());
+            int mysize(d->info.fileSize());
+            int hissize(iconItem->d->info.fileSize());
             if (mysize < hissize)
                 return -1;
             else if (mysize > hissize)
@@ -196,8 +196,8 @@ int AlbumIconItem::compare(IconItem *item)
         }
         case(AlbumSettings::ByIRating):
         {
-            int myrating(d->info->rating());
-            int hisrating(iconItem->d->info->rating());
+            int myrating(d->info.rating());
+            int hisrating(iconItem->d->info.rating());
             if (myrating < hisrating)
                 return 1;
             else if (myrating > hisrating)
@@ -240,7 +240,7 @@ void AlbumIconItem::paintItem()
 
     d->dirty = true;
     
-    QPixmap *thumbnail = d->view->pixmapManager()->find(d->info->fileUrl());
+    QPixmap *thumbnail = d->view->pixmapManager()->find(d->info.fileUrl());
     if (thumbnail)
     {
         r = d->view->itemPixmapRect();
@@ -258,7 +258,7 @@ void AlbumIconItem::paintItem()
         r = d->view->itemRatingRect();
         QPixmap ratingPixmap = d->view->ratingPixmap();
 
-        int rating = d->info->rating();
+        int rating = d->info.rating();
         
         int x, w;
         x = r.x() + (r.width() - rating * ratingPixmap.width())/2;
@@ -272,14 +272,14 @@ void AlbumIconItem::paintItem()
         r = d->view->itemNameRect();
         p.setFont(d->view->itemFontReg());
         p.drawText(r, Qt::AlignCenter, squeezedText(&p, r.width(),
-                                                    d->info->name()));
+                                                    d->info.name()));
     }
 
     p.setFont(d->view->itemFontCom());
     
     if (settings->getIconShowComments())
     {
-        QString comments = d->info->comment();
+        QString comments = d->info.comment();
         
         r = d->view->itemCommentsRect();
         p.drawText(r, Qt::AlignCenter, squeezedText(&p, r.width(), comments));
@@ -289,7 +289,7 @@ void AlbumIconItem::paintItem()
 
     if (settings->getIconShowDate())
     {
-        QDateTime date(d->info->dateTime());
+        QDateTime date(d->info.dateTime());
 
         r = d->view->itemDateRect();    
         p.setFont(d->view->itemFontXtra());
@@ -301,7 +301,7 @@ void AlbumIconItem::paintItem()
     
     if (settings->getIconShowModDate())
     {
-        QDateTime date(d->info->modDateTime());
+        QDateTime date(d->info.modDateTime());
 
         r = d->view->itemModDateRect();    
         p.setFont(d->view->itemFontXtra());
@@ -313,7 +313,7 @@ void AlbumIconItem::paintItem()
     
     if (settings->getIconShowResolution())
     {
-        QSize dims = d->info->dimensions();
+        QSize dims = d->info.dimensions();
         if (dims.isValid())
         {
             QString mpixels, resolution;
@@ -330,7 +330,7 @@ void AlbumIconItem::paintItem()
         r = d->view->itemSizeRect();    
         p.drawText(r, Qt::AlignCenter,
                    squeezedText(&p, r.width(),
-                                KIO::convertSize(d->info->fileSize())));
+                                KIO::convertSize(d->info.fileSize())));
     }
 
     p.setFont(d->view->itemFontCom());
@@ -338,7 +338,7 @@ void AlbumIconItem::paintItem()
 
     if (settings->getIconShowTags())
     {
-        QString tags = d->info->tagNames().join(", ");
+        QString tags = d->info.tagNames().join(", ");
         
         r = d->view->itemTagRect();    
         p.drawText(r, Qt::AlignCenter, 

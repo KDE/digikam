@@ -27,7 +27,7 @@
 
 // Qt includes.
 
-#include <Q3ValueVector>
+#include <QSet>
 #include <QPixmap>
 #include <QString>
 #include <QPainter>
@@ -40,6 +40,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <ktoggleaction.h>
 
 // Local includes.
 
@@ -57,8 +58,7 @@
 namespace Digikam
 {
 
-#warning "TODO: kde4 port it";
-/*  // TODO: KDE4PORT: use KWidgetAction API instead QCustomMenuItem
+/*
 
 class TagsPopupCheckedMenuItem : public QCustomMenuItem
 {
@@ -119,6 +119,15 @@ private:
 };
 */
 
+class TagToggleAction : public KToggleAction
+{
+public:
+    TagToggleAction(const KIcon &icon, const QString &text, QObject *parent)
+    : KToggleAction(icon, text, parent)
+    {
+    }
+};
+
 // ------------------------------------------------------------------------
 
 class TagsPopupMenuPriv
@@ -127,33 +136,39 @@ public:
 
     TagsPopupMenuPriv(){}
 
-    int                    addToID;
-
     QPixmap                addTagPix;
 
-    Q3ValueList<int>       assignedTags;
-    Q3ValueList<qlonglong> selectedImageIDs;
+    QSet<int>              assignedTags;
+    QList<qlonglong>       selectedImageIDs;
 
     TagsPopupMenu::Mode    mode;
 };
 
-TagsPopupMenu::TagsPopupMenu(const Q3ValueList<qlonglong>& selectedImageIDs, int addToID, Mode mode)
-             : Q3PopupMenu(0)
+TagsPopupMenu::TagsPopupMenu(qlonglong selectedImageId, Mode mode)
+             : QMenu(0)
+{
+    d->selectedImageIDs << selectedImageId;
+    setup(mode);
+}
+
+TagsPopupMenu::TagsPopupMenu(const QList<qlonglong>& selectedImageIds, Mode mode)
+             : QMenu(0)
+{
+    d->selectedImageIDs = selectedImageIds;
+    setup(mode);
+}
+
+void TagsPopupMenu::setup(Mode mode)
 {
     d = new TagsPopupMenuPriv;
-    d->selectedImageIDs = selectedImageIDs;
-    d->addToID          = addToID;
     d->mode             = mode;
 
     KIconLoader *iconLoader = KIconLoader::global();
     d->addTagPix            = iconLoader->loadIcon("tag", K3Icon::NoGroup, K3Icon::SizeSmall,
                                                    K3Icon::DefaultState, 0, true);
-    
+
     connect(this, SIGNAL(aboutToShow()),
             this, SLOT(slotAboutToShow()));
-
-    connect(this, SIGNAL(activated(int)),
-            this, SLOT(slotActivated(int)));
 }
 
 TagsPopupMenu::~TagsPopupMenu()
@@ -167,56 +182,6 @@ void TagsPopupMenu::clearPopup()
     clear();
 }
 
-Q3PopupMenu* TagsPopupMenu::buildSubMenu(int tagid)
-{
-    AlbumManager* man = AlbumManager::componentData();
-    TAlbum* album     = man->findTAlbum(tagid);
-    if (!album)
-        return 0;
-
-    Q3PopupMenu* popup = new Q3PopupMenu(this);
-
-    connect(popup, SIGNAL(activated(int)), 
-            this, SLOT(slotActivated(int)));
-
-    if (d->mode == ASSIGN)
-    {
-        popup->insertItem(d->addTagPix, i18n("Add New Tag..."), ADDTAGID + album->id());
-        popup->insertSeparator();
-                
-        QPixmap pix = SyncJob::getTagThumbnail(album);
-        if ((d->mode == ASSIGN) && (d->assignedTags.contains(album->id())))
-        {
-#warning "TODO: kde4 port it";
-/*  // TODO: KDE4PORT: use KWidgetAction API instead QCustomMenuItem
-            popup->insertItem(new TagsPopupCheckedMenuItem(popup, album->title(), pix),
-                              d->addToID + album->id());*/
-        }
-        else
-        {
-            popup->insertItem(pix, album->title(), d->addToID + album->id());
-        }                
-        
-        if (album->firstChild())
-        {
-            popup->insertSeparator();
-        }
-    }
-    else
-    {
-        if (!album->isRoot())
-        {
-            QPixmap pix = SyncJob::getTagThumbnail(album);
-            popup->insertItem(pix, album->title(), d->addToID + album->id());
-            popup->insertSeparator();
-        }
-    }
-    
-    iterateAndBuildMenu(popup, album);
-
-    return popup;
-}
-
 void TagsPopupMenu::slotAboutToShow()
 {
     clearPopup();
@@ -228,14 +193,14 @@ void TagsPopupMenu::slotAboutToShow()
         if (d->selectedImageIDs.isEmpty())
             return;
 
-        d->assignedTags = DatabaseAccess().db()->getItemCommonTagIDs(d->selectedImageIDs);
+        d->assignedTags = QSet<int>::fromList(DatabaseAccess().db()->getItemCommonTagIDs(d->selectedImageIDs));
 
         if (d->assignedTags.isEmpty())
             return;
 
         // also add the parents of the assigned tags
-        QLinkedList<int> tList;
-        for (QLinkedList<int>::iterator it = d->assignedTags.begin();
+        QSet<int> parents;
+        for (QSet<int>::iterator it = d->assignedTags.begin();
              it != d->assignedTags.end(); ++it)
         {
             TAlbum* album = man->findTAlbum(*it);
@@ -244,23 +209,18 @@ void TagsPopupMenu::slotAboutToShow()
                 Album* a = album->parent();
                 while (a)
                 {
-                    tList.append(a->id());
+                    parents << a->id();
                     a = a->parent();
                 }
             }
         }
-
-        for (QLinkedList<int>::iterator it = tList.begin();
-             it != tList.end(); ++it)
-        {
-            d->assignedTags.append(*it);
-        }
+        d->assignedTags += parents;
     }
     else if (d->mode == ASSIGN)
     {
         if (d->selectedImageIDs.count() == 1)
         {
-            d->assignedTags = DatabaseAccess().db()->getItemCommonTagIDs(d->selectedImageIDs);
+            d->assignedTags = QSet<int>::fromList(DatabaseAccess().db()->getItemCommonTagIDs(d->selectedImageIDs));
         }
     }
 
@@ -270,107 +230,148 @@ void TagsPopupMenu::slotAboutToShow()
 
     if (d->mode == ASSIGN)
     {
-        insertItem(d->addTagPix, i18n("Add New Tag..."), ADDTAGID);
+        QAction *action = addAction(d->addTagPix, i18n("Add New Tag..."), this, SLOT(slotAddTag()));
+        action->setData(0); // root id
         if (album->firstChild())
         {
-            insertSeparator();
+            addSeparator();
         }
     }
-    
+
     iterateAndBuildMenu(this, album);
 }
 
-// for qHeapSort
-typedef QPair<QString, Album*> TagsMenuSortType;
-bool operator<(const TagsMenuSortType &lhs, const TagsMenuSortType &rhs)
+// for qSort
+bool lessThanByTitle(const Album *first, const Album *second)
 {
-    return lhs.first < rhs.first;
+    return first->title() < second->title();
 }
 
-void TagsPopupMenu::iterateAndBuildMenu(Q3PopupMenu *menu, TAlbum *album)
+void TagsPopupMenu::iterateAndBuildMenu(QMenu *menu, TAlbum *album)
 {
-    Q3ValueVector<TagsMenuSortType> sortedTags;
-
+    QList<Album*> sortedTags;
     for (Album* a = album->firstChild(); a; a = a->next())
     {
-        sortedTags.push_back(qMakePair(a->title(), a));
+        sortedTags << a;
     }
+    qStableSort(sortedTags.begin(), sortedTags.end(), lessThanByTitle);
 
-    qSort(sortedTags);
-    
-    for (Q3ValueVector<TagsMenuSortType>::Iterator i = sortedTags.begin(); i != sortedTags.end(); ++i)
+    for (QList<Album*>::iterator it = sortedTags.begin(); it != sortedTags.end(); ++it)
     {
-        Album *a = i->second;
-        
+        Album *a = *it;
+
         if (d->mode == REMOVE)
         {
-            QLinkedList<int>::iterator it = qFind(d->assignedTags.begin(), d->assignedTags.end(), a->id());
-            if (it == d->assignedTags.end())
+            if (!d->assignedTags.contains(a->id()))
                 continue;
         }
-        
+
         QPixmap pix = SyncJob::getTagThumbnail((TAlbum*)a);
         QString t = a->title();
         t.replace('&',"&&");
 
         if (a->firstChild())
         {
-            menu->insertItem(pix, t, buildSubMenu(a->id()));
+            QAction *menuAction = menu->addMenu(buildSubMenu(a->id()));
+            menuAction->setText(t);
+            menuAction->setIcon(pix);
         }
         else
         {
+            KToggleAction *action;
             if ((d->mode == ASSIGN) && (d->assignedTags.contains(a->id())))
             {
-#warning "TODO: kde4 port it";
-/*  // TODO: KDE4PORT: use KWidgetAction API instead QCustomMenuItem
-            
-                menu->insertItem(new TagsPopupCheckedMenuItem(this, a->title(), pix),
-                                                              d->addToID + a->id());
-*/
+                action = new TagToggleAction(KIcon(pix), t, this);
             }
             else
             {
-                menu->insertItem(pix, t, d->addToID + a->id());
+                action = new KToggleAction(KIcon(pix), t, this);
             }
+
+            action->setData(a->id());
+            connect(action, SIGNAL(toggled(bool)),
+                    this, SLOT(toggleTag(bool)));
+            menu->addAction(action);
         }
     }
 }
 
-void TagsPopupMenu::slotActivated(int id)
+QMenu* TagsPopupMenu::buildSubMenu(int tagid)
 {
-    if (id >= ADDTAGID)
+    AlbumManager* man = AlbumManager::componentData();
+    TAlbum* album     = man->findTAlbum(tagid);
+    if (!album)
+        return 0;
+
+    QMenu* popup = new QMenu(this);
+
+    if (d->mode == ASSIGN)
     {
-        int tagID = id - ADDTAGID;
+        QAction *action = addAction(d->addTagPix, i18n("Add New Tag..."), this, SLOT(slotAddTag()));
+        action->setData(album->id());
+        popup->addSeparator();
+    }
 
-        AlbumManager* man = AlbumManager::componentData();
-        TAlbum* parent    = man->findTAlbum(tagID);
-        if (!parent)
-        {
-            DWarning() << "Failed to find album with id "
-                       << tagID << endl;
-            return;
-        }
+    QPixmap pix = SyncJob::getTagThumbnail(album);
 
-        QString title, icon;
-        if (!TagCreateDlg::tagCreate(kapp->activeWindow(), parent, title, icon))
-            return;
-
-        QString errMsg;
-        TAlbum* newAlbum = man->createTAlbum(parent, title, icon, errMsg);
-
-        if( !newAlbum )
-        {
-            KMessageBox::error(this, errMsg);
-            return;
-        }
-
-        emit signalTagActivated(newAlbum->id());
+    KToggleAction *action;
+    if ((d->mode == ASSIGN) && (d->assignedTags.contains(album->id())))
+    {
+        action = new TagToggleAction(KIcon(pix), album->title(), popup);
     }
     else
     {
-        int tagID = id - d->addToID;
-        emit signalTagActivated(tagID);
+        action = new KToggleAction(KIcon(pix), album->title(), popup);
     }
+
+    action->setData(album->id());
+    connect(action, SIGNAL(toggled(bool)),
+            this, SLOT(toggleTag(bool)));
+    popup->addAction(action);
+
+    if (d->mode == REMOVE || album->firstChild())
+    {
+        popup->addSeparator();
+    }
+
+    iterateAndBuildMenu(popup, album);
+
+    return popup;
+}
+
+void TagsPopupMenu::slotToggleTag(bool)
+{
+    int tagID = qobject_cast<QAction*>(sender())->data().toInt();
+    emit signalTagActivated(tagID);
+}
+
+void TagsPopupMenu::slotAddTag()
+{
+    int tagID = qobject_cast<QAction*>(sender())->data().toInt();
+
+    AlbumManager* man = AlbumManager::componentData();
+    TAlbum* parent    = man->findTAlbum(tagID);
+    if (!parent)
+    {
+        DWarning() << "Failed to find album with id "
+                << tagID << endl;
+        return;
+    }
+
+    QString title, icon;
+    if (!TagCreateDlg::tagCreate(kapp->activeWindow(), parent, title, icon))
+        return;
+
+    QString errMsg;
+    TAlbum* newAlbum = man->createTAlbum(parent, title, icon, errMsg);
+
+    if( !newAlbum )
+    {
+        KMessageBox::error(this, errMsg);
+        return;
+    }
+
+    emit signalTagActivated(newAlbum->id());
 }
 
 }  // namespace Digikam

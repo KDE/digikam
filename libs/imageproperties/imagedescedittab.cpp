@@ -124,7 +124,7 @@ public:
 
     KDateTimeEdit                 *dateTimeEdit;
 
-    Q3PtrList<ImageInfo>           currInfos;
+    ImageInfoList                  currInfos;
 
     TAlbumListView                *tagsView;
 
@@ -478,12 +478,12 @@ void ImageDescEditTab::slotApplyAllChanges()
     int i=0;
     {
         DatabaseTransaction transaction;
-        for (ImageInfo *info = d->currInfos.first(); info; info = d->currInfos.next())
+        foreach(ImageInfo info, d->currInfos)
         {
             // apply to database
             d->hub.write(info);
             // apply to file metadata
-            d->hub.write(info->filePath(), MetadataHub::FullWrite, writeSettings);
+            d->hub.write(info.filePath(), MetadataHub::FullWrite, writeSettings);
 
             emit signalProgressValue((int)((i++/(float)d->currInfos.count())*100.0));
             if (progressInfo)
@@ -513,22 +513,22 @@ void ImageDescEditTab::slotRevertAllChanges()
     setInfos(d->currInfos);
 }
 
-void ImageDescEditTab::setItem(ImageInfo *info)
+void ImageDescEditTab::setItem(const ImageInfo &info)
 {
     slotChangingItems();
-    Q3PtrList<ImageInfo> list;
-    if (info)
-        list.append(info);
+    ImageInfoList list;
+    if (!info.isNull())
+        list << info;
     setInfos(list);
 }
 
-void ImageDescEditTab::setItems(Q3PtrList<ImageInfo> infos)
+void ImageDescEditTab::setItems(const ImageInfoList &infos)
 {
     slotChangingItems();
     setInfos(infos);
 }
 
-void ImageDescEditTab::setInfos(Q3PtrList<ImageInfo> infos)
+void ImageDescEditTab::setInfos(const ImageInfoList &infos)
 {
     if (infos.isEmpty())
     {
@@ -548,7 +548,7 @@ void ImageDescEditTab::setInfos(Q3PtrList<ImageInfo> infos)
     d->applyBtn->setEnabled(false);
     d->revertBtn->setEnabled(false);
 
-    for (ImageInfo *info = d->currInfos.first(); info; info = d->currInfos.next())
+    foreach(ImageInfo info, d->currInfos)
     {
         d->hub.load(info);
     }
@@ -568,12 +568,12 @@ void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
     int i=0;
     {
         DatabaseTransaction transaction;
-        for (ImageInfo *info = d->currInfos.first(); info; info = d->currInfos.next())
+        foreach(ImageInfo info, d->currInfos)
         {
             // A batch operation: a hub for each single file, not the common hub
             MetadataHub fileHub(MetadataHub::NewTagsImport);
             // read in from DMetadata
-            fileHub.load(info->filePath());
+            fileHub.load(info.filePath());
             // write out to database
             fileHub.write(info);
 
@@ -596,13 +596,13 @@ void ImageDescEditTab::slotWriteToFileMetadataFromDatabase()
     MetadataWriteSettings writeSettings = MetadataHub::defaultWriteSettings();
 
     int i=0;
-    for (ImageInfo *info = d->currInfos.first(); info; info = d->currInfos.next())
+    foreach(ImageInfo info, d->currInfos)
     {
         MetadataHub fileHub;
         // read in from database
         fileHub.load(info);
         // write out to file DMetadata
-        fileHub.write(info->filePath());
+        fileHub.write(info.filePath());
 
         emit signalProgressValue((int)((i++/(float)d->currInfos.count())*100.0));
         kapp->processEvents();
@@ -1405,15 +1405,15 @@ void ImageDescEditTab::reloadForMetadataChange(qlonglong imageId)
 
     if (singleSelection())
     {
-        if (d->currInfos.first()->id() == imageId)
+        if (d->currInfos.first().id() == imageId)
             setInfos(d->currInfos);
     }
     else
     {
         // if image id is in our list, update
-        for (ImageInfo *info = d->currInfos.first(); info; info = d->currInfos.next())
+        foreach(ImageInfo info, d->currInfos)
         {
-            if (info->id() == imageId)
+            if (info.id() == imageId)
             {
                 setInfos(d->currInfos);
                 return;

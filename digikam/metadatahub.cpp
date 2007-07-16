@@ -145,14 +145,14 @@ void MetadataHub::reset()
 
 // --------------------------------------------------
 
-void MetadataHub::load(ImageInfo *info)
+void MetadataHub::load(const ImageInfo &info)
 {
     d->count++;
 
-    load(info->dateTime(), info->comment(), info->rating());
+    load(info.dateTime(), info.comment(), info.rating());
 
     AlbumManager *man = AlbumManager::componentData();
-    QList<int> tagIds = info->tagIds();
+    QList<int> tagIds = info.tagIds();
     QList<TAlbum *> loadedTags;
 
     if (d->dbmode == ManagedTags)
@@ -173,7 +173,7 @@ void MetadataHub::load(ImageInfo *info)
     }
     else
     {
-        loadTags(man->tagPaths(info->tagIds(), false));
+        loadTags(man->tagPaths(info.tagIds(), false));
     }
 }
 
@@ -272,11 +272,11 @@ void MetadataHub::loadTags(const QList<TAlbum *> &loadedTags)
             // set to explicitly not contained, but we contain it => disjoint
             status = TagStatus(MetadataDisjoint, true);
         }
-        // else if mapIt.data() ==  MetadataAvailable, true: all right, we contain it too
-        // else if mapIt.data() ==  MetadataDisjoint: it's already disjoint
+        // else if mapIt.value() ==  MetadataAvailable, true: all right, we contain it too
+        // else if mapIt.value() ==  MetadataDisjoint: it's already disjoint
 
         // remove from the list to signal that this tag has been handled
-        previousTags.remove(*it);
+        previousTags.removeAll(*it);
     }
 
     // Those tags which had been set as MetadataAvailable before,
@@ -284,9 +284,9 @@ void MetadataHub::loadTags(const QList<TAlbum *> &loadedTags)
     for (QList<TAlbum *>::iterator it = previousTags.begin(); it != previousTags.end(); ++it)
     {
         QMap<TAlbum *, TagStatus>::iterator mapIt = d->tags.find(*it);
-        if (mapIt != d->tags.end() && mapIt.data() == TagStatus(MetadataAvailable, true))
+        if (mapIt != d->tags.end() && mapIt.value() == TagStatus(MetadataAvailable, true))
         {
-            mapIt.data() = TagStatus(MetadataDisjoint, true);
+            mapIt.value() = TagStatus(MetadataDisjoint, true);
         }
     }
 }
@@ -304,11 +304,10 @@ void MetadataHub::loadTags(const QStringList &loadedTagPaths)
         QStringList toBeAdded;
         for (QStringList::iterator it = d->tagList.begin(); it != d->tagList.end(); ++it)
         {
-            QStringList::const_iterator newTagListIt = loadedTagPaths.find(*it);
-            if (newTagListIt == loadedTagPaths.end())
+            if (loadedTagPaths.indexOf(*it) == -1)
             {
                 // it's not in the loadedTagPaths list. Remove it from intersection list.
-                it = d->tagList.remove(it);
+                it = d->tagList.erase(it);
             }
             // else, it is in both lists, so no need to change d->tagList, it's already added.
         }
@@ -386,7 +385,7 @@ template <class T> void MetadataHubPriv::loadSingleValue(const T &data, T &stora
 
 // --------------------------------------------------
 
-bool MetadataHub::write(ImageInfo *info, WriteMode writeMode)
+bool MetadataHub::write(ImageInfo info, WriteMode writeMode)
 {
     bool changed = false;
 
@@ -397,7 +396,7 @@ bool MetadataHub::write(ImageInfo *info, WriteMode writeMode)
     bool saveTags     = false;
     for (QMap<TAlbum *, TagStatus>::iterator it = d->tags.begin(); it != d->tags.end(); ++it)
     {
-        if (it.data() == MetadataAvailable)
+        if (it.value() == MetadataAvailable)
         {
             saveTags = true;
             break;
@@ -419,17 +418,17 @@ bool MetadataHub::write(ImageInfo *info, WriteMode writeMode)
 
     if (saveComment && (writeAllFields || d->commentChanged))
     {
-        info->setComment(d->comment);
+        info.setComment(d->comment);
         changed = true;
     }
     if (saveDateTime && (writeAllFields || d->dateTimeChanged))
     {
-        info->setDateTime(d->dateTime);
+        info.setDateTime(d->dateTime);
         changed = true;
     }
     if (saveRating && (writeAllFields || d->ratingChanged))
     {
-        info->setRating(d->rating);
+        info.setRating(d->rating);
         changed = true;
     }
 
@@ -439,12 +438,12 @@ bool MetadataHub::write(ImageInfo *info, WriteMode writeMode)
         {
             for (QMap<TAlbum *, TagStatus>::iterator it = d->tags.begin(); it != d->tags.end(); ++it)
             {
-                if (it.data() == MetadataAvailable)
+                if (it.value() == MetadataAvailable)
                 {
-                    if (it.data().hasTag)
-                        info->setTag(it.key()->id());
+                    if (it.value().hasTag)
+                        info.setTag(it.key()->id());
                     else
-                        info->removeTag(it.key()->id());
+                        info.removeTag(it.key()->id());
                     changed = true;
                 }
             }
@@ -452,7 +451,7 @@ bool MetadataHub::write(ImageInfo *info, WriteMode writeMode)
         else
         {
         // tags not yet contained in database will be created
-            info->addTagPaths(d->tagList);
+            info.addTagPaths(d->tagList);
             changed = changed || !d->tagList.isEmpty();
         }
     }
@@ -474,7 +473,7 @@ bool MetadataHub::write(DMetadata &metadata, WriteMode writeMode, const Metadata
         // find at least one tag to write
         for (QMap<TAlbum *, TagStatus>::iterator it = d->tags.begin(); it != d->tags.end(); ++it)
         {
-            if (it.data() == MetadataAvailable)
+            if (it.value() == MetadataAvailable)
             {
                 saveTags = true;
                 break;
@@ -525,12 +524,12 @@ bool MetadataHub::write(DMetadata &metadata, WriteMode writeMode, const Metadata
         for (QMap<TAlbum *, TagStatus>::iterator it = d->tags.begin(); it != d->tags.end(); ++it)
         {
             // it is important that MetadataDisjoint keywords are not touched
-            if (it.data() == MetadataAvailable)
+            if (it.value() == MetadataAvailable)
             {
                 // This works for single and multiple selection.
                 // In both situations, tags which had originally been loaded
                 // have explicitly been removed with setTag.
-                if (it.data().hasTag)
+                if (it.value().hasTag)
                     newKeywords.append(it.key()->tagPath(false));
                 else
                     oldKeywords.append(it.key()->tagPath(false));
@@ -617,7 +616,7 @@ bool MetadataHub::needWriteMetadata(WriteMode writeMode, const MetadataWriteSett
         // find at least one tag to write
         for (QMap<TAlbum *, TagStatus>::iterator it = d->tags.begin(); it != d->tags.end(); ++it)
         {
-            if (it.data() == MetadataAvailable)
+            if (it.value() == MetadataAvailable)
             {
                 saveTags = true;
                 break;
@@ -695,7 +694,7 @@ MetadataHub::TagStatus MetadataHub::tagStatus(TAlbum *album) const
     QMap<TAlbum *, TagStatus>::iterator mapIt = d->tags.find(album);
     if (mapIt == d->tags.end())
         return TagStatus(MetadataInvalid);
-    return mapIt.data();
+    return mapIt.value();
 }
 
 
@@ -777,7 +776,7 @@ QStringList MetadataHub::keywords() const
         QStringList tagList;
         for (QMap<TAlbum *, TagStatus>::iterator it = d->tags.begin(); it != d->tags.end(); ++it)
         {
-            if (it.data() == TagStatus(MetadataAvailable, true))
+            if (it.value() == TagStatus(MetadataAvailable, true))
                 tagList.append(it.key()->tagPath(false));
         }
         return tagList;
@@ -796,7 +795,7 @@ QMap<int, MetadataHub::TagStatus> MetadataHub::tagIDs() const
     QMap<int, TagStatus> intmap;
     for (QMap<TAlbum *, TagStatus>::iterator it = d->tags.begin(); it != d->tags.end(); ++it)
     {
-        intmap.insert(it.key()->id(), it.data());
+        intmap.insert(it.key()->id(), it.value());
     }
     return intmap;
 }

@@ -686,7 +686,7 @@ void DigikamView::slotDispatchImageSelected()
     if (d->needDispatchSelection)
     {
         // the list of copies of ImageInfos of currently selected items, currentItem first
-        Q3PtrList<ImageInfo> list = d->iconView->selectedImageInfos(true);
+        ImageInfoList list = d->iconView->selectedImageInfos();
 
         if (list.isEmpty())
         {
@@ -699,19 +699,16 @@ void DigikamView::slotDispatchImageSelected()
             d->rightSideBar->itemChanged(list);
 
             AlbumIconItem *selectedItem = d->iconView->firstSelectedItem();
-            ImageInfo *previousInfo=0, *nextInfo=0;
+            ImageInfo previousInfo, nextInfo;
             if (selectedItem->prevItem())
                 previousInfo = static_cast<AlbumIconItem*>(selectedItem->prevItem())->imageInfo();
             if (selectedItem->nextItem())
                 nextInfo = static_cast<AlbumIconItem*>(selectedItem->nextItem())->imageInfo();
 
-            // we fed a list of copies
-            d->rightSideBar->takeImageInfoOwnership(true);
-
             if (!d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
                 d->albumWidgetStack->setPreviewItem(list.first(), previousInfo, nextInfo);
 
-            emit signalImageSelected(list, previousInfo, nextInfo);
+            emit signalImageSelected(list, !previousInfo.isNull(), !nextInfo.isNull());
         }
 
         d->needDispatchSelection = false;
@@ -989,7 +986,7 @@ void DigikamView::slotTogglePreviewMode(AlbumIconItem *iconItem)
     if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode && iconItem)
     {
         // We will go to ImagePreview Mode.
-        ImageInfo *previousInfo=0, *nextInfo=0;
+        ImageInfo previousInfo, nextInfo;
 
         if (iconItem->prevItem())
             previousInfo = static_cast<AlbumIconItem*>(iconItem->prevItem())->imageInfo();
@@ -1062,7 +1059,7 @@ void DigikamView::slotImageLightTable()
     else
     {
         ImageInfoList list;
-        ImageInfo *info = d->albumWidgetStack->imagePreviewView()->getImageInfo();
+        ImageInfo info = d->albumWidgetStack->imagePreviewView()->getImageInfo();
         list.append(info);
         d->iconView->insertToLightTable(list, info);
     }
@@ -1258,21 +1255,21 @@ void DigikamView::slideShow(ImageInfoList &infoList)
     for (ImageInfoList::iterator it = infoList.begin() ; 
          !d->cancelSlideShow && (it != infoList.end()) ; ++it)
     {
-        ImageInfo *info = *it;
-        settings.fileList.append(info->fileUrl());
+        ImageInfo info = *it;
+        settings.fileList.append(info.fileUrl());
         SlidePictureInfo pictInfo;
-        pictInfo.comment = info->comment();
+        pictInfo.comment = info.comment();
 
         // Perform optimizations: only read pictures metadata if necessary.
         if (settings.printApertureFocal || settings.printExpoSensitivity || settings.printMakeModel)
         {
-            meta.load(info->fileUrl().path());
+            meta.load(info.fileUrl().path());
             pictInfo.photoInfo = meta.getPhotographInformations();
         }
 
         // In case of dateTime extraction from metadata failed 
-        pictInfo.photoInfo.dateTime = info->dateTime(); 
-        settings.pictInfoMap.insert(info->fileUrl(), pictInfo);
+        pictInfo.photoInfo.dateTime = info.dateTime();
+        settings.pictInfoMap.insert(info.fileUrl(), pictInfo);
 
         emit signalProgressValue((int)((i++/cnt)*100.0));
         kapp->processEvents();
@@ -1287,9 +1284,9 @@ void DigikamView::slideShow(ImageInfoList &infoList)
         {
             AlbumIconItem* current = dynamic_cast<AlbumIconItem*>(d->iconView->currentItem());
             if (current) 
-                slide->setCurrent(current->imageInfo()->fileUrl());
+                slide->setCurrent(current->imageInfo().fileUrl());
         }
-    
+
         slide->show();
     }
 }

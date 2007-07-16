@@ -839,9 +839,9 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
                     ImageInfo info(*it);
 
                     MetadataHub hub;
-                    hub.load(&info);
+                    hub.load(info);
                     hub.setTag(destAlbum, true);
-                    hub.write(&info, MetadataHub::PartialWrite);
+                    hub.write(info, MetadataHub::PartialWrite);
                     hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
 
                     emit signalProgressValue((int)((i++/(float)imageIDs.count())*100.0));

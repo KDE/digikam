@@ -336,9 +336,9 @@ void MonthWidget::slotAddItems(const ImageInfoList& items)
     if (!m_active)
         return;
 
-    for (ImageInfoListIterator it = items.begin(); it != items.end(); ++it)
+    for (ImageInfoList::const_iterator it = items.begin(); it != items.end(); ++it)
     {
-        QDateTime dt = (*it)->dateTime();
+        QDateTime dt = it->dateTime();
 
         for (int i=0; i<42; i++)
         {

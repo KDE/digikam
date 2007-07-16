@@ -167,7 +167,7 @@ public:
     QFont                            fnXtra;
 
     Q3Dict<AlbumIconItem>            itemDict;
-    QMap<ImageInfo*, AlbumIconItem*> itemInfoMap;
+    QHash<ImageInfo, AlbumIconItem*> itemInfoMap;
 
     AlbumLister                     *imageLister;
     Album                           *currentAlbum;
@@ -206,8 +206,8 @@ AlbumIconView::AlbumIconView(QWidget* parent)
     connect(d->imageLister, SIGNAL(signalNewFilteredItems(const ImageInfoList&)),
             this, SLOT(slotImageListerNewItems(const ImageInfoList&)));
 
-    connect(d->imageLister, SIGNAL(signalDeleteFilteredItem(ImageInfo*)),
-            this, SLOT(slotImageListerDeleteItem(ImageInfo*)) );
+    connect(d->imageLister, SIGNAL(signalDeleteFilteredItem(const ImageInfo &)),
+            this, SLOT(slotImageListerDeleteItem(const ImageInfo &)) );
 
     connect(d->imageLister, SIGNAL(signalClear()),
             this, SLOT(slotImageListerClear()));
@@ -364,31 +364,30 @@ void AlbumIconView::slotImageListerNewItems(const ImageInfoList& itemList)
     if (!d->currentAlbum || d->currentAlbum->isRoot())
         return;
 
-    for (ImageInfoListIterator it = itemList.begin(); it != itemList.end(); ++it)
+    for (ImageInfoList::const_iterator it = itemList.begin(); it != itemList.end(); ++it)
     {
-        KUrl url( (*it)->fileUrl() );
+        KUrl url( it->fileUrl() );
         url.cleanPath();
 
-        QMap<ImageInfo*, AlbumIconItem*>::iterator itMap = d->itemInfoMap.find(*it);
-        if (itMap != d->itemInfoMap.end())
+        if (d->itemInfoMap.contains(*it))
         {
             // TODO: Make sure replacing slotImageListerDeleteItem with continue here is not wrong
             //slotImageListerDeleteItem((*itMap)->imageInfo());
             continue;
         }
 
-        AlbumIconGroupItem* group = d->albumDict.find((*it)->albumId());
+        AlbumIconGroupItem* group = d->albumDict.find(it->albumId());
         if (!group)
         {
-            group = new AlbumIconGroupItem(this, (*it)->albumId());
-            d->albumDict.insert((*it)->albumId(), group);
+            group = new AlbumIconGroupItem(this, it->albumId());
+            d->albumDict.insert(it->albumId(), group);
         }
 
-        PAlbum *album = AlbumManager::componentData()->findPAlbum((*it)->albumId());
+        PAlbum *album = AlbumManager::componentData()->findPAlbum(it->albumId());
         if (!album)
         {
-            DWarning() << "No album for item: " << (*it)->name()
-                       << ", albumID: " << (*it)->albumId() << endl;
+            DWarning() << "No album for item: " << it->name()
+                       << ", albumID: " << it->albumId() << endl;
             continue;
         }
 
@@ -401,9 +400,9 @@ void AlbumIconView::slotImageListerNewItems(const ImageInfoList& itemList)
     emit signalItemsAdded();
 }
 
-void AlbumIconView::slotImageListerDeleteItem(ImageInfo* item)
+void AlbumIconView::slotImageListerDeleteItem(const ImageInfo &item)
 {
-    QMap<ImageInfo*, AlbumIconItem*>::iterator itMap = d->itemInfoMap.find(item);
+    QHash<ImageInfo, AlbumIconItem*>::iterator itMap = d->itemInfoMap.find(item);
     if (itMap == d->itemInfoMap.end())
         return;
 
@@ -430,7 +429,7 @@ void AlbumIconView::slotImageListerDeleteItem(ImageInfo* item)
     delete iconItem;
 
     d->itemInfoMap.remove(item);
-    d->itemDict.remove(item->fileUrl().url());
+    d->itemDict.remove(item.fileUrl().url());
 
     IconGroupItem* group = firstGroup();
     IconGroupItem* tmp;
@@ -506,7 +505,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 
     //-- Open With Actions ------------------------------------
 
-    KMimeType::Ptr mimePtr = KMimeType::findByUrl(iconItem->imageInfo()->fileUrl(), 0, true, true);
+    KMimeType::Ptr mimePtr = KMimeType::findByUrl(iconItem->imageInfo().fileUrl(), 0, true, true);
 
     Q3ValueVector<KService::Ptr> serviceVector;
 
@@ -596,14 +595,14 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 
     // --------------------------------------------------------
 
-    Q3ValueList<qlonglong> selectedImageIDs;
-    
+    QList<qlonglong> selectedImageIDs;
+
     for (IconItem *it = firstItem(); it; it=it->nextItem())
     {
         if (it->isSelected())
         {
             AlbumIconItem *selItem = static_cast<AlbumIconItem *>(it);
-            selectedImageIDs.append(selItem->imageInfo()->id());
+            selectedImageIDs.append(selItem->imageInfo().id());
         }
     }
 
@@ -614,12 +613,12 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 
     // Bulk assignment/removal of tags --------------------------
 
-    TagsPopupMenu* assignTagsPopup = new TagsPopupMenu(selectedImageIDs, 1000, TagsPopupMenu::ASSIGN);
-    TagsPopupMenu* removeTagsPopup = new TagsPopupMenu(selectedImageIDs, 1000, TagsPopupMenu::REMOVE);
-    
+    TagsPopupMenu* assignTagsPopup = new TagsPopupMenu(selectedImageIDs, TagsPopupMenu::ASSIGN);
+    TagsPopupMenu* removeTagsPopup = new TagsPopupMenu(selectedImageIDs, TagsPopupMenu::REMOVE);
+
     connect(assignTagsPopup, SIGNAL(signalTagActivated(int)),
             this, SLOT(slotAssignTag(int)));
-            
+
     connect(removeTagsPopup, SIGNAL(signalTagActivated(int)),
             this, SLOT(slotRemoveTag(int)));
 
@@ -700,7 +699,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
             if (it->isSelected())
             {
                 AlbumIconItem *selItem = static_cast<AlbumIconItem *>(it);
-                urlList.append(selItem->imageInfo()->fileUrl());
+                urlList.append(selItem->imageInfo().fileUrl());
             }
         }
         if (urlList.count())
@@ -729,9 +728,10 @@ void AlbumIconView::slotCopy()
         if (it->isSelected())
         {
             AlbumIconItem *albumItem = static_cast<AlbumIconItem *>(it);
-            urls.append(albumItem->imageInfo()->fileUrl());
-            kioURLs.append(albumItem->imageInfo()->databaseUrl());
-            imageIDs.append(albumItem->imageInfo()->id());
+            ImageInfo info = albumItem->imageInfo();
+            urls.append(info.fileUrl());
+            kioURLs.append(info.databaseUrl());
+            imageIDs.append(info.id());
         }
     }
     albumIDs.append(d->currentAlbum->id());
@@ -785,7 +785,7 @@ void AlbumIconView::slotSetAlbumThumbnail(AlbumIconItem *iconItem)
 
         QString err;
         AlbumManager::componentData()->updatePAlbumIcon( album,
-                                                    iconItem->imageInfo()->id(),
+                                                    iconItem->imageInfo().id(),
                                                     err );
     }
     else if (d->currentAlbum->type() == Album::TAG)
@@ -795,7 +795,7 @@ void AlbumIconView::slotSetAlbumThumbnail(AlbumIconItem *iconItem)
         QString err;
         AlbumManager::componentData()->updateTAlbumIcon( album,
                                                     QString(),
-                                                    iconItem->imageInfo()->id(),
+                                                    iconItem->imageInfo().id(),
                                                     err );
     }
 }
@@ -807,9 +807,9 @@ void AlbumIconView::slotRename(AlbumIconItem* item)
 
     // Create a copy of the item. After entering the event loop
     // in the dialog, we cannot be sure about the item's status.
-    ImageInfo renameInfo(*item->imageInfo());
+    ImageInfo renameInfo = item->imageInfo();
 
-    QFileInfo fi(item->imageInfo()->name());
+    QFileInfo fi(renameInfo.name());
     QString ext  = QString(".") + fi.suffix();
     QString name = fi.fileName();
     name.truncate(fi.fileName().length() - ext.length());
@@ -838,7 +838,7 @@ void AlbumIconView::slotRename(AlbumIconItem* item)
     // When this is completed, DIO will call AlbumLister::componentData()->refresh().
     // Usually the AlbumLister will ignore changes to already listed items.
     // So the renamed item need explicitly be invalidated.
-    d->imageLister->invalidateItem(&renameInfo);
+    d->imageLister->invalidateItem(renameInfo);
 }
 
 void AlbumIconView::slotRenamed(KIO::Job*, const KUrl &, const KUrl&newURL)
@@ -864,8 +864,9 @@ void AlbumIconView::slotDeleteSelectedItems(bool deletePermanently)
         if (it->isSelected()) 
         {
             AlbumIconItem *iconItem = static_cast<AlbumIconItem *>(it);
-            urlList.append(iconItem->imageInfo()->fileUrl());
-            kioUrlList.append(iconItem->imageInfo()->databaseUrl());
+            ImageInfo info = iconItem->imageInfo();
+            urlList.append(info.fileUrl());
+            kioUrlList.append(info.databaseUrl());
         }
     }
 
@@ -906,8 +907,9 @@ void AlbumIconView::slotDeleteSelectedItemsDirectly(bool useTrash)
         if (it->isSelected())
         {
             AlbumIconItem *iconItem = static_cast<AlbumIconItem *>(it);
-            kioUrlList.append(iconItem->imageInfo()->databaseUrl());
-            urlList.append(iconItem->imageInfo()->fileUrl());
+            ImageInfo info = iconItem->imageInfo();
+            kioUrlList.append(info.databaseUrl());
+            urlList.append(info.fileUrl());
         }
     }
 
@@ -946,7 +948,7 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item)
 
     if (!settings) return;
 
-    QString currentFileExtension = item->imageInfo()->name().section( '.', -1 );
+    QString currentFileExtension = item->imageInfo().name().section( '.', -1 );
     QString imagefilter = settings->getImageFileFilter().toLower() +
                           settings->getImageFileFilter().toUpper();
 
@@ -960,7 +962,7 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item)
     // If the current item is not an image file.
     if ( !imagefilter.contains(currentFileExtension) )
     {
-        KMimeType::Ptr mimePtr = KMimeType::findByUrl(item->imageInfo()->fileUrl(), 0, true, true);
+        KMimeType::Ptr mimePtr = KMimeType::findByUrl(item->imageInfo().fileUrl(), 0, true, true);
         const KService::List offers = KServiceTypeTrader::self()->query(mimePtr->name(), 
                                                                         "Type == 'Application'");
         
@@ -969,24 +971,24 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item)
 
         KService::Ptr ptr = offers.first();
         // Run the dedicated app to show the item.
-        KRun::run(*ptr, item->imageInfo()->fileUrl(), this);
+        KRun::run(*ptr, item->imageInfo().fileUrl(), this);
         return;
     }
 
     // Run Digikam ImageEditor with all image files in the current Album.
 
     ImageInfoList imageInfoList;
-    ImageInfo *currentImageInfo = 0;
+    ImageInfo currentImageInfo;
 
     for (IconItem *it = firstItem() ; it ; it = it->nextItem())
     {
         AlbumIconItem *iconItem = static_cast<AlbumIconItem *>(it);
-        QString fileExtension = iconItem->imageInfo()->fileUrl().fileName().section( '.', -1 );
+        QString fileExtension = iconItem->imageInfo().fileUrl().fileName().section( '.', -1 );
 
         if ( imagefilter.indexOf(fileExtension) != -1 )
         {
-            ImageInfo *info = new ImageInfo(*iconItem->imageInfo());
-            imageInfoList.append(info);
+            ImageInfo info = iconItem->imageInfo();
+            imageInfoList << info;
             if (iconItem == item)
                 currentImageInfo = info;
         }
@@ -1025,21 +1027,20 @@ void AlbumIconView::insertSelectionToLightTable()
     // Run Light Table with all selected image files in the current Album.
 
     ImageInfoList imageInfoList;
-    
+
     for (IconItem *it = firstItem() ; it ; it = it->nextItem())
     {
         if ((*it).isSelected())
         {
             AlbumIconItem *iconItem = static_cast<AlbumIconItem *>(it);
-            ImageInfo *info         = new ImageInfo(*iconItem->imageInfo());
-            imageInfoList.append(info);
+            imageInfoList << iconItem->imageInfo();
         }
     }
-    
+
     insertToLightTable(imageInfoList, imageInfoList.first());
 }
 
-void AlbumIconView::insertToLightTable(const ImageInfoList& list, ImageInfo* current)
+void AlbumIconView::insertToLightTable(const ImageInfoList& list, const ImageInfo &current)
 {
     LightTableWindow *ltview = LightTableWindow::lightTableWindow();
 
@@ -1111,9 +1112,10 @@ void AlbumIconView::startDrag()
         if (it->isSelected())
         {
             AlbumIconItem *albumItem = static_cast<AlbumIconItem *>(it);
-            urls.append(albumItem->imageInfo()->fileUrl());
-            kioURLs.append(albumItem->imageInfo()->databaseUrl());
-            imageIDs.append(albumItem->imageInfo()->id());
+            ImageInfo info = albumItem->imageInfo();
+            urls.append(info.fileUrl());
+            kioURLs.append(info.databaseUrl());
+            imageIDs.append(info.id());
         }
     }
     albumIDs.append(d->currentAlbum->id());
@@ -1275,7 +1277,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                                                i18n("Assigning image tags. Please wait..."));
 
                     // always give a copy of the image infos (the "true"). Else there were crashes reported.
-                    changeTagOnImageInfos(selectedImageInfos(true), Q3ValueList<int>() << tagID, true, true);
+                    changeTagOnImageInfos(selectedImageInfos(), QList<int>() << tagID, true, true);
 
                     emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
                     break;
@@ -1285,7 +1287,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                     emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
                                                i18n("Assigning image tags. Please wait..."));
 
-                    changeTagOnImageInfos(allImageInfos(true), Q3ValueList<int>() << tagID, true, true);
+                    changeTagOnImageInfos(allImageInfos(), QList<int>() << tagID, true, true);
 
                     emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
                     break;
@@ -1295,9 +1297,9 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                     AlbumIconItem *albumItem = findItem(event->pos());
                     if (albumItem)
                     {
-                        Q3PtrList<ImageInfo> infos;
-                        infos.append(albumItem->imageInfo());
-                        changeTagOnImageInfos(infos, Q3ValueList<int>() << tagID, true, false);
+                        ImageInfoList infos;
+                        infos << albumItem->imageInfo();
+                        changeTagOnImageInfos(infos, QList<int>() << tagID, true, false);
                     }
                     break;
                 }
@@ -1351,7 +1353,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                 emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
                                             i18n("Assigning image tags. Please wait..."));
 
-                changeTagOnImageInfos(selectedImageInfos(true), tagIDs, true, true);
+                changeTagOnImageInfos(selectedImageInfos(), tagIDs, true, true);
 
                 emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
                 break;
@@ -1361,7 +1363,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                 emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
                                             i18n("Assigning image tags. Please wait..."));
 
-                changeTagOnImageInfos(allImageInfos(true), tagIDs, true, true);
+                changeTagOnImageInfos(allImageInfos(), tagIDs, true, true);
 
                 emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
                 break;
@@ -1371,8 +1373,8 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                 AlbumIconItem *albumItem = findItem(event->pos());
                 if (albumItem)
                 {
-                    Q3PtrList<ImageInfo> infos;
-                    infos.append(albumItem->imageInfo());
+                    ImageInfoList infos;
+                    infos << albumItem->imageInfo();
                     changeTagOnImageInfos(infos, tagIDs, true, false);
                 }
                 break;
@@ -1387,26 +1389,26 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
     }
 }
 
-void AlbumIconView::changeTagOnImageInfos(const Q3PtrList<ImageInfo> &list, const Q3ValueList<int> &tagIDs, bool addOrRemove, bool progress)
+void AlbumIconView::changeTagOnImageInfos(const ImageInfoList &list, const QList<int> &tagIDs, bool addOrRemove, bool progress)
 {
     float cnt = list.count();
     int i = 0;
 
     {
         DatabaseTransaction transaction;
-        for (Q3PtrList<ImageInfo>::const_iterator it = list.begin(); it != list.end(); ++it)
+        foreach(ImageInfo info, list)
         {
             MetadataHub hub;
 
-            hub.load(*it);
+            hub.load(info);
 
-            for (Q3ValueList<int>::const_iterator tagIt = tagIDs.begin(); tagIt != tagIDs.end(); ++tagIt)
+            for (QList<int>::const_iterator tagIt = tagIDs.begin(); tagIt != tagIDs.end(); ++tagIt)
             {
                 hub.setTag(*tagIt, addOrRemove);
             }
 
-            hub.write(*it, MetadataHub::PartialWrite);
-            hub.write((*it)->filePath(), MetadataHub::FullWriteIfChanged);
+            hub.write(info, MetadataHub::PartialWrite);
+            hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
 
             if (progress)
             {
@@ -1449,7 +1451,7 @@ KUrl::List AlbumIconView::allItems()
      for (IconItem *it = firstItem(); it; it = it->nextItem())
      {
          AlbumIconItem *item = (AlbumIconItem*) it;
-         itemList.append(item->imageInfo()->fileUrl());
+         itemList.append(item->imageInfo().fileUrl());
      }
 
     return itemList;
@@ -1464,24 +1466,22 @@ KUrl::List AlbumIconView::selectedItems()
          if (it->isSelected())
          {
              AlbumIconItem *item = (AlbumIconItem*) it;
-             itemList.append(item->imageInfo()->fileUrl());
+             itemList.append(item->imageInfo().fileUrl());
          }
      }
 
     return itemList;
 }
 
-Q3PtrList<ImageInfo> AlbumIconView::allImageInfos(bool copy) const
+ImageInfoList AlbumIconView::allImageInfos() const
 {
     // Returns the list of ImageInfos of all items,
     // with the extra feature that the currentItem is the first in the list.
-    Q3PtrList<ImageInfo> list;
+    ImageInfoList list;
     for (IconItem *it = firstItem(); it; it = it->nextItem())
     {
         AlbumIconItem *iconItem = static_cast<AlbumIconItem *>(it);
-        ImageInfo *info = iconItem->imageInfo();
-        if (copy)
-            info = new ImageInfo(*info);
+        ImageInfo info = iconItem->imageInfo();
 
         if (iconItem == currentItem())
             list.prepend(info);
@@ -1491,19 +1491,17 @@ Q3PtrList<ImageInfo> AlbumIconView::allImageInfos(bool copy) const
     return list;
 }
 
-Q3PtrList<ImageInfo> AlbumIconView::selectedImageInfos(bool copy) const
+ImageInfoList AlbumIconView::selectedImageInfos() const
 {
     // Returns the list of ImageInfos of currently selected items,
     // with the extra feature that the currentItem is the first in the list.
-    Q3PtrList<ImageInfo> list;
+    ImageInfoList list;
     for (IconItem *it = firstItem(); it; it = it->nextItem())
     {
         AlbumIconItem *iconItem = static_cast<AlbumIconItem *>(it);
         if (it->isSelected())
         {
-            ImageInfo *info = iconItem->imageInfo();
-            if (copy)
-                info = new ImageInfo(*info);
+            ImageInfo info = iconItem->imageInfo();
 
             if (iconItem == currentItem())
                 list.prepend(info);
@@ -1538,8 +1536,9 @@ void AlbumIconView::refreshItems(const KUrl::List& urlList)
         if (!iconItem)
             continue;
 
-        iconItem->imageInfo()->refresh();
-        d->pixMan->remove(iconItem->imageInfo()->fileUrl());
+        ImageInfo info = iconItem->imageInfo();
+        info.refresh();
+        d->pixMan->remove(info.fileUrl());
         // clean LoadingCache as well - be pragmatic, do it here.
         LoadingCacheInterface::cleanFromCache((*it).path());
     }
@@ -1577,7 +1576,7 @@ void AlbumIconView::slotSetExifOrientation( int orientation )
         if (it->isSelected()) 
         {
             AlbumIconItem *iconItem = static_cast<AlbumIconItem *>(it);
-            urlList.append(iconItem->imageInfo()->fileUrl());
+            urlList.append(iconItem->imageInfo().fileUrl());
         }
     }
 
@@ -1943,7 +1942,7 @@ void AlbumIconView::slotAssignTag(int tagID)
     emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
                                 i18n("Assigning image tags. Please wait..."));
 
-    changeTagOnImageInfos(selectedImageInfos(true), Q3ValueList<int>() << tagID, true, true);
+    changeTagOnImageInfos(selectedImageInfos(), QList<int>() << tagID, true, true);
 
     emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
 }
@@ -1953,7 +1952,7 @@ void AlbumIconView::slotRemoveTag(int tagID)
     emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
                                 i18n("Removing image tags. Please wait..."));
 
-    changeTagOnImageInfos(selectedImageInfos(true), Q3ValueList<int>() << tagID, false, true);
+    changeTagOnImageInfos(selectedImageInfos(), QList<int>() << tagID, false, true);
 
     emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
 }
@@ -1974,13 +1973,13 @@ void AlbumIconView::slotAssignRating(int rating)
             if (it->isSelected())
             {
                 AlbumIconItem *albumItem = static_cast<AlbumIconItem *>(it);
-                ImageInfo* info          = albumItem->imageInfo();
+                ImageInfo info           = albumItem->imageInfo();
 
                 MetadataHub hub;
                 hub.load(info);
                 hub.setRating(rating);
                 hub.write(info, MetadataHub::PartialWrite);
-                hub.write(info->filePath(), MetadataHub::FullWriteIfChanged);
+                hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
 
                 emit signalProgressValue((int)((i++/cnt)*100.0));
                 kapp->processEvents();
@@ -2038,7 +2037,7 @@ void AlbumIconView::slotImageAttributesChanged(qlonglong imageId)
     for (AlbumIconItem *item = firstItem; item;
          item = static_cast<AlbumIconItem *>(item->nextItem()))
     {
-        if (item->imageInfo()->id() == imageId)
+        if (item->imageInfo().id() == imageId)
         {
             updateContents();
             return;

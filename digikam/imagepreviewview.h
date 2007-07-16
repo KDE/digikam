@@ -61,8 +61,11 @@ public:
     void setImage(const DImg& image);
     DImg& getImage() const;
 
-    void setImageInfo(ImageInfo* info=0, ImageInfo *previous=0, ImageInfo *next=0);
-    ImageInfo* getImageInfo() const;
+    void setImageInfo(const ImageInfo &info = ImageInfo(),
+                      const ImageInfo &previous = ImageInfo(),
+                      const ImageInfo &next = ImageInfo());
+
+    ImageInfo getImageInfo() const;
 
     void reload();
     void setImagePath(const QString& path=QString());
@@ -97,7 +100,7 @@ private slots:
     void slotPanIconHiden();
 
 private:
-    
+
     int  previewWidth();
     int  previewHeight();
     bool previewIsNull();

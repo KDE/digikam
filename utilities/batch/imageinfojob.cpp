@@ -130,7 +130,7 @@ void ImageInfoJob::slotData(KIO::Job*, const QByteArray& data)
         ImageListerRecord record;
         ds >> record;
 
-        ImageInfo* info = new ImageInfo(record);
+        ImageInfo info(record);
 
         itemsList.append(info);
     }

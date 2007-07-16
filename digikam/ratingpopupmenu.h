@@ -36,11 +36,19 @@ class RatingPopupMenuPriv;
 class RatingPopupMenu : public Q3PopupMenu
 {
     Q_OBJECT
-    
+
 public:
 
     RatingPopupMenu(QWidget* parent=0);
     ~RatingPopupMenu();
+
+signals:
+
+    void rating(int);
+
+private slots:
+
+    void slotRatingTriggered();
 };
 
 }  // namespace Digikam

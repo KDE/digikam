@@ -329,8 +329,8 @@ void AlbumFileTip::updateText()
     tip = "<table cellspacing=\"0\" cellpadding=\"0\" width=\"250\" border=\"0\">";
 
     AlbumSettings* settings = AlbumSettings::componentData();
-    const ImageInfo* info   = d->iconItem->imageInfo();
-    KUrl fileUrl(info->fileUrl());
+    const ImageInfo info   = d->iconItem->imageInfo();
+    KUrl fileUrl(info.fileUrl());
     QFileInfo fileInfo(fileUrl.path());
     KFileItem fi(KFileItem::Unknown, KFileItem::Unknown, fileUrl);
     DMetadata metaData(fileUrl.path());
@@ -518,21 +518,21 @@ void AlbumFileTip::updateText()
 
         if (settings->getToolTipsShowAlbumName())
         {
-            PAlbum* album = AlbumManager::componentData()->findPAlbum(info->albumId());
+            PAlbum* album = AlbumManager::componentData()->findPAlbum(info.albumId());
             if (album)
                 tip += cellSpecBeg + i18n("Album:") + cellSpecMid + album->albumPath().remove(0, 1) + cellSpecEnd;
         }
 
         if (settings->getToolTipsShowComments())
         {
-            str = info->comment();
+            str = info.comment();
             if (str.isEmpty()) str = QString("---");
             tip += cellSpecBeg + i18n("Comments:") + cellSpecMid + breakString(str) + cellSpecEnd;
         }
 
         if (settings->getToolTipsShowTags())
         {
-            QStringList tagPaths = AlbumManager::componentData()->tagPaths(info->tagIds(), false);
+            QStringList tagPaths = AlbumManager::componentData()->tagPaths(info.tagIds(), false);
 
             str = tagPaths.join(", ");
             if (str.isEmpty()) str = QString("---");
@@ -542,7 +542,7 @@ void AlbumFileTip::updateText()
 
         if (settings->getToolTipsShowRating())
         {
-            str.fill( '*', info->rating() );
+            str.fill( '*', info.rating() );
             if (str.isEmpty()) str = QString("---");
             tip += cellSpecBeg + i18n("Rating:") + cellSpecMid + str + cellSpecEnd;
         }

@@ -28,15 +28,15 @@
 
 // KDE includes.
 
-#include <Q3ValueList>
-#include <Q3PtrList>
 #include <QRect>
 #include <QFont>
+#include <QList>
 
 // Local includes.
 
 #include "iconview.h"
 #include "imageinfo.h"
+#include "imageinfolist.h"
 #include "albumitemhandler.h"
 
 class QResizeEvent;
@@ -85,8 +85,8 @@ public:
     KUrl::List allItems();
     KUrl::List selectedItems();
 
-    Q3PtrList<ImageInfo> allImageInfos(bool copy) const;
-    Q3PtrList<ImageInfo> selectedImageInfos(bool copy) const;
+    ImageInfoList allImageInfos() const;
+    ImageInfoList selectedImageInfos() const;
 
     void refresh();
     void refreshItems(const KUrl::List& itemList);
@@ -120,7 +120,7 @@ public:
     PixmapManager* pixmapManager() const;
 
     void insertSelectionToLightTable();
-    void insertToLightTable(const ImageInfoList& list, ImageInfo* current);
+    void insertToLightTable(const ImageInfoList& list, const ImageInfo &current);
 
 signals:
 
@@ -166,7 +166,7 @@ protected:
 private slots:
 
     void slotImageListerNewItems(const ImageInfoList& itemList);
-    void slotImageListerDeleteItem(ImageInfo* item);
+    void slotImageListerDeleteItem(const ImageInfo &item);
     void slotImageListerClear();
 
     void slotDoubleClicked(IconItem *item);
@@ -197,7 +197,7 @@ private:
 
     void updateBannerRectPixmap();
     void updateItemRectsPixmap();
-    void changeTagOnImageInfos(const Q3PtrList<ImageInfo> &list, const Q3ValueList<int> &tagIDs, bool addOrRemove, bool progress);
+    void changeTagOnImageInfos(const ImageInfoList &list, const QList<int> &tagIDs, bool addOrRemove, bool progress);
 
 private:
 

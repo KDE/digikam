@@ -132,9 +132,9 @@ ImagePreviewView* AlbumWidgetStack::imagePreviewView()
     return d->imagePreviewView;
 }
 
-void AlbumWidgetStack::setPreviewItem(ImageInfo* info, ImageInfo *previous, ImageInfo *next)
+void AlbumWidgetStack::setPreviewItem(const ImageInfo & info, const ImageInfo &previous, const ImageInfo &next)
 {
-    if (!info)
+    if (info.isNull())
     {
         if (previewMode() == MediaPlayerMode)
             d->mediaPlayerView->setMediaPlayerFromUrl(KUrl());
@@ -142,11 +142,11 @@ void AlbumWidgetStack::setPreviewItem(ImageInfo* info, ImageInfo *previous, Imag
         {
             d->imagePreviewView->setImageInfo();
         }
-    }    
+    }
     else
     {
         AlbumSettings *settings      = AlbumSettings::componentData();
-        QString currentFileExtension = QFileInfo(info->fileUrl().path()).suffix();
+        QString currentFileExtension = QFileInfo(info.fileUrl().path()).suffix();
         QString mediaplayerfilter    = settings->getMovieFileFilter().toLower() +
                                        settings->getMovieFileFilter().toUpper() +
                                        settings->getAudioFileFilter().toLower() +
@@ -154,7 +154,7 @@ void AlbumWidgetStack::setPreviewItem(ImageInfo* info, ImageInfo *previous, Imag
         if (mediaplayerfilter.contains(currentFileExtension) )
         {
             setPreviewMode(AlbumWidgetStack::MediaPlayerMode);
-            d->mediaPlayerView->setMediaPlayerFromUrl(info->fileUrl());
+            d->mediaPlayerView->setMediaPlayerFromUrl(info.fileUrl());
         }
         else
         {
@@ -216,7 +216,7 @@ void AlbumWidgetStack::slotItemsUpdated(const KUrl::List& list)
         previewMode() == AlbumWidgetStack::MediaPlayerMode)    // What we can do with media player ?
         return;
 
-    if (list.contains(imagePreviewView()->getImageInfo()->fileUrl()))
+    if (list.contains(imagePreviewView()->getImageInfo().fileUrl()))
         d->imagePreviewView->reload();
 }
 

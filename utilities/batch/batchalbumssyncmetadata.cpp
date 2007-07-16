@@ -137,15 +137,15 @@ void BatchAlbumsSyncMetadata::slotAlbumParsed(const ImageInfoList& list)
 
     if (!imageInfoList.isEmpty())
     {
-        addedAction(pix, imageInfoList.first()->fileUrl().directory());
+        addedAction(pix, imageInfoList.first().fileUrl().directory());
 
-        for (ImageInfo *info = imageInfoList.first(); info; info = imageInfoList.next())
+        foreach(ImageInfo info, imageInfoList)
         {
             MetadataHub fileHub;
             // read in from database
             fileHub.load(info);
             // write out to file DMetadata
-            fileHub.write(info->filePath());
+            fileHub.write(info.filePath());
         }
     }
 

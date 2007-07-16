@@ -158,7 +158,7 @@ AlbumManager::~AlbumManager()
     if (d->dateListJob)
     {
         d->dateListJob->kill();
-        d->dateListJob = 0;
+        d->dateListJob = 0; 
     }
 
     delete d->rootPAlbum;

@@ -62,7 +62,7 @@ public:
                  bool allowSaving=true);
 
     void loadImageInfos(const ImageInfoList &imageInfoList,
-                        ImageInfo *imageInfoCurrent,
+                        const ImageInfo &imageInfoCurrent,
                         const QString& caption, bool allowSaving);
 
     static ImageWindow* imagewindow();

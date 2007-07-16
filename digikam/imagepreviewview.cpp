@@ -90,7 +90,6 @@ public:
         cornerButton         = 0;
         previewThread        = 0;
         previewPreloadThread = 0;
-        imageInfo            = 0;
         parent               = 0;
         hasPrev              = false;
         hasNext              = false;
@@ -119,7 +118,7 @@ public:
 
     DImg               preview;
 
-    ImageInfo         *imageInfo;
+    ImageInfo          imageInfo;
 
     PreviewLoadThread *previewThread;
     PreviewLoadThread *previewPreloadThread;
@@ -306,22 +305,22 @@ void ImagePreviewView::slotNextPreload()
                                   AlbumSettings::componentData()->getExifRotate()));
 }
 
-void ImagePreviewView::setImageInfo(ImageInfo* info, ImageInfo *previous, ImageInfo *next)
+void ImagePreviewView::setImageInfo(const ImageInfo & info, const ImageInfo &previous, const ImageInfo &next)
 {
     d->imageInfo = info;
-    d->hasPrev   = previous;
-    d->hasNext   = next;
+    d->hasPrev   = !previous.isNull();
+    d->hasNext   = !next.isNull();
 
-    if (d->imageInfo)
-        setImagePath(info->filePath());
+    if (!d->imageInfo.isNull())
+        setImagePath(info.filePath());
     else
         setImagePath();
 
-    setPreviousNextPaths(previous ? previous->filePath() : QString(),
-                         next     ? next->filePath()     : QString());
+    setPreviousNextPaths(d->hasPrev ? QString() : previous.filePath(),
+                         d->hasNext ? QString() : next.filePath());
 }
 
-ImageInfo* ImagePreviewView::getImageInfo() const
+ImageInfo ImagePreviewView::getImageInfo() const
 {
     return d->imageInfo;
 }
@@ -332,12 +331,12 @@ void ImagePreviewView::slotContextMenu()
     TagsPopupMenu   *assignTagsMenu = 0;
     TagsPopupMenu   *removeTagsMenu = 0;
 
-    if (!d->imageInfo)
+    if (d->imageInfo.isNull())
         return;
 
     //-- Open With Actions ------------------------------------
 
-    KUrl url(d->imageInfo->fileUrl().path());
+    KUrl url(d->imageInfo.fileUrl().path());
     KMimeType::Ptr mimePtr = KMimeType::findByUrl(url, 0, true, true);
 
     Q3ValueVector<KService::Ptr> serviceVector;
@@ -412,12 +411,11 @@ void ImagePreviewView::slotContextMenu()
 
     // Bulk assignment/removal of tags --------------------------
 
-    qlonglong id = d->imageInfo->id();
-    Q3ValueList<qlonglong> idList;
-    idList.append(id);
+    QList<qlonglong> idList;
+    idList << d->imageInfo.id();
 
-    assignTagsMenu = new TagsPopupMenu(idList, 1000, TagsPopupMenu::ASSIGN);
-    removeTagsMenu = new TagsPopupMenu(idList, 2000, TagsPopupMenu::REMOVE);
+    assignTagsMenu = new TagsPopupMenu(idList, TagsPopupMenu::ASSIGN);
+    removeTagsMenu = new TagsPopupMenu(idList, TagsPopupMenu::REMOVE);
 
     popmenu.insertSeparator();
 
@@ -511,38 +509,38 @@ void ImagePreviewView::slotContextMenu()
 
 void ImagePreviewView::slotAssignTag(int tagID)
 {
-    if (d->imageInfo)
+    if (!d->imageInfo.isNull())
     {
         MetadataHub hub;
         hub.load(d->imageInfo);
         hub.setTag(tagID, true);
         hub.write(d->imageInfo, MetadataHub::PartialWrite);
-        hub.write(d->imageInfo->filePath(), MetadataHub::FullWriteIfChanged);
+        hub.write(d->imageInfo.filePath(), MetadataHub::FullWriteIfChanged);
     }
 }
 
 void ImagePreviewView::slotRemoveTag(int tagID)
 {
-    if (d->imageInfo)
+    if (!d->imageInfo.isNull())
     {
         MetadataHub hub;
         hub.load(d->imageInfo);
         hub.setTag(tagID, false);
         hub.write(d->imageInfo, MetadataHub::PartialWrite);
-        hub.write(d->imageInfo->filePath(), MetadataHub::FullWriteIfChanged);
+        hub.write(d->imageInfo.filePath(), MetadataHub::FullWriteIfChanged);
     }
 }
 
 void ImagePreviewView::slotAssignRating(int rating)
 {
     rating = qMin(5, qMax(0, rating));
-    if (d->imageInfo)
+    if (!d->imageInfo.isNull())
     {
         MetadataHub hub;
         hub.load(d->imageInfo);
         hub.setRating(rating);
         hub.write(d->imageInfo, MetadataHub::PartialWrite);
-        hub.write(d->imageInfo->filePath(), MetadataHub::FullWriteIfChanged);
+        hub.write(d->imageInfo.filePath(), MetadataHub::FullWriteIfChanged);
     }
 }
 
@@ -623,8 +621,8 @@ void ImagePreviewView::resizeEvent(QResizeEvent* e)
 
     Q3ScrollView::resizeEvent(e);
 
-    if (!d->imageInfo)
-        d->cornerButton->hide(); 
+    if (d->imageInfo.isNull())
+        d->cornerButton->hide();
 
     updateZoomAndSize(false);
 }
@@ -667,8 +665,8 @@ bool ImagePreviewView::previewIsNull()
 void ImagePreviewView::resetPreview()
 {
     d->preview   = DImg();
-    d->path      = QString(); 
-    d->imageInfo = 0;
+    d->path      = QString();
+    d->imageInfo = ImageInfo();
 
     updateZoomAndSize(true);
     emit signalPreviewLoaded(false);

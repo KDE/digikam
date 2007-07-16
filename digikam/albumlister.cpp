@@ -80,11 +80,11 @@ public:
 
     QString                         filter;
 
-    QMap<qlonglong, ImageInfo*>     itemMap;
-    QMap<int,int>                   invalidatedItems;
-    QMap<int,bool>                  dayFilter;
+    QMap<qlonglong, ImageInfo>      itemMap;
+    QSet<int>                       invalidatedItems;
+    QSet<int>                       dayFilter;
 
-    Q3ValueList<int>                tagFilter;
+    QList<int>                      tagFilter;
 
     QTimer                         *filterTimer;
 
@@ -112,7 +112,6 @@ AlbumLister::AlbumLister()
     m_instance = this;
 
     d = new AlbumListerPriv;
-    d->itemList.setAutoDelete(true);
     d->untaggedFilter = false;
     d->filterTimer    = new QTimer(this);
 
@@ -170,9 +169,9 @@ void AlbumLister::refresh()
     }
 
     d->itemMap.clear();
-    for (ImageInfoListIterator it = d->itemList.begin(); it != d->itemList.end(); ++it)
+    for (ImageInfoList::const_iterator it = d->itemList.begin(); it != d->itemList.end(); ++it)
     {
-        d->itemMap.insert((*it)->id(), *it);
+        d->itemMap.insert(it->id(), *it);
     }
 
     ImageLister lister;
@@ -185,18 +184,15 @@ void AlbumLister::refresh()
             this, SLOT(slotData(KIO::Job*, const QByteArray&)));
 }
 
-void AlbumLister::setDayFilter(const Q3ValueList<int>& days)
+void AlbumLister::setDayFilter(const QList<int>& days)
 {
-    d->dayFilter.clear();
-
-    for (Q3ValueList<int>::const_iterator it = days.begin(); it != days.end(); ++it)
-        d->dayFilter.insert(*it, true);
+    d->dayFilter = QSet<int>::fromList(days);
 
     d->filterTimer->setSingleShot(true);
     d->filterTimer->start(100);
 }
 
-void AlbumLister::setTagFilter(const Q3ValueList<int>& tags, const MatchingCondition& matchingCond, 
+void AlbumLister::setTagFilter(const QList<int>& tags, const MatchingCondition& matchingCond,
                                bool showUnTagged)
 {
     d->tagFilter      = tags;
@@ -206,7 +202,7 @@ void AlbumLister::setTagFilter(const Q3ValueList<int>& tags, const MatchingCondi
     d->filterTimer->start(100);
 }
 
-bool AlbumLister::matchesFilter(const ImageInfo* info) const
+bool AlbumLister::matchesFilter(const ImageInfo &info) const
 {
     if (d->dayFilter.isEmpty() && d->tagFilter.isEmpty() &&
         !d->untaggedFilter)
@@ -216,8 +212,8 @@ bool AlbumLister::matchesFilter(const ImageInfo* info) const
 
     if (!d->tagFilter.isEmpty())
     {
-        Q3ValueList<int> tagIds = info->tagIds();
-        Q3ValueList<int>::iterator it;
+        QList<int> tagIds = info.tagIds();
+        QList<int>::iterator it;
 
         if (d->matchingCond == OrCondition)        
         {
@@ -239,7 +235,7 @@ bool AlbumLister::matchesFilter(const ImageInfo* info) const
                 if (!tagIds.contains(*it))
                     break;
             }
-    
+
             if (it == d->tagFilter.end())
                 match = true;
         }
@@ -248,7 +244,7 @@ bool AlbumLister::matchesFilter(const ImageInfo* info) const
     }
     else if (d->untaggedFilter)
     {
-        match = info->tagIds().isEmpty();
+        match = info.tagIds().isEmpty();
     }
     else
     {
@@ -257,7 +253,7 @@ bool AlbumLister::matchesFilter(const ImageInfo* info) const
 
     if (!d->dayFilter.isEmpty())
     {
-        match &= d->dayFilter.contains(info->dateTime().date().day());
+        match &= d->dayFilter.contains(info.dateTime().date().day());
     }
 
     return match;
@@ -284,9 +280,9 @@ void AlbumLister::setNameFilter(const QString& nameFilter)
     d->filter = nameFilter;
 }
 
-void AlbumLister::invalidateItem(const ImageInfo *item)
+void AlbumLister::invalidateItem(const ImageInfo &item)
 {
-    d->invalidatedItems.insert(item->id(), item->id());
+    d->invalidatedItems << item.id();
 }
 
 void AlbumLister::slotClear()
@@ -326,7 +322,7 @@ void AlbumLister::slotFilterItems()
 
     if (!deleteFilteredItemsList.isEmpty())
     {
-        for (ImageInfo *info=deleteFilteredItemsList.first(); info; info = deleteFilteredItemsList.next())
+        foreach(ImageInfo info, deleteFilteredItemsList)
             emit signalDeleteFilteredItem(info);
     }
     if (!newFilteredItemsList.isEmpty())
@@ -350,14 +346,12 @@ void AlbumLister::slotResult(KIO::Job* job)
         return;
     }
 
-    typedef QMap<qlonglong, ImageInfo*> ImMap;
-
-    for (ImMap::iterator it = d->itemMap.begin();
+    for (QMap<qlonglong, ImageInfo>::iterator it = d->itemMap.begin();
          it != d->itemMap.end(); ++it)
     {
         emit signalDeleteItem(it.value());
         emit signalDeleteFilteredItem(it.value());
-        d->itemList.remove(it.value());
+        d->itemList.removeAll(it.value());
     }
 
     d->itemMap.clear();
@@ -384,14 +378,14 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
 
         if (d->itemMap.contains(record.imageID))
         {
-            ImageInfo* info = d->itemMap[record.imageID];
+            ImageInfo info = d->itemMap[record.imageID];
             d->itemMap.remove(record.imageID);
 
             if (d->invalidatedItems.contains(record.imageID))
             {
                 emit signalDeleteItem(info);
                 emit signalDeleteFilteredItem(info);
-                d->itemList.remove(info);
+                d->itemList.removeAll(info);
             }
             else
             {
@@ -403,7 +397,7 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
             }
         }
 
-        ImageInfo* info = new ImageInfo(record);
+        ImageInfo info(record);
 
         if (matchesFilter(info))
             newFilteredItemsList.append(info);

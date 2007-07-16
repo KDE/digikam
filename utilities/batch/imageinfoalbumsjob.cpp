@@ -94,10 +94,9 @@ void ImageInfoAlbumsJob::stop()
 
 void ImageInfoAlbumsJob::slotItemsInfo(const ImageInfoList& items)
 {
-    for (ImageInfoListIterator it = items.begin(); it != items.end(); ++it)
-        d->itemsList.append(*it);
+    d->itemsList = items;
 
-   ++d->albumIt; 
+   ++d->albumIt;
    if (d->albumIt == d->albumsList.end())
     {
         stop();

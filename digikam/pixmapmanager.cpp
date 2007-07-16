@@ -241,7 +241,7 @@ void PixmapManager::slotCompleted()
     if (!item)
         return;
 
-    find(item->imageInfo()->fileUrl());
+    find(item->imageInfo().fileUrl());
 }
 
 int PixmapManager::cacheSize() const
