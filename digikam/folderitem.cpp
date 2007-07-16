@@ -23,11 +23,13 @@
 
 // Qt includes.
 
+#include <QFrame>
 #include <QFont>
 #include <QFontMetrics>
 #include <QPainter>
 #include <QPixmap>
 #include <QStyle>
+#include <QStyleOption>
 
 // Local includes.
 
@@ -174,13 +176,12 @@ void FolderCheckListItem::paintCell(QPainter* p, const QColorGroup & cg,
     
     QFontMetrics fm(p->fontMetrics());
 
-    QString t = text(column);
-
-    int margin = fv->itemMargin();
-    int r      = margin;
+    QString t           = text(column);
+    int margin          = fv->itemMargin();
+    int r               = margin;
     const QPixmap* icon = pixmap(column);
 
-    int styleflags = QStyle::State_None;
+    QStyle::State styleflags = QStyle::State_None;
     switch (state())
     {
         case(Q3CheckListItem::Off):
@@ -203,16 +204,19 @@ void FolderCheckListItem::paintCell(QPainter* p, const QColorGroup & cg,
     if ((type() == Q3CheckListItem::CheckBox) ||
         (type() == Q3CheckListItem::CheckBoxController))
     {
-        int boxsize = fv->style().pixelMetric(QStyle::PM_CheckListButtonSize, fv); 
-        int x = 3;
-        int y = (height() - boxsize)/2 + margin;
+        int boxsize = fv->style()->pixelMetric(QStyle::PM_CheckListButtonSize, 0, fv); 
+        int x       = 3;
+        int y       = (height() - boxsize)/2 + margin;
         r += boxsize + 4;
 
         p->fillRect(0, 0, r, height(), cg.base());
         
-        fv->style().drawPrimitive(QStyle::PE_CheckListIndicator, p,
-                                  QRect(x, y, boxsize, height()),
-                                  cg, styleflags, QStyleOption(this));
+        // NOTE: Inspired form Qt4::Q3listview::paintCell()
+        QStyleOptionQ3ListView opt = getStyleOption(fv);
+        opt.rect.setRect(x, y, boxsize, height());
+        opt.palette = cg;
+        opt.state   = styleflags;
+        fv->style()->drawPrimitive(QStyle::PE_Q3CheckListIndicator, &opt, p, fv);
     }
     
     if (isSelected())
@@ -249,6 +253,58 @@ void FolderCheckListItem::setup()
         h++;
 
     setHeight(h);
+}
+
+// NOTE: Inspired from Qt4::Q3listview::getStyleOption()
+QStyleOptionQ3ListView FolderCheckListItem::getStyleOption(const FolderView *fv)
+{
+    Q3ListViewItem *item = dynamic_cast<Q3ListViewItem*>(this);
+    QStyleOptionQ3ListView opt;
+    opt.init(fv);
+    opt.subControls       = QStyle::SC_None;
+    opt.activeSubControls = QStyle::SC_None;
+    QWidget *vp           = fv->viewport();
+    opt.viewportPalette   = vp->palette();
+    opt.viewportBGRole    = vp->backgroundRole();
+    opt.itemMargin        = fv->itemMargin();
+    opt.sortColumn        = 0;
+    opt.treeStepSize      = fv->treeStepSize();
+    opt.rootIsDecorated   = fv->rootIsDecorated();
+    bool firstItem        = true;
+    while (item) 
+    {
+        QStyleOptionQ3ListViewItem lvi;
+        lvi.height      = item->height();
+        lvi.totalHeight = item->totalHeight();
+        lvi.itemY       = item->itemPos();
+        lvi.childCount  = item->childCount();
+        lvi.features    = QStyleOptionQ3ListViewItem::None;
+        lvi.state       = QStyle::State_None;
+        if (item->isEnabled())
+            lvi.state |= QStyle::State_Enabled;
+        if (item->isOpen())
+            lvi.state |= QStyle::State_Open;
+        if (item->isExpandable())
+            lvi.features |= QStyleOptionQ3ListViewItem::Expandable;
+        if (item->multiLinesEnabled())
+            lvi.features |= QStyleOptionQ3ListViewItem::MultiLine;
+        if (item->isVisible())
+            lvi.features |= QStyleOptionQ3ListViewItem::Visible;
+        if (item->parent() && item->parent()->rtti() == 1
+            && static_cast<Q3CheckListItem *>(item->parent())->type() == Q3CheckListItem::Controller)
+            lvi.features |= QStyleOptionQ3ListViewItem::ParentControl;
+        opt.items.append(lvi);
+        if (!firstItem) 
+        {
+            item = item->nextSibling();
+        }
+        else 
+        {
+            firstItem = false;
+            item = item->firstChild();
+        }
+    }
+    return opt;
 }
 
 }  // namespace Digikam

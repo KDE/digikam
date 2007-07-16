@@ -27,6 +27,7 @@
 // Qt includes.
 
 #include <Q3ListView>
+#include <QStyleOptionQ3ListView>
 
 // Local includes
 
@@ -34,6 +35,8 @@
 
 namespace Digikam
 {
+
+class FolderView;
 
 class DIGIKAM_EXPORT FolderItem : public Q3ListViewItem
 {
@@ -76,6 +79,7 @@ protected:
 
     void paintCell(QPainter* p, const QColorGroup & cg, int column, int width, int align);
     void setup();
+    QStyleOptionQ3ListView getStyleOption(const FolderView *fv);
 };
     
 }  // namespace Digikam

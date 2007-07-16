@@ -101,7 +101,7 @@ SET(digikam_LIB_SRCS
                       dio.cpp 
                       dragobjects.cpp 
                       firstrun.cpp 
-#                      folderitem.cpp 
+                      folderitem.cpp 
                       folderview.cpp 
 #                      iconview.cpp 
                       icongroupitem.cpp 
