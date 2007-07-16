@@ -63,14 +63,14 @@ public:
         cancelled   = false;
     }
 
-    bool       allowCancel;
-    bool       cancelled;
+    bool          allowCancel;
+    bool          cancelled;
 
-    QLabel    *logo;
-    QLabel    *title;
-    QLabel    *label;
+    QLabel       *logo;
+    QLabel       *title;
+    QLabel       *label;
 
-    K3ListView *actionsList;
+    K3ListView   *actionsList;
 
     QProgressBar *progress;
 };
@@ -101,8 +101,8 @@ DProgressDlg::DProgressDlg(QWidget *parent, const QString &caption)
     vlay->addWidget(d->title);
     vlay->addStretch();
 
-    KIconLoader* iconLoader = KIconLoader::global();
-    d->logo->setPixmap(iconLoader->loadIcon("digikam", K3Icon::NoGroup, 128, K3Icon::DefaultState, 0, true));
+    d->logo->setPixmap(KIconLoader::global()->loadIcon("digikam", K3Icon::NoGroup, 
+                                              128, K3Icon::DefaultState, 0, true));
 
     d->actionsList->addColumn("Thumb");   // no i18n here: hiden column
     d->actionsList->addColumn("Status");  // no i18n here: hiden column
