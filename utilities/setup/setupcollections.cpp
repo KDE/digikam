@@ -92,13 +92,13 @@ SetupCollections::SetupCollections(QWidget* parent )
 
     QSpacerItem* spacer = new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-    grid->setMargin(KDialog::spacingHint());
+    grid->setMargin(0);
     grid->setSpacing(KDialog::spacingHint());
     grid->setAlignment(Qt::AlignTop);
-    grid->addWidget(d->albumCollectionBox, 0, 4, 0, 0);
-    grid->addWidget(d->addCollectionButton, 0, 1);
-    grid->addWidget(d->delCollectionButton, 1, 1);
-    grid->addItem(spacer, 4, 1);
+    grid->addWidget(d->albumCollectionBox, 0, 0, 4+1, 1);
+    grid->addWidget(d->addCollectionButton, 0, 1, 1, 1);
+    grid->addWidget(d->delCollectionButton, 1, 1, 1, 1);
+    grid->addItem(spacer, 4, 1, 1, 1);
 
     // --------------------------------------------------------
 
