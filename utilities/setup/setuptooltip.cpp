@@ -103,20 +103,17 @@ SetupToolTip::SetupToolTip(QWidget* parent)
             : QWidget(parent)
 {
     d = new SetupToolTipPriv;
-    QVBoxLayout *layout = new QVBoxLayout( this );
-    layout->setSpacing( KDialog::spacingHint() );
+
+    QVBoxLayout *layout = new QVBoxLayout(this);
 
     d->showToolTipsBox = new QCheckBox(i18n("Show album items toolti&ps"), this);
     d->showToolTipsBox->setWhatsThis( i18n("<p>Set this option to display image information when "
                                            "the mouse is hovered over an album item."));
 
-    layout->addWidget(d->showToolTipsBox);
-
     // --------------------------------------------------------
 
     d->fileSettingBox     = new QGroupBox(i18n("File/Image Information"), this);
-    QVBoxLayout *gLayout1 = new QVBoxLayout();
-    gLayout1->setSpacing( KDialog::spacingHint() );
+    QVBoxLayout *gLayout1 = new QVBoxLayout(d->fileSettingBox);
 
     d->showFileNameBox = new QCheckBox(i18n("Show file name"), d->fileSettingBox);
     d->showFileNameBox->setWhatsThis( i18n("<p>Set this option to display image file name."));
@@ -138,15 +135,13 @@ SetupToolTip::SetupToolTip(QWidget* parent)
     gLayout1->addWidget(d->showFileSizeBox);
     gLayout1->addWidget(d->showImageTypeBox);
     gLayout1->addWidget(d->showImageDimBox);
-    d->fileSettingBox->setLayout(gLayout1);
-
-    layout->addWidget(d->fileSettingBox);
+    gLayout1->setMargin(KDialog::spacingHint());
+    gLayout1->setSpacing(0);
 
     // --------------------------------------------------------
 
     d->photoSettingBox    = new QGroupBox(i18n("Photograph Information"), this);
-    QVBoxLayout *gLayout2 = new QVBoxLayout();
-    gLayout2->setSpacing( KDialog::spacingHint() );
+    QVBoxLayout *gLayout2 = new QVBoxLayout(d->photoSettingBox);
 
     d->showPhotoMakeBox = new QCheckBox(i18n("Show camera make and model"), d->photoSettingBox);
     d->showPhotoMakeBox->setWhatsThis( i18n("<p>Set this option to display the camera make and model "
@@ -182,15 +177,13 @@ SetupToolTip::SetupToolTip(QWidget* parent)
     gLayout2->addWidget(d->showPhotoModeBox);
     gLayout2->addWidget(d->showPhotoFlashBox);
     gLayout2->addWidget(d->showPhotoWbBox);
-    d->photoSettingBox->setLayout(gLayout2);
-
-    layout->addWidget(d->photoSettingBox);
+    gLayout2->setMargin(KDialog::spacingHint());
+    gLayout2->setSpacing(0);
 
     // --------------------------------------------------------
 
     d->digikamSettingBox  = new QGroupBox(i18n("digiKam Information"), this);
-    QVBoxLayout *gLayout3 = new QVBoxLayout();
-    gLayout3->setSpacing( KDialog::spacingHint() );
+    QVBoxLayout *gLayout3 = new QVBoxLayout(d->digikamSettingBox);
 
     d->showAlbumNameBox = new QCheckBox(i18n("Show album name"), d->digikamSettingBox);
     d->showAlbumNameBox->setWhatsThis( i18n("<p>Set this option to display the album name."));
@@ -208,8 +201,16 @@ SetupToolTip::SetupToolTip(QWidget* parent)
     gLayout3->addWidget(d->showCommentsBox);
     gLayout3->addWidget(d->showTagsBox);
     gLayout3->addWidget(d->showRatingBox);
-    d->digikamSettingBox->setLayout(gLayout3);
+    gLayout3->setMargin(KDialog::spacingHint());
+    gLayout3->setSpacing(0);
 
+    // --------------------------------------------------------
+
+    layout->setMargin(0);
+    layout->setSpacing(KDialog::spacingHint());
+    layout->addWidget(d->showToolTipsBox);
+    layout->addWidget(d->fileSettingBox);
+    layout->addWidget(d->photoSettingBox);
     layout->addWidget(d->digikamSettingBox);
     layout->addStretch();
 
@@ -297,4 +298,3 @@ void SetupToolTip::readSettings()
 }
 
 }  // namespace Digikam
-
