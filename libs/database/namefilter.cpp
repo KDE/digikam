@@ -46,7 +46,10 @@ NameFilter::NameFilter(const QString &filter)
     QStringList list = filter.split(sep, QString::SkipEmptyParts);
     QStringList::const_iterator it = list.constBegin();
     while ( it != list.constEnd() ) {
-        m_filterList << QRegExp( (*it).trimmed() );
+        QRegExp wildcard( (*it).trimmed() );
+        wildcard.setPatternSyntax(QRegExp::Wildcard);
+        wildcard.setCaseSensitivity(Qt::CaseInsensitive);
+        m_filterList << wildcard;
         ++it;
     }
 }
