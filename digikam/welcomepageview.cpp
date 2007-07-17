@@ -75,7 +75,7 @@ WelcomePageView::WelcomePageView(QWidget* parent)
     end();
     show();
 
-    connect(browserExtension(), SIGNAL(openURLRequest(const KUrl &, const KParts::URLArgs &)),
+    connect(browserExtension(), SIGNAL(openUrlRequest(const KUrl &, const KParts::URLArgs &)),
             this, SLOT(slotUrlOpen(const KUrl &)));    
 }
 
@@ -111,14 +111,13 @@ QString WelcomePageView::infoPage()
 
     QString info =
         i18nc(
-        "%1: digiKam version; " 
-        "%2: help:// URL; "
-        "%3: homepage URL; "
+        "%1: current digiKam version; " 
+        "%2: digiKam help:// Url; "
+        "%3: digiKam homepage Url; "
         "%4: prior digiKam version; " 
         "%5: prior KDE version; "
         "%6: generated list of new features; "
-        "%7: First-time user text (only shown on first start); "
-        "%8: generated list of important changes; "
+        "%7: generated list of important changes; "
         "--- end of comment ---",
         
         "<h2 style='margin-top: 0px;'>Welcome to digiKam %1</h2><p>"
@@ -129,7 +128,7 @@ QString WelcomePageView::infoPage()
         "<a href=\"%2\">documentation</a></li>\n"
         "<li>The <a href=\"%3\">digiKam homepage</A> provides information about "
         "new versions of digiKam</li></ul>\n"
-        "%8\n<p>"                        // important changes
+        "%7\n<p>"                        
         "Some of the new features in this release of digiKam include "
         "(compared to digiKam %4):</p>\n"
         "<ul>\n%5</ul>\n"
@@ -138,14 +137,13 @@ QString WelcomePageView::infoPage()
         "<p>Thank you,</p>\n"
         "<p style='margin-bottom: 0px'>&nbsp; &nbsp; The digiKam Team</p>",
  
-    QString(digikam_version),            // current digiKam version
-    "help:/digikam/index.html",          // digiKam help:// URL
-    "http://www.digikam.org",            // digiKam homepage URL
-    "0.8.2",
-	featureItems,
-	QString(),
-	QString(),
-    QString());                   // previous digiKam release.
+    QString(digikam_version),            // %1 : current digiKam version
+    "help:/digikam/index.html",          // %2 : digiKam help:// Url
+    "http://www.digikam.org",            // %3 : digiKam homepage Url
+    "0.8.2",                             // %4 : prior digiKam version
+	featureItems,                        // %5 : prior KDE version
+	QString(),                           // %6 : generated list of new features
+    QString());                          // %7 : previous digiKam release.
     
     return info;
 }
