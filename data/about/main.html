@@ -4,15 +4,14 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-  <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st August 2004), see www.w3.org" />
+  <meta name="generator" content="HTML Tidy for Linux/x86 (vers 1st August 2004), see www.w3.org" />
 
   <style type="text/css">
   /*<![CDATA[*/
-    @import "%1"; /* kde_infopage.css */
-    %1 /* maybe @import "kde_infopage_rtl.css"; */
+    @import "%1";            /* locationCss */
+    %2                       /* locationRtl */
     @import "digikam.css";
-    body {font-size: %1px;}
+    body {font-size: %3px;}
   /*]]>*/
   </style>
 
@@ -25,11 +24,11 @@
     <div id="headerR"/>
 
     <div id="title">
-    %2 <!-- digiKam -->
+    %4 <!-- appTitle -->
     </div>
 
     <div id="tagline">
-    %3 <!-- Catchphrase -->
+    %5 <!-- Catchphrase -->
     </div>
   </div>
 
@@ -39,7 +38,7 @@
     <div id="barL">
       <div id="barR">
         <div id="barCenter" class="bar_text">
-      %4<!-- digiKam is ... -->
+    %6 <!-- Quick description... -->
         </div>
       </div>
     </div>
@@ -52,8 +51,7 @@
     <div id="boxL">
       <div id="boxR">
         <div id="boxCenter">
-        <!--Welcome to digiKam-->
-	%5
+	%7 <!-- Advanced informations -->
         </div>
       </div>
     </div>
@@ -63,4 +61,3 @@
   <div id="footer"><div id="footerL"/><div id="footerR"/></div>
 </body>
 </html>
-<!-- vim:set sw=2 et nocindent smartindent: -->

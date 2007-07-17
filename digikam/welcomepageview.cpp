@@ -58,24 +58,33 @@ WelcomePageView::WelcomePageView(QWidget* parent)
     setMetaRefreshEnabled(false);
     setURLCursor(KCursor::handCursor());
 
-    QString location = locate("data", "digikam/about/main.html");
-    QString content  = fileToString(location);
-    content          = content.arg( locate( "data", "digikam/about/kde_infopage.css" ) );
-    content          = content.arg( "" );
-    
-    begin(KURL( location ));
-    
-    QString fontSize         = QString::number( 12 );
+    QString fontSize         = QString::number(12);
     QString appTitle         = i18n("digiKam");
-    QString catchPhrase      = "";
+    QString catchPhrase      = QString();      // Not enough space for a catch phrase at default window size.
     QString quickDescription = i18n("A Photo-Management Application for KDE");
-    write(content.arg(fontSize).arg(appTitle).arg(catchPhrase)
-                 .arg(quickDescription).arg(infoPage()));
+    QString locationHtml     = locate("data", "digikam/about/main.html");
+    QString locationCss      = locate("data", "digikam/about/kde_infopage.css");
+    QString locationRtl      = locate("data", "digikam/about/kde_infopage_rtl.css" );
+    QString rtl              = kapp->reverseLayout() ? QString("@import \"%1\";" ).arg(locationRtl)
+                                                     : QString();
+
+    begin(KURL(locationHtml));
+
+    QString content = fileToString(locationHtml);
+    content         = content.arg(locationCss)        // %1
+                             .arg(rtl)                // %2
+                             .arg(fontSize)           // %3
+                             .arg(appTitle)           // %4
+                             .arg(catchPhrase)        // %5
+                             .arg(quickDescription)   // %6
+                             .arg(infoPage());        // %7
+
+    write(content);
     end();
     show();
 
     connect(browserExtension(), SIGNAL(openURLRequest(const KURL &, const KParts::URLArgs &)),
-            this, SLOT(slotUrlOpen(const KURL &)));    
+            this, SLOT(slotUrlOpen(const KURL &)));
 }
 
 WelcomePageView::~WelcomePageView()
@@ -120,7 +129,7 @@ QString WelcomePageView::infoPage()
         .arg("help:/digikam/index.html") // digiKam help:// URL
         .arg("http://www.digikam.org")   // digiKam homepage URL
         .arg("0.8.2");                   // previous digiKam release.
-    
+
     QStringList newFeatures;
     newFeatures << i18n("16-bit/color/pixels image support");
     newFeatures << i18n("Full color management support");

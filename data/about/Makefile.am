@@ -4,6 +4,6 @@ about_DATA = top-right-digikam.png main.html digikam.css \
 	box-middle-right.png   top-middle.png         bar-middle-left.png    bottom-right.png \
 	box-top-left.png       bar-middle-right.png   box-bottom-left.png    box-top-middle.png \
 	bar-top-left.png       box-bottom-middle.png  box-top-right.png      bar-top-middle.png \
-	box-bottom-right.png   kde_infopage.css
+	box-bottom-right.png   kde_infopage.css kde_infopage_rtl.css
 aboutdir = $(kde_datadir)/digikam/about
 
