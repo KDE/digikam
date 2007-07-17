@@ -41,6 +41,7 @@
 
 // Local includes.
 
+#include "ddebug.h"
 #include "version.h"
 #include "welcomepageview.h"
 #include "welcomepageview.moc"
@@ -59,19 +60,28 @@ WelcomePageView::WelcomePageView(QWidget* parent)
     setMetaRefreshEnabled(false);
     setURLCursor(Qt::PointingHandCursor);
 
-    QString location = KStandardDirs::locate("data", "digikam/about/main.html");
-    QString content  = fileToString(location);
-    content          = content.arg( KStandardDirs::locate( "data", "digikam/about/kde_infopage.css" ) );
-    content          = content.arg( "" );
-    
-    begin(KUrl( location ));
-    
-    QString fontSize         = QString::number( 12 );
+    QString fontSize         = QString::number(pointsToPixel(Settings::mediumFontSize()));
     QString appTitle         = i18n("digiKam");
-    QString catchPhrase      = "";
+    QString catchPhrase      = QString();      // Not enough space for a catch phrase at default window size.
     QString quickDescription = i18n("A Photo-Management Application for KDE");
-    write(content.arg(fontSize).arg(appTitle).arg(catchPhrase)
-                 .arg(quickDescription).arg(infoPage()));
+    QString locationHtml     = KStandardDirs::locate("data", "digikam/about/main.html");
+    QString locationCss      = KStandardDirs::locate("data", "digikam/about/kde_infopage.css");
+    QString locationRtl      = KStandardDirs::locate("data", "digikam/about/kde_infopage_rtl.css" );
+    QString rtl              = kapp->isRightToLeft() ? QString("@import \"%1\";" ).arg(locationRtl)
+                                                     : QString();
+
+    begin(KUrl(locationHtml));
+
+    QString content = fileToString(locationHtml);
+    content         = content.arg(locationCss)        // %1
+                             .arg(rtl)                // %2
+                             .arg(fontSize)           // %3
+                             .arg(appTitle)           // %4
+                             .arg(catchPhrase)        // %5
+                             .arg(quickDescription)   // %6
+                             .arg(infoPage());        // %7
+
+    write(content);
     end();
     show();
 
