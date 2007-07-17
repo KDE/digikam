@@ -141,7 +141,6 @@ TARGET_LINK_LIBRARIES(digikam
                       ${KDE4_KDEUI_LIBS} 
                       ${KDE4_KUTILS_LIBS} 
                       ${KDE4_KABC_LIBS}
-                      -lkabc
 
                       ${SQLITE_LIBRARIES}
                       ${GPHOTO2_LIBRARIES}
