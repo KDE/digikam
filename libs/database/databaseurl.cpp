@@ -208,7 +208,7 @@ QString DatabaseUrl::album() const
 QString DatabaseUrl::name() const
 {
     // do not ignore trailing slash in the path - albums have a trailing slash
-    return fileName(false);
+    return fileName(KUrl::ObeyTrailingSlash);
 }
 
 KUrl DatabaseUrl::fileUrl() const
