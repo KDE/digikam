@@ -75,12 +75,13 @@ SetupEditor::SetupEditor(QWidget* parent )
            : QWidget(parent)
 {
     d = new SetupEditorPriv;
+
     QVBoxLayout *layout = new QVBoxLayout(this);
 
     // --------------------------------------------------------
 
     QGroupBox *interfaceOptionsGroup = new QGroupBox(i18n("Interface Options"), this);
-    QVBoxLayout *gLayout1            = new QVBoxLayout();
+    QVBoxLayout *gLayout1            = new QVBoxLayout(interfaceOptionsGroup);
 
     d->themebackgroundColor = new QCheckBox(i18n("&Use theme background color"),
                                             interfaceOptionsGroup);
@@ -103,12 +104,13 @@ SetupEditor::SetupEditor(QWidget* parent )
     gLayout1->addWidget(d->themebackgroundColor);
     gLayout1->addWidget(d->colorBox);
     gLayout1->addWidget(d->hideToolBar);
-    interfaceOptionsGroup->setLayout(gLayout1);
+    gLayout1->setMargin(KDialog::spacingHint());
+    gLayout1->setSpacing(KDialog::spacingHint());
 
     // --------------------------------------------------------
 
     QGroupBox *exposureOptionsGroup = new QGroupBox(i18n("Exposure Indicators"), this);
-    QVBoxLayout *gLayout2           = new QVBoxLayout();
+    QVBoxLayout *gLayout2           = new QVBoxLayout(exposureOptionsGroup);
 
     KHBox *underExpoBox         = new KHBox(exposureOptionsGroup);
     QLabel *underExpoColorlabel = new QLabel( i18n("&Under-exposure color:"), underExpoBox);
@@ -126,14 +128,16 @@ SetupEditor::SetupEditor(QWidget* parent )
 
     gLayout2->addWidget(underExpoBox);
     gLayout2->addWidget(overExpoBox);
-    exposureOptionsGroup->setLayout(gLayout2);
+    gLayout2->setMargin(KDialog::spacingHint());
+    gLayout2->setSpacing(KDialog::spacingHint());
 
     // --------------------------------------------------------
 
-    layout->setSpacing(KDialog::spacingHint());
     layout->addWidget(interfaceOptionsGroup);
     layout->addWidget(exposureOptionsGroup);
     layout->addStretch();
+    layout->setMargin(0);
+    layout->setSpacing(KDialog::spacingHint());
 
     // --------------------------------------------------------
 
@@ -179,4 +183,3 @@ void SetupEditor::applySettings()
 }
 
 }  // namespace Digikam
-
