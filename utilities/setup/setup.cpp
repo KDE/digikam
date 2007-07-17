@@ -143,12 +143,12 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->generalPage  = new SetupGeneral(this);
     d->page_general = addPage( d->generalPage, i18n("Albums") );
     d->page_general->setHeader( i18n("Album Settings") );
-    d->page_general->setIcon( KIcon("folder_image") );
+    d->page_general->setIcon( KIcon("folder-image") );
 
     d->collectionsPage  = new SetupCollections();
     d->page_collections = addPage( d->collectionsPage, i18n("Collections") );
     d->page_collections->setHeader( i18n("Album Collections") );
-    d->page_collections->setIcon( KIcon("fileopen") );
+    d->page_collections->setIcon( KIcon("list") );
 
     d->identityPage  = new SetupIdentity();
     d->page_identity = addPage( d->identityPage, i18n("Identity") );
@@ -168,7 +168,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->mimePage  = new SetupMime();
     d->page_mime = addPage( d->mimePage, i18n("Mime Types") );
     d->page_mime->setHeader( i18n("File (MIME) Types Settings") );
-    d->page_mime->setIcon( KIcon("kcmsystem") );
+    d->page_mime->setIcon( KIcon("compfile") );
 
     d->lighttablePage  = new SetupLightTable();
     d->page_lighttable = addPage( d->lighttablePage, i18n("Light Table") );
@@ -203,7 +203,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->slideshowPage  = new SetupSlideShow();
     d->page_slideshow = addPage( d->slideshowPage, i18n("Slide Show") );
     d->page_slideshow->setHeader( i18n("Slide Show Settings") );
-    d->page_slideshow->setIcon( KIcon("slideshow") );
+    d->page_slideshow->setIcon( KIcon("datashow") );
 
     d->cameraPage  = new SetupCamera();
     d->page_camera = addPage( d->cameraPage, i18n("Cameras") );
@@ -213,7 +213,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->miscPage  = new SetupMisc();
     d->page_misc = addPage( d->miscPage, i18n("Miscellaneous") );
     d->page_misc->setHeader( i18n("Miscellaneous Settings") );
-    d->page_misc->setIcon( KIcon("misc") );
+    d->page_misc->setIcon( KIcon("gear") );
 
     connect(this, SIGNAL(okClicked()),
             this, SLOT(slotOkClicked()) );
