@@ -81,9 +81,9 @@ SetupCamera::SetupCamera( QWidget* parent )
 {
     d = new SetupCameraPriv;
 
-    QGridLayout* grid = new QGridLayout( this );
+    QGridLayout* grid = new QGridLayout(this);
 
-    d->listView = new K3ListView( this );
+    d->listView = new K3ListView(this);
     d->listView->addColumn( i18n("Title") );
     d->listView->addColumn( i18n("Model") );
     d->listView->addColumn( i18n("Port") );
@@ -95,12 +95,9 @@ SetupCamera::SetupCamera( QWidget* parent )
 
     // -------------------------------------------------------------
 
-    d->addButton = new QPushButton( this );
-
-    d->removeButton = new QPushButton( this );
-
-    d->editButton = new QPushButton( this );
-
+    d->addButton        = new QPushButton( this );
+    d->removeButton     = new QPushButton( this );
+    d->editButton       = new QPushButton( this );
     d->autoDetectButton = new QPushButton( this );
 
     d->addButton->setText( i18n( "&Add..." ) );
@@ -123,16 +120,16 @@ SetupCamera::SetupCamera( QWidget* parent )
 
     // -------------------------------------------------------------
 
-    grid->setMargin(KDialog::spacingHint());
+    grid->setMargin(0);
     grid->setSpacing(KDialog::spacingHint());
     grid->setAlignment(Qt::AlignTop);
-    grid->addWidget(d->listView, 0, 5, 0, 0);
-    grid->addWidget(d->addButton, 0, 1);
-    grid->addWidget(d->removeButton, 1, 1);
-    grid->addWidget(d->editButton, 2, 1);
-    grid->addWidget(d->autoDetectButton, 3, 1);
-    grid->addItem(spacer, 4, 1);
-    grid->addWidget(gphotoLogoLabel, 5, 1);
+    grid->addWidget(d->listView, 0, 0, 5+1, 1);
+    grid->addWidget(d->addButton, 0, 1, 1, 1);
+    grid->addWidget(d->removeButton, 1, 1, 1, 1);
+    grid->addWidget(d->editButton, 2, 1, 1, 1);
+    grid->addWidget(d->autoDetectButton, 3, 1, 1, 1);
+    grid->addItem(spacer, 4, 1, 1, 1);
+    grid->addWidget(gphotoLogoLabel, 5, 1, 1, 1);
 
     adjustSize();
 
