@@ -98,14 +98,14 @@ SetupGeneral::SetupGeneral(KPageDialog* dialog, QWidget* parent)
             : QWidget(parent)
 {
     d = new SetupGeneralPriv;
-    d->mainDialog       = dialog;
+    d->mainDialog = dialog;
+
     QVBoxLayout *layout = new QVBoxLayout( this );
-    layout->setSpacing( KDialog::spacingHint() );
 
     // --------------------------------------------------------
 
     QGroupBox *albumPathBox = new QGroupBox(i18n("Album &Library Path"), this);
-    QVBoxLayout *gLayout1   = new QVBoxLayout();
+    QVBoxLayout *gLayout1   = new QVBoxLayout(albumPathBox);
 
     d->albumPathEdit = new KUrlRequester(albumPathBox);
     d->albumPathEdit->setMode(KFile::Directory | KFile::LocalOnly | KFile::ExistingOnly);    
@@ -121,14 +121,13 @@ SetupGeneral::SetupGeneral(KPageDialog* dialog, QWidget* parent)
             this, SLOT(slotPathEdited(const QString&)) );
 
     gLayout1->addWidget(d->albumPathEdit);
-    albumPathBox->setLayout(gLayout1);
-
-    layout->addWidget(albumPathBox);
-
+    gLayout1->setSpacing(0);
+    gLayout1->setMargin(KDialog::spacingHint());
+    
     // --------------------------------------------------------
 
     QGroupBox *iconTextGroup = new QGroupBox(i18n("Thumbnail Information"), this);
-    QVBoxLayout *gLayout2    = new QVBoxLayout();
+    QVBoxLayout *gLayout2    = new QVBoxLayout(iconTextGroup);
 
     d->iconShowNameBox = new QCheckBox(i18n("Show file &name"), iconTextGroup);
     d->iconShowNameBox->setWhatsThis( i18n("<p>Set this option to show file name below image thumbnail."));
@@ -168,16 +167,13 @@ SetupGeneral::SetupGeneral(KPageDialog* dialog, QWidget* parent)
     gLayout2->addWidget(d->iconShowTagsBox);
     gLayout2->addWidget(d->iconShowRatingBox);
     gLayout2->addWidget(d->iconShowResolutionBox);
-    iconTextGroup->setLayout(gLayout2);
-
-    layout->addWidget(iconTextGroup);
+    gLayout2->setSpacing(0);
+    gLayout2->setMargin(KDialog::spacingHint());
 
     // --------------------------------------------------------
 
     QGroupBox *interfaceOptionsGroup = new QGroupBox(i18n("Interface Options"), this);
-    QGridLayout* ifaceSettingsLayout = new QGridLayout();
-    ifaceSettingsLayout->setSpacing(KDialog::spacingHint());
-    ifaceSettingsLayout->setMargin(KDialog::marginHint());
+    QGridLayout* ifaceSettingsLayout = new QGridLayout(interfaceOptionsGroup);
 
     d->iconTreeThumbLabel = new QLabel(i18n("Sidebar thumbnail size:"), interfaceOptionsGroup);
     d->iconTreeThumbSize  = new QComboBox(interfaceOptionsGroup);
@@ -189,8 +185,6 @@ SetupGeneral::SetupGeneral(KPageDialog* dialog, QWidget* parent)
                                           "in pixels of the thumbnails in digiKam's sidebars. "
                                           "This option will take effect when you restart "
                                           "digiKam."));
-    ifaceSettingsLayout->addWidget(d->iconTreeThumbLabel, 0, 0, 0, 0);
-    ifaceSettingsLayout->addWidget(d->iconTreeThumbSize, 0, 0, 1, 1);
 
     QLabel *rightClickLabel     = new QLabel(i18n("Thumbnail click action:"), interfaceOptionsGroup);
     d->rightClickActionComboBox = new QComboBox(interfaceOptionsGroup);
@@ -198,17 +192,26 @@ SetupGeneral::SetupGeneral(KPageDialog* dialog, QWidget* parent)
     d->rightClickActionComboBox->addItem(i18n("Start image editor"), AlbumSettings::StartEditor);
     d->rightClickActionComboBox->setToolTip(i18n("<p>Select here the right action to do when you "
                                                  "right click with mouse button on thumbnail."));
-    ifaceSettingsLayout->addWidget(rightClickLabel, 1 ,1, 0, 0);
-    ifaceSettingsLayout->addWidget(d->rightClickActionComboBox, 1, 1, 1, 4);
 
     d->previewLoadFullImageSize = new QCheckBox(i18n("Embedded preview load full image size"), interfaceOptionsGroup);
     d->previewLoadFullImageSize->setWhatsThis( i18n("<p>Set this option to load full image size "
                      "with embedded preview instead a reduced one. Because this option will take more time "
                      "to load image, use it only if you have a fast computer."));
-    ifaceSettingsLayout->addWidget(d->previewLoadFullImageSize, 2, 2, 0, 4);
 
-    interfaceOptionsGroup->setLayout(ifaceSettingsLayout);
+    ifaceSettingsLayout->setMargin(KDialog::spacingHint());
+    ifaceSettingsLayout->setSpacing(KDialog::spacingHint());
+    ifaceSettingsLayout->addWidget(d->iconTreeThumbLabel, 0, 0, 1, 1);
+    ifaceSettingsLayout->addWidget(d->iconTreeThumbSize, 0, 1, 1, 1);
+    ifaceSettingsLayout->addWidget(rightClickLabel, 1 , 0, 1, 1);
+    ifaceSettingsLayout->addWidget(d->rightClickActionComboBox, 1, 1, 1, 4);
+    ifaceSettingsLayout->addWidget(d->previewLoadFullImageSize, 2, 0, 1, 5 );
 
+    // --------------------------------------------------------
+
+    layout->setMargin(0);
+    layout->setSpacing(KDialog::spacingHint());
+    layout->addWidget(albumPathBox);
+    layout->addWidget(iconTextGroup);
     layout->addWidget(interfaceOptionsGroup);
     layout->addStretch();
 
