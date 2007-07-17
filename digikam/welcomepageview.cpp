@@ -38,6 +38,7 @@
 #include <kurl.h>
 #include <kstandarddirs.h>
 #include <KToolInvocation>
+#include <kglobalsettings.h>
 
 // Local includes.
 
@@ -60,7 +61,7 @@ WelcomePageView::WelcomePageView(QWidget* parent)
     setMetaRefreshEnabled(false);
     setURLCursor(Qt::PointingHandCursor);
 
-    QString fontSize         = QString::number(pointsToPixel(Settings::mediumFontSize()));
+    QString fontSize         = QString::number(12);
     QString appTitle         = i18n("digiKam");
     QString catchPhrase      = QString();      // Not enough space for a catch phrase at default window size.
     QString quickDescription = i18n("A Photo-Management Application for KDE");
