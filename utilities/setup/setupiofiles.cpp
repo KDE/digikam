@@ -79,29 +79,32 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
 
     d->JPEGOptions    = new JPEGSettings(this);
     KSeparator *line1 = new KSeparator(Qt::Horizontal, this);
-    vbox->addWidget(d->JPEGOptions);
-    vbox->addWidget(line1);
 
     //-- PNG Settings -------------------------------------------------------
 
     d->PNGOptions     = new PNGSettings(this);
     KSeparator *line2 = new KSeparator(Qt::Horizontal, this);
-    vbox->addWidget(d->PNGOptions);
-    vbox->addWidget(line2);
 
     //-- TIFF Settings ------------------------------------------------------
 
     d->TIFFOptions    = new TIFFSettings(this);
     KSeparator *line3 = new KSeparator(Qt::Horizontal, this);
-    vbox->addWidget(d->TIFFOptions);
-    vbox->addWidget(line3);
 
     //-- JPEG 2000 Settings -------------------------------------------------
 
     d->JPEG2000Options = new JP2KSettings(this);
-    vbox->addWidget(d->JPEG2000Options);
 
+    vbox->setMargin(0);
+    vbox->setSpacing(KDialog::spacingHint());
+    vbox->addWidget(d->JPEGOptions);
+    vbox->addWidget(line1);
+    vbox->addWidget(d->PNGOptions);
+    vbox->addWidget(line2);
+    vbox->addWidget(d->TIFFOptions);
+    vbox->addWidget(line3);
+    vbox->addWidget(d->JPEG2000Options);
     vbox->addStretch(10);
+
     readSettings();
 }
 
