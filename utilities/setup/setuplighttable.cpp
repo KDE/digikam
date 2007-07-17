@@ -65,12 +65,13 @@ SetupLightTable::SetupLightTable(QWidget* parent )
                : QWidget(parent)
 {
     d = new SetupLightTablePriv;
-    QVBoxLayout *layout = new QVBoxLayout( this );
+
+    QVBoxLayout *layout = new QVBoxLayout(this);
 
     // --------------------------------------------------------
 
     QGroupBox *interfaceOptionsGroup = new QGroupBox(i18n("Interface Options"), this);
-    QVBoxLayout *gLayout             = new QVBoxLayout();
+    QVBoxLayout *gLayout             = new QVBoxLayout(interfaceOptionsGroup);
 
     d->autoSyncPreview = new QCheckBox(i18n("Synchronize panels automatically"), interfaceOptionsGroup);
     d->autoSyncPreview->setWhatsThis( i18n("<p>Set this option to automatically synchronize "
@@ -93,12 +94,14 @@ SetupLightTable::SetupLightTable(QWidget* parent )
     gLayout->addWidget(d->autoLoadOnRightPanel);
     gLayout->addWidget(d->loadFullImageSize);
     gLayout->addWidget(d->hideToolBar);
-    interfaceOptionsGroup->setLayout(gLayout);
+    gLayout->setMargin(KDialog::spacingHint());
+    gLayout->setSpacing(KDialog::spacingHint());
 
     // --------------------------------------------------------
 
     layout->addWidget(interfaceOptionsGroup);
-    layout->setSpacing( KDialog::spacingHint() );
+    layout->setMargin(0);
+    layout->setSpacing(KDialog::spacingHint());
     layout->addStretch();
 
     // --------------------------------------------------------
@@ -135,4 +138,3 @@ void SetupLightTable::applySettings()
 }
 
 }  // namespace Digikam
-
