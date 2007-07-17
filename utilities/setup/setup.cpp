@@ -173,7 +173,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->lighttablePage  = new SetupLightTable();
     d->page_lighttable = addPage( d->lighttablePage, i18n("Light Table") );
     d->page_lighttable->setHeader( i18n("Light Table Settings") );
-    d->page_lighttable->setIcon( KIcon("idea") );
+    d->page_lighttable->setIcon( KIcon("lighttable") );
     
     d->editorPage  = new SetupEditor();
     d->page_editor = addPage( d->editorPage, i18n("Image Editor") );
