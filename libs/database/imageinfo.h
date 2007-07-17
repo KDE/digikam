@@ -70,7 +70,7 @@ public:
      * Constructor. Creates an ImageInfo object without any cached data initially.
      * @param    ID       unique ID for this image
      */
-    ImageInfo(qlonglong ID);
+    explicit ImageInfo(qlonglong ID);
 
     /**
      * Constructor. Creates an ImageInfo object where the provided information

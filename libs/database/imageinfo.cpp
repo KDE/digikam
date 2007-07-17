@@ -28,6 +28,7 @@
 
 #include <QFile>
 #include <QFileInfo>
+#include <QHash>
 
 // Local includes.
 
@@ -160,9 +161,9 @@ bool ImageInfo::operator<(const ImageInfo &info) const
 uint ImageInfo::hash() const
 {
     if (m_data)
-        return qHash(m_data->id);
+        return ::qHash(m_data->id);
     else
-        return qHash(0);
+        return ::qHash((int)0);
 }
 
 /**
