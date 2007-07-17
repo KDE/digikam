@@ -78,14 +78,11 @@ SetupMime::SetupMime(QWidget* parent)
 {
     d = new SetupMimePriv;
     QVBoxLayout *layout = new QVBoxLayout(this);
-    layout->setSpacing(KDialog::spacingHint());
 
     // --------------------------------------------------------
     
     QGroupBox *imageFileFilterBox = new QGroupBox(i18n("Image Files"), this);
-    QGridLayout* grid1            = new QGridLayout();
-    grid1->setSpacing(KDialog::spacingHint());
-    imageFileFilterBox->setLayout(grid1);
+    QGridLayout* grid1            = new QGridLayout(imageFileFilterBox);
 
     QLabel *logoLabel1 = new QLabel(imageFileFilterBox);
     logoLabel1->setPixmap(DesktopIcon("image"));
@@ -103,22 +100,20 @@ SetupMime::SetupMime(QWidget* parent)
     hbox1->setStretchFactor(d->imageFileFilterEdit, 10);
 
     d->revertImageFileFilterBtn = new QToolButton(hbox1);
-    d->revertImageFileFilterBtn->setIcon(SmallIcon("reload_page"));
+    d->revertImageFileFilterBtn->setIcon(SmallIcon("view-refresh"));
     d->revertImageFileFilterBtn->setToolTip(i18n("Revert to default settings"));
  
-    grid1->addWidget(logoLabel1, 0, 1, 0, 0);
-    grid1->addWidget(imageFileFilterLabel, 0, 0, 1, 1);
+    grid1->addWidget(logoLabel1, 0, 0, 2, 1);
+    grid1->addWidget(imageFileFilterLabel, 0, 1, 1, 1);
     grid1->addWidget(hbox1, 1, 1, 1, 1);
     grid1->setColumnStretch(1, 10);
+    grid1->setMargin(KDialog::spacingHint());
+    grid1->setSpacing(KDialog::spacingHint());
 
-    layout->addWidget(imageFileFilterBox);
-    
     // --------------------------------------------------------
     
     QGroupBox *movieFileFilterBox = new QGroupBox(i18n("Movie Files"), this);
-    QGridLayout* grid2            = new QGridLayout();
-    grid2->setSpacing(KDialog::spacingHint());
-    movieFileFilterBox->setLayout(grid2);
+    QGridLayout* grid2            = new QGridLayout(movieFileFilterBox);
 
     QLabel *logoLabel2 = new QLabel(movieFileFilterBox);
     logoLabel2->setPixmap(DesktopIcon("video"));
@@ -136,21 +131,20 @@ SetupMime::SetupMime(QWidget* parent)
     hbox2->setStretchFactor(d->movieFileFilterEdit, 10);
 
     d->revertMovieFileFilterBtn = new QToolButton(hbox2);
-    d->revertMovieFileFilterBtn->setIcon(SmallIcon("reload_page"));
+    d->revertMovieFileFilterBtn->setIcon(SmallIcon("view-refresh"));
     d->revertMovieFileFilterBtn->setToolTip(i18n("Revert to default settings"));
 
-    grid2->addWidget(logoLabel2, 0, 1, 0, 0);
-    grid2->addWidget(movieFileFilterLabel, 0, 0, 1, 1);
+    grid2->addWidget(logoLabel2, 0, 0, 2, 1);
+    grid2->addWidget(movieFileFilterLabel, 0, 1, 1, 1);
     grid2->addWidget(hbox2, 1, 1, 1, 1);
     grid2->setColumnStretch(1, 10);
+    grid2->setMargin(KDialog::spacingHint());
+    grid2->setSpacing(KDialog::spacingHint());
 
-    layout->addWidget(movieFileFilterBox);
-    
     // --------------------------------------------------------
     
     QGroupBox *audioFileFilterBox = new QGroupBox(i18n("Audio Files"), this);
-    QGridLayout* grid3            = new QGridLayout();
-    grid3->setSpacing(KDialog::spacingHint());
+    QGridLayout* grid3            = new QGridLayout(audioFileFilterBox);
 
     QLabel *logoLabel3 = new QLabel(audioFileFilterBox);
     logoLabel3->setPixmap(DesktopIcon("sound"));
@@ -168,21 +162,20 @@ SetupMime::SetupMime(QWidget* parent)
     hbox3->setStretchFactor(d->audioFileFilterEdit, 10);
 
     d->revertAudioFileFilterBtn = new QToolButton(hbox3);
-    d->revertAudioFileFilterBtn->setIcon(SmallIcon("reload_page"));
+    d->revertAudioFileFilterBtn->setIcon(SmallIcon("view-refresh"));
     d->revertAudioFileFilterBtn->setToolTip(i18n("Revert to default settings"));
 
-    grid3->addWidget(logoLabel3, 0, 1, 0, 0);
-    grid3->addWidget(audioFileFilterLabel, 0, 0, 1, 1);
+    grid3->addWidget(logoLabel3, 0, 0, 2, 1);
+    grid3->addWidget(audioFileFilterLabel, 0, 1, 1, 1);
     grid3->addWidget(hbox3, 1, 1, 1, 1);
     grid3->setColumnStretch(1, 10);
+    grid3->setMargin(KDialog::spacingHint());
+    grid3->setSpacing(KDialog::spacingHint());
 
-    layout->addWidget(audioFileFilterBox);
-    
     // --------------------------------------------------------
     
     QGroupBox *rawFileFilterBox = new QGroupBox(i18n("RAW Files"), this);
-    QGridLayout* grid4          = new QGridLayout();
-    grid4->setSpacing(KDialog::spacingHint());
+    QGridLayout* grid4          = new QGridLayout(rawFileFilterBox);
 
     QLabel *logoLabel4 = new QLabel(rawFileFilterBox);
     logoLabel4->setPixmap(DesktopIcon("kdcraw"));
@@ -199,14 +192,23 @@ SetupMime::SetupMime(QWidget* parent)
     hbox4->setStretchFactor(d->rawFileFilterEdit, 10);
 
     d->revertRawFileFilterBtn = new QToolButton(hbox4);
-    d->revertRawFileFilterBtn->setIcon(SmallIcon("reload_page"));
+    d->revertRawFileFilterBtn->setIcon(SmallIcon("view-refresh"));
     d->revertRawFileFilterBtn->setToolTip(i18n("Revert to default settings"));
 
-    grid4->addWidget(logoLabel4, 0, 1, 0, 0);
-    grid4->addWidget(rawFileFilterLabel, 0, 0, 1, 1);
+    grid4->addWidget(logoLabel4, 0, 0, 2, 1);
+    grid4->addWidget(rawFileFilterLabel, 0, 1, 1, 1);
     grid4->addWidget(hbox4, 1, 1, 1, 1);
     grid4->setColumnStretch(1, 10);
+    grid4->setMargin(KDialog::spacingHint());
+    grid4->setSpacing(KDialog::spacingHint());
 
+    // --------------------------------------------------------
+
+    layout->setMargin(0);
+    layout->setSpacing(KDialog::spacingHint());
+    layout->addWidget(imageFileFilterBox);
+    layout->addWidget(movieFileFilterBox);
+    layout->addWidget(audioFileFilterBox);
     layout->addWidget(rawFileFilterBox);
     layout->addStretch();
     
@@ -281,4 +283,3 @@ void SetupMime::slotRevertRawFileFilter()
 }
 
 }  // namespace Digikam
-
