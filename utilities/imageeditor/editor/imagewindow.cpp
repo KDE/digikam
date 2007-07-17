@@ -123,7 +123,6 @@ public:
         fileDeletePermanentlyAction         = 0;
         fileDeletePermanentlyDirectlyAction = 0;
         fileTrashDirectlyAction             = 0;
-        imageInfoCurrent                    = 0;
         rightSidebar                        = 0;
     }
 

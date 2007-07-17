@@ -85,7 +85,6 @@ public:
         cornerButton         = 0;
         previewThread        = 0;
         previewPreloadThread = 0;
-        imageInfo            = 0;
         hasPrev              = false;
         hasNext              = false;
         selected             = false;

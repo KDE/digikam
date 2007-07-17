@@ -86,7 +86,6 @@ public:
     {
         onLeftPanel  = false;
         onRightPanel = false;
-        info         = 0;
     }
 
     bool       onLeftPanel;
@@ -343,7 +342,7 @@ void LightTableBar::slotItemSelected(ThumbBarItem* item)
         }
     }
 
-    emit signalLightTableBarItemSelected(0);
+    emit signalLightTableBarItemSelected(ImageInfo());
 }
 
 ImageInfo LightTableBar::currentItemImageInfo() const
@@ -354,7 +353,7 @@ ImageInfo LightTableBar::currentItemImageInfo() const
         return item->info();
     }
 
-    return 0;
+    return ImageInfo();
 }
 
 ImageInfoList LightTableBar::itemsImageInfoList()

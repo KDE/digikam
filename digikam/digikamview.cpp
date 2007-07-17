@@ -1047,7 +1047,7 @@ void DigikamView::slotImageExifOrientation(int orientation)
 void DigikamView::slotLightTable()
 {
     ImageInfoList empty;
-    d->iconView->insertToLightTable(empty, 0);
+    d->iconView->insertToLightTable(empty, ImageInfo());
 }
 
 void DigikamView::slotImageLightTable()

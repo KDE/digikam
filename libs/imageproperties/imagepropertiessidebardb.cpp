@@ -126,7 +126,7 @@ void ImagePropertiesSideBarDB::itemChanged(const ImageInfo &info,
 
 void ImagePropertiesSideBarDB::itemChanged(const KUrl& url, const QRect &rect, DImg *img)
 {
-    itemChanged(url, 0, rect, img);
+    itemChanged(url, ImageInfo(), rect, img);
 }
 
 void ImagePropertiesSideBarDB::itemChanged(const KUrl& url, const ImageInfo &info,

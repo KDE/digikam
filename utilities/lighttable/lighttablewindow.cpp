@@ -526,7 +526,7 @@ void LightTableWindow::setupAccelerators()
 
 void LightTableWindow::slotThumbbarDroppedItems(const ImageInfoList& list)
 {
-    loadImageInfos(list, 0);
+    loadImageInfos(list, ImageInfo());
 }
 
 void LightTableWindow::loadImageInfos(const ImageInfoList &list, const ImageInfo &givenImageInfoCurrent)
@@ -661,7 +661,7 @@ void LightTableWindow::slotLeftPreviewLoaded(bool b)
             else
             {
                 LightTableBarItem* first = dynamic_cast<LightTableBarItem*>(d->barView->firstItem());
-                slotSetItemOnRightPanel(first ? first->info() : 0);
+                slotSetItemOnRightPanel(first ? first->info() : ImageInfo());
             }
         }
     }

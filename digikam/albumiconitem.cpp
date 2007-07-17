@@ -62,7 +62,6 @@ public:
     AlbumIconItemPriv()
     {
         dirty = true;
-        info  = 0;
         view  = 0;
     }
 
