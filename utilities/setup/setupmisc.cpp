@@ -65,31 +65,25 @@ SetupMisc::SetupMisc(QWidget* parent)
     d = new SetupMiscPriv;
 
     QVBoxLayout *layout = new QVBoxLayout(this);
-    layout->setSpacing( KDialog::spacingHint() );
 
-    // --------------------------------------------------------
-    
     d->showTrashDeleteDialogCheck = new QCheckBox(i18n("Show confirmation dialog when moving items to the &trash"), this);
-    layout->addWidget(d->showTrashDeleteDialogCheck);
-    
-    // --------------------------------------------------------
     
     d->sidebarApplyDirectlyCheck = new QCheckBox(i18n("Apply changes in the &right sidebar without confirmation"), this);
-    layout->addWidget(d->sidebarApplyDirectlyCheck);
-    
-    // --------------------------------------------------------
     
     d->showSplashCheck = new QCheckBox(i18n("&Show splash screen at startup"), this);
-    layout->addWidget(d->showSplashCheck);
-    
-    // --------------------------------------------------------
     
     d->scanAtStart = new QCheckBox(i18n("&Scan for new items on startup (slows down startup)"), this);
-    layout->addWidget(d->scanAtStart);
     
     // --------------------------------------------------------
     
+    layout->setMargin(0);    
+    layout->setSpacing(KDialog::spacingHint());
+    layout->addWidget(d->showTrashDeleteDialogCheck);
+    layout->addWidget(d->sidebarApplyDirectlyCheck);
+    layout->addWidget(d->showSplashCheck);
+    layout->addWidget(d->scanAtStart);
     layout->addStretch();
+
     readSettings();
     adjustSize();
 }
