@@ -91,7 +91,7 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     // --------------------------------------------------------
   
     QGroupBox *ExifGroup  = new QGroupBox(i18n("EXIF Actions"), this);
-    QVBoxLayout *gLayout1 = new QVBoxLayout();
+    QVBoxLayout *gLayout1 = new QVBoxLayout(ExifGroup);
 
     d->ExifRotateBox = new QCheckBox(ExifGroup);
     d->ExifRotateBox->setText(i18n("Show images/thumbs &rotated according to orientation tag"));
@@ -101,12 +101,13 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     
     gLayout1->addWidget(d->ExifRotateBox);
     gLayout1->addWidget(d->ExifSetOrientationBox);
-    ExifGroup->setLayout(gLayout1);
+    gLayout1->setMargin(KDialog::spacingHint());
+    gLayout1->setSpacing(0);
 
     // --------------------------------------------------------
   
     QGroupBox *IptcGroup  = new QGroupBox(i18n("IPTC Actions"), this);
-    QVBoxLayout *gLayout2 = new QVBoxLayout();
+    QVBoxLayout *gLayout2 = new QVBoxLayout(IptcGroup);
 
     d->saveTagsIptcBox = new QCheckBox(IptcGroup);
     d->saveTagsIptcBox->setText(i18n("&Save image tags as \"Keywords\" tag"));
@@ -128,12 +129,13 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     gLayout2->addWidget(d->saveTagsIptcBox);
     gLayout2->addWidget(d->savePhotographerIdIptcBox);
     gLayout2->addWidget(d->saveCreditsIptcBox);
-    IptcGroup->setLayout(gLayout2);
+    gLayout2->setMargin(KDialog::spacingHint());
+    gLayout2->setSpacing(0);
                                                            
     // --------------------------------------------------------
   
     QGroupBox *commonGroup = new QGroupBox(i18n("Common Metadata Actions"), this);
-    QVBoxLayout *gLayout3  = new QVBoxLayout();
+    QVBoxLayout *gLayout3  = new QVBoxLayout(commonGroup);
 
     d->saveCommentsBox = new QCheckBox(commonGroup);
     d->saveCommentsBox->setText(i18n("&Save image comments as embedded text"));
@@ -153,7 +155,8 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     gLayout3->addWidget(d->saveCommentsBox);
     gLayout3->addWidget(d->saveDateTimeBox);
     gLayout3->addWidget(d->saveRatingBox);
-    commonGroup->setLayout(gLayout3);
+    gLayout3->setMargin(KDialog::spacingHint());
+    gLayout3->setSpacing(0);
 
     // --------------------------------------------------------
     
@@ -175,7 +178,7 @@ SetupMetadata::SetupMetadata(QWidget* parent )
 
     // --------------------------------------------------------
     
-    mainLayout->setMargin(KDialog::spacingHint());
+    mainLayout->setMargin(0);
     mainLayout->setSpacing(KDialog::spacingHint());
     mainLayout->addWidget(ExifGroup);
     mainLayout->addWidget(IptcGroup);

@@ -95,7 +95,7 @@ SetupLightTable::SetupLightTable(QWidget* parent )
     gLayout->addWidget(d->loadFullImageSize);
     gLayout->addWidget(d->hideToolBar);
     gLayout->setMargin(KDialog::spacingHint());
-    gLayout->setSpacing(KDialog::spacingHint());
+    gLayout->setSpacing(0);
 
     // --------------------------------------------------------
 
