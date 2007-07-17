@@ -96,27 +96,25 @@ CameraSelection::CameraSelection( QWidget* parent )
                : KDialog(parent)
 {
     d = new CameraSelectionPriv;
+
     kapp->setOverrideCursor( Qt::WaitCursor );
     setHelp("cameraselection.anchor", "digikam");
     setCaption(i18n("Camera Configuration"));
     setButtons(KDialog::Help|KDialog::Ok|KDialog::Cancel);
     setDefaultButton(KDialog::Ok);
     setModal(true);
+
     d->UMSCameraNameActual = QString("Directory Browse");   // Don't be i18n!
     d->UMSCameraNameShown  = i18n("Mounted Camera");
     d->PTPCameraNameShown  = QString("USB PTP Class Camera");
 
-    KVBox *vbox = new KVBox( this );
-    setMainWidget( vbox );
+    setMainWidget(new QWidget(this));
 
-    QGridLayout* mainBoxLayout = new QGridLayout( vbox );
-    mainBoxLayout->setSpacing( KDialog::spacingHint() );
-    mainBoxLayout->setColumnStretch( 0, 10 );
-    mainBoxLayout->setRowStretch( 6, 10 );
+    QGridLayout* mainBoxLayout = new QGridLayout(mainWidget());
 
     // --------------------------------------------------------------
 
-    d->listView = new K3ListView( vbox );
+    d->listView = new K3ListView(mainWidget());
     d->listView->addColumn( i18n("Camera List") );
     d->listView->setAllColumnsShowFocus(true);
     d->listView->setResizeMode(K3ListView::LastColumn);
@@ -128,18 +126,20 @@ CameraSelection::CameraSelection( QWidget* parent )
 
     // --------------------------------------------------------------
 
-    QGroupBox* titleBox   = new QGroupBox( i18n("Camera Title"), vbox );
-    QVBoxLayout *gLayout1 = new QVBoxLayout();
-    d->titleEdit          = new KLineEdit( titleBox );
+    QGroupBox* titleBox   = new QGroupBox(i18n("Camera Title"), mainWidget());
+    QVBoxLayout *gLayout1 = new QVBoxLayout(titleBox);
+    d->titleEdit          = new KLineEdit(titleBox);
     d->titleEdit->setWhatsThis( i18n("<p>Set here the name used in digiKam interface to "
                                      "identify this camera.</p>"));
 
     gLayout1->addWidget(d->titleEdit);
-    titleBox->setLayout(gLayout1);
+    gLayout1->setMargin(KDialog::spacingHint());
+    gLayout1->setSpacing(KDialog::spacingHint());
 
     // --------------------------------------------------------------
 
-    QGroupBox* portBox    = new QGroupBox( i18n("Camera Port Type"), vbox );
+    QGroupBox* portBox    = new QGroupBox(i18n("Camera Port Type"), mainWidget());
+    QVBoxLayout *gLayout2 = new QVBoxLayout(portBox);
     d->portButtonGroup    = new QButtonGroup( portBox );
     d->portButtonGroup->setExclusive( true );
 
@@ -154,10 +154,15 @@ CameraSelection::CameraSelection( QWidget* parent )
     d->portButtonGroup->addButton(d->usbButton);
     d->portButtonGroup->addButton(d->serialButton);
 
+    gLayout2->addWidget(d->usbButton);
+    gLayout2->addWidget(d->serialButton);
+    gLayout2->setMargin(KDialog::spacingHint());
+    gLayout2->setSpacing(KDialog::spacingHint());
+
     // --------------------------------------------------------------
 
-    QGroupBox* portPathBox = new QGroupBox( i18n("Camera Port Path"), vbox );
-    QVBoxLayout *gLayout3  = new QVBoxLayout();
+    QGroupBox* portPathBox = new QGroupBox(i18n("Camera Port Path"), mainWidget());
+    QVBoxLayout *gLayout3  = new QVBoxLayout(portPathBox);
 
     d->portPathLabel = new QLabel( portPathBox);
     d->portPathLabel->setText( i18n( "Note: only for serial port camera" ) );
@@ -169,12 +174,13 @@ CameraSelection::CameraSelection( QWidget* parent )
 
     gLayout3->addWidget(d->portPathLabel);
     gLayout3->addWidget(d->portPathComboBox);
-    portPathBox->setLayout(gLayout3);
+    gLayout3->setMargin(KDialog::spacingHint());
+    gLayout3->setSpacing(KDialog::spacingHint());
 
     // --------------------------------------------------------------
 
-    QGroupBox* umsMountBox = new QGroupBox( i18n("Camera Mount Path"), vbox );
-    QVBoxLayout *gLayout4  = new QVBoxLayout();
+    QGroupBox* umsMountBox = new QGroupBox(i18n("Camera Mount Path"), mainWidget());
+    QVBoxLayout *gLayout4  = new QVBoxLayout(umsMountBox);
 
     QLabel* umsMountLabel = new QLabel( umsMountBox );
     umsMountLabel->setText( i18n( "Note: only for USB/IEEE mass storage camera" ) );
@@ -187,14 +193,15 @@ CameraSelection::CameraSelection( QWidget* parent )
 
     gLayout4->addWidget(umsMountLabel);
     gLayout4->addWidget(d->umsMountURL);
-    umsMountBox->setLayout(gLayout4);
+    gLayout4->setMargin(KDialog::spacingHint());
+    gLayout4->setSpacing(KDialog::spacingHint());
 
     // --------------------------------------------------------------
     
-    QWidget* box2         = new QWidget(vbox);
-    QGridLayout* gLayout5 = new QGridLayout();
+    QWidget* box2         = new QWidget(mainWidget());
+    QGridLayout* gLayout5 = new QGridLayout(box2);
 
-    QLabel* logo = new QLabel( box2 );
+    QLabel* logo = new QLabel(box2);
 
     KIconLoader* iconLoader = KIconLoader::global();
     logo->setPixmap(iconLoader->loadIcon("digikam", K3Icon::NoGroup, 64, 
@@ -203,36 +210,39 @@ CameraSelection::CameraSelection( QWidget* parent )
     K3ActiveLabel* link = new K3ActiveLabel(box2);
     link->setText(i18n("<p>To set an <b>USB Mass Storage</b> camera<br>"
                        "(which appears like a removable drive), please<br>"
-                       "use <a href=\"umscamera\">%1</a> from camera list.</p>") 
-                       .arg(d->UMSCameraNameShown));
+                       "use <a href=\"umscamera\">%1</a> from camera list.</p>", 
+                       d->UMSCameraNameShown));
 
     K3ActiveLabel* link2 = new K3ActiveLabel(box2);
     link2->setText(i18n("<p>To set a <b>Generic PTP USB Device</b><br>"
                         "(which use Picture Transfer Protocol), please<br>"
-                        "use <a href=\"ptpcamera\">%1</a> from camera list.</p>")
-                        .arg(d->PTPCameraNameShown));
+                        "use <a href=\"ptpcamera\">%1</a> from camera list.</p>",
+                        d->PTPCameraNameShown));
 
     K3ActiveLabel* explanation = new K3ActiveLabel(box2);
     explanation->setText(i18n("<p>A complete list of camera settings to use is<br>"
-                              "available at <a href='http://www.teaser.fr/~hfiguiere/linux/digicam.html'>"
-                              "this url</a>.</p>"));
+                 "available at <a href='http://www.teaser.fr/~hfiguiere/linux/digicam.html'>"
+                 "this url</a>.</p>"));
 
-    gLayout5->addWidget( logo, 0, 0, 0, 0 );
-    gLayout5->addWidget( link, 0, 1, 1, 1 );
-    gLayout5->addWidget( link2, 2, 3, 1, 1 );
-    gLayout5->addWidget( explanation, 4, 5, 1, 1 );
-    box2->setLayout(gLayout5);
+    gLayout5->setMargin(KDialog::spacingHint());
+    gLayout5->setSpacing(KDialog::spacingHint());
+    gLayout5->addWidget(logo, 0, 0, 1, 1);
+    gLayout5->addWidget(link, 0, 1, 2, 1);
+    gLayout5->addWidget(link2, 2, 1, 3- 2+1, 1);
+    gLayout5->addWidget(explanation, 4, 1, 5- 4+1, 1);
 
     // --------------------------------------------------------------
 
-    mainBoxLayout->addWidget( d->listView, 0, 6, 0, 0 );
-    mainBoxLayout->addWidget( titleBox, 0, 0, 1, 1 );
-    mainBoxLayout->addWidget( portBox, 1, 1, 1, 1 );
-    mainBoxLayout->addWidget( portPathBox, 2, 2, 1, 1 );
-    mainBoxLayout->addWidget( umsMountBox, 3, 3, 1, 1 );
-    mainBoxLayout->addWidget( box2, 4, 5, 1, 1 );
-
-    vbox->setLayout(mainBoxLayout);
+    mainBoxLayout->setMargin(0);
+    mainBoxLayout->setSpacing(KDialog::spacingHint());
+    mainBoxLayout->setColumnStretch(0, 10);
+    mainBoxLayout->setRowStretch(6, 10);
+    mainBoxLayout->addWidget(d->listView, 0, 0, 6+1, 1);
+    mainBoxLayout->addWidget(titleBox, 0, 1, 1, 1);
+    mainBoxLayout->addWidget(portBox, 1, 1, 1, 1);
+    mainBoxLayout->addWidget(portPathBox, 2, 1, 1, 1);
+    mainBoxLayout->addWidget(umsMountBox, 3, 1, 1, 1);
+    mainBoxLayout->addWidget(box2, 4, 1, 5- 4+1, 1);
 
     // Connections --------------------------------------------------
 
@@ -480,4 +490,3 @@ void CameraSelection::slotOkClicked()
 }
 
 }  // namespace Digikam
-
