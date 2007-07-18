@@ -60,6 +60,7 @@ extern "C"
 #include "albumdb.h"
 #include "albummanager.h"
 #include "scanlib.h"
+#include "scanlib.moc"
 
 /** @file scanlib.cpp*/
 
