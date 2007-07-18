@@ -36,6 +36,7 @@ INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/histogram
 
 # Shared libdigikam ################################################################
 
+
 SET(digikam_LIB_SRCS 
                      ${libcameragui_SRCS}
                      ${liblighttable_SRCS}
@@ -128,7 +129,8 @@ SET(digikam_LIB_SRCS
 
 KDE4_ADD_UI_FILES(digikam_LIB_SRCS ${CMAKE_SOURCE_DIR}/digikam/libs/dialogs/deletedialogbase.ui)
 
-QT4_ADD_DBUS_ADAPTOR(digikam_LIB_SRCS org.kde.digikam.xml digikamapp.h Digikam::DigikamApp)
+qt4_add_dbus_adaptor(digikam_LIB_SRCS org.kde.digikam.xml digikamapp.h Digikam::DigikamApp)
+
 
 KDE4_ADD_LIBRARY(digikam SHARED ${digikam_LIB_SRCS})
 
@@ -159,15 +161,15 @@ INSTALL(TARGETS digikam DESTINATION ${LIB_INSTALL_DIR} )
 
 # digiKam binary progam #########################################################   
       
-SET(digikam_SRCS main.cpp)   
+SET(digikam_bin_SRCS main.cpp)   
       
-KDE4_ADD_EXECUTABLE(digikam ${digikam_SRCS})   
+KDE4_ADD_EXECUTABLE(digikam_bin ${digikam_bin_SRCS})   
       
-TARGET_LINK_LIBRARIES(digikam ${KDE4_KPARTS_LIBS} digikam)   
+TARGET_LINK_LIBRARIES(digikam_bin ${KDE4_KPARTS_LIBS} digikam)   
       
-#SET_TARGET_PROPERTIES(digikam_bin PROPERTIES OUTPUT_NAME digikam)   
+SET_TARGET_PROPERTIES(digikam_bin PROPERTIES OUTPUT_NAME digikam)   
       
-INSTALL(TARGETS digikam DESTINATION ${BIN_INSTALL_DIR})   
+INSTALL(TARGETS digikam_bin DESTINATION ${BIN_INSTALL_DIR})   
       
       
 # Others Files to install #######################################################   
