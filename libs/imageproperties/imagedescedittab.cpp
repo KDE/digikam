@@ -39,7 +39,7 @@
 // KDE includes.
 
 #include <k3popupmenu.h>
-#include <kabc/stdaddressbook.h>
+//#include <kabc/stdaddressbook.h>
 #include <klocale.h>
 #include <kurl.h>
 #include <kcursor.h>
@@ -999,7 +999,7 @@ void ImageDescEditTab::slotRightButtonClicked(Q3ListViewItem *item, const QPoint
 
 void ImageDescEditTab::slotABCContextMenu()
 {
-    d->ABCMenu->clear();
+/*    d->ABCMenu->clear();
 
     int counter = 100;
     KABC::AddressBook* ab = KABC::StdAddressBook::self();
@@ -1022,7 +1022,7 @@ void ImageDescEditTab::slotABCContextMenu()
     {
         d->ABCMenu->insertItem( i18n("No AddressBook Entries Found"), ++counter );
         d->ABCMenu->setItemEnabled( counter, false );
-    }
+    }*/
 }
 
 void ImageDescEditTab::slotMoreMenu()

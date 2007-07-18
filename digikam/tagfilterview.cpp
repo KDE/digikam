@@ -36,7 +36,7 @@
 // KDE includes.
 
 #include <k3popupmenu.h>
-#include <kabc/stdaddressbook.h>
+//#include <kabc/stdaddressbook.h>
 #include <klocale.h>
 #include <kapplication.h>
 #include <kconfig.h>
@@ -994,7 +994,7 @@ void TagFilterView::slotContextMenu(Q3ListViewItem* it, const QPoint&, int)
 
 void TagFilterView::slotABCContextMenu()
 {
-    d->ABCMenu->clear();
+/*    d->ABCMenu->clear();
 
     int counter = 100;
     KABC::AddressBook* ab = KABC::StdAddressBook::self();
@@ -1017,7 +1017,7 @@ void TagFilterView::slotABCContextMenu()
     {
         d->ABCMenu->insertItem( i18n("No AddressBook entries found"), ++counter );
         d->ABCMenu->setItemEnabled( counter, false );
-    }
+    }*/
 }
 
 void TagFilterView::tagNew(TagFilterViewItem* item, const QString& _title, const QString& _icon)

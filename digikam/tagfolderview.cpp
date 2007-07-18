@@ -33,7 +33,7 @@
 
 #include <k3popupmenu.h>
 #include <klocale.h>
-#include <kabc/stdaddressbook.h>
+//#include <kabc/stdaddressbook.h>
 #include <kiconloader.h>
 #include <kapplication.h>
 #include <kmessagebox.h>
@@ -460,7 +460,7 @@ void TagFolderView::slotContextMenu(Q3ListViewItem *item, const QPoint &, int)
 
 void TagFolderView::slotABCContextMenu()
 {
-    d->ABCMenu->clear();
+/*    d->ABCMenu->clear();
 
     int counter = 100;
     KABC::AddressBook* ab = KABC::StdAddressBook::self();
@@ -483,7 +483,7 @@ void TagFolderView::slotABCContextMenu()
     {
         d->ABCMenu->insertItem( i18n("No AddressBook entries found"), ++counter );
         d->ABCMenu->setItemEnabled( counter, false );
-    }
+    }*/
 }
 
 void TagFolderView::tagNew()
