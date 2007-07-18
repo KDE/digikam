@@ -32,7 +32,6 @@
 #include <QSignalMapper>
 #include <QtDBus>
 
-
 // KDE includes.
 
 #include <khbox.h>
@@ -347,8 +346,8 @@ void DigikamApp::setupView()
     connect(d->view, SIGNAL(signalTagSelected(bool)),
             this, SLOT(slotTagSelected(bool)));
 
-    connect(d->view, SIGNAL(signalImageSelected(const Q3PtrList<ImageInfo>&, bool, bool)),
-            this, SLOT(slotImageSelected(const Q3PtrList<ImageInfo>&, bool, bool)));
+    connect(d->view, SIGNAL(signalImageSelected(const ImageInfoList& list, bool, bool)),
+            this, SLOT(slotImageSelected(const ImageInfoList& list, bool, bool)));
 }
 
 void DigikamApp::setupStatusBar()
@@ -1128,9 +1127,9 @@ void DigikamApp::slotTagSelected(bool val)
     }
 }
 
-void DigikamApp::slotImageSelected(const Q3PtrList<ImageInfo>& list, bool hasPrev, bool hasNext)
+void DigikamApp::slotImageSelected(const ImageInfoList& list, bool hasPrev, bool hasNext)
 {
-    Q3PtrList<ImageInfo> selection = list;
+    ImageInfoList selection = list;
     bool val = selection.isEmpty() ? false : true;
     d->imageViewAction->setEnabled(val);
     d->imagePreviewAction->setEnabled(val);
@@ -1146,7 +1145,7 @@ void DigikamApp::slotImageSelected(const Q3PtrList<ImageInfo>& list, bool hasPre
             d->statusProgressBar->setText(i18n("No item selected"));
         break;
         case 1:
-            d->statusProgressBar->setText(selection.first()->fileUrl().fileName());
+            d->statusProgressBar->setText(selection.first().fileUrl().fileName());
         break;
         default:
             d->statusProgressBar->setText(i18n("%1 items selected").arg(selection.count()));

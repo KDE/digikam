@@ -28,7 +28,6 @@
 
 // Qt includes.
 
-#include <Q3PtrList>
 #include <QList>
 #include <QAction>
 #include <QString>
@@ -49,6 +48,7 @@ namespace Digikam
 {
 
 class ImageInfo;
+class ImageInfoList;
 class CameraType;
 class DigikamAppPriv;
 
@@ -114,7 +114,7 @@ private slots:
 
     void slotAlbumSelected(bool val);
     void slotTagSelected(bool val);
-    void slotImageSelected(const Q3PtrList<ImageInfo>&, bool, bool);
+    void slotImageSelected(const ImageInfoList&, bool, bool);
     void slotExit();
     void slotShowTip();
     void slotShowKipiHelp();
