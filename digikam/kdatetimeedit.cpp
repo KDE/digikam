@@ -42,11 +42,11 @@ KDateTimeEdit::KDateTimeEdit(QWidget *parent, const char *name)
     m_datePopUp = new KDateEdit(this, "datepopup");
     m_timePopUp = new QTimeEdit(QTime::currentTime(), this);
 
-    connect(m_datePopUp, SIGNAL(dateChanged(const QDate& )),
-            this, SLOT(slotDateTimeChanged()) );
+    connect(m_datePopUp, SIGNAL(dateChanged(const QDate&)),
+            this, SLOT(slotDateTimeChanged()));
 
-    connect(m_timePopUp, SIGNAL(valueChanged(const QTime& )),
-            this, SLOT(slotDateTimeChanged()) );
+    connect(m_timePopUp, SIGNAL(timeChanged(const QTime&)),
+            this, SLOT(slotDateTimeChanged()));
 }
 
 KDateTimeEdit::~KDateTimeEdit()
