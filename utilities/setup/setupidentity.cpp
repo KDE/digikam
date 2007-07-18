@@ -78,16 +78,13 @@ SetupIdentity::SetupIdentity(QWidget* parent )
     QValidator *asciiValidator = new QRegExpValidator(asciiRx, this);
 
     QGroupBox *photographerIdGroup = new QGroupBox(i18n("Photographer Information"), this);
-    QGridLayout* grid              = new QGridLayout();
-    grid->setSpacing(KDialog::spacingHint());
+    QGridLayout* grid              = new QGridLayout(photographerIdGroup);
 
     QLabel *label1 = new QLabel(i18n("Author:"), photographerIdGroup);
     d->authorEdit  = new KLineEdit(photographerIdGroup);
     d->authorEdit->setValidator(asciiValidator);
     d->authorEdit->setMaxLength(32);
     label1->setBuddy(d->authorEdit);
-    grid->addWidget(label1, 0, 0, 0, 0);
-    grid->addWidget(d->authorEdit, 0, 0, 1, 1);
     d->authorEdit->setWhatsThis( i18n("<p>Set the photographer name. This field is limited "
                                       "to 32 ASCII characters."));
 
@@ -96,26 +93,26 @@ SetupIdentity::SetupIdentity(QWidget* parent )
     d->authorTitleEdit->setValidator(asciiValidator);
     d->authorTitleEdit->setMaxLength(32);
     label2->setBuddy(d->authorTitleEdit);
-    grid->addWidget(label2, 1, 1, 0, 0);
-    grid->addWidget(d->authorTitleEdit, 1, 1, 1, 1);
     d->authorTitleEdit->setWhatsThis( i18n("<p>Set the photographer title. This field is limited "
                                            "to 32 ASCII characters."));
         
-    photographerIdGroup->setLayout(grid);
+    grid->addWidget(label1, 0, 0, 1, 1);
+    grid->addWidget(d->authorEdit, 0, 1, 1, 1);
+    grid->addWidget(label2, 1, 0, 1, 1);
+    grid->addWidget(d->authorTitleEdit, 1, 1, 1, 1);
+    grid->setMargin(KDialog::spacingHint());
+    grid->setSpacing(KDialog::spacingHint());
 
     // --------------------------------------------------------
 
     QGroupBox *creditsGroup = new QGroupBox(i18n("Credit and Copyright"), this);
-    QGridLayout* grid2      = new QGridLayout();
-    grid2->setSpacing(KDialog::spacingHint());
+    QGridLayout* grid2      = new QGridLayout(creditsGroup);
 
     QLabel *label3 = new QLabel(i18n("Credit:"), creditsGroup);
-    d->creditEdit = new KLineEdit(creditsGroup);
+    d->creditEdit  = new KLineEdit(creditsGroup);
     d->creditEdit->setValidator(asciiValidator);
     d->creditEdit->setMaxLength(32);
     label3->setBuddy(d->creditEdit);
-    grid2->addWidget(label3, 0, 0, 0, 0);
-    grid2->addWidget(d->creditEdit, 0, 0, 1, 1);
     d->creditEdit->setWhatsThis( i18n("<p>Set the default provider identification of the picture, "
                                       "not necessarily the owner/creator. This field is limited "
                                       "to 32 ASCII characters."));
@@ -125,8 +122,6 @@ SetupIdentity::SetupIdentity(QWidget* parent )
     d->sourceEdit->setValidator(asciiValidator);
     d->sourceEdit->setMaxLength(32);
     label4->setBuddy(d->sourceEdit);
-    grid2->addWidget(label4, 1, 1, 0, 0);
-    grid2->addWidget(d->sourceEdit, 1, 1, 1, 1);
     d->sourceEdit->setWhatsThis( i18n("<p>Set the default original owner identification of the intellectual "
                                       "content of the picture. This could be an agency, a member of an agency or "
                                       "an individual photographer name. This field is limited "
@@ -137,12 +132,17 @@ SetupIdentity::SetupIdentity(QWidget* parent )
     d->copyrightEdit->setValidator(asciiValidator);
     d->copyrightEdit->setMaxLength(128);
     label5->setBuddy(d->copyrightEdit);
-    grid2->addWidget(label5, 2, 2, 0, 0);
-    grid2->addWidget(d->copyrightEdit, 2, 2, 1, 1);
     d->copyrightEdit->setWhatsThis( i18n("<p>Set the default copyright notice of the pictures. "
                                          "This field is limited to 128 ASCII characters."));
 
-    creditsGroup->setLayout(grid2);
+    grid2->addWidget(label3, 0, 0, 1, 1);
+    grid2->addWidget(d->creditEdit, 0, 1, 1, 1);
+    grid2->addWidget(label4, 1, 0, 1, 1);
+    grid2->addWidget(d->sourceEdit, 1, 1, 1, 1);
+    grid2->addWidget(label5, 2, 0, 1, 1);
+    grid2->addWidget(d->copyrightEdit, 2, 1, 1, 1);
+    grid2->setMargin(KDialog::spacingHint());
+    grid2->setSpacing(KDialog::spacingHint());
 
     // --------------------------------------------------------
 
@@ -155,6 +155,8 @@ SetupIdentity::SetupIdentity(QWidget* parent )
     layout->addWidget(creditsGroup);
     layout->addWidget(iptcNote);
     layout->addStretch();
+    layout->setMargin(0);
+    layout->setSpacing(KDialog::spacingHint());
     
     readSettings();
 }
