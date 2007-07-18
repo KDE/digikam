@@ -170,7 +170,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
 
     d->tagsSearchClearBtn = new QToolButton(tagsSearch);
     d->tagsSearchClearBtn->setAutoRaise(true);
-    d->tagsSearchClearBtn->setIcon(KIconLoader::global()->loadIcon("locationbar_erase",
+    d->tagsSearchClearBtn->setIcon(KIconLoader::global()->loadIcon("locationbar-erase",
                                    K3Icon::Toolbar, K3Icon::SizeSmall));
 
     new QLabel(i18n("Search:"), tagsSearch);
@@ -202,12 +202,12 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     buttonsBox->setSpacing(KDialog::spacingHint());
 
     d->revertBtn = new QToolButton(buttonsBox);
-    d->revertBtn->setIcon(SmallIcon("reload_page"));
+    d->revertBtn->setIcon(SmallIcon("view-refresh"));
     d->revertBtn->setToolTip( i18n("Revert all changes"));
     d->revertBtn->setEnabled(false);
     
     d->applyBtn = new QPushButton(i18n("Apply"), buttonsBox);
-    d->applyBtn->setIcon(SmallIcon("button_ok"));
+    d->applyBtn->setIcon(SmallIcon("ok"));
     d->applyBtn->setEnabled(false);
     d->applyBtn->setToolTip( i18n("Apply all changes to pictures"));
     buttonsBox->setStretchFactor(d->applyBtn, 10);
