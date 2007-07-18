@@ -92,6 +92,9 @@ StatusZoomBar::StatusZoomBar(QWidget *parent)
 
     d->zoomTracker = new DTipTracker("", d->zoomSlider);
 
+    layout()->hBox->setMargin(0);
+    layout()->hBox->setSpacing(0);
+
     // -------------------------------------------------------------
 
     connect(d->zoomMinusButton, SIGNAL(clicked()),
