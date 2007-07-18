@@ -361,13 +361,14 @@ void DigikamApp::setupStatusBar()
     //------------------------------------------------------------------------------
 
     d->statusZoomBar = new StatusZoomBar(statusBar());
-    statusBar()->addWidget(d->statusZoomBar, 1);
+    d->statusZoomBar->setMaximumHeight(fontMetrics().height()+2);
+    statusBar()->addPermanentWidget(d->statusZoomBar, 1);
 
     //------------------------------------------------------------------------------
 
     d->statusNavigateBar = new StatusNavigateBar(statusBar());
     d->statusNavigateBar->setMaximumHeight(fontMetrics().height()+2);
-    statusBar()->addWidget(d->statusNavigateBar, 1);
+    statusBar()->addPermanentWidget(d->statusNavigateBar, 1);
 
     //------------------------------------------------------------------------------
 
