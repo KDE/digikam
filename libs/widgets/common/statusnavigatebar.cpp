@@ -68,32 +68,33 @@ StatusNavigateBar::StatusNavigateBar(QWidget *parent)
     setAttribute(Qt::WA_DeleteOnClose);
 
     QHBoxLayout *lay = new QHBoxLayout(this);
-    setLayout(lay);
 
     d->firstButton = new QToolButton(this);
     d->firstButton->setAutoRaise(true);
-    d->firstButton->setIcon(SmallIcon("start"));
+    d->firstButton->setIcon(SmallIcon("go-first"));
     d->firstButton->setToolTip( i18n("Go to the first item"));
 
     d->prevButton = new QToolButton(this);
     d->prevButton->setAutoRaise(true);
-    d->prevButton->setIcon(SmallIcon("back"));
+    d->prevButton->setIcon(SmallIcon("go-previous"));
     d->prevButton->setToolTip( i18n("Go to the previous item"));
 
     d->nextButton = new QToolButton(this);
     d->nextButton->setAutoRaise(true);
-    d->nextButton->setIcon(SmallIcon("forward"));
+    d->nextButton->setIcon(SmallIcon("go-next"));
     d->nextButton->setToolTip( i18n("Go to the next item"));
 
     d->lastButton = new QToolButton(this);
     d->lastButton->setAutoRaise(true);
-    d->lastButton->setIcon(SmallIcon("finish"));
+    d->lastButton->setIcon(SmallIcon("go-last"));
     d->lastButton->setToolTip( i18n("Go to the last item"));
 
     lay->addWidget(d->firstButton);
     lay->addWidget(d->prevButton);
     lay->addWidget(d->nextButton);
     lay->addWidget(d->lastButton);
+    lay->setMargin(0);
+    lay->setSpacing(0);
 
     connect(d->firstButton, SIGNAL(clicked()),
             this, SIGNAL(signalFirstItem()));
