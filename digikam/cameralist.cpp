@@ -24,13 +24,13 @@
 
 // Qt includes.
 
-#include <qdatetime.h>
-#include <qstring.h>
-#include <qfile.h>
-#include <qdom.h>
-#include <q3textstream.h>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <QDateTime>
+#include <QString>
+#include <QFile>
+#include <QDomDocument>
+#include <QDomElement>
+#include <QTextStream>
+#include <QTextCodec>
 
 // KDE includes.
 
@@ -58,10 +58,15 @@ class CameraListPrivate
 {
 public:
 
-    bool                 modified;
+    CameraListPrivate()
+    {
+        modified = false;
+    }
+
+    bool                  modified;
     
     Q3PtrList<CameraType> clist;
-    QString              file;
+    QString               file;
 };
 
 CameraList::CameraList(QObject *parent, const QString& file)
@@ -69,9 +74,8 @@ CameraList::CameraList(QObject *parent, const QString& file)
 {
     d = new CameraListPrivate;
     d->clist.setAutoDelete(true);
-    d->file     = file;
-    d->modified = false;
-    m_componentData  = this;
+    d->file         = file;
+    m_componentData = this;
 }
 
 CameraList::~CameraList()
@@ -151,8 +155,9 @@ bool CameraList::save()
     if (!cfile.open(QIODevice::WriteOnly))
         return false;
 
-    Q3TextStream stream(&cfile);
-    stream.setEncoding(Q3TextStream::UnicodeUTF8);
+    QTextStream stream(&cfile);
+    stream.setCodec(QTextCodec::codecForName("UTF-8"));
+    stream.setAutoDetectUnicode(true);
     stream << doc.toString();
     cfile.close();
 
@@ -274,5 +279,3 @@ void CameraList::clear()
 }
 
 }  // namespace Digikam
-
-

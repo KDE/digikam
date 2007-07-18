@@ -27,8 +27,8 @@
 
 // Qt includes.
 
-#include <q3ptrlist.h>
-#include <qobject.h>
+#include <Q3PtrList>
+#include <QObject>
 
 class QString;
 
@@ -76,7 +76,6 @@ private:
 
     static CameraList *m_componentData;
     CameraListPrivate *d;
-
 };
 
 }  // namespace Digikam
