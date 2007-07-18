@@ -231,7 +231,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     setModal(true);
     setCaption(cameraTitle);
     setButtonText(User1, i18n("D&elete"));
-    setButtonText(User2,  i18n("&Download"));
+    setButtonText(User2, i18n("&Download"));
     setButtonText(User3, i18n("&Images"));
 
     d = new CameraUIPriv;
@@ -411,7 +411,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     viewBoxLayout->setColumnStretch( 3, 1 );
     viewBoxLayout->setColumnStretch( 4, 0 );
     viewBoxLayout->setColumnStretch( 5, 0 );
-    viewBoxLayout->setMargin(spacingHint());
+    viewBoxLayout->setMargin(0);
     viewBoxLayout->setSpacing(spacingHint());
 
     // -------------------------------------------------------------------------
