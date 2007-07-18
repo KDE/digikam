@@ -1794,13 +1794,13 @@ void DigikamApp::slotZoomSliderChanged(int size)
 void DigikamApp::slotThumbSizeChanged(int size)
 {
     d->statusZoomBar->setZoomSliderValue(size);
-    d->statusZoomBar->setZoomTrackerText(i18n("Size: %1").arg(size));
+    d->statusZoomBar->setZoomTrackerText(i18n("Size: %1", size));
 }
 
 void DigikamApp::slotZoomChanged(double zoom, int size)
 {
     d->statusZoomBar->setZoomSliderValue(size);
-    d->statusZoomBar->setZoomTrackerText(i18n("zoom: %1%").arg((int)(zoom*100.0)));
+    d->statusZoomBar->setZoomTrackerText(i18n("zoom: %1%", (int)(zoom*100.0)));
 }
 
 void DigikamApp::slotTooglePreview(bool t)
