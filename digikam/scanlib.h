@@ -26,6 +26,7 @@
 
 // Qt includes.
 
+#include <QObject>
 #include <QString>
 #include <QMap>
 
@@ -58,6 +59,7 @@ class DProgressDlg;
 class DIGIKAM_EXPORT ScanLib : public QObject
 {
     Q_OBJECT
+
 public:
     /** 
     * Constructor
