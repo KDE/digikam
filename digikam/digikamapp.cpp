@@ -1333,6 +1333,7 @@ void DigikamApp::slotCameraAdded(CameraType *ctype)
 
     KAction *cAction = new KAction(KIcon("camera-photo"), ctype->title(), this);
     connect(cAction, SIGNAL(triggered()), this, SLOT(slotCameraConnect()));
+    cAction->setObjectName(ctype->title());
     actionCollection()->addAction(ctype->title().toUtf8(), cAction);
 
     d->cameraMenuAction->insertAction(0, cAction);
