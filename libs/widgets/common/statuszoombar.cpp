@@ -26,6 +26,7 @@
 #include <QToolButton>
 #include <QTimer>
 #include <QSlider>
+#include <QLayout>
 
 // KDE includes.
 
@@ -92,8 +93,8 @@ StatusZoomBar::StatusZoomBar(QWidget *parent)
 
     d->zoomTracker = new DTipTracker("", d->zoomSlider);
 
-    layout()->hBox->setMargin(0);
-    layout()->hBox->setSpacing(0);
+    layout()->setMargin(0);
+    layout()->setSpacing(0);
 
     // -------------------------------------------------------------
 
