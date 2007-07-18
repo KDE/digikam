@@ -67,7 +67,8 @@ extern "C"
 namespace Digikam
 {
 
-ScanLib::ScanLib()
+ScanLib::ScanLib() 
+       : QObject()
 {
     m_progressBar = new DProgressDlg(0);
     m_progressBar->setInitialSize(QSize(500, 100));
@@ -84,10 +85,13 @@ ScanLib::ScanLib()
 
     connect(&m_scanner, SIGNAL(totalFilesToScan(int)),
             this, SLOT(slotTotalFilesToScan(int)));
+
     connect(&m_scanner, SIGNAL(startScanningAlbum(const QString &, const QString &)),
             this, SLOT(slotStartScanningAlbum(const QString &, const QString &)));
+
     connect(&m_scanner, SIGNAL(finishedScanningAlbum(const QString &, const QString &, int)),
             this, SLOT(slotFinishedScanningAlbum(const QString &, const QString &, int)));
+
     connect(&m_scanner, SIGNAL(scanningFile(const QString &)),
             this, SLOT(slotScanningFile(const QString &)));
 }
