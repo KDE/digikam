@@ -95,7 +95,7 @@ TagCreateDlg::TagCreateDlg(QWidget *parent, TAlbum* album)
     QLabel *topLabel = new QLabel(widget);
     QString tagName  = album->prettyUrl();
     if (tagName.endsWith("/")) tagName.truncate(tagName.length()-1);
-    topLabel->setText( i18n("<qt><b>Create New Tag in <i>\"%1\"</i></b></qt>",tagName));
+    topLabel->setText(i18n("<qt><b>Create New Tag in <i>\"%1\"</i></b></qt>", tagName));
     topLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine);
 
     // --------------------------------------------------------
@@ -139,14 +139,13 @@ TagCreateDlg::TagCreateDlg(QWidget *parent, TAlbum* album)
     gl->addWidget(d->iconButton, 1, 1, 1, 1);
     gl->addItem(spacer, 2, 1, 1, 1);
     gl->setMargin(KDialog::spacingHint());
-    gl->setSpacing(0);
+    gl->setSpacing(KDialog::spacingHint());
 
     grid->addWidget(logo, 0, 0, 1, 1);
     grid->addLayout(topLayout, 0, 1, 2, 1);
     grid->setRowStretch(1, 10);
     grid->setMargin(0);
     grid->setSpacing(KDialog::spacingHint());
-
 
     // --------------------------------------------------------
 
@@ -264,7 +263,7 @@ TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album)
     QLabel *topLabel = new QLabel(widget);
     QString tagName  = album->prettyUrl();
     if (tagName.endsWith("/")) tagName.truncate(tagName.length()-1);
-    topLabel->setText( i18n("<qt><b>Tag <i>\"%1\"</i> Properties </b></qt>").arg(tagName));
+    topLabel->setText(i18n("<qt><b>Tag <i>\"%1\"</i> Properties </b></qt>", tagName));
     topLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine);
 
     // --------------------------------------------------------
@@ -298,7 +297,7 @@ TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album)
     d->iconButton->setFixedSize(40, 40);
     iconTextLabel->setBuddy(d->iconButton);
     
-    d->resetIconButton = new QPushButton(i18n("Reset"), widget);
+    d->resetIconButton = new QPushButton(KIcon("view-refresh"), i18n("Reset"), widget);
 
     QSpacerItem* spacer = new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
@@ -311,7 +310,7 @@ TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album)
     gl->addWidget(d->resetIconButton, 1, 2, 1, 1);
     gl->addItem(spacer, 1, 3, 1, 1);
     gl->setMargin(KDialog::spacingHint());
-    gl->setSpacing(0);
+    gl->setSpacing(KDialog::spacingHint());
     
     grid->addWidget(logo, 0, 0, 1, 1);
     grid->addLayout(topLayout, 0, 1, 2, 1);
