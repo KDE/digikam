@@ -25,8 +25,6 @@
 
 // Qt includes.
 
-#include <Q3Header>
-#include <Q3ListView>
 #include <QCheckBox>
 #include <QComboBox>
 #include <QGroupBox>
@@ -112,61 +110,56 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
     QLabel *topLabel = new QLabel( page );
     if (create)
     {
-        topLabel->setText( i18n( "<qt><b>Create new Album in \"<i>%1</i>\"</b></qt>")
-                           .arg(album->title()));
+        topLabel->setText(i18n("<qt><b>Create new Album in \"<i>%1</i>\"</b></qt>", album->title()));
     }
     else
     {
-        topLabel->setText( i18n( "<qt><b>\"<i>%1</i>\" Album Properties</b></qt>")
-                           .arg(album->title()));
+        topLabel->setText(i18n("<qt><b>\"<i>%1</i>\" Album Properties</b></qt>", album->title()));
     }
     topLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine);
 
     // --------------------------------------------------------
 
-    QFrame *topLine = new QFrame( page );
-    topLine->setFrameShape( QFrame::HLine );
-    topLine->setFrameShadow( QFrame::Sunken );
+    QFrame *topLine = new QFrame(page);
+    topLine->setFrameShape(QFrame::HLine);
+    topLine->setFrameShadow(QFrame::Sunken);
 
     // --------------------------------------------------------
 
-    QLabel *titleLabel = new QLabel( page);
-    titleLabel->setText( i18n( "&Title:" ) );
+    QLabel *titleLabel = new QLabel(page);
+    titleLabel->setText(i18n("&Title:"));
 
-    d->titleEdit = new KLineEdit( page );
-    titleLabel->setBuddy( d->titleEdit );
+    d->titleEdit = new KLineEdit(page);
+    titleLabel->setBuddy(d->titleEdit);
 
-    QLabel *collectionLabel = new QLabel( page );
-    collectionLabel->setText( i18n( "Co&llection:" ) );
+    QLabel *collectionLabel = new QLabel(page);
+    collectionLabel->setText(i18n("Co&llection:"));
 
-    d->collectionCombo = new QComboBox( page );
+    d->collectionCombo = new QComboBox(page);
     d->collectionCombo->setEditable(true);
-    collectionLabel->setBuddy( d->collectionCombo );
+    collectionLabel->setBuddy(d->collectionCombo);
 
-    QLabel *commentsLabel = new QLabel( page );
-    commentsLabel->setText( i18n( "Co&mments:" ) );
+    QLabel *commentsLabel = new QLabel(page);
+    commentsLabel->setText(i18n("Co&mments:"));
 
-    d->commentsEdit = new KTextEdit( page );
-    commentsLabel->setBuddy( d->commentsEdit );
+    d->commentsEdit = new KTextEdit(page);
+    commentsLabel->setBuddy(d->commentsEdit);
     d->commentsEdit->setCheckSpellingEnabled(true);
     d->commentsEdit->setWordWrapMode(QTextOption::WordWrap);
 
-    QLabel *dateLabel = new QLabel( page );
-    dateLabel->setText( i18n( "Album &date:" ) );
+    QLabel *dateLabel = new QLabel(page);
+    dateLabel->setText(i18n("Album &date:"));
 
-    d->datePicker = new KDatePicker( page );
-    dateLabel->setBuddy( d->datePicker );
+    d->datePicker = new KDatePicker(page);
+    dateLabel->setBuddy(d->datePicker);
 
-    KHBox *buttonRow = new KHBox( page );
-    QPushButton *dateLowButton = new QPushButton( 
-            i18nc("Selects the date of the oldest image",
-                 "&Oldest" ), buttonRow );
-    QPushButton *dateAvgButton = new QPushButton( 
-            i18nc("Calculates the average date",
-                 "&Average" ), buttonRow );
-    QPushButton *dateHighButton = new QPushButton( 
-            i18nc("Selects the date of the newest image",
-                 "Newest" ), buttonRow );
+    KHBox *buttonRow = new KHBox(page);
+    QPushButton *dateLowButton = new QPushButton(i18nc("Selects the date of the oldest image",
+                                                 "&Oldest"), buttonRow);
+    QPushButton *dateAvgButton = new QPushButton(i18nc("Calculates the average date",
+                                                 "&Average"), buttonRow);
+    QPushButton *dateHighButton = new QPushButton(i18nc("Selects the date of the newest image",
+                                                  "Newest"), buttonRow);
         
     setTabOrder(d->titleEdit, d->collectionCombo);
     setTabOrder(d->collectionCombo, d->commentsEdit);
@@ -305,12 +298,8 @@ bool AlbumPropsEdit::editProps(PAlbum *album, QString& title,
     return ok;
 }
 
-bool AlbumPropsEdit::createNew(PAlbum  *parent,
-                               QString& title,
-                               QString& comments,
-                               QDate&   date,
-                               QString& collection,
-                               QStringList& albumCollections)
+bool AlbumPropsEdit::createNew(PAlbum *parent, QString& title, QString& comments,
+                               QDate& date, QString& collection, QStringList& albumCollections)
 {
     AlbumPropsEdit dlg(parent, true);
 
@@ -371,5 +360,3 @@ void AlbumPropsEdit::slotDateAverageButtonClicked()
 }
 
 }  // namespace Digikam
-
-
