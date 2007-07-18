@@ -468,7 +468,7 @@ void DigikamApp::setupActions()
 {
     // -----------------------------------------------------------------
 
-    d->cameraMenuAction = new KActionMenu(KIcon("camera-photo"), i18n("&Camera"), this);
+    d->cameraMenuAction = new KActionMenu(i18n("&Camera"), this);
     d->cameraMenuAction->setDelayed(false);
     actionCollection()->addAction("camera_menu", d->cameraMenuAction);
 

@@ -21,7 +21,6 @@
  * 
  * ============================================================ */
 
-
 #ifndef DIGIKAM_VERSION_H
 #define DIGIKAM_VERSION_H
 
