@@ -1335,7 +1335,7 @@ void DigikamApp::slotCameraAdded(CameraType *ctype)
     connect(cAction, SIGNAL(triggered()), this, SLOT(slotCameraConnect()));
     actionCollection()->addAction(ctype->title().toUtf8(), cAction);
 
-    d->cameraMenuAction->insertAction(cAction, 0);
+    d->cameraMenuAction->insertAction(0, cAction);
     ctype->setAction(cAction);
 }
 
