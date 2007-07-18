@@ -902,7 +902,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    KAction *syncMetadataAction = new KAction(KIcon("mimetypes/text-rdf"), 
+    KAction *syncMetadataAction = new KAction(KIcon("compfile"), 
                                               i18n("Update Metadata Database..."), this);
     connect(syncMetadataAction, SIGNAL(triggered()), this, SLOT(slotSyncAllPicturesMetadata()));
     actionCollection()->addAction("sync_metadata", syncMetadataAction);
