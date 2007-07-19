@@ -1148,7 +1148,7 @@ void DigikamApp::slotImageSelected(const ImageInfoList& list, bool hasPrev, bool
             d->statusProgressBar->setText(selection.first().fileUrl().fileName());
         break;
         default:
-            d->statusProgressBar->setText(i18n("%1 items selected").arg(selection.count()));
+            d->statusProgressBar->setText(i18n("%1 items selected",selection.count()));
         break;
     }
 
@@ -1273,7 +1273,7 @@ void DigikamApp::slotDownloadImages()
     if (!alreadyThere)
     {
         KAction *cAction = new KAction(KIcon("camera-photo"), 
-                           i18n("Browse %1").arg(KUrl(d->cameraGuiPath).prettyUrl()), this);
+                           i18n("Browse %1",KUrl(d->cameraGuiPath).prettyUrl()), this);
         connect(cAction, SIGNAL(triggered()), this, SLOT(slotDownloadImages()));
         actionCollection()->addAction(d->cameraGuiPath.toLatin1(), cAction);
 
@@ -1282,7 +1282,7 @@ void DigikamApp::slotDownloadImages()
 
     // the CameraUI will delete itself when it has finished
     CameraUI* cgui = new CameraUI(this,
-                                  i18n("Images found in %1").arg(d->cameraGuiPath),
+                                  i18n("Images found in %1",d->cameraGuiPath),
                                   "directory browse", "Fixed", localUrl, 
                                   QDateTime::currentDateTime());
     cgui->show();

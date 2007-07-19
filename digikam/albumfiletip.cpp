@@ -460,7 +460,7 @@ void AlbumFileTip::updateText()
                 if (photoInfo.focalLength35mm.isEmpty())
                     str += QString(" / %1").arg(photoInfo.focalLength.isEmpty() ? unavailable : photoInfo.focalLength);
                 else 
-                    str += QString(" / %1").arg(i18n("%1 (35mm: %2)").arg(photoInfo.focalLength).arg(photoInfo.focalLength35mm));
+                    str += QString(" / %1").arg(i18n("%1 (35mm: %2)",photoInfo.focalLength,photoInfo.focalLength35mm));
 
                 if (str.length() > d->maxStringLen) str = str.left(d->maxStringLen-3) + "...";
                 metaStr += cellBeg + i18n("Aperture/Focal:") + cellMid + Qt::escape( str ) + cellEnd;
@@ -469,7 +469,7 @@ void AlbumFileTip::updateText()
             if (settings->getToolTipsShowPhotoExpo())
             {
                 str = QString("%1 / %2").arg(photoInfo.exposureTime.isEmpty() ? unavailable : photoInfo.exposureTime)
-                                        .arg(photoInfo.sensitivity.isEmpty() ? unavailable : i18n("%1 ISO").arg(photoInfo.sensitivity));
+                                        .arg(photoInfo.sensitivity.isEmpty() ? unavailable : i18n("%1 ISO",photoInfo.sensitivity));
                 if (str.length() > d->maxStringLen) str = str.left(d->maxStringLen-3) + "...";
                 metaStr += cellBeg + i18n("Exposure/Sensitivity:") + cellMid + Qt::escape( str ) + cellEnd;
             }

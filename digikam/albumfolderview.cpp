@@ -733,7 +733,7 @@ void AlbumFolderView::albumRename(AlbumFolderViewItem* item)
     QString oldTitle(album->title());
     bool    ok;
 
-    QString title = KInputDialog::getText(i18n("Rename Album (%1)").arg(oldTitle), 
+    QString title = KInputDialog::getText(i18n("Rename Album (%1)",oldTitle), 
                                           i18n("Enter new album name:"),
                                           oldTitle, &ok, this);
     if (!ok)

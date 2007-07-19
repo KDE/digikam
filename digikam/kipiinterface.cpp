@@ -297,7 +297,7 @@ QString DigikamImageCollection::name()
 {
     if ( album_->type() == Album::TAG )
     {
-        return i18n("Tag: %1").arg(album_->title());
+        return i18n("Tag: %1",album_->title());
     }
     else
         return album_->title();
@@ -313,7 +313,7 @@ QString DigikamImageCollection::category()
     else if ( album_->type() == Album::TAG )
     {
         TAlbum *p = dynamic_cast<TAlbum*>(album_);
-        return i18n("Tag: %1").arg(p->tagPath());
+        return i18n("Tag: %1",p->tagPath());
     }
     else
         return QString();
@@ -616,10 +616,7 @@ int DigikamKipiInterface::features() const
 {
     return (
 
-// HostSupportsTags feature require libkipi version > 1.4.0
-#if KIPI_VERSION>0x000104
            KIPI::HostSupportsTags |
-#endif
            KIPI::ImagesHasComments          | KIPI::AcceptNewImages            |
            KIPI::AlbumsHaveComments         | KIPI::ImageTitlesWritable        |
            KIPI::ImagesHasTime              | KIPI::AlbumsHaveCategory         |
@@ -633,7 +630,7 @@ bool DigikamKipiInterface::addImage( const KUrl& url, QString& errmsg )
 
     if ( url.isValid() == false )
     {
-        errmsg = i18n("Target URL %1 is not valid.").arg(url.path());
+        errmsg = i18n("Target URL %1 is not valid.",url.path());
         return false;
     }
 

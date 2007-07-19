@@ -816,7 +816,7 @@ void AlbumIconView::slotRename(AlbumIconItem* item)
 
     bool ok;
 
-    QString newName = KInputDialog::getText(i18n("Rename Item (%1)").arg(fi.fileName()), 
+    QString newName = KInputDialog::getText(i18n("Rename Item (%1)",fi.fileName()), 
                                             i18n("Enter new name (without extension):"),
                                             name, &ok, this);
     if (!ok)
@@ -1012,7 +1012,7 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item)
 
     imview->loadImageInfos(imageInfoList,
                            currentImageInfo,
-                           d->currentAlbum ? i18n("Album \"%1\"").arg(d->currentAlbum->title()) : QString(),
+                           d->currentAlbum ? i18n("Album \"%1\"",d->currentAlbum->title()) : QString(),
                            true);
 
     if (imview->isHidden())
@@ -1255,14 +1255,14 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
 
             if (moreItemsSelected)
                 popMenu.insertItem(SmallIcon("tag"), 
-                                   i18n("Assign '%1' to &Selected Items").arg(talbum->tagPath().mid(1)), 10);
+                                   i18n("Assign '%1' to &Selected Items",talbum->tagPath().mid(1)), 10);
 
             if (itemDropped)
                 popMenu.insertItem(SmallIcon("tag"),
-                                   i18n("Assign '%1' to &This Item").arg(talbum->tagPath().mid(1)),   12);
+                                   i18n("Assign '%1' to &This Item",talbum->tagPath().mid(1)),   12);
 
             popMenu.insertItem(SmallIcon("tag"), 
-                               i18n("Assign '%1' to &All Items").arg(talbum->tagPath().mid(1)),          11);
+                               i18n("Assign '%1' to &All Items",talbum->tagPath().mid(1)),          11);
 
             popMenu.insertSeparator(-1);
             popMenu.insertItem(SmallIcon("cancel"), i18n("&Cancel"));
@@ -1597,8 +1597,8 @@ void AlbumIconView::slotSetExifOrientation( int orientation )
 
         if (!metadata.applyChanges())
         {
-            KMessageBox::sorry(0, i18n("Failed to revise Exif orientation for file %1.")
-                               .arg((*it).fileName()));
+            KMessageBox::sorry(0, i18n("Failed to revise Exif orientation for file %1."
+                               ,(*it).fileName()));
             return;
         }
         else
