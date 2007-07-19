@@ -316,15 +316,15 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent, bool navBar)
     settingsLayout->addWidget(d->colorMode, 17, 0, 1, 1);
     settingsLayout->addWidget(d->labelImageColorMode, 17, 1, 1, 1);
 
-    settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
-                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 18, 18, 0, 1);
+    settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
+                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 18, 0, 1, 2);
     settingsLayout->addWidget(line2, 19, 0, 1, 2 );
-    settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
-                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 20, 20, 0, 1);
+    settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
+                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 20, 0, 1, 2);
 
     settingsLayout->addWidget(d->title3, 21, 0, 1, 2 );
-    settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
-                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 22, 22, 0, 1);
+    settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
+                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 22, 0, 1, 2);
     settingsLayout->addWidget(d->make, 23, 0, 1, 1);
     settingsLayout->addWidget(d->labelPhotoMake, 23, 1, 1, 1);
     settingsLayout->addWidget(d->model, 24, 0, 1, 1);
