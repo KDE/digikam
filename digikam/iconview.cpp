@@ -14,12 +14,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #define RECT_EXTENSION 300
@@ -115,10 +115,10 @@ public:
     IconGroupItem       *firstGroup;
     IconGroupItem       *lastGroup;
 
-    struct ItemContainer 
+    struct ItemContainer
     {
-        ItemContainer(ItemContainer *p, ItemContainer *n, const QRect &r) 
-            : prev(p), next(n), rect(r) 
+        ItemContainer(ItemContainer *p, ItemContainer *n, const QRect &r)
+            : prev(p), next(n), rect(r)
         {
             if (prev)
                 prev->next = this;
@@ -131,7 +131,7 @@ public:
         Q3ValueList<IconItem*> items;
     } *firstContainer, *lastContainer;
 
-    struct SortableItem 
+    struct SortableItem
     {
         IconGroupItem *group;
     };
@@ -152,10 +152,10 @@ IconView::IconView(QWidget* parent, const char* name)
     d->toolTipTimer    = new QTimer(this);
     d->rubber          = new QRubberBand(QRubberBand::Rectangle, this);
     d->rubber->hide();
-    
+
     connect(d->rearrangeTimer, SIGNAL(timeout()),
             this, SLOT(slotRearrange()));
-            
+
     connect(d->toolTipTimer, SIGNAL(timeout()),
             this, SLOT(slotToolTip()));
 
@@ -174,7 +174,7 @@ IconView::~IconView()
 
 IconGroupItem* IconView::firstGroup() const
 {
-    return d->firstGroup;    
+    return d->firstGroup;
 }
 
 IconGroupItem* IconView::lastGroup() const
@@ -207,7 +207,7 @@ void IconView::setCurrentItem(IconItem* item)
 {
     d->currItem   = item;
     d->anchorItem = d->currItem;
-    
+
     if (d->currItem)
     {
         d->currItem->setSelected(true, true);
@@ -220,7 +220,7 @@ IconItem* IconView::findItem(const QPoint& pos)
     IconViewPriv::ItemContainer *c = d->firstContainer;
     for (; c; c = c->next)
     {
-        if ( c->rect.contains(pos) ) 
+        if ( c->rect.contains(pos) )
         {
             for (Q3ValueList<IconItem*>::iterator it = c->items.begin();
                  it != c->items.end(); ++it)
@@ -278,11 +278,11 @@ void IconView::clear(bool update)
     d->toolTipItem = 0;
     d->toolTipTimer->stop();
     slotToolTip();
-    
+
     deleteContainers();
 
     d->selectedItems.clear();
-    
+
     IconGroupItem *group = d->firstGroup;
     while (group)
     {
@@ -335,7 +335,7 @@ void IconView::selectAll()
 
     if (!wasBlocked)
         blockSignals(true);
-    
+
     for (IconItem* item = firstItem(); item; item = item->nextItem())
     {
         if (!item->isSelected())
@@ -343,7 +343,7 @@ void IconView::selectAll()
             item->setSelected(true, false);
         }
     }
-    
+
     if (!wasBlocked)
         blockSignals(false);
 
@@ -356,7 +356,7 @@ void IconView::invertSelection()
 
     if (!wasBlocked)
         blockSignals(true);
-    
+
     for (IconItem* item = firstItem(); item; item = item->nextItem())
     {
         if (!item->isSelected())
@@ -368,7 +368,7 @@ void IconView::invertSelection()
             item->setSelected(false, false);
         }
     }
-    
+
     if (!wasBlocked)
         blockSignals(false);
 
@@ -435,7 +435,7 @@ void IconView::takeGroup(IconGroupItem* group)
             d->firstGroup = d->lastGroup = 0;
         alternativeVisibleGroup = d->firstGroup;
     }
-    else if (group == d->lastGroup) 
+    else if (group == d->lastGroup)
     {
         d->lastGroup = d->lastGroup->m_prev;
         if ( d->lastGroup )
@@ -444,10 +444,10 @@ void IconView::takeGroup(IconGroupItem* group)
             d->firstGroup = d->lastGroup = 0;
         alternativeVisibleGroup = d->lastGroup->m_prev;
     }
-    else 
+    else
     {
         IconGroupItem *i = group;
-        if (i) 
+        if (i)
         {
             if (i->m_prev )
                 i->m_prev->m_next = i->m_next;
@@ -489,7 +489,7 @@ void IconView::takeItem(IconItem* item)
 
     // First remove item from any containers holding it
     IconViewPriv::ItemContainer *tmp = d->firstContainer;
-    while (tmp) 
+    while (tmp)
     {
         tmp->items.remove(item);
         tmp = tmp->next;
@@ -506,7 +506,7 @@ void IconView::takeItem(IconItem* item)
         d->toolTipTimer->stop();
         slotToolTip();
     }
-    
+
     // if it is current item, change the current item
     if (d->currItem == item)
     {
@@ -517,7 +517,7 @@ void IconView::takeItem(IconItem* item)
     }
 
     d->anchorItem = d->currItem;
-    
+
     if (!d->clearing)
     {
         d->storedVisibleItem = findFirstVisibleItem();
@@ -564,13 +564,13 @@ void IconView::sort()
     }
 
     int gcount = groupCount();
-    
+
     // then sort the groups themselves
     IconViewPriv::SortableItem *groups = new IconViewPriv::SortableItem[ gcount ];
 
     IconGroupItem *group = d->firstGroup;
     int i = 0;
-    
+
     for ( ; group; group = group->m_next )
         groups[ i++ ].group = group;
 
@@ -578,28 +578,28 @@ void IconView::sort()
 
     IconGroupItem *prev = 0;
     group = 0;
-    
-    for ( i = 0; i < (int)gcount; ++i ) 
+
+    for ( i = 0; i < (int)gcount; ++i )
     {
         group = groups[ i ].group;
-        if ( group ) 
+        if ( group )
         {
             group->m_prev = prev;
-            
+
             if ( group->m_prev )
                 group->m_prev->m_next = group;
-            
+
             group->m_next = 0;
         }
-        
+
         if ( i == 0 )
             d->firstGroup = group;
-            
+
         if ( i == (int)gcount - 1 )
             d->lastGroup = group;
         prev = group;
     }
-    
+
     delete [] groups;
 }
 
@@ -653,7 +653,7 @@ bool IconView::arrangeItems()
     int numItemsPerRow = visibleWidth()/(itemW + d->spacing);
 
     bool changed = false;
-    
+
     IconGroupItem* group = d->firstGroup;
     IconItem*      item  = 0;
     while (group)
@@ -679,7 +679,7 @@ bool IconView::arrangeItems()
             }
 
             maxW = qMax(maxW, x + itemW);
-            
+
             item = item->m_next;
         }
 
@@ -693,7 +693,7 @@ bool IconView::arrangeItems()
         group = group->m_next;
     }
 
-    viewport()->setUpdatesEnabled(false);  
+    viewport()->setUpdatesEnabled(false);
     resizeContents( maxW, y );
     viewport()->setUpdatesEnabled(true);
 
@@ -704,12 +704,12 @@ bool IconView::arrangeItems()
 
 QRect IconView::itemRect() const
 {
-    return QRect(0, 0, 100, 100);    
+    return QRect(0, 0, 100, 100);
 }
 
 QRect IconView::bannerRect() const
 {
-    return QRect(0, 0, visibleWidth(), 0);    
+    return QRect(0, 0, visibleWidth(), 0);
 }
 
 void IconView::viewportPaintEvent(QPaintEvent* pe)
@@ -724,7 +724,7 @@ void IconView::viewportPaintEvent(QPaintEvent* pe)
     for (IconGroupItem* group = d->firstGroup; group; group = group->nextGroup())
     {
         QRect br(contentsRectToViewport(group->rect()));
-        if (r.intersects(br)) 
+        if (r.intersects(br))
         {
             group->paintBanner();
             paintRegion -= QRegion(br);
@@ -733,19 +733,19 @@ void IconView::viewportPaintEvent(QPaintEvent* pe)
 
     // now paint any items which intersect
     for (IconViewPriv::ItemContainer* c = d->firstContainer; c;
-         c = c->next) 
+         c = c->next)
     {
         QRect cr(contentsRectToViewport(c->rect));
 
-        if (r.intersects(cr)) 
+        if (r.intersects(cr))
         {
-            
+
             for (Q3ValueList<IconItem*>::iterator it = c->items.begin();
                  it != c->items.end(); ++it)
             {
                 IconItem* item = *it;
                 QRect ir(contentsRectToViewport(item->rect()));
-                if (r.intersects(ir)) 
+                if (r.intersects(ir))
                 {
                     item->paintItem();
                     paintRegion -= QRegion(ir);
@@ -780,40 +780,40 @@ void IconView::rebuildContainers()
 
     if (d->firstGroup)
         item = d->firstGroup->firstItem();
-    
+
     IconViewPriv::ItemContainer* c = d->lastContainer;
-    while (item) 
+    while (item)
     {
-        if (c->rect.contains(item->rect())) 
+        if (c->rect.contains(item->rect()))
         {
             c->items.append(item);
             item = item->nextItem();
         }
-        else if (c->rect.intersects(item->rect())) 
+        else if (c->rect.intersects(item->rect()))
         {
             c->items.append( item );
             c = c->next;
-            
-            if (!c) 
+
+            if (!c)
             {
                 appendContainer();
                 c = d->lastContainer;
             }
-            
+
             c->items.append(item);
             item = item->nextItem();
             c = c->prev;
         }
-        else 
+        else
         {
-            if (item->y() < c->rect.y() && c->prev) 
+            if (item->y() < c->rect.y() && c->prev)
             {
                 c = c->prev;
                 continue;
             }
 
             c = c->next;
-            if (!c) 
+            if (!c)
             {
                 appendContainer();
                 c = d->lastContainer;
@@ -844,7 +844,7 @@ void IconView::deleteContainers()
     IconViewPriv::ItemContainer *c = d->firstContainer;
     IconViewPriv::ItemContainer *tmp;
 
-    while (c) 
+    while (c)
     {
         tmp = c->next;
         delete c;
@@ -864,7 +864,7 @@ void IconView::leaveEvent(QEvent *e)
     // if the mouse leaves the widget we are not dragging
     // anymore
     d->dragging = false;
-    
+
     Q3ScrollView::leaveEvent(e);
 }
 
@@ -891,7 +891,7 @@ void IconView::contentsMousePressEvent(QMouseEvent* e)
     d->toolTipItem = 0;
     d->toolTipTimer->stop();
     slotToolTip();
-    
+
     // Clear any existing rubber -------------------------------
     d->rubber->hide();
 
@@ -919,9 +919,9 @@ void IconView::contentsMousePressEvent(QMouseEvent* e)
         }
         return;
     }
-    
+
     IconItem *item = findItem(e->pos());
-    if (item) 
+    if (item)
     {
         if (e->modifiers() & Qt::ControlModifier)
         {
@@ -985,22 +985,22 @@ void IconView::contentsMousePressEvent(QMouseEvent* e)
         IconItem* prevCurrItem = d->currItem;
         d->currItem   = item;
         d->anchorItem = item;
-        
+
         if (prevCurrItem)
             prevCurrItem->repaint();
-        
+
         d->currItem->repaint();
 
         d->dragging     = true;
         d->dragStartPos = e->pos();
-        
+
         return;
     }
 
-    // Press outside any item. 
+    // Press outside any item.
     if (!(e->modifiers() & Qt::ControlModifier))
     {
-        // unselect all if the ctrl button is not pressed        
+        // unselect all if the ctrl button is not pressed
         clearSelection();
     }
     else
@@ -1008,13 +1008,13 @@ void IconView::contentsMousePressEvent(QMouseEvent* e)
         // ctrl is pressed. make sure our current selection is not lost
         d->prevSelectedItems.clear();
         Q3PtrDictIterator<IconItem> it( d->selectedItems );
-        
+
         for ( ; it.current(); ++it )
         {
             d->prevSelectedItems.insert(it.current(), it.current());
         }
     }
-    
+
     d->rubber->setGeometry(QRect(e->pos(), QSize()));
     d->rubber->show();
 }
@@ -1099,15 +1099,15 @@ void IconView::contentsMouseMoveEvent(QMouseEvent* e)
     blockSignals(true);
 
     IconViewPriv::ItemContainer *c = d->firstContainer;
-    for (; c; c = c->next) 
+    for (; c; c = c->next)
     {
-        if ( rubberUnion.intersects(c->rect) ) 
+        if ( rubberUnion.intersects(c->rect) )
         {
             for (Q3ValueList<IconItem*>::iterator it = c->items.begin();
                  it != c->items.end(); ++it)
             {
                 IconItem* item = *it;
-                if (nr.intersects(item->rect())) 
+                if (nr.intersects(item->rect()))
                 {
                     if (!item->isSelected())
                     {
@@ -1116,7 +1116,7 @@ void IconView::contentsMouseMoveEvent(QMouseEvent* e)
                         paintRegion += QRect(item->rect());
                     }
                 }
-                else 
+                else
                 {
                     if (item->isSelected() &&  !d->prevSelectedItems.find(item))
                     {
@@ -1133,7 +1133,7 @@ void IconView::contentsMouseMoveEvent(QMouseEvent* e)
     viewport()->setUpdatesEnabled(true);
 
     QRect r = d->rubber->geometry();
-    
+
     d->rubber->setGeometry(oldRubber);
     d->rubber->show();
 
@@ -1161,7 +1161,7 @@ void IconView::contentsMouseReleaseEvent(QMouseEvent* e)
 
     if (d->rubber->isVisible())
         d->rubber->hide();
-    
+
     if (e->buttons() == Qt::LeftButton)
     {
         if (d->pressedMoved)
@@ -1208,7 +1208,7 @@ void IconView::contentsMouseDoubleClickEvent(QMouseEvent *e)
         return;
 
     IconItem *item = findItem(e->pos());
-    if (item) 
+    if (item)
     {
         itemClickedToOpen(item);
     }
@@ -1223,36 +1223,36 @@ void IconView::keyPressEvent(QKeyEvent* e)
 
     switch ( e->key() )
     {
-        case Qt::Key_Home: 
+        case Qt::Key_Home:
         {
             IconItem* tmp = d->currItem;
             d->currItem = firstItem();
             d->anchorItem = d->currItem;
             if (tmp)
                 tmp->repaint();
-    
+
             firstItem()->setSelected(true, true);
             ensureItemVisible(firstItem());
             handled = true;
             break;
         }
-    
-        case Qt::Key_End: 
+
+        case Qt::Key_End:
         {
             IconItem* tmp = d->currItem;
             d->currItem   = lastItem();
             d->anchorItem = d->currItem;
             if (tmp)
                 tmp->repaint();
-    
+
             lastItem()->setSelected(true, true);
             ensureItemVisible(lastItem());
             handled = true;
             break;
         }
-    
+
         case Qt::Key_Enter:
-        case Qt::Key_Return: 
+        case Qt::Key_Return:
         {
             if (d->currItem)
             {
@@ -1262,10 +1262,10 @@ void IconView::keyPressEvent(QKeyEvent* e)
             break;
         }
 
-        case Qt::Key_Right: 
+        case Qt::Key_Right:
         {
             IconItem *item = 0;
-            
+
             if (d->currItem)
             {
                 if (d->currItem->nextItem())
@@ -1277,7 +1277,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
                         d->anchorItem = d->currItem;
                         tmp->repaint();
                         d->currItem->repaint();
-    
+
                         item = d->currItem;
                     }
                     else if (e->modifiers() & Qt::ShiftModifier)
@@ -1285,15 +1285,15 @@ void IconView::keyPressEvent(QKeyEvent* e)
                         IconItem* tmp = d->currItem;
                         d->currItem   = d->currItem->nextItem();
                         tmp->repaint();
-    
+
                         // if the anchor is behind us, move forward preserving
                         // the previously selected item. otherwise unselect the
                         // previously selected item
                         if (!anchorIsBehind())
                             tmp->setSelected(false, false);
-    
+
                         d->currItem->setSelected(true, false);
-                        
+
                         item = d->currItem;
                     }
                     else
@@ -1303,7 +1303,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
                         d->anchorItem = d->currItem;
                         d->currItem->setSelected(true, true);
                         tmp->repaint();
-                        
+
                         item = d->currItem;
                     }
                 }
@@ -1315,16 +1315,16 @@ void IconView::keyPressEvent(QKeyEvent* e)
                 d->currItem->setSelected(true, true);
                 item = d->currItem;
             }
-    
+
             ensureItemVisible(item);
             handled = true;
             break;
         }
-    
-        case Qt::Key_Left: 
+
+        case Qt::Key_Left:
         {
             IconItem *item = 0;
-            
+
             if (d->currItem)
             {
                 if (d->currItem->prevItem())
@@ -1336,7 +1336,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
                         d->anchorItem = d->currItem;
                         tmp->repaint();
                         d->currItem->repaint();
-    
+
                         item = d->currItem;
                     }
                     else if (e->modifiers() & Qt::ShiftModifier)
@@ -1344,15 +1344,15 @@ void IconView::keyPressEvent(QKeyEvent* e)
                         IconItem* tmp = d->currItem;
                         d->currItem   = d->currItem->prevItem();
                         tmp->repaint();
-    
+
                         // if the anchor is ahead of us, move forward preserving
                         // the previously selected item. otherwise unselect the
                         // previously selected item
                         if (anchorIsBehind())
                             tmp->setSelected(false, false);
-    
+
                         d->currItem->setSelected(true, false);
-                        
+
                         item = d->currItem;
                     }
                     else
@@ -1362,7 +1362,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
                         d->anchorItem = d->currItem;
                         d->currItem->setSelected(true, true);
                         tmp->repaint();
-                        
+
                         item = d->currItem;
                     }
                 }
@@ -1374,30 +1374,30 @@ void IconView::keyPressEvent(QKeyEvent* e)
                 d->currItem->setSelected(true, true);
                 item = d->currItem;
             }
-    
+
             ensureItemVisible(item);
             handled = true;
             break;
         }
-    
+
         case Qt::Key_Up:
         {
             IconItem *item = 0;
-            
+
             if (d->currItem)
             {
                 int x = d->currItem->x() + itemRect().width()/2;
                 int y = d->currItem->y() - d->spacing*2;
-    
+
                 IconItem *it = 0;
-    
+
                 while (!it && y > 0)
                 {
                     it  = findItem(QPoint(x,y));
                     y  -= d->spacing * 2;
                 }
-    
-                if (it)            
+
+                if (it)
                 {
                     if (e->modifiers() & Qt::ControlModifier)
                     {
@@ -1406,7 +1406,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
                         d->anchorItem = it;
                         tmp->repaint();
                         d->currItem->repaint();
-    
+
                         item = d->currItem;
                     }
                     else if (e->modifiers() & Qt::ShiftModifier)
@@ -1414,7 +1414,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
                         IconItem* tmp = d->currItem;
                         d->currItem   = it;
                         tmp->repaint();
-    
+
                         clearSelection();
                         if (anchorIsBehind())
                         {
@@ -1434,8 +1434,8 @@ void IconView::keyPressEvent(QKeyEvent* e)
                                     break;
                             }
                         }
-    
-                        item = d->currItem; 
+
+                        item = d->currItem;
                     }
                     else
                     {
@@ -1444,7 +1444,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
                         d->anchorItem = it;
                         d->currItem->setSelected(true, true);
                         tmp->repaint();
-                        
+
                         item = d->currItem;
                     }
                 }
@@ -1456,30 +1456,30 @@ void IconView::keyPressEvent(QKeyEvent* e)
                 d->currItem->setSelected(true, true);
                 item = d->currItem;
             }
-    
+
             ensureItemVisible(item);
             handled = true;
             break;
         }
-    
+
         case Qt::Key_Down:
         {
             IconItem *item = 0;
-            
+
             if (d->currItem)
             {
                 int x = d->currItem->x() + itemRect().width()/2;
                 int y = d->currItem->y() + itemRect().height() + d->spacing*2;
-    
+
                 IconItem *it = 0;
-    
+
                 while (!it && y < contentsHeight())
                 {
                     it  = findItem(QPoint(x,y));
                     y  += d->spacing * 2;
                 }
-    
-                if (it)            
+
+                if (it)
                 {
                     if (e->modifiers() & Qt::ControlModifier)
                     {
@@ -1488,7 +1488,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
                         d->anchorItem = it;
                         tmp->repaint();
                         d->currItem->repaint();
-    
+
                         item = d->currItem;
                     }
                     else if (e->modifiers() & Qt::ShiftModifier)
@@ -1496,7 +1496,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
                         IconItem* tmp = d->currItem;
                         d->currItem   = it;
                         tmp->repaint();
-    
+
                         clearSelection();
                         if (anchorIsBehind())
                         {
@@ -1516,8 +1516,8 @@ void IconView::keyPressEvent(QKeyEvent* e)
                                     break;
                             }
                         }
-    
-                        item = d->currItem; 
+
+                        item = d->currItem;
                     }
                     else
                     {
@@ -1526,7 +1526,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
                         d->anchorItem = it;
                         d->currItem->setSelected(true, true);
                         tmp->repaint();
-                        
+
                         item = d->currItem;
                     }
                 }
@@ -1538,30 +1538,30 @@ void IconView::keyPressEvent(QKeyEvent* e)
                 d->currItem->setSelected(true, true);
                 item = d->currItem;
             }
-    
+
             ensureItemVisible(item);
             handled = true;
             break;
         }
-    
-        case Qt::Key_Next: 
+
+        case Qt::Key_Next:
         {
             IconItem *item = 0;
-    
+
             if (d->currItem)
             {
                 QRect r( 0, d->currItem->y() + visibleHeight(),
                         contentsWidth(), visibleHeight() );
                 IconItem *ni = findFirstVisibleItem(r, false);
-    
-                if (!ni) 
+
+                if (!ni)
                 {
                     r = QRect( 0, d->currItem->y() + itemRect().height(),
                               contentsWidth(), contentsHeight() );
                     ni = findLastVisibleItem(r, false);
                 }
-    
-                if (ni) 
+
+                if (ni)
                 {
                     IconItem* tmp = d->currItem;
                     d->currItem   = ni;
@@ -1578,30 +1578,30 @@ void IconView::keyPressEvent(QKeyEvent* e)
                 d->currItem->setSelected(true, true);
                 item = d->currItem;
             }
-    
+
             ensureItemVisible(item);
             handled = true;
             break;
         }
-    
-        case Qt::Key_Prior: 
+
+        case Qt::Key_Prior:
         {
             IconItem *item = 0;
-    
+
             if (d->currItem)
             {
                 QRect r(0, d->currItem->y() - visibleHeight(),
                         contentsWidth(), visibleHeight() );
-    
+
                 IconItem *ni = findFirstVisibleItem(r, false);
-    
-                if (!ni) 
+
+                if (!ni)
                 {
                     r = QRect( 0, 0, contentsWidth(), d->currItem->y() );
                     ni = findFirstVisibleItem(r, false);
                 }
-    
-                if (ni) 
+
+                if (ni)
                 {
                     IconItem* tmp = d->currItem;
                     d->currItem   = ni;
@@ -1618,7 +1618,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
                 d->currItem->setSelected(true, true);
                 item = d->currItem;
             }
-    
+
             ensureItemVisible(item);
             handled = true;
             break;
@@ -1784,7 +1784,7 @@ IconItem* IconView::findLastVisibleItem(const QRect& r, bool useThumbnailRect) c
     IconViewPriv::ItemContainer *c = d->firstContainer;
     IconItem *i = 0;
     bool alreadyIntersected = false;
-    for ( ; c; c = c->next ) 
+    for ( ; c; c = c->next )
     {
         if ( c->rect.intersects( r ) )
         {
@@ -1794,13 +1794,13 @@ IconItem* IconView::findLastVisibleItem(const QRect& r, bool useThumbnailRect) c
             {
                 IconItem *item = *it;
 
-                if ( r.intersects( useThumbnailRect ? item->clickToOpenRect() : item->rect() ) ) 
+                if ( r.intersects( useThumbnailRect ? item->clickToOpenRect() : item->rect() ) )
                 {
-                    if ( !i ) 
+                    if ( !i )
                     {
                         i = item;
                     }
-                    else 
+                    else
                     {
                         QRect r2 = item->rect();
                         QRect r3 = i->rect();
@@ -1862,7 +1862,7 @@ void IconView::itemClickedToOpen(IconItem* item)
     IconItem* prevCurrItem = d->currItem;
     d->currItem   = item;
     d->anchorItem = item;
-    
+
     if (prevCurrItem)
         prevCurrItem->repaint();
 
