@@ -346,8 +346,8 @@ void DigikamApp::setupView()
     connect(d->view, SIGNAL(signalTagSelected(bool)),
             this, SLOT(slotTagSelected(bool)));
 
-    connect(d->view, SIGNAL(signalImageSelected(const ImageInfoList& list, bool, bool)),
-            this, SLOT(slotImageSelected(const ImageInfoList& list, bool, bool)));
+    connect(d->view, SIGNAL(signalImageSelected(const ImageInfoList&, bool, bool)),
+            this, SLOT(slotImageSelected(const ImageInfoList&, bool, bool)));
 }
 
 void DigikamApp::setupStatusBar()
