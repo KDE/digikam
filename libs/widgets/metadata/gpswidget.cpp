@@ -133,7 +133,7 @@ GPSWidget::GPSWidget(QWidget* parent, const char* name)
 
     layout->addWidget(d->map, 0, 0, 1, 3 );
     layout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
-                         QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 1, 1, 0, 2);
+                         QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 1, 0, 1, 3);
     layout->addWidget(box2, 2, 0, 1, 1);
     layout->setColumnStretch(2, 10);
     layout->setSpacing(0);

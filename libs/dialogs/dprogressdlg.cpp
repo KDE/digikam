@@ -112,8 +112,8 @@ DProgressDlg::DProgressDlg(QWidget *parent, const QString &caption)
     d->actionsList->header()->hide();
     d->actionsList->setResizeMode(Q3ListView::LastColumn);
 
-    grid->addLayout(vlay, 0, 1, 0, 0);
-    grid->addWidget(d->label, 0, 0, 1, 1);
+    grid->addLayout(vlay, 0, 0, 2, 1);
+    grid->addWidget(d->label, 0, 1, 1, 1);
     grid->addWidget(d->actionsList, 1, 1, 1, 1);
     grid->setRowStretch(1, 10);
     grid->setColumnStretch(1, 10);

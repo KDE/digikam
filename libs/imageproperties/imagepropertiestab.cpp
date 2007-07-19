@@ -282,7 +282,7 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent, bool navBar)
 
     settingsLayout->addWidget(d->title, 0, 0, 1, 2 );
     settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
-                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 1, 1, 0, 1);
+                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 1, 0, 1, 2);
     settingsLayout->addWidget(d->file, 2, 0, 1, 1);
     settingsLayout->addWidget(d->labelFile, 2, 1, 1, 1);
     settingsLayout->addWidget(d->folder, 3, 0, 1, 1);
@@ -297,14 +297,14 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent, bool navBar)
     settingsLayout->addWidget(d->labelFilePermissions, 7, 1, 1, 1);
 
     settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
-                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 8, 8, 0, 1);
+                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 8, 0, 1, 2);
     settingsLayout->addWidget(line, 9, 0, 1, 2 );
     settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
-                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 10, 10, 0, 1);
+                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 10, 0, 1, 2);
 
     settingsLayout->addWidget(d->title2, 11, 0, 1, 2 );
     settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
-                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 12, 12, 0, 1);
+                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 12, 0, 1, 2);
     settingsLayout->addWidget(d->mime, 13, 0, 1, 1);
     settingsLayout->addWidget(d->labelImageMime, 13, 1, 1, 1);
     settingsLayout->addWidget(d->dimensions, 14, 0, 1, 1);
