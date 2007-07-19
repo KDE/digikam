@@ -167,15 +167,14 @@ QPixmap Texture::renderPixmap() const
     QPainter p(&pix);
     p.drawPixmap(1, 1, d->pixmap, 0, 0, d->pixmap.width(), d->pixmap.height());
     p.setPen(d->borderColor);
-    p.drawRect(0, 0, d->width+2, d->height+2);
-    p.end();
+    p.drawRect(0, 0, d->width+1, d->height+1);
 
     return pix;
 }
 
 void Texture::doSolid()
 {
-    d->pixmap.scaled(d->width, d->height);
+    d->pixmap = QPixmap(d->width, d->height);
     QPainter p(&d->pixmap);
     p.fillRect(0, 0, d->width, d->height, d->color0);
     if (d->bevel == Theme::RAISED)
@@ -196,7 +195,6 @@ void Texture::doSolid()
         p.drawLine(0, d->height-1, d->width-1, d->height-1); // bottom
         p.drawLine(d->width-1, 0, d->width-1, d->height-1);  // right
     }
-    p.end();
 }
 
 void Texture::doHgradient()
