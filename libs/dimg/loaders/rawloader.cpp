@@ -49,21 +49,12 @@ bool RAWLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 {
     m_observer = observer;
 
-    // We are using K3Process here, and make two assumptions:
-    // - there is an event loop (not for ioslaves)
-    // - we are not called from the event loop thread
-    // These assumptions are currently true for all use cases in digikam,
-    // except the thumbnails iosalve, which will set this attribute.
-    // I hope when porting to Qt4, all the event loop stuff (and this problem) can be removed.
-    if (imageGetAttribute("noeventloop").isValid())
-        return false;
-    
     readMetadata(filePath, DImg::RAW);
-  
+
     // NOTE: Here, we don't check a possible embedded work-space color profile using 
     // the method checkExifWorkingColorSpace() like with JPEG, PNG, and TIFF loaders, 
     // because RAW file are always in linear mode.
-    
+
     int width, height, rgbmax;
     QByteArray data;
     if (!KDcrawIface::KDcraw::decodeRAWImage(filePath, m_rawDecodingSettings, 
