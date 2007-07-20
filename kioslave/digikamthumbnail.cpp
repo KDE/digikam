@@ -99,9 +99,9 @@ using namespace Digikam;
 kio_digikamthumbnailProtocol::kio_digikamthumbnailProtocol(int argc, char** argv) 
                             : SlaveBase("kio_digikamthumbnail", argv[2], argv[3])
 {
-    argc_ = argc;
-    argv_ = argv;
-    app_  = 0;
+    m_argc = argc;
+    m_argv = argv;
+    m_app  = 0;
 
     createThumbnailDirs();
 }
@@ -115,9 +115,9 @@ void kio_digikamthumbnailProtocol::get(const KUrl& url )
     int  size =  metaData("size").toInt();
     bool exif = (metaData("exif") == "yes");
 
-    cachedSize_ = (size <= 128) ? 128 : 256;
+    m_cachedSize = (size <= 128) ? 128 : 256;
 
-    if (cachedSize_ <= 0)
+    if (m_cachedSize <= 0)
     {
         error(KIO::ERR_INTERNAL, i18n("No or invalid size specified"));
         kWarning() << "No or invalid size specified" << endl;
@@ -127,7 +127,7 @@ void kio_digikamthumbnailProtocol::get(const KUrl& url )
     // generate the thumbnail path
     QString uri = "file://" + QDir::cleanPath(url.path(KUrl::RemoveTrailingSlash));
     KMD5 md5( QFile::encodeName(uri) );
-    QString thumbPath = (cachedSize_ == 128) ? smallThumbPath_ : bigThumbPath_;
+    QString thumbPath = (m_cachedSize == 128) ? m_smallThumbPath : m_bigThumbPath;
     thumbPath += QFile::encodeName( md5.hexDigest() ) + ".png";
 
     QImage img;
@@ -181,8 +181,8 @@ void kio_digikamthumbnailProtocol::get(const KUrl& url )
             return;
         }
 
-        if (qMax(img.width(),img.height()) != cachedSize_)
-            img = img.scaled(cachedSize_, cachedSize_, Qt::KeepAspectRatio);
+        if (qMax(img.width(),img.height()) != m_cachedSize)
+            img = img.scaled(m_cachedSize, m_cachedSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
         if (img.format() != QImage::Format_ARGB32)
             img = img.convertToFormat(QImage::Format_ARGB32);
@@ -205,7 +205,7 @@ void kio_digikamthumbnailProtocol::get(const KUrl& url )
         }
     }
 
-    img = img.scaled(size, size, Qt::KeepAspectRatio);
+    img = img.scaled(size, size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
     if (img.isNull())
     {
@@ -233,7 +233,7 @@ void kio_digikamthumbnailProtocol::get(const KUrl& url )
             return;
         }
 
-        if (img.width() * img.height() > cachedSize_ * cachedSize_)
+        if (img.width() * img.height() > m_cachedSize * m_cachedSize)
         {
             error(KIO::ERR_INTERNAL, "Image is too big for the shared memory segment");
             kWarning() << "Image is too big for the shared memory segment" << endl;
@@ -287,7 +287,7 @@ bool kio_digikamthumbnailProtocol::loadByExtension(QImage& image, const QString&
 
 bool kio_digikamthumbnailProtocol::loadJPEG(QImage& image, const QString& path)
 {
-    return Digikam::loadJPEGScaled(image, path, cachedSize_);
+    return Digikam::loadJPEGScaled(image, path, m_cachedSize);
 }
 
 void kio_digikamthumbnailProtocol::exifRotate(const QString& filePath, QImage& thumb)
@@ -503,19 +503,6 @@ bool kio_digikamthumbnailProtocol::loadDImg(QImage& image, const QString& path)
     }
 
     image = dimg_im.copyQImage();
-    org_width_  = image.width();
-    org_height_ = image.height();
-
-    if ( qMax(org_width_, org_height_) != cachedSize_ )
-    {
-        QSize sz(dimg_im.width(), dimg_im.height());
-        sz.scale(cachedSize_, cachedSize_, Qt::KeepAspectRatio);
-        image.scaled(sz.width(), sz.height());
-    }
-
-    new_width_  = image.width();
-    new_height_ = image.height();
-
     return true;
 }
 
@@ -526,8 +513,8 @@ bool kio_digikamthumbnailProtocol::loadKDEThumbCreator(QImage& image, const QStr
     // this sucks royally. some of the thumbcreators need an instance of
     // app running so that they can use pixmap. till they get their 
     // code fixed, we will have to create a qapp instance.
-    if (!app_)
-        app_ = new QApplication(argc_, argv_);
+    if (!m_app)
+        m_app = new QApplication(m_argc, m_argv);
 
     QString mimeType = KMimeType::findByUrl(path)->name();
     if (mimeType.isEmpty())
@@ -581,7 +568,7 @@ bool kio_digikamthumbnailProtocol::loadKDEThumbCreator(QImage& image, const QStr
         return false;
     }
 
-    if (!creator->create(path, cachedSize_, cachedSize_, image))
+    if (!creator->create(path, m_cachedSize, m_cachedSize, image))
     {
         kDebug() << "Cannot create thumbnail for " << path << endl;
         delete creator;
@@ -596,11 +583,11 @@ void kio_digikamthumbnailProtocol::createThumbnailDirs()
 {
     QString path = QDir::homePath() + "/.thumbnails/";
 
-    smallThumbPath_ = path + "normal/";
-    bigThumbPath_   = path + "large/";
+    m_smallThumbPath = path + "normal/";
+    m_bigThumbPath   = path + "large/";
 
-    KStandardDirs::makeDir(smallThumbPath_, 0700);
-    KStandardDirs::makeDir(bigThumbPath_, 0700);
+    KStandardDirs::makeDir(m_smallThumbPath, 0700);
+    KStandardDirs::makeDir(m_bigThumbPath, 0700);
 }
 
 // -- KIO slave registration ---------------------------------------------------------------------

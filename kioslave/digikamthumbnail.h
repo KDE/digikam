@@ -56,20 +56,15 @@ private:
 
 private:
 
-    int           cachedSize_;
+    int           m_cachedSize;
 
-    int           org_width_;
-    int           org_height_;
-    int           new_width_;
-    int           new_height_;
+    int           m_argc;
+    char        **m_argv;
 
-    int           argc_;
-    char        **argv_;
+    QString       m_smallThumbPath;
+    QString       m_bigThumbPath;
 
-    QString       smallThumbPath_;
-    QString       bigThumbPath_;
-
-    QApplication *app_;
+    QApplication *m_app;
 };
 
 #endif  // _digikamthumbnail_H_
