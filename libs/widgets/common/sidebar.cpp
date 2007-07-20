@@ -91,6 +91,7 @@ Sidebar::Sidebar(QWidget *parent, const char *name, Side side, bool minimizedDef
     d->minimizedDefault = minimizedDefault;
     d->side             = side;
     setObjectName(name);
+    setStyle(KMultiTabBar::VSNET);
 }
 
 Sidebar::~Sidebar()
@@ -101,7 +102,6 @@ Sidebar::~Sidebar()
 
 void Sidebar::setSplitter(QSplitter *sp)
 {
-    setStyle(KMultiTabBar::VSNET);
     d->stack = new QStackedWidget(sp);
 
     if(d->side == DockLeft)
