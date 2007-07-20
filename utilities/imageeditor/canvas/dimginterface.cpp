@@ -594,7 +594,7 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iof
         meta.setImagePreview(preview);
 
     // Update Exif thumbnail.
-    QImage thumb = preview.scaled(160, 120, Qt::KeepAspectRatio);
+    QImage thumb = preview.scaled(160, 120, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     meta.setExifThumbnail(thumb);
 
     // Update Exif Image dimensions.

@@ -99,7 +99,7 @@ void PanIconWidget::setImage(int previewWidth, int previewHeight, const QImage& 
     m_pixmap          = new QPixmap(previewWidth, previewHeight);
     m_width           = sz.width();
     m_height          = sz.height();
-    d->image          = image.scaled(sz.width(), sz.height());
+    d->image          = image.scaled(sz.width(), sz.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     m_orgWidth        = image.width();
     m_orgHeight       = image.height();
     m_zoomedOrgWidth  = image.width();

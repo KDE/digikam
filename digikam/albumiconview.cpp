@@ -422,7 +422,7 @@ void AlbumIconView::slotImageListerDeleteItem(const ImageInfo &item)
     }
     */
 
-    //d->pixMan->remove(item->kurl());
+    //d->pixMan->deleteThumbnail(item->kurl());
 
     emit signalItemDeleted(iconItem);
 
@@ -849,7 +849,7 @@ void AlbumIconView::slotRenamed(KIO::Job*, const KUrl &, const KUrl&newURL)
     fileURL.addPath(newURL.path());
 
     // refresh thumbnail
-    d->pixMan->remove(fileURL);
+    d->pixMan->deleteThumbnail(fileURL);
     // clean LoadingCache as well - be pragmatic, do it here.
     LoadingCacheInterface::cleanFromCache(fileURL.path());
 }
@@ -1538,7 +1538,7 @@ void AlbumIconView::refreshItems(const KUrl::List& urlList)
 
         ImageInfo info = iconItem->imageInfo();
         info.refresh();
-        d->pixMan->remove(info.fileUrl());
+        d->pixMan->deleteThumbnail(info.fileUrl());
         // clean LoadingCache as well - be pragmatic, do it here.
         LoadingCacheInterface::cleanFromCache((*it).path());
     }

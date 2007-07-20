@@ -423,7 +423,7 @@ bool exifRotate(const QString& file, const QString& documentName)
         metaData.setImageDimensions(img.size());
 
         // Update the image preview.
-        QImage preview = img.scaled(800, 600, Qt::KeepAspectRatio);
+        QImage preview = img.scaled(800, 600, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         
         // TODO: see B.K.O #130525. The a JPEG segment is limited to 64K. If IPTC byte array 
         // bigger than 64K duing of image preview tag size, the target JPEG image will be 
@@ -433,7 +433,7 @@ bool exifRotate(const QString& file, const QString& documentName)
         // metaData.setImagePreview(preview);
 
         // Update the image thumbnail.
-        QImage thumb = preview.scaled(160, 120, Qt::KeepAspectRatio);
+        QImage thumb = preview.scaled(160, 120, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         metaData.setExifThumbnail(thumb);
 
         // Update Exif Document Name tag (the orinal file name from camera for example).
@@ -505,7 +505,7 @@ bool jpegConvert(const QString& src, const QString& dest, const QString& documen
             meta.setImagePreview(preview);
     
         // Update Exif thumbnail.
-        QImage thumb = preview.scaled(160, 120, Qt::KeepAspectRatio);
+        QImage thumb = preview.scaled(160, 120, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         meta.setExifThumbnail(thumb);
     
         // Update Exif Document Name tag (the orinal file name from camera for example).

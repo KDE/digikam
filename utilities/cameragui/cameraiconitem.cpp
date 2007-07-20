@@ -355,7 +355,7 @@ void CameraIconViewItem::calcRect(const QString& itemName, const QString& downlo
 {
     CameraIconView* view = (CameraIconView*)iconView();
     int thumbSize        = view->thumbnailSize().size();
-    d->pixmap            = QPixmap::fromImage(d->thumbnail.scaled(thumbSize, thumbSize, Qt::KeepAspectRatio));
+    d->pixmap            = QPixmap::fromImage(d->thumbnail.scaled(thumbSize, thumbSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     d->pixRect           = QRect(0,0,0,0);
     d->textRect          = QRect(0,0,0,0);
     d->extraRect         = QRect(0,0,0,0);

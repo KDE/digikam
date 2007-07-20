@@ -142,27 +142,26 @@ void DProgressDlg::setButtonText(const QString &text)
     KDialog::setButtonText(Cancel, text);
 }
 
-void DProgressDlg::addedAction(const QPixmap& pix, const QString &text)
+void DProgressDlg::addedAction(const QPixmap& itemPix, const QString &text)
 {
-    QImage img;
+    QPixmap pix = itemPix;
     K3ListViewItem *item = new K3ListViewItem(d->actionsList,
                            d->actionsList->lastItem(), QString(), text);
 
     if (pix.isNull())
     {
-        QString dir = KGlobal::dirs()->findResourceDir("digikam_imagebroken",
-                                                       "image-broken.png");
-        dir = dir + "/image-broken.png";
-        QPixmap pixbi(dir);
-        img = pixbi.toImage().scaled(32, 32, Qt::KeepAspectRatio);
+        QString imagePath = KGlobal::dirs()->findResource("digikam_imagebroken",
+                                                          "image-broken.png");
+        QImage img(imagePath);
+        img = img.scaled(32, 32, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        pix = QPixmap::fromImage(img);
     }
     else
     {
-        img = pix.toImage().scaled(32, 32, Qt::KeepAspectRatio);
+        pix = pix.scaled(32, 32, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
 
-    QPixmap pixmap = QPixmap::fromImage(img);
-    item->setPixmap(0, pixmap);
+    item->setPixmap(0, pix);
     d->actionsList->ensureItemVisible(item);
 }
 
