@@ -239,16 +239,16 @@ void AlbumIconItem::paintItem()
 
     d->dirty = true;
     
-    QPixmap *thumbnail = d->view->pixmapManager()->find(d->info.fileUrl());
-    if (thumbnail)
+    QPixmap thumbnail = d->view->pixmapManager()->find(d->info.fileUrl());
+    if (!thumbnail.isNull())
     {
         r = d->view->itemPixmapRect();
-        p.drawPixmap(r.x() + (r.width()-thumbnail->width())/2,
-                     r.y() + (r.height()-thumbnail->height())/2,
-                     *thumbnail);
-        d->tightPixmapRect.setRect(r.x() + (r.width()-thumbnail->width())/2,
-                                 r.y() + (r.height()-thumbnail->height())/2,
-                                 thumbnail->width(), thumbnail->height());
+        p.drawPixmap(r.x() + (r.width()-thumbnail.width())/2,
+                     r.y() + (r.height()-thumbnail.height())/2,
+                     thumbnail);
+        d->tightPixmapRect.setRect(r.x() + (r.width()-thumbnail.width())/2,
+                                 r.y() + (r.height()-thumbnail.height())/2,
+                                 thumbnail.width(), thumbnail.height());
         d->dirty = false;
     }
 
@@ -367,7 +367,7 @@ QRect AlbumIconItem::thumbnailRect() const
     QRect pixmapRect = d->view->itemPixmapRect();
     QRect r          = rect();
 
-    pixmapRect.translated(r.x(), r.y());
+    pixmapRect.translate(r.x(), r.y());
     return pixmapRect;
 }
 

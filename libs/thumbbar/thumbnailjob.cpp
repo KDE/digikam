@@ -178,7 +178,7 @@ void ThumbnailJob::processNext()
     KUrl::List::iterator it = d->urlList.begin();
     while(*it != d->next_url)
     {
-        it++;        
+        it++;
     }
 
     if (it == d->urlList.end())
@@ -305,9 +305,8 @@ void ThumbnailJob::emitThumbnail(QImage& thumb)
     if (d->highlight && (w >= 10 && h >= 10))
     {
         QPainter p(&pix);
-        p.setPen(QPen(QColor(0,0,0),1));
-        p.drawRect(0,0,w,h);
-        p.end();
+        p.setPen(QPen(Qt::black, 1));
+        p.drawRect(0, 0, w, h);
     }
 
     emit signalThumbnail(d->curr_url, pix);

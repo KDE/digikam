@@ -51,18 +51,23 @@ class PixmapManagerPriv;
 class PixmapManager : public QObject
 {
     Q_OBJECT
-    
+
 public:
 
     PixmapManager(AlbumIconView* view);
     ~PixmapManager();
 
-    QPixmap* find(const KUrl& path);
-    void     remove(const KUrl& path);
+    QPixmap  find(const KUrl& path);
     void     clear();
     void     setThumbnailSize(int size);
     int      cacheSize() const;
-   
+
+    /** Removes all cached occurrences of the thumbnail for the given file,
+        deletes the thumbnail file on-disk.
+        Use when you know that the content of the file has changed.
+    */
+    void     deleteThumbnail(const KUrl& path);
+
 signals:
 
     void signalPixmap(const KUrl& url);

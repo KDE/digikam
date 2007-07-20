@@ -481,7 +481,7 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
 
                 if (item->hasPixmap())
                 {
-                    QPixmap pix = item->pixmap().scaled(d->tileSize, d->tileSize, Qt::KeepAspectRatio);
+                    QPixmap pix = item->pixmap().scaled(d->tileSize, d->tileSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
                     int x = (tile.width()  - pix.width())/2;
                     int y = (tile.height() - pix.height())/2;
                     p.drawPixmap(x, y, pix);
@@ -507,7 +507,7 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
 
                 if (item->hasPixmap())
                 {
-                    QPixmap pix = item->pixmap().scaled(d->tileSize, d->tileSize, Qt::KeepAspectRatio);
+                    QPixmap pix = item->pixmap().scaled(d->tileSize, d->tileSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
                     int x = (tile.width()  - pix.width())/2;
                     int y = (tile.height() - pix.height())/2;
                     p.drawPixmap(x, y, pix);

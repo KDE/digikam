@@ -31,7 +31,7 @@ extern "C"
 
 // Qt includes.
 
-#include <Q3Cache>
+#include <QCache>
 #include <QPointer>
 #include <QPixmap>
 #include <QDir>
@@ -69,15 +69,13 @@ public:
         size     = 0;
         cache    = 0;
         view     = 0;
-        timer    = 0;
         thumbJob = 0;
     }
 
     int                        size;
 
-    Q3Cache<QPixmap>          *cache;
+    QCache<KUrl, QPixmap>     *cache;
     QPointer<ThumbnailJob>     thumbJob;
-    QTimer                    *timer;
     QString                    thumbCacheDir;
 
     AlbumIconView             *view;
@@ -87,20 +85,13 @@ PixmapManager::PixmapManager(AlbumIconView* view)
 {
     d = new PixmapManagerPriv;
     d->view  = view;
-    d->cache = new Q3Cache<QPixmap>(101, 211);
-    d->cache->setAutoDelete(true);
+    d->cache = new QCache<KUrl, QPixmap>(100);
     d->thumbCacheDir = QDir::homePath() + "/.thumbnails/";
-    
-    d->timer = new QTimer();
-    connect(d->timer, SIGNAL(timeout()),
-            this, SLOT(slotCompleted()));
 }
 
 PixmapManager::~PixmapManager()
 {
-    delete d->timer;
-    
-    if (!d->thumbJob.isNull())
+    if (d->thumbJob)
     {
         d->thumbJob->kill();
     }
@@ -116,23 +107,23 @@ void PixmapManager::setThumbnailSize(int size)
 
     d->size = size;
     d->cache->clear();
-    if (!d->thumbJob.isNull())
+    if (d->thumbJob)
     {
         d->thumbJob->kill();
         d->thumbJob = 0;
     }
 }
 
-QPixmap* PixmapManager::find(const KUrl& url)
+QPixmap PixmapManager::find(const KUrl& url)
 {
-    QPixmap* pix = d->cache->find(url.path());
+    QPixmap* pix = d->cache->object(url);
     if (pix)
-        return pix;
-    
-    if (d->thumbJob.isNull())
+        return *pix;
+
+    if (!d->thumbJob)
     {
         d->thumbJob = new ThumbnailJob(url, d->size, true, AlbumSettings::componentData()->getExifRotate());
-        
+
         connect(d->thumbJob, SIGNAL(signalThumbnail(const KUrl&, const QPixmap&)),
                 this, SLOT(slotGotThumbnail(const KUrl&, const QPixmap&)));
 
@@ -142,13 +133,13 @@ QPixmap* PixmapManager::find(const KUrl& url)
         connect(d->thumbJob, SIGNAL(signalCompleted()),
                 this, SLOT(slotCompleted()));
     }
-    
-    return 0;
+
+    return QPixmap();
 }
 
-void PixmapManager::remove(const KUrl& url)
+void PixmapManager::deleteThumbnail(const KUrl& url)
 {
-    d->cache->remove(url.path());
+    d->cache->remove(url);
 
     if (!d->thumbJob.isNull())
         d->thumbJob->removeItem(url);
@@ -178,9 +169,9 @@ void PixmapManager::clear()
 
 void PixmapManager::slotGotThumbnail(const KUrl& url, const QPixmap& pix)
 {
-    d->cache->remove(url.path());
+    d->cache->remove(url);
     QPixmap* thumb = new QPixmap(pix);
-    d->cache->insert(url.path(), thumb);
+    d->cache->insert(url, thumb);
     emit signalPixmap(url);
 }
 
@@ -220,22 +211,19 @@ void PixmapManager::slotFailedThumbnail(const KUrl& url)
     {
         // only scale down
         // do not scale up, looks bad
-        img = img.scaled(size);
+        img = img.scaled(size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     }
 
-    d->cache->remove(url.path());
+    d->cache->remove(url);
     QPixmap* thumb = new QPixmap(QPixmap::fromImage(img));
-    d->cache->insert(url.path(), thumb);
+    d->cache->insert(url, thumb);
     emit signalPixmap(url);
 }
 
 void PixmapManager::slotCompleted()
 {
-    if (!d->thumbJob.isNull())
-    {
-        d->thumbJob->kill();
-        d->thumbJob = 0;
-    }
+    d->thumbJob->kill();
+    d->thumbJob = 0;
 
     AlbumIconItem* item = d->view->nextItemToThumbnail();
     if (!item)
@@ -246,7 +234,7 @@ void PixmapManager::slotCompleted()
 
 int PixmapManager::cacheSize() const
 {
-    return d->cache->maxCost();    
+    return d->cache->maxCost();
 }
 
 }  // namespace Digikam
