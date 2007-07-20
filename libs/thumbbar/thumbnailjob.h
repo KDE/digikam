@@ -34,6 +34,7 @@
 
 #include <kio/job.h>
 #include <kurl.h>
+#include <kfileitem.h>
 
 class QPixmap;
 class QImage;
@@ -77,6 +78,8 @@ protected slots:
 
     void slotResult(KJob *job);
     void slotThumbData(KIO::Job *job, const QByteArray &data);
+    void gotKDEPreview(const KFileItem &, const QPixmap &);
+    void failedKDEPreview(const KFileItem &);
 
 private:
 

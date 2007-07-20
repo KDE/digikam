@@ -242,6 +242,7 @@ bool LoadSaveThread::isShuttingDown()
 
 bool LoadSaveThread::exifRotate(DImg &image, const QString& filePath)
 {
+    // Keep in sync with the variant in thumbnailcreator.cpp
     QVariant attribute(image.attribute("exifRotated"));
     if (attribute.isValid() && attribute.toBool())
         return false;
@@ -311,54 +312,6 @@ bool LoadSaveThread::exifRotate(DImg &image, const QString& filePath)
 
     image.setAttribute("exifRotated", true);
     return rotatedOrFlipped;
-
-    /*
-    if (orientation == DMetadata::ORIENTATION_NORMAL ||
-        orientation == DMetadata::ORIENTATION_UNSPECIFIED)
-        return;
-
-    QMatrix matrix;
-
-    switch (orientation)
-    {
-        case DMetadata::ORIENTATION_NORMAL:
-        case DMetadata::ORIENTATION_UNSPECIFIED:
-            break;
-
-        case DMetadata::ORIENTATION_HFLIP:
-            matrix.scale(-1, 1);
-            break;
-
-        case DMetadata::ORIENTATION_ROT_180:
-            matrix.rotate(180);
-            break;
-
-        case DMetadata::ORIENTATION_VFLIP:
-            matrix.scale(1, -1);
-            break;
-
-        case DMetadata::ORIENTATION_ROT_90_HFLIP:
-            matrix.scale(-1, 1);
-            matrix.rotate(90);
-            break;
-
-        case DMetadata::ORIENTATION_ROT_90:
-            matrix.rotate(90);
-            break;
-
-        case DMetadata::ORIENTATION_ROT_90_VFLIP:
-            matrix.scale(1, -1);
-            matrix.rotate(90);
-            break;
-
-        case DMetadata::ORIENTATION_ROT_270:
-            matrix.rotate(270);
-            break;
-    }
-
-    // transform accordingly
-    thumb = thumb.transformed( matrix );
-    */
 }
 
 

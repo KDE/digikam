@@ -47,6 +47,7 @@ extern "C"
 // KDE includes.
 
 #include <kglobal.h>
+#include <kio/previewjob.h>
 
 // Local includes.
 
@@ -223,11 +224,32 @@ void ThumbnailJob::slotResult(KJob *job)
 
     if (job->error())
     {
-        emit signalFailed(d->curr_url);
+        // try again with KDE preview
+        KUrl::List list;
+        list << d->curr_url;
+        KIO::PreviewJob *job = KIO::filePreview(list, d->size);
+
+        connect(job, SIGNAL(gotPreview(const KFileItem &, const QPixmap &)),
+                this, SLOT(gotKDEPreview(const KFileItem &, const QPixmap &)));
+        connect(job, SIGNAL(failed(const KFileItem &)),
+                this, SLOT(failedKDEPreview(const KFileItem &)));
+
+        addSubjob(job);
+        return;
     }
 
     d->running  = false;
     processNext();
+}
+
+void ThumbnailJob::gotKDEPreview(const KFileItem &, const QPixmap &pix)
+{
+    emit signalThumbnail(d->curr_url, pix);
+}
+
+void ThumbnailJob::failedKDEPreview(const KFileItem &)
+{
+    emit signalFailed(d->curr_url);
 }
 
 void ThumbnailJob::createShmSeg()

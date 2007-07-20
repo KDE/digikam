@@ -150,7 +150,7 @@ void PreviewLoadingTask::execute()
     if (qimage.isNull())
     {
         //TODO: Use DImg based loader instead?
-        KDcrawIface::KDcraw::loadEmbeddedPreview(qimage, m_loadingDescription.filePath);
+        KDcrawIface::KDcraw::loadHalfPreview(qimage, m_loadingDescription.filePath);
     }
 
     // Try to extract Exif/Iptc preview.

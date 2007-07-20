@@ -12,6 +12,7 @@ INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/jpegutils
                      ${CMAKE_SOURCE_DIR}/digikam/libs/histogram
                      ${CMAKE_SOURCE_DIR}/digikam/libs/levels
                      ${CMAKE_SOURCE_DIR}/digikam/libs/lprof/
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/threadimageio
                      ${JPEG_INCLUDE_DIR}
                      ${TIFF_INCLUDE_DIR}
                      ${PNG_INCLUDE_DIR}
@@ -26,6 +27,7 @@ SET(kio_digikamthumbnail_PART_SRCS digikamthumbnail.cpp
                                    ${libdatabase_SRCS} 
                                    ${libdimg_SRCS} 
                                    ${libdimgloaders_SRCS} 
+                                   ${libthreadimageio_SRCS}
                                    ${libsqlite2_SRCS} 
                                    ${libdmetadata_SRCS} 
                                    ${libdimgfilters_SRCS} 

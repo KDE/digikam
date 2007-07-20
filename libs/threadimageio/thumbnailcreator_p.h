@@ -3,18 +3,19 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2003-01-15
- * Description : digiKam KIO slave to get image thumbnails.
+ * Date        : 2007-07-20
+ * Description : Loader for thumbnails
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2003-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,40 +23,35 @@
  *
  * ============================================================ */
 
-#ifndef _digikamthumbnail_H_
-#define _digikamthumbnail_H_
+#ifndef DIGIKAMTHUMBNAILCREATORPRIV_H
+#define DIGIKAMTHUMBNAILCREATORPRIV_H
 
-// KDE includes.
-
-#include <kio/slavebase.h>
-
-// Local includes
-
-#include "thumbnailcreator.h"
-
-class QString;
-class QImage;
-class QApplication;
-
-class KUrl;
-
-class kio_digikamthumbnailProtocol : public KIO::SlaveBase
+namespace Digikam
 {
 
+class ThumbnailCreatorPriv
+{
 public:
 
-    kio_digikamthumbnailProtocol(int argc, char** argv);
-    virtual ~kio_digikamthumbnailProtocol();
-    virtual void get(const KUrl& url);
+    ThumbnailCreatorPriv()
+    {
+        thumbnailSize = 0;
+        cachedSize = 0;
+        observer   = 0;
+    }
 
-private:
+    int     thumbnailSize;
+    int     cachedSize;
+    QString bigThumbPath;
+    QString smallThumbPath;
 
-    Digikam::ThumbnailCreator *m_creator;
+    QString error;
 
-    int           m_cachedSize;
-
-    QString       m_smallThumbPath;
-    QString       m_bigThumbPath;
+    DImgLoaderObserver *observer;
+    KDcrawIface::RawDecodingSettings rawSettings;
 };
 
-#endif  // _digikamthumbnail_H_
+}
+
+#endif
+
