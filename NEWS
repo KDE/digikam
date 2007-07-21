@@ -15,4 +15,5 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 008 ==> 146636 : adjust levels: helper line for sliders.
 009 ==> 147671 : Portability problem in configure script.
 010 ==> 147670 : Compilation problems on NetBSD in greycstoration.
-011 ==> 
+011 ==> 147362 : Tool-tip for zoom indicator is below the screen if window is maximised.
+012 ==> 
