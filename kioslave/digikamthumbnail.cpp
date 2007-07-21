@@ -132,7 +132,7 @@ void kio_digikamthumbnailProtocol::get(const KUrl& url )
             return;
         }
 
-        if (img.width() * img.height() > m_cachedSize * m_cachedSize)
+        if (img.width() * img.height() > m_creator->cachedSize() * m_creator->cachedSize())
         {
             error(KIO::ERR_INTERNAL, "Image is too big for the shared memory segment");
             kWarning() << "Image is too big for the shared memory segment" << endl;
@@ -140,7 +140,7 @@ void kio_digikamthumbnailProtocol::get(const KUrl& url )
             return;
         }
 
-	    // NOTE: KDE4PORT: Qt4::QImage API has change. We will use "format" instead "depth".
+        // NOTE: KDE4PORT: Qt4::QImage API has change. We will use "format" instead "depth".
         stream << img.width() << img.height() << (int)img.format();
         memcpy(shmaddr, img.bits(), img.numBytes());
         shmdt((char*)shmaddr);
@@ -245,6 +245,14 @@ extern "C"
     DIGIKAM_EXPORT int kdemain(int argc, char **argv)
     {
         KLocale::setMainCatalog("digikam");
+
+        // The creation of a QCoreApplication is necessary here for only one reason:
+        // The Qt image plugins are not found without it.
+        // We need Qt JPG support in ThumbCreator, KDcraw to load the embedded preview.
+        // If anyone knows if the loading of plugins can be achieved with less
+        // than creating a QCoreApplication, please change it.
+        QCoreApplication app(argc, argv);
+
         KComponentData componentData( "kio_digikamthumbnail" );
         ( void ) KGlobal::locale();
 

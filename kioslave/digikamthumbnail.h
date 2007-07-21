@@ -51,11 +51,6 @@ public:
 private:
 
     Digikam::ThumbnailCreator *m_creator;
-
-    int           m_cachedSize;
-
-    QString       m_smallThumbPath;
-    QString       m_bigThumbPath;
 };
 
 #endif  // _digikamthumbnail_H_
