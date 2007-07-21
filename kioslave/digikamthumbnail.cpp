@@ -83,7 +83,7 @@ extern "C"
 using namespace KIO;
 using namespace Digikam;
 
-kio_digikamthumbnailProtocol::kio_digikamthumbnailProtocol(int argc, char** argv) 
+kio_digikamthumbnailProtocol::kio_digikamthumbnailProtocol(int /*argc*/, char** argv) 
                             : SlaveBase("kio_digikamthumbnail", argv[2], argv[3])
 {
     m_creator = new Digikam::ThumbnailCreator;
