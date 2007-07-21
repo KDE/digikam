@@ -96,6 +96,16 @@ void ThumbnailCreator::setLoadingProperties(DImgLoaderObserver *observer, KDcraw
     d->rawSettings = settings;
 }
 
+int ThumbnailCreator::thumbnailSize() const
+{
+    return d->thumbnailSize;
+}
+
+int ThumbnailCreator::cachedSize() const
+{
+    return d->cachedSize;
+}
+
 QString ThumbnailCreator::errorString() const
 {
     return d->error;
@@ -150,7 +160,6 @@ QImage ThumbnailCreator::load(const QString &path, bool exif)
         // To speed-up thumb extraction, we now try to load the images by the file extension.
         QFileInfo info(path);
         QString ext = info.suffix().toUpper();
-        QString rawFilesExt(raw_file_extentions);
 
         if (qimage.isNull() && !ext.isEmpty())
         {
@@ -263,7 +272,7 @@ void ThumbnailCreator::exifRotate(const QString& filePath, QImage& thumb, bool f
 {
     // Keep in sync with main version in loadsavethread.cpp
 
-    if (fromEmbeddedPreview)
+    if (DImg::fileFormat(filePath) == DImg::RAW && !fromEmbeddedPreview )
         return;
 
     DMetadata metadata(filePath);

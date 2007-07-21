@@ -53,18 +53,57 @@ class ThumbnailCreatorPriv;
 class DIGIKAM_EXPORT ThumbnailCreator
 {
 public:
+    /**
+     * Create a thumbnail creator object.
+     * You must call setThumbnailSize before load.
+     */
     ThumbnailCreator();
+    /**
+     * Create a thumbnail creator object, and set the thumbnail size.
+     */
     ThumbnailCreator(int thumbnailSize);
     ~ThumbnailCreator();
 
-    void setThumbnailSize(int thumbnailSize);
-    void setLoadingProperties(DImgLoaderObserver *observer, KDcrawIface::RawDecodingSettings settings);
-
+    /**
+     * Create a thumbnail for the specified file.
+     * If exifRotate is true, the thumbnail will be rotated according
+     * to the exif information.
+     */
     QImage load(const QString &filePath, bool exifRotate);
 
+    /**
+     * Sets the thumbnail size. This is the maximum size of the QImage
+     * returned by load.
+     */
+    void setThumbnailSize(int thumbnailSize);
+    /**
+     * If you plan to load thumbnail from the context of the threadimageio framework,
+     * you can specify the relevant parameters. They will be passed if a thumbnail
+     * is created by loading with DImg.
+     * Note that DImg is not used in most cases (Raw files, JPEG)
+     */
+    void setLoadingProperties(DImgLoaderObserver *observer, KDcrawIface::RawDecodingSettings settings);
+
+    /**
+     * Return the thumbnail size, the maximum size of the QImage
+     * returned by load.
+     */
+    int thumbnailSize() const;
+    /**
+     * Return the cached image size, the size of the image that is stored on disk
+     * according to the FreeDesktop specification.
+     * This size is larger than thumbnailSize.
+     * Possible values: 128 or 256.
+     */
+    int cachedSize() const;
+
+    /**
+     * Returns the last error that occurred.
+     * It is valid if load returned a null QImage object.
+     */
     QString errorString() const;
 
-protected:
+private:
 
     QImage loadWithDImg(const QString &path);
     QImage loadImagePreview(const QString& path);
