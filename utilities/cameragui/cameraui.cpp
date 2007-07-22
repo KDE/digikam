@@ -1036,8 +1036,8 @@ void CameraUI::slotUploadItems(const KUrl::List& urls)
         while (d->view->findItem(cameraFolder, name + ext)) 
         {
             QString msg(i18n("Camera Folder <b>%1</b> already contains item <b>%2</b><br>"
-                             "Please enter a new file name (without extension):")
-                             .arg(cameraFolder).arg(fi.fileName()));
+                             "Please enter a new file name (without extension):",
+                             cameraFolder, fi.fileName()));
             name = KInputDialog::getText(i18n("File already exists"), msg, name, &ok, this);
 
             if (!ok) 
@@ -1575,9 +1575,8 @@ bool CameraUI::createAutoAlbum(const KUrl& parentURL, const QString& name,
             return true;
         else
         {
-            errMsg = i18n("A file with same name (%1) exists in folder %2")
-                     .arg(name)
-                     .arg(parentURL.path());
+            errMsg = i18n("A file with same name (%1) exists in folder %2",
+                          name, parentURL.path());
             return false;
         }
     }
@@ -1588,8 +1587,7 @@ bool CameraUI::createAutoAlbum(const KUrl& parentURL, const QString& name,
     PAlbum* parent     = aman->findPAlbum(parentURL);
     if (!parent)
     {
-        errMsg = i18n("Failed to find Album for path '%1'")
-                 .arg(parentURL.path());
+        errMsg = i18n("Failed to find Album for path '%1'", parentURL.path());
         return false;
     }
     QString albumRootPath = CollectionManager::instance()->albumRootPath(parentURL);

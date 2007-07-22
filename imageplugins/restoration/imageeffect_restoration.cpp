@@ -310,8 +310,8 @@ void ImageEffect_Restoration::slotUser3()
         if (!m_settingsWidget->loadSettings(file, QString("# Photograph Restoration Configuration File V2")))
         {
            KMessageBox::error(this, 
-                        i18n("\"%1\" is not a Photograph Restoration settings text file.")
-                        .arg(loadRestorationFile.fileName()));
+                        i18n("\"%1\" is not a Photograph Restoration settings text file.",
+                             loadRestorationFile.fileName()));
            file.close();            
            return;
         }

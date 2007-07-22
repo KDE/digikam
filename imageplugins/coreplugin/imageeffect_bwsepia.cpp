@@ -1082,8 +1082,8 @@ void ImageEffect_BWSepia::slotUser3()
         if ( stream.readLine() != "# Black & White Configuration File" )
         {
            KMessageBox::error(this, 
-                        i18n("\"%1\" is not a Black & White settings text file.")
-                        .arg(loadFile.fileName()));
+                        i18n("\"%1\" is not a Black & White settings text file.",
+                             loadFile.fileName()));
            file.close();            
            return;
         }

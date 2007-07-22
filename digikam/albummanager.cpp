@@ -225,8 +225,8 @@ void AlbumManager::setAlbumRoot(const QString &albumRoot, bool priority)
         KMessageBox::error(0, i18n("<qt><p>Failed to open the database. "
                                    " Error message from database: %1 "
                                    "</p><p>You cannot use digiKam without a working database."
-                                   "Please check the database settings in the configuration menu.</p></qt>")
-                               .arg(DatabaseAccess().lastError()));
+                                   "Please check the database settings in the configuration menu.</p></qt>",
+                                   DatabaseAccess().lastError()));
         return;
     }
 
@@ -292,9 +292,8 @@ void AlbumManager::setAlbumRoot(const QString &albumRoot, bool priority)
                                            "If you are sure that you want to "
                                            "continue, click 'Yes' to work with this album. "
                                            "Otherwise, click 'No' and correct your "
-                                           "locale setting before restarting digiKam")
-                                      .arg(dbLocale)
-                                      .arg(currLocale));
+                                           "locale setting before restarting digiKam",
+                                           dbLocale, currLocale));
         if (result != KMessageBox::Yes)
             exit(0);
 

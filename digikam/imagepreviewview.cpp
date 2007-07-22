@@ -262,8 +262,8 @@ void ImagePreviewView::slotGotImagePreview(const LoadingDescription &description
         p.setPen(QPen(ThemeEngine::componentData()->textRegColor()));
         p.drawText(0, 0, pix.width(), pix.height(),
                    Qt::AlignCenter|Qt::TextWordWrap, 
-                   i18n("Cannot display preview for\n\"%1\"")
-                   .arg(info.fileName()));
+                   i18n("Cannot display preview for\n\"%1\"",
+                   info.fileName()));
         p.end();
         // three copies - but the image is small
         setImage(DImg(pix.toImage()));

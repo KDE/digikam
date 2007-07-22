@@ -784,8 +784,8 @@ void ImageEffect_WhiteBalance::slotUser3()
         if ( stream.readLine() != "# White Color Balance Configuration File V2" )
         {
            KMessageBox::error(this, 
-                        i18n("\"%1\" is not a White Color Balance settings text file.")
-                        .arg(loadWhiteBalanceFile.fileName()));
+                        i18n("\"%1\" is not a White Color Balance settings text file.",
+                             loadWhiteBalanceFile.fileName()));
            file.close();            
            return;
         }

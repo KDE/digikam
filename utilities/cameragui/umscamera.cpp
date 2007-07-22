@@ -458,11 +458,11 @@ bool UMSCamera::cameraSummary(QString& summary)
     summary.append(i18n("Title: %1<br>"
                         "Model: %2<br>"
                         "Port: %3<br>"
-                        "Path: %4<br>")
-                        .arg(title())
-                        .arg(model())
-                        .arg(port())
-                        .arg(path()));
+                        "Path: %4<br>",
+                        title(),
+                        model(), 
+                        port(),
+                        path()));
     return true;
 }
 

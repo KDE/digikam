@@ -430,8 +430,8 @@ void ImageEffect_InPainting_Dialog::slotUser3()
         if (!m_settingsWidget->loadSettings(file, QString("# Photograph Inpainting Configuration File V2")))
         {
            KMessageBox::error(this,
-                        i18n("\"%1\" is not a Photograph Inpainting settings text file.")
-                        .arg(loadInpaintingFile.fileName()));
+                        i18n("\"%1\" is not a Photograph Inpainting settings text file.",
+                             loadInpaintingFile.fileName()));
            file.close();
            return;
         }

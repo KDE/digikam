@@ -123,10 +123,8 @@ void MetadataListView::slotSelectionChanged(Q3ListViewItem *item)
     
     this->setWhatsThis( i18n("<b>Title: </b><p>%1<p>"
                              "<b>Value: </b><p>%2<p>"
-                             "<b>Description: </b><p>%3")
-                          .arg(tagTitle)
-                          .arg(tagValue)
-                          .arg(tagDesc));
+                             "<b>Description: </b><p>%3",
+                             tagTitle, tagValue, tagDesc));
 }
 
 void MetadataListView::setIfdList(DMetadata::MetaDataMap ifds, const QStringList& tagsfilter)

@@ -1642,7 +1642,7 @@ void DigikamApp::slotKipiPluginPlug()
         ++cpt;
 
         //if(d->splashScreen)
-          //  d->splashScreen->message(i18n("Loading: %1").arg((*it)->name()));
+          //  d->splashScreen->message(i18n("Loading: %1", (*it)->name()));
 
         plugin->setup( this );
 

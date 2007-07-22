@@ -318,8 +318,8 @@ bool SchemaUpdater::copyV3toV4(const QString &digikam3DBPath, const QString &cur
     {
         m_access->setLastError(i18n("Failed to copy the old database file (\"%1\")"
                                     "to its new location (\"%2\")."
-                                    "Please make sure that the file can be copied.")
-                               .arg(digikam3DBPath).arg(currentDBPath));
+                                    "Please make sure that the file can be copied.", 
+                                    digikam3DBPath, currentDBPath));
     }
 
     if (!m_access->backend()->open(m_access->parameters()))
@@ -327,8 +327,8 @@ bool SchemaUpdater::copyV3toV4(const QString &digikam3DBPath, const QString &cur
         m_access->setLastError(i18n("The old database file (\"%1\") has been copied "
                                     "to the new location (\"%2\") but it cannot be opened. "
                                     "Please remove both files and try again, "
-                                    "starting with an empty database. ")
-                               .arg(digikam3DBPath).arg(currentDBPath));
+                                    "starting with an empty database. ",
+                                    digikam3DBPath, currentDBPath));
 
         return false;
     }
@@ -347,8 +347,7 @@ bool SchemaUpdater::updateV2toV4(const QString &sqlite2DBPath)
     {
         m_access->setLastError(i18n("Could not update from the old SQLite2 file (\"%1\"). "
                                     "Please remove this file and try again, "
-                                    "starting with an empty database. ")
-                               .arg(sqlite2DBPath));
+                                    "starting with an empty database. ", sqlite2DBPath));
         return false;
     }
 }

@@ -195,8 +195,8 @@ KIO::CopyJob *rename(const KUrl& src, const KUrl& dest)
         return true;
     }
 
-    KMessageBox::error(0, i18n("Failed to rename file\n%1")
-                       .arg(src.fileName()), i18n("Rename Failed"));
+    KMessageBox::error(0, i18n("Failed to rename file\n%1", src.fileName()), 
+                          i18n("Rename Failed"));
     return false;
     */
 }

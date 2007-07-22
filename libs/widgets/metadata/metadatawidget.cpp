@@ -308,8 +308,8 @@ void MetadataWidget::slotCopy2Clipboard(void)
 
 void MetadataWidget::slotPrintMetadata(void)
 {
-    QString textmetadata = i18n("<p><big><big><b>File name: %1 (%2)</b></big></big>")
-                           .arg(d->fileName).arg(getMetadataTitle());
+    QString textmetadata = i18n("<p><big><big><b>File name: %1 (%2)</b></big></big>",
+                                d->fileName, getMetadataTitle());
     Q3ListViewItemIterator it( d->view );
 
     while ( it.current() )

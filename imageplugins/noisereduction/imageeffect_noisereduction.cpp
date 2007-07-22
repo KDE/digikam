@@ -486,8 +486,8 @@ void ImageEffect_NoiseReduction::slotUser3()
         if ( stream.readLine() != "# Photograph Noise Reduction Configuration File" )
         {
            KMessageBox::error(this, 
-                        i18n("\"%1\" is not a Photograph Noise Reduction settings text file.")
-                        .arg(loadRestorationFile.fileName()));
+                        i18n("\"%1\" is not a Photograph Noise Reduction settings text file.",
+                        loadRestorationFile.fileName()));
            file.close();            
            return;
         }

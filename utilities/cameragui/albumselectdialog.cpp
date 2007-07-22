@@ -293,8 +293,8 @@ void AlbumSelectDialog::slotUser1()
     bool ok;
     QString newAlbumName = KInputDialog::getText(i18n("New Album Name"),
                                                  i18n("Creating new album in '%1'\n"
-                                                      "Enter album name:")
-                                                 .arg(album->prettyUrl()),
+                                                      "Enter album name:",
+                                                      album->prettyUrl()),
                                                  d->newAlbumString, &ok, this);
     if (!ok)
         return;

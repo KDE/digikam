@@ -1096,13 +1096,12 @@ void ImageDescEditTab::tagDelete(TAlbum *album)
         KMessageBox::error(this, i18n("You are currently viewing items in the "
                                       "tag '%1' that you are about to delete. "
                                       "You will need to apply change first "
-                                      "if you want to delete the tag." )
-                           .arg(album->title()));
+                                      "if you want to delete the tag.", album->title()));
         return;
     }
 
-    int result = KMessageBox::warningContinueCancel(this, i18n("Delete '%1' tag?")
-                                                    .arg(album->title()),i18n("Delete Tag"),
+    int result = KMessageBox::warningContinueCancel(this, i18n("Delete '%1' tag?", album->title()),
+                                                    i18n("Delete Tag"),
                                                     KGuiItem(i18n("Delete"), "editdelete"));
 
     if (result == KMessageBox::Continue)

@@ -282,8 +282,8 @@ void LightTablePreview::slotGotImagePreview(const LoadingDescription &descriptio
         p.setPen(QPen(ThemeEngine::componentData()->textRegColor()));
         p.drawText(0, 0, pix.width(), pix.height(),
                    Qt::AlignCenter|Qt::TextWordWrap, 
-                   i18n("Unable to display preview for\n\"%1\"")
-                   .arg(info.fileName()));
+                   i18n("Unable to display preview for\n\"%1\"",
+                   info.fileName()));
         p.end();
         setImage(DImg(pix.toImage()));
 

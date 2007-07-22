@@ -687,8 +687,8 @@ void ImageEffect_Sharpen::slotUser3()
         if ( stream.readLine() != "# Photograph Refocus Configuration File" )
         {
            KMessageBox::error(this, 
-                        i18n("\"%1\" is not a Photograph Refocus settings text file.")
-                        .arg(loadRestorationFile.fileName()));
+                        i18n("\"%1\" is not a Photograph Refocus settings text file.", 
+                             loadRestorationFile.fileName()));
            file.close();            
            return;
         }

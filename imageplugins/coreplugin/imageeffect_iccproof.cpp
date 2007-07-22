@@ -1221,8 +1221,8 @@ void ImageEffect_ICCProof::slotUser3()
         if ( stream.readLine() != "# Color Management Configuration File" )
         {
            KMessageBox::error(this, 
-                        i18n("\"%1\" is not a Color Management settings text file.")
-                        .arg(loadColorManagementFile.fileName()));
+                        i18n("\"%1\" is not a Color Management settings text file.",
+                             loadColorManagementFile.fileName()));
            file.close();            
            return;
         }
