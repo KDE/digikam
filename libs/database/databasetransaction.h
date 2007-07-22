@@ -24,12 +24,16 @@
 #ifndef DATABASETRANSACTION_H
 #define DATABASETRANSACTION_H
 
+// Local includes
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
 class DatabaseAccess;
 
-class DatabaseTransaction
+class DIGIKAM_EXPORT DatabaseTransaction
 {
 public:
     /**

@@ -38,6 +38,7 @@
 
 // Local includes
 
+#include "digikam_export.h"
 #include "dimg.h"
 
 namespace Digikam
@@ -45,7 +46,7 @@ namespace Digikam
 
 class PanIconWidgetPriv;
 
-class PanIconWidget : public QWidget
+class DIGIKAM_EXPORT PanIconWidget : public QWidget
 {
 Q_OBJECT
 

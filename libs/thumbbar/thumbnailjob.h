@@ -36,6 +36,10 @@
 #include <kurl.h>
 #include <kfileitem.h>
 
+// Local includes
+
+#include "digikam_export.h"
+
 class QPixmap;
 class QImage;
 
@@ -44,7 +48,7 @@ namespace Digikam
 
 class ThumbnailJobPriv;
 
-class ThumbnailJob : public KIO::Job
+class DIGIKAM_EXPORT ThumbnailJob : public KIO::Job
 {
     Q_OBJECT
 

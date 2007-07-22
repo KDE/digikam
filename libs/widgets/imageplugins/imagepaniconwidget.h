@@ -31,6 +31,7 @@
 
 // Local includes.
 
+#include "digikam_export.h"
 #include "paniconwidget.h"
 
 namespace Digikam
@@ -38,7 +39,7 @@ namespace Digikam
 
 class ImagePanIconWidgetPriv;
 
-class ImagePanIconWidget : public PanIconWidget
+class DIGIKAM_EXPORT ImagePanIconWidget : public PanIconWidget
 {
 
 Q_OBJECT
