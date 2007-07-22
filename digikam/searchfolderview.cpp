@@ -331,9 +331,9 @@ void SearchFolderView::slotContextMenu(Q3ListViewItem* item, const QPoint&, int)
     if (!item)
     {
         K3PopupMenu popmenu(this);
-        popmenu.insertTitle(SmallIcon("digikam"), i18n("My Searches"));
-        popmenu.insertItem(SmallIcon("filefind"), i18n("New Simple Search..."), 10);
-        popmenu.insertItem(SmallIcon("find"),     i18n("New Advanced Search..."), 11);
+        popmenu.insertTitle(SmallIcon("digikam"),  i18n("My Searches"));
+        popmenu.insertItem(SmallIcon("file-find"), i18n("New Simple Search..."), 10);
+        popmenu.insertItem(SmallIcon("file-find"), i18n("New Advanced Search..."), 11);
 
         switch (popmenu.exec(QCursor::pos()))
         {
