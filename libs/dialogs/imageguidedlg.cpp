@@ -272,8 +272,11 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
     QList<int> list;
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group(d->name + QString(" Tool Dialog"));
-    if(group.hasKey("SplitterSizes"))
-        d->splitter->setSizes(group.readEntry("SplitterSizes", list));
+    if (group.hasKey("SplitterState")) {
+        QByteArray state;
+        state = group.readEntry("SplitterState", state);
+        d->splitter->restoreState(QByteArray::fromBase64(state));
+    }
 
     // -------------------------------------------------------------
 
@@ -330,7 +333,7 @@ void ImageGuideDlg::writeSettings(void)
     KConfigGroup group = config->group(d->name + QString(" Tool Dialog"));
     group.writeEntry( "Guide Color", d->guideColorBt->color() );
     group.writeEntry( "Guide Width", d->guideSize->value() );
-    group.writeEntry( "SplitterSizes", d->splitter->sizes() );
+    group.writeEntry("SplitterState", d->splitter->saveState().toBase64());
     saveDialogSize(group);
     config->sync();
 }

@@ -923,9 +923,12 @@ void EditorWindow::applyStandardSettings()
     rightSzPolicy.setHorizontalStretch(2);
     rightSzPolicy.setVerticalStretch(1);
     QList<int> list;
-    if(config->hasKey("Splitter Sizes"))
-        m_splitter->setSizes(group.readEntry("Splitter Sizes", list));
-    else 
+    if (group.hasKey("Splitter State")) {
+        QByteArray state;
+        state = group.readEntry("Splitter State", state);
+        m_splitter->restoreState(QByteArray::fromBase64(state));
+    }
+    else
         m_canvas->setSizePolicy(rightSzPolicy);
 
     d->fullScreenHideToolBar = group.readEntry("FullScreen Hide ToolBar", false);
@@ -954,7 +957,7 @@ void EditorWindow::saveStandardSettings()
     KConfigGroup group = config->group("ImageViewer Settings");
 
     group.writeEntry("AutoZoom", d->zoomFitToWindowAction->isChecked());
-    group.writeEntry("Splitter Sizes", m_splitter->sizes());
+    group.writeEntry("Splitter State", m_splitter->saveState().toBase64());
 
     group.writeEntry("FullScreen", m_fullScreenAction->isChecked());
     group.writeEntry("UnderExposureIndicator", d->exposureSettings->underExposureIndicator);

@@ -367,8 +367,12 @@ void DigikamView::loadViewState()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("MainWindow");
 
-    if(config->hasKey("SplitterSizes"))
-        d->splitter->setSizes(group.readEntry("SplitterSizes",QList<int>()));
+    DDebug() << "DigikamView::loadViewState()" << endl;
+    if (group.hasKey("SplitterState")) {
+        QByteArray state;
+        state = group.readEntry("SplitterState", state);
+        d->splitter->restoreState(QByteArray::fromBase64(state));
+    }
 
     d->initialAlbumID = group.readEntry("InitialAlbumID", 0);
 }
@@ -377,7 +381,7 @@ void DigikamView::saveViewState()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("MainWindow");
-    group.writeEntry("SplitterSizes", d->splitter->sizes());
+    group.writeEntry("SplitterState", d->splitter->saveState().toBase64());
 
     Album *album = AlbumManager::componentData()->currentAlbum();
     if(album)

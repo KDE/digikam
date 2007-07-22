@@ -195,8 +195,11 @@ void ImageDlgBase::readSettings(void)
     QList<int> list;
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group(d->name + QString(" Tool Dialog"));
-    if(group.hasKey("SplitterSizes"))
-        d->splitter->setSizes(group.readEntry("SplitterSizes", list));
+    if (group.hasKey("SplitterState")) {
+        QByteArray state;
+        state = group.readEntry("SplitterState", state);
+        d->splitter->restoreState(QByteArray::fromBase64(state));
+    }
 
     readUserSettings();
 }
@@ -205,7 +208,7 @@ void ImageDlgBase::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group(d->name + QString(" Tool Dialog"));
-    group.writeEntry("SplitterSizes", d->splitter->sizes());
+    group.writeEntry("SplitterState", d->splitter->saveState().toBase64());
     saveDialogSize(group);
     config->sync();
 }

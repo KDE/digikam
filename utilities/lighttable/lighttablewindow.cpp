@@ -137,11 +137,17 @@ void LightTableWindow::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("LightTable Settings");
     QList<int> list;
-    if(config->hasKey("Vertical Splitter Sizes"))
-        d->vSplitter->setSizes(group.readEntry("Vertical Splitter Sizes", list));
+    if (group.hasKey("Vertical Splitter State")) {
+        QByteArray state;
+        state = group.readEntry("Vertical Splitter State", state);
+        d->vSplitter->restoreState(QByteArray::fromBase64(state));
+    }
 
-    if(config->hasKey("Horizontal Splitter Sizes"))
-        d->hSplitter->setSizes(group.readEntry("Horizontal Splitter Sizes", list));
+    if (group.hasKey("Horizontal Splitter State")) {
+        QByteArray state;
+        state = group.readEntry("Horizontal Splitter State", state);
+        d->hSplitter->restoreState(QByteArray::fromBase64(state));
+    }
 
     d->navigateByPairAction->setChecked(group.readEntry("Navigate By Pair", false));
     slotToggleNavigateByPair();
@@ -151,8 +157,8 @@ void LightTableWindow::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("LightTable Settings");
-    group.writeEntry("Vertical Splitter Sizes", d->vSplitter->sizes());
-    group.writeEntry("Horizontal Splitter Sizes", d->hSplitter->sizes());
+    group.writeEntry("Vertical Splitter State", d->vSplitter->saveState().toBase64());
+    group.writeEntry("Horizontal Splitter State", d->hSplitter->saveState().toBase64());
     group.writeEntry("Navigate By Pair", d->navigateByPairAction->isChecked());
     config->sync();
 }

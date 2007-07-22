@@ -525,8 +525,12 @@ void ShowFoto::readSettings()
     szPolicy.setVerticalStretch(1);
     QList<int> list;
     if(group.hasKey("Vertical Splitter Sizes") && d->vSplitter)
-        d->vSplitter->setSizes(group.readEntry("Vertical Splitter Sizes", list));
-    else 
+    {
+        QByteArray state;
+        state = group.readEntry("Vertical Splitter State", state);
+        d->vSplitter->restoreState(QByteArray::fromBase64(state));
+    }
+    else
         m_canvas->setSizePolicy(szPolicy);
 }
 
@@ -541,7 +545,9 @@ void ShowFoto::saveSettings()
     group.writeEntry("Show Thumbnails", d->showBarAction->isChecked());
 
     if (d->vSplitter)
-        group.writeEntry("Vertical Splitter Sizes", d->vSplitter->sizes());
+    {
+        group.writeEntry("Vertical Splitter State", d->vSplitter->saveState().toBase64());
+    }
 
     group.sync();    
 }

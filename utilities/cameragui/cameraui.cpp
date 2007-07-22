@@ -601,9 +601,11 @@ void CameraUI::readSettings()
     d->view->setThumbnailSize(ThumbnailSize((ThumbnailSize::Size)group.readEntry("ThumbnailSize", 
                               (int)ThumbnailSize::Large)));
 
-    QList<int> list;
-    if(config->hasKey("Splitter Sizes"))
-        d->splitter->setSizes(group.readEntry("Splitter Sizes", list));
+    if (group.hasKey("Splitter State")) {
+        QByteArray state;
+        state = group.readEntry("Splitter State", state);
+        d->splitter->restoreState(QByteArray::fromBase64(state));
+    }
 
     d->dateTimeEdit->setEnabled(d->fixDateTimeCheck->isChecked());
     d->losslessFormat->setEnabled(convertLosslessJpegFiles());
@@ -628,7 +630,7 @@ void CameraUI::saveSettings()
     group.writeEntry("ConvertJpeg", convertLosslessJpegFiles());
     group.writeEntry("LossLessFormat", d->losslessFormat->currentIndex());
     group.writeEntry("ThumbnailSize", d->view->thumbnailSize().size());
-    group.writeEntry("Splitter Sizes", d->splitter->sizes());
+    group.writeEntry("Splitter State", d->splitter->saveState().toBase64());
     group.writeEntry("FolderDateFormat", d->folderDateFormat->currentIndex());
     config->sync();
 }
