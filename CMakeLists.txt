@@ -214,13 +214,6 @@ SET(libshowfoto_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editorwindow.cpp
    )
 
-SET(libdialogshowfoto_SRCS
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/iccprofileinfodlg.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/imagedlgbase.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/imageguidedlg.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/ctrlpaneldlg.cpp
-   )
-
 # digiKam target parts ##########################################################
 
 SET(libdialog_SRCS
@@ -229,6 +222,9 @@ SET(libdialog_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/imageguidedlg.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/ctrlpaneldlg.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/dprogressdlg.cpp
+   )
+
+SET(libdeletedialog_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/deletedialog.cpp
    )
 
@@ -276,6 +272,9 @@ SET(libimagepropertiesdigikam_SRCS
  SET(libdimgeditor_SRCS 
      ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editorwindow.cpp 
      ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/imageiface.cpp 
+    )
+
+ SET(libdimgimagewindow_SRCS
      ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/imagewindow.cpp
     )
 
@@ -374,10 +373,10 @@ SET(libcameragui_SRCS
 ADD_SUBDIRECTORY( data )
 ADD_SUBDIRECTORY( libs )
 ADD_SUBDIRECTORY( utilities )
-ADD_SUBDIRECTORY( showfoto )
-ADD_SUBDIRECTORY( imageplugins )
 ADD_SUBDIRECTORY( digikam )
 ADD_SUBDIRECTORY( kioslave )
+ADD_SUBDIRECTORY( showfoto )
+ADD_SUBDIRECTORY( imageplugins )
 #ADD_SUBDIRECTORY( themedesigner )
 
 INSTALL( FILES tips DESTINATION ${DATA_INSTALL_DIR}/digikam )

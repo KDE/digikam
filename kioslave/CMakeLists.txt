@@ -22,159 +22,63 @@ INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/jpegutils
 
 # digiKam Thumbnails kio slave #####################################################
 
-SET(kio_digikamthumbnail_PART_SRCS digikamthumbnail.cpp 
-                                   ${libjpegutils_SRCS} 
-                                   ${libdatabase_SRCS} 
-                                   ${libdimg_SRCS} 
-                                   ${libdimgloaders_SRCS} 
-                                   ${libthreadimageio_SRCS}
-                                   ${libsqlite2_SRCS} 
-                                   ${libdmetadata_SRCS} 
-                                   ${libdimgfilters_SRCS} 
-                                   ${libhistogram_SRCS} 
-                                   ${liblevels_SRCS}
-   )
+SET(kio_digikamthumbnail_PART_SRCS digikamthumbnail.cpp  )
 
 
 KDE4_ADD_PLUGIN(kio_digikamthumbnail ${kio_digikamthumbnail_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(kio_digikamthumbnail 
-                      ${KDE4_KDE3SUPPORT_LIBS} 
-                      ${KDE4_KIO_LIBS} 
-                      ${KEXIV2_LIBRARIES} 
-                      ${JPEG_LIBRARIES} 
-                      ${TIFF_LIBRARIES} 
-                      ${PNG_LIBRARIES} 
-                      ${JASPER_LIBRARIES} 
-                      ${KDCRAW_LIBRARIES} 
-                      ${LCMS_LIBRARIES} 
-                      ${KEXIV2_LIBRARIES} 
-                      ${SQLITE_LIBRARIES}
+TARGET_LINK_LIBRARIES(kio_digikamthumbnail
+                      digikam
                      )
 
 
 # # digiKam Tags kio slave ###########################################################
 
-SET(kio_digikamtags_PART_SRCS digikamtags.cpp 
-                              ${libdatabase_SRCS} 
-                              ${libdimg_SRCS} 
-                              ${libdimgloaders_SRCS} 
-                              ${libsqlite2_SRCS} 
-                              ${libdmetadata_SRCS} 
-                              ${libdimgfilters_SRCS} 
-                              ${libhistogram_SRCS} 
-                              ${liblevels_SRCS}
-   ) 
+SET(kio_digikamtags_PART_SRCS digikamtags.cpp )
 
 
 KDE4_ADD_PLUGIN(kio_digikamtags ${kio_digikamtags_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(kio_digikamtags 
-                      ${QT_QT3SUPPORT_LIBRARY} 
-                      ${KDE4_KIO_LIBS} 
-                      ${JPEG_LIBRARIES} 
-                      ${TIFF_LIBRARIES} 
-                      ${PNG_LIBRARIES} 
-                      ${JASPER_LIBRARIES} 
-                      ${KDCRAW_LIBRARIES} 
-                      ${LCMS_LIBRARIES} 
-                      ${KEXIV2_LIBRARIES} 
-                      ${SQLITE_LIBRARIES}
+TARGET_LINK_LIBRARIES(kio_digikamtags
+                      digikam
+                      digikamdatabase
                      )
 
 
 # # digiKam Albums kio slave #########################################################
 
-SET(kio_digikamalbums_PART_SRCS digikamalbums.cpp
-                               ${libdatabase_SRCS} 
-                               ${libdimg_SRCS} 
-                               ${libdimgloaders_SRCS} 
-                               ${libsqlite2_SRCS} 
-                               ${libdmetadata_SRCS} 
-                               ${libdimgfilters_SRCS} 
-                               ${libhistogram_SRCS} 
-                               ${liblevels_SRCS}
-                               )
+SET(kio_digikamalbums_PART_SRCS digikamalbums.cpp )
 
 KDE4_ADD_PLUGIN(kio_digikamalbums ${kio_digikamalbums_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kio_digikamalbums
-                      ${QT_QT3SUPPORT_LIBRARY} 
-                      ${KDE4_KIO_LIBS} 
-                      ${KEXIV2_LIBRARIES}
-                      ${JPEG_LIBRARIES}
-                      ${TIFF_LIBRARIES} 
-                      ${PNG_LIBRARIES} 
-                      ${JASPER_LIBRARIES} 
-                      ${KDCRAW_LIBRARIES} 
-                      ${LCMS_LIBRARIES} 
-                      ${SQLITE_LIBRARIES}
-                      )
+                      digikam
+                      digikamdatabase
+                     )
 
 # # digiKam Date kio slave ###########################################################
 
-SET(kio_digikamdates_PART_SRCS digikamdates.cpp 
-                               ${libdatabase_SRCS} 
-                               ${libdimg_SRCS} 
-                               ${libdimgloaders_SRCS} 
-                               ${libsqlite2_SRCS} 
-                               ${libdmetadata_SRCS} 
-                               ${libdimgfilters_SRCS} 
-                               ${libhistogram_SRCS} 
-                               ${liblevels_SRCS}
-   )
+SET(kio_digikamdates_PART_SRCS digikamdates.cpp)
 
 
 KDE4_ADD_PLUGIN(kio_digikamdates ${kio_digikamdates_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(kio_digikamdates 
-                      ${QT_QT3SUPPORT_LIBRARY} 
-                      ${KDE4_KIO_LIBS} 
-                      ${KEXIV2_LIBRARIES} 
-                      ${JPEG_LIBRARIES} 
-                      ${TIFF_LIBRARIES} 
-                      ${PNG_LIBRARIES} 
-                      ${JASPER_LIBRARIES} 
-                      ${KDCRAW_LIBRARIES} 
-                      ${LCMS_LIBRARIES} 
-                      ${SQLITE_LIBRARIES}
-)
+TARGET_LINK_LIBRARIES(kio_digikamdates
+                      digikam
+                      digikamdatabase
+                     )
 
 
 # # digiKam Search kio slave #########################################################
 
-SET(kio_digikamsearch_PART_SRCS 
-    digikamsearch.cpp 
-    ${libdatabase_SRCS} 
-    ${libiccprofileswidgets_SRCS} 
-    ${libmetadatawidgets_SRCS} 
-    ${liblprof_SRCS} 
-    ${libdimg_SRCS} 
-    ${libdimgloaders_SRCS} 
-    ${libsqlite2_SRCS} 
-    ${libdmetadata_SRCS} 
-    ${libdimgfilters_SRCS} 
-    ${libhistogram_SRCS} 
-    ${liblevels_SRCS} 
-   )
+SET(kio_digikamsearch_PART_SRCS digikamsearch.cpp )
 
 
 KDE4_ADD_PLUGIN(kio_digikamsearch ${kio_digikamsearch_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(kio_digikamsearch 
-                      ${KDE4_KIO_LIBS} 
-                      ${KEXIV2_LIBRARIES} 
-                      ${LCMS_LIBRARIES}
-                      ${KDE4_KDE3SUPPORT_LIBS} 
-                      ${KEXIV2_LIBRARIES} 
-                      ${JPEG_LIBRARIES} 
-                      ${TIFF_LIBRARIES} 
-                      ${PNG_LIBRARIES} 
-                      ${JASPER_LIBRARIES} 
-                      ${KDCRAW_LIBRARIES} 
-                      ${LCMS_LIBRARIES} 
-                      ${SQLITE_LIBRARIES} 
-                      ${KDE4_KDEPRINT_LIBS}
+TARGET_LINK_LIBRARIES(kio_digikamsearch
+                      digikam
+                      digikamdatabase
                      )
 
 
