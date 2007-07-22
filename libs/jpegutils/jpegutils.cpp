@@ -8,6 +8,9 @@
  * 
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ *
+ * Parts of the loading code is taken from qjpeghandler.cpp, copyright follows:
+ * Copyright (C) 1992-2007 Trolltech ASA. All rights reserved.
  * 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -181,7 +184,7 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
     {
         case 3:
         case 4:
-            img = QImage( cinfo.output_width, cinfo.output_height, QImage::Format_ARGB32 );
+            img = QImage( cinfo.output_width, cinfo.output_height, QImage::Format_RGB32 );
             break;
         case 1: // B&W image
             img = QImage( cinfo.output_width, cinfo.output_height, QImage::Format_Indexed8);
@@ -191,48 +194,47 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
             break;
     }
 
-    // TODO: KDE4PORT: QImage::jumpTable() do not exist with Qt4. 
-    //       Check later if this new loop work fine!
-    while (cinfo.output_scanline < cinfo.output_height)
-        jpeg_read_scanlines(&cinfo, (JSAMPARRAY)img.scanLine(cinfo.output_scanline), cinfo.output_height);
-
+    uchar* data = img.bits();
+    int bpl = img.bytesPerLine();
+    while (cinfo.output_scanline < cinfo.output_height) {
+        uchar *d = data + cinfo.output_scanline * bpl;
+        jpeg_read_scanlines(&cinfo, &d, 1);
+    }
     jpeg_finish_decompress(&cinfo);
 
-    // Expand 24->32 bpp
-    if ( cinfo.output_components == 3 )
-    {
-        for (uint j=0; j<cinfo.output_height; j++) 
-        {
-            uchar *in = img.scanLine(j) + cinfo.output_width*3;
-            QRgb *out = (QRgb*)( img.scanLine(j) );
+    if (cinfo.output_components == 3) {
+        // Expand 24->32 bpp.
+        for (uint j=0; j<cinfo.output_height; j++) {
+            uchar *in = img.scanLine(j) + cinfo.output_width * 3;
+            QRgb *out = (QRgb*)img.scanLine(j);
 
-            for (uint i=cinfo.output_width; i--; ) 
-            {
+            for (uint i = cinfo.output_width; i--; ) {
                 in -= 3;
                 out[i] = qRgb(in[0], in[1], in[2]);
             }
         }
-    }
-    else if ( cinfo.output_components == 4 )
-    {
-        // CMYK conversion
-        for (uint j=0; j<cinfo.output_height; j++)
-        {
-            uchar *in = img.scanLine(j) + cinfo.output_width*4;
-            QRgb *out = (QRgb*)( img.scanLine(j) );
+    } else if (cinfo.out_color_space == JCS_CMYK) {
+        for (uint j = 0; j < cinfo.output_height; ++j) {
+            uchar *in = img.scanLine(j) + cinfo.output_width * 4;
+            QRgb *out = (QRgb*)img.scanLine(j);
 
-            for (uint i=cinfo.output_width; i--; )
-            {
+            for (uint i = cinfo.output_width; i--; ) {
                 in -= 4;
                 int k = in[3];
                 out[i] = qRgb(k * in[0] / 255, k * in[1] / 255, k * in[2] / 255);
             }
         }
     }
-
-    int newMax = qMax(cinfo.output_width, cinfo.output_height);
-    int newx = maximumSize*cinfo.output_width / newMax;
-    int newy = maximumSize*cinfo.output_height / newMax;
+    if (cinfo.density_unit == 1) {
+        img.setDotsPerMeterX(int(100. * cinfo.X_density / 2.54));
+        img.setDotsPerMeterY(int(100. * cinfo.Y_density / 2.54));
+    } else if (cinfo.density_unit == 2) {
+        img.setDotsPerMeterX(int(100. * cinfo.X_density));
+        img.setDotsPerMeterY(int(100. * cinfo.Y_density));
+    }
+    //int newMax = qMax(cinfo.output_width, cinfo.output_height);
+    //int newx = maximumSize*cinfo.output_width / newMax;
+    //int newy = maximumSize*cinfo.output_height / newMax;
 
     jpeg_destroy_decompress(&cinfo);
     fclose(inputFile);
