@@ -457,7 +457,7 @@ void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, 
     {
         popmenu.insertItem(SmallIcon("pencil"), i18n("Rename..."), 14);
         popmenu.insertItem(SmallIcon("albumfolder-properties"), i18n("Edit Album Properties..."), 11);
-        popmenu.insertItem(SmallIcon("reload_page"), i18n("Reset Album Icon"), 13);
+        popmenu.insertItem(SmallIcon("view-refresh"), i18n("Reset Album Icon"), 13);
         popmenu.insertSeparator();
 
         // Add KIPI Albums plugins Actions
@@ -511,12 +511,12 @@ void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, 
 
         if(AlbumSettings::componentData()->getUseTrash())
         {
-            popmenu.insertItem(SmallIcon("edittrash"),
+            popmenu.insertItem(SmallIcon("edit-trash"),
                                i18n("Move Album to Trash"), 12);
         }
         else
         {
-            popmenu.insertItem(SmallIcon("editdelete"),
+            popmenu.insertItem(SmallIcon("editshred"),
                                i18n("Delete Album"), 12);
         }
     }
