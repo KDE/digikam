@@ -35,6 +35,7 @@ namespace Digikam
 class DIGIKAM_EXPORT LoadingCacheInterface
 {
 public:
+    static void initialize();
     // clean up cache at shutdown
     static void cleanUp();
     // remove an image from the cache

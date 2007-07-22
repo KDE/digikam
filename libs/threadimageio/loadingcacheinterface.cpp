@@ -28,6 +28,11 @@
 namespace Digikam
 {
 
+void LoadingCacheInterface::initialize()
+{
+    LoadingCache::cache();
+}
+
 void LoadingCacheInterface::cleanUp()
 {
     LoadingCache::cleanUp();

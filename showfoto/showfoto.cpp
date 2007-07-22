@@ -177,7 +177,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
 
     // Setup loading cache
 
-    Digikam::LoadingCache::cache();
+    Digikam::LoadingCacheInterface::initialize();
 
     // Check ICC profiles repository availability
 
