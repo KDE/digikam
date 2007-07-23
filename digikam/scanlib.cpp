@@ -82,8 +82,8 @@ ScanLib::ScanLib()
 
     // these two lines prevent the dialog to be shown in
     // findFoldersWhichDoNotExist() method.
-    m_progressDlg->progressBar()->setMaximum(1);
-    m_progressDlg->progressBar()->setValue(1);
+    m_progressDlg->setMaximum(1);
+    m_progressDlg->setValue(1);
 
     connect(&m_scanner, SIGNAL(totalFilesToScan(int)),
             this, SLOT(slotTotalFilesToScan(int)));
@@ -176,7 +176,7 @@ void ScanLib::findMissingItems()
 {
     m_progressDlg->setAllowCancel(false);
     m_progressDlg->showCancelButton(false);
-    m_progressDlg->progressBar()->setValue(0);
+    m_progressDlg->setValue(0);
     m_progressDlg->setLabel(i18n("Scanning items, please wait..."));
     qApp->processEvents();
 
@@ -188,7 +188,7 @@ void ScanLib::findMissingItems()
 
 void ScanLib::slotTotalFilesToScan(int count)
 {
-    m_progressDlg->progressBar()->setMaximum( count );
+    m_progressDlg->setMaximum( count );
     if (count > 0)
         m_progressDlg->show();
     qApp->processEvents();
@@ -204,14 +204,14 @@ void ScanLib::slotStartScanningAlbum(const QString &albumRoot, const QString &al
 
 void ScanLib::slotFinishedScanningAlbum(const QString &, const QString &, int filesScanned)
 {
-    m_progressDlg->progressBar()->setValue(filesScanned);
+    m_progressDlg->setValue(filesScanned);
     qApp->processEvents();
 }
 
 void ScanLib::slotScanningFile(const QString &)
 {
-    m_progressDlg->progressBar()->setValue(1);
-    if (m_progressDlg->progressBar()->value() % 30 == 0)
+    m_progressDlg->setValue(1);
+    if (m_progressDlg->value() % 30 == 0)
         qApp->processEvents();
 }
 
@@ -219,7 +219,7 @@ void ScanLib::updateItemsWithoutDate()
 {
     m_progressDlg->setAllowCancel( false );
     m_progressDlg->showCancelButton (false );
-    m_progressDlg->progressBar()->setValue(0);
+    m_progressDlg->setValue(0);
     m_progressDlg->setLabel(i18n("Updating items, please wait..."));
     kapp->processEvents();
 
