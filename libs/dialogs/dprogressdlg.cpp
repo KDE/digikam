@@ -171,9 +171,9 @@ void DProgressDlg::reset()
     d->progress->setValue(0);
 }
 
-void DProgressDlg::setTotalSteps(int total)
+void DProgressDlg::setMaximum(int max)
 {
-    d->progress->setMaximum(total);
+    d->progress->setMaximum(max);
 }
 
 void DProgressDlg::setValue(int value)
@@ -184,6 +184,11 @@ void DProgressDlg::setValue(int value)
 void DProgressDlg::advance(int offset)
 {
     d->progress->setValue(d->progress->value() + offset);
+}
+
+int DProgressDlg::value()
+{
+    return d->progress->value();
 }
 
 void DProgressDlg::setLabel(const QString &text)
@@ -217,11 +222,6 @@ bool DProgressDlg::wasCancelled() const
     return d->cancelled;
 }
 
-QProgressBar *DProgressDlg::progressBar() const
-{
-    return d->progress;
-}
-
 void DProgressDlg::setActionListVSBarVisible(bool visible)
 {
     if (!visible)
@@ -231,4 +231,3 @@ void DProgressDlg::setActionListVSBarVisible(bool visible)
 }
 
 }  // NameSpace Digikam
-

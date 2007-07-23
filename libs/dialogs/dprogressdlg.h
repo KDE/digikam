@@ -55,9 +55,12 @@ Q_OBJECT
     void setButtonText(const QString &text);
     void addedAction(const QPixmap& pix, const QString &text);
     void reset();
-    void setTotalSteps(int total);
-    void setValue(int value);
+
+    void setMaximum(int max);
     void advance(int offset);
+    void setValue(int value);
+    int  value();
+
     void setLabel(const QString &text);
     void setTitle(const QString &text);
     void setActionListVSBarVisible(bool visible);
@@ -65,8 +68,6 @@ Q_OBJECT
     void setAllowCancel(bool allowCancel);
     bool wasCancelled() const;
     bool allowCancel() const;
-
-    QProgressBar *progressBar() const;
  
  protected slots:
 
