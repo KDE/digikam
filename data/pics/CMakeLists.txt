@@ -43,7 +43,6 @@ install( FILES image-full.png
 	       duplicatebothvert.png 
 	       duplicatebothhorz.png 
 	       togglemouseover.png  		          
-	       rating.png 
 	       worldmap.jpg 
 	       menusidepixmap.png  
          DESTINATION ${DATA_INSTALL_DIR}/digikam/data 
