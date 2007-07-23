@@ -48,6 +48,7 @@ extern "C"
 #include <QEvent>
 #include <QPainter>
 #include <QPoint>
+#include <QPolygon>
 #include <QDateTime>
 #include <QFileInfo>
 #include <QFile>
@@ -139,6 +140,18 @@ public:
         albumSettings = 0;
         pixMan        = 0;
         toolTip       = 0;
+
+        // Pre-computed star polygon for a 15x15 pixmap.
+        starPolygon << QPoint(0,  6);
+        starPolygon << QPoint(5,  5);
+        starPolygon << QPoint(7,  0);
+        starPolygon << QPoint(9,  5);
+        starPolygon << QPoint(14, 6);
+        starPolygon << QPoint(10, 9);
+        starPolygon << QPoint(11, 14);
+        starPolygon << QPoint(7,  11);
+        starPolygon << QPoint(3,  14);
+        starPolygon << QPoint(4,  9);
     }
 
     QString                          albumTitle;
@@ -165,6 +178,8 @@ public:
     QFont                            fnReg;
     QFont                            fnCom;
     QFont                            fnXtra;
+
+    QPolygon                         starPolygon;
 
     Q3Dict<AlbumIconItem>            itemDict;
     QHash<ImageInfo, AlbumIconItem*> itemInfoMap;
@@ -194,11 +209,14 @@ AlbumIconView::AlbumIconView(QWidget* parent)
 
     // -- Load rating Pixmap ------------------------------------------
 
-    d->ratingPixmap = QPixmap(KStandardDirs::locate("data", "digikam/data/rating.png"));
+    d->ratingPixmap = QPixmap(15, 15);
+    d->ratingPixmap.fill(Qt::transparent); 
 
     QPainter painter(&d->ratingPixmap);
-    painter.fillRect(0, 0, d->ratingPixmap.width(), d->ratingPixmap.height(),
-                     ThemeEngine::componentData()->textSpecialRegColor());
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setBrush(ThemeEngine::componentData()->textSpecialRegColor());
+    painter.setPen(Qt::black);
+    painter.drawPolygon(d->starPolygon, Qt::WindingFill);
     painter.end();
     
     // -- ImageLister connections -------------------------------------
@@ -1878,8 +1896,10 @@ void AlbumIconView::slotThemeChanged()
     setPalette(plt);
 
     QPainter painter(&d->ratingPixmap);
-    painter.fillRect(0, 0, d->ratingPixmap.width(), d->ratingPixmap.height(),
-                     ThemeEngine::componentData()->textSpecialRegColor());
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setBrush(ThemeEngine::componentData()->textSpecialRegColor());
+    painter.setPen(Qt::black);
+    painter.drawPolygon(d->starPolygon, Qt::WindingFill);
     painter.end();
     
     updateBannerRectPixmap();
