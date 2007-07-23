@@ -213,6 +213,6 @@ INSTALL(TARGETS digikam_bin DESTINATION ${BIN_INSTALL_DIR})
 
 # Others Files to install #######################################################
 
-INSTALL( FILES digikam.desktop DESTINATION ${XDG_APPS_DIR} )
+INSTALL( FILES digikam.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
 INSTALL( FILES digikamui.rc DESTINATION ${DATA_INSTALL_DIR}/digikam )
 INSTALL( FILES digikam_export.h DESTINATION ${INCLUDE_INSTALL_DIR} )
