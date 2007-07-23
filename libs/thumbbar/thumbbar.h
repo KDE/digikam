@@ -125,6 +125,12 @@ public:
 
     void refreshThumbs(const KUrl::List& urls);
     void invalidateThumb(ThumbBarItem* item);
+
+signals:
+
+    void signalItemSelected(ThumbBarItem*);
+    void signalURLSelected(const KUrl&);
+    void signalItemAdded(void);
         
 protected:
 
@@ -145,15 +151,12 @@ protected:
     virtual void viewportPaintEvent(QPaintEvent*);
     virtual void startDrag();
 
-signals:
+protected slots:
 
-    void signalItemSelected(ThumbBarItem*);
-    void signalURLSelected(const KUrl&);
-    void signalItemAdded(void);
+    void slotUpdate();
 
 private slots:
 
-    void slotUpdate();
     void slotGotPreview(const KFileItem &, const QPixmap &);
     void slotFailedPreview(const KFileItem &);
     void slotGotThumbnail(const KUrl&, const QPixmap&);
