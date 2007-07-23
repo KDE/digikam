@@ -98,12 +98,6 @@ LightTableBar::LightTableBar(QWidget* parent, int orientation, bool exifRotate)
     readToolTipSettings();
     d->toolTip = new LightTableBarToolTip(this);
 
-    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
-            this, SLOT(slotUpdate()));
-
-    connect(this, SIGNAL(signalItemSelected(ThumbBarItem*)),
-            this, SLOT(slotItemSelected(ThumbBarItem*)));
-
     // -- Load rating Pixmap ------------------------------------------
 
     KGlobal::dirs()->addResourceType("digikam_rating", KGlobal::dirs()->kde_default("data")
@@ -128,6 +122,12 @@ LightTableBar::LightTableBar(QWidget* parent, int orientation, bool exifRotate)
 
     connect(watch, SIGNAL(signalImageRatingChanged(Q_LLONG)),
             this, SLOT(slotImageRatingChanged(Q_LLONG)));
+
+    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+            this, SLOT(slotThemeChanged()));
+
+    connect(this, SIGNAL(signalItemSelected(ThumbBarItem*)),
+            this, SLOT(slotItemSelected(ThumbBarItem*)));
 }
 
 LightTableBar::~LightTableBar()
@@ -752,6 +752,22 @@ void LightTableBar::contentsDropEvent(QDropEvent *e)
     {
         e->ignore();
     }
+}
+
+void LightTableBar::slotThemeChanged()
+{
+    KGlobal::dirs()->addResourceType("digikam_rating", KGlobal::dirs()->kde_default("data")
+                                     + "digikam/data");
+    QString ratingPixPath = KGlobal::dirs()->findResourceDir("digikam_rating", "rating.png");
+    ratingPixPath += "/rating.png";
+    d->ratingPixmap = QPixmap(ratingPixPath);
+
+    QPainter painter(&d->ratingPixmap);
+    painter.fillRect(0, 0, d->ratingPixmap.width(), d->ratingPixmap.height(),
+                     ThemeEngine::instance()->textSpecialRegColor());
+    painter.end();
+
+    slotUpdate();
 }
 
 // -------------------------------------------------------------------------
