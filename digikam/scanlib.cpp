@@ -7,6 +7,8 @@
  * Description : scan pictures interface.
  * 
  * Copyright (C) 2005-2006 by Tom Albers <tomalbers@kde.nl>
+ * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007      by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -70,35 +72,35 @@ namespace Digikam
 ScanLib::ScanLib() 
        : QObject()
 {
-    m_progressBar = new DProgressDlg(0);
-    m_progressBar->setInitialSize(QSize(500, 100));
-    m_progressBar->setActionListVSBarVisible(false);
-    m_progressBar->setWhatsThis( i18n("This shows the progress of the "
+    m_progressDlg = new DProgressDlg(0);
+    m_progressDlg->setInitialSize(QSize(500, 100));
+    m_progressDlg->setActionListVSBarVisible(false);
+    m_progressDlg->setWhatsThis( i18n("This shows the progress of the "
         "scan. During the scan, all files on disk are registered in a "
         "database. This is required for sorting on exif-date and speeds up "
         "the overall performance of digiKam.") );
 
     // these two lines prevent the dialog to be shown in
     // findFoldersWhichDoNotExist() method.
-    m_progressBar->progressBar()->setMaximum(1);
-    m_progressBar->progressBar()->setValue(1);
+    m_progressDlg->progressBar()->setMaximum(1);
+    m_progressDlg->progressBar()->setValue(1);
 
     connect(&m_scanner, SIGNAL(totalFilesToScan(int)),
             this, SLOT(slotTotalFilesToScan(int)));
 
-    connect(&m_scanner, SIGNAL(startScanningAlbum(const QString &, const QString &)),
-            this, SLOT(slotStartScanningAlbum(const QString &, const QString &)));
+    connect(&m_scanner, SIGNAL(startScanningAlbum(const QString&, const QString&)),
+            this, SLOT(slotStartScanningAlbum(const QString&, const QString&)));
 
-    connect(&m_scanner, SIGNAL(finishedScanningAlbum(const QString &, const QString &, int)),
-            this, SLOT(slotFinishedScanningAlbum(const QString &, const QString &, int)));
+    connect(&m_scanner, SIGNAL(finishedScanningAlbum(const QString&, const QString&, int)),
+            this, SLOT(slotFinishedScanningAlbum(const QString&, const QString&, int)));
 
-    connect(&m_scanner, SIGNAL(scanningFile(const QString &)),
-            this, SLOT(slotScanningFile(const QString &)));
+    connect(&m_scanner, SIGNAL(scanningFile(const QString&)),
+            this, SLOT(slotScanningFile(const QString&)));
 }
 
 ScanLib::~ScanLib()
 {
-    delete m_progressBar;
+    delete m_progressDlg;
 }
 
 void ScanLib::startScan()
@@ -108,21 +110,21 @@ void ScanLib::startScan()
                   "system-run", K3Icon::NoGroup, 32);
 
     QString message = i18n("Finding non-existing Albums");
-    m_progressBar->addedAction(pix, message);
+    m_progressDlg->addedAction(pix, message);
     gettimeofday(&tv1, 0);
     findFoldersWhichDoNotExist();
     gettimeofday(&tv2, 0);
     timing(message, tv1, tv2);
 
     message = i18n("Finding items not in the database or disk");
-    m_progressBar->addedAction(pix, message);
+    m_progressDlg->addedAction(pix, message);
     gettimeofday(&tv1, 0);
     findMissingItems();
     gettimeofday(&tv2, 0);
     timing(message, tv1, tv2);
 
     message = i18n("Updating items without date");
-    m_progressBar->addedAction(pix, message);
+    m_progressDlg->addedAction(pix, message);
     gettimeofday(&tv1, 0);
     updateItemsWithoutDate();
     gettimeofday(&tv2, 0);
@@ -172,23 +174,23 @@ void ScanLib::findFoldersWhichDoNotExist()
 
 void ScanLib::findMissingItems()
 {
-    m_progressBar->setAllowCancel(false);
-    m_progressBar->showCancelButton(false);
-    m_progressBar->progressBar()->setValue(0);
-    m_progressBar->setLabel(i18n("Scanning items, please wait..."));
+    m_progressDlg->setAllowCancel(false);
+    m_progressDlg->showCancelButton(false);
+    m_progressDlg->progressBar()->setValue(0);
+    m_progressDlg->setLabel(i18n("Scanning items, please wait..."));
     qApp->processEvents();
 
     m_scanner.scanAlbums();
 
-    m_progressBar->hide();
+    m_progressDlg->hide();
     kapp->processEvents();
 }
 
 void ScanLib::slotTotalFilesToScan(int count)
 {
-    m_progressBar->progressBar()->setMaximum( count );
+    m_progressDlg->progressBar()->setMaximum( count );
     if (count > 0)
-        m_progressBar->show();
+        m_progressDlg->show();
     qApp->processEvents();
 }
 
@@ -196,34 +198,34 @@ void ScanLib::slotStartScanningAlbum(const QString &albumRoot, const QString &al
 {
     QPixmap pix = KIconLoader::global()->loadIcon(
                   "folder-image", K3Icon::NoGroup, 32);
-    m_progressBar->addedAction(pix, albumRoot + album);
+    m_progressDlg->addedAction(pix, albumRoot + album);
     qApp->processEvents();
 }
 
 void ScanLib::slotFinishedScanningAlbum(const QString &, const QString &, int filesScanned)
 {
-    m_progressBar->progressBar()->setValue(filesScanned);
+    m_progressDlg->progressBar()->setValue(filesScanned);
     qApp->processEvents();
 }
 
 void ScanLib::slotScanningFile(const QString &)
 {
-    m_progressBar->progressBar()->setValue(1);
-    if (m_progressBar->progressBar()->value() % 30 == 0)
+    m_progressDlg->progressBar()->setValue(1);
+    if (m_progressDlg->progressBar()->value() % 30 == 0)
         qApp->processEvents();
 }
 
 void ScanLib::updateItemsWithoutDate()
 {
-    m_progressBar->setAllowCancel( false );
-    m_progressBar->showCancelButton (false );
-    m_progressBar->progressBar()->setValue(0);
-    m_progressBar->setLabel(i18n("Updating items, please wait..."));
+    m_progressDlg->setAllowCancel( false );
+    m_progressDlg->showCancelButton (false );
+    m_progressDlg->progressBar()->setValue(0);
+    m_progressDlg->setLabel(i18n("Updating items, please wait..."));
     kapp->processEvents();
 
     m_scanner.updateItemsWithoutDate();
 
-    m_progressBar->hide();
+    m_progressDlg->hide();
     qApp->processEvents();
 }
 
