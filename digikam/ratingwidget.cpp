@@ -177,30 +177,21 @@ void RatingWidget::slotThemeChanged()
     p1.setRenderHint(QPainter::Antialiasing, true);
     p1.setBrush(palette().color(QPalette::Dark));
     p1.setPen(Qt::black);
-    for (int i = 0; i < RatingMax; ++i) 
-    {
-        p1.drawPolygon(d->starPolygon, Qt::WindingFill);
-    }
+    p1.drawPolygon(d->starPolygon, Qt::WindingFill);
     p1.end();
 
     QPainter p2(&d->selPixmap);
     p2.setRenderHint(QPainter::Antialiasing, true);
     p2.setBrush(ThemeEngine::componentData()->textSpecialRegColor());
     p2.setPen(Qt::black);
-    for (int i = 0; i < RatingMax; ++i) 
-    {
-        p2.drawPolygon(d->starPolygon, Qt::WindingFill);
-    }
+    p2.drawPolygon(d->starPolygon, Qt::WindingFill);
     p2.end();
 
     QPainter p3(&d->disPixmap);
     p3.setRenderHint(QPainter::Antialiasing, true);
     p3.setBrush(palette().color(QPalette::Disabled, QPalette::Background));
     p3.setPen(palette().color(QPalette::Disabled, QPalette::Foreground));
-    for (int i = 0; i < RatingMax; ++i) 
-    {
-        p3.drawPolygon(d->starPolygon, Qt::WindingFill);
-    }
+    p3.drawPolygon(d->starPolygon, Qt::WindingFill);
     p3.end();
     
     setFixedSize(QSize(d->regPixmap.width()*RatingMax, d->regPixmap.height()));
