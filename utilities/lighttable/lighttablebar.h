@@ -103,6 +103,8 @@ private slots:
     void slotAssignRatingFiveStar();
     void slotAssignRating(int);
 
+    void slotThemeChanged();
+
 private:
 
     LightTableBarPriv *d;

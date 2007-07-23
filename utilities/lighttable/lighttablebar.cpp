@@ -32,6 +32,7 @@
 #include <QDropEvent>
 #include <QMouseEvent>
 #include <QPaintEvent>
+#include <QPolygon>
 
 // KDE includes.
 
@@ -68,9 +69,23 @@ public:
     {
         navigateByPair = false;
         toolTip        = 0;
+
+        // Pre-computed star polygon for a 15x15 pixmap.
+        starPolygon << QPoint(0,  6);
+        starPolygon << QPoint(5,  5);
+        starPolygon << QPoint(7,  0);
+        starPolygon << QPoint(9,  5);
+        starPolygon << QPoint(14, 6);
+        starPolygon << QPoint(10, 9);
+        starPolygon << QPoint(11, 14);
+        starPolygon << QPoint(7,  11);
+        starPolygon << QPoint(3,  14);
+        starPolygon << QPoint(4,  9);
     }
 
     bool                  navigateByPair;
+
+    QPolygon              starPolygon;
 
     QPixmap               ratingPixmap;
 
@@ -102,19 +117,16 @@ LightTableBar::LightTableBar(QWidget* parent, int orientation, bool exifRotate)
     readToolTipSettings();
     d->toolTip = new LightTableBarToolTip(this);
 
-    connect(ThemeEngine::componentData(), SIGNAL(signalThemeChanged()),
-            this, SLOT(slotUpdate()));
-
-    connect(this, SIGNAL(signalItemSelected(ThumbBarItem*)),
-            this, SLOT(slotItemSelected(ThumbBarItem*)));
-
     // -- Load rating Pixmap ------------------------------------------
 
-    d->ratingPixmap = QPixmap(KStandardDirs::locate("data", "digikam/data/rating.png"));
+    d->ratingPixmap = QPixmap(15, 15);
+    d->ratingPixmap.fill(Qt::transparent); 
 
     QPainter painter(&d->ratingPixmap);
-    painter.fillRect(0, 0, d->ratingPixmap.width(), d->ratingPixmap.height(),
-                     ThemeEngine::componentData()->textSpecialRegColor());
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setBrush(ThemeEngine::componentData()->textSpecialRegColor());
+    painter.setPen(Qt::black);
+    painter.drawPolygon(d->starPolygon, Qt::WindingFill);
     painter.end();
 
     if (orientation == Qt::Vertical)
@@ -128,6 +140,12 @@ LightTableBar::LightTableBar(QWidget* parent, int orientation, bool exifRotate)
 
     connect(watch, SIGNAL(signalImageRatingChanged(qlonglong)),
             this, SLOT(slotImageRatingChanged(qlonglong)));
+
+    connect(ThemeEngine::componentData(), SIGNAL(signalThemeChanged()),
+            this, SLOT(slotThemeChanged()));
+
+    connect(this, SIGNAL(signalItemSelected(ThumbBarItem*)),
+            this, SLOT(slotItemSelected(ThumbBarItem*)));
 }
 
 LightTableBar::~LightTableBar()
@@ -741,6 +759,18 @@ void LightTableBar::contentsDropEvent(QDropEvent *e)
     {
         e->ignore();
     }
+}
+
+void LightTableBar::slotThemeChanged()
+{
+    QPainter painter(&d->ratingPixmap);
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setBrush(ThemeEngine::componentData()->textSpecialRegColor());
+    painter.setPen(Qt::black);
+    painter.drawPolygon(d->starPolygon, Qt::WindingFill);
+    painter.end();
+
+    slotUpdate();
 }
 
 // -------------------------------------------------------------------------
