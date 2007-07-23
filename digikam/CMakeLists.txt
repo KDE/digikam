@@ -45,6 +45,7 @@ INCLUDE_DIRECTORIES(
                      ${CMAKE_SOURCE_DIR}/digikam/digikam
                    )
 
+
 # Shared libdigikam ################################################################
 
 # Required by Greycstoration algorithm (CImg.h)
@@ -106,6 +107,7 @@ TARGET_LINK_LIBRARIES(digikam
 SET_TARGET_PROPERTIES(digikam PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 INSTALL(TARGETS digikam DESTINATION ${LIB_INSTALL_DIR} )
 
+
 # Shared libdigikamdatabase ########################################################
 
 SET(digikamdatabase_LIB_SRCS
@@ -123,6 +125,7 @@ TARGET_LINK_LIBRARIES(digikamdatabase
 SET_TARGET_PROPERTIES(digikamdatabase PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 INSTALL(TARGETS digikamdatabase DESTINATION ${LIB_INSTALL_DIR} )
 
+
 # digiKam binary progam #########################################################
 
 SET(digikam_bin_SRCS
@@ -135,66 +138,66 @@ SET(digikam_bin_SRCS
                      ${libbatch_SRCS}
                      ${libthemeengine_SRCS}
 
-                      kdateedit.cpp 
-                      metadatahub.cpp 
-                      digikamapp.cpp 
-                      album.cpp 
-                      albumiconview.cpp 
-                      albumicongroupitem.cpp 
-                      albumiconitem.cpp 
-                      albumitemhandler.cpp 
-                      albumfiletip.cpp 
-                      albumfolderview.cpp 
-                      albumhistory.cpp 
-                      albumlister.cpp 
-                      albummanager.cpp 
-                      albumpropsedit.cpp 
-                      albumsettings.cpp 
-                      albumthumbnailloader.cpp 
-                      albumwidgetstack.cpp 
-                      cameradragobject.cpp 
-                      cameralist.cpp 
-                      cameratype.cpp 
-                      datefolderview.cpp 
-                      digikamfirstrun.cpp 
-                      digikamview.cpp 
-                      dio.cpp 
-                      dragobjects.cpp 
-                      firstrun.cpp 
-                      folderitem.cpp 
-                      folderview.cpp 
-                      iconview.cpp 
-                      icongroupitem.cpp 
-                      iconitem.cpp 
-                      imageattributeswatch.cpp 
-                      imagepreviewview.cpp 
-                      kdatetimeedit.cpp 
-                      kdatepickerpopup.cpp 
-                      kipiinterface.cpp 
-                      mediaplayerview.cpp 
-                      monthwidget.cpp 
-                      pixmapmanager.cpp 
-                      ratingpopupmenu.cpp 
-                      ratingwidget.cpp 
-                      scanlib.cpp 
-                      searchadvanceddialog.cpp 
-                      searchfolderview.cpp 
-                      searchquickdialog.cpp 
-                      searchresultsview.cpp 
-                      searchresultsitem.cpp 
-                      searchwidgets.cpp 
-                      syncjob.cpp 
-                      tagcreatedlg.cpp 
-                      tagfilterview.cpp 
-                      tagfolderview.cpp 
-                      tagspopupmenu.cpp 
-                      welcomepageview.cpp 
-                      main.cpp
+                     album.cpp 
+                     albumiconview.cpp 
+                     albumicongroupitem.cpp 
+                     albumiconitem.cpp 
+                     albumitemhandler.cpp 
+                     albumfiletip.cpp 
+                     albumfolderview.cpp 
+                     albumhistory.cpp 
+                     albumlister.cpp 
+                     albummanager.cpp 
+                     albumpropsedit.cpp 
+                     albumsettings.cpp 
+                     albumthumbnailloader.cpp 
+                     albumwidgetstack.cpp 
+                     cameradragobject.cpp 
+                     cameralist.cpp 
+                     cameratype.cpp 
+                     datefolderview.cpp 
+                     digikamapp.cpp 
+                     digikamfirstrun.cpp 
+                     digikamview.cpp 
+                     dio.cpp 
+                     dragobjects.cpp 
+                     firstrun.cpp 
+                     folderitem.cpp 
+                     folderview.cpp 
+                     iconview.cpp 
+                     icongroupitem.cpp 
+                     iconitem.cpp 
+                     imageattributeswatch.cpp 
+                     imagepreviewview.cpp 
+                     kdateedit.cpp 
+                     kdatetimeedit.cpp 
+                     kdatepickerpopup.cpp 
+                     kipiinterface.cpp 
+                     main.cpp
+                     mediaplayerview.cpp 
+                     metadatahub.cpp 
+                     monthwidget.cpp 
+                     pixmapmanager.cpp 
+                     ratingpopupmenu.cpp 
+                     ratingwidget.cpp 
+                     scanlib.cpp 
+                     searchadvanceddialog.cpp 
+                     searchfolderview.cpp 
+                     searchquickdialog.cpp 
+                     searchresultsview.cpp 
+                     searchresultsitem.cpp 
+                     searchwidgets.cpp 
+                     syncjob.cpp 
+                     tagcreatedlg.cpp 
+                     tagfilterview.cpp 
+                     tagfolderview.cpp 
+                     tagspopupmenu.cpp 
+                     welcomepageview.cpp 
     )
 
 KDE4_ADD_UI_FILES(digikam_bin_SRCS ${CMAKE_SOURCE_DIR}/digikam/libs/dialogs/deletedialogbase.ui)
 
-qt4_add_dbus_adaptor(digikam_bin_SRCS org.kde.digikam.xml digikamapp.h Digikam::DigikamApp)
+QT4_ADD_DBUS_ADAPTATOR(digikam_bin_SRCS org.kde.digikam.xml digikamapp.h Digikam::DigikamApp)
 
 KDE4_ADD_EXECUTABLE(digikam_bin ${digikam_bin_SRCS})
 
@@ -204,7 +207,7 @@ TARGET_LINK_LIBRARIES(digikam_bin
                       ${GPHOTO2_LIBRARIES}
                       digikam
                       digikamdatabase
-              )
+                     )
 
 SET_TARGET_PROPERTIES(digikam_bin PROPERTIES OUTPUT_NAME digikam)
 
@@ -213,6 +216,6 @@ INSTALL(TARGETS digikam_bin DESTINATION ${BIN_INSTALL_DIR})
 
 # Others Files to install #######################################################
 
-INSTALL( FILES digikam.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
-INSTALL( FILES digikamui.rc DESTINATION ${DATA_INSTALL_DIR}/digikam )
-INSTALL( FILES digikam_export.h DESTINATION ${INCLUDE_INSTALL_DIR} )
+INSTALL(FILES digikam.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
+INSTALL(FILES digikamui.rc DESTINATION ${DATA_INSTALL_DIR}/digikam)
+INSTALL(FILES digikam_export.h DESTINATION ${INCLUDE_INSTALL_DIR})
