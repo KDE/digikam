@@ -197,7 +197,7 @@ SET(digikam_bin_SRCS
 
 KDE4_ADD_UI_FILES(digikam_bin_SRCS ${CMAKE_SOURCE_DIR}/digikam/libs/dialogs/deletedialogbase.ui)
 
-QT4_ADD_DBUS_ADAPTATOR(digikam_bin_SRCS org.kde.digikam.xml digikamapp.h Digikam::DigikamApp)
+QT4_ADD_DBUS_ADAPTOR(digikam_bin_SRCS org.kde.digikam.xml digikamapp.h Digikam::DigikamApp)
 
 KDE4_ADD_EXECUTABLE(digikam_bin ${digikam_bin_SRCS})
 
