@@ -92,7 +92,7 @@ BatchAlbumsSyncMetadata::~BatchAlbumsSyncMetadata()
 void BatchAlbumsSyncMetadata::slotStart()
 {
     setTitle(i18n("Parsing all albums"));
-    setTotalSteps(d->palbumList.count());
+    setMaximum(d->palbumList.count());
 
     connect(d->imageInfoJob, SIGNAL(signalItemsInfo(const ImageInfoList&)),
             this, SLOT(slotAlbumParsed(const ImageInfoList&)));

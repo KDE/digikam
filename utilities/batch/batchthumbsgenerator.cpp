@@ -166,7 +166,7 @@ void BatchThumbsGenerator::rebuildAllThumbs(int size)
         allPicturesPath += pathSorted;
     }
 
-    setTotalSteps(allPicturesPath.count()*2);
+    setMaximum(allPicturesPath.count()*2);
 
     // Remove all current album item thumbs from disk cache.
 
