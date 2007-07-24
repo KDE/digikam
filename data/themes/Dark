@@ -27,7 +27,7 @@
 
 <digikamtheme>
 
- <name                         value="Dark"      />
+ <name                         value="Dark"       />
 
  <BaseColor                    value="#000000"    />
 
@@ -46,21 +46,21 @@
  <ThumbnailRegularColor        value="#131313"    />
  <ThumbnailRegularColorTo      value="#2e2a26"    />
  <ThumbnailRegularBevel        value="RAISED"     />
- <ThumbnailRegularGradient     value="SOLID    />
- <ThumbnailRegularBorder       value="false"       />
+ <ThumbnailRegularGradient     value="SOLID       />
+ <ThumbnailRegularBorder       value="false"      />
  <ThumbnailRegularBorderColor  value="#e0e0ef"    />
 
  <ThumbnailSelectedColor       value="#e0e0ef"    />
  <ThumbnailSelectedColorTo     value="#1b252f"    />
  <ThumbnailSelectedBevel       value="RAISED"     />
  <ThumbnailSelectedGradient    value="VERTICAL"   />
- <ThumbnailSelectedBorder      value="false"       />
+ <ThumbnailSelectedBorder      value="false"      />
  <ThumbnailSelectedBorderColor value="#e0e0ef"    />
 
  <ListviewRegularColor         value="#0d0d0d"    />
  <ListviewRegularColorTo       value="#222120"    />
- <ListviewRegularBevel         value="RAISED"       />
- <ListviewRegularGradient      value="HORIZONTAL"      />
+ <ListviewRegularBevel         value="RAISED"     />
+ <ListviewRegularGradient      value="HORIZONTAL" />
  <ListviewRegularBorder        value="false"      />
  <ListviewRegularBorderColor   value="#000000"    />
 
