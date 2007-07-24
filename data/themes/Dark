@@ -32,7 +32,7 @@ text.special.selected.color:		#83b8bd
 banner.color:				#313f50
 banner.colorTo:				#1e2731
 banner.bevel:				RAISED
-banner.gradient:				VERTICAL
+banner.gradient:			VERTICAL
 banner.border:				false
 banner.borderColor			#000000
 

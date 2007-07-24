@@ -63,5 +63,3 @@ listview.selected.bevel:		FLAT
 listview.selected.gradient:		SOLID
 listview.selected.border:		true
 listview.selected.borderColor:		#313131
-
-
