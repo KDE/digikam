@@ -542,7 +542,7 @@ void AlbumFileTip::updateText()
 
         if (settings->getToolTipsShowRating())
         {
-            str.fill( '*', info.rating() );
+            str.fill( 'X', info.rating() );
             if (str.isEmpty()) str = QString("---");
             tip += cellSpecBeg + i18n("Rating:") + cellSpecMid + str + cellSpecEnd;
         }
