@@ -101,8 +101,7 @@ DProgressDlg::DProgressDlg(QWidget *parent, const QString &caption)
     vlay->addWidget(d->title);
     vlay->addStretch();
 
-    d->logo->setPixmap(KIconLoader::global()->loadIcon("digikam", K3Icon::NoGroup, 
-                                              128, K3Icon::DefaultState, QStringList(),0, true));
+    d->logo->setPixmap(KIconLoader::global()->loadIcon("digikam", K3Icon::NoGroup, 128));
 
     d->actionsList->addColumn("Thumb");   // no i18n here: hiden column
     d->actionsList->addColumn("Status");  // no i18n here: hiden column
