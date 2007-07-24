@@ -23,42 +23,42 @@
 
 ! "Sandy"
 
-base.color:			     rgb:DA/C8/BD
-text.regular.color:		     rgb:00/00/00
-text.selected.color:		     rgb:FF/FF/FF
-text.special.regular.color:	     rgb:88/88/00
-text.special.selected.color:	     rgb:FF/FF/00
+base.color:			     #DAC8BD
+text.regular.color:		     #000000
+text.selected.color:		     #FFFFFF
+text.special.regular.color:	     #888800
+text.special.selected.color:	     #FFFF00
 
-banner.color:			     rgb:81/76/70
-banner.colorTo:			     rgb:76/6C/66
+banner.color:			     #817670
+banner.colorTo:			     #766C66
 banner.bevel:			     RAISED
 banner.gradient:		     DIAGONAL
 banner.border:                       true
-banner.borderColor:                  rgb:00/00/00
+banner.borderColor:                  #000000
 
-thumbnail.regular.color:             rgb:FF/EA/DD
-thumbnail.regular.colorTo:           rgb:EC/D9/CD
+thumbnail.regular.color:             #FFEADD
+thumbnail.regular.colorTo:           #ECD9CD
 thumbnail.regular.bevel:	     RAISED
 thumbnail.regular.gradient:          DIAGONAL
 thumbnail.regular.border:            true
-thumbnail.regular.borderColor:       rgb:B5/A6/9D
+thumbnail.regular.borderColor:       #B5A69D
 
-thumbnail.selected.color:	     rgb:81/76/70
-thumbnail.selected.colorTo:	     rgb:76/6C/66
+thumbnail.selected.color:	     #817670
+thumbnail.selected.colorTo:	     #766C66
 thumbnail.selected.bevel:	     RAISED
 thumbnail.selected.gradient:         DIAGONAL
 thumbnail.selected.border:           true
-thumbnail.selected.borderColor:      rgb:00/00/00
+thumbnail.selected.borderColor:      #000000
 
-listview.regular.color:	             rgb:DA/C8/BD
+listview.regular.color:	             #DAC8BD
 listview.regular.bevel:	             FLAT
 listview.regular.gradient:           SOLID
 listview.regular.border:             true
-listview.regular.borderColor:        rgb:FF/EA/DD
+listview.regular.borderColor:        #FFEADD
 
-listview.selected.color:	     rgb:81/76/70
-listview.selected.colorTo:	     rgb:76/6C/66
+listview.selected.color:	     #817670
+listview.selected.colorTo:	     #766C66
 listview.selected.bevel:	     RAISED
 listview.selected.gradient:          DIAGONAL
 listview.selected.border:            true
-listview.selected.borderColor:       rgb:00/00/00
+listview.selected.borderColor:       #000000
