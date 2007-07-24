@@ -1,3 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
 /* ============================================================
  *
  * This file is a part of digiKam project
@@ -6,7 +9,7 @@
  * Date        : 2005-07-19
  * Description : "Sandy" colors theme.
  *
- * Copyright (C) 2005 by Laurent Rathle  <lrathle at kde-france dot org>
+ * Copyright (C) 2005 by Laurent Rathle <lrathle at kde-france dot org>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,45 +23,53 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
+-->
 
-! "Sandy"
+<digikamtheme>
 
-base.color:			     rgb:DA/C8/BD
-text.regular.color:		     rgb:00/00/00
-text.selected.color:		     rgb:FF/FF/FF
-text.special.regular.color:	     rgb:88/88/00
-text.special.selected.color:	     rgb:FF/FF/00
+ <name                         value="Sandy"      />
 
-banner.color:			     rgb:81/76/70
-banner.colorTo:			     rgb:76/6C/66
-banner.bevel:			     RAISED
-banner.gradient:		     DIAGONAL
-banner.border:                       true
-banner.borderColor:                  rgb:00/00/00
+ <BaseColor                    value="#DAC8BD"    />
 
-thumbnail.regular.color:             rgb:FF/EA/DD
-thumbnail.regular.colorTo:           rgb:EC/D9/CD
-thumbnail.regular.bevel:	     RAISED
-thumbnail.regular.gradient:          DIAGONAL
-thumbnail.regular.border:            true
-thumbnail.regular.borderColor:       rgb:B5/A6/9D
+ <TextRegularColor             value="#000000"    />
+ <TextSelectedColor            value="#FFFFFF"    />
+ <TextSpecialRegularColor      value="#888800"    />
+ <TextSpecialSelectedColor     value="#FFFF00"    />
 
-thumbnail.selected.color:	     rgb:81/76/70
-thumbnail.selected.colorTo:	     rgb:76/6C/66
-thumbnail.selected.bevel:	     RAISED
-thumbnail.selected.gradient:         DIAGONAL
-thumbnail.selected.border:           true
-thumbnail.selected.borderColor:      rgb:00/00/00
+ <BannerColor                  value="#817670"    />
+ <BannerColorTo                value="#766C66"    />
+ <BannerBevel                  value="RAISED"     />
+ <BannerGradient               value="DIAGONAL"   />
+ <BannerBorder                 value="true"       />
+ <BannerBorderColor            value="#000000"    />
 
-listview.regular.color:	             rgb:DA/C8/BD
-listview.regular.bevel:	             FLAT
-listview.regular.gradient:           SOLID
-listview.regular.border:             true
-listview.regular.borderColor:        rgb:FF/EA/DD
+ <ThumbnailRegularColor        value="#FFEADD"    />
+ <ThumbnailRegularColorTo      value="#ECD9CD"    />
+ <ThumbnailRegularBevel        value="RAISED"     />
+ <ThumbnailRegularGradient     value="DIAGONAL    />
+ <ThumbnailRegularBorder       value="true"       />
+ <ThumbnailRegularBorderColor  value="#B5A69D"    />
 
-listview.selected.color:	     rgb:81/76/70
-listview.selected.colorTo:	     rgb:76/6C/66
-listview.selected.bevel:	     RAISED
-listview.selected.gradient:          DIAGONAL
-listview.selected.border:            true
-listview.selected.borderColor:       rgb:00/00/00
+ <ThumbnailSelectedColor       value="#817670"    />
+ <ThumbnailSelectedColorTo     value="#766C66"    />
+ <ThumbnailSelectedBevel       value="RAISED"     />
+ <ThumbnailSelectedGradient    value="DIAGONAL"   />
+ <ThumbnailSelectedBorder      value="true"       />
+ <ThumbnailSelectedBorderColor value="#000000"    />
+
+ <ListviewRegularColor         value="#DAC8BD"    />
+ <ListviewRegularColorTo       value="#DAC8BD"    />
+ <ListviewRegularBevel         value="FLAT"       />
+ <ListviewRegularGradient      value="SOLID"      />
+ <ListviewRegularBorder        value="true"       />
+ <ListviewRegularBorderColor   value="#FFEADD"    />
+
+ <ListviewSelectedColor        value="#817670"    />
+ <ListviewSelectedColorTo      value="#766C66"    />
+ <ListviewSelectedBevel        value="RAISED"     />
+ <ListviewSelectedGradient     value="DIAGONAL"   />
+ <ListviewSelectedBorder       value="true "      />
+ <ListviewSelectedBorderColor  value="#000000"    />
+
+</digikamtheme>
+                                             
