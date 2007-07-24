@@ -27,10 +27,8 @@
 
 // Qt includes.
 
-#include <qwidget.h>
-#include <qmap.h>
-//Added by qt3to4:
-#include <QLabel>
+#include <QWidget>
+#include <QMap>
 
 class QComboBox;
 class QCheckBox;

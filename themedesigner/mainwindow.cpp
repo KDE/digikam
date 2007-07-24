@@ -24,22 +24,20 @@
 
 // Qt includes.
 
-#include <qpushbutton.h>
-#include <q3groupbox.h>
-#include <qlabel.h>
-#include <qcombobox.h>
-#include <qcheckbox.h>
-#include <q3frame.h>
-#include <qsplitter.h>
-#include <q3header.h>
-#include <qlayout.h>
-#include <qfileinfo.h>
-#include <q3textstream.h>
-#include <qdatetime.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3GridLayout>
-#include <Q3VBoxLayout>
+#include <QHeader>
+#include <QFrame>
+#include <QPushButton>
+#include <QGroupBox>
+#include <QLabel>
+#include <QComboBox>
+#include <qCheckBox>
+#include <QSplitter>
+#include <QFileInfo>
+#include <QTextStream>
+#include <QDateTime>
+#include <QHBoxLayout>
+#include <QGridLayout>
+#include <QVBoxLayout>
 
 // KDE includes.
 
@@ -68,9 +66,10 @@ namespace Digikam
 {
 
 MainWindow::MainWindow()
-          : QWidget(0, 0, Qt::WDestructiveClose)
+          : QWidget(0)
 {
     setCaption(i18n("digiKam Theme Designer"));
+    setAttribute(Qt::WA_DeleteOnClose);
 
     AlbumSettings *albumSettings = new AlbumSettings();
     albumSettings->readSettings();
@@ -85,7 +84,7 @@ MainWindow::MainWindow()
         
     // Top Layout ------------------------------------------------
     
-    Q3GridLayout* layout = new Q3GridLayout(this);
+    QGridLayout* layout = new QGridLayout(this);
     layout->setMargin(5);
     layout->setSpacing(5);
 
@@ -103,50 +102,50 @@ MainWindow::MainWindow()
 
     // Property Editor ---------------------------------------------
     
-    Q3GroupBox *groupBox = new Q3GroupBox( this );
+    QGroupBox *groupBox = new QGroupBox(this);
     layout->addWidget(groupBox, 0, 1);
 
-    groupBox->setColumnLayout(0, Qt::Vertical );
+    groupBox->setColumnLayout(0, Qt::Vertical);
     groupBox->layout()->setSpacing( 5 );
     groupBox->layout()->setMargin( 5 );
 
-    Q3VBoxLayout* groupBoxLayout = new Q3VBoxLayout( groupBox->layout() );
-    groupBoxLayout->setAlignment( Qt::AlignTop );
+    QVBoxLayout* groupBoxLayout = new QVBoxLayout(groupBox);
+    groupBoxLayout->setAlignment(Qt::AlignTop);
 
-    Q3HBoxLayout* hboxLayout = 0;
-    QLabel*      label = 0;
+    QHBoxLayout* hboxLayout = 0;
+    QLabel*      label      = 0;
     
-    label           = new QLabel( "Property: ", groupBox );
-    m_propertyCombo = new QComboBox( groupBox );
-    hboxLayout      = new Q3HBoxLayout( 0 );
-    hboxLayout->addWidget( label );
-    hboxLayout->addWidget( m_propertyCombo );
-    groupBoxLayout->addLayout( hboxLayout);
+    label           = new QLabel("Property: ", groupBox);
+    m_propertyCombo = new QComboBox(groupBox);
+    hboxLayout      = new QHBoxLayout(0);
+    hboxLayout->addWidget(label );
+    hboxLayout->addWidget(m_propertyCombo);
+    groupBoxLayout->addLayout(hboxLayout);
 
     m_bevelLabel = new QLabel( "Bevel: ", groupBox );
     m_bevelCombo = new QComboBox( groupBox );
-    hboxLayout   = new Q3HBoxLayout( 0 );
+    hboxLayout   = new QHBoxLayout( 0 );
     hboxLayout->addWidget( m_bevelLabel );
     hboxLayout->addWidget( m_bevelCombo );
     groupBoxLayout->addLayout( hboxLayout);
 
     m_gradientLabel = new QLabel( "Gradient: ", groupBox );
     m_gradientCombo = new QComboBox( groupBox );
-    hboxLayout      = new Q3HBoxLayout( 0 );
+    hboxLayout      = new QHBoxLayout( 0 );
     hboxLayout->addWidget( m_gradientLabel );
     hboxLayout->addWidget( m_gradientCombo );
     groupBoxLayout->addLayout( hboxLayout);
 
     m_begColorLabel = new QLabel( "Start Color: ", groupBox );
     m_begColorBtn   = new KColorButton( groupBox );
-    hboxLayout      = new Q3HBoxLayout( 0 );
+    hboxLayout      = new QHBoxLayout( 0 );
     hboxLayout->addWidget( m_begColorLabel );
     hboxLayout->addWidget( m_begColorBtn );
     groupBoxLayout->addLayout( hboxLayout);
 
     m_endColorLabel = new QLabel( "End Color: ", groupBox );
     m_endColorBtn   = new KColorButton( groupBox );
-    hboxLayout      = new Q3HBoxLayout( 0 );
+    hboxLayout      = new QHBoxLayout( 0 );
     hboxLayout->addWidget( m_endColorLabel );
     hboxLayout->addWidget( m_endColorBtn );
     groupBoxLayout->addLayout( hboxLayout);
@@ -156,7 +155,7 @@ MainWindow::MainWindow()
 
     m_borderColorLabel = new QLabel( "Border Color: ", groupBox );
     m_borderColorBtn   = new KColorButton( groupBox );
-    hboxLayout         = new Q3HBoxLayout( 0 );
+    hboxLayout         = new QHBoxLayout( 0 );
     hboxLayout->addWidget( m_borderColorLabel );
     hboxLayout->addWidget( m_borderColorBtn );
     groupBoxLayout->addLayout( hboxLayout);
@@ -224,7 +223,7 @@ MainWindow::MainWindow()
 
     // Bottom button bar -------------------------------------------------------
     
-    Q3HBoxLayout* buttonLayout = new Q3HBoxLayout(0);
+    QHBoxLayout* buttonLayout = new QHBoxLayout(0);
     buttonLayout->setMargin(5);
     buttonLayout->setSpacing(5);
     buttonLayout->addItem(new QSpacerItem(10, 10, QSizePolicy::Expanding,
@@ -939,4 +938,3 @@ void MainWindow::slotThemeChanged()
 }
 
 }  // NameSpace Digikam
-

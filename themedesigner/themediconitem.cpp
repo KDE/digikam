@@ -23,13 +23,13 @@
 
 // Qt includes.
 
-#include <qpainter.h>
-#include <qpixmap.h>
-#include <qpalette.h>
-#include <qpen.h>
-#include <qfontmetrics.h>
-#include <qfont.h>
-#include <qdatetime.h>
+#include <QPainter>
+#include <QPixmap>
+#include <QPalette>
+#include <QPen>
+#include <QFontMetrics>
+#include <QFont>
+#include <QDateTime>
 
 // KDE includes.
 

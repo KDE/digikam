@@ -28,9 +28,6 @@
 #include "themediconitem.h"
 #include "themediconview.h"
 #include "themediconview.moc"
-//Added by qt3to4:
-#include <QPixmap>
-#include <QResizeEvent>
 
 namespace Digikam
 {
