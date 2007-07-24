@@ -861,7 +861,7 @@ QString LightTableBarToolTip::tipContentExtraData(ThumbBarItem* item)
 
             if (settings->getToolTipsShowRating())
             {
-                str.fill( '*', info.rating() );
+                str.fill( 'X', info.rating() );
                 if (str.isEmpty()) str = QString("---");
                 tip += m_cellSpecBeg + i18n("Rating:") + m_cellSpecMid + str + m_cellSpecEnd;
             }
