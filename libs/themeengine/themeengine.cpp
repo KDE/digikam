@@ -62,8 +62,9 @@ public:
 
     ThemeEnginePriv()
     {
-        currTheme = 0;
-        db        = 0;
+	defaultTheme      = 0;
+        currTheme         = 0;
+        db                = 0;
         themeInitiallySet = false;
     }
 
