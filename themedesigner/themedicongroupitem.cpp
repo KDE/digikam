@@ -23,8 +23,8 @@
 
 // Qt includes.
 
-#include <qpixmap.h>
-#include <qpainter.h>
+#include <QPixmap>
+#include <QPainter>
 
 // Local includes.
 

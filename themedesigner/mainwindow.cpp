@@ -24,13 +24,12 @@
 
 // Qt includes.
 
-#include <QHeader>
 #include <QFrame>
 #include <QPushButton>
 #include <QGroupBox>
 #include <QLabel>
 #include <QComboBox>
-#include <qCheckBox>
+#include <QCheckBox>
 #include <QSplitter>
 #include <QFileInfo>
 #include <QTextStream>
