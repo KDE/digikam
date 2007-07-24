@@ -1,3 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
 /* ============================================================
  *
  * This file is a part of digiKam project
@@ -20,45 +23,53 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
+-->
 
-! "Dreary Day"
+<digikamtheme>
 
-base.color:			     rgb:F0/F0/F0
-text.regular.color:		     rgb:00/00/00
-text.selected.color:		     rgb:FF/FF/FF
-text.special.regular.color:	     rgb:88/88/00
-text.special.selected.color:	     rgb:FF/FF/00
+ <name                         value="Dreary Day"        />
 
-banner.color:			     rgb:80/80/80
-banner.colorTo:			     rgb:40/40/40
-banner.bevel:			     RAISED
-banner.gradient:		     DIAGONAL
-banner.border:                       true
-banner.borderColor:                  rgb:00/00/00
+ <BaseColor                    value="#F0F0F0"    />
 
-thumbnail.regular.color:             rgb:EF/EF/EF
-thumbnail.regular.colorTo:           rgb:C0/C0/C0
-thumbnail.regular.bevel:	     RAISED
-thumbnail.regular.gradient:          DIAGONAL
-thumbnail.regular.border:            true
-thumbnail.regular.borderColor:       rgb:70/70/70
+ <TextRegularColor             value="#000000"    />
+ <TextSelectedColor            value="#FFFFFF"    />
+ <TextSpecialRegularColor      value="#888800"    />
+ <TextSpecialSelectedColor     value="#FFFF00"    />
 
-thumbnail.selected.color:	     rgb:A0/A0/A0
-thumbnail.selected.colorTo:	     rgb:40/40/40
-thumbnail.selected.bevel:	     RAISED
-thumbnail.selected.gradient:         DIAGONAL
-thumbnail.selected.border:           true
-thumbnail.selected.borderColor:      rgb:00/00/00
+ <BannerColor                  value="#808080"    />
+ <BannerColorTo                value="#404040"    />
+ <BannerBevel                  value="RAISED"     />
+ <BannerGradient               value="DIAGONAL"   />
+ <BannerBorder                 value="true"       />
+ <BannerBorderColor            value="#000000"    />
 
-listview.regular.color:	             rgb:E0/E0/E0
-listview.regular.bevel:	             FLAT
-listview.regular.gradient:           SOLID
-listview.regular.border:             true
-listview.regular.borderColor:        rgb:D0/D0/D0
+ <ThumbnailRegularColor        value="#EFEFEF"    />
+ <ThumbnailRegularColorTo      value="#C0C0C0"    />
+ <ThumbnailRegularBevel        value="RAISED"     />
+ <ThumbnailRegularGradient     value="DIAGONAL    />
+ <ThumbnailRegularBorder       value="true"       />
+ <ThumbnailRegularBorderColor  value="#707070"    />
 
-listview.selected.color:	     rgb:A0/A0/A0
-listview.selected.colorTo:	     rgb:40/40/40
-listview.selected.bevel:	     RAISED
-listview.selected.gradient:          DIAGONAL
-listview.selected.border:            true
-listview.selected.borderColor:       rgb:00/00/00
+ <ThumbnailSelectedColor       value="#A0A0A0"    />
+ <ThumbnailSelectedColorTo     value="#404040"    />
+ <ThumbnailSelectedBevel       value="RAISED"     />
+ <ThumbnailSelectedGradient    value="DIAGONAL"   />
+ <ThumbnailSelectedBorder      value="true"       />
+ <ThumbnailSelectedBorderColor value="#000000"    />
+
+ <ListviewRegularColor         value="#E0E0E0"    />
+ <ListviewRegularColorTo       value="#E0E0E0"    />
+ <ListviewRegularBevel         value="FLAT"       />
+ <ListviewRegularGradient      value="SOLID"      />
+ <ListviewRegularBorder        value="true"       />
+ <ListviewRegularBorderColor   value="#D0D0D0"    />
+
+ <ListviewSelectedColor        value="#A0A0A0"    />
+ <ListviewSelectedColorTo      value="#404040"    />
+ <ListviewSelectedBevel        value="RAISED"     />
+ <ListviewSelectedGradient     value="DIAGONAL"   />
+ <ListviewSelectedBorder       value="true "      />
+ <ListviewSelectedBorderColor  value="#000000"    />
+
+</digikamtheme>
+                                             
