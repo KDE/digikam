@@ -48,7 +48,7 @@ namespace Digikam
 {
 
 MonthWidget::MonthWidget(QWidget* parent)
-    : QFrame(parent)
+           : Q3Frame(parent)
 {
     setWindowFlags(Qt::WNoAutoErase);
     init();
@@ -211,7 +211,7 @@ void MonthWidget::drawContents(QPainter *)
         rsmall.setWidth(r.width() - 2);
         rsmall.setHeight(r.height() - 2);
         p.drawText(rsmall, Qt::AlignVCenter|Qt::AlignHCenter,
-                          KGlobal::locale()->calendar()->weekDayName(i, KCalendarSystem::ShortDayName)
+                          KGlobal::locale()->calendar()->weekDayName(i, KCalendarSystem::ShortForm)
                           .remove(2,1));
         index++;                                             
     }
@@ -223,7 +223,7 @@ void MonthWidget::drawContents(QPainter *)
 
     p.drawText(r, Qt::AlignCenter,
                QString("%1 %2")
-                .arg(KGlobal::locale()->calendar()->monthName(m_month, KCalendarSystem::LongName))
+                .arg(KGlobal::locale()->calendar()->monthName(m_month, KCalendarSystem::LongForm))
                 .arg(KGlobal::locale()->calendar()->
                        year(QDate(m_year,m_month,1))));
 

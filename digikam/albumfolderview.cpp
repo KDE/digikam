@@ -1320,7 +1320,7 @@ AlbumFolderViewItem* AlbumFolderView::findParentByDate(PAlbum* album, bool& fail
     QDate date = album->date();
 
     QString timeString = QString::number(date.year()) + ", " +
-                         KGlobal::locale()->calendar()->monthName(date, KCalendarSystem::LongName);
+                         KGlobal::locale()->calendar()->monthName(date, KCalendarSystem::LongForm);
 
     AlbumFolderViewItem* parent = 0;
 

@@ -26,7 +26,7 @@
 
 // Qt includes.
 
-#include <QFrame>
+#include <Q3Frame>
 #include <QResizeEvent>
 #include <QMouseEvent>
 
@@ -37,7 +37,7 @@
 namespace Digikam
 {
 
-class MonthWidget : public QFrame
+class MonthWidget : public Q3Frame
 {
     Q_OBJECT
 

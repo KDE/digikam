@@ -174,7 +174,7 @@ void DateFolderView::slotAlbumAdded(Album* a)
 
     QString yr = QString::number(date.year());
     
-    QString mo = KGlobal::locale()->calendar()->monthName(date, KCalendarSystem::LongName);
+    QString mo = KGlobal::locale()->calendar()->monthName(date, KCalendarSystem::LongForm);
     Q3ListViewItem* parent = d->listview->findItem(yr, 0);
     if (!parent)
     {
