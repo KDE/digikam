@@ -24,65 +24,44 @@
 ! DLR
 
 base.color:				#181818
-!24
 text.regular.color:			#A0A0A0
-!160
 text.selected.color:			#D8D8D8
-!216
 text.special.regular.color:		#898989
-!137
 text.special.selected.color:		#B2B2B2
-!178
 
 banner.color:				#1B1B1B
-!27
 banner.colorTo:				#282828
-!40
 banner.bevel:				RAISED
 banner.gradient:			VERTICAL
 banner.border:				true
 banner.borderColor:			#343434
-!52
 
 thumbnail.regular.color:		#1C1C1C
-!30
 thumbnail.regular.colorTo:		#1A1A1A
-!26
 thumbnail.regular.bevel:		RAISED
 thumbnail.regular.gradient:		VERTICAL
 thumbnail.regular.border:		true
 thumbnail.regular.borderColor:		#474747
-!71
 
 thumbnail.selected.color:		#808080
-!128
 thumbnail.selected.colorTo:		#808080
-!128
 thumbnail.selected.bevel:		RAISED
 thumbnail.selected.gradient:		SOLID
 thumbnail.selected.border:		true
 thumbnail.selected.borderColor:		#BFBFBF
-!191
 
 listview.regular.color:			#1A1A1A
-!26
-listview.regular.colorTo:		
-!
+listview.regular.colorTo:		#1A1A1A
 listview.regular.bevel:			FLAT
 listview.regular.gradient:		SOLID
 listview.regular.border:		true
 listview.regular.borderColor:		#1B1B1B
-!27
 
 listview.selected.color:		#3E3E3E
-!62
-listview.selected.colorTo:		
-!
+listview.selected.colorTo:		#3E3E3E
 listview.selected.bevel:		FLAT
 listview.selected.gradient:		SOLID
 listview.selected.border:		true
 listview.selected.borderColor:		#313131
-!49
-
 
 
