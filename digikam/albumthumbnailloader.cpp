@@ -197,7 +197,7 @@ QPixmap AlbumThumbnailLoader::loadIcon(const QString &name, int size)
     KIconLoader *iconLoader = KIconLoader::global();
     return iconLoader->loadIcon(name, K3Icon::NoGroup,
                                 size, K3Icon::DefaultState,
-                                0, true);
+                                QStringList(),0, true);
 }
 
 bool AlbumThumbnailLoader::getTagThumbnail(TAlbum *album, QPixmap &icon)

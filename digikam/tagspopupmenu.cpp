@@ -165,7 +165,7 @@ void TagsPopupMenu::setup(Mode mode)
 
     KIconLoader *iconLoader = KIconLoader::global();
     d->addTagPix            = iconLoader->loadIcon("tag", K3Icon::NoGroup, K3Icon::SizeSmall,
-                                                   K3Icon::DefaultState, 0, true);
+                                                   K3Icon::DefaultState,QStringList(), 0, true);
 
     connect(this, SIGNAL(aboutToShow()),
             this, SLOT(slotAboutToShow()));

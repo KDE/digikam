@@ -88,7 +88,7 @@ TagCreateDlg::TagCreateDlg(QWidget *parent, TAlbum* album)
 
     QLabel *logo            = new QLabel(widget);
     KIconLoader* iconLoader = KIconLoader::global();
-    logo->setPixmap(iconLoader->loadIcon("digikam", K3Icon::NoGroup, 96, K3Icon::DefaultState, 0, true));    
+    logo->setPixmap(iconLoader->loadIcon("digikam", K3Icon::NoGroup, 96, K3Icon::DefaultState,QStringList(), 0, true));    
 
     QVBoxLayout *topLayout = new QVBoxLayout();
 
@@ -256,7 +256,7 @@ TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album)
 
     QLabel *logo            = new QLabel(widget);
     KIconLoader* iconLoader = KIconLoader::global();
-    logo->setPixmap(iconLoader->loadIcon("digikam", K3Icon::NoGroup, 96, K3Icon::DefaultState, 0, true));    
+    logo->setPixmap(iconLoader->loadIcon("digikam", K3Icon::NoGroup, 96, K3Icon::DefaultState, QStringList(),0, true));    
 
     QVBoxLayout *topLayout = new QVBoxLayout();
 
