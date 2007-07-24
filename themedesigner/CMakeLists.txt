@@ -1,24 +1,25 @@
 
-include_directories( ${CMAKE_SOURCE_DIR}/digikam/digikam ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/common ${CMAKE_SOURCE_DIR}/digikam/libs/dimg ${CMAKE_SOURCE_DIR}/digikam/libs/themeengine ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata ${CMAKE_SOURCE_DIR}/digikam/libs/imageproperties   )
-
-
-########### next target ###############
+include_directories(${CMAKE_SOURCE_DIR}/digikam/digikam 
+                    ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/common 
+		    ${CMAKE_SOURCE_DIR}/digikam/libs/dimg 
+		    ${CMAKE_SOURCE_DIR}/digikam/libs/themeengine 
+		    ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata 
+		    ${CMAKE_SOURCE_DIR}/digikam/libs/imageproperties   
+		   )
 
 set(digikamthemedesigner_SRCS 
-   main.cpp 
-   mainwindow.cpp 
-   themedicongroupitem.cpp 
-   themediconitem.cpp 
-   themediconview.cpp )
+    main.cpp 
+    mainwindow.cpp 
+    themedicongroupitem.cpp 
+    themediconitem.cpp 
+    themediconview.cpp 
+   )
 
 
 kde4_add_executable(digikamthemedesigner ${digikamthemedesigner_SRCS})
 
-target_link_libraries(digikamthemedesigner  digikam ${KDE4_KUTILS_LIBS} )
+target_link_libraries(digikamthemedesigner digikam ${KDE4_KUTILS_LIBS})
 
 install(TARGETS digikamthemedesigner DESTINATION ${BIN_INSTALL_DIR})
 
-
-########### install files ###############
-
-install( FILES  digikamthemedesigner.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
+install(FILES digikamthemedesigner.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
