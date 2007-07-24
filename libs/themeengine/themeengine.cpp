@@ -32,20 +32,13 @@
 #include <QPalette>
 #include <QTimer>
 #include <QPixmap>
+#include <QDomDocument>
 
 // KDE includes.
 
 #include <kglobal.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
-
-// X11 includes.
-
-extern "C"
-{
-#include <X11/Xlib.h>
-#include <X11/Xresource.h>
-}    
 
 // Local includes.
 
@@ -66,7 +59,6 @@ public:
     {
         defaultTheme      = 0;
         currTheme         = 0;
-        db                = 0;
         themeInitiallySet = false;
     }
 
@@ -76,8 +68,6 @@ public:
     Theme*           currTheme;
     Theme*           defaultTheme;
     bool             themeInitiallySet;
-
-    XrmDatabase      db;
 };
 
 ThemeEngine* ThemeEngine::m_componentData = 0;
@@ -96,8 +86,6 @@ ThemeEngine::ThemeEngine()
     m_componentData = this;
     KGlobal::dirs()->addResourceDir("themes", KStandardDirs::installPath("data") + QString("digikam/themes")); 
 
-    XrmInitialize();
-    
     d = new ThemeEnginePriv;
 
     d->themeList.setAutoDelete(false);
@@ -112,11 +100,6 @@ ThemeEngine::ThemeEngine()
 
 ThemeEngine::~ThemeEngine()
 {
-    if (d->db)
-    {
-        XrmDestroyDatabase(d->db);
-    }
-    
     d->themeList.setAutoDelete(true);
     d->themeList.clear();
     delete d;
@@ -261,63 +244,71 @@ void ThemeEngine::buildDefaultTheme()
     t->listSelBorderColor  = Qt::black;
 }
 
-void ThemeEngine::loadTheme()
+bool ThemeEngine::loadTheme()
 {
     Q_ASSERT( d->currTheme );
     if (!d->currTheme || d->currTheme == d->defaultTheme)
-        return;
+        return false;
 
     Theme *t = d->currTheme;
     
     // use the default theme as base template to build the themes
     *(t) = *(d->defaultTheme);
 
-    if (d->db)
+    QFile themeFile(t->filePath);
+
+    if (!themeFile.open(IO_ReadOnly))
+        return false;
+
+    QDomDocument xmlDoc;
+    QString error;
+    int row, col;
+    if (!xmlDoc.setContent(&themeFile, true, &error, &row, &col))
     {
-        XrmDestroyDatabase(d->db);
-        d->db = 0;
+        DDebug() << "Theme file: " << t->filePath << endl;
+        DDebug() << error << " :: row=" << row << " , col=" << col << endl; 
+        return false;
     }
-    
-    d->db = XrmGetFileDatabase(QFile::encodeName(t->filePath));
-    Q_ASSERT( d->db );
-    if (!d->db)
-        return;
+
+    QDomElement rootElem = xmlDoc.documentElement();
+    if (rootElem.tagName() != QString::fromLatin1("digikamtheme"))
+        return false;
 
     QString resource;
 
     // -- base ------------------------------------------------------------------------
     
-    resource = resourceValue("base.color", "Base.Color");
+    resource = resourceValue(rootElem, "BaseColor");
     if (!resource.isEmpty())
         t->baseColor = resource;
 
-    resource = resourceValue("text.regular.color", "Text.Regular.Color");
+    resource = resourceValue(rootElem, "TextRegularColor");
     if (!resource.isEmpty())
         t->textRegColor = resource;
     
-    resource = resourceValue("text.selected.color", "Text.Selected.Color");
+    resource = resourceValue(rootElem, "TextSelectedColor");
     if (!resource.isEmpty())
         t->textSelColor = resource;
 
-    resource = resourceValue("text.special.regular.color", "Text.Special.Regular.Color");
+    resource = resourceValue(rootElem, "TextSpecialRegularColor");
     if (!resource.isEmpty())
         t->textSpecialRegColor = resource;
     
-    resource = resourceValue("text.special.selected.color", "Text.Special.Selected.Color");
+    resource = resourceValue(rootElem, "TextSpecialSelectedColor");
     if (!resource.isEmpty())
         t->textSpecialSelColor = resource;
 
     // -- banner ------------------------------------------------------------------------
     
-    resource = resourceValue("banner.color", "Banner.Color");
+    resource = resourceValue(rootElem, "BannerColor");
     if (!resource.isEmpty())
         t->bannerColor = resource;
 
-    resource = resourceValue("banner.colorTo", "Banner.ColorTo");
+    resource = resourceValue(rootElem, "BannerColorTo");
     if (!resource.isEmpty())
         t->bannerColorTo = resource;
 
-    resource = resourceValue("banner.bevel", "Banner.Bevel");
+    resource = resourceValue(rootElem, "BannerBevel");
     if (!resource.isEmpty())
     {
         if (resource.contains("flat", Qt::CaseInsensitive))
@@ -328,7 +319,7 @@ void ThemeEngine::loadTheme()
             t->bannerBevel = Theme::RAISED;
     }
 
-    resource = resourceValue("banner.gradient", "Banner.Gradient");
+    resource = resourceValue(rootElem, "BannerGradient");
     if (!resource.isEmpty())
     {
         if (resource.contains("solid", Qt::CaseInsensitive))
@@ -341,13 +332,13 @@ void ThemeEngine::loadTheme()
             t->bannerGrad = Theme::DIAGONAL;
     }
 
-    resource = resourceValue("banner.border", "Banner.Border");
+    resource = resourceValue(rootElem, "BannerBorder");
     if (!resource.isEmpty())
     {
         t->bannerBorder = resource.contains("true", Qt::CaseInsensitive);
     }
 
-    resource = resourceValue("banner.borderColor", "Banner.BorderColor");
+    resource = resourceValue(rootElem, "BannerBorderColor");
     if (!resource.isEmpty())
     {
         t->bannerBorderColor = resource;
@@ -355,15 +346,15 @@ void ThemeEngine::loadTheme()
 
     // -- thumbnail view ----------------------------------------------------------------
     
-    resource = resourceValue("thumbnail.regular.color", "Thumbnail.Regular.Color");
+    resource = resourceValue(rootElem, "ThumbnailRegular.Color");
     if (!resource.isEmpty())
         t->thumbRegColor = resource;
 
-    resource = resourceValue("thumbnail.regular.colorTo", "Thumbnail.Regular.ColorTo");
+    resource = resourceValue(rootElem, "ThumbnailRegularColorTo");
     if (!resource.isEmpty())
         t->thumbRegColorTo = resource;
 
-    resource = resourceValue("thumbnail.regular.bevel", "Thumbnail.Regular.Bevel");
+    resource = resourceValue(rootElem, "ThumbnailRegularBevel");
     if (!resource.isEmpty())
     {
         if (resource.contains("flat", Qt::CaseInsensitive))
@@ -374,7 +365,7 @@ void ThemeEngine::loadTheme()
             t->thumbRegBevel = Theme::RAISED;
     }
 
-    resource = resourceValue("thumbnail.regular.gradient", "Thumbnail.Regular.Gradient");
+    resource = resourceValue(rootElem, "ThumbnailRegularGradient");
     if (!resource.isEmpty())
     {
         if (resource.contains("solid", Qt::CaseInsensitive))
@@ -387,27 +378,27 @@ void ThemeEngine::loadTheme()
             t->thumbRegGrad = Theme::DIAGONAL;
     }
 
-    resource = resourceValue("thumbnail.regular.border", "Thumbnail.Regular.Border");
+    resource = resourceValue(rootElem, "ThumbnailRegularBorder");
     if (!resource.isEmpty())
     {
         t->thumbRegBorder = resource.contains("true", Qt::CaseInsensitive);
     }
 
-    resource = resourceValue("thumbnail.regular.borderColor", "Thumbnail.Regular.BorderColor");
+    resource = resourceValue(rootElem, "ThumbnailRegularBorderColor");
     if (!resource.isEmpty())
     {
         t->thumbRegBorderColor = resource;
     }
     
-    resource = resourceValue("thumbnail.selected.color", "Thumbnail.Selected.Color");
+    resource = resourceValue(rootElem, "ThumbnailSelectedColor");
     if (!resource.isEmpty())
         t->thumbSelColor = resource;
 
-    resource = resourceValue("thumbnail.selected.colorTo", "Thumbnail.Selected.ColorTo");
+    resource = resourceValue(rootElem, "ThumbnailSelectedColorTo");
     if (!resource.isEmpty())
         t->thumbSelColorTo = resource;
 
-    resource = resourceValue("thumbnail.selected.bevel", "Thumbnail.Selected.Bevel");
+    resource = resourceValue(rootElem, "ThumbnailSelectedBevel");
     if (!resource.isEmpty())
     {
         if (resource.contains("flat", Qt::CaseInsensitive))
@@ -418,7 +409,7 @@ void ThemeEngine::loadTheme()
             t->thumbSelBevel = Theme::RAISED;
     }
 
-    resource = resourceValue("thumbnail.selected.gradient", "Thumbnail.Selected.Gradient");
+    resource = resourceValue(rootElem, "ThumbnailSelectedGradient");
     if (!resource.isEmpty())
     {
         if (resource.contains("solid", Qt::CaseInsensitive))
@@ -431,13 +422,13 @@ void ThemeEngine::loadTheme()
             t->thumbSelGrad = Theme::DIAGONAL;
     }
     
-    resource = resourceValue("thumbnail.selected.border", "Thumbnail.Selected.Border");
+    resource = resourceValue(rootElem, "ThumbnailSelectedBorder");
     if (!resource.isEmpty())
     {
         t->thumbSelBorder = resource.contains("true", Qt::CaseInsensitive);
     }
 
-    resource = resourceValue("thumbnail.selected.borderColor", "Thumbnail.Selected.BorderColor");
+    resource = resourceValue(rootElem, "ThumbnailSelectedBorderColor");
     if (!resource.isEmpty())
     {
         t->thumbSelBorderColor = resource;
@@ -445,15 +436,15 @@ void ThemeEngine::loadTheme()
 
     // -- listview view ----------------------------------------------------------------
     
-    resource = resourceValue("listview.regular.color", "Listview.Regular.Color");
+    resource = resourceValue(rootElem, "ListviewRegularColor");
     if (!resource.isEmpty())
         t->listRegColor = resource;
 
-    resource = resourceValue("listview.regular.colorTo", "Listview.Regular.ColorTo");
+    resource = resourceValue(rootElem, "ListviewRegularColorTo");
     if (!resource.isEmpty())
         t->listRegColorTo = resource;
 
-    resource = resourceValue("listview.regular.bevel", "Listview.Regular.Bevel");
+    resource = resourceValue(rootElem, "ListviewRegularBevel");
     if (!resource.isEmpty())
     {
         if (resource.contains("flat", Qt::CaseInsensitive))
@@ -464,7 +455,7 @@ void ThemeEngine::loadTheme()
             t->listRegBevel = Theme::RAISED;
     }
 
-    resource = resourceValue("listview.regular.gradient", "Listview.Regular.Gradient");
+    resource = resourceValue(rootElem, "ListviewRegularGradient");
     if (!resource.isEmpty())
     {
         if (resource.contains("solid", Qt::CaseInsensitive))
@@ -477,27 +468,27 @@ void ThemeEngine::loadTheme()
             t->listRegGrad = Theme::DIAGONAL;
     }
 
-    resource = resourceValue("listview.regular.border", "Listview.Regular.Border");
+    resource = resourceValue(rootElem, "ListviewRegularBorder");
     if (!resource.isEmpty())
     {
         t->listRegBorder = resource.contains("true", Qt::CaseInsensitive);
     }
 
-    resource = resourceValue("listview.regular.borderColor", "Listview.Regular.BorderColor");
+    resource = resourceValue(rootElem, "ListviewRegularBorderColor");
     if (!resource.isEmpty())
     {
         t->listRegBorderColor = resource;
     }
 
-    resource = resourceValue("listview.selected.color", "Listview.Selected.Color");
+    resource = resourceValue(rootElem, "ListviewSelectedColor");
     if (!resource.isEmpty())
         t->listSelColor = resource;
 
-    resource = resourceValue("listview.selected.colorTo", "Listview.Selected.ColorTo");
+    resource = resourceValue(rootElem, "ListviewSelectedColorTo");
     if (!resource.isEmpty())
         t->listSelColorTo = resource;
 
-    resource = resourceValue("listview.selected.bevel", "Listview.Selected.Bevel");
+    resource = resourceValue(rootElem, "ListviewSelectedBevel");
     if (!resource.isEmpty())
     {
         if (resource.contains("flat", Qt::CaseInsensitive))
@@ -508,7 +499,7 @@ void ThemeEngine::loadTheme()
             t->listSelBevel = Theme::RAISED;
     }
 
-    resource = resourceValue("listview.selected.gradient", "Listview.Selected.Gradient");
+    resource = resourceValue(rootElem, "ListviewSelectedGradient");
     if (!resource.isEmpty())
     {
         if (resource.contains("solid", Qt::CaseInsensitive))
@@ -521,29 +512,35 @@ void ThemeEngine::loadTheme()
             t->listSelGrad = Theme::DIAGONAL;
     }
 
-    resource = resourceValue("listview.selected.border", "Listview.Selected.Border");
+    resource = resourceValue(rootElem, "ListviewSelectedBorder");
     if (!resource.isEmpty())
     {
         t->listSelBorder = resource.contains("true", Qt::CaseInsensitive);
     }
 
-    resource = resourceValue("listview.selected.borderColor", "Listview.Selected.BorderColor");
+    resource = resourceValue(rootElem, "ListviewSelectedBorderColor");
     if (!resource.isEmpty())
     {
         t->listSelBorderColor = resource;
     }
+
+    DDebug() << "Theme file loaded: " << t->filePath << endl;
+    return true;
 }
 
-QString ThemeEngine::resourceValue(const QString& name, const QString& altName)
+QString ThemeEngine::resourceValue(const QDomElement &rootElem, const QString& key)
 {
-    if (d->db)
-    {        
-        XrmValue value;
-        char     *value_type;
+    for (QDomNode node = rootElem.firstChild();
+         !node.isNull(); node = node.nextSibling()) 
+    {
+        QDomElement e = node.toElement();
+        QString name  = e.tagName(); 
+        QString val   = e.attribute(QString::fromLatin1("value")); 
 
-        XrmGetResource(d->db, name.toAscii(), altName.toAscii(), &value_type, &value);
-        if (value.addr)
-            return QString(value.addr);
+        if (key == name)
+        {
+            return val;
+        } 
     }
 
     return QString("");
@@ -625,5 +622,3 @@ QPixmap ThemeEngine::listSelPixmap(int w, int h)
 }
 
 }  // NameSpace Digikam
-
-

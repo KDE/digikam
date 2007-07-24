@@ -31,6 +31,7 @@
 #include <QObject>
 #include <QColor>
 #include <QPixmap>
+#include <QDomElement>
 
 // Digikam includes.
 
@@ -80,8 +81,8 @@ private:
     static ThemeEngine* m_componentData;
 
     void    buildDefaultTheme();
-    void    loadTheme();
-    QString resourceValue(const QString& name, const QString& altName);
+    bool    loadTheme();
+    QString resourceValue(const QDomElement &rootElem, const QString& key);
     
 signals:
 
