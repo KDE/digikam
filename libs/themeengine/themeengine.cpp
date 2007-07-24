@@ -49,6 +49,7 @@ extern "C"
 
 // Local includes.
 
+#include "ddebug.h"
 #include "theme.h"
 #include "texture.h"
 #include "themeengine.h"
@@ -63,6 +64,7 @@ public:
 
     ThemeEnginePriv()
     {
+        defaultTheme      = 0;
         currTheme         = 0;
         db                = 0;
         themeInitiallySet = false;
