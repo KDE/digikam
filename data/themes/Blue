@@ -1,3 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
 /* ============================================================
  *
  * This file is a part of digiKam project
@@ -20,46 +23,52 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
+-->
 
-! "Blue"
+<digikamtheme>
 
-base.color:				#eeeef6
-text.regular.color:			#405772
-text.selected.color:			#080ccd
-text.special.regular.color:		#107141
-text.special.selected.color:		#007000
+ <name                         value="Blue"       />
 
-banner.color:				#c5daff
-banner.colorTo:				#a7b9d8
-banner.bevel:				SUNKEN
-banner.gradient:			HORIZONTAL
-banner.border:				false
-banner.borderColor			#000000
+ <BaseColor                    value="#eeeef6"    />
 
-thumbnail.regular.color:		#eeeef6
-thumbnail.regular.colorTo:		#709dca
-thumbnail.regular.bevel:		FLAT
-thumbnail.regular.gradient:		SOLID
-thumbnail.regular.border:		false
-thumbnail.regular.borderColor		#e0e0ef
+ <TextRegularColor             value="#405772"    />
+ <TextSelectedColor            value="#080ccd"    />
+ <TextSpecialRegularColor      value="#107141"    />
+ <TextSpecialSelectedColor     value="#007000"    />
 
-thumbnail.selected.color:		#c5daff
-thumbnail.selected.colorTo:		#a7b9d8
-thumbnail.selected.bevel:		SUNKEN
-thumbnail.selected.gradient:		HORIZONTAL
-thumbnail.selected.border:		true
-thumbnail.selected.borderColor		#000000
+ <BannerColor                  value="#c5daff"    />
+ <BannerColorTo                value="#a7b9d8"    />
+ <BannerBevel                  value="SUNKEN"     />
+ <BannerGradient               value="HORIZONTAL" />
+ <BannerBorder                 value="false"      />
+ <BannerBorderColor            value="#000000"    />
 
-listview.regular.color:			#eeeef6
-listview.regular.colorTo:		#4673a5
-listview.regular.bevel:			FLAT
-listview.regular.gradient:		SOLID
-listview.regular.border:		false
-listview.regular.borderColor		#000000
+ <ThumbnailRegularColor        value="#eeeef6"    />
+ <ThumbnailRegularColorTo      value="#709dca"    />
+ <ThumbnailRegularBevel        value="FLAT"       />
+ <ThumbnailRegularGradient     value="SOLID"      />
+ <ThumbnailRegularBorder       value="false"      />
+ <ThumbnailRegularBorderColor  value="#e0e0ef"    />
 
-listview.selected.color:		#c5daff
-listview.selected.colorTo:		#a7b9d8
-listview.selected.bevel:		SUNKEN
-listview.selected.gradient:		HORIZONTAL
-listview.selected.border:		false
-listview.selected.borderColor		#000000
+ <ThumbnailSelectedColor       value="#c5daff"    />
+ <ThumbnailSelectedColorTo     value="#a7b9d8"    />
+ <ThumbnailSelectedBevel       value="SUNKEN"     />
+ <ThumbnailSelectedGradient    value="HORIZONTAL" />
+ <ThumbnailSelectedBorder      value="true"       />
+ <ThumbnailSelectedBorderColor value="#000000"    />
+
+ <ListviewRegularColor         value="#eeeef6"    />
+ <ListviewRegularColorTo       value="#4673a5"    />
+ <ListviewRegularBevel         value="FLAT"       />
+ <ListviewRegularGradient      value="SOLID"      />
+ <ListviewRegularBorder        value="false"      />
+ <ListviewRegularBorderColor   value="#000000"    />
+
+ <ListviewSelectedColor        value="#c5daff"    />
+ <ListviewSelectedColorTo      value="#a7b9d8"    />
+ <ListviewSelectedBevel        value="SUNKEN"     />
+ <ListviewSelectedGradient     value="HORIZONTAL" />
+ <ListviewSelectedBorder       value="false"      />
+ <ListviewSelectedBorderColor  value="#000000"    />
+
+</digikamtheme>
