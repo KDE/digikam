@@ -23,42 +23,42 @@
 
 ! "Dreary Day"
 
-base.color:			     rgb:F0/F0/F0
-text.regular.color:		     rgb:00/00/00
-text.selected.color:		     rgb:FF/FF/FF
-text.special.regular.color:	     rgb:88/88/00
-text.special.selected.color:	     rgb:FF/FF/00
+base.color:			     #F0F0F0
+text.regular.color:		     #000000
+text.selected.color:		     #FFFFFF
+text.special.regular.color:	     #888800
+text.special.selected.color:	     #FFFF00
 
-banner.color:			     rgb:80/80/80
-banner.colorTo:			     rgb:40/40/40
+banner.color:			     #808080
+banner.colorTo:			     #404040
 banner.bevel:			     RAISED
 banner.gradient:		     DIAGONAL
 banner.border:                       true
-banner.borderColor:                  rgb:00/00/00
+banner.borderColor:                  #000000
 
-thumbnail.regular.color:             rgb:EF/EF/EF
-thumbnail.regular.colorTo:           rgb:C0/C0/C0
+thumbnail.regular.color:             #EFEFEF
+thumbnail.regular.colorTo:           #C0C0C0
 thumbnail.regular.bevel:	     RAISED
 thumbnail.regular.gradient:          DIAGONAL
 thumbnail.regular.border:            true
-thumbnail.regular.borderColor:       rgb:70/70/70
+thumbnail.regular.borderColor:       #707070
 
-thumbnail.selected.color:	     rgb:A0/A0/A0
-thumbnail.selected.colorTo:	     rgb:40/40/40
+thumbnail.selected.color:	     #A0A0A0
+thumbnail.selected.colorTo:	     #404040
 thumbnail.selected.bevel:	     RAISED
 thumbnail.selected.gradient:         DIAGONAL
 thumbnail.selected.border:           true
-thumbnail.selected.borderColor:      rgb:00/00/00
+thumbnail.selected.borderColor:      #000000
 
-listview.regular.color:	             rgb:E0/E0/E0
+listview.regular.color:	             #E0E0E0
 listview.regular.bevel:	             FLAT
 listview.regular.gradient:           SOLID
 listview.regular.border:             true
-listview.regular.borderColor:        rgb:D0/D0/D0
+listview.regular.borderColor:        #D0D0D0
 
-listview.selected.color:	     rgb:A0/A0/A0
-listview.selected.colorTo:	     rgb:40/40/40
+listview.selected.color:	     #A0A0A0
+listview.selected.colorTo:	     #404040
 listview.selected.bevel:	     RAISED
 listview.selected.gradient:          DIAGONAL
 listview.selected.border:            true
-listview.selected.borderColor:       rgb:00/00/00
+listview.selected.borderColor:       #000000
