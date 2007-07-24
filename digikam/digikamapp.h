@@ -42,7 +42,6 @@
 
 #include "digikam_export.h"
 
-class KAction;
 
 namespace Digikam
 {

@@ -56,7 +56,6 @@ class PAlbum;
 class TAlbum;
 class DAlbum;
 class SAlbum;
-class AlbumDB;
 class AlbumItemHandler;
 class AlbumManagerPriv;
 

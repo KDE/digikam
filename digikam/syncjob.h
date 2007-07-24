@@ -40,7 +40,6 @@
 #include <kurl.h>
 
 class QString;
-class QEventLoop;
 
 namespace KIO
 {

@@ -441,12 +441,12 @@ void kio_digikamalbums::createDigikamPropsUDSEntry(KIO::UDSEntry& entry)
 {
     entry.clear();
 
-    entry.insert(KIO::UDS_FILE_TYPE, S_IFREG);
-    entry.insert(KIO::UDS_ACCESS, 00666);
-    entry.insert(KIO::UDS_SIZE, 0);
-    entry.insert(KIO::UDS_MODIFICATION_TIME, QDateTime::currentDateTime().toTime_t());
-    entry.insert(KIO::UDS_ACCESS_TIME, QDateTime::currentDateTime().toTime_t());
-    entry.insert(KIO::UDS_NAME, QString(".digikam_properties"));
+    entry.insert(KIO::UDSEntry::UDS_FILE_TYPE, S_IFREG);
+    entry.insert(KIO::UDSEntry::UDS_ACCESS, 00666);
+    entry.insert(KIO::UDSEntry::UDS_SIZE, 0);
+    entry.insert(KIO::UDSEntry::UDS_MODIFICATION_TIME, QDateTime::currentDateTime().toTime_t());
+    entry.insert(KIO::UDSEntry::UDS_ACCESS_TIME, QDateTime::currentDateTime().toTime_t());
+    entry.insert(KIO::UDSEntry::UDS_NAME, QString(".digikam_properties"));
 }
 
 

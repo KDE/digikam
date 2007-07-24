@@ -61,8 +61,6 @@ class AlbumManager;
 class Album;
 class PAlbum;
 class TAlbum;
-class AlbumDB;
-class AlbumSettings;
 
 /** DigikamImageInfo: class to get/set image information/properties in a digiKam album. */
 

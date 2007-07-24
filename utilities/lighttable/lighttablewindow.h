@@ -44,7 +44,6 @@ namespace Digikam
 {
 
 class SlideShowSettings;
-class ThumbBarItem;
 class LightTableWindowPriv;
 
 class LightTableWindow : public KXmlGuiWindow

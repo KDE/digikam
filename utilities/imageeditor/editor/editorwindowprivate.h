@@ -33,14 +33,11 @@ class QEventLoop;
 
 class KComboBox;
 class KToggleAction;
-class KSelectAction;
-class KActionMenu;
 
 namespace Digikam
 {
 
 class ICCSettingsContainer;
-class ExposureContainer;
 
 class EditorWindowPriv
 {

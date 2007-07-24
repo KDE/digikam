@@ -41,7 +41,6 @@
 class QPainter;
 class QMouseEvent;
 class QPaintEvent;
-class QDropEvent;
 class QPoint;
 
 namespace Digikam

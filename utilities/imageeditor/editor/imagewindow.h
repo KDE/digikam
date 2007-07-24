@@ -45,7 +45,6 @@ class QDropEvent;
 namespace Digikam
 {
 
-class AlbumIconView;
 class ImageWindowPriv;
 class SlideShowSettings;
 

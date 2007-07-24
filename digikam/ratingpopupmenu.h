@@ -31,7 +31,6 @@
 namespace Digikam
 {
 
-class RatingPopupMenuPriv;
 
 class RatingPopupMenu : public Q3PopupMenu
 {

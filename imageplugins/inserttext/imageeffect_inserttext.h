@@ -33,7 +33,6 @@
 
 #include "imagedlgbase.h"
 
-class QLabel;
 class QFont;
 class QButtonGroup;
 class QComboBox;

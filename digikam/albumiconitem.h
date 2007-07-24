@@ -40,7 +40,6 @@ namespace Digikam
 {
 
 class ImageInfo;
-class AlbumIconView;
 class AlbumIconItemPriv;
 
 class AlbumIconItem : public IconItem

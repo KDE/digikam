@@ -36,7 +36,6 @@
 namespace Digikam
 {
 
-class UMSCameraPriv;
 
 class UMSCamera : public DKCamera
 {

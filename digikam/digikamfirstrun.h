@@ -33,7 +33,6 @@
 
 #include "digikam_export.h"
 
-class KUrlRequester;
 
 namespace Digikam
 {

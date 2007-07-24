@@ -36,7 +36,6 @@
 #include "thumbnailjob.h"
 
 class QPixmap;
-class KFileItem;
 
 namespace KIO
 {

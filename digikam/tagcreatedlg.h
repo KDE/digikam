@@ -33,9 +33,6 @@
 
 #include <kdialog.h>
 
-class QComboBox;
-class QLineEdit;
-class QPushButton;
 class QWidget;
 
 namespace Digikam

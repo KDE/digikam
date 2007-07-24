@@ -32,7 +32,6 @@
 
 #include "digikam_export.h"
 
-class QToolButton;
 
 namespace Digikam
 {

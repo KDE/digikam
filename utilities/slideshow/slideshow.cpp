@@ -444,7 +444,7 @@ void SlideShow::updatePixmap()
         // End of Slide Show.
 
         QPixmap logo = KIconLoader::global()->loadIcon("digikam", K3Icon::NoGroup, 128,
-                                                    K3Icon::DefaultState, 0, true);
+                                                    K3Icon::DefaultState, QStringList(),0, true);
 
         QFont fn(font());
         fn.setPointSize(fn.pointSize()+10);

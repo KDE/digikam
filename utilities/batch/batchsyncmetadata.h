@@ -33,7 +33,6 @@
 
 #include "imageinfo.h"
 
-class KUrl;
 
 namespace Digikam
 {

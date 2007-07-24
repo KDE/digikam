@@ -35,7 +35,6 @@ class QDropEvent;
 class QMouseEvent;
 class QPaintEvent;
 
-class KUrl;
 
 namespace Digikam
 {

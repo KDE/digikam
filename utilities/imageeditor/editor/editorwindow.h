@@ -39,13 +39,11 @@
 
 #include "digikam_export.h"
 
-class Q3PopupMenu;
 class QSplitter;
 class QLabel;
 class QAction;
 
 class KToolBarPopupAction;
-class KToggleAction;
 class KAction;
 
 namespace Digikam

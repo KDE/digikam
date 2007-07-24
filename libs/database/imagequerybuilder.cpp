@@ -53,8 +53,8 @@ ImageQueryBuilder::ImageQueryBuilder()
     const KCalendarSystem* cal = KGlobal::locale()->calendar();
     for (int i=1; i<=12; ++i)
     {
-        m_shortMonths[i-1] = cal->monthName(i, 2000, true).toLower();
-        m_longMonths[i-1]  = cal->monthName(i, 2000, false).toLower();
+        m_shortMonths[i-1] = cal->monthName(i, 2000, KCalendarSystem::ShortName).toLower();
+        m_longMonths[i-1]  = cal->monthName(i, 2000, KCalendarSystem::LongName).toLower();
     }
 }
 

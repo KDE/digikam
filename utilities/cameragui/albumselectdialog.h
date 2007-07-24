@@ -38,8 +38,6 @@
 namespace Digikam
 {
 
-class FolderView;
-class FolderItem;
 class PAlbum;
 class AlbumSelectDialogPrivate;
 
