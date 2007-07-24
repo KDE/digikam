@@ -46,7 +46,7 @@
  <ThumbnailRegularColor        value="#EFEFEF"    />
  <ThumbnailRegularColorTo      value="#C0C0C0"    />
  <ThumbnailRegularBevel        value="RAISED"     />
- <ThumbnailRegularGradient     value="DIAGONAL    />
+ <ThumbnailRegularGradient     value="DIAGONAL"   />
  <ThumbnailRegularBorder       value="TRUE"       />
  <ThumbnailRegularBorderColor  value="#707070"    />
 
