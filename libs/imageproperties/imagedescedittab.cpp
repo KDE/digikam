@@ -181,7 +181,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     d->assignedTagsBtn->setToolTip( i18n("Already assigned tags"));
     d->assignedTagsBtn->setIcon(KIconLoader::global()->loadIcon("tag-assigned",
                                 K3Icon::NoGroup, K3Icon::SizeSmall, 
-                                K3Icon::DefaultState, 0, true));
+                                K3Icon::DefaultState, QStringList(),0, true));
     d->assignedTagsBtn->setCheckable(true);
 
     d->recentTagsBtn       = new QToolButton(tagsSearch);
@@ -189,7 +189,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     d->recentTagsBtn->setToolTip( i18n("Recent Tags"));
     d->recentTagsBtn->setIcon(KIconLoader::global()->loadIcon("tag-recents", 
                               K3Icon::NoGroup, K3Icon::SizeSmall, 
-                              K3Icon::DefaultState, 0, true));
+                              K3Icon::DefaultState, QStringList(),0, true));
     d->recentTagsBtn->setIconSize(QSize(K3Icon::SizeSmall, K3Icon::SizeSmall));
     d->recentTagsBtn->setMenu(popupMenu);
     d->recentTagsBtn->setPopupDelay(1);

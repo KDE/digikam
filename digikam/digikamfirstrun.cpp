@@ -90,7 +90,7 @@ DigikamFirstRun::DigikamFirstRun(QWidget* parent)
     m_ui->m_path->setMode(KFile::Directory | KFile::LocalOnly);
 
     m_ui->m_pixLabel->setPixmap(KIconLoader::global()->loadIcon("digikam", K3Icon::NoGroup, 
-                                128, K3Icon::DefaultState, 0, true));
+                                128, K3Icon::DefaultState,QStringList(), 0, true));
     m_ui->setMinimumSize(450, m_ui->sizeHint().height());
 
     connect(this, SIGNAL(okClicked()),

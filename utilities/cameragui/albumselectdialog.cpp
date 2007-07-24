@@ -102,7 +102,7 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
 
     QLabel *logo = new QLabel(page);
     KIconLoader* iconLoader = KIconLoader::global();
-    logo->setPixmap(iconLoader->loadIcon("digikam", K3Icon::NoGroup, 128, K3Icon::DefaultState, 0, true));  
+    logo->setPixmap(iconLoader->loadIcon("digikam", K3Icon::NoGroup, 128, K3Icon::DefaultState, QStringList(),0, true));  
 
     QLabel *message = new QLabel(page);
     if (!header.isEmpty())
@@ -123,7 +123,7 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
 
     QPixmap icon = iconLoader->loadIcon("folder", K3Icon::NoGroup,
                                         AlbumSettings::componentData()->getDefaultTreeIconSize(),
-                                        K3Icon::DefaultState, 0, true);
+                                        K3Icon::DefaultState,QStringList(), 0, true);
 
     AlbumList aList = AlbumManager::componentData()->allPAlbums();
 
@@ -212,7 +212,7 @@ void AlbumSelectDialog::slotAlbumAdded(Album* album)
     KIconLoader* iconLoader = KIconLoader::global();
     QPixmap icon = iconLoader->loadIcon("folder", K3Icon::NoGroup,
                                         AlbumSettings::componentData()->getDefaultTreeIconSize(),
-                                        K3Icon::DefaultState, 0, true);
+                                        K3Icon::DefaultState,QStringList(), 0, true);
     
     FolderItem* viewItem = new FolderItem(parentItem, album->title());
     viewItem->setPixmap(0, icon);
