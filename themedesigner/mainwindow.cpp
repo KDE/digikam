@@ -75,8 +75,8 @@ MainWindow::MainWindow()
 
     // Initialize theme engine ------------------------------------
 
-    ThemeEngine::componentData().scanThemes();
-    m_theme = new Theme(*(ThemeEngine::componentData().getCurrentTheme()));
+    ThemeEngine::componentData()->scanThemes();
+    m_theme = new Theme(*(ThemeEngine::componentData()->getCurrentTheme()));
 
     connect(ThemeEngine::componentData(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
@@ -104,12 +104,10 @@ MainWindow::MainWindow()
     QGroupBox *groupBox = new QGroupBox(this);
     layout->addWidget(groupBox, 0, 1);
 
-    groupBox->setColumnLayout(0, Qt::Vertical);
-    groupBox->layout()->setSpacing( 5 );
-    groupBox->layout()->setMargin( 5 );
-
     QVBoxLayout* groupBoxLayout = new QVBoxLayout(groupBox);
     groupBoxLayout->setAlignment(Qt::AlignTop);
+    groupBoxLayout->setSpacing(5);
+    groupBoxLayout->setMargin(5);
 
     QHBoxLayout* hboxLayout = 0;
     QLabel*      label      = 0;
@@ -255,7 +253,7 @@ MainWindow::MainWindow()
     m_folderView->setResizeMode(Q3ListView::LastColumn);
     m_folderView->setRootIsDecorated(true);
 
-    KIconLoader *iconLoader = KIconLoader::iconLoader();    
+    KIconLoader *iconLoader = KIconLoader::global();    
     for (int i=0; i<10; i++)
     {
         FolderItem* folderItem = new FolderItem(m_folderView, QString("Album %1").arg(i));
@@ -278,8 +276,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::slotLoad()
 {
-    QString path = KFileDialog::getOpenFileName(QString::null, QString::null,
-                                                this);
+    QString path = KFileDialog::getOpenFileName(KUrl(), QString(), this, QString());
     if (path.isEmpty())
         return;
 
@@ -287,15 +284,14 @@ void MainWindow::slotLoad()
     m_theme->name = fi.fileName();
     m_theme->filePath = path;
 
-    ThemeEngine::componentData().setCurrentTheme(*m_theme, m_theme->name, true);
-    *m_theme = *(ThemeEngine::componentData().getCurrentTheme());
+    ThemeEngine::componentData()->setCurrentTheme(*m_theme, m_theme->name, true);
+    *m_theme = *(ThemeEngine::componentData()->getCurrentTheme());
     slotPropertyChanged();
 }
 
 void MainWindow::slotSave()
 {
-    QString path = KFileDialog::getSaveFileName(QString::null, QString::null,
-                                                this);
+    QString path = KFileDialog::getSaveFileName(KUrl(), QString(), this, QString());
     if (path.isEmpty())
         return;
 
@@ -307,7 +303,7 @@ void MainWindow::slotSave()
     }
 
     QFileInfo fi(path);
-    Q3TextStream ts(&file);
+    QTextStream ts(&file);
 
     // header ------------------------------------------------------------------
     
@@ -926,13 +922,13 @@ void MainWindow::slotUpdateTheme()
         }
     };
 
-    ThemeEngine::componentData().setCurrentTheme(*m_theme, "Digikam ThemeEditor Theme");
+    ThemeEngine::componentData()->setCurrentTheme(*m_theme, "Digikam ThemeEditor Theme");
 }
 
 void MainWindow::slotThemeChanged()
 {
-    QColor backgroundColor(ThemeEngine::componentData().baseColor());
-    QColor foregroundColor(ThemeEngine::componentData().textRegColor());
+    QColor backgroundColor(ThemeEngine::componentData()->baseColor());
+    QColor foregroundColor(ThemeEngine::componentData()->textRegColor());
     m_propView->colorChanged(backgroundColor, foregroundColor);
 }
 

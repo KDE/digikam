@@ -162,9 +162,9 @@ void ThemedIconView::slotThemeChanged()
 {
     QPalette plt(palette());
     QColorGroup cg(plt.active());
-    cg.setColor(QColorGroup::Base, ThemeEngine::componentData().baseColor());
-    cg.setColor(QColorGroup::Text, ThemeEngine::componentData().textRegColor());
-    cg.setColor(QColorGroup::HighlightedText, ThemeEngine::componentData().textSelColor());
+    cg.setColor(QColorGroup::Base, ThemeEngine::componentData()->baseColor());
+    cg.setColor(QColorGroup::Text, ThemeEngine::componentData()->textRegColor());
+    cg.setColor(QColorGroup::HighlightedText, ThemeEngine::componentData()->textSelColor());
     plt.setActive(cg);
     plt.setInactive(cg);
     setPalette(plt);
@@ -225,8 +225,8 @@ void ThemedIconView::updateBannerRectPixmap()
     d->bannerRect.setHeight(d->bannerRect.height() + tr.height() + 10);
     d->bannerRect.setWidth(frameRect().width());
 
-    d->bannerPixmap = ThemeEngine::componentData().bannerPixmap(d->bannerRect.width(),
-                                                            d->bannerRect.height());
+    d->bannerPixmap = ThemeEngine::componentData()->bannerPixmap(d->bannerRect.width(),
+                                                                 d->bannerRect.height());
 }
 
 void ThemedIconView::updateItemRectsPixmap()
@@ -301,11 +301,11 @@ void ThemedIconView::updateItemRectsPixmap()
 
     d->itemRect = QRect(0, 0, w+2*margin, y+margin);
 
-    d->itemRegPixmap = ThemeEngine::componentData().thumbRegPixmap(d->itemRect.width(),
-                                                               d->itemRect.height());
+    d->itemRegPixmap = ThemeEngine::componentData()->thumbRegPixmap(d->itemRect.width(),
+                                                                    d->itemRect.height());
 
-    d->itemSelPixmap = ThemeEngine::componentData().thumbSelPixmap(d->itemRect.width(),
-                                                               d->itemRect.height());
+    d->itemSelPixmap = ThemeEngine::componentData()->thumbSelPixmap(d->itemRect.width(),
+                                                                    d->itemRect.height());
 }
 
 }  // NameSpace Digikam

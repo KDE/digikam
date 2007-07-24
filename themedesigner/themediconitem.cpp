@@ -49,7 +49,7 @@ namespace Digikam
 
 static void dateToString(const QDateTime& datetime, QString& str)
 {
-    str = KGlobal::locale()->formatDateTime(datetime, true, false);
+    str = KGlobal::locale()->formatDateTime(datetime, KLocale::ShortDate, false);
 }
 
 static QString squeezedText(QPainter* p, int width, const QString& text)
@@ -135,7 +135,7 @@ void ThemedIconItem::paintItem()
 
     {
         r = view->itemPixmapRect();
-        KIconLoader *iconLoader = KIconLoader::global()->iconLoader();    
+        KIconLoader *iconLoader = KIconLoader::global();    
         QPixmap thumbnail = iconLoader->loadIcon("colors", K3Icon::NoGroup, 100);
         
         p.drawPixmap(r.x() + (r.width()-thumbnail.width())/2,
