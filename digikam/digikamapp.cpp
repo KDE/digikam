@@ -1730,8 +1730,11 @@ void DigikamApp::populateThemes()
 
 void DigikamApp::slotChangeTheme(const QString& theme)
 {
-    d->albumSettings->setCurrentTheme(theme);
-    ThemeEngine::componentData()->slotChangeTheme(theme);
+    // Theme menu entry is returned with keyboard accelerator. We remove it. 
+    QString name = theme;
+    name.remove(QChar('&'));
+    d->albumSettings->setCurrentTheme(name);
+    ThemeEngine::componentData()->slotChangeTheme(name);
 }
 
 void DigikamApp::slotDatabaseRescan()
