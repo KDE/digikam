@@ -6,7 +6,7 @@
  * Date        : 2005-07-19
  * Description : "Sandy" colors theme.
  *
- * Copyright (C) 2005 by Laurent Rathle  <lrathle at kde-france dot org>
+ * Copyright (C) 2005 by Laurent Rathle <lrathle at kde-france dot org>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -51,6 +51,7 @@ thumbnail.selected.border:           true
 thumbnail.selected.borderColor:      #000000
 
 listview.regular.color:	             #DAC8BD
+listview.regular.colorTo:            #DAC8BD
 listview.regular.bevel:	             FLAT
 listview.regular.gradient:           SOLID
 listview.regular.border:             true
