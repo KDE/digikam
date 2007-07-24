@@ -68,7 +68,7 @@ RatingPopupMenu::RatingPopupMenu(QWidget* parent)
     QPainter p1(&starbm);
     p1.setRenderHint(QPainter::Antialiasing, true);
     p1.setBrush(ThemeEngine::componentData()->textSpecialRegColor());
-    p1.setPen(Qt::black);
+    p1.setPen(palette().color(QPalette::Active, QPalette::Foreground));
     p1.drawPolygon(starPolygon, Qt::WindingFill);
     p1.end();
 
