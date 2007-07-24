@@ -136,8 +136,7 @@ void ThemedIconItem::paintItem()
     {
         r = view->itemPixmapRect();
         KIconLoader *iconLoader = KIconLoader::global()->iconLoader();    
-        QPixmap thumbnail = iconLoader->loadIcon("colors", K3Icon::NoGroup,
-                                                 100, K3Icon::DefaultState, 0, true);
+        QPixmap thumbnail = iconLoader->loadIcon("colors", K3Icon::NoGroup, 100);
         
         p.drawPixmap(r.x() + (r.width()-thumbnail.width())/2,
                      r.y() + (r.height()-thumbnail.height())/2,

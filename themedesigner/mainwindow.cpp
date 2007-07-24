@@ -261,8 +261,7 @@ MainWindow::MainWindow()
     for (int i=0; i<10; i++)
     {
         FolderItem* folderItem = new FolderItem(m_folderView, QString("Album %1").arg(i));
-        folderItem->setPixmap(0, iconLoader->loadIcon("folder", K3Icon::NoGroup,
-                                                      32, K3Icon::DefaultState, 0, true));
+        folderItem->setPixmap(0, iconLoader->loadIcon("folder", K3Icon::NoGroup, 32));
         if (i == 2)
         {
             m_folderView->setSelected(folderItem, true);
