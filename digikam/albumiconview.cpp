@@ -215,7 +215,7 @@ AlbumIconView::AlbumIconView(QWidget* parent)
     QPainter painter(&d->ratingPixmap);
     painter.setRenderHint(QPainter::Antialiasing, true);
     painter.setBrush(ThemeEngine::componentData()->textSpecialRegColor());
-    painter.setPen(Qt::black);
+    painter.setPen(ThemeEngine::componentData()->textRegColor());
     painter.drawPolygon(d->starPolygon, Qt::WindingFill);
     painter.end();
     
@@ -1898,7 +1898,7 @@ void AlbumIconView::slotThemeChanged()
     QPainter painter(&d->ratingPixmap);
     painter.setRenderHint(QPainter::Antialiasing, true);
     painter.setBrush(ThemeEngine::componentData()->textSpecialRegColor());
-    painter.setPen(Qt::black);
+    painter.setPen(ThemeEngine::componentData()->textRegColor());
     painter.drawPolygon(d->starPolygon, Qt::WindingFill);
     painter.end();
     
