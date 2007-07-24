@@ -377,6 +377,6 @@ ADD_SUBDIRECTORY( digikam )
 ADD_SUBDIRECTORY( kioslave )
 ADD_SUBDIRECTORY( showfoto )
 ADD_SUBDIRECTORY( imageplugins )
-#ADD_SUBDIRECTORY( themedesigner )
+ADD_SUBDIRECTORY( themedesigner )
 
 INSTALL( FILES tips DESTINATION ${DATA_INSTALL_DIR}/digikam )
