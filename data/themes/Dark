@@ -31,44 +31,44 @@
 
  <BaseColor                    value="#000000"    />
 
- <TextRegularColor             value="#7f7f7f"    />
- <TextSelectedColor            value="#b4b4b4"    />
- <TextSpecialRegularColor      value="#549fb6"    />
- <TextSpecialSelectedColor     value="#83b8bd"    />
+ <TextRegularColor             value="#7F7F7F"    />
+ <TextSelectedColor            value="#B4B4B4"    />
+ <TextSpecialRegularColor      value="#549FB6"    />
+ <TextSpecialSelectedColor     value="#83B8BD"    />
 
- <BannerColor                  value="#313f50"    />
- <BannerColorTo                value="#1e2731"    />
+ <BannerColor                  value="#313F50"    />
+ <BannerColorTo                value="#1E2731"    />
  <BannerBevel                  value="RAISED"     />
  <BannerGradient               value="VERTICAL"   />
- <BannerBorder                 value="false"      />
+ <BannerBorder                 value="FALSE"      />
  <BannerBorderColor            value="#000000"    />
 
  <ThumbnailRegularColor        value="#131313"    />
- <ThumbnailRegularColorTo      value="#2e2a26"    />
+ <ThumbnailRegularColorTo      value="#2E2A26"    />
  <ThumbnailRegularBevel        value="RAISED"     />
  <ThumbnailRegularGradient     value="SOLID       />
- <ThumbnailRegularBorder       value="false"      />
- <ThumbnailRegularBorderColor  value="#e0e0ef"    />
+ <ThumbnailRegularBorder       value="FALSE"      />
+ <ThumbnailRegularBorderColor  value="#E0E0EF"    />
 
- <ThumbnailSelectedColor       value="#e0e0ef"    />
- <ThumbnailSelectedColorTo     value="#1b252f"    />
+ <ThumbnailSelectedColor       value="#E0E0EF"    />
+ <ThumbnailSelectedColorTo     value="#1B252F"    />
  <ThumbnailSelectedBevel       value="RAISED"     />
  <ThumbnailSelectedGradient    value="VERTICAL"   />
- <ThumbnailSelectedBorder      value="false"      />
- <ThumbnailSelectedBorderColor value="#e0e0ef"    />
+ <ThumbnailSelectedBorder      value="FALSE"      />
+ <ThumbnailSelectedBorderColor value="#E0E0EF"    />
 
- <ListviewRegularColor         value="#0d0d0d"    />
+ <ListviewRegularColor         value="#0D0D0D"    />
  <ListviewRegularColorTo       value="#222120"    />
  <ListviewRegularBevel         value="RAISED"     />
  <ListviewRegularGradient      value="HORIZONTAL" />
- <ListviewRegularBorder        value="false"      />
+ <ListviewRegularBorder        value="FALSE"      />
  <ListviewRegularBorderColor   value="#000000"    />
 
- <ListviewSelectedColor        value="#2e3d4e"    />
- <ListviewSelectedColorTo      value="#212a34"    />
+ <ListviewSelectedColor        value="#2E3D4E"    />
+ <ListviewSelectedColorTo      value="#212A34"    />
  <ListviewSelectedBevel        value="RAISED"     />
  <ListviewSelectedGradient     value="VERTICAL"   />
- <ListviewSelectedBorder       value="true "      />
+ <ListviewSelectedBorder       value="TRUE"       />
  <ListviewSelectedBorderColor  value="#000000"    />
 
 </digikamtheme>

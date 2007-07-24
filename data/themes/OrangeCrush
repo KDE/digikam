@@ -27,49 +27,49 @@
 
 <digikamtheme>
 
- <name                         value="OrangeCrush"/>
+ <name                         value="Orange Crush"/>
 
- <BaseColor                    value="#FFFFFF"    />
+ <BaseColor                    value="#FFFFFF"     />
 
- <TextRegularColor             value="#000000"    />
- <TextSelectedColor            value="#000000"    />
- <TextSpecialRegularColor      value="#AA8858"    />
- <TextSpecialSelectedColor     value="#000000"    />
+ <TextRegularColor             value="#000000"     />
+ <TextSelectedColor            value="#000000"     />
+ <TextSpecialRegularColor      value="#AA8858"     />
+ <TextSpecialSelectedColor     value="#000000"     />
 
- <BannerColor                  value="#ffa200"    />
- <BannerColorTo                value="#ffa200"    />
- <BannerBevel                  value="RAISED"     />
- <BannerGradient               value="FLAT"       />
- <BannerBorder                 value="false"      />
- <BannerBorderColor            value="#000000"    />
+ <BannerColor                  value="#FFA200"     />
+ <BannerColorTo                value="#FFA200"     />
+ <BannerBevel                  value="RAISED"      />
+ <BannerGradient               value="FLAT"        />
+ <BannerBorder                 value="FALSE"       />
+ <BannerBorderColor            value="#000000"     />
 
- <ThumbnailRegularColor        value="#F5F5F0"    />
- <ThumbnailRegularColorTo      value="#F5F5F5"    />
- <ThumbnailRegularBevel        value="RAISED"     />
- <ThumbnailRegularGradient     value="FLAT        />
- <ThumbnailRegularBorder       value="false"      />
- <ThumbnailRegularBorderColor  value="#F0F0F0"    />
+ <ThumbnailRegularColor        value="#F5F5F0"     />
+ <ThumbnailRegularColorTo      value="#F5F5F5"     />
+ <ThumbnailRegularBevel        value="RAISED"      />
+ <ThumbnailRegularGradient     value="FLAT         />
+ <ThumbnailRegularBorder       value="FALSE"       />
+ <ThumbnailRegularBorderColor  value="#F0F0F0"     />
 
- <ThumbnailSelectedColor       value="#ffa200"    />
- <ThumbnailSelectedColorTo     value="#ffa200"    />
- <ThumbnailSelectedBevel       value="RAISED"     />
- <ThumbnailSelectedGradient    value="FLAT"       />
- <ThumbnailSelectedBorder      value="false"      />
- <ThumbnailSelectedBorderColor value="#000000"    />
+ <ThumbnailSelectedColor       value="#FFA200"     />
+ <ThumbnailSelectedColorTo     value="#FFA200"     />
+ <ThumbnailSelectedBevel       value="RAISED"      />
+ <ThumbnailSelectedGradient    value="FLAT"        />
+ <ThumbnailSelectedBorder      value="FALSE"       />
+ <ThumbnailSelectedBorderColor value="#000000"     />
 
- <ListviewRegularColor         value="#ffffff"    />
- <ListviewRegularColorTo       value="#ffffff"    />
- <ListviewRegularBevel         value="FLAT"       />
- <ListviewRegularGradient      value="SOLID"      />
- <ListviewRegularBorder        value="false"      />
- <ListviewRegularBorderColor   value="#707070"    />
+ <ListviewRegularColor         value="#FFFFFF"     />
+ <ListviewRegularColorTo       value="#FFFFFF"     />
+ <ListviewRegularBevel         value="FLAT"        />
+ <ListviewRegularGradient      value="SOLID"       />
+ <ListviewRegularBorder        value="FALSE"       />
+ <ListviewRegularBorderColor   value="#707070"     />
 
- <ListviewSelectedColor        value="#ffa200"    />
- <ListviewSelectedColorTo      value="#ffa200"    />
- <ListviewSelectedBevel        value="RAISED"     />
- <ListviewSelectedGradient     value="FLAT"       />
- <ListviewSelectedBorder       value="false "     />
- <ListviewSelectedBorderColor  value="#000000"    />
+ <ListviewSelectedColor        value="#FFA200"     />
+ <ListviewSelectedColorTo      value="#FFA200"     />
+ <ListviewSelectedBevel        value="RAISED"      />
+ <ListviewSelectedGradient     value="FLAT"        />
+ <ListviewSelectedBorder       value="FALSE"       />
+ <ListviewSelectedBorderColor  value="#000000"     />
 
 </digikamtheme>
                                              

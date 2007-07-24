@@ -40,35 +40,35 @@
  <BannerColorTo                value="#766C66"    />
  <BannerBevel                  value="RAISED"     />
  <BannerGradient               value="DIAGONAL"   />
- <BannerBorder                 value="true"       />
+ <BannerBorder                 value="TRUE"       />
  <BannerBorderColor            value="#000000"    />
 
  <ThumbnailRegularColor        value="#FFEADD"    />
  <ThumbnailRegularColorTo      value="#ECD9CD"    />
  <ThumbnailRegularBevel        value="RAISED"     />
  <ThumbnailRegularGradient     value="DIAGONAL    />
- <ThumbnailRegularBorder       value="true"       />
+ <ThumbnailRegularBorder       value="TRUE"       />
  <ThumbnailRegularBorderColor  value="#B5A69D"    />
 
  <ThumbnailSelectedColor       value="#817670"    />
  <ThumbnailSelectedColorTo     value="#766C66"    />
  <ThumbnailSelectedBevel       value="RAISED"     />
  <ThumbnailSelectedGradient    value="DIAGONAL"   />
- <ThumbnailSelectedBorder      value="true"       />
+ <ThumbnailSelectedBorder      value="TRUE"       />
  <ThumbnailSelectedBorderColor value="#000000"    />
 
  <ListviewRegularColor         value="#DAC8BD"    />
  <ListviewRegularColorTo       value="#DAC8BD"    />
  <ListviewRegularBevel         value="FLAT"       />
  <ListviewRegularGradient      value="SOLID"      />
- <ListviewRegularBorder        value="true"       />
+ <ListviewRegularBorder        value="TRUE"       />
  <ListviewRegularBorderColor   value="#FFEADD"    />
 
  <ListviewSelectedColor        value="#817670"    />
  <ListviewSelectedColorTo      value="#766C66"    />
  <ListviewSelectedBevel        value="RAISED"     />
  <ListviewSelectedGradient     value="DIAGONAL"   />
- <ListviewSelectedBorder       value="true "      />
+ <ListviewSelectedBorder       value="TRUE"      />
  <ListviewSelectedBorderColor  value="#000000"    />
 
 </digikamtheme>
