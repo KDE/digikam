@@ -175,15 +175,15 @@ void RatingWidget::slotThemeChanged()
 
     QPainter p1(&d->regPixmap);
     p1.setRenderHint(QPainter::Antialiasing, true);
-    p1.setBrush(palette().color(QPalette::Dark));
-    p1.setPen(Qt::black);
+    p1.setBrush(palette().color(QPalette::Active, QPalette::Background));
+    p1.setPen(palette().color(QPalette::Active, QPalette::Foreground));
     p1.drawPolygon(d->starPolygon, Qt::WindingFill);
     p1.end();
 
     QPainter p2(&d->selPixmap);
     p2.setRenderHint(QPainter::Antialiasing, true);
     p2.setBrush(ThemeEngine::componentData()->textSpecialRegColor());
-    p2.setPen(Qt::black);
+    p2.setPen(palette().color(QPalette::Active, QPalette::Foreground));
     p2.drawPolygon(d->starPolygon, Qt::WindingFill);
     p2.end();
 
