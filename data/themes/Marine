@@ -23,43 +23,43 @@
 
 ! "Marine"
 
-base.color:			     #fafffa
+base.color:			     #FAFFFA
 text.regular.color:		     #000000
 text.selected.color:		     #000000
 text.special.regular.color:	     #658857
-text.special.selected.color:	     #ffffff
+text.special.selected.color:	     #FFFFFF
 
 banner.color:			     #4BFF9C
 banner.colorTo:			     #35B56F
 banner.bevel:			     SUNKEN
 banner.gradient:		     HORIZONTAL
-banner.border:                       true
+banner.border:                       TRUE
 banner.borderColor:                  #2FA062
 
 thumbnail.regular.color:             #E7FFF4
 thumbnail.regular.colorTo:           #C4D8CF
 thumbnail.regular.bevel:	     SUNKEN
 thumbnail.regular.gradient:          HORIZONTAL
-thumbnail.regular.border:            true
+thumbnail.regular.border:            TRUE
 thumbnail.regular.borderColor:       #769286
 
 thumbnail.selected.color:	     #4BFF9C
 thumbnail.selected.colorTo:	     #35B56F
 thumbnail.selected.bevel:	     SUNKEN
 thumbnail.selected.gradient:         HORIZONTAL
-thumbnail.selected.border:           true
+thumbnail.selected.border:           TRUE
 thumbnail.selected.borderColor:      #2FA062
 
-listview.regular.color:	             #fafffa
-listview.regular.colorTo:            #fafffa
+listview.regular.color:	             #FAFFFA
+listview.regular.colorTo:            #FAFFFA
 listview.regular.bevel:	             FLAT
 listview.regular.gradient:           SOLID
-listview.regular.border:             false
+listview.regular.border:             FALSE
 listview.regular.borderColor:        #000000
 
 listview.selected.color:	     #4BFF9C
 listview.selected.colorTo:	     #35B56F
 listview.selected.bevel:	     SUNKEN
 listview.selected.gradient:          HORIZONTAL
-listview.selected.border:            true
+listview.selected.border:            TRUE
 listview.selected.borderColor:       #2FA062

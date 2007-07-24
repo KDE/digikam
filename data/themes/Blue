@@ -23,43 +23,43 @@
 
 ! "Blue"
 
-base.color:				#eeeef6
+base.color:				#EEEEF6
 text.regular.color:			#405772
-text.selected.color:			#080ccd
+text.selected.color:			#080CCD
 text.special.regular.color:		#107141
 text.special.selected.color:		#007000
 
-banner.color:				#c5daff
-banner.colorTo:				#a7b9d8
+banner.color:				#C5DAFF
+banner.colorTo:				#A7B9D8
 banner.bevel:				SUNKEN
 banner.gradient:			HORIZONTAL
-banner.border:				false
+banner.border:				FALSE
 banner.borderColor			#000000
 
-thumbnail.regular.color:		#eeeef6
-thumbnail.regular.colorTo:		#709dca
+thumbnail.regular.color:		#EEEEF6
+thumbnail.regular.colorTo:		#709DCA
 thumbnail.regular.bevel:		FLAT
 thumbnail.regular.gradient:		SOLID
-thumbnail.regular.border:		false
-thumbnail.regular.borderColor		#e0e0ef
+thumbnail.regular.border:		FALSE
+thumbnail.regular.borderColor		#E0E0EF
 
-thumbnail.selected.color:		#c5daff
-thumbnail.selected.colorTo:		#a7b9d8
+thumbnail.selected.color:		#C5DAFF
+thumbnail.selected.colorTo:		#A7B9D8
 thumbnail.selected.bevel:		SUNKEN
 thumbnail.selected.gradient:		HORIZONTAL
-thumbnail.selected.border:		true
+thumbnail.selected.border:		TRUE
 thumbnail.selected.borderColor		#000000
 
-listview.regular.color:			#eeeef6
-listview.regular.colorTo:		#4673a5
+listview.regular.color:			#EEEEF6
+listview.regular.colorTo:		#4673A5
 listview.regular.bevel:			FLAT
 listview.regular.gradient:		SOLID
-listview.regular.border:		false
+listview.regular.border:		FALSE
 listview.regular.borderColor		#000000
 
-listview.selected.color:		#c5daff
-listview.selected.colorTo:		#a7b9d8
+listview.selected.color:		#C5DAFF
+listview.selected.colorTo:		#A7B9D8
 listview.selected.bevel:		SUNKEN
 listview.selected.gradient:		HORIZONTAL
-listview.selected.border:		false
+listview.selected.border:		FALSE
 listview.selected.borderColor		#000000

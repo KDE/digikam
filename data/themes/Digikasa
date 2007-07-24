@@ -23,43 +23,43 @@
 
 ! "Digikasa"
 
-base.color:			     #f2f2f2
+base.color:			     #F2F2F2
 text.regular.color:		     #727272
 text.selected.color:		     #FFFFFF
-text.special.regular.color:	     #6793ae
+text.special.regular.color:	     #6793AE
 text.special.selected.color:	     #FFFFFF
 
 banner.color:			     #25648B
 !banner.colorTo:		     #25648B
 banner.bevel:			     FLAT
 banner.gradient:		     SOLID
-banner.border:                       false
+banner.border:                       FALSE
 banner.borderColor:                  #000000
 
-thumbnail.regular.color:             #f2f2f2
+thumbnail.regular.color:             #F2F2F2
 !thumbnail.regular.colorTo:          #EFEFEF
 thumbnail.regular.bevel:	     FLAT
 thumbnail.regular.gradient:          SOLID
-thumbnail.regular.border:            false
+thumbnail.regular.border:            FALSE
 !thumbnail.regular.borderColor:      #707070
 
 thumbnail.selected.color:	     #25648B
 !thumbnail.selected.colorTo:	     #4B6CC7
 thumbnail.selected.bevel:	     FLAT
 thumbnail.selected.gradient:         SOLID
-thumbnail.selected.border:           false
+thumbnail.selected.border:           FALSE
 thumbnail.selected.borderColor:      #000000
 
-listview.regular.color:	             #f2f2f2
-!listview.regular.colorTo:	     #ffffff
+listview.regular.color:	             #F2F2F2
+!listview.regular.colorTo:	     #FFFFFF
 listview.regular.bevel:	             FLAT
 listview.regular.gradient:           SOLID
-listview.regular.border:             false
+listview.regular.border:             FALSE
 listview.regular.borderColor:        #707070
 
 listview.selected.color:	     #25648B
 !listview.selected.colorTo:	     #4B6CC7
 listview.selected.bevel:	     FLAT
 listview.selected.gradient:          SOLID
-listview.selected.border:            false
+listview.selected.border:            FALSE
 listview.selected.borderColor:       #000000

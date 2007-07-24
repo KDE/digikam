@@ -33,33 +33,33 @@ banner.color:				#1B1B1B
 banner.colorTo:				#282828
 banner.bevel:				RAISED
 banner.gradient:			VERTICAL
-banner.border:				true
+banner.border:				TRUE
 banner.borderColor:			#343434
 
 thumbnail.regular.color:		#1C1C1C
 thumbnail.regular.colorTo:		#1A1A1A
 thumbnail.regular.bevel:		RAISED
 thumbnail.regular.gradient:		VERTICAL
-thumbnail.regular.border:		true
+thumbnail.regular.border:		TRUE
 thumbnail.regular.borderColor:		#474747
 
 thumbnail.selected.color:		#808080
 thumbnail.selected.colorTo:		#808080
 thumbnail.selected.bevel:		RAISED
 thumbnail.selected.gradient:		SOLID
-thumbnail.selected.border:		true
+thumbnail.selected.border:		TRUE
 thumbnail.selected.borderColor:		#BFBFBF
 
 listview.regular.color:			#1A1A1A
 listview.regular.colorTo:		#1A1A1A
 listview.regular.bevel:			FLAT
 listview.regular.gradient:		SOLID
-listview.regular.border:		true
+listview.regular.border:		TRUE
 listview.regular.borderColor:		#1B1B1B
 
 listview.selected.color:		#3E3E3E
 listview.selected.colorTo:		#3E3E3E
 listview.selected.bevel:		FLAT
 listview.selected.gradient:		SOLID
-listview.selected.border:		true
+listview.selected.border:		TRUE
 listview.selected.borderColor:		#313131

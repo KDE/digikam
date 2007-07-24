@@ -25,41 +25,41 @@
 
 base.color:				#727272
 text.regular.color:			#505050
-text.selected.color:			#c4c4c4
-text.special.regular.color:		#c4c4c4
-text.special.selected.color:		#c7c7c7
+text.selected.color:			#C4C4C4
+text.special.regular.color:		#C4C4C4
+text.special.selected.color:		#C7C7C7
 
 banner.color:				#969696
 banner.colorTo:				#505050
 banner.bevel:				SUNKEN
 banner.gradient:			HORIZONTAL
-banner.border:				true
+banner.border:				TRUE
 banner.borderColor			#000000
 
 thumbnail.regular.color:		#727272
-thumbnail.regular.colorTo:		#7f7f7f
+thumbnail.regular.colorTo:		#7F7F7F
 thumbnail.regular.bevel:		FLAT
 thumbnail.regular.gradient:		SOLID
-thumbnail.regular.border:		false
-thumbnail.regular.borderColor		#e0e0ef
+thumbnail.regular.border:		FALSE
+thumbnail.regular.borderColor		#E0E0EF
 
 thumbnail.selected.color:		#505050
 thumbnail.selected.colorTo:		#969696
 thumbnail.selected.bevel:		SUNKEN
 thumbnail.selected.gradient:		DIAGONAL
-thumbnail.selected.border:		true
-thumbnail.selected.borderColor		#e0e0ef
+thumbnail.selected.border:		TRUE
+thumbnail.selected.borderColor		#E0E0EF
 
 listview.regular.color:			#727272
 listview.regular.colorTo:		#777777
 listview.regular.bevel:			FLAT
 listview.regular.gradient:		SOLID
-listview.regular.border:		false
+listview.regular.border:		FALSE
 listview.regular.borderColor		#000000
 
 listview.selected.color:		#505050
 listview.selected.colorTo:		#969696
 listview.selected.bevel:		SUNKEN
 listview.selected.gradient:		HORIZONTAL
-listview.selected.border:		true
+listview.selected.border:		TRUE
 listview.selected.borderColor		#000000
