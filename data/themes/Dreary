@@ -51,6 +51,7 @@ thumbnail.selected.border:           true
 thumbnail.selected.borderColor:      #000000
 
 listview.regular.color:	             #E0E0E0
+listview.regular.colorTo:            #E0E0E0
 listview.regular.bevel:	             FLAT
 listview.regular.gradient:           SOLID
 listview.regular.border:             true
