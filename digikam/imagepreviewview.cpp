@@ -546,7 +546,9 @@ void ImagePreviewView::slotAssignRating(int rating)
 
 void ImagePreviewView::slotThemeChanged()
 {
-    setBackgroundColor(ThemeEngine::componentData()->baseColor());
+    QPalette plt(palette());
+    plt.setColor(backgroundRole(), ThemeEngine::componentData()->baseColor());
+    setPalette(plt);
 }
 
 void ImagePreviewView::slotCornerButtonPressed()
