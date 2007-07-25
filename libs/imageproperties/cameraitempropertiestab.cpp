@@ -260,59 +260,59 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent, bool navBar)
 
     // --------------------------------------------------
 
-    settingsLayout->addWidget(d->title, 0, 0, 0, 1);
+    settingsLayout->addWidget(d->title, 0, 0, 1, 2 );
     settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
                                 QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 1, 1, 0, 1);
-    settingsLayout->addWidget(d->file, 2, 2, 0, 0);
-    settingsLayout->addWidget(d->labelFile, 2, 2, 1, 1);
-    settingsLayout->addWidget(d->folder, 3, 3, 0, 0);
-    settingsLayout->addWidget(d->labelFolder, 3, 3, 1, 1);
-    settingsLayout->addWidget(d->date, 4, 4, 0, 0);
-    settingsLayout->addWidget(d->labelFileDate, 4, 4, 1, 1);
-    settingsLayout->addWidget(d->size, 5, 5, 0, 0);
-    settingsLayout->addWidget(d->labelFileSize, 5, 5, 1, 1);
-    settingsLayout->addWidget(d->isReadable, 6, 6, 0, 0);
-    settingsLayout->addWidget(d->labelFileIsReadable, 6, 6, 1, 1);
-    settingsLayout->addWidget(d->isWritable, 7, 7, 0, 0);
-    settingsLayout->addWidget(d->labelFileIsWritable, 7, 7, 1, 1);
-    settingsLayout->addWidget(d->mime, 8, 8, 0, 0);
-    settingsLayout->addWidget(d->labelImageMime, 8, 8, 1, 1);
-    settingsLayout->addWidget(d->dimensions, 9, 9, 0, 0);
-    settingsLayout->addWidget(d->labelImageDimensions, 9, 9, 1, 1);
-    settingsLayout->addWidget(d->newFileName, 10, 10, 0, 0);
-    settingsLayout->addWidget(d->labelNewFileName, 10, 10, 1, 1);
-    settingsLayout->addWidget(d->downloaded, 11, 11, 0, 0);
-    settingsLayout->addWidget(d->labelAlreadyDownloaded, 11, 11, 1, 1);
+    settingsLayout->addWidget(d->file, 2, 0, 1, 1);
+    settingsLayout->addWidget(d->labelFile, 2, 1, 1, 1);
+    settingsLayout->addWidget(d->folder, 3, 0, 1, 1);
+    settingsLayout->addWidget(d->labelFolder, 3, 1, 1, 1);
+    settingsLayout->addWidget(d->date, 4, 0, 1, 1);
+    settingsLayout->addWidget(d->labelFileDate, 4, 1, 1, 1);
+    settingsLayout->addWidget(d->size, 5, 0, 1, 1);
+    settingsLayout->addWidget(d->labelFileSize, 5, 1, 1, 1);
+    settingsLayout->addWidget(d->isReadable, 6, 0, 1, 1);
+    settingsLayout->addWidget(d->labelFileIsReadable, 6, 1, 1, 1);
+    settingsLayout->addWidget(d->isWritable, 7, 0, 1, 1);
+    settingsLayout->addWidget(d->labelFileIsWritable, 7, 1, 1, 1);
+    settingsLayout->addWidget(d->mime, 8, 0, 1, 1);
+    settingsLayout->addWidget(d->labelImageMime, 8, 1, 1, 1);
+    settingsLayout->addWidget(d->dimensions, 9, 0, 1, 1);
+    settingsLayout->addWidget(d->labelImageDimensions, 9, 1, 1, 1);
+    settingsLayout->addWidget(d->newFileName, 10, 0, 1, 1);
+    settingsLayout->addWidget(d->labelNewFileName, 10, 1, 1, 1);
+    settingsLayout->addWidget(d->downloaded, 11, 0, 1, 1);
+    settingsLayout->addWidget(d->labelAlreadyDownloaded, 11, 1, 1, 1);
 
     settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
                                 QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 12, 12, 0, 1);
-    settingsLayout->addWidget(line, 13, 13, 0, 1);
+    settingsLayout->addWidget(line, 13, 0, 1, 2 );
     settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
                                 QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 14, 14, 0, 1);
 
-    settingsLayout->addWidget(d->title2, 15, 15, 0, 1);
+    settingsLayout->addWidget(d->title2, 15, 0, 1, 2 );
     settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
                                 QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 16, 16, 0, 1);
-    settingsLayout->addWidget(d->make, 17, 17, 0, 0);
-    settingsLayout->addWidget(d->labelPhotoMake, 17, 17, 1, 1);
-    settingsLayout->addWidget(d->model, 18, 18, 0, 0);
-    settingsLayout->addWidget(d->labelPhotoModel, 18, 18, 1, 1);
-    settingsLayout->addWidget(d->photoDate, 19, 19, 0, 0);
-    settingsLayout->addWidget(d->labelPhotoDateTime, 19, 19, 1, 1);
-    settingsLayout->addWidget(d->aperture, 20, 20, 0, 0);
-    settingsLayout->addWidget(d->labelPhotoAperture, 20, 20, 1, 1);
-    settingsLayout->addWidget(d->focalLength, 21, 21, 0, 0);
-    settingsLayout->addWidget(d->labelPhotoFocalLenght, 21, 21, 1, 1);
-    settingsLayout->addWidget(d->exposureTime, 22, 22, 0, 0);
-    settingsLayout->addWidget(d->labelPhotoExposureTime, 22, 22, 1, 1);
-    settingsLayout->addWidget(d->sensitivity, 23, 23, 0, 0);
-    settingsLayout->addWidget(d->labelPhotoSensitivity, 23, 23, 1, 1);
-    settingsLayout->addWidget(d->exposureMode, 24, 24, 0, 0);
-    settingsLayout->addWidget(d->labelPhotoExposureMode, 24, 24, 1, 1);
-    settingsLayout->addWidget(d->flash, 25, 25, 0, 0);
-    settingsLayout->addWidget(d->labelPhotoFlash, 25, 25, 1, 1);
-    settingsLayout->addWidget(d->whiteBalance, 26, 26, 0, 0);
-    settingsLayout->addWidget(d->labelPhotoWhiteBalance, 26, 26, 1, 1);
+    settingsLayout->addWidget(d->make, 17, 0, 1, 1);
+    settingsLayout->addWidget(d->labelPhotoMake, 17, 1, 1, 1);
+    settingsLayout->addWidget(d->model, 18, 0, 1, 1);
+    settingsLayout->addWidget(d->labelPhotoModel, 18, 1, 1, 1);
+    settingsLayout->addWidget(d->photoDate, 19, 0, 1, 1);
+    settingsLayout->addWidget(d->labelPhotoDateTime, 19, 1, 1, 1);
+    settingsLayout->addWidget(d->aperture, 20, 0, 1, 1);
+    settingsLayout->addWidget(d->labelPhotoAperture, 20, 1, 1, 1);
+    settingsLayout->addWidget(d->focalLength, 21, 0, 1, 1);
+    settingsLayout->addWidget(d->labelPhotoFocalLenght, 21, 1, 1, 1);
+    settingsLayout->addWidget(d->exposureTime, 22, 0, 1, 1);
+    settingsLayout->addWidget(d->labelPhotoExposureTime, 22, 1, 1, 1);
+    settingsLayout->addWidget(d->sensitivity, 23, 0, 1, 1);
+    settingsLayout->addWidget(d->labelPhotoSensitivity, 23, 1, 1, 1);
+    settingsLayout->addWidget(d->exposureMode, 24, 0, 1, 1);
+    settingsLayout->addWidget(d->labelPhotoExposureMode, 24, 1, 1, 1);
+    settingsLayout->addWidget(d->flash, 25, 0, 1, 1);
+    settingsLayout->addWidget(d->labelPhotoFlash, 25, 1, 1, 1);
+    settingsLayout->addWidget(d->whiteBalance, 26, 0, 1, 1);
+    settingsLayout->addWidget(d->labelPhotoWhiteBalance, 26, 1, 1, 1);
 
     settingsLayout->setRowStretch(27, 10);
     settingsLayout->setColumnStretch(1, 10);
