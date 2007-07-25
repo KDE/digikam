@@ -316,13 +316,13 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent, bool navBar)
 
     settingsLayout->setRowStretch(27, 10);
     settingsLayout->setColumnStretch(1, 10);
-    settingsLayout->setSpacing(0);
     settingsLayout->setMargin(KDialog::spacingHint());
+    settingsLayout->setSpacing(0);
 
     // --------------------------------------------------
 
     m_navigateBarLayout->addWidget(d->settingsArea);
-    m_navigateBarLayout->addStretch(10);
+    m_navigateBarLayout->setStretchFactor(d->settingsArea, 10);
 }
 
 CameraItemPropertiesTab::~CameraItemPropertiesTab()

@@ -152,6 +152,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
     setupNavigateBar(navBar);
     d->tab = new KTabWidget(this);
     m_navigateBarLayout->addWidget(d->tab);
+    m_navigateBarLayout->setStretchFactor(d->tab, 10);
 
     // Histogram tab area -----------------------------------------------------
 

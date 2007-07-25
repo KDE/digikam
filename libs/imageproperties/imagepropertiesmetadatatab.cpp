@@ -93,6 +93,7 @@ ImagePropertiesMetaDataTab::ImagePropertiesMetaDataTab(QWidget* parent, bool nav
     setupNavigateBar(navBar);
     d->tab = new KTabWidget(this);
     m_navigateBarLayout->addWidget(d->tab);
+    m_navigateBarLayout->setStretchFactor(d->tab, 10);
 
     // Exif tab area -----------------------------------------------------
 
