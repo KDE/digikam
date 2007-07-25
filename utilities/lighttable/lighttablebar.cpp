@@ -187,8 +187,8 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent *e)
     if (e->button() == Qt::RightButton)
     {
         DPopupMenu popmenu(this);
-        popmenu.insertItem(SmallIcon("previous"), i18n("Show on left panel"), 10);
-        popmenu.insertItem(SmallIcon("next"), i18n("Show on right panel"), 11);
+        popmenu.insertItem(SmallIcon("arrow-left"), i18n("Show on left panel"), 10);
+        popmenu.insertItem(SmallIcon("arrow-right"), i18n("Show on right panel"), 11);
         popmenu.insertItem(SmallIcon("editimage"), i18n("Edit"), 12);
 
         if (d->navigateByPair)
@@ -198,7 +198,7 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent *e)
         }
 
         popmenu.insertSeparator();
-        popmenu.insertItem(SmallIcon("fileclose"), i18n("Remove"), 13);
+        popmenu.insertItem(SmallIcon("dialog-close"), i18n("Remove"), 13);
         popmenu.insertItem(SmallIcon("editshred"), i18n("Clear all"), 14);
         popmenu.insertSeparator();
 
@@ -531,12 +531,12 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
 
                         if (ltItem->isOnLeftPanel())
                         {
-                            QPixmap lPix = SmallIcon("previous"); 
+                            QPixmap lPix = SmallIcon("arrow-left"); 
                             p.drawPixmap(getMargin(), getMargin(), lPix);
                         }
                         if (ltItem->isOnRightPanel())
                         {
-                            QPixmap rPix = SmallIcon("next"); 
+                            QPixmap rPix = SmallIcon("arrow-right"); 
                             p.drawPixmap(tile.width() - getMargin() - rPix.width(), getMargin(), rPix);
                         }
 
@@ -583,12 +583,12 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
 
                         if (ltItem->isOnLeftPanel())
                         {
-                            QPixmap lPix = SmallIcon("previous"); 
+                            QPixmap lPix = SmallIcon("arrow-left"); 
                             p.drawPixmap(getMargin(), getMargin(), lPix);
                         }
                         if (ltItem->isOnRightPanel())
                         {
-                            QPixmap rPix = SmallIcon("next"); 
+                            QPixmap rPix = SmallIcon("arrow-right"); 
                             p.drawPixmap(tile.width() - getMargin() - rPix.width(), getMargin(), rPix);
                         }
 
