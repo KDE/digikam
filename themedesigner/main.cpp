@@ -67,7 +67,7 @@ int main(int argc, char** argv)
     KCmdLineArgs::init(argc, argv, &aboutData);
 
     KCmdLineOptions options;
-    options.add("+[URL]", ki18n( "Document to open." ));
+    options.add("+[URL]", ki18n("Theme color scheme file to open."));
     KCmdLineArgs::addCmdLineOptions(options);
     KApplication app; 
 

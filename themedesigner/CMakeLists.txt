@@ -5,6 +5,7 @@ INCLUDE_DIRECTORIES(
                      ${CMAKE_SOURCE_DIR}/digikam/libs/dimg/loaders
                      ${CMAKE_SOURCE_DIR}/digikam/libs/dimg/filters
                      ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata 
+                     ${CMAKE_SOURCE_DIR}/digikam/libs/histogram    
                      ${CMAKE_SOURCE_DIR}/digikam/libs/curves
                      ${CMAKE_SOURCE_DIR}/digikam/libs/levels
                      ${CMAKE_SOURCE_DIR}/digikam/libs/lprof/

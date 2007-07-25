@@ -7,6 +7,7 @@
  * Description : themed icon group item 
  * 
  * Copyright (C) 2005 by Renchi Raju <renchi at pooh.tam.uiuc.edu>
+ * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -71,9 +72,8 @@ void ThemedIconGroupItem::paintBanner()
     p.setFont(fn);
 
     QRect tr;
-    p.drawText(5, 5, r.width(), r.height(),
-               Qt::AlignLeft | Qt::AlignTop, "Album Banner",
-               -1, &tr);
+    p.drawText(QRect(5, 5, r.width(), r.height()),
+               Qt::AlignLeft | Qt::AlignTop, "Album Banner", &tr);
 
     r.setY(tr.height() + 2);
 
@@ -85,8 +85,8 @@ void ThemedIconGroupItem::paintBanner()
     fn.setBold(false);
     p.setFont(fn);
 
-    p.drawText(5, r.y(), r.width(), r.height(),
-               Qt::AlignLeft | Qt::AlignVCenter, "October 2005 - 10 Items");
+    p.drawText(QRect(5, r.y(), r.width(), r.height()),
+               Qt::AlignLeft | Qt::AlignVCenter, "July 2007 - 10 Items");
     
     p.end();
 
@@ -94,8 +94,9 @@ void ThemedIconGroupItem::paintBanner()
     r = QRect(iconView()->contentsToViewport(QPoint(r.x(), r.y())),
               QSize(r.width(), r.height()));
     
-    bitBlt(iconView()->viewport(), r.x(), r.y(), &pix,
-           0, 0, r.width(), r.height());
+    QPainter p2(iconView()->viewport());
+    p2.drawPixmap(r.x(), r.y(), pix, 0, 0, r.width(), r.height());
+    p2.end();
 }
 
 }  // NameSpace Digikam
