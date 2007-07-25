@@ -39,14 +39,12 @@
 #include "version.h"
 #include "mainwindow.h"
 
-static const char *description = I18N_NOOP("A Color Theme Designer for digiKam");
-
-int main(int argc, char** argv) {
-
+int main(int argc, char** argv) 
+{
     KAboutData aboutData("digikamthemedesigner", 0, 
                          ki18n("digiKam Theme Designer"),
                          digikam_version,        
-                         ki18n(description),
+                         ki18n("A Color Theme Designer for digiKam"),
                          KAboutData::License_GPL,
                          ki18n("(c) 2002-2007, digiKam developers team"),
                          KLocalizedString(),
@@ -64,7 +62,7 @@ int main(int argc, char** argv) {
 
     aboutData.addAuthor(ki18n("Renchi Raju"),
                         ki18n("Developer"),
-                        "renchi at pooh.tam.uiuc.edu");
+                        "renchi at pooh dot tam dot uiuc dot edu");
 
     KCmdLineArgs::init(argc, argv, &aboutData);
 
@@ -74,7 +72,7 @@ int main(int argc, char** argv) {
     KApplication app; 
 
     Digikam::MainWindow *im = new Digikam::MainWindow();
-    app.setMainWidget(im);
+    app.setTopWidget(im);
     im->resize(800, 600);
     im->show();
     
