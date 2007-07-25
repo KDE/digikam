@@ -67,7 +67,7 @@ namespace Digikam
 MainWindow::MainWindow()
           : QWidget(0)
 {
-    setCaption(i18n("digiKam Theme Designer"));
+    setWindowTitle(i18n("digiKam Theme Designer"));
     setAttribute(Qt::WA_DeleteOnClose);
 
     AlbumSettings *albumSettings = new AlbumSettings();
@@ -136,32 +136,27 @@ MainWindow::MainWindow()
     vlay->addWidget(m_borderColorBtn);
     vlay->addItem(new QSpacerItem(10, 10, QSizePolicy::Minimum, QSizePolicy::Expanding));
 
-    layout->setMargin(5);
-    layout->setSpacing(5);
-    layout->addWidget(splitter, 0, 0);
-    layout->addWidget(groupBox, 0, 1);
-
     // -------------------------------------------------------------
 
-    m_propertyCombo->insertItem("Base",          BASE);
-    m_propertyCombo->insertItem("Regular Text",  REGULARTEXT);
-    m_propertyCombo->insertItem("Selected Text", SELECTEDTEXT);
-    m_propertyCombo->insertItem("Special Regular Text",  REGULARSPECIALTEXT);
-    m_propertyCombo->insertItem("Special Selected Text", SELECTEDSPECIALTEXT);
-    m_propertyCombo->insertItem("Banner",    BANNER);
-    m_propertyCombo->insertItem("Thumbnail Regular", THUMBNAILREGULAR);
-    m_propertyCombo->insertItem("Thumbnail Selected", THUMBNAILSELECTED);
-    m_propertyCombo->insertItem("ListView Regular",  LISTVIEWREGULAR);
-    m_propertyCombo->insertItem("ListView Selected",  LISTVIEWSELECTED);
+    m_propertyCombo->insertItem(BASE, "Base");
+    m_propertyCombo->insertItem(REGULARTEXT, "Regular Text");
+    m_propertyCombo->insertItem(SELECTEDTEXT, "Selected Text");
+    m_propertyCombo->insertItem(REGULARSPECIALTEXT, "Special Regular Text");
+    m_propertyCombo->insertItem(SELECTEDSPECIALTEXT, "Special Selected Text");
+    m_propertyCombo->insertItem(BANNER, "Banner");
+    m_propertyCombo->insertItem(THUMBNAILREGULAR, "Thumbnail Regular");
+    m_propertyCombo->insertItem(THUMBNAILSELECTED, "Thumbnail Selected");
+    m_propertyCombo->insertItem(LISTVIEWREGULAR, "ListView Regular");
+    m_propertyCombo->insertItem(LISTVIEWSELECTED, "ListView Selected");
 
-    m_bevelCombo->insertItem("Flat",  FLAT);
-    m_bevelCombo->insertItem("Raised", RAISED);
-    m_bevelCombo->insertItem("Sunken", SUNKEN );
+    m_bevelCombo->insertItem(FLAT, "Flat");
+    m_bevelCombo->insertItem(RAISED, "Raised");
+    m_bevelCombo->insertItem(SUNKEN, "Sunken");
     
-    m_gradientCombo->insertItem("Solid",      SOLID);
-    m_gradientCombo->insertItem("Horizontal", HORIZONTAL);
-    m_gradientCombo->insertItem("Vertical",   VERTICAL );
-    m_gradientCombo->insertItem("Diagonal",   DIAGONAL );    
+    m_gradientCombo->insertItem(SOLID, "Solid");
+    m_gradientCombo->insertItem(HORIZONTAL, "Horizontal");
+    m_gradientCombo->insertItem(VERTICAL, "Vertical");
+    m_gradientCombo->insertItem(DIAGONAL, "Diagonal");    
 
     m_bevelMap[FLAT]   = Theme::FLAT;
     m_bevelMap[RAISED] = Theme::RAISED;
@@ -185,48 +180,63 @@ MainWindow::MainWindow()
     m_endColorBtn->setColor(Qt::black);
     m_borderColorBtn->setColor(Qt::black);
 
+    // Bottom button bar -------------------------------------------------------
+    
+    QHBoxLayout* buttonLayout = new QHBoxLayout();
+    
+    QPushButton* loadButton = new QPushButton(this);
+    loadButton->setText("&Load");
+
+    QPushButton* saveButton = new QPushButton(this);
+    saveButton->setText("&Save");
+
+    QPushButton* closeButton = new QPushButton(this);
+    closeButton->setText("&Close");
+
+    buttonLayout->setMargin(5);
+    buttonLayout->setSpacing(5);
+    buttonLayout->addItem(new QSpacerItem(10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum)); 
+    buttonLayout->addWidget(loadButton);
+    buttonLayout->addWidget(saveButton);
+    buttonLayout->addWidget(closeButton);
+
+    // ------------------------------------------------------------------------
+    
+    layout->setMargin(5);
+    layout->setSpacing(5);
+    layout->addWidget(splitter, 0, 0, 1, 1);
+    layout->addWidget(groupBox, 0, 1, 1, 1);
+    layout->addLayout(buttonLayout, 1, 0, 1, 2 );
+
+    // ------------------------------------------------------------------------
+
     connect(m_propertyCombo, SIGNAL(activated(int)),
             this, SLOT(slotPropertyChanged()));
+
     connect(m_bevelCombo, SIGNAL(activated(int)),
             this, SLOT(slotUpdateTheme()));
+
     connect(m_gradientCombo, SIGNAL(activated(int)),
             this, SLOT(slotUpdateTheme()));
             
     connect(m_begColorBtn, SIGNAL(changed(const QColor&)),
             this, SLOT(slotUpdateTheme()));
+
     connect(m_endColorBtn, SIGNAL(changed(const QColor&)),
             this, SLOT(slotUpdateTheme()));
+
     connect(m_addBorderCheck, SIGNAL(toggled(bool)),
             this, SLOT(slotUpdateTheme()));
+
     connect(m_borderColorBtn, SIGNAL(changed(const QColor&)),
             this, SLOT(slotUpdateTheme()));
 
-    // Bottom button bar -------------------------------------------------------
-    
-    QHBoxLayout* buttonLayout = new QHBoxLayout(0);
-    buttonLayout->setMargin(5);
-    buttonLayout->setSpacing(5);
-    buttonLayout->addItem(new QSpacerItem(10, 10, QSizePolicy::Expanding,
-                                          QSizePolicy::Minimum)); 
-    
-    QPushButton* loadButton = new QPushButton( this );
-    loadButton->setText( "&Load" );
-    buttonLayout->addWidget( loadButton );
-
-    QPushButton* saveButton = new QPushButton( this );
-    saveButton->setText( "&Save" );
-    buttonLayout->addWidget( saveButton );
-
-    QPushButton* closeButton = new QPushButton( this );
-    closeButton->setText( "&Close" );
-    buttonLayout->addWidget( closeButton );
-    
-    layout->addMultiCellLayout(buttonLayout, 1, 1, 0, 1);
-
     connect(loadButton, SIGNAL(clicked()),
             this, SLOT(slotLoad()));
+
     connect(saveButton, SIGNAL(clicked()),
             this, SLOT(slotSave()));
+
     connect(closeButton, SIGNAL(clicked()),
             this, SLOT(close()));
 
