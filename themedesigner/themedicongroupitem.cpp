@@ -26,6 +26,10 @@
 #include <qpixmap.h>
 #include <qpainter.h>
 
+// KDE includes.
+
+#include <klocale.h>
+
 // Local includes.
 
 #include "themeengine.h"
