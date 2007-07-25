@@ -262,7 +262,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
 
     // -- setup connections -------------------------------------------------
 
-    connect(this, SIGNAL(buttonClicked(int)),
+    connect(d->buttonGroup, SIGNAL(buttonClicked(int)),
             this, SLOT(slotRadioButtonClicked(int)));
             
     connect(d->renameCustomPrefix, SIGNAL(textChanged(const QString&)),
