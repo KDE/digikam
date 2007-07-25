@@ -145,12 +145,11 @@ void ThemedIconItem::paintItem()
 
     r = view->itemNameRect();
     p.setFont(view->itemFontReg());
-    p.drawText(r, Qt::AlignCenter, squeezedText(&p, r.width(),
-                                                "IMG_00.JPG"));
+    p.drawText(r, Qt::AlignCenter, squeezedText(&p, r.width(), "IMG_00.JPG"));
 
     p.setFont(view->itemFontCom());
     r = view->itemCommentsRect();
-    p.drawText(r, Qt::AlignCenter, squeezedText(&p, r.width(), "photo comments"));
+    p.drawText(r, Qt::AlignCenter, squeezedText(&p, r.width(), i18n("Photo comments")));
 
     p.setFont(view->itemFontXtra());
     {
@@ -167,7 +166,7 @@ void ThemedIconItem::paintItem()
     p.setPen(isSelected() ? te->textSpecialSelColor() : te->textSpecialRegColor());
 
     {
-        QString tags = "Events, Places, Vacation";
+        QString tags = i18n("Events, Places, Vacation");
         
         r = view->itemTagRect();    
         p.drawText(r, Qt::AlignCenter, 

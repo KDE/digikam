@@ -27,6 +27,10 @@
 #include <QPixmap>
 #include <QPainter>
 
+// KDE includes.
+
+#include <klocale.h>
+
 // Local includes.
 
 #include "themeengine.h"
@@ -73,7 +77,7 @@ void ThemedIconGroupItem::paintBanner()
 
     QRect tr;
     p.drawText(QRect(5, 5, r.width(), r.height()),
-               Qt::AlignLeft | Qt::AlignTop, "Album Banner", &tr);
+               Qt::AlignLeft | Qt::AlignTop, i18n("Album Banner"), &tr);
 
     r.setY(tr.height() + 2);
 
@@ -86,7 +90,8 @@ void ThemedIconGroupItem::paintBanner()
     p.setFont(fn);
 
     p.drawText(QRect(5, r.y(), r.width(), r.height()),
-               Qt::AlignLeft | Qt::AlignVCenter, "July 2007 - 10 Items");
+               Qt::AlignLeft | Qt::AlignVCenter, 
+               i18n("July 2007 - 10 Items"));
     
     p.end();
 

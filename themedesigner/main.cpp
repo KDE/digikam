@@ -33,6 +33,7 @@
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
+#include <kglobal.h>
 
 // Local includes.
 
@@ -69,8 +70,10 @@ int main(int argc, char** argv)
     KCmdLineOptions options;
     options.add("+[URL]", ki18n("Theme color scheme file to open."));
     KCmdLineArgs::addCmdLineOptions(options);
-    KApplication app; 
 
+    KGlobal::locale()->setMainCatalogue( "digikam" );
+
+    KApplication app; 
     Digikam::MainWindow *im = new Digikam::MainWindow();
     app.setTopWidget(im);
     im->resize(800, 600);
