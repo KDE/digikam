@@ -147,6 +147,4 @@ QStringList LoadingDescription::possibleCacheKeys(const QString &filePath)
     return keys;
 }
 
-
 } // namespace Digikam
-

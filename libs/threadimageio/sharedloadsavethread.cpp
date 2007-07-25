@@ -62,4 +62,3 @@ DImg SharedLoadSaveThread::cacheLookup(const QString& filePath, AccessMode /*acc
 }
 
 }   // namespace Digikam
-

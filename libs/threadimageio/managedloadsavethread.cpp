@@ -354,4 +354,3 @@ void ManagedLoadSaveThread::save(DImg &image, const QString& filePath, const QSt
 }
 
 }   // namespace Digikam
-

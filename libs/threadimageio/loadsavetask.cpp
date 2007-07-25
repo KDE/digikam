@@ -22,8 +22,6 @@
  *
  * ============================================================ */
 
-#include "loadsavetask.h"
-
 // Qt includes.
 
 #include <qapplication.h>
@@ -35,6 +33,7 @@
 #include "managedloadsavethread.h"
 #include "sharedloadsavethread.h"
 #include "loadingcache.h"
+#include "loadsavetask.h"
 
 namespace Digikam
 {

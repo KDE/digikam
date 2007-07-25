@@ -24,6 +24,8 @@
 #ifndef PREVIEW_LOAD_THREAD_H
 #define PREVIEW_LOAD_THREAD_H
 
+// Local includes.
+
 #include "managedloadsavethread.h"
 
 namespace Digikam
@@ -51,6 +53,5 @@ public:
 };
 
 }   // namespace Digikam
-
 
 #endif // SHARED_LOAD_SAVE_THREAD_H

@@ -120,8 +120,7 @@ private:
     ThumbnailCreatorPriv *d;
 };
 
+}  // namespace Digikam
 
-}
-
-#endif
+#endif // DIGIKAMTHUMBNAILCREATOR_H
 

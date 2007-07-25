@@ -24,7 +24,11 @@
 #ifndef LOADING_CACHE_INTERFACE_H
 #define LOADING_CACHE_INTERFACE_H
 
+// Qt includes.
+
 #include <QString>
+
+// Local includes.
 
 #include "digikam_export.h"
 #include "dimg.h"
@@ -53,5 +57,4 @@ public:
 
 }   // namespace Digikam
 
-#endif
-
+#endif // LOADING_CACHE_INTERFACE_H

@@ -253,4 +253,3 @@ void LoadingCache::CacheLock::timedWait()
 }
 
 }   // namespace Digikam
-

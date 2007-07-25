@@ -25,6 +25,8 @@
 #ifndef MANAGED_LOAD_SAVE_THREAD_H
 #define MANAGED_LOAD_SAVE_THREAD_H
 
+// Local includes.
+
 #include "loadsavethread.h"
 
 namespace Digikam
@@ -123,7 +125,6 @@ private:
     TerminationPolicy m_terminationPolicy;
 };
 
-}   // namespace Digikam
-
+}  // namespace Digikam
 
 #endif // MANAGED_LOAD_SAVE_THREAD_H

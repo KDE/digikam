@@ -49,4 +49,3 @@ void PreviewLoadThread::loadHighQuality(LoadingDescription description)
 }
 
 }   // namespace Digikam
-

@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-
 // Qt includes
 
 #include <QFileInfo>
@@ -325,8 +324,4 @@ void ThumbnailCreator::exifRotate(const QString& filePath, QImage& thumb, bool f
     thumb = thumb.transformed( matrix );
 }
 
-
-
-
-}
-
+}  // namespace Digikam

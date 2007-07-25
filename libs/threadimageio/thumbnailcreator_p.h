@@ -51,7 +51,6 @@ public:
     KDcrawIface::RawDecodingSettings rawSettings;
 };
 
-}
+}  // namespace Digikam
 
-#endif
-
+#endif // DIGIKAMTHUMBNAILCREATORPRIV_H

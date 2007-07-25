@@ -62,7 +62,6 @@ extern "C"
 
 #define PNG_BYTES_TO_CHECK 4
 
-
 namespace Digikam
 {
 
@@ -235,7 +234,4 @@ QImage ThumbnailCreator::loadPNG(const QString& path)
     return qimage;
 }
 
-}
-
-
-
+}  // namespace Digikam

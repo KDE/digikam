@@ -26,10 +26,11 @@
 
 #include "ddebug.h"
 #include "dmetadata.h"
-#include "loadsavethread.h"
 #include "managedloadsavethread.h"
 #include "sharedloadsavethread.h"
 #include "loadsavetask.h"
+#include "loadsavethread.h"
+#include "loadsavethread.moc"
 
 namespace Digikam
 {
@@ -314,9 +315,4 @@ bool LoadSaveThread::exifRotate(DImg &image, const QString& filePath)
     return rotatedOrFlipped;
 }
 
-
-
-
 }   // namespace Digikam
-
-#include "loadsavethread.moc"

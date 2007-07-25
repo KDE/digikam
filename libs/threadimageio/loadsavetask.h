@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #ifndef LOAD_SAVE_TASK_H
 #define LOAD_SAVE_TASK_H
 

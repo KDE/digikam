@@ -261,4 +261,3 @@ bool PreviewLoadingTask::loadImagePreview(QImage& image, const QString& path)
 }
 
 } // namespace Digikam
-

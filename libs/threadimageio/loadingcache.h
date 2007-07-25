@@ -24,6 +24,8 @@
 #ifndef LOADING_CACHE_H
 #define LOADING_CACHE_H
 
+// Local includes.
+
 #include "dimg.h"
 #include "loadsavethread.h"
 
@@ -129,4 +131,4 @@ private:
 
 }   // namespace Digikam
 
-#endif
+#endif // LOADING_CACHE_H

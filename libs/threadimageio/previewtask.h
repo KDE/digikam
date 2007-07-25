@@ -27,7 +27,7 @@
 
 // Qt includes
 
-#include <qimage.h>
+#include <QImage>
 
 // Local includes.
 
@@ -52,10 +52,6 @@ private:
     bool loadImagePreview(QImage& image, const QString& path);
 };
 
-
 } // namespace Digikam
 
 #endif // PREVIEW_TASK_H
-
-
-
