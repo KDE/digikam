@@ -52,11 +52,9 @@ private:
 
     DatabaseAccess *m_access;
 
-    int m_currentVersion;
+    int             m_currentVersion;
 };
 
+}  // namespace Digikam
 
-}
-
-#endif
-
+#endif // SCHEMAUPDATER_H

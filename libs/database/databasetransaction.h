@@ -56,7 +56,6 @@ private:
     DatabaseAccess *m_access;
 };
 
-}
+}  // namespace Digikam
 
-#endif
-
+#endif // DATABASETRANSACTION_H

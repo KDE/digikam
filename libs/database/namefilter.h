@@ -25,9 +25,13 @@
 #ifndef NAMEFILTER_H
 #define NAMEFILTER_H
 
+// Qt includes.
+
 #include <QString>
 #include <QList>
 #include <QRegExp>
+
+// Local includes.
 
 #include "digikam_export.h"
 
@@ -54,13 +58,8 @@ public:
 protected:
 
     QList<QRegExp> m_filterList;
-
 };
 
+}  // namespace Digikam
 
-
-}
-
-#endif
-
-
+#endif // NAMEFILTER_H

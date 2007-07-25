@@ -21,6 +21,8 @@
  * 
  * ============================================================ */
 
+// Local includes.
+
 #include "albumdb.h"
 #include "databaseaccess.h"
 #include "databasebackend.h"
@@ -55,6 +57,4 @@ DatabaseTransaction::~DatabaseTransaction()
     }
 }
 
-}
-
-
+}  // namespace Digikam

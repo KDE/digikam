@@ -23,7 +23,7 @@
 
 // Qt includes
 
-#include <qmutex.h>
+#include <QMutex>
 
 // KDE includes
 
@@ -207,6 +207,4 @@ void DatabaseAccess::cleanUpDatabase()
     d = 0;
 }
 
-
-
-}
+}  // namespace Digikam

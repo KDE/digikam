@@ -1,5 +1,3 @@
-//Added by qt3to4:
-#include <Q3ValueList>
 /* ============================================================
  *
  * This file is a part of digiKam project
@@ -43,9 +41,9 @@ extern "C"
 
 // Qt includes.
 
-#include <qfile.h>
-#include <qfileinfo.h>
-#include <qdir.h>
+#include <QFile>
+#include <QFileInfo>
+#include <QDir>
 
 // KDE includes.
 
@@ -1465,4 +1463,3 @@ bool AlbumDB::copyAlbumProperties(int srcAlbumID, int dstAlbumID)
 }
 
 }  // namespace Digikam
-

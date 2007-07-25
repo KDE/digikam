@@ -65,9 +65,4 @@ bool NameFilter::matches(const QString &name)
     return false;
 }
 
-
-}
-
-
-
-
+}  // namespace Digikam

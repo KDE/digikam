@@ -23,7 +23,7 @@
 
 // Qt includes
 
-#include <qdir.h>
+#include <QDir>
 
 // Local includes
 
@@ -31,13 +31,14 @@
 #include "collectionlocation.h"
 #include "collectionmanager.h"
 
-
 namespace Digikam
 {
 
 class SimpleLocation : public CollectionLocation
 {
+
 public:
+
     SimpleLocation(const QString &albumRoot)
     {
         m_albumRoot = albumRoot;
@@ -48,14 +49,17 @@ public:
 class CollectionManagerPrivate
 {
 public:
+
     CollectionManagerPrivate()
     {
         location = 0;
     }
+
     SimpleLocation *location;
 };
 
 CollectionManager *CollectionManager::m_instance = 0;
+
 CollectionManager *CollectionManager::instance()
 {
     if (!m_instance)
@@ -151,9 +155,7 @@ CollectionManager::CollectionManager()
 
 CollectionManager::~CollectionManager()
 {
-    delete d;;
+    delete d;
 }
 
-
-}
-
+}  // namespace Digikam

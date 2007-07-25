@@ -21,7 +21,6 @@
  * 
  * ============================================================ */
 
-
 #ifndef IMAGEINFODATA_H
 #define IMAGEINFODATA_H
 
@@ -29,7 +28,6 @@
 
 #include <QDateTime>
 #include <QSize>
-#include <Q3Shared>
 
 // Local includes
 
@@ -62,8 +60,7 @@ public:
 
 };
 
+}  // namespace Digikam
 
-}
-
-#endif
+#endif // IMAGEINFODATA_H
 

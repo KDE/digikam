@@ -25,10 +25,14 @@
 #ifndef IMAGELISTERRECORD_H
 #define IMAGELISTERRECORD_H
 
-#include <qstring.h>
-#include <qdatastream.h>
-#include <qdatetime.h>
-#include <qsize.h>
+// QT includes.
+
+#include <QString>
+#include <QDataStream>
+#include <QDateTime>
+#include <QSize>
+
+// KDE includes.
 
 #include "digikam_export.h"
 
@@ -37,13 +41,15 @@ namespace Digikam
 
 class DIGIKAM_EXPORT ImageListerRecord
 {
+
 public:
+
     ImageListerRecord()
     : imageID(-1), albumID(-1), size(0)
     {
     }
 
-    qlonglong    imageID;
+    qlonglong  imageID;
     int        albumID;
     QString    name;
     QString    albumName;
@@ -56,8 +62,6 @@ public:
 DIGIKAM_EXPORT QDataStream &operator<<(QDataStream &os, const ImageListerRecord &record);
 DIGIKAM_EXPORT QDataStream &operator>>(QDataStream &ds, ImageListerRecord &record);
 
-}
+}  // namespace Digikam
 
-
-#endif
-
+#endif // IMAGELISTERRECORD_H

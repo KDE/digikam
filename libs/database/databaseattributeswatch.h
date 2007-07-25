@@ -26,17 +26,18 @@
 
 // Qt includes
 
-#include <qobject.h>
+#include <QObject>
 
 // KDE includes
 
 #include <kurl.h>
 
+// Local includes.
+
 #include "digikam_export.h"
 
 namespace Digikam
 {
-
 
 class DIGIKAM_EXPORT DatabaseAttributesWatch : public QObject
 {
@@ -77,10 +78,8 @@ protected:
 public:
 
     void sendImageFieldChanged(qlonglong imageId, ImageDataField field);
-
 };
 
+} // namespace Digikam
 
-}
-
-#endif
+#endif // DATABASEATTRIBUTESWATCH_H

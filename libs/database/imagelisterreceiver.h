@@ -25,10 +25,16 @@
 #ifndef IMAGELISTERRECEIVER_H
 #define IMAGELISTERRECEIVER_H
 
+// Qt includes.
+
 #include <QString>
 #include <QList>
 
+// KDE includes.
+
 #include <kio/slavebase.h>
+
+// Local includes.
 
 #include "digikam_export.h"
 #include "imagelisterrecord.h"
@@ -39,7 +45,9 @@ namespace Digikam
 //TODO: Docs
 class DIGIKAM_EXPORT ImageListerReceiver
 {
+
 public:
+
     virtual ~ImageListerReceiver() {};
     virtual void receive(const ImageListerRecord &record) = 0;
     virtual void error(const QString &/*errMsg*/) {};
@@ -48,7 +56,9 @@ public:
 class DIGIKAM_EXPORT ImageListerValueListReceiver
     : public ImageListerReceiver
 {
+
 public:
+
     ImageListerValueListReceiver();
     QList<ImageListerRecord> records;
     bool hasError;
@@ -58,27 +68,33 @@ public:
 
 class DIGIKAM_EXPORT ImageListerSlaveBaseReceiver : public ImageListerValueListReceiver
 {
+
 public:
+
     ImageListerSlaveBaseReceiver(KIO::SlaveBase *slave);
     virtual void error(const QString &errMsg);
     void sendData();
+
 protected:
+
     KIO::SlaveBase *m_slave;
 };
 
 class DIGIKAM_EXPORT ImageListerSlaveBasePartsSendingReceiver
     : public ImageListerSlaveBaseReceiver
 {
+
 public:
+
     ImageListerSlaveBasePartsSendingReceiver(KIO::SlaveBase *slave, int limit);
     virtual void receive(const ImageListerRecord &record);
+
 protected:
+
     int m_limit;
     int m_count;
 };
 
-}
+}  // namespace Digikam
 
-
-#endif
-
+#endif  // IMAGELISTERRECEIVER_H

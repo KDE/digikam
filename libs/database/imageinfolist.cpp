@@ -21,12 +21,12 @@
  * 
  * ============================================================ */
 
+// Local includes.
+
 #include "imageinfo.h"
 #include "imageinfolist.h"
 
 namespace Digikam
 {
 
-
 }
-

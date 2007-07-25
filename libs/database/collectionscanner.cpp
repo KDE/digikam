@@ -595,8 +595,4 @@ void CollectionScanner::removeInvalidAlbums(const QString &albumRoot)
 }
 */
 
-
-
-}
-
-
+}  // namespace Digikam

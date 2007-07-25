@@ -21,8 +21,9 @@
  * 
  * ============================================================ */
 
-#include "collectionlocation.h"
+// Local includes.
 
+#include "collectionlocation.h"
 
 namespace Digikam
 {
@@ -37,6 +38,4 @@ QString CollectionLocation::albumRoot() const
     return m_albumRoot;
 }
 
-
-}
-
+}  // namespace Digikam

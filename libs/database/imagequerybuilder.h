@@ -24,6 +24,8 @@
 #ifndef IMAGEQUERYBUILDER_H
 #define IMAGEQUERYBUILDER_H
 
+// Local includes.
+
 #include "digikam_export.h"
 
 namespace Digikam
@@ -81,7 +83,7 @@ protected:
     QString  m_shortMonths[12];
 };
 
-}
+}  // namespace Digikam
 
-#endif
+#endif // IMAGEQUERYBUILDER_H
 

@@ -24,7 +24,11 @@
 #ifndef IMAGEINFOLIST_H
 #define IMAGEINFOLIST_H
 
-#include <q3ptrlist.h>
+// Qt includes.
+
+#include <QList>
+
+// Local includes.
 
 #include "digikam_export.h"
 
@@ -35,15 +39,16 @@ class ImageInfo;
 
 class DIGIKAM_EXPORT ImageInfoList : public QList<ImageInfo>
 {
+
 public:
+
     //TODO: Connect change signals from album db,
     // to provide facilities to update contained ImageInfos
 };
 
 typedef ImageInfoList::iterator ImageInfoListIterator;
 
-}
+}  // namespace Digikam
 
-
-#endif
+#endif // IMAGEINFOLIST_H
 

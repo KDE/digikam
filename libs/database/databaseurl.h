@@ -24,10 +24,16 @@
 #ifndef DATABASEURL_H
 #define DATABASEURL_H
 
+// Qt includes.
+
 #include <QDateTime>
 #include <QList>
 
+// KDE includes.
+
 #include <kurl.h>
+
+// Local includes.
 
 #include "digikam_export.h"
 #include "databaseparameters.h"
@@ -123,12 +129,10 @@ public:
      */
     void setParameters(const DatabaseParameters &parameters);
 
-
     /**
      * The following methods are only applicable for a certain protocol each.
      * If the URL has another protocol, the return value of these methods is undefined.
      */
-
 
     /// Album URL
 
@@ -153,7 +157,6 @@ public:
      */
     KUrl fileUrl() const;
 
-
     /// Tag URL
 
     /**
@@ -167,14 +170,12 @@ public:
      */
     QList<int> tagIds() const;
 
-
     /// Date URL
 
     /**
      * Return the referenced date
      */
     QDate date() const;
-
 
     /// Search URL
 
@@ -183,7 +184,6 @@ public:
      * The returned URL has database information removed.
      */
     KUrl searchUrl() const;
-
 
     DatabaseUrl(const DatabaseUrl &url);
 
@@ -194,7 +194,6 @@ public:
 
 };
 
-}
+}  // namespace Digikam
 
-#endif
-
+#endif // DATABASEURL_H

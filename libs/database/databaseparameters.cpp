@@ -21,7 +21,11 @@
  * 
  * ============================================================ */
 
-#include <qdir.h>
+// Qt includes.
+
+#include <QDir>
+
+// Local includes.
 
 #include "databaseparameters.h"
 
@@ -124,4 +128,4 @@ void DatabaseParameters::removeFromUrl(KUrl &url)
     url.removeQueryItem("password");
 }
 
-}
+}  // namespace Digikam

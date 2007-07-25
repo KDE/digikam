@@ -24,6 +24,8 @@
 #ifndef DATABASEACCESS_H
 #define DATABASEACCESS_H
 
+// Local includes.
+
 #include "digikam_export.h"
 #include "databaseparameters.h"
 
@@ -141,7 +143,7 @@ private:
     static DatabaseAccessStaticPriv *d;
 };
 
-}
+}  // namespace Digikam
 
-#endif
+#endif // DATABASEACCESS_H
 

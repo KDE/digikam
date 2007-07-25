@@ -21,7 +21,6 @@
  * GNU General Public License for more details.
  * ============================================================ */
 
-
 // Qt includes.
 
 #include <QFile>
@@ -53,8 +52,8 @@ ImageQueryBuilder::ImageQueryBuilder()
     const KCalendarSystem* cal = KGlobal::locale()->calendar();
     for (int i=1; i<=12; ++i)
     {
-        m_shortMonths[i-1] = cal->monthName(i, 2000, KCalendarSystem::ShortName).toLower();
-        m_longMonths[i-1]  = cal->monthName(i, 2000, KCalendarSystem::LongName).toLower();
+        m_shortMonths[i-1] = cal->monthName(i, 2000, KCalendarSystem::ShortForm).toLower();
+        m_longMonths[i-1]  = cal->monthName(i, 2000, KCalendarSystem::LongForm).toLower();
     }
 }
 
@@ -437,7 +436,4 @@ QString ImageQueryBuilder::possibleDate(const QString& str, bool& exact) const
     return QString();
 }
 
-
-}
-
-
+}  // namespace Digikam

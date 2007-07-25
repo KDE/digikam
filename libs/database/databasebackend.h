@@ -178,7 +178,6 @@ public:
 
 };
 
-}
+} // namespace Digikam
 
-#endif
-
+#endif // DATABASEBACKEND_H

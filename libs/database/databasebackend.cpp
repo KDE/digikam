@@ -21,17 +21,17 @@
  * 
  * ============================================================ */
 
+// Local includes.
+
 #include "databasebackend.h"
 #include "backendsqlite3.h"
 
 namespace Digikam
-
 {
 
 DatabaseBackend::DatabaseBackend()
 {
 }
-
 
 DatabaseBackend* DatabaseBackend::createBackend(const DatabaseParameters &parameters)
 {
@@ -40,5 +40,4 @@ DatabaseBackend* DatabaseBackend::createBackend(const DatabaseParameters &parame
     return 0;
 }
 
-}
-
+}  // namespace Digikam

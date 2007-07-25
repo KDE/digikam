@@ -45,7 +45,6 @@
 namespace Digikam
 {
 
-
 int SchemaUpdater::schemaVersion()
 {
     //return 4;
@@ -357,5 +356,4 @@ bool SchemaUpdater::createTablesV3()
     return createTables();
 }
 
-}
-
+}  // namespace Digikam

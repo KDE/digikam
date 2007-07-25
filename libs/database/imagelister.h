@@ -25,9 +25,15 @@
 #ifndef IMAGELISTER_H
 #define IMAGELISTER_H
 
+// Qt includes.
+
 #include <QString>
 
+// KDE includes.
+
 #include <kio/job.h>
+
+// Local includes.
 
 #include "digikam_export.h"
 #include "imageinfo.h"
@@ -102,8 +108,6 @@ public:
     static QSize retrieveDimension(const QString &filePath);
 };
 
-}
+}  // namespace Digikam
 
-
-#endif
-
+#endif // IMAGELISTER_H

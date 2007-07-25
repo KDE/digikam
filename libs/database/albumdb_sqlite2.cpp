@@ -37,7 +37,7 @@ extern "C"
 
 // Qt includes.
 
-#include <qfile.h>
+#include <QFile>
 
 // Local includes.
 
@@ -141,4 +141,3 @@ bool AlbumDB_Sqlite2::execSql(const QString& sql, QStringList* const values,
 }
 
 }  // namespace Digikam
-

@@ -399,8 +399,6 @@ void ImageInfo::refresh()
     m_data->dateTime         = QDateTime();
     m_data->modDateTime      = QDateTime();
     //m_data->imageDimension = QSize();
-
 }
 
 }  // namespace Digikam
-

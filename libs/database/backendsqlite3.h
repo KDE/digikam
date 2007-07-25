@@ -25,6 +25,8 @@
 #ifndef BACKENDSQLITE3_H
 #define BACKENDSQLITE3_H
 
+// Local includes.
+
 #include "databasebackend.h"
 
 namespace Digikam
@@ -101,7 +103,6 @@ private:
     BackendSQLite3Priv *d;
 };
 
-}
+}  // namespace Digikam
 
-#endif
-
+#endif // BACKENDSQLITE3_H

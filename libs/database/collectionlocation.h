@@ -26,7 +26,7 @@
 
 // Qt includes
 
-#include <qstring.h>
+#include <QString>
 
 // Local includes
 
@@ -35,9 +35,9 @@
 namespace Digikam
 {
 
-
 class DIGIKAM_EXPORT CollectionLocation
 {
+
 public:
 
     enum Status
@@ -54,9 +54,8 @@ protected:
 
     Status m_status;
     QString m_albumRoot;
-
 };
 
-}
+}  // namespace Digikam
 
-#endif
+#endif // COLLECTIONLOCATION_H

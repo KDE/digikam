@@ -62,7 +62,6 @@
 namespace Digikam
 {
 
-
 QDataStream &operator<<(QDataStream &os, const ImageListerRecord &record)
 {
     os << record.imageID;
@@ -422,7 +421,4 @@ void ImageLister::listSearch(ImageListerReceiver *receiver,
     }
 }
 
-}
-
-
-
+}  // namespace Digikam

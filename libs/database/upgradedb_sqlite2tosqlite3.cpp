@@ -381,7 +381,7 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
             DError() << "Failed" << endl;
             DWarning() << "" << endl;
             DWarning() << "Consistency check failed for Album: "
-                    << album.url << endl;
+                       << album.url << endl;
             return false;
         }
     }
@@ -414,7 +414,7 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
             DError() << "Failed" << endl;
             DWarning() << "" << endl;
             DWarning() << "Consistency check failed for Tag: "
-                    << name << endl;
+                       << name << endl;
             return false;
         }
     }
@@ -449,7 +449,7 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
             DError() << "Failed" << endl;
             DWarning() << "" << endl;
             DWarning() << "Consistency check failed for Image: "
-                    << url << ", " << name << ", " << caption  << endl;
+                       << url << ", " << name << ", " << caption  << endl;
             return false;
         }
     }
@@ -486,7 +486,7 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
             DError() << "Failed" << endl;
             DWarning() << "" << endl;
             DWarning() << "Consistency check failed for ImageTag: "
-                    << url << ", " << name << ", " << tagid << endl;
+                       << url << ", " << name << ", " << tagid << endl;
             return false;
         }
     }
@@ -518,7 +518,7 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
             DError() << "Failed" << endl;
             DWarning() << "" << endl;
             DWarning() << "Consistency check failed for Album Icon: "
-                    << url << ", " << icon << endl;
+                       << url << ", " << icon << endl;
 
             return false;
         }
@@ -553,7 +553,7 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
                 DError() << "Failed" << endl;
                 DWarning() << "" << endl;
                 DWarning() << "Consistency check failed for Tag Icon: "
-                        << id << ", " << icon << endl;
+                           << id << ", " << icon << endl;
 
                 return false;
             }
@@ -592,7 +592,7 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
                 DError() << "Failed." << endl;
                 DWarning() << "" << endl;
                 DWarning() << "Consistency check failed for Tag Icon: "
-                        << id << ", " << icon << endl;
+                           << id << ", " << icon << endl;
 
                 return false;
             }

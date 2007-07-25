@@ -163,11 +163,9 @@ protected:
 
     QList< QPair<QString,int> >  m_filesToBeDeleted;
     QList<AlbumShortInfo> m_foldersToBeDeleted;
-
 };
 
+}  // namespace Digikam
 
-}
-
-#endif
+#endif // COLLECTIONSCANNER_H
 

@@ -23,9 +23,7 @@
 
 // Qt includes
 
-#include <qstringlist.h>
-//Added by qt3to4:
-#include <Q3ValueList>
+#include <QStringList>
 
 // Local includes
 
@@ -255,7 +253,4 @@ KUrl DatabaseUrl::searchUrl() const
     return url;
 }
 
-
-
-}
-
+}  // namespace Digikam

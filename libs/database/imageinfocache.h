@@ -21,7 +21,6 @@
  * 
  * ============================================================ */
 
-
 #ifndef IMAGEINFOCACHE_H
 #define IMAGEINFOCACHE_H
 
@@ -79,8 +78,6 @@ private:
     QMap<qlonglong, ImageInfoData *> m_map;
 };
 
+}  // namespace Digikam
 
-}
-
-#endif
-
+#endif // IMAGEINFOCACHE_H

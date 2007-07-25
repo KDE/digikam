@@ -26,7 +26,7 @@
 
 // Qt includes
 
-#include <qstring.h>
+#include <QString>
 
 // KDE includes
 
@@ -84,7 +84,6 @@ public:
     static void removeFromUrl(KUrl &url);
 };
 
-}
+}  // namespace Digikam
 
-#endif
-
+#endif // DATABASEPARAMETERS_H

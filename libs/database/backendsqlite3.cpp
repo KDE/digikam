@@ -31,14 +31,13 @@ extern "C"
 
 // Qt includes
 
-#include <qfile.h>
+#include <QFile>
 
 // Local includes
 
 #include "ddebug.h"
 #include "schemaupdater.h"
 #include "backendsqlite3.h"
-
 
 namespace Digikam
 {
@@ -246,7 +245,4 @@ QString BackendSQLite3::lastError()
     return QString();
 }
 
-
-
-}
-
+}  // namespace Digikam

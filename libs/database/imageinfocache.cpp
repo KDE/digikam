@@ -21,7 +21,7 @@
  * 
  * ============================================================ */
 
-// Local inclused
+// Local includes.
 
 #include "imageinfodata.h"
 #include "imageinfocache.h"
@@ -94,10 +94,4 @@ void ImageInfoCache::slotImageFieldChanged(qlonglong imageId, int field)
     }
 }
 
-
-
-}
-
-
-
-
+}  // namespace Digikam

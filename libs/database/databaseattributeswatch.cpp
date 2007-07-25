@@ -50,6 +50,4 @@ void DatabaseAttributesWatch::sendImageFieldChanged(qlonglong imageId, ImageData
     emit imageFieldChanged(imageId, field);
 }
 
-
 } // namespace Digikam
-

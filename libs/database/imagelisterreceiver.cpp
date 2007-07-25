@@ -32,7 +32,6 @@
 namespace Digikam
 {
 
-
 ImageListerValueListReceiver::ImageListerValueListReceiver()
     : hasError(false)
 {
@@ -89,7 +88,4 @@ void ImageListerSlaveBasePartsSendingReceiver::receive(const ImageListerRecord &
     }
 }
 
-}
-
-
-
+}  // namespace Digikam

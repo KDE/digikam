@@ -83,6 +83,6 @@ private:
     CollectionManagerPrivate *d;
 };
 
-}
+}  // namespace Digikam
 
-#endif
+#endif // COLLECTIONMANAGER_H
