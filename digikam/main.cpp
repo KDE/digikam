@@ -98,12 +98,10 @@ int main(int argc, char *argv[])
                           QString("\n") + 
                           QString(I18N_NOOP("Using Gphoto2 library version %1")).arg(Gphoto2Ver);
 
-    QString description = QString(I18N_NOOP("A Photo-Management Application for KDE"));
-    
     KAboutData aboutData( "digikam", 0, 
                           ki18n("digiKam"),
                           digikam_version,        
-                          ki18n(description.toLatin1()),
+                          ki18n("A Photo-Management Application for KDE"),
                           KAboutData::License_GPL,
                           ki18n("(c) 2002-2007, digiKam developers team"),
                           KLocalizedString(),
