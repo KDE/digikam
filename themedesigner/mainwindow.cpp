@@ -78,87 +78,68 @@ MainWindow::MainWindow()
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
-        
-    // Top Layout ------------------------------------------------
-    
-    QGridLayout* layout = new QGridLayout(this);
-    layout->setMargin(5);
-    layout->setSpacing(5);
 
     // Actual views ------------------------------------------------
-    
-    QSplitter* splitter = new QSplitter( this );
+
+    QGridLayout* layout = new QGridLayout(this);
+
+    QSplitter* splitter = new QSplitter(this);
     splitter->setOrientation( QSplitter::Horizontal );
     splitter->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
 
-    m_folderView = new FolderView( splitter );
-    m_iconView   = new ThemedIconView( splitter );
-    m_propView   = new ImagePropertiesTab( splitter, false );
-
-    layout->addWidget(splitter, 0, 0);
+    m_folderView = new FolderView(splitter);
+    m_iconView   = new ThemedIconView(splitter);
+    m_propView   = new ImagePropertiesTab(splitter, false);
 
     // Property Editor ---------------------------------------------
-    
-    QGroupBox *groupBox = new QGroupBox( this );
-    layout->addWidget(groupBox, 0, 1);
 
-    groupBox->setColumnLayout(0, Qt::Vertical );
-    groupBox->layout()->setSpacing( 5 );
-    groupBox->layout()->setMargin( 5 );
+    QGroupBox *groupBox = new QGroupBox(this);
+    QVBoxLayout* vlay   = new QVBoxLayout(groupBox);
 
-    QVBoxLayout* groupBoxLayout = new QVBoxLayout( groupBox->layout() );
-    groupBoxLayout->setAlignment( Qt::AlignTop );
+    QLabel* label1  = new QLabel("Property: ", groupBox);
+    m_propertyCombo = new QComboBox(groupBox);
 
-    QHBoxLayout* hboxLayout = 0;
-    QLabel*      label = 0;
-    
-    label           = new QLabel( "Property: ", groupBox );
-    m_propertyCombo = new QComboBox( groupBox );
-    hboxLayout      = new QHBoxLayout( 0 );
-    hboxLayout->addWidget( label );
-    hboxLayout->addWidget( m_propertyCombo );
-    groupBoxLayout->addLayout( hboxLayout);
+    m_bevelLabel = new QLabel("Bevel: ", groupBox);
+    m_bevelCombo = new QComboBox(groupBox);
 
-    m_bevelLabel = new QLabel( "Bevel: ", groupBox );
-    m_bevelCombo = new QComboBox( groupBox );
-    hboxLayout   = new QHBoxLayout( 0 );
-    hboxLayout->addWidget( m_bevelLabel );
-    hboxLayout->addWidget( m_bevelCombo );
-    groupBoxLayout->addLayout( hboxLayout);
+    m_gradientLabel = new QLabel("Gradient: ", groupBox);
+    m_gradientCombo = new QComboBox(groupBox);
 
-    m_gradientLabel = new QLabel( "Gradient: ", groupBox );
-    m_gradientCombo = new QComboBox( groupBox );
-    hboxLayout      = new QHBoxLayout( 0 );
-    hboxLayout->addWidget( m_gradientLabel );
-    hboxLayout->addWidget( m_gradientCombo );
-    groupBoxLayout->addLayout( hboxLayout);
+    m_begColorLabel = new QLabel("Start Color: ", groupBox);
+    m_begColorBtn   = new KColorButton(groupBox);
 
-    m_begColorLabel = new QLabel( "Start Color: ", groupBox );
-    m_begColorBtn   = new KColorButton( groupBox );
-    hboxLayout      = new QHBoxLayout( 0 );
-    hboxLayout->addWidget( m_begColorLabel );
-    hboxLayout->addWidget( m_begColorBtn );
-    groupBoxLayout->addLayout( hboxLayout);
-
-    m_endColorLabel = new QLabel( "End Color: ", groupBox );
-    m_endColorBtn   = new KColorButton( groupBox );
-    hboxLayout      = new QHBoxLayout( 0 );
-    hboxLayout->addWidget( m_endColorLabel );
-    hboxLayout->addWidget( m_endColorBtn );
-    groupBoxLayout->addLayout( hboxLayout);
+    m_endColorLabel = new QLabel("End Color: ", groupBox);
+    m_endColorBtn   = new KColorButton(groupBox);
 
     m_addBorderCheck = new QCheckBox("Add Border", groupBox);
-    groupBoxLayout->addWidget( m_addBorderCheck );
 
-    m_borderColorLabel = new QLabel( "Border Color: ", groupBox );
-    m_borderColorBtn   = new KColorButton( groupBox );
-    hboxLayout         = new QHBoxLayout( 0 );
-    hboxLayout->addWidget( m_borderColorLabel );
-    hboxLayout->addWidget( m_borderColorBtn );
-    groupBoxLayout->addLayout( hboxLayout);
-    
-    groupBoxLayout->addItem( new QSpacerItem( 10, 10, QSizePolicy::Minimum,
-                                              QSizePolicy::Expanding ) );
+    m_borderColorLabel = new QLabel("Border Color: ", groupBox);
+    m_borderColorBtn   = new KColorButton(groupBox);
+
+    vlay->setAlignment(Qt::AlignTop);
+    vlay->setSpacing(5);
+    vlay->setMargin(5);
+    vlay->addWidget(label1);
+    vlay->addWidget(m_propertyCombo);
+    vlay->addWidget(m_bevelLabel);
+    vlay->addWidget(m_bevelCombo);
+    vlay->addWidget(m_gradientLabel);
+    vlay->addWidget(m_gradientCombo);
+    vlay->addWidget(m_begColorLabel);
+    vlay->addWidget(m_begColorBtn);
+    vlay->addWidget(m_endColorLabel);
+    vlay->addWidget(m_endColorBtn);
+    vlay->addWidget( m_addBorderCheck );
+    vlay->addWidget(m_borderColorLabel);
+    vlay->addWidget(m_borderColorBtn);
+    vlay->addItem(new QSpacerItem(10, 10, QSizePolicy::Minimum, QSizePolicy::Expanding));
+
+    layout->setMargin(5);
+    layout->setSpacing(5);
+    layout->addWidget(splitter, 0, 0);
+    layout->addWidget(groupBox, 0, 1);
+
+    // -------------------------------------------------------------
 
     m_propertyCombo->insertItem( "Base",          BASE);
     m_propertyCombo->insertItem( "Regular Text",  REGULARTEXT);
@@ -174,7 +155,7 @@ MainWindow::MainWindow()
     m_bevelCombo->insertItem( "Flat",  FLAT);
     m_bevelCombo->insertItem( "Raised", RAISED);
     m_bevelCombo->insertItem( "Sunken", SUNKEN );
-    
+
     m_gradientCombo->insertItem( "Solid",      SOLID);
     m_gradientCombo->insertItem( "Horizontal", HORIZONTAL);
     m_gradientCombo->insertItem( "Vertical",   VERTICAL );
@@ -208,7 +189,7 @@ MainWindow::MainWindow()
             this, SLOT(slotUpdateTheme()));
     connect(m_gradientCombo, SIGNAL(activated(int)),
             this, SLOT(slotUpdateTheme()));
-            
+
     connect(m_begColorBtn, SIGNAL(changed(const QColor&)),
             this, SLOT(slotUpdateTheme()));
     connect(m_endColorBtn, SIGNAL(changed(const QColor&)),
@@ -219,13 +200,13 @@ MainWindow::MainWindow()
             this, SLOT(slotUpdateTheme()));
 
     // Bottom button bar -------------------------------------------------------
-    
+
     QHBoxLayout* buttonLayout = new QHBoxLayout(0);
     buttonLayout->setMargin(5);
     buttonLayout->setSpacing(5);
     buttonLayout->addItem(new QSpacerItem(10, 10, QSizePolicy::Expanding,
                                           QSizePolicy::Minimum)); 
-    
+
     QPushButton* loadButton = new QPushButton( this );
     loadButton->setText( "&Load" );
     buttonLayout->addWidget( loadButton );
