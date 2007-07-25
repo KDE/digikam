@@ -31,7 +31,7 @@
 
 // Qt includes.
 
-#include <Q3ValueList>
+#include <QList>
 #include <QByteArray>
 
 class QDataStream;
@@ -70,8 +70,8 @@ public:
     time_t  mtime;
 };
 
-QDataStream& operator<<( QDataStream &, const GPItemInfo & );
-QDataStream& operator>>( QDataStream &, GPItemInfo & );
+QDataStream& operator<<(QDataStream &, const GPItemInfo &);
+QDataStream& operator>>(QDataStream &, GPItemInfo &);
 
 typedef QList<GPItemInfo> GPItemInfoList;
 
