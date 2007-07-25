@@ -64,30 +64,27 @@ RatingPopupMenu::RatingPopupMenu(QWidget* parent)
     QAction *action = addAction(i18n("None"));
     action->setData(0);
 
-    QBitmap starbm(15, 15);
-    QPainter p1(&starbm);
+    QPixmap starPix(15, 15);
+    QPainter p1(&starPix);
     p1.setRenderHint(QPainter::Antialiasing, true);
     p1.setBrush(ThemeEngine::componentData()->textSpecialRegColor());
     p1.setPen(palette().color(QPalette::Active, QPalette::Foreground));
     p1.drawPolygon(starPolygon, Qt::WindingFill);
     p1.end();
 
-    QBitmap clearbm(starbm.width(), starbm.height());
-    clearbm.clear();
+    QBitmap clearPix(starPix.width(), starPix.height());
+    clearPix.clear();
 
     for (int i = 1 ; i <= RatingMax ; i++)
     {
-        QPixmap pix(starbm.width() * 5, starbm.height());
-        pix.fill(ThemeEngine::componentData()->textSpecialRegColor());
+        QPixmap pix(starPix.width() * 5, starPix.height());
+        pix.fill(palette().color(QPalette::Active, QPalette::Foreground));
 
-        QBitmap mask(starbm.width() * 5, starbm.height());
-
-        QPainter p2(&mask);
-        p2.drawTiledPixmap(0, 0, i*starbm.width(), pix.height(), starbm);
-        p2.drawTiledPixmap(i*starbm.width(), 0, 5*starbm.width()-i*starbm.width(), pix.height(), clearbm);
+        QPainter p2(&pix);
+        p2.drawTiledPixmap(0, 0, i*starPix.width(), pix.height(), starPix);
+        p2.drawTiledPixmap(i*starPix.width(), 0, 5*starPix.width()-i*starPix.width(), pix.height(), clearPix);
         p2.end();
 
-        pix.setMask(mask);
         QAction *action = addAction(pix, QString(), this, SLOT(slotRatingTriggered()));
         action->setData(i);
     }
