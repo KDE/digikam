@@ -54,6 +54,7 @@ public:
 
     void        scanThemes();
     QStringList themeNames() const;
+    bool        saveTheme();
     
     void    setCurrentTheme(const QString& name);
     void    setCurrentTheme(const Theme& theme, const QString& name,

@@ -33,12 +33,14 @@
 #include <QTimer>
 #include <QPixmap>
 #include <QDomDocument>
+#include <QTextStream>
 
 // KDE includes.
 
 #include <kglobal.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <kuser.h>
 
 // Local includes.
 
@@ -104,6 +106,81 @@ ThemeEngine::~ThemeEngine()
     d->themeList.clear();
     delete d;
     m_componentData = 0;
+}
+
+QColor ThemeEngine::baseColor() const
+{
+    return d->currTheme->baseColor;    
+}
+
+QColor ThemeEngine::thumbSelColor() const
+{
+    return d->currTheme->thumbSelColor;    
+}
+
+QColor ThemeEngine::thumbRegColor() const
+{
+    return d->currTheme->thumbRegColor;    
+}
+
+QColor ThemeEngine::textRegColor() const
+{
+    return d->currTheme->textRegColor;    
+}
+
+QColor ThemeEngine::textSelColor() const
+{
+    return d->currTheme->textSelColor;    
+}
+
+QColor ThemeEngine::textSpecialRegColor() const
+{
+    return d->currTheme->textSpecialRegColor;    
+}
+
+QColor ThemeEngine::textSpecialSelColor() const
+{
+    return d->currTheme->textSpecialSelColor;    
+}
+
+QPixmap ThemeEngine::bannerPixmap(int w, int h)
+{
+    Texture tex(w, h, d->currTheme->bannerColor, d->currTheme->bannerColorTo,
+                d->currTheme->bannerBevel, d->currTheme->bannerGrad,
+                d->currTheme->bannerBorder, d->currTheme->bannerBorderColor);
+    return tex.renderPixmap();
+}
+
+QPixmap ThemeEngine::thumbRegPixmap(int w, int h)
+{
+    Texture tex(w, h, d->currTheme->thumbRegColor, d->currTheme->thumbRegColorTo,
+                d->currTheme->thumbRegBevel, d->currTheme->thumbRegGrad,
+                d->currTheme->thumbRegBorder, d->currTheme->thumbRegBorderColor);
+    return tex.renderPixmap();
+}
+
+QPixmap ThemeEngine::thumbSelPixmap(int w, int h)
+{
+    Texture tex(w, h, d->currTheme->thumbSelColor, d->currTheme->thumbSelColorTo,
+                d->currTheme->thumbSelBevel, d->currTheme->thumbSelGrad,
+                d->currTheme->thumbSelBorder, d->currTheme->thumbSelBorderColor);
+    return tex.renderPixmap();
+}
+
+QPixmap ThemeEngine::listRegPixmap(int w, int h)
+{
+    Texture tex(w, h, d->currTheme->listRegColor, d->currTheme->listRegColorTo,
+                d->currTheme->listRegBevel, d->currTheme->listRegGrad,
+                d->currTheme->listRegBorder, d->currTheme->listRegBorderColor);
+    return tex.renderPixmap();
+}
+
+QPixmap ThemeEngine::listSelPixmap(int w, int h)
+{
+    Texture tex(w, h, d->currTheme->listSelColor, d->currTheme->listSelColorTo,
+                d->currTheme->listSelBevel, d->currTheme->listSelGrad,
+                d->currTheme->listSelBorder, d->currTheme->listSelBorderColor);
+    return tex.renderPixmap();
 }
 
 void ThemeEngine::scanThemes()
@@ -546,79 +623,445 @@ QString ThemeEngine::resourceValue(const QDomElement &rootElem, const QString& k
     return QString("");
 }
 
-QColor ThemeEngine::baseColor() const
+bool ThemeEngine::saveTheme()
 {
-    return d->currTheme->baseColor;    
-}
+    Q_ASSERT( d->currTheme );
+    if (!d->currTheme)
+        return false;
 
-QColor ThemeEngine::thumbSelColor() const
-{
-    return d->currTheme->thumbSelColor;    
-}
+    Theme *t = d->currTheme;
+    
+    QFileInfo fi(t->filePath);
 
-QColor ThemeEngine::thumbRegColor() const
-{
-    return d->currTheme->thumbRegColor;    
-}
+    QFile themeFile(fi.filePath());
 
-QColor ThemeEngine::textRegColor() const
-{
-    return d->currTheme->textRegColor;    
-}
+    if (!themeFile.open(IO_WriteOnly))
+        return false;
 
-QColor ThemeEngine::textSelColor() const
-{
-    return d->currTheme->textSelColor;    
-}
+    KUser        user;
+    QDomDocument xmlDoc;
+    QDomElement  e;
+    QString      val;
 
-QColor ThemeEngine::textSpecialRegColor() const
-{
-    return d->currTheme->textSpecialRegColor;    
-}
+    // header ------------------------------------------------------------------
+    
+    xmlDoc.appendChild(xmlDoc.createProcessingInstruction(QString::fromLatin1("xml"),
+                       QString::fromLatin1("version=\"1.0\" encoding=\"UTF-8\"")));
+    
+    QString banner = QString("\n/* ============================================================"
+                             "\n *"
+                             "\n * This file is a part of digiKam project"
+                             "\n * http://www.digikam.org"
+                             "\n *"
+                             "\n * Date        : %1-%2-%3"
+                             "\n * Description : %4 colors theme."
+                             "\n *"
+                             "\n * Copyright (C) %5 by %6"
+                             "\n *"
+                             "\n * This program is free software; you can redistribute it"
+                             "\n * and/or modify it under the terms of the GNU General"
+                             "\n * Public License as published by the Free Software Foundation;"
+                             "\n * either version 2, or (at your option)"
+                             "\n * any later version."
+                             "\n * "
+                             "\n * This program is distributed in the hope that it will be useful,"
+                             "\n * but WITHOUT ANY WARRANTY; without even the implied warranty of"
+                             "\n * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the"
+                             "\n * GNU General Public License for more details."
+                             "\n *"
+                             "\n * ============================================================ */\n")
+                    .arg(QDate::currentDate().year())
+                    .arg(QDate::currentDate().month())
+                    .arg(QDate::currentDate().day())
+                    .arg(fi.fileName())
+                    .arg(QDate::currentDate().year())
+                    .arg(user.fullName());
 
-QColor ThemeEngine::textSpecialSelColor() const
-{
-    return d->currTheme->textSpecialSelColor;    
-}
+    xmlDoc.appendChild(xmlDoc.createComment(banner));
 
-QPixmap ThemeEngine::bannerPixmap(int w, int h)
-{
-    Texture tex(w, h, d->currTheme->bannerColor, d->currTheme->bannerColorTo,
-                d->currTheme->bannerBevel, d->currTheme->bannerGrad,
-                d->currTheme->bannerBorder, d->currTheme->bannerBorderColor);
-    return tex.renderPixmap();
-}
+    QDomElement themeElem = xmlDoc.createElement(QString::fromLatin1("digikamtheme")); 
+    xmlDoc.appendChild(themeElem);
 
-QPixmap ThemeEngine::thumbRegPixmap(int w, int h)
-{
-    Texture tex(w, h, d->currTheme->thumbRegColor, d->currTheme->thumbRegColorTo,
-                d->currTheme->thumbRegBevel, d->currTheme->thumbRegGrad,
-                d->currTheme->thumbRegBorder, d->currTheme->thumbRegBorderColor);
-    return tex.renderPixmap();
-}
+    // base props --------------------------------------------------------------
 
-QPixmap ThemeEngine::thumbSelPixmap(int w, int h)
-{
-    Texture tex(w, h, d->currTheme->thumbSelColor, d->currTheme->thumbSelColorTo,
-                d->currTheme->thumbSelBevel, d->currTheme->thumbSelGrad,
-                d->currTheme->thumbSelBorder, d->currTheme->thumbSelBorderColor);
-    return tex.renderPixmap();
-}
+    e = xmlDoc.createElement(QString::fromLatin1("name"));
+    e.setAttribute(QString::fromLatin1("value"), fi.fileName());
+    themeElem.appendChild(e);
 
-QPixmap ThemeEngine::listRegPixmap(int w, int h)
-{
-    Texture tex(w, h, d->currTheme->listRegColor, d->currTheme->listRegColorTo,
-                d->currTheme->listRegBevel, d->currTheme->listRegGrad,
-                d->currTheme->listRegBorder, d->currTheme->listRegBorderColor);
-    return tex.renderPixmap();
-}
+    e = xmlDoc.createElement(QString::fromLatin1("BaseColor"));
+    e.setAttribute(QString::fromLatin1("value"), t->baseColor.name().toUpper());
+    themeElem.appendChild(e);
 
-QPixmap ThemeEngine::listSelPixmap(int w, int h)
-{
-    Texture tex(w, h, d->currTheme->listSelColor, d->currTheme->listSelColorTo,
-                d->currTheme->listSelBevel, d->currTheme->listSelGrad,
-                d->currTheme->listSelBorder, d->currTheme->listSelBorderColor);
-    return tex.renderPixmap();
+    e = xmlDoc.createElement(QString::fromLatin1("TextRegularColor"));
+    e.setAttribute(QString::fromLatin1("value"), t->textRegColor.name().toUpper());
+    themeElem.appendChild(e);
+
+    e = xmlDoc.createElement(QString::fromLatin1("TextSelectedColor"));
+    e.setAttribute(QString::fromLatin1("value"), t->textSelColor.name().toUpper());
+    themeElem.appendChild(e);
+
+    e = xmlDoc.createElement(QString::fromLatin1("TextSpecialRegularColor"));
+    e.setAttribute(QString::fromLatin1("value"), t->textSpecialRegColor.name().toUpper());
+    themeElem.appendChild(e);
+
+    e = xmlDoc.createElement(QString::fromLatin1("TextSpecialSelectedColor"));
+    e.setAttribute(QString::fromLatin1("value"), t->textSpecialSelColor.name().toUpper());
+    themeElem.appendChild(e);
+
+    // banner props ------------------------------------------------------------
+    
+    e = xmlDoc.createElement(QString::fromLatin1("BannerColor"));
+    e.setAttribute(QString::fromLatin1("value"), t->bannerColor.name().toUpper());
+    themeElem.appendChild(e);
+
+    e = xmlDoc.createElement(QString::fromLatin1("BannerColorTo"));
+    e.setAttribute(QString::fromLatin1("value"), t->bannerColorTo.name().toUpper());
+    themeElem.appendChild(e);
+
+    switch(t->bannerBevel)
+    {
+        case(Theme::FLAT):
+        {
+            val = QString("FLAT");
+            break;
+        }
+        case(Theme::RAISED):
+        {
+            val = QString("RAISED");
+            break;
+        }
+        case(Theme::SUNKEN):
+        {
+            val = QString("SUNKEN");
+            break;
+        }
+    };
+
+    e = xmlDoc.createElement(QString::fromLatin1("BannerBevel"));
+    e.setAttribute(QString::fromLatin1("value"), val);
+    themeElem.appendChild(e);
+
+    switch(t->bannerGrad)
+    {
+        case(Theme::SOLID):
+        {
+            val = QString("SOLID");
+            break;
+        }
+        case(Theme::HORIZONTAL):
+        {
+            val = QString("HORIZONTAL");
+            break;
+        }
+        case(Theme::VERTICAL):
+        {
+            val = QString("VERTICAL");
+            break;
+        }
+        case(Theme::DIAGONAL):
+        {
+            val = QString("DIAGONAL");
+            break;
+        }
+    };
+
+    e = xmlDoc.createElement(QString::fromLatin1("BannerGradient"));
+    e.setAttribute(QString::fromLatin1("value"), val);
+    themeElem.appendChild(e);
+
+    e = xmlDoc.createElement(QString::fromLatin1("BannerBorder"));
+    e.setAttribute(QString::fromLatin1("value"), (t->bannerBorder ? "TRUE" : "FALSE"));
+    themeElem.appendChild(e);
+
+    e = xmlDoc.createElement(QString::fromLatin1("BannerBorderColor"));
+    e.setAttribute(QString::fromLatin1("value"), t->bannerBorderColor.name().toUpper());
+    themeElem.appendChild(e);
+
+    // thumbnail.regular props -------------------------------------------------
+
+    e = xmlDoc.createElement(QString::fromLatin1("ThumbnailRegularColor"));
+    e.setAttribute(QString::fromLatin1("value"), t->thumbRegColor.name().toUpper());
+    themeElem.appendChild(e);
+    
+    e = xmlDoc.createElement(QString::fromLatin1("ThumbnailRegularColorTo"));
+    e.setAttribute(QString::fromLatin1("value"), t->thumbRegColorTo.name().toUpper());
+    themeElem.appendChild(e);
+
+    switch(t->thumbRegBevel)
+    {
+        case(Theme::FLAT):
+        {
+            val = QString("FLAT");
+            break;
+        }
+        case(Theme::RAISED):
+        {
+            val = QString("RAISED");
+            break;
+        }
+        case(Theme::SUNKEN):
+        {
+            val = QString("SUNKEN");
+            break;
+        }
+    };
+
+    e = xmlDoc.createElement(QString::fromLatin1("ThumbnailRegularBevel"));
+    e.setAttribute(QString::fromLatin1("value"), val);
+    themeElem.appendChild(e);
+
+    switch(t->thumbRegGrad)
+    {
+        case(Theme::SOLID):
+        {
+            val = QString("SOLID");
+            break;
+        }
+        case(Theme::HORIZONTAL):
+        {
+            val = QString("HORIZONTAL");
+            break;
+        }
+        case(Theme::VERTICAL):
+        {
+            val = QString("VERTICAL");
+            break;
+        }
+        case(Theme::DIAGONAL):
+        {
+            val = QString("DIAGONAL");
+            break;
+        }
+    };
+    
+    e = xmlDoc.createElement(QString::fromLatin1("ThumbnailRegularGradient"));
+    e.setAttribute(QString::fromLatin1("value"), val);
+    themeElem.appendChild(e);
+
+    e = xmlDoc.createElement(QString::fromLatin1("ThumbnailRegularBorder"));
+    e.setAttribute(QString::fromLatin1("value"), (t->thumbRegBorder ? "TRUE" : "FALSE"));
+    themeElem.appendChild(e);
+
+    e = xmlDoc.createElement(QString::fromLatin1("ThumbnailRegularBorderColor"));
+    e.setAttribute(QString::fromLatin1("value"), t->thumbRegBorderColor.name().toUpper());
+    themeElem.appendChild(e);
+
+    // thumbnail.selected props -------------------------------------------------
+    
+    e = xmlDoc.createElement(QString::fromLatin1("ThumbnailSelectedColor"));
+    e.setAttribute(QString::fromLatin1("value"), t->thumbSelColor.name().toUpper());
+    themeElem.appendChild(e);
+
+    e = xmlDoc.createElement(QString::fromLatin1("ThumbnailSelectedColorTo"));
+    e.setAttribute(QString::fromLatin1("value"), t->thumbSelColorTo.name().toUpper());
+    themeElem.appendChild(e);
+
+    switch(t->thumbSelBevel)
+    {
+        case(Theme::FLAT):
+        {
+            val = QString("FLAT");
+            break;
+        }
+        case(Theme::RAISED):
+        {
+            val = QString("RAISED");
+            break;
+        }
+        case(Theme::SUNKEN):
+        {
+            val = QString("SUNKEN");
+            break;
+        }
+    };
+
+    e = xmlDoc.createElement(QString::fromLatin1("ThumbnailSelectedBevel"));
+    e.setAttribute(QString::fromLatin1("value"), val);
+    themeElem.appendChild(e);
+
+    switch(t->thumbSelGrad)
+    {
+        case(Theme::SOLID):
+        {
+            val = QString("SOLID");
+            break;
+        }
+        case(Theme::HORIZONTAL):
+        {
+            val = QString("HORIZONTAL");
+            break;
+        }
+        case(Theme::VERTICAL):
+        {
+            val = QString("VERTICAL");
+            break;
+        }
+        case(Theme::DIAGONAL):
+        {
+            val = QString("DIAGONAL");
+            break;
+        }
+    };
+
+    e = xmlDoc.createElement(QString::fromLatin1("ThumbnailSelectedGradient"));
+    e.setAttribute(QString::fromLatin1("value"), val);
+    themeElem.appendChild(e);
+    
+    e = xmlDoc.createElement(QString::fromLatin1("ThumbnailSelectedBorder"));
+    e.setAttribute(QString::fromLatin1("value"), (t->thumbSelBorder ? "TRUE" : "FALSE"));
+    themeElem.appendChild(e);
+
+    e = xmlDoc.createElement(QString::fromLatin1("ThumbnailSelectedBorderColor"));
+    e.setAttribute(QString::fromLatin1("value"), t->thumbSelBorderColor.name().toUpper());
+    themeElem.appendChild(e);
+
+    // listview.regular props -------------------------------------------------
+    
+    e = xmlDoc.createElement(QString::fromLatin1("ListviewRegularColor"));
+    e.setAttribute(QString::fromLatin1("value"), t->listRegColor.name().toUpper());
+    themeElem.appendChild(e);
+
+    e = xmlDoc.createElement(QString::fromLatin1("ListviewRegularColorTo"));
+    e.setAttribute(QString::fromLatin1("value"), t->listRegColorTo.name().toUpper());
+    themeElem.appendChild(e);
+
+    switch(t->listRegBevel)
+    {
+        case(Theme::FLAT):
+        {
+            val = QString("FLAT");
+            break;
+        }
+        case(Theme::RAISED):
+        {
+            val = QString("RAISED");
+            break;
+        }
+        case(Theme::SUNKEN):
+        {
+            val = QString("SUNKEN");
+            break;
+        }
+    };
+
+    e = xmlDoc.createElement(QString::fromLatin1("ListviewRegularBevel"));
+    e.setAttribute(QString::fromLatin1("value"), val);
+    themeElem.appendChild(e);
+
+    switch(t->listRegGrad)
+    {
+        case(Theme::SOLID):
+        {
+            val = QString("SOLID");
+            break;
+        }
+        case(Theme::HORIZONTAL):
+        {
+            val = QString("HORIZONTAL");
+            break;
+        }
+        case(Theme::VERTICAL):
+        {
+            val = QString("VERTICAL");
+            break;
+        }
+        case(Theme::DIAGONAL):
+        {
+            val = QString("DIAGONAL");
+            break;
+        }
+    };
+    
+    e = xmlDoc.createElement(QString::fromLatin1("ListviewRegularGradient"));
+    e.setAttribute(QString::fromLatin1("value"), val);
+    themeElem.appendChild(e);
+    
+    e = xmlDoc.createElement(QString::fromLatin1("ListviewRegularBorder"));
+    e.setAttribute(QString::fromLatin1("value"), (t->listRegBorder ? "TRUE" : "FALSE"));
+    themeElem.appendChild(e);
+
+    e = xmlDoc.createElement(QString::fromLatin1("ListviewRegularBorderColor"));
+    e.setAttribute(QString::fromLatin1("value"), t->listRegBorderColor.name().toUpper());
+    themeElem.appendChild(e);
+
+    // listview.selected props -------------------------------------------------
+    
+    e = xmlDoc.createElement(QString::fromLatin1("ListviewSelectedColor"));
+    e.setAttribute(QString::fromLatin1("value"), t->listSelColor.name().toUpper());
+    themeElem.appendChild(e);
+
+    e = xmlDoc.createElement(QString::fromLatin1("ListviewSelectedColorTo"));
+    e.setAttribute(QString::fromLatin1("value"), t->listSelColorTo.name().toUpper());
+    themeElem.appendChild(e);
+
+    switch(t->listSelBevel)
+    {
+        case(Theme::FLAT):
+        {
+            val = QString("FLAT");
+            break;
+        }
+        case(Theme::RAISED):
+        {
+            val = QString("RAISED");
+            break;
+        }
+        case(Theme::SUNKEN):
+        {
+            val = QString("SUNKEN");
+            break;
+        }
+    };
+
+    e = xmlDoc.createElement(QString::fromLatin1("ListviewSelectedBevel"));
+    e.setAttribute(QString::fromLatin1("value"), val);
+    themeElem.appendChild(e);
+
+    switch(t->listSelGrad)
+    {
+        case(Theme::SOLID):
+        {
+            val = QString("SOLID");
+            break;
+        }
+        case(Theme::HORIZONTAL):
+        {
+            val = QString("HORIZONTAL");
+            break;
+        }
+        case(Theme::VERTICAL):
+        {
+            val = QString("VERTICAL");
+            break;
+        }
+        case(Theme::DIAGONAL):
+        {
+            val = QString("DIAGONAL");
+            break;
+        }
+    };
+    
+    e = xmlDoc.createElement(QString::fromLatin1("ListviewSelectedGradient"));
+    e.setAttribute(QString::fromLatin1("value"), val);
+    themeElem.appendChild(e);
+    
+    e = xmlDoc.createElement(QString::fromLatin1("ListviewSelectedBorder"));
+    e.setAttribute(QString::fromLatin1("value"), (t->listSelBorder ? "TRUE" : "FALSE"));
+    themeElem.appendChild(e);
+
+    e = xmlDoc.createElement(QString::fromLatin1("ListviewSelectedBorderColor"));
+    e.setAttribute(QString::fromLatin1("value"), t->listSelBorderColor.name().toUpper());
+    themeElem.appendChild(e);
+
+    // -------------------------------------------------------------------------
+
+    QTextStream stream(&themeFile);
+    stream.setCodec(QTextCodec::codecForName("UTF-8"));
+    stream.setAutoDetectUnicode(true);
+    stream << xmlDoc.toString();
+    themeFile.close();
+
+    return true;
 }
 
 }  // NameSpace Digikam
