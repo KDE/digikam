@@ -81,104 +81,87 @@ MainWindow::MainWindow()
     connect(ThemeEngine::componentData(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
         
-    // Top Layout ------------------------------------------------
-    
-    QGridLayout* layout = new QGridLayout(this);
-    layout->setMargin(5);
-    layout->setSpacing(5);
-
     // Actual views ------------------------------------------------
-    
-    QSplitter* splitter = new QSplitter( this );
-    splitter->setOrientation( Qt::Horizontal );
+
+    QGridLayout* layout = new QGridLayout(this);
+
+    QSplitter* splitter = new QSplitter(this);
+    splitter->setOrientation(Qt::Horizontal);
     splitter->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
 
-    m_folderView = new FolderView( splitter );
-    m_iconView   = new ThemedIconView( splitter );
-    m_propView   = new ImagePropertiesTab( splitter, false );
-
-    layout->addWidget(splitter, 0, 0);
+    m_folderView = new FolderView(splitter);
+    m_iconView   = new ThemedIconView(splitter);
+    m_propView   = new ImagePropertiesTab(splitter, false);
 
     // Property Editor ---------------------------------------------
-    
+
     QGroupBox *groupBox = new QGroupBox(this);
-    layout->addWidget(groupBox, 0, 1);
+    QVBoxLayout* vlay   = new QVBoxLayout(groupBox);
 
-    QVBoxLayout* groupBoxLayout = new QVBoxLayout(groupBox);
-    groupBoxLayout->setAlignment(Qt::AlignTop);
-    groupBoxLayout->setSpacing(5);
-    groupBoxLayout->setMargin(5);
-
-    QHBoxLayout* hboxLayout = 0;
-    QLabel*      label      = 0;
-    
-    label           = new QLabel("Property: ", groupBox);
+    QLabel* label1  = new QLabel("Property: ", groupBox);
     m_propertyCombo = new QComboBox(groupBox);
-    hboxLayout      = new QHBoxLayout(0);
-    hboxLayout->addWidget(label );
-    hboxLayout->addWidget(m_propertyCombo);
-    groupBoxLayout->addLayout(hboxLayout);
 
-    m_bevelLabel = new QLabel( "Bevel: ", groupBox );
-    m_bevelCombo = new QComboBox( groupBox );
-    hboxLayout   = new QHBoxLayout( 0 );
-    hboxLayout->addWidget( m_bevelLabel );
-    hboxLayout->addWidget( m_bevelCombo );
-    groupBoxLayout->addLayout( hboxLayout);
+    m_bevelLabel = new QLabel("Bevel: ", groupBox);
+    m_bevelCombo = new QComboBox(groupBox);
 
-    m_gradientLabel = new QLabel( "Gradient: ", groupBox );
-    m_gradientCombo = new QComboBox( groupBox );
-    hboxLayout      = new QHBoxLayout( 0 );
-    hboxLayout->addWidget( m_gradientLabel );
-    hboxLayout->addWidget( m_gradientCombo );
-    groupBoxLayout->addLayout( hboxLayout);
+    m_gradientLabel = new QLabel("Gradient: ", groupBox);
+    m_gradientCombo = new QComboBox(groupBox);
 
-    m_begColorLabel = new QLabel( "Start Color: ", groupBox );
-    m_begColorBtn   = new KColorButton( groupBox );
-    hboxLayout      = new QHBoxLayout( 0 );
-    hboxLayout->addWidget( m_begColorLabel );
-    hboxLayout->addWidget( m_begColorBtn );
-    groupBoxLayout->addLayout( hboxLayout);
+    m_begColorLabel = new QLabel("Start Color: ", groupBox);
+    m_begColorBtn   = new KColorButton(groupBox);
 
-    m_endColorLabel = new QLabel( "End Color: ", groupBox );
-    m_endColorBtn   = new KColorButton( groupBox );
-    hboxLayout      = new QHBoxLayout( 0 );
-    hboxLayout->addWidget( m_endColorLabel );
-    hboxLayout->addWidget( m_endColorBtn );
-    groupBoxLayout->addLayout( hboxLayout);
+    m_endColorLabel = new QLabel("End Color: ", groupBox);
+    m_endColorBtn   = new KColorButton(groupBox);
 
     m_addBorderCheck = new QCheckBox("Add Border", groupBox);
-    groupBoxLayout->addWidget( m_addBorderCheck );
 
-    m_borderColorLabel = new QLabel( "Border Color: ", groupBox );
-    m_borderColorBtn   = new KColorButton( groupBox );
-    hboxLayout         = new QHBoxLayout( 0 );
-    hboxLayout->addWidget( m_borderColorLabel );
-    hboxLayout->addWidget( m_borderColorBtn );
-    groupBoxLayout->addLayout( hboxLayout);
+    m_borderColorLabel = new QLabel("Border Color: ", groupBox);
+    m_borderColorBtn   = new KColorButton(groupBox);
+
+    vlay->setAlignment(Qt::AlignTop);
+    vlay->setSpacing(5);
+    vlay->setMargin(5);
+    vlay->addWidget(label1);
+    vlay->addWidget(m_propertyCombo);
+    vlay->addWidget(m_bevelLabel);
+    vlay->addWidget(m_bevelCombo);
+    vlay->addWidget(m_gradientLabel);
+    vlay->addWidget(m_gradientCombo);
+    vlay->addWidget(m_begColorLabel);
+    vlay->addWidget(m_begColorBtn);
+    vlay->addWidget(m_endColorLabel);
+    vlay->addWidget(m_endColorBtn);
+    vlay->addWidget( m_addBorderCheck );
+    vlay->addWidget(m_borderColorLabel);
+    vlay->addWidget(m_borderColorBtn);
+    vlay->addItem(new QSpacerItem(10, 10, QSizePolicy::Minimum, QSizePolicy::Expanding));
+
+    layout->setMargin(5);
+    layout->setSpacing(5);
+    layout->addWidget(splitter, 0, 0);
+    layout->addWidget(groupBox, 0, 1);
+
+    // -------------------------------------------------------------
+
+    m_propertyCombo->insertItem("Base",          BASE);
+    m_propertyCombo->insertItem("Regular Text",  REGULARTEXT);
+    m_propertyCombo->insertItem("Selected Text", SELECTEDTEXT);
+    m_propertyCombo->insertItem("Special Regular Text",  REGULARSPECIALTEXT);
+    m_propertyCombo->insertItem("Special Selected Text", SELECTEDSPECIALTEXT);
+    m_propertyCombo->insertItem("Banner",    BANNER);
+    m_propertyCombo->insertItem("Thumbnail Regular", THUMBNAILREGULAR);
+    m_propertyCombo->insertItem("Thumbnail Selected", THUMBNAILSELECTED);
+    m_propertyCombo->insertItem("ListView Regular",  LISTVIEWREGULAR);
+    m_propertyCombo->insertItem("ListView Selected",  LISTVIEWSELECTED);
+
+    m_bevelCombo->insertItem("Flat",  FLAT);
+    m_bevelCombo->insertItem("Raised", RAISED);
+    m_bevelCombo->insertItem("Sunken", SUNKEN );
     
-    groupBoxLayout->addItem( new QSpacerItem( 10, 10, QSizePolicy::Minimum,
-                                              QSizePolicy::Expanding ) );
-
-    m_propertyCombo->insertItem( "Base",          BASE);
-    m_propertyCombo->insertItem( "Regular Text",  REGULARTEXT);
-    m_propertyCombo->insertItem( "Selected Text", SELECTEDTEXT);
-    m_propertyCombo->insertItem( "Special Regular Text",  REGULARSPECIALTEXT);
-    m_propertyCombo->insertItem( "Special Selected Text", SELECTEDSPECIALTEXT);
-    m_propertyCombo->insertItem( "Banner",    BANNER);
-    m_propertyCombo->insertItem( "Thumbnail Regular", THUMBNAILREGULAR);
-    m_propertyCombo->insertItem( "Thumbnail Selected", THUMBNAILSELECTED);
-    m_propertyCombo->insertItem( "ListView Regular",  LISTVIEWREGULAR);
-    m_propertyCombo->insertItem( "ListView Selected",  LISTVIEWSELECTED);
-
-    m_bevelCombo->insertItem( "Flat",  FLAT);
-    m_bevelCombo->insertItem( "Raised", RAISED);
-    m_bevelCombo->insertItem( "Sunken", SUNKEN );
-    
-    m_gradientCombo->insertItem( "Solid",      SOLID);
-    m_gradientCombo->insertItem( "Horizontal", HORIZONTAL);
-    m_gradientCombo->insertItem( "Vertical",   VERTICAL );
-    m_gradientCombo->insertItem( "Diagonal",   DIAGONAL );    
+    m_gradientCombo->insertItem("Solid",      SOLID);
+    m_gradientCombo->insertItem("Horizontal", HORIZONTAL);
+    m_gradientCombo->insertItem("Vertical",   VERTICAL );
+    m_gradientCombo->insertItem("Diagonal",   DIAGONAL );    
 
     m_bevelMap[FLAT]   = Theme::FLAT;
     m_bevelMap[RAISED] = Theme::RAISED;
