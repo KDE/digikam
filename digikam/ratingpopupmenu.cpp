@@ -46,7 +46,7 @@ namespace Digikam
 {
 
 RatingPopupMenu::RatingPopupMenu(QWidget* parent)
-               : Q3PopupMenu(parent)
+               : QMenu(parent)
 {
     QPolygon starPolygon;
 
@@ -74,12 +74,12 @@ RatingPopupMenu::RatingPopupMenu(QWidget* parent)
     p1.end();
 
     QPixmap clearPix(starPix.width(), starPix.height());
-    clearPix.fill(palette().color(QPalette::Active, QPalette::Foreground));
+    clearPix.fill(palette().color(QPalette::Active, QPalette::Background));
 
     for (int i = 1 ; i <= RatingMax ; i++)
     {
         QPixmap pix(starPix.width() * 5, starPix.height());
-        pix.fill(palette().color(QPalette::Active, QPalette::Foreground));
+        pix.fill(palette().color(QPalette::Active, QPalette::Background));
 
         QPainter p2(&pix);
         p2.drawTiledPixmap(0, 0, i*starPix.width(), pix.height(), starPix);
