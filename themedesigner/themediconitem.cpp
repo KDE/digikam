@@ -187,8 +187,9 @@ void ThemedIconItem::paintItem()
     r = QRect(view->contentsToViewport(QPoint(r.x(), r.y())),
               QSize(r.width(), r.height()));
 
-    bitBlt(view->viewport(), r.x(), r.y(), &pix,
-           0, 0, r.width(), r.height());
+    QPainter p2(view->viewport());
+    p2.drawPixmap(r.x(), r.y(), pix, 0, 0, r.width(), r.height());
+    p2.end();
 }
 
 }  // NameSpace Digikam

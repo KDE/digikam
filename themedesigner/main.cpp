@@ -71,7 +71,7 @@ int main(int argc, char** argv)
     options.add("+[URL]", ki18n("Theme color scheme file to open."));
     KCmdLineArgs::addCmdLineOptions(options);
 
-    KGlobal::locale()->setMainCatalogue( "digikam" );
+    KGlobal::locale()->setMainCatalog( "digikam" );
 
     KApplication app; 
     Digikam::MainWindow *im = new Digikam::MainWindow();
