@@ -322,6 +322,7 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent, bool navBar)
     // --------------------------------------------------
 
     m_navigateBarLayout->addWidget(d->settingsArea);
+    m_navigateBarLayout->addStretch(10);
 }
 
 CameraItemPropertiesTab::~CameraItemPropertiesTab()

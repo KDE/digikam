@@ -62,13 +62,15 @@ NavigateBarWidget::NavigateBarWidget(QWidget *parent, bool show)
     setAttribute(Qt::WA_DeleteOnClose);
 
     QHBoxLayout *lay = new QHBoxLayout(this);
+
     d->navBar        = new StatusNavigateBar(this);
     d->filename      = new KSqueezedTextLabel(this);
 
     lay->addWidget(d->navBar);
-    lay->addSpacing( KDialog::spacingHint() );
+    lay->addSpacing(KDialog::spacingHint());
     lay->addWidget(d->filename);
-    setLayout(lay);
+    lay->setMargin(0);
+    lay->setSpacing(0);
 
     if (!show) hide();
 
@@ -111,4 +113,3 @@ int NavigateBarWidget::getButtonsState()
 }
 
 }  // namespace Digikam
-
