@@ -461,13 +461,11 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
     ThemeEngine* te = ThemeEngine::componentData();
     QRect    er(e->rect());
     QPixmap  bgPix;
-    QPainter p2(&bgPix);
 
     if (countItems() > 0)
     {
         int cy=0, cx=0, ts=0, y1=0, y2=0, x1=0, x2=0;
         QPixmap  tile;
-        QPainter p(&tile);
 
         if (getOrientation() == Qt::Vertical)
         {
@@ -495,6 +493,8 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
         }
 
         bgPix.fill(te->baseColor());
+        QPainter p(&tile);
+        QPainter p2(&bgPix);
 
         for (ThumbBarItem *item = firstItem(); item; item = item->next())
         {
@@ -605,6 +605,7 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
             }
         }
 
+        p2.end();
         p.end();
 
         QPainter p3(viewport());
@@ -620,16 +621,17 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
     {
         bgPix = QPixmap(contentsRect().width(), contentsRect().height());
         bgPix.fill(te->baseColor());
-        p2.setPen(QPen(te->textRegColor()));
-        p2.drawText(0, 0, bgPix.width(), bgPix.height(),
+        QPainter p4(&bgPix);
+        p4.setPen(QPen(te->textRegColor()));
+        p4.drawText(0, 0, bgPix.width(), bgPix.height(),
                     Qt::AlignCenter|Qt::TextWordWrap, 
                     i18n("Drag and drop images here"));
-        QPainter p3(viewport());
-        p3.drawPixmap(0, 0, bgPix);
-        p3.end();
-    }
+        p4.end();
 
-    p2.end();
+        QPainter p5(viewport());
+        p5.drawPixmap(0, 0, bgPix);
+        p5.end();
+    }
 }
 
 void LightTableBar::startDrag()
