@@ -1362,8 +1362,8 @@ void DigikamApp::slotCameraMediaMenuEntries( Job *, const UDSEntryList & list )
     for(KIO::UDSEntryList::ConstIterator it = list.begin() ; it != list.end() ; ++it)
     {
         // TODO: KDE4PORT: check if this port is right.
-        QString name = (*it).stringValue(KIO::UDS_NAME);
-        QString path = (*it).stringValue(KIO::UDS_URL);
+        QString name = (*it).stringValue(KIO::UDSEntry::UDS_NAME);
+        QString path = (*it).stringValue(KIO::UDSEntry::UDS_URL);
 
         /*for ( UDSEntry::const_iterator et = (*it).begin() ; et != (*it).end() ; ++et ) 
         {
