@@ -390,14 +390,14 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     
     d->anim = new AnimWidget(frame, pixmapLogo->height());
     
-    layout->addWidget( pixmapLogo );
-    layout->addWidget( d->anim );
-    layout->setMargin( 2 );  // To make sure the frame gets displayed
-    layout->setSpacing( 0 );
+    layout->addWidget(pixmapLogo);
+    layout->addWidget(d->anim);
+    layout->setMargin(2);  // To make sure the frame gets displayed
+    layout->setSpacing(0);
 
     // -------------------------------------------------------------------------
 
-    viewBoxLayout->addWidget(widget, 0, 0, 1, 5+1);
+    viewBoxLayout->addWidget(widget, 0, 0, 1, 6);
     viewBoxLayout->addWidget(d->cancelBtn, 2, 0, 1, 1);
     viewBoxLayout->addWidget(d->status, 2, 2, 1, 1);
     viewBoxLayout->addWidget(d->progress, 2, 3, 1, 1);
@@ -405,14 +405,14 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     viewBoxLayout->setRowMinimumHeight(1, spacingHint());
     viewBoxLayout->setColumnMinimumWidth(1, spacingHint());
     viewBoxLayout->setColumnMinimumWidth(4, spacingHint());
-    viewBoxLayout->setColumnStretch( 0, 0 );
-    viewBoxLayout->setColumnStretch( 1, 0 );
-    viewBoxLayout->setColumnStretch( 2, 3 );
-    viewBoxLayout->setColumnStretch( 3, 1 );
-    viewBoxLayout->setColumnStretch( 4, 0 );
-    viewBoxLayout->setColumnStretch( 5, 0 );
+    viewBoxLayout->setColumnStretch(0, 0);
+    viewBoxLayout->setColumnStretch(1, 0);
+    viewBoxLayout->setColumnStretch(2, 3);
+    viewBoxLayout->setColumnStretch(3, 1);
+    viewBoxLayout->setColumnStretch(4, 0);
+    viewBoxLayout->setColumnStretch(5, 0);
     viewBoxLayout->setMargin(0);
-    viewBoxLayout->setSpacing(spacingHint());
+    viewBoxLayout->setSpacing(0);
 
     // -------------------------------------------------------------------------
     
