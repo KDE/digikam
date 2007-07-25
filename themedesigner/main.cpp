@@ -32,6 +32,7 @@
 #include <kapplication.h>
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
+#include <kglobal.h>
 #include <klocale.h>
 
 // Local includes.
@@ -75,8 +76,10 @@ int main(int argc, char** argv) {
 
     KCmdLineArgs::init(argc, argv, &aboutData);
     KCmdLineArgs::addCmdLineOptions(options);
-    KApplication app; 
 
+    KGlobal::locale()->setMainCatalogue( "digikam" );
+
+    KApplication app; 
     Digikam::MainWindow *im = new Digikam::MainWindow();
     app.setMainWidget(im);
     im->resize(800, 600);
