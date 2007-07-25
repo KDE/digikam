@@ -606,62 +606,67 @@ void ImagePropertiesTab::setCurrentURL(const KUrl& url)
 
 void ImagePropertiesTab::colorChanged(const QColor& back, const QColor& fore)
 {
-    QPalette palette;
-    palette.setColor(d->settingsArea->backgroundRole(), back);
-    palette.setColor(d->settingsArea->foregroundRole(), fore);
+    QPalette plt(palette());
 
-    d->settingsArea->setPalette(palette);
+    plt.setColor(QPalette::Active, QPalette::Base, back);
+    plt.setColor(QPalette::Active, QPalette::Text, fore);
+    plt.setColor(QPalette::Inactive, QPalette::Base, back);
+    plt.setColor(QPalette::Inactive, QPalette::Text, fore);
 
-    d->title->setPalette(palette);
-    d->file->setPalette(palette);
-    d->folder->setPalette(palette);
-    d->modifiedDate->setPalette(palette);
-    d->size->setPalette(palette);
-    d->owner->setPalette(palette);
-    d->permissions->setPalette(palette);
+    setPalette(plt);
 
-    d->title2->setPalette(palette);
-    d->mime->setPalette(palette);
-    d->dimensions->setPalette(palette);
-    d->compression->setPalette(palette);
-    d->bitDepth->setPalette(palette);
-    d->colorMode->setPalette(palette);
+    d->settingsArea->setPalette(plt);
 
-    d->title3->setPalette(palette);
-    d->make->setPalette(palette);
-    d->model->setPalette(palette);
-    d->photoDate->setPalette(palette);
-    d->aperture->setPalette(palette);
-    d->focalLength->setPalette(palette);
-    d->exposureTime->setPalette(palette);
-    d->sensitivity->setPalette(palette);
-    d->exposureMode->setPalette(palette);
-    d->flash->setPalette(palette);
-    d->whiteBalance->setPalette(palette);
+    d->title->setPalette(plt);
+    d->file->setPalette(plt);
+    d->folder->setPalette(plt);
+    d->modifiedDate->setPalette(plt);
+    d->size->setPalette(plt);
+    d->owner->setPalette(plt);
+    d->permissions->setPalette(plt);
 
-    d->labelFile->setPalette(palette);
-    d->labelFolder->setPalette(palette);
-    d->labelFileModifiedDate->setPalette(palette);
-    d->labelFileSize->setPalette(palette);
-    d->labelFileOwner->setPalette(palette);
-    d->labelFilePermissions->setPalette(palette);
+    d->title2->setPalette(plt);
+    d->mime->setPalette(plt);
+    d->dimensions->setPalette(plt);
+    d->compression->setPalette(plt);
+    d->bitDepth->setPalette(plt);
+    d->colorMode->setPalette(plt);
 
-    d->labelImageMime->setPalette(palette);
-    d->labelImageDimensions->setPalette(palette);
-    d->labelImageCompression->setPalette(palette);
-    d->labelImageBitDepth->setPalette(palette);
-    d->labelImageColorMode->setPalette(palette);
+    d->title3->setPalette(plt);
+    d->make->setPalette(plt);
+    d->model->setPalette(plt);
+    d->photoDate->setPalette(plt);
+    d->aperture->setPalette(plt);
+    d->focalLength->setPalette(plt);
+    d->exposureTime->setPalette(plt);
+    d->sensitivity->setPalette(plt);
+    d->exposureMode->setPalette(plt);
+    d->flash->setPalette(plt);
+    d->whiteBalance->setPalette(plt);
 
-    d->labelPhotoMake->setPalette(palette);
-    d->labelPhotoModel->setPalette(palette);
-    d->labelPhotoDateTime->setPalette(palette);
-    d->labelPhotoAperture->setPalette(palette);
-    d->labelPhotoFocalLenght->setPalette(palette);
-    d->labelPhotoExposureTime->setPalette(palette);
-    d->labelPhotoSensitivity->setPalette(palette);
-    d->labelPhotoExposureMode->setPalette(palette);
-    d->labelPhotoFlash->setPalette(palette);
-    d->labelPhotoWhiteBalance->setPalette(palette);
+    d->labelFile->setPalette(plt);
+    d->labelFolder->setPalette(plt);
+    d->labelFileModifiedDate->setPalette(plt);
+    d->labelFileSize->setPalette(plt);
+    d->labelFileOwner->setPalette(plt);
+    d->labelFilePermissions->setPalette(plt);
+
+    d->labelImageMime->setPalette(plt);
+    d->labelImageDimensions->setPalette(plt);
+    d->labelImageCompression->setPalette(plt);
+    d->labelImageBitDepth->setPalette(plt);
+    d->labelImageColorMode->setPalette(plt);
+
+    d->labelPhotoMake->setPalette(plt);
+    d->labelPhotoModel->setPalette(plt);
+    d->labelPhotoDateTime->setPalette(plt);
+    d->labelPhotoAperture->setPalette(plt);
+    d->labelPhotoFocalLenght->setPalette(plt);
+    d->labelPhotoExposureTime->setPalette(plt);
+    d->labelPhotoSensitivity->setPalette(plt);
+    d->labelPhotoExposureMode->setPalette(plt);
+    d->labelPhotoFlash->setPalette(plt);
+    d->labelPhotoWhiteBalance->setPalette(plt);
 }
 
 }  // NameSpace Digikam
