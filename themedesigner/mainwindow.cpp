@@ -647,168 +647,168 @@ void MainWindow::slotPropertyChanged()
     m_borderColorBtn->setEnabled(false);
     m_borderColorLabel->setEnabled(false);
 
-    switch(m_propertyCombo->currentItem())
+    switch(m_propertyCombo->currentIndex())
     {
-    case(BASE):
-    {
-        m_begColorLabel->setEnabled(true);
-        m_begColorBtn->setEnabled(true);
-        m_begColorBtn->setColor(m_theme->baseColor);
-        break;
-    }
-    case(REGULARTEXT):
-    {
-        m_begColorLabel->setEnabled(true);
-        m_begColorBtn->setEnabled(true);
-        m_begColorBtn->setColor(m_theme->textRegColor);
-        break;
-    }
-    case(SELECTEDTEXT):
-    {
-        m_begColorLabel->setEnabled(true);
-        m_begColorBtn->setEnabled(true);
-        m_begColorBtn->setColor(m_theme->textSelColor);
-        break;
-    }
-    case(REGULARSPECIALTEXT):
-    {
-        m_begColorLabel->setEnabled(true);
-        m_begColorBtn->setEnabled(true);
-        m_begColorBtn->setColor(m_theme->textSpecialRegColor);
-        break;
-    }
-    case(SELECTEDSPECIALTEXT):
-    {
-        m_begColorLabel->setEnabled(true);
-        m_begColorBtn->setEnabled(true);
-        m_begColorBtn->setColor(m_theme->textSpecialSelColor);
-        break;
-    }
-    case(BANNER):
-    {
-        m_bevelCombo->setEnabled(true);
-        m_gradientCombo->setEnabled(true);
-        m_begColorBtn->setEnabled(true);
-        m_endColorBtn->setEnabled(true);
-        m_addBorderCheck->setEnabled(true);
-        m_borderColorBtn->setEnabled(true);
-        m_bevelLabel->setEnabled(true);
-        m_gradientLabel->setEnabled(true);
-        m_begColorLabel->setEnabled(true);
-        m_endColorLabel->setEnabled(true);
-        m_borderColorLabel->setEnabled(true);
-
-        m_bevelCombo->setCurrentItem(m_bevelReverseMap[m_theme->bannerBevel]);
-        m_gradientCombo->setCurrentItem(m_gradientReverseMap[m_theme->bannerGrad]);
-        
-        m_begColorBtn->setColor(m_theme->bannerColor);
-        m_endColorBtn->setColor(m_theme->bannerColorTo);
-
-        m_addBorderCheck->setChecked(m_theme->bannerBorder);
-        m_borderColorBtn->setColor(m_theme->bannerBorderColor);
-        
-        break;
-    }
-    case(THUMBNAILREGULAR):
-    {
-        m_bevelCombo->setEnabled(true);
-        m_gradientCombo->setEnabled(true);
-        m_begColorBtn->setEnabled(true);
-        m_endColorBtn->setEnabled(true);
-        m_addBorderCheck->setEnabled(true);
-        m_borderColorBtn->setEnabled(true);
-        m_bevelLabel->setEnabled(true);
-        m_gradientLabel->setEnabled(true);
-        m_begColorLabel->setEnabled(true);
-        m_endColorLabel->setEnabled(true);
-        m_borderColorLabel->setEnabled(true);
-
-        m_bevelCombo->setCurrentItem(m_bevelReverseMap[m_theme->thumbRegBevel]);
-        m_gradientCombo->setCurrentItem(m_gradientReverseMap[m_theme->thumbRegGrad]);
-        
-        m_begColorBtn->setColor(m_theme->thumbRegColor);
-        m_endColorBtn->setColor(m_theme->thumbRegColorTo);
-
-        m_addBorderCheck->setChecked(m_theme->thumbRegBorder);
-        m_borderColorBtn->setColor(m_theme->thumbRegBorderColor);
-
-        break;
-    }
-    case(THUMBNAILSELECTED):
-    {
-        m_bevelCombo->setEnabled(true);
-        m_gradientCombo->setEnabled(true);
-        m_begColorBtn->setEnabled(true);
-        m_endColorBtn->setEnabled(true);
-        m_addBorderCheck->setEnabled(true);
-        m_borderColorBtn->setEnabled(true);
-        m_bevelLabel->setEnabled(true);
-        m_gradientLabel->setEnabled(true);
-        m_begColorLabel->setEnabled(true);
-        m_endColorLabel->setEnabled(true);
-        m_borderColorLabel->setEnabled(true);
-
-        m_bevelCombo->setCurrentItem(m_bevelReverseMap[m_theme->thumbSelBevel]);
-        m_gradientCombo->setCurrentItem(m_gradientReverseMap[m_theme->thumbSelGrad]);
-        
-        m_begColorBtn->setColor(m_theme->thumbSelColor);
-        m_endColorBtn->setColor(m_theme->thumbSelColorTo);
-
-        m_addBorderCheck->setChecked(m_theme->thumbSelBorder);
-        m_borderColorBtn->setColor(m_theme->thumbSelBorderColor);
-
-        break;
-    }
-    case(LISTVIEWREGULAR):
-    {
-        m_bevelCombo->setEnabled(true);
-        m_gradientCombo->setEnabled(true);
-        m_begColorBtn->setEnabled(true);
-        m_endColorBtn->setEnabled(true);
-        m_addBorderCheck->setEnabled(true);
-        m_borderColorBtn->setEnabled(true);
-        m_bevelLabel->setEnabled(true);
-        m_gradientLabel->setEnabled(true);
-        m_begColorLabel->setEnabled(true);
-        m_endColorLabel->setEnabled(true);
-        m_borderColorLabel->setEnabled(true);
-
-        m_bevelCombo->setCurrentItem(m_bevelReverseMap[m_theme->listRegBevel]);
-        m_gradientCombo->setCurrentItem(m_gradientReverseMap[m_theme->listRegGrad]);
-        
-        m_begColorBtn->setColor(m_theme->listRegColor);
-        m_endColorBtn->setColor(m_theme->listRegColorTo);
-
-        m_addBorderCheck->setChecked(m_theme->listRegBorder);
-        m_borderColorBtn->setColor(m_theme->listRegBorderColor);
-
-        break;
-    }
-    case(LISTVIEWSELECTED):
-    {
-        m_bevelCombo->setEnabled(true);
-        m_gradientCombo->setEnabled(true);
-        m_begColorBtn->setEnabled(true);
-        m_endColorBtn->setEnabled(true);
-        m_addBorderCheck->setEnabled(true);
-        m_borderColorBtn->setEnabled(true);
-        m_bevelLabel->setEnabled(true);
-        m_gradientLabel->setEnabled(true);
-        m_begColorLabel->setEnabled(true);
-        m_endColorLabel->setEnabled(true);
-        m_borderColorLabel->setEnabled(true);
-
-        m_bevelCombo->setCurrentItem(m_bevelReverseMap[m_theme->listSelBevel]);
-        m_gradientCombo->setCurrentItem(m_gradientReverseMap[m_theme->listSelGrad]);
-
-        m_begColorBtn->setColor(m_theme->listSelColor);
-        m_endColorBtn->setColor(m_theme->listSelColorTo);
-
-        m_addBorderCheck->setChecked(m_theme->listSelBorder);
-        m_borderColorBtn->setColor(m_theme->listSelBorderColor);
-
-        break;
-    }
+        case(BASE):
+        {
+            m_begColorLabel->setEnabled(true);
+            m_begColorBtn->setEnabled(true);
+            m_begColorBtn->setColor(m_theme->baseColor);
+            break;
+        }
+        case(REGULARTEXT):
+        {
+            m_begColorLabel->setEnabled(true);
+            m_begColorBtn->setEnabled(true);
+            m_begColorBtn->setColor(m_theme->textRegColor);
+            break;
+        }
+        case(SELECTEDTEXT):
+        {
+            m_begColorLabel->setEnabled(true);
+            m_begColorBtn->setEnabled(true);
+            m_begColorBtn->setColor(m_theme->textSelColor);
+            break;
+        }
+        case(REGULARSPECIALTEXT):
+        {
+            m_begColorLabel->setEnabled(true);
+            m_begColorBtn->setEnabled(true);
+            m_begColorBtn->setColor(m_theme->textSpecialRegColor);
+            break;
+        }
+        case(SELECTEDSPECIALTEXT):
+        {
+            m_begColorLabel->setEnabled(true);
+            m_begColorBtn->setEnabled(true);
+            m_begColorBtn->setColor(m_theme->textSpecialSelColor);
+            break;
+        }
+        case(BANNER):
+        {
+            m_bevelCombo->setEnabled(true);
+            m_gradientCombo->setEnabled(true);
+            m_begColorBtn->setEnabled(true);
+            m_endColorBtn->setEnabled(true);
+            m_addBorderCheck->setEnabled(true);
+            m_borderColorBtn->setEnabled(true);
+            m_bevelLabel->setEnabled(true);
+            m_gradientLabel->setEnabled(true);
+            m_begColorLabel->setEnabled(true);
+            m_endColorLabel->setEnabled(true);
+            m_borderColorLabel->setEnabled(true);
+    
+            m_bevelCombo->setCurrentIndex(m_bevelReverseMap[m_theme->bannerBevel]);
+            m_gradientCombo->setCurrentIndex(m_gradientReverseMap[m_theme->bannerGrad]);
+            
+            m_begColorBtn->setColor(m_theme->bannerColor);
+            m_endColorBtn->setColor(m_theme->bannerColorTo);
+    
+            m_addBorderCheck->setChecked(m_theme->bannerBorder);
+            m_borderColorBtn->setColor(m_theme->bannerBorderColor);
+            
+            break;
+        }
+        case(THUMBNAILREGULAR):
+        {
+            m_bevelCombo->setEnabled(true);
+            m_gradientCombo->setEnabled(true);
+            m_begColorBtn->setEnabled(true);
+            m_endColorBtn->setEnabled(true);
+            m_addBorderCheck->setEnabled(true);
+            m_borderColorBtn->setEnabled(true);
+            m_bevelLabel->setEnabled(true);
+            m_gradientLabel->setEnabled(true);
+            m_begColorLabel->setEnabled(true);
+            m_endColorLabel->setEnabled(true);
+            m_borderColorLabel->setEnabled(true);
+    
+            m_bevelCombo->setCurrentIndex(m_bevelReverseMap[m_theme->thumbRegBevel]);
+            m_gradientCombo->setCurrentIndex(m_gradientReverseMap[m_theme->thumbRegGrad]);
+            
+            m_begColorBtn->setColor(m_theme->thumbRegColor);
+            m_endColorBtn->setColor(m_theme->thumbRegColorTo);
+    
+            m_addBorderCheck->setChecked(m_theme->thumbRegBorder);
+            m_borderColorBtn->setColor(m_theme->thumbRegBorderColor);
+    
+            break;
+        }
+        case(THUMBNAILSELECTED):
+        {
+            m_bevelCombo->setEnabled(true);
+            m_gradientCombo->setEnabled(true);
+            m_begColorBtn->setEnabled(true);
+            m_endColorBtn->setEnabled(true);
+            m_addBorderCheck->setEnabled(true);
+            m_borderColorBtn->setEnabled(true);
+            m_bevelLabel->setEnabled(true);
+            m_gradientLabel->setEnabled(true);
+            m_begColorLabel->setEnabled(true);
+            m_endColorLabel->setEnabled(true);
+            m_borderColorLabel->setEnabled(true);
+    
+            m_bevelCombo->setCurrentIndex(m_bevelReverseMap[m_theme->thumbSelBevel]);
+            m_gradientCombo->setCurrentIndex(m_gradientReverseMap[m_theme->thumbSelGrad]);
+            
+            m_begColorBtn->setColor(m_theme->thumbSelColor);
+            m_endColorBtn->setColor(m_theme->thumbSelColorTo);
+    
+            m_addBorderCheck->setChecked(m_theme->thumbSelBorder);
+            m_borderColorBtn->setColor(m_theme->thumbSelBorderColor);
+    
+            break;
+        }
+        case(LISTVIEWREGULAR):
+        {
+            m_bevelCombo->setEnabled(true);
+            m_gradientCombo->setEnabled(true);
+            m_begColorBtn->setEnabled(true);
+            m_endColorBtn->setEnabled(true);
+            m_addBorderCheck->setEnabled(true);
+            m_borderColorBtn->setEnabled(true);
+            m_bevelLabel->setEnabled(true);
+            m_gradientLabel->setEnabled(true);
+            m_begColorLabel->setEnabled(true);
+            m_endColorLabel->setEnabled(true);
+            m_borderColorLabel->setEnabled(true);
+    
+            m_bevelCombo->setCurrentIndex(m_bevelReverseMap[m_theme->listRegBevel]);
+            m_gradientCombo->setCurrentIndex(m_gradientReverseMap[m_theme->listRegGrad]);
+            
+            m_begColorBtn->setColor(m_theme->listRegColor);
+            m_endColorBtn->setColor(m_theme->listRegColorTo);
+    
+            m_addBorderCheck->setChecked(m_theme->listRegBorder);
+            m_borderColorBtn->setColor(m_theme->listRegBorderColor);
+    
+            break;
+        }
+        case(LISTVIEWSELECTED):
+        {
+            m_bevelCombo->setEnabled(true);
+            m_gradientCombo->setEnabled(true);
+            m_begColorBtn->setEnabled(true);
+            m_endColorBtn->setEnabled(true);
+            m_addBorderCheck->setEnabled(true);
+            m_borderColorBtn->setEnabled(true);
+            m_bevelLabel->setEnabled(true);
+            m_gradientLabel->setEnabled(true);
+            m_begColorLabel->setEnabled(true);
+            m_endColorLabel->setEnabled(true);
+            m_borderColorLabel->setEnabled(true);
+    
+            m_bevelCombo->setCurrentIndex(m_bevelReverseMap[m_theme->listSelBevel]);
+            m_gradientCombo->setCurrentIndex(m_gradientReverseMap[m_theme->listSelGrad]);
+    
+            m_begColorBtn->setColor(m_theme->listSelColor);
+            m_endColorBtn->setColor(m_theme->listSelColorTo);
+    
+            m_addBorderCheck->setChecked(m_theme->listSelBorder);
+            m_borderColorBtn->setColor(m_theme->listSelBorderColor);
+    
+            break;
+        }
     };
 
     m_bevelCombo->blockSignals(false);
@@ -821,7 +821,7 @@ void MainWindow::slotPropertyChanged()
 
 void MainWindow::slotUpdateTheme()
 {
-    switch(m_propertyCombo->currentItem())
+    switch(m_propertyCombo->currentIndex())
     {
         case(BASE):
         {
@@ -850,65 +850,65 @@ void MainWindow::slotUpdateTheme()
         }
         case(BANNER):
         {
-            m_theme->bannerBevel = (Theme::Bevel) m_bevelMap[m_bevelCombo->currentItem()];
-            m_theme->bannerGrad  = (Theme::Gradient) m_gradientMap[m_gradientCombo->currentItem()];
+            m_theme->bannerBevel = (Theme::Bevel) m_bevelMap[m_bevelCombo->currentIndex()];
+            m_theme->bannerGrad  = (Theme::Gradient) m_gradientMap[m_gradientCombo->currentIndex()];
     
             m_theme->bannerColor   = m_begColorBtn->color();
             m_theme->bannerColorTo = m_endColorBtn->color();
     
-            m_theme->bannerBorder  = m_addBorderCheck->isChecked();
+            m_theme->bannerBorder      = m_addBorderCheck->isChecked();
             m_theme->bannerBorderColor = m_borderColorBtn->color();
     
             break;
         }
         case(THUMBNAILREGULAR):
         {
-            m_theme->thumbRegBevel = (Theme::Bevel) m_bevelMap[m_bevelCombo->currentItem()];
-            m_theme->thumbRegGrad  = (Theme::Gradient) m_gradientMap[m_gradientCombo->currentItem()];
+            m_theme->thumbRegBevel = (Theme::Bevel) m_bevelMap[m_bevelCombo->currentIndex()];
+            m_theme->thumbRegGrad  = (Theme::Gradient) m_gradientMap[m_gradientCombo->currentIndex()];
     
             m_theme->thumbRegColor   = m_begColorBtn->color();
             m_theme->thumbRegColorTo = m_endColorBtn->color();
     
-            m_theme->thumbRegBorder  = m_addBorderCheck->isChecked();
+            m_theme->thumbRegBorder      = m_addBorderCheck->isChecked();
             m_theme->thumbRegBorderColor = m_borderColorBtn->color();
     
             break;
         }
         case(THUMBNAILSELECTED):
         {
-            m_theme->thumbSelBevel = (Theme::Bevel) m_bevelMap[m_bevelCombo->currentItem()];
-            m_theme->thumbSelGrad  = (Theme::Gradient) m_gradientMap[m_gradientCombo->currentItem()];
+            m_theme->thumbSelBevel = (Theme::Bevel) m_bevelMap[m_bevelCombo->currentIndex()];
+            m_theme->thumbSelGrad  = (Theme::Gradient) m_gradientMap[m_gradientCombo->currentIndex()];
     
             m_theme->thumbSelColor   = m_begColorBtn->color();
             m_theme->thumbSelColorTo = m_endColorBtn->color();
     
-            m_theme->thumbSelBorder  = m_addBorderCheck->isChecked();
+            m_theme->thumbSelBorder      = m_addBorderCheck->isChecked();
             m_theme->thumbSelBorderColor = m_borderColorBtn->color();
     
             break;
         }
         case(LISTVIEWREGULAR):
         {
-            m_theme->listRegBevel = (Theme::Bevel) m_bevelMap[m_bevelCombo->currentItem()];
-            m_theme->listRegGrad  = (Theme::Gradient) m_gradientMap[m_gradientCombo->currentItem()];
+            m_theme->listRegBevel = (Theme::Bevel) m_bevelMap[m_bevelCombo->currentIndex()];
+            m_theme->listRegGrad  = (Theme::Gradient) m_gradientMap[m_gradientCombo->currentIndex()];
     
             m_theme->listRegColor   = m_begColorBtn->color();
             m_theme->listRegColorTo = m_endColorBtn->color();
     
-            m_theme->listRegBorder  = m_addBorderCheck->isChecked();
+            m_theme->listRegBorder      = m_addBorderCheck->isChecked();
             m_theme->listRegBorderColor = m_borderColorBtn->color();
     
             break;
         }
         case(LISTVIEWSELECTED):
         {
-            m_theme->listSelBevel = (Theme::Bevel) m_bevelMap[m_bevelCombo->currentItem()];
-            m_theme->listSelGrad  = (Theme::Gradient) m_gradientMap[m_gradientCombo->currentItem()];
+            m_theme->listSelBevel = (Theme::Bevel) m_bevelMap[m_bevelCombo->currentIndex()];
+            m_theme->listSelGrad  = (Theme::Gradient) m_gradientMap[m_gradientCombo->currentIndex()];
     
             m_theme->listSelColor   = m_begColorBtn->color();
             m_theme->listSelColorTo = m_endColorBtn->color();
     
-            m_theme->listSelBorder  = m_addBorderCheck->isChecked();
+            m_theme->listSelBorder      = m_addBorderCheck->isChecked();
             m_theme->listSelBorderColor = m_borderColorBtn->color();
     
             break;
