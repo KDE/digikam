@@ -39,12 +39,10 @@
 
 int main(int argc, char *argv[])
 {
-    QString Description = i18n("KDE Photo Viewer and Editor");
-
     KAboutData aboutData( "showfoto", 0,
                           ki18n("showFoto"),
                           "0.8.0",
-                          ki18n(Description.toLatin1()),
+                          ki18n("KDE Photo Viewer and Editor"),
                           KAboutData::License_GPL,
                           ki18n("(c) 2004-2007, digiKam developers team"),
                           KLocalizedString(),
