@@ -102,8 +102,8 @@ void AlbumIconGroupItem::paintBanner()
         
         dateAndComments = i18np("%1 %2 - 1 Item", "%1 %2 - %3 Items", 
                                 KGlobal::locale()->calendar()->monthName(date, KCalendarSystem::LongName),
-                                KGlobal::locale()->calendar()->year(date)
-				count());
+                                KGlobal::locale()->calendar()->year(date),
+                                count());
         
         if (!album->caption().isEmpty())
         {
