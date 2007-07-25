@@ -26,8 +26,9 @@
 #include <QString>
 #include <QPainter>
 #include <QPixmap>
-#include <QBitmap>
 #include <QPolygon>
+#include <QWidgetAction>
+#include <QLabel>
 
 // KDE includes.
 
@@ -61,7 +62,7 @@ RatingPopupMenu::RatingPopupMenu(QWidget* parent)
     starPolygon << QPoint(3,  14);
     starPolygon << QPoint(4,  9);
 
-    QAction *action = addAction(i18n("None"));
+    QAction *action = addAction(i18n("None"), this, SLOT(slotRatingTriggered()));
     action->setData(0);
 
     QPixmap starPix(15, 15);
@@ -72,8 +73,8 @@ RatingPopupMenu::RatingPopupMenu(QWidget* parent)
     p1.drawPolygon(starPolygon, Qt::WindingFill);
     p1.end();
 
-    QBitmap clearPix(starPix.width(), starPix.height());
-    clearPix.clear();
+    QPixmap clearPix(starPix.width(), starPix.height());
+    clearPix.fill(palette().color(QPalette::Active, QPalette::Foreground));
 
     for (int i = 1 ; i <= RatingMax ; i++)
     {
@@ -82,11 +83,16 @@ RatingPopupMenu::RatingPopupMenu(QWidget* parent)
 
         QPainter p2(&pix);
         p2.drawTiledPixmap(0, 0, i*starPix.width(), pix.height(), starPix);
-        p2.drawTiledPixmap(i*starPix.width(), 0, 5*starPix.width()-i*starPix.width(), pix.height(), clearPix);
+        p2.drawTiledPixmap(i*clearPix.width(), 0, 5*clearPix.width()-i*clearPix.width(), pix.height(), clearPix);
         p2.end();
 
-        QAction *action = addAction(pix, QString(), this, SLOT(slotRatingTriggered()));
+        QWidgetAction *action = new QWidgetAction(this);
+        QLabel *label         = new QLabel();
+        label->setPixmap(pix);
+        action->setDefaultWidget(label);
         action->setData(i);
+        connect(action, SIGNAL(triggered()), this, SLOT(slotRatingTriggered()));
+        addAction(action);
     }
 }
 
