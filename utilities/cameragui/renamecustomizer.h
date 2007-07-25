@@ -28,7 +28,7 @@
 
 // Qt includes.
 
-#include <kvbox.h>
+#include <QWidget>
 
 class QDateTime;
 
@@ -37,7 +37,7 @@ namespace Digikam
 
 class RenameCustomizerPriv;
 
-class RenameCustomizer : public KVBox
+class RenameCustomizer : public QWidget
 {
     Q_OBJECT
 

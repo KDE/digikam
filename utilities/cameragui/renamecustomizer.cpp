@@ -94,6 +94,8 @@ public:
 }
 
     QWidget      *focusedWidget;
+    QWidget      *renameDefaultBox;
+    QWidget      *renameCustomBox;
 
     QString       cameraTitle;
 
@@ -119,9 +121,6 @@ public:
 
     QTimer       *changedTimer;
 
-    KVBox        *renameDefaultBox;
-    KVBox        *renameCustomBox;
-
     KLineEdit    *renameCustomPrefix;
     KLineEdit    *renameCustomSuffix;
 
@@ -129,16 +128,15 @@ public:
 };
 
 RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
-                : KVBox(parent)
+                : QWidget(parent)
 {
     d = new RenameCustomizerPriv;
     d->changedTimer = new QTimer();
     d->cameraTitle  = cameraTitle;
     d->buttonGroup  = new QButtonGroup(this);
+    d->buttonGroup->setExclusive(true);
 
     setAttribute(Qt::WA_DeleteOnClose);
-
-    d->buttonGroup->setExclusive(true);
 
     QGridLayout* mainLayout = new QGridLayout(this);
 
@@ -146,17 +144,16 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
 
     d->renameDefault = new QRadioButton(i18n("Camera filenames"), this);
     d->buttonGroup->addButton(d->renameDefault);
-    d->renameDefault->setWhatsThis( i18n("<p>Turn on this option to use camera "
-                                         "provided image filenames without modifications."));
+    d->renameDefault->setWhatsThis(i18n("<p>Turn on this option to use camera "
+                                        "provided image filenames without modifications."));
 
-    d->renameDefaultBox = new KVBox(this);
-    d->renameDefaultBox->setMargin(0);
-    d->renameDefaultBox->setSpacing(KDialog::spacingHint());
+    d->renameDefaultBox     = new QWidget(this);
+    QHBoxLayout* boxLayout1 = new QHBoxLayout(d->renameDefaultBox);
 
-    d->renameDefaultCase = new QLabel( i18n("Change case to:"), d->renameDefaultBox );
-    d->renameDefaultCase->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Preferred );
+    d->renameDefaultCase = new QLabel(i18n("Change case to:"), d->renameDefaultBox);
+    d->renameDefaultCase->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
 
-    d->renameDefaultCaseType = new QComboBox( d->renameDefaultBox );
+    d->renameDefaultCaseType = new QComboBox(d->renameDefaultBox);
     d->renameDefaultCaseType->insertItem(0, i18n("Leave as Is"));
     d->renameDefaultCaseType->insertItem(1, i18n("Upper"));
     d->renameDefaultCaseType->insertItem(2, i18n("Lower"));
@@ -164,24 +161,20 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     d->renameDefaultCaseType->setWhatsThis( i18n("<p>Set the method to use to change the case "
                                                  "of image filenames."));
                                            
-    QHBoxLayout* boxLayout1 = new QHBoxLayout(d->renameDefaultBox);
     boxLayout1->setMargin(KDialog::spacingHint());
     boxLayout1->setSpacing(KDialog::spacingHint());
-    boxLayout1->addSpacing( 10 );
-    boxLayout1->addWidget( d->renameDefaultCase );
-    boxLayout1->addWidget( d->renameDefaultCaseType );
+    boxLayout1->addSpacing(10);
+    boxLayout1->addWidget(d->renameDefaultCase);
+    boxLayout1->addWidget(d->renameDefaultCaseType);
 
     // -------------------------------------------------------------
 
     d->renameCustom = new QRadioButton(i18n("Customize"), this);
     d->buttonGroup->addButton(d->renameCustom);
-    d->renameCustom->setWhatsThis( i18n("<p>Turn on this option to customize image filenames "
-                                        "during download."));
+    d->renameCustom->setWhatsThis(i18n("<p>Turn on this option to customize image filenames "
+                                       "during download."));
 
-    d->renameCustomBox = new KVBox(this);
-    d->renameCustomBox->setMargin(0);
-    d->renameCustomBox->setSpacing(KDialog::spacingHint());
-
+    d->renameCustomBox                 = new QWidget(this);
     QGridLayout* renameCustomBoxLayout = new QGridLayout(d->renameCustomBox);
 
     QLabel* prefixLabel   = new QLabel(i18n("Prefix:"), d->renameCustomBox);
@@ -199,6 +192,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     d->addDateTimeBox->setWhatsThis( i18n("<p>Set this option to add the camera provided date and time."));
 
     QWidget *dateTimeWidget = new QWidget(d->renameCustomBox);
+    QHBoxLayout *boxLayout2 = new QHBoxLayout(dateTimeWidget);
     d->dateTimeLabel        = new QLabel(i18n("Date format:"), dateTimeWidget);
     d->dateTimeFormat       = new QComboBox(dateTimeWidget);
     d->dateTimeFormat->insertItem(RenameCustomizerPriv::DigikamStandard, i18n("Standard"));
@@ -222,25 +216,24 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     policy.setHorizontalPolicy(QSizePolicy::Maximum);
     d->dateTimeButton->setSizePolicy(policy);
 
-    QHBoxLayout *boxLayout2 = new QHBoxLayout(dateTimeWidget);
     boxLayout2->addWidget(d->dateTimeLabel);
     boxLayout2->addWidget(d->dateTimeFormat);
     boxLayout2->addWidget(d->dateTimeButton);
     boxLayout2->setMargin(KDialog::spacingHint());
     boxLayout2->setSpacing(KDialog::spacingHint());
 
-    d->addCameraNameBox = new QCheckBox( i18n("Add Camera Name"), d->renameCustomBox );
-    d->addCameraNameBox->setWhatsThis( i18n("<p>Set this option to add the camera name."));
+    d->addCameraNameBox = new QCheckBox(i18n("Add Camera Name"), d->renameCustomBox);
+    d->addCameraNameBox->setWhatsThis(i18n("<p>Set this option to add the camera name."));
 
-    d->addSeqNumberBox = new QCheckBox( i18n("Add Sequence Number"), d->renameCustomBox );
-    d->addSeqNumberBox->setWhatsThis( i18n("<p>Set this option to add a sequence number "
-                                           "starting with the index set below."));
+    d->addSeqNumberBox = new QCheckBox(i18n("Add Sequence Number"), d->renameCustomBox);
+    d->addSeqNumberBox->setWhatsThis(i18n("<p>Set this option to add a sequence number "
+                                          "starting with the index set below."));
 
-    d->startIndexLabel = new QLabel( i18n("Start Index:"), d->renameCustomBox );
+    d->startIndexLabel = new QLabel(i18n("Start Index:"), d->renameCustomBox);
     d->startIndexInput = new KIntNumInput(1, d->renameCustomBox);
     d->startIndexInput->setRange(1, 900000, 1, false);
-    d->startIndexInput->setWhatsThis( i18n("<p>Set the starting index value used to rename picture "
-                                           "files with a sequence number."));
+    d->startIndexInput->setWhatsThis(i18n("<p>Set the starting index value used to rename picture "
+                                          "files with a sequence number."));
 
     renameCustomBoxLayout->addWidget(prefixLabel, 0, 1, 1, 1);
     renameCustomBoxLayout->addWidget(d->renameCustomPrefix, 0, 2, 1, 1);
@@ -258,10 +251,11 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
 
     // ----------------------------------------------------------------------
 
-    mainLayout->addWidget(d->renameDefaultBox, 1, 0, 1, 2 );
-    mainLayout->addWidget(d->renameCustom, 2, 0, 1, 2 );
-    mainLayout->addWidget(d->renameDefault, 0, 0, 1, 2 );
-    mainLayout->addWidget(d->renameCustomBox, 3, 0, 1, 2 );
+
+    mainLayout->addWidget(d->renameDefault, 0, 0, 1, 2);
+    mainLayout->addWidget(d->renameDefaultBox, 1, 0, 1, 2);
+    mainLayout->addWidget(d->renameCustom, 2, 0, 1, 2);
+    mainLayout->addWidget(d->renameCustomBox, 3, 0, 1, 2);
     mainLayout->setRowStretch(4, 10);
     mainLayout->setMargin(KDialog::spacingHint());
     mainLayout->setSpacing(KDialog::spacingHint());
