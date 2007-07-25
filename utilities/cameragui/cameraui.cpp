@@ -364,31 +364,31 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     // -------------------------------------------------------------------------
 
     d->cancelBtn = new QToolButton(plain);
-    d->cancelBtn->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
+    d->cancelBtn->setSizePolicy(QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum));
     d->cancelBtn->setIcon(SmallIcon("process-stop"));
     d->cancelBtn->setEnabled(false);
     
     d->status   = new KSqueezedTextLabel(plain);
     d->progress = new QProgressBar(plain);
-    d->progress->setMaximumHeight( fontMetrics().height() );
+    d->progress->setMaximumHeight(fontMetrics().height()+2);
     d->progress->hide();
 
     QFrame *frame = new QFrame(plain);
-    frame->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
+    frame->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QHBoxLayout* layout = new QHBoxLayout( frame );
+    QHBoxLayout* layout = new QHBoxLayout(frame);
 
-    KUrlLabel *pixmapLogo = new KUrlLabel( "http://www.digikam.org", QString(), frame );
+    KUrlLabel *pixmapLogo = new KUrlLabel("http://www.digikam.org", QString(), frame);
     pixmapLogo->setMargin(0);
-    pixmapLogo->setScaledContents( false );
+    pixmapLogo->setScaledContents(false);
     QPalette palette;
     palette.setColor(pixmapLogo->backgroundRole(), QColor(201, 208, 255));
     pixmapLogo->setPalette(palette);
-    pixmapLogo->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
-    pixmapLogo->setToolTip( i18n("Visit digiKam project website"));
+    pixmapLogo->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
+    pixmapLogo->setToolTip(i18n("Visit digiKam project website"));
     pixmapLogo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png")));
     
-    d->anim = new AnimWidget(frame, pixmapLogo->height());
+    d->anim = new AnimWidget(frame, pixmapLogo->height()-2);
     
     layout->addWidget(pixmapLogo);
     layout->addWidget(d->anim);
