@@ -288,6 +288,13 @@ void MainWindow::slotSave()
     if (path.isEmpty())
         return;
 
+    QFile file(path);
+    if (!file.open(IO_WriteOnly))
+    {
+        KMessageBox::error(this, "Failed to open file for writing");
+        return;
+    }
+
     QFileInfo fi(path);
     m_theme->name     = fi.fileName();
     m_theme->filePath = path;
