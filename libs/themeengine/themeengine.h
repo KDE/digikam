@@ -31,6 +31,7 @@
 #include <qobject.h>
 #include <qcolor.h>
 #include <qpixmap.h>
+#include <qdom.h>
 
 // Digikam includes.
 
@@ -53,6 +54,7 @@ public:
 
     void        scanThemes();
     QStringList themeNames() const;
+    bool        saveTheme();
     
     void    setCurrentTheme(const QString& name);
     void    setCurrentTheme(const Theme& theme, const QString& name,
@@ -80,8 +82,8 @@ private:
     static ThemeEngine* m_instance;
 
     void    buildDefaultTheme();
-    void    loadTheme();
-    QString resourceValue(const QString& name, const QString& altName);
+    bool    loadTheme();
+    QString resourceValue(const QDomElement &rootElem, const QString& key);
     
 signals:
 

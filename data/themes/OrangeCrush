@@ -1,3 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
 /* ============================================================
  *
  * This file is a part of digiKam project
@@ -20,46 +23,53 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
+-->
 
-! "Orange Crush"
+<digikamtheme>
 
-base.color:			     #FFFFFF
-text.regular.color:		     #000000
-text.selected.color:		     #000000
-text.special.regular.color:	     #AA8858
-text.special.selected.color:	     #000000
+ <name                         value="Orange Crush"/>
 
-banner.color:			     #FFA200
-banner.colorTo:			     #FFA200
-banner.bevel:			     RAISED
-banner.gradient:		     FLAT
-banner.border:                       FALSE
-banner.borderColor:                  #000000
+ <BaseColor                    value="#FFFFFF"     />
 
-thumbnail.regular.color:             #F5F5F0
-thumbnail.regular.colorTo:           #F5F5F5
-thumbnail.regular.bevel:	     RAISED
-thumbnail.regular.gradient:          FLAT
-thumbnail.regular.border:            FALSE
-thumbnail.regular.borderColor:       #F0F0F0
+ <TextRegularColor             value="#000000"     />
+ <TextSelectedColor            value="#000000"     />
+ <TextSpecialRegularColor      value="#AA8858"     />
+ <TextSpecialSelectedColor     value="#000000"     />
 
-thumbnail.selected.color:	     #FFA200
-thumbnail.selected.colorTo:	     #FFA200
-thumbnail.selected.bevel:	     RAISED
-thumbnail.selected.gradient:         FLAT
-thumbnail.selected.border:           FALSE
-thumbnail.selected.borderColor:      #000000
+ <BannerColor                  value="#FFA200"     />
+ <BannerColorTo                value="#FFA200"     />
+ <BannerBevel                  value="RAISED"      />
+ <BannerGradient               value="FLAT"        />
+ <BannerBorder                 value="FALSE"       />
+ <BannerBorderColor            value="#000000"     />
 
-listview.regular.color:	             #FFFFFF
-listview.regular.colorTo:	     #FFFFFF
-listview.regular.bevel:	             FLAT
-listview.regular.gradient:           SOLID
-listview.regular.border:             FALSE
-listview.regular.borderColor:        #707070
+ <ThumbnailRegularColor        value="#F5F5F0"     />
+ <ThumbnailRegularColorTo      value="#F5F5F5"     />
+ <ThumbnailRegularBevel        value="RAISED"      />
+ <ThumbnailRegularGradient     value="FLAT"        />
+ <ThumbnailRegularBorder       value="FALSE"       />
+ <ThumbnailRegularBorderColor  value="#F0F0F0"     />
 
-listview.selected.color:	     #FFA200
-listview.selected.colorTo:	     #FFA200
-listview.selected.bevel:	     RAISED
-listview.selected.gradient:          FLAT
-listview.selected.border:            FALSE
-listview.selected.borderColor:       #000000
+ <ThumbnailSelectedColor       value="#FFA200"     />
+ <ThumbnailSelectedColorTo     value="#FFA200"     />
+ <ThumbnailSelectedBevel       value="RAISED"      />
+ <ThumbnailSelectedGradient    value="FLAT"        />
+ <ThumbnailSelectedBorder      value="FALSE"       />
+ <ThumbnailSelectedBorderColor value="#000000"     />
+
+ <ListviewRegularColor         value="#FFFFFF"     />
+ <ListviewRegularColorTo       value="#FFFFFF"     />
+ <ListviewRegularBevel         value="FLAT"        />
+ <ListviewRegularGradient      value="SOLID"       />
+ <ListviewRegularBorder        value="FALSE"       />
+ <ListviewRegularBorderColor   value="#707070"     />
+
+ <ListviewSelectedColor        value="#FFA200"     />
+ <ListviewSelectedColorTo      value="#FFA200"     />
+ <ListviewSelectedBevel        value="RAISED"      />
+ <ListviewSelectedGradient     value="FLAT"        />
+ <ListviewSelectedBorder       value="FALSE"       />
+ <ListviewSelectedBorderColor  value="#000000"     />
+
+</digikamtheme>
+                                             
