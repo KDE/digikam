@@ -98,7 +98,7 @@ RatingPopupMenu::~RatingPopupMenu()
 void RatingPopupMenu::slotRatingTriggered()
 {
     int r = qobject_cast<QWidgetAction*>(sender())->data().toInt();
-    emit rating(r);
+    emit signalRatingChanged(r);
 }
 
 }  // namespace Digikam

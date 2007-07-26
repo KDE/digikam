@@ -43,7 +43,7 @@ public:
 
 signals:
 
-    void rating(int);
+    void signalRatingChanged(int);
 
 private slots:
 
