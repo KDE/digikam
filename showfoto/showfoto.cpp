@@ -799,7 +799,7 @@ bool ShowFoto::setup(bool iccSetupPage)
     return true;
 }
 
-void ShowFoto::slotUpdateItemInfo(void)
+void ShowFoto::slotUpdateItemInfo()
 {
     d->itemsNb = d->thumbBar->countItems();
     
@@ -820,8 +820,9 @@ void ShowFoto::slotUpdateItemInfo(void)
             index++;
         }
 
-        text = d->currentItem->url().fileName() +
-                   i18nc("(<Image number> of <Images in album>", " (%1 of %2)", index, d->itemsNb);
+        text = i18nc("<Image file name> (<Image number> of <Images in album>)", 
+                     "%1 (%2 of %3)", d->currentItem->url().fileName(), 
+                                      index, d->itemsNb);
     
         setCaption(d->currentItem->url().directory());
     }
