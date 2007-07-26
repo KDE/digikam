@@ -161,7 +161,7 @@ QPixmap AlbumThumbnailLoader::getStandardAlbumIcon(RelativeSize relativeSize)
 
 QPixmap AlbumThumbnailLoader::getStandardAlbumRootIcon(RelativeSize relativeSize)
 {
-    return loadIcon("folder_image", computeIconSize(relativeSize));
+    return loadIcon("folder-image", computeIconSize(relativeSize));
 }
 
 QPixmap AlbumThumbnailLoader::getStandardAlbumIcon(PAlbum *album, RelativeSize relativeSize)
