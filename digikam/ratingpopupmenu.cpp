@@ -62,10 +62,8 @@ RatingPopupMenu::RatingPopupMenu(QWidget* parent)
     starPolygon << QPoint(3,  14);
     starPolygon << QPoint(4,  9);
 
-    QAction *action = addAction(i18n("None"), this, SLOT(slotRatingTriggered()));
-    action->setData(0);
-
     QPixmap starPix(15, 15);
+    starPix.fill(Qt::transparent);
     QPainter p1(&starPix);
     p1.setRenderHint(QPainter::Antialiasing, true);
     p1.setBrush(ThemeEngine::componentData()->textSpecialRegColor());
@@ -73,22 +71,19 @@ RatingPopupMenu::RatingPopupMenu(QWidget* parent)
     p1.drawPolygon(starPolygon, Qt::WindingFill);
     p1.end();
 
-    QPixmap clearPix(starPix.width(), starPix.height());
-    clearPix.fill(palette().color(QPalette::Active, QPalette::Background));
-
-    for (int i = 1 ; i <= RatingMax ; i++)
+    for (int i = 0 ; i <= RatingMax ; i++)
     {
-        QPixmap pix(starPix.width() * 5, starPix.height());
-        pix.fill(palette().color(QPalette::Active, QPalette::Background));
+        QPixmap pix(starPix.width() * i, starPix.height());
+        pix.fill(Qt::transparent);
 
         QPainter p2(&pix);
         p2.drawTiledPixmap(0, 0, i*starPix.width(), pix.height(), starPix);
-        p2.drawTiledPixmap(i*clearPix.width(), 0, 5*clearPix.width()-i*clearPix.width(), pix.height(), clearPix);
         p2.end();
 
         QWidgetAction *action = new QWidgetAction(this);
         QLabel *label         = new QLabel();
-        label->setPixmap(pix);
+        if (i < 1) label->setText(i18n("None"));
+        else label->setPixmap(pix);
         action->setDefaultWidget(label);
         action->setData(i);
         connect(action, SIGNAL(triggered()), this, SLOT(slotRatingTriggered()));
@@ -102,7 +97,7 @@ RatingPopupMenu::~RatingPopupMenu()
 
 void RatingPopupMenu::slotRatingTriggered()
 {
-    int r = qobject_cast<QAction*>(sender())->data().toInt();
+    int r = qobject_cast<QWidgetAction*>(sender())->data().toInt();
     emit rating(r);
 }
 
