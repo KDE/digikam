@@ -1011,7 +1011,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
                 popMenu.insertTitle(SmallIcon("digikam"), i18n("My Albums"));
                 popMenu.insertItem(i18n("Set as Album Thumbnail"), 12);
                 popMenu.insertSeparator(-1);
-                popMenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );
+                popMenu.insertItem(SmallIcon("dialog-cancel"), i18n("C&ancel"));
                 popMenu.setMouseTracking(true);
                 id = popMenu.exec(QCursor::pos());
             }
@@ -1042,12 +1042,12 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
         {
             K3PopupMenu popMenu(this);
             popMenu.insertTitle(SmallIcon("digikam"), i18n("My Albums"));
-            popMenu.insertItem( SmallIcon("goto"), i18n("&Move Here"), 10 );
-            popMenu.insertItem( SmallIcon("editcopy"), i18n("&Copy Here"), 11 );
+            popMenu.insertItem(SmallIcon("footprint"), i18n("&Move Here"), 10 );
+            popMenu.insertItem(SmallIcon("edit-copy"), i18n("&Copy Here"), 11 );
             if (imageIDs.count() == 1)
                 popMenu.insertItem(i18n("Set as Album Thumbnail"), 12);
             popMenu.insertSeparator(-1);
-            popMenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );
+            popMenu.insertItem(SmallIcon("dialog-cancel"), i18n("C&ancel"));
             popMenu.setMouseTracking(true);
             id = popMenu.exec(QCursor::pos());
         }
@@ -1125,10 +1125,10 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
         {
             K3PopupMenu popMenu(this);
             popMenu.insertTitle(SmallIcon("digikam"), i18n("My Albums"));
-            popMenu.insertItem( SmallIcon("goto"), i18n("&Move Here"), 10 );
-            popMenu.insertItem( SmallIcon("editcopy"), i18n("&Copy Here"), 11 );
+            popMenu.insertItem( SmallIcon("footprint"), i18n("&Move Here"), 10 );
+            popMenu.insertItem( SmallIcon("edit-copy"), i18n("&Copy Here"), 11 );
             popMenu.insertSeparator(-1);
-            popMenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );
+            popMenu.insertItem( SmallIcon("dialog-cancel"), i18n("C&ancel") );
             popMenu.setMouseTracking(true);
             id = popMenu.exec(QCursor::pos());
         }
