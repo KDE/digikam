@@ -72,13 +72,6 @@
 #include "albumfolderview.h"
 #include "albumfolderview.moc"
 
-// X11 C Ansi includes.
-
-extern "C"
-{
-#include <X11/Xlib.h>
-}
-
 namespace Digikam
 {
 
@@ -988,20 +981,13 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
         }
 
         int id = 0;
-        char keys_return[32];
-        XQueryKeymap(x11Info().display(), keys_return);
-        int key_1 = XKeysymToKeycode(x11Info().display(), 0xFFE3);
-        int key_2 = XKeysymToKeycode(x11Info().display(), 0xFFE4);
-        int key_3 = XKeysymToKeycode(x11Info().display(), 0xFFE1);
-        int key_4 = XKeysymToKeycode(x11Info().display(), 0xFFE2);
-
+        
         if(srcAlbum == destAlbum)
         {
             // Setting the dropped image as the album thumbnail
             // If the ctrl key is pressed, when dropping the image, the
             // thumbnail is set without a popup menu
-            if (((keys_return[key_1 / 8]) && (1 << (key_1 % 8))) ||
-                ((keys_return[key_2 / 8]) && (1 << (key_2 % 8))))
+            if (e->keyboardModifiers() == Qt::ControlModifier)
             {
                 id = 12;
             }
@@ -1026,15 +1012,13 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
 
         // If shift key is pressed while dragging, move the drag object without
         // displaying popup menu -> move
-        if (((keys_return[key_3 / 8]) && (1 << (key_3 % 8))) ||
-            ((keys_return[key_4 / 8]) && (1 << (key_4 % 8))))
+        if (e->keyboardModifiers() == Qt::ShiftModifier)
         {
             id = 10;
         }
         // If ctrl key is pressed while dragging, copy the drag object without
         // displaying popup menu -> copy
-        else if (((keys_return[key_1 / 8]) && (1 << (key_1 % 8))) ||
-                 ((keys_return[key_2 / 8]) && (1 << (key_2 % 8))))
+        else if (e->keyboardModifiers() == Qt::ControlModifier)
         {
             id = 11;
         }
@@ -1099,25 +1083,17 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
 
         KUrl::List srcURLs = KUrl::List::fromMimeData( e->mimeData() );
 
-        char keys_return[32];
-        XQueryKeymap(x11Info().display(), keys_return);
         int id = 0;
 
-        int key_1 = XKeysymToKeycode(x11Info().display(), 0xFFE3);
-        int key_2 = XKeysymToKeycode(x11Info().display(), 0xFFE4);
-        int key_3 = XKeysymToKeycode(x11Info().display(), 0xFFE1);
-        int key_4 = XKeysymToKeycode(x11Info().display(), 0xFFE2);
         // If shift key is pressed while dropping, move the drag object without
         // displaying popup menu -> move
-        if(((keys_return[key_3 / 8]) && (1 << (key_3 % 8))) ||
-           ((keys_return[key_4 / 8]) && (1 << (key_4 % 8))))
+        if (e->keyboardModifiers() == Qt::ShiftModifier)
         {
             id = 10;
         }
         // If ctrl key is pressed while dropping, copy the drag object without
         // displaying popup menu -> copy
-        else if(((keys_return[key_1 / 8]) && (1 << (key_1 % 8))) ||
-                ((keys_return[key_2 / 8]) && (1 << (key_2 % 8))))
+        else if (e->keyboardModifiers() == Qt::ControlModifier)
         {
             id = 11;
         }
