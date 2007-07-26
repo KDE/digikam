@@ -682,8 +682,10 @@ void ImageWindow::slotUpdateItemInfo()
 
     m_rotatedOrFlipped = false;
 
-    QString text = d->urlCurrent.fileName() + i18n(" (%2 of %3)", QString::number(index+1),
-                                                                  QString::number(d->urlList.count()));
+    QString text = i18nc("<Image file name> (<Image number> of <Images in album>)", 
+                         "%1 (%2 of %3)", d->urlCurrent.fileName(), 
+                                          QString::number(index+1),
+                                          QString::number(d->urlList.count()));
     m_nameLabel->setText(text);
 
     if (d->urlList.count() == 1) 
