@@ -242,7 +242,7 @@ void ScanLib::deleteStaleEntries()
                 "the database because all views depend on the information "
                 "in the database. Do you want it to be removed from the "
                 "database?",
-                "<p>There are %1 items in the database which do not "
+                "<p>There are %n items in the database which do not "
                 "appear to be on disk or are located in the root album of "
                 "the path. These files should be removed from the "
                 "database, however you may lose information.<p>"
