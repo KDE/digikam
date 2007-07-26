@@ -423,7 +423,7 @@ bool ThemeEngine::loadTheme()
 
     // -- thumbnail view ----------------------------------------------------------------
     
-    resource = resourceValue(rootElem, "ThumbnailRegular.Color");
+    resource = resourceValue(rootElem, "ThumbnailRegularColor");
     if (!resource.isEmpty())
         t->thumbRegColor = resource;
 
