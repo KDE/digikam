@@ -473,7 +473,7 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
 
             bgPix = QPixmap(contentsRect().width(), er.height());
 
-            ts = getTileSize() + 2*getMargin();
+            ts   = getTileSize() + 2*getMargin();
             tile = QPixmap(visibleWidth(), ts);
 
             y1 = (cy/ts)*ts;
@@ -493,8 +493,6 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
         }
 
         bgPix.fill(te->baseColor());
-        QPainter p(&tile);
-        QPainter p2(&bgPix);
 
         for (ThumbBarItem *item = firstItem(); item; item = item->next())
         {
@@ -506,6 +504,8 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
                         tile = te->thumbSelPixmap(tile.width(), tile.height());
                     else
                         tile = te->thumbRegPixmap(tile.width(), tile.height());
+                    
+                    QPainter p(&tile);
 
                     if (item == currentItem())
                     {
@@ -548,7 +548,11 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
                         p.drawTiledPixmap(xr, r.y(), wr, r.height(), d->ratingPixmap);
                     }
 
+                    p.end();
+
+                    QPainter p2(&bgPix);
                     p2.drawPixmap(0, item->position() - cy, tile);
+                    p2.end();
                 }
             }
             else
@@ -559,6 +563,8 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
                         tile = te->thumbSelPixmap(tile.width(), tile.height());
                     else
                         tile = te->thumbRegPixmap(tile.width(), tile.height());
+
+                    QPainter p(&tile);
 
                     if (item == currentItem())
                     {
@@ -599,14 +605,15 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
                         int wr     = rating * d->ratingPixmap.width();
                         p.drawTiledPixmap(xr, r.y(), wr, r.height(), d->ratingPixmap);
                     }
+                    
+                    p.end();
 
+                    QPainter p2(&bgPix);
                     p2.drawPixmap(item->position() - cx, 0, tile);
+                    p2.end();
                 }
             }
         }
-
-        p2.end();
-        p.end();
 
         QPainter p3(viewport());
 
@@ -621,6 +628,7 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
     {
         bgPix = QPixmap(contentsRect().width(), contentsRect().height());
         bgPix.fill(te->baseColor());
+
         QPainter p4(&bgPix);
         p4.setPen(QPen(te->textRegColor()));
         p4.drawText(0, 0, bgPix.width(), bgPix.height(),
