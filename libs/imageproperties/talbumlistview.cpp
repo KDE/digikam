@@ -61,13 +61,6 @@
 #include "talbumlistview.h"
 #include "talbumlistview.moc"
 
-// X11 Includes.
-
-extern "C"
-{
-#include <X11/Xlib.h>
-}
-
 namespace Digikam
 {
 
@@ -365,18 +358,13 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
         }
 
         int id = 0;
-        char keys_return[32];
-        XQueryKeymap(x11Info().display(), keys_return);
-        int key_1 = XKeysymToKeycode(x11Info().display(), 0xFFE3);
-        int key_2 = XKeysymToKeycode(x11Info().display(), 0xFFE4);
 
         if(srcAlbum == destAlbum)
         {
             // Setting the dropped image as the album thumbnail
             // If the ctrl key is pressed, when dropping the image, the
             // thumbnail is set without a popup menu
-            if (((keys_return[key_1 / 8]) && (1 << (key_1 % 8))) ||
-                ((keys_return[key_2 / 8]) && (1 << (key_2 % 8))))
+            if (e->keyboardModifiers() == Qt::ControlModifier)
             {
                 id = 12;
             }
@@ -404,8 +392,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
         // If a ctrl key is pressed while dropping the drag object,
         // the tag is assigned to the images without showing a
         // popup menu.
-        if (((keys_return[key_1 / 8]) && (1 << (key_1 % 8))) ||
-            ((keys_return[key_2 / 8]) && (1 << (key_2 % 8))))
+        if (e->keyboardModifiers() == Qt::ControlModifier)
         {
             id = 10;
         }
