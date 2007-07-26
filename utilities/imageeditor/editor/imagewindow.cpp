@@ -584,7 +584,7 @@ void ImageWindow::slotContextMenu()
             ratingMenu = new RatingPopupMenu();
             ratingMenu->menuAction()->setText(i18n("Assign Rating"));
 
-            connect(ratingMenu, SIGNAL(rating(int)),
+            connect(ratingMenu, SIGNAL(signalRatingChanged(int)),
                     this, SLOT(slotAssignRating(int)));
 
             m_contextMenu->addMenu(ratingMenu);

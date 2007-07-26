@@ -206,7 +206,7 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent *e)
 
         ratingMenu = new RatingPopupMenu();
 
-        connect(ratingMenu, SIGNAL(activated(int)),
+        connect(ratingMenu, SIGNAL(signalRatingChanged(int)),
                 this, SLOT(slotAssignRating(int)));
 
         popmenu.insertItem(i18n("Assign Rating"), ratingMenu);
