@@ -2,6 +2,7 @@ digiKam 0.9.3 - Release date: 2007-xx-xx
 
 NEW FEATURES:
 
+General        : Color scheme theme are now XML based (instead X11 format).
 
 digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
