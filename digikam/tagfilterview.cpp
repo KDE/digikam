@@ -44,6 +44,7 @@
 #include <kglobalsettings.h>
 #include <kcursor.h>
 #include <kmessagebox.h>
+#include <kglobal.h>
 
 // Local includes.
 
@@ -64,14 +65,6 @@
 #include "statusprogressbar.h"
 #include "tagfilterview.h"
 #include "tagfilterview.moc"
-
-// X11 includes.
-
-extern "C"
-{
-#include <X11/Xlib.h>
-#include <kglobal.h>
-}
 
 namespace Digikam
 {
@@ -510,16 +503,11 @@ void TagFilterView::contentsDropEvent(QDropEvent *e)
             return;
 
         int id = 0;
-        char keys_return[32];
-        XQueryKeymap(x11Info().display(), keys_return);
-        int key_1 = XKeysymToKeycode(x11Info().display(), 0xFFE3);
-        int key_2 = XKeysymToKeycode(x11Info().display(), 0xFFE4);
 
         // If a ctrl key is pressed while dropping the drag object,
         // the tag is assigned to the images without showing a
         // popup menu.
-        if (((keys_return[key_1 / 8]) && (1 << (key_1 % 8))) ||
-            ((keys_return[key_2 / 8]) && (1 << (key_2 % 8))))
+        if (e->keyboardModifiers() == Qt::ControlModifier)
         {
             id = 10;
         }
