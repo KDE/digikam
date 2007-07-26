@@ -28,9 +28,10 @@
 
 #include <QMenu>
 
+class QAction;
+
 namespace Digikam
 {
-
 
 class RatingPopupMenu : public QMenu
 {
@@ -48,6 +49,7 @@ signals:
 private slots:
 
     void slotRatingTriggered();
+    void slotHovered(QAction *);
 };
 
 }  // namespace Digikam
