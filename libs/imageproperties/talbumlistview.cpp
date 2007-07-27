@@ -30,7 +30,6 @@
 
 // KDE includes.
 
-#include <k3popupmenu.h>
 #include <kmenu.h>
 #include <klocale.h>
 #include <kurl.h>
@@ -295,15 +294,15 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
         if (talbum == itemDrop->m_album)
             return;
 
-        K3PopupMenu popMenu(this);
-        popMenu.insertTitle(SmallIcon("digikam"), i18n("Tags"));
-        popMenu.insertItem(SmallIcon("goto"), i18n("&Move Here"), 10);
-        popMenu.insertSeparator(-1);
-        popMenu.insertItem(SmallIcon("cancel"), i18n("C&ancel"), 20);
+        KMenu popMenu(this);
+        popMenu.addTitle(SmallIcon("digikam"), i18n("Tags"));
+        QAction *moveAction = popMenu.addAction(SmallIcon("goto"), i18n("&Move Here"));
+        popMenu.addSeparator();
+        popMenu.addAction(SmallIcon("cancel"), i18n("C&ancel"));
         popMenu.setMouseTracking(true);
-        int id = popMenu.exec(QCursor::pos());
+        QAction *choice = popMenu.exec(QCursor::pos());
 
-        if(id == 10)
+        if(choice == moveAction)
         {
             TAlbum *newParentTag = 0;
 
@@ -357,30 +356,30 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
             return;
         }
 
-        int id = 0;
-
         if(srcAlbum == destAlbum)
         {
             // Setting the dropped image as the album thumbnail
             // If the ctrl key is pressed, when dropping the image, the
             // thumbnail is set without a popup menu
+            bool set = false;
             if (e->keyboardModifiers() == Qt::ControlModifier)
             {
-                id = 12;
+                set = true;
             }
             else
             {
-                K3PopupMenu popMenu(this);
-                popMenu.insertTitle(SmallIcon("digikam"), i18n("Tags"));
-                popMenu.insertItem(i18n("Set as Tag Thumbnail"), 12);
-                popMenu.insertSeparator(-1);
-                popMenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );
+                KMenu popMenu(this);
+                popMenu.addTitle(SmallIcon("digikam"), i18n("Tags"));
+                QAction *thumbnailAction = popMenu.addAction(i18n("Set as Tag Thumbnail"));
+                popMenu.addSeparator();
+                popMenu.addAction( SmallIcon("cancel"), i18n("C&ancel") );
 
                 popMenu.setMouseTracking(true);
-                id = popMenu.exec(QCursor::pos());
+                QAction *choice = popMenu.exec(QCursor::pos());
+                set = (choice == thumbnailAction);
             }
 
-            if(id == 12)
+            if(set)
             {
                 QString errMsg;
                 AlbumManager::componentData()->updateTAlbumIcon(destAlbum, QString(),
@@ -392,23 +391,26 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
         // If a ctrl key is pressed while dropping the drag object,
         // the tag is assigned to the images without showing a
         // popup menu.
+        bool assign = false;
         if (e->keyboardModifiers() == Qt::ControlModifier)
         {
-            id = 10;
+            assign = true;
         }
         else
         {
-            K3PopupMenu popMenu(this);
-            popMenu.insertTitle(SmallIcon("digikam"), i18n("Tags"));
-            popMenu.insertItem( SmallIcon("tag"), i18n("Assign Tag '%1' to Items", destAlbum->prettyUrl()), 10) ;
-            popMenu.insertSeparator(-1);
-            popMenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );
+            KMenu popMenu(this);
+            popMenu.addTitle(SmallIcon("digikam"), i18n("Tags"));
+            QAction *assignAction =
+                    popMenu.addAction( SmallIcon("tag"), i18n("Assign Tag '%1' to Items", destAlbum->prettyUrl()));
+            popMenu.addSeparator();
+            popMenu.addAction( SmallIcon("cancel"), i18n("C&ancel") );
 
             popMenu.setMouseTracking(true);
-            id = popMenu.exec(QCursor::pos());
+            QAction *choice = popMenu.exec(QCursor::pos());
+            assign = (choice == assignAction);
         }
 
-        if (id == 10)
+        if (assign)
         {
             emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
                                        i18n("Assign tag to pictures. Please wait..."));
