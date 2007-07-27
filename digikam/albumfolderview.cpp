@@ -35,7 +35,6 @@
 
 // KDE includes.
 
-#include <k3popupmenu.h>
 #include <kmenu.h>
 #include <klocale.h>
 #include <kglobal.h>
@@ -434,9 +433,9 @@ void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, 
     QMenu menuExport(i18n("Export"));
     QMenu menuKIPIBatch(i18n("Batch Process"));
 
-    K3PopupMenu popmenu(this);
-    popmenu.insertTitle(SmallIcon("digikam"), i18n("My Albums"));
-    popmenu.insertItem(SmallIcon("albumfolder-new"), i18n("New Album..."), 10);
+    KMenu popmenu(this);
+    popmenu.addTitle(SmallIcon("digikam"), i18n("My Albums"));
+    QAction *newAction = popmenu.addAction(SmallIcon("albumfolder-new"), i18n("New Album..."));
 
     AlbumFolderViewItem *item = dynamic_cast<AlbumFolderViewItem*>(listitem);
     if (item && !item->getAlbum())
@@ -446,19 +445,20 @@ void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, 
     }
 
     // Root folder only shows "New Album..."
+    QAction *renameAction = 0, *propertiesAction = 0, *resetIconAction = 0, *deleteAction = 0;
     if(item && item->parent())
     {
-        popmenu.insertItem(SmallIcon("pencil"), i18n("Rename..."), 14);
-        popmenu.insertItem(SmallIcon("albumfolder-properties"), i18n("Edit Album Properties..."), 11);
-        popmenu.insertItem(SmallIcon("view-refresh"), i18n("Reset Album Icon"), 13);
-        popmenu.insertSeparator();
+        renameAction     = popmenu.addAction(SmallIcon("pencil"), i18n("Rename..."));
+        propertiesAction = popmenu.addAction(SmallIcon("albumfolder-properties"), i18n("Edit Album Properties..."));
+        resetIconAction  = popmenu.addAction(SmallIcon("view-refresh"), i18n("Reset Album Icon"));
+        popmenu.addSeparator();
 
         // Add KIPI Albums plugins Actions
         const QList<QAction*>& albumActions = DigikamApp::getinstance()->menuAlbumActions();
         if(!albumActions.isEmpty())
         {
             foreach(QAction *action, albumActions)
-            {            
+            {
                 popmenu.addAction(action);
             }
         }
@@ -499,51 +499,43 @@ void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, 
         if(!albumActions.isEmpty() || !batchActions.isEmpty() ||
            !importActions.isEmpty())
         {
-            popmenu.insertSeparator(-1);
+            popmenu.addSeparator();
         }
 
         if(AlbumSettings::componentData()->getUseTrash())
         {
-            popmenu.insertItem(SmallIcon("edit-trash"),
-                               i18n("Move Album to Trash"), 12);
+            deleteAction = popmenu.addAction(SmallIcon("edit-trash"), i18n("Move Album to Trash"));
         }
         else
         {
-            popmenu.insertItem(SmallIcon("editshred"),
-                               i18n("Delete Album"), 12);
+            deleteAction = popmenu.addAction(SmallIcon("editshred"), i18n("Delete Album"));
         }
     }
 
-    switch(popmenu.exec((QCursor::pos())))
+    QAction *choice = popmenu.exec(QCursor::pos());
+    if (choice)
     {
-        case 10:
+        if (choice == newAction)
         {
             albumNew(item);
-            break;
         }
-        case 11:
+        else if (choice == propertiesAction)
         {
             albumEdit(item);
-            break;
         }
-        case 12:
-        {
-            albumDelete(item);
-            break;
-        }
-        case 13:
+        else if (choice == resetIconAction)
         {
             QString err;
             AlbumManager::componentData()->updatePAlbumIcon(item->getAlbum(), 0, err);
-            break;
         }
-        case 14:
+        else if (choice == renameAction)
         {
             albumRename(item);
-            break;
         }
-        default:
-            break;
+        else if (choice == deleteAction)
+        {
+            albumDelete(item);
+        }
     }
 }
 
@@ -904,15 +896,15 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
             == AlbumSettings::ByFolder)
         {
             // TODO: Copy?
-            K3PopupMenu popMenu(this);
-            popMenu.insertTitle(SmallIcon("digikam"), i18n("My Albums"));
-            popMenu.insertItem(SmallIcon("goto"), i18n("&Move Here"), 10);
-            popMenu.insertSeparator(-1);
-            popMenu.insertItem(SmallIcon("cancel"), i18n("C&ancel"), 20);
+            KMenu popMenu(this);
+            popMenu.addTitle(SmallIcon("digikam"), i18n("My Albums"));
+            QAction *moveAction = popMenu.addAction(SmallIcon("goto"), i18n("&Move Here"));
+            popMenu.addSeparator();
+            popMenu.addAction(SmallIcon("cancel"), i18n("C&ancel"));
             popMenu.setMouseTracking(true);
-            int id = popMenu.exec(QCursor::pos());
+            QAction *choice = popMenu.exec(QCursor::pos());
 
-            if(id == 10)
+            if(choice == moveAction)
             {
                 PAlbum *album = itemDrag->getAlbum();
                 PAlbum *destAlbum;
@@ -980,29 +972,29 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
             return;
         }
 
-        int id = 0;
-        
         if(srcAlbum == destAlbum)
         {
             // Setting the dropped image as the album thumbnail
             // If the ctrl key is pressed, when dropping the image, the
             // thumbnail is set without a popup menu
+            bool set = false;
             if (e->keyboardModifiers() == Qt::ControlModifier)
             {
-                id = 12;
+                set = true;
             }
             else
             {
-                K3PopupMenu popMenu(this);
-                popMenu.insertTitle(SmallIcon("digikam"), i18n("My Albums"));
-                popMenu.insertItem(i18n("Set as Album Thumbnail"), 12);
-                popMenu.insertSeparator(-1);
-                popMenu.insertItem(SmallIcon("dialog-cancel"), i18n("C&ancel"));
+                KMenu popMenu(this);
+                popMenu.addTitle(SmallIcon("digikam"), i18n("My Albums"));
+                QAction *setAction = popMenu.addAction(i18n("Set as Album Thumbnail"));
+                popMenu.addSeparator();
+                popMenu.addAction(SmallIcon("dialog-cancel"), i18n("C&ancel"));
                 popMenu.setMouseTracking(true);
-                id = popMenu.exec(QCursor::pos());
+                QAction *choice = popMenu.exec(QCursor::pos());
+                set = (setAction == choice);
             }
 
-            if(id == 12)
+            if(set)
             {
                 QString errMsg;
                 AlbumManager::componentData()->updatePAlbumIcon(destAlbum, imageIDs.first(), errMsg);
@@ -1012,53 +1004,57 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
 
         // If shift key is pressed while dragging, move the drag object without
         // displaying popup menu -> move
+        bool move = false, copy = false, setThumbnail = false;
         if (e->keyboardModifiers() == Qt::ShiftModifier)
         {
-            id = 10;
+            move = true;
         }
         // If ctrl key is pressed while dragging, copy the drag object without
         // displaying popup menu -> copy
         else if (e->keyboardModifiers() == Qt::ControlModifier)
         {
-            id = 11;
+            copy = true;
         }
         else
         {
-            K3PopupMenu popMenu(this);
-            popMenu.insertTitle(SmallIcon("digikam"), i18n("My Albums"));
-            popMenu.insertItem(SmallIcon("footprint"), i18n("&Move Here"), 10 );
-            popMenu.insertItem(SmallIcon("edit-copy"), i18n("&Copy Here"), 11 );
+            KMenu popMenu(this);
+            popMenu.addTitle(SmallIcon("digikam"), i18n("My Albums"));
+            QAction *moveAction = popMenu.addAction(SmallIcon("footprint"), i18n("&Move Here"));
+            QAction *copyAction = popMenu.addAction(SmallIcon("edit-copy"), i18n("&Copy Here"));
+            QAction *thumbnailAction = 0;
             if (imageIDs.count() == 1)
-                popMenu.insertItem(i18n("Set as Album Thumbnail"), 12);
-            popMenu.insertSeparator(-1);
-            popMenu.insertItem(SmallIcon("dialog-cancel"), i18n("C&ancel"));
+                thumbnailAction = popMenu.addAction(i18n("Set as Album Thumbnail"));
+            popMenu.addSeparator();
+            popMenu.addAction(SmallIcon("dialog-cancel"), i18n("C&ancel"));
             popMenu.setMouseTracking(true);
-            id = popMenu.exec(QCursor::pos());
+            QAction *choice = popMenu.exec(QCursor::pos());
+            if (choice)
+            {
+                if (choice == moveAction)
+                    move = true;
+                else if (choice == copyAction)
+                    copy = true;
+                else if (choice == thumbnailAction)
+                    setThumbnail = true;
+            }
         }
 
-        switch(id)
+        if (move)
         {
-            case 10:
-            {
-                KIO::Job* job = DIO::move(kioURLs, destAlbum->kurl());
-                connect(job, SIGNAL(result(KJob*)),
-                        this, SLOT(slotDIOResult(KJob*)));
-                break;
-            }
-            case 11:
-            {
-                KIO::Job* job = DIO::copy(kioURLs, destAlbum->kurl());
-                connect(job, SIGNAL(result(KJob*)),
-                        this, SLOT(slotDIOResult(KJob*)));
-                break;
-            }
-            case 12:
-            {
-                QString errMsg;
-                AlbumManager::componentData()->updatePAlbumIcon(destAlbum, imageIDs.first(), errMsg);
-            }
-            default:
-                break;
+            KIO::Job* job = DIO::move(kioURLs, destAlbum->kurl());
+            connect(job, SIGNAL(result(KJob*)),
+                    this, SLOT(slotDIOResult(KJob*)));
+        }
+        else if (copy)
+        {
+            KIO::Job* job = DIO::copy(kioURLs, destAlbum->kurl());
+            connect(job, SIGNAL(result(KJob*)),
+                    this, SLOT(slotDIOResult(KJob*)));
+        }
+        else if (setThumbnail)
+        {
+            QString errMsg;
+            AlbumManager::componentData()->updatePAlbumIcon(destAlbum, imageIDs.first(), errMsg);
         }
 
         return;
@@ -1083,50 +1079,46 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
 
         KUrl::List srcURLs = KUrl::List::fromMimeData( e->mimeData() );
 
-        int id = 0;
-
+        bool move = false, copy = false;
         // If shift key is pressed while dropping, move the drag object without
         // displaying popup menu -> move
         if (e->keyboardModifiers() == Qt::ShiftModifier)
         {
-            id = 10;
+            move = true;
         }
         // If ctrl key is pressed while dropping, copy the drag object without
         // displaying popup menu -> copy
         else if (e->keyboardModifiers() == Qt::ControlModifier)
         {
-            id = 11;
+            copy = true;
         }
         else
         {
-            K3PopupMenu popMenu(this);
-            popMenu.insertTitle(SmallIcon("digikam"), i18n("My Albums"));
-            popMenu.insertItem( SmallIcon("footprint"), i18n("&Move Here"), 10 );
-            popMenu.insertItem( SmallIcon("edit-copy"), i18n("&Copy Here"), 11 );
-            popMenu.insertSeparator(-1);
-            popMenu.insertItem( SmallIcon("dialog-cancel"), i18n("C&ancel") );
+            KMenu popMenu(this);
+            popMenu.addTitle(SmallIcon("digikam"), i18n("My Albums"));
+            QAction *moveAction = popMenu.addAction( SmallIcon("footprint"), i18n("&Move Here"));
+            QAction *copyAction = popMenu.addAction( SmallIcon("edit-copy"), i18n("&Copy Here"));
+            popMenu.addSeparator();
+            popMenu.addAction( SmallIcon("dialog-cancel"), i18n("C&ancel") );
             popMenu.setMouseTracking(true);
-            id = popMenu.exec(QCursor::pos());
+            QAction *choice = popMenu.exec(QCursor::pos());
+            if (choice == copyAction)
+                copy = true;
+            else if (choice == moveAction)
+                move = true;
         }
 
-        switch(id)
+        if (move)
         {
-            case 10:
-            {
-                KIO::Job* job = DIO::move(srcURLs, destAlbum->kurl());
-                connect(job, SIGNAL(result(KJob*)),
-                        this, SLOT(slotDIOResult(KJob*)));
-                break;
-            }
-            case 11:
-            {
-                KIO::Job* job = DIO::copy(srcURLs, destAlbum->kurl());
-                connect(job, SIGNAL(result(KJob*)),
-                        this, SLOT(slotDIOResult(KJob*)));
-                break;
-            }
-            default:
-                break;
+            KIO::Job* job = DIO::move(srcURLs, destAlbum->kurl());
+            connect(job, SIGNAL(result(KJob*)),
+                    this, SLOT(slotDIOResult(KJob*)));
+        }
+        else if (copy)
+        {
+            KIO::Job* job = DIO::copy(srcURLs, destAlbum->kurl());
+            connect(job, SIGNAL(result(KJob*)),
+                    this, SLOT(slotDIOResult(KJob*)));
         }
 
         return;
