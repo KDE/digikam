@@ -25,7 +25,6 @@
 
 #include <Q3ValueList>
 #include <Q3ValueVector>
-#include <Q3PopupMenu>
 #include <QPainter>
 #include <QCursor>
 #include <QString>
@@ -39,11 +38,12 @@
 
 // KDE includes.
 
-#include <kservicetypetrader.h>
+#include <kmimetypetrader.h>
 #include <kdialog.h>
 #include <klocale.h>
 #include <kservice.h>
 #include <krun.h>
+#include <kmenu.h>
 #include <kmimetype.h>
 #include <kcursor.h>
 #include <kdatetable.h>
@@ -359,56 +359,60 @@ void LightTablePreview::slotContextMenu()
     KUrl url(d->imageInfo.fileUrl().path());
     KMimeType::Ptr mimePtr = KMimeType::findByUrl(url, 0, true, true);
 
-    Q3ValueVector<KService::Ptr> serviceVector;
+    QMap<QAction *, KService::Ptr> serviceMap;
 
-    const KService::List offers = KServiceTypeTrader::self()->query(mimePtr->name(), "Type == 'Application'");
+    const KService::List offers = KMimeTypeTrader::self()->query(mimePtr->name());
     KService::List::ConstIterator iter;
     KService::Ptr ptr;
 
-    Q3PopupMenu openWithMenu;
-
-    int index = 100;
+    QMenu openWithMenu;
 
     for( iter = offers.begin(); iter != offers.end(); ++iter )
     {
         ptr = *iter;
-        openWithMenu.insertItem(SmallIcon(ptr->icon()), ptr->name(), index++);
-        serviceVector.push_back(ptr); 
+        QAction *serviceAction = openWithMenu.addAction(SmallIcon(ptr->icon()), ptr->name());
+        serviceMap[serviceAction] = ptr;
     }
+
+    if (openWithMenu.isEmpty())
+        openWithMenu.menuAction()->setEnabled(false);
 
     DPopupMenu popmenu(this);
 
     //-- Zoom actions -----------------------------------------------
 
-    popmenu.insertItem(SmallIcon("viewmag"), i18n("Zoom in"), 17);
-    popmenu.insertItem(SmallIcon("viewmag-"), i18n("Zoom out"), 18);
-    popmenu.insertItem(SmallIcon("view_fit_window"), i18n("Fit to &Window"), 19);
+    QAction *zoomInAction    = popmenu.addAction(SmallIcon("viewmag"), i18n("Zoom in"));
+    QAction *zoomOutAction   = popmenu.addAction(SmallIcon("viewmag-"), i18n("Zoom out"));
+    QAction *fitWindowAction = popmenu.addAction(SmallIcon("view_fit_window"), i18n("Fit to &Window"));
 
     //-- Edit actions -----------------------------------------------
 
-    popmenu.insertSeparator();
-    popmenu.insertItem(SmallIcon("slideshow"), i18n("SlideShow"), 16);
-    popmenu.insertItem(SmallIcon("editimage"), i18n("Edit..."), 12);
-    popmenu.insertItem(i18n("Open With"), &openWithMenu, 13);
+    popmenu.addSeparator();
+    QAction *slideshowAction = popmenu.addAction(SmallIcon("slideshow"), i18n("SlideShow"));
+    QAction *editAction = popmenu.addAction(SmallIcon("editimage"), i18n("Edit..."));
+    popmenu.addMenu(&openWithMenu);
+    openWithMenu.menuAction()->setText(i18n("Open With"));
 
     //-- Trash action -------------------------------------------
 
-    popmenu.insertSeparator();
-    popmenu.insertItem(SmallIcon("edittrash"), i18n("Move to Trash"), 14);
+    popmenu.addSeparator();
+    QAction *trashAction = popmenu.addAction(SmallIcon("edittrash"), i18n("Move to Trash"));
 
     // Bulk assignment/removal of tags --------------------------
 
-    qlonglong id = d->imageInfo.id();
     QList<qlonglong> idList;
     idList << d->imageInfo.id();
 
     assignTagsMenu = new TagsPopupMenu(idList, TagsPopupMenu::ASSIGN);
     removeTagsMenu = new TagsPopupMenu(idList, TagsPopupMenu::REMOVE);
 
-    popmenu.insertSeparator();
+    popmenu.addSeparator();
 
-    popmenu.insertItem(i18n("Assign Tag"), assignTagsMenu);
-    int i = popmenu.insertItem(i18n("Remove Tag"), removeTagsMenu);
+    popmenu.addMenu(assignTagsMenu);
+    assignTagsMenu->menuAction()->setText(i18n("Assign Tag"));
+
+    popmenu.addMenu(removeTagsMenu);
+    removeTagsMenu->menuAction()->setText(i18n("Remove Tag"));
 
     connect(assignTagsMenu, SIGNAL(signalTagActivated(int)),
             this, SLOT(slotAssignTag(int)));
@@ -417,9 +421,9 @@ void LightTablePreview::slotContextMenu()
             this, SLOT(slotRemoveTag(int)));
 
     if (!DatabaseAccess().db()->hasTags(idList))
-        popmenu.setItemEnabled(i, false);
+        removeTagsMenu->menuAction()->setEnabled(false);
 
-    popmenu.insertSeparator();
+    popmenu.addSeparator();
 
     // Assign Star Rating -------------------------------------------
 
@@ -428,62 +432,46 @@ void LightTablePreview::slotContextMenu()
     connect(ratingMenu, SIGNAL(signalRatingChanged(int)),
             this, SLOT(slotAssignRating(int)));
 
-    popmenu.insertItem(i18n("Assign Rating"), ratingMenu);
+    popmenu.addMenu(ratingMenu);
+    ratingMenu->menuAction()->setText(i18n("Assign Rating"));
 
     // --------------------------------------------------------
 
-    int idm = popmenu.exec(QCursor::pos());
+    QAction *choice = popmenu.exec(QCursor::pos());
 
-    switch(idm) 
+    if (choice)
     {
-        case 12:     // Edit...
+        if (choice == editAction)               // Edit...
         {
             emit signalEditItem(d->imageInfo);
-            break;
         }
-
-        case 14:     // Move to trash
+        else if (choice == trashAction)         // Move to trash
         {
             emit signalDeleteItem(d->imageInfo);
-            break;
         }
-
-        case 16:     // SlideShow
+        else if (choice == slideshowAction)     // SlideShow
         {
             emit signalSlideShow();
-            break;
         }
-
-        case 17:     // Zoom in
+        else if (choice == zoomInAction)        // Zoom in
         {
             slotIncreaseZoom();
-            break;
         }
-
-        case 18:     // Zoom out
+        else if (choice == zoomOutAction)       // Zoom out
         {
             slotDecreaseZoom();
-            break;
         }
-
-        case 19:     // Fit to window
+        else if (choice == fitWindowAction)     // Fit to window
         {
             fitToWindow();
-            break;
         }
-
-        default:
-            break;
+        else if (serviceMap.contains(choice))
+        {
+            KService::Ptr imageServicePtr = serviceMap[choice];
+            KRun::run(*imageServicePtr, url, this);
+        }
     }
 
-    // Open With...
-    if (idm >= 100 && idm < 1000) 
-    {
-        KService::Ptr imageServicePtr = serviceVector[idm-100];
-        KRun::run(*imageServicePtr, url, this);
-    }
-
-    serviceVector.clear();
     delete assignTagsMenu;
     delete removeTagsMenu;
     delete ratingMenu;

@@ -187,20 +187,20 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent *e)
     if (e->button() == Qt::RightButton)
     {
         DPopupMenu popmenu(this);
-        popmenu.insertItem(SmallIcon("arrow-left"), i18n("Show on left panel"), 10);
-        popmenu.insertItem(SmallIcon("arrow-right"), i18n("Show on right panel"), 11);
-        popmenu.insertItem(SmallIcon("editimage"), i18n("Edit"), 12);
+        QAction *leftPanelAction  = popmenu.addAction(SmallIcon("arrow-left"), i18n("Show on left panel"));
+        QAction *rightPanelAction = popmenu.addAction(SmallIcon("arrow-right"), i18n("Show on right panel"));
+        QAction *editAction       = popmenu.addAction(SmallIcon("editimage"), i18n("Edit"));
 
         if (d->navigateByPair)
         {
-            popmenu.setItemEnabled(10, false);
-            popmenu.setItemEnabled(11, false);
+            leftPanelAction->setEnabled(false);
+            rightPanelAction->setEnabled(false);
         }
 
-        popmenu.insertSeparator();
-        popmenu.insertItem(SmallIcon("dialog-close"), i18n("Remove"), 13);
-        popmenu.insertItem(SmallIcon("editshred"), i18n("Clear all"), 14);
-        popmenu.insertSeparator();
+        popmenu.addSeparator();
+        QAction *removeAction   = popmenu.addAction(SmallIcon("dialog-close"), i18n("Remove"));
+        QAction *clearAllAction = popmenu.addAction(SmallIcon("editshred"), i18n("Clear all"));
+        popmenu.addSeparator();
 
         // Assign Star Rating -------------------------------------------
 
@@ -209,37 +209,33 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent *e)
         connect(ratingMenu, SIGNAL(signalRatingChanged(int)),
                 this, SLOT(slotAssignRating(int)));
 
-        popmenu.insertItem(i18n("Assign Rating"), ratingMenu);
+        popmenu.addMenu(ratingMenu);
+        ratingMenu->menuAction()->setText(i18n("Assign Rating"));
 
-        switch(popmenu.exec(pos))
+        QAction *choice = popmenu.exec(pos);
+
+        if (choice)
         {
-            case 10:    // Left panel
+            if (choice == leftPanelAction)          // Left panel
             {
                 emit signalSetItemOnLeftPanel(item->info());
-                break;
             }
-            case 11:    // Right panel
+            else if (choice == rightPanelAction)    // Right panel
             {
                 emit signalSetItemOnRightPanel(item->info());
-                break;
             }
-            case 12:    // Edit
+            else if (choice == editAction)          // Edit
             {
                 emit signalEditItem(item->info());
-                break;
             }
-            case 13:    // Remove
+            else if (choice == removeAction)        // Remove
             {
                 emit signalRemoveItem(item->info());
-                break;
             }
-            case 14:    // Clear All
+            else if (choice == clearAllAction)      // Clear All
             {
                 emit signalClearAll();
-                break;
             }
-            default:
-                break;
         }
     }
 
