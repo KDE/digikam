@@ -96,6 +96,8 @@ SET(digikamthemedesigner_SRCS
     themediconview.cpp 
    )
 
+KDE4_ADD_UI_FILES(digikamthemedesigner_SRCS ${CMAKE_SOURCE_DIR}/digikam/libs/dialogs/deletedialogbase.ui)
+
 KDE4_ADD_EXECUTABLE(digikamthemedesigner ${digikamthemedesigner_SRCS})
 
 TARGET_LINK_LIBRARIES(digikamthemedesigner 
