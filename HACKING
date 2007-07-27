@@ -285,3 +285,21 @@ To generate API documentation, you need to install:
 
 Go to 'project' sub-folder and just run doxygen binary program. A new subfolder 
 named 'api' will be create. Warning, this can take a while.
+
+========================================================================
+Speed up the code-compile-test cycle
+========================================================================
+
+Assuming you have setup your environment in ~/.bashrc as is suggested for KDE4 development,
+you can add something like this to your ~/.bashrc:
+
+function digikam_start {
+LD_LIBRARY_PATH=${KDE_BUILD}/extragear/graphics/lib:${LD_LIBRARY_PATH} ${KDE_BUILD}/extragear/graphics/digikam/digikam/digikam
+}
+
+function digikam_start_gdb {
+LD_LIBRARY_PATH=${KDE_BUILD}/extragear/graphics/lib:${LD_LIBRARY_PATH}  gdb ${KDE_BUILD}/extragear/graphics/digikam/digikam/digikam
+}
+
+This allows you to run digikam after compiling without the need of a "make install", even
+if you changed code in the libraries.
