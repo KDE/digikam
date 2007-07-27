@@ -60,8 +60,8 @@ signals:
 private slots:
 
     void slotAboutToShow();
-    void slotToggleTag(bool);
-    void slotAddTag();
+    void slotToggleTag(QAction *);
+    void slotAddTag(QAction *);
 
 private:
 

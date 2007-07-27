@@ -142,11 +142,15 @@ public:
     QList<qlonglong>       selectedImageIDs;
 
     TagsPopupMenu::Mode    mode;
+
+    QActionGroup          *addTagActions;
+    QActionGroup          *toggleTagActions;
 };
 
 TagsPopupMenu::TagsPopupMenu(qlonglong selectedImageId, Mode mode)
              : QMenu(0)
 {
+    d = new TagsPopupMenuPriv;
     d->selectedImageIDs << selectedImageId;
     setup(mode);
 }
@@ -154,17 +158,26 @@ TagsPopupMenu::TagsPopupMenu(qlonglong selectedImageId, Mode mode)
 TagsPopupMenu::TagsPopupMenu(const QList<qlonglong>& selectedImageIds, Mode mode)
              : QMenu(0)
 {
+    d = new TagsPopupMenuPriv;
     d->selectedImageIDs = selectedImageIds;
     setup(mode);
 }
 
 void TagsPopupMenu::setup(Mode mode)
 {
-    d = new TagsPopupMenuPriv;
     d->mode             = mode;
 
     KIconLoader *iconLoader = KIconLoader::global();
     d->addTagPix            = iconLoader->loadIcon("tag", K3Icon::NoGroup, K3Icon::SizeSmall);
+
+    d->addTagActions    = new QActionGroup(this);
+    d->toggleTagActions = new QActionGroup(this);
+
+    connect(d->addTagActions, SIGNAL(triggered(QAction*)),
+            this, SLOT(slotAddTag(QAction*)));
+
+    connect(d->toggleTagActions, SIGNAL(triggered(QAction*)),
+            this, SLOT(slotToggleTag(QAction*)));
 
     connect(this, SIGNAL(aboutToShow()),
             this, SLOT(slotAboutToShow()));
@@ -229,8 +242,10 @@ void TagsPopupMenu::slotAboutToShow()
 
     if (d->mode == ASSIGN)
     {
-        QAction *action = addAction(d->addTagPix, i18n("Add New Tag..."), this, SLOT(slotAddTag()));
+        QAction *action = addAction(d->addTagPix, i18n("Add New Tag..."));
         action->setData(0); // root id
+        d->addTagActions->addAction(action);
+
         if (album->firstChild())
         {
             addSeparator();
@@ -288,8 +303,7 @@ void TagsPopupMenu::iterateAndBuildMenu(QMenu *menu, TAlbum *album)
             }
 
             action->setData(a->id());
-            connect(action, SIGNAL(toggled(bool)),
-                    this, SLOT(toggleTag(bool)));
+            d->toggleTagActions->addAction(action);
             menu->addAction(action);
         }
     }
@@ -306,8 +320,10 @@ QMenu* TagsPopupMenu::buildSubMenu(int tagid)
 
     if (d->mode == ASSIGN)
     {
-        QAction *action = addAction(d->addTagPix, i18n("Add New Tag..."), this, SLOT(slotAddTag()));
+        QAction *action = popup->addAction(d->addTagPix, i18n("Add New Tag..."));
         action->setData(album->id());
+        d->addTagActions->addAction(action);
+
         popup->addSeparator();
     }
 
@@ -316,16 +332,15 @@ QMenu* TagsPopupMenu::buildSubMenu(int tagid)
     KToggleAction *action;
     if ((d->mode == ASSIGN) && (d->assignedTags.contains(album->id())))
     {
-        action = new TagToggleAction(KIcon(pix), album->title(), popup);
+        action = new TagToggleAction(KIcon(pix), album->title(), d->toggleTagActions);
     }
     else
     {
-        action = new KToggleAction(KIcon(pix), album->title(), popup);
+        action = new KToggleAction(KIcon(pix), album->title(), d->toggleTagActions);
     }
 
     action->setData(album->id());
-    connect(action, SIGNAL(toggled(bool)),
-            this, SLOT(toggleTag(bool)));
+    d->toggleTagActions->addAction(action);
     popup->addAction(action);
 
     if (d->mode == REMOVE || album->firstChild())
@@ -338,15 +353,15 @@ QMenu* TagsPopupMenu::buildSubMenu(int tagid)
     return popup;
 }
 
-void TagsPopupMenu::slotToggleTag(bool)
+void TagsPopupMenu::slotToggleTag(QAction *action)
 {
-    int tagID = qobject_cast<QAction*>(sender())->data().toInt();
+    int tagID = action->data().toInt();
     emit signalTagActivated(tagID);
 }
 
-void TagsPopupMenu::slotAddTag()
+void TagsPopupMenu::slotAddTag(QAction *action)
 {
-    int tagID = qobject_cast<QAction*>(sender())->data().toInt();
+    int tagID = action->data().toInt();
 
     AlbumManager* man = AlbumManager::componentData();
     TAlbum* parent    = man->findTAlbum(tagID);
