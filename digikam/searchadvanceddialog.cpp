@@ -27,7 +27,7 @@
 
 // Qt includes.
 
-#include <Q3ValueList>
+#include <QList>
 #include <QPushButton>
 #include <QComboBox>
 #include <QGroupBox>
@@ -81,7 +81,7 @@ public:
 
     QComboBox                        *optionsCombo;
 
-    Q3ValueList<SearchAdvancedBase*>  baseList;
+    QList<SearchAdvancedBase*>        baseList;
 
     QTimer                           *timer;
 
@@ -289,7 +289,7 @@ void SearchAdvancedDialog::slotDelRules()
     if (d->baseList.isEmpty())
         return;
 
-    typedef Q3ValueList<SearchAdvancedBase*> BaseList;
+    typedef QList<SearchAdvancedBase*> BaseList;
 
     BaseList itemsToRemove;
 
@@ -307,7 +307,7 @@ void SearchAdvancedDialog::slotDelRules()
          it != itemsToRemove.end(); ++it)
     {
         SearchAdvancedBase* base = (SearchAdvancedBase*) *it;
-        d->baseList.remove(base);
+        d->baseList.removeAll(base);
         delete base;
     }
 
@@ -327,7 +327,7 @@ void SearchAdvancedDialog::slotDelRules()
 
 void SearchAdvancedDialog::slotGroupRules()
 {
-    typedef Q3ValueList<SearchAdvancedBase*> BaseList;
+    typedef QList<SearchAdvancedBase*> BaseList;
 
     BaseList itemsToGroup;
     BaseList groupsToUnGroupAndGroup;
@@ -348,20 +348,20 @@ void SearchAdvancedDialog::slotGroupRules()
     for (BaseList::iterator it = groupsToUnGroupAndGroup.begin();
          it != groupsToUnGroupAndGroup.end(); ++it)
     {
-        SearchAdvancedGroup* group         = (SearchAdvancedGroup*)*it;
-        BaseList::iterator itemsToGroupPos = itemsToGroup.find(group);
-        BaseList::iterator itPos           = d->baseList.find(group);
+        SearchAdvancedGroup* group = (SearchAdvancedGroup*)*it;
+        int itemsToGroupPos        = itemsToGroup.indexOf(group);
+        int itPos                  = d->baseList.indexOf(group);
 
-        Q3ValueList<SearchAdvancedRule*> childRules = group->childRules();
-        for (Q3ValueList<SearchAdvancedRule*>::iterator iter = childRules.begin();
-                 iter != childRules.end(); ++iter)
+        QList<SearchAdvancedRule*> childRules = group->childRules();
+        for (QList<SearchAdvancedRule*>::iterator iter = childRules.begin();
+             iter != childRules.end(); ++iter)
         {
             d->baseList.insert(itPos, *iter);
             itemsToGroup.insert(itemsToGroupPos, *iter);
         }
         group->removeRules();
-        d->baseList.remove(group);
-        itemsToGroup.remove(group);
+        d->baseList.removeAll(group);
+        itemsToGroup.removeAll(group);
         delete group;
     }
 
@@ -373,7 +373,7 @@ void SearchAdvancedDialog::slotGroupRules()
     SearchAdvancedRule* rule = (SearchAdvancedRule*)(*it);
 
     SearchAdvancedGroup* group = new SearchAdvancedGroup(d->rulesBox);
-    BaseList::iterator itPos   = d->baseList.find(rule);
+    int itPos = d->baseList.indexOf(rule);
     d->baseList.insert(itPos, group);
 
     for (BaseList::iterator it = itemsToGroup.begin();
@@ -384,7 +384,7 @@ void SearchAdvancedDialog::slotGroupRules()
         {
             SearchAdvancedRule* rule = (SearchAdvancedRule*)base;
             group->addRule(rule);
-            d->baseList.remove(rule);
+            d->baseList.removeAll(rule);
         }
     }
 
@@ -404,8 +404,8 @@ void SearchAdvancedDialog::slotGroupRules()
 
 void SearchAdvancedDialog::slotUnGroupRules()
 {
-    typedef Q3ValueList<SearchAdvancedBase*>  BaseList;
-    typedef Q3ValueList<SearchAdvancedGroup*> GroupList;
+    typedef QList<SearchAdvancedBase*>  BaseList;
+    typedef QList<SearchAdvancedGroup*> GroupList;
 
     GroupList itemsToUnGroup;
 
@@ -427,18 +427,18 @@ void SearchAdvancedDialog::slotUnGroupRules()
          it != itemsToUnGroup.end(); ++it)
     {
         SearchAdvancedGroup *group = *it;
-        Q3ValueList<SearchAdvancedRule*> childRules = group->childRules();
+        QList<SearchAdvancedRule*> childRules = group->childRules();
 
-        BaseList::iterator itPos = d->baseList.find(group);
+        int itPos = d->baseList.indexOf(group);
 
-        for (Q3ValueList<SearchAdvancedRule*>::iterator iter = childRules.begin();
+        for (QList<SearchAdvancedRule*>::iterator iter = childRules.begin();
              iter != childRules.end(); ++iter)
         {
             d->baseList.insert(itPos, *iter);
         }
 
         group->removeRules();
-        d->baseList.remove(group);
+        d->baseList.removeAll(group);
         delete group;
     }
 
@@ -475,7 +475,7 @@ void SearchAdvancedDialog::slotTimeOut()
     if (d->baseList.isEmpty())
         return;
 
-    typedef Q3ValueList<SearchAdvancedBase*>  BaseList;
+    typedef QList<SearchAdvancedBase*>  BaseList;
 
     QString grouping;
     int     count    = 0;
@@ -512,9 +512,8 @@ void SearchAdvancedDialog::slotTimeOut()
             QString tempGrouping;
             int curCount = count;
 
-            Q3ValueList<SearchAdvancedRule*> childRules = group->childRules();
-            for (Q3ValueList<SearchAdvancedRule*>::iterator iter =
-                    childRules.begin();
+            QList<SearchAdvancedRule*> childRules = group->childRules();
+            for (QList<SearchAdvancedRule*>::iterator iter = childRules.begin();
                  iter != childRules.end(); ++iter)
             {
                 SearchAdvancedRule* rule = (SearchAdvancedRule*)(*iter);
@@ -569,7 +568,7 @@ void SearchAdvancedDialog::slotChangeButtonStates()
     bool group  = false;
     int counter = 0;
 
-    typedef Q3ValueList<SearchAdvancedBase*>  BaseList;
+    typedef QList<SearchAdvancedBase*>  BaseList;
     for (BaseList::iterator it = d->baseList.begin();
          it != d->baseList.end(); ++it)
     {
