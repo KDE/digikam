@@ -31,9 +31,8 @@
 
 // KDE includes.
 
-#include <k3popupmenu.h>
+#include <kmenu.h>
 #include <klocale.h>
-//#include <kabc/stdaddressbook.h>
 #include <kiconloader.h>
 #include <kapplication.h>
 #include <kmessagebox.h>
@@ -57,6 +56,11 @@
 #include "statusprogressbar.h"
 #include "tagfolderview.h"
 #include "tagfolderview.moc"
+
+#include "config.h"
+#ifdef KDEPIMLIBS_FOUND
+#include <kabc/stdaddressbook.h>
+#endif
 
 namespace Digikam
 {
@@ -118,9 +122,9 @@ public:
         ABCMenu  = 0;
         albumMan = 0;
     }
-    
-    Q3PopupMenu   *ABCMenu;
-    
+
+    QMenu        *ABCMenu;
+
     AlbumManager *albumMan;
 };
 
@@ -394,57 +398,58 @@ void TagFolderView::slotSelectionChanged()
 
 void TagFolderView::slotContextMenu(Q3ListViewItem *item, const QPoint &, int)
 {
-    d->ABCMenu = new Q3PopupMenu;
-    
+    TagFolderViewItem *tag = dynamic_cast<TagFolderViewItem*>(item);
+
+    KMenu popmenu(this);
+    popmenu.addTitle(SmallIcon("digikam"), i18n("My Tags"));
+
+    QAction *newAction, *editAction=0, *resetIconAction=0, *deleteAction=0;
+
+    newAction     = popmenu.addAction(SmallIcon("tag-new"), i18n("New Tag..."));
+
+#ifdef KDEPIMLIBS_FOUND
+    d->ABCMenu = new QMenu(this);
+
     connect( d->ABCMenu, SIGNAL( aboutToShow() ),
              this, SLOT( slotABCContextMenu() ) );
 
-    TagFolderViewItem *tag = dynamic_cast<TagFolderViewItem*>(item);
-
-    K3PopupMenu popmenu(this);
-    popmenu.insertTitle(SmallIcon("digikam"), i18n("My Tags"));
-    popmenu.insertItem(SmallIcon("tag-new"), i18n("New Tag..."), 10);
-    popmenu.insertItem(SmallIcon("tag-addressbook"), i18n("Create Tag From AddressBook"), d->ABCMenu);
+    popmenu.addMenu(d->ABCMenu);
+    d->ABCMenu->menuAction()->setIcon(SmallIcon("tag-addressbook"));
+    d->ABCMenu->menuAction()->setText(i18n("Create Tag From AddressBook"));
+#endif
 
     if(tag && tag->parent())
     {
-        popmenu.insertItem(SmallIcon("tag-properties"), i18n("Edit Tag Properties..."), 11);
-        popmenu.insertItem(SmallIcon("tag-reset"),      i18n("Reset Tag Icon"),         13);
-        popmenu.insertSeparator(-1);
-        popmenu.insertItem(SmallIcon("tag-delete"),     i18n("Delete Tag"),             12);
+        editAction       = popmenu.addAction(SmallIcon("tag-properties"), i18n("Edit Tag Properties..."));
+        resetIconAction  = popmenu.addAction(SmallIcon("tag-reset"),      i18n("Reset Tag Icon"));
+        popmenu.addSeparator();
+        deleteAction = popmenu.addAction(SmallIcon("tag-delete"),     i18n("Delete Tag"));
     }
 
-    int choice = popmenu.exec((QCursor::pos()));
-    switch( choice )
+    QAction *choice = popmenu.exec((QCursor::pos()));
+    if (choice)
     {
-        case 10:
+        if (choice == newAction)
         {
             tagNew(tag);
-            break;
         }
-        case 11:
+        if (choice == editAction)
         {
             tagEdit(tag);
-            break;
         }
-        case 12:
+        if (choice == deleteAction)
         {
             tagDelete(tag);
-            break;
         }
-        case 13:
+        if (choice == resetIconAction)
         {
             QString errMsg;
             AlbumManager::componentData()->updateTAlbumIcon(tag->getTag(), QString("tag"), 0, errMsg);
-            break;
         }
-        default:
-            break;
-    }
-
-    if ( choice > 100 )
-    {
-        tagNew( tag, d->ABCMenu->text( choice ), "tag-people" );
+        else
+        {
+            tagNew( tag, choice->text(), "tag-people" );
+        }
     }
 
     delete d->ABCMenu;
@@ -453,30 +458,30 @@ void TagFolderView::slotContextMenu(Q3ListViewItem *item, const QPoint &, int)
 
 void TagFolderView::slotABCContextMenu()
 {
-/*    d->ABCMenu->clear();
+#ifdef KDEPIMLIBS_FOUND
+    d->ABCMenu->clear();
 
-    int counter = 100;
     KABC::AddressBook* ab = KABC::StdAddressBook::self();
     QStringList names;
     for ( KABC::AddressBook::Iterator it = ab->begin(); it != ab->end(); ++it )
     {
         names.push_back(it->formattedName());
     }
-
     qSort(names);
 
     for ( QStringList::Iterator it = names.begin(); it != names.end(); ++it )
     {
         QString name = *it;
-        if ( !name.isNull() )
-            d->ABCMenu->insertItem( name, ++counter );
+        if (!name.isNull() )
+            d->ABCMenu->addAction(name);
     }
 
-    if (counter == 100)
+    if (d->ABCMenu->isEmpty())
     {
-        d->ABCMenu->insertItem( i18n("No AddressBook entries found"), ++counter );
-        d->ABCMenu->setItemEnabled( counter, false );
-    }*/
+        QAction *nothingFound = d->ABCMenu->addAction(i18n("No AddressBook entries found"));
+        nothingFound->setEnabled(false);
+    }
+#endif
 }
 
 void TagFolderView::tagNew()
@@ -693,19 +698,20 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
 
         if(!talbum)
             return;
-        
+
         if (talbum == itemDrop->getTag())
             return;
 
-        K3PopupMenu popMenu(this);
-        popMenu.insertTitle(SmallIcon("digikam"), i18n("My Tags"));
-        popMenu.insertItem(SmallIcon("goto"), i18n("&Move Here"), 10);
-        popMenu.insertSeparator(-1);
-        popMenu.insertItem(SmallIcon("cancel"), i18n("C&ancel"), 20);
-        popMenu.setMouseTracking(true);
-        int id = popMenu.exec(QCursor::pos());
+        KMenu popMenu(this);
+        popMenu.addTitle(SmallIcon("digikam"), i18n("My Tags"));
 
-        if(id == 10)
+        QAction *gotoAction = popMenu.addAction(SmallIcon("goto"), i18n("&Move Here"));
+        popMenu.addSeparator();
+        popMenu.addAction(SmallIcon("cancel"), i18n("C&ancel"));
+        popMenu.setMouseTracking(true);
+        QAction *choice = popMenu.exec(QCursor::pos());
+
+        if(choice == gotoAction)
         {
             TAlbum *newParentTag = 0;
 
@@ -759,30 +765,30 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
             return;
         }
 
-        int id = 0;
-
         if(srcAlbum == destAlbum)
         {
             // Setting the dropped image as the album thumbnail
             // If the ctrl key is pressed, when dropping the image, the
             // thumbnail is set without a popup menu
+            bool set = false;
             if (e->keyboardModifiers() == Qt::ControlModifier)
             {
-                id = 12;
+                set = true;
             }
             else
             {
-                K3PopupMenu popMenu(this);
-                popMenu.insertTitle(SmallIcon("digikam"), i18n("My Tags"));
-                popMenu.insertItem(i18n("Set as Tag Thumbnail"), 12);
-                popMenu.insertSeparator(-1);
-                popMenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );
+                KMenu popMenu(this);
+                popMenu.addTitle(SmallIcon("digikam"), i18n("My Tags"));
+                QAction *setAction = popMenu.addAction(i18n("Set as Tag Thumbnail"));
+                popMenu.addSeparator();
+                popMenu.addAction( SmallIcon("cancel"), i18n("C&ancel") );
 
                 popMenu.setMouseTracking(true);
-                id = popMenu.exec(QCursor::pos());
+                QAction *choice = popMenu.exec(QCursor::pos());
+                set = (choice == setAction);
             }
 
-            if(id == 12)
+            if(set)
             {
                 QString errMsg;
                 AlbumManager::componentData()->updateTAlbumIcon(destAlbum, QString(),
@@ -794,23 +800,26 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
         // If a ctrl key is pressed while dropping the drag object,
         // the tag is assigned to the images without showing a
         // popup menu.
+        bool assign = false;
         if (e->keyboardModifiers() == Qt::ControlModifier)
         {
-            id = 10;
+            assign = true;
         }
         else
         {
-            K3PopupMenu popMenu(this);
-            popMenu.insertTitle(SmallIcon("digikam"), i18n("My Tags"));
-            popMenu.insertItem( SmallIcon("tag"), i18n("Assign Tag '%1' to Items", destAlbum->prettyUrl()), 10) ;
-            popMenu.insertSeparator(-1);
-            popMenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );
+            KMenu popMenu(this);
+            popMenu.addTitle(SmallIcon("digikam"), i18n("My Tags"));
+            QAction * assignAction =
+                    popMenu.addAction( SmallIcon("tag"), i18n("Assign Tag '%1' to Items", destAlbum->prettyUrl()));
+            popMenu.addSeparator();
+            popMenu.addAction( SmallIcon("cancel"), i18n("C&ancel") );
 
             popMenu.setMouseTracking(true);
-            id = popMenu.exec(QCursor::pos());
+            QAction *choice = popMenu.exec(QCursor::pos());
+            assign = (choice == assignAction);
         }
 
-        if (id == 10)
+        if (assign)
         {
             emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
                                        i18n("Assigning image tags. Please wait..."));

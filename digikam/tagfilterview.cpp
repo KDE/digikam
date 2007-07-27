@@ -35,8 +35,7 @@
 
 // KDE includes.
 
-#include <k3popupmenu.h>
-//#include <kabc/stdaddressbook.h>
+#include <kmenu.h>
 #include <klocale.h>
 #include <kapplication.h>
 #include <kconfig.h>
@@ -65,6 +64,11 @@
 #include "statusprogressbar.h"
 #include "tagfilterview.h"
 #include "tagfilterview.moc"
+
+#include "config.h"
+#ifdef KDEPIMLIBS_FOUND
+#include <kabc/stdaddressbook.h>
+#endif
 
 namespace Digikam
 {
@@ -178,7 +182,7 @@ public:
 
     QPoint                          dragStartPos;    
 
-    Q3PopupMenu                     *ABCMenu;
+    QMenu                          *ABCMenu;
 
     TagFilterView::ToggleAutoTags   toggleAutoTags;
 
@@ -447,19 +451,19 @@ void TagFilterView::contentsDropEvent(QDropEvent *e)
 
         if(!talbum)
             return;
-        
+
         if (talbum == itemDrop->m_tag)
             return;
 
-        K3PopupMenu popMenu(this);
-        popMenu.insertTitle(SmallIcon("digikam"), i18n("Tag Filters"));
-        popMenu.insertItem(SmallIcon("goto"), i18n("&Move Here"), 10);
-        popMenu.insertSeparator(-1);
-        popMenu.insertItem(SmallIcon("cancel"), i18n("C&ancel"), 20);
+        KMenu popMenu(this);
+        popMenu.addTitle(SmallIcon("digikam"), i18n("Tag Filters"));
+        QAction *gotoAction = popMenu.addAction(SmallIcon("goto"), i18n("&Move Here"));
+        popMenu.addSeparator();
+        popMenu.addAction(SmallIcon("cancel"), i18n("C&ancel"));
         popMenu.setMouseTracking(true);
-        int id = popMenu.exec(QCursor::pos());
+        QAction *choice = popMenu.exec(QCursor::pos());
 
-        if(id == 10)
+        if(choice == gotoAction)
         {
             TAlbum *newParentTag = 0;
 
@@ -502,29 +506,31 @@ void TagFilterView::contentsDropEvent(QDropEvent *e)
         if (urls.isEmpty() || kioURLs.isEmpty() || albumIDs.isEmpty() || imageIDs.isEmpty())
             return;
 
-        int id = 0;
 
         // If a ctrl key is pressed while dropping the drag object,
         // the tag is assigned to the images without showing a
         // popup menu.
+        bool assignTag = false, setThumbnail = false;
         if (e->keyboardModifiers() == Qt::ControlModifier)
         {
-            id = 10;
+            assignTag = true;
         }
         else
         {
-            K3PopupMenu popMenu(this);
-            popMenu.insertTitle(SmallIcon("digikam"), i18n("Tag Filters"));
-            popMenu.insertItem(SmallIcon("tag"), i18n("Assign Tag '%1' to Items", destAlbum->prettyUrl()), 10) ;
-            popMenu.insertItem(i18n("Set as Tag Thumbnail"),  11);
-            popMenu.insertSeparator(-1);
-            popMenu.insertItem(SmallIcon("cancel"), i18n("C&ancel"));
+            KMenu popMenu(this);
+            popMenu.addTitle(SmallIcon("digikam"), i18n("Tag Filters"));
+            QAction *assignAction = popMenu.addAction(SmallIcon("tag"), i18n("Assign Tag '%1' to Items", destAlbum->prettyUrl()));
+            QAction *thumbnailAction = popMenu.addAction(i18n("Set as Tag Thumbnail"));
+            popMenu.addSeparator();
+            popMenu.addAction(SmallIcon("cancel"), i18n("C&ancel"));
 
             popMenu.setMouseTracking(true);
-            id = popMenu.exec(QCursor::pos());
+            QAction *choice = popMenu.exec(QCursor::pos());
+            assignTag = choice == assignAction;
+            setThumbnail = choice == thumbnailAction;
         }
 
-        if (id == 10)
+        if (assignTag)
         {
             emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
                                        i18n("Assigning image tags. Please wait..."));
@@ -551,7 +557,7 @@ void TagFilterView::contentsDropEvent(QDropEvent *e)
 
             emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
         }
-        else if(id == 11)
+        else if(setThumbnail)
         {
             QString errMsg;
             AlbumManager::componentData()->updateTAlbumIcon(destAlbum, QString(),
@@ -758,93 +764,145 @@ void TagFilterView::slotContextMenu(Q3ListViewItem* it, const QPoint&, int)
     if (item && item->m_untagged)
         return;
 
-    d->ABCMenu = new Q3PopupMenu;
-    
-    connect(d->ABCMenu, SIGNAL( aboutToShow() ),
-            this, SLOT( slotABCContextMenu() ));
+    KMenu popmenu(this);
+    popmenu.addTitle(SmallIcon("digikam"), i18n("Tag Filters"));
 
-    K3PopupMenu popmenu(this);
-    popmenu.insertTitle(SmallIcon("digikam"), i18n("Tag Filters"));
-    popmenu.insertItem(SmallIcon("tag-new"), i18n("New Tag..."), 10);
-    popmenu.insertItem(SmallIcon("tag-addressbook"), i18n("Create Tag From AddressBook"), d->ABCMenu);
+    QAction *newAction, *editAction=0, *resetIconAction=0, *deleteAction=0;
+
+    newAction     = popmenu.addAction(SmallIcon("tag-new"), i18n("New Tag..."));
+
+#ifdef KDEPIMLIBS_FOUND
+    d->ABCMenu = new QMenu(this);
+
+    connect( d->ABCMenu, SIGNAL( aboutToShow() ),
+             this, SLOT( slotABCContextMenu() ) );
+
+    popmenu.addMenu(d->ABCMenu);
+    d->ABCMenu->menuAction()->setIcon(SmallIcon("tag-addressbook"));
+    d->ABCMenu->menuAction()->setText(i18n("Create Tag From AddressBook"));
+#endif
 
     if (item)
     {
-        popmenu.insertItem(SmallIcon("tag-properties"), i18n("Edit Tag Properties..."), 11);
-        popmenu.insertItem(SmallIcon("tag-reset"),      i18n("Reset Tag Icon"),         13);
-        popmenu.insertSeparator(-1);
-        popmenu.insertItem(SmallIcon("tag-delete"),     i18n("Delete Tag"),             12);
+        editAction      = popmenu.addAction(SmallIcon("tag-properties"), i18n("Edit Tag Properties..."));
+        resetIconAction = popmenu.addAction(SmallIcon("tag-reset"),      i18n("Reset Tag Icon"));
+        popmenu.addSeparator();
+        deleteAction    = popmenu.addAction(SmallIcon("tag-delete"),     i18n("Delete Tag"));
     }
- 
-    popmenu.insertSeparator(-1);
 
-    Q3PopupMenu selectTagsMenu;
-    selectTagsMenu.insertItem(i18n("All Tags"),   14);
+    popmenu.addSeparator();
+
+    QMenu selectTagsMenu;
+    QAction *selectAllTagsAction, *selectChildrenAction=0, *selectParentsAction=0;
+    selectAllTagsAction = selectTagsMenu.addAction(i18n("All Tags"));
     if (item)
     {
-        selectTagsMenu.insertSeparator(-1);
-        selectTagsMenu.insertItem(i18n("Children"),     17);
-        selectTagsMenu.insertItem(i18n("Parents"),    19);
+        selectTagsMenu.addSeparator();
+        selectChildrenAction = selectTagsMenu.addAction(i18n("Children"));
+        selectParentsAction  = selectTagsMenu.addAction(i18n("Parents"));
     }
-    popmenu.insertItem(i18n("Select"), &selectTagsMenu);
+    popmenu.addMenu(&selectTagsMenu);
+    selectTagsMenu.menuAction()->setText(i18n("Select"));
 
-    Q3PopupMenu deselectTagsMenu;
-    deselectTagsMenu.insertItem(i18n("All Tags"), 15);
+    QMenu deselectTagsMenu;
+    QAction *deselectAllTagsAction, *deselectChildrenAction=0, *deselectParentsAction=0;
+    deselectAllTagsAction = deselectTagsMenu.addAction(i18n("All Tags"));
     if (item)
     {
-        deselectTagsMenu.insertSeparator(-1);
-        deselectTagsMenu.insertItem(i18n("Children"),   18);
-        deselectTagsMenu.insertItem(i18n("Parents"),  20);
+        deselectTagsMenu.addSeparator();
+        deselectChildrenAction = deselectTagsMenu.addAction(i18n("Children"));
+        deselectParentsAction  = deselectTagsMenu.addAction(i18n("Parents"));
     }
-    popmenu.insertItem(i18n("Deselect"), &deselectTagsMenu);
+    popmenu.addMenu(&deselectTagsMenu);
+    deselectTagsMenu.menuAction()->setText(i18n("Deselect"));
 
-    popmenu.insertItem(i18n("Invert Selection"),  16);
-    popmenu.insertSeparator(-1);
+    QAction *invertAction;
+    invertAction = popmenu.addAction(i18n("Invert Selection"));
+    popmenu.addSeparator();
 
-    Q3PopupMenu toggleAutoMenu;
-    toggleAutoMenu.setCheckable(true);
-    toggleAutoMenu.insertItem(i18n("None"),    21);
-    toggleAutoMenu.insertSeparator(-1);
-    toggleAutoMenu.insertItem(i18n("Children"),  22);
-    toggleAutoMenu.insertItem(i18n("Parents"), 23);
-    toggleAutoMenu.insertItem(i18n("Both"),    24);
-    toggleAutoMenu.setItemChecked(21 + d->toggleAutoTags, true);
-    popmenu.insertItem(i18n("Toogle Auto"), &toggleAutoMenu);
 
-    Q3PopupMenu matchingCongMenu;
-    matchingCongMenu.setCheckable(true);
-    matchingCongMenu.insertItem(i18n("Or Between Tags"),  25);
-    matchingCongMenu.insertItem(i18n("And Between Tags"), 26);
-    matchingCongMenu.setItemChecked((d->matchingCond == AlbumLister::OrCondition) ? 25 : 26, true);
-    popmenu.insertItem(i18n("Matching Condition"), &matchingCongMenu);
+    QMenu toggleAutoMenu;
+    QAction *toggleNoneAction, *toggleChildrenAction, *toggleParentsAction, *toggleBothAction;
+    QActionGroup toggleGroup(this);
+    toggleNoneAction = new QAction(i18n("None"), &toggleGroup);
+    toggleChildrenAction = new QAction(i18n("Children"), &toggleGroup);
+    toggleParentsAction = new QAction(i18n("Parents"), &toggleGroup);
+    toggleBothAction = new QAction(i18n("Both"), &toggleGroup);
 
-    ToggleAutoTags oldAutoTags = d->toggleAutoTags;            
+    toggleNoneAction->setCheckable(true);
+    toggleChildrenAction->setCheckable(true);
+    toggleParentsAction->setCheckable(true);
+    toggleBothAction->setCheckable(true);
 
-    int choice = popmenu.exec((QCursor::pos()));
-    switch( choice )
+    toggleAutoMenu.addAction(toggleNoneAction);
+    toggleAutoMenu.addSeparator();
+    toggleAutoMenu.addAction(toggleChildrenAction);
+    toggleAutoMenu.addAction(toggleParentsAction);
+    toggleAutoMenu.addAction(toggleBothAction);
+
+    switch (d->toggleAutoTags)
     {
-        case 10:    // New Tag.
+        case NoToggleAuto:
+            toggleNoneAction->setChecked(true);
+            break;
+        case Children:
+            toggleChildrenAction->setChecked(true);
+            break;
+        case Parents:
+            toggleParentsAction->setChecked(true);
+            break;
+        case ChildrenAndParents:
+            toggleBothAction->setChecked(true);
+            break;
+    }
+
+    popmenu.addMenu(&toggleAutoMenu);
+    toggleAutoMenu.menuAction()->setText(i18n("Toogle Auto"));
+
+
+    QAction *orBetweenAction, *andBetweenAction;
+    QMenu matchingCondMenu;
+    QActionGroup conditionGroup(this);
+
+    orBetweenAction = new QAction(i18n("Or Between Tags"), &conditionGroup);
+    andBetweenAction = new QAction(i18n("And Between Tags"), &conditionGroup);
+
+    orBetweenAction->setCheckable(true);
+    andBetweenAction->setCheckable(true);
+
+    matchingCondMenu.addAction(orBetweenAction);
+    matchingCondMenu.addAction(andBetweenAction);
+    if (d->matchingCond == AlbumLister::OrCondition)
+        orBetweenAction->setChecked(true);
+    else
+        andBetweenAction->setChecked(true);
+    popmenu.addMenu(&matchingCondMenu);
+    matchingCondMenu.menuAction()->setText(i18n("Matching Condition"));
+
+    ToggleAutoTags oldAutoTags = d->toggleAutoTags;
+
+    QAction *choice = popmenu.exec((QCursor::pos()));
+
+    if (choice)
+    {
+        if (choice == newAction)                    // New Tag.
         {
             tagNew(item);
-            break;
         }
-        case 11:    // Edit Tag Properties.
+        else if (choice == editAction)              // Edit Tag Properties.
         {
             tagEdit(item);
-            break;
         }
-        case 12:    // Delete Tag.
+        else if (choice == deleteAction)            // Delete Tag.
         {
             tagDelete(item);
-            break;
         }
-        case 13:    // Reset Tag Icon.
+        else if (choice == resetIconAction)         // Reset Tag Icon.
         {
             QString errMsg;
             AlbumManager::componentData()->updateTAlbumIcon(item->m_tag, QString("tag"), 0, errMsg);
-            break;
-        }        
-        case 14:    // Select All Tags.
+        }
+        else if (choice == selectAllTagsAction)     // Select All Tags.
         {
             d->toggleAutoTags = TagFilterView::NoToggleAuto;
             Q3ListViewItemIterator it(this, Q3ListViewItemIterator::NotChecked);
@@ -860,9 +918,8 @@ void TagFilterView::slotContextMenu(Q3ListViewItem* it, const QPoint&, int)
             }
             triggerChange();
             d->toggleAutoTags = oldAutoTags;
-            break;
         }
-        case 15:    // Deselect All Tags.
+        else if (choice == deselectAllTagsAction)    // Deselect All Tags.
         {
             d->toggleAutoTags = TagFilterView::NoToggleAuto;
             Q3ListViewItemIterator it(this, Q3ListViewItemIterator::Checked);
@@ -878,9 +935,8 @@ void TagFilterView::slotContextMenu(Q3ListViewItem* it, const QPoint&, int)
             }
             triggerChange();
             d->toggleAutoTags = oldAutoTags;
-            break;
         }
-        case 16:       // Invert All Tags Selection.
+        else if (choice == invertAction)             // Invert All Tags Selection.
         {
             d->toggleAutoTags = TagFilterView::NoToggleAuto;
             Q3ListViewItemIterator it(this);
@@ -896,83 +952,69 @@ void TagFilterView::slotContextMenu(Q3ListViewItem* it, const QPoint&, int)
             }
             triggerChange();
             d->toggleAutoTags = oldAutoTags;
-            break;
         }
-        case 17:   // Select Child Tags.
+        else if (choice == selectChildrenAction)     // Select Child Tags.
         {
             d->toggleAutoTags = TagFilterView::NoToggleAuto;
             toggleChildTags(item, true);
             TagFilterViewItem *tItem = (TagFilterViewItem*)item->m_tag->extraData(this);
-            tItem->setOn(true);            
+            tItem->setOn(true);
             d->toggleAutoTags = oldAutoTags;
-            break;
         }
-        case 18:   // Deselect Child Tags.
+        else if (choice == deselectChildrenAction)   // Deselect Child Tags.
         {
             d->toggleAutoTags = TagFilterView::NoToggleAuto;
             toggleChildTags(item, false);
             TagFilterViewItem *tItem = (TagFilterViewItem*)item->m_tag->extraData(this);
-            tItem->setOn(false);            
+            tItem->setOn(false);
             d->toggleAutoTags = oldAutoTags;
-            break;
         }
-        case 19:   // Select Parent Tags.
+        else if (choice == selectParentsAction)     // Select Parent Tags.
         {
             d->toggleAutoTags = TagFilterView::NoToggleAuto;
             toggleParentTags(item, true);
             TagFilterViewItem *tItem = (TagFilterViewItem*)item->m_tag->extraData(this);
-            tItem->setOn(true);            
+            tItem->setOn(true);
             d->toggleAutoTags = oldAutoTags;
-            break;
         }
-        case 20:   // Deselect Parent Tags.
+        else if (choice == deselectParentsAction)   // Deselect Parent Tags.
         {
             d->toggleAutoTags = TagFilterView::NoToggleAuto;
             toggleParentTags(item, false);
             TagFilterViewItem *tItem = (TagFilterViewItem*)item->m_tag->extraData(this);
-            tItem->setOn(false);            
+            tItem->setOn(false);
             d->toggleAutoTags = oldAutoTags;
-            break;
         }
-        case 21:   // No toggle auto tags.
+        else if (choice == toggleNoneAction)        // No toggle auto tags.
         {
             d->toggleAutoTags = NoToggleAuto;
-            break;
         }
-        case 22:   // Toggle auto Children tags.
+        else if (choice == toggleChildrenAction)    // Toggle auto Children tags.
         {
             d->toggleAutoTags = Children;
-            break;
         }
-        case 23:   // Toggle auto Parents tags.
+        else if (choice == toggleParentsAction)     // Toggle auto Parents tags.
         {
             d->toggleAutoTags = Parents;
-            break;
         }
-        case 24:   // Toggle auto Children and Parents tags.
+        else if (choice == toggleBothAction)        // Toggle auto Children and Parents tags.
         {
             d->toggleAutoTags = ChildrenAndParents;
-            break;
         }
-        case 25:    // Or Between Tags.
+        else if (choice == orBetweenAction)         // Or Between Tags.
         {
             d->matchingCond = AlbumLister::OrCondition;
             triggerChange();
-            break;
         }
-        case 26:    // And Between Tags.
+        else if (choice == andBetweenAction)        // And Between Tags.
         {
             d->matchingCond = AlbumLister::AndCondition;
             triggerChange();
-            break;
         }
-        default:
-            break;
-    }
-
-    if ( choice > 100 )
-    {
-        tagNew(item, d->ABCMenu->text( choice ), "tag-people" );
+        else                                        // ABC menu
+        {
+            tagNew(item, choice->text(), "tag-people" );
+        }
     }
 
     delete d->ABCMenu;
@@ -981,30 +1023,30 @@ void TagFilterView::slotContextMenu(Q3ListViewItem* it, const QPoint&, int)
 
 void TagFilterView::slotABCContextMenu()
 {
-/*    d->ABCMenu->clear();
+#ifdef KDEPIMLIBS_FOUND
+    d->ABCMenu->clear();
 
-    int counter = 100;
     KABC::AddressBook* ab = KABC::StdAddressBook::self();
     QStringList names;
     for ( KABC::AddressBook::Iterator it = ab->begin(); it != ab->end(); ++it )
     {
         names.push_back(it->formattedName());
     }
-
     qSort(names);
 
     for ( QStringList::Iterator it = names.begin(); it != names.end(); ++it )
     {
         QString name = *it;
-        if ( !name.isNull() )
-            d->ABCMenu->insertItem( name, ++counter );
+        if (!name.isNull() )
+            d->ABCMenu->addAction(name);
     }
 
-    if (counter == 100)
+    if (d->ABCMenu->isEmpty())
     {
-        d->ABCMenu->insertItem( i18n("No AddressBook entries found"), ++counter );
-        d->ABCMenu->setItemEnabled( counter, false );
-    }*/
+        QAction *nothingFound = d->ABCMenu->addAction(i18n("No AddressBook entries found"));
+        nothingFound->setEnabled(false);
+    }
+#endif
 }
 
 void TagFilterView::tagNew(TagFilterViewItem* item, const QString& _title, const QString& _icon)
