@@ -201,7 +201,7 @@ Album::Type Album::type() const
 
 void Album::setExtraData(const void* key, void* value)
 {
-    m_extraMap.replace(key, value);
+    m_extraMap.insert(key, value);
 }
 
 void Album::removeExtraData(const void* key)
@@ -216,7 +216,7 @@ void* Album::extraData(const void* key) const
     if (it == m_extraMap.end())
         return 0;
 
-    return it.data();
+    return it.value();
 }
 
 bool Album::isRoot() const
