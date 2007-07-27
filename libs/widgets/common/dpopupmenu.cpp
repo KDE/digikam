@@ -54,11 +54,9 @@ namespace Digikam
 QImage DPopupMenu::s_dpopupmenu_sidePixmap;
 QColor DPopupMenu::s_dpopupmenu_sidePixmapColor;
 
-DPopupMenu::DPopupMenu( QWidget* parent, const char* name )
-          : Q3PopupMenu(parent)
+DPopupMenu::DPopupMenu( QWidget* parent )
+          : KMenu(parent)
 {
-    setObjectName(name);
-
     // Must be initialized so that we know the size on first invocation
     if ( s_dpopupmenu_sidePixmap.isNull() )
         generateSidePixmap();
@@ -133,27 +131,27 @@ QColor DPopupMenu::calcPixmapColor()
 
 void DPopupMenu::setMinimumSize(const QSize & s)
 {
-    Q3PopupMenu::setMinimumSize(s.width() + s_dpopupmenu_sidePixmap.width(), s.height());
+    KMenu::setMinimumSize(s.width() + s_dpopupmenu_sidePixmap.width(), s.height());
 }
 
 void DPopupMenu::setMaximumSize(const QSize & s)
 {
-    Q3PopupMenu::setMaximumSize(s.width() + s_dpopupmenu_sidePixmap.width(), s.height());
+    KMenu::setMaximumSize(s.width() + s_dpopupmenu_sidePixmap.width(), s.height());
 }
 
 void DPopupMenu::setMinimumSize(int w, int h)
 {
-    Q3PopupMenu::setMinimumSize(w + s_dpopupmenu_sidePixmap.width(), h);
+    KMenu::setMinimumSize(w + s_dpopupmenu_sidePixmap.width(), h);
 }
 
 void DPopupMenu::setMaximumSize(int w, int h)
 {
-    Q3PopupMenu::setMaximumSize(w + s_dpopupmenu_sidePixmap.width(), h);
+    KMenu::setMaximumSize(w + s_dpopupmenu_sidePixmap.width(), h);
 }
 
 void DPopupMenu::resizeEvent(QResizeEvent * e)
 {
-    Q3PopupMenu::resizeEvent( e );
+    KMenu::resizeEvent( e );
 
 #if 0
     setFrameRect( QStyle::visualRect( QRect( s_dpopupmenu_sidePixmap.width(), 0,
@@ -165,7 +163,7 @@ void DPopupMenu::resizeEvent(QResizeEvent * e)
 void DPopupMenu::resize( int width, int height )
 {
     width = qMax(width, maximumSize().width());
-    Q3PopupMenu::resize(width, height);
+    KMenu::resize(width, height);
 }
 
 void DPopupMenu::paintEvent( QPaintEvent* e )
@@ -191,7 +189,7 @@ void DPopupMenu::paintEvent( QPaintEvent* e )
         p.drawImage( drawRect.topLeft(), s_dpopupmenu_sidePixmap, pixRect );
     }
 
-    Q3PopupMenu::paintEvent( e );
+    KMenu::paintEvent( e );
 
     p.setClipRegion( e->region() );
 }

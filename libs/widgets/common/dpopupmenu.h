@@ -29,12 +29,16 @@
 
 // Qt includes.
 
-#include <Q3PopupMenu>
+#include <QMenu>
 #include <QColor>
 #include <QImage>
 #include <QRect>
 #include <QPaintEvent>
 #include <QResizeEvent>
+
+// KDE includes
+
+#include <kmenu.h>
 
 // Local includes.
 
@@ -45,13 +49,13 @@ class QSize;
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DPopupMenu : public Q3PopupMenu
+class DIGIKAM_EXPORT DPopupMenu : public KMenu
 {
     Q_OBJECT
 
 public:
 
-    DPopupMenu(QWidget *parent = 0, const char *name = 0);
+    DPopupMenu(QWidget *parent = 0);
 
     int sidePixmapWidth() const { return s_dpopupmenu_sidePixmap.width(); }
 
