@@ -24,7 +24,6 @@
 // Qt includes.
 
 #include <Q3ValueList>
-#include <Q3PopupMenu>
 #include <Q3ValueVector>
 #include <QPainter>
 #include <QCursor>
@@ -36,12 +35,13 @@
 
 // KDE includes.
 
-#include <kservicetypetrader.h>
+#include <kmimetypetrader.h>
 #include <kdialog.h>
 #include <klocale.h>
 #include <kservice.h>
 #include <krun.h>
 #include <kaction.h>
+#include <kmenu.h>
 #include <kmimetype.h>
 #include <kcursor.h>
 #include <kdatetable.h>
@@ -339,47 +339,51 @@ void ImagePreviewView::slotContextMenu()
     KUrl url(d->imageInfo.fileUrl().path());
     KMimeType::Ptr mimePtr = KMimeType::findByUrl(url, 0, true, true);
 
-    Q3ValueVector<KService::Ptr> serviceVector;
+    QMap<QAction *,KService::Ptr> serviceMap;
 
-    const KService::List offers = KServiceTypeTrader::self()->query(mimePtr->name(), "Type == 'Application'");
+    const KService::List offers = KMimeTypeTrader::self()->query(mimePtr->name());
     KService::List::ConstIterator iter;
     KService::Ptr ptr;
 
-    Q3PopupMenu openWithMenu;
-
-    int index = 100;
+    QMenu openWithMenu;
 
     for( iter = offers.begin(); iter != offers.end(); ++iter )
     {
         ptr = *iter;
-        openWithMenu.insertItem(SmallIcon(ptr->icon()), ptr->name(), index++);
-        serviceVector.push_back(ptr); 
+        QAction *serviceAction = openWithMenu.addAction(SmallIcon(ptr->icon()), ptr->name());
+        serviceMap[serviceAction] = ptr;
     }
+
+    if (openWithMenu.isEmpty())
+        openWithMenu.menuAction()->setEnabled(false);
 
     //-- Navigate actions -------------------------------------------
 
     DPopupMenu popmenu(this);
-    popmenu.insertItem(SmallIcon("back"), i18n("Back"), 10);
-    if (!d->hasPrev) popmenu.setItemEnabled(10, false);
+    QAction *backAction        = popmenu.addAction(SmallIcon("back"), i18n("Back"));
+    if (!d->hasPrev)
+        backAction->setEnabled(false);
 
-    popmenu.insertItem(SmallIcon("forward"), i18n("Forward"), 11);
-    if (!d->hasNext) popmenu.setItemEnabled(11, false);
+    QAction *forwardAction     = popmenu.addAction(SmallIcon("forward"), i18n("Forward"));
+    if (!d->hasNext)
+        forwardAction->setEnabled(false);
 
-    popmenu.insertItem(SmallIcon("folder_image"), i18n("Back to Album"), 15);
-    
+    QAction *backToAlbumAction = popmenu.addAction(SmallIcon("folder_image"), i18n("Back to Album"));
+
     //-- Edit actions -----------------------------------------------
 
-    popmenu.insertSeparator();
-    popmenu.insertItem(SmallIcon("datashow"), i18n("SlideShow"), 16);
-    popmenu.insertItem(SmallIcon("editimage"), i18n("Edit..."), 12);
-    popmenu.insertItem(SmallIcon("lighttable"), i18n("Add to Light Table"), 17);
-    popmenu.insertItem(i18n("Open With"), &openWithMenu, 13);
+    popmenu.addSeparator();
+    QAction *slideshowAction  = popmenu.addAction(SmallIcon("datashow"),   i18n("SlideShow"));
+    QAction *editAction       = popmenu.addAction(SmallIcon("editimage"),  i18n("Edit..."));
+    QAction *lighttableAction = popmenu.addAction(SmallIcon("lighttable"), i18n("Add to Light Table"));
+    popmenu.addMenu(&openWithMenu);
+    openWithMenu.menuAction()->setText(i18n("Open With"));
 
     // Merge in the KIPI plugins actions ----------------------------
 
     KIPI::PluginLoader* kipiPluginLoader      = KIPI::PluginLoader::componentData();
     KIPI::PluginLoader::PluginList pluginList = kipiPluginLoader->pluginList();
-    
+
     for (KIPI::PluginLoader::PluginList::const_iterator it = pluginList.begin();
         it != pluginList.end(); ++it)
     {
@@ -390,12 +394,12 @@ void ImagePreviewView::slotContextMenu()
             DDebug() << "Found JPEGLossless plugin" << endl;
 
             QList<KAction*> actionList = plugin->actions();
-            
+
             for (QList<KAction*>::const_iterator iter = actionList.begin();
                 iter != actionList.end(); ++iter)
             {
                 KAction* action = *iter;
-                
+
                 if (action->objectName().toLatin1() == QString::fromLatin1("jpeglossless_rotate"))
                 {
                     popmenu.addAction(action);
@@ -406,8 +410,8 @@ void ImagePreviewView::slotContextMenu()
 
     //-- Trash action -------------------------------------------
 
-    popmenu.insertSeparator();
-    popmenu.insertItem(SmallIcon("edittrash"), i18n("Move to Trash"), 14);
+    popmenu.addSeparator();
+    QAction *trashAction = popmenu.addAction(SmallIcon("edittrash"), i18n("Move to Trash"));
 
     // Bulk assignment/removal of tags --------------------------
 
@@ -417,10 +421,13 @@ void ImagePreviewView::slotContextMenu()
     assignTagsMenu = new TagsPopupMenu(idList, TagsPopupMenu::ASSIGN);
     removeTagsMenu = new TagsPopupMenu(idList, TagsPopupMenu::REMOVE);
 
-    popmenu.insertSeparator();
+    popmenu.addSeparator();
 
-    popmenu.insertItem(i18n("Assign Tag"), assignTagsMenu);
-    int i = popmenu.insertItem(i18n("Remove Tag"), removeTagsMenu);
+    popmenu.addMenu(assignTagsMenu);
+    assignTagsMenu->menuAction()->setText(i18n("Assign Tag"));
+
+    popmenu.addMenu(removeTagsMenu);
+    removeTagsMenu->menuAction()->setText(i18n("Remove Tag"));
 
     connect(assignTagsMenu, SIGNAL(signalTagActivated(int)),
             this, SLOT(slotAssignTag(int)));
@@ -429,79 +436,61 @@ void ImagePreviewView::slotContextMenu()
             this, SLOT(slotRemoveTag(int)));
 
     if (!DatabaseAccess().db()->hasTags( idList ))
-        popmenu.setItemEnabled(i, false);
+        removeTagsMenu->menuAction()->setEnabled(false);
 
-    popmenu.insertSeparator();
+    popmenu.addSeparator();
 
     // Assign Star Rating -------------------------------------------
 
     ratingMenu = new RatingPopupMenu();
-    
+
     connect(ratingMenu, SIGNAL(signalRatingChanged(int)),
             this, SLOT(slotAssignRating(int)));
 
-    popmenu.insertItem(i18n("Assign Rating"), ratingMenu);
+    popmenu.addMenu(ratingMenu);
+    ratingMenu->menuAction()->setText(i18n("Assign Rating"));
 
     // --------------------------------------------------------
 
-    int idm = popmenu.exec(QCursor::pos());
+    QAction *choice = popmenu.exec(QCursor::pos());
 
-    switch(idm) 
+    if (choice)
     {
-        case 10:     // Back
+        if (choice == backAction)     // Back
         {
             emit signalPrevItem();
-            break;
         }
-
-        case 11:     // Forward
+        else if (choice == forwardAction) // Forward
         {
             emit signalNextItem();
-            break;
         }
-
-        case 12:     // Edit...
+        else if (choice == editAction)     // Edit...
         {
             emit signalEditItem();
-            break;
         }
-
-        case 14:     // Move to trash
+        else if (choice == trashAction)     // Move to trash
         {
             emit signalDeleteItem();
-            break;
         }
-
-        case 15:     // Back to album
+        else if (choice == backToAlbumAction)     // Back to album
         {
             emit signalBack2Album();
-            break;
         }
-
-        case 16:     // SlideShow
+        else if (choice == slideshowAction)     // SlideShow
         {
             emit signalSlideShow();
-            break;
         }
-
-        case 17:     // Place onto Light Table
+        else if (choice == lighttableAction)     // Place onto Light Table
         {
             emit signalInsert2LightTable();
-            break;
         }
-
-        default:
-            break;
+        else if (serviceMap.contains(choice))
+        {
+            KService::Ptr imageServicePtr = serviceMap[choice];
+            KRun::run(*imageServicePtr, url,this);
+        }
     }
 
-    // Open With...
-    if (idm >= 100 && idm < 1000) 
-    {
-        KService::Ptr imageServicePtr = serviceVector[idm-100];
-        KRun::run(*imageServicePtr, url,this);
-    }
-
-    serviceVector.clear();
     delete assignTagsMenu;
     delete removeTagsMenu;
     delete ratingMenu;
