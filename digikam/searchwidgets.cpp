@@ -198,7 +198,7 @@ void SearchAdvancedRule::setValues(const KUrl& url)
     for (int i=0; i< RuleKeyTableCount; i++)
         if (RuleKeyTable[i].key == url.queryItem("1.key"))
         {
-            m_key->setCurrentText( i18n(RuleKeyTable[i].keyText) );
+            m_key->setCurrentIndex(i);
         }
 
     // set the operator and the last widget
@@ -207,7 +207,7 @@ void SearchAdvancedRule::setValues(const KUrl& url)
         if ( RuleOpTable[i].key == url.queryItem("1.op") &&
              RuleOpTable[i].cat == m_widgetType )
         {
-            m_operator->setCurrentText( i18n(RuleOpTable[i].keyText) );
+            m_operator->setCurrentIndex(i);
         }
 
     // Set the value for the last widget.
@@ -274,7 +274,7 @@ void SearchAdvancedRule::slotKeyChanged(int id)
         m_operator->addItem( i18n(RuleOpTable[i].keyText) );
 
         if ( currentOperator == RuleOpTable[i].key )
-            m_operator->setCurrentText( currentOperator );
+            m_operator->setCurrentIndex(i);
     }
     m_operator->adjustSize();
     setValueWidget( currentType, m_widgetType );
