@@ -75,12 +75,14 @@ extern "C"
 #include <kservice.h>
 #include <krun.h>
 #include <kaction.h>
+#include <kmenu.h>
 #include <kstandarddirs.h>
 #include <kiconeffect.h>
 #include <kdeversion.h>
 #include <kcalendarsystem.h>
 #include <kinputdialog.h>
 #include <kio/jobuidelegate.h>
+#include <kmimetypetrader.h>
 
 // LibKipi includes.
 
@@ -500,7 +502,7 @@ void AlbumIconView::slotRightButtonClicked(const QPoint& pos)
         return;
     }
 
-    Q3PopupMenu popmenu(this);
+    QMenu popmenu(this);
     KAction *paste    = KStandardAction::paste(this, SLOT(slotPaste()), 0);
     QMimeSource *data = kapp->clipboard()->data(QClipboard::Clipboard);
 
@@ -518,43 +520,45 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 {
     if (!item)
         return;
-    
+
     AlbumIconItem* iconItem = static_cast<AlbumIconItem *>(item);
 
     //-- Open With Actions ------------------------------------
 
     KMimeType::Ptr mimePtr = KMimeType::findByUrl(iconItem->imageInfo().fileUrl(), 0, true, true);
 
-    Q3ValueVector<KService::Ptr> serviceVector;
+    QMap<QAction*, KService::Ptr> serviceMap;
 
-    const KService::List offers = KServiceTypeTrader::self()->query(mimePtr->name(), "Type == 'Application'");
+    const KService::List offers = KMimeTypeTrader::self()->query(mimePtr->name());
     KService::List::ConstIterator iter;
     KService::Ptr ptr;
 
-    Q3PopupMenu openWithMenu;
-
-    int index = 100;
+    KMenu openWithMenu;
 
     for( iter = offers.begin(); iter != offers.end(); ++iter )
     {
         ptr = *iter;
-        openWithMenu.insertItem(SmallIcon(ptr->icon()), ptr->name(), index++);
-        serviceVector.push_back(ptr); 
+        QAction *serviceAction = openWithMenu.addAction(SmallIcon(ptr->icon()), ptr->name());
+        serviceMap[serviceAction] = ptr;
     }
+
+    if (openWithMenu.isEmpty())
+        openWithMenu.menuAction()->setEnabled(false);
 
     // --------------------------------------------------------
 
     DPopupMenu popmenu(this);
-    popmenu.insertItem(SmallIcon("viewimage"), i18n("View..."), 18);
-    popmenu.insertItem(SmallIcon("editimage"), i18n("Edit..."), 10);
-    popmenu.insertItem(SmallIcon("lighttable"), i18n("Add to Light Table"), 19);
-    popmenu.insertItem(i18n("Open With"), &openWithMenu, 11);
+    QAction *viewAction       = popmenu.addAction(SmallIcon("viewimage"), i18n("View..."));
+    QAction *editAction       = popmenu.addAction(SmallIcon("editimage"), i18n("Edit..."));
+    QAction *lighttableAction = popmenu.addAction(SmallIcon("lighttable"), i18n("Add to Light Table"));
+    popmenu.addMenu(&openWithMenu);
+    openWithMenu.menuAction()->setText(i18n("Open With"));
 
     // Merge in the KIPI plugins actions ----------------------------
 
     KIPI::PluginLoader* kipiPluginLoader      = KIPI::PluginLoader::componentData();
     KIPI::PluginLoader::PluginList pluginList = kipiPluginLoader->pluginList();
-    
+
     for (KIPI::PluginLoader::PluginList::const_iterator it = pluginList.begin();
          it != pluginList.end(); ++it)
     {
@@ -565,12 +569,12 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
             DDebug() << "Found JPEGLossless plugin" << endl;
 
             QList<KAction*> actionList = plugin->actions();
-            
+
             for (QList<KAction*>::const_iterator iter = actionList.begin();
                 iter != actionList.end(); ++iter)
             {
                 KAction* action = *iter;
-                
+
                 if (action->objectName().toLatin1() == QString::fromLatin1("jpeglossless_rotate"))
                 {
                     popmenu.addAction(action);
@@ -581,23 +585,24 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 
     // --------------------------------------------------------
 
-    popmenu.insertItem(SmallIcon("pencil"), i18n("Rename..."), 15);
-    popmenu.insertSeparator();
+    QAction *renameAction = popmenu.addAction(SmallIcon("pencil"), i18n("Rename..."));
+    popmenu.addSeparator();
 
     // --------------------------------------------------------
 
+    QAction *thumbnailAction = 0;
     if (d->currentAlbum)
     {
         if (d->currentAlbum->type() == Album::PHYSICAL )
-            popmenu.insertItem(i18n("Set as Album Thumbnail"), 17);
+            thumbnailAction = popmenu.addAction(i18n("Set as Album Thumbnail"));
         else if (d->currentAlbum->type() == Album::TAG )
-            popmenu.insertItem(i18n("Set as Tag Thumbnail"), 17);
+            thumbnailAction = popmenu.addAction(i18n("Set as Tag Thumbnail"));
     }
 
-    popmenu.insertSeparator();
+    popmenu.addSeparator();
 
     // --------------------------------------------------------
-    
+
     KAction *copy     = KStandardAction::copy(this, SLOT(slotCopy()), 0);
     KAction *paste    = KStandardAction::paste(this, SLOT(slotPaste()), 0);
     QMimeSource *data = kapp->clipboard()->data(QClipboard::Clipboard);
@@ -605,11 +610,11 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     if(!data || !Q3UriDrag::canDecode(data))
     {
         paste->setEnabled(false);
-    }    
+    }
 
     popmenu.addAction(copy);
-    popmenu.addAction(paste);    
-    popmenu.insertSeparator();
+    popmenu.addAction(paste);
+    popmenu.addSeparator();
 
     // --------------------------------------------------------
 
@@ -624,10 +629,10 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
         }
     }
 
-    popmenu.insertItem(SmallIcon("edittrash"),
-                       i18np("Move to Trash", "Move %n Files to Trash" , selectedImageIDs.count() ), 16);
+    QAction *trashAction = popmenu.addAction(SmallIcon("edittrash"),
+                                             i18np("Move to Trash", "Move %n Files to Trash" , selectedImageIDs.count() ));
 
-    popmenu.insertSeparator();
+    popmenu.addSeparator();
 
     // Bulk assignment/removal of tags --------------------------
 
@@ -640,91 +645,81 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     connect(removeTagsPopup, SIGNAL(signalTagActivated(int)),
             this, SLOT(slotRemoveTag(int)));
 
-    popmenu.insertItem(i18n("Assign Tag"), assignTagsPopup);
+    popmenu.addMenu(assignTagsPopup);
+    assignTagsPopup->menuAction()->setText(i18n("Assign Tag"));
 
-    int removeTagId = popmenu.insertItem(i18n("Remove Tag"), removeTagsPopup);
+    popmenu.addMenu(removeTagsPopup);
+    removeTagsPopup->menuAction()->setText(i18n("Remove Tag"));
 
     // Performance: Only check for tags if there are <250 images selected
-    if (selectedImageIDs.count() > 250 ||
-        !DatabaseAccess().db()->hasTags(selectedImageIDs))
-        popmenu.setItemEnabled(removeTagId, false);
+    if (selectedImageIDs.count() > 250
+         || !DatabaseAccess().db()->hasTags(selectedImageIDs))
+        removeTagsPopup->menuAction()->setEnabled(false);
 
-    popmenu.insertSeparator();
+    popmenu.addSeparator();
 
     // Assign Star Rating -------------------------------------------
 
     RatingPopupMenu ratingMenu;
-    
+
     connect(&ratingMenu, SIGNAL(signalRatingChanged(int)),
             this, SLOT(slotAssignRating(int)));
 
-    popmenu.insertItem(i18n("Assign Rating"), &ratingMenu);
+    popmenu.addMenu(&ratingMenu);
+    ratingMenu.menuAction()->setText(i18n("Assign Rating"));
 
     // --------------------------------------------------------
-        
-    int id = popmenu.exec(pos);
 
-    switch(id) 
+    QAction *choice = popmenu.exec(pos);
+
+    if (choice)
     {
-      case 10: 
-      {
-          slotDisplayItem(iconItem);
-          break;
-      }
-  
-      case 15: 
-      {
-          slotRename(iconItem);
-          break;
-      }
-  
-      case 16: 
-      {
-          slotDeleteSelectedItems();
-          break;
-      }
-  
-      case 17: 
-      {
-          slotSetAlbumThumbnail(iconItem);
-          break;
-      }
-
-      case 18: 
-      {
-          signalPreviewItem(iconItem);
-          break;
-      }
-  
-      case 19: 
-      {
-          insertSelectionToLightTable();
-          break;
-      }
-
-      default:
-          break;
+        if (choice == editAction)
+        {
+            slotDisplayItem(iconItem);
+        }
+        else if (choice == renameAction)
+        {
+            slotRename(iconItem);
+        }
+        else if (choice == trashAction)
+        {
+            slotDeleteSelectedItems();
+        }
+        else if (choice == thumbnailAction)
+        {
+            slotSetAlbumThumbnail(iconItem);
+        }
+        else if (choice == viewAction)
+        {
+            signalPreviewItem(iconItem);
+        }
+        else if (choice == lighttableAction)
+        {
+            insertSelectionToLightTable();
+        }
+        else
+        {
+            if (serviceMap.contains(choice))
+            {
+                KService::Ptr imageServicePtr = serviceMap[choice];
+                KUrl::List urlList;
+                for (IconItem *it = firstItem(); it; it=it->nextItem())
+                {
+                    if (it->isSelected())
+                    {
+                        AlbumIconItem *selItem = static_cast<AlbumIconItem *>(it);
+                        urlList.append(selItem->imageInfo().fileUrl());
+                    }
+                }
+                if (urlList.count())
+                    KRun::run(*imageServicePtr, urlList, this);
+            }
+        }
     }
 
     //---------------------------------------------------------------
 
-    if (id >= 100 && id < 1000) 
-    {
-        KService::Ptr imageServicePtr = serviceVector[id-100];
-        KUrl::List urlList;
-        for (IconItem *it = firstItem(); it; it=it->nextItem())
-        {
-            if (it->isSelected())
-            {
-                AlbumIconItem *selItem = static_cast<AlbumIconItem *>(it);
-                urlList.append(selItem->imageInfo().fileUrl());
-            }
-        }
-        if (urlList.count())
-            KRun::run(*imageServicePtr, urlList, this);
-    }
-
-    serviceVector.clear();
     delete assignTagsPopup;
     delete removeTagsPopup;
     delete copy;
@@ -1213,32 +1208,25 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
 
         KUrl::List srcURLs = KUrl::List::fromMimeData( event->mimeData() );
 
-        Q3PopupMenu popMenu(this);
-        popMenu.insertItem( SmallIcon("goto"), i18n("&Move Here"), 10 );
-        popMenu.insertItem( SmallIcon("editcopy"), i18n("&Copy Here"), 11 );
-        popMenu.insertSeparator(-1);
-        popMenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );
+        QMenu popMenu(this);
+        QAction *moveAction = popMenu.addAction( SmallIcon("goto"), i18n("&Move Here"));
+        QAction *copyAction = popMenu.addAction( SmallIcon("editcopy"), i18n("&Copy Here"));
+        popMenu.addSeparator();
+        popMenu.addAction( SmallIcon("cancel"), i18n("C&ancel") );
 
         popMenu.setMouseTracking(true);
-        int id = popMenu.exec(QCursor::pos());
-        switch(id) 
+        QAction *choice = popMenu.exec(QCursor::pos());
+        if (choice == moveAction)
         {
-            case 10: 
-            {
-                KIO::Job* job = DIO::move(srcURLs, destURL);
-                connect(job, SIGNAL(result(KJob*)),
-                        this, SLOT(slotDIOResult(KJob*)));
-                break;
-            }
-            case 11: 
-            {
-                KIO::Job* job = DIO::copy(srcURLs, destURL);
-                connect(job, SIGNAL(result(KJob*)),
-                        this, SLOT(slotDIOResult(KJob*)));
-                break;
-            }
-            default:
-                break;
+            KIO::Job* job = DIO::move(srcURLs, destURL);
+            connect(job, SIGNAL(result(KJob*)),
+                    this, SLOT(slotDIOResult(KJob*)));
+        }
+        else if (choice == copyAction)
+        {
+            KIO::Job* job = DIO::copy(srcURLs, destURL);
+            connect(job, SIGNAL(result(KJob*)),
+                    this, SLOT(slotDIOResult(KJob*)));
         }
     }
     else if(TagDrag::canDecode(event))
@@ -1253,7 +1241,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
 
         if (talbum)
         {
-            Q3PopupMenu popMenu(this);
+            QMenu popMenu(this);
 
             bool moreItemsSelected = false;
             bool itemDropped = false;
@@ -1271,25 +1259,27 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                 }
             }
 
+            QAction *assignToSelectedAction = 0;
             if (moreItemsSelected)
-                popMenu.insertItem(SmallIcon("tag"), 
-                                   i18n("Assign '%1' to &Selected Items",talbum->tagPath().mid(1)), 10);
+                assignToSelectedAction =
+                        popMenu.addAction(SmallIcon("tag"), i18n("Assign '%1' to &Selected Items",talbum->tagPath().mid(1)));
 
+            QAction *assignToThisAction = 0;
             if (itemDropped)
-                popMenu.insertItem(SmallIcon("tag"),
-                                   i18n("Assign '%1' to &This Item",talbum->tagPath().mid(1)),   12);
+                assignToThisAction =
+                        popMenu.addAction(SmallIcon("tag"), i18n("Assign '%1' to &This Item",talbum->tagPath().mid(1)));
 
-            popMenu.insertItem(SmallIcon("tag"), 
-                               i18n("Assign '%1' to &All Items",talbum->tagPath().mid(1)),          11);
+            QAction *assignToAllAction =
+                popMenu.addAction(SmallIcon("tag"), i18n("Assign '%1' to &All Items",talbum->tagPath().mid(1)));
 
-            popMenu.insertSeparator(-1);
-            popMenu.insertItem(SmallIcon("cancel"), i18n("&Cancel"));
+            popMenu.addSeparator();
+            popMenu.addAction(SmallIcon("cancel"), i18n("&Cancel"));
 
             popMenu.setMouseTracking(true);
-            int id = popMenu.exec(QCursor::pos());
-            switch(id) 
+            QAction *choice = popMenu.exec(QCursor::pos());
+            if (choice)
             {
-                case 10:    // Selected Items
+                if (choice == assignToSelectedAction)    // Selected Items
                 {
                     emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
                                                i18n("Assigning image tags. Please wait..."));
@@ -1298,9 +1288,8 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                     changeTagOnImageInfos(selectedImageInfos(), QList<int>() << tagID, true, true);
 
                     emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
-                    break;
                 }
-                case 11:    // All Items
+                else if (choice == assignToAllAction)    // All Items
                 {
                     emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
                                                i18n("Assigning image tags. Please wait..."));
@@ -1308,9 +1297,8 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                     changeTagOnImageInfos(allImageInfos(), QList<int>() << tagID, true, true);
 
                     emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
-                    break;
                 }
-                case 12:    // Dropped Item only.
+                else if (choice == assignToThisAction)  // Dropped Item only.
                 {
                     AlbumIconItem *albumItem = findItem(event->pos());
                     if (albumItem)
@@ -1319,10 +1307,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                         infos << albumItem->imageInfo();
                         changeTagOnImageInfos(infos, QList<int>() << tagID, true, false);
                     }
-                    break;
                 }
-                default:
-                    break;
             }
         }
     }
@@ -1333,7 +1318,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
         Q3ValueList<int> tagIDs;
         ds >> tagIDs;
 
-        Q3PopupMenu popMenu(this);
+        QMenu popMenu(this);
 
         bool moreItemsSelected = false;
         bool itemDropped = false;
@@ -1351,32 +1336,34 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
             }
         }
 
+        QAction *assignToSelectedAction = 0;
         if (moreItemsSelected)
-            popMenu.insertItem(SmallIcon("tag"), i18n("Assign Tags to &Selected Items"), 10);
+            assignToSelectedAction = popMenu.addAction(SmallIcon("tag"), i18n("Assign Tags to &Selected Items"));
 
+        QAction *assignToThisAction = 0;
         if (itemDropped)
-            popMenu.insertItem(SmallIcon("tag"), i18n("Assign Tags to &This Item"),   12);
+            assignToThisAction = popMenu.addAction(SmallIcon("tag"), i18n("Assign Tags to &This Item"));
 
-        popMenu.insertItem(SmallIcon("tag"), i18n("Assign Tags to &All Items"),          11);
+        QAction *assignToAllAction =
+            popMenu.addAction(SmallIcon("tag"), i18n("Assign Tags to &All Items"));
 
-        popMenu.insertSeparator(-1);
-        popMenu.insertItem(SmallIcon("cancel"), i18n("&Cancel"));
+        popMenu.addSeparator();
+        popMenu.addAction(SmallIcon("cancel"), i18n("&Cancel"));
 
         popMenu.setMouseTracking(true);
-        int id = popMenu.exec(QCursor::pos());
-        switch(id) 
+        QAction *choice = popMenu.exec(QCursor::pos());
+        if (choice)
         {
-            case 10:    // Selected Items
+            if (choice == assignToSelectedAction)    // Selected Items
             {
-                emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
+                emit signalProgressBarMode(StatusProgressBar::ProgressBarMode,
                                             i18n("Assigning image tags. Please wait..."));
 
                 changeTagOnImageInfos(selectedImageInfos(), tagIDs, true, true);
 
                 emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
-                break;
             }
-            case 11:    // All Items
+            else if (choice == assignToAllAction)    // All Items
             {
                 emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
                                             i18n("Assigning image tags. Please wait..."));
@@ -1384,9 +1371,8 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                 changeTagOnImageInfos(allImageInfos(), tagIDs, true, true);
 
                 emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
-                break;
             }
-            case 12:    // Dropped item only.
+            else if (choice == assignToThisAction)    // Dropped item only.
             {
                 AlbumIconItem *albumItem = findItem(event->pos());
                 if (albumItem)
@@ -1395,13 +1381,10 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                     infos << albumItem->imageInfo();
                     changeTagOnImageInfos(infos, tagIDs, true, false);
                 }
-                break;
             }
-            default:
-                break;
         }
     }
-    else 
+    else
     {
         event->ignore();
     }
