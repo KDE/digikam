@@ -25,8 +25,6 @@
 
 // Qt includes.
 
-#include <Q3PtrList>
-#include <Q3PopupMenu>
 #include <QLabel>
 #include <QToolButton>
 #include <QPushButton>
@@ -35,11 +33,11 @@
 #include <QGridLayout>
 #include <QPixmap>
 #include <QEvent>
+#include <QSignalMapper>
 
 // KDE includes.
 
-#include <k3popupmenu.h>
-//#include <kabc/stdaddressbook.h>
+#include <kmenu.h>
 #include <klocale.h>
 #include <kurl.h>
 #include <kcursor.h>
@@ -51,6 +49,7 @@
 #include <klineedit.h>
 #include <kdialog.h>
 #include <kglobal.h>
+#include <kselectaction.h>
 #include <kvbox.h>
 
 // Local includes.
@@ -77,6 +76,11 @@
 #include "imagedescedittab.h"
 #include "imagedescedittab.moc"
 
+#include "config.h"
+#ifdef KDEPIMLIBS_FOUND
+#include <kabc/stdaddressbook.h>
+#endif
+
 namespace Digikam
 {
 
@@ -100,6 +104,7 @@ public:
         assignedTagsBtn            = 0;
         applyBtn                   = 0;
         revertBtn                  = 0;
+        recentTagsMapper           = 0;
         toggleAutoTags             = TagFilterView::NoToggleAuto;
     }
 
@@ -111,8 +116,10 @@ public:
     QToolButton                   *assignedTagsBtn;
     QToolButton                   *revertBtn;
 
-    Q3PopupMenu                   *ABCMenu;
-    Q3PopupMenu                   *moreMenu;
+    QMenu                         *ABCMenu;
+    QMenu                         *moreMenu;
+
+    QSignalMapper                 *recentTagsMapper;
 
     QPushButton                   *applyBtn;
 
@@ -148,11 +155,10 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     QGridLayout *settingsLayout = new QGridLayout(settingsArea);
 
     // Comments/Date/Rating view -----------------------------------
-    
+
     KVBox *commentsBox = new KVBox(settingsArea);
     new QLabel(i18n("Comments:"), commentsBox);
     d->commentsEdit = new KTextEdit(commentsBox);
-    d->commentsEdit->setTextFormat(Qt::PlainText);
     d->commentsEdit->setCheckSpellingEnabled(true);
 
     KHBox *dateBox  = new KHBox(settingsArea);
@@ -183,14 +189,15 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
                                 K3Icon::NoGroup, K3Icon::SizeSmall));
     d->assignedTagsBtn->setCheckable(true);
 
-    d->recentTagsBtn       = new QToolButton(tagsSearch);
-    Q3PopupMenu *popupMenu = new Q3PopupMenu(d->recentTagsBtn);
+    d->recentTagsBtn      = new QToolButton(tagsSearch);
+    QMenu *recentTagsMenu = new QMenu(d->recentTagsBtn);
     d->recentTagsBtn->setToolTip( i18n("Recent Tags"));
     d->recentTagsBtn->setIcon(KIconLoader::global()->loadIcon("tag-recents", 
                               K3Icon::NoGroup, K3Icon::SizeSmall));
     d->recentTagsBtn->setIconSize(QSize(K3Icon::SizeSmall, K3Icon::SizeSmall));
-    d->recentTagsBtn->setMenu(popupMenu);
-    d->recentTagsBtn->setPopupDelay(1);
+    d->recentTagsBtn->setMenu(recentTagsMenu);
+    d->recentTagsBtn->setPopupMode(QToolButton::DelayedPopup);
+    d->recentTagsMapper = new QSignalMapper(this);
 
     d->tagsView = new TAlbumListView(settingsArea);
 
@@ -203,7 +210,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     d->revertBtn->setIcon(SmallIcon("view-refresh"));
     d->revertBtn->setToolTip( i18n("Revert all changes"));
     d->revertBtn->setEnabled(false);
-    
+
     d->applyBtn = new QPushButton(i18n("Apply"), buttonsBox);
     d->applyBtn->setIcon(SmallIcon("ok"));
     d->applyBtn->setEnabled(false);
@@ -211,7 +218,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     buttonsBox->setStretchFactor(d->applyBtn, 10);
 
     d->moreButton = new QPushButton(i18n("More"), buttonsBox);
-    d->moreMenu   = new Q3PopupMenu(this);
+    d->moreMenu   = new QMenu(this);
     d->moreButton->setMenu(d->moreMenu);
 
     // --------------------------------------------------
@@ -234,27 +241,24 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     connect(d->tagsView, SIGNAL(signalProgressValue(int)),
             this, SIGNAL(signalProgressValue(int)));
 
-    connect(popupMenu, SIGNAL(activated(int)),
-            this, SLOT(slotRecentTagsMenuActivated(int)));
-
     connect(d->tagsView, SIGNAL(signalItemStateChanged(TAlbumCheckListItem *)),
             this, SLOT(slotItemStateChanged(TAlbumCheckListItem *)));
-    
+
     connect(d->commentsEdit, SIGNAL(textChanged()),
             this, SLOT(slotCommentChanged()));
-    
+
     connect(d->dateTimeEdit, SIGNAL(dateTimeChanged(const QDateTime& )),
             this, SLOT(slotDateTimeChanged(const QDateTime&)));
 
     connect(d->ratingWidget, SIGNAL(signalRatingChanged(int)),
             this, SLOT(slotRatingChanged(int)));
-     
+
     connect(d->tagsView, SIGNAL(rightButtonClicked(Q3ListViewItem*, const QPoint &, int)),
             this, SLOT(slotRightButtonClicked(Q3ListViewItem*, const QPoint&, int)));
-            
+
     connect(d->tagsSearchClearBtn, SIGNAL(clicked()),
             d->tagsSearchEdit, SLOT(clear()));
-            
+
     connect(d->tagsSearchEdit, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotTagsSearchChanged()));
 
@@ -270,6 +274,9 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     connect(d->moreMenu, SIGNAL(aboutToShow()),
             this, SLOT(slotMoreMenu()));
 
+    connect(d->recentTagsMapper, SIGNAL(mapped(int)),
+            this, SLOT(slotRecentTagsMenuActivated(int)));
+
     // Initialize ---------------------------------------------
 
     d->commentsEdit->installEventFilter(this);
@@ -281,19 +288,19 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     // Connect to album manager -----------------------------
 
     AlbumManager* man = AlbumManager::componentData();
-    
+
     connect(man, SIGNAL(signalAlbumAdded(Album*)),
             this, SLOT(slotAlbumAdded(Album*)));
-    
+
     connect(man, SIGNAL(signalAlbumDeleted(Album*)),
             this, SLOT(slotAlbumDeleted(Album*)));
-    
+
     connect(man, SIGNAL(signalAlbumRenamed(Album*)),
             this, SLOT(slotAlbumRenamed(Album*)));
-    
+
     connect(man, SIGNAL(signalAlbumsCleared()),
             this, SLOT(slotAlbumsCleared()));
-    
+
     connect(man, SIGNAL(signalAlbumIconChanged(Album*)),
             this, SLOT(slotAlbumIconChanged(Album*)));
 
@@ -685,10 +692,10 @@ void ImageDescEditTab::slotCommentChanged()
     // we cannot trust that the text actually changed
     // (there are bogus signals caused by spell checking, see bug 141663)
     // so we have to check before marking the metadata as modified
-    if (d->hub.comment() == d->commentsEdit->document()->toPlainText())
+    if (d->hub.comment() == d->commentsEdit->toPlainText())
         return;
 
-    d->hub.setComment(d->commentsEdit->document()->toPlainText());
+    d->hub.setComment(d->commentsEdit->toPlainText());
     setMetadataWidgetStatus(d->hub.commentStatus(), d->commentsEdit);
     slotModified();
 }
@@ -744,7 +751,7 @@ void ImageDescEditTab::updateTagsView()
 void ImageDescEditTab::updateComments()
 {
     d->commentsEdit->blockSignals(true);
-    d->commentsEdit->setText(d->hub.comment());
+    d->commentsEdit->setPlainText(d->hub.comment());
     setMetadataWidgetStatus(d->hub.commentStatus(), d->commentsEdit);
     d->commentsEdit->blockSignals(false);
 }
@@ -803,88 +810,101 @@ void ImageDescEditTab::slotRightButtonClicked(Q3ListViewItem *item, const QPoint
     if(!album)
         return;
 
-    d->ABCMenu = new Q3PopupMenu;
-    
+    KMenu popmenu(this);
+    popmenu.addTitle(SmallIcon("digikam"), i18n("Tags"));
+    QAction *newAction = popmenu.addAction(SmallIcon("tag-new"),  i18n("New Tag..."));
+
+#ifdef KDEPIMLIBS_FOUND
+    d->ABCMenu = new KMenu;
+
     connect(d->ABCMenu, SIGNAL( aboutToShow() ),
             this, SLOT( slotABCContextMenu() ));
 
-    K3PopupMenu popmenu(this);
-    popmenu.insertTitle(SmallIcon("digikam"), i18n("Tags"));
-    popmenu.insertItem(SmallIcon("tag-new"),  i18n("New Tag..."), 10);
-    popmenu.insertItem(SmallIcon("tag-addressbook"), i18n("Create Tag From AddressBook"), d->ABCMenu);
+    popmenu.addMenu(d->ABCMenu);
+    d->ABCMenu->menuAction()->setIcon(SmallIcon("tag-addressbook"));
+    d->ABCMenu->menuAction()->setText(i18n("Create Tag From AddressBook"));
+#endif
 
+    QAction *editAction=0, *resetIconAction=0, *deleteAction=0;
     if (!album->isRoot())
     {
-        popmenu.insertItem(SmallIcon("tag-properties"), i18n("Edit Tag Properties..."), 11);
-        popmenu.insertItem(SmallIcon("tag-reset"),      i18n("Reset Tag Icon"),         13);        
-        popmenu.insertSeparator(-1);
-        popmenu.insertItem(SmallIcon("tag-delete"),     i18n("Delete Tag"),             12);
+        editAction      = popmenu.addAction(SmallIcon("tag-properties"), i18n("Edit Tag Properties..."));
+        resetIconAction = popmenu.addAction(SmallIcon("tag-reset"),      i18n("Reset Tag Icon"));
+        popmenu.addSeparator();
+        deleteAction    = popmenu.addAction(SmallIcon("tag-delete"),     i18n("Delete Tag"));
     }
 
-    popmenu.insertSeparator(-1);
+    popmenu.addSeparator();
 
-    Q3PopupMenu selectTagsMenu;
-    selectTagsMenu.insertItem(i18n("All Tags"),   14);
-    if (!album->isRoot())
+    QMenu selectTagsMenu;
+    QAction *selectAllTagsAction, *selectChildrenAction=0, *selectParentsAction=0;
+    selectAllTagsAction = selectTagsMenu.addAction(i18n("All Tags"));
+    if (item)
     {
-        selectTagsMenu.insertSeparator(-1);
-        selectTagsMenu.insertItem(i18n("Children"),     17);
-        selectTagsMenu.insertItem(i18n("Parents"),    19);
+        selectTagsMenu.addSeparator();
+        selectChildrenAction = selectTagsMenu.addAction(i18n("Children"));
+        selectParentsAction  = selectTagsMenu.addAction(i18n("Parents"));
     }
-    popmenu.insertItem(i18n("Select"), &selectTagsMenu);
+    popmenu.addMenu(&selectTagsMenu);
+    selectTagsMenu.menuAction()->setText(i18n("Select"));
 
-    Q3PopupMenu deselectTagsMenu;
-    deselectTagsMenu.insertItem(i18n("All Tags"), 15);
-    if (!album->isRoot())
+    QMenu deselectTagsMenu;
+    QAction *deselectAllTagsAction, *deselectChildrenAction=0, *deselectParentsAction=0;
+    deselectAllTagsAction = deselectTagsMenu.addAction(i18n("All Tags"));
+    if (item)
     {
-        deselectTagsMenu.insertSeparator(-1);
-        deselectTagsMenu.insertItem(i18n("Children"),   18);
-        deselectTagsMenu.insertItem(i18n("Parents"),  20);
+        deselectTagsMenu.addSeparator();
+        deselectChildrenAction = deselectTagsMenu.addAction(i18n("Children"));
+        deselectParentsAction  = deselectTagsMenu.addAction(i18n("Parents"));
     }
-    popmenu.insertItem(i18n("Deselect"), &deselectTagsMenu);
+    popmenu.addMenu(&deselectTagsMenu);
+    deselectTagsMenu.menuAction()->setText(i18n("Deselect"));
 
-    popmenu.insertItem(i18n("Invert Selection"),  16);
-    popmenu.insertSeparator(-1);
+    QAction *invertAction;
+    invertAction = popmenu.addAction(i18n("Invert Selection"));
+    popmenu.addSeparator();
 
-    Q3PopupMenu toggleAutoMenu;
-    toggleAutoMenu.setCheckable(true);
-    toggleAutoMenu.insertItem(i18n("None"),    21);
-    toggleAutoMenu.insertSeparator(-1);
-    toggleAutoMenu.insertItem(i18n("Children"),  22);
-    toggleAutoMenu.insertItem(i18n("Parents"), 23);
-    toggleAutoMenu.insertItem(i18n("Both"),    24);
-    toggleAutoMenu.setItemChecked(21 + d->toggleAutoTags, true);
-    popmenu.insertItem(i18n("Toogle Auto"), &toggleAutoMenu);
 
-    TagFilterView::ToggleAutoTags oldAutoTags = d->toggleAutoTags;            
+    KSelectAction *toggleAutoAction = new KSelectAction(i18n("Toogle Auto"), &popmenu);
+    QAction *toggleNoneAction     = toggleAutoAction->addAction(i18n("None"));
+    toggleAutoAction->menu()->addSeparator();
+    QAction *toggleChildrenAction = toggleAutoAction->addAction(i18n("Children"));
+    QAction *toggleParentsAction  = toggleAutoAction->addAction(i18n("Parents"));
+    QAction *toggleBothAction     = toggleAutoAction->addAction(i18n("Both"));
 
-    int choice = popmenu.exec((QCursor::pos()));
-    switch( choice )
+    toggleNoneAction->setChecked(d->toggleAutoTags == TagFilterView::NoToggleAuto);
+    toggleChildrenAction->setChecked(d->toggleAutoTags == TagFilterView::Children);
+    toggleParentsAction->setChecked(d->toggleAutoTags == TagFilterView::Parents);
+    toggleBothAction->setChecked(d->toggleAutoTags == TagFilterView::ChildrenAndParents);
+
+    popmenu.addAction(toggleAutoAction);
+
+    TagFilterView::ToggleAutoTags oldAutoTags = d->toggleAutoTags;
+
+    QAction *choice = popmenu.exec((QCursor::pos()));
+
+    if (choice)
     {
-        case 10:   // New Tag.
+        if (choice == newAction)                    // New Tag.
         {
             tagNew(album);
-            break;
         }
-        case 11:   // Edit Tag Properties.
+        else if (choice == editAction)              // Edit Tag Properties.
         {
             if (!album->isRoot())
                 tagEdit(album);
-            break;
         }
-        case 12:   // Delete Tag.
+        else if (choice == deleteAction)            // Delete Tag.
         {
             if (!album->isRoot())
                 tagDelete(album);
-            break;
         }
-        case 13:   // Reset Tag Icon.
+        else if (choice == resetIconAction)         // Reset Tag Icon.
         {
             QString errMsg;
             AlbumManager::componentData()->updateTAlbumIcon(album, QString("tag"), 0, errMsg);
-            break;
         }
-        case 14:   // Select All Tags.
+        else if (choice == selectAllTagsAction)     // Select All Tags.
         {
             d->toggleAutoTags = TagFilterView::NoToggleAuto;
             Q3ListViewItemIterator it(d->tagsView, Q3ListViewItemIterator::NotChecked);
@@ -896,9 +916,8 @@ void ImageDescEditTab::slotRightButtonClicked(Q3ListViewItem *item, const QPoint
                 ++it;
             }
             d->toggleAutoTags = oldAutoTags;
-            break;
         }
-        case 15:   // Deselect All Tags.
+        else if (choice == deselectAllTagsAction)    // Deselect All Tags.
         {
             d->toggleAutoTags = TagFilterView::NoToggleAuto;
             Q3ListViewItemIterator it(d->tagsView, Q3ListViewItemIterator::Checked);
@@ -910,9 +929,8 @@ void ImageDescEditTab::slotRightButtonClicked(Q3ListViewItem *item, const QPoint
                 ++it;
             }
             d->toggleAutoTags = oldAutoTags;
-            break;
         }
-        case 16:   // Invert All Tags Selection.
+        else if (choice == invertAction)             // Invert All Tags Selection.
         {
             d->toggleAutoTags = TagFilterView::NoToggleAuto;
             Q3ListViewItemIterator it(d->tagsView);
@@ -924,71 +942,59 @@ void ImageDescEditTab::slotRightButtonClicked(Q3ListViewItem *item, const QPoint
                 ++it;
             }
             d->toggleAutoTags = oldAutoTags;
-            break;
         }
-        case 17:   // Select Child Tags.
+        else if (choice == selectChildrenAction)     // Select Child Tags.
         {
             d->toggleAutoTags = TagFilterView::NoToggleAuto;
             toggleChildTags(album, true);
             TAlbumCheckListItem *item = (TAlbumCheckListItem*)album->extraData(this);
-            item->setOn(true);            
+            item->setOn(true);
             d->toggleAutoTags = oldAutoTags;
-            break;
         }
-        case 18:   // Deselect Child Tags.
+        else if (choice == deselectChildrenAction)   // Deselect Child Tags.
         {
             d->toggleAutoTags = TagFilterView::NoToggleAuto;
             toggleChildTags(album, false);
             TAlbumCheckListItem *item = (TAlbumCheckListItem*)album->extraData(this);
-            item->setOn(false);            
+            item->setOn(false);
             d->toggleAutoTags = oldAutoTags;
-            break;
         }
-        case 19:   // Select Parent Tags.
+        else if (choice == selectParentsAction)     // Select Parent Tags.
         {
             d->toggleAutoTags = TagFilterView::NoToggleAuto;
             toggleParentTags(album, true);
             TAlbumCheckListItem *item = (TAlbumCheckListItem*)album->extraData(this);
-            item->setOn(true);            
+            item->setOn(true);
             d->toggleAutoTags = oldAutoTags;
-            break;
         }
-        case 20:   // Deselect Parent Tags.
+        else if (choice == deselectParentsAction)   // Deselect Parent Tags.
         {
             d->toggleAutoTags = TagFilterView::NoToggleAuto;
             toggleParentTags(album, false);
             TAlbumCheckListItem *item = (TAlbumCheckListItem*)album->extraData(this);
-            item->setOn(false);            
+            item->setOn(false);
             d->toggleAutoTags = oldAutoTags;
-            break;
         }
-        case 21:   // No toggle auto tags.
+        else if (choice == toggleNoneAction)        // No toggle auto tags.
         {
             d->toggleAutoTags = TagFilterView::NoToggleAuto;
-            break;
         }
-        case 22:   // Toggle auto Children tags.
+        else if (choice == toggleChildrenAction)    // Toggle auto Children tags.
         {
             d->toggleAutoTags = TagFilterView::Children;
-            break;
         }
-        case 23:   // Toggle auto Parents tags.
+        else if (choice == toggleParentsAction)     // Toggle auto Parents tags.
         {
             d->toggleAutoTags = TagFilterView::Parents;
-            break;
         }
-        case 24:   // Toggle auto Children and Parents tags.
+        else if (choice == toggleBothAction)        // Toggle auto Children and Parents tags.
         {
             d->toggleAutoTags = TagFilterView::ChildrenAndParents;
-            break;
         }
-        default:
-            break;
-    }
-
-    if ( choice > 100 )
-    {
-        tagNew(album, d->ABCMenu->text( choice ), "tag-people" );
+        else                                        // ABC menu
+        {
+            tagNew(album, choice->text(), "tag-people" );
+        }
     }
 
     delete d->ABCMenu;
@@ -997,30 +1003,30 @@ void ImageDescEditTab::slotRightButtonClicked(Q3ListViewItem *item, const QPoint
 
 void ImageDescEditTab::slotABCContextMenu()
 {
-/*    d->ABCMenu->clear();
+#ifdef KDEPIMLIBS_FOUND
+    d->ABCMenu->clear();
 
-    int counter = 100;
     KABC::AddressBook* ab = KABC::StdAddressBook::self();
     QStringList names;
     for ( KABC::AddressBook::Iterator it = ab->begin(); it != ab->end(); ++it )
     {
         names.push_back(it->formattedName());
     }
-
     qSort(names);
 
     for ( QStringList::Iterator it = names.begin(); it != names.end(); ++it )
     {
         QString name = *it;
-        if ( !name.isNull() )
-            d->ABCMenu->insertItem( name, ++counter );
+        if (!name.isNull() )
+            d->ABCMenu->addAction(name);
     }
 
-    if (counter == 100)
+    if (d->ABCMenu->isEmpty())
     {
-        d->ABCMenu->insertItem( i18n("No AddressBook Entries Found"), ++counter );
-        d->ABCMenu->setItemEnabled( counter, false );
-    }*/
+        QAction *nothingFound = d->ABCMenu->addAction(i18n("No AddressBook entries found"));
+        nothingFound->setEnabled(false);
+    }
+#endif
 }
 
 void ImageDescEditTab::slotMoreMenu()
@@ -1029,21 +1035,22 @@ void ImageDescEditTab::slotMoreMenu()
 
     if (singleSelection())
     {
-        d->moreMenu->insertItem(i18n("Read metadata from file to database"), this, SLOT(slotReadFromFileMetadataToDatabase()));
-        int writeActionId = d->moreMenu->insertItem(i18n("Write metadata to each file"), this, SLOT(slotWriteToFileMetadataFromDatabase()));
+        d->moreMenu->addAction(i18n("Read metadata from file to database"), this, SLOT(slotReadFromFileMetadataToDatabase()));
+        QAction *writeAction =
+                d->moreMenu->addAction(i18n("Write metadata to each file"), this, SLOT(slotWriteToFileMetadataFromDatabase()));
         // we do not need a "Write to file" action here because the apply button will do just that
         // if selection is a single file.
         // Adding the option will confuse users: Does the apply button not write to file?
         // Removing the option will confuse users: There is not option to write to file! (not visible in single selection)
         // Disabling will confuse users: Why is it disabled?
-        d->moreMenu->setItemEnabled(writeActionId, false);
+        writeAction->setEnabled(false);
     }
     else
     {
         // We need to make clear that this action is different from the Apply button,
         // which saves the same changes to all files. These batch operations operate on each single file.
-        d->moreMenu->insertItem(i18n("Read metadata from each file to database"), this, SLOT(slotReadFromFileMetadataToDatabase()));
-        d->moreMenu->insertItem(i18n("Write metadata to each file"), this, SLOT(slotWriteToFileMetadataFromDatabase()));
+        d->moreMenu->addAction(i18n("Read metadata from each file to database"), this, SLOT(slotReadFromFileMetadataToDatabase()));
+        d->moreMenu->addAction(i18n("Write metadata to each file"), this, SLOT(slotWriteToFileMetadataFromDatabase()));
     }
 }
 
@@ -1326,11 +1333,12 @@ void ImageDescEditTab::slotGotThumbnailFromIcon(Album *album, const QPixmap& thu
     item->setPixmap(0, thumbnail);
 
     // update item in recent tags popup menu, if found therein
-    Q3PopupMenu *menu = dynamic_cast<Q3PopupMenu *>(d->recentTagsBtn->menu());
+    QMenu *menu = dynamic_cast<QMenu *>(d->recentTagsBtn->menu());
     if (menu)
     {
-        if (menu->indexOf(album->id()) != -1)
-            menu->changeItem(album->id(), thumbnail, menu->text(album->id()));
+        QAction *action = qobject_cast<QAction *>(d->recentTagsMapper->mapping(album->id()));
+        if (action)
+            action->setIcon(thumbnail);
     }
 }
 
@@ -1421,7 +1429,7 @@ void ImageDescEditTab::reloadForMetadataChange(qlonglong imageId)
 
 void ImageDescEditTab::updateRecentTags()
 {
-    Q3PopupMenu *menu = dynamic_cast<Q3PopupMenu *>(d->recentTagsBtn->menu());
+    QMenu *menu = dynamic_cast<QMenu *>(d->recentTagsBtn->menu());
     if (!menu) return;
 
     menu->clear();
@@ -1430,8 +1438,8 @@ void ImageDescEditTab::updateRecentTags()
 
     if (recentTags.isEmpty())
     {
-        menu->insertItem(i18n("No Recently Assigned Tags"), 0);
-        menu->setItemEnabled(0, false);
+        QAction *noTagsAction = menu->addAction(i18n("No Recently Assigned Tags"));
+        noTagsAction->setEnabled(false);
     }
     else
     {
@@ -1451,7 +1459,8 @@ void ImageDescEditTab::updateRecentTags()
                     }
                 }
                 QString text = album->title() + " (" + ((TAlbum*)album->parent())->prettyUrl() + ')';
-                menu->insertItem(icon, text, album->id());
+                QAction *action = menu->addAction(icon, text, d->recentTagsMapper, SLOT(map()));
+                d->recentTagsMapper->setMapping(action, album->id());
             }
         }
     }
@@ -1460,7 +1469,7 @@ void ImageDescEditTab::updateRecentTags()
 void ImageDescEditTab::slotRecentTagsMenuActivated(int id)
 {
     AlbumManager* albumMan = AlbumManager::componentData();
-    
+
     if (id > 0)
     {
         TAlbum* album = albumMan->findTAlbum(id);
