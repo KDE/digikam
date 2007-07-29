@@ -44,6 +44,7 @@
 #include <kcursor.h>
 #include <kmessagebox.h>
 #include <kglobal.h>
+#include <kselectaction.h>
 
 // Local includes.
 
@@ -821,63 +822,30 @@ void TagFilterView::slotContextMenu(Q3ListViewItem* it, const QPoint&, int)
     popmenu.addSeparator();
 
 
-    QMenu toggleAutoMenu;
-    QAction *toggleNoneAction, *toggleChildrenAction, *toggleParentsAction, *toggleBothAction;
-    QActionGroup toggleGroup(this);
-    toggleNoneAction = new QAction(i18n("None"), &toggleGroup);
-    toggleChildrenAction = new QAction(i18n("Children"), &toggleGroup);
-    toggleParentsAction = new QAction(i18n("Parents"), &toggleGroup);
-    toggleBothAction = new QAction(i18n("Both"), &toggleGroup);
+    KSelectAction *toggleAutoAction = new KSelectAction(i18n("Toogle Auto"), &popmenu);
+    QAction *toggleNoneAction     = toggleAutoAction->addAction(i18n("None"));
+    toggleAutoAction->menu()->addSeparator();
+    QAction *toggleChildrenAction = toggleAutoAction->addAction(i18n("Children"));
+    QAction *toggleParentsAction  = toggleAutoAction->addAction(i18n("Parents"));
+    QAction *toggleBothAction     = toggleAutoAction->addAction(i18n("Both"));
 
-    toggleNoneAction->setCheckable(true);
-    toggleChildrenAction->setCheckable(true);
-    toggleParentsAction->setCheckable(true);
-    toggleBothAction->setCheckable(true);
+    toggleNoneAction->setChecked(d->toggleAutoTags == TagFilterView::NoToggleAuto);
+    toggleChildrenAction->setChecked(d->toggleAutoTags == TagFilterView::Children);
+    toggleParentsAction->setChecked(d->toggleAutoTags == TagFilterView::Parents);
+    toggleBothAction->setChecked(d->toggleAutoTags == TagFilterView::ChildrenAndParents);
 
-    toggleAutoMenu.addAction(toggleNoneAction);
-    toggleAutoMenu.addSeparator();
-    toggleAutoMenu.addAction(toggleChildrenAction);
-    toggleAutoMenu.addAction(toggleParentsAction);
-    toggleAutoMenu.addAction(toggleBothAction);
-
-    switch (d->toggleAutoTags)
-    {
-        case NoToggleAuto:
-            toggleNoneAction->setChecked(true);
-            break;
-        case Children:
-            toggleChildrenAction->setChecked(true);
-            break;
-        case Parents:
-            toggleParentsAction->setChecked(true);
-            break;
-        case ChildrenAndParents:
-            toggleBothAction->setChecked(true);
-            break;
-    }
-
-    popmenu.addMenu(&toggleAutoMenu);
-    toggleAutoMenu.menuAction()->setText(i18n("Toogle Auto"));
+    popmenu.addAction(toggleAutoAction);
 
 
-    QAction *orBetweenAction, *andBetweenAction;
-    QMenu matchingCondMenu;
-    QActionGroup conditionGroup(this);
+    KSelectAction *matchingCondAction = new KSelectAction(i18n("Matching Condition"), &popmenu);
+    QAction *orBetweenAction = matchingCondAction->addAction(i18n("Or Between Tags"));
+    QAction *andBetweenAction = matchingCondAction->addAction(i18n("And Between Tags"));
 
-    orBetweenAction = new QAction(i18n("Or Between Tags"), &conditionGroup);
-    andBetweenAction = new QAction(i18n("And Between Tags"), &conditionGroup);
-
-    orBetweenAction->setCheckable(true);
-    andBetweenAction->setCheckable(true);
-
-    matchingCondMenu.addAction(orBetweenAction);
-    matchingCondMenu.addAction(andBetweenAction);
     if (d->matchingCond == AlbumLister::OrCondition)
         orBetweenAction->setChecked(true);
     else
         andBetweenAction->setChecked(true);
-    popmenu.addMenu(&matchingCondMenu);
-    matchingCondMenu.menuAction()->setText(i18n("Matching Condition"));
+    popmenu.addAction(matchingCondAction);
 
     ToggleAutoTags oldAutoTags = d->toggleAutoTags;
 
