@@ -31,8 +31,8 @@
 
 // Qt includes.
 
-#include <Q3ValueList>
-#include <Q3PtrDict>
+#include <QList>
+#include <QSet>
 #include <QTimer>
 #include <QPainter>
 #include <QStyle>
@@ -97,8 +97,8 @@ public:
     int                  rearrangeTimerInterval;
     int                  spacing;
 
-    Q3PtrDict<IconItem>  selectedItems;
-    Q3PtrDict<IconItem>  prevSelectedItems;
+    QSet<IconItem*>      selectedItems;
+    QSet<IconItem*>      prevSelectedItems;
 
     QRubberBand         *rubber;
 
@@ -128,7 +128,7 @@ public:
 
         ItemContainer        *prev, *next;
         QRect                 rect;
-        Q3ValueList<IconItem*> items;
+        QList<IconItem*>      items;
     } *firstContainer, *lastContainer;
 
     struct SortableItem
@@ -222,10 +222,8 @@ IconItem* IconView::findItem(const QPoint& pos)
     {
         if ( c->rect.contains(pos) )
         {
-            for (Q3ValueList<IconItem*>::iterator it = c->items.begin();
-                 it != c->items.end(); ++it)
+            foreach(IconItem *item, c->items)
             {
-                IconItem* item = *it;
                 if (item->rect().contains(pos))
                     return item;
             }
@@ -316,10 +314,9 @@ void IconView::clearSelection()
     if (!wasBlocked)
         blockSignals(true);
 
-    Q3PtrDict<IconItem> selItems = d->selectedItems;
-    Q3PtrDictIterator<IconItem> it( selItems );
-    for ( ; it.current(); ++it )
-        it.current()->setSelected(false, false);
+    QSet<IconItem*> selItems = d->selectedItems;
+    foreach(IconItem *item, selItems)
+        item->setSelected(false, false);
 
     d->selectedItems.clear();
 
@@ -382,7 +379,7 @@ void IconView::selectItem(IconItem* item, bool select)
 
     if (select)
     {
-        d->selectedItems.replace(item, item);
+        d->selectedItems.insert(item);
     }
     else
     {
@@ -491,7 +488,7 @@ void IconView::takeItem(IconItem* item)
     IconViewPriv::ItemContainer *tmp = d->firstContainer;
     while (tmp)
     {
-        tmp->items.remove(item);
+        tmp->items.removeAll(item);
         tmp = tmp->next;
     }
 
@@ -605,6 +602,7 @@ void IconView::sort()
 
 void IconView::slotRearrange()
 {
+    DDebug() << "IconView::slotrearrange " << geometry() << endl;
     sort();
     arrangeItems();
 
@@ -645,6 +643,7 @@ void IconView::slotRearrange()
 
 bool IconView::arrangeItems()
 {
+    DDebug() << "IconView::arrangeItems visibleWidth" << visibleWidth() << endl;
     int  y   = 0;
     int  itemW = itemRect().width();
     int  itemH = itemRect().height();
@@ -740,10 +739,8 @@ void IconView::viewportPaintEvent(QPaintEvent* pe)
         if (r.intersects(cr))
         {
 
-            for (Q3ValueList<IconItem*>::iterator it = c->items.begin();
-                 it != c->items.end(); ++it)
+            foreach(IconItem *item, c->items)
             {
-                IconItem* item = *it;
                 QRect ir(contentsRectToViewport(item->rect()));
                 if (r.intersects(ir))
                 {
@@ -768,6 +765,7 @@ QRect IconView::contentsRectToViewport(const QRect& r) const
 void IconView::resizeEvent(QResizeEvent* e)
 {
     Q3ScrollView::resizeEvent(e);
+    DDebug() << "IconView::resizeEvent " << e->size() << endl;
     triggerRearrangement();
 }
 
@@ -786,12 +784,12 @@ void IconView::rebuildContainers()
     {
         if (c->rect.contains(item->rect()))
         {
-            c->items.append(item);
+            c->items << item;
             item = item->nextItem();
         }
         else if (c->rect.intersects(item->rect()))
         {
-            c->items.append( item );
+            c->items << item;
             c = c->next;
 
             if (!c)
@@ -800,7 +798,7 @@ void IconView::rebuildContainers()
                 c = d->lastContainer;
             }
 
-            c->items.append(item);
+            c->items << item;
             item = item->nextItem();
             c = c->prev;
         }
@@ -1006,13 +1004,7 @@ void IconView::contentsMousePressEvent(QMouseEvent* e)
     else
     {
         // ctrl is pressed. make sure our current selection is not lost
-        d->prevSelectedItems.clear();
-        Q3PtrDictIterator<IconItem> it( d->selectedItems );
-
-        for ( ; it.current(); ++it )
-        {
-            d->prevSelectedItems.insert(it.current(), it.current());
-        }
+        d->prevSelectedItems = d->selectedItems;
     }
 
     d->rubber->setGeometry(QRect(e->pos(), QSize()));
@@ -1103,10 +1095,8 @@ void IconView::contentsMouseMoveEvent(QMouseEvent* e)
     {
         if ( rubberUnion.intersects(c->rect) )
         {
-            for (Q3ValueList<IconItem*>::iterator it = c->items.begin();
-                 it != c->items.end(); ++it)
+            foreach(IconItem *item, c->items)
             {
-                IconItem* item = *it;
                 if (nr.intersects(item->rect()))
                 {
                     if (!item->isSelected())
@@ -1118,7 +1108,7 @@ void IconView::contentsMouseMoveEvent(QMouseEvent* e)
                 }
                 else
                 {
-                    if (item->isSelected() &&  !d->prevSelectedItems.find(item))
+                    if (item->isSelected() &&  !d->prevSelectedItems.contains(item))
                     {
                         item->setSelected(false, false);
                         changed = true;
@@ -1743,11 +1733,8 @@ IconItem* IconView::findFirstVisibleItem(const QRect& r, bool useThumbnailRect) 
         if ( c->rect.intersects( r ) )
         {
             alreadyIntersected = true;
-            for (Q3ValueList<IconItem*>::iterator it = c->items.begin();
-                 it != c->items.end(); ++it)
+            foreach (IconItem *item, c->items)
             {
-                IconItem *item = *it;
-
                 // if useThumbnailRect, we only check for the clickToOpenRect, which is the thumbnail,
                 // otherwise, we take the whole item rect
                 if ( r.intersects( useThumbnailRect ? item->clickToOpenRect() : item->rect() ) )
@@ -1789,11 +1776,8 @@ IconItem* IconView::findLastVisibleItem(const QRect& r, bool useThumbnailRect) c
         if ( c->rect.intersects( r ) )
         {
             alreadyIntersected = true;
-            for (Q3ValueList<IconItem*>::iterator it = c->items.begin();
-                 it != c->items.end(); ++it)
+            foreach (IconItem *item, c->items)
             {
-                IconItem *item = *it;
-
                 if ( r.intersects( useThumbnailRect ? item->clickToOpenRect() : item->rect() ) )
                 {
                     if ( !i )
