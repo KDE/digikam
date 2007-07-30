@@ -56,6 +56,8 @@
 #include <kglobal.h>
 #include <ktoolinvocation.h>
 #include <ktoolbarpopupaction.h>
+#include <ktogglefullscreenaction.h>
+#include <ktoolbar.h>
 
 // libKipi includes.
 
@@ -130,9 +132,13 @@ DigikamApp::DigikamApp()
     LoadingCacheInterface::initialize();
 
     d->cameraMediaList = new KMenu;
-
     connect(d->cameraMediaList, SIGNAL( aboutToShow() ),
             this, SLOT(slotCameraMediaMenu()));
+
+    d->cameraSignalMapper = new QSignalMapper(this);
+
+    connect(d->cameraSignalMapper, SIGNAL(mapped(const QString &)),
+            this, SLOT(slotDownloadImages(const QString &)));
 
     d->cameraList = new CameraList(this, KStandardDirs::locateLocal("appdata", "cameras.xml"));
 
@@ -407,61 +413,47 @@ void DigikamApp::setupStatusBar()
 
 void DigikamApp::setupAccelerators()
 {
-#warning "TODO: kde4 port it";
-/*  // TODO: KDE4PORT: use KAction/QAction framework instead KAccel
+    KAction *escapeAction = new KAction(i18n("Exit preview mode"), this);
+    escapeAction->setShortcut(Qt::Key_Escape);
+    connect(escapeAction, SIGNAL(triggered()), this, SIGNAL(signalEscapePressed()));
+    actionCollection()->addAction("exit preview mode", escapeAction);
+    addAction(escapeAction);
 
-    d->accelerators = new KAccel(this);
+    KAction *nextImageAction = new KAction(i18n("Next Image"), this);
+    escapeAction->setShortcut(KShortcut(Qt::Key_Space, Qt::Key_Next));
+    connect(nextImage1Action, SIGNAL(triggered()), this, SIGNAL(signalNextItem()));
+    actionCollection()->addAction("next image", nextImage);
+    addAction(nextImageAction);
 
-    d->accelerators->insert("Exit Preview Mode", i18n("Exit Preview"),
-                           i18n("Exit preview mode"),
-                           Qt::Key_Escape, this, SIGNAL(signalEscapePressed()),
-                           false, true);
-    
-    d->accelerators->insert("Next Image Qt::Key_Space", i18n("Next Image"),
-                           i18n("Next Image"),
-                           Qt::Key_Space, this, SIGNAL(signalNextItem()),
-                           false, true);
+    KAction *previousImageAction = new KAction(i18n("Previous Image"), this);
+    escapeAction->setShortcut(KShortcut(Qt::Key_Backspace, Qt::Key_Prior));
+    connect(previousImageAction1, SIGNAL(triggered()), this, SIGNAL(signalPrevItem()));
+    actionCollection()->addAction("previous action", previousImageAction);
+    addAction(previousImageAction);
 
-    d->accelerators->insert("Next Image SHIFT+Qt::Key_Space", i18n("Next Image"),
-                           i18n("Next Image"),
-                           SHIFT+Qt::Key_Space, this, SIGNAL(signalNextItem()),
-                           false, true);
+    KAction *firstImageAction = new KAction(i18n("First Image"), this);
+    escapeAction->setShortcut(Qt::Key_Home);
+    connect(firstImageAction, SIGNAL(triggered()), this, SIGNAL(signalFirstItem()));
+    actionCollection()->addAction("first image", firstImageAction);
+    addAction(firstImageAction);
 
-    d->accelerators->insert("Previous Image Qt::Key_Backspace", i18n("Previous Image"),
-                           i18n("Previous Image"),
-                           Qt::Key_Backspace, this, SIGNAL(signalPrevItem()),
-                           false, true);
+    KAction *lastImageAction = new KAction(i18n("Last Image"), this);
+    escapeAction->setShortcut(Qt::Key_End);
+    connect(lastImageAction, SIGNAL(triggered()), this, SIGNAL(signalLastItem()));
+    actionCollection()->addAction("last image", lastImageAction);
+    addAction(lastImageAction);
 
-    d->accelerators->insert("Next Image Qt::Key_Next", i18n("Next Image"),
-                           i18n("Next Image"),
-                           Qt::Key_Next, this, SIGNAL(signalNextItem()),
-                           false, true);
+    KAction *copyItemsAction = new KAction(i18n("Copy Album Items Selection"), this);
+    escapeAction->setShortcut(Qt::CTRL+Qt::Key_C);
+    connect(copyItemsAction, SIGNAL(triggered()), this, SIGNAL(signalCopyAlbumItemsSelection()));
+    actionCollection()->addAction("copy album selection", copyItemsAction);
+    addAction(copyItemsAction);
 
-    d->accelerators->insert("Previous Image Prior", i18n("Previous Image"),
-                           i18n("Previous Image"),
-                           Qt::Key_Prior, this, SIGNAL(signalPrevItem()),
-                           false, true);
-
-    d->accelerators->insert("First Image Home", i18n("First Image"),
-                           i18n("First Image"),
-                           Qt::Key_Home, this, SIGNAL(signalFirstItem()),
-                           false, true);
-
-    d->accelerators->insert("Last Image End", i18n("Last Image"),
-                           i18n("Last Image"),
-                           Qt::Key_End, this, SIGNAL(signalLastItem()),
-                           false, true);
-
-    d->accelerators->insert("Copy Album Items Selection CTRL+Key_C", i18n("Copy Album Items Selection"),
-                           i18n("Copy Album Items Selection"),
-                           Qt::CTRL+Qt::Key_C, this, SIGNAL(signalCopyAlbumItemsSelection()),
-                           false, true);
-
-    d->accelerators->insert("Paste Album Items Selection CTRL+Key_V", i18n("Paste Album Items Selection"),
-                           i18n("Paste Album Items Selection"),
-                           Qt::CTRL+Qt::Key_V, this, SIGNAL(signalPasteAlbumItemsSelection()),
-                           false, true);
-*/
+    KAction *pasteItemsAction = new KAction(i18n("Paste Album Items Selection"), this);
+    escapeAction->setShortcut(Qt::CTRL+Qt::Key_V);
+    connect(pasteItemsAction, SIGNAL(triggered()), this, SIGNAL(signalPasteAlbumItemsSelection()));
+    actionCollection()->addAction("paste album selection", pasteItemsAction);
+    addAction(pasteItemsAction);
 }
 
 void DigikamApp::setupActions()
@@ -483,30 +475,40 @@ void DigikamApp::setupActions()
     d->backwardActionMenu = new KToolBarPopupAction(KIcon("go-previous"), i18n("&Back"), this);
     d->backwardActionMenu->setEnabled(false);
     d->backwardActionMenu->setShortcut(Qt::ALT+Qt::Key_Left);
-    connect(d->backwardActionMenu, SIGNAL(triggered()), d->view, SLOT(slotAlbumHistoryBack()));
     actionCollection()->addAction("album_back", d->backwardActionMenu);
 
     connect(d->backwardActionMenu->menu(), SIGNAL(aboutToShow()),
             this, SLOT(slotAboutToShowBackwardMenu()));
-    
-    // TODO: KDE4PORT: this activated(int) have been replaced by triggered(QAction *)
-    connect(d->backwardActionMenu->menu(), SIGNAL(activated(int)),
+
+    // we are using a signal mapper to identify which of a bunch of actions was triggered
+    d->backwardSignalMapper = new QSignalMapper(this);
+
+    // connect mapper to view
+    connect(d->backwardSignalMapper, SIGNAL(mapped(int)),
             d->view, SLOT(slotAlbumHistoryBack(int)));
+
+    // connect action to mapper
+    connect(d->backwardActionMenu, SIGNAL(triggered()), d->backwardSignalMapper, SLOT(map()));
+    // inform mapper about number of steps
+    d->backwardSignalMapper->setMapping(d->backwardActionMenu, 1);
 
     // -----------------------------------------------------------------
 
     d->forwardActionMenu = new KToolBarPopupAction(KIcon("go-next"), i18n("Forward"), this);
     d->forwardActionMenu->setEnabled(false);
     d->forwardActionMenu->setShortcut(Qt::ALT+Qt::Key_Right);
-    connect(d->forwardActionMenu, SIGNAL(triggered()), d->view, SLOT(slotAlbumHistoryForward()));
     actionCollection()->addAction("album_forward", d->forwardActionMenu);
 
     connect(d->forwardActionMenu->menu(), SIGNAL(aboutToShow()),
             this, SLOT(slotAboutToShowForwardMenu()));
-    
-    // TODO: KDE4PORT: this activated(int) have been replaced by triggered(QAction *)
-    connect(d->forwardActionMenu->menu(), SIGNAL(activated(int)),
+
+    d->forwardSignalMapper = new QSignalMapper(this);
+
+    connect(d->forwardSignalMapper, SIGNAL(mapped(int)),
             d->view, SLOT(slotAlbumHistoryForward(int)));
+
+    connect(d->forwardActionMenu, SIGNAL(triggered()), d->forwardSignalMapper, SLOT(map()));
+    d->forwardSignalMapper->setMapping(d->forwardActionMenu, 1);
 
     // -----------------------------------------------------------------
 
@@ -786,8 +788,8 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->fullScreenAction = actionCollection()->addAction(KStandardAction::FullScreen,
-                          "full_screen", this, SLOT(slotToggleFullScreen()));
+    d->fullScreenAction = KStandardAction::fullScreen(this, SLOT(slotToggleFullScreen()), this, this);
+    actionCollection()->addAction("full_screen", d->fullScreenAction);
 
     // -----------------------------------------------------------
 
@@ -970,13 +972,15 @@ void DigikamApp::slotAboutToShowBackwardMenu()
     d->backwardActionMenu->menu()->clear();
     QStringList titles;
     d->view->getBackwardHistory(titles);
+
     if(!titles.isEmpty())
     {
         int id = 1;
-        QStringList::Iterator iter = titles.begin();
-        for(; iter != titles.end(); ++iter,++id)
+        foreach(QString title, titles)
         {
-            d->backwardActionMenu->menu()->insertItem(*iter, id);
+            QAction *action = d->backwardActionMenu->menu()->addAction(title);
+            d->backwardSignalMapper->setMapping(action, id);
+            id++;
         }
     }
 }
@@ -986,14 +990,15 @@ void DigikamApp::slotAboutToShowForwardMenu()
     d->forwardActionMenu->menu()->clear();
     QStringList titles;
     d->view->getForwardHistory(titles);
-    
+
     if(!titles.isEmpty())
     {
         int id = 1;
-        QStringList::Iterator iter = titles.begin();
-        for(; iter != titles.end(); ++iter,++id)
+        foreach(QString title, titles)
         {
-            d->forwardActionMenu->menu()->insertItem(*iter, id);
+            QAction *action = d->forwardActionMenu->menu()->addAction(title);
+            d->forwardSignalMapper->setMapping(action, id);
+            id++;
         }
     }
 }
@@ -1172,6 +1177,7 @@ void DigikamApp::slotExit()
 
 QString DigikamApp::convertToLocalUrl( const QString& folder )
 {
+#warning KDE4Port: Use Solid
     // This function is copied from k3b.
 
     KUrl url( folder );
@@ -1277,7 +1283,7 @@ void DigikamApp::slotDownloadImages()
         connect(cAction, SIGNAL(triggered()), this, SLOT(slotDownloadImages()));
         actionCollection()->addAction(d->cameraGuiPath.toLatin1(), cAction);
 
-        d->cameraMenuAction->insertAction(cAction, 0);
+        d->cameraMenuAction->addAction(cAction);
     }
 
     // the CameraUI will delete itself when it has finished
@@ -1336,21 +1342,19 @@ void DigikamApp::slotCameraAdded(CameraType *ctype)
     cAction->setObjectName(ctype->title());
     actionCollection()->addAction(ctype->title().toUtf8(), cAction);
 
-    d->cameraMenuAction->insertAction(0, cAction);
+    d->cameraMenuAction->addAction(cAction);
     ctype->setAction(cAction);
 }
 
 void DigikamApp::slotCameraMediaMenu()
 {
-    d->mediaItems.clear();
-    
     d->cameraMediaList->clear();
-    d->cameraMediaList->insertItem(i18n("No media devices found"), 0);
-    d->cameraMediaList->setItemEnabled(0, false);
-        
+    QAction *nothingFoundAction = d->cameraMediaList->addAction(i18n("No media devices found"));
+    nothingFoundAction->setEnabled(false);
+
     KUrl kurl("media:/");
     KIO::ListJob *job = KIO::listDir(kurl, false, false);
-    
+
     connect( job, SIGNAL(entries(KIO::Job*,const KIO::UDSEntryList&)),
              this, SLOT(slotCameraMediaMenuEntries(KIO::Job*,const KIO::UDSEntryList&)) );
 }
@@ -1382,18 +1386,11 @@ void DigikamApp::slotCameraMediaMenuEntries( Job *, const UDSEntryList & list )
             if (i == 0)
                 d->cameraMediaList->clear();
 
-            d->mediaItems[i] = path;
-
-            d->cameraMediaList->insertItem(name, this, SLOT(slotDownloadImagesFromMedia(int)), 0, i);
-            d->cameraMediaList->setItemParameter(i, i);
+            QAction *action = d->cameraMediaList->addAction(name, d->cameraSignalMapper, SLOT(map()));
+            d->cameraSignalMapper->setMapping(action, path);
             i++;
         }
     }
-}
-
-void DigikamApp::slotDownloadImagesFromMedia( int id )
-{
-    slotDownloadImages( d->mediaItems[id] );
 }
 
 void DigikamApp::slotCameraRemoved(CameraType *ctype)
@@ -1411,7 +1408,7 @@ void DigikamApp::slotCameraAutoDetect()
     bool retry = false;
 
     CameraType* ctype = d->cameraList->autoDetect(retry);
-    
+
     if (!ctype && retry)
     {
         QTimer::singleShot(0, this, SLOT(slotCameraAutoDetect()));
@@ -1532,22 +1529,19 @@ void DigikamApp::slotToggleFullScreen()
 {
     if (d->fullScreen)
     {
-#if QT_VERSION >= 0x030300
-        setWindowState( windowState() & ~Qt::WindowFullScreen );
-#else
         showNormal();
-#endif
+
         menuBar()->show();
         statusBar()->show();
 
-#warning "TODO: kde4 port it";
-/* TODO: KDE4PORT: Check these methods
-        topDock()->show();
-        bottomDock()->show();
-        leftDock()->show();
-        rightDock()->show();
-*/
+        QList<KToolBar *> toolbars = toolBars();
+        foreach(KToolBar *toolbar, toolbars)
+        {
+            toolbar->show();
+        }
+
         d->view->showSideBars();
+
         d->fullScreen = false;
     }
     else
@@ -1555,20 +1549,22 @@ void DigikamApp::slotToggleFullScreen()
         KConfigGroup group         = d->config->group("ImageViewer Settings");
         bool fullScreenHideToolBar = group.readEntry("FullScreen Hide ToolBar", false);
 
+        showFullScreen();
+
         menuBar()->hide();
         statusBar()->hide();
 
-
-/* TODO: KDE4PORT: Check these methods
-
         if (fullScreenHideToolBar)
-            topDock()->hide();
-        bottomDock()->hide();
-        leftDock()->hide();
-        rightDock()->hide();
-*/
+        {
+            QList<KToolBar *> toolbars = toolBars();
+            foreach(KToolBar *toolbar, toolbars)
+            {
+                toolbar->hide();
+            }
+        }
+
         d->view->hideSideBars();
-        showFullScreen();
+
         d->fullScreen = true;
     }
 }
@@ -1681,6 +1677,7 @@ void DigikamApp::slotKipiPluginPlug()
         }
 
 #warning "TODO: kde4 port it";
+                 // Not needed anymore? Check that shortcuts work
 /* TODO: KDE4PORT: how we can do it with KDE4 ?
         plugin->actionCollection()->readShortcutSettings();
 */
@@ -1699,10 +1696,11 @@ void DigikamApp::slotKipiPluginPlug()
 void DigikamApp::loadCameras()
 {
     d->cameraList->load();
-   
-    d->cameraMenuAction->menu()->insertSeparator();
-    d->cameraMenuAction->menu()->insertItem(i18n("Browse Media"), d->cameraMediaList);
-    d->cameraMenuAction->menu()->insertSeparator();
+
+    d->cameraMenuAction->menu()->addSeparator();
+    d->cameraMenuAction->menu()->addMenu(d->cameraMediaList);
+    d->cameraMediaList->menuAction()->setText(i18n("Browse Media"));
+    d->cameraMenuAction->menu()->addSeparator();
 
     KAction *cameraAction = new KAction(i18n("Add Camera..."), this);
     connect(cameraAction, SIGNAL(triggered()), this, SLOT(slotSetupCamera()));

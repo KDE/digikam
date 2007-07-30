@@ -68,7 +68,7 @@ public:
     const QList<QAction*>& menuImageActions();
     const QList<QAction*>& menuBatchActions();
     const QList<QAction*>& menuAlbumActions();
-    
+
     QList<QAction*> menuImportActions();
     const QList<QAction*>& menuExportActions();
 
@@ -78,7 +78,7 @@ public:
     void enableZoomMinusAction(bool val);
     void enableAlbumBackwardHistory(bool enable);
     void enableAlbumForwardHistory(bool enable);
-    
+
 signals:
 
     void signalEscapePressed();
@@ -133,7 +133,6 @@ private slots:
     void slotDownloadImages();
     void slotCameraConnect();
     void slotCameraMediaMenu();
-    void slotDownloadImagesFromMedia( int id );
     void slotCameraAdded(CameraType *ctype);
     void slotCameraRemoved(CameraType *ctype);
     void slotCameraAutoDetect();

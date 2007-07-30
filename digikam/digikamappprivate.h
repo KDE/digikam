@@ -27,6 +27,7 @@
 #include <QByteArray>
 #include <QString>
 #include <QMap>
+#include <QSignalMapper>
 #include <QToolButton>
 #include <QTimer>
 
@@ -126,6 +127,9 @@ public:
         donateMoneyAction                    = 0;
         cameraMenuAction                     = 0;
         themeMenuAction                      = 0;
+        forwardSignalMapper                  = 0;
+        backwardSignalMapper                 = 0;
+        cameraSignalMapper                   = 0;
         albumSettings                        = 0;
         albumManager                         = 0;
         dcopIface                            = 0;
@@ -154,8 +158,6 @@ public:
     QList<QAction*>        kipiToolsActions;
     QList<QAction*>        kipiBatchActions;
     QList<QAction*>        kipiAlbumActions;
-
-    QMap<int, QString>     mediaItems;
 
     QString                cameraGuiPath;
 
@@ -232,7 +234,11 @@ public:
     KAction               *donateMoneyAction;
     KActionMenu           *cameraMenuAction;
     KSelectAction         *themeMenuAction;
-    
+
+    QSignalMapper         *backwardSignalMapper;
+    QSignalMapper         *forwardSignalMapper;
+    QSignalMapper         *cameraSignalMapper;
+
     AlbumSettings         *albumSettings;
     AlbumManager          *albumManager;
     SplashScreen          *splashScreen;
