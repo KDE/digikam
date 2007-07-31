@@ -368,6 +368,8 @@ void TagsPopupMenu::setup(Mode mode)
     d->addTagActions    = new QActionGroup(this);
     d->toggleTagActions = new QActionGroup(this);
 
+    setSeparatorsCollapsible(true);
+
     connect(d->addTagActions, SIGNAL(triggered(QAction*)),
             this, SLOT(slotAddTag(QAction*)));
 
@@ -435,19 +437,15 @@ void TagsPopupMenu::slotAboutToShow()
     if (!album)
         return;
 
+    iterateAndBuildMenu(this, album);
+
     if (d->mode == ASSIGN)
     {
+        addSeparator();
         QAction *action = addAction(d->addTagPix, i18n("Add New Tag..."));
         action->setData(0); // root id
         d->addTagActions->addAction(action);
-
-        if (album->firstChild())
-        {
-            addSeparator();
-        }
     }
-
-    iterateAndBuildMenu(this, album);
 }
 
 // for qSort
@@ -513,14 +511,14 @@ QMenu* TagsPopupMenu::buildSubMenu(int tagid)
     QPixmap pix = SyncJob::getTagThumbnail(album);
     if (d->mode == ASSIGN && !d->assignedTags.contains(album->id()))
     {
-        QAction *action = new KToggleAction(KIcon(pix), i18n("Add this tag"), d->toggleTagActions);
+        QAction *action = new KToggleAction(KIcon(pix), i18n("Assign This Tag"), d->toggleTagActions);
         action->setData(album->id());
         popup->addAction(action);
         popup->addSeparator();
     }
     else if (d->mode == REMOVE)
     {
-        QAction *action = new KToggleAction(KIcon(pix), i18n("Remove this tag"), d->toggleTagActions);
+        QAction *action = new KToggleAction(KIcon(pix), i18n("Remove This Tag"), d->toggleTagActions);
         action->setData(album->id());
         popup->addAction(action);
     }
