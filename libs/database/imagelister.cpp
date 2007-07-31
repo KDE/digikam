@@ -99,8 +99,7 @@ KIO::TransferJob *ImageLister::startListJob(const DatabaseUrl &url, const QStrin
     if (extraValue != -1)
         ds << extraValue;
 
-    return new KIO::TransferJob(url, KIO::CMD_SPECIAL,
-                                ba, QByteArray());
+    return new KIO::SpecialJob(url,ba);
 }
 
 QSize ImageLister::retrieveDimension(const QString &filePath)
