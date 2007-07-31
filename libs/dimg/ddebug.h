@@ -53,7 +53,7 @@ class DIGIKAM_EXPORT Dndbgstream : public kndbgstream
 
 public:
 
-    Dndbgstream(kndbgstream stream);
+    Dndbgstream(QDebug stream);
     ~Dndbgstream();
 };
 
