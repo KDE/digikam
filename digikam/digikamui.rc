@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="30" name="digikam" >
+<gui version="31" name="digikam" >
 
  <MenuBar>
 
@@ -131,6 +131,17 @@
   <Action name="full_screen" />
   <Action name="slideshow" />
  </ToolBar>
+
+ <MainWindow>
+  <Action name="exit_preview_mode"/>
+  <Action name="next_image"/>
+  <Action name="previous_image"/>
+  <Action name="first_image"/>
+  <Action name="last_image"/>
+  <Action name="copy_album_selection"/>
+  <Action name="paste_album_selection"/>
+ </MainWindow>
+
  <ActionProperties/>
 
-</kpartgui>
+</gui>

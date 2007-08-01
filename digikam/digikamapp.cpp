@@ -413,48 +413,41 @@ void DigikamApp::setupStatusBar()
 
 void DigikamApp::setupAccelerators()
 {
-    // TODO: Shortcuts are configurable, but values given here do not work!
+    // Action are added by <MainWindow> tag in ui.rc XML file
     KAction *escapeAction = new KAction(i18n("Exit preview mode"), this);
-    escapeAction->setShortcut(Qt::Key_Escape);
+    actionCollection()->addAction("exit_preview_mode", escapeAction);
+    escapeAction->setShortcut( QKeySequence(Qt::Key_Escape) );
     connect(escapeAction, SIGNAL(triggered()), this, SIGNAL(signalEscapePressed()));
-    actionCollection()->addAction("exit preview mode", escapeAction);
-    addAction(escapeAction);
 
     KAction *nextImageAction = new KAction(i18n("Next Image"), this);
-    escapeAction->setShortcut(KShortcut(Qt::Key_Space, Qt::Key_Next));
+    actionCollection()->addAction("next_image", nextImageAction);
+    nextImageAction->setShortcut(KShortcut(Qt::Key_Space, Qt::Key_Next));
     connect(nextImageAction, SIGNAL(triggered()), this, SIGNAL(signalNextItem()));
-    actionCollection()->addAction("next image", nextImageAction);
-    addAction(nextImageAction);
 
     KAction *previousImageAction = new KAction(i18n("Previous Image"), this);
-    escapeAction->setShortcut(KShortcut(Qt::Key_Backspace, Qt::Key_Prior));
+    actionCollection()->addAction("previous_image", previousImageAction);
+    previousImageAction->setShortcut(KShortcut(Qt::Key_Backspace, Qt::Key_Prior));
     connect(previousImageAction, SIGNAL(triggered()), this, SIGNAL(signalPrevItem()));
-    actionCollection()->addAction("previous action", previousImageAction);
-    addAction(previousImageAction);
 
     KAction *firstImageAction = new KAction(i18n("First Image"), this);
-    escapeAction->setShortcut(Qt::Key_Home);
+    actionCollection()->addAction("first_image", firstImageAction);
+    firstImageAction->setShortcut( QKeySequence(Qt::Key_Home) );
     connect(firstImageAction, SIGNAL(triggered()), this, SIGNAL(signalFirstItem()));
-    actionCollection()->addAction("first image", firstImageAction);
-    addAction(firstImageAction);
 
     KAction *lastImageAction = new KAction(i18n("Last Image"), this);
-    escapeAction->setShortcut(Qt::Key_End);
+    actionCollection()->addAction("last_image", lastImageAction);
+    lastImageAction->setShortcut( QKeySequence(Qt::Key_End) );
     connect(lastImageAction, SIGNAL(triggered()), this, SIGNAL(signalLastItem()));
-    actionCollection()->addAction("last image", lastImageAction);
-    addAction(lastImageAction);
 
     KAction *copyItemsAction = new KAction(i18n("Copy Album Items Selection"), this);
-    escapeAction->setShortcut(Qt::CTRL+Qt::Key_C);
+    actionCollection()->addAction("copy_album_selection", copyItemsAction);
+    copyItemsAction->setShortcut( QKeySequence(Qt::CTRL+Qt::Key_C) );
     connect(copyItemsAction, SIGNAL(triggered()), this, SIGNAL(signalCopyAlbumItemsSelection()));
-    actionCollection()->addAction("copy album selection", copyItemsAction);
-    addAction(copyItemsAction);
 
     KAction *pasteItemsAction = new KAction(i18n("Paste Album Items Selection"), this);
-    escapeAction->setShortcut(Qt::CTRL+Qt::Key_V);
+    actionCollection()->addAction("paste_album_selection", pasteItemsAction);
+    pasteItemsAction->setShortcut( QKeySequence(Qt::CTRL+Qt::Key_V) );
     connect(pasteItemsAction, SIGNAL(triggered()), this, SIGNAL(signalPasteAlbumItemsSelection()));
-    actionCollection()->addAction("paste album selection", pasteItemsAction);
-    addAction(pasteItemsAction);
 }
 
 void DigikamApp::setupActions()
