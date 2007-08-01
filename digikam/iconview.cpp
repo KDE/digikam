@@ -1152,7 +1152,7 @@ void IconView::contentsMouseReleaseEvent(QMouseEvent* e)
     if (d->rubber->isVisible())
         d->rubber->hide();
 
-    if (e->buttons() == Qt::LeftButton)
+    if (e->button() == Qt::LeftButton)
     {
         if (d->pressedMoved)
         {
