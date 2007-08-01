@@ -88,5 +88,5 @@ Digikam::Ddbgstream DDebug(int area)   { return Digikam::Ddbgstream(kDebug(area)
 Digikam::Ddbgstream DError(int area)   { return Digikam::Ddbgstream(kError(area));   }
 Digikam::Ddbgstream DWarning(int area) { return Digikam::Ddbgstream(kWarning(area)); }
 
-Digikam::Dndbgstream DnDebug(int area) { return Digikam::Dndbgstream(kndDebug()); }
+Digikam::Dndbgstream DnDebug(int area) { return Digikam::Dndbgstream(kDebugDevNull()); }
 
