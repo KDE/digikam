@@ -38,11 +38,12 @@
 #include <QFont>
 #include <QClipboard>
 #include <QDropEvent>
+#include <QHash>
 
 // KDE includes.
 
 #include <k3urldrag.h>
-#include <k3popupmenu.h>
+#include <kmenu.h>
 #include <kmimetype.h>
 #include <klocale.h>
 #include <kiconloader.h>
@@ -78,7 +79,7 @@ public:
         thumbSize = ThumbnailSize::Large;
     }
 
-    Q3Dict<CameraIconViewItem>  itemDict;
+    QHash<QString, CameraIconViewItem *>  itemDict;
 
     QRect                       itemRect;
 
@@ -188,7 +189,7 @@ void CameraIconView::addItem(const GPItemInfo& info)
 
 void CameraIconView::removeItem(const QString& folder, const QString& file)
 {
-    CameraIconViewItem* item = d->itemDict.find(folder+file);
+    CameraIconViewItem* item = d->itemDict.value(folder+file);
     if (!item)
         return;
     d->itemDict.remove(folder+file);
@@ -200,7 +201,7 @@ void CameraIconView::removeItem(const QString& folder, const QString& file)
 
 CameraIconViewItem* CameraIconView::findItem(const QString& folder, const QString& file)
 {
-    return d->itemDict.find(folder+file);
+    return d->itemDict.value(folder+file);
 }
 
 int CameraIconView::countItemsByFolder(QString folder)
@@ -223,7 +224,7 @@ int CameraIconView::countItemsByFolder(QString folder)
 
 void CameraIconView::setThumbnail(const QString& folder, const QString& filename, const QImage& image)
 {
-    CameraIconViewItem* item = d->itemDict.find(folder+filename);
+    CameraIconViewItem* item = d->itemDict.value(folder+filename);
     if (!item)
         return;
 
@@ -243,7 +244,7 @@ void CameraIconView::ensureItemVisible(const GPItemInfo& itemInfo)
 
 void CameraIconView::ensureItemVisible(const QString& folder, const QString& file)
 {
-    CameraIconViewItem* item = d->itemDict.find(folder+file);
+    CameraIconViewItem* item = d->itemDict.value(folder+file);
     if (!item)
         return;
 
@@ -431,42 +432,36 @@ void CameraIconView::slotContextMenu(IconItem * item, const QPoint&)
         return;
 
     CameraIconViewItem* camItem = static_cast<CameraIconViewItem*>(item);
-    
-    K3PopupMenu menu(this);
-    menu.insertTitle(SmallIcon("digikam"), d->cameraUI->cameraTitle());
-    menu.insertItem(SmallIcon("editimage"), i18n("&View"), 0);
-    menu.insertSeparator(-1);
-    menu.insertItem(SmallIcon("down"),i18n("Download"), 1);
-    menu.insertItem(SmallIcon("encrypted"), i18n("Toggle lock"), 3);
-    menu.insertSeparator(-1);
-    menu.insertItem(SmallIcon("editdelete"), i18n("Delete"), 2);
 
-    int result = menu.exec(QCursor::pos());
+    KMenu menu(this);
+    menu.addTitle(SmallIcon("digikam"), d->cameraUI->cameraTitle());
+    QAction *viewAction      = menu.addAction(SmallIcon("editimage"), i18n("&View"));
+    menu.addSeparator();
+    QAction *downAction      = menu.addAction(SmallIcon("down"),i18n("Download"));
+    QAction *encryptedAction = menu.addAction(SmallIcon("encrypted"), i18n("Toggle lock"));
+    menu.addSeparator();
+    QAction *deleteAction    = menu.addAction(SmallIcon("editdelete"), i18n("Delete"));
 
-    switch (result)
+    QAction *choice = menu.exec(QCursor::pos());
+
+    if (choice)
     {
-        case(0):
+        if (choice == viewAction)
         {
             emit signalFileView(camItem);
-            break;
         }
-        case(1):
+        else if (choice == downAction)
         {
             emit signalDownload();
-            break;
         }
-        case(2):
+        else if (choice == deleteAction)
         {
             emit signalDelete();
-            break;
         }
-        case(3):
+        else if (choice == encryptedAction)
         {
             emit signalToggleLock();
-            break;
         }
-        default:
-            break;
     }
 }
 
@@ -554,24 +549,16 @@ void CameraIconView::slotRightButtonClicked(const QPoint&)
 
 void CameraIconView::uploadItemPopupMenu(const KUrl::List& srcURLs)
 {
-    K3PopupMenu popMenu(this);
-    popMenu.insertTitle(SmallIcon("digikam"), d->cameraUI->cameraTitle());
-    popMenu.insertItem( SmallIcon("goto"), i18n("&Upload into camera"), 10 );
-    popMenu.insertSeparator(-1);
-    popMenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );
+    KMenu popMenu(this);
+    popMenu.addTitle(SmallIcon("digikam"), d->cameraUI->cameraTitle());
+    QAction *uploadAction = popMenu.addAction( SmallIcon("goto"), i18n("&Upload into camera"));
+    popMenu.addSeparator();
+    popMenu.addAction( SmallIcon("cancel"), i18n("C&ancel") );
 
     popMenu.setMouseTracking(true);
-    int id = popMenu.exec(QCursor::pos());
-    switch(id) 
-    {
-        case 10: 
-        {
-            emit signalUpload(srcURLs);
-            break;
-        }
-        default:
-            break;
-    }
+    QAction *choice = popMenu.exec(QCursor::pos());
+    if (choice == uploadAction)
+        emit signalUpload(srcURLs);
 }
 
 QRect CameraIconView::itemRect() const

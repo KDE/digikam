@@ -36,8 +36,7 @@ extern "C"
 
 // Qt includes.
 
-#include <Q3IconView>
-#include <Q3PopupMenu>
+#include <QMenu>
 #include <QGroupBox>
 #include <QPushButton>
 #include <QToolButton>
@@ -163,21 +162,36 @@ public:
         formatLabel        = 0;
         folderDateLabel    = 0;
         folderDateFormat   = 0;
+        increaseThumbsAction   = 0;
+        decreaseThumbsAction   = 0;
+        downloadSelectedAction = 0;
+        downloadAllAction      = 0;
+        deleteSelectedAction   = 0;
+        deleteAllAction        = 0;
+        cameraInfoAction       = 0;
     }
 
     bool                          busy;
     bool                          closed;
-    
+
     QString                       cameraTitle;
 
     QStringList                   currentlyDeleting;
     QStringList                   foldersToScan;
     QStringList                   cameraFolderList;
 
-    Q3PopupMenu                  *downloadMenu;
-    Q3PopupMenu                  *deleteMenu;
-    Q3PopupMenu                  *imageMenu;
-    
+    QMenu                        *downloadMenu;
+    QMenu                        *deleteMenu;
+    QMenu                        *imageMenu;
+
+    QAction                      *increaseThumbsAction;
+    QAction                      *decreaseThumbsAction;
+    QAction                      *downloadSelectedAction;
+    QAction                      *downloadAllAction;
+    QAction                      *deleteSelectedAction;
+    QAction                      *deleteAllAction;
+    QAction                      *cameraInfoAction;
+
     QToolButton                  *cancelBtn;
 
     QToolBox                     *advBox;
@@ -209,7 +223,7 @@ public:
     KHelpMenu                    *helpMenu;
 
     KDateTimeEdit                *dateTimeEdit;
-    
+
     CameraController             *controller;
 
     CameraIconView               *view;
@@ -226,7 +240,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
                    const QString& path, const QDateTime lastAccess)
         : KDialog(0)
 {
-    
+
     setButtons(Help|User1|User2|User3|Close);
     setDefaultButton(Close);
     setModal(true);
@@ -250,19 +264,19 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     KHBox* widget = new KHBox(plain);
     d->splitter   = new QSplitter(widget);
     d->view       = new CameraIconView(this, d->splitter);
-    
+
     QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
     rightSzPolicy.setHorizontalStretch(2);
     rightSzPolicy.setVerticalStretch(1);
     d->view->setSizePolicy(rightSzPolicy);
-        
+
     d->rightSidebar = new ImagePropertiesSideBarCamGui(widget, "CameraGui Sidebar Right", d->splitter,
                                                        Sidebar::DockRight, true);
     d->splitter->setFrameStyle( QFrame::NoFrame );
     d->splitter->setFrameShadow( QFrame::Plain );
     d->splitter->setFrameShape( QFrame::NoFrame );       
     d->splitter->setOpaqueResize(false);
-    
+
     // -------------------------------------------------------------------------
 
     d->advBox            = new QToolBox(d->rightSidebar);
@@ -273,7 +287,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
 
     d->advBox->insertItem(CameraUIPriv::RENAMEFILEPAGE, d->renameCustomizer, 
                           SmallIcon("file-import"), i18n("File Renaming Options"));
-        
+
     // -- Albums Auto-creation options -----------------------------------------
 
     QWidget* albumBox      = new QWidget(d->advBox);
@@ -358,17 +372,17 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
 
     d->advBox->insertItem(CameraUIPriv::ONFLYPAGE, onFlyBox, SmallIcon("system-run"), 
                           i18n("On the Fly Operations (JPEG only)"));
-                                               
+
     d->rightSidebar->appendTab(d->advBox, SmallIcon("configure"), i18n("Settings"));
     d->rightSidebar->loadViewState();
-        
+
     // -------------------------------------------------------------------------
 
     d->cancelBtn = new QToolButton(plain);
     d->cancelBtn->setSizePolicy(QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum));
     d->cancelBtn->setIcon(SmallIcon("process-stop"));
     d->cancelBtn->setEnabled(false);
-    
+
     d->status   = new KSqueezedTextLabel(plain);
     d->progress = new QProgressBar(plain);
     d->progress->setMaximumHeight(fontMetrics().height()+2);
@@ -388,9 +402,9 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     pixmapLogo->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
     pixmapLogo->setToolTip(i18n("Visit digiKam project website"));
     pixmapLogo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png")));
-    
+
     d->anim = new AnimWidget(frame, pixmapLogo->height()-2);
-    
+
     layout->addWidget(pixmapLogo);
     layout->addWidget(d->anim);
     layout->setMargin(2);  // To make sure the frame gets displayed
@@ -416,47 +430,51 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     viewBoxLayout->setSpacing(0);
 
     // -------------------------------------------------------------------------
-    
-    d->imageMenu = new Q3PopupMenu(this);
-    d->imageMenu->insertItem(i18n("Select &All"),       d->view, SLOT(slotSelectAll()),    Qt::CTRL+Qt::Key_A, 0);
-    d->imageMenu->insertItem(i18n("Select N&one"),      d->view, SLOT(slotSelectNone()),   Qt::CTRL+Qt::Key_U, 1);
-    d->imageMenu->insertItem(i18n("&Invert Selection"), d->view, SLOT(slotSelectInvert()), Qt::CTRL+Qt::Key_Asterisk, 2);
-    d->imageMenu->insertSeparator();
-    d->imageMenu->insertItem(i18n("Select &New Items"), d->view, SLOT(slotSelectNew()), 0, 3);
-    d->imageMenu->insertSeparator();
-    d->imageMenu->insertItem(i18n("Increase Thumbs"),   this,    SLOT(slotIncreaseThumbSize()), Qt::CTRL+Qt::Key_Plus, 4);
-    d->imageMenu->insertItem(i18n("Decrease Thumbs"),   this,    SLOT(slotDecreaseThumbSize()), Qt::CTRL+Qt::Key_Minus, 5);
-    d->imageMenu->insertSeparator();
-    d->imageMenu->insertItem(i18n("Toggle Lock"),       this,    SLOT(slotToggleLock()), 0, 6);
-    button(User3)->setMenu(d->imageMenu);    
+
+    d->imageMenu = new QMenu(this);
+    d->imageMenu->addAction(i18n("Select &All"),       d->view, SLOT(slotSelectAll()),    Qt::CTRL+Qt::Key_A);
+    d->imageMenu->addAction(i18n("Select N&one"),      d->view, SLOT(slotSelectNone()),   Qt::CTRL+Qt::Key_U);
+    d->imageMenu->addAction(i18n("&Invert Selection"), d->view, SLOT(slotSelectInvert()), Qt::CTRL+Qt::Key_Asterisk);
+    d->imageMenu->addSeparator();
+    d->imageMenu->addAction(i18n("Select &New Items"), d->view, SLOT(slotSelectNew()));
+    d->imageMenu->addSeparator();
+    d->increaseThumbsAction =
+      d->imageMenu->addAction(i18n("Increase Thumbs"), this,    SLOT(slotIncreaseThumbSize()), Qt::CTRL+Qt::Key_Plus);
+    d->decreaseThumbsAction =
+      d->imageMenu->addAction(i18n("Decrease Thumbs"), this,    SLOT(slotDecreaseThumbSize()), Qt::CTRL+Qt::Key_Minus);
+    d->imageMenu->addSeparator();
+    d->imageMenu->addAction(i18n("Toggle Lock"),       this,    SLOT(slotToggleLock()));
+    button(User3)->setMenu(d->imageMenu);
 
     // -------------------------------------------------------------------------
 
-    d->downloadMenu = new Q3PopupMenu(this);
-    d->downloadMenu->insertItem(i18n("Download Selected"), this, SLOT(slotDownloadSelected()), 0, 0);
-    d->downloadMenu->insertItem(i18n("Download All"),      this, SLOT(slotDownloadAll()), 0, 1);
-    d->downloadMenu->insertSeparator();
-    d->downloadMenu->insertItem(i18n("Upload..."),         this, SLOT(slotUpload()), 0, 2);
-    d->downloadMenu->setItemEnabled(0, false);
+    d->downloadMenu = new QMenu(this);
+    d->downloadSelectedAction =
+        d->downloadMenu->addAction(i18n("Download Selected"), this, SLOT(slotDownloadSelected()));
+    d->downloadAllAction =
+        d->downloadMenu->addAction(i18n("Download All"),      this, SLOT(slotDownloadAll()));
+    d->downloadMenu->addSeparator();
+    d->downloadMenu->addAction(i18n("Upload..."),         this, SLOT(slotUpload()));
+    d->downloadSelectedAction->setEnabled(false);
     button(User2)->setMenu(d->downloadMenu);
 
     // -------------------------------------------------------------------------
-    
-    d->deleteMenu = new Q3PopupMenu(this);
-    d->deleteMenu->insertItem(i18n("Delete Selected"), this, SLOT(slotDeleteSelected()), 0, 0);
-    d->deleteMenu->insertItem(i18n("Delete All"),      this, SLOT(slotDeleteAll()), 0, 1);
-    d->deleteMenu->setItemEnabled(0, false);
+
+    d->deleteMenu = new QMenu(this);
+    d->deleteSelectedAction = d->deleteMenu->addAction(i18n("Delete Selected"), this, SLOT(slotDeleteSelected()));
+    d->deleteAllAction      = d->deleteMenu->addAction(i18n("Delete All"),      this, SLOT(slotDeleteAll()));
+    d->deleteSelectedAction->setEnabled(false);
     button(User1)->setMenu(d->deleteMenu);
 
     // -------------------------------------------------------------------------
 
     d->helpMenu = new KHelpMenu(this, KGlobal::mainComponent().aboutData(), false);
-    d->helpMenu->menu()->insertItem(SmallIcon("camera-photo"), i18n("Camera Information"), 
-                                    this, SLOT(slotInformations()), 0, CAMERA_INFO_MENU_ID, 0);
+    d->cameraInfoAction = d->helpMenu->menu()->addAction(SmallIcon("camera-photo"), i18n("Camera Information"),
+                                                         this, SLOT(slotInformations()));
     button(Help)->setMenu(d->helpMenu->menu());
 
     // -------------------------------------------------------------------------
-    
+
     connect(d->autoAlbumDateCheck, SIGNAL(toggled(bool)),
             d->folderDateFormat, SLOT(setEnabled(bool)));
 
@@ -775,7 +793,7 @@ void CameraUI::slotBusy(bool val)
         enableButton(User3, true);
         enableButton(User2, true);
         enableButton(User1, true);
-        d->helpMenu->menu()->setItemEnabled(CAMERA_INFO_MENU_ID, true);
+        d->cameraInfoAction->setEnabled(true);
 
         d->anim->stop();
         d->status->setText(i18n("Ready"));
@@ -804,7 +822,7 @@ void CameraUI::slotBusy(bool val)
         enableButton(User3, false);
         enableButton(User2, false);
         enableButton(User1, false);
-        d->helpMenu->menu()->setItemEnabled(CAMERA_INFO_MENU_ID, false);
+        d->cameraInfoAction->setEnabled(false);
     }
 }
 
@@ -840,9 +858,9 @@ void CameraUI::slotIncreaseThumbSize()
 
     if (thumbSize.size() == ThumbnailSize::Huge)
     {
-        d->imageMenu->setItemEnabled(4, false);
+        d->increaseThumbsAction->setEnabled(false);
     }
-    d->imageMenu->setItemEnabled(5, true);
+    d->decreaseThumbsAction->setEnabled(true);
 
     d->view->setThumbnailSize(thumbSize);
 }
@@ -879,10 +897,10 @@ void CameraUI::slotDecreaseThumbSize()
 
     if (thumbSize.size() == ThumbnailSize::Small)
     {
-        d->imageMenu->setItemEnabled(5, false);
+        d->decreaseThumbsAction->setEnabled(false);
     }
-    d->imageMenu->setItemEnabled(4, true);    
-    
+    d->increaseThumbsAction->setEnabled(false);
+
     d->view->setThumbnailSize(thumbSize);
 }
 
@@ -982,25 +1000,25 @@ void CameraUI::slotUpload()
         return;
 
     QString fileformats;
-    
-    QStringList patternList = QStringList::split('\n', KImageIO::pattern(KImageIO::Reading));
-    
+
+    QStringList patternList = KImageIO::pattern(KImageIO::Reading).split('\n');
+
     // All Pictures from list must been always the first entry given by KDE API
     QString allPictures = patternList[0];
-    
+
     // Add RAW file format to All Pictures" type mime and remplace current.
-    allPictures.insert(allPictures.find("|"), QString(raw_file_extentions));
-    patternList.remove(patternList[0]);
+    allPictures.insert(allPictures.indexOf("|"), QString(raw_file_extentions));
+    patternList.removeAll(patternList[0]);
     patternList.prepend(allPictures);
-    
+
     // Added RAW file formats supported by dcraw program like a type mime. 
     // Nota: we cannot use here "image/x-raw" type mime from KDE because it uncomplete 
     // or unavailable(dcraw_0)(see file #121242 in B.K.O).
     patternList.append(QString("\n%1|Camera RAW files").arg(QString(raw_file_extentions)));
-    
+
     fileformats = patternList.join("\n");
 
-    DDebug () << "fileformats=" << fileformats << endl;   
+    DDebug () << "fileformats=" << fileformats << endl;
 
     KUrl::List urls = KFileDialog::getOpenUrls(CollectionManager::instance()->oneAlbumRootPath(),
                                                fileformats, this, i18n("Select Image to Upload"));
@@ -1464,7 +1482,7 @@ void CameraUI::slotDeleted(const QString& folder, const QString& file, bool stat
     {
         d->view->removeItem(folder, file);
         // do this after removeItem, which will signal to slotItemsSelected, which checks for the list
-        d->currentlyDeleting.remove(folder + file);
+        d->currentlyDeleting.removeAll(folder + file);
     }
 
     int curr = d->progress->value();
@@ -1526,29 +1544,28 @@ void CameraUI::slotNewSelection(bool hasSelection)
     {
         // for customized names, the downloadNames depend on the selection.
         // So do not allow Download All if there is a selection!
-        d->downloadMenu->setItemEnabled(0, hasSelection);
-        d->downloadMenu->setItemEnabled(1, !hasSelection);
+        d->downloadSelectedAction->setEnabled(hasSelection);
+        d->downloadAllAction->setEnabled(!hasSelection);
     }
     else
     {
         // if useDefault, the name can easily be computed without selection context,
         // so we can allow Download All.
         // This is the easiest default for new users
-        d->downloadMenu->setItemEnabled(0, hasSelection);
-        d->downloadMenu->setItemEnabled(1, true);
+        d->downloadSelectedAction->setEnabled(hasSelection);
+        d->downloadAllAction->setEnabled(true);
     }
 }
 
 void CameraUI::slotItemsSelected(CameraIconViewItem* item, bool selected)
 {
-    d->downloadMenu->setItemEnabled(0, selected);
-    d->deleteMenu->setItemEnabled(0, selected);
+    d->downloadSelectedAction->setEnabled(selected);
+    d->deleteSelectedAction->setEnabled(selected);
 
     if (selected)
     {
         // if selected item is in the list of item which will be deleted, set no current item
-        if (d->currentlyDeleting.find(item->itemInfo()->folder + item->itemInfo()->name)
-             == d->currentlyDeleting.end())
+        if (!d->currentlyDeleting.contains(item->itemInfo()->folder + item->itemInfo()->name))
         {
             KUrl url(item->itemInfo()->folder + '/' + item->itemInfo()->name);
             d->rightSidebar->itemChanged(item->itemInfo(), url, QByteArray(), d->view, item);
