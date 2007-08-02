@@ -54,6 +54,8 @@ void PreviewLoadingTask::execute()
     if (m_loadingTaskStatus == LoadingTaskStatusStopping)
         return;
 
+    DImg img;
+
     LoadingCache *cache = LoadingCache::cache();
     {
         LoadingCache::CacheLock lock(cache);
@@ -73,7 +75,7 @@ void PreviewLoadingTask::execute()
         {
             // image is found in image cache, loading is successful
 
-            DImg img(*cachedImg);
+            img = DImg(*cachedImg);
 
             // rotate if needed - images are unrotated in the cache,
             // except for RAW images, which are already rotated by dcraw.
@@ -82,9 +84,6 @@ void PreviewLoadingTask::execute()
                 img = img.copy();
                 LoadSaveThread::exifRotate(img, m_loadingDescription.filePath);
             }
-
-            m_thread->imageLoaded(m_loadingDescription.filePath, img);
-            return;
         }
         else
         {
@@ -131,6 +130,14 @@ void PreviewLoadingTask::execute()
                 cache->notifyNewLoadingProcess(this, m_loadingDescription);
             }
         }
+    }
+
+    if (!img.isNull())
+    {
+        // following the golden rule to avoid deadlocks, do this when CacheLock is not held
+        m_thread->taskHasFinished();
+        m_thread->imageLoaded(m_loadingDescription.filePath, img);
+        return;
     }
 
     // load image
@@ -212,7 +219,7 @@ void PreviewLoadingTask::execute()
         cache->removeLoadingProcess(this);
     }
 
-    // following the golden rule to avoid deadlocks, do this when CacheLock is not held
+    // again: following the golden rule to avoid deadlocks, do this when CacheLock is not held
     m_thread->taskHasFinished();
 
     {
