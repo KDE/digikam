@@ -104,6 +104,11 @@ void LoadSaveThread::run()
                 delete d->lastTask;
                 d->lastTask = 0;
             }
+            if (m_currentTask)
+            {
+                delete m_currentTask;
+                m_currentTask = 0;
+            }
             if (!m_todo.isEmpty())
             {
                 m_currentTask = m_todo.takeFirst();
@@ -125,11 +130,12 @@ void LoadSaveThread::run()
 
 void LoadSaveThread::taskHasFinished()
 {
-    // This function is called by the tasks before they send their final message.
+    // This function is called by the tasks _before_ they send their _final_ message.
     // This is to guarantee the user of the API that at least the final message
-    // is sent after load() has been called. This might not been the case
+    // is sent after load() has been called. This might not be the case
     // if m_currentTask is currently loading the same image and a race condition
-    // between the return from execute and the next run of the loop above occurs.
+    // between the return from execute and the next run of the loop above occurs:
+    // Note that m_currentTask is checked for in base classes before adding new tasks.
     QMutexLocker lock(&m_mutex);
     d->lastTask = m_currentTask;
     m_currentTask = 0;

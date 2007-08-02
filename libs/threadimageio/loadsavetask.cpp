@@ -90,6 +90,8 @@ void SharedLoadingTask::execute()
     // send StartedLoadingEvent from each single Task, not via LoadingProcess list
     m_thread->imageStartedLoading(m_loadingDescription.filePath);
 
+    DImg img;
+
     LoadingCache *cache = LoadingCache::cache();
     {
         LoadingCache::CacheLock lock(cache);
@@ -105,11 +107,10 @@ void SharedLoadingTask::execute()
         if (cachedImg)
         {
             // image is found in image cache, loading is successful
-            DImg img(*cachedImg);
+            img = *cachedImg;
             if (accessMode() == LoadSaveThread::AccessModeReadWrite)
                 img = img.copy();
-            m_thread->imageLoaded(m_loadingDescription.filePath, img);
-            return;
+            // continues after else clause...
         }
         else
         {
@@ -157,8 +158,15 @@ void SharedLoadingTask::execute()
         }
     }
 
+    if (!img.isNull())
+    {
+        // following the golden rule to avoid deadlocks, do this when CacheLock is not held
+        m_thread->taskHasFinished();
+        m_thread->imageLoaded(m_loadingDescription.filePath, img);
+    }
+
     // load image
-    DImg img(m_loadingDescription.filePath, this, m_loadingDescription.rawDecodingSettings);
+    img = DImg(m_loadingDescription.filePath, this, m_loadingDescription.rawDecodingSettings);
 
     bool isCached = false;
     {
@@ -170,7 +178,7 @@ void SharedLoadingTask::execute()
         cache->removeLoadingProcess(this);
     }
 
-    // following the golden rule to avoid deadlocks, do this when CacheLock is not held
+    // again: following the golden rule to avoid deadlocks, do this when CacheLock is not held
     m_thread->taskHasFinished();
 
     {
