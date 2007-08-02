@@ -308,16 +308,13 @@ void ImagePreviewView::slotNextPreload()
 void ImagePreviewView::setImageInfo(const ImageInfo & info, const ImageInfo &previous, const ImageInfo &next)
 {
     d->imageInfo = info;
-    d->hasPrev   = !previous.isNull();
-    d->hasNext   = !next.isNull();
 
     if (!d->imageInfo.isNull())
         setImagePath(info.filePath());
     else
         setImagePath();
 
-    setPreviousNextPaths(d->hasPrev ? QString() : previous.filePath(),
-                         d->hasNext ? QString() : next.filePath());
+    setPreviousNextPaths(previous.filePath(), next.filePath());
 }
 
 ImageInfo ImagePreviewView::getImageInfo() const
@@ -391,7 +388,7 @@ void ImagePreviewView::slotContextMenu()
 
         if (plugin && (*it)->name() == "JPEGLossless")
         {
-            DDebug() << "Found JPEGLossless plugin" << endl;
+            //DDebug() << "Found JPEGLossless plugin" << endl;
 
             QList<KAction*> actionList = plugin->actions();
 
@@ -541,7 +538,7 @@ void ImagePreviewView::slotThemeChanged()
 }
 
 void ImagePreviewView::slotCornerButtonPressed()
-{    
+{
     if (d->panIconPopup)
     {
         d->panIconPopup->hide();
