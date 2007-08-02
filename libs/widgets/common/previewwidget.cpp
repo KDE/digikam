@@ -98,17 +98,15 @@ public:
     Q3Cache<QPixmap> tileCache;
 
     QPixmap*         tileTmpPix;
-
-    QColor           bgColor;
 };
 
 PreviewWidget::PreviewWidget(QWidget *parent)
              : Q3ScrollView(parent)
 {
     d = new PreviewWidgetPriv;
-    d->bgColor.setRgb(0, 0, 0);
     m_movingInProgress = false;
     setAttribute(Qt::WA_DeleteOnClose);
+    setBackgroundRole(QPalette::Base);
 
     viewport()->setMouseTracking(false);
 
@@ -126,15 +124,6 @@ PreviewWidget::~PreviewWidget()
 {
     delete d->tileTmpPix;
     delete d;
-}
-
-void PreviewWidget::setBackgroundColor(const QColor& color)
-{
-    if (d->bgColor == color)
-        return;
-
-    d->bgColor = color;
-    viewport()->update();
 }
 
 void PreviewWidget::slotReset()
@@ -394,6 +383,8 @@ void PreviewWidget::viewportPaintEvent(QPaintEvent *e)
     QRegion clipRegion(er);
     cr = d->pixmapRect.intersect(cr);
 
+    QColor bgColor = palette().color(QPalette::Base);
+
     if (!cr.isEmpty() && !previewIsNull())
     {
         clipRegion -= QRect(contentsToViewport(cr.topLeft()), cr.size());
@@ -429,7 +420,7 @@ void PreviewWidget::viewportPaintEvent(QPaintEvent *e)
                         pix = d->tileTmpPix;
                     }
 
-                    pix->fill(d->bgColor);
+                    pix->fill(bgColor);
 
                     sx = (int)floor((double)i / d->tileSize ) * step;
                     sy = (int)floor((double)j / d->tileSize ) * step;
@@ -453,7 +444,7 @@ void PreviewWidget::viewportPaintEvent(QPaintEvent *e)
     }
 
     p.setClipRegion(clipRegion);
-    p.fillRect(er, d->bgColor);
+    p.fillRect(er, bgColor);
     p.end();
 
     viewportPaintExtraData();

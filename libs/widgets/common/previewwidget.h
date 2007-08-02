@@ -55,7 +55,6 @@ public:
     ~PreviewWidget();
 
     void   setZoomFactor(double z);
-    void   setBackgroundColor(const QColor& color);
     void   fitToWindow();
     bool   isFitToWindow();
     void   toggleFitToWindow();
