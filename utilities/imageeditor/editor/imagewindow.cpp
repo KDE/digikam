@@ -299,6 +299,9 @@ void ImageWindow::setupUserArea()
     m_splitter->setFrameShape( QFrame::NoFrame );
     m_splitter->setOpaqueResize(false);
     setCentralWidget(widget);
+
+    // the window will be constructed after the initial theme change
+    slotThemeChanged();
 }
 
 void ImageWindow::setupActions()
