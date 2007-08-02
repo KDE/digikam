@@ -163,6 +163,7 @@ void SharedLoadingTask::execute()
         // following the golden rule to avoid deadlocks, do this when CacheLock is not held
         m_thread->taskHasFinished();
         m_thread->imageLoaded(m_loadingDescription.filePath, img);
+        return;
     }
 
     // load image
