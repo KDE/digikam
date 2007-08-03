@@ -47,7 +47,7 @@ public:
 
 protected:
 
-    void paintBanner();
+    void paintBanner(QPainter *p);
 
 private:
 

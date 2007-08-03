@@ -49,7 +49,7 @@ public:
     virtual ~IconGroupItem();
 
     IconView* iconView() const;
-    
+
     IconGroupItem* nextGroup() const;
     IconGroupItem* prevGroup() const;
 
@@ -65,18 +65,18 @@ public:
 
     void      clear(bool update=true);
     void      sort();
-    
+
     void insertItem(IconItem* item);
     void takeItem(IconItem* item);
 
     virtual int compare(IconGroupItem *group);
-    
+
 protected:
-    
-    virtual void paintBanner();
+
+    virtual void paintBanner(QPainter *p);
 
 private:
-    
+
     static int cmpItems(const void *n1, const void *n2);
 
 private:

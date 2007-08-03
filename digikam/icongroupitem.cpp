@@ -276,18 +276,9 @@ bool IconGroupItem::move(int y)
     return true;
 }
 
-void IconGroupItem::paintBanner()
+void IconGroupItem::paintBanner(QPainter *p)
 {
-    QRect r(rect());
-    QPixmap pix(r.width(), r.height());
-    pix.fill(d->view->palette().color(QPalette::Base));
-
-    r = QRect(d->view->contentsToViewport(QPoint(r.x(), r.y())),
-              QSize(r.width(), r.height()));
-    
-    QPainter p(d->view->viewport());
-    p.drawPixmap(r.x(), r.y(), pix, 0, 0, r.width(), r.height());
-    p.end();
+    p->fillRect(rect(), d->view->palette().color(QPalette::Base));
 }
 
 int IconGroupItem::compare(IconGroupItem*)
