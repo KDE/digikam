@@ -55,14 +55,14 @@ class CameraIconViewPriv;
 class CameraIconView : public IconView
 {
     Q_OBJECT
-    
+
 public:
 
     CameraIconView(CameraUI* ui, QWidget* parent);
     ~CameraIconView();
 
     void setRenameCustomizer(RenameCustomizer* renamer);
-    
+
     void addItem(const GPItemInfo& itemInfo);
     void removeItem(const QString& folder, const QString& file);
     void setThumbnail(const QString& folder, const QString& filename, const QImage& image);
@@ -73,19 +73,19 @@ public:
 
     void setThumbnailSize(const ThumbnailSize& thumbSize);
     ThumbnailSize thumbnailSize() const;
-        
+
     CameraIconViewItem* findItem(const QString& folder, const QString& file);
 
     int countItemsByFolder(QString folder);
     int itemsDownloaded();
 
-    QPixmap* itemBaseRegPixmap() const;
-    QPixmap* itemBaseSelPixmap() const;
+    QPixmap itemBaseRegPixmap() const;
+    QPixmap itemBaseSelPixmap() const;
 
     virtual QRect itemRect() const;
 
     QString defaultDownloadName(CameraIconViewItem *item);
-    
+
 signals:
 
     void signalSelected(CameraIconViewItem*, bool);
@@ -96,7 +96,7 @@ signals:
     void signalDelete();
     void signalToggleLock();
     void signalNewSelection(bool);
-    
+
 public slots:
 
     void slotDownloadNameChanged();
@@ -119,7 +119,7 @@ protected:
     void startDrag();
     void contentsDropEvent(QDropEvent *event);
     void updateItemRectsPixmap();
-    
+   
 private:
 
     QString getTemplatedName(const GPItemInfo* itemInfo, int position);

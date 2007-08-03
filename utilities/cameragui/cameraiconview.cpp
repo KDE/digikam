@@ -140,20 +140,20 @@ CameraIconView::~CameraIconView()
     delete d;
 }
 
-QPixmap* CameraIconView::itemBaseRegPixmap() const
+QPixmap CameraIconView::itemBaseRegPixmap() const
 {
-    return &d->itemRegPixmap;
+    return d->itemRegPixmap;
 }
 
-QPixmap* CameraIconView::itemBaseSelPixmap() const
+QPixmap CameraIconView::itemBaseSelPixmap() const
 {
-    return &d->itemSelPixmap;
+    return d->itemSelPixmap;
 }
 
 void CameraIconView::setRenameCustomizer(RenameCustomizer* renamer)
 {
     d->renamer = renamer;
-    
+
     connect(d->renamer, SIGNAL(signalChanged()),
             this, SLOT(slotDownloadNameChanged()));
 }

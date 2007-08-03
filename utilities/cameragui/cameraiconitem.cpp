@@ -225,54 +225,51 @@ GPItemInfo* CameraIconViewItem::itemInfo() const
     return d->itemInfo; 
 }
 
-void CameraIconViewItem::paintItem()
+void CameraIconViewItem::paintItem(QPainter *p)
 {
     CameraIconView* view = (CameraIconView*)iconView();
     QFont fn(view->font());
 
-    QPixmap pix;
     QRect r(rect());
 
     if (isSelected())
-        pix = *(view->itemBaseSelPixmap());
+        p->drawPixmap(0, 0, view->itemBaseSelPixmap());
     else
-        pix = *(view->itemBaseRegPixmap());
-    
+        p->drawPixmap(0, 0, view->itemBaseRegPixmap());
+
     ThemeEngine* te = ThemeEngine::componentData();
 
-    QPainter p(&pix);
-
-    QString itemName     = AlbumIconItem::squeezedText(&p, r.width()-5, d->itemInfo->name);
-    QString downloadName = AlbumIconItem::squeezedText(&p, r.width()-5, d->downloadName);
+    QString itemName     = AlbumIconItem::squeezedText(p, r.width()-5, d->itemInfo->name);
+    QString downloadName = AlbumIconItem::squeezedText(p, r.width()-5, d->downloadName);
     calcRect(itemName, downloadName);
 
-    p.setPen(isSelected() ? te->textSelColor() : te->textRegColor());
+    p->setPen(isSelected() ? te->textSelColor() : te->textRegColor());
 
-    p.drawPixmap(d->pixRect.x() + (d->pixRect.width()  - d->pixmap.width())  /2,
+    p->drawPixmap(d->pixRect.x() + (d->pixRect.width()  - d->pixmap.width())  /2,
                  d->pixRect.y() + (d->pixRect.height() - d->pixmap.height()) /2,
                  d->pixmap);
 
-    p.drawText(d->textRect, Qt::AlignHCenter|Qt::AlignTop, itemName);
+    p->drawText(d->textRect, Qt::AlignHCenter|Qt::AlignTop, itemName);
 
     if (!d->downloadName.isEmpty())
     {
         if (fn.pointSize() > 0)
             fn.setPointSize(qMax(fn.pointSize()-2, 6));
 
-        p.setFont(fn);
-        p.setPen(isSelected() ? te->textSpecialSelColor() : te->textSpecialRegColor());
-        p.drawText(d->extraRect, Qt::AlignHCenter|Qt::AlignTop, downloadName);
+        p->setFont(fn);
+        p->setPen(isSelected() ? te->textSpecialSelColor() : te->textSpecialRegColor());
+        p->drawText(d->extraRect, Qt::AlignHCenter|Qt::AlignTop, downloadName);
     }
 
     if (this == iconView()->currentItem())
     {
-        p.setPen(QPen(isSelected() ? Qt::white : Qt::black, 1, Qt::DotLine));
-        p.drawRect(0, 0, r.width(), r.height());
+        p->setPen(QPen(isSelected() ? Qt::white : Qt::black, 1, Qt::DotLine));
+        p->drawRect(0, 0, r.width(), r.height());
     }
 
     // Draw download status icon.
     QPixmap downloaded;
-    
+
     switch (d->itemInfo->downloaded)
     {
         case GPItemInfo::NewPicture:
@@ -298,7 +295,7 @@ void CameraIconViewItem::paintItem()
         /* TODO: see B.K.O #107316 : disable temporally the unknow download status until     
                  a new method to identify the already downloaded pictures from camera is 
                  implemented.
-  
+
         case GPItemInfo::DownloadUnknow:
         {
             downloaded = d->pixmapUnknowPicture;
@@ -308,20 +305,11 @@ void CameraIconViewItem::paintItem()
     }
 
     if (!downloaded.isNull())
-        p.drawPixmap(rect().width() - downloaded.width() - 5, 5, downloaded);
+        p->drawPixmap(rect().width() - downloaded.width() - 5, 5, downloaded);
 
     // If camera item is locked (read only), draw a "Lock" icon.
     if (d->itemInfo->writePermissions == 0) 
-        p.drawPixmap(5, 5, SmallIcon( "encrypted" ));
-
-    p.end();
-
-    r = QRect(view->contentsToViewport(QPoint(r.x(), r.y())),
-              QSize(r.width(), r.height()));
-
-    QPainter p2(view->viewport());
-    p2.drawPixmap(r.x(), r.y(), pix);
-    p2.end();
+        p->drawPixmap(5, 5, SmallIcon( "encrypted" ));
 }
 
 void CameraIconViewItem::setDownloadName(const QString& downloadName)
@@ -390,7 +378,7 @@ void CameraIconViewItem::calcRect(const QString& itemName, const QString& downlo
         d->textRect.setWidth(qMax(d->textRect.width(), d->extraRect.width()));
         d->textRect.setHeight(d->textRect.height() + d->extraRect.height());
     }
-    
+
     int w = qMax(d->textRect.width(), d->pixRect.width() );
     int h = d->textRect.height() + d->pixRect.height() ;
 

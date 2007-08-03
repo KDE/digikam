@@ -51,7 +51,7 @@ public:
     ~CameraIconViewItem();
 
     void    setThumbnail(const QImage& thumbnail);
-    
+
     void    setDownloadName(const QString& downloadName);
     QString getDownloadName() const;
     void    setDownloaded(int status);
@@ -62,18 +62,18 @@ public:
 
     // reimplemented from IconItem
     virtual QRect clickToOpenRect();
-    
+
 protected:
 
-    virtual void paintItem();
-    
+    virtual void paintItem(QPainter *p);
+
 private:
 
     void calcRect(const QString& itemName, const QString& downloadName);
 
 private:
 
-    CameraIconViewItemPriv* d;    
+    CameraIconViewItemPriv* d;
 };
 
 }  // namespace Digikam
