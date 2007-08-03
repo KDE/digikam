@@ -1670,14 +1670,14 @@ QRect AlbumIconView::bannerRect() const
     return d->bannerRect;
 }
 
-QPixmap* AlbumIconView::itemBaseRegPixmap() const
+QPixmap AlbumIconView::itemBaseRegPixmap() const
 {
-    return &d->itemRegPixmap;
+    return d->itemRegPixmap;
 }
 
-QPixmap* AlbumIconView::itemBaseSelPixmap() const
+QPixmap AlbumIconView::itemBaseSelPixmap() const
 {
-    return &d->itemSelPixmap;
+    return d->itemSelPixmap;
 }
 
 QPixmap AlbumIconView::bannerPixmap() const
@@ -1687,7 +1687,7 @@ QPixmap AlbumIconView::bannerPixmap() const
 
 QPixmap AlbumIconView::ratingPixmap() const
 {
-    return d->ratingPixmap;    
+    return d->ratingPixmap;
 }
 
 QFont AlbumIconView::itemFontReg() const
@@ -1864,7 +1864,7 @@ void AlbumIconView::updateItemRectsPixmap()
 void AlbumIconView::slotThemeChanged()
 {
     QPalette plt(palette());
-    plt.setColor(QPalette::Active, QPalette::Base, 
+    plt.setColor(QPalette::Active, QPalette::Base,
                  ThemeEngine::componentData()->baseColor());
     plt.setColor(QPalette::Active, QPalette::Text, 
                  ThemeEngine::componentData()->textRegColor());

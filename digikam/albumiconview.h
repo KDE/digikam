@@ -103,8 +103,8 @@ public:
     QRect    itemTagRect() const;
     QRect    bannerRect() const;
 
-    QPixmap* itemBaseRegPixmap() const;
-    QPixmap* itemBaseSelPixmap() const;
+    QPixmap  itemBaseRegPixmap() const;
+    QPixmap  itemBaseSelPixmap() const;
     QPixmap  bannerPixmap() const;
     QPixmap  ratingPixmap() const;
 

@@ -63,7 +63,7 @@ public:
 
 protected:
 
-    virtual void paintItem();
+    virtual void paintItem(QPainter *p);
 
 private:
 

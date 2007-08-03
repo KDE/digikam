@@ -221,24 +221,25 @@ QRect AlbumIconItem::clickToOpenRect()
     return pixmapRect;
 }
 
-void AlbumIconItem::paintItem()
+void AlbumIconItem::paintItem(QPainter *viewportPainter)
 {
-    QPixmap pix;
     QRect   r;
     const AlbumSettings *settings = d->view->settings();
-    
+
+    QPixmap pix;
     if (isSelected())
-        pix = *(d->view->itemBaseSelPixmap());
+        pix = d->view->itemBaseSelPixmap();
     else
-        pix = *(d->view->itemBaseRegPixmap());
+        pix = d->view->itemBaseRegPixmap();
 
     ThemeEngine* te = ThemeEngine::componentData();
-    
+
     QPainter p(&pix);
+
     p.setPen(isSelected() ? te->textSelColor() : te->textRegColor());
 
     d->dirty = true;
-    
+
     QPixmap thumbnail = d->view->pixmapManager()->find(d->info.fileUrl());
     if (!thumbnail.isNull())
     {
@@ -258,28 +259,27 @@ void AlbumIconItem::paintItem()
         QPixmap ratingPixmap = d->view->ratingPixmap();
 
         int rating = d->info.rating();
-        
+
         int x, w;
         x = r.x() + (r.width() - rating * ratingPixmap.width())/2;
         w = rating * ratingPixmap.width();
-        
+
         p.drawTiledPixmap(x, r.y(), w, r.height(), ratingPixmap);
-    }    
-    
+    }
+
     if (settings->getIconShowName())
     {
         r = d->view->itemNameRect();
         p.setFont(d->view->itemFontReg());
-        p.drawText(r, Qt::AlignCenter, squeezedText(&p, r.width(),
-                                                    d->info.name()));
+        p.drawText(r, Qt::AlignCenter, squeezedText(&p, r.width(), d->info.name()));
     }
 
     p.setFont(d->view->itemFontCom());
-    
+
     if (settings->getIconShowComments())
     {
         QString comments = d->info.comment();
-        
+
         r = d->view->itemCommentsRect();
         p.drawText(r, Qt::AlignCenter, squeezedText(&p, r.width(), comments));
     }
@@ -290,14 +290,14 @@ void AlbumIconItem::paintItem()
     {
         QDateTime date(d->info.dateTime());
 
-        r = d->view->itemDateRect();    
+        r = d->view->itemDateRect();
         p.setFont(d->view->itemFontXtra());
         QString str;
         dateToString(date, str);
         str = i18n("created : %1",str);
         p.drawText(r, Qt::AlignCenter, squeezedText(&p, r.width(), str));
     }
-    
+
     if (settings->getIconShowModDate())
     {
         QDateTime date(d->info.modDateTime());
@@ -309,7 +309,7 @@ void AlbumIconItem::paintItem()
         str = i18n("modified : %1",str);
         p.drawText(r, Qt::AlignCenter, squeezedText(&p, r.width(), str));
     }
-    
+
     if (settings->getIconShowResolution())
     {
         QSize dims = d->info.dimensions();
@@ -318,18 +318,17 @@ void AlbumIconItem::paintItem()
             QString mpixels, resolution;
             mpixels.setNum(dims.width()*dims.height()/1000000.0, 'f', 2);
             resolution = (!dims.isValid()) ? i18n("Unknown") : i18n("%1x%2 (%3Mpx)",
-                         dims.width(),dims.height(),mpixels);
-            r = d->view->itemResolutionRect();    
+                          dims.width(),dims.height(),mpixels);
+            r = d->view->itemResolutionRect();
             p.drawText(r, Qt::AlignCenter, squeezedText(&p, r.width(), resolution));
         }
     }
 
     if (settings->getIconShowSize())
     {
-        r = d->view->itemSizeRect();    
+        r = d->view->itemSizeRect();
         p.drawText(r, Qt::AlignCenter,
-                   squeezedText(&p, r.width(),
-                                KIO::convertSize(d->info.fileSize())));
+                    squeezedText(&p, r.width(), KIO::convertSize(d->info.fileSize())));
     }
 
     p.setFont(d->view->itemFontCom());
@@ -338,28 +337,19 @@ void AlbumIconItem::paintItem()
     if (settings->getIconShowTags())
     {
         QString tags = d->info.tagNames().join(", ");
-        
-        r = d->view->itemTagRect();    
-        p.drawText(r, Qt::AlignCenter, 
-                   squeezedText(&p, r.width(), tags));
+
+        r = d->view->itemTagRect();
+        p.drawText(r, Qt::AlignCenter, squeezedText(&p, r.width(), tags));
     }
 
     if (this == d->view->currentItem())
     {
-        p.setPen(QPen(isSelected() ? te->textSelColor() : te->textRegColor(),
-                      0, Qt::DotLine));
-        p.drawRect(1, 1, pix.width()-2, pix.height()-2);
+        r = d->view->itemRect();
+        p.setPen(QPen(isSelected() ? te->textSelColor() : te->textRegColor(), 0, Qt::DotLine));
+        p.drawRect(1, 1, r.width()-2, r.height()-2);
     }
-    
-    p.end();
-    
-    r = rect();
-    r = QRect(d->view->contentsToViewport(QPoint(r.x(), r.y())),
-              QSize(r.width(), r.height()));
 
-    QPainter p2(d->view->viewport());
-    p2.drawPixmap(r.x(), r.y(), pix, 0, 0, r.width(), r.height());
-    p2.end();
+    viewportPainter->drawPixmap(0, 0, pix);
 }
 
 QRect AlbumIconItem::thumbnailRect() const
