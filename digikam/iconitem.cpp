@@ -60,7 +60,7 @@ IconItem* IconItem::nextItem() const
     if (m_group->nextGroup())
         return m_group->nextGroup()->firstItem();
 
-    return 0;    
+    return 0;
 }
 
 IconItem* IconItem::prevItem() const
@@ -115,7 +115,7 @@ void IconItem::setSelected(bool val, bool cb)
         view->clearSelection();
         view->blockSignals(false);
     }
-    
+
     m_selected = val;
     view->selectItem(this, val);
     view->updateContents(rect());
@@ -144,7 +144,7 @@ int IconItem::compare(IconItem* /*item*/)
     return 0;
 }
 
-void IconItem::paintItem()
+void IconItem::paintItem(QPainter *p)
 {
     IconView* view = m_group->iconView();
 
@@ -159,13 +159,11 @@ void IconItem::paintItem()
         p.drawRect(2, 2, r.width()-4, r.width()-4);
         p.end();
     }
-        
+
     r = QRect(view->contentsToViewport(QPoint(r.x(), r.y())),
               QSize(r.width(), r.height()));
 
-    QPainter p(view->viewport());
-    p.drawPixmap(r.x(), r.y(), pix, 0, 0, r.width(), r.height());
-    p.end();
+    p->drawPixmap(r.x(), r.y(), pix, 0, 0, r.width(), r.height());
 }
 
 }  // namespace Digikam
