@@ -128,14 +128,14 @@ void kio_digikamthumbnailProtocol::get(const KUrl& url )
         if (shmaddr == (void *)-1)
         {
             error(KIO::ERR_INTERNAL, "Failed to attach to shared memory segment " + shmid);
-            kWarning() << "Failed to attach to shared memory segment " << shmid << endl;
+            kWarning() << "Failed to attach to shared memory segment " << shmid;
             return;
         }
 
         if (img.width() * img.height() > m_creator->cachedSize() * m_creator->cachedSize())
         {
             error(KIO::ERR_INTERNAL, "Image is too big for the shared memory segment");
-            kWarning() << "Image is too big for the shared memory segment" << endl;
+            kWarning() << "Image is too big for the shared memory segment";
             shmdt((char*)shmaddr);
             return;
         }
@@ -175,7 +175,7 @@ bool kio_digikamthumbnailProtocol::loadKDEThumbCreator(QImage& image, const QStr
     QString mimeType = KMimeType::findByUrl(path)->name();
     if (mimeType.isEmpty())
     {
-        kDebug() << "Mimetype not found" << endl;
+        kDebug() << "Mimetype not found";
         return false;
     }
 
@@ -202,14 +202,14 @@ bool kio_digikamthumbnailProtocol::loadKDEThumbCreator(QImage& image, const QStr
 
     if (plugin.isEmpty())
     {
-        kDebug() << "No relevant plugin found " << endl;
+        kDebug() << "No relevant plugin found ";
         return false;
     }
 
     KLibrary *library = KLibLoader::self()->library(QFile::encodeName(plugin));
     if (!library)
     {
-        kDebug() << "Plugin library not found " << plugin << endl;
+        kDebug() << "Plugin library not found " << plugin;
         return false;
     }
 
@@ -220,13 +220,13 @@ bool kio_digikamthumbnailProtocol::loadKDEThumbCreator(QImage& image, const QStr
 
     if (!creator)
     {
-        kDebug() << "Cannot load ThumbCreator " << plugin << endl;
+        kDebug() << "Cannot load ThumbCreator " << plugin;
         return false;
     }
 
     if (!creator->create(path, m_cachedSize, m_cachedSize, image))
     {
-        kDebug() << "Cannot create thumbnail for " << path << endl;
+        kDebug() << "Cannot create thumbnail for " << path;
         delete creator;
         return false;
     }  

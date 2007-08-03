@@ -67,7 +67,7 @@ void kio_digikamsearch::special(const QByteArray& data)
     if (!ds.atEnd())
         ds >> listingType;
 
-    kDebug() << "kio_digikamsearch::special " << kurl << endl;
+    kDebug() << "kio_digikamsearch::special " << kurl;
 
     Digikam::DatabaseUrl dbUrl(kurl);
     Digikam::DatabaseAccess::setParameters(dbUrl);
