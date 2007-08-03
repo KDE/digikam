@@ -602,7 +602,6 @@ void IconView::sort()
 
 void IconView::slotRearrange()
 {
-    DDebug() << "IconView::slotrearrange " << geometry() << endl;
     sort();
     arrangeItems();
 
@@ -643,7 +642,6 @@ void IconView::slotRearrange()
 
 bool IconView::arrangeItems()
 {
-    DDebug() << "IconView::arrangeItems visibleWidth" << visibleWidth() << endl;
     int  y   = 0;
     int  itemW = itemRect().width();
     int  itemH = itemRect().height();
@@ -713,20 +711,23 @@ QRect IconView::bannerRect() const
 
 void IconView::viewportPaintEvent(QPaintEvent* pe)
 {
-    QRect r(pe->rect());
-    QRegion paintRegion(pe->region());
+    QRect contentsPaintRect(viewportToContents(pe->rect().topLeft()), viewportToContents(pe->rect().bottomRight()));
+    QRegion unpaintedRegion(pe->region());
 
     QPainter painter(viewport());
-    painter.setClipRegion(paintRegion);
 
     // paint any group banners which intersect this paintevent rect
     for (IconGroupItem* group = d->firstGroup; group; group = group->nextGroup())
     {
-        QRect br(contentsRectToViewport(group->rect()));
-        if (r.intersects(br))
+        if (contentsPaintRect.intersects(group->rect()))
         {
-            group->paintBanner();
-            paintRegion -= QRegion(br);
+            QRect viewportRect = contentsRectToViewport(group->rect());
+            //painter.save();
+            painter.translate(viewportRect.x(), viewportRect.y());
+            group->paintBanner(&painter);
+            painter.translate( - viewportRect.x(), - viewportRect.y());
+            //painter.restore();
+            unpaintedRegion -= QRegion(viewportRect);
         }
     }
 
@@ -734,26 +735,26 @@ void IconView::viewportPaintEvent(QPaintEvent* pe)
     for (IconViewPriv::ItemContainer* c = d->firstContainer; c;
          c = c->next)
     {
-        QRect cr(contentsRectToViewport(c->rect));
-
-        if (r.intersects(cr))
+        if (contentsPaintRect.intersects(c->rect))
         {
-
             foreach(IconItem *item, c->items)
             {
-                QRect ir(contentsRectToViewport(item->rect()));
-                if (r.intersects(ir))
+                if (contentsPaintRect.intersects(item->rect()))
                 {
-                    item->paintItem();
-                    paintRegion -= QRegion(ir);
+                    QRect viewportRect = contentsRectToViewport(item->rect());
+                    //painter.save();
+                    painter.translate(viewportRect.x(), viewportRect.y());
+                    item->paintItem(&painter);
+                    painter.translate( - viewportRect.x(), - viewportRect.y());
+                    //painter.restore();
+                    unpaintedRegion -= QRegion(viewportRect);
                 }
             }
         }
     }
 
-    painter.setClipRegion(paintRegion);
-    painter.fillRect(r, palette().color(QPalette::Base));
-    painter.end();
+    painter.setClipRegion(unpaintedRegion);
+    painter.fillRect(pe->rect(), palette().color(QPalette::Base));
 }
 
 QRect IconView::contentsRectToViewport(const QRect& r) const
@@ -765,7 +766,6 @@ QRect IconView::contentsRectToViewport(const QRect& r) const
 void IconView::resizeEvent(QResizeEvent* e)
 {
     Q3ScrollView::resizeEvent(e);
-    DDebug() << "IconView::resizeEvent " << e->size() << endl;
     triggerRearrangement();
 }
 
