@@ -143,7 +143,6 @@ void PreviewLoadingTask::execute()
     // load image
     int  size = m_loadingDescription.previewParameters.size;
 
-    DImg img;
     QImage qimage;
     bool fromEmbeddedPreview = false;
 
