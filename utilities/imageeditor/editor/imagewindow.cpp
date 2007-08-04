@@ -375,8 +375,6 @@ void ImageWindow::setupActions()
     // ---------------------------------------------------------------------------------
 
     createGUI("digikamimagewindowui.rc");
-
-    setupStandardAccelerators();
 }
 
 void ImageWindow::applySettings()

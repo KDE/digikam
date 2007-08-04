@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="19" name="digikamimagewindow" >
+<gui version="20" name="digikamimagewindow" >
 
 <MenuBar>
 
@@ -113,6 +113,10 @@
      <Action name="editorwindow_slideshow" />      
      <Merge />
 </ToolBar>
+
+<MainWindow>
+     <Action name="editorwindow_exitfullscreen" />
+</MainWindow>
  
 <ActionProperties/>
 

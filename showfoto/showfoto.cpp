@@ -503,8 +503,6 @@ void ShowFoto::setupActions()
     // --- Create the gui --------------------------------------------------------------
 
     createGUI("showfotoui.rc");
-
-    setupStandardAccelerators();
 }
 
 void ShowFoto::readSettings()

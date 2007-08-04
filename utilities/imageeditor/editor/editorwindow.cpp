@@ -266,11 +266,13 @@ void EditorWindow::setupStandardActions()
 {
     // -- Standard 'File' menu actions ---------------------------------------------
 
-    m_backwardAction = actionCollection()->addAction(KStandardAction::Back, "editorwindow_backward", 
-                                                     this, SLOT(slotBackward()));
+    m_backwardAction = KStandardAction::back(this, SLOT(slotBackward()), this);
+    actionCollection()->addAction("editorwindow_backward", m_backwardAction);
+    m_backwardAction->setShortcut( KShortcut(Qt::Key_PageUp, Qt::Key_Backspace) );
 
-    m_forwardAction = actionCollection()->addAction(KStandardAction::Forward, "editorwindow_forward", 
-                                                    this, SLOT(slotForward()));
+    m_forwardAction = KStandardAction::forward(this, SLOT(slotForward()), this);
+    actionCollection()->addAction("editorwindow_forward", m_forwardAction);
+    m_forwardAction->setShortcut( KShortcut(Qt::Key_PageDown, Qt::Key_Space) );
 
     m_firstAction = new KAction(KIcon("go-first"), i18n("&First"), this);
     m_firstAction->setShortcut(KStandardShortcut::Home);
@@ -282,14 +284,14 @@ void EditorWindow::setupStandardActions()
     connect(m_lastAction, SIGNAL(triggered()), this, SLOT(slotLast()));
     actionCollection()->addAction("editorwindow_last", m_lastAction);
 
-    m_saveAction = actionCollection()->addAction(KStandardAction::Save, "editorwindow_save", 
-                                                 this, SLOT(slotSave()));
+    m_saveAction = KStandardAction::save(this, SLOT(slotSave()), this);
+    actionCollection()->addAction("editorwindow_save", m_saveAction);
 
-    m_saveAsAction = actionCollection()->addAction(KStandardAction::SaveAs, "editorwindow_saveas", 
-                                                   this, SLOT(slotSaveAs()));
+    m_saveAsAction = KStandardAction::saveAs(this, SLOT(slotSaveAs()), this);
+    actionCollection()->addAction("editorwindow_saveas", m_saveAsAction);
 
-    m_revertAction = actionCollection()->addAction(KStandardAction::Revert, "editorwindow_revert", 
-                                                   m_canvas, SLOT(slotRestore()));
+    m_revertAction = KStandardAction::revert(this, SLOT(slotRestore()), this);
+    actionCollection()->addAction("editorwindow_revert", m_revertAction);
 
     m_saveAction->setEnabled(false);
     m_saveAsAction->setEnabled(false);
@@ -311,8 +313,8 @@ void EditorWindow::setupStandardActions()
 
     // -- Standard 'Edit' menu actions ---------------------------------------------
 
-    d->copyAction = actionCollection()->addAction(KStandardAction::Copy, "editorwindow_copy", 
-                                                  m_canvas, SLOT(slotCopy()));
+    d->copyAction = KStandardAction::copy(m_canvas, SLOT(slotCopy()), this);
+    actionCollection()->addAction("editorwindow_copy", d->copyAction);
     d->copyAction->setEnabled(false);
 
     m_undoAction = new KToolBarPopupAction(KIcon("edit-undo"), i18n("Undo"), this);
@@ -355,11 +357,13 @@ void EditorWindow::setupStandardActions()
 
     // -- Standard 'View' menu actions ---------------------------------------------
 
-    d->zoomPlusAction = actionCollection()->addAction(KStandardAction::ZoomIn, "editorwindow_zoomplus", 
-                                                 this, SLOT(slotIncreaseZoom()));
+    d->zoomPlusAction = KStandardAction::zoomIn(this, SLOT(slotIncreaseZoom()), this);
+    actionCollection()->addAction("editorwindow_zoomplus", d->zoomPlusAction);
+    d->zoomPlusAction->setShortcut(QKeySequence(Qt::Key_Plus));
 
-    d->zoomMinusAction = actionCollection()->addAction(KStandardAction::ZoomOut, "editorwindow_zoomminus", 
-                                                 this, SLOT(slotDecreaseZoom()));
+    d->zoomMinusAction = KStandardAction::zoomOut(this, SLOT(slotDecreaseZoom()), this);
+    actionCollection()->addAction("editorwindow_zoomminus", d->zoomMinusAction);
+    d->zoomMinusAction->setShortcut(QKeySequence(Qt::Key_Minus));
 
     d->zoomTo100percents = new KAction(KIcon("viewmag1"), i18n("Zoom to 1:1"), this);
     d->zoomTo100percents->setShortcut(Qt::ALT+Qt::CTRL+Qt::Key_0);       // NOTE: Photoshop 7 use ALT+CTRL+0
@@ -486,60 +490,13 @@ void EditorWindow::setupStandardActions()
     d->donateMoneyAction = new KAction(i18n("Donate Money..."), this);
     connect(d->donateMoneyAction, SIGNAL(triggered()), this, SLOT(slotDonateMoney()));
     actionCollection()->addAction("editorwindow_donatemoney", d->donateMoneyAction);
-}
 
-void EditorWindow::setupStandardAccelerators()
-{
-#warning "TODO: kde4 port it";
-/*  // TODO: KDE4PORT: use KAction/QAction framework instead KAccel
+    // -- Keyboard-only actions added to <MainWindow> ------------------------------
 
-    d->accelerators = new KAccel(this);
-
-    d->accelerators->insert("Exit fullscreen", i18n("Exit Fullscreen mode"),
-                    i18n("Exit out of the fullscreen mode"),
-                    Qt::Key_Escape, this, SLOT(slotEscapePressed()),
-                    false, true);
-
-    d->accelerators->insert("Next Image Qt::Key_Space", i18n("Next Image"),
-                    i18n("Load Next Image"),
-                    Qt::Key_Space, this, SLOT(slotForward()),
-                    false, true);
-
-    d->accelerators->insert("Next Image SHIFT+Qt::Key_Space", i18n("Next Image"),
-                    i18n("Load Next Image"),
-                    Qt::SHIFT+Qt::Key_Space, this, SLOT(slotForward()),
-                    false, true);
-
-    d->accelerators->insert("Previous Image Qt::Key_Backspace", i18n("Previous Image"),
-                    i18n("Load Previous Image"),
-                    Qt::Key_Backspace, this, SLOT(slotBackward()),
-                    false, true);
-
-    d->accelerators->insert("Next Image Qt::Key_Next", i18n("Next Image"),
-                    i18n("Load Next Image"),
-                    Qt::Key_PageDown, this, SLOT(slotForward()),
-                    false, true);
-
-    d->accelerators->insert("Previous Image Qt::Key_Prior", i18n("Previous Image"),
-                    i18n("Load Previous Image"),
-                    Qt::Key_PageUp, this, SLOT(slotBackward()),
-                    false, true);
-
-    d->accelerators->insert("Zoom Plus Qt::Key_Plus", i18n("Zoom In"),
-                    i18n("Zoom in on Image"),
-                    Qt::Key_Plus, this, SLOT(slotIncreaseZoom()),
-                    false, true);
-
-    d->accelerators->insert("Zoom Plus Qt::Key_Minus", i18n("Zoom Out"),
-                    i18n("Zoom out of Image"),
-                    Qt::Key_Minus, this, SLOT(slotDecreaseZoom()),
-                    false, true);
-
-    d->accelerators->insert("Redo CTRL+Qt::Key_Y", i18n("Redo"),
-                    i18n("Redo Last action"),
-                    Qt::CTRL+Qt::Key_Y, m_canvas, SLOT(slotRedo()),
-                    false, true);
-*/
+    KAction *exitFullscreenAction = new KAction(i18n("Exit Fullscreen mode"), this);
+    actionCollection()->addAction("editorwindow_exitfullscreen", exitFullscreenAction);
+    exitFullscreenAction->setShortcut( QKeySequence(Qt::Key_Escape) );
+    connect(exitFullscreenAction, SIGNAL(triggered()), this, SLOT(slotEscapePressed()));
 }
 
 void EditorWindow::setupStatusBar()
@@ -767,30 +724,6 @@ void EditorWindow::slotEscapePressed()
 {
     if (m_fullScreen)
         m_fullScreenAction->activate(QAction::Trigger);
-}
-
-void EditorWindow::plugActionAccel(KAction* action)
-{
-    if (!action)
-        return;
-
-#warning "TODO: kde4 port it";
-/*  // TODO: KDE4PORT: use KAction/QAction framework instead KAccel
-
-    d->accelerators->insert(action->text(),
-                    action->text(),
-                    action->whatsThis(),
-                    action->shortcut(),
-                    action,
-                    SLOT(activate()));*/
-}
-
-void EditorWindow::unplugActionAccel(KAction* /*action*/)
-{
-#warning "TODO: kde4 port it";
-/*  // TODO: KDE4PORT: use KAction/QAction framework instead KAccel
-
-    d->accelerators->remove(action->text());*/
 }
 
 void EditorWindow::loadImagePlugins()
@@ -1034,25 +967,7 @@ void EditorWindow::slotToggleFullScreen()
                 }
             }
         }
-/*
-        // -- remove the gui action accels ----
 
-        unplugActionAccel(m_forwardAction);
-        unplugActionAccel(m_backwardAction);
-        unplugActionAccel(m_firstAction);
-        unplugActionAccel(m_lastAction);
-        unplugActionAccel(m_saveAction);
-        unplugActionAccel(m_saveAsAction);
-        unplugActionAccel(d->zoomPlusAction);
-        unplugActionAccel(d->zoomMinusAction);
-        unplugActionAccel(d->zoomFitToWindowAction);
-        unplugActionAccel(d->zoomFitToSelectAction);
-        unplugActionAccel(d->cropAction);
-        unplugActionAccel(d->filePrintAction);
-        unplugActionAccel(m_fileDeleteAction);
-        unplugActionAccel(d->selectAllAction);
-        unplugActionAccel(d->selectNoneAction);
-*/
         toggleGUI2FullScreen();
         m_fullScreen = false;
     }
@@ -1097,24 +1012,6 @@ void EditorWindow::slotToggleFullScreen()
             }
         }
 
-/*
-
-        plugActionAccel(m_forwardAction);
-        plugActionAccel(m_backwardAction);
-        plugActionAccel(m_firstAction);
-        plugActionAccel(m_lastAction);
-        plugActionAccel(m_saveAction);
-        plugActionAccel(m_saveAsAction);
-        plugActionAccel(d->zoomPlusAction);
-        plugActionAccel(d->zoomMinusAction);
-        plugActionAccel(d->zoomFitToWindowAction);
-        plugActionAccel(d->zoomFitToSelectAction);
-        plugActionAccel(d->cropAction);
-        plugActionAccel(d->filePrintAction);
-        plugActionAccel(m_fileDeleteAction);
-        plugActionAccel(d->selectAllAction);
-        plugActionAccel(d->selectNoneAction);
-*/
         toggleGUI2FullScreen();
         showFullScreen();
         m_fullScreen = true;

@@ -41,7 +41,6 @@
 
 class QSplitter;
 class QLabel;
-class QAction;
 
 class KToolBarPopupAction;
 class KAction;
@@ -88,13 +87,13 @@ protected:
 
     QSplitter               *m_splitter;
 
-    QAction                 *m_saveAction;
-    QAction                 *m_saveAsAction;
-    QAction                 *m_revertAction;
-    QAction                 *m_fileDeleteAction;
-    QAction                 *m_forwardAction;
-    QAction                 *m_backwardAction;
-    QAction                 *m_fullScreenAction;
+    KAction                 *m_saveAction;
+    KAction                 *m_saveAsAction;
+    KAction                 *m_revertAction;
+    KAction                 *m_fileDeleteAction;
+    KAction                 *m_forwardAction;
+    KAction                 *m_backwardAction;
+    KAction                 *m_fullScreenAction;
 
     KAction                 *m_lastAction;
     KAction                 *m_firstAction;
@@ -117,15 +116,11 @@ protected:
 
     void setupStandardConnections();
     void setupStandardActions();
-    void setupStandardAccelerators();
     void setupStatusBar();
     void setupContextMenu();
     void toggleStandardActions(bool val);
 
     void printImage(KUrl url);
-
-    void plugActionAccel(KAction* action);
-    void unplugActionAccel(KAction* action);
 
     void unLoadImagePlugins();
     void loadImagePlugins();

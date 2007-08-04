@@ -27,7 +27,7 @@
 
 class QToolButton;
 class QLabel;
-class QAction;
+class KAction;
 class QWidgetAction;
 class QEventLoop;
 
@@ -95,22 +95,22 @@ public:
     QToolButton               *underExposureIndicator; 
     QToolButton               *overExposureIndicator; 
 
-    QAction                   *donateMoneyAction;
-    QAction                   *filePrintAction;
-    QAction                   *copyAction;
-    QAction                   *resizeAction;
-    QAction                   *cropAction;
-    QAction                   *zoomPlusAction;
-    QAction                   *zoomMinusAction;
-    QAction                   *zoomTo100percents;
-    QAction                   *zoomFitToSelectAction;
-    QAction                   *rotateLeftAction;
-    QAction                   *rotateRightAction;
-    QAction                   *flipHorizAction;
-    QAction                   *flipVertAction;
-    QAction                   *slideShowAction;
-    QAction                   *selectAllAction;
-    QAction                   *selectNoneAction;
+    KAction                   *donateMoneyAction;
+    KAction                   *filePrintAction;
+    KAction                   *copyAction;
+    KAction                   *resizeAction;
+    KAction                   *cropAction;
+    KAction                   *zoomPlusAction;
+    KAction                   *zoomMinusAction;
+    KAction                   *zoomTo100percents;
+    KAction                   *zoomFitToSelectAction;
+    KAction                   *rotateLeftAction;
+    KAction                   *rotateRightAction;
+    KAction                   *flipHorizAction;
+    KAction                   *flipVertAction;
+    KAction                   *slideShowAction;
+    KAction                   *selectAllAction;
+    KAction                   *selectNoneAction;
 
     KToggleAction             *zoomFitToWindowAction;
     KToggleAction             *viewCMViewAction;
