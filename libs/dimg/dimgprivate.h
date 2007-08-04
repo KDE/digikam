@@ -36,15 +36,12 @@
 // Local includes.
 
 #include "digikam_export.h"
+#include "dshareddata.h"
 
 namespace Digikam
 {
 
-// TODO: KDE4PORT: QShared have been removed to Qt4. Check if QSharedData can be
-//                 used instead as well.
-//                 More details: http://doc.trolltech.com/4.3/porting4.html#qshared
-
-class DIGIKAM_EXPORT DImgPrivate : public Q3Shared
+class DIGIKAM_EXPORT DImgPrivate : public DSharedData
 {
 public:
 
@@ -66,14 +63,14 @@ public:
 
     bool                    null;
     bool                    alpha;
-    bool                    sixteenBit;    
-    bool                    isReadOnly;    
-    
+    bool                    sixteenBit;
+    bool                    isReadOnly;
+
     unsigned int            width;
     unsigned int            height;
 
     unsigned char          *data;
-    
+
     QMap<int, QByteArray>   metaData;
     QMap<QString, QVariant> attributes;
     QMap<QString, QString>  embeddedText;

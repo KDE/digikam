@@ -42,6 +42,7 @@
 // Local includes.
 
 #include "digikam_export.h"
+#include "dshareddata.h"
 #include "dcolor.h"
 #include "dcolorcomposer.h"
 
@@ -76,7 +77,7 @@ public:
         COM,    // JFIF comments section data.
         EXIF,   // EXIF meta-data.
         IPTC,   // IPTC meta-data.
-        ICC     // ICC color profile.        
+        ICC     // ICC color profile.
     };
 
     enum ANGLE
@@ -326,7 +327,7 @@ public:
 
 private:
 
-    DImgPrivate *m_priv;
+    DSharedDataPointer<DImgPrivate> m_priv;
 
 private:
 

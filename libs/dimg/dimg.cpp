@@ -104,7 +104,6 @@ DImg::DImg(const QString& filePath, DImgLoaderObserver *observer,
 DImg::DImg(const DImg& image)
 {
     m_priv = image.m_priv;
-    m_priv->ref();
 }
 
 DImg::DImg(uint width, uint height, bool sixteenBit, bool alpha, uchar* data, bool copyData)
@@ -155,8 +154,6 @@ DImg::DImg(const QImage& image)
 
 DImg::~DImg()
 {
-    if (m_priv->deref())
-        delete m_priv;
 }
 
 
@@ -166,18 +163,7 @@ DImg::~DImg()
 
 DImg& DImg::operator=(const DImg& image)
 {
-    if (m_priv == image.m_priv)
-        return *this;
-
-    if (m_priv->deref())
-    {
-        delete m_priv;
-        m_priv = 0;
-    }
-
     m_priv = image.m_priv;
-    m_priv->ref();
-
     return *this;
 }
 
@@ -188,21 +174,18 @@ bool DImg::operator==(const DImg& image) const
 
 void DImg::reset(void)
 {
-    if (m_priv->deref())
-        delete m_priv;
-
     m_priv = new DImgPrivate;
 }
 
 void DImg::detach()
 {
     // are we being shared?
-    if (m_priv->count <= 1)
+    if (!m_priv->hasMoreReferences())
     {
         return;
     }
 
-    DImgPrivate* old = m_priv;
+    DSharedDataPointer<DImgPrivate> old = m_priv;
 
     m_priv = new DImgPrivate;
     copyImageData(old);
@@ -213,8 +196,6 @@ void DImg::detach()
         int size = allocateData();
         memcpy(m_priv->data, old->data, size);
     }
-
-    old->deref();
 }
 
 void DImg::putImageData(uint width, uint height, bool sixteenBit, bool alpha, uchar *data, bool copyData)
@@ -732,8 +713,8 @@ void DImg::setICCProfil(const QByteArray& profile)
 QByteArray DImg::metadata(DImg::METADATA key) const
 {
     typedef QMap<int, QByteArray> MetaDataMap;
-    
-    for (MetaDataMap::iterator it = m_priv->metaData.begin(); it != m_priv->metaData.end(); ++it)
+
+    for (MetaDataMap::const_iterator it = m_priv->metaData.begin(); it != m_priv->metaData.end(); ++it)
     {
         if (it.key() == key)
             return it.value();
