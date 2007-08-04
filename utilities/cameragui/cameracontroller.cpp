@@ -121,6 +121,7 @@ public:
         overwriteAll = false;
         skipAll      = false;
         canceled     = false;
+        running      = false;
         downloadTotal = 0;
         parent = 0;
         timer  = 0;
@@ -131,6 +132,7 @@ public:
     bool                    overwriteAll;
     bool                    skipAll;
     bool                    canceled;
+    bool                    running;
 
     int                     downloadTotal;
 
@@ -212,13 +214,21 @@ CameraController::CameraController(QWidget* parent, const QString& title, const 
     connect(this, SIGNAL(signalInternalOpen(const QString&, const QString&, const QString&)),
             this, SLOT(slotOpen(const QString&, const QString&, const QString&)));
 
+    d->running = true;
     start();
 }
 
 CameraController::~CameraController()
 {
+    // clear commands, stop camera
     slotCancel();
 
+    // stop thread
+    {
+        QMutexLocker lock(&d->mutex);
+        d->running = false;
+        d->condVar.wakeAll();
+    }
     wait();
 
     delete d->camera;
@@ -231,12 +241,11 @@ void CameraController::slotCancel()
     d->camera->cancel();
     QMutexLocker lock(&d->mutex);
     d->commands.clear();
-    d->condVar.wakeAll();
 }
 
 void CameraController::run()
 {
-    while (!d->canceled)
+    while (d->running)
     {
         CameraCommand *command;
 
