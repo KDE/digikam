@@ -54,6 +54,8 @@ public:
      */
     inline bool isReferenced() const
         { return (int)ref > 0; }
+    inline bool hasMoreReferences() const
+        { return (int)ref != 1; }
 
 private:
     // using the assignment operator would lead to corruption in the ref-counting
@@ -73,7 +75,7 @@ public:
      *   copy constructor of class T may not be used.
      */
 
-    /** Various pperators for accessing the pointer const and non-const */
+    /** Various operators for accessing the pointer const and non-const */
     inline T &operator*() { return *d; }
     inline const T &operator*() const { return *d; }
     inline T *operator->() { return d; }
