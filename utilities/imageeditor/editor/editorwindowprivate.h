@@ -30,6 +30,7 @@ class QLabel;
 class KAction;
 class QWidgetAction;
 class QEventLoop;
+class QSignalMapper;
 
 class KComboBox;
 class KToggleAction;
@@ -78,6 +79,8 @@ public:
         selectAllAction        = 0;
         selectNoneAction       = 0;
         waitingLoop            = 0;
+        undoSignalMapper       = 0;
+        redoSignalMapper       = 0;
     }
 
     ~EditorWindowPriv()
@@ -111,6 +114,9 @@ public:
     KAction                   *slideShowAction;
     KAction                   *selectAllAction;
     KAction                   *selectNoneAction;
+
+    QSignalMapper             *undoSignalMapper;
+    QSignalMapper             *redoSignalMapper;
 
     KToggleAction             *zoomFitToWindowAction;
     KToggleAction             *viewCMViewAction;

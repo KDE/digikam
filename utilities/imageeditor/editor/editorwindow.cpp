@@ -50,6 +50,7 @@ extern "C"
 #include <QWidgetAction>
 #include <QImageReader>
 #include <QEventLoop>
+#include <QSignalMapper>
 
 // KDE includes.
 
@@ -317,33 +318,43 @@ void EditorWindow::setupStandardActions()
     actionCollection()->addAction("editorwindow_copy", d->copyAction);
     d->copyAction->setEnabled(false);
 
+
     m_undoAction = new KToolBarPopupAction(KIcon("edit-undo"), i18n("Undo"), this);
     m_undoAction->setShortcut(KStandardShortcut::Undo);
-    connect(m_undoAction, SIGNAL(triggered()), m_canvas, SLOT(slotUndo()));
+    m_undoAction->setEnabled(false);
     actionCollection()->addAction("editorwindow_undo", m_undoAction);
 
     connect(m_undoAction->menu(), SIGNAL(aboutToShow()),
             this, SLOT(slotAboutToShowUndoMenu()));
 
-    // TODO: KDE4PORT: this activated(int) have been replaced by triggered(QAction *)
-    connect(m_undoAction->menu(), SIGNAL(activated(int)),
+    // we are using a signal mapper to identify which of a bunch of actions was triggered
+    d->undoSignalMapper = new QSignalMapper(this);
+
+    // connect mapper to view
+    connect(d->undoSignalMapper, SIGNAL(mapped(int)),
             m_canvas, SLOT(slotUndo(int)));
 
-    m_undoAction->setEnabled(false);
+    // connect simple undo action
+    connect(m_undoAction, SIGNAL(triggered()), d->undoSignalMapper, SLOT(map()));
+    d->undoSignalMapper->setMapping(m_undoAction, 1);
+
 
     m_redoAction = new KToolBarPopupAction(KIcon("edit-redo"), i18n("Redo"), this);
     m_redoAction->setShortcut(KStandardShortcut::Redo);
-    connect(m_redoAction, SIGNAL(triggered()), m_canvas, SLOT(slotRedo()));
+    m_redoAction->setEnabled(false);
     actionCollection()->addAction("editorwindow_redo", m_redoAction);
 
     connect(m_redoAction->menu(), SIGNAL(aboutToShow()),
             this, SLOT(slotAboutToShowRedoMenu()));
 
-    // TODO: KDE4PORT: this activated(int) have been replaced by triggered(QAction *)
-    connect(m_redoAction->menu(), SIGNAL(activated(int)),
+    d->redoSignalMapper = new QSignalMapper(this);
+
+    connect(d->redoSignalMapper, SIGNAL(mapped(int)),
             m_canvas, SLOT(slotRedo(int)));
 
-    m_redoAction->setEnabled(false);
+    connect(m_redoAction, SIGNAL(triggered()), d->redoSignalMapper, SLOT(map()));
+    d->redoSignalMapper->setMapping(m_redoAction, 1);
+
 
     d->selectAllAction = new KAction(i18n("Select All"), this);
     d->selectAllAction->setShortcut(Qt::CTRL+Qt::Key_A);
@@ -611,13 +622,11 @@ void EditorWindow::slotAboutToShowUndoMenu()
     QStringList titles;
     m_canvas->getUndoHistory(titles);
 
-    if(!titles.isEmpty())
+    for (int i=0; i<titles.size(); i++)
     {
-        QStringList::Iterator iter = titles.begin();
-        for(; iter != titles.end(); ++iter)
-        {
-            m_undoAction->menu()->addAction(*iter);
-        }
+        QAction *action =
+            m_undoAction->menu()->addAction(titles[i], d->undoSignalMapper, SLOT(map()));
+        d->undoSignalMapper->setMapping(action, i + 1);
     }
 }
 
@@ -627,13 +636,11 @@ void EditorWindow::slotAboutToShowRedoMenu()
     QStringList titles;
     m_canvas->getRedoHistory(titles);
 
-    if(!titles.isEmpty())
+    for (int i=0; i<titles.size(); i++)
     {
-        QStringList::Iterator iter = titles.begin();
-        for(; iter != titles.end(); ++iter)
-        {
-            m_redoAction->menu()->addAction(*iter);
-        }
+        QAction *action =
+            m_redoAction->menu()->addAction(titles[i], d->redoSignalMapper, SLOT(map()));
+        d->redoSignalMapper->setMapping(action, i + 1);
     }
 }
 
