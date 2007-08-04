@@ -967,15 +967,11 @@ void DigikamApp::slotAboutToShowBackwardMenu()
     QStringList titles;
     d->view->getBackwardHistory(titles);
 
-    if(!titles.isEmpty())
+    for (int i=0; i<titles.size(); i++)
     {
-        int id = 1;
-        foreach(QString title, titles)
-        {
-            QAction *action = d->backwardActionMenu->menu()->addAction(title);
-            d->backwardSignalMapper->setMapping(action, id);
-            id++;
-        }
+        QAction *action =
+            d->backwardActionMenu->menu()->addAction(titles[i], d->backwardSignalMapper, SLOT(map()));
+        d->backwardSignalMapper->setMapping(action, i + 1);
     }
 }
 
@@ -985,15 +981,11 @@ void DigikamApp::slotAboutToShowForwardMenu()
     QStringList titles;
     d->view->getForwardHistory(titles);
 
-    if(!titles.isEmpty())
+    for (int i=0; i<titles.size(); i++)
     {
-        int id = 1;
-        foreach(QString title, titles)
-        {
-            QAction *action = d->forwardActionMenu->menu()->addAction(title);
-            d->forwardSignalMapper->setMapping(action, id);
-            id++;
-        }
+        QAction *action =
+            d->forwardActionMenu->menu()->addAction(titles[i], d->forwardSignalMapper, SLOT(map()));
+        d->forwardSignalMapper->setMapping(action, i + 1);
     }
 }
 
