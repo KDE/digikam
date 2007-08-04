@@ -231,6 +231,7 @@ void CameraController::slotCancel()
     d->camera->cancel();
     QMutexLocker lock(&d->mutex);
     d->commands.clear();
+    d->condVar.wakeAll();
 }
 
 void CameraController::run()
@@ -257,6 +258,7 @@ void CameraController::run()
         executeCommand(command);
         delete command;
     }
+    sendBusy(false);
 }
 
 void CameraController::executeCommand(CameraCommand *cmd)

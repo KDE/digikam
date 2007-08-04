@@ -688,7 +688,7 @@ void CameraUI::slotCancelButton()
 {
     d->status->setText(i18n("Cancelling current operation, please wait..."));
     d->progress->hide();
-    QTimer::singleShot(0, d->controller, SLOT(slotCancel()));
+    d->controller->slotCancel();
     d->currentlyDeleting.clear();
 }
 
