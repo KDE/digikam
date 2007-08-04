@@ -232,11 +232,6 @@ void CameraIconViewItem::paintItem(QPainter *p)
 
     QRect r(rect());
 
-    if (isSelected())
-        p->drawPixmap(0, 0, view->itemBaseSelPixmap());
-    else
-        p->drawPixmap(0, 0, view->itemBaseRegPixmap());
-
     ThemeEngine* te = ThemeEngine::componentData();
 
     QString itemName     = AlbumIconItem::squeezedText(p, r.width()-5, d->itemInfo->name);
@@ -245,9 +240,21 @@ void CameraIconViewItem::paintItem(QPainter *p)
 
     p->setPen(isSelected() ? te->textSelColor() : te->textRegColor());
 
-    p->drawPixmap(d->pixRect.x() + (d->pixRect.width()  - d->pixmap.width())  /2,
-                 d->pixRect.y() + (d->pixRect.height() - d->pixmap.height()) /2,
-                 d->pixmap);
+    p->setCompositionMode(QPainter::CompositionMode_Source);
+
+    QRect pixmapDrawRect(d->pixRect.x() + (d->pixRect.width()  - d->pixmap.width())  /2,
+                         d->pixRect.y() + (d->pixRect.height() - d->pixmap.height()) /2,
+                         d->pixmap.width(), d->pixmap.height());
+    p->drawPixmap(pixmapDrawRect.topLeft(), d->pixmap);
+
+    p->save();
+    QRegion pixmapClipRegion = QRegion(0, 0, r.width(), r.height()) - QRegion(pixmapDrawRect);
+    p->setClipRegion(pixmapClipRegion);
+    if (isSelected())
+        p->drawPixmap(0, 0, view->itemBaseSelPixmap());
+    else
+        p->drawPixmap(0, 0, view->itemBaseRegPixmap());
+    p->restore();
 
     p->drawText(d->textRect, Qt::AlignHCenter|Qt::AlignTop, itemName);
 
@@ -256,9 +263,11 @@ void CameraIconViewItem::paintItem(QPainter *p)
         if (fn.pointSize() > 0)
             fn.setPointSize(qMax(fn.pointSize()-2, 6));
 
+        QFont oldFn = p->font();
         p->setFont(fn);
         p->setPen(isSelected() ? te->textSpecialSelColor() : te->textSpecialRegColor());
         p->drawText(d->extraRect, Qt::AlignHCenter|Qt::AlignTop, downloadName);
+        p->setFont(oldFn);
     }
 
     if (this == iconView()->currentItem())
@@ -402,19 +411,16 @@ void CameraIconViewItem::calcRect(const QString& itemName, const QString& downlo
 QRect CameraIconViewItem::clickToOpenRect()
 {
     QRect r(rect());
-    
+
     if (d->pixmap.isNull())
     {
-        QRect pixRect(d->pixRect);
-        pixRect.translate(r.x(), r.y());
-        return pixRect;
+        return d->pixRect.translated(r.x(), r.y());
     }
 
     QRect pixRect(d->pixRect.x() + (d->pixRect.width()  - d->pixmap.width())/2,
                   d->pixRect.y() + (d->pixRect.height() - d->pixmap.height())/2,
                   d->pixmap.width(), d->pixmap.height());
-    pixRect.translate(r.x(), r.y());
-    return pixRect;
+    return pixRect.translated(r.x(), r.y());
 }
 
 }  // namespace Digikam
