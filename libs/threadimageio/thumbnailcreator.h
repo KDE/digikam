@@ -107,6 +107,7 @@ private:
 
     QImage loadWithDImg(const QString &path);
     QImage loadImagePreview(const QString& path);
+    void handleAlphaChannel(QImage &thumb);
     void exifRotate(const QString& filePath, QImage& thumb, bool fromEmbeddedPreview);
 
     // implementations in thumbnailbasic.cpp

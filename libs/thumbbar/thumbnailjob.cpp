@@ -219,6 +219,7 @@ void ThumbnailJob::processNext()
 
 void ThumbnailJob::slotResult(KJob *job)
 {
+    // TODO: this slot is not called when the slave crashed ??
     removeSubjob(job);
     Q_ASSERT( subjobs().isEmpty() );
 

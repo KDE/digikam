@@ -177,7 +177,7 @@ void PixmapManager::slotGotThumbnail(const KUrl& url, const QPixmap& pix)
 
 void PixmapManager::slotFailedThumbnail(const KUrl& url)
 {
-    QImage img;
+    QPixmap pix;
     QString ext = QFileInfo(url.path()).suffix();
 
     // Wrapper around mime type of item to get the right icon.
@@ -187,36 +187,35 @@ void PixmapManager::slotFailedThumbnail(const KUrl& url)
     {
         if (settings->getImageFileFilter().toUpper().contains(ext.toUpper()) ||
             settings->getRawFileFilter().toUpper().contains(ext.toUpper()))
-        { 
-            img = DesktopIcon("image", K3Icon::SizeEnormous).toImage();
+        {
+            pix = DesktopIcon("image", K3Icon::SizeEnormous);
         }
         else if (settings->getMovieFileFilter().toUpper().contains(ext.toUpper()))
         {
-            img = DesktopIcon("video", K3Icon::SizeEnormous).toImage();
+            pix = DesktopIcon("video", K3Icon::SizeEnormous);
         }
         else if (settings->getAudioFileFilter().toUpper().contains(ext.toUpper()))
         {
-            img = DesktopIcon("sound", K3Icon::SizeEnormous).toImage();
+            pix = DesktopIcon("sound", K3Icon::SizeEnormous);
         }
     }
 
-    if (img.isNull())
-        img = DesktopIcon("file-broken", K3Icon::SizeEnormous).toImage();
+    if (pix.isNull())
+        pix = DesktopIcon("file-broken", K3Icon::SizeEnormous);
 
     // Resize icon to the right size depending of current settings.
 
-    QSize size(img.size());
+    QSize size(pix.size());
     size.scale(d->size, d->size, Qt::KeepAspectRatio);
-    if (size.width() < img.width() && size.height() < img.height())
+    if (size.width() < pix.width() && size.height() < pix.height())
     {
         // only scale down
         // do not scale up, looks bad
-        img = img.scaled(size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        pix = pix.scaled(size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     }
 
     d->cache->remove(url);
-    QPixmap* thumb = new QPixmap(QPixmap::fromImage(img));
-    d->cache->insert(url, thumb);
+    d->cache->insert(url, new QPixmap(pix));
     emit signalPixmap(url);
 }
 

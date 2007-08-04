@@ -240,8 +240,6 @@ void CameraIconViewItem::paintItem(QPainter *p)
 
     p->setPen(isSelected() ? te->textSelColor() : te->textRegColor());
 
-    p->setCompositionMode(QPainter::CompositionMode_Source);
-
     QRect pixmapDrawRect(d->pixRect.x() + (d->pixRect.width()  - d->pixmap.width())  /2,
                          d->pixRect.y() + (d->pixRect.height() - d->pixmap.height()) /2,
                          d->pixmap.width(), d->pixmap.height());

@@ -227,11 +227,6 @@ void AlbumIconItem::paintItem(QPainter *p)
     const AlbumSettings *settings = d->view->settings();
     ThemeEngine* te = ThemeEngine::componentData();
 
-    // Thumbnail pixmaps can have an alpha channel.
-    // Default composition mode is Source Over, doing alpha blending.
-    // Setting Source here is a major drawing speedup on non-accelerated systems
-    p->setCompositionMode(QPainter::CompositionMode_Source);
-
     QPixmap pix;
     if (isSelected())
         pix = d->view->itemBaseSelPixmap();

@@ -26,6 +26,7 @@
 // Qt includes
 
 #include <QFileInfo>
+#include <QPainter>
 
 // KDE includes
 
@@ -211,8 +212,7 @@ QImage ThumbnailCreator::load(const QString &path, bool exif)
         if (qMax(qimage.width(),qimage.height()) != d->cachedSize)
             qimage = qimage.scaled(d->cachedSize, d->cachedSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
-        if (qimage.format() != QImage::Format_ARGB32)
-            qimage = qimage.convertToFormat(QImage::Format_ARGB32);
+        handleAlphaChannel(qimage);
 
         if (exif)
             exifRotate(path, qimage, fromEmbeddedPreview);
@@ -233,6 +233,8 @@ QImage ThumbnailCreator::load(const QString &path, bool exif)
     }
 
     qimage = qimage.scaled(d->thumbnailSize, d->thumbnailSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+
+    handleAlphaChannel(qimage);
 
     if (qimage.isNull())
     {
@@ -265,6 +267,28 @@ QImage ThumbnailCreator::loadImagePreview(const QString& path)
     }
 
     return image;
+}
+
+void ThumbnailCreator::handleAlphaChannel(QImage &qimage)
+{
+    switch (qimage.format())
+    {
+        case QImage::Format_RGB32:
+            break;
+        case QImage::Format_ARGB32:
+        case QImage::Format_ARGB32_Premultiplied:
+        {
+            QImage newImage(qimage.size(), QImage::Format_RGB32);
+            // use raster paint engine
+            QPainter p(&newImage);
+            p.fillRect(newImage.rect(), Qt::white);
+            p.drawImage(0, 0, qimage);
+            qimage = newImage;
+            break;
+        }
+        default: // indexed and monochrome formats
+            qimage = qimage.convertToFormat(QImage::Format_RGB32);
+    }
 }
 
 void ThumbnailCreator::exifRotate(const QString& filePath, QImage& thumb, bool fromEmbeddedPreview)
