@@ -188,64 +188,20 @@ void SharedLoadingTask::execute()
         // indicate that loading has finished so that listeners can stop waiting
         m_completed = true;
 
-        // Optimize so that no unnecessary copying is done.
-        // If image has been put in cache, the initial copy has been consumed for this.
-        // If image is too large for cache, the initial copy is still available.
-        bool usedInitialCopy = isCached;
         // dispatch image to all listeners, including this
         for (int i=0; i<m_listeners.count(); i++)
         {
             LoadingProcessListener *l = m_listeners[i];
-            // This code sends a copy only when ReadWrite access is requested.
-            // Otherwise, the image from the cache is sent.
-            // As the image in the cache will be deleted from any thread, the explicit sharing
-            // needs to be thread-safe to avoid the risk of memory leaks.
-            // This is the case only for Qt4, so uncomment this code when porting.
-            /*
             if (l->accessMode() == LoadSaveThread::AccessModeReadWrite)
             {
                 // If a listener requested ReadWrite access, it gets a deep copy.
                 // DImg is explicitly shared.
                 DImg copy = img.copy();
-                QApplication::postEvent(l->eventReceiver(), new LoadedEvent(m_loadingDescription.filePath, copy));
-            }
-            else
-                QApplication::postEvent(l->eventReceiver(), new LoadedEvent(m_loadingDescription.filePath, img));
-            */
-            // Qt3: The same copy for all Read listeners (it is assumed that they will delete it only in the main thread),
-            // an extra copy for each ReadWrite listener
-            DImg readerCopy;
-            if (l->accessMode() == LoadSaveThread::AccessModeReadWrite)
-            {
-                // If a listener requested ReadWrite access, it gets a deep copy.
-                // DImg is explicitly shared.
-                DImg copy;
-                if (usedInitialCopy)
-                {
-                    copy = img.copy();
-                }
-                else
-                {
-                    copy = img;
-                    usedInitialCopy = true;
-                }
                 l->loadSaveNotifier()->imageLoaded(m_loadingDescription, copy);
             }
             else
             {
-                if (readerCopy.isNull())
-                {
-                    if (usedInitialCopy)
-                    {
-                        readerCopy = img.copy();
-                    }
-                    else
-                    {
-                        readerCopy = img;
-                        usedInitialCopy = true;
-                    }
-                }
-                l->loadSaveNotifier()->imageLoaded(m_loadingDescription, readerCopy);
+                l->loadSaveNotifier()->imageLoaded(m_loadingDescription, img);
             }
         }
 
