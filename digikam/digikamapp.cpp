@@ -1669,12 +1669,6 @@ void DigikamApp::slotKipiPluginPlug()
             else
                 DDebug() << "No menu found for a plugin!!!" << endl;
         }
-
-#warning "TODO: kde4 port it";
-                 // Not needed anymore? Check that shortcuts work
-/* TODO: KDE4PORT: how we can do it with KDE4 ?
-        plugin->actionCollection()->readShortcutSettings();
-*/
     }
 
     // Create GUI menu in according with plugins.
