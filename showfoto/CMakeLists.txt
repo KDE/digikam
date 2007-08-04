@@ -37,7 +37,6 @@ SET(showfoto_SRCS
 
     ${libsetupshowfoto_SRCS}
     ${libshowfotosetup_SRCS}
-    ${libshowfoto_SRCS}
 
     main.cpp
     showfoto.cpp 
