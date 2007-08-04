@@ -87,6 +87,7 @@ extern "C"
 #include <kservice.h>
 #include <kservicetype.h>
 #include <kservicetypetrader.h>
+#include <ktogglefullscreenaction.h>
 
 // Local includes.
 
@@ -406,8 +407,8 @@ void EditorWindow::setupStandardActions()
     d->zoomComboAction->setText(i18n("Zoom"));
     actionCollection()->addAction("editorwindow_zoomto", d->zoomComboAction);
 
-    m_fullScreenAction = actionCollection()->addAction(KStandardAction::FullScreen,
-                         "editorwindow_fullscreen", this, SLOT(slotToggleFullScreen()));
+    m_fullScreenAction = KStandardAction::fullScreen(this, SLOT(slotToggleFullScreen()), this, this);
+    actionCollection()->addAction("editorwindow_fullscreen", m_fullScreenAction);
 
     d->slideShowAction = new KAction(KIcon("datashow"), i18n("Slide Show"), this);
     d->slideShowAction->setShortcut(Qt::Key_F9);
@@ -1012,34 +1013,28 @@ void EditorWindow::slotToggleFullScreen()
 {
     if (m_fullScreen) // out of fullscreen
     {
+        showNormal();
+
         m_canvas->setBackgroundColor(m_bgColor);
 
-        setWindowState( windowState() & ~Qt::WindowFullScreen );
         menuBar()->show();
         statusBar()->show();
+        showToolBars();
 
-#warning "TODO: kde4 port it";
-/* TODO: KDE4PORT: Check these methods
-        leftDock()->show();
-        rightDock()->show();
-        topDock()->show();
-        bottomDock()->show();*/
-
-#warning "TODO: kde4 port it";
-/*
-        QObject* obj = child("ToolBar","KToolBar");
-
-        if (obj)
+        if (d->removeFullScreenButton)
         {
-            KToolBar* toolBar = static_cast<KToolBar*>(obj);
-
-            if (m_fullScreenAction->isPlugged(toolBar) && d->removeFullScreenButton)
-                m_fullScreenAction->unplug(toolBar);
-
-            if (toolBar->isHidden())
-                showToolBars();
+            QList<KToolBar *> toolbars = toolBars();
+            foreach(KToolBar *toolbar, toolbars)
+            {
+                // name is set in ui.rc XML file
+                if (toolbar->objectName() == "ToolBar")
+                {
+                    toolbar->removeAction(m_fullScreenAction);
+                    break;
+                }
+            }
         }
-
+/*
         // -- remove the gui action accels ----
 
         unplugActionAccel(m_forwardAction);
@@ -1069,44 +1064,40 @@ void EditorWindow::slotToggleFullScreen()
         menuBar()->hide();
         statusBar()->hide();
 
-#warning "TODO: kde4 port it";
-/* TODO: KDE4PORT: Check these methods
-        topDock()->hide();
-        leftDock()->hide();
-        rightDock()->hide();
-        bottomDock()->hide();*/
-
-#warning "TODO: kde4 port it";
-/*
-        QObject* obj = child("ToolBar","KToolBar");
-
-        if (obj)
+        if (d->fullScreenHideToolBar)
         {
-            KToolBar* toolBar = static_cast<KToolBar*>(obj);
+            hideToolBars();
+        }
+        else
+        {
+            showToolBars();
 
-            if (d->fullScreenHideToolBar)
+            QList<KToolBar *> toolbars = toolBars();
+            KToolBar *mainToolbar = 0;
+            foreach(KToolBar *toolbar, toolbars)
             {
-                hideToolBars();
+                if (toolbar->objectName() == "ToolBar")
+                {
+                    mainToolbar = toolbar;
+                    break;
+                }
+            }
+
+            // add fullscreen action if necessary
+            if ( mainToolbar && !mainToolbar->actions().contains(m_fullScreenAction) )
+            {
+                mainToolbar->addAction(m_fullScreenAction);
+                d->removeFullScreenButton=true;
             }
             else
-            {   
-                showToolBars();
-
-                if ( !m_fullScreenAction->isPlugged(toolBar) )
-                {
-                    m_fullScreenAction->plug(toolBar);
-                    d->removeFullScreenButton=true;
-                }
-                else    
-                {
-                    // If FullScreen button is enable in toolbar settings
-                    // We don't remove it when we out of fullscreen mode.
-                    d->removeFullScreenButton=false;
-                }
+            {
+                // If FullScreen button is enabled in toolbar settings,
+                // we shall not remove it when leaving of fullscreen mode.
+                d->removeFullScreenButton=false;
             }
         }
 
-        // -- Insert all the gui actions into the accel --
+/*
 
         plugActionAccel(m_forwardAction);
         plugActionAccel(m_backwardAction);
@@ -1260,40 +1251,20 @@ void EditorWindow::slotSelected(bool val)
 
 void EditorWindow::hideToolBars()
 {
-#warning "TODO: kde4 port it";
-/*
-    Q3PtrListIterator<KToolBar> it = toolBarIterator();
-    KToolBar* bar;
-
-    for(;it.current()!=0L; ++it)
+    QList<KToolBar *> toolbars = toolBars();
+    foreach(KToolBar *toolbar, toolbars)
     {
-        bar=it.current();
-
-        if (bar->area()) 
-            bar->area()->hide();
-        else 
-            bar->hide();
+        toolbar->hide();
     }
-*/
 }
 
 void EditorWindow::showToolBars()
 {
-#warning "TODO: kde4 port it";
-/*
-    Q3PtrListIterator<KToolBar> it = toolBarIterator();
-    KToolBar* bar;
-
-    for( ; it.current()!=0L ; ++it)
+    QList<KToolBar *> toolbars = toolBars();
+    foreach(KToolBar *toolbar, toolbars)
     {
-        bar=it.current();
-
-        if (bar->area())
-            bar->area()->show();
-        else
-            bar->show();
+        toolbar->show();
     }
-*/
 }
 
 void EditorWindow::slotLoadingStarted(const QString& /*filename*/)
