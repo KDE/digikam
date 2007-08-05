@@ -329,7 +329,7 @@ void ThumbnailJob::emitThumbnail(QImage& thumb)
     {
         QPainter p(&pix);
         p.setPen(QPen(Qt::black, 1));
-        p.drawRect(0, 0, w, h);
+        p.drawRect(0, 0, w - 1, h - 1);
     }
 
     emit signalThumbnail(d->curr_url, pix);
