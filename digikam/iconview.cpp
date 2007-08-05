@@ -921,17 +921,19 @@ void IconView::contentsMousePressEvent(QMouseEvent* e)
     IconItem *item = findItem(e->pos());
     if (item)
     {
-        if (e->modifiers() & Qt::ControlModifier)
+        if (e->modifiers() == Qt::ControlModifier)
         {
             item->setSelected(!item->isSelected(), false);
         }
-        else if (e->modifiers() & Qt::ShiftModifier)
+        else if (e->modifiers() == Qt::ShiftModifier
+                 || e->modifiers() == (Qt::ShiftModifier | Qt::ControlModifier) )
         {
             blockSignals(true);
 
             if (d->currItem)
             {
-                clearSelection();
+                if ( !(e->modifiers() & Qt::ControlModifier) )
+                    clearSelection();
 
                 // select all items from/upto the current item
                 bool bwdSelect = false;
@@ -974,7 +976,7 @@ void IconView::contentsMousePressEvent(QMouseEvent* e)
 
             emit signalSelectionChanged();
         }
-        else
+        else if (e->modifiers() == Qt::NoModifier)
         {
             if (!item->isSelected())
                 item->setSelected(true, true);
@@ -1152,7 +1154,9 @@ void IconView::contentsMouseReleaseEvent(QMouseEvent* e)
     if (d->rubber->isVisible())
         d->rubber->hide();
 
-    if (e->button() == Qt::LeftButton)
+    if (e->button() == Qt::LeftButton
+        && e->buttons() == Qt::NoButton
+        && e->modifiers() == Qt::NoModifier)
     {
         if (d->pressedMoved)
         {
