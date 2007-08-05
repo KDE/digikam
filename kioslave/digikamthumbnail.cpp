@@ -104,7 +104,8 @@ void kio_digikamthumbnailProtocol::get(const KUrl& url )
     bool exif = (metaData("exif") == "yes");
 
     m_creator->setThumbnailSize(size);
-    QImage img = m_creator->load(url.path(KUrl::RemoveTrailingSlash), exif);
+    m_creator->setExifRotate(exif);
+    QImage img = m_creator->load(url.path(KUrl::RemoveTrailingSlash));
 
     if (img.isNull())
     {

@@ -118,6 +118,8 @@ SET(libthreadimageio_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/previewtask.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/thumbnailbasic.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/thumbnailcreator.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/thumbnailloadthread.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/thumbnailtask.cpp
    )
 
 SET(libthumbbar_SRCS
