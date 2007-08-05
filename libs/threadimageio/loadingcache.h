@@ -70,7 +70,8 @@ public:
     static void cleanUp();
     virtual ~LoadingCache();
 
-    // all functions shall only be called when a CacheLock is held
+    /// !! All methods of LoadingCache shall only be called when a CacheLock is held !!
+
     class CacheLock
     {
     public:
@@ -82,32 +83,82 @@ public:
         LoadingCache *m_cache;
     };
 
-    // Retrieves an image for the given string from the cache,
-    // or 0 if no image is found.
+    /**
+     * Retrieves an image for the given string from the cache,
+     * or 0 if no image is found.
+     */
     DImg *retrieveImage(const QString &cacheKey);
-    // Returns whether the given DImg fits in the cache.
+    /// Returns whether the given DImg fits in the cache.
     bool isCacheable(const DImg *img);
-    // Put image into for given string into the cache.
-    // Returns true if image has been put in the cache, false otherwise.
-    // Ownership of the DImg instance is passed to the cache.
-    // When it cannot be put in the cache it is deleted.
-    // The third parameter specifies a file path that will be watched.
-    // If this file changes, the object will be removed from the cache.
+    /** Put image into for given string into the cache.
+     *  Returns true if image has been put in the cache, false otherwise.
+     *  Ownership of the DImg instance is passed to the cache.
+     *  When it cannot be put in the cache it is deleted.
+     *  The third parameter specifies a file path that will be watched.
+     *  If this file changes, the object will be removed from the cache.
+     */
     bool putImage(const QString &cacheKey, DImg *img, const QString &filePath);
+    /**
+     *  Remove entries for the given cacheKey from the cache
+     */
     void removeImage(const QString &cacheKey);
+    /**
+     *  Remove all entries from the cache
+     */
     void removeImages();
 
-    // Find the loading process for given cacheKey, or 0 if not found
+    // ------- Loading process management -----------------------------------
+
+    /**
+     *  Find the loading process for given cacheKey, or 0 if not found
+     */
     LoadingProcess *retrieveLoadingProcess(const QString &cacheKey);
-    // Add a loading process to the list. Only one loading process
-    // for the same cache key is registered at a time.
+    /**
+     *  Add a loading process to the list. Only one loading process
+     *  for the same cache key is registered at a time.
+     */
     void addLoadingProcess(LoadingProcess *process);
-    // Remove loading process for given cache key
+    /**
+     *  Remove loading process for given cache key
+     */
     void removeLoadingProcess(LoadingProcess *process);
-    // Notify all currently registered loading processes
+    /**
+     *  Notify all currently registered loading processes
+     */
     void notifyNewLoadingProcess(LoadingProcess *process, LoadingDescription description);
 
+    /**
+     *  Sets the cache size in megabytes.
+     *  The thumbnail cache is not affected and setThumbnailCacheSize takes the maximum number.
+     */
     void setCacheSize(int megabytes);
+
+    // ------- Thumbnail cache -----------------------------------
+
+    /**
+     * Retrieves a thumbnail for the given filePath from the thumbnail cache,
+     * or a null QImage if the thumbnail is not found.
+     */
+    QImage retrieveThumbnail(const QString &filePath);
+    /**
+     * Puts a thumbnail into the thumbnail cache.
+     */
+    void putThumbnail(const QString &filePath, const QImage &thumb);
+    /**
+     * Remove the thumbnail for the given file path from the thumbnail cache
+     */
+    void removeThumbnail(const QString &filePath);
+    /**
+     * Remove all thumbnails
+     */
+    void removeThumbnails();
+    /**
+     * Sets the size of the thumbnail cache
+     *  @param number The maximum number of thumbnails that will be cached
+     * Note: The main cache is unaffected by this method,
+     *       and setCacheSize takes megabytes as parameter.
+     */
+    void setThumbnailCacheSize(int number);
 
 private slots:
 

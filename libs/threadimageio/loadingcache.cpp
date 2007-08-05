@@ -46,6 +46,7 @@ class LoadingCachePriv
 public:
 
     QCache<QString, DImg> imageCache;
+    QCache<QString, QImage> thumbnailCache;
     QHash<QString, LoadingProcess *> loadingDict;
     QMutex mutex;
     QWaitCondition condVar;
@@ -75,6 +76,7 @@ LoadingCache::LoadingCache()
     d = new LoadingCachePriv;
 
     setCacheSize(60);
+    setThumbnailCacheSize(100);
 
     d->watch = new KDirWatch;
 
@@ -225,6 +227,32 @@ void LoadingCache::notifyNewLoadingProcess(LoadingProcess *process, LoadingDescr
 void LoadingCache::setCacheSize(int megabytes)
 {
     d->imageCache.setMaxCost(megabytes * 1024 * 1024);
+}
+
+
+QImage LoadingCache::retrieveThumbnail(const QString &cacheKey)
+{
+    return QImage(*d->thumbnailCache[cacheKey]);
+}
+
+void LoadingCache::putThumbnail(const QString &cacheKey, const QImage &thumb)
+{
+    d->thumbnailCache.insert(cacheKey, new QImage(thumb));
+}
+
+void LoadingCache::removeThumbnail(const QString &cacheKey)
+{
+    d->imageCache.remove(cacheKey);
+}
+
+void LoadingCache::removeThumbnails()
+{
+    d->imageCache.clear();
+}
+
+void LoadingCache::setThumbnailCacheSize(int number)
+{
+    d->thumbnailCache.setMaxCost(number);
 }
 
 //---------------------------------------------------------------------------------------------------
