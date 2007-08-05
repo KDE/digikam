@@ -154,6 +154,10 @@ public:
         starPolygon << QPoint(7,  11);
         starPolygon << QPoint(3,  14);
         starPolygon << QPoint(4,  9);
+
+        starPolygonSize = QSize(15, 15);
+
+        ratingPixmaps = QVector<QPixmap>(10);
     }
 
     QString                          albumTitle;
@@ -175,13 +179,14 @@ public:
     QPixmap                          itemRegPixmap;
     QPixmap                          itemSelPixmap;
     QPixmap                          bannerPixmap;
-    QPixmap                          ratingPixmap;
+    QVector<QPixmap>                 ratingPixmaps;
 
     QFont                            fnReg;
     QFont                            fnCom;
     QFont                            fnXtra;
 
     QPolygon                         starPolygon;
+    QSize                            starPolygonSize;
 
     Q3Dict<AlbumIconItem>            itemDict;
     QHash<ImageInfo, AlbumIconItem*> itemInfoMap;
@@ -209,18 +214,6 @@ AlbumIconView::AlbumIconView(QWidget* parent)
     setAcceptDrops(true);
     viewport()->setAcceptDrops(true);
 
-    // -- Load rating Pixmap ------------------------------------------
-
-    d->ratingPixmap = QPixmap(15, 15);
-    d->ratingPixmap.fill(Qt::transparent); 
-
-    QPainter painter(&d->ratingPixmap);
-    painter.setRenderHint(QPainter::Antialiasing, true);
-    painter.setBrush(ThemeEngine::componentData()->textSpecialRegColor());
-    painter.setPen(ThemeEngine::componentData()->textRegColor());
-    painter.drawPolygon(d->starPolygon, Qt::WindingFill);
-    painter.end();
-    
     // -- ImageLister connections -------------------------------------
 
     connect(d->imageLister, SIGNAL(signalNewFilteredItems(const ImageInfoList&)),
@@ -302,8 +295,7 @@ void AlbumIconView::applySettings(const AlbumSettings* settings)
 
     setEnableToolTips(d->albumSettings->getShowToolTips());
 
-    updateBannerRectPixmap();
-    updateItemRectsPixmap();
+    updateRectsAndPixmaps();
 
     d->imageLister->stop();
     clear();
@@ -326,8 +318,7 @@ void AlbumIconView::setThumbnailSize(const ThumbnailSize& thumbSize)
         d->thumbSize = thumbSize;
         d->pixMan->setThumbnailSize(d->thumbSize.size());
 
-        updateBannerRectPixmap();
-        updateItemRectsPixmap();
+        updateRectsAndPixmaps();
 
         d->imageLister->openAlbum(d->currentAlbum);
     }
@@ -353,8 +344,7 @@ void AlbumIconView::setAlbum(Album* album)
     d->currentAlbum = album;
     d->imageLister->openAlbum(d->currentAlbum);
 
-    updateBannerRectPixmap();
-    updateItemRectsPixmap();
+    updateRectsAndPixmaps();
 }
 
 void AlbumIconView::refreshIcon(AlbumIconItem* item)
@@ -1105,7 +1095,7 @@ void AlbumIconView::resizeEvent(QResizeEvent *e)
     IconView::resizeEvent(e);
 
     if (d->bannerRect.width() != frameRect().width())
-        updateBannerRectPixmap();
+        updateRectsAndPixmaps();
 }
 
 // -- DnD ---------------------------------------------------
@@ -1685,9 +1675,15 @@ QPixmap AlbumIconView::bannerPixmap() const
     return d->bannerPixmap;
 }
 
-QPixmap AlbumIconView::ratingPixmap() const
+QPixmap AlbumIconView::ratingPixmap(int rating, bool selected) const
 {
-    return d->ratingPixmap;
+    if (rating < 1 || rating > 5)
+        return QPixmap();
+    rating--;
+    if (selected)
+        return d->ratingPixmaps[5 + rating];
+    else
+        return d->ratingPixmaps[rating];
 }
 
 QFont AlbumIconView::itemFontReg() const
@@ -1751,8 +1747,10 @@ void AlbumIconView::updateBannerRectPixmap()
                                                             d->bannerRect.height());
 }
 
-void AlbumIconView::updateItemRectsPixmap()
+void AlbumIconView::updateRectsAndPixmaps()
 {
+    updateBannerRectPixmap();
+
     d->itemRect           = QRect(0,0,0,0);
     d->itemRatingRect     = QRect(0,0,0,0);
     d->itemDateRect       = QRect(0,0,0,0);
@@ -1798,6 +1796,8 @@ void AlbumIconView::updateItemRectsPixmap()
                                            Qt::AlignTop | Qt::AlignHCenter,
                                            "XXXXXXXXX");
 
+    QSize starPolygonSize(15, 15);
+
     int y = margin;
 
     d->itemPixmapRect = QRect(margin, y, w, d->thumbSize.size()+margin);
@@ -1805,10 +1805,10 @@ void AlbumIconView::updateItemRectsPixmap()
 
     if (d->albumSettings->getIconShowRating())
     {
-        d->itemRatingRect = QRect(margin, y, w, d->ratingPixmap.height());
+        d->itemRatingRect = QRect(margin, y, w, starPolygonSize.height());
         y = d->itemRatingRect.bottom();
     }
-    
+
     if (d->albumSettings->getIconShowName())
     {
         d->itemNameRect = QRect(margin, y, w, oneRowRegRect.height());
@@ -1859,6 +1859,53 @@ void AlbumIconView::updateItemRectsPixmap()
 
     d->itemSelPixmap = ThemeEngine::componentData()->thumbSelPixmap(d->itemRect.width(),
                                                                d->itemRect.height());
+
+    // -- Generate rating pixmaps ------------------------------------------
+
+    // We use antialiasing and want to pre-render the pixmaps.
+    // So we need the background at the time of painting,
+    // and the background may be a gradient, and will be different for selected items.
+    // This makes 5*2 (small) pixmaps.
+    if (d->albumSettings->getIconShowRating())
+    {
+        for (int sel=0; sel<2; sel++)
+        {
+            QPixmap basePix;
+
+            // do this once for regular, once for selected backgrounds
+            if (sel)
+                basePix = d->itemSelPixmap.copy(d->itemRatingRect);
+            else
+                basePix = d->itemRegPixmap.copy(d->itemRatingRect);
+
+            for (int rating=1; rating<=5; rating++)
+            {
+                // we store first the 5 regular, then the 5 selected pixmaps, for simplicity
+                int index = (sel * 5 + rating) - 1;
+
+                // copy background
+                d->ratingPixmaps[index] = basePix;
+                // open a painter
+                QPainter painter(&d->ratingPixmaps[index]);
+
+                // use antialiasing
+                painter.setRenderHint(QPainter::Antialiasing, true);
+                painter.setBrush(ThemeEngine::componentData()->textSpecialRegColor());
+                QPen pen(ThemeEngine::componentData()->textRegColor());
+                // set a pen which joins the lines at a filled angle
+                pen.setJoinStyle(Qt::MiterJoin);
+                painter.setPen(pen);
+
+                // move painter while drawing polygons
+                painter.translate( (d->itemRatingRect.width() - rating * starPolygonSize.width())/2, 0 );
+                for (int s=0; s<rating; s++)
+                {
+                    painter.drawPolygon(d->starPolygon, Qt::WindingFill);
+                    painter.translate(starPolygonSize.width() + 1, 0);
+                }
+            }
+        }
+    }
 }
 
 void AlbumIconView::slotThemeChanged()
@@ -1878,15 +1925,7 @@ void AlbumIconView::slotThemeChanged()
                  ThemeEngine::componentData()->textSelColor());
     setPalette(plt);
 
-    QPainter painter(&d->ratingPixmap);
-    painter.setRenderHint(QPainter::Antialiasing, true);
-    painter.setBrush(ThemeEngine::componentData()->textSpecialRegColor());
-    painter.setPen(ThemeEngine::componentData()->textRegColor());
-    painter.drawPolygon(d->starPolygon, Qt::WindingFill);
-    painter.end();
-    
-    updateBannerRectPixmap();
-    updateItemRectsPixmap();
+    updateRectsAndPixmaps();
 
     viewport()->update();
 }
@@ -1936,8 +1975,7 @@ void AlbumIconView::slotAlbumModified()
 
     d->imageLister->openAlbum(d->currentAlbum);
 
-    updateBannerRectPixmap();
-    updateItemRectsPixmap();
+    updateRectsAndPixmaps();
 }
 
 void AlbumIconView::slotAssignTag(int tagID)

@@ -106,7 +106,7 @@ public:
     QPixmap  itemBaseRegPixmap() const;
     QPixmap  itemBaseSelPixmap() const;
     QPixmap  bannerPixmap() const;
-    QPixmap  ratingPixmap() const;
+    QPixmap  ratingPixmap(int rating, bool selected) const;
 
     QFont    itemFontReg() const;
     QFont    itemFontCom() const;
@@ -195,8 +195,8 @@ private slots:
 
 private:
 
+    void updateRectsAndPixmaps();
     void updateBannerRectPixmap();
-    void updateItemRectsPixmap();
     void changeTagOnImageInfos(const ImageInfoList &list, const QList<int> &tagIDs, bool addOrRemove, bool progress);
 
 private:

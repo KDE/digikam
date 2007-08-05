@@ -259,15 +259,14 @@ void AlbumIconItem::paintItem(QPainter *p)
     if (settings->getIconShowRating())
     {
         r = d->view->itemRatingRect();
-        QPixmap ratingPixmap = d->view->ratingPixmap();
 
         int rating = d->info.rating();
 
-        int x, w;
-        x = r.x() + (r.width() - rating * ratingPixmap.width())/2;
-        w = rating * ratingPixmap.width();
-
-        p->drawTiledPixmap(x, r.y(), w, r.height(), ratingPixmap);
+        if (rating > 0 && rating <=5)
+        {
+            QPixmap ratingPixmap = d->view->ratingPixmap(rating, isSelected());
+            p->drawPixmap(r, ratingPixmap);
+        }
     }
 
     if (settings->getIconShowName())
