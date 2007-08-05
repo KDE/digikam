@@ -66,16 +66,15 @@ public:
 
     /**
      * Create a thumbnail for the specified file.
-     * If exifRotate is true, the thumbnail will be rotated according
-     * to the exif information.
      */
-    QImage load(const QString &filePath, bool exifRotate);
+    QImage load(const QString &filePath);
 
     /**
      * Sets the thumbnail size. This is the maximum size of the QImage
      * returned by load.
      */
     void setThumbnailSize(int thumbnailSize);
+
     /**
      * If you plan to load thumbnail from the context of the threadimageio framework,
      * you can specify the relevant parameters. They will be passed if a thumbnail
@@ -83,6 +82,14 @@ public:
      * Note that DImg is not used in most cases (Raw files, JPEG)
      */
     void setLoadingProperties(DImgLoaderObserver *observer, KDcrawIface::RawDecodingSettings settings);
+
+    /**
+     * Set the exif rotation property.
+     * If exifRotate is true, the thumbnail will be rotated according
+     * to the exif information.
+     * Default value is true.
+     */
+    void setExifRotate(bool rotate);
 
     /**
      * If you enable this property, the thumbnail creator will create only large (256x256)

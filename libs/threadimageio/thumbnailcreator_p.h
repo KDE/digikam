@@ -39,6 +39,7 @@ public:
         cachedSize          = 0;
         observer            = 0;
 
+        exifRotate          = true;
         removeAlphaChannel  = true;
         onlyLargeThumbnails = false;
     }
@@ -48,6 +49,7 @@ public:
     QString bigThumbPath;
     QString smallThumbPath;
 
+    bool    exifRotate;
     bool    removeAlphaChannel;
     bool    onlyLargeThumbnails;
 

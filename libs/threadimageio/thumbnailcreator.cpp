@@ -94,6 +94,11 @@ void ThumbnailCreator::setThumbnailSize(int thumbnailSize)
         d->cachedSize = (thumbnailSize <= 128) ? 128 : 256;
 }
 
+void ThumbnailCreator::setExifRotate(bool rotate)
+{
+    d->exifRotate = rotate;
+}
+
 void ThumbnailCreator::setOnlyLargeThumbnails(bool onlyLarge)
 {
     d->onlyLargeThumbnails = onlyLarge;
@@ -126,7 +131,7 @@ QString ThumbnailCreator::errorString() const
     return d->error;
 }
 
-QImage ThumbnailCreator::load(const QString &path, bool exif)
+QImage ThumbnailCreator::load(const QString &path)
 {
     if (d->cachedSize <= 0)
     {
@@ -231,7 +236,7 @@ QImage ThumbnailCreator::load(const QString &path, bool exif)
         if (qimage.format() != QImage::Format_ARGB32)
             qimage = qimage.convertToFormat(QImage::Format_ARGB32);
 
-        if (exif)
+        if (d->exifRotate)
             exifRotate(path, qimage, fromEmbeddedPreview);
 
         qimage.setText(QString("Thumb::URI").toLatin1(),   0, uri);
