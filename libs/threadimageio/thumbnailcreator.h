@@ -85,6 +85,20 @@ public:
     void setLoadingProperties(DImgLoaderObserver *observer, KDcrawIface::RawDecodingSettings settings);
 
     /**
+     * If you enable this property, the thumbnail creator will create only large (256x256)
+     * thumbnails on disk.
+     * Normally, for requested sizes below 128, thumbnails of 128x128 will be cached on disk.
+     * Default value is false.
+     */
+    void setOnlyLargeThumbnails(bool onlyLarge);
+
+    /**
+     * If you enable this property, the returned QImage objects will not have an alpha channel.
+     * Images with transparency will be blended over an opaque background.
+     */
+    void setRemoveAlphaChannel(bool removeAlpha);
+
+    /**
      * Return the thumbnail size, the maximum size of the QImage
      * returned by load.
      */

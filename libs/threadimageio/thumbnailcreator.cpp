@@ -87,8 +87,23 @@ ThumbnailCreator::~ThumbnailCreator()
 void ThumbnailCreator::setThumbnailSize(int thumbnailSize)
 {
     d->thumbnailSize = thumbnailSize;
-    d->cachedSize = (thumbnailSize <= 128) ? 128 : 256;
+    // on-disk thumbnail sizes according to spec
+    if (d->onlyLargeThumbnails)
+        d->cachedSize = 256;
+    else
+        d->cachedSize = (thumbnailSize <= 128) ? 128 : 256;
 }
+
+void ThumbnailCreator::setOnlyLargeThumbnails(bool onlyLarge)
+{
+    d->onlyLargeThumbnails = onlyLarge;
+}
+
+void ThumbnailCreator::setRemoveAlphaChannel(bool removeAlpha)
+{
+    d->removeAlphaChannel = removeAlpha;
+}
+
 
 void ThumbnailCreator::setLoadingProperties(DImgLoaderObserver *observer, KDcrawIface::RawDecodingSettings settings)
 {
@@ -212,7 +227,9 @@ QImage ThumbnailCreator::load(const QString &path, bool exif)
         if (qMax(qimage.width(),qimage.height()) != d->cachedSize)
             qimage = qimage.scaled(d->cachedSize, d->cachedSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
-        handleAlphaChannel(qimage);
+        // required by spec
+        if (qimage.format() != QImage::Format_ARGB32)
+            qimage = qimage.convertToFormat(QImage::Format_ARGB32);
 
         if (exif)
             exifRotate(path, qimage, fromEmbeddedPreview);
@@ -278,12 +295,16 @@ void ThumbnailCreator::handleAlphaChannel(QImage &qimage)
         case QImage::Format_ARGB32:
         case QImage::Format_ARGB32_Premultiplied:
         {
-            QImage newImage(qimage.size(), QImage::Format_RGB32);
-            // use raster paint engine
-            QPainter p(&newImage);
-            p.fillRect(newImage.rect(), Qt::white);
-            p.drawImage(0, 0, qimage);
-            qimage = newImage;
+            if (d->removeAlphaChannel)
+            {
+                QImage newImage(qimage.size(), QImage::Format_RGB32);
+                // use raster paint engine
+                QPainter p(&newImage);
+                // blend over white, or a checkerboard?
+                p.fillRect(newImage.rect(), Qt::white);
+                p.drawImage(0, 0, qimage);
+                qimage = newImage;
+            }
             break;
         }
         default: // indexed and monochrome formats

@@ -35,15 +35,21 @@ public:
 
     ThumbnailCreatorPriv()
     {
-        thumbnailSize = 0;
-        cachedSize = 0;
-        observer   = 0;
+        thumbnailSize       = 0;
+        cachedSize          = 0;
+        observer            = 0;
+
+        removeAlphaChannel  = true;
+        onlyLargeThumbnails = false;
     }
 
     int     thumbnailSize;
     int     cachedSize;
     QString bigThumbPath;
     QString smallThumbPath;
+
+    bool    removeAlphaChannel;
+    bool    onlyLargeThumbnails;
 
     QString error;
 
