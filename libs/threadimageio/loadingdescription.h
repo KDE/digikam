@@ -39,14 +39,21 @@ public:
     class PreviewParameters
     {
     public:
+        enum PreviewType
+        {
+            NoPreview,
+            PreviewImage,
+            Thumbnail
+        };
+
         PreviewParameters()
         {
-            isPreview  = false;
+            type       = NoPreview;
             size       = 0;
             exifRotate = false;
         }
 
-        bool isPreview;
+        PreviewType type;
         int  size;
         bool exifRotate;
 
@@ -73,13 +80,13 @@ public:
     LoadingDescription(const QString &filePath, KDcrawIface::RawDecodingSettings settings);
 
     /**
-     * For preview jobs:
+     * For preview and thumbnail jobs:
      * Stores preview max size and exif rotation.
      * Exif Rotation:
      *    The exif rotation is only a hint.
      *    Call LoadSaveThread::exifRotate to make sure that the image is really
      *    rotated. It is safe to call this method even if the image is rotated.
-     * Raw files:
+     * Raw files / preview jobs:
      *    If size is not 0, the embedded preview will be loaded if available.
      *    If size is 0, DImg based loading will be used with default raw decoding settings.
      */

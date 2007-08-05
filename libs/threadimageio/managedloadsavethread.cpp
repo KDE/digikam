@@ -28,6 +28,7 @@
 #include "managedloadsavethread.h"
 #include "loadsavetask.h"
 #include "previewtask.h"
+#include "thumbnailtask.h"
 
 namespace Digikam
 {
@@ -244,7 +245,10 @@ void ManagedLoadSaveThread::loadPreview(LoadingDescription description)
     // append new loading task
     if (existingTask)
         return;
-    m_todo.append(new PreviewLoadingTask(this, description));
+    if (description.previewParameters.type == LoadingDescription::PreviewParameters::Thumbnail)
+        m_todo.append(new ThumbnailLoadingTask(this, description));
+    else
+        m_todo.append(new PreviewLoadingTask(this, description));
     m_condVar.wakeAll();
 }
 

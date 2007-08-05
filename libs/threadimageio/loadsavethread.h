@@ -59,6 +59,7 @@ public:
     virtual void imageStartedSaving(const QString& filePath) = 0;
     virtual void savingProgress(const QString& filePath, float progress) = 0;
     virtual void imageSaved(const QString& filePath, bool success) = 0;
+    virtual void thumbnailLoaded(const LoadingDescription &loadingDescription, const QImage& img) = 0;
 };
 
 class DIGIKAM_EXPORT LoadSaveThread : public QThread, public LoadSaveNotifier
@@ -150,6 +151,8 @@ signals:
     void signalSavingProgress(const QString& filePath, float progress);
     void signalImageSaved(const QString& filePath, bool success);
 
+    void signalThumbnailLoaded(const LoadingDescription &loadingDescription, const QImage& img);
+
 public:
 
     virtual void imageStartedLoading(const LoadingDescription &loadingDescription);
@@ -160,6 +163,7 @@ public:
     virtual void imageStartedSaving(const QString& filePath);
     virtual void savingProgress(const QString& filePath, float progress);
     virtual void imageSaved(const QString& filePath, bool success);
+    virtual void thumbnailLoaded(const LoadingDescription &loadingDescription, const QImage& img);
 
     virtual bool querySendNotifyEvent();
     virtual void taskHasFinished();

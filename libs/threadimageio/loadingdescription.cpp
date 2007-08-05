@@ -30,9 +30,9 @@ namespace Digikam
 
 bool LoadingDescription::PreviewParameters::operator==(const PreviewParameters &other) const
 {
-    return isPreview  == other.isPreview
-            && size       == other.size
-            && exifRotate == other.exifRotate;
+    return type          == other.type
+           && size       == other.size
+           && exifRotate == other.exifRotate;
 }
 
 LoadingDescription::LoadingDescription(const QString &filePath)
@@ -50,7 +50,7 @@ LoadingDescription::LoadingDescription(const QString &filePath, int size, bool e
     : filePath(filePath)
 {
     rawDecodingSettings = KDcrawIface::RawDecodingSettings();
-    previewParameters.isPreview  = false;
+    previewParameters.type       = PreviewParameters::PreviewImage;
     previewParameters.size       = size;
     previewParameters.exifRotate = exifRotate;
 }
@@ -59,6 +59,12 @@ QString LoadingDescription::cacheKey() const
 {
     // Here we have the knowledge which LoadingDescriptions / RawFileDecodingSettings
     // must be cached separately.
+
+    // Thumbnail loading. This one is easy.
+    if (previewParameters.type == PreviewParameters::Thumbnail)
+        return filePath + "-thumbnail-" + QString::number(previewParameters.size);
+
+    // DImg loading
     // Current assumption:
     // Eight-bit images are needed for LightTable, and if 16-bit is enabled,
     // 16-bit half size images for the histogram sidebar,
@@ -78,6 +84,12 @@ QString LoadingDescription::cacheKey() const
 QStringList LoadingDescription::lookupCacheKeys() const
 {
     // Build a hierarchy which cache entries may be used for this LoadingDescription.
+
+    // Thumbnail loading. No other cache key included!
+    if (previewParameters.type == PreviewParameters::Thumbnail)
+        return QStringList() << cacheKey();
+
+    // DImg loading.
     // Typically, the first is the best, but an actual loading operation may use a
     // lower-quality loading and will effectively only add the last entry of the
     // list to the cache, although it can accept the first if already available.
@@ -99,7 +111,7 @@ bool LoadingDescription::isReducedVersion() const
 {
     // return true if this loads anything but the full version
     return rawDecodingSettings.halfSizeColorImage
-        || previewParameters.isPreview;
+        || previewParameters.type != PreviewParameters::NoPreview;
 }
 
 bool LoadingDescription::operator==(const LoadingDescription &other) const

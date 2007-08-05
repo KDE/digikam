@@ -184,6 +184,12 @@ void LoadSaveThread::imageSaved(const QString& filePath, bool success)
     emit signalImageSaved(filePath, success);
 }
 
+void LoadSaveThread::thumbnailLoaded(const LoadingDescription &loadingDescription, const QImage& img)
+{
+    notificationReceived();
+    emit signalThumbnailLoaded(loadingDescription, img);
+}
+
 void LoadSaveThread::notificationReceived()
 {
     switch (m_notificationPolicy)
