@@ -24,6 +24,10 @@
 #ifndef LOADING_CACHE_H
 #define LOADING_CACHE_H
 
+// Qt includes
+
+#include <QPixmap>
+
 // Local includes.
 
 #include "dimg.h"
@@ -135,30 +139,37 @@ public:
 
     // ------- Thumbnail cache -----------------------------------
 
+    /// The LoadingCache support both the caching of QImage and QPixmap objects.
+    /// QPixmaps can only be accessed from the main thread, so the tasks cannot access this cache.
     /**
      * Retrieves a thumbnail for the given filePath from the thumbnail cache,
      * or a null QImage if the thumbnail is not found.
      */
-    QImage retrieveThumbnail(const QString &filePath);
+    QImage  retrieveThumbnail(const QString &cacheKey);
+    QPixmap retrieveThumbnailPixmap(const QString &cacheKey);
     /**
      * Puts a thumbnail into the thumbnail cache.
      */
-    void putThumbnail(const QString &filePath, const QImage &thumb);
+    void putThumbnail(const QString &cacheKey, const QImage  &thumb);
+    void putThumbnail(const QString &cacheKey, const QPixmap &thumb);
     /**
      * Remove the thumbnail for the given file path from the thumbnail cache
      */
-    void removeThumbnail(const QString &filePath);
+    void removeThumbnail(const QString &cacheKey);
     /**
      * Remove all thumbnails
      */
     void removeThumbnails();
     /**
      * Sets the size of the thumbnail cache
-     *  @param number The maximum number of thumbnails that will be cached
+     *  @param numberOfImages The maximum number of thumbnails in QImage format that will be cached
+     *  @param numberOfPixmaps The maximum number of thumbnails in QPixmap format that will be cached
      * Note: The main cache is unaffected by this method,
      *       and setCacheSize takes megabytes as parameter.
+     * Note: A good caching strategy will be to set one of the numbers to 0
+     * Default values: (0, 100)
      */
-    void setThumbnailCacheSize(int number);
+    void setThumbnailCacheSize(int numberOfQImages, int numberOfQPixmaps);
 
 private slots:
 

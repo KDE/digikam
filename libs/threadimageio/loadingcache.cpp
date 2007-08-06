@@ -46,7 +46,8 @@ class LoadingCachePriv
 public:
 
     QCache<QString, DImg> imageCache;
-    QCache<QString, QImage> thumbnailCache;
+    QCache<QString, QImage>  thumbnailImageCache;
+    QCache<QString, QPixmap> thumbnailPixmapCache;
     QHash<QString, LoadingProcess *> loadingDict;
     QMutex mutex;
     QWaitCondition condVar;
@@ -76,7 +77,7 @@ LoadingCache::LoadingCache()
     d = new LoadingCachePriv;
 
     setCacheSize(60);
-    setThumbnailCacheSize(100);
+    setThumbnailCacheSize(0, 100);
 
     d->watch = new KDirWatch;
 
@@ -229,30 +230,52 @@ void LoadingCache::setCacheSize(int megabytes)
     d->imageCache.setMaxCost(megabytes * 1024 * 1024);
 }
 
+// --- Thumbnails ----
 
 QImage LoadingCache::retrieveThumbnail(const QString &cacheKey)
 {
-    return QImage(*d->thumbnailCache[cacheKey]);
+    QImage *cachedImg = d->thumbnailImageCache[cacheKey];
+    if (cachedImg)
+        return QImage(*cachedImg);
+    else
+        return QImage();
+}
+
+QPixmap LoadingCache::retrieveThumbnailPixmap(const QString &cacheKey)
+{
+    QPixmap *cachedPixmap = d->thumbnailPixmapCache[cacheKey];
+    if (cachedPixmap)
+        return QPixmap(*cachedPixmap);
+    else
+        return QPixmap();
 }
 
 void LoadingCache::putThumbnail(const QString &cacheKey, const QImage &thumb)
 {
-    d->thumbnailCache.insert(cacheKey, new QImage(thumb));
+    d->thumbnailImageCache.insert(cacheKey, new QImage(thumb));
+}
+
+void LoadingCache::putThumbnail(const QString &cacheKey, const QPixmap &thumb)
+{
+    d->thumbnailPixmapCache.insert(cacheKey, new QPixmap(thumb));
 }
 
 void LoadingCache::removeThumbnail(const QString &cacheKey)
 {
-    d->imageCache.remove(cacheKey);
+    d->thumbnailImageCache.remove(cacheKey);
+    d->thumbnailPixmapCache.remove(cacheKey);
 }
 
 void LoadingCache::removeThumbnails()
 {
-    d->imageCache.clear();
+    d->thumbnailImageCache.clear();
+    d->thumbnailPixmapCache.clear();
 }
 
-void LoadingCache::setThumbnailCacheSize(int number)
+void LoadingCache::setThumbnailCacheSize(int numberOfQImages, int numberOfQPixmaps)
 {
-    d->thumbnailCache.setMaxCost(number);
+    d->thumbnailImageCache.setMaxCost(numberOfQImages);
+    d->thumbnailPixmapCache.setMaxCost(numberOfQPixmaps);
 }
 
 //---------------------------------------------------------------------------------------------------
