@@ -135,6 +135,7 @@ public:
      * (all cache keys under which the given file could be stored in the cache).
      */
     static QStringList possibleCacheKeys(const QString &filePath);
+    static QStringList possibleThumbnailCacheKeys(const QString &filePath);
 };
 
 }   // namespace Digikam

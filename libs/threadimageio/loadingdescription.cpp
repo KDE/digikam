@@ -159,4 +159,15 @@ QStringList LoadingDescription::possibleCacheKeys(const QString &filePath)
     return keys;
 }
 
+QStringList LoadingDescription::possibleThumbnailCacheKeys(const QString &filePath)
+{
+    QStringList keys;
+    // there are 256 possible keys...
+    QString path = filePath + "-thumbnail-";
+    for (int i=1; i<=256; i++)
+        keys << filePath + QString::number(i);
+    return keys;
+}
+
+
 } // namespace Digikam
