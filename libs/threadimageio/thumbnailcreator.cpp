@@ -26,6 +26,7 @@
 // Qt includes
 
 #include <QFileInfo>
+#include <QFile>
 #include <QPainter>
 
 // KDE includes
@@ -141,7 +142,7 @@ QImage ThumbnailCreator::load(const QString &path)
     }
 
     QString uri = thumbnailUri(path);
-    QString thumbPath = thumbnailPath(uri);
+    QString thumbPath = thumbnailPath(path);
 
     // stat the original file
     struct stat st;
@@ -373,5 +374,16 @@ void ThumbnailCreator::exifRotate(const QString& filePath, QImage& thumb, bool f
     // transform accordingly
     thumb = thumb.transformed( matrix );
 }
+
+
+void ThumbnailCreator::deleteThumbnailsFromDisk(const QString &filePath)
+{
+    QFile smallThumb(thumbnailPath(filePath, normalThumbnailDir()));
+    QFile largeThumb(thumbnailPath(filePath, largeThumbnailDir()));
+
+    smallThumb.remove();
+    largeThumb.remove();
+}
+
 
 }  // namespace Digikam

@@ -124,6 +124,13 @@ public:
      */
     QString errorString() const;
 
+
+    /**
+     * Deletes all available thumbnails from the on-disk thumbnail cache.
+     * A subsequent call to load() will recreate the thumbnail.
+     */
+    static void deleteThumbnailsFromDisk(const QString &filePath);
+
 private:
 
     QImage loadWithDImg(const QString &path);
@@ -132,10 +139,15 @@ private:
     void exifRotate(const QString& filePath, QImage& thumb, bool fromEmbeddedPreview);
 
     // implementations in thumbnailbasic.cpp
-    QImage loadPNG(const QString& path);
+    static QString normalThumbnailDir();
+    static QString largeThumbnailDir();
+    static QString thumbnailPath(const QString &filePath, const QString &basePath);
+    static QString thumbnailUri(const QString &filePath);
+    static QString thumbnailPathFromUri(const QString &uri, const QString &basePath);
+
     void initThumbnailDirs();
-    QString thumbnailUri(const QString &filePath);
     QString thumbnailPath(const QString &uri);
+    QImage loadPNG(const QString& path);
 
 private:
 

@@ -65,15 +65,21 @@ extern "C"
 namespace Digikam
 {
 
-void ThumbnailCreator::initThumbnailDirs()
+// --- Static methods: Generate the thumbnail path according to FreeDesktop spec ---
+
+QString ThumbnailCreator::normalThumbnailDir()
 {
-    QString path = QDir::homePath() + "/.thumbnails/";
+    return  QDir::homePath() + "/.thumbnails/normal/";
+}
 
-    d->smallThumbPath = path + "normal/";
-    d->bigThumbPath   = path + "large/";
+QString ThumbnailCreator::largeThumbnailDir()
+{
+    return  QDir::homePath() + "/.thumbnails/large/";
+}
 
-    KStandardDirs::makeDir(d->smallThumbPath, 0700);
-    KStandardDirs::makeDir(d->bigThumbPath, 0700);
+QString ThumbnailCreator::thumbnailPath(const QString &filePath, const QString &basePath)
+{
+    return thumbnailPathFromUri(thumbnailUri(filePath), basePath);
 }
 
 QString ThumbnailCreator::thumbnailUri(const QString &filePath)
@@ -81,14 +87,30 @@ QString ThumbnailCreator::thumbnailUri(const QString &filePath)
      return "file://" + QDir::cleanPath(filePath);
 }
 
-QString ThumbnailCreator::thumbnailPath(const QString &uri)
+QString ThumbnailCreator::thumbnailPathFromUri(const QString &uri, const QString &basePath)
 {
-    // generate the thumbnail path according to FreeDesktop spec
     KMD5 md5( QFile::encodeName(uri) );
-    QString thumbPath = (d->cachedSize == 128) ? d->smallThumbPath : d->bigThumbPath;
-    thumbPath += QFile::encodeName( md5.hexDigest() ) + ".png";
-    return thumbPath;
+    return basePath + QFile::encodeName( md5.hexDigest() ) + ".png";
 }
+
+// --- non-static methods ---
+
+void ThumbnailCreator::initThumbnailDirs()
+{
+    d->smallThumbPath = normalThumbnailDir();
+    d->bigThumbPath   = largeThumbnailDir();
+
+    KStandardDirs::makeDir(d->smallThumbPath, 0700);
+    KStandardDirs::makeDir(d->bigThumbPath, 0700);
+}
+
+QString ThumbnailCreator::thumbnailPath(const QString &filePath)
+{
+    QString basePath = (d->cachedSize == 128) ? d->smallThumbPath : d->bigThumbPath;
+    return thumbnailPath(filePath, basePath);
+}
+
+// --- Basic PNG loading ---
 
 QImage ThumbnailCreator::loadPNG(const QString& path)
 {
