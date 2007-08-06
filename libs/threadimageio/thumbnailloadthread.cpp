@@ -28,6 +28,7 @@
 
 // KDE includes
 
+#include <kglobal.h>
 #include <kiconloader.h>
 
 // Local includes.
@@ -47,15 +48,21 @@ public:
 
     ThumbnailLoadThreadPriv()
     {
+        size          = 128;
+        exifRotate    = true;
         highlight     = true;
         sendSurrogate = true;
         creator       = 0;
     }
 
     ThumbnailCreator *creator;
+    int  size;
+    bool exifRotate;
     bool highlight;
     bool sendSurrogate;
 };
+
+K_GLOBAL_STATIC(ThumbnailLoadThread, defaultObject);
 
 ThumbnailLoadThread::ThumbnailLoadThread()
 {
@@ -64,6 +71,7 @@ ThumbnailLoadThread::ThumbnailLoadThread()
     d->creator = new ThumbnailCreator();
     //d->creator->setOnlyLargeThumbnails(true);
     d->creator->setRemoveAlphaChannel(true);
+    setPixmapRequested(true);
 }
 
 ThumbnailLoadThread::~ThumbnailLoadThread()
@@ -71,7 +79,22 @@ ThumbnailLoadThread::~ThumbnailLoadThread()
     delete d;
 }
 
-void ThumbnailLoadThread::setPixmapReqested(bool wantPixmap)
+ThumbnailLoadThread *ThumbnailLoadThread::defaultThread()
+{
+    return defaultObject;
+}
+
+void ThumbnailLoadThread::setThumbnailSize(int size)
+{
+    d->size = size;
+}
+
+void ThumbnailLoadThread::setExifRotate(int exifRotate)
+{
+    d->exifRotate = exifRotate;
+}
+
+void ThumbnailLoadThread::setPixmapRequested(bool wantPixmap)
 {
     if (wantPixmap)
         connect(this, SIGNAL(thumbnailLoaded(const LoadingDescription &, const QImage&)),
@@ -91,8 +114,29 @@ ThumbnailCreator *ThumbnailLoadThread::thumbnailCreator() const
     return d->creator;
 }
 
-void ThumbnailLoadThread::load(LoadingDescription description)
+QPixmap ThumbnailLoadThread::find(const QString &filePath)
 {
+    QPixmap pix;
+    LoadingDescription description(filePath, d->size, d->exifRotate);
+
+    {
+        LoadingCache *cache = LoadingCache::cache();
+        LoadingCache::CacheLock lock(cache);
+        pix = cache->retrieveThumbnailPixmap(description.cacheKey());
+    }
+
+    if (!pix.isNull())
+        return pix;
+
+    load(description);
+    return QPixmap();
+}
+
+void ThumbnailLoadThread::load(const LoadingDescription &constDescription)
+{
+    LoadingDescription description(constDescription);
+    description.previewParameters.type = LoadingDescription::PreviewParameters::Thumbnail;
+
     if (description.previewParameters.size <= 0)
     {
         DError() << "ThumbnailLoadThread::load: No thumbnail size specified. Refusing to load thumbnail." << endl;
@@ -105,7 +149,6 @@ void ThumbnailLoadThread::load(LoadingDescription description)
         return;
     }
 
-    description.previewParameters.type = LoadingDescription::PreviewParameters::Thumbnail;
     ManagedLoadSaveThread::loadPreview(description);
 }
 
@@ -183,8 +226,27 @@ void ThumbnailLoadThread::sendSurrogatePixmap(const LoadingDescription &descript
         pix = pix.scaled(size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     }
 
-    //Note/TODO: Currently not cached
+    {
+        LoadingCache *cache = LoadingCache::cache();
+        LoadingCache::CacheLock lock(cache);
+        cache->putThumbnail(description.cacheKey(), pix);
+    }
+
     emit thumbnailLoaded(description, pix);
+}
+
+void ThumbnailLoadThread::deleteThumbnail(const QString &filePath)
+{
+    {
+        LoadingCache *cache = LoadingCache::cache();
+        LoadingCache::CacheLock lock(cache);
+
+        QStringList possibleKeys = LoadingDescription::possibleThumbnailCacheKeys(filePath);
+        foreach(QString cacheKey, possibleKeys)
+            cache->removeThumbnail(cacheKey);
+    }
+
+    ThumbnailCreator::deleteThumbnailsFromDisk(filePath);
 }
 
 
