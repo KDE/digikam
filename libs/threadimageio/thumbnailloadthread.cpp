@@ -25,11 +25,13 @@
 // Qt includes
 
 #include <QPainter>
+#include <QHash>
 
 // KDE includes
 
 #include <kglobal.h>
 #include <kiconloader.h>
+#include <kio/previewjob.h>
 
 // Local includes.
 
@@ -60,6 +62,7 @@ public:
     bool exifRotate;
     bool highlight;
     bool sendSurrogate;
+    QHash<KUrl, LoadingDescription> kdeJobHash;
 };
 
 K_GLOBAL_STATIC(ThumbnailLoadThread, defaultObject);
@@ -97,10 +100,10 @@ void ThumbnailLoadThread::setExifRotate(int exifRotate)
 void ThumbnailLoadThread::setPixmapRequested(bool wantPixmap)
 {
     if (wantPixmap)
-        connect(this, SIGNAL(thumbnailLoaded(const LoadingDescription &, const QImage&)),
+        connect(this, SIGNAL(signalThumbnailLoaded(const LoadingDescription &, const QImage&)),
                 this, SLOT(slotThumbnailLoaded(const LoadingDescription &, const QImage&)));
     else
-        disconnect(this, SIGNAL(thumbnailLoaded(const LoadingDescription &, const QImage&)),
+        disconnect(this, SIGNAL(signalThumbnailLoaded(const LoadingDescription &, const QImage&)),
                    this, SLOT(slotThumbnailLoaded(const LoadingDescription &, const QImage&)));
 }
 
@@ -114,10 +117,10 @@ ThumbnailCreator *ThumbnailLoadThread::thumbnailCreator() const
     return d->creator;
 }
 
-QPixmap ThumbnailLoadThread::find(const QString &filePath)
+bool ThumbnailLoadThread::find(const QString &filePath, QPixmap &retPixmap)
 {
-    QPixmap pix;
-    LoadingDescription description(filePath, d->size, d->exifRotate);
+    const QPixmap *pix;
+    LoadingDescription description(filePath, d->size, d->exifRotate, LoadingDescription::PreviewParameters::Thumbnail);
 
     {
         LoadingCache *cache = LoadingCache::cache();
@@ -125,17 +128,19 @@ QPixmap ThumbnailLoadThread::find(const QString &filePath)
         pix = cache->retrieveThumbnailPixmap(description.cacheKey());
     }
 
-    if (!pix.isNull())
-        return pix;
+    if (pix)
+    {
+        retPixmap = QPixmap(*pix);
+        return true;
+    }
 
     load(description);
-    return QPixmap();
+    return false;
 }
 
 void ThumbnailLoadThread::load(const LoadingDescription &constDescription)
 {
     LoadingDescription description(constDescription);
-    description.previewParameters.type = LoadingDescription::PreviewParameters::Thumbnail;
 
     if (description.previewParameters.size <= 0)
     {
@@ -149,18 +154,13 @@ void ThumbnailLoadThread::load(const LoadingDescription &constDescription)
         return;
     }
 
-    ManagedLoadSaveThread::loadPreview(description);
+    ManagedLoadSaveThread::loadThumbnail(description);
 }
 
-void ThumbnailLoadThread::slotThumbnailLoaded(const LoadingDescription &loadingDescription, const QImage& thumb)
+void ThumbnailLoadThread::slotThumbnailLoaded(const LoadingDescription &description, const QImage& thumb)
 {
     if (thumb.isNull())
-    {
-        if (d->sendSurrogate)
-            sendSurrogatePixmap(loadingDescription);
-        else
-            emit thumbnailLoaded(loadingDescription, QPixmap());
-    }
+        loadWithKDE(description);
 
     QPixmap pix = QPixmap::fromImage(thumb);
 
@@ -176,10 +176,56 @@ void ThumbnailLoadThread::slotThumbnailLoaded(const LoadingDescription &loadingD
         p.drawRect(0, 0, w - 1, h - 1);
     }
 
-    emit thumbnailLoaded(loadingDescription, pix);
+    // put into cache
+    {
+        LoadingCache *cache = LoadingCache::cache();
+        LoadingCache::CacheLock lock(cache);
+        cache->putThumbnail(description.cacheKey(), pix);
+    }
+
+    emit signalThumbnailLoaded(description, pix);
 }
 
-void ThumbnailLoadThread::sendSurrogatePixmap(const LoadingDescription &description)
+void ThumbnailLoadThread::loadWithKDE(const LoadingDescription &description)
+{
+    // try again with KDE preview
+    KUrl url = KUrl::fromPath(description.filePath);
+    KUrl::List list;
+    list << url;
+    KIO::PreviewJob *job = KIO::filePreview(list, d->size);
+    d->kdeJobHash[url] = description;
+
+    connect(job, SIGNAL(gotPreview(const KFileItem &, const QPixmap &)),
+            this, SLOT(gotKDEPreview(const KFileItem &, const QPixmap &)));
+    connect(job, SIGNAL(failed(const KFileItem &)),
+            this, SLOT(failedKDEPreview(const KFileItem &)));
+}
+
+void ThumbnailLoadThread::gotKDEPreview(const KFileItem &item, const QPixmap &kdepix)
+{
+    QPixmap pix(kdepix);
+    LoadingDescription description = d->kdeJobHash[item.url()];
+
+    // third and last attempt - load a mimetype specific icon
+    if (pix.isNull() && d->sendSurrogate)
+        pix = surrogatePixmap(description);
+
+    // put into cache
+    {
+        LoadingCache *cache = LoadingCache::cache();
+        LoadingCache::CacheLock lock(cache);
+        cache->putThumbnail(description.cacheKey(), pix);
+    }
+
+    emit signalThumbnailLoaded(description, pix);
+}
+
+void ThumbnailLoadThread::failedKDEPreview(const KFileItem &item)
+{
+    gotKDEPreview(item, QPixmap());
+}
+
+QPixmap ThumbnailLoadThread::surrogatePixmap(const LoadingDescription &description)
 {
     QPixmap pix;
 
@@ -226,13 +272,7 @@ void ThumbnailLoadThread::sendSurrogatePixmap(const LoadingDescription &descript
         pix = pix.scaled(size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     }
 
-    {
-        LoadingCache *cache = LoadingCache::cache();
-        LoadingCache::CacheLock lock(cache);
-        cache->putThumbnail(description.cacheKey(), pix);
-    }
-
-    emit thumbnailLoaded(description, pix);
+    return pix;
 }
 
 void ThumbnailLoadThread::deleteThumbnail(const QString &filePath)

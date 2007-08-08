@@ -245,13 +245,30 @@ void ManagedLoadSaveThread::loadPreview(LoadingDescription description)
     // append new loading task
     if (existingTask)
         return;
-    if (description.previewParameters.type == LoadingDescription::PreviewParameters::Thumbnail)
-        m_todo.append(new ThumbnailLoadingTask(this, description));
-    else
-        m_todo.append(new PreviewLoadingTask(this, description));
+    m_todo.append(new PreviewLoadingTask(this, description));
     m_condVar.wakeAll();
 }
 
+void ManagedLoadSaveThread::loadThumbnail(LoadingDescription description)
+{
+    // This is simply appending.
+    // Thumbnail threads typically only support thumbnail tasks,
+    // so no need to differentiate with normal loading tasks.
+
+    QMutexLocker lock(&m_mutex);
+    LoadingTask *existingTask = findExistingTask(description);
+
+    // reuse task if it exists
+    if (existingTask)
+    {
+        existingTask->setStatus(LoadingTask::LoadingTaskStatusLoading);
+        return;
+    }
+
+    // append new loading task
+    m_todo.append(new ThumbnailLoadingTask(this, description));
+    m_condVar.wakeAll();
+}
 
 LoadingTask *ManagedLoadSaveThread::createLoadingTask(const LoadingDescription &description,
          bool preloading, LoadingMode loadingMode, AccessMode accessMode)

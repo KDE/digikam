@@ -32,6 +32,8 @@
 
 #include "managedloadsavethread.h"
 
+class KFileItem;
+
 namespace Digikam
 {
 
@@ -56,10 +58,12 @@ public:
 
     /**
      * Find a thumbnail.
-     * If the pixmap is found in the cache, it is returned.
-     * If the pixmap is not found in the cache, load() is called and a null QPixmap is returned.
+     * If the pixmap is found in the cache, returns true and sets pixmap
+     * to the found QPixmap.
+     * If the pixmap is not found in the cache, load() is called to start the loading process,
+     * false is returned and pixmap is not touched.
      */
-    QPixmap find(const QString &filePath);
+    bool find(const QString &filePath, QPixmap &pixmap);
 
     /**
      * Load a thumbnail.
@@ -125,7 +129,7 @@ signals:
 
     // See LoadSaveThread for a QImage-based thumbnailLoaded() signal.
 
-    void thumbnailLoaded(const LoadingDescription &loadingDescription, const QPixmap& pix);
+    void signalThumbnailLoaded(const LoadingDescription &loadingDescription, const QPixmap& pix);
 
 public:
 
@@ -134,11 +138,14 @@ public:
 
 private:
 
-    void sendSurrogatePixmap(const LoadingDescription &loadingDescription);
+    void loadWithKDE(const LoadingDescription &description);
+    QPixmap surrogatePixmap(const LoadingDescription &loadingDescription);
 
 private slots:
 
     void slotThumbnailLoaded(const LoadingDescription &loadingDescription, const QImage& thumb);
+    void gotKDEPreview(const KFileItem &, const QPixmap &pix);
+    void failedKDEPreview(const KFileItem &);
 
 private:
 

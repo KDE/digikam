@@ -114,6 +114,7 @@ protected:
     void load(LoadingDescription description, LoadingMode loadingMode,
               LoadingPolicy policy = LoadingPolicyAppend, AccessMode mode = AccessModeReadWrite);
     void loadPreview(LoadingDescription description);
+    void loadThumbnail(LoadingDescription description);
 
 private:
 
