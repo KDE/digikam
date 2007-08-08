@@ -46,11 +46,12 @@ LoadingDescription::LoadingDescription(const QString &filePath, KDcrawIface::Raw
 {
 }
 
-LoadingDescription::LoadingDescription(const QString &filePath, int size, bool exifRotate)
+LoadingDescription::LoadingDescription(const QString &filePath, int size, bool exifRotate,
+                                       LoadingDescription::PreviewParameters::PreviewType type)
     : filePath(filePath)
 {
     rawDecodingSettings = KDcrawIface::RawDecodingSettings();
-    previewParameters.type       = PreviewParameters::PreviewImage;
+    previewParameters.type       = type;
     previewParameters.size       = size;
     previewParameters.exifRotate = exifRotate;
 }
