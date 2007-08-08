@@ -143,10 +143,10 @@ public:
     /// QPixmaps can only be accessed from the main thread, so the tasks cannot access this cache.
     /**
      * Retrieves a thumbnail for the given filePath from the thumbnail cache,
-     * or a null QImage if the thumbnail is not found.
+     * or a 0 if the thumbnail is not found.
      */
-    QImage  retrieveThumbnail(const QString &cacheKey);
-    QPixmap retrieveThumbnailPixmap(const QString &cacheKey);
+    const QImage *retrieveThumbnail(const QString &cacheKey);
+    const QPixmap *retrieveThumbnailPixmap(const QString &cacheKey);
     /**
      * Puts a thumbnail into the thumbnail cache.
      */
