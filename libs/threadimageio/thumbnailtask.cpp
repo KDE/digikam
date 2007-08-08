@@ -74,7 +74,9 @@ void ThumbnailLoadingTask::execute()
         LoadingCache::CacheLock lock(cache);
 
         // find possible cached images
-        qimage = cache->retrieveThumbnail(m_loadingDescription.cacheKey());
+        const QImage *cachedImage = cache->retrieveThumbnail(m_loadingDescription.cacheKey());
+        if (cachedImage)
+            qimage = QImage(*cachedImage);
 
         if (qimage.isNull())
         {
