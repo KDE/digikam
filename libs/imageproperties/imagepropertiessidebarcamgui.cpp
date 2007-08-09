@@ -88,10 +88,10 @@ public:
     CameraItemPropertiesTab    *cameraItemTab;
 };
 
-ImagePropertiesSideBarCamGui::ImagePropertiesSideBarCamGui(QWidget *parent, const char *name,
+ImagePropertiesSideBarCamGui::ImagePropertiesSideBarCamGui(QWidget *parent,
                                                            QSplitter *splitter, Side side,
                                                            bool mimimizedDefault)
-                            : Sidebar(parent, name, side, mimimizedDefault)
+                            : Sidebar(parent, side, mimimizedDefault)
 {
     d = new ImagePropertiesSideBarCamGuiPriv;
     d->cameraItemTab = new CameraItemPropertiesTab(parent, true);

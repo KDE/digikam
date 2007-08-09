@@ -425,8 +425,8 @@ void ShowFoto::setupUserArea()
         m_canvas->setSizePolicy(rightSzPolicy);
         m_canvas->makeDefaultEditingCanvas();
 
-        d->rightSidebar   = new Digikam::ImagePropertiesSideBar(widget, "ShowFoto Sidebar Right", m_splitter, 
-                                                                Digikam::Sidebar::DockRight);
+        d->rightSidebar   = new Digikam::ImagePropertiesSideBar(widget, m_splitter, Digikam::Sidebar::DockRight);
+        d->rightSidebar->setObjectName("ShowFoto Sidebar Right");
 
         hlay->addWidget(m_splitter);
         hlay->addWidget(d->rightSidebar);
@@ -455,8 +455,9 @@ void ShowFoto::setupUserArea()
         vlay->setMargin(0);
 
         QHBoxLayout *hlay = new QHBoxLayout(widget);
-        d->rightSidebar   = new Digikam::ImagePropertiesSideBar(widget, "ShowFoto Sidebar Right", m_splitter, 
-                                                                Digikam::Sidebar::DockRight);
+        d->rightSidebar   = new Digikam::ImagePropertiesSideBar(widget, m_splitter, Digikam::Sidebar::DockRight);
+        d->rightSidebar->setObjectName("ShowFoto Sidebar Right");
+
         hlay->addWidget(m_splitter);
         hlay->addWidget(d->rightSidebar);
         hlay->setSpacing(0);

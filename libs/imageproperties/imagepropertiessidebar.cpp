@@ -48,10 +48,10 @@
 namespace Digikam
 {
 
-ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget *parent, const char *name, 
+ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget *parent,
                                                QSplitter *splitter, Side side, 
                                                bool mimimizedDefault, bool navBar)
-                      : Sidebar(parent, name, side, mimimizedDefault)
+                      : Sidebar(parent, side, mimimizedDefault)
 {
     m_image              = 0;
     m_currentRect        = QRect();

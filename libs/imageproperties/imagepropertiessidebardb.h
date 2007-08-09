@@ -55,7 +55,7 @@ class DIGIKAM_EXPORT ImagePropertiesSideBarDB : public ImagePropertiesSideBar
 
 public:
 
-    ImagePropertiesSideBarDB(QWidget* parent, const char *name, QSplitter *splitter, 
+    ImagePropertiesSideBarDB(QWidget* parent, QSplitter *splitter,
                              Side side=DockLeft, bool mimimizedDefault=false);
 
     ~ImagePropertiesSideBarDB();

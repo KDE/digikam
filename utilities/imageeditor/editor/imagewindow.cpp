@@ -287,8 +287,9 @@ void ImageWindow::setupUserArea()
     rightSzPolicy.setHorizontalStretch(2);
     rightSzPolicy.setVerticalStretch(1);
 
-    d->rightSidebar  = new ImagePropertiesSideBarDB(widget, "ImageEditor Right Sidebar", m_splitter,
+    d->rightSidebar  = new ImagePropertiesSideBarDB(widget, m_splitter,
                                                     Sidebar::DockRight, true);
+    d->rightSidebar->setObjectName("ImageEditor Right Sidebar");
     lay->addWidget(m_splitter);
     lay->addWidget(d->rightSidebar);
     lay->setSpacing(0);

@@ -27,6 +27,7 @@
 #include <QLabel>
 #include <QPixmap>
 #include <QFileInfo>
+#include <QVBoxLayout>
 
 // KDE includes.
 

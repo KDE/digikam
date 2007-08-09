@@ -194,7 +194,8 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
     m_imagePreviewWidget->setSizePolicy(rightSzPolicy);
 
     QString sbName(d->name + QString(" Image Plugin Sidebar"));
-    d->settingsSideBar = new Sidebar(d->hbox, sbName.toAscii().data(), Sidebar::DockRight);
+    d->settingsSideBar = new Sidebar(d->hbox, Sidebar::DockRight);
+    d->settingsSideBar->setObjectName(sbName.toAscii());
     d->settingsSideBar->setSplitter(d->splitter);
 
     d->mainLayout->addWidget(d->hbox, 1, 0, 2, 2 );

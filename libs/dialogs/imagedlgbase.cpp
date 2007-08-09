@@ -275,7 +275,8 @@ void ImageDlgBase::setPreviewAreaWidget(QWidget *w)
 void ImageDlgBase::setUserAreaWidget(QWidget *w)
 {
     QString sbName(d->name + QString(" Image Plugin Sidebar"));
-    d->settingsSideBar = new Sidebar(d->hbox, sbName.toAscii().data(), Sidebar::DockRight);
+    d->settingsSideBar = new Sidebar(d->hbox, Sidebar::DockRight);
+    d->settingsSideBar->setObjectName(sbName.toAscii());
     d->settingsSideBar->setSplitter(d->splitter);
     d->settingsSideBar->appendTab(w, SmallIcon("configure"), i18n("Settings"));
     d->settingsSideBar->loadViewState();

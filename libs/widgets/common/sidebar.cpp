@@ -84,13 +84,12 @@ public:
     Sidebar::Side   side;
 };
 
-Sidebar::Sidebar(QWidget *parent, const char *name, Side side, bool minimizedDefault)
+Sidebar::Sidebar(QWidget *parent, Side side, bool minimizedDefault)
        : KMultiTabBar(KMultiTabBar::Vertical, parent)
 {
     d = new SidebarPriv;
     d->minimizedDefault = minimizedDefault;
     d->side             = side;
-    setObjectName(name);
     setStyle(KMultiTabBar::VSNET);
 }
 

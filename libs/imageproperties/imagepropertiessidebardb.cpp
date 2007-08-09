@@ -80,9 +80,9 @@ public:
     bool                  hasImageInfoOwnership;
 };
 
-ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, const char *name, QSplitter *splitter, 
+ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, QSplitter *splitter,
                                                    Side side, bool mimimizedDefault)
-                        : ImagePropertiesSideBar(parent, name, splitter, side, mimimizedDefault, false)
+                        : ImagePropertiesSideBar(parent, splitter, side, mimimizedDefault, false)
 {
     // Navigate bar is disabled by passing false to parent class constructor, and tab constructors
 

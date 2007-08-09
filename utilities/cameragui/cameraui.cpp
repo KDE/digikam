@@ -270,8 +270,9 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     rightSzPolicy.setVerticalStretch(1);
     d->view->setSizePolicy(rightSzPolicy);
 
-    d->rightSidebar = new ImagePropertiesSideBarCamGui(widget, "CameraGui Sidebar Right", d->splitter,
+    d->rightSidebar = new ImagePropertiesSideBarCamGui(widget, d->splitter,
                                                        Sidebar::DockRight, true);
+    d->rightSidebar->setObjectName("CameraGui Sidebar Right");
     d->splitter->setFrameStyle( QFrame::NoFrame );
     d->splitter->setFrameShadow( QFrame::Plain );
     d->splitter->setFrameShape( QFrame::NoFrame );       
