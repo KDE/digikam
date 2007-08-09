@@ -48,7 +48,7 @@
 #include "imageinfo.h"
 #include "albumsettings.h"
 #include "icongroupitem.h"
-#include "pixmapmanager.h"
+#include "thumbnailloadthread.h"
 #include "albumiconview.h"
 #include "albumiconitem.h"
 
@@ -237,8 +237,8 @@ void AlbumIconItem::paintItem(QPainter *p)
 
     d->dirty = true;
 
-    QPixmap thumbnail = d->view->pixmapManager()->find(d->info.fileUrl());
-    if (!thumbnail.isNull())
+    QPixmap thumbnail;
+    if (ThumbnailLoadThread::defaultThread()->find(d->info.filePath(), thumbnail))
     {
         r = d->view->itemPixmapRect();
         p->drawPixmap(r.x() + (r.width()-thumbnail.width())/2,

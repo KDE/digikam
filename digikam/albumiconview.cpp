@@ -112,7 +112,7 @@ extern "C"
 #include "dpopupmenu.h"
 #include "tagspopupmenu.h"
 #include "ratingpopupmenu.h"
-#include "pixmapmanager.h"
+#include "thumbnailloadthread.h"
 #include "cameradragobject.h"
 #include "dragobjects.h"
 #include "dmetadata.h"
@@ -140,7 +140,6 @@ public:
         imageLister   = 0;
         currentAlbum  = 0;
         albumSettings = 0;
-        pixMan        = 0;
         toolTip       = 0;
 
         // Pre-computed star polygon for a 15x15 pixmap.
@@ -195,10 +194,9 @@ public:
     Album                           *currentAlbum;
     const AlbumSettings             *albumSettings;
     Q3IntDict<AlbumIconGroupItem>    albumDict;
-    PixmapManager                   *pixMan;
 
     ThumbnailSize                    thumbSize;
-    
+
     AlbumFileTip                    *toolTip;
 };
 
@@ -208,7 +206,6 @@ AlbumIconView::AlbumIconView(QWidget* parent)
     d = new AlbumIconViewPrivate;
     d->init();
     d->imageLister = AlbumLister::componentData();
-    d->pixMan      = new PixmapManager(this);
     d->toolTip     = new AlbumFileTip(this);
 
     setAcceptDrops(true);
@@ -252,8 +249,8 @@ AlbumIconView::AlbumIconView(QWidget* parent)
 
     // -- Pixmap manager connections ------------------------------------
 
-    connect(d->pixMan, SIGNAL(signalPixmap(const KUrl&)),
-            this, SLOT(slotGotThumbnail(const KUrl&)));
+    connect(ThumbnailLoadThread::defaultThread(), SIGNAL(signalThumbnailLoaded(const LoadingDescription &, const QPixmap&)),
+            this, SLOT(slotThumbnailLoaded(const LoadingDescription &, const QPixmap&)));
 
     // -- ImageAttributesWatch connections ------------------------------
 
@@ -277,7 +274,6 @@ AlbumIconView::AlbumIconView(QWidget* parent)
 
 AlbumIconView::~AlbumIconView()
 {
-    delete d->pixMan;
     delete d->toolTip;
     delete d;
 }
@@ -300,7 +296,7 @@ void AlbumIconView::applySettings(const AlbumSettings* settings)
     d->imageLister->stop();
     clear();
 
-    d->pixMan->setThumbnailSize(d->thumbSize.size());
+    ThumbnailLoadThread::defaultThread()->setThumbnailSize(d->thumbSize.size());
 
     if (d->currentAlbum)
     {
@@ -316,7 +312,7 @@ void AlbumIconView::setThumbnailSize(const ThumbnailSize& thumbSize)
         clear();
 
         d->thumbSize = thumbSize;
-        d->pixMan->setThumbnailSize(d->thumbSize.size());
+        ThumbnailLoadThread::defaultThread()->setThumbnailSize(d->thumbSize.size());
 
         updateRectsAndPixmaps();
 
@@ -359,7 +355,6 @@ void AlbumIconView::clear(bool update)
 {
     emit signalCleared();
 
-    d->pixMan->clear();
     d->itemDict.clear();
     d->albumDict.clear();
     d->itemInfoMap.clear();
@@ -852,7 +847,7 @@ void AlbumIconView::slotRenamed(KIO::Job*, const KUrl &, const KUrl&newURL)
     fileURL.addPath(newURL.path());
 
     // refresh thumbnail
-    d->pixMan->deleteThumbnail(fileURL);
+    ThumbnailLoadThread::deleteThumbnail(fileURL.path());
     // clean LoadingCache as well - be pragmatic, do it here.
     LoadingCacheInterface::cleanFromCache(fileURL.path());
 }
@@ -1529,7 +1524,7 @@ void AlbumIconView::refreshItems(const KUrl::List& urlList)
 
         ImageInfo info = iconItem->imageInfo();
         info.refresh();
-        d->pixMan->deleteThumbnail(info.fileUrl());
+        ThumbnailLoadThread::deleteThumbnail((*it).path());
         // clean LoadingCache as well - be pragmatic, do it here.
         LoadingCacheInterface::cleanFromCache((*it).path());
     }
@@ -1540,9 +1535,9 @@ void AlbumIconView::refreshItems(const KUrl::List& urlList)
     triggerRearrangement();
 }
 
-void AlbumIconView::slotGotThumbnail(const KUrl& url)
+void AlbumIconView::slotThumbnailLoaded(const LoadingDescription &loadingDescription, const QPixmap&)
 {
-    AlbumIconItem* iconItem = findItem(url.url());
+    AlbumIconItem* iconItem = findItem(KUrl::fromPath(loadingDescription.filePath).url());
     if (!iconItem)
         return;
 
@@ -1961,11 +1956,6 @@ AlbumIconItem* AlbumIconView::nextItemToThumbnail() const
     }
 
     return 0;
-}
-
-PixmapManager* AlbumIconView::pixmapManager() const
-{
-    return d->pixMan;
 }
 
 void AlbumIconView::slotAlbumModified()

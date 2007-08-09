@@ -34,6 +34,7 @@
 
 // Local includes.
 
+#include "loadingdescription.h"
 #include "iconview.h"
 #include "imageinfo.h"
 #include "imageinfolist.h"
@@ -58,7 +59,6 @@ class AlbumIconItem;
 class AlbumSettings;
 class ThumbnailSize;
 class Album;
-class PixmapManager;
 class AlbumIconViewPrivate;
 
 class AlbumIconView : public IconView,
@@ -117,7 +117,6 @@ public:
     AlbumIconItem* findItem(const QPoint& pos);
     AlbumIconItem* findItem(const QString& url) const;
     AlbumIconItem* nextItemToThumbnail() const;
-    PixmapManager* pixmapManager() const;
 
     void insertSelectionToLightTable();
     void insertToLightTable(const ImageInfoList& list, const ImageInfo &current);
@@ -173,7 +172,7 @@ private slots:
     void slotRightButtonClicked(const QPoint& pos);
     void slotRightButtonClicked(IconItem *item, const QPoint& pos);
 
-    void slotGotThumbnail(const KUrl& url);
+    void slotThumbnailLoaded(const LoadingDescription &loadingDescription, const QPixmap& thumb);
     void slotSelectionChanged();
 
     void slotFilesModified();
