@@ -270,6 +270,27 @@ void ManagedLoadSaveThread::loadThumbnail(LoadingDescription description)
     m_condVar.wakeAll();
 }
 
+void ManagedLoadSaveThread::prependThumbnailGroup(QList<LoadingDescription> descriptions)
+{
+    // This method is meant to prepend a group of loading tasks after the current task,
+    // in the order they are given here, pushing the existing tasks to the back respectively removing double tasks.
+    QMutexLocker lock(&m_mutex);
+
+    int index = 0;
+    for (int i=0; i<descriptions.size(); i++)
+    {
+        LoadingTask *existingTask = findExistingTask(descriptions[i]);
+
+        // remove task, if not the current task
+        if (existingTask && existingTask != m_currentTask)
+            m_todo.removeAll(existingTask);
+
+        // insert new loading task, in the order given by descriptions list
+        m_todo.insert(index++, new ThumbnailLoadingTask(this, descriptions[i]));
+    }
+    m_condVar.wakeAll();
+}
+
 LoadingTask *ManagedLoadSaveThread::createLoadingTask(const LoadingDescription &description,
          bool preloading, LoadingMode loadingMode, AccessMode accessMode)
 {
@@ -372,6 +393,7 @@ void ManagedLoadSaveThread::save(DImg &image, const QString& filePath, const QSt
             break;
     }
     m_todo.insert(i, new SavingTask(this, image, filePath, format));
+    m_condVar.wakeAll();
 }
 
 }   // namespace Digikam

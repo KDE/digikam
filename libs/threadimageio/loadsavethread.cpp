@@ -121,7 +121,7 @@ void LoadSaveThread::run()
                 }
             }
             else
-                m_condVar.wait(&m_mutex, 1000);
+                m_condVar.wait(&m_mutex);
         }
         if (m_currentTask)
             m_currentTask->execute();
