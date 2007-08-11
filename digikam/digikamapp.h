@@ -37,6 +37,7 @@
 #include <kxmlguiwindow.h>
 #include <kio/global.h>
 #include <kio/netaccess.h>
+#include <solid/solidnamespace.h>
 
 // Local includes.
 
@@ -94,10 +95,6 @@ protected:
 
     bool queryClose();
 
-protected slots:
-
-    void slotCameraMediaMenuEntries( KIO::Job *, const KIO::UDSEntryList & );
-
 private:
 
     bool setup(bool iccSetupPage=false);
@@ -128,11 +125,11 @@ private slots:
 
     void slotKipiPluginPlug();
     
-    QString convertToLocalUrl( const QString& folder );
-    void slotDownloadImages( const QString& folder );
-    void slotDownloadImages();
-    void slotCameraConnect();
-    void slotCameraMediaMenu();
+    void slotOpenCameraUi(QAction *);
+    void slotOpenCameraUiFromPath();
+    void slotSolidSetupDevice(QAction *);
+    void slotSolidSetupDone(Solid::ErrorType errorType, QVariant errorData);
+    void slotFillSolidMenus();
     void slotCameraAdded(CameraType *ctype);
     void slotCameraRemoved(CameraType *ctype);
     void slotCameraAutoDetect();

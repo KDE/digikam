@@ -74,7 +74,8 @@ public:
     {
         fullScreen                           = false;
         validIccPath                         = true;
-        cameraMediaList                      = 0;
+        usbMediaMenu                         = 0;
+        cardReaderMenu                       = 0;
         newAction                            = 0;
         deleteAction                         = 0;
         imageDeletePermanentlyAction         = 0;
@@ -129,7 +130,6 @@ public:
         themeMenuAction                      = 0;
         forwardSignalMapper                  = 0;
         backwardSignalMapper                 = 0;
-        cameraSignalMapper                   = 0;
         albumSettings                        = 0;
         albumManager                         = 0;
         dcopIface                            = 0;
@@ -146,6 +146,9 @@ public:
         zoomFitToWindowAction                = 0;
         zoomPlusAction                       = 0;
         zoomMinusAction                      = 0;
+        cameraActionGroup                    = 0;
+        solidActionGroup                     = 0;
+        eventLoop                            = 0;
     }
 
     bool                   fullScreen;
@@ -161,7 +164,8 @@ public:
 
     QString                cameraGuiPath;
 
-    KMenu                 *cameraMediaList;
+    KMenu                 *usbMediaMenu;
+    KMenu                 *cardReaderMenu;
 
     KSharedConfig::Ptr     config;    
     
@@ -237,7 +241,11 @@ public:
 
     QSignalMapper         *backwardSignalMapper;
     QSignalMapper         *forwardSignalMapper;
-    QSignalMapper         *cameraSignalMapper;
+    QActionGroup          *cameraActionGroup;
+    QActionGroup          *solidActionGroup;
+
+    QEventLoop            *eventLoop;
+    QString                solidErrorMessage;
 
     AlbumSettings         *albumSettings;
     AlbumManager          *albumManager;
