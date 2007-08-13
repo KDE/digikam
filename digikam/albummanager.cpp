@@ -224,8 +224,9 @@ void AlbumManager::setAlbumRoot(const QString &albumRoot, bool priority)
     {
         KMessageBox::error(0, i18n("<qt><p>Failed to open the database. "
                                    " Error message from database: %1 "
-                                   "</p><p>You cannot use digiKam without a working database."
-                                   "Please check the database settings in the configuration menu.</p></qt>",
+                                   "</p><p>You cannot use digiKam without a working database. "
+                                   "digiKam will attempt to start now, but it will <b>not</b> be functional. "
+                                   "Please check the database settings in the <b>configuration menu</b>.</p></qt>",
                                    DatabaseAccess().lastError()));
         return;
     }

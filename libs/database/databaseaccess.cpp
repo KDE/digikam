@@ -24,6 +24,7 @@
 // Qt includes
 
 #include <QMutex>
+#include <QSqlDatabase>
 
 // KDE includes
 
@@ -133,7 +134,7 @@ void DatabaseAccess::setParameters(const DatabaseParameters &parameters)
         delete d->db;
         delete d->backend;
         delete d->infoCache;
-        d->backend = DatabaseBackend::createBackend(parameters);
+        d->backend = new DatabaseBackend();
         d->db = new AlbumDB(d->backend);
         d->infoCache = new ImageInfoCache();
     }
@@ -149,6 +150,15 @@ void DatabaseAccess::setParameters(const DatabaseParameters &parameters)
 
 bool DatabaseAccess::checkReadyForUse()
 {
+    QStringList drivers = QSqlDatabase::drivers();
+    if (!drivers.contains("QSQLITE"))
+    {
+        DError() << "No SQLite3 driver available. List of QSqlDatabase drivers: " << drivers << endl;
+        d->lastError = i18n("The driver \"SQLITE\" for SQLite3 databases is not available.\n"
+                            "digiKam depends on the drivers provided by the SQL module of Qt4.");
+        return false;
+    }
+
     // this code is similar to the constructor
     QMutexLocker locker(&d->mutex);
 
