@@ -26,8 +26,10 @@
 
 // Qt includes
 
+#include <QObject>
 #include <QString>
 #include <QStringList>
+#include <QSqlQuery>
 
 // Local includes
 
@@ -38,43 +40,43 @@ namespace Digikam
 {
 
 class SchemaUpdater;
+class DatabaseBackendPriv;
 
-class DIGIKAM_EXPORT DatabaseBackend
+class DIGIKAM_EXPORT DatabaseBackend : public QObject
 {
+
+Q_OBJECT
 
     // NOTE: when porting to Qt SQL, most of the methods can be implemented here
 public:
 
-    /**
-     * Creates a DatabaseBackend based on the given parameters.
-     * Returns null on failure.
-     */
-    static DatabaseBackend* createBackend(const DatabaseParameters &parameters);
-
     DatabaseBackend();
-    virtual ~DatabaseBackend() {};
+    ~DatabaseBackend();
 
     /**
      * Checks if the parameters can be used for this database backend.
      */
-    virtual bool isCompatible(const DatabaseParameters &parameters) = 0;
+    bool isCompatible(const DatabaseParameters &parameters);
 
     /**
-     * Open the database connection. Subclasses require a specific set of parameters.
+     * Open the database connection.
+     * Shall only be called from the main thread.
      * @returns true on success
      */
-    virtual bool open(const DatabaseParameters &parameters) = 0;
+    bool open(const DatabaseParameters &parameters);
 
     /**
      * Initialize the database schema to the current version,
      * carry out upgrades if necessary.
+     * Shall only be called from the thread that called open().
      */
-    virtual bool initSchema(SchemaUpdater *updater) = 0;
+    bool initSchema(SchemaUpdater *updater);
 
     /**
-     * Close the database connection
+     * Close the database connection.
+     * Shall only be called from the thread that called open().
      */
-    virtual void close() = 0;
+    void close();
 
     enum Status
     {
@@ -101,48 +103,73 @@ public:
     /**
      * Returns the current status of the database backend
      */
-    virtual Status status() const = 0;
+    Status status() const;
 
     bool isOpen() const { return status() > Unavailable; }
     bool isReady() const { return status() == OpenSchemaChecked; }
 
-    /**
-     * This will execute a given SQL statement to the database.
-     * @param sql The SQL statement
-     * @param values This will be filled with the result of the SQL statement
-     * @param debug If true, it will output the SQL statement 
-     * @return It will return if the execution of the statement was succesfull
-     */
-    virtual bool execSql(const QString& sql, QStringList* const values = 0,
-                 QString *errMsg = 0, bool debug = false) = 0;
+    /// DEPRECATED: @param values This will be filled with the result of the SQL statement, converted to QString
+    KDE_DEPRECATED bool execSql(const QString& sql, QStringList* values);
 
     /**
-     * Escapes text fields. This is needed for all queries to the database
-     * which happens with an argument which is a text field. It makes sure
-     * a ' is replaced with '', as this is needed for sqlite.
-     * @param str String to escape
-     * @return The escaped string
+     * Executes the sql statement, and write the returned data into the values list.
+     * If you are not interested in the returned data, set values to 0.
+     * Methods are provided for up to four bound values (positional binding), or for a list of bound values.
      */
-    virtual QString escapeString(QString str) const = 0;
+    bool execSql(const QString& sql, QList<QVariant>* values = 0);
+    bool execSql(const QString& sql, const QVariant &boundValue1, QList<QVariant>* values = 0);
+    bool execSql(const QString& sql,
+                 const QVariant &boundValue1, const QVariant &boundValue2,
+                 QList<QVariant>* values = 0);
+    bool execSql(const QString& sql,
+                 const QVariant &boundValue1, const QVariant &boundValue2, const QVariant &boundValue3,
+                 QList<QVariant>* values = 0);
+    bool execSql(const QString& sql,
+                 const QVariant &boundValue1, const QVariant &boundValue2,
+                 const QVariant &boundValue3, const QVariant &boundValue4,
+                 QList<QVariant>* values = 0);
+    bool execSql(const QString& sql, const QList<QVariant> &boundValues, QList<QVariant>* values);
 
     /**
-     * @return the last inserted row in one the db table.
+     * Executes the statement and returns the query object.
+     * Methods are provided for up to four bound values (positional binding), or for a list of bound values.
      */
-    virtual qlonglong lastInsertedRow() = 0;
+    QSqlQuery execQuery(const QString& sql);
+    QSqlQuery execQuery(const QString& sql, const QVariant &boundValue1);
+    QSqlQuery execQuery(const QString& sql,
+                        const QVariant &boundValue1, const QVariant &boundValue2);
+    QSqlQuery execQuery(const QString& sql,
+                        const QVariant &boundValue1, const QVariant &boundValue2, const QVariant &boundValue3);
+    QSqlQuery execQuery(const QString& sql,
+                        const QVariant &boundValue1, const QVariant &boundValue2,
+                        const QVariant &boundValue3, const QVariant &boundValue4);
+    QSqlQuery execQuery(const QString& sql, const QList<QVariant> &boundValues);
+
+    /**
+     * Creates a query object prepared with the statement, waiting for bound values
+     */
+    QSqlQuery prepareQuery(const QString &sql);
+
+    QList<QVariant> readToList(QSqlQuery &query);
+
+    /**
+     * @return the last inserted row in one of the db tables.
+     */
+    qlonglong lastInsertedRow();
 
     /**
      * Begin a database transaction
      */
-    virtual void beginTransaction() = 0;
+    void beginTransaction();
     /**
      * Commit the current database transaction
      */
-    virtual void commitTransaction() = 0;
+    void commitTransaction();
 
     /**
      * Return a list with the names of the tables in the database
      */
-    virtual QStringList tables() = 0;
+    QStringList tables();
 
     /**
      * Returns a description of the last error that occurred on this database.
@@ -150,7 +177,7 @@ public:
      * This error will be included in that message.
      * It may be empty.
      */
-    virtual QString lastError() = 0;
+    QString lastError();
 
 /*
     Qt SQL driver supported features
@@ -175,6 +202,15 @@ public:
         QuerySize
         LastInsertId
 */
+
+private slots:
+
+    void slotThreadFinished();
+    void slotMainThreadFinished();
+
+private:
+
+    DatabaseBackendPriv *d;
 
 };
 
