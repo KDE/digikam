@@ -119,7 +119,7 @@ KDE4_ADD_LIBRARY(digikamdatabase SHARED ${digikamdatabase_LIB_SRCS})
 
 TARGET_LINK_LIBRARIES(digikamdatabase
                       digikam
-                      ${SQLITE_LIBRARIES}
+                      ${QT_QTSQL_LIBRARY}
               )
 
 SET_TARGET_PROPERTIES(digikamdatabase PROPERTIES VERSION 1.0.0 SOVERSION 1 )
