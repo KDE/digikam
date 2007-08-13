@@ -116,7 +116,8 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
     {
         topLabel->setText(i18n("<qt><b>\"<i>%1</i>\" Album Properties</b></qt>", album->title()));
     }
-    topLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine);
+    topLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    topLabel->setWordWrap(false);
 
     // --------------------------------------------------------
 
