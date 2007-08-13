@@ -28,6 +28,7 @@
 
 // Qt includes.
 
+#include <QCoreApplication>
 #include <QFile>
 #include <QDataStream>
 
@@ -138,6 +139,9 @@ extern "C"
 {
     DIGIKAM_EXPORT int kdemain(int argc, char **argv)
     {
+        // Needed to load SQL driver plugins
+        QCoreApplication app(argc, argv);
+
         KLocale::setMainCatalog("digikam");
         KComponentData componentData( "kio_digikamdates" );
         KGlobal::locale();

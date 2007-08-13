@@ -28,6 +28,8 @@
 
 // Qt includes.
 
+#include <QCoreApplication>
+
 // KDE includes.
 
 #include <klocale.h>
@@ -73,7 +75,8 @@ void kio_digikamsearch::special(const QByteArray& data)
     Digikam::DatabaseAccess::setParameters(dbUrl);
 
     Digikam::ImageQueryBuilder queryBuilder;
-    QString query = queryBuilder.buildQuery(dbUrl.searchUrl());
+    QList<QVariant> boundValues;
+    QString query = queryBuilder.buildQuery(dbUrl.searchUrl(), boundValues);
 
     Digikam::ImageLister lister;
 
@@ -81,7 +84,7 @@ void kio_digikamsearch::special(const QByteArray& data)
     {
         // send data every 200 images to be more responsive
         Digikam::ImageListerSlaveBasePartsSendingReceiver receiver(this, 200);
-        lister.listSearch(&receiver, query, filter, getDimensions);
+        lister.listSearch(&receiver, query, boundValues, filter, getDimensions);
         if (!receiver.hasError)
             receiver.sendData();
     }
@@ -89,7 +92,7 @@ void kio_digikamsearch::special(const QByteArray& data)
     {
         Digikam::ImageListerSlaveBaseReceiver receiver(this);
         // fast mode: do not get size, dimension, limit results to 500
-        lister.listSearch(&receiver, query, filter, false, false, 500);
+        lister.listSearch(&receiver, query, boundValues, filter, false, false, 500);
         if (!receiver.hasError)
             receiver.sendData();
         //        ds << m_libraryPath + *it;
@@ -104,6 +107,9 @@ extern "C"
 {
     DIGIKAM_EXPORT int kdemain(int argc, char **argv)
     {
+        // Needed to load SQL driver plugins
+        QCoreApplication app(argc, argv);
+
         KLocale::setMainCatalog("digikam");
         KComponentData componentData( "kio_digikamsearch" );
         KGlobal::locale();

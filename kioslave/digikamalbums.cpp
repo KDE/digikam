@@ -29,6 +29,7 @@
 
 // Qt includes.
 
+#include <qcoreapplication.h>
 #include <qfileinfo.h>
 #include <qdatastream.h>
 
@@ -610,6 +611,9 @@ extern "C"
 {
     DIGIKAM_EXPORT int kdemain(int argc, char **argv)
     {
+        // Needed to load SQL driver plugins
+        QCoreApplication app(argc, argv);
+
         KLocale::setMainCatalog("digikam");
         KComponentData componentData( "kio_digikamalbums" );
         KGlobal::locale();
