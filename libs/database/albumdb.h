@@ -611,10 +611,6 @@ private:
      */
     ~AlbumDB();
 
-    bool execSql(const QString& sql, QStringList* const values = 0,
-                 QString *errMsg = 0, bool debug = false);
-    QString escapeString(QString str) const;
-
 private:
 
     AlbumDBPriv* d;
