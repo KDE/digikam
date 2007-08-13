@@ -174,14 +174,13 @@ void ImageLister::listAlbum(ImageListerReceiver *receiver,
 {
     QString base      = albumRoot + album;
 
-    QStringList values;
+    QList<QVariant> values;
 
     {
         DatabaseAccess access;
         access.backend()->execSql(QString("SELECT id, name, datetime FROM Images "
-                                          "WHERE dirid = %1;")
-                                         .arg(albumid),
-                                  &values);
+                                          "WHERE dirid = ?;"),
+                                  albumid, &values);
         /*
         With rating:
         SELECT Images.id, Images.name, Images.datetime, Albums.url, ImageProperties.value
@@ -194,14 +193,14 @@ void ImageLister::listAlbum(ImageListerReceiver *receiver,
 
     NameFilter nameFilter(filter);
     struct stat stbuf;
-    for (QStringList::iterator it = values.begin(); it != values.end();)
+    for (QList<QVariant>::iterator it = values.begin(); it != values.end();)
     {
         ImageListerRecord record;
-        record.imageID   = (*it).toLongLong();
+        record.imageID   = it->toLongLong();
         ++it;
-        record.name      = *it;
+        record.name      = it->toString();
         ++it;
-        record.dateTime  = QDateTime::fromString(*it, Qt::ISODate);
+        record.dateTime  = QDateTime::fromString(it->toString(), Qt::ISODate);
         ++it;
 
         record.albumID   = albumid;
@@ -229,7 +228,7 @@ void ImageLister::listTag(ImageListerReceiver *receiver,
 {
     QString albumRoot = DatabaseAccess::albumRoot();
 
-    QStringList values;
+    QList<QVariant> values;
 
     {
         DatabaseAccess access;
@@ -238,27 +237,26 @@ void ImageLister::listTag(ImageListerReceiver *receiver,
                                             " FROM Images, Albums \n "
                                             " WHERE Images.id IN \n "
                                             "       (SELECT imageid FROM ImageTags \n "
-                                            "        WHERE tagid=%1 \n "
-                                            "           OR tagid IN (SELECT id FROM TagsTree WHERE pid=%2)) \n "
-                                            "   AND Albums.id=Images.dirid \n " )
-                                    .arg(tagId)
-                                    .arg(tagId), &values );
+                                            "        WHERE tagid=? \n "
+                                            "           OR tagid IN (SELECT id FROM TagsTree WHERE pid=?)) \n "
+                                            "   AND Albums.id=Images.dirid \n " ),
+                                    tagId, tagId, &values );
     }
 
     NameFilter nameFilter(filter);
     struct stat stbuf;
-    for (QStringList::iterator it = values.begin(); it != values.end();)
+    for (QList<QVariant>::iterator it = values.begin(); it != values.end();)
     {
         ImageListerRecord record;
         record.imageID   = (*it).toLongLong();
         ++it;
-        record.name      = *it;
+        record.name      = (*it).toString();
         ++it;
         record.albumID   = (*it).toInt();
         ++it;
-        record.dateTime  = QDateTime::fromString(*it, Qt::ISODate);
+        record.dateTime  = QDateTime::fromString((*it).toString(), Qt::ISODate);
         ++it;
-        record.albumName = *it;
+        record.albumName = (*it).toString();
         ++it;
 
         record.albumRoot = albumRoot;
@@ -287,39 +285,40 @@ void ImageLister::listMonth(ImageListerReceiver *receiver,
     QString moStr1, moStr2;
     moStr1.sprintf("%.2d", date.month());
     moStr2.sprintf("%.2d", date.month()+1);
+    QString yearStr = QString("%1").arg(date.year(),4);
 
-    QStringList values;
+    QList<QVariant> values;
 
     {
         DatabaseAccess access;
         access.backend()->execSql(QString("SELECT Images.id, Images.name, Images.dirid, \n "
                                           "  Images.datetime, Albums.url \n "
                                           "FROM Images, Albums \n "
-                                          "WHERE Images.datetime < '%1-%2-01' \n "
-                                          "AND Images.datetime >= '%3-%4-01' \n "
+                                          "WHERE Images.datetime < '?-?-01' \n "
+                                          "AND Images.datetime >= '?-?-01' \n "
                                           "AND Albums.id=Images.dirid \n "
-                                          "ORDER BY Albums.id;")
-                                  .arg(date.year(),4)
-                                  .arg(moStr2)
-                                  .arg(date.year(),4)
-                                  .arg(moStr1,2),
+                                          "ORDER BY Albums.id;"),
+                                  yearStr,
+                                  moStr2,
+                                  yearStr,
+                                  moStr1,
                                   &values);
     }
 
     NameFilter nameFilter(filter);
     struct stat stbuf;
-    for (QStringList::iterator it = values.begin(); it != values.end();)
+    for (QList<QVariant>::iterator it = values.begin(); it != values.end();)
     {
         ImageListerRecord record;
         record.imageID   = (*it).toLongLong();
         ++it;
-        record.name      = *it;
+        record.name      = (*it).toString();
         ++it;
         record.albumID   = (*it).toInt();
         ++it;
-        record.dateTime  = QDateTime::fromString(*it, Qt::ISODate);
+        record.dateTime  = QDateTime::fromString((*it).toString(), Qt::ISODate);
         ++it;
-        record.albumName = *it;
+        record.albumName = (*it).toString();
         ++it;
 
         record.albumRoot = albumRoot;
@@ -341,12 +340,14 @@ void ImageLister::listMonth(ImageListerReceiver *receiver,
 }
 
 void ImageLister::listSearch(ImageListerReceiver *receiver,
-                             const QString &sqlConditionalExpression, const QString &filter, bool getDimensions,
+                             const QString &sqlConditionalExpression,
+                             const QList<QVariant> &boundValues,
+                             const QString &filter, bool getDimensions,
                              bool getSize, int limit)
 {
     QString albumRoot = DatabaseAccess::albumRoot();
 
-    QStringList values;
+    QList<QVariant> values;
     QString sqlQuery;
     QString errMsg;
 
@@ -370,7 +371,9 @@ void ImageLister::listSearch(ImageListerReceiver *receiver,
     bool executionSuccess;
     {
         DatabaseAccess access;
-        executionSuccess = access.backend()->execSql(sqlQuery, &values, &errMsg);
+        executionSuccess = access.backend()->execSql(sqlQuery, boundValues, &values);
+        if (!executionSuccess)
+            errMsg = access.backend()->lastError();
     }
 
     if (!executionSuccess)
@@ -381,18 +384,18 @@ void ImageLister::listSearch(ImageListerReceiver *receiver,
 
     NameFilter nameFilter(filter);
     struct stat stbuf;
-    for (QStringList::iterator it = values.begin(); it != values.end();)
+    for (QList<QVariant>::iterator it = values.begin(); it != values.end();)
     {
         ImageListerRecord record;
         record.imageID   = (*it).toLongLong();
         ++it;
-        record.name      = *it;
+        record.name      = (*it).toString();
         ++it;
         record.albumID   = (*it).toInt();
         ++it;
-        record.dateTime  = QDateTime::fromString(*it, Qt::ISODate);
+        record.dateTime  = QDateTime::fromString((*it).toString(), Qt::ISODate);
         ++it;
-        record.albumName = *it;
+        record.albumName = (*it).toString();
         ++it;
 
         record.albumRoot = albumRoot;

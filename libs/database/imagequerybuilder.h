@@ -63,11 +63,11 @@ public:
     };
 
     ImageQueryBuilder();
-    QString buildQuery(const KUrl& url) const;
+    QString buildQuery(const KUrl& url, QList<QVariant> &boundValues) const;
 
 protected:
 
-    QString subQuery(enum SKey key, enum SOperator op, const QString& val) const;
+    QString subQuery(enum SKey key, enum SOperator op, const QString& val, QList<QVariant> &boundValues) const;
     QString possibleDate(const QString& str, bool& exact) const;
 
     class RuleType

@@ -57,7 +57,7 @@ ImageQueryBuilder::ImageQueryBuilder()
     }
 }
 
-QString ImageQueryBuilder::buildQuery(const KUrl& url) const
+QString ImageQueryBuilder::buildQuery(const KUrl& url, QList<QVariant> &boundValues) const
 {
     int  count = url.queryItem("count").toInt();
     if (count <= 0)
@@ -178,7 +178,7 @@ QString ImageQueryBuilder::buildQuery(const KUrl& url) const
                         rule.op = LIKE;
                     }
 
-                    sqlQuery += subQuery(rule.key, rule.op, rule.val);
+                    sqlQuery += subQuery(rule.key, rule.op, rule.val, boundValues);
                 }
                 else
                 {
@@ -195,7 +195,7 @@ QString ImageQueryBuilder::buildQuery(const KUrl& url) const
                     QList<SKey>::const_iterator it = todo.constBegin();
                     while ( it != todo.constEnd() )
                     {
-                        sqlQuery += subQuery(*it, rule.op, rule.val);
+                        sqlQuery += subQuery(*it, rule.op, rule.val, boundValues);
                         ++it;
                         if ( it != todo.end() )
                             sqlQuery += " OR ";
@@ -205,7 +205,7 @@ QString ImageQueryBuilder::buildQuery(const KUrl& url) const
             }
             else
             {
-                sqlQuery += subQuery(rule.key, rule.op, rule.val);
+                sqlQuery += subQuery(rule.key, rule.op, rule.val, boundValues);
             }
         }
         else
@@ -219,65 +219,78 @@ QString ImageQueryBuilder::buildQuery(const KUrl& url) const
 
 QString ImageQueryBuilder::subQuery(enum ImageQueryBuilder::SKey key,
                                     enum ImageQueryBuilder::SOperator op,
-                                    const QString& val) const
+                                    const QString& passedVal,
+                                    QList<QVariant> &boundValues) const
 {
     QString query;
-    QString escapedVal;
-    {
-        DatabaseAccess access;
-        escapedVal = access.backend()->escapeString(val);
-    }
+    QString val = passedVal;
+
+    if (op == LIKE || op == NLIKE)
+        val = "%" + val + "%";
 
     switch (key)
     {
         case(ALBUM):
         {
-            query = " (Images.dirid $$##$$ $$@@$$) ";
+            query = " (Images.dirid $$##$$ ?) ";
+            boundValues << val;
             break;
         }
         case(ALBUMNAME):
         {
             query = " (Images.dirid IN "
-                    "  (SELECT id FROM Albums WHERE url $$##$$ $$@@$$)) ";
+                    "  (SELECT id FROM Albums WHERE url $$##$$ ?)) ";
+            boundValues << val;
             break;
         }
         case(ALBUMCAPTION):
         {
             query = " (Images.dirid IN "
-                    "  (SELECT id FROM Albums WHERE caption $$##$$ $$@@$$)) ";
+                    "  (SELECT id FROM Albums WHERE caption $$##$$ ?)) ";
+            boundValues << val;
             break;
         }
         case(ALBUMCOLLECTION):
         {
             query = " (Images.dirid IN "
-                    "  (SELECT id FROM Albums WHERE collection $$##$$ $$@@$$)) ";
+                    "  (SELECT id FROM Albums WHERE collection $$##$$ ?)) ";
+            boundValues << val;
             break;
         }
         case(TAG):
         {
             if (op == EQ)
+            {
                 query = " (Images.id IN "
                         "   (SELECT imageid FROM ImageTags "
-                        "    WHERE tagid = $$@@$$)) ";
+                        "    WHERE tagid = ?)) ";
+                boundValues << val.toInt();
+            }
             else if (op == NE)
+            {
                 query = " (Images.id NOT IN "
                         "   (SELECT imageid FROM ImageTags "
-                        "    WHERE tagid = $$@@$$)) ";
-            else if (op == LIKE) 
+                        "    WHERE tagid = ?)) ";
+                boundValues << val.toInt();
+            }
+            else if (op == LIKE)
+            {
                 query = " (Images.id IN "
                         "   (SELECT ImageTags.imageid FROM ImageTags JOIN TagsTree on ImageTags.tagid = TagsTree.id "
-                        "    WHERE TagsTree.pid = $$@@$$ or ImageTags.tagid = $$@@$$ )) ";
+                        "    WHERE TagsTree.pid = ? or ImageTags.tagid = ? )) ";
+                boundValues << val.toInt() << val.toInt();
+            }
             else // op == NLIKE
+            {
                 query = " (Images.id NOT IN "
                         "   (SELECT ImageTags.imageid FROM ImageTags JOIN TagsTree on ImageTags.tagid = TagsTree.id "
-                        "    WHERE TagsTree.pid = $$@@$$ or ImageTags.tagid = $$@@$$ )) ";
+                        "    WHERE TagsTree.pid = ? or ImageTags.tagid = ? )) ";
+                boundValues << val.toInt() << val.toInt();
+            }
 
     //         query = " (Images.id IN "
     //                 "   (SELECT imageid FROM ImageTags "
-    //                 "    WHERE tagid $$##$$ $$@@$$)) ";
-
-            query.replace("$$@@$$", QString::fromLatin1("'") + escapedVal
-                        + QString::fromLatin1("'"));
+    //                 "    WHERE tagid $$##$$ ?)) ";
 
             break;
         }
@@ -286,22 +299,26 @@ QString ImageQueryBuilder::subQuery(enum ImageQueryBuilder::SKey key,
             query = " (Images.id IN "
                     "  (SELECT imageid FROM ImageTags "
                     "   WHERE tagid IN "
-                    "   (SELECT id FROM Tags WHERE name $$##$$ $$@@$$))) ";
+                    "   (SELECT id FROM Tags WHERE name $$##$$ ?))) ";
+            boundValues << val;
             break;
         }
         case(IMAGENAME):
         {
-            query = " (Images.name $$##$$ $$@@$$) ";
+            query = " (Images.name $$##$$ ?) ";
+            boundValues << val;
             break;
         }
         case(IMAGECAPTION):
         {
-            query = " (Images.caption $$##$$ $$@@$$) ";
+            query = " (Images.caption $$##$$ ?) ";
+            boundValues << val;
             break;
         }
         case(IMAGEDATE):
         {
-            query = " (Images.datetime $$##$$ $$@@$$) ";
+            query = " (Images.datetime $$##$$ ?) ";
+            boundValues << val;
             break;
         }
         case (KEYWORD):
@@ -311,7 +328,8 @@ QString ImageQueryBuilder::subQuery(enum ImageQueryBuilder::SKey key,
         }
         case(RATING):
         {
-            query = " (ImageProperties.value $$##$$ $$@@$$ and ImageProperties.property='Rating') ";
+            query = " (ImageProperties.value $$##$$ ? and ImageProperties.property='Rating') ";
+            boundValues << val;
             break;
         }
     }
@@ -323,57 +341,41 @@ QString ImageQueryBuilder::subQuery(enum ImageQueryBuilder::SKey key,
             case(EQ):
             {
                 query.replace("$$##$$", "=");
-                query.replace("$$@@$$", QString::fromLatin1("'") + escapedVal
-                            + QString::fromLatin1("'"));
                 break;
             }
             case(NE):
             {
                 query.replace("$$##$$", "<>");
-                query.replace("$$@@$$", QString::fromLatin1("'") + escapedVal
-                            + QString::fromLatin1("'"));
                 break;
             }
             case(LT):
             {
                 query.replace("$$##$$", "<");
-                query.replace("$$@@$$", QString::fromLatin1("'") + escapedVal
-                            + QString::fromLatin1("'"));
                 break;
             }
             case(GT):
             {
                 query.replace("$$##$$", ">");
-                query.replace("$$@@$$", QString::fromLatin1("'") + escapedVal
-                            + QString::fromLatin1("'"));
                 break;
             }
             case(LTE):
             {
                 query.replace("$$##$$", "<=");
-                query.replace("$$@@$$", QString::fromLatin1("'") + escapedVal
-                            + QString::fromLatin1("'"));
                 break;
             }
             case(GTE):
             {
                 query.replace("$$##$$", ">=");
-                query.replace("$$@@$$", QString::fromLatin1("'") + escapedVal
-                            + QString::fromLatin1("'"));
                 break;
             }
             case(LIKE):
             {
                 query.replace("$$##$$", "LIKE");
-                query.replace("$$@@$$", QString::fromLatin1("'%") + escapedVal
-                            + QString::fromLatin1("%'"));
                 break;
             }
             case(NLIKE):
             {
                 query.replace("$$##$$", "NOT LIKE");
-                query.replace("$$@@$$", QString::fromLatin1("'%") + escapedVal
-                            + QString::fromLatin1("%'"));
                 break;
             }
         }
@@ -387,9 +389,9 @@ QString ImageQueryBuilder::subQuery(enum ImageQueryBuilder::SKey key,
         if (!date.isValid())
             return query;
 
-        query = QString(" (Images.datetime > '%1' AND Images.datetime < '%2') ")
-                .arg(date.addDays(-1).toString(Qt::ISODate))
-                .arg(date.addDays( 1).toString(Qt::ISODate));
+        query = QString(" (Images.datetime > ? AND Images.datetime < ?) ");
+        boundValues << date.addDays(-1).toString(Qt::ISODate)
+                   << date.addDays( 1).toString(Qt::ISODate);
     }
 
     return query;

@@ -68,11 +68,10 @@ struct _Tag
 qlonglong findOrAddImage(DatabaseAccess &access, int dirid, const QString& name,
                          const QString& caption)
 {
-    QStringList values;
+    QList<QVariant> values;
 
-    access.backend()->execSql(QString("SELECT id FROM Images WHERE dirid=%1 AND name='%2'")
-            .arg(dirid)
-            .arg(access.backend()->escapeString(name)), &values);
+    access.backend()->execSql(QString("SELECT id FROM Images WHERE dirid=? AND name=?"),
+                              dirid, name, &values);
 
     if (!values.isEmpty())
     {
@@ -80,10 +79,8 @@ qlonglong findOrAddImage(DatabaseAccess &access, int dirid, const QString& name,
     }
 
     access.backend()->execSql(QString("INSERT INTO Images (dirid, name, caption) \n "
-            "VALUES(%1, '%2', '%3');")
-            .arg(dirid)
-            .arg(access.backend()->escapeString(name))
-            .arg(access.backend()->escapeString(caption)), &values);
+                                      "VALUES(?, ?, ?);"),
+                              dirid, name, caption);
 
     return access.backend()->lastInsertedRow();
 }
@@ -184,13 +181,12 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
         albumList.append(album);
         albumMap.insert(album.url, album.id);
 
+        QList<QVariant> boundValues;
+        boundValues << album.id << album.url << album.date << album.caption << album.collection;
+
         access.backend()->execSql(QString("INSERT INTO Albums (id, url, date, caption, collection) "
-                "VALUES(%1, '%2', '%3', '%4', '%5');")
-                .arg(album.id)
-                .arg(access.backend()->escapeString(album.url))
-                .arg(access.backend()->escapeString(album.date))
-                .arg(access.backend()->escapeString(album.caption))
-                .arg(access.backend()->escapeString(album.collection)));
+                                          "VALUES(?, ?, ?, ?, ?);"),
+                                  boundValues);
     }
     access.backend()->commitTransaction();
 
@@ -220,10 +216,8 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
         tagList.append(tag);
 
         access.backend()->execSql(QString("INSERT INTO Tags (id, pid, name) "
-                "VALUES(%1, %2, '%3');")
-                .arg(tag.id)
-                .arg(tag.pid)
-                .arg(access.backend()->escapeString(tag.name)));
+                                          "VALUES(?, ?, ?);"),
+                                  tag.id, tag.pid, tag.name);
     }
     access.backend()->commitTransaction();
 
@@ -266,8 +260,8 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
 
         qlonglong imageid = findOrAddImage(access, dirid, name, QString());
 
-        access.backend()->execSql(QString("INSERT INTO ImageTags VALUES( %1, %2 )")
-                .arg(imageid).arg(tagid));
+        access.backend()->execSql(QString("INSERT INTO ImageTags VALUES(?, ?)"),
+                                  imageid, tagid);
     }
     access.backend()->commitTransaction();
 
@@ -284,9 +278,8 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
 
         qlonglong imageid = findOrAddImage(access, album.id, album.icon, QString());
 
-        access.backend()->execSql(QString("UPDATE Albums SET icon=%1 WHERE id=%2")
-                .arg(imageid)
-                .arg(album.id));
+        access.backend()->execSql(QString("UPDATE Albums SET icon=? WHERE id=?"),
+                                  imageid, album.id);
     }
     access.backend()->commitTransaction();
 
@@ -303,9 +296,8 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
         QFileInfo fi(tag.icon);
         if (fi.isRelative())
         {
-            access.backend()->execSql(QString("UPDATE Tags SET iconkde='%1' WHERE id=%2")
-                    .arg(access.backend()->escapeString(tag.icon))
-                    .arg(tag.id));
+            access.backend()->execSql(QString("UPDATE Tags SET iconkde=? WHERE id=?"),
+                                      tag.icon, tag.id);
             continue;
         }
 
@@ -327,9 +319,8 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
 
         qlonglong imageid = findOrAddImage(access, dirid, name, QString());;
 
-        access.backend()->execSql(QString("UPDATE Tags SET icon=%1 WHERE id=%2")
-                .arg(imageid)
-                .arg(tag.id));
+        access.backend()->execSql(QString("UPDATE Tags SET icon=? WHERE id=?"),
+                                  imageid, tag.id);
 
     }
     access.backend()->commitTransaction();
@@ -344,6 +335,7 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
 
     // -- Check for db consistency ----------------------------------------
 
+    /*
     DDebug() << "Checking database consistency" << endl;
 
 
@@ -603,6 +595,7 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
 
     DDebug() << "" << endl;
     DDebug() << "All Tests: A-OK" << endl;
+    */
 
     return true;
 }

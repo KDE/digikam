@@ -98,7 +98,8 @@ public:
      * @param limit limit the count of the result set. If limit = 0, then no limit is set.
      */
     void listSearch(ImageListerReceiver *receiver,
-                    const QString &sqlConditionalExpression,
+                    const QString &sqlQuery,
+                    const QList<QVariant> &boundValues,
                     const QString &filter, bool getDimensions,
                     bool getSize = true, int limit = 0);
 
