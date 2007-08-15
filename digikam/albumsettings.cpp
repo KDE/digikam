@@ -47,12 +47,17 @@ class AlbumSettingsPrivate
 
 public:
 
+    // start up setting
     bool showSplash;
+    // file ops settings
     bool useTrash;
     bool showTrashDeleteDialog;
+    // metadata setting
     bool sidebarApplyDirectly;
+    // database setting
     bool scanAtStart;
 
+    // icon view settings
     bool iconShowName;
     bool iconShowSize;
     bool iconShowDate;
@@ -62,6 +67,7 @@ public:
     bool iconShowTags;
     bool iconShowRating;
 
+    // tooltip settings
     bool showToolTips;
     bool tooltipShowFileName;
     bool tooltipShowFileDate;
@@ -80,6 +86,7 @@ public:
     bool tooltipShowTags;
     bool tooltipShowRating;
 
+    // metadata settings
     bool exifRotate;
     bool exifSetOrientation;
 
@@ -91,12 +98,24 @@ public:
     bool saveDateTime;
     bool saveRating;
 
+    QString      author;
+    QString      authorTitle;
+    QString      credit;
+    QString      source;
+    QString      copyright;
+
+    // preview settings
     bool previewLoadFullImageSize;
 
+    // icon view settings
     int  thumbnailSize;
+    // album view settings
     int  treeThumbnailSize;
 
+    // theme settings
     QString      currentTheme;
+
+    // database settings
     QString      albumLibraryPath;
     QString      imageFilefilter;
     QString      movieFilefilter;
@@ -107,40 +126,35 @@ public:
     QString      defaultAudioFilefilter;
     QString      defaultRawFilefilter;
 
-    QString      author;
-    QString      authorTitle;
-    QString      credit;
-    QString      source;
-    QString      copyright;
-
+    // album settings
     QStringList  albumCollectionNames;
 
     KSharedConfigPtr     config;
 
+    // album view settings
     AlbumSettings::AlbumSortOrder       albumSortOrder;
+    // icon view settings
     AlbumSettings::ImageSortOrder       imageSortOrder;
     AlbumSettings::ItemRightClickAction itemRightClickAction;
 };
 
-AlbumSettings* AlbumSettings::m_componentData = 0;
+K_GLOBAL_STATIC(AlbumSettings, settings);
 
 AlbumSettings* AlbumSettings::componentData()
 {
-    return m_componentData;
+    return settings;
 }
 
 AlbumSettings::AlbumSettings()
 {
     d = new AlbumSettingsPrivate;
     d->config  = KGlobal::config();
-    m_componentData = this;
     init();
 }
 
 AlbumSettings::~AlbumSettings()
 {
     delete d;
-    m_componentData = 0;
 }
 
 void AlbumSettings::init()

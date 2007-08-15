@@ -260,8 +260,6 @@ private:
 
 private:
 
-    static AlbumSettings* m_componentData;
-
     AlbumSettingsPrivate* d;
 };
 
