@@ -27,8 +27,6 @@
 
 // Qt includes.
 
-#include <Q3PtrList>
-#include <Q3ValueList>
 #include <QObject>
 #include <QString>
 #include <QPair>
@@ -46,7 +44,7 @@ class ImagePluginLoaderPrivate;
 
 class DIGIKAM_EXPORT ImagePluginLoader : public QObject
 {
-    
+
 public:
 
     ImagePluginLoader(QObject *parent, SplashScreen *splash=0);
@@ -54,17 +52,18 @@ public:
 
     static ImagePluginLoader* componentData();
 
-    Q3PtrList<ImagePlugin> pluginList();
+    QList<ImagePlugin *> pluginList();
     void loadPluginsFromList(const QStringList& list);
-    
+
     // Return true if plugin library is loaded in memory.
     // 'libraryName' is internal plugin library name not i18n.
     bool pluginLibraryIsLoaded(const QString& libraryName);
-    
+
     ImagePlugin* pluginInstance(const QString& libraryName);
+    ImagePlugin* corePluginInstance();
 
 private:
-    
+
     ImagePlugin* pluginIsLoaded(const QString& name);
 
 private:

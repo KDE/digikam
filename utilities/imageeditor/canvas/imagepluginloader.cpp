@@ -24,8 +24,8 @@
 
 // Qt includes.
 
-#include <Q3ValueList>
-#include <Q3PtrList>
+#include <QMap>
+#include <QList>
 
 // KDE includes.
 
@@ -62,11 +62,6 @@ class ImagePluginLoaderPrivate
 
 public:
 
-    typedef QPair<QString, ImagePlugin*> PluginType;
-    typedef Q3ValueList< PluginType >    PluginList;
-
-public:
-
     ImagePluginLoaderPrivate()
     {
         splash = 0;
@@ -74,12 +69,15 @@ public:
         for (int i=0 ; QString(ObsoleteImagePluginsList[i]) != QString("-1") ; i++)
             obsoleteImagePluginsList << ObsoleteImagePluginsList[i];
     }
-    
+
     QStringList   obsoleteImagePluginsList;
 
     SplashScreen *splash;
 
-    PluginList    pluginList;
+    // a map of _loaded_ plugins
+    QMap<QString, ImagePlugin*> pluginMap;
+    // a map of _available_ plugins
+    QMap<QString, KService::Ptr> pluginServiceMap;
 };
 
 ImagePluginLoader* ImagePluginLoader::m_componentData=0;
@@ -95,116 +93,109 @@ ImagePluginLoader::ImagePluginLoader(QObject *parent, SplashScreen *splash)
     m_componentData = this;
     d = new ImagePluginLoaderPrivate;
     d->splash = splash;
- 
+
     QStringList imagePluginsList2Load;
-    
+
     const KService::List offers = KServiceTypeTrader::self()->query("Digikam/ImagePlugin");
-    KService::List::ConstIterator iter;
-    
-    for(iter = offers.begin(); iter != offers.end(); ++iter) 
+    foreach (KService::Ptr service, offers)
     {
-        KService::Ptr service = *iter;
-        if (!d->obsoleteImagePluginsList.contains(service->library()))
-            imagePluginsList2Load.append(service->library());
+        if (service)
+            d->pluginServiceMap[service->name()] = service;
     }
-        
+
+    foreach (KService::Ptr service, d->pluginServiceMap)
+    {
+        if (!d->obsoleteImagePluginsList.contains(service->library()))
+            imagePluginsList2Load.append(service->name());
+    }
+
     loadPluginsFromList(imagePluginsList2Load);
 }
 
 ImagePluginLoader::~ImagePluginLoader()
 {
+    QList<QString> pluginNames = d->pluginMap.keys();
+    foreach(QString name, pluginNames)
+    {
+        ImagePlugin *plugin = d->pluginMap.value(name);
+        KService::Ptr service = d->pluginServiceMap.value(name);
+        delete plugin;
+        //if (service)
+          //  KLibLoader::self()->unloadLibrary(service->library());
+    }
     delete d;
     m_componentData = 0;
 }
 
-void ImagePluginLoader::loadPluginsFromList(const QStringList& list)
+void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)
 {
     if (d->splash)
         d->splash->message(i18n("Loading Image Plugins"));
-
-    const KService::List offers = KServiceTypeTrader::self()->query("Digikam/ImagePlugin");
-    KService::List::ConstIterator iter;
 
     int cpt = 0;
 
     // Load plugin core at the first time.
 
-    for(iter = offers.begin(); iter != offers.end(); ++iter)
+    KService::Ptr corePlugin = d->pluginServiceMap.value("ImagePlugin_Core");
+
+    if (!pluginIsLoaded(corePlugin->name()) )
     {
-        KService::Ptr service = *iter;
-        ImagePlugin *plugin;
+        int error = -1;
 
-        if (service->library() == "digikamimageplugin_core")
+        ImagePlugin *plugin = KService::createInstance<ImagePlugin>(corePlugin, this, QStringList(), &error);
+
+        if (plugin && (dynamic_cast<KXMLGUIClient*>(plugin) != 0))
         {
-            if (!pluginIsLoaded(service->name()) )
-            {
-                int error = -1;
+            d->pluginMap[corePlugin->name()] = plugin;
 
-                plugin = KService::createInstance<ImagePlugin>(service, this, QStringList(), &error);
+            DDebug() << "ImagePluginLoader: Loaded plugin " << corePlugin->name() << endl;
 
-                if (plugin && (dynamic_cast<KXMLGUIClient*>(plugin) != 0))
-                {
-                    d->pluginList.append(ImagePluginLoaderPrivate::PluginType(service->name(), plugin));
-
-                    DDebug() << "ImagePluginLoader: Loaded plugin " << service->name() << endl;
-
-                    ++cpt;
-                }
-                else
-                {
-                    DWarning() << "ImagePluginLoader: createInstance returned 0 for "
-                               << service->name()
-                               << " (" << service->library() << ")"
-                               << " with error number "
-                               << error
-                               << "\n KLibLoader says: "
-                               << KLibLoader::self()->lastErrorMessage() << endl;
-                }
-            }
-            break;
+            ++cpt;
+        }
+        else
+        {
+            DWarning() << "ImagePluginLoader: createInstance returned 0 for "
+                    << corePlugin->name()
+                    << " (" << corePlugin->library() << ")"
+                    << " with error number "
+                    << error
+                    << "\n KLibLoader says: "
+                    << KLibLoader::self()->lastErrorMessage() << endl;
         }
     }
 
     // Load all other image plugins after (make a coherant menu construction in Image Editor).
 
-    for (iter = offers.begin(); iter != offers.end(); ++iter)
+    foreach (QString name, pluginsToLoad)
     {
-        KService::Ptr service = *iter;
+        KService::Ptr service = d->pluginServiceMap.value(name);
         ImagePlugin *plugin;
 
-        if (!list.contains(service->library()) && service->library() != "digikamimageplugin_core")
+        if( pluginIsLoaded(name) )
+            continue;
+        else
         {
-            if ((plugin = pluginIsLoaded(service->name())) != NULL)
-                d->pluginList.remove(ImagePluginLoaderPrivate::PluginType(service->name(),plugin));
-        }
-        else 
-        {
-            if( pluginIsLoaded(service->name()) )
-                continue;
+            int error = -1;
+
+            plugin = KService::createInstance<ImagePlugin>(service, this, QStringList(), &error);
+
+            if (plugin && (dynamic_cast<KXMLGUIClient*>(plugin) != 0))
+            {
+                d->pluginMap[name] = plugin;
+
+                DDebug() << "ImagePluginLoader: Loaded plugin " << service->name() << endl;
+
+                ++cpt;
+            }
             else
             {
-                int error = -1;
-
-                plugin = KService::createInstance<ImagePlugin>(service, this, QStringList(), &error);
-
-                if (plugin && (dynamic_cast<KXMLGUIClient*>(plugin) != 0))
-                {
-                    d->pluginList.append(ImagePluginLoaderPrivate::PluginType(service->name(), plugin));
-
-                    DDebug() << "ImagePluginLoader: Loaded plugin " << service->name() << endl;
-
-                    ++cpt;
-                }
-                else
-                {
-                    DWarning() << "ImagePluginLoader: createInstance returned 0 for "
-                               << service->name()
-                               << " (" << service->library() << ")"
-                               << " with error number "
-                               << error
-                               << "\n KLibLoader says: "
-                               << KLibLoader::self()->lastErrorMessage() << endl;
-                }
+                DWarning() << "ImagePluginLoader: createInstance returned 0 for "
+                        << service->name()
+                        << " (" << service->library() << ")"
+                        << " with error number "
+                        << error
+                        << "\n KLibLoader says: "
+                        << KLibLoader::self()->lastErrorMessage() << endl;
             }
         }
     }
@@ -216,67 +207,44 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& list)
 
 ImagePlugin* ImagePluginLoader::pluginIsLoaded(const QString& name)
 {
-    if ( d->pluginList.isEmpty() )
-        return 0;
-
-    for (ImagePluginLoaderPrivate::PluginList::iterator it = d->pluginList.begin(); 
-         it != d->pluginList.end(); ++it)
-    {
-        if ((*it).first == name )
-            return (*it).second;
-    }
-           
-    return 0;
+    return d->pluginMap.value(name);
 }
 
 ImagePlugin* ImagePluginLoader::pluginInstance(const QString& libraryName)
 {
-    const KService::List offers = KServiceTypeTrader::self()->query("Digikam/ImagePlugin");
-    KService::List::ConstIterator iter;
-
-    for(iter = offers.begin(); iter != offers.end(); ++iter)
+    foreach (KService::Ptr service, d->pluginServiceMap)
     {
-        KService::Ptr service = *iter;
-
         if(service->library() == libraryName)
         {
             return ( pluginIsLoaded(service->name()) );
         }
     }
-    
+
     return 0;
+}
+
+ImagePlugin* ImagePluginLoader::corePluginInstance()
+{
+    return pluginIsLoaded("ImagePlugin_Core");
 }
 
 bool ImagePluginLoader::pluginLibraryIsLoaded(const QString& libraryName)
 {
-    const KService::List offers = KServiceTypeTrader::self()->query("Digikam/ImagePlugin");
-    KService::List::ConstIterator iter;
-    
-    for(iter = offers.begin(); iter != offers.end(); ++iter)
+    foreach (KService::Ptr service, d->pluginServiceMap)
     {
-        KService::Ptr service = *iter;
-
         if(service->library() == libraryName)
         {
             if( pluginIsLoaded(service->name()) )
                 return true;
         }
     }
-    
+
     return false;
 }
 
-Q3PtrList<ImagePlugin> ImagePluginLoader::pluginList()
+QList<ImagePlugin *> ImagePluginLoader::pluginList()
 {
-    Q3PtrList<ImagePlugin> list;
-
-    for (ImagePluginLoaderPrivate::PluginList::iterator it = d->pluginList.begin(); 
-         it != d->pluginList.end(); ++it)
-    {
-        list.append((*it).second);
-    }
-        
-    return list;
+    return d->pluginMap.values();
 }
 
 }  // namespace Digikam

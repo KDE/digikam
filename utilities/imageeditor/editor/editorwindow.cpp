@@ -255,7 +255,7 @@ void EditorWindow::setupStandardConnections()
 
     // -- Core plugin connections -------------------------------------
 
-    ImagePlugin *corePlugin = m_imagePluginLoader->pluginInstance("digikamimageplugin_core");
+    ImagePlugin *corePlugin = m_imagePluginLoader->corePluginInstance();
     if ( corePlugin )
     {
         connect(m_canvas, SIGNAL(signalColorManagementTool()),
@@ -596,10 +596,9 @@ void EditorWindow::slotEditKeys()
                             KShortcutsEditor::LetterShortcutsAllowed, this);
     dialog.addCollection( actionCollection(), i18n( "General" ) );
 
-    Q3PtrList<ImagePlugin> pluginList = ImagePluginLoader::componentData()->pluginList();
+    QList<ImagePlugin *> pluginList = ImagePluginLoader::componentData()->pluginList();
 
-    for (ImagePlugin* plugin = pluginList.first();
-         plugin; plugin = pluginList.next())
+    foreach (ImagePlugin *plugin, pluginList)
     {
         if (plugin)
         {
@@ -735,10 +734,9 @@ void EditorWindow::slotEscapePressed()
 
 void EditorWindow::loadImagePlugins()
 {
-    Q3PtrList<ImagePlugin> pluginList = m_imagePluginLoader->pluginList();
+    QList<ImagePlugin *> pluginList = m_imagePluginLoader->pluginList();
 
-    for (ImagePlugin* plugin = pluginList.first();
-         plugin; plugin = pluginList.next())
+    foreach (ImagePlugin *plugin, pluginList)
     {
         if (plugin)
         {
@@ -753,10 +751,9 @@ void EditorWindow::loadImagePlugins()
 
 void EditorWindow::unLoadImagePlugins()
 {
-    Q3PtrList<ImagePlugin> pluginList = m_imagePluginLoader->pluginList();
+    QList<ImagePlugin *> pluginList = m_imagePluginLoader->pluginList();
 
-    for (ImagePlugin* plugin = pluginList.first();
-         plugin; plugin = pluginList.next())
+    foreach (ImagePlugin *plugin, pluginList)
     {
         if (plugin) 
         {
@@ -937,10 +934,9 @@ void EditorWindow::toggleStandardActions(bool val)
         m_redoAction->setEnabled(val);
     }
 
-    Q3PtrList<ImagePlugin> pluginList = m_imagePluginLoader->pluginList();
+    QList<ImagePlugin *> pluginList = m_imagePluginLoader->pluginList();
 
-    for (ImagePlugin* plugin = pluginList.first();
-         plugin; plugin = pluginList.next())
+    foreach (ImagePlugin *plugin, pluginList)
     {
         if (plugin) 
         {
@@ -1132,8 +1128,8 @@ void EditorWindow::slotSelected(bool val)
     d->zoomFitToSelectAction->setEnabled(val);
     d->copyAction->setEnabled(val);
 
-    for (ImagePlugin* plugin = m_imagePluginLoader->pluginList().first();
-         plugin; plugin = m_imagePluginLoader->pluginList().next())
+    QList<ImagePlugin*> pluginList = m_imagePluginLoader->pluginList();
+    foreach (ImagePlugin *plugin, pluginList)
     {
         if (plugin) 
         {
