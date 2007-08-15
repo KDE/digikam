@@ -759,6 +759,7 @@ void CameraUI::finishDialog()
 
     d->status->setText(i18n("Scanning for new files, please wait..."));
     CollectionScanner scanner;
+    scanner.setNameFilters(AlbumSettings::componentData()->getAllFileFilter());
     for (QStringList::iterator it = d->foldersToScan.begin();
          it != d->foldersToScan.end(); ++it)
     {

@@ -77,8 +77,8 @@ void SearchResultsView::openURL(const KUrl& url)
     m_thumbJob = 0;
 
     m_listJob = ImageLister::startListJob(DatabaseUrl::fromSearchUrl(url),
-                    m_filter,
-                    false, // getting dimensions (not needed here)
+                    //m_filter,
+                    //false, // getting dimensions (not needed here)
                     1);    // miniListing (Use 0 for full listing)
 
     connect(m_listJob, SIGNAL(result(KJob*)),
