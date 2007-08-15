@@ -57,6 +57,29 @@ namespace Digikam
 
 // ------------------- CollectionScanner code -------------------------
 
+void CollectionScanner::setNameFilters(QString filter)
+{
+    QStringList filterList;
+
+    QChar sep( ';' );
+    int i = filter.indexOf( sep );
+    if ( i == -1 && filter.indexOf( ' ') != -1 )
+        sep = QChar( ' ' );
+
+    QStringList sepList = filter.split(sep, QString::SkipEmptyParts);
+    foreach (QString f, sepList)
+    {
+        filterList << f.trimmed();
+    }
+    setNameFilters(filterList);
+}
+
+void CollectionScanner::setNameFilters(QStringList filters)
+{
+    m_nameFilters = filters;
+}
+
+
 void CollectionScanner::scanForStaleAlbums()
 {
     QStringList albumRootPaths = CollectionManager::instance()->allAvailableAlbumRootPaths();
@@ -251,7 +274,7 @@ void CollectionScanner::scanAlbum(const QString &albumRoot, const QString& album
         filesFoundInDB << *it;
     }
 
-    const QFileInfoList list = dir.entryInfoList();
+    const QFileInfoList list = dir.entryInfoList(m_nameFilters, QDir::AllDirs | QDir::Files /*not CaseSensitive*/);
     QFileInfoList::const_iterator fi;
 
     for (fi = list.constBegin(); fi != list.constEnd(); ++fi)

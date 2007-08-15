@@ -53,21 +53,23 @@ public:
     /**
      * Create a TransferJob for the "special" method of one of the database ioslaves,
      * referenced by the URL.
-     * Three or four parameters will be sent to the "special" method:
-     * KUrl, QString, int (, int).
      * @param extraValue If -1, nothing is sent. If it takes another value,
-     *                   this value will be sent as a fourth parameter.
+     *                   this value will be sent as a second parameter.
      */
-    static KIO::TransferJob *startListJob(const DatabaseUrl &url, const QString &filter,
-                                          int getDimension, int extraValue = -1);
+    static KIO::TransferJob *startListJob(const DatabaseUrl &url, int extraValue = -1);
+
+    /**
+     * Create a TransferJob for the scanning part of the "special" method of the albums ioslave,
+     * referenced by the URL. Filter and extraValue will be added to the job data.
+     */
+    static KIO::TransferJob *startScanJob(const DatabaseUrl &url, const QString &filter, int extraValue);
 
 
     /**
      * Convenience method for Album, Tag and Date URLs, _not_ for Search URLs.
      */
     void list(ImageListerReceiver *receiver,
-              const DatabaseUrl &url,
-              const QString &filter, bool getDimension);
+              const DatabaseUrl &url);
 
     /**
       * List images in the Album (physical album) specified by albumRoot, album (and albumid).
@@ -76,31 +78,28 @@ public:
       * @param getDimension retrieve dimension - slow!. If false, dimension will be QSize()
       */
     void listAlbum(ImageListerReceiver *receiver,
-                   const QString &albumRoot, const QString &album,
-                   const QString &filter, bool getDimensions);
+                   const QString &albumRoot, const QString &album);
     void listAlbum(ImageListerReceiver *receiver,
-                   const QString &albumRoot, const QString &album, int albumid,
-                   const QString &filter, bool getDimensions);
+                   const QString &albumRoot, const QString &album, int albumid);
     /**
      * List the images which have assigned the tag specified by tagId
      */
-    void listTag(ImageListerReceiver *receiver,
-                 int tagId, const QString &filter, bool getDimensions);
+    void listTag(ImageListerReceiver *receiver, int tagId);
     /**
       * List those images whose date lies in the month specified by the date
       */
-    void listMonth(ImageListerReceiver *receiver,
-                   const QDate &date, const QString &filter, bool getDimensions);
+    void listMonth(ImageListerReceiver *receiver, const QDate &date);
 
     /**
      * Execute the search specified by a SQL expression
+     * @param sqlConditionalExpression SQL code for the WHERE part of the query
+     * @param boundValues SQL bound values used in the sql conditional expression
      * @param getSize stat the file size. If false, size will be 0
      * @param limit limit the count of the result set. If limit = 0, then no limit is set.
      */
     void listSearch(ImageListerReceiver *receiver,
-                    const QString &sqlQuery,
+                    const QString &sqlConditionalExpression,
                     const QList<QVariant> &boundValues,
-                    const QString &filter, bool getDimensions,
                     bool getSize = true, int limit = 0);
 
     /**

@@ -56,7 +56,6 @@
 #include "databaseaccess.h"
 #include "databasebackend.h"
 #include "dmetadata.h"
-#include "namefilter.h"
 #include "imagelister.h"
 
 namespace Digikam
@@ -88,18 +87,27 @@ QDataStream &operator>>(QDataStream &ds, ImageListerRecord &record)
     return ds;
 }
 
-KIO::TransferJob *ImageLister::startListJob(const DatabaseUrl &url, const QString &filter,
-                                            int getDimension, int extraValue)
+KIO::TransferJob *ImageLister::startListJob(const DatabaseUrl &url, int extraValue)
+{
+    QByteArray ba;
+    QDataStream ds(&ba, QIODevice::WriteOnly);
+    ds << url;
+    if (extraValue != -1)
+        ds << extraValue;
+
+    return new KIO::SpecialJob(url, ba);
+}
+
+KIO::TransferJob *ImageLister::startScanJob(const DatabaseUrl &url, const QString &filter, int extraValue)
 {
     QByteArray ba;
     QDataStream ds(&ba, QIODevice::WriteOnly);
     ds << url;
     ds << filter;
-    ds << getDimension;
     if (extraValue != -1)
         ds << extraValue;
 
-    return new KIO::SpecialJob(url,ba);
+    return new KIO::SpecialJob(url, ba);
 }
 
 QSize ImageLister::retrieveDimension(const QString &filePath)
@@ -132,28 +140,26 @@ QSize ImageLister::retrieveDimension(const QString &filePath)
 }
 
 
-void ImageLister::list(ImageListerReceiver *receiver, const DatabaseUrl &url,
-                       const QString &filter, bool getDimension)
+void ImageLister::list(ImageListerReceiver *receiver, const DatabaseUrl &url)
 {
     if (url.isAlbumUrl())
     {
         QString albumRoot = url.albumRootPath();
         QString album     = url.album();
-        listAlbum(receiver, albumRoot, album, filter, getDimension);
+        listAlbum(receiver, albumRoot, album);
     }
     else if (url.isTagUrl())
     {
-        listTag(receiver, url.tagId(), filter, getDimension);
+        listTag(receiver, url.tagId());
     }
     else if (url.isDateUrl())
     {
-        listMonth(receiver, url.date(), filter, getDimension);
+        listMonth(receiver, url.date());
     }
 }
 
 void ImageLister::listAlbum(ImageListerReceiver *receiver,
-                            const QString &albumRoot, const QString &album,
-                            const QString &filter, bool getDimension)
+                            const QString &albumRoot, const QString &album)
 {
     int albumid;
 
@@ -165,12 +171,11 @@ void ImageLister::listAlbum(ImageListerReceiver *receiver,
             return;
     }
 
-    listAlbum(receiver, albumRoot, album, albumid, filter, getDimension);
+    listAlbum(receiver, albumRoot, album, albumid);
 }
 
 void ImageLister::listAlbum(ImageListerReceiver *receiver,
-                            const QString &albumRoot, const QString &album, int albumid,
-                            const QString &filter, bool getDimensions)
+                            const QString &albumRoot, const QString &album, int albumid)
 {
     QString base      = albumRoot + album;
 
@@ -191,7 +196,6 @@ void ImageLister::listAlbum(ImageListerReceiver *receiver,
         */
     }
 
-    NameFilter nameFilter(filter);
     struct stat stbuf;
     for (QList<QVariant>::iterator it = values.begin(); it != values.end();)
     {
@@ -207,24 +211,20 @@ void ImageLister::listAlbum(ImageListerReceiver *receiver,
         record.albumName = album;
         record.albumRoot = albumRoot;
 
-        if (!nameFilter.matches(record.name))
-            continue;
-
         QString filePath = base + '/' + record.name;
 
         if (::stat(QFile::encodeName(filePath), &stbuf) != 0)
             continue;
         record.size = static_cast<size_t>(stbuf.st_size);
 
-        if (getDimensions)
-            record.dims = retrieveDimension(filePath);
+        //if (getDimensions)
+          //  record.dims = retrieveDimension(filePath);
 
         receiver->receive(record);
     }
 }
 
-void ImageLister::listTag(ImageListerReceiver *receiver,
-                          int tagId, const QString &filter, bool getDimensions)
+void ImageLister::listTag(ImageListerReceiver *receiver, int tagId)
 {
     QString albumRoot = DatabaseAccess::albumRoot();
 
@@ -243,7 +243,6 @@ void ImageLister::listTag(ImageListerReceiver *receiver,
                                     tagId, tagId, &values );
     }
 
-    NameFilter nameFilter(filter);
     struct stat stbuf;
     for (QList<QVariant>::iterator it = values.begin(); it != values.end();)
     {
@@ -261,24 +260,20 @@ void ImageLister::listTag(ImageListerReceiver *receiver,
 
         record.albumRoot = albumRoot;
 
-        if (!nameFilter.matches(record.name))
-            continue;
-
         QString path = albumRoot + record.albumName + '/' + record.name;
 
         if (::stat(QFile::encodeName(path), &stbuf) != 0)
             continue;
         record.size = static_cast<size_t>(stbuf.st_size);
 
-        if (getDimensions)
-            record.dims = retrieveDimension(path);
+        //if (getDimensions)
+          //  record.dims = retrieveDimension(path);
 
         receiver->receive(record);
     }
 }
 
-void ImageLister::listMonth(ImageListerReceiver *receiver,
-                            const QDate &date, const QString &filter, bool getDimensions)
+void ImageLister::listMonth(ImageListerReceiver *receiver, const QDate &date)
 {
     QString albumRoot = DatabaseAccess::albumRoot();
 
@@ -301,7 +296,6 @@ void ImageLister::listMonth(ImageListerReceiver *receiver,
                                   &values);
     }
 
-    NameFilter nameFilter(filter);
     struct stat stbuf;
     for (QList<QVariant>::iterator it = values.begin(); it != values.end();)
     {
@@ -319,17 +313,14 @@ void ImageLister::listMonth(ImageListerReceiver *receiver,
 
         record.albumRoot = albumRoot;
 
-        if (!nameFilter.matches(record.name))
-            continue;
-
         QString path = albumRoot + record.albumName + '/' + record.name;
 
         if (::stat(QFile::encodeName(path), &stbuf) != 0)
             continue;
         record.size = static_cast<size_t>(stbuf.st_size);
 
-        if (getDimensions)
-            record.dims = retrieveDimension(path);
+        //if (getDimensions)
+          //  record.dims = retrieveDimension(path);
 
         receiver->receive(record);
     }
@@ -338,7 +329,6 @@ void ImageLister::listMonth(ImageListerReceiver *receiver,
 void ImageLister::listSearch(ImageListerReceiver *receiver,
                              const QString &sqlConditionalExpression,
                              const QList<QVariant> &boundValues,
-                             const QString &filter, bool getDimensions,
                              bool getSize, int limit)
 {
     QString albumRoot = DatabaseAccess::albumRoot();
@@ -378,7 +368,6 @@ void ImageLister::listSearch(ImageListerReceiver *receiver,
         return;
     }
 
-    NameFilter nameFilter(filter);
     struct stat stbuf;
     for (QList<QVariant>::iterator it = values.begin(); it != values.end();)
     {
@@ -396,9 +385,6 @@ void ImageLister::listSearch(ImageListerReceiver *receiver,
 
         record.albumRoot = albumRoot;
 
-        if (!nameFilter.matches(record.name))
-            continue;
-
         QString path = albumRoot + record.albumName + '/' + record.name;
 
         if (getSize)
@@ -412,8 +398,8 @@ void ImageLister::listSearch(ImageListerReceiver *receiver,
             record.size = 0;
         }
 
-        if (getDimensions)
-            record.dims = retrieveDimension(path);
+        //if (getDimensions)
+          //  record.dims = retrieveDimension(path);
 
         receiver->receive(record);
     }

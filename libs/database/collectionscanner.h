@@ -47,6 +47,19 @@ class DIGIKAM_EXPORT CollectionScanner : public QObject
 public:
 
     /**
+     * Sets a filter for the file formats which shall be included in the collection.
+     * The string is a list of name wildcards (understanding * and ?),
+     * separated by ';' characters.
+     * Example: "*.jpg;*.png"
+     */
+    void setNameFilters(QString filters);
+    /**
+     * Sets a filter for the file formats which shall be included in the collection.
+     * Each name filter in the list is a wildcard (globbing)
+     * filter that understands * and ? wildcards (see QDir::setNameFilters)
+     */
+    void setNameFilters(QStringList filters);
+    /**
      * Carries out a full scan (for new albums + new pictures,
      * stale albums, stale pictures) on the given path.
      * @param filePath a folder somewhere in the collection
@@ -162,7 +175,8 @@ protected:
     int countItemsInFolder(const QString& directory);
 
     QList< QPair<QString,int> >  m_filesToBeDeleted;
-    QList<AlbumShortInfo> m_foldersToBeDeleted;
+    QList<AlbumShortInfo>        m_foldersToBeDeleted;
+    QStringList                  m_nameFilters;
 };
 
 }  // namespace Digikam
