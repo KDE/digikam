@@ -282,10 +282,8 @@ void ImageLister::listMonth(ImageListerReceiver *receiver,
 {
     QString albumRoot = DatabaseAccess::albumRoot();
 
-    QString moStr1, moStr2;
-    moStr1.sprintf("%.2d", date.month());
-    moStr2.sprintf("%.2d", date.month()+1);
-    QString yearStr = QString("%1").arg(date.year(),4);
+    QDate firstDayOfMonth(date.year(), date.month(), 1);
+    QDate firstDayOfNextMonth = firstDayOfMonth.addMonths(1);
 
     QList<QVariant> values;
 
@@ -294,14 +292,12 @@ void ImageLister::listMonth(ImageListerReceiver *receiver,
         access.backend()->execSql(QString("SELECT Images.id, Images.name, Images.dirid, \n "
                                           "  Images.datetime, Albums.url \n "
                                           "FROM Images, Albums \n "
-                                          "WHERE Images.datetime < '?-?-01' \n "
-                                          "AND Images.datetime >= '?-?-01' \n "
+                                          "WHERE Images.datetime < ? \n "
+                                          "AND Images.datetime >= ? \n "
                                           "AND Albums.id=Images.dirid \n "
                                           "ORDER BY Albums.id;"),
-                                  yearStr,
-                                  moStr2,
-                                  yearStr,
-                                  moStr1,
+                                  QDateTime(firstDayOfNextMonth).toString(Qt::ISODate),
+                                  QDateTime(firstDayOfMonth).toString(Qt::ISODate),
                                   &values);
     }
 
