@@ -58,14 +58,10 @@ kio_digikamsearch::~kio_digikamsearch()
 void kio_digikamsearch::special(const QByteArray& data)
 {
     KUrl    kurl;
-    QString filter;
-    int     getDimensions;
     int     listingType = 0;
 
     QDataStream ds(data);
     ds >> kurl;
-    ds >> filter;
-    ds >> getDimensions;
     if (!ds.atEnd())
         ds >> listingType;
 
@@ -84,7 +80,7 @@ void kio_digikamsearch::special(const QByteArray& data)
     {
         // send data every 200 images to be more responsive
         Digikam::ImageListerSlaveBasePartsSendingReceiver receiver(this, 200);
-        lister.listSearch(&receiver, query, boundValues, filter, getDimensions);
+        lister.listSearch(&receiver, query, boundValues);
         if (!receiver.hasError)
             receiver.sendData();
     }
@@ -92,7 +88,7 @@ void kio_digikamsearch::special(const QByteArray& data)
     {
         Digikam::ImageListerSlaveBaseReceiver receiver(this);
         // fast mode: do not get size, dimension, limit results to 500
-        lister.listSearch(&receiver, query, boundValues, filter, false, false, 500);
+        lister.listSearch(&receiver, query, boundValues, false, 500);
         if (!receiver.hasError)
             receiver.sendData();
         //        ds << m_libraryPath + *it;

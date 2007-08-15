@@ -47,7 +47,6 @@
 #include "imagelister.h"
 #include "albumdb.h"
 #include "databaseaccess.h"
-#include "namefilter.h"
 #include "digikamdates.h"
 
 kio_digikamdates::kio_digikamdates(const QByteArray &pool_socket,
@@ -67,12 +66,10 @@ void kio_digikamdates::special(const QByteArray& data)
     KUrl    kurl;
     QString url;
     QString filter;
-    int     getDimensions;
+    //int     getDimensions;
 
     QDataStream ds(data);
     ds >> kurl;
-    ds >> filter;
-    ds >> getDimensions;
 
     Digikam::DatabaseUrl dbUrl(kurl);
     Digikam::DatabaseAccess::setParameters(dbUrl);
@@ -81,7 +78,6 @@ void kio_digikamdates::special(const QByteArray& data)
 
     if (folders)
     {
-        Digikam::NameFilter nameFilter(filter);
         QByteArray  ba;
 
         typedef QPair<int, int> YearMonth;
@@ -96,9 +92,6 @@ void kio_digikamdates::special(const QByteArray& data)
         QList<QPair<QString, QDateTime> >::const_iterator it;
         for ( it = images.constBegin(); it != images.constEnd(); ++it)
         {
-            if ( !nameFilter.matches((*it).first) )
-                continue;
-
             if ( !yearMonthMap.contains(YearMonth((*it).second.date().year(), (*it).second.date().month())) )
             {
                 yearMonthMap.insert( YearMonth( (*it).second.date().year(), (*it).second.date().month() ), true );
@@ -125,7 +118,7 @@ void kio_digikamdates::special(const QByteArray& data)
         Digikam::ImageLister lister;
         // send data every 200 images to be more responsive
         Digikam::ImageListerSlaveBasePartsSendingReceiver receiver(this, 200);
-        lister.list(&receiver, kurl, filter, getDimensions);
+        lister.list(&receiver, kurl);
         // send rest
         receiver.sendData();
     }

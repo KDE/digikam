@@ -67,8 +67,6 @@ void kio_digikamtagsProtocol::special(const QByteArray& data)
 
     QDataStream ds(data);
     ds >> kurl;
-    ds >> filter;
-    ds >> getDimensions;
 
     Digikam::DatabaseUrl dbUrl(kurl);
     Digikam::DatabaseAccess::setParameters(dbUrl);
@@ -76,7 +74,7 @@ void kio_digikamtagsProtocol::special(const QByteArray& data)
     Digikam::ImageLister lister;
     // send data every 200 images to be more responsive
     Digikam::ImageListerSlaveBasePartsSendingReceiver receiver(this, 200);
-    lister.list(&receiver, kurl, filter, getDimensions);
+    lister.list(&receiver, kurl);
     // send rest
     receiver.sendData();
 

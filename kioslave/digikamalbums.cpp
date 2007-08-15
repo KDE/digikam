@@ -79,15 +79,15 @@ void kio_digikamalbums::special(const QByteArray& data)
 {
     KUrl    kurl;
     QString filter;
-    int     getDimensions;
     int     scan = 0;
 
     QDataStream ds(data);
     ds >> kurl;
-    ds >> filter;
-    ds >> getDimensions;
     if (!ds.atEnd())
+    {
+        ds >> filter;
         ds >> scan;
+    }
 
     kDebug() << "kio_digikamalbums::special " << kurl;
 
@@ -97,6 +97,7 @@ void kio_digikamalbums::special(const QByteArray& data)
     if (scan)
     {
         Digikam::CollectionScanner scanner;
+        scanner.setNameFilters(filter);
         scanner.scan(dbUrl.albumRootPath(), dbUrl.album());
         finished();
         return;
@@ -104,7 +105,7 @@ void kio_digikamalbums::special(const QByteArray& data)
 
     Digikam::ImageLister lister;
     Digikam::ImageListerSlaveBaseReceiver receiver(this);
-    lister.list(&receiver, kurl, filter, getDimensions);
+    lister.list(&receiver, kurl);
     receiver.sendData();
 
     finished();
