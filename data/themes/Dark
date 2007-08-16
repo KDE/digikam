@@ -6,10 +6,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2007-5-26
+ * Date        : 2007-8-8
  * Description : "Dark" colors theme.
  *
- * Copyright (C) 2007 by Gerhard Kulzer <gerhard at kulzer dor net>
+ * Copyright (C) 2007 by Gerhard Kulzer <gerhard at kulzer dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -50,15 +50,15 @@
  <ThumbnailRegularBorder       value="FALSE"      />
  <ThumbnailRegularBorderColor  value="#E0E0EF"    />
 
- <ThumbnailSelectedColor       value="#E0E0EF"    />
+ <ThumbnailSelectedColor       value="#7B8D9A"    />
  <ThumbnailSelectedColorTo     value="#1B252F"    />
  <ThumbnailSelectedBevel       value="RAISED"     />
  <ThumbnailSelectedGradient    value="VERTICAL"   />
  <ThumbnailSelectedBorder      value="FALSE"      />
  <ThumbnailSelectedBorderColor value="#E0E0EF"    />
 
- <ListviewRegularColor         value="#0D0D0D"    />
- <ListviewRegularColorTo       value="#222120"    />
+ <ListviewRegularColor         value="#070707"    />
+ <ListviewRegularColorTo       value="#1B1B1B"    />
  <ListviewRegularBevel         value="RAISED"     />
  <ListviewRegularGradient      value="HORIZONTAL" />
  <ListviewRegularBorder        value="FALSE"      />
@@ -72,4 +72,3 @@
  <ListviewSelectedBorderColor  value="#000000"    />
 
 </digikamtheme>
-                                             
