@@ -89,6 +89,7 @@ public:
     {
         dragging   = false;
         exifRotate = false;
+        clearing   = false;
         toolTip    = 0;
         firstItem  = 0;
         lastItem   = 0;
