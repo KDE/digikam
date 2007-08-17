@@ -52,13 +52,13 @@ public:
      * separated by ';' characters.
      * Example: "*.jpg;*.png"
      */
-    void setNameFilters(QString filters);
+    void setNameFilters(const QString &filters);
     /**
      * Sets a filter for the file formats which shall be included in the collection.
      * Each name filter in the list is a wildcard (globbing)
      * filter that understands * and ? wildcards (see QDir::setNameFilters)
      */
-    void setNameFilters(QStringList filters);
+    void setNameFilters(const QStringList &filters);
     /**
      * Carries out a full scan (for new albums + new pictures,
      * stale albums, stale pictures) on the given path.

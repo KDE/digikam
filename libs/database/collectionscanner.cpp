@@ -57,7 +57,7 @@ namespace Digikam
 
 // ------------------- CollectionScanner code -------------------------
 
-void CollectionScanner::setNameFilters(QString filter)
+void CollectionScanner::setNameFilters(const QString &filter)
 {
     QStringList filterList;
 
@@ -74,7 +74,7 @@ void CollectionScanner::setNameFilters(QString filter)
     setNameFilters(filterList);
 }
 
-void CollectionScanner::setNameFilters(QStringList filters)
+void CollectionScanner::setNameFilters(const QStringList &filters)
 {
     m_nameFilters = filters;
 }
