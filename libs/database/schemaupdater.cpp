@@ -304,6 +304,246 @@ bool SchemaUpdater::createTables()
     return true;
 }
 
+bool SchemaUpdater::createTablesV5()
+{
+    if (!m_access->backend()->execSql(
+                    QString("CREATE TABLE AlbumRoots\n"
+                            " (id INTEGER PRIMARY KEY,\n"
+                            "  type INTEGER NOT NULL,\n"
+                            "  absolutePath TEXT,\n"
+                            "  volumeUuid TEXT,\n"
+                            "  relativePath TEXT);") ));
+    {
+        return false;
+    }
+
+    if (!m_access->backend()->execSql(
+                    QString("CREATE TABLE Albums\n"
+                            " (id INTEGER PRIMARY KEY,\n"
+                            "  albumRoot INTEGER NOT NULL FOREIGN KEY,\n"
+                            "  relativePath TEXT NOT NULL UNIQUE,\n"
+                            "  date DATE,\n"
+                            "  caption TEXT,\n"
+                            "  collection TEXT,\n"
+                            "  icon INTEGER);") ))
+    {
+        return false;
+    }
+
+    if (!m_access->backend()->execSql(
+                    QString("CREATE TABLE Images\n"
+                            " (id INTEGER PRIMARY KEY,\n"
+                            "  albumRoot INTEGER NOT NULL FOREIGN KEY,\n"
+                            "  album INTEGER NOT NULL FOREIGN KEY,\n"
+                            "  name TEXT NOT NULL,\n"
+                            "  UNIQUE (name, album));") ))
+    {
+        return false;
+    }
+
+    if (!m_access->backend()->execSql(
+                    QString("CREATE TABLE Tags\n"
+                            " (id INTEGER PRIMARY KEY,\n"
+                            "  pid INTEGER,\n"
+                            "  name TEXT NOT NULL,\n"
+                            "  icon INTEGER,\n"
+                            "  iconkde TEXT,\n"
+                            "  UNIQUE (name, pid));") ))
+    {
+        return false;
+    }
+
+    if (!m_access->backend()->execSql(
+                    QString("CREATE TABLE TagsTree\n"
+                            " (id INTEGER NOT NULL,\n"
+                            "  pid INTEGER NOT NULL,\n"
+                            "  UNIQUE (id, pid));") ))
+    {
+        return false;
+    }
+
+    if (!m_access->backend()->execSql(
+                    QString("CREATE TABLE ImageData\n"
+                            " (imageid INTEGER UNIQUE FOREIGN KEY,\n"
+                            "  caption TEXT,\n"
+                            "  rating INTEGER,\n"
+                            "  creationDate DATETIME,\n"
+                            "  modificationDate DATETIME,\n"
+                            "  sizeX INTEGER,\n"
+                            "  sizeY INTEGER,\n"
+                            "  colorDepth INTEGER,\n"
+                            "  colorMode INTEGER,\n"
+                            "  compression TEXT;") ))
+    {
+        return false;
+    }
+
+    if (!m_access->backend()->execSql(
+                    QString("CREATE TABLE ExifMetadata\n"
+                            " (imageid INTEGER UNIQUE FOREIGN KEY,\n"
+                            "  make TEXT,\n"             // "Exif.Image.Make"
+                            "  model TEXT,\n"            // "Exif.Image.Model"
+                            "  aperture REAL,\n"         // "Exif.Photo.FNumber", "Exif.Photo.ApertureValue"
+                            "  focalLength REAL,\n"      // "Exif.Photo.FocalLength"
+                            //"  focalLength35 REAL,\n"  // "Exif.Photo.FocalLengthIn35mmFilm"
+                            "  exposureTime REAL,\n"     // "Exif.Photo.ExposureTime"
+                            "  exposureMode REAL,\n"     // "Exif.Photo.ExposureMode"
+                            "  exposureProgram REAL,\n"  // "Exif.Photo.ExposureProgram"
+                            "  sensitivity INTEGER,\n"   // "Exif.Photo.ISOSpeedRatings" "Exif.Photo.ExposureIndex"
+                            "  flash INTEGER,\n"         // "Exif.Photo.Flash"
+                            "  whiteBalance INTEGER,\n"  // "Exif.Photo.WhiteBalance"
+                            "  orientation INTEGER);"    //  various, libkexiv2 enum value
+                           ) ))
+    {
+        return false;
+    }
+
+     if (!m_access->backend()->execSql(
+                    QString("CREATE TABLE GPS\n"
+                            " (imageid INTEGER UNIQUE FOREIGN KEY,\n"
+                            "  latitudeDegrees REAL,\n"
+                            "  latitudeMinutes REAL,\n"
+                            "  latitudeSeconds REAL,\n"
+                            "  longitudeDegrees REAL,\n"
+                            "  longitudeMinutes REAL,\n"
+                            "  longitudeSeconds REAL,\n"
+                            "  altitude REAL);\n"
+                           ) ))
+    {
+        return false;
+    }
+
+   if (!m_access->backend()->execSql(
+                    QString("CREATE TABLE ImageTags\n"
+                            " (imageid INTEGER NOT NULL,\n"
+                            "  tagid INTEGER NOT NULL,\n"
+                            "  UNIQUE (imageid, tagid));") ))
+    {
+        return false;
+    }
+
+    if (!m_access->backend()->execSql(
+                    QString("CREATE TABLE ImageProperties\n"
+                            " (imageid  INTEGER NOT NULL,\n"
+                            "  property TEXT    NOT NULL,\n"
+                            "  value    TEXT    NOT NULL,\n"
+                            "  UNIQUE (imageid, property));") ))
+    {
+        return false;
+    }
+
+    if ( !m_access->backend()->execSql(
+                   QString( "CREATE TABLE Searches  \n"
+                            " (id INTEGER PRIMARY KEY, \n"
+                            "  name TEXT NOT NULL UNIQUE, \n"
+                            "  url  TEXT NOT NULL);" ) ) )
+    {
+        return false;
+    }
+
+    if (!m_access->backend()->execSql(
+                    QString("CREATE TABLE Settings         \n"
+                            "(keyword TEXT NOT NULL UNIQUE,\n"
+                            " value TEXT);") ))
+        return false;
+    else
+    {
+        m_currentVersion = 1;
+    }
+
+    // TODO: see which more indices are needed
+    // create indices
+    m_access->backend()->execSql("CREATE INDEX dir_index ON Images    (dirid);");
+    m_access->backend()->execSql("CREATE INDEX tag_index ON ImageTags (tagid);");
+
+    // Create triggers
+
+    // Triggers for deletion of images
+
+    // trigger: delete from Images/ImageTags/ImageProperties
+    // if Album has been deleted
+    m_access->backend()->execSql("CREATE TRIGGER delete_album DELETE ON Albums\n"
+            "BEGIN\n"
+            " DELETE FROM ImageTags\n"
+            "   WHERE imageid IN (SELECT id FROM Images WHERE dirid=OLD.id);\n"
+            " DELETE From ImageProperties\n"
+            "   WHERE imageid IN (SELECT id FROM Images WHERE dirid=OLD.id);\n"
+            " DELETE FROM Images\n"
+            "   WHERE dirid = OLD.id;\n"
+            "END;");
+
+    // trigger: delete from ImageTags/ImageProperties
+    // if Image has been deleted
+    m_access->backend()->execSql(
+            "CREATE TRIGGER delete_image DELETE ON Images\n"
+            "BEGIN\n"
+            "  DELETE FROM ImageTags\n"
+            "    WHERE imageid=OLD.id;\n"
+            "  DELETE From ImageProperties\n "
+            "    WHERE imageid=OLD.id;\n"
+            "  UPDATE Albums SET icon=null \n "
+            "    WHERE icon=OLD.id;\n"
+            "  UPDATE Tags SET icon=null \n "
+            "    WHERE icon=OLD.id;\n"
+            "END;");
+
+    // trigger: delete from ImageTags if Tag has been deleted
+    m_access->backend()->execSql(
+            "CREATE TRIGGER delete_tag DELETE ON Tags\n"
+            "BEGIN\n"
+            "  DELETE FROM ImageTags WHERE tagid=OLD.id;\n"
+            "END;");
+
+    // Triggers maintaining the TagTree (which is used when listing images by tags)
+
+    // trigger: insert into TagsTree if Tag has been added
+    m_access->backend()->execSql(
+            "CREATE TRIGGER insert_tagstree AFTER INSERT ON Tags\n"
+            "BEGIN\n"
+            "  INSERT INTO TagsTree\n"
+            "    SELECT NEW.id, NEW.pid\n"
+            "    UNION\n"
+            "    SELECT NEW.id, pid FROM TagsTree WHERE id=NEW.pid;\n"
+            "END;");
+
+    // trigger: delete from TagsTree if Tag has been deleted
+    m_access->backend()->execSql(
+            "CREATE TRIGGER delete_tagstree DELETE ON Tags\n"
+            "BEGIN\n"
+            " DELETE FROM Tags\n"
+            "   WHERE id  IN (SELECT id FROM TagsTree WHERE pid=OLD.id);\n"
+            " DELETE FROM TagsTree\n"
+            "   WHERE id IN (SELECT id FROM TagsTree WHERE pid=OLD.id);\n"
+            " DELETE FROM TagsTree\n"
+            "    WHERE id=OLD.id;\n"
+            "END;");
+
+    // trigger: delete from TagsTree if Tag has been deleted
+    m_access->backend()->execSql(
+            "CREATE TRIGGER move_tagstree UPDATE OF pid ON Tags\n"
+            "BEGIN\n"
+            "  DELETE FROM TagsTree\n"
+            "    WHERE\n"
+            "      ((id = OLD.id)\n"
+            "        OR\n"
+            "        id IN (SELECT id FROM TagsTree WHERE pid=OLD.id))\n"
+            "      AND\n"
+            "      pid IN (SELECT pid FROM TagsTree WHERE id=OLD.id);\n"
+            "  INSERT INTO TagsTree\n"
+            "     SELECT NEW.id, NEW.pid\n"
+            "     UNION\n"
+            "     SELECT NEW.id, pid FROM TagsTree WHERE id=NEW.pid\n"
+            "     UNION\n"
+            "     SELECT id, NEW.pid FROM TagsTree WHERE pid=NEW.id\n"
+            "     UNION\n"
+            "     SELECT A.id, B.pid FROM TagsTree A, TagsTree B\n"
+            "        WHERE\n"
+            "        A.pid = NEW.id AND B.id = NEW.pid;\n"
+            "END;");
+
+    return true;
+}
+
 bool SchemaUpdater::copyV3toV4(const QString &digikam3DBPath, const QString &currentDBPath)
 {
     m_access->backend()->close();

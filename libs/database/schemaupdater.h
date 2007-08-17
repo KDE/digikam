@@ -49,6 +49,7 @@ private:
     bool copyV3toV4(const QString &digikam3DBPath, const QString &currentDBPath);
     bool updateV2toV4(const QString &sqlite2DBPath);
     bool createTablesV3();
+    bool createTablesV5();
 
     DatabaseAccess *m_access;
 
