@@ -116,8 +116,8 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
 
     m_previewWidget = new Digikam::ImageWidget("adjustlevels Tool Dialog", plainPage(),
                                                i18n("<p>Here you can see the image's "
-                                                    "level-adjustments preview. You can pick color on image "
-                                                    "to see the color level corresponding on histogram."));
+                                                    "level-adjustments preview. You can pick a spot on the image "
+                                                    "to see the corresponding level in the histogram."));
     setPreviewAreaWidget(m_previewWidget); 
 
     // -------------------------------------------------------------
@@ -134,7 +134,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     m_channelCB->insertItem( i18n("Blue") );
     m_channelCB->insertItem( i18n("Alpha") );
     m_channelCB->setCurrentText( i18n("Luminosity") );
-    QWhatsThis::add( m_channelCB, i18n("<p>Select here the histogram channel to display:<p>"
+    QWhatsThis::add( m_channelCB, i18n("<p>Here select the histogram channel to display:<p>"
                                        "<b>Luminosity</b>: display the image's luminosity values.<p>"
                                        "<b>Red</b>: display the red image-channel values.<p>"
                                        "<b>Green</b>: display the green image-channel values.<p>"
@@ -147,9 +147,9 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     m_scaleBG->setExclusive(true);
     m_scaleBG->setFrameShape(QFrame::NoFrame);
     m_scaleBG->setInsideMargin( 0 );
-    QWhatsThis::add( m_scaleBG, i18n("<p>Select here the histogram scale.<p>"
+    QWhatsThis::add( m_scaleBG, i18n("<p>Here select the histogram scale.<p>"
                                      "If the image's maximal counts are small, you can use the linear scale.<p>"
-                                     "Logarithmic scale can be used when the maximal counts are big; "
+                                     "The Logarithmic scale can be used when the maximal counts are big; "
                                      "if it is used, all values (small and large) will be visible on the graph."));
 
     QPushButton *linHistoButton = new QPushButton( m_scaleBG );
