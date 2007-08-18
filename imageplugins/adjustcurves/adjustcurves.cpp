@@ -116,9 +116,9 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     // -------------------------------------------------------------
 
     m_previewWidget = new Digikam::ImageWidget("adjustcurves Tool Dialog", plainPage(),
-                                               i18n("<p>You can see here the image's "
-                                                    "curve-adjustments preview. You can pick color on image "
-                                                    "to see the color level corresponding on histogram."));
+                                               i18n("<p>This is the image's curve-adjustments preview. "
+                                                    "You can pick a spot on the image "
+                                                    "to see the corresponding level in the histogram."));
     setPreviewAreaWidget(m_previewWidget); 
 
     // -------------------------------------------------------------
