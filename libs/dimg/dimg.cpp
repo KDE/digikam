@@ -313,11 +313,30 @@ void DImg::setImageData(bool null, uint width, uint height, bool sixteenBit, boo
 //---------------------------------------------------------------------------------------------------
 // load and save
 
+bool DImg::loadImageInfo(const QString& filePath, bool loadMetadata, bool loadICCData, bool loadUniqueHash)
+{
+    DImgLoader::LoadFlags loadFlags = DImgLoader::LoadImageInfo;
+    if (loadMetadata)
+        loadFlags |= DImgLoader::LoadMetadata;
+    if (loadICCData)
+        loadFlags |= DImgLoader::LoadICCData;
+    if (loadUniqueHash)
+        loadFlags |= DImgLoader::LoadUniqueHash;
+
+    return load(filePath, loadFlags, 0, KDcrawIface::RawDecodingSettings());
+}
 
 bool DImg::load(const QString& filePath, DImgLoaderObserver *observer,
                 KDcrawIface::RawDecodingSettings rawDecodingSettings)
 {
+    return load(filePath, DImgLoader::LoadAll, observer, rawDecodingSettings);
+}
+
+bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *observer,
+                KDcrawIface::RawDecodingSettings rawDecodingSettings)
+{
     FORMAT format = fileFormat(filePath);
+    DImgLoader::LoadFlags loadFlags = (DImgLoader::LoadFlags)loadFlagsInt;
 
     switch (format)
     {
@@ -331,12 +350,14 @@ bool DImg::load(const QString& filePath, DImgLoaderObserver *observer,
         {
             DDebug() << filePath << " : JPEG file identified" << endl;
             JPEGLoader loader(this);
+            loader.setLoadFlags(loadFlags);
             if (loader.load(filePath, observer))
             {
-                m_priv->null       = false;
+                m_priv->null       = loader.hasLoadedData();
                 m_priv->alpha      = loader.hasAlpha();
                 m_priv->sixteenBit = loader.sixteenBit();
                 m_priv->isReadOnly = loader.isReadOnly();
+                setAttribute("originalFilePath", filePath);
                 return true;
             }
             break;
@@ -345,12 +366,14 @@ bool DImg::load(const QString& filePath, DImgLoaderObserver *observer,
         {
             DDebug() << filePath << " : TIFF file identified" << endl;
             TIFFLoader loader(this);
+            loader.setLoadFlags(loadFlags);
             if (loader.load(filePath, observer))
             {
-                m_priv->null       = false;
+                m_priv->null       = loader.hasLoadedData();
                 m_priv->alpha      = loader.hasAlpha();
                 m_priv->sixteenBit = loader.sixteenBit();
                 m_priv->isReadOnly = loader.isReadOnly();
+                setAttribute("originalFilePath", filePath);
                 return true;
             }
             break;
@@ -359,12 +382,14 @@ bool DImg::load(const QString& filePath, DImgLoaderObserver *observer,
         {
             DDebug() << filePath << " : PNG file identified" << endl;
             PNGLoader loader(this);
+            loader.setLoadFlags(loadFlags);
             if (loader.load(filePath, observer))
             {
-                m_priv->null       = false;
+                m_priv->null       = loader.hasLoadedData();
                 m_priv->alpha      = loader.hasAlpha();
                 m_priv->sixteenBit = loader.sixteenBit();
                 m_priv->isReadOnly = loader.isReadOnly();
+                setAttribute("originalFilePath", filePath);
                 return true;
             }
             break;
@@ -373,12 +398,14 @@ bool DImg::load(const QString& filePath, DImgLoaderObserver *observer,
         {
             DDebug() << filePath << " : PPM file identified" << endl;
             PPMLoader loader(this);
+            loader.setLoadFlags(loadFlags);
             if (loader.load(filePath, observer))
             {
-                m_priv->null       = false;
+                m_priv->null       = loader.hasLoadedData();
                 m_priv->alpha      = loader.hasAlpha();
                 m_priv->sixteenBit = loader.sixteenBit();
                 m_priv->isReadOnly = loader.isReadOnly();
+                setAttribute("originalFilePath", filePath);
                 return true;
             }
             break;
@@ -387,12 +414,14 @@ bool DImg::load(const QString& filePath, DImgLoaderObserver *observer,
         {
             DDebug() << filePath << " : RAW file identified" << endl;
             RAWLoader loader(this, rawDecodingSettings);
+            loader.setLoadFlags(loadFlags);
             if (loader.load(filePath, observer))
             {
-                m_priv->null       = false;
+                m_priv->null       = loader.hasLoadedData();
                 m_priv->alpha      = loader.hasAlpha();
                 m_priv->sixteenBit = loader.sixteenBit();
                 m_priv->isReadOnly = loader.isReadOnly();
+                setAttribute("originalFilePath", filePath);
                 return true;
             }
             break;
@@ -401,26 +430,30 @@ bool DImg::load(const QString& filePath, DImgLoaderObserver *observer,
         {
             DDebug() << filePath << " : JPEG2000 file identified" << endl;
             JP2KLoader loader(this);
+            loader.setLoadFlags(loadFlags);
             if (loader.load(filePath, observer))
             {
-                m_priv->null       = false;
+                m_priv->null       = loader.hasLoadedData();
                 m_priv->alpha      = loader.hasAlpha();
                 m_priv->sixteenBit = loader.sixteenBit();
                 m_priv->isReadOnly = loader.isReadOnly();
+                setAttribute("originalFilePath", filePath);
                 return true;
             }
             break;
-        }       
+        }
         default:
         {
             DDebug() << filePath << " : QIMAGE file identified" << endl;
             QImageLoader loader(this);
+            loader.setLoadFlags(loadFlags);
             if (loader.load(filePath, observer))
             {
-                m_priv->null       = false;
+                m_priv->null       = loader.hasLoadedData();
                 m_priv->alpha      = loader.hasAlpha();
                 m_priv->sixteenBit = loader.sixteenBit();
                 m_priv->isReadOnly = loader.isReadOnly();
+                setAttribute("originalFilePath", filePath);
                 return true;
             }
             break;
@@ -640,6 +673,19 @@ bool DImg::sixteenBit() const
 bool DImg::isReadOnly() const
 {
     return m_priv->isReadOnly;
+}
+
+DImg::COLORMODEL DImg::originalColorModel() const
+{
+    if (m_priv->attributes.contains("originalColorModel"))
+        return (COLORMODEL)m_priv->attributes.value("originalColorModel").toInt();
+    else
+        return COLORMODELUNKNOWN;
+}
+
+int DImg::originalBitDepth() const
+{
+    return m_priv->attributes.value("originalBitDepth").toInt();
 }
 
 bool DImg::getICCProfilFromFile(const QString& filePath)
@@ -1679,5 +1725,35 @@ void DImg::fill(DColor color)
         }
     }
 }
+
+QByteArray DImg::getUniqueHash()
+{
+    if (m_priv->attributes.contains("uniqueHash"))
+        return m_priv->attributes["uniqueHash"].toByteArray();
+
+    if (!m_priv->attributes.contains("originalFilePath"))
+    {
+        DWarning() << "DImg::getUniqueHash called withou originalFilePath property set!" << endl;
+        return QByteArray();
+    }
+
+    QString filePath = m_priv->attributes.value("originalFilePath").toString();
+
+    if (filePath.isEmpty())
+        return QByteArray();
+
+    QByteArray hash = DImgLoader::uniqueHash(filePath, *this, false);
+
+    if (!hash.isNull())
+        setAttribute("uniqueHash", hash);
+
+    return hash;
+}
+
+QByteArray getUniqueHash(const QString &filePath)
+{
+    return DImgLoader::uniqueHash(filePath, DImg(), true);
+}
+
 
 }  // NameSpace Digikam

@@ -93,6 +93,19 @@ public:
         VERTICAL
     };
 
+    enum COLORMODEL
+    {
+        COLORMODELUNKNOWN,
+        RGB,
+        GRAYSCALE,
+        MONOCHROME,
+        INDEXED,
+        YCBCR,
+        CMYK,
+        CIELAB,
+        COLORMODELRAW,
+    };
+
     /** Identify file format */
     static FORMAT fileFormat(const QString& filePath);
 
@@ -180,6 +193,14 @@ public:
 
     bool        save(const QString& filePath, const QString& format, DImgLoaderObserver *observer = 0);
 
+    /**
+     * Loads most parts of the meta information, but never the image data.
+     * If loadMetadata is true, the metadata will be available with getComments, getExif, getIPTC.
+     * If loadICCData is true, the ICC profile will be available with getICCProfile.
+     */
+    bool        loadImageInfo(const QString& filePath, bool loadMetadata = true,
+                              bool loadICCData = true, bool loadUniqueHash = false);
+
     bool        isNull()         const;
     uint        width()          const;
     uint        height()         const;
@@ -196,6 +217,18 @@ public:
 
     /** Return the number of bits depth of one color component for one pixel : 8 (non sixteenBit) or 16 (sixteen) */
     int         bitsDepth()  const;
+
+
+    /**
+     * Returns the color model in which the image was stored in the file.
+     * The color space of the loaded image data is always RGB.
+     */
+    COLORMODEL  originalColorModel() const;
+    /**
+     * Returns the bit depth (in bits per channel, e.g. 8 or 16) of the original file.
+     */
+    int         originalBitDepth() const;
+
 
     /** Access a single pixel of the image.
         These functions add some safety checks and then use the methods from DColor.
@@ -325,12 +358,34 @@ public:
     */
     void       fill(DColor color);
 
+
+    /**
+     * This methods return a 16-byte MD5 hex digest which is meant to uniquely identify
+     * the file. The hash is calculated on parts of the file and the file metadata.
+     * It cannot be used to find similar pictures. It is not calculated from the image data.
+     *
+     * If you already have a DImg object of the file, use the member method.
+     * The object does not need to have the full image data loaded, but it shall at least
+     * have been loaded with loadImageInfo with loadMetadata = true.
+     * If the object has been loaded without loadMetadata, a non-null, invalid hash will
+     * be returned! In this case, use the static method.
+     * If the image has been loaded with loadUniqueHash = true, the hash can be retrieved
+     * with this method.
+     *
+     * You do not need a DImg object of the file to retrieve the unique hash;
+     * Use the static method and pass just the file path.
+     */
+    QByteArray getUniqueHash();
+    static QByteArray getUniqueHash(const QString &filePath);
+
 private:
 
     DSharedDataPointer<DImgPrivate> m_priv;
 
 private:
 
+    bool        load(const QString& filePath, int loadFlags, DImgLoaderObserver *observer,
+                     KDcrawIface::RawDecodingSettings rawDecodingSettings=KDcrawIface::RawDecodingSettings());
     void       copyMetaData(const DImgPrivate *src);
     void       copyImageData(const DImgPrivate *src);
     void       setImageData(bool null, uint width, uint height, bool sixteenBit, bool alpha);
