@@ -42,11 +42,24 @@ namespace Digikam
 
 class DImgLoaderObserver;
 
-class DIGIKAM_EXPORT DImgLoader
+class DImgLoader
 {
 public:
 
+    enum LoadFlag
+    {
+        LoadImageInfo = 1,
+        LoadMetadata = 2,
+        LoadICCData = 4,
+        LoadImageData = 8,
+        LoadUniqueHash = 16,
+        LoadAll = LoadImageInfo | LoadMetadata | LoadUniqueHash | LoadICCData | LoadImageData
+    };
+    Q_DECLARE_FLAGS(LoadFlags, LoadFlag)
+
     virtual ~DImgLoader() {};
+
+    void setLoadFlags(LoadFlags flags);
 
     virtual bool load(const QString& filePath, DImgLoaderObserver *observer) = 0;
     virtual bool save(const QString& filePath, DImgLoaderObserver *observer) = 0;
@@ -54,6 +67,9 @@ public:
     virtual bool hasAlpha()   const = 0;
     virtual bool sixteenBit() const = 0;
     virtual bool isReadOnly() const = 0;
+    virtual bool hasLoadedData() const;
+
+    static QByteArray uniqueHash(const QString &filePath, const DImg &img, bool loadMetadata);
 
 protected:
 
@@ -86,11 +102,14 @@ protected:
 protected:
 
     DImg                   *m_image;
+    LoadFlags               m_loadFlags;
 
 private:
 
     DImgLoader();
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(DImgLoader::LoadFlags)
 
 }  // NameSpace Digikam
 

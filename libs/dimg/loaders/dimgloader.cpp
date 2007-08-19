@@ -22,9 +22,14 @@
  * 
  * ============================================================ */
 
+// Qt includes
+
+#include <QFile>
+
 // KDE includes.
 
 #include <kstandarddirs.h>
+#include <kcodecs.h> // for KMD5
 
 // Local includes.
 
@@ -40,6 +45,17 @@ namespace Digikam
 DImgLoader::DImgLoader(DImg* image)
           : m_image(image)
 {
+    m_loadFlags = LoadAll;
+}
+
+void DImgLoader::setLoadFlags(LoadFlags flags)
+{
+    m_loadFlags = flags;
+}
+
+bool DImgLoader::hasLoadedData() const
+{
+    return m_loadFlags & LoadImageData;
 }
 
 int DImgLoader::granularity(DImgLoaderObserver *observer, int total, float progressSlice)
@@ -124,10 +140,13 @@ void DImgLoader::imageSetEmbbededText(const QString& key, const QString& text)
 
 bool DImgLoader::readMetadata(const QString& filePath, DImg::FORMAT /*ff*/)
 {
+    if (! (m_loadFlags & LoadMetadata || m_loadFlags & LoadUniqueHash) )
+        return false;
+
     QMap<int, QByteArray>& imageMetadata = imageMetaData();
     imageMetadata.clear();
 
-    DMetadata metaDataFromFile(filePath);
+    DMetadata metaDataFromFile;
     if (!metaDataFromFile.load(filePath))
         return false;
 
@@ -193,5 +212,49 @@ bool DImgLoader::checkExifWorkingColorSpace()
 
     return false;
 }
+
+QByteArray DImgLoader::uniqueHash(const QString &filePath, const DImg &img, bool loadMetadata)
+{
+    QByteArray bv;
+
+    if (loadMetadata)
+    {
+        DMetadata metaDataFromFile(filePath);
+        bv = metaDataFromFile.getExif();
+    }
+    else
+    {
+        bv = img.getExif();
+    }
+
+    // Create the unique ID
+
+    KMD5 md5;
+
+    // First, read the exif data into the hash
+    md5.update( bv );
+
+    // Second, read in the first 8KB of the file
+    QFile qfile( filePath );
+
+    char databuf[8192];
+    int readlen = 0;
+    QByteArray size = 0;
+
+    if( qfile.open( QIODevice::Unbuffered | QIODevice::ReadOnly ) )
+    {
+        if( ( readlen = qfile.read( databuf, 8192 ) ) > 0 )
+        {
+            md5.update( databuf, readlen );
+            md5.update( size.setNum( qfile.size() ) );
+            return md5.hexDigest();
+        }
+        else
+            return QByteArray();
+    }
+
+    return QByteArray();
+}
+
 
 }  // NameSpace Digikam
