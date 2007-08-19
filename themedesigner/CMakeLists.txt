@@ -110,4 +110,3 @@ TARGET_LINK_LIBRARIES(digikamthemedesigner
 
 INSTALL(TARGETS digikamthemedesigner DESTINATION ${BIN_INSTALL_DIR})
 
-INSTALL(FILES digikamthemedesigner.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
