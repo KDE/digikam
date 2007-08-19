@@ -17,5 +17,3 @@ digikamthemedesigner_LDADD = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) \
 	                     $(top_builddir)/digikam/digikam/libdigikam.la 
 
 digikamthemedesigner_LDFLAGS = $(KDE_RPATH) $(all_libraries) $(LIB_KUTILS) 
-
-xdg_apps_DATA = digikamthemedesigner.desktop
