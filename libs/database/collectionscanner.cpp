@@ -166,15 +166,12 @@ void CollectionScanner::scanAlbums()
     for (QStringList::iterator it = albumRootPaths.begin(); it != albumRootPaths.end(); ++it)
     {
         QDir dir(*it);
-        QStringList fileList(dir.entryList(QDir::Dirs));
+        QStringList fileList(dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot));
 
         DatabaseTransaction transaction;
-        for (QStringList::iterator fileIt = fileList.begin(); fileIt != fileList.end(); ++fileIt)
+        foreach (QString dir, fileList)
         {
-            if ((*fileIt) == "." || (*fileIt) == "..")
-                continue;
-
-            scanAlbum(*it, '/' + (*fileIt));
+            scanAlbum(*it, '/' + dir);
         }
     }
 }
@@ -209,14 +206,11 @@ void CollectionScanner::scan(const QString &albumRoot, const QString& album)
     {
         // Don't scan files under album root, only descend into directories (?)
         QDir dir(albumRoot + album);
-        QStringList fileList(dir.entryList(QDir::Dirs));
+        QStringList fileList(dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot));
 
         DatabaseTransaction transaction;
         for (QStringList::iterator fileIt = fileList.begin(); fileIt != fileList.end(); ++fileIt)
         {
-            if ((*fileIt) == "." || (*fileIt) == "..")
-                continue;
-
             scanAlbum(albumRoot, '/' + (*fileIt));
         }
     }
@@ -274,7 +268,7 @@ void CollectionScanner::scanAlbum(const QString &albumRoot, const QString& album
         filesFoundInDB << *it;
     }
 
-    const QFileInfoList list = dir.entryInfoList(m_nameFilters, QDir::AllDirs | QDir::Files /*not CaseSensitive*/);
+    const QFileInfoList list = dir.entryInfoList(m_nameFilters, QDir::AllDirs | QDir::Files  | QDir::NoDotAndDotDot /*not CaseSensitive*/);
     QFileInfoList::const_iterator fi;
 
     for (fi = list.constBegin(); fi != list.constEnd(); ++fi)
@@ -296,7 +290,7 @@ void CollectionScanner::scanAlbum(const QString &albumRoot, const QString& album
                 addItem(albumID, albumRoot, album, fi->fileName());
             }
         }
-        else if ( fi->isDir() && fi->fileName() != "." && fi->fileName() != "..")
+        else if ( fi->isDir() )
         {
             scanAlbum( albumRoot, album + '/' + fi->fileName() );
         }
