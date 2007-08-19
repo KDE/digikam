@@ -18,4 +18,5 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 010 ==> 147670 : Compilation problems on NetBSD in greycstoration.
 011 ==> 147362 : Tool-tip for zoom indicator is below the screen if window is maximised.
 012 ==> 145017 : Deleting an image from within DigiKam does not update the DigiKam database.
-013 ==> 
+013 ==> 148925 : Light Table thumb bar not updated when deleting images.
+014 ==> 
