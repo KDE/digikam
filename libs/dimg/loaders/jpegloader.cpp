@@ -79,6 +79,8 @@ void JPEGLoader::dimg_jpeg_emit_message(j_common_ptr cinfo, int msg_level)
 
 #ifdef ENABLE_DEBUG_MESSAGES
     DDebug() << k_funcinfo << buffer << " (" << msg_level << ")" << endl;
+#else
+    Q_UNUSED(msg_level);
 #endif
 }
 
@@ -100,6 +102,8 @@ JPEGLoader::JPEGLoader(DImg* image)
 bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 {
     readMetadata(filePath, DImg::JPEG);
+
+    int colorModel = DImg::COLORMODELUNKNOWN;
 
     FILE *file = fopen(QFile::encodeName(filePath), "rb");
     if (!file)
@@ -190,15 +194,24 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     {
         case JCS_UNKNOWN:
             // perhaps jpeg_read_header did some guessing, leave value unchanged
+            colorModel = DImg::COLORMODELUNKNOWN;
             break;
         case JCS_GRAYSCALE:
+            cinfo.out_color_space     = JCS_RGB;
+            colorModel = DImg::GRAYSCALE;
+            break;
         case JCS_RGB:
+            cinfo.out_color_space     = JCS_RGB;
+            colorModel = DImg::RGB;
+            break;
         case JCS_YCbCr:
             cinfo.out_color_space     = JCS_RGB;
+            colorModel = DImg::YCBCR;
             break;
         case JCS_CMYK:
         case JCS_YCCK:
             cinfo.out_color_space     = JCS_CMYK;
+            colorModel = DImg::CMYK;
             break;
     }
 
@@ -214,228 +227,235 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     int w = cinfo.output_width;
     int h = cinfo.output_height;
+
     uchar *dest = 0;
-    
-    uchar *ptr, *line[16], *data=0;
-    uchar *ptr2=0;
-    int    x, y, l, i, scans, count, prevy;
 
-    if (cinfo.rec_outbuf_height > 16)
+    if (m_loadFlags & LoadImageData)
     {
-        jpeg_destroy_decompress(&cinfo);
-        fclose(file);
-        DDebug() << k_funcinfo << "Height of JPEG scanline buffer out of range!" << endl;
-        return false;
-    }
+        uchar *ptr, *line[16], *data=0;
+        uchar *ptr2=0;
+        int    x, y, l, i, scans, count, prevy;
 
-    // We only take RGB with 1 or 3 components, or CMYK with 4 components
-    if (!(
-           (cinfo.out_color_space == JCS_RGB  && (cinfo.output_components == 3 || cinfo.output_components == 1))
-        || (cinfo.out_color_space == JCS_CMYK &&  cinfo.output_components == 4)
-        ))
-    {
-        jpeg_destroy_decompress(&cinfo);
-        fclose(file);
-        DDebug() << k_funcinfo
-                  << "JPEG colorspace ("
-                  << cinfo.out_color_space
-                  << ") or Number of JPEG color components ("
-                  << cinfo.output_components
-                  << ") unsupported!" << endl;
-        return false;
-    }
+        if (cinfo.rec_outbuf_height > 16)
+        {
+            jpeg_destroy_decompress(&cinfo);
+            fclose(file);
+            DDebug() << k_funcinfo << "Height of JPEG scanline buffer out of range!" << endl;
+            return false;
+        }
 
-    data = new uchar[w * 16 * cinfo.output_components];
+        // We only take RGB with 1 or 3 components, or CMYK with 4 components
+        if (!(
+            (cinfo.out_color_space == JCS_RGB  && (cinfo.output_components == 3 || cinfo.output_components == 1))
+            || (cinfo.out_color_space == JCS_CMYK &&  cinfo.output_components == 4)
+            ))
+        {
+            jpeg_destroy_decompress(&cinfo);
+            fclose(file);
+            DDebug() << k_funcinfo
+                    << "JPEG colorspace ("
+                    << cinfo.out_color_space
+                    << ") or Number of JPEG color components ("
+                    << cinfo.output_components
+                    << ") unsupported!" << endl;
+            return false;
+        }
 
-    if (!data)
-    {
-        jpeg_destroy_decompress(&cinfo);
-        fclose(file);
-        DDebug() << k_funcinfo << "Cannot allocate memory!" << endl;
-        return false;
-    }
+        data = new uchar[w * 16 * cinfo.output_components];
 
-    dest = new uchar[w * h * 4];
+        if (!data)
+        {
+            jpeg_destroy_decompress(&cinfo);
+            fclose(file);
+            DDebug() << k_funcinfo << "Cannot allocate memory!" << endl;
+            return false;
+        }
 
-    if (!dest)
-    {
+        dest = new uchar[w * h * 4];
+
+        if (!dest)
+        {
+            delete [] data;
+            jpeg_destroy_decompress(&cinfo);
+            fclose(file);
+            DDebug() << k_funcinfo << "Cannot allocate memory!" << endl;
+            return false;
+        }
+
+        ptr2  = dest;
+        count = 0;
+        prevy = 0;
+
+        if (cinfo.output_components == 3)
+        {
+            for (i = 0; i < cinfo.rec_outbuf_height; i++)
+                line[i] = data + (i * w * 3);
+
+            int checkPoint = 0;
+            for (l = 0; l < h; l += cinfo.rec_outbuf_height)
+            {
+                // use 0-10% and 90-100% for pseudo-progress
+                if (observer && l >= checkPoint)
+                {
+                    checkPoint += granularity(observer, h, 0.8);
+                    if (!observer->continueQuery(m_image))
+                    {
+                        delete [] data;
+                        delete [] dest;
+                        jpeg_destroy_decompress(&cinfo);
+                        fclose(file);
+                        return false;
+                    }
+                    observer->progressInfo(m_image, 0.1 + (0.8 * ( ((float)l)/((float)h) )));
+                }
+
+                jpeg_read_scanlines(&cinfo, &line[0], cinfo.rec_outbuf_height);
+                scans = cinfo.rec_outbuf_height;
+
+                if ((h - l) < scans)
+                    scans = h - l;
+
+                ptr = data;
+
+                for (y = 0; y < scans; y++)
+                {
+                    for (x = 0; x < w; x++)
+                    {
+                        ptr2[3] = 0xFF;
+                        ptr2[2] = ptr[0];
+                        ptr2[1] = ptr[1];
+                        ptr2[0] = ptr[2];
+
+                        ptr  += 3;
+                        ptr2 += 4;
+                    }
+                }
+            }
+        }
+        else if (cinfo.output_components == 1)
+        {
+            for (i = 0; i < cinfo.rec_outbuf_height; i++)
+                line[i] = data + (i * w);
+
+            int checkPoint = 0;
+            for (l = 0; l < h; l += cinfo.rec_outbuf_height)
+            {
+                if (observer && l >= checkPoint)
+                {
+                    checkPoint += granularity(observer, h, 0.8);
+                    if (!observer->continueQuery(m_image))
+                    {
+                        delete [] data;
+                        delete [] dest;
+                        jpeg_destroy_decompress(&cinfo);
+                        fclose(file);
+                        return false;
+                    }
+                    observer->progressInfo(m_image, 0.1 + (0.8 * ( ((float)l)/((float)h) )));
+                }
+
+                jpeg_read_scanlines(&cinfo, line, cinfo.rec_outbuf_height);
+                scans = cinfo.rec_outbuf_height;
+
+                if ((h - l) < scans)
+                    scans = h - l;
+
+                ptr = data;
+
+                for (y = 0; y < scans; y++)
+                {
+                    for (x = 0; x < w; x++)
+                    {
+                        ptr2[3] = 0xFF;
+                        ptr2[2] = ptr[0];
+                        ptr2[1] = ptr[0];
+                        ptr2[0] = ptr[0];
+
+                        ptr  ++;
+                        ptr2 += 4;
+                    }
+                }
+            }
+        }
+        else // CMYK
+        {
+            for (i = 0; i < cinfo.rec_outbuf_height; i++)
+                line[i] = data + (i * w * 4);
+
+            int checkPoint = 0;
+            for (l = 0; l < h; l += cinfo.rec_outbuf_height)
+            {
+                // use 0-10% and 90-100% for pseudo-progress
+                if (observer && l >= checkPoint)
+                {
+                    checkPoint += granularity(observer, h, 0.8);
+                    if (!observer->continueQuery(m_image))
+                    {
+                        delete [] data;
+                        delete [] dest;
+                        jpeg_destroy_decompress(&cinfo);
+                        fclose(file);
+                        return false;
+                    }
+                    observer->progressInfo(m_image, 0.1 + (0.8 * ( ((float)l)/((float)h) )));
+                }
+
+                jpeg_read_scanlines(&cinfo, &line[0], cinfo.rec_outbuf_height);
+                scans = cinfo.rec_outbuf_height;
+
+                if ((h - l) < scans)
+                    scans = h - l;
+
+                ptr = data;
+
+                for (y = 0; y < scans; y++)
+                {
+                    for (x = 0; x < w; x++)
+                    {
+                        // Inspired by Qt's JPEG loader
+
+                        int k = ptr[3];
+
+                        ptr2[3] = 0xFF;
+                        ptr2[2] = k * ptr[0] / 255;
+                        ptr2[1] = k * ptr[1] / 255;
+                        ptr2[0] = k * ptr[2] / 255;
+
+                        ptr  += 4;
+                        ptr2 += 4;
+                    }
+                }
+            }
+        }
+
         delete [] data;
-        jpeg_destroy_decompress(&cinfo);
-        fclose(file);
-        DDebug() << k_funcinfo << "Cannot allocate memory!" << endl;
-        return false;
     }
-
-    ptr2  = dest;
-    count = 0;
-    prevy = 0;
-
-    if (cinfo.output_components == 3)
-    {
-        for (i = 0; i < cinfo.rec_outbuf_height; i++)
-            line[i] = data + (i * w * 3);
-
-        int checkPoint = 0;
-        for (l = 0; l < h; l += cinfo.rec_outbuf_height)
-        {
-            // use 0-10% and 90-100% for pseudo-progress
-            if (observer && l >= checkPoint)
-            {
-                checkPoint += granularity(observer, h, 0.8);
-                if (!observer->continueQuery(m_image))
-                {
-                    delete [] data;
-                    delete [] dest;
-                    jpeg_destroy_decompress(&cinfo);
-                    fclose(file);
-                    return false;
-                }
-                observer->progressInfo(m_image, 0.1 + (0.8 * ( ((float)l)/((float)h) )));
-            }
-
-            jpeg_read_scanlines(&cinfo, &line[0], cinfo.rec_outbuf_height);
-            scans = cinfo.rec_outbuf_height;
-
-            if ((h - l) < scans)
-                scans = h - l;
-
-            ptr = data;
-
-            for (y = 0; y < scans; y++)
-            {
-                for (x = 0; x < w; x++)
-                {
-                    ptr2[3] = 0xFF;
-                    ptr2[2] = ptr[0];
-                    ptr2[1] = ptr[1];
-                    ptr2[0] = ptr[2];
-
-                    ptr  += 3;
-                    ptr2 += 4;
-                }
-            }
-        }
-    }
-    else if (cinfo.output_components == 1)
-    {
-        for (i = 0; i < cinfo.rec_outbuf_height; i++)
-            line[i] = data + (i * w);
-
-        int checkPoint = 0;
-        for (l = 0; l < h; l += cinfo.rec_outbuf_height)
-        {
-            if (observer && l >= checkPoint)
-            {
-                checkPoint += granularity(observer, h, 0.8);
-                if (!observer->continueQuery(m_image))
-                {
-                    delete [] data;
-                    delete [] dest;
-                    jpeg_destroy_decompress(&cinfo);
-                    fclose(file);
-                    return false;
-                }
-                observer->progressInfo(m_image, 0.1 + (0.8 * ( ((float)l)/((float)h) )));
-            }
-
-            jpeg_read_scanlines(&cinfo, line, cinfo.rec_outbuf_height);
-            scans = cinfo.rec_outbuf_height;
-
-            if ((h - l) < scans)
-                scans = h - l;
-
-            ptr = data;
-
-            for (y = 0; y < scans; y++)
-            {
-                for (x = 0; x < w; x++)
-                {
-                    ptr2[3] = 0xFF;
-                    ptr2[2] = ptr[0];
-                    ptr2[1] = ptr[0];
-                    ptr2[0] = ptr[0];
-
-                    ptr  ++;
-                    ptr2 += 4;
-                }
-            }
-        }
-    }
-    else // CMYK
-    {
-        for (i = 0; i < cinfo.rec_outbuf_height; i++)
-            line[i] = data + (i * w * 4);
-
-        int checkPoint = 0;
-        for (l = 0; l < h; l += cinfo.rec_outbuf_height)
-        {
-            // use 0-10% and 90-100% for pseudo-progress
-            if (observer && l >= checkPoint)
-            {
-                checkPoint += granularity(observer, h, 0.8);
-                if (!observer->continueQuery(m_image))
-                {
-                    delete [] data;
-                    delete [] dest;
-                    jpeg_destroy_decompress(&cinfo);
-                    fclose(file);
-                    return false;
-                }
-                observer->progressInfo(m_image, 0.1 + (0.8 * ( ((float)l)/((float)h) )));
-            }
-
-            jpeg_read_scanlines(&cinfo, &line[0], cinfo.rec_outbuf_height);
-            scans = cinfo.rec_outbuf_height;
-
-            if ((h - l) < scans)
-                scans = h - l;
-
-            ptr = data;
-
-            for (y = 0; y < scans; y++)
-            {
-                for (x = 0; x < w; x++)
-                {
-                    // Inspired by Qt's JPEG loader
-
-                    int k = ptr[3];
-
-                    ptr2[3] = 0xFF;
-                    ptr2[2] = k * ptr[0] / 255;
-                    ptr2[1] = k * ptr[1] / 255;
-                    ptr2[0] = k * ptr[2] / 255;
-
-                    ptr  += 4;
-                    ptr2 += 4;
-                }
-            }
-        }
-    }
-
-    delete [] data;
 
     // -------------------------------------------------------------------
     // Read image ICC profile
 
-    QMap<int, QByteArray>& metaData = imageMetaData();
-
-    JOCTET *profile_data=NULL;
-    uint    profile_size;
-
-    read_icc_profile (&cinfo, &profile_data, &profile_size);
-
-    if (profile_data != NULL) 
+    if (m_loadFlags & LoadICCData)
     {
-        QByteArray profile_rawdata;
-        profile_rawdata.resize(profile_size);
-        memcpy(profile_rawdata.data(), profile_data, profile_size);
-        metaData.insert(DImg::ICC, profile_rawdata);
-        free (profile_data);
-    }
-    else
-    {
-        // If ICC profile is null, check Exif metadata.
-        checkExifWorkingColorSpace();
+        QMap<int, QByteArray>& metaData = imageMetaData();
+
+        JOCTET *profile_data=NULL;
+        uint    profile_size;
+
+        read_icc_profile (&cinfo, &profile_data, &profile_size);
+
+        if (profile_data != NULL) 
+        {
+            QByteArray profile_rawdata;
+            profile_rawdata.resize(profile_size);
+            memcpy(profile_rawdata.data(), profile_data, profile_size);
+            metaData.insert(DImg::ICC, profile_rawdata);
+            free (profile_data);
+        }
+        else
+        {
+            // If ICC profile is null, check Exif metadata.
+            checkExifWorkingColorSpace();
+        }
     }
 
     // -------------------------------------------------------------------
@@ -454,7 +474,9 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     imageHeight() = h;
     imageData()   = dest;
     imageSetAttribute("format", "JPEG");
-    
+    imageSetAttribute("originalColorModel", colorModel);
+    imageSetAttribute("originalBitDepth", 8);
+
     return true;
 }
 

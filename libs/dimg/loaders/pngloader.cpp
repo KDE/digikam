@@ -73,7 +73,8 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     int          bit_depth, color_type, interlace_type;
     png_structp  png_ptr  = NULL;
     png_infop    info_ptr = NULL;
-    
+    int          colorModel = DImg::COLORMODELUNKNOWN;
+
     readMetadata(filePath, DImg::PNG);
 
     // -------------------------------------------------------------------
@@ -168,6 +169,8 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                 else                                                         // PPC
                     png_set_add_alpha(png_ptr, 0xFFFF, PNG_FILLER_AFTER);
 
+                colorModel = DImg::RGB;
+
                 break;
 
             case PNG_COLOR_TYPE_RGB_ALPHA :     // RGBA
@@ -175,6 +178,9 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                 DDebug() << "PNG in PNG_COLOR_TYPE_RGB_ALPHA" << endl;
 #endif
                 m_hasAlpha = true;
+
+                colorModel = DImg::RGB;
+
                 break;
 
             case PNG_COLOR_TYPE_GRAY :          // Grayscale
@@ -189,6 +195,9 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                     png_set_add_alpha(png_ptr, 0xFFFF, PNG_FILLER_AFTER);
 
                 m_hasAlpha = false;
+
+                colorModel = DImg::GRAYSCALE;
+
                 break;
 
             case PNG_COLOR_TYPE_GRAY_ALPHA :	// Grayscale + Alpha 
@@ -197,6 +206,9 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 #endif
                 png_set_gray_to_rgb(png_ptr);
                 m_hasAlpha = true;
+
+                colorModel = DImg::GRAYSCALE;
+
                 break;
 
             case PNG_COLOR_TYPE_PALETTE :       // Indexed
@@ -211,6 +223,9 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                     png_set_add_alpha(png_ptr, 0xFFFF, PNG_FILLER_AFTER);
 
                 m_hasAlpha = false;
+
+                colorModel = DImg::INDEXED;
+
                 break;
 
             default:
@@ -310,87 +325,90 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     // -------------------------------------------------------------------
     // Get image data.
 
-    png_read_update_info(png_ptr, info_ptr);
-
     uchar *data  = 0;
 
-    if (m_sixteenBit)
-        data = new uchar[width*height*8];  // 16 bits/color/pixel
-    else
-        data = new uchar[width*height*4];  // 8 bits/color/pixel
-
-    uchar **lines = 0;
-    lines = (uchar **)malloc(height * sizeof(uchar *));
-    if (!lines)
+    if (m_loadFlags & LoadImageData)
     {
-        DDebug() << k_funcinfo << "Cannot allocate memory to load PNG image data." << endl;
-        png_read_end(png_ptr, info_ptr);
-        png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) NULL);
-        fclose(f);
-        delete [] data;
-        return false;
-    }
+        png_read_update_info(png_ptr, info_ptr);
 
-    for (int i = 0; i < height; i++)
-    {
         if (m_sixteenBit)
-            lines[i] = data + (i * width * 8);
+            data = new uchar[width*height*8];  // 16 bits/color/pixel
         else
-            lines[i] = data + (i * width * 4);
-    }
+            data = new uchar[width*height*4];  // 8 bits/color/pixel
 
-    // The easy way to read the whole image
-    // png_read_image(png_ptr, lines);
-    // The other way to read images is row by row. Necessary for observer.
-    // Now we need to deal with interlacing.
-
-    // for non-interlaced images number_passes will be 1
-    int number_passes = png_set_interlace_handling(png_ptr);
-    for (int pass = 0; pass < number_passes; pass++)
-    {
-        int y;
-        int checkPoint = 0;
-        for (y = 0; y < height; y++)
+        uchar **lines = 0;
+        lines = (uchar **)malloc(height * sizeof(uchar *));
+        if (!lines)
         {
-            if (observer && y == checkPoint)
-            {
-                checkPoint += granularity(observer, height, 0.7);
-                if (!observer->continueQuery(m_image))
-                {
-                    png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) NULL);
-                    fclose(f);
-                    delete [] data;
-                    free(lines);
-                    return false;
-                }
-                // use 10% - 80% for progress while reading rows
-                observer->progressInfo(m_image, 0.1 + (0.7 * ( ((float)y)/((float)height) )) );
-            }
-
-            png_read_rows(png_ptr, lines+y, NULL, 1);
+            DDebug() << k_funcinfo << "Cannot allocate memory to load PNG image data." << endl;
+            png_read_end(png_ptr, info_ptr);
+            png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) NULL);
+            fclose(f);
+            delete [] data;
+            return false;
         }
-    }
 
-    free(lines);
-
-    // Swap bytes in 16 bits/color/pixel for DImg
-
-    if (m_sixteenBit)
-    {
-        uchar ptr[8];   // One pixel to swap
-
-        for (int p = 0; p < width*height*8; p+=8)
+        for (int i = 0; i < height; i++)
         {
-            memcpy (&ptr[0], &data[p], 8);  // Current pixel
+            if (m_sixteenBit)
+                lines[i] = data + (i * width * 8);
+            else
+                lines[i] = data + (i * width * 4);
+        }
 
-            data[ p ] = ptr[1];  // Blue
-            data[p+1] = ptr[0];
-            data[p+2] = ptr[3];  // Green
-            data[p+3] = ptr[2];
-            data[p+4] = ptr[5];  // Red
-            data[p+5] = ptr[4];
-            data[p+6] = ptr[7];  // Alpha
-            data[p+7] = ptr[6];
+        // The easy way to read the whole image
+        // png_read_image(png_ptr, lines);
+        // The other way to read images is row by row. Necessary for observer.
+        // Now we need to deal with interlacing.
+
+        // for non-interlaced images number_passes will be 1
+        int number_passes = png_set_interlace_handling(png_ptr);
+        for (int pass = 0; pass < number_passes; pass++)
+        {
+            int y;
+            int checkPoint = 0;
+            for (y = 0; y < height; y++)
+            {
+                if (observer && y == checkPoint)
+                {
+                    checkPoint += granularity(observer, height, 0.7);
+                    if (!observer->continueQuery(m_image))
+                    {
+                        png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) NULL);
+                        fclose(f);
+                        delete [] data;
+                        free(lines);
+                        return false;
+                    }
+                    // use 10% - 80% for progress while reading rows
+                    observer->progressInfo(m_image, 0.1 + (0.7 * ( ((float)y)/((float)height) )) );
+                }
+
+                png_read_rows(png_ptr, lines+y, NULL, 1);
+            }
+        }
+
+        free(lines);
+
+        // Swap bytes in 16 bits/color/pixel for DImg
+
+        if (m_sixteenBit)
+        {
+            uchar ptr[8];   // One pixel to swap
+
+            for (int p = 0; p < width*height*8; p+=8)
+            {
+                memcpy (&ptr[0], &data[p], 8);  // Current pixel
+
+                data[ p ] = ptr[1];  // Blue
+                data[p+1] = ptr[0];
+                data[p+2] = ptr[3];  // Green
+                data[p+3] = ptr[2];
+                data[p+4] = ptr[5];  // Red
+                data[p+5] = ptr[4];
+                data[p+6] = ptr[7];  // Alpha
+                data[p+7] = ptr[6];
+            }
         }
     }
 
@@ -400,25 +418,28 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     // -------------------------------------------------------------------
     // Read image ICC profile
 
-    QMap<int, QByteArray>& metaData = imageMetaData();
-
-    png_charp   profile_name, profile_data=NULL;
-    png_uint_32 profile_size;
-    int         compression_type;
-
-    png_get_iCCP(png_ptr, info_ptr, &profile_name, &compression_type, &profile_data, &profile_size);
-
-    if (profile_data != NULL) 
+    if (m_loadFlags & LoadICCData)
     {
-        QByteArray profile_rawdata;
-        profile_rawdata.resize(profile_size);
-        memcpy(profile_rawdata.data(), profile_data, profile_size);
-        metaData.insert(DImg::ICC, profile_rawdata);
-    }
-    else
-    {
-        // If ICC profile is null, check Exif metadata.
-        checkExifWorkingColorSpace();
+        QMap<int, QByteArray>& metaData = imageMetaData();
+
+        png_charp   profile_name, profile_data=NULL;
+        png_uint_32 profile_size;
+        int         compression_type;
+
+        png_get_iCCP(png_ptr, info_ptr, &profile_name, &compression_type, &profile_data, &profile_size);
+
+        if (profile_data != NULL) 
+        {
+            QByteArray profile_rawdata;
+            profile_rawdata.resize(profile_size);
+            memcpy(profile_rawdata.data(), profile_data, profile_size);
+            metaData.insert(DImg::ICC, profile_rawdata);
+        }
+        else
+        {
+            // If ICC profile is null, check Exif metadata.
+            checkExifWorkingColorSpace();
+        }
     }
 
     // -------------------------------------------------------------------
@@ -445,20 +466,23 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     http://search.cpan.org/src/EXIFTOOL/Image-ExifTool-5.87/html/TagNames/PNG.html#TextualData
     */
 
-    for (int i = 0; i < num_comments; i++)
+    if (m_loadFlags & LoadICCData)
     {
-        // Check if we have a Raw profile embedded using ImageMagick technic.
-
-        if (memcmp(text_ptr[i].key, "Raw profile type exif", 21) != 0 ||
-            memcmp(text_ptr[i].key, "Raw profile type APP1", 21) != 0 ||
-            memcmp(text_ptr[i].key, "Raw profile type iptc", 21) != 0)
+        for (int i = 0; i < num_comments; i++)
         {
-            imageSetEmbbededText(text_ptr[i].key, text_ptr[i].text);
+            // Check if we have a Raw profile embedded using ImageMagick technic.
 
-#ifdef ENABLE_DEBUG_MESSAGES
-            DDebug() << "Reading PNG Embedded text: key=" << text_ptr[i].key 
-                      << " text=" << text_ptr[i].text << endl;
-#endif
+            if (memcmp(text_ptr[i].key, "Raw profile type exif", 21) != 0 ||
+                memcmp(text_ptr[i].key, "Raw profile type APP1", 21) != 0 ||
+                memcmp(text_ptr[i].key, "Raw profile type iptc", 21) != 0)
+            {
+                imageSetEmbbededText(text_ptr[i].key, text_ptr[i].text);
+
+    #ifdef ENABLE_DEBUG_MESSAGES
+                DDebug() << "Reading PNG Embedded text: key=" << text_ptr[i].key 
+                        << " text=" << text_ptr[i].text << endl;
+    #endif
+            }
         }
     }
 
@@ -475,6 +499,8 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     imageHeight() = height;
     imageData()   = data;
     imageSetAttribute("format", "PNG");
+    imageSetAttribute("originalColorModel", colorModel);
+    imageSetAttribute("originalBitDepth", bit_depth);
 
     return true;
 }

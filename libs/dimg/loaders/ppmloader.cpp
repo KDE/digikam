@@ -117,44 +117,47 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     if (observer)
         observer->progressInfo(m_image, 0.1);
 
-    unsigned short *data;
-    
-    data = new unsigned short[width*height*4];
-    unsigned short *dst  = data;
-    uchar src[6];
-    float fac = 65535.0 / rgbmax;
-    int checkpoint = 0;
+    unsigned short *data = 0;
 
-#ifdef ENABLE_DEBUG_MESSAGES
-    DDebug() << "rgbmax=" << rgbmax << "  fac=" << fac << endl;
-#endif
-
-    for (int h = 0; h < height; h++)
+    if (m_loadFlags & LoadImageData)
     {
+        data = new unsigned short[width*height*4];
+        unsigned short *dst  = data;
+        uchar src[6];
+        float fac = 65535.0 / rgbmax;
+        int checkpoint = 0;
 
-        if (observer && h == checkpoint)
+    #ifdef ENABLE_DEBUG_MESSAGES
+        DDebug() << "rgbmax=" << rgbmax << "  fac=" << fac << endl;
+    #endif
+
+        for (int h = 0; h < height; h++)
         {
-            checkpoint += granularity(observer, height, 0.9);
-            if (!observer->continueQuery(m_image))
+
+            if (observer && h == checkpoint)
             {
-                delete [] data;
-                pclose( file );
-                return false;
+                checkpoint += granularity(observer, height, 0.9);
+                if (!observer->continueQuery(m_image))
+                {
+                    delete [] data;
+                    pclose( file );
+                    return false;
+                }
+                observer->progressInfo(m_image, 0.1 + (0.9 * ( ((float)h)/((float)height) )));
             }
-            observer->progressInfo(m_image, 0.1 + (0.9 * ( ((float)h)/((float)height) )));
-        }
 
-        for (int w = 0; w < width; w++)
-        {
+            for (int w = 0; w < width; w++)
+            {
 
-            fread (src, 6 *sizeof(unsigned char), 1, file);
+                fread (src, 6 *sizeof(unsigned char), 1, file);
 
-            dst[0] = (unsigned short)((src[4]*256 + src[5]) * fac);      // Blue
-            dst[1] = (unsigned short)((src[2]*256 + src[3]) * fac);      // Green
-            dst[2] = (unsigned short)((src[0]*256 + src[1]) * fac);      // Red
-            dst[3] = 0xFFFF;
+                dst[0] = (unsigned short)((src[4]*256 + src[5]) * fac);      // Blue
+                dst[1] = (unsigned short)((src[2]*256 + src[3]) * fac);      // Green
+                dst[2] = (unsigned short)((src[0]*256 + src[1]) * fac);      // Red
+                dst[3] = 0xFFFF;
 
-            dst += 4;
+                dst += 4;
+            }
         }
     }
 
@@ -166,7 +169,9 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     imageHeight() = height;
     imageData()   = (uchar*)data;
     imageSetAttribute("format", "PPM");
-    
+    imageSetAttribute("originalColorFormat", DImg::RGB);
+    imageSetAttribute("originalBitDepth", 8);
+
     return true;
 }
 

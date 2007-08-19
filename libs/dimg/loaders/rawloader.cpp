@@ -169,6 +169,8 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
     imageWidth()  = width;
     imageHeight() = height;
     imageSetAttribute("format", "RAW");
+    imageSetAttribute("originalColorModel", DImg::COLORMODELRAW);
+    imageSetAttribute("originalBitDepth", 16);
 
     return true;
 }

@@ -57,6 +57,35 @@ bool QImageLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         return false;
     }
 
+    int colorModel = DImg::COLORMODELUNKNOWN;
+    int originalDepth = 0;
+    switch (image.format())
+    {
+        case QImage::Format_Invalid:
+        default:
+            colorModel = DImg::COLORMODELUNKNOWN;
+            originalDepth = 0;
+            break;
+        case QImage::Format_Mono:
+        case QImage::Format_MonoLSB:
+            colorModel = DImg::MONOCHROME;
+            originalDepth = 1;
+            break;
+        case QImage::Format_Indexed8:
+            colorModel = DImg::INDEXED;
+            originalDepth = 0;
+            break;
+        case QImage::Format_RGB32:
+            colorModel = DImg::RGB;
+            originalDepth = 8;
+            break;
+        case QImage::Format_ARGB32:
+        case QImage::Format_ARGB32_Premultiplied:
+            colorModel = DImg::RGB;
+            originalDepth = 8;
+            break;
+    }
+
     m_hasAlpha    = image.hasAlphaChannel();
     QImage target = image.convertToFormat(QImage::Format_ARGB32);
     
@@ -86,6 +115,8 @@ bool QImageLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     // We considering that PNG is the most representative format of an image loaded by Qt
     imageSetAttribute("format", "PNG");
+    imageSetAttribute("originalColorModel", colorModel);
+    imageSetAttribute("originalBitDepth", originalDepth);
 
     return true;
 }
