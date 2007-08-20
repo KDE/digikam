@@ -212,7 +212,7 @@ void TagFolderView::slotAlbumAdded(Album *album)
 
         if (!parent)
         {
-            DWarning() << k_funcinfo << " Failed to find parent for Tag "
+            DWarning() << " Failed to find parent for Tag "
                        << tag->title() << endl;
             return;
         }

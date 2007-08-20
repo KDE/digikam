@@ -59,7 +59,7 @@ void UnsharpMask::filterImage(void)
 
     if (m_orgImage.isNull())
     {
-       DWarning() << k_funcinfo << "No image data available!" << endl;
+       DWarning() << "No image data available!" << endl;
        return;
     }
 

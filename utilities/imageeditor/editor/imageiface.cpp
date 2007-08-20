@@ -117,7 +117,7 @@ DColor ImageIface::getColorInfoFromOriginalImage(QPoint point)
 {
     if ( !DImgInterface::defaultInterface()->getImage() || point.x() > originalWidth() || point.y() > originalHeight() )
     {
-        DWarning() << k_funcinfo << "Coordinate out of range or no image data available!" << endl;
+        DWarning() << "Coordinate out of range or no image data available!" << endl;
         return DColor();
     }
 
@@ -128,7 +128,7 @@ DColor ImageIface::getColorInfoFromPreviewImage(QPoint point)
 {
     if ( d->previewImage.isNull() || point.x() > previewWidth() || point.y() > previewHeight() )
     {
-        DWarning() << k_funcinfo << "Coordinate out of range or no image data available!" << endl;
+        DWarning() << "Coordinate out of range or no image data available!" << endl;
         return DColor();
     }
 
@@ -139,7 +139,7 @@ DColor ImageIface::getColorInfoFromTargetPreviewImage(QPoint point)
 {
     if ( d->targetPreviewImage.isNull() || point.x() > previewWidth() || point.y() > previewHeight() )
     {
-        DWarning() << k_funcinfo << "Coordinate out of range or no image data available!" << endl;
+        DWarning() << "Coordinate out of range or no image data available!" << endl;
         return DColor::DColor();
     }
 

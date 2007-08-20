@@ -437,7 +437,7 @@ void AlbumManager::scanPAlbums()
         PAlbum* parent = d->pAlbumDict.find(purl);
         if (!parent)
         {
-            DWarning() << k_funcinfo <<  "Could not find parent with url: "
+            DWarning() <<  "Could not find parent with url: "
                        << purl << " for: " << info.url << endl;
             continue;
         }
@@ -1374,7 +1374,7 @@ void AlbumManager::slotResult(KJob* job)
 
     if (job->error())
     {
-        DWarning() << k_funcinfo << "Failed to list dates" << endl;
+        DWarning() << "Failed to list dates" << endl;
         return;
     }
     

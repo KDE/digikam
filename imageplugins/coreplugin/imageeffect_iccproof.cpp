@@ -1030,7 +1030,7 @@ void ImageEffect_ICCProof::finalRendering()
             if (m_embeddProfileBox->isChecked())
             {
                 iface->setEmbeddedICCToOriginalImage( tmpSpacePath );
-                DDebug() << k_funcinfo << QFile::encodeName(tmpSpacePath) << endl;
+                DDebug() << QFile::encodeName(tmpSpacePath) << endl;
             }
 
             //-- Calculate and apply the curve on image after transformation -------------

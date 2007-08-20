@@ -66,7 +66,7 @@ void JPEGLoader::dimg_jpeg_error_exit(j_common_ptr cinfo)
     (*cinfo->err->format_message)(cinfo, buffer);
 
 #ifdef ENABLE_DEBUG_MESSAGES
-    DDebug() << k_funcinfo << buffer << endl;
+    DDebug() << buffer << endl;
 #endif
 
     longjmp(myerr->setjmp_buffer, 1);
@@ -78,7 +78,7 @@ void JPEGLoader::dimg_jpeg_emit_message(j_common_ptr cinfo, int msg_level)
     (*cinfo->err->format_message)(cinfo, buffer);
 
 #ifdef ENABLE_DEBUG_MESSAGES
-    DDebug() << k_funcinfo << buffer << " (" << msg_level << ")" << endl;
+    DDebug() << buffer << " (" << msg_level << ")" << endl;
 #else
     Q_UNUSED(msg_level);
 #endif
@@ -90,7 +90,7 @@ void JPEGLoader::dimg_jpeg_output_message(j_common_ptr cinfo)
     (*cinfo->err->format_message)(cinfo, buffer);
 
 #ifdef ENABLE_DEBUG_MESSAGES
-    DDebug() << k_funcinfo << buffer << endl;
+    DDebug() << buffer << endl;
 #endif
 }
 
@@ -240,7 +240,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         {
             jpeg_destroy_decompress(&cinfo);
             fclose(file);
-            DDebug() << k_funcinfo << "Height of JPEG scanline buffer out of range!" << endl;
+            DDebug() << "Height of JPEG scanline buffer out of range!" << endl;
             return false;
         }
 
@@ -252,7 +252,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         {
             jpeg_destroy_decompress(&cinfo);
             fclose(file);
-            DDebug() << k_funcinfo
+            DDebug() 
                     << "JPEG colorspace ("
                     << cinfo.out_color_space
                     << ") or Number of JPEG color components ("
@@ -267,7 +267,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         {
             jpeg_destroy_decompress(&cinfo);
             fclose(file);
-            DDebug() << k_funcinfo << "Cannot allocate memory!" << endl;
+            DDebug() << "Cannot allocate memory!" << endl;
             return false;
         }
 
@@ -278,7 +278,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             delete [] data;
             jpeg_destroy_decompress(&cinfo);
             fclose(file);
-            DDebug() << k_funcinfo << "Cannot allocate memory!" << endl;
+            DDebug() << "Cannot allocate memory!" << endl;
             return false;
         }
 

@@ -137,7 +137,7 @@ bool BackendSQLite3::execSql(const QString& sql, QStringList* const values,
 
     if ( !d->dataBase )
     {
-        DWarning() << k_funcinfo << "SQLite pointer == NULL"
+        DWarning() << "SQLite pointer == NULL"
                     << endl;
         if (errMsg)
         {
@@ -154,7 +154,7 @@ bool BackendSQLite3::execSql(const QString& sql, QStringList* const values,
     error = sqlite3_prepare(d->dataBase, sql.toUtf8(), -1, &stmt, &tail);
     if ( error != SQLITE_OK )
     {
-        DWarning() << k_funcinfo
+        DWarning() 
                     << "sqlite_compile error: "
                     << sqlite3_errmsg(d->dataBase)
                     << " on query: "

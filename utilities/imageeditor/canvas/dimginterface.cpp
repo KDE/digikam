@@ -1050,7 +1050,7 @@ DImg* DImgInterface::getImg()
     }
     else
     {
-        DWarning() << k_funcinfo << "d->image is NULL" << endl;
+        DWarning() << "d->image is NULL" << endl;
         return 0;
     }
 }
@@ -1063,7 +1063,7 @@ uchar* DImgInterface::getImage()
     }
     else
     {
-        DWarning() << k_funcinfo << "d->image is NULL" << endl;
+        DWarning() << "d->image is NULL" << endl;
         return 0;
     }
 }
@@ -1088,13 +1088,13 @@ void DImgInterface::putImage(uchar* data, int w, int h, bool sixteenBit)
 {
     if (d->image.isNull())
     {
-       DWarning() << k_funcinfo << "d->image is NULL" << endl;
+       DWarning() << "d->image is NULL" << endl;
        return;
     }
 
     if (!data)
     {
-       DWarning() << k_funcinfo << "New image is NULL" << endl;
+       DWarning() << "New image is NULL" << endl;
        return;
     }
 
@@ -1111,7 +1111,7 @@ void DImgInterface::putImage(uchar* data, int w, int h, bool sixteenBit)
         d->origHeight = h;
     }
 
-    //DDebug() << k_funcinfo << data << " " << w << " " << h << endl;
+    //DDebug() << data << " " << w << " " << h << endl;
     d->image.putImageData(w, h, sixteenBit, d->image.hasAlpha(), data);
 
     setModified();
@@ -1121,11 +1121,11 @@ void DImgInterface::setEmbeddedICCToOriginalImage( QString profilePath)
 {
     if (d->image.isNull())
     {
-        DWarning() << k_funcinfo << "d->image is NULL" << endl;
+        DWarning() << "d->image is NULL" << endl;
         return;
     }
      
-     DDebug() << k_funcinfo << "Embedding profile: " << profilePath << endl;
+     DDebug() << "Embedding profile: " << profilePath << endl;
      d->image.getICCProfilFromFile( QFile::encodeName(profilePath));
      setModified();
 }

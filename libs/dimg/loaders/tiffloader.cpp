@@ -124,7 +124,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     TIFF* tif = TIFFOpen(QFile::encodeName(filePath), "r");
     if (!tif)
     {
-        DDebug() << k_funcinfo << "Cannot open image file." << endl;
+        DDebug() << "Cannot open image file." << endl;
         return false;
     }
 
@@ -293,7 +293,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
                 if (bytesRead == -1)
                 {
-                    DDebug() << k_funcinfo << "Failed to read strip" << endl;
+                    DDebug() << "Failed to read strip" << endl;
                     delete [] data;
                     TIFFClose(tif);
                     return false;
@@ -359,7 +359,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
             if (!TIFFRGBAImageOK(tif, emsg) || !TIFFRGBAImageBegin(&img, tif, 0, emsg))
             {
-                DDebug() << k_funcinfo << "Failed to set up RGBA reading of image, filename "
+                DDebug() << "Failed to set up RGBA reading of image, filename "
                         << TIFFFileName(tif) <<  " error message from Libtiff: " << emsg << endl;
                 delete [] data;
                 delete [] strip;
@@ -397,7 +397,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
                 if (TIFFRGBAImageGet(&img, (uint32*)strip, img.width, rows_to_read ) == -1)
                 {
-                    DDebug() << k_funcinfo << "Failed to read image data" << endl;
+                    DDebug() << "Failed to read image data" << endl;
                     delete [] data;
                     delete [] strip;
                     TIFFClose(tif);
@@ -473,7 +473,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         
     if (!tif)
     {
-        DDebug() << k_funcinfo << "Cannot open target image file." << endl;
+        DDebug() << "Cannot open target image file." << endl;
         return false;
     }
 
@@ -771,7 +771,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
     if (!buf)
     {
-        DDebug() << k_funcinfo << "Cannot allocate memory buffer for main image." << endl;
+        DDebug() << "Cannot allocate memory buffer for main image." << endl;
         TIFFClose(tif);
         return false;
     }
@@ -861,7 +861,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
         if (!TIFFWriteScanline(tif, buf, y, 0))
         {
-            DDebug() << k_funcinfo << "Cannot write main image to target file." << endl;
+            DDebug() << "Cannot write main image to target file." << endl;
             _TIFFfree(buf);
             TIFFClose(tif);
             return false;
@@ -893,7 +893,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
     if (!bufThumb)
     {
-        DDebug() << k_funcinfo << "Cannot allocate memory buffer for thumbnail." << endl;
+        DDebug() << "Cannot allocate memory buffer for thumbnail." << endl;
         TIFFClose(tif);
         return false;
     }
@@ -914,7 +914,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
         if (!TIFFWriteScanline(tif, bufThumb, y, 0))
         {
-            DDebug() << k_funcinfo << "Cannot write thumbnail to target file." << endl;
+            DDebug() << "Cannot write thumbnail to target file." << endl;
             _TIFFfree(bufThumb);
             TIFFClose(tif);
             return false;

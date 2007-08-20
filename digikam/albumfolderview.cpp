@@ -271,7 +271,7 @@ void AlbumFolderView::slotAlbumAdded(Album *album)
     AlbumFolderViewItem* parent = findParent(palbum, failed);
     if (failed)
     {
-        DWarning() << k_funcinfo << " Failed to find parent for Album "
+        DWarning() << " Failed to find parent for Album "
                    << palbum->albumPath() << endl;
         return;
     }

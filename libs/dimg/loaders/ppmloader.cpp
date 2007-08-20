@@ -69,7 +69,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     FILE *file = fopen(QFile::encodeName(filePath), "rb");
     if (!file)
     {
-        DDebug() << k_funcinfo << "Cannot open image file." << endl;
+        DDebug() << "Cannot open image file." << endl;
         return false;
     }
 
@@ -77,7 +77,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     if (fread(&header, 2, 1, file) != 1)
     {
-        DDebug() << k_funcinfo << "Cannot read header of file." << endl;
+        DDebug() << "Cannot read header of file." << endl;
         fclose(file);
         return false;
     }
@@ -85,7 +85,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     uchar* c = (uchar*) &header;
     if (*c != 'P')
     {
-        DDebug() << k_funcinfo << "Not a PPM file." << endl;
+        DDebug() << "Not a PPM file." << endl;
         fclose(file);
         return false;
     }
@@ -93,7 +93,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     c++;
     if (*c != '6')
     {
-        DDebug() << k_funcinfo << "Not a PPM file." << endl;
+        DDebug() << "Not a PPM file." << endl;
         fclose(file);
         return false;
     }
@@ -109,7 +109,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     
     if (rgbmax <= 255)
     {
-        DDebug() << k_funcinfo << "Not a 16 bits per color per pixel PPM file." << endl;
+        DDebug() << "Not a 16 bits per color per pixel PPM file." << endl;
         pclose (file);
         return false;
     }

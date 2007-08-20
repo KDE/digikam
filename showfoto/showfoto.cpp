@@ -1072,7 +1072,7 @@ bool ShowFoto::save()
 {
     if (!d->currentItem)
     {
-        DWarning() << k_funcinfo << "This should not happen" << endl;
+        DWarning() << "This should not happen" << endl;
         return true;
     }
 
@@ -1089,7 +1089,7 @@ bool ShowFoto::saveAs()
 {
     if (!d->currentItem)
     {
-        DWarning() << k_funcinfo << "This should not happen" << endl;
+        DWarning() << "This should not happen" << endl;
         return false;
     }
 

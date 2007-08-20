@@ -585,7 +585,7 @@ void TagFilterView::slotTagAdded(Album* album)
         TagFilterViewItem* parent = (TagFilterViewItem*)(tag->parent()->extraData(this));
         if (!parent)
         {
-            DWarning() << k_funcinfo << " Failed to find parent for Tag "
+            DWarning() << " Failed to find parent for Tag "
                        << tag->tagPath() << endl;
             return;
         }

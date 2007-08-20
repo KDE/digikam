@@ -74,7 +74,7 @@ void AlbumDB_Sqlite2::setDBPath(const QString& path)
     m_db = sqlite_open(QFile::encodeName(path), 0, &errMsg);
     if (m_db == 0)
     {
-        DWarning() << k_funcinfo << "Cannot open database: "
+        DWarning() << "Cannot open database: "
                     << errMsg << endl;
         free(errMsg);
         return;
@@ -92,7 +92,7 @@ bool AlbumDB_Sqlite2::execSql(const QString& sql, QStringList* const values,
         DDebug() << "SQL-query: " << sql << endl;
 
     if ( !m_db ) {
-        DWarning() << k_funcinfo << "SQLite pointer == NULL"
+        DWarning() << "SQLite pointer == NULL"
                     << endl;
         return false;
     }
@@ -106,7 +106,7 @@ bool AlbumDB_Sqlite2::execSql(const QString& sql, QStringList* const values,
     error = sqlite_compile( m_db, QFile::encodeName(sql), &tail, &vm, &errorStr );
 
     if ( error != SQLITE_OK ) {
-        DWarning() << k_funcinfo << "sqlite_compile error: "
+        DWarning() << "sqlite_compile error: "
                     << errorStr 
                     << " on query: " << sql << endl;
         sqlite_freemem( errorStr );
@@ -131,7 +131,7 @@ bool AlbumDB_Sqlite2::execSql(const QString& sql, QStringList* const values,
     sqlite_finalize( vm, &errorStr );
 
     if ( error != SQLITE_DONE ) {
-        DWarning() << k_funcinfo << "sqlite_step error: "
+        DWarning() << "sqlite_step error: "
                     << errorStr
                     << " on query: " << sql << endl;
         return false;

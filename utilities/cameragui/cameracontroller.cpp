@@ -600,7 +600,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
             break;
         }
         default:
-            DWarning() << k_funcinfo << " unknown action specified" << endl;
+            DWarning() << " unknown action specified" << endl;
     }
 }
 

@@ -83,7 +83,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     f = fopen(QFile::encodeName(filePath), "rb");
     if ( !f )
     {
-        DDebug() << k_funcinfo << "Cannot open image file." << endl;
+        DDebug() << "Cannot open image file." << endl;
         return false;
     }
 
@@ -92,7 +92,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     fread(buf, 1, PNG_BYTES_TO_CHECK, f);
     if (!png_check_sig(buf, PNG_BYTES_TO_CHECK))
     {
-        DDebug() << k_funcinfo << "Not a PNG image file." << endl;
+        DDebug() << "Not a PNG image file." << endl;
         fclose(f);
         return false;
     }
@@ -104,7 +104,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
     if (!png_ptr)
     {
-        DDebug() << k_funcinfo << "Invalid PNG image file structure." << endl;
+        DDebug() << "Invalid PNG image file structure." << endl;
         fclose(f);
         return false;
     }
@@ -112,7 +112,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     info_ptr = png_create_info_struct(png_ptr);
     if (!info_ptr)
     {
-        DDebug() << k_funcinfo << "Cannot reading PNG image file structure." << endl;
+        DDebug() << "Cannot reading PNG image file structure." << endl;
         png_destroy_read_struct(&png_ptr, NULL, NULL);
         fclose(f);
         return false;
@@ -124,7 +124,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     
     if (setjmp(png_ptr->jmpbuf))
     {
-        DDebug() << k_funcinfo << "Internal libPNG error during reading file. Process aborted!" << endl;
+        DDebug() << "Internal libPNG error during reading file. Process aborted!" << endl;
         png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
         fclose(f);
         return false;
@@ -230,7 +230,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
             default:
 #ifdef ENABLE_DEBUG_MESSAGES
-                DDebug() << k_funcinfo << "PNG color type unknown." << endl;
+                DDebug() << "PNG color type unknown." << endl;
 #endif
                 return false;
         }
@@ -238,7 +238,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     else
     {
 #ifdef ENABLE_DEBUG_MESSAGES
-        DDebug() << k_funcinfo << "PNG in >=8 bits/color/pixel." << endl;
+        DDebug() << "PNG in >=8 bits/color/pixel." << endl;
 #endif
         m_sixteenBit = false;
         png_set_packing(png_ptr);
@@ -304,7 +304,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
             default:
 #ifdef ENABLE_DEBUG_MESSAGES
-                DDebug() << k_funcinfo << "PNG color type unknown." << endl;
+                DDebug() << "PNG color type unknown." << endl;
 #endif
                 return false;
         }
@@ -340,7 +340,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         lines = (uchar **)malloc(height * sizeof(uchar *));
         if (!lines)
         {
-            DDebug() << k_funcinfo << "Cannot allocate memory to load PNG image data." << endl;
+            DDebug() << "Cannot allocate memory to load PNG image data." << endl;
             png_read_end(png_ptr, info_ptr);
             png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) NULL);
             fclose(f);
@@ -523,7 +523,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     f = fopen(QFile::encodeName(filePath), "wb");
     if ( !f )
     {
-        DDebug() << k_funcinfo << "Cannot open target image file." << endl;
+        DDebug() << "Cannot open target image file." << endl;
         return false;
     }
 
@@ -534,7 +534,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
     if (!png_ptr)
     {
-        DDebug() << k_funcinfo << "Invalid target PNG image file structure." << endl;
+        DDebug() << "Invalid target PNG image file structure." << endl;
         fclose(f);
         return false;
     }
@@ -542,7 +542,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     info_ptr = png_create_info_struct(png_ptr);
     if (info_ptr == NULL)
     {
-        DDebug() << k_funcinfo << "Cannot create PNG image file structure." << endl;
+        DDebug() << "Cannot create PNG image file structure." << endl;
         png_destroy_write_struct(&png_ptr, (png_infopp) NULL);
         fclose(f);
         return false;
@@ -554,7 +554,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         
     if (setjmp(png_ptr->jmpbuf))
     {
-        DDebug() << k_funcinfo << "Internal libPNG error during writing file. Process aborted!" << endl;
+        DDebug() << "Internal libPNG error during writing file. Process aborted!" << endl;
         fclose(f);
         png_destroy_write_struct(&png_ptr, (png_infopp) & info_ptr);
         png_destroy_info_struct(png_ptr, (png_infopp) & info_ptr);

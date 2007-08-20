@@ -257,7 +257,7 @@ bool DMetadata::setImageRating(int rating)
 {
     if (rating < RatingMin || rating > RatingMax)
     {
-        DDebug() << k_funcinfo << "Rating value to write is out of range!" << endl;
+        DDebug() << "Rating value to write is out of range!" << endl;
         return false;
     }
 

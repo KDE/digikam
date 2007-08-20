@@ -1468,7 +1468,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
             if ( !imgExtList.contains( m_savingContext->format.toUpper() ) )
             {
                 KMessageBox::error(this, i18n("Target image file format \"%1\" unsupported.", m_savingContext->format));
-                DWarning() << k_funcinfo << "target image file format " << m_savingContext->format << " unsupported!" << endl;
+                DWarning() << "target image file format " << m_savingContext->format << " unsupported!" << endl;
                 return false;
             }
         }
@@ -1479,7 +1479,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
         KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to\n\"%2\".",
                                       newURL.fileName(),
                                       newURL.path().section('/', -2, -2)));
-        DWarning() << k_funcinfo << "target URL is not valid !" << endl;
+        DWarning() << "target URL is not valid !" << endl;
         return false;
     }
 

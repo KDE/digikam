@@ -160,7 +160,7 @@ void DigikamImageInfo::setTime(const QDateTime& time, KIPI::TimeSpec)
 {
     if ( !time.isValid() )
     {
-        DWarning() << k_funcinfo << "Invalid datetime specified" << endl;
+        DWarning() << "Invalid datetime specified" << endl;
         return;
     }
 
@@ -285,7 +285,7 @@ DigikamImageCollection::DigikamImageCollection( Type tp, Album* album, const QSt
 {
     if (!album)
     {
-        DWarning() << k_funcinfo << "This should not happen. No album specified" << endl;
+        DWarning() << "This should not happen. No album specified" << endl;
     }
 }
 
@@ -369,7 +369,7 @@ KUrl::List DigikamImageCollection::images()
         }
             else
             {
-                DWarning() << k_funcinfo << "Unknown album type" << endl;
+                DWarning() << "Unknown album type" << endl;
                 return KUrl::List();
             }
     
@@ -467,7 +467,7 @@ KUrl DigikamImageCollection::path()
     }
     else
     {
-        DWarning() << k_funcinfo << "Requesting kurl from a virtual album" << endl;
+        DWarning() << "Requesting kurl from a virtual album" << endl;
         return QString();
     }
 }
@@ -483,7 +483,7 @@ KUrl DigikamImageCollection::uploadPath()
     }
     else
     {
-        DWarning() << k_funcinfo << "Requesting kurl from a virtual album" << endl;
+        DWarning() << "Requesting kurl from a virtual album" << endl;
         return KUrl();
     }
 }
@@ -652,7 +652,7 @@ void DigikamKipiInterface::delImage( const KUrl& url )
     KUrl rootURL(CollectionManager::instance()->albumRoot(url));
     if ( !rootURL.isParentOf(url) )
     {
-        DWarning() << k_funcinfo << "URL not in the album library" << endl;
+        DWarning() << "URL not in the album library" << endl;
     }
 
     // Is there a PAlbum for this url
@@ -666,7 +666,7 @@ void DigikamKipiInterface::delImage( const KUrl& url )
     }
     else
     {
-        DWarning() << k_funcinfo << "Cannot find Parent album in album library" << endl;
+        DWarning() << "Cannot find Parent album in album library" << endl;
     }
 }
 

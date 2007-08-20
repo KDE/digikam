@@ -1168,7 +1168,7 @@ void ImageDescEditTab::slotAlbumAdded(Album* a)
 
         if (!parentItem)
         {
-            DWarning() << k_funcinfo << "Failed to find parent for Tag " << tag->title()
+            DWarning() << "Failed to find parent for Tag " << tag->title()
                        << endl;
             return;
         }

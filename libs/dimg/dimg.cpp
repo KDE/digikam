@@ -519,7 +519,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
     QFileInfo fileInfo(filePath);
     if (!fileInfo.exists())
     {
-        DDebug() << k_funcinfo << "File \"" << filePath << "\" does not exist" << endl;
+        DDebug() << "File \"" << filePath << "\" does not exist" << endl;
         return NONE;
     }
 
@@ -548,7 +548,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
 
     if (!f)
     {
-        DDebug() << k_funcinfo << "Failed to open file \"" << filePath << "\"" << endl;
+        DDebug() << "Failed to open file \"" << filePath << "\"" << endl;
         return NONE;
     }
 
@@ -557,7 +557,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
 
     if (fread(&header, headerLen, 1, f) != 1)
     {
-        DDebug() << k_funcinfo << "Failed to read header of file \"" << filePath << "\"" << endl;
+        DDebug() << "Failed to read header of file \"" << filePath << "\"" << endl;
         fclose(f);
         return NONE;
     }
@@ -825,7 +825,7 @@ DColor DImg::getPixelColor(uint x, uint y) const
 {
     if (isNull() || x > width() || y > height())
     {
-        DDebug() << k_funcinfo << " : wrong pixel position!" << endl;
+        DDebug() << " : wrong pixel position!" << endl;
         return DColor();
     }
 
@@ -838,13 +838,13 @@ void DImg::setPixelColor(uint x, uint y, DColor color)
 {
     if (isNull() || x > width() || y > height())
     {
-        DDebug() << k_funcinfo << " : wrong pixel position!" << endl;
+        DDebug() << " : wrong pixel position!" << endl;
         return;
     }
 
     if (color.sixteenBit() != sixteenBit())
     {
-        DDebug() << k_funcinfo << " : wrong color depth!" << endl;
+        DDebug() << " : wrong color depth!" << endl;
         return;
     }
 
@@ -891,7 +891,7 @@ DImg DImg::copy(int x, int y, int w, int h)
 {
     if ( isNull() || w <= 0 || h <= 0)
     {
-        DDebug() << k_funcinfo << " : return null image!" << endl;
+        DDebug() << " : return null image!" << endl;
         return DImg();
     }
 
@@ -1204,7 +1204,7 @@ QPixmap DImg::convertToPixmap(IccTransform *monitorICCtrans)
 
     if (!monitorICCtrans->hasOutputProfile())
     {
-        DDebug() << k_funcinfo << " : no monitor ICC profile available!" << endl;
+        DDebug() << " : no monitor ICC profile available!" << endl;
         return convertToPixmap();
     }
     
@@ -1654,7 +1654,7 @@ void DImg::convertDepth(int depth)
 
     if (depth != 32 && depth != 64)
     {
-        DDebug() << k_funcinfo << " : wrong color depth!" << endl;
+        DDebug() << " : wrong color depth!" << endl;
         return;
     }
 

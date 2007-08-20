@@ -118,7 +118,7 @@ void kio_digikamalbums::special(const QByteArray& data)
 
 void kio_digikamalbums::get( const KUrl& url )
 {
-    kDebug() << k_funcinfo << " : " << url;
+    kDebug() << " : " << url;
 
     // no need to open the db. we don't need to read/write to it
 
@@ -134,7 +134,7 @@ void kio_digikamalbums::get( const KUrl& url )
 
 void kio_digikamalbums::put(const KUrl& url, int permissions, bool overwrite, bool resume)
 {
-    kDebug() << k_funcinfo << " : " << url.url();
+    kDebug() << " : " << url.url();
 
     Digikam::DatabaseUrl dbUrl(url);
     Digikam::DatabaseAccess::setParameters(dbUrl);
@@ -167,7 +167,7 @@ void kio_digikamalbums::put(const KUrl& url, int permissions, bool overwrite, bo
 
 void kio_digikamalbums::copy( const KUrl &src, const KUrl &dst, int mode, bool overwrite )
 {
-    kDebug() << k_funcinfo << "Src: " << src.path() << ", Dst: " << dst.path();
+    kDebug() << "Src: " << src.path() << ", Dst: " << dst.path();
 
     Digikam::DatabaseUrl dbUrlSrc(src);
     Digikam::DatabaseUrl dbUrlDst(dst);
@@ -234,7 +234,7 @@ void kio_digikamalbums::copy( const KUrl &src, const KUrl &dst, int mode, bool o
 
 void kio_digikamalbums::rename( const KUrl& src, const KUrl& dst, bool overwrite )
 {
-    kDebug() << k_funcinfo << "Src: " << src << ", Dst: " << dst;
+    kDebug() << "Src: " << src << ", Dst: " << dst;
 
     // if the filename is .digikam_properties fake that we renamed it
     if (src.fileName() == ".digikam_properties")
@@ -312,7 +312,7 @@ void kio_digikamalbums::rename( const KUrl& src, const KUrl& dst, bool overwrite
 
 void kio_digikamalbums::mkdir( const KUrl& url, int permissions )
 {
-    kDebug() << k_funcinfo << " : " << url.url();
+    kDebug() << " : " << url.url();
 
     Digikam::DatabaseUrl dbUrl(url);
     Digikam::DatabaseAccess::setParameters(dbUrl);
@@ -330,7 +330,7 @@ void kio_digikamalbums::mkdir( const KUrl& url, int permissions )
 
 void kio_digikamalbums::chmod( const KUrl& url, int permissions )
 {
-    kDebug() << k_funcinfo << " : " << url.url();
+    kDebug() << " : " << url.url();
 
     Digikam::DatabaseUrl dbUrl(url);
 
@@ -344,7 +344,7 @@ void kio_digikamalbums::chmod( const KUrl& url, int permissions )
 
 void kio_digikamalbums::del( const KUrl& url, bool isFile)
 {
-    kDebug() << k_funcinfo << " : " << url.url();
+    kDebug() << " : " << url.url();
 
     // if the filename is .digikam_properties fake that we deleted it
     if (isFile && url.fileName() == ".digikam_properties")
@@ -423,7 +423,7 @@ void kio_digikamalbums::stat( const KUrl& url )
 
 void kio_digikamalbums::listDir( const KUrl& url )
 {
-    kDebug() << k_funcinfo << " : " << url.path();
+    kDebug() << " : " << url.path();
 
     Digikam::DatabaseUrl dbUrl(url);
 
