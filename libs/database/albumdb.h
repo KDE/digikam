@@ -73,6 +73,51 @@ public:
      */
     QString getSetting(const QString& keyword);
 
+    // ----------- AlbumRoot operations -----------
+
+    /**
+     * Returns all albums and their attributes in the database
+     * @return a list of albums and their attributes
+     */
+    QList<AlbumRootInfo> getAlbumRoots();
+
+    /**
+     * Returns all albums with a specified status and their attributes in the database
+     * @param status The status that the requested album roots shall have
+     * @return a list of albums and their attributes
+     */
+    QList<AlbumRootInfo> getAlbumRootsWithStatus(int status);
+
+    /**
+     * Add a new album to the database with the given attributes
+     * @param type The type of the album root
+     * @param absolutePath The last absolute path in the file system.
+     *                     The usage of this parameter is up to the CollectionManager
+     * @param uuid         The volume UUID of the volume this album root is contained on.
+     * @param relativePath The relative path on the volume of this album root
+     * @returns the album root id of the newly created root
+     */
+    int addAlbumRoot(int type, const QString &absolutePath, const QString &uuid, const QString &relativePath);
+
+    /**
+     * Deletes an album  root from the database.
+     * @param rootId the id of the album root
+     */
+    void deleteAlbumRoot(int rootId);
+
+    /**
+     * Returns the status of the album root with the given id,
+     * or -1 if no such album root exists.
+     */
+    int getAlbumRootStatus(int rootId);
+
+    /**
+     * Sets the status and absolutePath of the album root with given id.
+     * @param status The new status
+     * @param absolutePath The new absolute path. If this is null, it will not be changed.
+     */
+    void setAlbumRootStatus(int rootId, int status, const QString &absolutePath = QString());
+
     // ----------- Album Listing operations -----------
     /**
      * Returns all albums and their attributes in the database

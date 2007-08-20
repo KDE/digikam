@@ -41,6 +41,23 @@ namespace Digikam
 {
 
 /**
+ * \class AlbumRootInfo
+ */
+class AlbumRootInfo
+{
+public:
+
+    AlbumRootInfo() : id(0), status(-1), type(-1) {};
+
+    int id;
+    int status;
+    QString absolutePath;
+    int type;
+    QString uuid;
+    QString relativePath;
+};
+
+/**
  * \class AlbumInfo
  * A container class for transporting album information
  * from the database to AlbumManager
