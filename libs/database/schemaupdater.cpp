@@ -309,8 +309,9 @@ bool SchemaUpdater::createTablesV5()
     if (!m_access->backend()->execSql(
                     QString("CREATE TABLE AlbumRoots\n"
                             " (id INTEGER PRIMARY KEY,\n"
-                            "  type INTEGER NOT NULL,\n"
+                            "  status INTEGER NOT NULL,\n"
                             "  absolutePath TEXT,\n"
+                            "  type INTEGER NOT NULL,\n"
                             "  volumeUuid TEXT,\n"
                             "  relativePath TEXT);") ));
     {
@@ -371,9 +372,8 @@ bool SchemaUpdater::createTablesV5()
                             "  modificationDate DATETIME,\n"
                             "  sizeX INTEGER,\n"
                             "  sizeY INTEGER,\n"
-                            "  colorDepth INTEGER,\n"
-                            "  colorMode INTEGER,\n"
-                            "  compression TEXT;") ))
+                            "  colorDepth INTEGER,\n"  // 8 or 16
+                            "  colorModel TEXT;") ))
     {
         return false;
     }
