@@ -7,4 +7,5 @@ General        : Removed all X11 library depencies. Code is now portable under M
 
 digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-001 ==> 
+001 ==> 146864 : Lesser XMP support in digiKam.
+002 ==> 
