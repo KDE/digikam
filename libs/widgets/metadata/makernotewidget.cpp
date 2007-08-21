@@ -159,7 +159,6 @@ bool MakerNoteWidget::decodeMetadata()
 
     // Update all metadata contents.
     setMetadataMap(metaData.getExifTagsDataList(m_keysFilter, true));
-
     return true;
 }
 
