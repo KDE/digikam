@@ -134,7 +134,6 @@ bool ExifWidget::decodeMetadata()
 
     // Update all metadata contents.
     setMetadataMap(metaData.getExifTagsDataList(m_keysFilter));
-
     return true;
 }
 

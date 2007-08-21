@@ -117,8 +117,7 @@ bool IptcWidget::decodeMetadata()
 
     // Update all metadata contents.
     setMetadataMap(metaData.getIptcTagsDataList(m_keysFilter));
-
-    return false;
+    return true;
 }
 
 void IptcWidget::buildView(void)
