@@ -703,14 +703,15 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
                 // If bytes array do not start with ImageMagick header, Exif metadata have been created from 
                 // scratch using Exiv2. In this case, we need to add Exif header from start.
-                if (memcmp(ba.data(), "exif", 4) != 0 && 
-                    memcmp(ba.data(), "iptc", 4) != 0 &&
+                if (memcmp(ba.data(), "exif",    4) != 0 && 
+                    memcmp(ba.data(), "iptc",    4) != 0 &&
+                    memcmp(ba.data(), "xmp",     3) != 0 &&
                     memcmp(ba.data(), "profile", 7) != 0)
                 {
                     profile = QByteArray();
                     profile.resize(ba.size() + sizeof(ExifHeader));
                     memcpy(profile.data(), ExifHeader, sizeof(ExifHeader));
-                    memcpy(profile.data()+sizeof(ExifHeader), ba.data(), ba.size());
+                    memcpy(profile.data() + sizeof(ExifHeader), ba.data(), ba.size());
                 }
                 else
                 {
@@ -723,6 +724,11 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
             case(DImg::IPTC):
             {
                 writeRawProfile(png_ptr, info_ptr, "iptc", ba.data(), (png_uint_32) ba.size());
+                break;
+            }
+            case(DImg::XMP):
+            {
+                writeRawProfile(png_ptr, info_ptr, "xmp", ba.data(), (png_uint_32) ba.size());
                 break;
             }
             default:
@@ -822,7 +828,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
     imageSetAttribute("savedformat", "PNG");
 
-    // Here there is no writeMetadata() call until Exiv2 will support PNG file format.
+    // Here there is no writeMetadata() call until Exiv2 will support PNG in writting mode.
     
     return true;
 }

@@ -27,7 +27,6 @@
 // Qt includes.
 
 #include <QWidget>
-#include <QByteArray>
 
 // KDE includes.
 
@@ -36,6 +35,7 @@
 // Local includes.
 
 #include "digikam_export.h"
+#include "dmetadata.h"
 #include "navigatebartab.h"
 
 namespace Digikam
@@ -53,8 +53,7 @@ public:
     ~ImagePropertiesMetaDataTab();
 
     void setCurrentURL(const KUrl& url=KUrl());
-    void setCurrentData(const QByteArray& exifData=QByteArray(), 
-                        const QByteArray& iptcData=QByteArray(), 
+    void setCurrentData(const DMetadata& metadata=DMetadata(), 
                         const QString& filename=QString());
 
 private:

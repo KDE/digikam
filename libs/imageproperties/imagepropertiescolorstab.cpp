@@ -834,4 +834,3 @@ void ImagePropertiesColorsTab::getICCData()
 }
 
 }  // NameSpace Digikam
-

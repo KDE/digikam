@@ -137,15 +137,14 @@ bool MakerNoteWidget::loadFromURL(const KUrl& url)
     else
     {    
         DMetadata metadata(url.path());
-        QByteArray exifData = metadata.getExif();
 
-        if (exifData.isEmpty())
+        if (!metadata.asExif())
         {
             setMetadata();
             return false;
         }
         else
-            setMetadata(exifData);
+            setMetadata(metadata);
     }
 
     return true;
@@ -153,12 +152,12 @@ bool MakerNoteWidget::loadFromURL(const KUrl& url)
 
 bool MakerNoteWidget::decodeMetadata()
 {
-    DMetadata metaData;
-    if (!metaData.setExif(getMetadata()))
+    DMetadata data = getMetadata();
+    if (!data.asIptc())
         return false;
 
     // Update all metadata contents.
-    setMetadataMap(metaData.getExifTagsDataList(m_keysFilter, true));
+    setMetadataMap(data.getExifTagsDataList(m_keysFilter, true));
     return true;
 }
 
@@ -198,8 +197,7 @@ void MakerNoteWidget::slotSaveMetadataToFile(void)
 {
     KUrl url = saveMetadataToFile(i18n("EXIF File to Save"),
                                   QString("*.dat|"+i18n("EXIF binary Files (*.dat)")));
-    storeMetadataToFile(url);
+    storeMetadataToFile(url, getMetadata().getExif());
 }
 
 }  // namespace Digikam
-

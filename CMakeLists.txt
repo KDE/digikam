@@ -173,6 +173,7 @@ SET(libmetadatawidgets_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/makernotewidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/gpswidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/metadatawidget.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/xmpwidget.cpp
    )
 
 SET(libslideshow_SRCS

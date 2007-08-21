@@ -105,6 +105,8 @@ public:
         cieTongue = 0;
     }
 
+    QByteArray       profileData; 
+
     QStringList      tagsfilter;
     QStringList      keysFilter;
 
@@ -182,6 +184,35 @@ ICCProfileWidget::~ICCProfileWidget()
     delete d;
 }
 
+bool ICCProfileWidget::setProfileData(const QByteArray& data)
+{
+    d->profileData = data;
+    
+    // Cleanup all metadata contents.
+    setMetadataMap();
+
+    if (d->profileData.isEmpty())
+    {
+        setMetadataEmpty();
+        return false;
+    }
+
+    // Try to decode current metadata.
+    if (decodeMetadata())
+        enabledToolButtons(true);
+    else
+        enabledToolButtons(false);
+    
+    // Refresh view using decoded metadata.
+    buildView();
+    return true;
+}
+
+const QByteArray& ICCProfileWidget::getProfileData()
+{
+    return d->profileData;
+}
+
 void ICCProfileWidget::setDataLoading()
 {
     d->cieTongue->loadingStarted();
@@ -203,7 +234,7 @@ bool ICCProfileWidget::loadFromURL(const KUrl& url)
 
     if (url.isEmpty())
     {
-        setMetadata();
+        setProfileData();
         d->cieTongue->setProfileData();
         return false;
     }
@@ -212,7 +243,7 @@ bool ICCProfileWidget::loadFromURL(const KUrl& url)
         QFile file(url.path());
         if ( !file.open(QIODevice::ReadOnly) ) 
         {
-            setMetadata();
+            setProfileData();
             d->cieTongue->setProfileData();
             return false;
         }
@@ -226,13 +257,13 @@ bool ICCProfileWidget::loadFromURL(const KUrl& url)
 
         if (iccData.isEmpty())
         {
-            setMetadata();
+            setProfileData();
             d->cieTongue->setProfileData();
             return false;
         }
         else
         {
-            setMetadata(iccData);
+            setProfileData(iccData);
             d->cieTongue->setProfileData(iccData);
         }
     }
@@ -240,9 +271,15 @@ bool ICCProfileWidget::loadFromURL(const KUrl& url)
     return true;
 }
 
+bool ICCProfileWidget::loadFromData(QString fileName, const QByteArray& data)
+{
+    setFileName(fileName);
+    return(setProfileData(data));
+}
+
 bool ICCProfileWidget::decodeMetadata()
 {
-    QByteArray iccData = getMetadata();
+    QByteArray iccData = getProfileData();
     if (iccData.isNull())
         return false;
 
@@ -429,7 +466,7 @@ void ICCProfileWidget::slotSaveMetadataToFile(void)
 {
     KUrl url = saveMetadataToFile(i18n("ICC color profile File to Save"), 
                                   QString("*.icc *.icm|"+i18n("ICC Files (*.icc; *.icm)")));
-    storeMetadataToFile(url);
+//FIXME    storeMetadataToFile(url);
 }
 
 QString ICCProfileWidget::getTagDescription(const QString& key)

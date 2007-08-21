@@ -159,6 +159,8 @@ bool DImgLoader::readMetadata(const QString& filePath, DImg::FORMAT /*ff*/)
         imageMetadata.insert(DImg::EXIF, metaDataFromFile.getExif());
     if (!metaDataFromFile.getIptc().isNull())
         imageMetadata.insert(DImg::IPTC, metaDataFromFile.getIptc());
+    if (!metaDataFromFile.getXmp().isNull())
+        imageMetadata.insert(DImg::XMP, metaDataFromFile.getXmp());
 
     return true;
 }
@@ -169,6 +171,7 @@ bool DImgLoader::saveMetadata(const QString& filePath)
     metaDataToFile.setComments(m_image->getComments());
     metaDataToFile.setExif(m_image->getExif());
     metaDataToFile.setIptc(m_image->getIptc());
+    metaDataToFile.setXmp(m_image->getXmp());
     return metaDataToFile.applyChanges();
 }
 
@@ -255,6 +258,5 @@ QByteArray DImgLoader::uniqueHash(const QString &filePath, const DImg &img, bool
 
     return QByteArray();
 }
-
 
 }  // NameSpace Digikam

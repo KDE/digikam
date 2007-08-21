@@ -95,15 +95,14 @@ bool IptcWidget::loadFromURL(const KUrl& url)
     else
     {    
         DMetadata metadata(url.path());
-        QByteArray iptcData = metadata.getIptc();
 
-        if (iptcData.isEmpty())
+        if (!metadata.asIptc())
         {
             setMetadata();
             return false;
         }
         else
-            setMetadata(iptcData);
+            setMetadata(metadata);
     }
 
     return true;
@@ -111,12 +110,12 @@ bool IptcWidget::loadFromURL(const KUrl& url)
 
 bool IptcWidget::decodeMetadata()
 {
-    DMetadata metaData;
-    if (!metaData.setIptc(getMetadata()))
+    DMetadata data = getMetadata();
+    if (!data.asIptc())
         return false;
 
     // Update all metadata contents.
-    setMetadataMap(metaData.getIptcTagsDataList(m_keysFilter));
+    setMetadataMap(data.getIptcTagsDataList(m_keysFilter));
     return true;
 }
 
@@ -156,8 +155,7 @@ void IptcWidget::slotSaveMetadataToFile(void)
 {
     KUrl url = saveMetadataToFile(i18n("IPTC File to Save"),
                                   QString("*.dat|"+i18n("IPTC binary Files (*.dat)")));
-    storeMetadataToFile(url);
+    storeMetadataToFile(url, getMetadata().getIptc());
 }
 
 }  // namespace Digikam
-

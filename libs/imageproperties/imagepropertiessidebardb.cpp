@@ -205,8 +205,14 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         else if (tab == m_metadataTab && !m_dirtyMetadataTab)
         {
             if (m_image)
-                m_metadataTab->setCurrentData(m_image->getExif(), m_image->getIptc(), 
-                                              m_currentURL.fileName());
+            {
+                DMetadata data;
+                data.setComments(m_image->getComments());
+                data.setExif(m_image->getExif());
+                data.setIptc(m_image->getIptc());
+                data.setXmp(m_image->getXmp());
+                m_metadataTab->setCurrentData(data, m_currentURL.fileName());
+            }
             else
                 m_metadataTab->setCurrentURL(m_currentURL);
 
@@ -234,8 +240,14 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         else if (tab == m_metadataTab && !m_dirtyMetadataTab)
         {
             if (m_image)
-                m_metadataTab->setCurrentData(m_image->getExif(), m_image->getIptc(),
-                                              m_currentURL.fileName());
+            {
+                DMetadata data;
+                data.setComments(m_image->getComments());
+                data.setExif(m_image->getExif());
+                data.setIptc(m_image->getIptc());
+                data.setXmp(m_image->getXmp());
+                m_metadataTab->setCurrentData(data, m_currentURL.fileName());
+            }
             else
                 m_metadataTab->setCurrentURL(m_currentURL);
 

@@ -74,7 +74,6 @@ public:
     QMap<int, QByteArray>   metaData;
     QMap<QString, QVariant> attributes;
     QMap<QString, QString>  embeddedText;
-
 };
 
 }  // NameSpace Digikam

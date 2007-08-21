@@ -36,19 +36,7 @@ extern "C"
 
 // Qt includes.
 
-// FIXME: this line fix temporally a compilation problem with 
-// Qt 4.3.10-10 under Mandriva 2007.1 patched to use cooker repository.
-// There is certainly a Qt header missing, but which one exactly ?
-// The compilation error is given below:
-//
-// /usr/lib/qt4/include/QtCore/qhash.h: In function 'unsigned int qHash(char)':
-// /usr/lib/qt4/include/QtCore/qhash.h:43: error: expected primary-expression before 'unsigned'
-// /usr/lib/qt4/include/QtCore/qhash.h:43: error: expected ';' before 'unsigned'
-// /usr/lib/qt4/include/QtCore/qhash.h:43: error: declaration of 'unsigned int key' shadows a parameter
-// /usr/lib/qt4/include/QtCore/qhash.h:43: warning: unused variable 'key'
-// /usr/lib/qt4/include/QtCore/qhash.h: At global scope:
 #include <QtCore>        
-
 #include <QFile>
 #include <QFileInfo>
 #include <QMap>
@@ -736,6 +724,11 @@ QByteArray DImg::getICCProfil() const
     return metadata(ICC);
 }
 
+QByteArray DImg::getXmp() const
+{
+    return metadata(XMP);
+}
+
 void DImg::setComments(const QByteArray& commentsData)
 {
     m_priv->metaData.insert(COM, commentsData);
@@ -754,6 +747,11 @@ void DImg::setIptc(const QByteArray& iptcData)
 void DImg::setICCProfil(const QByteArray& profile)
 {
     m_priv->metaData.insert(ICC, profile);
+}
+
+void DImg::setXmp(const QByteArray& xmpData)
+{
+    m_priv->metaData.insert(XMP, xmpData);
 }
 
 QByteArray DImg::metadata(DImg::METADATA key) const

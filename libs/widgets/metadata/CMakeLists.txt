@@ -7,4 +7,5 @@ INSTALL( FILES exifwidget.h
                makernotewidget.h  
                metadatalistview.h 
                metadatawidget.h
+	       xmpwidget.h
          DESTINATION ${INCLUDE_INSTALL_DIR}/digikam )

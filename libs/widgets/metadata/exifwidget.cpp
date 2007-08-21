@@ -112,15 +112,14 @@ bool ExifWidget::loadFromURL(const KUrl& url)
     else
     {    
         DMetadata metadata(url.path());
-        QByteArray exifData = metadata.getExif();
 
-        if (exifData.isEmpty())
+        if (!metadata.asExif())
         {
             setMetadata();
             return false;
         }
         else
-            setMetadata(exifData);
+            setMetadata(metadata);
     }
 
     return true;
@@ -128,12 +127,12 @@ bool ExifWidget::loadFromURL(const KUrl& url)
 
 bool ExifWidget::decodeMetadata()
 {
-    DMetadata metaData;
-    if (!metaData.setExif(getMetadata()))
+    DMetadata data = getMetadata();
+    if (!data.asExif())
         return false;
 
     // Update all metadata contents.
-    setMetadataMap(metaData.getExifTagsDataList(m_keysFilter));
+    setMetadataMap(data.getExifTagsDataList(m_keysFilter));
     return true;
 }
 
@@ -174,7 +173,7 @@ void ExifWidget::slotSaveMetadataToFile(void)
 {
     KUrl url = saveMetadataToFile(i18n("EXIF File to Save"),
                                   QString("*.dat|"+i18n("EXIF binary Files (*.dat)")));
-    storeMetadataToFile(url);
+    storeMetadataToFile(url, getMetadata().getExif());
 }
 
 }  // namespace Digikam

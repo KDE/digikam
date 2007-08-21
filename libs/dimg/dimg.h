@@ -77,7 +77,8 @@ public:
         COM,    // JFIF comments section data.
         EXIF,   // EXIF meta-data.
         IPTC,   // IPTC meta-data.
-        ICC     // ICC color profile.
+        ICC,    // ICC  color profile.
+        XMP     // XMP  meta-data
     };
 
     enum ANGLE
@@ -195,7 +196,7 @@ public:
 
     /**
      * Loads most parts of the meta information, but never the image data.
-     * If loadMetadata is true, the metadata will be available with getComments, getExif, getIPTC.
+     * If loadMetadata is true, the metadata will be available with getComments, getExif, getIptc, getXmp .
      * If loadICCData is true, the ICC profile will be available with getICCProfile.
      */
     bool        loadImageInfo(const QString& filePath, bool loadMetadata = true,
@@ -250,10 +251,12 @@ public:
     QByteArray getComments()  const;
     QByteArray getExif()      const;
     QByteArray getIptc()      const;
+    QByteArray getXmp()       const;
     QByteArray getICCProfil() const;
     void       setComments(const QByteArray& commentsData);
     void       setExif(const QByteArray& exifData);
     void       setIptc(const QByteArray& iptcData);
+    void       setXmp(const QByteArray& xmpData);
     void       setICCProfil(const QByteArray& profile);
 
     QByteArray metadata(METADATA key) const;

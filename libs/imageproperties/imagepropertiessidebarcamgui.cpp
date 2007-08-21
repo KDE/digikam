@@ -66,16 +66,16 @@ public:
         itemInfo           = 0;
         cameraView         = 0;
         cameraItem         = 0;
-        exifData           = QByteArray();
+        metaData           = DMetadata();
         currentURL         = KUrl();
     }
 
     bool                        dirtyMetadataTab;
     bool                        dirtyCameraItemTab;
 
-    QByteArray                  exifData;
-
     KUrl                        currentURL;
+
+    DMetadata                   metaData;
 
     GPItemInfo                 *itemInfo;
 
@@ -143,7 +143,7 @@ void ImagePropertiesSideBarCamGui::itemChanged(GPItemInfo* itemInfo, const KUrl&
     if (!itemInfo)
         return;
 
-    d->exifData           = exifData;
+    d->metaData.setExif(exifData);
     d->itemInfo           = itemInfo;
     d->currentURL         = url;
     d->dirtyMetadataTab   = false;
@@ -151,10 +151,9 @@ void ImagePropertiesSideBarCamGui::itemChanged(GPItemInfo* itemInfo, const KUrl&
     d->cameraView         = view;
     d->cameraItem         = item;
 
-    if (d->exifData.isEmpty())
+    if (exifData.isEmpty())
     {
-        DMetadata metaData(d->currentURL.path());
-        d->exifData = metaData.getExif();
+        d->metaData = DMetadata(d->currentURL.path());
     }
 
     slotChangedTab( getActiveTab() );
@@ -164,7 +163,7 @@ void ImagePropertiesSideBarCamGui::slotNoCurrentItem(void)
 {
     d->itemInfo           = 0;
     d->cameraItem         = 0;
-    d->exifData           = QByteArray();
+    d->metaData           = DMetadata();
     d->currentURL         = KUrl();
     d->dirtyMetadataTab   = false;
     d->dirtyCameraItemTab = false;
@@ -183,15 +182,14 @@ void ImagePropertiesSideBarCamGui::slotChangedTab(QWidget* tab)
     if (tab == d->cameraItemTab && !d->dirtyCameraItemTab)
     {
         d->cameraItemTab->setCurrentItem(d->itemInfo,
-                                         d->cameraItem->getDownloadName(), d->exifData,
+                                         d->cameraItem->getDownloadName(), d->metaData.getExif(),
                                          d->currentURL);
 
         d->dirtyCameraItemTab = true;
     }
     else if (tab == d->metadataTab && !d->dirtyMetadataTab)
     {
-        d->metadataTab->setCurrentData(d->exifData, QByteArray(), 
-                                       d->itemInfo->name);
+        d->metadataTab->setCurrentData(d->metaData, d->itemInfo->name);
 
         d->dirtyMetadataTab = true;
     }

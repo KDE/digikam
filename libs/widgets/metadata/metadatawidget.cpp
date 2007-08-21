@@ -88,12 +88,11 @@ public:
     QButtonGroup           *toolButtons;
     QButtonGroup           *levelButtons;
 
-    QByteArray              metadata;
-
     QString                 fileName;
 
     MetadataListView       *view;
 
+    DMetadata               metadata;
     DMetadata::MetaDataMap  metaDataMap;
 };
 
@@ -198,9 +197,9 @@ void MetadataWidget::enabledToolButtons(bool b)
     d->toolsGBox->setEnabled(b);
 }
 
-bool MetadataWidget::setMetadata(const QByteArray& data)
+bool MetadataWidget::setMetadata(const DMetadata& data)
 {
-    d->metadata = data;
+    d->metadata = DMetadata(data);
 
     // Cleanup all metadata contents.
     setMetadataMap();
@@ -229,12 +228,12 @@ void MetadataWidget::setMetadataEmpty()
     enabledToolButtons(false);
 }
 
-const QByteArray& MetadataWidget::getMetadata()
+const DMetadata& MetadataWidget::getMetadata()
 {
     return d->metadata;
 }
 
-bool MetadataWidget::storeMetadataToFile(const KUrl& url)
+bool MetadataWidget::storeMetadataToFile(const KUrl& url, const QByteArray& metaData)
 {
     if( url.isEmpty() )
         return false;
@@ -244,7 +243,7 @@ bool MetadataWidget::storeMetadataToFile(const KUrl& url)
         return false;
 
     QDataStream stream( &file );
-    stream.writeRawData(d->metadata.data(), d->metadata.size());
+    stream.writeRawData(metaData.data(), metaData.size());
     file.close();
     return true;
 }
@@ -419,7 +418,7 @@ void MetadataWidget::setCurrentItemByKey(const QString& itemKey)
     d->view->setCurrentItemByKey(itemKey);
 }
 
-bool MetadataWidget::loadFromData(QString fileName, const QByteArray& data)
+bool MetadataWidget::loadFromData(QString fileName, const DMetadata& data)
 {
     setFileName(fileName);
     return(setMetadata(data));

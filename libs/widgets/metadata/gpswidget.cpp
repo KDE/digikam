@@ -235,15 +235,14 @@ bool GPSWidget::loadFromURL(const KUrl& url)
     else
     {
         DMetadata metadata(url.path());
-        QByteArray exifData = metadata.getExif();
 
-        if (exifData.isEmpty())
+        if (!metadata.asExif())
         {
             setMetadata();
             return false;
         }
         else
-            setMetadata(exifData);
+            setMetadata(metadata);
     }
 
     return true;
@@ -251,15 +250,15 @@ bool GPSWidget::loadFromURL(const KUrl& url)
 
 bool GPSWidget::decodeMetadata()
 {
-    DMetadata metaData;
-    if (!metaData.setExif(getMetadata()))
+    DMetadata data = getMetadata();
+    if (!data.asExif())
     {
         setMetadataEmpty();
         return false;
     }
 
     // Update all metadata contents.
-    setMetadataMap(metaData.getExifTagsDataList(d->keysFilter));
+    setMetadataMap(data.getExifTagsDataList(d->keysFilter));
 
     bool ret = decodeGPSPosition();
     if (!ret)
@@ -319,8 +318,7 @@ bool GPSWidget::decodeGPSPosition(void)
 {
     double latitude=0.0, longitude=0.0, altitude=0.0;
 
-    DMetadata meta;
-    meta.setExif(getMetadata());
+    DMetadata meta = getMetadata();
 
     if (meta.getGPSInfo(altitude, latitude, longitude))
         d->map->setGPSPosition(latitude, longitude);
@@ -334,7 +332,7 @@ void GPSWidget::slotSaveMetadataToFile(void)
 {
     KUrl url = saveMetadataToFile(i18n("EXIF File to Save"),
                                   QString("*.dat|"+i18n("EXIF binary Files (*.dat)")));
-    storeMetadataToFile(url);
+    storeMetadataToFile(url, getMetadata().getExif());
 }
 
 }  // namespace Digikam

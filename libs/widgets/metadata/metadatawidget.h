@@ -72,7 +72,7 @@ public:
     virtual QString getTagTitle(const QString& key);
     virtual QString getTagDescription(const QString& key);
 
-    virtual bool loadFromData(QString fileName, const QByteArray& data=QByteArray());
+    virtual bool loadFromData(QString fileName, const DMetadata& data=DMetadata());
     virtual bool loadFromURL(const KUrl& url)=0;
 
 private slots:
@@ -91,8 +91,8 @@ protected:
     void   setFileName(QString fileName);
     MetadataListView* view(void);
 
-    bool   setMetadata(const QByteArray& data=QByteArray());
-    const  QByteArray& getMetadata();
+    bool   setMetadata(const DMetadata& data=DMetadata());
+    const  DMetadata& getMetadata();
 
     void   setMetadataMap(const DMetadata::MetaDataMap& data=DMetadata::MetaDataMap());
     const  DMetadata::MetaDataMap& getMetadataMap();
@@ -102,7 +102,7 @@ protected:
                       const QStringList& tagsFilter);
 
     KUrl   saveMetadataToFile(const QString& caption, const QString& fileFilter);
-    bool   storeMetadataToFile(const KUrl& url);
+    bool   storeMetadataToFile(const KUrl& url, const QByteArray& metaData);
     
     virtual bool decodeMetadata(void)=0;
     virtual void buildView(void)=0;
