@@ -360,7 +360,7 @@ bool GPCamera::getSubFolders(const QString& folder, QStringList& subFolderList)
             return false;
         }
 
-        subFolderList.append(QString(subFolder));
+        subFolderList.append(QFile::decodeName(subFolder));
     }
 
     gp_list_unref(clist);
@@ -407,7 +407,7 @@ bool GPCamera::getItemsList(const QString& folder, QStringList& itemsList)
             return false;
         }
 
-        itemsList.append(cname);
+        itemsList.append(QFile::decodeName(cname));
     }
 
     gp_list_unref(clist);        
@@ -460,7 +460,7 @@ bool GPCamera::getItemsInfoList(const QString& folder, GPItemInfoList& items, bo
 
         GPItemInfo itemInfo;
 
-        itemInfo.name   = cname;
+        itemInfo.name   = QFile::decodeName(cname);
         itemInfo.folder = folder;
 
         CameraFileInfo info;
@@ -1181,8 +1181,8 @@ int GPCamera::autoDetect(QString& model, QString& port)
         gp_list_get_value(camList, i, &camPort_);
     }
 
-    model = camModel_;
-    port  = camPort_;
+    model = QString::fromLatin1(camModel_);
+    port  = QString::fromLatin1(camPort_);
     gp_list_free(camList);
 
     return 0;
