@@ -102,19 +102,10 @@ void WelcomePageView::slotUrlOpen(const KUrl &url)
 QString WelcomePageView::infoPage()
 {
     QStringList newFeatures;
-    newFeatures << i18n("16-bit/color/pixels image support");
-    newFeatures << i18n("Full color management support");
-    newFeatures << i18n("Native JPEG-2000 support");
-    newFeatures << i18n("Makernote and IPTC metadata support");
-    newFeatures << i18n("Photograph geolocalization");
-    newFeatures << i18n("Extensive Sidebars");
-    newFeatures << i18n("Advanced RAW pictures decoding settings");
-    newFeatures << i18n("Fast RAW preview");
-    newFeatures << i18n("RAW Metadata support");
-    newFeatures << i18n("New advanced camera download options");
-    newFeatures << i18n("New advanced picture Tag management");
-    newFeatures << i18n("New zooming/panning support in preview mode");
-    newFeatures << i18n("New Light Table provides easy comparison for similar pictures");
+    newFeatures << i18n("Designed to run under KDE4");
+    newFeatures << i18n("Hardware handling using KDE4 Solid interface");
+    newFeatures << i18n("XMP metadata support");
+    newFeatures << i18n("Support most recent camera RAW pictures");
 
     QString featureItems;
     for ( int i = 0 ; i < newFeatures.count() ; i++ )
@@ -131,7 +122,9 @@ QString WelcomePageView::infoPage()
         "%7: generated list of important changes; "
         "--- end of comment ---",
         
-        "<h2 style='margin-top: 0px;'>Welcome to digiKam %1</h2><p>"
+        "<h2 style='margin-top: 0px;'>"
+        "Welcome to digiKam %1"
+        "</h2><p>"
         "digiKam is a photo-management program for the K Desktop Environment. "
         "It is designed to import, organize, and export your digital photographs on your computer."
         "</p>\n<ul><li>"
@@ -151,7 +144,7 @@ QString WelcomePageView::infoPage()
     QString(digikam_version),            // %1 : current digiKam version
     "help:/digikam/index.html",          // %2 : digiKam help:// Url
     "http://www.digikam.org",            // %3 : digiKam homepage Url
-    "0.8.2",                             // %4 : prior digiKam version
+    "0.9.3",                             // %4 : prior digiKam version
 	featureItems,                        // %5 : prior KDE version
 	QString(),                           // %6 : generated list of new features
     QString());                          // %7 : previous digiKam release.
