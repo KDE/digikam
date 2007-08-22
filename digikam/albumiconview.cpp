@@ -614,7 +614,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
         }
     }
 
-    QAction *trashAction = popmenu.addAction(SmallIcon("edittrash"),
+    QAction *trashAction = popmenu.addAction(SmallIcon("edit-trash"),
                                              i18np("Move to Trash", "Move %n Files to Trash" , selectedImageIDs.count() ));
 
     popmenu.addSeparator();

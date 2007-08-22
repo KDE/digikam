@@ -565,12 +565,12 @@ void ShowFoto::applySettings()
     d->deleteItem2Trash = group.readEntry("DeleteItem2Trash", true);
     if (d->deleteItem2Trash)
     {
-        m_fileDeleteAction->setIcon(KIcon("edittrash"));
+        m_fileDeleteAction->setIcon(KIcon("edit-trash"));
         m_fileDeleteAction->setText(i18n("Move to Trash"));
     }
     else
     {
-        m_fileDeleteAction->setIcon(KIcon("editdelete"));
+        m_fileDeleteAction->setIcon(KIcon("edit-delete"));
         m_fileDeleteAction->setText(i18n("Delete File"));
     }
 

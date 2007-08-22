@@ -1107,7 +1107,7 @@ void ImageDescEditTab::tagDelete(TAlbum *album)
 
     int result = KMessageBox::warningContinueCancel(this, i18n("Delete '%1' tag?", album->title()),
                                                     i18n("Delete Tag"),
-                                                    KGuiItem(i18n("Delete"), "editdelete"));
+                                                    KGuiItem(i18n("Delete"), "edit-delete"));
 
     if (result == KMessageBox::Continue)
     {

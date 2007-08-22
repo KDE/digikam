@@ -599,7 +599,7 @@ void TagFolderView::tagDelete(TagFolderViewItem *item)
                              tag->title()),
                        i18n("Delete Tag"), 
                        KGuiItem(i18n("Delete"),
-                       "editdelete"));
+                       "edit-delete"));
 
         if(result == KMessageBox::Continue)
         {
@@ -613,7 +613,7 @@ void TagFolderView::tagDelete(TagFolderViewItem *item)
         int result =
             KMessageBox::warningContinueCancel(0, i18n("Delete '%1' tag?",
                                                tag->title()), i18n("Delete Tag"),
-                                               KGuiItem(i18n("Delete"), "editdelete"));
+                                               KGuiItem(i18n("Delete"), "edit-delete"));
 
         if(result == KMessageBox::Continue)
         {

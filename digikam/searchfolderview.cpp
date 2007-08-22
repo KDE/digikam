@@ -363,7 +363,7 @@ void SearchFolderView::slotContextMenu(Q3ListViewItem* item, const QPoint&, int)
             popmenu.insertItem(SmallIcon("find"), i18n("Edit as Advanced Search..."), 11);
         
         popmenu.insertSeparator(-1);
-        popmenu.insertItem(SmallIcon("editdelete"), i18n("Delete Search"), 12);
+        popmenu.insertItem(SmallIcon("edit-delete"), i18n("Delete Search"), 12);
 
         switch (popmenu.exec(QCursor::pos()))
         {

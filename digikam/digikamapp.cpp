@@ -534,7 +534,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------------
 
-    d->deleteAction = new KAction(KIcon("edit-delete"), i18n("Delete Album"), this);
+    d->deleteAction = new KAction(KIcon("edit-trash"), i18n("Delete Album"), this);
     connect(d->deleteAction, SIGNAL(triggered()), d->view, SLOT(slotDeleteAlbum()));
     actionCollection()->addAction("album_delete", d->deleteAction);
 

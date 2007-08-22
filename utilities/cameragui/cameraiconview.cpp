@@ -440,7 +440,7 @@ void CameraIconView::slotContextMenu(IconItem * item, const QPoint&)
     QAction *downAction      = menu.addAction(SmallIcon("down"),i18n("Download"));
     QAction *encryptedAction = menu.addAction(SmallIcon("encrypted"), i18n("Toggle lock"));
     menu.addSeparator();
-    QAction *deleteAction    = menu.addAction(SmallIcon("editdelete"), i18n("Delete"));
+    QAction *deleteAction    = menu.addAction(SmallIcon("edit-delete"), i18n("Delete"));
 
     QAction *choice = menu.exec(QCursor::pos());
 
