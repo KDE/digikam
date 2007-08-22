@@ -105,7 +105,7 @@ QString WelcomePageView::infoPage()
     newFeatures << i18n("Designed for KDE4");
     newFeatures << i18n("Hardware handling using KDE4 Solid interface");
     newFeatures << i18n("XMP metadata support");
-    newFeatures << i18n("Support most recent camera RAW pictures");
+    newFeatures << i18n("Supports the latest camera RAW files");
 
     QString featureItems;
     for ( int i = 0 ; i < newFeatures.count() ; i++ )
@@ -125,7 +125,7 @@ QString WelcomePageView::infoPage()
         "<h2 style='margin-top: 0px;'>"
         "Welcome to digiKam %1"
         "</h2><p>"
-        "digiKam is a photo-management program for the K Desktop Environment. "
+        "digiKam is a photo management program for the K Desktop Environment. "
         "It is designed to import, organize, and export your digital photographs on your computer."
         "</p>\n<ul><li>"
         "digiKam has many powerful features which are described in the "
