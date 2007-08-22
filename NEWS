@@ -20,4 +20,5 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 012 ==> 145017 : Deleting an image from within DigiKam does not update the DigiKam database.
 013 ==> 148925 : Light Table thumb bar not updated when deleting images.
 014 ==> 148971 : Awful menu entry "digiKamThemeDesigner".
-015 ==> 
+015 ==> 148930 : digiKam-0.9.2 does not compile with lcms-1.17.
+016 ==> 
