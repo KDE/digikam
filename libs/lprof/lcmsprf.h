@@ -69,6 +69,10 @@ typedef struct {
 
     } MATN,FAR* LPMATN;
 
+// See B.K.O #148930: compile with lcms v.1.17
+#if (LCMS_VERSION > 116)
+typedef LCMSBOOL BOOL;
+#endif
 
 LPMATN      cdecl MATNalloc(int Rows, int Cols);
 void        cdecl MATNfree (LPMATN mat);
