@@ -381,14 +381,14 @@ void LightTablePreview::slotContextMenu()
 
     //-- Zoom actions -----------------------------------------------
 
-    QAction *zoomInAction    = popmenu.addAction(SmallIcon("viewmag"), i18n("Zoom in"));
-    QAction *zoomOutAction   = popmenu.addAction(SmallIcon("viewmag-"), i18n("Zoom out"));
-    QAction *fitWindowAction = popmenu.addAction(SmallIcon("view_fit_window"), i18n("Fit to &Window"));
+    QAction *zoomInAction    = popmenu.addAction(SmallIcon("zoom-in"), i18n("Zoom in"));
+    QAction *zoomOutAction   = popmenu.addAction(SmallIcon("zoom-out"), i18n("Zoom out"));
+    QAction *fitWindowAction = popmenu.addAction(SmallIcon("zoom-best-fit"), i18n("Fit to &Window"));
 
     //-- Edit actions -----------------------------------------------
 
     popmenu.addSeparator();
-    QAction *slideshowAction = popmenu.addAction(SmallIcon("slideshow"), i18n("SlideShow"));
+    QAction *slideshowAction = popmenu.addAction(SmallIcon("datashow"), i18n("SlideShow"));
     QAction *editAction = popmenu.addAction(SmallIcon("editimage"), i18n("Edit..."));
     popmenu.addMenu(&openWithMenu);
     openWithMenu.menuAction()->setText(i18n("Open With"));
