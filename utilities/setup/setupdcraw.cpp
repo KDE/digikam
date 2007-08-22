@@ -95,6 +95,9 @@ void SetupDcraw::applySettings()
     config->writeEntry("DontStretchPixels", d->dcrawSettings->useDontStretchPixels());
     config->writeEntry("EnableNoiseReduction", d->dcrawSettings->useNoiseReduction());
     config->writeEntry("NRThreshold", d->dcrawSettings->NRThreshold());
+    config->writeEntry("EnableCACorrection", d->dcrawSettings->useCACorrection());
+    config->writeEntry("caRedMultiplier", d->dcrawSettings->caRedMultiplier());
+    config->writeEntry("caBlueMultiplier", d->dcrawSettings->caBlueMultiplier());
     config->writeEntry("UnclipColors", d->dcrawSettings->unclipColor());
     config->writeEntry("RAWBrightness", d->dcrawSettings->brightness());
     config->writeEntry("RAWQuality", d->dcrawSettings->quality());
@@ -108,6 +111,9 @@ void SetupDcraw::readSettings()
     d->dcrawSettings->setSixteenBits(config->readBoolEntry("SixteenBitsImage", false));
     d->dcrawSettings->setNoiseReduction(config->readBoolEntry("EnableNoiseReduction", false));
     d->dcrawSettings->setNRThreshold(config->readNumEntry("NRThreshold", 100));
+    d->dcrawSettings->setUseCACorrection(config->readBoolEntry("EnableCACorrection", false));
+    d->dcrawSettings->setcaRedMultiplier(config->readDoubleNumEntry("caRedMultiplier", 1.0));
+    d->dcrawSettings->setcaBlueMultiplier(config->readDoubleNumEntry("caBlueMultiplier", 1.0));
     d->dcrawSettings->setDontStretchPixels(config->readBoolEntry("DontStretchPixels", false));
     d->dcrawSettings->setUnclipColor(config->readNumEntry("UnclipColors", 0));
     d->dcrawSettings->setCameraWB(config->readBoolEntry("CameraColorBalance", true));

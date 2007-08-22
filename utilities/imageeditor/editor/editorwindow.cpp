@@ -892,6 +892,9 @@ void EditorWindow::applyStandardSettings()
     m_IOFileSettings->rawDecodingSettings.RAWQuality              = (KDcrawIface::RawDecodingSettings::DecodingQuality)config->readNumEntry("RAWQuality",
                                                                     KDcrawIface::RawDecodingSettings::BILINEAR);
     m_IOFileSettings->rawDecodingSettings.NRThreshold             = config->readNumEntry("NRThreshold", 100);
+    m_IOFileSettings->rawDecodingSettings.enableCACorrection      = config->readBoolEntry("EnableCACorrection", false);
+    m_IOFileSettings->rawDecodingSettings.caMultiplier[0]         = config->readDoubleNumEntry("caRedMultiplier", 1.0);
+    m_IOFileSettings->rawDecodingSettings.caMultiplier[1]         = config->readDoubleNumEntry("caBlueMultiplier", 1.0);
     m_IOFileSettings->rawDecodingSettings.brightness              = config->readDoubleNumEntry("RAWBrightness", 1.0);
 
     // -- GUI Settings -------------------------------------------------------
