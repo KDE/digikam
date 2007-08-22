@@ -95,7 +95,7 @@ fi
 if test "x$have_libkdcraw" != "xyes"; then
   echo "-- libkdcraw library found........ NO"
   echo ""
-  echo "digiKam needs libkdcraw library >= 0.1.1. You need to install libkdcraw first"
+  echo "digiKam needs libkdcraw library >= 0.1.2. You need to install libkdcraw first"
   echo "libkdcraw website is at http://www.kipi-plugins.org"
   echo ""
   all_tests=bad
