@@ -853,6 +853,9 @@ void EditorWindow::applyStandardSettings()
                                                        group.readEntry("RAWQuality",
                                                        (int)KDcrawIface::RawDecodingSettings::BILINEAR);
     m_IOFileSettings->rawDecodingSettings.NRThreshold             = group.readEntry("NRThreshold", 100);
+    m_IOFileSettings->rawDecodingSettings.enableCACorrection      = group.readEntry("EnableCACorrection", false);
+    m_IOFileSettings->rawDecodingSettings.caMultiplier[0]         = group.readEntry("caRedMultiplier", 1.0);
+    m_IOFileSettings->rawDecodingSettings.caMultiplier[1]         = group.readEntry("caBlueMultiplier", 1.0);
     m_IOFileSettings->rawDecodingSettings.brightness              = group.readEntry("RAWBrightness", 1.0);
 
     // -- GUI Settings -------------------------------------------------------

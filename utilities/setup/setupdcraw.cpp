@@ -91,6 +91,9 @@ void SetupDcraw::applySettings()
     group.writeEntry("DontStretchPixels", d->dcrawSettings->useDontStretchPixels());
     group.writeEntry("EnableNoiseReduction", d->dcrawSettings->useNoiseReduction());
     group.writeEntry("NRThreshold", d->dcrawSettings->NRThreshold());
+    group.writeEntry("EnableCACorrection", d->dcrawSettings->useCACorrection());
+    group.writeEntry("caRedMultiplier", d->dcrawSettings->caRedMultiplier());
+    group.writeEntry("caBlueMultiplier", d->dcrawSettings->caBlueMultiplier());
     group.writeEntry("UnclipColors", d->dcrawSettings->unclipColor());
     group.writeEntry("RAWBrightness", d->dcrawSettings->brightness());
     group.writeEntry("RAWQuality", (int)d->dcrawSettings->quality());
@@ -104,6 +107,9 @@ void SetupDcraw::readSettings()
     d->dcrawSettings->setSixteenBits(group.readEntry("SixteenBitsImage", false));
     d->dcrawSettings->setNoiseReduction(group.readEntry("EnableNoiseReduction", false));
     d->dcrawSettings->setNRThreshold(group.readEntry("NRThreshold", 100));
+    d->dcrawSettings->setUseCACorrection(group.readEntry("EnableCACorrection", false));
+    d->dcrawSettings->setcaRedMultiplier(group.readEntry("caRedMultiplier", 1.0));
+    d->dcrawSettings->setcaBlueMultiplier(group.readEntry("caBlueMultiplier", 1.0));
     d->dcrawSettings->setDontStretchPixels(group.readEntry("DontStretchPixels", false));
     d->dcrawSettings->setUnclipColor(group.readEntry("UnclipColors", 0));
     d->dcrawSettings->setCameraWB(group.readEntry("CameraColorBalance", true));
