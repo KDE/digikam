@@ -61,7 +61,7 @@ WelcomePageView::WelcomePageView(QWidget* parent)
     QString fontSize         = QString::number(12);
     QString appTitle         = i18n("digiKam");
     QString catchPhrase      = QString();      // Not enough space for a catch phrase at default window size.
-    QString quickDescription = i18n("A Photo-Management Application for KDE");
+    QString quickDescription = i18n("A Photo Management Application for KDE");
     QString locationHtml     = locate("data", "digikam/about/main.html");
     QString locationCss      = locate("data", "digikam/about/kde_infopage.css");
     QString locationRtl      = locate("data", "digikam/about/kde_infopage_rtl.css" );
@@ -110,7 +110,7 @@ QString WelcomePageView::infoPage()
         "%8: generated list of important changes; "
         "--- end of comment ---",
         "<h2 style='margin-top: 0px;'>Welcome to digiKam %1</h2><p>"
-        "digiKam is a photo-management program for the K Desktop Environment. "
+        "digiKam is a photo management program for the K Desktop Environment. "
         "It is designed to import, organize, and export your digital photographs on your computer."
         "</p>\n<ul><li>"
         "digiKam has many powerful features which are described in the "
@@ -131,13 +131,13 @@ QString WelcomePageView::infoPage()
         .arg("0.8.2");                   // previous digiKam release.
 
     QStringList newFeatures;
-    newFeatures << i18n("16-bit/color/pixels image support");
+    newFeatures << i18n("16-bit/color/pixel image support");
     newFeatures << i18n("Full color management support");
     newFeatures << i18n("Native JPEG-2000 support");
     newFeatures << i18n("Makernote and IPTC metadata support");
     newFeatures << i18n("Photograph geolocalization");
     newFeatures << i18n("Extensive Sidebars");
-    newFeatures << i18n("Advanced RAW pictures decoding settings");
+    newFeatures << i18n("Advanced RAW picture decoding settings");
     newFeatures << i18n("Fast RAW preview");
     newFeatures << i18n("RAW Metadata support");
     newFeatures << i18n("New advanced camera download options");
