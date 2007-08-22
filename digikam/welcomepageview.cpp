@@ -102,7 +102,7 @@ void WelcomePageView::slotUrlOpen(const KUrl &url)
 QString WelcomePageView::infoPage()
 {
     QStringList newFeatures;
-    newFeatures << i18n("Designed to run under KDE4");
+    newFeatures << i18n("Designed for KDE4");
     newFeatures << i18n("Hardware handling using KDE4 Solid interface");
     newFeatures << i18n("XMP metadata support");
     newFeatures << i18n("Support most recent camera RAW pictures");
