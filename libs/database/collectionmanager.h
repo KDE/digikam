@@ -43,28 +43,67 @@ namespace Digikam
 class CollectionLocation;
 class CollectionManagerPrivate;
 
-class DIGIKAM_EXPORT CollectionManager
+class DIGIKAM_EXPORT CollectionManager : public QObject
 {
+
+    Q_OBJECT
+
 public:
 
     static CollectionManager *instance();
     static void cleanUp();
 
-    //QList<CollectionLocation *> allLocations();
-    //QList<CollectionLocation *> allAvailableLocations();
+    /**
+     * Returns a list of all CollectionLocations stored in the database
+     */
+    QList<CollectionLocation *> allLocations();
+    /**
+     * Returns a list of all currently available CollectionLocations
+     */
+    QList<CollectionLocation *> allAvailableLocations();
+    /**
+     * Returns a list of the paths of all currently available CollectionLocations
+     */
     QStringList allAvailableAlbumRootPaths();
 
+    /**
+     * Returns the CollectionLocation that contains the given album root.
+     * The path must be an album root with isAlbumRoot() == true.
+     * Returns 0 if no collection location matches.
+     * Only available (or hidden, but available) locations are guaranteed to be found.
+     */
     CollectionLocation *locationForAlbumRoot(const KUrl &fileUrl);
     CollectionLocation *locationForAlbumRootPath(const QString &albumRootPath);
 
+    /**
+     * For a given path, the part of the path that forms the album root is returned,
+     * ending without a slash. Example: "/media/fotos/Paris 2007" gives "/media/fotos".
+     * Only available (or hidden, but available) album roots are guaranteed to be found.
+     */
     KUrl    albumRoot(const KUrl &fileUrl);
     QString albumRootPath(const KUrl &fileUrl);
-    //QString albumRootPath(const QString &filePath);
+    QString albumRootPath(const QString &filePath);
+    /**
+     * Returns true if the given path forms an album root.
+     * It will return false if the path is a path below an album root,
+     * or if the the path does not belong to an album root.
+     * Example: "/media/fotos/Paris 2007" is an album with album root "/media/fotos".
+     *          "/media/fotos" returns true, "/media/fotos/Paris 2007" and "/media" return false.
+     * Only available (or hidden, but available) album roots are guaranteed to be found.
+     */
     bool    isAlbumRoot(const KUrl &fileUrl);
-    //bool    isAlbumRoot(const QString &filePath);
+    /// the file path should not end with the directory slash. Using DatabaseUrl's method is fine.
+    bool    isAlbumRoot(const QString &filePath);
 
+    /**
+     * Returns the album part of of the given file path, i.e. the album root path
+     * at the beginning is removed and the second part, starting with "/", ending without a slash,
+     * is returned. Example: "/media/fotos/Paris 2007" gives "/Paris 2007"
+     * Returns a null QString if the file path is not located in an album root.
+     * Returns "/" if the file path is an album root.
+     */
     QString album(const KUrl &fileUrl);
-    //QString album(const QString &filePath);
+    QString album(const QString &filePath);
 
     /**
      * Returns just one album root, out of the list of available location,
@@ -73,6 +112,10 @@ public:
      */
     KUrl oneAlbumRoot();
     QString oneAlbumRootPath();
+
+private slots:
+
+    void updateLocations();
 
 private:
 

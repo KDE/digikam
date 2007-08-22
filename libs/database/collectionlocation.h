@@ -44,7 +44,7 @@ public:
     {
         LocationAvailable,
         LocationHidden,
-        LocationInavailable
+        LocationUnavailable
     };
 
     Status status() const;
