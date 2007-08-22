@@ -341,7 +341,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
             loader.setLoadFlags(loadFlags);
             if (loader.load(filePath, observer))
             {
-                m_priv->null       = loader.hasLoadedData();
+                m_priv->null       = !loader.hasLoadedData();
                 m_priv->alpha      = loader.hasAlpha();
                 m_priv->sixteenBit = loader.sixteenBit();
                 m_priv->isReadOnly = loader.isReadOnly();
@@ -357,7 +357,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
             loader.setLoadFlags(loadFlags);
             if (loader.load(filePath, observer))
             {
-                m_priv->null       = loader.hasLoadedData();
+                m_priv->null       = !loader.hasLoadedData();
                 m_priv->alpha      = loader.hasAlpha();
                 m_priv->sixteenBit = loader.sixteenBit();
                 m_priv->isReadOnly = loader.isReadOnly();
@@ -373,7 +373,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
             loader.setLoadFlags(loadFlags);
             if (loader.load(filePath, observer))
             {
-                m_priv->null       = loader.hasLoadedData();
+                m_priv->null       = !loader.hasLoadedData();
                 m_priv->alpha      = loader.hasAlpha();
                 m_priv->sixteenBit = loader.sixteenBit();
                 m_priv->isReadOnly = loader.isReadOnly();
@@ -389,7 +389,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
             loader.setLoadFlags(loadFlags);
             if (loader.load(filePath, observer))
             {
-                m_priv->null       = loader.hasLoadedData();
+                m_priv->null       = !loader.hasLoadedData();
                 m_priv->alpha      = loader.hasAlpha();
                 m_priv->sixteenBit = loader.sixteenBit();
                 m_priv->isReadOnly = loader.isReadOnly();
@@ -405,7 +405,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
             loader.setLoadFlags(loadFlags);
             if (loader.load(filePath, observer))
             {
-                m_priv->null       = loader.hasLoadedData();
+                m_priv->null       = !loader.hasLoadedData();
                 m_priv->alpha      = loader.hasAlpha();
                 m_priv->sixteenBit = loader.sixteenBit();
                 m_priv->isReadOnly = loader.isReadOnly();
@@ -421,7 +421,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
             loader.setLoadFlags(loadFlags);
             if (loader.load(filePath, observer))
             {
-                m_priv->null       = loader.hasLoadedData();
+                m_priv->null       = !loader.hasLoadedData();
                 m_priv->alpha      = loader.hasAlpha();
                 m_priv->sixteenBit = loader.sixteenBit();
                 m_priv->isReadOnly = loader.isReadOnly();
@@ -437,7 +437,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
             loader.setLoadFlags(loadFlags);
             if (loader.load(filePath, observer))
             {
-                m_priv->null       = loader.hasLoadedData();
+                m_priv->null       = !loader.hasLoadedData();
                 m_priv->alpha      = loader.hasAlpha();
                 m_priv->sixteenBit = loader.sixteenBit();
                 m_priv->isReadOnly = loader.isReadOnly();
