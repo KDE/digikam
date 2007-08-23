@@ -190,11 +190,9 @@ public:
     AlbumFolderViewPriv()
     {
         albumMan     = 0;
-        iconThumbJob = 0;
     }
-    
+
     AlbumManager                     *albumMan;
-    ThumbnailJob                     *iconThumbJob;
     Q3ValueList<AlbumFolderViewItem*>  groupItems;
 };
 
@@ -207,7 +205,6 @@ AlbumFolderView::AlbumFolderView(QWidget *parent)
 {
     d = new AlbumFolderViewPriv();
     d->albumMan     = AlbumManager::componentData();
-    d->iconThumbJob = 0;
 
     addColumn(i18n("My Albums"));
     setResizeMode(Q3ListView::LastColumn);
@@ -252,9 +249,6 @@ AlbumFolderView::AlbumFolderView(QWidget *parent)
 
 AlbumFolderView::~AlbumFolderView()
 {
-    if (d->iconThumbJob)
-        d->iconThumbJob->kill();
-
     delete d;
 }
 
@@ -301,9 +295,6 @@ void AlbumFolderView::slotAlbumDeleted(Album *album)
     PAlbum* palbum = dynamic_cast<PAlbum*>(album);
     if(!palbum)
         return;
-
-    if(!palbum->icon().isEmpty() && d->iconThumbJob)
-        d->iconThumbJob->removeItem(palbum->icon());
 
     AlbumFolderViewItem* item = (AlbumFolderViewItem*) palbum->extraData(this);
     if(item)
