@@ -248,6 +248,7 @@ bool AlbumThumbnailLoader::getAlbumThumbnail(PAlbum *album)
 
 void AlbumThumbnailLoader::addUrl(Album *album, const KUrl &url)
 {
+    return; //TEMP
     /*
     QPixmap* pix = d->cache->find(album->iconKURL().path());
     if (pix)
