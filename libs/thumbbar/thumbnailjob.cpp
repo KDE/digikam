@@ -176,10 +176,11 @@ void ThumbnailJob::processNext()
         return;
     }
 
-    KUrl::List::iterator it = d->urlList.begin();
-    while(*it != d->next_url)
+    KUrl::List::iterator it;
+    for (it = d->urlList.begin(); it != d->urlList.end(); ++it)
     {
-        it++;
+        if (*it == d->next_url)
+            break;
     }
 
     if (it == d->urlList.end())

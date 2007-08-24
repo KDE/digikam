@@ -202,7 +202,6 @@ void SyncJob::slotGotThumbnailFromIcon(Album *album, const QPixmap& pix)
 
 QPixmap SyncJob::getTagThumbnailPriv(const QString &name, int size)
 {
-    return QPixmap(); //TEMP
     d->thumbnailSize = size;
 
     if (d->thumbnail)
