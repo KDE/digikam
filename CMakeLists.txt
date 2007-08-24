@@ -8,7 +8,7 @@ SET(DIGIKAM_MAJOR_VERSION "0")
 SET(DIGIKAM_MINOR_VERSION "10")
 SET(DIGIKAM_PATCH_VERSION "0")
 
-# Suffix to add at end of version string. Usual value are:
+# Suffix to add at end of version string. Usual values are:
 # "-svn"   : alpha code unstable from svn. Do not use in production
 # "-beta1" : beta1 release.
 # "-beta2" : beta2 release.
