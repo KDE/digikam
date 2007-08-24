@@ -190,7 +190,7 @@ void ScanLib::findMissingItems()
 
 void ScanLib::slotTotalFilesToScan(int count)
 {
-    m_progressDlg->setMaximum( count );
+    m_progressDlg->setMaximum(count);
     if (count > 0)
         m_progressDlg->show();
     qApp->processEvents();
@@ -205,13 +205,13 @@ void ScanLib::slotStartScanningAlbum(const QString &albumRoot, const QString &al
 
 void ScanLib::slotFinishedScanningAlbum(const QString &, const QString &, int filesScanned)
 {
-    m_progressDlg->setValue(filesScanned);
+    m_progressDlg->advance(filesScanned);
     qApp->processEvents();
 }
 
 void ScanLib::slotScanningFile(const QString &)
 {
-    m_progressDlg->setValue(1);
+    m_progressDlg->advance(1);
     if (m_progressDlg->value() % 30 == 0)
         qApp->processEvents();
 }
