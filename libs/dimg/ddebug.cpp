@@ -62,7 +62,7 @@ Ddbgstream::~Ddbgstream()
     _ddebug_mutex_->unlock();
 }
 
-Dndbgstream::Dndbgstream(QDebug stream)
+Dndbgstream::Dndbgstream(QDebug /*stream*/)
            : kndbgstream()
 {
     // using a static variable here - we can safely assume that kDebug
@@ -88,5 +88,4 @@ Digikam::Ddbgstream DDebug(int area)   { return Digikam::Ddbgstream(kDebug(area)
 Digikam::Ddbgstream DError(int area)   { return Digikam::Ddbgstream(kError(area));   }
 Digikam::Ddbgstream DWarning(int area) { return Digikam::Ddbgstream(kWarning(area)); }
 
-Digikam::Dndbgstream DnDebug(int area) { return Digikam::Dndbgstream(kDebugDevNull()); }
-
+Digikam::Dndbgstream DnDebug(int /*area*/) { return Digikam::Dndbgstream(kDebugDevNull()); }
