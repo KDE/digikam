@@ -42,7 +42,6 @@
 #include "ddebug.h"
 #include "dmetadata.h"
 #include "jpegutils.h"
-#include "fastscale.h"
 #include "previewloadthread.h"
 #include "previewtask.h"
 
@@ -198,11 +197,7 @@ void PreviewLoadingTask::execute()
     if (needToScale(scaledSize, size))
     {
         scaledSize.scale(size, size, Qt::KeepAspectRatio);
-        //qimage = FastScale::fastScaleQImage(qimage, scaledSize.width(), scaledSize.height());
-        //qimage = qimage.smoothScale(scaledSize);
-        //TODO
         img = img.smoothScale(scaledSize.width(), scaledSize.height());
-        //img = img.fastScale(scaledSize.width(), scaledSize.height());
     }
 
     // Scale if hinted, Store previews rotated in the cache (?)

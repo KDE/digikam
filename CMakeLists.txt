@@ -54,7 +54,6 @@ SET(libdimg_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/dcolor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/dcolorcomposer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/ddebug.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/fastscale.cpp
    )
 
 SET(libdimgloaders_SRCS 

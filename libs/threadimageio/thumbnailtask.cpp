@@ -42,7 +42,6 @@
 #include "ddebug.h"
 #include "dmetadata.h"
 #include "jpegutils.h"
-#include "fastscale.h"
 #include "thumbnailloadthread.h"
 #include "thumbnailcreator.h"
 #include "thumbnailtask.h"

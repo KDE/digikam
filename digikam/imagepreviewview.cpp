@@ -62,7 +62,6 @@
 #include "albumsettings.h"
 #include "albumwidgetstack.h"
 #include "databaseaccess.h"
-#include "fastscale.h"
 #include "imageinfo.h"
 #include "dmetadata.h"
 #include "dpopupmenu.h"
