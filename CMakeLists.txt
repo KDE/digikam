@@ -1,5 +1,29 @@
 PROJECT(digikam)
 
+# =======================================================
+# Informations to update before to release this package.
+
+# digiKam version
+SET(DIGIKAM_MAJOR_VERSION "0")
+SET(DIGIKAM_MINOR_VERSION "10")
+SET(DIGIKAM_PATCH_VERSION "0")
+
+# Suffix to add at end of version string. Usual value are:
+# "-svn"   : alpha code unstable from svn. Do not use in production
+# "-beta1" : beta1 release.
+# "-beta2" : beta2 release.
+# "-beta3" : beta3 release.
+# "-rc"    : release candidate.
+# ""       : final relase. Can be used in production.
+SET(DIGIKAM_SUFFIX_VERSION "-svn")
+
+# =======================================================
+# Set env. variables accordinly.
+
+SET(DIGIKAM_VERSION_STRING "${DIGIKAM_MAJOR_VERSION}.${DIGIKAM_MINOR_VERSION}.${DIGIKAM_PATCH_VERSION}${DIGIKAM_SUFFIX_VERSION}")
+
+# =======================================================
+
 ADD_DEFINITIONS(${QT_DEFINITIONS}
                 ${KDE4_DEFINITIONS} 
                 ${KDCRAW_DEFINITIONS} 
@@ -377,3 +401,7 @@ ADD_SUBDIRECTORY( imageplugins )
 ADD_SUBDIRECTORY( themedesigner )
 
 INSTALL( FILES tips DESTINATION ${DATA_INSTALL_DIR}/digikam )
+
+IF(NOT WIN32)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/digikam.lsm.cmake ${CMAKE_CURRENT_BINARY_DIR}/digikam.lsm)
+ENDIF(NOT WIN32)

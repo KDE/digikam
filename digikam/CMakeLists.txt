@@ -1,3 +1,7 @@
+IF(NOT WIN32)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/version.h)
+ENDIF(NOT WIN32)
+
 #Require by Greycstoration algorithm (CImg.h)
 ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
 

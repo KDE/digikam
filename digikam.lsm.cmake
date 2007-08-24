@@ -1,6 +1,6 @@
 Begin3
 Title:          digiKam
-Version:        0.10.0-svn
+Version:        ${DIGIKAM_VERSION_STRING}
 Entered-date:   2007-06-13
 Description:    KDE Photo Management
 Keywords:       Digital Still Camera, KDE, Graphics, Image Viewer, Image Editor, Light Table, Digital Camera Interface, Gphoto, Digital Photo Management, Search, Rating, Tags, Comments, Exif, Iptc, Makenotes, Geolocalization, Batch process 
