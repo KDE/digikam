@@ -516,7 +516,9 @@ void LightTablePreview::slotAssignRating(int rating)
 
 void LightTablePreview::slotThemeChanged()
 {
-    setBackgroundColor(ThemeEngine::componentData()->baseColor());
+    QPalette palette;
+    palette.setColor(backgroundRole(), ThemeEngine::componentData()->baseColor());
+    setPalette(palette);
     frameChanged();
 }
 
