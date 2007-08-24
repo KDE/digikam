@@ -63,6 +63,7 @@ class DIGIKAM_EXPORT ScanLib : public QObject
     Q_OBJECT
 
 public:
+
     /** 
     * Constructor
     */
@@ -112,16 +113,18 @@ private:
     void deleteStaleEntries();
 
     /**
-     * Member variable so we can update the progress bar everywhere
-     */
-    DProgressDlg     *m_progressDlg;
-
-    CollectionScanner m_scanner;
-
-    /**
      * This is used to print out some timings.
      */
-    void timing(const QString& text, struct timeval tv1, struct timeval tv2);
+    void timing(const QString& text, int elaspedms);
+
+private:
+
+    /**
+     * Member variable so we can update the progress bar everywhere
+     */
+    DProgressDlg      *m_progressDlg;
+
+    CollectionScanner  m_scanner;
 };
 
 }  // namespace Digikam

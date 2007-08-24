@@ -23,18 +23,6 @@
  * 
  * ============================================================ */
 
-// C Ansi includes.
-
-extern "C"
-{
-#include <sys/time.h>
-}
-
-// C++ includes
-
-#include <ctime>
-#include <cstdlib>
-
 // Qt includes.
 
 #include <QApplication>
@@ -43,6 +31,7 @@ extern "C"
 #include <QFileInfo>
 #include <QPixmap>
 #include <QProgressBar>
+#include <QTime>
 
 // KDE includes.
 
@@ -108,33 +97,37 @@ ScanLib::~ScanLib()
 
 void ScanLib::startScan()
 {
-    struct timeval tv1, tv2;
+    QTime time;
     QPixmap pix = KIconLoader::global()->loadIcon("system-run", K3Icon::NoGroup, 32);
 
     QString message = i18n("Finding non-existing Albums");
     m_progressDlg->addedAction(pix, message);
-    gettimeofday(&tv1, 0);
+    time.start();
     findFoldersWhichDoNotExist();
-    gettimeofday(&tv2, 0);
-    timing(message, tv1, tv2);
+    timing(message, time.elapsed());
 
     message = i18n("Finding items not in the database or disk");
     m_progressDlg->addedAction(pix, message);
-    gettimeofday(&tv1, 0);
+    time.start();
     findMissingItems();
-    gettimeofday(&tv2, 0);
-    timing(message, tv1, tv2);
+    timing(message, time.elapsed());
 
     message = i18n("Updating items without date");
     m_progressDlg->addedAction(pix, message);
-    gettimeofday(&tv1, 0);
+    time.start();
     updateItemsWithoutDate();
-    gettimeofday(&tv2, 0);
-    timing(message, tv1, tv2);
+    timing(message, time.elapsed());
 
     deleteStaleEntries();
 
     m_scanner.markDatabaseAsScanned();
+}
+
+void ScanLib::timing(const QString& text, int elaspedms)
+{
+    DDebug() << "ScanLib: " << text
+             << ": " << elaspedms
+             << " ms" << endl;
 }
 
 void ScanLib::findFoldersWhichDoNotExist()
@@ -262,15 +255,6 @@ void ScanLib::deleteStaleEntries()
 
         m_scanner.removeStaleFiles();
     }
-}
-
-void ScanLib::timing(const QString& text, struct timeval tv1, struct timeval tv2)
-{
-    DDebug() << "ScanLib: "
-              << text + ": "
-              << (((tv2.tv_sec-tv1.tv_sec)*1000000 +
-                   (tv2.tv_usec-tv1.tv_usec))/1000)
-              << " ms" << endl;
 }
 
 }  // namespace Digikam
