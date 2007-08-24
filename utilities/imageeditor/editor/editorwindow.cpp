@@ -1305,9 +1305,20 @@ void EditorWindow::slotNameLabelCancelButtonPressed()
 void EditorWindow::slotSave()
 {
     if (m_canvas->isReadOnly())
+    {
         saveAs();
+    }
     else
-        save();
+    {
+        QFileInfo fi(m_canvas->currentImageFilePath());
+        QString warnMsg(i18n("About to overwrite file \"%1\"\nAre you sure?")
+                        .arg(fi.fileName()));
+        if (KMessageBox::warningContinueCancel(this, warnMsg, i18n("Warning"), i18n("Overwrite")) 
+            ==  KMessageBox::Continue)
+        {
+            save();
+        }
+    }
 }
 void EditorWindow::slotSavingStarted(const QString& /*filename*/)
 {
