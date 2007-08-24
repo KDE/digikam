@@ -4,9 +4,7 @@ Notice to make release tarballs from SVN
 0/ release annoucements can be send to kde-i18n-docs. The earlier the better
    TODO: not clear where an how to store them yet. 
 
-1/ Update the release info in these files and commit it to svn :
-   - digikam/digikam/version.h
-   - digikam/digikam.lsm - update date as well
+1/ Update the release info in digikam/CMakeLists.txt and commit it to svn.
   
 2/ Edited release_digikam.rb and release_digikam_docs.rb script. Update these settings :
    - version.
