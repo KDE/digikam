@@ -97,6 +97,11 @@ void ThumbnailLoadThread::setExifRotate(int exifRotate)
     d->exifRotate = exifRotate;
 }
 
+void ThumbnailLoadThread::setSendSurrogatePixmap(bool send)
+{
+    d->sendSurrogate = send;
+}
+
 void ThumbnailLoadThread::setPixmapRequested(bool wantPixmap)
 {
     if (wantPixmap)
@@ -136,6 +141,26 @@ bool ThumbnailLoadThread::find(const QString &filePath, QPixmap &retPixmap)
 
     load(description);
     return false;
+}
+
+void ThumbnailLoadThread::find(const QString &filePath)
+{
+    const QPixmap *pix;
+    LoadingDescription description(filePath, d->size, d->exifRotate, LoadingDescription::PreviewParameters::Thumbnail);
+
+    {
+        LoadingCache *cache = LoadingCache::cache();
+        LoadingCache::CacheLock lock(cache);
+        pix = cache->retrieveThumbnailPixmap(description.cacheKey());
+    }
+
+    if (pix)
+    {
+        emit signalThumbnailLoaded(description, QPixmap(*pix));
+        return;
+    }
+
+    load(description);
 }
 
 void ThumbnailLoadThread::load(const LoadingDescription &constDescription)

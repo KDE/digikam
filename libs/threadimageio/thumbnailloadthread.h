@@ -66,7 +66,16 @@ public:
     bool find(const QString &filePath, QPixmap &pixmap);
 
     /**
+     * Find a thumbnail.
+     * This method sends the signals and does not return values like the medthod above.
+     * If you certainly need asynchronous return, connect with Qt::QueuedConnection to the signals.
+     * If you connect directly, the signals may be sent from within the method call.
+     */
+    void find(const QString &filePath);
+
+    /**
      * Load a thumbnail.
+     * You do not need to use this method directly, it will not access the pixmap cache. Use find().
      * The LoadingDescription shall be constructed with the constructor for preview/thumbnail jobs.
      * (in the description constructor, you need to specify file path, thumbnail size and exif rotation)
      */
