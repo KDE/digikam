@@ -33,9 +33,14 @@ CollectionLocation::Status CollectionLocation::status() const
     return m_status;
 }
 
-QString CollectionLocation::albumRoot() const
+CollectionLocation::Type CollectionLocation::type() const
 {
-    return m_albumRoot;
+    return m_type;
+}
+
+QString CollectionLocation::albumRootPath() const
+{
+    return m_path;
 }
 
 }  // namespace Digikam

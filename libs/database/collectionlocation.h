@@ -47,13 +47,23 @@ public:
         LocationUnavailable
     };
 
+    enum Type
+    {
+        TypeHardWired,
+        TypeRemovable
+    };
+
     Status status() const;
-    QString albumRoot() const;
+    Type type() const;
+    QString albumRootPath() const;
 
 protected:
 
+    CollectionLocation() {}
+
     Status m_status;
-    QString m_albumRoot;
+    Type m_type;
+    QString m_path;
 };
 
 }  // namespace Digikam

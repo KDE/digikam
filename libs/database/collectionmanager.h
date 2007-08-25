@@ -54,6 +54,20 @@ public:
     static void cleanUp();
 
     /**
+     * Add the given file system location as new collection location.
+     * Type and availability will be detected.
+     * On failure returns null. This would be the case if the given
+     * url is already contained in another collection location.
+     */
+    CollectionLocation *addLocation(const KUrl &fileUrl);
+
+    /**
+     * Removes the given location. This means that all images contained on the
+     * location will be removed from the database, all tags will be lost.
+     */
+    void removeLocation(CollectionLocation *location);
+
+    /**
      * Returns a list of all CollectionLocations stored in the database
      */
     QList<CollectionLocation *> allLocations();
@@ -74,6 +88,14 @@ public:
      */
     CollectionLocation *locationForAlbumRoot(const KUrl &fileUrl);
     CollectionLocation *locationForAlbumRootPath(const QString &albumRootPath);
+
+    /**
+     * Returns the CollectionLocation that contains the given path.
+     * Equivalent to calling locationForAlbumRoot(albumRoot(fileUrl)).
+     * Only available (or hidden, but available) locations are guaranteed to be found.
+     */
+    CollectionLocation *locationForUrl(const KUrl &fileUrl);
+    CollectionLocation *locationForPath(const QString &filePath);
 
     /**
      * For a given path, the part of the path that forms the album root is returned,
@@ -115,13 +137,14 @@ public:
 
 private slots:
 
-    void updateLocations();
+    void deviceChange(const QString &);
 
 private:
 
     CollectionManager();
     ~CollectionManager();
     static CollectionManager *m_instance;
+    void updateLocations();
 
     CollectionManagerPrivate *d;
 };
