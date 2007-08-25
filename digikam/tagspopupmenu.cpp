@@ -53,9 +53,9 @@
 #include "albumiconview.h"
 #include "albumiconitem.h"
 #include "albummanager.h"
+#include "albumthumbnailloader.h"
 #include "albumdb.h"
 #include "album.h"
-#include "syncjob.h"
 #include "tagcreatedlg.h"
 #include "tagspopupmenu.h"
 #include "tagspopupmenu.moc"
@@ -378,6 +378,13 @@ void TagsPopupMenu::setup(Mode mode)
 
     connect(this, SIGNAL(aboutToShow()),
             this, SLOT(slotAboutToShow()));
+
+    AlbumThumbnailLoader *loader = AlbumThumbnailLoader::componentData();
+
+    connect(loader, SIGNAL(signalThumbnail(Album *, const QPixmap&)),
+            this, SLOT(slotTagThumbnail(Album *, const QPixmap&)));
+
+    // we are not interested in signalThumbnailFailed
 }
 
 TagsPopupMenu::~TagsPopupMenu()
@@ -465,7 +472,7 @@ void TagsPopupMenu::iterateAndBuildMenu(QMenu *menu, TAlbum *album)
 
     for (QList<Album*>::iterator it = sortedTags.begin(); it != sortedTags.end(); ++it)
     {
-        Album *a = *it;
+        TAlbum *a = (TAlbum*)*it;
 
         if (d->mode == REMOVE)
         {
@@ -473,25 +480,27 @@ void TagsPopupMenu::iterateAndBuildMenu(QMenu *menu, TAlbum *album)
                 continue;
         }
 
-        QPixmap pix = SyncJob::getTagThumbnail((TAlbum*)a);
         QString t = a->title();
         t.replace('&',"&&");
 
         QAction *action;
         if (d->mode == ASSIGN)
         {
-            TagToggleAction *toggleAction = new TagToggleAction(KIcon(pix), t, d->toggleTagActions);
+            TagToggleAction *toggleAction = new TagToggleAction(t, d->toggleTagActions);
             if (d->assignedTags.contains(a->id()))
                 toggleAction->setSpecialChecked(true);
             action = toggleAction;
         }
         else
         {
-            action = new KToggleAction(KIcon(pix), t, d->toggleTagActions);
+            action = new KToggleAction(t, d->toggleTagActions);
         }
 
         action->setData(a->id());
         menu->addAction(action);
+
+        // get icon
+        setAlbumIcon(action, a);
 
         if (a->firstChild())
             action->setMenu(buildSubMenu(a->id()));
@@ -508,18 +517,19 @@ QMenu* TagsPopupMenu::buildSubMenu(int tagid)
     QMenu* popup = new QMenu(this);
     popup->setSeparatorsCollapsible(true);
 
-    QPixmap pix = SyncJob::getTagThumbnail(album);
     if (d->mode == ASSIGN && !d->assignedTags.contains(album->id()))
     {
-        QAction *action = new KToggleAction(KIcon(pix), i18n("Assign This Tag"), d->toggleTagActions);
+        QAction *action = new KToggleAction(i18n("Assign This Tag"), d->toggleTagActions);
         action->setData(album->id());
+        setAlbumIcon(action, album);
         popup->addAction(action);
         popup->addSeparator();
     }
     else if (d->mode == REMOVE)
     {
-        QAction *action = new KToggleAction(KIcon(pix), i18n("Remove This Tag"), d->toggleTagActions);
+        QAction *action = new KToggleAction(i18n("Remove This Tag"), d->toggleTagActions);
         action->setData(album->id());
+        setAlbumIcon(action, album);
         popup->addAction(action);
     }
 
@@ -535,6 +545,29 @@ QMenu* TagsPopupMenu::buildSubMenu(int tagid)
     }
 
     return popup;
+}
+
+void TagsPopupMenu::setAlbumIcon(QAction *action, TAlbum *album)
+{
+    AlbumThumbnailLoader *loader = AlbumThumbnailLoader::componentData();
+    QPixmap pix;
+    if (!loader->getTagThumbnail(album, pix))
+    {
+        if (pix.isNull())
+        {
+            action->setIcon(KIcon(loader->getStandardTagIcon(album)));
+        }
+        else
+        {
+            action->setIcon(KIcon(loader->blendIcons(loader->getStandardTagIcon(), pix)));
+        }
+    }
+    else
+    {
+        // for the time while loading, set standard icon
+        // usually this code path will not be used, as icons are cached
+        action->setIcon(KIcon(loader->getStandardTagIcon(album)));
+    }
 }
 
 void TagsPopupMenu::slotToggleTag(QAction *action)
@@ -570,6 +603,19 @@ void TagsPopupMenu::slotAddTag(QAction *action)
     }
 
     emit signalTagActivated(newAlbum->id());
+}
+
+void TagsPopupMenu::slotTagThumbnail(Album *album, const QPixmap& pix)
+{
+    QList<QAction*> actionList = actions();
+    foreach (QAction *action, actionList)
+    {
+        if (action->data().toInt() == album->id())
+        {
+            action->setIcon(KIcon(pix));
+            return;
+        }
+    }
 }
 
 }  // namespace Digikam

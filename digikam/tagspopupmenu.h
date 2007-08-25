@@ -62,6 +62,7 @@ private slots:
     void slotAboutToShow();
     void slotToggleTag(QAction *);
     void slotAddTag(QAction *);
+    void slotTagThumbnail(Album *, const QPixmap&);
 
 private:
 
@@ -69,7 +70,7 @@ private:
     void         clearPopup();
     QMenu*       buildSubMenu(int tagid);
     void         iterateAndBuildMenu(QMenu *menu, TAlbum *album);
-    bool         showThisTag(int tagid);
+    void         setAlbumIcon(QAction *action, TAlbum *album);
 
 private:
 
