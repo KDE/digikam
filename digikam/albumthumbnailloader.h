@@ -41,6 +41,7 @@ namespace Digikam
 class Album;
 class TAlbum;
 class PAlbum;
+class LoadingDescription;
 class AlbumThumbnailLoaderPrivate;
 
 class AlbumThumbnailLoader : public QObject
@@ -151,13 +152,13 @@ signals:
 
 protected slots:
 
-    void slotGotThumbnailFromIcon(const KUrl&, const QPixmap&);
-    void slotThumbnailLost(const KUrl&);
+    void slotGotThumbnailFromIcon(const LoadingDescription &loadingDescription, const QPixmap &pixmap);
     void slotIconChanged(Album* album);
+    void slotDispatchThumbnailInternal(int albumID, const QPixmap &thumbnail);
 
-protected:
+signals:
 
-    void customEvent(QEvent *e);
+    void signalDispatchThumbnailInternal(int albumID, const QPixmap &thumbnail);
 
 private:
 
