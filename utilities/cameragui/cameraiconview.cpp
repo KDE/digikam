@@ -40,7 +40,6 @@
 
 // KDE includes.
 
-#include <kpopupmenu.h>
 #include <kurldrag.h>
 #include <kmimetype.h>
 #include <klocale.h>
@@ -56,6 +55,7 @@
 #include "gpiteminfo.h"
 #include "renamecustomizer.h"
 #include "icongroupitem.h"
+#include "dpopupmenu.h"
 #include "cameraui.h"
 #include "cameradragobject.h"
 #include "cameraiconitem.h"
@@ -428,11 +428,11 @@ void CameraIconView::slotContextMenu(IconItem * item, const QPoint&)
 
     CameraIconViewItem* camItem = static_cast<CameraIconViewItem*>(item);
     
-    KPopupMenu menu(this);
-    menu.insertTitle(SmallIcon("digikam"), d->cameraUI->cameraTitle());
+    DPopupMenu menu(this);
     menu.insertItem(SmallIcon("editimage"), i18n("&View"), 0);
     menu.insertSeparator(-1);
     menu.insertItem(SmallIcon("down"),i18n("Download"), 1);
+    menu.insertItem(SmallIcon("down"),i18n("Download && Delete"), 4);
     menu.insertItem(SmallIcon("encrypted"), i18n("Toggle lock"), 3);
     menu.insertSeparator(-1);
     menu.insertItem(SmallIcon("editdelete"), i18n("Delete"), 2);
@@ -459,6 +459,11 @@ void CameraIconView::slotContextMenu(IconItem * item, const QPoint&)
         case(3):
         {
             emit signalToggleLock();
+            break;
+        }
+        case(4):
+        {
+            emit signalDownloadAndDelete();
             break;
         }
         default:

@@ -418,11 +418,20 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     // -------------------------------------------------------------------------
 
     d->downloadMenu = new QPopupMenu(this);
-    d->downloadMenu->insertItem(i18n("Download Selected"), this, SLOT(slotDownloadSelected()), 0, 0);
-    d->downloadMenu->insertItem(i18n("Download All"),      this, SLOT(slotDownloadAll()), 0, 1);
+    d->downloadMenu->insertItem(i18n("Download Selected"), 
+                                this, SLOT(slotDownloadSelected()), 0, 0);
+    d->downloadMenu->insertItem(i18n("Download All"),      
+                                this, SLOT(slotDownloadAll()), 0, 1);
     d->downloadMenu->insertSeparator();
-    d->downloadMenu->insertItem(i18n("Upload..."),         this, SLOT(slotUpload()), 0, 2);
+    d->downloadMenu->insertItem(i18n("Download/Delete Selected"), 
+                                this, SLOT(slotDownloadAndDeleteSelected()), 0, 2);
+    d->downloadMenu->insertItem(i18n("Download/Delete All"),      
+                                this, SLOT(slotDownloadAll()), 0, 3);
+    d->downloadMenu->insertSeparator();
+    d->downloadMenu->insertItem(i18n("Upload..."),         
+                                this, SLOT(slotUpload()), 0, 4);
     d->downloadMenu->setItemEnabled(0, false);
+    d->downloadMenu->setItemEnabled(2, false);
     actionButton(User2)->setPopup(d->downloadMenu);
 
     // -------------------------------------------------------------------------
@@ -477,6 +486,9 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
 
     connect(d->view, SIGNAL(signalDownload()),
             this, SLOT(slotDownloadSelected()));
+
+    connect(d->view, SIGNAL(signalDownloadAndDelete()),
+            this, SLOT(slotDownloadAndDeleteSelected()));
 
     connect(d->view, SIGNAL(signalDelete()),
             this, SLOT(slotDeleteSelected()));
@@ -1049,15 +1061,25 @@ void CameraUI::slotUploaded(const GPItemInfo& itemInfo)
 
 void CameraUI::slotDownloadSelected()
 {
-    slotDownload(true);
+    slotDownload(true, false);
+}
+
+void CameraUI::slotDownloadAndDeleteSelected()
+{
+    slotDownload(true, true);
 }
 
 void CameraUI::slotDownloadAll()
 {
-    slotDownload(false);
+    slotDownload(false, false);
 }
 
-void CameraUI::slotDownload(bool onlySelected)
+void CameraUI::slotDownloadAndDeleteAll()
+{
+    slotDownload(false, true);
+}
+
+void CameraUI::slotDownload(bool onlySelected, bool deleteAfter)
 {
     // -- Get the destination album from digiKam library ---------------
 
@@ -1231,6 +1253,14 @@ void CameraUI::slotDownload(bool onlySelected)
     // disable settings tab here instead of slotBusy:
     // Only needs to be disabled while downloading
     d->advBox->setEnabled(false);
+
+    if (deleteAfter)
+    {
+        if (onlySelected)
+            slotDeleteSelected();
+        else
+            slotDeleteAll();
+    }
 }
 
 void CameraUI::slotDownloaded(const QString& folder, const QString& file, int status)
@@ -1514,6 +1544,8 @@ void CameraUI::slotNewSelection(bool hasSelection)
         // So do not allow Download All if there is a selection!
         d->downloadMenu->setItemEnabled(0, hasSelection);
         d->downloadMenu->setItemEnabled(1, !hasSelection);
+        d->downloadMenu->setItemEnabled(2, hasSelection);
+        d->downloadMenu->setItemEnabled(3, !hasSelection);
     }
     else
     {
@@ -1522,12 +1554,15 @@ void CameraUI::slotNewSelection(bool hasSelection)
         // This is the easiest default for new users
         d->downloadMenu->setItemEnabled(0, hasSelection);
         d->downloadMenu->setItemEnabled(1, true);
+        d->downloadMenu->setItemEnabled(2, hasSelection);
+        d->downloadMenu->setItemEnabled(3, true);
     }
 }
 
 void CameraUI::slotItemsSelected(CameraIconViewItem* item, bool selected)
 {
     d->downloadMenu->setItemEnabled(0, selected);
+    d->downloadMenu->setItemEnabled(2, selected);
     d->deleteMenu->setItemEnabled(0, selected);
 
     if (selected)

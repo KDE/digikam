@@ -109,9 +109,11 @@ private slots:
     void slotUploadItems(const KURL::List&);
     void slotDownloadSelected();
     void slotDownloadAll();
-    void slotDownload(bool onlySelected);
+    void slotDownload(bool onlySelected, bool deleteAfter);
     void slotDeleteSelected();
+    void slotDownloadAndDeleteSelected();
     void slotDeleteAll();
+    void slotDownloadAndDeleteAll();
     void slotToggleLock();
 
     void slotFileView(CameraIconViewItem* item);

@@ -92,6 +92,7 @@ signals:
 
     void signalUpload(const KURL::List&);
     void signalDownload();
+    void signalDownloadAndDelete();
     void signalDelete();
     void signalToggleLock();
     void signalNewSelection(bool);
