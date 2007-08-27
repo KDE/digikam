@@ -3,6 +3,7 @@ digiKam 0.9.3 - Release date: 2007-xx-xx
 NEW FEATURES:
 
 General        : Color scheme theme are now XML based (instead X11 format).
+CameraGUI      : New options to Download pictures and Delete it from camera at the same time.
 
 digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
@@ -23,4 +24,5 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 015 ==> 148930 : digiKam-0.9.2 does not compile with lcms-1.17.
 016 ==> 141774 : Autorotate does not work however kipi rotate works.
 017 ==> 103350 : Original image is silently overwritten when saving.
-018 ==> 
+018 ==> 144431 : Add option in Camera Download Dialog.
+019 ==> 
