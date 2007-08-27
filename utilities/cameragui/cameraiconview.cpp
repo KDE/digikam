@@ -22,10 +22,6 @@
  * 
  * ============================================================ */
 
-// C++ includes.
-
-#include <ctime>
-
 // Qt includes.
 
 #include <Q3DragObject>
@@ -555,7 +551,7 @@ void CameraIconView::uploadItemPopupMenu(const KUrl::List& srcURLs)
 {
     KMenu popMenu(this);
     popMenu.addTitle(SmallIcon("digikam"), d->cameraUI->cameraTitle());
-    QAction *uploadAction = popMenu.addAction( SmallIcon("goto"), i18n("&Upload into camera"));
+    QAction *uploadAction = popMenu.addAction(SmallIcon("file-import"), i18n("&Upload into camera"));
     popMenu.addSeparator();
     popMenu.addAction( SmallIcon("cancel"), i18n("C&ancel") );
 
@@ -641,7 +637,6 @@ void CameraIconView::slotThemeChanged()
     setPalette(plt);
 
     updateItemRectsPixmap();
-
     viewport()->update();
 }
 
