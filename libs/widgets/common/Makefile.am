@@ -2,7 +2,7 @@ METASOURCES = AUTO
 
 noinst_LTLIBRARIES = libcommonwidgets.la
 
-libcommonwidgets_la_SOURCES = histogramwidget.cpp colorgradientwidget.cpp curveswidget.cpp \
+libcommonwidgets_la_SOURCES = histogramwidget.cpp colorgradientwidget.cpp curveswidget.cpp dlogoaction.cpp \
                               sidebar.cpp squeezedcombobox.cpp filesaveoptionsbox.cpp dpopupmenu.cpp \
                               statuszoombar.cpp statusnavigatebar.cpp statusprogressbar.cpp \
                               dcursortracker.cpp paniconwidget.cpp previewwidget.cpp splashscreen.cpp 
@@ -14,12 +14,12 @@ INCLUDES = -I$(top_srcdir)/digikam/libs/histogram \
 	       -I$(top_srcdir)/digikam/libs/dimg \
 	       -I$(top_srcdir)/digikam/libs/dimg/loaders \
 	       -I$(top_srcdir)/digikam/digikam \
-		$(LIBKDCRAW_CFLAGS) \
-		$(all_includes)
+	       $(LIBKDCRAW_CFLAGS) \
+	       $(all_includes)
 
 
-digikaminclude_HEADERS = histogramwidget.h colorgradientwidget.h curveswidget.h sidebar.h \
-                         squeezedcombobox.h dpopupmenu.h statuszoombar.h statusnavigatebar.h \
-			 statusprogressbar.h dcursortracker.h paniconwidget.h previewwidget.h 
+digikaminclude_HEADERS = histogramwidget.h colorgradientwidget.h curveswidget.h sidebar.h dlogoaction.h \
+	                     squeezedcombobox.h dpopupmenu.h statuszoombar.h statusnavigatebar.h \
+	                     statusprogressbar.h dcursortracker.h paniconwidget.h previewwidget.h 
 
 digikamincludedir = $(includedir)/digikam

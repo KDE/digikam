@@ -63,6 +63,7 @@
 // Local includes.
 
 #include "ddebug.h"
+#include "dlogoaction.h"
 #include "album.h"
 #include "albumlister.h"
 #include "albumthumbnailloader.h"
@@ -883,6 +884,8 @@ void DigikamApp::setupActions()
                                    SLOT(slotDonateMoney()),
                                    actionCollection(),
                                    "help_donatemoney");
+
+    new DLogoAction(actionCollection(), "logo_action" );
 
     // -- Rating actions ---------------------------------------------------------------
 
