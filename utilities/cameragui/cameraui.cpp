@@ -242,12 +242,11 @@ public:
 CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle, 
                    const QString& model, const QString& port,
                    const QString& path, const QDateTime lastAccess)
-        : KDialog(0)
+        : KDialog(0) // B.K.O # 116485: no parent for this modal dialog.
 {
-
     setButtons(Help|User1|User2|User3|Close);
     setDefaultButton(Close);
-    setModal(true);
+    setModal(false);
     setCaption(cameraTitle);
     setButtonText(User1, i18n("D&elete"));
     setButtonText(User2, i18n("&Download"));
@@ -1113,20 +1112,9 @@ void CameraUI::slotDownloadAndDeleteAll()
     slotDownload(false, true);
 }
 
-void CameraUI::slotDownload(bool onlySelected, bool deleteAfter)
+void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
 {
-    // -- Get the destination album from digiKam library ---------------
-
-    AlbumManager* man = AlbumManager::componentData();
-
-    Album* album = man->currentAlbum();
-    if (album && album->type() != Album::PHYSICAL)
-        album = 0;
-
-    QString header(i18n("<p>Please select the destination album from the digiKam library to "
-                        "import the camera pictures into.</p>"));
-
-    QString newDirName;
+    QString   newDirName;
     IconItem* firstItem = d->view->firstItem();
     if (firstItem)
     {
@@ -1149,16 +1137,32 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter)
         }
     }
 
-    album = AlbumSelectDialog::selectAlbum(this, (PAlbum*)album, header, newDirName,
-                                           d->autoAlbumDateCheck->isChecked());
+    // -- Get the destination album from digiKam library ---------------
 
     if (!album)
-        return;
+    {
+        AlbumManager* man = AlbumManager::componentData();
+    
+        album = man->currentAlbum();
+        if (album && album->type() != Album::PHYSICAL)
+            album = 0;
+    
+        QString header(i18n("<p>Please select the destination album from the digiKam library to "
+                            "import the camera pictures into.</p>"));
+    
+        album = AlbumSelectDialog::selectAlbum(this, (PAlbum*)album, header, newDirName,
+                                               d->autoAlbumDateCheck->isChecked());
+    
+        if (!album) return;
+    }
+
+    PAlbum *pAlbum = dynamic_cast<PAlbum*>(album);
+    if (!pAlbum) return;
 
     // -- Prepare downloading of camera items ------------------------
 
     KUrl url;
-    url.setPath(((PAlbum*)album)->folderPath());
+    url.setPath(pAlbum->folderPath());
     
     d->controller->downloadPrep();
 

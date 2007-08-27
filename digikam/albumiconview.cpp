@@ -114,6 +114,7 @@ extern "C"
 #include "ratingpopupmenu.h"
 #include "thumbnailloadthread.h"
 #include "cameradragobject.h"
+#include "cameraui.h"
 #include "dragobjects.h"
 #include "dmetadata.h"
 #include "albumdb.h"
@@ -1136,7 +1137,7 @@ void AlbumIconView::startDrag()
     QRect r = p.boundingRect(2,2,w,h,Qt::AlignLeft|Qt::AlignTop,text);
     r.setWidth(qMax(r.width(),r.height()));
     r.setHeight(qMax(r.width(),r.height()));
-    p.fillRect(r, QColor(0,80,0));
+    p.fillRect(r, QColor(0, 80, 0));
     p.setPen(Qt::white);
     QFont f(font());
     f.setBold(true);
@@ -1160,7 +1161,8 @@ void AlbumIconView::contentsDragMoveEvent(QDragMoveEvent *event)
                              !Q3UriDrag::canDecode(event) &&
                              !CameraDragObject::canDecode(event) &&
                              !TagListDrag::canDecode(event) &&
-                             !TagDrag::canDecode(event))
+                             !TagDrag::canDecode(event) &&
+                             !CameraItemListDrag::canDecode(event))
         || event->source() == this) 
     {
         event->ignore();
@@ -1178,7 +1180,8 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                              !Q3UriDrag::canDecode(event) &&
                              !CameraDragObject::canDecode(event) &&
                              !TagListDrag::canDecode(event) &&
-                             !TagDrag::canDecode(event))
+                             !TagDrag::canDecode(event) &&
+                             !CameraItemListDrag::canDecode(event))
          || event->source() == this)
     {
         event->ignore();
@@ -1366,6 +1369,30 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                     infos << albumItem->imageInfo();
                     changeTagOnImageInfos(infos, tagIDs, true, false);
                 }
+            }
+        }
+    }
+    else if(CameraItemListDrag::canDecode(event))
+    {
+        CameraUI *ui = dynamic_cast<CameraUI*>(event->source());
+        if (ui)
+        {
+            KMenu popMenu(this);
+            popMenu.addTitle(SmallIcon("digikam"), i18n("My Albums"));
+            QAction *downAction    = popMenu.addAction(SmallIcon("file-export"), 
+                                                       i18n("Download from camera"));
+            QAction *downDelAction = popMenu.addAction(SmallIcon("file-export"), 
+                                                       i18n("Download && Delete from camera"));
+            popMenu.addSeparator();
+            popMenu.addAction(SmallIcon("dialog-cancel"), i18n("C&ancel"));
+            popMenu.setMouseTracking(true);
+            QAction *choice = popMenu.exec(QCursor::pos());
+            if (choice)
+            {
+                if (choice == downAction)
+                    ui->slotDownload(true, false, d->currentAlbum);
+                else if (choice == downDelAction)
+                    ui->slotDownload(true, true, d->currentAlbum);
             }
         }
     }

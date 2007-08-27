@@ -64,6 +64,7 @@
 #include "thumbnailsize.h"
 #include "albumpropsedit.h"
 #include "folderitem.h"
+#include "cameraui.h"
 #include "dio.h"
 #include "dragobjects.h"
 #include "albumthumbnailloader.h"
@@ -859,6 +860,11 @@ bool AlbumFolderView::acceptDrop(const QDropEvent *e) const
         return true;
     }
 
+    if (CameraItemListDrag::canDecode(e))
+    {
+        return true;
+    }
+
     if(Q3UriDrag::canDecode(e))
     {
         return true;
@@ -1049,6 +1055,36 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
         }
 
         return;
+    }
+
+    // -- DnD from Camera GUI ------------------------------------------------
+
+    if(CameraItemListDrag::canDecode(e))
+    {
+        Album *album = dynamic_cast<Album*>(itemDrop->getAlbum());
+        if (!album) return;
+        
+        CameraUI *ui = dynamic_cast<CameraUI*>(e->source());
+        if (ui)
+        {
+            KMenu popMenu(this);
+            popMenu.addTitle(SmallIcon("digikam"), i18n("My Albums"));
+            QAction *downAction    = popMenu.addAction(SmallIcon("file-export"), 
+                                                       i18n("Download from camera"));
+            QAction *downDelAction = popMenu.addAction(SmallIcon("file-export"), 
+                                                       i18n("Download && Delete from camera"));
+            popMenu.addSeparator();
+            popMenu.addAction(SmallIcon("dialog-cancel"), i18n("C&ancel"));
+            popMenu.setMouseTracking(true);
+            QAction *choice = popMenu.exec(QCursor::pos());
+            if (choice)
+            {
+                if (choice == downAction)
+                    ui->slotDownload(true, false, album);
+                else if (choice == downDelAction)
+                    ui->slotDownload(true, true, album);
+            }
+        }
     }
 
     // -- DnD from an external source ----------------------------------------
