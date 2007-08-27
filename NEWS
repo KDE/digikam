@@ -4,6 +4,7 @@ NEW FEATURES:
 
 General        : Color scheme theme are now XML based (instead X11 format).
 CameraGUI      : New options to Download pictures and Delete it from camera at the same time.
+CameraGUI      : Support of Drag & Drop to download files from camera gui to album gui.
 
 digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
