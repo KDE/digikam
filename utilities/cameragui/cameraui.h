@@ -74,7 +74,7 @@ signals:
 
 public slots:
 
-    void slotDownload(bool onlySelected, bool deleteAfter, Album *pAlbum=0);
+    void slotDownload(bool onlySelected, bool deleteAfter, Album *album=0);
 
 protected:
     
