@@ -217,7 +217,7 @@ public:
 
     AlbumRootLocation(const AlbumRootInfo &info)
     {
-        id           = info.id;
+        m_id         = info.id;
         m_type       = (CollectionLocation::Type)info.type;
         m_path       = info.absolutePath;
         relativePath = info.relativePath;
@@ -264,6 +264,11 @@ public:
         }
     }
 
+    void setId(int id)
+    {
+        m_id = id;
+    }
+
     void setAbsolutePath(const QString &path)
     {
         m_path = path;
@@ -274,7 +279,6 @@ public:
         m_type = type;
     }
 
-    int id;
     QString uuid;
     QString relativePath;
     bool available;
@@ -442,7 +446,7 @@ CollectionLocation *CollectionManager::addLocation(const KUrl &fileUrl)
 
 void CollectionManager::removeLocation(CollectionLocation *location)
 {
-    DatabaseAccess().db()->deleteAlbumRoot(((AlbumRootLocation *)location)->id);
+    DatabaseAccess().db()->deleteAlbumRoot(((AlbumRootLocation *)location)->id());
     updateLocations();
 }
 
@@ -477,6 +481,11 @@ QStringList CollectionManager::allAvailableAlbumRootPaths()
             list << location->albumRootPath();
     }
     return list;
+}
+
+CollectionLocation *CollectionManager::locationForAlbumRootId(int id)
+{
+    return d->locations.value(id);
 }
 
 CollectionLocation *CollectionManager::locationForAlbumRoot(const KUrl &fileUrl)
@@ -643,7 +652,7 @@ void CollectionManager::updateLocations()
             location->setAbsolutePath(volumePath + location->relativePath);
             location->setStatusFromFlags();
             // set the volatile values in db
-            access.db()->setAlbumRootStatus(location->id, location->status(), location->albumRootPath());
+            access.db()->setAlbumRootStatus(location->id(), location->status(), location->albumRootPath());
         }
     }
 }

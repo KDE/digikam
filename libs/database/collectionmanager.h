@@ -86,6 +86,7 @@ public:
      * Returns 0 if no collection location matches.
      * Only available (or hidden, but available) locations are guaranteed to be found.
      */
+    CollectionLocation *locationForAlbumRootId(int id);
     CollectionLocation *locationForAlbumRoot(const KUrl &fileUrl);
     CollectionLocation *locationForAlbumRootPath(const QString &albumRootPath);
 
