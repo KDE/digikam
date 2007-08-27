@@ -884,12 +884,12 @@ bool AlbumFolderView::acceptDrop(const QDropEvent *e) const
         return true;
     }
 
-    if(QUriDrag::canDecode(e))
+    if (CameraItemListDrag::canDecode(e))
     {
         return true;
     }
-
-    if (CameraItemListDrag::canDecode(e))
+    
+    if(QUriDrag::canDecode(e))
     {
         return true;
     }
