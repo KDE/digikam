@@ -28,6 +28,11 @@
 namespace Digikam
 {
 
+int CollectionLocation::id() const
+{
+    return m_id;
+}
+
 CollectionLocation::Status CollectionLocation::status() const
 {
     return m_status;

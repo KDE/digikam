@@ -54,7 +54,7 @@ public:
     QString absolutePath;
     int type;
     QString uuid;
-    QString relativePath;
+    QString specificPath;
 };
 
 /**

@@ -53,14 +53,19 @@ public:
         TypeRemovable
     };
 
-    Status status() const;
-    Type type() const;
+    int     id() const;
+    Status  status() const;
+    Type    type() const;
     QString albumRootPath() const;
 
 protected:
 
-    CollectionLocation() {}
+    CollectionLocation()
+        : m_id(-1), m_status(LocationUnavailable), m_type(TypeHardWired)
+    {
+    }
 
+    int m_id;
     Status m_status;
     Type m_type;
     QString m_path;
