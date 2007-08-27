@@ -22,15 +22,12 @@
  * 
  * ============================================================ */
 
-// C++ includes.
-
-#include <ctime>
-
 // Qt includes.
 
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qtimer.h>
+#include <qpainter.h>
 #include <qpixmap.h>
 #include <qcursor.h>
 #include <qfontmetrics.h>
@@ -56,6 +53,7 @@
 #include "renamecustomizer.h"
 #include "icongroupitem.h"
 #include "dpopupmenu.h"
+#include "dragobjects.h"
 #include "cameraui.h"
 #include "cameradragobject.h"
 #include "cameraiconitem.h"
@@ -518,6 +516,47 @@ void CameraIconView::slotSelectNew()
 
 void CameraIconView::startDrag()
 {
+    QStringList lst;
+
+    for (IconItem* item = firstItem(); item; item = item->nextItem())
+    {
+        if (!item->isSelected())
+            continue;
+
+        CameraIconViewItem* iconItem = static_cast<CameraIconViewItem*>(item);
+        QString itemPath = iconItem->itemInfo()->folder + iconItem->itemInfo()->name;
+        lst.append(itemPath);
+    }
+
+    QDragObject * drag = new CameraItemListDrag(lst, d->cameraUI);
+    if (drag)
+    {
+        QPixmap icon(DesktopIcon("image", 48));
+        int w = icon.width();
+        int h = icon.height();
+    
+        QPixmap pix(w+4,h+4);
+        QString text(QString::number(lst.count()));
+    
+        QPainter p(&pix);
+        p.fillRect(0, 0, w+4, h+4, QColor(Qt::white));
+        p.setPen(QPen(Qt::black, 1));
+        p.drawRect(0, 0, w+4, h+4);
+        p.drawPixmap(2, 2, icon);
+        QRect r = p.boundingRect(2,2,w,h,Qt::AlignLeft|Qt::AlignTop,text);
+        r.setWidth(QMAX(r.width(),r.height()));
+        r.setHeight(QMAX(r.width(),r.height()));
+        p.fillRect(r, QColor(0,80,0));
+        p.setPen(Qt::white);
+        QFont f(font());
+        f.setBold(true);
+        p.setFont(f);
+        p.drawText(r, Qt::AlignCenter, text);
+        p.end();
+        
+        drag->setPixmap(pix);
+        drag->drag();
+    }
 }
 
 void CameraIconView::contentsDropEvent(QDropEvent *event)

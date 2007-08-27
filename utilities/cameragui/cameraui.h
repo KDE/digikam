@@ -43,6 +43,7 @@
 namespace Digikam
 {
 
+class Album;
 class CameraIconViewItem;
 class CameraUIPriv;
 
@@ -70,6 +71,10 @@ signals:
     
     void signalLastDestination(const KURL&);
     void signalAlbumSettingsChanged();
+
+public slots:
+
+    void slotDownload(bool onlySelected, bool deleteAfter, Album *pAlbum=0);
 
 protected:
     
@@ -109,7 +114,6 @@ private slots:
     void slotUploadItems(const KURL::List&);
     void slotDownloadSelected();
     void slotDownloadAll();
-    void slotDownload(bool onlySelected, bool deleteAfter);
     void slotDeleteSelected();
     void slotDownloadAndDeleteSelected();
     void slotDeleteAll();

@@ -1079,20 +1079,9 @@ void CameraUI::slotDownloadAndDeleteAll()
     slotDownload(false, true);
 }
 
-void CameraUI::slotDownload(bool onlySelected, bool deleteAfter)
+void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
 {
-    // -- Get the destination album from digiKam library ---------------
-
-    AlbumManager* man = AlbumManager::instance();
-
-    Album* album = man->currentAlbum();
-    if (album && album->type() != Album::PHYSICAL)
-        album = 0;
-
-    QString header(i18n("<p>Please select the destination album from the digiKam library to "
-                        "import the camera pictures into.</p>"));
-
-    QString newDirName;
+    QString   newDirName;
     IconItem* firstItem = d->view->firstItem();
     if (firstItem)
     {
@@ -1115,16 +1104,32 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter)
         }
     }
 
-    album = AlbumSelectDialog::selectAlbum(this, (PAlbum*)album, header, newDirName,
-                                           d->autoAlbumDateCheck->isChecked());
+    // -- Get the destination album from digiKam library if necessary ---------------
 
     if (!album)
-        return;
+    {
+        AlbumManager* man = AlbumManager::instance();
+        album = man->currentAlbum();
+
+        if (album && album->type() != Album::PHYSICAL)
+            album = 0;
+
+        QString header(i18n("<p>Please select the destination album from the digiKam library to "
+                            "import the camera pictures into.</p>"));
+                        
+        album = AlbumSelectDialog::selectAlbum(this, (PAlbum*)album, header, newDirName,
+                                               d->autoAlbumDateCheck->isChecked());
+
+        if (!album) return;
+    }
+
+    PAlbum *pAlbum = dynamic_cast<PAlbum*>(album);
+    if (!pAlbum) return;
 
     // -- Prepare downloading of camera items ------------------------
 
     KURL url;
-    url.setPath(((PAlbum*)album)->folderPath());
+    url.setPath(pAlbum->folderPath());
     
     d->controller->downloadPrep();
 

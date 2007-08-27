@@ -115,6 +115,7 @@ extern "C"
 #include "ratingpopupmenu.h"
 #include "pixmapmanager.h"
 #include "cameradragobject.h"
+#include "cameraui.h"
 #include "dragobjects.h"
 #include "dmetadata.h"
 #include "albumdb.h"
@@ -1167,7 +1168,8 @@ void AlbumIconView::contentsDragMoveEvent(QDragMoveEvent *event)
                              !QUriDrag::canDecode(event) &&
                              !CameraDragObject::canDecode(event) &&
                              !TagListDrag::canDecode(event) &&
-                             !TagDrag::canDecode(event))
+                             !TagDrag::canDecode(event) &&
+                             !CameraItemListDrag::canDecode(event))
         || event->source() == this) 
     {
         event->ignore();
@@ -1185,7 +1187,8 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                              !QUriDrag::canDecode(event) &&
                              !CameraDragObject::canDecode(event) &&
                              !TagListDrag::canDecode(event) &&
-                             !TagDrag::canDecode(event))
+                             !TagDrag::canDecode(event) &&
+                             !CameraItemListDrag::canDecode(event))
          || event->source() == this)
     {
         event->ignore();
@@ -1387,6 +1390,35 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
             }
             default:
                 break;
+        }
+    }
+    else if(CameraItemListDrag::canDecode(event))
+    {
+        CameraUI *ui = dynamic_cast<CameraUI*>(event->source());
+        if (ui)
+        {
+            QPopupMenu popMenu(this);
+            popMenu.insertItem(SmallIcon("down"), i18n("Download from camera"),           10);
+            popMenu.insertItem(SmallIcon("down"), i18n("Download && Delete from camera"), 11);
+            popMenu.insertSeparator(-1);
+            popMenu.insertItem(SmallIcon("cancel"), i18n("&Cancel"));
+            popMenu.setMouseTracking(true);
+            int id = popMenu.exec(QCursor::pos());
+            switch(id) 
+            {
+                case 10:    // Download from camera
+                {
+                    ui->slotDownload(true, false, d->currentAlbum);
+                    break;
+                }
+                case 11:    // Download and Delete from camera
+                {
+                    ui->slotDownload(true, true, d->currentAlbum);
+                    break;
+                }
+                default:
+                    break;
+            }
         }
     }
     else 
