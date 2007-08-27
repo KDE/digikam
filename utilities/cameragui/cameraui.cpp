@@ -134,41 +134,43 @@ public:
 
     CameraUIPriv()
     {
-        busy               = false;
-        closed             = false;
-        helpMenu           = 0;
-        advBox             = 0;
-        downloadMenu       = 0;
-        deleteMenu         = 0;
-        imageMenu          = 0;
-        cancelBtn          = 0;
-        splitter           = 0;
-        rightSidebar       = 0;
-        fixDateTimeCheck   = 0;
-        autoRotateCheck    = 0;
-        autoAlbumDateCheck = 0;
-        autoAlbumExtCheck  = 0;
-        status             = 0;
-        progress           = 0;
-        controller         = 0;
-        view               = 0;
-        renameCustomizer   = 0;
-        anim               = 0;
-        dateTimeEdit       = 0;
-        setPhotographerId  = 0;
-        setCredits         = 0;
-        losslessFormat     = 0;
-        convertJpegCheck   = 0;
-        formatLabel        = 0;
-        folderDateLabel    = 0;
-        folderDateFormat   = 0;
-        increaseThumbsAction   = 0;
-        decreaseThumbsAction   = 0;
-        downloadSelectedAction = 0;
-        downloadAllAction      = 0;
-        deleteSelectedAction   = 0;
-        deleteAllAction        = 0;
-        cameraInfoAction       = 0;
+        busy                      = false;
+        closed                    = false;
+        helpMenu                  = 0;
+        advBox                    = 0;
+        downloadMenu              = 0;
+        deleteMenu                = 0;
+        imageMenu                 = 0;
+        cancelBtn                 = 0;
+        splitter                  = 0;
+        rightSidebar              = 0;
+        fixDateTimeCheck          = 0;
+        autoRotateCheck           = 0;
+        autoAlbumDateCheck        = 0;
+        autoAlbumExtCheck         = 0;
+        status                    = 0;
+        progress                  = 0;
+        controller                = 0;
+        view                      = 0;
+        renameCustomizer          = 0;
+        anim                      = 0;
+        dateTimeEdit              = 0;
+        setPhotographerId         = 0;
+        setCredits                = 0;
+        losslessFormat            = 0;
+        convertJpegCheck          = 0;
+        formatLabel               = 0;
+        folderDateLabel           = 0;
+        folderDateFormat          = 0;
+        increaseThumbsAction      = 0;
+        decreaseThumbsAction      = 0;
+        downloadSelectedAction    = 0;
+        downloadDelSelectedAction = 0;
+        downloadAllAction         = 0;
+        downloadDelAllAction      = 0;
+        deleteSelectedAction      = 0;
+        deleteAllAction           = 0;
+        cameraInfoAction          = 0;
     }
 
     bool                          busy;
@@ -187,7 +189,9 @@ public:
     QAction                      *increaseThumbsAction;
     QAction                      *decreaseThumbsAction;
     QAction                      *downloadSelectedAction;
+    QAction                      *downloadDelSelectedAction;
     QAction                      *downloadAllAction;
+    QAction                      *downloadDelAllAction;
     QAction                      *deleteSelectedAction;
     QAction                      *deleteAllAction;
     QAction                      *cameraInfoAction;
@@ -449,14 +453,20 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
 
     // -------------------------------------------------------------------------
 
-    d->downloadMenu = new QMenu(this);
-    d->downloadSelectedAction =
-        d->downloadMenu->addAction(i18n("Download Selected"), this, SLOT(slotDownloadSelected()));
-    d->downloadAllAction =
-        d->downloadMenu->addAction(i18n("Download All"),      this, SLOT(slotDownloadAll()));
+    d->downloadMenu              = new QMenu(this);
+    d->downloadSelectedAction    = d->downloadMenu->addAction(i18n("Download Selected"), 
+                                                              this, SLOT(slotDownloadSelected()));
+    d->downloadAllAction         = d->downloadMenu->addAction(i18n("Download All"),
+                                                              this, SLOT(slotDownloadAll()));
     d->downloadMenu->addSeparator();
-    d->downloadMenu->addAction(i18n("Upload..."),         this, SLOT(slotUpload()));
+    d->downloadDelSelectedAction = d->downloadMenu->addAction(i18n("Download/Delete Selected"),
+                                                              this, SLOT(slotDownloadAndDeleteSelected()));
+    d->downloadDelAllAction      = d->downloadMenu->addAction(i18n("Download/Delete All"),
+                                                              this, SLOT(slotDownloadAll()));
+    d->downloadMenu->addSeparator();
+    d->downloadMenu->addAction(i18n("Upload..."),             this, SLOT(slotUpload()));
     d->downloadSelectedAction->setEnabled(false);
+    d->downloadDelSelectedAction->setEnabled(false);
     button(User2)->setMenu(d->downloadMenu);
 
     // -------------------------------------------------------------------------
@@ -510,6 +520,9 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
 
     connect(d->view, SIGNAL(signalDownload()),
             this, SLOT(slotDownloadSelected()));
+
+    connect(d->view, SIGNAL(signalDownloadAndDelete()),
+            this, SLOT(slotDownloadAndDeleteSelected()));
 
     connect(d->view, SIGNAL(signalDelete()),
             this, SLOT(slotDeleteSelected()));
@@ -1082,15 +1095,25 @@ void CameraUI::slotUploaded(const GPItemInfo& itemInfo)
 
 void CameraUI::slotDownloadSelected()
 {
-    slotDownload(true);
+    slotDownload(true, false);
+}
+
+void CameraUI::slotDownloadAndDeleteSelected()
+{
+    slotDownload(true, true);
 }
 
 void CameraUI::slotDownloadAll()
 {
-    slotDownload(false);
+    slotDownload(false, false);
 }
 
-void CameraUI::slotDownload(bool onlySelected)
+void CameraUI::slotDownloadAndDeleteAll()
+{
+    slotDownload(false, true);
+}
+
+void CameraUI::slotDownload(bool onlySelected, bool deleteAfter)
 {
     // -- Get the destination album from digiKam library ---------------
 
@@ -1264,6 +1287,14 @@ void CameraUI::slotDownload(bool onlySelected)
     // disable settings tab here instead of slotBusy:
     // Only needs to be disabled while downloading
     d->advBox->setEnabled(false);
+
+    if (deleteAfter)
+    {
+        if (onlySelected)
+            slotDeleteSelected();
+        else
+            slotDeleteAll();
+    }
 }
 
 void CameraUI::slotDownloaded(const QString& folder, const QString& file, int status)
@@ -1548,6 +1579,8 @@ void CameraUI::slotNewSelection(bool hasSelection)
         // So do not allow Download All if there is a selection!
         d->downloadSelectedAction->setEnabled(hasSelection);
         d->downloadAllAction->setEnabled(!hasSelection);
+        d->downloadDelSelectedAction->setEnabled(hasSelection);
+        d->downloadDelAllAction->setEnabled(!hasSelection);
     }
     else
     {
@@ -1556,12 +1589,15 @@ void CameraUI::slotNewSelection(bool hasSelection)
         // This is the easiest default for new users
         d->downloadSelectedAction->setEnabled(hasSelection);
         d->downloadAllAction->setEnabled(true);
+        d->downloadDelSelectedAction->setEnabled(hasSelection);
+        d->downloadDelAllAction->setEnabled(true);
     }
 }
 
 void CameraUI::slotItemsSelected(CameraIconViewItem* item, bool selected)
 {
     d->downloadSelectedAction->setEnabled(selected);
+    d->downloadDelSelectedAction->setEnabled(selected);
     d->deleteSelectedAction->setEnabled(selected);
 
     if (selected)

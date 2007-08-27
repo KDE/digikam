@@ -43,7 +43,6 @@
 // KDE includes.
 
 #include <k3urldrag.h>
-#include <kmenu.h>
 #include <kmimetype.h>
 #include <klocale.h>
 #include <kiconloader.h>
@@ -58,6 +57,7 @@
 #include "gpiteminfo.h"
 #include "renamecustomizer.h"
 #include "icongroupitem.h"
+#include "dpopupmenu.h"
 #include "cameraui.h"
 #include "cameradragobject.h"
 #include "cameraiconitem.h"
@@ -433,11 +433,11 @@ void CameraIconView::slotContextMenu(IconItem * item, const QPoint&)
 
     CameraIconViewItem* camItem = static_cast<CameraIconViewItem*>(item);
 
-    KMenu menu(this);
-    menu.addTitle(SmallIcon("digikam"), d->cameraUI->cameraTitle());
+    DPopupMenu menu(this);
     QAction *viewAction      = menu.addAction(SmallIcon("editimage"), i18n("&View"));
     menu.addSeparator();
     QAction *downAction      = menu.addAction(SmallIcon("down"),i18n("Download"));
+    QAction *downDelAction   = menu.addAction(SmallIcon("down"),i18n("Download && Delete"));
     QAction *encryptedAction = menu.addAction(SmallIcon("encrypted"), i18n("Toggle lock"));
     menu.addSeparator();
     QAction *deleteAction    = menu.addAction(SmallIcon("edit-delete"), i18n("Delete"));
@@ -461,6 +461,10 @@ void CameraIconView::slotContextMenu(IconItem * item, const QPoint&)
         else if (choice == encryptedAction)
         {
             emit signalToggleLock();
+        }
+        else if (choice == downDelAction)
+        {
+            emit signalDownloadAndDelete();
         }
     }
 }

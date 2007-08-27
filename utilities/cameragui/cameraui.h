@@ -112,8 +112,10 @@ private slots:
     void slotUploadItems(const KUrl::List&);
     void slotDownloadSelected();
     void slotDownloadAll();
-    void slotDownload(bool onlySelected);
+    void slotDownloadAndDeleteAll();
+    void slotDownload(bool onlySelected, bool deleteAfter);
     void slotDeleteSelected();
+    void slotDownloadAndDeleteSelected();
     void slotDeleteAll();
     void slotToggleLock();
 
