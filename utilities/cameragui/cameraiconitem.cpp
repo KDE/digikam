@@ -286,17 +286,17 @@ void CameraIconViewItem::paintItem(QPainter *p)
         }
         case GPItemInfo::DownloadedYes:
         {
-            downloaded = SmallIcon( "button_ok" );
+            downloaded = SmallIcon( "dialog-ok" );
             break;
         }
         case GPItemInfo::DownloadStarted:
         {
-            downloaded = SmallIcon( "run" );
+            downloaded = SmallIcon( "system-run" );
             break;
         }
         case GPItemInfo::DownloadFailed:
         {
-            downloaded = SmallIcon( "button_cancel" );
+            downloaded = SmallIcon( "dialog-cancel" );
             break;
         }
         /* TODO: see B.K.O #107316 : disable temporally the unknow download status until     
