@@ -150,6 +150,30 @@ private:
     QValueList<int> m_tagIDs;
 };
 
+/**
+ * Provides a drag object for a list of camera items
+ *
+ * When a camera item is moved through drag'n'drop an object of this class
+ * is created.
+ */
+class CameraItemListDrag : public QDragObject
+{
+public:
+
+    CameraItemListDrag(const QStringList& cameraItemPaths, QWidget *dragSource = 0,
+                       const char *name = 0);
+    static bool canDecode(const QMimeSource* e);
+    
+protected:
+
+    QByteArray  encodedData( const char* ) const;
+    const char* format(int i) const;
+    
+private:
+
+    QStringList m_cameraItemPaths;
+};
+
 }  // namespace Digikam
 
 #endif /* DRAGOBJECTS_H */

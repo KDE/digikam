@@ -281,4 +281,33 @@ const char* TagListDrag::format(int i) const
     return 0;
 }
 
+CameraItemListDrag::CameraItemListDrag(const QStringList& cameraItemPaths,
+                                       QWidget *dragSource,
+                                       const char *name)
+                  : QDragObject( dragSource, name )
+{
+    m_cameraItemPaths = cameraItemPaths;
+}
+
+bool CameraItemListDrag::canDecode(const QMimeSource* e)
+{
+    return e->provides("digikam/cameraItemlist");
+}
+
+QByteArray CameraItemListDrag::encodedData(const char*) const
+{
+    QByteArray ba;
+    QDataStream ds(ba, IO_WriteOnly);
+    ds << m_cameraItemPaths;
+    return ba;
+}
+
+const char* CameraItemListDrag::format(int i) const
+{
+    if ( i == 0 )
+        return "digikam/cameraItemlist";
+
+    return 0;
+}
+
 }  // namespace Digikam
