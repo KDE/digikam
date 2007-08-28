@@ -57,17 +57,19 @@ public:
     StatusProgressBar(QWidget *parent=0);
     ~StatusProgressBar();
 
-    void setText(const QString& text);
     void setAlignment(Qt::Alignment a);
 
     void progressBarMode(int mode, const QString& text=QString());
 
-    int progressValue();
-    void setProgressValue(int v);
+    int  progressValue();
 
-    int progressTotalSteps();
+    int  progressTotalSteps();
     void setProgressTotalSteps(int v);
 
+public slots:
+
+    void setText(const QString& text);
+    void setProgressValue(int v);
     void setProgressText(const QString& text);
 
 signals:

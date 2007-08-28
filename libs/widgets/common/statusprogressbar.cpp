@@ -85,7 +85,7 @@ StatusProgressBar::StatusProgressBar(QWidget *parent)
     d->cancelButton   = new QPushButton(d->progressWidget);
     d->cancelButton->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
     d->cancelButton->setIcon(SmallIcon("cancel"));
-    setProgressTotalStep(100);
+    setProgressTotalSteps(100);
 
     // Parent widget will probably have the wait cursor set.
     // Set arrow cursor to indicate the button can be clicked
@@ -135,7 +135,7 @@ int StatusProgressBar::progressTotalSteps()
     return d->progressBar->maximum();
 }
 
-void StatusProgressBar::setProgressTotalStep(int v)
+void StatusProgressBar::setProgressTotalSteps(int v)
 {
     d->progressBar->setMaximum(v);
 }
