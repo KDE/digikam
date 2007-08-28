@@ -34,7 +34,6 @@
 #include <kstandarddirs.h>
 #include <kcursor.h>
 #include <klocale.h>
-#include <k3staticdeleter.h>
 
 // Local includes.
 
@@ -56,23 +55,19 @@ public:
         longitude = 0;
         latLonPos = 0;
     }
-    
+
     int             xPos;
     int             yPos;
     int             xMousePos;
     int             yMousePos;
-    
+
     double          latitude;
     double          longitude;
 
     QLabel         *latLonPos;
-
-    static QPixmap *worldMap;
 };
 
-static K3StaticDeleter<QPixmap> pixmapDeleter;
-
-QPixmap *WorldMapWidgetPriv::worldMap = 0;
+K_GLOBAL_STATIC(QPixmap, worldMap);
 
 WorldMapWidget::WorldMapWidget(int w, int h, QWidget *parent)
               : Q3ScrollView(parent)
@@ -101,12 +96,12 @@ WorldMapWidget::~WorldMapWidget()
 
 QPixmap &WorldMapWidget::worldMapPixmap()
 {
-    if (!d->worldMap)
+    if (worldMap->isNull())
     {
-        QString directory = KStandardDirs::locate("data", "digikam/data/worldmap.jpg");
-        pixmapDeleter.setObject(d->worldMap, new QPixmap(directory));
+        QString mapPath = KStandardDirs::locate("data", "digikam/data/worldmap.jpg");
+        *worldMap = QPixmap(mapPath);
     }
-    return *d->worldMap;
+    return *worldMap;
 }
 
 double WorldMapWidget::getLatitude(void)
