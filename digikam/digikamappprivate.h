@@ -74,8 +74,10 @@ public:
     {
         fullScreen                           = false;
         validIccPath                         = true;
+        cameraSolidMenu                      = 0;
         usbMediaMenu                         = 0;
         cardReaderMenu                       = 0;
+        manuallyAddedCamerasMenu             = 0;
         newAction                            = 0;
         deleteAction                         = 0;
         imageDeletePermanentlyAction         = 0;
@@ -164,8 +166,10 @@ public:
 
     QString                cameraGuiPath;
 
+    KMenu                 *cameraSolidMenu;
     KMenu                 *usbMediaMenu;
     KMenu                 *cardReaderMenu;
+    KMenu                 *manuallyAddedCamerasMenu;
 
     KSharedConfig::Ptr     config;
 
