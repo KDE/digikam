@@ -31,7 +31,6 @@
 #include <kurllabel.h>
 #include <ktoolbar.h>
 #include <kiconloader.h>
-#include <kpopupmenu.h>
 #include <kapplication.h>
 #include <kstandarddirs.h>
 #include <klocale.h>
@@ -67,7 +66,8 @@ int DLogoAction::plug(QWidget *widget, int index)
         KGlobal::dirs()->addResourceType("logo-digikam", KGlobal::dirs()->kde_default("data") + "digikam/data");
         QString directory = KGlobal::dirs()->findResourceDir("logo-digikam", "logo-digikam.png");
         pixmapLogo->setPixmap(QPixmap( directory + "logo-digikam.png" ));
-
+        pixmapLogo->setFocusPolicy(QWidget::NoFocus);
+	
         bar->insertWidget(id, pixmapLogo->width(), pixmapLogo);
         bar->alignItemRight(id);
     
