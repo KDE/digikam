@@ -841,7 +841,7 @@ void DigikamApp::setupActions()
 
     // -- Logo on the right of tool bar --------------------------
 
-    new DLogoAction(actionCollection(), "logo_action" );
+    actionCollection()->addAction("logo_action", new DLogoAction(this));
 
     // -- Rating actions ---------------------------------------------------------------
 
