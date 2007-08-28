@@ -4,6 +4,7 @@ install( FILES histogramwidget.h
                sidebar.h
                squeezedcombobox.h 
                dpopupmenu.h 
+	       dlogoaction.h
                statuszoombar.h 
                statusnavigatebar.h
                statusprogressbar.h 

@@ -97,6 +97,7 @@
 #include "imageattributeswatch.h"
 #include "batchthumbsgenerator.h"
 #include "batchalbumssyncmetadata.h"
+#include "dlogoaction.h"
 #include "digikamadaptor.h"
 #include "digikamappprivate.h"
 #include "digikamapp.h"
@@ -837,6 +838,10 @@ void DigikamApp::setupActions()
     d->donateMoneyAction = new KAction(i18n("Make a donation..."), this);
     connect(d->donateMoneyAction, SIGNAL(triggered()), this, SLOT(slotDonateMoney()));
     actionCollection()->addAction("help_donatemoney", d->donateMoneyAction);
+
+    // -- Logo on the right of tool bar --------------------------
+
+    new DLogoAction(actionCollection(), "logo_action" );
 
     // -- Rating actions ---------------------------------------------------------------
 
