@@ -82,7 +82,7 @@ StatusProgressBar::StatusProgressBar(QWidget *parent)
     d->progressWidget = new QWidget(this);
     QHBoxLayout *hBox = new QHBoxLayout(d->progressWidget);
     d->progressBar    = new KProgress(d->progressWidget);
-    setProgressTotalStep(100);
+    setProgressTotalSteps(100);
     d->cancelButton = new QPushButton(d->progressWidget);
     d->cancelButton->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
     d->cancelButton->setPixmap(SmallIcon("cancel"));
@@ -118,14 +118,24 @@ void StatusProgressBar::setAlignment(int a)
     d->textLabel->setAlignment(a);
 }
 
+int StatusProgressBar::progressValue()
+{
+    return d->progressBar->progress();
+}
+
 void StatusProgressBar::setProgressValue( int v )
 {
     d->progressBar->setProgress(v);
 }
 
-void StatusProgressBar::setProgressTotalStep(int v)
+void StatusProgressBar::setProgressTotalSteps(int v)
 {
     d->progressBar->setTotalSteps(v);
+}
+
+int StatusProgressBar::progressTotalSteps()
+{
+    return d->progressBar->totalSteps();
 }
 
 void StatusProgressBar::setProgressText( const QString& text )
