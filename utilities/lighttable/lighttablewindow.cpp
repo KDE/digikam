@@ -45,6 +45,7 @@
 // Local includes.
 
 #include "ddebug.h"
+#include "dlogoaction.h"
 #include "themeengine.h"
 #include "dimg.h"
 #include "dmetadata.h"
@@ -451,6 +452,8 @@ void LightTableWindow::setupActions()
 
     // ---------------------------------------------------------------------------------
 
+    new DLogoAction(actionCollection(), "logo_action");
+    
     createGUI("lighttablewindowui.rc", false);
 }
 

@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="19" name="lighttablewindow" >
+<gui version="20" name="lighttablewindow" >
 
 <MenuBar>
 
@@ -70,6 +70,8 @@
      <Action name="lighttable_fullscreen" />
      <Action name="lighttable_slideshow" />      
      <Merge />
+     <WeakSeparator/>
+     <Action name="logo_action" />	       
 </ToolBar>
  
 <ActionProperties/>
