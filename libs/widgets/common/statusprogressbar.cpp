@@ -82,7 +82,7 @@ StatusProgressBar::StatusProgressBar(QWidget *parent)
     d->progressWidget = new QWidget(this);
     QHBoxLayout *hBox = new QHBoxLayout(d->progressWidget);
     d->progressBar    = new KProgress(d->progressWidget);
-    d->progressBar->setTotalSteps(100);
+    setProgressTotalStep(100);
     d->cancelButton = new QPushButton(d->progressWidget);
     d->cancelButton->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
     d->cancelButton->setPixmap(SmallIcon("cancel"));
@@ -123,6 +123,11 @@ void StatusProgressBar::setProgressValue( int v )
     d->progressBar->setProgress(v);
 }
 
+void StatusProgressBar::setProgressTotalStep(int v)
+{
+    d->progressBar->setTotalSteps(v);
+}
+
 void StatusProgressBar::setProgressText( const QString& text )
 {
     d->progressBar->setFormat( text + QString ("%p%") );
@@ -151,4 +156,3 @@ void StatusProgressBar::progressBarMode( int mode, const QString& text )
 }
 
 }  // namespace Digikam
-
