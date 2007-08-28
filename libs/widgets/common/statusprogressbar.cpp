@@ -120,9 +120,19 @@ void StatusProgressBar::setAlignment(Qt::Alignment a)
     d->textLabel->setAlignment(a);
 }
 
+int StatusProgressBar::progressValue()
+{
+    return d->progressBar->value();
+}
+
 void StatusProgressBar::setProgressValue( int v )
 {
     d->progressBar->setValue(v);
+}
+
+int StatusProgressBar::progressTotalSteps()
+{
+    return d->progressBar->maximum();
 }
 
 void StatusProgressBar::setProgressTotalStep(int v)

@@ -61,8 +61,13 @@ public:
     void setAlignment(Qt::Alignment a);
 
     void progressBarMode(int mode, const QString& text=QString());
+
+    int progressValue();
     void setProgressValue(int v);
-    void setProgressTotalStep(int v);
+
+    int progressTotalSteps();
+    void setProgressTotalSteps(int v);
+
     void setProgressText(const QString& text);
 
 signals:
