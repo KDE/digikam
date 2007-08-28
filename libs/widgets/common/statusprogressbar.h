@@ -54,7 +54,7 @@ public:
 
 public:
 
-    StatusProgressBar( QWidget *parent=0 );
+    StatusProgressBar(QWidget *parent=0);
     ~StatusProgressBar();
 
     void setText(const QString& text);
@@ -62,6 +62,7 @@ public:
 
     void progressBarMode(int mode, const QString& text=QString());
     void setProgressValue(int v);
+    void setProgressTotalStep(int v);
     void setProgressText(const QString& text);
 
 signals:
