@@ -43,7 +43,7 @@ public:
     
     DLogoAction(QObject* parent, const char* name=0);
                
-    virtual int plug(QWidget *widget, int index=-1);
+    virtual QWidget* createWidget(QWidget* parent);
 
 private slots:
 

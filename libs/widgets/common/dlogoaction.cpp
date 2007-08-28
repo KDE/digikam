@@ -24,13 +24,14 @@
 // Qt includes.
 
 #include <QPixmap>
+#include <QBoxLayout>
 
 // KDE includes.
 
 #include <kurllabel.h>
 #include <ktoolbar.h>
 #include <kiconloader.h>
-#include <kpopupmenu.h>
+#include <kapplication.h>
 #include <ktoolinvocation.h>
 #include <kstandarddirs.h>
 #include <klocale.h>
@@ -43,47 +44,34 @@ namespace Digikam
 {
 
 DLogoAction::DLogoAction(QObject* parent, const char* name)
-           : KAction(parent, name)
+           : KAction(parent)
 {
+    setObjectName(name);
 }
 
-int DLogoAction::plug(QWidget *widget, int index)
+QWidget* DLogoAction::createWidget( QWidget * parent )
 {
-    if (kapp && !kapp->authorizeKAction(name()))
-        return -1;
+    QToolBar *bar = qobject_cast<QToolBar*>(parent);
+    
+    // This action should only be used in a toolbar
+    Q_ASSERT(bar != NULL);
+    
+    QWidget* container    = new QWidget(parent);
+    QHBoxLayout* layout   = new QHBoxLayout(container);
+    KUrlLabel *pixmapLogo = new KUrlLabel("http://www.digikam.org", QString(), bar);
+    pixmapLogo->setMargin(0);
+    pixmapLogo->setScaledContents(false);
+    pixmapLogo->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
+    pixmapLogo->setToolTip(i18n("Visit digiKam project website"));
+    pixmapLogo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png")));
+    pixmapLogo->setFocusPolicy(Qt::NoFocus);
 
-    if ( widget->inherits( "KToolBar" ) )
-    {
-        KToolBar *bar = (KToolBar *)widget;
-
-        int id = getToolButtonID();
-
-        KURLLabel *pixmapLogo = new KURLLabel("http://www.digikam.org", QString(), bar);
-        pixmapLogo->setMargin(0);
-        pixmapLogo->setScaledContents(false);
-        pixmapLogo->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
-        pixmapLogo->setTooltips(pixmapLogo, i18n("Visit digiKam project website"));
-        KGlobal::dirs()->addResourceType("logo-digikam", KGlobal::dirs()->kde_default("data") + "digikam/data");
-        QString directory = KGlobal::dirs()->findResourceDir("logo-digikam", "logo-digikam.png");
-        pixmapLogo->setPixmap(QPixmap( directory + "logo-digikam.png" ));
-
-        bar->insertWidget(id, pixmapLogo->width(), pixmapLogo);
-        bar->alignItemRight(id);
-
-        addContainer(bar, id);
-
-        connect(bar, SIGNAL(destroyed()), 
-                this, SLOT(slotDestroyed()));
-
-        connect(pixmapLogo, SIGNAL(leftClickedURL(const QString&)),
-                this, SLOT(slotProcessURL(const QString&)));    
-
-        return containerCount() - 1;
-    }
-
-    int containerId = KAction::plug( widget, index );
-
-    return containerId;
+    layout->setMargin(0);
+    layout->setSpacing(0);
+    layout->addStretch();
+    layout->addWidget(pixmapLogo);
+    
+    return container;
 }
 
 void DLogoAction::slotProcessURL(const QString& url)
