@@ -96,7 +96,7 @@ namespace DImgScale
     void dimgScaleAARGB16(DImgScaleInfo *isi, ullong *dest,
                           int dxx, int dyy, int dw, int dh, 
                           int dow, int sow);
-};
+}
 
 using namespace DImgScale;
 

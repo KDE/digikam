@@ -15,7 +15,8 @@ INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/editor
                     ${CMAKE_SOURCE_DIR}/digikam/libs/dimg/filters 
                     ${CMAKE_SOURCE_DIR}/digikam/libs/dimg/loaders 
                     ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata 
-                    ${CMAKE_SOURCE_DIR}/digikam/digikam   
+                    ${CMAKE_SOURCE_DIR}/digikam/digikam 
+                    ${CMAKE_BINARY_DIR}/digikam/digikam
                    )
 
 ADD_SUBDIRECTORY( adjustcurves )

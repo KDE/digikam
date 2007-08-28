@@ -34,7 +34,7 @@
 #include <kstandarddirs.h>
 #include <kcursor.h>
 #include <klocale.h>
-#include <kstaticdeleter.h>
+#include <k3staticdeleter.h>
 
 // Local includes.
 
@@ -70,7 +70,7 @@ public:
     static QPixmap *worldMap;
 };
 
-static KStaticDeleter<QPixmap> pixmapDeleter;
+static K3StaticDeleter<QPixmap> pixmapDeleter;
 
 QPixmap *WorldMapWidgetPriv::worldMap = 0;
 

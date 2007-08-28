@@ -104,7 +104,7 @@ public:
         YCBCR,
         CMYK,
         CIELAB,
-        COLORMODELRAW,
+        COLORMODELRAW
     };
 
     /** Identify file format */
