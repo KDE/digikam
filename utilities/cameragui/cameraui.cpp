@@ -426,7 +426,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     d->downloadMenu->insertItem(i18n("Download/Delete Selected"), 
                                 this, SLOT(slotDownloadAndDeleteSelected()), 0, 2);
     d->downloadMenu->insertItem(i18n("Download/Delete All"),      
-                                this, SLOT(slotDownloadAll()), 0, 3);
+                                this, SLOT(slotDownloadAndDeleteAll()), 0, 3);
     d->downloadMenu->insertSeparator();
     d->downloadMenu->insertItem(i18n("Upload..."),         
                                 this, SLOT(slotUpload()), 0, 4);
