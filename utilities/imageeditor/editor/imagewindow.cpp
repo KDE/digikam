@@ -70,6 +70,7 @@
 
 #include "constants.h"
 #include "ddebug.h"
+#include "dlogoaction.h"
 #include "dpopupmenu.h"
 #include "dragobjects.h"
 #include "canvas.h"
@@ -374,6 +375,8 @@ void ImageWindow::setupActions()
     actionCollection()->addAction("image_trash_directly", d->fileTrashDirectlyAction);
 
     // ---------------------------------------------------------------------------------
+
+    actionCollection()->addAction("logo_action", new DLogoAction(this));
 
     createGUI("digikamimagewindowui.rc");
 }

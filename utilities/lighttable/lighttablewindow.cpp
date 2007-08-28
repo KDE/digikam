@@ -58,6 +58,7 @@
 #include "ddebug.h"
 #include "themeengine.h"
 #include "dimg.h"
+#include "dlogoaction.h"
 #include "dmetadata.h"
 #include "albumsettings.h"
 #include "albummanager.h"
@@ -137,13 +138,15 @@ void LightTableWindow::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("LightTable Settings");
     QList<int> list;
-    if (group.hasKey("Vertical Splitter State")) {
+    if (group.hasKey("Vertical Splitter State")) 
+    {
         QByteArray state;
         state = group.readEntry("Vertical Splitter State", state);
         d->vSplitter->restoreState(QByteArray::fromBase64(state));
     }
 
-    if (group.hasKey("Horizontal Splitter State")) {
+    if (group.hasKey("Horizontal Splitter State")) 
+    {
         QByteArray state;
         state = group.readEntry("Horizontal Splitter State", state);
         d->hSplitter->restoreState(QByteArray::fromBase64(state));
@@ -478,6 +481,8 @@ void LightTableWindow::setupActions()
     actionCollection()->addAction("lighttable_ratefivestar", d->star5);
 
     // ---------------------------------------------------------------------------------
+
+    actionCollection()->addAction("logo_action", new DLogoAction(this));
 
     createGUI("lighttablewindowui.rc");
 }
