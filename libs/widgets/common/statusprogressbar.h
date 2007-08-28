@@ -54,7 +54,7 @@ public:
 
 public:
 
-    StatusProgressBar( QWidget *parent=0 );
+    StatusProgressBar(QWidget *parent=0);
     ~StatusProgressBar();
 
     void setText(const QString& text);
