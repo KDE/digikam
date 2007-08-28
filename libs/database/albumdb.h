@@ -94,10 +94,10 @@ public:
      * @param absolutePath The last absolute path in the file system.
      *                     The usage of this parameter is up to the CollectionManager
      * @param uuid         The volume UUID of the volume this album root is contained on.
-     * @param relativePath The relative path on the volume of this album root
+     * @param specificPath The path specific to volume
      * @returns the album root id of the newly created root
      */
-    int addAlbumRoot(int type, const QString &absolutePath, const QString &uuid, const QString &relativePath);
+    int addAlbumRoot(int type, const QString &absolutePath, const QString &uuid, const QString &specificPath);
 
     /**
      * Deletes an album  root from the database.
@@ -228,6 +228,13 @@ public:
      * @param albumID the id of the album
      */
     QString getAlbumIcon(int albumID);
+
+    /**
+     * Given an albumid, this returns the album root id for that album
+     * @param albumID the id of the albumdb
+     * @return the id of the album root of this album
+     */
+    int getAlbumRootId(int albumID);
 
     /**
      * Given an albumid, this returns the url for that albumdb

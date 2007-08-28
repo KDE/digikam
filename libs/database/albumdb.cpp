@@ -53,6 +53,8 @@ extern "C"
 #include "ddebug.h"
 #include "databaseattributeswatch.h"
 #include "databasebackend.h"
+#include "collectionmanager.h"
+#include "collectionlocation.h"
 #include "albumdb.h"
 
 namespace Digikam
@@ -88,7 +90,7 @@ QList<AlbumRootInfo> AlbumDB::getAlbumRoots()
     QList<AlbumRootInfo> list;
 
     QList<QVariant> values;
-    d->db->execSql( "SELECT id, status, absolutePath, type, uuid, relativePath FROM AlbumRoots;", &values );
+    d->db->execSql( "SELECT id, status, absolutePath, type, uuid, specificPath FROM AlbumRoots;", &values );
 
     for (QList<QVariant>::iterator it = values.begin(); it != values.end();)
     {
@@ -103,7 +105,7 @@ QList<AlbumRootInfo> AlbumDB::getAlbumRoots()
         ++it;
         info.uuid         = (*it).toString();
         ++it;
-        info.relativePath = (*it).toString();
+        info.specificPath = (*it).toString();
         ++it;
 
         list << info;
@@ -117,7 +119,7 @@ QList<AlbumRootInfo> AlbumDB::getAlbumRootsWithStatus(int status)
     QList<AlbumRootInfo> list;
 
     QList<QVariant> values;
-    d->db->execSql( "SELECT id, absolutePath, type, uuid, relativePath FROM AlbumRoots "
+    d->db->execSql( "SELECT id, absolutePath, type, uuid, specificPath FROM AlbumRoots "
                     " WHERE status=?;", status, &values );
 
     for (QList<QVariant>::iterator it = values.begin(); it != values.end();)
@@ -132,7 +134,7 @@ QList<AlbumRootInfo> AlbumDB::getAlbumRootsWithStatus(int status)
         ++it;
         info.uuid         = (*it).toString();
         ++it;
-        info.relativePath = (*it).toString();
+        info.specificPath = (*it).toString();
         ++it;
 
         list << info;
@@ -141,11 +143,11 @@ QList<AlbumRootInfo> AlbumDB::getAlbumRootsWithStatus(int status)
     return list;
 }
 
-int AlbumDB::addAlbumRoot(int type, const QString &absolutePath, const QString &uuid, const QString &relativePath)
+int AlbumDB::addAlbumRoot(int type, const QString &absolutePath, const QString &uuid, const QString &specificPath)
 {
-    d->db->execSql( QString("REPLACE INTO AlbumRoots (type, status, absolutePath, uuid, relativePath) "
+    d->db->execSql( QString("REPLACE INTO AlbumRoots (type, status, absolutePath, uuid, specificPath) "
                             "VALUES(?, 0, ?, ?, ?);"),
-                    type, absolutePath, uuid, relativePath);
+                    type, absolutePath, uuid, specificPath);
 
     int id = d->db->lastInsertedRow();
     return id;
@@ -180,7 +182,8 @@ void AlbumDB::setAlbumRootStatus(int rootId, int status, const QString &absolute
                         status, absolutePath, rootId );
 }
 
-
+#define OLDCODE
+#ifdef OLDCODE
 AlbumInfo::List AlbumDB::scanAlbums()
 {
     AlbumInfo::List aList;
@@ -271,6 +274,100 @@ TagInfo::List AlbumDB::scanTags()
     return tList;
 }
 
+#else
+AlbumInfo::List AlbumDB::scanAlbums()
+{
+    AlbumInfo::List aList;
+
+    QList<QVariant> values;
+    d->db->execSql( "SELECT R.absolutePath, A.id, A.relativePath, A.date, A.caption, A.collection, B.relativePath, I.name \n "
+                    "FROM Albums AS A \n "
+                    "  LEFT OUTER JOIN Images AS I ON A.icon=I.id \n"
+                    "  LEFT OUTER JOIN Albums AS B ON B.id=I.dirid \n"
+                    "  LEFT OUTER JOIN AlbumRoots AS R ON R.id=B.id;", &values);
+
+    QString iconAlbumUrl, iconName;
+
+    for (QList<QVariant>::iterator it = values.begin(); it != values.end();)
+    {
+        AlbumInfo info;
+
+        info.albumRoot = (*it).toString();
+        ++it;
+        info.id = (*it).toInt();
+        ++it;
+        info.url = (*it).toString();
+        ++it;
+        info.date = QDate::fromString((*it).toString(), Qt::ISODate);
+        ++it;
+        info.caption = (*it).toString();
+        ++it;
+        info.collection = (*it).toString();
+        ++it;
+        iconAlbumUrl = (*it).toString();
+        ++it;
+        iconName = (*it).toString();
+        ++it;
+
+        if (!iconName.isEmpty())
+        {
+            info.icon = info.albumRoot + iconAlbumUrl + '/' + iconName;
+        }
+
+        aList.append(info);
+    }
+
+    return aList;
+}
+
+TagInfo::List AlbumDB::scanTags()
+{
+    TagInfo::List tList;
+
+    QList<QVariant> values;
+    d->db->execSql( "SELECT T.id, T.pid, T.name, A.relativePath, I.name, T.iconkde, R.absolutePath \n "
+                    "FROM Tags AS T \n"
+                    "  LEFT OUTER JOIN Images AS I ON I.id=T.icon \n "
+                    "  LEFT OUTER JOIN Albums AS A ON A.id=I.dirid; "
+                    "  LEFT OUTER JOIN AlbumRoots AS R ON R.id=A.albumRoot;", &values );
+
+    QString iconName, iconKDE, albumURL, basePath;
+
+    for (QList<QVariant>::iterator it = values.begin(); it != values.end();)
+    {
+        TagInfo info;
+
+        info.id     = (*it).toInt();
+        ++it;
+        info.pid    = (*it).toInt();
+        ++it;
+        info.name   = (*it).toString();
+        ++it;
+        albumURL    = (*it).toString();
+        ++it;
+        iconName    = (*it).toString();
+        ++it;
+        iconKDE     = (*it).toString();
+        ++it;
+        basePath    = (*it).toString();
+        ++it;
+
+        if ( albumURL.isEmpty() )
+        {
+            info.icon = iconKDE;
+        }
+        else
+        {
+            info.icon = basePath + albumURL + '/' + iconName;
+        }
+
+        tList.append(info);
+    }
+
+    return tList;
+}
+#endif
+
 SearchInfo::List AlbumDB::scanSearches()
 {
     SearchInfo::List searchList;
@@ -295,6 +392,7 @@ SearchInfo::List AlbumDB::scanSearches()
     return searchList;
 }
 
+#ifdef OLDCODE
 QList<AlbumShortInfo> AlbumDB::getAlbumShortInfos()
 {
     QList<QVariant> values;
@@ -364,6 +462,90 @@ int AlbumDB::addAlbum(const QString &albumRoot, const QString& url,
     int id = d->db->lastInsertedRow();
     return id;
 }
+#else
+QList<AlbumShortInfo> AlbumDB::getAlbumShortInfos()
+{
+    QList<QVariant> values;
+    d->db->execSql( QString("SELECT Albums.id, Albums.relativePath, AlbumRoots.absolutePath from Albums "
+                            " LEFT OUTER JOIN AlbumRoots ON AlbumRoots.id=Albums.albumRoot; "),
+                    &values);
+
+    QList<AlbumShortInfo> albumList;
+
+    for (QList<QVariant>::iterator it = values.begin(); it != values.end();)
+    {
+        AlbumShortInfo info;
+
+        info.id        = (*it).toInt();
+        ++it;
+        info.url       = (*it).toString();
+        ++it;
+        info.albumRoot = (*it).toString();
+        ++it;
+
+        albumList << info;
+    }
+
+    return albumList;
+}
+
+QStringList AlbumDB::getSubalbumsForPath(const QString &albumRoot,
+                                         const QString& path,
+                                         bool onlyDirectSubalbums)
+{
+    CollectionLocation *location = CollectionManager::instance()->locationForAlbumRootPath(albumRoot);
+    if (!location)
+        return QStringList();
+
+    QString subURL = path;
+    if (!path.endsWith("/"))
+        subURL += '/';
+    subURL = (subURL);
+
+    QList<QVariant> values;
+
+    if (onlyDirectSubalbums)
+    {
+        d->db->execSql( QString("SELECT relativePath FROM Albums WHERE albumRoot=? AND relativePath LIKE '") +
+                        subURL + QString("%' ") + QString("AND relativePath NOT LIKE '") +
+                        subURL + QString("%/%'; "),
+                        location->id(),
+                        &values );
+    }
+    else
+    {
+        d->db->execSql( QString("SELECT relativePath FROM Albums WHERE albumRoot=? AND relativePath LIKE '") +
+                        subURL + QString("%'; "),
+                        location->id(),
+                        &values );
+    }
+
+    QStringList subalbums;
+    for (QList<QVariant>::iterator it = values.begin(); it != values.end(); ++it)
+        subalbums << location->albumRootPath() + it->toString();
+    return subalbums;
+}
+
+int AlbumDB::addAlbum(const QString &albumRoot, const QString& relativePath,
+                      const QString& caption,
+                      const QDate& date, const QString& collection)
+{
+    CollectionLocation *location = CollectionManager::instance()->locationForAlbumRootPath(albumRoot);
+    if (!location)
+        return -1;
+
+    QList<QVariant> boundValues;
+    boundValues << location->id() << relativePath << date.toString(Qt::ISODate) << caption << collection;
+
+    d->db->execSql( QString("REPLACE INTO Albums (albumRoot, relativePath, date, caption, collection) "
+                            "VALUES(?, ?, ?, ?, ?);"),
+                    boundValues);
+
+    int id = d->db->lastInsertedRow();
+    return id;
+}
+
+#endif
 
 void AlbumDB::setAlbumCaption(int albumID, const QString& caption)
 {
@@ -391,7 +573,7 @@ void AlbumDB::setAlbumIcon(int albumID, qlonglong iconID)
                     albumID );
 }
 
-
+#ifdef OLDCODE
 QString AlbumDB::getAlbumIcon(int albumID)
 {
     QList<QVariant> values;
@@ -417,6 +599,35 @@ QString AlbumDB::getAlbumIcon(int albumID)
 
     return basePath;
 }
+#else
+QString AlbumDB::getAlbumIcon(int albumID)
+{
+    QList<QVariant> values;
+    d->db->execSql( QString("SELECT B.relativePath, I.name, R.absolutePath \n "
+                            "FROM Albums AS A \n "
+                            "  LEFT OUTER JOIN Images AS I ON I.id=A.icon \n "
+                            "  LEFT OUTER JOIN Albums AS B ON B.id=I.dirid \n "
+                            "  LEFT OUTER JOIN AlbumRoots AS R ON R.id=B.albumRoot \n "
+                            "WHERE A.id=?;"),
+                    albumID, &values );
+    if (values.isEmpty())
+        return QString();
+
+    QList<QVariant>::iterator it = values.begin();
+    QString path = (*it).toString();
+    ++it;
+    QString icon = (*it).toString();
+    ++it;
+    if (icon.isEmpty())
+        return QString();
+
+    QString basePath = (*it).toString();
+    basePath += path;
+    basePath += '/' + icon;
+
+    return basePath;
+}
+#endif
 
 void AlbumDB::deleteAlbum(int albumID)
 {
@@ -473,6 +684,7 @@ void AlbumDB::setTagIcon(int tagID, const QString& iconKDE, qlonglong iconID)
     }
 }
 
+#ifdef OLDCODE
 QString AlbumDB::getTagIcon(int tagID)
 {
     QList<QVariant> values;
@@ -510,6 +722,46 @@ QString AlbumDB::getTagIcon(int tagID)
 
     return icon;
 }
+#else
+QString AlbumDB::getTagIcon(int tagID)
+{
+    QList<QVariant> values;
+    d->db->execSql( QString("SELECT A.relativePath, I.name, T.iconkde, R.absolutePath \n "
+                            "FROM Tags AS T \n "
+                            "  LEFT OUTER JOIN Images AS I ON I.id=T.icon \n "
+                            "  LEFT OUTER JOIN Albums AS A ON A.id=I.dirid \n "
+                            "  LEFT OUTER JOIN AlbumRoots AS R ON R.id=A.albumRoot \n "
+                            "WHERE T.id=?;"),
+                    tagID, &values );
+
+    if (values.isEmpty())
+        return QString();
+
+    QString iconName, iconKDE, albumURL, icon, basePath;
+
+    QList<QVariant>::iterator it = values.begin();
+
+    albumURL    = (*it).toString();
+    ++it;
+    iconName    = (*it).toString();
+    ++it;
+    iconKDE     = (*it).toString();
+    ++it;
+    basePath    = (*it).toString();
+    ++it;
+
+    if ( albumURL.isEmpty() )
+    {
+        icon = iconKDE;
+    }
+    else
+    {
+        icon = basePath + albumURL + '/' + iconName;
+    }
+
+    return icon;
+}
+#endif
 
 void AlbumDB::setTagParentID(int tagID, int newParentTagID)
 {
@@ -676,6 +928,7 @@ QList<int> AlbumDB::getItemTagIDs(qlonglong imageID)
     return ids;
 }
 
+#ifdef OLDCODE
 ItemShortInfo AlbumDB::getItemShortInfo(qlonglong imageID)
 {
     QList<QVariant> values;
@@ -701,6 +954,33 @@ ItemShortInfo AlbumDB::getItemShortInfo(qlonglong imageID)
 
     return info;
 }
+#else
+ItemShortInfo AlbumDB::getItemShortInfo(qlonglong imageID)
+{
+    QList<QVariant> values;
+
+    d->db->execSql( QString("SELECT Images.name, AlbumRoots.absolutePath, Albums.relativePath, Albums.id "
+                            "FROM Images "
+                            "  LEFT OUTER JOIN Albums ON Albums.id=Images.dirid "
+                            "  LEFT OUTER JOIN AlbumRoots ON AlbumRoots.id=Albums.albumRoot "
+                            "WHERE Images.id=?;"),
+                    imageID,
+                    &values );
+
+    ItemShortInfo info;
+
+    if (!values.isEmpty())
+    {
+        info.id        = imageID;
+        info.itemName  = values[0].toString();
+        info.albumRoot = values[1].toString();
+        info.album     = values[2].toString();
+        info.albumID   = values[3].toInt();
+    }
+
+    return info;
+}
+#endif
 
 bool AlbumDB::hasTags(const QList<qlonglong>& imageIDList)
 {
@@ -870,6 +1150,7 @@ QStringList AlbumDB::getItemNamesInAlbum(int albumID)
     return names;
 }
 
+#ifdef OLDCODE
 QStringList AlbumDB::getAllItemURLsWithoutDate()
 {
     QList<QVariant> values;
@@ -886,6 +1167,25 @@ QStringList AlbumDB::getAllItemURLsWithoutDate()
         urls << libraryPath + it->toString();
     return urls;
 }
+#else
+QStringList AlbumDB::getAllItemURLsWithoutDate()
+{
+    QList<QVariant> values;
+    d->db->execSql( QString("SELECT AlbumRoots.absolutePath||Albums.relativePath||'/'||Images.name "
+                            "FROM Images "
+                            "  LEFT OUTER JOIN Albums ON Images.dirid=Albums.id "
+                            "  LEFT OUTER JOIN AlbumRoots ON AlbumRoots.id=Albums.albumRoot "
+                            "WHERE (Images.datetime is null or "
+                            "       Images.datetime == '');"),
+                    &values );
+
+    QStringList urls;
+    for (QList<QVariant>::iterator it = values.begin(); it != values.end(); ++it)
+        urls << it->toString();
+
+    return urls;
+}
+#endif
 
 QList<QPair<QString, QDateTime> > AlbumDB::getItemsAndDate()
 {
@@ -909,7 +1209,7 @@ QList<QPair<QString, QDateTime> > AlbumDB::getItemsAndDate()
     return data;
 }
 
-
+#ifdef OLDCODE
 int AlbumDB::getAlbumForPath(const QString &albumRoot, const QString& folder, bool create)
 {
     QList<QVariant> values;
@@ -929,6 +1229,31 @@ int AlbumDB::getAlbumForPath(const QString &albumRoot, const QString& folder, bo
 
     return albumID;
 }
+#else
+int AlbumDB::getAlbumForPath(const QString &albumRoot, const QString& folder, bool create)
+{
+    CollectionLocation *location = CollectionManager::instance()->locationForAlbumRootPath(albumRoot);
+    if (!location)
+        return -1;
+
+    QList<QVariant> values;
+    d->db->execSql( QString("SELECT id FROM Albums WHERE albumRoot=? AND relativePath=?;"),
+                    location->id(), folder, &values);
+
+    int albumID = -1;
+    if (values.isEmpty())
+    {
+        if (create)
+            albumID = addAlbum(albumRoot, folder, QString(), QDate::currentDate(), QString());
+    }
+    else
+    {
+        albumID = values.first().toInt();
+    }
+
+    return albumID;
+}
+#endif
 
 qlonglong AlbumDB::addItem(int albumID,
                          const QString& name,
@@ -1227,6 +1552,7 @@ int AlbumDB::getItemRating(qlonglong imageID)
         return 0;
 }
 
+#ifdef OLDCODE
 QStringList AlbumDB::getItemURLsInAlbum(int albumID, ItemSortOrder sortOrder)
 {
     QList<QVariant> values;
@@ -1275,6 +1601,69 @@ QStringList AlbumDB::getItemURLsInAlbum(int albumID, ItemSortOrder sortOrder)
 
     return urls;
 }
+#else
+QStringList AlbumDB::getItemURLsInAlbum(int albumID, ItemSortOrder sortOrder)
+{
+    QList<QVariant> values;
+
+    QString sqlString;
+    switch(sortOrder)
+    {
+        case ByItemName:
+            sqlString = QString("SELECT AlbumRoots.absolutePath||Albums.relativePath||'/'||Images.name "
+                                 "FROM Images "
+                                 "  LEFT OUTER JOIN Albums ON Albums.id=Images.dirid "
+                                 "  LEFT OUTER JOIN AlbumRoots ON AlbumRoots.id=Albums.albumRoot "
+                                 "WHERE Albums.id=? "
+                                 "ORDER BY Images.name COLLATE NOCASE;");
+            break;
+        case ByItemPath:
+            // Dont collate on the path - this is to maintain the same behaviour
+            // that happens when sort order is "By Path"
+            sqlString = QString("SELECT AlbumRoots.absolutePath||Albums.relativePath||'/'||Images.name "
+                                 "FROM Images "
+                                 "  LEFT OUTER JOIN Albums ON Albums.id=Images.dirid "
+                                 "  LEFT OUTER JOIN AlbumRoots ON AlbumRoots.id=Albums.albumRoot "
+                                 "WHERE Albums.id=? "
+                                 "ORDER BY Albums.relativePath,Images.name;");
+            break;
+        case ByItemDate:
+            sqlString = QString("SELECT AlbumRoots.absolutePath||Albums.relativePath||'/'||Images.name "
+                                 "FROM Images "
+                                 "  LEFT OUTER JOIN Albums ON Albums.id=Images.dirid "
+                                 "  LEFT OUTER JOIN AlbumRoots ON AlbumRoots.id=Albums.albumRoot "
+                                 "WHERE Albums.id=? "
+                                 "ORDER BY Images.datetime;");
+            break;
+        case ByItemRating:
+            sqlString = QString("SELECT AlbumRoots.absolutePath||Albums.relativePath||'/'||Images.name "
+                                 "FROM Images "
+                                 "  LEFT OUTER JOIN Albums ON Albums.id=Images.dirid "
+                                 "  LEFT OUTER JOIN AlbumRoots ON AlbumRoots.id=Albums.albumRoot "
+                                 "  LEFT OUTER JOIN ImageProperties.imageid=Images.id "
+                                 "WHERE Albums.id=? "
+                                 "AND ImageProperties.property='Rating' "
+                                 "ORDER BY ImageProperties.value DESC;");
+            break;
+        case NoItemSorting:
+        default:
+            sqlString = QString("SELECT AlbumRoots.absolutePath||Albums.relativePath||'/'||Images.name "
+                                 "FROM Images "
+                                 "  LEFT OUTER JOIN Albums ON Albums.id=Images.dirid "
+                                 "  LEFT OUTER JOIN AlbumRoots ON AlbumRoots.id=Albums.albumRoot "
+                                 "WHERE Albums.id=?;");
+            break;
+    }
+    // all statements take one bound values
+    d->db->execSql(sqlString, albumID, &values);
+
+    QStringList urls;
+    for (QList<QVariant>::iterator it = values.begin(); it != values.end(); ++it)
+        urls << it->toString();
+
+    return urls;
+}
+#endif
 
 QList<qlonglong> AlbumDB::getItemIDsInAlbum(int albumID)
 {
@@ -1292,6 +1681,7 @@ QList<qlonglong> AlbumDB::getItemIDsInAlbum(int albumID)
     return itemIDs;
 }
 
+#ifdef OLDCODE
 QStringList AlbumDB::getItemURLsInTag(int tagID, bool recursive)
 {
     QList<QVariant> values;
@@ -1324,6 +1714,40 @@ QStringList AlbumDB::getItemURLsInTag(int tagID, bool recursive)
 
     return urls;
 }
+#else
+QStringList AlbumDB::getItemURLsInTag(int tagID, bool recursive)
+{
+    QList<QVariant> values;
+
+    QString imagesIdClause;
+    QList<QVariant> boundValues;
+    if (recursive)
+    {
+        imagesIdClause = QString("SELECT imageid FROM ImageTags "
+                                 " WHERE tagid=? "
+                                 " OR tagid IN (SELECT id FROM TagsTree WHERE pid=?)");
+        boundValues << tagID << tagID;
+    }
+    else
+    {
+        imagesIdClause = QString("SELECT imageid FROM ImageTags WHERE tagid=?");
+        boundValues << tagID;
+    }
+
+    d->db->execSql( QString("SELECT AlbumRoots.absolutePath||Albums.relativePath||'/'||Images.name "
+                            "FROM Images "
+                            "  LEFT OUTER JOIN Albums ON Albums.id=Images.dirid "
+                            "  LEFT OUTER JOIN AlbumRoots ON AlbumRoots.id=Albums.albumRoot "
+                            "WHERE Images.id IN (%1);")
+                    .arg(imagesIdClause), boundValues, &values );
+
+    QStringList urls;
+    for (QList<QVariant>::iterator it = values.begin(); it != values.end(); ++it)
+        urls << it->toString();
+
+    return urls;
+}
+#endif
 
 QList<qlonglong> AlbumDB::getItemIDsInTag(int tagID, bool recursive)
 {
@@ -1347,6 +1771,7 @@ QList<qlonglong> AlbumDB::getItemIDsInTag(int tagID, bool recursive)
     return itemIDs;
 }
 
+#ifdef OLDCODE
 QString AlbumDB::getAlbumURL(int albumID)
 {
     QList<QVariant> values;
@@ -1357,6 +1782,31 @@ QString AlbumDB::getAlbumURL(int albumID)
     else
         return QString();
 }
+#else
+QString AlbumDB::getAlbumURL(int albumID)
+{
+    QList<QVariant> values;
+    d->db->execSql( QString("SELECT AlbumRoots.absolutePath||Albums.relativePath "
+                            "FROM Albums, AlbumRoots WHERE Albums.id=? AND AlbumRoots.id=Albums.albumRoot; "),
+                    albumID, &values);
+    if (!values.isEmpty())
+        return values.first().toString();
+    else
+        return QString();
+}
+
+int AlbumDB::getAlbumRootId(int albumID)
+{
+    QList<QVariant> values;
+    d->db->execSql( QString("SELECT albumRoot FROM Albums WHERE id=?; "),
+                    albumID, &values);
+    if (!values.isEmpty())
+        return values.first().toInt();
+    else
+        return -1;
+}
+
+#endif
 
 QDate AlbumDB::getAlbumLowestDate(int albumID)
 {
@@ -1423,6 +1873,7 @@ void AlbumDB::deleteItem(int albumID, const QString& file)
                     albumID, file );
 }
 
+#ifdef OLDCODE
 void AlbumDB::renameAlbum(int albumID, const QString& newUrl, bool renameSubalbums)
 {
     QString oldUrl = getAlbumURL(albumID);
@@ -1453,6 +1904,41 @@ void AlbumDB::renameAlbum(int albumID, const QString& newUrl, bool renameSubalbu
         }
     }
 }
+#else
+//TODO
+void AlbumDB::renameAlbum(int albumID, const QString& newRelativePath, bool renameSubalbums)
+{
+    /*
+    QString oldUrl = getAlbumURL(albumID);
+
+    // first delete any stale albums left behind
+    d->db->execSql( QString("DELETE FROM Albums WHERE url = ?"),
+                    newUrl );
+
+    // now update the album url
+    d->db->execSql( QString("UPDATE Albums SET relativePath = ? WHERE id = ?;"),
+                    newUrl, albumID );
+
+    if (renameSubalbums)
+    {
+        // now find the list of all subalbums which need to be updated
+        QList<QVariant> values;
+        d->db->execSql( QString("SELECT url FROM Albums WHERE url LIKE '?/%';"),
+                        oldUrl, &values );
+
+        // and update their url
+        QString newChildURL;
+        for (QList<QVariant>::iterator it = values.begin(); it != values.end(); ++it)
+        {
+            newChildURL = (*it).toString();
+            newChildURL.replace(oldUrl, newUrl);
+            d->db->execSql(QString("UPDATE Albums SET url=? WHERE url=?"),
+                           newChildURL, (*it) );
+        }
+    }
+    */
+}
+#endif
 
 void AlbumDB::setTagName(int tagID, const QString& name)
 {
