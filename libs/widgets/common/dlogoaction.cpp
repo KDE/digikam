@@ -43,10 +43,9 @@
 namespace Digikam 
 {
 
-DLogoAction::DLogoAction(QObject* parent, const char* name)
+DLogoAction::DLogoAction(QObject* parent)
            : KAction(parent)
 {
-    setObjectName(name);
 }
 
 QWidget* DLogoAction::createWidget( QWidget * parent )
@@ -71,10 +70,13 @@ QWidget* DLogoAction::createWidget( QWidget * parent )
     layout->addStretch();
     layout->addWidget(pixmapLogo);
     
+    connect(pixmapLogo, SIGNAL(leftClickedUrl(const QString&)),
+            this, SLOT(slotProcessUrl(const QString&)));
+
     return container;
 }
 
-void DLogoAction::slotProcessURL(const QString& url)
+void DLogoAction::slotProcessUrl(const QString& url)
 {
     KToolInvocation::invokeBrowser(url);
 }

@@ -41,13 +41,13 @@ class DIGIKAM_EXPORT DLogoAction : public KAction
 
 public:
     
-    DLogoAction(QObject* parent, const char* name=0);
+    DLogoAction(QObject* parent);
                
     virtual QWidget* createWidget(QWidget* parent);
 
 private slots:
 
-    void slotProcessURL(const QString&);
+    void slotProcessUrl(const QString&);
 };
 
 } // namespace Digikam
