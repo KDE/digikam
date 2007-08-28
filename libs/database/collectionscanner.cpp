@@ -133,7 +133,7 @@ QStringList CollectionScanner::formattedListOfStaleFiles()
     QList< QPair<QString,int> >::const_iterator it;
     for (it = m_filesToBeDeleted.constBegin(); it != m_filesToBeDeleted.constEnd(); ++it)
     {
-        QString location = " (" + access.db()->getAlbumURL((*it).second) + ')';
+        QString location = " (" + access.db()->getAlbumPath((*it).second) + ')';
 
         listToBeDeleted.append((*it).first + location);
     }

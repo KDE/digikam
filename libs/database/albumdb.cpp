@@ -1772,7 +1772,12 @@ QList<qlonglong> AlbumDB::getItemIDsInTag(int tagID, bool recursive)
 }
 
 #ifdef OLDCODE
-QString AlbumDB::getAlbumURL(int albumID)
+QString AlbumDB::getAlbumPath(int albumID)
+{
+    return getAlbumRelativePath(albumID);
+}
+
+QString AlbumDB::getAlbumRelativePath(int albumID)
 {
     QList<QVariant> values;
     d->db->execSql( QString("SELECT url from Albums WHERE id=?"),
@@ -1783,11 +1788,22 @@ QString AlbumDB::getAlbumURL(int albumID)
         return QString();
 }
 #else
-QString AlbumDB::getAlbumURL(int albumID)
+QString AlbumDB::getAlbumPath(int albumID)
 {
     QList<QVariant> values;
     d->db->execSql( QString("SELECT AlbumRoots.absolutePath||Albums.relativePath "
                             "FROM Albums, AlbumRoots WHERE Albums.id=? AND AlbumRoots.id=Albums.albumRoot; "),
+                    albumID, &values);
+    if (!values.isEmpty())
+        return values.first().toString();
+    else
+        return QString();
+}
+
+QString AlbumDB::getAlbumRelativePath(int albumID)
+{
+    QList<QVariant> values;
+    d->db->execSql( QString("SELECT relativePath from Albums WHERE id=?"),
                     albumID, &values);
     if (!values.isEmpty())
         return values.first().toString();
@@ -1876,40 +1892,7 @@ void AlbumDB::deleteItem(int albumID, const QString& file)
 #ifdef OLDCODE
 void AlbumDB::renameAlbum(int albumID, const QString& newUrl, bool renameSubalbums)
 {
-    QString oldUrl = getAlbumURL(albumID);
-
-    // first delete any stale albums left behind
-    d->db->execSql( QString("DELETE FROM Albums WHERE url = ?"),
-                    newUrl );
-
-    // now update the album url
-    d->db->execSql( QString("UPDATE Albums SET url = ? WHERE id = ?;"),
-                    newUrl, albumID );
-
-    if (renameSubalbums)
-    {
-        // now find the list of all subalbums which need to be updated
-        QList<QVariant> values;
-        d->db->execSql( QString("SELECT url FROM Albums WHERE url LIKE '?/%';"),
-                        oldUrl, &values );
-
-        // and update their url
-        QString newChildURL;
-        for (QList<QVariant>::iterator it = values.begin(); it != values.end(); ++it)
-        {
-            newChildURL = (*it).toString();
-            newChildURL.replace(oldUrl, newUrl);
-            d->db->execSql(QString("UPDATE Albums SET url=? WHERE url=?"),
-                           newChildURL, (*it) );
-        }
-    }
-}
-#else
-//TODO
-void AlbumDB::renameAlbum(int albumID, const QString& newRelativePath, bool renameSubalbums)
-{
-    /*
-    QString oldUrl = getAlbumURL(albumID);
+    QString oldUrl = getAlbumPath(albumID);
 
     // first delete any stale albums left behind
     d->db->execSql( QString("DELETE FROM Albums WHERE url = ?"),
@@ -1936,7 +1919,41 @@ void AlbumDB::renameAlbum(int albumID, const QString& newRelativePath, bool rena
                            newChildURL, (*it) );
         }
     }
-    */
+}
+#else
+void AlbumDB::renameAlbum(int albumID, const QString& newRelativePath, bool renameSubalbums)
+{
+    int albumRoot  = getAlbumRootId(albumID);
+    QString oldUrl = getAlbumRelativePath(albumID);
+
+    if (oldUrl == newRelativePath)
+        return;
+
+    // first delete any stale albums left behind
+    d->db->execSql( QString("DELETE FROM Albums WHERE relativePath=? AND albumRoot=?;"),
+                    newRelativePath, albumRoot );
+
+    // now update the album url
+    d->db->execSql( QString("UPDATE Albums SET relativePath = ? WHERE id = ? AND albumRoot=?;"),
+                    newRelativePath, albumID, albumRoot );
+
+    if (renameSubalbums)
+    {
+        // now find the list of all subalbums which need to be updated
+        QList<QVariant> values;
+        d->db->execSql( QString("SELECT relativePath FROM Albums WHERE albumRoot=? AND relativePath LIKE '?/%';"),
+                        albumRoot, oldUrl, &values );
+
+        // and update their url
+        QString newChildURL;
+        for (QList<QVariant>::iterator it = values.begin(); it != values.end(); ++it)
+        {
+            newChildURL = (*it).toString();
+            newChildURL.replace(oldUrl, newRelativePath);
+            d->db->execSql(QString("UPDATE Albums SET url=? WHERE albumRoot=? AND url=?"),
+                           newChildURL, albumRoot, (*it) );
+        }
+    }
 }
 #endif
 

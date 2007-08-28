@@ -237,11 +237,19 @@ public:
     int getAlbumRootId(int albumID);
 
     /**
-     * Given an albumid, this returns the url for that albumdb
-     * @param albumID the id of the albumdb
-     * @return the url of the albumdb
+     * Given an albumid, this returns the path for that album
+     * @param albumID the id of the album
+     * @return the url of the album
      */
-    QString getAlbumURL(int albumID);
+    QString getAlbumPath(int albumID);
+
+    /**
+     * Given an albumid, this returns the relative path for that album
+     * (the path below the album root, starting with a slash)
+     * @param albumID the id of the album
+     * @return the url of the album
+     */
+    QString getAlbumRelativePath(int albumID);
 
     /**
      * Returns the lowest/oldest date of all images for that album.
