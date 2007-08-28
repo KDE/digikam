@@ -40,6 +40,7 @@ INCLUDE_DIRECTORIES(
                      ${CMAKE_SOURCE_DIR}/digikam/utilities/batch
                      ${CMAKE_SOURCE_DIR}/digikam/utilities/lighttable
                      ${CMAKE_SOURCE_DIR}/digikam/digikam
+                     ${CMAKE_BINARY_DIR}/digikam/digikam
                    )
 
 SET(libdigikamtheme_SRCS 
