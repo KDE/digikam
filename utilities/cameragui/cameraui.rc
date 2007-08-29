@@ -1,9 +1,10 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="4" name="cameraui" >
+<gui version="8" name="cameraui" >
 
 <MenuBar>
 
     <Menu name="Camera" ><text>&amp;Camera</text>
+        <Action name="cameraui_cancelprocess" />
         <Action name="cameraui_camerainfo" />
         <Separator />
         <Action name="cameraui_close" />
@@ -14,10 +15,13 @@
         <Action name="cameraui_selectall" />
         <Action name="cameraui_selectnone" />
         <Action name="cameraui_selectinvert" />
+        <Separator />
         <Action name="cameraui_selectnewitems" />
     </Menu>
     
     <Menu name="Image" ><text>&amp;Image</text>
+        <Action name="cameraui_imageview" />
+        <Separator />
         <Action name="cameraui_imagedownloadselected" />
         <Action name="cameraui_imagedownloadall" />
         <Separator />
@@ -56,11 +60,16 @@
 </MenuBar>
 
 <ToolBar name="ToolBar" ><text>Main Toolbar</text>
-     <Action name="cameraui_zoomplus" /> 
-     <Action name="cameraui_zoomminus" /> 
+     <Action name="cameraui_cancelprocess" /> 
+     <Separator/>
+     <Action name="cameraui_imageview" />
+     <Action name="cameraui_imagedownloadselected" />
+     <Action name="cameraui_imageupload" />
+     <Action name="cameraui_imagelock" />
      <Merge />
      <WeakSeparator/>
-     <Action name="logo_action" />	       
+     <Action name="logo_action" />	      
+     <Action name="anim_action" />        
 </ToolBar>
  
 <ActionProperties/>

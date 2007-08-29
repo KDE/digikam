@@ -30,12 +30,16 @@
 #include <QWidget>
 #include <QPaintEvent>
 
+// Local includes.
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
 class AnimWidgetPriv;
 
-class AnimWidget : public QWidget
+class DIGIKAM_EXPORT AnimWidget : public QWidget
 {
     Q_OBJECT
     
@@ -51,7 +55,6 @@ public:
 protected:
 
     void paintEvent(QPaintEvent*);
-    void resizeEvent(QResizeEvent *e);
 
 private slots:
 

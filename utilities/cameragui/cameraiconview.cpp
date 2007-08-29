@@ -78,6 +78,8 @@ public:
         thumbSize = ThumbnailSize::Large;
     }
 
+    int                         thumbSize;
+
     QHash<QString, CameraIconViewItem *>  itemDict;
 
     QRect                       itemRect;
@@ -88,8 +90,6 @@ public:
     RenameCustomizer           *renamer;
 
     IconGroupItem              *groupItem;
-
-    ThumbnailSize               thumbSize;
 
     CameraUI                   *cameraUI;
 };
@@ -421,6 +421,23 @@ void CameraIconView::slotSelectionChanged()
     viewport()->update();
 }
 
+CameraIconViewItem* CameraIconView::firstItemSelected()
+{
+    CameraIconViewItem* camItem = 0;
+
+    for (IconItem* item = firstItem(); item; item = item->nextItem())
+    {
+        if (item->isSelected())
+        {
+            camItem = static_cast<CameraIconViewItem*>(item);
+            break;
+        }
+    }
+
+    return(camItem);
+}
+
+
 void CameraIconView::slotContextMenu(IconItem * item, const QPoint&)
 {
     if (!item)
@@ -610,34 +627,39 @@ QRect CameraIconView::itemRect() const
     return d->itemRect;
 }
 
-void CameraIconView::setThumbnailSize(const ThumbnailSize& thumbSize)
+void CameraIconView::setThumbnailSize(int size)
 {
-    if ( d->thumbSize != thumbSize)
+    if ( d->thumbSize != size)
     {
-        d->thumbSize = thumbSize;
+        if (size > ThumbnailSize::Huge)
+            d->thumbSize = ThumbnailSize::Huge;
+        else if (size < ThumbnailSize::Small)
+            d->thumbSize = ThumbnailSize::Small;
+        else 
+            d->thumbSize = size;
+
         updateItemRectsPixmap();
         triggerRearrangement();
+        emit signalThumbSizeChanged(d->thumbSize);
     }
 }
 
-ThumbnailSize CameraIconView::thumbnailSize() const
+int CameraIconView::thumbnailSize()
 {
     return d->thumbSize;
 }
 
 void CameraIconView::updateItemRectsPixmap()
 {
-    int thumbSize = d->thumbSize.size();
-
     QRect pixRect;
     QRect textRect;
     QRect extraRect;
 
-    pixRect.setWidth(thumbSize);
-    pixRect.setHeight(thumbSize);
+    pixRect.setWidth(d->thumbSize);
+    pixRect.setHeight(d->thumbSize);
 
     QFontMetrics fm(font());
-    QRect r = QRect(fm.boundingRect(0, 0, thumbSize, 0xFFFFFFFF,
+    QRect r = QRect(fm.boundingRect(0, 0, d->thumbSize, 0xFFFFFFFF,
                                     Qt::AlignHCenter | Qt::AlignTop,
                                     "XXXXXXXXX"));
     textRect.setWidth(r.width());
@@ -650,7 +672,7 @@ void CameraIconView::updateItemRectsPixmap()
     }
 
     fm = QFontMetrics(fn);
-    r = QRect(fm.boundingRect(0, 0, thumbSize, 0xFFFFFFFF,
+    r = QRect(fm.boundingRect(0, 0, d->thumbSize, 0xFFFFFFFF,
                               Qt::AlignHCenter | Qt::AlignTop,
                               "XXXXXXXXX"));
     extraRect.setWidth(r.width());

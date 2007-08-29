@@ -30,6 +30,10 @@
 #include <QColor>
 #include <QTimer>
 
+// KDE includes.
+
+#include <ktoolbar.h>
+
 // Local includes.
 
 #include "animwidget.h"
@@ -50,22 +54,23 @@ public:
     }
 
     int      pos;
+    int      size;
     
     QTimer  *timer;
     
     QPixmap *pix;    
 };
 
-
 AnimWidget::AnimWidget(QWidget* parent, int size)
           : QWidget(parent)
 {
     d = new AnimWidgetPriv;
- 
-    setAttribute(Qt::WA_DeleteOnClose);
-    setMinimumSize(size, size);
+    d->size = size; 
 
-    d->pix   = new QPixmap();
+    setAttribute(Qt::WA_DeleteOnClose);
+    setFixedSize(d->size, d->size);
+
+    d->pix   = new QPixmap(d->size, d->size);
     d->timer = new QTimer();
     
     connect(d->timer, SIGNAL(timeout()),
@@ -95,7 +100,7 @@ void AnimWidget::paintEvent(QPaintEvent*)
     d->pix->fill(palette().background().color());
     QPainter p(d->pix);
 
-    p.translate(d->pix->width()/2, d->pix->height()/2);
+    p.translate(d->size/2, d->size/2);
 
     if (d->timer->isActive())
     {
@@ -109,7 +114,7 @@ void AnimWidget::paintEvent(QPaintEvent*)
             
     for ( int i=0 ; i<12 ; i++ )
     {
-        p.drawLine(d->pix->width()/2-4, 0, d->pix->height()/2-2, 0);
+        p.drawLine(d->size/2-4, 0, d->size/2-2, 0);
         p.rotate(30);
     }
     
@@ -118,13 +123,6 @@ void AnimWidget::paintEvent(QPaintEvent*)
     QPainter p2(this);
     p2.drawPixmap(0, 0, *d->pix);
     p2.end();
-}
-
-void AnimWidget::resizeEvent(QResizeEvent *e)
-{
-    delete d->pix;
-    int size = qMax(e->size().width(), e->size().height());
-    d->pix = new QPixmap(size, size);
 }
 
 void AnimWidget::slotTimeout()

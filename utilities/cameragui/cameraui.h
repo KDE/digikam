@@ -36,7 +36,7 @@
 
 // KDE includes.
 
-#include <kdialog.h>
+#include <kxmlguiwindow.h>
 #include <kurl.h>
 
 // Local includes.
@@ -50,7 +50,7 @@ class Album;
 class CameraIconViewItem;
 class CameraUIPriv;
 
-class CameraUI : public KDialog
+class CameraUI : public KXmlGuiWindow
 {
     Q_OBJECT
 
@@ -75,7 +75,6 @@ signals:
     void signalLastDestination(const KUrl&);
     void signalAlbumSettingsChanged();
 
-
 public slots:
 
     void slotDownload(bool onlySelected, bool deleteAfter, Album *pAlbum=0);
@@ -83,16 +82,23 @@ public slots:
 protected:
 
     void closeEvent(QCloseEvent* e);
-    void keyPressEvent(QKeyEvent *e);
 
 private:
 
+    void setupActions();
+    void setupConnections();
+    void setupUserArea();
+    void setupStatusBar();
+    void setupAccelerators();
+    void setupCameraController(const QString& model, const QString& port, const QString& path);
+
     void readSettings();
     void saveSettings();
-    bool dialogClosed();
     bool createAutoAlbum(const KUrl& parentURL, const QString& name,
                          const QDate& date, QString& errMsg);
     void addFileExtension(const QString& ext);
+
+    bool dialogClosed();
     void finishDialog();
 
 private slots:
@@ -113,6 +119,8 @@ private slots:
 
     void slotIncreaseThumbSize();
     void slotDecreaseThumbSize();
+    void slotZoomSliderChanged(int size);
+    void slotThumbSizeChanged(int size);
 
     void slotUpload();
     void slotUploadItems(const KUrl::List&);
@@ -124,6 +132,7 @@ private slots:
     void slotDeleteAll();
     void slotToggleLock();
 
+    void slotFileView();
     void slotFileView(CameraIconViewItem* item);
 
     void slotUploaded(const GPItemInfo&);
@@ -138,10 +147,16 @@ private slots:
     void slotExifFromFile(const QString& folder, const QString& file);
     void slotExifFromData(const QByteArray& exifData);
 
-    void slotFirstItem(void);
-    void slotPrevItem(void);
-    void slotNextItem(void);
-    void slotLastItem(void);
+    void slotFirstItem();
+    void slotPrevItem();
+    void slotNextItem();
+    void slotLastItem();
+
+    void slotDonateMoney();
+    void slotEditKeys();
+    void slotConfToolbars();
+    void slotNewToolbarConfig();
+    void slotSetup();
 
 private:
 

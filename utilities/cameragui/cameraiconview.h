@@ -71,10 +71,12 @@ public:
     void ensureItemVisible(const GPItemInfo& itemInfo);
     void ensureItemVisible(const QString& folder, const QString& file);
 
-    void setThumbnailSize(const ThumbnailSize& thumbSize);
-    ThumbnailSize thumbnailSize() const;
+    void setThumbnailSize(int thumbSize);
+    int thumbnailSize();
 
     CameraIconViewItem* findItem(const QString& folder, const QString& file);
+
+    CameraIconViewItem* firstItemSelected();
 
     int countItemsByFolder(QString folder);
     int itemsDownloaded();
@@ -90,6 +92,7 @@ signals:
 
     void signalSelected(CameraIconViewItem*, bool);
     void signalFileView(CameraIconViewItem*);
+    void signalThumbSizeChanged(int);
 
     void signalUpload(const KUrl::List&);
     void signalDownload();
