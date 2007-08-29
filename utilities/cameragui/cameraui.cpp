@@ -371,25 +371,24 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     d->progress->setMaximumHeight( fontMetrics().height() );
     d->progress->hide();
 
-    QFrame *frame = new QFrame(plainPage());
-    frame->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
-    frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QHBoxLayout* layout = new QHBoxLayout( frame );
-    layout->setMargin( 2 );  // To make sure the frame gets displayed
-    layout->setSpacing( 0 );
+    QWidget *frame      = new QWidget(plainPage());
+    QHBoxLayout* layout = new QHBoxLayout(frame);
+    frame->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
 
     KURLLabel *pixmapLogo = new KURLLabel( "http://www.digikam.org", QString(), frame );
     pixmapLogo->setMargin(0);
     pixmapLogo->setScaledContents( false );
-    pixmapLogo->setPaletteBackgroundColor( QColor(201, 208, 255) );
-    pixmapLogo->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
+    pixmapLogo->setSizePolicy(QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum));
     QToolTip::add(pixmapLogo, i18n("Visit digiKam project website"));
     KGlobal::dirs()->addResourceType("logo-digikam", KGlobal::dirs()->kde_default("data") + "digikam/data");
     QString directory = KGlobal::dirs()->findResourceDir("logo-digikam", "logo-digikam.png");
     pixmapLogo->setPixmap( QPixmap( directory + "logo-digikam.png" ) );
+    pixmapLogo->setFocusPolicy(QWidget::NoFocus);
     
     d->anim = new AnimWidget(frame, pixmapLogo->height());
     
+    layout->setMargin(0);
+    layout->setSpacing(0);
     layout->addWidget( pixmapLogo );
     layout->addWidget( d->anim );
 

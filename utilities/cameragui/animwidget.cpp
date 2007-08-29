@@ -94,7 +94,7 @@ void AnimWidget::stop()
 
 void AnimWidget::paintEvent(QPaintEvent*)
 {
-    d->pix->fill(QColor(201, 208, 255));
+    d->pix->fill(colorGroup().background());
     QPainter p(d->pix);
 
     p.translate(d->size/2, d->size/2);
@@ -131,4 +131,3 @@ bool AnimWidget::running() const
 }
 
 }  // namespace Digikam
-
