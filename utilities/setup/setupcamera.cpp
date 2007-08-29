@@ -254,12 +254,11 @@ void SetupCamera::slotAutoDetectCamera()
 
     if (d->listView->findItem(model, 1))
     {
-        KMessageBox::information(this, i18n("Camera '%1' (%2) is already in list.",model,port));
+        KMessageBox::information(this, i18n("Camera '%1' (%2) is already in list.", model, port));
     }
     else 
     {
-        KMessageBox::information(this, i18n("Found camera '%1' (%2) and added it to the list.")
-                                 ,model,port);
+        KMessageBox::information(this, i18n("Found camera '%1' (%2) and added it to the list.", model, port));
         new K3ListViewItem(d->listView, model, model, port, "/", 
                           QDateTime::currentDateTime().toString(Qt::ISODate));
     }
