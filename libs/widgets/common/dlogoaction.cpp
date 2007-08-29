@@ -55,9 +55,9 @@ QWidget* DLogoAction::createWidget( QWidget * parent )
     // This action should only be used in a toolbar
     Q_ASSERT(bar != NULL);
     
-    QWidget* container    = new QWidget(parent);
-    QHBoxLayout* layout   = new QHBoxLayout(container);
-    m_pixmapLogo = new KUrlLabel("http://www.digikam.org", QString(), bar);
+    QWidget* container  = new QWidget(parent);
+    QHBoxLayout* layout = new QHBoxLayout(container);
+    m_pixmapLogo        = new KUrlLabel("http://www.digikam.org", QString(), bar);
     m_pixmapLogo->setMargin(0);
     m_pixmapLogo->setScaledContents(false);
     m_pixmapLogo->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
@@ -79,11 +79,6 @@ QWidget* DLogoAction::createWidget( QWidget * parent )
 void DLogoAction::slotProcessUrl(const QString& url)
 {
     KToolInvocation::invokeBrowser(url);
-}
-
-int DLogoAction::logoHeight()
-{
-    return m_pixmapLogo->height();
 }
 
 } // namespace Digikam

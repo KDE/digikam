@@ -47,8 +47,6 @@ public:
                
     virtual QWidget* createWidget(QWidget* parent);
 
-    int logoHeight();
-
 private slots:
 
     void slotProcessUrl(const QString&);
