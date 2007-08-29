@@ -385,7 +385,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     pixmapLogo->setPixmap( QPixmap( directory + "logo-digikam.png" ) );
     pixmapLogo->setFocusPolicy(QWidget::NoFocus);
     
-    d->anim = new AnimWidget(frame, pixmapLogo->height());
+    d->anim = new AnimWidget(frame, pixmapLogo->height()-2);
     
     layout->setMargin(0);
     layout->setSpacing(0);
