@@ -94,8 +94,8 @@ ImagePropertiesSideBarCamGui::ImagePropertiesSideBarCamGui(QWidget *parent,
                             : Sidebar(parent, side, mimimizedDefault)
 {
     d = new ImagePropertiesSideBarCamGuiPriv;
-    d->cameraItemTab = new CameraItemPropertiesTab(parent, true);
-    d->metadataTab   = new ImagePropertiesMetaDataTab(parent, true);
+    d->cameraItemTab = new CameraItemPropertiesTab(parent, false);
+    d->metadataTab   = new ImagePropertiesMetaDataTab(parent, false);
 
     setSplitter(splitter);
 
