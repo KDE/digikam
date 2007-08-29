@@ -319,13 +319,13 @@ void CameraController::executeCommand(CameraCommand *cmd)
         {
             QString folder = cmd->map["folder"].toString();
 
-            sendInfo(i18n("Listing files in %1...",folder));
+            sendInfo(i18n("Listing files in %1...", folder));
 
             GPItemInfoList itemsList;
             // setting getImageDimensions to false is a huge speedup for UMSCamera
             if (!d->camera->getItemsInfoList(folder, itemsList, false))
             {
-                sendError(i18n("Failed to list files in %1",folder));
+                sendError(i18n("Failed to list files in %1", folder));
             }
 
             if (!itemsList.isEmpty())
@@ -333,7 +333,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
                 emit signalFileList(itemsList);
             }
 
-            sendInfo(i18n("Listing files in %1 is complete",folder));
+            sendInfo(i18n("Listing files in %1 is complete", folder));
 
             break;
         }
@@ -342,7 +342,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
             QString folder = cmd->map["folder"].toString();
             QString file   = cmd->map["file"].toString();
 
-            sendInfo(i18n("Getting thumbnail for %1/%2...",folder,file));
+            sendInfo(i18n("Getting thumbnail for %1...", file));
 
             QImage thumbnail;
             d->camera->getThumbnail(folder, file, thumbnail);
@@ -368,7 +368,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
             }
             else
             {
-                sendInfo(i18n("Getting EXIF information for %1/%2...",folder,file));
+                sendInfo(i18n("Getting EXIF information for %1...", file));
 
                 char* edata = 0;
                 int   esize = 0;
@@ -421,7 +421,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
                 QString   copyright         = cmd->map["copyright"].toString();
                 bool      convertJpeg       = cmd->map["convertJpeg"].toBool();
                 QString   losslessFormat    = cmd->map["losslessFormat"].toString();
-                sendInfo(i18n("Downloading file %1...",file));
+                sendInfo(i18n("Downloading file %1...", file));
 
                 // download to a temp file
 
@@ -438,13 +438,13 @@ void CameraController::executeCommand(CameraCommand *cmd)
                     if (autoRotate)
                     {
                         DDebug() << "Exif autorotate: " << file << " using (" << tempURL.path() << ")" << endl;
-                        sendInfo(i18n("EXIF rotating file %1...",file));
+                        sendInfo(i18n("EXIF rotating file %1...", file));
                         exifRotate(tempURL.path(), file);
                     }
 
                     if (fixDateTime || setPhotographerId || setCredits)
                     {
-                        sendInfo(i18n("Setting Metadata tags to file %1...",file));
+                        sendInfo(i18n("Setting Metadata tags to file %1...", file));
                         DMetadata metadata(tempURL.path());
 
                         if (fixDateTime)
@@ -464,7 +464,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
 
                     if (convertJpeg && isJpegImage(tempURL.path()))
                     {
-                        sendInfo(i18n("Converting %1 to lossless file format...",file));
+                        sendInfo(i18n("Converting %1 to lossless file format...", file));
 
                         KUrl tempURL2(dest);
                         tempURL2 = tempURL2.upUrl();
@@ -519,7 +519,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
             QString file   = cmd->map["file"].toString();
             QString dest   = cmd->map["dest"].toString();
 
-            sendInfo(i18n("Retrieving file %1 from camera...",file));
+            sendInfo(i18n("Retrieving file %1 from camera...", file));
 
             bool result = d->camera->downloadItem(folder, file, dest);
 
@@ -529,7 +529,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
             }
             else
             {
-                sendError(i18n("Failed to retrieve file %1 from camera",file));
+                sendError(i18n("Failed to retrieve file %1 from camera", file));
             }
             break;
         }
@@ -544,7 +544,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
             // The source file path to download in camera.
             QString src    = cmd->map["srcFilePath"].toString();
 
-            sendInfo(i18n("Uploading file %1 to camera...",file));
+            sendInfo(i18n("Uploading file %1 to camera...", file));
 
             GPItemInfo itemsInfo;
 
@@ -565,7 +565,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
             QString folder = cmd->map["folder"].toString();
             QString file   = cmd->map["file"].toString();
 
-            sendInfo(i18n("Deleting file %1...",file));
+            sendInfo(i18n("Deleting file %1...", file));
 
             bool result = d->camera->deleteItem(folder, file);
 
@@ -585,7 +585,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
             QString file   = cmd->map["file"].toString();
             bool    lock   = cmd->map["lock"].toBool();
 
-            sendInfo(i18n("Toggle lock file %1...",file));
+            sendInfo(i18n("Toggle lock file %1...", file));
 
             bool result = d->camera->setLockItem(folder, file, lock);
 
