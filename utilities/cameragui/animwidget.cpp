@@ -50,7 +50,6 @@ public:
     }
 
     int      pos;
-    int      size;
     
     QTimer  *timer;
     
@@ -62,12 +61,11 @@ AnimWidget::AnimWidget(QWidget* parent, int size)
           : QWidget(parent)
 {
     d = new AnimWidgetPriv;
-    d->size = size;
-    d->pix  = new QPixmap(d->size, d->size);
-
-    setFixedSize(d->size, d->size);
+ 
     setAttribute(Qt::WA_DeleteOnClose);
+    setMinimumSize(size, size);
 
+    d->pix   = new QPixmap();
     d->timer = new QTimer();
     
     connect(d->timer, SIGNAL(timeout()),
@@ -94,10 +92,10 @@ void AnimWidget::stop()
 
 void AnimWidget::paintEvent(QPaintEvent*)
 {
-    d->pix->fill(QColor(201, 208, 255));
+    d->pix->fill(palette().background().color());
     QPainter p(d->pix);
 
-    p.translate(d->size/2, d->size/2);
+    p.translate(d->pix->width()/2, d->pix->height()/2);
 
     if (d->timer->isActive())
     {
@@ -111,7 +109,7 @@ void AnimWidget::paintEvent(QPaintEvent*)
             
     for ( int i=0 ; i<12 ; i++ )
     {
-        p.drawLine(d->size/2-4, 0, d->size/2-2, 0);
+        p.drawLine(d->pix->width()/2-4, 0, d->pix->height()/2-2, 0);
         p.rotate(30);
     }
     
@@ -120,6 +118,13 @@ void AnimWidget::paintEvent(QPaintEvent*)
     QPainter p2(this);
     p2.drawPixmap(0, 0, *d->pix);
     p2.end();
+}
+
+void AnimWidget::resizeEvent(QResizeEvent *e)
+{
+    delete d->pix;
+    int size = qMax(e->size().width(), e->size().height());
+    d->pix = new QPixmap(size, size);
 }
 
 void AnimWidget::slotTimeout()

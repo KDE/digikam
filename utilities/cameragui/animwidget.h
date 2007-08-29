@@ -51,6 +51,7 @@ public:
 protected:
 
     void paintEvent(QPaintEvent*);
+    void resizeEvent(QResizeEvent *e);
 
 private slots:
 
