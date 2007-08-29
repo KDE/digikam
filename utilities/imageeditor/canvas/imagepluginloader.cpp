@@ -30,7 +30,6 @@
 // KDE includes.
 
 #include <kservicetypetrader.h>
-#include <kparts/componentfactory.h>
 #include <klibloader.h>
 #include <kapplication.h>
 #include <klocale.h>
@@ -140,9 +139,9 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)
 
     if (!pluginIsLoaded(corePlugin->name()) )
     {
-        int error = -1;
+        QString* error = 0;
 
-        ImagePlugin *plugin = KService::createInstance<ImagePlugin>(corePlugin, this, QStringList(), &error);
+        ImagePlugin *plugin = KService::createInstance<ImagePlugin>(corePlugin, this, QVariantList(), error);
 
         if (plugin && (dynamic_cast<KXMLGUIClient*>(plugin) != 0))
         {
@@ -155,12 +154,10 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)
         else
         {
             DWarning() << "ImagePluginLoader: createInstance returned 0 for "
-                    << corePlugin->name()
-                    << " (" << corePlugin->library() << ")"
-                    << " with error number "
-                    << error
-                    << "\n KLibLoader says: "
-                    << KLibLoader::self()->lastErrorMessage() << endl;
+                       << corePlugin->name()
+                       << " (" << corePlugin->library() << ")"
+                       << " with error: "
+                       << error << endl;
         }
     }
 
@@ -175,9 +172,9 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)
             continue;
         else
         {
-            int error = -1;
+            QString *error = 0;
 
-            plugin = KService::createInstance<ImagePlugin>(service, this, QStringList(), &error);
+            plugin = KService::createInstance<ImagePlugin>(service, this, QVariantList(), error);
 
             if (plugin && (dynamic_cast<KXMLGUIClient*>(plugin) != 0))
             {
@@ -190,12 +187,10 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)
             else
             {
                 DWarning() << "ImagePluginLoader: createInstance returned 0 for "
-                        << service->name()
-                        << " (" << service->library() << ")"
-                        << " with error number "
-                        << error
-                        << "\n KLibLoader says: "
-                        << KLibLoader::self()->lastErrorMessage() << endl;
+                           << service->name()
+                           << " (" << service->library() << ")"
+                           << " with error: "
+                           << error << endl;
             }
         }
     }
