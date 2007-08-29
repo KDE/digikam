@@ -32,6 +32,8 @@
 
 #include "digikam_export.h"
 
+class KUrlLabel;
+
 namespace Digikam 
 {
 
@@ -45,9 +47,15 @@ public:
                
     virtual QWidget* createWidget(QWidget* parent);
 
+    int logoHeight();
+
 private slots:
 
     void slotProcessUrl(const QString&);
+
+private:
+
+    KUrlLabel *m_pixmapLogo;
 };
 
 } // namespace Digikam

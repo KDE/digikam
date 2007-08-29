@@ -57,20 +57,20 @@ QWidget* DLogoAction::createWidget( QWidget * parent )
     
     QWidget* container    = new QWidget(parent);
     QHBoxLayout* layout   = new QHBoxLayout(container);
-    KUrlLabel *pixmapLogo = new KUrlLabel("http://www.digikam.org", QString(), bar);
-    pixmapLogo->setMargin(0);
-    pixmapLogo->setScaledContents(false);
-    pixmapLogo->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
-    pixmapLogo->setToolTip(i18n("Visit digiKam project website"));
-    pixmapLogo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png")));
-    pixmapLogo->setFocusPolicy(Qt::NoFocus);
+    m_pixmapLogo = new KUrlLabel("http://www.digikam.org", QString(), bar);
+    m_pixmapLogo->setMargin(0);
+    m_pixmapLogo->setScaledContents(false);
+    m_pixmapLogo->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
+    m_pixmapLogo->setToolTip(i18n("Visit digiKam project website"));
+    m_pixmapLogo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png")));
+    m_pixmapLogo->setFocusPolicy(Qt::NoFocus);
 
     layout->setMargin(0);
     layout->setSpacing(0);
     layout->addStretch();
-    layout->addWidget(pixmapLogo);
+    layout->addWidget(m_pixmapLogo);
     
-    connect(pixmapLogo, SIGNAL(leftClickedUrl(const QString&)),
+    connect(m_pixmapLogo, SIGNAL(leftClickedUrl(const QString&)),
             this, SLOT(slotProcessUrl(const QString&)));
 
     return container;
@@ -79,6 +79,11 @@ QWidget* DLogoAction::createWidget( QWidget * parent )
 void DLogoAction::slotProcessUrl(const QString& url)
 {
     KToolInvocation::invokeBrowser(url);
+}
+
+int DLogoAction::logoHeight()
+{
+    return m_pixmapLogo->height();
 }
 
 } // namespace Digikam
