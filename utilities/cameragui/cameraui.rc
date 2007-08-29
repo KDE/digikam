@@ -1,9 +1,9 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="3" name="cameraui" >
+<gui version="4" name="cameraui" >
 
 <MenuBar>
 
-    <Menu name="File" ><text>&amp;File</text>
+    <Menu name="Camera" ><text>&amp;Camera</text>
         <Action name="cameraui_camerainfo" />
         <Separator />
         <Action name="cameraui_close" />
