@@ -272,13 +272,13 @@ void SearchFolderView::searchDelete(SAlbum* album)
         return;
 
     // Make sure that a complicated search is not deleted accidentally
-    int result =KMessageBox::warningYesNo( this, i18n("Are you sure you want to "
+    int result = KMessageBox::warningYesNo(this, i18n("Are you sure you want to "
                                                       "delete the selected search "
                                                       "\"%1\"?")
                                            .arg(album->title()),
-                                       i18n("Delete Search?"),
-                                       i18n("Delete"),
-                                       KStdGuiItem::cancel() );
+                                           i18n("Delete Search?"),
+                                           i18n("Delete"),
+                                           KStdGuiItem::cancel());
 
     if (result != KMessageBox::Yes)
         return;
