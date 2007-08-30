@@ -3,6 +3,7 @@ digiKam 0.9.3 - Release date: 2007-xx-xx
 NEW FEATURES:
 
 General        : Color scheme theme are now XML based (instead X11 format).
+General        : Camera interface is now used to import new pictures in collection.
 CameraGUI      : New options to Download pictures and Delete it from camera at the same time.
 CameraGUI      : Support of Drag & Drop to download files from camera gui to album gui.
 
@@ -26,4 +27,5 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 016 ==> 141774 : Autorotate does not work however kipi rotate works.
 017 ==> 103350 : Original image is silently overwritten when saving.
 018 ==> 144431 : Add option in Camera Download Dialog.
-019 ==> 
+019 ==> 131407 : Use camera GUI also for import of images from different locations.
+020 ==> 
