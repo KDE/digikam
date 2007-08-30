@@ -48,6 +48,8 @@
 #include <kdeversion.h>
 #include <kapplication.h>
 #include <kmenubar.h>
+#include <kglobalsettings.h>
+#include <kfiledialog.h>
 #include <kmessagebox.h>
 #include <kwin.h>
 #include <dcopref.h>
@@ -541,7 +543,7 @@ void DigikamApp::setupActions()
     d->addImagesAction = new KAction( i18n("Add Images..."),
                                     "albumfolder-importimages",
                                     CTRL+Key_I,
-                                    d->view,
+                                    this,
                                     SLOT(slotAlbumAddImages()),
                                     actionCollection(),
                                     "album_addImages");
@@ -1886,5 +1888,16 @@ void DigikamApp::slotTooglePreview(bool t)
     d->zoomFitToWindowAction->setEnabled(t);
 }
 
-}  // namespace Digikam
+void DigikamApp::slotAlbumAddImages()
+{
+    QString path = KFileDialog::getExistingDirectory(KGlobalSettings::documentPath(), this,
+                                i18n("Select folder to parse"));
 
+    if(path.isEmpty())
+        return;
+
+    // The folder contents will be parsed by Camera interface in "Directory Browse" mode.
+    downloadFrom(path);
+}
+
+}  // namespace Digikam

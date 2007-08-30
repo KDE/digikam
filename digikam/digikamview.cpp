@@ -38,7 +38,6 @@
 // KDE includes.
 
 #include <kurl.h>
-#include <kfiledialog.h>
 #include <kpushbutton.h>
 #include <klocale.h>
 #include <kapplication.h>
@@ -46,7 +45,6 @@
 #include <krun.h>
 #include <kiconloader.h>
 #include <kstandarddirs.h>
-#include <kimageio.h>
 
 // LibKDcraw includes.
 
@@ -887,53 +885,6 @@ void DigikamView::slotAlbumSyncPicturesMetadata()
 void DigikamView::slotAlbumSyncPicturesMetadataDone()
 {
     applySettings(AlbumSettings::instance());
-}
-
-void DigikamView::slotAlbumAddImages()
-{
-    Album *album = d->albumManager->currentAlbum();
-    if (!album || album->type() != Album::PHYSICAL)
-        return;
-
-    PAlbum* palbum = dynamic_cast<PAlbum*>(album);
-
-    QString fileformats;
-    
-    QStringList patternList = QStringList::split('\n', KImageIO::pattern(KImageIO::Reading));
-    
-    // All Pictures from list must been always the first entry given by KDE API
-    QString allPictures = patternList[0];
-    
-    // Add other files format witch are missing to All Pictures" type mime provided by KDE and remplace current.
-    allPictures.insert(allPictures.find("|"), QString(raw_file_extentions) + QString(" *.JPE *.TIF"));
-    patternList.remove(patternList[0]);
-    patternList.prepend(allPictures);
-    
-    // Added RAW file formats supported by dcraw program like a type mime. 
-    // Nota: we cannot use here "image/x-raw" type mime from KDE because it uncomplete 
-    // or unavailable(dcraw_0)(see file #121242 in B.K.O).
-    patternList.append(QString("\n%1|Camera RAW files").arg(QString(raw_file_extentions)));
-    
-    fileformats = patternList.join("\n");
-
-    DDebug () << "fileformats=" << fileformats << endl;   
-
-    KURL::List urls = KFileDialog::getOpenURLs(AlbumManager::instance()->getLibraryPath(), 
-                                               fileformats, this, i18n("Select Image to Add"));
-
-    if (!urls.isEmpty())
-    {
-        KIO::Job* job = DIO::copy(urls, palbum->kurl());
-
-        connect(job, SIGNAL(result(KIO::Job *) ),
-                this, SLOT(slotImageCopyResult(KIO::Job *)));
-    }
-}
-
-void DigikamView::slotImageCopyResult(KIO::Job* job)
-{
-    if (job->error())
-        job->showErrorDialog(this);
 }
 
 void DigikamView::slotAlbumImportFolder()
