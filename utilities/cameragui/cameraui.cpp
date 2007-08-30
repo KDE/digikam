@@ -263,10 +263,10 @@ public:
     StatusNavigateBar            *statusNavigateBar;
 };
 
-CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle, 
+CameraUI::CameraUI(QWidget* parent, const QString& cameraTitle, 
                    const QString& model, const QString& port,
                    const QString& path, const QDateTime lastAccess)
-                : KXmlGuiWindow(0)
+                : KXmlGuiWindow(parent)
 {
     d = new CameraUIPriv;
     d->lastAccess  = lastAccess;
