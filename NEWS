@@ -28,4 +28,5 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 017 ==> 103350 : Original image is silently overwritten when saving.
 018 ==> 144431 : Add option in Camera Download Dialog.
 019 ==> 131407 : Use camera GUI also for import of images from different locations.
-020 ==> 
+020 ==> 143934 : Cannot download all photos from camera.
+021 ==> 
