@@ -41,11 +41,6 @@
 
 class KUrl;
 
-namespace KIO
-{
-class Job;
-}
-
 namespace Digikam
 {
 class AlbumIconItem;

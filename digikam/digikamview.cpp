@@ -37,7 +37,6 @@
 // KDE includes.
 
 #include <kurl.h>
-#include <kfiledialog.h>
 #include <kpushbutton.h>
 #include <klocale.h>
 #include <kapplication.h>
@@ -45,8 +44,6 @@
 #include <krun.h>
 #include <kiconloader.h>
 #include <kstandarddirs.h>
-#include <kimageio.h>
-#include <kio/jobuidelegate.h>
 
 // LibKDcraw includes.
 

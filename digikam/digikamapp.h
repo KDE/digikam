@@ -43,7 +43,6 @@
 
 #include "digikam_export.h"
 
-
 namespace Digikam
 {
 
