@@ -35,7 +35,7 @@
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <kdeversion.h>
-
+#include <kmessagebox.h>
 #include <kinputdialog.h>
 
 // Local includes.
@@ -259,6 +259,17 @@ void SearchFolderView::extendedSearchEdit(SAlbum* album)
 void SearchFolderView::searchDelete(SAlbum* album)
 {
     if (!album)
+        return;
+
+    // Make sure that a complicated search is not deleted accidentally
+    int result = KMessageBox::warningYesNo(this, i18n("Are you sure you want to "
+                                                      "delete the selected search "
+                                                      "\"%1\"?", album->title()),
+                                           i18n("Delete Search?"),
+                                           KGuiItem(i18n("Delete")),
+                                           KStandardGuiItem::cancel());
+
+    if (result != KMessageBox::Yes)
         return;
 
     AlbumManager::componentData()->deleteSAlbum(album);
