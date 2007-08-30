@@ -29,4 +29,5 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 018 ==> 144431 : Add option in Camera Download Dialog.
 019 ==> 131407 : Use camera GUI also for import of images from different locations.
 020 ==> 143934 : Cannot download all photos from camera.
-021 ==> 
+021 ==> 147119 : Can't link against static libjasper, configure reports jasper is missing.
+022 ==> 
