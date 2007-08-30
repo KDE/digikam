@@ -144,6 +144,7 @@ QString WelcomePageView::infoPage()
     newFeatures << i18n("New advanced picture Tag management");
     newFeatures << i18n("New zooming/panning support in preview mode");
     newFeatures << i18n("New Light Table provides easy comparison for similar pictures");
+    newFeatures << i18n("Camera Interface used as generic import tool");
 
     QString featureItems;
     for ( uint i = 0 ; i < newFeatures.count() ; i++ )
