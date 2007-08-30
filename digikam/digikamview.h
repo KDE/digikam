@@ -99,7 +99,6 @@ public slots:
     void slotDeleteAlbum();
     void slotSelectAlbum(const KUrl &url);
     void slotAlbumPropsEdit();
-    void slotAlbumAddImages();
     void slotAlbumOpenInKonqui();
     void slotAlbumRefresh();
     void slotAlbumImportFolder();
@@ -167,7 +166,6 @@ private slots:
     void slotImageSelected();
     void slotTogglePreviewMode(AlbumIconItem *iconItem=0);
     void slotDispatchImageSelected();
-    void slotImageCopyResult(KIO::Job* job);
     void slotItemsInfoFromAlbums(const ImageInfoList&);
 
     void slotLeftSidebarChangedTab(QWidget* w);

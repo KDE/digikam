@@ -108,6 +108,7 @@ private:
 
 private slots:
 
+    void slotAlbumAddImages();
     void slotAlbumSelected(bool val);
     void slotTagSelected(bool val);
     void slotImageSelected(const ImageInfoList&, bool, bool);

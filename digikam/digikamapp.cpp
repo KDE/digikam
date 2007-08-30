@@ -38,6 +38,7 @@
 #include <kactioncollection.h>
 #include <kaboutdata.h>
 #include <klocale.h>
+#include <kglobalsettings.h>
 #include <kstandarddirs.h>
 #include <kurl.h>
 #include <kstandardaction.h>
@@ -58,6 +59,7 @@
 #include <ktoolbarpopupaction.h>
 #include <ktogglefullscreenaction.h>
 #include <ktoolbar.h>
+#include <kfiledialog.h>
 #include <solid/device.h>
 #include <solid/deviceinterface.h>
 #include <solid/devicenotifier.h>
@@ -546,7 +548,7 @@ void DigikamApp::setupActions()
     d->addImagesAction = new KAction(KIcon("albumfolder-importimages"), i18n("Add Images..."), this);
     d->addImagesAction->setShortcut(Qt::CTRL+Qt::Key_I);
     d->addImagesAction->setWhatsThis(i18n("Adds new items to the current Album."));
-    connect(d->addImagesAction, SIGNAL(triggered()), d->view, SLOT(slotAlbumAddImages()));
+    connect(d->addImagesAction, SIGNAL(triggered()), this, SLOT(slotAlbumAddImages()));
     actionCollection()->addAction("album_addImages", d->addImagesAction);
 
     // -----------------------------------------------------------------
@@ -1914,6 +1916,18 @@ void DigikamApp::slotTooglePreview(bool t)
     d->imageSortAction->setEnabled(!t);
     d->zoomTo100percents->setEnabled(t);
     d->zoomFitToWindowAction->setEnabled(t);
+}
+
+void DigikamApp::slotAlbumAddImages()
+{
+    QString path = KFileDialog::getExistingDirectory(KGlobalSettings::documentPath(), this, 
+                                i18n("Select folder to parse"));
+  
+    if(path.isEmpty())
+        return;
+
+    // The folder contents will be parsed by Camera interface in "Directory Browse" mode.
+    downloadFrom(path);
 }
 
 }  // namespace Digikam
