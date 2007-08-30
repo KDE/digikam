@@ -1080,6 +1080,12 @@ void CameraUI::slotDownloadAndDeleteAll()
 
 void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
 {
+    // See B.K.O #143934: force to select all items to prevent problem 
+    // when !renameCustomizer->useDefault() ==> iconItem->getDownloadName()
+    // can return an empty string in this case because it depends on selection.
+    if (!onlySelected)
+        d->view->slotSelectAll();
+
     QString   newDirName;
     IconItem* firstItem = d->view->firstItem();
     if (firstItem)
@@ -1169,12 +1175,6 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
         downloadName                 = iconItem->getDownloadName();
         mtime                        = iconItem->itemInfo()->mtime;
 
-        // occurs if renameCustomizer->useDefault() and Download All is used.
-        // If !useDefault, downloadName depends on selection,
-        // so Download All is disabled! (see slotNewSelection)
-        if (downloadName.isEmpty())
-            downloadName = d->view->defaultDownloadName(iconItem);
-        
         KURL u(url);
         QString errMsg;
         QDateTime dateTime;
@@ -1544,16 +1544,11 @@ void CameraUI::slotNewSelection(bool hasSelection)
 {
     if (!d->renameCustomizer->useDefault())
     {
-        // for customized names, the downloadNames depend on the selection.
-        // So do not allow Download All if there is a selection!
         d->downloadMenu->setItemEnabled(0, hasSelection);
         d->downloadMenu->setItemEnabled(2, hasSelection);
     }
     else
     {
-        // if useDefault, the name can easily be computed without selection context,
-        // so we can allow Download All.
-        // This is the easiest default for new users
         d->downloadMenu->setItemEnabled(0, hasSelection);
         d->downloadMenu->setItemEnabled(2, hasSelection);
     }
