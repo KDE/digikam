@@ -68,7 +68,7 @@ CameraInfoDialog::CameraInfoDialog(QWidget *parent, const QString& summary, cons
 
     KPageWidgetItem *p2 = addPage(manualView, i18n("Manual"));
     p2->setHeader( i18n("Camera Manual") );
-    p2->setIcon( KIcon("help-contentsb") );
+    p2->setIcon( KIcon("help-contents") );
 
     // ----------------------------------------------------------
 
