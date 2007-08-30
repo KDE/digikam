@@ -117,6 +117,7 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
     grid->addWidget(logo, 0, 0, 1, 1);
     grid->addWidget(message, 1, 0, 1, 1);
     grid->addWidget(d->folderView, 0, 1, 3, 1);
+    grid->setColumnStretch(1, 10);
     grid->setRowStretch(2, 10);
     grid->setMargin(0);
     grid->setSpacing(KDialog::spacingHint());
@@ -184,7 +185,9 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
             this, SLOT(slotContextMenu(Q3ListViewItem*, const QPoint&, int)));
 
     // -------------------------------------------------------------
+
     connect(this,SIGNAL(user1Clicked()),this,SLOT(slotUser1()));
+
     resize(500, 500);
     slotSelectionChanged();
 }
@@ -302,7 +305,6 @@ void AlbumSelectDialog::slotUser1()
     if (album->isRoot())
     {
         // TODO: Let user choose an album root
-        // TODO: KDE4PORT: Fix instance() ==> componentData
         albumRootPath = CollectionManager::instance()->oneAlbumRootPath();
     }
 
