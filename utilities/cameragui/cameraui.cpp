@@ -1678,9 +1678,7 @@ void CameraUI::slotNewSelection(bool hasSelection)
         // for customized names, the downloadNames depend on the selection.
         // So do not allow Download All if there is a selection!
         d->downloadSelectedAction->setEnabled(hasSelection);
-        d->downloadAllAction->setEnabled(!hasSelection);
         d->downloadDelSelectedAction->setEnabled(hasSelection);
-        d->downloadDelAllAction->setEnabled(!hasSelection);
         d->deleteSelectedAction->setEnabled(hasSelection);
         d->imageViewAction->setEnabled(hasSelection);
     }
@@ -1690,9 +1688,7 @@ void CameraUI::slotNewSelection(bool hasSelection)
         // so we can allow Download All.
         // This is the easiest default for new users
         d->downloadSelectedAction->setEnabled(hasSelection);
-        d->downloadAllAction->setEnabled(true);
         d->downloadDelSelectedAction->setEnabled(hasSelection);
-        d->downloadDelAllAction->setEnabled(true);
         d->deleteSelectedAction->setEnabled(hasSelection);
         d->imageViewAction->setEnabled(hasSelection);
     }
