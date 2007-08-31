@@ -114,7 +114,8 @@ private slots:
     void slotAlbumAddImages();
     void slotAlbumSelected(bool val);
     void slotTagSelected(bool val);
-    void slotImageSelected(const QPtrList<ImageInfo>&, bool, bool);
+    void slotImageSelected(const QPtrList<ImageInfo>&, bool, bool,
+                           const KURL::List&);
     void slotExit();
     void slotShowTip();
     void slotShowKipiHelp();

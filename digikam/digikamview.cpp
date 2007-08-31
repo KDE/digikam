@@ -680,11 +680,14 @@ void DigikamView::slotDispatchImageSelected()
     {
         // the list of copies of ImageInfos of currently selected items, currentItem first
         QPtrList<ImageInfo> list = d->iconView->selectedImageInfos(true);
+        // no copy needed for this one, as this list is just used for counting
+        // the total number of images
+        KURL::List listAll = d->iconView->allItems();
 
         if (list.isEmpty())
         {
             d->albumWidgetStack->setPreviewItem();
-            emit signalImageSelected(list, false, false);
+            emit signalImageSelected(list, false, false, listAll);
             emit signalNoCurrentItem();
         }
         else
@@ -703,8 +706,7 @@ void DigikamView::slotDispatchImageSelected()
 
             if (!d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
                 d->albumWidgetStack->setPreviewItem(list.first(), previousInfo, nextInfo);
-
-            emit signalImageSelected(list, previousInfo, nextInfo);
+            emit signalImageSelected(list, previousInfo, nextInfo, listAll);
         }
 
         d->needDispatchSelection = false;
