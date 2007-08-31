@@ -35,12 +35,14 @@
 
 // KDE includes.
 
+#include <kurl.h>
 #include <klocale.h>
 #include <kdiskfreesp.h>
 #include <kio/global.h>
 
 // Local includes.
 
+#include "albumsettings.h"
 #include "freespacewidget.h"
 #include "freespacewidget.moc"
 
@@ -76,15 +78,12 @@ public:
     QTimer        *timer;
     
     QPixmap        pix;
-
-    KURL           url;
 };
 
-FreeSpaceWidget::FreeSpaceWidget(QWidget* parent, int width, const KURL& url)
+FreeSpaceWidget::FreeSpaceWidget(QWidget* parent, int width)
                : QWidget(parent, 0, WResizeNoErase|WRepaintNoErase)
 {
     d = new FreeSpaceWidgetPriv;
-    d->url = url;
     setBackgroundMode(Qt::NoBackground);
     setFixedWidth(width);
     setMaximumHeight(fontMetrics().height()+4);
@@ -103,16 +102,6 @@ FreeSpaceWidget::~FreeSpaceWidget()
     d->timer->stop();
     delete d->timer;
     delete d;
-}
-
-void FreeSpaceWidget::setUrl(const KURL& url)
-{
-    d->url = url;
-}
-
-KURL FreeSpaceWidget::url()
-{
-    return d->url;
 }
 
 void FreeSpaceWidget::setEstimatedDSizeKb(unsigned long dSize)
@@ -163,15 +152,15 @@ void FreeSpaceWidget::updatePixmap()
     d->pix.fill(colorGroup().background());
     
     QPainter p(&d->pix);
-    p.setPen(colorGroup().dark());
+    p.setPen(colorGroup().foreground());
     p.drawRect(0, 0, d->pix.width(), d->pix.height());
 
     if (isValid())
     {
         // We will compute the estimated % of space size used to download and process.
         unsigned long eUsedKb = d->dSizeKb + d->kBUsed;
-        int peUsed = (int)(100.0*((double)eUsedKb/(double)d->kBSize));
-        int pClamp = peUsed > 100 ? 100 : peUsed;
+        int peUsed            = (int)(100.0*((double)eUsedKb/(double)d->kBSize));
+        int pClamp            = peUsed > 100 ? 100 : peUsed;
         p.setBrush(peUsed > 95 ? Qt::red : Qt::darkGreen);
         p.setPen(Qt::white);
         QRect gRect(1, 1, (int)(((double)d->pix.width()-2.0)*(pClamp/100.0)), d->pix.height()-2);
@@ -204,7 +193,7 @@ void FreeSpaceWidget::paintEvent(QPaintEvent*)
 
 void FreeSpaceWidget::slotTimeout()
 {
-    QString mountPoint = KIO::findPathMountPoint(d->url.path());
+    QString mountPoint = KIO::findPathMountPoint(AlbumSettings::instance()->getAlbumLibraryPath());
     KDiskFreeSp *job   = new KDiskFreeSp;
     connect(job, SIGNAL(foundMountPoint(const unsigned long&, const unsigned long&,
                                         const unsigned long&, const QString&)),

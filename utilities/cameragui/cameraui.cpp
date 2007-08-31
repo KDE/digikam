@@ -384,8 +384,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     layout->addWidget( pixmapLogo );
     layout->addWidget( d->anim );
 
-    d->freeSpaceWidget = new FreeSpaceWidget(plainPage(), 100,
-                         KURL(AlbumSettings::instance()->getAlbumLibraryPath()));
+    d->freeSpaceWidget = new FreeSpaceWidget(plainPage(), 100);
 
     viewBoxLayout->addMultiCellWidget(widget, 0, 0, 0, 7);
     viewBoxLayout->addMultiCellWidget(d->cancelBtn, 2, 2, 0, 0);

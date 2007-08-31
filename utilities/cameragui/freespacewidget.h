@@ -29,10 +29,6 @@
 #include <qstring.h>
 #include <qwidget.h>
 
-// KDE includes.
-
-#include <kurl.h>
-
 namespace Digikam
 {
 
@@ -44,11 +40,8 @@ class FreeSpaceWidget : public QWidget
     
 public:
 
-    FreeSpaceWidget(QWidget* parent, int width, const KURL& url);
+    FreeSpaceWidget(QWidget* parent, int width);
     ~FreeSpaceWidget();
-
-    void setUrl(const KURL& url);
-    KURL url();
 
     void          setEstimatedDSizeKb(unsigned long dSize);
     unsigned long estimatedDSizeKb();
