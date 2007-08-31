@@ -58,6 +58,7 @@ public:
     static bool              lightTableWindowCreated();
 
     void loadImageInfos(const ImageInfoList &list, ImageInfo *imageInfoCurrent);
+    void setLeftRightItems(const ImageInfoList &list);
 
 signals: 
 
@@ -100,7 +101,7 @@ private slots:
     void slotSetItemOnRightPanel(ImageInfo*);
     void slotLeftDroppedItems(const ImageInfoList&);
     void slotRightDroppedItems(const ImageInfoList&);
-
+    
     void slotLeftPanelLeftButtonClicked();
     void slotRightPanelLeftButtonClicked();
 

@@ -497,13 +497,26 @@ void LightTableWindow::setupAccelerators()
                     false, true);
 }
 
+// Deal with items dropped onto the thumbbar (e.g. from the Album view)
 void LightTableWindow::slotThumbbarDroppedItems(const ImageInfoList& list)
 {
     loadImageInfos(list, 0);
+    if (list.count()>1)
+        setLeftRightItems(list);
 }
 
+
+// We get here either
+// - via F6 (from the albumview)
+//     a) digikamapp.cpp:  key_F6 leads to slotImageLightTable())
+//     b) digikamview.cpp: void DigikamView::slotImageLightTable()
+//          calls d->iconView->insertToLightTable(list, info);
+//     c) albumiconview.cpp: AlbumIconView::insertToLightTable
+//          calls ltview->loadImageInfos(list, current);
+// - via drag&drop, i.e. calls issued by the ...Dropped... routines
 void LightTableWindow::loadImageInfos(const ImageInfoList &list, ImageInfo *imageInfoCurrent)
 {
+
     ImageInfoList l = list;
 
     if (!imageInfoCurrent) 
@@ -535,11 +548,7 @@ void LightTableWindow::loadImageInfos(const ImageInfoList &list, ImageInfo *imag
         }
     }   
     d->barView->blockSignals(false);
-
-    LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(d->barView->findItemByInfo(imageInfoCurrent));
-    if (ltItem) 
-        d->barView->setSelectedItem(ltItem);
-
+    
     // if window is iconified, show it
     if (isMinimized())
     {
@@ -722,29 +731,87 @@ void LightTableWindow::slotItemSelected(ImageInfo* info)
     d->previewView->checkForSelection(info);
 }    
 
+// Deal with one (or more) items dropped onto the left panel
 void LightTableWindow::slotLeftDroppedItems(const ImageInfoList& list)
 {
     ImageInfo *info = *(list.begin());
     loadImageInfos(list, info);
 
     // We will check if first item from list is already stored in thumbbar
-    // Note than thumbbar store all ImageInfo reference in memory for preview object.
+    // Note that the thumbbar stores all ImageInfo reference 
+    // in memory for preview object.
     LightTableBarItem *item = d->barView->findItemByInfo(info);
-    if (item)
+    if (item) 
+    {
         slotSetItemOnLeftPanel(item->info());
+        // One approach is to make this item the current one, via
+        //    d->barView->setSelectedItem(item);
+        // However, this is not good, because this also sets 
+        // the right thumb to the same image.
+        // Therefore we use setLeftRightItems if there is more than 
+        // one item in the list of dropped images.        
+    }
+    if (list.count()>1)
+        setLeftRightItems(list);
+
 }
 
+// Deal with one (or more) items dropped onto the right panel
 void LightTableWindow::slotRightDroppedItems(const ImageInfoList& list)
 {
     ImageInfo *info = *(list.begin());
     loadImageInfos(list, info);
+    if (list.count()>1)
+        setLeftRightItems(list);
 
     // We will check if first item from list is already stored in thumbbar
-    // Note than thumbbar store all ImageInfo reference in memory for preview object.
+    // Note that the thumbbar stores all ImageInfo reference 
+    // in memory for preview object.
     LightTableBarItem *item = d->barView->findItemByInfo(info);
-    if (item)
+    if (item) 
+    {
         slotSetItemOnRightPanel(item->info());
+        // Make this item the current one.
+        d->barView->setSelectedItem(item);
+    }
+
+    if (list.count()>1)
+        setLeftRightItems(list);
+
 }
+
+
+// Set the images for the left and right panel.
+void LightTableWindow::setLeftRightItems(const ImageInfoList &list)
+{
+    ImageInfoList l = list;
+
+    // Make sure that more than just one item is in the list.
+    if (l.count()<=1)
+        return;
+
+    ImageInfo *info = l.first();
+    LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(d->barView->findItemByInfo(info));
+
+    if (ltItem) {
+        // The first item is used for the left panel.
+        d->barView->setOnLeftPanel(info);
+        slotSetItemOnLeftPanel(info);
+
+        // The subsequent item is used for the right panel.
+        LightTableBarItem* next = dynamic_cast<LightTableBarItem*>(ltItem->next());
+        if (next)
+        {
+            d->barView->setOnRightPanel(next->info());
+            slotSetItemOnRightPanel(next->info());
+            d->barView->setSelectedItem(next);
+            // ensure that the selected item is visible
+            // FIXME: this does not work:
+            d->barView->ensureItemVisible(next);
+        }
+    }
+}
+
 
 void LightTableWindow::slotSetItemLeft()
 {
