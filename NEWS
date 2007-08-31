@@ -32,4 +32,5 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 021 ==> 147119 : Can't link against static libjasper, configure reports jasper is missing.
 022 ==> 147439 : It is too easy to delete a search.
 023 ==> 147687 : Error when downloading and converting images.
-024 ==> 
+024 ==> 137590 : Be able to modifiy the extension of images in the interface.
+025 ==> 
