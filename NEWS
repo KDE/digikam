@@ -33,4 +33,5 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 022 ==> 147439 : It is too easy to delete a search.
 023 ==> 147687 : Error when downloading and converting images.
 024 ==> 137590 : Be able to modifiy the extension of images in the interface.
-025 ==> 
+025 ==> 139024 : camera GUI new items selection doesn't work.
+026 ==> 
