@@ -84,6 +84,8 @@ public:
     virtual QRect itemRect() const;
 
     QString defaultDownloadName(CameraIconViewItem *item);
+
+    void itemsSelectionSizeInfo(unsigned long& fSize, unsigned long& dSize);
     
 signals:
 

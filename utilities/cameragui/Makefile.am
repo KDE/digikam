@@ -11,7 +11,7 @@ libcameragui_la_SOURCES = gpcamera.cpp cameraui.cpp cameraiconview.cpp  \
 	                  animwidget.cpp renamecustomizer.cpp  \
 	                  dkcamera.cpp umscamera.cpp gpiteminfo.cpp \
 	                  camerainfodialog.cpp albumselectdialog.cpp \
-	                  camerafolderdialog.cpp  
+	                  camerafolderdialog.cpp freespacewidget.cpp 
 
 libcameragui_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 

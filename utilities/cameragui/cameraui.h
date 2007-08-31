@@ -61,7 +61,9 @@ public:
     bool isBusy() const;
     bool isClosed() const;
 
-    // Get status of JPEG conversion files to lossless format during download.
+    bool autoRotateJpegFiles() const;
+    
+    /** Get status of JPEG conversion files to lossless format during download.*/
     bool convertLosslessJpegFiles() const;
     QString losslessFormat();
 

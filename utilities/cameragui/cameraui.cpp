@@ -102,6 +102,7 @@ extern "C"
 #include "albumselectdialog.h"
 #include "renamecustomizer.h"
 #include "animwidget.h"
+#include "freespacewidget.h"
 #include "camerafolderdialog.h"
 #include "camerainfodialog.h"
 #include "cameraiconview.h"
@@ -219,6 +220,8 @@ public:
     AnimWidget                   *anim;
 
     ImagePropertiesSideBarCamGui *rightSidebar;
+
+    FreeSpaceWidget              *freeSpaceWidget;
 };
 
 CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle, 
@@ -233,19 +236,13 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
                       i18n("&Images"))
 {
     d = new CameraUIPriv;
-    d->lastAccess  = lastAccess;
-    d->cameraTitle = cameraTitle;
+    d->lastAccess     = lastAccess;
+    d->cameraTitle    = cameraTitle;
     setHelp("camerainterface.anchor", "digikam");
 
     // -------------------------------------------------------------------------
     
-    QGridLayout* viewBoxLayout = new QGridLayout(plainPage(), 2, 5);
-    viewBoxLayout->setColStretch( 0, 0 );
-    viewBoxLayout->setColStretch( 1, 0 );
-    viewBoxLayout->setColStretch( 2, 3 );
-    viewBoxLayout->setColStretch( 3, 1 );
-    viewBoxLayout->setColStretch( 4, 0 );
-    viewBoxLayout->setColStretch( 5, 0 );
+    QGridLayout* viewBoxLayout = new QGridLayout(plainPage(), 2, 7);
 
     QHBox* widget = new QHBox(plainPage());
     d->splitter   = new QSplitter(widget);
@@ -352,11 +349,6 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
                           i18n("On the Fly Operations (JPEG only)"));
                                                
     d->rightSidebar->appendTab(d->advBox, SmallIcon("configure"), i18n("Settings"));
-    
-    // -------------------------------------------------------------------------
-    
-    viewBoxLayout->addMultiCellWidget(widget, 0, 0, 0, 5);
-    viewBoxLayout->setRowSpacing(1, spacingHint());
     d->rightSidebar->loadViewState();
         
     // -------------------------------------------------------------------------
@@ -384,20 +376,35 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     QString directory = KGlobal::dirs()->findResourceDir("logo-digikam", "logo-digikam.png");
     pixmapLogo->setPixmap( QPixmap( directory + "logo-digikam.png" ) );
     pixmapLogo->setFocusPolicy(QWidget::NoFocus);
-    
+
     d->anim = new AnimWidget(frame, pixmapLogo->height()-2);
-    
+
     layout->setMargin(0);
     layout->setSpacing(0);
     layout->addWidget( pixmapLogo );
     layout->addWidget( d->anim );
 
+    d->freeSpaceWidget = new FreeSpaceWidget(plainPage(), 100,
+                         KURL(AlbumSettings::instance()->getAlbumLibraryPath()));
+
+    viewBoxLayout->addMultiCellWidget(widget, 0, 0, 0, 7);
     viewBoxLayout->addMultiCellWidget(d->cancelBtn, 2, 2, 0, 0);
     viewBoxLayout->addMultiCellWidget(d->status, 2, 2, 2, 2);
     viewBoxLayout->addMultiCellWidget(d->progress, 2, 2, 3, 3);
-    viewBoxLayout->addMultiCellWidget(frame, 2, 2, 5, 5);
+    viewBoxLayout->addMultiCellWidget(d->freeSpaceWidget, 2, 2, 5, 5);
+    viewBoxLayout->addMultiCellWidget(frame, 2, 2, 7, 7);
+    viewBoxLayout->setRowSpacing(1, spacingHint());
     viewBoxLayout->setColSpacing(1, spacingHint());
     viewBoxLayout->setColSpacing(4, spacingHint());
+    viewBoxLayout->setColSpacing(6, spacingHint());
+    viewBoxLayout->setColStretch( 0, 0 );
+    viewBoxLayout->setColStretch( 1, 0 );
+    viewBoxLayout->setColStretch( 2, 3 );
+    viewBoxLayout->setColStretch( 3, 1 );
+    viewBoxLayout->setColStretch( 4, 0 );
+    viewBoxLayout->setColStretch( 5, 0 );
+    viewBoxLayout->setColStretch( 6, 0 );
+    viewBoxLayout->setColStretch( 7, 0 );
 
     // -------------------------------------------------------------------------
     
@@ -512,11 +519,16 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     connect(d->rightSidebar, SIGNAL(signalLastItem()),
             this, SLOT(slotLastItem()));                
 
-    // -- Read settings --------------------------------------------------
+    // -------------------------------------------------------------------------
+    
+    connect(d->cancelBtn, SIGNAL(clicked()),
+            this, SLOT(slotCancelButton()));
+
+    // -- Read settings & Check free space availability on album root path -----
 
     readSettings();
-    
-    // -- camera controller -----------------------------------------------
+       
+    // -- camera controller ----------------------------------------------------
     
     d->controller = new CameraController(this, d->cameraTitle, model, port, path);
 
@@ -565,8 +577,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     connect(d->controller, SIGNAL(signalUploaded(const GPItemInfo&)),
             this, SLOT(slotUploaded(const GPItemInfo&)));
 
-    connect(d->cancelBtn, SIGNAL(clicked()),
-            this, SLOT(slotCancelButton()));
+    // -------------------------------------------------------------------------
 
     d->view->setFocus();
     QTimer::singleShot(0, d->controller, SLOT(slotConnect()));
@@ -648,6 +659,11 @@ bool CameraUI::isClosed() const
 bool CameraUI::convertLosslessJpegFiles() const
 {
     return d->convertJpegCheck->isChecked();
+}
+
+bool CameraUI::autoRotateJpegFiles() const
+{
+    return d->autoRotateCheck->isChecked();
 }
 
 QString CameraUI::losslessFormat()
@@ -1085,6 +1101,22 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
     // can return an empty string in this case because it depends on selection.
     if (!onlySelected)
         d->view->slotSelectAll();
+
+    // See B.K.O #139519: Always check free space available before to
+    // download items selection from camera.
+    unsigned long fSize = 0;
+    unsigned long dSize = 0;
+    d->view->itemsSelectionSizeInfo(fSize, dSize);
+    if (d->freeSpaceWidget->isValid() && (dSize >= d->freeSpaceWidget->kBAvail()))
+    {
+        KMessageBox::error(this, i18n("There is no enough free space on Album Library Path "
+                                      "to download and process selected pictures from camera.\n\n"
+                                      "Estimated space require: %1\n"
+                                      "Available free space: %2")
+                                      .arg(KIO::convertSizeFromKB(dSize))
+                                      .arg(KIO::convertSizeFromKB(d->freeSpaceWidget->kBAvail())));
+        return;
+    }
 
     QString   newDirName;
     IconItem* firstItem = d->view->firstItem();
@@ -1552,6 +1584,11 @@ void CameraUI::slotNewSelection(bool hasSelection)
         d->downloadMenu->setItemEnabled(0, hasSelection);
         d->downloadMenu->setItemEnabled(2, hasSelection);
     }
+
+    unsigned long fSize = 0;
+    unsigned long dSize = 0;
+    d->view->itemsSelectionSizeInfo(fSize, dSize);
+    d->freeSpaceWidget->setEstimatedDSizeKb(dSize);
 }
 
 void CameraUI::slotItemsSelected(CameraIconViewItem* item, bool selected)
@@ -1706,4 +1743,3 @@ void CameraUI::keyPressEvent(QKeyEvent *e)
 }
 
 }  // namespace Digikam
-
