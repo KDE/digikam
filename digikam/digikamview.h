@@ -34,12 +34,11 @@
 // KDE includes.
 
 #include <khbox.h>
+#include <kurl.h>
 
 // Local includes.
 
 #include "imageinfo.h"
-
-class KUrl;
 
 namespace Digikam
 {
@@ -69,7 +68,7 @@ signals:
 
     void signalAlbumSelected(bool val);
     void signalTagSelected(bool val);
-    void signalImageSelected(const ImageInfoList& list, bool, bool);
+    void signalImageSelected(const ImageInfoList&, bool, bool, const KUrl::List&);
     void signalNoCurrentItem();
     void signalProgressBarMode(int, const QString&);
     void signalProgressValue(int);

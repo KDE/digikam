@@ -40,7 +40,6 @@
 #include <klocale.h>
 #include <kglobalsettings.h>
 #include <kstandarddirs.h>
-#include <kurl.h>
 #include <kstandardaction.h>
 #include <kstandardshortcut.h>
 #include <kshortcutsdialog.h>
@@ -358,8 +357,8 @@ void DigikamApp::setupView()
     connect(d->view, SIGNAL(signalTagSelected(bool)),
             this, SLOT(slotTagSelected(bool)));
 
-    connect(d->view, SIGNAL(signalImageSelected(const ImageInfoList&, bool, bool)),
-            this, SLOT(slotImageSelected(const ImageInfoList&, bool, bool)));
+    connect(d->view, SIGNAL(signalImageSelected(const ImageInfoList&, bool, bool, const KUrl::List&)),
+            this, SLOT(slotImageSelected(const ImageInfoList&, bool, bool, const KUrl::List&)));
 }
 
 void DigikamApp::setupStatusBar()
@@ -1134,10 +1133,17 @@ void DigikamApp::slotTagSelected(bool val)
     }
 }
 
-void DigikamApp::slotImageSelected(const ImageInfoList& list, bool hasPrev, bool hasNext)
+void DigikamApp::slotImageSelected(const ImageInfoList& list, bool hasPrev, bool hasNext,
+                                   const KUrl::List& listAll)
 {
     ImageInfoList selection = list;
-    bool val = selection.isEmpty() ? false : true;
+
+    KUrl::List all = listAll;
+    int num_images = listAll.count();
+    bool val       = selection.isEmpty() ? false : true;
+    int index      = 1;
+    QString text;
+
     d->imageViewAction->setEnabled(val);
     d->imagePreviewAction->setEnabled(val);
     d->imageLightTableAction->setEnabled(val);
@@ -1150,13 +1156,30 @@ void DigikamApp::slotImageSelected(const ImageInfoList& list, bool hasPrev, bool
     {
         case 0:
             d->statusProgressBar->setText(i18n("No item selected"));
-        break;
+            break;
         case 1:
-            d->statusProgressBar->setText(selection.first().fileUrl().fileName());
-        break;
+        {
+            KUrl first = selection.first().fileUrl();
+
+            for (KUrl::List::iterator it = all.begin();
+                it != all.end(); ++it)
+            {
+                if ((*it) == first)
+                    break;
+
+                index++;
+            }
+
+            text = selection.first().fileUrl().fileName()
+                                   + i18n(" (%1 of %2)", QString::number(index),
+                                                         QString::number(num_images));
+            d->statusProgressBar->setText(text);
+            break;
+        }
         default:
-            d->statusProgressBar->setText(i18n("%1 items selected",selection.count()));
-        break;
+            d->statusProgressBar->setText(i18n("%1/%2 items selected", selection.count(), 
+                                                                       QString::number(num_images)));
+            break;
     }
 
     d->statusNavigateBar->setNavigateBarState(hasPrev, hasNext);

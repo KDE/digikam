@@ -34,6 +34,7 @@
 
 // KDE includes.
 
+#include <kurl.h>
 #include <kxmlguiwindow.h>
 #include <kio/global.h>
 #include <kio/netaccess.h>
@@ -110,7 +111,7 @@ private slots:
     void slotAlbumAddImages();
     void slotAlbumSelected(bool val);
     void slotTagSelected(bool val);
-    void slotImageSelected(const ImageInfoList&, bool, bool);
+    void slotImageSelected(const ImageInfoList&, bool, bool, const KUrl::List&);
     void slotExit();
     void slotShowTip();
     void slotShowKipiHelp();

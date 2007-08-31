@@ -36,7 +36,6 @@
 
 // KDE includes.
 
-#include <kurl.h>
 #include <kpushbutton.h>
 #include <klocale.h>
 #include <kapplication.h>
@@ -44,12 +43,12 @@
 #include <krun.h>
 #include <kiconloader.h>
 #include <kstandarddirs.h>
+#include <kglobal.h>
+#include <kvbox.h>
 
 // LibKDcraw includes.
 
 #include <libkdcraw/rawfiles.h>
-#include <kglobal.h>
-#include <kvbox.h>
 
 // Local includes.
 
@@ -690,11 +689,15 @@ void DigikamView::slotDispatchImageSelected()
     {
         // the list of copies of ImageInfos of currently selected items, currentItem first
         ImageInfoList list = d->iconView->selectedImageInfos();
+        
+        // no copy needed for this one, as this list is just used for counting
+        // the total number of images
+        KUrl::List listAll = d->iconView->allItems();
 
         if (list.isEmpty())
         {
             d->albumWidgetStack->setPreviewItem();
-            emit signalImageSelected(list, false, false);
+            emit signalImageSelected(list, false, false, listAll);
             emit signalNoCurrentItem();
         }
         else
@@ -711,7 +714,7 @@ void DigikamView::slotDispatchImageSelected()
             if (!d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
                 d->albumWidgetStack->setPreviewItem(list.first(), previousInfo, nextInfo);
 
-            emit signalImageSelected(list, !previousInfo.isNull(), !nextInfo.isNull());
+            emit signalImageSelected(list, !previousInfo.isNull(), !nextInfo.isNull(), listAll);
         }
 
         d->needDispatchSelection = false;
