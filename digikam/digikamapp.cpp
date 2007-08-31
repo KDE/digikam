@@ -1210,7 +1210,7 @@ void DigikamApp::slotImageSelected(const QPtrList<ImageInfo>& list, bool hasPrev
             }    
 
             text = selection.first()->kurl().fileName()  
-                                   + i18n(" (%2 of %3)")
+                                   + i18n(" (%1 of %2)")
                                    .arg(QString::number(index))
                                    .arg(QString::number(num_images));
             d->statusProgressBar->setText(text);
