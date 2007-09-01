@@ -37,7 +37,7 @@ class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_BlurFX : public Digikam::ImagePlugi
     
 public:
 
-    ImagePlugin_BlurFX(QObject *parent, const QStringList &args);
+    ImagePlugin_BlurFX(QObject *parent, const QVariantList &args);
     ~ImagePlugin_BlurFX();
     
     void setEnabledActions(bool enable);

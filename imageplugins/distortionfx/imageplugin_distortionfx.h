@@ -40,7 +40,7 @@ class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_DistortionFX : public Digikam::Imag
     
 public:
 
-    ImagePlugin_DistortionFX(QObject *parent, const QStringList &args);
+    ImagePlugin_DistortionFX(QObject *parent, const QVariantList &args);
     ~ImagePlugin_DistortionFX();
 
     void setEnabledActions(bool enable);

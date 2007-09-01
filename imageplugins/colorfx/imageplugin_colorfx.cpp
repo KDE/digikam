@@ -39,10 +39,10 @@
 #include "imageplugin_colorfx.h"
 #include "imageplugin_colorfx.moc"
 
-K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_colorfx,
-                           KGenericFactory<ImagePlugin_ColorFX>("digikamimageplugin_colorfx"));
+K_PLUGIN_FACTORY( ColorFXFactory, registerPlugin<ImagePlugin_ColorFX>(); )
+K_EXPORT_PLUGIN ( ColorFXFactory("digikamimageplugin_colorfx") )
 
-ImagePlugin_ColorFX::ImagePlugin_ColorFX(QObject *parent, const QStringList &)
+ImagePlugin_ColorFX::ImagePlugin_ColorFX(QObject *parent, const QVariantList &)
                    : Digikam::ImagePlugin(parent, "ImagePlugin_ColorFX")
 {
     m_solarizeAction  = new KAction(KIcon("colorfx"), i18n("Color Effects..."), this);

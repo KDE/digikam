@@ -38,10 +38,10 @@
 #include "imageplugin_freerotation.h"
 #include "imageplugin_freerotation.moc"
 
-K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_freerotation,
-                           KGenericFactory<ImagePlugin_FreeRotation>("digikamimageplugin_freerotation"));
+K_PLUGIN_FACTORY( FreeRotationFactory, registerPlugin<ImagePlugin_FreeRotation>(); )
+K_EXPORT_PLUGIN ( FreeRotationFactory("digikamimageplugin_freerotation") )
 
-ImagePlugin_FreeRotation::ImagePlugin_FreeRotation(QObject *parent, const QStringList &)
+ImagePlugin_FreeRotation::ImagePlugin_FreeRotation(QObject *parent, const QVariantList &)
                         : Digikam::ImagePlugin(parent, "ImagePlugin_FreeRotation")
 {
     m_freerotationAction = new KAction(KIcon("freerotation"), i18n("Free Rotation..."), this);

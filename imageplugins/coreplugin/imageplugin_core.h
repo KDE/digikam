@@ -38,7 +38,7 @@ class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_Core : public Digikam::ImagePlugin
     
 public:
 
-    ImagePlugin_Core(QObject *parent, const QStringList &args);
+    ImagePlugin_Core(QObject *parent, const QVariantList &args);
     ~ImagePlugin_Core();
 
     void setEnabledSelectionActions(bool enable);

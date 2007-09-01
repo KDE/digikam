@@ -37,7 +37,7 @@ class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_OilPaint : public Digikam::ImagePlu
     
 public:
 
-    ImagePlugin_OilPaint(QObject *parent, const QStringList &args);
+    ImagePlugin_OilPaint(QObject *parent, const QVariantList &args);
     ~ImagePlugin_OilPaint();
 
     void setEnabledActions(bool enable);

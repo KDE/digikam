@@ -38,7 +38,7 @@ class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_Infrared : public Digikam::ImagePlu
     
 public:
 
-    ImagePlugin_Infrared(QObject *parent, const QStringList &args);
+    ImagePlugin_Infrared(QObject *parent, const QVariantList &args);
     ~ImagePlugin_Infrared();
 
     void setEnabledActions(bool enable);

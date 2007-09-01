@@ -38,8 +38,7 @@ class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_InPainting : public Digikam::ImageP
     
 public:
 
-    ImagePlugin_InPainting(QObject *parent,
-                           const QStringList &args);
+    ImagePlugin_InPainting(QObject *parent, const QVariantList &args);
     ~ImagePlugin_InPainting();
 
     void setEnabledActions(bool enable);

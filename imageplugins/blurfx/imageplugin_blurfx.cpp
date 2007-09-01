@@ -37,10 +37,10 @@
 #include "imageplugin_blurfx.h"
 #include "imageplugin_blurfx.moc"
 
-K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_blurfx,
-                           KGenericFactory<ImagePlugin_BlurFX>("digikamimageplugin_blurfx"));
+K_PLUGIN_FACTORY( BlurFXFactory, registerPlugin<ImagePlugin_BlurFX>(); )
+K_EXPORT_PLUGIN ( BlurFXFactory("digikamimageplugin_blurfx") )
 
-ImagePlugin_BlurFX::ImagePlugin_BlurFX(QObject *parent, const QStringList &)
+ImagePlugin_BlurFX::ImagePlugin_BlurFX(QObject *parent, const QVariantList &)
                   : Digikam::ImagePlugin(parent, "ImagePlugin_BlurFX")
 {
     m_blurfxAction  = new KAction(KIcon("blurfx"), i18n("Blur Effects..."), this);

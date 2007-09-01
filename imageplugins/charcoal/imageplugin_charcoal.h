@@ -38,7 +38,7 @@ class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_Charcoal : public Digikam::ImagePlu
     
 public:
 
-    ImagePlugin_Charcoal(QObject *parent, const QStringList &args);
+    ImagePlugin_Charcoal(QObject *parent, const QVariantList &args);
     ~ImagePlugin_Charcoal();
     
     void setEnabledActions(bool enable);

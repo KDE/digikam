@@ -37,10 +37,10 @@
 #include "imageplugin_texture.h"
 #include "imageplugin_texture.moc"
 
-K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_texture,
-                           KGenericFactory<ImagePlugin_Texture>("digikamimageplugin_texture"));
+K_PLUGIN_FACTORY( TextureFactory, registerPlugin<ImagePlugin_Texture>(); )
+K_EXPORT_PLUGIN ( TextureFactory("digikamimageplugin_texture") )
 
-ImagePlugin_Texture::ImagePlugin_Texture(QObject *parent, const QStringList &)
+ImagePlugin_Texture::ImagePlugin_Texture(QObject *parent, const QVariantList &)
                    : Digikam::ImagePlugin(parent, "ImagePlugin_Texture")
 {
                 

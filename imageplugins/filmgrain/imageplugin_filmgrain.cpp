@@ -38,10 +38,10 @@
 #include "imageplugin_filmgrain.h"
 #include "imageplugin_filmgrain.moc"
 
-K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_filmgrain,
-                           KGenericFactory<ImagePlugin_FilmGrain>("digikamimageplugin_filmgrain"));
+K_PLUGIN_FACTORY( FilmGrainFactory, registerPlugin<ImagePlugin_FilmGrain>(); )
+K_EXPORT_PLUGIN ( FilmGrainFactory("digikamimageplugin_filmgrain") )
 
-ImagePlugin_FilmGrain::ImagePlugin_FilmGrain(QObject *parent, const QStringList &)
+ImagePlugin_FilmGrain::ImagePlugin_FilmGrain(QObject *parent, const QVariantList &)
                      : Digikam::ImagePlugin(parent, "ImagePlugin_FilmGrain")
 {
     m_filmgrainAction  = new KAction(KIcon("filmgrain"), i18n("Add Film Grain..."), this);

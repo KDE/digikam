@@ -38,7 +38,7 @@ class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_Restoration : public Digikam::Image
     
 public:
 
-    ImagePlugin_Restoration(QObject *parent, const QStringList &args);
+    ImagePlugin_Restoration(QObject *parent, const QVariantList &args);
     ~ImagePlugin_Restoration();
 
     void setEnabledActions(bool enable);

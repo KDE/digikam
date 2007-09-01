@@ -38,10 +38,10 @@
 #include "imageplugin_infrared.h"
 #include "imageplugin_infrared.moc"
 
-K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_infrared,
-                           KGenericFactory<ImagePlugin_Infrared>("digikamimageplugin_infrared"));
+K_PLUGIN_FACTORY( InfraredFactory, registerPlugin<ImagePlugin_Infrared>(); )
+K_EXPORT_PLUGIN ( InfraredFactory("digikamimageplugin_infrared") )
 
-ImagePlugin_Infrared::ImagePlugin_Infrared(QObject *parent, const QStringList &)
+ImagePlugin_Infrared::ImagePlugin_Infrared(QObject *parent, const QVariantList &)
                     : Digikam::ImagePlugin(parent, "ImagePlugin_Infrared")
 {
 

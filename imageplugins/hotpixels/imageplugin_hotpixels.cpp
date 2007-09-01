@@ -39,10 +39,10 @@
 #include "imageplugin_hotpixels.h"
 #include "imageplugin_hotpixels.moc"
 
-K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_hotpixels,
-                           KGenericFactory<ImagePlugin_HotPixels>("digikamimageplugin_hotpixels"));
+K_PLUGIN_FACTORY( HotPixelsFactory, registerPlugin<ImagePlugin_HotPixels>(); )
+K_EXPORT_PLUGIN ( HotPixelsFactory("digikamimageplugin_hotpixels") )
 
-ImagePlugin_HotPixels::ImagePlugin_HotPixels(QObject *parent, const QStringList &)
+ImagePlugin_HotPixels::ImagePlugin_HotPixels(QObject *parent, const QVariantList &)
                      : Digikam::ImagePlugin(parent, "ImagePlugin_HotPixels")
 {
     m_hotpixelsAction  = new KAction(KIcon("hotpixels"), i18n("Curves Adjust..."), this);

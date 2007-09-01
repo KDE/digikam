@@ -37,7 +37,7 @@ class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_ChannelMixer : public Digikam::Imag
     
 public:
 
-    ImagePlugin_ChannelMixer(QObject *parent, const QStringList &args);
+    ImagePlugin_ChannelMixer(QObject *parent, const QVariantList &args);
     ~ImagePlugin_ChannelMixer();
     
     void setEnabledActions(bool enable);

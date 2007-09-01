@@ -37,7 +37,7 @@ class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_Texture : public Digikam::ImagePlug
     
 public:
 
-    ImagePlugin_Texture(QObject *parent, const QStringList &args);
+    ImagePlugin_Texture(QObject *parent, const QVariantList &args);
     ~ImagePlugin_Texture();
 
     void setEnabledActions(bool enable);

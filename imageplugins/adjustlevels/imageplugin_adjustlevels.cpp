@@ -37,10 +37,10 @@
 #include "imageplugin_adjustlevels.h"
 #include "imageplugin_adjustlevels.moc"
 
-K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_adjustlevels,
-                            KGenericFactory<ImagePlugin_AdjustLevels>("digikamimageplugin_adjustlevels"))
+K_PLUGIN_FACTORY( AdjustLevelsFactory, registerPlugin<ImagePlugin_AdjustLevels>(); )
+K_EXPORT_PLUGIN ( AdjustLevelsFactory("digikamimageplugin_adjustlevels") )
 
-ImagePlugin_AdjustLevels::ImagePlugin_AdjustLevels(QObject *parent, const QStringList &)
+ImagePlugin_AdjustLevels::ImagePlugin_AdjustLevels(QObject *parent, const QVariantList &)
                         : Digikam::ImagePlugin(parent, "ImagePlugin_AdjustLevels")
 {
     m_levelsAction  = new KAction(KIcon("adjustlevels"), i18n("Levels Adjust..."), this);

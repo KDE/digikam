@@ -38,7 +38,7 @@ class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_Emboss : public Digikam::ImagePlugi
     
 public:
 
-    ImagePlugin_Emboss(QObject *parent, const QStringList &args);
+    ImagePlugin_Emboss(QObject *parent, const QVariantList &args);
     ~ImagePlugin_Emboss();
 
     void setEnabledActions(bool enable);

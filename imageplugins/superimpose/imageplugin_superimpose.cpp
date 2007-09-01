@@ -34,10 +34,10 @@
 #include "imageplugin_superimpose.h"
 #include "imageplugin_superimpose.moc"
 
-K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_superimpose,
-                           KGenericFactory<ImagePlugin_SuperImpose>("digikamimageplugin_superimpose"));
+K_PLUGIN_FACTORY( SuperImposeFactory, registerPlugin<ImagePlugin_SuperImpose>(); )
+K_EXPORT_PLUGIN ( SuperImposeFactory("digikamimageplugin_superimpose") )
 
-ImagePlugin_SuperImpose::ImagePlugin_SuperImpose(QObject *parent, const QStringList &)
+ImagePlugin_SuperImpose::ImagePlugin_SuperImpose(QObject *parent, const QVariantList &)
                         : Digikam::ImagePlugin(parent, "ImagePlugin_SuperImpose")
 {
     m_superimposeAction  = new KAction(KIcon("superimpose"), i18n("Template Superimpose..."), this);

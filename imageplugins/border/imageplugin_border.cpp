@@ -38,10 +38,10 @@
 #include "imageplugin_border.h"
 #include "imageplugin_border.moc"
 
-K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_border,
-                            KGenericFactory<ImagePlugin_Border>("digikamimageplugin_border"));
+K_PLUGIN_FACTORY( BorderFactory, registerPlugin<ImagePlugin_Border>(); )
+K_EXPORT_PLUGIN ( BorderFactory("digikamimageplugin_border") )
 
-ImagePlugin_Border::ImagePlugin_Border(QObject *parent, const QStringList &)
+ImagePlugin_Border::ImagePlugin_Border(QObject *parent, const QVariantList &)
                   : Digikam::ImagePlugin(parent, "ImagePlugin_Border")
 {
     m_borderAction  = new KAction(KIcon("bordertool"), i18n("Add Border..."), this);

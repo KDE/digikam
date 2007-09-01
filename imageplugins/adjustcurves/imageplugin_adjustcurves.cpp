@@ -37,11 +37,11 @@
 #include "imageplugin_adjustcurves.h"
 #include "imageplugin_adjustcurves.moc"
 
-K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_adjustcurves,
-                            KGenericFactory<ImagePlugin_AdjustCurves>("digikamimageplugin_adjustcurves"));
+K_PLUGIN_FACTORY( AdjustCurvesFactory, registerPlugin<ImagePlugin_AdjustCurves>(); )
+K_EXPORT_PLUGIN ( AdjustCurvesFactory("digikamimageplugin_adjustcurves") )
 
 ImagePlugin_AdjustCurves::ImagePlugin_AdjustCurves(QObject *parent,
-                                                   const QStringList &)
+                                                   const QList<QVariant> &)
                         : Digikam::ImagePlugin(parent, "ImagePlugin_AdjustCurves")
 {
     m_curvesAction  = new KAction(KIcon("adjustcurves"), i18n("Curves Adjust..."), this);

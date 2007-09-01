@@ -38,10 +38,10 @@
 #include "imageplugin_restoration.h"
 #include "imageplugin_restoration.moc"
 
-K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_restoration,
-                           KGenericFactory<ImagePlugin_Restoration>("digikamimageplugin_restoration"));
+K_PLUGIN_FACTORY( RestorationFactory, registerPlugin<ImagePlugin_Restoration>(); )
+K_EXPORT_PLUGIN ( RestorationFactory("digikamimageplugin_restoration") )
 
-ImagePlugin_Restoration::ImagePlugin_Restoration(QObject *parent, const QStringList &)
+ImagePlugin_Restoration::ImagePlugin_Restoration(QObject *parent, const QVariantList &)
                        : Digikam::ImagePlugin(parent, "ImagePlugin_Restoration")
 {
     m_restorationAction  = new KAction(KIcon("restoration"), i18n("Restoration..."), this);

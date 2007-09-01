@@ -38,10 +38,10 @@
 #include "imageplugin_charcoal.h"
 #include "imageplugin_charcoal.moc"
 
-K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_charcoal,
-                           KGenericFactory<ImagePlugin_Charcoal>("digikamimageplugin_charcoal"));
+K_PLUGIN_FACTORY( CharcoalFactory, registerPlugin<ImagePlugin_Charcoal>(); )
+K_EXPORT_PLUGIN ( CharcoalFactory("digikamimageplugin_charcoal") )
 
-ImagePlugin_Charcoal::ImagePlugin_Charcoal(QObject *parent, const QStringList &)
+ImagePlugin_Charcoal::ImagePlugin_Charcoal(QObject *parent, const QVariantList &)
                     : Digikam::ImagePlugin(parent, "ImagePlugin_Charcoal")
 {
     m_charcoalAction  = new KAction(KIcon("charcoaltool"), i18n("Charcoal Drawing..."), this);

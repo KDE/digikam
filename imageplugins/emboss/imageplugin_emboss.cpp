@@ -38,10 +38,10 @@
 #include "imageplugin_emboss.h"
 #include "imageplugin_emboss.moc"
 
-K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_emboss,
-                           KGenericFactory<ImagePlugin_Emboss>("digikamimageplugin_emboss"));
+K_PLUGIN_FACTORY( EmbossFactory, registerPlugin<ImagePlugin_Emboss>(); )
+K_EXPORT_PLUGIN ( EmbossFactory("digikamimageplugin_emboss") )
 
-ImagePlugin_Emboss::ImagePlugin_Emboss(QObject *parent, const QStringList &)
+ImagePlugin_Emboss::ImagePlugin_Emboss(QObject *parent, const QVariantList &)
                   : Digikam::ImagePlugin(parent, "ImagePlugin_Emboss")
 {
 

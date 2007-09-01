@@ -51,10 +51,10 @@
 #include "imageplugin_core.h"
 #include "imageplugin_core.moc"
 
-K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_core,
-                            KGenericFactory<ImagePlugin_Core>("digikam"));
+K_PLUGIN_FACTORY( CorePluginFactory, registerPlugin<ImagePlugin_Core>(); )
+K_EXPORT_PLUGIN ( CorePluginFactory("digikamimageplugin_core") )
 
-ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QStringList &)
+ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QVariantList &)
                 : Digikam::ImagePlugin(parent, "ImagePlugin_Core")
 {
     //-------------------------------

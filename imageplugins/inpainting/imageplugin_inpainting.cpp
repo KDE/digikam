@@ -38,10 +38,10 @@
 #include "imageplugin_inpainting.h"
 #include "imageplugin_inpainting.moc"
 
-K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_inpainting,
-                           KGenericFactory<ImagePlugin_InPainting>("digikamimageplugin_inpainting"));
+K_PLUGIN_FACTORY( InPaintingFactory, registerPlugin<ImagePlugin_InPainting>(); )
+K_EXPORT_PLUGIN ( InPaintingFactory("digikamimageplugin_inpainting") )
 
-ImagePlugin_InPainting::ImagePlugin_InPainting(QObject *parent, const QStringList &)
+ImagePlugin_InPainting::ImagePlugin_InPainting(QObject *parent, const QVariantList &)
                       : Digikam::ImagePlugin(parent, "ImagePlugin_InPainting")
 {
     m_inPaintingAction = new KAction(KIcon("inpainting"), i18n("Inpainting..."), this);

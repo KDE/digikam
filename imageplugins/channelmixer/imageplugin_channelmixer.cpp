@@ -37,10 +37,10 @@
 #include "imageplugin_channelmixer.h"
 #include "imageplugin_channelmixer.moc"
 
-K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_channelmixer,
-                           KGenericFactory<ImagePlugin_ChannelMixer>("digikamimageplugin_channelmixer"))
+K_PLUGIN_FACTORY( ChannelMixerFactory, registerPlugin<ImagePlugin_ChannelMixer>(); )
+K_EXPORT_PLUGIN ( ChannelMixerFactory("digikamimageplugin_channelmixer") )
 
-ImagePlugin_ChannelMixer::ImagePlugin_ChannelMixer(QObject *parent, const QStringList &)
+ImagePlugin_ChannelMixer::ImagePlugin_ChannelMixer(QObject *parent, const QVariantList &)
                         : Digikam::ImagePlugin(parent, "ImagePlugin_ChannelMixer")
 {
     m_channelMixerAction  = new KAction(KIcon("channelmixer"), i18n("Channel Mixer..."), this);

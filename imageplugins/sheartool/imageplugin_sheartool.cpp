@@ -37,10 +37,10 @@
 #include "imageplugin_sheartool.h"
 #include "imageplugin_sheartool.moc"
 
-K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_sheartool,
-                           KGenericFactory<ImagePlugin_ShearTool>("digikamimageplugin_sheartool"));
+K_PLUGIN_FACTORY( ShearToolFactory, registerPlugin<ImagePlugin_ShearTool>(); )
+K_EXPORT_PLUGIN ( ShearToolFactory("digikamimageplugin_sheartool") )
 
-ImagePlugin_ShearTool::ImagePlugin_ShearTool(QObject *parent, const QStringList &)
+ImagePlugin_ShearTool::ImagePlugin_ShearTool(QObject *parent, const QVariantList &)
                      : Digikam::ImagePlugin(parent, "ImagePlugin_ShearTool")
 {
     m_sheartoolAction  = new KAction(KIcon("shear"), i18n("Shear..."), this);

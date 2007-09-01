@@ -37,10 +37,10 @@
 #include "imageplugin_inserttext.h"
 #include "imageplugin_inserttext.moc"
 
-K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_inserttext,
-                           KGenericFactory<ImagePlugin_InsertText>("digikamimageplugin_inserttext"));
+K_PLUGIN_FACTORY( InsertTextFactory, registerPlugin<ImagePlugin_InsertText>(); )
+K_EXPORT_PLUGIN ( InsertTextFactory("digikamimageplugin_inserttext") )
 
-ImagePlugin_InsertText::ImagePlugin_InsertText(QObject *parent, const QStringList &)
+ImagePlugin_InsertText::ImagePlugin_InsertText(QObject *parent, const QVariantList &)
                       : Digikam::ImagePlugin(parent, "ImagePlugin_InsertText")
 {
     m_insertTextAction = new KAction(KIcon("inserttext"), i18n("Insert Text..."), this);

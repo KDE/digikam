@@ -37,10 +37,10 @@
 #include "imageplugin_lensdistortion.h"
 #include "imageplugin_lensdistortion.moc"
 
-K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_lensdistortion,
-                           KGenericFactory<ImagePlugin_LensDistortion>("digikamimageplugin_lensdistortion"));
+K_PLUGIN_FACTORY( LensDistortionFactory, registerPlugin<ImagePlugin_LensDistortion>(); )
+K_EXPORT_PLUGIN ( LensDistortionFactory("digikamimageplugin_lensdistortion") )
 
-ImagePlugin_LensDistortion::ImagePlugin_LensDistortion(QObject *parent, const QStringList &)
+ImagePlugin_LensDistortion::ImagePlugin_LensDistortion(QObject *parent, const QVariantList &)
                           : Digikam::ImagePlugin(parent, "ImagePlugin_LensDistortion")
 {
     m_lensdistortionAction  = new KAction(KIcon("embosstool"), i18n("Lens Distortion..."), this);

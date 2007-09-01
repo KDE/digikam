@@ -34,7 +34,7 @@ class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_SuperImpose : public Digikam::Image
     
 public:
 
-    ImagePlugin_SuperImpose(QObject *parent, const QStringList &args);
+    ImagePlugin_SuperImpose(QObject *parent, const QVariantList &args);
     ~ImagePlugin_SuperImpose();
 
     void setEnabledActions(bool enable);

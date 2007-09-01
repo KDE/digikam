@@ -37,11 +37,10 @@
 #include "imageplugin_oilpaint.h"
 #include "imageplugin_oilpaint.moc"
 
-K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_oilpaint,
-                           KGenericFactory<ImagePlugin_OilPaint>("digikamimageplugin_oilpaint"));
+K_PLUGIN_FACTORY( OilPaintFactory, registerPlugin<ImagePlugin_OilPaint>(); )
+K_EXPORT_PLUGIN ( OilPaintFactory("digikamimageplugin_oilpaint") )
 
-ImagePlugin_OilPaint::ImagePlugin_OilPaint(QObject *parent,
-                                           const QStringList &)
+ImagePlugin_OilPaint::ImagePlugin_OilPaint(QObject *parent, const QVariantList &)
                     : Digikam::ImagePlugin(parent, "ImagePlugin_OilPaint")
 {
     m_oilpaintAction  = new KAction(KIcon("oilpaint"), i18n("Oil Paint..."), this);

@@ -39,10 +39,10 @@
 #include "imageplugin_whitebalance.h"
 #include "imageplugin_whitebalance.moc"
 
-K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_whitebalance,
-                           KGenericFactory<ImagePlugin_WhiteBalance>("digikamimageplugin_whitebalance"));
+K_PLUGIN_FACTORY( WhiteBalanceFactory, registerPlugin<ImagePlugin_WhiteBalance>(); )
+K_EXPORT_PLUGIN ( WhiteBalanceFactory("digikamimageplugin_whitebalance") )
 
-ImagePlugin_WhiteBalance::ImagePlugin_WhiteBalance(QObject *parent, const QStringList &)
+ImagePlugin_WhiteBalance::ImagePlugin_WhiteBalance(QObject *parent, const QVariantList &)
                         : Digikam::ImagePlugin(parent, "ImagePlugin_WhiteBalance")
 {
     m_whitebalanceAction = new KAction(KIcon("whitebalance"), i18n("White Balance..."), this);

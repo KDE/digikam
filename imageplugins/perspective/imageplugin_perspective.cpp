@@ -37,10 +37,10 @@
 #include "imageplugin_perspective.h"
 #include "imageplugin_perspective.moc"
 
-K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_perspective,
-                           KGenericFactory<ImagePlugin_Perspective>("digikamimageplugin_perspective"));
+K_PLUGIN_FACTORY( PerspectiveFactory, registerPlugin<ImagePlugin_Perspective>(); )
+K_EXPORT_PLUGIN ( PerspectiveFactory("digikamimageplugin_perspective") )
 
-ImagePlugin_Perspective::ImagePlugin_Perspective(QObject *parent, const QStringList &)
+ImagePlugin_Perspective::ImagePlugin_Perspective(QObject *parent, const QVariantList &)
                         : Digikam::ImagePlugin(parent, "ImagePlugin_Perspective")
 {
     m_perspectiveAction  = new KAction(KIcon("perspective"), i18n("Perspective Adjustment..."), this);

@@ -37,7 +37,7 @@ class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_HotPixels : public Digikam::ImagePl
     
 public:
 
-    ImagePlugin_HotPixels(QObject *parent, const QStringList &args);
+    ImagePlugin_HotPixels(QObject *parent, const QVariantList &args);
     ~ImagePlugin_HotPixels();
 
     void setEnabledActions(bool enable);

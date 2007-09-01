@@ -37,10 +37,10 @@
 #include "imageplugin_raindrop.h"
 #include "imageplugin_raindrop.moc"
 
-K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_raindrop,
-                           KGenericFactory<ImagePlugin_RainDrop>("digikamimageplugin_raindrop"));
+K_PLUGIN_FACTORY( RainDropFactory, registerPlugin<ImagePlugin_RainDrop>(); )
+K_EXPORT_PLUGIN ( RainDropFactory("digikamimageplugin_raindrop") )
 
-ImagePlugin_RainDrop::ImagePlugin_RainDrop(QObject *parent, const QStringList &)
+ImagePlugin_RainDrop::ImagePlugin_RainDrop(QObject *parent, const QVariantList &)
                     : Digikam::ImagePlugin(parent, "ImagePlugin_RainDrop")
 {
     m_raindropAction  = new KAction(KIcon("raindrop"), i18n("Raindrops..."), this);

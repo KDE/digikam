@@ -40,10 +40,10 @@
 #include "imageplugin_distortionfx.h"
 #include "imageplugin_distortionfx.moc"
 
-K_EXPORT_COMPONENT_FACTORY(digikamimageplugin_distortionfx,
-                           KGenericFactory<ImagePlugin_DistortionFX>("digikamimageplugin_distortionfx"));
+K_PLUGIN_FACTORY( DistortionFXFactory, registerPlugin<ImagePlugin_DistortionFX>(); )
+K_EXPORT_PLUGIN ( DistortionFXFactory("digikamimageplugin_distortionfx") )
 
-ImagePlugin_DistortionFX::ImagePlugin_DistortionFX(QObject *parent, const QStringList &)
+ImagePlugin_DistortionFX::ImagePlugin_DistortionFX(QObject *parent, const QVariantList &)
                         : Digikam::ImagePlugin(parent, "ImagePlugin_DistortionFX")
 {
     m_distortionfxAction  = new KAction(KIcon("distortionfx"), i18n("Distortion Effects..."), this);

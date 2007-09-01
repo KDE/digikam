@@ -37,7 +37,7 @@ class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_AdjustLevels : public Digikam::Imag
     
 public:
 
-    ImagePlugin_AdjustLevels(QObject *parent, const QStringList &args);
+    ImagePlugin_AdjustLevels(QObject *parent, const QVariantList &args);
     ~ImagePlugin_AdjustLevels();
     
     void setEnabledActions(bool enable);
