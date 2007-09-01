@@ -164,6 +164,7 @@ public:
         formatLabel        = 0;
         folderDateLabel    = 0;
         folderDateFormat   = 0;
+        freeSpaceWidget    = 0;
     }
 
     bool                          busy;
