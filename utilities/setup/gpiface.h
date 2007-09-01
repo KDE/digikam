@@ -39,6 +39,7 @@ public:
     static void getSupportedCameras(int& count, QStringList& clist);
     static void getSupportedPorts(QStringList& plist);
     static void getCameraSupportedPorts(const QString& model, QStringList& plist);
+    static bool findConnectedUsbCamera(int vendorId, int productId, QString& model, QString& port);
 };
 
 }  // namespace Digikam

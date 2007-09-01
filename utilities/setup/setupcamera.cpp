@@ -155,7 +155,7 @@ SetupCamera::SetupCamera( QWidget* parent )
 
     // Add cameras --------------------------------------
 
-    CameraList* clist = CameraList::componentData();
+    CameraList* clist = CameraList::defaultList();
 
     if (clist) 
     {
@@ -285,7 +285,7 @@ void SetupCamera::slotEditedCamera(const QString& title, const QString& model,
 
 void SetupCamera::applySettings()
 {
-    CameraList* clist = CameraList::componentData();
+    CameraList* clist = CameraList::defaultList();
 
     if (clist) 
     {

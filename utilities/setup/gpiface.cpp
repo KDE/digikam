@@ -102,6 +102,83 @@ int GPIface::autoDetect(QString& model, QString& port)
     return -1;
 }
 
+bool GPIface::findConnectedUsbCamera(int vendorId, int productId, QString& model, QString& port)
+{
+    CameraAbilitiesList *abilList;
+    GPPortInfoList      *list;
+    GPPortInfo           info;
+    GPContext           *context;
+    bool                 success;
+
+    success = false;
+
+    context = gp_context_new();
+
+    // get list of all ports
+    gp_port_info_list_new( &list );
+    gp_port_info_list_load( list );
+
+    int numPorts = gp_port_info_list_count( list );
+    for (int i = 0 ; i < numPorts ; i++) 
+    {
+        // create a port object from info
+        gp_port_info_list_get_info( list, i, &info );
+        GPPort *gpport;
+        gp_port_new(&gpport);
+        gp_port_set_info(gpport, info);
+
+        // check if device is connected to port
+        if (gp_port_usb_find_device(gpport, vendorId, productId) == GP_OK)
+        {
+            CameraList          *camList;
+            GPPortInfoList      *portinfo;
+
+            // create three lists
+            gp_list_new (&camList);
+            gp_port_info_list_new( &portinfo );
+            gp_abilities_list_new( &abilList );
+
+            // append one port info to 
+            gp_port_info_list_append(portinfo, info);
+            // get list of all supported cameras
+            gp_abilities_list_load(abilList, context);
+            // search for all supported cameras on one port
+            gp_abilities_list_detect(abilList, portinfo, camList, context);
+            int count = gp_list_count(camList);
+            // get name and port of detected camera
+            const char *model_str, *port_str;
+            if (count > 0)
+            {
+                gp_list_get_name(camList, i, &model_str);
+                gp_list_get_value(camList, i, &port_str);
+
+                model = QString::fromLatin1(model_str);
+                port  = QString::fromLatin1(port_str);
+
+                success = true;
+            }
+            if (count > 1)
+            {
+                DWarning() << "More than one camera detected on port " << port
+                           << ". Due to restrictions in the GPhoto2 API, only the first camera is used." << endl;
+            }
+
+            gp_abilities_list_free( abilList );
+            gp_port_info_list_free(portinfo);
+            gp_list_free(camList);
+        }
+        gp_port_free(gpport);
+
+        if (success)
+            break;
+    }
+
+    gp_port_info_list_free( list );
+    gp_context_unref( context );
+
+    return success;
+}
+
 void GPIface::getSupportedCameras(int& count, QStringList& clist)
 {
     clist.clear();
@@ -112,7 +189,7 @@ void GPIface::getSupportedCameras(int& count, QStringList& clist)
     GPContext           *context;
 
     context = gp_context_new();
- 
+
     gp_abilities_list_new( &abilList );
     gp_abilities_list_load( abilList, context );
 
