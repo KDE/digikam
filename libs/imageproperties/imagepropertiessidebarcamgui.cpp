@@ -112,7 +112,7 @@ ImagePropertiesSideBarCamGui::ImagePropertiesSideBarCamGui(QWidget *parent,
     connect(this, SIGNAL(signalChangedTab(QWidget*)),
             this, SLOT(slotChangedTab(QWidget*)));
 
-    connect(ThemeEngine::componentData(), SIGNAL(signalThemeChanged()),
+    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
 }
 
@@ -212,8 +212,8 @@ void ImagePropertiesSideBarCamGui::slotChangedTab(QWidget* tab)
 
 void ImagePropertiesSideBarCamGui::slotThemeChanged()
 {
-    QColor backgroundColor(ThemeEngine::componentData()->baseColor());
-    QColor foregroundColor(ThemeEngine::componentData()->textRegColor());
+    QColor backgroundColor(ThemeEngine::instance()->baseColor());
+    QColor foregroundColor(ThemeEngine::instance()->textRegColor());
     d->cameraItemTab->colorChanged(backgroundColor, foregroundColor);
 }
 

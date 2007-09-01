@@ -86,7 +86,7 @@ FolderView::FolderView(QWidget *parent, const char *name)
 
     setObjectName(name);
 
-    connect(ThemeEngine::componentData(), SIGNAL(signalThemeChanged()),
+    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
 
     connect(AlbumManager::instance(), SIGNAL(signalAllAlbumsLoaded()),
@@ -311,30 +311,30 @@ void FolderView::slotThemeChanged()
     int w = frameRect().width();
     int h = itemHeight();
 
-    d->itemRegPix = ThemeEngine::componentData()->listRegPixmap(w, h);
-    d->itemSelPix = ThemeEngine::componentData()->listSelPixmap(w, h);
+    d->itemRegPix = ThemeEngine::instance()->listRegPixmap(w, h);
+    d->itemSelPix = ThemeEngine::instance()->listSelPixmap(w, h);
 
     QPalette plt(palette());
     plt.setColor(QPalette::Active, QPalette::Base, 
-                 ThemeEngine::componentData()->baseColor());
+                 ThemeEngine::instance()->baseColor());
     plt.setColor(QPalette::Active, QPalette::Text, 
-                 ThemeEngine::componentData()->textRegColor());
+                 ThemeEngine::instance()->textRegColor());
     plt.setColor(QPalette::Active, QPalette::HighlightedText, 
-                 ThemeEngine::componentData()->textSelColor());
+                 ThemeEngine::instance()->textSelColor());
     plt.setColor(QPalette::Active, QPalette::Link, 
-                 ThemeEngine::componentData()->textSpecialRegColor());
+                 ThemeEngine::instance()->textSpecialRegColor());
     plt.setColor(QPalette::Active, QPalette::LinkVisited,
-                 ThemeEngine::componentData()->textSpecialSelColor());
+                 ThemeEngine::instance()->textSpecialSelColor());
     plt.setColor(QPalette::Inactive, QPalette::Base, 
-                 ThemeEngine::componentData()->baseColor());
+                 ThemeEngine::instance()->baseColor());
     plt.setColor(QPalette::Inactive, QPalette::Text, 
-                 ThemeEngine::componentData()->textRegColor());
+                 ThemeEngine::instance()->textRegColor());
     plt.setColor(QPalette::Inactive, QPalette::HighlightedText, 
-                 ThemeEngine::componentData()->textSelColor());
+                 ThemeEngine::instance()->textSelColor());
     plt.setColor(QPalette::Inactive, QPalette::Link, 
-                 ThemeEngine::componentData()->textSpecialRegColor());
+                 ThemeEngine::instance()->textSpecialRegColor());
     plt.setColor(QPalette::Inactive, QPalette::LinkVisited,
-                 ThemeEngine::componentData()->textSpecialSelColor());
+                 ThemeEngine::instance()->textSpecialSelColor());
     setPalette(plt);
 
     viewport()->update();

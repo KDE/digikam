@@ -79,7 +79,7 @@ class RatingMenuItem : public QWidget
         starPix.fill(Qt::transparent);
         QPainter p1(&starPix);
         p1.setRenderHint(QPainter::Antialiasing, true);
-        p1.setBrush(ThemeEngine::componentData()->textSpecialRegColor());
+        p1.setBrush(ThemeEngine::instance()->textSpecialRegColor());
         p1.setPen(palette().color(QPalette::Active, QPalette::Foreground));
         p1.drawPolygon(starPolygon, Qt::WindingFill);
         p1.end();

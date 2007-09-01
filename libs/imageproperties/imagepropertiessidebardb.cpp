@@ -98,7 +98,7 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, QSplitter *s
     connect(this, SIGNAL(signalChangedTab(QWidget*)),
             this, SLOT(slotChangedTab(QWidget*)));
 
-    connect(ThemeEngine::componentData(), SIGNAL(signalThemeChanged()),
+    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
 
     connect(d->desceditTab, SIGNAL(signalProgressBarMode(int, const QString&)),
@@ -346,8 +346,8 @@ void ImagePropertiesSideBarDB::slotAssignRatingFiveStar()
 
 void ImagePropertiesSideBarDB::slotThemeChanged()
 {
-    QColor backgroundColor(ThemeEngine::componentData()->baseColor());
-    QColor foregroundColor(ThemeEngine::componentData()->textRegColor());
+    QColor backgroundColor(ThemeEngine::instance()->baseColor());
+    QColor foregroundColor(ThemeEngine::instance()->textRegColor());
     m_propertiesTab->colorChanged(backgroundColor, foregroundColor);
 }
 

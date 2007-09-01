@@ -72,21 +72,17 @@ public:
     bool             themeInitiallySet;
 };
 
-ThemeEngine* ThemeEngine::m_componentData = 0;
+class ThemeEngineCreator { public: ThemeEngine object; };
 
-ThemeEngine* ThemeEngine::componentData()
+K_GLOBAL_STATIC(ThemeEngineCreator, creator);
+ThemeEngine* ThemeEngine::instance()
 {
-    if (!m_componentData)
-    { 
-        new ThemeEngine();
-    }
-    return m_componentData;
+    return &creator->object;
 }
 
 ThemeEngine::ThemeEngine()
 {
-    m_componentData = this;
-    KGlobal::dirs()->addResourceDir("themes", KStandardDirs::installPath("data") + QString("digikam/themes")); 
+    KGlobal::dirs()->addResourceDir("themes", KStandardDirs::installPath("data") + QString("digikam/themes"));
 
     d = new ThemeEnginePriv;
 
@@ -105,7 +101,6 @@ ThemeEngine::~ThemeEngine()
     d->themeList.setAutoDelete(true);
     d->themeList.clear();
     delete d;
-    m_componentData = 0;
 }
 
 QColor ThemeEngine::baseColor() const

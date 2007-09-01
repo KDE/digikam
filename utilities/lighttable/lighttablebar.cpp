@@ -124,8 +124,8 @@ LightTableBar::LightTableBar(QWidget* parent, int orientation, bool exifRotate)
 
     QPainter painter(&d->ratingPixmap);
     painter.setRenderHint(QPainter::Antialiasing, true);
-    painter.setBrush(ThemeEngine::componentData()->textSpecialRegColor());
-    painter.setPen(ThemeEngine::componentData()->textRegColor());
+    painter.setBrush(ThemeEngine::instance()->textSpecialRegColor());
+    painter.setPen(ThemeEngine::instance()->textRegColor());
     painter.drawPolygon(d->starPolygon, Qt::WindingFill);
     painter.end();
 
@@ -141,7 +141,7 @@ LightTableBar::LightTableBar(QWidget* parent, int orientation, bool exifRotate)
     connect(watch, SIGNAL(signalImageRatingChanged(qlonglong)),
             this, SLOT(slotImageRatingChanged(qlonglong)));
 
-    connect(ThemeEngine::componentData(), SIGNAL(signalThemeChanged()),
+    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
 
     connect(this, SIGNAL(signalItemSelected(ThumbBarItem*)),
@@ -454,7 +454,7 @@ void LightTableBar::readToolTipSettings()
 
 void LightTableBar::viewportPaintEvent(QPaintEvent* e)
 {
-    ThemeEngine* te = ThemeEngine::componentData();
+    ThemeEngine* te = ThemeEngine::instance();
     QRect    er(e->rect());
     QPixmap  bgPix;
 
@@ -771,8 +771,8 @@ void LightTableBar::slotThemeChanged()
 {
     QPainter painter(&d->ratingPixmap);
     painter.setRenderHint(QPainter::Antialiasing, true);
-    painter.setBrush(ThemeEngine::componentData()->textSpecialRegColor());
-    painter.setPen(ThemeEngine::componentData()->textRegColor());
+    painter.setBrush(ThemeEngine::instance()->textSpecialRegColor());
+    painter.setPen(ThemeEngine::instance()->textRegColor());
     painter.drawPolygon(d->starPolygon, Qt::WindingFill);
     painter.end();
 

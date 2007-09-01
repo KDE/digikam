@@ -50,7 +50,7 @@ class DIGIKAM_EXPORT ThemeEngine : public QObject
 public:
 
     ~ThemeEngine();
-    static ThemeEngine* componentData();
+    static ThemeEngine* instance();
 
     void        scanThemes();
     QStringList themeNames() const;
@@ -78,8 +78,8 @@ public:
     
 private:
 
+    friend class ThemeEngineCreator;
     ThemeEngine();
-    static ThemeEngine* m_componentData;
 
     void    buildDefaultTheme();
     bool    loadTheme();

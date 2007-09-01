@@ -134,7 +134,7 @@ void AlbumIconGroupItem::paintBanner(QPainter *p)
         usePointSize = false;
     }
 
-    p->setPen(ThemeEngine::componentData()->textSelColor());
+    p->setPen(ThemeEngine::instance()->textSelColor());
     p->setFont(fn);
 
     QRect tr;

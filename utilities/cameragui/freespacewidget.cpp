@@ -194,7 +194,7 @@ void FreeSpaceWidget::paintEvent(QPaintEvent*)
 
 void FreeSpaceWidget::slotTimeout()
 {
-    QString path        = AlbumSettings::componentData()->getAlbumLibraryPath();
+    QString path        = AlbumSettings::instance()->getAlbumLibraryPath();
     KMountPoint::Ptr mp = KMountPoint::currentMountPoints().findByPath(path);
     if (mp)
     {

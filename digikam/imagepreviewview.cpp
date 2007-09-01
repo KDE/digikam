@@ -164,7 +164,7 @@ ImagePreviewView::ImagePreviewView(AlbumWidgetStack *parent)
     connect(this, SIGNAL(signalLeftButtonClicked()),
             this, SIGNAL(signalBack2Album()));
 
-    connect(ThemeEngine::componentData(), SIGNAL(signalThemeChanged()),
+    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
 
     // ------------------------------------------------------------
@@ -255,10 +255,10 @@ void ImagePreviewView::slotGotImagePreview(const LoadingDescription &description
     {
         d->parent->setPreviewMode(AlbumWidgetStack::PreviewImageMode);
         QPixmap pix(visibleWidth(), visibleHeight());
-        pix.fill(ThemeEngine::componentData()->baseColor());
+        pix.fill(ThemeEngine::instance()->baseColor());
         QPainter p(&pix);
         QFileInfo info(d->path);
-        p.setPen(QPen(ThemeEngine::componentData()->textRegColor()));
+        p.setPen(QPen(ThemeEngine::instance()->textRegColor()));
         p.drawText(0, 0, pix.width(), pix.height(),
                    Qt::AlignCenter|Qt::TextWordWrap, 
                    i18n("Cannot display preview for\n\"%1\"",
@@ -532,7 +532,7 @@ void ImagePreviewView::slotAssignRating(int rating)
 void ImagePreviewView::slotThemeChanged()
 {
     QPalette plt(palette());
-    plt.setColor(backgroundRole(), ThemeEngine::componentData()->baseColor());
+    plt.setColor(backgroundRole(), ThemeEngine::instance()->baseColor());
     setPalette(plt);
 }
 

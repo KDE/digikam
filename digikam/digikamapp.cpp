@@ -2011,8 +2011,8 @@ void DigikamApp::populateThemes()
     if(d->splashScreen)
         d->splashScreen->message(i18n("Loading themes"), Qt::AlignLeft, Qt::white);
 
-    ThemeEngine::componentData()->scanThemes();
-    QStringList themes(ThemeEngine::componentData()->themeNames());
+    ThemeEngine::instance()->scanThemes();
+    QStringList themes(ThemeEngine::instance()->themeNames());
 
     d->themeMenuAction->setItems(themes);
     int index = themes.indexOf(d->albumSettings->getCurrentTheme());
@@ -2021,7 +2021,7 @@ void DigikamApp::populateThemes()
         index = themes.indexOf(i18n("Default"));
 
     d->themeMenuAction->setCurrentItem(index);
-    ThemeEngine::componentData()->slotChangeTheme(d->themeMenuAction->currentText());
+    ThemeEngine::instance()->slotChangeTheme(d->themeMenuAction->currentText());
 }
 
 void DigikamApp::slotChangeTheme(const QString& theme)
@@ -2030,7 +2030,7 @@ void DigikamApp::slotChangeTheme(const QString& theme)
     QString name = theme;
     name.remove(QChar('&'));
     d->albumSettings->setCurrentTheme(name);
-    ThemeEngine::componentData()->slotChangeTheme(name);
+    ThemeEngine::instance()->slotChangeTheme(name);
 }
 
 void DigikamApp::slotDatabaseRescan()

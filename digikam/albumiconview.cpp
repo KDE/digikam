@@ -245,7 +245,7 @@ AlbumIconView::AlbumIconView(QWidget* parent)
 
     // -- ThemeEngine connections ---------------------------------------
 
-    connect(ThemeEngine::componentData(), SIGNAL(signalThemeChanged()),
+    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
 
     // -- Pixmap manager connections ------------------------------------
@@ -1765,7 +1765,7 @@ void AlbumIconView::updateBannerRectPixmap()
     d->bannerRect.setHeight(d->bannerRect.height() + tr.height() + 10);
     d->bannerRect.setWidth(frameRect().width());
 
-    d->bannerPixmap = ThemeEngine::componentData()->bannerPixmap(d->bannerRect.width(),
+    d->bannerPixmap = ThemeEngine::instance()->bannerPixmap(d->bannerRect.width(),
                                                             d->bannerRect.height());
 }
 
@@ -1876,10 +1876,10 @@ void AlbumIconView::updateRectsAndPixmaps()
 
     d->itemRect = QRect(0, 0, w+2*margin, y+margin);
 
-    d->itemRegPixmap = ThemeEngine::componentData()->thumbRegPixmap(d->itemRect.width(),
+    d->itemRegPixmap = ThemeEngine::instance()->thumbRegPixmap(d->itemRect.width(),
                                                                d->itemRect.height());
 
-    d->itemSelPixmap = ThemeEngine::componentData()->thumbSelPixmap(d->itemRect.width(),
+    d->itemSelPixmap = ThemeEngine::instance()->thumbSelPixmap(d->itemRect.width(),
                                                                d->itemRect.height());
 
     // -- Generate rating pixmaps ------------------------------------------
@@ -1912,8 +1912,8 @@ void AlbumIconView::updateRectsAndPixmaps()
 
                 // use antialiasing
                 painter.setRenderHint(QPainter::Antialiasing, true);
-                painter.setBrush(ThemeEngine::componentData()->textSpecialRegColor());
-                QPen pen(ThemeEngine::componentData()->textRegColor());
+                painter.setBrush(ThemeEngine::instance()->textSpecialRegColor());
+                QPen pen(ThemeEngine::instance()->textRegColor());
                 // set a pen which joins the lines at a filled angle
                 pen.setJoinStyle(Qt::MiterJoin);
                 painter.setPen(pen);
@@ -1934,17 +1934,17 @@ void AlbumIconView::slotThemeChanged()
 {
     QPalette plt(palette());
     plt.setColor(QPalette::Active, QPalette::Base,
-                 ThemeEngine::componentData()->baseColor());
+                 ThemeEngine::instance()->baseColor());
     plt.setColor(QPalette::Active, QPalette::Text, 
-                 ThemeEngine::componentData()->textRegColor());
+                 ThemeEngine::instance()->textRegColor());
     plt.setColor(QPalette::Active, QPalette::HighlightedText, 
-                 ThemeEngine::componentData()->textSelColor());
+                 ThemeEngine::instance()->textSelColor());
     plt.setColor(QPalette::Inactive, QPalette::Base, 
-                 ThemeEngine::componentData()->baseColor());
+                 ThemeEngine::instance()->baseColor());
     plt.setColor(QPalette::Inactive, QPalette::Text, 
-                 ThemeEngine::componentData()->textRegColor());
+                 ThemeEngine::instance()->textRegColor());
     plt.setColor(QPalette::Inactive, QPalette::HighlightedText, 
-                 ThemeEngine::componentData()->textSelColor());
+                 ThemeEngine::instance()->textSelColor());
     setPalette(plt);
 
     updateRectsAndPixmaps();

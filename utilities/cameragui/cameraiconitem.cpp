@@ -232,7 +232,7 @@ void CameraIconViewItem::paintItem(QPainter *p)
 
     QRect r(rect());
 
-    ThemeEngine* te = ThemeEngine::componentData();
+    ThemeEngine* te = ThemeEngine::instance();
 
     QString itemName     = AlbumIconItem::squeezedText(p, r.width()-5, d->itemInfo->name);
     QString downloadName = AlbumIconItem::squeezedText(p, r.width()-5, d->downloadName);

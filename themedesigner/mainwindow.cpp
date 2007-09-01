@@ -75,10 +75,10 @@ MainWindow::MainWindow()
 
     // Initialize theme engine ------------------------------------
 
-    ThemeEngine::componentData()->scanThemes();
-    m_theme = new Theme(*(ThemeEngine::componentData()->getCurrentTheme()));
+    ThemeEngine::instance()->scanThemes();
+    m_theme = new Theme(*(ThemeEngine::instance()->getCurrentTheme()));
 
-    connect(ThemeEngine::componentData(), SIGNAL(signalThemeChanged()),
+    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
         
     // Actual views ------------------------------------------------
@@ -277,8 +277,8 @@ void MainWindow::slotLoad()
     m_theme->name     = fi.fileName();
     m_theme->filePath = path;
 
-    ThemeEngine::componentData()->setCurrentTheme(*m_theme, m_theme->name, true);
-    *m_theme = *(ThemeEngine::componentData()->getCurrentTheme());
+    ThemeEngine::instance()->setCurrentTheme(*m_theme, m_theme->name, true);
+    *m_theme = *(ThemeEngine::instance()->getCurrentTheme());
     slotPropertyChanged();
 }
 
@@ -299,8 +299,8 @@ void MainWindow::slotSave()
     m_theme->name     = fi.fileName();
     m_theme->filePath = path;
 
-    ThemeEngine::componentData()->setCurrentTheme(*m_theme, m_theme->name, false);
-    ThemeEngine::componentData()->saveTheme();
+    ThemeEngine::instance()->setCurrentTheme(*m_theme, m_theme->name, false);
+    ThemeEngine::instance()->saveTheme();
 }
 
 void MainWindow::slotPropertyChanged()
@@ -592,13 +592,13 @@ void MainWindow::slotUpdateTheme()
         }
     };
 
-    ThemeEngine::componentData()->setCurrentTheme(*m_theme, "Digikam ThemeEditor Theme");
+    ThemeEngine::instance()->setCurrentTheme(*m_theme, "Digikam ThemeEditor Theme");
 }
 
 void MainWindow::slotThemeChanged()
 {
-    QColor backgroundColor(ThemeEngine::componentData()->baseColor());
-    QColor foregroundColor(ThemeEngine::componentData()->textRegColor());
+    QColor backgroundColor(ThemeEngine::instance()->baseColor());
+    QColor foregroundColor(ThemeEngine::instance()->textRegColor());
     m_propView->colorChanged(backgroundColor, foregroundColor);
 }
 

@@ -225,7 +225,7 @@ void AlbumIconItem::paintItem(QPainter *p)
 {
     QRect   r;
     const AlbumSettings *settings = d->view->settings();
-    ThemeEngine* te = ThemeEngine::componentData();
+    ThemeEngine* te = ThemeEngine::instance();
 
     QPixmap pix;
     if (isSelected())

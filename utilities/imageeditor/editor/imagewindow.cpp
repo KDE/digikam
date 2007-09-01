@@ -271,7 +271,7 @@ void ImageWindow::setupConnections()
     connect(watch, SIGNAL(signalFileMetadataChanged(const KUrl &)),
             this, SLOT(slotFileMetadataChanged(const KUrl &)));
 
-    connect(ThemeEngine::componentData(), SIGNAL(signalThemeChanged()),
+    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
 }
 
@@ -391,7 +391,7 @@ void ImageWindow::applySettings()
     if (!group.readEntry("UseThemeBackgroundColor", true))
         m_bgColor = group.readEntry("BackgroundColor", QColor(Qt::black));
     else
-        m_bgColor = ThemeEngine::componentData()->baseColor();
+        m_bgColor = ThemeEngine::instance()->baseColor();
 
     m_canvas->setBackgroundColor(m_bgColor);
 
@@ -1011,7 +1011,7 @@ void ImageWindow::slotFileMetadataChanged(const KUrl &url)
 
 void ImageWindow::slotThemeChanged()
 {
-    m_canvas->setBackgroundColor(ThemeEngine::componentData()->baseColor());
+    m_canvas->setBackgroundColor(ThemeEngine::instance()->baseColor());
 }
 
 void ImageWindow::slotFilePrint()

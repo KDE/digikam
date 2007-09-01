@@ -80,7 +80,7 @@ RatingWidget::RatingWidget(QWidget* parent)
 
     slotThemeChanged();
 
-    connect(ThemeEngine::componentData(), SIGNAL(signalThemeChanged()),
+    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
 }
 
@@ -182,7 +182,7 @@ void RatingWidget::slotThemeChanged()
 
     QPainter p2(&d->selPixmap);
     p2.setRenderHint(QPainter::Antialiasing, true);
-    p2.setBrush(ThemeEngine::componentData()->textSpecialRegColor());
+    p2.setBrush(ThemeEngine::instance()->textSpecialRegColor());
     p2.setPen(palette().color(QPalette::Active, QPalette::Foreground));
     p2.drawPolygon(d->starPolygon, Qt::WindingFill);
     p2.end();

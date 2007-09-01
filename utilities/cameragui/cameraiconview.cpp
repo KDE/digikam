@@ -124,7 +124,7 @@ CameraIconView::CameraIconView(CameraUI* ui, QWidget* parent)
     connect(this, SIGNAL(signalDoubleClicked(IconItem*)),
             this, SLOT(slotDoubleClicked(IconItem*)));
 
-    connect(ThemeEngine::componentData(), SIGNAL(signalThemeChanged()),
+    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
 
     // ----------------------------------------------------------------
@@ -684,22 +684,22 @@ void CameraIconView::updateItemRectsPixmap()
 
     d->itemRect = r;
 
-    d->itemRegPixmap = ThemeEngine::componentData()->thumbRegPixmap(d->itemRect.width(),
+    d->itemRegPixmap = ThemeEngine::instance()->thumbRegPixmap(d->itemRect.width(),
                                                                     d->itemRect.height());
 
-    d->itemSelPixmap = ThemeEngine::componentData()->thumbSelPixmap(d->itemRect.width(),
+    d->itemSelPixmap = ThemeEngine::instance()->thumbSelPixmap(d->itemRect.width(),
                                                                     d->itemRect.height());
 }
 
 void CameraIconView::slotThemeChanged()
 {
     QPalette plt(palette());
-    plt.setColor(QPalette::Active,   QPalette::Base,            ThemeEngine::componentData()->baseColor());
-    plt.setColor(QPalette::Active,   QPalette::Text,            ThemeEngine::componentData()->textRegColor());
-    plt.setColor(QPalette::Active,   QPalette::HighlightedText, ThemeEngine::componentData()->textSelColor());
-    plt.setColor(QPalette::Inactive, QPalette::Base,            ThemeEngine::componentData()->baseColor());
-    plt.setColor(QPalette::Inactive, QPalette::Text,            ThemeEngine::componentData()->textRegColor());
-    plt.setColor(QPalette::Inactive, QPalette::HighlightedText, ThemeEngine::componentData()->textSelColor());
+    plt.setColor(QPalette::Active,   QPalette::Base,            ThemeEngine::instance()->baseColor());
+    plt.setColor(QPalette::Active,   QPalette::Text,            ThemeEngine::instance()->textRegColor());
+    plt.setColor(QPalette::Active,   QPalette::HighlightedText, ThemeEngine::instance()->textSelColor());
+    plt.setColor(QPalette::Inactive, QPalette::Base,            ThemeEngine::instance()->baseColor());
+    plt.setColor(QPalette::Inactive, QPalette::Text,            ThemeEngine::instance()->textRegColor());
+    plt.setColor(QPalette::Inactive, QPalette::HighlightedText, ThemeEngine::instance()->textSelColor());
     setPalette(plt);
 
     updateItemRectsPixmap();

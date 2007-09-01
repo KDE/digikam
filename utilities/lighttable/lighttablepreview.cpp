@@ -158,7 +158,7 @@ LightTablePreview::LightTablePreview(QWidget *parent)
     connect(this, SIGNAL(signalRightButtonClicked()),
             this, SLOT(slotContextMenu()));
 
-    connect(ThemeEngine::componentData(), SIGNAL(signalThemeChanged()),
+    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
 
     // ------------------------------------------------------------
@@ -189,9 +189,9 @@ void LightTablePreview::setDragAndDropMessage()
     if (d->dragAndDropEnabled)
     {
         QPixmap pix(visibleWidth(), visibleHeight());
-        pix.fill(ThemeEngine::componentData()->baseColor());
+        pix.fill(ThemeEngine::instance()->baseColor());
         QPainter p(&pix);
-        p.setPen(QPen(ThemeEngine::componentData()->textRegColor()));
+        p.setPen(QPen(ThemeEngine::instance()->textRegColor()));
         p.drawText(0, 0, pix.width(), pix.height(),
                    Qt::AlignCenter|Qt::TextWordWrap,
                    i18n("Drag and drop an image here"));
@@ -276,10 +276,10 @@ void LightTablePreview::slotGotImagePreview(const LoadingDescription &descriptio
     if (preview.isNull())
     {
         QPixmap pix(visibleWidth(), visibleHeight());
-        pix.fill(ThemeEngine::componentData()->baseColor());
+        pix.fill(ThemeEngine::instance()->baseColor());
         QPainter p(&pix);
         QFileInfo info(d->path);
-        p.setPen(QPen(ThemeEngine::componentData()->textRegColor()));
+        p.setPen(QPen(ThemeEngine::instance()->textRegColor()));
         p.drawText(0, 0, pix.width(), pix.height(),
                    Qt::AlignCenter|Qt::TextWordWrap, 
                    i18n("Unable to display preview for\n\"%1\"",
@@ -517,7 +517,7 @@ void LightTablePreview::slotAssignRating(int rating)
 void LightTablePreview::slotThemeChanged()
 {
     QPalette palette;
-    palette.setColor(backgroundRole(), ThemeEngine::componentData()->baseColor());
+    palette.setColor(backgroundRole(), ThemeEngine::instance()->baseColor());
     setPalette(palette);
     frameChanged();
 }
@@ -762,11 +762,11 @@ void LightTablePreview::drawFrame(QPainter *p)
 {
     if (d->selected)
     {
-        qDrawPlainRect(p, frameRect(), ThemeEngine::componentData()->thumbSelColor(), lineWidth());
-        qDrawPlainRect(p, frameRect(), ThemeEngine::componentData()->textSelColor(), 2);
+        qDrawPlainRect(p, frameRect(), ThemeEngine::instance()->thumbSelColor(), lineWidth());
+        qDrawPlainRect(p, frameRect(), ThemeEngine::instance()->textSelColor(), 2);
     }
     else 
-        qDrawPlainRect(p, frameRect(), ThemeEngine::componentData()->baseColor(), lineWidth());
+        qDrawPlainRect(p, frameRect(), ThemeEngine::instance()->baseColor(), lineWidth());
 }
 
 }  // NameSpace Digikam
