@@ -76,26 +76,26 @@
 namespace Digikam
 {
 
-LightTableWindow* LightTableWindow::m_componentData = 0;
+LightTableWindow* LightTableWindow::m_instance = 0;
 
 LightTableWindow* LightTableWindow::lightTableWindow()
 {
-    if (!m_componentData)
+    if (!m_instance)
         new LightTableWindow();
 
-    return m_componentData;
+    return m_instance;
 }
 
 bool LightTableWindow::lightTableWindowCreated()
 {
-    return m_componentData;
+    return m_instance;
 }
 
 LightTableWindow::LightTableWindow()
                 : KXmlGuiWindow(0)
 {
     d = new LightTableWindowPriv;
-    m_componentData = this;
+    m_instance = this;
 
     setWindowFlags(Qt::Window);
     setCaption(i18n("Light Table"));
@@ -125,7 +125,7 @@ LightTableWindow::LightTableWindow()
 
 LightTableWindow::~LightTableWindow()
 {
-    m_componentData = 0;
+    m_instance = 0;
 
     delete d->barView;
     delete d->rightSidebar;

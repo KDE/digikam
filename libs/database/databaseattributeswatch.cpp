@@ -33,18 +33,6 @@ DatabaseAttributesWatch::~DatabaseAttributesWatch()
 {
 }
 
-/*
-void DatabaseAttributesWatch::cleanUp()
-{
-}
-
-void DatabaseAttributesWatch::shutDown()
-{
-    if (m_componentData)
-        m_componentData.disconnect(0, 0, 0);
-}
-*/
-
 void DatabaseAttributesWatch::sendImageFieldChanged(qlonglong imageId, ImageDataField field)
 {
     emit imageFieldChanged(imageId, field);

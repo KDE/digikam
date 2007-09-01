@@ -145,7 +145,7 @@ private:
 
     LightTableWindowPriv    *d;
 
-    static LightTableWindow *m_componentData;
+    static LightTableWindow *m_instance;
 };
 
 }  // namespace Digikam

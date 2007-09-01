@@ -136,7 +136,7 @@ private:
 
     ImageWindowPriv    *d;
 
-    static ImageWindow *m_componentData;
+    static ImageWindow *m_instance;
 };
 
 }  // namespace Digikam

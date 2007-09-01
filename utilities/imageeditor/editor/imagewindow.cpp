@@ -153,26 +153,26 @@ public:
     ImagePropertiesSideBarDB *rightSidebar;
 };
 
-ImageWindow* ImageWindow::m_componentData = 0;
+ImageWindow* ImageWindow::m_instance = 0;
 
 ImageWindow* ImageWindow::imagewindow()
 {
-    if (!m_componentData)
+    if (!m_instance)
         new ImageWindow();
 
-    return m_componentData;
+    return m_instance;
 }
 
 bool ImageWindow::imagewindowCreated()
 {
-    return m_componentData;
+    return m_instance;
 }
 
 ImageWindow::ImageWindow()
            : EditorWindow( "Image Editor" )
 {
     d = new ImageWindowPriv;
-    m_componentData = this;
+    m_instance = this;
     setAcceptDrops(true); 
 
     // -- Build the GUI -------------------------------
@@ -208,7 +208,7 @@ ImageWindow::ImageWindow()
 
 ImageWindow::~ImageWindow()
 {
-    m_componentData = 0;
+    m_instance = 0;
 
     unLoadImagePlugins();
 
