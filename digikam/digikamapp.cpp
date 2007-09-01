@@ -136,7 +136,7 @@ DigikamApp::DigikamApp()
     d->albumSettings = new AlbumSettings();
     d->albumSettings->readSettings();
 
-    d->albumManager = AlbumManager::componentData();
+    d->albumManager = AlbumManager::instance();
     AlbumLister::componentData();
 
     LoadingCacheInterface::initialize();

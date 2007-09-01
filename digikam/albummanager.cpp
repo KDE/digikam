@@ -127,7 +127,7 @@ public:
 
 AlbumManager* AlbumManager::m_instance = 0;
 
-AlbumManager* AlbumManager::componentData()
+AlbumManager* AlbumManager::instance()
 {
     return m_instance;
 }

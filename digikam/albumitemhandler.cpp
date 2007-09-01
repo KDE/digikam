@@ -39,7 +39,7 @@ AlbumItemHandler::~AlbumItemHandler()
 
 void AlbumItemHandler::emitItemsSelected(bool val)
 {
-    AlbumManager::componentData()->emitAlbumItemsSelected(val);
+    AlbumManager::instance()->emitAlbumItemsSelected(val);
 }
 
 }  // namespace Digikam

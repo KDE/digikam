@@ -211,22 +211,22 @@ TagFilterView::TagFilterView(QWidget* parent)
 
     // -- setup slots ---------------------------------------------------------
 
-    connect(AlbumManager::componentData(), SIGNAL(signalAlbumAdded(Album*)),
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumAdded(Album*)),
             this, SLOT(slotTagAdded(Album*)));
 
-    connect(AlbumManager::componentData(), SIGNAL(signalAlbumDeleted(Album*)),
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumDeleted(Album*)),
             this, SLOT(slotTagDeleted(Album*)));
 
-    connect(AlbumManager::componentData(), SIGNAL(signalAlbumRenamed(Album*)),
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumRenamed(Album*)),
             this, SLOT(slotTagRenamed(Album*)));
 
-    connect(AlbumManager::componentData(), SIGNAL(signalAlbumsCleared()),
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumsCleared()),
             this, SLOT(slotClear()));
 
-    connect(AlbumManager::componentData(), SIGNAL(signalAlbumIconChanged(Album*)),
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumIconChanged(Album*)),
             this, SLOT(slotAlbumIconChanged(Album*)));
 
-    connect(AlbumManager::componentData(), SIGNAL(signalTAlbumMoved(TAlbum*, TAlbum*)),
+    connect(AlbumManager::instance(), SIGNAL(signalTAlbumMoved(TAlbum*, TAlbum*)),
             this, SLOT(slotTagMoved(TAlbum*, TAlbum*)));
 
     AlbumThumbnailLoader *loader = AlbumThumbnailLoader::componentData();
@@ -447,7 +447,7 @@ void TagFilterView::contentsDropEvent(QDropEvent *e)
         int tagID;
         ds >> tagID;
 
-        AlbumManager* man = AlbumManager::componentData();
+        AlbumManager* man = AlbumManager::instance();
         TAlbum* talbum    = man->findTAlbum(tagID);
 
         if(!talbum)
@@ -471,7 +471,7 @@ void TagFilterView::contentsDropEvent(QDropEvent *e)
             if (!itemDrop)
             {
                 // move dragItem to the root
-                newParentTag = AlbumManager::componentData()->findTAlbum(0);
+                newParentTag = AlbumManager::instance()->findTAlbum(0);
             }
             else
             {
@@ -480,7 +480,7 @@ void TagFilterView::contentsDropEvent(QDropEvent *e)
             }
 
             QString errMsg;
-            if (!AlbumManager::componentData()->moveTAlbum(talbum, newParentTag, errMsg))
+            if (!AlbumManager::instance()->moveTAlbum(talbum, newParentTag, errMsg))
             {
                 KMessageBox::error(this, errMsg);
             }
@@ -561,7 +561,7 @@ void TagFilterView::contentsDropEvent(QDropEvent *e)
         else if(setThumbnail)
         {
             QString errMsg;
-            AlbumManager::componentData()->updateTAlbumIcon(destAlbum, QString(),
+            AlbumManager::instance()->updateTAlbumIcon(destAlbum, QString(),
                                                        imageIDs.first(), errMsg);
         }
     }
@@ -715,7 +715,7 @@ void TagFilterView::slotThumbnailLost(Album *)
 
 void TagFilterView::slotReloadThumbnails()
 {
-    AlbumList tList = AlbumManager::componentData()->allTAlbums();
+    AlbumList tList = AlbumManager::instance()->allTAlbums();
     for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
     {
         TAlbum* tag  = (TAlbum*)(*it);
@@ -868,7 +868,7 @@ void TagFilterView::slotContextMenu(Q3ListViewItem* it, const QPoint&, int)
         else if (choice == resetIconAction)         // Reset Tag Icon.
         {
             QString errMsg;
-            AlbumManager::componentData()->updateTAlbumIcon(item->m_tag, QString("tag"), 0, errMsg);
+            AlbumManager::instance()->updateTAlbumIcon(item->m_tag, QString("tag"), 0, errMsg);
         }
         else if (choice == selectAllTagsAction)     // Select All Tags.
         {
@@ -1022,7 +1022,7 @@ void TagFilterView::tagNew(TagFilterViewItem* item, const QString& _title, const
     TAlbum  *parent;
     QString  title    = _title;
     QString  icon     = _icon;
-    AlbumManager *man = AlbumManager::componentData();
+    AlbumManager *man = AlbumManager::instance();
 
     if (!item)
         parent = man->findTAlbum(0);
@@ -1070,7 +1070,7 @@ void TagFilterView::tagEdit(TagFilterViewItem* item)
         return;
     }
 
-    AlbumManager* man = AlbumManager::componentData();
+    AlbumManager* man = AlbumManager::instance();
 
     if (tag->title() != title)
     {
@@ -1109,7 +1109,7 @@ void TagFilterView::tagDelete(TagFilterViewItem* item)
         ++iter;
     }
 
-    AlbumManager* man = AlbumManager::componentData();
+    AlbumManager* man = AlbumManager::instance();
 
     if (children)
     {

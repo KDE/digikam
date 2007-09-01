@@ -205,7 +205,7 @@ AlbumFolderView::AlbumFolderView(QWidget *parent)
                : FolderView(parent, "AlbumFolderView")
 {
     d = new AlbumFolderViewPriv();
-    d->albumMan     = AlbumManager::componentData();
+    d->albumMan     = AlbumManager::instance();
 
     addColumn(i18n("My Albums"));
     setResizeMode(Q3ListView::LastColumn);
@@ -370,7 +370,7 @@ void AlbumFolderView::slotThumbnailLost(Album *)
 
 void AlbumFolderView::slotReloadThumbnails()
 {
-    AlbumList tList = AlbumManager::componentData()->allPAlbums();
+    AlbumList tList = AlbumManager::instance()->allPAlbums();
     for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
     {
         PAlbum* album  = (PAlbum*)(*it);
@@ -518,7 +518,7 @@ void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, 
         else if (choice == resetIconAction)
         {
             QString err;
-            AlbumManager::componentData()->updatePAlbumIcon(item->getAlbum(), 0, err);
+            AlbumManager::instance()->updatePAlbumIcon(item->getAlbum(), 0, err);
         }
         else if (choice == renameAction)
         {
@@ -994,7 +994,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
             if(set)
             {
                 QString errMsg;
-                AlbumManager::componentData()->updatePAlbumIcon(destAlbum, imageIDs.first(), errMsg);
+                AlbumManager::instance()->updatePAlbumIcon(destAlbum, imageIDs.first(), errMsg);
             }
             return;
         }
@@ -1051,7 +1051,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
         else if (setThumbnail)
         {
             QString errMsg;
-            AlbumManager::componentData()->updatePAlbumIcon(destAlbum, imageIDs.first(), errMsg);
+            AlbumManager::instance()->updatePAlbumIcon(destAlbum, imageIDs.first(), errMsg);
         }
 
         return;
@@ -1348,7 +1348,7 @@ void AlbumFolderView::resort()
     if (prevSelectedItem && prevSelectedItem->isGroupItem())
         prevSelectedItem = 0;
 
-    AlbumList pList(AlbumManager::componentData()->allPAlbums());
+    AlbumList pList(AlbumManager::instance()->allPAlbums());
     for (AlbumList::iterator it = pList.begin(); it != pList.end(); ++it)
     {
         PAlbum *album = (PAlbum*)(*it);

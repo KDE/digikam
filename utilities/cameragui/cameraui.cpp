@@ -1266,7 +1266,7 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
 
     if (!album)
     {
-        AlbumManager* man = AlbumManager::componentData();
+        AlbumManager* man = AlbumManager::instance();
     
         album = man->currentAlbum();
         if (album && album->type() != Album::PHYSICAL)
@@ -1772,7 +1772,7 @@ bool CameraUI::createAutoAlbum(const KUrl& parentURL, const QString& name,
 
     // looks like the directory does not exist, try to create it
 
-    AlbumManager* aman = AlbumManager::componentData();
+    AlbumManager* aman = AlbumManager::instance();
     PAlbum* parent     = aman->findPAlbum(parentURL);
     if (!parent)
     {

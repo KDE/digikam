@@ -151,7 +151,7 @@ void MetadataHub::load(const ImageInfo &info)
 
     load(info.dateTime(), info.comment(), info.rating());
 
-    AlbumManager *man = AlbumManager::componentData();
+    AlbumManager *man = AlbumManager::instance();
     QList<int> tagIds = info.tagIds();
     QList<TAlbum *> loadedTags;
 
@@ -215,7 +215,7 @@ void MetadataHub::load(const DMetadata &metadata)
 
     if (d->dbmode == ManagedTags)
     {
-        AlbumManager *man = AlbumManager::componentData();
+        AlbumManager *man = AlbumManager::instance();
         QStringList tagPaths = metadata.getImageKeywords();
         QList<TAlbum *> loadedTags;
 
@@ -677,14 +677,14 @@ MetadataHub::TagStatus MetadataHub::tagStatus(int albumId) const
 {
     if (d->dbmode == NewTagsImport)
         return TagStatus(MetadataInvalid);
-    return tagStatus(AlbumManager::componentData()->findTAlbum(albumId));
+    return tagStatus(AlbumManager::instance()->findTAlbum(albumId));
 }
 
 MetadataHub::TagStatus MetadataHub::tagStatus(const QString &tagPath) const
 {
     if (d->dbmode == NewTagsImport)
         return TagStatus(MetadataInvalid);
-    return tagStatus(AlbumManager::componentData()->findTAlbum(tagPath));
+    return tagStatus(AlbumManager::instance()->findTAlbum(tagPath));
 }
 
 MetadataHub::TagStatus MetadataHub::tagStatus(TAlbum *album) const
@@ -834,7 +834,7 @@ void MetadataHub::setTag(TAlbum *tag, bool hasTag, Status status)
 void MetadataHub::setTag(int albumID, bool hasTag, Status status)
 {
     // DatabaseMode == ManagedTags is assumed
-    TAlbum *album = AlbumManager::componentData()->findTAlbum(albumID);
+    TAlbum *album = AlbumManager::instance()->findTAlbum(albumID);
     if (!album)
     {
         DWarning() << "Tag ID " << albumID << " not found in database." << endl;

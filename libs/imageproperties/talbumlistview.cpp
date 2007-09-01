@@ -285,7 +285,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
         int tagID;
         ds >> tagID;
 
-        AlbumManager* man = AlbumManager::componentData();
+        AlbumManager* man = AlbumManager::instance();
         TAlbum* talbum    = man->findTAlbum(tagID);
 
         if(!talbum)
@@ -309,7 +309,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
             if (!itemDrop)
             {
                 // move dragItem to the root
-                newParentTag = AlbumManager::componentData()->findTAlbum(0);
+                newParentTag = AlbumManager::instance()->findTAlbum(0);
             }
             else
             {
@@ -318,7 +318,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
             }
 
             QString errMsg;
-            if (!AlbumManager::componentData()->moveTAlbum(talbum, newParentTag, errMsg))
+            if (!AlbumManager::instance()->moveTAlbum(talbum, newParentTag, errMsg))
             {
                 KMessageBox::error(this, errMsg);
             }
@@ -348,7 +348,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
 
         // all the albumids will be the same
         int albumID = albumIDs.first();
-        srcAlbum    = AlbumManager::componentData()->findTAlbum(albumID);
+        srcAlbum    = AlbumManager::instance()->findTAlbum(albumID);
         if (!srcAlbum)
         {
             DWarning() << "Could not find source album of drag"
@@ -382,7 +382,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
             if(set)
             {
                 QString errMsg;
-                AlbumManager::componentData()->updateTAlbumIcon(destAlbum, QString(),
+                AlbumManager::instance()->updateTAlbumIcon(destAlbum, QString(),
                                                                 imageIDs.first(), errMsg);
             }
             return;

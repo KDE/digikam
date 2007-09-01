@@ -97,7 +97,7 @@ public:
     /**
      * A convenience function to get the instance of the AlbumManager
      */
-    static AlbumManager* componentData();
+    static AlbumManager* instance();
 
     /** @name Library path And Scanning
      */

@@ -100,10 +100,10 @@ AlbumThumbnailLoader::AlbumThumbnailLoader()
     connect(this, SIGNAL(signalDispatchThumbnailInternal(int, const QPixmap &)),
             this, SLOT(slotDispatchThumbnailInternal(int, const QPixmap &)));
 
-    connect(AlbumManager::componentData(), SIGNAL(signalAlbumIconChanged(Album*)),
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumIconChanged(Album*)),
             this, SLOT(slotIconChanged(Album*)));
 
-    connect(AlbumManager::componentData(), SIGNAL(signalAlbumDeleted(Album*)),
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumDeleted(Album*)),
             this, SLOT(slotIconChanged(Album*)));
 }
 
@@ -342,7 +342,7 @@ void AlbumThumbnailLoader::slotGotThumbnailFromIcon(const LoadingDescription &lo
 
     if (it != d->pathAlbumMap.end())
     {
-        AlbumManager *manager = AlbumManager::componentData();
+        AlbumManager *manager = AlbumManager::instance();
 
         if (thumbnail.isNull())
         {
@@ -393,7 +393,7 @@ void AlbumThumbnailLoader::slotDispatchThumbnailInternal(int albumID, const QPix
 {
     // for cached thumbnails
 
-    AlbumManager *manager = AlbumManager::componentData();
+    AlbumManager *manager = AlbumManager::instance();
     Album *album          = manager->findAlbum(albumID);
     if (album)
     {

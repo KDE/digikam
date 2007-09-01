@@ -87,7 +87,7 @@ PAlbum* DigikamImageInfo::parentAlbum()
     if (!palbum_)
     {
         KUrl u(_url.directory());
-        palbum_ = AlbumManager::componentData()->findPAlbum(u);
+        palbum_ = AlbumManager::instance()->findPAlbum(u);
     }
     return palbum_;
 }
@@ -174,7 +174,7 @@ void DigikamImageInfo::setTime(const QDateTime& time, KIPI::TimeSpec)
             imageId = access.db()->getImageId(p->id(), _url.fileName());
             access.db()->setItemDate(imageId, time);
         }
-        AlbumManager::componentData()->refreshItemHandler( _url );
+        AlbumManager::instance()->refreshItemHandler( _url );
     }
 }
 
@@ -358,7 +358,7 @@ KUrl::List DigikamImageCollection::images()
             else if (album_->type() == Album::DATE || 
                     album_->type() == Album::SEARCH)
             {
-                AlbumItemHandler* handler = AlbumManager::componentData()->getItemHandler();
+                AlbumItemHandler* handler = AlbumManager::instance()->getItemHandler();
     
                 if (handler)
                 {
@@ -377,7 +377,7 @@ KUrl::List DigikamImageCollection::images()
         }
         case SelectedItems:
         {
-            AlbumItemHandler* handler = AlbumManager::componentData()->getItemHandler();
+            AlbumItemHandler* handler = AlbumManager::instance()->getItemHandler();
     
             if (handler)
             {
@@ -517,7 +517,7 @@ bool DigikamImageCollection::operator==(ImageCollectionShared& imgCollection)
 DigikamKipiInterface::DigikamKipiInterface( QObject *parent, const char *name)
                     : KIPI::Interface( parent, name )
 {
-    albumManager_ = AlbumManager::componentData();
+    albumManager_ = AlbumManager::instance();
 
     connect( albumManager_, SIGNAL( signalAlbumItemsSelected( bool ) ),
              this, SLOT( slotSelectionChanged( bool ) ) );

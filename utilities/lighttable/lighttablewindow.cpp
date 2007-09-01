@@ -845,7 +845,7 @@ void LightTableWindow::slotDeleteItem(const ImageInfo &info)
     bool permanently = false;
 
     KUrl u = info.fileUrl();
-    PAlbum *palbum = AlbumManager::componentData()->findPAlbum(u.directory());
+    PAlbum *palbum = AlbumManager::instance()->findPAlbum(u.directory());
     if (!palbum)
         return;
 

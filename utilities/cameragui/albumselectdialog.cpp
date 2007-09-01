@@ -125,7 +125,7 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
     QPixmap icon = iconLoader->loadIcon("folder", K3Icon::NoGroup,
                                         AlbumSettings::instance()->getDefaultTreeIconSize());
 
-    AlbumList aList = AlbumManager::componentData()->allPAlbums();
+    AlbumList aList = AlbumManager::instance()->allPAlbums();
 
     for (AlbumList::const_iterator it = aList.begin(); it != aList.end(); ++it)
     {
@@ -169,13 +169,13 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
 
     // -------------------------------------------------------------
 
-    connect(AlbumManager::componentData(), SIGNAL(signalAlbumAdded(Album*)),
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumAdded(Album*)),
             this, SLOT(slotAlbumAdded(Album*)));
 
-    connect(AlbumManager::componentData(), SIGNAL(signalAlbumDeleted(Album*)),
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumDeleted(Album*)),
             this, SLOT(slotAlbumDeleted(Album*)));
 
-    connect(AlbumManager::componentData(), SIGNAL(signalAlbumsCleared()),
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumsCleared()),
             this, SLOT(slotAlbumsCleared()));
 
     connect(d->folderView, SIGNAL(selectionChanged()),
@@ -309,7 +309,7 @@ void AlbumSelectDialog::slotUser1()
     }
 
     QString errMsg;
-    PAlbum* newAlbum = AlbumManager::componentData()->createPAlbum(album, albumRootPath, newAlbumName,
+    PAlbum* newAlbum = AlbumManager::instance()->createPAlbum(album, albumRootPath, newAlbumName,
                                                               QString(), QDate::currentDate(),
                                                               QString(), errMsg);
     if (!newAlbum)

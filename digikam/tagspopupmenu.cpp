@@ -402,7 +402,7 @@ void TagsPopupMenu::slotAboutToShow()
 {
     clearPopup();
 
-    AlbumManager* man = AlbumManager::componentData();
+    AlbumManager* man = AlbumManager::instance();
 
     if (d->mode == REMOVE)
     {
@@ -509,7 +509,7 @@ void TagsPopupMenu::iterateAndBuildMenu(QMenu *menu, TAlbum *album)
 
 QMenu* TagsPopupMenu::buildSubMenu(int tagid)
 {
-    AlbumManager* man = AlbumManager::componentData();
+    AlbumManager* man = AlbumManager::instance();
     TAlbum* album     = man->findTAlbum(tagid);
     if (!album)
         return 0;
@@ -580,7 +580,7 @@ void TagsPopupMenu::slotAddTag(QAction *action)
 {
     int tagID = action->data().toInt();
 
-    AlbumManager* man = AlbumManager::componentData();
+    AlbumManager* man = AlbumManager::instance();
     TAlbum* parent    = man->findTAlbum(tagID);
     if (!parent)
     {

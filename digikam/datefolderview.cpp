@@ -121,13 +121,13 @@ DateFolderView::DateFolderView(QWidget* parent)
     d->listview->setResizeMode(Q3ListView::LastColumn);
     d->listview->setRootIsDecorated(true);
 
-    connect(AlbumManager::componentData(), SIGNAL(signalAlbumAdded(Album*)),
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumAdded(Album*)),
             this, SLOT(slotAlbumAdded(Album*)));
-    connect(AlbumManager::componentData(), SIGNAL(signalAlbumDeleted(Album*)),
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumDeleted(Album*)),
             this, SLOT(slotAlbumDeleted(Album*)));
-    connect(AlbumManager::componentData(), SIGNAL(signalAllDAlbumsLoaded()),
+    connect(AlbumManager::instance(), SIGNAL(signalAllDAlbumsLoaded()),
             this, SLOT(slotAllDAlbumsLoaded()));    
-    connect(AlbumManager::componentData(), SIGNAL(signalAlbumsCleared()),
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumsCleared()),
             d->listview, SLOT(clear()));
 
     connect(d->listview, SIGNAL(selectionChanged()),
@@ -158,7 +158,7 @@ void DateFolderView::setActive(bool val)
 
 void DateFolderView::slotAllDAlbumsLoaded()
 {
-    disconnect(AlbumManager::componentData(), SIGNAL(signalAllDAlbumsLoaded()),
+    disconnect(AlbumManager::instance(), SIGNAL(signalAllDAlbumsLoaded()),
                this, SLOT(slotAllDAlbumsLoaded()));
     loadViewState();
 }
@@ -225,7 +225,7 @@ void DateFolderView::slotSelectionChanged()
     
     if (!selItem)
     {
-        AlbumManager::componentData()->setCurrentAlbum(0);
+        AlbumManager::instance()->setCurrentAlbum(0);
         return;
     }
 
@@ -233,12 +233,12 @@ void DateFolderView::slotSelectionChanged()
     
     if (!dateItem || !dateItem->m_album)
     {
-        AlbumManager::componentData()->setCurrentAlbum(0);
+        AlbumManager::instance()->setCurrentAlbum(0);
         d->monthview->setActive(false);
     }
     else
     {
-        AlbumManager::componentData()->setCurrentAlbum(dateItem->m_album);
+        AlbumManager::instance()->setCurrentAlbum(dateItem->m_album);
 
         QDate date = dateItem->m_album->date();        
         d->monthview->setActive(true);

@@ -287,7 +287,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
 
     // Connect to album manager -----------------------------
 
-    AlbumManager* man = AlbumManager::componentData();
+    AlbumManager* man = AlbumManager::instance();
 
     connect(man, SIGNAL(signalAlbumAdded(Album*)),
             this, SLOT(slotAlbumAdded(Album*)));
@@ -348,7 +348,7 @@ ImageDescEditTab::~ImageDescEditTab()
     slotChangingItems();
 
     /*
-    AlbumList tList = AlbumManager::componentData().allTAlbums();
+    AlbumList tList = AlbumManager::instance().allTAlbums();
     for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
     {
         (*it)->removeExtraData(this);
@@ -644,7 +644,7 @@ void ImageDescEditTab::populateTags()
 {
     d->tagsView->clear();
 
-    AlbumList tList = AlbumManager::componentData()->allTAlbums();
+    AlbumList tList = AlbumManager::instance()->allTAlbums();
     for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
     {
         TAlbum *tag = (TAlbum*)(*it);
@@ -795,14 +795,14 @@ void ImageDescEditTab::slotRightButtonClicked(Q3ListViewItem *item, const QPoint
 
     if (!item)
     {
-        album = AlbumManager::componentData()->findTAlbum(0);
+        album = AlbumManager::instance()->findTAlbum(0);
     }
     else
     {
         TAlbumCheckListItem* viewItem = dynamic_cast<TAlbumCheckListItem*>(item);
 
         if(!viewItem)
-            album = AlbumManager::componentData()->findTAlbum(0);
+            album = AlbumManager::instance()->findTAlbum(0);
         else
             album = viewItem->m_album;
     }
@@ -902,7 +902,7 @@ void ImageDescEditTab::slotRightButtonClicked(Q3ListViewItem *item, const QPoint
         else if (choice == resetIconAction)         // Reset Tag Icon.
         {
             QString errMsg;
-            AlbumManager::componentData()->updateTAlbumIcon(album, QString("tag"), 0, errMsg);
+            AlbumManager::instance()->updateTAlbumIcon(album, QString("tag"), 0, errMsg);
         }
         else if (choice == selectAllTagsAction)     // Select All Tags.
         {
@@ -1061,7 +1061,7 @@ void ImageDescEditTab::tagNew(TAlbum* parAlbum, const QString& _title, const QSt
 
     QString title           = _title;
     QString icon            = _icon;
-    AlbumManager *albumMan_ = AlbumManager::componentData();
+    AlbumManager *albumMan_ = AlbumManager::instance();
 
     if (title.isNull())
     {
@@ -1093,7 +1093,7 @@ void ImageDescEditTab::tagDelete(TAlbum *album)
     if (!album || album->isRoot())
         return;
 
-    AlbumManager *albumMan = AlbumManager::componentData();
+    AlbumManager *albumMan = AlbumManager::instance();
 
     if (album == albumMan->currentAlbum() ||
         album->isAncestorOf(albumMan->currentAlbum()))
@@ -1128,7 +1128,7 @@ void ImageDescEditTab::tagEdit(TAlbum* album)
     if (!TagEditDlg::tagEdit(kapp->activeWindow(), album, title, icon))
         return;
 
-    AlbumManager *albumMan = AlbumManager::componentData();
+    AlbumManager *albumMan = AlbumManager::instance();
     if (album->title() != title)
     {
         QString errMsg;
@@ -1349,7 +1349,7 @@ void ImageDescEditTab::slotThumbnailLost(Album *)
 
 void ImageDescEditTab::slotReloadThumbnails()
 {
-    AlbumList tList = AlbumManager::componentData()->allTAlbums();
+    AlbumList tList = AlbumManager::instance()->allTAlbums();
     for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
     {
         TAlbum* tag  = (TAlbum*)(*it);
@@ -1371,7 +1371,7 @@ void ImageDescEditTab::slotImagesChanged(int albumId)
     if (d->ignoreImageAttributesWatch || d->modified)
         return;
 
-    Album *a = AlbumManager::componentData()->findAlbum(albumId);
+    Album *a = AlbumManager::instance()->findAlbum(albumId);
     if (d->currInfos.isEmpty() || !a || a->isRoot() || a->type() != Album::TAG)
         return;
 
@@ -1434,7 +1434,7 @@ void ImageDescEditTab::updateRecentTags()
 
     menu->clear();
 
-    AlbumList recentTags = AlbumManager::componentData()->getRecentlyAssignedTags();
+    AlbumList recentTags = AlbumManager::instance()->getRecentlyAssignedTags();
 
     if (recentTags.isEmpty())
     {
@@ -1468,7 +1468,7 @@ void ImageDescEditTab::updateRecentTags()
 
 void ImageDescEditTab::slotRecentTagsMenuActivated(int id)
 {
-    AlbumManager* albumMan = AlbumManager::componentData();
+    AlbumManager* albumMan = AlbumManager::instance();
 
     if (id > 0)
     {
@@ -1494,7 +1494,7 @@ void ImageDescEditTab::slotTagsSearchChanged()
 
     bool atleastOneMatch = false;
 
-    AlbumList tList = AlbumManager::componentData()->allTAlbums();
+    AlbumList tList = AlbumManager::instance()->allTAlbums();
     for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
     {
         TAlbum* tag  = (TAlbum*)(*it);
@@ -1556,14 +1556,14 @@ void ImageDescEditTab::slotTagsSearchChanged()
     if (search.isEmpty())
     {
         d->tagsSearchEdit->setPalette(QPalette());
-        TAlbum* root = AlbumManager::componentData()->findTAlbum(0);
+        TAlbum* root = AlbumManager::instance()->findTAlbum(0);
         TAlbumCheckListItem* rootItem = (TAlbumCheckListItem*)(root->extraData(this));
         if (rootItem)
             rootItem->setText(0, root->title());
     }
     else
     {
-        TAlbum* root = AlbumManager::componentData()->findTAlbum(0);
+        TAlbum* root = AlbumManager::instance()->findTAlbum(0);
         TAlbumCheckListItem* rootItem = (TAlbumCheckListItem*)(root->extraData(this));
         if (rootItem)
             rootItem->setText(0, i18n("Found Tags"));
@@ -1662,7 +1662,7 @@ void ImageDescEditTab::slotAssignedTagsToggled(bool t)
         }
     }
 
-    TAlbum *root                  = AlbumManager::componentData()->findTAlbum(0);
+    TAlbum *root                  = AlbumManager::instance()->findTAlbum(0);
     TAlbumCheckListItem *rootItem = (TAlbumCheckListItem*)(root->extraData(this));
     if (rootItem)
     {

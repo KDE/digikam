@@ -142,7 +142,7 @@ DigikamView::DigikamView(QWidget *parent)
 {
     d = new DigikamViewPriv;
     d->parent       = static_cast<DigikamApp *>(parent);
-    d->albumManager = AlbumManager::componentData();
+    d->albumManager = AlbumManager::instance();
     d->leftSideBar  = new Sidebar(this, Sidebar::DockLeft);
     d->leftSideBar->setObjectName("Digikam Left Sidebar");
 
@@ -381,7 +381,7 @@ void DigikamView::saveViewState()
     KConfigGroup group = config->group("MainWindow");
     group.writeEntry("SplitterState", d->splitter->saveState().toBase64());
 
-    Album *album = AlbumManager::componentData()->currentAlbum();
+    Album *album = AlbumManager::instance()->currentAlbum();
     if(album)
     {
         group.writeEntry("InitialAlbumID", album->globalID());
@@ -1158,7 +1158,7 @@ void DigikamView::slotSlideShowSelection()
 
 void DigikamView::slotSlideShowRecursive()
 {
-    Album *album = AlbumManager::componentData()->currentAlbum();
+    Album *album = AlbumManager::instance()->currentAlbum();
     if(album)
     {
         AlbumList albumList;

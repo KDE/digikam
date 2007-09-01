@@ -136,7 +136,7 @@ TagFolderView::TagFolderView(QWidget *parent)
              : FolderView(parent, "TagFolderView")
 {
     d = new TagFolderViewPriv();
-    d->albumMan = AlbumManager::componentData();
+    d->albumMan = AlbumManager::instance();
 
     addColumn(i18n("My Tags"));
     setResizeMode(Q3ListView::LastColumn);
@@ -347,7 +347,7 @@ void TagFolderView::slotThumbnailLost(Album *)
 
 void TagFolderView::slotReloadThumbnails()
 {
-    AlbumList tList = AlbumManager::componentData()->allTAlbums();
+    AlbumList tList = AlbumManager::instance()->allTAlbums();
     for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
     {
         TAlbum* tag  = (TAlbum*)(*it);
@@ -444,7 +444,7 @@ void TagFolderView::slotContextMenu(Q3ListViewItem *item, const QPoint &, int)
         if (choice == resetIconAction)
         {
             QString errMsg;
-            AlbumManager::componentData()->updateTAlbumIcon(tag->getTag(), QString("tag"), 0, errMsg);
+            AlbumManager::instance()->updateTAlbumIcon(tag->getTag(), QString("tag"), 0, errMsg);
         }
         else
         {
@@ -693,7 +693,7 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
         int tagID;
         ds >> tagID;
 
-        AlbumManager* man = AlbumManager::componentData();
+        AlbumManager* man = AlbumManager::instance();
         TAlbum* talbum    = man->findTAlbum(tagID);
 
         if(!talbum)
@@ -791,7 +791,7 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
             if(set)
             {
                 QString errMsg;
-                AlbumManager::componentData()->updateTAlbumIcon(destAlbum, QString(),
+                AlbumManager::instance()->updateTAlbumIcon(destAlbum, QString(),
                                                            imageIDs.first(), errMsg);
             }
             return;

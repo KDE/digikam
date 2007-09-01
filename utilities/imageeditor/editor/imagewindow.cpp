@@ -725,7 +725,7 @@ void ImageWindow::slotUpdateItemInfo()
     // This is necessary when ImageEditor is opened from cameraclient.
 
     KUrl u(d->urlCurrent.directory());
-    PAlbum *palbum = AlbumManager::componentData()->findPAlbum(u);
+    PAlbum *palbum = AlbumManager::instance()->findPAlbum(u);
 
     if (!palbum)
     {
@@ -790,10 +790,10 @@ void ImageWindow::saveAsIsComplete()
     // Find the src and dest albums ------------------------------------------
 
     KUrl srcDirURL(QDir::cleanPath(m_savingContext->srcURL.directory()));
-    PAlbum* srcAlbum = AlbumManager::componentData()->findPAlbum(srcDirURL);
+    PAlbum* srcAlbum = AlbumManager::instance()->findPAlbum(srcDirURL);
 
     KUrl dstDirURL(QDir::cleanPath(m_savingContext->destinationURL.directory()));
-    PAlbum* dstAlbum = AlbumManager::componentData()->findPAlbum(dstDirURL);
+    PAlbum* dstAlbum = AlbumManager::instance()->findPAlbum(dstDirURL);
 
     if (dstAlbum && srcAlbum)
     {
@@ -908,7 +908,7 @@ void ImageWindow::deleteCurrentItem(bool ask, bool permanently)
 
     KUrl u;
     u.setPath(d->urlCurrent.directory());
-    PAlbum *palbum = AlbumManager::componentData()->findPAlbum(u);
+    PAlbum *palbum = AlbumManager::instance()->findPAlbum(u);
 
     // if available, provide a digikamalbums:// URL to KIO
     KUrl kioURL;
@@ -1139,7 +1139,7 @@ void ImageWindow::dropEvent(QDropEvent *e)
         }
 
         QString ATitle;
-        AlbumManager* man  = AlbumManager::componentData();
+        AlbumManager* man  = AlbumManager::instance();
         PAlbum* palbum     = man->findPAlbum(albumIDs.first());
         if (palbum) ATitle = palbum->title();  
 
@@ -1152,7 +1152,7 @@ void ImageWindow::dropEvent(QDropEvent *e)
     }
     else if (AlbumDrag::decode(e, urls, albumID))
     {
-        AlbumManager* man           = AlbumManager::componentData();
+        AlbumManager* man           = AlbumManager::instance();
         Q3ValueList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInAlbum(albumID);
         ImageInfoList imageInfoList;
 
@@ -1184,7 +1184,7 @@ void ImageWindow::dropEvent(QDropEvent *e)
         int tagID;
         ds >> tagID;
 
-        AlbumManager* man           = AlbumManager::componentData();
+        AlbumManager* man           = AlbumManager::instance();
         Q3ValueList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInTag(tagID, true);
         ImageInfoList imageInfoList;
 

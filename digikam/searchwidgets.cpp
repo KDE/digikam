@@ -324,7 +324,7 @@ void SearchAdvancedRule::setValueWidget(valueWidgetTypes oldType, valueWidgetTyp
         m_valueCombo->setObjectName("albumscombo");
         m_valueCombo->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
 
-        AlbumManager* aManager = AlbumManager::componentData();
+        AlbumManager* aManager = AlbumManager::instance();
         AlbumList aList = aManager->allPAlbums();
 
         m_itemsIndexIDMap.clear();
@@ -352,7 +352,7 @@ void SearchAdvancedRule::setValueWidget(valueWidgetTypes oldType, valueWidgetTyp
         m_valueCombo->setObjectName("tagscombo");
         m_valueCombo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-        AlbumManager* aManager = AlbumManager::componentData();
+        AlbumManager* aManager = AlbumManager::instance();
         AlbumList tList        = aManager->allTAlbums();
 
         m_itemsIndexIDMap.clear();

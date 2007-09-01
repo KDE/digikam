@@ -89,7 +89,7 @@ FolderView::FolderView(QWidget *parent, const char *name)
     connect(ThemeEngine::componentData(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
 
-    connect(AlbumManager::componentData(), SIGNAL(signalAllAlbumsLoaded()),
+    connect(AlbumManager::instance(), SIGNAL(signalAllAlbumsLoaded()),
             this, SLOT(slotAllAlbumsLoaded()));
 
     connect(AlbumThumbnailLoader::componentData(), SIGNAL(signalReloadThumbnails()),
@@ -342,7 +342,7 @@ void FolderView::slotThemeChanged()
 
 void FolderView::slotAllAlbumsLoaded()
 {
-    disconnect(AlbumManager::componentData(), SIGNAL(signalAllAlbumsLoaded()),
+    disconnect(AlbumManager::instance(), SIGNAL(signalAllAlbumsLoaded()),
                this, SLOT(slotAllAlbumsLoaded()));    
     loadViewState();
 }

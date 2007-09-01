@@ -842,7 +842,7 @@ QString LightTableBarToolTip::tipContentExtraData(ThumbBarItem* item)
 
             if (settings->getToolTipsShowAlbumName())
             {
-                PAlbum* album = AlbumManager::componentData()->findPAlbum(info.albumId());
+                PAlbum* album = AlbumManager::instance()->findPAlbum(info.albumId());
                 if (album)
                     tip += m_cellSpecBeg + i18n("Album:") + m_cellSpecMid + 
                            album->albumPath().remove(0, 1) + m_cellSpecEnd;
@@ -857,7 +857,7 @@ QString LightTableBarToolTip::tipContentExtraData(ThumbBarItem* item)
 
             if (settings->getToolTipsShowTags())
             {
-                QStringList tagPaths = AlbumManager::componentData()->tagPaths(info.tagIds(), false);
+                QStringList tagPaths = AlbumManager::instance()->tagPaths(info.tagIds(), false);
 
                 str = tagPaths.join(", ");
                 if (str.isEmpty()) str = QString("---");
