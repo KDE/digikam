@@ -47,11 +47,11 @@
 namespace Digikam
 {
 
-CameraList* CameraList::m_componentData = 0;
+CameraList* CameraList::m_defaultList = 0;
 
-CameraList* CameraList::componentData()
+CameraList* CameraList::defaultList()
 {
-    return m_componentData;    
+    return m_defaultList;
 }
 
 class CameraListPrivate
@@ -64,7 +64,7 @@ public:
     }
 
     bool                  modified;
-    
+
     Q3PtrList<CameraType> clist;
     QString               file;
 };
@@ -75,17 +75,19 @@ CameraList::CameraList(QObject *parent, const QString& file)
     d = new CameraListPrivate;
     d->clist.setAutoDelete(true);
     d->file         = file;
-    m_componentData = this;
+    if (!m_defaultList)
+        m_defaultList = this;
 }
 
 CameraList::~CameraList()
 {
     save();
-    
+
     d->clist.clear();
     delete d;
 
-    m_componentData = 0;
+    if (m_defaultList == this)
+        m_defaultList = 0;
 }
 
 bool CameraList::load()
@@ -265,6 +267,11 @@ CameraType* CameraList::autoDetect(bool& retry)
     insert(ctype);
 
     return ctype;
+}
+
+bool CameraList::findConnectedCamera(int vendorId, int productId, QString &model, QString &port)
+{
+    return GPIface::findConnectedUsbCamera(vendorId, productId, model, port);
 }
 
 void CameraList::clear()
