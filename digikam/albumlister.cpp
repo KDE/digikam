@@ -99,12 +99,17 @@ public:
 
 AlbumLister* AlbumLister::m_instance = 0;
 
-AlbumLister* AlbumLister::componentData()
+AlbumLister* AlbumLister::instance()
 {
     if (!m_instance)
         new AlbumLister();
 
     return m_instance;
+}
+
+void AlbumLister::cleanUp()
+{
+    delete m_instance;
 }
 
 AlbumLister::AlbumLister()
@@ -121,7 +126,6 @@ AlbumLister::AlbumLister()
 
 AlbumLister::~AlbumLister()
 {
-    delete d->filterTimer;
     delete d;
     m_instance = 0;
 }

@@ -300,7 +300,7 @@ void MonthWidget::mousePressEvent(QMouseEvent *e)
             filterDays.append(m_days[i].day);
     }
 
-    AlbumLister::componentData()->setDayFilter(filterDays);
+    AlbumLister::instance()->setDayFilter(filterDays);
     
     update();
 }
@@ -314,10 +314,10 @@ void MonthWidget::setActive(bool val)
     
     if (m_active)
     {
-        connect(AlbumLister::componentData(),
+        connect(AlbumLister::instance(),
                 SIGNAL(signalNewItems(const ImageInfoList&)),
                 SLOT(slotAddItems(const ImageInfoList&)));
-        connect(AlbumLister::componentData(),
+        connect(AlbumLister::instance(),
                 SIGNAL(signalDeleteItem(ImageInfo*)),
                 SLOT(slotDeleteItem(ImageInfo*)));
     }
@@ -325,9 +325,9 @@ void MonthWidget::setActive(bool val)
     {
         QDate date = QDate::currentDate();
         setYearMonth(date.year(), date.month());
-        AlbumLister::componentData()->setDayFilter(Q3ValueList<int>());
+        AlbumLister::instance()->setDayFilter(Q3ValueList<int>());
 
-        disconnect(AlbumLister::componentData());
+        disconnect(AlbumLister::instance());
     }
 }
 

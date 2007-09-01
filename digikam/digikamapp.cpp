@@ -137,7 +137,7 @@ DigikamApp::DigikamApp()
     d->albumSettings->readSettings();
 
     d->albumManager = AlbumManager::instance();
-    AlbumLister::componentData();
+    AlbumLister::instance();
 
     LoadingCacheInterface::initialize();
 
@@ -211,11 +211,11 @@ DigikamApp::~DigikamApp()
         delete d->view;
 
     d->albumSettings->saveSettings();
+
     delete d->albumSettings;
-
     delete d->albumManager;
-    delete AlbumLister::componentData();
 
+    AlbumLister::cleanUp();
     ImageAttributesWatch::cleanUp();
     LoadingCacheInterface::cleanUp();
     KDcrawIface::DcrawBinary::cleanUp();

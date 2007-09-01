@@ -206,7 +206,7 @@ AlbumIconView::AlbumIconView(QWidget* parent)
 {
     d = new AlbumIconViewPrivate;
     d->init();
-    d->imageLister = AlbumLister::componentData();
+    d->imageLister = AlbumLister::instance();
     d->toolTip     = new AlbumFileTip(this);
 
     setAcceptDrops(true);
@@ -834,7 +834,7 @@ void AlbumIconView::slotRename(AlbumIconItem* item)
             this, SLOT(slotRenamed(KIO::Job*, const KUrl &, const KUrl&)));
 
     // The AlbumManager KDirWatch will trigger a DIO::scan.
-    // When this is completed, DIO will call AlbumLister::componentData()->refresh().
+    // When this is completed, DIO will call AlbumLister::instance()->refresh().
     // Usually the AlbumLister will ignore changes to already listed items.
     // So the renamed item need explicitly be invalidated.
     d->imageLister->invalidateItem(renameInfo);
@@ -890,7 +890,7 @@ void AlbumIconView::slotDeleteSelectedItems(bool deletePermanently)
             this, SLOT(slotDIOResult(KJob*)));
 
     // The AlbumManager KDirWatch will trigger a DIO::scan.
-    // When this is completed, DIO will call AlbumLister::componentData()->refresh().
+    // When this is completed, DIO will call AlbumLister::instance()->refresh().
 }
 
 void AlbumIconView::slotDeleteSelectedItemsDirectly(bool useTrash)

@@ -756,7 +756,7 @@ void TagFilterView::slotTimeOut()
         ++it;
     }
 
-    AlbumLister::componentData()->setTagFilter(filterTags, d->matchingCond, showUnTagged);
+    AlbumLister::instance()->setTagFilter(filterTags, d->matchingCond, showUnTagged);
 }
 
 void TagFilterView::slotContextMenu(Q3ListViewItem* it, const QPoint&, int)

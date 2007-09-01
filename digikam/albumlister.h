@@ -73,8 +73,9 @@ public:
 
 public:
 
-    static AlbumLister* componentData();
-    
+    static AlbumLister* instance();
+    static void cleanUp();
+
     ~AlbumLister();
 
     /**
