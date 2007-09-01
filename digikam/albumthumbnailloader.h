@@ -50,8 +50,7 @@ class AlbumThumbnailLoader : public QObject
 
 public:
 
-    static AlbumThumbnailLoader *componentData();
-    static void cleanUp();
+    static AlbumThumbnailLoader *instance();
 
     /**
      * Change the size of the thumbnails.
@@ -162,10 +161,10 @@ signals:
 
 private:
 
+    friend class AlbumThumbnailLoaderCreator;
     AlbumThumbnailLoader();
     ~AlbumThumbnailLoader();
     AlbumThumbnailLoaderPrivate *d;
-    static AlbumThumbnailLoader *m_componentData;
 
     void    addUrl(Album *album, const KUrl &url);
     QPixmap loadIcon(const QString &name, int size = 0);

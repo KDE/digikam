@@ -156,7 +156,7 @@ QPixmap SyncJob::getTagThumbnailPriv(TAlbum *album)
 
     d->thumbnail = new QPixmap();
 
-    AlbumThumbnailLoader *loader = AlbumThumbnailLoader::componentData();
+    AlbumThumbnailLoader *loader = AlbumThumbnailLoader::instance();
 
     if (!loader->getTagThumbnail(album, *d->thumbnail))
     {

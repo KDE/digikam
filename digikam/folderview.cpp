@@ -92,7 +92,7 @@ FolderView::FolderView(QWidget *parent, const char *name)
     connect(AlbumManager::instance(), SIGNAL(signalAllAlbumsLoaded()),
             this, SLOT(slotAllAlbumsLoaded()));
 
-    connect(AlbumThumbnailLoader::componentData(), SIGNAL(signalReloadThumbnails()),
+    connect(AlbumThumbnailLoader::instance(), SIGNAL(signalReloadThumbnails()),
             this, SLOT(slotIconSizeChanged()));
 
     setColumnAlignment(0, Qt::AlignLeft|Qt::AlignVCenter);
@@ -160,14 +160,14 @@ void FolderView::fontChange(const QFont& oldFont)
 {
     // this is bad, since the settings value might not always be the _real_ height of the thumbnail.
     // (e.g. when it is blended, as for the tags)
-    d->itemHeight = qMax(AlbumThumbnailLoader::componentData()->thumbnailSize() + 2*itemMargin(), fontMetrics().height());
+    d->itemHeight = qMax(AlbumThumbnailLoader::instance()->thumbnailSize() + 2*itemMargin(), fontMetrics().height());
     Q3ListView::fontChange(oldFont);
     slotThemeChanged();
 }
 
 void FolderView::slotIconSizeChanged()
 {
-    d->itemHeight = qMax(AlbumThumbnailLoader::componentData()->thumbnailSize() + 2*itemMargin(), fontMetrics().height());
+    d->itemHeight = qMax(AlbumThumbnailLoader::instance()->thumbnailSize() + 2*itemMargin(), fontMetrics().height());
     slotThemeChanged();
 }
 

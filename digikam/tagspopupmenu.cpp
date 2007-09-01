@@ -379,7 +379,7 @@ void TagsPopupMenu::setup(Mode mode)
     connect(this, SIGNAL(aboutToShow()),
             this, SLOT(slotAboutToShow()));
 
-    AlbumThumbnailLoader *loader = AlbumThumbnailLoader::componentData();
+    AlbumThumbnailLoader *loader = AlbumThumbnailLoader::instance();
 
     connect(loader, SIGNAL(signalThumbnail(Album *, const QPixmap&)),
             this, SLOT(slotTagThumbnail(Album *, const QPixmap&)));
@@ -549,7 +549,7 @@ QMenu* TagsPopupMenu::buildSubMenu(int tagid)
 
 void TagsPopupMenu::setAlbumIcon(QAction *action, TAlbum *album)
 {
-    AlbumThumbnailLoader *loader = AlbumThumbnailLoader::componentData();
+    AlbumThumbnailLoader *loader = AlbumThumbnailLoader::instance();
     QPixmap pix;
     if (!loader->getTagThumbnail(album, pix))
     {

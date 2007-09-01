@@ -207,7 +207,7 @@ TagFilterView::TagFilterView(QWidget* parent)
     viewport()->setAcceptDrops(true);
 
     TagFilterViewItem* notTaggedItem = new TagFilterViewItem(this, 0, true);
-    notTaggedItem->setPixmap(0, AlbumThumbnailLoader::componentData()->getStandardTagIcon());
+    notTaggedItem->setPixmap(0, AlbumThumbnailLoader::instance()->getStandardTagIcon());
 
     // -- setup slots ---------------------------------------------------------
 
@@ -229,7 +229,7 @@ TagFilterView::TagFilterView(QWidget* parent)
     connect(AlbumManager::instance(), SIGNAL(signalTAlbumMoved(TAlbum*, TAlbum*)),
             this, SLOT(slotTagMoved(TAlbum*, TAlbum*)));
 
-    AlbumThumbnailLoader *loader = AlbumThumbnailLoader::componentData();
+    AlbumThumbnailLoader *loader = AlbumThumbnailLoader::instance();
 
     connect(loader, SIGNAL(signalThumbnail(Album *, const QPixmap&)),
             this, SLOT(slotGotThumbnailFromIcon(Album *, const QPixmap&)));
@@ -672,7 +672,7 @@ void TagFilterView::setTagThumbnail(TAlbum *album)
     if(!item)
         return;
 
-    AlbumThumbnailLoader *loader = AlbumThumbnailLoader::componentData();
+    AlbumThumbnailLoader *loader = AlbumThumbnailLoader::instance();
     QPixmap icon;
     if (!loader->getTagThumbnail(album, icon))
     {
@@ -703,7 +703,7 @@ void TagFilterView::slotGotThumbnailFromIcon(Album *album, const QPixmap& thumbn
     if(!item)
         return;
 
-    AlbumThumbnailLoader *loader = AlbumThumbnailLoader::componentData();
+    AlbumThumbnailLoader *loader = AlbumThumbnailLoader::instance();
     QPixmap blendedIcon = loader->blendIcons(loader->getStandardTagIcon(), thumbnail);
     item->setPixmap(0, blendedIcon);
 }
@@ -736,7 +736,7 @@ void TagFilterView::slotClear()
     clear();
 
     TagFilterViewItem* notTaggedItem = new TagFilterViewItem(this, 0, true);
-    notTaggedItem->setPixmap(0, AlbumThumbnailLoader::componentData()->getStandardTagIcon());
+    notTaggedItem->setPixmap(0, AlbumThumbnailLoader::instance()->getStandardTagIcon());
 }
 
 void TagFilterView::slotTimeOut()

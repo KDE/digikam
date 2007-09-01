@@ -230,7 +230,7 @@ AlbumFolderView::AlbumFolderView(QWidget *parent)
     connect(d->albumMan, SIGNAL(signalAlbumRenamed(Album*)),
             this, SLOT(slotAlbumRenamed(Album*)));
 
-    AlbumThumbnailLoader *loader = AlbumThumbnailLoader::componentData();
+    AlbumThumbnailLoader *loader = AlbumThumbnailLoader::instance();
 
     connect(loader, SIGNAL(signalThumbnail(Album *, const QPixmap&)),
             this, SLOT(slotGotThumbnailFromIcon(Album *, const QPixmap&)));
@@ -344,7 +344,7 @@ void AlbumFolderView::setAlbumThumbnail(PAlbum *album)
     // Either, getThumbnail returns true and loads an icon asynchronously.
     // Then, for the time being, we set the standard icon.
     // Or, no icon is associated with the album, then we set the standard icon anyway.
-    AlbumThumbnailLoader *loader = AlbumThumbnailLoader::componentData();
+    AlbumThumbnailLoader *loader = AlbumThumbnailLoader::instance();
     item->setPixmap(0, loader->getStandardAlbumIcon(album));
     loader->getAlbumThumbnail(album);
 }

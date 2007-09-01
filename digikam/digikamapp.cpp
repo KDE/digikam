@@ -219,7 +219,6 @@ DigikamApp::~DigikamApp()
     ImageAttributesWatch::cleanUp();
     LoadingCacheInterface::cleanUp();
     KDcrawIface::DcrawBinary::cleanUp();
-    AlbumThumbnailLoader::cleanUp();
 
     m_instance = 0;
 
@@ -1795,7 +1794,7 @@ void DigikamApp::slotSetupChanged()
 
     d->view->applySettings(d->albumSettings);
 
-    AlbumThumbnailLoader::componentData()->setThumbnailSize(d->albumSettings->getDefaultTreeIconSize());
+    AlbumThumbnailLoader::instance()->setThumbnailSize(d->albumSettings->getDefaultTreeIconSize());
 
     if (ImageWindow::imagewindowCreated())
         ImageWindow::imagewindow()->applySettings();

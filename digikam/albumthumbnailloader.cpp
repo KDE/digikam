@@ -79,18 +79,12 @@ public:
     TagThumbnailMap         tagThumbnailMap;
 };
 
-AlbumThumbnailLoader *AlbumThumbnailLoader::m_componentData = 0;
+class AlbumThumbnailLoaderCreator { public: AlbumThumbnailLoader object; };
+K_GLOBAL_STATIC(AlbumThumbnailLoaderCreator, creator)
 
-AlbumThumbnailLoader *AlbumThumbnailLoader::componentData()
+AlbumThumbnailLoader *AlbumThumbnailLoader::instance()
 {
-    if (!m_componentData)
-        m_componentData = new AlbumThumbnailLoader;
-    return m_componentData;
-}
-
-void AlbumThumbnailLoader::cleanUp()
-{
-    delete m_componentData;
+    return &creator->object;
 }
 
 AlbumThumbnailLoader::AlbumThumbnailLoader()
@@ -107,15 +101,12 @@ AlbumThumbnailLoader::AlbumThumbnailLoader()
             this, SLOT(slotIconChanged(Album*)));
 }
 
-
 AlbumThumbnailLoader::~AlbumThumbnailLoader()
 {
     delete d->iconTagThumbThread;
     delete d->iconAlbumThumbThread;
 
     delete d;
-
-    m_componentData = 0;
 }
 
 QPixmap AlbumThumbnailLoader::getStandardTagIcon(RelativeSize relativeSize)

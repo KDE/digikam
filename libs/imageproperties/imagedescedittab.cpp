@@ -307,7 +307,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     connect(man, SIGNAL(signalTAlbumMoved(TAlbum*, TAlbum*)),
             this, SLOT(slotAlbumMoved(TAlbum*, TAlbum*)));
 
-    AlbumThumbnailLoader *loader = AlbumThumbnailLoader::componentData();
+    AlbumThumbnailLoader *loader = AlbumThumbnailLoader::instance();
 
     connect(loader, SIGNAL(signalThumbnail(Album *, const QPixmap&)),
             this, SLOT(slotGotThumbnailFromIcon(Album *, const QPixmap&)));
@@ -1304,7 +1304,7 @@ void ImageDescEditTab::setTagThumbnail(TAlbum *album)
     if(!item)
         return;
 
-    AlbumThumbnailLoader *loader = AlbumThumbnailLoader::componentData();
+    AlbumThumbnailLoader *loader = AlbumThumbnailLoader::instance();
     QPixmap icon;
     if (!loader->getTagThumbnail(album, icon))
     {
@@ -1449,7 +1449,7 @@ void ImageDescEditTab::updateRecentTags()
             TAlbum* album = static_cast<TAlbum*>(*it);
             if (album)
             {
-                AlbumThumbnailLoader *loader = AlbumThumbnailLoader::componentData();
+                AlbumThumbnailLoader *loader = AlbumThumbnailLoader::instance();
                 QPixmap icon;
                 if (!loader->getTagThumbnail(album, icon))
                 {
