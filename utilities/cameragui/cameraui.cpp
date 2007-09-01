@@ -106,6 +106,7 @@ extern "C"
 #include "albumselectdialog.h"
 #include "renamecustomizer.h"
 #include "animwidget.h"
+#include "freespacewidget.h"
 #include "collectionscanner.h"
 #include "collectionmanager.h"
 #include "camerafolderdialog.h"
@@ -187,6 +188,7 @@ public:
         donateMoneyAction         = 0;
         cameraCancelAction        = 0;
         imageViewAction           = 0;
+        freeSpaceWidget           = 0;
     }
 
     bool                          busy;
@@ -261,6 +263,8 @@ public:
     StatusZoomBar                *statusZoomBar;
     StatusProgressBar            *statusProgressBar;
     StatusNavigateBar            *statusNavigateBar;
+
+    FreeSpaceWidget              *freeSpaceWidget;
 };
 
 CameraUI::CameraUI(QWidget* parent, const QString& cameraTitle, 
@@ -562,6 +566,11 @@ void CameraUI::setupActions()
 
     // ---------------------------------------------------------------------------------
 
+    d->freeSpaceWidget             = new FreeSpaceWidget(this, 100);
+    QWidgetAction *freeSpaceAction = new QWidgetAction(this);
+    freeSpaceAction->setDefaultWidget(d->freeSpaceWidget);
+    actionCollection()->addAction("freespace_action", freeSpaceAction);
+
     DLogoAction *logoAction = new DLogoAction(this);
     actionCollection()->addAction("logo_action", logoAction);
 
@@ -787,6 +796,11 @@ bool CameraUI::isBusy() const
 bool CameraUI::isClosed() const
 {
     return d->closed;
+}
+
+bool CameraUI::autoRotateJpegFiles() const
+{
+    return d->autoRotateCheck->isChecked();
 }
 
 bool CameraUI::convertLosslessJpegFiles() const
@@ -1208,6 +1222,22 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
     // can return an empty string in this case because it depends on selection.
     if (!onlySelected)
         d->view->slotSelectAll();
+
+    // See B.K.O #139519: Always check free space available before to
+    // download items selection from camera.
+    unsigned long fSize = 0;
+    unsigned long dSize = 0;
+    d->view->itemsSelectionSizeInfo(fSize, dSize);
+    if (d->freeSpaceWidget->isValid() && (dSize >= d->freeSpaceWidget->kBAvail()))
+    {
+        KMessageBox::error(this, i18n("There is no enough free space on Album Library Path "
+                                      "to download and process selected pictures from camera.\n\n"
+                                      "Estimated space require: %1\n"
+                                      "Available free space: %2",
+                                      KIO::convertSizeFromKiB(dSize)),
+                                      KIO::convertSizeFromKiB(d->freeSpaceWidget->kBAvail()));
+        return;
+    }
 
     QString   newDirName;
     IconItem* firstItem = d->view->firstItem();
@@ -1687,6 +1717,11 @@ void CameraUI::slotNewSelection(bool hasSelection)
         d->deleteSelectedAction->setEnabled(hasSelection);
         d->imageViewAction->setEnabled(hasSelection);
     }
+
+    unsigned long fSize = 0;
+    unsigned long dSize = 0;
+    d->view->itemsSelectionSizeInfo(fSize, dSize);
+    d->freeSpaceWidget->setEstimatedDSizeKb(dSize);
 }
 
 void CameraUI::slotItemsSelected(CameraIconViewItem* item, bool selected)

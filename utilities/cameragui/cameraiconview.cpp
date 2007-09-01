@@ -721,4 +721,43 @@ int CameraIconView::itemsDownloaded()
     return downloaded;
 }
 
+void CameraIconView::itemsSelectionSizeInfo(unsigned long& fSize, unsigned long& dSize)
+{
+    fSize = 0;  // Files size
+    dSize = 0;  // Estimated space requires to download and process files.
+    for (IconItem* item = firstItem(); item; item = item->nextItem())
+    {
+        if (item->isSelected())
+        {
+            CameraIconViewItem* iconItem = static_cast<CameraIconViewItem*>(item);
+            fSize += iconItem->itemInfo()->size;
+            
+            if (iconItem->itemInfo()->mime == QString("image/jpeg"))
+            {
+                if (d->cameraUI->convertLosslessJpegFiles())
+                {
+                    // Estimated size is aroud 5 x original size when JPEG=>PNG.
+                    dSize += iconItem->itemInfo()->size*5;
+                }
+                else if (d->cameraUI->autoRotateJpegFiles())
+                {
+                    // We need a double size to perform rotation.
+                    dSize += iconItem->itemInfo()->size*2;
+                }
+                else
+                {
+                    // Real file size is added.
+                    dSize += iconItem->itemInfo()->size;
+                }
+            }
+            else
+                dSize += iconItem->itemInfo()->size;
+
+        }
+    }
+    
+    fSize /= 1024;
+    dSize /= 1024;
+}
+
 }  // namespace Digikam

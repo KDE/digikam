@@ -30,10 +30,6 @@
 #include <QColor>
 #include <QTimer>
 
-// KDE includes.
-
-#include <ktoolbar.h>
-
 // Local includes.
 
 #include "animwidget.h"

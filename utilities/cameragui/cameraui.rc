@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="8" name="cameraui" >
+<gui version="9" name="cameraui" >
 
 <MenuBar>
 
@@ -67,7 +67,8 @@
      <Action name="cameraui_imageupload" />
      <Action name="cameraui_imagelock" />
      <Merge />
-     <WeakSeparator/>
+     <WeakSeparator/>     
+     <Action name="freespace_action" />        
      <Action name="logo_action" />	      
      <Action name="anim_action" />        
 </ToolBar>

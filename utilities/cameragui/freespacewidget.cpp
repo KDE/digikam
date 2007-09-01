@@ -194,12 +194,15 @@ void FreeSpaceWidget::paintEvent(QPaintEvent*)
 
 void FreeSpaceWidget::slotTimeout()
 {
-    KMountPoint::Ptr mp = KMountPoint::currentMountPoints().
-                          findByPath(AlbumSettings::componentData()->getAlbumLibraryPath());
-    KDiskFreeSpace *job   = new KDiskFreeSpace;
-    connect(job, SIGNAL(foundMountPoint(QString, quint64, quint64, quint64)),
-            this, SLOT(slotAvailableFreeSpace(QString, quint64, quint64, quint64)));
-    job->readDF(mp->mountPoint());
+    QString path        = AlbumSettings::componentData()->getAlbumLibraryPath();
+    KMountPoint::Ptr mp = KMountPoint::currentMountPoints().findByPath(path);
+    if (mp)
+    {
+        KDiskFreeSpace *job = new KDiskFreeSpace;
+        connect(job, SIGNAL(foundMountPoint(QString, quint64, quint64, quint64)),
+                this, SLOT(slotAvailableFreeSpace(QString, quint64, quint64, quint64)));
+        job->readDF(mp->mountPoint());
+    }
 }
 
 void FreeSpaceWidget::slotAvailableFreeSpace(QString mountPoint, quint64 kBSize, 

@@ -88,6 +88,8 @@ public:
 
     QString defaultDownloadName(CameraIconViewItem *item);
 
+    void itemsSelectionSizeInfo(unsigned long& fSize, unsigned long& dSize);
+
 signals:
 
     void signalSelected(CameraIconViewItem*, bool);
