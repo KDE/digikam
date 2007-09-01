@@ -65,6 +65,7 @@
 #include <solid/storageaccess.h>
 #include <solid/storagedrive.h>
 #include <solid/storagevolume.h>
+#include <solid/camera.h>
 #include <solid/predicate.h>
 
 // libKipi includes.
@@ -463,11 +464,14 @@ void DigikamApp::setupActions()
     d->cameraMenuAction->setDelayed(false);
     actionCollection()->addAction("camera_menu", d->cameraMenuAction);
 
-    d->cameraActionGroup = new QActionGroup(this);
-    connect(d->cameraActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(slotOpenCameraUi(QAction*)));
+    d->solidCameraActionGroup = new QActionGroup(this);
+    connect(d->solidCameraActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(slotOpenSolidCamera(QAction*)));
 
-    d->solidActionGroup = new QActionGroup(this);
-    connect(d->solidActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(slotSolidSetupDevice(QAction*)));
+    d->solidUsmActionGroup = new QActionGroup(this);
+    connect(d->solidUsmActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(slotOpenSolidUsmDevice(QAction*)));
+
+    d->manualCameraActionGroup = new QActionGroup(this);
+    connect(d->manualCameraActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(slotOpenManualCamera(QAction*)));
 
     // -----------------------------------------------------------------
 
@@ -1238,32 +1242,34 @@ void DigikamApp::loadCameras()
     d->cameraMenuAction->menu()->addMenu(d->manuallyAddedCamerasMenu);
     d->manuallyAddedCamerasMenu->menuAction()->setText(i18n("Cameras Added Manually"));
 
-    // fill manually added cameras
-    d->cameraList->load();
-
     KAction *cameraAction = new KAction(i18n("Add Camera..."), this);
     connect(cameraAction, SIGNAL(triggered()), this, SLOT(slotSetupCamera()));
     actionCollection()->addAction("camera_add", cameraAction);
-    d->manuallyAddedCamerasMenu->addSeparator();
+    d->addCameraSeparatorAction = d->manuallyAddedCamerasMenu->addSeparator();
     d->manuallyAddedCamerasMenu->addAction(cameraAction);
 
-    slotFillSolidMenus();
+    // fill manually added cameras
+    d->cameraList->load();
 
-    connect(Solid::DeviceNotifier::instance(), SIGNAL(deviceAdded(QString)),
-            this, SLOT(slotFillSolidMenus()));
-    connect(Solid::DeviceNotifier::instance(), SIGNAL(deviceRemoved(QString)),
-            this, SLOT(slotFillSolidMenus()));
+    // scan Solid devices
+    fillSolidMenus();
+
+    connect(Solid::DeviceNotifier::instance(), SIGNAL(deviceAdded(const QString &)),
+            this, SLOT(slotSolidDeviceChanged(const QString &)));
+    connect(Solid::DeviceNotifier::instance(), SIGNAL(deviceRemoved(const QString &)),
+            this, SLOT(slotSolidDeviceChanged(const QString &)));
 }
 
 void DigikamApp::slotCameraAdded(CameraType *ctype)
 {
     if (!ctype) return;
 
-    KAction *cAction = new KAction(KIcon("camera-photo"), ctype->title(), d->cameraActionGroup);
+    KAction *cAction = new KAction(KIcon("camera-photo"), ctype->title(), d->manualCameraActionGroup);
     cAction->setData(ctype->title());
     actionCollection()->addAction(ctype->title().toUtf8(), cAction);
 
-    d->manuallyAddedCamerasMenu->addAction(cAction);
+    // insert before separator
+    d->manuallyAddedCamerasMenu->insertAction(d->addCameraSeparatorAction, cAction);
     ctype->setAction(cAction);
 }
 
@@ -1295,7 +1301,26 @@ void DigikamApp::slotCameraAutoDetect()
     }
 }
 
-void DigikamApp::slotOpenCameraUi(QAction *action)
+void DigikamApp::slotOpenCameraUiFromPath()
+{
+    if (d->cameraGuiPath.isNull())
+        return;
+
+    // the CameraUI will delete itself when it has finished
+    CameraUI* cgui = new CameraUI(this,
+                                  i18n("Images found in %1", d->cameraGuiPath),
+                                  "directory browse", "Fixed", d->cameraGuiPath,
+                                  QDateTime::currentDateTime());
+    cgui->show();
+
+    connect(cgui, SIGNAL(signalLastDestination(const KUrl&)),
+            d->view, SLOT(slotSelectAlbum(const KUrl&)));
+
+    connect(cgui, SIGNAL(signalAlbumSettingsChanged()),
+            this, SLOT(slotSetupChanged()));
+}
+
+void DigikamApp::slotOpenManualCamera(QAction *action)
 {
     CameraType* ctype = d->cameraList->find(action->data().toString());
 
@@ -1328,29 +1353,82 @@ void DigikamApp::slotOpenCameraUi(QAction *action)
     }
 }
 
-void DigikamApp::slotOpenCameraUiFromPath()
+void DigikamApp::slotOpenSolidCamera(QAction *action)
 {
-    if (d->cameraGuiPath.isNull())
-        return;
+    QString udi = action->data().toString();
 
-    // the CameraUI will delete itself when it has finished
-    CameraUI* cgui = new CameraUI(this,
-                                  i18n("Images found in %1", d->cameraGuiPath),
-                                  "directory browse", "Fixed", d->cameraGuiPath,
-                                  QDateTime::currentDateTime());
-    cgui->show();
+    // if there is already an open CameraUI for the device, show and raise it, and be done
+    if (d->cameraUIMap.contains(udi))
+    {
+        CameraUI *ui = d->cameraUIMap.value(udi);
+        if (ui && !ui->isClosed())
+        {
+            if (ui->isMinimized())
+                KWindowSystem::unminimizeWindow(ui->winId());
+            KWindowSystem::activateWindow(ui->winId());
+            return;
+        }
+    }
 
-    connect(cgui, SIGNAL(signalLastDestination(const KUrl&)),
-            d->view, SLOT(slotSelectAlbum(const KUrl&)));
+    // recreate device from unambiguous UDI
+    Solid::Device device(udi);
 
-    connect(cgui, SIGNAL(signalAlbumSettingsChanged()),
-            this, SLOT(slotSetupChanged()));
+    if( device.isValid() )
+    {
+        Solid::Camera *camera = device.as<Solid::Camera>();
+        QList<QVariant> list = camera->driverHandle("gphoto").toList();
+        // all sanity checks have already been done when creating the action
+        if (list.size() < 3)
+            return;
+
+        int vendorId = list[1].toInt();
+        int productId = list[2].toInt();
+
+        QString model, port;
+        if (CameraList::findConnectedCamera(vendorId, productId, model, port))
+        {
+            DDebug() << "Found camera from ids " << vendorId << " " << productId << " camera is: " << model << " at " << port << endl;
+            // the CameraUI will delete itself when it has finished
+            CameraUI* cgui = new CameraUI(this, action->text(), model,
+                                          port, "/", QDateTime());
+
+            d->cameraUIMap[udi] = cgui;
+
+            cgui->show();
+
+            connect(cgui, SIGNAL(signalLastDestination(const KUrl&)),
+                    d->view, SLOT(slotSelectAlbum(const KUrl&)));
+
+            connect(cgui, SIGNAL(signalAlbumSettingsChanged()),
+                    this, SLOT(slotSetupChanged()));
+        }
+        else
+        {
+            DError() << "Failed to detect camera with GPhoto2 from Solid information" << endl;
+        }
+    }
 }
 
-void DigikamApp::slotSolidSetupDevice(QAction *action)
+void DigikamApp::slotOpenSolidUsmDevice(QAction *action)
 {
-    Solid::Device device(action->data().toString());
-    // only one device because the UDI is unambiguous
+    QString udi = action->data().toString();
+
+    // if there is already an open CameraUI for the device, show and raise it
+    if (d->cameraUIMap.contains(udi))
+    {
+        CameraUI *ui = d->cameraUIMap.value(udi);
+        if (ui && !ui->isClosed())
+        {
+            if (ui->isMinimized())
+                KWindowSystem::unminimizeWindow(ui->winId());
+            KWindowSystem::activateWindow(ui->winId());
+            return;
+        }
+    }
+
+    // recreate device from unambiguous UDI
+    Solid::Device device(udi);
+
     if( device.isValid() )
     {
         Solid::StorageAccess *access = device.as<Solid::StorageAccess>();
@@ -1381,8 +1459,24 @@ void DigikamApp::slotSolidSetupDevice(QAction *action)
             }
         }
 
-        d->cameraGuiPath = access->filePath();
-        QTimer::singleShot(0, this, SLOT(slotOpenCameraUiFromPath()));
+        // Create Camera UI
+
+        QString path = access->filePath();
+
+        // the CameraUI will delete itself when it has finished
+        CameraUI* cgui = new CameraUI(this,
+                                      i18n("Images found in %1", path),
+                                           "directory browse", "Fixed", path,
+                                           QDateTime::currentDateTime());
+        d->cameraUIMap[udi] = cgui;
+
+        cgui->show();
+
+        connect(cgui, SIGNAL(signalLastDestination(const KUrl&)),
+                d->view, SLOT(slotSelectAlbum(const KUrl&)));
+
+        connect(cgui, SIGNAL(signalAlbumSettingsChanged()),
+                this, SLOT(slotSetupChanged()));
     }
 }
 
@@ -1401,10 +1495,70 @@ void DigikamApp::slotSolidSetupDone(Solid::ErrorType errorType, QVariant errorDa
     }
 }
 
-void DigikamApp::slotFillSolidMenus()
+void DigikamApp::slotSolidDeviceChanged(const QString &udi)
 {
+    Solid::Device device(udi);
+
+    if (device.isValid())
+    {
+        if (device.is<Solid::StorageAccess>() || device.is<Solid::Camera>())
+            fillSolidMenus();
+    }
+}
+
+void DigikamApp::fillSolidMenus()
+{
+    d->cameraSolidMenu->clear();
     d->usbMediaMenu->clear();
     d->cardReaderMenu->clear();
+
+    QList<Solid::Device> cameraDevices = Solid::Device::listFromType(Solid::DeviceInterface::Camera);
+
+    foreach(Solid::Device cameraDevice, cameraDevices)
+    {
+        // USM camera: will be handled below
+        if (cameraDevice.is<Solid::StorageAccess>())
+            continue;
+
+        Solid::Camera *camera = cameraDevice.as<Solid::Camera>();
+
+        QStringList drivers = camera->supportedDrivers();
+
+        DDebug() << "fillSolidMenus: Found Camera " << cameraDevice.vendor() + " " + cameraDevice.product() << " protocols " << camera->supportedProtocols() << " drivers " << camera->supportedDrivers("ptp") << endl;
+
+        // We handle gphoto2 cameras in this loop
+        if (! (camera->supportedDrivers().contains("gphoto") || camera->supportedProtocols().contains("ptp")) )
+            continue;
+
+        QVariant driverHandle = camera->driverHandle("gphoto");
+        if (!driverHandle.canConvert(QVariant::List))
+        {
+            DWarning() << "Solid returns unsupported driver handle for gphoto2" << endl;
+            continue;
+        }
+        QList<QVariant> driverHandleList = driverHandle.toList();
+        if (driverHandleList.size() < 3 || driverHandleList[0].toString() != "usb"
+            || !driverHandleList[1].canConvert(QVariant::Int)
+            || !driverHandleList[2].canConvert(QVariant::Int)
+           )
+        {
+            DWarning() << "Solid returns unsupported driver handle for gphoto2" << endl;
+            continue;
+        }
+
+        QString label = cameraDevice.vendor() + " " + cameraDevice.product();
+        QString iconName = cameraDevice.icon();
+        if (iconName.isEmpty())
+            iconName = "camera-photo";
+
+        KAction *action = new KAction(label, d->solidCameraActionGroup);
+
+        action->setIcon(KIcon(iconName));
+        // set data to identify device in action slot slotSolidSetupDevice
+        action->setData(cameraDevice.udi());
+
+        d->cameraSolidMenu->addAction(action);
+    }
 
     QList<Solid::Device> storageDevices = Solid::Device::listFromType(Solid::DeviceInterface::StorageAccess);
 
@@ -1483,43 +1637,52 @@ void DigikamApp::slotFillSolidMenus()
         if (!volumeDevice.isValid())
             continue;
 
+        bool isCamera = accessDevice.is<Solid::Camera>();
+
         Solid::StorageAccess *access = accessDevice.as<Solid::StorageAccess>();
         Solid::StorageVolume *volume = volumeDevice.as<Solid::StorageVolume>();
 
         QString label;
 
-        label += driveType;
-
-        if (!driveDevice.product().isEmpty())
-            label += "\"" + driveDevice.product() + "\" ";
-        else if (!volume->label().isEmpty())
-            label += "\"" + volume->label() + "\" ";
-
-        if (!access->filePath().isEmpty())
-            label += "at " + access->filePath() + " ";
-
-        if (volume->size())
+        if (isCamera)
         {
-            qulonglong size = volume->size();
-            if (size > 1024)
+            label = accessDevice.vendor() + " " + accessDevice.product();
+        }
+        else
+        {
+            label += driveType;
+
+            if (!driveDevice.product().isEmpty())
+                label += "\"" + driveDevice.product() + "\" ";
+            else if (!volume->label().isEmpty())
+                label += "\"" + volume->label() + "\" ";
+
+            if (!access->filePath().isEmpty())
+                label += "at " + access->filePath() + " ";
+
+            if (volume->size())
             {
-                size /= 1024;
+                qulonglong size = volume->size();
                 if (size > 1024)
                 {
                     size /= 1024;
                     if (size > 1024)
                     {
                         size /= 1024;
-                        label += "(" + QString::number(size) + " TB)";
+                        if (size > 1024)
+                        {
+                            size /= 1024;
+                            label += "(" + QString::number(size) + " TB)";
+                        }
+                        else
+                            label += "(" + QString::number(size) + " MB)";
                     }
                     else
-                        label += "(" + QString::number(size) + " MB)";
+                        label += "(" + QString::number(size) + " KB)";
                 }
                 else
-                    label += "(" + QString::number(size) + " KB)";
+                    label += "(" + QString::number(size) + " Bytes)";
             }
-            else
-                label += "(" + QString::number(size) + " Bytes)";
         }
 
         QString iconName;
@@ -1530,30 +1693,50 @@ void DigikamApp::slotFillSolidMenus()
         else if (!volumeDevice.icon().isEmpty())
             iconName = volumeDevice.icon();
 
-        KAction *action = new KAction(label, d->solidActionGroup);
+        KAction *action = new KAction(label, d->solidUsmActionGroup);
         if (!iconName.isEmpty())
             action->setIcon(KIcon(iconName));
 
         // set data to identify device in action slot slotSolidSetupDevice
         action->setData(accessDevice.udi());
 
+        if (isCamera)
+            d->cameraSolidMenu->addAction(action);
         if (isHarddisk)
             d->usbMediaMenu->addAction(action);
         else
             d->cardReaderMenu->addAction(action);
     }
 
+    //TODO: Find best usable solution when no devices are connected: One entry, hide, or disable?
+    /*
+    // Add one entry telling that no device is available
+    if (d->cameraSolidMenu->isEmpty())
+    {
+        QAction *action = d->cameraSolidMenu->addAction(i18n("No Camera Connected"));
+        action->setEnabled(false);
+    }
+    if (d->usbMediaMenu->isEmpty())
+    {
+        QAction *action = d->usbMediaMenu->addAction(i18n("No Storage Devices Found"));
+        action->setEnabled(false);
+    }
+    if (d->cardReaderMenu->isEmpty())
+    {
+        QAction *action = d->cardReaderMenu->addAction(i18n("No Card Readers Available"));
+        action->setEnabled(false);
+    }
+    */
+    /*
+    // hide empty menus
+    d->cameraSolidMenu->menuAction()->setVisible(!d->cameraSolidMenu->isEmpty());
+    d->usbMediaMenu->menuAction()->setVisible(!d->usbMediaMenu->isEmpty());
+    d->cardReaderMenu->menuAction()->setVisible(!d->cardReaderMenu->isEmpty());
+    */
+    // disable empty menus
+    d->cameraSolidMenu->menuAction()->setEnabled(!d->cameraSolidMenu->isEmpty());
     d->usbMediaMenu->menuAction()->setEnabled(!d->usbMediaMenu->isEmpty());
     d->cardReaderMenu->menuAction()->setEnabled(!d->cardReaderMenu->isEmpty());
-
-    QList<Solid::Device> cameraDevices = Solid::Device::listFromType(Solid::DeviceInterface::Camera);
-
-    foreach(Solid::Device cameraDevice, cameraDevices)
-    {
-    }
-
-    d->cameraSolidMenu->menuAction()->setEnabled(!d->cameraSolidMenu->isEmpty());
-
 }
 
 

@@ -27,6 +27,7 @@
 #include <QByteArray>
 #include <QString>
 #include <QMap>
+#include <QPointer>
 #include <QSignalMapper>
 #include <QToolButton>
 #include <QTimer>
@@ -65,6 +66,7 @@ namespace Digikam
 {
 
 class DCOPIface;
+class CameraUI;
 
 class DigikamAppPriv
 {
@@ -129,6 +131,7 @@ public:
         kipiHelpAction                       = 0;
         donateMoneyAction                    = 0;
         cameraMenuAction                     = 0;
+        addCameraSeparatorAction             = 0;
         themeMenuAction                      = 0;
         forwardSignalMapper                  = 0;
         backwardSignalMapper                 = 0;
@@ -148,8 +151,9 @@ public:
         zoomFitToWindowAction                = 0;
         zoomPlusAction                       = 0;
         zoomMinusAction                      = 0;
-        cameraActionGroup                    = 0;
-        solidActionGroup                     = 0;
+        manualCameraActionGroup              = 0;
+        solidCameraActionGroup               = 0;
+        solidUsmActionGroup                  = 0;
         eventLoop                            = 0;
     }
 
@@ -242,11 +246,14 @@ public:
     KAction               *donateMoneyAction;
     KActionMenu           *cameraMenuAction;
     KSelectAction         *themeMenuAction;
+    QAction               *addCameraSeparatorAction;
 
     QSignalMapper         *backwardSignalMapper;
     QSignalMapper         *forwardSignalMapper;
-    QActionGroup          *cameraActionGroup;
-    QActionGroup          *solidActionGroup;
+    QActionGroup          *manualCameraActionGroup;
+    QActionGroup          *solidCameraActionGroup;
+    QActionGroup          *solidUsmActionGroup;
+    QMap<QString, QPointer<CameraUI> > cameraUIMap;
 
     QEventLoop            *eventLoop;
     QString                solidErrorMessage;

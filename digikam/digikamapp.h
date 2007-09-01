@@ -105,6 +105,7 @@ private:
     void loadPlugins();
     void loadCameras();
     void populateThemes();
+    void fillSolidMenus();
 
 private slots:
 
@@ -126,11 +127,12 @@ private slots:
 
     void slotKipiPluginPlug();
 
-    void slotOpenCameraUi(QAction *);
+    void slotOpenSolidCamera(QAction *);
+    void slotOpenManualCamera(QAction *);
+    void slotOpenSolidUsmDevice(QAction *);
     void slotOpenCameraUiFromPath();
-    void slotSolidSetupDevice(QAction *);
     void slotSolidSetupDone(Solid::ErrorType errorType, QVariant errorData);
-    void slotFillSolidMenus();
+    void slotSolidDeviceChanged(const QString &udi);
     void slotCameraAdded(CameraType *ctype);
     void slotCameraRemoved(CameraType *ctype);
     void slotCameraAutoDetect();
