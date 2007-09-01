@@ -50,7 +50,7 @@ public:
     ImagePluginLoader(QObject *parent, SplashScreen *splash=0);
     ~ImagePluginLoader();
 
-    static ImagePluginLoader* componentData();
+    static ImagePluginLoader* instance();
 
     QList<ImagePlugin *> pluginList();
     void loadPluginsFromList(const QStringList& list);
@@ -68,7 +68,7 @@ private:
 
 private:
 
-    static ImagePluginLoader *m_componentData;
+    static ImagePluginLoader *m_instance;
 
     ImagePluginLoaderPrivate *d;
 };

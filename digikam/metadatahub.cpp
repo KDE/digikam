@@ -567,7 +567,7 @@ bool MetadataHub::write(const QString &filePath, WriteMode writeMode, const Meta
     if (write(metadata, writeMode, settings))
     {
         bool success = metadata.applyChanges();
-        ImageAttributesWatch::componentData()->fileMetadataChanged(filePath);
+        ImageAttributesWatch::instance()->fileMetadataChanged(filePath);
         return success;
     }
     return false;

@@ -79,17 +79,17 @@ public:
     QMap<QString, KService::Ptr> pluginServiceMap;
 };
 
-ImagePluginLoader* ImagePluginLoader::m_componentData=0;
+ImagePluginLoader* ImagePluginLoader::m_instance=0;
 
-ImagePluginLoader* ImagePluginLoader::componentData()
+ImagePluginLoader* ImagePluginLoader::instance()
 {
-    return m_componentData;
+    return m_instance;
 }
 
 ImagePluginLoader::ImagePluginLoader(QObject *parent, SplashScreen *splash)
                  : QObject(parent)
 {
-    m_componentData = this;
+    m_instance = this;
     d = new ImagePluginLoaderPrivate;
     d->splash = splash;
 
@@ -123,7 +123,7 @@ ImagePluginLoader::~ImagePluginLoader()
           //  KLibLoader::self()->unloadLibrary(service->library());
     }
     delete d;
-    m_componentData = 0;
+    m_instance = 0;
 }
 
 void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)

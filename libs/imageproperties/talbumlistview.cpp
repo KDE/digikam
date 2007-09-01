@@ -435,7 +435,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
                 }
             }
 
-            //ImageAttributesWatch::componentData().imagesChanged(destAlbum->id());
+            //ImageAttributesWatch::instance().imagesChanged(destAlbum->id());
 
             emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
         }

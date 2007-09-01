@@ -141,7 +141,7 @@ void DigikamImageInfo::setDescription( const QString& description )
             DMetadata metadata(_url.path());
             metadata.setImageComment(description);
             metadata.applyChanges();
-            ImageAttributesWatch::componentData()->fileMetadataChanged(_url);
+            ImageAttributesWatch::instance()->fileMetadataChanged(_url);
         }
     }
 }
@@ -239,7 +239,7 @@ void DigikamImageInfo::addAttributes(const QMap<QString, QVariant>& res)
 
     // To update sidebar content. Some kipi-plugins use this way to refresh sidebar 
     // using an empty QMap(). 
-    ImageAttributesWatch::componentData()->fileMetadataChanged(_url);
+    ImageAttributesWatch::instance()->fileMetadataChanged(_url);
 }
 
 void DigikamImageInfo::clearAttributes()
@@ -606,7 +606,7 @@ void DigikamKipiInterface::refreshImages( const KUrl::List& urls )
 
     // Re-scan metadata from pictures. This way will update Metadata sidebar and database.
     for ( KUrl::List::Iterator it = ulist.begin() ; it != ulist.end() ; ++it )
-        ImageAttributesWatch::componentData()->fileMetadataChanged(*it);
+        ImageAttributesWatch::instance()->fileMetadataChanged(*it);
     
     // Refresh preview.
     albumManager_->refreshItemHandler(urls);

@@ -318,7 +318,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     connect(loader, SIGNAL(signalReloadThumbnails()),
             this, SLOT(slotReloadThumbnails()));
 
-    ImageAttributesWatch *watch = ImageAttributesWatch::componentData();
+    ImageAttributesWatch *watch = ImageAttributesWatch::instance();
 
     connect(watch, SIGNAL(signalImageTagsChanged(qlonglong)),
             this, SLOT(slotImageTagsChanged(qlonglong)));

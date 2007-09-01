@@ -107,7 +107,7 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, QSplitter *s
     connect(d->desceditTab, SIGNAL(signalProgressValue(int)),
             this, SIGNAL(signalProgressValue(int)));
 
-    ImageAttributesWatch *watch = ImageAttributesWatch::componentData();
+    ImageAttributesWatch *watch = ImageAttributesWatch::instance();
 
     connect(watch, SIGNAL(signalFileMetadataChanged(const KUrl &)),
             this, SLOT(slotFileMetadataChanged(const KUrl &)));

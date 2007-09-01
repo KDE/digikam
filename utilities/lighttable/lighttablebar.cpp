@@ -136,7 +136,7 @@ LightTableBar::LightTableBar(QWidget* parent, int orientation, bool exifRotate)
 
     // ----------------------------------------------------------------
 
-    ImageAttributesWatch *watch = ImageAttributesWatch::componentData();
+    ImageAttributesWatch *watch = ImageAttributesWatch::instance();
 
     connect(watch, SIGNAL(signalImageRatingChanged(qlonglong)),
             this, SLOT(slotImageRatingChanged(qlonglong)));

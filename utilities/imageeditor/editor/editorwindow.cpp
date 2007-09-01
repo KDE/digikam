@@ -596,7 +596,7 @@ void EditorWindow::slotEditKeys()
                             KShortcutsEditor::LetterShortcutsAllowed, this);
     dialog.addCollection( actionCollection(), i18n( "General" ) );
 
-    QList<ImagePlugin *> pluginList = ImagePluginLoader::componentData()->pluginList();
+    QList<ImagePlugin *> pluginList = ImagePluginLoader::instance()->pluginList();
 
     foreach (ImagePlugin *plugin, pluginList)
     {

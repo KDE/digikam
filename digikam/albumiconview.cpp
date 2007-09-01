@@ -255,7 +255,7 @@ AlbumIconView::AlbumIconView(QWidget* parent)
 
     // -- ImageAttributesWatch connections ------------------------------
 
-    ImageAttributesWatch *watch = ImageAttributesWatch::componentData();
+    ImageAttributesWatch *watch = ImageAttributesWatch::instance();
 
     connect(watch, SIGNAL(signalImageTagsChanged(qlonglong)),
             this, SLOT(slotImageAttributesChanged(qlonglong)));
@@ -1616,7 +1616,7 @@ void AlbumIconView::slotSetExifOrientation( int orientation )
         }
         else
         {
-            ImageAttributesWatch::componentData()->fileMetadataChanged((*it));
+            ImageAttributesWatch::instance()->fileMetadataChanged((*it));
         }
 
         emit signalProgressValue((int)((i++/cnt)*100.0));

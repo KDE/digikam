@@ -183,7 +183,7 @@ ImageWindow::ImageWindow()
 
     // Load image plugins to GUI
 
-    m_imagePluginLoader = ImagePluginLoader::componentData();
+    m_imagePluginLoader = ImagePluginLoader::instance();
     loadImagePlugins();
 
     // Create context menu.
@@ -266,7 +266,7 @@ void ImageWindow::setupConnections()
     connect(this, SIGNAL(signalNoCurrentItem()),
             d->rightSidebar, SLOT(slotNoCurrentItem()));
 
-    ImageAttributesWatch *watch = ImageAttributesWatch::componentData();
+    ImageAttributesWatch *watch = ImageAttributesWatch::instance();
 
     connect(watch, SIGNAL(signalFileMetadataChanged(const KUrl &)),
             this, SLOT(slotFileMetadataChanged(const KUrl &)));
