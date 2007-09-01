@@ -140,7 +140,7 @@ public:
 
 K_GLOBAL_STATIC(AlbumSettings, settings);
 
-AlbumSettings* AlbumSettings::componentData()
+AlbumSettings* AlbumSettings::instance()
 {
     return settings;
 }

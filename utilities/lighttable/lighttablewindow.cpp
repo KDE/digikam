@@ -197,7 +197,7 @@ void LightTableWindow::setupUserArea()
     QVBoxLayout *vlay = new QVBoxLayout(centralW);
     d->vSplitter      = new QSplitter(Qt::Vertical, centralW);
     d->barView        = new LightTableBar(d->vSplitter, Qt::Horizontal, 
-                                          AlbumSettings::componentData()->getExifRotate());
+                                          AlbumSettings::instance()->getExifRotate());
     d->previewView    = new LightTableView(d->vSplitter);
 
     d->rightSidebar   = new ImagePropertiesSideBarDB(mainW, d->hSplitter, Sidebar::DockRight, true);
@@ -544,7 +544,7 @@ void LightTableWindow::loadImageInfos(const ImageInfoList &list, const ImageInfo
     if (imageInfoCurrent.isNull())
         imageInfoCurrent = l.first();
 
-    AlbumSettings *settings = AlbumSettings::componentData();
+    AlbumSettings *settings = AlbumSettings::instance();
 
     if (!settings) return;
 
@@ -1011,7 +1011,7 @@ void LightTableWindow::slideShow(bool startWithCurrent, SlideShowSettings& setti
 
     if (!d->cancelSlideShow)
     {
-        settings.exifRotate = AlbumSettings::componentData()->getExifRotate();
+        settings.exifRotate = AlbumSettings::instance()->getExifRotate();
 
         SlideShow *slide = new SlideShow(settings);
         if (startWithCurrent)

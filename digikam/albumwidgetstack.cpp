@@ -145,7 +145,7 @@ void AlbumWidgetStack::setPreviewItem(const ImageInfo & info, const ImageInfo &p
     }
     else
     {
-        AlbumSettings *settings      = AlbumSettings::componentData();
+        AlbumSettings *settings      = AlbumSettings::instance();
         QString currentFileExtension = QFileInfo(info.fileUrl().path()).suffix();
         QString mediaplayerfilter    = settings->getMovieFileFilter().toLower() +
                                        settings->getMovieFileFilter().toUpper() +

@@ -62,7 +62,7 @@ class AlbumThumbnailLoaderPrivate
 public:
     AlbumThumbnailLoaderPrivate()
     {
-        iconSize             = AlbumSettings::componentData()->getDefaultTreeIconSize();
+        iconSize             = AlbumSettings::instance()->getDefaultTreeIconSize();
         minBlendSize         = 20;
         iconAlbumThumbThread = 0;
         iconTagThumbThread   = 0;
@@ -264,7 +264,7 @@ void AlbumThumbnailLoader::addUrl(Album *album, const KUrl &url)
                 d->iconTagThumbThread = new ThumbnailLoadThread();
                 d->iconTagThumbThread->setThumbnailSize(d->iconSize);
                 d->iconTagThumbThread->setSendSurrogatePixmap(false);
-                d->iconTagThumbThread->setExifRotate(AlbumSettings::componentData()->getExifRotate());
+                d->iconTagThumbThread->setExifRotate(AlbumSettings::instance()->getExifRotate());
                 connect(d->iconTagThumbThread,
                         SIGNAL(signalThumbnailLoaded(const LoadingDescription &, const QPixmap&)),
                         SLOT(slotGotThumbnailFromIcon(const LoadingDescription &, const QPixmap&)),
@@ -281,7 +281,7 @@ void AlbumThumbnailLoader::addUrl(Album *album, const KUrl &url)
                 d->iconAlbumThumbThread = new ThumbnailLoadThread();
                 d->iconAlbumThumbThread->setThumbnailSize(d->iconSize);
                 d->iconAlbumThumbThread->setSendSurrogatePixmap(false);
-                d->iconAlbumThumbThread->setExifRotate(AlbumSettings::componentData()->getExifRotate());
+                d->iconAlbumThumbThread->setExifRotate(AlbumSettings::instance()->getExifRotate());
                 connect(d->iconAlbumThumbThread,
                         SIGNAL(signalThumbnailLoaded(const LoadingDescription &, const QPixmap&)),
                         SLOT(slotGotThumbnailFromIcon(const LoadingDescription &, const QPixmap&)),

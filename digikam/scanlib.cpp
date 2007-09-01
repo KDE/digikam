@@ -75,7 +75,7 @@ ScanLib::ScanLib()
     m_progressDlg->setMaximum(1);
     m_progressDlg->setValue(1);
 
-    m_scanner.setNameFilters(AlbumSettings::componentData()->getAllFileFilter());
+    m_scanner.setNameFilters(AlbumSettings::instance()->getAllFileFilter());
 
     connect(&m_scanner, SIGNAL(totalFilesToScan(int)),
             this, SLOT(slotTotalFilesToScan(int)));

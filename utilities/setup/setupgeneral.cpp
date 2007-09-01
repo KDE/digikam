@@ -228,7 +228,7 @@ SetupGeneral::~SetupGeneral()
 
 void SetupGeneral::applySettings()
 {
-    AlbumSettings* settings = AlbumSettings::componentData();
+    AlbumSettings* settings = AlbumSettings::instance();
     if (!settings) return;
 
     settings->setAlbumLibraryPath(d->albumPathEdit->url().path());
@@ -252,7 +252,7 @@ void SetupGeneral::applySettings()
 
 void SetupGeneral::readSettings()
 {
-    AlbumSettings* settings = AlbumSettings::componentData();
+    AlbumSettings* settings = AlbumSettings::instance();
 
     if (!settings) return;
 

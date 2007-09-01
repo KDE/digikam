@@ -238,7 +238,7 @@ SetupMime::~SetupMime()
 
 void SetupMime::applySettings()
 {
-    AlbumSettings* settings = AlbumSettings::componentData();
+    AlbumSettings* settings = AlbumSettings::instance();
 
     if (!settings) return;
 
@@ -252,7 +252,7 @@ void SetupMime::applySettings()
 
 void SetupMime::readSettings()
 {
-    AlbumSettings* settings = AlbumSettings::componentData();
+    AlbumSettings* settings = AlbumSettings::instance();
 
     if (!settings) return;
 
@@ -264,22 +264,22 @@ void SetupMime::readSettings()
 
 void SetupMime::slotRevertImageFileFilter()
 {
-    d->imageFileFilterEdit->setText(AlbumSettings::componentData()->getDefaultImageFileFilter());
+    d->imageFileFilterEdit->setText(AlbumSettings::instance()->getDefaultImageFileFilter());
 }
 
 void SetupMime::slotRevertMovieFileFilter()
 {
-    d->movieFileFilterEdit->setText(AlbumSettings::componentData()->getDefaultMovieFileFilter());
+    d->movieFileFilterEdit->setText(AlbumSettings::instance()->getDefaultMovieFileFilter());
 }
 
 void SetupMime::slotRevertAudioFileFilter()
 {
-    d->audioFileFilterEdit->setText(AlbumSettings::componentData()->getDefaultAudioFileFilter());
+    d->audioFileFilterEdit->setText(AlbumSettings::instance()->getDefaultAudioFileFilter());
 }
 
 void SetupMime::slotRevertRawFileFilter()
 {
-    d->rawFileFilterEdit->setText(AlbumSettings::componentData()->getDefaultRawFileFilter());
+    d->rawFileFilterEdit->setText(AlbumSettings::instance()->getDefaultRawFileFilter());
 }
 
 }  // namespace Digikam

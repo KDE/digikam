@@ -52,7 +52,7 @@ public:
     {
         job         = 0;
 
-        AlbumSettings *settings = AlbumSettings::componentData();
+        AlbumSettings *settings = AlbumSettings::instance();
         imagefilter = settings->getImageFileFilter().toLower() +
                       settings->getImageFileFilter().toUpper() +
                       settings->getRawFileFilter().toLower()   +

@@ -376,7 +376,7 @@ void ImageDescEditTab::slotChangingItems()
     if (d->currInfos.isEmpty())
         return;
 
-    if (!AlbumSettings::componentData()->getApplySidebarChangesDirectly())
+    if (!AlbumSettings::instance()->getApplySidebarChangesDirectly())
     {
         KDialog *dialog = new KDialog(this);
 
@@ -448,7 +448,7 @@ void ImageDescEditTab::slotChangingItems()
                           &alwaysApply, KMessageBox::Notify);
 
         if (alwaysApply)
-            AlbumSettings::componentData()->setApplySidebarChangesDirectly(true);
+            AlbumSettings::instance()->setApplySidebarChangesDirectly(true);
 
         if (returnCode == KDialog::User1)
             return;

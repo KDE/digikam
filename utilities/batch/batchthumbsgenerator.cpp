@@ -135,8 +135,8 @@ void BatchThumbsGenerator::rebuildAllThumbs(int size)
 {
     QStringList allPicturesPath;
     QString thumbCacheDir = QDir::homePath() + "/.thumbnails/";
-    QString filesFilter   = AlbumSettings::componentData()->getAllFileFilter();
-    bool exifRotate       = AlbumSettings::componentData()->getExifRotate();
+    QString filesFilter   = AlbumSettings::instance()->getAllFileFilter();
+    bool exifRotate       = AlbumSettings::instance()->getExifRotate();
     AlbumList palbumList  = AlbumManager::componentData()->allPAlbums();
 
     // Get all digiKam albums collection pictures path.

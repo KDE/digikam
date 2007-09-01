@@ -124,7 +124,7 @@ SetupCollections::~SetupCollections()
 
 void SetupCollections::applySettings()
 {
-    AlbumSettings* settings = AlbumSettings::componentData();
+    AlbumSettings* settings = AlbumSettings::instance();
 
     if (!settings) return;
 
@@ -142,7 +142,7 @@ void SetupCollections::applySettings()
 
 void SetupCollections::readSettings()
 {
-    AlbumSettings* settings = AlbumSettings::componentData();
+    AlbumSettings* settings = AlbumSettings::instance();
     if (!settings) return;
 
     d->albumCollectionBox->insertItems(0, settings->getAlbumCollectionNames());

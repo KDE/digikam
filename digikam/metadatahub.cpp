@@ -649,8 +649,8 @@ bool MetadataHub::needWriteMetadata(WriteMode writeMode, const MetadataWriteSett
 
 MetadataWriteSettings MetadataHub::defaultWriteSettings()
 {
-    if (AlbumSettings::componentData())
-        return MetadataWriteSettings(AlbumSettings::componentData());
+    if (AlbumSettings::instance())
+        return MetadataWriteSettings(AlbumSettings::instance());
     else
         // is this check necessary?
         return MetadataWriteSettings();

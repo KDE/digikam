@@ -468,7 +468,7 @@ void DigikamView::slotAllAlbumsLoaded()
 
 void DigikamView::slotSortAlbums(int order)
 {
-    AlbumSettings* settings = AlbumSettings::componentData();
+    AlbumSettings* settings = AlbumSettings::instance();
     if (!settings) return;
     settings->setAlbumSortOrder( (AlbumSettings::AlbumSortOrder) order);
     d->folderView->resort();
@@ -774,7 +774,7 @@ void DigikamView::slotThumbSizeEffect()
     d->iconView->setThumbnailSize(d->thumbSize);
     toogleZoomActions();
 
-    AlbumSettings* settings = AlbumSettings::componentData();
+    AlbumSettings* settings = AlbumSettings::instance();
     if (!settings)
         return;
     settings->setDefaultIconSize(d->thumbSize);
@@ -895,7 +895,7 @@ void DigikamView::slotAlbumSyncPicturesMetadata()
 
 void DigikamView::slotAlbumSyncPicturesMetadataDone()
 {
-    applySettings(AlbumSettings::componentData());
+    applySettings(AlbumSettings::instance());
 }
 
 void DigikamView::slotAlbumImportFolder()
@@ -1075,7 +1075,7 @@ void DigikamView::slotSelectInvert()
 
 void DigikamView::slotSortImages(int order)
 {
-    AlbumSettings* settings = AlbumSettings::componentData();
+    AlbumSettings* settings = AlbumSettings::instance();
     if (!settings)
         return;
     settings->setImageSortOrder((AlbumSettings::ImageSortOrder) order);
@@ -1196,7 +1196,7 @@ void DigikamView::slideShow(ImageInfoList &infoList)
 
     DMetadata         meta;
     SlideShowSettings settings;
-    settings.exifRotate           = AlbumSettings::componentData()->getExifRotate();
+    settings.exifRotate           = AlbumSettings::instance()->getExifRotate();
     settings.delay                = group.readEntry("SlideShowDelay", 5) * 1000;
     settings.printName            = group.readEntry("SlideShowPrintName", true);
     settings.printDate            = group.readEntry("SlideShowPrintDate", false);

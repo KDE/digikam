@@ -395,7 +395,7 @@ void ImageWindow::applySettings()
 
     m_canvas->setBackgroundColor(m_bgColor);
 
-    AlbumSettings *settings = AlbumSettings::componentData();
+    AlbumSettings *settings = AlbumSettings::instance();
     m_canvas->setExifOrient(settings->getExifRotate());
     m_setExifOrientationTag = settings->getExifSetOrientation();
 }
@@ -1083,7 +1083,7 @@ void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
 
     if (!m_cancelSlideShow)
     {
-        settings.exifRotate = AlbumSettings::componentData()->getExifRotate();
+        settings.exifRotate = AlbumSettings::instance()->getExifRotate();
         settings.fileList   = d->urlList;
     
         SlideShow *slide = new SlideShow(settings);

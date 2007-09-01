@@ -213,7 +213,7 @@ void SetupMetadata::processExiv2Url(const QString& url)
 
 void SetupMetadata::applySettings()
 {
-    AlbumSettings* settings = AlbumSettings::componentData();
+    AlbumSettings* settings = AlbumSettings::instance();
     if (!settings) return;
 
     settings->setExifRotate(d->ExifRotateBox->isChecked());
@@ -230,7 +230,7 @@ void SetupMetadata::applySettings()
 
 void SetupMetadata::readSettings()
 {
-    AlbumSettings* settings = AlbumSettings::componentData();
+    AlbumSettings* settings = AlbumSettings::instance();
     if (!settings) return;
 
     d->ExifAutoRotateOrg = settings->getExifRotate();

@@ -943,7 +943,7 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item)
 {
     if (!item) return;
 
-    AlbumSettings *settings = AlbumSettings::componentData();
+    AlbumSettings *settings = AlbumSettings::instance();
 
     if (!settings) return;
 

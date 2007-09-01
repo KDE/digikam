@@ -264,7 +264,7 @@ QPixmap ThumbnailLoadThread::surrogatePixmap(const LoadingDescription &descripti
     No dependency on AlbumSettings here please...
     QString ext = QFileInfo(url.path()).suffix();
 
-    AlbumSettings* settings = AlbumSettings::componentData();
+    AlbumSettings* settings = AlbumSettings::instance();
     if (settings)
     {
         if (settings->getImageFileFilter().toUpper().contains(ext.toUpper()) ||

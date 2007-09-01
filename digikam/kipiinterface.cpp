@@ -134,7 +134,7 @@ void DigikamImageInfo::setDescription( const QString& description )
             access.db()->setItemCaption(imageId, description);
         }
 
-        AlbumSettings *settings = AlbumSettings::componentData();
+        AlbumSettings *settings = AlbumSettings::instance();
         if (settings->getSaveComments())
         {
             // Store comments in image as JFIF comments, Exif comments, and Iptc Comments.
@@ -249,7 +249,7 @@ void DigikamImageInfo::clearAttributes()
 
 int DigikamImageInfo::angle()
 {
-    AlbumSettings *settings = AlbumSettings::componentData();
+    AlbumSettings *settings = AlbumSettings::instance();
     if (settings->getExifRotate())
     {
         DMetadata metadata(_url.path());
@@ -403,7 +403,7 @@ KUrl::List DigikamImageCollection::imagesFromPAlbum(PAlbum* album) const
     // get the images from the database and return the items found
 
     AlbumDB::ItemSortOrder sortOrder = AlbumDB::NoItemSorting;
-    switch (AlbumSettings::componentData()->getImageSortOrder())
+    switch (AlbumSettings::instance()->getImageSortOrder())
     {
         default:
         case AlbumSettings::ByIName:
@@ -685,7 +685,7 @@ QString DigikamKipiInterface::fileExtensions()
     // do not save this into a local variable, as this
     // might change in the main app
 
-    AlbumSettings* s = AlbumSettings::componentData();
+    AlbumSettings* s = AlbumSettings::instance();
     return (s->getImageFileFilter() + ' ' +
             s->getMovieFileFilter() + ' ' +
             s->getAudioFileFilter() + ' ' +

@@ -252,7 +252,7 @@ public:
     void setPreviewLoadFullImageSize(bool val);
     bool getPreviewLoadFullImageSize() const;
 
-    static AlbumSettings *componentData();
+    static AlbumSettings *instance();
 
 private:
 

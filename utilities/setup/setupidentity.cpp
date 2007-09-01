@@ -168,7 +168,7 @@ SetupIdentity::~SetupIdentity()
 
 void SetupIdentity::applySettings()
 {
-    AlbumSettings* settings = AlbumSettings::componentData();
+    AlbumSettings* settings = AlbumSettings::instance();
     if (!settings) return;
 
     settings->setIptcAuthor(d->authorEdit->text());
@@ -181,7 +181,7 @@ void SetupIdentity::applySettings()
 
 void SetupIdentity::readSettings()
 {
-    AlbumSettings* settings = AlbumSettings::componentData();
+    AlbumSettings* settings = AlbumSettings::instance();
     if (!settings) return;
 
     d->authorEdit->setText(settings->getIptcAuthor());

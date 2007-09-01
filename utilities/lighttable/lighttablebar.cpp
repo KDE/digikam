@@ -432,7 +432,7 @@ LightTableBarItem* LightTableBar::findItemByPos(const QPoint& pos) const
 
 void LightTableBar::readToolTipSettings()
 {
-    AlbumSettings* albumSettings = AlbumSettings::componentData();
+    AlbumSettings* albumSettings = AlbumSettings::instance();
     if (!albumSettings) return;
 
     Digikam::ThumbBarToolTipSettings settings;
@@ -828,7 +828,7 @@ LightTableBarToolTip::LightTableBarToolTip(ThumbBarView* parent)
 QString LightTableBarToolTip::tipContentExtraData(ThumbBarItem* item)
 {
     QString tip, str;
-    AlbumSettings* settings = AlbumSettings::componentData();
+    AlbumSettings* settings = AlbumSettings::instance();
     ImageInfo info          = static_cast<LightTableBarItem *>(item)->info();
 
     if (settings)

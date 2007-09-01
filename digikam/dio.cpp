@@ -204,7 +204,7 @@ KIO::CopyJob *rename(const KUrl& src, const KUrl& dest)
 KIO::Job* scan(const KUrl& albumURL)
 {
     KIO::Job* job = Digikam::ImageLister::startScanJob(albumURL,
-                                                       Digikam::AlbumSettings::componentData()->getAllFileFilter(),
+                                                       Digikam::AlbumSettings::instance()->getAllFileFilter(),
                                                        1);        // scan
     new Watch(job);
 

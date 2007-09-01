@@ -129,7 +129,7 @@ void AlbumFileTip::setIconItem(AlbumIconItem* iconItem)
     d->iconItem = iconItem;
 
     if (!d->iconItem || 
-        !AlbumSettings::componentData()->showToolTipsIsValid())
+        !AlbumSettings::instance()->showToolTipsIsValid())
     {
         hide();
     }
@@ -328,7 +328,7 @@ void AlbumFileTip::updateText()
 
     tip = "<table cellspacing=\"0\" cellpadding=\"0\" width=\"250\" border=\"0\">";
 
-    AlbumSettings* settings = AlbumSettings::componentData();
+    AlbumSettings* settings = AlbumSettings::instance();
     const ImageInfo info   = d->iconItem->imageInfo();
     KUrl fileUrl(info.fileUrl());
     QFileInfo fileInfo(fileUrl.path());

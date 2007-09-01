@@ -52,7 +52,7 @@ SearchResultsView::SearchResultsView(QWidget* parent)
     m_listJob  = 0;
     m_thumbJob = 0;
 
-    m_filter   = AlbumSettings::componentData()->getAllFileFilter();
+    m_filter   = AlbumSettings::instance()->getAllFileFilter();
 
     setAutoArrange(true);
     setResizeMode(Q3IconView::Adjust);

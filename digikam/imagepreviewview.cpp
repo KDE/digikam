@@ -241,9 +241,9 @@ void ImagePreviewView::setImagePath(const QString& path)
     }
 
     if (d->loadFullImageSize)
-        d->previewThread->loadHighQuality(LoadingDescription(path, 0, AlbumSettings::componentData()->getExifRotate()));
+        d->previewThread->loadHighQuality(LoadingDescription(path, 0, AlbumSettings::instance()->getExifRotate()));
     else
-        d->previewThread->load(LoadingDescription(path, d->previewSize, AlbumSettings::componentData()->getExifRotate()));
+        d->previewThread->load(LoadingDescription(path, d->previewSize, AlbumSettings::instance()->getExifRotate()));
 }
 
 void ImagePreviewView::slotGotImagePreview(const LoadingDescription &description, const DImg& preview)
@@ -272,7 +272,7 @@ void ImagePreviewView::slotGotImagePreview(const LoadingDescription &description
     else
     {
         DImg img(preview);
-        if (AlbumSettings::componentData()->getExifRotate())
+        if (AlbumSettings::instance()->getExifRotate())
             d->previewThread->exifRotate(img, description.filePath);
         d->parent->setPreviewMode(AlbumWidgetStack::PreviewImageMode);
         setImage(img);
@@ -301,7 +301,7 @@ void ImagePreviewView::slotNextPreload()
         return;
 
     d->previewPreloadThread->load(LoadingDescription(loadPath, d->previewSize,
-                                  AlbumSettings::componentData()->getExifRotate()));
+                                  AlbumSettings::instance()->getExifRotate()));
 }
 
 void ImagePreviewView::setImageInfo(const ImageInfo & info, const ImageInfo &previous, const ImageInfo &next)

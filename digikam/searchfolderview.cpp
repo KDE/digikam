@@ -283,7 +283,7 @@ void SearchFolderView::slotAlbumAdded(Album* a)
     SAlbum* album = (SAlbum*)a;
 
     SearchFolderItem* item = new SearchFolderItem(this, album);
-    item->setPixmap(0, SmallIcon("find", AlbumSettings::componentData()->getDefaultTreeIconSize()));
+    item->setPixmap(0, SmallIcon("find", AlbumSettings::instance()->getDefaultTreeIconSize()));
     m_lastAddedItem = item;
 }
 

@@ -879,7 +879,7 @@ void CameraUI::finishDialog()
     d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode,
                                           i18n("Scanning for new files, please wait..."));
     CollectionScanner scanner;
-    scanner.setNameFilters(AlbumSettings::componentData()->getAllFileFilter());
+    scanner.setNameFilters(AlbumSettings::instance()->getAllFileFilter());
     for (QStringList::iterator it = d->foldersToScan.begin();
          it != d->foldersToScan.end(); ++it)
     {
@@ -1274,7 +1274,7 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
     downloadSettings.convertJpeg       = convertLosslessJpegFiles();
     downloadSettings.losslessFormat    = losslessFormat();
     
-    AlbumSettings* settings = AlbumSettings::componentData();
+    AlbumSettings* settings = AlbumSettings::instance();
     if (settings)
     {
         downloadSettings.author      = settings->getIptcAuthor();
@@ -1751,7 +1751,7 @@ bool CameraUI::createAutoAlbum(const KUrl& parentURL, const QString& name,
 
 void CameraUI::addFileExtension(const QString& ext)
 {
-    AlbumSettings* settings = AlbumSettings::componentData();
+    AlbumSettings* settings = AlbumSettings::instance();
     if (!settings)
         return;
 
