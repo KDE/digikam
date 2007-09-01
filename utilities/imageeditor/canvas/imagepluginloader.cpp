@@ -139,9 +139,9 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)
 
     if (!pluginIsLoaded(corePlugin->name()) )
     {
-        QString* error = 0;
+        QString error;
 
-        ImagePlugin *plugin = KService::createInstance<ImagePlugin>(corePlugin, this, QVariantList(), error);
+        ImagePlugin *plugin = KService::createInstance<ImagePlugin>(corePlugin, this, QVariantList(), &error);
 
         if (plugin && (dynamic_cast<KXMLGUIClient*>(plugin) != 0))
         {
@@ -172,9 +172,9 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)
             continue;
         else
         {
-            QString *error = 0;
+            QString error;
 
-            plugin = KService::createInstance<ImagePlugin>(service, this, QVariantList(), error);
+            plugin = KService::createInstance<ImagePlugin>(service, this, QVariantList(), &error);
 
             if (plugin && (dynamic_cast<KXMLGUIClient*>(plugin) != 0))
             {
