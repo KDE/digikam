@@ -155,7 +155,7 @@ void FreeSpaceWidget::updatePixmap()
     
     QPainter p(&d->pix);
     p.setPen(palette().foreground().color());
-    p.drawRect(0, 0, d->pix.width(), d->pix.height());
+    p.drawRect(0, 0, d->pix.width()-1, d->pix.height()-1);
 
     if (isValid())
     {
@@ -165,10 +165,10 @@ void FreeSpaceWidget::updatePixmap()
         int pClamp            = peUsed > 100 ? 100 : peUsed;
         p.setBrush(peUsed > 95 ? Qt::red : Qt::darkGreen);
         p.setPen(Qt::white);
-        QRect gRect(1, 1, (int)(((double)d->pix.width()-2.0)*(pClamp/100.0)), d->pix.height()-2);
+        QRect gRect(1, 1, (int)(((double)d->pix.width()-3.0)*(pClamp/100.0)), d->pix.height()-3);
         p.drawRect(gRect);
 
-        QRect tRect(1, 1, d->pix.width()-2, d->pix.height()-2);
+        QRect tRect(1, 1, d->pix.width()-3, d->pix.height()-3);
         QString text = QString("%1%").arg(peUsed);
         p.setPen(palette().text().color());
         QFontMetrics fontMt = p.fontMetrics();
