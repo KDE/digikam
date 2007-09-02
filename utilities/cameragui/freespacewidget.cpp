@@ -29,11 +29,13 @@
 #include <QColor>
 #include <QTimer>
 #include <QFont> 
+#include <QBoxLayout>
 #include <QFontMetrics> 
 
 // KDE includes.
 
 #include <kurl.h>
+#include <ktoolbar.h>
 #include <klocale.h>
 #include <kdiskfreespace.h>
 #include <kmountpoint.h>
@@ -218,6 +220,37 @@ void FreeSpaceWidget::slotAvailableFreeSpace(QString mountPoint, quint64 kBSize,
     d->isValid     = true;
     updatePixmap();
     repaint();
+}
+
+// -----------------------------------------------------------------------------------
+
+FreeSpaceAction::FreeSpaceAction(QObject* parent)
+               : KAction(parent)
+{
+}
+
+QWidget* FreeSpaceAction::createWidget( QWidget * parent )
+{
+    QToolBar *bar = qobject_cast<QToolBar*>(parent);
+    
+    // This action should only be used in a toolbar
+    Q_ASSERT(bar != NULL);
+    
+    QWidget* container  = new QWidget(parent);
+    QHBoxLayout* layout = new QHBoxLayout(container);
+    m_freeSpaceWidget   = new FreeSpaceWidget(bar, 100);
+    
+    layout->setMargin(0);
+    layout->setSpacing(0);
+    layout->addStretch();
+    layout->addWidget(m_freeSpaceWidget);
+    
+    return container;
+}
+
+FreeSpaceWidget* FreeSpaceAction::freeSpaceWidget() const
+{
+    return m_freeSpaceWidget;
 }
 
 }  // namespace Digikam
