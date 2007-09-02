@@ -377,7 +377,7 @@ void ImagePreviewView::slotContextMenu()
 
     // Merge in the KIPI plugins actions ----------------------------
 
-    KIPI::PluginLoader* kipiPluginLoader      = KIPI::PluginLoader::componentData();
+    KIPI::PluginLoader* kipiPluginLoader      = KIPI::PluginLoader::instance();
     KIPI::PluginLoader::PluginList pluginList = kipiPluginLoader->pluginList();
 
     for (KIPI::PluginLoader::PluginList::const_iterator it = pluginList.begin();

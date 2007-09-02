@@ -551,7 +551,7 @@ void LightTableWindow::loadImageInfos(const ImageInfoList &list, const ImageInfo
     QString imagefilter = settings->getImageFileFilter().toLower() +
                           settings->getImageFileFilter().toUpper();
 
-    if (KDcrawIface::DcrawBinary::componentData()->versionIsRight())
+    if (KDcrawIface::DcrawBinary::instance()->versionIsRight())
     {
         // add raw files only if dcraw is available
         imagefilter += settings->getRawFileFilter().toLower() +

@@ -542,7 +542,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 
     // Merge in the KIPI plugins actions ----------------------------
 
-    KIPI::PluginLoader* kipiPluginLoader      = KIPI::PluginLoader::componentData();
+    KIPI::PluginLoader* kipiPluginLoader      = KIPI::PluginLoader::instance();
     KIPI::PluginLoader::PluginList pluginList = kipiPluginLoader->pluginList();
 
     for (KIPI::PluginLoader::PluginList::const_iterator it = pluginList.begin();
@@ -951,7 +951,7 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item)
     QString imagefilter = settings->getImageFileFilter().toLower() +
                           settings->getImageFileFilter().toUpper();
 
-    if (KDcrawIface::DcrawBinary::componentData()->versionIsRight())
+    if (KDcrawIface::DcrawBinary::instance()->versionIsRight())
     {
         // add raw files only if dcraw is available
         imagefilter += settings->getRawFileFilter().toLower() +

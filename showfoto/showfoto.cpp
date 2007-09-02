@@ -193,7 +193,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
     if(d->splash)
         d->splash->message(i18n("Checking dcraw version"), Qt::AlignLeft, Qt::white);
 
-    KDcrawIface::DcrawBinary::componentData()->checkSystem();
+    KDcrawIface::DcrawBinary::instance()->checkSystem();
 
     // -- Build the GUI -----------------------------------
 
@@ -385,7 +385,7 @@ void ShowFoto::show()
 
     // Report errors from dcraw detection.
 
-    KDcrawIface::DcrawBinary::componentData()->checkReport();
+    KDcrawIface::DcrawBinary::instance()->checkReport();
 }
 
 void ShowFoto::setupConnections()
@@ -612,7 +612,7 @@ void ShowFoto::slotOpenFile()
     QString allPictures = patternList[0];
     
     // Add other files format witch are missing to All Pictures" type mime provided by KDE and remplace current.
-    if (KDcrawIface::DcrawBinary::componentData()->versionIsRight())
+    if (KDcrawIface::DcrawBinary::instance()->versionIsRight())
     {
         allPictures.insert(allPictures.indexOf("|"), QString(raw_file_extentions) + QString(" *.JPE *.TIF"));
         patternList.removeAll(patternList[0]);
@@ -622,7 +622,7 @@ void ShowFoto::slotOpenFile()
     // Added RAW file formats supported by dcraw program like a type mime. 
     // Nota: we cannot use here "image/x-raw" type mime from KDE because it uncomplete 
     // or unavailable(dcraw_0)(see file #121242 in B.K.O).
-    if (KDcrawIface::DcrawBinary::componentData()->versionIsRight())
+    if (KDcrawIface::DcrawBinary::instance()->versionIsRight())
     {
         patternList.append(i18n("\n%1|Camera RAW files",QString(raw_file_extentions)));
     }

@@ -172,7 +172,7 @@ DigikamApp::DigikamApp()
     if(d->splashScreen)
         d->splashScreen->message(i18n("Checking dcraw version"), Qt::AlignLeft, Qt::white);
 
-    KDcrawIface::DcrawBinary::componentData()->checkSystem();
+    KDcrawIface::DcrawBinary::instance()->checkSystem();
 
     // Actual file scanning is done in main() - is this necessary here?
     //d->albumManager->setLibraryPath(AlbumSettings::instance()->getAlbumLibraryPath());
@@ -267,7 +267,7 @@ void DigikamApp::show()
 
     // Report errors from dcraw detection.
 
-    KDcrawIface::DcrawBinary::componentData()->checkReport();
+    KDcrawIface::DcrawBinary::instance()->checkReport();
 
     // Init album icon view zoom factor.
     slotThumbSizeChanged(AlbumSettings::instance()->getDefaultIconSize());
