@@ -35,4 +35,5 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 024 ==> 137590 : Be able to modifiy the extension of images in the interface.
 025 ==> 139024 : camera GUI new items selection doesn't work.
 026 ==> 139519 : digiKam silently fails to import when out of disc space.
-027 ==> 
+027 ==> 149469 : excessive trash confirmation dialogs after album is deleted.
+028 ==> 
