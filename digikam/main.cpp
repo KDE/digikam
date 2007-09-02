@@ -272,7 +272,7 @@ int main(int argc, char *argv[])
         return app.exec();
     }
 
-    Digikam::AlbumManager* man = new Digikam::AlbumManager();
+    Digikam::AlbumManager* man = Digikam::AlbumManager::instance();
     man->setAlbumRoot(albumPath, priorityAlbumPath); // TEMPORARY SOLUTION
 
     Digikam::DigikamApp *digikam = new Digikam::DigikamApp();

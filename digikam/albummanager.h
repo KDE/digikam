@@ -85,16 +85,6 @@ class DIGIKAM_EXPORT AlbumManager : public QObject
 public:
 
     /**
-     * Constructor
-     */
-    AlbumManager();
-
-    /**
-     * Destructor
-     */
-    ~AlbumManager();
-
-    /**
      * A convenience function to get the instance of the AlbumManager
      */
     static AlbumManager* instance();
@@ -394,7 +384,10 @@ public:
 
 private:
 
-    static AlbumManager* m_instance;
+    friend class AlbumManagerCreator;
+    AlbumManager();
+    ~AlbumManager();
+
     AlbumManagerPriv*    d;
 
     void insertPAlbum(PAlbum *album);

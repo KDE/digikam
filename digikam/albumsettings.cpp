@@ -138,11 +138,12 @@ public:
     AlbumSettings::ItemRightClickAction itemRightClickAction;
 };
 
-K_GLOBAL_STATIC(AlbumSettings, settings);
+class AlbumSettingsCreator { public: AlbumSettings object; };
+K_GLOBAL_STATIC(AlbumSettingsCreator, creator)
 
 AlbumSettings* AlbumSettings::instance()
 {
-    return settings;
+    return &creator->object;
 }
 
 AlbumSettings::AlbumSettings()
@@ -150,6 +151,7 @@ AlbumSettings::AlbumSettings()
     d = new AlbumSettingsPrivate;
     d->config  = KGlobal::config();
     init();
+    readSettings();
 }
 
 AlbumSettings::~AlbumSettings()

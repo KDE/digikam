@@ -133,10 +133,9 @@ DigikamApp::DigikamApp()
         d->splashScreen->show();
     }
 
-    d->albumSettings = new AlbumSettings();
-    d->albumSettings->readSettings();
-
-    d->albumManager = AlbumManager::instance();
+    // ensure creation
+    AlbumSettings::instance();
+    AlbumManager::instance();
     AlbumLister::instance();
 
     LoadingCacheInterface::initialize();
@@ -176,7 +175,7 @@ DigikamApp::DigikamApp()
     KDcrawIface::DcrawBinary::componentData()->checkSystem();
 
     // Actual file scanning is done in main() - is this necessary here?
-    //d->albumManager->setLibraryPath(d->albumSettings->getAlbumLibraryPath());
+    //d->albumManager->setLibraryPath(AlbumSettings::instance()->getAlbumLibraryPath());
 
     // Read albums from database
     if(d->splashScreen)
@@ -210,10 +209,7 @@ DigikamApp::~DigikamApp()
     if (d->view)
         delete d->view;
 
-    d->albumSettings->saveSettings();
-
-    delete d->albumSettings;
-    delete d->albumManager;
+    AlbumSettings::instance()->saveSettings();
 
     AlbumLister::cleanUp();
     ImageAttributesWatch::cleanUp();
@@ -274,8 +270,8 @@ void DigikamApp::show()
     KDcrawIface::DcrawBinary::componentData()->checkReport();
 
     // Init album icon view zoom factor.
-    slotThumbSizeChanged(d->albumSettings->getDefaultIconSize());
-    slotZoomSliderChanged(d->albumSettings->getDefaultIconSize());
+    slotThumbSizeChanged(AlbumSettings::instance()->getDefaultIconSize());
+    slotZoomSliderChanged(AlbumSettings::instance()->getDefaultIconSize());
 }
 
 const QList<QAction*>& DigikamApp::menuImageActions()
@@ -349,7 +345,7 @@ void DigikamApp::setupView()
 
     d->view = new DigikamView(this);
     setCentralWidget(d->view);
-    d->view->applySettings(d->albumSettings);
+    d->view->applySettings(AlbumSettings::instance());
 
     connect(d->view, SIGNAL(signalAlbumSelected(bool)),
             this, SLOT(slotAlbumSelected(bool)));
@@ -953,8 +949,8 @@ void DigikamApp::setupActions()
     d->imageExifOrientationActionMenu->setEnabled(false);
     d->slideShowSelectionAction->setEnabled(false);
 
-    d->albumSortAction->setCurrentItem((int)d->albumSettings->getAlbumSortOrder());
-    d->imageSortAction->setCurrentItem((int)d->albumSettings->getImageSortOrder());
+    d->albumSortAction->setCurrentItem((int)AlbumSettings::instance()->getAlbumSortOrder());
+    d->imageSortAction->setCurrentItem((int)AlbumSettings::instance()->getImageSortOrder());
 }
 
 void DigikamApp::enableZoomPlusAction(bool val)
@@ -1786,15 +1782,15 @@ void DigikamApp::slotSetupChanged()
     LoadingCacheInterface::cleanCache();
 
     // TODO: clear history when location changed
-    //if(d->albumSettings->getAlbumLibraryPath() != d->albumManager->getLibraryPath())
+    //if(AlbumSettings::instance()->getAlbumLibraryPath() != d->albumManager->getLibraryPath())
       //  d->view->clearHistory();
 
-    d->albumManager->setAlbumRoot(d->albumSettings->getAlbumLibraryPath(), false);// TEMPORARY SOLUTION
+    d->albumManager->setAlbumRoot(AlbumSettings::instance()->getAlbumLibraryPath(), false);// TEMPORARY SOLUTION
     d->albumManager->startScan();
 
-    d->view->applySettings(d->albumSettings);
+    d->view->applySettings(AlbumSettings::instance());
 
-    AlbumThumbnailLoader::instance()->setThumbnailSize(d->albumSettings->getDefaultTreeIconSize());
+    AlbumThumbnailLoader::instance()->setThumbnailSize(AlbumSettings::instance()->getDefaultTreeIconSize());
 
     if (ImageWindow::imagewindowCreated())
         ImageWindow::imagewindow()->applySettings();
@@ -2014,7 +2010,7 @@ void DigikamApp::populateThemes()
     QStringList themes(ThemeEngine::instance()->themeNames());
 
     d->themeMenuAction->setItems(themes);
-    int index = themes.indexOf(d->albumSettings->getCurrentTheme());
+    int index = themes.indexOf(AlbumSettings::instance()->getCurrentTheme());
 
     if (index == -1)
         index = themes.indexOf(i18n("Default"));
@@ -2028,7 +2024,7 @@ void DigikamApp::slotChangeTheme(const QString& theme)
     // Theme menu entry is returned with keyboard accelerator. We remove it.
     QString name = theme;
     name.remove(QChar('&'));
-    d->albumSettings->setCurrentTheme(name);
+    AlbumSettings::instance()->setCurrentTheme(name);
     ThemeEngine::instance()->slotChangeTheme(name);
 }
 
@@ -2056,7 +2052,7 @@ void DigikamApp::slotRebuildAllThumbs()
 
 void DigikamApp::slotRebuildAllThumbsDone()
 {
-    d->view->applySettings(d->albumSettings);
+    d->view->applySettings(AlbumSettings::instance());
 }
 
 void DigikamApp::slotSyncAllPicturesMetadata()
@@ -2076,7 +2072,7 @@ void DigikamApp::slotSyncAllPicturesMetadata()
 
 void DigikamApp::slotSyncAllPicturesMetadataDone()
 {
-    d->view->applySettings(d->albumSettings);
+    d->view->applySettings(AlbumSettings::instance());
 }
 
 void DigikamApp::slotDonateMoney()

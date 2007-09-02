@@ -125,17 +125,16 @@ public:
     Album            *currentAlbum;
 };
 
-AlbumManager* AlbumManager::m_instance = 0;
+class AlbumManagerCreator { public: AlbumManager object; };
+K_GLOBAL_STATIC(AlbumManagerCreator, creator);
 
 AlbumManager* AlbumManager::instance()
 {
-    return m_instance;
+    return &creator->object;
 }
 
 AlbumManager::AlbumManager()
 {
-    m_instance    = this;
-
     d = new AlbumManagerPriv;
 
     d->dateListJob = 0;
@@ -169,8 +168,6 @@ AlbumManager::~AlbumManager()
     delete d->dirWatch;
 
     delete d;
-
-    m_instance = 0;
 }
 
 void AlbumManager::setAlbumRoot(const QString &albumRoot, bool priority)

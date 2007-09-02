@@ -65,9 +65,6 @@ public:
         StartEditor
     };
 
-    AlbumSettings();
-    ~AlbumSettings();
-
     void readSettings();
     void saveSettings();
 
@@ -256,9 +253,11 @@ public:
 
 private:
 
-    void init();
+    friend class AlbumSettingsCreator;
+    AlbumSettings();
+    ~AlbumSettings();
 
-private:
+    void init();
 
     AlbumSettingsPrivate* d;
 };
