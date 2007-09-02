@@ -230,7 +230,7 @@ static char* PredefinedProperties[] = {
                                    /* needed. */
 
             "SAMPLE_BACKING",      /* Identifies the backing material used behind the sample during */
-                                   /* measurement. Allowed values are “black”, “white”, or "na".  */
+                                   /* measurement. Allowed values are ï¿½blackï¿½, ï¿½whiteï¿½, or "na".  */
 
             "CHISQ_DOF"            /* Degrees of freedom associated with the Chi squared statistic */
             };
@@ -840,10 +840,10 @@ LCMSHANDLE cmsxIT8Alloc(void)
 
     /* Initialize predefined properties & data */
     
-    for (i=0; i < NUMPREDEFINEDPROPS; i++)
+    for (i=0; i < (int)NUMPREDEFINEDPROPS; i++)
             AddAvailableProperty(it8, PredefinedProperties[i]);
 
-    for (i=0; i < NUMPREDEFINEDSAMPLEID; i++)
+    for (i=0; i < (int)NUMPREDEFINEDSAMPLEID; i++)
             AddAvailableSampleID(it8, PredefinedSampleID[i]);
 
 
@@ -1533,7 +1533,7 @@ int LocatePatch(LPIT8 it8, const char* cPatch)
 
 
 static
-int LocateEmptyPatch(LPIT8 it8, const char* cPatch)
+int LocateEmptyPatch(LPIT8 it8, const char* /*cPatch*/)
 {
     int i;
     const char *data;
