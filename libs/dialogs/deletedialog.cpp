@@ -188,6 +188,7 @@ DeleteDialog::DeleteDialog(QWidget *parent, const char *name)
                           true // use separator between buttons and the main widget
                          ),
               m_saveShouldDeleteUserPreference(true),
+              m_saveDoNotShowAgain(false),
               m_trashGuiItem(i18n("&Send to Trash"), "trashcan_full")
 {
     m_widget = new DeleteWidget(this, "delete_dialog_widget");
@@ -233,7 +234,10 @@ void DeleteDialog::accept()
     {
         settings->setUseTrash(!shouldDelete());
     }
-    settings->setShowTrashDeleteDialog(!m_widget->ddDoNotShowAgain->isChecked());
+    if (m_saveDoNotShowAgain)
+    {
+        settings->setShowTrashDeleteDialog(!m_widget->ddDoNotShowAgain->isChecked());
+    }
 
     settings->saveSettings();
 
@@ -256,6 +260,7 @@ void DeleteDialog::presetDeleteMode(DeleteDialogMode::DeleteMode mode)
             // access the widget directly, signals will be fired to DeleteDialog and DeleteWidget
             m_widget->ddShouldDelete->setChecked(false);
             m_widget->ddCheckBoxStack->raiseWidget(m_widget->ddDoNotShowAgain);
+            m_saveDoNotShowAgain = true;
             break;
         case DeleteDialogMode::NoChoiceDeletePermanently:
             m_widget->ddShouldDelete->setChecked(true);

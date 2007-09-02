@@ -125,6 +125,7 @@ protected slots:
 private:
 
     bool          m_saveShouldDeleteUserPreference;
+    bool          m_saveDoNotShowAgain;
 
     KGuiItem      m_trashGuiItem;
 
