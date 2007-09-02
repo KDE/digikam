@@ -70,8 +70,8 @@ MainWindow::MainWindow()
     setWindowTitle(i18n("digiKam Theme Designer"));
     setAttribute(Qt::WA_DeleteOnClose);
 
-    AlbumSettings *albumSettings = new AlbumSettings();
-    albumSettings->readSettings();
+    AlbumSettings::instance();
+    AlbumSettings::instance()->readSettings();
 
     // Initialize theme engine ------------------------------------
 
