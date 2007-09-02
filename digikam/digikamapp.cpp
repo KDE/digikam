@@ -175,13 +175,13 @@ DigikamApp::DigikamApp()
     KDcrawIface::DcrawBinary::instance()->checkSystem();
 
     // Actual file scanning is done in main() - is this necessary here?
-    //d->albumManager->setLibraryPath(AlbumSettings::instance()->getAlbumLibraryPath());
+    //AlbumManager::instance()->setLibraryPath(AlbumSettings::instance()->getAlbumLibraryPath());
 
     // Read albums from database
     if(d->splashScreen)
         d->splashScreen->message(i18n("Reading database"), Qt::AlignLeft, Qt::white);
 
-    d->albumManager->startScan();
+    AlbumManager::instance()->startScan();
 
     // Load KIPI Plugins.
     loadPlugins();
@@ -1005,7 +1005,7 @@ void DigikamApp::slotAboutToShowForwardMenu()
 
 void DigikamApp::slotAlbumSelected(bool val)
 {
-    Album *album = d->albumManager->currentAlbum();
+    Album *album = AlbumManager::instance()->currentAlbum();
 
     if(album && !val)
     {
@@ -1093,7 +1093,7 @@ void DigikamApp::slotAlbumSelected(bool val)
 
 void DigikamApp::slotTagSelected(bool val)
 {
-    Album *album = d->albumManager->currentAlbum();
+    Album *album = AlbumManager::instance()->currentAlbum();
 
     if(!val)
     {
@@ -1782,11 +1782,11 @@ void DigikamApp::slotSetupChanged()
     LoadingCacheInterface::cleanCache();
 
     // TODO: clear history when location changed
-    //if(AlbumSettings::instance()->getAlbumLibraryPath() != d->albumManager->getLibraryPath())
+    //if(AlbumSettings::instance()->getAlbumLibraryPath() != AlbumManager::instance()->getLibraryPath())
       //  d->view->clearHistory();
 
-    d->albumManager->setAlbumRoot(AlbumSettings::instance()->getAlbumLibraryPath(), false);// TEMPORARY SOLUTION
-    d->albumManager->startScan();
+    AlbumManager::instance()->setAlbumRoot(AlbumSettings::instance()->getAlbumLibraryPath(), false);// TEMPORARY SOLUTION
+    AlbumManager::instance()->startScan();
 
     d->view->applySettings(AlbumSettings::instance());
 
@@ -1914,10 +1914,10 @@ void DigikamApp::loadPlugins()
 
     d->kipiPluginLoader->loadPlugins();
 
-    d->kipiInterface->slotCurrentAlbumChanged(d->albumManager->currentAlbum());
+    d->kipiInterface->slotCurrentAlbumChanged(AlbumManager::instance()->currentAlbum());
 
     // Setting the initial menu options after all plugins have been loaded
-    d->view->slotAlbumSelected(d->albumManager->currentAlbum());
+    d->view->slotAlbumSelected(AlbumManager::instance()->currentAlbum());
 
     d->imagePluginsLoader = new ImagePluginLoader(this, d->splashScreen);
 }

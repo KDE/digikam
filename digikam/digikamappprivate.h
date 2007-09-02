@@ -135,8 +135,6 @@ public:
         themeMenuAction                      = 0;
         forwardSignalMapper                  = 0;
         backwardSignalMapper                 = 0;
-        albumSettings                        = 0;
-        albumManager                         = 0;
         dcopIface                            = 0;
         imagePluginsLoader                   = 0;
         kipiInterface                        = 0;
@@ -258,8 +256,6 @@ public:
     QEventLoop            *eventLoop;
     QString                solidErrorMessage;
 
-    AlbumSettings         *albumSettings;
-    AlbumManager          *albumManager;
     SplashScreen          *splashScreen;
     DCOPIface             *dcopIface;
     ImagePluginLoader     *imagePluginsLoader;
