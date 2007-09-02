@@ -41,6 +41,7 @@
 
 // Local includes.
 
+#include "ddebug.h"
 #include "albumsettings.h"
 #include "freespacewidget.h"
 #include "freespacewidget.moc"
@@ -174,10 +175,10 @@ void FreeSpaceWidget::updatePixmap()
 
         QString info = i18n("<p>Capacity: <b>%1</b>"
                             "<p>Available: <b>%2</b>"
-                            "<p>Require: <b>%3</b>")
-                            .arg(KIO::convertSizeFromKiB(d->kBSize))
-                            .arg(KIO::convertSizeFromKiB(d->kBAvail))
-                            .arg(KIO::convertSizeFromKiB(d->dSizeKb));
+                            "<p>Require: <b>%3</b>",
+                            KIO::convertSizeFromKiB(d->kBSize),
+                            KIO::convertSizeFromKiB(d->kBAvail),
+                            KIO::convertSizeFromKiB(d->dSizeKb));
         setWhatsThis(info);
         setToolTip(info);
     }
@@ -194,8 +195,9 @@ void FreeSpaceWidget::paintEvent(QPaintEvent*)
 
 void FreeSpaceWidget::slotTimeout()
 {
-    QString path        = AlbumSettings::instance()->getAlbumLibraryPath();
-    KMountPoint::Ptr mp = KMountPoint::currentMountPoints().findByPath(path);
+    QString path           = AlbumSettings::instance()->getAlbumLibraryPath();
+    KMountPoint::List list = KMountPoint::currentMountPoints();
+    KMountPoint::Ptr mp    = list.findByPath(path);
     if (mp)
     {
         KDiskFreeSpace *job = new KDiskFreeSpace;
