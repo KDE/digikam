@@ -43,9 +43,10 @@
 namespace Digikam 
 {
 
-DLogoAction::DLogoAction(QObject* parent)
+DLogoAction::DLogoAction(QObject* parent, bool alignOnright)
            : KAction(parent)
 {
+    m_alignOnright = alignOnright;
 }
 
 QWidget* DLogoAction::createWidget( QWidget * parent )
@@ -67,7 +68,10 @@ QWidget* DLogoAction::createWidget( QWidget * parent )
 
     layout->setMargin(0);
     layout->setSpacing(0);
-    layout->addStretch();
+
+    if (m_alignOnright)
+        layout->addStretch();
+
     layout->addWidget(m_pixmapLogo);
     
     connect(m_pixmapLogo, SIGNAL(leftClickedUrl(const QString&)),

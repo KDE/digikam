@@ -43,7 +43,7 @@ class DIGIKAM_EXPORT DLogoAction : public KAction
 
 public:
     
-    DLogoAction(QObject* parent);
+    DLogoAction(QObject* parent, bool alignOnright=true);
                
     virtual QWidget* createWidget(QWidget* parent);
 
@@ -52,6 +52,8 @@ private slots:
     void slotProcessUrl(const QString&);
 
 private:
+
+    bool       m_alignOnright;
 
     KUrlLabel *m_pixmapLogo;
 };
