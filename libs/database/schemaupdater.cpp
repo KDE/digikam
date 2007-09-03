@@ -337,7 +337,11 @@ bool SchemaUpdater::createTablesV5()
                             "  albumRoot INTEGER NOT NULL FOREIGN KEY,\n"
                             "  album INTEGER NOT NULL FOREIGN KEY,\n"
                             "  name TEXT NOT NULL,\n"
-                            "  UNIQUE (name, album));") ))
+                            "  status INTEGER,\n"
+                            "  modificationDate DATETIME,\n"
+                            "  fileSize INTEGER,\n"
+                            "  uniqueHash TEXT,\n"
+                            "  UNIQUE (albumRoot, album, name));") ))
     {
         return false;
     }
@@ -369,7 +373,7 @@ bool SchemaUpdater::createTablesV5()
                             "  caption TEXT,\n"
                             "  rating INTEGER,\n"
                             "  creationDate DATETIME,\n"
-                            "  modificationDate DATETIME,\n"
+                            "  digitizationDate DATETIME,\n"
                             "  sizeX INTEGER,\n"
                             "  sizeY INTEGER,\n"
                             "  colorDepth INTEGER,\n"  // 8 or 16
