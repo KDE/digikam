@@ -46,10 +46,10 @@
 
 // Local includes.
 
+#include "gpcamera.h"
 #include "cameraselection.h"
 #include "cameralist.h"
 #include "cameratype.h"
-#include "gpiface.h"
 #include "setupcamera.h"
 #include "setupcamera.moc"
 
@@ -237,7 +237,7 @@ void SetupCamera::slotAutoDetectCamera()
     QString model, port;
 
     kapp->setOverrideCursor( Qt::WaitCursor );
-    int ret = GPIface::autoDetect(model, port);
+    int ret = GPCamera::autoDetect(model, port);
     kapp->restoreOverrideCursor();
 
     if (ret != 0) 

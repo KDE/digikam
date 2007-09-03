@@ -39,7 +39,7 @@
 
 // Local includes.
 
-#include "gpiface.h"
+#include "gpcamera.h"
 #include "cameratype.h"
 #include "cameralist.h"
 #include "cameralist.moc"
@@ -74,7 +74,7 @@ CameraList::CameraList(QObject *parent, const QString& file)
 {
     d = new CameraListPrivate;
     d->clist.setAutoDelete(true);
-    d->file         = file;
+    d->file = file;
     if (!m_defaultList)
         m_defaultList = this;
 }
@@ -231,7 +231,7 @@ CameraType* CameraList::autoDetect(bool& retry)
     retry = false;
     
     QString model, port;
-    if (GPIface::autoDetect(model, port) != 0)
+    if (GPCamera::autoDetect(model, port) != 0)
     {
         retry = ( KMessageBox::warningYesNo(0, i18n("Failed to auto-detect camera; "
                                                     "please make sure it is connected "
@@ -271,7 +271,7 @@ CameraType* CameraList::autoDetect(bool& retry)
 
 bool CameraList::findConnectedCamera(int vendorId, int productId, QString &model, QString &port)
 {
-    return GPIface::findConnectedUsbCamera(vendorId, productId, model, port);
+    return GPCamera::findConnectedUsbCamera(vendorId, productId, model, port);
 }
 
 void CameraList::clear()

@@ -7,7 +7,8 @@
  * Description : Gphoto2 camera interface
  * 
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -1043,8 +1044,6 @@ bool GPCamera::cameraAbout(QString& about)
 
 // -- Static methods ---------------------------------------------------------------------
 
-// TODO merge these methods with GPIface implementation.
-
 void GPCamera::printGphotoErrorDescription(int errorCode)
 {
     DDebug() << "Libgphoto2 error: " << gp_result_as_string(errorCode) 
@@ -1066,7 +1065,7 @@ void GPCamera::getSupportedCameras(int& count, QStringList& clist)
     gp_abilities_list_load( abilList, context );
 
     count = gp_abilities_list_count( abilList );
-    if ( count < 0) 
+    if ( count < 0 ) 
     {
         DDebug() << "Failed to get list of cameras!" << endl;
         printGphotoErrorDescription(count);
@@ -1077,9 +1076,8 @@ void GPCamera::getSupportedCameras(int& count, QStringList& clist)
     {
         for (int i = 0 ; i < count ; i++) 
         {
-            const char *cname;
             gp_abilities_list_get_abilities( abilList, i, &abil );
-            cname = abil.model;
+            const char *cname = abil.model;
             clist.append( QString( cname ) );
         }
     }
@@ -1175,17 +1173,115 @@ int GPCamera::autoDetect(QString& model, QString& port)
         return -1;
     }
 
-    for (int i = 0 ; i < count ; i++) 
+    camModel_ = 0;
+    camPort_  = 0;
+
+    for (int i = 0; i < count; i++)
     {
-        gp_list_get_name (camList, i, &camModel_);
-        gp_list_get_value(camList, i, &camPort_);
+        if (gp_list_get_name(camList, i, &camModel_) != GP_OK)
+        {
+            DDebug() << "Failed to autodetect camera!" << endl;
+            gp_list_free(camList);
+            return -1;
+        }
+
+        if (gp_list_get_value(camList, i, &camPort_) != GP_OK)
+        {
+            DDebug() << "Failed to autodetect camera!" << endl;
+            gp_list_free(camList);
+            return -1;
+        }
+
+        if (camModel_ && camPort_)
+        {
+            model = QString::fromLatin1(camModel_);
+            port  = QString::fromLatin1(camPort_);
+            gp_list_free(camList);
+            return 0;
+        }
     }
 
-    model = QString::fromLatin1(camModel_);
-    port  = QString::fromLatin1(camPort_);
+    DDebug() << "Failed to autodetect camera!" << endl;
     gp_list_free(camList);
+    return -1;
+}
 
-    return 0;
+bool GPCamera::findConnectedUsbCamera(int vendorId, int productId, QString& model, QString& port)
+{
+    CameraAbilitiesList *abilList;
+    GPPortInfoList      *list;
+    GPPortInfo           info;
+    GPContext           *context;
+    bool                 success;
+
+    success = false;
+
+    context = gp_context_new();
+
+    // get list of all ports
+    gp_port_info_list_new( &list );
+    gp_port_info_list_load( list );
+
+    int numPorts = gp_port_info_list_count( list );
+    for (int i = 0 ; i < numPorts ; i++) 
+    {
+        // create a port object from info
+        gp_port_info_list_get_info( list, i, &info );
+        GPPort *gpport;
+        gp_port_new(&gpport);
+        gp_port_set_info(gpport, info);
+
+        // check if device is connected to port
+        if (gp_port_usb_find_device(gpport, vendorId, productId) == GP_OK)
+        {
+            CameraList          *camList;
+            GPPortInfoList      *portinfo;
+
+            // create three lists
+            gp_list_new (&camList);
+            gp_port_info_list_new( &portinfo );
+            gp_abilities_list_new( &abilList );
+
+            // append one port info to 
+            gp_port_info_list_append(portinfo, info);
+            // get list of all supported cameras
+            gp_abilities_list_load(abilList, context);
+            // search for all supported cameras on one port
+            gp_abilities_list_detect(abilList, portinfo, camList, context);
+            int count = gp_list_count(camList);
+            // get name and port of detected camera
+            const char *model_str, *port_str;
+            if (count > 0)
+            {
+                gp_list_get_name(camList, i, &model_str);
+                gp_list_get_value(camList, i, &port_str);
+
+                model = QString::fromLatin1(model_str);
+                port  = QString::fromLatin1(port_str);
+
+                success = true;
+            }
+            if (count > 1)
+            {
+                DWarning() << "More than one camera detected on port " << port
+                           << ". Due to restrictions in the GPhoto2 API, "
+                           << "only the first camera is used." << endl;
+            }
+
+            gp_abilities_list_free( abilList );
+            gp_port_info_list_free(portinfo);
+            gp_list_free(camList);
+        }
+        gp_port_free(gpport);
+
+        if (success)
+            break;
+    }
+
+    gp_port_info_list_free( list );
+    gp_context_unref( context );
+
+    return success;
 }
 
 }  // namespace Digikam

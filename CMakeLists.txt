@@ -274,7 +274,6 @@ SET(libsetup_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupdcraw.cpp 
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupcamera.cpp 
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/cameraselection.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/gpiface.cpp 
    )
 
 SET(libimagepropertiesdigikam_SRCS

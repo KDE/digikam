@@ -7,7 +7,8 @@
  * Description : Gphoto2 camera interface
  * 
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -83,13 +84,14 @@ public:
     QString model() const;
     QString port()  const;
     QString path()  const;
-    
-    // Static Functions
-    
+
+    // Public static methods shared with Setup Camera
+
+    static int  autoDetect(QString& model, QString& port);
     static void getSupportedCameras(int& count, QStringList& clist);
     static void getSupportedPorts(QStringList& plist);
     static void getCameraSupportedPorts(const QString& model, QStringList& plist);
-    static int  autoDetect(QString& model, QString& port);
+    static bool findConnectedUsbCamera(int vendorId, int productId, QString& model, QString& port);
 
 private:
 
