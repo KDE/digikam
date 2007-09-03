@@ -72,6 +72,7 @@ CameraFolderDialog::CameraFolderDialog(QWidget *parent, CameraIconView *cameraVi
 
     message->setText(i18n("<p>Please select the camera folder "
                           "where you want to upload the pictures.</p>"));
+    message->setWordWrap(true);
 
     grid->addWidget(logo, 0, 0, 1, 1);
     grid->addWidget(message, 1, 0, 1, 1);
