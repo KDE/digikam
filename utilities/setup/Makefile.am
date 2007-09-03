@@ -1,20 +1,18 @@
 METASOURCES = AUTO
 
 INCLUDES = -I$(top_srcdir)/digikam/digikam \
+	   -I$(top_srcdir)/digikam/utilities/cameragui \
 	   -I$(top_srcdir)/digikam/utilities/batch \
 	   -I$(top_srcdir)/digikam/utilities/imageeditor/canvas \
 	   -I$(top_srcdir)/digikam/libs/dialogs \
 	   -I$(top_srcdir)/digikam/libs/dimg \
 	   -I$(top_srcdir)/digikam/libs/dimg/loaders \
 	   -I$(top_srcdir)/digikam/libs/widgets/common \
-	   $(GPHOTO_CFLAGS) $(LIBKIPI_CFLAGS) $(LIBKDCRAW_CFLAGS) $(all_includes)
+	   $(LIBKIPI_CFLAGS) $(LIBKDCRAW_CFLAGS) $(all_includes)
 
 noinst_LTLIBRARIES = libsetup.la libshowfotosetup.la
 
-# NOTE from Gilles (06-12-06): gpiface.cpp must be placed on the top of source file list 
-# to unbreak compilation with './configure -enable-final' option. I suspect a problem with 
-# Gphoto2 C Ansi header.
-libsetup_la_SOURCES = gpiface.cpp cameraselection.cpp setupcamera.cpp \
+libsetup_la_SOURCES = cameraselection.cpp setupcamera.cpp \
 	              setupmime.cpp setupplugins.cpp setupidentity.cpp \
 	              setupgeneral.cpp setup.cpp \
 	              setupcollections.cpp setupmetadata.cpp \

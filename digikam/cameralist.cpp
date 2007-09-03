@@ -37,7 +37,7 @@
 
 // Local includes.
 
-#include "gpiface.h"
+#include "gpcamera.h"
 #include "cameratype.h"
 #include "cameralist.h"
 #include "cameralist.moc"
@@ -222,7 +222,7 @@ CameraType* CameraList::autoDetect(bool& retry)
     retry = false;
     
     QString model, port;
-    if (GPIface::autoDetect(model, port) != 0)
+    if (GPCamera::autoDetect(model, port) != 0)
     {
         retry = ( KMessageBox::warningYesNo(0, i18n("Failed to auto-detect camera; "
                                                     "please make sure it is connected "

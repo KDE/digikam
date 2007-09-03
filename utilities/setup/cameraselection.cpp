@@ -47,7 +47,7 @@
 
 // Local includes.
 
-#include "gpiface.h"
+#include "gpcamera.h"
 #include "cameraselection.h"
 #include "cameraselection.moc"
 
@@ -304,7 +304,7 @@ void CameraSelection::getCameraList()
     QStringList clist;
     QString cname;
     
-    GPIface::getSupportedCameras(count, clist);
+    GPCamera::getSupportedCameras(count, clist);
     
     for (int i = 0 ; i < count ; i++) 
     {
@@ -320,7 +320,7 @@ void CameraSelection::getSerialPortList()
 {
     QStringList plist;
 
-    GPIface::getSupportedPorts(plist);
+    GPCamera::getSupportedPorts(plist);
 
     d->serialPortList.clear();
     
@@ -369,7 +369,7 @@ void CameraSelection::slotSelectionChanged(QListViewItem *item)
     d->titleEdit->setText(model);
     
     QStringList plist;
-    GPIface::getCameraSupportedPorts(model, plist);
+    GPCamera::getCameraSupportedPorts(model, plist);
 
     if (plist.contains("serial")) 
     {

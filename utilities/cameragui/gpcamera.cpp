@@ -1044,12 +1044,10 @@ bool GPCamera::cameraAbout(QString& about)
 
 // -- Static methods ---------------------------------------------------------------------
 
-// TODO merge these methods with GPIface implementation.
-
 void GPCamera::printGphotoErrorDescription(int errorCode)
 {
     DDebug() << "Libgphoto2 error: " << gp_result_as_string(errorCode) 
-              << " (" << errorCode << ")" << endl;
+             << " (" << errorCode << ")" << endl;
 }
 
 void GPCamera::getSupportedCameras(int& count, QStringList& clist)
@@ -1067,7 +1065,7 @@ void GPCamera::getSupportedCameras(int& count, QStringList& clist)
     gp_abilities_list_load( abilList, context );
 
     count = gp_abilities_list_count( abilList );
-    if ( count < 0) 
+    if ( count < 0 ) 
     {
         DDebug() << "Failed to get list of cameras!" << endl;
         printGphotoErrorDescription(count);
@@ -1078,9 +1076,8 @@ void GPCamera::getSupportedCameras(int& count, QStringList& clist)
     {
         for (int i = 0 ; i < count ; i++) 
         {
-            const char *cname;
             gp_abilities_list_get_abilities( abilList, i, &abil );
-            cname = abil.model;
+            const char *cname = abil.model;
             clist.append( QString( cname ) );
         }
     }
@@ -1176,16 +1173,37 @@ int GPCamera::autoDetect(QString& model, QString& port)
         return -1;
     }
 
-    for (int i = 0 ; i < count ; i++) 
+    camModel_ = 0;
+    camPort_  = 0;
+    
+    for (int i = 0; i < count; i++)
     {
-        gp_list_get_name (camList, i, &camModel_);
-        gp_list_get_value(camList, i, &camPort_);
+        if (gp_list_get_name(camList, i, &camModel_) != GP_OK)
+        {
+            DDebug() << "Failed to autodetect camera!" << endl;
+            gp_list_free(camList);
+            return -1;
+        }
+
+        if (gp_list_get_value(camList, i, &camPort_) != GP_OK)
+        {
+            DDebug() << "Failed to autodetect camera!" << endl;
+            gp_list_free(camList);
+            return -1;
+        }
+
+        if (camModel_ && camPort_)
+        {
+            model = QString::fromLatin1(camModel_);
+            port  = QString::fromLatin1(camPort_);
+            gp_list_free(camList);
+            return 0;
+        }
     }
 
-    model = QString::fromLatin1(camModel_);
-    port  = QString::fromLatin1(camPort_);
+    DDebug() << "Failed to autodetect camera!" << endl;
     gp_list_free(camList);
-    return 0;
+    return -1;
 }
 
 }  // namespace Digikam

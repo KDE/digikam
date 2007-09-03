@@ -84,12 +84,12 @@ public:
     QString port()  const;
     QString path()  const;
     
-    // Static Functions
+    // Public static methods shared with Camera Setup
     
+    static int  autoDetect(QString& model, QString& port);
     static void getSupportedCameras(int& count, QStringList& clist);
     static void getSupportedPorts(QStringList& plist);
     static void getCameraSupportedPorts(const QString& model, QStringList& plist);
-    static int  autoDetect(QString& model, QString& port);
 
 private:
 
