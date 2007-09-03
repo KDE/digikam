@@ -105,6 +105,7 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
     logo->setPixmap(iconLoader->loadIcon("digikam", K3Icon::NoGroup, 128));  
 
     QLabel *message = new QLabel(page);
+    message->setWordWrap(true);
     if (!header.isEmpty())
         message->setText(header);
 
