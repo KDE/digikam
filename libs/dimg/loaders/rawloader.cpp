@@ -69,7 +69,7 @@ bool RAWLoader::checkToCancelWaitingData()
     return (m_observer ? !m_observer->continueQuery(m_image) : false);
 }
 
-bool RAWLoader::checkToCancelRecievingData()
+bool RAWLoader::checkToCancelReceivingData()
 {
     return (m_observer ? m_observer->isShuttingDown() : false);
 }
@@ -80,7 +80,7 @@ void RAWLoader::setWaitingDataProgress(double value)
         m_observer->progressInfo(m_image, value);
 }
 
-void RAWLoader::setRecievingDataProgress(double value)
+void RAWLoader::setReceivingDataProgress(double value)
 {
     if (m_observer)
         m_observer->progressInfo(m_image, value);

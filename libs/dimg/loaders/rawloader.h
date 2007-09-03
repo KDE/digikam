@@ -65,10 +65,10 @@ private:
                          DImgLoaderObserver *observer);
 
     bool checkToCancelWaitingData();
-    bool checkToCancelRecievingData();
+    bool checkToCancelReceivingData();
 
     void setWaitingDataProgress(double value);
-    void setRecievingDataProgress(double value);
+    void setReceivingDataProgress(double value);
 
 private:
 
