@@ -88,7 +88,6 @@ DProgressDlg::DProgressDlg(QWidget *parent, const QString &caption)
     setMainWidget(page);
 
     QGridLayout* grid = new QGridLayout(page);
-    grid->setSpacing(spacingHint());
 
     QVBoxLayout *vlay = new QVBoxLayout();
     d->actionsList    = new K3ListView(page);
@@ -96,6 +95,8 @@ DProgressDlg::DProgressDlg(QWidget *parent, const QString &caption)
     d->title          = new QLabel(page);
     d->logo           = new QLabel(page);
     d->progress       = new QProgressBar(page);
+    d->label->setWordWrap(true);
+
     vlay->addWidget(d->logo);
     vlay->addWidget(d->progress);
     vlay->addWidget(d->title);
@@ -114,6 +115,7 @@ DProgressDlg::DProgressDlg(QWidget *parent, const QString &caption)
     grid->addLayout(vlay, 0, 0, 2, 1);
     grid->addWidget(d->label, 0, 1, 1, 1);
     grid->addWidget(d->actionsList, 1, 1, 1, 1);
+    grid->setSpacing(spacingHint());
     grid->setRowStretch(1, 10);
     grid->setColumnStretch(1, 10);
 
