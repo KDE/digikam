@@ -34,7 +34,6 @@
 
 // KDE includes.
 
-#include <k3activelabel.h>
 #include <k3listview.h>
 #include <kiconloader.h>
 #include <kglobalsettings.h>
@@ -206,19 +205,20 @@ CameraSelection::CameraSelection( QWidget* parent )
     KIconLoader* iconLoader = KIconLoader::global();
     logo->setPixmap(iconLoader->loadIcon("digikam", K3Icon::NoGroup, 64));
 
-    K3ActiveLabel* link = new K3ActiveLabel(box2);
+    QLabel* link = new QLabel(box2);
     link->setText(i18n("<p>To set an <b>USB Mass Storage</b> camera<br>"
                        "(which appears like a removable drive), please<br>"
                        "use <a href=\"umscamera\">%1</a> from camera list.</p>", 
                        d->UMSCameraNameShown));
 
-    K3ActiveLabel* link2 = new K3ActiveLabel(box2);
+    QLabel* link2 = new QLabel(box2);
     link2->setText(i18n("<p>To set a <b>Generic PTP USB Device</b><br>"
                         "(which use Picture Transfer Protocol), please<br>"
                         "use <a href=\"ptpcamera\">%1</a> from camera list.</p>",
                         d->PTPCameraNameShown));
 
-    K3ActiveLabel* explanation = new K3ActiveLabel(box2);
+    QLabel* explanation = new QLabel(box2);
+    explanation->setOpenExternalLinks(true);
     explanation->setText(i18n("<p>A complete list of camera settings to use is<br>"
                  "available at <a href='http://www.teaser.fr/~hfiguiere/linux/digicam.html'>"
                  "this url</a>.</p>"));
@@ -227,8 +227,8 @@ CameraSelection::CameraSelection( QWidget* parent )
     gLayout5->setSpacing(KDialog::spacingHint());
     gLayout5->addWidget(logo, 0, 0, 1, 1);
     gLayout5->addWidget(link, 0, 1, 2, 1);
-    gLayout5->addWidget(link2, 2, 1, 3- 2+1, 1);
-    gLayout5->addWidget(explanation, 4, 1, 5- 4+1, 1);
+    gLayout5->addWidget(link2, 2, 1, 3-2+1, 1);
+    gLayout5->addWidget(explanation, 4, 1, 5-4+1, 1);
 
     // --------------------------------------------------------------
 
@@ -245,22 +245,16 @@ CameraSelection::CameraSelection( QWidget* parent )
 
     // Connections --------------------------------------------------
 
-    disconnect(link, SIGNAL(linkClicked(const QString &)),
-               link, SLOT(openLink(const QString &)));
-
-    connect(link, SIGNAL(linkClicked(const QString &)),
+    connect(link, SIGNAL(linkActivated(const QString &)),
             this, SLOT(slotUMSCameraLinkUsed()));
 
-    disconnect(link2, SIGNAL(linkClicked(const QString &)),
-               link2, SLOT(openLink(const QString &)));
-
-    connect(link2, SIGNAL(linkClicked(const QString &)),
+    connect(link2, SIGNAL(linkActivated(const QString &)),
             this, SLOT(slotPTPCameraLinkUsed()));
 
     connect(d->listView, SIGNAL(selectionChanged(Q3ListViewItem *)),
             this, SLOT(slotSelectionChanged(Q3ListViewItem *)));
 
-    connect(d->portButtonGroup, SIGNAL(clicked(int)),
+    connect(d->portButtonGroup, SIGNAL(buttonClicked(int)),
             this, SLOT(slotPortChanged()));
 
     connect(this, SIGNAL(okClicked()),
