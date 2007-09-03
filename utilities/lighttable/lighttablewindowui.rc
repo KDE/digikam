@@ -74,6 +74,10 @@
      <Action name="logo_action" />
  </ToolBar>
  
+<MainWindow>
+     <Action name="editorwindow_exitfullscreen" />
+</MainWindow>
+
 <ActionProperties/>
 
 </gui>

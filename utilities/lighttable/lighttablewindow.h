@@ -74,12 +74,9 @@ private:
     void setupConnections();
     void setupUserArea();
     void setupStatusBar();
-    void setupAccelerators();
     void slideShow(bool startWithCurrent, SlideShowSettings& settings);
     void showToolBars();
     void hideToolBars();
-    void plugActionAccel(KAction* action);
-    void unplugActionAccel(KAction* action);
     void readSettings();
     void writeSettings();
     void applySettings();

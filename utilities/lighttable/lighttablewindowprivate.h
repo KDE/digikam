@@ -107,10 +107,10 @@ public:
     KAction                  *star4;
     KAction                  *star5;
 
-    QAction                  *forwardAction;
-    QAction                  *backwardAction;
-    QAction                  *firstAction;
-    QAction                  *lastAction;
+    KAction                  *forwardAction;
+    KAction                  *backwardAction;
+    KAction                  *firstAction;
+    KAction                  *lastAction;
 
     QAction                  *setItemLeftAction;
     QAction                  *setItemRightAction;

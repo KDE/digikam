@@ -48,6 +48,7 @@
 #include <kstatusbar.h>
 #include <kmenubar.h>
 #include <kglobal.h>
+#include <ktoolbar.h>
 
 // LibKDcraw includes.
 
@@ -105,7 +106,6 @@ LightTableWindow::LightTableWindow()
     setupUserArea();
     setupStatusBar();
     setupActions();
-    setupAccelerators();
 
     // Make signals/slots connections
 
@@ -331,13 +331,14 @@ void LightTableWindow::setupActions()
 {
     // -- Standard 'File' menu actions ---------------------------------------------
 
-    d->backwardAction = actionCollection()->addAction(KStandardAction::Back, "lighttable_backward", 
-                                                      this, SLOT(slotBackward()));
-    d->backwardAction->setEnabled(false);
+    d->backwardAction = KStandardAction::back(this, SLOT(slotBackward()), this);
+    actionCollection()->addAction("lighttable_backward", d->backwardAction);
+    d->backwardAction->setShortcut( KShortcut(Qt::Key_Prior, Qt::Key_Backspace) );
 
-    d->forwardAction = actionCollection()->addAction(KStandardAction::Forward, "lighttable_forward", 
-                                                    this, SLOT(slotForward()));
+    d->forwardAction = KStandardAction::forward(this, SLOT(slotForward()), this);
+    actionCollection()->addAction("lighttable_forward", d->forwardAction);
     d->forwardAction->setEnabled(false);
+    d->forwardAction->setShortcut( KShortcut(Qt::Key_Next, Qt::Key_Space) );
 
     d->firstAction = new KAction(KIcon("go-first"), i18n("&First"), this);
     d->firstAction->setShortcut(KStandardShortcut::Home);
@@ -407,10 +408,12 @@ void LightTableWindow::setupActions()
     d->zoomPlusAction = actionCollection()->addAction(KStandardAction::ZoomIn, "lighttable_zoomplus", 
                                                       this, SLOT(slotIncreaseZoom()));
     d->zoomPlusAction->setEnabled(false);
+    d->zoomPlusAction->setShortcut(QKeySequence(Qt::Key_Plus));
 
     d->zoomMinusAction = actionCollection()->addAction(KStandardAction::ZoomOut, "lighttable_zoomminus", 
                                                        this, SLOT(slotDecreaseZoom()));
     d->zoomMinusAction->setEnabled(false);
+    d->zoomMinusAction->setShortcut(QKeySequence(Qt::Key_Minus));
 
     d->zoomTo100percents = new KAction(KIcon("viewmag1"), i18n("Zoom to 1:1"), this);
     d->zoomTo100percents->setShortcut(Qt::ALT+Qt::CTRL+Qt::Key_0);       // NOTE: Photoshop 7 use ALT+CTRL+0
@@ -480,55 +483,18 @@ void LightTableWindow::setupActions()
     connect(d->star5, SIGNAL(triggered()), d->barView, SLOT(slotAssignRatingFiveStar()));
     actionCollection()->addAction("lighttable_ratefivestar", d->star5);
 
+    // -- Keyboard-only actions added to <MainWindow> ------------------------------
+
+    KAction *exitFullscreenAction = new KAction(i18n("Exit Fullscreen mode"), this);
+    actionCollection()->addAction("editorwindow_exitfullscreen", exitFullscreenAction);
+    exitFullscreenAction->setShortcut( QKeySequence(Qt::Key_Escape) );
+    connect(exitFullscreenAction, SIGNAL(triggered()), this, SLOT(slotEscapePressed()));
+
     // ---------------------------------------------------------------------------------
 
     actionCollection()->addAction("logo_action", new DLogoAction(this));
 
     createGUI("lighttablewindowui.rc");
-}
-
-void LightTableWindow::setupAccelerators()
-{
-#warning "TODO: kde4 port it";
-/*  // TODO: KDE4PORT: use KAction/QAction framework instead KAccel
-
-    d->accelerators = new KAccel(this);
-
-    d->accelerators->insert("Exit fullscreen", i18n("Exit Fullscreen mode"),
-                    i18n("Exit from fullscreen viewing mode"),
-                    Qt::Key_Escape, this, SLOT(slotEscapePressed()),
-                    false, true);
-
-    d->accelerators->insert("Next Image Qt::Key_Space", i18n("Next Image"),
-                    i18n("Load Next Image"),
-                    Qt::Key_Space, this, SLOT(slotForward()),
-                    false, true);
-
-    d->accelerators->insert("Previous Image Qt::Key_Backspace", i18n("Previous Image"),
-                    i18n("Load Previous Image"),
-                    Qt::Key_Backspace, this, SLOT(slotBackward()),
-                    false, true);
-
-    d->accelerators->insert("Next Image Qt::Key_Next", i18n("Next Image"),
-                    i18n("Load Next Image"),
-                    Qt::Key_Next, this, SLOT(slotForward()),
-                    false, true);
-
-    d->accelerators->insert("Previous Image Qt::Key_Prior", i18n("Previous Image"),
-                    i18n("Load Previous Image"),
-                    Qt::Key_Prior, this, SLOT(slotBackward()),
-                    false, true);
-
-    d->accelerators->insert("Zoom Plus Qt::Key_Plus", i18n("Zoom in"),
-                    i18n("Zoom in on image"),
-                    Qt::Key_Plus, d->previewView, SLOT(slotIncreaseZoom()),
-                    false, true);
-
-    d->accelerators->insert("Zoom Plus Qt::Key_Minus", i18n("Zoom out"),
-                    i18n("Zoom out of image"),
-                    Qt::Key_Minus, d->previewView, SLOT(slotDecreaseZoom()),
-                    false, true);
-*/
 }
 
 void LightTableWindow::slotThumbbarDroppedItems(const ImageInfoList& list)
@@ -1030,47 +996,28 @@ void LightTableWindow::slotToggleFullScreen()
 {
     if (d->fullScreen) // out of fullscreen
     {
-        setWindowState( windowState() & ~Qt::WindowFullScreen );
+        showNormal();
+
         menuBar()->show();
         statusBar()->show();
+        showToolBars();
 
-#warning "TODO: kde4 port it";
-/* TODO: KDE4PORT: Check these methods
-        leftDock()->show();
-        rightDock()->show();
-        topDock()->show();
-        bottomDock()->show();*/
-
-#warning "TODO: kde4 port it";
-/*
-        QObject* obj = child("ToolBar","KToolBar");
-
-        if (obj)
+        if (d->removeFullScreenButton)
         {
-            KToolBar* toolBar = static_cast<KToolBar*>(obj);
-
-            if (d->fullScreenAction->isPlugged(toolBar) && d->removeFullScreenButton)
-                d->fullScreenAction->unplug(toolBar);
-
-            if (toolBar->isHidden())
-                showToolBars();
+            QList<KToolBar *> toolbars = toolBars();
+            foreach(KToolBar *toolbar, toolbars)
+            {
+                // name is set in ui.rc XML file
+                if (toolbar->objectName() == "ToolBar")
+                {
+                    toolbar->removeAction(d->fullScreenAction);
+                    break;
+                }
+            }
         }
 
-        // -- remove the gui action accels ----
-
-        unplugActionAccel(d->zoomFitToWindowAction);
-*/
-
-        if (d->fullScreen)
-        {
-            d->leftSidebar->restore();
-            d->rightSidebar->restore();
-        }
-        else
-        {
-            d->leftSidebar->backup();
-            d->rightSidebar->backup();
-        }
+        d->leftSidebar->restore();
+        d->rightSidebar->restore();
 
         d->fullScreen = false;
     }
@@ -1080,57 +1027,41 @@ void LightTableWindow::slotToggleFullScreen()
         menuBar()->hide();
         statusBar()->hide();
 
-#warning "TODO: kde4 port it";
-/* TODO: KDE4PORT: Check these methods
-        topDock()->hide();
-        leftDock()->hide();
-        rightDock()->hide();
-        bottomDock()->hide();*/
-
-#warning "TODO: kde4 port it";
-/*
-        QObject* obj = child("ToolBar","KToolBar");
-
-        if (obj)
+        if (d->fullScreenHideToolBar)
         {
-            KToolBar* toolBar = static_cast<KToolBar*>(obj);
-
-            if (d->fullScreenHideToolBar)
-            {
-                hideToolBars();
-            }
-            else
-            {
-                showToolBars();
-
-                if ( !d->fullScreenAction->isPlugged(toolBar) )
-                {
-                    d->fullScreenAction->plug(toolBar);
-                    d->removeFullScreenButton=true;
-                }
-                else
-                {
-                    // If FullScreen button is enable in toolbar settings
-                    // We don't remove it when we out of fullscreen mode.
-                    d->removeFullScreenButton=false;
-                }
-            }
-        }
-
-        // -- Insert all the gui actions into the accel --
-
-        plugActionAccel(d->zoomFitToWindowAction);
-*/
-        if (d->fullScreen) 
-        {
-            d->leftSidebar->restore();
-            d->rightSidebar->restore();
+            hideToolBars();
         }
         else
         {
-            d->leftSidebar->backup();
-            d->rightSidebar->backup();
+            showToolBars();
+
+            QList<KToolBar *> toolbars = toolBars();
+            KToolBar *mainToolbar = 0;
+            foreach(KToolBar *toolbar, toolbars)
+            {
+                if (toolbar->objectName() == "ToolBar")
+                {
+                    mainToolbar = toolbar;
+                    break;
+                }
+            }
+
+            // add fullscreen action if necessary
+            if ( mainToolbar && !mainToolbar->actions().contains(d->fullScreenAction) )
+            {
+                mainToolbar->addAction(d->fullScreenAction);
+                d->removeFullScreenButton=true;
+            }
+            else
+            {
+                // If FullScreen button is enabled in toolbar settings,
+                // we shall not remove it when leaving of fullscreen mode.
+                d->removeFullScreenButton=false;
+            }
         }
+
+        d->leftSidebar->backup();
+        d->rightSidebar->backup();
 
         showFullScreen();
         d->fullScreen = true;
@@ -1145,63 +1076,20 @@ void LightTableWindow::slotEscapePressed()
 
 void LightTableWindow::showToolBars()
 {
-#warning "TODO: kde4 port it";
-/*
-    Q3PtrListIterator<KToolBar> it = toolBarIterator();
-    KToolBar* bar;
-
-    for( ; it.current()!=0L ; ++it)
+    QList<KToolBar *> toolbars = toolBars();
+    foreach(KToolBar *toolbar, toolbars)
     {
-        bar=it.current();
-
-        if (bar->area())
-            bar->area()->show();
-        else
-            bar->show();
+        toolbar->show();
     }
-*/
 }
 
 void LightTableWindow::hideToolBars()
 {
-#warning "TODO: kde4 port it";
-/*
-    Q3PtrListIterator<KToolBar> it = toolBarIterator();
-    KToolBar* bar;
-
-    for( ; it.current()!=0L ; ++it)
+    QList<KToolBar *> toolbars = toolBars();
+    foreach(KToolBar *toolbar, toolbars)
     {
-        bar=it.current();
-
-        if (bar->area()) 
-            bar->area()->hide();
-        else 
-            bar->hide();
+        toolbar->hide();
     }
-*/
-}
-
-void LightTableWindow::plugActionAccel(KAction* action)
-{
-    if (!action)
-        return;
-
-#warning "TODO: kde4 port it";
-/*  // TODO: KDE4PORT: use KAction/QAction framework instead KAccel
-    d->accelerators->insert(action->text(),
-                    action->text(),
-                    action->whatsThis(),
-                    action->shortcut(),
-                    action,
-                    SLOT(activate()));*/
-}
-
-void LightTableWindow::unplugActionAccel(KAction* /*action*/)
-{
-#warning "TODO: kde4 port it";
-/*  // TODO: KDE4PORT: use KAction/QAction framework instead KAccel
-
-    d->accelerators->remove(action->text());*/
 }
 
 void LightTableWindow::slotDonateMoney()
