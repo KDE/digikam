@@ -161,12 +161,12 @@ QFont ThemedIconView::itemFontXtra() const
 void ThemedIconView::slotThemeChanged()
 {
     QPalette plt(palette());
-    QColorGroup cg(plt.active());
-    cg.setColor(QColorGroup::Base, ThemeEngine::instance()->baseColor());
-    cg.setColor(QColorGroup::Text, ThemeEngine::instance()->textRegColor());
-    cg.setColor(QColorGroup::HighlightedText, ThemeEngine::instance()->textSelColor());
-    plt.setActive(cg);
-    plt.setInactive(cg);
+    plt.setColor(QPalette::Active,   QPalette::Base,            ThemeEngine::instance()->baseColor());
+    plt.setColor(QPalette::Active,   QPalette::Text,            ThemeEngine::instance()->textRegColor());
+    plt.setColor(QPalette::Active,   QPalette::HighlightedText, ThemeEngine::instance()->textSelColor());
+    plt.setColor(QPalette::Inactive, QPalette::Base,            ThemeEngine::instance()->baseColor());
+    plt.setColor(QPalette::Inactive, QPalette::Text,            ThemeEngine::instance()->textRegColor());
+    plt.setColor(QPalette::Inactive, QPalette::HighlightedText, ThemeEngine::instance()->textSelColor());
     setPalette(plt);
 
     updateBannerRectPixmap();
