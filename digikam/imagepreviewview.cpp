@@ -356,15 +356,15 @@ void ImagePreviewView::slotContextMenu()
     //-- Navigate actions -------------------------------------------
 
     DPopupMenu popmenu(this);
-    QAction *backAction        = popmenu.addAction(SmallIcon("back"), i18n("Back"));
+    QAction *backAction        = popmenu.addAction(SmallIcon("go-previous"), i18n("Back"));
     if (!d->hasPrev)
         backAction->setEnabled(false);
 
-    QAction *forwardAction     = popmenu.addAction(SmallIcon("forward"), i18n("Forward"));
+    QAction *forwardAction     = popmenu.addAction(SmallIcon("go-next"), i18n("Forward"));
     if (!d->hasNext)
         forwardAction->setEnabled(false);
 
-    QAction *backToAlbumAction = popmenu.addAction(SmallIcon("folder_image"), i18n("Back to Album"));
+    QAction *backToAlbumAction = popmenu.addAction(SmallIcon("folder-image"), i18n("Back to Album"));
 
     //-- Edit actions -----------------------------------------------
 
