@@ -5,6 +5,28 @@ Gilles Caulier <caulier dot gilles at gmail dot com>
 Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
 Laurent Montel <montel at kde dot org>
 
+URL
+---
+
+* Port project to CMake:
+    http://techbase.kde.org/Development/Tutorials/CMake
+    http://techbase.kde.org/Development/Tutorials/KDE4_Porting_Guide#CMake
+    http://www.cmake.org/Wiki/CMake_Useful_Variables
+    http://www.kdedevelopers.org/node/1743
+		    
+* Port to QT4/KDE4.
+    Overview documentation
+      http://techbase.kde.org/Development/Tutorials/KDE4_Porting_Guide
+		  
+    There are scripts to relieve us of the tedious work:
+      http://doc.trolltech.com/4.2/qt3to4.html
+      http://websvn.kde.org/trunk/KDE/kdesdk/scripts/qt4/
+				      
+    There are two pages with detailed information about the API changes. These
+    need to be consulted while porting:
+      http://doc.trolltech.com/4.0/porting4.html
+      http://websvn.kde.org/*checkout*/trunk/KDE/kdelibs/KDE4PORTING.html
+						      
 
 LIST OF DIRECTORIES PORTED BY DEVELOPPERS:
 ------------------------------------------
@@ -34,7 +56,7 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
     cameraitempropertiestab.cpp         Gilles                 X       DONE
     imagepropertiessidebarcamgui.cpp    Gilles                 X       DONE
     imagepropertiessidebardb.cpp        Gilles                 X       DONE
-    imagedescedittab.cpp                Gilles                 X       DONE                 Few depreciate methods to fix
+    imagedescedittab.cpp                Gilles                 X       DONE
     talbumlistview.cpp                  Gilles                 X       DONE
 |---jpegutils                           Gilles                 X       DONE
 |---levels                              Gilles          X      X       DONE
@@ -78,7 +100,7 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
     cameraiconitem.cpp                  Gilles                 X       DONE
     cameraiconview.cpp                  Gilles                 X       DONE
     camerainfodialog.cpp                Gilles                 X       DONE
-    cameraui.cpp                        Gilles                 X       DONE                 Few depreciate methods to fix
+    cameraui.cpp                        Gilles                 X       DONE
     dkcamera.cpp                        Gilles                 X       DONE
     gpcamera.cpp                        Gilles                 X       DONE
     gpiteminfo.cpp                      Gilles                 X       DONE
@@ -88,15 +110,15 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
 |---imageeditor
 |-----canvas                            Gilles          X      X       DONE
 |-----editor
-    editorwindow.cpp                    Gilles          X      X       UNCOMPLETE           Compile. Some code to manage keyboard shorcuts are not yet ported.
+    editorwindow.cpp                    Gilles          X      X       DONE
     imageiface.cpp                      Gilles          X      X       DONE
-    imagewindow.cpp                     Gilles                 X       DONE                 Few depreciate methods to fix
+    imagewindow.cpp                     Gilles                 X       DONE
 |-----tools                             Laurent         X      X       DONE
 |---lighttable
     lighttablepreview.cpp               Gilles                 X       DONE
     lighttableview.cpp                  Gilles                 X       DONE
     lighttablebar.cpp                   Gilles                 X       DONE
-    lighttablewindow.cpp                Gilles                 X       UNCOMPLETE           Compile. Some code to manage keyboard shorcuts are not yet ported.
+    lighttablewindow.cpp                Gilles                 X       DONE
 |---scripts                             Gilles                         DONE        -
 |---setup                               Gilles          X      X       DONE
 |---slideshow                           Laurent         X      X       DONE
@@ -132,7 +154,7 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
     cameralist.cpp                      Laurent                X       DONE
     cameratype.cpp                      Gilles                 X       DONE
     datefolderview.cpp                  Laurent                X       DONE
-    digikamapp.cpp                      Gilles                 X       UNCOMPLETE           Compile. Some code to manage keyboard shorcuts are not yet ported.
+    digikamapp.cpp                      Gilles                 X       DONE
     digikamfirstrun.cpp                 Laurent                X       DONE
     digikamview.cpp                     Gilles                 X       DONE
     dio.cpp                             Laurent                X       DONE
@@ -167,7 +189,7 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
     tagcreatedlg.cpp                    Gilles                 X       DONE
     tagfilterview.cpp                   Gilles                 X       DONE
     tagfolderview.cpp                   Gilles                 X       DONE
-    tagspopupmenu.cpp                   Gilles                 X       UNCOMPLETE           Compile. QCustomMenuItem code must be ported to QWidgetAction.
+    tagspopupmenu.cpp                   Gilles                 X       DONE
     welcomepageview.cpp                 Laurent                X       DONE
 
 |-imageplugins
