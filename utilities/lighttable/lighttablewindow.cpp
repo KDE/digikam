@@ -505,7 +505,6 @@ void LightTableWindow::slotThumbbarDroppedItems(const ImageInfoList& list)
         setLeftRightItems(list);
 }
 
-
 // We get here either
 // - via F6 (from the albumview)
 //     a) digikamapp.cpp:  key_F6 leads to slotImageLightTable())
@@ -516,7 +515,6 @@ void LightTableWindow::slotThumbbarDroppedItems(const ImageInfoList& list)
 // - via drag&drop, i.e. calls issued by the ...Dropped... routines
 void LightTableWindow::loadImageInfos(const ImageInfoList &list, ImageInfo *imageInfoCurrent)
 {
-
     ImageInfoList l = list;
 
     if (!imageInfoCurrent) 
@@ -753,7 +751,6 @@ void LightTableWindow::slotLeftDroppedItems(const ImageInfoList& list)
     }
     if (list.count()>1)
         setLeftRightItems(list);
-
 }
 
 // Deal with one (or more) items dropped onto the right panel
@@ -774,12 +771,9 @@ void LightTableWindow::slotRightDroppedItems(const ImageInfoList& list)
         // Make this item the current one.
         d->barView->setSelectedItem(item);
     }
-
     if (list.count()>1)
         setLeftRightItems(list);
-
 }
-
 
 // Set the images for the left and right panel.
 void LightTableWindow::setLeftRightItems(const ImageInfoList &list)
@@ -793,7 +787,8 @@ void LightTableWindow::setLeftRightItems(const ImageInfoList &list)
     ImageInfo *info = l.first();
     LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(d->barView->findItemByInfo(info));
 
-    if (ltItem) {
+    if (ltItem)
+    {
         // The first item is used for the left panel.
         d->barView->setOnLeftPanel(info);
         slotSetItemOnLeftPanel(info);
@@ -811,7 +806,6 @@ void LightTableWindow::setLeftRightItems(const ImageInfoList &list)
         }
     }
 }
-
 
 void LightTableWindow::slotSetItemLeft()
 {
