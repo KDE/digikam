@@ -110,6 +110,11 @@ int main(int argc, char *argv[])
                           "a dot naselli at libero dot it",
                           0);
 
+    aboutData.addCredit ( "Arnd Baecker",
+                          I18N_NOOP("Developer"),
+                          "arnd dot baecker at web dot de",
+                          0);
+
     aboutData.addCredit ( "Fabien Salvi",
                           I18N_NOOP("Webmaster"),
                           "fabien dot ubuntu at gmail dot com",
