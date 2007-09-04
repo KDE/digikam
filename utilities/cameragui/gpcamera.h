@@ -87,8 +87,7 @@ public:
 
     CameraDriverType cameraDriverType(){ return GPhotoDriver; };
 
-    unsigned long getCapacityKb();
-    unsigned long getFreeSpaceKb();
+    bool getFreeSpace(unsigned long& capacityKb, unsigned long& availableKb);
 
     // Public static methods shared with Setup Camera
 

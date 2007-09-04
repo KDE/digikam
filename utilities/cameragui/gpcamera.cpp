@@ -155,14 +155,9 @@ QString GPCamera::path() const
     return d->globalPath;   
 }
 
-unsigned long GPCamera::getCapacityKb()
+bool GPCamera::getFreeSpace(unsigned long& capacityKb, unsigned long& availableKb)
 {
-    return 0; // TODO : not yet implemented.
-}
-
-unsigned long GPCamera::getFreeSpaceKb()
-{
-    return 0; // TODO : not yet implemented.
+    return false; // TODO : not yet implemented.
 }
 
 bool GPCamera::thumbnailSupport()

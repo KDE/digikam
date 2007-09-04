@@ -77,8 +77,7 @@ public:
 
     virtual CameraDriverType cameraDriverType() = 0;
 
-    virtual unsigned long getCapacityKb() = 0;
-    virtual unsigned long getFreeSpaceKb() = 0;
+    virtual bool getFreeSpace(unsigned long& capacityKb, unsigned long& availableKb) = 0;
 
     QString title() const;
     QString model() const;

@@ -69,14 +69,9 @@ UMSCamera::~UMSCamera()
 {
 }
 
-unsigned long UMSCamera::getCapacityKb()
+bool UMSCamera::getFreeSpace(unsigned long& capacityKb, unsigned long& availableKb)
 {
-    return 0; // TODO : not yet implemented.
-}
-
-unsigned long UMSCamera::getFreeSpaceKb()
-{
-    return 0; // TODO : not yet implemented.
+    return false; // TODO : not yet implemented.
 }
 
 bool UMSCamera::doConnect()
