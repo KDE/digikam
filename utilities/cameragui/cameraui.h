@@ -88,7 +88,7 @@ private:
     void readSettings();
     void saveSettings();
     bool dialogClosed();
-    bool createAutoAlbum(const KURL& parentURL, const QString& name,
+    bool createAutoAlbum(const KURL& parentURL, const QString& sub,
                          const QDate& date, QString& errMsg);
     void addFileExtension(const QString& ext);
     void finishDialog();
