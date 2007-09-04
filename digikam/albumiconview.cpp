@@ -1057,6 +1057,8 @@ void AlbumIconView::insertToLightTable(const ImageInfoList& list, const ImageInf
     ltview->raise();
     ltview->setFocus();
     ltview->loadImageInfos(list, current);
+    if (list.count()>1)
+        ltview->setLeftRightItems(list);
 }
 
 // ------------------------------------------------------------------------------
