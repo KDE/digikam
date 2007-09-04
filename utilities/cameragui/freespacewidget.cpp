@@ -39,6 +39,7 @@
 #include <klocale.h>
 #include <kdiskfreesp.h>
 #include <kio/global.h>
+#include <kiconloader.h>
 
 // Local includes.
 
@@ -148,13 +149,16 @@ QString FreeSpaceWidget::mountPoint()
 
 void FreeSpaceWidget::updatePixmap()
 {
-    d->pix = QPixmap(size());
+    QPixmap fimgPix = SmallIcon("folder_image");
+    d->pix          = QPixmap(size());
     d->pix.fill(colorGroup().background());
     
     QPainter p(&d->pix);
-    p.setPen(colorGroup().foreground());
+    p.setPen(colorGroup().mid());
     p.drawRect(0, 0, d->pix.width(), d->pix.height());
-
+    p.drawPixmap(2, d->pix.height()/2-fimgPix.height()/2, 
+                 fimgPix, 0, 0, fimgPix.width(), fimgPix.height());
+                 
     if (isValid())
     {
         // We will compute the estimated % of space size used to download and process.
@@ -163,14 +167,17 @@ void FreeSpaceWidget::updatePixmap()
         int pClamp            = peUsed > 100 ? 100 : peUsed;
         p.setBrush(peUsed > 95 ? Qt::red : Qt::darkGreen);
         p.setPen(Qt::white);
-        QRect gRect(1, 1, (int)(((double)d->pix.width()-2.0)*(pClamp/100.0)), d->pix.height()-2);
+        QRect gRect(fimgPix.height()+2, 1,
+                    (int)(((double)d->pix.width()-2.0-fimgPix.width()-2.0)*(pClamp/100.0)),
+                    d->pix.height()-2);
         p.drawRect(gRect);
 
-        QRect tRect(1, 1, d->pix.width()-2, d->pix.height()-2);
+        QRect tRect(fimgPix.height()+2, 1, d->pix.width()-2-fimgPix.width()-2, d->pix.height()-2);
         QString text = QString("%1%").arg(peUsed);
         p.setPen(colorGroup().text());
         QFontMetrics fontMt = p.fontMetrics();
-        QRect fontRect      = fontMt.boundingRect(tRect.x(), tRect.y(), tRect.width(), tRect.height(), 0, text);
+        QRect fontRect      = fontMt.boundingRect(tRect.x(), tRect.y(),
+                                                  tRect.width(), tRect.height(), 0, text);
         p.drawText(tRect, Qt::AlignCenter, text);
 
         QString info = i18n("<p>Capacity: <b>%1</b>"
