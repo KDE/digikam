@@ -41,5 +41,7 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 028 ==> 148648 : Color managed previews not working in all plugins.
 029 ==> 126427 : In "rename file" dialog, the 2nd picture is (and can't) not displayed.
 030 ==> 144336 : Selecting pictures on the camera lets the scroll-bar jump back to the top of the list.
-031 ==> 
+031 ==> 136927 : Failed to download file DCP_4321.jpg. Do you want to continue? and when continue is 
+                 clicked the same warning comes for the next image and so on.
+032 ==>                  
 
