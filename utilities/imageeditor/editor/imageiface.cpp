@@ -227,6 +227,7 @@ void ImageIface::putPreviewImage(uchar* data)
     {
         d->targetPreviewImage = DImg(d->previewImage.width(), d->previewImage.height(),
                                      d->previewImage.sixteenBit(), d->previewImage.hasAlpha(), data);
+        d->targetPreviewImage.setICCProfil( d->previewImage.getICCProfil() );
     }
     else
     {
