@@ -40,4 +40,6 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 027 ==> 149469 : Excessive trash confirmation dialogs after album is deleted.
 028 ==> 148648 : Color managed previews not working in all plugins.
 029 ==> 126427 : In "rename file" dialog, the 2nd picture is (and can't) not displayed.
-030 ==> 
+030 ==> 144336 : Selecting pictures on the camera lets the scroll-bar jump back to the top of the list.
+031 ==> 
+
