@@ -156,7 +156,7 @@ void FreeSpaceWidget::updatePixmap()
     d->pix.fill(palette().background().color());
 
     QPainter p(&d->pix);
-    p.setPen(palette().button().color());
+    p.setPen(palette().mid().color());
     p.drawRect(0, 0, d->pix.width()-1, d->pix.height()-1);
     p.drawPixmap(2, d->pix.height()/2-fimgPix.height()/2, 
                  fimgPix, 0, 0, fimgPix.width(), fimgPix.height());
