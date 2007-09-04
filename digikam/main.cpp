@@ -154,6 +154,11 @@ int main(int argc, char *argv[])
                           ki18n("Developer"),
                           "a dot naselli at libero dot it");
 
+    aboutData.addCredit ( ki18n("Arnd Baecker"),
+                          ki18n("Developer"),
+                          "arnd dot baecker at web dot de",
+                          "http://www.digikam.org/?q=blog/133");
+
     aboutData.addCredit ( ki18n("Fabien Salvi"),
                           ki18n("Webmaster"),
                           "fabien dot ubuntu at gmail dot com");
