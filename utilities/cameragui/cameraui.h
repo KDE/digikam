@@ -102,6 +102,8 @@ private:
 
     bool dialogClosed();
     void finishDialog();
+    void showToolBars();
+    void hideToolBars();
 
 private slots:
 
@@ -123,6 +125,9 @@ private slots:
     void slotDecreaseThumbSize();
     void slotZoomSliderChanged(int size);
     void slotThumbSizeChanged(int size);
+
+    void slotToggleFullScreen();
+    void slotEscapePressed();
 
     void slotUpload();
     void slotUploadItems(const KUrl::List&);

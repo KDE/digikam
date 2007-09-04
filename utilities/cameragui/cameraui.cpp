@@ -61,6 +61,7 @@
 #include <kapplication.h>
 #include <kiconloader.h>
 #include <kmenu.h>
+#include <kmenubar.h>
 #include <kstandarddirs.h>
 #include <khelpmenu.h>
 #include <kcalendarsystem.h>
@@ -71,6 +72,7 @@
 #include <kstatusbar.h>
 #include <kshortcutsdialog.h>
 #include <kedittoolbar.h>
+#include <ktoolbar.h>
 
 // LibKDcraw includes.
 
@@ -391,6 +393,9 @@ void CameraUI::setupActions()
                                                             this, SLOT(slotDecreaseThumbSize()));
     d->decreaseThumbsAction->setEnabled(false);
 
+    d->fullScreenAction = actionCollection()->addAction(KStandardAction::FullScreen,
+                          "cameraui_fullscreen", this, SLOT(slotToggleFullScreen()));
+
     // -- Standard 'Configure' menu actions ----------------------------------------
 
     KStandardAction::keyBindings(this, SLOT(slotEditKeys()),           actionCollection());
@@ -408,6 +413,13 @@ void CameraUI::setupActions()
 
     // Provides a menu entry that allows showing/hiding the statusbar
     createStandardStatusBarAction();
+
+    // -- Keyboard-only actions added to <MainWindow> ------------------------------
+
+    KAction *exitFullscreenAction = new KAction(i18n("Exit Fullscreen mode"), this);
+    actionCollection()->addAction("cameraui_exitfullscreen", exitFullscreenAction);
+    exitFullscreenAction->setShortcut( QKeySequence(Qt::Key_Escape) );
+    connect(exitFullscreenAction, SIGNAL(triggered()), this, SLOT(slotEscapePressed()));
 
     // ---------------------------------------------------------------------------------
 
@@ -1726,6 +1738,104 @@ void CameraUI::slotSetup()
         return;
 
     KGlobal::config()->sync();
+}
+
+void CameraUI::slotToggleFullScreen()
+{
+    if (d->fullScreen) // out of fullscreen
+    {
+        showNormal();
+
+        menuBar()->show();
+        statusBar()->show();
+        showToolBars();
+
+        if (d->removeFullScreenButton)
+        {
+            QList<KToolBar *> toolbars = toolBars();
+            foreach(KToolBar *toolbar, toolbars)
+            {
+                // name is set in ui.rc XML file
+                if (toolbar->objectName() == "ToolBar")
+                {
+                    toolbar->removeAction(d->fullScreenAction);
+                    break;
+                }
+            }
+        }
+
+        d->rightSidebar->restore();
+
+        d->fullScreen = false;
+    }
+    else  // go to fullscreen
+    {
+        // hide the menubar and the statusbar
+        menuBar()->hide();
+        statusBar()->hide();
+
+        if (d->fullScreenHideToolBar)
+        {
+            hideToolBars();
+        }
+        else
+        {
+            showToolBars();
+
+            QList<KToolBar *> toolbars = toolBars();
+            KToolBar *mainToolbar = 0;
+            foreach(KToolBar *toolbar, toolbars)
+            {
+                if (toolbar->objectName() == "ToolBar")
+                {
+                    mainToolbar = toolbar;
+                    break;
+                }
+            }
+
+            // add fullscreen action if necessary
+            if ( mainToolbar && !mainToolbar->actions().contains(d->fullScreenAction) )
+            {
+                mainToolbar->addAction(d->fullScreenAction);
+                d->removeFullScreenButton=true;
+            }
+            else
+            {
+                // If FullScreen button is enabled in toolbar settings,
+                // we shall not remove it when leaving of fullscreen mode.
+                d->removeFullScreenButton=false;
+            }
+        }
+
+        d->rightSidebar->backup();
+
+        showFullScreen();
+        d->fullScreen = true;
+    }
+}
+
+void CameraUI::slotEscapePressed()
+{
+    if (d->fullScreen)
+        d->fullScreenAction->activate(QAction::Trigger);
+}
+
+void CameraUI::showToolBars()
+{
+    QList<KToolBar *> toolbars = toolBars();
+    foreach(KToolBar *toolbar, toolbars)
+    {
+        toolbar->show();
+    }
+}
+
+void CameraUI::hideToolBars()
+{
+    QList<KToolBar *> toolbars = toolBars();
+    foreach(KToolBar *toolbar, toolbars)
+    {
+        toolbar->hide();
+    }
 }
 
 }  // namespace Digikam

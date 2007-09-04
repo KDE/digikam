@@ -57,6 +57,9 @@ public:
     {
         busy                      = false;
         closed                    = false;
+        fullScreen                = false;
+        removeFullScreenButton    = false;
+        fullScreenHideToolBar     = false;
         helpMenu                  = 0;
         advBox                    = 0;
         downloadMenu              = 0;
@@ -80,6 +83,7 @@ public:
         formatLabel               = 0;
         folderDateLabel           = 0;
         folderDateFormat          = 0;
+        fullScreenAction          = 0;
         increaseThumbsAction      = 0;
         decreaseThumbsAction      = 0;
         downloadSelectedAction    = 0;
@@ -106,6 +110,9 @@ public:
 
     bool                          busy;
     bool                          closed;
+    bool                          fullScreen;
+    bool                          removeFullScreenButton;
+    bool                          fullScreenHideToolBar;
 
     QString                       cameraTitle;
 
@@ -139,6 +146,7 @@ public:
 
     QAction                      *increaseThumbsAction;
     QAction                      *decreaseThumbsAction;
+    QAction                      *fullScreenAction;
 
     KAction                      *imageViewAction;
     KAction                      *downloadSelectedAction;

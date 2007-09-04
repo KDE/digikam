@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="9" name="cameraui" >
+<gui version="11" name="cameraui" >
 
 <MenuBar>
 
@@ -37,6 +37,8 @@
     </Menu>
   
     <Menu name="View" ><text>&amp;View</text>
+        <Action name="cameraui_fullscreen" />
+        <Separator/>
         <Action name="cameraui_zoomplus" /> 
         <Action name="cameraui_zoomminus" /> 
     </Menu>
@@ -66,6 +68,8 @@
      <Action name="cameraui_imagedownloadselected" />
      <Action name="cameraui_imageupload" />
      <Action name="cameraui_imagelock" />
+     <Separator/>     
+     <Action name="cameraui_fullscreen" />
      <Merge />
      <WeakSeparator/>     
      <Action name="freespace_action" />        
