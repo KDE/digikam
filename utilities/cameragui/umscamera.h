@@ -63,6 +63,8 @@ public:
     bool cameraManual(QString& manual);
     bool cameraAbout(QString& about);
 
+    CameraDriverType cameraDriverType(){ return UMSDriver; };
+
 private:
 
     void listFolders(const QString& folder, QStringList& subFolderList);

@@ -39,8 +39,15 @@ class QImage;
 namespace Digikam
 {
 
+enum CameraDriverType
+{
+    GPhotoDriver = 0,
+    UMSDriver
+};
+
 class DKCamera
 {
+
 public:
 
     DKCamera(const QString& title, const QString& model, const QString& port, const QString& path);
@@ -67,6 +74,8 @@ public:
     virtual bool cameraAbout(QString& about) = 0;
 
     virtual bool setLockItem(const QString& folder, const QString& itemName, bool lock) = 0;
+
+    virtual CameraDriverType cameraDriverType() = 0;
 
     QString title() const;
     QString model() const;

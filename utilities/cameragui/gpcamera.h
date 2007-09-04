@@ -85,6 +85,8 @@ public:
     QString port()  const;
     QString path()  const;
 
+    CameraDriverType cameraDriverType(){ return GPhotoDriver; };
+
     // Public static methods shared with Setup Camera
 
     static int  autoDetect(QString& model, QString& port);
