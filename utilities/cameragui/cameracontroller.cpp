@@ -22,15 +22,6 @@
  * 
  * ============================================================ */
 
-// C Ansi includes.
-
-extern "C"
-{
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
-}
-
 // C++ includes.
 
 #include <typeinfo>
@@ -144,10 +135,15 @@ public:
 
     CameraControllerPriv()
     {
-        parent = 0; 
-        timer  = 0; 
-        thread = 0; 
-        camera = 0; 
+        close         = false;
+        overwriteAll  = false;
+        skipAll       = false;
+        canceled      = false;
+        downloadTotal = 0;
+        parent        = 0; 
+        timer         = 0; 
+        camera        = 0;
+        thread        = 0; 
     }
     
     bool                    close;
@@ -917,9 +913,9 @@ void CameraController::customEvent(QCustomEvent* e)
 
             if (!d->overwriteAll)
             {
-                struct stat info;
-    
-                while (::stat(QFile::encodeName(dest), &info) == 0)
+                QFileInfo info(dest);
+
+                while (info.exists())
                 {
                     if (d->skipAll)
                     {
