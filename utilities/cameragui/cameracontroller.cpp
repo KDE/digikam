@@ -23,15 +23,6 @@
  * 
  * ============================================================ */
 
-// C Ansi includes.
-
-extern "C"
-{
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
-}
-
 // C++ includes.
 
 #include <typeinfo>
@@ -94,38 +85,21 @@ public:
     QMap<QString,QVariant> map;
 };
 
-class RenameResult
-{
-public:
-
-    RenameResult()
-    {
-        skip      = false;
-        overwrite = false;
-        cancel    = false;
-    }
-
-    bool skip;
-    bool overwrite;
-    bool cancel;
-    QString dest;
-};
-
 class CameraControllerPriv
 {
 public:
 
     CameraControllerPriv()
     {
-        close        = false;
-        overwriteAll = false;
-        skipAll      = false;
-        canceled     = false;
-        running      = false;
+        close         = false;
+        overwriteAll  = false;
+        skipAll       = false;
+        canceled      = false;
+        running       = false;
         downloadTotal = 0;
-        parent = 0;
-        timer  = 0;
-        camera = 0;
+        parent        = 0;
+        timer         = 0;
+        camera        = 0;
     }
 
     bool                    close;
@@ -191,8 +165,8 @@ CameraController::CameraController(QWidget* parent, const QString& title, const 
     qRegisterMetaType<GPItemInfo>("GPItemInfo");
     qRegisterMetaType<GPItemInfoList>("GPItemInfoList");
 
-    connect(this, SIGNAL(signalInternalNeedRename(const QString&, const QString&, const QString&, RenameResult *)),
-            this, SLOT(slotNeedRename(const QString&, const QString&, const QString&, RenameResult *)),
+    connect(this, SIGNAL(signalInternalCheckRename(const QString&, const QString&, const QString&, const QString&)),
+            this, SLOT(slotCheckRename(const QString&, const QString&, const QString&, const QString&)),
             Qt::BlockingQueuedConnection);
 
     connect(this, SIGNAL(signalInternalDownloadFailed(const QString&, const QString&)),
@@ -394,21 +368,6 @@ void CameraController::executeCommand(CameraCommand *cmd)
 
             if (!d->overwriteAll)
             {
-                QFileInfo info(dest);
-                if (info.exists())
-                {
-                    if (!d->skipAll)
-                    {
-                        // do UI operation from main thread
-                        RenameResult result;
-                        emit signalInternalNeedRename(folder, file, dest, &result);
-                        if (result.skip || result.cancel)
-                            break;
-                        if (result.overwrite)
-                            dest = result.dest;
-                    }
-                }
-
                 bool      autoRotate        = cmd->map["autoRotate"].toBool();
                 bool      fixDateTime       = cmd->map["fixDateTime"].toBool();
                 QDateTime newDateTime       = cmd->map["newDateTime"].toDateTime();
@@ -430,6 +389,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
                 KUrl tempURL(dest);
                 tempURL = tempURL.upUrl();
                 tempURL.addPath(QString(".digikam-camera-tmp1-%1").arg(getpid()));
+                QString temp = tempURL.path();
 
                 bool result = d->camera->downloadItem(folder, file, tempURL.path());
 
@@ -469,49 +429,25 @@ void CameraController::executeCommand(CameraCommand *cmd)
                         KUrl tempURL2(dest);
                         tempURL2 = tempURL2.upUrl();
                         tempURL2.addPath(QString(".digikam-camera-tmp2-%1").arg(getpid()));
+                        temp = tempURL2.path();
 
                         if (!jpegConvert(tempURL.path(), tempURL2.path(), file, losslessFormat))
                         {
                             // convert failed. delete the temp file
+                            unlink(QFile::encodeName(tempURL.path()));
                             unlink(QFile::encodeName(tempURL2.path()));
                             result = false;
                         }
-                        else
-                        {
-                            // move the file to the destination file
-                            if (rename(QFile::encodeName(tempURL2.path()), QFile::encodeName(dest)) != 0)
-                            {
-                                // rename failed. delete the temp file
-                                unlink(QFile::encodeName(tempURL2.path()));
-                                result = false;
-                            }
-                        }
-
-                        unlink(QFile::encodeName(tempURL.path()));
-                    }
-                    else
-                    {
-                        // move the file to the destination file
-                        if (rename(QFile::encodeName(tempURL.path()), QFile::encodeName(dest)) != 0)
-                        {
-                            // rename failed. delete the temp file
-                            unlink(QFile::encodeName(tempURL.path()));
-                            result = false;
-                        }
                     }
                 }
 
-                if (result)
+                if (!d->skipAll)
                 {
-                    emit signalDownloaded(folder, file, GPItemInfo::DownloadedYes);
+                    // do UI operation from main thread
+                    emit signalInternalCheckRename(folder, file, dest, temp);
                 }
-                else
-                {
-                    emit signalInternalDownloadFailed(folder, file);
-                    emit signalDownloaded(folder, file, GPItemInfo::DownloadFailed);
-                }
-                break;
             }
+            break;
         }
         case(CameraCommand::gp_open):
         {
@@ -620,56 +556,98 @@ void CameraController::sendInfo(const QString& msg)
         emit signalInfoMsg(msg);
 }
 
-void CameraController::slotNeedRename(const QString &folder, const QString &file, const QString &dest, RenameResult *renameResult)
+void CameraController::slotCheckRename(const QString &folder, const QString &file, 
+                                       const QString &destination, const QString &temp)
 {
-    // FIXME : see B.K.O #126427: with Gphoto camera, the camera folder is not
-    // mounted in local and camera picture cannot be display like a preview in dialog.
+    bool skip      = false;
+    bool cancel    = false;
+    bool overwrite = false;
+    QString dest   = destination;
 
-    KIO::RenameDialog dlg(d->parent, i18n("Rename File"), folder + QString("/") + file, dest,
-                          KIO::RenameDialog_Mode(KIO::M_MULTI | KIO::M_OVERWRITE | KIO::M_SKIP));
+    // Check if dest file already exist.
 
-    int result = dlg.exec();
-    renameResult->dest = dlg.newDestUrl().path();
-
-    switch (result)
+    if (!d->overwriteAll)
     {
-        case KIO::R_CANCEL:
+        QFileInfo info(dest);
+
+        while (info.exists())
         {
-            renameResult->cancel = true;
-            break;
-        }
-        case KIO::R_SKIP:
-        {
-            renameResult->skip = true;
-            break;
-        }
-        case KIO::R_AUTO_SKIP:
-        {
-            d->skipAll         = true;
-            renameResult->skip = true;
-            break;
-        }
-        case KIO::R_OVERWRITE:
-        {
-            renameResult->overwrite = true;
-            break;
-        }
-        case KIO::R_OVERWRITE_ALL:
-        {
-            d->overwriteAll         = true;
-            renameResult->overwrite = true;
-            break;
+            if (d->skipAll)
+            {
+                skip = true;
+                break;
+            }
+
+            KIO::RenameDialog dlg(d->parent, i18n("Rename File"), 
+                                  folder + QString("/") + file, dest,
+                                  KIO::RenameDialog_Mode(KIO::M_MULTI | KIO::M_OVERWRITE | KIO::M_SKIP));
+
+            int result = dlg.exec();
+            dest       = dlg.newDestUrl().path();
+
+            switch (result)
+            {
+                case KIO::R_CANCEL:
+                {
+                    cancel = true;
+                    break;
+                }
+                case KIO::R_SKIP:
+                {
+                    skip = true;
+                    break;
+                }
+                case KIO::R_AUTO_SKIP:
+                {
+                    d->skipAll = true;
+                    skip       = true;
+                    break;
+                }
+                case KIO::R_OVERWRITE:
+                {
+                    overwrite = true;
+                    break;
+                }
+                case KIO::R_OVERWRITE_ALL:
+                {
+                    d->overwriteAll = true;
+                    overwrite       = true;
+                    break;
+                }
+                default:
+                    break;
+            }
+
+            if (cancel || skip || overwrite)
+                break;
         }
     }
 
-    if (renameResult->cancel)
+    if (cancel)
     {
+        unlink(QFile::encodeName(temp));
         slotCancel();
+        emit signalSkipped(folder, file);
+        return;
     }
-    else if (renameResult->skip)
+    else if (skip)
     {
-        emit signalInfoMsg(i18n("Skipped file %1",file));
-        emit signalSkipped(folder, file); 
+        unlink(QFile::encodeName(temp));
+        emit signalInfoMsg(i18n("Skipped file %1", file));
+        emit signalSkipped(folder, file);        
+        return;
+    }
+    
+    // move the file to the destination file
+    if (rename(QFile::encodeName(temp), QFile::encodeName(dest)) != 0)
+    {
+        // rename failed. delete the temp file
+        unlink(QFile::encodeName(temp));
+        emit signalDownloaded(folder, file, GPItemInfo::DownloadFailed);
+    }
+    else
+    {
+        emit signalDownloaded(folder, file, GPItemInfo::DownloadedYes);
     }
 }
 

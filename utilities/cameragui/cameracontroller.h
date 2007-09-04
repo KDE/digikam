@@ -100,7 +100,9 @@ protected:
     void executeCommand(CameraCommand *cmd);
 
 signals:
-    void signalInternalNeedRename(const QString &folder, const QString &file, const QString &dest, RenameResult *renameResult);
+
+    void signalInternalCheckRename(const QString &folder, const QString &file, 
+                                   const QString &destination, const QString &temp);
     void signalInternalDownloadFailed(const QString &folder, const QString &file);
     void signalInternalUploadFailed(const QString &folder, const QString &file, const QString &src);
     void signalInternalDeleteFailed(const QString &folder, const QString &file);
@@ -109,7 +111,8 @@ signals:
 
 private slots:
 
-    void slotNeedRename(const QString &folder, const QString &file, const QString &dest, RenameResult *renameResult);
+    void slotCheckRename(const QString &folder, const QString &file, 
+                         const QString &destination, const QString& temp);
     void slotDownloadFailed(const QString &folder, const QString &file);
     void slotUploadFailed(const QString &folder, const QString &file, const QString &src);
     void slotDeleteFailed(const QString &folder, const QString &file);
