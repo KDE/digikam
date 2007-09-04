@@ -518,9 +518,9 @@ void CameraUI::setupStatusBar()
 
     //------------------------------------------------------------------------------
 
-    d->freeSpaceWidget = new FreeSpaceWidget(statusBar(), 100);
-    d->freeSpaceWidget->setIcon("folder-image");
-    statusBar()->addWidget(d->freeSpaceWidget, 1);
+    d->albumLibraryFreeSpace = new FreeSpaceWidget(statusBar(), 100);
+    d->albumLibraryFreeSpace->setIcon("folder-image");
+    statusBar()->addWidget(d->albumLibraryFreeSpace, 1);
 
     //------------------------------------------------------------------------------
 
@@ -1086,15 +1086,15 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
     unsigned long fSize = 0;
     unsigned long dSize = 0;
     d->view->itemsSelectionSizeInfo(fSize, dSize);
-    if (d->freeSpaceWidget->isValid() && 
-        (dSize >= d->freeSpaceWidget->kBAvail()))
+    if (d->albumLibraryFreeSpace->isValid() && 
+        (dSize >= d->albumLibraryFreeSpace->kBAvail()))
     {
         KMessageBox::error(this, i18n("There is no enough free space on Album Library Path "
                                       "to download and process selected pictures from camera.\n\n"
                                       "Estimated space require: %1\n"
                                       "Available free space: %2",
                                  KIO::convertSizeFromKiB(dSize)),
-                                 KIO::convertSizeFromKiB(d->freeSpaceWidget->kBAvail()));
+                                 KIO::convertSizeFromKiB(d->albumLibraryFreeSpace->kBAvail()));
         return;
     }
 
@@ -1589,7 +1589,7 @@ void CameraUI::slotNewSelection(bool hasSelection)
     unsigned long fSize = 0;
     unsigned long dSize = 0;
     d->view->itemsSelectionSizeInfo(fSize, dSize);
-    d->freeSpaceWidget->setEstimatedDSizeKb(dSize);
+    d->albumLibraryFreeSpace->setEstimatedDSizeKb(dSize);
 }
 
 void CameraUI::slotItemsSelected(CameraIconViewItem* item, bool selected)
