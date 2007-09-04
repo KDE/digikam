@@ -87,6 +87,9 @@ public:
 
     CameraDriverType cameraDriverType(){ return GPhotoDriver; };
 
+    unsigned long getCapacityKb();
+    unsigned long getFreeSpaceKb();
+
     // Public static methods shared with Setup Camera
 
     static int  autoDetect(QString& model, QString& port);

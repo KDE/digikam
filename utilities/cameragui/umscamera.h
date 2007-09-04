@@ -63,6 +63,9 @@ public:
     bool cameraManual(QString& manual);
     bool cameraAbout(QString& about);
 
+    unsigned long getCapacityKb();
+    unsigned long getFreeSpaceKb();
+
     CameraDriverType cameraDriverType(){ return UMSDriver; };
 
 private:

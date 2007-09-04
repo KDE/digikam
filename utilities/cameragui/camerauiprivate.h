@@ -106,6 +106,7 @@ public:
         cameraCancelAction        = 0;
         imageViewAction           = 0;
         albumLibraryFreeSpace     = 0;
+        cameraFreeSpace           = 0;
     }
 
     bool                          busy;
@@ -186,6 +187,7 @@ public:
     StatusNavigateBar            *statusNavigateBar;
 
     FreeSpaceWidget              *albumLibraryFreeSpace;
+    FreeSpaceWidget              *cameraFreeSpace;
 };
 
 }  // namespace Digikam

@@ -524,6 +524,12 @@ void CameraUI::setupStatusBar()
 
     //------------------------------------------------------------------------------
 
+    d->cameraFreeSpace = new FreeSpaceWidget(statusBar(), 100);
+    d->cameraFreeSpace->setIcon("camera");
+    statusBar()->addWidget(d->cameraFreeSpace, 1);
+
+    //------------------------------------------------------------------------------
+
     d->statusZoomBar = new StatusZoomBar(statusBar());
     d->statusZoomBar->setMaximumHeight(fontMetrics().height()+2);
     statusBar()->addPermanentWidget(d->statusZoomBar, 1);
@@ -538,6 +544,10 @@ void CameraUI::setupStatusBar()
 void CameraUI::setupCameraController(const QString& model, const QString& port, const QString& path)
 {
     d->controller = new CameraController(this, d->cameraTitle, model, port, path);
+
+    // Until libgphoto2 2.4.0, there is no method to get camera media free space.
+    if (d->controller->cameraDriverType() == GPhotoDriver) 
+        d->cameraFreeSpace->hide();
 
     connect(d->controller, SIGNAL(signalConnected(bool)),
             this, SLOT(slotConnected(bool)));

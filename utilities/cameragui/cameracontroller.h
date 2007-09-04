@@ -37,6 +37,7 @@
 
 #include "downloadsettingscontainer.h"
 #include "gpiteminfo.h"
+#include "dkcamera.h"
 
 namespace Digikam
 {
@@ -69,6 +70,8 @@ public:
     void deleteFile(const QString& folder, const QString& file);
     void lockFile(const QString& folder, const QString& file, bool lock);
     void openFile(const QString& folder, const QString& file);
+    
+    CameraDriverType cameraDriverType();
 
 signals:
 

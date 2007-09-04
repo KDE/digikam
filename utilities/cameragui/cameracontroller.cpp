@@ -209,6 +209,11 @@ CameraController::~CameraController()
     delete d;
 }
 
+CameraDriverType CameraController::cameraDriverType()
+{
+    return d->camera->cameraDriverType();
+}
+
 void CameraController::slotCancel()
 {
     d->canceled = true;
