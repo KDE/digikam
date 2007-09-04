@@ -375,6 +375,7 @@ void CameraThread::run()
                 KURL tempURL(dest);
                 tempURL = tempURL.upURL();
                 tempURL.addPath( QString(".digikam-camera-tmp1-%1").arg(getpid()));
+                QString temp = tempURL.path();
     
                 bool result = d->camera->downloadItem(folder, file, tempURL.path());
     
@@ -406,7 +407,7 @@ void CameraThread::run()
                     
                     // Convert Jpeg file to lossless format if necessary, 
                     // and move converted image to destination.
-
+                    
                     if (convertJpeg && isJpegImage(tempURL.path()))
                     {
                         sendInfo(i18n("Converting %1 to lossless file format...").arg(file));
@@ -414,33 +415,13 @@ void CameraThread::run()
                         KURL tempURL2(dest);
                         tempURL2 = tempURL2.upURL();
                         tempURL2.addPath( QString(".digikam-camera-tmp2-%1").arg(getpid()));
+                        temp = tempURL2.path();
 
                         if (!jpegConvert(tempURL.path(), tempURL2.path(), file, losslessFormat))
                         {
                             // convert failed. delete the temp file
-                            unlink(QFile::encodeName(tempURL2.path()));
-                            result = false;
-                        }
-                        else
-                        {
-                            // move the file to the destination file
-                            if (rename(QFile::encodeName(tempURL2.path()), QFile::encodeName(dest)) != 0)
-                            {
-                                // rename failed. delete the temp file
-                                unlink(QFile::encodeName(tempURL2.path()));
-                                result = false;
-                            }
-                        }
-
-                        unlink(QFile::encodeName(tempURL.path()));
-                    }
-                    else
-                    {
-                        // move the file to the destination file
-                        if (rename(QFile::encodeName(tempURL.path()), QFile::encodeName(dest)) != 0)
-                        {
-                            // rename failed. delete the temp file
                             unlink(QFile::encodeName(tempURL.path()));
+                            unlink(QFile::encodeName(tempURL2.path()));
                             result = false;
                         }
                     }
@@ -452,6 +433,7 @@ void CameraThread::run()
                     event->map.insert("folder", QVariant(folder));
                     event->map.insert("file", QVariant(file));
                     event->map.insert("dest", QVariant(dest));
+                    event->map.insert("temp", QVariant(temp));
                     QApplication::postEvent(parent, event);
                 }
                 else
@@ -922,7 +904,104 @@ void CameraController::customEvent(QCustomEvent* e)
         {
             QString folder = QDeepCopy<QString>(event->map["folder"].asString());
             QString file   = QDeepCopy<QString>(event->map["file"].asString());
-            emit signalDownloaded(folder, file, GPItemInfo::DownloadedYes);
+            QString dest   = QDeepCopy<QString>(event->map["dest"].asString());
+            QString temp   = QDeepCopy<QString>(event->map["temp"].asString());
+
+            d->timer->stop();
+            
+            bool skip      = false;
+            bool cancel    = false;
+            bool overwrite = false;
+
+            // Check if dest file already exist.
+
+            if (!d->overwriteAll)
+            {
+                struct stat info;
+    
+                while (::stat(QFile::encodeName(dest), &info) == 0)
+                {
+                    if (d->skipAll)
+                    {
+                        skip = true;
+                        break;
+                    }
+
+                    KIO::RenameDlg dlg(d->parent, i18n("Rename File"),
+                                       folder + QString("/") + file, dest,
+                                       KIO::RenameDlg_Mode(KIO::M_MULTI | KIO::M_OVERWRITE | KIO::M_SKIP));
+    
+                    int result = dlg.exec();
+                    dest       = dlg.newDestURL().path();
+    
+                    switch (result)
+                    {
+                        case KIO::R_CANCEL:
+                        {
+                            cancel = true;
+                            break;
+                        }
+                        case KIO::R_SKIP:
+                        {
+                            skip = true;
+                            break;
+                        }
+                        case KIO::R_AUTO_SKIP:
+                        {
+                            d->skipAll = true;
+                            skip       = true;
+                            break;
+                        }
+                        case KIO::R_OVERWRITE:
+                        {
+                            overwrite = true;
+                            break;
+                        }
+                        case KIO::R_OVERWRITE_ALL:
+                        {
+                            d->overwriteAll = true;
+                            overwrite       = true;
+                            break;
+                        }
+                        default:
+                            break;
+                    }
+    
+                    if (cancel || skip || overwrite)
+                        break;
+                }
+            }
+
+            if (cancel)
+            {
+                unlink(QFile::encodeName(temp));
+                slotCancel();
+                d->timer->start(50);
+                emit signalSkipped(folder, file);
+                return;
+            }
+            else if (skip)
+            {
+                unlink(QFile::encodeName(temp));
+                d->timer->start(50);
+                emit signalInfoMsg(i18n("Skipped file %1").arg(file));
+                emit signalSkipped(folder, file);        
+                return;
+            }
+            
+            // move the file to the destination file
+            if (rename(QFile::encodeName(temp), QFile::encodeName(dest)) != 0)
+            {
+                // rename failed. delete the temp file
+                unlink(QFile::encodeName(temp));
+                d->timer->start(50);
+                emit signalDownloaded(folder, file, GPItemInfo::DownloadFailed);
+            }
+            else
+            {
+                d->timer->start(50);
+                emit signalDownloaded(folder, file, GPItemInfo::DownloadedYes);
+            }
             break;
         }
         case (CameraEvent::gp_downloadFailed) :
@@ -1102,10 +1181,6 @@ void CameraController::slotProcessNext()
     
     CameraCommand* cmd = d->cmdQueue.head();
 
-    bool skip      = false;
-    bool cancel    = false;
-    bool overwrite = false;
-
     QString folder;
     QString file;
     QString dest;
@@ -1128,82 +1203,7 @@ void CameraController::slotProcessNext()
         folder = QDeepCopy<QString>(cmd->map["folder"].asString());
         file   = QDeepCopy<QString>(cmd->map["file"].asString());
         dest   = QDeepCopy<QString>(cmd->map["dest"].asString());
-
-        if (!d->overwriteAll)
-        {
-            struct stat info;
-            
-            while (::stat(QFile::encodeName(dest), &info) == 0)
-            {
-                if (d->skipAll)
-                {
-                    skip = true;
-                    break;
-                }
-
-                // FIXME : see B.K.O #126427: with Gphoto camera, the camera folder is not 
-                // mounted in local and camera picture cannot be display like a preview in dialog.
-
-                KIO::RenameDlg dlg(d->parent, i18n("Rename File"), folder + QString("/") + file, dest,
-                                   KIO::RenameDlg_Mode(KIO::M_MULTI | KIO::M_OVERWRITE | KIO::M_SKIP));
-            
-                int result = dlg.exec();
-                dest       = dlg.newDestURL().path();
-
-                switch (result)
-                {
-                    case KIO::R_CANCEL:
-                    {
-                        cancel = true;
-                        break;
-                    }
-                    case KIO::R_SKIP:
-                    {
-                        skip = true;
-                        break;
-                    }
-                    case KIO::R_AUTO_SKIP:
-                    {
-                        d->skipAll = true;
-                        skip       = true;
-                        break;
-                    }
-                    case KIO::R_OVERWRITE:
-                    {
-                        overwrite = true;
-                        break;
-                    }
-                    case KIO::R_OVERWRITE_ALL:
-                    {
-                        d->overwriteAll = true;
-                        overwrite       = true;
-                        break;
-                    }
-                    default:
-                        break;
-                }
-
-                if (cancel || skip || overwrite)
-                    break;
-            }
-        }
-
-        cmd->map["dest"] = QVariant(QDeepCopy<QString>(dest));        
-    }
-
-    if (cancel)
-    {
-        slotCancel();
-        d->timer->start(50, false);
-        return;
-    }
-    else if (skip)
-    {
-        d->cmdQueue.dequeue();
-        emit signalInfoMsg(i18n("Skipped file %1").arg(file));
-        emit signalSkipped(folder, file);        
-        d->timer->start(50, false);
-        return;
+        cmd->map["dest"] = QVariant(QDeepCopy<QString>(dest));
     }
 
     d->thread->start();
