@@ -125,6 +125,7 @@ ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent,
     bool sixteenBit = d->iface->previewSixteenBit();
     bool hasAlpha   = d->iface->previewHasAlpha();
     d->preview      = DImg(d->width, d->height, sixteenBit, hasAlpha, data);
+    d->preview.setICCProfil( d->iface->getOriginalImg()->getICCProfil() );
     delete [] data;
 
     d->pixmap = new QPixmap(w, h);
@@ -484,6 +485,7 @@ void ImageGuideWidget::resizeEvent(QResizeEvent * e)
     bool sixteenBit = d->iface->previewSixteenBit();
     bool hasAlpha   = d->iface->previewHasAlpha();
     d->preview      = DImg(d->width, d->height, sixteenBit, hasAlpha, data);
+    d->preview.setICCProfil( d->iface->getOriginalImg()->getICCProfil() );
     delete [] data;
 
     d->pixmap = new QPixmap(w, h);
