@@ -625,7 +625,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     
     if (!profile_rawdata.isEmpty())
     {
-        png_set_iCCP(png_ptr, info_ptr, "icc", PNG_COMPRESSION_TYPE_BASE, profile_rawdata.data(), profile_rawdata.size());
+        png_set_iCCP(png_ptr, info_ptr, (png_charp)("icc"), PNG_COMPRESSION_TYPE_BASE, profile_rawdata.data(), profile_rawdata.size());
     }    
 
     // -------------------------------------------------------------------
@@ -656,7 +656,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     libpngver.replace('\n', ' ');
     software.append(QString(" (%1)").arg(libpngver));
     png_text text;
-    text.key  = "Software";
+    text.key  = (png_charp)("Software");
     text.text = (char *)software.toAscii().data();
 #ifdef ENABLE_DEBUG_MESSAGES
     DDebug() << "Writing PNG Embedded text: key=" << text.key << " text=" << text.text << endl;
@@ -718,17 +718,17 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
                     profile = ba;
                 }
 
-                writeRawProfile(png_ptr, info_ptr, "exif", profile.data(), (png_uint_32) profile.size());
+                writeRawProfile(png_ptr, info_ptr, (png_charp)("exif"), profile.data(), (png_uint_32) profile.size());
                 break;
             }
             case(DImg::IPTC):
             {
-                writeRawProfile(png_ptr, info_ptr, "iptc", ba.data(), (png_uint_32) ba.size());
+                writeRawProfile(png_ptr, info_ptr, (png_charp)("iptc"), ba.data(), (png_uint_32) ba.size());
                 break;
             }
             case(DImg::XMP):
             {
-                writeRawProfile(png_ptr, info_ptr, "xmp", ba.data(), (png_uint_32) ba.size());
+                writeRawProfile(png_ptr, info_ptr, (png_charp)("xmp"), ba.data(), (png_uint_32) ba.size());
                 break;
             }
             default:
