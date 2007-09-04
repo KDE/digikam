@@ -40,6 +40,7 @@
 #include <kdiskfreespace.h>
 #include <kmountpoint.h>
 #include <kio/global.h>
+#include <kiconloader.h>
 
 // Local includes.
 
@@ -150,12 +151,15 @@ QString FreeSpaceWidget::mountPoint()
 
 void FreeSpaceWidget::updatePixmap()
 {
-    d->pix = QPixmap(size());
+    QPixmap fimgPix = SmallIcon("folder-image");
+    d->pix          = QPixmap(size());
     d->pix.fill(palette().background().color());
-    
+
     QPainter p(&d->pix);
-    p.setPen(palette().foreground().color());
+    p.setPen(palette().button().color());
     p.drawRect(0, 0, d->pix.width()-1, d->pix.height()-1);
+    p.drawPixmap(2, d->pix.height()/2-fimgPix.height()/2, 
+                 fimgPix, 0, 0, fimgPix.width(), fimgPix.height());
 
     if (isValid())
     {
@@ -165,14 +169,17 @@ void FreeSpaceWidget::updatePixmap()
         int pClamp            = peUsed > 100 ? 100 : peUsed;
         p.setBrush(peUsed > 95 ? Qt::red : Qt::darkGreen);
         p.setPen(Qt::white);
-        QRect gRect(1, 1, (int)(((double)d->pix.width()-3.0)*(pClamp/100.0)), d->pix.height()-3);
+        QRect gRect(fimgPix.height()+2, 1, 
+                    (int)(((double)d->pix.width()-3.0-fimgPix.width()-2.0)*(pClamp/100.0)), 
+                    d->pix.height()-3);
         p.drawRect(gRect);
 
-        QRect tRect(1, 1, d->pix.width()-3, d->pix.height()-3);
+        QRect tRect(fimgPix.height()+2, 1, d->pix.width()-3-fimgPix.width()-2, d->pix.height()-3);
         QString text = QString("%1%").arg(peUsed);
         p.setPen(palette().text().color());
         QFontMetrics fontMt = p.fontMetrics();
-        QRect fontRect      = fontMt.boundingRect(tRect.x(), tRect.y(), tRect.width(), tRect.height(), 0, text);
+        QRect fontRect      = fontMt.boundingRect(tRect.x(), tRect.y(), 
+                                                  tRect.width(), tRect.height(), 0, text);
         p.drawText(tRect, Qt::AlignCenter, text);
 
         QString info = i18n("<p>Capacity: <b>%1</b>"
