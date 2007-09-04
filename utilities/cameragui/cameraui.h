@@ -96,7 +96,7 @@ private:
 
     void readSettings();
     void saveSettings();
-    bool createAutoAlbum(const KUrl& parentURL, const QString& name,
+    bool createAutoAlbum(const KUrl& parentURL, const QString& sub,
                          const QDate& date, QString& errMsg);
     void addFileExtension(const QString& ext);
 

@@ -23,17 +23,6 @@
  * 
  * ============================================================ */
 
-#define CAMERA_INFO_MENU_ID 255
-
-// C Ansi includes.
-
-extern "C"
-{
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
-}
-
 // Qt includes.
 
 #include <QMenu>
@@ -1351,6 +1340,9 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
                     break;
             }
 
+            // See B.K.O #136927 : we need to support file system which do not
+            // handle upper case properly.
+            dirName = dirName.toLower();
             if (!createAutoAlbum(url, dirName, dateTime.date(), errMsg))
             {
                 KMessageBox::error(this, errMsg);
@@ -1379,6 +1371,9 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
                 fi.suffix().toUpper() == QString("MPO"))
                 subAlbum = QString("MPG");
 
+            // See B.K.O #136927 : we need to support file system which do not
+            // handle upper case properly.
+            subAlbum = subAlbum.toLower();
             if (!createAutoAlbum(u, subAlbum, dateTime.date(), errMsg))
             {
                 KMessageBox::error(this, errMsg);
@@ -1751,23 +1746,23 @@ void CameraUI::slotItemsSelected(CameraIconViewItem* item, bool selected)
         d->rightSidebar->slotNoCurrentItem();
 }
 
-bool CameraUI::createAutoAlbum(const KUrl& parentURL, const QString& name,
+bool CameraUI::createAutoAlbum(const KUrl& parentURL, const QString& sub,
                                const QDate& date, QString& errMsg)
 {
     KUrl u(parentURL);
-    u.addPath(name);
+    u.addPath(sub);
 
     // first stat to see if the album exists
-    struct stat buf;
-    if (::stat(QFile::encodeName(u.path()), &buf) == 0)
+    QFileInfo info(u.path());
+    if (info.exists())
     {
         // now check if its really a directory
-        if (S_ISDIR(buf.st_mode))
+        if (info.isDir())
             return true;
         else
         {
             errMsg = i18n("A file with same name (%1) exists in folder %2",
-                          name, parentURL.path());
+                          sub, parentURL.path());
             return false;
         }
     }
@@ -1783,7 +1778,7 @@ bool CameraUI::createAutoAlbum(const KUrl& parentURL, const QString& name,
     }
     QString albumRootPath = CollectionManager::instance()->albumRootPath(parentURL);
 
-    return aman->createPAlbum(parent, albumRootPath, name, QString(""), date, QString(""), errMsg);
+    return aman->createPAlbum(parent, albumRootPath, sub, QString(""), date, QString(""), errMsg);
 }
 
 void CameraUI::addFileExtension(const QString& ext)
