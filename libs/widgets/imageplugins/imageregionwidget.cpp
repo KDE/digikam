@@ -91,7 +91,6 @@ ImageRegionWidget::ImageRegionWidget(int wp, int hp, QWidget *parent, bool scrol
     d->image = d->iface->getOriginalImg()->copy(); 
 
     setMinimumSize(wp, hp);
-    setBackgroundColor(palette().color(QPalette::Background));
 
     if( !scrollBar ) 
     {
