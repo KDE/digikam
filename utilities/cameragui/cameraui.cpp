@@ -1306,9 +1306,6 @@ void CameraUI::slotDownloaded(const QString& folder, const QString& file, int st
     {
         iconItem->setDownloaded(status);
         d->view->ensureItemVisible(iconItem);
-
-        //if (iconItem->isSelected())
-          //  slotItemsSelected(iconItem, true);
     }
     
     if (status == GPItemInfo::DownloadedYes || status == GPItemInfo::DownloadFailed)
@@ -1322,7 +1319,10 @@ void CameraUI::slotSkipped(const QString& folder, const QString& file)
 {
     CameraIconViewItem* iconItem = d->view->findItem(folder, file);
     if (iconItem)
+    {
+        iconItem->setDownloaded(GPItemInfo::DownloadedNo);
         d->view->ensureItemVisible(iconItem);
+    }
 
     int curr = d->progress->progress();
     d->progress->setProgress(curr+1);
