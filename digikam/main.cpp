@@ -171,7 +171,7 @@ int main(int argc, char *argv[])
     aboutData.addCredit ( "Arnd Baecker",
                           I18N_NOOP("Developer"),
                           "arnd dot baecker at web dot de",
-                          0);
+                          "http://www.digikam.org/?q=blog/133");
 
     aboutData.addCredit ( "Fabien Salvi",
                           I18N_NOOP("Webmaster"),
