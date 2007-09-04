@@ -519,6 +519,7 @@ void CameraUI::setupStatusBar()
     //------------------------------------------------------------------------------
 
     d->freeSpaceWidget = new FreeSpaceWidget(statusBar(), 100);
+    d->freeSpaceWidget->setIcon("folder-image");
     statusBar()->addWidget(d->freeSpaceWidget, 1);
 
     //------------------------------------------------------------------------------

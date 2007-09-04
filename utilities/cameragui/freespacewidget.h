@@ -47,6 +47,7 @@ public:
     FreeSpaceWidget(QWidget* parent, int width);
     ~FreeSpaceWidget();
 
+    void          setIcon(const QString& name);
     void          setEstimatedDSizeKb(unsigned long dSize);
     unsigned long estimatedDSizeKb();
     

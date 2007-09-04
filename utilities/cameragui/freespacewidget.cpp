@@ -80,6 +80,7 @@ public:
     QTimer        *timer;
     
     QPixmap        pix;
+    QPixmap        iconPix;
 };
 
 FreeSpaceWidget::FreeSpaceWidget(QWidget* parent, int width)
@@ -104,6 +105,11 @@ FreeSpaceWidget::~FreeSpaceWidget()
     d->timer->stop();
     delete d->timer;
     delete d;
+}
+
+void FreeSpaceWidget::setIcon(const QString& name)
+{
+    d->iconPix = SmallIcon(name);
 }
 
 void FreeSpaceWidget::setEstimatedDSizeKb(unsigned long dSize)
@@ -150,15 +156,14 @@ QString FreeSpaceWidget::mountPoint()
 
 void FreeSpaceWidget::updatePixmap()
 {
-    QPixmap fimgPix = SmallIcon("folder-image");
-    d->pix          = QPixmap(size());
+    d->pix = QPixmap(size());
     d->pix.fill(palette().background().color());
 
     QPainter p(&d->pix);
     p.setPen(palette().mid().color());
     p.drawRect(0, 0, d->pix.width()-1, d->pix.height()-1);
-    p.drawPixmap(2, d->pix.height()/2-fimgPix.height()/2, 
-                 fimgPix, 0, 0, fimgPix.width(), fimgPix.height());
+    p.drawPixmap(2, d->pix.height()/2-d->iconPix.height()/2, 
+                 d->iconPix, 0, 0, d->iconPix.width(), d->iconPix.height());
 
     if (isValid())
     {
@@ -168,12 +173,12 @@ void FreeSpaceWidget::updatePixmap()
         int pClamp            = peUsed > 100 ? 100 : peUsed;
         p.setBrush(peUsed > 95 ? Qt::red : Qt::darkGreen);
         p.setPen(Qt::white);
-        QRect gRect(fimgPix.height()+2, 1, 
-                    (int)(((double)d->pix.width()-3.0-fimgPix.width()-2.0)*(pClamp/100.0)), 
+        QRect gRect(d->iconPix.height()+2, 1, 
+                    (int)(((double)d->pix.width()-3.0-d->iconPix.width()-2.0)*(pClamp/100.0)), 
                     d->pix.height()-3);
         p.drawRect(gRect);
 
-        QRect tRect(fimgPix.height()+2, 1, d->pix.width()-3-fimgPix.width()-2, d->pix.height()-3);
+        QRect tRect(d->iconPix.height()+2, 1, d->pix.width()-3-d->iconPix.width()-2, d->pix.height()-3);
         QString text = QString("%1%").arg(peUsed);
         p.setPen(palette().text().color());
         QFontMetrics fontMt = p.fontMetrics();
@@ -181,12 +186,25 @@ void FreeSpaceWidget::updatePixmap()
                                                   tRect.width(), tRect.height(), 0, text);
         p.drawText(tRect, Qt::AlignCenter, text);
 
-        QString info = i18n("<p>Capacity: <b>%1</b>"
-                            "<p>Available: <b>%2</b>"
-                            "<p>Require: <b>%3</b>",
-                            KIO::convertSizeFromKiB(d->kBSize),
-                            KIO::convertSizeFromKiB(d->kBAvail),
-                            KIO::convertSizeFromKiB(d->dSizeKb));
+        QString info;
+
+        if (d->dSizeKb > 0)
+        {
+            info = i18n("<p>Capacity: <b>%1</b>"
+                        "<p>Available: <b>%2</b>"
+                        "<p>Require: <b>%3</b>",
+                        KIO::convertSizeFromKiB(d->kBSize),
+                        KIO::convertSizeFromKiB(d->kBAvail),
+                        KIO::convertSizeFromKiB(d->dSizeKb));
+        }
+        else
+        {
+            info = i18n("<p>Capacity: <b>%1</b>"
+                        "<p>Available: <b>%2</b>",
+                        KIO::convertSizeFromKiB(d->kBSize),
+                        KIO::convertSizeFromKiB(d->kBAvail));
+        }
+
         setWhatsThis(info);
         setToolTip(info);
     }
