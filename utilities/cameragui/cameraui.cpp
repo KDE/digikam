@@ -423,10 +423,7 @@ void CameraUI::setupActions()
 
     // ---------------------------------------------------------------------------------
 
-    d->freeSpaceAction = new FreeSpaceAction(this);
-    actionCollection()->addAction("freespace_action", d->freeSpaceAction);
-
-    DLogoAction *logoAction = new DLogoAction(this, false);
+    DLogoAction *logoAction = new DLogoAction(this);
     actionCollection()->addAction("logo_action", logoAction);
 
     d->anim                   = new AnimWidget(this, 22);
@@ -518,6 +515,11 @@ void CameraUI::setupStatusBar()
     d->statusProgressBar->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
     d->statusProgressBar->setMaximumHeight(fontMetrics().height()+2);
     statusBar()->addWidget(d->statusProgressBar, 100);
+
+    //------------------------------------------------------------------------------
+
+    d->freeSpaceWidget = new FreeSpaceWidget(statusBar(), 100);
+    statusBar()->addWidget(d->freeSpaceWidget, 1);
 
     //------------------------------------------------------------------------------
 
@@ -1083,15 +1085,15 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
     unsigned long fSize = 0;
     unsigned long dSize = 0;
     d->view->itemsSelectionSizeInfo(fSize, dSize);
-    if (d->freeSpaceAction->freeSpaceWidget()->isValid() && 
-        (dSize >= d->freeSpaceAction->freeSpaceWidget()->kBAvail()))
+    if (d->freeSpaceWidget->isValid() && 
+        (dSize >= d->freeSpaceWidget->kBAvail()))
     {
         KMessageBox::error(this, i18n("There is no enough free space on Album Library Path "
                                       "to download and process selected pictures from camera.\n\n"
                                       "Estimated space require: %1\n"
                                       "Available free space: %2",
                                  KIO::convertSizeFromKiB(dSize)),
-                                 KIO::convertSizeFromKiB(d->freeSpaceAction->freeSpaceWidget()->kBAvail()));
+                                 KIO::convertSizeFromKiB(d->freeSpaceWidget->kBAvail()));
         return;
     }
 
@@ -1586,7 +1588,7 @@ void CameraUI::slotNewSelection(bool hasSelection)
     unsigned long fSize = 0;
     unsigned long dSize = 0;
     d->view->itemsSelectionSizeInfo(fSize, dSize);
-    d->freeSpaceAction->freeSpaceWidget()->setEstimatedDSizeKb(dSize);
+    d->freeSpaceWidget->setEstimatedDSizeKb(dSize);
 }
 
 void CameraUI::slotItemsSelected(CameraIconViewItem* item, bool selected)

@@ -72,25 +72,6 @@ private:
     FreeSpaceWidgetPriv* d;
 };
 
-// -----------------------------------------------------------------------------------
-
-class FreeSpaceAction : public KAction
-{
-  Q_OBJECT
-
-public:
-    
-    FreeSpaceAction(QObject* parent);
-               
-    virtual QWidget* createWidget(QWidget* parent);
-
-    FreeSpaceWidget* freeSpaceWidget() const;
-
-private:
-
-    FreeSpaceWidget *m_freeSpaceWidget;
-};
-
 }  // namespace Digikam
 
 #endif /* FREESPACEWIDGET_H */

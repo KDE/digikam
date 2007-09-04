@@ -105,7 +105,7 @@ public:
         donateMoneyAction         = 0;
         cameraCancelAction        = 0;
         imageViewAction           = 0;
-        freeSpaceAction           = 0;
+        freeSpaceWidget           = 0;
     }
 
     bool                          busy;
@@ -185,7 +185,7 @@ public:
     StatusProgressBar            *statusProgressBar;
     StatusNavigateBar            *statusNavigateBar;
 
-    FreeSpaceAction              *freeSpaceAction;
+    FreeSpaceWidget              *freeSpaceWidget;
 };
 
 }  // namespace Digikam
