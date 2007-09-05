@@ -95,15 +95,17 @@ void UMSCamera::getAllFolders(const QString& folder, QStringList& subFolderList)
 
 bool UMSCamera::getItemsInfoList(const QString& folder, GPItemInfoList& infoList, bool getImageDimensions)
 {
-    m_cancel = false;
+    d->cancel = false;
     infoList.clear();
 
     QDir dir(folder);
     dir.setFilter(QDir::Files);
+    if (!dir.exists())
+        return false;
 
     const QFileInfoList list = dir.entryInfoList();
     if (list.isEmpty())
-        return false;
+        return true;        // Nothing todo.
 
     QFileInfoList::const_iterator fi;
 
