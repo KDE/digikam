@@ -69,9 +69,9 @@ UMSCamera::~UMSCamera()
 {
 }
 
-bool UMSCamera::getFreeSpace(unsigned long& capacityKb, unsigned long& availableKb)
+bool UMSCamera::getFreeSpace(unsigned long& /*kBSize*/, unsigned long& /*kBAvail*/)
 {
-    return false; // TODO : not yet implemented.
+    return false; // NOTE: implemented in gui, outside the camera thread.
 }
 
 bool UMSCamera::doConnect()
@@ -95,7 +95,7 @@ void UMSCamera::getAllFolders(const QString& folder, QStringList& subFolderList)
 
 bool UMSCamera::getItemsInfoList(const QString& folder, GPItemInfoList& infoList, bool getImageDimensions)
 {
-    d->cancel = false;
+    m_cancel = false;
     infoList.clear();
 
     QDir dir(folder);

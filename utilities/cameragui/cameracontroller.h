@@ -58,11 +58,13 @@ public:
 
     void listFolders();
     void listFiles(const QString& folder);
+    void getFreeSpace();
     void getThumbnail(const QString& folder, const QString& file);
     void getExif(const QString& folder, const QString& file);
     void getCameraInformations();
     QString getCameraPath();
     QString getCameraTitle();
+    DKCamera::CameraDriverType cameraDriverType();
 
     void downloadPrep();
     void download(DownloadSettingsContainer downloadSettings);
@@ -70,15 +72,15 @@ public:
     void deleteFile(const QString& folder, const QString& file);
     void lockFile(const QString& folder, const QString& file, bool lock);
     void openFile(const QString& folder, const QString& file);
-    
-    CameraDriverType cameraDriverType();
 
 signals:
 
     void signalBusy(bool val);
     void signalInfoMsg(const QString& msg);
     void signalErrorMsg(const QString& msg);
-    void signalCameraInformations(const QString& summary, const QString& manual, const QString& about);
+    void signalCameraInformations(const QString& summary, const QString& manual,
+                                  const QString& about);
+    void signalFreeSpace(unsigned long kBSize, unsigned long kBAvail);
 
     void signalConnected(bool val);
     void signalFolderList(const QStringList& folderList);
@@ -92,6 +94,14 @@ signals:
     void signalExifFromFile(const QString& folder, const QString& file);
     void signalExifData(const QByteArray& exifData);
 
+    void signalInternalCheckRename(const QString &folder, const QString &file, 
+                                   const QString &destination, const QString &temp);
+    void signalInternalDownloadFailed(const QString &folder, const QString &file);
+    void signalInternalUploadFailed(const QString &folder, const QString &file, const QString &src);
+    void signalInternalDeleteFailed(const QString &folder, const QString &file);
+    void signalInternalLockFailed(const QString &folder, const QString &file);
+    void signalInternalOpen(const QString &folder, const QString &file, const QString &dest);
+
 public slots:
 
     void slotCancel();
@@ -101,16 +111,6 @@ protected:
 
     void run();
     void executeCommand(CameraCommand *cmd);
-
-signals:
-
-    void signalInternalCheckRename(const QString &folder, const QString &file, 
-                                   const QString &destination, const QString &temp);
-    void signalInternalDownloadFailed(const QString &folder, const QString &file);
-    void signalInternalUploadFailed(const QString &folder, const QString &file, const QString &src);
-    void signalInternalDeleteFailed(const QString &folder, const QString &file);
-    void signalInternalLockFailed(const QString &folder, const QString &file);
-    void signalInternalOpen(const QString &folder, const QString &file, const QString &dest);
 
 private slots:
 

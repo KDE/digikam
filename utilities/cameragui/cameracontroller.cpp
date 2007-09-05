@@ -78,7 +78,8 @@ public:
         gp_lock,
         gp_thumbnail,
         gp_exif,
-        gp_open
+        gp_open,
+        gp_freeSpace
     };
 
     Action                 action;
@@ -209,11 +210,6 @@ CameraController::~CameraController()
     delete d;
 }
 
-CameraDriverType CameraController::cameraDriverType()
-{
-    return d->camera->cameraDriverType();
-}
-
 void CameraController::slotCancel()
 {
     d->canceled = true;
@@ -279,6 +275,15 @@ void CameraController::executeCommand(CameraCommand *cmd)
             d->camera->cameraAbout(about);
 
             emit signalCameraInformations(summary, manual, about);
+            break;
+        }
+        case(CameraCommand::gp_freeSpace):
+        {
+            sendInfo(i18n("Getting camera freespace available..."));
+            unsigned long kBSize  = 0;
+            unsigned long kBAvail = 0;
+            d->camera->getFreeSpace(kBSize, kBAvail);
+            emit signalFreeSpace(kBSize, kBAvail);
             break;
         }
         case(CameraCommand::gp_listfolders):
@@ -787,6 +792,11 @@ QString CameraController::getCameraTitle()
     return d->camera->title();
 }
 
+DKCamera::CameraDriverType CameraController::cameraDriverType()
+{
+    return d->camera->cameraDriverType();
+}
+
 void CameraController::slotConnect()
 {
     d->canceled = false;
@@ -837,6 +847,14 @@ void CameraController::getCameraInformations()
     d->canceled = false;
     CameraCommand *cmd = new CameraCommand;
     cmd->action = CameraCommand::gp_cameraInformations;
+    addCommand(cmd);
+}
+
+void CameraController::getFreeSpace()
+{
+    d->canceled = false;
+    CameraCommand *cmd = new CameraCommand;
+    cmd->action = CameraCommand::gp_freeSpace;
     addCommand(cmd);
 }
 

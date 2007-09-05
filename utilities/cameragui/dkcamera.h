@@ -39,14 +39,16 @@ class QImage;
 namespace Digikam
 {
 
-enum CameraDriverType
-{
-    GPhotoDriver = 0,
-    UMSDriver
-};
-
 class DKCamera
 {
+
+public:
+
+    enum CameraDriverType
+    {
+        GPhotoDriver = 0,
+        UMSDriver
+    };
 
 public:
 
@@ -75,9 +77,9 @@ public:
 
     virtual bool setLockItem(const QString& folder, const QString& itemName, bool lock) = 0;
 
-    virtual CameraDriverType cameraDriverType() = 0;
+    virtual DKCamera::CameraDriverType cameraDriverType() = 0;
 
-    virtual bool getFreeSpace(unsigned long& capacityKb, unsigned long& availableKb) = 0;
+    virtual bool getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail) = 0;
 
     QString title() const;
     QString model() const;

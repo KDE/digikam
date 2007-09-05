@@ -64,23 +64,27 @@ public:
         kBAvail     = 0;
         dSizeKb     = 0;
         percentUsed = 0;
+        mode        = FreeSpaceWidget::AlbumLibrary;
     }
 
-    bool           isValid;
+    bool                            isValid;
     
-    int            percentUsed;
+    int                             percentUsed;
 
-    unsigned long  dSizeKb;
-    unsigned long  kBSize;
-    unsigned long  kBUsed;
-    unsigned long  kBAvail;
+    unsigned long                   dSizeKb;
+    unsigned long                   kBSize;
+    unsigned long                   kBUsed;
+    unsigned long                   kBAvail;
     
-    QString        mountPoint;
+    QString                         mountPoint;
+    QString                         path;
 
-    QTimer        *timer;
+    QTimer                         *timer;
     
-    QPixmap        pix;
-    QPixmap        iconPix;
+    QPixmap                         pix;
+    QPixmap                         iconPix;
+
+    FreeSpaceWidget::FreeSpaceMode  mode;
 };
 
 FreeSpaceWidget::FreeSpaceWidget(QWidget* parent, int width)
@@ -90,14 +94,10 @@ FreeSpaceWidget::FreeSpaceWidget(QWidget* parent, int width)
     setAttribute(Qt::WA_DeleteOnClose);
     setFixedWidth(width);
     setMaximumHeight(fontMetrics().height()+4);
-    slotTimeout();
-    
     d->timer = new QTimer(this);
-    
+        
     connect(d->timer, SIGNAL(timeout()),
             this, SLOT(slotTimeout()));
-
-    d->timer->start(10000);
 }
 
 FreeSpaceWidget::~FreeSpaceWidget()
@@ -107,9 +107,53 @@ FreeSpaceWidget::~FreeSpaceWidget()
     delete d;
 }
 
-void FreeSpaceWidget::setIcon(const QString& name)
+void FreeSpaceWidget::setMode(FreeSpaceMode mode)
 {
-    d->iconPix = SmallIcon(name);
+    d->mode = mode;
+    if (d->mode == FreeSpaceWidget::AlbumLibrary)
+    {
+        d->iconPix = SmallIcon("folder-image");
+    }
+    else if (d->mode == FreeSpaceWidget::UMSCamera)
+    {
+        d->iconPix = SmallIcon("camera");
+    }
+    else // GPhotoCamera
+    {
+        d->iconPix = SmallIcon("camera");
+    }
+    updatePixmap();
+}
+
+void FreeSpaceWidget::setPath(const QString& path)
+{
+    d->timer->stop();
+    d->path = path;
+    slotTimeout();
+    d->timer->start(10000);
+}
+
+void FreeSpaceWidget::setInformations(unsigned long kBSize,
+                                      unsigned long kBUsed, unsigned long kBAvail, 
+                                      const QString& mountPoint)
+{
+    d->mountPoint = mountPoint;
+    d->kBSize     = kBSize;
+    d->kBUsed     = kBUsed;
+    d->kBAvail    = kBAvail;
+
+    if (kBSize <= 0)
+    {
+        d->percentUsed = 0;
+        d->isValid     = false;
+    }
+    else
+    {
+        d->percentUsed = 100 - (int)(100.0*kBAvail/kBSize);
+        d->isValid     = true;
+    }
+    updatePixmap();
+    repaint();
 }
 
 void FreeSpaceWidget::setEstimatedDSizeKb(unsigned long dSize)
@@ -177,15 +221,15 @@ void FreeSpaceWidget::updatePixmap()
                     (int)(((double)d->pix.width()-3.0-d->iconPix.width()-2.0)*(pClamp/100.0)), 
                     d->pix.height()-3);
         p.drawRect(gRect);
-
+    
         QRect tRect(d->iconPix.height()+2, 1, d->pix.width()-3-d->iconPix.width()-2, d->pix.height()-3);
-        QString text = QString("%1%").arg(peUsed);
-        p.setPen(palette().text().color());
+        QString text        = QString("%1%").arg(peUsed);
         QFontMetrics fontMt = p.fontMetrics();
         QRect fontRect      = fontMt.boundingRect(tRect.x(), tRect.y(), 
-                                                  tRect.width(), tRect.height(), 0, text);
+                                                tRect.width(), tRect.height(), 0, text);
+        p.setPen(palette().text().color());
         p.drawText(tRect, Qt::AlignCenter, text);
-
+    
         QString info;
 
         if (d->dSizeKb > 0)
@@ -221,9 +265,8 @@ void FreeSpaceWidget::paintEvent(QPaintEvent*)
 
 void FreeSpaceWidget::slotTimeout()
 {
-    QString path           = AlbumSettings::instance()->getAlbumLibraryPath();
     KMountPoint::List list = KMountPoint::currentMountPoints();
-    KMountPoint::Ptr mp    = list.findByPath(path);
+    KMountPoint::Ptr mp    = list.findByPath(d->path);
     if (mp)
     {
         KDiskFreeSpace *job = new KDiskFreeSpace;
@@ -236,14 +279,7 @@ void FreeSpaceWidget::slotTimeout()
 void FreeSpaceWidget::slotAvailableFreeSpace(QString mountPoint, quint64 kBSize, 
                                              quint64 kBUsed, quint64 kBAvail)
 {
-    d->mountPoint  = mountPoint;
-    d->kBSize      = kBSize;
-    d->kBUsed      = kBUsed;
-    d->kBAvail     = kBAvail;
-    d->percentUsed = 100 - (int)(100.0*kBAvail/kBSize);
-    d->isValid     = true;
-    updatePixmap();
-    repaint();
+    setInformations(kBSize, kBUsed, kBAvail, mountPoint);
 }
 
 }  // namespace Digikam

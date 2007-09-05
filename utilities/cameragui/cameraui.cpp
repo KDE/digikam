@@ -519,13 +519,13 @@ void CameraUI::setupStatusBar()
     //------------------------------------------------------------------------------
 
     d->albumLibraryFreeSpace = new FreeSpaceWidget(statusBar(), 100);
-    d->albumLibraryFreeSpace->setIcon("folder-image");
+    d->albumLibraryFreeSpace->setMode(FreeSpaceWidget::AlbumLibrary);
+    d->albumLibraryFreeSpace->setPath(AlbumSettings::instance()->getAlbumLibraryPath());
     statusBar()->addWidget(d->albumLibraryFreeSpace, 1);
 
     //------------------------------------------------------------------------------
 
     d->cameraFreeSpace = new FreeSpaceWidget(statusBar(), 100);
-    d->cameraFreeSpace->setIcon("camera");
     statusBar()->addWidget(d->cameraFreeSpace, 1);
 
     //------------------------------------------------------------------------------
@@ -545,9 +545,17 @@ void CameraUI::setupCameraController(const QString& model, const QString& port, 
 {
     d->controller = new CameraController(this, d->cameraTitle, model, port, path);
 
-    // Until libgphoto2 2.4.0, there is no method to get camera media free space.
-    if (d->controller->cameraDriverType() == GPhotoDriver) 
-        d->cameraFreeSpace->hide();
+    if (d->controller->cameraDriverType() == DKCamera::GPhotoDriver)
+    { 
+        d->cameraFreeSpace->setMode(FreeSpaceWidget::GPhotoCamera);
+        connect(d->controller, SIGNAL(signalFreeSpace(unsigned long, unsigned long)),
+                this, SLOT(slotCameraFreeSpaceInfo(unsigned long, unsigned long)));
+    }
+    else
+    {
+        d->cameraFreeSpace->setMode(FreeSpaceWidget::UMSCamera);
+        d->cameraFreeSpace->setPath(d->controller->getCameraPath());
+    }
 
     connect(d->controller, SIGNAL(signalConnected(bool)),
             this, SLOT(slotConnected(bool)));
@@ -908,6 +916,7 @@ void CameraUI::slotConnected(bool val)
     }
     else
     {
+        d->controller->getFreeSpace();
         d->controller->listFolders();
     }
 }
@@ -1849,6 +1858,11 @@ void CameraUI::hideToolBars()
     {
         toolbar->hide();
     }
+}
+
+void CameraUI::slotCameraFreeSpaceInfo(unsigned long kBSize, unsigned long kBAvail)
+{    
+    d->cameraFreeSpace->setInformations(kBSize, kBSize-kBAvail, kBAvail, QString());
 }
 
 }  // namespace Digikam

@@ -85,9 +85,9 @@ public:
     QString port()  const;
     QString path()  const;
 
-    CameraDriverType cameraDriverType(){ return GPhotoDriver; };
+    DKCamera::CameraDriverType cameraDriverType(){ return DKCamera::GPhotoDriver; };
 
-    bool getFreeSpace(unsigned long& capacityKb, unsigned long& availableKb);
+    bool getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail);
 
     // Public static methods shared with Setup Camera
 

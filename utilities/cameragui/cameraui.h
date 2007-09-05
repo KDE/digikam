@@ -116,6 +116,7 @@ private slots:
     void slotErrorMsg(const QString& msg);
     void slotInformations();
     void slotCameraInformations(const QString&, const QString&, const QString&);
+    void slotCameraFreeSpaceInfo(unsigned long kBSize, unsigned long kBAvail);
 
     void slotFolderList(const QStringList& folderList);
     void slotFileList(const GPItemInfoList& fileList);

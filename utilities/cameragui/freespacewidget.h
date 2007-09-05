@@ -40,23 +40,38 @@ class FreeSpaceWidgetPriv;
 
 class FreeSpaceWidget : public QWidget
 {
+
     Q_OBJECT
+
+public: 
+
+    enum FreeSpaceMode
+    {
+        AlbumLibrary = 0,
+        UMSCamera,
+        GPhotoCamera
+    };
     
 public:
 
     FreeSpaceWidget(QWidget* parent, int width);
     ~FreeSpaceWidget();
 
-    void          setIcon(const QString& name);
     void          setEstimatedDSizeKb(unsigned long dSize);
     unsigned long estimatedDSizeKb();
     
-    bool          isValid() ;
+    bool          isValid();
     int           percentUsed();
     unsigned long kBSize();
     unsigned long kBUsed();
     unsigned long kBAvail();
     QString       mountPoint();
+
+    void setMode(FreeSpaceMode mode);
+    void setPath(const QString& path);
+    void setInformations(unsigned long kBSize,
+                         unsigned long kBUsed, unsigned long kBAvail, 
+                         const QString& mountPoint);
 
 protected:
 
