@@ -155,11 +155,6 @@ QString GPCamera::path() const
     return d->globalPath;   
 }
 
-bool GPCamera::getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail)
-{
-    return false; // TODO : not yet implemented.
-}
-
 bool GPCamera::thumbnailSupport()
 {
     return d->thumbnailSupport;    
@@ -304,6 +299,124 @@ void GPCamera::cancel()
     if (!m_status)
         return;
     m_status->cancel = true;
+}
+
+/* This method depand of libgphoto2 2.4.0 */
+bool GPCamera::getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail)
+{
+    int                       nrofsinfos;
+    CameraStorageInformation *sinfos;
+
+    if (m_status) 
+    {
+        delete m_status;
+        m_status = 0;
+    }
+    m_status = new GPStatus();
+
+    int errorCode = gp_camera_get_storageinfo (d->camera, &sinfos, &nrofsinfos, m_status->context);
+    if (errorCode != GP_OK) 
+    {
+        DDebug() << "Getting storage information not supported for this camera!" << endl;
+        printGphotoErrorDescription(errorCode);
+        delete m_status;
+        m_status = 0;
+        return false;
+    }
+
+    for (int i = 0 ; i < nrofsinfos ; i++) 
+    {
+        if (sinfos[i].fields & GP_STORAGEINFO_FILESYSTEMTYPE) 
+        {
+            switch (sinfos[i].fstype) 
+            {
+                case GP_STORAGEINFO_FST_DCF:       // Camera layout (DCIM)
+                {
+                    if (sinfos[i].fields & GP_STORAGEINFO_LABEL)
+                        DDebug() << "Storage label: " << QString(sinfos[i].label) << endl;
+                    if (sinfos[i].fields & GP_STORAGEINFO_DESCRIPTION)
+                        DDebug() << "Storage description: " << QString(sinfos[i].description) << endl;
+                    if (sinfos[i].fields & GP_STORAGEINFO_BASE)
+                        DDebug() << "Storage base-dir: " << QString(sinfos[i].basedir) << endl;
+            
+                    if (sinfos[i].fields & GP_STORAGEINFO_ACCESS) 
+                    {
+                        switch (sinfos[i].access) 
+                        {
+                            case GP_STORAGEINFO_AC_READWRITE:
+                                DDebug() << "Storage access: R/W" << endl;
+                                break;
+                            case GP_STORAGEINFO_AC_READONLY:
+                                DDebug() << "Storage access: RO" << endl;
+                                break;
+                            case GP_STORAGEINFO_AC_READONLY_WITH_DELETE:
+                                DDebug() << "Storage access: RO + Del" << endl;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+            
+                    if (sinfos[i].fields & GP_STORAGEINFO_STORAGETYPE) 
+                    {
+                        switch (sinfos[i].type) 
+                        {
+                            case GP_STORAGEINFO_ST_FIXED_ROM:
+                                DDebug() << "Storage type: fixed ROM" << endl;
+                                break;
+                            case GP_STORAGEINFO_ST_REMOVABLE_ROM:
+                                DDebug() << "Storage type: removable ROM" << endl;
+                                break;
+                            case GP_STORAGEINFO_ST_FIXED_RAM:
+                                DDebug() << "Storage type: fixed RAM" << endl;
+                                break;
+                            case GP_STORAGEINFO_ST_REMOVABLE_RAM:
+                                DDebug() << "Storage type: removable RAM" << endl;
+                                break;
+                            case GP_STORAGEINFO_ST_UNKNOWN:
+                            default:
+                                DDebug() << "Storage type: unknow" << endl;
+                                break;
+                        }
+                    }
+
+                    if (sinfos[i].fields & GP_STORAGEINFO_MAXCAPACITY)
+                    {
+                        kBSize = sinfos[i].capacitykbytes;
+                        DDebug() << "Storage capacity: " << kBSize << endl;
+                    }
+                    else
+                    {
+                        delete m_status;
+                        m_status = 0;
+                        return false;
+                    }
+            
+                    if (sinfos[i].fields & GP_STORAGEINFO_FREESPACEKBYTES)
+                    {
+                        kBAvail = sinfos[i].freekbytes;
+                        DDebug() << "Storage free-space: " << kBAvail << endl;
+                    }
+                    else
+                    {
+                        delete m_status;
+                        m_status = 0;
+                        return false;
+                    }
+                    break;
+                }
+                case GP_STORAGEINFO_FST_UNDEFINED:
+                case GP_STORAGEINFO_FST_GENERICFLAT:
+                case GP_STORAGEINFO_FST_GENERICHIERARCHICAL:
+                default:
+                    break;
+            }
+        }
+    }
+
+    delete m_status;
+    m_status = 0;
+    return true;
 }
 
 void GPCamera::getAllFolders(const QString& rootFolder,
