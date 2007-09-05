@@ -230,27 +230,42 @@ void FreeSpaceWidget::updatePixmap()
         p.setPen(palette().text().color());
         p.drawText(tRect, Qt::AlignCenter, text);
     
-        QString info;
+        QString tipText, value; 
+        QString header = i18n("Camera Media");
+        if (d->mode == FreeSpaceWidget::AlbumLibrary) header = i18n("Album Library");
+        QString headBeg("<tr bgcolor=\"orange\"><td colspan=\"2\">"
+                        "<nobr><font size=\"-1\" color=\"black\"><b>");
+        QString headEnd("</b></font></nobr></td></tr>");
+        QString cellBeg("<tr><td><nobr><font size=-1>");
+        QString cellMid("</font></nobr></td><td><nobr><font size=-1>");
+        QString cellEnd("</font></nobr></td></tr>");
+        tipText  = "<table cellspacing=0 cellpadding=0>";
+        tipText += headBeg + header + headEnd;
 
         if (d->dSizeKb > 0)
         {
-            info = i18n("<p>Capacity: <b>%1</b>"
-                        "<p>Available: <b>%2</b>"
-                        "<p>Require: <b>%3</b>",
-                        KIO::convertSizeFromKiB(d->kBSize),
-                        KIO::convertSizeFromKiB(d->kBAvail),
-                        KIO::convertSizeFromKiB(d->dSizeKb));
+            tipText += cellBeg + i18n("Capacity:") + cellMid;
+            tipText += KIO::convertSizeFromKiB(d->kBSize) + cellEnd;
+
+            tipText += cellBeg + i18n("Available:") + cellMid;
+            tipText += KIO::convertSizeFromKiB(d->kBAvail) + cellEnd;
+
+            tipText += cellBeg + i18n("Require:") + cellMid;
+            tipText += KIO::convertSizeFromKiB(d->dSizeKb) + cellEnd;
         }
         else
         {
-            info = i18n("<p>Capacity: <b>%1</b>"
-                        "<p>Available: <b>%2</b>",
-                        KIO::convertSizeFromKiB(d->kBSize),
-                        KIO::convertSizeFromKiB(d->kBAvail));
+            tipText += cellBeg + i18n("Capacity:") + cellMid;
+            tipText += KIO::convertSizeFromKiB(d->kBSize) + cellEnd;
+
+            tipText += cellBeg + i18n("Available:") + cellMid;
+            tipText += KIO::convertSizeFromKiB(d->kBAvail) + cellEnd;
         }
 
-        setWhatsThis(info);
-        setToolTip(info);
+        tipText += "</table>";
+
+        setWhatsThis(tipText);
+        setToolTip(tipText);
     }
     
     p.end();
