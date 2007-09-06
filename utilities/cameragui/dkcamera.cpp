@@ -32,10 +32,16 @@ namespace Digikam
 
 DKCamera::DKCamera(const QString& title, const QString& model, const QString& port, const QString& path)
 {
-    m_title = title;
-    m_model = model;
-    m_port  = port;
-    m_path  = path;
+    m_title               = title;
+    m_model               = model;
+    m_port                = port;
+    m_path                = path;
+    m_thumbnailSupport    = false;
+    m_deleteSupport       = false;
+    m_uploadSupport       = false;
+    m_mkDirSupport        = false;
+    m_delDirSupport       = false;
+    m_captureImageSupport = false;
 
     AlbumSettings* settings = AlbumSettings::instance();
     m_imageFilter = settings->getImageFileFilter();
@@ -71,6 +77,36 @@ QString DKCamera::port() const
 QString DKCamera::path() const
 {
     return m_path;
+}
+
+bool DKCamera::thumbnailSupport()
+{
+    return m_thumbnailSupport;    
+}
+
+bool DKCamera::deleteSupport()
+{
+    return m_deleteSupport;
+}
+
+bool DKCamera::uploadSupport()
+{
+    return m_uploadSupport;
+}
+
+bool DKCamera::mkDirSupport()
+{
+    return m_mkDirSupport;
+}
+
+bool DKCamera::delDirSupport()
+{
+    return m_delDirSupport;
+}
+
+bool DKCamera::captureImageSupport()
+{
+    return m_captureImageSupport;
 }
 
 QString DKCamera::mimeType(const QString& fileext) const

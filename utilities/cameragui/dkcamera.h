@@ -89,23 +89,35 @@ public:
     QString port()  const;
     QString path()  const;
 
+    bool thumbnailSupport();
+    bool deleteSupport();
+    bool uploadSupport();
+    bool mkDirSupport();
+    bool delDirSupport();
+    bool captureImageSupport();
+
 protected:
 
     QString mimeType(const QString& fileext) const;
 
 protected:
 
+    bool    m_thumbnailSupport;
+    bool    m_deleteSupport;
+    bool    m_uploadSupport;
+    bool    m_mkDirSupport;
+    bool    m_delDirSupport;
+    bool    m_captureImageSupport;
+
     QString m_imageFilter;
     QString m_movieFilter;
     QString m_audioFilter;
     QString m_rawFilter;
 
-private:
-
-    QString m_title;
     QString m_model;
     QString m_port;
     QString m_path;
+    QString m_title;
 };
 
 }  // namespace Digikam

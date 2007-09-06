@@ -59,7 +59,8 @@ extern "C"
 namespace Digikam
 {
 
-UMSCamera::UMSCamera(const QString& title, const QString& model, const QString& port, const QString& path)
+UMSCamera::UMSCamera(const QString& title, const QString& model, 
+                     const QString& port, const QString& path)
          : DKCamera(title, model, port, path)
 {
     m_cancel = false;
@@ -76,6 +77,28 @@ bool UMSCamera::getFreeSpace(unsigned long& /*kBSize*/, unsigned long& /*kBAvail
 
 bool UMSCamera::doConnect()
 {
+    QFileInfo dir(m_path);
+    if (!dir.exists() || !dir.isReadable() || !dir.isDir())
+        return false;
+
+    if (dir.isWritable())
+    {
+        m_deleteSupport = true;
+        m_uploadSupport = true;
+        m_mkDirSupport  = true;
+        m_delDirSupport = true;
+    }
+    else
+    {
+        m_deleteSupport = false;
+        m_uploadSupport = false;
+        m_mkDirSupport  = false;
+        m_delDirSupport = false;
+    }
+
+    m_thumbnailSupport    = true;   // UMS camera always support thumbnails.
+    m_captureImageSupport = false;  // UMS camera never support capture mode.
+
     return true;
 }
 
@@ -129,8 +152,9 @@ bool UMSCamera::getItemsInfoList(const QString& folder, GPItemInfoList& infoList
                 {
                     KFileMetaInfo meta(fi->filePath());
 
-        /*          TODO: KDE4PORT: KFileMetaInfo API as Changed.
-                                    Check if new method to search "Dimensions" information is enough.
+#warning "TODO: kde4 port it";
+                    /* TODO: KDE4PORT: KFileMetaInfo API as Changed.
+                             Check if new method to search "Dimensions" information is enough.
         
                     if (meta.isValid())
                     {
@@ -397,8 +421,9 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
             {
                 KFileMetaInfo meta(fi.filePath());
 
-        /*          TODO: KDE4PORT: KFileMetaInfo API as Changed.
-                                    Check if new method to search "Dimensions" information is enough.
+#warning "TODO: kde4 port it";
+                /* TODO: KDE4PORT: KFileMetaInfo API as Changed.
+                         Check if new method to search "Dimensions" information is enough.
         
                 if (meta.isValid())
                 {
@@ -459,17 +484,30 @@ void UMSCamera::listFolders(const QString& folder, QStringList& subFolderList)
 
 bool UMSCamera::cameraSummary(QString& summary)
 {
-    summary = QString(i18n("<b>Mounted Camera</b> driver for USB/IEEE1394 mass storage cameras and "
-                           "Flash disk card readers.<br><br>"));
+    summary =  QString(i18n("<b>Mounted Camera</b> driver for USB/IEEE1394 mass storage cameras and "
+                            "Flash disk card readers.<br><br>"));
 
-    summary.append(i18n("Title: %1<br>"
-                        "Model: %2<br>"
-                        "Port: %3<br>"
-                        "Path: %4<br>",
-                        title(),
-                        model(), 
-                        port(),
-                        path()));
+    summary += i18n("Title: <b>%1</b><br>"
+                    "Model: <b>%2</b><br>"
+                    "Port: <b>%3</b><br>"
+                    "Path: <b>%4</b><br><br>",
+                    title(),
+                    model(),
+                    port(),
+                    path());
+
+    summary += i18n("Thumbnail support: <b>%1</b><br>"
+                    "Capture image support: <b>%2</b><br>"
+                    "Delete items support: <b>%3</b><br>"
+                    "Upload items support: <b>%4</b><br>"
+                    "Directory creation support: <b>%5</b><br>"
+                    "Directory deletion support: <b>%6</b><br><br>",
+                    thumbnailSupport()    ? i18n("yes") : i18n("no"),
+                    captureImageSupport() ? i18n("yes") : i18n("no"),
+                    deleteSupport()       ? i18n("yes") : i18n("no"),
+                    uploadSupport()       ? i18n("yes") : i18n("no"),
+                    mkDirSupport()        ? i18n("yes") : i18n("no"),
+                    delDirSupport()       ? i18n("yes") : i18n("no"));
     return true;
 }
 

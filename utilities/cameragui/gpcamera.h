@@ -49,12 +49,6 @@ public:
              const QString& port, const QString& path);
     ~GPCamera();
 
-    bool thumbnailSupport();
-    bool deleteSupport();
-    bool uploadSupport();
-    bool mkDirSupport();
-    bool delDirSupport();
-
     bool doConnect();
 
     void cancel();
@@ -81,10 +75,6 @@ public:
     bool cameraManual(QString& manual);
     bool cameraAbout(QString& about);
 
-    QString model() const;
-    QString port()  const;
-    QString path()  const;
-
     DKCamera::CameraDriverType cameraDriverType(){ return DKCamera::GPhotoDriver; };
 
     bool getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail);
@@ -107,7 +97,6 @@ private:
 private:
 
     GPCameraPrivate *d;
-    GPStatus        *m_status;
 };
 
 }  // namespace Digikam
