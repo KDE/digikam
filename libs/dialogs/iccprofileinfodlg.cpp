@@ -38,12 +38,11 @@ ICCProfileInfoDlg::ICCProfileInfoDlg(QWidget* parent, const QString& profilePath
                                      const QByteArray& profileData)
                  : KDialog(parent)
 {
-    setCaption(i18n("Color Profile Info"));
+    setCaption(i18n("Color Profile Info - %1", profilePath));
     setButtons(Help|Ok);
     setDefaultButton(Ok);
     setModal(true);
     setHelp("iccprofile.anchor", "digikam");
-    setCaption(profilePath);
 
     ICCProfileWidget *profileWidget = new ICCProfileWidget(this, 340, 256);
     
