@@ -6,7 +6,9 @@ General        : Ported to CMake/Qt4/KDE4.
 General        : Removed all X11 library depencies. Code is now portable under MACOS-X and Win32.
 General        : Support of XMP metadata (require Exiv2 0.16).
 General        : Hardware handling using KDE4 Solid interface.
-CaMeraGUI      : New design for camera interface.
+CameraGUI      : New design for camera interface.
+CameraGUI      : New Capture tool.
+CameraGUI      : New bargraph to display camera media free-space.
 
 
 digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
