@@ -67,6 +67,9 @@ public:
     virtual bool getThumbnail(const QString& folder, const QString& itemName, QImage& thumbnail) = 0;
     virtual bool getExif(const QString& folder, const QString& itemName, char **edata, int& esize) = 0;
 
+    virtual bool getPreview(QImage& preview) = 0;
+    virtual bool capture(GPItemInfo& itemInfo) = 0;
+
     virtual bool downloadItem(const QString& folder, const QString& itemName, const QString& saveFile) = 0;
     virtual bool deleteItem(const QString& folder, const QString& itemName) = 0;
     virtual bool uploadItem(const QString& folder, const QString& itemName, const QString& localFile,

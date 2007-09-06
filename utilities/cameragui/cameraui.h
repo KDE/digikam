@@ -115,6 +115,7 @@ private slots:
     void slotBusy(bool val);
     void slotErrorMsg(const QString& msg);
     void slotInformations();
+    void slotCapture();
     void slotCameraInformations(const QString&, const QString&, const QString&);
     void slotCameraFreeSpaceInfo(unsigned long kBSize, unsigned long kBAvail);
 

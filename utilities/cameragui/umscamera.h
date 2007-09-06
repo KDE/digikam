@@ -65,6 +65,10 @@ public:
 
     bool getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail);
 
+    // Methods not supported by UMS camera.
+    bool getPreview(QImage& /*preview*/){ return false; }; 
+    bool capture(GPItemInfo& /*itemInfo*/){ return false; };
+
     DKCamera::CameraDriverType cameraDriverType(){ return DKCamera::UMSDriver; };
 
 private:

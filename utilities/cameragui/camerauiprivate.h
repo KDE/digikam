@@ -93,6 +93,7 @@ public:
         deleteSelectedAction      = 0;
         deleteAllAction           = 0;
         cameraInfoAction          = 0;
+        cameraCaptureAction       = 0;
         statusProgressBar         = 0;
         statusNavigateBar         = 0;
         statusZoomBar             = 0;
@@ -157,6 +158,7 @@ public:
     KAction                      *deleteSelectedAction;
     KAction                      *deleteAllAction;
     KAction                      *cameraInfoAction;
+    KAction                      *cameraCaptureAction;
     KAction                      *uploadAction;
     KAction                      *lockAction;
     KAction                      *selectAllAction;

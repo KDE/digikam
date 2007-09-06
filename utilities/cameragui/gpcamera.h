@@ -88,6 +88,8 @@ public:
     DKCamera::CameraDriverType cameraDriverType(){ return DKCamera::GPhotoDriver; };
 
     bool getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail);
+    bool getPreview(QImage& preview);
+    bool capture(GPItemInfo& itemInfo);
 
     // Public static methods shared with Setup Camera
 

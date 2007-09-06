@@ -419,6 +419,145 @@ bool GPCamera::getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail)
     return true;
 }
 
+bool GPCamera::getPreview(QImage& preview)
+{
+    int                errorCode;
+    CameraFile        *cfile;
+    const char        *data;
+    unsigned long int  size;
+    
+    gp_file_new(&cfile);
+    
+    if (m_status) 
+    {
+        delete m_status;
+        m_status = 0;
+    }
+    
+    m_status = new GPStatus;
+
+    errorCode = gp_camera_capture_preview(d->camera, cfile, m_status->context);
+    if (errorCode != GP_OK) 
+    {
+        DDebug() << "Failed to initialize camera preview mode!" << endl;
+        printGphotoErrorDescription(errorCode);
+        gp_file_unref(cfile);
+        delete m_status;
+        m_status = 0;
+        return false;
+    }
+
+    delete m_status;
+    m_status = 0;
+
+    errorCode = gp_file_get_data_and_size(cfile, &data, &size);
+    if (errorCode != GP_OK) 
+    {
+        DDebug() << "Failed to get preview from camera!" << endl;
+        printGphotoErrorDescription(errorCode);
+        gp_file_unref(cfile);
+        return false;
+    }
+
+    preview.loadFromData((const uchar*) data, (uint) size);
+
+    gp_file_unref(cfile);
+    return true;
+}
+
+bool GPCamera::capture(GPItemInfo& itemInfo)
+{
+    int            errorCode;
+    CameraFilePath path;
+
+    if (m_status) 
+    {
+        delete m_status;
+        m_status = 0;
+    }
+    
+    m_status = new GPStatus;
+
+    errorCode = gp_camera_capture(d->camera, GP_CAPTURE_IMAGE, &path, m_status->context);
+    if (errorCode != GP_OK) 
+    {
+        DDebug() << "Failed to take camera capture!" << endl;
+        printGphotoErrorDescription(errorCode);
+        delete m_status;
+        m_status = 0;
+        return false;
+    }
+
+    // Get new camera item information.
+
+    itemInfo.folder = QString(path.folder);
+    itemInfo.name   = QString(path.name);
+    
+    CameraFileInfo info;
+    errorCode = gp_camera_file_get_info(d->camera, QFile::encodeName(itemInfo.folder),
+                                        QFile::encodeName(itemInfo.name), &info, 
+                                        m_status->context);
+    if (errorCode != GP_OK) 
+    {
+        DDebug() << "Failed to get camera item information!" << endl;
+        printGphotoErrorDescription(errorCode);
+        delete m_status;
+        m_status = 0;
+        return false;
+    }
+
+    itemInfo.mtime            = -1;
+    itemInfo.mime             = "";
+    itemInfo.size             = -1;
+    itemInfo.width            = -1;
+    itemInfo.height           = -1;
+    itemInfo.downloaded       = GPItemInfo::DownloadUnknow;
+    itemInfo.readPermissions  = -1;
+    itemInfo.writePermissions = -1;
+    
+    /* The mime type returned by Gphoto2 is dummy with all RAW files.
+    if (info.file.fields & GP_FILE_INFO_TYPE)
+        itemInfo.mime = info.file.type;*/
+
+    itemInfo.mime = mimeType(itemInfo.name.section('.', -1).toLower());
+
+    if (info.file.fields & GP_FILE_INFO_MTIME)
+        itemInfo.mtime = info.file.mtime;      
+
+    if (info.file.fields & GP_FILE_INFO_SIZE)
+        itemInfo.size = info.file.size;
+
+    if (info.file.fields & GP_FILE_INFO_WIDTH)
+        itemInfo.width = info.file.width;
+
+    if (info.file.fields & GP_FILE_INFO_HEIGHT)
+        itemInfo.height = info.file.height;
+
+    if (info.file.fields & GP_FILE_INFO_STATUS) 
+    {
+        if (info.file.status == GP_FILE_STATUS_DOWNLOADED)
+            itemInfo.downloaded = GPItemInfo::DownloadedYes;
+        else
+            itemInfo.downloaded = GPItemInfo::DownloadedNo;
+    }
+    
+    if (info.file.fields & GP_FILE_INFO_PERMISSIONS) 
+    {
+        if (info.file.permissions & GP_FILE_PERM_READ)
+            itemInfo.readPermissions = 1;
+        else
+            itemInfo.readPermissions = 0;
+        if (info.file.permissions & GP_FILE_PERM_DELETE)
+            itemInfo.writePermissions = 1;
+        else
+            itemInfo.writePermissions = 0;
+    }
+
+    delete m_status;
+    m_status = 0;
+    return true;
+}
+
 void GPCamera::getAllFolders(const QString& rootFolder,
                              QStringList& folderList)
 {

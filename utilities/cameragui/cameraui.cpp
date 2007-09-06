@@ -100,6 +100,7 @@
 #include "freespacewidget.h"
 #include "collectionscanner.h"
 #include "collectionmanager.h"
+#include "capturedlg.h"
 #include "camerafolderdialog.h"
 #include "camerainfodialog.h"
 #include "cameraiconview.h"
@@ -289,9 +290,15 @@ void CameraUI::setupActions()
 
     // -----------------------------------------------------------------
 
-    d->cameraInfoAction = new KAction(KIcon("camera-photo"), i18n("Camera Information"), this);
+    d->cameraInfoAction = new KAction(KIcon("camera-photo"), i18n("Information"), this);
     connect(d->cameraInfoAction, SIGNAL(triggered()), this, SLOT(slotInformations()));
     actionCollection()->addAction("cameraui_camerainfo", d->cameraInfoAction);
+
+    // -----------------------------------------------------------------
+
+    d->cameraCaptureAction = new KAction(KIcon("camera"), i18n("Capture"), this);
+    connect(d->cameraCaptureAction, SIGNAL(triggered()), this, SLOT(slotCapture()));
+    actionCollection()->addAction("cameraui_cameracapture", d->cameraCaptureAction);
 
     // -----------------------------------------------------------------
 
@@ -815,6 +822,7 @@ void CameraUI::slotBusy(bool val)
         d->selectNewItemsAction->setEnabled(true);
         d->lockAction->setEnabled(true);
         d->cameraInfoAction->setEnabled(true);
+        d->cameraCaptureAction->setEnabled(true);
 
         d->anim->stop();
         d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, i18n("Ready"));
@@ -854,6 +862,7 @@ void CameraUI::slotBusy(bool val)
         d->selectNewItemsAction->setEnabled(false);
         d->lockAction->setEnabled(false);
         d->cameraInfoAction->setEnabled(false);
+        d->cameraCaptureAction->setEnabled(false);
     }
 }
 
@@ -967,6 +976,15 @@ void CameraUI::slotThumbnail(const QString& folder, const QString& file,
     d->view->setThumbnail(folder, file, thumbnail);
     int curr = d->statusProgressBar->progressValue();
     d->statusProgressBar->setProgressValue(curr+1);
+}
+
+void CameraUI::slotCapture()
+{
+    if (d->busy) 
+        return;
+
+    CaptureDlg *captureDlg = new CaptureDlg(this, d->controller, d->cameraTitle);
+    captureDlg->show();
 }
 
 void CameraUI::slotInformations()

@@ -79,7 +79,9 @@ public:
         gp_thumbnail,
         gp_exif,
         gp_open,
-        gp_freeSpace
+        gp_freeSpace,
+        gp_preview,
+        gp_capture
     };
 
     Action                 action;
@@ -284,6 +286,22 @@ void CameraController::executeCommand(CameraCommand *cmd)
             unsigned long kBAvail = 0;
             d->camera->getFreeSpace(kBSize, kBAvail);
             emit signalFreeSpace(kBSize, kBAvail);
+            break;
+        }
+        case(CameraCommand::gp_preview):
+        {
+            sendInfo(i18n("Getting preview..."));
+            QImage preview;
+            d->camera->getPreview(preview);
+            emit signalPreview(preview);
+            break;
+        }
+        case(CameraCommand::gp_capture):
+        {
+            sendInfo(i18n("Capture picture..."));
+            GPItemInfo itemInfo;
+            d->camera->capture(itemInfo);
+            emit signalUploaded(itemInfo);
             break;
         }
         case(CameraCommand::gp_listfolders):
@@ -855,6 +873,22 @@ void CameraController::getFreeSpace()
     d->canceled = false;
     CameraCommand *cmd = new CameraCommand;
     cmd->action = CameraCommand::gp_freeSpace;
+    addCommand(cmd);
+}
+
+void CameraController::getPreview()
+{
+    d->canceled = false;
+    CameraCommand *cmd = new CameraCommand;
+    cmd->action = CameraCommand::gp_preview;
+    addCommand(cmd);
+}
+
+void CameraController::capture()
+{
+    d->canceled = false;
+    CameraCommand *cmd = new CameraCommand;
+    cmd->action = CameraCommand::gp_capture;
     addCommand(cmd);
 }
 

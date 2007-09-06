@@ -62,6 +62,8 @@ public:
     void getThumbnail(const QString& folder, const QString& file);
     void getExif(const QString& folder, const QString& file);
     void getCameraInformations();
+    void getPreview();
+    void capture();
     QString getCameraPath();
     QString getCameraTitle();
     DKCamera::CameraDriverType cameraDriverType();
@@ -81,6 +83,7 @@ signals:
     void signalCameraInformations(const QString& summary, const QString& manual,
                                   const QString& about);
     void signalFreeSpace(unsigned long kBSize, unsigned long kBAvail);
+    void signalPreview(const QImage& preview);
 
     void signalConnected(bool val);
     void signalFolderList(const QStringList& folderList);
