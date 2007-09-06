@@ -1046,7 +1046,30 @@ void CameraUI::slotUploadItems(const KUrl::List& urls)
     if (urls.isEmpty())
         return;
 
-    CameraFolderDialog dlg(this, d->view, d->cameraFolderList, d->controller->cameraTitle(),
+    if (d->cameraFreeSpace->isValid())
+    {
+        // Check if space require to upload new items in camera is enough.
+        qint64 totalKbSize = 0;
+        for (KUrl::List::const_iterator it = urls.begin() ; it != urls.end() ; ++it)
+        {
+            QFileInfo fi((*it).path());
+            totalKbSize += fi.size()/1024;
+        }
+    
+        if (totalKbSize >= d->cameraFreeSpace->kBAvail())
+        {
+            KMessageBox::error(this, i18n("There is no enough free space on Camera Media "
+                                        "to upload pictures.\n\n"
+                                        "Space require: %1\n"
+                                        "Available free space: %2",
+                                    KIO::convertSizeFromKiB(totalKbSize)),
+                                    KIO::convertSizeFromKiB(d->cameraFreeSpace->kBAvail()));
+            return;
+        } 
+    }
+
+    CameraFolderDialog dlg(this, d->view, d->cameraFolderList, 
+                           d->controller->cameraTitle(),
                            d->controller->cameraPath());
 
     if (dlg.exec() != QDialog::Accepted)
