@@ -796,7 +796,7 @@ void CameraUI::finishDialog()
 
 void CameraUI::slotBusy(bool val)
 {
-    if (!val)
+    if (!val)   // Camera is available for actions.
     {
         if (!d->busy)
             return;
@@ -806,23 +806,23 @@ void CameraUI::slotBusy(bool val)
 
         d->advBox->setEnabled(true);
         // B.K.O #127614: The Focus need to be restored in custom prefix widget.
-        //commenting this out again:  If we do not disable, no need to restore focus
-        //d->renameCustomizer->restoreFocus();
+        // commenting this out again: If we do not disable, no need to restore focus
+        // d->renameCustomizer->restoreFocus();
 
-        d->uploadAction->setEnabled(true);
+        d->uploadAction->setEnabled(d->controller->cameraUploadSupport());
         d->downloadSelectedAction->setEnabled(true);
-        d->downloadDelSelectedAction->setEnabled(true);
+        d->downloadDelSelectedAction->setEnabled(d->controller->cameraDeleteSupport());
         d->downloadAllAction->setEnabled(true);
-        d->downloadDelAllAction->setEnabled(true);
-        d->deleteSelectedAction->setEnabled(true);
-        d->deleteAllAction->setEnabled(true);
+        d->downloadDelAllAction->setEnabled(d->controller->cameraDeleteSupport());
+        d->deleteSelectedAction->setEnabled(d->controller->cameraDeleteSupport());
+        d->deleteAllAction->setEnabled(d->controller->cameraDeleteSupport());
         d->selectAllAction->setEnabled(true);
         d->selectNoneAction->setEnabled(true);
         d->selectInvertAction->setEnabled(true);
         d->selectNewItemsAction->setEnabled(true);
         d->lockAction->setEnabled(true);
         d->cameraInfoAction->setEnabled(true);
-        d->cameraCaptureAction->setEnabled(true);
+        d->cameraCaptureAction->setEnabled(d->controller->cameraCaptureImageSupport());
 
         d->anim->stop();
         d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, i18n("Ready"));
@@ -833,7 +833,7 @@ void CameraUI::slotBusy(bool val)
             finishDialog();
         }
     }
-    else
+    else    // Camera is busy.
     {
         if (d->busy)
             return;
@@ -1611,15 +1611,15 @@ void CameraUI::slotNewSelection(bool hasSelection)
     if (!d->renameCustomizer->useDefault())
     {
         d->downloadSelectedAction->setEnabled(hasSelection);
-        d->downloadDelSelectedAction->setEnabled(hasSelection);
-        d->deleteSelectedAction->setEnabled(hasSelection);
+        d->downloadDelSelectedAction->setEnabled(hasSelection & d->controller->cameraDeleteSupport());
+        d->deleteSelectedAction->setEnabled(hasSelection & d->controller->cameraDeleteSupport());
         d->imageViewAction->setEnabled(hasSelection);
     }
     else
     {
         d->downloadSelectedAction->setEnabled(hasSelection);
-        d->downloadDelSelectedAction->setEnabled(hasSelection);
-        d->deleteSelectedAction->setEnabled(hasSelection);
+        d->downloadDelSelectedAction->setEnabled(hasSelection & d->controller->cameraDeleteSupport());
+        d->deleteSelectedAction->setEnabled(hasSelection & d->controller->cameraDeleteSupport());
         d->imageViewAction->setEnabled(hasSelection);
     }
 
@@ -1632,8 +1632,8 @@ void CameraUI::slotNewSelection(bool hasSelection)
 void CameraUI::slotItemsSelected(CameraIconViewItem* item, bool selected)
 {
     d->downloadSelectedAction->setEnabled(selected);
-    d->downloadDelSelectedAction->setEnabled(selected);
-    d->deleteSelectedAction->setEnabled(selected);
+    d->downloadDelSelectedAction->setEnabled(selected & d->controller->cameraDeleteSupport());
+    d->deleteSelectedAction->setEnabled(selected & d->controller->cameraDeleteSupport());
     d->imageViewAction->setEnabled(selected);
 
     if (selected)
