@@ -1059,9 +1059,9 @@ void CameraUI::slotUploadItems(const KUrl::List& urls)
         if (totalKbSize >= d->cameraFreeSpace->kBAvail())
         {
             KMessageBox::error(this, i18n("There is no enough free space on Camera Media "
-                                        "to upload pictures.\n\n"
-                                        "Space require: %1\n"
-                                        "Available free space: %2",
+                                          "to upload pictures.\n\n"
+                                          "Space require: %1\n"
+                                          "Available free space: %2",
                                     KIO::convertSizeFromKiB(totalKbSize)),
                                     KIO::convertSizeFromKiB(d->cameraFreeSpace->kBAvail()));
             return;
@@ -1466,12 +1466,12 @@ void CameraUI::slotDeleteSelected()
         return;
 
     QString warnMsg(i18np("About to delete this image. "
-                         "Deleted files are unrecoverable. "
-                         "Are you sure?",
-                         "About to delete these %1 images. "
-                         "Deleted files are unrecoverable. "
-                         "Are you sure?",
-                         QString::number(deleteList.count())));
+                          "Deleted file is unrecoverable. "
+                          "Are you sure?",
+                          "About to delete these %1 images. "
+                          "Deleted files are unrecoverable. "
+                          "Are you sure?",
+                          deleteList.count()));
     if (KMessageBox::warningContinueCancelList(this, warnMsg,
                                                deleteList,
                                                i18n("Warning"),
@@ -1533,12 +1533,12 @@ void CameraUI::slotDeleteAll()
         return;
 
     QString warnMsg(i18np("About to delete this image. "
-                         "Deleted files are unrecoverable. "
-                         "Are you sure?",
-                         "About to delete these %n images. "
-                         "Deleted files are unrecoverable. "
-                         "Are you sure?",
-                         deleteList.count()));
+                          "Deleted file is unrecoverable. "
+                          "Are you sure?",
+                          "About to delete these %n images. "
+                          "Deleted files are unrecoverable. "
+                          "Are you sure?",
+                          deleteList.count()));
     if (KMessageBox::warningContinueCancelList(this, warnMsg,
                                                deleteList,
                                                i18n("Warning"),
