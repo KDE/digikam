@@ -92,9 +92,9 @@ public:
 
     GPCameraPrivate()
     {
-        status              = 0;
-        camera              = 0;
-        cameraInitialized   = false;    
+        status            = 0;
+        camera            = 0;
+        cameraInitialized = false;    
     }
 
     bool             cameraInitialized;
@@ -127,6 +127,7 @@ GPCamera::~GPCamera()
 bool GPCamera::doConnect()
 {
     int errorCode;
+
     // -- first step - setup the camera --------------------
     
     if (d->camera) 
@@ -236,7 +237,6 @@ bool GPCamera::doConnect()
 
     delete d->status;
     d->status = 0;
-    
     d->cameraInitialized = true;    
     return true;
 }
@@ -248,7 +248,7 @@ void GPCamera::cancel()
     d->status->cancel = true;
 }
 
-/* This method depand of libgphoto2 2.4.0 */
+/* NOTE: This method depand of libgphoto2 2.4.0 */
 bool GPCamera::getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail)
 {
     int                       nrofsinfos;
@@ -343,6 +343,7 @@ bool GPCamera::getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail)
                     {
                         kBAvail = sinfos[i].freekbytes;
                         DDebug() << "Storage free-space: " << kBAvail << endl;
+                        return true;
                     }
                     else
                     {
@@ -363,7 +364,7 @@ bool GPCamera::getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail)
 
     delete d->status;
     d->status = 0;
-    return true;
+    return false;
 }
 
 bool GPCamera::getPreview(QImage& preview)
@@ -958,7 +959,6 @@ bool GPCamera::deleteItem(const QString& folder, const QString& itemName)
 
     delete d->status;
     d->status = 0;
-
     return true;
 }
 
@@ -1006,7 +1006,6 @@ bool GPCamera::deleteAllItems(const QString& folder)
     
     delete d->status;
     d->status = 0;
-
     return true;
 }
 
@@ -1254,7 +1253,7 @@ bool GPCamera::cameraAbout(QString& about)
 void GPCamera::printGphotoErrorDescription(int errorCode)
 {
     DDebug() << "Libgphoto2 error: " << gp_result_as_string(errorCode) 
-              << " (" << errorCode << ")" << endl;
+             << " (" << errorCode << ")" << endl;
 }
 
 void GPCamera::getSupportedCameras(int& count, QStringList& clist)
