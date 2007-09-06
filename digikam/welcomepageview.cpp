@@ -106,6 +106,7 @@ QString WelcomePageView::infoPage()
     newFeatures << i18n("Hardware handling using KDE4 Solid interface");
     newFeatures << i18n("XMP metadata support");
     newFeatures << i18n("A new camera interface");
+    newFeatures << i18n("A new tool to capture pictures from Camera");
     newFeatures << i18n("Supports the latest camera RAW files");
 
     QString featureItems;
