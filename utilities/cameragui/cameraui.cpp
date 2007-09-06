@@ -561,7 +561,7 @@ void CameraUI::setupCameraController(const QString& model, const QString& port, 
     else
     {
         d->cameraFreeSpace->setMode(FreeSpaceWidget::UMSCamera);
-        d->cameraFreeSpace->setPath(d->controller->getCameraPath());
+        d->cameraFreeSpace->setPath(d->controller->cameraPath());
     }
 
     connect(d->controller, SIGNAL(signalConnected(bool)),
@@ -1046,8 +1046,8 @@ void CameraUI::slotUploadItems(const KUrl::List& urls)
     if (urls.isEmpty())
         return;
 
-    CameraFolderDialog dlg(this, d->view, d->cameraFolderList, d->controller->getCameraTitle(),
-                           d->controller->getCameraPath());
+    CameraFolderDialog dlg(this, d->view, d->cameraFolderList, d->controller->cameraTitle(),
+                           d->controller->cameraPath());
 
     if (dlg.exec() != QDialog::Accepted)
         return;

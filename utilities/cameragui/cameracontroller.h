@@ -56,6 +56,18 @@ public:
                      const QString& port, const QString& path);
     ~CameraController();
 
+    bool cameraThumbnailSupport();
+    bool cameraDeleteSupport();
+    bool cameraUploadSupport();
+    bool cameraMkDirSupport();
+    bool cameraDelDirSupport();
+    bool cameraCaptureImageSupport();
+
+    QString cameraPath();
+    QString cameraTitle();
+
+    DKCamera::CameraDriverType cameraDriverType();
+
     void listFolders();
     void listFiles(const QString& folder);
     void getFreeSpace();
@@ -64,9 +76,6 @@ public:
     void getCameraInformations();
     void getPreview();
     void capture();
-    QString getCameraPath();
-    QString getCameraTitle();
-    DKCamera::CameraDriverType cameraDriverType();
 
     void downloadPrep();
     void download(DownloadSettingsContainer downloadSettings);

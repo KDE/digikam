@@ -125,7 +125,8 @@ public:
     QList<CameraCommand*>   commands;
 };
 
-CameraController::CameraController(QWidget* parent, const QString& title, const QString& model,
+CameraController::CameraController(QWidget* parent, 
+                                   const QString& title, const QString& model,
                                    const QString& port, const QString& path)
                 : QThread(parent)
 {
@@ -210,6 +211,51 @@ CameraController::~CameraController()
 
     delete d->camera;
     delete d;
+}
+
+bool CameraController::cameraThumbnailSupport()
+{
+    return d->camera->thumbnailSupport();
+}
+
+bool CameraController::cameraDeleteSupport()
+{
+    return d->camera->deleteSupport();
+}
+
+bool CameraController::cameraUploadSupport()
+{
+    return d->camera->uploadSupport();
+}
+
+bool CameraController::cameraMkDirSupport()
+{
+    return d->camera->mkDirSupport();
+}
+
+bool CameraController::cameraDelDirSupport()
+{
+    return d->camera->delDirSupport();
+}
+
+bool CameraController::cameraCaptureImageSupport()
+{
+    return d->camera->captureImageSupport();
+}
+
+QString CameraController::cameraPath()
+{
+    return d->camera->path();
+}
+
+QString CameraController::cameraTitle()
+{
+    return d->camera->title();
+}
+
+DKCamera::CameraDriverType CameraController::cameraDriverType()
+{
+    return d->camera->cameraDriverType();
 }
 
 void CameraController::slotCancel()
@@ -798,21 +844,6 @@ bool CameraController::queueIsEmpty()
 {
     QMutexLocker lock(&d->mutex);
     return d->commands.isEmpty();
-}
-
-QString CameraController::getCameraPath()
-{
-    return d->camera->path();
-}
-
-QString CameraController::getCameraTitle()
-{
-    return d->camera->title();
-}
-
-DKCamera::CameraDriverType CameraController::cameraDriverType()
-{
-    return d->camera->cameraDriverType();
 }
 
 void CameraController::slotConnect()
