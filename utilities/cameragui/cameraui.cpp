@@ -1883,4 +1883,24 @@ void CameraUI::slotCameraFreeSpaceInfo(unsigned long kBSize, unsigned long kBAva
     d->cameraFreeSpace->setInformations(kBSize, kBSize-kBAvail, kBAvail, QString());
 }
 
+bool CameraUI::cameraDeleteSupport()
+{
+    return d->controller->cameraDeleteSupport();
+}
+
+bool CameraUI::cameraUploadSupport()
+{
+    return d->controller->cameraUploadSupport();
+}
+
+bool CameraUI::cameraMkDirSupport()
+{
+    return d->controller->cameraMkDirSupport();
+}
+
+bool CameraUI::cameraDelDirSupport()
+{
+    return d->controller->cameraDelDirSupport();
+}
+
 }  // namespace Digikam

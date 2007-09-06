@@ -458,6 +458,9 @@ void CameraIconView::slotContextMenu(IconItem * item, const QPoint&)
     menu.addSeparator();
     QAction *deleteAction    = menu.addAction(SmallIcon("edit-delete"), i18n("Delete"));
 
+    downDelAction->setEnabled(d->cameraUI->cameraDeleteSupport());
+    deleteAction->setEnabled(d->cameraUI->cameraDeleteSupport());
+
     QAction *choice = menu.exec(QCursor::pos());
 
     if (choice)
@@ -577,8 +580,8 @@ void CameraIconView::startDrag()
 
 void CameraIconView::contentsDropEvent(QDropEvent *event)
 {
-    // don't popup context menu if the camera is busy
-    if (d->cameraUI->isBusy())
+    // Don't popup context menu if the camera is busy or if camera do not support upload.
+    if (d->cameraUI->isBusy() || d->cameraUI->cameraUploadSupport())
         return;
 
     if ( (!Q3UriDrag::canDecode(event) && !CameraDragObject::canDecode(event) )
@@ -595,8 +598,8 @@ void CameraIconView::contentsDropEvent(QDropEvent *event)
 
 void CameraIconView::slotRightButtonClicked(const QPoint&)
 {
-    // don't popup context menu if the camera is busy
-    if (d->cameraUI->isBusy())
+    // Don't popup context menu if the camera is busy or if camera do not support upload.
+    if (d->cameraUI->isBusy() || d->cameraUI->cameraUploadSupport())
         return;
 
     QMimeSource *data = kapp->clipboard()->data(QClipboard::Clipboard);

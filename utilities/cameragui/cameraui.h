@@ -64,6 +64,11 @@ public:
     bool isBusy() const;
     bool isClosed() const;
 
+    bool cameraDeleteSupport();
+    bool cameraUploadSupport();
+    bool cameraMkDirSupport();
+    bool cameraDelDirSupport();
+
     bool autoRotateJpegFiles() const;
 
     /** Get status of JPEG conversion files to lossless format during download.*/
