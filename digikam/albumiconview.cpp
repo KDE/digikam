@@ -534,9 +534,9 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     // --------------------------------------------------------
 
     DPopupMenu popmenu(this);
-    QAction *viewAction       = popmenu.addAction(SmallIcon("viewimage"), i18n("View..."));
-    QAction *editAction       = popmenu.addAction(SmallIcon("editimage"), i18n("Edit..."));
-    QAction *lighttableAction = popmenu.addAction(SmallIcon("lighttable"), i18n("Add to Light Table"));
+    QAction *viewAction       = popmenu.addAction(SmallIcon("viewimage"),     i18n("View..."));
+    QAction *editAction       = popmenu.addAction(SmallIcon("editimage"),     i18n("Edit..."));
+    QAction *lighttableAction = popmenu.addAction(SmallIcon("lighttableadd"), i18n("Add to Light Table"));
     popmenu.addMenu(&openWithMenu);
     openWithMenu.menuAction()->setText(i18n("Open With"));
 
