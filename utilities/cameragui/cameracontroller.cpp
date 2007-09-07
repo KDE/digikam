@@ -251,19 +251,19 @@ bool CameraController::cameraCaptureImageSupport()
 
 QString CameraController::cameraPath()
 {
-    if (!d->camera) return false;
+    if (!d->camera) return QString();
     return d->camera->path();
 }
 
 QString CameraController::cameraTitle()
 {
-    if (!d->camera) return false;
+    if (!d->camera) return QString();
     return d->camera->title();
 }
 
 DKCamera::CameraDriverType CameraController::cameraDriverType()
 {
-    if (!d->camera) return false;
+    if (!d->camera) return DKCamera::UMSDriver;
     return d->camera->cameraDriverType();
 }
 
