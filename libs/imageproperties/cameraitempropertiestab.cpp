@@ -390,9 +390,11 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
 
     d->labelFileIsWritable->setText(str);
 
-    QDateTime date;
-    date.setTime_t(itemInfo->mtime);
-    d->labelFileDate->setText(KGlobal::locale()->formatDateTime(date, KLocale::ShortDate, true));
+    if (itemInfo->mtime.isValid())
+        d->labelFileDate->setText(KGlobal::locale()->formatDateTime(itemInfo->mtime, 
+                                                                    KLocale::ShortDate, true));
+    else
+        d->labelFileDate->setText(unknown);
 
     str = i18n("%1 (%2)", KIO::convertSize(itemInfo->size),
                           KGlobal::locale()->formatNumber(itemInfo->size, 0));
