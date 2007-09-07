@@ -156,13 +156,14 @@ void CameraIconView::setRenameCustomizer(RenameCustomizer* renamer)
 
 void CameraIconView::addItem(const GPItemInfo& info)
 {
+    QImage thumb;
     // Just to have a generic image thumb from desktop with KDE < 3.5.0
     KMimeType::Ptr mime = KMimeType::mimeType(info.mime == QString("image/x-raw") ? QString("image/tiff") : info.mime);
 
     if (mime)
     {
-        QImage thumb(mime->pixmap(KIcon::Desktop, ThumbnailSize::Huge, KIcon::DefaultState)
-	             .convertToImage());
+	thumb = QImage(mime->pixmap(KIcon::Desktop, ThumbnailSize::Huge, KIcon::DefaultState)
+	              .convertToImage());
     }
     
     QString downloadName;
