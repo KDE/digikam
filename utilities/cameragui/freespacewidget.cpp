@@ -180,14 +180,41 @@ void FreeSpaceWidget::updatePixmap()
                                                   tRect.width(), tRect.height(), 0, text);
         p.drawText(tRect, Qt::AlignCenter, text);
 
-        QString info = i18n("<p>Capacity: <b>%1</b>"
-                            "<p>Available: <b>%2</b>"
-                            "<p>Require: <b>%3</b>")
-                            .arg(KIO::convertSizeFromKB(d->kBSize))
-                            .arg(KIO::convertSizeFromKB(d->kBAvail))
-                            .arg(KIO::convertSizeFromKB(d->dSizeKb));
-        QWhatsThis::add(this, info);
-        QToolTip::add(this, info);
+        QString tipText, value; 
+        QString header = i18n("Album Library");
+        QString headBeg("<tr bgcolor=\"orange\"><td colspan=\"2\">"
+                        "<nobr><font size=\"-1\" color=\"black\"><b>");
+        QString headEnd("</b></font></nobr></td></tr>");
+        QString cellBeg("<tr><td><nobr><font size=-1>");
+        QString cellMid("</font></nobr></td><td><nobr><font size=-1>");
+        QString cellEnd("</font></nobr></td></tr>");
+        tipText  = "<table cellspacing=0 cellpadding=0>";
+        tipText += headBeg + header + headEnd;
+
+        if (d->dSizeKb > 0)
+        {
+            tipText += cellBeg + i18n("Capacity:") + cellMid;
+            tipText += KIO::convertSizeFromKB(d->kBSize) + cellEnd;
+
+            tipText += cellBeg + i18n("Available:") + cellMid;
+            tipText += KIO::convertSizeFromKB(d->kBAvail) + cellEnd;
+
+            tipText += cellBeg + i18n("Require:") + cellMid;
+            tipText += KIO::convertSizeFromKB(d->dSizeKb) + cellEnd;
+        }
+        else
+        {
+            tipText += cellBeg + i18n("Capacity:") + cellMid;
+            tipText += KIO::convertSizeFromKB(d->kBSize) + cellEnd;
+
+            tipText += cellBeg + i18n("Available:") + cellMid;
+            tipText += KIO::convertSizeFromKB(d->kBAvail) + cellEnd;
+        }
+
+        tipText += "</table>";
+
+        QWhatsThis::add(this, tipText);
+        QToolTip::add(this, tipText);
     }
     
     p.end();
