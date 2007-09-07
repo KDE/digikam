@@ -636,14 +636,14 @@ void DigikamApp::setupActions()
                                     "image_lighttable");
     d->imageLightTableAction->setWhatsThis(i18n("Put the selected items into the light table thumbbar."));
 
-    d->imageLightTableAction = new KAction(i18n("Add to Light Table"),
+    d->imageAddLightTableAction = new KAction(i18n("Add to Light Table"),
                                     "idea",
                                     CTRL+Key_F6,
                                     d->view,
                                     SLOT(slotImageAddToLightTable()),
                                     actionCollection(),
                                     "image_add_to_lighttable");
-    d->imageLightTableAction->setWhatsThis(i18n("Add selected items to the light table thumbbar."));
+    d->imageAddLightTableAction->setWhatsThis(i18n("Add selected items to the light table thumbbar."));
 
     d->imageRenameAction = new KAction(i18n("Rename..."),
                                     "pencil",
