@@ -49,6 +49,9 @@ public:
     void setCompressionValue(int val);
     int  getCompressionValue();
 
+    void setSubSamplingValue(int val);
+    int  getSubSamplingValue();
+
 private:
 
     JPEGSettingsPriv* d;

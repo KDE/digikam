@@ -3,7 +3,7 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date   : 2003-01-15
+ * Date        : 2003-01-15
  * Description : DImg interface for image editor
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
@@ -552,7 +552,10 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iof
     // JPEG file format.
     if ( mimeType.toUpper() == QString("JPG") || mimeType.toUpper() == QString("JPEG") || 
          mimeType.toUpper() == QString("JPE")) 
-       d->image.setAttribute("quality", iofileSettings->JPEGCompression);
+    {
+       d->image.setAttribute("quality",     iofileSettings->JPEGCompression);
+       d->image.setAttribute("subsampling", iofileSettings->JPEGSubSampling);
+    }
 
     // PNG file format.
     if ( mimeType.toUpper() == QString("PNG") ) 

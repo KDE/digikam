@@ -818,6 +818,8 @@ void EditorWindow::applyStandardSettings()
                                                  (float)group.readEntry("JPEGCompression", 75)
                                                  + 26.0 - (75.0/100.0));
 
+    m_IOFileSettings->JPEGSubSampling     = group.readEntry("JPEGSubSampling", 1);  // Medium subsampling
+
     // PNG compression slider settings : 1 - 9 ==> libpng settings : 100 - 1.
     m_IOFileSettings->PNGCompression      = (int)(((1.0-100.0)/8.0)*
                                                  (float)group.readEntry("PNGCompression", 1)
