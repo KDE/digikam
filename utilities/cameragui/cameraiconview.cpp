@@ -158,12 +158,20 @@ void CameraIconView::addItem(const GPItemInfo& info)
 {
     QImage thumb;
     // Just to have a generic image thumb from desktop with KDE < 3.5.0
-    KMimeType::Ptr mime = KMimeType::mimeType(info.mime == QString("image/x-raw") ? QString("image/tiff") : info.mime);
+    KMimeType::Ptr mime = KMimeType::mimeType(info.mime == QString("image/x-raw") ? 
+                                              QString("image/tiff") : info.mime);
 
     if (mime)
     {
-	thumb = QImage(mime->pixmap(KIcon::Desktop, ThumbnailSize::Huge, KIcon::DefaultState)
-	              .convertToImage());
+        thumb = QImage(mime->pixmap(KIcon::Desktop, ThumbnailSize::Huge, KIcon::DefaultState)
+                       .convertToImage());
+    }
+    else
+    {
+        KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
+        thumb = iconLoader->loadIcon("empty", KIcon::Desktop,
+                                     ThumbnailSize::Huge, KIcon::DefaultState, 0, true)
+                                     .convertToImage();
     }
     
     QString downloadName;
