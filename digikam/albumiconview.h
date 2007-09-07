@@ -118,8 +118,8 @@ public:
     AlbumIconItem* findItem(const QString& url) const;
     AlbumIconItem* nextItemToThumbnail() const;
 
-    void insertSelectionToLightTable();
-    void insertToLightTable(const ImageInfoList& list, const ImageInfo &current);
+    void insertSelectionToLightTable(bool addTo=false);
+    void insertToLightTable(const ImageInfoList& list, const ImageInfo &current, bool addTo=false);
 
 signals:
 

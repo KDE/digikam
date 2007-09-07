@@ -1003,21 +1003,40 @@ void DigikamView::slotImageExifOrientation(int orientation)
 void DigikamView::slotLightTable()
 {
     ImageInfoList empty;
-    d->iconView->insertToLightTable(empty, ImageInfo());
+    d->iconView->insertToLightTable(empty, ImageInfo(), true);
 }
 
 void DigikamView::slotImageLightTable()
 {
     if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
     {
-        d->iconView->insertSelectionToLightTable();
+        // put images into an emptied light table 
+        d->iconView->insertSelectionToLightTable(false);
     }
     else
     {
         ImageInfoList list;
         ImageInfo info = d->albumWidgetStack->imagePreviewView()->getImageInfo();
         list.append(info);
-        d->iconView->insertToLightTable(list, info);
+        // put images into an emptied light table 
+        d->iconView->insertToLightTable(list, info, false);
+    }
+}
+
+void DigikamView::slotImageAddToLightTable()
+{
+    if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
+    {
+        // add images to the existing images in the light table 
+        d->iconView->insertSelectionToLightTable(true);
+    }
+    else
+    {
+        ImageInfoList list;
+        ImageInfo info = d->albumWidgetStack->imagePreviewView()->getImageInfo();
+        list.append(info);
+        // add images to the existing images in the light table 
+        d->iconView->insertToLightTable(list, info, true);
     }
 }
 

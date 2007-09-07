@@ -100,6 +100,7 @@ public:
         imagePreviewAction                   = 0;
         imageViewAction                      = 0;
         imageLightTableAction                = 0;
+        imageAddLightTableAction             = 0;
         imageSetExifOrientation1Action       = 0;
         imageSetExifOrientation2Action       = 0;
         imageSetExifOrientation3Action       = 0;
@@ -199,6 +200,7 @@ public:
     // Image Actions
     KToggleAction         *imagePreviewAction;
     KAction               *imageLightTableAction;
+    KAction               *imageAddLightTableAction;
     KAction               *imageViewAction;
     KAction               *imageSetExifOrientation1Action;
     KAction               *imageSetExifOrientation2Action;

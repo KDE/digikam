@@ -623,9 +623,17 @@ void DigikamApp::setupActions()
 
     d->imageLightTableAction = new KAction(KIcon("lighttable"), i18n("Place onto Light Table"), this);
     d->imageLightTableAction->setShortcut(Qt::Key_F6);
-    d->imageLightTableAction->setWhatsThis(i18n("Insert the selected items into the light table thumbbar."));
+    d->imageLightTableAction->setWhatsThis(i18n("Put the selected items into the light table thumbbar."));
     connect(d->imageLightTableAction, SIGNAL(triggered()), d->view, SLOT(slotImageLightTable()));
     actionCollection()->addAction("image_lighttable", d->imageLightTableAction);
+
+    // -----------------------------------------------------------
+
+    d->imageAddLightTableAction = new KAction(KIcon("lighttable"), i18n("Add to Light Table"), this);
+    d->imageAddLightTableAction->setShortcut(Qt::CTRL+Qt::Key_F6);
+    d->imageAddLightTableAction->setWhatsThis(i18n("Add selected items to the light table thumbbar."));
+    connect(d->imageAddLightTableAction, SIGNAL(triggered()), d->view, SLOT(slotImageAddToLightTable()));
+    actionCollection()->addAction("image_add_to_lighttable", d->imageAddLightTableAction);
 
     // -----------------------------------------------------------
 
@@ -894,7 +902,7 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------
 
     KAction *ltAction = new KAction(KIcon("lighttable"), i18n("Light Table"), this);
-    ltAction->setShortcut(Qt::CTRL+Qt::Key_F6);
+    ltAction->setShortcut(Qt::SHIFT+Qt::Key_F6);
     connect(ltAction, SIGNAL(triggered()), d->view, SLOT(slotLightTable()));
     actionCollection()->addAction("light_table", ltAction);
 
