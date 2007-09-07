@@ -639,9 +639,9 @@ int AlbumDB::addTag(int parentTagID, const QString& name, const QString& iconKDE
                     qlonglong iconID)
 {
     if (!d->db->execSql( QString("INSERT INTO Tags (pid, name) "
-                                "VALUES( ?, ?);"),
-                         parentTagID,
-                         name ));
+                                 "VALUES( ?, ?);"),
+                         parentTagID, 
+                         name) )
     {
         return -1;
     }
