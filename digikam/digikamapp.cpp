@@ -634,7 +634,16 @@ void DigikamApp::setupActions()
                                     SLOT(slotImageLightTable()),
                                     actionCollection(),
                                     "image_lighttable");
-    d->imageLightTableAction->setWhatsThis(i18n("Insert the selected items into the light table thumbbar."));
+    d->imageLightTableAction->setWhatsThis(i18n("Put the selected items into the light table thumbbar."));
+
+    d->imageLightTableAction = new KAction(i18n("Add to Light Table"),
+                                    "idea",
+                                    CTRL+Key_F6,
+                                    d->view,
+                                    SLOT(slotImageAddToLightTable()),
+                                    actionCollection(),
+                                    "image_add_to_lighttable");
+    d->imageLightTableAction->setWhatsThis(i18n("Add selected items to the light table thumbbar."));
 
     d->imageRenameAction = new KAction(i18n("Rename..."),
                                     "pencil",
@@ -922,7 +931,7 @@ void DigikamApp::setupActions()
     advFindAction->setText(i18n("Advanced Search..."));
     advFindAction->setShortcut("Ctrl+Alt+F");
 
-    new KAction(i18n("Light Table"), "idea", CTRL+Key_F6,
+    new KAction(i18n("Light Table"), "idea", SHIFT+Key_F6,
                 d->view, SLOT(slotLightTable()), actionCollection(), 
                 "light_table");
 

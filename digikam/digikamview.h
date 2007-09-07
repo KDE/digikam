@@ -113,6 +113,7 @@ public slots:
 
     // Image action slots
     void slotImageLightTable();
+    void slotImageAddToLightTable();
     void slotImagePreview();
     void slotImageEdit();
     void slotImageExifOrientation(int orientation);

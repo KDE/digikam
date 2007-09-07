@@ -682,7 +682,8 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
   
       case 19: 
       {
-          insertSelectionToLightTable();
+          //  add images to existing images in the light table
+          insertSelectionToLightTable(true);
           break;
       }
 
@@ -1027,10 +1028,11 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item)
     imview->setFocus();
 }
 
-void AlbumIconView::insertSelectionToLightTable()
+void AlbumIconView::insertSelectionToLightTable(bool addTo)
 {
     // Run Light Table with all selected image files in the current Album.
-
+    // If addTo is false, the light table will be emptied before adding
+    // the images.
     ImageInfoList imageInfoList;
     
     for (IconItem *it = firstItem() ; it ; it = it->nextItem())
@@ -1044,10 +1046,10 @@ void AlbumIconView::insertSelectionToLightTable()
         }
     }
     
-    insertToLightTable(imageInfoList, imageInfoList.first());
+    insertToLightTable(imageInfoList, imageInfoList.first(), addTo);
 }
 
-void AlbumIconView::insertToLightTable(const ImageInfoList& list, ImageInfo* current)
+void AlbumIconView::insertToLightTable(const ImageInfoList& list, ImageInfo* current, bool addTo)
 {
     LightTableWindow *ltview = LightTableWindow::lightTableWindow();
 
@@ -1064,7 +1066,9 @@ void AlbumIconView::insertToLightTable(const ImageInfoList& list, ImageInfo* cur
 
     ltview->raise();
     ltview->setFocus();
-    ltview->loadImageInfos(list, current);
+    // If addTo is false, the light table will be emptied before adding
+    // the images.
+    ltview->loadImageInfos(list, current, addTo);
     if (list.count()>1)
         ltview->setLeftRightItems(list);
 }

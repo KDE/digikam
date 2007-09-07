@@ -43,6 +43,7 @@
      <Action name="image_view" />
      <Action name="image_edit" />
      <Action name="image_lighttable" />
+     <Action name="image_add_to_lighttable" />
      <Action name="image_set_exif_orientation"/>
    <Separator />
      <ActionList name="image_actions"/>
