@@ -123,7 +123,7 @@ JPEGSettings::JPEGSettings(QWidget *parent)
     d->JPEGGrid->addWidget(d->JPEGcompression,      0, 1, 1, 1);
     d->JPEGGrid->addWidget(d->labelSubSampling,     1, 0, 1, 1);    
     d->JPEGGrid->addWidget(d->subSamplingCB,        1, 1, 1, 1);    
-    d->JPEGGrid->addWidget(d->labelWarning,         0, 2, 1, 1);    
+    d->JPEGGrid->addWidget(d->labelWarning,         0, 2, 2, 1);    
     d->JPEGGrid->setColumnStretch(1, 10);
     d->JPEGGrid->setRowStretch(2, 10);
     d->JPEGGrid->setAlignment(d->JPEGcompression, Qt::AlignCenter);
