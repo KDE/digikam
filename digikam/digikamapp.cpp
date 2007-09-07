@@ -952,6 +952,7 @@ void DigikamApp::setupActions()
     d->imageViewAction->setEnabled(false);
     d->imagePreviewAction->setEnabled(false);
     d->imageLightTableAction->setEnabled(false);
+    d->imageAddLightTableAction->setEnabled(false);
     d->imageRenameAction->setEnabled(false);
     d->imageDeleteAction->setEnabled(false);
     d->imageExifOrientationActionMenu->setEnabled(false);
@@ -1154,6 +1155,7 @@ void DigikamApp::slotImageSelected(const ImageInfoList& list, bool hasPrev, bool
     d->imageViewAction->setEnabled(val);
     d->imagePreviewAction->setEnabled(val);
     d->imageLightTableAction->setEnabled(val);
+    d->imageAddLightTableAction->setEnabled(val);
     d->imageRenameAction->setEnabled(val);
     d->imageDeleteAction->setEnabled(val);
     d->imageExifOrientationActionMenu->setEnabled(val);
