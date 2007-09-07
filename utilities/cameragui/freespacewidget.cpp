@@ -127,8 +127,13 @@ void FreeSpaceWidget::setMode(FreeSpaceMode mode)
 
 void FreeSpaceWidget::setPath(const QString& path)
 {
-    d->timer->stop();
     d->path = path;
+    refresh();
+}
+
+void FreeSpaceWidget::refresh()
+{
+    d->timer->stop();
     slotTimeout();
     d->timer->start(10000);
 }

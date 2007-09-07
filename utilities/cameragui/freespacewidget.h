@@ -66,6 +66,7 @@ public:
     unsigned long kBUsed();
     unsigned long kBAvail();
     QString       mountPoint();
+    void          refresh();
 
     void setMode(FreeSpaceMode mode);
     void setPath(const QString& path);

@@ -707,6 +707,15 @@ void CameraUI::slotCancelButton()
                                           i18n("Cancelling current operation, please wait..."));
     d->controller->slotCancel();
     d->currentlyDeleting.clear();
+    refreshFreeSpace();
+}
+
+void CameraUI::refreshFreeSpace()
+{
+    if (d->controller->cameraDriverType() == DKCamera::GPhotoDriver)
+        d->controller->getFreeSpace();
+    else
+        d->cameraFreeSpace->refresh();
 }
 
 void CameraUI::closeEvent(QCloseEvent* e)
@@ -925,7 +934,7 @@ void CameraUI::slotConnected(bool val)
     }
     else
     {
-        d->controller->getFreeSpace();
+        refreshFreeSpace();
         d->controller->listFolders();
     }
 }
@@ -1111,6 +1120,7 @@ void CameraUI::slotUploaded(const GPItemInfo& itemInfo)
 
     d->view->addItem(itemInfo);
     d->controller->getThumbnail(itemInfo.folder, itemInfo.name);
+    refreshFreeSpace();
 }
 
 void CameraUI::slotDownloadSelected()
@@ -1568,6 +1578,7 @@ void CameraUI::slotDeleted(const QString& folder, const QString& file, bool stat
 
     int curr = d->statusProgressBar->progressValue();
     d->statusProgressBar->setProgressTotalSteps(curr+1);
+    refreshFreeSpace();
 }
 
 void CameraUI::slotFileView()
@@ -1628,6 +1639,8 @@ void CameraUI::slotExifFromData(const QByteArray& exifData)
 
 void CameraUI::slotNewSelection(bool hasSelection)
 {
+    if (!d->controller) return;
+
     if (!d->renameCustomizer->useDefault())
     {
         d->downloadSelectedAction->setEnabled(hasSelection);
@@ -1651,6 +1664,8 @@ void CameraUI::slotNewSelection(bool hasSelection)
 
 void CameraUI::slotItemsSelected(CameraIconViewItem* item, bool selected)
 {
+    if (!d->controller) return;
+
     d->downloadSelectedAction->setEnabled(selected);
     d->downloadDelSelectedAction->setEnabled(selected & d->controller->cameraDeleteSupport());
     d->deleteSelectedAction->setEnabled(selected & d->controller->cameraDeleteSupport());

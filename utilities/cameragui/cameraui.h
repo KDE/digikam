@@ -109,6 +109,7 @@ private:
     void finishDialog();
     void showToolBars();
     void hideToolBars();
+    void refreshFreeSpace();
 
 private slots:
 
