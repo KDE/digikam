@@ -57,7 +57,7 @@ public:
     static LightTableWindow *lightTableWindow();
     static bool              lightTableWindowCreated();
 
-    void loadImageInfos(const ImageInfoList &list, const ImageInfo &imageInfoCurrent);
+    void loadImageInfos(const ImageInfoList &list, const ImageInfo &imageInfoCurrent, bool addTo);
     void setLeftRightItems(const ImageInfoList &list);
 
 signals: 

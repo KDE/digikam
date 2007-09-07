@@ -500,7 +500,9 @@ void LightTableWindow::setupActions()
 // Deal with items dropped onto the thumbbar (e.g. from the Album view)
 void LightTableWindow::slotThumbbarDroppedItems(const ImageInfoList& list)
 {
-    loadImageInfos(list, ImageInfo());
+    // Setting the third parameter of loadImageInfos to true
+    // means that the images are added to the presently available images.
+    loadImageInfos(list, ImageInfo(), true);
     if (list.count()>1)
         setLeftRightItems(list);
 }
@@ -513,8 +515,14 @@ void LightTableWindow::slotThumbbarDroppedItems(const ImageInfoList& list)
 //     c) albumiconview.cpp: AlbumIconView::insertToLightTable
 //          calls ltview->loadImageInfos(list, current);
 // - via drag&drop, i.e. calls issued by the ...Dropped... routines
-void LightTableWindow::loadImageInfos(const ImageInfoList &list, const ImageInfo &givenImageInfoCurrent)
+void LightTableWindow::loadImageInfos(const ImageInfoList &list, 
+                                      const ImageInfo &givenImageInfoCurrent,
+                                      bool addTo)
 {
+    // Clear all items before adding new images to the light table.
+    if (!addTo)
+        slotClearItemsList();
+
     ImageInfoList l = list;
     ImageInfo imageInfoCurrent = givenImageInfoCurrent;
 
@@ -522,7 +530,6 @@ void LightTableWindow::loadImageInfos(const ImageInfoList &list, const ImageInfo
         imageInfoCurrent = l.first();
 
     AlbumSettings *settings = AlbumSettings::instance();
-
     if (!settings) return;
 
     QString imagefilter = settings->getImageFileFilter().toLower() +
@@ -734,7 +741,8 @@ void LightTableWindow::slotItemSelected(const ImageInfo &info)
 void LightTableWindow::slotLeftDroppedItems(const ImageInfoList& list)
 {
     ImageInfo info = list.first();
-    loadImageInfos(list, info);
+    // add the image to the existing images
+    loadImageInfos(list, info, true);
 
     // We will check if first item from list is already stored in thumbbar
     // Note that the thumbbar stores all ImageInfo reference 
@@ -758,7 +766,8 @@ void LightTableWindow::slotLeftDroppedItems(const ImageInfoList& list)
 void LightTableWindow::slotRightDroppedItems(const ImageInfoList& list)
 {
     ImageInfo info = list.first();
-    loadImageInfos(list, info);
+    // add the image to the existing images
+    loadImageInfos(list, info, true);
     if (list.count()>1)
         setLeftRightItems(list);
 
