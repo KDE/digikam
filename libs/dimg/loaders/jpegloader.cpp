@@ -503,18 +503,56 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
     QVariant qualityAttr = imageGetAttribute("quality");
     int quality = qualityAttr.isValid() ? qualityAttr.toInt() : 90;
-    
+
     if (quality < 0)
         quality = 90;
     if (quality > 100)
         quality = 100;
-    
+
+    QVariant subSamplingAttr = imageGetAttribute("subsampling");
+    int subsampling = subSamplingAttr.isValid() ? subSamplingAttr.toInt() : 1;  // Medium
+   
     jpeg_set_defaults(&cinfo);
 
-    // B.K.O #130996: set horizontal and vertical Subsampling factor to 1 for a best 
-    // quality of color picture compression. 
-    cinfo.comp_info[0].h_samp_factor = 1;
-    cinfo.comp_info[0].v_samp_factor = 1; 
+    // B.K.O #149578: set horizontal and vertical chroma subsampling factor to encoder.
+    // See this page for details: http://en.wikipedia.org/wiki/Chroma_subsampling
+
+    switch (subsampling)
+    {
+        case 1:  // 2x1, 1x1, 1x1 (4:2:2) : Medium
+        {
+            DDebug() << "Using LibJPEG medium chroma-subsampling (4:2:2)" << endl;
+            cinfo.comp_info[0].h_samp_factor = 2;
+            cinfo.comp_info[0].v_samp_factor = 1;
+            cinfo.comp_info[1].h_samp_factor = 1;
+            cinfo.comp_info[1].v_samp_factor = 1;
+            cinfo.comp_info[2].h_samp_factor = 1;
+            cinfo.comp_info[2].v_samp_factor = 1;
+            break;
+        }
+        case 2:  // 2x2, 1x1, 1x1 (4:1:1) : High
+        {
+            DDebug() << "Using LibJPEG high chroma-subsampling (4:1:1)" << endl;
+            cinfo.comp_info[0].h_samp_factor = 2;
+            cinfo.comp_info[0].v_samp_factor = 2;
+            cinfo.comp_info[1].h_samp_factor = 1;
+            cinfo.comp_info[1].v_samp_factor = 1;
+            cinfo.comp_info[2].h_samp_factor = 1;
+            cinfo.comp_info[2].v_samp_factor = 1;
+            break;
+        }
+        default:  // 1x1 1x1 1x1 (4:4:4) : None
+        {
+            DDebug() << "Using LibJPEG none chroma-subsampling (4:4:4)" << endl;
+            cinfo.comp_info[0].h_samp_factor = 1;
+            cinfo.comp_info[0].v_samp_factor = 1;
+            cinfo.comp_info[1].h_samp_factor = 1;
+            cinfo.comp_info[1].v_samp_factor = 1;
+            cinfo.comp_info[2].h_samp_factor = 1;
+            cinfo.comp_info[2].v_samp_factor = 1;
+            break;
+        }
+    }
 
     jpeg_set_quality(&cinfo, quality, true);
     jpeg_start_compress(&cinfo, true);

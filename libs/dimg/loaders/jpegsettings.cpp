@@ -27,6 +27,7 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qwhatsthis.h>
+#include <qcombobox.h>
 
 // KDE includes.
 
@@ -54,11 +55,15 @@ public:
         labelJPEGcompression = 0;
         JPEGcompression      = 0;
         labelWarning         = 0;
+        subSamplingCB        = 0;
     }
 
     QGridLayout  *JPEGGrid;
 
     QLabel       *labelJPEGcompression;
+    QLabel       *labelSubSampling;
+
+    QComboBox    *subSamplingCB;
 
     KActiveLabel *labelWarning;
 
@@ -94,11 +99,30 @@ JPEGSettings::JPEGSettings(QWidget *parent)
     d->labelWarning->setLineWidth(1);
     d->labelWarning->setFrameShape(QFrame::Box);
 
+    d->labelSubSampling = new QLabel(i18n("Chroma subsampling:"), this);
+
+    d->subSamplingCB = new QComboBox(false, this);
+    d->subSamplingCB->insertItem(i18n("None"));    // 1x1, 1x1, 1x1 (4:4:4)
+    d->subSamplingCB->insertItem(i18n("Medium"));  // 2x1, 1x1, 1x1 (4:2:2)
+    d->subSamplingCB->insertItem(i18n("High"));    // 2x2, 1x1, 1x1 (4:1:1)
+    QWhatsThis::add(d->subSamplingCB, i18n("<p>The level of chroma subsampling for JPEG images:<p>"
+                                           "<b>None</b>: use 4:4:4 ratio. It does not have any chroma "
+                                           "subsampling at all. This preserves borders and contrasting "
+                                           "colors, but compression is less<p>"
+                                           "<b>Medium</b>: use 4:2:2 ratio. Medium compression; reduces "
+                                           "the bandwidth for the picture by one-third with little to "
+                                           "no visual difference<p>"
+                                           "<b>High</b>: use 4:1:1 ratio. Important compression; suits "
+                                           "images with weak borders but tends to denature colors<p>"
+                                           "<b>Note: JPEG use a lossy compression image algorithm.</b>"));
+
     d->JPEGGrid->addMultiCellWidget(d->labelJPEGcompression, 0, 0, 0, 0);
-    d->JPEGGrid->addMultiCellWidget(d->JPEGcompression, 0, 0, 1, 1);
-    d->JPEGGrid->addMultiCellWidget(d->labelWarning, 0, 0, 2, 2);    
+    d->JPEGGrid->addMultiCellWidget(d->JPEGcompression,      0, 0, 1, 1);
+    d->JPEGGrid->addMultiCellWidget(d->labelSubSampling,     1, 1, 0, 0);    
+    d->JPEGGrid->addMultiCellWidget(d->subSamplingCB,        1, 1, 1, 1);    
+    d->JPEGGrid->addMultiCellWidget(d->labelWarning,         0, 1, 2, 2);    
     d->JPEGGrid->setColStretch(1, 10);
-    d->JPEGGrid->setRowStretch(1, 10);
+    d->JPEGGrid->setRowStretch(2, 10);
 }
 
 JPEGSettings::~JPEGSettings()
@@ -116,5 +140,14 @@ int JPEGSettings::getCompressionValue()
     return d->JPEGcompression->value();
 }
 
-}  // namespace Digikam
+void JPEGSettings::setSubSamplingValue(int val)
+{
+    d->subSamplingCB->setCurrentItem(val);
+}
 
+int JPEGSettings::getSubSamplingValue()
+{
+    return d->subSamplingCB->currentItem();
+}
+
+}  // namespace Digikam

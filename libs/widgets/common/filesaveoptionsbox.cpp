@@ -159,6 +159,7 @@ void FileSaveOptionsBox::applySettings()
     KConfig* config = kapp->config();
     config->setGroup("ImageViewer Settings");
     config->writeEntry("JPEGCompression", d->JPEGOptions->getCompressionValue());
+    config->writeEntry("JPEGSubSampling", d->JPEGOptions->getSubSamplingValue());
     config->writeEntry("PNGCompression", d->PNGOptions->getCompressionValue());
     config->writeEntry("TIFFCompression", d->TIFFOptions->getCompression());
     config->writeEntry("JPEG2000Compression", d->JPEG2000Options->getCompressionValue());
@@ -171,6 +172,7 @@ void FileSaveOptionsBox::readSettings()
     KConfig* config = kapp->config();
     config->setGroup("ImageViewer Settings");
     d->JPEGOptions->setCompressionValue( config->readNumEntry("JPEGCompression", 75) );
+    d->JPEGOptions->setCompressionValue( config->readNumEntry("JPEGSubSampling", 1) );  // Medium subsampling
     d->PNGOptions->setCompressionValue( config->readNumEntry("PNGCompression", 9) );
     d->TIFFOptions->setCompression(config->readBoolEntry("TIFFCompression", false));
     d->JPEG2000Options->setCompressionValue( config->readNumEntry("JPEG2000Compression", 75) );
@@ -178,4 +180,3 @@ void FileSaveOptionsBox::readSettings()
 }
 
 }  // namespace Digikam
-

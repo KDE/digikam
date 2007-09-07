@@ -549,8 +549,11 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iof
 
     // JPEG file format.
     if ( mimeType.upper() == QString("JPG") || mimeType.upper() == QString("JPEG") || 
-         mimeType.upper() == QString("JPE")) 
-       d->image.setAttribute("quality", iofileSettings->JPEGCompression);
+         mimeType.upper() == QString("JPE"))
+    {
+       d->image.setAttribute("quality",     iofileSettings->JPEGCompression);
+       d->image.setAttribute("subsampling", iofileSettings->JPEGSubSampling);
+    }
 
     // PNG file format.
     if ( mimeType.upper() == QString("PNG") ) 
