@@ -664,11 +664,13 @@ CameraController::~CameraController()
 
 QString CameraController::getCameraPath()
 {
+    if (!d->camera) return QString();
     return d->camera->path();
 }
 
 QString CameraController::getCameraTitle()
 {
+    if (!d->camera) return QString();
     return d->camera->title();
 }
 
