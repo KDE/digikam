@@ -389,6 +389,8 @@ SET(libcameragui_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/albumselectdialog.cpp 
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameraui.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/freespacewidget.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/capturewidget.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/capturedlg.cpp
    )
 
 ADD_SUBDIRECTORY( data )
