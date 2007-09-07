@@ -117,8 +117,8 @@ public:
     AlbumIconItem* nextItemToThumbnail() const;
     PixmapManager* pixmapManager() const;
 
-    void insertSelectionToLightTable(bool addTo = false);
-    void insertToLightTable(const ImageInfoList& list, ImageInfo* current, bool addTo = false);
+    void insertSelectionToLightTable(bool addTo=false);
+    void insertToLightTable(const ImageInfoList& list, ImageInfo* current, bool addTo=false);
 
 signals:
 

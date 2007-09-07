@@ -515,13 +515,13 @@ void LightTableWindow::slotThumbbarDroppedItems(const ImageInfoList& list)
 //     c) albumiconview.cpp: AlbumIconView::insertToLightTable
 //          calls ltview->loadImageInfos(list, current);
 // - via drag&drop, i.e. calls issued by the ...Dropped... routines
-void LightTableWindow::loadImageInfos(const ImageInfoList &list, ImageInfo *imageInfoCurrent, bool addTo)
+void LightTableWindow::loadImageInfos(const ImageInfoList &list,
+                                      ImageInfo *imageInfoCurrent,
+                                      bool addTo)
 {
     // Clear all items before adding new images to the light table.
     if (!addTo)
-    {
         slotClearItemsList();
-    }
 
     ImageInfoList l = list;
 
@@ -529,7 +529,6 @@ void LightTableWindow::loadImageInfos(const ImageInfoList &list, ImageInfo *imag
         imageInfoCurrent = l.first();
 
     AlbumSettings *settings = AlbumSettings::instance();
-
     if (!settings) return;
 
     QString imagefilter = settings->getImageFileFilter().lower() +
