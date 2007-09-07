@@ -25,14 +25,11 @@
 #ifndef GPITEMINFO_H
 #define GPITEMINFO_H
 
-// C++ includes.
-
-#include <ctime>
-
 // Qt includes.
 
 #include <QList>
 #include <QByteArray>
+#include <QDateTime>
 
 class QDataStream;
 
@@ -56,18 +53,19 @@ public:
 
 public:
 
-    long    size;
-    int     width;
-    int     height;
-    int     downloaded;           // See DownloadStatus enum.
-    int     readPermissions;
-    int     writePermissions;
+    qint64    size;
 
-    QString name;
-    QString folder;
-    QString mime;
+    int       width;
+    int       height;
+    int       downloaded;           // See DownloadStatus enum.
+    int       readPermissions;
+    int       writePermissions;
 
-    time_t  mtime;
+    QString   name;
+    QString   folder;
+    QString   mime;
+
+    QDateTime mtime;
 };
 
 QDataStream& operator<<(QDataStream &, const GPItemInfo &);

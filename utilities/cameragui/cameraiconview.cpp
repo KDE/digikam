@@ -367,10 +367,7 @@ QString CameraIconView::getTemplatedName(const GPItemInfo* itemInfo, int positio
     else
         ext = ext.right( ext.length() - pos );
 
-    QDateTime mtime;
-    mtime.setTime_t(itemInfo->mtime);
-
-    return d->renamer->newName(mtime, position+1, ext);
+    return d->renamer->newName(itemInfo->mtime, position+1, ext);
 }
 
 QString CameraIconView::getCasedName(const RenameCustomizer::Case ccase,

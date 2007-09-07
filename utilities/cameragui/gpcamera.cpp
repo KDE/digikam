@@ -42,6 +42,7 @@ extern "C"
 #include <QImage>
 #include <QPixmap>
 #include <QFile>
+#include <QDateTime>
 
 // KDE includes.
 
@@ -454,7 +455,7 @@ bool GPCamera::capture(GPItemInfo& itemInfo)
         return false;
     }
 
-    itemInfo.mtime            = -1;
+    itemInfo.mtime            = QDateTime();
     itemInfo.mime             = "";
     itemInfo.size             = -1;
     itemInfo.width            = -1;
@@ -470,7 +471,7 @@ bool GPCamera::capture(GPItemInfo& itemInfo)
     itemInfo.mime = mimeType(itemInfo.name.section('.', -1).toLower());
 
     if (info.file.fields & GP_FILE_INFO_MTIME)
-        itemInfo.mtime = info.file.mtime;      
+        itemInfo.mtime = QDateTime::fromTime_t(info.file.mtime);      
 
     if (info.file.fields & GP_FILE_INFO_SIZE)
         itemInfo.size = info.file.size;
@@ -673,7 +674,7 @@ bool GPCamera::getItemsInfoList(const QString& folder, GPItemInfoList& items, bo
         gp_camera_file_get_info(d->camera, QFile::encodeName(folder),
                                 cname, &info, d->status->context);
 
-        itemInfo.mtime            = -1;
+        itemInfo.mtime            = QDateTime();
         itemInfo.mime             = "";
         itemInfo.size             = -1;
         itemInfo.width            = -1;
@@ -689,7 +690,7 @@ bool GPCamera::getItemsInfoList(const QString& folder, GPItemInfoList& items, bo
         itemInfo.mime = mimeType(itemInfo.name.section('.', -1).toLower());
 
         if (info.file.fields & GP_FILE_INFO_MTIME)
-            itemInfo.mtime = info.file.mtime;      
+            itemInfo.mtime = QDateTime::fromTime_t(info.file.mtime);      
 
         if (info.file.fields & GP_FILE_INFO_SIZE)
             itemInfo.size = info.file.size;
@@ -1081,7 +1082,7 @@ bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const 
         return false;
     }
 
-    itemInfo.mtime            = -1;
+    itemInfo.mtime            = QDateTime();
     itemInfo.mime             = "";
     itemInfo.size             = -1;
     itemInfo.width            = -1;
@@ -1097,7 +1098,7 @@ bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const 
     itemInfo.mime = mimeType(itemInfo.name.section('.', -1).toLower());
 
     if (info.file.fields & GP_FILE_INFO_MTIME)
-        itemInfo.mtime = info.file.mtime;      
+        itemInfo.mtime = QDateTime::fromTime_t(info.file.mtime);      
 
     if (info.file.fields & GP_FILE_INFO_SIZE)
         itemInfo.size = info.file.size;

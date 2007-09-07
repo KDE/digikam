@@ -959,7 +959,7 @@ void CameraUI::slotFileList(const GPItemInfoList& fileList)
     {
         GPItemInfo item = *it;
 
-        if (item.mtime > (time_t)d->lastAccess.toTime_t() && item.downloaded == GPItemInfo::DownloadUnknow)
+        if (item.mtime > d->lastAccess && item.downloaded == GPItemInfo::DownloadUnknow)
            item.downloaded = GPItemInfo::NewPicture;
 
         d->view->addItem(item);
@@ -1164,8 +1164,7 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
     {
         CameraIconViewItem* iconItem = static_cast<CameraIconViewItem*>(firstItem);
         
-        QDateTime dateTime;
-        dateTime.setTime_t(iconItem->itemInfo()->mtime);
+        QDateTime dateTime = iconItem->itemInfo()->mtime;
 
         switch(d->folderDateFormat->currentIndex())
         {
@@ -1211,9 +1210,9 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
     d->controller->downloadPrep();
 
     DownloadSettingsContainer downloadSettings;
-    QString downloadName;
-    time_t  mtime;
-    int     total = 0;
+    QString   downloadName;
+    QDateTime dateTime;
+    int       total = 0;
     
     downloadSettings.autoRotate        = d->autoRotateCheck->isChecked();
     downloadSettings.fixDateTime       = d->fixDateTimeCheck->isChecked();
@@ -1245,12 +1244,10 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
         downloadSettings.folder      = iconItem->itemInfo()->folder;
         downloadSettings.file        = iconItem->itemInfo()->name;
         downloadName                 = iconItem->getDownloadName();
-        mtime                        = iconItem->itemInfo()->mtime;
+        dateTime                     = iconItem->itemInfo()->mtime;
 
         KUrl u(url);
         QString errMsg;
-        QDateTime dateTime;
-        dateTime.setTime_t(mtime);
                     
         // Auto sub-albums creation based on file date.     
 

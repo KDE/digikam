@@ -176,7 +176,7 @@ bool UMSCamera::getItemsInfoList(const QString& folder, GPItemInfoList& infoList
             info.name             = fi->fileName();
             info.folder           = !folder.endsWith("/") ? folder + QString("/") : folder;
             info.mime             = mime;
-            info.mtime            = fi->lastModified().toTime_t();
+            info.mtime            = fi->lastModified();
             info.size             = fi->size();
             info.width            = dims.width();
             info.height           = dims.height();
@@ -445,7 +445,7 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
         itemInfo.name             = fi.fileName();
         itemInfo.folder           = !folder.endsWith("/") ? folder + QString("/") : folder;
         itemInfo.mime             = mime;
-        itemInfo.mtime            = fi.lastModified().toTime_t();
+        itemInfo.mtime            = fi.lastModified();
         itemInfo.size             = fi.size();
         itemInfo.width            = dims.width();
         itemInfo.height           = dims.height();
