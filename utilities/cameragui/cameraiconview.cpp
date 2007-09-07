@@ -159,15 +159,20 @@ void CameraIconView::setRenameCustomizer(RenameCustomizer* renamer)
 
 void CameraIconView::addItem(const GPItemInfo& info)
 {
-    KMimeType::Ptr mime;
+    KIconLoader* iconLoader = KIconLoader::global();
+    QImage thumb;
 
     // Just to have a generic image thumb from desktop with KDE < 3.5.0
-    mime = KMimeType::mimeType(info.mime == QString("image/x-raw") ? QString("image/tiff") : info.mime);
+    KMimeType::Ptr mime = KMimeType::mimeType(info.mime == QString("image/x-raw") ? 
+                                              QString("image/tiff") : info.mime);
 
-    KIconLoader* iconLoader = KIconLoader::global();
-    QImage thumb = iconLoader->loadIcon(mime->iconName(), K3Icon::Desktop, 
-                                        ThumbnailSize::Huge, K3Icon::DefaultState)
-                               .toImage();
+    if (mime)
+    {
+        thumb = iconLoader->loadIcon(mime->iconName(), K3Icon::Desktop, 
+                                     ThumbnailSize::Huge, K3Icon::DefaultState)
+                                     .toImage();
+    }
+
     QString downloadName;
 
     if (d->renamer)
