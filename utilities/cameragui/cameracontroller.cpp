@@ -215,46 +215,55 @@ CameraController::~CameraController()
 
 bool CameraController::cameraThumbnailSupport()
 {
+    if (!d->camera) return false;
     return d->camera->thumbnailSupport();
 }
 
 bool CameraController::cameraDeleteSupport()
 {
+    if (!d->camera) return false;
     return d->camera->deleteSupport();
 }
 
 bool CameraController::cameraUploadSupport()
 {
+    if (!d->camera) return false;
     return d->camera->uploadSupport();
 }
 
 bool CameraController::cameraMkDirSupport()
 {
+    if (!d->camera) return false;
     return d->camera->mkDirSupport();
 }
 
 bool CameraController::cameraDelDirSupport()
 {
+    if (!d->camera) return false;
     return d->camera->delDirSupport();
 }
 
 bool CameraController::cameraCaptureImageSupport()
 {
+    if (!d->camera) return false;
     return d->camera->captureImageSupport();
 }
 
 QString CameraController::cameraPath()
 {
+    if (!d->camera) return false;
     return d->camera->path();
 }
 
 QString CameraController::cameraTitle()
 {
+    if (!d->camera) return false;
     return d->camera->title();
 }
 
 DKCamera::CameraDriverType CameraController::cameraDriverType()
 {
+    if (!d->camera) return false;
     return d->camera->cameraDriverType();
 }
 
