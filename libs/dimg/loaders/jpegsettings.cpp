@@ -55,6 +55,7 @@ public:
         labelJPEGcompression = 0;
         JPEGcompression      = 0;
         labelWarning         = 0;
+        labelSubSampling     = 0;
         subSamplingCB        = 0;
     }
 
