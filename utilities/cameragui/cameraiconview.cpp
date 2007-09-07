@@ -172,6 +172,12 @@ void CameraIconView::addItem(const GPItemInfo& info)
                                      ThumbnailSize::Huge, K3Icon::DefaultState)
                                      .toImage();
     }
+    else
+    {
+        thumb = iconLoader->loadIcon("empty", K3Icon::Desktop, 
+                                     ThumbnailSize::Huge, K3Icon::DefaultState)
+                                     .toImage();
+    }
 
     QString downloadName;
 
