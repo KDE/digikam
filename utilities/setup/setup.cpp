@@ -164,7 +164,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->mimePage = new SetupMime(d->page_mime);
 
     d->page_lighttable = addPage(i18n("Light Table"), i18n("Light Table Settings"),
-                                 BarIcon("idea", KIcon::SizeMedium));
+                                 BarIcon("lighttable", KIcon::SizeMedium));
     d->lighttablePage = new SetupLightTable(d->page_lighttable);
 
     d->page_editor = addPage(i18n("Image Editor"), i18n("Image Editor General Settings"),

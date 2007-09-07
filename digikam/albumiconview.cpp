@@ -529,7 +529,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     DPopupMenu popmenu(this);
     popmenu.insertItem(SmallIcon("viewimage"), i18n("View..."), 18);
     popmenu.insertItem(SmallIcon("editimage"), i18n("Edit..."), 10);
-    popmenu.insertItem(SmallIcon("idea"), i18n("Add to Light Table"), 19);
+    popmenu.insertItem(SmallIcon("lighttableadd"), i18n("Add to Light Table"), 19);
     popmenu.insertItem(i18n("Open With"), &openWithMenu, 11);
 
     // Merge in the KIPI plugins actions ----------------------------

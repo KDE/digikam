@@ -628,7 +628,7 @@ void DigikamApp::setupActions()
     d->imageViewAction->setWhatsThis(i18n("Open the selected item in the image editor."));
 
     d->imageLightTableAction = new KAction(i18n("Place onto Light Table"),
-                                    "idea",
+                                    "lighttable",
                                     Key_F6,
                                     d->view,
                                     SLOT(slotImageLightTable()),
@@ -637,7 +637,7 @@ void DigikamApp::setupActions()
     d->imageLightTableAction->setWhatsThis(i18n("Put the selected items into the light table thumbbar."));
 
     d->imageAddLightTableAction = new KAction(i18n("Add to Light Table"),
-                                    "idea",
+                                    "lighttableadd",
                                     CTRL+Key_F6,
                                     d->view,
                                     SLOT(slotImageAddToLightTable()),
