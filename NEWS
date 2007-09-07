@@ -45,5 +45,6 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
                  clicked the same warning comes for the next image and so on.
 032 ==> 146083 : Bugs in drag and drop.
 033 ==> 147854 : Put images into an emptied light-table
-034 ==>
+034 ==> 149578 : libjpeg JPEG subsampling setting is not user-controlable.
+035 ==> 
 
