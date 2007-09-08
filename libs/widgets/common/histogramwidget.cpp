@@ -141,10 +141,12 @@ HistogramWidget::HistogramWidget(int w, int h,
     setup(w, h, selectMode, blinkComputation, statisticsVisible);
     setAttribute(Qt::WA_DeleteOnClose);
 
-    m_imageHistogram     = new ImageHistogram(i_data, i_w, i_h, i_sixteenBits, true);
+    m_imageHistogram     = new ImageHistogram(i_data, i_w, i_h, i_sixteenBits);
     m_selectionHistogram = 0L;
 
     connectHistogram(m_imageHistogram);
+
+    m_imageHistogram->calculateInThread();
 }
 
 // Constructor with image selection.
@@ -162,11 +164,13 @@ HistogramWidget::HistogramWidget(int w, int h,
     setup(w, h, selectMode, blinkComputation, statisticsVisible);
     setAttribute(Qt::WA_DeleteOnClose);
 
-    m_imageHistogram     = new ImageHistogram(i_data, i_w, i_h, i_sixteenBits, true);
-    m_selectionHistogram = new ImageHistogram(s_data, s_w, s_h, i_sixteenBits, true);
+    m_imageHistogram     = new ImageHistogram(i_data, i_w, i_h, i_sixteenBits);
+    m_selectionHistogram = new ImageHistogram(s_data, s_w, s_h, i_sixteenBits);
 
     connectHistogram(m_imageHistogram);
     connectHistogram(m_selectionHistogram);
+
+    m_imageHistogram->calculateInThread();
 }
 
 HistogramWidget::~HistogramWidget()
@@ -228,9 +232,15 @@ void HistogramWidget::setRenderingType(HistogramRenderingType type)
         else
             nowUsedHistogram = m_imageHistogram;
 
-        // still computing?
+        // already calculated?
         if (!nowUsedHistogram->isValid())
-            slotCalculationStarted(nowUsedHistogram);
+        {
+            // still computing, or need to start it?
+            if (nowUsedHistogram->isCalculating())
+                slotCalculationStarted(nowUsedHistogram);
+            else
+                nowUsedHistogram->calculateInThread();
+        }
         else
             update();
     }
@@ -247,12 +257,17 @@ void HistogramWidget::slotCalculationStarted(const ImageHistogram *histogram)
     if (histogram != m_imageHistogram && histogram != m_selectionHistogram)
         return;
 
+    // only react to the histogram that the user is currently waiting for
     if (d->renderingType == ImageSelectionHistogram && m_selectionHistogram)
+    {
         if (histogram == m_imageHistogram)
             return;
+    }
     else
+    {
         if (histogram == m_selectionHistogram)
             return;
+    }
 
     setCursor( Qt::WaitCursor );
     d->clearFlag = HistogramWidgetPriv::HistogramStarted;
@@ -260,14 +275,15 @@ void HistogramWidget::slotCalculationStarted(const ImageHistogram *histogram)
     {
         if (d->clearFlag != HistogramWidgetPriv::HistogramDataLoading)
         {
-                // enter initial repaint wait, repaint only after waiting
-                // a short time so that very fast computation does not create flicker
+            // enter initial repaint wait, repaint only after waiting
+            // a short time so that very fast computation does not create flicker
             d->inInitialRepaintWait = true;
             d->blinkTimer->start( 100 );
         }
         else
         {
-                // after the initial repaint, we can repaint immediately
+            // For data loading, the initial wait has been set in setDataLoading.
+            // After the initial repaint, we can repaint immediately.
             repaint();
             d->blinkTimer->start( 200 );
         }
@@ -280,23 +296,27 @@ void HistogramWidget::slotCalculationFinished(const ImageHistogram *histogram, b
         return;
 
     if (d->renderingType == ImageSelectionHistogram && m_selectionHistogram)
+    {
         if (histogram == m_imageHistogram)
             return;
+    }
     else
+    {
         if (histogram == m_selectionHistogram)
             return;
+    }
 
     if (success)
     {
-            // Repaint histogram 
+        // Repaint histogram
         d->clearFlag = HistogramWidgetPriv::HistogramCompleted;
         d->blinkTimer->stop();
         d->inInitialRepaintWait = false;
         setCursor( Qt::ArrowCursor );
 
-            // Send signals to refresh information if necessary.
-            // The signals may trigger multiple repaints, avoid this,
-            // we repaint once afterwards.
+        // Send signals to refresh information if necessary.
+        // The signals may trigger multiple repaints, avoid this,
+        // we repaint once afterwards.
         setUpdatesEnabled(false);
 
         notifyValuesChanged();
@@ -353,10 +373,10 @@ void HistogramWidget::setLoadingFailed()
 void HistogramWidget::stopHistogramComputation(void)
 {
     if (m_imageHistogram)
-       m_imageHistogram->stopCalcHistogramValues();
+       m_imageHistogram->stopCalculation();
 
     if (m_selectionHistogram)
-       m_selectionHistogram->stopCalcHistogramValues();
+       m_selectionHistogram->stopCalculation();
 
     d->blinkTimer->stop();
 }
@@ -386,16 +406,21 @@ void HistogramWidget::updateData(uchar *i_data, uint i_w, uint i_h,
        delete m_selectionHistogram;
 
     // Calc new histogram data
-    m_imageHistogram = new ImageHistogram(i_data, i_w, i_h, i_sixteenBits, true);
+    m_imageHistogram = new ImageHistogram(i_data, i_w, i_h, i_sixteenBits);
     connectHistogram(m_imageHistogram);
 
     if (s_data && s_w && s_h)
     {
-        m_selectionHistogram = new ImageHistogram(s_data, s_w, s_h, i_sixteenBits, true);
+        m_selectionHistogram = new ImageHistogram(s_data, s_w, s_h, i_sixteenBits);
         connectHistogram(m_selectionHistogram);
     }
     else
         m_selectionHistogram = 0L;
+
+    if (d->renderingType == ImageSelectionHistogram && m_selectionHistogram)
+        m_selectionHistogram->calculateInThread();
+    else
+        m_imageHistogram->calculateInThread();
 }
 
 void HistogramWidget::updateSelectionData(uchar *s_data, uint s_w, uint s_h,
@@ -410,8 +435,11 @@ void HistogramWidget::updateSelectionData(uchar *s_data, uint s_w, uint s_h,
        delete m_selectionHistogram;
 
     // Calc new histogram data
-    m_selectionHistogram = new ImageHistogram(s_data, s_w, s_h, i_sixteenBits, true);
+    m_selectionHistogram = new ImageHistogram(s_data, s_w, s_h, i_sixteenBits);
     connectHistogram(m_selectionHistogram);
+
+    if (d->renderingType == ImageSelectionHistogram)
+        m_selectionHistogram->calculateInThread();
 }
 
 void HistogramWidget::slotBlinkTimerDone( void )
@@ -424,7 +452,7 @@ void HistogramWidget::slotBlinkTimerDone( void )
 
 void HistogramWidget::paintEvent( QPaintEvent * )
 {
-    // Widget is disabled, not initialized, 
+    // Widget is disabled, not initialized,
     // or loading, but no message shall be drawn:
     // Drawing grayed frame.
     if (  !isEnabled() ||
