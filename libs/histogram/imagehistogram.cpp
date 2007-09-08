@@ -69,62 +69,58 @@ public:
 
     ImageHistogramPriv()
     {
-        parent      = 0;
         imageData   = 0;
         histogram   = 0;
+        valid       = false;
         runningFlag = true;
     }
 
     /** The histogram data.*/
     struct double_packet *histogram;
- 
+    bool                  valid;
+
     /** Image information.*/
     uchar   *imageData;
     uint     imageWidth;
     uint     imageHeight;
- 
+
     /** Numbers of histogram segments dependaing of image bytes depth*/
     int      histoSegments;
- 
-    /** To post event from thread to parent.*/
-    QObject *parent;
- 
+
     /** Used to stop thread during calculations.*/
     bool     runningFlag;
 };
 
-ImageHistogram::ImageHistogram(const DImg& image, QObject *parent)
-              : QThread()
+ImageHistogram::ImageHistogram(const DImg& image, bool threaded, QObject *parent)
+              : QThread(parent)
 {
-    setup(image.bits(), image.width(), image.height(), image.sixteenBit(), parent);
+    setup(image.bits(), image.width(), image.height(), image.sixteenBit(), threaded);
 }
 
-ImageHistogram::ImageHistogram(uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits, QObject *parent)
-              : QThread()
+ImageHistogram::ImageHistogram(uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits, bool threaded, QObject *parent)
+              : QThread(parent)
 {
-    setup(i_data, i_w, i_h, i_sixteenBits, parent);
+    setup(i_data, i_w, i_h, i_sixteenBits, threaded);
 }
 
-void ImageHistogram::setup(uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits, QObject *parent)
+void ImageHistogram::setup(uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits, bool threaded)
 {
     d = new ImageHistogramPriv;
     d->imageData     = i_data;
     d->imageWidth    = i_w;
     d->imageHeight   = i_h;
-    d->parent        = parent;
     d->histoSegments = i_sixteenBits ? 65536 : 256;
 
     if (d->imageData && d->imageWidth && d->imageHeight)
     {
-       if (d->parent)
+       if (threaded)
           start();
        else
           calcHistogramValues();
     }
     else
     {
-       if (d->parent)
-           emit calculationFinished(this, false);
+       emit calculationFinished(this, false);
     }
 }
 
@@ -149,6 +145,11 @@ void ImageHistogram::stopCalcHistogramValues(void)
     wait();
 }
 
+bool ImageHistogram::isValid()
+{
+    return d->valid;
+}
+
 // List of threaded operations.
 
 void ImageHistogram::run()
@@ -161,20 +162,16 @@ void ImageHistogram::calcHistogramValues()
     register uint  i;
     int            max;
 
-    if (d->parent)
-        emit calculationStarted(this);
+    emit calculationStarted(this);
 
     d->histogram = new ImageHistogramPriv::double_packet[d->histoSegments];
     memset(d->histogram, 0, d->histoSegments*sizeof(ImageHistogramPriv::double_packet));
 
     if ( !d->histogram )
     {
-       DWarning() << ("HistogramWidget::calcHistogramValues: Unable to allocate memory!") << endl;
-
-       if (d->parent)
-           emit calculationFinished(this, false);
-
-       return;
+        DWarning() << ("HistogramWidget::calcHistogramValues: Unable to allocate memory!") << endl;
+        emit calculationFinished(this, false);
+        return;
     }
 
     memset(d->histogram, 0, d->histoSegments*sizeof(struct ImageHistogramPriv::double_packet));
@@ -230,7 +227,9 @@ void ImageHistogram::calcHistogramValues()
         }
     }
 
-    if (d->parent && d->runningFlag)
+    d->valid = true;
+
+    if (d->runningFlag)
         emit calculationFinished(this, true);
 }
 

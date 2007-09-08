@@ -60,17 +60,18 @@ enum HistogramChannelType
 
 public:
 
-    ImageHistogram(uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits, QObject *parent=0);
+    ImageHistogram(uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits, bool threaded = false, QObject *parent = 0);
 
-    ImageHistogram(const DImg& image, QObject *parent=0);
+    ImageHistogram(const DImg& image, bool threaded = false, QObject *parent = 0);
     ~ImageHistogram();
 
-    void setup(uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits, QObject *parent);
+    void setup(uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits, bool async);
 
-    /** Method to stop threaded computations.*/
+    /** Stop threaded computation. */
     void stopCalcHistogramValues(void);
 
-    /** Methods for to manipulate the histogram data.*/
+    /** Methods to access the histogram data.*/
+    bool   isValid();
     double getCount(int channel, int start, int end);
     double getMean(int channel, int start, int end);
     double getPixels();
