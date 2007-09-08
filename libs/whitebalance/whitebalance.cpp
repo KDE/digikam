@@ -178,6 +178,7 @@ void WhiteBalance::autoExposureAdjustement(uchar* data, int width, int height, b
     // Create an histogram of original image.     
 
     ImageHistogram *histogram = new ImageHistogram(data, width, height, sb);
+    histogram->calculate();
        
     // Calculate optimal exposition and black level 
     

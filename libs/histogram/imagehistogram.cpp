@@ -91,47 +91,35 @@ public:
     bool     runningFlag;
 };
 
-ImageHistogram::ImageHistogram(const DImg& image, bool threaded, QObject *parent)
+ImageHistogram::ImageHistogram(const DImg& image, QObject *parent)
               : QThread(parent)
 {
-    setup(image.bits(), image.width(), image.height(), image.sixteenBit(), threaded);
+    setup(image.bits(), image.width(), image.height(), image.sixteenBit());
 }
 
-ImageHistogram::ImageHistogram(uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits, bool threaded, QObject *parent)
+ImageHistogram::ImageHistogram(uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits, QObject *parent)
               : QThread(parent)
 {
-    setup(i_data, i_w, i_h, i_sixteenBits, threaded);
+    setup(i_data, i_w, i_h, i_sixteenBits);
 }
 
-void ImageHistogram::setup(uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits, bool threaded)
+void ImageHistogram::setup(uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits)
 {
     d = new ImageHistogramPriv;
     d->imageData     = i_data;
     d->imageWidth    = i_w;
     d->imageHeight   = i_h;
     d->histoSegments = i_sixteenBits ? 65536 : 256;
-
-    if (d->imageData && d->imageWidth && d->imageHeight)
-    {
-       if (threaded)
-          start();
-       else
-          calcHistogramValues();
-    }
-    else
-    {
-       emit calculationFinished(this, false);
-    }
 }
 
 ImageHistogram::~ImageHistogram()
 {
-    stopCalcHistogramValues();
+    stopCalculation();
 
     if (d->histogram)
        delete [] d->histogram;
 
-    delete d;       
+    delete d;
 }
 
 int ImageHistogram::getHistogramSegment(void)
@@ -139,7 +127,21 @@ int ImageHistogram::getHistogramSegment(void)
     return d->histoSegments;
 }
 
-void ImageHistogram::stopCalcHistogramValues(void)
+void ImageHistogram::calculateInThread()
+{
+    // this is done in an extra method and not in the constructor
+    // to allow to connect to the signals, which is only possible after construction
+    if (d->imageData && d->imageWidth && d->imageHeight)
+    {
+        start();
+    }
+    else
+    {
+       emit calculationFinished(this, false);
+    }
+}
+
+void ImageHistogram::stopCalculation()
 {
     d->runningFlag = false;
     wait();
@@ -150,15 +152,26 @@ bool ImageHistogram::isValid()
     return d->valid;
 }
 
+bool ImageHistogram::isCalculating()
+{
+    return isRunning();
+}
+
 // List of threaded operations.
 
 void ImageHistogram::run()
 {
-    calcHistogramValues();
+    calculate();
 }
 
-void ImageHistogram::calcHistogramValues()
+void ImageHistogram::calculate()
 {
+    if (!d->imageData || !d->imageWidth || !d->imageHeight)
+    {
+        emit calculationFinished(this, false);
+        return;
+    }
+
     register uint  i;
     int            max;
 
@@ -227,10 +240,11 @@ void ImageHistogram::calcHistogramValues()
         }
     }
 
-    d->valid = true;
-
     if (d->runningFlag)
+    {
+        d->valid = true;
         emit calculationFinished(this, true);
+    }
 }
 
 double ImageHistogram::getCount(int channel, int start, int end)

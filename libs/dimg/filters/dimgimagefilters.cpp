@@ -72,6 +72,7 @@ void DImgImageFilters::equalizeImage(uchar *data, int w, int h, bool sixteenBit)
     
     // Create an histogram of the current image.     
     ImageHistogram *histogram = new ImageHistogram(data, w, h, sixteenBit);
+    histogram->calculate();
     
     // Memory allocation.
     map          = new double_packet[histogram->getHistogramSegment()];

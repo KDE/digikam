@@ -60,15 +60,17 @@ enum HistogramChannelType
 
 public:
 
-    ImageHistogram(uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits, bool threaded = false, QObject *parent = 0);
-
-    ImageHistogram(const DImg& image, bool threaded = false, QObject *parent = 0);
+    ImageHistogram(uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits, QObject *parent = 0);
+    ImageHistogram(const DImg& image, QObject *parent = 0);
     ~ImageHistogram();
 
-    void setup(uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits, bool async);
+    /** Started computation: synchronous or threaded */
+    void calculate();
+    void calculateInThread();
 
     /** Stop threaded computation. */
-    void stopCalcHistogramValues(void);
+    void stopCalculation();
+    bool isCalculating();
 
     /** Methods to access the histogram data.*/
     bool   isValid();
@@ -84,8 +86,8 @@ public:
 
 signals:
 
-    void calculationFinished(const ImageHistogram *histogram, bool success);
     void calculationStarted(const ImageHistogram *histogram);
+    void calculationFinished(const ImageHistogram *histogram, bool success);
 
 protected:
 
@@ -93,7 +95,7 @@ protected:
 
 private:
 
-    void calcHistogramValues();
+    void setup(uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits);
     void postProgress(bool starting, bool success);
 
 private:
