@@ -735,8 +735,7 @@ void ImagePropertiesColorsTab::slotColorsChanged(int color)
 
 void ImagePropertiesColorsTab::slotRenderingChanged(int rendering)
 {
-    d->histogramWidget->m_renderingType = rendering;
-    d->histogramWidget->repaint();
+    d->histogramWidget->setRenderingType((HistogramWidget::HistogramRenderingType)rendering);
     updateStatistiques();
 }
 

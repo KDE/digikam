@@ -134,7 +134,7 @@ public:
     int             m_channelType;         // Channel type to draw.
     int             m_scaleType;           // Scale to use for drawing.
     int             m_colorType;           // Color to use for drawing in All Colors Channel mode.
-    int             m_renderingType;       // Using full image or image selection for histogram rendering.
+    void            setRenderingType(HistogramRenderingType type);
 
     ImageHistogram *m_imageHistogram;      // Full image.
     ImageHistogram *m_selectionHistogram;  // Image selection.

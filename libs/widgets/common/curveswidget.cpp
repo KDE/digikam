@@ -132,7 +132,7 @@ CurvesWidget::CurvesWidget(int w, int h,
     connect( d->blinkTimer, SIGNAL(timeout()),
              this, SLOT(slotBlinkTimerDone()) );
     
-    m_imageHistogram = new ImageHistogram(i_data, i_w, i_h, i_sixteenBits, this);
+    m_imageHistogram = new ImageHistogram(i_data, i_w, i_h, i_sixteenBits, true);
 
     connect(m_imageHistogram, SIGNAL(calculationStarted(const ImageHistogram *)),
             this, SLOT(slotCalculationStarted(const ImageHistogram *)));

@@ -74,6 +74,7 @@ public:
     
     HistogramWidgetPriv()
     {
+        renderingType = HistogramWidget::FullImageHistogram;
         blinkTimer   = 0;
         sixteenBits  = false;
         inSelected   = false;
@@ -85,6 +86,8 @@ public:
         guideVisible = false;
         inInitialRepaintWait = false;
     }
+
+    int     renderingType;       // Using full image or image selection for histogram rendering.
 
     // Current selection information.
     double  xmin;
@@ -138,7 +141,7 @@ HistogramWidget::HistogramWidget(int w, int h,
     setup(w, h, selectMode, blinkComputation, statisticsVisible);
     setAttribute(Qt::WA_DeleteOnClose);
 
-    m_imageHistogram     = new ImageHistogram(i_data, i_w, i_h, i_sixteenBits, this);
+    m_imageHistogram     = new ImageHistogram(i_data, i_w, i_h, i_sixteenBits, true);
     m_selectionHistogram = 0L;
 
     connectHistogram(m_imageHistogram);
@@ -159,8 +162,8 @@ HistogramWidget::HistogramWidget(int w, int h,
     setup(w, h, selectMode, blinkComputation, statisticsVisible);
     setAttribute(Qt::WA_DeleteOnClose);
 
-    m_imageHistogram     = new ImageHistogram(i_data, i_w, i_h, i_sixteenBits, this);
-    m_selectionHistogram = new ImageHistogram(s_data, s_w, s_h, i_sixteenBits, this);
+    m_imageHistogram     = new ImageHistogram(i_data, i_w, i_h, i_sixteenBits, true);
+    m_selectionHistogram = new ImageHistogram(s_data, s_w, s_h, i_sixteenBits, true);
 
     connectHistogram(m_imageHistogram);
     connectHistogram(m_selectionHistogram);
@@ -184,7 +187,6 @@ void HistogramWidget::setup(int w, int h, bool selectMode, bool blinkComputation
     m_channelType        = ValueHistogram;
     m_scaleType          = LogScaleHistogram;
     m_colorType          = RedColor;
-    m_renderingType      = FullImageHistogram;
     d->statisticsVisible = statisticsVisible;
     d->selectMode        = selectMode;
     d->blinkComputation  = blinkComputation;
@@ -214,6 +216,26 @@ void HistogramWidget::setHistogramGuideByColor(DColor color)
     repaint();
 }
 
+void HistogramWidget::setRenderingType(HistogramRenderingType type)
+{
+    if (type != d->renderingType)
+    {
+        d->renderingType = type;
+
+        ImageHistogram *nowUsedHistogram;
+        if (d->renderingType == ImageSelectionHistogram && m_selectionHistogram)
+            nowUsedHistogram = m_selectionHistogram;
+        else
+            nowUsedHistogram = m_imageHistogram;
+
+        // still computing?
+        if (!nowUsedHistogram->isValid())
+            slotCalculationStarted(nowUsedHistogram);
+        else
+            update();
+    }
+}
+
 void HistogramWidget::reset(void)
 {
     d->guideVisible = false;
@@ -224,6 +246,13 @@ void HistogramWidget::slotCalculationStarted(const ImageHistogram *histogram)
 {
     if (histogram != m_imageHistogram && histogram != m_selectionHistogram)
         return;
+
+    if (d->renderingType == ImageSelectionHistogram && m_selectionHistogram)
+        if (histogram == m_imageHistogram)
+            return;
+    else
+        if (histogram == m_selectionHistogram)
+            return;
 
     setCursor( Qt::WaitCursor );
     d->clearFlag = HistogramWidgetPriv::HistogramStarted;
@@ -249,6 +278,13 @@ void HistogramWidget::slotCalculationFinished(const ImageHistogram *histogram, b
 {
     if (histogram != m_imageHistogram && histogram != m_selectionHistogram)
         return;
+
+    if (d->renderingType == ImageSelectionHistogram && m_selectionHistogram)
+        if (histogram == m_imageHistogram)
+            return;
+    else
+        if (histogram == m_selectionHistogram)
+            return;
 
     if (success)
     {
@@ -350,12 +386,12 @@ void HistogramWidget::updateData(uchar *i_data, uint i_w, uint i_h,
        delete m_selectionHistogram;
 
     // Calc new histogram data
-    m_imageHistogram = new ImageHistogram(i_data, i_w, i_h, i_sixteenBits, this);
+    m_imageHistogram = new ImageHistogram(i_data, i_w, i_h, i_sixteenBits, true);
     connectHistogram(m_imageHistogram);
 
     if (s_data && s_w && s_h)
     {
-        m_selectionHistogram = new ImageHistogram(s_data, s_w, s_h, i_sixteenBits, this);
+        m_selectionHistogram = new ImageHistogram(s_data, s_w, s_h, i_sixteenBits, true);
         connectHistogram(m_selectionHistogram);
     }
     else
@@ -374,7 +410,7 @@ void HistogramWidget::updateSelectionData(uchar *s_data, uint s_w, uint s_h,
        delete m_selectionHistogram;
 
     // Calc new histogram data
-    m_selectionHistogram = new ImageHistogram(s_data, s_w, s_h, i_sixteenBits, this);
+    m_selectionHistogram = new ImageHistogram(s_data, s_w, s_h, i_sixteenBits, true);
     connectHistogram(m_selectionHistogram);
 }
 
@@ -475,7 +511,7 @@ void HistogramWidget::paintEvent( QPaintEvent * )
     double max;
     class  ImageHistogram *histogram; 
 
-    if (m_renderingType == ImageSelectionHistogram && m_selectionHistogram)
+    if (d->renderingType == ImageSelectionHistogram && m_selectionHistogram)
        histogram = m_selectionHistogram;
     else 
        histogram = m_imageHistogram;
