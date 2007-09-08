@@ -96,7 +96,7 @@ SET(libhistogram_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/histogram/imagehistogram.cpp
    )
 
-SET(libimagepropertiesshowfoto_SRCS
+SET(libimageproperties_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/navigatebarwidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/navigatebartab.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiessidebar.cpp
@@ -279,12 +279,6 @@ SET(libsetup_SRCS
 SET(libimagepropertiesdigikam_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiessidebarcamgui.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/cameraitempropertiestab.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/navigatebarwidget.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/navigatebartab.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiessidebar.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiestab.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiesmetadatatab.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiescolorstab.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiessidebardb.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/talbumlistview.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagedescedittab.cpp
