@@ -433,15 +433,15 @@ void TagFolderView::slotContextMenu(Q3ListViewItem *item, const QPoint &, int)
         {
             tagNew(tag);
         }
-        if (choice == editAction)
+        else if (choice == editAction)
         {
             tagEdit(tag);
         }
-        if (choice == deleteAction)
+        else if (choice == deleteAction)
         {
             tagDelete(tag);
         }
-        if (choice == resetIconAction)
+        else if (choice == resetIconAction)
         {
             QString errMsg;
             AlbumManager::instance()->updateTAlbumIcon(tag->getTag(), QString("tag"), 0, errMsg);
