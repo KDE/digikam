@@ -1139,11 +1139,14 @@ void ShowFoto::slotDeleteCurrentItemResult( KIO::Job * job )
     // No error, remove item in thumbbar.
 
     Digikam::ThumbBarItem *item2remove = d->currentItem;
+    Digikam::ThumbBarItem *nextItem    = 0;
 
     for (Digikam::ThumbBarItem *item = d->thumbBar->firstItem(); item; item = item->next())
     {
         if (item->url().equals(item2remove->url()))
         {
+            // Find item next to the current item
+            nextItem = item->next();
             d->thumbBar->removeItem(item);
             break;
         }
@@ -1163,6 +1166,10 @@ void ShowFoto::slotDeleteCurrentItemResult( KIO::Job * job )
     }
     else
     {
+        // If there is an image after the deleted one, make that selected.
+        if (nextItem)
+            d->thumbBar->setSelected(nextItem);
+
         d->currentItem = d->thumbBar->currentItem();
         slotOpenURL(d->currentItem->url());
     }
