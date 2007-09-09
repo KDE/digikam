@@ -50,7 +50,6 @@ public:
     {
         q               = backend;
         status          = DatabaseBackend::Unavailable;
-        lastInsertedRow = 0;
     }
 
     // "A connection can only be used from within the thread that created it.
@@ -240,76 +239,84 @@ QList<QVariant> DatabaseBackend::readToList(QSqlQuery &query)
     return list;
 }
 
-bool DatabaseBackend::execSql(const QString& sql, QList<QVariant>* values)
+bool DatabaseBackend::execSql(const QString& sql, QList<QVariant>* values, QVariant *lastInsertId)
 {
     QSqlQuery query = execQuery(sql);
     if (!query.isActive())
         return false;
-    if (!values)
-        return true;
-    (*values) = readToList(query);
+    if (lastInsertId)
+        (*lastInsertId) = query.lastInsertId();
+    if (values)
+        (*values) = readToList(query);
     return true;
 }
 
-bool DatabaseBackend::execSql(const QString& sql, const QVariant &boundValue1, QList<QVariant>* values)
+bool DatabaseBackend::execSql(const QString& sql, const QVariant &boundValue1,
+                              QList<QVariant>* values, QVariant *lastInsertId)
 {
     QSqlQuery query = execQuery(sql, boundValue1);
     if (!query.isActive())
         return false;
-    if (!values)
-        return true;
-    (*values) = readToList(query);
+    if (lastInsertId)
+        (*lastInsertId) = query.lastInsertId();
+    if (values)
+        (*values) = readToList(query);
     return true;
 }
 
 bool DatabaseBackend::execSql(const QString& sql,
                 const QVariant &boundValue1, const QVariant &boundValue2,
-                QList<QVariant>* values)
+                QList<QVariant>* values, QVariant *lastInsertId)
 {
     QSqlQuery query = execQuery(sql, boundValue1, boundValue2);
     if (!query.isActive())
         return false;
-    if (!values)
-        return true;
-    (*values) = readToList(query);
+    if (lastInsertId)
+        (*lastInsertId) = query.lastInsertId();
+    if (values)
+        (*values) = readToList(query);
     return true;
 }
 
 bool DatabaseBackend::execSql(const QString& sql,
                 const QVariant &boundValue1, const QVariant &boundValue2, const QVariant &boundValue3,
-                QList<QVariant>* values)
+                QList<QVariant>* values, QVariant *lastInsertId)
 {
     QSqlQuery query = execQuery(sql, boundValue1, boundValue2, boundValue3);
     if (!query.isActive())
         return false;
-    if (!values)
-        return true;
-    (*values) = readToList(query);
+    if (lastInsertId)
+        (*lastInsertId) = query.lastInsertId();
+    if (values)
+        (*values) = readToList(query);
     return true;
 }
 
 bool DatabaseBackend::execSql(const QString& sql,
                 const QVariant &boundValue1, const QVariant &boundValue2,
                 const QVariant &boundValue3, const QVariant &boundValue4,
-                QList<QVariant>* values)
+                QList<QVariant>* values, QVariant *lastInsertId)
 {
     QSqlQuery query = execQuery(sql, boundValue1, boundValue2, boundValue3, boundValue4);
     if (!query.isActive())
         return false;
-    if (!values)
-        return true;
-    (*values) = readToList(query);
+    if (lastInsertId)
+        (*lastInsertId) = query.lastInsertId();
+    if (values)
+        (*values) = readToList(query);
     return true;
 }
 
-bool DatabaseBackend::execSql(const QString& sql, const QList<QVariant> &boundValues, QList<QVariant>* values)
+bool DatabaseBackend::execSql(const QString& sql, const QList<QVariant> &boundValues,
+                              QList<QVariant>* values, QVariant *lastInsertId)
 {
     QSqlQuery query = execQuery(sql, boundValues);
     if (!query.isActive())
         return false;
-    if (!values)
-        return true;
-    (*values) = readToList(query);
+    if (lastInsertId)
+        (*lastInsertId) = query.lastInsertId();
+    if (values)
+        (*values) = readToList(query);
     return true;
 }
 
@@ -378,13 +385,9 @@ QSqlQuery DatabaseBackend::prepareQuery(const QString &sql)
 {
     QSqlDatabase db = d->databaseForThread();
     QSqlQuery query(db);
+    query.setForwardOnly(true);
     query.prepare(sql);
     return query;
-}
-
-qlonglong DatabaseBackend::lastInsertedRow()
-{
-    return d->lastInsertedRow;
 }
 
 void DatabaseBackend::beginTransaction()

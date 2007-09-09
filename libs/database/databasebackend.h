@@ -115,20 +115,22 @@ public:
      * Executes the sql statement, and write the returned data into the values list.
      * If you are not interested in the returned data, set values to 0.
      * Methods are provided for up to four bound values (positional binding), or for a list of bound values.
+     * If you want the last inserted id (and your query is suitable), sett lastInsertId to the address of a QVariant.
      */
-    bool execSql(const QString& sql, QList<QVariant>* values = 0);
-    bool execSql(const QString& sql, const QVariant &boundValue1, QList<QVariant>* values = 0);
+    bool execSql(const QString& sql, QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
+    bool execSql(const QString& sql, const QVariant &boundValue1,
+                 QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
     bool execSql(const QString& sql,
                  const QVariant &boundValue1, const QVariant &boundValue2,
-                 QList<QVariant>* values = 0);
+                 QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
     bool execSql(const QString& sql,
                  const QVariant &boundValue1, const QVariant &boundValue2, const QVariant &boundValue3,
-                 QList<QVariant>* values = 0);
+                 QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
     bool execSql(const QString& sql,
                  const QVariant &boundValue1, const QVariant &boundValue2,
                  const QVariant &boundValue3, const QVariant &boundValue4,
-                 QList<QVariant>* values = 0);
-    bool execSql(const QString& sql, const QList<QVariant> &boundValues, QList<QVariant>* values);
+                 QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
+    bool execSql(const QString& sql, const QList<QVariant> &boundValues, QList<QVariant>* values, QVariant *lastInsertId = 0);
 
     /**
      * Executes the statement and returns the query object.
@@ -151,11 +153,6 @@ public:
     QSqlQuery prepareQuery(const QString &sql);
 
     QList<QVariant> readToList(QSqlQuery &query);
-
-    /**
-     * @return the last inserted row in one of the db tables.
-     */
-    qlonglong lastInsertedRow();
 
     /**
      * Begin a database transaction

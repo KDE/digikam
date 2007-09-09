@@ -78,11 +78,12 @@ qlonglong findOrAddImage(DatabaseAccess &access, int dirid, const QString& name,
         return values.first().toLongLong();
     }
 
+    QVariant id;
     access.backend()->execSql(QString("INSERT INTO Images (dirid, name, caption) \n "
                                       "VALUES(?, ?, ?);"),
-                              dirid, name, caption);
+                              dirid, name, caption, 0, &id);
 
-    return access.backend()->lastInsertedRow();
+    return id.toInt();
 }
 
 

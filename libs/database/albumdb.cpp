@@ -145,12 +145,12 @@ QList<AlbumRootInfo> AlbumDB::getAlbumRootsWithStatus(int status)
 
 int AlbumDB::addAlbumRoot(int type, const QString &absolutePath, const QString &uuid, const QString &specificPath)
 {
+    QVariant id;
     d->db->execSql( QString("REPLACE INTO AlbumRoots (type, status, absolutePath, uuid, specificPath) "
                             "VALUES(?, 0, ?, ?, ?);"),
-                    type, absolutePath, uuid, specificPath);
+                    type, absolutePath, uuid, specificPath, 0, &id);
 
-    int id = d->db->lastInsertedRow();
-    return id;
+    return id.toInt();
 }
 
 void AlbumDB::deleteAlbumRoot(int rootId)
@@ -452,15 +452,16 @@ int AlbumDB::addAlbum(const QString &albumRoot, const QString& url,
                       const QString& caption,
                       const QDate& date, const QString& collection)
 {
+    QVariant id;
     d->db->execSql( QString("REPLACE INTO Albums (url, date, caption, collection) "
                             "VALUES(?, ?, ?, ?);"),
                     url,
                     date.toString(Qt::ISODate),
                     caption,
-                    collection);
+                    collection,
+                    0, &id);
 
-    int id = d->db->lastInsertedRow();
-    return id;
+    return id.toInt();
 }
 #else
 QList<AlbumShortInfo> AlbumDB::getAlbumShortInfos()
@@ -534,15 +535,15 @@ int AlbumDB::addAlbum(const QString &albumRoot, const QString& relativePath,
     if (!location)
         return -1;
 
+    QVariant id;
     QList<QVariant> boundValues;
     boundValues << location->id() << relativePath << date.toString(Qt::ISODate) << caption << collection;
 
     d->db->execSql( QString("REPLACE INTO Albums (albumRoot, relativePath, date, caption, collection) "
                             "VALUES(?, ?, ?, ?, ?);"),
-                    boundValues);
+                    boundValues, &id);
 
-    int id = d->db->lastInsertedRow();
-    return id;
+    return id.toInt();
 }
 
 #endif
@@ -638,30 +639,30 @@ void AlbumDB::deleteAlbum(int albumID)
 int AlbumDB::addTag(int parentTagID, const QString& name, const QString& iconKDE,
                     qlonglong iconID)
 {
+    QVariant id;
     if (!d->db->execSql( QString("INSERT INTO Tags (pid, name) "
                                  "VALUES( ?, ?);"),
                          parentTagID, 
-                         name) )
+                         name,
+                         0, &id) )
     {
         return -1;
     }
-
-    int id = d->db->lastInsertedRow();
 
     if (!iconKDE.isEmpty())
     {
         d->db->execSql( QString("UPDATE Tags SET iconkde=? WHERE id=?;"),
                         iconKDE,
-                        id );
+                        id.toInt() );
     }
     else
     {
         d->db->execSql( QString("UPDATE Tags SET icon=? WHERE id=?;"),
                         iconID,
-                        id);
+                        id.toInt());
     }
 
-    return id;
+    return id.toInt();
 }
 
 void AlbumDB::deleteTag(int tagID)
@@ -771,14 +772,15 @@ void AlbumDB::setTagParentID(int tagID, int newParentTagID)
 
 int AlbumDB::addSearch(const QString& name, const KUrl& url)
 {
+    QVariant id;
     if (!d->db->execSql(QString("INSERT INTO Searches (name, url) \n"
                                 "VALUES(?, ?);"),
-                        name, url.url()) )
+                        name, url.url(), 0, &id) )
     {
         return -1;
     }
 
-    return d->db->lastInsertedRow();
+    return id.toInt();
 }
 
 void AlbumDB::updateSearch(int searchID, const QString& name,
@@ -1262,15 +1264,17 @@ qlonglong AlbumDB::addItem(int albumID,
                          int rating,
                          const QStringList &keywordsList)
 {
+    QVariant id;
     d->db->execSql ( QString ("REPLACE INTO Images "
                             "( caption , datetime, name, dirid ) "
                             " VALUES (?,?,?,?) " ),
                     comment,
                     datetime.toString(Qt::ISODate),
                     name,
-                    albumID );
+                    albumID,
+                    0, &id);
 
-    qlonglong item = d->db->lastInsertedRow();
+    qlonglong item = id.toLongLong();
 
     // Set Rating value to item in database.
 
@@ -1998,12 +2002,13 @@ int AlbumDB::copyItem(int srcAlbumID, const QString& srcName,
     deleteItem(dstAlbumID, dstName);
 
     // copy entry in Images table
+    QVariant id;
     d->db->execSql( QString("INSERT INTO Images (dirid, name, caption, datetime) "
                             "SELECT ?, ?, caption, datetime FROM Images "
                             "WHERE id=?;"),
-                    dstAlbumID, dstName, srcId );
+                    dstAlbumID, dstName, srcId, 0, &id );
 
-    int dstId = d->db->lastInsertedRow();
+    int dstId = id.toInt();
 
     // copy tags
     d->db->execSql( QString("INSERT INTO ImageTags (imageid, tagid) "
