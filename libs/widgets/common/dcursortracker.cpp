@@ -69,7 +69,8 @@ bool DCursorTracker::eventFilter(QObject *object, QEvent *e)
                             (event->stateAfter() & LeftButton))) 
             {
                 show();
-                move(event->globalPos().x() + 15, event->globalPos().y() - 15);
+		QPoint p = widget->mapToGlobal(QPoint(widget->width()/2, 0));
+                move(p.x()-width()/2, p.y()-height());
             }
             else 
             {
