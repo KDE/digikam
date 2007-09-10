@@ -360,6 +360,7 @@ void DigikamApp::setupStatusBar()
     //------------------------------------------------------------------------------
 
     d->statusZoomBar = new StatusZoomBar(statusBar());
+    d->statusZoomBar->setMaximumHeight(fontMetrics().height()+2);
     statusBar()->addWidget(d->statusZoomBar, 1, true);
 
     //------------------------------------------------------------------------------
