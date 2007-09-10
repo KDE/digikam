@@ -66,25 +66,30 @@ StatusNavigateBar::StatusNavigateBar(QWidget *parent)
                  : QWidget(parent, 0, Qt::WDestructiveClose)
 {
     d = new StatusNavigateBarPriv;
+    setFocusPolicy(QWidget::NoFocus);
 
     QHBoxLayout *lay = new QHBoxLayout(this);
 
     d->firstButton = new QToolButton(this);
+    d->firstButton->setFocusPolicy(QWidget::NoFocus);
     d->firstButton->setAutoRaise(true);
     d->firstButton->setIconSet(SmallIconSet("start"));
     QToolTip::add(d->firstButton, i18n("Go to the first item"));
 
     d->prevButton = new QToolButton(this);
+    d->prevButton->setFocusPolicy(QWidget::NoFocus);
     d->prevButton->setAutoRaise(true);
     d->prevButton->setIconSet(SmallIconSet("back"));
     QToolTip::add(d->prevButton, i18n("Go to the previous item"));
 
     d->nextButton = new QToolButton(this);
+    d->nextButton->setFocusPolicy(QWidget::NoFocus);
     d->nextButton->setAutoRaise(true);
     d->nextButton->setIconSet(SmallIconSet("forward"));
     QToolTip::add(d->nextButton, i18n("Go to the next item"));
 
     d->lastButton = new QToolButton(this);
+    d->lastButton->setFocusPolicy(QWidget::NoFocus);
     d->lastButton->setAutoRaise(true);
     d->lastButton->setIconSet(SmallIconSet("finish"));
     QToolTip::add(d->lastButton, i18n("Go to the last item"));

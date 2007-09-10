@@ -71,9 +71,11 @@ StatusZoomBar::StatusZoomBar(QWidget *parent)
              : QHBox(parent, 0, Qt::WDestructiveClose)
 {
     d = new StatusZoomBarPriv;
+    setFocusPolicy(QWidget::NoFocus);
 
     d->zoomMinusButton = new QToolButton(this);
     d->zoomMinusButton->setAutoRaise(true);
+    d->zoomMinusButton->setFocusPolicy(QWidget::NoFocus);
     d->zoomMinusButton->setIconSet(SmallIconSet("viewmag-"));
     QToolTip::add(d->zoomMinusButton, i18n("Zoom Out"));
 
@@ -83,10 +85,12 @@ StatusZoomBar::StatusZoomBar(QWidget *parent)
     d->zoomSlider->setLineStep(ThumbnailSize::Step);
     d->zoomSlider->setMaximumHeight(fontMetrics().height()+2);    
     d->zoomSlider->setFixedWidth(120);
+    d->zoomSlider->setFocusPolicy(QWidget::NoFocus);
 
     d->zoomPlusButton = new QToolButton(this);
     d->zoomPlusButton->setAutoRaise(true);
     d->zoomPlusButton->setIconSet(SmallIconSet("viewmag+"));
+    d->zoomPlusButton->setFocusPolicy(QWidget::NoFocus);
     QToolTip::add(d->zoomPlusButton, i18n("Zoom In"));
 
     d->zoomTracker = new DTipTracker("", d->zoomSlider);

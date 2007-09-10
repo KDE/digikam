@@ -77,6 +77,7 @@ StatusProgressBar::StatusProgressBar(QWidget *parent)
                  : QWidgetStack(parent, 0, Qt::WDestructiveClose)
 {
     d = new StatusProgressBarPriv;
+    setFocusPolicy(QWidget::NoFocus);
 
     d->textLabel      = new KSqueezedTextLabel(this);
     d->progressWidget = new QWidget(this);
@@ -84,6 +85,7 @@ StatusProgressBar::StatusProgressBar(QWidget *parent)
     d->progressBar    = new KProgress(d->progressWidget);
     setProgressTotalSteps(100);
     d->cancelButton = new QPushButton(d->progressWidget);
+    d->cancelButton->setFocusPolicy(QWidget::NoFocus);
     d->cancelButton->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
     d->cancelButton->setPixmap(SmallIcon("cancel"));
 
