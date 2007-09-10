@@ -940,7 +940,7 @@ void LightTableWindow::slotRemoveItem(ImageInfo* info)
     // To describe them, 4 images A B C D are used
     // and the subscript _L and _ R  mark the currently
     // active item on the left and right panel
-  
+
     bool leftPanelActive = false;
     ImageInfo *curr_linfo = d->previewView->leftImageInfo();
     ImageInfo *curr_rinfo = d->previewView->rightImageInfo();
@@ -955,34 +955,31 @@ void LightTableWindow::slotRemoveItem(ImageInfo* info)
 
     if (curr_linfo) 
     {
-        LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(d->barView->findItemByInfo(curr_linfo));
+        LightTableBarItem *ltItem = d->barView->findItemByInfo(curr_linfo);
         if (ltItem)
         {
             LightTableBarItem* next = dynamic_cast<LightTableBarItem*>(ltItem->next());
             if (next)
             {
-                next_linfo =  next->info();
+                next_linfo = next->info();
             }
-
         }
     }
 
     if (curr_rinfo) 
     {
-        LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(d->barView->findItemByInfo(curr_rinfo));
+        LightTableBarItem *ltItem = d->barView->findItemByInfo(curr_rinfo);
         if (ltItem)
         {
             LightTableBarItem* next = dynamic_cast<LightTableBarItem*>(ltItem->next());
             if (next)
             {
-                next_rinfo =  next->info();
+                next_rinfo = next->info();
             }
         }
     }
 
-
     d->barView->removeItem(info);
-
 
     // Make sure that next_linfo and next_rinfo are still available:
     if (!d->barView->findItemByInfo(next_linfo))
@@ -994,13 +991,11 @@ void LightTableWindow::slotRemoveItem(ImageInfo* info)
          next_rinfo = 0;
     }
 
-
-
     // removal of the left panel item?
-    if (curr_linfo) 
+    if (curr_linfo)
     {
-        if ( curr_linfo->id() == infoId ) 
-        {   
+        if ( curr_linfo->id() == infoId )
+        {
             leftPanelActive = true;
             // Delete the item A_L of the left panel:
             // 1)  A_L  B_R  C    D   ->   B_L  C_R  D
@@ -1026,7 +1021,7 @@ void LightTableWindow::slotRemoveItem(ImageInfo* info)
                 }
             }
         }
-    } 
+    }
 
     // removal of the right panel item?
     if (curr_rinfo) 
@@ -1040,21 +1035,18 @@ void LightTableWindow::slotRemoveItem(ImageInfo* info)
         }
     }
 
-
-
     // Now we deal with the corner cases, where no left or right item exists.
     // If the right panel would be set, but not the left-one, then swap
     if (!new_linfo && new_rinfo)
     {
-        new_linfo = new_rinfo;
-        new_rinfo = 0;
+        new_linfo       = new_rinfo;
+        new_rinfo       = 0;
         leftPanelActive = true;
     }
 
-
-    if (!new_linfo) 
+    if (!new_linfo)
     {
-        if (d->barView->countItems()>0) 
+        if (d->barView->countItems() > 0)
         {
             LightTableBarItem* first = dynamic_cast<LightTableBarItem*>(d->barView->firstItem());
             new_linfo = first->info();
@@ -1065,15 +1057,15 @@ void LightTableWindow::slotRemoveItem(ImageInfo* info)
     if (!new_rinfo) 
     {
         // If there are at least two items, we can find reasonable right image.
-        if (d->barView->countItems()>1) 
+        if (d->barView->countItems() > 1) 
         {
             // See if there is an item next to the left one:
-            LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(d->barView->findItemByInfo(new_linfo));
-            LightTableBarItem* next = dynamic_cast<LightTableBarItem*>(ltItem->next());
+            LightTableBarItem *ltItem = d->barView->findItemByInfo(new_linfo);
+            LightTableBarItem* next   = dynamic_cast<LightTableBarItem*>(ltItem->next());
             if (next)
             {
                 new_rinfo = next->info();
-            } 
+            }
             else
             {
                 // If there is no item to the right of new_linfo
@@ -1082,7 +1074,7 @@ void LightTableWindow::slotRemoveItem(ImageInfo* info)
                 LightTableBarItem* first = dynamic_cast<LightTableBarItem*>(d->barView->firstItem());
                 new_rinfo = first->info();
             }
-        }            
+        }
     }
 
     // Check if left and right are set to the same
@@ -1091,7 +1083,7 @@ void LightTableWindow::slotRemoveItem(ImageInfo* info)
         if (new_linfo->id() == new_rinfo->id())
         {
             // Only keep the left one 
-            new_rinfo = false;
+            new_rinfo = 0;
         }
     }
 
@@ -1099,11 +1091,10 @@ void LightTableWindow::slotRemoveItem(ImageInfo* info)
     // (note that this has to be done here again!)
     if (!new_linfo && new_rinfo)
     {
-        new_linfo = new_rinfo;
-        new_rinfo = false;
+        new_linfo       = new_rinfo;
+        new_rinfo       = 0;
         leftPanelActive = true;
     }
-        
 
     // set the image for the left panel
     if (new_linfo)
@@ -1114,9 +1105,9 @@ void LightTableWindow::slotRemoveItem(ImageInfo* info)
         //  make this the selected item if the left was active before
         if ( leftPanelActive)
         {
-            LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(d->barView->findItemByInfo(new_linfo));
+            LightTableBarItem *ltItem = d->barView->findItemByInfo(new_linfo);
             d->barView->setSelectedItem(ltItem);
-        }        
+        }
     }
     else
     {
@@ -1132,9 +1123,9 @@ void LightTableWindow::slotRemoveItem(ImageInfo* info)
         //  make this the selected item if the left was active before
         if (!leftPanelActive)
         {
-            LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(d->barView->findItemByInfo(new_rinfo));
+            LightTableBarItem *ltItem = d->barView->findItemByInfo(new_rinfo);
             d->barView->setSelectedItem(ltItem);
-        }        
+        }
     }
     else
     {
