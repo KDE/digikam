@@ -48,7 +48,7 @@
 using namespace cimg_library;
 
 /** Number of children threads used to run Greystoration algorithm */ 
-#define COMPUTATION_THREAD 1
+#define COMPUTATION_THREAD 2
 
 /** Uncomment this line if you use future GreycStoration implementation with GFact parameter */
 #define GREYSTORATION_USING_GFACT 1
