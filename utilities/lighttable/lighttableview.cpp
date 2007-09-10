@@ -78,8 +78,8 @@ LightTableView::LightTableView(QWidget *parent)
     d->leftPreview  = new LightTablePreview(this);
     d->rightPreview = new LightTablePreview(this);
 
-    d->grid->addWidget(d->leftPreview,  0, 0, 0, 0);
-    d->grid->addWidget(d->rightPreview, 0, 0, 1, 1);
+    d->grid->addWidget(d->leftPreview,  0, 0, 1, 1);
+    d->grid->addWidget(d->rightPreview, 0, 1, 1, 1);
 
     d->grid->setColumnStretch(0, 10),
     d->grid->setColumnStretch(1, 10),
