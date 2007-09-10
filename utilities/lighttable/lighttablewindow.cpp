@@ -406,12 +406,12 @@ void LightTableWindow::setupActions()
     actionCollection()->addAction("lighttable_navigatebypair", d->navigateByPairAction);
 
     d->zoomPlusAction = actionCollection()->addAction(KStandardAction::ZoomIn, "lighttable_zoomplus", 
-                                                      this, SLOT(slotIncreaseZoom()));
+                                                      d->previewView, SLOT(slotIncreaseZoom()));
     d->zoomPlusAction->setEnabled(false);
     d->zoomPlusAction->setShortcut(QKeySequence(Qt::Key_Plus));
 
     d->zoomMinusAction = actionCollection()->addAction(KStandardAction::ZoomOut, "lighttable_zoomminus", 
-                                                       this, SLOT(slotDecreaseZoom()));
+                                                       d->previewView, SLOT(slotDecreaseZoom()));
     d->zoomMinusAction->setEnabled(false);
     d->zoomMinusAction->setShortcut(QKeySequence(Qt::Key_Minus));
 
