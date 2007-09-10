@@ -2,6 +2,7 @@ digiKam 0.9.3 - Release date: 2007-xx-xx
 
 NEW FEATURES:
 
+General        : Updated internal CImg library to last stable 1.2.3 (released at 2007/08/24).
 General        : Color scheme theme are now XML based (instead X11 format).
 General        : Camera interface is now used to import new pictures in collection.
 CameraGUI      : New options to Download pictures and Delete it from camera at the same time.
