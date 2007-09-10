@@ -37,10 +37,14 @@
 // Local includes.
 
 #define cimg_plugin "greycstoration.h"
-#if defined(sun)         || defined(__sun)      || defined(linux)       || defined(__linux) \
- || defined(__linux__)   || defined(__CYGWIN__) || defined(BSD)         || defined(__FreeBSD__) || defined(__NetBSD__)\
- || defined(__OPENBSD__) || defined(__MACOSX__) || defined(__APPLE__)   || defined(sgi) \
- || defined(__sgi)
+// Unix-like (Linux, Solaris, BSD, MacOSX, Irix,...).
+#if defined(unix)       || defined(__unix)      || defined(__unix__) \
+ || defined(linux)      || defined(__linux)     || defined(__linux__) \
+ || defined(sun)        || defined(__sun) \
+ || defined(BSD)        || defined(__OpenBSD__) || defined(__NetBSD__) || defined(__FreeBSD__) || defined __DragonFly__ \
+ || defined(__MACOSX__) || defined(__APPLE__) \
+ || defined(sgi)        || defined(__sgi) \
+ || defined(__CYGWIN__)
 #include <pthread.h>
 #endif
 
