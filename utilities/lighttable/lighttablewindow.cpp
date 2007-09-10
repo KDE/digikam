@@ -206,6 +206,7 @@ void LightTableWindow::setupUserArea()
 void LightTableWindow::setupStatusBar()
 {
     d->leftZoomBar = new StatusZoomBar(statusBar());
+    d->leftZoomBar->setMaximumHeight(fontMetrics().height()+2);
     statusBar()->addWidget(d->leftZoomBar, 1);
     d->leftZoomBar->setEnabled(false);
 
@@ -215,6 +216,7 @@ void LightTableWindow::setupStatusBar()
     statusBar()->addWidget(d->statusProgressBar, 100);
  
     d->rightZoomBar = new StatusZoomBar(statusBar());
+    d->rightZoomBar->setMaximumHeight(fontMetrics().height()+2);
     statusBar()->addWidget(d->rightZoomBar, 1);
     d->rightZoomBar->setEnabled(false);
 }
