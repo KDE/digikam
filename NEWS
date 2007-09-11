@@ -14,4 +14,5 @@ CameraGUI      : New bargraph to display camera media free-space.
 digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 146864 : Lesser XMP support in digiKam.
-002 ==> 
+002 ==> 145096 : Request: acquire mass storage from printer as from camera. Change menu "Camera" to "Acquire".
+003 ==> 
