@@ -1237,15 +1237,19 @@ void DigikamApp::loadCameras()
 {
     d->cameraMenuAction->menu()->addMenu(d->cameraSolidMenu);
     d->cameraSolidMenu->menuAction()->setText(i18n("Digital Cameras"));
+    d->cameraSolidMenu->menuAction()->setIcon(KIcon("camera"));
 
     d->cameraMenuAction->menu()->addMenu(d->usbMediaMenu);
     d->usbMediaMenu->menuAction()->setText(i18n("USB Storage Devices"));
+    d->usbMediaMenu->menuAction()->setIcon(KIcon("drive-removable-media-usb"));
 
     d->cameraMenuAction->menu()->addMenu(d->cardReaderMenu);
     d->cardReaderMenu->menuAction()->setText(i18n("Card Readers"));
+    d->cardReaderMenu->menuAction()->setIcon(KIcon("media-flash-smart-media"));
 
     d->cameraMenuAction->menu()->addMenu(d->manuallyAddedCamerasMenu);
     d->manuallyAddedCamerasMenu->menuAction()->setText(i18n("Cameras Added Manually"));
+    d->manuallyAddedCamerasMenu->menuAction()->setIcon(KIcon("camera-test"));
 
     KAction *cameraAction = new KAction(i18n("Add Camera..."), this);
     connect(cameraAction, SIGNAL(triggered()), this, SLOT(slotSetupCamera()));
