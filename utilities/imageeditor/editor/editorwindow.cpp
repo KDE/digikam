@@ -21,14 +21,6 @@
  *
  * ============================================================ */
 
-// C Ansi includes.
-
-extern "C"
-{
-#include <sys/types.h>
-#include <sys/stat.h>
-}
-
 // C++ includes.
 
 #include <cmath>
@@ -386,7 +378,7 @@ void EditorWindow::setupStandardActions()
     connect(d->zoomFitToWindowAction, SIGNAL(triggered()), this, SLOT(slotToggleFitToWindow()));
     actionCollection()->addAction("editorwindow_zoomfit2window", d->zoomFitToWindowAction);
 
-    d->zoomFitToSelectAction = new KAction(KIcon("viewmagfit"), i18n("Fit to &Selection"), this);
+    d->zoomFitToSelectAction = new KAction(KIcon("zoom-select-fit"), i18n("Fit to &Selection"), this);
     d->zoomFitToSelectAction->setShortcut(Qt::ALT+Qt::CTRL+Qt::Key_S);   // NOTE: Photoshop 7 use ALT+CTRL+0
     connect(d->zoomFitToSelectAction, SIGNAL(triggered()), this, SLOT(slotFitToSelect()));
     actionCollection()->addAction("editorwindow_zoomfit2select", d->zoomFitToSelectAction);
