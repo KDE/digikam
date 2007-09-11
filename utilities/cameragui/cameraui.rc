@@ -1,13 +1,13 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="14" name="cameraui" >
+<gui version="15" name="cameraui" >
 
 <MenuBar>
 
-    <Menu name="Camera" ><text>&amp;Camera</text>
+    <Menu name="Device" ><text>&amp;Device</text>
         <Action name="cameraui_cancelprocess" />
-        <Action name="cameraui_camerainfo" />
+        <Action name="cameraui_info" />
         <Separator />
-        <Action name="cameraui_cameracapture" />
+        <Action name="cameraui_capture" />
         <Separator />
         <Action name="cameraui_close" />
     </Menu>
@@ -71,7 +71,7 @@
      <Action name="cameraui_imageupload" />
      <Action name="cameraui_imagelock" />
      <Separator/>     
-     <Action name="cameraui_cameracapture" />
+     <Action name="cameraui_capture" />
      <Separator/>     
      <Action name="cameraui_fullscreen" />
      <Merge />

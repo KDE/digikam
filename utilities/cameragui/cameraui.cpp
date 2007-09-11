@@ -292,13 +292,13 @@ void CameraUI::setupActions()
 
     d->cameraInfoAction = new KAction(KIcon("camera-photo"), i18n("Information"), this);
     connect(d->cameraInfoAction, SIGNAL(triggered()), this, SLOT(slotInformations()));
-    actionCollection()->addAction("cameraui_camerainfo", d->cameraInfoAction);
+    actionCollection()->addAction("cameraui_info", d->cameraInfoAction);
 
     // -----------------------------------------------------------------
 
     d->cameraCaptureAction = new KAction(KIcon("camera"), i18n("Capture"), this);
     connect(d->cameraCaptureAction, SIGNAL(triggered()), this, SLOT(slotCapture()));
-    actionCollection()->addAction("cameraui_cameracapture", d->cameraCaptureAction);
+    actionCollection()->addAction("cameraui_capture", d->cameraCaptureAction);
 
     // -----------------------------------------------------------------
 

@@ -42,7 +42,7 @@ CameraInfoDialog::CameraInfoDialog(QWidget *parent, const QString& summary, cons
                                    const QString& about)
                 : KPageDialog(parent)
 {
-    setCaption(i18n("Camera Information"));
+    setCaption(i18n("Device Information"));
     setButtons(KDialog::Help|KDialog::Ok);
     setDefaultButton(KDialog::Ok);
     setHelp("digitalstillcamera.anchor", "digikam");
@@ -57,7 +57,7 @@ CameraInfoDialog::CameraInfoDialog(QWidget *parent, const QString& summary, cons
     summaryView->setReadOnly(true);
 
     KPageWidgetItem *p1 = addPage(summaryView, i18n("Summary"));
-    p1->setHeader( i18n("Camera Summary") );
+    p1->setHeader( i18n("Device Summary") );
     p1->setIcon( KIcon("book2") );
     
     // ----------------------------------------------------------
@@ -67,7 +67,7 @@ CameraInfoDialog::CameraInfoDialog(QWidget *parent, const QString& summary, cons
     manualView->setReadOnly(true);
 
     KPageWidgetItem *p2 = addPage(manualView, i18n("Manual"));
-    p2->setHeader( i18n("Camera Manual") );
+    p2->setHeader( i18n("Device Manual") );
     p2->setIcon( KIcon("help-contents") );
 
     // ----------------------------------------------------------
@@ -78,7 +78,7 @@ CameraInfoDialog::CameraInfoDialog(QWidget *parent, const QString& summary, cons
 
     KPageWidgetItem *p3 = addPage(aboutView, i18n("About"));
     p3->setHeader( i18n("About Driver") );
-    p3->setIcon( KIcon("camera-photo") );
+    p3->setIcon( KIcon("media-flash") );
 }
 
 CameraInfoDialog::~CameraInfoDialog()
