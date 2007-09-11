@@ -131,7 +131,7 @@ public:
         tipAction                            = 0;
         kipiHelpAction                       = 0;
         donateMoneyAction                    = 0;
-        cameraMenuAction                     = 0;
+        acquireMenuAction                    = 0;
         addCameraSeparatorAction             = 0;
         themeMenuAction                      = 0;
         forwardSignalMapper                  = 0;
@@ -240,13 +240,13 @@ public:
     KAction               *rating5Star;
 
     // Application Actions
-    QAction               *quitAction;
-    QAction               *tipAction;
     KAction               *kipiHelpAction;
     KAction               *donateMoneyAction;
-    KActionMenu           *cameraMenuAction;
+    KActionMenu           *acquireMenuAction;
     KSelectAction         *themeMenuAction;
     QAction               *addCameraSeparatorAction;
+    QAction               *quitAction;
+    QAction               *tipAction;
 
     QSignalMapper         *backwardSignalMapper;
     QSignalMapper         *forwardSignalMapper;

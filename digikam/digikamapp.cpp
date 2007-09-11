@@ -453,11 +453,9 @@ void DigikamApp::setupAccelerators()
 
 void DigikamApp::setupActions()
 {
-    // -----------------------------------------------------------------
-
-    d->cameraMenuAction = new KActionMenu(i18n("&Camera"), this);
-    d->cameraMenuAction->setDelayed(false);
-    actionCollection()->addAction("camera_menu", d->cameraMenuAction);
+    d->acquireMenuAction = new KActionMenu(i18n("&Acquire"), this);
+    d->acquireMenuAction->setDelayed(false);
+    actionCollection()->addAction("acquire_menu", d->acquireMenuAction);
 
     d->solidCameraActionGroup = new QActionGroup(this);
     connect(d->solidCameraActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(slotOpenSolidCamera(QAction*)));
@@ -1235,19 +1233,19 @@ void DigikamApp::cameraAutoDetect()
 
 void DigikamApp::loadCameras()
 {
-    d->cameraMenuAction->menu()->addMenu(d->cameraSolidMenu);
+    d->acquireMenuAction->menu()->addMenu(d->cameraSolidMenu);
     d->cameraSolidMenu->menuAction()->setText(i18n("Digital Cameras"));
     d->cameraSolidMenu->menuAction()->setIcon(KIcon("camera"));
 
-    d->cameraMenuAction->menu()->addMenu(d->usbMediaMenu);
+    d->acquireMenuAction->menu()->addMenu(d->usbMediaMenu);
     d->usbMediaMenu->menuAction()->setText(i18n("USB Storage Devices"));
     d->usbMediaMenu->menuAction()->setIcon(KIcon("drive-removable-media-usb"));
 
-    d->cameraMenuAction->menu()->addMenu(d->cardReaderMenu);
+    d->acquireMenuAction->menu()->addMenu(d->cardReaderMenu);
     d->cardReaderMenu->menuAction()->setText(i18n("Card Readers"));
     d->cardReaderMenu->menuAction()->setIcon(KIcon("media-flash-smart-media"));
 
-    d->cameraMenuAction->menu()->addMenu(d->manuallyAddedCamerasMenu);
+    d->acquireMenuAction->menu()->addMenu(d->manuallyAddedCamerasMenu);
     d->manuallyAddedCamerasMenu->menuAction()->setText(i18n("Cameras Added Manually"));
     d->manuallyAddedCamerasMenu->menuAction()->setIcon(KIcon("camera-test"));
 

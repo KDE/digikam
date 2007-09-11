@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="33" name="digikam" >
+<gui version="34" name="digikam" >
 
  <MenuBar>
 
@@ -91,7 +91,7 @@
       </Menu>
   </Menu>
 
-  <Action name="camera_menu" />
+  <Action name="acquire_menu" />
 
   <Menu name="settings" noMerge="1"><Text>&amp;Settings</Text>
      <Action name="options_show_toolbar"/>
