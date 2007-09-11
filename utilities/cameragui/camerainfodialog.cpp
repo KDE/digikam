@@ -78,7 +78,7 @@ CameraInfoDialog::CameraInfoDialog(QWidget *parent, const QString& summary, cons
 
     KPageWidgetItem *p3 = addPage(aboutView, i18n("About"));
     p3->setHeader( i18n("About Driver") );
-    p3->setIcon( KIcon("media-flash") );
+    p3->setIcon( KIcon("system-help") );
 }
 
 CameraInfoDialog::~CameraInfoDialog()
