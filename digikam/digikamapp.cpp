@@ -550,7 +550,7 @@ void DigikamApp::setupActions()
                                     "album_addImages");
     d->addImagesAction->setWhatsThis(i18n("Adds new items to the current Album."));
 
-    d->albumImportAction = new KAction( i18n("Import Folders..."),
+    d->albumImportAction = new KAction( i18n("Add Folders..."),
                                     "albumfolder-importdir",
                                     0,
                                     d->view,
