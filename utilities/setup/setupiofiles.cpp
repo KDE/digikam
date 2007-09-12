@@ -126,9 +126,9 @@ void SetupIOFiles::readSettings()
 {
     KConfig* config = kapp->config();
     config->setGroup("ImageViewer Settings");
-    d->JPEGOptions->setCompressionValue(config->readNumEntry("JPEGCompression", 75) );
-    d->JPEGOptions->setCompressionValue( config->readNumEntry("JPEGSubSampling", 1) ); // Medium subsampling
-    d->PNGOptions->setCompressionValue(config->readNumEntry("PNGCompression", 9) );
+    d->JPEGOptions->setCompressionValue( config->readNumEntry("JPEGCompression", 75) );
+    d->JPEGOptions->setSubSamplingValue( config->readNumEntry("JPEGSubSampling", 1) ); // Medium subsampling
+    d->PNGOptions->setCompressionValue( config->readNumEntry("PNGCompression", 9) );
     d->TIFFOptions->setCompression(config->readBoolEntry("TIFFCompression", false));
     d->JPEG2000Options->setCompressionValue( config->readNumEntry("JPEG2000Compression", 75) );
     d->JPEG2000Options->setLossLessCompression( config->readBoolEntry("JPEG2000LossLess", true) );
