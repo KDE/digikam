@@ -541,7 +541,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------------
 
-    d->albumImportAction = new KAction(KIcon("albumfolder-importdir"), i18n("Import Folders..."), this);
+    d->albumImportAction = new KAction(KIcon("albumfolder-importdir"), i18n("Add Folders..."), this);
     connect(d->albumImportAction, SIGNAL(triggered()), d->view, SLOT(slotAlbumImportFolder()));
     actionCollection()->addAction("album_importFolder", d->albumImportAction);
 
