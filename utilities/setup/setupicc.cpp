@@ -65,7 +65,7 @@
 // Local includes.
 
 #include "ddebug.h"
-//#include "squeezedcombobox.h"
+#include "squeezedcombobox.h"
 #include "iccprofileinfodlg.h"
 #include "albumsettings.h"
 #include "setupicc.h"
@@ -137,10 +137,10 @@ public:
 
     KPageDialog            *mainDialog;
 
-    KComboBox              *inProfilesKC;
-    KComboBox              *workProfilesKC;
-    KComboBox              *proofProfilesKC;
-    KComboBox              *monitorProfilesKC;
+    SqueezedComboBox       *inProfilesKC;
+    SqueezedComboBox       *workProfilesKC;
+    SqueezedComboBox       *proofProfilesKC;
+    SqueezedComboBox       *monitorProfilesKC;
 };
 
 SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
@@ -246,7 +246,7 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     d->monitorIcon       = new QLabel(d->profilesGB);
     d->monitorIcon->setPixmap(SmallIcon("video-display"));
     d->monitorProfiles   = new QLabel(i18n("Monitor:"), d->profilesGB);
-    d->monitorProfilesKC = new KComboBox(d->profilesGB);
+    d->monitorProfilesKC = new SqueezedComboBox(d->profilesGB);
     d->monitorProfiles->setBuddy(d->monitorProfilesKC);
     d->monitorProfilesKC->setWhatsThis( i18n("<p>Select here the color profile for your monitor. "
                      "You need to toggle on <b>Use color managed view</b> option to use this "
@@ -260,7 +260,7 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     QLabel *workIcon     = new QLabel(d->profilesGB);
     workIcon->setPixmap(SmallIcon("input-tablet"));
     QLabel *workProfiles = new QLabel(i18n("Workspace:"), d->profilesGB);
-    d->workProfilesKC    = new KComboBox(d->profilesGB);
+    d->workProfilesKC    = new SqueezedComboBox(d->profilesGB);
     workProfiles->setBuddy(d->workProfilesKC);
     d->workProfilesKC->setWhatsThis( i18n("<p>All the images will be converted to the color "
                      "space of this profile, so you must select a profile appropriate for editing.</p>"
@@ -274,7 +274,7 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     QLabel *inIcon     = new QLabel(d->profilesGB);
     inIcon->setPixmap(SmallIcon("camera-photo"));
     QLabel *inProfiles = new QLabel(i18n("Input:"), d->profilesGB);
-    d->inProfilesKC    = new KComboBox(d->profilesGB);
+    d->inProfilesKC    = new SqueezedComboBox(d->profilesGB);
     inProfiles->setBuddy(d->inProfilesKC);
     d->inProfilesKC->setWhatsThis( i18n("<p>You must select the profile for your input device "
                      "(usually, your camera, scanner...)</p>"));
@@ -287,7 +287,7 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     QLabel *proofIcon     = new QLabel(d->profilesGB);
     proofIcon->setPixmap(SmallIcon("printer"));
     QLabel *proofProfiles = new QLabel(i18n("Soft proof:"), d->profilesGB);
-    d->proofProfilesKC    = new KComboBox(d->profilesGB);
+    d->proofProfilesKC    = new SqueezedComboBox(d->profilesGB);
     proofProfiles->setBuddy(d->proofProfilesKC);
     d->proofProfilesKC->setWhatsThis( i18n("<p>You must select the profile for your output device "
                      "(usually, your printer). This profile will be used to do a soft proof, so you will "
