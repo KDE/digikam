@@ -69,11 +69,11 @@ static struct
 
 RuleKeyTable[] =
 {
-    { I18N_NOOP("Album"),            "album",           SearchAdvancedRule::ALBUMS },
+    { I18N_NOOP("Album"),            "album",           SearchAdvancedRule::ALBUMS   },
     { I18N_NOOP("Album Name"),       "albumname",       SearchAdvancedRule::LINEEDIT },
     { I18N_NOOP("Album Caption"),    "albumcaption",    SearchAdvancedRule::LINEEDIT },
     { I18N_NOOP("Album Collection"), "albumcollection", SearchAdvancedRule::LINEEDIT },
-    { I18N_NOOP("Tag"),              "tag",             SearchAdvancedRule::TAGS },
+    { I18N_NOOP("Tag"),              "tag",             SearchAdvancedRule::TAGS     },
     { I18N_NOOP("Tag Name"),         "tagname",         SearchAdvancedRule::LINEEDIT },
     { I18N_NOOP("Image Name"),       "imagename",       SearchAdvancedRule::LINEEDIT },
     { I18N_NOOP("Image Date"),       "imagedate",       SearchAdvancedRule::DATE     },
@@ -97,18 +97,18 @@ RuleOpTable[] =
     { I18N_NOOP("Does Not Contain"),   "NLIKE",        SearchAdvancedRule::LINEEDIT },
     { I18N_NOOP("Equals"),             "EQ",           SearchAdvancedRule::LINEEDIT },
     { I18N_NOOP("Does Not Equal"),     "NE",           SearchAdvancedRule::LINEEDIT },
-    { I18N_NOOP("Equals"),             "EQ",           SearchAdvancedRule::ALBUMS },
-    { I18N_NOOP("Does Not Equal"),     "NE",           SearchAdvancedRule::ALBUMS },
-    { I18N_NOOP("Equals"),             "EQ",           SearchAdvancedRule::TAGS },
-    { I18N_NOOP("Does Not Equal"),     "NE",           SearchAdvancedRule::TAGS },
-    { I18N_NOOP("Contains"),           "LIKE",         SearchAdvancedRule::TAGS },
-    { I18N_NOOP("Does Not Contain"),   "NLIKE",        SearchAdvancedRule::TAGS },
-    { I18N_NOOP("After"),              "GT",           SearchAdvancedRule::DATE },
-    { I18N_NOOP("Before"),             "LT",           SearchAdvancedRule::DATE },
-    { I18N_NOOP("Equals"),             "EQ",           SearchAdvancedRule::DATE },
-    { I18N_NOOP("At least"),           "GTE",           SearchAdvancedRule::RATING },
-    { I18N_NOOP("At most"),            "LTE",           SearchAdvancedRule::RATING },
-    { I18N_NOOP("Equals"),             "EQ",           SearchAdvancedRule::RATING },
+    { I18N_NOOP("Equals"),             "EQ",           SearchAdvancedRule::ALBUMS   },
+    { I18N_NOOP("Does Not Equal"),     "NE",           SearchAdvancedRule::ALBUMS   },
+    { I18N_NOOP("Equals"),             "EQ",           SearchAdvancedRule::TAGS     },
+    { I18N_NOOP("Does Not Equal"),     "NE",           SearchAdvancedRule::TAGS     },
+    { I18N_NOOP("Contains"),           "LIKE",         SearchAdvancedRule::TAGS     },
+    { I18N_NOOP("Does Not Contain"),   "NLIKE",        SearchAdvancedRule::TAGS     },
+    { I18N_NOOP("After"),              "GT",           SearchAdvancedRule::DATE     },
+    { I18N_NOOP("Before"),             "LT",           SearchAdvancedRule::DATE     },
+    { I18N_NOOP("Equals"),             "EQ",           SearchAdvancedRule::DATE     },
+    { I18N_NOOP("At least"),           "GTE",          SearchAdvancedRule::RATING   },
+    { I18N_NOOP("At most"),            "LTE",          SearchAdvancedRule::RATING   },
+    { I18N_NOOP("Equals"),             "EQ",           SearchAdvancedRule::RATING   },
 };
 
 static const int RuleOpTableCount = 16;
@@ -196,19 +196,23 @@ void SearchAdvancedRule::setValues(const KUrl& url)
 
     // set the key widget
     for (int i=0; i< RuleKeyTableCount; i++)
+    {
         if (RuleKeyTable[i].key == url.queryItem("1.key"))
         {
             m_key->setCurrentIndex(i);
         }
+    }
 
     // set the operator and the last widget
     slotKeyChanged( m_key->currentIndex() );
     for (int i=0; i< RuleOpTableCount; i++)
+    {
         if ( RuleOpTable[i].key == url.queryItem("1.op") &&
              RuleOpTable[i].cat == m_widgetType )
         {
             m_operator->setCurrentIndex(i);
         }
+    }
 
     // Set the value for the last widget.
     QString value = url.queryItem("1.val");
@@ -234,8 +238,10 @@ void SearchAdvancedRule::setValues(const KUrl& url)
         {
             QMap<int, int>::iterator it;
             for (it = m_itemsIndexIDMap.begin() ; it != m_itemsIndexIDMap.end(); ++it)
+            {
                 if (it.value() == num)
                     m_valueCombo->setCurrentIndex( it.key() );
+            }
         }
     }
 }
@@ -262,19 +268,21 @@ void SearchAdvancedRule::slotLabelDoubleClick()
 
 void SearchAdvancedRule::slotKeyChanged(int id)
 {
-    QString currentOperator = m_operator->currentText();
+    QString currentOperator      = m_operator->currentText();
     valueWidgetTypes currentType = m_widgetType;
 
     m_operator->clear();
     m_widgetType = RuleKeyTable[id].cat;
 
     for (int i = 0; i < RuleOpTableCount; i++)
-        if ( RuleOpTable[i].cat == m_widgetType )
     {
-        m_operator->addItem( i18n(RuleOpTable[i].keyText) );
-
-        if ( currentOperator == RuleOpTable[i].key )
-            m_operator->setCurrentIndex(i);
+        if ( RuleOpTable[i].cat == m_widgetType )
+        {
+            m_operator->addItem( i18n(RuleOpTable[i].keyText) );
+    
+            if ( currentOperator == RuleOpTable[i].key )
+                m_operator->setCurrentIndex(i);
+        }
     }
     m_operator->adjustSize();
     setValueWidget( currentType, m_widgetType );
@@ -395,12 +403,14 @@ QString SearchAdvancedRule::urlOperator() const
 
     int countItems = 0;
     for (int i=0; i< RuleOpTableCount; i++)
+    {
         if ( RuleOpTable[i].cat == m_widgetType )
         {
             if ( countItems == m_operator->currentIndex() )
                 string = RuleOpTable[i].key;
             ++countItems;
         }
+    }
 
     return string;
 }
