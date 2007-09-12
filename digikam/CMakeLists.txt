@@ -153,6 +153,7 @@ SET(digikam_bin_SRCS
                      albumlister.cpp 
                      albummanager.cpp 
                      albumpropsedit.cpp 
+		     albumselectdialog.cpp
                      albumsettings.cpp 
                      albumthumbnailloader.cpp 
                      albumwidgetstack.cpp 

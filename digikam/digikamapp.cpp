@@ -84,6 +84,7 @@
 #include "album.h"
 #include "albumlister.h"
 #include "albumthumbnailloader.h"
+#include "albumselectdialog.h"
 #include "cameratype.h"
 #include "cameraui.h"
 #include "setup.h"
