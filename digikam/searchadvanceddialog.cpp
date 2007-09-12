@@ -145,8 +145,6 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KUrl& url)
                                   "by adding/removing criteria."));
 
     QVBoxLayout *vlay2 = new QVBoxLayout(groupbox1);
-    vlay2->setMargin(spacingHint());
-    vlay2->setSpacing(spacingHint());
                                          
     d->optionsCombo = new QComboBox(groupbox1);
     d->optionsCombo->insertItem(0, i18n("As well as"));
@@ -162,6 +160,8 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KUrl& url)
     box1->addStretch(10);
     box1->addWidget(d->delButton);
 
+    vlay2->setMargin(spacingHint());
+    vlay2->setSpacing(spacingHint());
     vlay2->addLayout(box1);
 
     // -------------------------------------------------------------
@@ -172,8 +172,6 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KUrl& url)
                                   "from the Search Rule set."));
 
     QVBoxLayout *vlay3 = new QVBoxLayout(groupbox2);
-    vlay3->setMargin(spacingHint());
-    vlay3->setSpacing(spacingHint());
     
     d->groupButton   = new QPushButton(i18n("&Group"), groupbox2);
     d->ungroupButton = new QPushButton(i18n("&Ungroup"), groupbox2);
@@ -183,6 +181,8 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KUrl& url)
     box2->addStretch(10);
     box2->addWidget(d->ungroupButton);
 
+    vlay3->setMargin(spacingHint());
+    vlay3->setSpacing(spacingHint());
     vlay3->addLayout(box2);
 
     // -------------------------------------------------------------
@@ -266,10 +266,12 @@ void SearchAdvancedDialog::slotAddRule()
 {
     SearchAdvancedBase::Option type = SearchAdvancedBase::NONE;
     if ( !d->baseList.isEmpty() )
+    {
         if (d->optionsCombo->currentIndex() == 0 )
             type = SearchAdvancedBase::AND;
         else
             type = SearchAdvancedBase::OR;
+    }
 
     SearchAdvancedRule* rule = new SearchAdvancedRule( d->rulesBox, type );
     d->baseList.append(rule);
@@ -562,7 +564,6 @@ void SearchAdvancedDialog::slotTimeOut()
     }
 }
 
-
 void SearchAdvancedDialog::slotChangeButtonStates()
 {
     bool group  = false;
@@ -617,7 +618,7 @@ void SearchAdvancedDialog::fillWidgets( const KUrl& url )
 
         QString key = url.queryItem(QString::number(i) + ".key");
         QString op  = url.queryItem(QString::number(i) + ".op");
-        QString val  = url.queryItem(QString::number(i) + ".val");
+        QString val = url.queryItem(QString::number(i) + ".val");
 
         newRule.setPath("1");
         newRule.addQueryItem("1.key",key);
