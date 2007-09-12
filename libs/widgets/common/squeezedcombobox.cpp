@@ -49,7 +49,7 @@ public:
 
     SqueezedComboBoxPriv()
     {
-        timer   = 0;
+        timer = 0;
     }
 
     QMap<int, QString>   originalItems;
@@ -60,21 +60,17 @@ public:
 SqueezedComboBox::SqueezedComboBox( QWidget *parent, const char *name )
                 : QComboBox(parent)
 {
+    d = new SqueezedComboBoxPriv;
     setObjectName(name);
     setMinimumWidth(100);
     d->timer = new QTimer(this);
     d->timer->setSingleShot(true);
 
-    // See B.K.O #138747 : always for QComboBox instance to use a QListbox to 
-    // render content independently of Widget style used. 
-    /* TODO: KDE4PORT: Check if this line still mandatory with QT4.
-    setListBox(new QListBox(this));*/
-
     connect(d->timer, SIGNAL(timeout()),
-            SLOT(slotTimeOut()));
+            this, SLOT(slotTimeOut()));
 
     connect(this, SIGNAL(activated( int )),
-            this, SLOT(slotUpdateToolTip( int )));
+            SLOT(slotUpdateToolTip( int )));
 }
 
 SqueezedComboBox::~SqueezedComboBox()
@@ -88,11 +84,13 @@ bool SqueezedComboBox::contains( const QString& _text ) const
     if ( _text.isEmpty() )
         return false;
 
-    const int itemCount = count();
-    for (int i = 0; i < itemCount; ++i )
+    for (QMap<int, QString>::const_iterator it = d->originalItems.begin() ; it != d->originalItems.end();
+         ++it)
     {
-        if ( itemText(i) == _text )
+        if (it.value() == _text)
+        {
             return true;
+        }
     }
     return false;
 }
@@ -132,12 +130,10 @@ void SqueezedComboBox::setCurrent(const QString& itemText)
     QString squeezedText = squeezeText(itemText);
     qint32 itemIndex = findText(squeezedText);
     if (itemIndex >= 0) 
-    {
         setCurrentIndex(itemIndex);
-    }
 }
 
-void SqueezedComboBox::resizeEvent ( QResizeEvent * )
+void SqueezedComboBox::resizeEvent(QResizeEvent *)
 {
     d->timer->start(200);
 }
@@ -175,7 +171,7 @@ QString SqueezedComboBox::squeezeText( const QString& original)
     return sqItem;
 }
 
-void SqueezedComboBox::slotUpdateToolTip( int index )
+void SqueezedComboBox::slotUpdateToolTip(int index)
 {
      setToolTip(d->originalItems[index]);
 }

@@ -49,9 +49,6 @@ class SqueezedComboBoxPriv;
  * depending on de size of the widget. When it is not
  * possible to show the complete item, it will be shortened
  * and "..." will be prepended.
- *
- * @image html squeezedcombobox.png "This is how it looks"
- * @author Tom Albers
  */
 class DIGIKAM_EXPORT SqueezedComboBox : public QComboBox
 {
@@ -70,6 +67,12 @@ public:
      */
     virtual ~SqueezedComboBox();
 
+    /**
+     * 
+     * Returns true if the combobox contains the original (not-squeezed)
+     * version of text.
+     * @param text the original (not-squeezed) text to check for
+     */
     bool contains(const QString & text) const;
 
     /**
