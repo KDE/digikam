@@ -228,10 +228,12 @@ void SearchAdvancedDialog::slotAddRule()
 {
     SearchAdvancedBase::Option type = SearchAdvancedBase::NONE;
     if ( !d->baseList.isEmpty() )
+    {
         if (d->optionsCombo->currentItem() == 0 )
             type = SearchAdvancedBase::AND;
         else
             type = SearchAdvancedBase::OR;
+    }
 
     SearchAdvancedRule* rule = new SearchAdvancedRule( d->rulesBox, type );
     d->baseList.append(rule);
@@ -279,7 +281,8 @@ void SearchAdvancedDialog::slotDelRules()
 
     slotChangeButtonStates();
     slotPropertyChanged();
-    if (d->baseList.isEmpty()) {
+    if (d->baseList.isEmpty()) 
+    {
         d->optionsCombo->setEnabled(false);
         d->addButton->setEnabled(true);
         enableButtonOK( false );
@@ -383,7 +386,6 @@ void SearchAdvancedDialog::slotUnGroupRules()
     if (itemsToUnGroup.isEmpty())
         return;
 
-
     for (GroupList::iterator it = itemsToUnGroup.begin();
          it != itemsToUnGroup.end(); ++it)
     {
@@ -402,7 +404,6 @@ void SearchAdvancedDialog::slotUnGroupRules()
         d->baseList.remove(group);
         delete group;
     }
-
 
     for (BaseList::iterator it = d->baseList.begin();
          it != d->baseList.end(); ++it)
@@ -439,7 +440,7 @@ void SearchAdvancedDialog::slotTimeOut()
     typedef QValueList<SearchAdvancedBase*>  BaseList;
 
     QString grouping;
-    int     count  = 0;
+    int     count    = 0;
     bool    emptyVal = false;
 
     KURL url;
@@ -524,10 +525,9 @@ void SearchAdvancedDialog::slotTimeOut()
     }
 }
 
-
 void SearchAdvancedDialog::slotChangeButtonStates()
 {
-    bool group = false;
+    bool group  = false;
     int counter = 0;
 
     typedef QValueList<SearchAdvancedBase*>  BaseList;
@@ -579,7 +579,7 @@ void SearchAdvancedDialog::fillWidgets( const KURL& url )
 
         QString key = url.queryItem(QString::number(i) + ".key");
         QString op  = url.queryItem(QString::number(i) + ".op");
-        QString val  = url.queryItem(QString::number(i) + ".val");
+        QString val = url.queryItem(QString::number(i) + ".val");
 
         newRule.setPath("1");
         newRule.addQueryItem("1.key",key);
@@ -591,8 +591,8 @@ void SearchAdvancedDialog::fillWidgets( const KURL& url )
 
     QStringList strList = QStringList::split(" ", url.path());
 
-    SearchAdvancedGroup* group = 0;
-    bool groupingActive=false;
+    SearchAdvancedGroup* group      = 0;
+    bool groupingActive             = false;
     SearchAdvancedBase::Option type = SearchAdvancedBase::NONE;
 
     for ( QStringList::Iterator it = strList.begin(); it != strList.end(); ++it )
@@ -647,4 +647,3 @@ void SearchAdvancedDialog::fillWidgets( const KURL& url )
 }
 
 }  // namespace Digikam
-
