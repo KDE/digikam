@@ -70,9 +70,12 @@ public:
         delButton     = 0;
         addButton     = 0;
         rulesBox      = 0;
+        vlayRulesBox  = 0;
     }
 
     QGroupBox                        *rulesBox;
+
+    QVBoxLayout                      *vlayRulesBox;
 
     QPushButton                      *addButton;
     QPushButton                      *delButton;
@@ -120,7 +123,7 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KUrl& url)
                                       "using the current search settings."));
 
     hbox->setMargin(spacingHint());
-    hbox->setSpacing(spacingHint());
+    hbox->setSpacing(0);
     hbox->addLayout(leftSide);
     hbox->addWidget(d->resultsView);
 
@@ -132,10 +135,10 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KUrl& url)
                                     "searching in album library."));
     d->rulesBox->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
 
-    QVBoxLayout *vlay = new QVBoxLayout(d->rulesBox);
-    vlay->setMargin(spacingHint());
-    vlay->setSpacing(spacingHint());
-    vlay->setAlignment(Qt::AlignTop);
+    d->vlayRulesBox = new QVBoxLayout(d->rulesBox);
+    d->vlayRulesBox->setMargin(spacingHint());
+    d->vlayRulesBox->setSpacing(spacingHint());
+    d->vlayRulesBox->setAlignment(Qt::AlignTop);
 
     // -------------------------------------------------------------
     // Box for the add/delete
@@ -393,8 +396,8 @@ void SearchAdvancedDialog::slotGroupRules()
     for (BaseList::iterator it = d->baseList.begin();
          it != d->baseList.end(); ++it)
     {
-        d->rulesBox->layout()->removeWidget((*it)->widget());
-        d->rulesBox->layout()->addWidget((*it)->widget());
+        d->vlayRulesBox->removeWidget((*it)->widget());
+        d->vlayRulesBox->addWidget((*it)->widget());
     }
 
     connect(group, SIGNAL(signalBaseItemToggled()),
@@ -447,8 +450,8 @@ void SearchAdvancedDialog::slotUnGroupRules()
     for (BaseList::iterator it = d->baseList.begin();
          it != d->baseList.end(); ++it)
     {
-        d->rulesBox->layout()->removeWidget((*it)->widget());
-        d->rulesBox->layout()->addWidget((*it)->widget());
+        d->vlayRulesBox->removeWidget((*it)->widget());
+        d->vlayRulesBox->addWidget((*it)->widget());
     }
 
     slotChangeButtonStates();
@@ -665,7 +668,6 @@ void SearchAdvancedDialog::fillWidgets( const KUrl& url )
         else if (*it == "(")
         {
             group = new SearchAdvancedGroup(d->rulesBox);
-            d->baseList.append(group);
 
             connect(group, SIGNAL(signalBaseItemToggled()),
                     this, SLOT(slotChangeButtonStates()));
