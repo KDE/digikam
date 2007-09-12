@@ -1152,50 +1152,6 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
     }
 }
 
-void AlbumFolderView::albumImportFolder()
-{
-    AlbumSettings* settings = AlbumSettings::instance();
-    QDir libraryDir(settings->getAlbumLibraryPath());
-    if(!libraryDir.exists())
-    {
-        KMessageBox::error(0,
-                           i18n("The album library has not been set correctly.\n"
-                                "Select \"Configure digiKam\" from the Settings "
-                                "menu and choose a folder to use for the album "
-                                "library."));
-        return;
-    }
-
-    PAlbum* parent = 0;
-    if(selectedItem())
-    {
-        AlbumFolderViewItem *folderItem = dynamic_cast<AlbumFolderViewItem*>(selectedItem());
-        Album *album = folderItem->getAlbum();
-        if (album && album->type() == Album::PHYSICAL)
-        {
-            parent = dynamic_cast<PAlbum*>(album);
-        }
-    }
-    if(!parent)
-        parent = dynamic_cast<PAlbum*>(d->albumMan->findPAlbum(0));
-
-    QString libraryPath = parent->folderPath();
-
-    KFileDialog dlg(KUrl(), "inode/directory", this);
-    dlg.setMode(KFile::Directory |  KFile::Files);
-    if(dlg.exec() != QDialog::Accepted)
-        return;
-
-    KUrl::List urls = dlg.selectedUrls();
-    if(urls.empty())
-        return;
-
-    KIO::Job* job = DIO::copy(urls, parent->kurl());
-
-    connect(job, SIGNAL(result(KJob *)),
-            this, SLOT(slotDIOResult(KJob *)));
-}
-
 void AlbumFolderView::selectItem(int id)
 {
     PAlbum* album = d->albumMan->findPAlbum(id);

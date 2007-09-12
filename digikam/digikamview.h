@@ -95,7 +95,6 @@ public slots:
     void slotAlbumPropsEdit();
     void slotAlbumOpenInKonqui();
     void slotAlbumRefresh();
-    void slotAlbumImportFolder();
     void slotAlbumHistoryBack(int steps=1);
     void slotAlbumHistoryForward(int steps=1);
     void slotAlbumDeleted(Album *album);

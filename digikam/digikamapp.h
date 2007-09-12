@@ -158,6 +158,8 @@ private slots:
     void slotTooglePreview(bool);
 
     void slotImportAddImages();
+    void slotImportAddFolders();
+    void slotDIOResult(KJob*);
 
 private:
 

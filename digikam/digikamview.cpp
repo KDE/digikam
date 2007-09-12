@@ -898,11 +898,6 @@ void DigikamView::slotAlbumSyncPicturesMetadataDone()
     applySettings(AlbumSettings::instance());
 }
 
-void DigikamView::slotAlbumImportFolder()
-{
-    d->folderView->albumImportFolder();
-}
-
 void DigikamView::slotAlbumHighlight()
 {
     // TODO:

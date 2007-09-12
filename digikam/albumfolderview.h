@@ -56,7 +56,6 @@ public:
     AlbumFolderView(QWidget *parent);
     ~AlbumFolderView();
 
-    void albumImportFolder();
     void resort();
 
     void albumNew();

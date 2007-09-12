@@ -90,7 +90,7 @@ public:
         forwardActionMenu                    = 0;
         addImagesAction                      = 0;
         propsEditAction                      = 0;
-        albumImportAction                    = 0;
+        addFoldersAction                     = 0;
         openInKonquiAction                   = 0;
         refreshAlbumAction                   = 0;
         syncAlbumMetadataAction              = 0;
@@ -131,7 +131,7 @@ public:
         tipAction                            = 0;
         kipiHelpAction                       = 0;
         donateMoneyAction                    = 0;
-        importMenuAction                    = 0;
+        importMenuAction                     = 0;
         addCameraSeparatorAction             = 0;
         themeMenuAction                      = 0;
         forwardSignalMapper                  = 0;
@@ -187,7 +187,7 @@ public:
 
     KAction               *addImagesAction;
     KAction               *propsEditAction;
-    KAction               *albumImportAction;
+    KAction               *addFoldersAction;
     KAction               *openInKonquiAction;
     KAction               *refreshAlbumAction;
     KAction               *syncAlbumMetadataAction;

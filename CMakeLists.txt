@@ -244,6 +244,7 @@ SET(libdialog_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/imageguidedlg.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/ctrlpaneldlg.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/dprogressdlg.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/albumselectdialog.cpp 
    )
 
 SET(libdeletedialog_SRCS
@@ -380,7 +381,6 @@ SET(libcameragui_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameraiconitem.cpp 
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameraiconview.cpp 
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameracontroller.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/albumselectdialog.cpp 
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameraui.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/freespacewidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/capturewidget.cpp

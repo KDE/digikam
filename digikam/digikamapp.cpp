@@ -59,6 +59,8 @@
 #include <ktogglefullscreenaction.h>
 #include <ktoolbar.h>
 #include <kfiledialog.h>
+#include <kio/job.h>
+#include <kio/jobuidelegate.h>
 #include <solid/device.h>
 #include <solid/deviceinterface.h>
 #include <solid/devicenotifier.h>
@@ -293,7 +295,7 @@ QList<QAction*> DigikamApp::menuImportActions()
 {
     QList<QAction*> importMenu;
     importMenu = d->kipiFileActionsImport;
-    importMenu.append( d->albumImportAction );
+    importMenu.append( d->addFoldersAction );
     importMenu.append( d->addImagesAction );
     return importMenu;
 }
@@ -538,12 +540,6 @@ void DigikamApp::setupActions()
     d->deleteAction = new KAction(KIcon("edit-trash"), i18n("Delete Album"), this);
     connect(d->deleteAction, SIGNAL(triggered()), d->view, SLOT(slotDeleteAlbum()));
     actionCollection()->addAction("album_delete", d->deleteAction);
-
-    // -----------------------------------------------------------------
-
-    d->albumImportAction = new KAction(KIcon("albumfolder-importdir"), i18n("Add Folders..."), this);
-    connect(d->albumImportAction, SIGNAL(triggered()), d->view, SLOT(slotAlbumImportFolder()));
-    actionCollection()->addAction("album_importFolder", d->albumImportAction);
 
     // -----------------------------------------------------------------
 
@@ -1014,7 +1010,7 @@ void DigikamApp::slotAlbumSelected(bool val)
         d->propsEditAction->setEnabled(false);
         d->openInKonquiAction->setEnabled(false);
         d->newAction->setEnabled(false);
-        d->albumImportAction->setEnabled(false);
+        d->addFoldersAction->setEnabled(false);
 
     }
     else if(!album && !val)
@@ -1025,7 +1021,7 @@ void DigikamApp::slotAlbumSelected(bool val)
         d->propsEditAction->setEnabled(false);
         d->openInKonquiAction->setEnabled(false);
         d->newAction->setEnabled(false);
-        d->albumImportAction->setEnabled(false);
+        d->addFoldersAction->setEnabled(false);
 
         foreach(QAction *action, d->kipiFileActionsImport)
         {
@@ -1045,7 +1041,7 @@ void DigikamApp::slotAlbumSelected(bool val)
         d->propsEditAction->setEnabled(true);
         d->openInKonquiAction->setEnabled(true);
         d->newAction->setEnabled(true);
-        d->albumImportAction->setEnabled(true);
+        d->addFoldersAction->setEnabled(true);
 
         foreach(QAction *action, d->kipiFileActionsImport)
         {
@@ -1069,13 +1065,13 @@ void DigikamApp::slotAlbumSelected(bool val)
         {
             d->newAction->setEnabled(true);
             d->openInKonquiAction->setEnabled(true);
-            d->albumImportAction->setEnabled(true);
+            d->addFoldersAction->setEnabled(true);
         }
         else
         {
             d->newAction->setEnabled(false);
             d->openInKonquiAction->setEnabled(false);
-            d->albumImportAction->setEnabled(false);
+            d->addFoldersAction->setEnabled(false);
         }
 
         foreach(QAction *action, d->kipiFileActionsImport)
@@ -1257,6 +1253,13 @@ void DigikamApp::loadCameras()
     connect(d->addImagesAction, SIGNAL(triggered()), this, SLOT(slotImportAddImages()));
     actionCollection()->addAction("import_addImages", d->addImagesAction);
     d->importMenuAction->menu()->addAction(d->addImagesAction);
+
+    // -----------------------------------------------------------------
+
+    d->addFoldersAction = new KAction(KIcon("albumfolder-importdir"), i18n("Add Folders..."), this);
+    d->addFoldersAction->setWhatsThis(i18n("Adds new folders to Albums library."));    
+    connect(d->addFoldersAction, SIGNAL(triggered()), this, SLOT(slotImportAddFolders()));
+    actionCollection()->addAction("import_addFolders", d->addFoldersAction);
 
     // -- fill manually added cameras ----------------------------------
 
@@ -2146,6 +2149,51 @@ void DigikamApp::slotImportAddImages()
 
     // The folder contents will be parsed by Camera interface in "Directory Browse" mode.
     downloadFrom(path);
+}
+
+void DigikamApp::slotImportAddFolders()
+{
+    KFileDialog dlg(KUrl(), "inode/directory", this);
+    dlg.setCaption(i18n("Select folders to import"));
+    dlg.setMode(KFile::Directory |  KFile::Files);
+    if(dlg.exec() != QDialog::Accepted)
+        return;
+
+    KUrl::List urls = dlg.selectedUrls();
+    if(urls.empty()) return;
+
+    AlbumManager* man = AlbumManager::instance();
+
+    Album *album = AlbumManager::instance()->currentAlbum();
+    if (album && album->type() != Album::PHYSICAL)
+        album = 0;
+
+    QString header(i18n("<p>Please select the destination album from the digiKam library to "
+                        "import folders.</p>"));
+
+    album = AlbumSelectDialog::selectAlbum(this, (PAlbum*)album, header);
+    if (!album) return;
+
+    PAlbum *pAlbum = dynamic_cast<PAlbum*>(album);
+    if (!pAlbum) return;
+
+    KUrl albumUrl;
+    albumUrl.setPath(pAlbum->folderPath());
+
+    KIO::Job* job = DIO::copy(urls, albumUrl);
+
+    connect(job, SIGNAL(result(KJob *)),
+            this, SLOT(slotDIOResult(KJob *)));
+}
+
+void DigikamApp::slotDIOResult(KJob* kjob)
+{
+    KIO::Job *job = static_cast<KIO::Job*>(kjob);
+    if (job->error())
+    {
+        job->ui()->setWindow(this);
+        job->ui()->showErrorMessage();
+    }
 }
 
 }  // namespace Digikam
