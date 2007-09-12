@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="34" name="digikam" >
+<gui version="35" name="digikam" >
 
  <MenuBar>
 
@@ -16,7 +16,6 @@
      <Action name="album_openinkonqui" />
    <Separator/>
       <Menu name="Import"><text>&amp;Import</text>
-         <Action name="album_addImages" />
          <Action name="album_importFolder" />
          <ActionList name="file_actions_import"/>
       </Menu>
@@ -91,7 +90,7 @@
       </Menu>
   </Menu>
 
-  <Action name="acquire_menu" />
+  <Action name="import_menu" />
 
   <Menu name="settings" noMerge="1"><Text>&amp;Settings</Text>
      <Action name="options_show_toolbar"/>

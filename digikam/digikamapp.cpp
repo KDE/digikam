@@ -453,9 +453,9 @@ void DigikamApp::setupAccelerators()
 
 void DigikamApp::setupActions()
 {
-    d->acquireMenuAction = new KActionMenu(i18n("&Acquire"), this);
-    d->acquireMenuAction->setDelayed(false);
-    actionCollection()->addAction("acquire_menu", d->acquireMenuAction);
+    d->importMenuAction = new KActionMenu(i18n("I&mport"), this);
+    d->importMenuAction->setDelayed(false);
+    actionCollection()->addAction("import_menu", d->importMenuAction);
 
     d->solidCameraActionGroup = new QActionGroup(this);
     connect(d->solidCameraActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(slotOpenSolidCamera(QAction*)));
@@ -538,14 +538,6 @@ void DigikamApp::setupActions()
     d->deleteAction = new KAction(KIcon("edit-trash"), i18n("Delete Album"), this);
     connect(d->deleteAction, SIGNAL(triggered()), d->view, SLOT(slotDeleteAlbum()));
     actionCollection()->addAction("album_delete", d->deleteAction);
-
-    // -----------------------------------------------------------------
-
-    d->addImagesAction = new KAction(KIcon("albumfolder-importimages"), i18n("Add Images..."), this);
-    d->addImagesAction->setShortcut(Qt::CTRL+Qt::Key_I);
-    d->addImagesAction->setWhatsThis(i18n("Adds new items to the current Album."));
-    connect(d->addImagesAction, SIGNAL(triggered()), this, SLOT(slotAlbumAddImages()));
-    actionCollection()->addAction("album_addImages", d->addImagesAction);
 
     // -----------------------------------------------------------------
 
@@ -1233,19 +1225,19 @@ void DigikamApp::cameraAutoDetect()
 
 void DigikamApp::loadCameras()
 {
-    d->acquireMenuAction->menu()->addMenu(d->cameraSolidMenu);
+    d->importMenuAction->menu()->addMenu(d->cameraSolidMenu);
     d->cameraSolidMenu->menuAction()->setText(i18n("Digital Cameras"));
     d->cameraSolidMenu->menuAction()->setIcon(KIcon("camera"));
 
-    d->acquireMenuAction->menu()->addMenu(d->usbMediaMenu);
+    d->importMenuAction->menu()->addMenu(d->usbMediaMenu);
     d->usbMediaMenu->menuAction()->setText(i18n("USB Storage Devices"));
     d->usbMediaMenu->menuAction()->setIcon(KIcon("drive-removable-media-usb"));
 
-    d->acquireMenuAction->menu()->addMenu(d->cardReaderMenu);
+    d->importMenuAction->menu()->addMenu(d->cardReaderMenu);
     d->cardReaderMenu->menuAction()->setText(i18n("Card Readers"));
     d->cardReaderMenu->menuAction()->setIcon(KIcon("media-flash-smart-media"));
 
-    d->acquireMenuAction->menu()->addMenu(d->manuallyAddedCamerasMenu);
+    d->importMenuAction->menu()->addMenu(d->manuallyAddedCamerasMenu);
     d->manuallyAddedCamerasMenu->menuAction()->setText(i18n("Cameras Added Manually"));
     d->manuallyAddedCamerasMenu->menuAction()->setIcon(KIcon("camera-test"));
 
@@ -1255,10 +1247,23 @@ void DigikamApp::loadCameras()
     d->addCameraSeparatorAction = d->manuallyAddedCamerasMenu->addSeparator();
     d->manuallyAddedCamerasMenu->addAction(cameraAction);
 
-    // fill manually added cameras
+    d->importMenuAction->menu()->addSeparator();
+
+    // -----------------------------------------------------------------
+
+    d->addImagesAction = new KAction(KIcon("albumfolder-importimages"), i18n("Add Images..."), this);
+    d->addImagesAction->setShortcut(Qt::CTRL+Qt::Key_I);
+    d->addImagesAction->setWhatsThis(i18n("Adds new items to an Album."));
+    connect(d->addImagesAction, SIGNAL(triggered()), this, SLOT(slotAlbumAddImages()));
+    actionCollection()->addAction("import_addImages", d->addImagesAction);
+    d->importMenuAction->menu()->addAction(d->addImagesAction);
+
+    // -- fill manually added cameras ----------------------------------
+
     d->cameraList->load();
 
-    // scan Solid devices
+    // -- scan Solid devices -------------------------------------------
+
     fillSolidMenus();
 
     connect(Solid::DeviceNotifier::instance(), SIGNAL(deviceAdded(const QString &)),
