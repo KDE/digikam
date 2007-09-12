@@ -34,7 +34,6 @@
 
 // KDE includes.
 
-//#include <khbox.h>
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kiconloader.h>
@@ -44,8 +43,8 @@
 
 // Local includes.
 
-#include "deletedialog.h"
 #include "albumsettings.h"
+#include "deletedialog.h"
 #include "deletedialog.moc"
 
 namespace Digikam
@@ -193,8 +192,9 @@ DeleteDialog::DeleteDialog(QWidget *parent)
     adjustSize();
 
     slotShouldDelete(shouldDelete());
-    connect(m_widget->ddShouldDelete, SIGNAL(toggled(bool)), SLOT(slotShouldDelete(bool)));
 
+    connect(m_widget->ddShouldDelete, SIGNAL(toggled(bool)), 
+            this, SLOT(slotShouldDelete(bool)));
 }
 
 bool DeleteDialog::confirmDeleteList(const KUrl::List& condemnedFiles,
@@ -292,4 +292,3 @@ void DeleteDialog::setListMode(DeleteDialogMode::ListMode mode)
 }
 
 } // namespace Digikam
-

@@ -46,10 +46,13 @@ class QLabel;
 
 class DeleteDialogBase : public QWidget, public Ui::DeleteDialogBase
 {
+
 public:
-  DeleteDialogBase( QWidget *parent ) : QWidget( parent ) {
-    setupUi( this );
-  }
+
+    DeleteDialogBase( QWidget *parent ) : QWidget( parent ) 
+    {
+        setupUi( this );
+    }
 };
 
 namespace Digikam
@@ -89,7 +92,7 @@ public:
 
 protected slots:
 
-    void slotShouldDelete(bool shouldDelete);
+    void slotShouldDelete(bool);
 
 protected:
 
@@ -133,7 +136,7 @@ public:
 protected slots:
 
     virtual void accept();
-    void slotShouldDelete(bool shouldDelete);
+    void slotShouldDelete(bool);
 
 private:
 
