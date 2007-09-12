@@ -53,7 +53,7 @@ SET(libdigikamtheme_SRCS
     ${CMAKE_SOURCE_DIR}/digikam/digikam/albumlister.cpp 
     ${CMAKE_SOURCE_DIR}/digikam/digikam/albummanager.cpp 
     ${CMAKE_SOURCE_DIR}/digikam/digikam/albumsettings.cpp 
-    ${CMAKE_SOURCE_DIR}/digikam/digikam/albumselectiondialog.cpp 
+    ${CMAKE_SOURCE_DIR}/digikam/digikam/albumselectdialog.cpp 
     ${CMAKE_SOURCE_DIR}/digikam/digikam/albumthumbnailloader.cpp 
     ${CMAKE_SOURCE_DIR}/digikam/digikam/cameradragobject.cpp 
     ${CMAKE_SOURCE_DIR}/digikam/digikam/cameralist.cpp 
