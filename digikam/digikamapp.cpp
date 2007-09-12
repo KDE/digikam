@@ -103,6 +103,7 @@
 #include "batchthumbsgenerator.h"
 #include "batchalbumssyncmetadata.h"
 #include "dlogoaction.h"
+#include "dio.h"
 #include "digikamadaptor.h"
 #include "digikamappprivate.h"
 #include "digikamapp.h"
@@ -2162,8 +2163,6 @@ void DigikamApp::slotImportAddFolders()
 
     KUrl::List urls = dlg.selectedUrls();
     if(urls.empty()) return;
-
-    AlbumManager* man = AlbumManager::instance();
 
     Album *album = AlbumManager::instance()->currentAlbum();
     if (album && album->type() != Album::PHYSICAL)
