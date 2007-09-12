@@ -1262,6 +1262,7 @@ void DigikamApp::loadCameras()
     d->addFoldersAction->setWhatsThis(i18n("Adds new folders to Albums library."));    
     connect(d->addFoldersAction, SIGNAL(triggered()), this, SLOT(slotImportAddFolders()));
     actionCollection()->addAction("import_addFolders", d->addFoldersAction);
+    d->importMenuAction->menu()->addAction(d->addFoldersAction);
 
     // -- fill manually added cameras ----------------------------------
 
