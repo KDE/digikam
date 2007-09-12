@@ -40,6 +40,7 @@
 // KDE includes.
 
 #include <k3urldrag.h>
+#include <kmenu.h>
 #include <kmimetype.h>
 #include <klocale.h>
 #include <kiconloader.h>
