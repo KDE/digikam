@@ -1254,7 +1254,7 @@ void DigikamApp::loadCameras()
     d->addImagesAction = new KAction(KIcon("albumfolder-importimages"), i18n("Add Images..."), this);
     d->addImagesAction->setShortcut(Qt::CTRL+Qt::Key_I);
     d->addImagesAction->setWhatsThis(i18n("Adds new items to an Album."));
-    connect(d->addImagesAction, SIGNAL(triggered()), this, SLOT(slotAlbumAddImages()));
+    connect(d->addImagesAction, SIGNAL(triggered()), this, SLOT(slotImportAddImages()));
     actionCollection()->addAction("import_addImages", d->addImagesAction);
     d->importMenuAction->menu()->addAction(d->addImagesAction);
 
@@ -2136,7 +2136,7 @@ void DigikamApp::slotTooglePreview(bool t)
     d->zoomFitToWindowAction->setEnabled(t);
 }
 
-void DigikamApp::slotAlbumAddImages()
+void DigikamApp::slotImportAddImages()
 {
     QString path = KFileDialog::getExistingDirectory(KGlobalSettings::documentPath(), this, 
                                 i18n("Select folder to parse"));

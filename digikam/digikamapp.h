@@ -109,7 +109,6 @@ private:
 
 private slots:
 
-    void slotAlbumAddImages();
     void slotAlbumSelected(bool val);
     void slotTagSelected(bool val);
     void slotImageSelected(const ImageInfoList&, bool, bool, const KUrl::List&);
@@ -157,6 +156,8 @@ private slots:
     void slotThumbSizeChanged(int);
     void slotZoomChanged(double, int);
     void slotTooglePreview(bool);
+
+    void slotImportAddImages();
 
 private:
 
