@@ -77,7 +77,7 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
     previewwidget.cpp                   Gilles          X      X       DONE        DONE
     sidebar.cpp                         Gilles          X      X       DONE        DONE
     splashscreen.cpp                    Gilles          X      X       DONE        DONE
-    squeezedcombobox.cpp                Gilles          X      X       DONE                 Widget crash indeep. Need investiguation.
+    squeezedcombobox.cpp                Gilles          X      X       DONE        DONE
     statusnavigatebar.cpp               Gilles          X      X       DONE        DONE
     statusprogressbar.cpp               Gilles          X      X       DONE        DONE
     statuszoombar.cpp	                Gilles          X      X       DONE        DONE
