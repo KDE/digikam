@@ -94,7 +94,7 @@ FileSaveOptionsBox::FileSaveOptionsBox(QWidget *parent)
     d->noneGrid    = new QGridLayout(d->noneOptions);
     d->noneGrid->setSpacing(KDialog::spacingHint());
     d->noneOptions->setLayout(d->noneGrid);
-    d->labelNone   = new QLabel(i18n("None options available"), d->noneOptions);
+    d->labelNone   = new QLabel(i18n("No options available"), d->noneOptions);
     d->noneGrid->addWidget(d->labelNone, 0, 0, 0, 1);
 
     //-- JPEG Settings ------------------------------------------------------
