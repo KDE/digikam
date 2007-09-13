@@ -365,7 +365,7 @@ public:
     /**
      * This methods return a 16-byte MD5 hex digest which is meant to uniquely identify
      * the file. The hash is calculated on parts of the file and the file metadata.
-     * It cannot be used to find similar pictures. It is not calculated from the image data.
+     * It cannot be used to find similar images. It is not calculated from the image data.
      *
      * If you already have a DImg object of the file, use the member method.
      * The object does not need to have the full image data loaded, but it shall at least
