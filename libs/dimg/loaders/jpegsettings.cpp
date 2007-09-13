@@ -59,15 +59,15 @@ public:
         subSamplingCB        = 0;
     }
 
-    QGridLayout   *JPEGGrid;
+    QGridLayout  *JPEGGrid;
 
-    QLabel        *labelJPEGcompression;
-    QLabel        *labelWarning;
-    QLabel        *labelSubSampling;
+    QLabel       *labelJPEGcompression;
+    QLabel       *labelWarning;
+    QLabel       *labelSubSampling;
 
-    QComboBox     *subSamplingCB;
+    QComboBox    *subSamplingCB;
 
-    KIntNumInput  *JPEGcompression;
+    KIntNumInput *JPEGcompression;
 };
 
 JPEGSettings::JPEGSettings(QWidget *parent)
@@ -81,14 +81,14 @@ JPEGSettings::JPEGSettings(QWidget *parent)
     d->JPEGcompression->setRange(1, 100, 1, true );
     d->labelJPEGcompression = new QLabel(i18n("JPEG quality:"), this);
 
-    d->JPEGcompression->setWhatsThis( i18n("<p>The quality value for JPEG images:<p>"
+    d->JPEGcompression->setWhatsThis( i18n("<p>The JPEG image quality:<p>"
                                            "<b>1</b>: low quality (high compression and small "
                                            "file size)<p>"
                                            "<b>50</b>: medium quality<p>"
                                            "<b>75</b>: good quality (default)<p>"
                                            "<b>100</b>: high quality (no compression and "
                                            "large file size)<p>"
-                                           "<b>Note: JPEG use a lossy compression image algorithm.</b>"));
+                                           "<b>Note: JPEG always uses lossy compression.</b>"));
 
     d->labelWarning = new QLabel(i18n("<qt><font size=-1 color=\"red\"><i>"
                           "Warning: <a href='http://en.wikipedia.org/wiki/JPEG'>JPEG</a> is a<br>"
@@ -107,17 +107,17 @@ JPEGSettings::JPEGSettings(QWidget *parent)
     d->subSamplingCB->insertItem(0, i18n("None"));    // 1x1, 1x1, 1x1 (4:4:4)
     d->subSamplingCB->insertItem(1, i18n("Medium"));  // 2x1, 1x1, 1x1 (4:2:2)
     d->subSamplingCB->insertItem(2, i18n("High"));    // 2x2, 1x1, 1x1 (4:1:1)
-    d->subSamplingCB->setWhatsThis( i18n("<p>The level of chroma subsampling for JPEG images:<p>"
-                                         "<b>None</b>: use 4:4:4 ratio. It does not have any chroma "
-                                         "subsampling at all. This preserves borders and contrasting "
-                                         "colors, but compression is less<p>"
-                                         "<b>Medium</b>: use 4:2:2 ratio. Medium compression; reduces "
-                                         "the bandwidth for the picture by one-third with little to "
+    d->subSamplingCB->setWhatsThis( i18n("<p>JPEG Chroma subsampling level \n(color is saved with less resolution "
+                                         "than luminance):<p>"
+                                         "<b>None</b>=best: uses 4:4:4 ratio. Does not employ chroma "
+                                         "subsampling at all. This preserves edges and contrasting "
+                                         "colors, whilst adding no additional compression<p>"
+                                         "<b>Medium</b>: uses 4:2:2 ratio. Medium compression: reduces "
+                                         "the color resolution by one-third with little to "
                                          "no visual difference<p>"
-                                         "<b>High</b>: use 4:1:1 ratio. Important compression; suits "
-                                         "images with weak borders but tends to denature colors<p>"
-                                         "<b>Note: JPEG use a lossy compression image algorithm.</b>"));
-
+                                         "<b>High</b>: use 4:1:1 ratio. High compression: suits "
+					 "images with soft edges but tends to alter colors<p>"
+					 "<b>Note: JPEG always uses lossy compression.</b>"));
 
     d->JPEGGrid->addWidget(d->labelJPEGcompression, 0, 0, 1, 1);
     d->JPEGGrid->addWidget(d->JPEGcompression,      0, 1, 1, 1);
