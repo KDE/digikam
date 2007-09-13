@@ -137,13 +137,13 @@ QString WelcomePageView::infoPage()
     newFeatures << i18n("Makernote and IPTC metadata support");
     newFeatures << i18n("Photograph geolocalization");
     newFeatures << i18n("Extensive Sidebars");
-    newFeatures << i18n("Advanced RAW picture decoding settings");
+    newFeatures << i18n("Advanced RAW image decoding settings");
     newFeatures << i18n("Fast RAW preview");
     newFeatures << i18n("RAW Metadata support");
     newFeatures << i18n("New advanced camera download options");
-    newFeatures << i18n("New advanced picture Tag management");
+    newFeatures << i18n("New advanced tag management");
     newFeatures << i18n("New zooming/panning support in preview mode");
-    newFeatures << i18n("New Light Table provides easy comparison for similar pictures");
+    newFeatures << i18n("New Light Table provides easy comparison for similar images");
     newFeatures << i18n("Camera Interface used as generic import tool");
 
     QString featureItems;
