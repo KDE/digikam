@@ -52,7 +52,7 @@ public:
 
 public:
 
-    /** Picture Comment */
+    /** Image Comment */
     QString            comment; 
 
     /** Exif photo info of picture */

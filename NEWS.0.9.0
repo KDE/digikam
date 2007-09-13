@@ -89,7 +89,7 @@ General       : New option to set a matching condition to use between tags in Ta
 
 Setup         : The new batch thumbnail generator can be started when the Exif Auto-rotate option 
                 has been changed.
-Setup         : New Album Items Tool Tip setup tab to set witch information to show over the pictures 
+Setup         : New Album Items Tool Tip setup tab to set witch information to show over the images 
                 using the pop-up window.
 Setup         : New color sheme theme 'Digikasa' from Sergio Di Rio Mare.
 
@@ -237,7 +237,7 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 103 ==> 126199 : Nikon D70 comments in jpegs are all shown as "charset="Ascii".
 104 ==> 130381 : Automatic colorbalance and camera color balance checkboxes swapped.
 105 ==> 117248 : Opening default app when camera inserted return KIOExec error.
-106 ==> 130883 : Overexposure indicator in color management is saved as part of the picture.
+106 ==> 130883 : Overexposure indicator in color management is saved as part of the image.
 107 ==> 130798 : Editor saves some jpeg's 30% smaller than original,
                  even with jpeg compression option set at 100.
 108 ==> 130525 : Saving large (>5M) jpg's result in corrupt file.
@@ -340,12 +340,12 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 195 ==> 136643 : Showfoto can open CRW, but not shown in file dialogue.
 196 ==> 137063 : Keyboard shortcut for 'paste' action not working.
 197 ==> 137461 : Typo croping must be cropping.
-198 ==> 137282 : Comments are lost when copying or moving a picture to another album.
+198 ==> 137282 : Comments are lost when copying or moving an image to another album.
 199 ==> 132805 : Crash when assinging keywords.
 200 ==> 137204 : Crash when applying IPTC data.
 201 ==> 135407 : Reproducible crash selecting photos from collection.
 202 ==> 136086 : Crash when saving any type of files.
-203 ==> 137612 : Showfoto doesn't refresh the photo preview when deleting a picture.
+203 ==> 137612 : Showfoto doesn't refresh the photo preview when deleting an image.
 
 *** 0.9.0-rc2 **********************************************************
 
@@ -369,7 +369,7 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 216 ==> 137770 : digiKam doesn't keep original unix rights when modifying comments/tags/rating.
 217 ==> 133091 : Changing date/time with numblock changes also the orientation.
 218 ==> 137993 : Importing photos into albums results in time/date file override with current one.
-219 ==> 138620 : Saving a picture destroy another picture.
+219 ==> 138620 : Saving an image destroy another picture.
 220 ==> 119205 : Drag & Drop of image into librarypath root dir ==> images are invisible.
 221 ==> 121651 : Export menu not available in context menu from album.
 222 ==> 131601 : Need preview pane (large) in main digikam window.
@@ -382,7 +382,7 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 229 ==> 136258 : User comments in the EXIF/IPTC-data aren't carried over to the "Comments".
 230 ==> 136932 : Access to a specific jpg photo crashed digiKam.
 231 ==> 135442 : Add 'rename' entry to album RMB menu.
-232 ==> 138540 : Pictures files are updated (but not modified) when setting new 
+232 ==> 138540 : Images files are updated (but not modified) when setting new 
                  metadatas albeit they are unset.
 233 ==> 136256 : Tags are not filled from the IPTC-keywords.
 234 ==> 136062 : Charset problem saving EXIF comments (JPEG files).

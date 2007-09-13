@@ -115,7 +115,7 @@ void BatchSyncMetadata::slotAlbumParsed(const ImageInfoList& list)
 void BatchSyncMetadata::parseList()
 {
     emit signalProgressBarMode(StatusProgressBar::CancelProgressBarMode, 
-                               i18n("Sync pictures Metadata with database. Please wait..."));
+                               i18n("Synchonize images Metadata with database. Please wait..."));
 
     d->imageInfo = d->imageInfoList.first();
     parsePicture();

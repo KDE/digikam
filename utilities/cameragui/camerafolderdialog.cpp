@@ -67,7 +67,7 @@ CameraFolderDialog::CameraFolderDialog(QWidget *parent, CameraIconView *cameraVi
     KIconLoader* iconLoader = KApplication::kApplication()->iconLoader();
     logo->setPixmap(iconLoader->loadIcon("digikam", KIcon::NoGroup, 128, KIcon::DefaultState, 0, true));    
     message->setText(i18n("<p>Please select the camera folder "
-                          "where you want to upload the pictures.</p>"));
+                          "where you want to upload the images.</p>"));
 
     grid->addMultiCellWidget(logo, 0, 0, 0, 0);
     grid->addMultiCellWidget(message, 1, 1, 0, 0);

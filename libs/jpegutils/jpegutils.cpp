@@ -513,7 +513,7 @@ bool jpegConvert(const QString& src, const QString& dest, const QString& documen
         image.setExif(meta.getExif());
         image.setIptc(meta.getIptc());
     
-        // And now save the picture to a new file format.
+        // And now save the image to a new file format.
 
         if ( format.upper() == QString("PNG") ) 
             image.setAttribute("quality", 9);

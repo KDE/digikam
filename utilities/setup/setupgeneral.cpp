@@ -156,7 +156,7 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
                                                 "below image thumbnail."));
 
     d->iconShowResolutionBox = new QCheckBox(i18n("Show ima&ge dimensions (warning: slow)"), iconTextGroup);
-    QWhatsThis::add( d->iconShowResolutionBox, i18n("<p>Set this option to show picture size in pixels "
+    QWhatsThis::add( d->iconShowResolutionBox, i18n("<p>Set this option to show image size in pixels "
                                                     "below image thumbnail."));
 
     layout->addWidget(iconTextGroup);

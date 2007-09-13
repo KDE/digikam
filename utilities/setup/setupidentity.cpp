@@ -112,7 +112,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
     label3->setBuddy(d->creditEdit);
     grid2->addMultiCellWidget(label3, 0, 0, 0, 0);
     grid2->addMultiCellWidget(d->creditEdit, 0, 0, 1, 1);
-    QWhatsThis::add( d->creditEdit, i18n("<p>Set the default provider identification of the picture, "
+    QWhatsThis::add( d->creditEdit, i18n("<p>Set the default provider identification of the image, "
                                          "not necessarily the owner/creator. This field is limited "
                                          "to 32 ASCII characters."));
 
@@ -124,7 +124,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
     grid2->addMultiCellWidget(label4, 1, 1, 0, 0);
     grid2->addMultiCellWidget(d->sourceEdit, 1, 1, 1, 1);
     QWhatsThis::add( d->sourceEdit, i18n("<p>Set the default original owner identification of the intellectual "
-                                         "content of the picture. This could be an agency, a member of an agency or "
+                                         "content of the image. This could be an agency, a member of an agency or "
                                          "an individual photographer name. This field is limited "
                                          "to 32 ASCII characters."));
 
@@ -135,7 +135,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
     label5->setBuddy(d->copyrightEdit);
     grid2->addMultiCellWidget(label5, 2, 2, 0, 0);
     grid2->addMultiCellWidget(d->copyrightEdit, 2, 2, 1, 1);
-    QWhatsThis::add( d->copyrightEdit, i18n("<p>Set the default copyright notice of the pictures. "
+    QWhatsThis::add( d->copyrightEdit, i18n("<p>Set the default copyright notice of the images. "
                                             "This field is limited to 128 ASCII characters."));
 
     // --------------------------------------------------------

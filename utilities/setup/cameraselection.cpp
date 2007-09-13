@@ -185,7 +185,7 @@ CameraSelection::CameraSelection( QWidget* parent )
 
     KActiveLabel* link2 = new KActiveLabel(box2);
     link2->setText(i18n("<p>To set a <b>Generic PTP USB Device</b><br>"
-                        "(which use Picture Transfer Protocol), please<br>"
+                        "(which use Image Transfer Protocol), please<br>"
                         "use <a href=\"ptpcamera\">%1</a> from camera list.</p>")
                         .arg(d->PTPCameraNameShown));
                            

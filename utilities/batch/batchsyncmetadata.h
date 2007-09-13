@@ -50,7 +50,7 @@ public:
     /** Constructor witch sync all metatada pictures from an Album */ 
     BatchSyncMetadata(QObject* parent, Album *album);
 
-    /** Constructor witch sync all metatada from a pictures list */ 
+    /** Constructor witch sync all metatada from an images list */ 
     BatchSyncMetadata(QObject* parent, const ImageInfoList& list);
 
     ~BatchSyncMetadata();

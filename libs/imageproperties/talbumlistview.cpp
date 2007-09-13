@@ -420,7 +420,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
         if (id == 10)
         {
             emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
-                                       i18n("Assign tag to pictures. Please wait..."));
+                                       i18n("Assign tag to images. Please wait..."));
 
             AlbumManager::instance()->albumDB()->beginTransaction();
             int i=0;

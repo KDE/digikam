@@ -567,10 +567,10 @@ void ShowFoto::slotOpenFile()
    
     QStringList patternList = QStringList::split('\n', KImageIO::pattern(KImageIO::Reading));
     
-    // All Pictures from list must been always the first entry given by KDE API
+    // All Images from list must been always the first entry given by KDE API
     QString allPictures = patternList[0];
     
-    // Add other files format witch are missing to All Pictures" type mime provided by KDE and remplace current.
+    // Add other files format witch are missing to All Images" type mime provided by KDE and remplace current.
     if (KDcrawIface::DcrawBinary::instance()->versionIsRight())
     {
         allPictures.insert(allPictures.find("|"), QString(raw_file_extentions) + QString(" *.JPE *.TIF"));
@@ -868,7 +868,7 @@ void ShowFoto::openFolder(const KURL& url)
     const QFileInfoList* fileinfolist = dir.entryInfoList();
     if (!fileinfolist || fileinfolist->isEmpty())
     {
-        KMessageBox::sorry(this, i18n("There are no pictures in this folder."));
+        KMessageBox::sorry(this, i18n("There are no images in this folder."));
         return;
     }
     

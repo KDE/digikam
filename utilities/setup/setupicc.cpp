@@ -325,7 +325,7 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
                      "compressed or expanded to fill the gamut of the destination device, so that gray balance is "
                      "preserved but colorimetric accuracy may not be preserved.</p>"
                      "<p>In other words, if certain colors in an image fall outside of the range of colors that the output "
-                     "device can render, the picture intent will cause all the colors in the image to be adjusted so that "
+                     "device can render, the image intent will cause all the colors in the image to be adjusted so that "
                      "the every color in the image falls within the range that can be rendered and so that the relationship "
                      "between colors is preserved as much as possible.</p>"
                      "<p>This intent is most suitable for display of photographs and images, and is the default intent.</p></li>"

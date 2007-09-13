@@ -52,7 +52,7 @@ LATER 0.9.3 TODO LIST
    - New database interface to suport remote repository and others DB backend than sqlite.
    - Implement versioning of picture based on Image editor 'Action List' feature.
    - New option to set digiKam tags on the fly.
-   - Storing new Pictures meta-information : all major photograph informations and GPS.
+   - Storing new images meta-information : all major photograph information and GPS.
    - Allow for multiple root album directories.
 
 * New CD/DVD album folders+database backup/restore tool :

@@ -163,7 +163,7 @@ GreycstorationWidget::GreycstorationWidget(QTabWidget *parent)
     d->sigmaInput = new KDoubleNumInput(d->generalPage);
     d->sigmaInput->setPrecision(2);
     d->sigmaInput->setRange(0.0, 10.0, 0.1, true);
-    QWhatsThis::add( d->sigmaInput, i18n("<p>This value controls the smoothing regularity of the picture. "
+    QWhatsThis::add( d->sigmaInput, i18n("<p>This value controls the evenness of smoothing to the image. "
                                          "Do not use a high value here, or the "
                                          "target image will be completely blurred."));
     grid1->addMultiCellWidget(d->sigmaLabel, 3, 3, 0, 0);
@@ -173,7 +173,7 @@ GreycstorationWidget::GreycstorationWidget(QTabWidget *parent)
     d->iterationInput = new KIntNumInput(d->generalPage);
     d->iterationInput->setRange(1, 5000, 1, true);
     QWhatsThis::add( d->iterationInput, i18n("<p>Sets the number of times the filter is applied over "
-                                             "the picture."));
+                                             "the image."));
     grid1->addMultiCellWidget(d->iterationLabel, 4, 4, 0, 0);
     grid1->addMultiCellWidget(d->iterationInput, 4, 4, 1, 1);
 
@@ -237,12 +237,12 @@ GreycstorationWidget::GreycstorationWidget(QTabWidget *parent)
     d->interpolationBox->insertItem( i18n("Linear"),           GreycstorationSettings::Linear );
     d->interpolationBox->insertItem( i18n("Runge-Kutta"),      GreycstorationSettings::RungeKutta);
     QWhatsThis::add( d->interpolationBox, i18n("<p>Select the right interpolation method to set "
-                                               "the picture quality."));
+                                               "the image quality."));
     grid2->addMultiCellWidget(d->interpolationLabel, 5, 5, 0, 0);
     grid2->addMultiCellWidget(d->interpolationBox, 5, 5, 1, 1);
     
     d->fastApproxCBox = new QCheckBox(i18n("Fast approximation"), d->advancedPage);
-    QWhatsThis::add( d->fastApproxCBox, i18n("<p>Enable fast approximation to render picture."));
+    QWhatsThis::add( d->fastApproxCBox, i18n("<p>Enable fast approximation to render image."));
     grid2->addMultiCellWidget(d->fastApproxCBox, 6, 6, 0, 1);
 }
 

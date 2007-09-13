@@ -114,7 +114,7 @@ bool DMetadata::loadUsingDcraw(const QString& filePath)
         if (identify.imageSize.isValid())
             setImageDimensions(identify.imageSize, false);
 
-        // A RAW picture is always uncalibrated. */
+        // A RAW image is always uncalibrated. */
         setImageColorWorkSpace(WORKSPACE_UNCALIBRATED, false);
 
         return true;
