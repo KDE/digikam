@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2005-02-11
- * Description : a plugin to apply Distortion FX to a picture.
+ * Description : a plugin to apply Distortion FX to an image.
  *
  * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
