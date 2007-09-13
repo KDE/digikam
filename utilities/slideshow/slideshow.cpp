@@ -435,7 +435,7 @@ void SlideShow::updatePixmap()
             p.setPen(Qt::white);
             p.drawText(0, 0, d->pixmap.width(), d->pixmap.height(),
                        Qt::AlignCenter|Qt::TextWordWrap, 
-                       i18n("Cannot display picture\n\"%1\"",
+                       i18n("Cannot display image\n\"%1\"",
                        d->currentImage.fileName()));
         }
     }
