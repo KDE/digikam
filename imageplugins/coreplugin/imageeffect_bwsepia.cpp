@@ -350,7 +350,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     item = new ListBoxBWPreviewItem(m_bwFilters, 
                                      i18n("No Lens Filter"), m_previewPixmapFactory, type);
     whatsThis->add( item, i18n("<b>No Lens Filter</b>:"
-                               "<p>Do not apply a lens filter to render the picture.</p>"));
+                               "<p>Do not apply a lens filter to render the image.</p>"));
     
     ++type;
     item = new ListBoxBWPreviewItem(m_bwFilters, i18n("Green Filter"), m_previewPixmapFactory, type);
