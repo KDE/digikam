@@ -214,7 +214,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     d->applyBtn = new QPushButton(i18n("Apply"), buttonsBox);
     d->applyBtn->setIcon(SmallIcon("ok"));
     d->applyBtn->setEnabled(false);
-    d->applyBtn->setToolTip( i18n("Apply all changes to pictures"));
+    d->applyBtn->setToolTip( i18n("Apply all changes to images"));
     buttonsBox->setStretchFactor(d->applyBtn, 10);
 
     d->moreButton = new QPushButton(i18n("More"), buttonsBox);
@@ -402,19 +402,19 @@ void ImageDescEditTab::slotChangingItems()
         if (changedFields == 1)
         {
             if (d->hub.commentChanged())
-                text = i18np("<qt><p>You have edited the comment of the picture. ",
+                text = i18np("<qt><p>You have edited the comment of the image. ",
                              "<qt><p>You have edited the comment of %n pictures. ",
                              d->currInfos.count());
             else if (d->hub.dateTimeChanged())
-                text = i18np("<qt><p>You have edited the date of the picture. ",
+                text = i18np("<qt><p>You have edited the date of the image. ",
                              "<qt><p>You have edited the date of %n pictures. ",
                              d->currInfos.count());
             else if (d->hub.ratingChanged())
-                text = i18np("<qt><p>You have edited the rating of the picture. ",
+                text = i18np("<qt><p>You have edited the rating of the image. ",
                              "<qt><p>You have edited the rating of %n pictures. ",
                              d->currInfos.count());
             else if (d->hub.tagsChanged())
-                text = i18np("<qt><p>You have edited the tags of the picture. ",
+                text = i18np("<qt><p>You have edited the tags of the image. ",
                              "<qt><p>You have edited the tags of %n pictures. ",
                              d->currInfos.count());
 
@@ -422,7 +422,7 @@ void ImageDescEditTab::slotChangingItems()
         }
         else
         {
-            text = i18np("<qt><p>You have edited the metadata of the picture: </p><ul>",
+            text = i18np("<qt><p>You have edited the metadata of the image: </p><ul>",
                          "<qt><p>You have edited the metadata of %n pictures: </p><ul>",
                          d->currInfos.count());
 
@@ -468,7 +468,7 @@ void ImageDescEditTab::slotApplyAllChanges()
 
     bool progressInfo = (d->currInfos.count() > 1);
     emit signalProgressBarMode(StatusProgressBar::ProgressBarMode,
-                               i18n("Applying changes to pictures. Please wait..."));
+                               i18n("Applying changes to images. Please wait..."));
     MetadataWriteSettings writeSettings = MetadataHub::defaultWriteSettings();
 
     // debugging - use this to indicate reentry from event loop (kapp->processEvents)

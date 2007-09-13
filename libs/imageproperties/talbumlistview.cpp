@@ -413,7 +413,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
         if (assign)
         {
             emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
-                                       i18n("Assign tag to pictures. Please wait..."));
+                                       i18n("Assign tag to images. Please wait..."));
 
             int i=0;
             {
