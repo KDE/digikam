@@ -230,7 +230,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
                 "of the image to be compressed or expanded to fill the gamut of the destination media, "
                 "so that gray balance is preserved but colorimetric accuracy may not be preserved.<br>"
                 "In other words, if certain colors in an image fall outside of the range of colors that "
-                "the output device can render, the picture intent will cause all the colors in the image "
+                "the output device can render, the image intent will cause all the colors in the image "
                 "to be adjusted so that the every color in the image falls within the range that can be "
                 "rendered and so that the relationship between colors is preserved as much as possible.<br>"
                 "This intent is most suitable for display of photographs and images, and is the default "
@@ -314,10 +314,10 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     QPushButton *inProfilesInfo = new QPushButton(i18n("Info..."), inProfiles);
 
-    QGroupBox *pictureInfo = new QGroupBox(i18n("Picture Information"), inProfiles);
+    QGroupBox *pictureInfo = new QGroupBox(i18n("Camera information"), inProfiles);
     QGridLayout *infoGrid  = new QGridLayout(pictureInfo);
 
-    QLabel *make1              = new QLabel(i18n("Make:"), pictureInfo);
+    QLabel *make1              = new QLabel(i18n("Brand:"), pictureInfo);
     KSqueezedTextLabel *make2  = new KSqueezedTextLabel(0, pictureInfo);
     QLabel *model1             = new QLabel(i18n("Model:"), pictureInfo);
     KSqueezedTextLabel *model2 = new KSqueezedTextLabel(0, pictureInfo);
