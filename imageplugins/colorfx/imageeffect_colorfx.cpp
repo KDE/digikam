@@ -80,7 +80,7 @@ ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent)
     KAboutData *about = new KAboutData("digikam",
                             I18N_NOOP("Color Effects"),
                             digikam_version,
-                            I18N_NOOP("A digiKam plugin to apply special color effects on a picture."),
+                            I18N_NOOP("A digiKam plugin to apply special color effects on an image."),
                             KAboutData::License_GPL,
                             "(c) 2004-2005, Renchi Raju\n(c) 2006-2007, Gilles Caulier",
                             0,
