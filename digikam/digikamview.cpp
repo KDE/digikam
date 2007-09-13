@@ -1202,7 +1202,7 @@ void DigikamView::slideShow(ImageInfoList &infoList)
     int     i = 0;
     float cnt = (float)infoList.count();
     emit signalProgressBarMode(StatusProgressBar::CancelProgressBarMode, 
-                               i18n("Preparing slideshow from %1 pictures. Please wait...")
+                               i18n("Preparing slideshow of %1 images. Please wait...")
 			       .arg(infoList.count()));
 
     DMetadata         meta;
