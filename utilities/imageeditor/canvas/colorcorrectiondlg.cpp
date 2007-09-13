@@ -80,9 +80,9 @@ ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
     grid->setSpacing(KDialog::spacingHint());
     page->setLayout(grid);        
 
-    QLabel *originalTitle         = new QLabel(i18n("Original Picture:"), page);
+    QLabel *originalTitle         = new QLabel(i18n("Original Image:"), page);
     QLabel *previewOriginal       = new QLabel(page);
-    QLabel *targetTitle           = new QLabel(i18n("Corrected Picture:"), page);
+    QLabel *targetTitle           = new QLabel(i18n("Corrected Image:"), page);
     QLabel *previewTarget         = new QLabel(page);
     QLabel *logo                  = new QLabel(page);
     QLabel *message               = new QLabel(page);
@@ -96,7 +96,7 @@ ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
     
     if (m_iccTrans->embeddedProfile().isEmpty())
     {
-        message->setText(i18n("<p>This picture has not been assigned any color profile.</p>"
+        message->setText(i18n("<p>This image has not been assigned any color profile.</p>"
                               "<p>Do you want to convert it to your workspace color profile?</p>"));
                               
         line->hide();
@@ -106,7 +106,7 @@ ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
     }
     else
     {
-        message->setText(i18n("<p>This picture has been assigned a color profile that does not "
+        message->setText(i18n("<p>This image has been assigned a color profile that does not "
                               "match with your default workspace color profile.</p>"
                               "<p>Do you want to convert it to your workspace color profile?</p>"));
     }
