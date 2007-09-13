@@ -826,7 +826,7 @@ void EditorWindow::applyStandardSettings()
     // JPEG2000 LossLess setting.
     m_IOFileSettings->JPEG2000LossLess    = group.readEntry("JPEG2000LossLess", true);
 
-    // -- RAW pictures decoding settings ------------------------------------------------------
+    // -- RAW images decoding settings ------------------------------------------------------
 
     // If digiKam Color Management is enable, no need to correct color of decoded RAW image,
     // else, sRGB color workspace will be used.
@@ -1198,7 +1198,7 @@ void EditorWindow::slotLoadingFinished(const QString& filename, bool success)
 
 void EditorWindow::slotNameLabelCancelButtonPressed()
 {
-    // If we saving a picture...
+    // If we saving an image...
     if (m_savingContext->savingState != SavingContextContainer::SavingStateNone)
     {
         m_savingContext->abortingSaving = true;
