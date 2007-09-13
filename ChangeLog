@@ -1568,7 +1568,7 @@ v0.9.2-beta2 - 2007-05-28
 	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.cpp,
 	  trunk/extragear/graphics/digikam/utilities/lighttable/lighttablewindow.h:
 	  digikam from trunk : Light Table: check if an item inserted in
-	  Light Table using Drag & Drop is really a picture.
+	  Light Table using Drag & Drop is really an image.
 
 2007-05-14 12:17  cgilles
 
@@ -3497,7 +3497,7 @@ v0.9.2-beta1 - 2007-05-04
 	  tool. It not yet suitable as well because the tool do not provide
 	  yet a comparison method between 2 images.
 	  
-	  The Light Table is a pictures container witch can handle items
+	  The Light Table is an images container witch can handle items
 	  from everywhere on Albums library. Just use the Album Gui pop-up
 	  menu to insert an item in Light Table. The Light table has a
 	  thumbar on the right. when you click on one item, it's displayed
@@ -6940,7 +6940,7 @@ v0.9.2-beta1 - 2007-05-04
 	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.cpp,
 	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.h:
 	  digikam from trunk : now image editor status bar show the current
-	  mouse position over the picture when user choose a selection in
+	  mouse position over the image when user choose a selection in
 	  image.
 
 2007-03-23 07:35  cgilles
@@ -8904,7 +8904,7 @@ v0.9.2-beta1 - 2007-05-04
 	  a by change here (:=)) !!!
 	  
 	  The first new feature is to add a depency to libkdcraw shared
-	  library to decode RAW pictures instead to use a dcraw part from
+	  library to decode RAW images instead to use a dcraw part from
 	  digiKam core.
 	  libkdcraw include dcraw 8.60 instead the old dcraw 8.41 from
 	  digiKam core. It support more recent camera RAW file formats and
@@ -10203,7 +10203,7 @@ v0.9.1-beta1 - 11-Feb-2007
 	  Hi guys, you can slide your RAW files very fast like this !!!
 	  
 	  This slide show tool is a simplified version of kipi-plugins
-	  SlideShow tool. No effect, no OpenGL. Just the picture slided on
+	  SlideShow tool. No effect, no OpenGL. Just the image slided on
 	  the screen.
 	  
 	  But the must important feature is to use Image Preview : RAW
@@ -10288,7 +10288,7 @@ v0.9.1-beta1 - 11-Feb-2007
 2007-02-09 07:01  cgilles
 
 	* trunk/extragear/graphics/digikam/libs/dmetadata/dmetadata.cpp: a
-	  RAW picture is always uncalibrated
+	  RAW image is always uncalibrated
 
 2007-02-09 06:55  cgilles
 
@@ -10960,7 +10960,7 @@ v0.9.1-beta1 - 11-Feb-2007
 	  trunk/extragear/graphics/digikam/digikam/digikamappprivate.h:
 	  digiKam from trunk : from Album GUI, Image/Preview action is a
 	  toggle action type. like this in toolbar, it's easy to change/see
-	  the mode used to display a picture.
+	  the mode used to display an image.
 
 2007-02-01 12:57  cgilles
 
@@ -11544,7 +11544,7 @@ v0.9.1-beta1 - 11-Feb-2007
 	  trunk/extragear/graphics/digikam/utilities/batch/batchsyncmetadata.h,
 	  trunk/extragear/graphics/digikam/utilities/batch/imageinfojob.cpp,
 	  trunk/extragear/graphics/digikam/utilities/batch/imageinfojob.h:
-	  digikam from trunk : New batch tool to sync all pictures metadata
+	  digikam from trunk : New batch tool to sync all images metadata
 	  (EXIF/IPTC) with digiKam database contents (comments, tags,
 	  rating, date, etc...)
 	  
@@ -11774,7 +11774,7 @@ v0.9.1-beta1 - 11-Feb-2007
 	  trunk/extragear/graphics/digikam/utilities/setup/setupgeneral.h:
 	  digiKam from trunk : New option in Album Setup dialog page to
 	  choose the right action to do when user right click on Album Icon
-	  View if current item is a picture :
+	  View if current item is an image :
 	  
 	  - Show the embeded image preview (default).
 	  - Load the image in editor.
@@ -12313,7 +12313,7 @@ v0.9.1-beta1 - 11-Feb-2007
 	  photograph : Over and Under exposed pixel indicators.
 	  
 	  These tools render the over-exposed (pure white) and the
-	  under-exposed (pure black) over the picture.
+	  under-exposed (pure black) over the image.
 	  The colorize colors can be customized in Setup Image Editor.
 	  You can use F10 and F11 keys to toogle on/off these options.
 	  On the right corner of the status bar, there are 2 flags to show
@@ -13136,7 +13136,7 @@ v0.9.1-beta1 - 11-Feb-2007
 2007-01-03 22:32  cgilles
 
 	* trunk/extragear/graphics/digikam/libs/imageproperties/imagepropertiestab.cpp:
-	  digikam from trunk : with RAW pictures, image properties sidebar
+	  digikam from trunk : with RAW images, image properties sidebar
 	  must show than "Color Mode" is "Uncalibrated" not "Unaviable".
 
 2007-01-03 21:48  cgilles
@@ -13299,7 +13299,7 @@ v0.9.1-beta1 - 11-Feb-2007
 	  Technicals info to photographers:
 	  --------------------------------
 	  
-	  This picture have been taken from French Pyrénnées during my
+	  This image have been taken from French Pyrénnées during my
 	  Christmas holidays.
 	  It a view of "Pic du Midi" taken with my Dynax 5D in RAW mode
 	  using a 24/85mm F3.5-4.5 lens and a circular polarizer filter.
@@ -14822,7 +14822,7 @@ v0.9.0-rc1 - 21-Nov-2006
 	* digikam/NEWS: update
 
 	* digikam/showfoto/showfoto.cpp: Showfoto from trunk : no need a
-	  Qtimer to dispatch change when removing a picture from the list.
+	  Qtimer to dispatch change when removing an image from the list.
 	  Call directly the slot instead. BUG: 137612
 
 2006-11-19 08:42 +0000 [r606083]  cgilles
@@ -16459,7 +16459,7 @@ v0.9.0-beta2 - 09/09/2006
       
       trunk/extragear/graphics/digikam/utilities/setup/setuptooltip.h:
       digiKam from trunk : new Setup album item tooltip section to
-      optimize the informations to show over the picture using the
+      optimize the informations to show over the image using the
       pop-up tool tip window. Each item to show can be set in this new
       setup dialog tab.
       
@@ -17521,10 +17521,10 @@ v0.9.0-beta2 - 09/09/2006
       digiKam now store in the camera XML config file the "last camera
       used date". Each camera are tagged with a date value between
       camera gui sessions if some pictures have been donwloaded to
-      computer. If no pictures are donloaded with camera gui, the date
+      computer. If no images are donloaded with camera gui, the date
       is unchanged.
       
-      In fact, all picture dates in the camera witch are most recent
+      In fact, all image dates in the camera witch are most recent
       than the "last camera used date" will be displayed with a little
       yellow start to indentify the most recent pictures taken with
       the camera.
@@ -17532,7 +17532,7 @@ v0.9.0-beta2 - 09/09/2006
       To use properlly this little feature, you need to set the right
       date in your camera !
       
-      Of course, this way cannot be used to identify the pictures
+      Of course, this way cannot be used to identify the images
       "already downloaded" from camera to computer. For that, we need
       to have a full camera activity log somewhere (perhaps using the
       digiKam database).
@@ -19786,7 +19786,7 @@ v0.9.0-beta1 - 20/07/2006
 2006-07-05 14:53  cgilles
 
 	* trunk/extragear/graphics/digikam/libs/widgets/imageplugins/imageregionwidget.cpp:
-	  set the right background color when we use small pictures
+	  set the right background color when we use small images
 
 2006-07-05 14:23  cgilles
 
@@ -19797,7 +19797,7 @@ v0.9.0-beta1 - 20/07/2006
 
 	* trunk/extragear/graphics/digikam/libs/widgets/imageplugins/imageregionwidget.cpp:
 	  do not set "no background" to the content widget else
-	  background will not be re-generated properly with small pictures
+	  background will not be re-generated properly with small images
 
 2006-07-05 12:15  cgilles
 
@@ -19807,7 +19807,7 @@ v0.9.0-beta1 - 20/07/2006
 	  picture is selected in main interface.
 	  
 	  Note : with the old implementation, the bug can be reproduce
-	  like this : after to have selected a picture with metadata, if
+	  like this : after to have selected an image with metadata, if
 	  you select a new picture without metadata, nothing will be
 	  displayed. But if you change the level of details, the preview
 	  picture metadata will be displayed !
@@ -20127,13 +20127,13 @@ v0.9.0-beta1 - 20/07/2006
 	* trunk/extragear/graphics/digikam/libs/dimg/dimgloader.cpp,
 	  trunk/extragear/graphics/digikam/libs/dimg/dimgloader.h: digikam
 	  from trunk : BUGFIX : fix a crash with DImg::ImageLoader if used
-	  into cameragui during RAW picture thumbs rendering.
+	  into cameragui during RAW image thumbs rendering.
 
 2006-06-29 11:43  cgilles
 
 	* trunk/extragear/graphics/digikam/libs/dimg/loaders/rawloader.cpp:
 	  digikam from trunk : BUGFIX : fix a crash with
-	  DImg::ImageLoader if used into cameragui during RAW picture
+	  DImg::ImageLoader if used into cameragui during RAW image
 	  thumbs rendering.
 	  
 	  Since DImage::RawLoader use an observer to get loading progress
@@ -20263,7 +20263,7 @@ v0.9.0-beta1 - 20/07/2006
 
 	* trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/dimginterface.cpp:
 	  digikam from trunk : bugfix : if an embedded icc profile have
-	  been found in a picture, no need to re-apply the input profile
+	  been found in an image, no need to re-apply the input profile
 
 2006-06-27 13:01  cgilles
 
@@ -20704,7 +20704,7 @@ v0.9.0-beta1 - 20/07/2006
 
 	* trunk/extragear/graphics/digikam/libs/dimg/filters/icctransform.cpp:
 	  digikam from trunk : fix inverted input and output profiles
-	  when and embedded profile is found into a picture
+	  when and embedded profile is found into an image
 
 2006-06-22 06:02  cgilles
 
@@ -21360,7 +21360,7 @@ v0.9.0-beta1 - 20/07/2006
 	  trunk/extragear/graphics/digikam/libs/jpegutils/jpegmetadata.cpp,
 	  trunk/extragear/graphics/digikam/libs/jpegutils/jpegmetadata.h:
 	  digikam from trunk : DMetadata class is now th universal way to
-	  extract metadata from a picture. JpegUtils::JPEGMetadata method
+	  extract metadata from an image. JpegUtils::JPEGMetadata method
 	  is now obsolete.
 
 2006-06-09 14:10  cgilles
@@ -23172,7 +23172,7 @@ v0.9.0-beta1 - 20/07/2006
 	  This dialog remplace the simple KMessageBox (witch one give no
 	  feedback to user) . We have now 2 image previews to compare
 	  original and target before to process the ICC workspace
-	  conversion. This is important when user load a RAW picture on a
+	  conversion. This is important when user load a RAW image on a
 	  slow computer where Raw decoding can be long : if the ICC
 	  workspace correction isn't correct, no need to close editor and
 	  re-load picture to select the right option (:=)))...
@@ -23713,7 +23713,7 @@ v0.9.0-beta1 - 20/07/2006
 	  
 	  trunk/extragear/graphics/digikam/libs/imageproperties/imagepropertiessidebarcamgui.cpp:
 	  digikam from trunk : finalize camera item properties side bar
-	  tab: if your camera can provide Exif informations from a picture
+	  tab: if your camera can provide Exif informations from an image
 	  (Gphoto or UMS), we will display Photograph informations like in
 	  image properties sidebar tab from main interface and image
 	  editor.
@@ -26353,7 +26353,7 @@ v0.9.0-beta1 - 20/07/2006
 	  digikam from trunk : Writing digiKam comments into photograph
 	  !!!
 	  
-	  - DMetadata : new method to write comments into pictures using
+	  - DMetadata : new method to write comments into images using
 	  Exiv2. The string is writte as image comments (JPEG COM for
 	  example), Exif comments, and IPTC comments.
 	  
@@ -37640,13 +37640,13 @@ v0.8.2   			10-Jul-2006
 2006-07-05 14:55 +0000 [r558548]  cgilles
 
 	* digikam/libs/widgets/imageregionwidget.cpp: set the right
-	  background color when we use small pictures
+	  background color when we use small images
 
 2006-07-05 13:40 +0000 [r558497]  cgilles
 
 	* digikam/libs/widgets/imageregionwidget.cpp: do not set "no
 	  background" to the content widget else background will not be
-	  re-generated properly with small pictures
+	  re-generated properly with small images
 
 2006-07-04 19:10 +0000 [r558143]  cgilles
 
