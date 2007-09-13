@@ -113,7 +113,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
     d->creditEdit->setValidator(asciiValidator);
     d->creditEdit->setMaxLength(32);
     label3->setBuddy(d->creditEdit);
-    d->creditEdit->setWhatsThis( i18n("<p>Set the default provider identification of the picture, "
+    d->creditEdit->setWhatsThis( i18n("<p>Set the default provider identification of the image, "
                                       "not necessarily the owner/creator. This field is limited "
                                       "to 32 ASCII characters."));
 
@@ -123,7 +123,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
     d->sourceEdit->setMaxLength(32);
     label4->setBuddy(d->sourceEdit);
     d->sourceEdit->setWhatsThis( i18n("<p>Set the default original owner identification of the intellectual "
-                                      "content of the picture. This could be an agency, a member of an agency or "
+                                      "content of the image. This could be an agency, a member of an agency or "
                                       "an individual photographer name. This field is limited "
                                       "to 32 ASCII characters."));
 
@@ -132,7 +132,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
     d->copyrightEdit->setValidator(asciiValidator);
     d->copyrightEdit->setMaxLength(128);
     label5->setBuddy(d->copyrightEdit);
-    d->copyrightEdit->setWhatsThis( i18n("<p>Set the default copyright notice of the pictures. "
+    d->copyrightEdit->setWhatsThis( i18n("<p>Set the default copyright notice of the images. "
                                          "This field is limited to 128 ASCII characters."));
 
     grid2->addWidget(label3, 0, 0, 1, 1);
