@@ -71,7 +71,7 @@ CameraFolderDialog::CameraFolderDialog(QWidget *parent, CameraIconView *cameraVi
     logo->setPixmap(iconLoader->loadIcon("digikam", K3Icon::NoGroup, 128));
 
     message->setText(i18n("<p>Please select the camera folder "
-                          "where you want to upload the pictures.</p>"));
+                          "where you want to upload the images.</p>"));
     message->setWordWrap(true);
 
     grid->addWidget(logo, 0, 0, 1, 1);

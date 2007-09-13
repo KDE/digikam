@@ -181,7 +181,7 @@ void CameraUI::setupUserArea()
     d->renameCustomizer  = new RenameCustomizer(d->advBox, d->cameraTitle);
     d->view->setRenameCustomizer(d->renameCustomizer);
 
-    d->advBox->setWhatsThis( i18n("<p>Set how digiKam will rename picture files as they are downloaded."));
+    d->advBox->setWhatsThis( i18n("<p>Set how digiKam will rename file files as they are downloaded."));
 
     d->advBox->insertItem(CameraUIPriv::RENAMEFILEPAGE, d->renameCustomizer, 
                           SmallIcon("file-import"), i18n("File Renaming Options"));
@@ -1024,10 +1024,10 @@ void CameraUI::slotUpload()
 
     QStringList patternList = KImageIO::pattern(KImageIO::Reading).split('\n');
 
-    // All Pictures from list must been always the first entry given by KDE API
+    // All Images from list must been always the first entry given by KDE API
     QString allPictures = patternList[0];
 
-    // Add RAW file format to All Pictures" type mime and remplace current.
+    // Add RAW file format to All Images" type mime and remplace current.
     allPictures.insert(allPictures.indexOf("|"), QString(raw_file_extentions));
     patternList.removeAll(patternList[0]);
     patternList.prepend(allPictures);

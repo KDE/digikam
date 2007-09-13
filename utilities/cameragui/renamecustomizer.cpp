@@ -232,7 +232,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     d->startIndexLabel = new QLabel(i18n("Start Index:"), d->renameCustomBox);
     d->startIndexInput = new KIntNumInput(1, d->renameCustomBox);
     d->startIndexInput->setRange(1, 900000, 1, false);
-    d->startIndexInput->setWhatsThis(i18n("<p>Set the starting index value used to rename picture "
+    d->startIndexInput->setWhatsThis(i18n("<p>Set the starting index value used to rename file "
                                           "files with a sequence number."));
 
     renameCustomBoxLayout->addWidget(prefixLabel, 0, 1, 1, 1);

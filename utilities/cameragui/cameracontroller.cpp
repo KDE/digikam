@@ -353,7 +353,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
         }
         case(CameraCommand::gp_capture):
         {
-            sendInfo(i18n("Capture picture..."));
+            sendInfo(i18n("Capture image..."));
             GPItemInfo itemInfo;
             d->camera->capture(itemInfo);
             emit signalUploaded(itemInfo);
