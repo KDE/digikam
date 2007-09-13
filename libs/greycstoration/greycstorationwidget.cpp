@@ -157,7 +157,7 @@ GreycstorationWidget::GreycstorationWidget(QTabWidget *parent)
     d->sigmaInput = new KDoubleNumInput(d->generalPage);
     d->sigmaInput->setPrecision(2);
     d->sigmaInput->setRange(0.0, 10.0, 0.1, true);
-    d->sigmaInput->setWhatsThis( i18n("<p>This value controls the smoothing regularity of the picture. "
+    d->sigmaInput->setWhatsThis( i18n("<p>This value controls the evenness of smoothing to the image. "
                                       "Do not use a high value here, or the "
                                       "target image will be completely blurred."));
 
@@ -165,7 +165,7 @@ GreycstorationWidget::GreycstorationWidget(QTabWidget *parent)
     d->iterationInput = new KIntNumInput(d->generalPage);
     d->iterationInput->setRange(1, 5000, 1, true);
     d->iterationInput->setWhatsThis( i18n("<p>Sets the number of times the filter is applied over "
-                                             "the picture."));
+                                             "the image."));
 
     d->alphaLabel = new QLabel(i18n("Noise:"), d->generalPage);
     d->alphaInput = new KDoubleNumInput(d->generalPage);
@@ -230,10 +230,10 @@ GreycstorationWidget::GreycstorationWidget(QTabWidget *parent)
     d->interpolationBox->insertItem( GreycstorationSettings::Linear,          i18n("Linear")           );
     d->interpolationBox->insertItem( GreycstorationSettings::RungeKutta,      i18n("Runge-Kutta")      );
     d->interpolationBox->setWhatsThis( i18n("<p>Select the right interpolation method to set "
-                                            "the picture quality."));
+                                            "the image quality."));
 
     d->fastApproxCBox = new QCheckBox(i18n("Fast approximation"), d->advancedPage);
-    d->fastApproxCBox->setWhatsThis( i18n("<p>Enable fast approximation to render picture."));
+    d->fastApproxCBox->setWhatsThis( i18n("<p>Enable fast approximation to render image."));
 
     grid2->addWidget(d->daLabel, 0, 0, 1, 1);
     grid2->addWidget(d->daInput, 0, 1, 1, 1);
