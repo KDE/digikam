@@ -558,7 +558,7 @@ void DigikamApp::setupActions()
                                     actionCollection(),
                                     "album_importFolder");
 
-    d->propsEditAction = new KAction( i18n("Edit Album Properties..."),
+    d->propsEditAction = new KAction( i18n("Album Properties..."),
                                     "albumfolder-properties",
                                     0,
                                     d->view,
@@ -837,7 +837,7 @@ void DigikamApp::setupActions()
     d->fullScreenAction = KStdAction::fullScreen(this, SLOT(slotToggleFullScreen()),
                                                  actionCollection(), this, "full_screen");
 #else
-    d->fullScreenAction = new KToggleAction(i18n("FullScreen Mode"),
+    d->fullScreenAction = new KToggleAction(i18n("Full Screen"),
                                    "window_fullscreen",
                                    CTRL+SHIFT+Key_F,
                                    this,

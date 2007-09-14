@@ -279,7 +279,7 @@ void AlbumFolderView::slotAlbumAdded(Album *album)
     AlbumFolderViewItem* parent = findParent(palbum, failed);
     if (failed)
     {
-        DWarning() << k_funcinfo << " Failed to find parent for Album "
+        DWarning() << k_funcinfo << " Failed to find Album parent "
                    << palbum->url() << endl;
         return;
     }
@@ -456,7 +456,7 @@ void AlbumFolderView::slotContextMenu(QListViewItem *listitem, const QPoint &, i
     if(item && item->parent())
     {
         popmenu.insertItem(SmallIcon("pencil"), i18n("Rename..."), 14);
-        popmenu.insertItem(SmallIcon("albumfolder-properties"), i18n("Edit Album Properties..."), 11);
+        popmenu.insertItem(SmallIcon("albumfolder-properties"), i18n("Album Properties..."), 11);
         popmenu.insertItem(SmallIcon("reload_page"), i18n("Reset Album Icon"), 13);
         popmenu.insertSeparator();
 
