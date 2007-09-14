@@ -1016,11 +1016,6 @@ void DigikamApp::slotAlbumSelected(bool val)
         d->newAction->setEnabled(false);
         d->addFoldersAction->setEnabled(false);
 
-        foreach(QAction *action, d->kipiFileActionsImport)
-        {
-            action->setEnabled(false);
-        }
-
         foreach(QAction *action, d->kipiFileActionsExport)
         {
             action->setEnabled(false);
@@ -1035,11 +1030,6 @@ void DigikamApp::slotAlbumSelected(bool val)
         d->openInKonquiAction->setEnabled(true);
         d->newAction->setEnabled(true);
         d->addFoldersAction->setEnabled(true);
-
-        foreach(QAction *action, d->kipiFileActionsImport)
-        {
-            action->setEnabled(true);
-        }
 
         foreach(QAction *action, d->kipiFileActionsExport)
         {
@@ -1067,11 +1057,6 @@ void DigikamApp::slotAlbumSelected(bool val)
             d->addFoldersAction->setEnabled(false);
         }
 
-        foreach(QAction *action, d->kipiFileActionsImport)
-        {
-            action->setEnabled(false);
-        }
-
         foreach(QAction *action, d->kipiFileActionsExport)
         {
             action->setEnabled(true);
@@ -1093,11 +1078,6 @@ void DigikamApp::slotTagSelected(bool val)
         d->deleteTagAction->setEnabled(true);
         d->editTagAction->setEnabled(true);
 
-        foreach(QAction *action, d->kipiFileActionsImport)
-        {
-            action->setEnabled(false);
-        }
-
         foreach(QAction *action, d->kipiFileActionsExport)
         {
             action->setEnabled(true);
@@ -1107,11 +1087,6 @@ void DigikamApp::slotTagSelected(bool val)
     {
         d->deleteTagAction->setEnabled(false);
         d->editTagAction->setEnabled(false);
-
-        foreach(QAction *action, d->kipiFileActionsImport)
-        {
-            action->setEnabled(false);
-        }
 
         foreach(QAction *action, d->kipiFileActionsExport)
         {
