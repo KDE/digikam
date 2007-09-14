@@ -455,17 +455,6 @@ void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, 
             }
         }
 
-        // Add All Import Actions
-        const QList<QAction*> importActions = DigikamApp::getinstance()->menuImportActions();
-        if(!importActions.isEmpty())
-        {
-            foreach(QAction *action, importActions)
-            {
-                menuImport.addAction(action);
-            }
-            popmenu.addMenu(&menuImport);
-        }
-
         // Add All Export Actions
         const QList<QAction*> exportActions = DigikamApp::getinstance()->menuExportActions();
         if(!exportActions.isEmpty())
@@ -488,8 +477,7 @@ void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, 
             popmenu.addMenu(&menuKIPIBatch);
         }
 
-        if(!albumActions.isEmpty() || !batchActions.isEmpty() ||
-           !importActions.isEmpty())
+        if(!albumActions.isEmpty() || !batchActions.isEmpty())
         {
             popmenu.addSeparator();
         }

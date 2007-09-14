@@ -293,15 +293,6 @@ const QList<QAction*>& DigikamApp::menuAlbumActions()
     return d->kipiAlbumActions;
 }
 
-QList<QAction*> DigikamApp::menuImportActions()
-{
-    QList<QAction*> importMenu;
-    importMenu = d->kipiFileActionsImport;
-    importMenu.append( d->addFoldersAction );
-    importMenu.append( d->addImagesAction );
-    return importMenu;
-}
-
 const QList<QAction*>& DigikamApp::menuExportActions()
 {
     return d->kipiFileActionsExport;
@@ -457,23 +448,23 @@ void DigikamApp::setupAccelerators()
 
 void DigikamApp::setupActions()
 {
-    d->importMenuAction = new KActionMenu(i18n("I&mport"), this);
-    d->importMenuAction->setDelayed(false);
-    actionCollection()->addAction("import_menu", d->importMenuAction);
-
     d->solidCameraActionGroup = new QActionGroup(this);
-    connect(d->solidCameraActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(slotOpenSolidCamera(QAction*)));
+    connect(d->solidCameraActionGroup, SIGNAL(triggered(QAction*)), 
+            this, SLOT(slotOpenSolidCamera(QAction*)));
 
     d->solidUsmActionGroup = new QActionGroup(this);
-    connect(d->solidUsmActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(slotOpenSolidUsmDevice(QAction*)));
+    connect(d->solidUsmActionGroup, SIGNAL(triggered(QAction*)), 
+            this, SLOT(slotOpenSolidUsmDevice(QAction*)));
 
     d->manualCameraActionGroup = new QActionGroup(this);
-    connect(d->manualCameraActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(slotOpenManualCamera(QAction*)));
+    connect(d->manualCameraActionGroup, SIGNAL(triggered(QAction*)), 
+            this, SLOT(slotOpenManualCamera(QAction*)));
 
     // -----------------------------------------------------------------
 
     d->themeMenuAction = new KSelectAction(i18n("&Themes"), this);
-    connect(d->themeMenuAction, SIGNAL(triggered(const QString&)), this, SLOT(slotChangeTheme(const QString&)));
+    connect(d->themeMenuAction, SIGNAL(triggered(const QString&)), 
+            this, SLOT(slotChangeTheme(const QString&)));
     actionCollection()->addAction("theme_menu", d->themeMenuAction);
 
     // -----------------------------------------------------------------
@@ -1223,29 +1214,25 @@ void DigikamApp::cameraAutoDetect()
 
 void DigikamApp::loadCameras()
 {
-    d->importMenuAction->menu()->addMenu(d->cameraSolidMenu);
     d->cameraSolidMenu->menuAction()->setText(i18n("Digital Cameras"));
     d->cameraSolidMenu->menuAction()->setIcon(KIcon("camera"));
-
-    d->importMenuAction->menu()->addMenu(d->usbMediaMenu);
     d->usbMediaMenu->menuAction()->setText(i18n("USB Storage Devices"));
     d->usbMediaMenu->menuAction()->setIcon(KIcon("drive-removable-media-usb"));
-
-    d->importMenuAction->menu()->addMenu(d->cardReaderMenu);
     d->cardReaderMenu->menuAction()->setText(i18n("Card Readers"));
     d->cardReaderMenu->menuAction()->setIcon(KIcon("media-flash-smart-media"));
-
-    d->importMenuAction->menu()->addMenu(d->manuallyAddedCamerasMenu);
     d->manuallyAddedCamerasMenu->menuAction()->setText(i18n("Cameras Added Manually"));
     d->manuallyAddedCamerasMenu->menuAction()->setIcon(KIcon("camera-test"));
+
+    actionCollection()->addAction("camera_solid", d->cameraSolidMenu->menuAction());
+    actionCollection()->addAction("usb_media", d->usbMediaMenu->menuAction());
+    actionCollection()->addAction("card_reader", d->cardReaderMenu->menuAction());
+    actionCollection()->addAction("camera_addedmanually", d->manuallyAddedCamerasMenu->menuAction());
 
     KAction *cameraAction = new KAction(i18n("Add Camera..."), this);
     connect(cameraAction, SIGNAL(triggered()), this, SLOT(slotSetupCamera()));
     actionCollection()->addAction("camera_add", cameraAction);
     d->addCameraSeparatorAction = d->manuallyAddedCamerasMenu->addSeparator();
     d->manuallyAddedCamerasMenu->addAction(cameraAction);
-
-    d->importMenuAction->menu()->addSeparator();
 
     // -----------------------------------------------------------------
 
@@ -1254,7 +1241,6 @@ void DigikamApp::loadCameras()
     d->addImagesAction->setWhatsThis(i18n("Adds new items to an Album."));
     connect(d->addImagesAction, SIGNAL(triggered()), this, SLOT(slotImportAddImages()));
     actionCollection()->addAction("import_addImages", d->addImagesAction);
-    d->importMenuAction->menu()->addAction(d->addImagesAction);
 
     // -----------------------------------------------------------------
 
@@ -1262,7 +1248,6 @@ void DigikamApp::loadCameras()
     d->addFoldersAction->setWhatsThis(i18n("Adds new folders to Albums library."));    
     connect(d->addFoldersAction, SIGNAL(triggered()), this, SLOT(slotImportAddFolders()));
     actionCollection()->addAction("import_addFolders", d->addFoldersAction);
-    d->importMenuAction->menu()->addAction(d->addFoldersAction);
 
     // -- fill manually added cameras ----------------------------------
 
@@ -1274,6 +1259,7 @@ void DigikamApp::loadCameras()
 
     connect(Solid::DeviceNotifier::instance(), SIGNAL(deviceAdded(const QString &)),
             this, SLOT(slotSolidDeviceChanged(const QString &)));
+
     connect(Solid::DeviceNotifier::instance(), SIGNAL(deviceRemoved(const QString &)),
             this, SLOT(slotSolidDeviceChanged(const QString &)));
 }

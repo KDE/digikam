@@ -131,7 +131,6 @@ public:
         tipAction                            = 0;
         kipiHelpAction                       = 0;
         donateMoneyAction                    = 0;
-        importMenuAction                     = 0;
         addCameraSeparatorAction             = 0;
         themeMenuAction                      = 0;
         forwardSignalMapper                  = 0;
@@ -242,7 +241,6 @@ public:
     // Application Actions
     KAction               *kipiHelpAction;
     KAction               *donateMoneyAction;
-    KActionMenu           *importMenuAction;
     KSelectAction         *themeMenuAction;
     QAction               *addCameraSeparatorAction;
     QAction               *quitAction;
