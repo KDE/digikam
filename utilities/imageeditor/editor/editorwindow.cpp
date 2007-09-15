@@ -1219,7 +1219,12 @@ void EditorWindow::slotSave()
     {
         QFileInfo fi(m_canvas->currentImageFilePath());
         QString warnMsg(i18n("About to overwrite file \"%1\"\nAre you sure?", fi.fileName()));
-        if (KMessageBox::warningContinueCancel(this, warnMsg, i18n("Warning"), KGuiItem(i18n("Overwrite")))
+        if (KMessageBox::warningContinueCancel(this,
+                                               warnMsg, 
+                                               i18n("Warning"), 
+                                               KGuiItem(i18n("Overwrite")),
+                                               KStandardGuiItem::cancel(),
+                                               QString("editorWindowSaveOverwrite"))
             ==  KMessageBox::Continue)
         {
             save();
