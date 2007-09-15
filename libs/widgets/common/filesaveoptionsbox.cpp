@@ -177,7 +177,7 @@ void FileSaveOptionsBox::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("ImageViewer Settings");
     d->JPEGOptions->setCompressionValue( group.readEntry("JPEGCompression", 75) );
-    d->JPEGOptions->setCompressionValue( group.readEntry("JPEGSubSampling", 1) );  // Medium subsampling
+    d->JPEGOptions->setSubSamplingValue( group.readEntry("JPEGSubSampling", 1) );  // Medium subsampling
     d->PNGOptions->setCompressionValue( group.readEntry("PNGCompression", 9) );
     d->TIFFOptions->setCompression( group.readEntry("TIFFCompression", false) );
     d->JPEG2000Options->setCompressionValue( group.readEntry("JPEG2000Compression", 75) );
