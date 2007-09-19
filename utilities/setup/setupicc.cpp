@@ -445,10 +445,25 @@ void SetupICC::applySettings()
     group.writeEntry("RenderingIntent", d->renderingIntentKC->currentIndex());
     group.writeEntry("ManagedView", d->managedView->isChecked());
 
-    group.writePathEntry("InProfileFile", *(d->inICCPath.find(d->inProfilesKC->currentText())));
-    group.writePathEntry("WorkProfileFile", *(d->workICCPath.find(d->workProfilesKC->currentText())));
-    group.writePathEntry("MonitorProfileFile", *(d->monitorICCPath.find(d->monitorProfilesKC->currentText())));
-    group.writePathEntry("ProofProfileFile", *(d->proofICCPath.find(d->proofProfilesKC->currentText())));
+    if (d->inICCPath.find(d->inProfilesKC->currentText()) != d->inICCPath.end())
+        group.writePathEntry("InProfileFile", *(d->inICCPath.find(d->inProfilesKC->currentText())));
+    else 
+        group.writePathEntry("InProfileFile", QString());
+
+    if (d->workICCPath.find(d->workProfilesKC->currentText()) != d->workICCPath.end())
+        group.writePathEntry("WorkProfileFile", *(d->workICCPath.find(d->workProfilesKC->currentText())));
+    else
+        group.writePathEntry("WorkProfileFile", QString());
+
+    if (d->monitorICCPath.find(d->monitorProfilesKC->currentText()) != d->monitorICCPath.end())
+        group.writePathEntry("MonitorProfileFile", *(d->monitorICCPath.find(d->monitorProfilesKC->currentText())));
+    else
+        group.writePathEntry("MonitorProfileFile", QString());
+
+    if (d->proofICCPath.find(d->monitorProfilesKC->currentText()) != d->proofICCPath.end())
+        group.writePathEntry("ProofProfileFile", *(d->proofICCPath.find(d->proofProfilesKC->currentText())));
+    else
+        group.writePathEntry("ProofProfileFile", QString());
 }
 
 void SetupICC::readSettings(bool restore)
