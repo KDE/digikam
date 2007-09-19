@@ -537,14 +537,14 @@ void SetupICC::fillCombos(const QString& path, bool report)
     }
 
     // Look the ICC color-space profile path include with libkdcraw dist.
-    QString digiKamProfilesPath = KStandardDirs::locate("data", "libkdcraw/profiles");
-    QDir digiKamProfilesDir(QFile::encodeName(digiKamProfilesPath));
-    digiKamProfilesDir.setNameFilters(filters);
-    digiKamProfilesDir.setFilter(QDir::Files);
+    QString libkdcrawProfilesPath = KStandardDirs::installPath("data") + QString("libkdcraw/profiles");
+    QDir libkdcrawProfilesDir(QFile::encodeName(libkdcrawProfilesPath));
+    libkdcrawProfilesDir.setNameFilters(filters);
+    libkdcrawProfilesDir.setFilter(QDir::Files);
 
-    QFileInfoList digiKamFiles = digiKamProfilesDir.entryInfoList();
-    DDebug() << "Scanning ICC profiles included with digiKam: " << digiKamProfilesPath << endl;
-    parseProfilesfromDir(digiKamFiles);
+    QFileInfoList libkdcrawFiles = libkdcrawProfilesDir.entryInfoList();
+    DDebug() << "Scanning ICC profiles included with libkdcraw: " << libkdcrawProfilesPath << endl;
+    parseProfilesfromDir(libkdcrawFiles);
 
     d->monitorProfilesKC->insertItems(0, d->monitorICCPath.keys());
     if (d->monitorICCPath.keys().isEmpty())
