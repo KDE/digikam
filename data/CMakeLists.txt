@@ -1,5 +1,4 @@
 
-add_subdirectory( profiles )
 add_subdirectory( themes )
 add_subdirectory( icons )
 add_subdirectory( pics )
