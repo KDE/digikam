@@ -536,8 +536,8 @@ void SetupICC::fillCombos(const QString& path, bool report)
         return;
     }
 
-    // Look the ICC color-space profile path include with digiKam dist.
-    QString digiKamProfilesPath = KStandardDirs::locate("data", "digikam/profiles");
+    // Look the ICC color-space profile path include with libkdcraw dist.
+    QString digiKamProfilesPath = KStandardDirs::locate("data", "libkdcraw/profiles");
     QDir digiKamProfilesDir(QFile::encodeName(digiKamProfilesPath));
     digiKamProfilesDir.setNameFilters(filters);
     digiKamProfilesDir.setFilter(QDir::Files);
