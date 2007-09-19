@@ -189,13 +189,13 @@ bool DImgLoader::checkExifWorkingColorSpace()
         return true;
     }
 
-    // Else check the Exif color-space tag and use a default profiles available in digiKam.
+    // Else check the Exif color-space tag and use a default profiles available with libkdcraw.
+    QString directory = KStandardDirs::installPath("data") + QString("libkdcraw/profiles/");
 
     switch(metaData.getImageColorWorkSpace())
     {
         case DMetadata::WORKSPACE_SRGB:
         {
-            QString directory = KStandardDirs::locate("data", "libkdcraw/profiles/srgb.icm");
             DDebug() << "Exif color-space tag is sRGB. Using default sRGB ICC profile." << endl;
             m_image->getICCProfilFromFile(directory + QString("srgb.icm"));
             return true;
@@ -204,9 +204,9 @@ bool DImgLoader::checkExifWorkingColorSpace()
 
         case DMetadata::WORKSPACE_ADOBERGB:
         {
-            QString directory = KStandardDirs::locate("data", "libkdcraw/profiles/adobergb.icm");
             DDebug() << "Exif color-space tag is AdobeRGB. Using default AdobeRGB ICC profile." << endl;       
-            m_image->getICCProfilFromFile(directory + QString("adobergb.icm"));            return true;
+            m_image->getICCProfilFromFile(directory + QString("adobergb.icm"));            
+            return true;
             break;
         }
 
