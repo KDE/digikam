@@ -73,6 +73,7 @@
 #include <kshortcutsdialog.h>
 #include <kedittoolbar.h>
 #include <ktoolbar.h>
+#include <kio/global.h>
 
 // LibKDcraw includes.
 
