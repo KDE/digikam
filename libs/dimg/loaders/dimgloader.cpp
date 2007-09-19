@@ -195,7 +195,7 @@ bool DImgLoader::checkExifWorkingColorSpace()
     {
         case DMetadata::WORKSPACE_SRGB:
         {
-            QString directory = KStandardDirs::locate("data", "digikam/profiles/srgb.icm");
+            QString directory = KStandardDirs::locate("data", "libkdcraw/profiles/srgb.icm");
             DDebug() << "Exif color-space tag is sRGB. Using default sRGB ICC profile." << endl;
             return true;
             break;
@@ -203,7 +203,7 @@ bool DImgLoader::checkExifWorkingColorSpace()
 
         case DMetadata::WORKSPACE_ADOBERGB:
         {
-            QString directory = KStandardDirs::locate("data", "digikam/profiles/adobergb.icm");
+            QString directory = KStandardDirs::locate("data", "libkdcraw/profiles/adobergb.icm");
             DDebug() << "Exif color-space tag is AdobeRGB. Using default AdobeRGB ICC profile." << endl;       
             return true;
             break;
