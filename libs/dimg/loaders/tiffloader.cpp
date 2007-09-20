@@ -120,7 +120,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     // -------------------------------------------------------------------
     // Open the file
-    
+
     TIFF* tif = TIFFOpen(QFile::encodeName(filePath), "r");
     if (!tif)
     {
@@ -131,10 +131,10 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 #ifdef ENABLE_DEBUG_MESSAGES    
     TIFFPrintDirectory(tif, stdout, 0);
 #endif
-    
+
     // -------------------------------------------------------------------
     // Get image information.
-    
+
     uint32    w, h;
     uint16    bits_per_sample;
     uint16    samples_per_pixel;
@@ -151,7 +151,8 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     if (TIFFGetFieldDefaulted(tif, TIFFTAG_ROWSPERSTRIP, &rows_per_strip) == 0 || rows_per_strip == 0)
     {
-        DWarning()  << "TIFF loader: Cannot handle non-stripped images. Loading file " << filePath << endl;
+        DWarning()  << "TIFF loader: Cannot handle non-stripped images. Loading file " 
+                    << filePath << endl;
         TIFFClose(tif);
         return false;
     }
@@ -161,14 +162,14 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         rows_per_strip == 0)
     {
         DWarning() << "TIFF loader: Encountered invalid value 0 in image."
-                    << " bits_per_sample " << bits_per_sample
-                    << " samples_per_pixel " << samples_per_pixel
-                    << " rows_per_strip " << rows_per_strip
-                    << " Loading file " << filePath << endl;
+                   << " bits_per_sample " << bits_per_sample
+                   << " samples_per_pixel " << samples_per_pixel
+                   << " rows_per_strip " << rows_per_strip
+                   << " Loading file " << filePath << endl;
         TIFFClose(tif);
         return false;
     }
-    
+
     // TODO: check others TIFF color-spaces here. Actually, only RGB and MINISBLACK 
     // have been tested.
     // Complete description of TIFFTAG_PHOTOMETRIC tag can be found at this url: 
@@ -454,11 +455,11 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     TIFF   *tif;
     uchar  *data;
     uint32  w, h;
-    
+
     w    = imageWidth();
     h    = imageHeight();
     data = imageData();
-    
+
     // -------------------------------------------------------------------
     // TIFF error handling. If an errors/warnings occurs during reading, 
     // libtiff will call these methods
@@ -468,9 +469,9 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
     // -------------------------------------------------------------------
     // Open the file
-    
+
     tif = TIFFOpen(QFile::encodeName(filePath), "w");
-        
+
     if (!tif)
     {
         DDebug() << "Cannot open target image file." << endl;
@@ -479,18 +480,18 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
     // -------------------------------------------------------------------
     // Set image properties
-    
+
     TIFFSetField(tif, TIFFTAG_IMAGEWIDTH,     w);
     TIFFSetField(tif, TIFFTAG_IMAGELENGTH,    h);
     TIFFSetField(tif, TIFFTAG_PHOTOMETRIC,    PHOTOMETRIC_RGB);
     TIFFSetField(tif, TIFFTAG_PLANARCONFIG,   PLANARCONFIG_CONTIG);
     TIFFSetField(tif, TIFFTAG_ORIENTATION,    ORIENTATION_TOPLEFT);
     TIFFSetField(tif, TIFFTAG_RESOLUTIONUNIT, RESUNIT_NONE);
- 
+
     // Image must be compressed using deflate algorithm ?
     QVariant compressAttr = imageGetAttribute("compress");
     bool compress = compressAttr.isValid() ? compressAttr.toBool() : false;
-    
+
     if (compress)
     {
         TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_ADOBE_DEFLATE);
@@ -523,7 +524,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     // -------------------------------------------------------------------
     // Write meta-data Tags contents. 
     // TODO : - this code will be removed when Exiv2 will support TIFF in writing mode
-        
+
     DMetadata metaData;
     metaData.setExif(m_image->getExif());
     metaData.setIptc(m_image->getIptc());
@@ -740,25 +741,25 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     TIFFSetField(tif, TIFFTAG_EXIFIFD, sub_offset);
 #endif
 */
-    
+
     // -------------------------------------------------------------------
     // Write ICC profil.
-    
+
     QByteArray profile_rawdata = m_image->getICCProfil();
-    
+
     if (!profile_rawdata.isEmpty())
     {
 #if defined(TIFFTAG_ICCPROFILE)    
         TIFFSetField(tif, TIFFTAG_ICCPROFILE, (uint32)profile_rawdata.size(), (uchar *)profile_rawdata.data());
-#endif      
-    }    
+#endif
+    }
 
     // -------------------------------------------------------------------
     // Write full image data in tiff directory IFD0
 
     if (observer)
         observer->progressInfo(m_image, 0.1);
-    
+
     uint8  *buf=0;
     uchar  *pixel;
     double  alpha_factor;
@@ -794,37 +795,37 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         }
 
         i = 0;
-        
+
         for (x = 0; x < w; x++)
         {
             pixel = &data[((y * w) + x) * imageBytesDepth()];
-            
+
             if ( imageSixteenBit() )        // 16 bits image.
             {
                 b16 = (uint16)(pixel[0]+256*pixel[1]);
                 g16 = (uint16)(pixel[2]+256*pixel[3]);
                 r16 = (uint16)(pixel[4]+256*pixel[5]);
-                
+
                 if (imageHasAlpha())
                 {
                     // TIFF makes you pre-mutiply the rgb components by alpha 
-                    
+
                     a16          = (uint16)(pixel[6]+256*pixel[7]);
                     alpha_factor = ((double)a16 / 65535.0);
                     r16          = (uint16)(r16*alpha_factor);
                     g16          = (uint16)(g16*alpha_factor);
                     b16          = (uint16)(b16*alpha_factor);
                 }
-    
+
                 // This might be endian dependent 
-                
+
                 buf[i++] = (uint8)(r16);
                 buf[i++] = (uint8)(r16 >> 8);
                 buf[i++] = (uint8)(g16);
                 buf[i++] = (uint8)(g16 >> 8);
                 buf[i++] = (uint8)(b16);
                 buf[i++] = (uint8)(b16 >> 8);
-                
+
                 if (imageHasAlpha())
                 {
                     buf[i++] = (uint8)(a16) ;
@@ -836,24 +837,24 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
                 b8 = (uint8)pixel[0];
                 g8 = (uint8)pixel[1];
                 r8 = (uint8)pixel[2];
-                
+
                 if (imageHasAlpha())
                 {
                     // TIFF makes you pre-mutiply the rgb components by alpha 
-                    
+
                     a8           = (uint8)(pixel[3]);
                     alpha_factor = ((double)a8 / 255.0);
                     r8           = (uint8)(r8*alpha_factor);
                     g8           = (uint8)(g8*alpha_factor);
                     b8           = (uint8)(b8*alpha_factor);
                 }
-    
+
                 // This might be endian dependent 
-                
+
                 buf[i++] = r8;
                 buf[i++] = g8;
                 buf[i++] = b8;
-                
+
                 if (imageHasAlpha())
                     buf[i++] = a8;
             }
@@ -901,11 +902,11 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     for (y = 0 ; y < uint32(thumb.height()) ; y++)
     {
         i = 0;
-        
+
         for (x = 0 ; x < uint32(thumb.width()) ; x++)
         {
             pixelThumb = &dataThumb[((y * thumb.width()) + x) * 4];
-            
+
             // This might be endian dependent 
             bufThumb[i++] = (uint8)pixelThumb[2];
             bufThumb[i++] = (uint8)pixelThumb[1];
@@ -930,10 +931,10 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         observer->progressInfo(m_image, 1.0);
 
     imageSetAttribute("savedformat", "TIFF");
-        
+
     // TODO : enable this line when Exiv2 will support TIFF in writing mode.
     //saveMetadata(filePath);
-    
+
     return true;
 }
 
