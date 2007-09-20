@@ -24,9 +24,14 @@
 #ifndef PNGLOADER_H
 #define PNGLOADER_H
 
+// C++ include.
+
+#include <cstdarg>
+
+// libPNG includes.
+
 extern "C"
 {
-#include <stdarg.h>
 #include <png.h>
 }
 

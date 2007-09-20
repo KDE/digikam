@@ -33,7 +33,6 @@
 extern "C"
 {
 #include <unistd.h>
-#include <stdarg.h> 
 }
 
 // C++  includes.
