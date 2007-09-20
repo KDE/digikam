@@ -101,7 +101,6 @@ TARGET_LINK_LIBRARIES(digikam
                       ${PNG_LIBRARIES}
                       ${LCMS_LIBRARIES}
                       ${JASPER_LIBRARIES}
-                      ${LCMS_LIBRARIES}
 
                       ${KDCRAW_LIBRARIES}
                       ${KEXIV2_LIBRARIES}
