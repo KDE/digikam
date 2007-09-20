@@ -196,7 +196,7 @@ void ImagePropertiesMetaDataTab::setCurrentData(const DMetadata& metaData, const
 {
     DMetadata data = metaData;
     
-    if (!data.asExif() && !data.asIptc() && !data.asXmp())
+    if (!data.hasExif() && !data.hasIptc() && !data.hasXmp())
     {
         d->exifWidget->loadFromData(filename, data);
         d->makernoteWidget->loadFromData(filename, data);
