@@ -1373,6 +1373,7 @@ void EditorWindow::startingSave(const KUrl& url)
     m_savingContext->saveTempFile->setPrefix(m_savingContext->srcURL.directory(false));
     m_savingContext->saveTempFile->setSuffix(".digikamtempfile.tmp");
     m_savingContext->saveTempFile->setAutoRemove(true);
+    m_savingContext->saveTempFile->open();
 
     m_canvas->saveAs(m_savingContext->saveTempFile->fileName(), m_IOFileSettings,
                      m_setExifOrientationTag && (m_rotatedOrFlipped || m_canvas->exifRotated()));
@@ -1544,6 +1545,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     m_savingContext->saveTempFile->setPrefix(newURL.directory());
     m_savingContext->saveTempFile->setSuffix(".digikamtempfile.tmp");
     m_savingContext->saveTempFile->setAutoRemove(true);
+    m_savingContext->saveTempFile->open();
 
     m_canvas->saveAs(m_savingContext->saveTempFile->fileName(), m_IOFileSettings,
                      m_setExifOrientationTag && (m_rotatedOrFlipped || m_canvas->exifRotated()),
