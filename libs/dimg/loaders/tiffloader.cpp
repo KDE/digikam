@@ -528,6 +528,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     DMetadata metaData;
     metaData.setExif(m_image->getExif());
     metaData.setIptc(m_image->getIptc());
+    metaData.setXmp(m_image->getXmp());
 
     // Standard IPTC tag (available with libtiff 3.6.1)    
 
