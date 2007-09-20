@@ -513,12 +513,12 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     uint           x, y, j;
     png_bytep      row_ptr;
     png_color_8    sig_bit;
-    int            quality = 75;
+    int            quality     = 75;
     int            compression = 3;
-    
+
     // -------------------------------------------------------------------
     // Open the file
-    
+
     f = fopen(QFile::encodeName(filePath), "wb");
     if ( !f )
     {
@@ -526,10 +526,9 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         return false;
     }
 
-
     // -------------------------------------------------------------------
     // Initialize the internal structures
-    
+
     png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
     if (!png_ptr)
     {
@@ -537,7 +536,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         fclose(f);
         return false;
     }
-    
+
     info_ptr = png_create_info_struct(png_ptr);
     if (info_ptr == NULL)
     {
@@ -546,11 +545,11 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         fclose(f);
         return false;
     }
-    
+
     // -------------------------------------------------------------------
     // PNG error handling. If an error occurs during writing, libpng
     // will jump here
-        
+
     if (setjmp(png_ptr->jmpbuf))
     {
         DDebug() << "Internal libPNG error during writing file. Process aborted!" << endl;
@@ -561,12 +560,12 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     }
 
     png_init_io(png_ptr, f);
-    
-    if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)           // Intel
+
+    if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)      // Intel
         png_set_bgr(png_ptr);
     else                                                    // PPC
         png_set_swap_alpha(png_ptr);
-    
+
     if (imageHasAlpha())
     {
         png_set_IHDR(png_ptr, info_ptr, imageWidth(), imageHeight(), imageBitsDepth(),
@@ -576,32 +575,32 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         if (imageSixteenBit())
             data = new uchar[imageWidth() * 8 * sizeof(uchar)];
         else
-            data = new uchar[imageWidth() * 4 * sizeof(uchar)];        
+            data = new uchar[imageWidth() * 4 * sizeof(uchar)];
     }
     else
     {
         png_set_IHDR(png_ptr, info_ptr, imageWidth(), imageHeight(), imageBitsDepth(), 
                      PNG_COLOR_TYPE_RGB,        PNG_INTERLACE_NONE, 
                      PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
-    
+
         if (imageSixteenBit())
             data = new uchar[imageWidth() * 6 * sizeof(uchar)];
         else
-            data = new uchar[imageWidth() * 3 * sizeof(uchar)];        
+            data = new uchar[imageWidth() * 3 * sizeof(uchar)];
     }
-    
+
     sig_bit.red   = imageBitsDepth();
     sig_bit.green = imageBitsDepth();
     sig_bit.blue  = imageBitsDepth();
     sig_bit.alpha = imageBitsDepth();
     png_set_sBIT(png_ptr, info_ptr, &sig_bit);
-        
+
     // -------------------------------------------------------------------
     // Quality to convert to compression 
-    
+
     QVariant qualityAttr = imageGetAttribute("quality");
     quality = qualityAttr.isValid() ? qualityAttr.toInt() : 90;
-    
+
     if (quality < 1)
         quality = 1;
     if (quality > 99)
@@ -609,30 +608,30 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
     quality     = quality / 10;
     compression = 9 - quality;
-    
+
     if (compression < 0)
         compression = 0;
     if (compression > 9)
         compression = 9;
-    
+
     png_set_compression_level(png_ptr, compression);
-    
+
     // -------------------------------------------------------------------
     // Write ICC profil.
-    
+
     QByteArray profile_rawdata = m_image->getICCProfil();
-    
+
     if (!profile_rawdata.isEmpty())
     {
         png_set_iCCP(png_ptr, info_ptr, (png_charp)("icc"), PNG_COMPRESSION_TYPE_BASE, profile_rawdata.data(), profile_rawdata.size());
-    }    
+    }
 
     // -------------------------------------------------------------------
     // Write embbeded Text
-    
+
     typedef QMap<QString, QString> EmbeddedTextMap;
     EmbeddedTextMap map = imageEmbeddedText();
-    
+
     for (EmbeddedTextMap::iterator it = map.begin(); it != map.end(); ++it)
     {
         if (it.key() != QString("Software") && it.key() != QString("Comment"))
@@ -666,14 +665,14 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     // Write embedded Raw profiles metadata (Exif/Iptc) in text tag using ImageMagick technic.
     // Write digiKam comment like an iTXt chunk using UTF8 encoding.
     // NOTE: iTXt will be enable by default with libpng >= 1.3.0.(dcraw_0)
-    
+
     typedef QMap<int, QByteArray> MetaDataMap;
     MetaDataMap metaDataMap = imageMetaData();
-    
+
     for (MetaDataMap::iterator it = metaDataMap.begin(); it != metaDataMap.end(); ++it)
     {
         QByteArray ba = it.value();
-        
+
         switch (it.key())
         {
 
@@ -689,7 +688,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
                 comment.itxt_lenght = ba.size();
                 comment.compression = PNG_ITXT_COMPRESSION_zTXt;
                 png_set_text(png_ptr, info_ptr, &(comment), 1);
-            
+
                 DDebug() << "Writing digiKam comment into iTXt PNG chunk : " << ba << endl;
                 break;
             }
@@ -745,7 +744,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     png_set_shift(png_ptr, &sig_bit);
     png_set_packing(png_ptr);
     ptr = imageData();
-    
+
     uint checkPoint = 0;
     for (y = 0; y < imageHeight(); y++)
     {
@@ -765,7 +764,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         }
 
         j = 0;
-        
+
         for (x = 0; x < imageWidth()*imageBytesDepth(); x+=imageBytesDepth())
         {
             if (imageSixteenBit())
@@ -808,38 +807,38 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
                 }
             }
         }
-        
+
         row_ptr = (png_bytep) data;
-        
+
         png_write_rows(png_ptr, &row_ptr, 1);
         ptr += (imageWidth() * imageBytesDepth());
     }
-    
+
     delete [] data;
-        
+
     // -------------------------------------------------------------------
-            
+
     png_write_end(png_ptr, info_ptr);
     png_destroy_write_struct(&png_ptr, (png_infopp) & info_ptr);
     png_destroy_info_struct(png_ptr, (png_infopp) & info_ptr);
-    
+
     fclose(f);
 
     imageSetAttribute("savedformat", "PNG");
 
     // Here there is no writeMetadata() call until Exiv2 will support PNG in writting mode.
-    
+
     return true;
 }
 
 bool PNGLoader::hasAlpha() const
 {
-    return m_hasAlpha;    
+    return m_hasAlpha;
 }
 
 bool PNGLoader::sixteenBit() const
 {
-    return m_sixteenBit;    
+    return m_sixteenBit;
 }
 
 void PNGLoader::writeRawProfile(png_struct *ping, png_info *ping_info, char *profile_type, 
