@@ -631,9 +631,9 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
             
             for (uint i = 0; i < w; i++)
             {
-                dstPtr[2] = srcPtr[0];
-                dstPtr[1] = srcPtr[1];
-                dstPtr[0] = srcPtr[2];
+                dstPtr[2] = srcPtr[0];  // Blue
+                dstPtr[1] = srcPtr[1];  // Green
+                dstPtr[0] = srcPtr[2];  // Red
         
                 srcPtr += 4;
                 dstPtr += 3;
@@ -667,9 +667,9 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
             
             for (uint i = 0; i < w; i++)
             {
-                dstPtr[2] = (srcPtr[0] * 255UL)/65535UL;
-                dstPtr[1] = (srcPtr[1] * 255UL)/65535UL;
-                dstPtr[0] = (srcPtr[2] * 255UL)/65535UL;
+                dstPtr[2] = (srcPtr[0] * 255UL)/65535UL;    // Blue
+                dstPtr[1] = (srcPtr[1] * 255UL)/65535UL;    // Green
+                dstPtr[0] = (srcPtr[2] * 255UL)/65535UL;    // Red
         
                 srcPtr += 4;
                 dstPtr += 3;
