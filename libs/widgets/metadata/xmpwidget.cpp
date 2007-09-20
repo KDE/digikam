@@ -108,7 +108,7 @@ bool XmpWidget::loadFromURL(const KUrl& url)
     {
         DMetadata metadata(url.path());
 
-        if (!metadata.asXmp())
+        if (!metadata.hasXmp())
         {
             setMetadata();
             return false;
@@ -123,7 +123,7 @@ bool XmpWidget::loadFromURL(const KUrl& url)
 bool XmpWidget::decodeMetadata()
 {
     DMetadata data = getMetadata();
-    if (!data.asXmp())
+    if (!data.hasXmp())
         return false;
 
     // Update all metadata contents.

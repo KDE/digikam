@@ -138,7 +138,7 @@ bool MakerNoteWidget::loadFromURL(const KUrl& url)
     {    
         DMetadata metadata(url.path());
 
-        if (!metadata.asExif())
+        if (!metadata.hasExif())
         {
             setMetadata();
             return false;
@@ -153,7 +153,7 @@ bool MakerNoteWidget::loadFromURL(const KUrl& url)
 bool MakerNoteWidget::decodeMetadata()
 {
     DMetadata data = getMetadata();
-    if (!data.asIptc())
+    if (!data.hasExif())
         return false;
 
     // Update all metadata contents.

@@ -236,7 +236,7 @@ bool GPSWidget::loadFromURL(const KUrl& url)
     {
         DMetadata metadata(url.path());
 
-        if (!metadata.asExif())
+        if (!metadata.hasExif())
         {
             setMetadata();
             return false;
@@ -251,7 +251,7 @@ bool GPSWidget::loadFromURL(const KUrl& url)
 bool GPSWidget::decodeMetadata()
 {
     DMetadata data = getMetadata();
-    if (!data.asExif())
+    if (!data.hasExif())
     {
         setMetadataEmpty();
         return false;

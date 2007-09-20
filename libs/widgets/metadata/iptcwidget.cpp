@@ -96,7 +96,7 @@ bool IptcWidget::loadFromURL(const KUrl& url)
     {    
         DMetadata metadata(url.path());
 
-        if (!metadata.asIptc())
+        if (!metadata.hasIptc())
         {
             setMetadata();
             return false;
@@ -111,7 +111,7 @@ bool IptcWidget::loadFromURL(const KUrl& url)
 bool IptcWidget::decodeMetadata()
 {
     DMetadata data = getMetadata();
-    if (!data.asIptc())
+    if (!data.hasIptc())
         return false;
 
     // Update all metadata contents.

@@ -113,7 +113,7 @@ bool ExifWidget::loadFromURL(const KUrl& url)
     {    
         DMetadata metadata(url.path());
 
-        if (!metadata.asExif())
+        if (!metadata.hasExif())
         {
             setMetadata();
             return false;
@@ -128,7 +128,7 @@ bool ExifWidget::loadFromURL(const KUrl& url)
 bool ExifWidget::decodeMetadata()
 {
     DMetadata data = getMetadata();
-    if (!data.asExif())
+    if (!data.hasExif())
         return false;
 
     // Update all metadata contents.
