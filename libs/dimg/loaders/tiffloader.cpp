@@ -542,19 +542,22 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
     // Standard XMP tag (available with libtiff 3.6.1)    
 
+    if (metaData.hasXmp())
+    {
 #if defined(TIFFTAG_XMLPACKET)
-    tiffSetExifDataTag(tif, TIFFTAG_XMLPACKET,                &metaData, "Exif.Image.XMLPacket");
+        tiffSetExifDataTag(tif, TIFFTAG_XMLPACKET,            metaData, "Exif.Image.XMLPacket");
 #endif
+    }
 
     // Standard Exif Ascii tags (available with libtiff 3.6.1)    
 
-    tiffSetExifAsciiTag(tif, TIFFTAG_DOCUMENTNAME,            &metaData, "Exif.Image.DocumentName");
-    tiffSetExifAsciiTag(tif, TIFFTAG_IMAGEDESCRIPTION,        &metaData, "Exif.Image.ImageDescription");
-    tiffSetExifAsciiTag(tif, TIFFTAG_MAKE,                    &metaData, "Exif.Image.Make");
-    tiffSetExifAsciiTag(tif, TIFFTAG_MODEL,                   &metaData, "Exif.Image.Model");
-    tiffSetExifAsciiTag(tif, TIFFTAG_DATETIME,                &metaData, "Exif.Image.DateTime");
-    tiffSetExifAsciiTag(tif, TIFFTAG_ARTIST,                  &metaData, "Exif.Image.Artist");
-    tiffSetExifAsciiTag(tif, TIFFTAG_COPYRIGHT,               &metaData, "Exif.Image.Copyright");
+    tiffSetExifAsciiTag(tif, TIFFTAG_DOCUMENTNAME,            metaData, "Exif.Image.DocumentName");
+    tiffSetExifAsciiTag(tif, TIFFTAG_IMAGEDESCRIPTION,        metaData, "Exif.Image.ImageDescription");
+    tiffSetExifAsciiTag(tif, TIFFTAG_MAKE,                    metaData, "Exif.Image.Make");
+    tiffSetExifAsciiTag(tif, TIFFTAG_MODEL,                   metaData, "Exif.Image.Model");
+    tiffSetExifAsciiTag(tif, TIFFTAG_DATETIME,                metaData, "Exif.Image.DateTime");
+    tiffSetExifAsciiTag(tif, TIFFTAG_ARTIST,                  metaData, "Exif.Image.Artist");
+    tiffSetExifAsciiTag(tif, TIFFTAG_COPYRIGHT,               metaData, "Exif.Image.Copyright");
 
     QString soft = metaData.getExifTagString("Exif.Image.Software");
     QString libtiffver(TIFFLIB_VERSION_STR);
@@ -950,9 +953,9 @@ bool TIFFLoader::sixteenBit() const
 }
 
 void TIFFLoader::tiffSetExifAsciiTag(TIFF* tif, ttag_t tiffTag, 
-                                     DMetadata *metaData, const char* exifTagName)
+                                     const DMetadata &metaData, const char* exifTagName)
 {
-    QByteArray tag = metaData->getExifTagData(exifTagName);
+    QByteArray tag = metaData.getExifTagData(exifTagName);
     if (!tag.isEmpty()) 
     {
         QByteArray str(tag.data(), tag.size());
@@ -961,9 +964,9 @@ void TIFFLoader::tiffSetExifAsciiTag(TIFF* tif, ttag_t tiffTag,
 }
 
 void TIFFLoader::tiffSetExifDataTag(TIFF* tif, ttag_t tiffTag, 
-                                    DMetadata *metaData, const char* exifTagName)
+                                    const DMetadata &metaData, const char* exifTagName)
 {
-    QByteArray tag = metaData->getExifTagData(exifTagName);
+    QByteArray tag = metaData.getExifTagData(exifTagName);
     if (!tag.isEmpty()) 
     {
         TIFFSetField (tif, tiffTag, (uint32)tag.size(), (char *)tag.data());

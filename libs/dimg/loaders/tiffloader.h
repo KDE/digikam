@@ -64,8 +64,8 @@ private:
     
 private:
 
-    void tiffSetExifAsciiTag(TIFF* tif, ttag_t tiffTag, DMetadata *metaData, const char* exifTagName);
-    void tiffSetExifDataTag(TIFF* tif, ttag_t tiffTag, DMetadata *metaData, const char* exifTagName);
+    void tiffSetExifAsciiTag(TIFF* tif, ttag_t tiffTag, const DMetadata& metaData, const char* exifTagName);
+    void tiffSetExifDataTag(TIFF* tif, ttag_t tiffTag, const DMetadata& metaData, const char* exifTagName);
 
     static void dimg_tiff_warning(const char* module, const char* format, va_list warnings);
     static void dimg_tiff_error(const char* module, const char* format, va_list errors);
