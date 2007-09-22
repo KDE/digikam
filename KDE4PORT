@@ -108,7 +108,15 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
     umscamera.cpp                       Gilles                 X       DONE
 |---hotplug                             Laurent                        DONE        -
 |---imageeditor
-|-----canvas                            Gilles          X      X       DONE
+|-----canvas  
+    canvas.cpp                          Gilles          X      X       DONE
+    colorcorrectiondlg.cpp              Gilles          X      X       DONE                 Dialog layout is broken
+    dimginterface.cpp                   Gilles          X      X       DONE
+    imageplugin.cpp                     Gilles          X      X       DONE
+    imagepluginloader.cpp               Gilles          X      X       DONE
+    undoaction.cpp                      Gilles          X      X       DONE
+    undocache.cpp                       Gilles          X      X       DONE
+    undomanager.cpp                     Gilles          X      X       DONE
 |-----editor
     editorwindow.cpp                    Gilles          X      X       DONE
     imageiface.cpp                      Gilles          X      X       DONE
