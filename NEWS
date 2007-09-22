@@ -7,7 +7,7 @@ General        : Color scheme theme are now XML based (instead X11 format).
 General        : Camera interface is now used to import new pictures in collection.
 CameraGUI      : New options to Download pictures and Delete it from camera at the same time.
 CameraGUI      : Support of Drag & Drop to download files from camera gui to album gui.
-CameraGUI      : Add new Bargarph to indicate ststistics about free space available on Album 
+CameraGUI      : Add new Bargarph to indicate statistics about free space available on Album 
                  Library Path.
 
 digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
@@ -23,7 +23,7 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 009 ==> 147671 : Portability problem in configure script.
 010 ==> 147670 : Compilation problems on NetBSD in greycstoration.
 011 ==> 147362 : Tool-tip for zoom indicator is below the screen if window is maximised.
-012 ==> 145017 : Deleting an image from within DigiKam does not update the DigiKam database.
+012 ==> 145017 : Deleting an image from within digiKam does not update the digiKam database.
 013 ==> 148925 : Light Table thumb bar not updated when deleting images.
 014 ==> 148971 : Awful menu entry "digiKamThemeDesigner".
 015 ==> 148930 : digiKam-0.9.2 does not compile with lcms-1.17.
