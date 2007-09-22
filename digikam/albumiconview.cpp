@@ -471,7 +471,8 @@ void AlbumIconView::slotDoubleClicked(IconItem *item)
     }
     else
     {
-        KIconEffect::visualActivate(viewport(), contentsRectToViewport(item->rect()));
+	// FIXME: this method has diseapear from kdelibs4
+        //KIconEffect::visualActivate(viewport(), contentsRectToViewport(item->rect()));
         slotDisplayItem(static_cast<AlbumIconItem *>(item));
     }
 }
