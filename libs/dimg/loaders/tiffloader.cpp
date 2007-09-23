@@ -452,13 +452,9 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
 bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 {
-    TIFF   *tif;
-    uchar  *data;
-    uint32  w, h;
-
-    w    = imageWidth();
-    h    = imageHeight();
-    data = imageData();
+    uint32 w     = imageWidth();
+    uint32 h     = imageHeight();
+    uchar  *data = imageData();
 
     // -------------------------------------------------------------------
     // TIFF error handling. If an errors/warnings occurs during reading, 
@@ -470,8 +466,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     // -------------------------------------------------------------------
     // Open the file
 
-    tif = TIFFOpen(QFile::encodeName(filePath), "w");
-
+    TIFF *tif = TIFFOpen(QFile::encodeName(filePath), "w");
     if (!tif)
     {
         DDebug() << "Cannot open target image file." << endl;
@@ -764,7 +759,6 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     if (observer)
         observer->progressInfo(m_image, 0.1);
 
-    uint8  *buf=0;
     uchar  *pixel;
     double  alpha_factor;
     uint32  x, y;
@@ -772,8 +766,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     uint16  r16, g16, b16, a16=0;
     int     i=0;
 
-    buf = (uint8 *) _TIFFmalloc(TIFFScanlineSize(tif));
-
+    uint8 *buf = (uint8 *)_TIFFmalloc(TIFFScanlineSize(tif));
     if (!buf)
     {
         DDebug() << "Cannot allocate memory buffer for main image." << endl;
