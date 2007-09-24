@@ -56,11 +56,12 @@ ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
                                        IccTransform *iccTrans, const QString& file)
                   : KDialog(parent)
 {
+    m_iccTrans = iccTrans;
+    m_parent   = parent;
+
     setButtons(Help|Ok|Apply|Cancel);
     setDefaultButton(Ok);
     setModal(true);
-    m_iccTrans = iccTrans;
-    m_parent   = parent;
     setHelp("iccprofile.anchor", "digikam");
     setButtonText(Ok,        i18n("Convert"));
     setButtonToolTip(Ok,     i18n("Apply the default color workspace profile to the image"));
@@ -74,11 +75,8 @@ ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
     setCaption(fi.fileName());
     
     QWidget *page     = new QWidget(this);
-    setMainWidget(page);
     QGridLayout* grid = new QGridLayout(page);
-    grid->setMargin(0);
-    grid->setSpacing(KDialog::spacingHint());
-    page->setLayout(grid);        
+    setMainWidget(page);
 
     QLabel *originalTitle         = new QLabel(i18n("Original Image:"), page);
     QLabel *previewOriginal       = new QLabel(page);
@@ -106,7 +104,7 @@ ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
     }
     else
     {
-        message->setText(i18n("<p>This image has been assigned a color profile that does not "
+        message->setText(i18n("<p>This image has been assigned to a color profile that does not "
                               "match with your default workspace color profile.</p>"
                               "<p>Do you want to convert it to your workspace color profile?</p>"));
     }
@@ -116,42 +114,39 @@ ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
     KIconLoader* iconLoader = KIconLoader::global();
     logo->setPixmap(iconLoader->loadIcon("digikam", K3Icon::NoGroup, 128));    
     
-    grid->addWidget(originalTitle, 0, 0, 0, 0);
-    grid->addWidget(previewOriginal, 1, 1, 0, 0);
-    grid->addWidget(targetTitle, 2, 2, 0, 0);
-    grid->addWidget(previewTarget, 3, 3, 0, 0);
-    
-    QVBoxLayout *vlay = new QVBoxLayout();
-    vlay->setSpacing( KDialog::spacingHint() );
-    vlay->addWidget(logo);
-    vlay->addWidget(message);
-    
-    vlay->addWidget(new KSeparator (Qt::Horizontal, page));
-    vlay->addWidget(currentProfileTitle);
-    vlay->addWidget(currentProfileDesc);
-    
     QHBoxLayout *hlay1 = new QHBoxLayout();
     hlay1->setSpacing( KDialog::spacingHint() );
     hlay1->addWidget(currentProfInfo);
     hlay1->addStretch();
-    vlay->addLayout(hlay1);
-    
-    vlay->addWidget(line);
-    vlay->addWidget(embeddedProfileTitle);
-    vlay->addWidget(embeddedProfileDesc);    
-    
+   
     QHBoxLayout *hlay2 = new QHBoxLayout();
     hlay2->setSpacing( KDialog::spacingHint() );
     hlay2->addWidget(embeddedProfInfo);
     hlay2->addStretch();
+
+    QVBoxLayout *vlay = new QVBoxLayout();
+    vlay->setSpacing( KDialog::spacingHint() );
+    vlay->addWidget(logo);
+    vlay->addWidget(message);
+    vlay->addWidget(new KSeparator (Qt::Horizontal, page));
+    vlay->addWidget(currentProfileTitle);
+    vlay->addWidget(currentProfileDesc);
+    vlay->addLayout(hlay1);
+    vlay->addWidget(line);
+    vlay->addWidget(embeddedProfileTitle);
+    vlay->addWidget(embeddedProfileDesc);    
     vlay->addLayout(hlay2);
     vlay->addStretch();
     
+    grid->setMargin(0);
+    grid->setSpacing(KDialog::spacingHint());
+    grid->addWidget(originalTitle, 0, 0, 0, 0);
+    grid->addWidget(previewOriginal, 1, 1, 0, 0);
+    grid->addWidget(targetTitle, 2, 2, 0, 0);
+    grid->addWidget(previewTarget, 3, 3, 0, 0);
     grid->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
                       QSizePolicy::Minimum, QSizePolicy::Expanding), 0, 3, 1, 1);
     grid->addLayout(vlay, 0, 3, 2, 2);
-    
-    setMainWidget(page);
     
     // --------------------------------------------------------------------
     
@@ -194,4 +189,3 @@ void ColorCorrectionDlg::slotApplyClicked()
 }
 
 }  // NameSpace Digikam
-
