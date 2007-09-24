@@ -98,7 +98,7 @@ ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
     }
     else
     {
-        message->setText(i18n("<p>This image has been assigned a color profile that does not "
+        message->setText(i18n("<p>This image has been assigned to a color profile that does not "
                               "match with your default workspace color profile.</p>"
                               "<p>Do you want to convert it to your workspace color profile?</p>"));
     }
