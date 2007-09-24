@@ -2,16 +2,16 @@ MAIN DEVELOPERS :
 ---------------
 
 Gilles Caulier <caulier dot gilles at gmail dot com>                      : Coordinator, lead developer, French translations.
-Marcel Wiesweg <marcel dot wiesweg at gmx dot de>                         : Developer.
+Marcel Wiesweg <marcel dot wiesweg at gmx dot de>                         : Lead developer.
 
 CURRENT CONTRIBUTORS :
 --------------------
 
-Luka Renko <lure at kubuntu dot org>                                      : Developer.
+Luka Renko <lure at kubuntu dot org>                                      : Developer, Kubuntu packages.
 Angelo Naselli <a dot naselli at libero dot it>                           : Developer, Mandriva packages.
 Arnd Baecker <arnd dot baecker at web dot de>                             : Developer.
 Francisco J. Cruz <fj dot cruz at supercable dot es>                      : Developer.
-Achim Bohnet <ach at mpe dot mpg dot de>                                  : Bug reports, patches, Kubuntu packages.
+Achim Bohnet <ach at mpe dot mpg dot de>                                  : Bug reports, patches, Debian packages.
 Gerhard Kulzer <gerhard at kulzer dot net>                                : Bug reports, patches, and handbook writer.
 Oliver Doerr <oliver at doerr-privat dot de>                              : Beta tester, German translations.
 Fabien Salvi <fabien dot ubuntu at gmail dot com>                         : Webmaster, French translations.
@@ -30,7 +30,7 @@ Richard Taylor <r dot taylor at bcs dot org dot uk>                       : Feed
 Yves Chaufour <yves dot chaufour at wanadoo dot fr>                       : digiKam webpage maintainer (0.7.x).
 Charles Bouveyron <c dot bouveyron at tuxfamily dot org>                  : Beta tester (0.6.x).
 Sebastian Rooder <seppelrockt at web dot de>                              : Crystal icons style (0.6.2).
-Tung NGUYEN <ntung at free dot fr>                                        : Bug reports, French translations, new image plugins icon set.
+Tung Nguyen <ntung at free dot fr>                                        : Bug reports, French translations, new image plugins icon set.
 Pieter Voloshyn <pieter dot voloshyn at gmail dot com>                    : Image filter algorithms.
 
 
@@ -48,33 +48,34 @@ Anna Sawicka <ania at kajak dot org dot pl>                               : Poli
 
 DIGIKAM SPLASHSCREENS CREDITS :
 -----------------------------
-
-0.9.2 : Juergen Flosbach <juergen dot flosbach at bigfoot dot com>
-0.9.1 : Gilles Caulier   <caulier dot gilles at kdemail dot net>
-0.9.0 : Dennis Gnad      <bluedrago at web dot de>
-0.8.2 : Andrea Gagliardi <andrea at euronia dot it>
-0.8.1 : Andrea Gagliardi <andrea at euronia dot it>
-0.8.0 : Tom Albers       <tomalbers at kde dot nl>
-0.7.3 : Andreas Fischer
-0.7.2 : Caulier Gilles   <caulier dot gilles at kdemail dot net>
-0.7.1 : Yemu
-0.7.0 : Yves Chaufour    <yves dot chaufour at wanadoo dot fr>
-0.6.2 : Yves Chaufour    <yves dot chaufour at wanadoo dot fr>
-0.6.1 : Jens Gassmann    <jens dot gassmann at atomix dot de>
-0.6.0 : Renchi Raju      <renchi dot raju at kdemail dot net>
-0.5.0 : Renchi Raju      <renchi dot raju at kdemail dot net>
-0.4.0 : NONE
+0.10.0 : Fernando Batista <ferbatista at mail dot telepac dot pt>
+0.9.3  : Laurenz Gamper   <lgamper at gmx dot ch>
+0.9.2  : Juergen Flosbach <juergen dot flosbach at bigfoot dot com>
+0.9.1  : Gilles Caulier   <caulier dot gilles at kdemail dot net>
+0.9.0  : Dennis Gnad      <bluedrago at web dot de>
+0.8.2  : Andrea Gagliardi <andrea at euronia dot it>
+0.8.1  : Andrea Gagliardi <andrea at euronia dot it>
+0.8.0  : Tom Albers       <tomalbers at kde dot nl>
+0.7.3  : Andreas Fischer
+0.7.2  : Caulier Gilles   <caulier dot gilles at kdemail dot net>
+0.7.1  : Yemu
+0.7.0  : Yves Chaufour    <yves dot chaufour at wanadoo dot fr>
+0.6.2  : Yves Chaufour    <yves dot chaufour at wanadoo dot fr>
+0.6.1  : Jens Gassmann    <jens dot gassmann at atomix dot de>
+0.6.0  : Renchi Raju      <renchi dot raju at kdemail dot net>
+0.5.0  : Renchi Raju      <renchi dot raju at kdemail dot net>
+0.4.0  : NONE
 
 SHOWFOTO SPLASHSCREENS CREDITS :
 ------------------------------
 
-0.8.0 : Boris            <sirro dot mig at gmail dot com>
-0.7.0 : Will Hardy       <will at zedat dot fu-berlin dot de>
-0.6.0 : Juergen Flosbach <juergen dot flosbach at bigfoot dot com>
-0.5.0 : Rainer Krienke   <rainer at krienke dot org>
-0.4.0 : Dudas Gabor      <dudasg at freemail dot hu>
-0.3.2 : Julien Narboux   <julien dot narboux at inria dot fr>
-0.3.1 : Maxime Delorme   <maxime dot delorme at tiscali dot fr>
-0.3.0 : Caulier Gilles   <caulier dot gilles at kdemail dot net>
-0.2.0 : Joern Ahrens     <kde at jokele dot de>
-0.1.0 : NONE
+0.8.0  : Udo Lembke       <ulembke at polarzone dot de>
+0.7.0  : Joel Koop        <joel at tuxable dot com> 
+0.6.0  : Juergen Flosbach <juergen dot flosbach at bigfoot dot com>
+0.5.0  : Rainer Krienke   <rainer at krienke dot org>
+0.4.0  : Dudas Gabor      <dudasg at freemail dot hu>
+0.3.2  : Julien Narboux   <julien dot narboux at inria dot fr>
+0.3.1  : Maxime Delorme   <maxime dot delorme at tiscali dot fr>
+0.3.0  : Caulier Gilles   <caulier dot gilles at kdemail dot net>
+0.2.0  : Joern Ahrens     <kde at jokele dot de>
+0.1.0  : NONE
