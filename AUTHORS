@@ -2,16 +2,16 @@ MAIN DEVELOPERS :
 ---------------
 
 Gilles Caulier <caulier dot gilles at gmail dot com>                      : Coordinator, lead developer, French translations.
-Marcel Wiesweg <marcel dot wiesweg at gmx dot de>                         : Developer.
+Marcel Wiesweg <marcel dot wiesweg at gmx dot de>                         : Lead developer.
 
 CURRENT CONTRIBUTORS :
 --------------------
 
-Luka Renko <lure at kubuntu dot org>                                      : Developer.
+Luka Renko <lure at kubuntu dot org>                                      : Developer, Kubuntu packages.
 Angelo Naselli <a dot naselli at libero dot it>                           : Developer, Mandriva packages.
 Arnd Baecker <arnd dot baecker at web dot de>                             : Developer.
 Francisco J. Cruz <fj dot cruz at supercable dot es>                      : Developer.
-Achim Bohnet <ach at mpe dot mpg dot de>                                  : Bug reports, patches, Kubuntu packages.
+Achim Bohnet <ach at mpe dot mpg dot de>                                  : Bug reports, patches, Debian packages.
 Gerhard Kulzer <gerhard at kulzer dot net>                                : Bug reports, patches, and handbook writer.
 Oliver Doerr <oliver at doerr-privat dot de>                              : Beta tester, German translations.
 Fabien Salvi <fabien dot ubuntu at gmail dot com>                         : Webmaster, French translations.
@@ -30,7 +30,7 @@ Richard Taylor <r dot taylor at bcs dot org dot uk>                       : Feed
 Yves Chaufour <yves dot chaufour at wanadoo dot fr>                       : digiKam webpage maintainer (0.7.x).
 Charles Bouveyron <c dot bouveyron at tuxfamily dot org>                  : Beta tester (0.6.x).
 Sebastian Rooder <seppelrockt at web dot de>                              : Crystal icons style (0.6.2).
-Tung NGUYEN <ntung at free dot fr>                                        : Bug reports, French translations, new image plugins icon set.
+Tung Nguyen <ntung at free dot fr>                                        : Bug reports, French translations, new image plugins icon set.
 Pieter Voloshyn <pieter dot voloshyn at gmail dot com>                    : Image filter algorithms.
 
 
