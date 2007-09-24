@@ -110,7 +110,7 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
 |---imageeditor
 |-----canvas  
     canvas.cpp                          Gilles          X      X       DONE
-    colorcorrectiondlg.cpp              Gilles          X      X       DONE                 Dialog layout is broken
+    colorcorrectiondlg.cpp              Gilles          X      X       DONE
     dimginterface.cpp                   Gilles          X      X       DONE
     imageplugin.cpp                     Gilles          X      X       DONE
     imagepluginloader.cpp               Gilles          X      X       DONE
