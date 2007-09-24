@@ -85,12 +85,14 @@ ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
     QLabel *logo                  = new QLabel(page);
     QLabel *message               = new QLabel(page);
     QLabel *currentProfileTitle   = new QLabel(i18n("Current workspace color profile:"), page);
-    QLabel *currentProfileDesc    = new QLabel(QString("<b>%1</b>").arg(m_iccTrans->getOutpoutProfileDescriptor()), page);
+    QLabel *currentProfileDesc    = new QLabel(QString("<b>%1</b>")
+                                               .arg(m_iccTrans->getOutpoutProfileDescriptor()), page);
     QPushButton *currentProfInfo  = new QPushButton(i18n("Info..."), page);
     QLabel *embeddedProfileTitle  = new QLabel(i18n("Embedded color profile:"), page);
-    QLabel *embeddedProfileDesc   = new QLabel(QString("<b>%1</b>").arg(m_iccTrans->getEmbeddedProfileDescriptor()), page);
+    QLabel *embeddedProfileDesc   = new QLabel(QString("<b>%1</b>")
+                                               .arg(m_iccTrans->getEmbeddedProfileDescriptor()), page);
     QPushButton *embeddedProfInfo = new QPushButton(i18n("Info..."), page);
-    KSeparator *line              = new KSeparator (Qt::Horizontal, page);
+    KSeparator *line              = new KSeparator(Qt::Horizontal, page);
     
     if (m_iccTrans->embeddedProfile().isEmpty())
     {
@@ -108,7 +110,15 @@ ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
                               "match with your default workspace color profile.</p>"
                               "<p>Do you want to convert it to your workspace color profile?</p>"));
     }
-    
+
+    originalTitle->setWordWrap(true);
+    targetTitle->setWordWrap(true);
+    message->setWordWrap(true);
+    currentProfileTitle->setWordWrap(true);
+    currentProfileDesc->setWordWrap(true);
+    embeddedProfileTitle->setWordWrap(true);
+    embeddedProfileDesc->setWordWrap(true);
+
     previewOriginal->setPixmap(preview->convertToPixmap());
     previewTarget->setPixmap(preview->convertToPixmap(m_iccTrans));
     KIconLoader* iconLoader = KIconLoader::global();
@@ -140,13 +150,13 @@ ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
     
     grid->setMargin(0);
     grid->setSpacing(KDialog::spacingHint());
-    grid->addWidget(originalTitle, 0, 0, 0, 0);
-    grid->addWidget(previewOriginal, 1, 1, 0, 0);
-    grid->addWidget(targetTitle, 2, 2, 0, 0);
-    grid->addWidget(previewTarget, 3, 3, 0, 0);
+    grid->addWidget(originalTitle, 0, 0, 1, 1);
+    grid->addWidget(previewOriginal, 1, 0, 1, 1);
+    grid->addWidget(targetTitle, 2, 0, 1, 1);
+    grid->addWidget(previewTarget, 3, 0, 1, 1);
     grid->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
-                      QSizePolicy::Minimum, QSizePolicy::Expanding), 0, 3, 1, 1);
-    grid->addLayout(vlay, 0, 3, 2, 2);
+                      QSizePolicy::Minimum, QSizePolicy::Expanding), 0, 1, 3, 1);
+    grid->addLayout(vlay, 0, 2, 4, 1);
     
     // --------------------------------------------------------------------
     
@@ -184,7 +194,6 @@ void ColorCorrectionDlg::slotEmbeddedProfInfo()
 
 void ColorCorrectionDlg::slotApplyClicked()
 {
-    DDebug() << "colorcorrectiondlg: Apply pressed" << endl;
     done(-1);
 }
 
