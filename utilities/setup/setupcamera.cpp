@@ -90,6 +90,8 @@ SetupCamera::SetupCamera( QWidget* parent )
     d->listView->addColumn( i18n("Path") );
     d->listView->addColumn( "Last Access Date", 0 ); // No i18n here. Hidden column with the last access date.
     d->listView->setAllColumnsShowFocus(true);
+    d->listView->setSelectionMode(Q3ListView::Single);
+    d->listView->setFullWidth(true);
     d->listView->setWhatsThis( i18n("<p>Here you can see the digital camera list used by digiKam "
                                     "via the Gphoto interface."));
 
