@@ -42,6 +42,10 @@
 #include <kvbox.h>
 #include <ktoolinvocation.h>
 
+// Libkexiv2 includes.
+
+#include <libkexiv2/kexiv2.h>
+
 // // Local includes.
 
 #include "albumsettings.h"
@@ -169,16 +173,20 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     exiv2LogoLabel->setWhatsThis(i18n("Visit Exiv2 project website"));
 
     K3ActiveLabel* explanation = new K3ActiveLabel(hbox);
-    explanation->setText(i18n("<p><b><a href='http://en.wikipedia.org/wiki/Exif'>EXIF</a></b> is "
-                              "a standard used by most digital cameras today to store technical "
-                              "informations about photograph.</p>"
-                              "<p><b><a href='http://en.wikipedia.org/wiki/IPTC'>IPTC</a></b> is "
-                              "an old standard used in digital photography to store "
-                              "photographer informations in pictures.</p>"
-                              "<p><b><a href='http://en.wikipedia.org/wiki/Extensible_Metadata_Platform'>"
-                              "XMP</a></b> is a new standard used in digital photography dedicaced to "
-                              "remplace IPTC.</p>"));
+    QString txt = i18n("<p><b><a href='http://en.wikipedia.org/wiki/Exif'>EXIF</a></b> is "
+                       "a standard used by most digital cameras today to store technical "
+                       "informations about photograph.</p>"
+                       "<p><b><a href='http://en.wikipedia.org/wiki/IPTC'>IPTC</a></b> is "
+                       "an old standard used in digital photography to store "
+                       "photographer informations in pictures.</p>");
 
+    if (KExiv2Iface::KExiv2::supportXmp())
+        txt.append(i18n("<p><b><a href='http://en.wikipedia.org/wiki/Extensible_Metadata_Platform'>"
+                        "XMP</a></b> is a new standard used in digital photography dedicaced to "
+                        "remplace IPTC.</p>"));
+
+    explanation->setText(txt);
+                   
     // --------------------------------------------------------
     
     mainLayout->setMargin(0);
