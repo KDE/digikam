@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
 
     QString Gphoto2Ver  = QString(gp_library_version(GP_VERSION_SHORT)[0]);
 
-    QString XmpSupport  = KExiv2Iface::KExiv2::supportXmp() ? I18N_NOOP("Yes") : I18N_NOOP("No");
+    QString XmpSupport  = KExiv2Iface::KExiv2::supportXmp() ? I18N_NOOP("yes") : I18N_NOOP("no");
 
     QString libInfo     = QString(I18N_NOOP("Using Kipi library version %1")).arg(kipi_version) +
                           QString("\n") + 
