@@ -193,10 +193,7 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     // --------------------------------------------------------
 
     readSettings();
-    adjustSize();
   
-    // --------------------------------------------------------
-
     connect(exiv2LogoLabel, SIGNAL(leftClickedUrl(const QString&)),
             this, SLOT(processExiv2Url(const QString&)));
 
