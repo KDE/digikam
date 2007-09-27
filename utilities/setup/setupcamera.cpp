@@ -79,10 +79,9 @@ SetupCamera::SetupCamera( QWidget* parent )
            : QWidget( parent )
 {
     d = new SetupCameraPriv;
-    QVBoxLayout *mainLayout = new QVBoxLayout(parent);
 
+    QVBoxLayout *mainLayout     = new QVBoxLayout(parent);
     QGridLayout* groupBoxLayout = new QGridLayout( this, 2, 5, 0, KDialog::spacingHint() );
-    groupBoxLayout->setAlignment( Qt::AlignTop );
 
     d->listView = new KListView( this );
     d->listView->addColumn( i18n("Title") );
@@ -91,31 +90,28 @@ SetupCamera::SetupCamera( QWidget* parent )
     d->listView->addColumn( i18n("Path") );
     d->listView->addColumn( "Last Access Date", 0 ); // No i18n here. Hidden column with the last access date.
     d->listView->setAllColumnsShowFocus(true);
-    groupBoxLayout->addMultiCellWidget( d->listView, 0, 5, 0, 0 );
     QWhatsThis::add( d->listView, i18n("<p>Here you can see the digital camera list used by digiKam "
                                        "via the Gphoto interface."));
 
     // -------------------------------------------------------------
 
-    d->addButton = new QPushButton( this );
-    groupBoxLayout->addWidget( d->addButton, 0, 1 );
-
-    d->removeButton = new QPushButton( this );
-    groupBoxLayout->addWidget( d->removeButton, 1, 1 );
-
-    d->editButton = new QPushButton( this );
-    groupBoxLayout->addWidget( d->editButton, 2, 1 );
-
+    d->addButton        = new QPushButton( this );
+    d->removeButton     = new QPushButton( this );
+    d->editButton       = new QPushButton( this );
     d->autoDetectButton = new QPushButton( this );
-    groupBoxLayout->addWidget( d->autoDetectButton, 3, 1 );
 
     d->addButton->setText( i18n( "&Add..." ) );
+    d->addButton->setIconSet(SmallIcon("add"));
     d->removeButton->setText( i18n( "&Remove" ) );
+    d->removeButton->setIconSet(SmallIcon("remove"));
     d->editButton->setText( i18n( "&Edit..." ) );
+    d->editButton->setIconSet(SmallIcon("configure"));
     d->autoDetectButton->setText( i18n( "Auto-&Detect" ) );
+    d->autoDetectButton->setIconSet(SmallIcon("find"));
+    d->removeButton->setEnabled(false);
+    d->editButton->setEnabled(false);
 
     QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
-    groupBoxLayout->addItem( spacer, 4, 1 );
 
     KURLLabel *gphotoLogoLabel = new KURLLabel(this);
     gphotoLogoLabel->setText(QString());
@@ -124,15 +120,18 @@ SetupCamera::SetupCamera( QWidget* parent )
     QString directory = KGlobal::dirs()->findResourceDir("logo-gphoto", "logo-gphoto.png");
     gphotoLogoLabel->setPixmap( QPixmap( directory + "logo-gphoto.png" ) );
     QToolTip::add(gphotoLogoLabel, i18n("Visit Gphoto project website"));
+
+    groupBoxLayout->setAlignment( Qt::AlignTop );
+    groupBoxLayout->addMultiCellWidget( d->listView, 0, 5, 0, 0 );
+    groupBoxLayout->addWidget( d->addButton, 0, 1 );
+    groupBoxLayout->addWidget( d->removeButton, 1, 1 );
+    groupBoxLayout->addWidget( d->editButton, 2, 1 );
+    groupBoxLayout->addWidget( d->autoDetectButton, 3, 1 );
+    groupBoxLayout->addItem( spacer, 4, 1 );
     groupBoxLayout->addWidget( gphotoLogoLabel, 5, 1 );
 
     adjustSize();
     mainLayout->addWidget(this);
-
-   // Initialize buttons
-
-    d->removeButton->setEnabled(false);
-    d->editButton->setEnabled(false);
 
     // -------------------------------------------------------------
 
