@@ -84,19 +84,23 @@ int main(int argc, char *argv[])
 
     QString Gphoto2Ver  = QString(gp_library_version(GP_VERSION_SHORT)[0]);
 
+    QString XmpSupport  = KExiv2Iface::KExiv2::supportXmp() ? I18N_NOOP("Yes") : I18N_NOOP("No");
+
     QString libInfo     = QString(I18N_NOOP("Using Kipi library version %1")).arg(kipi_version) +
                           QString("\n") + 
-                          QString(I18N_NOOP("Using KExiv2 library version %1")).arg(kexiv2_version) +
-                          QString("\n") +                           
-                          QString(I18N_NOOP("Using Exiv2 library version %1")).arg(Exiv2Ver) +
-                          QString("\n") +                           
                           QString(I18N_NOOP("Using KDcraw library version %1")).arg(kdcraw_version) +
                           QString("\n") +                           
                           QString(I18N_NOOP("Using Dcraw program version %1")).arg(DcrawVer) +
                           QString("\n") +                           
                           QString(I18N_NOOP("Using PNG library version %1")).arg(PNG_LIBPNG_VER_STRING) +
                           QString("\n") + 
-                          QString(I18N_NOOP("Using Gphoto2 library version %1")).arg(Gphoto2Ver);
+                          QString(I18N_NOOP("Using Gphoto2 library version %1")).arg(Gphoto2Ver) +
+                          QString("\n") +                           
+                          QString(I18N_NOOP("Using KExiv2 library version %1")).arg(kexiv2_version) +
+                          QString("\n") +                           
+                          QString(I18N_NOOP("Using Exiv2 library version %1")).arg(Exiv2Ver) +
+                          QString("\n") +                           
+                          QString(I18N_NOOP("XMP support available: %1")).arg(XmpSupport);
 
     KAboutData aboutData( "digikam", 0, 
                           ki18n("digiKam"),
