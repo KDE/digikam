@@ -145,7 +145,7 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     d->saveDateTimeBox = new QCheckBox(commonGroup);
     d->saveDateTimeBox->setText(i18n("&Save image timestamp as tags"));
     d->saveDateTimeBox->setWhatsThis( i18n("<p>Turn this option on to store the image date and time "
-                                           "into the EXIF and IPTC tags."));
+                                           "into the EXIF, XMP, and IPTC tags."));
 
     d->saveRatingBox = new QCheckBox(commonGroup);
     d->saveRatingBox->setText(i18n("&Save image rating as tags"));
@@ -169,12 +169,15 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     exiv2LogoLabel->setWhatsThis(i18n("Visit Exiv2 project website"));
 
     K3ActiveLabel* explanation = new K3ActiveLabel(hbox);
-    explanation->setText(i18n("<p><b>EXIF</b> is a standard used by most digital cameras today to store "
-                              "technical information about the photograph as metadata in the image file. You can learn more "
-                              "about EXIF at <a href='http://www.exif.org'>www.exif.org</a>.</p>"
-                              "<p><b>IPTC</b> is another standard used in digital photography to store "
-                              "embedded information in pictures. You can learn more "
-                              "about IPTC at <a href='http://www.iptc.org/IIM'>www.iptc.org</a>.</p>"));
+    explanation->setText(i18n("<p><b><a href='http://en.wikipedia.org/wiki/Exif'>EXIF</a></b> is "
+                              "a standard used by most digital cameras today to store technical "
+                              "informations about photograph.</p>"
+                              "<p><b><a href='http://en.wikipedia.org/wiki/IPTC'>IPTC</a></b> is "
+                              "an old standard used in digital photography to store "
+                              "photographer informations in pictures.</p>"
+                              "<p><b><a href='http://en.wikipedia.org/wiki/Extensible_Metadata_Platform'>"
+                              "XMP</a></b> is a new standard used in digital photography dedicaced to "
+                              "remplace IPTC.</p>"));
 
     // --------------------------------------------------------
     
