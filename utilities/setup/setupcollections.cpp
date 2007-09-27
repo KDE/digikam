@@ -39,6 +39,7 @@
 #include <klocale.h>
 #include <kpagedialog.h>
 #include <kurl.h>
+#include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kinputdialog.h>
 #include <klistwidget.h>
@@ -88,6 +89,9 @@ SetupCollections::SetupCollections(QWidget* parent )
     
     d->addCollectionButton = new QPushButton(i18n("&Add..."), this);
     d->delCollectionButton = new QPushButton(i18n("&Delete"), this);
+
+    d->addCollectionButton->setIcon(SmallIcon("edit-add"));
+    d->delCollectionButton->setIcon(SmallIcon("edit-delete"));
     d->delCollectionButton->setEnabled(false);
 
     QSpacerItem* spacer = new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding);
