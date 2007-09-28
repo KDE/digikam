@@ -148,7 +148,7 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
     collectionLabel->setBuddy( d->collectionCombo );
 
     QLabel *commentsLabel = new QLabel( plainPage( ) );
-    commentsLabel->setText( i18n( "Co&mments:" ) );
+    commentsLabel->setText( i18n( "Ca&ption:" ) );
     topLayout->addWidget( commentsLabel, 4, 0, Qt::AlignAuto|Qt::AlignTop );
 
     d->commentsEdit = new KTextEdit( plainPage( ) );
