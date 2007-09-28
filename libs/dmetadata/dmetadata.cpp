@@ -79,28 +79,16 @@ bool DMetadata::loadUsingDcraw(const QString& filePath)
         long int num=1, den=1;
 
         if (!identify.model.isNull())
-        {
             setExifTagString("Exif.Image.Model", identify.model.toLatin1(), false);
-            setXmpTagString("Xmp.tiff.Model", identify.model, false);
-        }
 
         if (!identify.make.isNull())
-        {
             setExifTagString("Exif.Image.Make", identify.make.toLatin1(), false);
-            setXmpTagString("Xmp.tiff.Make", identify.make, false);
-        }
 
         if (!identify.owner.isNull())
-        {
             setExifTagString("Exif.Image.Artist", identify.owner.toLatin1(), false);
-            setXmpTagString("Xmp.tiff.Artist", identify.owner, false);
-        }
 
         if (identify.sensitivity != -1)
-        {
             setExifTagLong("Exif.Photo.ISOSpeedRatings", identify.sensitivity, false);
-            setXmpTagString("Xmp.exif.ISOSpeedRatings", QString::number(identify.sensitivity), false);
-        }
 
         if (identify.dateTime.isValid())
             setImageDateTime(identify.dateTime, false, false);
@@ -109,21 +97,18 @@ bool DMetadata::loadUsingDcraw(const QString& filePath)
         {
             convertToRational(1/identify.exposureTime, &num, &den, 8);
             setExifTagRational("Exif.Photo.ExposureTime", num, den, false);
-            setXmpTagString("Xmp.exif.ExposureTime", QString("%1/%2").arg(num).arg(den), false);
         }
 
         if (identify.aperture != -1.0)
         {
             convertToRational(identify.aperture, &num, &den, 8);
             setExifTagRational("Exif.Photo.ApertureValue", num, den, false);
-            setXmpTagString("Xmp.exif.ApertureValue", QString("%1/%2").arg(num).arg(den), false);
         }
 
         if (identify.focalLength != -1.0)
         {
             convertToRational(identify.focalLength, &num, &den, 8);
             setExifTagRational("Exif.Photo.FocalLength", num, den, false);
-            setXmpTagString("Xmp.exif.FocalLength", QString("%1/%2").arg(num).arg(den), false);
         }
 
         if (identify.imageSize.isValid())
@@ -143,7 +128,9 @@ QString DMetadata::getImageComment() const
     if (getFilePath().isEmpty())
         return QString();
 
-    // In first we trying to get image comments, outside of Exif and IPTC.
+    // In first we trying to get image comments, outside of Xmp, Exif, and Iptc.
+    // For JPEG, string is extracted from JFIF Comments section.
+    // For PNG, string is extracted from iTXt chunck.
 
     QString comment = getCommentsDecoded();
     if (!comment.isEmpty())
@@ -151,16 +138,30 @@ QString DMetadata::getImageComment() const
 
     // In second, we trying to get Exif comments
 
-    if (!getExif().isEmpty())
+    if (hasExif())
     {
         QString exifComment = getExifComment();     
         if (!exifComment.isEmpty())
             return exifComment;
     }
 
-    // In third, we trying to get IPTC comments
+    // In third, we trying to get Xmp comments
 
-    if (!getIptc().isEmpty())
+    if (hasXmp())
+    {
+        QString lang;
+        QString xmpComment = getXmpTagString("Xmp.exif.UserComment", false);
+        if (!xmpComment.isEmpty() && !xmpComment.trimmed().isEmpty())
+            return detectLanguageAlt(xmpComment, lang);
+
+        xmpComment = getXmpTagString("Xmp.dc.Description", false);
+        if (!xmpComment.isEmpty() && !xmpComment.trimmed().isEmpty())
+            return detectLanguageAlt(xmpComment, lang);
+    }
+
+    // In four, we trying to get Iptc comments
+
+    if (hasIptc())
     {
         QString iptcComment = getIptcTagString("Iptc.Application2.Caption", false);
         if (!iptcComment.isEmpty() && !iptcComment.trimmed().isEmpty())
@@ -172,16 +173,13 @@ QString DMetadata::getImageComment() const
 
 bool DMetadata::setImageComment(const QString& comment)
 {
-    //See bug #139313: An empty string is also a valid value
-    //if (comment.isEmpty())
-    //    return false;
+    //See B.K.O #139313: An empty string is also a valid value
+    /*if (comment.isEmpty())
+          return false;*/
     
     DDebug() << getFilePath() << " ==> Comment: " << comment << endl;
 
-    if (!setProgramId())
-        return false;
-
-    // In first we trying to set image comments, outside of Exif and IPTC.
+    // In first we set image comments, outside of Exif, Xmp, and Iptc.
 
     if (!setComments(comment.toUtf8()))
         return false;
@@ -191,7 +189,16 @@ bool DMetadata::setImageComment(const QString& comment)
     if (!setExifComment(comment))
         return false;
 
-    // In Third we write comments into Iptc.
+    // In Third we write comments into Xmp.
+
+    QString lang("lang=\"x-default\" ");
+    if (!setXmpTagString("Xmp.exif.UserComment", lang + comment))
+        return false;
+
+    if (!setXmpTagString("Xmp.dc.Description", lang + comment))
+        return false;
+
+    // In Four we write comments into Iptc.
     // Note that Caption IPTC tag is limited to 2000 char and ASCII charset.
 
     QString commentIptc = comment;
