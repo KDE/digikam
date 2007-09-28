@@ -79,16 +79,31 @@ bool DMetadata::loadUsingDcraw(const QString& filePath)
         long int num=1, den=1;
 
         if (!identify.model.isNull())
+        {
             setExifTagString("Exif.Image.Model", identify.model.toLatin1(), false);
+            setXmpTagString("Xmp.tiff.Model", identify.model, false);
+        }
 
         if (!identify.make.isNull())
+        {
             setExifTagString("Exif.Image.Make", identify.make.toLatin1(), false);
+            setXmpTagString("Xmp.tiff.Make", identify.make, false);
+        }
 
         if (!identify.owner.isNull())
+        {
             setExifTagString("Exif.Image.Artist", identify.owner.toLatin1(), false);
+            setXmpTagString("Xmp.tiff.Artist", identify.owner, false);
+        }
 
         if (identify.sensitivity != -1)
+        {
             setExifTagLong("Exif.Photo.ISOSpeedRatings", identify.sensitivity, false);
+            bool ok=false;
+            QString sens = QString::number(identify.sensitivity, ok);
+            if (ok)
+                setXmpTagString("Xmp.tiff.Artist", sens, false);
+        }
 
         if (identify.dateTime.isValid())
             setImageDateTime(identify.dateTime, false, false);
@@ -97,18 +112,21 @@ bool DMetadata::loadUsingDcraw(const QString& filePath)
         {
             convertToRational(1/identify.exposureTime, &num, &den, 8);
             setExifTagRational("Exif.Photo.ExposureTime", num, den, false);
+            setXmpTagString("Xmp.exif.ExposureTime", QString("%1/%2").arg(num).arg(den), false);
         }
 
         if (identify.aperture != -1.0)
         {
             convertToRational(identify.aperture, &num, &den, 8);
             setExifTagRational("Exif.Photo.ApertureValue", num, den, false);
+            setXmpTagString("Xmp.exif.ApertureValue", QString("%1/%2").arg(num).arg(den), false);
         }
 
         if (identify.focalLength != -1.0)
         {
             convertToRational(identify.focalLength, &num, &den, 8);
             setExifTagRational("Exif.Photo.FocalLength", num, den, false);
+            setXmpTagString("Xmp.exif.FocalLength", QString("%1/%2").arg(num).arg(den), false);
         }
 
         if (identify.imageSize.isValid())
