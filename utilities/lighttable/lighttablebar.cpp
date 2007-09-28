@@ -180,7 +180,7 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent *e)
         }
 
         popmenu.insertSeparator();
-        popmenu.insertItem(SmallIcon("fileclose"), i18n("Remove"), 13);
+        popmenu.insertItem(SmallIcon("fileclose"), i18n("Remove item"), 13);
         popmenu.insertItem(SmallIcon("editshred"), i18n("Clear all"), 14);
         popmenu.insertSeparator();
 

@@ -256,7 +256,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     d->renameCustomizer  = new RenameCustomizer(d->advBox, d->cameraTitle);
     d->view->setRenameCustomizer(d->renameCustomizer);
 
-    QWhatsThis::add( d->advBox, i18n("<p>Set how digiKam will rename file files as they are downloaded."));
+    QWhatsThis::add( d->advBox, i18n("<p>Set how digiKam will rename files as they are downloaded."));
 
     d->advBox->insertItem(CameraUIPriv::RENAMEFILEPAGE, d->renameCustomizer, 
                           SmallIconSet("fileimport"), i18n("File Renaming Options"));
