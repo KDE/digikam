@@ -59,20 +59,21 @@ static const char* XmpHumanList[] =
 
 static const char* StandardXmpEntryList[] =
 {
-     "aux",       // Schema for Additional Exif Properties.   
-     "crs",       // Camera Raw schema.
-     "dc",        // Dublin Core schema.
-     "exif",      // Schema for Exif-specific Properties.
-     "iptc",      // IPTC Core schema.
-     "pdf",       // Adobe PDF schema.
-     "photoshop", // Adobe Photoshop schema.
-     "tiff",      // Schema for TIFF Properties
-     "xmp",       // Basic schema.
-     "xmpBJ",     // Basic Job Ticket schema.
-     "xmpDM",     // Dynamic Media schema.
-     "xmpMM",     // Media Management schema.
-     "xmpRights", // Rights Management schema.
-     "xmpTPg",    // Paged-Text schema.
+     "aux",             // Schema for Additional Exif Properties.   
+     "crs",             // Camera Raw schema.
+     "dc",              // Dublin Core schema.
+     "exif",            // Schema for Exif-specific Properties.
+     "iptc",            // IPTC Core schema.
+     "pdf",             // Adobe PDF schema.
+     "photoshop",       // Adobe Photoshop schema.
+     "tiff",            // Schema for TIFF Properties
+     "xmp",             // Basic schema.
+     "xmpBJ",           // Basic Job Ticket schema.
+     "xmpDM",           // Dynamic Media schema.
+     "xmpMM",           // Media Management schema.
+     "xmpRights",       // Rights Management schema.
+     "xmpTPg",          // Paged-Text schema.
+     "MicrosoftPhoto",  // Microsoft schema.
      "-1"
 };
 
@@ -148,7 +149,7 @@ QString XmpWidget::getTagTitle(const QString& key)
     QString title = DMetadata::getXmpTagTitle(key.toAscii());
 
     if (title.isEmpty())
-        return i18n("Unknown");
+        return key.section('.', -1);
 
     return title;
 }

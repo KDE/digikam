@@ -178,7 +178,7 @@ QString MakerNoteWidget::getTagTitle(const QString& key)
     QString title = DMetadata::getExifTagTitle(key.toAscii());
 
     if (title.isEmpty())
-        return i18n("Unknown");
+        return key.section('.', -1);
 
     return title;
 }
