@@ -127,8 +127,8 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     QGroupBox *commonGroup = new QGroupBox(1, Qt::Horizontal, i18n("Common Metadata Actions"), parent);
 
     d->saveCommentsBox = new QCheckBox(commonGroup);
-    d->saveCommentsBox->setText(i18n("&Save image comments as embedded text"));
-    QWhatsThis::add( d->saveCommentsBox, i18n("<p>Turn this option on to store image comments "
+    d->saveCommentsBox->setText(i18n("&Save image captions as embedded text"));
+    QWhatsThis::add( d->saveCommentsBox, i18n("<p>Turn this option on to store image captions "
                                               "into the JFIF section, EXIF tag, and IPTC tag."));
 
     d->saveDateTimeBox = new QCheckBox(commonGroup);

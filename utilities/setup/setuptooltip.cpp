@@ -173,8 +173,8 @@ SetupToolTip::SetupToolTip(QWidget* parent)
     d->showAlbumNameBox = new QCheckBox(i18n("Show album name"), d->digikamSettingBox);
     QWhatsThis::add( d->showAlbumNameBox, i18n("<p>Set this option to display the album name."));
 
-    d->showCommentsBox = new QCheckBox(i18n("Show image comments"), d->digikamSettingBox);
-    QWhatsThis::add( d->showCommentsBox, i18n("<p>Set this option to display image comments."));
+    d->showCommentsBox = new QCheckBox(i18n("Show image caption"), d->digikamSettingBox);
+    QWhatsThis::add( d->showCommentsBox, i18n("<p>Set this option to display image captions."));
 
     d->showTagsBox = new QCheckBox(i18n("Show image tags"), d->digikamSettingBox);
     QWhatsThis::add( d->showTagsBox, i18n("<p>Set this option to display image tags."));
