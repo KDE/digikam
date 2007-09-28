@@ -150,13 +150,13 @@ QString DMetadata::getImageComment() const
     if (hasXmp())
     {
         QString lang;
-        QString xmpComment = getXmpTagString("Xmp.exif.UserComment", false);
-        if (!xmpComment.isEmpty() && !xmpComment.trimmed().isEmpty())
-            return detectLanguageAlt(xmpComment, lang);
+        QString xmpComment = getXmpTagStringLangAlt("Xmp.exif.UserComment", lang, false);
+        if (!xmpComment.isEmpty())
+            return xmpComment;
 
-        xmpComment = getXmpTagString("Xmp.dc.Description", false);
-        if (!xmpComment.isEmpty() && !xmpComment.trimmed().isEmpty())
-            return detectLanguageAlt(xmpComment, lang);
+        xmpComment = getXmpTagStringLangAlt("Xmp.dc.Description", lang, false);
+        if (!xmpComment.isEmpty())
+            return xmpComment;
     }
 
     // In four, we trying to get Iptc comments
@@ -191,11 +191,10 @@ bool DMetadata::setImageComment(const QString& comment)
 
     // In Third we write comments into Xmp.
 
-    QString lang("lang=\"x-default\" ");
-    if (!setXmpTagString("Xmp.exif.UserComment", lang + comment))
+    if (!setXmpTagStringLangAlt("Xmp.exif.UserComment", comment, QString(), false))
         return false;
 
-    if (!setXmpTagString("Xmp.dc.Description", lang + comment))
+    if (!setXmpTagStringLangAlt("Xmp.dc.Description", comment, QString(), false))
         return false;
 
     // In Four we write comments into Iptc.
