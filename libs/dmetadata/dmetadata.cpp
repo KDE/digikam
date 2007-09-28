@@ -99,10 +99,7 @@ bool DMetadata::loadUsingDcraw(const QString& filePath)
         if (identify.sensitivity != -1)
         {
             setExifTagLong("Exif.Photo.ISOSpeedRatings", identify.sensitivity, false);
-            bool ok=false;
-            QString sens = QString::number(identify.sensitivity, ok);
-            if (ok)
-                setXmpTagString("Xmp.tiff.Artist", sens, false);
+            setXmpTagString("Xmp.tiff.Artist", QString::number(identify.sensitivity), false);
         }
 
         if (identify.dateTime.isValid())
