@@ -150,7 +150,7 @@ void ThemedIconItem::paintItem()
 
     p.setFont(view->itemFontCom());
     r = view->itemCommentsRect();
-    p.drawText(r, Qt::AlignCenter, squeezedText(&p, r.width(), i18n("Photo comments")));
+    p.drawText(r, Qt::AlignCenter, squeezedText(&p, r.width(), i18n("Photo caption")));
 
     p.setFont(view->itemFontXtra());
     {
