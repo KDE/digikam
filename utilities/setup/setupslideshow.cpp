@@ -106,8 +106,8 @@ SetupSlideShow::SetupSlideShow(QWidget* parent )
     d->printMakeModel = new QCheckBox(i18n("Print camera make and model"), this);
     d->printMakeModel->setWhatsThis( i18n("<p>Print camera make and model to the screen bottom."));
 
-    d->printComment = new QCheckBox(i18n("Print image comment"), this);
-    d->printComment->setWhatsThis( i18n("<p>Print image comment on bottom of screen."));
+    d->printComment = new QCheckBox(i18n("Print image caption"), this);
+    d->printComment->setWhatsThis( i18n("<p>Print image caption on the screen bottom."));
     
     layout->addWidget(d->delayInput);
     layout->addWidget(d->startWithCurrent);

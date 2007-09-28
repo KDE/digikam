@@ -142,8 +142,8 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     QVBoxLayout *gLayout3  = new QVBoxLayout(commonGroup);
 
     d->saveCommentsBox = new QCheckBox(commonGroup);
-    d->saveCommentsBox->setText(i18n("&Save image comments as embedded text"));
-    d->saveCommentsBox->setWhatsThis( i18n("<p>Turn this option on to store image comments "
+    d->saveCommentsBox->setText(i18n("&Save image captions as embedded text"));
+    d->saveCommentsBox->setWhatsThis( i18n("<p>Turn this option on to store image captions "
                                            "into the JFIF section, EXIF tag, and IPTC tag."));
 
     d->saveDateTimeBox = new QCheckBox(commonGroup);

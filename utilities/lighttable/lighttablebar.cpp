@@ -852,7 +852,7 @@ QString LightTableBarToolTip::tipContentExtraData(ThumbBarItem* item)
             {
                 str = info.comment();
                 if (str.isEmpty()) str = QString("---");
-                tip += m_cellSpecBeg + i18n("Comments:") + m_cellSpecMid + breakString(str) + m_cellSpecEnd;
+                tip += m_cellSpecBeg + i18n("Caption:") + m_cellSpecMid + breakString(str) + m_cellSpecEnd;
             }
 
             if (settings->getToolTipsShowTags())

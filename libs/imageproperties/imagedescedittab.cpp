@@ -157,7 +157,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     // Comments/Date/Rating view -----------------------------------
 
     KVBox *commentsBox = new KVBox(settingsArea);
-    new QLabel(i18n("Comments:"), commentsBox);
+    new QLabel(i18n("Caption:"), commentsBox);
     d->commentsEdit = new KTextEdit(commentsBox);
     d->commentsEdit->setCheckSpellingEnabled(true);
 
@@ -402,20 +402,20 @@ void ImageDescEditTab::slotChangingItems()
         if (changedFields == 1)
         {
             if (d->hub.commentChanged())
-                text = i18np("<qt><p>You have edited the comment of the image. ",
-                             "<qt><p>You have edited the comment of %n pictures. ",
+                text = i18np("<qt><p>You have edited the image caption. ",
+                             "<qt><p>You have edited the captions of %n images. ",
                              d->currInfos.count());
             else if (d->hub.dateTimeChanged())
                 text = i18np("<qt><p>You have edited the date of the image. ",
-                             "<qt><p>You have edited the date of %n pictures. ",
+                             "<qt><p>You have edited the date of %n images. ",
                              d->currInfos.count());
             else if (d->hub.ratingChanged())
                 text = i18np("<qt><p>You have edited the rating of the image. ",
-                             "<qt><p>You have edited the rating of %n pictures. ",
+                             "<qt><p>You have edited the rating of %n images. ",
                              d->currInfos.count());
             else if (d->hub.tagsChanged())
                 text = i18np("<qt><p>You have edited the tags of the image. ",
-                             "<qt><p>You have edited the tags of %n pictures. ",
+                             "<qt><p>You have edited the tags of %n images. ",
                              d->currInfos.count());
 
             text += i18n("Do you want to apply your changes?</p></qt>");
@@ -423,11 +423,11 @@ void ImageDescEditTab::slotChangingItems()
         else
         {
             text = i18np("<qt><p>You have edited the metadata of the image: </p><ul>",
-                         "<qt><p>You have edited the metadata of %n pictures: </p><ul>",
+                         "<qt><p>You have edited the metadata of %n images: </p><ul>",
                          d->currInfos.count());
 
             if (d->hub.commentChanged())
-                text += i18n("<li>the comment</li>");
+                text += i18n("<li>the caption</li>");
             if (d->hub.dateTimeChanged())
                 text += i18n("<li>the date</li>");
             if (d->hub.ratingChanged())

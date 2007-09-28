@@ -143,8 +143,8 @@ SetupGeneral::SetupGeneral(KPageDialog* dialog, QWidget* parent)
     d->iconShowModDateBox->setWhatsThis( i18n("<p>Set this option to show file modification date "
                                               "below image thumbnail."));
 
-    d->iconShowCommentsBox = new QCheckBox(i18n("Show digiKam &comments"), iconTextGroup);
-    d->iconShowCommentsBox->setWhatsThis( i18n("<p>Set this option to show digiKam comments "
+    d->iconShowCommentsBox = new QCheckBox(i18n("Show digiKam &captions"), iconTextGroup);
+    d->iconShowCommentsBox->setWhatsThis( i18n("<p>Set this option to show digiKam captions "
                                                "below image thumbnail."));
 
     d->iconShowTagsBox = new QCheckBox(i18n("Show digiKam &tags"), iconTextGroup);
@@ -294,7 +294,7 @@ void SetupGeneral::slotChangeAlbumPath(const KUrl &result)
     if (!result.isEmpty() && !targetPath.isWritable()) 
     {
         KMessageBox::information(0, i18n("No write access for this path.\n"
-                                         "Warning: the comment and tag features will not work."));
+                                         "Warning: the caption and tag features will not work."));
     }
 }
 

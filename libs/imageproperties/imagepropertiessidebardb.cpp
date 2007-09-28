@@ -89,7 +89,7 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, QSplitter *s
     d = new ImagePropertiesSideBarDBPriv;
     d->desceditTab = new ImageDescEditTab(parent, false);
 
-    appendTab(d->desceditTab, SmallIcon("imagecomment"), i18n("Comments/Tags"));
+    appendTab(d->desceditTab, SmallIcon("imagecomment"), i18n("Caption/Tags"));
 
     slotThemeChanged();
 

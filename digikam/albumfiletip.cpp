@@ -527,7 +527,7 @@ void AlbumFileTip::updateText()
         {
             str = info.comment();
             if (str.isEmpty()) str = QString("---");
-            tip += cellSpecBeg + i18n("Comments:") + cellSpecMid + breakString(str) + cellSpecEnd;
+            tip += cellSpecBeg + i18n("Caption:") + cellSpecMid + breakString(str) + cellSpecEnd;
         }
 
         if (settings->getToolTipsShowTags())
