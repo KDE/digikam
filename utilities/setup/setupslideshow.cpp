@@ -85,11 +85,11 @@ SetupSlideShow::SetupSlideShow(QWidget* parent )
     QWhatsThis::add( d->delayInput, i18n("<p>The delay, in seconds, between images."));
     
     d->startWithCurrent = new QCheckBox(i18n("Start with current image"), parent);
-    QWhatsThis::add( d->startWithCurrent, i18n("<p>If this option is enabled, Slideshow will be started "
-                                               "with current image selected from the images list."));
+    QWhatsThis::add( d->startWithCurrent, i18n("<p>If this option is enabled, slideshow will be started "
+                                               "with currently selected image."));
     
-    d->loopMode = new QCheckBox(i18n("Display in loop"), parent);
-    QWhatsThis::add( d->loopMode, i18n("<p>Run the slideshow in a loop."));
+    d->loopMode = new QCheckBox(i18n("Display in a loop"), parent);
+    QWhatsThis::add( d->loopMode, i18n("<p>Run the slideshow in endless repetition."));
     
     d->printName = new QCheckBox(i18n("Print image file name"), parent);
     QWhatsThis::add( d->printName, i18n("<p>Print image file name to the screen bottom."));
@@ -101,13 +101,13 @@ SetupSlideShow::SetupSlideShow(QWidget* parent )
     QWhatsThis::add( d->printApertureFocal, i18n("<p>Print camera aperture and focal length to the screen bottom."));
 
     d->printExpoSensitivity = new QCheckBox(i18n("Print camera exposure and sensitivity"), parent);
-    QWhatsThis::add( d->printExpoSensitivity, i18n("<p>Print camera exposure and sensitivity to the screen  bottom."));
+    QWhatsThis::add( d->printExpoSensitivity, i18n("<p>Print camera exposure and sensitivity to the screen bottom."));
 
     d->printMakeModel = new QCheckBox(i18n("Print camera make and model"), parent);
     QWhatsThis::add( d->printMakeModel, i18n("<p>Print camera make and model to the screen bottom."));
 
-    d->printComment = new QCheckBox(i18n("Print image comment"), parent);
-    QWhatsThis::add( d->printComment, i18n("<p>Print image comment on bottom of screen."));
+    d->printComment = new QCheckBox(i18n("Print image caption"), parent);
+    QWhatsThis::add( d->printComment, i18n("<p>Print image caption to bottom of the screen."));
     
     layout->addWidget(d->delayInput);
     layout->addWidget(d->startWithCurrent);
