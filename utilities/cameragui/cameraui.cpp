@@ -182,7 +182,7 @@ void CameraUI::setupUserArea()
     d->renameCustomizer  = new RenameCustomizer(d->advBox, d->cameraTitle);
     d->view->setRenameCustomizer(d->renameCustomizer);
 
-    d->advBox->setWhatsThis( i18n("<p>Set how digiKam will rename file files as they are downloaded."));
+    d->advBox->setWhatsThis( i18n("<p>Set how digiKam will rename files as they are downloaded."));
 
     d->advBox->insertItem(CameraUIPriv::RENAMEFILEPAGE, d->renameCustomizer, 
                           SmallIcon("file-import"), i18n("File Renaming Options"));
