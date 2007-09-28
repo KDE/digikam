@@ -147,7 +147,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     // Comments/Date/Rating view -----------------------------------
     
     QVBox *commentsBox = new QVBox(settingsArea);
-    new QLabel(i18n("Comments:"), commentsBox);
+    new QLabel(i18n("Caption:"), commentsBox);
     d->commentsEdit = new KTextEdit(commentsBox);
     d->commentsEdit->setTextFormat(QTextEdit::PlainText);
     d->commentsEdit->setCheckSpellingEnabled(true);
