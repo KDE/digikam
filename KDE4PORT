@@ -74,7 +74,7 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
     filesaveoptionsbox.cpp              Gilles          X      X       DONE        DONE
     histogramwidget.cpp                 Gilles          X      X       DONE        DONE
     paniconwidget.cpp                   Gilles          X      X       DONE        DONE
-    previewwidget.cpp                   Gilles          X      X       DONE        DONE
+    previewwidget.cpp                   Gilles          X      X       DONE                 Pan tool crash digiKam in preview mode.
     sidebar.cpp                         Gilles          X      X       DONE        DONE
     splashscreen.cpp                    Gilles          X      X       DONE        DONE
     squeezedcombobox.cpp                Gilles          X      X       DONE        DONE
@@ -109,7 +109,7 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
 |---hotplug                             Laurent                        DONE        -
 |---imageeditor
 |-----canvas  
-    canvas.cpp                          Gilles          X      X       DONE
+    canvas.cpp                          Gilles          X      X       DONE                 Pan tool crash digiKam 
     colorcorrectiondlg.cpp              Gilles          X      X       DONE
     dimginterface.cpp                   Gilles          X      X       DONE
     imageplugin.cpp                     Gilles          X      X       DONE
