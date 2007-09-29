@@ -234,7 +234,7 @@ int DMetadata::getImageRating() const
     // Note : no need to check rating in percent tags (Exif.image.0x4747) here because 
     // its appear always with rating tag value (Exif.image.0x4749). 
 
-    if (!getExif().isEmpty())
+    if (hasExif())
     {
         long rating = -1;
         if (getExifTagLong("Exif.Image.0x4746", rating))
@@ -244,9 +244,21 @@ int DMetadata::getImageRating() const
         }
     }
 
+    if (hasXmp())
+    {
+        QString value = getXmpTagString("Xmp.xmp.Rating", false);
+        if (!value.isEmpty())
+        {
+            bool ok     = false;
+            long rating = value.toLong(&ok);
+            if (ok && rating >= RatingMin && rating <= RatingMax)
+                return rating;            
+        }
+    }
+
     // Check Iptc Urgency tag content
 
-    if (!getIptc().isEmpty())
+    if (hasIptc())
     {
         QString IptcUrgency(getIptcTagData("Iptc.Application2.Urgency"));
         
@@ -319,6 +331,11 @@ bool DMetadata::setImageRating(int rating)
     if (!setExifTagLong("Exif.Image.0x4749", ratePercents))
         return false;
 
+    // Set Xmp rating tag.
+
+    if (!setXmpTagString("Xmp.xmp.Rating", QString::number(rating)))
+        return false;
+
     // Set Iptc Urgency tag value.
 
     QString urgencyTag;
@@ -364,7 +381,6 @@ bool DMetadata::setImagePhotographerId(const QString& author, const QString& aut
     if (!setProgramId())
         return false;
 
-    //TODO  Exernalize the hard-coded values
     if (!setIptcTag(author,      32, "Author",       "Iptc.Application2.Byline"))      return false;
     if (!setIptcTag(authorTitle, 32, "Author Title", "Iptc.Application2.BylineTitle")) return false;
 
@@ -376,7 +392,6 @@ bool DMetadata::setImageCredits(const QString& credit, const QString& source, co
     if (!setProgramId())
         return false;
 
-    //TODO  Exernalize the hard-coded values
     if (!setIptcTag(credit,     32, "Credit",    "Iptc.Application2.Credit"))    return false;
     if (!setIptcTag(source,     32, "Source",    "Iptc.Application2.Source"))    return false;
     if (!setIptcTag(copyright, 128, "Copyright", "Iptc.Application2.Copyright")) return false;
