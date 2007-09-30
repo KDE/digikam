@@ -534,7 +534,6 @@ SET(libcameragui_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/capturewidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/capturedlg.cpp
    )
-endif
 ADD_SUBDIRECTORY( data )
 ADD_SUBDIRECTORY( libs )
 ADD_SUBDIRECTORY( utilities )
