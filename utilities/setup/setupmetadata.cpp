@@ -32,7 +32,6 @@
 
 // KDE includes.
 
-#include <k3activelabel.h>
 #include <klocale.h>
 #include <kdialog.h>
 #include <kurllabel.h>
@@ -164,15 +163,18 @@ SetupMetadata::SetupMetadata(QWidget* parent )
 
     // --------------------------------------------------------
     
-    KHBox *hbox = new KHBox(this);
+    QWidget     *box  = new QWidget(this);
+    QGridLayout *grid = new QGridLayout(box);
 
-    KUrlLabel *exiv2LogoLabel = new KUrlLabel(hbox);
+    KUrlLabel *exiv2LogoLabel = new KUrlLabel(box);
     exiv2LogoLabel->setText(QString());
     exiv2LogoLabel->setUrl("http://www.exiv2.org");
     exiv2LogoLabel->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-exiv2.png")));
     exiv2LogoLabel->setWhatsThis(i18n("Visit Exiv2 project website"));
 
-    K3ActiveLabel* explanation = new K3ActiveLabel(hbox);
+    QLabel* explanation = new QLabel(box);
+    explanation->setOpenExternalLinks(true);
+    explanation->setWordWrap(true);
     QString txt = i18n("<p><b><a href='http://en.wikipedia.org/wiki/Exif'>EXIF</a></b> is "
                        "a standard used by most digital cameras today to store technical "
                        "informations about photograph.</p>"
@@ -186,6 +188,13 @@ SetupMetadata::SetupMetadata(QWidget* parent )
                         "remplace IPTC.</p>"));
 
     explanation->setText(txt);
+
+    grid->addWidget(exiv2LogoLabel, 0, 0, 1, 1);
+    grid->addWidget(explanation, 0, 1, 2, 1);
+    grid->setColumnStretch(1, 10);
+    grid->setRowStretch(1, 10);
+    grid->setMargin(KDialog::spacingHint());
+    grid->setSpacing(0);
                    
     // --------------------------------------------------------
     
@@ -195,7 +204,7 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     mainLayout->addWidget(IptcGroup);
     mainLayout->addWidget(commonGroup);
     mainLayout->addSpacing(KDialog::spacingHint());
-    mainLayout->addWidget(hbox);
+    mainLayout->addWidget(box);
     mainLayout->addStretch();
 
     // --------------------------------------------------------
