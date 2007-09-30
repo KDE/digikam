@@ -61,7 +61,17 @@ else(SQLITE_FOUND)
 endif(SQLITE_FOUND)
 
 if(GPHOTO2_FOUND)
-  message("-- libgphoto2 library found....... YES")
+ EXEC_PROGRAM(gphoto2-config ARGS --version RETURN_VALUE _return_VALUE OUTPUT_VARIABLE GPHOTO2_VERSION)
+ STRING(REPLACE "libgphoto2" "" GPHOTO2_VERSION "${GPHOTO2_VERSION}")
+ MACRO_ENSURE_VERSION( "2.4.0" "${GPHOTO2_VERSION}" VERSION_GPHOTO2)
+ MESSAGE(STATUS "ensure version ${VERSION_OKK}")
+  if( VERSION_GPHOTO2)
+    message("-- libgphoto2 library found....... YES")
+  else(VERSION_GPHOTO2)
+    message("-- libgphoto2 library found....... NO")
+    message("-- Install libghoto2 > 2.4.0")
+    set(GPHOTO2_FOUND false)
+  endif(VERSION_GPHOTO2)
 else(GPHOTO2_FOUND)
   message("-- libgphoto2 library found....... NO")
   message("")
@@ -505,7 +515,6 @@ SET(liblighttable_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttablebar.cpp 
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttablewindow.cpp 
    )
-
 SET(libcameragui_SRCS 
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/dkcamera.cpp 
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/umscamera.cpp 
@@ -525,7 +534,7 @@ SET(libcameragui_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/capturewidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/capturedlg.cpp
    )
-
+endif
 ADD_SUBDIRECTORY( data )
 ADD_SUBDIRECTORY( libs )
 ADD_SUBDIRECTORY( utilities )
