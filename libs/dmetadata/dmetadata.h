@@ -52,33 +52,37 @@ public:
     ~DMetadata();
 
     /** Re-implemented from libKexiv2 to use dcraw identify method if Exiv2 failed. */
-    bool load(const QString& filePath);
+    bool load(const QString& filePath) const;
 
     /** Try to extract metadata using dcraw identify method */
-    bool loadUsingDcraw(const QString& filePath);
+    bool loadUsingDcraw(const QString& filePath) const;
     
     /** Metadata manipulation methods */
 
     QString getImageComment() const;
-    bool    setImageComment(const QString& comment);
+    bool    setImageComment(const QString& comment) const;
 
     int  getImageRating() const;
-    bool setImageRating(int rating);
+    bool setImageRating(int rating) const;
 
-    bool setImagePhotographerId(const QString& author, const QString& authorTitle);
-    bool setImageCredits(const QString& credit, const QString& source, const QString& copyright);
+    bool setImagePhotographerId(const QString& author, const QString& authorTitle) const;
+    bool setImageCredits(const QString& credit, const QString& source, const QString& copyright) const;
 
     PhotoInfoContainer getPhotographInformations() const;
 
+    
+
+    /** Methods dedicaced to record/read a private Iptc tag used to store digiKam image properties.
+        Code tested but not used because Xmp is more simple to use for that. */
     bool getXMLImageProperties(QString& comments, QDateTime& date, 
-                               int& rating, QStringList& tagsPath);
+                               int& rating, QStringList& tagsPath) const;
     bool setXMLImageProperties(const QString& comments, const QDateTime& date, 
-                               int rating, const QStringList& tagsPath);
+                               int rating, const QStringList& tagsPath) const;
 
 private:
 
-    bool setProgramId(bool on=true);
-    bool setIptcTag(const QString& text, int maxLength, const char* debugLabel, const char* tagKey);
+    bool setProgramId(bool on=true) const;
+    bool setIptcTag(const QString& text, int maxLength, const char* debugLabel, const char* tagKey) const;
 };
 
 }  // NameSpace Digikam

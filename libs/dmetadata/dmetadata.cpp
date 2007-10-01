@@ -57,7 +57,7 @@ DMetadata::~DMetadata()
 {
 }
 
-bool DMetadata::load(const QString& filePath)
+bool DMetadata::load(const QString& filePath) const
 {
     // In first, we trying to get metadata using Exiv2,
     // else we will use dcraw to extract minimal information.
@@ -71,7 +71,7 @@ bool DMetadata::load(const QString& filePath)
     return true;
 }
 
-bool DMetadata::loadUsingDcraw(const QString& filePath)
+bool DMetadata::loadUsingDcraw(const QString& filePath) const
 {
     KDcrawIface::DcrawInfoContainer identify;
     if (KDcrawIface::KDcraw::rawFileIdentify(identify, filePath))
@@ -123,7 +123,7 @@ bool DMetadata::loadUsingDcraw(const QString& filePath)
     return false;
 }
 
-bool DMetadata::setProgramId(bool on)
+bool DMetadata::setProgramId(bool on) const
 {
     if (on)
     {
@@ -183,7 +183,7 @@ QString DMetadata::getImageComment() const
     return QString();
 }
 
-bool DMetadata::setImageComment(const QString& comment)
+bool DMetadata::setImageComment(const QString& comment) const
 {
     //See B.K.O #139313: An empty string is also a valid value
     /*if (comment.isEmpty())
@@ -298,7 +298,7 @@ int DMetadata::getImageRating() const
     return -1;
 }
 
-bool DMetadata::setImageRating(int rating)
+bool DMetadata::setImageRating(int rating) const
 {
     if (rating < RatingMin || rating > RatingMax)
     {
@@ -460,7 +460,7 @@ PhotoInfoContainer DMetadata::getPhotographInformations() const
     return photoInfo;
 }
 
-bool DMetadata::setImagePhotographerId(const QString& author, const QString& authorTitle)
+bool DMetadata::setImagePhotographerId(const QString& author, const QString& authorTitle) const
 {
     if (!setProgramId())
         return false;
@@ -471,7 +471,7 @@ bool DMetadata::setImagePhotographerId(const QString& author, const QString& aut
     return true;
 }
 
-bool DMetadata::setImageCredits(const QString& credit, const QString& source, const QString& copyright)
+bool DMetadata::setImageCredits(const QString& credit, const QString& source, const QString& copyright) const
 {
     if (!setProgramId())
         return false;
@@ -483,7 +483,8 @@ bool DMetadata::setImageCredits(const QString& credit, const QString& source, co
     return true;
 }
 
-bool DMetadata::setIptcTag(const QString& text, int maxLength, const char* debugLabel, const char* tagKey) 
+bool DMetadata::setIptcTag(const QString& text, int maxLength, 
+                           const char* debugLabel, const char* tagKey)  const
 {
     QString truncatedText = text;
     truncatedText.truncate(maxLength);
@@ -511,7 +512,7 @@ like a byte array. The XML text data format are like below:
 */
 
 bool DMetadata::getXMLImageProperties(QString& comments, QDateTime& date, 
-                                      int& rating, QStringList& tagsPath) 
+                                      int& rating, QStringList& tagsPath) const
 {
     rating = 0;
 
@@ -582,7 +583,7 @@ bool DMetadata::getXMLImageProperties(QString& comments, QDateTime& date,
 }
 
 bool DMetadata::setXMLImageProperties(const QString& comments, const QDateTime& date, 
-                                      int rating, const QStringList& tagsPath)
+                                      int rating, const QStringList& tagsPath) const
 {
     QDomDocument xmlDoc;
     
