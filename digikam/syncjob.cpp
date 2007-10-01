@@ -228,7 +228,7 @@ QPixmap SyncJob::getTagThumbnailPriv(const QString &name, int size)
     else
     {
         KIconLoader *iconLoader = KIconLoader::global();
-        *d->thumbnail = iconLoader->loadIcon(name, K3Icon::NoGroup, d->thumbnailSize);
+        *d->thumbnail = iconLoader->loadIcon(name, KIconLoader::NoGroup, d->thumbnailSize);
     }
     return *d->thumbnail;
 }

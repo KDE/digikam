@@ -177,7 +177,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     d->tagsSearchClearBtn = new QToolButton(tagsSearch);
     d->tagsSearchClearBtn->setAutoRaise(true);
     d->tagsSearchClearBtn->setIcon(KIconLoader::global()->loadIcon("locationbar-erase",
-                                   K3Icon::Toolbar, K3Icon::SizeSmall));
+                                   KIconLoader::Toolbar, KIconLoader::SizeSmall));
 
     new QLabel(i18n("Search:"), tagsSearch);
     d->tagsSearchEdit = new KLineEdit(tagsSearch);
@@ -186,15 +186,15 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     d->assignedTagsBtn = new QToolButton(tagsSearch);
     d->assignedTagsBtn->setToolTip( i18n("Already assigned tags"));
     d->assignedTagsBtn->setIcon(KIconLoader::global()->loadIcon("tag-assigned",
-                                K3Icon::NoGroup, K3Icon::SizeSmall));
+                                KIconLoader::NoGroup, KIconLoader::SizeSmall));
     d->assignedTagsBtn->setCheckable(true);
 
     d->recentTagsBtn      = new QToolButton(tagsSearch);
     QMenu *recentTagsMenu = new QMenu(d->recentTagsBtn);
     d->recentTagsBtn->setToolTip( i18n("Recent Tags"));
     d->recentTagsBtn->setIcon(KIconLoader::global()->loadIcon("tag-recents", 
-                              K3Icon::NoGroup, K3Icon::SizeSmall));
-    d->recentTagsBtn->setIconSize(QSize(K3Icon::SizeSmall, K3Icon::SizeSmall));
+                              KIconLoader::NoGroup, KIconLoader::SizeSmall));
+    d->recentTagsBtn->setIconSize(QSize(KIconLoader::SizeSmall, KIconLoader::SizeSmall));
     d->recentTagsBtn->setMenu(recentTagsMenu);
     d->recentTagsBtn->setPopupMode(QToolButton::DelayedPopup);
     d->recentTagsMapper = new QSignalMapper(this);

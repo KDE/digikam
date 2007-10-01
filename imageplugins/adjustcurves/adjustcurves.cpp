@@ -289,7 +289,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     // -------------------------------------------------------------
 
     m_resetButton = new QPushButton(i18n("&Reset"), gboxSettings);
-    m_resetButton->setIcon( KIconLoader::global()->loadIcon("document-revert", K3Icon::Toolbar) );
+    m_resetButton->setIcon( KIconLoader::global()->loadIcon("document-revert", KIconLoader::Toolbar) );
     m_resetButton->setToolTip( i18n( "Reset current channel curves' values." ) );
     m_resetButton->setWhatsThis( i18n("<p>If you press this button, all curves' values "
                                       "from the current selected channel "

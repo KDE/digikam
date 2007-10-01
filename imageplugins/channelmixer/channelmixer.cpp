@@ -206,7 +206,7 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent)
                                    "the current channel."));
 
     m_resetButton = new QPushButton(i18n("&Reset"), gboxSettings);
-    m_resetButton->setIcon(KIconLoader::global()->loadIcon("document-revert", K3Icon::Toolbar));     
+    m_resetButton->setIcon(KIconLoader::global()->loadIcon("document-revert", KIconLoader::Toolbar));     
     m_resetButton->setWhatsThis( i18n("Reset color channels' gains settings from "
                                       "the currently selected channel."));
 

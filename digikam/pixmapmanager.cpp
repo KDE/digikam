@@ -188,20 +188,20 @@ void PixmapManager::slotFailedThumbnail(const KUrl& url)
         if (settings->getImageFileFilter().toUpper().contains(ext.toUpper()) ||
             settings->getRawFileFilter().toUpper().contains(ext.toUpper()))
         {
-            pix = DesktopIcon("image", K3Icon::SizeEnormous);
+            pix = DesktopIcon("image", KIconLoader::SizeEnormous);
         }
         else if (settings->getMovieFileFilter().toUpper().contains(ext.toUpper()))
         {
-            pix = DesktopIcon("video", K3Icon::SizeEnormous);
+            pix = DesktopIcon("video", KIconLoader::SizeEnormous);
         }
         else if (settings->getAudioFileFilter().toUpper().contains(ext.toUpper()))
         {
-            pix = DesktopIcon("sound", K3Icon::SizeEnormous);
+            pix = DesktopIcon("sound", KIconLoader::SizeEnormous);
         }
     }
 
     if (pix.isNull())
-        pix = DesktopIcon("file-broken", K3Icon::SizeEnormous);
+        pix = DesktopIcon("file-broken", KIconLoader::SizeEnormous);
 
     // Resize icon to the right size depending of current settings.
 

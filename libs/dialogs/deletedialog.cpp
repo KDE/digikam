@@ -111,13 +111,13 @@ void DeleteWidget::updateText()
             ddDeleteText->setText(i18n("<qt>These items will be <b>permanently "
                                        "deleted</b> from your hard disk.</qt>"));
             ddWarningIcon->setPixmap(KIconLoader::global()->loadIcon("messagebox_warning",
-                K3Icon::Desktop, K3Icon::SizeLarge));
+                KIconLoader::Desktop, KIconLoader::SizeLarge));
         }
         else
         {
             ddDeleteText->setText(i18n("<qt>These items will be moved to the Trash Bin.</qt>"));
             ddWarningIcon->setPixmap(KIconLoader::global()->loadIcon("trashcan_full",
-                K3Icon::Desktop, K3Icon::SizeLarge));
+                KIconLoader::Desktop, KIconLoader::SizeLarge));
         }
         ddNumFiles->setText(i18np("<b>1</b> file selected.", "<b>%n</b> files selected.", ddFileList->count()));
         break;
@@ -131,13 +131,13 @@ void DeleteWidget::updateText()
             ddDeleteText->setText(i18n("<qt>These albums will be <b>permanently "
                                        "deleted</b> from your hard disk.</qt>"));
             ddWarningIcon->setPixmap(KIconLoader::global()->loadIcon("messagebox_warning",
-                                     K3Icon::Desktop, K3Icon::SizeLarge));
+                                     KIconLoader::Desktop, KIconLoader::SizeLarge));
         }
         else
         {
             ddDeleteText->setText(i18n("<qt>These albums will be moved to the Trash Bin.</qt>"));
             ddWarningIcon->setPixmap(KIconLoader::global()->loadIcon("trashcan_full",
-                                     K3Icon::Desktop, K3Icon::SizeLarge));
+                                     KIconLoader::Desktop, KIconLoader::SizeLarge));
         }
         ddNumFiles->setText(i18np("<b>1</b> album selected.", "<b>%n</b> albums selected.", ddFileList->count()));
         break;
@@ -154,7 +154,7 @@ void DeleteWidget::updateText()
                                        "are included in this list and will "
                                        "be deleted permanently as well.</qt>"));
             ddWarningIcon->setPixmap(KIconLoader::global()->loadIcon("messagebox_warning",
-                                     K3Icon::Desktop, K3Icon::SizeLarge));
+                                     KIconLoader::Desktop, KIconLoader::SizeLarge));
         }
         else
         {
@@ -163,7 +163,7 @@ void DeleteWidget::updateText()
                                        "are included in this list and will "
                                        "be moved to the Trash Bin as well.</qt>"));
             ddWarningIcon->setPixmap(KIconLoader::global()->loadIcon("trashcan_full",
-                                     K3Icon::Desktop, K3Icon::SizeLarge));
+                                     KIconLoader::Desktop, KIconLoader::SizeLarge));
         }
         ddNumFiles->setText(i18np("<b>1</b> album selected.", "<b>%n</b> albums selected.", ddFileList->count()));
         break;

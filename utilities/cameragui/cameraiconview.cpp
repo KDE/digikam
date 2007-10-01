@@ -169,14 +169,14 @@ void CameraIconView::addItem(const GPItemInfo& info)
 
     if (mime)
     {
-        thumb = iconLoader->loadIcon(mime->iconName(), K3Icon::Desktop, 
-                                     ThumbnailSize::Huge, K3Icon::DefaultState)
+        thumb = iconLoader->loadIcon(mime->iconName(), KIconLoader::Desktop, 
+                                     ThumbnailSize::Huge, KIconLoader::DefaultState)
                                      .toImage();
     }
     else
     {
-        thumb = iconLoader->loadIcon("empty", K3Icon::Desktop, 
-                                     ThumbnailSize::Huge, K3Icon::DefaultState)
+        thumb = iconLoader->loadIcon("empty", KIconLoader::Desktop, 
+                                     ThumbnailSize::Huge, KIconLoader::DefaultState)
                                      .toImage();
     }
 

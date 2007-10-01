@@ -122,7 +122,7 @@ ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
     previewOriginal->setPixmap(preview->convertToPixmap());
     previewTarget->setPixmap(preview->convertToPixmap(m_iccTrans));
     KIconLoader* iconLoader = KIconLoader::global();
-    logo->setPixmap(iconLoader->loadIcon("digikam", K3Icon::NoGroup, 128));    
+    logo->setPixmap(iconLoader->loadIcon("digikam", KIconLoader::NoGroup, 128));    
     
     QHBoxLayout *hlay1 = new QHBoxLayout();
     hlay1->setSpacing( KDialog::spacingHint() );

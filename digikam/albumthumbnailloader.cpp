@@ -168,7 +168,7 @@ QRect AlbumThumbnailLoader::computeBlendRect(int iconSize)
 QPixmap AlbumThumbnailLoader::loadIcon(const QString &name, int size)
 {
     KIconLoader *iconLoader = KIconLoader::global();
-    return iconLoader->loadIcon(name, K3Icon::NoGroup, size);
+    return iconLoader->loadIcon(name, KIconLoader::NoGroup, size);
 }
 
 bool AlbumThumbnailLoader::getTagThumbnail(TAlbum *album, QPixmap &icon)

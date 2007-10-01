@@ -318,13 +318,13 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     // -------------------------------------------------------------
 
     m_autoButton = new QPushButton(gboxSettings);
-    m_autoButton->setIcon(KIconLoader::global()->loadIcon("gear", K3Icon::Toolbar));    
+    m_autoButton->setIcon(KIconLoader::global()->loadIcon("gear", KIconLoader::Toolbar));    
     m_autoButton->setToolTip( i18n( "Adjust all levels automatically." ) );
     m_autoButton->setWhatsThis( i18n("<p>If you press this button, all channel levels will be adjusted "
                                      "automatically."));
 
     m_resetButton = new QPushButton(i18n("&Reset"), gboxSettings);
-    m_resetButton->setIcon(KIconLoader::global()->loadIcon("document-revert", K3Icon::Toolbar));     
+    m_resetButton->setIcon(KIconLoader::global()->loadIcon("document-revert", KIconLoader::Toolbar));     
     m_resetButton->setToolTip( i18n( "Reset current channel levels' values." ) );
     m_resetButton->setWhatsThis( i18n("<p>If you press this button, all levels' values "
                                       "from the current selected channel "

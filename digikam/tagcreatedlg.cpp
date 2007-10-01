@@ -88,7 +88,7 @@ TagCreateDlg::TagCreateDlg(QWidget *parent, TAlbum* album)
 
     QLabel *logo            = new QLabel(widget);
     KIconLoader* iconLoader = KIconLoader::global();
-    logo->setPixmap(iconLoader->loadIcon("digikam", K3Icon::NoGroup, 96));    
+    logo->setPixmap(iconLoader->loadIcon("digikam", KIconLoader::NoGroup, 96));    
 
     QVBoxLayout *topLayout = new QVBoxLayout();
 
@@ -187,7 +187,7 @@ QString TagCreateDlg::icon() const
 void TagCreateDlg::slotIconChange()
 {
     KIconDialog dlg(this);
-    dlg.setup(K3Icon::NoGroup, K3Icon::Application, false, 20, false, false, false);
+    dlg.setup(KIconLoader::NoGroup, KIconLoader::Application, false, 20, false, false, false);
     QString icon = dlg.openDialog();
 
     if (icon.isEmpty() || d->icon == icon)
@@ -257,7 +257,7 @@ TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album)
 
     QLabel *logo            = new QLabel(widget);
     KIconLoader* iconLoader = KIconLoader::global();
-    logo->setPixmap(iconLoader->loadIcon("digikam", K3Icon::NoGroup, 96));    
+    logo->setPixmap(iconLoader->loadIcon("digikam", KIconLoader::NoGroup, 96));    
 
     QVBoxLayout *topLayout = new QVBoxLayout();
 
@@ -364,7 +364,7 @@ void TagEditDlg::slotIconResetClicked()
 void TagEditDlg::slotIconChange()
 {
     KIconDialog dlg(this);
-    dlg.setup(K3Icon::NoGroup, K3Icon::Application, false, 20, false, false, false);
+    dlg.setup(KIconLoader::NoGroup, KIconLoader::Application, false, 20, false, false, false);
     QString icon = dlg.openDialog();
     
     if (icon.isEmpty() || icon == d->icon)

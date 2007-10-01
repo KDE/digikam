@@ -89,7 +89,7 @@ DigikamFirstRun::DigikamFirstRun(QWidget* parent)
                                "include the slash in the translation", "/Pictures"));
     m_ui->m_path->setMode(KFile::Directory | KFile::LocalOnly);
 
-    m_ui->m_pixLabel->setPixmap(KIconLoader::global()->loadIcon("digikam", K3Icon::NoGroup, 128));
+    m_ui->m_pixLabel->setPixmap(KIconLoader::global()->loadIcon("digikam", KIconLoader::NoGroup, 128));
     m_ui->setMinimumSize(450, m_ui->sizeHint().height());
 
     connect(this, SIGNAL(okClicked()),

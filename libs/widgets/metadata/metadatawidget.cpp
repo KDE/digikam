@@ -113,14 +113,14 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
     d->levelButtons->setExclusive(true);
 
     QPushButton *simpleLevel = new QPushButton( d->levelGBox );
-    simpleLevel->setIcon( iconLoader->loadIcon( "document", (K3Icon::Group)K3Icon::Toolbar ) );
+    simpleLevel->setIcon( iconLoader->loadIcon( "document", (KIconLoader::Group)KIconLoader::Toolbar ) );
     simpleLevel->setCheckable(true);
     simpleLevel->setWhatsThis( i18n( "Toggle tags view to a simple human-readable list" ) );
     d->levelButtons->addButton(simpleLevel, SIMPLE);
     hlay1->addWidget(simpleLevel);
 
     QPushButton *fullLevel = new QPushButton( d->levelGBox );
-    fullLevel->setIcon( iconLoader->loadIcon( "text-enriched", (K3Icon::Group)K3Icon::Toolbar ) );
+    fullLevel->setIcon( iconLoader->loadIcon( "text-enriched", (KIconLoader::Group)KIconLoader::Toolbar ) );
     fullLevel->setCheckable(true);
     fullLevel->setWhatsThis( i18n( "Toggle tags view to a full list" ) );
     d->levelButtons->addButton(fullLevel, FULL);
@@ -136,17 +136,17 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
     QHBoxLayout *hlay2 = new QHBoxLayout(d->toolsGBox);
 
     QPushButton *saveMetadata = new QPushButton( d->toolsGBox );
-    saveMetadata->setIcon( iconLoader->loadIcon( "document-save", (K3Icon::Group)K3Icon::Toolbar ) );
+    saveMetadata->setIcon( iconLoader->loadIcon( "document-save", (KIconLoader::Group)KIconLoader::Toolbar ) );
     saveMetadata->setWhatsThis( i18n( "Save meta-data to a binary file" ) );
     d->toolButtons->addButton(saveMetadata);
 
     QPushButton *printMetadata = new QPushButton( d->toolsGBox );
-    printMetadata->setIcon( iconLoader->loadIcon( "document-print", (K3Icon::Group)K3Icon::Toolbar ) );
+    printMetadata->setIcon( iconLoader->loadIcon( "document-print", (KIconLoader::Group)KIconLoader::Toolbar ) );
     printMetadata->setWhatsThis( i18n( "Print meta-data to printer" ) );
     d->toolButtons->addButton(printMetadata);
 
     QPushButton *copy2ClipBoard = new QPushButton( d->toolsGBox );
-    copy2ClipBoard->setIcon( iconLoader->loadIcon( "edit-copy", (K3Icon::Group)K3Icon::Toolbar ) );
+    copy2ClipBoard->setIcon( iconLoader->loadIcon( "edit-copy", (KIconLoader::Group)KIconLoader::Toolbar ) );
     copy2ClipBoard->setWhatsThis( i18n( "Copy meta-data to clipboard" ) );
     d->toolButtons->addButton(copy2ClipBoard);
 

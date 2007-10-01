@@ -443,7 +443,7 @@ void SlideShow::updatePixmap()
     {
         // End of Slide Show.
 
-        QPixmap logo = KIconLoader::global()->loadIcon("digikam", K3Icon::NoGroup, 128);
+        QPixmap logo = KIconLoader::global()->loadIcon("digikam", KIconLoader::NoGroup, 128);
 
         QFont fn(font());
         fn.setPointSize(fn.pointSize()+10);

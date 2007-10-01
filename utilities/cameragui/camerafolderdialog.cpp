@@ -68,7 +68,7 @@ CameraFolderDialog::CameraFolderDialog(QWidget *parent, CameraIconView *cameraVi
     QLabel *message   = new QLabel(page);
 
     KIconLoader* iconLoader = KIconLoader::global();
-    logo->setPixmap(iconLoader->loadIcon("digikam", K3Icon::NoGroup, 128));
+    logo->setPixmap(iconLoader->loadIcon("digikam", KIconLoader::NoGroup, 128));
 
     message->setText(i18n("<p>Please select the camera folder "
                           "where you want to upload the images.</p>"));

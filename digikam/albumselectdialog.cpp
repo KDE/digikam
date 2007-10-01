@@ -102,7 +102,7 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
 
     QLabel *logo = new QLabel(page);
     KIconLoader* iconLoader = KIconLoader::global();
-    logo->setPixmap(iconLoader->loadIcon("digikam", K3Icon::NoGroup, 128));  
+    logo->setPixmap(iconLoader->loadIcon("digikam", KIconLoader::NoGroup, 128));  
 
     QLabel *message = new QLabel(page);
     message->setWordWrap(true);
@@ -123,7 +123,7 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
     grid->setMargin(0);
     grid->setSpacing(KDialog::spacingHint());
 
-    QPixmap icon = iconLoader->loadIcon("folder", K3Icon::NoGroup,
+    QPixmap icon = iconLoader->loadIcon("folder", KIconLoader::NoGroup,
                                         AlbumSettings::instance()->getDefaultTreeIconSize());
 
     AlbumList aList = AlbumManager::instance()->allPAlbums();
@@ -213,7 +213,7 @@ void AlbumSelectDialog::slotAlbumAdded(Album* album)
     }
 
     KIconLoader* iconLoader = KIconLoader::global();
-    QPixmap icon = iconLoader->loadIcon("folder", K3Icon::NoGroup,
+    QPixmap icon = iconLoader->loadIcon("folder", KIconLoader::NoGroup,
                                         AlbumSettings::instance()->getDefaultTreeIconSize());
     
     FolderItem* viewItem = new FolderItem(parentItem, album->title());

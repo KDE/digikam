@@ -363,7 +363,7 @@ void TagsPopupMenu::setup(Mode mode)
     d->mode             = mode;
 
     KIconLoader *iconLoader = KIconLoader::global();
-    d->addTagPix            = iconLoader->loadIcon("tag", K3Icon::NoGroup, K3Icon::SizeSmall);
+    d->addTagPix            = iconLoader->loadIcon("tag", KIconLoader::NoGroup, KIconLoader::SizeSmall);
 
     d->addTagActions    = new QActionGroup(this);
     d->toggleTagActions = new QActionGroup(this);

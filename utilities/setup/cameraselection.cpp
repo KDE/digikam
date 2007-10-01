@@ -203,7 +203,7 @@ CameraSelection::CameraSelection( QWidget* parent )
     QLabel* logo = new QLabel(box2);
 
     KIconLoader* iconLoader = KIconLoader::global();
-    logo->setPixmap(iconLoader->loadIcon("digikam", K3Icon::NoGroup, 64));
+    logo->setPixmap(iconLoader->loadIcon("digikam", KIconLoader::NoGroup, 64));
 
     QLabel* link = new QLabel(box2);
     link->setText(i18n("<p>To set an <b>USB Mass Storage</b> camera<br>"
