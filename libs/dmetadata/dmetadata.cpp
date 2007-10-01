@@ -123,6 +123,18 @@ bool DMetadata::loadUsingDcraw(const QString& filePath)
     return false;
 }
 
+bool DMetadata::setProgramId(bool on)
+{
+    if (on)
+    {
+        QString version(digikam_version);
+        QString software("digiKam");
+        return setImageProgramId(software, version);
+    }
+ 
+    return true;
+}
+
 QString DMetadata::getImageComment() const
 {
     if (getFilePath().isEmpty())
@@ -368,49 +380,6 @@ bool DMetadata::setImageRating(int rating)
     return true;
 }
 
-bool DMetadata::setIptcTag(const QString& text, int maxLength, const char* debugLabel, const char* tagKey) 
-{
-    QString truncatedText = text;
-    truncatedText.truncate(maxLength);
-    DDebug() << getFilePath() << " ==> " << debugLabel << ": " << truncatedText << endl;
-    return setIptcTagString(tagKey, truncatedText);    // returns false if failed
-}
-
-bool DMetadata::setImagePhotographerId(const QString& author, const QString& authorTitle)
-{
-    if (!setProgramId())
-        return false;
-
-    if (!setIptcTag(author,      32, "Author",       "Iptc.Application2.Byline"))      return false;
-    if (!setIptcTag(authorTitle, 32, "Author Title", "Iptc.Application2.BylineTitle")) return false;
-
-    return true;
-}
-
-bool DMetadata::setImageCredits(const QString& credit, const QString& source, const QString& copyright)
-{
-    if (!setProgramId())
-        return false;
-
-    if (!setIptcTag(credit,     32, "Credit",    "Iptc.Application2.Credit"))    return false;
-    if (!setIptcTag(source,     32, "Source",    "Iptc.Application2.Source"))    return false;
-    if (!setIptcTag(copyright, 128, "Copyright", "Iptc.Application2.Copyright")) return false;
-
-    return true;
-}
-
-bool DMetadata::setProgramId(bool on)
-{
-    if (on)
-    {
-        QString version(digikam_version);
-        QString software("digiKam");
-        return setImageProgramId(software, version);
-    }
- 
-    return true;
-}
-
 PhotoInfoContainer DMetadata::getPhotographInformations() const
 {
     PhotoInfoContainer photoInfo;
@@ -489,6 +458,37 @@ PhotoInfoContainer DMetadata::getPhotographInformations() const
     }
 
     return photoInfo;
+}
+
+bool DMetadata::setImagePhotographerId(const QString& author, const QString& authorTitle)
+{
+    if (!setProgramId())
+        return false;
+
+    if (!setIptcTag(author,      32, "Author",       "Iptc.Application2.Byline"))      return false;
+    if (!setIptcTag(authorTitle, 32, "Author Title", "Iptc.Application2.BylineTitle")) return false;
+
+    return true;
+}
+
+bool DMetadata::setImageCredits(const QString& credit, const QString& source, const QString& copyright)
+{
+    if (!setProgramId())
+        return false;
+
+    if (!setIptcTag(credit,     32, "Credit",    "Iptc.Application2.Credit"))    return false;
+    if (!setIptcTag(source,     32, "Source",    "Iptc.Application2.Source"))    return false;
+    if (!setIptcTag(copyright, 128, "Copyright", "Iptc.Application2.Copyright")) return false;
+
+    return true;
+}
+
+bool DMetadata::setIptcTag(const QString& text, int maxLength, const char* debugLabel, const char* tagKey) 
+{
+    QString truncatedText = text;
+    truncatedText.truncate(maxLength);
+    DDebug() << getFilePath() << " ==> " << debugLabel << ": " << truncatedText << endl;
+    return setIptcTagString(tagKey, truncatedText);    // returns false if failed
 }
 
 /**
