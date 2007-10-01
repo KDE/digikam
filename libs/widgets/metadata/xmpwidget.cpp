@@ -167,7 +167,7 @@ QString XmpWidget::getTagDescription(const QString& key)
 void XmpWidget::slotSaveMetadataToFile(void)
 {
     KUrl url = saveMetadataToFile(i18n("XMP File to Save"),
-                                  QString("*.dat|"+i18n("XMP binary Files (*.dat)")));
+                                  QString("*.xmp|"+i18n("XMP text Files (*.xmp)")));
     storeMetadataToFile(url, getMetadata().getXmp());
 }
 
