@@ -418,29 +418,74 @@ PhotoInfoContainer DMetadata::getPhotographInformations() const
     if (!getExif().isEmpty())
     {
         photoInfo.dateTime = getImageDateTime();
+
         photoInfo.make     = getExifTagString("Exif.Image.Make");
+        if (photoInfo.make.isEmpty())
+            photoInfo.make = getXmpTagString("Xmp.tiff.Make");
+
         photoInfo.model    = getExifTagString("Exif.Image.Model");
+        if (photoInfo.model.isEmpty())
+            photoInfo.model = getXmpTagString("Xmp.tiff.Model");
 
         photoInfo.aperture = getExifTagString("Exif.Photo.FNumber");
         if (photoInfo.aperture.isEmpty())
+        {
             photoInfo.aperture = getExifTagString("Exif.Photo.ApertureValue");
+            if (photoInfo.aperture.isEmpty())
+            {
+                photoInfo.aperture = getXmpTagString("Xmp.exif.FNumber");
+                if (photoInfo.aperture.isEmpty())
+                    photoInfo.aperture = getXmpTagString("Xmp.exif.ApertureValue");
+            }
+        }
 
         photoInfo.exposureTime = getExifTagString("Exif.Photo.ExposureTime");
         if (photoInfo.exposureTime.isEmpty())
+        {
             photoInfo.exposureTime = getExifTagString("Exif.Photo.ShutterSpeedValue");
+            if (photoInfo.exposureTime.isEmpty())
+            {
+                photoInfo.exposureTime = getXmpTagString("Xmp.exif.ExposureTime");
+                if (photoInfo.exposureTime.isEmpty())
+                    photoInfo.exposureTime = getXmpTagString("Xmp.exif.ShutterSpeedValue");
+            }
+        }
 
         photoInfo.exposureMode    = getExifTagString("Exif.Photo.ExposureMode");
+        if (photoInfo.exposureMode.isEmpty())
+            photoInfo.exposureMode = getXmpTagString("Xmp.exif.ExposureMode");
+
         photoInfo.exposureProgram = getExifTagString("Exif.Photo.ExposureProgram");
+        if (photoInfo.exposureProgram.isEmpty())
+            photoInfo.exposureProgram = getXmpTagString("Xmp.exif.ExposureProgram");
 
         photoInfo.focalLength     = getExifTagString("Exif.Photo.FocalLength");
+        if (photoInfo.focalLength.isEmpty())
+            photoInfo.focalLength = getXmpTagString("Xmp.exif.FocalLength");
+
         photoInfo.focalLength35mm = getExifTagString("Exif.Photo.FocalLengthIn35mmFilm");
+        if (photoInfo.focalLength35mm.isEmpty())
+            photoInfo.focalLength35mm = getXmpTagString("Xmp.exif.FocalLengthIn35mmFilm");
 
         photoInfo.sensitivity = getExifTagString("Exif.Photo.ISOSpeedRatings");
         if (photoInfo.sensitivity.isEmpty())
+        {
             photoInfo.sensitivity = getExifTagString("Exif.Photo.ExposureIndex");
+            if (photoInfo.sensitivity.isEmpty())
+            {
+                photoInfo.sensitivity = getXmpTagString("Xmp.exif.ISOSpeedRatings");
+                if (photoInfo.sensitivity.isEmpty())
+                    photoInfo.sensitivity = getXmpTagString("Xmp.exif.ExposureIndex");
+            }
+        }
 
         photoInfo.flash = getExifTagString("Exif.Photo.Flash");
+        if (photoInfo.flash.isEmpty())
+            photoInfo.flash = getXmpTagString("Xmp.exif.Flash");
+
         photoInfo.whiteBalance = getExifTagString("Exif.Photo.WhiteBalance");
+        if (photoInfo.whiteBalance.isEmpty())
+            photoInfo.whiteBalance = getXmpTagString("Xmp.exif.WhiteBalance");
     }
 
     return photoInfo;
