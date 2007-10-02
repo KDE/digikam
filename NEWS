@@ -50,5 +50,5 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 035 ==> 149685 : Go to next photo after current photo deletion (vs. to previous photo).
 036 ==> 148233 : Adding texture generates black image.
 037 ==> 147311 : Ligth Table RAW images does not rotate as def. by exif info.
-038 ==> 
-
+038 ==> 146773 : Metadata sources preference when sorting images.
+039 ==> 
