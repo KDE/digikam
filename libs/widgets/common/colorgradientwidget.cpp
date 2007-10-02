@@ -28,8 +28,6 @@
  
 // KDE includes.
 
-#include <kimageeffect.h>
-
 // Local includes.
 
 #include "colorgradientwidget.h"
@@ -150,8 +148,7 @@ void ColorGradientWidget::paintEvent( QPaintEvent * )
                                  color1.green() + greenDiff * s / psize,
                                  color1.blue()  + blueDiff  * s / psize );
     }
-
-    KImageEffect::dither( image, ditherPalette, psize );
+    //KImageEffect::dither( image, ditherPalette, psize );
 
     QPixmap pm = QPixmap::fromImage(image);
     QPainter p(this);
