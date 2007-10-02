@@ -85,7 +85,7 @@ public:
 };
 
 Sidebar::Sidebar(QWidget *parent, Side side, bool minimizedDefault)
-       : KMultiTabBar(KMultiTabBar::Vertical, parent)
+       : KMultiTabBar(KMultiTabBar::Left, parent)
 {
     d = new SidebarPriv;
     d->minimizedDefault = minimizedDefault;
@@ -240,7 +240,7 @@ void Sidebar::shrink()
 
     d->stack->hide();
 
-    KMultiTabBarTab* tab = tabs().first();
+    KMultiTabBarTab* tab = this->tab(0);
     if (tab)
         setFixedWidth(tab->width());
     else
