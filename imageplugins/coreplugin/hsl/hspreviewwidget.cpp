@@ -33,7 +33,6 @@
 
 #include <kapplication.h>
 #include <klocale.h>
-#include <kimageeffect.h>
 
 // Local includes.
 
