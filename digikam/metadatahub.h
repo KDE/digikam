@@ -72,15 +72,15 @@ public:
     bool     saveComments;
     bool     saveDateTime;
     bool     saveRating;
-    bool     saveIptcTags;
-    bool     saveIptcPhotographerId;
-    bool     saveIptcCredits;
+    bool     saveTags;
+    bool     savePhotographerId;
+    bool     saveCredits;
 
-    QString  iptcAuthor;
-    QString  iptcAuthorTitle;
-    QString  iptcCredit;
-    QString  iptcSource;
-    QString  iptcCopyright;
+    QString  Author;
+    QString  AuthorTitle;
+    QString  Credit;
+    QString  Source;
+    QString  Copyright;
 };
 
 class MetadataHub
@@ -125,7 +125,7 @@ public:
             Use this mode if
                 - the album manager is not available and/or
                 - metadata sets may contain tags that are not available from the AlbumManager
-            This situation occurs if new tags are imported from IPTC keywords.
+            This situation occurs if new tags are imported from XMP/IPTC keywords.
             This means that the album manager is not accessed, all methods depending on TAlbum*
             (tags(), tagIDs(), setTag()) shall not be used.
             The method write(ImageInfo) will create not yet existing tags in the database.

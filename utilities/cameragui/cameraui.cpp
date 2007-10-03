@@ -256,13 +256,13 @@ void CameraUI::setupUserArea()
     d->autoRotateCheck->setWhatsThis( i18n("<p>Toggle on this option if you want images automatically "
                      "rotated or flipped using EXIF information provided by the camera."));
     d->setPhotographerId->setWhatsThis( i18n("<p>Toggle on this option to store the default "
-                     "photographer identity into IPTC tags using digiKam's metadata settings."));
+                     "photographer identity into XMP and IPTC tags using digiKam's metadata settings."));
     d->setCredits->setWhatsThis( i18n("<p>Toggle on this option to store the default credit "
-                     "and copyright information into IPTC tags using digiKam's metadata settings."));
+                     "and copyright information into XMP and IPTC tags using digiKam's metadata settings."));
     d->fixDateTimeCheck->setWhatsThis( i18n("<p>Toggle on this option to set date and time metadata "
                      "tags to the right values if your camera does not set "
                      "these tags correctly when pictures are taken. The values will "
-                     "be saved in the DateTimeDigitized and DateTimeCreated EXIF/IPTC fields."));
+                     "be saved in the DateTimeDigitized and DateTimeCreated EXIF, XMP, and IPTC tags."));
     d->convertJpegCheck->setWhatsThis( i18n("<p>Toggle on this option to automatically convert "
                      "all JPEG files to a lossless image format. <b>Note:</b> Image conversion can take a "
                      "while on a slow computer."));
@@ -1236,11 +1236,11 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
     AlbumSettings* settings = AlbumSettings::instance();
     if (settings)
     {
-        downloadSettings.author      = settings->getIptcAuthor();
-        downloadSettings.authorTitle = settings->getIptcAuthorTitle();
-        downloadSettings.credit      = settings->getIptcCredit();
-        downloadSettings.source      = settings->getIptcSource();
-        downloadSettings.copyright   = settings->getIptcCopyright();        
+        downloadSettings.author      = settings->getAuthor();
+        downloadSettings.authorTitle = settings->getAuthorTitle();
+        downloadSettings.credit      = settings->getCredit();
+        downloadSettings.source      = settings->getSource();
+        downloadSettings.copyright   = settings->getCopyright();        
     }
 
     // -- Download camera items -------------------------------

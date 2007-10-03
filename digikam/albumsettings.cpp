@@ -90,9 +90,9 @@ public:
     bool exifRotate;
     bool exifSetOrientation;
 
-    bool saveIptcTags;
-    bool saveIptcPhotographerId;
-    bool saveIptcCredits;
+    bool saveTags;
+    bool savePhotographerId;
+    bool saveCredits;
 
     bool saveComments;
     bool saveDateTime;
@@ -233,9 +233,9 @@ void AlbumSettings::init()
     d->exifRotate             = true;
     d->exifSetOrientation     = true;
 
-    d->saveIptcTags           = false;
-    d->saveIptcPhotographerId = false;
-    d->saveIptcCredits        = false;
+    d->saveTags               = false;
+    d->savePhotographerId     = false;
+    d->saveCredits            = false;
 
     d->saveComments           = false;
     d->saveDateTime           = false;
@@ -319,19 +319,19 @@ void AlbumSettings::readSettings()
 
     group = config->group("Metadata Settings");
 
-    d->saveIptcTags           = group.readEntry("Save IPTC Tags", false);
-    d->saveIptcPhotographerId = group.readEntry("Save IPTC Photographer ID", false);
-    d->saveIptcCredits        = group.readEntry("Save IPTC Credits", false);
+    d->saveTags               = group.readEntry("Save Tags", false);
+    d->savePhotographerId     = group.readEntry("Save Photographer ID", false);
+    d->saveCredits            = group.readEntry("Save Credits", false);
 
     d->saveComments           = group.readEntry("Save EXIF Comments", false);
     d->saveDateTime           = group.readEntry("Save Date Time", false);
     d->saveRating             = group.readEntry("Save Rating", false);
 
-    d->author                 = group.readEntry("IPTC Author", QString());
-    d->authorTitle            = group.readEntry("IPTC Author Title", QString());
-    d->credit                 = group.readEntry("IPTC Credit", QString());
-    d->source                 = group.readEntry("IPTC Source", QString());
-    d->copyright              = group.readEntry("IPTC Copyright", QString());
+    d->author                 = group.readEntry("Author", QString());
+    d->authorTitle            = group.readEntry("Author Title", QString());
+    d->credit                 = group.readEntry("Credit", QString());
+    d->source                 = group.readEntry("Source", QString());
+    d->copyright              = group.readEntry("Copyright", QString());
 
     // ---------------------------------------------------------------------
 
@@ -405,19 +405,19 @@ void AlbumSettings::saveSettings()
 
     group = config->group("Metadata Settings");
 
-    group.writeEntry("Save IPTC Tags", d->saveIptcTags);
-    group.writeEntry("Save IPTC Photographer ID", d->saveIptcPhotographerId);
-    group.writeEntry("Save IPTC Credits", d->saveIptcCredits);
+    group.writeEntry("Save Tags", d->saveTags);
+    group.writeEntry("Save Photographer ID", d->savePhotographerId);
+    group.writeEntry("Save Credits", d->saveCredits);
 
     group.writeEntry("Save EXIF Comments", d->saveComments);
     group.writeEntry("Save Date Time", d->saveDateTime);
     group.writeEntry("Save Rating", d->saveRating);
 
-    group.writeEntry("IPTC Author", d->author);
-    group.writeEntry("IPTC Author Title", d->authorTitle);
-    group.writeEntry("IPTC Credit", d->credit);
-    group.writeEntry("IPTC Source", d->source);
-    group.writeEntry("IPTC Copyright", d->copyright);
+    group.writeEntry("Author", d->author);
+    group.writeEntry("Author Title", d->authorTitle);
+    group.writeEntry("Credit", d->credit);
+    group.writeEntry("Source", d->source);
+    group.writeEntry("Copyright", d->copyright);
 
     // ---------------------------------------------------------------------
 
@@ -697,82 +697,82 @@ bool AlbumSettings::getExifSetOrientation() const
     return d->exifSetOrientation;
 }
 
-void AlbumSettings::setSaveIptcTags(bool val)
+void AlbumSettings::setSaveTags(bool val)
 {
-    d->saveIptcTags = val;
+    d->saveTags = val;
 }
 
-bool AlbumSettings::getSaveIptcTags() const
+bool AlbumSettings::getSaveTags() const
 {
-    return d->saveIptcTags;
+    return d->saveTags;
 }
 
-void AlbumSettings::setSaveIptcPhotographerId(bool val)
+void AlbumSettings::setSavePhotographerId(bool val)
 {
-    d->saveIptcPhotographerId = val;
+    d->savePhotographerId = val;
 }
 
-bool AlbumSettings::getSaveIptcPhotographerId() const
+bool AlbumSettings::getSavePhotographerId() const
 {
-    return d->saveIptcPhotographerId;
+    return d->savePhotographerId;
 }
 
-void AlbumSettings::setSaveIptcCredits(bool val)
+void AlbumSettings::setSaveCredits(bool val)
 {
-    d->saveIptcCredits = val;
+    d->saveCredits = val;
 }
 
-bool AlbumSettings::getSaveIptcCredits() const
+bool AlbumSettings::getSaveCredits() const
 {
-    return d->saveIptcCredits;
+    return d->saveCredits;
 }
 
-void AlbumSettings::setIptcAuthor(const QString& author)
+void AlbumSettings::setAuthor(const QString& author)
 {
     d->author = author;
 }
 
-QString AlbumSettings::getIptcAuthor() const
+QString AlbumSettings::getAuthor() const
 {
     return d->author;
 }
 
-void AlbumSettings::setIptcAuthorTitle(const QString& authorTitle)
+void AlbumSettings::setAuthorTitle(const QString& authorTitle)
 {
     d->authorTitle = authorTitle;
 }
 
-QString AlbumSettings::getIptcAuthorTitle() const
+QString AlbumSettings::getAuthorTitle() const
 {
     return d->authorTitle;
 }
 
-void AlbumSettings::setIptcCredit(const QString& credit)
+void AlbumSettings::setCredit(const QString& credit)
 {
     d->credit = credit;
 }
 
-QString AlbumSettings::getIptcCredit() const
+QString AlbumSettings::getCredit() const
 {
     return d->credit;
 }
 
-void AlbumSettings::setIptcSource(const QString& source)
+void AlbumSettings::setSource(const QString& source)
 {
     d->source = source;
 }
 
-QString AlbumSettings::getIptcSource() const
+QString AlbumSettings::getSource() const
 {
     return d->source;
 }
 
-void AlbumSettings::setIptcCopyright(const QString& copyright)
+void AlbumSettings::setCopyright(const QString& copyright)
 {
     d->copyright = copyright;
 }
 
-QString AlbumSettings::getIptcCopyright() const
+QString AlbumSettings::getCopyright() const
 {
     return d->copyright;
 }

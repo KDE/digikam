@@ -145,29 +145,29 @@ public:
     void setExifSetOrientation(bool val);
     bool getExifSetOrientation() const;
 
-    void setSaveIptcTags(bool val);
-    bool getSaveIptcTags() const;
+    void setSaveTags(bool val);
+    bool getSaveTags() const;
 
-    void setSaveIptcPhotographerId(bool val);
-    bool getSaveIptcPhotographerId() const;
+    void setSavePhotographerId(bool val);
+    bool getSavePhotographerId() const;
 
-    void setSaveIptcCredits(bool val);
-    bool getSaveIptcCredits() const;
+    void setSaveCredits(bool val);
+    bool getSaveCredits() const;
 
-    void setIptcAuthor(const QString& author);
-    QString getIptcAuthor() const;
+    void setAuthor(const QString& author);
+    QString getAuthor() const;
 
-    void setIptcAuthorTitle(const QString& authorTitle);
-    QString getIptcAuthorTitle() const;
+    void setAuthorTitle(const QString& authorTitle);
+    QString getAuthorTitle() const;
 
-    void setIptcCredit(const QString& credit);
-    QString getIptcCredit() const;
+    void setCredit(const QString& credit);
+    QString getCredit() const;
 
-    void setIptcSource(const QString& source);
-    QString getIptcSource() const;
+    void setSource(const QString& source);
+    QString getSource() const;
 
-    void setIptcCopyright(const QString& copyright);
-    QString getIptcCopyright() const;
+    void setCopyright(const QString& copyright);
+    QString getCopyright() const;
 
     void setSaveComments(bool val);
     bool getSaveComments() const;

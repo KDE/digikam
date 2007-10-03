@@ -60,15 +60,15 @@ public:
 
     SetupMetadataPriv()
     {
-        ExifAutoRotateAsChanged   = false;
-        saveCommentsBox           = 0;
-        ExifRotateBox             = 0;
-        ExifSetOrientationBox     = 0;
-        saveRatingBox             = 0;
-        saveTagsIptcBox           = 0;
-        saveDateTimeBox           = 0;
-        savePhotographerIdIptcBox = 0;
-        saveCreditsIptcBox        = 0;
+        ExifAutoRotateAsChanged = false;
+        saveCommentsBox         = 0;
+        ExifRotateBox           = 0;
+        ExifSetOrientationBox   = 0;
+        saveRatingBox           = 0;
+        saveTagsBox             = 0;
+        saveDateTimeBox         = 0;
+        savePhotographerIdBox   = 0;
+        saveCreditsBox          = 0;
     }
 
     bool       ExifAutoRotateAsChanged;
@@ -78,10 +78,10 @@ public:
     QCheckBox *ExifRotateBox;
     QCheckBox *ExifSetOrientationBox;
     QCheckBox *saveRatingBox;
-    QCheckBox *saveTagsIptcBox;
+    QCheckBox *saveTagsBox;
     QCheckBox *saveDateTimeBox;
-    QCheckBox *savePhotographerIdIptcBox;
-    QCheckBox *saveCreditsIptcBox;
+    QCheckBox *savePhotographerIdBox;
+    QCheckBox *saveCreditsBox;
 };
 
 SetupMetadata::SetupMetadata(QWidget* parent )
@@ -109,41 +109,30 @@ SetupMetadata::SetupMetadata(QWidget* parent )
 
     // --------------------------------------------------------
   
-    QGroupBox *IptcGroup  = new QGroupBox(i18n("IPTC Actions"), this);
-    QVBoxLayout *gLayout2 = new QVBoxLayout(IptcGroup);
-
-    d->saveTagsIptcBox = new QCheckBox(IptcGroup);
-    d->saveTagsIptcBox->setText(i18n("&Save image tags as \"Keywords\" tag"));
-    d->saveTagsIptcBox->setWhatsThis( i18n("<p>Turn this option on to store the image tags "
-                                           "in the IPTC <i>Keywords</i> tag."));
-  
-    d->savePhotographerIdIptcBox = new QCheckBox(IptcGroup);
-    d->savePhotographerIdIptcBox->setText(i18n("&Save default photographer identity as tags"));
-    d->savePhotographerIdIptcBox->setWhatsThis( i18n("<p>Turn this option on to store the default "
-                                                     "photographer identity into the IPTC tags. You can set this "
-                                                     "value in the Identity setup page."));
-
-    d->saveCreditsIptcBox = new QCheckBox(IptcGroup);
-    d->saveCreditsIptcBox->setText(i18n("&Save default credit and copyright identity as tags"));
-    d->saveCreditsIptcBox->setWhatsThis( i18n("<p>Turn this option on to store the default "
-                                              "credit and copyright identity into the IPTC tags. "
-                                              "You can set this value in the Identity setup page."));
-
-    gLayout2->addWidget(d->saveTagsIptcBox);
-    gLayout2->addWidget(d->savePhotographerIdIptcBox);
-    gLayout2->addWidget(d->saveCreditsIptcBox);
-    gLayout2->setMargin(KDialog::spacingHint());
-    gLayout2->setSpacing(0);
-                                                           
-    // --------------------------------------------------------
-  
     QGroupBox *commonGroup = new QGroupBox(i18n("Common Metadata Actions"), this);
-    QVBoxLayout *gLayout3  = new QVBoxLayout(commonGroup);
+    QVBoxLayout *gLayout2  = new QVBoxLayout(commonGroup);
+
+    d->saveTagsBox = new QCheckBox(commonGroup);
+    d->saveTagsBox->setText(i18n("&Save image tags as \"Keywords\" tag"));
+    d->saveTagsBox->setWhatsThis( i18n("<p>Turn this option on to store the image tags "
+                                       "in the XMP and IPTC tags."));
+  
+    d->savePhotographerIdBox = new QCheckBox(commonGroup);
+    d->savePhotographerIdBox->setText(i18n("&Save default photographer identity as tags"));
+    d->savePhotographerIdBox->setWhatsThis( i18n("<p>Turn this option on to store the default "
+                                                 "photographer identity into the XMP and IPTC tags. "
+                                                 "You can set this value in the Identity setup page."));
+
+    d->saveCreditsBox = new QCheckBox(commonGroup);
+    d->saveCreditsBox->setText(i18n("&Save default credit and copyright identity as tags"));
+    d->saveCreditsBox->setWhatsThis( i18n("<p>Turn this option on to store the default "
+                                          "credit and copyright identity into the XMP and IPTC tags. "
+                                          "You can set this value in the Identity setup page."));
 
     d->saveCommentsBox = new QCheckBox(commonGroup);
     d->saveCommentsBox->setText(i18n("&Save image captions as embedded text"));
     d->saveCommentsBox->setWhatsThis( i18n("<p>Turn this option on to store image captions "
-                                           "into the JFIF section, EXIF tag, and IPTC tag."));
+                                           "into the JFIF Comment section, EXIF tag, XMP tag, and IPTC tag."));
 
     d->saveDateTimeBox = new QCheckBox(commonGroup);
     d->saveDateTimeBox->setText(i18n("&Save image timestamp as tags"));
@@ -153,13 +142,16 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     d->saveRatingBox = new QCheckBox(commonGroup);
     d->saveRatingBox->setText(i18n("&Save image rating as tags"));
     d->saveRatingBox->setWhatsThis( i18n("<p>Turn this option on to store the image rating "
-                                         "into EXIF tag and IPTC <i>Urgency</i> tag."));
-    
-    gLayout3->addWidget(d->saveCommentsBox);
-    gLayout3->addWidget(d->saveDateTimeBox);
-    gLayout3->addWidget(d->saveRatingBox);
-    gLayout3->setMargin(KDialog::spacingHint());
-    gLayout3->setSpacing(0);
+                                         "into EXIF tag and XMP tags."));
+
+    gLayout2->addWidget(d->saveTagsBox);
+    gLayout2->addWidget(d->savePhotographerIdBox);
+    gLayout2->addWidget(d->saveCreditsBox);    
+    gLayout2->addWidget(d->saveCommentsBox);
+    gLayout2->addWidget(d->saveDateTimeBox);
+    gLayout2->addWidget(d->saveRatingBox);
+    gLayout2->setMargin(KDialog::spacingHint());
+    gLayout2->setSpacing(0);
 
     // --------------------------------------------------------
     
@@ -201,7 +193,6 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     mainLayout->setMargin(0);
     mainLayout->setSpacing(KDialog::spacingHint());
     mainLayout->addWidget(ExifGroup);
-    mainLayout->addWidget(IptcGroup);
     mainLayout->addWidget(commonGroup);
     mainLayout->addSpacing(KDialog::spacingHint());
     mainLayout->addWidget(box);
@@ -238,9 +229,9 @@ void SetupMetadata::applySettings()
     settings->setSaveComments(d->saveCommentsBox->isChecked());
     settings->setSaveDateTime(d->saveDateTimeBox->isChecked());
     settings->setSaveRating(d->saveRatingBox->isChecked());
-    settings->setSaveIptcTags(d->saveTagsIptcBox->isChecked());
-    settings->setSaveIptcPhotographerId(d->savePhotographerIdIptcBox->isChecked());
-    settings->setSaveIptcCredits(d->saveCreditsIptcBox->isChecked());
+    settings->setSaveTags(d->saveTagsBox->isChecked());
+    settings->setSavePhotographerId(d->savePhotographerIdBox->isChecked());
+    settings->setSaveCredits(d->saveCreditsBox->isChecked());
 
     settings->saveSettings();
 }
@@ -256,9 +247,9 @@ void SetupMetadata::readSettings()
     d->saveCommentsBox->setChecked(settings->getSaveComments());
     d->saveDateTimeBox->setChecked(settings->getSaveDateTime());
     d->saveRatingBox->setChecked(settings->getSaveRating());
-    d->saveTagsIptcBox->setChecked(settings->getSaveIptcTags());
-    d->savePhotographerIdIptcBox->setChecked(settings->getSaveIptcPhotographerId());
-    d->saveCreditsIptcBox->setChecked(settings->getSaveIptcCredits());
+    d->saveTagsBox->setChecked(settings->getSaveTags());
+    d->savePhotographerIdBox->setChecked(settings->getSavePhotographerId());
+    d->saveCreditsBox->setChecked(settings->getSaveCredits());
 }
 
 bool SetupMetadata::exifAutoRotateAsChanged()

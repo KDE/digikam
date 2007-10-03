@@ -4,7 +4,7 @@
  * http://www.digikam.org
  * 
  * Date        : 2006-07-04
- * Description : default IPTC identity setup tab.
+ * Description : default identity setup tab.
  * 
  * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -73,16 +73,11 @@ SetupIdentity::SetupIdentity(QWidget* parent )
     
     // --------------------------------------------------------
 
-    // IPTC only accept printable Ascii char.
-    QRegExp asciiRx("[\x20-\x7F]+$");
-    QValidator *asciiValidator = new QRegExpValidator(asciiRx, this);
-
     QGroupBox *photographerIdGroup = new QGroupBox(i18n("Photographer Information"), this);
     QGridLayout* grid              = new QGridLayout(photographerIdGroup);
 
     QLabel *label1 = new QLabel(i18n("Author:"), photographerIdGroup);
     d->authorEdit  = new KLineEdit(photographerIdGroup);
-    d->authorEdit->setValidator(asciiValidator);
     d->authorEdit->setMaxLength(32);
     label1->setBuddy(d->authorEdit);
     d->authorEdit->setWhatsThis( i18n("<p>Set the photographer name. This field is limited "
@@ -90,7 +85,6 @@ SetupIdentity::SetupIdentity(QWidget* parent )
 
     QLabel *label2     = new QLabel(i18n("Author Title:"), photographerIdGroup);
     d->authorTitleEdit = new KLineEdit(photographerIdGroup);
-    d->authorTitleEdit->setValidator(asciiValidator);
     d->authorTitleEdit->setMaxLength(32);
     label2->setBuddy(d->authorTitleEdit);
     d->authorTitleEdit->setWhatsThis( i18n("<p>Set the photographer title. This field is limited "
@@ -110,7 +104,6 @@ SetupIdentity::SetupIdentity(QWidget* parent )
 
     QLabel *label3 = new QLabel(i18n("Credit:"), creditsGroup);
     d->creditEdit  = new KLineEdit(creditsGroup);
-    d->creditEdit->setValidator(asciiValidator);
     d->creditEdit->setMaxLength(32);
     label3->setBuddy(d->creditEdit);
     d->creditEdit->setWhatsThis( i18n("<p>Set the default provider identification of the image, "
@@ -119,7 +112,6 @@ SetupIdentity::SetupIdentity(QWidget* parent )
 
     QLabel *label4 = new QLabel(i18n("Source:"), creditsGroup);
     d->sourceEdit  = new KLineEdit(creditsGroup);
-    d->sourceEdit->setValidator(asciiValidator);
     d->sourceEdit->setMaxLength(32);
     label4->setBuddy(d->sourceEdit);
     d->sourceEdit->setWhatsThis( i18n("<p>Set the default original owner identification of the intellectual "
@@ -129,7 +121,6 @@ SetupIdentity::SetupIdentity(QWidget* parent )
 
     QLabel *label5   = new QLabel(i18n("Copyright:"), creditsGroup);
     d->copyrightEdit = new KLineEdit(creditsGroup);
-    d->copyrightEdit->setValidator(asciiValidator);
     d->copyrightEdit->setMaxLength(128);
     label5->setBuddy(d->copyrightEdit);
     d->copyrightEdit->setWhatsThis( i18n("<p>Set the default copyright notice of the images. "
@@ -171,11 +162,11 @@ void SetupIdentity::applySettings()
     AlbumSettings* settings = AlbumSettings::instance();
     if (!settings) return;
 
-    settings->setIptcAuthor(d->authorEdit->text());
-    settings->setIptcAuthorTitle(d->authorTitleEdit->text());
-    settings->setIptcCredit(d->creditEdit->text());
-    settings->setIptcSource(d->sourceEdit->text());
-    settings->setIptcCopyright(d->copyrightEdit->text());
+    settings->setAuthor(d->authorEdit->text());
+    settings->setAuthorTitle(d->authorTitleEdit->text());
+    settings->setCredit(d->creditEdit->text());
+    settings->setSource(d->sourceEdit->text());
+    settings->setCopyright(d->copyrightEdit->text());
     settings->saveSettings();
 }
 
@@ -184,12 +175,11 @@ void SetupIdentity::readSettings()
     AlbumSettings* settings = AlbumSettings::instance();
     if (!settings) return;
 
-    d->authorEdit->setText(settings->getIptcAuthor());
-    d->authorTitleEdit->setText(settings->getIptcAuthorTitle());
-    d->creditEdit->setText(settings->getIptcCredit());
-    d->sourceEdit->setText(settings->getIptcSource());
-    d->copyrightEdit->setText(settings->getIptcCopyright());
+    d->authorEdit->setText(settings->getAuthor());
+    d->authorTitleEdit->setText(settings->getAuthorTitle());
+    d->creditEdit->setText(settings->getCredit());
+    d->sourceEdit->setText(settings->getSource());
+    d->copyrightEdit->setText(settings->getCopyright());
 }
 
 }  // namespace Digikam
-

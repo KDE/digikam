@@ -90,28 +90,28 @@ public:
 
 MetadataWriteSettings::MetadataWriteSettings()
 {
-    saveComments           = false;
-    saveDateTime           = false;
-    saveRating             = false;
-    saveIptcTags           = false;
-    saveIptcPhotographerId = false;
-    saveIptcCredits        = false;
+    saveComments       = false;
+    saveDateTime       = false;
+    saveRating         = false;
+    saveTags           = false;
+    savePhotographerId = false;
+    saveCredits        = false;
 }
 
 MetadataWriteSettings::MetadataWriteSettings(AlbumSettings *albumSettings)
 {
-    saveComments           = albumSettings->getSaveComments();
-    saveDateTime           = albumSettings->getSaveDateTime();
-    saveRating             = albumSettings->getSaveRating();
-    saveIptcTags           = albumSettings->getSaveIptcTags();
-    saveIptcPhotographerId = albumSettings->getSaveIptcPhotographerId();
-    saveIptcCredits        = albumSettings->getSaveIptcCredits();
+    saveComments       = albumSettings->getSaveComments();
+    saveDateTime       = albumSettings->getSaveDateTime();
+    saveRating         = albumSettings->getSaveRating();
+    saveTags           = albumSettings->getSaveTags();
+    savePhotographerId = albumSettings->getSavePhotographerId();
+    saveCredits        = albumSettings->getSaveCredits();
 
-    iptcAuthor             = albumSettings->getIptcAuthor();
-    iptcAuthorTitle        = albumSettings->getIptcAuthorTitle();
-    iptcCredit             = albumSettings->getIptcCredit();
-    iptcSource             = albumSettings->getIptcSource();
-    iptcCopyright          = albumSettings->getIptcCopyright();
+    Author             = albumSettings->getAuthor();
+    AuthorTitle        = albumSettings->getAuthorTitle();
+    Credit             = albumSettings->getCredit();
+    Source             = albumSettings->getSource();
+    Copyright          = albumSettings->getCopyright();
 }
 
 MetadataHub::MetadataHub(DatabaseMode dbmode)
@@ -469,7 +469,7 @@ bool MetadataHub::write(DMetadata &metadata, WriteMode writeMode, const Metadata
     bool saveDateTime = (settings.saveDateTime && d->dateTimeStatus == MetadataAvailable);
     bool saveRating   = (settings.saveRating   && d->ratingStatus == MetadataAvailable);
     bool saveTags     = false;
-    if (settings.saveIptcTags)
+    if (settings.saveTags)
     {
         saveTags = false;
         // find at least one tag to write
@@ -553,19 +553,19 @@ bool MetadataHub::write(DMetadata &metadata, WriteMode writeMode, const Metadata
         dirty |= metadata.setImageTagsPath(tagsPathList);
     }
 
-    if (settings.saveIptcPhotographerId && writeAllFields)
+    if (settings.savePhotographerId && writeAllFields)
     {
         // Store Photograph identity into the Iptc tags.
-        dirty |= metadata.setImagePhotographerId(settings.iptcAuthor,
-                                                 settings.iptcAuthorTitle);
+        dirty |= metadata.setImagePhotographerId(settings.Author,
+                                                 settings.AuthorTitle);
     }
 
-    if (settings.saveIptcCredits && writeAllFields)
+    if (settings.saveCredits && writeAllFields)
     {
         // Store Photograph identity into the Iptc tags.
-        dirty |= metadata.setImageCredits(settings.iptcCredit,
-                                          settings.iptcSource,
-                                          settings.iptcCopyright);
+        dirty |= metadata.setImageCredits(settings.Credit,
+                                          settings.Source,
+                                          settings.Copyright);
     }
 
     return dirty;
@@ -628,7 +628,7 @@ bool MetadataHub::needWriteMetadata(WriteMode writeMode, const MetadataWriteSett
     bool saveDateTime = (settings.saveDateTime && d->dateTimeStatus == MetadataAvailable);
     bool saveRating   = (settings.saveRating   && d->ratingStatus == MetadataAvailable);
     bool saveTags     = false;
-    if (settings.saveIptcTags)
+    if (settings.saveTags)
     {
         saveTags = false;
         // find at least one tag to write
@@ -660,8 +660,8 @@ bool MetadataHub::needWriteMetadata(WriteMode writeMode, const MetadataWriteSett
             (saveDateTime && (writeAllFields || d->dateTimeChanged)) ||
             (saveRating && (writeAllFields || d->ratingChanged))     ||
             (saveTags && (writeAllFields || d->tagsChanged))         ||
-            (settings.saveIptcPhotographerId && writeAllFields)      ||
-            (settings.saveIptcCredits && writeAllFields)
+            (settings.savePhotographerId && writeAllFields)      ||
+            (settings.saveCredits && writeAllFields)
            );
 }
 
