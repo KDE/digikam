@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="39" name="digikam" >
+<gui version="40" name="digikam" >
 
  <MenuBar>
 
@@ -81,9 +81,10 @@
         <ActionList name="album_actions"/>
       <Separator/>
         <ActionList name="tool_actions"/>
-      <Menu name="BatchProcess"><text>&amp;Batch Process</text>
-        <ActionList name="batch_actions"/>
-      </Menu>
+  </Menu>
+
+  <Menu name="Batch"><text>&amp;Batch</text>
+      <ActionList name="batch_actions"/>
   </Menu>
 
   <Menu name="Import"><text>I&amp;mport</text>
