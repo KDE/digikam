@@ -433,7 +433,7 @@ void CollectionScanner::addItem(Digikam::DatabaseAccess &access, int albumID,
 
     // Try to get image tags from IPTC keywords tags.
 
-    keywords = metadata.getImageKeywords();
+    metadata.getImageTagsPath(keywords);
 
     access.db()->addItem(albumID, fileName, datetime, comment, rating, keywords);
 }

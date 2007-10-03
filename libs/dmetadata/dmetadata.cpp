@@ -157,16 +157,15 @@ QString DMetadata::getImageComment() const
             return exifComment;
     }
 
-    // In third, we trying to get Xmp comments
+    // In third, we trying to get Xmp comments. Language Alternative rule is not yet used.
 
     if (hasXmp())
     {
-        QString lang;
-        QString xmpComment = getXmpTagStringLangAlt("Xmp.exif.UserComment", lang, false);
+        QString xmpComment = getXmpTagStringLangAlt("Xmp.dc.description", QString(), false);
         if (!xmpComment.isEmpty())
             return xmpComment;
 
-        xmpComment = getXmpTagStringLangAlt("Xmp.dc.Description", lang, false);
+        xmpComment = getXmpTagStringLangAlt("Xmp.exif.UserComment", QString(), false);
         if (!xmpComment.isEmpty())
             return xmpComment;
     }
@@ -201,12 +200,12 @@ bool DMetadata::setImageComment(const QString& comment) const
     if (!setExifComment(comment))
         return false;
 
-    // In Third we write comments into Xmp.
+    // In Third we write comments into Xmp. Language Alternative rule is not yet used.
 
-    if (!setXmpTagStringLangAlt("Xmp.exif.UserComment", comment, QString(), false))
+    if (!setXmpTagStringLangAlt("Xmp.dc.description", comment, QString(), false))
         return false;
 
-    if (!setXmpTagStringLangAlt("Xmp.dc.Description", comment, QString(), false))
+    if (!setXmpTagStringLangAlt("Xmp.exif.UserComment", comment, QString(), false))
         return false;
 
     // In Four we write comments into Iptc.
@@ -221,26 +220,22 @@ bool DMetadata::setImageComment(const QString& comment) const
     return true;
 }
 
-/*
-Iptc.Application2.Urgency <==> digiKam Rating links:
-
-digiKam     IPTC
-Rating      Urgency
-
-0 star  <=>  8          // Least important
-1 star  <=>  7
-1 star  <==  6
-2 star  <=>  5
-3 star  <=>  4
-4 star  <==  3
-4 star  <=>  2
-5 star  <=>  1          // Most important
-*/
-
 int DMetadata::getImageRating() const
 {
     if (getFilePath().isEmpty())
         return -1;
+
+    if (hasXmp())
+    {
+        QString value = getXmpTagString("Xmp.xmp.Rating", false);
+        if (!value.isEmpty())
+        {
+            bool ok     = false;
+            long rating = value.toLong(&ok);
+            if (ok && rating >= RatingMin && rating <= RatingMax)
+                return rating;            
+        }
+    }
 
     // Check Exif rating tag set by Windows Vista
     // Note : no need to check rating in percent tags (Exif.image.0x4747) here because 
@@ -256,19 +251,22 @@ int DMetadata::getImageRating() const
         }
     }
 
-    if (hasXmp())
-    {
-        QString value = getXmpTagString("Xmp.xmp.Rating", false);
-        if (!value.isEmpty())
-        {
-            bool ok     = false;
-            long rating = value.toLong(&ok);
-            if (ok && rating >= RatingMin && rating <= RatingMax)
-                return rating;            
-        }
-    }
-
-    // Check Iptc Urgency tag content
+    // digiKam 0.9.x has used Iptc Urgency to store Rating.
+    // This way is obsolete now since digiKam support Xmp.
+    // But we will let the capability to import it.
+    // Iptc.Application2.Urgency <==> digiKam Rating links:
+    //
+    // digiKam     IPTC
+    // Rating      Urgency
+    //    
+    // 0 star  <=>  8          // Least important
+    // 1 star  <=>  7
+    // 1 star  <==  6
+    // 2 star  <=>  5
+    // 3 star  <=>  4
+    // 4 star  <==  3
+    // 4 star  <=>  2
+    // 5 star  <=>  1          // Most important
 
     if (hasIptc())
     {
@@ -300,6 +298,9 @@ int DMetadata::getImageRating() const
 
 bool DMetadata::setImageRating(int rating) const
 {
+    // NOTE : with digiKam 0.9.x, we have used Iptc Urgency to store Rating. 
+    // Now this way is obsolete, and we use standard Xmp rating tag instead.
+
     if (rating < RatingMin || rating > RatingMax)
     {
         DDebug() << "Rating value to write is out of range!" << endl;
@@ -309,6 +310,11 @@ bool DMetadata::setImageRating(int rating) const
     DDebug() << getFilePath() << " ==> Rating: " << rating << endl;
 
     if (!setProgramId())
+        return false;
+
+    // Set standard Xmp rating tag.
+
+    if (!setXmpTagString("Xmp.xmp.Rating", QString::number(rating)))
         return false;
 
     // Set Exif rating tag used by Windows Vista.
@@ -343,40 +349,6 @@ bool DMetadata::setImageRating(int rating) const
     if (!setExifTagLong("Exif.Image.0x4749", ratePercents))
         return false;
 
-    // Set Xmp rating tag.
-
-    if (!setXmpTagString("Xmp.xmp.Rating", QString::number(rating)))
-        return false;
-
-    // Set Iptc Urgency tag value.
-
-    QString urgencyTag;
-
-    switch(rating)
-    {
-        case 0:
-            urgencyTag = QString("8");
-            break;
-        case 1:
-            urgencyTag = QString("7");
-            break;
-        case 2:
-            urgencyTag = QString("5");
-            break;
-        case 3:
-            urgencyTag = QString("4");
-            break;
-        case 4:
-            urgencyTag = QString("3");
-            break;
-        case 5:
-            urgencyTag = QString("1");
-            break;
-    }
-
-    if (!setIptcTagString("Iptc.Application2.Urgency", urgencyTag))
-        return false;
-
     return true;
 }
 
@@ -384,7 +356,7 @@ PhotoInfoContainer DMetadata::getPhotographInformations() const
 {
     PhotoInfoContainer photoInfo;
 
-    if (!getExif().isEmpty())
+    if (hasExif() || hasXmp())
     {
         photoInfo.dateTime = getImageDateTime();
 
@@ -460,10 +432,80 @@ PhotoInfoContainer DMetadata::getPhotographInformations() const
     return photoInfo;
 }
 
+bool DMetadata::getImageTagsPath(QStringList& tagsPath) const
+{
+    // Standard Xmp namespace do not provide a place to store Tags Path list as well. 
+    // We will use a private namespace for that.
+    if (!registerXmpNameSpace("http://www.digikam.org/", "digiKam"))
+        return false;
+
+    // Try to get Tags Path list from Xmp in first.
+    tagsPath = getXmpTagStringSeq("Xmp.digiKam.TagsList", false);
+    if (!tagsPath.isEmpty())
+        return true;
+
+    // Try to get Tags Path list from Xmp keywords.
+    tagsPath = getXmpKeywords();
+    if (!tagsPath.isEmpty())
+        return true;
+
+    // Try to get Tags Path list from Iptc keywords.
+    // digiKam 0.9.x has used Iptc keywords to store Tags Path list.
+    // This way is obsolete now since digiKam support Xmp because Iptc 
+    // do not support UTF-8 and have strings size limitation. But we will 
+    // let the capability to import it for interworking issues.
+    tagsPath = getIptcKeywords();
+    if (!tagsPath.isEmpty())
+        return true;
+        
+    return false;
+}
+
+bool DMetadata::setImageTagsPath(const QStringList& tagsPath) const
+{
+    // NOTE : with digiKam 0.9.x, we have used Iptc Keywords for that. 
+    // Now this way is obsolete, and we use Xmp instead.
+
+    // Standard Xmp namespace do not provide a place to store Tags path as well. 
+    // We will use a private namespace for that.
+    if (!registerXmpNameSpace("http://www.digikam.org/", "digiKam"))
+        return false;
+
+    // Remove the old Tags path list from metadata if already exist.
+    if (removeXmpTag("Xmp.digiKam.TagsList", false))
+        return false;
+
+    // An now, add the new Tags path list as well.
+    if (setXmpTagStringSeq("Xmp.digiKam.TagsList", tagsPath))
+        return false;
+
+    return true;
+}
+
 bool DMetadata::setImagePhotographerId(const QString& author, const QString& authorTitle) const
 {
     if (!setProgramId())
         return false;
+
+    // Set Xmp tags. Xmp<->Iptc Schema from Photoshop 7.0
+
+    // Create a list of authors including old one witch already exists.
+    QStringList oldAuthors = getXmpTagStringSeq("Xmp.dc.creator", false);
+    QStringList newAuthors(author);
+
+    for (QStringList::Iterator it = oldAuthors.begin(); it != oldAuthors.end(); ++it )
+    {
+        if (!newAuthors.contains(*it))
+            newAuthors.append(*it);
+    }
+
+    if (!setXmpTagStringSeq("Xmp.dc.creator", newAuthors, false))
+        return false;
+
+    if (!setXmpTagString("Xmp.photoshop.AuthorsPosition", authorTitle, false))
+        return false;
+
+    // Set Iptc tags. 
 
     if (!setIptcTag(author,      32, "Author",       "Iptc.Application2.Byline"))      return false;
     if (!setIptcTag(authorTitle, 32, "Author Title", "Iptc.Application2.BylineTitle")) return false;
@@ -475,6 +517,20 @@ bool DMetadata::setImageCredits(const QString& credit, const QString& source, co
 {
     if (!setProgramId())
         return false;
+
+    // Set Xmp tags. Xmp<->Iptc Schema from Photoshop 7.0
+
+    if (!setXmpTagString("Xmp.photoshop.Credit", credit, false))
+        return false;
+
+    if (!setXmpTagString("Xmp.photoshop.Source", source, false))
+        return false;
+
+    // NOTE : language Alternative rule is not yet used here.
+    if (!setXmpTagStringLangAlt("Xmp.dc.rights", copyright, QString(), false))
+        return false;
+
+    // Set Iptc tags.
 
     if (!setIptcTag(credit,     32, "Credit",    "Iptc.Application2.Credit"))    return false;
     if (!setIptcTag(source,     32, "Source",    "Iptc.Application2.Source"))    return false;

@@ -65,15 +65,16 @@ public:
     int  getImageRating() const;
     bool setImageRating(int rating) const;
 
+    bool getImageTagsPath(QStringList& tagsPath) const;
+    bool setImageTagsPath(const QStringList& tagsPath) const;
+
     bool setImagePhotographerId(const QString& author, const QString& authorTitle) const;
     bool setImageCredits(const QString& credit, const QString& source, const QString& copyright) const;
 
     PhotoInfoContainer getPhotographInformations() const;
 
-    
-
-    /** Methods dedicaced to record/read a private Iptc tag used to store digiKam image properties.
-        Code tested but not used because Xmp is more simple to use for that. */
+    /** Methods dedicaced to save/read a private Iptc tag used to store digiKam image properties.
+        Code tested but not used because Xmp is now the common/universal way to use for that. */
     bool getXMLImageProperties(QString& comments, QDateTime& date, 
                                int& rating, QStringList& tagsPath) const;
     bool setXMLImageProperties(const QString& comments, const QDateTime& date, 

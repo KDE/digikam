@@ -26,8 +26,6 @@
 
 #include <QFileInfo>
 
-// KDE includes
-
 // Local includes
 
 #include "ddebug.h"
@@ -47,16 +45,16 @@ public:
 
     MetadataHubPriv()
     {
-        dateTimeStatus = MetadataHub::MetadataInvalid;
-        ratingStatus   = MetadataHub::MetadataInvalid;
-        commentStatus  = MetadataHub::MetadataInvalid;
+        dateTimeStatus  = MetadataHub::MetadataInvalid;
+        ratingStatus    = MetadataHub::MetadataInvalid;
+        commentStatus   = MetadataHub::MetadataInvalid;
 
-        rating         = -1;
-        highestRating  = -1;
+        rating          = -1;
+        highestRating   = -1;
 
-        count          = 0;
+        count           = 0;
 
-        dbmode         = MetadataHub::ManagedTags;
+        dbmode          = MetadataHub::ManagedTags;
 
         dateTimeChanged = false;
         commentChanged  = false;
@@ -68,27 +66,26 @@ public:
     MetadataHub::Status commentStatus;
     MetadataHub::Status ratingStatus;
 
-    QDateTime           dateTime;
-    QDateTime           lastDateTime;
-    QString             comment;
-    int                 rating;
-    int                 highestRating;
+    QDateTime                              dateTime;
+    QDateTime                              lastDateTime;
+    QString                                comment;
+    int                                    rating;
+    int                                    highestRating;
 
-    int                 count;
+    int                                    count;
 
     QMap<TAlbum *, MetadataHub::TagStatus> tags;
-    QStringList         tagList;
+    QStringList                            tagList;
 
-    MetadataHub::DatabaseMode dbmode;
+    MetadataHub::DatabaseMode              dbmode;
 
-    bool                dateTimeChanged;
-    bool                commentChanged;
-    bool                ratingChanged;
-    bool                tagsChanged;
+    bool                                   dateTimeChanged;
+    bool                                   commentChanged;
+    bool                                   ratingChanged;
+    bool                                   tagsChanged;
 
     template <class T> void loadWithInterval(const T &data, T &storage, T &highestStorage, MetadataHub::Status &status);
     template <class T> void loadSingleValue(const T &data, T &storage, MetadataHub::Status &status);
-
 };
 
 MetadataWriteSettings::MetadataWriteSettings()
@@ -211,30 +208,35 @@ void MetadataHub::load(const DMetadata &metadata)
 
     load(datetime, comment, rating);
 
-    // Try to get image tags from Iptc keywords tags.
+    // Try to get image tags from Xmp using digiKam namespace tags.
 
     if (d->dbmode == ManagedTags)
     {
-        AlbumManager *man = AlbumManager::instance();
-        QStringList tagPaths = metadata.getImageKeywords();
-        QList<TAlbum *> loadedTags;
-
-        for (QStringList::iterator it = tagPaths.begin(); it != tagPaths.end(); ++it)
+        QStringList tagPaths;
+        if (metadata.getImageTagsPath(tagPaths))
         {
-            TAlbum *album = man->findTAlbum(*it);
-            if (!album)
-            {
-                DWarning() << "Tag id " << *it << " not found in database. Use NewTagsImport mode?" << endl;
-                continue;
-            }
-            loadedTags << album;
-        }
+            AlbumManager *man = AlbumManager::instance();
+            QList<TAlbum *> loadedTags;
 
-        loadTags(loadedTags);
+            for (QStringList::iterator it = tagPaths.begin(); it != tagPaths.end(); ++it)
+            {
+                TAlbum *album = man->findTAlbum(*it);
+                if (!album)
+                {
+                    DWarning() << "Tag id " << *it << " not found in database. Use NewTagsImport mode?" << endl;
+                    continue;
+                }
+                loadedTags << album;
+            }
+    
+            loadTags(loadedTags);
+        }
     }
     else
     {
-        loadTags(metadata.getImageKeywords());
+        QStringList tagPaths;
+        if (metadata.getImageTagsPath(tagPaths))
+            loadTags(tagPaths);
     }
 }
 
@@ -520,7 +522,7 @@ bool MetadataHub::write(DMetadata &metadata, WriteMode writeMode, const Metadata
         // To fix this constraint (not needed currently), an oldKeywords parameter is needed
 
         // create list of keywords to be added and to be removed
-        QStringList newKeywords, oldKeywords;
+        QStringList tagsPathList, oldKeywords, newKeywords;
         for (QMap<TAlbum *, TagStatus>::iterator it = d->tags.begin(); it != d->tags.end(); ++it)
         {
             // it is important that MetadataDisjoint keywords are not touched
@@ -530,27 +532,40 @@ bool MetadataHub::write(DMetadata &metadata, WriteMode writeMode, const Metadata
                 // In both situations, tags which had originally been loaded
                 // have explicitly been removed with setTag.
                 if (it.value().hasTag)
-                    newKeywords.append(it.key()->tagPath(false));
+                {
+                    tagsPathList.append(it.key()->tagPath(false));
+                    newKeywords.append(it.key()->title());
+                }
                 else
-                    oldKeywords.append(it.key()->tagPath(false));
+                {
+                    oldKeywords.append(it.key()->title());
+                }
             }
-        }
-        dirty |= metadata.setImageKeywords(oldKeywords, newKeywords);
+        }        
+
+        // We set Iptc keywords using tags name.
+        dirty |= metadata.setIptcKeywords(oldKeywords, newKeywords);
+
+        // We set Xmp keywords using tags name.
+        dirty |= metadata.setXmpKeywords(newKeywords);
+
+        // We set Tags Path list in digiKam Xmp private namespace using tags path.
+        dirty |= metadata.setImageTagsPath(tagsPathList);
     }
 
     if (settings.saveIptcPhotographerId && writeAllFields)
     {
         // Store Photograph identity into the Iptc tags.
         dirty |= metadata.setImagePhotographerId(settings.iptcAuthor,
-                                        settings.iptcAuthorTitle);
+                                                 settings.iptcAuthorTitle);
     }
 
     if (settings.saveIptcCredits && writeAllFields)
     {
         // Store Photograph identity into the Iptc tags.
         dirty |= metadata.setImageCredits(settings.iptcCredit,
-                                 settings.iptcSource,
-                                 settings.iptcCopyright);
+                                          settings.iptcSource,
+                                          settings.iptcCopyright);
     }
 
     return dirty;
