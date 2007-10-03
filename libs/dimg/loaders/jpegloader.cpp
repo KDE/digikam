@@ -79,6 +79,8 @@ void JPEGLoader::dimg_jpeg_emit_message(j_common_ptr cinfo, int msg_level)
 
 #ifdef ENABLE_DEBUG_MESSAGES
     DDebug() << k_funcinfo << buffer << " (" << msg_level << ")" << endl;
+#else
+    Q_UNUSED(msg_level);
 #endif
 }
 

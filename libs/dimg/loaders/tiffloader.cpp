@@ -79,6 +79,10 @@ void TIFFLoader::dimg_tiff_warning(const char* module, const char* format, va_li
     char message[4096];
     vsnprintf(message, 4096, format, warnings);
     DDebug() << module <<  "::" <<  message << endl;
+#else
+    Q_UNUSED(module);
+    Q_UNUSED(format);
+    Q_UNUSED(warnings);
 #endif
 }
 
@@ -88,6 +92,10 @@ void TIFFLoader::dimg_tiff_error(const char* module, const char* format, va_list
     char message[4096];
     vsnprintf(message, 4096, format, errors);
     DDebug() << module << "::" << message << endl;
+#else
+    Q_UNUSED(module);
+    Q_UNUSED(format);
+    Q_UNUSED(errors);
 #endif
 }
 
