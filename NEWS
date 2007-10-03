@@ -15,4 +15,6 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 146864 : Lesser XMP support in digiKam.
 002 ==> 145096 : Request: acquire mass storage from printer as from camera. Change menu "Camera" to "Acquire".
-003 ==> 
+003 ==> 134206 : rethink about: Iptc.Application2.Urgency <==> digiKam Rating.
+004 ==> 149966 : Alternative IPTC Keyword Separator (dot notation).
+005 ==> 
