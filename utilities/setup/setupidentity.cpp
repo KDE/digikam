@@ -35,6 +35,7 @@
 #include <klocale.h>
 #include <kdialog.h>
 #include <klineedit.h>
+#include <kactivelabel.h>
 
 // Local includes.
 
@@ -140,16 +141,20 @@ SetupIdentity::SetupIdentity(QWidget* parent )
 
     // --------------------------------------------------------
 
-    QLabel *iptcNote = new QLabel(i18n("<b>Note: IPTC text tags only support the printable "
-                                       "ASCII characters set.</b>"), parent);
-                                         
+    KActiveLabel *note = new KActiveLabel(i18n("<b>Note: These informations are used to set "
+                   "<b><a href='http://en.wikipedia.org/wiki/IPTC'>IPTC</a></b> tags contents. "
+                   "Take a care than IPTC text tags only support the printable "
+                   "<b><a href='http://en.wikipedia.org/wiki/Ascii'>ASCII</a></b>"
+                   "characters set and limit strings size. "
+                   "Use contextual help for details.</b>"), this);
+
     // --------------------------------------------------------
-    
+
     layout->addWidget(photographerIdGroup);
     layout->addWidget(creditsGroup);
-    layout->addWidget(iptcNote);
+    layout->addWidget(note);
     layout->addStretch();
-    
+
     readSettings();
 }
 
