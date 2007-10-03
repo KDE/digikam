@@ -152,7 +152,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
 
     d->identityPage  = new SetupIdentity();
     d->page_identity = addPage( d->identityPage, i18n("Identity") );
-    d->page_identity->setHeader( i18n("Default IPTC identity information") );
+    d->page_identity->setHeader( i18n("Default identity information") );
     d->page_identity->setIcon( KIcon("identity") );
 
     d->metadataPage  = new SetupMetadata();
@@ -351,4 +351,5 @@ Setup::Page Setup::activePageIndex()
 
     return GeneralPage;
 }
+
 }  // namespace Digikam
