@@ -141,9 +141,9 @@ SetupIdentity::SetupIdentity(QWidget* parent )
                    "<b><a href='http://en.wikipedia.org/wiki/Extensible_Metadata_Platform'>XMP</a></b> "
                    "and <b><a href='http://en.wikipedia.org/wiki/IPTC'>IPTC</a></b> tags contents. "
                    "There is no limitation with XMP, but take a care than IPTC text tags "
-			       "only support the printable <b><a href='http://en.wikipedia.org/wiki/Ascii'>ASCII</a></b>"
+                   "only support the printable <b><a href='http://en.wikipedia.org/wiki/Ascii'>ASCII</a></b>"
                    "characters set and limit strings size. "
-				   "Use contextual help for details.</b>"), this);
+                   "Use contextual help for details.</b>"), this);
     note->setOpenExternalLinks(true);
     note->setWordWrap(true);                       
 
