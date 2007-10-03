@@ -134,15 +134,8 @@ void DigikamImageInfo::setDescription( const QString& description )
             access.db()->setItemCaption(imageId, description);
         }
 
-        AlbumSettings *settings = AlbumSettings::instance();
-        if (settings->getSaveComments())
-        {
-            // Store comments in image as JFIF comments, Exif comments, and Iptc Comments.
-            DMetadata metadata(_url.path());
-            metadata.setImageComment(description);
-            metadata.applyChanges();
-            ImageAttributesWatch::instance()->fileMetadataChanged(_url);
-        }
+        // See B.K.O #140133. Do not set here metadata comments of picture.
+        // Only the database comments must be set.
     }
 }
 
