@@ -81,14 +81,14 @@ SetupIdentity::SetupIdentity(QWidget* parent )
     d->authorEdit->setMaxLength(32);
     label1->setBuddy(d->authorEdit);
     d->authorEdit->setWhatsThis( i18n("<p>Set the photographer name. This field is limited "
-                                      "to 32 ASCII characters."));
+                                      "to 32 ASCII characters with IPTC."));
 
     QLabel *label2     = new QLabel(i18n("Author Title:"), photographerIdGroup);
     d->authorTitleEdit = new KLineEdit(photographerIdGroup);
     d->authorTitleEdit->setMaxLength(32);
     label2->setBuddy(d->authorTitleEdit);
     d->authorTitleEdit->setWhatsThis( i18n("<p>Set the photographer title. This field is limited "
-                                           "to 32 ASCII characters."));
+                                           "to 32 ASCII characters with IPTC."));
         
     grid->addWidget(label1, 0, 0, 1, 1);
     grid->addWidget(d->authorEdit, 0, 1, 1, 1);
@@ -108,7 +108,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
     label3->setBuddy(d->creditEdit);
     d->creditEdit->setWhatsThis( i18n("<p>Set the default provider identification of the image, "
                                       "not necessarily the owner/creator. This field is limited "
-                                      "to 32 ASCII characters."));
+                                      "to 32 ASCII characters with IPTC."));
 
     QLabel *label4 = new QLabel(i18n("Source:"), creditsGroup);
     d->sourceEdit  = new KLineEdit(creditsGroup);
@@ -117,14 +117,14 @@ SetupIdentity::SetupIdentity(QWidget* parent )
     d->sourceEdit->setWhatsThis( i18n("<p>Set the default original owner identification of the intellectual "
                                       "content of the image. This could be an agency, a member of an agency or "
                                       "an individual photographer name. This field is limited "
-                                      "to 32 ASCII characters."));
+                                      "to 32 ASCII characters with IPTC."));
 
     QLabel *label5   = new QLabel(i18n("Copyright:"), creditsGroup);
     d->copyrightEdit = new KLineEdit(creditsGroup);
     d->copyrightEdit->setMaxLength(128);
     label5->setBuddy(d->copyrightEdit);
     d->copyrightEdit->setWhatsThis( i18n("<p>Set the default copyright notice of the images. "
-                                         "This field is limited to 128 ASCII characters."));
+                                         "This field is limited to 128 ASCII characters with IPTC."));
 
     grid2->addWidget(label3, 0, 0, 1, 1);
     grid2->addWidget(d->creditEdit, 0, 1, 1, 1);
@@ -137,14 +137,21 @@ SetupIdentity::SetupIdentity(QWidget* parent )
 
     // --------------------------------------------------------
 
-    QLabel *iptcNote = new QLabel(i18n("<b>Note: IPTC text tags only support the printable "
-                                       "ASCII characters set.</b>"), this);
-                                         
+    QLabel *note = new QLabel(i18n("<b>Note: These informations are used to set "
+                   "<b><a href='http://en.wikipedia.org/wiki/Extensible_Metadata_Platform'>XMP</a></b> "
+                   "and <b><a href='http://en.wikipedia.org/wiki/IPTC'>IPTC</a></b> tags contents. "
+                   "There is no limitation with XMP, but take a care than IPTC text tags "
+			       "only support the printable <b><a href='http://en.wikipedia.org/wiki/Ascii'>ASCII</a></b>"
+                   "characters set and limit strings size. "
+				   "Use contextual help for details.</b>"), this);
+    note->setOpenExternalLinks(true);
+    note->setWordWrap(true);                       
+
     // --------------------------------------------------------
     
     layout->addWidget(photographerIdGroup);
     layout->addWidget(creditsGroup);
-    layout->addWidget(iptcNote);
+    layout->addWidget(note);
     layout->addStretch();
     layout->setMargin(0);
     layout->setSpacing(KDialog::spacingHint());
