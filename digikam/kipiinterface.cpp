@@ -173,8 +173,8 @@ void DigikamImageInfo::setTime(const QDateTime& time, KIPI::TimeSpec)
 
 void DigikamImageInfo::cloneData( ImageInfoShared* other )
 {
-    // PENDING (Gilles) : Added new Image data to clone which are provide by the
-    // new Renchi implementation until digiKam 0.7.0...
+    // TODO: Added others picture attributes stored by digiKam 
+    //       database to clone an item.
 
     setDescription( other->description() );
     setTime( other->time(KIPI::FromInfo), KIPI::FromInfo );
@@ -188,17 +188,26 @@ QMap<QString, QVariant> DigikamImageInfo::attributes()
     if (p)
     {
         DatabaseAccess access;
-        qlonglong imageId  = access.db()->getImageId(p->id(), _url.fileName());
+        qlonglong imageId    = access.db()->getImageId(p->id(), _url.fileName());
 
-        // Get digiKam Tags list of picture.
-        QStringList tags         = access.db()->getItemTagNames(imageId);
-        res["tags"]              = tags;
+        /* TODO:  Marcel, a new method from AlbumDb class need to created for that.
 
-        // Get digiKam Rating of picture.
-        int rating               = access.db()->getItemRating(imageId);
-        res["rating"]            = rating;
+        // Get digiKam Tags Path list of picture from database. 
+        // Ex.: "City/Paris/Monuments/Notre Dame"
 
-        // TODO: add here future picture attributes stored by digiKam database
+        QStringList tagspath = access.db()->getItemTagPath(imageId);
+        res["tagspath"]      = tagspath;*/
+
+        // Get digiKam Tags name list of picture from database.
+        // Ex.: "Notre Dame"
+        QStringList tags     = access.db()->getItemTagNames(imageId);
+        res["tags"]          = tags;
+
+        // Get digiKam Rating of picture from database.
+        int rating           = access.db()->getItemRating(imageId);
+        res["rating"]        = rating;
+
+        // TODO: add here a kipi-plugins access to future picture attributes stored by digiKam database
     }
     return res;
 }
@@ -209,17 +218,20 @@ void DigikamImageInfo::addAttributes(const QMap<QString, QVariant>& res)
     if (p)
     {
         DatabaseAccess access;
-        qlonglong imageId                    = access.db()->getImageId(p->id(), _url.fileName());
+        qlonglong imageId = access.db()->getImageId(p->id(), _url.fileName());
         QMap<QString, QVariant> attributes = res;
 
-        // Set digiKam Tags list of picture.
-        if (attributes.find("tags") != attributes.end())
+        // Set digiKam Tags Path list of picture into database. 
+        // Ex.: "City/Paris/Monuments/Notre Dame"
+        if (attributes.find("tagspath") != attributes.end())
         {
-            QStringList tags = attributes["tags"].toStringList();
-            //TODO
+            /* TODO:  Marcel, a new method from AlbumDb class need to created for that.
+
+            QStringList tagspath = attributes["tagspath"].toStringList();*/
+            access.db()->setItemTagPath(imageId, tagspath);
         }
 
-        // Set digiKam Rating of picture.
+        // Set digiKam Rating of picture into database.
         if (attributes.find("rating") != attributes.end())
         {
             int rating = attributes["rating"].toInt();
@@ -227,7 +239,7 @@ void DigikamImageInfo::addAttributes(const QMap<QString, QVariant>& res)
                 access.db()->setItemRating(imageId, rating);
         }
 
-        // TODO: add here future picture attributes stored by digiKam database
+        // TODO: add here a kipi-plugins access to future picture attributes stored by digiKam database
     }
 
     // To update sidebar content. Some kipi-plugins use this way to refresh sidebar 
@@ -237,7 +249,7 @@ void DigikamImageInfo::addAttributes(const QMap<QString, QVariant>& res)
 
 void DigikamImageInfo::clearAttributes()
 {
-    // TODO ! This will used for the futures tags digiKam features.
+    // TODO: implemente me.
 }
 
 int DigikamImageInfo::angle()
@@ -266,9 +278,9 @@ int DigikamImageInfo::angle()
     return 0;
 }
 
-void DigikamImageInfo::setAngle( int )
+void DigikamImageInfo::setAngle(int /*angle*/)
 {
-    // TODO : add here a DMetadata call (thru Exiv2) to set Exif orientation tag.
+    // TODO: set digiKam database with this information.
 }
 
 //-- Image Collection ------------------------------------------------------------
