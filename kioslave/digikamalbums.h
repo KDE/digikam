@@ -54,9 +54,9 @@ public:
     void special(const QByteArray& data);
 
     void get( const KUrl& url );
-    void put( const KUrl& url, int _mode, bool _overwrite, bool _resume );
-    void copy( const KUrl &src, const KUrl &dest, int mode, bool overwrite );
-    void rename( const KUrl &src, const KUrl &dest, bool overwrite );
+    void put( const KUrl& url, int _mode, KIO::JobFlags _flags );
+    void copy( const KUrl &src, const KUrl &dest, int mode, KIO::JobFlags flags );
+    void rename( const KUrl &src, const KUrl &dest, KIO::JobFlags flags );
 
     void stat( const KUrl& url );
     void listDir( const KUrl& url );

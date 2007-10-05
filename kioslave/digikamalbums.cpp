@@ -132,7 +132,7 @@ void kio_digikamalbums::get( const KUrl& url )
     finished();
 }
 
-void kio_digikamalbums::put(const KUrl& url, int permissions, bool overwrite, bool resume)
+void kio_digikamalbums::put(const KUrl& url, int permissions, KIO::JobFlags flags)
 {
     kDebug() << " : " << url.url();
 
@@ -149,12 +149,7 @@ void kio_digikamalbums::put(const KUrl& url, int permissions, bool overwrite, bo
         return;
     }
 
-    KIO::JobFlags flags = KIO::DefaultFlags;
-    if(overwrite)
-	flags|=KIO::Overwrite;
-    if(!resume)
-	flags|=KIO::HideProgressInfo;
-    KIO::TransferJob *job = KIO::put(dbUrl.fileUrl(), -1, flags);
+    KIO::TransferJob *job = KIO::put(dbUrl.fileUrl(), -1, flags | KIO::HideProgressInfo);
     connectTransferJob(job);
     if (m_eventLoop->exec() != 0)
         return;
@@ -170,7 +165,7 @@ void kio_digikamalbums::put(const KUrl& url, int permissions, bool overwrite, bo
     finished();
 }
 
-void kio_digikamalbums::copy( const KUrl &src, const KUrl &dst, int mode, bool overwrite )
+void kio_digikamalbums::copy( const KUrl &src, const KUrl &dst, int mode, KIO::JobFlags flags )
 {
     kDebug() << "Src: " << src.path() << ", Dst: " << dst.path();
 
@@ -226,10 +221,7 @@ void kio_digikamalbums::copy( const KUrl &src, const KUrl &dst, int mode, bool o
         return;
     }
 
-    KIO::JobFlags flags = KIO::HideProgressInfo;
-    if (overwrite)
-        flags |= KIO::Overwrite;
-    KIO::Job *job = KIO::file_copy(dbUrlSrc.fileUrl(), dbUrlDst.fileUrl(), mode, flags );
+    KIO::Job *job = KIO::file_copy(dbUrlSrc.fileUrl(), dbUrlDst.fileUrl(), mode, flags | KIO::HideProgressInfo );
     connectJob(job);
     if (m_eventLoop->exec() != 0)
         return;
@@ -240,7 +232,7 @@ void kio_digikamalbums::copy( const KUrl &src, const KUrl &dst, int mode, bool o
     finished();
 }
 
-void kio_digikamalbums::rename( const KUrl& src, const KUrl& dst, bool overwrite )
+void kio_digikamalbums::rename( const KUrl& src, const KUrl& dst, KIO::JobFlags flags )
 {
     kDebug() << "Src: " << src << ", Dst: " << dst;
 
@@ -298,7 +290,7 @@ void kio_digikamalbums::rename( const KUrl& src, const KUrl& dst, bool overwrite
         }
     }
 
-    KIO::Job *job = KIO::rename(dbUrlSrc.fileUrl(), dbUrlDst.fileUrl(), KIO::Overwrite);
+    KIO::Job *job = KIO::rename(dbUrlSrc.fileUrl(), dbUrlDst.fileUrl(), flags);
     connectJob(job);
     if (m_eventLoop->exec() != 0)
         return;
