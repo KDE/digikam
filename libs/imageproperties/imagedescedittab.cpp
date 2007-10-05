@@ -94,7 +94,6 @@ public:
         modified                   = false;
         ignoreImageAttributesWatch = false;
         recentTagsBtn              = 0;
-        tagsSearchClearBtn         = 0;
         commentsEdit               = 0;
         tagsSearchEdit             = 0;
         dateTimeEdit               = 0;
@@ -112,7 +111,6 @@ public:
     bool                           ignoreImageAttributesWatch;
 
     QToolButton                   *recentTagsBtn;
-    QToolButton                   *tagsSearchClearBtn;
     QToolButton                   *assignedTagsBtn;
     QToolButton                   *revertBtn;
 
@@ -174,13 +172,9 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     KHBox *tagsSearch = new KHBox(settingsArea);
     tagsSearch->setSpacing(KDialog::spacingHint());
 
-    d->tagsSearchClearBtn = new QToolButton(tagsSearch);
-    d->tagsSearchClearBtn->setAutoRaise(true);
-    d->tagsSearchClearBtn->setIcon(KIconLoader::global()->loadIcon("locationbar-erase",
-                                   KIconLoader::Toolbar, KIconLoader::SizeSmall));
-
     new QLabel(i18n("Search:"), tagsSearch);
     d->tagsSearchEdit = new KLineEdit(tagsSearch);
+    d->tagsSearchEdit->setClearButtonShown(true);
     d->tagsSearchEdit->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum));
 
     d->assignedTagsBtn = new QToolButton(tagsSearch);
@@ -255,9 +249,6 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
 
     connect(d->tagsView, SIGNAL(rightButtonClicked(Q3ListViewItem*, const QPoint &, int)),
             this, SLOT(slotRightButtonClicked(Q3ListViewItem*, const QPoint&, int)));
-
-    connect(d->tagsSearchClearBtn, SIGNAL(clicked()),
-            d->tagsSearchEdit, SLOT(clear()));
 
     connect(d->tagsSearchEdit, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotTagsSearchChanged()));
