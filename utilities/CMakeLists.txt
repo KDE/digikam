@@ -1,6 +1,6 @@
 
-include_directories( ${CMAKE_SOURCE_DIR}/digikam/digikam 
-                     ${CMAKE_SOURCE_DIR}/digikam/libs/dimg 
+include_directories( ../digikam 
+                     ../libs/dimg 
                    )
 
 add_subdirectory( scripts )
