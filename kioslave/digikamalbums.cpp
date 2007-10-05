@@ -124,7 +124,7 @@ void kio_digikamalbums::get( const KUrl& url )
 
     Digikam::DatabaseUrl dbUrl(url);
 
-    KIO::TransferJob *job = KIO::get(dbUrl.fileUrl(), false, false);
+    KIO::TransferJob *job = KIO::get(dbUrl.fileUrl(), KIO::NoReload, KIO::HideProgressInfo);
     connectTransferJob(job);
     if (m_eventLoop->exec() != 0)
         return;
@@ -149,7 +149,12 @@ void kio_digikamalbums::put(const KUrl& url, int permissions, bool overwrite, bo
         return;
     }
 
-    KIO::TransferJob *job = KIO::put(dbUrl.fileUrl(), permissions, overwrite, resume, false);
+    KIO::JobFlags flags = KIO::DefaultFlags;
+    if(overwrite)
+	flags|=KIO::Overwrite;
+    if(!resume)
+	flags|=KIO::HideProgressInfo;
+    KIO::TransferJob *job = KIO::put(dbUrl.fileUrl(), -1, flags);
     connectTransferJob(job);
     if (m_eventLoop->exec() != 0)
         return;
@@ -221,7 +226,10 @@ void kio_digikamalbums::copy( const KUrl &src, const KUrl &dst, int mode, bool o
         return;
     }
 
-    KIO::Job *job = KIO::file_copy(dbUrlSrc.fileUrl(), dbUrlDst.fileUrl(), mode, overwrite, false);
+    KIO::JobFlags flags = KIO::HideProgressInfo;
+    if (overwrite)
+        flags |= KIO::Overwrite;
+    KIO::Job *job = KIO::file_copy(dbUrlSrc.fileUrl(), dbUrlDst.fileUrl(), mode, flags );
     connectJob(job);
     if (m_eventLoop->exec() != 0)
         return;
@@ -290,7 +298,7 @@ void kio_digikamalbums::rename( const KUrl& src, const KUrl& dst, bool overwrite
         }
     }
 
-    KIO::Job *job = KIO::rename(dbUrlSrc.fileUrl(), dbUrlDst.fileUrl(), overwrite);
+    KIO::Job *job = KIO::rename(dbUrlSrc.fileUrl(), dbUrlDst.fileUrl(), KIO::Overwrite);
     connectJob(job);
     if (m_eventLoop->exec() != 0)
         return;
@@ -384,7 +392,7 @@ void kio_digikamalbums::del( const KUrl& url, bool isFile)
 
     if (isFile)
     {
-        KIO::DeleteJob *job = KIO::del(dbUrl.fileUrl(), false, false);
+        KIO::DeleteJob *job = KIO::del(dbUrl.fileUrl(), KIO::HideProgressInfo);
         connectJob(job);
     }
     else
@@ -413,7 +421,7 @@ void kio_digikamalbums::stat( const KUrl& url )
 {
     Digikam::DatabaseUrl dbUrl(url);
 
-    KIO::SimpleJob *job = KIO::stat(dbUrl.fileUrl(), false);
+    KIO::SimpleJob *job = KIO::stat(dbUrl.fileUrl(), KIO::HideProgressInfo);
     connectSimpleJob(job);
     if (m_eventLoop->exec() != 0)
         return;
@@ -431,7 +439,7 @@ void kio_digikamalbums::listDir( const KUrl& url )
     createDigikamPropsUDSEntry(entry);
     listEntry(entry, false);
 
-    KIO::ListJob *job = KIO::listDir(dbUrl.fileUrl(), false);
+    KIO::ListJob *job = KIO::listDir(dbUrl.fileUrl(), KIO::HideProgressInfo);
     connectListJob(job);
     if (m_eventLoop->exec() != 0)
         return;

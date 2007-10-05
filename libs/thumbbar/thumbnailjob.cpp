@@ -200,7 +200,7 @@ void ThumbnailJob::processNext()
     KUrl url(d->curr_url);
     url.setProtocol("digikamthumbnail");
 
-    KIO::TransferJob *job = KIO::get(url, false, false);
+    KIO::TransferJob *job = KIO::get(url, KIO::NoReload, KIO::HideProgressInfo);
     job->addMetaData("size", QString::number(d->size));
     createShmSeg();
 

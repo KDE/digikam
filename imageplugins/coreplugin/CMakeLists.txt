@@ -1,62 +1,62 @@
 
-INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/sharpnesseditor
-                    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/sharpnesseditor/clapack
-                    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/hsl
-                    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/ratiocrop
+INCLUDE_DIRECTORIES(../../imageplugins/coreplugin/sharpnesseditor
+                    ../../imageplugins/coreplugin/sharpnesseditor/clapack
+                    ../../imageplugins/coreplugin/hsl
+                    ../../imageplugins/coreplugin/ratiocrop
                    )
 
 SET(libclapack_SRCS 
-    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/sharpnesseditor/clapack/abort_.c
-    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/sharpnesseditor/clapack/dgesv.c 
-    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/sharpnesseditor/clapack/dlaswp.c
-    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/sharpnesseditor/clapack/endfile.c 
-    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/sharpnesseditor/clapack/idamax.c 
-    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/sharpnesseditor/clapack/open.c 
-    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/sharpnesseditor/clapack/sig_die.c 
-    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/sharpnesseditor/clapack/wref.c 
-    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/sharpnesseditor/clapack/close.c 
-    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/sharpnesseditor/clapack/dgetf2.c 
-    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/sharpnesseditor/clapack/dscal.c 
-    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/sharpnesseditor/clapack/err.c 
-    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/sharpnesseditor/clapack/ieeeck.c 
-    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/sharpnesseditor/clapack/s_cmp.c 
-    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/sharpnesseditor/clapack/s_stop.c 
-    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/sharpnesseditor/clapack/wrtfmt.c 
-    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/sharpnesseditor/clapack/dgemm.c 
-    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/sharpnesseditor/clapack/dgetrf.c 
-    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/sharpnesseditor/clapack/dswap.c 
-    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/sharpnesseditor/clapack/fmt.c 
-    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/sharpnesseditor/clapack/ilaenv.c 
-    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/sharpnesseditor/clapack/s_copy.c 
-    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/sharpnesseditor/clapack/wsfe.c 
-    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/sharpnesseditor/clapack/dger.c 
-    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/sharpnesseditor/clapack/dgetrs.c 
-    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/sharpnesseditor/clapack/dtrsm.c 
-    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/sharpnesseditor/clapack/fmtlib.c 
-    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/sharpnesseditor/clapack/lsame.c 
-    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/sharpnesseditor/clapack/sfe.c 
-    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/sharpnesseditor/clapack/util.c 
-    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/sharpnesseditor/clapack/xerbla.c
+    ../../imageplugins/coreplugin/sharpnesseditor/clapack/abort_.c
+    ../../imageplugins/coreplugin/sharpnesseditor/clapack/dgesv.c 
+    ../../imageplugins/coreplugin/sharpnesseditor/clapack/dlaswp.c
+    ../../imageplugins/coreplugin/sharpnesseditor/clapack/endfile.c 
+    ../../imageplugins/coreplugin/sharpnesseditor/clapack/idamax.c 
+    ../../imageplugins/coreplugin/sharpnesseditor/clapack/open.c 
+    ../../imageplugins/coreplugin/sharpnesseditor/clapack/sig_die.c 
+    ../../imageplugins/coreplugin/sharpnesseditor/clapack/wref.c 
+    ../../imageplugins/coreplugin/sharpnesseditor/clapack/close.c 
+    ../../imageplugins/coreplugin/sharpnesseditor/clapack/dgetf2.c 
+    ../../imageplugins/coreplugin/sharpnesseditor/clapack/dscal.c 
+    ../../imageplugins/coreplugin/sharpnesseditor/clapack/err.c 
+    ../../imageplugins/coreplugin/sharpnesseditor/clapack/ieeeck.c 
+    ../../imageplugins/coreplugin/sharpnesseditor/clapack/s_cmp.c 
+    ../../imageplugins/coreplugin/sharpnesseditor/clapack/s_stop.c 
+    ../../imageplugins/coreplugin/sharpnesseditor/clapack/wrtfmt.c 
+    ../../imageplugins/coreplugin/sharpnesseditor/clapack/dgemm.c 
+    ../../imageplugins/coreplugin/sharpnesseditor/clapack/dgetrf.c 
+    ../../imageplugins/coreplugin/sharpnesseditor/clapack/dswap.c 
+    ../../imageplugins/coreplugin/sharpnesseditor/clapack/fmt.c 
+    ../../imageplugins/coreplugin/sharpnesseditor/clapack/ilaenv.c 
+    ../../imageplugins/coreplugin/sharpnesseditor/clapack/s_copy.c 
+    ../../imageplugins/coreplugin/sharpnesseditor/clapack/wsfe.c 
+    ../../imageplugins/coreplugin/sharpnesseditor/clapack/dger.c 
+    ../../imageplugins/coreplugin/sharpnesseditor/clapack/dgetrs.c 
+    ../../imageplugins/coreplugin/sharpnesseditor/clapack/dtrsm.c 
+    ../../imageplugins/coreplugin/sharpnesseditor/clapack/fmtlib.c 
+    ../../imageplugins/coreplugin/sharpnesseditor/clapack/lsame.c 
+    ../../imageplugins/coreplugin/sharpnesseditor/clapack/sfe.c 
+    ../../imageplugins/coreplugin/sharpnesseditor/clapack/util.c 
+    ../../imageplugins/coreplugin/sharpnesseditor/clapack/xerbla.c
    )
 
 SET(digikamimageplugin_core_PART_SRCS 
     ${libclapack_SRCS} 
-    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/imageplugin_core.cpp 
-    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/imageeffect_bcg.cpp 
-    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/imageeffect_rgb.cpp 
-    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/imageeffect_blur.cpp 
-    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/imageeffect_autocorrection.cpp 
-    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/imageeffect_redeye.cpp 
-    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/imageeffect_iccproof.cpp 
-    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/imageeffect_bwsepia.cpp 
-    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/hsl/hspreviewwidget.cpp
-    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/hsl/imageeffect_hsl.cpp 
-    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/sharpnesseditor/matrix.cpp
-    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/sharpnesseditor/refocus.cpp
-    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/sharpnesseditor/unsharp.cpp
-    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/sharpnesseditor/imageeffect_sharpen.cpp 
-    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/ratiocrop/imageselectionwidget.cpp
-    ${CMAKE_SOURCE_DIR}/digikam/imageplugins/coreplugin/ratiocrop/imageeffect_ratiocrop.cpp 
+    ../../imageplugins/coreplugin/imageplugin_core.cpp 
+    ../../imageplugins/coreplugin/imageeffect_bcg.cpp 
+    ../../imageplugins/coreplugin/imageeffect_rgb.cpp 
+    ../../imageplugins/coreplugin/imageeffect_blur.cpp 
+    ../../imageplugins/coreplugin/imageeffect_autocorrection.cpp 
+    ../../imageplugins/coreplugin/imageeffect_redeye.cpp 
+    ../../imageplugins/coreplugin/imageeffect_iccproof.cpp 
+    ../../imageplugins/coreplugin/imageeffect_bwsepia.cpp 
+    ../../imageplugins/coreplugin/hsl/hspreviewwidget.cpp
+    ../../imageplugins/coreplugin/hsl/imageeffect_hsl.cpp 
+    ../../imageplugins/coreplugin/sharpnesseditor/matrix.cpp
+    ../../imageplugins/coreplugin/sharpnesseditor/refocus.cpp
+    ../../imageplugins/coreplugin/sharpnesseditor/unsharp.cpp
+    ../../imageplugins/coreplugin/sharpnesseditor/imageeffect_sharpen.cpp 
+    ../../imageplugins/coreplugin/ratiocrop/imageselectionwidget.cpp
+    ../../imageplugins/coreplugin/ratiocrop/imageeffect_ratiocrop.cpp 
    )
 
 
