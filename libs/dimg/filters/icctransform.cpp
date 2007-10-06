@@ -32,7 +32,7 @@
 #include <kconfig.h>
 #include <kapplication.h>
 #include <kglobal.h>
-
+#include <kconfiggroup.h>
 // Lcms includes.
 
 #include <lcms.h>

@@ -42,6 +42,7 @@
 #include <kstandarddirs.h>
 #include <kaboutdata.h>
 #include <kcomponentdata.h>
+#include <kconfiggroup.h>
 
 // Local includes.
 

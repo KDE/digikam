@@ -32,7 +32,7 @@
 #include <QDir>
 
 // Local Includes.
-
+#include <kurl.h>
 #include "digikam_export.h"
 
 class KPageDialog;
