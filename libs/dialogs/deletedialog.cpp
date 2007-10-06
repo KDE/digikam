@@ -40,7 +40,7 @@
 #include <kio/job.h>
 #include <klocale.h>
 #include <kstdguiitem.h>
-
+#include <kdebug.h>
 // Local includes.
 
 #include "albumsettings.h"

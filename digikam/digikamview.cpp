@@ -45,6 +45,7 @@
 #include <kstandarddirs.h>
 #include <kglobal.h>
 #include <kvbox.h>
+#include <kconfiggroup.h>
 
 // LibKDcraw includes.
 

@@ -38,7 +38,7 @@
 #include <kconfig.h>
 #include <kdeversion.h>
 #include <kcalendarsystem.h>
-
+#include <kconfiggroup.h>
 // Local includes.
 
 #include "ddebug.h"
@@ -252,13 +252,13 @@ void DateFolderView::loadViewState()
     KConfigGroup group = config->group(objectName());
     
     QString selected;
-    if(config->hasKey("LastSelectedItem"))
+    if(group.hasKey("LastSelectedItem"))
     {
         selected = group.readEntry("LastSelectedItem");
     }
 
     QStringList openFolders;
-    if(config->hasKey("OpenFolders"))
+    if(group.hasKey("OpenFolders"))
     {
         openFolders = group.readEntry("OpenFolders",QStringList());
     }

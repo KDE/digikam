@@ -228,7 +228,8 @@ void DigikamImageInfo::addAttributes(const QMap<QString, QVariant>& res)
             /* TODO:  Marcel, a new method from AlbumDb class need to created for that.
 
             QStringList tagspath = attributes["tagspath"].toStringList();*/
-            access.db()->setItemTagPath(imageId, tagspath);
+            //FIXME
+            //access.db()->setItemTagPath(imageId, tagspath);
         }
 
         // Set digiKam Rating of picture into database.
