@@ -34,7 +34,7 @@
 #include <QPixmap>
 #include <QDomDocument>
 #include <QTextStream>
-
+#include <QDate>
 // KDE includes.
 
 #include <kglobal.h>

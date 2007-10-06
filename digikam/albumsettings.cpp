@@ -29,7 +29,7 @@
 #include <kapplication.h>
 #include <kdebug.h>
 #include <kglobal.h>
-
+#include <kconfiggroup.h>
 // LibKDcraw includes.
 
 #include <libkdcraw/rawfiles.h>

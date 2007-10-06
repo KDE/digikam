@@ -60,7 +60,7 @@ extern "C"
 #include <kio/global.h>
 #include <kio/job.h>
 #include <kdirwatch.h>
-
+#include <kconfiggroup.h>
 // Local includes.
 
 #include "ddebug.h"
@@ -244,7 +244,7 @@ void AlbumManager::setAlbumRoot(const QString &albumRoot, bool priority)
         // to the database.
         KSharedConfig::Ptr config = KGlobal::config();
         KConfigGroup group = config->group("General Settings");
-        if (config->hasKey("Locale"))
+        if (group.hasKey("Locale"))
         {
             DDebug() << "Locale found in configfile" << endl;
             dbLocale = group.readEntry("Locale");

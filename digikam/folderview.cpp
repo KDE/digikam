@@ -34,7 +34,7 @@
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kglobal.h>
-
+#include <kconfiggroup.h>
 // Local includes.
 
 #include "ddebug.h"
