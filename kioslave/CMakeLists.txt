@@ -1,18 +1,18 @@
 
-INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/digikam/libs/jpegutils 
-                     ${CMAKE_SOURCE_DIR}/digikam/libs/dimg 
-                     ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata 
-                     ${CMAKE_SOURCE_DIR}/digikam/libs/database 
-                     ${CMAKE_SOURCE_DIR}/digikam/libs/database/sqlite2
-                     ${CMAKE_SOURCE_DIR}/digikam/digikam
-                     ${CMAKE_SOURCE_DIR}/digikam/libs/dimg/loaders
-                     ${CMAKE_SOURCE_DIR}/digikam/libs/dimg/filters
-                     ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata
-                     ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/metadata
-                     ${CMAKE_SOURCE_DIR}/digikam/libs/histogram
-                     ${CMAKE_SOURCE_DIR}/digikam/libs/levels
-                     ${CMAKE_SOURCE_DIR}/digikam/libs/lprof/
-                     ${CMAKE_SOURCE_DIR}/digikam/libs/threadimageio
+INCLUDE_DIRECTORIES( ../libs/jpegutils 
+                     ../libs/dimg 
+                     ../libs/dmetadata 
+                     ../libs/database 
+                     ../libs/database/sqlite2
+                     ../digikam
+                     ../libs/dimg/loaders
+                     ../libs/dimg/filters
+                     ../libs/dmetadata
+                     ../libs/widgets/metadata
+                     ../libs/histogram
+                     ../libs/levels
+                     ../libs/lprof/
+                     ../libs/threadimageio
                      ${JPEG_INCLUDE_DIR}
                      ${TIFF_INCLUDE_DIR}
                      ${PNG_INCLUDE_DIR}

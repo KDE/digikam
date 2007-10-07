@@ -7,46 +7,46 @@ ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
 
 INCLUDE_DIRECTORIES(
                      # basic libs
-                     ${CMAKE_SOURCE_DIR}/digikam/libs/dimg
-                     ${CMAKE_SOURCE_DIR}/digikam/libs/dimg/loaders
-                     ${CMAKE_SOURCE_DIR}/digikam/libs/dimg/filters
-                     ${CMAKE_SOURCE_DIR}/digikam/libs/whitebalance
-                     ${CMAKE_SOURCE_DIR}/digikam/libs/dmetadata 
-                     ${CMAKE_SOURCE_DIR}/digikam/libs/histogram
-                     ${CMAKE_SOURCE_DIR}/digikam/libs/curves
-                     ${CMAKE_SOURCE_DIR}/digikam/libs/levels
-                     ${CMAKE_SOURCE_DIR}/digikam/libs/lprof/
-                     ${CMAKE_SOURCE_DIR}/digikam/libs/jpegutils 
-                     ${CMAKE_SOURCE_DIR}/digikam/libs/greycstoration
-                     ${CMAKE_SOURCE_DIR}/digikam/libs/threadimageio
+                     ../libs/dimg
+                     ../libs/dimg/loaders
+                     ../libs/dimg/filters
+                     ../libs/whitebalance
+                     ../libs/dmetadata 
+                     ../libs/histogram
+                     ../libs/curves
+                     ../libs/levels
+                     ../libs/lprof/
+                     ../libs/jpegutils 
+                     ../libs/greycstoration
+                     ../libs/threadimageio
 
                      # widgets and dialogs
-                     ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/common
-                     ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/imageplugins 
-                     ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/metadata 
-                     ${CMAKE_SOURCE_DIR}/digikam/libs/widgets/iccprofiles 
-                     ${CMAKE_SOURCE_DIR}/digikam/libs/imageproperties
-                     ${CMAKE_SOURCE_DIR}/digikam/libs/dialogs
+                     ../libs/widgets/common
+                     ../libs/widgets/imageplugins 
+                     ../libs/widgets/metadata 
+                     ../libs/widgets/iccprofiles 
+                     ../libs/imageproperties
+                     ../libs/dialogs
 
                      # database libs
-                     ${CMAKE_SOURCE_DIR}/digikam/libs/database
-                     ${CMAKE_SOURCE_DIR}/digikam/libs/database/sqlite2
+                     ../libs/database
+                     ../libs/database/sqlite2
 
                      # shared utilities
-                     ${CMAKE_SOURCE_DIR}/digikam/libs/thumbbar
-                     ${CMAKE_SOURCE_DIR}/digikam/utilities/slideshow
-                     ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/editor
-                     ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/canvas
-                     ${CMAKE_SOURCE_DIR}/digikam/utilities/imageeditor/tools
+                     ../libs/thumbbar
+                     ../utilities/slideshow
+                     ../utilities/imageeditor/editor
+                     ../utilities/imageeditor/canvas
+                     ../utilities/imageeditor/tools
 
                      # specific libs and utilities
-                     ${CMAKE_SOURCE_DIR}/digikam/libs/themeengine
-                     ${CMAKE_SOURCE_DIR}/digikam/utilities/cameragui
-                     ${CMAKE_SOURCE_DIR}/digikam/utilities/setup
-                     ${CMAKE_SOURCE_DIR}/digikam/utilities/slideshow
-                     ${CMAKE_SOURCE_DIR}/digikam/utilities/batch
-                     ${CMAKE_SOURCE_DIR}/digikam/utilities/lighttable
-                     ${CMAKE_SOURCE_DIR}/digikam/digikam
+                     ../libs/themeengine
+                     ../utilities/cameragui
+                     ../utilities/setup
+                     ../utilities/slideshow
+                     ../utilities/batch
+                     ../utilities/lighttable
+                     ../digikam
                    )
 
 
