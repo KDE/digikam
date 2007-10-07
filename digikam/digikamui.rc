@@ -86,7 +86,6 @@
         <ActionList name="album_actions"/>
       <Separator/>
         <ActionList name="tool_actions"/>
-      </Menu>
   </Menu>
 
   <Menu name="Batch"><text>&amp;Batch</text>
