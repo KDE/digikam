@@ -1250,7 +1250,12 @@ void DigikamApp::slotProgressValue(int count)
 
 void DigikamApp::slotExit()
 {
-    close();
+    if (d->fullScreen) {
+        slotToggleFullScreen();
+        QTimer::singleShot(0, this, SLOT(close()));
+    }
+    else
+        close();
 }
 
 QString DigikamApp::convertToLocalUrl( const QString& folder )
