@@ -119,6 +119,7 @@ TagCreateDlg::TagCreateDlg(QWidget *parent, TAlbum* album)
     titleLabel->setText(i18n("&Title:"));
 
     d->titleEdit = new KLineEdit(widget);
+    d->titleEdit->setClearButtonShown(true);
     titleLabel->setBuddy(d->titleEdit);
 
     setFocusProxy(d->titleEdit);
@@ -288,6 +289,7 @@ TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album)
     titleLabel->setText(i18n("&Title:"));
 
     d->titleEdit = new KLineEdit(widget);
+    d->titleEdit->setClearButtonShown(true);
     d->titleEdit->setText(album->title());
     titleLabel->setBuddy(d->titleEdit);
     setFocusProxy(d->titleEdit);
