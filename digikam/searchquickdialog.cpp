@@ -90,6 +90,7 @@ SearchQuickDialog::SearchQuickDialog(QWidget* parent, KUrl& url)
     
     QLabel *label1 = new QLabel("<b>" + i18n("Search:") + "</b>", w);
     d->searchEdit  = new KLineEdit(w);
+    d->searchEdit->setClearButtonShown(true);
     d->searchEdit->setWhatsThis( i18n("<p>Enter your search criteria to find items in the album library"));
     
     d->resultsView = new SearchResultsView(w);
@@ -99,6 +100,7 @@ SearchQuickDialog::SearchQuickDialog(QWidget* parent, KUrl& url)
     
     QLabel *label2 = new QLabel(i18n("Save search as:"), w);
     d->nameEdit    = new KLineEdit(w);
+    d->nameEdit->setClearButtonShown(true);
     d->nameEdit->setText(i18n("Last Search"));
     d->nameEdit->setWhatsThis( i18n("<p>Enter the name of the current search to save in the "
                                     "\"My Searches\" view"));
