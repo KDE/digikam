@@ -131,6 +131,7 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
     titleLabel->setText(i18n("&Title:"));
 
     d->titleEdit = new KLineEdit(page);
+    d->titleEdit->setClearButtonShown(true);
     titleLabel->setBuddy(d->titleEdit);
 
     QLabel *collectionLabel = new QLabel(page);
