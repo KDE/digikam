@@ -1,4 +1,4 @@
-digiKam 0.9.3-beta1 - Release date: 2007-10-xx
+digiKam 0.9.3-beta1 - Release date: 2007-10-08
 
 NEW FEATURES:
 
@@ -52,4 +52,4 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 037 ==> 147311 : Ligth Table RAW images does not rotate as def. by exif info.
 038 ==> 146773 : Metadata sources preference when sorting images.
 039 ==> 140133 : Metadata Edit Picture Comments Syncs to IPTC and EXIF when option is de-selected .
-040 ==> 
+040 ==> ML     : Lost toolbar after building from svn
