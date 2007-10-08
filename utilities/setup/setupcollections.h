@@ -53,6 +53,7 @@ private slots:
     void slotCollectionSelectionChanged();
     void slotAddCollection();
     void slotDelCollection();
+    void slotRepCollection();
 
 private:
 
