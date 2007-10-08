@@ -78,6 +78,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
 
     QLabel *label1 = new QLabel(i18n("Author:"), photographerIdGroup);
     d->authorEdit  = new KLineEdit(photographerIdGroup);
+    d->authorEdit->setClearButtonShown(true);
     d->authorEdit->setMaxLength(32);
     label1->setBuddy(d->authorEdit);
     d->authorEdit->setWhatsThis( i18n("<p>Set the photographer name. This field is limited "
@@ -85,6 +86,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
 
     QLabel *label2     = new QLabel(i18n("Author Title:"), photographerIdGroup);
     d->authorTitleEdit = new KLineEdit(photographerIdGroup);
+    d->authorTitleEdit->setClearButtonShown(true);
     d->authorTitleEdit->setMaxLength(32);
     label2->setBuddy(d->authorTitleEdit);
     d->authorTitleEdit->setWhatsThis( i18n("<p>Set the photographer title. This field is limited "
@@ -104,6 +106,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
 
     QLabel *label3 = new QLabel(i18n("Credit:"), creditsGroup);
     d->creditEdit  = new KLineEdit(creditsGroup);
+    d->creditEdit->setClearButtonShown(true);
     d->creditEdit->setMaxLength(32);
     label3->setBuddy(d->creditEdit);
     d->creditEdit->setWhatsThis( i18n("<p>Set the default provider identification of the image, "
@@ -112,6 +115,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
 
     QLabel *label4 = new QLabel(i18n("Source:"), creditsGroup);
     d->sourceEdit  = new KLineEdit(creditsGroup);
+    d->sourceEdit->setClearButtonShown(true);
     d->sourceEdit->setMaxLength(32);
     label4->setBuddy(d->sourceEdit);
     d->sourceEdit->setWhatsThis( i18n("<p>Set the default original owner identification of the intellectual "
@@ -121,6 +125,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
 
     QLabel *label5   = new QLabel(i18n("Copyright:"), creditsGroup);
     d->copyrightEdit = new KLineEdit(creditsGroup);
+    d->copyrightEdit->setClearButtonShown(true);
     d->copyrightEdit->setMaxLength(128);
     label5->setBuddy(d->copyrightEdit);
     d->copyrightEdit->setWhatsThis( i18n("<p>Set the default copyright notice of the images. "
