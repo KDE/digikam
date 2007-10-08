@@ -9,11 +9,11 @@
 
 name       = "digikam"
 egmodule   = "graphics"
-version    = "0.9.3-rc1"
+version    = "0.9.3-beta1"
 docs       = "no"
 
 svnbase    = "svn+ssh://gkulzer@svn.kde.org/home/kde"
-svnroot    = "#{svnbase}/branches/extragear/kde3"
+svnroot    = "#{svnbase}/branches"
 adminroot  = "#{svnbase}/branches/KDE/3.5"
 
 addDocs    = []
@@ -37,7 +37,7 @@ puts "Fetching #{egmodule}/#{name}..."
 Dir.mkdir( folder )
 Dir.chdir( folder )
 
-`svn co -N #{svnroot}/#{egmodule}`
+`svn co -N #{svnroot}/extragear/kde3/#{egmodule}`
 Dir.chdir( egmodule )
 `svn up #{name}`
 `svn up -N doc`
@@ -57,7 +57,7 @@ puts "\n"
 puts "Fetching l10n docs for #{egmodule}/#{name}...\n"
 puts "\n"
 
-i18nlangs = `svn cat #{svnroot}/l10n/subdirs`
+i18nlangs = `svn cat #{svnbase}/trunk/l10n-kde3/subdirs`
 i18nlangsCleaned = []
 for lang in i18nlangs
   l = lang.chomp
@@ -79,7 +79,7 @@ for lang in i18nlangs
     `rm -rf #{dg}`
     docdirname = "l10n/#{lang}/docs/extragear-#{egmodule}/#{dg}"
     if ( docs != "no")
-        `svn co -q #{svnroot}/#{docdirname} > /dev/null 2>&1`
+        `svn co -q #{svnbase}/trunk/#{docdirname} > /dev/null 2>&1`
     end
     next unless FileTest.exists?( dg )
     print "Copying #{lang}'s #{dg} documentation over...  "
@@ -113,8 +113,8 @@ for lang in i18nlangs
 
   for dg in addPo
     dg.chomp!
-    pofilename = "l10n/#{lang}/messages/extragear-#{egmodule}/#{dg}.po"
-    `svn cat #{svnroot}/#{pofilename} 2> /dev/null | tee l10n/#{dg}.po`
+    pofilename = "l10n-kde3/#{lang}/messages/extragear-#{egmodule}/#{dg}.po"
+    `svn cat #{svnbase}/trunk/#{pofilename} 2> /dev/null | tee l10n/#{dg}.po`
     next if FileTest.size( "l10n/#{dg}.po" ) == 0
 
     if !FileTest.exist?( dest )
