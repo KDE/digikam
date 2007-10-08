@@ -1,5 +1,57 @@
-v0.9.3-beta1 - 2007-010-07
+v0.9.3-beta1 - 2007-010-08
 ----------------------------------------------------------------------------
+2007-10-08 05:10  gkulzer
+
+	* branches/extragear/kde3/graphics/digikam/release_digikam.rb:
+	  release 0.9.3
+
+2007-10-08 04:19  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/digikam/version.h:
+	  rc1->beta1
+
+2007-10-08 04:17  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/digikam.lsm: rc1 =>
+	  beta1
+
+2007-10-08 04:15  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2007-10-07 16:49  mwiesweg
+
+	* branches/extragear/kde3/graphics/digikam/digikam/digikamapp.cpp:
+	  Fix the bug that after an exit from full screen mode, the hidden
+	  menu & tabs would be saved by KMainWindow as default setting.
+	  The first patch from Arnd was correct, except one problem: all
+	  the showing of widgets works
+	  by events, and obviously needs to return to the event loop to be
+	  completed. I am not sure why it did not work as with Arnd's
+	  version,
+	  as close also works with a QCloseEvent. Strange.
+
+2007-10-07 14:44  gkulzer
+
+	* branches/extragear/kde3/graphics/digikam/digikam.lsm: release
+	  0.9.3-rc1
+
+2007-10-07 14:42  gkulzer
+
+	* branches/extragear/kde3/graphics/digikam/digikam/version.h:
+	  release 0.9.3-rc1
+
+2007-10-07 14:35  gkulzer
+
+	* branches/extragear/kde3/graphics/digikam/ChangeLog: release
+	  0.9.3-beta1
+
+2007-10-07 13:38  mwiesweg
+
+	* branches/extragear/kde3/graphics/digikam/digikam/digikamui.rc:
+	  Remove one tag too much which closed the xml and removed the
+	  toolbar (see reports on ML)
+
 
 2007-10-03 16:27  cgilles
 
