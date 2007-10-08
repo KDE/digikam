@@ -168,7 +168,12 @@ QString DMetadata::getImageComment() const
         xmpComment = getXmpTagStringLangAlt("Xmp.exif.UserComment", QString(), false);
         if (!xmpComment.isEmpty())
             return xmpComment;
-    }
+
+
+        xmpComment = getXmpTagStringLangAlt("Xmp.tiff.ImageDescription", QString(), false);
+        if (!xmpComment.isEmpty())
+            return xmpComment;
+}
 
     // In four, we trying to get Iptc comments
 
@@ -206,6 +211,9 @@ bool DMetadata::setImageComment(const QString& comment) const
         return false;
 
     if (!setXmpTagStringLangAlt("Xmp.exif.UserComment", comment, QString(), false))
+        return false;
+
+    if (!setXmpTagStringLangAlt("Xmp.tiff.ImageDescription", comment, QString(), false))
         return false;
 
     // In Four we write comments into Iptc.
@@ -502,6 +510,9 @@ bool DMetadata::setImagePhotographerId(const QString& author, const QString& aut
     if (!setXmpTagStringSeq("Xmp.dc.creator", newAuthors, false))
         return false;
 
+    if (!setXmpTagStringSeq("Xmp.tiff.Artist", newAuthors, false))
+        return false;
+
     if (!setXmpTagString("Xmp.photoshop.AuthorsPosition", authorTitle, false))
         return false;
 
@@ -528,6 +539,9 @@ bool DMetadata::setImageCredits(const QString& credit, const QString& source, co
 
     // NOTE : language Alternative rule is not yet used here.
     if (!setXmpTagStringLangAlt("Xmp.dc.rights", copyright, QString(), false))
+        return false;
+
+    if (!setXmpTagStringLangAlt("Xmp.tiff.Copyright", copyright, QString(), false))
         return false;
 
     // Set Iptc tags.
