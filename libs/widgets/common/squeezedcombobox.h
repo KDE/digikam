@@ -103,6 +103,13 @@ private:
     void resizeEvent(QResizeEvent *);
     QString squeezeText(const QString& original);
 
+    // Prevent these from being used.
+    QString currentText() const;
+    void setCurrentText(const QString&);
+    void insertItem(const QString& t, int index=-1);
+    void addItem(const QString &text);
+    QString text(int index) const;
+
 private:
 
     SqueezedComboBoxPriv *d;
