@@ -52,6 +52,8 @@ signals:
     
 protected:
 
+    int regPixmapWidth() const;
+
     virtual void mousePressEvent(QMouseEvent*);
     virtual void mouseMoveEvent(QMouseEvent*);
     virtual void paintEvent(QPaintEvent*);

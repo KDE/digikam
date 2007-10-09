@@ -93,6 +93,11 @@ int RatingWidget::rating() const
     return d->rating;
 }
 
+int RatingWidget::regPixmapWidth() const
+{
+    return d->regPixmap.width();
+}
+
 void RatingWidget::mouseMoveEvent(QMouseEvent* e)
 {
     int pos = e->x() / d->regPixmap.width() +1;
