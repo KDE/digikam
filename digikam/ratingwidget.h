@@ -43,7 +43,7 @@ class RatingWidget : public QWidget
 public:
 
     RatingWidget(QWidget* parent);
-    ~RatingWidget();
+    virtual ~RatingWidget();
 
     void setRating(int val);
     int  rating() const;
@@ -54,9 +54,9 @@ signals:
     
 protected:
 
-    void mousePressEvent(QMouseEvent* e);
-    void mouseMoveEvent(QMouseEvent* e);
-    void paintEvent(QPaintEvent* e);
+    virtual void mousePressEvent(QMouseEvent*);
+    virtual void mouseMoveEvent(QMouseEvent*);
+    virtual void paintEvent(QPaintEvent*);
 
 private slots:
 
