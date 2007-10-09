@@ -420,13 +420,13 @@ void SetupICC::applySettings()
     config->writeEntry("ManagedView", d->managedView->isChecked());
 
     config->writePathEntry("InProfileFile", 
-            *(d->inICCPath.find(d->inProfilesKC->currentText())));
+            *(d->inICCPath.find(d->inProfilesKC->itemHighlighted())));
     config->writePathEntry("WorkProfileFile", 
-            *(d->workICCPath.find(d->workProfilesKC->currentText())));
+            *(d->workICCPath.find(d->workProfilesKC->itemHighlighted())));
     config->writePathEntry("MonitorProfileFile",
-            *(d->monitorICCPath.find(d->monitorProfilesKC->currentText())));
+            *(d->monitorICCPath.find(d->monitorProfilesKC->itemHighlighted())));
     config->writePathEntry("ProofProfileFile", 
-            *(d->proofICCPath.find(d->proofProfilesKC->currentText())));
+            *(d->proofICCPath.find(d->proofProfilesKC->itemHighlighted())));
 }
 
 void SetupICC::readSettings(bool restore)
@@ -683,22 +683,22 @@ void SetupICC::slotToggledWidgets(bool t)
 
 void SetupICC::slotClickedWork()
 {
-    profileInfo(*(d->workICCPath.find(d->workProfilesKC->currentText())));
+    profileInfo(*(d->workICCPath.find(d->workProfilesKC->itemHighlighted())));
 }
 
 void SetupICC::slotClickedIn()
 {
-    profileInfo(*(d->inICCPath.find(d->inProfilesKC->currentText())));
+    profileInfo(*(d->inICCPath.find(d->inProfilesKC->itemHighlighted())));
 }
 
 void SetupICC::slotClickedMonitor()
 {
-    profileInfo(*(d->monitorICCPath.find(d->monitorProfilesKC->currentText())));
+    profileInfo(*(d->monitorICCPath.find(d->monitorProfilesKC->itemHighlighted())));
 }
 
 void SetupICC::slotClickedProof()
 {
-    profileInfo(*(d->proofICCPath.find(d->proofProfilesKC->currentText())));
+    profileInfo(*(d->proofICCPath.find(d->proofProfilesKC->itemHighlighted())));
 }
 
 void SetupICC::profileInfo(const QString& profile)
