@@ -65,7 +65,7 @@ public:
     }
 
     int      rating;
-    
+
     QPolygon starPolygon;
 
     QPixmap  selPixmap;      // Selected star.
@@ -87,6 +87,11 @@ RatingWidget::RatingWidget(QWidget* parent)
 RatingWidget::~RatingWidget()
 {
     delete d;
+}
+
+int RatingWidget::regPixmapWidth() const
+{
+    return d->regPixmap.width();
 }
 
 void RatingWidget::setRating(int val)
@@ -153,7 +158,7 @@ void RatingWidget::paintEvent(QPaintEvent*)
             p.drawPixmap(x, 0, d->selPixmap);
             x += d->selPixmap.width();
         }
-    
+
         for (int i = d->rating; i < RatingMax; i++)
         {
             p.drawPixmap(x, 0, d->regPixmap);
@@ -193,7 +198,7 @@ void RatingWidget::slotThemeChanged()
     p3.setPen(palette().color(QPalette::Disabled, QPalette::Foreground));
     p3.drawPolygon(d->starPolygon, Qt::WindingFill);
     p3.end();
-    
+
     setFixedSize(QSize(d->regPixmap.width()*RatingMax, d->regPixmap.height()));
     update();
 }

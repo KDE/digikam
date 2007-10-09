@@ -39,7 +39,7 @@ class RatingWidgetPriv;
 class RatingWidget : public QWidget
 {
     Q_OBJECT
-    
+
 public:
 
     RatingWidget(QWidget* parent);
@@ -51,8 +51,10 @@ public:
 signals:
 
     void signalRatingChanged(int);
-    
+
 protected:
+
+    int regPixmapWidth() const;
 
     virtual void mousePressEvent(QMouseEvent*);
     virtual void mouseMoveEvent(QMouseEvent*);
