@@ -68,7 +68,8 @@ Note : svn2cl need xsltproc program. Please install it before. (check libxslt-pr
 * digikam-users@kde.org
 * digikam-devel@kde.org
 * kde-extra-gear@kde.org
-* kde-announce@kde.org
+* kde-announce-apps@kde.org 
+* kde-imaging@kde.org
 
 ------------------ TAGGING ------------------
 
