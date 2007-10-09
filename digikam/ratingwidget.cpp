@@ -49,7 +49,7 @@ public:
 
     RatingWidgetPriv()
     {
-        rating    = 0;
+        rating = 0;
     }
 
     int     rating;
@@ -163,4 +163,3 @@ void RatingWidget::slotThemeChanged()
 }
 
 }  // namespace Digikam
-
