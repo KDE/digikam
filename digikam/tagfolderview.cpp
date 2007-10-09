@@ -587,11 +587,11 @@ void TagFolderView::tagDelete(TagFolderViewItem *item)
     if(children)
     {
         int result = KMessageBox::warningContinueCancel(this,
-                       i18np("Tag '%1' has one subtag. "
+                       i18np("Tag '%2' has one subtag. "
                              "Deleting this will also delete "
                              "the subtag. "
                              "Do you want to continue?",
-                             "Tag '%1' has %n subtags. "
+                             "Tag '%2' has %1 subtags. "
                              "Deleting this will also delete "
                              "the subtags. "
                              "Do you want to continue?",

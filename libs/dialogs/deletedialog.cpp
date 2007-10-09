@@ -119,7 +119,7 @@ void DeleteWidget::updateText()
             ddWarningIcon->setPixmap(KIconLoader::global()->loadIcon("trashcan_full",
                 KIconLoader::Desktop, KIconLoader::SizeLarge));
         }
-        ddNumFiles->setText(i18np("<b>1</b> file selected.", "<b>%n</b> files selected.", ddFileList->count()));
+        ddNumFiles->setText(i18np("<b>1</b> file selected.", "<b>%1</b> files selected.", ddFileList->count()));
         break;
 
         case DeleteDialogMode::Albums:
@@ -139,7 +139,7 @@ void DeleteWidget::updateText()
             ddWarningIcon->setPixmap(KIconLoader::global()->loadIcon("trashcan_full",
                                      KIconLoader::Desktop, KIconLoader::SizeLarge));
         }
-        ddNumFiles->setText(i18np("<b>1</b> album selected.", "<b>%n</b> albums selected.", ddFileList->count()));
+        ddNumFiles->setText(i18np("<b>1</b> album selected.", "<b>%1</b> albums selected.", ddFileList->count()));
         break;
 
         case DeleteDialogMode::Subalbums:
@@ -165,7 +165,7 @@ void DeleteWidget::updateText()
             ddWarningIcon->setPixmap(KIconLoader::global()->loadIcon("trashcan_full",
                                      KIconLoader::Desktop, KIconLoader::SizeLarge));
         }
-        ddNumFiles->setText(i18np("<b>1</b> album selected.", "<b>%n</b> albums selected.", ddFileList->count()));
+        ddNumFiles->setText(i18np("<b>1</b> album selected.", "<b>%1</b> albums selected.", ddFileList->count()));
         break;
 
     }

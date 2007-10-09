@@ -394,19 +394,19 @@ void ImageDescEditTab::slotChangingItems()
         {
             if (d->hub.commentChanged())
                 text = i18np("<qt><p>You have edited the image caption. ",
-                             "<qt><p>You have edited the captions of %n images. ",
+                             "<qt><p>You have edited the captions of %1 images. ",
                              d->currInfos.count());
             else if (d->hub.dateTimeChanged())
                 text = i18np("<qt><p>You have edited the date of the image. ",
-                             "<qt><p>You have edited the date of %n images. ",
+                             "<qt><p>You have edited the date of %1 images. ",
                              d->currInfos.count());
             else if (d->hub.ratingChanged())
                 text = i18np("<qt><p>You have edited the rating of the image. ",
-                             "<qt><p>You have edited the rating of %n images. ",
+                             "<qt><p>You have edited the rating of %1 images. ",
                              d->currInfos.count());
             else if (d->hub.tagsChanged())
                 text = i18np("<qt><p>You have edited the tags of the image. ",
-                             "<qt><p>You have edited the tags of %n images. ",
+                             "<qt><p>You have edited the tags of %1 images. ",
                              d->currInfos.count());
 
             text += i18n("Do you want to apply your changes?</p></qt>");
@@ -414,7 +414,7 @@ void ImageDescEditTab::slotChangingItems()
         else
         {
             text = i18np("<qt><p>You have edited the metadata of the image: </p><ul>",
-                         "<qt><p>You have edited the metadata of %n images: </p><ul>",
+                         "<qt><p>You have edited the metadata of %1 images: </p><ul>",
                          d->currInfos.count());
 
             if (d->hub.commentChanged())

@@ -147,7 +147,7 @@ void ScanLib::findFoldersWhichDoNotExist()
                   "from the database because all views depend on the information "
                   "in the database. Do you want them to be removed from the "
                   "database?",
-                  "<p>There are %n albums in the database which do not appear to "
+                  "<p>There are %1 albums in the database which do not appear to "
                   "be on disk. These albums should be removed from the database, "
                   "however you may lose information because all images "
                   "associated with these albums will be removed from the database "
@@ -156,7 +156,7 @@ void ScanLib::findFoldersWhichDoNotExist()
                   "from the database because all views depend on the information "
                   "in the database. Do you want them to be removed from the "
                   "database?",
-                  QString::number(toBeDeleted.count())),
+                  toBeDeleted.count()),
             toBeDeleted,
             i18n("Albums are Missing"));
 
@@ -238,7 +238,7 @@ void ScanLib::deleteStaleEntries()
                 "the database because all views depend on the information "
                 "in the database. Do you want it to be removed from the "
                 "database?",
-                "<p>There are %n items in the database which do not "
+                "<p>There are %1 items in the database which do not "
                 "appear to be on disk or are located in the root album of "
                 "the path. These files should be removed from the "
                 "database, however you may lose information.<p>"

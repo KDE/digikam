@@ -1543,7 +1543,7 @@ void CameraUI::slotDeleteAll()
     QString warnMsg(i18np("About to delete this image. "
                           "Deleted file is unrecoverable. "
                           "Are you sure?",
-                          "About to delete these %n images. "
+                          "About to delete these %1 images. "
                           "Deleted files are unrecoverable. "
                           "Are you sure?",
                           deleteList.count()));
