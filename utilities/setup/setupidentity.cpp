@@ -70,7 +70,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
     d = new SetupIdentityPriv;
     QVBoxLayout *layout = new QVBoxLayout( this );
     layout->setSpacing( KDialog::spacingHint() );
-    
+
     // --------------------------------------------------------
 
     QGroupBox *photographerIdGroup = new QGroupBox(i18n("Photographer Information"), this);
@@ -91,7 +91,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
     label2->setBuddy(d->authorTitleEdit);
     d->authorTitleEdit->setWhatsThis( i18n("<p>Set the photographer title. This field is limited "
                                            "to 32 ASCII characters with IPTC."));
-        
+
     grid->addWidget(label1, 0, 0, 1, 1);
     grid->addWidget(d->authorEdit, 0, 1, 1, 1);
     grid->addWidget(label2, 1, 0, 1, 1);
@@ -150,17 +150,18 @@ SetupIdentity::SetupIdentity(QWidget* parent )
                    "characters set and limit strings size. "
                    "Use contextual help for details.</b>"), this);
     note->setOpenExternalLinks(true);
-    note->setWordWrap(true);                       
+    note->setWordWrap(true);
+    note->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
 
     // --------------------------------------------------------
-    
+
     layout->addWidget(photographerIdGroup);
     layout->addWidget(creditsGroup);
     layout->addWidget(note);
     layout->addStretch();
     layout->setMargin(0);
     layout->setSpacing(KDialog::spacingHint());
-    
+
     readSettings();
 }
 
