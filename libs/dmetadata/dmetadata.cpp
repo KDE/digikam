@@ -537,6 +537,9 @@ bool DMetadata::setImageCredits(const QString& credit, const QString& source, co
     if (!setXmpTagString("Xmp.photoshop.Source", source, false))
         return false;
 
+    if (!setXmpTagString("Xmp.dc.source", source, false))
+        return false;
+
     // NOTE : language Alternative rule is not yet used here.
     if (!setXmpTagStringLangAlt("Xmp.dc.rights", copyright, QString(), false))
         return false;
