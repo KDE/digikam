@@ -27,6 +27,7 @@
 #include <QButtonGroup>
 #include <QGroupBox>
 #include <QCheckBox>
+#include <QFrame>
 #include <QLabel>
 #include <QVBoxLayout>
 
@@ -73,7 +74,7 @@ public:
 
     bool       ExifAutoRotateAsChanged;
     bool       ExifAutoRotateOrg;
-    
+
     QCheckBox *saveCommentsBox;
     QCheckBox *ExifRotateBox;
     QCheckBox *ExifSetOrientationBox;
@@ -92,23 +93,23 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
 
     // --------------------------------------------------------
-  
+
     QGroupBox *ExifGroup  = new QGroupBox(i18n("EXIF Actions"), this);
     QVBoxLayout *gLayout1 = new QVBoxLayout(ExifGroup);
 
     d->ExifRotateBox = new QCheckBox(ExifGroup);
     d->ExifRotateBox->setText(i18n("Show images/thumbs &rotated according to orientation tag"));
-    
+
     d->ExifSetOrientationBox = new QCheckBox(ExifGroup);
     d->ExifSetOrientationBox->setText(i18n("Set orientation tag to normal after rotate/flip"));
-    
+
     gLayout1->addWidget(d->ExifRotateBox);
     gLayout1->addWidget(d->ExifSetOrientationBox);
     gLayout1->setMargin(KDialog::spacingHint());
     gLayout1->setSpacing(0);
 
     // --------------------------------------------------------
-  
+
     QGroupBox *commonGroup = new QGroupBox(i18n("Common Metadata Actions"), this);
     QVBoxLayout *gLayout2  = new QVBoxLayout(commonGroup);
 
@@ -116,7 +117,7 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     d->saveTagsBox->setText(i18n("&Save image tags as \"Keywords\" tag"));
     d->saveTagsBox->setWhatsThis( i18n("<p>Turn this option on to store the image tags "
                                        "in the XMP and IPTC tags."));
-  
+
     d->savePhotographerIdBox = new QCheckBox(commonGroup);
     d->savePhotographerIdBox->setText(i18n("&Save default photographer identity as tags"));
     d->savePhotographerIdBox->setWhatsThis( i18n("<p>Turn this option on to store the default "
@@ -154,9 +155,10 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     gLayout2->setSpacing(0);
 
     // --------------------------------------------------------
-    
-    QWidget     *box  = new QWidget(this);
+
+    QFrame      *box  = new QFrame(this);
     QGridLayout *grid = new QGridLayout(box);
+    box->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
 
     KUrlLabel *exiv2LogoLabel = new KUrlLabel(box);
     exiv2LogoLabel->setText(QString());
@@ -187,9 +189,9 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     grid->setRowStretch(1, 10);
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(0);
-                   
+
     // --------------------------------------------------------
-    
+
     mainLayout->setMargin(0);
     mainLayout->setSpacing(KDialog::spacingHint());
     mainLayout->addWidget(ExifGroup);
@@ -201,7 +203,7 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     // --------------------------------------------------------
 
     readSettings();
-  
+
     connect(exiv2LogoLabel, SIGNAL(leftClickedUrl(const QString&)),
             this, SLOT(processExiv2Url(const QString&)));
 
