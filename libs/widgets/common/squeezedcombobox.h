@@ -77,20 +77,24 @@ public:
 
     /**
      * This inserts a item to the list. See QComboBox::insertItem()
-     * for detaills. Please do not use QComboBox::insertItem() to this
+     * for details. Please do not use QComboBox::insertItem() to this
      * widget, as that will fail.
      * @param newItem the original (long version) of the item which needs
      *                to be added to the combobox
      * @param index the position in the widget.
+     * @param userData custom meta-data assigned to new item.
      */
-    void insertSqueezedItem(const QString& newItem, int index);
+    void insertSqueezedItem(const QString& newItem, int index, 
+                            const QVariant& userData=QVariant());
 
     /**
      * Append an item.
      * @param newItem the original (long version) of the item which needs
      *                to be added to the combobox
+     * @param userData custom meta-data assigned to new item.
      */
-    void addSqueezedItem(const QString& newItem);
+    void addSqueezedItem(const QString& newItem, 
+                         const QVariant& userData=QVariant());
 
     /**
      * Set the current item to the one matching the given text.
