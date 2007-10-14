@@ -313,7 +313,7 @@ bool SchemaUpdater::createTablesV5()
                             "  absolutePath TEXT,\n"
                             "  type INTEGER NOT NULL,\n"
                             "  volumeUuid TEXT,\n"
-                            "  specificPath TEXT);") ));
+                            "  specificPath TEXT);") ))
     {
         return false;
     }
