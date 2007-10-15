@@ -55,7 +55,7 @@ public:
         RedChannelHistogram,      // Red channel.
         GreenChannelHistogram,    // Green channel.
         BlueChannelHistogram,     // Blue channel.
-        AlphaChannelHistogram,    // Alpha channel.
+        AlphaChannelHistogram     // Alpha channel.
     };
 
     enum HistogramScale

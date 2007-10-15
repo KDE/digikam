@@ -67,7 +67,7 @@ public:
     QLabel         *latLonPos;
 };
 
-K_GLOBAL_STATIC(QPixmap, worldMap);
+K_GLOBAL_STATIC(QPixmap, worldMap)
 
 WorldMapWidget::WorldMapWidget(int w, int h, QWidget *parent)
               : Q3ScrollView(parent)

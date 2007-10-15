@@ -328,7 +328,7 @@ void SavingTask::execute()
     bool success = m_img.save(m_filePath, m_format, this);
     m_thread->taskHasFinished();
     m_thread->imageSaved(m_filePath, success);
-};
+}
 
 LoadingTask::TaskType SavingTask::type()
 {

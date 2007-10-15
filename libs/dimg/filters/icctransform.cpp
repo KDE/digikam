@@ -26,6 +26,7 @@
 
 #include <QDataStream>
 #include <QFile>
+#include <QtCore/QVarLengthArray>
 
 // KDE includes
 
@@ -498,7 +499,7 @@ bool IccTransform::apply(DImg& image)
     }
 
      // We need to work using temp pixel buffer to apply ICC transformations.
-    uchar  transdata[image.bytesDepth()];
+    QVarLengthArray<uchar> transdata(image.bytesDepth());
 
     // Always working with uchar* prevent endianess problem.
     uchar *data = image.bits();
@@ -801,7 +802,7 @@ bool IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool use
     //DDebug() << "Transform flags are: " << transformFlags << endl;
 
      // We need to work using temp pixel buffer to apply ICC transformations.
-    uchar  transdata[image.bytesDepth()];
+    QVarLengthArray<uchar>  transdata(image.bytesDepth());
 
     // Always working with uchar* prevent endianess problem.
     uchar *data = image.bits();

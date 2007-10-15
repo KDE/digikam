@@ -65,7 +65,7 @@ public:
     QHash<KUrl, LoadingDescription> kdeJobHash;
 };
 
-K_GLOBAL_STATIC(ThumbnailLoadThread, defaultObject);
+K_GLOBAL_STATIC(ThumbnailLoadThread, defaultObject)
 
 ThumbnailLoadThread::ThumbnailLoadThread()
 {
