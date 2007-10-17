@@ -455,6 +455,7 @@ SET(libdatabase_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/albumdb.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/albumdb_sqlite2.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collectionscanner.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagescanner.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collectionmanager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collectionlocation.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseaccess.cpp
@@ -468,6 +469,7 @@ SET(libdatabase_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imageinfocache.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagelister.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagelisterreceiver.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagecomments.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagequerybuilder.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/namefilter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/schemaupdater.cpp

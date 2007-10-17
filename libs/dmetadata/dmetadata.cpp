@@ -626,20 +626,20 @@ inline QVariant DMetadata::fromIptcOrXmpList(const char *iptcTagName, const char
 
 inline QVariant DMetadata::fromIptcOrXmpLangAlt(const char *iptcTagName, const char *xmpTagName)
 {
-    QString iptcValue;
-
-    if (iptcTagName)
-        iptcValue = getIptcTagString(iptcTagName);
-    if (!iptcValue.isNull())
-    {
-        QMap<QString, QVariant> map;
-        map["x-default"] = iptcValue;
-        return map;
-    }
+    QString value;
 
     if (xmpTagName)
     {
         // TODO
+    }
+
+    if (iptcTagName)
+        value = getIptcTagString(iptcTagName);
+    if (!value.isNull())
+    {
+        QMap<QString, QVariant> map;
+        map["x-default"] = value;
+        return map;
     }
 
     return QVariant(QVariant::Map);
@@ -649,6 +649,27 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field)
 {
     switch (field)
     {
+        case MetadataInfo::Comment:
+            return getImageComment();
+        case MetadataInfo::CommentJfif:
+            return getCommentsDecoded();
+        case MetadataInfo::CommentExif:
+            return getExifComment();
+        case MetadataInfo::CommentIptc:
+            return fromIptcOrXmp("Iptc.Application2.Caption", 0);
+
+        case MetadataInfo::Description:
+            return fromIptcOrXmpLangAlt("Iptc.Application2.Caption", "dc.description");
+        case MetadataInfo::Headline:
+            return fromIptcOrXmp("Iptc.Application2.Headline", "photoshop.Headline");
+        case MetadataInfo::Title:
+            return fromIptcOrXmpLangAlt("Iptc.Application2.ObjectName", "dc.title");
+        case MetadataInfo::DescriptionWriter:
+            return fromIptcOrXmp("Iptc.Application2.Writer", "photoshop.CaptionWriter");
+
+        case MetadataInfo::Keywords:
+            return fromIptcOrXmpList("Iptc.Application2.Keywords", "dc.subject");
+
         case MetadataInfo::Rating:
             return getImageRating();
         case MetadataInfo::CreationDate:
@@ -750,49 +771,41 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field)
             return QVariant(QVariant::String);
 
         //TODO: Check all IPTC tag names
-        case MetadataInfo::IPTCCoreCopyrightNotice:
+        case MetadataInfo::IptcCoreCopyrightNotice:
             return fromIptcOrXmpLangAlt("Iptc.Application2.Copyright", "dc.rights");
-        case MetadataInfo::IPTCCoreCreator:
+        case MetadataInfo::IptcCoreCreator:
             return fromIptcOrXmpList("Iptc.Application2.Creator", "dc.creator");
-        case MetadataInfo::IPTCCoreProvider:
+        case MetadataInfo::IptcCoreProvider:
             return fromIptcOrXmp("Iptc.Application2.Credit", "photoshop.Credit");
-        case MetadataInfo::IPTCCoreRightUsageTerms:
+        case MetadataInfo::IptcCoreRightUsageTerms:
             return fromIptcOrXmpLangAlt(0, "xmpRights.UsageTerms");
-        case MetadataInfo::IPTCCoreSource:
+        case MetadataInfo::IptcCoreSource:
             return fromIptcOrXmp("Iptc.Application2.Source", "photoshop.Source");
 
-        case MetadataInfo::IPTCCoreCreatorJobTitle:
+        case MetadataInfo::IptcCoreCreatorJobTitle:
             return fromIptcOrXmp("Iptc.Application2.BylineTitle", "photoshop.AuthorsPosition");
-        case MetadataInfo::IPTCCoreInstructions:
+        case MetadataInfo::IptcCoreInstructions:
             return fromIptcOrXmp("Iptc.Application2.SpecialInstructions", "photoshop.Instructions");
 
-        case MetadataInfo::IPTCCoreCountryCode:
+        case MetadataInfo::IptcCoreCountryCode:
             return fromIptcOrXmp("Iptc.Application2.CountryCode", "Iptc4xmpCore.CountryCode");
-        case MetadataInfo::IPTCCoreCountry:
+        case MetadataInfo::IptcCoreCountry:
             return fromIptcOrXmp("Iptc.Application2.Country", "photoshop.Country");
-        case MetadataInfo::IPTCCoreCity:
+        case MetadataInfo::IptcCoreCity:
             return fromIptcOrXmp("Iptc.Application2.City", "photoshop.City");
-        case MetadataInfo::IPTCCoreLocation:
+        case MetadataInfo::IptcCoreLocation:
             return fromIptcOrXmp("Iptc.Application2.Sublocation", "Iptc4xmpCore.Location");
-        case MetadataInfo::IPTCCoreProvinceState:
+        case MetadataInfo::IptcCoreProvinceState:
             return fromIptcOrXmp("Iptc.Application2.State", "photoshop.State");
-        case MetadataInfo::IPTCCoreIntellectualGenre:
+        case MetadataInfo::IptcCoreIntellectualGenre:
             return fromIptcOrXmp("Iptc.Application2.ObjectAttributesReference", "Iptc4xmpCore.IntellectualGenre");
-        case MetadataInfo::IPTCCoreJobID:
+        case MetadataInfo::IptcCoreJobID:
             return fromIptcOrXmp("Iptc.Application2.OriginalTransmissionReference", "photoshop.TransmissionReference");
-        case MetadataInfo::IPTCCoreScene:
+        case MetadataInfo::IptcCoreScene:
             return fromIptcOrXmpList(0, "Iptc4xmpCore.Scene");
-        case MetadataInfo::IPTCCoreSubjectCode:
+        case MetadataInfo::IptcCoreSubjectCode:
             return fromIptcOrXmpList("Iptc.Application2.SubjectReference", "Iptc4xmpCore.SubjectCode");
 
-        case MetadataInfo::IPTCCoreDescription:
-            return fromIptcOrXmpLangAlt("Iptc.Application2.Caption", "dc.description");
-        case MetadataInfo::IPTCCoreDescriptionWriter:
-            return fromIptcOrXmp("Iptc.Application2.Writer", "photoshop.CaptionWriter");
-        case MetadataInfo::IPTCCoreHeadline:
-            return fromIptcOrXmp("Iptc.Application2.Headline", "photoshop.Headline");
-        case MetadataInfo::IPTCCoreTitle:
-            return fromIptcOrXmpLangAlt("Iptc.Application2.ObjectName", "photoshop.dc.title");
         default:
             return QVariant();
     }
@@ -932,10 +945,10 @@ QString DMetadata::valueToString (const QVariant &value, MetadataInfo::Field fie
             return value.toString();
 
         // Lang Alt
-        case MetadataInfo::IPTCCoreCopyrightNotice:
-        case MetadataInfo::IPTCCoreRightUsageTerms:
-        case MetadataInfo::IPTCCoreDescription:
-        case MetadataInfo::IPTCCoreTitle:
+        case MetadataInfo::IptcCoreCopyrightNotice:
+        case MetadataInfo::IptcCoreRightUsageTerms:
+        case MetadataInfo::Description:
+        case MetadataInfo::Title:
         {
             QMap<QString, QVariant> map = value.toMap();
             // the most common cases
@@ -965,25 +978,25 @@ QString DMetadata::valueToString (const QVariant &value, MetadataInfo::Field fie
         }
 
         // List
-        case MetadataInfo::IPTCCoreCreator:
-        case MetadataInfo::IPTCCoreScene:
-        case MetadataInfo::IPTCCoreSubjectCode:
+        case MetadataInfo::IptcCoreCreator:
+        case MetadataInfo::IptcCoreScene:
+        case MetadataInfo::IptcCoreSubjectCode:
             return value.toStringList().join(" ");
 
         // Text
-        case MetadataInfo::IPTCCoreProvider:
-        case MetadataInfo::IPTCCoreSource:
-        case MetadataInfo::IPTCCoreCreatorJobTitle:
-        case MetadataInfo::IPTCCoreInstructions:
-        case MetadataInfo::IPTCCoreCountryCode:
-        case MetadataInfo::IPTCCoreCountry:
-        case MetadataInfo::IPTCCoreCity:
-        case MetadataInfo::IPTCCoreLocation:
-        case MetadataInfo::IPTCCoreProvinceState:
-        case MetadataInfo::IPTCCoreIntellectualGenre:
-        case MetadataInfo::IPTCCoreJobID:
-        case MetadataInfo::IPTCCoreDescriptionWriter:
-        case MetadataInfo::IPTCCoreHeadline:
+        case MetadataInfo::IptcCoreProvider:
+        case MetadataInfo::IptcCoreSource:
+        case MetadataInfo::IptcCoreCreatorJobTitle:
+        case MetadataInfo::IptcCoreInstructions:
+        case MetadataInfo::IptcCoreCountryCode:
+        case MetadataInfo::IptcCoreCountry:
+        case MetadataInfo::IptcCoreCity:
+        case MetadataInfo::IptcCoreLocation:
+        case MetadataInfo::IptcCoreProvinceState:
+        case MetadataInfo::IptcCoreIntellectualGenre:
+        case MetadataInfo::IptcCoreJobID:
+        case MetadataInfo::DescriptionWriter:
+        case MetadataInfo::Headline:
             return value.toString();
 
         default:
