@@ -103,7 +103,9 @@ private slots:
     void slotTotalFilesToScan(int count);
     void slotStartScanningAlbum(const QString &albumRoot, const QString &album);
     void slotFinishedScanningAlbum(const QString &, const QString &, int filesScanned);
-    void slotScanningFile(const QString &filePath);
+    void slotStartScanningAlbumRoot(const QString &albumRoot);
+    void slotStartScanningForStaleAlbums();
+    void slotStartScanningAlbumRoots();
 
 private:
 

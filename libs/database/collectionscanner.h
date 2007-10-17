@@ -41,27 +41,21 @@
 namespace Digikam
 {
 
+class CollectionLocation;
+class CollectionScannerPriv;
+
 class DIGIKAM_EXPORT CollectionScanner : public QObject
 {
     Q_OBJECT
 public:
 
-    /**
-     * Sets a filter for the file formats which shall be included in the collection.
-     * The string is a list of name wildcards (understanding * and ?),
-     * separated by ';' characters.
-     * Example: "*.jpg;*.png"
-     */
-    void setNameFilters(const QString &filters);
-    /**
-     * Sets a filter for the file formats which shall be included in the collection.
-     * Each name filter in the list is a wildcard (globbing)
-     * filter that understands * and ? wildcards (see QDir::setNameFilters)
-     */
-    void setNameFilters(const QStringList &filters);
+    CollectionScanner();
+    ~CollectionScanner();
 
     /**
      * Carries out a full scan on all available parts of the collection.
+     * Only a full scan can finally remove deleted files from the database,
+     * only a full scan will mark the database as scanned.
      */
     void completeScan();
 
@@ -78,9 +72,15 @@ public:
      */
     void partialScan(const QString &albumRoot, const QString& album);
 
+    /**
+     * Call this to enable the progress info signals.
+     * Default is off.
+     */
+    void setSignalsEnabled(bool on);
+
 protected:
 
-    void scanForStaleAlbums();
+    void scanForStaleAlbums(QList<CollectionLocation*> locations);
     void scanAlbumRoot(CollectionLocation *location);
     void scanAlbum(CollectionLocation *location, const QString &album);
 
@@ -88,6 +88,20 @@ protected:
 
 
 #if 0
+    /**
+     * Sets a filter for the file formats which shall be included in the collection.
+     * The string is a list of name wildcards (understanding * and ?),
+     * separated by ';' characters.
+     * Example: "*.jpg;*.png"
+     */
+    void setNameFilters(const QString &filters);
+    /**
+     * Sets a filter for the file formats which shall be included in the collection.
+     * Each name filter in the list is a wildcard (globbing)
+     * filter that understands * and ? wildcards (see QDir::setNameFilters)
+     */
+    void setNameFilters(const QStringList &filters);
+
     /**
      * Carries out a full scan (for new albums + new pictures,
      * stale albums, stale pictures) on the given path.
@@ -158,11 +172,6 @@ protected:
 
 
 
-    /**
-     * Writes into the database that it has been scanned at this point in time.
-     */
-    void markDatabaseAsScanned();
-
     // Tools
     /**
      * Adds an item with the given file name found in the album pointed to by
@@ -188,28 +197,33 @@ signals:
      * Gives the number of the files that need to be scanned.
      */
     void totalFilesToScan(int count);
-    /**
-     * Notifies the begin of the scanning of the specified album.
-     * Emitted from all scan... methods.
-     */
-    void startScanningAlbum(const QString &albumRoot, const QString &album);
-    /**
-     * As above, when the scanning has finished
-     */
-    void finishedScanningAlbum(const QString &albumRoot, const QString &album, int filesScanned);
 
     /**
-     * Emitted from updateItemDate when an item is updated.
+     * Notifies the begin of the scanning of the specified album root,
+     * album, of stale files, or of the whole collection (after stale files)
      */
-    void scanningFile(const QString &filePath);
+    void startScanningAlbumRoot(const QString &albumRoot);
+    void startScanningAlbum(const QString &albumRoot, const QString &album);
+    void startScanningForStaleAlbums();
+    void startScanningAlbumRoots();
+
+    /**
+     * Emitted when the scanning has finished.
+     */
+    void finishedScanningAlbumRoot(const QString &albumRoot);
+    void finishedScanningAlbum(const QString &albumRoot, const QString &album, int filesScanned);
+    void finishedScanningForStaleAlbums();
 
 protected:
 
+    void markDatabaseAsScanned();
+    void loadNameFilters();
     int countItemsInFolder(const QString& directory);
+    DatabaseItem::Category category(const QFileInfo &info);
 
-    QList< QPair<QString,int> >  m_filesToBeDeleted;
-    QList<AlbumShortInfo>        m_foldersToBeDeleted;
-    QStringList                  m_nameFilters;
+private:
+
+    CollectionScannerPriv *d;
 };
 
 }  // namespace Digikam

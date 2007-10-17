@@ -65,17 +65,16 @@ ScanLib::ScanLib()
     m_progressDlg = new DProgressDlg(0);
     m_progressDlg->setInitialSize(QSize(500, 100));
     m_progressDlg->setActionListVSBarVisible(false);
-    m_progressDlg->setWhatsThis( i18n("This shows the progress of the "
-        "scan. During the scan, all files on disk are registered in a "
-        "database. This is required for sorting on exif-date and speeds up "
-        "the overall performance of digiKam.") );
+    m_progressDlg->setWhatsThis( i18n("This shows the progress of the scan. "
+                                      "During the scan, all files on disk "
+                                      "are registered in a database.") );
 
     // these two lines prevent the dialog to be shown in
     // findFoldersWhichDoNotExist() method.
     m_progressDlg->setMaximum(1);
     m_progressDlg->setValue(1);
 
-    m_scanner.setNameFilters(AlbumSettings::instance()->getAllFileFilter());
+    m_scanner.setSignalsEnabled(true);
 
     connect(&m_scanner, SIGNAL(totalFilesToScan(int)),
             this, SLOT(slotTotalFilesToScan(int)));
@@ -86,8 +85,14 @@ ScanLib::ScanLib()
     connect(&m_scanner, SIGNAL(finishedScanningAlbum(const QString&, const QString&, int)),
             this, SLOT(slotFinishedScanningAlbum(const QString&, const QString&, int)));
 
-    connect(&m_scanner, SIGNAL(scanningFile(const QString&)),
-            this, SLOT(slotScanningFile(const QString&)));
+    connect(&m_scanner, SIGNAL(startScanningAlbumRoot(const QString&)),
+            this, SLOT(slotStartScanningAlbumRoot(const QString&)));
+
+    connect(&m_scanner, SIGNAL(startScanningForStaleAlbums()),
+            this, SLOT(slotStartScanningForStaleAlbums()));
+
+    connect(&m_scanner, SIGNAL(startScanningAlbumRoots()),
+            this, SLOT(slotStartScanningAlbumRoots()));
 }
 
 ScanLib::~ScanLib()
@@ -97,30 +102,7 @@ ScanLib::~ScanLib()
 
 void ScanLib::startScan()
 {
-    QTime time;
-    QPixmap pix = KIconLoader::global()->loadIcon("system-run", KIconLoader::NoGroup, 32);
-
-    QString message = i18n("Finding non-existing Albums");
-    m_progressDlg->addedAction(pix, message);
-    time.start();
-    findFoldersWhichDoNotExist();
-    timing(message, time.elapsed());
-
-    message = i18n("Finding items not in the database or disk");
-    m_progressDlg->addedAction(pix, message);
-    time.start();
-    findMissingItems();
-    timing(message, time.elapsed());
-
-    message = i18n("Updating items without date");
-    m_progressDlg->addedAction(pix, message);
-    time.start();
-    updateItemsWithoutDate();
-    timing(message, time.elapsed());
-
-    deleteStaleEntries();
-
-    m_scanner.markDatabaseAsScanned();
+    m_scanner.completeScan();
 }
 
 void ScanLib::timing(const QString& text, int elaspedms)
@@ -130,6 +112,48 @@ void ScanLib::timing(const QString& text, int elaspedms)
              << " ms" << endl;
 }
 
+void ScanLib::slotTotalFilesToScan(int count)
+{
+    m_progressDlg->setMaximum(count);
+    if (count > 0)
+        m_progressDlg->show();
+    qApp->processEvents();
+}
+
+void ScanLib::slotStartScanningAlbum(const QString &albumRoot, const QString &album)
+{
+    Q_UNUSED(albumRoot);
+    QPixmap pix = KIconLoader::global()->loadIcon("folder-image", KIconLoader::NoGroup, 32);
+    m_progressDlg->addedAction(pix, " " + album);
+    qApp->processEvents();
+}
+
+void ScanLib::slotFinishedScanningAlbum(const QString &, const QString &, int filesScanned)
+{
+    m_progressDlg->advance(filesScanned);
+    qApp->processEvents();
+}
+
+void ScanLib::slotStartScanningAlbumRoot(const QString &albumRoot)
+{
+    QPixmap pix = KIconLoader::global()->loadIcon("folder-open", KIconLoader::NoGroup, 32);
+    m_progressDlg->addedAction(pix, albumRoot);
+    qApp->processEvents();
+}
+
+void ScanLib::slotStartScanningForStaleAlbums()
+{
+    QPixmap pix = KIconLoader::global()->loadIcon("system-run", KIconLoader::NoGroup, 32);
+    m_progressDlg->addedAction(pix, i18n("Scanning for removed albums"));
+}
+
+void ScanLib::slotStartScanningAlbumRoots()
+{
+    QPixmap pix = KIconLoader::global()->loadIcon("system-run", KIconLoader::NoGroup, 32);
+    m_progressDlg->addedAction(pix, i18n("Scanning images in individual albums"));
+}
+
+#if 0
 void ScanLib::findFoldersWhichDoNotExist()
 {
     m_scanner.scanForStaleAlbums();
@@ -179,27 +203,6 @@ void ScanLib::findMissingItems()
 
     m_progressDlg->hide();
     kapp->processEvents();
-}
-
-void ScanLib::slotTotalFilesToScan(int count)
-{
-    m_progressDlg->setMaximum(count);
-    if (count > 0)
-        m_progressDlg->show();
-    qApp->processEvents();
-}
-
-void ScanLib::slotStartScanningAlbum(const QString &albumRoot, const QString &album)
-{
-    QPixmap pix = KIconLoader::global()->loadIcon("folder-image", KIconLoader::NoGroup, 32);
-    m_progressDlg->addedAction(pix, albumRoot + album);
-    qApp->processEvents();
-}
-
-void ScanLib::slotFinishedScanningAlbum(const QString &, const QString &, int filesScanned)
-{
-    m_progressDlg->advance(filesScanned);
-    qApp->processEvents();
 }
 
 void ScanLib::slotScanningFile(const QString &)
@@ -256,5 +259,6 @@ void ScanLib::deleteStaleEntries()
         m_scanner.removeStaleFiles();
     }
 }
+#endif
 
 }  // namespace Digikam
