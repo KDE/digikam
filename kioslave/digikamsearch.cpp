@@ -88,7 +88,7 @@ void kio_digikamsearch::special(const QByteArray& data)
     {
         Digikam::ImageListerSlaveBaseReceiver receiver(this);
         // fast mode: do not get size, dimension, limit results to 500
-        lister.listSearch(&receiver, query, boundValues, false, 500);
+        lister.listSearch(&receiver, query, boundValues, 500);
         if (!receiver.hasError)
             receiver.sendData();
         //        ds << m_libraryPath + *it;

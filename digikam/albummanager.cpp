@@ -365,7 +365,7 @@ void AlbumManager::scanPAlbums()
     while (it.current())
     {
         PAlbum* a = (PAlbum*)(*it);
-        aMap.insert(a->albumPath(), a);
+        aMap.insert(a->albumRootPath() + a->albumPath(), a);
         ++it;
     }
 
@@ -374,8 +374,15 @@ void AlbumManager::scanPAlbums()
 
     qSort(aList);
 
+    /*
+    QList<CollectionLocation *> allLocations = CollectionManager::instance()->allAvailableLocations();
+    QHash<int, CollectionLocation::Status> statusHash;
+    foreach (CollectionLocation *location, allLocations)
+        statusHash[location->id()] = location->status();
+    */
+
     AlbumInfo::List newAlbumList;
-    
+
     // go through all the Albums and see which ones are already present
     for (AlbumInfo::List::iterator it = aList.begin(); it != aList.end(); ++it)
     {
@@ -439,8 +446,10 @@ void AlbumManager::scanPAlbums()
             continue;
         }
 
+        QString albumRootPath = CollectionManager::instance()->albumRootPath(info.albumRootId);
+
         // Create the new album
-        PAlbum* album       = new PAlbum(info.albumRoot, name, info.id);
+        PAlbum* album       = new PAlbum(albumRootPath, name, info.id);
         album->m_caption    = info.caption;
         album->m_collection = info.collection;
         album->m_date       = info.date;
