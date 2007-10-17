@@ -216,7 +216,7 @@ class CommentInfo
 {
 public:
 
-    CommentInfo() : imageId(-1), source(DatabaseComment::UndefinedType) {};
+    CommentInfo() : imageId(-1), type(DatabaseComment::UndefinedType) {};
 
     int                     id;
     qlonglong               imageId;

@@ -816,7 +816,7 @@ void AlbumDB::addImageInformation(qlonglong imageID, const QVariantList &infos, 
     The query looks like this (for all fields):
                     QString("REPLACE INTO ImageInformation "
                             " ( imageId, rating, creationDate, digitizationDate, "
-                            "   orientation, sizeX, sizeY, colorDepth, colorModel ) "
+                            "   orientation, width, height, colorDepth, colorModel ) "
                             " VALUES (?,?,?,?,?,?,?,?,?);"
     */
 }
@@ -908,7 +908,7 @@ void AlbumDB::changeImagePosition(qlonglong imageId, const QVariantList &infos,
     d->db->execSql( query, boundValues );
 }
 
-QList<CommentInfo> AlbumDB::getItemComments(qlonglong imageID)
+QList<CommentInfo> AlbumDB::getImageComments(qlonglong imageID)
 {
     QList<CommentInfo> list;
 
@@ -983,10 +983,10 @@ QStringList AlbumDB::imageInformationFieldList(DatabaseFields::ImageInformation 
         list << "digitizationDate";
     if (fields & DatabaseFields::Orientation)
         list << "orientation";
-    if (fields & DatabaseFields::SizeX)
-        list << "sizeX";
-    if (fields & DatabaseFields::SizeY)
-        list << "sizeY";
+    if (fields & DatabaseFields::Width)
+        list << "width";
+    if (fields & DatabaseFields::Height)
+        list << "height";
     if (fields & DatabaseFields::ColorDepth)
         list << "colorDepth";
     if (fields & DatabaseFields::ColorModel)
@@ -1157,6 +1157,27 @@ void AlbumDB::addItemTag(int albumID, const QString& name, int tagID)
     return addItemTag(getImageId(albumID, name), tagID);
 }
 
+void AlbumDB::addTagsToItems(QList<qlonglong> imageIDs, QList<int> tagIDs)
+{
+    QSqlQuery query = d->db->prepareQuery("REPLACE INTO ImageTags (imageid, tagid) VALUES(?, ?);");
+
+    QVariantList images;
+    QVariantList tags;
+
+    foreach (qlonglong imageid, imageIDs)
+    {
+        foreach (int tagid, tagIDs)
+        {
+            images << imageid;
+            tags << tagid;
+        }
+    }
+
+    query.addBindValue(images);
+    query.addBindValue(tags);
+    query.execBatch();
+}
+
 QList<int> AlbumDB::getRecentlyAssignedTags() const
 {
     return d->recentlyAssignedTags;    
@@ -1181,6 +1202,27 @@ void AlbumDB::removeItemAllTags(qlonglong imageID)
 
     DatabaseAccess::attributesWatch()
             ->sendImageFieldChanged(imageID, DatabaseAttributesWatch::ImageTags);
+}
+
+void AlbumDB::removeTagsFromItems(QList<qlonglong> imageIDs, QList<int> tagIDs)
+{
+    QSqlQuery query = d->db->prepareQuery("DELETE FROM ImageTags WHERE imageID=? AND tagid=?;");
+
+    QVariantList images;
+    QVariantList tags;
+
+    foreach (qlonglong imageid, imageIDs)
+    {
+        foreach (int tagid, tagIDs)
+        {
+            images << imageid;
+            tags << tagid;
+        }
+    }
+
+    query.addBindValue(images);
+    query.addBindValue(tags);
+    query.execBatch();
 }
 
 QStringList AlbumDB::getItemNamesInAlbum(int albumID)
@@ -1288,26 +1330,12 @@ qlonglong AlbumDB::addItem(int albumID, const QString& name,
     return id.toLongLong();
 }
 
-/*
-    // Set Rating value to item in database.
-
-    if ( item != -1 && rating != -1 )
-        setItemRating(item, rating);
-
-    // Set existing tags in database or create new tags if not exist.
-
-    if ( item != -1 && !keywordsList.isEmpty() )
-    {
-        QList<int> tagIDs = getTagsFromTagPaths(keywordsList, true);
-        for (QList<int>::iterator it = tagIDs.begin(); it != tagIDs.end(); ++it)
-        {
-            addItemTag(item, *it);
-        }
-    }
-
-    return item;
+void AlbumDB::updateItem(qlonglong imageID, const QDateTime& modificationDate,
+                         int fileSize, const QString& uniqueHash)
+{
+    d->db->execSql( QString("UPDATE Images SET modificationDate=?, fileSize=?, uniqueHash=? WHERE id=?"),
+                    modificationDate, fileSize, uniqueHash, imageID );
 }
-    */
 
 QList<int> AlbumDB::getTagsFromTagPaths(const QStringList &keywordsList, bool create)
 {
@@ -1652,7 +1680,7 @@ QList<ItemScanInfo> AlbumDB::getItemScanInfos(int albumID)
 {
     QList<QVariant> values;
 
-    d->db->execSql( QString("SELECT id, album, name, status, modificationDate, uniqueHas "
+    d->db->execSql( QString("SELECT id, album, name, status, modificationDate, uniqueHash "
                             "FROM Images WHERE dirid=?;"),
                     albumID,
                     &values );
@@ -1680,6 +1708,30 @@ QList<ItemScanInfo> AlbumDB::getItemScanInfos(int albumID)
     }
 
     return list;
+}
+
+ItemScanInfo AlbumDB::getItemScanInfo(qlonglong imageID)
+{
+    QList<QVariant> values;
+
+    d->db->execSql( QString("SELECT id, album, name, status, modificationDate, uniqueHash "
+                            "FROM Images WHERE imageid=?;"),
+                    imageID,
+                    &values );
+
+    ItemScanInfo info;
+
+    if (!values.isEmpty())
+    {
+        info.id               = values[0].toLongLong();
+        info.albumID          = values[1].toInt();
+        info.itemName         = values[2].toString();
+        info.status           = (DatabaseItem::Status)values[3].toInt();
+        info.modificationDate = QDateTime::fromString( values[4].toString(), Qt::ISODate );
+        info.uniqueHash       = values[5].toString();
+    }
+
+    return info;
 }
 
 QStringList AlbumDB::getItemURLsInTag(int tagID, bool recursive)

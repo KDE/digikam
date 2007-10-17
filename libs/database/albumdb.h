@@ -383,16 +383,6 @@ public:
     // ----------- Adding and deleting Items -----------
     /**
      * Put a new item in the database or replace an existing one.
-     * @param albumID The albumID where the file is located.
-     * @param name The filename
-     * @param datetime The datetime to be stored. Should try to let that be
-     * the exif-datetime, but if not available the modification date.
-     * @param comment The user comment as found in the exif-headers of the 
-     * file.
-     * @param rating The user rating as found in the iptc-headers of the 
-     * file.
-     * @param keywords The user keywords as found in the iptc-headers of the 
-     * file.
      * @return the id of item added or -1 if it fails
      */
     qlonglong addItem(int albumID, const QString& name,
@@ -554,8 +544,20 @@ public:
      */
     ItemShortInfo getItemShortInfo(qlonglong imageID);
 
+    /**
+     * Get scan info from the image ID
+     */
+    ItemScanInfo getItemScanInfo(qlonglong imageID);
 
-
+    /**
+     * Update the fields of the Images table that have changed when
+     * the file has been modified on disk.
+     * @param imageID the image that has been modified
+     */
+    void updateItem(qlonglong imageID,
+                    const QDateTime& modificationDate,
+                    int fileSize,
+                    const QString& uniqueHash);
     /**
      * Add (or replace) the ImageInformation of the specified item.
      * If there is already an entry, it will be discarded.
@@ -564,8 +566,8 @@ public:
      * 1) DateTime  modificationDate
      * 2) DateTime  digitizationDate
      * 3) Int       orientation
-     * 4) Int       sizeX
-     * 5) Int       sizeY
+     * 4) Int       width
+     * 5) Int       height
      * 6) Int       colorDepth
      * 7) Int       colorModel
      * You can leave out entries from this list, which will then be filled with null values.
@@ -647,7 +649,7 @@ public:
     /**
      * Retrieves all available comments for the specified item.
      */
-    QList<CommentInfo> getItemComments(qlonglong imageID);
+    QList<CommentInfo> getImageComments(qlonglong imageID);
 
     /**
      * Sets the comments for the image. A comment for the image with the same
@@ -671,14 +673,14 @@ public:
     /**
      * Changes the properties of a comment.
      * The QVariantList shall have at most 5 entries, of types in this order:
-     * 0) Int       Source
+     * 0) Int       Type
      * 1) String    Language
      * 2) String    Author
      * 3) DateTime  Date
      * 4) String    Comment
      */
     void changeImageComment(int commentId, const QVariantList &infos,
-                       DatabaseFields::ImageComments fields = DatabaseFields::ImageCommentsAll);
+                            DatabaseFields::ImageComments fields = DatabaseFields::ImageCommentsAll);
 
 
 
@@ -760,6 +762,12 @@ public:
     void addItemTag(int albumID, const QString& name, int tagID);
 
     /**
+     * Add each tag of a list of tags
+     * to each member of a list of items.
+     */
+    void addTagsToItems(QList<qlonglong> imageIDs, QList<int> tagIDs);
+
+    /**
      * Remove a specific tag for the item
      * @param imageID the ID of the item
      * @param tagID   the tagID for the tag
@@ -771,6 +779,12 @@ public:
      * @param imageID the ID of the item
      */
     void removeItemAllTags(qlonglong imageID);
+
+    /**
+     * Remove each tag from a list of tags
+     * from a each member of a list of items.
+     */
+    void removeTagsFromItems(QList<qlonglong> imageIDs, QList<int> tagIDs);
 
     /**
      * Get a list of names of all the tags for the item
