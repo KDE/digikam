@@ -251,10 +251,10 @@ int main(int argc, char *argv[])
 
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("General Settings");
-    QString version = group.readEntry("Version");
+    QString version = group.readEntry("Version", QString());
 
     group = config->group("Album Settings");
-    QString albumPath = group.readEntry("Album Path");
+    QString albumPath = group.readEntry("Album Path", QString());
 
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
     // TEMPORARY SOLUTION
