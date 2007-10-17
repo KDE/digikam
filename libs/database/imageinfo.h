@@ -73,6 +73,11 @@ public:
     explicit ImageInfo(qlonglong ID);
 
     /**
+     * Constructor. Creates an ImageInfo object from a file url.
+     */
+    ImageInfo(const KUrl &url);
+
+    /**
      * Constructor. Creates an ImageInfo object where the provided information
      * will initially be available cached, without database access.
      * @param     ID       unique ID for this image

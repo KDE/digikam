@@ -36,6 +36,8 @@
 #include "albumdb.h"
 #include "databaseattributeswatch.h"
 #include "databaseaccess.h"
+#include "collectionmanager.h"
+#include "collectionlocation.h"
 #include "imageinfodata.h"
 #include "imageinfocache.h"
 #include "imageinfo.h"
@@ -95,6 +97,35 @@ ImageInfo::ImageInfo(qlonglong ID)
     ItemShortInfo info = access.db()->getItemShortInfo(ID);
     m_data->albumId = info.albumID;
     m_data->url     = DatabaseUrl::fromAlbumAndName(info.itemName, info.album, info.albumRoot);
+}
+
+ImageInfo::ImageInfo(const KUrl &url)
+{
+    DatabaseAccess access;
+
+    CollectionLocation *location = CollectionManager::instance()->locationForUrl(url);
+    QString album = CollectionManager::instance()->album(url);
+    QString name  = url.fileName();
+
+    // if needed, the two SQL calls can be consolidated into one by adding a method to AlbumDB
+    int albumId = access.db()->getAlbumForPath(location->id(), album, false);
+    if (albumId == -1)
+    {
+        m_data = 0;
+        return;
+    }
+
+    int imageId = access.db()->getImageId(albumId, name);
+    if (imageId == -1)
+    {
+        m_data = 0;
+        return;
+    }
+
+    m_data = access.imageInfoCache()->infoForId(imageId);
+    m_data->albumId = albumId;
+    m_data->url     = DatabaseUrl::fromAlbumAndName(name, album, location->albumRootPath());
+
 }
 
 ImageInfo::~ImageInfo()
@@ -228,7 +259,11 @@ int ImageInfo::rating() const
 
     DatabaseAccess access;
     if (m_data->rating == -1)
-        m_data.constCastData()->rating = access.db()->getItemRating(m_data->id);
+    {
+        QVariantList list = access.db()->getImageInformation(m_data->id, DatabaseFields::Rating);
+        if (!list.isEmpty())
+            m_data.constCastData()->rating = list.first().toInt();
+    }
     return m_data->rating;
 }
 
@@ -240,7 +275,9 @@ QDateTime ImageInfo::dateTime() const
     DatabaseAccess access;
     if (!m_data->dateTime.isValid())
     {
-        m_data.constCastData()->dateTime = access.db()->getItemDate(m_data->id);
+        QVariantList list = access.db()->getImageInformation(m_data->id, DatabaseFields::CreationDate);
+        if (!list.isEmpty())
+            m_data.constCastData()->dateTime = list.first().toDateTime();
     }
     return m_data->dateTime;
 }
@@ -253,8 +290,9 @@ QDateTime ImageInfo::modDateTime() const
     DatabaseAccess access;
     if (!m_data->modDateTime.isValid())
     {
-        QFileInfo fileInfo(filePath());
-        m_data.constCastData()->modDateTime = fileInfo.lastModified();
+        QVariantList list = access.db()->getImagesFields(m_data->id, DatabaseFields::ModificationDate);
+        if (!list.isEmpty())
+            m_data.constCastData()->modDateTime = list.first().toDateTime();
     }
     return m_data->modDateTime;
 }
@@ -316,7 +354,7 @@ void ImageInfo::setComment(const QString& caption)
 void ImageInfo::setRating(int value)
 {
     DatabaseAccess access;
-    access.db()->setItemRating(m_data->id, value);
+    access.db()->changeImageInformation(m_data->id, QVariantList() << value, DatabaseFields::Rating);
 }
 
 void ImageInfo::setDateTime(const QDateTime& dateTime)
@@ -327,7 +365,7 @@ void ImageInfo::setDateTime(const QDateTime& dateTime)
     if (dateTime.isValid())
     {
         DatabaseAccess access;
-        access.db()->setItemDate(m_data->id, dateTime);
+        access.db()->changeImageInformation(m_data->id, QVariantList() << dateTime, DatabaseFields::CreationDate);
     }
 }
 

@@ -35,6 +35,21 @@ namespace Digikam
 namespace DatabaseFields
 {
 
+enum ImagesField
+{
+    ImagesNone         = 0,
+    Album              = 1 << 0,
+    Name               = 1 << 1,
+    Status             = 1 << 2,
+    Category           = 1 << 3,
+    ModificationDate   = 1 << 4,
+    FileSize           = 1 << 5,
+    UniqueHash         = 1 << 6,
+    ImagesAll          =
+            Album | Name | Status | Category |
+            ModificationDate | FileSize | UniqueHash
+};
+
 enum ImageInformationField
 {
     ImageInformationNone = 0,
@@ -106,6 +121,7 @@ enum ImageCommentsField
             CommentType | CommentAuthor | CommentLanguage | CommentDate | Comment
 };
 
+Q_DECLARE_FLAGS(Images, ImagesField);
 Q_DECLARE_FLAGS(ImageInformation, ImageInformationField);
 Q_DECLARE_FLAGS(ImageMetadata, ImageMetadataField);
 Q_DECLARE_FLAGS(ImageComments, ImageCommentsField);
@@ -117,6 +133,7 @@ Q_DECLARE_FLAGS(ImagePositions, ImagePositionsField);
 } // end of namespace Digikam
 
 // must be outside the namespace!
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::Images);
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImageInformation);
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImageMetadata);
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImageComments);

@@ -24,10 +24,12 @@
 // Qt includes
 
 #include <QSharedData>
+#include <QSet>
 
 // KDE includes
 
 #include <klocale.h>
+#include <kglobal.h>
 
 // Local includes
 
