@@ -61,7 +61,6 @@
 #include <kcombobox.h>
 #include <kglobalsettings.h>
 #include <knuminput.h>
-#include <kprinter.h>
 #include <kpropertiesdialog.h>
 #include <kglobal.h>
 #include <kvbox.h>
@@ -77,6 +76,10 @@
 
 namespace Digikam
 {
+
+#warning "TODO: KPrinter ==> QPrinter";
+
+/*
 
 class ImagePrintPrivate
 {
@@ -503,7 +506,7 @@ ImageEditorPrintDialogPage::~ImageEditorPrintDialogPage()
     delete d;
 }
 
-void ImageEditorPrintDialogPage::getOptions( QMap<QString,QString>& opts, bool /*incldef*/ )
+void ImageEditorPrintDialogPage::getOptions( QMap<QString,QString>& opts, bool incldef )
 {
     QString t = "true";
     QString f = "false";
@@ -824,5 +827,5 @@ QString ImageEditorPrintDialogPage::unitToString(Unit unit)
       return i18n("Inches");
     }
 }
-
+*/
 }  // namespace Digikam

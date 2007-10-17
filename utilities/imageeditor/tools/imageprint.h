@@ -33,8 +33,6 @@
 // KDE lib includes
 
 #include <kurl.h>
-#include <kprinter.h>
-#include <kdeprint/kprintdialogpage.h>
 
 // Local includes.
 
@@ -47,6 +45,8 @@ class ImagePrintPrivate;
 
 class DIGIKAM_EXPORT ImagePrint
 {
+#warning "TODO: KPrinter ==> QPrinter";
+/*
 public:
 
     ImagePrint(DImg& image, KPrinter& printer, const QString& fileName);
@@ -63,15 +63,17 @@ private:
 
     KPrinter&          m_printer;
 
-    ImagePrintPrivate *d;
+    ImagePrintPrivate *d;*/
 };
 
 //-----------------------------------------------------------------------------
 
 class ImageEditorPrintDialogPagePrivate;
 
-class DIGIKAM_EXPORT ImageEditorPrintDialogPage : public KPrintDialogPage
+class DIGIKAM_EXPORT ImageEditorPrintDialogPage// : public KPrintDialogPage
 {
+#warning "TODO: KPrinter ==> QPrinter";
+/*
     Q_OBJECT
 
 public:
@@ -113,7 +115,7 @@ private:
 
 private:
 
-    ImageEditorPrintDialogPagePrivate *d;
+    ImageEditorPrintDialogPagePrivate *d;*/
 };
 
 }  // namespace Digikam

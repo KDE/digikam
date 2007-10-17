@@ -56,7 +56,6 @@
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
-#include <kprinter.h>
 #include <kedittoolbar.h>
 #include <kaboutdata.h>
 #include <kcursor.h>
@@ -552,6 +551,9 @@ void EditorWindow::setupStatusBar()
 
 void EditorWindow::printImage(KUrl url)
 {
+#warning "TODO: KPrinter ==> QPrinter";
+
+/*
     uchar* ptr      = m_canvas->interface()->getImage();
     int w           = m_canvas->interface()->origWidth();
     int h           = m_canvas->interface()->origHeight();
@@ -579,7 +581,7 @@ void EditorWindow::printImage(KUrl url)
             KMessageBox::error(this, i18n("Failed to print file: '%1'",
                                url.fileName()));
         }
-    }
+    }*/
 }
 
 void EditorWindow::slotEditKeys()
