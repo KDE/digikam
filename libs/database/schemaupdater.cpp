@@ -228,10 +228,9 @@ bool SchemaUpdater::createTablesV5()
                     QString("CREATE TABLE AlbumRoots\n"
                             " (id INTEGER PRIMARY KEY,\n"
                             "  status INTEGER NOT NULL,\n"
-                            "  absolutePath TEXT,\n"
                             "  type INTEGER NOT NULL,\n"
-                            "  volumeUuid TEXT,\n"
-                            "  specificPath TEXT);") ))
+                            "  identifier TEXT,\n"
+                            "  specificPath TEXT);") ));
     {
         return false;
     }
@@ -239,7 +238,7 @@ bool SchemaUpdater::createTablesV5()
     if (!m_access->backend()->execSql(
                     QString("CREATE TABLE Albums\n"
                             " (id INTEGER PRIMARY KEY,\n"
-                            "  albumRoot INTEGER NOT NULL FOREIGN KEY,\n"
+                            "  albumRoot INTEGER NOT NULL,\n"
                             "  relativePath TEXT NOT NULL UNIQUE,\n"
                             "  date DATE,\n"
                             "  caption TEXT,\n"
@@ -259,7 +258,7 @@ bool SchemaUpdater::createTablesV5()
                             "  modificationDate DATETIME,\n"
                             "  fileSize INTEGER,\n"
                             "  uniqueHash TEXT,\n"
-                            "  UNIQUE (albumRoot, album, name));") ))
+                            "  UNIQUE (album, name));") ))
     {
         return false;
     }
@@ -329,7 +328,7 @@ bool SchemaUpdater::createTablesV5()
     if (!m_access->backend()->execSql(
                     QString("CREATE TABLE ImageComments\n"
                             " (id INTEGER PRIMARY KEY,\n"
-                            "  imageid INTEGER UNIQUE FOREIGN KEY,\n"
+                            "  imageid INTEGER UNIQUE,\n"
                             "  type INTEGER,\n"
                             "  language TEXT,\n"
                             "  author TEXT,\n"
@@ -342,7 +341,7 @@ bool SchemaUpdater::createTablesV5()
 
     if (!m_access->backend()->execSql(
                     QString("CREATE TABLE ImageCopyright\n"
-                            " (imageid INTEGER UNIQUE FOREIGN KEY,\n"
+                            " (imageid INTEGER,\n"
                             "  property TEXT,\n"
                             "  value TEXT,\n"
                             "  extraValue TEXT);") ))
@@ -400,7 +399,7 @@ bool SchemaUpdater::createTablesV5()
     }
 
     if (!m_access->backend()->execSql(
-                    QString("CREATE TABLE IF NOT EXISTS DownloadHistory\n"
+                    QString("CREATE TABLE DownloadHistory\n"
                             " (id  INTEGER PRIMARY KEY,\n"
                             "  filepath TEXT,\n"
                             "  filename TEXT,\n"
@@ -426,8 +425,9 @@ bool SchemaUpdater::createIndicesV5()
 {
     // TODO: see which more indices are needed
     // create indices
-    m_access->backend()->execSql("CREATE INDEX IF NOT EXISTS dir_index ON Images    (dirid);");
-    m_access->backend()->execSql("CREATE INDEX IF NOT EXISTS tag_index ON ImageTags (tagid);");
+    m_access->backend()->execSql("CREATE INDEX dir_index  ON Images    (album);");
+    m_access->backend()->execSql("CREATE INDEX hash_index ON Images    (uniqueHash);");
+    m_access->backend()->execSql("CREATE INDEX tag_index  ON ImageTags (tagid);");
 
     return true;
 }
@@ -438,12 +438,12 @@ bool SchemaUpdater::createTriggersV5()
 
     // trigger: delete from Images/ImageTags/ImageProperties
     // if Album has been deleted
-    m_access->backend()->execSql("CREATE TRIGGER IF NOT EXISTS delete_album DELETE ON Albums\n"
+    m_access->backend()->execSql("CREATE TRIGGER delete_album DELETE ON Albums\n"
             "BEGIN\n"
             " DELETE FROM ImageTags\n"
-            "   WHERE imageid IN (SELECT id FROM Images WHERE dirid=OLD.id);\n"
+            "   WHERE imageid IN (SELECT id FROM Images WHERE album=OLD.id);\n"
             " DELETE From ImageProperties\n"
-            "   WHERE imageid IN (SELECT id FROM Images WHERE dirid=OLD.id);\n"
+            "   WHERE imageid IN (SELECT id FROM Images WHERE album=OLD.id);\n"
             " DELETE FROM Images\n"
             "   WHERE dirid = OLD.id;\n"
             "END;");
@@ -451,7 +451,7 @@ bool SchemaUpdater::createTriggersV5()
     // trigger: delete from ImageTags/ImageProperties
     // if Image has been deleted
     m_access->backend()->execSql(
-            "CREATE TRIGGER IF NOT EXISTS delete_image DELETE ON Images\n"
+            "CREATE TRIGGER delete_image DELETE ON Images\n"
             "BEGIN\n"
             "  DELETE FROM ImageTags\n"
             "    WHERE imageid=OLD.id;\n"
@@ -475,7 +475,7 @@ bool SchemaUpdater::createTriggersV5()
 
     // trigger: delete from ImageTags if Tag has been deleted
     m_access->backend()->execSql(
-            "CREATE TRIGGER IF NOT EXISTS delete_tag DELETE ON Tags\n"
+            "CREATE TRIGGER delete_tag DELETE ON Tags\n"
             "BEGIN\n"
             "  DELETE FROM ImageTags WHERE tagid=OLD.id;\n"
             "END;");
@@ -485,7 +485,7 @@ bool SchemaUpdater::createTriggersV5()
 
     // trigger: insert into TagsTree if Tag has been added
     m_access->backend()->execSql(
-            "CREATE TRIGGER IF NOT EXISTS insert_tagstree AFTER INSERT ON Tags\n"
+            "CREATE TRIGGER insert_tagstree AFTER INSERT ON Tags\n"
             "BEGIN\n"
             "  INSERT INTO TagsTree\n"
             "    SELECT NEW.id, NEW.pid\n"
@@ -495,7 +495,7 @@ bool SchemaUpdater::createTriggersV5()
 
     // trigger: delete from TagsTree if Tag has been deleted
     m_access->backend()->execSql(
-            "CREATE TRIGGER IF NOT EXISTS delete_tagstree DELETE ON Tags\n"
+            "CREATE TRIGGER delete_tagstree DELETE ON Tags\n"
             "BEGIN\n"
             " DELETE FROM Tags\n"
             "   WHERE id  IN (SELECT id FROM TagsTree WHERE pid=OLD.id);\n"
@@ -507,7 +507,7 @@ bool SchemaUpdater::createTriggersV5()
 
     // trigger: delete from TagsTree if Tag has been deleted
     m_access->backend()->execSql(
-            "CREATE TRIGGER IF NOT EXISTS move_tagstree UPDATE OF pid ON Tags\n"
+            "CREATE TRIGGER move_tagstree UPDATE OF pid ON Tags\n"
             "BEGIN\n"
             "  DELETE FROM TagsTree\n"
             "    WHERE\n"
@@ -614,13 +614,16 @@ bool SchemaUpdater::updateV4toV5()
     if (!m_access->backend()->execSql(QString("ALTER TABLE Images RENAME TO ImagesV3;")))
         return false;
 
-    // --- Drop two triggers ---
+    // --- Drop some triggers and indices ---
 
-    if (!m_access->backend()->execSql(QString("DROP TRIGGER IF EXISTS delete_album;")))
-        return false;
-
-    if (!m_access->backend()->execSql(QString("DROP TRIGGER IF EXISTS delete_image;")))
-        return false;
+    // Dont check for errors here. The "IF EXISTS" clauses seem not supported in SQLite
+    m_access->backend()->execSql(QString("DROP TRIGGER delete_album;"));
+    m_access->backend()->execSql(QString("DROP TRIGGER delete_image;"));
+    m_access->backend()->execSql(QString("DROP TRIGGER delete_tag;"));
+    m_access->backend()->execSql(QString("DROP TRIGGER insert_tagstree;"));
+    m_access->backend()->execSql(QString("DROP TRIGGER delete_tagstree;"));
+    m_access->backend()->execSql(QString("DROP TRIGGER move_tagstree;"));
+    m_access->backend()->execSql(QString("DROP INDEX dir_index;"));
 
     // --- Create new tables ---
 
@@ -664,7 +667,7 @@ bool SchemaUpdater::updateV4toV5()
     if (!m_access->backend()->execSql(QString(
                     "REPLACE INTO Images "
                     " (id, album, name, status, category, modificationDate, fileSize, uniqueHash) "
-                    "SELECT id, dirid, name, ?, ?, NULL, NULL, NULL, NULL "
+                    "SELECT id, dirid, name, ?, ?, NULL, NULL, NULL"
                     " FROM ImagesV3;"
                                              ),
                     DatabaseItem::Visible, DatabaseItem::UndefinedCategory)
@@ -731,8 +734,8 @@ bool SchemaUpdater::updateV4toV5()
     // Port ImagesV3.date -> ImageInformation.creationDate
     if (!m_access->backend()->execSql(QString(
                     "UPDATE ImageInformation SET "
-                    " creationDate=(SELECT datetime FROM ImagesV3 WHERE ImagesV3.id=Images.id) "
-                    "WHERE id IN (SELECT id FROM ImagesV3);"
+                    " creationDate=(SELECT datetime FROM ImagesV3 WHERE ImagesV3.id=ImageInformation.imageid) "
+                    "WHERE imageid IN (SELECT id FROM ImagesV3);"
                                              )
                                      )
        )
@@ -742,7 +745,7 @@ bool SchemaUpdater::updateV4toV5()
     if (!m_access->backend()->execSql(QString(
                     "REPLACE INTO ImageComments "
                     " (imageid, type, language, comment) "
-                    "SELECT id, ?, ?, caption FROM IMAGES;"
+                    "SELECT id, ?, ?, caption FROM ImagesV3;"
                                              ),
                     (int)DatabaseComment::Comment, QString("x-default"))
        )
@@ -752,8 +755,8 @@ bool SchemaUpdater::updateV4toV5()
     if (!m_access->backend()->execSql(QString(
                     "UPDATE ImageInformation SET "
                     " rating=(SELECT value FROM ImageProperties "
-                    "         WHERE Images.id=ImageProperties.imageid AND ImageProperties.property=?) "
-                    "WHERE id IN (SELECT id FROM ImageProperties WHERE property=?);"
+                    "         WHERE ImageInformation.imageid=ImageProperties.imageid AND ImageProperties.property=?) "
+                    "WHERE imageid IN (SELECT imageid FROM ImageProperties WHERE property=?);"
                                              ),
                     QString("Rating"), QString("Rating"))
        )
