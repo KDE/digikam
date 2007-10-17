@@ -191,9 +191,24 @@ public:
 
 namespace DatabaseComment
 {
-    enum Source
+    enum Type
     {
-        UndefinedSource = 0
+        // Keep values constant
+        /// UndefinedType: Shall never appear in the database
+        UndefinedType   = 0,
+        /**
+         *  Comment: The default - a normal comment
+         *  This is what the user in digikam edits as the comment.
+         *  It is mapped to and from the JFIF comment,
+         *  the EXIF user comment, the Iptc Caption,
+         *  Dublin Core and Photoshop Description.
+         */
+        Comment         = 1,
+        /// Headline: as with Iptc or Photoshop
+        Headline        = 2,
+        /// Title: as with Dublin Core Title, Photoshop Title, Iptc Object Name
+        Title           = 3
+        // Feel free to add here any more types that you need!
     };
 }
 
@@ -201,11 +216,11 @@ class CommentInfo
 {
 public:
 
-    CommentInfo() : imageId(-1), source(DatabaseComment::UndefinedSource) {};
+    CommentInfo() : imageId(-1), source(DatabaseComment::UndefinedType) {};
 
     int                     id;
     qlonglong               imageId;
-    DatabaseComment::Source source;
+    DatabaseComment::Type   type;
     QString                 author;
     QString                 language;
     QDateTime               date;

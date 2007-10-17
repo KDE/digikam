@@ -96,13 +96,13 @@ enum ImagePositionsField
 enum ImageCommentsField
 {
     ImageCommentsNone = 0,
-    CommentSource     = 1 << 0,
+    CommentType       = 1 << 0,
     CommentLanguage   = 1 << 1,
     CommentAuthor     = 1 << 2,
     CommentDate       = 1 << 3,
     Comment           = 1 << 4,
     ImageCommentsAll  =
-            CommentSource | CommentAuthor | CommentLanguage | CommentDate | Comment
+            CommentType | CommentAuthor | CommentLanguage | CommentDate | Comment
 };
 
 Q_DECLARE_FLAGS(ImageInformation, ImageInformationField);

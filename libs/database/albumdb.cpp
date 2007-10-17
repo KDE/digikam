@@ -923,7 +923,7 @@ QList<CommentInfo> AlbumDB::getItemComments(qlonglong imageID)
 
         info.id       = (*it).toInt();
         ++it;
-        info.source   = (DatabaseComment::Source)(*it).toInt();
+        info.type     = (DatabaseComment::Type)(*it).toInt();
         ++it;
         info.language = (*it).toString();
         ++it;
@@ -940,15 +940,15 @@ QList<CommentInfo> AlbumDB::getItemComments(qlonglong imageID)
     return list;
 }
 
-int AlbumDB::setImageComment(qlonglong imageID, const QString &comment, DatabaseComment::Source source,
+int AlbumDB::setImageComment(qlonglong imageID, const QString &comment, DatabaseComment::Type type,
                              const QString &language, const QString &author, const QDateTime &date)
 {
     QVariantList boundValues;
-    boundValues << imageID << (int)source << language << author << date << comment;
+    boundValues << imageID << (int)type << language << author << date << comment;
 
     QVariant id;
     d->db->execSql( QString("REPLACE INTO ImageComments "
-                            "( imageid, source, language, author, date, comment ) "
+                            "( imageid, type, language, author, date, comment ) "
                             " VALUES (?,?,?,?,?,?);"),
                     boundValues, 0, &id);
 
@@ -1063,8 +1063,8 @@ QStringList AlbumDB::imageCommentsFieldList(DatabaseFields::ImageComments fields
 {
     // adds no spaces at beginning or end
     QStringList list;
-    if (fields & DatabaseFields::CommentSource)
-        list << "source";
+    if (fields & DatabaseFields::CommentType)
+        list << "type";
     if (fields & DatabaseFields::CommentLanguage)
         list << "language";
     if (fields & DatabaseFields::CommentAuthor)

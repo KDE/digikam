@@ -433,7 +433,7 @@ bool SchemaUpdater::createTablesV5()
                     QString("CREATE TABLE ImageComments\n"
                             " (id INTEGER PRIMARY KEY,\n"
                             "  imageid INTEGER UNIQUE FOREIGN KEY,\n"
-                            "  source INTEGER,\n"
+                            "  type INTEGER,\n"
                             "  language TEXT,\n"
                             "  author TEXT,\n"
                             "  date DATETIME,\n"

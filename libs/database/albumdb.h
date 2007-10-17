@@ -664,7 +664,7 @@ public:
      *                 If not supported by the source, pass a null string.
      * @returns the comment ID of the comment
      */
-    int setImageComment(qlonglong imageID, const QString &comment, DatabaseComment::Source source,
+    int setImageComment(qlonglong imageID, const QString &comment, DatabaseComment::Type type,
                         const QString &language = QString(), const QString &author = QString(),
                         const QDateTime &date = QDateTime());
 
