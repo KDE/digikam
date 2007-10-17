@@ -48,7 +48,8 @@ public:
 
     qlonglong id;
     QList<CommentInfo> infos;
-    QSet<int> dirty;
+    QSet<int> dirtyIndices;
+    QSet<int> newIndices;
     ImageComments::UniqueBehavior unique;
 
     void languageMatch(const QString &fullCode, const QString &langCode,
@@ -220,18 +221,31 @@ void ImageComments::addComment(const QString &comment, const QString &lang, cons
     for (int i=0; i<d->infos.size(); i++)
     {
         CommentInfo &info = d->infos[i];
+
+        // some extra considerations on replacing
         if (info.type == DatabaseComment::Comment && info.language == language)
         {
             if ( !multipleCommentsPerLanguage
                  || (multipleCommentsPerLanguage && info.author == author) )
             {
-                changeComment(i, comment);
-                changeAuthor(i, author);
-                apply();
+                info.comment = comment;
+                info.date    = date;
+                info.author  = author;
+                d->dirtyIndices << i;
                 return;
             }
         }
+
+        // simulate unique restrictions of db
+        if (info.type == type && info.language == language && info.author == author)
+        {
+            info.comment = comment;
+            info.date    = date;
+            d->dirtyIndices << i;
+            return;
+        }
     }
+
     return addCommentDirect(comment, language, author, type, date);
 }
 
@@ -257,53 +271,38 @@ void ImageComments::addCommentDirect(const QString &comment, const QString &lang
     info.type = type;
     info.date = date;
 
-    DatabaseAccess access;
-    info.id = access.db()->setImageComment(d->id, comment, type, language, author, date);
-
-    if (info.id != -1)
-    {
-        // overwrite or add
-        for (int i=0; i<d->infos.size(); i++)
-        {
-            if (d->infos[i].id == info.id)
-            {
-                d->infos[i] = info;
-                return;
-            }
-        }
-
-        d->infos << info;
-    }
+    d->newIndices << d->infos.size();
+    d->infos      << info;
 }
 
 void ImageComments::changeComment(int index, const QString &comment)
 {
     d->infos[index].comment = comment;
-    d->dirty << index;
+    d->dirtyIndices << index;
 }
 
 void ImageComments::changeLanguage(int index, const QString &language)
 {
     d->infos[index].language = language;
-    d->dirty << index;
+    d->dirtyIndices << index;
 }
 
 void ImageComments::changeAuthor(int index, const QString &author)
 {
     d->infos[index].author = author;
-    d->dirty << index;
+    d->dirtyIndices << index;
 }
 
 void ImageComments::changeDate(int index, const QDateTime &date)
 {
     d->infos[index].date = date;
-    d->dirty << index;
+    d->dirtyIndices << index;
 }
 
 void ImageComments::changeType(int index, DatabaseComment::Type type)
 {
     d->infos[index].type = type;
-    d->dirty << index;
+    d->dirtyIndices << index;
 }
 
 void ImageComments::apply()
@@ -314,14 +313,22 @@ void ImageComments::apply()
 
 void ImageComments::apply(DatabaseAccess &access)
 {
-     foreach(int index, d->dirty)
-     {
-         QVariantList values;
-         CommentInfo &info = d->infos[index];
-         values << (int)info.type << info.language << info.author << info.date << info.comment;
-         access.db()->changeImageComment(info.id, values);
-     }
-     d->dirty.clear();
+    foreach(int index, d->newIndices)
+    {
+        CommentInfo &info = d->infos[index];
+        DatabaseAccess access;
+        info.id = access.db()->setImageComment(d->id, info.comment, info.type, info.language, info.author, info.date);
+    }
+    d->newIndices.clear();
+
+    foreach(int index, d->dirtyIndices)
+    {
+        QVariantList values;
+        CommentInfo &info = d->infos[index];
+        values << (int)info.type << info.language << info.author << info.date << info.comment;
+        access.db()->changeImageComment(info.id, values);
+    }
+    d->dirtyIndices.clear();
 }
 
 } // namespace Digikam

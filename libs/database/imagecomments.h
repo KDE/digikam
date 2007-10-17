@@ -47,6 +47,9 @@ class ImageComments
      * to the comments stored in the database. It is a mere wrapper around the less
      * convenient access methods in AlbumDB.
      * Database results are cached, but the object will not listen to database changes from other places.
+     *
+     * Changes are applied to the database only after calling apply(), which you can call any time
+     * and which will in any case be called from the destructor.
      */
 
 public:
@@ -149,24 +152,7 @@ public:
                   const QDateTime &date = QDateTime());
 
     /**
-     * Advanced: Allows to specify all properties of a new comment.
-     * Only the UNIQUE requirements of the database are enforced.
-     * Note that existing comments may be overwritten, so specify all needed values.
-     */
-    void addCommentDirect(const QString &comment,
-                          const QString &language,
-                          const QString &author,
-                          DatabaseComment::Type type,
-                          const QDateTime &date);
-
-
-
-    /**
      * Access individual properties.
-     * Changes done with one of the following methods are applied to the database
-     * only after calling apply()!
-     * apply() will be called from the destructor and _may_ be called in any other
-     * method, but there are no guarantees on that.
      * Please ensure that the specified index is a valid index
      */
 
@@ -176,12 +162,21 @@ public:
     void changeDate(int index, const QDateTime &date);
     void changeType(int index, DatabaseComment::Type type);
 
+    /**
+     * Apply all changes.
+     */
     void apply();
     void apply(DatabaseAccess &access);
 
     // If you need more methods, add your methods here!
 
 protected:
+
+    void addCommentDirect(const QString &comment,
+                          const QString &language,
+                          const QString &author,
+                          DatabaseComment::Type type,
+                          const QDateTime &date);
 
     QSharedDataPointer<ImageCommentsPriv> d;
 };
