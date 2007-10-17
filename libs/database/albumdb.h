@@ -285,7 +285,7 @@ public:
      * @param albumID the id of the album
      * @return the url of the album
      */
-    QString getAlbumPath(int albumID);
+    //QString getAlbumPath(int albumID);
 
     /**
      * Given an albumid, this returns the relative path for that album
@@ -524,20 +524,9 @@ public:
     QList<qlonglong> getItemIDsInTag(int tagID, bool recursive = false);
 
     /**
-     * Returns all items in the database without a date. This is used
-     * in the scanlib class which tries to find out the date of the 
-     * items, so the database holds the date for each item. This was
-     * not the case untill the 0.8.0 release.
-     * @return The path (starting from albumPath and including the 
-     * the filename of all items.
+     * Returns all creation dates found in the image metadata table
      */
-    QStringList getAllItemURLsWithoutDate();
-
-    /**
-     * Returns all item in the database and their dates.
-     * Items that do not have a valid date set are excluded.
-     */
-    QList<QPair<QString, QDateTime> > getItemsAndDate();
+    QList<QDateTime> getAllCreationDates();
 
     // ----------- Item properties -----------
 
@@ -554,27 +543,6 @@ public:
      * @return The name of the item, or a null string if not found
      */
     QString getItemName(qlonglong imageID);
-
-    /**
-     * Get the caption for the item
-     * @param imageID the id  of the item
-     * @return the caption for the item
-     */
-    QString getItemCaption(qlonglong imageID);
-
-    /**
-     * Get the datetime for the item
-     * @param imageID the ID of the item
-     * @return the datetime for the item
-     */
-    QDateTime getItemDate(qlonglong imageID);
-
-    /**
-     * Get the item rating
-     * @param imageID the ID of the item
-     * @return the rating for the item
-     */
-    int getItemRating(qlonglong imageID);
 
     /**
      * Get item and album info from the image ID
@@ -596,19 +564,35 @@ public:
                     const QDateTime& modificationDate,
                     int fileSize,
                     const QString& uniqueHash);
+
+    /**
+     * Returns the requested fields from the Images table.
+     * Choose the fields with the mask.
+     * The fields will be returned in the following order and type:
+     * 0) Int       Album
+     * 1) String    Name
+     * 2) Int       Status
+     * 3) Int       Category
+     * 4) DateTime  ModificationDate
+     * 5) int       FileSize
+     * 6) String    uniqueHash
+     */
+    QVariantList getImagesFields(qlonglong imageID, DatabaseFields::Images imagesFields);
+
     /**
      * Add (or replace) the ImageInformation of the specified item.
      * If there is already an entry, it will be discarded.
      * The QVariantList shall have 9 entries, of types in this order:
      * 0) Int       rating
-     * 1) DateTime  modificationDate
-     * 2) DateTime  digitizationDate
+     * 1) DateTime* creationDate
+     * 2) DateTime* digitizationDate
      * 3) Int       orientation
      * 4) Int       width
      * 5) Int       height
      * 6) String    format
      * 7) Int       colorDepth
      * 8) Int       colorModel
+     * ( (*) You can provide the date also as a string in the format Qt::IsoDate)
      * You can leave out entries from this list, which will then be filled with null values.
      * Indicate the values that you have passed in the ImageInformation flag in the third parameters.
      */
@@ -623,6 +607,12 @@ public:
      */
     void changeImageInformation(qlonglong imageID, const QVariantList &infos,
                                 DatabaseFields::ImageInformation fields = DatabaseFields::ImageInformationAll);
+
+    /**
+     * Read image information. Parameters as above.
+     */
+    QVariantList getImageInformation(qlonglong imageID,
+                                     DatabaseFields::ImageInformation infoFields = DatabaseFields::ImageInformationAll);
 
     /**
      * Add (or replace) the ImageMetadata of the specified item.
@@ -659,6 +649,12 @@ public:
                              DatabaseFields::ImageMetadata fields = DatabaseFields::ImageMetadataAll);
 
     /**
+     * Read image metadata. Parameters as above.
+     */
+    QVariantList getImageMetadata(qlonglong imageID,
+                                  DatabaseFields::ImageMetadata metadataFields = DatabaseFields::ImageMetadataAll);
+
+    /**
      * Add (or replace) the ImagePosition of the specified item.
      * If there is already an entry, it will be discarded.
      * The QVariantList shall have at most 9 entries, of types in this order:
@@ -684,6 +680,12 @@ public:
      */
     void changeImagePosition(qlonglong imageID, const QVariantList &infos,
                              DatabaseFields::ImagePositions fields = DatabaseFields::ImagePositionsAll);
+
+    /**
+     * Read image metadata. Parameters as above.
+     */
+    QVariantList getImagePosition(qlonglong imageID,
+                                  DatabaseFields::ImagePositions positionFields = DatabaseFields::ImagePositionsAll);
 
     /**
      * Retrieves all available comments for the specified item.
@@ -722,13 +724,19 @@ public:
                             DatabaseFields::ImageComments fields = DatabaseFields::ImageCommentsAll);
 
 
+    /**
+     * Get the datetime for the item
+     * @param imageID the ID of the item
+     * @return the datetime for the item
+     */
+    //QDateTime getItemDate(qlonglong imageID);
 
     /**
-     * Set the caption for the item
-     * @param imageID the id of the item
-     * @param caption the caption for the item
+     * Get the item rating
+     * @param imageID the ID of the item
+     * @return the rating for the item
      */
-    //void setItemCaption(qlonglong imageID, const QString& caption);
+    //int getItemRating(qlonglong imageID);
 
     /**
      * Update the date of a item to supplied date
@@ -737,14 +745,14 @@ public:
      * the exif-datetime, but if not available the modification date.
      * @return It will always return true. Maybe that will change.
      */
-    bool setItemDate(qlonglong imageID, const QDateTime& datetime);
+    //bool setItemDate(qlonglong imageID, const QDateTime& datetime);
 
     /**
      * Update the rating of a item to supplied value
      * @param imageID The ID of the item
      * @param rating The rating value to be stored.
      */
-    void setItemRating(qlonglong imageID, int rating);
+    //void setItemRating(qlonglong imageID, int rating);
 
 
     /**
@@ -753,15 +761,7 @@ public:
      * @param name    the name of the item
      * @return the datetime for the item
      */
-    QDateTime getItemDate(int albumID, const QString& name);
-
-    /**
-     * Get the caption for the item
-     * @param albumID the albumID of the item
-     * @param name    the name of the item
-     * @return the caption for the item
-     */
-    //QString getItemCaption(int albumID, const QString& name);
+    //QDateTime getItemDate(int albumID, const QString& name);
 
 
     /**
@@ -772,8 +772,30 @@ public:
      * the exif-datetime, but if not available the modification date.
      * @return It will always return true. Maybe that will change.
      */
-    bool setItemDate(int albumID, const QString& name,
-                     const QDateTime& datetime);
+    //bool setItemDate(int albumID, const QString& name,
+      //               const QDateTime& datetime);
+
+    /**
+     * Get the caption for the item
+     * @param imageID the id  of the item
+     * @return the caption for the item
+     */
+    //QString getItemCaption(qlonglong imageID);
+
+    /**
+     * Get the caption for the item
+     * @param albumID the albumID of the item
+     * @param name    the name of the item
+     * @return the caption for the item
+     */
+    //QString getItemCaption(int albumID, const QString& name);
+
+    /**
+     * Set the caption for the item
+     * @param imageID the id of the item
+     * @param caption the caption for the item
+     */
+    //void setItemCaption(qlonglong imageID, const QString& caption);
 
     /**
      * Set the caption for the item
@@ -782,6 +804,7 @@ public:
      * @param caption the caption for the item
      */
     //void setItemCaption(int albumID, const QString& name, const QString& caption);
+
 
     // ----------- Items and their tags -----------
 
@@ -884,6 +907,7 @@ public:
 
     // ----------- Static helper methods for constructing SQL queries -----------
 
+    static QStringList imagesFieldList(DatabaseFields::Images fields);
     static QStringList imageInformationFieldList(DatabaseFields::ImageInformation fields);
     static QStringList imageMetadataFieldList(DatabaseFields::ImageMetadata fields);
     static QStringList imagePositionsFieldList(DatabaseFields::ImagePositions fields);
