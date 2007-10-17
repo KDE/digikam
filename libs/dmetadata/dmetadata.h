@@ -37,6 +37,7 @@
 
 #include "dimg.h"
 #include "photoinfocontainer.h"
+#include "metadatainfo.h"
 #include "digikam_export.h"
 
 namespace Digikam
@@ -73,17 +74,41 @@ public:
 
     PhotoInfoContainer getPhotographInformations() const;
 
-    /** Methods dedicaced to save/read a private Iptc tag used to store digiKam image properties.
-        Code tested but not used because Xmp is now the common/universal way to use for that. */
-    bool getXMLImageProperties(QString& comments, QDateTime& date, 
+    /** Returns the requested metadata field as a QVariant. See metadatainfo.h for a specification
+        of the format of the QVariant.
+     */
+    QVariant     getMetadataField(MetadataInfo::Field field);
+    QVariantList getMetadataFields(const MetadataFields &fields);
+
+    /** Convert a QVariant value of the specified field to a user-presentable, i18n'ed string.
+        The QVariant must be of the type as specified in metadatainfo.h and as obtained by getMetadataField.
+     */
+    QString     valueToString (const QVariant &value, MetadataInfo::Field field);
+    QStringList valuesToString(const QVariantList &list, const MetadataFields &fields);
+
+    /** Returns a map of possible enum values and their user-presentable, i18n'ed representation.
+        Valid fields are those which are described as "enum from" or "bit mask from" in metadatainfo.h.
+     */
+    QMap<int, QString> possibleValuesForEnumField(MetadataInfo::Field field);
+
+    /** Methods dedicaced to record/read a private Iptc tag used to store digiKam image properties.
+        Code tested but not used because Xmp is more simple to use for that. */
+    bool getXMLImageProperties(QString& comments, QDateTime& date,
                                int& rating, QStringList& tagsPath) const;
     bool setXMLImageProperties(const QString& comments, const QDateTime& date, 
                                int rating, const QStringList& tagsPath) const;
+
+    static double apexApertureToFNumber(double aperture);
+    static double apexShutterSpeedToExposureTime(double shutterSpeed);
 
 private:
 
     bool setProgramId(bool on=true) const;
     bool setIptcTag(const QString& text, int maxLength, const char* debugLabel, const char* tagKey) const;
+    QVariant fromExifOrXmp(const char *exifTagName, const char *xmpTagName) const;
+    QVariant fromIptcOrXmp(const char *iptcTagName, const char *xmpTagName) const;
+    QVariant fromIptcOrXmpList(const char *iptcTagName, const char *xmpTagName) const;
+    QVariant fromIptcOrXmpLangAlt(const char *iptcTagName, const char *xmpTagName) const;
 };
 
 }  // NameSpace Digikam

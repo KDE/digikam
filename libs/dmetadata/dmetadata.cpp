@@ -22,10 +22,19 @@
  * 
  * ============================================================ */
 
+// C++ includes
+
+#include <cmath>
+
 // Qt includes.
 
 #include <QDomDocument>
 #include <QFile>
+
+// KDE includes
+
+#include <klocale.h>
+#include <kglobal.h>
 
 // LibKDcraw includes.
 
@@ -556,13 +565,567 @@ bool DMetadata::setImageCredits(const QString& credit, const QString& source, co
     return true;
 }
 
-bool DMetadata::setIptcTag(const QString& text, int maxLength, 
+bool DMetadata::setIptcTag(const QString& text, int maxLength,
                            const char* debugLabel, const char* tagKey)  const
 {
     QString truncatedText = text;
     truncatedText.truncate(maxLength);
     DDebug() << getFilePath() << " ==> " << debugLabel << ": " << truncatedText << endl;
     return setIptcTagString(tagKey, truncatedText);    // returns false if failed
+}
+
+inline QVariant DMetadata::fromExifOrXmp(const char *exifTagName, const char *xmpTagName)
+{
+    QVariant var;
+
+    var = getExifTagVariant(exifTagName, false);
+    if (!var.isNull())
+        return var;
+
+    if (xmpTagName)
+    {
+        //TODO
+    }
+
+    return var;
+}
+
+inline QVariant DMetadata::fromIptcOrXmp(const char *iptcTagName, const char *xmpTagName)
+{
+    QString iptcValue;
+
+    if (iptcTagName)
+        iptcValue = getIptcTagString(iptcTagName);
+    if (!iptcValue.isNull())
+        return iptcValue;
+
+    if (xmpTagName)
+    {
+        // TODO
+    }
+
+    return QVariant();
+}
+
+inline QVariant DMetadata::fromIptcOrXmpList(const char *iptcTagName, const char *xmpTagName)
+{
+    QStringList iptcValues;
+
+    if (iptcTagName)
+        iptcValues = getIptcTagsStringList(iptcTagName);
+    if (!iptcValues.isEmpty())
+        return iptcValues;
+
+    if (xmpTagName)
+    {
+        // TODO
+    }
+
+    return QVariant();
+}
+
+inline QVariant DMetadata::fromIptcOrXmpLangAlt(const char *iptcTagName, const char *xmpTagName)
+{
+    QString iptcValue;
+
+    if (iptcTagName)
+        iptcValue = getIptcTagString(iptcTagName);
+    if (!iptcValue.isNull())
+    {
+        QMap<QString, QVariant> map;
+        map["x-default"] = iptcValue;
+        return map;
+    }
+
+    if (xmpTagName)
+    {
+        // TODO
+    }
+
+    return QVariant();
+}
+
+QVariant DMetadata::getMetadataField(MetadataInfo::Field field)
+{
+    switch (field)
+    {
+        case MetadataInfo::Rating:
+            return getImageRating();
+        case MetadataInfo::CreationDate:
+            return getImageDateTime();
+        case MetadataInfo::DigitizationDate:
+            return getDigitizationDateTime(true);
+        case MetadataInfo::Orientation:
+            return getImageOrientation();
+
+        case MetadataInfo::Make:
+            return fromExifOrXmp("Exif.Image.Make", "tiff.Make");
+        case MetadataInfo::Model:
+            return fromExifOrXmp("Exif.Image.Model", "tiff.Model");
+        case MetadataInfo::Aperture:
+        {
+            QVariant var = fromExifOrXmp("Exif.Photo.FNumber", "exif.FNumber");
+            if (var.isNull())
+            {
+                var = fromExifOrXmp("Exif.Photo.ApertureValue", "exif.ApertureValue");
+                if (!var.isNull())
+                    var = apexApertureToFNumber(var.toDouble());
+            }
+            return var;
+        }
+        case MetadataInfo::FocalLength:
+            return fromExifOrXmp("Exif.Photo.FocalLength", "exif.FocalLength");
+        case MetadataInfo::FocalLengthIn35mm:
+            return fromExifOrXmp("Exif.Photo.FocalLengthIn35mmFilm", "exif.FocalLengthIn35mmFilm");
+        case MetadataInfo::ExposureTime:
+        {
+            QVariant var = fromExifOrXmp("Exif.Photo.ExposureTime", "exif.ExposureTime");
+            if (var.isNull())
+            {
+                var = fromExifOrXmp("Exif.Photo.ShutterSpeedValue", "exif.ShutterSpeedValue");
+                if (!var.isNull())
+                    var = apexShutterSpeedToExposureTime(var.toDouble());
+            }
+            return var;
+        }
+        case MetadataInfo::ExposureProgram:
+            return fromExifOrXmp("Exif.Photo.ExposureProgram", "exif.ExposureProgram");
+        case MetadataInfo::ExposureMode:
+            return fromExifOrXmp("Exif.Photo.ExposureMode", "exif.ExposureMode");
+        case MetadataInfo::Sensitivity:
+        {
+            QVariant var = fromExifOrXmp("Exif.Photo.ISOSpeedRatings", "exif.ISOSpeedRatings");
+            //if (var.isNull())
+                // TODO: has this ISO format??? We must convert to the format of ISOSpeedRatings!
+              //  var = fromExifOrXmp("Exif.Photo.ExposureIndex", "exif.ExposureIndex");
+            return var;
+        }
+        case MetadataInfo::FlashMode:
+            return fromExifOrXmp("Exif.Photo.Flash", "exif.Flash");
+        case MetadataInfo::WhiteBalance:
+            return fromExifOrXmp("Exif.Photo.WhiteBalance", "exif.WhiteBalance");
+        case MetadataInfo::MeteringMode:
+            return fromExifOrXmp("Exif.Photo.MeteringMode", "exif.MeteringMode");
+        case MetadataInfo::SubjectDistance:
+            return fromExifOrXmp("Exif.Photo.SubjectDistance", "exif.SubjectDistance");
+        case MetadataInfo::SubjectDistanceCategory:
+            return fromExifOrXmp("Exif.Photo.SubjectDistanceRange", "exif.SubjectDistanceRange");
+        case MetadataInfo::WhiteBalanceColorTemperature:
+            //TODO: ??
+            return QVariant();
+
+        case MetadataInfo::Longitude:
+            return getGPSLongitudeString();
+        case MetadataInfo::LongitudeNumber:
+        {
+            double longitude;
+            if (getGPSLongitudeNumber(&longitude))
+                return longitude;
+            else
+                return QVariant();
+        }
+        case MetadataInfo::Latitude:
+            return getGPSLatitudeString();
+        case MetadataInfo::LatitudeNumber:
+        {
+            double latitude;
+            if (getGPSLatitudeNumber(&latitude))
+                return latitude;
+            else
+                return QVariant();
+        }
+        case MetadataInfo::Altitude:
+        {
+            double altitude;
+            if (getGPSAltitude(&altitude))
+                return altitude;
+            else
+                return QVariant();
+        }
+        case MetadataInfo::GeographicOrientation:
+        case MetadataInfo::CameraTilt:
+        case MetadataInfo::CameraRoll:
+        case MetadataInfo::PositionDescription:
+            // TODO or unsupported?
+            return QVariant();
+
+        //TODO: Check all IPTC tag names
+        case MetadataInfo::IPTCCoreCopyrightNotice:
+            return fromIptcOrXmpLangAlt("Iptc.Application2.Copyright", "dc.rights");
+        case MetadataInfo::IPTCCoreCreator:
+            return fromIptcOrXmpList("Iptc.Application2.Creator", "dc.creator");
+        case MetadataInfo::IPTCCoreProvider:
+            return fromIptcOrXmp("Iptc.Application2.Credit", "photoshop.Credit");
+        case MetadataInfo::IPTCCoreRightUsageTerms:
+            return fromIptcOrXmpLangAlt(0, "xmpRights.UsageTerms");
+        case MetadataInfo::IPTCCoreSource:
+            return fromIptcOrXmp("Iptc.Application2.Source", "photoshop.Source");
+
+        case MetadataInfo::IPTCCoreCreatorJobTitle:
+            return fromIptcOrXmp("Iptc.Application2.BylineTitle", "photoshop.AuthorsPosition");
+        case MetadataInfo::IPTCCoreInstructions:
+            return fromIptcOrXmp("Iptc.Application2.SpecialInstructions", "photoshop.Instructions");
+
+        case MetadataInfo::IPTCCoreCountryCode:
+            return fromIptcOrXmp("Iptc.Application2.CountryCode", "Iptc4xmpCore.CountryCode");
+        case MetadataInfo::IPTCCoreCountry:
+            return fromIptcOrXmp("Iptc.Application2.Country", "photoshop.Country");
+        case MetadataInfo::IPTCCoreCity:
+            return fromIptcOrXmp("Iptc.Application2.City", "photoshop.City");
+        case MetadataInfo::IPTCCoreLocation:
+            return fromIptcOrXmp("Iptc.Application2.Sublocation", "Iptc4xmpCore.Location");
+        case MetadataInfo::IPTCCoreProvinceState:
+            return fromIptcOrXmp("Iptc.Application2.State", "photoshop.State");
+        case MetadataInfo::IPTCCoreIntellectualGenre:
+            return fromIptcOrXmp("Iptc.Application2.ObjectAttributesReference", "Iptc4xmpCore.IntellectualGenre");
+        case MetadataInfo::IPTCCoreJobID:
+            return fromIptcOrXmp("Iptc.Application2.OriginalTransmissionReference", "photoshop.TransmissionReference");
+        case MetadataInfo::IPTCCoreScene:
+            return fromIptcOrXmpList(0, "Iptc4xmpCore.Scene");
+        case MetadataInfo::IPTCCoreSubjectCode:
+            return fromIptcOrXmpList("Iptc.Application2.SubjectReference", "Iptc4xmpCore.SubjectCode");
+
+        case MetadataInfo::IPTCCoreDescription:
+            return fromIptcOrXmpLangAlt("Iptc.Application2.Caption", "dc.description");
+        case MetadataInfo::IPTCCoreDescriptionWriter:
+            return fromIptcOrXmp("Iptc.Application2.Writer", "photoshop.CaptionWriter");
+        case MetadataInfo::IPTCCoreHeadline:
+            return fromIptcOrXmp("Iptc.Application2.Headline", "photoshop.Headline");
+        case MetadataInfo::IPTCCoreTitle:
+            return fromIptcOrXmpLangAlt("Iptc.Application2.ObjectName", "photoshop.dc.title");
+        default:
+            return QVariant();
+    }
+}
+
+QVariantList DMetadata::getMetadataFields(const MetadataFields &fields)
+{
+    QVariantList list;
+    foreach (MetadataInfo::Field field, fields)
+    {
+        list << getMetadataField(field);
+    }
+    return list;
+}
+
+QString DMetadata::valueToString (const QVariant &value, MetadataInfo::Field field)
+    switch (field)
+    {
+        case MetadataInfo::Rating:
+            return value.toString();
+        case MetadataInfo::CreationDate:
+        case MetadataInfo::DigitizationDate:
+            return value.toDateTime().toString(Qt::LocaleDate);
+        case MetadataInfo::Orientation:
+            switch (value.toInt())
+            {
+                // Example why the English text differs from the enum names: ORIENTATION_ROT_90.
+                // Rotation by 90° is right (clockwise) rotation.
+                // But: The enum names describe what needs to be done to get the image right again.
+                // And an image that needs to be rotated 90° is currently rotated 270° = left.
+
+                case ORIENTATION_UNSPECIFIED:
+                    return i18n("Unspecified");
+                case ORIENTATION_NORMAL:
+                    return i18nc("Rotation of an unrotated image", "Normal");
+                case ORIENTATION_HFLIP:
+                    return i18n("Flipped Horizontally");
+                case ORIENTATION_ROT_180:
+                    return i18n("Rotated by 180 Degrees");
+                case ORIENTATION_VFLIP:
+                    return i18n("Flipped Vertically");
+                case ORIENTATION_ROT_90_HFLIP:
+                    return i18n("Flipped Horizontally and Rotated Left");
+                case ORIENTATION_ROT_90:
+                    return i18n("Rotated Left");
+                case ORIENTATION_ROT_90_VFLIP:
+                    return i18n("Flipped Vertically and Rotated Left");
+                case ORIENTATION_ROT_270:
+                    return i18n("Rotated Right");
+            }
+
+        case MetadataInfo::Make:
+            return createExifUserStringFromValue("Exif.Image.Make", value);
+        case MetadataInfo::Model:
+            return createExifUserStringFromValue("Exif.Image.Model", value);
+        case MetadataInfo::Aperture:
+            return createExifUserStringFromValue("Exif.Photo.FNumber", value);
+        case MetadataInfo::FocalLength:
+            return createExifUserStringFromValue("Exif.Photo.FocalLength", value);
+        case MetadataInfo::FocalLengthIn35mm:
+            return createExifUserStringFromValue("Exif.Photo.FocalLengthIn35mmFilm", value);
+        case MetadataInfo::ExposureTime:
+            return createExifUserStringFromValue("Exif.Photo.ExposureTime", value);
+        case MetadataInfo::ExposureProgram:
+            return createExifUserStringFromValue("Exif.Photo.ExposureProgram", value);
+        case MetadataInfo::ExposureMode:
+            return createExifUserStringFromValue("Exif.Photo.ExposureMode", value);
+        case MetadataInfo::Sensitivity:
+            return createExifUserStringFromValue("Exif.Photo.ISOSpeedRatings", value);
+        case MetadataInfo::FlashMode:
+            return createExifUserStringFromValue("Exif.Photo.Flash", value);
+        case MetadataInfo::WhiteBalance:
+            return createExifUserStringFromValue("Exif.Photo.WhiteBalance", value);
+        case MetadataInfo::MeteringMode:
+            return createExifUserStringFromValue("Exif.Photo.MeteringMode", value);
+        case MetadataInfo::SubjectDistance:
+            return createExifUserStringFromValue("Exif.Photo.SubjectDistance", value);
+        case MetadataInfo::SubjectDistanceCategory:
+            return createExifUserStringFromValue("Exif.Photo.SubjectDistanceRange", value);
+        case MetadataInfo::WhiteBalanceColorTemperature:
+            return i18nc("Temperature in Kelvin", "%1 K", value.toInt());
+
+        case MetadataInfo::Longitude:
+        {
+            int degrees, minutes;
+            double seconds;
+            char directionRef;
+            if (!convertToUserPresentableNumbers(value.toString(), &degrees, &minutes, &seconds, &directionRef))
+                return QString();
+            QString direction = (directionRef == 'W') ?
+                                i18nc("For use in longitude coordinate", "West") : i18nc("For use in longitude coordinate'' East", "East");
+            return QString("%1°%2'%3'' %4").arg(degrees).arg(minutes).arg(seconds).arg(direction);
+        }
+        case MetadataInfo::LongitudeNumber:
+        {
+            int degrees, minutes;
+            double seconds;
+            char directionRef;
+            convertToUserPresentableNumbers(false, value.toDouble(), &degrees, &minutes, &seconds, &directionRef);
+            QString direction = (directionRef == 'W') ?
+                                i18nc("For use in longitude coordinate", "West") : i18nc("For use in longitude coordinate'' East", "East");
+            return QString("%1°%2'%3'' %4").arg(degrees).arg(minutes).arg(seconds).arg(direction);
+        }
+        case MetadataInfo::Latitude:
+        {
+            int degrees, minutes;
+            double seconds;
+            char directionRef;
+            if (!convertToUserPresentableNumbers(value.toString(), &degrees, &minutes, &seconds, &directionRef))
+                return QString();
+            QString direction = (directionRef == 'N') ?
+                                i18nc("For use in latitude coordinate", "North") : i18nc("For use in latitude coordinate'' South", "South");
+            return QString("%1°%2'%3'' %4").arg(degrees).arg(minutes).arg(seconds).arg(direction);
+        }
+        case MetadataInfo::LatitudeNumber:
+        {
+            int degrees, minutes;
+            double seconds;
+            char directionRef;
+            convertToUserPresentableNumbers(false, value.toDouble(), &degrees, &minutes, &seconds, &directionRef);
+            QString direction = (directionRef == 'N') ?
+                                i18nc("For use in latitude coordinate", "North") : i18nc("For use in latitude coordinate'' East", "North");
+            return QString("%1°%2'%3'' %4").arg(degrees).arg(minutes).arg(seconds).arg(direction);
+        }
+        case MetadataInfo::Altitude:
+        {
+            QString meters = QString("%L1").arg(value.toDouble(), 0, 'f', 2);
+            return i18nc("Height in meters", "%1m", meters);
+        }
+
+        case MetadataInfo::GeographicOrientation:
+        case MetadataInfo::CameraTilt:
+        case MetadataInfo::CameraRoll:
+            //TODO
+            return value.toString();
+        case MetadataInfo::PositionDescription:
+            return value.toString();
+
+        // Lang Alt
+        case MetadataInfo::IPTCCoreCopyrightNotice:
+        case MetadataInfo::IPTCCoreRightUsageTerms:
+        case MetadataInfo::IPTCCoreDescription:
+        case MetadataInfo::IPTCCoreTitle:
+        {
+            QMap<QString, QVariant> map = value.toMap();
+            // the most common cases
+            if (map.isEmpty())
+                return QString();
+            else if (map.size() == 1)
+                return map.begin().value().toString();
+            // Try "en-us"
+            KLocale *locale = KGlobal::locale();
+            QString spec = locale->language().toLower() + '-' + locale->country().toLower();
+            if (map.contains(spec))
+                return map[spec].toString();
+
+            // Try "en-"
+            QStringList keys = map.keys();
+            QRegExp exp(locale->language().toLower() + '-');
+            QStringList matches = keys.filter(exp);
+            if (!matches.isEmpty())
+                return map[matches.first()].toString();
+
+            // return default
+            if (map.contains("x-default"))
+                return map["x-default"].toString();
+
+            // return first entry
+            return map.begin().value().toString();
+        }
+
+        // List
+        case MetadataInfo::IPTCCoreCreator:
+        case MetadataInfo::IPTCCoreScene:
+        case MetadataInfo::IPTCCoreSubjectCode:
+            return value.toStringList().join(" ");
+
+        // Text
+        case MetadataInfo::IPTCCoreProvider:
+        case MetadataInfo::IPTCCoreSource:
+        case MetadataInfo::IPTCCoreCreatorJobTitle:
+        case MetadataInfo::IPTCCoreInstructions:
+        case MetadataInfo::IPTCCoreCountryCode:
+        case MetadataInfo::IPTCCoreCountry:
+        case MetadataInfo::IPTCCoreCity:
+        case MetadataInfo::IPTCCoreLocation:
+        case MetadataInfo::IPTCCoreProvinceState:
+        case MetadataInfo::IPTCCoreIntellectualGenre:
+        case MetadataInfo::IPTCCoreJobID:
+        case MetadataInfo::IPTCCoreDescriptionWriter:
+        case MetadataInfo::IPTCCoreHeadline:
+            return value.toString();
+
+        default:
+            return QString();
+    }
+}
+
+QStringList DMetadata::valuesToString(const QVariantList &values, const MetadataFields &fields)
+{
+    int size = values.size();
+    Q_ASSERT(size == values.size());
+
+    QStringList list;
+    for (int i=0; i<size; i++)
+    {
+        list << valueToString(values[i], fields[i]);
+    }
+    return list;
+}
+
+QMap<int, QString> DMetadata::possibleValuesForEnumField(MetadataInfo::Field field)
+{
+    QMap<int, QString> map;
+    int min, max;
+    switch (field)
+    {
+        case MetadataInfo::Orientation:                      /// Int, enum from libkexiv2
+            min = ORIENTATION_UNSPECIFIED;
+            max = ORIENTATION_ROT_270;
+            break;
+        case MetadataInfo::ExposureProgram:                  /// Int, enum from Exif
+            min = 0;
+            max = 8;
+            break;
+        case MetadataInfo::ExposureMode:                     /// Int, enum from Exif
+            min = 0;
+            max = 2;
+            break;
+        case MetadataInfo::WhiteBalance:                     /// Int, enum from Exif
+            min = 0;
+            max = 1;
+            break;
+        case MetadataInfo::MeteringMode:                     /// Int, enum from Exif
+            min = 0;
+            max = 6;
+            map[255] = valueToString(255, field);
+            break;
+        case MetadataInfo::SubjectDistanceCategory:          /// int, enum from Exif
+            min = 0;
+            max = 3;
+            break;
+        case MetadataInfo::FlashMode:                        /// Int, bit mask from Exif
+            // This one is a bit special.
+            // We return a bit mask for binary AND searching.
+            map[0x1] = i18n("Flash has been fired");
+            map[0x40] = i18n("Flash with red-eye reduction mode");
+            //more: TODO?
+            return map;
+        default:
+            DWarning() << "Unsupported field " << field << " in DMetadata::possibleValuesForEnumField" << endl;
+            return map;
+    }
+
+    for (int i = min; i < max; i++)
+    {
+        map[i] = valueToString(i, field);
+    }
+    return map;
+}
+
+double DMetadata::apexApertureToFNumber(double aperture)
+{
+    // convert from APEX. See Exif spec, Annex C.
+    if (aperture == 0.0)
+        return 1;
+    else if (aperture == 1.0)
+        return 1.4;
+    else if (aperture == 2.0)
+        return 2;
+    else if (aperture == 3.0)
+        return 2.8;
+    else if (aperture == 4.0)
+        return 4;
+    else if (aperture == 5.0)
+        return 5.6;
+    else if (aperture == 6.0)
+        return 8;
+    else if (aperture == 7.0)
+        return 11;
+    else if (aperture == 8.0)
+        return 16;
+    else if (aperture == 9.0)
+        return 22;
+    else if (aperture == 10.0)
+        return 32;
+    return exp2(aperture / 2.0);
+}
+
+double DMetadata::apexShutterSpeedToExposureTime(double shutterSpeed)
+{
+    // convert from APEX. See Exif spec, Annex C.
+    if (shutterSpeed == -5.0)
+        return 30;
+    else if (shutterSpeed == -4.0)
+        return 15;
+    else if (shutterSpeed == -3.0)
+        return 8;
+    else if (shutterSpeed == -2.0)
+        return 4;
+    else if (shutterSpeed == -1.0)
+        return 2;
+    else if (shutterSpeed == 0.0)
+        return 1;
+    else if (shutterSpeed == 1.0)
+        return 0.5;
+    else if (shutterSpeed == 2.0)
+        return 0.25;
+    else if (shutterSpeed == 3.0)
+        return 0.125;
+    else if (shutterSpeed == 4.0)
+        return 1.0 / 15.0;
+    else if (shutterSpeed == 5.0)
+        return 1.0 / 30.0;
+    else if (shutterSpeed == 6.0)
+        return 1.0 / 60.0;
+    else if (shutterSpeed == 7.0)
+        return 0.008; // 1/125
+    else if (shutterSpeed == 8.0)
+        return 0.004; // 1/250
+    else if (shutterSpeed == 9.0)
+        return 0.002; // 1/500
+    else if (shutterSpeed == 10.0)
+        return 0.001; // 1/1000
+    else if (shutterSpeed == 11.0)
+        return 0.0005; // 1/2000
+    // additions by me
+    else if (shutterSpeed == 12.0)
+        return 0.00025; // 1/4000
+    else if (shutterSpeed == 13.0)
+        return 0.000125; // 1/8000
+
+    return exp2( - shutterSpeed);
 }
 
 /**
