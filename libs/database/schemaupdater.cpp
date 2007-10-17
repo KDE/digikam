@@ -332,21 +332,6 @@ bool SchemaUpdater::createTablesV5()
     }
 
     if (!m_access->backend()->execSql(
-                    QString("CREATE TABLE Images\n"
-                            " (id INTEGER PRIMARY KEY,\n"
-                            "  albumRoot INTEGER NOT NULL FOREIGN KEY,\n"
-                            "  album INTEGER NOT NULL FOREIGN KEY,\n"
-                            "  name TEXT NOT NULL,\n"
-                            "  status INTEGER,\n"
-                            "  modificationDate DATETIME,\n"
-                            "  fileSize INTEGER,\n"
-                            "  uniqueHash TEXT,\n"
-                            "  UNIQUE (albumRoot, album, name));") ))
-    {
-        return false;
-    }
-
-    if (!m_access->backend()->execSql(
                     QString("CREATE TABLE Tags\n"
                             " (id INTEGER PRIMARY KEY,\n"
                             "  pid INTEGER,\n"
@@ -368,56 +353,108 @@ bool SchemaUpdater::createTablesV5()
     }
 
     if (!m_access->backend()->execSql(
-                    QString("CREATE TABLE ImageData\n"
-                            " (imageid INTEGER UNIQUE FOREIGN KEY,\n"
-                            "  caption TEXT,\n"
-                            "  rating INTEGER,\n"
-                            "  creationDate DATETIME,\n"
-                            "  digitizationDate DATETIME,\n"
-                            "  sizeX INTEGER,\n"
-                            "  sizeY INTEGER,\n"
-                            "  colorDepth INTEGER,\n"  // 8 or 16
-                            "  colorModel TEXT;") ))
+                    QString("CREATE TABLE Images\n"
+                            " (id INTEGER PRIMARY KEY,\n"
+                            "  albumRoot INTEGER NOT NULL FOREIGN KEY,\n"
+                            "  album INTEGER,\n" // no constraints, for temporary orphans
+                            "  name TEXT NOT NULL,\n"
+                            "  status INTEGER,\n"
+                            "  modificationDate DATETIME,\n"
+                            "  fileSize INTEGER,\n"
+                            "  uniqueHash TEXT,\n"
+                            "  UNIQUE (albumRoot, album, name));") ))
     {
         return false;
     }
 
     if (!m_access->backend()->execSql(
-                    QString("CREATE TABLE ExifMetadata\n"
+                    QString("CREATE TABLE ImageHaarMatrix\n"
                             " (imageid INTEGER UNIQUE FOREIGN KEY,\n"
-                            "  make TEXT,\n"             // "Exif.Image.Make"
-                            "  model TEXT,\n"            // "Exif.Image.Model"
-                            "  aperture REAL,\n"         // "Exif.Photo.FNumber", "Exif.Photo.ApertureValue"
-                            "  focalLength REAL,\n"      // "Exif.Photo.FocalLength"
-                            //"  focalLength35 REAL,\n"  // "Exif.Photo.FocalLengthIn35mmFilm"
-                            "  exposureTime REAL,\n"     // "Exif.Photo.ExposureTime"
-                            "  exposureMode REAL,\n"     // "Exif.Photo.ExposureMode"
-                            "  exposureProgram REAL,\n"  // "Exif.Photo.ExposureProgram"
-                            "  sensitivity INTEGER,\n"   // "Exif.Photo.ISOSpeedRatings" "Exif.Photo.ExposureIndex"
-                            "  flash INTEGER,\n"         // "Exif.Photo.Flash"
-                            "  whiteBalance INTEGER,\n"  // "Exif.Photo.WhiteBalance"
-                            "  orientation INTEGER);"    //  various, libkexiv2 enum value
+                            "  matrix BLOB);") ))
+    {
+        return false;
+    }
+
+    if (!m_access->backend()->execSql(
+                    QString("CREATE TABLE ImageInformation\n"
+                            " (imageid INTEGER UNIQUE FOREIGN KEY,\n"
+                            "  rating INTEGER,\n"
+                            "  creationDate DATETIME,\n"
+                            "  digitizationDate DATETIME,\n"
+                            "  sizeX INTEGER,\n"
+                            "  sizeY INTEGER,\n"
+                            "  colorDepth INTEGER,\n"
+                            "  colorModel INTEGER,\n"
+                            "  orientation INTEGER);") ))
+    {
+        return false;
+    }
+
+    if (!m_access->backend()->execSql(
+                    QString("CREATE TABLE ImageMetadata\n"
+                            " (imageid INTEGER UNIQUE FOREIGN KEY,\n"
+                            "  make TEXT,\n"
+                            "  model TEXT,\n"
+                            "  aperture REAL,\n"
+                            "  focalLength REAL,\n"
+                            "  focalLength35 REAL,\n"
+                            "  exposureTime REAL,\n"
+                            "  exposureProgram INTEGER,\n"
+                            "  exposureMode INTEGER,\n"
+                            "  sensitivity INTEGER,\n"
+                            "  flash INTEGER,\n"
+                            "  whiteBalance INTEGER,\n"
+                            "  whiteBalanceColorTemperature INTEGER,\n"
+                            "  meteringMode INTEGER,\n"
+                            "  subjectDistance REAL,\n"
+                            "  subjectDistanceCategory INTEGER);"
                            ) ))
     {
         return false;
     }
 
-     if (!m_access->backend()->execSql(
-                    QString("CREATE TABLE GPS\n"
+    if (!m_access->backend()->execSql(
+                    QString("CREATE TABLE ImagePositions\n"
                             " (imageid INTEGER UNIQUE FOREIGN KEY,\n"
-                            "  latitudeDegrees REAL,\n"
-                            "  latitudeMinutes REAL,\n"
-                            "  latitudeSeconds REAL,\n"
-                            "  longitudeDegrees REAL,\n"
-                            "  longitudeMinutes REAL,\n"
-                            "  longitudeSeconds REAL,\n"
-                            "  altitude REAL);\n"
+                            "  latitude TEXT,\n"
+                            "  latitudeNumber REAL,\n"
+                            "  longitude TEXT,\n"
+                            "  longitudeNumber REAL,\n"
+                            "  altitude REAL,\n"
+                            "  orientation REAL,\n"
+                            "  tilt REAL,\n"
+                            "  roll REAL,\n"
+                            "  description TEXT);"
                            ) ))
     {
         return false;
     }
 
-   if (!m_access->backend()->execSql(
+    if (!m_access->backend()->execSql(
+                    QString("CREATE TABLE ImageComments\n"
+                            " (imageid INTEGER UNIQUE FOREIGN KEY,\n"
+                            "  source INTEGER,\n"
+                            "  author TEXT,\n"
+                            "  language TEXT,\n"
+                            "  date DATETIME,\n"
+                            "  comment TEXT);"
+                           ) ))
+    {
+        return false;
+    }
+
+    if (!m_access->backend()->execSql(
+                    QString("CREATE TABLE ImageCopyright\n"
+                            " (imageid INTEGER UNIQUE FOREIGN KEY,\n"
+                            "  property TEXT,\n"
+                            "  value TEXT,\n"
+                            "  extraValue TEXT);"
+                           ) ))
+    {
+        return false;
+    }
+
+    if (!m_access->backend()->execSql(
                     QString("CREATE TABLE ImageTags\n"
                             " (imageid INTEGER NOT NULL,\n"
                             "  tagid INTEGER NOT NULL,\n"
@@ -440,7 +477,19 @@ bool SchemaUpdater::createTablesV5()
                    QString( "CREATE TABLE Searches  \n"
                             " (id INTEGER PRIMARY KEY, \n"
                             "  name TEXT NOT NULL UNIQUE, \n"
-                            "  url  TEXT NOT NULL);" ) ) )
+                            "  url  TEXT NOT NULL);" ) ))
+    {
+        return false;
+    }
+
+    if (!m_access->backend()->execSql(
+                    QString("CREATE TABLE DownloadHistory\n"
+                            " (id  INTEGER PRIMARY KEY,\n"
+                            "  filepath TEXT,\n"
+                            "  filename TEXT,\n"
+                            "  filesize INTEGER,\n"
+                            "  filedate DATETIME);"
+                           ) ))
     {
         return false;
     }
@@ -482,6 +531,16 @@ bool SchemaUpdater::createTablesV5()
             "CREATE TRIGGER delete_image DELETE ON Images\n"
             "BEGIN\n"
             "  DELETE FROM ImageTags\n"
+            "    WHERE imageid=OLD.id;\n"
+            "  DELETE From ImageInformation\n "
+            "    WHERE imageid=OLD.id;\n"
+            "  DELETE From ImageMetadata\n "
+            "    WHERE imageid=OLD.id;\n"
+            "  DELETE From ImagePositions\n "
+            "    WHERE imageid=OLD.id;\n"
+            "  DELETE From ImageComments\n "
+            "    WHERE imageid=OLD.id;\n"
+            "  DELETE From ImageCopyright\n "
             "    WHERE imageid=OLD.id;\n"
             "  DELETE From ImageProperties\n "
             "    WHERE imageid=OLD.id;\n"
