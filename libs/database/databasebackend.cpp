@@ -91,6 +91,7 @@ public:
         }
         threadDatabases.remove(thread);
         databasesValid[thread] = 0;
+        transactionCount.remove(thread);
         QSqlDatabase::removeDatabase(connectionName(thread));
     }
 
@@ -100,6 +101,7 @@ public:
         firstDatabase.close();
         threadDatabases.remove(thread);
         databasesValid[thread] = 0;
+        transactionCount.remove(thread);
         firstDatabase = QSqlDatabase();
         QSqlDatabase::removeDatabase(connectionName(thread));
     }
@@ -124,8 +126,21 @@ public:
 
         threadDatabases[thread] = db;
         databasesValid[thread] = 1;
+        transactionCount[thread] = 0;
 
         return success;
+    }
+
+    bool incrementTransactionCount()
+    {
+        QThread *thread = QThread::currentThread();
+        return !transactionCount[thread]++;
+    }
+
+    bool decrementTransactionCount()
+    {
+        QThread *thread = QThread::currentThread();
+        return !--transactionCount[thread];
     }
 
     QSqlDatabase firstDatabase;
@@ -133,6 +148,8 @@ public:
     QHash<QThread*, QSqlDatabase> threadDatabases;
     // this is not only db.isValid(), but also "parameters changed, need to reopen"
     QHash<QThread*, int> databasesValid;
+    // for recursive transactions
+    QHash<QThread*, int> transactionCount;
 
     DatabaseParameters parameters;
 
@@ -197,8 +214,11 @@ bool DatabaseBackend::initSchema(SchemaUpdater *updater)
     if (d->status == Unavailable)
         return false;
     if (updater->update())
+    {
         d->status = OpenSchemaChecked;
-    return true;
+        return true;
+    }
+    return false;
 }
 
 void DatabaseBackend::close()
@@ -326,7 +346,7 @@ QSqlQuery DatabaseBackend::execQuery(const QString& sql, const QVariant &boundVa
 {
     QSqlQuery query = prepareQuery(sql);
     query.bindValue(0, boundValue1);
-    query.exec();
+    exec(query);
     return query;
 }
 
@@ -336,7 +356,7 @@ QSqlQuery DatabaseBackend::execQuery(const QString& sql,
     QSqlQuery query = prepareQuery(sql);
     query.bindValue(0, boundValue1);
     query.bindValue(1, boundValue2);
-    query.exec();
+    exec(query);
     return query;
 }
 
@@ -347,7 +367,7 @@ QSqlQuery DatabaseBackend::execQuery(const QString& sql,
     query.bindValue(0, boundValue1);
     query.bindValue(1, boundValue2);
     query.bindValue(2, boundValue3);
-    query.exec();
+    exec(query);
     return query;
 }
 
@@ -360,7 +380,7 @@ QSqlQuery DatabaseBackend::execQuery(const QString& sql,
     query.bindValue(1, boundValue2);
     query.bindValue(2, boundValue3);
     query.bindValue(3, boundValue4);
-    query.exec();
+    exec(query);
     return query;
 }
 
@@ -369,17 +389,47 @@ QSqlQuery DatabaseBackend::execQuery(const QString& sql, const QList<QVariant> &
     QSqlQuery query = prepareQuery(sql);
     for (int i=0; i<boundValues.size(); i++)
         query.bindValue(i, boundValues[i]);
-    query.exec();
+    exec(query);
     return query;
 }
 
 QSqlQuery DatabaseBackend::execQuery(const QString& sql)
 {
-    QSqlDatabase db = d->databaseForThread();
-    QSqlQuery query(db);
-    query.exec(sql);
+    QSqlQuery query = prepareQuery(sql);
+    exec(query);
     return query;
 }
+
+bool DatabaseBackend::exec(QSqlQuery &query)
+{
+    if (!query.exec())
+    {
+        // Use DatabaseAccess::lastError?
+        DDebug() << "Failure executing query: " << endl;
+        DDebug() << query.executedQuery() << endl;
+        DDebug() << query.lastError().text() << endl;
+        return false;
+    }
+    /*else
+    {
+        DDebug() << "Successfully executed: " << endl << query.executedQuery() << endl;
+    }*/
+    return true;
+}
+
+bool DatabaseBackend::execBatch(QSqlQuery &query)
+{
+    if (!query.execBatch())
+    {
+        // Use DatabaseAccess::lastError?
+        DDebug() << "Failure executing batch query: " << endl;
+        DDebug() << query.executedQuery() << endl;
+        DDebug() << query.lastError().text() << endl;
+        return false;
+    }
+    return true;
+}
+
 
 QSqlQuery DatabaseBackend::prepareQuery(const QString &sql)
 {
@@ -392,16 +442,19 @@ QSqlQuery DatabaseBackend::prepareQuery(const QString &sql)
 
 void DatabaseBackend::beginTransaction()
 {
-    d->databaseForThread().transaction();
+    if (d->incrementTransactionCount())
+        d->databaseForThread().transaction();
 }
 
 void DatabaseBackend::commitTransaction()
 {
-    d->databaseForThread().commit();
+    if (d->decrementTransactionCount())
+        d->databaseForThread().commit();
 }
 
 void DatabaseBackend::rollbackTransaction()
 {
+    // we leave that out for transaction counting. It's an exceptional condition.
     d->databaseForThread().rollback();
 }
 

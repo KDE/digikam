@@ -130,7 +130,7 @@ public:
                  const QVariant &boundValue1, const QVariant &boundValue2,
                  const QVariant &boundValue3, const QVariant &boundValue4,
                  QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
-    bool execSql(const QString& sql, const QList<QVariant> &boundValues, QList<QVariant>* values, QVariant *lastInsertId = 0);
+    bool execSql(const QString& sql, const QList<QVariant> &boundValues, QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
 
     /**
      * Executes the statement and returns the query object.
@@ -146,6 +146,12 @@ public:
                         const QVariant &boundValue1, const QVariant &boundValue2,
                         const QVariant &boundValue3, const QVariant &boundValue4);
     QSqlQuery execQuery(const QString& sql, const QList<QVariant> &boundValues);
+
+    /**
+     * Calls exec/execBatch on the query, and handles debug output if something went wrong
+     */
+    bool exec(QSqlQuery &query);
+    bool execBatch(QSqlQuery &query);
 
     /**
      * Creates a query object prepared with the statement, waiting for bound values
