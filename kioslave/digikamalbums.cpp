@@ -96,6 +96,7 @@ void kio_digikamalbums::special(const QByteArray& data)
 
     if (scan)
     {
+        kDebug() << "Scanning with partial scan" << dbUrl.albumRootPath() << dbUrl.album() << endl;
         Digikam::CollectionScanner scanner;
         scanner.partialScan(dbUrl.albumRootPath(), dbUrl.album());
         finished();
@@ -148,7 +149,7 @@ void kio_digikamalbums::put(const KUrl& url, int permissions, KIO::JobFlags flag
         return;
     }
 
-    KIO::TransferJob *job = KIO::put(dbUrl.fileUrl(), -1, flags | KIO::HideProgressInfo);
+    KIO::TransferJob *job = KIO::put(dbUrl.fileUrl(), permissions, flags | KIO::HideProgressInfo);
     connectTransferJob(job);
     if (m_eventLoop->exec() != 0)
         return;

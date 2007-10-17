@@ -150,6 +150,8 @@ void ImageScanner::scanImageInformation()
     QVariantList metadataInfos = m_metadata.getMetadataFields(fields);
     QSize size = m_img.size();
 
+    // TODO: creation date need not be null
+
     QVariantList infos;
     infos << metadataInfos
           << size.width()

@@ -548,7 +548,7 @@ bool SchemaUpdater::copyV3toV4(const QString &digikam3DBPath, const QString &cur
     digikam3DBUrl.setPath(digikam3DBPath);
     currentDBUrl.setPath(currentDBPath);
 
-    KIO::Job *job = KIO::file_copy(digikam3DBUrl, currentDBUrl, -1, KIO::Overwrite);
+    KIO::Job *job = KIO::file_copy(digikam3DBUrl, currentDBUrl, -1, KIO::Overwrite | KIO::HideProgressInfo);
     if (!KIO::NetAccess::synchronousRun(job, 0))
     {
         m_access->setLastError(i18n("Failed to copy the old database file (\"%1\")"
