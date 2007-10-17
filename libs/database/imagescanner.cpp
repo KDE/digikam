@@ -32,6 +32,8 @@
 #include "databaseurl.h"
 #include "databaseaccess.h"
 #include "albumdb.h"
+#include "collectionlocation.h"
+#include "collectionmanager.h"
 #include "imagecomments.h"
 #include "imagescanner.h"
 
@@ -56,7 +58,9 @@ ImageScanner::ImageScanner(qlonglong imageid)
         shortInfo  = access.db()->getItemShortInfo(imageid);
         m_scanInfo = access.db()->getItemScanInfo(imageid);
     }
-    m_fileInfo = QFileInfo(DatabaseUrl::fromAlbumAndName(shortInfo.itemName, shortInfo.album, shortInfo.albumRoot).fileUrl().path());
+
+    QString albumRootPath = CollectionManager::instance()->albumRootPath(shortInfo.albumRootId);
+    m_fileInfo = QFileInfo(DatabaseUrl::fromAlbumAndName(shortInfo.itemName, shortInfo.album, albumRootPath).fileUrl().path());
 }
 
 void ImageScanner::setCategory(DatabaseItem::Category category)
@@ -68,7 +72,7 @@ void ImageScanner::setCategory(DatabaseItem::Category category)
 void ImageScanner::fileModified()
 {
     loadFromDisk();
-    scanHardInfos();
+    updateHardInfos();
 }
 
 void ImageScanner::newFile(int albumId)
@@ -78,9 +82,10 @@ void ImageScanner::newFile(int albumId)
     scanFile();
 }
 
-void ImageScanner::rescanToDatabase()
+void ImageScanner::fullScan()
 {
     loadFromDisk();
+    updateImage();
     scanFile();
 }
 
@@ -100,6 +105,17 @@ void ImageScanner::addImage(int albumId)
                                                    m_scanInfo.modificationDate, fileSize, m_scanInfo.uniqueHash);
 }
 
+void ImageScanner::updateImage()
+{
+    // part from addImage()
+    m_scanInfo.modificationDate = m_fileInfo.lastModified();
+    int fileSize = (int)m_fileInfo.size();
+    m_scanInfo.uniqueHash = QString(m_img.getUniqueHash());
+
+    DatabaseAccess().db()->updateItem(m_scanInfo.id, m_scanInfo.category,
+                                      m_scanInfo.modificationDate, fileSize, m_scanInfo.uniqueHash);
+}
+
 void ImageScanner::scanFile()
 {
     if (m_scanInfo.category == DatabaseItem::Image)
@@ -117,33 +133,10 @@ void ImageScanner::scanFile()
     }
 }
 
-void ImageScanner::scanHardInfos()
+void ImageScanner::updateHardInfos()
 {
-    // part from addImage()
-    m_scanInfo.modificationDate = m_fileInfo.lastModified();
-    int fileSize = (int)m_fileInfo.size();
-    m_scanInfo.uniqueHash = QString(m_img.getUniqueHash());
-
-    DatabaseAccess access;
-    access.db()->updateItem(m_scanInfo.id, m_scanInfo.category,
-                            m_scanInfo.modificationDate, fileSize, m_scanInfo.uniqueHash);
-
-    // part from scanImageInformation()
-    QSize size = m_img.size();
-
-    QVariantList infos;
-    infos << size.width()
-          << size.height()
-          << detectFormat()
-          << m_img.originalBitDepth()
-          << m_img.originalColorModel();
-
-    access.db()->changeImageInformation(m_scanInfo.id, infos,
-                                                    DatabaseFields::Width
-                                                    | DatabaseFields::Height
-                                                    | DatabaseFields::Format
-                                                    | DatabaseFields::ColorDepth
-                                                    | DatabaseFields::ColorModel);
+    updateImage();
+    updateImageInformation();
 }
 
 void ImageScanner::scanImageInformation()
@@ -166,6 +159,27 @@ void ImageScanner::scanImageInformation()
 
     DatabaseAccess().db()->addImageInformation(m_scanInfo.id, infos);
 }
+
+void ImageScanner::updateImageInformation()
+{
+    QSize size = m_img.size();
+
+    QVariantList infos;
+    infos << size.width()
+          << size.height()
+          << detectFormat()
+          << m_img.originalBitDepth()
+          << m_img.originalColorModel();
+
+    DatabaseAccess access;
+    access.db()->changeImageInformation(m_scanInfo.id, infos,
+                                                    DatabaseFields::Width
+                                                    | DatabaseFields::Height
+                                                    | DatabaseFields::Format
+                                                    | DatabaseFields::ColorDepth
+                                                    | DatabaseFields::ColorModel);
+}
+
 
 void ImageScanner::scanImageMetadata()
 {

@@ -44,11 +44,12 @@ public:
     /**
      * Construct an ImageScanner object from an existing QFileInfo
      * and ItemScanInfo object.
+     * This constructor shall be used with fileModified() or fullScan().
      */
     ImageScanner(const QFileInfo &info, const ItemScanInfo &info);
     /**
      * Construct an ImageScanner from an existing QFileInfo object.
-     * You can use this constructor if you intend to call newFile().
+     * Use this constructor if you intend to call newFile().
      */
     ImageScanner(const QFileInfo &info);
     /**
@@ -73,12 +74,14 @@ public:
      *   the actual file does not make sense (width/height, bit depth, color model)
      */
     void fileModified();
+
     /**
      * Call this to take an existing image in the database, but re-read
      * all information from the file into the database, possibly overwriting
      * information there.
      */
-    void rescanToDatabase();
+    void fullScan();
+
     /**
      * Call this when you want ImageScanner to add a new file to the database
      * and read all information into the database.
@@ -88,10 +91,12 @@ public:
 protected:
 
     void scanFile();
-    void scanHardInfos();
+    void updateHardInfos();
 
     void addImage(int albumId);
+    void updateImage();
     void scanImageInformation();
+    void updateImageInformation();
     void scanImageMetadata();
     void scanImagePosition();
     void scanImageComments();
