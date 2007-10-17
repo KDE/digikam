@@ -478,7 +478,7 @@ void RenameCustomizer::readSettings()
     QString suffix   = group.readEntry("Rename Postfix", QString());
     int startIndex   = group.readEntry("Rename Start Index", 1);
     int dateTime     = group.readEntry("Date Time Format", (int)RenameCustomizerPriv::IsoDateFormat);
-    QString format   = group.readEntry("Date Time Format String", "yyyyMMddThhmmss");
+    QString format   = group.readEntry("Date Time Format String", QString("yyyyMMddThhmmss"));
 
     if (def)
     {
