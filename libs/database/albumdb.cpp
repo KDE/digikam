@@ -992,7 +992,7 @@ void AlbumDB::addImageInformation(qlonglong imageID, const QVariantList &infos, 
     query += fieldNames.join(", ");
 
     query += " ) VALUES (";
-    addBoundValuePlaceholders(query, infos.size());
+    addBoundValuePlaceholders(query, infos.size() + 1);
     query += ");";
 
     QVariantList boundValues;
@@ -1048,7 +1048,7 @@ void AlbumDB::addImageMetadata(qlonglong imageID, const QVariantList &infos, Dat
     query += fieldNames.join(", ");
 
     query += " ) VALUES (";
-    addBoundValuePlaceholders(query, infos.size());
+    addBoundValuePlaceholders(query, infos.size() + 1);
     query += ");";
 
     QVariantList boundValues;
@@ -1096,7 +1096,7 @@ void AlbumDB::addImagePosition(qlonglong imageID, const QVariantList &infos, Dat
     query += fieldNames.join(", ");
 
     query += " ) VALUES (";
-    addBoundValuePlaceholders(query, infos.size());
+    addBoundValuePlaceholders(query, infos.size() + 1);
     query += ");";
 
     QVariantList boundValues;
@@ -1325,6 +1325,8 @@ void AlbumDB::addBoundValuePlaceholders(QString &query, int count)
 
     for (int i=0; i<count; i++)
         questionMarks += questionMark;
+    // remove last ','
+    questionMarks.chop(1);
 
     query += questionMarks;
 }
@@ -1413,7 +1415,7 @@ void AlbumDB::addTagsToItems(QList<qlonglong> imageIDs, QList<int> tagIDs)
 
     query.addBindValue(images);
     query.addBindValue(tags);
-    query.execBatch();
+    d->db->execBatch(query);
 }
 
 QList<int> AlbumDB::getRecentlyAssignedTags() const
@@ -1460,7 +1462,7 @@ void AlbumDB::removeTagsFromItems(QList<qlonglong> imageIDs, QList<int> tagIDs)
 
     query.addBindValue(images);
     query.addBindValue(tags);
-    query.execBatch();
+    d->db->execBatch(query);
 }
 
 QStringList AlbumDB::getItemNamesInAlbum(int albumID)
@@ -1594,7 +1596,7 @@ void AlbumDB::updateItem(qlonglong imageID, DatabaseItem::Category category,
 {
     QVariantList boundValues;
     boundValues << category << modificationDate << fileSize << uniqueHash << imageID;
-    d->db->execSql( QString("UPDATE Images SET category=?, modificationDate=?, fileSize=?, uniqueHash=? WHERE id=?"),
+    d->db->execSql( QString("UPDATE Images SET category=?, modificationDate=?, fileSize=?, uniqueHash=? WHERE id=?;"),
                     boundValues );
 }
 
@@ -1963,7 +1965,8 @@ QList<ItemScanInfo> AlbumDB::getItemScanInfos(int albumID)
         ++it;
         info.category         = (DatabaseItem::Category)(*it).toInt();
         ++it;
-        info.modificationDate = QDateTime::fromString( (*it).toString(), Qt::ISODate );
+        if (!(*it).isNull())
+            info.modificationDate = QDateTime::fromString( (*it).toString(), Qt::ISODate );
         ++it;
         info.uniqueHash       = (*it).toString();
         ++it;
@@ -2179,7 +2182,7 @@ void AlbumDB::removeItems(QList<qlonglong> itemIDs)
 
     query.addBindValue(status);
     query.addBindValue(imageIds);
-    query.execBatch();
+    d->db->execBatch(query);
 }
 
 void AlbumDB::deleteRemovedItems()
@@ -2202,7 +2205,7 @@ void AlbumDB::deleteRemovedItems(QList<int> albumIds)
 
     query.addBindValue(status);
     query.addBindValue(albumBindIds);
-    query.execBatch();
+    d->db->execBatch(query);
 }
 
 void AlbumDB::renameAlbum(int albumID, const QString& newRelativePath, bool renameSubalbums)

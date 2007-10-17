@@ -58,6 +58,7 @@ public:
 
     AlbumRootLocation(const AlbumRootInfo &info)
     {
+        DDebug() << "Creating new Location " << info.specificPath << " uuid " << info.identifier << endl;
         m_id         = info.id;
         m_type       = (Type)info.type;
         specificPath = info.specificPath;
@@ -252,6 +253,7 @@ void CollectionManager::update()
 
 CollectionLocation *CollectionManager::addLocation(const KUrl &fileUrl)
 {
+    DDebug() << "addLocation " << fileUrl << endl;
     QString path = fileUrl.path(KUrl::RemoveTrailingSlash);
 
     if (locationForPath(path))
@@ -259,18 +261,23 @@ CollectionLocation *CollectionManager::addLocation(const KUrl &fileUrl)
 
     QList<SolidVolumeInfo> volumes = d->listVolumes();
     SolidVolumeInfo volume;
-    bool haveVolume = false;
+    int volumeMatch = 0;
 
-    foreach (volume, volumes)
+    // This is probably not really clean. But Solid does not help us.
+    foreach (SolidVolumeInfo v, volumes)
     {
-        if (path.startsWith(volume.path))
+        if (path.startsWith(v.path))
         {
-            haveVolume = true;
-            break;
+            int length = v.path.length();
+            if (length > volumeMatch)
+            {
+                volumeMatch = v.path.length();
+                volume = v;
+            }
         }
     }
 
-    if (!haveVolume)
+    if (!volumeMatch)
     {
         DError() << "Failed to detect a storage volume for path " << path << " with Solid" << endl;
         return 0;
@@ -285,9 +292,10 @@ CollectionLocation *CollectionManager::addLocation(const KUrl &fileUrl)
     else
         type = CollectionLocation::TypeVolumeHardWired;
 
-    access.db()->addAlbumRoot(type, volume.uuid, specificPath);
+    int id = access.db()->addAlbumRoot(type, volume.uuid, specificPath);
 
     updateLocations();
+    DDebug() << "addAlbumRoot returned id " << id << ", after updateLocations count is " << d->locations.size() << endl;
 
     return locationForPath(path);
 }
@@ -364,6 +372,7 @@ CollectionLocation *CollectionManager::locationForPath(const QString &filePath)
     DatabaseAccess access;
     foreach (AlbumRootLocation *location, d->locations)
     {
+        DDebug() << "Testing location " << location->id() << filePath << location->albumRootPath() << endl;
         if (filePath.startsWith(location->albumRootPath()))
             return location;
     }
@@ -468,6 +477,7 @@ void CollectionManager::updateLocations()
 {
     // get information from Solid
     QList<SolidVolumeInfo> volumes = d->listVolumes();
+    DDebug() << "updateLocations: Have " << volumes.count() << endl;
 
     {
         DatabaseAccess access;
@@ -492,7 +502,7 @@ void CollectionManager::updateLocations()
             delete location;
         d->locations = locs;
 
-        // update status in db with current access state
+        // update status with current access state
         foreach (AlbumRootLocation *location, d->locations)
         {
             QString volumePath;
@@ -504,12 +514,16 @@ void CollectionManager::updateLocations()
                 {
                     available = true;
                     volumePath = volume.path;
+                    // volume.path has a trailing slash (and this is good)
+                    // but specific path has a leading slash, so remove it
+                    volumePath.chop(1);
                 }
             }
             // set values in location
             // dont touch location->status, do not interfer with "hidden" setting
             location->available = available;
             location->setAbsolutePath(volumePath + location->specificPath);
+            DDebug() << "location for " << volumePath + location->specificPath << " is available " << available << endl;
             location->setStatusFromFlags();
             // set the volatile values in db
             //access.db()->setAlbumRootStatus(location->id(), location->status(), location->albumRootPath());

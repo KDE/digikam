@@ -202,14 +202,13 @@ void ImageScanner::scanImageMetadata()
 
     QVariantList metadataInfos = m_metadata.getMetadataFields(fields);
 
-    DatabaseAccess().db()->addImageInformation(m_scanInfo.id, metadataInfos);
+    DatabaseAccess().db()->addImageMetadata(m_scanInfo.id, metadataInfos);
 }
 
 void ImageScanner::scanImagePosition()
 {
     MetadataFields fields;
-    fields << MetadataInfo::Make
-           << MetadataInfo::Latitude
+    fields << MetadataInfo::Latitude
            << MetadataInfo::LatitudeNumber
            << MetadataInfo::Longitude
            << MetadataInfo::LongitudeNumber

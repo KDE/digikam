@@ -72,6 +72,7 @@ SchemaUpdater::SchemaUpdater(DatabaseAccess *access)
 
 bool SchemaUpdater::update()
 {
+    DDebug() << "SchemaUpdater update" << endl;
     bool success = startUpdates();
     m_access->db()->setSetting("DBVersion",QString::number(m_currentVersion));
     updateFilterSettings();
@@ -88,6 +89,7 @@ bool SchemaUpdater::startUpdates()
         // Find out schema version of db file
         QString version = m_access->db()->getSetting("DBVersion");
         QString versionRequired = m_access->db()->getSetting("DBVersionRequired");
+        DDebug() << "Have a database structure version " << version << endl;
 
         // We absolutely require the DBVersion setting
         if (version.isEmpty())
@@ -131,6 +133,7 @@ bool SchemaUpdater::startUpdates()
     }
     else
     {
+        DDebug() << "No database file available" << endl;
         // Legacy handling?
 
         // first test if there are older files that need to be upgraded.
@@ -181,6 +184,7 @@ bool SchemaUpdater::startUpdates()
 
 bool SchemaUpdater::makeUpdates()
 {
+    DDebug() << "makeUpdates " << m_currentVersion << " to " << schemaVersion() << endl;
     //DatabaseTransaction transaction(m_access);
     if (m_currentVersion < schemaVersion())
     {
@@ -192,6 +196,7 @@ bool SchemaUpdater::makeUpdates()
                 m_access->backend()->rollbackTransaction();
                 return false;
             }
+            DDebug() << "Success updating to v5" << endl;
             m_access->backend()->commitTransaction();
         }
         // add future updates here
@@ -224,16 +229,18 @@ bool SchemaUpdater::createDatabase()
 
 bool SchemaUpdater::createTablesV5()
 {
+    DDebug() << "createTablesV5" << endl;
     if (!m_access->backend()->execSql(
                     QString("CREATE TABLE AlbumRoots\n"
                             " (id INTEGER PRIMARY KEY,\n"
                             "  status INTEGER NOT NULL,\n"
                             "  type INTEGER NOT NULL,\n"
                             "  identifier TEXT,\n"
-                            "  specificPath TEXT);") ));
+                            "  specificPath TEXT);") ))
     {
         return false;
     }
+    DDebug() << "Created table AlbumRoots" << endl;
 
     if (!m_access->backend()->execSql(
                     QString("CREATE TABLE Albums\n"
@@ -604,6 +611,7 @@ static QStringList cleanUserFilterString(const QString &filterString)
 
 bool SchemaUpdater::updateV4toV5()
 {
+    DDebug() << "updateV4toV5" << endl;
     // This update was introduced from digikam version 0.9 to digikam 0.10
     // We operator on an SQLite3 database under a transaction (which will be rolled back on error)
 
@@ -614,6 +622,7 @@ bool SchemaUpdater::updateV4toV5()
     if (!m_access->backend()->execSql(QString("ALTER TABLE Images RENAME TO ImagesV3;")))
         return false;
 
+    DDebug() << "Moved tables" << endl;
     // --- Drop some triggers and indices ---
 
     // Dont check for errors here. The "IF EXISTS" clauses seem not supported in SQLite
@@ -624,10 +633,12 @@ bool SchemaUpdater::updateV4toV5()
     m_access->backend()->execSql(QString("DROP TRIGGER delete_tagstree;"));
     m_access->backend()->execSql(QString("DROP TRIGGER move_tagstree;"));
     m_access->backend()->execSql(QString("DROP INDEX dir_index;"));
+    m_access->backend()->execSql(QString("DROP INDEX tag_index;"));
 
+    DDebug() << "Dropped triggers" << endl;
     // --- Create new tables ---
 
-    if (!createTablesV5() && createIndicesV5())
+    if (!createTablesV5() || !createIndicesV5())
         return false;
 
     // --- Populate AlbumRoots (from config) ---
@@ -648,8 +659,12 @@ bool SchemaUpdater::updateV4toV5()
     CollectionLocation *location =
             CollectionManager::instance()->addLocation(KUrl::fromPath(albumLibraryPath));
     if (!location)
+    {
+        DError() << "Failure to create a collection location. Aborting update." << endl;
         return false;
+    }
 
+    DDebug() << "Inserted album root" << endl;
     // --- With the album root, populate albums ---
 
     if (!m_access->backend()->execSql(QString(
@@ -661,6 +676,7 @@ bool SchemaUpdater::updateV4toV5()
                     location->id())
        )
         return false;
+    DDebug() << "Populated albums" << endl;
 
     // --- Add images ---
 
@@ -674,10 +690,13 @@ bool SchemaUpdater::updateV4toV5()
        )
          return false;
 
+    DDebug() << "Populated Images" << endl;
+
     // --- Create triggers ---
 
     if (!createTriggersV5())
         return false;
+    DDebug() << "Created triggers" << endl;
 
     // --- Populate name filters ---
 
@@ -722,12 +741,15 @@ bool SchemaUpdater::updateV4toV5()
     configAudioFilter.subtract(defaultAudioFilter.toSet());
 
     m_access->db()->setUserFilterSettings(configImageFilter.toList(), configVideoFilter.toList(), configAudioFilter.toList());
+    DDebug() << "Set initial filter settings with user settings" << configImageFilter << endl;
 
     // --- do a full scan ---
 
     // TODO: Add UI!!!
+    DDebug() << "Starting scan" << endl;
     CollectionScanner scanner;
     scanner.completeScan();
+    DDebug() << "Done scan" << endl;
 
     // --- Port date, comment and rating (_after_ the scan) ---
 
@@ -770,6 +792,8 @@ bool SchemaUpdater::updateV4toV5()
     m_access->backend()->execSql(QString("DROP TABLE ImagesV3;"));
     m_access->backend()->execSql(QString("DROP TABLE AlbumsV3;"));
 
+    m_currentVersion = 5;
+    DDebug() << "Returning true from updating to 5" << endl;
     return true;
 }
 

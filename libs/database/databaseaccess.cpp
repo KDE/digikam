@@ -178,7 +178,8 @@ bool DatabaseAccess::checkReadyForUse()
 
     // update schema
     SchemaUpdater updater(&access);
-    d->backend->initSchema(&updater);
+    if (!d->backend->initSchema(&updater))
+        return false;
 
     // initialize CollectionManager
     CollectionManager::instance()->update();
