@@ -74,6 +74,36 @@ public:
      */
     QString getSetting(const QString& keyword);
 
+    /**
+     * Get the settings for the file name filters of this database.
+     * Returns a list with lowercase suffixes only, no wildcards added ("png", not "*.png")
+     * Returned is a joint result of main and user settings.
+     */
+    void getFilterSettings(QStringList &imageFilter, QStringList &videoFilter, QStringList &audioFilter);
+
+    /**
+     * Returns the user-configurable filter settings.
+     */
+    void getUserFilterSettings(QString &imageFilterString, QString &videoFilterString, QString &audioFilterString);
+
+    /**
+     * Sets the main filter settings of the database. Should only be called at schema update.
+     */
+    void setFilterSettings(const QStringList &imageFilter, const QStringList &videoFilter, const QStringList &audioFilter);
+
+    /**
+     * Sets the user-configurable filter settings. The lists shall be as specified for getFilterSettings.
+     * They may include entries starting with "-", which indicates that this format shall be removed from
+     * the list, if it is included in the main settings list.
+     */
+    void setUserFilterSettings(const QStringList &imageFilter, const QStringList &videoFilter, const QStringList &audioFilter);
+
+    /**
+     * Sets the user-configurable filter settings. The strings shall be lists joined either by ";" or " ".
+     * Extra whitespace, dots and wildcard characters (*.) are removed.
+     */
+    void setUserFilterSettings(const QString &imageFilterString, const QString &videoFilterString, const QString &audioFilterString);
+
     // ----------- AlbumRoot operations -----------
 
     /**
@@ -387,6 +417,7 @@ public:
      */
     qlonglong addItem(int albumID, const QString& name,
                       DatabaseItem::Status status,
+                      DatabaseItem::Category category,
                       const QDateTime& modificationDate,
                       int fileSize,
                       const QString& uniqueHash);
@@ -421,6 +452,12 @@ public:
      * Use with care!
      */
     void deleteRemovedItems();
+
+    /**
+     * Delete from the database all items
+     * in the specified albums that are marked as removed.
+     */
+    void deleteRemovedItems(QList<int> albumIDs);
 
     // ----------- Finding items -----------
 
@@ -555,21 +592,23 @@ public:
      * @param imageID the image that has been modified
      */
     void updateItem(qlonglong imageID,
+                    DatabaseItem::Category category,
                     const QDateTime& modificationDate,
                     int fileSize,
                     const QString& uniqueHash);
     /**
      * Add (or replace) the ImageInformation of the specified item.
      * If there is already an entry, it will be discarded.
-     * The QVariantList shall have 8 entries, of types in this order:
+     * The QVariantList shall have 9 entries, of types in this order:
      * 0) Int       rating
      * 1) DateTime  modificationDate
      * 2) DateTime  digitizationDate
      * 3) Int       orientation
      * 4) Int       width
      * 5) Int       height
-     * 6) Int       colorDepth
-     * 7) Int       colorModel
+     * 6) String    format
+     * 7) Int       colorDepth
+     * 8) Int       colorModel
      * You can leave out entries from this list, which will then be filled with null values.
      * Indicate the values that you have passed in the ImageInformation flag in the third parameters.
      */

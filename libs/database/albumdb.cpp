@@ -187,11 +187,11 @@ AlbumInfo::List AlbumDB::scanAlbums()
     AlbumInfo::List aList;
 
     QList<QVariant> values;
-    d->db->execSql( "SELECT R.absolutePath, A.id, A.relativePath, A.date, A.caption, A.collection, B.relativePath, I.name \n "
+    d->db->execSql( "SELECT B.albumRoot, R.absolutePath, A.id, A.relativePath, A.date, A.caption, A.collection, B.relativePath, I.name \n "
                     "FROM Albums AS A \n "
                     "  LEFT OUTER JOIN Images AS I ON A.icon=I.id \n"
                     "  LEFT OUTER JOIN Albums AS B ON B.id=I.dirid \n"
-                    "  LEFT OUTER JOIN AlbumRoots AS R ON R.id=B.id;", &values);
+                    "  LEFT OUTER JOIN AlbumRoots AS R ON R.id=B.albumRoot;", &values);
 
     QString iconAlbumUrl, iconName;
 
@@ -199,6 +199,8 @@ AlbumInfo::List AlbumDB::scanAlbums()
     {
         AlbumInfo info;
 
+        info.albumRootId = (*it).toInt();
+        ++it;
         info.albumRoot = (*it).toString();
         ++it;
         info.id = (*it).toInt();
@@ -301,7 +303,7 @@ SearchInfo::List AlbumDB::scanSearches()
 QList<AlbumShortInfo> AlbumDB::getAlbumShortInfos()
 {
     QList<QVariant> values;
-    d->db->execSql( QString("SELECT Albums.id, Albums.relativePath, AlbumRoots.absolutePath from Albums "
+    d->db->execSql( QString("SELECT Albums.id, Albums.relativePath, Albums.albumRoot, AlbumRoots.absolutePath from Albums "
                             " LEFT OUTER JOIN AlbumRoots ON AlbumRoots.id=Albums.albumRoot; "),
                     &values);
 
@@ -314,6 +316,8 @@ QList<AlbumShortInfo> AlbumDB::getAlbumShortInfos()
         info.id           = (*it).toLongLong();
         ++it;
         info.relativePath = (*it).toString();
+        ++it;
+        info.albumRootId  = (*it).toInt();
         ++it;
         info.albumRoot    = (*it).toString();
         ++it;
@@ -586,6 +590,100 @@ QString AlbumDB::getSetting(const QString& keyword)
         return QString();
     else
         return values.first().toString();
+}
+
+// helper method
+static QStringList joinMainAndUserFilterString(const QString &filter, const QString &userFilter)
+{
+    QSet<QString> filterSet;
+    QStringList userFilterList;
+
+    filterSet = filter.split(';', QString::SkipEmptyParts).toSet();
+    userFilterList = userFilter.split(';', QString::SkipEmptyParts);
+    foreach (QString userFormat, userFilterList)
+    {
+        if (userFormat.startsWith('-'))
+            filterSet.remove(userFormat.mid(1));
+        else
+            filterSet << userFormat;
+    }
+    return filterSet.toList();
+}
+
+void AlbumDB::getFilterSettings(QStringList &imageFilter, QStringList &videoFilter, QStringList &audioFilter)
+{
+    QString imageFormats, videoFormats, audioFormats, userImageFormats, userVideoFormats, userAudioFormats;
+
+    imageFormats = getSetting("databaseImageFormats");
+    videoFormats = getSetting("databaseVideoFormats");
+    audioFormats = getSetting("databaseAudioFormats");
+    userImageFormats = getSetting("databaseUserImageFormats");
+    userVideoFormats = getSetting("databaseUserVideoFormats");
+    userAudioFormats = getSetting("databaseUserAudioFormats");
+
+    imageFilter = joinMainAndUserFilterString(imageFormats, userImageFormats);
+    videoFilter = joinMainAndUserFilterString(videoFormats, userVideoFormats);
+    audioFilter = joinMainAndUserFilterString(audioFormats, userAudioFormats);
+}
+
+void AlbumDB::getUserFilterSettings(QString &imageFilterString, QString &videoFilterString, QString &audioFilterString)
+{
+    imageFilterString = getSetting("databaseUserImageFormats");
+    videoFilterString = getSetting("databaseUserVideoFormats");
+    audioFilterString = getSetting("databaseUserAudioFormats");
+}
+
+void AlbumDB::setFilterSettings(const QStringList &imageFilter, const QStringList &videoFilter, const QStringList &audioFilter)
+{
+    setSetting("databaseImageFormats", imageFilter.join(";"));
+    setSetting("databaseVideoFormats", videoFilter.join(";"));
+    setSetting("databaseAudioFormats", audioFilter.join(";"));
+}
+
+// helper method
+static QStringList cleanUserFilterString(const QString &filterString)
+{
+    // splits by either ; or space, removes "*.", trims
+    QStringList filterList;
+
+    QString wildcard("*.");
+    QString minusWildcard("-*.");
+    QChar dot('.');
+    QString minusDot("-.");
+    QChar sep( ';' );
+    int i = filterString.indexOf( sep );
+    if ( i == -1 && filterString.indexOf( ' ') != -1 )
+        sep = QChar( ' ' );
+
+    QStringList sepList = filterString.split(sep, QString::SkipEmptyParts);
+    foreach (QString f, sepList)
+    {
+        if (f.startsWith(wildcard))
+            filterList << f.mid(2).trimmed().toLower();
+        else if (f.startsWith(minusWildcard))
+            filterList << "-" + f.mid(3).trimmed().toLower();
+        else if (f.startsWith(dot))
+            filterList << f.mid(1).trimmed().toLower();
+        else if (f.startsWith(minusDot))
+            filterList << "-" + f.mid(2).trimmed().toLower();
+        else
+            filterList << f.trimmed().toLower();
+    }
+    return filterList;
+}
+
+void AlbumDB::setUserFilterSettings(const QString &imageFilterString, const QString &videoFilterString, const QString &audioFilterString)
+{
+    setUserFilterSettings(cleanUserFilterString(imageFilterString),
+                          cleanUserFilterString(videoFilterString),
+                          cleanUserFilterString(audioFilterString));
+}
+
+void AlbumDB::setUserFilterSettings(const QStringList &imageFilter, const QStringList &videoFilter, const QStringList &audioFilter)
+{
+    setSetting("databaseUserImageFormats", imageFilter.join(";"));
+    setSetting("databaseUserVideoFormats", videoFilter.join(";"));
+    setSetting("databaseUserAudioFormats", audioFilter.join(";"));
 }
 
 /*
@@ -987,6 +1085,8 @@ QStringList AlbumDB::imageInformationFieldList(DatabaseFields::ImageInformation 
         list << "width";
     if (fields & DatabaseFields::Height)
         list << "height";
+    if (fields & DatabaseFields::Format)
+        list << "format";
     if (fields & DatabaseFields::ColorDepth)
         list << "colorDepth";
     if (fields & DatabaseFields::ColorModel)
@@ -1311,17 +1411,19 @@ int AlbumDB::getAlbumForPath(int albumRootId, const QString& folder, bool create
 
 qlonglong AlbumDB::addItem(int albumID, const QString& name,
                            DatabaseItem::Status status,
+                           DatabaseItem::Category category,
                            const QDateTime& modificationDate,
                            int fileSize,
                            const QString& uniqueHash)
 {
     QVariantList boundValues;
-    boundValues << albumID << name << (int)status << modificationDate.toString(Qt::ISODate) << fileSize << uniqueHash;
+    boundValues << albumID << name << (int)status << (int)category
+                << modificationDate.toString(Qt::ISODate) << fileSize << uniqueHash;
 
     QVariant id;
     d->db->execSql ( QString ("REPLACE INTO Images "
-                              " ( album, name, status, modificationDate, fileSize, uniqueHash ) "
-                              " VALUES (?,?,?,?,?,?);" ),
+                              " ( album, name, status, category, modificationDate, fileSize, uniqueHash ) "
+                              " VALUES (?,?,?,?,?,?,?);" ),
                      boundValues,
                      0, &id);
 
@@ -1330,11 +1432,14 @@ qlonglong AlbumDB::addItem(int albumID, const QString& name,
     return id.toLongLong();
 }
 
-void AlbumDB::updateItem(qlonglong imageID, const QDateTime& modificationDate,
+void AlbumDB::updateItem(qlonglong imageID, DatabaseItem::Category category,
+                         const QDateTime& modificationDate,
                          int fileSize, const QString& uniqueHash)
 {
-    d->db->execSql( QString("UPDATE Images SET modificationDate=?, fileSize=?, uniqueHash=? WHERE id=?"),
-                    modificationDate, fileSize, uniqueHash, imageID );
+    QVariantList boundValues;
+    boundValues << category << modificationDate << fileSize << uniqueHash << imageID;
+    d->db->execSql( QString("UPDATE Images SET category=?, modificationDate=?, fileSize=?, uniqueHash=? WHERE id=?"),
+                    boundValues );
 }
 
 QList<int> AlbumDB::getTagsFromTagPaths(const QStringList &keywordsList, bool create)
@@ -1680,7 +1785,7 @@ QList<ItemScanInfo> AlbumDB::getItemScanInfos(int albumID)
 {
     QList<QVariant> values;
 
-    d->db->execSql( QString("SELECT id, album, name, status, modificationDate, uniqueHash "
+    d->db->execSql( QString("SELECT id, album, name, status, category, modificationDate, uniqueHash "
                             "FROM Images WHERE dirid=?;"),
                     albumID,
                     &values );
@@ -1699,6 +1804,8 @@ QList<ItemScanInfo> AlbumDB::getItemScanInfos(int albumID)
         ++it;
         info.status           = (DatabaseItem::Status)(*it).toInt();
         ++it;
+        info.category         = (DatabaseItem::Category)(*it).toInt();
+        ++it;
         info.modificationDate = QDateTime::fromString( (*it).toString(), Qt::ISODate );
         ++it;
         info.uniqueHash       = (*it).toString();
@@ -1714,7 +1821,7 @@ ItemScanInfo AlbumDB::getItemScanInfo(qlonglong imageID)
 {
     QList<QVariant> values;
 
-    d->db->execSql( QString("SELECT id, album, name, status, modificationDate, uniqueHash "
+    d->db->execSql( QString("SELECT id, album, name, status, category, modificationDate, uniqueHash "
                             "FROM Images WHERE imageid=?;"),
                     imageID,
                     &values );
@@ -1727,8 +1834,9 @@ ItemScanInfo AlbumDB::getItemScanInfo(qlonglong imageID)
         info.albumID          = values[1].toInt();
         info.itemName         = values[2].toString();
         info.status           = (DatabaseItem::Status)values[3].toInt();
-        info.modificationDate = QDateTime::fromString( values[4].toString(), Qt::ISODate );
-        info.uniqueHash       = values[5].toString();
+        info.category         = (DatabaseItem::Category)values[4].toInt();
+        info.modificationDate = QDateTime::fromString( values[5].toString(), Qt::ISODate );
+        info.uniqueHash       = values[6].toString();
     }
 
     return info;
@@ -1896,21 +2004,42 @@ void AlbumDB::removeItemsFromAlbum(int albumID)
 
 void AlbumDB::removeItems(QList<qlonglong> itemIDs)
 {
-    QSqlQuery query = d->db->prepareQuery( QString("UPDATE Images SET status=?,dirid=NULL WHERE id=?;") );
+    QSqlQuery query = d->db->prepareQuery( QString("UPDATE Images SET status=?, dirid=NULL WHERE id=?;") );
 
+    QVariantList imageIds;
+    QVariantList status;
     foreach (qlonglong id, itemIDs)
     {
-        query.bindValue(0, (int)DatabaseItem::Removed);
-        query.bindValue(1, id);
-        query.exec();
+        status << (int)DatabaseItem::Removed;
+        imageIds << id;
     }
+
+    query.addBindValue(status);
+    query.addBindValue(imageIds);
+    query.execBatch();
 }
 
 void AlbumDB::deleteRemovedItems()
 {
-    d->db->execSql( QString("DELETE FROM Images "
-                            "WHERE status=?;"),
+    d->db->execSql( QString("DELETE FROM Images WHERE status=?;"),
                     (int)DatabaseItem::Removed );
+}
+
+void AlbumDB::deleteRemovedItems(QList<int> albumIds)
+{
+    QSqlQuery query = d->db->prepareQuery( QString("DELETE FROM Images WHERE status=? AND album=?;") );
+
+    QVariantList albumBindIds;
+    QVariantList status;
+    foreach(int albumId, albumIds)
+    {
+        status << (int)DatabaseItem::Removed;
+        albumBindIds << albumId;
+    }
+
+    query.addBindValue(status);
+    query.addBindValue(albumBindIds);
+    query.execBatch();
 }
 
 void AlbumDB::renameAlbum(int albumID, const QString& newRelativePath, bool renameSubalbums)

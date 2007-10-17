@@ -71,6 +71,7 @@ public:
     typedef QList<AlbumInfo> List;
 
     int      id;
+    int      albumRootId;
     QString  albumRoot;
     QString  url;
     QString  caption;
@@ -145,6 +146,7 @@ public:
 
     int         id;
     QString     relativePath;
+    int         albumRootId;
     QString     albumRoot;
 };
 
@@ -157,6 +159,16 @@ namespace DatabaseItem
         Visible         = 1,
         Hidden          = 2,
         Removed         = 3
+    };
+
+    enum Category
+    {
+        // Keep values constant
+        UndefinedCategory = 0,
+        Image             = 1,
+        Video             = 2,
+        Audio             = 3,
+        Other             = 4
     };
 }
 
@@ -178,15 +190,17 @@ class ItemScanInfo
 public:
 
     ItemScanInfo()
-        : id(0), albumID(0), status(DatabaseItem::UndefinedStatus)
+        : id(0), albumID(0), status(DatabaseItem::UndefinedStatus),
+          category(DatabaseItem::UndefinedCategory)
     {};
 
-    qlonglong            id;
-    int                  albumID;
-    QString              itemName;
-    DatabaseItem::Status status;
-    QDateTime            modificationDate;
-    QString              uniqueHash;
+    qlonglong              id;
+    int                    albumID;
+    QString                itemName;
+    DatabaseItem::Status   status;
+    DatabaseItem::Category category;
+    QDateTime              modificationDate;
+    QString                uniqueHash;
 };
 
 namespace DatabaseComment
