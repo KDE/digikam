@@ -48,19 +48,19 @@ enum Field
     Sensitivity,                      /// Int, ISO sensitivity
     FlashMode,                        /// Int, bit mask from Exif
     WhiteBalance,                     /// Int, enum from Exif
+    WhiteBalanceColorTemperature,     /// double, color temperature in K
     MeteringMode,                     /// Int, enum from Exif
     SubjectDistance,                  /// double, m
     SubjectDistanceCategory,          /// int, enum from Exif
-    WhiteBalanceColorTemperature,     /// double, color temperature in K
 
-    Longitude,                        /// String (as XMP GPSCoordinate)
-    LongitudeNumber,                  /// double, degrees
     Latitude,                         /// String (as XMP GPSCoordinate)
     LatitudeNumber,                   /// double, degrees
+    Longitude,                        /// String (as XMP GPSCoordinate)
+    LongitudeNumber,                  /// double, degrees
     Altitude,                         /// double, m
-    GeographicOrientation,            /// ?
-    CameraTilt,                       /// ?
-    CameraRoll,                       /// ?
+    PositionOrientation,              /// ?
+    PositionTilt,                     /// ?
+    PositionRoll,                     /// ?
     PositionDescription,              /// String
 
     IPTCCoreCopyrightNotice,          /// Map language -> String
@@ -88,7 +88,7 @@ enum Field
     IPTCCoreTitle                     /// Map language -> String
     // not supported: CreatorContactInfo
     // not handled here: DateCreated, Keywords
-            
+
 
     //Dublin Core??
 };

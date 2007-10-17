@@ -604,7 +604,7 @@ inline QVariant DMetadata::fromIptcOrXmp(const char *iptcTagName, const char *xm
         // TODO
     }
 
-    return QVariant();
+    return QVariant(QVariant::String);
 }
 
 inline QVariant DMetadata::fromIptcOrXmpList(const char *iptcTagName, const char *xmpTagName)
@@ -621,7 +621,7 @@ inline QVariant DMetadata::fromIptcOrXmpList(const char *iptcTagName, const char
         // TODO
     }
 
-    return QVariant();
+    return QVariant(QVariant::StringList);
 }
 
 inline QVariant DMetadata::fromIptcOrXmpLangAlt(const char *iptcTagName, const char *xmpTagName)
@@ -642,7 +642,7 @@ inline QVariant DMetadata::fromIptcOrXmpLangAlt(const char *iptcTagName, const c
         // TODO
     }
 
-    return QVariant();
+    return QVariant(QVariant::Map);
 }
 
 QVariant DMetadata::getMetadataField(MetadataInfo::Field field)
@@ -656,7 +656,7 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field)
         case MetadataInfo::DigitizationDate:
             return getDigitizationDateTime(true);
         case MetadataInfo::Orientation:
-            return getImageOrientation();
+            return (int)getImageOrientation();
 
         case MetadataInfo::Make:
             return fromExifOrXmp("Exif.Image.Make", "tiff.Make");
@@ -712,7 +712,7 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field)
             return fromExifOrXmp("Exif.Photo.SubjectDistanceRange", "exif.SubjectDistanceRange");
         case MetadataInfo::WhiteBalanceColorTemperature:
             //TODO: ??
-            return QVariant();
+            return QVariant(QVariant::Int);
 
         case MetadataInfo::Longitude:
             return getGPSLongitudeString();
@@ -722,7 +722,7 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field)
             if (getGPSLongitudeNumber(&longitude))
                 return longitude;
             else
-                return QVariant();
+                return QVariant(QVariant::Double);
         }
         case MetadataInfo::Latitude:
             return getGPSLatitudeString();
@@ -732,7 +732,7 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field)
             if (getGPSLatitudeNumber(&latitude))
                 return latitude;
             else
-                return QVariant();
+                return QVariant(QVariant::Double);
         }
         case MetadataInfo::Altitude:
         {
@@ -740,14 +740,14 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field)
             if (getGPSAltitude(&altitude))
                 return altitude;
             else
-                return QVariant();
+                return QVariant(QVariant::Double);
         }
-        case MetadataInfo::GeographicOrientation:
-        case MetadataInfo::CameraTilt:
-        case MetadataInfo::CameraRoll:
+        case MetadataInfo::PositionOrientation:
+        case MetadataInfo::PositionTilt:
+        case MetadataInfo::PositionRoll:
         case MetadataInfo::PositionDescription:
             // TODO or unsupported?
-            return QVariant();
+            return QVariant(QVariant::String);
 
         //TODO: Check all IPTC tag names
         case MetadataInfo::IPTCCoreCopyrightNotice:
@@ -923,9 +923,9 @@ QString DMetadata::valueToString (const QVariant &value, MetadataInfo::Field fie
             return i18nc("Height in meters", "%1m", meters);
         }
 
-        case MetadataInfo::GeographicOrientation:
-        case MetadataInfo::CameraTilt:
-        case MetadataInfo::CameraRoll:
+        case MetadataInfo::PositionOrientation:
+        case MetadataInfo::PositionTilt:
+        case MetadataInfo::PositionRoll:
             //TODO
             return value.toString();
         case MetadataInfo::PositionDescription:
