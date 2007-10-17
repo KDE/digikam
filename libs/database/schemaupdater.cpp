@@ -381,8 +381,8 @@ bool SchemaUpdater::createTablesV5()
                             "  creationDate DATETIME,\n"
                             "  digitizationDate DATETIME,\n"
                             "  orientation INTEGER,\n"
-                            "  sizeX INTEGER,\n"
-                            "  sizeY INTEGER,\n"
+                            "  width INTEGER,\n"
+                            "  height INTEGER,\n"
                             "  colorDepth INTEGER,\n"
                             "  colorModel INTEGER);") ))
     {

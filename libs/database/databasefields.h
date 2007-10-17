@@ -42,13 +42,13 @@ enum ImageInformationField
     CreationDate         = 1 << 1,
     DigitizationDate     = 1 << 2,
     Orientation          = 1 << 3,
-    SizeX                = 1 << 4,
-    SizeY                = 1 << 5,
+    Width                = 1 << 4,
+    Height               = 1 << 5,
     ColorDepth           = 1 << 6,
     ColorModel           = 1 << 7,
     ImageInformationAll  =
             Rating | CreationDate | DigitizationDate | Orientation |
-            SizeX | SizeY | ColorDepth | ColorModel
+            Width | Height | ColorDepth | ColorModel
 };
 
 enum ImageMetadataField

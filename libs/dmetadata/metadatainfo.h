@@ -32,6 +32,17 @@ namespace MetadataInfo
 
 enum Field
 {
+    Comment,                          /// String (one of the following three values)
+    CommentJfif,                      /// String
+    CommentExif,                      /// String
+    CommentIptc,                      /// String (see also IptcCoreDescription)
+    Description,                      /// Map language -> String
+    Title,                            /// Map language -> String
+    Headline,                         /// String
+    DescriptionWriter,                /// String
+
+    Keywords,                         /// StringList
+
     Rating,                           /// Int
     CreationDate,                     /// DateTime
     DigitizationDate,                 /// DateTime
@@ -63,34 +74,31 @@ enum Field
     PositionRoll,                     /// ?
     PositionDescription,              /// String
 
-    IPTCCoreCopyrightNotice,          /// Map language -> String
-    IPTCCoreCreator,                  /// List of type String
-    IPTCCoreProvider,                 /// String
-    IPTCCoreRightUsageTerms,          /// Map language -> String
-    IPTCCoreSource,                   /// String
+    IptcCoreCopyrightNotice,          /// Map language -> String
+    IptcCoreCreator,                  /// List of type String
+    IptcCoreProvider,                 /// String
+    IptcCoreRightUsageTerms,          /// Map language -> String
+    IptcCoreSource,                   /// String
 
-    IPTCCoreCreatorJobTitle,          /// String
-    IPTCCoreInstructions,             /// String
+    IptcCoreCreatorJobTitle,          /// String
+    IptcCoreInstructions,             /// String
 
-    IPTCCoreCountryCode,              /// String
-    IPTCCoreCountry,                  /// String
-    IPTCCoreCity,                     /// String
-    IPTCCoreLocation,                 /// String
-    IPTCCoreProvinceState,            /// String
-    IPTCCoreIntellectualGenre,        /// String
-    IPTCCoreJobID,                    /// String
-    IPTCCoreScene,                    /// List of type String
-    IPTCCoreSubjectCode,              /// List of type String
+    IptcCoreCountryCode,              /// String
+    IptcCoreCountry,                  /// String
+    IptcCoreCity,                     /// String
+    IptcCoreLocation,                 /// String
+    IptcCoreProvinceState,            /// String
+    IptcCoreIntellectualGenre,        /// String
+    IptcCoreJobID,                    /// String
+    IptcCoreScene,                    /// List of type String
+    IptcCoreSubjectCode,              /// List of type String
 
-    IPTCCoreDescription,              /// Map language -> String
-    IPTCCoreDescriptionWriter,        /// String
-    IPTCCoreHeadline,                 /// String
-    IPTCCoreTitle                     /// Map language -> String
+    // Description, DescriptionWriter, Headline, Title: see above
+    // DateCreated: see above, CreationDate
+    // Keywords: see above, Keywords
     // not supported: CreatorContactInfo
-    // not handled here: DateCreated, Keywords
 
-
-    //Dublin Core??
+    // Dublin Core: Description, Title, Subject (keywords) see above
 };
 
 }
