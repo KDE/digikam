@@ -162,6 +162,10 @@ public:
      * Commit the current database transaction
      */
     void commitTransaction();
+    /**
+     * Rollback the current database transaction
+     */
+    void rollbackTransaction();
 
     /**
      * Return a list with the names of the tables in the database

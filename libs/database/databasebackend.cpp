@@ -400,6 +400,11 @@ void DatabaseBackend::commitTransaction()
     d->databaseForThread().commit();
 }
 
+void DatabaseBackend::rollbackTransaction()
+{
+    d->databaseForThread().rollback();
+}
+
 QStringList DatabaseBackend::tables()
 {
     return d->databaseForThread().tables();

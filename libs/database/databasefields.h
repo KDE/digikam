@@ -44,11 +44,12 @@ enum ImageInformationField
     Orientation          = 1 << 3,
     Width                = 1 << 4,
     Height               = 1 << 5,
-    ColorDepth           = 1 << 6,
-    ColorModel           = 1 << 7,
+    Format               = 1 << 6,
+    ColorDepth           = 1 << 7,
+    ColorModel           = 1 << 8,
     ImageInformationAll  =
             Rating | CreationDate | DigitizationDate | Orientation |
-            Width | Height | ColorDepth | ColorModel
+            Width | Height | Format | ColorDepth | ColorModel
 };
 
 enum ImageMetadataField
@@ -113,13 +114,13 @@ Q_DECLARE_FLAGS(ImagePositions, ImagePositionsField);
 
 } // end of namespace DatabaseFields
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(DatabaseFields::ImageInformation);
-Q_DECLARE_OPERATORS_FOR_FLAGS(DatabaseFields::ImageMetadata);
-Q_DECLARE_OPERATORS_FOR_FLAGS(DatabaseFields::ImageComments);
-Q_DECLARE_OPERATORS_FOR_FLAGS(DatabaseFields::ImagePositions);
-
-
 } // end of namespace Digikam
+
+// must be outside the namespace!
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImageInformation);
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImageMetadata);
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImageComments);
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImagePositions);
 
 
 #endif

@@ -25,6 +25,8 @@
 
 // KDE includes
 
+#include <kmimetype.h>
+
 // Local includes
 
 #include "databaseurl.h"
@@ -57,9 +59,16 @@ ImageScanner::ImageScanner(qlonglong imageid)
     m_fileInfo = QFileInfo(DatabaseUrl::fromAlbumAndName(shortInfo.itemName, shortInfo.album, shortInfo.albumRoot).fileUrl().path());
 }
 
+void ImageScanner::setCategory(DatabaseItem::Category category)
+{
+    // we dont have the necessary information in this class, but in CollectionScanner
+    m_scanInfo.category = category;
+}
+
 void ImageScanner::fileModified()
 {
     loadFromDisk();
+    scanHardInfos();
 }
 
 void ImageScanner::newFile(int albumId)
@@ -81,26 +90,30 @@ void ImageScanner::addImage(int albumId)
     m_scanInfo.albumID = albumId;
     m_scanInfo.itemName = m_fileInfo.fileName();
     m_scanInfo.status = DatabaseItem::Visible;
+    // category is set by setCategory
     m_scanInfo.modificationDate = m_fileInfo.lastModified();
     int fileSize = (int)m_fileInfo.size();
     // the QByteArray is an ASCII hex string
     m_scanInfo.uniqueHash = QString(m_img.getUniqueHash());
 
-    m_scanInfo.id = DatabaseAccess().db()->addItem(m_scanInfo.albumID, m_scanInfo.itemName, m_scanInfo.status,
+    m_scanInfo.id = DatabaseAccess().db()->addItem(m_scanInfo.albumID, m_scanInfo.itemName, m_scanInfo.status, m_scanInfo.category,
                                                    m_scanInfo.modificationDate, fileSize, m_scanInfo.uniqueHash);
 }
 
 void ImageScanner::scanFile()
 {
-    scanImageInformation();
-    if (m_hasMetadata)
+    if (m_scanInfo.category == DatabaseItem::Image)
     {
-        scanImageMetadata();
-        scanImagePosition();
-        scanImageComments();
-        scanImageCopyright();
-        scanIPTCCore();
-        scanTags();
+        scanImageInformation();
+        if (m_hasMetadata)
+        {
+            scanImageMetadata();
+            scanImagePosition();
+            scanImageComments();
+            scanImageCopyright();
+            scanIPTCCore();
+            scanTags();
+        }
     }
 }
 
@@ -112,30 +125,44 @@ void ImageScanner::scanHardInfos()
     m_scanInfo.uniqueHash = QString(m_img.getUniqueHash());
 
     DatabaseAccess access;
-    access.db()->updateItem(m_scanInfo.id, m_scanInfo.modificationDate, fileSize, m_scanInfo.uniqueHash);
+    access.db()->updateItem(m_scanInfo.id, m_scanInfo.category,
+                            m_scanInfo.modificationDate, fileSize, m_scanInfo.uniqueHash);
 
     // part from scanImageInformation()
     QSize size = m_img.size();
 
     QVariantList infos;
-    infos << size.width() << size.height() << m_img.originalBitDepth() << m_img.originalColorModel();
+    infos << size.width()
+          << size.height()
+          << detectFormat()
+          << m_img.originalBitDepth()
+          << m_img.originalColorModel();
 
     access.db()->changeImageInformation(m_scanInfo.id, infos,
-                                                  DatabaseFields::Width | DatabaseFields::Height
-                                                  | DatabaseFields::ColorDepth | DatabaseFields::ColorModel);
+                                                    DatabaseFields::Width
+                                                    | DatabaseFields::Height
+                                                    | DatabaseFields::Format
+                                                    | DatabaseFields::ColorDepth
+                                                    | DatabaseFields::ColorModel);
 }
 
 void ImageScanner::scanImageInformation()
 {
     MetadataFields fields;
-    fields << MetadataInfo::Rating << MetadataInfo::CreationDate
-           << MetadataInfo::DigitizationDate << MetadataInfo::Orientation;
+    fields << MetadataInfo::Rating
+           << MetadataInfo::CreationDate
+           << MetadataInfo::DigitizationDate
+           << MetadataInfo::Orientation;
     QVariantList metadataInfos = m_metadata.getMetadataFields(fields);
     QSize size = m_img.size();
 
     QVariantList infos;
     infos << metadataInfos
-          << size.width() << size.height() << m_img.originalBitDepth() << m_img.originalColorModel();
+          << size.width()
+          << size.height()
+          << detectFormat()
+          << m_img.originalBitDepth()
+          << m_img.originalColorModel();
 
     DatabaseAccess().db()->addImageInformation(m_scanInfo.id, infos);
 }
@@ -288,6 +315,43 @@ void ImageScanner::loadFromDisk()
         m_img.setIptc(m_metadata.getIptc());
         m_img.setXmp(m_metadata.getXmp());
     }
+}
+
+QString ImageScanner::detectFormat()
+{
+    DImg::FORMAT dimgFormat = m_img.fileFormat();
+    switch (dimgFormat)
+    {
+        case DImg::JPEG:
+            return "JPG";
+        case DImg::PNG:
+            return "PNG";
+        case DImg::TIFF:
+            return "TIFF";
+        case DImg::PPM:
+            return "PPM";
+        case DImg::JP2K:
+            return "JP2k";
+        case DImg::RAW:
+        {
+            QString format = "RAW-";
+            format += m_fileInfo.suffix().toUpper();
+        }
+        case DImg::NONE:
+        case DImg::QIMAGE:
+        {
+            KMimeType::Ptr mimetype = KMimeType::mimeType(m_fileInfo.path(), KMimeType::ResolveAliases);
+            if (mimetype)
+            {
+                QString name = mimetype->name();
+                if (name.startsWith("image/"))
+                {
+                    return name.mid(6).toUpper();
+                }
+            }
+        }
+    }
+    return QString();
 }
 
 
