@@ -61,8 +61,8 @@ public:
         m_id         = info.id;
         m_type       = (CollectionLocation::Type)info.type;
         m_path       = info.absolutePath;
-        relativePath = info.relativePath;
-        uuid         = info.relativePath;
+        specificPath = info.specificPath;
+        uuid         = info.uuid;
 
         setStatus((CollectionLocation::Status)info.status);
     }
@@ -121,7 +121,7 @@ public:
     }
 
     QString uuid;
-    QString relativePath;
+    QString specificPath;
     bool available;
     bool hidden;
 };
@@ -271,14 +271,14 @@ CollectionLocation *CollectionManager::addLocation(const KUrl &fileUrl)
 
     DatabaseAccess access;
     // volume.path has a trailing slash. We want to split in front of this.
-    QString relativePath = path.mid(volume.path.length() - 1);
+    QString specificPath = path.mid(volume.path.length() - 1);
     CollectionLocation::Type type;
     if (volume.removableOrPluggable)
         type = CollectionLocation::TypeRemovable;
     else
         type = CollectionLocation::TypeHardWired;
 
-    access.db()->addAlbumRoot(type, volume.path, volume.uuid, relativePath);
+    access.db()->addAlbumRoot(type, volume.path, volume.uuid, specificPath);
 
     updateLocations();
 
@@ -490,13 +490,12 @@ void CollectionManager::updateLocations()
             // set values in location
             // dont touch location->status, do not interfer with "hidden" setting
             location->available = available;
-            location->setAbsolutePath(volumePath + location->relativePath);
+            location->setAbsolutePath(volumePath + location->specificPath);
             location->setStatusFromFlags();
             // set the volatile values in db
             access.db()->setAlbumRootStatus(location->id(), location->status(), location->albumRootPath());
         }
     }
 }
-#endif
 
 }  // namespace Digikam

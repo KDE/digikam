@@ -211,11 +211,11 @@ QString ImageInfo::comment() const
 {
     if (!m_data)
         return QString();
-
+#warning ImageInfo: implement comment()
     DatabaseAccess access;
     if (!m_data->commentValid)
     {
-        m_data.constCastData()->comment = access.db()->getItemCaption(m_data->id);
+        //m_data.constCastData()->comment = access.db()->getItemCaption(m_data->id);
         m_data.constCastData()->commentValid = true;
     }
     return m_data->comment;
@@ -305,11 +305,12 @@ KUrl ImageInfo::kurlForKIO() const
 
 void ImageInfo::setComment(const QString& caption)
 {
+#warning ImageInfo: implement setting of comment
     if (!m_data)
         return;
 
     DatabaseAccess access;
-    access.db()->setItemCaption(m_data->id, caption);
+    //access.db()->setItemCaption(m_data->id, caption);
 }
 
 void ImageInfo::setRating(int value)
