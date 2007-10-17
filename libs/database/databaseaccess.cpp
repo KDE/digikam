@@ -36,6 +36,7 @@
 #include "albumdb.h"
 #include "imageinfocache.h"
 #include "schemaupdater.h"
+#include "collectionmanager.h"
 #include "databaseattributeswatch.h"
 #include "databasebackend.h"
 #include "databaseaccess.h"
@@ -58,7 +59,6 @@ public:
     DatabaseAttributesWatch *attributesWatch;
     DatabaseParameters parameters;
     QMutex mutex;
-    QString albumRoot;
     QString lastError;
 };
 
@@ -70,6 +70,7 @@ DatabaseAccess::DatabaseAccess()
     if (!d->backend->isOpen())
     {
         d->backend->open(d->parameters);
+        CollectionManager::instance()->update();
     }
 }
 
@@ -138,14 +139,6 @@ void DatabaseAccess::setParameters(const DatabaseParameters &parameters)
         d->db = new AlbumDB(d->backend);
         d->infoCache = new ImageInfoCache();
     }
-
-    //TODO: remove when albumRoot is removed
-    if (d->parameters.databaseType == "QSQLITE")
-    {
-        KUrl url;
-        url.setPath(d->parameters.databaseName);
-        d->albumRoot = url.directory();
-    }
 }
 
 bool DatabaseAccess::checkReadyForUse()
@@ -183,8 +176,12 @@ bool DatabaseAccess::checkReadyForUse()
         }
     }
 
+    // update schema
     SchemaUpdater updater(&access);
     d->backend->initSchema(&updater);
+
+    // initialize CollectionManager
+    CollectionManager::instance()->update();
 
     return d->backend->isReady();
 }
@@ -197,11 +194,6 @@ QString DatabaseAccess::lastError()
 void DatabaseAccess::setLastError(const QString &error)
 {
     d->lastError = error;
-}
-
-QString DatabaseAccess::albumRoot()
-{
-    return d->albumRoot;
 }
 
 void DatabaseAccess::cleanUpDatabase()

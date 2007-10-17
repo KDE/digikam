@@ -116,12 +116,6 @@ public:
     static void cleanUpDatabase();
 
     /**
-      * This method is a temporary workaround until the album root is contained in the db.
-      * Returns the global album root, including the trailing slash.
-      */
-    static QString albumRoot();
-
-    /**
       * Return the ImageInfoCache. This object is not for public use outside libs/database/
       */
     ImageInfoCache *imageInfoCache() const;

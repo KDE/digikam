@@ -55,6 +55,7 @@
 #include "albumdb.h"
 #include "databaseaccess.h"
 #include "databasebackend.h"
+#include "collectionmanager.h"
 #include "dmetadata.h"
 #include "imagelister.h"
 
@@ -183,42 +184,37 @@ void ImageLister::listAlbum(ImageListerReceiver *receiver,
 
     {
         DatabaseAccess access;
-        access.backend()->execSql(QString("SELECT id, name, datetime FROM Images "
-                                          "WHERE dirid = ?;"),
+        access.backend()->execSql(QString("SELECT DISTINCT Images.id, Images.name, Images.album, "
+                                          "       Images.fileSize, ImageInformation.creationDate, "
+                                          "       ImageInformation.width, ImageInformation.height "
+                                          " FROM Images "
+                                          "       LEFT OUTER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
+                                          " WHERE Images.album = ?;"),
                                   albumid, &values);
-        /*
-        With rating:
-        SELECT Images.id, Images.name, Images.datetime, Albums.url, ImageProperties.value
-        FROM Images
-        LEFT OUTER JOIN Albums ON Images.dirid = Albums.id
-        LEFT OUTER JOIN ImageProperties ON (ImageProperties.imageid = Images.id AND ImageProperties.property="rating")
-        WHERE Images.dirid=1;
-        */
     }
 
-    struct stat stbuf;
+    int width, height;
     for (QList<QVariant>::iterator it = values.begin(); it != values.end();)
     {
         ImageListerRecord record;
-        record.imageID   = it->toLongLong();
+        record.imageID   = (*it).toLongLong();
         ++it;
-        record.name      = it->toString();
+        record.name      = (*it).toString();
         ++it;
-        record.dateTime  = QDateTime::fromString(it->toString(), Qt::ISODate);
+        record.size      = (*it).toInt();
         ++it;
+        record.dateTime  = QDateTime::fromString((*it).toString(), Qt::ISODate);
+        ++it;
+        width            = (*it).toInt();
+        ++it;
+        height           = (*it).toInt();
+        ++it;
+
+        record.dims      = QSize(width, height);
 
         record.albumID   = albumid;
         record.albumName = album;
         record.albumRoot = albumRoot;
-
-        QString filePath = base + '/' + record.name;
-
-        if (::stat(QFile::encodeName(filePath), &stbuf) != 0)
-            continue;
-        record.size = static_cast<size_t>(stbuf.st_size);
-
-        //if (getDimensions)
-          //  record.dims = retrieveDimension(filePath);
 
         receiver->receive(record);
     }
@@ -226,24 +222,25 @@ void ImageLister::listAlbum(ImageListerReceiver *receiver,
 
 void ImageLister::listTag(ImageListerReceiver *receiver, int tagId)
 {
-    QString albumRoot = DatabaseAccess::albumRoot();
-
     QList<QVariant> values;
 
     {
         DatabaseAccess access;
-        access.backend()->execSql( QString( "SELECT DISTINCT Images.id, Images.name, Images.dirid, \n "
-                                            "       Images.datetime, Albums.url \n "
-                                            " FROM Images, Albums \n "
-                                            " WHERE Images.id IN \n "
-                                            "       (SELECT imageid FROM ImageTags \n "
-                                            "        WHERE tagid=? \n "
-                                            "           OR tagid IN (SELECT id FROM TagsTree WHERE pid=?)) \n "
-                                            "   AND Albums.id=Images.dirid \n " ),
+        access.backend()->execSql( QString( "SELECT DISTINCT Images.id, Images.name, Images.album, "
+                                            "       Albums.relativePath, Albums.albumRoot, "
+                                            "       Images.fileSize, ImageInformation.creationDate, "
+                                            "       ImageInformation.width, ImageInformation.height "
+                                            " FROM Images "
+                                            "       LEFT OUTER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
+                                            "       LEFT OUTER JOIN Albums ON Albums.id=Images.album "
+                                            " WHERE Images.id IN "
+                                            "       (SELECT imageid FROM ImageTags "
+                                            "        WHERE tagid=? "
+                                            "           OR tagid IN (SELECT id FROM TagsTree WHERE pid=?)); "),
                                     tagId, tagId, &values );
     }
 
-    struct stat stbuf;
+    int albumRootId, width, height;
     for (QList<QVariant>::iterator it = values.begin(); it != values.end();)
     {
         ImageListerRecord record;
@@ -253,18 +250,29 @@ void ImageLister::listTag(ImageListerReceiver *receiver, int tagId)
         ++it;
         record.albumID   = (*it).toInt();
         ++it;
-        record.dateTime  = QDateTime::fromString((*it).toString(), Qt::ISODate);
-        ++it;
         record.albumName = (*it).toString();
         ++it;
+        albumRootId      = (*it).toInt();
+        ++it;
+        record.size      = (*it).toInt();
+        ++it;
+        record.dateTime  = QDateTime::fromString((*it).toString(), Qt::ISODate);
+        ++it;
+        width            = (*it).toInt();
+        ++it;
+        height           = (*it).toInt();
+        ++it;
 
-        record.albumRoot = albumRoot;
+        record.dims      = QSize(width, height);
+        record.albumRoot = CollectionManager::instance()->albumRootPath(albumRootId);
 
-        QString path = albumRoot + record.albumName + '/' + record.name;
+        /*
+        QString path = record.albumRoot + record.albumName + '/' + record.name;
 
         if (::stat(QFile::encodeName(path), &stbuf) != 0)
             continue;
         record.size = static_cast<size_t>(stbuf.st_size);
+        */
 
         //if (getDimensions)
           //  record.dims = retrieveDimension(path);
@@ -275,8 +283,6 @@ void ImageLister::listTag(ImageListerReceiver *receiver, int tagId)
 
 void ImageLister::listMonth(ImageListerReceiver *receiver, const QDate &date)
 {
-    QString albumRoot = DatabaseAccess::albumRoot();
-
     QDate firstDayOfMonth(date.year(), date.month(), 1);
     QDate firstDayOfNextMonth = firstDayOfMonth.addMonths(1);
 
@@ -284,19 +290,22 @@ void ImageLister::listMonth(ImageListerReceiver *receiver, const QDate &date)
 
     {
         DatabaseAccess access;
-        access.backend()->execSql(QString("SELECT Images.id, Images.name, Images.dirid, \n "
-                                          "  Images.datetime, Albums.url \n "
-                                          "FROM Images, Albums \n "
-                                          "WHERE Images.datetime < ? \n "
-                                          "AND Images.datetime >= ? \n "
-                                          "AND Albums.id=Images.dirid \n "
-                                          "ORDER BY Albums.id;"),
+        access.backend()->execSql(QString("SELECT DISTINCT Images.id, Images.name, Images.album, "
+                                          "       Albums.relativePath, Albums.albumRoot, "
+                                          "       Images.fileSize, ImageInformation.creationDate "
+                                          "       ImageInformation.width, ImageInformation.height "
+                                          " FROM Images "
+                                          "       LEFT OUTER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
+                                          "       LEFT OUTER JOIN Albums ON Albums.id=Images.album "
+                                          " WHERE Images.datetime < ? "
+                                          "   AND Images.datetime >= ? "
+                                          " ORDER BY Albums.id;"),
                                   QDateTime(firstDayOfNextMonth).toString(Qt::ISODate),
                                   QDateTime(firstDayOfMonth).toString(Qt::ISODate),
                                   &values);
     }
 
-    struct stat stbuf;
+    int albumRootId, width, height;
     for (QList<QVariant>::iterator it = values.begin(); it != values.end();)
     {
         ImageListerRecord record;
@@ -306,21 +315,21 @@ void ImageLister::listMonth(ImageListerReceiver *receiver, const QDate &date)
         ++it;
         record.albumID   = (*it).toInt();
         ++it;
-        record.dateTime  = QDateTime::fromString((*it).toString(), Qt::ISODate);
-        ++it;
         record.albumName = (*it).toString();
         ++it;
+        albumRootId      = (*it).toInt();
+        ++it;
+        record.size      = (*it).toInt();
+        ++it;
+        record.dateTime  = QDateTime::fromString((*it).toString(), Qt::ISODate);
+        ++it;
+        width            = (*it).toInt();
+        ++it;
+        height           = (*it).toInt();
+        ++it;
 
-        record.albumRoot = albumRoot;
-
-        QString path = albumRoot + record.albumName + '/' + record.name;
-
-        if (::stat(QFile::encodeName(path), &stbuf) != 0)
-            continue;
-        record.size = static_cast<size_t>(stbuf.st_size);
-
-        //if (getDimensions)
-          //  record.dims = retrieveDimension(path);
+        record.dims      = QSize(width, height);
+        record.albumRoot = CollectionManager::instance()->albumRootPath(albumRootId);
 
         receiver->receive(record);
     }
@@ -329,25 +338,27 @@ void ImageLister::listMonth(ImageListerReceiver *receiver, const QDate &date)
 void ImageLister::listSearch(ImageListerReceiver *receiver,
                              const QString &sqlConditionalExpression,
                              const QList<QVariant> &boundValues,
-                             bool getSize, int limit)
+                             int limit)
 {
-    QString albumRoot = DatabaseAccess::albumRoot();
-
     QList<QVariant> values;
     QString sqlQuery;
     QString errMsg;
 
     // query head
-    sqlQuery = "SELECT Images.id, Images.name, Images.dirid, Images.datetime, Albums.url "
-                "FROM Images, Albums LEFT JOIN ImageProperties ON Images.id = Imageproperties.imageid "
-                "WHERE ( ";
+    sqlQuery = "SELECT DISTINCT Images.id, Images.name, Images.album, "
+               "       Albums.relativePath, Albums.albumRoot, "
+               "       Images.fileSize, ImageInformation.creationDate "
+               "       ImageInformation.width, ImageInformation.height "
+               " FROM Images "
+               "       LEFT OUTER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
+               "       LEFT OUTER JOIN Albums ON Albums.id=Images.album "
+               "WHERE ( ";
 
-    // query body
+    // query body   
     sqlQuery += sqlConditionalExpression;
 
     // query tail
     sqlQuery += " ) ";
-    sqlQuery += " AND (Albums.id=Images.dirid) ";
 
     if (limit > 0)
         sqlQuery += QString(" LIMIT %1; ").arg(limit);
@@ -368,7 +379,7 @@ void ImageLister::listSearch(ImageListerReceiver *receiver,
         return;
     }
 
-    struct stat stbuf;
+    int albumRootId, width, height;
     for (QList<QVariant>::iterator it = values.begin(); it != values.end();)
     {
         ImageListerRecord record;
@@ -378,28 +389,21 @@ void ImageLister::listSearch(ImageListerReceiver *receiver,
         ++it;
         record.albumID   = (*it).toInt();
         ++it;
-        record.dateTime  = QDateTime::fromString((*it).toString(), Qt::ISODate);
-        ++it;
         record.albumName = (*it).toString();
         ++it;
+        albumRootId      = (*it).toInt();
+        ++it;
+        record.size      = (*it).toInt();
+        ++it;
+        record.dateTime  = QDateTime::fromString((*it).toString(), Qt::ISODate);
+        ++it;
+        width            = (*it).toInt();
+        ++it;
+        height           = (*it).toInt();
+        ++it;
 
-        record.albumRoot = albumRoot;
-
-        QString path = albumRoot + record.albumName + '/' + record.name;
-
-        if (getSize)
-        {
-            if (::stat(QFile::encodeName(path), &stbuf) != 0)
-                continue;
-            record.size = static_cast<size_t>(stbuf.st_size);
-        }
-        else
-        {
-            record.size = 0;
-        }
-
-        //if (getDimensions)
-          //  record.dims = retrieveDimension(path);
+        record.dims      = QSize(width, height);
+        record.albumRoot = CollectionManager::instance()->albumRootPath(albumRootId);
 
         receiver->receive(record);
     }

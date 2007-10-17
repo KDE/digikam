@@ -100,7 +100,7 @@ public:
     void listSearch(ImageListerReceiver *receiver,
                     const QString &sqlConditionalExpression,
                     const QList<QVariant> &boundValues,
-                    bool getSize = true, int limit = 0);
+                    int limit = 0);
 
     /**
      * Tool method to retrieve the dimension from a file. Not a database query, slow!
