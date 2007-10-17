@@ -229,6 +229,16 @@ public:
      * Returns the bit depth (in bits per channel, e.g. 8 or 16) of the original file.
      */
     int         originalBitDepth() const;
+    /**
+     * Returns the file format in form of the FORMAT enum that was detected in the load()
+     * method. Other than the format attribute which is written by the DImgLoader,
+     * this can include the QIMAGE or NONE values.
+     * Returns NONE for images that have not been loaded.
+     * For unknown image formats, a value of QIMAGE can be returned to indicate that the
+     * QImage-based loader will have been used. To find out if this has worked, check
+     * the return value you got from load().
+     */
+    FORMAT      fileFormat() const;
 
 
     /** Access a single pixel of the image.

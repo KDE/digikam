@@ -326,6 +326,8 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
     FORMAT format = fileFormat(filePath);
     DImgLoader::LoadFlags loadFlags = (DImgLoader::LoadFlags)loadFlagsInt;
 
+    setAttribute("detectedFileFormat", format);
+
     switch (format)
     {
         case(NONE):
@@ -674,6 +676,14 @@ DImg::COLORMODEL DImg::originalColorModel() const
 int DImg::originalBitDepth() const
 {
     return m_priv->attributes.value("originalBitDepth").toInt();
+}
+
+DImg::FORMAT DImg::fileFormat() const
+{
+    if (m_priv->attributes.contains("detectedFileFormat"))
+        return (FORMAT)m_priv->attributes.value("detectedFileFormat").toInt();
+    else
+        return NONE;
 }
 
 bool DImg::getICCProfilFromFile(const QString& filePath)
