@@ -273,6 +273,8 @@ bool SchemaUpdater::createTablesV5()
     if (!m_access->backend()->execSql(
                     QString("CREATE TABLE ImageHaarMatrix\n"
                             " (imageid INTEGER UNIQUE PRIMARY KEY,\n"
+                            "  modificationDate DATETIME,\n"
+                            "  uniqueHash TEXT,\n"
                             "  matrix BLOB);") ))
     {
         return false;
@@ -335,7 +337,7 @@ bool SchemaUpdater::createTablesV5()
     if (!m_access->backend()->execSql(
                     QString("CREATE TABLE ImageComments\n"
                             " (id INTEGER PRIMARY KEY,\n"
-                            "  imageid INTEGER UNIQUE,\n"
+                            "  imageid INTEGER,\n"
                             "  type INTEGER,\n"
                             "  language TEXT,\n"
                             "  author TEXT,\n"
@@ -689,6 +691,9 @@ bool SchemaUpdater::updateV4toV5()
                     DatabaseItem::Visible, DatabaseItem::UndefinedCategory)
        )
          return false;
+
+    // remove orphan images that would not be removed by CollectionScanner
+    m_access->backend()->execSql(QString("DELETE FROM Images WHERE album NOT IN (SELECT id FROM Albums);"));
 
     DDebug() << "Populated Images" << endl;
 

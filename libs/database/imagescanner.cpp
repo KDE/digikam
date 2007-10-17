@@ -29,6 +29,7 @@
 
 // Local includes
 
+#include "ddebug.h"
 #include "databaseurl.h"
 #include "databaseaccess.h"
 #include "albumdb.h"
@@ -160,6 +161,17 @@ void ImageScanner::scanImageInformation()
     DatabaseAccess().db()->addImageInformation(m_scanInfo.id, infos);
 }
 
+static bool hasValidField(const QVariantList &list)
+{
+    for (QVariantList::const_iterator it = list.begin();
+         it != list.end(); ++it)
+    {
+        if (!(*it).isNull())
+            return true;
+    }
+    return false;
+}
+
 void ImageScanner::updateImageInformation()
 {
     QSize size = m_img.size();
@@ -202,7 +214,8 @@ void ImageScanner::scanImageMetadata()
 
     QVariantList metadataInfos = m_metadata.getMetadataFields(fields);
 
-    DatabaseAccess().db()->addImageMetadata(m_scanInfo.id, metadataInfos);
+    if (hasValidField(metadataInfos))
+        DatabaseAccess().db()->addImageMetadata(m_scanInfo.id, metadataInfos);
 }
 
 void ImageScanner::scanImagePosition()
@@ -220,18 +233,7 @@ void ImageScanner::scanImagePosition()
 
     QVariantList metadataInfos = m_metadata.getMetadataFields(fields);
 
-    bool haveGpsData = false;
-    for (QVariantList::const_iterator it = metadataInfos.begin();
-         it != metadataInfos.end(); ++it)
-    {
-        if (!(*it).isNull())
-        {
-            haveGpsData = true;
-            break;
-        }
-    }
-
-    if (haveGpsData)
+    if (hasValidField(metadataInfos))
         DatabaseAccess().db()->addImagePosition(m_scanInfo.id, metadataInfos);
 }
 
@@ -318,8 +320,14 @@ void ImageScanner::scanTags()
 
 void ImageScanner::loadFromDisk()
 {
+    QTime time;
+    time.start();
     m_hasMetadata = m_metadata.load(m_fileInfo.filePath());
+    int metadataTime = time.elapsed();
+    time.restart();
     m_hasImage    = m_img.loadImageInfo(m_fileInfo.filePath(), false, false);
+    int dimgTime = time.elapsed();
+    time.restart();
     // faster than loading twice from disk
     if (m_hasMetadata)
     {
@@ -328,6 +336,8 @@ void ImageScanner::loadFromDisk()
         m_img.setIptc(m_metadata.getIptc());
         m_img.setXmp(m_metadata.getXmp());
     }
+    int setTime = time.elapsed();
+    //DDebug() << "loadFromDisk times:" << metadataTime << dimgTime << setTime << endl;
 }
 
 QString ImageScanner::detectFormat()

@@ -323,16 +323,16 @@ void CollectionScanner::scanAlbum(CollectionLocation *location, const QString &a
                 }
                 else
                 {
-                // compare modification date
+                    // compare modification date
                     QDateTime fiModifyDate = fi->lastModified();
                     if (fiModifyDate != scanInfos[index].modificationDate)
                     {
-                    // allow a "modify window" of one second.
-                    // FAT filesystems store the modify date in 2-second resolution.
+                        // allow a "modify window" of one second.
+                        // FAT filesystems store the modify date in 2-second resolution.
                         int diff = fiModifyDate.secsTo(scanInfos[index].modificationDate);
                         if (abs(diff) > 1)
                         {
-                        // file has been modified
+                            // file has been modified
                             ImageScanner scanner((*fi), scanInfos[index]);
                             scanner.setCategory(category(*fi));
                             scanner.fileModified();

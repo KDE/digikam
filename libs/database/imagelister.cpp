@@ -184,7 +184,7 @@ void ImageLister::listAlbum(ImageListerReceiver *receiver,
 
     {
         DatabaseAccess access;
-        access.backend()->execSql(QString("SELECT DISTINCT Images.id, Images.name, Images.album, "
+        access.backend()->execSql(QString("SELECT DISTINCT Images.id, Images.name, "
                                           "       Images.fileSize, ImageInformation.creationDate, "
                                           "       ImageInformation.width, ImageInformation.height "
                                           " FROM Images "

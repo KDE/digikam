@@ -408,6 +408,7 @@ bool DatabaseBackend::exec(QSqlQuery &query)
         DDebug() << "Failure executing query: " << endl;
         DDebug() << query.executedQuery() << endl;
         DDebug() << query.lastError().text() << endl;
+        DDebug() << "Bound values: " << query.boundValues().values() << endl;
         return false;
     }
     /*else
@@ -425,6 +426,7 @@ bool DatabaseBackend::execBatch(QSqlQuery &query)
         DDebug() << "Failure executing batch query: " << endl;
         DDebug() << query.executedQuery() << endl;
         DDebug() << query.lastError().text() << endl;
+        DDebug() << "Bound values: " << query.boundValues().values() << endl;
         return false;
     }
     return true;
