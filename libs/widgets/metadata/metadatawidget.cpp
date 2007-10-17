@@ -41,6 +41,8 @@
 #include <QButtonGroup>
 #include <QDataStream>
 #include <QColorGroup>
+#include <QPrinter>
+#include <QPrintDialog>
 
 // KDE includes.
 
@@ -49,7 +51,6 @@
 #include <kglobal.h>
 #include <kfiledialog.h>
 #include <kglobalsettings.h>
-#include <kprinter.h>
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <kapplication.h>
@@ -334,12 +335,13 @@ void MetadataWidget::slotPrintMetadata(void)
 
     textmetadata.append("</p>");
 
-    KPrinter printer;
+    QPrinter printer;
     printer.setFullPage( true );
 
-    if ( printer.setup( this ) )
+    QPrintDialog dialog(&printer, kapp->activeWindow());
+    if (dialog.exec())
     {
-        QPainter p( &printer );
+        QPainter p(&printer);
 
         if ( !p.device() ) 
             return;
