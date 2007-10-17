@@ -59,6 +59,35 @@ public:
      * filter that understands * and ? wildcards (see QDir::setNameFilters)
      */
     void setNameFilters(const QStringList &filters);
+
+    /**
+     * Carries out a full scan on all available parts of the collection.
+     */
+    void completeScan();
+
+    /**
+     * Carries out a partial scan on the specified path of the collection.
+     * The includes scanning for new files + albums and updating modified file data.
+     * Files no longer found in the specified path however are not completely
+     * removed, but only marked as removed. They will be removed only after a complete scan.
+     */
+    void partialScan(const QString &filePath);
+
+    /**
+     * Same procedure as above, but albumRoot and album is provided.
+     */
+    void partialScan(const QString &albumRoot, const QString& album);
+
+protected:
+
+    void scanForStaleAlbums();
+    void scanAlbumRoot(CollectionLocation *location);
+    void scanAlbum(CollectionLocation *location, const QString &album);
+
+
+
+
+#if 0
     /**
      * Carries out a full scan (for new albums + new pictures,
      * stale albums, stale pictures) on the given path.
@@ -126,6 +155,9 @@ public:
      */
     void updateItemsWithoutDate();
 
+
+
+
     /**
      * Writes into the database that it has been scanned at this point in time.
      */
@@ -147,6 +179,7 @@ public:
     static void updateItemDate(int albumID, const QString& albumRoot, const QString &album, const QString &fileName);
     static void updateItemDate(Digikam::DatabaseAccess &access, int albumID,
                                const QString& albumRoot, const QString &album, const QString &fileName);
+#endif
 
 signals:
 

@@ -42,13 +42,13 @@
 
 // Local includes
 
+#include "ddebug.h"
 #include "albumdb.h"
 #include "collectionmanager.h"
+#include "collectionlocation.h"
 #include "databaseaccess.h"
-#include "databasebackend.h"
 #include "databasetransaction.h"
-#include "ddebug.h"
-#include "dmetadata.h"
+#include "imagescanner.h"
 #include "collectionscanner.h"
 #include "collectionscanner.moc"
 
@@ -79,6 +79,182 @@ void CollectionScanner::setNameFilters(const QStringList &filters)
     m_nameFilters = filters;
 }
 
+
+void CollectionScanner::completeScan()
+{
+    QList<CollectionLocation *> allLocations = CollectionManager::instance()->allAvailableLocations();
+
+    // count for progress info
+    int count = 0;
+    foreach (CollectionLocation *location, allLocations)
+        count += countItemsInFolder(location->albumRootPath());
+
+    emit totalFilesToScan(count);
+
+    scanForStaleAlbums();
+
+    foreach (CollectionLocation *location, allLocations)
+        scanAlbumRoot(location);
+}
+
+void CollectionScanner::partialScan(const QString &filePath)
+{
+}
+
+void CollectionScanner::partialScan(const QString &albumRoot, const QString& album)
+{
+}
+
+void CollectionScanner::scanAlbumRoot(CollectionLocation *location)
+{
+    QDir dir(location->albumRootPath());
+    QStringList fileList(dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot));
+
+    DatabaseTransaction transaction;
+    for (QStringList::iterator fileIt = fileList.begin(); fileIt != fileList.end(); ++fileIt)
+    {
+        scanAlbum(location, '/' + (*fileIt));
+    }
+}
+
+void CollectionScanner::scanForStaleAlbums()
+{
+    QList<AlbumShortInfo> albumList = DatabaseAccess().db()->getAlbumShortInfos();
+    QList<AlbumShortInfo> toBeDeleted;
+
+    QList<AlbumShortInfo>::const_iterator it;
+    for (it = albumList.constBegin(); it != albumList.constEnd(); ++it)
+    {
+        QFileInfo fileInfo((*it).albumRoot + (*it).relativePath);
+        if (!fileInfo.exists() || !fileInfo.isDir())
+            toBeDeleted << (*it);
+    }
+
+    DatabaseTransaction transaction;
+    DatabaseAccess access;
+    for (it = toBeDeleted.constBegin(); it != toBeDeleted.constEnd(); ++it)
+    {
+        access.db()->removeItemsFromAlbum((*it).id);
+    }
+}
+
+void CollectionScanner::scanAlbum(CollectionLocation *location, const QString &album)
+{
+    // + Adds album if it does not yet exist in the db.
+    // + Recursively scans subalbums of album.
+    // + Adds files if they do not yet exist in the db.
+    // + Adds stale files from the db to m_filesToBeDeleted
+    // - Does not add stale albums to m_foldersToBeDeleted.
+
+    QDir dir(location->albumRootPath() + album);
+
+    if ( !dir.exists() or !dir.isReadable() )
+    {
+        DWarning() << "Folder does not exist or is not readable: "
+                    << dir.path() << endl;
+        return;
+    }
+
+    emit startScanningAlbum(location->albumRootPath(), album);
+
+    // get album id if album exists
+    int albumID = DatabaseAccess().db()->getAlbumForPath(location->id(), album, false);
+
+    if (albumID == -1)
+    {
+        QFileInfo fi(location->albumRootPath() + album);
+        albumID = DatabaseAccess().db()->addAlbum(location->id(), album, QString(), fi.lastModified().date(), QString());
+    }
+
+    QList<ItemScanInfo> scanInfos = DatabaseAccess().db()->getItemScanInfos(albumID);
+
+    // create a hash filename -> index in list
+    QHash<QString, int> fileNameIndexHash;
+    for (int i = 0; i < scanInfos.size(); i++)
+    {
+        fileNameIndexHash[scanInfos[i].itemName] = i;
+    }
+
+    const QFileInfoList list = dir.entryInfoList(m_nameFilters, QDir::AllDirs | QDir::Files  | QDir::NoDotAndDotDot /*not CaseSensitive*/);
+    QFileInfoList::const_iterator fi;
+
+    for (fi = list.constBegin(); fi != list.constEnd(); ++fi)
+    {
+        if ( fi->isFile())
+        {
+            int index = fileNameIndexHash.value(fi->fileName(), -1);
+            if (index != -1)
+            {
+                // compare modification date
+                QDateTime fiModifyDate = fi->lastModified();
+                if (fiModifyDate != scanInfos[index].modificationDate)
+                {
+                    // allow a "modify window" of one second.
+                    // FAT filesystems store the modify date in 2-second resolution.
+                    int diff = fiModifyDate.secsTo(scanInfos[index].modificationDate);
+                    if (abs(diff) > 1)
+                    {
+                        // file has been modified
+                        ImageScanner scanner((*fi), scanInfos[index]);
+                        scanner.fileModified();
+                    }
+                }
+            }
+            // ignore temp files we created ourselves
+            else if (fi->completeSuffix() == "digikamtempfile.tmp")
+            {
+                continue;
+            }
+            else
+            {
+                DDebug() << "Adding item " << fi->fileName() << endl;
+                ImageScanner scanner(*fi);
+                scanner.newFile(albumID);
+            }
+        }
+        else if ( fi->isDir() )
+        {
+            scanAlbum( location, album + '/' + fi->fileName() );
+        }
+    }
+
+    // Removing items from the db which we did not see on disk.
+    /*
+    if (!filesFoundInDB.isEmpty())
+    {
+        QSetIterator<QString> it(filesFoundInDB);
+        while (it.hasNext())
+        {
+            QPair<QString,int> pair(it.next(),albumID);
+            if (m_filesToBeDeleted.indexOf(pair) == -1)
+            {
+                m_filesToBeDeleted << pair;
+            }
+        }
+    }
+    */
+
+    emit finishedScanningAlbum(location->albumRootPath(), album, list.count());
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#if 0
 
 void CollectionScanner::scanForStaleAlbums()
 {
@@ -611,5 +787,6 @@ void CollectionScanner::removeInvalidAlbums(const QString &albumRoot)
     }
 }
 */
+#endif
 
 }  // namespace Digikam
