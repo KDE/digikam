@@ -7,5 +7,7 @@ Name[fr]=Télécharger les photos avec digiKam
 Name[tr]=digiKam ile resimler göster
 
 [Desktop Entry]
+Encoding=UTF-8
 Actions=digiKam Detect and Download
 ServiceTypes=media/gphoto2camera
+Type=Service

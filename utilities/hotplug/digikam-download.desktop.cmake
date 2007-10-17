@@ -7,5 +7,7 @@ Name[fr]=Télécharger les photos avec digiKam
 Name[tr]=digiKam ile resimleri göster
 
 [Desktop Entry]
+Encoding=UTF-8
 Actions=digiKam Download
+Type=Service
 ServiceTypes=media/removable_mounted,media/camera_mounted
