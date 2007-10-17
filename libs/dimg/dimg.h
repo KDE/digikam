@@ -369,11 +369,12 @@ public:
      *
      * If you already have a DImg object of the file, use the member method.
      * The object does not need to have the full image data loaded, but it shall at least
-     * have been loaded with loadImageInfo with loadMetadata = true.
-     * If the object has been loaded without loadMetadata, a non-null, invalid hash will
+     * have been loaded with loadImageInfo with loadMetadata = true, or have the metadata
+     * set later with setComments, setExif, setIptc, setXmp.
+     * If the object does not have the metadata loaded, a non-null, but invalid hash will
      * be returned! In this case, use the static method.
      * If the image has been loaded with loadUniqueHash = true, the hash can be retrieved
-     * with this method.
+     * with the member method.
      *
      * You do not need a DImg object of the file to retrieve the unique hash;
      * Use the static method and pass just the file path.

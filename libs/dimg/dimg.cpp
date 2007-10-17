@@ -1731,7 +1731,7 @@ QByteArray DImg::getUniqueHash()
 
     if (!m_priv->attributes.contains("originalFilePath"))
     {
-        DWarning() << "DImg::getUniqueHash called withou originalFilePath property set!" << endl;
+        DWarning() << "DImg::getUniqueHash called without originalFilePath property set!" << endl;
         return QByteArray();
     }
 
