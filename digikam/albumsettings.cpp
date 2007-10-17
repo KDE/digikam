@@ -271,6 +271,7 @@ void AlbumSettings::readSettings()
                                                                   "Item Right Click Action",
                                                                   (int)AlbumSettings::ShowPreview));
 
+#warning File formats are now stored in the database. Remove this here and update settings tab.
     d->imageFilefilter   = group.readEntry("File Filter", d->imageFilefilter);
     d->movieFilefilter   = group.readEntry("Movie File Filter", d->movieFilefilter);
     d->audioFilefilter   = group.readEntry("Audio File Filter", d->audioFilefilter);

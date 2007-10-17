@@ -574,7 +574,7 @@ bool DMetadata::setIptcTag(const QString& text, int maxLength,
     return setIptcTagString(tagKey, truncatedText);    // returns false if failed
 }
 
-inline QVariant DMetadata::fromExifOrXmp(const char *exifTagName, const char *xmpTagName)
+inline QVariant DMetadata::fromExifOrXmp(const char *exifTagName, const char *xmpTagName) const
 {
     QVariant var;
 
@@ -590,7 +590,7 @@ inline QVariant DMetadata::fromExifOrXmp(const char *exifTagName, const char *xm
     return var;
 }
 
-inline QVariant DMetadata::fromIptcOrXmp(const char *iptcTagName, const char *xmpTagName)
+inline QVariant DMetadata::fromIptcOrXmp(const char *iptcTagName, const char *xmpTagName) const
 {
     QString iptcValue;
 
@@ -607,7 +607,7 @@ inline QVariant DMetadata::fromIptcOrXmp(const char *iptcTagName, const char *xm
     return QVariant(QVariant::String);
 }
 
-inline QVariant DMetadata::fromIptcOrXmpList(const char *iptcTagName, const char *xmpTagName)
+inline QVariant DMetadata::fromIptcOrXmpList(const char *iptcTagName, const char *xmpTagName) const
 {
     QStringList iptcValues;
 
@@ -624,7 +624,7 @@ inline QVariant DMetadata::fromIptcOrXmpList(const char *iptcTagName, const char
     return QVariant(QVariant::StringList);
 }
 
-inline QVariant DMetadata::fromIptcOrXmpLangAlt(const char *iptcTagName, const char *xmpTagName)
+inline QVariant DMetadata::fromIptcOrXmpLangAlt(const char *iptcTagName, const char *xmpTagName) const
 {
     QString value;
 
@@ -668,7 +668,12 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field)
             return fromIptcOrXmp("Iptc.Application2.Writer", "photoshop.CaptionWriter");
 
         case MetadataInfo::Keywords:
-            return fromIptcOrXmpList("Iptc.Application2.Keywords", "dc.subject");
+        {
+            QStringList list;
+            if (getImageTagsPath(list))
+                return list;
+            return QVariant(QVariant::StringList);
+        }
 
         case MetadataInfo::Rating:
             return getImageRating();
@@ -822,6 +827,7 @@ QVariantList DMetadata::getMetadataFields(const MetadataFields &fields)
 }
 
 QString DMetadata::valueToString (const QVariant &value, MetadataInfo::Field field)
+{
     switch (field)
     {
         case MetadataInfo::Rating:
@@ -984,6 +990,12 @@ QString DMetadata::valueToString (const QVariant &value, MetadataInfo::Field fie
             return value.toStringList().join(" ");
 
         // Text
+        case MetadataInfo::Comment:
+        case MetadataInfo::CommentJfif:
+        case MetadataInfo::CommentExif:
+        case MetadataInfo::CommentIptc:
+        case MetadataInfo::Headline:
+        case MetadataInfo::DescriptionWriter:
         case MetadataInfo::IptcCoreProvider:
         case MetadataInfo::IptcCoreSource:
         case MetadataInfo::IptcCoreCreatorJobTitle:
@@ -995,8 +1007,6 @@ QString DMetadata::valueToString (const QVariant &value, MetadataInfo::Field fie
         case MetadataInfo::IptcCoreProvinceState:
         case MetadataInfo::IptcCoreIntellectualGenre:
         case MetadataInfo::IptcCoreJobID:
-        case MetadataInfo::DescriptionWriter:
-        case MetadataInfo::Headline:
             return value.toString();
 
         default:

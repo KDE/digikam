@@ -100,9 +100,11 @@ QString DigikamImageInfo::title()
 QString DigikamImageInfo::description()
 {
     PAlbum* p = parentAlbum();
-
+#warning Implement comments
+/*
     if (p)
         DatabaseAccess().db()->getItemCaption(p->id(), _url.fileName());
+    */
 
     return QString();
 }
@@ -131,7 +133,8 @@ void DigikamImageInfo::setDescription( const QString& description )
         {
             DatabaseAccess access;
             imageId = access.db()->getImageId(p->id(), _url.fileName());
-            access.db()->setItemCaption(imageId, description);
+#warning Implement comments
+            //access.db()->setItemCaption(imageId, description);
         }
 
         // See B.K.O #140133. Do not set here metadata comments of picture.

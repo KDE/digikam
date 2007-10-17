@@ -786,12 +786,11 @@ void CameraUI::finishDialog()
     d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode,
                                           i18n("Scanning for new files, please wait..."));
     CollectionScanner scanner;
-    scanner.setNameFilters(AlbumSettings::instance()->getAllFileFilter());
     for (QStringList::iterator it = d->foldersToScan.begin();
          it != d->foldersToScan.end(); ++it)
     {
         //DDebug() << "Scanning " << (*it) << endl;
-        scanner.scanAlbum(*it);
+        scanner.partialScan(*it);
     }
 
     // Never call finalScan after deleteLater() - ScanLib will call processEvent(),
