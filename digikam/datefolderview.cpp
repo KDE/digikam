@@ -254,13 +254,13 @@ void DateFolderView::loadViewState()
     QString selected;
     if(group.hasKey("LastSelectedItem"))
     {
-        selected = group.readEntry("LastSelectedItem");
+        selected = group.readEntry("LastSelectedItem", QString());
     }
 
     QStringList openFolders;
     if(group.hasKey("OpenFolders"))
     {
-        openFolders = group.readEntry("OpenFolders",QStringList());
+        openFolders = group.readEntry("OpenFolders", QStringList());
     }
     
     DateFolderItem *item;

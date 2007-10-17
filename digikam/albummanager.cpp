@@ -259,7 +259,7 @@ void AlbumManager::setAlbumRoot(const QString &albumRoot, bool priority)
         if (group.hasKey("Locale"))
         {
             DDebug() << "Locale found in configfile" << endl;
-            dbLocale = group.readEntry("Locale");
+            dbLocale = group.readEntry("Locale", QString());
 
             // this hack is necessary, as we used to store the entire
             // locale info LC_ALL (for eg: en_US.UTF-8) earlier, 
