@@ -74,8 +74,9 @@ namespace Digikam
 //-- Image Info ------------------------------------------------------------------
 
 DigikamImageInfo::DigikamImageInfo( KIPI::Interface* interface, const KUrl& url )
-                : KIPI::ImageInfoShared( interface, url ), palbum_(0)
+                : KIPI::ImageInfoShared( interface, url )
 {
+    m_info = ImageInfo(url);
 }
 
 DigikamImageInfo::~DigikamImageInfo()
@@ -84,29 +85,17 @@ DigikamImageInfo::~DigikamImageInfo()
 
 PAlbum* DigikamImageInfo::parentAlbum()
 {
-    if (!palbum_)
-    {
-        KUrl u(_url.directory());
-        palbum_ = AlbumManager::instance()->findPAlbum(u);
-    }
-    return palbum_;
+    return AlbumManager::instance()->findPAlbum(m_info.albumId());
 }
 
 QString DigikamImageInfo::title()
 {
-    return _url.fileName();
+    return m_info.name();
 }
 
 QString DigikamImageInfo::description()
 {
-    PAlbum* p = parentAlbum();
-#warning Implement comments
-/*
-    if (p)
-        DatabaseAccess().db()->getItemCaption(p->id(), _url.fileName());
-    */
-
-    return QString();
+    return m_info.comment();
 }
 
 void DigikamImageInfo::setTitle( const QString& newName )
@@ -125,31 +114,12 @@ void DigikamImageInfo::setTitle( const QString& newName )
 
 void DigikamImageInfo::setDescription( const QString& description )
 {
-    PAlbum* p = parentAlbum();
-
-    if ( p  )
-    {
-        qlonglong imageId;
-        {
-            DatabaseAccess access;
-            imageId = access.db()->getImageId(p->id(), _url.fileName());
-#warning Implement comments
-            //access.db()->setItemCaption(imageId, description);
-        }
-
-        // See B.K.O #140133. Do not set here metadata comments of picture.
-        // Only the database comments must be set.
-    }
+    m_info.setComment(description);
 }
 
 QDateTime DigikamImageInfo::time( KIPI::TimeSpec /*spec*/ )
 {
-    PAlbum* p = parentAlbum();
-
-    if (p)
-        DatabaseAccess().db()->getItemDate(p->id(), _url.fileName());
-
-    return QDateTime();
+    return m_info.dateTime();
 }
 
 void DigikamImageInfo::setTime(const QDateTime& time, KIPI::TimeSpec)
@@ -160,18 +130,8 @@ void DigikamImageInfo::setTime(const QDateTime& time, KIPI::TimeSpec)
         return;
     }
 
-    PAlbum* p = parentAlbum();
-
-    if ( p )
-    {
-        qlonglong imageId;
-        {
-            DatabaseAccess access;
-            imageId = access.db()->getImageId(p->id(), _url.fileName());
-            access.db()->setItemDate(imageId, time);
-        }
-        AlbumManager::instance()->refreshItemHandler( _url );
-    }
+    m_info.setDateTime(time);
+    AlbumManager::instance()->refreshItemHandler( _url );
 }
 
 void DigikamImageInfo::cloneData( ImageInfoShared* other )
@@ -190,24 +150,19 @@ QMap<QString, QVariant> DigikamImageInfo::attributes()
     PAlbum* p = parentAlbum();
     if (p)
     {
-        DatabaseAccess access;
-        qlonglong imageId    = access.db()->getImageId(p->id(), _url.fileName());
-
-        /* TODO:  Marcel, a new method from AlbumDb class need to created for that.
-
-        // Get digiKam Tags Path list of picture from database. 
+        // Get digiKam Tags Path list of picture from database.
         // Ex.: "City/Paris/Monuments/Notre Dame"
 
-        QStringList tagspath = access.db()->getItemTagPath(imageId);
-        res["tagspath"]      = tagspath;*/
+        QStringList tagspath = AlbumManager::instance()->tagPaths(m_info.tagIds(), false);
+        res["tagspath"]      = tagspath;
 
         // Get digiKam Tags name list of picture from database.
         // Ex.: "Notre Dame"
-        QStringList tags     = access.db()->getItemTagNames(imageId);
+        QStringList tags     = m_info.tagNames();
         res["tags"]          = tags;
 
         // Get digiKam Rating of picture from database.
-        int rating           = access.db()->getItemRating(imageId);
+        int rating           = m_info.rating();
         res["rating"]        = rating;
 
         // TODO: add here a kipi-plugins access to future picture attributes stored by digiKam database
@@ -220,27 +175,26 @@ void DigikamImageInfo::addAttributes(const QMap<QString, QVariant>& res)
     PAlbum* p = parentAlbum();
     if (p)
     {
-        DatabaseAccess access;
-        qlonglong imageId = access.db()->getImageId(p->id(), _url.fileName());
         QMap<QString, QVariant> attributes = res;
 
         // Set digiKam Tags Path list of picture into database. 
         // Ex.: "City/Paris/Monuments/Notre Dame"
         if (attributes.find("tagspath") != attributes.end())
         {
-            /* TODO:  Marcel, a new method from AlbumDb class need to created for that.
+            QStringList tagspaths = attributes["tagspath"].toStringList();
 
-            QStringList tagspath = attributes["tagspath"].toStringList();*/
-            //FIXME
-            //access.db()->setItemTagPath(imageId, tagspath);
+            DatabaseAccess access;
+            // get tag ids, create if necessary
+            QList<int> tagIds = access.db()->getTagsFromTagPaths(tagspaths, true);
+            access.db()->addTagsToItems(QList<qlonglong>() << m_info.id(), tagIds);
         }
 
         // Set digiKam Rating of picture into database.
-        if (attributes.find("rating") != attributes.end())
+        if (attributes.contains("rating"))
         {
             int rating = attributes["rating"].toInt();
             if (rating >= RatingMin && rating <= RatingMax)
-                access.db()->setItemRating(imageId, rating);
+                m_info.setRating(rating);
         }
 
         // TODO: add here a kipi-plugins access to future picture attributes stored by digiKam database
@@ -253,7 +207,7 @@ void DigikamImageInfo::addAttributes(const QMap<QString, QVariant>& res)
 
 void DigikamImageInfo::clearAttributes()
 {
-    // TODO: implemente me.
+    // TODO: implement me.
 }
 
 int DigikamImageInfo::angle()
@@ -261,6 +215,7 @@ int DigikamImageInfo::angle()
     AlbumSettings *settings = AlbumSettings::instance();
     if (settings->getExifRotate())
     {
+        //TODO: read from DB
         DMetadata metadata(_url.path());
         DMetadata::ImageOrientation orientation = metadata.getImageOrientation();
         

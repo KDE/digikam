@@ -97,8 +97,7 @@ void kio_digikamalbums::special(const QByteArray& data)
     if (scan)
     {
         Digikam::CollectionScanner scanner;
-        scanner.setNameFilters(filter);
-        scanner.scan(dbUrl.albumRootPath(), dbUrl.album());
+        scanner.partialScan(dbUrl.albumRootPath(), dbUrl.album());
         finished();
         return;
     }
@@ -154,12 +153,9 @@ void kio_digikamalbums::put(const KUrl& url, int permissions, KIO::JobFlags flag
     if (m_eventLoop->exec() != 0)
         return;
 
-    // First check if the file is already in database
-    if (access.db()->getImageId(albumID, url.fileName()) == -1)
-    {
-        // Now insert the file into the database
-        Digikam::CollectionScanner::addItem(access, albumID, dbUrl.albumRootPath(), dbUrl.album(), dbUrl.name());
-    }
+    // Necessary?
+    //CollectionScanner scanner;
+    //scanner.scanFile(dbUrl.albumRootPath(), dbUrl.album(), dbUrl.name())
 
     // We have done our job => finish
     finished();

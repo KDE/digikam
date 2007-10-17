@@ -706,6 +706,7 @@ Album* AlbumManager::currentAlbum() const
 
 PAlbum* AlbumManager::findPAlbum(const KUrl& url) const
 {
+#warning Reimplement this, not safe for multiple roots!
     return d->pAlbumDict.find(CollectionManager::instance()->album(url));
 }
 

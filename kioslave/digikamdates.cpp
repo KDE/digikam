@@ -83,18 +83,14 @@ void kio_digikamdates::special(const QByteArray& data)
         typedef QPair<int, int> YearMonth;
         QMap<YearMonth, bool> yearMonthMap;
 
-        QList<QPair<QString, QDateTime> > images;
-        {
-            Digikam::DatabaseAccess access;
-            images = access.db()->getItemsAndDate();
-        }
+        QList<QDateTime> allDateTimes;
+        Digikam::DatabaseAccess().db()->getAllCreationDates();
 
-        QList<QPair<QString, QDateTime> >::const_iterator it;
-        for ( it = images.constBegin(); it != images.constEnd(); ++it)
+        foreach (QDateTime dateTime, allDateTimes)
         {
-            if ( !yearMonthMap.contains(YearMonth((*it).second.date().year(), (*it).second.date().month())) )
+            if ( !yearMonthMap.contains(YearMonth(dateTime.date().year(), dateTime.date().month())) )
             {
-                yearMonthMap.insert( YearMonth( (*it).second.date().year(), (*it).second.date().month() ), true );
+                yearMonthMap.insert( YearMonth( dateTime.date().year(), dateTime.date().month() ), true );
             }
         }
 

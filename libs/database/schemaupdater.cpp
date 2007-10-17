@@ -33,6 +33,7 @@
 #include <kio/netaccess.h>
 #include <klocale.h>
 #include <kconfig.h>
+#include <kconfiggroup.h>
 
 // LibKDcraw includes.
 
@@ -47,6 +48,7 @@
 #include "upgradedb_sqlite2tosqlite3.h"
 #include "collectionmanager.h"
 #include "collectionlocation.h"
+#include "collectionscanner.h"
 #include "schemaupdater.h"
 
 namespace Digikam
@@ -264,7 +266,7 @@ bool SchemaUpdater::createTablesV5()
 
     if (!m_access->backend()->execSql(
                     QString("CREATE TABLE ImageHaarMatrix\n"
-                            " (imageid INTEGER UNIQUE FOREIGN KEY,\n"
+                            " (imageid INTEGER UNIQUE PRIMARY KEY,\n"
                             "  matrix BLOB);") ))
     {
         return false;
@@ -272,7 +274,7 @@ bool SchemaUpdater::createTablesV5()
 
     if (!m_access->backend()->execSql(
                     QString("CREATE TABLE ImageInformation\n"
-                            " (imageid INTEGER UNIQUE FOREIGN KEY,\n"
+                            " (imageid INTEGER UNIQUE PRIMARY KEY,\n"
                             "  rating INTEGER,\n"
                             "  creationDate DATETIME,\n"
                             "  digitizationDate DATETIME,\n"
@@ -288,7 +290,7 @@ bool SchemaUpdater::createTablesV5()
 
     if (!m_access->backend()->execSql(
                     QString("CREATE TABLE ImageMetadata\n"
-                            " (imageid INTEGER UNIQUE FOREIGN KEY,\n"
+                            " (imageid INTEGER UNIQUE PRIMARY KEY,\n"
                             "  make TEXT,\n"
                             "  model TEXT,\n"
                             "  aperture REAL,\n"
@@ -310,7 +312,7 @@ bool SchemaUpdater::createTablesV5()
 
     if (!m_access->backend()->execSql(
                     QString("CREATE TABLE ImagePositions\n"
-                            " (imageid INTEGER UNIQUE FOREIGN KEY,\n"
+                            " (imageid INTEGER UNIQUE PRIMARY KEY,\n"
                             "  latitude TEXT,\n"
                             "  latitudeNumber REAL,\n"
                             "  longitude TEXT,\n"
@@ -719,6 +721,10 @@ bool SchemaUpdater::updateV4toV5()
     m_access->db()->setUserFilterSettings(configImageFilter.toList(), configVideoFilter.toList(), configAudioFilter.toList());
 
     // --- do a full scan ---
+
+    // TODO: Add UI!!!
+    CollectionScanner scanner;
+    scanner.completeScan();
 
     // --- Port date, comment and rating (_after_ the scan) ---
 

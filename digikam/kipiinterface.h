@@ -45,6 +45,10 @@
 #include <libkipi/imageinfoshared.h>
 #include <libkipi/imagecollectionshared.h>
 
+// Local includes
+
+#include "imageinfo.h"
+
 class QDateTime;
 
 namespace KIPI
@@ -91,11 +95,11 @@ public:
     
 private:
 
-    PAlbum *parentAlbum();
+    PAlbum* parentAlbum();
 
 private:
 
-    PAlbum *palbum_;
+    ImageInfo m_info;
 };
 
 

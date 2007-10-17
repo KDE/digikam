@@ -685,57 +685,57 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field)
             return (int)getImageOrientation();
 
         case MetadataInfo::Make:
-            return fromExifOrXmp("Exif.Image.Make", "tiff.Make");
+            return fromExifOrXmp("Exif.Image.Make", "Xmp.tiff.Make");
         case MetadataInfo::Model:
-            return fromExifOrXmp("Exif.Image.Model", "tiff.Model");
+            return fromExifOrXmp("Exif.Image.Model", "Xmp.tiff.Model");
         case MetadataInfo::Aperture:
         {
-            QVariant var = fromExifOrXmp("Exif.Photo.FNumber", "exif.FNumber");
+            QVariant var = fromExifOrXmp("Exif.Photo.FNumber", "Xmp.exif.FNumber");
             if (var.isNull())
             {
-                var = fromExifOrXmp("Exif.Photo.ApertureValue", "exif.ApertureValue");
+                var = fromExifOrXmp("Exif.Photo.ApertureValue", "Xmp.exif.ApertureValue");
                 if (!var.isNull())
                     var = apexApertureToFNumber(var.toDouble());
             }
             return var;
         }
         case MetadataInfo::FocalLength:
-            return fromExifOrXmp("Exif.Photo.FocalLength", "exif.FocalLength");
+            return fromExifOrXmp("Exif.Photo.FocalLength", "Xmp.exif.FocalLength");
         case MetadataInfo::FocalLengthIn35mm:
-            return fromExifOrXmp("Exif.Photo.FocalLengthIn35mmFilm", "exif.FocalLengthIn35mmFilm");
+            return fromExifOrXmp("Exif.Photo.FocalLengthIn35mmFilm", "Xmp.exif.FocalLengthIn35mmFilm");
         case MetadataInfo::ExposureTime:
         {
-            QVariant var = fromExifOrXmp("Exif.Photo.ExposureTime", "exif.ExposureTime");
+            QVariant var = fromExifOrXmp("Exif.Photo.ExposureTime", "Xmp.exif.ExposureTime");
             if (var.isNull())
             {
-                var = fromExifOrXmp("Exif.Photo.ShutterSpeedValue", "exif.ShutterSpeedValue");
+                var = fromExifOrXmp("Exif.Photo.ShutterSpeedValue", "Xmp.exif.ShutterSpeedValue");
                 if (!var.isNull())
                     var = apexShutterSpeedToExposureTime(var.toDouble());
             }
             return var;
         }
         case MetadataInfo::ExposureProgram:
-            return fromExifOrXmp("Exif.Photo.ExposureProgram", "exif.ExposureProgram");
+            return fromExifOrXmp("Exif.Photo.ExposureProgram", "Xmp.exif.ExposureProgram");
         case MetadataInfo::ExposureMode:
-            return fromExifOrXmp("Exif.Photo.ExposureMode", "exif.ExposureMode");
+            return fromExifOrXmp("Exif.Photo.ExposureMode", "Xmp.exif.ExposureMode");
         case MetadataInfo::Sensitivity:
         {
-            QVariant var = fromExifOrXmp("Exif.Photo.ISOSpeedRatings", "exif.ISOSpeedRatings");
+            QVariant var = fromExifOrXmp("Exif.Photo.ISOSpeedRatings", "Xmp.exif.ISOSpeedRatings");
             //if (var.isNull())
                 // TODO: has this ISO format??? We must convert to the format of ISOSpeedRatings!
-              //  var = fromExifOrXmp("Exif.Photo.ExposureIndex", "exif.ExposureIndex");
+              //  var = fromExifOrXmp("Exif.Photo.ExposureIndex", "Xmp.exif.ExposureIndex");
             return var;
         }
         case MetadataInfo::FlashMode:
-            return fromExifOrXmp("Exif.Photo.Flash", "exif.Flash");
+            return fromExifOrXmp("Exif.Photo.Flash", "Xmp.exif.Flash");
         case MetadataInfo::WhiteBalance:
-            return fromExifOrXmp("Exif.Photo.WhiteBalance", "exif.WhiteBalance");
+            return fromExifOrXmp("Exif.Photo.WhiteBalance", "Xmp.exif.WhiteBalance");
         case MetadataInfo::MeteringMode:
-            return fromExifOrXmp("Exif.Photo.MeteringMode", "exif.MeteringMode");
+            return fromExifOrXmp("Exif.Photo.MeteringMode", "Xmp.exif.MeteringMode");
         case MetadataInfo::SubjectDistance:
-            return fromExifOrXmp("Exif.Photo.SubjectDistance", "exif.SubjectDistance");
+            return fromExifOrXmp("Exif.Photo.SubjectDistance", "Xmp.exif.SubjectDistance");
         case MetadataInfo::SubjectDistanceCategory:
-            return fromExifOrXmp("Exif.Photo.SubjectDistanceRange", "exif.SubjectDistanceRange");
+            return fromExifOrXmp("Exif.Photo.SubjectDistanceRange", "Xmp.exif.SubjectDistanceRange");
         case MetadataInfo::WhiteBalanceColorTemperature:
             //TODO: ??
             return QVariant(QVariant::Int);
@@ -775,41 +775,40 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field)
             // TODO or unsupported?
             return QVariant(QVariant::String);
 
-        //TODO: Check all IPTC tag names
         case MetadataInfo::IptcCoreCopyrightNotice:
-            return fromIptcOrXmpLangAlt("Iptc.Application2.Copyright", "dc.rights");
+            return fromIptcOrXmpLangAlt("Iptc.Application2.Copyright", "Xmp.dc.rights");
         case MetadataInfo::IptcCoreCreator:
-            return fromIptcOrXmpList("Iptc.Application2.Creator", "dc.creator");
+            return fromIptcOrXmpList("Iptc.Application2.Byline", "Xmp.dc.creator");
         case MetadataInfo::IptcCoreProvider:
-            return fromIptcOrXmp("Iptc.Application2.Credit", "photoshop.Credit");
+            return fromIptcOrXmp("Iptc.Application2.Credit", "Xmp.photoshop.Credit");
         case MetadataInfo::IptcCoreRightUsageTerms:
-            return fromIptcOrXmpLangAlt(0, "xmpRights.UsageTerms");
+            return fromIptcOrXmpLangAlt(0, "Xmp.xmpRights.UsageTerms");
         case MetadataInfo::IptcCoreSource:
-            return fromIptcOrXmp("Iptc.Application2.Source", "photoshop.Source");
+            return fromIptcOrXmp("Iptc.Application2.Source", "Xmp.photoshop.Source");
 
         case MetadataInfo::IptcCoreCreatorJobTitle:
-            return fromIptcOrXmp("Iptc.Application2.BylineTitle", "photoshop.AuthorsPosition");
+            return fromIptcOrXmp("Iptc.Application2.BylineTitle", "Xmp.photoshop.AuthorsPosition");
         case MetadataInfo::IptcCoreInstructions:
-            return fromIptcOrXmp("Iptc.Application2.SpecialInstructions", "photoshop.Instructions");
+            return fromIptcOrXmp("Iptc.Application2.SpecialInstructions", "Xmp.photoshop.Instructions");
 
         case MetadataInfo::IptcCoreCountryCode:
-            return fromIptcOrXmp("Iptc.Application2.CountryCode", "Iptc4xmpCore.CountryCode");
+            return fromIptcOrXmp("Iptc.Application2.CountryCode", "Xmp.Iptc4xmpCore.CountryCode");
         case MetadataInfo::IptcCoreCountry:
-            return fromIptcOrXmp("Iptc.Application2.Country", "photoshop.Country");
+            return fromIptcOrXmp("Iptc.Application2.CountryName", "Xmp.photoshop.Country");
         case MetadataInfo::IptcCoreCity:
-            return fromIptcOrXmp("Iptc.Application2.City", "photoshop.City");
+            return fromIptcOrXmp("Iptc.Application2.City", "Xmp.photoshop.City");
         case MetadataInfo::IptcCoreLocation:
-            return fromIptcOrXmp("Iptc.Application2.Sublocation", "Iptc4xmpCore.Location");
+            return fromIptcOrXmp("Iptc.Application2.SubLocation", "Xmp.Iptc4xmpCore.Location");
         case MetadataInfo::IptcCoreProvinceState:
-            return fromIptcOrXmp("Iptc.Application2.State", "photoshop.State");
+            return fromIptcOrXmp("Iptc.Application2.ProvinceState", "Xmp.photoshop.State");
         case MetadataInfo::IptcCoreIntellectualGenre:
-            return fromIptcOrXmp("Iptc.Application2.ObjectAttributesReference", "Iptc4xmpCore.IntellectualGenre");
+            return fromIptcOrXmp(/*"Iptc.Application2.ObjectAttribute"?*/ 0, "Xmp.Iptc4xmpCore.IntellectualGenre");
         case MetadataInfo::IptcCoreJobID:
-            return fromIptcOrXmp("Iptc.Application2.OriginalTransmissionReference", "photoshop.TransmissionReference");
+            return fromIptcOrXmp("Iptc.Application2.TransmissionReference", "Xmp.photoshop.TransmissionReference");
         case MetadataInfo::IptcCoreScene:
-            return fromIptcOrXmpList(0, "Iptc4xmpCore.Scene");
+            return fromIptcOrXmpList(0, "Xmp.Iptc4xmpCore.Scene");
         case MetadataInfo::IptcCoreSubjectCode:
-            return fromIptcOrXmpList("Iptc.Application2.SubjectReference", "Iptc4xmpCore.SubjectCode");
+            return fromIptcOrXmpList("Iptc.Application2.Subject", "Xmp.Iptc4xmpCore.SubjectCode");
 
         default:
             return QVariant();
