@@ -55,13 +55,28 @@ bool RAWLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     // the method checkExifWorkingColorSpace() like with JPEG, PNG, and TIFF loaders, 
     // because RAW file are always in linear mode.
 
-    int width, height, rgbmax;
-    QByteArray data;
-    if (!KDcrawIface::KDcraw::decodeRAWImage(filePath, m_rawDecodingSettings, 
-                                             data, width, height, rgbmax))
-        return false;
+    if (m_loadFlags & LoadImageData)
+    {
+        int width, height, rgbmax;
+        QByteArray data;
+        if (!KDcrawIface::KDcraw::decodeRAWImage(filePath, m_rawDecodingSettings,
+             data, width, height, rgbmax))
+            return false;
 
-    return (loadedFromDcraw(data, width, height, rgbmax, observer));
+        return (loadedFromDcraw(data, width, height, rgbmax, observer));
+    }
+    else
+    {
+        KDcrawIface::DcrawInfoContainer dcrawIdentify;
+        if (!KDcrawIface::KDcraw::rawFileIdentify(dcrawIdentify, filePath))
+            return false;
+        imageWidth()  = dcrawIdentify.imageSize.width();
+        imageHeight() = dcrawIdentify.imageSize.height();
+        imageSetAttribute("format", "RAW");
+        imageSetAttribute("originalColorModel", DImg::COLORMODELRAW);
+        imageSetAttribute("originalBitDepth", 16);
+        return true;
+    }
 }
 
 bool RAWLoader::checkToCancelWaitingData()

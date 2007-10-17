@@ -143,191 +143,190 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     width  = (int)w32;
     height = (int)h32;
 
-    // TODO: Endianness:
-    // You may notice that the code for little and big endian
-    // below is now identical. This was found to work by PPC users.
-    // If this proves right, all the conditional clauses can be removed.
+    m_sixteenBit = (bit_depth == 16);
 
-    if (bit_depth == 16)
+    switch (color_type)
     {
-#ifdef ENABLE_DEBUG_MESSAGES
-        DDebug() << "PNG in 16 bits/color/pixel." << endl;
-#endif
-        m_sixteenBit = true;
-
-        switch (color_type)
-        {
-            case PNG_COLOR_TYPE_RGB :            // RGB
-#ifdef ENABLE_DEBUG_MESSAGES
-                DDebug() << "PNG in PNG_COLOR_TYPE_RGB" << endl;
-#endif
-                m_hasAlpha = false;
-
-                if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)           // Intel
-                    png_set_add_alpha(png_ptr, 0xFFFF, PNG_FILLER_AFTER);
-                else                                                         // PPC
-                    png_set_add_alpha(png_ptr, 0xFFFF, PNG_FILLER_AFTER);
-
-                colorModel = DImg::RGB;
-
-                break;
-
-            case PNG_COLOR_TYPE_RGB_ALPHA :     // RGBA
-#ifdef ENABLE_DEBUG_MESSAGES
-                DDebug() << "PNG in PNG_COLOR_TYPE_RGB_ALPHA" << endl;
-#endif
-                m_hasAlpha = true;
-
-                colorModel = DImg::RGB;
-
-                break;
-
-            case PNG_COLOR_TYPE_GRAY :          // Grayscale
-#ifdef ENABLE_DEBUG_MESSAGES
-                DDebug() << "PNG in PNG_COLOR_TYPE_GRAY" << endl;
-#endif
-                png_set_gray_to_rgb(png_ptr);
-
-                if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)           // Intel
-                    png_set_add_alpha(png_ptr, 0xFFFF, PNG_FILLER_AFTER);
-                else                                                         // PPC
-                    png_set_add_alpha(png_ptr, 0xFFFF, PNG_FILLER_AFTER);
-
-                m_hasAlpha = false;
-
-                colorModel = DImg::GRAYSCALE;
-
-                break;
-
-            case PNG_COLOR_TYPE_GRAY_ALPHA :	// Grayscale + Alpha 
-#ifdef ENABLE_DEBUG_MESSAGES
-                DDebug() << "PNG in PNG_COLOR_TYPE_GRAY_ALPHA" << endl;
-#endif
-                png_set_gray_to_rgb(png_ptr);
-                m_hasAlpha = true;
-
-                colorModel = DImg::GRAYSCALE;
-
-                break;
-
-            case PNG_COLOR_TYPE_PALETTE :       // Indexed
-#ifdef ENABLE_DEBUG_MESSAGES
-                DDebug() << "PNG in PNG_COLOR_TYPE_PALETTE" << endl;
-#endif
-                png_set_palette_to_rgb(png_ptr);
-
-                if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)           // Intel
-                    png_set_add_alpha(png_ptr, 0xFFFF, PNG_FILLER_AFTER);
-                else                                                         // PPC
-                    png_set_add_alpha(png_ptr, 0xFFFF, PNG_FILLER_AFTER);
-
-                m_hasAlpha = false;
-
-                colorModel = DImg::INDEXED;
-
-                break;
-
-            default:
-#ifdef ENABLE_DEBUG_MESSAGES
-                DDebug() << "PNG color type unknown." << endl;
-#endif
-                return false;
-        }
+        case PNG_COLOR_TYPE_RGB:            // RGB
+            m_hasAlpha = false;
+            colorModel = DImg::RGB;
+            break;
+        case PNG_COLOR_TYPE_RGB_ALPHA:     // RGBA
+            m_hasAlpha = true;
+            colorModel = DImg::RGB;
+            break;
+        case PNG_COLOR_TYPE_GRAY:          // Grayscale
+            m_hasAlpha = false;
+            colorModel = DImg::GRAYSCALE;
+            break;
+        case PNG_COLOR_TYPE_GRAY_ALPHA:    // Grayscale + Alpha
+            m_hasAlpha = true;
+            colorModel = DImg::GRAYSCALE;
+            break;
+        case PNG_COLOR_TYPE_PALETTE:       // Indexed
+            m_hasAlpha = false;
+            colorModel = DImg::INDEXED;
+            break;
     }
-    else
-    {
-#ifdef ENABLE_DEBUG_MESSAGES
-        DDebug() << "PNG in >=8 bits/color/pixel." << endl;
-#endif
-        m_sixteenBit = false;
-        png_set_packing(png_ptr);
-
-        switch (color_type)
-        {
-            case PNG_COLOR_TYPE_RGB :           // RGB
-#ifdef ENABLE_DEBUG_MESSAGES
-                DDebug() << "PNG in PNG_COLOR_TYPE_RGB" << endl;
-#endif
-                if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)           // Intel
-                    png_set_add_alpha(png_ptr, 0xFF, PNG_FILLER_AFTER);
-                else                                                         // PPC
-                    png_set_add_alpha(png_ptr, 0xFF, PNG_FILLER_AFTER);
-
-                m_hasAlpha = false;
-                break;
-
-            case PNG_COLOR_TYPE_RGB_ALPHA :     // RGBA
-#ifdef ENABLE_DEBUG_MESSAGES
-                DDebug() << "PNG in PNG_COLOR_TYPE_RGB_ALPHA" << endl;
-#endif
-                m_hasAlpha = true;
-                break;
-
-            case PNG_COLOR_TYPE_GRAY :          // Grayscale
-#ifdef ENABLE_DEBUG_MESSAGES
-                DDebug() << "PNG in PNG_COLOR_TYPE_GRAY" << endl;
-#endif
-                png_set_gray_1_2_4_to_8(png_ptr);
-                png_set_gray_to_rgb(png_ptr);
-
-                if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)           // Intel
-                    png_set_add_alpha(png_ptr, 0xFF, PNG_FILLER_AFTER);
-                else                                                         // PPC
-                    png_set_add_alpha(png_ptr, 0xFF, PNG_FILLER_AFTER);
-
-                m_hasAlpha = false;
-                break;
-
-            case PNG_COLOR_TYPE_GRAY_ALPHA :    // Grayscale + alpha
-#ifdef ENABLE_DEBUG_MESSAGES
-                DDebug() << "PNG in PNG_COLOR_TYPE_GRAY_ALPHA" << endl;
-#endif
-                png_set_gray_to_rgb(png_ptr);
-                m_hasAlpha = true;
-                break;
-
-            case PNG_COLOR_TYPE_PALETTE :       // Indexed
-#ifdef ENABLE_DEBUG_MESSAGES
-                DDebug() << "PNG in PNG_COLOR_TYPE_PALETTE" << endl;
-#endif
-                png_set_packing(png_ptr);
-                png_set_palette_to_rgb(png_ptr);
-
-                if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)           // Intel
-                    png_set_add_alpha(png_ptr, 0xFF, PNG_FILLER_AFTER);
-                else                                                         // PPC
-                    png_set_add_alpha(png_ptr, 0xFF, PNG_FILLER_AFTER);
-
-                m_hasAlpha = true;
-                break;
-
-            default:
-#ifdef ENABLE_DEBUG_MESSAGES
-                DDebug() << "PNG color type unknown." << endl;
-#endif
-                return false;
-        }
-    }
-
-    if(png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS))
-        png_set_tRNS_to_alpha(png_ptr);
-
-    if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)      // Intel
-        png_set_bgr(png_ptr);
-    else                                                    // PPC
-        png_set_bgr(png_ptr);
-        //png_set_swap_alpha(png_ptr);
-
-    if (observer)
-        observer->progressInfo(m_image, 0.1);
-
-    // -------------------------------------------------------------------
-    // Get image data.
 
     uchar *data  = 0;
 
     if (m_loadFlags & LoadImageData)
     {
+        // TODO: Endianness:
+        // You may notice that the code for little and big endian
+        // below is now identical. This was found to work by PPC users.
+        // If this proves right, all the conditional clauses can be removed.
+
+        if (bit_depth == 16)
+        {
+    #ifdef ENABLE_DEBUG_MESSAGES
+            DDebug() << "PNG in 16 bits/color/pixel." << endl;
+    #endif
+            switch (color_type)
+            {
+                case PNG_COLOR_TYPE_RGB :            // RGB
+    #ifdef ENABLE_DEBUG_MESSAGES
+                    DDebug() << "PNG in PNG_COLOR_TYPE_RGB" << endl;
+    #endif
+                    if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)           // Intel
+                        png_set_add_alpha(png_ptr, 0xFFFF, PNG_FILLER_AFTER);
+                    else                                                         // PPC
+                        png_set_add_alpha(png_ptr, 0xFFFF, PNG_FILLER_AFTER);
+
+                    break;
+
+                case PNG_COLOR_TYPE_RGB_ALPHA :     // RGBA
+    #ifdef ENABLE_DEBUG_MESSAGES
+                    DDebug() << "PNG in PNG_COLOR_TYPE_RGB_ALPHA" << endl;
+    #endif
+                    break;
+
+                case PNG_COLOR_TYPE_GRAY :          // Grayscale
+    #ifdef ENABLE_DEBUG_MESSAGES
+                    DDebug() << "PNG in PNG_COLOR_TYPE_GRAY" << endl;
+    #endif
+                    png_set_gray_to_rgb(png_ptr);
+
+                    if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)           // Intel
+                        png_set_add_alpha(png_ptr, 0xFFFF, PNG_FILLER_AFTER);
+                    else                                                         // PPC
+                        png_set_add_alpha(png_ptr, 0xFFFF, PNG_FILLER_AFTER);
+
+                    break;
+
+                case PNG_COLOR_TYPE_GRAY_ALPHA :	// Grayscale + Alpha
+    #ifdef ENABLE_DEBUG_MESSAGES
+                    DDebug() << "PNG in PNG_COLOR_TYPE_GRAY_ALPHA" << endl;
+    #endif
+                    png_set_gray_to_rgb(png_ptr);
+
+                    break;
+
+                case PNG_COLOR_TYPE_PALETTE :       // Indexed
+    #ifdef ENABLE_DEBUG_MESSAGES
+                    DDebug() << "PNG in PNG_COLOR_TYPE_PALETTE" << endl;
+    #endif
+                    png_set_palette_to_rgb(png_ptr);
+
+                    if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)           // Intel
+                        png_set_add_alpha(png_ptr, 0xFFFF, PNG_FILLER_AFTER);
+                    else                                                         // PPC
+                        png_set_add_alpha(png_ptr, 0xFFFF, PNG_FILLER_AFTER);
+
+                    break;
+
+                default:
+    #ifdef ENABLE_DEBUG_MESSAGES
+                    DDebug() << "PNG color type unknown." << endl;
+    #endif
+                    return false;
+            }
+        }
+        else
+        {
+    #ifdef ENABLE_DEBUG_MESSAGES
+            DDebug() << "PNG in >=8 bits/color/pixel." << endl;
+    #endif
+            png_set_packing(png_ptr);
+
+            switch (color_type)
+            {
+                case PNG_COLOR_TYPE_RGB :           // RGB
+    #ifdef ENABLE_DEBUG_MESSAGES
+                    DDebug() << "PNG in PNG_COLOR_TYPE_RGB" << endl;
+    #endif
+                    if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)           // Intel
+                        png_set_add_alpha(png_ptr, 0xFF, PNG_FILLER_AFTER);
+                    else                                                         // PPC
+                        png_set_add_alpha(png_ptr, 0xFF, PNG_FILLER_AFTER);
+
+                    break;
+
+                case PNG_COLOR_TYPE_RGB_ALPHA :     // RGBA
+    #ifdef ENABLE_DEBUG_MESSAGES
+                    DDebug() << "PNG in PNG_COLOR_TYPE_RGB_ALPHA" << endl;
+    #endif
+                    break;
+
+                case PNG_COLOR_TYPE_GRAY :          // Grayscale
+    #ifdef ENABLE_DEBUG_MESSAGES
+                    DDebug() << "PNG in PNG_COLOR_TYPE_GRAY" << endl;
+    #endif
+                    png_set_gray_1_2_4_to_8(png_ptr);
+                    png_set_gray_to_rgb(png_ptr);
+
+                    if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)           // Intel
+                        png_set_add_alpha(png_ptr, 0xFF, PNG_FILLER_AFTER);
+                    else                                                         // PPC
+                        png_set_add_alpha(png_ptr, 0xFF, PNG_FILLER_AFTER);
+
+                    break;
+
+                case PNG_COLOR_TYPE_GRAY_ALPHA :    // Grayscale + alpha
+    #ifdef ENABLE_DEBUG_MESSAGES
+                    DDebug() << "PNG in PNG_COLOR_TYPE_GRAY_ALPHA" << endl;
+    #endif
+                    png_set_gray_to_rgb(png_ptr);
+                    break;
+
+                case PNG_COLOR_TYPE_PALETTE :       // Indexed
+    #ifdef ENABLE_DEBUG_MESSAGES
+                    DDebug() << "PNG in PNG_COLOR_TYPE_PALETTE" << endl;
+    #endif
+                    png_set_packing(png_ptr);
+                    png_set_palette_to_rgb(png_ptr);
+
+                    if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)           // Intel
+                        png_set_add_alpha(png_ptr, 0xFF, PNG_FILLER_AFTER);
+                    else                                                         // PPC
+                        png_set_add_alpha(png_ptr, 0xFF, PNG_FILLER_AFTER);
+
+                    break;
+
+                default:
+    #ifdef ENABLE_DEBUG_MESSAGES
+                    DDebug() << "PNG color type unknown." << endl;
+    #endif
+                    return false;
+            }
+        }
+
+        if(png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS))
+            png_set_tRNS_to_alpha(png_ptr);
+
+        if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)      // Intel
+            png_set_bgr(png_ptr);
+        else                                                    // PPC
+            png_set_bgr(png_ptr);
+            //png_set_swap_alpha(png_ptr);
+
+        if (observer)
+            observer->progressInfo(m_image, 0.1);
+
+        // -------------------------------------------------------------------
+        // Get image data.
+
         png_read_update_info(png_ptr, info_ptr);
 
         if (m_sixteenBit)
@@ -487,7 +486,8 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     // -------------------------------------------------------------------
 
-    png_read_end(png_ptr, info_ptr);
+    if (m_loadFlags & LoadImageData)
+        png_read_end(png_ptr, info_ptr);
     png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) NULL);
     fclose(f);
 

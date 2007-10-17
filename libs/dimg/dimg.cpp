@@ -327,6 +327,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
     DImgLoader::LoadFlags loadFlags = (DImgLoader::LoadFlags)loadFlagsInt;
 
     setAttribute("detectedFileFormat", format);
+    setAttribute("originalFilePath", filePath);
 
     switch (format)
     {
@@ -347,7 +348,6 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
                 m_priv->alpha      = loader.hasAlpha();
                 m_priv->sixteenBit = loader.sixteenBit();
                 m_priv->isReadOnly = loader.isReadOnly();
-                setAttribute("originalFilePath", filePath);
                 return true;
             }
             break;
@@ -363,7 +363,6 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
                 m_priv->alpha      = loader.hasAlpha();
                 m_priv->sixteenBit = loader.sixteenBit();
                 m_priv->isReadOnly = loader.isReadOnly();
-                setAttribute("originalFilePath", filePath);
                 return true;
             }
             break;
@@ -379,7 +378,6 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
                 m_priv->alpha      = loader.hasAlpha();
                 m_priv->sixteenBit = loader.sixteenBit();
                 m_priv->isReadOnly = loader.isReadOnly();
-                setAttribute("originalFilePath", filePath);
                 return true;
             }
             break;
@@ -395,7 +393,6 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
                 m_priv->alpha      = loader.hasAlpha();
                 m_priv->sixteenBit = loader.sixteenBit();
                 m_priv->isReadOnly = loader.isReadOnly();
-                setAttribute("originalFilePath", filePath);
                 return true;
             }
             break;
@@ -411,7 +408,6 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
                 m_priv->alpha      = loader.hasAlpha();
                 m_priv->sixteenBit = loader.sixteenBit();
                 m_priv->isReadOnly = loader.isReadOnly();
-                setAttribute("originalFilePath", filePath);
                 return true;
             }
             break;
@@ -427,7 +423,6 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
                 m_priv->alpha      = loader.hasAlpha();
                 m_priv->sixteenBit = loader.sixteenBit();
                 m_priv->isReadOnly = loader.isReadOnly();
-                setAttribute("originalFilePath", filePath);
                 return true;
             }
             break;
@@ -443,7 +438,6 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
                 m_priv->alpha      = loader.hasAlpha();
                 m_priv->sixteenBit = loader.sixteenBit();
                 m_priv->isReadOnly = loader.isReadOnly();
-                setAttribute("originalFilePath", filePath);
                 return true;
             }
             break;
@@ -555,7 +549,6 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
     fclose(f);
 
     KDcrawIface::DcrawInfoContainer dcrawIdentify;
-    KDcrawIface::KDcraw::rawFileIdentify(dcrawIdentify, filePath);
     uchar jpegID[2]    = { 0xFF, 0xD8 };
     uchar tiffBigID[2] = { 0x4D, 0x4D };
     uchar tiffLilID[2] = { 0x49, 0x49 };
@@ -589,7 +582,8 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
 
         pclose (file);
     }
-    else if (dcrawIdentify.isDecodable)
+    else if (KDcrawIface::KDcraw::rawFileIdentify(dcrawIdentify, filePath)
+              && dcrawIdentify.isDecodable)
     {
         // RAW File test using dcraw::identify method.  
         // Need to test it before TIFF because any RAW file 
