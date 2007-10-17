@@ -73,6 +73,12 @@ public:
     void partialScan(const QString &albumRoot, const QString& album);
 
     /**
+     * The specified file will be added to the database if it is not included,
+     * or rescanned as if it was modified if it is found in the database.
+     */
+    void scanFile(const QString &albumRoot, const QString &album, const QString &fileName);
+
+    /**
      * Call this to enable the progress info signals.
      * Default is off.
      */
@@ -83,6 +89,7 @@ protected:
     void scanForStaleAlbums(QList<CollectionLocation*> locations);
     void scanAlbumRoot(CollectionLocation *location);
     void scanAlbum(CollectionLocation *location, const QString &album);
+    int checkAlbum(CollectionLocation *location, const QString &album);
 
 
 

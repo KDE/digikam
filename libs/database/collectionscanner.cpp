@@ -159,6 +159,41 @@ void CollectionScanner::partialScan(const QString &albumRoot, const QString& alb
     scanAlbum(location, album);
 }
 
+void CollectionScanner::scanFile(const QString &albumRoot, const QString &album, const QString &fileName)
+{
+    CollectionLocation *location = CollectionManager::instance()->locationForAlbumRootPath(albumRoot);
+
+    if (!location)
+    {
+        DWarning() << "Did not find a CollectionLocation for album root path " << albumRoot << endl;
+        return;
+    }
+
+    QDir dir(location->albumRootPath() + album);
+    QFileInfo info(dir, fileName);
+
+    if (!info.exists())
+        return;
+
+    int albumId = checkAlbum(location, album);
+    qlonglong imageId = DatabaseAccess().db()->getImageId(albumId, fileName);
+
+    loadNameFilters();
+    if (imageId == -1)
+    {
+        ImageScanner scanner(info);
+        scanner.setCategory(category(info));
+        scanner.newFile(albumId);
+    }
+    else
+    {
+        ItemScanInfo scanInfo = DatabaseAccess().db()->getItemScanInfo(imageId);
+        ImageScanner scanner((info), scanInfo);
+        scanner.setCategory(category(info));
+        scanner.fileModified();
+    }
+}
+
 void CollectionScanner::scanAlbumRoot(CollectionLocation *location)
 {
     if (d->wantSignals)
@@ -214,6 +249,21 @@ void CollectionScanner::scanForStaleAlbums(QList<CollectionLocation*> locations)
         emit finishedScanningForStaleAlbums();
 }
 
+int CollectionScanner::checkAlbum(CollectionLocation *location, const QString &album)
+{
+    // get album id if album exists
+    int albumID = DatabaseAccess().db()->getAlbumForPath(location->id(), album, false);
+
+    // create if necessary
+    if (albumID == -1)
+    {
+        QFileInfo fi(location->albumRootPath() + album);
+        albumID = DatabaseAccess().db()->addAlbum(location->id(), album, QString(), fi.lastModified().date(), QString());
+    }
+
+    return albumID;
+}
+
 void CollectionScanner::scanAlbum(CollectionLocation *location, const QString &album)
 {
     // + Adds album if it does not yet exist in the db.
@@ -233,14 +283,7 @@ void CollectionScanner::scanAlbum(CollectionLocation *location, const QString &a
     if (d->wantSignals)
         emit startScanningAlbum(location->albumRootPath(), album);
 
-    // get album id if album exists
-    int albumID = DatabaseAccess().db()->getAlbumForPath(location->id(), album, false);
-
-    if (albumID == -1)
-    {
-        QFileInfo fi(location->albumRootPath() + album);
-        albumID = DatabaseAccess().db()->addAlbum(location->id(), album, QString(), fi.lastModified().date(), QString());
-    }
+    int albumID = checkAlbum(location, album);
 
     // mark album as scanned
     d->scannedAlbums << albumID;
