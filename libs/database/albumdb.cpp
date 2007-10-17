@@ -311,11 +311,11 @@ QList<AlbumShortInfo> AlbumDB::getAlbumShortInfos()
     {
         AlbumShortInfo info;
 
-        info.id        = (*it).toInt();
+        info.id           = (*it).toLongLong();
         ++it;
-        info.url       = (*it).toString();
+        info.relativePath = (*it).toString();
         ++it;
-        info.albumRoot = (*it).toString();
+        info.albumRoot    = (*it).toString();
         ++it;
 
         albumList << info;
@@ -369,9 +369,16 @@ int AlbumDB::addAlbum(const QString &albumRoot, const QString& relativePath,
     if (!location)
         return -1;
 
+    return addAlbum(location->id(), relativePath, caption, date, collection);
+}
+
+int AlbumDB::addAlbum(int albumRootId, const QString& relativePath,
+                      const QString& caption,
+                      const QDate& date, const QString& collection)
+{
     QVariant id;
     QList<QVariant> boundValues;
-    boundValues << location->id() << relativePath << date.toString(Qt::ISODate) << caption << collection;
+    boundValues << albumRootId << relativePath << date.toString(Qt::ISODate) << caption << collection;
 
     d->db->execSql( QString("REPLACE INTO Albums (albumRoot, relativePath, date, caption, collection) "
                             "VALUES(?, ?, ?, ?, ?);"),
@@ -581,6 +588,7 @@ QString AlbumDB::getSetting(const QString& keyword)
         return values.first().toString();
 }
 
+/*
 QString AlbumDB::getItemCaption(qlonglong imageID)
 {
     QList<QVariant> values;
@@ -610,6 +618,7 @@ QString AlbumDB::getItemCaption(int albumID, const QString& name)
     else
         return QString();
 }
+*/
 
 QDateTime AlbumDB::getItemDate(qlonglong imageID)
 {
@@ -786,6 +795,304 @@ QList<int> AlbumDB::getItemCommonTagIDs(const QList<qlonglong>& imageIDList)
     return ids;
 }
 
+void AlbumDB::addImageInformation(qlonglong imageID, const QVariantList &infos, DatabaseFields::ImageInformation fields)
+{
+    QString query("REPLACE INTO ImageInformation ( imageid, ");
+
+    QStringList fieldNames = imageInformationFieldList(fields);
+    Q_ASSERT(fieldNames.size()==infos.size());
+    query += fieldNames.join(", ");
+
+    query += " ) VALUES (";
+    addBoundValuePlaceholders(query, infos.size());
+    query += ");";
+
+    QVariantList boundValues;
+    boundValues << imageID << infos;
+
+    d->db->execSql( query, boundValues );
+
+    /*
+    The query looks like this (for all fields):
+                    QString("REPLACE INTO ImageInformation "
+                            " ( imageId, rating, creationDate, digitizationDate, "
+                            "   orientation, sizeX, sizeY, colorDepth, colorModel ) "
+                            " VALUES (?,?,?,?,?,?,?,?,?);"
+    */
+}
+
+void AlbumDB::changeImageInformation(qlonglong imageId, const QVariantList &infos,
+                                     DatabaseFields::ImageInformation fields)
+{
+    QString query("UPDATE ImageInformation SET ");
+
+    QStringList fieldNames = imageInformationFieldList(fields);
+    Q_ASSERT(fieldNames.size()==infos.size());
+    query += fieldNames.join("=?,");
+
+    query += " WHERE imageid=?;";
+
+    QVariantList boundValues;
+    boundValues << infos << imageId;
+
+    d->db->execSql( query, boundValues );
+}
+
+void AlbumDB::addImageMetadata(qlonglong imageID, const QVariantList &infos, DatabaseFields::ImageMetadata fields)
+{
+    QString query("REPLACE INTO ImageMetadata ( imageid, ");
+
+    QStringList fieldNames = imageMetadataFieldList(fields);
+    Q_ASSERT(fieldNames.size()==infos.size());
+    query += fieldNames.join(", ");
+
+    query += " ) VALUES (";
+    addBoundValuePlaceholders(query, infos.size());
+    query += ");";
+
+    QVariantList boundValues;
+    boundValues << imageID << infos;
+
+    d->db->execSql( query, boundValues );
+}
+
+void AlbumDB::changeImageMetadata(qlonglong imageId, const QVariantList &infos,
+                                  DatabaseFields::ImageMetadata fields)
+{
+    QString query("UPDATE ImageMetadata SET ");
+
+    QStringList fieldNames = imageMetadataFieldList(fields);
+    Q_ASSERT(fieldNames.size()==infos.size());
+    query += fieldNames.join("=?,");
+
+    query += " WHERE imageid=?;";
+
+    QVariantList boundValues;
+    boundValues << infos << imageId;
+
+    d->db->execSql( query, boundValues );
+}
+
+void AlbumDB::addImagePosition(qlonglong imageID, const QVariantList &infos, DatabaseFields::ImagePositions fields)
+{
+    QString query("REPLACE INTO ImagePositions ( imageid, ");
+
+    QStringList fieldNames = imagePositionsFieldList(fields);
+    Q_ASSERT(fieldNames.size()==infos.size());
+    query += fieldNames.join(", ");
+
+    query += " ) VALUES (";
+    addBoundValuePlaceholders(query, infos.size());
+    query += ");";
+
+    QVariantList boundValues;
+    boundValues << imageID << infos;
+
+    d->db->execSql( query, boundValues );
+}
+
+void AlbumDB::changeImagePosition(qlonglong imageId, const QVariantList &infos,
+                                   DatabaseFields::ImagePositions fields)
+{
+    QString query("UPDATE ImagePositions SET ");
+
+    QStringList fieldNames = imagePositionsFieldList(fields);
+    Q_ASSERT(fieldNames.size()==infos.size());
+    query += fieldNames.join("=?,");
+
+    query += " WHERE imageid=?;";
+
+    QVariantList boundValues;
+    boundValues << infos << imageId;
+
+    d->db->execSql( query, boundValues );
+}
+
+QList<CommentInfo> AlbumDB::getItemComments(qlonglong imageID)
+{
+    QList<CommentInfo> list;
+
+    QList<QVariant> values;
+    d->db->execSql( "SELECT id, source, language, author, date, comment "
+                    "FROM ImageComments WHERE imageid=?;", imageID, &values);
+
+    for (QList<QVariant>::iterator it = values.begin(); it != values.end();)
+    {
+        CommentInfo info;
+        info.imageId  = imageID;
+
+        info.id       = (*it).toInt();
+        ++it;
+        info.source   = (DatabaseComment::Source)(*it).toInt();
+        ++it;
+        info.language = (*it).toString();
+        ++it;
+        info.author   = (*it).toString();
+        ++it;
+        info.date     = QDateTime::fromString((*it).toString(), Qt::ISODate);
+        ++it;
+        info.comment  = (*it).toString();
+        ++it;
+
+        list << info;
+    }
+
+    return list;
+}
+
+int AlbumDB::setImageComment(qlonglong imageID, const QString &comment, DatabaseComment::Source source,
+                             const QString &language, const QString &author, const QDateTime &date)
+{
+    QVariantList boundValues;
+    boundValues << imageID << (int)source << language << author << date << comment;
+
+    QVariant id;
+    d->db->execSql( QString("REPLACE INTO ImageComments "
+                            "( imageid, source, language, author, date, comment ) "
+                            " VALUES (?,?,?,?,?,?);"),
+                    boundValues, 0, &id);
+
+    return id.toInt();
+}
+
+void AlbumDB::changeImageComment(int commentId, const QVariantList &infos, DatabaseFields::ImageComments fields)
+{
+    QString query("UPDATE ImageComments SET ");
+
+    QStringList fieldNames = imageCommentsFieldList(fields);
+    Q_ASSERT(fieldNames.size()==infos.size());
+    query += fieldNames.join("=?,");
+
+    query += " WHERE id=?;";
+
+    QVariantList boundValues;
+    boundValues << infos << commentId;
+
+    d->db->execSql( query, boundValues );
+}
+
+QStringList AlbumDB::imageInformationFieldList(DatabaseFields::ImageInformation fields)
+{
+    // adds no spaces at beginning or end
+    QStringList list;
+    if (fields & DatabaseFields::Rating)
+        list << "rating";
+    if (fields & DatabaseFields::CreationDate)
+        list << "creationDate";
+    if (fields & DatabaseFields::DigitizationDate)
+        list << "digitizationDate";
+    if (fields & DatabaseFields::Orientation)
+        list << "orientation";
+    if (fields & DatabaseFields::SizeX)
+        list << "sizeX";
+    if (fields & DatabaseFields::SizeY)
+        list << "sizeY";
+    if (fields & DatabaseFields::ColorDepth)
+        list << "colorDepth";
+    if (fields & DatabaseFields::ColorModel)
+        list << "colorModel";
+
+    return list;
+}
+
+QStringList AlbumDB::imageMetadataFieldList(DatabaseFields::ImageMetadata fields)
+{
+    // adds no spaces at beginning or end
+    QStringList list;
+    if (fields & DatabaseFields::Make)
+        list << "make";
+    if (fields & DatabaseFields::Model)
+        list << "model";
+    if (fields & DatabaseFields::Aperture)
+        list << "aperture";
+    if (fields & DatabaseFields::FocalLength)
+        list << "focalLength";
+    if (fields & DatabaseFields::FocalLength35)
+        list << "focalLength35";
+    if (fields & DatabaseFields::ExposureTime)
+        list << "exposureTime";
+    if (fields & DatabaseFields::ExposureProgram)
+        list << "exposureProgram";
+    if (fields & DatabaseFields::ExposureMode)
+        list << "exposureMode";
+    if (fields & DatabaseFields::Sensitivity)
+        list << "sensitivity";
+    if (fields & DatabaseFields::FlashMode)
+        list << "flash";
+    if (fields & DatabaseFields::WhiteBalance)
+        list << "whiteBalance";
+    if (fields & DatabaseFields::WhiteBalanceColorTemperature)
+        list << "chiteBalanceColorTemperature";
+    if (fields & DatabaseFields::MeteringMode)
+        list << "meteringMode";
+    if (fields & DatabaseFields::SubjectDistance)
+        list << "subjectDistance";
+    if (fields & DatabaseFields::SubjectDistanceCategory)
+        list << "subjectDistanceCategory";
+
+    return list;
+}
+
+QStringList AlbumDB::imagePositionsFieldList(DatabaseFields::ImagePositions fields)
+{
+    // adds no spaces at beginning or end
+    QStringList list;
+    if (fields & DatabaseFields::Latitude)
+        list << "latitude";
+    if (fields & DatabaseFields::LatitudeNumber)
+        list << "latitudeNumber";
+    if (fields & DatabaseFields::Longitude)
+        list << "longitude";
+    if (fields & DatabaseFields::LongitudeNumber)
+        list << "longitudeNumber";
+    if (fields & DatabaseFields::Altitude)
+        list << "altitude";
+    if (fields & DatabaseFields::PositionOrientation)
+        list << "orientation";
+    if (fields & DatabaseFields::PositionTilt)
+        list << "tilt";
+    if (fields & DatabaseFields::PositionRoll)
+        list << "roll";
+    if (fields & DatabaseFields::PositionDescription)
+        list << "description";
+
+    return list;
+}
+
+QStringList AlbumDB::imageCommentsFieldList(DatabaseFields::ImageComments fields)
+{
+    // adds no spaces at beginning or end
+    QStringList list;
+    if (fields & DatabaseFields::CommentSource)
+        list << "source";
+    if (fields & DatabaseFields::CommentLanguage)
+        list << "language";
+    if (fields & DatabaseFields::CommentAuthor)
+        list << "author";
+    if (fields & DatabaseFields::CommentDate)
+        list << "date";
+    if (fields & DatabaseFields::Comment)
+        list << "comment";
+
+    return list;
+}
+
+
+void AlbumDB::addBoundValuePlaceholders(QString &query, int count)
+{
+    // adds no spaces at beginning or end
+    QString questionMarks;
+    questionMarks.reserve(count * 2);
+    QString questionMark("?,");
+
+    for (int i=0; i<count; i++)
+        questionMarks += questionMark;
+
+    query += questionMarks;
+}
+
+
+/*
 void AlbumDB::setItemCaption(qlonglong imageID,const QString& caption)
 {
     QList<QVariant> values;
@@ -799,9 +1106,10 @@ void AlbumDB::setItemCaption(qlonglong imageID,const QString& caption)
             ->sendImageFieldChanged(imageID, DatabaseAttributesWatch::ImageComment);
 }
 
+
 void AlbumDB::setItemCaption(int albumID, const QString& name, const QString& caption)
 {
-    /*
+    / *
     QList<QVariant> values;
 
     d->db->execSql( QString("UPDATE Images SET caption=? "
@@ -809,11 +1117,12 @@ void AlbumDB::setItemCaption(int albumID, const QString& name, const QString& ca
              .(caption,
                   QString::number(albumID),
                   (name)) );
-    */
+    * /
 
     // easier because of attributes watch
     return setItemCaption(getImageId(albumID, name), caption);
 }
+*/
 
 void AlbumDB::addItemTag(qlonglong imageID, int tagID)
 {
@@ -934,15 +1243,21 @@ int AlbumDB::getAlbumForPath(const QString &albumRoot, const QString& folder, bo
     if (!location)
         return -1;
 
+    return getAlbumForPath(location->id(), folder, create);
+
+}
+
+int AlbumDB::getAlbumForPath(int albumRootId, const QString& folder, bool create)
+{
     QList<QVariant> values;
     d->db->execSql( QString("SELECT id FROM Albums WHERE albumRoot=? AND relativePath=?;"),
-                    location->id(), folder, &values);
+                    albumRootId, folder, &values);
 
     int albumID = -1;
     if (values.isEmpty())
     {
         if (create)
-            albumID = addAlbum(albumRoot, folder, QString(), QDate::currentDate(), QString());
+            albumID = addAlbum(albumRootId, folder, QString(), QDate::currentDate(), QString());
     }
     else
     {
@@ -952,25 +1267,28 @@ int AlbumDB::getAlbumForPath(const QString &albumRoot, const QString& folder, bo
     return albumID;
 }
 
-qlonglong AlbumDB::addItem(int albumID,
-                         const QString& name,
-                         const QDateTime& datetime,
-                         const QString& comment,
-                         int rating,
-                         const QStringList &keywordsList)
+qlonglong AlbumDB::addItem(int albumID, const QString& name,
+                           DatabaseItem::Status status,
+                           const QDateTime& modificationDate,
+                           int fileSize,
+                           const QString& uniqueHash)
 {
+    QVariantList boundValues;
+    boundValues << albumID << name << (int)status << modificationDate.toString(Qt::ISODate) << fileSize << uniqueHash;
+
     QVariant id;
     d->db->execSql ( QString ("REPLACE INTO Images "
-                            "( caption , datetime, name, dirid ) "
-                            " VALUES (?,?,?,?) " ),
-                    comment,
-                    datetime.toString(Qt::ISODate),
-                    name,
-                    albumID,
-                    0, &id);
+                              " ( album, name, status, modificationDate, fileSize, uniqueHash ) "
+                              " VALUES (?,?,?,?,?,?);" ),
+                     boundValues,
+                     0, &id);
 
-    qlonglong item = id.toLongLong();
+    if (id.isNull())
+        return -1;
+    return id.toLongLong();
+}
 
+/*
     // Set Rating value to item in database.
 
     if ( item != -1 && rating != -1 )
@@ -989,6 +1307,7 @@ qlonglong AlbumDB::addItem(int albumID,
 
     return item;
 }
+    */
 
 QList<int> AlbumDB::getTagsFromTagPaths(const QStringList &keywordsList, bool create)
 {
@@ -1329,6 +1648,40 @@ QList<qlonglong> AlbumDB::getItemIDsInAlbum(int albumID)
     return itemIDs;
 }
 
+QList<ItemScanInfo> AlbumDB::getItemScanInfos(int albumID)
+{
+    QList<QVariant> values;
+
+    d->db->execSql( QString("SELECT id, album, name, status, modificationDate, uniqueHas "
+                            "FROM Images WHERE dirid=?;"),
+                    albumID,
+                    &values );
+
+    QList<ItemScanInfo> list;
+
+    for (QList<QVariant>::iterator it = values.begin(); it != values.end();)
+    {
+        ItemScanInfo info;
+
+        info.id               = (*it).toLongLong();
+        ++it;
+        info.albumID          = (*it).toInt();
+        ++it;
+        info.itemName         = (*it).toString();
+        ++it;
+        info.status           = (DatabaseItem::Status)(*it).toInt();
+        ++it;
+        info.modificationDate = QDateTime::fromString( (*it).toString(), Qt::ISODate );
+        ++it;
+        info.uniqueHash       = (*it).toString();
+        ++it;
+
+        list << info;
+    }
+
+    return list;
+}
+
 QStringList AlbumDB::getItemURLsInTag(int tagID, bool recursive)
 {
     QList<QVariant> values;
@@ -1481,6 +1834,31 @@ void AlbumDB::deleteItem(int albumID, const QString& file)
     d->db->execSql( QString("DELETE FROM Images "
                             "WHERE dirid=? AND name=?;"),
                     albumID, file );
+}
+
+void AlbumDB::removeItemsFromAlbum(int albumID)
+{
+    d->db->execSql( QString("UPDATE Images SET status=?,dirid=NULL WHERE dirid=?;"),
+                    (int)DatabaseItem::Removed, albumID );
+}
+
+void AlbumDB::removeItems(QList<qlonglong> itemIDs)
+{
+    QSqlQuery query = d->db->prepareQuery( QString("UPDATE Images SET status=?,dirid=NULL WHERE id=?;") );
+
+    foreach (qlonglong id, itemIDs)
+    {
+        query.bindValue(0, (int)DatabaseItem::Removed);
+        query.bindValue(1, id);
+        query.exec();
+    }
+}
+
+void AlbumDB::deleteRemovedItems()
+{
+    d->db->execSql( QString("DELETE FROM Images "
+                            "WHERE status=?;"),
+                    (int)DatabaseItem::Removed );
 }
 
 void AlbumDB::renameAlbum(int albumID, const QString& newRelativePath, bool renameSubalbums)

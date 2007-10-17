@@ -43,6 +43,7 @@
 // Local includes.
 
 #include "albuminfo.h"
+#include "databasefields.h"
 #include "databaseaccess.h"
 #include "digikam_export.h"
 
@@ -146,24 +147,37 @@ public:
 
     /**
      * Add a new album to the database with the given attributes
-     * @param url        url of the album
-     * @param caption    the album caption
-     * @param date       the date for the album
-     * @param collection the album collection
+     * @param albumRoot     path of the album root of the new album
+     *   - or -
+     * @param albumRootId   id of the album root of the new album
+     * @param relativePath  url of the album
+     * @param caption       the album caption
+     * @param date          the date for the album
+     * @param collection    the album collection
      * @return the id of the album added or -1 if it failed
      */
-    int addAlbum(const QString& albumRoot, const QString& url,
+    int addAlbum(const QString& albumRoot, const QString& relativePath,
+                 const QString& caption,
+                 const QDate& date, const QString& collection);
+
+    int addAlbum(int albumRootId, const QString& relativePath,
                  const QString& caption,
                  const QDate& date, const QString& collection);
 
     /**
      * Find out the album for a given folder.
-     * @param folder The folder for which you want the albumID
-     * @param create Create album if it does not exist
+     * @param albumRoot    path of the album root of the new album
+     *   - or -
+     * @param albumRootId  id of the album root of the new album
+     * @param relativePath The folder for which you want the albumID relative to the album root
+     * @param create       If true, an album is newly created if it does not yet exist.
+     *                     If false, -1 is returned if no album exists.
      * @return The albumID for that folder,
                or -1 if it does not exist and create is false.
      */
-    int  getAlbumForPath(const QString &albumRoot, const QString& path, bool create = true);
+    int  getAlbumForPath(const QString &albumRoot, const QString& relativePath, bool create = true);
+
+    int  getAlbumForPath(int albumRootId, const QString& relativePath, bool create = true);
 
     /**
      * List the urls of all subalbums of the album specified by albumRoot and path.
@@ -382,10 +396,10 @@ public:
      * @return the id of item added or -1 if it fails
      */
     qlonglong addItem(int albumID, const QString& name,
-                    const QDateTime& datetime,
-                    const QString& comment,
-                    int rating,
-                    const QStringList& keywordsList);
+                      DatabaseItem::Status status,
+                      const QDateTime& modificationDate,
+                      int fileSize,
+                      const QString& uniqueHash);
 
     /**
      * Deletes an item from the database.
@@ -393,6 +407,30 @@ public:
      * @param file The filename of the file to delete.
      */
     void deleteItem(int albumID, const QString& file);
+
+    /**
+     * Marks all items in the specified album as removed,
+     * resets their dirids.
+     * The album can be deleted afterwards without removing
+     * the entries for the items, which
+     * can later be removed by deleteRemovedItems().
+     * @param albumID The id of the album
+     */
+    void removeItemsFromAlbum(int albumID);
+
+    /**
+     * Marks all items in the list as removed,
+     * resets their dirids.
+     * The items can later be removed by deleteRemovedItems().
+     * @param itemIDs a list of item IDs to be marked
+     */
+    void removeItems(QList<qlonglong> itemIDs);
+
+    /**
+     * Delete all items from the database that are marked as removed.
+     * Use with care!
+     */
+    void deleteRemovedItems();
 
     // ----------- Finding items -----------
 
@@ -421,6 +459,12 @@ public:
      * @return It returns a QStringList with the filenames.
      */
     QStringList getItemNamesInAlbum(int albumID);
+
+    /**
+     * Returns an ItemScanInfo object for each item in the album
+     * with the specified album id.
+     */
+    QList<ItemScanInfo> getItemScanInfos(int albumID);
 
     /**
      * Given a albumID, get a list of the url of all items in the album
@@ -511,12 +555,139 @@ public:
     ItemShortInfo getItemShortInfo(qlonglong imageID);
 
 
+
+    /**
+     * Add (or replace) the ImageInformation of the specified item.
+     * If there is already an entry, it will be discarded.
+     * The QVariantList shall have 8 entries, of types in this order:
+     * 0) Int       rating
+     * 1) DateTime  modificationDate
+     * 2) DateTime  digitizationDate
+     * 3) Int       orientation
+     * 4) Int       sizeX
+     * 5) Int       sizeY
+     * 6) Int       colorDepth
+     * 7) Int       colorModel
+     * You can leave out entries from this list, which will then be filled with null values.
+     * Indicate the values that you have passed in the ImageInformation flag in the third parameters.
+     */
+    void addImageInformation(qlonglong imageID, const QVariantList &infos,
+                             DatabaseFields::ImageInformation fields = DatabaseFields::ImageInformationAll);
+
+    /**
+     * Change the indicated fields of the image information for the specified item.
+     * Fields not indicated by the fields parameter will not be touched.
+     * This method does nothing if the item does not yet have an entry in the ImageInformation table.
+     * The parameters are as for the method above.
+     */
+    void changeImageInformation(qlonglong imageID, const QVariantList &infos,
+                                DatabaseFields::ImageInformation fields = DatabaseFields::ImageInformationAll);
+
+    /**
+     * Add (or replace) the ImageMetadata of the specified item.
+     * If there is already an entry, it will be discarded.
+     * The QVariantList shall at most 15 entries, of types as defined
+     * in the DBSCHEMA and in metadatainfo.h, in this order:
+     *  0) String    make
+     *  1) String    model
+     *  2) Double    aperture
+     *  3) Double    focalLength
+     *  4) Double    focalLength35
+     *  5) Double    exposureTime
+     *  6) Int       exposureProgram
+     *  7) Int       exposureMode
+     *  8) Int       sensitivity
+     *  9) Int       flash
+     * 10) Int       WhiteBalance
+     * 11) Int       WhiteBalanceColorTemperature
+     * 12) Int       meteringMode
+     * 13) Double    subjectDistance
+     * 14) Double    subjectDistanceCategory
+     * You can leave out entries from this list. Indicate the values that you have
+     * passed in the ImageMetadata flag in the third parameters.
+     */
+    void addImageMetadata(qlonglong imageID, const QVariantList &infos,
+                           DatabaseFields::ImageMetadata fields = DatabaseFields::ImageMetadataAll);
+
+    /**
+     * Change the indicated fields of the image information for the specified item.
+     * This method does nothing if the item does not yet have an entry in the ImageInformation table.
+     * The parameters are as for the method above.
+     */
+    void changeImageMetadata(qlonglong imageID, const QVariantList &infos,
+                             DatabaseFields::ImageMetadata fields = DatabaseFields::ImageMetadataAll);
+
+    /**
+     * Add (or replace) the ImagePosition of the specified item.
+     * If there is already an entry, it will be discarded.
+     * The QVariantList shall have at most 9 entries, of types in this order:
+     * 0) String    Latitude
+     * 1) Double    LatitudeNumber
+     * 2) String    Longitude
+     * 3) Double    LongitudeNumber
+     * 4) Double    Altitude
+     * 5) Double    Orientation
+     * 6) Double    Tilt
+     * 7) Double    Roll
+     * 8) String    Description
+     * You can leave out entries from this list. Indicate the values that you have
+     * passed in the ImageInfo flag in the third parameters.
+     */
+    void addImagePosition(qlonglong imageID, const QVariantList &infos,
+                           DatabaseFields::ImagePositions fields = DatabaseFields::ImagePositionsAll);
+
+    /**
+     * Change the indicated fields of the image information for the specified item.
+     * This method does nothing if the item does not yet have an entry in the ImageInformation table.
+     * The parameters are as for the method above.
+     */
+    void changeImagePosition(qlonglong imageID, const QVariantList &infos,
+                             DatabaseFields::ImagePositions fields = DatabaseFields::ImagePositionsAll);
+
+    /**
+     * Retrieves all available comments for the specified item.
+     */
+    QList<CommentInfo> getItemComments(qlonglong imageID);
+
+    /**
+     * Sets the comments for the image. A comment for the image with the same
+     * source, language and author will be overwritten.
+     * @param imageID  The imageID of the image
+     * @param comment  The comment string
+     * @param source   The source of the comment
+     * @param language Information about the language of the comment. A null string shall be used
+     *                 if language information is not available from the source, or if
+     *                 the comment is in the default language.
+     * @param author   Optional information about the author who wrote the comment.
+     *                 If not supported by the source, pass a null string.
+     * @param date     Optional information about the date when the comment was written
+     *                 If not supported by the source, pass a null string.
+     * @returns the comment ID of the comment
+     */
+    int setImageComment(qlonglong imageID, const QString &comment, DatabaseComment::Source source,
+                        const QString &language = QString(), const QString &author = QString(),
+                        const QDateTime &date = QDateTime());
+
+    /**
+     * Changes the properties of a comment.
+     * The QVariantList shall have at most 5 entries, of types in this order:
+     * 0) Int       Source
+     * 1) String    Language
+     * 2) String    Author
+     * 3) DateTime  Date
+     * 4) String    Comment
+     */
+    void changeImageComment(int commentId, const QVariantList &infos,
+                       DatabaseFields::ImageComments fields = DatabaseFields::ImageCommentsAll);
+
+
+
     /**
      * Set the caption for the item
      * @param imageID the id of the item
      * @param caption the caption for the item
      */
-    void setItemCaption(qlonglong imageID, const QString& caption);
+    //void setItemCaption(qlonglong imageID, const QString& caption);
 
     /**
      * Update the date of a item to supplied date
@@ -549,7 +720,7 @@ public:
      * @param name    the name of the item
      * @return the caption for the item
      */
-    QString getItemCaption(int albumID, const QString& name);
+    //QString getItemCaption(int albumID, const QString& name);
 
 
     /**
@@ -569,7 +740,7 @@ public:
      * @param name    the name of the item
      * @param caption the caption for the item
      */
-    void setItemCaption(int albumID, const QString& name, const QString& caption);
+    //void setItemCaption(int albumID, const QString& name, const QString& caption);
 
     // ----------- Items and their tags -----------
 
@@ -656,6 +827,15 @@ public:
      */
     int copyItem(int srcAlbumID, const QString& srcName,
                  int dstAlbumID, const QString& dstName);
+
+
+    // ----------- Static helper methods for constructing SQL queries -----------
+
+    static QStringList imageInformationFieldList(DatabaseFields::ImageInformation fields);
+    static QStringList imageMetadataFieldList(DatabaseFields::ImageMetadata fields);
+    static QStringList imagePositionsFieldList(DatabaseFields::ImagePositions fields);
+    static QStringList imageCommentsFieldList(DatabaseFields::ImageComments fields);
+    static void addBoundValuePlaceholders(QString &query, int count);
 
 private:
 

@@ -144,9 +144,21 @@ public:
     AlbumShortInfo() : id(0) {};
 
     int         id;
-    QString     url;
+    QString     relativePath;
     QString     albumRoot;
 };
+
+namespace DatabaseItem
+{
+    enum Status
+    {
+        // Keep values constant
+        UndefinedStatus = 0,
+        Visible         = 1,
+        Hidden          = 2,
+        Removed         = 3
+    };
+}
 
 class ItemShortInfo
 {
@@ -154,11 +166,50 @@ public:
 
     ItemShortInfo() : id(0), albumID(0) {};
 
-    int         id;
+    qlonglong   id;
     QString     itemName;
     int         albumID;
     QString     albumRoot;
     QString     album;
+};
+
+class ItemScanInfo
+{
+public:
+
+    ItemScanInfo()
+        : id(0), albumID(0), status(DatabaseItem::UndefinedStatus)
+    {};
+
+    qlonglong            id;
+    int                  albumID;
+    QString              itemName;
+    DatabaseItem::Status status;
+    QDateTime            modificationDate;
+    QString              uniqueHash;
+};
+
+namespace DatabaseComment
+{
+    enum Source
+    {
+        UndefinedSource = 0
+    };
+}
+
+class CommentInfo
+{
+public:
+
+    CommentInfo() : imageId(-1), source(DatabaseComment::UndefinedSource) {};
+
+    int                     id;
+    qlonglong               imageId;
+    DatabaseComment::Source source;
+    QString                 author;
+    QString                 language;
+    QDateTime               date;
+    QString                 comment;
 };
 
 }  // namespace Digikam
