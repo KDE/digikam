@@ -355,7 +355,6 @@ bool SchemaUpdater::createTablesV5()
     if (!m_access->backend()->execSql(
                     QString("CREATE TABLE Images\n"
                             " (id INTEGER PRIMARY KEY,\n"
-                            "  albumRoot INTEGER NOT NULL FOREIGN KEY,\n"
                             "  album INTEGER,\n" // no constraints, for temporary orphans
                             "  name TEXT NOT NULL,\n"
                             "  status INTEGER,\n"
@@ -381,11 +380,11 @@ bool SchemaUpdater::createTablesV5()
                             "  rating INTEGER,\n"
                             "  creationDate DATETIME,\n"
                             "  digitizationDate DATETIME,\n"
+                            "  orientation INTEGER,\n"
                             "  sizeX INTEGER,\n"
                             "  sizeY INTEGER,\n"
                             "  colorDepth INTEGER,\n"
-                            "  colorModel INTEGER,\n"
-                            "  orientation INTEGER);") ))
+                            "  colorModel INTEGER);") ))
     {
         return false;
     }
@@ -432,12 +431,14 @@ bool SchemaUpdater::createTablesV5()
 
     if (!m_access->backend()->execSql(
                     QString("CREATE TABLE ImageComments\n"
-                            " (imageid INTEGER UNIQUE FOREIGN KEY,\n"
+                            " (id INTEGER PRIMARY KEY,\n"
+                            "  imageid INTEGER UNIQUE FOREIGN KEY,\n"
                             "  source INTEGER,\n"
-                            "  author TEXT,\n"
                             "  language TEXT,\n"
+                            "  author TEXT,\n"
                             "  date DATETIME,\n"
-                            "  comment TEXT);"
+                            "  comment TEXT,\n"
+                            "  UNIQUE(imageid, source, language, author));"
                            ) ))
     {
         return false;
