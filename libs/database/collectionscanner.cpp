@@ -114,7 +114,7 @@ void CollectionScanner::completeScan()
 
     if (d->wantSignals)
     {
-    // count for progress info
+        // count for progress info
         int count = 0;
         foreach (CollectionLocation *location, allLocations)
             count += countItemsInFolder(location->albumRootPath());
@@ -220,16 +220,18 @@ void CollectionScanner::scanForStaleAlbums(QList<CollectionLocation*> locations)
     QList<AlbumShortInfo> albumList = DatabaseAccess().db()->getAlbumShortInfos();
     QList<int> toBeDeleted;
 
-    QSet<int> albumRootIds;
+    QHash<int, CollectionLocation *> albumRoots;
     foreach (CollectionLocation *location, locations)
-        albumRootIds << location->id();
+        albumRoots[location->id()] = location;
 
     QList<AlbumShortInfo>::const_iterator it;
     for (it = albumList.constBegin(); it != albumList.constEnd(); ++it)
     {
-        if (albumRootIds.contains((*it).albumRootId))
+        CollectionLocation *location = albumRoots.value((*it).albumRootId);
+        // Only handle albums on available locations
+        if (location)
         {
-            QFileInfo fileInfo((*it).albumRoot + (*it).relativePath);
+            QFileInfo fileInfo(location->albumRootPath() + (*it).relativePath);
             if (!fileInfo.exists() || !fileInfo.isDir())
             {
                 toBeDeleted << (*it).id;
@@ -312,19 +314,29 @@ void CollectionScanner::scanAlbum(CollectionLocation *location, const QString &a
                 // mark item as "seen"
                 itemIdSet.remove(scanInfos[index].id);
 
-                // compare modification date
-                QDateTime fiModifyDate = fi->lastModified();
-                if (fiModifyDate != scanInfos[index].modificationDate)
+                // if the hash is null, this signals a full rescan
+                if (scanInfos[index].uniqueHash.isEmpty())
                 {
+                    ImageScanner scanner((*fi), scanInfos[index]);
+                    scanner.setCategory(category(*fi));
+                    scanner.fullScan();
+                }
+                else
+                {
+                // compare modification date
+                    QDateTime fiModifyDate = fi->lastModified();
+                    if (fiModifyDate != scanInfos[index].modificationDate)
+                    {
                     // allow a "modify window" of one second.
                     // FAT filesystems store the modify date in 2-second resolution.
-                    int diff = fiModifyDate.secsTo(scanInfos[index].modificationDate);
-                    if (abs(diff) > 1)
-                    {
+                        int diff = fiModifyDate.secsTo(scanInfos[index].modificationDate);
+                        if (abs(diff) > 1)
+                        {
                         // file has been modified
-                        ImageScanner scanner((*fi), scanInfos[index]);
-                        scanner.setCategory(category(*fi));
-                        scanner.fileModified();
+                            ImageScanner scanner((*fi), scanInfos[index]);
+                            scanner.setCategory(category(*fi));
+                            scanner.fileModified();
+                        }
                     }
                 }
             }

@@ -96,7 +96,8 @@ ImageInfo::ImageInfo(qlonglong ID)
     // retrieve immutable values now, the rest on demand
     ItemShortInfo info = access.db()->getItemShortInfo(ID);
     m_data->albumId = info.albumID;
-    m_data->url     = DatabaseUrl::fromAlbumAndName(info.itemName, info.album, info.albumRoot);
+    m_data->url     = DatabaseUrl::fromAlbumAndName(info.itemName, info.album,
+                                                    CollectionManager::instance()->albumRootPath(info.albumRootId));
 }
 
 ImageInfo::ImageInfo(const KUrl &url)

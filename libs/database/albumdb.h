@@ -117,7 +117,7 @@ public:
      * @param status The status that the requested album roots shall have
      * @return a list of albums and their attributes
      */
-    QList<AlbumRootInfo> getAlbumRootsWithStatus(int status);
+    //QList<AlbumRootInfo> getAlbumRootsWithStatus(int status);
 
     /**
      * Add a new album to the database with the given attributes
@@ -128,7 +128,7 @@ public:
      * @param specificPath The path specific to volume
      * @returns the album root id of the newly created root
      */
-    int addAlbumRoot(int type, const QString &absolutePath, const QString &uuid, const QString &specificPath);
+    int addAlbumRoot(int type, const QString &identifier, const QString &specificPath);
 
     /**
      * Deletes an album  root from the database.
@@ -140,14 +140,14 @@ public:
      * Returns the status of the album root with the given id,
      * or -1 if no such album root exists.
      */
-    int getAlbumRootStatus(int rootId);
+    //int getAlbumRootStatus(int rootId);
 
     /**
      * Sets the status and absolutePath of the album root with given id.
      * @param status The new status
      * @param absolutePath The new absolute path. If this is null, it will not be changed.
      */
-    void setAlbumRootStatus(int rootId, int status, const QString &absolutePath = QString());
+    //void setAlbumRootStatus(int rootId, int status, const QString &absolutePath = QString());
 
     // ----------- Album Listing operations -----------
     /**
