@@ -40,6 +40,18 @@
 namespace Digikam
 {
 
+namespace AlbumRoot
+{
+    enum Type
+    {
+        // Keep values constant
+        UndefinedType   = 0,
+        VolumeHardWired = 1,
+        VolumeRemovable = 2,
+        Network         = 3
+    };
+};
+
 /**
  * \class AlbumRootInfo
  */
@@ -47,13 +59,12 @@ class AlbumRootInfo
 {
 public:
 
-    AlbumRootInfo() : id(0), status(-1), type(-1) {};
+    AlbumRootInfo() : id(0), type(AlbumRoot::UndefinedType) {};
 
     int id;
+    AlbumRoot::Type type;
     int status;
-    QString absolutePath;
-    int type;
-    QString uuid;
+    QString identifier;
     QString specificPath;
 };
 
@@ -72,7 +83,6 @@ public:
 
     int      id;
     int      albumRootId;
-    QString  albumRoot;
     QString  url;
     QString  caption;
     QString  collection;
@@ -147,7 +157,6 @@ public:
     int         id;
     QString     relativePath;
     int         albumRootId;
-    QString     albumRoot;
 };
 
 namespace DatabaseItem
@@ -181,7 +190,7 @@ public:
     qlonglong   id;
     QString     itemName;
     int         albumID;
-    QString     albumRoot;
+    int         albumRootId;
     QString     album;
 };
 

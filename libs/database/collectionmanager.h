@@ -54,6 +54,11 @@ public:
     static void cleanUp();
 
     /**
+     * Reads the lists of collection locations
+     */
+    void update();
+
+    /**
      * Add the given file system location as new collection location.
      * Type and availability will be detected.
      * On failure returns null. This would be the case if the given
@@ -81,12 +86,16 @@ public:
     QStringList allAvailableAlbumRootPaths();
 
     /**
+     * Returns the location for the given album root id
+     */
+    CollectionLocation *locationForAlbumRootId(int id);
+
+    /**
      * Returns the CollectionLocation that contains the given album root.
      * The path must be an album root with isAlbumRoot() == true.
      * Returns 0 if no collection location matches.
      * Only available (or hidden, but available) locations are guaranteed to be found.
      */
-    CollectionLocation *locationForAlbumRootId(int id);
     CollectionLocation *locationForAlbumRoot(const KUrl &fileUrl);
     CollectionLocation *locationForAlbumRootPath(const QString &albumRootPath);
 
@@ -97,6 +106,12 @@ public:
      */
     CollectionLocation *locationForUrl(const KUrl &fileUrl);
     CollectionLocation *locationForPath(const QString &filePath);
+
+    /**
+     * Returns the album root path for the location with the given id.
+     * Returns a null QString if the location does not exist or is not available.
+     */
+    QString albumRootPath(int id);
 
     /**
      * For a given path, the part of the path that forms the album root is returned,

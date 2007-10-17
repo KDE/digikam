@@ -31,6 +31,7 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "albuminfo.h"
 
 namespace Digikam
 {
@@ -44,13 +45,15 @@ public:
     {
         LocationAvailable,
         LocationHidden,
-        LocationUnavailable
+        LocationUnavailable,
+        LocationDeleted
     };
 
     enum Type
     {
-        TypeHardWired,
-        TypeRemovable
+        TypeVolumeHardWired = AlbumRoot::VolumeHardWired,
+        TypeVolumeRemovable = AlbumRoot::VolumeRemovable,
+        TypeNetwork         = AlbumRoot::Network
     };
 
     int     id() const;
@@ -58,10 +61,12 @@ public:
     Type    type() const;
     QString albumRootPath() const;
 
+    bool isAvailable() { return status() == LocationAvailable; }
+
 protected:
 
     CollectionLocation()
-        : m_id(-1), m_status(LocationUnavailable), m_type(TypeHardWired)
+        : m_id(-1), m_status(LocationUnavailable), m_type(TypeVolumeHardWired)
     {
     }
 

@@ -59,10 +59,11 @@ public:
     AlbumRootLocation(const AlbumRootInfo &info)
     {
         m_id         = info.id;
-        m_type       = (CollectionLocation::Type)info.type;
-        m_path       = info.absolutePath;
+        m_type       = (Type)info.type;
         specificPath = info.specificPath;
-        uuid         = info.uuid;
+        identifier   = info.identifier;
+
+        m_path       = QString();
 
         setStatus((CollectionLocation::Status)info.status);
     }
@@ -120,7 +121,7 @@ public:
         m_type = type;
     }
 
-    QString uuid;
+    QString identifier;
     QString specificPath;
     bool available;
     bool hidden;
@@ -147,6 +148,7 @@ public:
 
     QMap<int, AlbumRootLocation *> locations;
     QList<SolidVolumeInfo> listVolumes();
+    QList<CollectionLocation *> removedLocations;
 };
 
 QList<SolidVolumeInfo> CollectionManagerPrivate::listVolumes()
@@ -243,6 +245,11 @@ CollectionManager::~CollectionManager()
     delete d;
 }
 
+void CollectionManager::update()
+{
+    updateLocations();
+}
+
 CollectionLocation *CollectionManager::addLocation(const KUrl &fileUrl)
 {
     QString path = fileUrl.path(KUrl::RemoveTrailingSlash);
@@ -274,11 +281,11 @@ CollectionLocation *CollectionManager::addLocation(const KUrl &fileUrl)
     QString specificPath = path.mid(volume.path.length() - 1);
     CollectionLocation::Type type;
     if (volume.removableOrPluggable)
-        type = CollectionLocation::TypeRemovable;
+        type = CollectionLocation::TypeVolumeRemovable;
     else
-        type = CollectionLocation::TypeHardWired;
+        type = CollectionLocation::TypeVolumeHardWired;
 
-    access.db()->addAlbumRoot(type, volume.path, volume.uuid, specificPath);
+    access.db()->addAlbumRoot(type, volume.uuid, specificPath);
 
     updateLocations();
 
@@ -326,6 +333,7 @@ QStringList CollectionManager::allAvailableAlbumRootPaths()
 
 CollectionLocation *CollectionManager::locationForAlbumRootId(int id)
 {
+    DatabaseAccess access;
     return d->locations.value(id);
 }
 
@@ -360,6 +368,17 @@ CollectionLocation *CollectionManager::locationForPath(const QString &filePath)
             return location;
     }
     return 0;
+}
+
+QString CollectionManager::albumRootPath(int id)
+{
+    DatabaseAccess access;
+    CollectionLocation *location = d->locations.value(id);
+    if (location)
+    {
+        return location->albumRootPath();
+    }
+    return QString();
 }
 
 KUrl CollectionManager::albumRoot(const KUrl &fileUrl)
@@ -481,7 +500,7 @@ void CollectionManager::updateLocations()
             // if volume is in list, it is accessible
             foreach (SolidVolumeInfo volume, volumes)
             {
-                if (volume.uuid == location->uuid)
+                if (volume.uuid == location->identifier)
                 {
                     available = true;
                     volumePath = volume.path;
@@ -493,7 +512,7 @@ void CollectionManager::updateLocations()
             location->setAbsolutePath(volumePath + location->specificPath);
             location->setStatusFromFlags();
             // set the volatile values in db
-            access.db()->setAlbumRootStatus(location->id(), location->status(), location->albumRootPath());
+            //access.db()->setAlbumRootStatus(location->id(), location->status(), location->albumRootPath());
         }
     }
 }
