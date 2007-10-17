@@ -917,7 +917,8 @@ QVariantList AlbumDB::getImagesFields(qlonglong imageID, DatabaseFields::Images 
         if (fields & DatabaseFields::ModificationDate && !values.isEmpty())
         {
             int index = fieldNames.indexOf("modificationDate");
-            values[index] = QDateTime::fromString(values[index].toString(), Qt::ISODate);
+            values[index] = (values[index].isNull() ? QDateTime()
+                              : QDateTime::fromString(values[index].toString(), Qt::ISODate));
         }
     }
 #warning TODO: DatabaseAttributesWatch
@@ -936,6 +937,20 @@ QVariantList AlbumDB::getImageInformation(qlonglong imageID, DatabaseFields::Ima
 
         QVariantList values;
         d->db->execSql(query, imageID, &values);
+
+        // Convert date times to QDateTime, they come as QString
+        if (fields & DatabaseFields::CreationDate && !values.isEmpty())
+        {
+            int index = fieldNames.indexOf("creationDate");
+            values[index] = (values[index].isNull() ? QDateTime()
+                              : QDateTime::fromString(values[index].toString(), Qt::ISODate));
+        }
+        if (fields & DatabaseFields::DigitizationDate && !values.isEmpty())
+        {
+            int index = fieldNames.indexOf("digitizationDate");
+            values[index] = (values[index].isNull() ? QDateTime()
+                              : QDateTime::fromString(values[index].toString(), Qt::ISODate));
+        }
     }
     return values;
 }
@@ -952,18 +967,6 @@ QVariantList AlbumDB::getImageMetadata(qlonglong imageID, DatabaseFields::ImageM
 
         QVariantList values;
         d->db->execSql(query, imageID, &values);
-
-        // Convert date times to QDateTime, they come as QString
-        if (fields & DatabaseFields::CreationDate && !values.isEmpty())
-        {
-            int index = fieldNames.indexOf("creationDate");
-            values[index] = QDateTime::fromString(values[index].toString(), Qt::ISODate);
-        }
-        if (fields & DatabaseFields::DigitizationDate && !values.isEmpty())
-        {
-            int index = fieldNames.indexOf("digitizationDate");
-            values[index] = QDateTime::fromString(values[index].toString(), Qt::ISODate);
-        }
     }
     return values;
 }
@@ -996,17 +999,22 @@ void AlbumDB::addImageInformation(qlonglong imageID, const QVariantList &infos, 
     query += ");";
 
     QVariantList boundValues;
-    boundValues << imageID << infos;
+    boundValues << imageID;
+    // Take care for datetime values
+    if (fields & DatabaseFields::CreationDate || fields & DatabaseFields::DigitizationDate)
+    {
+        foreach (QVariant value, infos)
+        {
+            if (value.type() == QVariant::DateTime || value.type() == QVariant::Date)
+                boundValues << value.toDateTime().toString(Qt::ISODate);
+            else
+                boundValues << value;
+        }
+    }
+    else
+        boundValues << infos;
 
     d->db->execSql( query, boundValues );
-
-    /*
-    The query looks like this (for all fields):
-                    QString("REPLACE INTO ImageInformation "
-                            " ( imageId, rating, creationDate, digitizationDate, "
-                            "   orientation, width, height, colorDepth, colorModel ) "
-                            " VALUES (?,?,?,?,?,?,?,?,?);"
-    */
 }
 
 void AlbumDB::changeImageInformation(qlonglong imageId, const QVariantList &infos,
@@ -1052,20 +1060,7 @@ void AlbumDB::addImageMetadata(qlonglong imageID, const QVariantList &infos, Dat
     query += ");";
 
     QVariantList boundValues;
-    // Take care for datetime values
-    if (fields & DatabaseFields::CreationDate || fields & DatabaseFields::DigitizationDate)
-    {
-        foreach (QVariant value, infos)
-        {
-            if (value.type() == QVariant::DateTime || value.type() == QVariant::Date)
-                boundValues << value.toDateTime().toString(Qt::ISODate);
-            else
-                boundValues << value;
-        }
-        boundValues << imageID;
-    }
-    else
-        boundValues << infos << imageID;
+    boundValues << imageID << infos;
 
     d->db->execSql( query, boundValues );
 }
@@ -1127,8 +1122,9 @@ QList<CommentInfo> AlbumDB::getImageComments(qlonglong imageID)
     QList<CommentInfo> list;
 
     QList<QVariant> values;
-    d->db->execSql( "SELECT id, source, language, author, date, comment "
-                    "FROM ImageComments WHERE imageid=?;", imageID, &values);
+    d->db->execSql( QString("SELECT id, type, language, author, date, comment "
+                            "FROM ImageComments WHERE imageid=?;"),
+                    imageID, &values);
 
     for (QList<QVariant>::iterator it = values.begin(); it != values.end();)
     {
@@ -1143,7 +1139,7 @@ QList<CommentInfo> AlbumDB::getImageComments(qlonglong imageID)
         ++it;
         info.author   = (*it).toString();
         ++it;
-        info.date     = QDateTime::fromString((*it).toString(), Qt::ISODate);
+        info.date     = ((*it).isNull() ? QDateTime() : QDateTime::fromString((*it).toString(), Qt::ISODate));
         ++it;
         info.comment  = (*it).toString();
         ++it;
@@ -1176,8 +1172,7 @@ void AlbumDB::changeImageComment(int commentId, const QVariantList &infos, Datab
     QStringList fieldNames = imageCommentsFieldList(fields);
     Q_ASSERT(fieldNames.size()==infos.size());
     query += fieldNames.join("=?,");
-
-    query += " WHERE id=?;";
+    query += "=? WHERE id=?;";
 
     QVariantList boundValues;
     boundValues << infos << commentId;
@@ -1260,7 +1255,7 @@ QStringList AlbumDB::imageMetadataFieldList(DatabaseFields::ImageMetadata fields
     if (fields & DatabaseFields::WhiteBalance)
         list << "whiteBalance";
     if (fields & DatabaseFields::WhiteBalanceColorTemperature)
-        list << "chiteBalanceColorTemperature";
+        list << "whiteBalanceColorTemperature";
     if (fields & DatabaseFields::MeteringMode)
         list << "meteringMode";
     if (fields & DatabaseFields::SubjectDistance)
@@ -1502,13 +1497,14 @@ QStringList AlbumDB::getAllItemURLsWithoutDate()
 QList<QDateTime> AlbumDB::getAllCreationDates()
 {
     QList<QVariant> values;
-    d->db->execSql( "SELECT creationDate FROM ImageMetadata;", &values );
+    d->db->execSql( "SELECT creationDate FROM ImageInformation;", &values );
 
     QList<QDateTime> list;
     foreach (QVariant value, values)
     {
         if (!value.isNull())
-            list << QDateTime::fromString(value.toString(), Qt::ISODate);
+            list << (value.isNull() ? QDateTime()
+                        : QDateTime::fromString(value.toString(), Qt::ISODate));
     }
     return list;
 }
@@ -1965,8 +1961,8 @@ QList<ItemScanInfo> AlbumDB::getItemScanInfos(int albumID)
         ++it;
         info.category         = (DatabaseItem::Category)(*it).toInt();
         ++it;
-        if (!(*it).isNull())
-            info.modificationDate = QDateTime::fromString( (*it).toString(), Qt::ISODate );
+        info.modificationDate = ((*it).isNull() ? QDateTime()
+                                    : QDateTime::fromString( (*it).toString(), Qt::ISODate ));
         ++it;
         info.uniqueHash       = (*it).toString();
         ++it;
@@ -1987,17 +1983,23 @@ ItemScanInfo AlbumDB::getItemScanInfo(qlonglong imageID)
                     &values );
 
     ItemScanInfo info;
+    QList<QVariant>::iterator it = values.begin();
 
-    if (!values.isEmpty())
-    {
-        info.id               = values[0].toLongLong();
-        info.albumID          = values[1].toInt();
-        info.itemName         = values[2].toString();
-        info.status           = (DatabaseItem::Status)values[3].toInt();
-        info.category         = (DatabaseItem::Category)values[4].toInt();
-        info.modificationDate = QDateTime::fromString( values[5].toString(), Qt::ISODate );
-        info.uniqueHash       = values[6].toString();
-    }
+    info.id               = (*it).toLongLong();
+    ++it;
+    info.albumID          = (*it).toInt();
+    ++it;
+    info.itemName         = (*it).toString();
+    ++it;
+    info.status           = (DatabaseItem::Status)(*it).toInt();
+    ++it;
+    info.category         = (DatabaseItem::Category)(*it).toInt();
+    ++it;
+    info.modificationDate = ((*it).isNull() ? QDateTime()
+                                : QDateTime::fromString( (*it).toString(), Qt::ISODate ));
+    ++it;
+    info.uniqueHash       = (*it).toString();
+    ++it;
 
     return info;
 }
