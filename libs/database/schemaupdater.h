@@ -40,16 +40,22 @@ public:
     SchemaUpdater(DatabaseAccess *access);
 
     static int schemaVersion();
+    static int filterSettingsVersion();
     bool update();
 
 private:
 
-    bool createTables();
+    bool startUpdates();
     bool makeUpdates();
+    bool updateFilterSettings();
+    bool createDatabase();
+    bool createTablesV5();
+    bool createIndicesV5();
+    bool createTriggersV5();
     bool copyV3toV4(const QString &digikam3DBPath, const QString &currentDBPath);
+    bool updateV4toV5();
     bool updateV2toV4(const QString &sqlite2DBPath);
     bool createTablesV3();
-    bool createTablesV5();
 
     DatabaseAccess *m_access;
 
