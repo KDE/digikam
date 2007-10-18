@@ -52,9 +52,6 @@ INCLUDE_DIRECTORIES(
 
 # Shared libdigikam ################################################################
 
-# Required by Greycstoration algorithm (CImg.h)
-ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
-
 SET(digikam_LIB_SRCS
                         # basic libs
                         ${libdimg_SRCS}
