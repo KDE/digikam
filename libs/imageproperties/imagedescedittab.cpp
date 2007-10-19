@@ -162,6 +162,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     KHBox *dateBox  = new KHBox(settingsArea);
     new QLabel(i18n("Date:"), dateBox);
     d->dateTimeEdit = new KDateTimeEdit(dateBox, "datepicker");
+    d->dateTimeEdit->setMaximumHeight( fontMetrics().height()+4 );
 
     KHBox *ratingBox = new KHBox(settingsArea);
     new QLabel(i18n("Rating:"), ratingBox);
@@ -202,17 +203,20 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
 
     d->revertBtn = new QToolButton(buttonsBox);
     d->revertBtn->setIcon(SmallIcon("view-refresh"));
+    d->revertBtn->setMaximumHeight( fontMetrics().height()+4 );
     d->revertBtn->setToolTip( i18n("Revert all changes"));
     d->revertBtn->setEnabled(false);
 
     d->applyBtn = new QPushButton(i18n("Apply"), buttonsBox);
     d->applyBtn->setIcon(SmallIcon("ok"));
+    d->applyBtn->setMaximumHeight( fontMetrics().height()+4 );
     d->applyBtn->setEnabled(false);
     d->applyBtn->setToolTip( i18n("Apply all changes to images"));
     buttonsBox->setStretchFactor(d->applyBtn, 10);
 
     d->moreButton = new QPushButton(i18n("More"), buttonsBox);
     d->moreMenu   = new QMenu(this);
+    d->moreButton->setMaximumHeight( fontMetrics().height()+4 );
     d->moreButton->setMenu(d->moreMenu);
 
     // --------------------------------------------------
