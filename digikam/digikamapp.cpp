@@ -869,7 +869,7 @@ void DigikamApp::setupActions()
     QAction* findAction = actionCollection()->addAction(KStandardAction::Find, "search_quick",
                                                         d->view, SLOT(slotNewQuickSearch()));
     findAction->setText(i18n("Quick Search..."));
-    findAction->setIcon(BarIcon("file-find"));
+    findAction->setIcon(BarIcon("filefind"));
 
     // -----------------------------------------------------------
 
