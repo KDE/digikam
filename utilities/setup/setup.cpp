@@ -153,7 +153,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->identityPage  = new SetupIdentity();
     d->page_identity = addPage( d->identityPage, i18n("Identity") );
     d->page_identity->setHeader( i18n("Default identity information") );
-    d->page_identity->setIcon( KIcon("identity") );
+    d->page_identity->setIcon( KIcon("kontact-contacts") );
 
     d->metadataPage  = new SetupMetadata();
     d->page_metadata = addPage( d->metadataPage, i18n("Metadata") );
@@ -168,7 +168,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->mimePage  = new SetupMime();
     d->page_mime = addPage( d->mimePage, i18n("Mime Types") );
     d->page_mime->setHeader( i18n("File (MIME) Types Settings") );
-    d->page_mime->setIcon( KIcon("compfile") );
+    d->page_mime->setIcon( KIcon("system-file-manager") );
 
     d->lighttablePage  = new SetupLightTable();
     d->page_lighttable = addPage( d->lighttablePage, i18n("Light Table") );
