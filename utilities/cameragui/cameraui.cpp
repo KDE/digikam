@@ -185,7 +185,7 @@ void CameraUI::setupUserArea()
     d->advBox->setWhatsThis( i18n("<p>Set how digiKam will rename files as they are downloaded."));
 
     d->advBox->insertItem(CameraUIPriv::RENAMEFILEPAGE, d->renameCustomizer, 
-                          SmallIcon("file-import"), i18n("File Renaming Options"));
+                          SmallIcon("insert-image"), i18n("File Renaming Options"));
 
     // -- Albums Auto-creation options -----------------------------------------
 
@@ -342,7 +342,7 @@ void CameraUI::setupActions()
 
     // -----------------------------------------------------------------
 
-    d->downloadSelectedAction = new KAction(KIcon("file-export"), i18n("Download Selected"), this);
+    d->downloadSelectedAction = new KAction(KIcon("computer"), i18n("Download Selected"), this);
     connect(d->downloadSelectedAction, SIGNAL(triggered()), this, SLOT(slotDownloadSelected()));
     actionCollection()->addAction("cameraui_imagedownloadselected", d->downloadSelectedAction);
     d->downloadSelectedAction->setEnabled(false);
@@ -368,7 +368,7 @@ void CameraUI::setupActions()
 
     // -------------------------------------------------------------------------
 
-    d->uploadAction = new KAction(KIcon("file-import"), i18n("Upload..."), this);
+    d->uploadAction = new KAction(KIcon("media-flash-smart-media"), i18n("Upload..."), this);
     connect(d->uploadAction, SIGNAL(triggered()), this, SLOT(slotUpload()));
     actionCollection()->addAction("cameraui_imageupload", d->uploadAction);
 
