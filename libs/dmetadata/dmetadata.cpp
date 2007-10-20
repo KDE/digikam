@@ -578,13 +578,18 @@ inline QVariant DMetadata::fromExifOrXmp(const char *exifTagName, const char *xm
 {
     QVariant var;
 
-    var = getExifTagVariant(exifTagName, false);
-    if (!var.isNull())
-        return var;
+    if (exifTagName)
+    {
+        var = getExifTagVariant(exifTagName, false);
+        if (!var.isNull())
+            return var;
+    }
 
     if (xmpTagName)
     {
-        //TODO
+        var = getXmpTagVariant(xmpTagName);
+        if (!var.isNull())
+            return var;
     }
 
     return var;
@@ -592,57 +597,59 @@ inline QVariant DMetadata::fromExifOrXmp(const char *exifTagName, const char *xm
 
 inline QVariant DMetadata::fromIptcOrXmp(const char *iptcTagName, const char *xmpTagName) const
 {
-    QString iptcValue;
-
     if (iptcTagName)
-        iptcValue = getIptcTagString(iptcTagName);
-    if (!iptcValue.isNull())
-        return iptcValue;
+    {
+        QString iptcValue = getIptcTagString(iptcTagName);
+        if (!iptcValue.isNull())
+            return iptcValue;
+    }
 
     if (xmpTagName)
     {
-        // TODO
+        QVariant var = getXmpTagVariant(xmpTagName);
+        if (!var.isNull())
+            return var;
     }
 
     return QVariant(QVariant::String);
 }
 
-inline QVariant DMetadata::fromIptcOrXmpList(const char *iptcTagName, const char *xmpTagName) const
+inline QVariant DMetadata::fromIptcEmulateList(const char *iptcTagName) const
 {
-    QStringList iptcValues;
+    QStringList iptcValues = getIptcTagsStringList(iptcTagName);
 
-    if (iptcTagName)
-        iptcValues = getIptcTagsStringList(iptcTagName);
-    if (!iptcValues.isEmpty())
-        return iptcValues;
-
-    if (xmpTagName)
-    {
-        // TODO
-    }
-
-    return QVariant(QVariant::StringList);
+    if (iptcValues.isEmpty())
+        return QVariant(QVariant::StringList);
+    return iptcValues;
 }
 
-inline QVariant DMetadata::fromIptcOrXmpLangAlt(const char *iptcTagName, const char *xmpTagName) const
+inline QVariant DMetadata::fromXmpList(const char *xmpTagName) const
 {
-    QString value;
+    QVariant var = getXmpTagVariant(xmpTagName);
 
-    if (xmpTagName)
-    {
-        // TODO
-    }
+    if (var.isNull())
+        return QVariant(QVariant::StringList);
+    return var;
+}
 
-    if (iptcTagName)
-        value = getIptcTagString(iptcTagName);
-    if (!value.isNull())
-    {
-        QMap<QString, QVariant> map;
-        map["x-default"] = value;
-        return map;
-    }
+inline QVariant DMetadata::fromIptcEmulateLangAlt(const char *iptcTagName) const
+{
+    QString var = getIptcTagString(iptcTagName);
+    if (!var.isNull())
+        return QVariant(QVariant::Map);
 
-    return QVariant(QVariant::Map);
+    QMap<QString, QVariant> map;
+    map["x-default"] = var;
+    return map;
+}
+
+inline QVariant DMetadata::fromXmpLangAlt(const char *xmpTagName) const
+{
+    QVariant var = getXmpTagVariant(xmpTagName);
+
+    if (var.isNull())
+        return QVariant(QVariant::Map);
+    return var;
 }
 
 QVariant DMetadata::getMetadataField(MetadataInfo::Field field)
@@ -659,11 +666,27 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field)
             return fromIptcOrXmp("Iptc.Application2.Caption", 0);
 
         case MetadataInfo::Description:
-            return fromIptcOrXmpLangAlt("Iptc.Application2.Caption", "dc.description");
+        {
+            QVariant var = fromXmpLangAlt("Xmp.dc.description");
+            if (!var.isNull())
+                return var;
+
+            var = fromXmpLangAlt("Xmp.tiff.ImageDescription");
+            if (!var.isNull())
+                return var;
+
+            return fromIptcEmulateLangAlt("Iptc.Application2.Caption");
+        }
         case MetadataInfo::Headline:
-            return fromIptcOrXmp("Iptc.Application2.Headline", "photoshop.Headline");
+            return fromIptcOrXmp("Iptc.Application2.Headline", "Xmp.photoshop.Headline");
         case MetadataInfo::Title:
-            return fromIptcOrXmpLangAlt("Iptc.Application2.ObjectName", "dc.title");
+        {
+            QVariant var = fromXmpLangAlt("Xmp.dc.title");
+            if (!var.isNull())
+                return var;
+
+            return fromIptcEmulateLangAlt("Iptc.Application2.ObjectName");
+        }
         case MetadataInfo::DescriptionWriter:
             return fromIptcOrXmp("Iptc.Application2.Writer", "photoshop.CaptionWriter");
 
@@ -776,13 +799,37 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field)
             return QVariant(QVariant::String);
 
         case MetadataInfo::IptcCoreCopyrightNotice:
-            return fromIptcOrXmpLangAlt("Iptc.Application2.Copyright", "Xmp.dc.rights");
+        {
+            QVariant var = fromXmpLangAlt("Xmp.dc.rights");
+            if (!var.isNull())
+                return var;
+
+            var = fromXmpLangAlt("Xmp.tiff.Copyright");
+            if (!var.isNull())
+                return var;
+
+            return fromIptcEmulateLangAlt("Iptc.Application2.Copyright");
+        }
         case MetadataInfo::IptcCoreCreator:
-            return fromIptcOrXmpList("Iptc.Application2.Byline", "Xmp.dc.creator");
+        {
+            QVariant var = fromXmpList("Xmp.dc.creator");
+            if (!var.isNull())
+                return var;
+
+            QString artist = getXmpTagString("Xmp.tiff.Artist");
+            if (!artist.isNull())
+            {
+                QStringList list;
+                list << artist;
+                return list;
+            }
+
+            return fromIptcEmulateList("Iptc.Application2.Byline");
+        }
         case MetadataInfo::IptcCoreProvider:
             return fromIptcOrXmp("Iptc.Application2.Credit", "Xmp.photoshop.Credit");
         case MetadataInfo::IptcCoreRightUsageTerms:
-            return fromIptcOrXmpLangAlt(0, "Xmp.xmpRights.UsageTerms");
+            return fromXmpLangAlt("Xmp.xmpRights.UsageTerms");
         case MetadataInfo::IptcCoreSource:
             return fromIptcOrXmp("Iptc.Application2.Source", "Xmp.photoshop.Source");
 
@@ -802,13 +849,20 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field)
         case MetadataInfo::IptcCoreProvinceState:
             return fromIptcOrXmp("Iptc.Application2.ProvinceState", "Xmp.photoshop.State");
         case MetadataInfo::IptcCoreIntellectualGenre:
+            // TODO: find out correct Iptc tag
             return fromIptcOrXmp(/*"Iptc.Application2.ObjectAttribute"?*/ 0, "Xmp.Iptc4xmpCore.IntellectualGenre");
         case MetadataInfo::IptcCoreJobID:
             return fromIptcOrXmp("Iptc.Application2.TransmissionReference", "Xmp.photoshop.TransmissionReference");
         case MetadataInfo::IptcCoreScene:
-            return fromIptcOrXmpList(0, "Xmp.Iptc4xmpCore.Scene");
+            return fromXmpList("Xmp.Iptc4xmpCore.Scene");
         case MetadataInfo::IptcCoreSubjectCode:
-            return fromIptcOrXmpList("Iptc.Application2.Subject", "Xmp.Iptc4xmpCore.SubjectCode");
+        {
+            QVariant var = fromXmpList("Xmp.Iptc4xmpCore.SubjectCode");
+            if (!var.isNull())
+                return var;
+
+            return fromIptcEmulateList("Iptc.Application2.Subject");
+        }
 
         default:
             return QVariant();

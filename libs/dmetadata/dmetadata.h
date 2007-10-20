@@ -107,8 +107,10 @@ private:
     bool setIptcTag(const QString& text, int maxLength, const char* debugLabel, const char* tagKey) const;
     QVariant fromExifOrXmp(const char *exifTagName, const char *xmpTagName) const;
     QVariant fromIptcOrXmp(const char *iptcTagName, const char *xmpTagName) const;
-    QVariant fromIptcOrXmpList(const char *iptcTagName, const char *xmpTagName) const;
-    QVariant fromIptcOrXmpLangAlt(const char *iptcTagName, const char *xmpTagName) const;
+    QVariant fromXmpList(const char *xmpTagName) const;
+    QVariant fromIptcEmulateList(const char *iptcTagName) const;
+    QVariant fromXmpLangAlt(const char *xmpTagName) const;
+    QVariant fromIptcEmulateLangAlt(const char *iptcTagName) const;
 };
 
 }  // NameSpace Digikam
