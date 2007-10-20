@@ -150,7 +150,11 @@ void ImageScanner::scanImageInformation()
     QVariantList metadataInfos = m_metadata.getMetadataFields(fields);
     QSize size = m_img.size();
 
-    // TODO: creation date need not be null
+    // creation date: fall back to file system property
+    if (metadataInfos[1].isNull() || !metadataInfos[1].toDateTime().isValid())
+    {
+        metadataInfos[1] = m_fileInfo.created();
+    }
 
     QVariantList infos;
     infos << metadataInfos
