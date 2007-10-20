@@ -91,7 +91,7 @@ enum Field
     IptcCoreIntellectualGenre,        /// String
     IptcCoreJobID,                    /// String
     IptcCoreScene,                    /// List of type String
-    IptcCoreSubjectCode,              /// List of type String
+    IptcCoreSubjectCode               /// List of type String
 
     // Description, DescriptionWriter, Headline, Title: see above
     // DateCreated: see above, CreationDate
