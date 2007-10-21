@@ -561,7 +561,7 @@ void SetupICC::fillCombos(const QString& path, bool report)
     DDebug() << "Scanning ICC profiles included with libkdcraw: " << libkdcrawProfilesPath << endl;
     parseProfilesfromDir(libkdcrawFiles);
 
-    d->monitorProfilesKC->insertItems(0, d->monitorICCPath.keys());
+    d->monitorProfilesKC->insertSqueezedList(d->monitorICCPath.keys(), 0);
     if (d->monitorICCPath.keys().isEmpty())
     {
         d->managedView->setEnabled(false);
@@ -572,10 +572,10 @@ void SetupICC::fillCombos(const QString& path, bool report)
         d->managedView->setEnabled(true);
     }
 
-    d->inProfilesKC->insertItems(0, d->inICCPath.keys());
-    d->proofProfilesKC->insertItems(0, d->proofICCPath.keys());
+    d->inProfilesKC->insertSqueezedList(d->inICCPath.keys(), 0);
+    d->proofProfilesKC->insertSqueezedList(d->proofICCPath.keys(), 0);
 
-    d->workProfilesKC->insertItems(0, d->workICCPath.keys());
+    d->workProfilesKC->insertSqueezedList(d->workICCPath.keys(), 0);
     if (d->workICCPath.keys().isEmpty())
     {
         // If there is no workspace icc profiles available, 
