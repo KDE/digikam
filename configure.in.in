@@ -113,8 +113,12 @@ LCMS_LIBS=''
 have_lcms='no'
 if test "$have_lcms_header" = 'yes'
 then
+    saved_cflags="$CFLAGS"
+    saved_ldflags="$LDFLAGS"
     saved_libs=$LIBS
     LIBS="$LIBS -llcms"
+    CFLAGS="$CFLAGS $all_includes"
+    LDFLAGS="$LDFLAGS $all_libraries"
     AC_TRY_LINK([
 #define inline __inline /* gcc is in ansi mode */
 #include LCMS_HEADER
@@ -126,6 +130,8 @@ cmsOpenProfileFromFile("foo", "r");
 ],
         [LCMS_LIBS='-llcms'; have_lcms='yes'])
     LIBS=$saved_libs
+    CFLAGS=$saved_cflags
+    LDFLAGS=$saved_ldflags
 fi
 
 if test -z "$LCMS_LIBS"; then
