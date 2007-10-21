@@ -88,6 +88,16 @@ public:
                             const QVariant& userData=QVariant());
 
     /**
+     * This inserts items to the list. See QComboBox::insertItems()
+     * for details. Please do not use QComboBox:: insertItems() to this
+     * widget, as that will fail.
+     * @param newItems the originals (long version) of the items which needs
+     *                 to be added to the combobox
+     * @param index the position in the widget.
+     */
+    void insertSqueezedList(const QStringList& newItems, int index);
+
+    /**
      * Append an item.
      * @param newItem the original (long version) of the item which needs
      *                to be added to the combobox
@@ -129,15 +139,19 @@ private slots:
 
 private:
 
-    void resizeEvent(QResizeEvent *);
+    void    resizeEvent(QResizeEvent *);
     QString squeezeText(const QString& original);
 
     // Prevent these from being used.
     QString currentText() const;
-    void setCurrentText(const QString& itemText);
-    void insertItem(const QString &text);
-    void insertItem(qint32 index, const QString &text);
-    void addItem(const QString &text);
+    void    setCurrentText(const QString& itemText);
+    void    insertItem(const QString& text);
+    void    insertItem(qint32 index, const QString& text);
+    void    insertItem(int index, const QIcon& icon, const QString& text, const QVariant& userData=QVariant());
+    void    insertItems(int index, const QStringList& list);
+    void    addItem(const QString& text);
+    void    addItem(const QIcon& icon, const QString& text, const QVariant& userData=QVariant());
+    void    addItems(const QStringList& texts);
     QString itemText(int index) const;
 
 private:
