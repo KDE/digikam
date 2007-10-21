@@ -750,7 +750,7 @@ void ThumbBarView::slotFailedPreview(const KFileItem &fileItem)
         return;
 
     KIconLoader* iconLoader = KIconLoader::global();
-    QPixmap pix = iconLoader->loadIcon("file-broken", KIconLoader::NoGroup, ThumbnailSize::Huge);
+    QPixmap pix = iconLoader->loadIcon("image-missing", KIconLoader::NoGroup, ThumbnailSize::Huge);
 
     item->setPixmap(pix);
     item->repaint();

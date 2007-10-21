@@ -201,7 +201,7 @@ void PixmapManager::slotFailedThumbnail(const KUrl& url)
     }
 
     if (pix.isNull())
-        pix = DesktopIcon("file-broken", KIconLoader::SizeEnormous);
+        pix = DesktopIcon("image-missing", KIconLoader::SizeEnormous);
 
     // Resize icon to the right size depending of current settings.
 
