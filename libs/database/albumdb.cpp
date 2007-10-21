@@ -389,7 +389,7 @@ int AlbumDB::addAlbum(int albumRootId, const QString& relativePath,
 
     d->db->execSql( QString("REPLACE INTO Albums (albumRoot, relativePath, date, caption, collection) "
                             "VALUES(?, ?, ?, ?, ?);"),
-                    boundValues, &id);
+                    boundValues, 0, &id);
 
     return id.toInt();
 }
