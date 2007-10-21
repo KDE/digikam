@@ -992,6 +992,7 @@ QString DMetadata::valueToString (const QVariant &value, MetadataInfo::Field fie
         case MetadataInfo::Altitude:
         {
             QString meters = QString("%L1").arg(value.toDouble(), 0, 'f', 2);
+            // xgettext: no-c-format
             return i18nc("Height in meters", "%1m", meters);
         }
 
