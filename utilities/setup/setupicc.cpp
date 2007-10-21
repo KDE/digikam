@@ -517,7 +517,7 @@ void SetupICC::fillCombos(const QString& path, bool report)
     parseProfilesfromDir(digiKamFiles);
 
 
-    d->monitorProfilesKC->insertStringList(d->monitorICCPath.keys(), 0);
+    d->monitorProfilesKC->insertSqueezedList(d->monitorICCPath.keys(), 0);
     if (d->monitorICCPath.keys().isEmpty())
     {
         d->managedView->setEnabled(false);
@@ -528,10 +528,10 @@ void SetupICC::fillCombos(const QString& path, bool report)
         d->managedView->setEnabled(true);
     }
     
-    d->inProfilesKC->insertStringList(d->inICCPath.keys(), 0);
-    d->proofProfilesKC->insertStringList(d->proofICCPath.keys(), 0);
+    d->inProfilesKC->insertSqueezedList(d->inICCPath.keys(), 0);
+    d->proofProfilesKC->insertSqueezedList(d->proofICCPath.keys(), 0);
 
-    d->workProfilesKC->insertStringList(d->workICCPath.keys(), 0);
+    d->workProfilesKC->insertSqueezedList(d->workICCPath.keys(), 0);
     if (d->workICCPath.keys().isEmpty())
     {
         // If there is no workspace icc profiles available, 
