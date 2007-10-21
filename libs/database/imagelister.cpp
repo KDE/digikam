@@ -292,13 +292,13 @@ void ImageLister::listMonth(ImageListerReceiver *receiver, const QDate &date)
         DatabaseAccess access;
         access.backend()->execSql(QString("SELECT DISTINCT Images.id, Images.name, Images.album, "
                                           "       Albums.relativePath, Albums.albumRoot, "
-                                          "       Images.fileSize, ImageInformation.creationDate "
+                                          "       Images.fileSize, ImageInformation.creationDate, "
                                           "       ImageInformation.width, ImageInformation.height "
                                           " FROM Images "
                                           "       LEFT OUTER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
                                           "       LEFT OUTER JOIN Albums ON Albums.id=Images.album "
-                                          " WHERE Images.datetime < ? "
-                                          "   AND Images.datetime >= ? "
+                                          " WHERE ImageInformation.creationDate < ? "
+                                          "   AND ImageInformation.creationDate >= ? "
                                           " ORDER BY Albums.id;"),
                                   QDateTime(firstDayOfNextMonth).toString(Qt::ISODate),
                                   QDateTime(firstDayOfMonth).toString(Qt::ISODate),

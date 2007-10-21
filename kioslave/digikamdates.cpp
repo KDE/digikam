@@ -83,8 +83,7 @@ void kio_digikamdates::special(const QByteArray& data)
         typedef QPair<int, int> YearMonth;
         QMap<YearMonth, bool> yearMonthMap;
 
-        QList<QDateTime> allDateTimes;
-        Digikam::DatabaseAccess().db()->getAllCreationDates();
+        QList<QDateTime> allDateTimes = Digikam::DatabaseAccess().db()->getAllCreationDates();
 
         foreach (QDateTime dateTime, allDateTimes)
         {
