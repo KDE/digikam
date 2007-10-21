@@ -111,6 +111,15 @@ void SqueezedComboBox::insertSqueezedItem(const QString& newItem, int index)
         slotUpdateToolTip(0);
 }
 
+void SqueezedComboBox::insertSqueezedList(const QStringList& newItems, int index)
+{
+    for(QStringList::const_iterator it = newItems.begin() ; it != newItems.end() ; ++it)
+    {
+        insertSqueezedItem(*it, index);
+        index++;
+    }
+}
+
 void SqueezedComboBox::resizeEvent(QResizeEvent *)
 {
     d->timer->start(200, true);

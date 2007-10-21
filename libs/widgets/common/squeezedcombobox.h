@@ -73,13 +73,23 @@ public:
 
     /**
      * This inserts a item to the list. See QComboBox::insertItem()
-     * for detaills. Please do not use QComboBox::insertItem() to this
+     * for details. Please do not use QComboBox::insertItem() to this
      * widget, as that will fail.
      * @param newItem the original (long version) of the item which needs
      *                to be added to the combobox
      * @param index the position in the widget.
      */
     void insertSqueezedItem(const QString& newItem, int index);
+
+    /**
+     * This inserts items to the list. See QComboBox::insertStringList()
+     * for details. Please do not use QComboBox::insertStringList() to this
+     * widget, as that will fail.
+     * @param newItems the originals (long version) of the items which needs
+     *                 to be added to the combobox
+     * @param index the position in the widget.
+     */
+    void insertSqueezedList(const QStringList& newItems, int index);
 
     /**
      * This method returns the full text (not squeezed) of the currently
