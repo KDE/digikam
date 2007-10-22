@@ -267,7 +267,7 @@ void EditorWindow::setupStandardActions()
     m_forwardAction->setShortcut( KShortcut(Qt::Key_PageDown, Qt::Key_Space) );
 
     m_firstAction = new KAction(KIcon("go-first"), i18n("&First"), this);
-    m_firstAction->setShortcut(KStandardShortcut::Home);
+    m_firstAction->setShortcut(KStandardShortcut::Begin);
     connect(m_firstAction, SIGNAL(triggered()), this, SLOT(slotFirst()));
     actionCollection()->addAction("editorwindow_first", m_firstAction);
 
