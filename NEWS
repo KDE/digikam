@@ -1,3 +1,17 @@
+digiKam 0.9.3-beta2 - Release date: 2007-11-??
+
+NEW FEATURES:
+
+AlbumGUI       : Add Rating filter widget on status bar.
+
+
+digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+
+041 ==> 147533 : New rating filter for the statusbar
+
+
+**********************************************************************************************
+
 digiKam 0.9.3-beta1 - Release date: 2007-10-08
 
 NEW FEATURES:
@@ -52,5 +66,4 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 037 ==> 147311 : Ligth Table RAW images does not rotate as def. by exif info.
 038 ==> 146773 : Metadata sources preference when sorting images.
 039 ==> 140133 : Metadata Edit Picture Comments Syncs to IPTC and EXIF when option is de-selected .
-040 ==> ML     : Lost toolbar after building from svn
-041 ==> 147533 : New rating filter for the statusbar
+
