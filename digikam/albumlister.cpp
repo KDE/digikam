@@ -70,11 +70,14 @@ public:
 
     AlbumListerPriv()
     {
-        filterTimer  = 0;
-        job          = 0;
-        currAlbum    = 0;
-        filter       = "*";
-        matchingCond = AlbumLister::OrCondition;
+        untaggedFilter = false;
+        ratingFilter   = 0;
+        filterTimer    = 0;
+        job            = 0;
+        currAlbum      = 0;
+        filter         = "*";
+        ratingCond     = AlbumLister::GreaterEqualCondition;
+        matchingCond   = AlbumLister::OrCondition;
     }
 
     bool                            untaggedFilter;
@@ -118,10 +121,7 @@ AlbumLister::AlbumLister()
 
     d = new AlbumListerPriv;
     d->itemList.setAutoDelete(true);
-    d->untaggedFilter = false;
-    d->ratingFilter = -1; //3;   // -1 FIXME (for testing ...)
-    d->ratingCond = GreaterEqualCondition;
-    d->filterTimer    = new QTimer(this);
+    d->filterTimer = new QTimer(this);
 
     connect(d->filterTimer, SIGNAL(timeout()),
             this, SLOT(slotFilterItems()));
@@ -227,8 +227,8 @@ void AlbumLister::setTagFilter(const QValueList<int>& tags, const MatchingCondit
 
 void AlbumLister::setRatingFilter(int rating, const RatingCondition& ratingCond)
 {
-    d->ratingFilter   = rating;
-    d->ratingCond     = ratingCond;
+    d->ratingFilter = rating;
+    d->ratingCond   = ratingCond;
     d->filterTimer->start(100, true);
 }
 

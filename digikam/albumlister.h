@@ -100,8 +100,10 @@ public:
     void setNameFilter(const QString& nameFilter);
 
     void setDayFilter(const QValueList<int>& days);
+
     void setTagFilter(const QValueList<int>& tags, const MatchingCondition& matchingCond, 
                       bool showUnTagged=false);
+
     void setRatingFilter(int rating, const RatingCondition& ratingCond);
     
     /**
