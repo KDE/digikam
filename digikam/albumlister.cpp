@@ -87,6 +87,8 @@ public:
 
     QValueList<int>                 tagFilter;
 
+    int                             ratingFilter; 
+
     QTimer                         *filterTimer;
 
     KIO::TransferJob               *job;
@@ -95,7 +97,9 @@ public:
 
     Album                          *currAlbum;
 
-    AlbumLister::MatchingCondition matchingCond;
+    AlbumLister::MatchingCondition  matchingCond;
+
+    AlbumLister::RatingCondition    ratingCond;
 };
 
 AlbumLister* AlbumLister::m_instance = 0;
@@ -115,6 +119,8 @@ AlbumLister::AlbumLister()
     d = new AlbumListerPriv;
     d->itemList.setAutoDelete(true);
     d->untaggedFilter = false;
+    d->ratingFilter = -1; //3;   // -1 FIXME (for testing ...)
+    d->ratingCond = GreaterEqualCondition;
     d->filterTimer    = new QTimer(this);
 
     connect(d->filterTimer, SIGNAL(timeout()),
@@ -219,10 +225,17 @@ void AlbumLister::setTagFilter(const QValueList<int>& tags, const MatchingCondit
     d->filterTimer->start(100, true);
 }
 
+void AlbumLister::setRatingFilter(int rating, const RatingCondition& ratingCond)
+{
+    d->ratingFilter   = rating;
+    d->ratingCond     = ratingCond;
+    d->filterTimer->start(100, true);
+}
+
 bool AlbumLister::matchesFilter(const ImageInfo* info) const
 {
     if (d->dayFilter.isEmpty() && d->tagFilter.isEmpty() &&
-        !d->untaggedFilter)
+        !d->untaggedFilter && d->ratingFilter==-1)
         return true;
 
     bool match = false;
@@ -271,6 +284,35 @@ bool AlbumLister::matchesFilter(const ImageInfo* info) const
     if (!d->dayFilter.isEmpty())
     {
         match &= d->dayFilter.contains(info->dateTime().date().day());
+    }
+
+    // Filter by rating.
+    if (d->ratingFilter >= 0) 
+    {
+        if (d->ratingCond == GreaterEqualCondition)
+        {
+            // If the rating is not >=, i.e it is <, then it does not match.
+            if (info->rating() < d->ratingFilter)
+            {
+                match = false;
+            }
+        }
+        else if (d->ratingCond == EqualCondition)
+        {
+            // If the rating is not =, i.e it is !=, then it does not match.
+            if (info->rating() != d->ratingFilter)
+            {
+                match = false;
+            }
+        }
+        else
+        {
+            // If the rating is not <=, i.e it is >, then it does not match.
+            if (info->rating() > d->ratingFilter)
+            {
+                match = false;
+            }
+        }
     }
 
     return match;

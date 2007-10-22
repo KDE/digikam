@@ -41,6 +41,7 @@
 
 #include "thumbnailsize.h"
 #include "albumsettings.h"
+#include "albumlister.h"
 
 namespace Digikam
 {
@@ -98,6 +99,8 @@ public:
 
     int  thumbnailSize;
     int  treeThumbnailSize;
+    int  ratingFilterValue;
+    int  ratingFilterCond;
 
     QString      currentTheme;
     QString      albumLibraryPath;
@@ -123,6 +126,7 @@ public:
     AlbumSettings::AlbumSortOrder       albumSortOrder;
     AlbumSettings::ImageSortOrder       imageSortOrder;
     AlbumSettings::ItemRightClickAction itemRightClickAction;
+
 };
 
 
@@ -186,6 +190,9 @@ void AlbumSettings::init()
     d->thumbnailSize      = ThumbnailSize::Medium;
     d->treeThumbnailSize  = 32;
 
+    d->ratingFilterValue  = 0;
+    d->ratingFilterCond   = AlbumLister::GreaterEqualCondition;
+        
     d->showToolTips           = true;
     d->showSplash             = true;
     d->useTrash               = true;
@@ -266,6 +273,10 @@ void AlbumSettings::readSettings()
     d->thumbnailSize     = config->readNumEntry("Default Icon Size", ThumbnailSize::Medium);
     d->treeThumbnailSize = config->readNumEntry("Default Tree Icon Size", ThumbnailSize::Tiny);
     d->currentTheme      = config->readEntry("Theme", i18n("Default"));
+
+    d->ratingFilterValue = config->readNumEntry("Rating Filter Value", 0);
+    d->ratingFilterCond  = config->readNumEntry("Rating Filter Condition",
+                                                AlbumLister::GreaterEqualCondition);
 
     d->iconShowName       = config->readBoolEntry("Icon Show Name", false); 
     d->iconShowResolution = config->readBoolEntry("Icon Show Resolution", false);
@@ -351,6 +362,8 @@ void AlbumSettings::saveSettings()
     config->writeEntry("Raw File Filter", d->rawFilefilter);
     config->writeEntry("Default Icon Size", QString::number(d->thumbnailSize));
     config->writeEntry("Default Tree Icon Size", QString::number(d->treeThumbnailSize));
+    config->writeEntry("Rating Filter Value", d->ratingFilterValue);
+    config->writeEntry("Rating Filter Condition", d->ratingFilterCond);
     config->writeEntry("Theme", d->currentTheme);
 
     config->writeEntry("Icon Show Name", d->iconShowName);
@@ -583,6 +596,26 @@ void AlbumSettings::setDefaultTreeIconSize(int val)
 int AlbumSettings::getDefaultTreeIconSize() const
 {
     return ((d->treeThumbnailSize < 8) || (d->treeThumbnailSize > 48)) ? 48 : d->treeThumbnailSize;
+}
+
+void AlbumSettings::setRatingFilterValue(int val)
+{
+    d->ratingFilterValue = val;
+}
+
+int AlbumSettings::getRatingFilterValue() const
+{
+    return d->ratingFilterValue;
+}
+
+void AlbumSettings::setRatingFilterCond(int val)
+{
+    d->ratingFilterCond = val;
+}
+
+int AlbumSettings::getRatingFilterCond() const
+{
+    return d->ratingFilterCond;
 }
 
 void AlbumSettings::setIconShowName(bool val)

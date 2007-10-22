@@ -118,6 +118,12 @@ public:
     void setDefaultTreeIconSize(int val);
     int  getDefaultTreeIconSize() const;
 
+    void setRatingFilterValue(int val);
+    int  getRatingFilterValue() const;
+
+    void setRatingFilterCond(int val);
+    int  getRatingFilterCond() const;
+    
     void setIconShowName(bool val);
     bool getIconShowName() const;
 
