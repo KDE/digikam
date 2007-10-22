@@ -195,17 +195,17 @@ void RatingFilter::updateRatingTooltip()
     {
         case AlbumLister::GreaterEqualCondition:
         {
-            d->ratingTracker->setText(i18n("Rating >= %1").arg(rating()));
+            d->ratingTracker->setText(i18n("Rating >= %1", rating()));
             break;
         }
         case AlbumLister::EqualCondition:
         {
-            d->ratingTracker->setText(i18n("Rating = %1").arg(rating()));
+            d->ratingTracker->setText(i18n("Rating = %1", rating()));
             break;
         }
         case AlbumLister::LessEqualCondition:
         {
-            d->ratingTracker->setText(i18n("Rating <= %1").arg(rating()));
+            d->ratingTracker->setText(i18n("Rating <= %1", rating()));
             break;
         }
         default:
