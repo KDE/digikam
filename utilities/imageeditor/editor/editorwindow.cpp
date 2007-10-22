@@ -294,7 +294,7 @@ void EditorWindow::setupStandardActions()
     connect(d->filePrintAction, SIGNAL(triggered()), this, SLOT(slotFilePrint()));
     actionCollection()->addAction("editorwindow_print", d->filePrintAction);
 
-    m_fileDeleteAction = new KAction(KIcon("edit-trash"), i18n("Move to Trash"), this);
+    m_fileDeleteAction = new KAction(KIcon("user-trash"), i18n("Move to Trash"), this);
     m_fileDeleteAction->setShortcut(Qt::Key_Delete);
     connect(m_fileDeleteAction, SIGNAL(triggered()), this, SLOT(slotDeleteCurrentItem()));
     actionCollection()->addAction("editorwindow_delete", m_fileDeleteAction);

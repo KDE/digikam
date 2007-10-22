@@ -484,7 +484,7 @@ void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, 
 
         if(AlbumSettings::instance()->getUseTrash())
         {
-            deleteAction = popmenu.addAction(SmallIcon("edit-trash"), i18n("Move Album to Trash"));
+            deleteAction = popmenu.addAction(SmallIcon("user-trash"), i18n("Move Album to Trash"));
         }
         else
         {

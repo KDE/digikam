@@ -368,7 +368,7 @@ void ImageWindow::setupActions()
     actionCollection()->addAction("image_delete_permanently_directly",
                                   d->fileDeletePermanentlyDirectlyAction);
 
-    d->fileTrashDirectlyAction = new KAction(KIcon("edit-trash"), 
+    d->fileTrashDirectlyAction = new KAction(KIcon("user-trash"), 
                                      i18n("Move to Trash without Confirmation"), this);
     connect(d->fileTrashDirectlyAction, SIGNAL(triggered()), 
             this, SLOT(slotTrashCurrentItemDirectly()));

@@ -565,7 +565,7 @@ void ShowFoto::applySettings()
     d->deleteItem2Trash = group.readEntry("DeleteItem2Trash", true);
     if (d->deleteItem2Trash)
     {
-        m_fileDeleteAction->setIcon(KIcon("edit-trash"));
+        m_fileDeleteAction->setIcon(KIcon("user-trash"));
         m_fileDeleteAction->setText(i18n("Move to Trash"));
     }
     else

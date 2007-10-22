@@ -407,7 +407,7 @@ void ImagePreviewView::slotContextMenu()
     //-- Trash action -------------------------------------------
 
     popmenu.addSeparator();
-    QAction *trashAction = popmenu.addAction(SmallIcon("edit-trash"), i18n("Move to Trash"));
+    QAction *trashAction = popmenu.addAction(SmallIcon("user-trash"), i18n("Move to Trash"));
 
     // Bulk assignment/removal of tags --------------------------
 

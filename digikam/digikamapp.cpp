@@ -541,7 +541,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------------
 
-    d->deleteAction = new KAction(KIcon("edit-trash"), i18n("Delete Album"), this);
+    d->deleteAction = new KAction(KIcon("user-trash"), i18n("Delete Album"), this);
     connect(d->deleteAction, SIGNAL(triggered()), d->view, SLOT(slotDeleteAlbum()));
     actionCollection()->addAction("album_delete", d->deleteAction);
 
@@ -636,7 +636,7 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------
 
     // Pop up dialog to ask user whether to move to trash
-    d->imageDeleteAction = new KAction(KIcon("edit-trash"), i18n("Delete"), this);
+    d->imageDeleteAction = new KAction(KIcon("user-trash"), i18n("Delete"), this);
     d->imageDeleteAction->setShortcut(Qt::Key_Delete);
     connect(d->imageDeleteAction, SIGNAL(triggered()), d->view, SLOT(slotImageDelete()));
     actionCollection()->addAction("image_delete", d->imageDeleteAction);
@@ -661,7 +661,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->imageTrashDirectlyAction = new KAction(KIcon("edit-trash"),
+    d->imageTrashDirectlyAction = new KAction(KIcon("user-trash"),
                                   i18n("Move to trash without confirmation"), this);
     connect(d->imageTrashDirectlyAction, SIGNAL(triggered()),
             d->view, SLOT(slotImageTrashDirectly()));
