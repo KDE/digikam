@@ -463,7 +463,7 @@ void CameraIconView::slotContextMenu(IconItem * item, const QPoint&)
     menu.addSeparator();
     QAction *downAction      = menu.addAction(SmallIcon("computer"),i18n("Download"));
     QAction *downDelAction   = menu.addAction(SmallIcon("computer"),i18n("Download && Delete"));
-    QAction *encryptedAction = menu.addAction(SmallIcon("encrypted"), i18n("Toggle lock"));
+    QAction *encryptedAction = menu.addAction(SmallIcon("document-decrypt"), i18n("Toggle lock"));
     menu.addSeparator();
     QAction *deleteAction    = menu.addAction(SmallIcon("edit-delete"), i18n("Delete"));
 

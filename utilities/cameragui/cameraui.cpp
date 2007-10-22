@@ -374,7 +374,7 @@ void CameraUI::setupActions()
 
     // -------------------------------------------------------------------------
 
-    d->lockAction = new KAction(KIcon("encrypted"), i18n("Toggle Lock"), this);
+    d->lockAction = new KAction(KIcon("document-decrypt"), i18n("Toggle Lock"), this);
     connect(d->lockAction, SIGNAL(triggered()), this, SLOT(slotToggleLock()));
     actionCollection()->addAction("cameraui_imagelock", d->lockAction);
 

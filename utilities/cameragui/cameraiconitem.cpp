@@ -316,7 +316,7 @@ void CameraIconViewItem::paintItem(QPainter *p)
 
     // If camera item is locked (read only), draw a "Lock" icon.
     if (d->itemInfo->writePermissions == 0) 
-        p->drawPixmap(5, 5, SmallIcon( "encrypted" ));
+        p->drawPixmap(5, 5, SmallIcon( "security-high" ));
 }
 
 void CameraIconViewItem::setDownloadName(const QString& downloadName)
