@@ -67,6 +67,7 @@
 #include "ddebug.h"
 #include "dlogoaction.h"
 #include "album.h"
+#include "albumlister.h"
 #include "albumthumbnailloader.h"
 #include "cameratype.h"
 #include "cameraui.h"
@@ -996,8 +997,7 @@ void DigikamApp::setupActions()
     d->imageSortAction->setCurrentItem((int)d->albumSettings->getImageSortOrder());
     d->statusRatingFilterBar->setRating(d->albumSettings->getRatingFilterValue());
     // Setting the filter condition also updates the tooltip.
-    // (So `setRating` is called first, as otherwise the filter value
-    //  is not respected).
+    // (So `setRating` is called first, as otherwise the filter value is not respected).
     d->statusRatingFilterBar->setRatingFilterCondition((Digikam::AlbumLister::RatingCondition)
                                                         d->albumSettings->getRatingFilterCond());
 }

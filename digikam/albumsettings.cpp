@@ -40,8 +40,8 @@
 // Local includes.
 
 #include "thumbnailsize.h"
-#include "albumsettings.h"
 #include "albumlister.h"
+#include "albumsettings.h"
 
 namespace Digikam
 {
@@ -126,7 +126,6 @@ public:
     AlbumSettings::AlbumSortOrder       albumSortOrder;
     AlbumSettings::ImageSortOrder       imageSortOrder;
     AlbumSettings::ItemRightClickAction itemRightClickAction;
-
 };
 
 
