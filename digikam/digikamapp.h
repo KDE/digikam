@@ -42,6 +42,7 @@
 
 // Local includes.
 
+#include "albumlister.h"
 #include "digikam_export.h"
 
 namespace Digikam
@@ -114,6 +115,7 @@ private slots:
     void slotShowTip();
     void slotShowKipiHelp();
     void slotDonateMoney();
+    void slotRatingFilterChanged(int, AlbumLister::RatingCondition);
 
     void slotAboutToShowForwardMenu();
     void slotAboutToShowBackwardMenu();

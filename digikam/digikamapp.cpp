@@ -82,7 +82,6 @@
 
 #include "ddebug.h"
 #include "album.h"
-#include "albumlister.h"
 #include "albumthumbnailloader.h"
 #include "albumselectdialog.h"
 #include "cameratype.h"
@@ -213,6 +212,8 @@ DigikamApp::~DigikamApp()
     if (d->view)
         delete d->view;
 
+    AlbumSettings::instance()->setRatingFilterCond(d->statusRatingFilterBar->RatingFilterCondition());
+    AlbumSettings::instance()->setRatingFilterValue(d->statusRatingFilterBar->rating());
     AlbumSettings::instance()->saveSettings();
 
     AlbumLister::cleanUp();
@@ -361,6 +362,13 @@ void DigikamApp::setupStatusBar()
 
     //------------------------------------------------------------------------------
 
+    KHBox *hbox              = new KHBox(statusBar());
+    d->statusRatingFilterBar = new RatingFilter(hbox);
+    hbox->setMaximumHeight(fontMetrics().height()+2);
+    statusBar()->addPermanentWidget(hbox, 1);
+
+    //------------------------------------------------------------------------------
+
     d->statusZoomBar = new StatusZoomBar(statusBar());
     d->statusZoomBar->setMaximumHeight(fontMetrics().height()+2);
     statusBar()->addPermanentWidget(d->statusZoomBar, 1);
@@ -372,6 +380,9 @@ void DigikamApp::setupStatusBar()
     statusBar()->addPermanentWidget(d->statusNavigateBar, 1);
 
     //------------------------------------------------------------------------------
+
+    connect(d->statusRatingFilterBar, SIGNAL(signalRatingFilterChanged(int, AlbumLister::RatingCondition)),
+            this, SLOT(slotRatingFilterChanged(int, AlbumLister::RatingCondition)));
 
     connect(d->statusZoomBar, SIGNAL(signalZoomMinusClicked()),
             d->view, SLOT(slotZoomOut()));
@@ -939,6 +950,11 @@ void DigikamApp::setupActions()
 
     d->albumSortAction->setCurrentItem((int)AlbumSettings::instance()->getAlbumSortOrder());
     d->imageSortAction->setCurrentItem((int)AlbumSettings::instance()->getImageSortOrder());
+    d->statusRatingFilterBar->setRating(AlbumSettings::instance()->getRatingFilterValue());
+    // Setting the filter condition also updates the tooltip.
+    // (So `setRating` is called first, as otherwise the filter value is not respected).
+    d->statusRatingFilterBar->setRatingFilterCondition((Digikam::AlbumLister::RatingCondition)
+                                                        AlbumSettings::instance()->getRatingFilterCond());
 }
 
 void DigikamApp::enableZoomPlusAction(bool val)
@@ -2062,6 +2078,11 @@ void DigikamApp::slotSyncAllPicturesMetadataDone()
 void DigikamApp::slotDonateMoney()
 {
     KToolInvocation::invokeBrowser("http://www.digikam.org/?q=donation");
+}
+
+void DigikamApp::slotRatingFilterChanged(int rating, AlbumLister::RatingCondition cond)
+{
+    AlbumLister::instance()->setRatingFilter(rating, cond);
 }
 
 void DigikamApp::slotZoomSliderChanged(int size)

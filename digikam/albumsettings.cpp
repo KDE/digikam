@@ -30,6 +30,7 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <kconfiggroup.h>
+
 // LibKDcraw includes.
 
 #include <libkdcraw/rawfiles.h>
@@ -37,6 +38,7 @@
 // Local includes.
 
 #include "thumbnailsize.h"
+#include "albumlister.h"
 #include "albumsettings.h"
 
 namespace Digikam
@@ -98,19 +100,18 @@ public:
     bool saveDateTime;
     bool saveRating;
 
+    bool previewLoadFullImageSize;      // preview settings
+
     QString      author;
     QString      authorTitle;
     QString      credit;
     QString      source;
     QString      copyright;
 
-    // preview settings
-    bool previewLoadFullImageSize;
-
-    // icon view settings
-    int  thumbnailSize;
-    // album view settings
-    int  treeThumbnailSize;
+    int  thumbnailSize;                 // icon view settings
+    int  treeThumbnailSize;             // album view settings
+    int  ratingFilterValue;
+    int  ratingFilterCond;
 
     // theme settings
     QString      currentTheme;
@@ -198,6 +199,9 @@ void AlbumSettings::init()
     d->thumbnailSize      = ThumbnailSize::Medium;
     d->treeThumbnailSize  = 32;
 
+    d->ratingFilterValue  = 0;
+    d->ratingFilterCond   = AlbumLister::GreaterEqualCondition;
+
     d->showToolTips           = true;
     d->showSplash             = true;
     d->useTrash               = true;
@@ -279,6 +283,10 @@ void AlbumSettings::readSettings()
     d->thumbnailSize     = group.readEntry("Default Icon Size", (int)ThumbnailSize::Medium);
     d->treeThumbnailSize = group.readEntry("Default Tree Icon Size", (int)ThumbnailSize::Tiny);
     d->currentTheme      = group.readEntry("Theme", i18n("Default"));
+
+    d->ratingFilterValue = group.readEntry("Rating Filter Value", 0);
+    d->ratingFilterCond  = group.readEntry("Rating Filter Condition",
+                                           (int)AlbumLister::GreaterEqualCondition);
 
     d->iconShowName       = group.readEntry("Icon Show Name", false); 
     d->iconShowResolution = group.readEntry("Icon Show Resolution", false);
@@ -364,6 +372,8 @@ void AlbumSettings::saveSettings()
     group.writeEntry("Raw File Filter", d->rawFilefilter);
     group.writeEntry("Default Icon Size", QString::number(d->thumbnailSize));
     group.writeEntry("Default Tree Icon Size", QString::number(d->treeThumbnailSize));
+    group.writeEntry("Rating Filter Value", d->ratingFilterValue);
+    group.writeEntry("Rating Filter Condition", d->ratingFilterCond);
     group.writeEntry("Theme", d->currentTheme);
 
     group.writeEntry("Icon Show Name", d->iconShowName);
@@ -596,6 +606,26 @@ void AlbumSettings::setDefaultTreeIconSize(int val)
 int AlbumSettings::getDefaultTreeIconSize() const
 {
     return ((d->treeThumbnailSize < 8) || (d->treeThumbnailSize > 48)) ? 48 : d->treeThumbnailSize;
+}
+
+void AlbumSettings::setRatingFilterValue(int val)
+{
+    d->ratingFilterValue = val;
+}
+
+int AlbumSettings::getRatingFilterValue() const
+{
+    return d->ratingFilterValue;
+}
+
+void AlbumSettings::setRatingFilterCond(int val)
+{
+    d->ratingFilterCond = val;
+}
+
+int AlbumSettings::getRatingFilterCond() const
+{
+    return d->ratingFilterCond;
 }
 
 void AlbumSettings::setIconShowName(bool val)

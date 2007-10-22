@@ -71,6 +71,16 @@ public:
         AndCondition
     };
 
+    /** @enum RatingCondition
+     * Possible conditions used to filter rating: >=, =, <=.
+     */
+    enum RatingCondition
+    {
+        GreaterEqualCondition = 0,
+        EqualCondition,
+        LessEqualCondition
+    };
+
 public:
 
     static AlbumLister* instance();
@@ -92,8 +102,11 @@ public:
     void setNameFilter(const QString& nameFilter);
 
     void setDayFilter(const QList<int>& days);
+
     void setTagFilter(const QList<int>& tags, const MatchingCondition& matchingCond,
                       bool showUnTagged=false);
+
+    void setRatingFilter(int rating, const RatingCondition& ratingCond);
 
     /**
       * Trigger a recreation of the given ImageInfo object

@@ -129,6 +129,7 @@ INSTALL(TARGETS digikamdatabase DESTINATION ${LIB_INSTALL_DIR} )
 # digiKam binary progam #########################################################
 
 SET(digikam_bin_SRCS
+                     ${libcommonwidgets_SRCS}
                      ${libdimgimagewindow_SRCS}
                      ${libdeletedialog_SRCS}
                      ${libimagepropertiesdigikam_SRCS}
@@ -149,7 +150,7 @@ SET(digikam_bin_SRCS
                      albumlister.cpp 
                      albummanager.cpp 
                      albumpropsedit.cpp 
-		     albumselectdialog.cpp
+                     albumselectdialog.cpp
                      albumsettings.cpp 
                      albumthumbnailloader.cpp 
                      albumwidgetstack.cpp 
@@ -179,6 +180,7 @@ SET(digikam_bin_SRCS
                      metadatahub.cpp 
                      monthwidget.cpp 
                      pixmapmanager.cpp 
+		             ratingfilter.cpp
                      ratingpopupmenu.cpp 
                      ratingwidget.cpp 
                      scanlib.cpp 
