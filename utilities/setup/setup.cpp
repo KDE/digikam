@@ -148,7 +148,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->collectionsPage  = new SetupCollections();
     d->page_collections = addPage( d->collectionsPage, i18n("Collections") );
     d->page_collections->setHeader( i18n("Album Collections") );
-    d->page_collections->setIcon( KIcon("list") );
+    d->page_collections->setIcon( KIcon("view-calendar-list") );
 
     d->identityPage  = new SetupIdentity();
     d->page_identity = addPage( d->identityPage, i18n("Identity") );
