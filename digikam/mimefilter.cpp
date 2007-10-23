@@ -53,9 +53,9 @@ MimeFilter::MimeFilter(QWidget* parent)
 {
     d = new MimeFilterPriv;
     insertItem( i18n("All Files"),    AllFiles );
-    insertItem( i18n("JPG Files"),    JPGFiles );
+    insertItem( i18n("JPEG Files"),    JPGFiles );
     insertItem( i18n("PNG files"),    PNGFiles );
-    insertItem( i18n("TIF files"),    TIFFiles );
+    insertItem( i18n("TIFF files"),    TIFFiles );
     insertItem( i18n("RAW files"),    RAWFiles );
     insertItem( i18n("Movies files"), MoviesFiles );
     insertItem( i18n("Audio files"),  AudioFiles );
