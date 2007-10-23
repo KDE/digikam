@@ -57,6 +57,7 @@
 #include "statusnavigatebar.h"
 #include "digikamview.h"
 #include "ratingfilter.h"
+#include "mimefilter.h"
 
 class KToolBarPopupAction;
 class KToggleAction;
@@ -141,6 +142,7 @@ public:
         kipiInterface                        = 0;
         cameraList                           = 0;
         statusRatingFilterBar                = 0;
+        statusMimeFilterBar                  = 0;
         statusProgressBar                    = 0;
         statusNavigateBar                    = 0;
         statusZoomBar                        = 0;
@@ -157,119 +159,121 @@ public:
         eventLoop                            = 0;
     }
 
-    bool                   fullScreen;
-    bool                   validIccPath;
+    bool                                fullScreen;
+    bool                                validIccPath;
 
     // KIPI plugins support
-    QList<QAction*>        kipiFileActionsExport;
-    QList<QAction*>        kipiFileActionsImport;
-    QList<QAction*>        kipiImageActions;
-    QList<QAction*>        kipiToolsActions;
-    QList<QAction*>        kipiBatchActions;
-    QList<QAction*>        kipiAlbumActions;
+    QList<QAction*>                     kipiFileActionsExport;
+    QList<QAction*>                     kipiFileActionsImport;
+    QList<QAction*>                     kipiImageActions;
+    QList<QAction*>                     kipiToolsActions;
+    QList<QAction*>                     kipiBatchActions;
+    QList<QAction*>                     kipiAlbumActions;
 
-    QString                cameraGuiPath;
+    QString                             cameraGuiPath;
 
-    KMenu                 *cameraSolidMenu;
-    KMenu                 *usbMediaMenu;
-    KMenu                 *cardReaderMenu;
-    KMenu                 *manuallyAddedCamerasMenu;
+    KMenu                              *cameraSolidMenu;
+    KMenu                              *usbMediaMenu;
+    KMenu                              *cardReaderMenu;
+    KMenu                              *manuallyAddedCamerasMenu;
 
-    KSharedConfig::Ptr     config;
+    KSharedConfig::Ptr                  config;
 
     // Album Actions
-    KAction               *newAction;
-    KAction               *deleteAction;
-    KAction               *imageDeletePermanentlyAction;
-    KAction               *imageDeletePermanentlyDirectlyAction;
-    KAction               *imageTrashDirectlyAction;
-    KToolBarPopupAction   *backwardActionMenu;
-    KToolBarPopupAction   *forwardActionMenu;
+    KAction                            *newAction;
+    KAction                            *deleteAction;
+    KAction                            *imageDeletePermanentlyAction;
+    KAction                            *imageDeletePermanentlyDirectlyAction;
+    KAction                            *imageTrashDirectlyAction;
+    KToolBarPopupAction                *backwardActionMenu;
+    KToolBarPopupAction                *forwardActionMenu;
 
-    KAction               *addImagesAction;
-    KAction               *propsEditAction;
-    KAction               *addFoldersAction;
-    KAction               *openInKonquiAction;
-    KAction               *refreshAlbumAction;
-    KAction               *syncAlbumMetadataAction;
+    KAction                            *addImagesAction;
+    KAction                            *propsEditAction;
+    KAction                            *addFoldersAction;
+    KAction                            *openInKonquiAction;
+    KAction                            *refreshAlbumAction;
+    KAction                            *syncAlbumMetadataAction;
 
     // Tag Actions
-    KAction               *newTagAction;
-    KAction               *deleteTagAction;
-    KAction               *editTagAction;
+    KAction                            *newTagAction;
+    KAction                            *deleteTagAction;
+    KAction                            *editTagAction;
 
     // Image Actions
-    KToggleAction         *imagePreviewAction;
-    KAction               *imageLightTableAction;
-    KAction               *imageAddLightTableAction;
-    KAction               *imageViewAction;
-    KAction               *imageSetExifOrientation1Action;
-    KAction               *imageSetExifOrientation2Action;
-    KAction               *imageSetExifOrientation3Action;
-    KAction               *imageSetExifOrientation4Action;
-    KAction               *imageSetExifOrientation5Action;
-    KAction               *imageSetExifOrientation6Action;
-    KAction               *imageSetExifOrientation7Action;
-    KAction               *imageSetExifOrientation8Action;
-    KAction               *imageRenameAction;
-    KAction               *imageDeleteAction;
-    KActionMenu           *imageExifOrientationActionMenu;
+    KToggleAction                      *imagePreviewAction;
+    KAction                            *imageLightTableAction;
+    KAction                            *imageAddLightTableAction;
+    KAction                            *imageViewAction;
+    KAction                            *imageSetExifOrientation1Action;
+    KAction                            *imageSetExifOrientation2Action;
+    KAction                            *imageSetExifOrientation3Action;
+    KAction                            *imageSetExifOrientation4Action;
+    KAction                            *imageSetExifOrientation5Action;
+    KAction                            *imageSetExifOrientation6Action;
+    KAction                            *imageSetExifOrientation7Action;
+    KAction                            *imageSetExifOrientation8Action;
+    KAction                            *imageRenameAction;
+    KAction                            *imageDeleteAction;
+    KActionMenu                        *imageExifOrientationActionMenu;
 
     // Selection Actions
-    KAction               *selectAllAction;
-    KAction               *selectNoneAction;
-    KAction               *selectInvertAction;
+    KAction                            *selectAllAction;
+    KAction                            *selectNoneAction;
+    KAction                            *selectInvertAction;
 
     // View Actions
-    QAction               *fullScreenAction;
-    QAction               *zoomPlusAction;
-    QAction               *zoomMinusAction;
-    KAction               *zoomFitToWindowAction;
-    KAction               *zoomTo100percents;
-    KActionMenu           *slideShowAction;
-    KAction               *slideShowAllAction;
-    KAction               *slideShowSelectionAction;
-    KAction               *slideShowRecursiveAction;
-    KSelectAction         *imageSortAction;
-    KSelectAction         *albumSortAction;
+    QAction                            *fullScreenAction;
+    QAction                            *zoomPlusAction;
+    QAction                            *zoomMinusAction;
+    KAction                            *zoomFitToWindowAction;
+    KAction                            *zoomTo100percents;
+    KActionMenu                        *slideShowAction;
+    KAction                            *slideShowAllAction;
+    KAction                            *slideShowSelectionAction;
+    KAction                            *slideShowRecursiveAction;
+    KSelectAction                      *imageSortAction;
+    KSelectAction                      *albumSortAction;
 
-    KAction               *rating0Star;
-    KAction               *rating1Star;
-    KAction               *rating2Star;
-    KAction               *rating3Star;
-    KAction               *rating4Star;
-    KAction               *rating5Star;
+    KAction                            *rating0Star;
+    KAction                            *rating1Star;
+    KAction                            *rating2Star;
+    KAction                            *rating3Star;
+    KAction                            *rating4Star;
+    KAction                            *rating5Star;
 
     // Application Actions
-    KAction               *kipiHelpAction;
-    KAction               *donateMoneyAction;
-    KSelectAction         *themeMenuAction;
-    QAction               *addCameraSeparatorAction;
-    QAction               *quitAction;
-    QAction               *tipAction;
+    KAction                            *kipiHelpAction;
+    KAction                            *donateMoneyAction;
+    KSelectAction                      *themeMenuAction;
+    QAction                            *addCameraSeparatorAction;
+    QAction                            *quitAction;
+    QAction                            *tipAction;
 
-    QSignalMapper         *backwardSignalMapper;
-    QSignalMapper         *forwardSignalMapper;
-    QActionGroup          *manualCameraActionGroup;
-    QActionGroup          *solidCameraActionGroup;
-    QActionGroup          *solidUsmActionGroup;
-    QMap<QString, QPointer<CameraUI> > cameraUIMap;
+    QSignalMapper                      *backwardSignalMapper;
+    QSignalMapper                      *forwardSignalMapper;
+    QActionGroup                       *manualCameraActionGroup;
+    QActionGroup                       *solidCameraActionGroup;
+    QActionGroup                       *solidUsmActionGroup;
 
-    QEventLoop            *eventLoop;
-    QString                solidErrorMessage;
+    QMap<QString, QPointer<CameraUI> >  cameraUIMap;
 
-    SplashScreen          *splashScreen;
-    DCOPIface             *dcopIface;
-    ImagePluginLoader     *imagePluginsLoader;
-    DigikamKipiInterface  *kipiInterface;
-    DigikamView           *view;
-    CameraList            *cameraList;
-    StatusZoomBar         *statusZoomBar;
-    StatusProgressBar     *statusProgressBar;
-    StatusNavigateBar     *statusNavigateBar;
-    RatingFilter          *statusRatingFilterBar;
+    QEventLoop                         *eventLoop;
+    QString                             solidErrorMessage;
 
-    KIPI::PluginLoader    *kipiPluginLoader;
+    SplashScreen                       *splashScreen;
+    DCOPIface                          *dcopIface;
+    ImagePluginLoader                  *imagePluginsLoader;
+    DigikamKipiInterface               *kipiInterface;
+    DigikamView                        *view;
+    CameraList                         *cameraList;
+    StatusZoomBar                      *statusZoomBar;
+    StatusProgressBar                  *statusProgressBar;
+    StatusNavigateBar                  *statusNavigateBar;
+    RatingFilter                       *statusRatingFilterBar;
+    MimeFilter                         *statusMimeFilterBar;
+
+    KIPI::PluginLoader                 *kipiPluginLoader;
 };
 
 }  // namespace Digikam

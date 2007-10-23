@@ -110,6 +110,8 @@ public:
 
     void setRatingFilter(int rating, const RatingCondition& ratingCond);
 
+    void setMimeTypeFilter(int mimeTypeFilter);
+
     /**
       * Trigger a recreation of the given ImageInfo object
       * for the next refresh.

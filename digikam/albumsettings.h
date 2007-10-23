@@ -116,6 +116,9 @@ public:
     void setDefaultTreeIconSize(int val);
     int  getDefaultTreeIconSize() const;
 
+    void setMimeTypeFilter(int val);
+    int  getMimeTypeFilter() const;
+
     void setRatingFilterValue(int val);
     int  getRatingFilterValue() const;
 

@@ -178,6 +178,7 @@ SET(digikam_bin_SRCS
                      main.cpp
                      mediaplayerview.cpp 
                      metadatahub.cpp 
+                     mimefilter.cpp 
                      monthwidget.cpp 
                      pixmapmanager.cpp 
 		             ratingfilter.cpp

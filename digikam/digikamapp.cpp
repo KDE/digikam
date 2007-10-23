@@ -212,6 +212,7 @@ DigikamApp::~DigikamApp()
     if (d->view)
         delete d->view;
 
+    AlbumSettings::instance()->setMimeTypeFilter(d->statusMimeFilterBar->mimeFilter());
     AlbumSettings::instance()->setRatingFilterCond(d->statusRatingFilterBar->ratingFilterCondition());
     AlbumSettings::instance()->setRatingFilterValue(d->statusRatingFilterBar->rating());
     AlbumSettings::instance()->saveSettings();
@@ -362,6 +363,12 @@ void DigikamApp::setupStatusBar()
 
     //------------------------------------------------------------------------------
 
+    d->statusMimeFilterBar = new MimeFilter(statusBar());
+    d->statusMimeFilterBar->setMaximumHeight(fontMetrics().height()+2);
+    statusBar()->addPermanentWidget(d->statusMimeFilterBar, 1);
+
+    //------------------------------------------------------------------------------
+
     KHBox *hbox              = new KHBox(statusBar());
     d->statusRatingFilterBar = new RatingFilter(hbox);
     hbox->setMaximumHeight(fontMetrics().height()+2);
@@ -383,6 +390,9 @@ void DigikamApp::setupStatusBar()
 
     connect(d->statusRatingFilterBar, SIGNAL(signalRatingFilterChanged(int, AlbumLister::RatingCondition)),
             this, SLOT(slotRatingFilterChanged(int, AlbumLister::RatingCondition)));
+
+    connect(d->statusMimeFilterBar, SIGNAL(activated(int)),
+            this, SLOT(slotMimeTypeFilterChanged(int)));
 
     connect(d->statusZoomBar, SIGNAL(signalZoomMinusClicked()),
             d->view, SLOT(slotZoomOut()));
@@ -2078,6 +2088,11 @@ void DigikamApp::slotSyncAllPicturesMetadataDone()
 void DigikamApp::slotDonateMoney()
 {
     KToolInvocation::invokeBrowser("http://www.digikam.org/?q=donation");
+}
+
+void DigikamApp::slotMimeTypeFilterChanged(int mimeTypeFilter)
+{
+    AlbumLister::instance()->setMimeTypeFilter(mimeTypeFilter);
 }
 
 void DigikamApp::slotRatingFilterChanged(int rating, AlbumLister::RatingCondition cond)

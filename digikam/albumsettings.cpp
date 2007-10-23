@@ -39,6 +39,7 @@
 // Local includes.
 
 #include "thumbnailsize.h"
+#include "mimefilter.h"
 #include "albumlister.h"
 #include "albumsettings.h"
 
@@ -51,90 +52,96 @@ class AlbumSettingsPrivate
 public:
 
     // start up setting
-    bool showSplash;
+    bool                                showSplash;
     // file ops settings
-    bool useTrash;
-    bool showTrashDeleteDialog;
+    bool                                useTrash;
+    bool                                showTrashDeleteDialog;
     // metadata setting
-    bool sidebarApplyDirectly;
+    bool                                sidebarApplyDirectly;
     // database setting
-    bool scanAtStart;
+    bool                                scanAtStart;
 
     // icon view settings
-    bool iconShowName;
-    bool iconShowSize;
-    bool iconShowDate;
-    bool iconShowModDate;
-    bool iconShowComments;
-    bool iconShowResolution;
-    bool iconShowTags;
-    bool iconShowRating;
+    bool                                iconShowName;
+    bool                                iconShowSize;
+    bool                                iconShowDate;
+    bool                                iconShowModDate;
+    bool                                iconShowComments;
+    bool                                iconShowResolution;
+    bool                                iconShowTags;
+    bool                                iconShowRating;
 
     // tooltip settings
-    bool showToolTips;
-    bool tooltipShowFileName;
-    bool tooltipShowFileDate;
-    bool tooltipShowFileSize;
-    bool tooltipShowImageType;
-    bool tooltipShowImageDim;
-    bool tooltipShowPhotoMake;
-    bool tooltipShowPhotoDate;
-    bool tooltipShowPhotoFocal;
-    bool tooltipShowPhotoExpo;
-    bool tooltipShowPhotoMode;
-    bool tooltipShowPhotoFlash;
-    bool tooltipShowPhotoWb;
-    bool tooltipShowAlbumName;
-    bool tooltipShowComments;
-    bool tooltipShowTags;
-    bool tooltipShowRating;
+    bool                                showToolTips;
+    bool                                tooltipShowFileName;
+    bool                                tooltipShowFileDate;
+    bool                                tooltipShowFileSize;
+    bool                                tooltipShowImageType;
+    bool                                tooltipShowImageDim;
+    bool                                tooltipShowPhotoMake;
+    bool                                tooltipShowPhotoDate;
+    bool                                tooltipShowPhotoFocal;
+    bool                                tooltipShowPhotoExpo;
+    bool                                tooltipShowPhotoMode;
+    bool                                tooltipShowPhotoFlash;
+    bool                                tooltipShowPhotoWb;
+    bool                                tooltipShowAlbumName;
+    bool                                tooltipShowComments;
+    bool                                tooltipShowTags;
+    bool                                tooltipShowRating;
 
     // metadata settings
-    bool exifRotate;
-    bool exifSetOrientation;
+    bool                                exifRotate;
+    bool                                exifSetOrientation;
 
-    bool saveTags;
-    bool savePhotographerId;
-    bool saveCredits;
+    bool                                saveTags;
+    bool                                savePhotographerId;
+    bool                                saveCredits;
 
-    bool saveComments;
-    bool saveDateTime;
-    bool saveRating;
+    bool                                saveComments;
+    bool                                saveDateTime;
+    bool                                saveRating;
 
-    bool previewLoadFullImageSize;      // preview settings
+    // preview settings
+    bool                                previewLoadFullImageSize;      
 
-    QString      author;
-    QString      authorTitle;
-    QString      credit;
-    QString      source;
-    QString      copyright;
+    QString                             author;
+    QString                             authorTitle;
+    QString                             credit;
+    QString                             source;
+    QString                             copyright;
 
-    int  thumbnailSize;                 // icon view settings
-    int  treeThumbnailSize;             // album view settings
-    int  ratingFilterValue;
-    int  ratingFilterCond;
+    // album view settings
+    int                                 treeThumbnailSize;             
+
+    // icon view settings
+    int                                 thumbnailSize;                 
+    int                                 mimeTypeFilter;
+    int                                 ratingFilterValue;
+    int                                 ratingFilterCond;
 
     // theme settings
-    QString      currentTheme;
+    QString                             currentTheme;
 
     // database settings
-    QString      albumLibraryPath;
-    QString      imageFilefilter;
-    QString      movieFilefilter;
-    QString      audioFilefilter;
-    QString      rawFilefilter;
-    QString      defaultImageFilefilter;
-    QString      defaultMovieFilefilter;
-    QString      defaultAudioFilefilter;
-    QString      defaultRawFilefilter;
+    QString                             albumLibraryPath;
+    QString                             imageFilefilter;
+    QString                             movieFilefilter;
+    QString                             audioFilefilter;
+    QString                             rawFilefilter;
+    QString                             defaultImageFilefilter;
+    QString                             defaultMovieFilefilter;
+    QString                             defaultAudioFilefilter;
+    QString                             defaultRawFilefilter;
 
     // album settings
-    QStringList  albumCollectionNames;
+    QStringList                         albumCollectionNames;
 
-    KSharedConfigPtr     config;
+    KSharedConfigPtr                    config;
 
     // album view settings
     AlbumSettings::AlbumSortOrder       albumSortOrder;
+
     // icon view settings
     AlbumSettings::ImageSortOrder       imageSortOrder;
     AlbumSettings::ItemRightClickAction itemRightClickAction;
@@ -269,52 +276,54 @@ void AlbumSettings::readSettings()
     d->albumSortOrder = AlbumSettings::AlbumSortOrder(group.readEntry("Album Sort Order",
                                                       (int)AlbumSettings::ByFolder));
 
-    d->imageSortOrder = AlbumSettings::ImageSortOrder(group.readEntry("Image Sort Order",
+    d->imageSortOrder           = AlbumSettings::ImageSortOrder(group.readEntry("Image Sort Order",
                                                       (int)AlbumSettings::ByIName));
 
-    d->itemRightClickAction = AlbumSettings::ItemRightClickAction(group.readEntry(
+    d->itemRightClickAction     = AlbumSettings::ItemRightClickAction(group.readEntry(
                                                                   "Item Right Click Action",
                                                                   (int)AlbumSettings::ShowPreview));
 
 #warning File formats are now stored in the database. Remove this here and update settings tab.
-    d->imageFilefilter   = group.readEntry("File Filter", d->imageFilefilter);
-    d->movieFilefilter   = group.readEntry("Movie File Filter", d->movieFilefilter);
-    d->audioFilefilter   = group.readEntry("Audio File Filter", d->audioFilefilter);
-    d->rawFilefilter     = group.readEntry("Raw File Filter", d->rawFilefilter);
-    d->thumbnailSize     = group.readEntry("Default Icon Size", (int)ThumbnailSize::Medium);
-    d->treeThumbnailSize = group.readEntry("Default Tree Icon Size", (int)ThumbnailSize::Tiny);
-    d->currentTheme      = group.readEntry("Theme", i18n("Default"));
+    d->imageFilefilter          = group.readEntry("File Filter", d->imageFilefilter);
+    d->movieFilefilter          = group.readEntry("Movie File Filter", d->movieFilefilter);
+    d->audioFilefilter          = group.readEntry("Audio File Filter", d->audioFilefilter);
+    d->rawFilefilter            = group.readEntry("Raw File Filter", d->rawFilefilter);
+    d->thumbnailSize            = group.readEntry("Default Icon Size", (int)ThumbnailSize::Medium);
+    d->treeThumbnailSize        = group.readEntry("Default Tree Icon Size", (int)ThumbnailSize::Tiny);
+    d->currentTheme             = group.readEntry("Theme", i18n("Default"));
 
-    d->ratingFilterValue = group.readEntry("Rating Filter Value", 0);
-    d->ratingFilterCond  = group.readEntry("Rating Filter Condition",
-                                           (int)AlbumLister::GreaterEqualCondition);
+    d->mimeTypeFilter           = group.readEntry("Mime Type Filter", (int)MimeFilter::AllFiles);
 
-    d->iconShowName       = group.readEntry("Icon Show Name", false); 
-    d->iconShowResolution = group.readEntry("Icon Show Resolution", false);
-    d->iconShowSize       = group.readEntry("Icon Show Size", false);
-    d->iconShowDate       = group.readEntry("Icon Show Date", true);
-    d->iconShowModDate    = group.readEntry("Icon Show Modification Date", true);
-    d->iconShowComments   = group.readEntry("Icon Show Comments", true);
-    d->iconShowTags       = group.readEntry("Icon Show Tags", true);
-    d->iconShowRating     = group.readEntry("Icon Show Rating", true);
+    d->ratingFilterValue        = group.readEntry("Rating Filter Value", 0);
+    d->ratingFilterCond         = group.readEntry("Rating Filter Condition",
+                                                  (int)AlbumLister::GreaterEqualCondition);
 
-    d->showToolTips          = group.readEntry("Show ToolTips", false);
-    d->tooltipShowFileName   = group.readEntry("ToolTips Show File Name", true);
-    d->tooltipShowFileDate   = group.readEntry("ToolTips Show File Date", false);
-    d->tooltipShowFileSize   = group.readEntry("ToolTips Show File Size", false);
-    d->tooltipShowImageType  = group.readEntry("ToolTips Show Image Type", false);
-    d->tooltipShowImageDim   = group.readEntry("ToolTips Show Image Dim", true);
-    d->tooltipShowPhotoMake  = group.readEntry("ToolTips Show Photo Make", true);
-    d->tooltipShowPhotoDate  = group.readEntry("ToolTips Show Photo Date", true);
-    d->tooltipShowPhotoFocal = group.readEntry("ToolTips Show Photo Focal", true);
-    d->tooltipShowPhotoExpo  = group.readEntry("ToolTips Show Photo Expo", true);
-    d->tooltipShowPhotoMode  = group.readEntry("ToolTips Show Photo Mode", true);
-    d->tooltipShowPhotoFlash = group.readEntry("ToolTips Show Photo Flash", false);
-    d->tooltipShowPhotoWb    = group.readEntry("ToolTips Show Photo WB", false);
-    d->tooltipShowAlbumName  = group.readEntry("ToolTips Show Album Name", false);
-    d->tooltipShowComments   = group.readEntry("ToolTips Show Comments", true);
-    d->tooltipShowTags       = group.readEntry("ToolTips Show Tags", true);
-    d->tooltipShowRating     = group.readEntry("ToolTips Show Rating", true);
+    d->iconShowName             = group.readEntry("Icon Show Name", false); 
+    d->iconShowResolution       = group.readEntry("Icon Show Resolution", false);
+    d->iconShowSize             = group.readEntry("Icon Show Size", false);
+    d->iconShowDate             = group.readEntry("Icon Show Date", true);
+    d->iconShowModDate          = group.readEntry("Icon Show Modification Date", true);
+    d->iconShowComments         = group.readEntry("Icon Show Comments", true);
+    d->iconShowTags             = group.readEntry("Icon Show Tags", true);
+    d->iconShowRating           = group.readEntry("Icon Show Rating", true);
+
+    d->showToolTips             = group.readEntry("Show ToolTips", false);
+    d->tooltipShowFileName      = group.readEntry("ToolTips Show File Name", true);
+    d->tooltipShowFileDate      = group.readEntry("ToolTips Show File Date", false);
+    d->tooltipShowFileSize      = group.readEntry("ToolTips Show File Size", false);
+    d->tooltipShowImageType     = group.readEntry("ToolTips Show Image Type", false);
+    d->tooltipShowImageDim      = group.readEntry("ToolTips Show Image Dim", true);
+    d->tooltipShowPhotoMake     = group.readEntry("ToolTips Show Photo Make", true);
+    d->tooltipShowPhotoDate     = group.readEntry("ToolTips Show Photo Date", true);
+    d->tooltipShowPhotoFocal    = group.readEntry("ToolTips Show Photo Focal", true);
+    d->tooltipShowPhotoExpo     = group.readEntry("ToolTips Show Photo Expo", true);
+    d->tooltipShowPhotoMode     = group.readEntry("ToolTips Show Photo Mode", true);
+    d->tooltipShowPhotoFlash    = group.readEntry("ToolTips Show Photo Flash", false);
+    d->tooltipShowPhotoWb       = group.readEntry("ToolTips Show Photo WB", false);
+    d->tooltipShowAlbumName     = group.readEntry("ToolTips Show Album Name", false);
+    d->tooltipShowComments      = group.readEntry("ToolTips Show Comments", true);
+    d->tooltipShowTags          = group.readEntry("ToolTips Show Tags", true);
+    d->tooltipShowRating        = group.readEntry("ToolTips Show Rating", true);
 
     d->previewLoadFullImageSize = group.readEntry("Preview Load Full Image Size", false);
     
@@ -322,7 +331,7 @@ void AlbumSettings::readSettings()
 
     group = config->group("EXIF Settings");
 
-    d->exifRotate = group.readEntry("EXIF Rotate", true);
+    d->exifRotate         = group.readEntry("EXIF Rotate", true);
     d->exifSetOrientation = group.readEntry("EXIF Set Orientation", true);
 
     // ---------------------------------------------------------------------
@@ -373,6 +382,7 @@ void AlbumSettings::saveSettings()
     group.writeEntry("Raw File Filter", d->rawFilefilter);
     group.writeEntry("Default Icon Size", QString::number(d->thumbnailSize));
     group.writeEntry("Default Tree Icon Size", QString::number(d->treeThumbnailSize));
+    group.writeEntry("Mime Type Filter", d->mimeTypeFilter);
     group.writeEntry("Rating Filter Value", d->ratingFilterValue);
     group.writeEntry("Rating Filter Condition", d->ratingFilterCond);
     group.writeEntry("Theme", d->currentTheme);
@@ -607,6 +617,16 @@ void AlbumSettings::setDefaultTreeIconSize(int val)
 int AlbumSettings::getDefaultTreeIconSize() const
 {
     return ((d->treeThumbnailSize < 8) || (d->treeThumbnailSize > 48)) ? 48 : d->treeThumbnailSize;
+}
+
+void AlbumSettings::setMimeTypeFilter(int val)
+{
+    d->mimeTypeFilter = val;
+}
+
+int AlbumSettings::getMimeTypeFilter() const
+{
+    return d->mimeTypeFilter;
 }
 
 void AlbumSettings::setRatingFilterValue(int val)

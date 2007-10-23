@@ -56,6 +56,7 @@ extern "C"
 
 #include "ddebug.h"
 #include "imagelister.h"
+#include "mimefilter.h"
 #include "album.h"
 #include "albummanager.h"
 #include "albumsettings.h"
@@ -77,6 +78,7 @@ public:
         job            = 0;
         currAlbum      = 0;
         filter         = "*";
+        mimeTypeFilter = MimeFilter::AllFiles;
         ratingCond     = AlbumLister::GreaterEqualCondition;
         matchingCond   = AlbumLister::OrCondition;
     }
@@ -100,6 +102,8 @@ public:
     ImageInfoList                   itemList;
 
     Album                          *currAlbum;
+
+    MimeFilter::TypeMimeFilter      mimeTypeFilter;
 
     AlbumLister::MatchingCondition  matchingCond;
 
@@ -222,6 +226,13 @@ void AlbumLister::setRatingFilter(int rating, const RatingCondition& ratingCond)
     d->filterTimer->start(100);
 }
 
+void AlbumLister::setMimeTypeFilter(int mimeTypeFilter)
+{
+    d->mimeTypeFilter = (MimeFilter::TypeMimeFilter)mimeTypeFilter;
+    d->filterTimer->setSingleShot(true);
+    d->filterTimer->start(100);
+}
+
 bool AlbumLister::matchesFilter(const ImageInfo &info) const
 {
     if (d->dayFilter.isEmpty() && d->tagFilter.isEmpty() &&
@@ -303,6 +314,56 @@ bool AlbumLister::matchesFilter(const ImageInfo &info) const
                 match = false;
             }
         }
+    }
+
+    // Filter by mime type.
+    QFileInfo fi(info.filePath());
+    QString mimeType = fi.suffix().toUpper();
+
+    switch(d->mimeTypeFilter) 
+    {
+        case MimeFilter::JPGFiles:
+        {
+            if (mimeType != QString("JPG") && mimeType != QString("JPE") && 
+                mimeType != QString("JPEG"))
+                match = false;
+            break;
+        }
+        case MimeFilter::PNGFiles:
+        {
+            if (mimeType != QString("PNG"))
+                match = false;
+            break;
+        }
+        case MimeFilter::TIFFiles:
+        {
+            if (mimeType != QString("TIF") && mimeType != QString("TIFF"))
+                match = false;
+            break;
+        }
+        case MimeFilter::RAWFiles:
+        {
+            QString rawFilesExt(AlbumSettings::instance()->getRawFileFilter());
+            if (!rawFilesExt.upper().contains(mimeType))
+                match = false;
+            break;
+        }
+        case MimeFilter::MoviesFiles:
+        {
+            QString moviesFilesExt(AlbumSettings::instance()->getMovieFileFilter());
+            if (!moviesFilesExt.upper().contains(mimeType))
+                match = false;
+            break;
+        }
+        case MimeFilter::AudioFiles:
+        {
+            QString audioFilesExt(AlbumSettings::instance()->getAudioFileFilter());
+            if (!audioFilesExt.upper().contains(mimeType))
+                match = false;
+            break;
+        }
+        default:        // All Files: do nothing...
+            break;
     }
 
     return match;
