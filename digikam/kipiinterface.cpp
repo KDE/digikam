@@ -136,11 +136,9 @@ void DigikamImageInfo::setTime(const QDateTime& time, KIPI::TimeSpec)
 
 void DigikamImageInfo::cloneData( ImageInfoShared* other )
 {
-    // TODO: Added others picture attributes stored by digiKam 
-    //       database to clone an item.
-
     setDescription( other->description() );
     setTime( other->time(KIPI::FromInfo), KIPI::FromInfo );
+    addAttributes( other->attributes() );
 }
 
 QMap<QString, QVariant> DigikamImageInfo::attributes()
