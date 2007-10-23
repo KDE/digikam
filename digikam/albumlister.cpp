@@ -57,10 +57,10 @@ extern "C"
 // Local includes.
 
 #include "ddebug.h"
+#include "mimefilter.h"
 #include "album.h"
 #include "albummanager.h"
 #include "albumsettings.h"
-#include "mimefilter.h"
 #include "albumlister.h"
 #include "albumlister.moc"
 
@@ -79,6 +79,7 @@ public:
         job            = 0;
         currAlbum      = 0;
         filter         = "*";
+        mimeTypeFilter = MimeFilter::AllFiles;
         ratingCond     = AlbumLister::GreaterEqualCondition;
         matchingCond   = AlbumLister::OrCondition;
     }
@@ -326,10 +327,10 @@ bool AlbumLister::matchesFilter(const ImageInfo* info) const
         }
     }
 
+    // Filter by mime type.
     QFileInfo fi(info->filePath());
     QString mimeType = fi.extension(false).upper();
 
-    // Filter by mime type.
     switch(d->mimeTypeFilter) 
     {
         case MimeFilter::JPGFiles:
