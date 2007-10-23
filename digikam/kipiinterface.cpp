@@ -176,11 +176,9 @@ void DigikamImageInfo::setTime(const QDateTime& time, KIPI::TimeSpec)
 
 void DigikamImageInfo::cloneData( ImageInfoShared* other )
 {
-    // PENDING (Gilles) : Added new Image data to clone which are provide by the
-    // new Renchi implementation until digiKam 0.7.0...
-
     setDescription( other->description() );
     setTime( other->time(KIPI::FromInfo), KIPI::FromInfo );
+    addAttributes( other->attributes() );
 }
 
 QMap<QString, QVariant> DigikamImageInfo::attributes()
