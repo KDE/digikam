@@ -988,6 +988,9 @@ QVariantList AlbumDB::getImagePosition(qlonglong imageID, DatabaseFields::ImageP
 
 void AlbumDB::addImageInformation(qlonglong imageID, const QVariantList &infos, DatabaseFields::ImageInformation fields)
 {
+    if (fields == DatabaseFields::ImageInformationNone)
+        return;
+
     QString query("REPLACE INTO ImageInformation ( imageid, ");
 
     QStringList fieldNames = imageInformationFieldList(fields);
@@ -1020,13 +1023,16 @@ void AlbumDB::addImageInformation(qlonglong imageID, const QVariantList &infos, 
 void AlbumDB::changeImageInformation(qlonglong imageId, const QVariantList &infos,
                                      DatabaseFields::ImageInformation fields)
 {
+    if (fields == DatabaseFields::ImageInformationNone)
+        return;
+
     QString query("UPDATE ImageInformation SET ");
 
     QStringList fieldNames = imageInformationFieldList(fields);
     Q_ASSERT(fieldNames.size()==infos.size());
     query += fieldNames.join("=?,");
 
-    query += " WHERE imageid=?;";
+    query += "=? WHERE imageid=?;";
 
     QVariantList boundValues;
     // Take care for datetime values
@@ -1049,6 +1055,9 @@ void AlbumDB::changeImageInformation(qlonglong imageId, const QVariantList &info
 
 void AlbumDB::addImageMetadata(qlonglong imageID, const QVariantList &infos, DatabaseFields::ImageMetadata fields)
 {
+    if (fields == DatabaseFields::ImageMetadataNone)
+        return;
+
     QString query("REPLACE INTO ImageMetadata ( imageid, ");
 
     QStringList fieldNames = imageMetadataFieldList(fields);
@@ -1068,13 +1077,16 @@ void AlbumDB::addImageMetadata(qlonglong imageID, const QVariantList &infos, Dat
 void AlbumDB::changeImageMetadata(qlonglong imageId, const QVariantList &infos,
                                   DatabaseFields::ImageMetadata fields)
 {
+    if (fields == DatabaseFields::ImageMetadataNone)
+        return;
+
     QString query("UPDATE ImageMetadata SET ");
 
     QStringList fieldNames = imageMetadataFieldList(fields);
     Q_ASSERT(fieldNames.size()==infos.size());
     query += fieldNames.join("=?,");
 
-    query += " WHERE imageid=?;";
+    query += "=? WHERE imageid=?;";
 
     QVariantList boundValues;
     boundValues << infos << imageId;
@@ -1084,6 +1096,9 @@ void AlbumDB::changeImageMetadata(qlonglong imageId, const QVariantList &infos,
 
 void AlbumDB::addImagePosition(qlonglong imageID, const QVariantList &infos, DatabaseFields::ImagePositions fields)
 {
+    if (fields == DatabaseFields::ImagePositionsNone)
+        return;
+
     QString query("REPLACE INTO ImagePositions ( imageid, ");
 
     QStringList fieldNames = imagePositionsFieldList(fields);
@@ -1103,13 +1118,16 @@ void AlbumDB::addImagePosition(qlonglong imageID, const QVariantList &infos, Dat
 void AlbumDB::changeImagePosition(qlonglong imageId, const QVariantList &infos,
                                    DatabaseFields::ImagePositions fields)
 {
+    if (fields == DatabaseFields::ImagePositionsNone)
+        return;
+
     QString query("UPDATE ImagePositions SET ");
 
     QStringList fieldNames = imagePositionsFieldList(fields);
     Q_ASSERT(fieldNames.size()==infos.size());
     query += fieldNames.join("=?,");
 
-    query += " WHERE imageid=?;";
+    query += "=? WHERE imageid=?;";
 
     QVariantList boundValues;
     boundValues << infos << imageId;
@@ -1167,6 +1185,9 @@ int AlbumDB::setImageComment(qlonglong imageID, const QString &comment, Database
 
 void AlbumDB::changeImageComment(int commentId, const QVariantList &infos, DatabaseFields::ImageComments fields)
 {
+    if (fields == DatabaseFields::ImageCommentsNone)
+        return;
+
     QString query("UPDATE ImageComments SET ");
 
     QStringList fieldNames = imageCommentsFieldList(fields);
