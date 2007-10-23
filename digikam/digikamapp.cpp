@@ -212,7 +212,7 @@ DigikamApp::~DigikamApp()
     if (d->view)
         delete d->view;
 
-    AlbumSettings::instance()->setRatingFilterCond(d->statusRatingFilterBar->RatingFilterCondition());
+    AlbumSettings::instance()->setRatingFilterCond(d->statusRatingFilterBar->ratingFilterCondition());
     AlbumSettings::instance()->setRatingFilterValue(d->statusRatingFilterBar->rating());
     AlbumSettings::instance()->saveSettings();
 

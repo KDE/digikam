@@ -45,7 +45,7 @@ public:
     ~RatingFilter();
 
     void setRatingFilterCondition(AlbumLister::RatingCondition cond);
-    AlbumLister::RatingCondition RatingFilterCondition();
+    AlbumLister::RatingCondition ratingFilterCondition();
 
 signals:
 
