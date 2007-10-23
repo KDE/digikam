@@ -41,6 +41,7 @@
 // Local includes.
 
 #include "thumbnailsize.h"
+#include "mimefilter.h"
 #include "albumlister.h"
 #include "albumsettings.h"
 
@@ -100,6 +101,7 @@ public:
 
     int  thumbnailSize;
     int  treeThumbnailSize;
+    int  mimeTypeFilter;
     int  ratingFilterValue;
     int  ratingFilterCond;
 
@@ -190,6 +192,8 @@ void AlbumSettings::init()
     d->thumbnailSize      = ThumbnailSize::Medium;
     d->treeThumbnailSize  = 32;
 
+    d->mimeTypeFilter     = MimeFilter::AllFiles;
+
     d->ratingFilterValue  = 0;
     d->ratingFilterCond   = AlbumLister::GreaterEqualCondition;
         
@@ -273,6 +277,8 @@ void AlbumSettings::readSettings()
     d->thumbnailSize     = config->readNumEntry("Default Icon Size", ThumbnailSize::Medium);
     d->treeThumbnailSize = config->readNumEntry("Default Tree Icon Size", ThumbnailSize::Tiny);
     d->currentTheme      = config->readEntry("Theme", i18n("Default"));
+
+    d->mimeTypeFilter    = config->readNumEntry("Mime Type Filter", MimeFilter::AllFiles);
 
     d->ratingFilterValue = config->readNumEntry("Rating Filter Value", 0);
     d->ratingFilterCond  = config->readNumEntry("Rating Filter Condition",
@@ -362,6 +368,7 @@ void AlbumSettings::saveSettings()
     config->writeEntry("Raw File Filter", d->rawFilefilter);
     config->writeEntry("Default Icon Size", QString::number(d->thumbnailSize));
     config->writeEntry("Default Tree Icon Size", QString::number(d->treeThumbnailSize));
+    config->writeEntry("Mime Type Filter", d->mimeTypeFilter);
     config->writeEntry("Rating Filter Value", d->ratingFilterValue);
     config->writeEntry("Rating Filter Condition", d->ratingFilterCond);
     config->writeEntry("Theme", d->currentTheme);
@@ -596,6 +603,16 @@ void AlbumSettings::setDefaultTreeIconSize(int val)
 int AlbumSettings::getDefaultTreeIconSize() const
 {
     return ((d->treeThumbnailSize < 8) || (d->treeThumbnailSize > 48)) ? 48 : d->treeThumbnailSize;
+}
+
+void AlbumSettings::setMimeTypeFilter(int val)
+{
+    d->mimeTypeFilter = val;
+}
+
+int AlbumSettings::getMimeTypeFilter() const
+{
+    return d->mimeTypeFilter;
 }
 
 void AlbumSettings::setRatingFilterValue(int val)

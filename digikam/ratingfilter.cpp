@@ -104,7 +104,7 @@ void RatingFilter::setRatingFilterCondition(AlbumLister::RatingCondition cond)
     slotRatingChanged();
 }
 
-AlbumLister::RatingCondition RatingFilter::RatingFilterCondition()
+AlbumLister::RatingCondition RatingFilter::ratingFilterCondition()
 {
     return d->filterCond;
 }

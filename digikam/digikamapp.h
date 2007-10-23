@@ -122,6 +122,7 @@ private slots:
     void slotShowKipiHelp();
     void slotDonateMoney();
     void slotRatingFilterChanged(int, AlbumLister::RatingCondition);
+    void slotMimeTypeFilterChanged(int);
 
     void slotAboutToShowForwardMenu();
     void slotAboutToShowBackwardMenu();

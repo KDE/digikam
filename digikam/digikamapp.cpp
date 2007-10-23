@@ -196,7 +196,8 @@ DigikamApp::~DigikamApp()
     if (d->view)
         delete d->view;
 
-    d->albumSettings->setRatingFilterCond(d->statusRatingFilterBar->RatingFilterCondition());
+    d->albumSettings->setMimeTypeFilter(d->statusMimeFilterBar->mimeFilter());
+    d->albumSettings->setRatingFilterCond(d->statusRatingFilterBar->ratingFilterCondition());
     d->albumSettings->setRatingFilterValue(d->statusRatingFilterBar->rating());
     d->albumSettings->saveSettings();
     delete d->albumSettings;
@@ -361,6 +362,12 @@ void DigikamApp::setupStatusBar()
 
     //------------------------------------------------------------------------------
 
+    d->statusMimeFilterBar = new MimeFilter(statusBar());
+    d->statusMimeFilterBar->setMaximumHeight(fontMetrics().height()+2);
+    statusBar()->addWidget(d->statusMimeFilterBar, 1, true);
+
+    //------------------------------------------------------------------------------
+
     QHBox *hbox = new QHBox(statusBar());
     d->statusRatingFilterBar = new RatingFilter(hbox);
     hbox->setMaximumHeight(fontMetrics().height()+2);
@@ -382,6 +389,9 @@ void DigikamApp::setupStatusBar()
 
     connect(d->statusRatingFilterBar, SIGNAL(signalRatingFilterChanged(int, AlbumLister::RatingCondition)),
             this, SLOT(slotRatingFilterChanged(int, AlbumLister::RatingCondition)));
+
+    connect(d->statusMimeFilterBar, SIGNAL(activated(int)),
+            this, SLOT(slotMimeTypeFilterChanged(int)));
 
     connect(d->statusZoomBar, SIGNAL(signalZoomMinusClicked()),
             d->view, SLOT(slotZoomOut()));
@@ -995,6 +1005,9 @@ void DigikamApp::setupActions()
 
     d->albumSortAction->setCurrentItem((int)d->albumSettings->getAlbumSortOrder());
     d->imageSortAction->setCurrentItem((int)d->albumSettings->getImageSortOrder());
+
+    d->statusMimeFilterBar->setMimeFilter(d->albumSettings->getMimeTypeFilter());
+
     d->statusRatingFilterBar->setRating(d->albumSettings->getRatingFilterValue());
     // Setting the filter condition also updates the tooltip.
     // (So `setRating` is called first, as otherwise the filter value is not respected).
@@ -1911,6 +1924,11 @@ void DigikamApp::slotDonateMoney()
 void DigikamApp::slotRatingFilterChanged(int rating, AlbumLister::RatingCondition cond)
 {
     AlbumLister::instance()->setRatingFilter(rating, cond);
+}
+
+void DigikamApp::slotMimeTypeFilterChanged(int mimeTypeFilter)
+{
+    AlbumLister::instance()->setMimeTypeFilter(mimeTypeFilter);
 }
 
 void DigikamApp::slotZoomSliderChanged(int size)

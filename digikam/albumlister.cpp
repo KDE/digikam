@@ -7,6 +7,8 @@
  * Description : Albums lister.
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007 by Arnd Baecker <arnd dot baecker at web dot de> 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -58,6 +60,7 @@ extern "C"
 #include "album.h"
 #include "albummanager.h"
 #include "albumsettings.h"
+#include "mimefilter.h"
 #include "albumlister.h"
 #include "albumlister.moc"
 
@@ -99,6 +102,8 @@ public:
     ImageInfoList                   itemList;
 
     Album                          *currAlbum;
+
+    MimeFilter::TypeMimeFilter      mimeTypeFilter;
 
     AlbumLister::MatchingCondition  matchingCond;
 
@@ -232,6 +237,12 @@ void AlbumLister::setRatingFilter(int rating, const RatingCondition& ratingCond)
     d->filterTimer->start(100, true);
 }
 
+void AlbumLister::setMimeTypeFilter(int mimeTypeFilter)
+{
+    d->mimeTypeFilter = (MimeFilter::TypeMimeFilter)mimeTypeFilter;
+    d->filterTimer->start(100, true);
+}
+
 bool AlbumLister::matchesFilter(const ImageInfo* info) const
 {
     if (d->dayFilter.isEmpty() && d->tagFilter.isEmpty() &&
@@ -313,6 +324,56 @@ bool AlbumLister::matchesFilter(const ImageInfo* info) const
                 match = false;
             }
         }
+    }
+
+    QFileInfo fi(info->filePath());
+    QString mimeType = fi.extension(false).upper();
+
+    // Filter by mime type.
+    switch(d->mimeTypeFilter) 
+    {
+        case MimeFilter::JPGFiles:
+        {
+            if (mimeType != QString("JPG") && mimeType != QString("JPE") && 
+                mimeType != QString("JPEG"))
+                match = false;
+            break;
+        }
+        case MimeFilter::PNGFiles:
+        {
+            if (mimeType != QString("PNG"))
+                match = false;
+            break;
+        }
+        case MimeFilter::TIFFiles:
+        {
+            if (mimeType != QString("TIF") && mimeType != QString("TIFF"))
+                match = false;
+            break;
+        }
+        case MimeFilter::RAWFiles:
+        {
+            QString rawFilesExt(AlbumSettings::instance()->getRawFileFilter());
+            if (!rawFilesExt.upper().contains(mimeType))
+                match = false;
+            break;
+        }
+        case MimeFilter::MoviesFiles:
+        {
+            QString moviesFilesExt(AlbumSettings::instance()->getMovieFileFilter());
+            if (!moviesFilesExt.upper().contains(mimeType))
+                match = false;
+            break;
+        }
+        case MimeFilter::AudioFiles:
+        {
+            QString audioFilesExt(AlbumSettings::instance()->getAudioFileFilter());
+            if (!audioFilesExt.upper().contains(mimeType))
+                match = false;
+            break;
+        }
+        default:        // All Files: do nothing...
+            break;
     }
 
     return match;
@@ -489,6 +550,3 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
 }
 
 }  // namespace Digikam
-
-
-

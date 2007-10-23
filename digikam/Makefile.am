@@ -77,6 +77,7 @@ libdigikam_la_SOURCES = kdateedit.cpp \
 	                kdatepickerpopup.cpp \
 	                kipiinterface.cpp \
 	                mediaplayerview.cpp \
+                        mimefilter.cpp \
 	                monthwidget.cpp \
 	                pixmapmanager.cpp \
 	                ratingfilter.cpp \

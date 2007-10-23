@@ -54,6 +54,7 @@
 #include "statusnavigatebar.h"
 #include "digikamview.h"
 #include "ratingfilter.h"
+#include "mimefilter.h"
 
 class KToolBarPopupAction;
 class KToggleAction;
@@ -136,6 +137,7 @@ public:
         kipiInterface                        = 0;
         cameraList                           = 0;
         statusProgressBar                    = 0;
+        statusMimeFilterBar                  = 0;
         statusRatingFilterBar                = 0;
         statusNavigateBar                    = 0;
         statusZoomBar                        = 0;
@@ -252,6 +254,7 @@ public:
     StatusProgressBar     *statusProgressBar;
     StatusNavigateBar     *statusNavigateBar;
     RatingFilter          *statusRatingFilterBar;
+    MimeFilter            *statusMimeFilterBar;
 
     KIPI::PluginLoader    *kipiPluginLoader;
 };
