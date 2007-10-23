@@ -28,6 +28,7 @@
 #include <qpalette.h>
 #include <qpixmap.h>
 #include <qcursor.h>
+#include <qwhatsthis.h>
 
 // KDE includes.
 
