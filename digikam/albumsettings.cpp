@@ -53,82 +53,82 @@ class AlbumSettingsPrivate
 
 public:
 
-    bool showSplash;
-    bool useTrash;
-    bool showTrashDeleteDialog;
-    bool sidebarApplyDirectly;
-    bool scanAtStart;
+    bool                                 showSplash;
+    bool                                 useTrash;
+    bool                                 showTrashDeleteDialog;
+    bool                                 sidebarApplyDirectly;
+    bool                                 scanAtStart;
 
-    bool iconShowName;
-    bool iconShowSize;
-    bool iconShowDate;
-    bool iconShowModDate;
-    bool iconShowComments;
-    bool iconShowResolution;
-    bool iconShowTags;
-    bool iconShowRating;
+    bool                                 iconShowName;
+    bool                                 iconShowSize;
+    bool                                 iconShowDate;
+    bool                                 iconShowModDate;
+    bool                                 iconShowComments;
+    bool                                 iconShowResolution;
+    bool                                 iconShowTags;
+    bool                                 iconShowRating;
 
-    bool showToolTips;
-    bool tooltipShowFileName;
-    bool tooltipShowFileDate;
-    bool tooltipShowFileSize;
-    bool tooltipShowImageType;
-    bool tooltipShowImageDim;
-    bool tooltipShowPhotoMake;
-    bool tooltipShowPhotoDate;
-    bool tooltipShowPhotoFocal;
-    bool tooltipShowPhotoExpo;
-    bool tooltipShowPhotoMode;
-    bool tooltipShowPhotoFlash;
-    bool tooltipShowPhotoWb;
-    bool tooltipShowAlbumName;
-    bool tooltipShowComments;
-    bool tooltipShowTags;
-    bool tooltipShowRating;
+    bool                                 showToolTips;
+    bool                                 tooltipShowFileName;
+    bool                                 tooltipShowFileDate;
+    bool                                 tooltipShowFileSize;
+    bool                                 tooltipShowImageType;
+    bool                                 tooltipShowImageDim;
+    bool                                 tooltipShowPhotoMake;
+    bool                                 tooltipShowPhotoDate;
+    bool                                 tooltipShowPhotoFocal;
+    bool                                 tooltipShowPhotoExpo;
+    bool                                 tooltipShowPhotoMode;
+    bool                                 tooltipShowPhotoFlash;
+    bool                                 tooltipShowPhotoWb;
+    bool                                 tooltipShowAlbumName;
+    bool                                 tooltipShowComments;
+    bool                                 tooltipShowTags;
+    bool                                 tooltipShowRating;
 
-    bool exifRotate;
-    bool exifSetOrientation;
+    bool                                 exifRotate;
+    bool                                 exifSetOrientation;
 
-    bool saveIptcTags;
-    bool saveIptcPhotographerId;
-    bool saveIptcCredits;
+    bool                                 saveIptcTags;
+    bool                                 saveIptcPhotographerId;
+    bool                                 saveIptcCredits;
 
-    bool saveComments;
-    bool saveDateTime;
-    bool saveRating;
+    bool                                 saveComments;
+    bool                                 saveDateTime;
+    bool                                 saveRating;
 
-    bool previewLoadFullImageSize;
+    bool                                 previewLoadFullImageSize;
 
-    int  thumbnailSize;
-    int  treeThumbnailSize;
-    int  mimeTypeFilter;
-    int  ratingFilterValue;
-    int  ratingFilterCond;
+    int                                  thumbnailSize;
+    int                                  treeThumbnailSize;
+    int                                  mimeTypeFilter;
+    int                                  ratingFilterValue;
+    int                                  ratingFilterCond;
 
-    QString      currentTheme;
-    QString      albumLibraryPath;
-    QString      imageFilefilter;
-    QString      movieFilefilter;
-    QString      audioFilefilter;
-    QString      rawFilefilter;
-    QString      defaultImageFilefilter;
-    QString      defaultMovieFilefilter;
-    QString      defaultAudioFilefilter;
-    QString      defaultRawFilefilter;
+    QString                              currentTheme;
+    QString                              albumLibraryPath;
+    QString                              imageFilefilter;
+    QString                              movieFilefilter;
+    QString                              audioFilefilter;
+    QString                              rawFilefilter;
+    QString                              defaultImageFilefilter;
+    QString                              defaultMovieFilefilter;
+    QString                              defaultAudioFilefilter;
+    QString                              defaultRawFilefilter;
 
-    QString      author;
-    QString      authorTitle;
-    QString      credit;
-    QString      source;
-    QString      copyright;
+    QString                              author;
+    QString                              authorTitle;
+    QString                              credit;
+    QString                              source;
+    QString                              copyright;
 
-    QStringList  albumCollectionNames;
+    QStringList                          albumCollectionNames;
 
-    KConfig     *config;
+    KConfig                             *config;
 
-    AlbumSettings::AlbumSortOrder       albumSortOrder;
-    AlbumSettings::ImageSortOrder       imageSortOrder;
-    AlbumSettings::ItemRightClickAction itemRightClickAction;
+    AlbumSettings::AlbumSortOrder        albumSortOrder;
+    AlbumSettings::ImageSortOrder        imageSortOrder;
+    AlbumSettings::ItemRightClickAction  itemRightClickAction;
 };
 
 
@@ -192,11 +192,11 @@ void AlbumSettings::init()
     d->thumbnailSize      = ThumbnailSize::Medium;
     d->treeThumbnailSize  = 32;
 
-    d->mimeTypeFilter     = MimeFilter::AllFiles;
+    d->mimeTypeFilter         = MimeFilter::AllFiles;
 
-    d->ratingFilterValue  = 0;
-    d->ratingFilterCond   = AlbumLister::GreaterEqualCondition;
-        
+    d->ratingFilterValue      = 0;
+    d->ratingFilterCond       = AlbumLister::GreaterEqualCondition;
+
     d->showToolTips           = true;
     d->showSplash             = true;
     d->useTrash               = true;
@@ -260,64 +260,64 @@ void AlbumSettings::readSettings()
         d->albumCollectionNames = collectionList;
     }
 
-    d->albumSortOrder = AlbumSettings::AlbumSortOrder(config->readNumEntry("Album Sort Order",
-                                                      (int)AlbumSettings::ByFolder));
+    d->albumSortOrder           = AlbumSettings::AlbumSortOrder(config->readNumEntry("Album Sort Order",
+                                                                (int)AlbumSettings::ByFolder));
 
-    d->imageSortOrder = AlbumSettings::ImageSortOrder(config->readNumEntry("Image Sort Order",
-                                                      (int)AlbumSettings::ByIName));
+    d->imageSortOrder           = AlbumSettings::ImageSortOrder(config->readNumEntry("Image Sort Order",
+                                                                (int)AlbumSettings::ByIName));
 
-    d->itemRightClickAction = AlbumSettings::ItemRightClickAction(config->readNumEntry(
-                                                                  "Item Right Click Action",
-                                                                  (int)AlbumSettings::ShowPreview));
+    d->itemRightClickAction     = AlbumSettings::ItemRightClickAction(config->readNumEntry(
+                                                                      "Item Right Click Action",
+                                                                      (int)AlbumSettings::ShowPreview));
 
-    d->imageFilefilter   = config->readEntry("File Filter", d->imageFilefilter);
-    d->movieFilefilter   = config->readEntry("Movie File Filter", d->movieFilefilter);
-    d->audioFilefilter   = config->readEntry("Audio File Filter", d->audioFilefilter);
-    d->rawFilefilter     = config->readEntry("Raw File Filter", d->rawFilefilter);
-    d->thumbnailSize     = config->readNumEntry("Default Icon Size", ThumbnailSize::Medium);
-    d->treeThumbnailSize = config->readNumEntry("Default Tree Icon Size", ThumbnailSize::Tiny);
-    d->currentTheme      = config->readEntry("Theme", i18n("Default"));
+    d->imageFilefilter          = config->readEntry("File Filter", d->imageFilefilter);
+    d->movieFilefilter          = config->readEntry("Movie File Filter", d->movieFilefilter);
+    d->audioFilefilter          = config->readEntry("Audio File Filter", d->audioFilefilter);
+    d->rawFilefilter            = config->readEntry("Raw File Filter", d->rawFilefilter);
+    d->thumbnailSize            = config->readNumEntry("Default Icon Size", ThumbnailSize::Medium);
+    d->treeThumbnailSize        = config->readNumEntry("Default Tree Icon Size", ThumbnailSize::Tiny);
+    d->currentTheme             = config->readEntry("Theme", i18n("Default"));
 
-    d->mimeTypeFilter    = config->readNumEntry("Mime Type Filter", MimeFilter::AllFiles);
+    d->mimeTypeFilter           = config->readNumEntry("Mime Type Filter", MimeFilter::AllFiles);
 
-    d->ratingFilterValue = config->readNumEntry("Rating Filter Value", 0);
-    d->ratingFilterCond  = config->readNumEntry("Rating Filter Condition",
-                                                AlbumLister::GreaterEqualCondition);
+    d->ratingFilterValue        = config->readNumEntry("Rating Filter Value", 0);
+    d->ratingFilterCond         = config->readNumEntry("Rating Filter Condition",
+                                                       AlbumLister::GreaterEqualCondition);
 
-    d->iconShowName       = config->readBoolEntry("Icon Show Name", false); 
-    d->iconShowResolution = config->readBoolEntry("Icon Show Resolution", false);
-    d->iconShowSize       = config->readBoolEntry("Icon Show Size", false);
-    d->iconShowDate       = config->readBoolEntry("Icon Show Date", true);
-    d->iconShowModDate    = config->readBoolEntry("Icon Show Modification Date", true);
-    d->iconShowComments   = config->readBoolEntry("Icon Show Comments", true);
-    d->iconShowTags       = config->readBoolEntry("Icon Show Tags", true);
-    d->iconShowRating     = config->readBoolEntry("Icon Show Rating", true);
+    d->iconShowName             = config->readBoolEntry("Icon Show Name", false); 
+    d->iconShowResolution       = config->readBoolEntry("Icon Show Resolution", false);
+    d->iconShowSize             = config->readBoolEntry("Icon Show Size", false);
+    d->iconShowDate             = config->readBoolEntry("Icon Show Date", true);
+    d->iconShowModDate          = config->readBoolEntry("Icon Show Modification Date", true);
+    d->iconShowComments         = config->readBoolEntry("Icon Show Comments", true);
+    d->iconShowTags             = config->readBoolEntry("Icon Show Tags", true);
+    d->iconShowRating           = config->readBoolEntry("Icon Show Rating", true);
 
-    d->showToolTips          = config->readBoolEntry("Show ToolTips", false);
-    d->tooltipShowFileName   = config->readBoolEntry("ToolTips Show File Name", true);
-    d->tooltipShowFileDate   = config->readBoolEntry("ToolTips Show File Date", false);
-    d->tooltipShowFileSize   = config->readBoolEntry("ToolTips Show File Size", false);
-    d->tooltipShowImageType  = config->readBoolEntry("ToolTips Show Image Type", false);
-    d->tooltipShowImageDim   = config->readBoolEntry("ToolTips Show Image Dim", true);
-    d->tooltipShowPhotoMake  = config->readBoolEntry("ToolTips Show Photo Make", true);
-    d->tooltipShowPhotoDate  = config->readBoolEntry("ToolTips Show Photo Date", true);
-    d->tooltipShowPhotoFocal = config->readBoolEntry("ToolTips Show Photo Focal", true);
-    d->tooltipShowPhotoExpo  = config->readBoolEntry("ToolTips Show Photo Expo", true);
-    d->tooltipShowPhotoMode  = config->readBoolEntry("ToolTips Show Photo Mode", true);
-    d->tooltipShowPhotoFlash = config->readBoolEntry("ToolTips Show Photo Flash", false);
-    d->tooltipShowPhotoWb    = config->readBoolEntry("ToolTips Show Photo WB", false);
-    d->tooltipShowAlbumName  = config->readBoolEntry("ToolTips Show Album Name", false);
-    d->tooltipShowComments   = config->readBoolEntry("ToolTips Show Comments", true);
-    d->tooltipShowTags       = config->readBoolEntry("ToolTips Show Tags", true);
-    d->tooltipShowRating     = config->readBoolEntry("ToolTips Show Rating", true);
+    d->showToolTips             = config->readBoolEntry("Show ToolTips", false);
+    d->tooltipShowFileName      = config->readBoolEntry("ToolTips Show File Name", true);
+    d->tooltipShowFileDate      = config->readBoolEntry("ToolTips Show File Date", false);
+    d->tooltipShowFileSize      = config->readBoolEntry("ToolTips Show File Size", false);
+    d->tooltipShowImageType     = config->readBoolEntry("ToolTips Show Image Type", false);
+    d->tooltipShowImageDim      = config->readBoolEntry("ToolTips Show Image Dim", true);
+    d->tooltipShowPhotoMake     = config->readBoolEntry("ToolTips Show Photo Make", true);
+    d->tooltipShowPhotoDate     = config->readBoolEntry("ToolTips Show Photo Date", true);
+    d->tooltipShowPhotoFocal    = config->readBoolEntry("ToolTips Show Photo Focal", true);
+    d->tooltipShowPhotoExpo     = config->readBoolEntry("ToolTips Show Photo Expo", true);
+    d->tooltipShowPhotoMode     = config->readBoolEntry("ToolTips Show Photo Mode", true);
+    d->tooltipShowPhotoFlash    = config->readBoolEntry("ToolTips Show Photo Flash", false);
+    d->tooltipShowPhotoWb       = config->readBoolEntry("ToolTips Show Photo WB", false);
+    d->tooltipShowAlbumName     = config->readBoolEntry("ToolTips Show Album Name", false);
+    d->tooltipShowComments      = config->readBoolEntry("ToolTips Show Comments", true);
+    d->tooltipShowTags          = config->readBoolEntry("ToolTips Show Tags", true);
+    d->tooltipShowRating        = config->readBoolEntry("ToolTips Show Rating", true);
 
     d->previewLoadFullImageSize = config->readBoolEntry("Preview Load Full Image Size", false);
-    
+
     // ---------------------------------------------------------------------
 
     config->setGroup("EXIF Settings");
 
-    d->exifRotate = config->readBoolEntry("EXIF Rotate", true);
+    d->exifRotate         = config->readBoolEntry("EXIF Rotate", true);
     d->exifSetOrientation = config->readBoolEntry("EXIF Set Orientation", true);
 
     // ---------------------------------------------------------------------
