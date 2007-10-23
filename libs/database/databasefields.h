@@ -47,7 +47,9 @@ enum ImagesField
     UniqueHash         = 1 << 6,
     ImagesAll          =
             Album | Name | Status | Category |
-            ModificationDate | FileSize | UniqueHash
+            ModificationDate | FileSize | UniqueHash,
+    ImagesFirst        = Album,
+    ImagesLast         = UniqueHash
 };
 
 enum ImageInformationField
@@ -64,7 +66,9 @@ enum ImageInformationField
     ColorModel           = 1 << 8,
     ImageInformationAll  =
             Rating | CreationDate | DigitizationDate | Orientation |
-            Width | Height | Format | ColorDepth | ColorModel
+            Width | Height | Format | ColorDepth | ColorModel,
+    ImageInformationFirst = Rating,
+    ImageInformationLast  = ColorModel
 };
 
 enum ImageMetadataField
@@ -89,7 +93,9 @@ enum ImageMetadataField
             Make | Model | Aperture | FocalLength | FocalLength35 |
             ExposureTime | ExposureProgram | ExposureMode | Sensitivity |
             FlashMode | WhiteBalance | WhiteBalanceColorTemperature |
-            MeteringMode | SubjectDistance | SubjectDistanceCategory
+            MeteringMode | SubjectDistance | SubjectDistanceCategory,
+    ImageMetadataFirst           = Make,
+    ImageMetadataLast            = SubjectDistanceCategory
 };
 
 enum ImagePositionsField
@@ -106,7 +112,9 @@ enum ImagePositionsField
     PositionDescription = 1 << 8,
     ImagePositionsAll   =
             Latitude | LatitudeNumber | Longitude | LongitudeNumber | Altitude |
-            PositionOrientation | PositionRoll | PositionTilt | PositionDescription
+            PositionOrientation | PositionRoll | PositionTilt | PositionDescription,
+    ImagePositionsFirst = Latitude,
+    ImagePositionsLast  = PositionDescription
 };
 
 enum ImageCommentsField
@@ -118,7 +126,9 @@ enum ImageCommentsField
     CommentDate       = 1 << 3,
     Comment           = 1 << 4,
     ImageCommentsAll  =
-            CommentType | CommentAuthor | CommentLanguage | CommentDate | Comment
+            CommentType | CommentAuthor | CommentLanguage | CommentDate | Comment,
+    ImageCommentsFirst = CommentType,
+    ImageCommentsLast  = Comment
 };
 
 Q_DECLARE_FLAGS(Images, ImagesField);
@@ -129,22 +139,54 @@ Q_DECLARE_FLAGS(ImagePositions, ImagePositionsField);
 
 
 
+/**
+ * You can iterate over each of the Enumerations defined above:
+ * ImagesIterator, ImageMetadataIterator etc.
+ * for (ImagesIterator it; !it.atEnd(); ++it) {}
+ */
+
+#define DATABASEFIELDS_ENUM_ITERATOR(Flag) \
+class Flag##Iterator \
+{ \
+    int i; \
+public: \
+    Flag##Iterator() { i = Flag##First; } \
+    bool atEnd() { return i > Flag##Last; } \
+    void operator++() { i = (i << 1); } \
+    Flag operator*() const { return (Flag)i; } \
+};
+
+DATABASEFIELDS_ENUM_ITERATOR(Images)
+DATABASEFIELDS_ENUM_ITERATOR(ImageInformation)
+DATABASEFIELDS_ENUM_ITERATOR(ImageMetadata)
+DATABASEFIELDS_ENUM_ITERATOR(ImagePositions)
+DATABASEFIELDS_ENUM_ITERATOR(ImageComments)
+
+
+/**
+ * For your custom enum, you need to use the CustomEnum class.
+ * You need to do an explicit cast.
+ */
+enum CustomEnumFlags
+{
+};
+Q_DECLARE_FLAGS(CustomEnum, CustomEnumFlags);
+
 #define DATABASEFIELDS_SET_DECLARE_METHODS(Flag, variable) \
     inline Flag &operator=(const Flag &f) { return variable.operator=(f); } \
     inline Flag &operator|=(Flag f) { return variable.operator|=(f); } \
-    inline Flag &operator|=(Flag::enum_type f) { return variable.operator|=(f); } \
     inline Flag &operator^=(Flag f) { return variable.operator^=(f); } \
-    inline Flag &operator^=(Flag::enum_type f) { return variable.operator^=(f); } \
     inline Flag operator|(Flag f) const { return variable.operator|(f); } \
-    inline Flag operator|(Flag::enum_type f) const { return variable.operator|(f); } \
     inline Flag operator^(Flag f) const { return variable.operator^(f); } \
-    inline Flag operator^(Flag::enum_type f) const { return variable.operator^(f); } \
-    inline Flag operator&(Flag::enum_type f) const { return variable.operator&(f); } \
+    inline Flag operator&(Flag f) const { return variable.operator&(f); } \
+    inline operator Flag() const { return variable; } \
+    inline bool hasFieldsFrom##Flag() const { return variable & Flag##All; }
 
 /**
  * This class provides a set of all DatabasFields enums,
  * without resorting to a QSet.
 */
+
 class Set
 {
 public:
@@ -156,6 +198,7 @@ public:
         imageMetadata = ImageMetadataNone;
         imageComments = ImageCommentsNone;
         imagePositions = ImagePositionsNone;
+        customEnum = (CustomEnum)0;
     }
 
 
@@ -165,28 +208,35 @@ public:
     DATABASEFIELDS_SET_DECLARE_METHODS(ImageComments, imageComments)
     DATABASEFIELDS_SET_DECLARE_METHODS(ImagePositions, imagePositions)
 
+    inline CustomEnum &operator=(const CustomEnum &f) { return customEnum.operator=(f); }
+    inline CustomEnum &operator|=(CustomEnum f) { return customEnum.operator|=(f); }
+    inline CustomEnum &operator^=(CustomEnum f) { return customEnum.operator^=(f); }
+    inline CustomEnum operator|(CustomEnum f) const { return customEnum.operator|(f); }
+    inline CustomEnum operator^(CustomEnum f) const { return customEnum.operator^(f); }
+    inline CustomEnum operator&(CustomEnum f) const { return customEnum.operator&(f); }
+
 private:
     Images images;
     ImageInformation imageInformation;
     ImageMetadata imageMetadata;
     ImageComments imageComments;
     ImagePositions imagePositions;
+    CustomEnum customEnum;
 };
 
 
-
 #define DATABASEFIELDS_HASH_DECLARE_METHODS(Key, method) \
-    int remove(const Key &key) { return remove(method(key)); } \
-    T take(const Key &key) { return take(method(key)); } \
+    int remove(const Key &key) { return QHash<unsigned int, T>::remove(method(key)); } \
+    T take(const Key &key) { return QHash<unsigned int, T>::take(method(key)); } \
     \
-    bool contains(const Key &key) const { return contains(method(key)); } \
-    const T value(const Key &key) const { return value(method(key)); } \
-    const T value(const Key &key, const T &defaultValue) const { return value(method(key), defaultValue); } \
-    T &operator[](const Key &key) { return operator[](method(key)); } \
-    const T operator[](const Key &key) const { return operator[](method(key)); } \
+    bool contains(const Key &key) const { return QHash<unsigned int, T>::contains(method(key)); } \
+    const T value(const Key &key) const { return QHash<unsigned int, T>::value(method(key)); } \
+    const T value(const Key &key, const T &defaultValue) const { return QHash<unsigned int, T>::value(method(key), defaultValue); } \
+    T &operator[](const Key &key) { return QHash<unsigned int, T>::operator[](method(key)); } \
+    const T operator[](const Key &key) const { return QHash<unsigned int, T>::operator[](method(key)); } \
     \
-    QList<T> values(const Key &key) const { return value(method(key)); } \
-    int count(const Key &key) const { return count(method(key)); }
+    QList<T> values(const Key &key) const { return QHash<unsigned int, T>::value(method(key)); } \
+    int count(const Key &key) const { return QHash<unsigned int, T>::count(method(key)); }
 
 /**
  * This class provides a hash on all DatabaseFields enums,
@@ -194,29 +244,32 @@ private:
  * You can use the class like a normal QHash with the value type defined
  * by you, and as keys the members of the DatabaseFields enums.
  * You can only use single enum members as keys, not or'ed numbers.
+ * You can use one custom enum, cast to DatabaseFields::CustomEnum,
+ * which can have at most 26 flag values (1 << 0 to 1 << 26).
+ * Pass this as the optional second template parameter.
  */
 
 template <class T>
-class Hash : public QHash<int, T>
+class Hash : public QHash<unsigned int, T>
 {
 public:
 
-    static inline int uniqueKey(ImagesField f)            { return f + 0 * 256 + 0; }
-    static inline int uniqueKey(ImageInformationField f) { return f + 1 * 256 + 1; }
-    static inline int uniqueKey(ImageMetadataField f)    { return f + 2 * 256 + 2; }
-    static inline int uniqueKey(ImageCommentsField f)    { return f + 3 * 256 + 3; }
-    static inline int uniqueKey(ImagePositionsField f)    { return f + 4 * 256 + 4; }
+    // We use the upper 6 bits to distinguish the enums, and give the lower 26 bits to the flags.
+    // So we can store up to 64 enums, with 26 flags each.
+    static inline unsigned int uniqueKey(Images f)            { return (int)f | (0 << 26); }
+    static inline unsigned int uniqueKey(ImageInformation f)  { return (int)f | (1 << 26); }
+    static inline unsigned int uniqueKey(ImageMetadata f)     { return (int)f | (2 << 26); }
+    static inline unsigned int uniqueKey(ImageComments f)     { return (int)f | (3 << 26); }
+    static inline unsigned int uniqueKey(ImagePositions f)    { return (int)f | (4 << 26); }
+    static inline unsigned int uniqueKey(CustomEnum f)        { return f | (63 << 26); }
 
     // override relevant methods from QHash
-    DATABASEFIELDS_HASH_DECLARE_METHODS(ImagesField, uniqueKey);
-    DATABASEFIELDS_HASH_DECLARE_METHODS(ImageInformationField, uniqueKey);
-    DATABASEFIELDS_HASH_DECLARE_METHODS(ImageMetadataField, uniqueKey);
-    DATABASEFIELDS_HASH_DECLARE_METHODS(ImageCommentsField, uniqueKey);
-    DATABASEFIELDS_HASH_DECLARE_METHODS(ImagePositionsField, uniqueKey);
-
-private:
-    // make pure int methods private
-    DATABASEFIELDS_HASH_DECLARE_METHODS(int, int);
+    DATABASEFIELDS_HASH_DECLARE_METHODS(Images, uniqueKey);
+    DATABASEFIELDS_HASH_DECLARE_METHODS(ImageInformation, uniqueKey);
+    DATABASEFIELDS_HASH_DECLARE_METHODS(ImageMetadata, uniqueKey);
+    DATABASEFIELDS_HASH_DECLARE_METHODS(ImageComments, uniqueKey);
+    DATABASEFIELDS_HASH_DECLARE_METHODS(ImagePositions, uniqueKey);
+    DATABASEFIELDS_HASH_DECLARE_METHODS(CustomEnum, uniqueKey);
 };
 
 
