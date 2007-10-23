@@ -8,9 +8,10 @@ AlbumGUI       : Add MimeType filter widget on status bar.
 
 digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-040 ==> 147533 : New rating filter for the statusbar
+040 ==> 147533 : New rating filter for the statusbar.
 041 ==> 131963 : Add a file type filter tab to the right.
-042 ==> 
+042 ==> 148993 : Filter images by rating in album view.
+043 ==> 
 
 **********************************************************************************************
 
