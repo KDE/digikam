@@ -115,7 +115,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->iofilesPage = new Digikam::SetupIOFiles();
     d->page_iofiles = addPage( d->iofilesPage, i18n("Save Images") );
     d->page_iofiles->setHeader( i18n("Save Images Files Settings") );
-    d->page_iofiles->setIcon( KIcon("save-all") );
+    d->page_iofiles->setIcon( KIcon("document-save-all") );
 
     d->slideshowPage = new Digikam::SetupSlideShow();
     d->page_slideshow = addPage( d->slideshowPage, i18n("Slide Show") );
