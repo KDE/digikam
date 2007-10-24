@@ -920,7 +920,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    KAction *syncMetadataAction = new KAction(KIcon("compfile"),
+    KAction *syncMetadataAction = new KAction(KIcon("run-build-file"),
                                               i18n("Update Metadata Database..."), this);
     connect(syncMetadataAction, SIGNAL(triggered()), this, SLOT(slotSyncAllPicturesMetadata()));
     actionCollection()->addAction("sync_metadata", syncMetadataAction);
