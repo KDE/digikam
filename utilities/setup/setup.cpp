@@ -178,12 +178,12 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->editorPage  = new SetupEditor();
     d->page_editor = addPage( d->editorPage, i18n("Image Editor") );
     d->page_editor->setHeader( i18n("Image Editor General Settings") );
-    d->page_editor->setIcon( KIcon("image") );
+    d->page_editor->setIcon( KIcon("editimage") );
 
     d->iofilesPage  = new SetupIOFiles();
     d->page_iofiles = addPage( d->iofilesPage, i18n("Save Images") );
     d->page_iofiles->setHeader( i18n("Image Editor Save Images Files Settings") );
-    d->page_iofiles->setIcon( KIcon("save-all") );
+    d->page_iofiles->setIcon( KIcon("document-save-all") );
 
     d->dcrawPage = new SetupDcraw();
     d->page_dcraw = addPage( d->dcrawPage, i18n("RAW decoding") );
