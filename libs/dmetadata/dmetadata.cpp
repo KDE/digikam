@@ -688,7 +688,7 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field)
             return fromIptcEmulateLangAlt("Iptc.Application2.ObjectName");
         }
         case MetadataInfo::DescriptionWriter:
-            return fromIptcOrXmp("Iptc.Application2.Writer", "photoshop.CaptionWriter");
+            return fromIptcOrXmp("Iptc.Application2.Writer", "Xmp.photoshop.CaptionWriter");
 
         case MetadataInfo::Keywords:
         {
