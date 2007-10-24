@@ -49,7 +49,7 @@ MimeFilter::MimeFilter(QWidget* parent)
 {
     d = new MimeFilterPriv;
     insertItem( AllFiles,    i18n("All Files") );
-    insertItem( JPGFiles,    i18n("JEPG Files") );
+    insertItem( JPGFiles,    i18n("JPEG Files") );
     insertItem( PNGFiles,    i18n("PNG files") );
     insertItem( TIFFiles,    i18n("TIFF files") );
     insertItem( RAWFiles,    i18n("RAW files") );
