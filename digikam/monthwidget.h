@@ -64,7 +64,7 @@ private:
 private slots:
 
     void slotAddItems(const ImageInfoList& items);
-    void slotDeleteItem(ImageInfo* item);
+    void slotDeleteItem(const ImageInfo& item);
     
 private:
     

@@ -314,12 +314,11 @@ void MonthWidget::setActive(bool val)
     
     if (m_active)
     {
-        connect(AlbumLister::instance(),
-                SIGNAL(signalNewItems(const ImageInfoList&)),
+        connect(AlbumLister::instance(), SIGNAL(signalNewItems(const ImageInfoList&)),
                 SLOT(slotAddItems(const ImageInfoList&)));
-        connect(AlbumLister::instance(),
-                SIGNAL(signalDeleteItem(ImageInfo*)),
-                SLOT(slotDeleteItem(ImageInfo*)));
+
+        connect(AlbumLister::instance(), SIGNAL(signalDeleteItem(const ImageInfo&)),
+                this, SLOT(slotDeleteItem(const ImageInfo&)));
     }
     else
     {
@@ -354,12 +353,12 @@ void MonthWidget::slotAddItems(const ImageInfoList& items)
     update();
 }
 
-void MonthWidget::slotDeleteItem(ImageInfo* item)
+void MonthWidget::slotDeleteItem(const ImageInfo &item)
 {
-    if (!m_active || !item)
+    if (!m_active || item.isNull())
         return;
 
-    QDateTime dt = item->dateTime();
+    QDateTime dt = item.dateTime();
 
     for (int i=0; i<42; i++)
     {
