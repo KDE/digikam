@@ -589,9 +589,9 @@ void ImageEffect_ICCProof::readUserSettings()
         m_spacePath   = group.readEntry("WorkProfileFile");
         m_proofPath   = group.readEntry("ProofProfileFile");
 
-        if (QFile::exists(group.readPathEntry("DefaultPath")))
+        if (QFile::exists(group.readPathEntry("DefaultPath", QString())))
         {
-            defaultICCPath = group.readPathEntry("DefaultPath");
+            defaultICCPath = group.readPathEntry("DefaultPath", QString());
         }
         else
         {

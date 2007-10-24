@@ -302,8 +302,8 @@ void ImagePrint::readSettings()
 {
     KConfigGroup group = KGlobal::config()->group("Color Management");
 
-    d->inProfilePath     = group.readPathEntry("WorkSpaceProfile");
-    d->outputProfilePath = group.readPathEntry("ProofProfileFile");
+    d->inProfilePath     = group.readPathEntry("WorkSpaceProfile", QString());
+    d->outputProfilePath = group.readPathEntry("ProofProfileFile", QString());
 }
 
 // Image print dialog class -------------------------------------------------------------
