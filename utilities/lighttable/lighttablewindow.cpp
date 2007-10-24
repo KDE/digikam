@@ -528,7 +528,7 @@ void LightTableWindow::loadImageInfos(const ImageInfoList &list,
     ImageInfoList l = list;
     ImageInfo imageInfoCurrent = givenImageInfoCurrent;
 
-    if (imageInfoCurrent.isNull())
+    if (imageInfoCurrent.isNull() && !l.isEmpty())
         imageInfoCurrent = l.first();
 
     AlbumSettings *settings = AlbumSettings::instance();
