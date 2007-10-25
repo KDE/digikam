@@ -38,6 +38,7 @@
 #include "album.h"
 #include "albummanager.h"
 #include "albumsettings.h"
+#include "imagelister.h"
 #include "imageinfojob.h"
 #include "imageinfojob.moc"
 

@@ -116,9 +116,8 @@ void SearchResultsView::slotData(KIO::Job*, const QByteArray &data)
         ImageListerRecord record;
         ds >> record;
 
-        // the record is not completely filled, we chose miniListing above. We only need the path.
-        DatabaseUrl url = DatabaseUrl::fromAlbumAndName(record.name, record.albumName, record.albumRoot);
-        path = url.path();
+        ImageInfo info(record);
+        path = info.filePath();
 
         SearchResultsItem* existingItem = (SearchResultsItem*) m_itemDict.find(path);
         if (existingItem)

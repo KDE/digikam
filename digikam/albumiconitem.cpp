@@ -47,6 +47,7 @@
 #include "thumbnailsize.h"
 #include "imageinfo.h"
 #include "albumsettings.h"
+#include "albummanager.h"
 #include "icongroupitem.h"
 #include "thumbnailloadthread.h"
 #include "albumiconview.h"
@@ -338,7 +339,7 @@ void AlbumIconItem::paintItem(QPainter *p)
 
     if (settings->getIconShowTags())
     {
-        QString tags = d->info.tagNames().join(", ");
+        QString tags = AlbumManager::instance()->tagPaths(d->info.tagIds(), false).join(", ");
 
         r = d->view->itemTagRect();
         p->drawText(r, Qt::AlignCenter, squeezedText(p, r.width(), tags));

@@ -42,6 +42,7 @@ namespace KIO
 {
 class Job;
 }
+class KJob;
 
 namespace Digikam
 {
