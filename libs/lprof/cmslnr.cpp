@@ -145,10 +145,10 @@ LPSAMPLEDCURVE NormalizeTo(LPSAMPLEDCURVE X, double N, BOOL lAddEndPoint)
 /* */
 
 static 
-void GammaGainOffsetFn(double x, double *a, double *y, double *dyda, int na)
+void GammaGainOffsetFn(double x, double *a, double *y, double *dyda, int /*na*/)
 {
     double Gamma,Gain,Offset;
-	double Base;
+    double Base;
 
     Gamma  = a[0];
     Gain   = a[1];
