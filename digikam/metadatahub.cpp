@@ -420,7 +420,10 @@ bool MetadataHub::write(ImageInfo info, WriteMode writeMode)
 
     if (saveComment && (writeAllFields || d->commentChanged))
     {
-        info.setComment(d->comment);
+        DatabaseAccess access;
+        ImageComments comments = info.imageComments(access);
+        // we set a comment with default language, author and date null
+        comments.addComment(d->comment);
         changed = true;
     }
     if (saveDateTime && (writeAllFields || d->dateTimeChanged))

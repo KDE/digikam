@@ -114,7 +114,10 @@ void DigikamImageInfo::setTitle( const QString& newName )
 
 void DigikamImageInfo::setDescription( const QString& description )
 {
-    m_info.setComment(description);
+    DatabaseAccess access;
+    ImageComments comments = m_info.imageComments(access);
+    // we set a comment with default language, author and date null
+    comments.addComment(description);
 }
 
 QDateTime DigikamImageInfo::time( KIPI::TimeSpec /*spec*/ )
@@ -148,15 +151,16 @@ QMap<QString, QVariant> DigikamImageInfo::attributes()
     PAlbum* p = parentAlbum();
     if (p)
     {
+        QList<int> tagIds = m_info.tagIds();
         // Get digiKam Tags Path list of picture from database.
         // Ex.: "City/Paris/Monuments/Notre Dame"
 
-        QStringList tagspath = AlbumManager::instance()->tagPaths(m_info.tagIds(), false);
+        QStringList tagspath = AlbumManager::instance()->tagPaths(tagIds, false);
         res["tagspath"]      = tagspath;
 
         // Get digiKam Tags name list of picture from database.
         // Ex.: "Notre Dame"
-        QStringList tags     = m_info.tagNames();
+        QStringList tags     = AlbumManager::instance()->tagNames(tagIds);
         res["tags"]          = tags;
 
         // Get digiKam Rating of picture from database.
