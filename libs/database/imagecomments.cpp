@@ -95,6 +95,10 @@ public:
     }
 };
 
+ImageComments::ImageComments()
+{
+}
+
 ImageComments::ImageComments(qlonglong imageid)
 {
     d = new ImageCommentsPriv;
@@ -110,13 +114,26 @@ ImageComments::ImageComments(DatabaseAccess &access, qlonglong imageid)
     d->infos = access.db()->getImageComments(imageid);
 }
 
+ImageComments::ImageComments(const ImageComments &other)
+{
+    d = other.d;
+}
+
 ImageComments::~ImageComments()
 {
     apply();
 }
 
+bool ImageComments::isNull() const
+{
+    return !d;
+}
+
 QString ImageComments::defaultComment(int *index) const
 {
+    if (!d)
+        return QString();
+
     KLocale *locale = KGlobal::locale();
     QString langCode = locale->language().toLower() + '-';
     QString fullCode = langCode + locale->country().toLower();
@@ -144,6 +161,9 @@ QString ImageComments::defaultComment(int *index) const
 
 QString ImageComments::commentForLanguage(const QString &languageCode, int *index, LanguageChoiceBehavior behavior) const
 {
+    if (!d)
+        return QString();
+
     int fullCodeMatch, langCodeMatch, defaultCodeMatch, firstMatch;
 
     // en-us => en-
@@ -176,6 +196,9 @@ QString ImageComments::commentForLanguage(const QString &languageCode, int *inde
 
 int ImageComments::numberOfComments() const
 {
+    if (!d)
+        return 0;
+
     return d->infos.size();
 }
 
@@ -183,38 +206,59 @@ int ImageComments::numberOfComments() const
 
 DatabaseComment::Type ImageComments::type(int index) const
 {
+    if (!d)
+        return DatabaseComment::UndefinedType;
+
     return d->infos[index].type;
 }
 
 QString ImageComments::language(int index) const
 {
+    if (!d)
+        return QString();
+
     return d->infos[index].language;
 }
 
 QString ImageComments::author(int index) const
 {
+    if (!d)
+        return QString();
+
     return d->infos[index].author;
 }
 
 QDateTime ImageComments::date(int index) const
 {
+    if (!d)
+        return QDateTime();
+
     return d->infos[index].date;
 }
 
 QString ImageComments::comment(int index) const
 {
+    if (!d)
+        return QString();
+
     return d->infos[index].comment;
 }
 
 
 void ImageComments::setUniqueBehavior(UniqueBehavior behavior)
 {
+    if (!d)
+        return;
+
     d->unique = behavior;
 }
 
 void ImageComments::addComment(const QString &comment, const QString &lang, const QString &author,
                                const QDateTime &date, DatabaseComment::Type type)
 {
+    if (!d)
+        return;
+
     bool multipleCommentsPerLanguage = (d->unique == UniquePerLanguageAndAuthor);
     QString language = lang;
     if (language.isNull())
@@ -279,42 +323,63 @@ void ImageComments::addCommentDirect(const QString &comment, const QString &lang
 
 void ImageComments::changeComment(int index, const QString &comment)
 {
+    if (!d)
+        return;
+
     d->infos[index].comment = comment;
     d->dirtyIndices << index;
 }
 
 void ImageComments::changeLanguage(int index, const QString &language)
 {
-    d->infos[index].language = language;
+     if (!d)
+        return;
+
+   d->infos[index].language = language;
     d->dirtyIndices << index;
 }
 
 void ImageComments::changeAuthor(int index, const QString &author)
 {
+    if (!d)
+        return;
+
     d->infos[index].author = author;
     d->dirtyIndices << index;
 }
 
 void ImageComments::changeDate(int index, const QDateTime &date)
 {
+    if (!d)
+        return;
+
     d->infos[index].date = date;
     d->dirtyIndices << index;
 }
 
 void ImageComments::changeType(int index, DatabaseComment::Type type)
 {
+    if (!d)
+        return;
+
     d->infos[index].type = type;
     d->dirtyIndices << index;
 }
 
 void ImageComments::apply()
 {
+    if (!d)
+        return;
+
     DatabaseAccess access;
     apply(access);
 }
 
 void ImageComments::apply(DatabaseAccess &access)
 {
+    if (!d)
+        return;
+
     foreach(int index, d->newIndices)
     {
         CommentInfo &info = d->infos[index];

@@ -32,6 +32,7 @@
 
 // Local includes
 
+#include "digikam_export.h"
 #include "albuminfo.h"
 #include "databaseaccess.h"
 
@@ -40,7 +41,7 @@ namespace Digikam
 
 class ImageCommentsPriv;
 
-class ImageComments
+class DIGIKAM_EXPORT ImageComments
 {
     /**
      * The ImageComments class shall provide short-lived objects that provide read/write access
@@ -54,6 +55,9 @@ class ImageComments
 
 public:
 
+    /** Create a null ImageComments object */
+    ImageComments();
+
     /**
      * Create a ImageComments object for the image with the specified id.
      */
@@ -64,7 +68,10 @@ public:
      */
     ImageComments(DatabaseAccess &access, qlonglong imageid);
 
+    ImageComments(const ImageComments &other);
     ~ImageComments();
+
+    bool isNull() const;
 
     enum LanguageChoiceBehavior
     {

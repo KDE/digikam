@@ -824,7 +824,7 @@ ItemShortInfo AlbumDB::getItemShortInfo(qlonglong imageID)
     {
         info.id          = imageID;
         info.itemName    = values[0].toString();
-        info.albumRootId = values[1].toInt();
+        info.albumRootID = values[1].toInt();
         info.album       = values[2].toString();
         info.albumID     = values[3].toInt();
     }

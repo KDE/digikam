@@ -60,7 +60,7 @@ ImageScanner::ImageScanner(qlonglong imageid)
         m_scanInfo = access.db()->getItemScanInfo(imageid);
     }
 
-    QString albumRootPath = CollectionManager::instance()->albumRootPath(shortInfo.albumRootId);
+    QString albumRootPath = CollectionManager::instance()->albumRootPath(shortInfo.albumRootID);
     m_fileInfo = QFileInfo(DatabaseUrl::fromAlbumAndName(shortInfo.itemName, shortInfo.album, albumRootPath).fileUrl().path());
 }
 

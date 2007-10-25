@@ -190,7 +190,7 @@ public:
     qlonglong   id;
     QString     itemName;
     int         albumID;
-    int         albumRootId;
+    int         albumRootID;
     QString     album;
 };
 
