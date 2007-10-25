@@ -79,10 +79,11 @@ DatabaseAccess::~DatabaseAccess()
     d->mutex.unlock();
 }
 
-DatabaseAccess::DatabaseAccess(QMutexLocker *)
+DatabaseAccess::DatabaseAccess(bool)
 {
     // private constructor, when mutex is locked and
     // backend should not be checked
+    d->mutex.lock();
 }
 
 AlbumDB *DatabaseAccess::db() const
@@ -152,11 +153,8 @@ bool DatabaseAccess::checkReadyForUse()
         return false;
     }
 
-    // this code is similar to the constructor
-    QMutexLocker locker(&d->mutex);
-
     // create an object with private shortcut constructor
-    DatabaseAccess access(&locker);
+    DatabaseAccess access(false);
 
     if (!d->backend)
     {

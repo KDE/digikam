@@ -132,7 +132,7 @@ public:
 
 private:
 
-    DatabaseAccess(QMutexLocker *locker);
+    DatabaseAccess(bool);
 
     static DatabaseAccessStaticPriv *d;
 };
