@@ -6,7 +6,7 @@ NEW FEATURES :
 *** 0.9.0-beta1 *******************************************************
 
 General       : Sidebars are used at all to display metadata, comments & tags, and file properties.
-General       : Removed imlib2 and libkexif depencies. Add Exiv2 and LCMS depencies.
+General       : Removed imlib2 and libkexif dependencies. Add Exiv2 and LCMS dependencies.
 General       : New API in digiKam core named DImg to manage image data in 8 and 16 bits colors depth.
 General       : New API in digiKam core named DMetadata to manage image metadata.
 General       : Ported all image filter algorithms to new DImg API. Support of 16 bits images.

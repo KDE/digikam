@@ -3,7 +3,7 @@ digiKam 0.10.0 - Release date: 2007-xx-xx
 NEW FEATURES:
 
 General        : Ported to CMake/Qt4/KDE4.
-General        : Removed all X11 library depencies. Code is now portable under MACOS-X and Win32.
+General        : Removed all X11 library dependencies. Code is now portable under MACOS-X and Win32.
 General        : Support of XMP metadata (require Exiv2 0.16).
 General        : Hardware handling using KDE4 Solid interface.
 CameraGUI      : New design for camera interface.

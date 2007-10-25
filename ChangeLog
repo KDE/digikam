@@ -11044,7 +11044,7 @@ v0.9.1-beta1 - 11-Feb-2007
 	  - New class container DigikamAppPriv to store all private members
 	  of DigikamApp.
 	  - Using d private class in DigikamApp to speed up compilation and
-	  reduce depencies.
+	  reduce dependencies.
 	  - Code clean up and fix coding style.
 
 2007-01-31 20:13  cgilles
@@ -17123,7 +17123,7 @@ v0.9.0-beta2 - 09/09/2006
 
     * trunk/extragear/graphics/digikam/digikam/batchthumbsgenerator.cpp:
       digikam from trunk : code polishing : there is no LibKExif
-      depencies here.
+      dependencies here.
 
 2006-08-30 10:34  cgilles
 
@@ -19114,7 +19114,7 @@ v0.9.0-beta1 - 20/07/2006
 
 2006-07-19 05:55  cgilles
 
-	* trunk/extragear/graphics/digikam/README: update depencies
+	* trunk/extragear/graphics/digikam/README: update dependencies
 
 2006-07-19 05:48  cgilles
 
@@ -26379,7 +26379,7 @@ v0.9.0-beta1 - 20/07/2006
 	  - All metadata extractions are now drived by DMetadata class
 	  using Exiv2 library.
 	  
-	  To packagers : please update your packages depencies.
+	  To packagers : please update your packages dependencies.
 	  
 	  CCMAIL: digikam-devel@kde.org
 
@@ -26400,7 +26400,7 @@ v0.9.0-beta1 - 20/07/2006
 	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/Makefile.am,
 	  
 	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/Makefile.am:
-	  digikam from trunk : cleanup makefiles about libKexif depencies
+	  digikam from trunk : cleanup makefiles about libKexif dependencies
 
 2006-03-30 06:34  cgilles
 
@@ -26739,25 +26739,25 @@ v0.9.0-beta1 - 20/07/2006
 
 	* trunk/extragear/graphics/digikam/utilities/imageeditor/editor/imagewindow.cpp:
 	  digikam from trunk : code polishing : there is no LibKExif
-	  depencies here.
+	  dependencies here.
 
 2006-03-27 12:04  cgilles
 
 	* trunk/extragear/graphics/digikam/showfoto/showfoto.cpp: digikam
-	  from trunk : code polishing : there is no LibKExif depencies
+	  from trunk : code polishing : there is no LibKExif dependencies
 	  here.
 
 2006-03-27 11:59  cgilles
 
 	* trunk/extragear/graphics/digikam/digikam/albumpropsedit.cpp:
 	  digikam from trunk : code polishing : there is no LibKExif
-	  depencies here.
+	  dependencies here.
 
 2006-03-27 11:53  cgilles
 
 	* trunk/extragear/graphics/digikam/libs/imageproperties/imagedescedittab.cpp:
 	  digikam from trunk : code polishing : there is no LibKExif
-	  depencies here.
+	  dependencies here.
 
 2006-03-27 10:30  cgilles
 
@@ -27095,7 +27095,7 @@ v0.9.0-beta1 - 20/07/2006
 	  
 	  trunk/extragear/graphics/digikam/libs/dmetadata/loaders/pngmetaloader.h:
 	  digikam from trunk : PNG EXIF/IPTC raw profile extraction
-	  restaured. Removed all private libPNG methods depencies.
+	  restaured. Removed all private libPNG methods dependencies.
 	  
 	  CCMAIL: digikam-devel@kde.org, gerhard@kulzer.net
 
@@ -28972,7 +28972,7 @@ v0.9.0-beta1 - 20/07/2006
 
 2006-02-14 08:02  cgilles
 
-	* trunk/extragear/graphics/digikam/README: update depencies
+	* trunk/extragear/graphics/digikam/README: update dependencies
 
 2006-02-13 18:18  mwiesweg
 
@@ -33695,7 +33695,7 @@ v0.9.0-beta1 - 20/07/2006
 	  digikam from trunk : fix CIE tonge wiget :
 	  - Polish code (more c++ like)
 	  - Polish lablel size computation.
-	  - limited depencies with liblprof on other digikam part (using
+	  - limited dependencies with liblprof on other digikam part (using
 	  internal private class)
 	  - disable tonge drawing if no embedded ICC profile.
 	  
@@ -44859,7 +44859,7 @@ v0.7.1-beta1			17/12/04
 2004-11-26 10:36  cgilles
 
 	* showfoto/: Makefile.am, showfoto.cpp, showfoto.h: Back to old
-	  code. no digikam depencies in showfoto
+	  code. no digikam dependencies in showfoto
 
 2004-11-25 15:44  cgilles
 
@@ -46943,7 +46943,7 @@ v0.7-beta1		10/13/04
         * <Gilles Caulier> LibKipi support instead DigikamPlugins.
         * <Gilles Caulier> Updated the menu and popup menu in according with 
           KIPI plugins actions. 
-        * <Gilles Caulier> Removed all old Digikamplugins depencies. 
+        * <Gilles Caulier> Removed all old Digikamplugins dependencies. 
         * <Gilles Caulier> Added thumbnails creation with imlib2 API.
         * <Gilles Caulier> Added a new option in general setup for to show the 
           images resolution of Album items (using imlib2).
