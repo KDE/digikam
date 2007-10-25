@@ -38,6 +38,7 @@
 #include "databaseaccess.h"
 #include "collectionmanager.h"
 #include "collectionlocation.h"
+#include "imagelister.h"
 #include "imageinfodata.h"
 #include "imageinfocache.h"
 #include "imageinfo.h"
@@ -47,34 +48,25 @@ namespace Digikam
 
 ImageInfoData::ImageInfoData()
 {
-    id           = -1;
-    albumId      = -1;
-    commentValid = false;
-    rating       = -1;
-    fileSize     = (uint)-1;
+    id             = -1;
+    albumId        = -1;
+    albumRootId    = -1;
+
+    rating         = -1;
+    fileSize       = 0;
+
+    defaultCommentCached    = false;
+    ratingCached            = false;
+    creationDateCached      = false;
+    modificationDateCached  = false;
+    fileSizeCached          = false;
+    imageSizeCached         = false;
+    tagIdsCached            = false;
 }
 
 ImageInfo::ImageInfo()
     : m_data(0)
 {
-}
-
-ImageInfo::ImageInfo(qlonglong Id, int albumId,
-                     const QString& name,
-                     const QString &albumName,
-                     const KUrl& albumRoot,
-                     const QDateTime& datetime,
-                     uint  size,
-                     const QSize& dims)
-{
-    DatabaseAccess access;
-    m_data = access.imageInfoCache()->infoForId(Id);
-
-    m_data->albumId        = albumId;
-    m_data->url            = DatabaseUrl::fromAlbumAndName(name, albumName, albumRoot);
-    m_data->dateTime       = datetime;
-    m_data->fileSize       = size;
-    m_data->imageDimension = dims;
 }
 
 ImageInfo::ImageInfo(const ImageListerRecord &record)
@@ -83,10 +75,14 @@ ImageInfo::ImageInfo(const ImageListerRecord &record)
     m_data = access.imageInfoCache()->infoForId(record.imageID);
 
     m_data->albumId        = record.albumID;
-    m_data->url            = DatabaseUrl::fromAlbumAndName(record.name, record.albumName, record.albumRoot);
-    m_data->dateTime       = record.dateTime;
-    m_data->fileSize       = record.size;
-    m_data->imageDimension = record.dims;
+    m_data->albumRootId    = record.albumRootID;
+    m_data->name           = record.name;
+
+    m_data->rating           = record.rating;
+    m_data->creationDate     = record.creationDate;
+    m_data->modificationDate = record.modificationDate;
+    m_data->fileSize         = record.fileSize;
+    m_data->imageSize        = record.imageSize;
 }
 
 ImageInfo::ImageInfo(qlonglong ID)
@@ -95,9 +91,12 @@ ImageInfo::ImageInfo(qlonglong ID)
     m_data = access.imageInfoCache()->infoForId(ID);
     // retrieve immutable values now, the rest on demand
     ItemShortInfo info = access.db()->getItemShortInfo(ID);
-    m_data->albumId = info.albumID;
-    m_data->url     = DatabaseUrl::fromAlbumAndName(info.itemName, info.album,
-                                                    CollectionManager::instance()->albumRootPath(info.albumRootId));
+    m_data->albumId        = info.albumID;
+    m_data->albumRootId    = info.albumRootID;
+    m_data->name           = info.itemName;
+
+    //m_data->url     = DatabaseUrl::fromAlbumAndName(info.itemName, info.album,
+      //                                              CollectionManager::instance()->albumRootPath(info.albumRootId));
 }
 
 ImageInfo::ImageInfo(const KUrl &url)
@@ -124,9 +123,10 @@ ImageInfo::ImageInfo(const KUrl &url)
     }
 
     m_data = access.imageInfoCache()->infoForId(imageId);
-    m_data->albumId = albumId;
-    m_data->url     = DatabaseUrl::fromAlbumAndName(name, album, location->albumRootPath());
-
+    m_data->albumId     = albumId;
+    m_data->albumRootId = location->id();
+    m_data->name        = name;
+    //m_data->url     = DatabaseUrl::fromAlbumAndName(name, album, location->albumRootPath());
 }
 
 ImageInfo::~ImageInfo()
@@ -221,7 +221,7 @@ QString ImageInfo::name() const
         return QString();
 
     DatabaseAccess access;
-    return m_data->url.name();
+    return m_data->name;
 }
 
 uint ImageInfo::fileSize() const
@@ -230,10 +230,12 @@ uint ImageInfo::fileSize() const
         return 0;
 
     DatabaseAccess access;
-    if (m_data->fileSize == (uint)-1)
+    if (!m_data->fileSizeCached)
     {
-        QFileInfo info(filePath());
-        m_data.constCastData()->fileSize = info.size();
+        QVariantList values = access.db()->getImagesFields(m_data->id, DatabaseFields::FileSize);
+        if (!values.isEmpty())
+            m_data.constCastData()->fileSize = values.first().toUInt();
+        m_data.constCastData()->fileSizeCached = true;
     }
 
     return m_data->fileSize;
@@ -243,14 +245,15 @@ QString ImageInfo::comment() const
 {
     if (!m_data)
         return QString();
-#warning ImageInfo: implement comment()
+
     DatabaseAccess access;
-    if (!m_data->commentValid)
+    if (!m_data->defaultCommentCached)
     {
-        //m_data.constCastData()->comment = access.db()->getItemCaption(m_data->id);
-        m_data.constCastData()->commentValid = true;
+        ImageComments comments(access, m_data->id);
+        m_data.constCastData()->defaultComment = comments.defaultComment();
+        m_data.constCastData()->defaultCommentCached = true;
     }
-    return m_data->comment;
+    return m_data->defaultComment;
 }
 
 int ImageInfo::rating() const
@@ -259,11 +262,12 @@ int ImageInfo::rating() const
         return 0;
 
     DatabaseAccess access;
-    if (m_data->rating == -1)
+    if (!m_data->ratingCached)
     {
-        QVariantList list = access.db()->getImageInformation(m_data->id, DatabaseFields::Rating);
-        if (!list.isEmpty())
-            m_data.constCastData()->rating = list.first().toInt();
+        QVariantList values = access.db()->getImageInformation(m_data->id, DatabaseFields::Rating);
+        if (!values.isEmpty())
+            m_data.constCastData()->rating = values.first().toInt();
+        m_data.constCastData()->ratingCached = true;
     }
     return m_data->rating;
 }
@@ -274,13 +278,14 @@ QDateTime ImageInfo::dateTime() const
         return QDateTime();
 
     DatabaseAccess access;
-    if (!m_data->dateTime.isValid())
+    if (!m_data->creationDateCached)
     {
-        QVariantList list = access.db()->getImageInformation(m_data->id, DatabaseFields::CreationDate);
-        if (!list.isEmpty())
-            m_data.constCastData()->dateTime = list.first().toDateTime();
+        QVariantList values = access.db()->getImageInformation(m_data->id, DatabaseFields::CreationDate);
+        if (!values.isEmpty())
+            m_data.constCastData()->creationDate = values.first().toDateTime();
+        m_data.constCastData()->creationDateCached = true;
     }
-    return m_data->dateTime;
+    return m_data->creationDate;
 }
 
 QDateTime ImageInfo::modDateTime() const
@@ -289,13 +294,14 @@ QDateTime ImageInfo::modDateTime() const
         return QDateTime();
 
     DatabaseAccess access;
-    if (!m_data->modDateTime.isValid())
+    if (!m_data->modificationDateCached)
     {
-        QVariantList list = access.db()->getImagesFields(m_data->id, DatabaseFields::ModificationDate);
-        if (!list.isEmpty())
-            m_data.constCastData()->modDateTime = list.first().toDateTime();
+        QVariantList values = access.db()->getImagesFields(m_data->id, DatabaseFields::ModificationDate);
+        if (!values.isEmpty())
+            m_data.constCastData()->modificationDate = values.first().toDateTime();
+        m_data.constCastData()->modificationDateCached = true;
     }
-    return m_data->modDateTime;
+    return m_data->modificationDate;
 }
 
 QSize ImageInfo::dimensions() const
@@ -303,9 +309,29 @@ QSize ImageInfo::dimensions() const
     if (!m_data)
         return QSize();
 
-    //TODO: lazy loading
     DatabaseAccess access;
-    return m_data->imageDimension;
+    if (!m_data->imageSizeCached)
+    {
+        QVariantList values = access.db()->getImageInformation(m_data->id, DatabaseFields::Width | DatabaseFields::Height);
+        if (values.size() == 2)
+            m_data.constCastData()->imageSize = QSize(values[0].toInt(), values[1].toInt());
+        m_data.constCastData()->imageSizeCached = true;
+    }
+    return m_data->imageSize;
+}
+
+QList<int> ImageInfo::tagIds() const
+{
+    if (!m_data)
+        return QList<int>();
+
+    DatabaseAccess access;
+    if (!m_data->tagIdsCached)
+    {
+        m_data.constCastData()->tagIds = access.db()->getItemTagIDs(m_data->id);
+        m_data.constCastData()->imageSizeCached = true;
+    }
+    return m_data->tagIds;
 }
 
 DatabaseUrl ImageInfo::databaseUrl() const
@@ -314,18 +340,17 @@ DatabaseUrl ImageInfo::databaseUrl() const
         return DatabaseUrl();
 
     DatabaseAccess access;
-    return m_data->url;
+
+    QString album = access.imageInfoCache()->albumName(access, m_data->albumId);
+    QString albumRoot = CollectionManager::instance()->albumRootPath(m_data->albumRootId);
+
+    return DatabaseUrl::fromAlbumAndName(m_data->name, album, albumRoot);
 }
 
 KUrl ImageInfo::fileUrl() const
 {
-    if (!m_data)
-        return KUrl();
-
-    DatabaseAccess access;
-    return m_data->url.fileUrl();
+    return databaseUrl().fileUrl();
 }
-
 
 KUrl ImageInfo::kurl() const
 {
@@ -342,20 +367,24 @@ KUrl ImageInfo::kurlForKIO() const
     return databaseUrl();
 }
 
-void ImageInfo::setComment(const QString& caption)
+ImageComments ImageInfo::imageComments(DatabaseAccess &access)
 {
-#warning ImageInfo: implement setting of comment
     if (!m_data)
-        return;
+        return ImageComments();
 
-    DatabaseAccess access;
-    //access.db()->setItemCaption(m_data->id, caption);
+    return ImageComments(access, m_data->id);
 }
 
 void ImageInfo::setRating(int value)
 {
+    if (!m_data)
+        return;
+
     DatabaseAccess access;
     access.db()->changeImageInformation(m_data->id, QVariantList() << value, DatabaseFields::Rating);
+
+    m_data->rating = value;
+    m_data.constCastData()->ratingCached = true;
 }
 
 void ImageInfo::setDateTime(const QDateTime& dateTime)
@@ -367,24 +396,10 @@ void ImageInfo::setDateTime(const QDateTime& dateTime)
     {
         DatabaseAccess access;
         access.db()->changeImageInformation(m_data->id, QVariantList() << dateTime, DatabaseFields::CreationDate);
+
+        m_data->creationDate = dateTime;
+        m_data.constCastData()->creationDateCached = true;
     }
-}
-
-QStringList ImageInfo::tagNames() const
-{
-    if (!m_data)
-        return QStringList();
-    DatabaseAccess access;
-    return access.db()->getItemTagNames(m_data->id);
-}
-
-QList<int> ImageInfo::tagIds() const
-{
-    // Cache tags?
-    if (!m_data)
-        return QList<int>();
-    DatabaseAccess access;
-    return access.db()->getItemTagIDs(m_data->id);
 }
 
 void ImageInfo::setTag(int tagID)
@@ -416,11 +431,13 @@ void ImageInfo::addTagPaths(const QStringList &tagPaths)
 ImageInfo ImageInfo::copyItem(int dstAlbumID, const QString &dstFileName)
 {
     DatabaseAccess access;
-    DDebug() << "ImageInfo::copyItem " << m_data->albumId << " " << m_data->url.name() << " to " << dstAlbumID << " " << dstFileName << endl;
-    if (dstAlbumID == m_data->albumId && dstFileName == m_data->url.name())
-        return (*this);
+#warning TODO: copyItem method
+    //DDebug() << "ImageInfo::copyItem " << m_data->albumId << " " << m_data->name << " to " << dstAlbumID << " " << dstFileName << endl;
 
-    int id = access.db()->copyItem(m_data->albumId, m_data->url.name(), dstAlbumID, dstFileName);
+    // if (dstAlbumID == m_data->albumId && dstFileName == m_data->url.name())
+       //  return (*this);
+
+    int id = access.db()->copyItem(m_data->albumId, m_data->name, dstAlbumID, dstFileName);
 
     if (id == -1)
         return ImageInfo();
@@ -433,12 +450,13 @@ void ImageInfo::refresh()
     DatabaseAccess access;
 
     // invalidate, load lazily
-    m_data->commentValid     = false;
-    m_data->rating           = -1;
-    m_data->fileSize         = (uint)-1;
-    m_data->dateTime         = QDateTime();
-    m_data->modDateTime      = QDateTime();
-    //m_data->imageDimension = QSize();
+    m_data->defaultCommentCached    = false;
+    m_data->ratingCached            = false;
+    m_data->creationDateCached      = false;
+    m_data->modificationDateCached  = false;
+    m_data->fileSizeCached          = false;
+    m_data->imageSizeCached         = false;
+    m_data->tagIdsCached            = false;
 }
 
 }  // namespace Digikam

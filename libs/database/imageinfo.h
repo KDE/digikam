@@ -43,8 +43,9 @@
 #include "digikam_export.h"
 #include "dshareddata.h"
 #include "databaseurl.h"
-#include "imagelister.h"
 #include "imagelisterrecord.h"
+#include "imageinfolist.h"
+#include "imagecomments.h"
 
 namespace Digikam
 {
@@ -80,22 +81,6 @@ public:
     /**
      * Constructor. Creates an ImageInfo object where the provided information
      * will initially be available cached, without database access.
-     * @param     ID       unique ID for this image
-     * @param     albumID  id of the PAlbum to which this item belongs
-     * @param     name     name of the image
-     * @param     datetime datetime of the image
-     * @param     size     filesize of the image
-     * @param     dims     dimensions of the image
-     */
-    ImageInfo(qlonglong ID, int albumID,
-              const QString &album, const QString& albumName,
-              const KUrl& albumRoot,
-              const QDateTime& datetime,
-              uint size,
-              const QSize& dims=QSize());
-
-    /**
-     * Essentially the same as above
      */
     ImageInfo(const ImageListerRecord &record);
 
@@ -193,7 +178,7 @@ public:
      * @return a list of names of all tags assigned to this item
      * @see tagPaths
      */
-    QStringList tagNames() const;
+    //QStringList tagNames() const;
 
     /**
      * @return a list of IDs of tags assigned to this item
@@ -206,10 +191,13 @@ public:
 
 
     /**
-     * Set the caption (writes it to database)
-     * @param caption the new caption for this item
+     * Retrieve the ImageComments object for this item.
+     * This object allows full read and write access to all comments
+     * and their properties.
+     * You need to hold DatabaseAccess to ensure the validity.
+     * For simple, cached read access see comment().
      */
-    void  setComment(const QString& caption);
+    ImageComments imageComments(DatabaseAccess &access);
 
     /**
      * Set the date and time (write it to database)
@@ -263,6 +251,9 @@ public:
     void        refresh();
 
 private:
+
+    friend class ImageInfoCache;
+    friend class ImageInfoList;
 
     DSharedDataPointer<ImageInfoData> m_data;
 };

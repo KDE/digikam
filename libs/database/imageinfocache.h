@@ -27,7 +27,7 @@
 // Qt includes
 
 #include <QObject>
-#include <QMap>
+#include <QHash>
 
 // Local includes
 
@@ -38,7 +38,7 @@ namespace Digikam
 
 class ImageInfoData;
 
-
+// No EXPORT class
 class ImageInfoCache : public QObject
 {
     Q_OBJECT
@@ -69,13 +69,16 @@ public:
      */
     void dropInfo(ImageInfoData *infodata);
 
+    QString albumName(DatabaseAccess &access, int albumId);
+
 private slots:
 
     void slotImageFieldChanged(qlonglong imageId, int field);
 
 private:
 
-    QMap<qlonglong, ImageInfoData *> m_map;
+    QHash<qlonglong, ImageInfoData *> m_infos;
+    QHash<int, QString>               m_albums;
 };
 
 }  // namespace Digikam

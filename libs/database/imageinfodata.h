@@ -47,16 +47,24 @@ public:
 
     qlonglong     id;
     int           albumId;
-    DatabaseUrl   url;
+    int           albumRootId;
+    QString       name;
 
-    QString       comment;
-    bool          commentValid;
+    QString       defaultComment;
     int           rating;
-
-    QDateTime     dateTime;
-    QDateTime     modDateTime;
+    QDateTime     creationDate;
+    QDateTime     modificationDate;
     uint          fileSize;
-    QSize         imageDimension;
+    QSize         imageSize;
+    QList<int>    tagIds;
+
+    bool          defaultCommentCached    : 1;
+    bool          ratingCached            : 1;
+    bool          creationDateCached      : 1;
+    bool          modificationDateCached  : 1;
+    bool          fileSizeCached          : 1;
+    bool          imageSizeCached         : 1;
+    bool          tagIdsCached            : 1;
 
 };
 

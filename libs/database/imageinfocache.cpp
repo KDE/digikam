@@ -23,6 +23,7 @@
 
 // Local includes.
 
+#include "albumdb.h"
 #include "imageinfodata.h"
 #include "imageinfocache.h"
 #include "imageinfocache.moc"
@@ -44,20 +45,20 @@ ImageInfoCache::~ImageInfoCache()
 
 ImageInfoData *ImageInfoCache::infoForId(qlonglong id)
 {
-    QMap<qlonglong, ImageInfoData *>::iterator it = m_map.find(id);
-    if (it == m_map.end())
+    QHash<qlonglong, ImageInfoData *>::iterator it = m_infos.find(id);
+    if (it == m_infos.end())
     {
         ImageInfoData *data = new ImageInfoData();
         data->id = id;
-        m_map[id] = data;
+        m_infos[id] = data;
         return data;
     }
-    return *it;
+    return (*it);
 }
 
 bool ImageInfoCache::hasInfoForId(qlonglong id) const
 {
-    return m_map.contains(id);
+    return m_infos.contains(id);
 }
 
 void ImageInfoCache::dropInfo(ImageInfoData *infodata)
@@ -66,19 +67,32 @@ void ImageInfoCache::dropInfo(ImageInfoData *infodata)
     if (infodata->isReferenced())
         return;
 
-    if (m_map.remove(infodata->id))
+    if (m_infos.remove(infodata->id))
         delete infodata;
+}
+
+QString ImageInfoCache::albumName(DatabaseAccess &access, int albumId)
+{
+    QHash<int, QString>::iterator it = m_albums.find(albumId);
+    if (it == m_albums.end())
+    {
+        QString album = access.db()->getAlbumRelativePath(albumId);
+        m_albums[albumId] = album;
+        return album;
+    }
+    return (*it);
 }
 
 void ImageInfoCache::slotImageFieldChanged(qlonglong imageId, int field)
 {
     // we have databaseaccess lock here as well!
-    QMap<qlonglong, ImageInfoData *>::iterator it = m_map.find(imageId);
-    if (it != m_map.end())
+    QHash<qlonglong, ImageInfoData *>::iterator it = m_infos.find(imageId);
+    if (it != m_infos.end())
     {
         // invalidate the relevant field. It will be lazy-loaded at first access.
         switch (field)
         {
+            /*
             case DatabaseAttributesWatch::ImageComment:
                 (*it)->commentValid = false;
                 break;
@@ -90,6 +104,7 @@ void ImageInfoCache::slotImageFieldChanged(qlonglong imageId, int field)
                 break;
             case DatabaseAttributesWatch::ImageTags:
                 break;
+            */
         }
     }
 }
