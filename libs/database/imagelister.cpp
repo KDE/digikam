@@ -56,6 +56,8 @@
 #include "databaseaccess.h"
 #include "databasebackend.h"
 #include "collectionmanager.h"
+#include "collectionlocation.h"
+#include "collectionlocation.h"
 #include "dmetadata.h"
 #include "imagelister.h"
 
@@ -66,12 +68,15 @@ QDataStream &operator<<(QDataStream &os, const ImageListerRecord &record)
 {
     os << record.imageID;
     os << record.albumID;
+    os << record.albumRootID;
     os << record.name;
-    os << record.albumName;
-    os << record.albumRoot;
-    os << record.dateTime;
-    //os << record.size;
-    os << record.dims;
+
+    os << record.rating;
+    os << record.creationDate;
+    os << record.modificationDate;
+    os << record.fileSize;
+    os << record.imageSize;
+
     return os;
 }
 
@@ -79,12 +84,15 @@ QDataStream &operator>>(QDataStream &ds, ImageListerRecord &record)
 {
     ds >> record.imageID;
     ds >> record.albumID;
+    ds >> record.albumRootID;
     ds >> record.name;
-    ds >> record.albumName;
-    ds >> record.albumRoot;
-    ds >> record.dateTime;
-    //ds >> record.size;
-    ds >> record.dims;
+
+    ds >> record.rating;
+    ds >> record.creationDate;
+    ds >> record.modificationDate;
+    ds >> record.fileSize;
+    ds >> record.imageSize;
+
     return ds;
 }
 
@@ -162,21 +170,19 @@ void ImageLister::list(ImageListerReceiver *receiver, const DatabaseUrl &url)
 void ImageLister::listAlbum(ImageListerReceiver *receiver,
                             const QString &albumRoot, const QString &album)
 {
-    int albumid;
+    CollectionLocation *location = CollectionManager::instance()->locationForAlbumRootPath(albumRoot);
+    if (!location)
+        return;
 
-    {
-        DatabaseAccess access;
-        albumid = access.db()->getAlbumForPath(albumRoot, album, false);
+    int albumid = DatabaseAccess().db()->getAlbumForPath(albumRoot, album, false);
+    if (albumid == -1)
+        return;
 
-        if (albumid == -1)
-            return;
-    }
-
-    listAlbum(receiver, albumRoot, album, albumid);
+    listAlbum(receiver, albumRoot, location->id(), album, albumid);
 }
 
 void ImageLister::listAlbum(ImageListerReceiver *receiver,
-                            const QString &albumRoot, const QString &album, int albumid)
+                            const QString &albumRoot, int albumRootID, const QString &album, int albumId)
 {
     QString base      = albumRoot + album;
 
@@ -185,36 +191,40 @@ void ImageLister::listAlbum(ImageListerReceiver *receiver,
     {
         DatabaseAccess access;
         access.backend()->execSql(QString("SELECT DISTINCT Images.id, Images.name, "
-                                          "       Images.fileSize, ImageInformation.creationDate, "
+                                          "       ImageInformation.rating, ImageInformation.creationDate, "
+                                          "       Images.modificationDate, Images.fileSize, "
                                           "       ImageInformation.width, ImageInformation.height "
                                           " FROM Images "
                                           "       LEFT OUTER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
                                           " WHERE Images.album = ?;"),
-                                  albumid, &values);
+                                  albumId, &values);
     }
 
     int width, height;
     for (QList<QVariant>::iterator it = values.begin(); it != values.end();)
     {
         ImageListerRecord record;
-        record.imageID   = (*it).toLongLong();
+        record.imageID           = (*it).toLongLong();
         ++it;
-        record.name      = (*it).toString();
+        record.name              = (*it).toString();
         ++it;
-        record.size      = (*it).toInt();
+        record.rating            = (*it).toInt();
         ++it;
-        record.dateTime  = QDateTime::fromString((*it).toString(), Qt::ISODate);
+        record.creationDate      = QDateTime::fromString((*it).toString(), Qt::ISODate);
         ++it;
-        width            = (*it).toInt();
+        record.modificationDate  = QDateTime::fromString((*it).toString(), Qt::ISODate);
         ++it;
-        height           = (*it).toInt();
+        record.fileSize          = (*it).toInt();
+        ++it;
+        width                    = (*it).toInt();
+        ++it;
+        height                   = (*it).toInt();
         ++it;
 
-        record.dims      = QSize(width, height);
+        record.imageSize         = QSize(width, height);
 
-        record.albumID   = albumid;
-        record.albumName = album;
-        record.albumRoot = albumRoot;
+        record.albumID     = albumId;
+        record.albumRootID = albumRootID;
 
         receiver->receive(record);
     }
@@ -227,8 +237,9 @@ void ImageLister::listTag(ImageListerReceiver *receiver, int tagId)
     {
         DatabaseAccess access;
         access.backend()->execSql( QString( "SELECT DISTINCT Images.id, Images.name, Images.album, "
-                                            "       Albums.relativePath, Albums.albumRoot, "
-                                            "       Images.fileSize, ImageInformation.creationDate, "
+                                            "       Albums.albumRoot, "
+                                            "       ImageInformation.rating, ImageInformation.creationDate, "
+                                            "       Images.modificationDate, Images.fileSize, "
                                             "       ImageInformation.width, ImageInformation.height "
                                             " FROM Images "
                                             "       LEFT OUTER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
@@ -240,42 +251,33 @@ void ImageLister::listTag(ImageListerReceiver *receiver, int tagId)
                                     tagId, tagId, &values );
     }
 
-    int albumRootId, width, height;
+    int width, height;
     for (QList<QVariant>::iterator it = values.begin(); it != values.end();)
     {
         ImageListerRecord record;
-        record.imageID   = (*it).toLongLong();
+
+        record.imageID           = (*it).toLongLong();
         ++it;
-        record.name      = (*it).toString();
+        record.name              = (*it).toString();
         ++it;
-        record.albumID   = (*it).toInt();
+        record.albumID           = (*it).toInt();
         ++it;
-        record.albumName = (*it).toString();
+        record.albumRootID       = (*it).toInt();
         ++it;
-        albumRootId      = (*it).toInt();
+        record.rating            = (*it).toInt();
         ++it;
-        record.size      = (*it).toInt();
+        record.creationDate      = QDateTime::fromString((*it).toString(), Qt::ISODate);
         ++it;
-        record.dateTime  = QDateTime::fromString((*it).toString(), Qt::ISODate);
+        record.modificationDate  = QDateTime::fromString((*it).toString(), Qt::ISODate);
         ++it;
-        width            = (*it).toInt();
+        record.fileSize          = (*it).toInt();
         ++it;
-        height           = (*it).toInt();
+        width                    = (*it).toInt();
+        ++it;
+        height                   = (*it).toInt();
         ++it;
 
-        record.dims      = QSize(width, height);
-        record.albumRoot = CollectionManager::instance()->albumRootPath(albumRootId);
-
-        /*
-        QString path = record.albumRoot + record.albumName + '/' + record.name;
-
-        if (::stat(QFile::encodeName(path), &stbuf) != 0)
-            continue;
-        record.size = static_cast<size_t>(stbuf.st_size);
-        */
-
-        //if (getDimensions)
-          //  record.dims = retrieveDimension(path);
+        record.imageSize         = QSize(width, height);
 
         receiver->receive(record);
     }
@@ -291,8 +293,9 @@ void ImageLister::listMonth(ImageListerReceiver *receiver, const QDate &date)
     {
         DatabaseAccess access;
         access.backend()->execSql(QString("SELECT DISTINCT Images.id, Images.name, Images.album, "
-                                          "       Albums.relativePath, Albums.albumRoot, "
-                                          "       Images.fileSize, ImageInformation.creationDate, "
+                                          "       Albums.albumRoot, "
+                                          "       ImageInformation.rating, ImageInformation.creationDate, "
+                                          "       Images.modificationDate, Images.fileSize, "
                                           "       ImageInformation.width, ImageInformation.height "
                                           " FROM Images "
                                           "       LEFT OUTER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
@@ -305,31 +308,33 @@ void ImageLister::listMonth(ImageListerReceiver *receiver, const QDate &date)
                                   &values);
     }
 
-    int albumRootId, width, height;
+    int width, height;
     for (QList<QVariant>::iterator it = values.begin(); it != values.end();)
     {
         ImageListerRecord record;
-        record.imageID   = (*it).toLongLong();
+
+        record.imageID           = (*it).toLongLong();
         ++it;
-        record.name      = (*it).toString();
+        record.name              = (*it).toString();
         ++it;
-        record.albumID   = (*it).toInt();
+        record.albumID           = (*it).toInt();
         ++it;
-        record.albumName = (*it).toString();
+        record.albumRootID       = (*it).toInt();
         ++it;
-        albumRootId      = (*it).toInt();
+        record.rating            = (*it).toInt();
         ++it;
-        record.size      = (*it).toInt();
+        record.creationDate      = QDateTime::fromString((*it).toString(), Qt::ISODate);
         ++it;
-        record.dateTime  = QDateTime::fromString((*it).toString(), Qt::ISODate);
+        record.modificationDate  = QDateTime::fromString((*it).toString(), Qt::ISODate);
         ++it;
-        width            = (*it).toInt();
+        record.fileSize          = (*it).toInt();
         ++it;
-        height           = (*it).toInt();
+        width                    = (*it).toInt();
+        ++it;
+        height                   = (*it).toInt();
         ++it;
 
-        record.dims      = QSize(width, height);
-        record.albumRoot = CollectionManager::instance()->albumRootPath(albumRootId);
+        record.imageSize         = QSize(width, height);
 
         receiver->receive(record);
     }
@@ -346,8 +351,9 @@ void ImageLister::listSearch(ImageListerReceiver *receiver,
 
     // query head
     sqlQuery = "SELECT DISTINCT Images.id, Images.name, Images.album, "
-               "       Albums.relativePath, Albums.albumRoot, "
-               "       Images.fileSize, ImageInformation.creationDate "
+               "       Albums.albumRoot, "
+               "       ImageInformation.rating, ImageInformation.creationDate, "
+               "       Images.modificationDate, Images.fileSize, "
                "       ImageInformation.width, ImageInformation.height "
                " FROM Images "
                "       LEFT OUTER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
@@ -379,31 +385,33 @@ void ImageLister::listSearch(ImageListerReceiver *receiver,
         return;
     }
 
-    int albumRootId, width, height;
+    int width, height;
     for (QList<QVariant>::iterator it = values.begin(); it != values.end();)
     {
         ImageListerRecord record;
-        record.imageID   = (*it).toLongLong();
+
+        record.imageID           = (*it).toLongLong();
         ++it;
-        record.name      = (*it).toString();
+        record.name              = (*it).toString();
         ++it;
-        record.albumID   = (*it).toInt();
+        record.albumID           = (*it).toInt();
         ++it;
-        record.albumName = (*it).toString();
+        record.albumRootID       = (*it).toInt();
         ++it;
-        albumRootId      = (*it).toInt();
+        record.rating            = (*it).toInt();
         ++it;
-        record.size      = (*it).toInt();
+        record.creationDate      = QDateTime::fromString((*it).toString(), Qt::ISODate);
         ++it;
-        record.dateTime  = QDateTime::fromString((*it).toString(), Qt::ISODate);
+        record.modificationDate  = QDateTime::fromString((*it).toString(), Qt::ISODate);
         ++it;
-        width            = (*it).toInt();
+        record.fileSize          = (*it).toInt();
         ++it;
-        height           = (*it).toInt();
+        width                    = (*it).toInt();
+        ++it;
+        height                   = (*it).toInt();
         ++it;
 
-        record.dims      = QSize(width, height);
-        record.albumRoot = CollectionManager::instance()->albumRootPath(albumRootId);
+        record.imageSize         = QSize(width, height);
 
         receiver->receive(record);
     }

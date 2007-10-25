@@ -45,18 +45,24 @@ class DIGIKAM_EXPORT ImageListerRecord
 public:
 
     ImageListerRecord()
-    : imageID(-1), albumID(-1), size(0)
     {
+        imageID     = -1;
+        albumID     = -1;
+        albumRootID = -1;
+        rating      = -1;
+        fileSize    = -1;
     }
 
     qlonglong  imageID;
     int        albumID;
+    int        albumRootID;
     QString    name;
-    QString    albumName;
-    QString    albumRoot;
-    QDateTime  dateTime;
-    size_t     size;
-    QSize      dims;
+
+    int        rating;
+    QDateTime  creationDate;
+    QDateTime  modificationDate;
+    int        fileSize;
+    QSize      imageSize;
 };
 
 DIGIKAM_EXPORT QDataStream &operator<<(QDataStream &os, const ImageListerRecord &record);

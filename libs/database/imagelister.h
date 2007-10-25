@@ -80,7 +80,7 @@ public:
     void listAlbum(ImageListerReceiver *receiver,
                    const QString &albumRoot, const QString &album);
     void listAlbum(ImageListerReceiver *receiver,
-                   const QString &albumRoot, const QString &album, int albumid);
+                   const QString &albumRoot, int albumRootId, const QString &album, int albumid);
     /**
      * List the images which have assigned the tag specified by tagId
      */
