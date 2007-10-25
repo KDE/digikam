@@ -610,7 +610,7 @@ void PatchesByRGB(LPMEASUREMENT m, SETOFPATCHES Valids,
 
 /* This filter does validate patches placed at dEmax radius */
 /* in the device-independent side. */
-
+/*
 static
 void PatchesByLab(LPMEASUREMENT m, SETOFPATCHES Valids, 
                   double L, double a, double b, double dEmax, SETOFPATCHES Result)
@@ -641,7 +641,7 @@ void PatchesByLab(LPMEASUREMENT m, SETOFPATCHES Valids,
        }
     }
 }
-
+*/
 
 /* Restrict Lab in a cube of variable sides. Quick and dirty out-of-gamut  */
 /* stripper used in estimations. */
