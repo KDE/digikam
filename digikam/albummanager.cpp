@@ -1223,6 +1223,22 @@ QStringList AlbumManager::tagPaths(const Q3ValueList<int> &tagIDs, bool leadingS
     return tagPaths;
 }
 
+QStringList AlbumManager::tagNames(const QList<int> &tagIDs) const
+{
+    QStringList tagNames;
+
+    foreach(int id, tagIDs)
+    {
+        TAlbum *album = findTAlbum(id);
+        if (album)
+        {
+            tagNames << album->title();
+        }
+    }
+
+    return tagNames;
+}
+
 SAlbum* AlbumManager::createSAlbum(const KUrl& url, bool simple)
 {
     QString name = url.queryItem("name");

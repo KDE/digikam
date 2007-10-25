@@ -339,6 +339,12 @@ public:
      */
     QStringList tagPaths(const Q3ValueList<int> &tagIDs, bool leadingSlash = true) const;
 
+    /**
+     * @return A list with the tagPaths for a list of tag IDs.
+     * @param tagIDs list of tag album IDs
+     */
+    QStringList tagNames(const QList<int> &tagIDs) const;
+
     //@}
     
 
