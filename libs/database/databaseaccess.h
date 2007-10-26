@@ -140,4 +140,3 @@ private:
 }  // namespace Digikam
 
 #endif // DATABASEACCESS_H
-
