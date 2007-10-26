@@ -70,10 +70,12 @@ protected:
     {
     }
 
-    int m_id;
-    Status m_status;
-    Type m_type;
+protected:
+
+    int     m_id;
     QString m_path;
+    Status  m_status;
+    Type    m_type;
 };
 
 }  // namespace Digikam
