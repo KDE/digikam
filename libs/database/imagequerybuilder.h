@@ -24,6 +24,12 @@
 #ifndef IMAGEQUERYBUILDER_H
 #define IMAGEQUERYBUILDER_H
 
+// Qt includes.
+
+#include <QString>
+#include <QList>
+#include <QVariant>
+
 // Local includes.
 
 #include "digikam_export.h"
@@ -70,6 +76,8 @@ protected:
     QString subQuery(enum SKey key, enum SOperator op, const QString& val, QList<QVariant> &boundValues) const;
     QString possibleDate(const QString& str, bool& exact) const;
 
+protected:
+
     class RuleType
     {
     public:
@@ -86,4 +94,3 @@ protected:
 }  // namespace Digikam
 
 #endif // IMAGEQUERYBUILDER_H
-
