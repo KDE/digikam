@@ -28,6 +28,8 @@
 
 #include <QDateTime>
 #include <QSize>
+#include <QList>
+#include <QAtomic>
 
 // Local includes
 
@@ -43,32 +45,30 @@ public:
 
     ImageInfoData();
 
-    QAtomic       ref;
+    QAtomic    ref;
 
-    qlonglong     id;
-    int           albumId;
-    int           albumRootId;
-    QString       name;
+    qlonglong  id;
+    int        albumId;
+    int        albumRootId;
+    QString    name;
 
-    QString       defaultComment;
-    int           rating;
-    QDateTime     creationDate;
-    QDateTime     modificationDate;
-    uint          fileSize;
-    QSize         imageSize;
-    QList<int>    tagIds;
+    QString    defaultComment;
+    int        rating;
+    QDateTime  creationDate;
+    QDateTime  modificationDate;
+    uint       fileSize;
+    QSize      imageSize;
+    QList<int> tagIds;
 
-    bool          defaultCommentCached    : 1;
-    bool          ratingCached            : 1;
-    bool          creationDateCached      : 1;
-    bool          modificationDateCached  : 1;
-    bool          fileSizeCached          : 1;
-    bool          imageSizeCached         : 1;
-    bool          tagIdsCached            : 1;
-
+    bool       defaultCommentCached   : 1;
+    bool       ratingCached           : 1;
+    bool       creationDateCached     : 1;
+    bool       modificationDateCached : 1;
+    bool       fileSizeCached         : 1;
+    bool       imageSizeCached        : 1;
+    bool       tagIdsCached           : 1;
 };
 
 }  // namespace Digikam
 
 #endif // IMAGEINFODATA_H
-
