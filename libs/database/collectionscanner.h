@@ -91,9 +91,6 @@ protected:
     void scanAlbum(CollectionLocation *location, const QString &album);
     int checkAlbum(CollectionLocation *location, const QString &album);
 
-
-
-
 #if 0
     /**
      * Sets a filter for the file formats which shall be included in the collection.
@@ -176,9 +173,6 @@ protected:
      */
     void updateItemsWithoutDate();
 
-
-
-
     // Tools
     /**
      * Adds an item with the given file name found in the album pointed to by
@@ -236,4 +230,3 @@ private:
 }  // namespace Digikam
 
 #endif // COLLECTIONSCANNER_H
-
