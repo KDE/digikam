@@ -39,6 +39,7 @@ namespace Digikam
 
 class DIGIKAM_EXPORT ImageScanner
 {
+
 public:
 
     /**
@@ -116,8 +117,6 @@ protected:
     bool m_hasMetadata;
 };
 
+} // namespace Digikam
 
-}
-
-#endif
-
+#endif // IMAGESCANNER_H
