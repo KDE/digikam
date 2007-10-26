@@ -198,7 +198,7 @@ static const KEYWORD TabKeys[] = {
 #define NUMKEYS (sizeof(TabKeys)/sizeof(KEYWORD))
 
 /* Predefined properties */
-static char* PredefinedProperties[] = {
+static const char* PredefinedProperties[] = {
 
             "NUMBER_OF_FIELDS",     /* Required - NUMBER OF FIELDS */
             "NUMBER_OF_SETS",       /* Required - NUMBER OF SETS */
@@ -239,7 +239,7 @@ static char* PredefinedProperties[] = {
 
 
 /* Predefined sample types on dataset */
-static char* PredefinedSampleID[] = {
+static const char* PredefinedSampleID[] = {
 
             "CMYK_C",         /* Cyan component of CMYK data expressed as a percentage */
             "CMYK_M",         /* Magenta component of CMYK data expressed as a percentage */
