@@ -966,6 +966,4 @@ bool SchemaUpdater::createTablesV3()
     return true;
 }
 
-
-
 }  // namespace Digikam

@@ -57,6 +57,8 @@ private:
     bool updateV2toV4(const QString &sqlite2DBPath);
     bool createTablesV3();
 
+private:
+
     DatabaseAccess *m_access;
 
     int             m_currentVersion;
