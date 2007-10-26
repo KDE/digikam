@@ -36,8 +36,8 @@
 // Local includes.
 
 #include "ddebug.h"
-#include "databasebackend.h"
 #include "schemaupdater.h"
+#include "databasebackend.h"
 
 namespace Digikam
 {
