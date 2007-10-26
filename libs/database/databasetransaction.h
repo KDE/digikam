@@ -51,6 +51,7 @@ public:
      */
     DatabaseTransaction(DatabaseAccess *access);
     ~DatabaseTransaction();
+
 private:
 
     DatabaseAccess *m_access;
