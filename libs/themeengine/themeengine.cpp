@@ -670,7 +670,7 @@ bool ThemeEngine::saveTheme()
                     .arg(QDate::currentDate().day())
                     .arg(fi.fileName())
                     .arg(QDate::currentDate().year())
-                    .arg(user.fullName());
+                    .arg(user.property(KUser::FullName).toString());
 
     xmlDoc.appendChild(xmlDoc.createComment(banner));
 
