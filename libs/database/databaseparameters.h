@@ -41,6 +41,7 @@ namespace Digikam
 
 class DIGIKAM_EXPORT DatabaseParameters
 {
+
 public:
 
     /**
