@@ -114,6 +114,11 @@ void RatingWidget::mouseMoveEvent(QMouseEvent* e)
 
     if (d->rating != pos)
     {
+        if (pos > RatingMax)       // B.K.O.: # 151357
+            pos = RatingMax;
+        if (pos < RatingMin)
+            pos = RatingMin;
+					
         d->rating = pos;
         emit signalRatingChanged(d->rating);
         update();
