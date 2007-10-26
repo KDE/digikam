@@ -24,6 +24,7 @@
 // Qt includes.
 
 #include <qwhatsthis.h>
+#include <qtooltip.h>
 
 // KDE includes.
 
@@ -60,6 +61,7 @@ MimeFilter::MimeFilter(QWidget* parent)
     insertItem( i18n("Movies files"), MoviesFiles );
     insertItem( i18n("Audio files"),  AudioFiles );
 
+    QToolTip::add(this, i18n("Mime type filter"));
     QWhatsThis::add(this, i18n("Select here the mime type pattern used to filter albums contents"));
 
     setMimeFilter(AllFiles);
