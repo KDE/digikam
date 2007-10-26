@@ -246,7 +246,7 @@ void AlbumHistory::back(Album **album, QWidget **widget, unsigned int steps)
     *album = 0;
     *widget = 0;
     
-    if(m_backwardStack->count() <= 1 || steps > m_backwardStack->count())
+    if(m_backwardStack->count() <= 1 || (int)steps > m_backwardStack->count())
         return; // Only the current album available
 
     while(steps)
@@ -270,7 +270,7 @@ void AlbumHistory::forward(Album **album, QWidget **widget, unsigned int steps)
     *album = 0;
     *widget = 0;
 
-    if(m_forwardStack->isEmpty() || steps > m_forwardStack->count())
+    if(m_forwardStack->isEmpty() || (int)steps > m_forwardStack->count())
         return;
     
     forward(steps);
@@ -285,7 +285,7 @@ void AlbumHistory::forward(Album **album, QWidget **widget, unsigned int steps)
 
 void AlbumHistory::forward(unsigned int steps)
 {
-    if(m_forwardStack->isEmpty() || steps > m_forwardStack->count())
+    if(m_forwardStack->isEmpty() || (int)steps > m_forwardStack->count())
         return;
     
     while(steps)
