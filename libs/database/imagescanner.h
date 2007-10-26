@@ -108,13 +108,16 @@ protected:
     void loadFromDisk();
     QString detectFormat();
 
-    QFileInfo m_fileInfo;
-    DMetadata m_metadata;
-    DImg m_img;
-    ItemScanInfo m_scanInfo;
+protected:
 
-    bool m_hasImage;
-    bool m_hasMetadata;
+    bool         m_hasImage;
+    bool         m_hasMetadata;
+
+    QFileInfo    m_fileInfo;
+
+    DMetadata    m_metadata;
+    DImg         m_img;
+    ItemScanInfo m_scanInfo;
 };
 
 } // namespace Digikam
