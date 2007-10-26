@@ -2,6 +2,7 @@ digiKam 0.9.3-beta2 - Release date: 2007-11-??
 
 NEW FEATURES:
 
+General        : Updated internal CImg library to last stable 1.2.4 (released at 2007/09/26).
 AlbumGUI       : Add Rating filter widget on status bar.
 AlbumGUI       : Add MimeType filter widget on status bar.
 
