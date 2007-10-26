@@ -344,21 +344,21 @@ bool AlbumLister::matchesFilter(const ImageInfo &info) const
         case MimeFilter::RAWFiles:
         {
             QString rawFilesExt(AlbumSettings::instance()->getRawFileFilter());
-            if (!rawFilesExt.upper().contains(mimeType))
+            if (!rawFilesExt.toUpper().contains(mimeType))
                 match = false;
             break;
         }
         case MimeFilter::MoviesFiles:
         {
             QString moviesFilesExt(AlbumSettings::instance()->getMovieFileFilter());
-            if (!moviesFilesExt.upper().contains(mimeType))
+            if (!moviesFilesExt.toUpper().contains(mimeType))
                 match = false;
             break;
         }
         case MimeFilter::AudioFiles:
         {
             QString audioFilesExt(AlbumSettings::instance()->getAudioFileFilter());
-            if (!audioFilesExt.upper().contains(mimeType))
+            if (!audioFilesExt.toUpper().contains(mimeType))
                 match = false;
             break;
         }
