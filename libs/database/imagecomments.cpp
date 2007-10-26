@@ -42,6 +42,7 @@ namespace Digikam
 class ImageCommentsPriv : public QSharedData
 {
 public:
+
     ImageCommentsPriv()
     {
         id = -1;
@@ -399,4 +400,3 @@ void ImageComments::apply(DatabaseAccess &access)
 }
 
 } // namespace Digikam
-
