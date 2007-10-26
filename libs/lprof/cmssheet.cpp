@@ -1025,7 +1025,7 @@ BOOL SetData(LPIT8 it8, int nSet, int nField, char *Val)
 
 /* Writes a string to file */
 static
-void WriteStr(FILE *f, char *str)
+void WriteStr(FILE *f, const char *str)
 {
     if (str == NULL)
         fwrite(" ", 1, 1, f);
