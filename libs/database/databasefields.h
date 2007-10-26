@@ -28,7 +28,6 @@
 
 #include <QFlags>
 
-
 namespace Digikam
 {
 
@@ -162,7 +161,6 @@ DATABASEFIELDS_ENUM_ITERATOR(ImageMetadata)
 DATABASEFIELDS_ENUM_ITERATOR(ImagePositions)
 DATABASEFIELDS_ENUM_ITERATOR(ImageComments)
 
-
 /**
  * For your custom enum, you need to use the CustomEnum class.
  * You need to do an explicit cast.
@@ -201,7 +199,6 @@ public:
         customEnum = (CustomEnum)0;
     }
 
-
     DATABASEFIELDS_SET_DECLARE_METHODS(Images, images)
     DATABASEFIELDS_SET_DECLARE_METHODS(ImageInformation, imageInformation)
     DATABASEFIELDS_SET_DECLARE_METHODS(ImageMetadata, imageMetadata)
@@ -216,6 +213,7 @@ public:
     inline CustomEnum operator&(CustomEnum f) const { return customEnum.operator&(f); }
 
 private:
+
     Images images;
     ImageInformation imageInformation;
     ImageMetadata imageMetadata;
@@ -223,7 +221,6 @@ private:
     ImagePositions imagePositions;
     CustomEnum customEnum;
 };
-
 
 #define DATABASEFIELDS_HASH_DECLARE_METHODS(Key, method) \
     int remove(const Key &key) { return QHash<unsigned int, T>::remove(method(key)); } \
@@ -272,7 +269,6 @@ public:
     DATABASEFIELDS_HASH_DECLARE_METHODS(CustomEnum, uniqueKey);
 };
 
-
 } // end of namespace DatabaseFields
 
 } // end of namespace Digikam
@@ -284,6 +280,4 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImageMetadata);
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImageComments);
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImagePositions);
 
-
-#endif
-
+#endif // DATABASEFIELDS_H
