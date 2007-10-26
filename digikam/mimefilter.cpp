@@ -56,6 +56,7 @@ MimeFilter::MimeFilter(QWidget* parent)
     insertItem( MoviesFiles, i18n("Movies files") );
     insertItem( AudioFiles,  i18n("Audio files") );
 
+    setToolTip(i18n("Mime type filter"));
     setWhatsThis(i18n("Select here the mime type pattern used to filter albums contents"));
 
     setMimeFilter(AllFiles);
@@ -68,13 +69,13 @@ MimeFilter::~MimeFilter()
 
 void MimeFilter::setMimeFilter(int filter)
 {
-    setCurrentItem(filter);
+    setCurrentIndex(filter);
     emit activated(filter);
 }
 
 int MimeFilter::mimeFilter()
 {
-    return currentItem();
+    return currentIndex();
 }
 
 }  // namespace Digikam
