@@ -104,8 +104,6 @@ public:
      */
     void setUniqueBehavior(UniqueBehavior behavior);
 
-
-
     /**
      * This methods presents one of the comment strings of the available comment
      * as the default value, when you just want to have one string.
@@ -188,10 +186,7 @@ protected:
     QSharedDataPointer<ImageCommentsPriv> d;
 };
 
-
-
 } // namespace Digikam
 
 
-#endif
-
+#endif // IMAGECOMMENTS_H
