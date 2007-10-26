@@ -30,7 +30,7 @@
 
 // KDe includes.
 
-#include <k3popupmenu.h>
+#include <kmenu.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kiconloader.h>
@@ -341,63 +341,61 @@ void SearchFolderView::slotContextMenu(Q3ListViewItem* item, const QPoint&, int)
 {
     if (!item)
     {
-        K3PopupMenu popmenu(this);
-        popmenu.insertTitle(SmallIcon("digikam"),  i18n("My Searches"));
-        popmenu.insertItem(SmallIcon("filefind"), i18n("New Simple Search..."), 10);
-        popmenu.insertItem(SmallIcon("edit-find"), i18n("New Advanced Search..."), 11);
-
-        switch (popmenu.exec(QCursor::pos()))
+        KMenu popmenu(this);
+        popmenu.addTitle(SmallIcon("digikam"),  i18n("My Searches"));
+        QAction *smpSearch = popmenu.addAction(SmallIcon("filefind"), i18n("New Simple Search..."));
+        QAction *advSearch = popmenu.addAction(SmallIcon("edit-find"), i18n("New Advanced Search..."));
+        QAction *choice    = popmenu.exec(QCursor::pos());
+        if (choice)
         {
-            case 10:
+            if (choice == smpSearch)
             {
                 quickSearchNew();
-                break;
             }
-            case 11:
+            else if (choice == advSearch)
             {
                 extendedSearchNew();
-                break;
             }
-            default:
-                break;
         }
     }
     else
     {
         SearchFolderItem* sItem = dynamic_cast<SearchFolderItem*>(item);
+        QAction *edtadvSearch   = 0;
 
-        K3PopupMenu popmenu(this);
-        popmenu.insertTitle(SmallIcon("digikam"), i18n("My Searches"));
-        popmenu.insertItem(SmallIcon("filefind"), i18n("Edit Search..."), 10);
+        KMenu popmenu(this);
+        popmenu.addTitle(SmallIcon("digikam"),  i18n("My Searches"));
+        QAction *edtsmpSearch = popmenu.addAction(SmallIcon("filefind"), i18n("Edit Search..."));
 
         if ( sItem->m_album->isSimple() )
-            popmenu.insertItem(SmallIcon("find"), i18n("Edit as Advanced Search..."), 11);
-        
-        popmenu.insertSeparator(-1);
-        popmenu.insertItem(SmallIcon("edit-delete"), i18n("Delete Search"), 12);
-
-        switch (popmenu.exec(QCursor::pos()))
         {
-            case 10:
+            edtadvSearch = popmenu.addAction(SmallIcon("find"), i18n("Edit as Advanced Search..."));
+            popmenu.insertSeparator(edtadvSearch);    
+        }
+        else
+        {
+            popmenu.insertSeparator(edtsmpSearch);    
+        }        
+
+        QAction *delSearch = popmenu.addAction(SmallIcon("edit-delete"), i18n("Delete Search"));
+        QAction *choice    = popmenu.exec(QCursor::pos());
+        if (choice)
+        {
+            if (choice == edtsmpSearch)
             {
                 if (sItem->m_album->isSimple())
                     quickSearchEdit(sItem->m_album);
                 else
                     extendedSearchEdit(sItem->m_album);
-                break;
             }
-            case 11:
+            else if (choice == edtadvSearch)
             {
                 extendedSearchEdit(sItem->m_album);
-                break;
             }
-            case 12:
+            else if (choice == delSearch)
             {
                 searchDelete(sItem->m_album);
-                break;
             }
-            default:
-                break;
         }
     }
 }
