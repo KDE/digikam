@@ -21,8 +21,6 @@
  *
  * ============================================================ */
 
-// Qt includes
-
 // KDE includes
 
 #include <kmimetype.h>
@@ -197,7 +195,6 @@ void ImageScanner::updateImageInformation()
                                                     | DatabaseFields::ColorDepth
                                                     | DatabaseFields::ColorModel);
 }
-
 
 void ImageScanner::scanImageMetadata()
 {
@@ -383,8 +380,4 @@ QString ImageScanner::detectFormat()
     return QString();
 }
 
-
-
-
 }
-
