@@ -549,9 +549,9 @@ void EditorWindow::setupStatusBar()
             this, SLOT(slotToggleColorManagedView()));
 }
 
-void EditorWindow::printImage(KUrl url)
+void EditorWindow::printImage(KUrl /*url*/)
 {
-#warning "TODO: KPrinter ==> QPrinter";
+#warning "TODO: KPrinter is disabled for KDE4.0";
 
 /*
     uchar* ptr      = m_canvas->interface()->getImage();

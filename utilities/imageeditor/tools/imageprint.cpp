@@ -77,7 +77,7 @@
 namespace Digikam
 {
 
-#warning "TODO: KPrinter ==> QPrinter";
+#warning "TODO: KPrinter is disabled for KDE4.0";
 
 /*
 
