@@ -85,7 +85,7 @@ SetupMime::SetupMime(QWidget* parent)
     QGridLayout* grid1            = new QGridLayout(imageFileFilterBox);
 
     QLabel *logoLabel1 = new QLabel(imageFileFilterBox);
-    logoLabel1->setPixmap(DesktopIcon("image"));
+    logoLabel1->setPixmap(DesktopIcon("image-jpeg2000"));
 
     QLabel *imageFileFilterLabel = new QLabel(imageFileFilterBox);
     imageFileFilterLabel->setText(i18n("Show only &image files with extensions:"));
@@ -116,7 +116,7 @@ SetupMime::SetupMime(QWidget* parent)
     QGridLayout* grid2            = new QGridLayout(movieFileFilterBox);
 
     QLabel *logoLabel2 = new QLabel(movieFileFilterBox);
-    logoLabel2->setPixmap(DesktopIcon("video"));
+    logoLabel2->setPixmap(DesktopIcon("video-mpeg"));
 
     QLabel *movieFileFilterLabel = new QLabel(movieFileFilterBox);
     movieFileFilterLabel->setText(i18n("Show only &movie files with extensions:"));
@@ -147,7 +147,7 @@ SetupMime::SetupMime(QWidget* parent)
     QGridLayout* grid3            = new QGridLayout(audioFileFilterBox);
 
     QLabel *logoLabel3 = new QLabel(audioFileFilterBox);
-    logoLabel3->setPixmap(DesktopIcon("sound"));
+    logoLabel3->setPixmap(DesktopIcon("audio-basic"));
 
     QLabel *audioFileFilterLabel = new QLabel(audioFileFilterBox);
     audioFileFilterLabel->setText(i18n("Show only &audio files with extensions:"));
