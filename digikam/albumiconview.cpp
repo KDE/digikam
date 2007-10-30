@@ -2080,7 +2080,7 @@ void AlbumIconView::slotGotoTag(int tagID)
     // send a signal to the parent widget (digikamview.cpp) to change 
     // to Tag view and the corresponding item
   
-    emit signalGotoTagAndItem(tagID); //(iconItem);
+    emit signalGotoTagAndItem(tagID);
 }
 
 void AlbumIconView::slotAssignTag(int tagID)
