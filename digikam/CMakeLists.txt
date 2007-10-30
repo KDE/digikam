@@ -81,7 +81,6 @@ SET(digikam_LIB_SRCS
                         ${libdimgcanvas_SRCS}
                         ${libdimgeditortools_SRCS}
                         ${libdimgeditor_SRCS}
-
    )
 
 KDE4_ADD_LIBRARY(digikam SHARED ${digikam_LIB_SRCS})
@@ -115,6 +114,7 @@ INSTALL(TARGETS digikam DESTINATION ${LIB_INSTALL_DIR} )
 SET(digikamdatabase_LIB_SRCS
                       ${libdatabase_SRCS}
                       ${libsqlite2_SRCS}
+		      scancontroller.cpp
    )
 
 KDE4_ADD_LIBRARY(digikamdatabase SHARED ${digikamdatabase_LIB_SRCS})
