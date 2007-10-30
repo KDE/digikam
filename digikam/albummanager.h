@@ -51,6 +51,7 @@ class Job;
 namespace Digikam
 {
 
+class CollectionLocation;
 class Album;
 class PAlbum;
 class TAlbum;
@@ -95,7 +96,7 @@ public:
     /**
     * Initialize
     */
-    void setAlbumRoot(const QString &albumRoot, bool priority); // TEMPORARY SOLUTION
+    bool setDatabase(const QString &dbPath, bool priority);
 
     /**
     * starts scanning the libraryPath and listing the albums. If the
@@ -434,6 +435,7 @@ private slots:
     void slotResult(KJob* job);
     void slotData(KIO::Job* job, const QByteArray& data);
     void slotDirty(const QString& path);
+    void slotCollectionLocationStatusChanged(const CollectionLocation &, int);
 
 signals:
 

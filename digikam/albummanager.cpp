@@ -69,12 +69,13 @@ extern "C"
 #include "albumitemhandler.h"
 #include "albumsettings.h"
 #include "collectionmanager.h"
+#include "collectionlocation.h"
 #include "databaseaccess.h"
 #include "databaseurl.h"
 #include "databaseparameters.h"
 #include "dio.h"
 #include "imagelister.h"
-#include "scanlib.h"
+#include "scancontroller.h"
 #include "upgradedb_sqlite2tosqlite3.h"
 #include "albummanager.h"
 #include "albummanager.moc"
@@ -91,7 +92,8 @@ public:
 
     AlbumManagerPriv()
     {
-        changed      = false;
+        changed            = false;
+        hasPriorizedDbPath = false;
         dateListJob  = 0;
         dirWatch     = 0;
         itemHandler  = 0;
@@ -104,7 +106,8 @@ public:
 
     bool              changed;
 
-    QString           priorityAlbumRoot;
+    QString           dbPath;
+    bool              hasPriorizedDbPath;
 
     QStringList       dirtyAlbums;
 
@@ -123,6 +126,8 @@ public:
     AlbumIntDict      albumIntDict;
 
     Album            *currentAlbum;
+
+    QList<QDateTime>  dbPathModificationDateList;
 };
 
 class AlbumManagerCreator { public: AlbumManager object; };
@@ -170,22 +175,26 @@ AlbumManager::~AlbumManager()
     delete d;
 }
 
-void AlbumManager::setAlbumRoot(const QString &albumRoot, bool priority)
+bool AlbumManager::setDatabase(const QString &dbPath, bool priority)
 {
-    // TEMPORARY SOLUTION
     // This is to ensure that the setup does not overrule the command line.
-    // TODO: Replace with a better solution
+    // Replace with a better solution?
     if (priority)
     {
-        d->priorityAlbumRoot = albumRoot;
+        d->hasPriorizedDbPath = true;
     }
-    else if (!d->priorityAlbumRoot.isNull())
+    else if (d->hasPriorizedDbPath && !d->dbPath.isNull())
     {
         // ignore change without priority
-        return;
+        // true means, dont exit()
+        return true;
     }
 
+    d->dbPath = dbPath;
     d->changed = true;
+
+    disconnect(CollectionManager::instance(), 0, this, 0);
+    d->dbPathModificationDateList.clear();
 
     if (d->dateListJob)
     {
@@ -215,29 +224,38 @@ void AlbumManager::setAlbumRoot(const QString &albumRoot, bool priority)
 
     // -- Database initialization -------------------------------------------------
 
-    Digikam::DatabaseAccess::setParameters(Digikam::DatabaseParameters::parametersForSQLiteDefaultFile(albumRoot));
+    DatabaseAccess::setParameters(Digikam::DatabaseParameters::parametersForSQLiteDefaultFile(d->dbPath));
 
-    if (!Digikam::DatabaseAccess::checkReadyForUse())
+    ScanController::Advice advice = ScanController::instance()->databaseInitialization();
+
+    switch (advice)
     {
-        QString errorMsg = DatabaseAccess().lastError();
-        if (errorMsg.isEmpty())
+        case ScanController::Success:
+            break;
+        case ScanController::ContinueWithoutDatabase:
         {
-            KMessageBox::error(0, i18n("<qt><p>Failed to open the database. "
-                                    "</p><p>You cannot use digiKam without a working database. "
-                                    "digiKam will attempt to start now, but it will <b>not</b> be functional. "
-                                    "Please check the database settings in the <b>configuration menu</b>.</p></qt>"
-                                    ));
+            QString errorMsg = DatabaseAccess().lastError();
+            if (errorMsg.isEmpty())
+            {
+                KMessageBox::error(0, i18n("<qt><p>Failed to open the database. "
+                                        "</p><p>You cannot use digiKam without a working database. "
+                                        "digiKam will attempt to start now, but it will <b>not</b> be functional. "
+                                        "Please check the database settings in the <b>configuration menu</b>.</p></qt>"
+                                        ));
+            }
+            else
+            {
+                KMessageBox::error(0, i18n("<qt><p>Failed to open the database. "
+                                        " Error message from database: %1 "
+                                        "</p><p>You cannot use digiKam without a working database. "
+                                        "digiKam will attempt to start now, but it will <b>not</b> be functional. "
+                                        "Please check the database settings in the <b>configuration menu</b>.</p></qt>",
+                                        errorMsg));
+            }
+            return true;
         }
-        else
-        {
-            KMessageBox::error(0, i18n("<qt><p>Failed to open the database. "
-                                    " Error message from database: %1 "
-                                    "</p><p>You cannot use digiKam without a working database. "
-                                    "digiKam will attempt to start now, but it will <b>not</b> be functional. "
-                                    "Please check the database settings in the <b>configuration menu</b>.</p></qt>",
-                                    errorMsg));
-        }
-        return;
+        case ScanController::AbortImmediately:
+            return false;
     }
 
     // -- Locale Checking ---------------------------------------------------------
@@ -298,11 +316,14 @@ void AlbumManager::setAlbumRoot(const QString &albumRoot, bool priority)
                                       i18n("Your locale has changed from the previous time "
                                            "this album was opened.\n"
                                            "Old Locale : %1, New Locale : %2\n"
-                                           "This can cause unexpected problems. "
+                                           "If you changed your locale lately, this is all right.\n"
+                                           "Please notice that if you switched to a locale "
+                                           "that does not support some of the file names in your collection, "
+                                           "these files may no longer be found in the collection. "
                                            "If you are sure that you want to "
-                                           "continue, click 'Yes' to work with this album. "
+                                           "continue, click 'Yes'. "
                                            "Otherwise, click 'No' and correct your "
-                                           "locale setting before restarting digiKam",
+                                           "locale setting before restarting digiKam.",
                                            dbLocale, currLocale));
         if (result != KMessageBox::Yes)
             exit(0);
@@ -317,9 +338,10 @@ void AlbumManager::setAlbumRoot(const QString &albumRoot, bool priority)
     if (group.readEntry("Scan At Start", true) ||
         DatabaseAccess().db()->getSetting("Scanned").isEmpty())
     {
-        ScanLib sLib;
-        sLib.startScan();
+        ScanController::instance()->completeCollectionScan();
     }
+
+    return true;
 }
 
 void AlbumManager::startScan()
@@ -328,14 +350,24 @@ void AlbumManager::startScan()
         return;
     d->changed = false;
 
+    // create dir watch
     d->dirWatch = new KDirWatch(this);
     connect(d->dirWatch, SIGNAL(dirty(const QString&)),
             this, SLOT(slotDirty(const QString&)));
 
+    // listen to location status changes
+    connect(CollectionManager::instance(), SIGNAL(locationStatusChanged(const CollectionLocation &, int)),
+            this, SLOT(slotCollectionLocationStatusChanged(const CollectionLocation &, int)));
+
+    // add album roots to dir watch
     QStringList albumRootPaths = CollectionManager::instance()->allAvailableAlbumRootPaths();
     for (QStringList::iterator it = albumRootPaths.begin(); it != albumRootPaths.end(); ++it)
-        d->dirWatch->addDir(*it);
+    {
+        if (!d->dirWatch->contains(*it))
+            d->dirWatch->addDir(*it, KDirWatch::WatchSubDirs);
+    }
 
+    // create root albums
     d->rootPAlbum = new PAlbum(i18n("My Albums"));
     insertPAlbum(d->rootPAlbum);
 
@@ -346,9 +378,23 @@ void AlbumManager::startScan()
 
     d->rootDAlbum = new DAlbum(QDate(), true);
 
+    // reload albums
     refresh();
 
     emit signalAllAlbumsLoaded();
+}
+
+void AlbumManager::slotCollectionLocationStatusChanged(const CollectionLocation &location, int oldStatus)
+{
+    if (location.status() == CollectionLocation::LocationAvailable)
+    {
+        if (!d->dirWatch->contains(location.albumRootPath()))
+             d->dirWatch->addDir(location.albumRootPath(), KDirWatch::WatchSubDirs);
+    }
+    else if (oldStatus == CollectionLocation::LocationAvailable)
+    {
+        d->dirWatch->removeDir(location.albumRootPath());
+    }
 }
 
 void AlbumManager::refresh()
@@ -425,7 +471,7 @@ void AlbumManager::scanPAlbums()
         // this might look like there is memory leak here, since removePAlbum
         // doesn't delete albums and looks like child Albums don't get deleted.
         // But when the parent album gets deleted, the children are also deleted.
-        
+
         PAlbum* album = d->pAlbumDict.find(it.key());
         if (!album)
             continue;
@@ -468,7 +514,6 @@ void AlbumManager::scanPAlbums()
         album->m_icon       = info.icon;
 
         album->setParent(parent);
-        d->dirWatch->addDir(album->folderPath());
 
         insertPAlbum(album);
     } 
@@ -882,8 +927,6 @@ PAlbum* AlbumManager::createPAlbum(PAlbum* parent,
     album->m_date       = date;
 
     album->setParent(parent);
-
-    d->dirWatch->addDir(fileUrl.path());
 
     insertPAlbum(album);
 
@@ -1334,7 +1377,6 @@ void AlbumManager::removePAlbum(PAlbum *album)
 
     DatabaseUrl url = album->databaseUrl();
     d->dirtyAlbums.removeAll(url.url());
-    d->dirWatch->removeDir(url.fileUrl().path());
 
     if (album == d->currentAlbum)
     {
@@ -1469,6 +1511,42 @@ void AlbumManager::slotData(KIO::Job*, const QByteArray& data)
 
 void AlbumManager::slotDirty(const QString& path)
 {
+    DDebug() << "AlbumManager::slotDirty" << path << endl;
+    QDir dir(path);
+
+    // Filter out dirty signals triggered by changes on the database file
+    DatabaseParameters params = DatabaseAccess::parameters();
+    if (params.isSQLite())
+    {
+        QFileInfo dbFile(params.SQLiteDatabaseFile());
+
+        // is the signal for the directory containing the database file?
+        if (dbFile.dir() == dir)
+        {
+            // retrieve modification dates
+            QList<QDateTime> modList;
+            QFileInfoList fileInfoList = dir.entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
+
+            // build list
+            foreach (QFileInfo info, fileInfoList)
+            {
+                modList << info.lastModified();
+            }
+
+            // check for equality
+            if (modList == d->dbPathModificationDateList)
+            {
+                DDebug() << "Filtering out db file triggered dir watch signal" << endl;
+                // we can skip the signal
+                return;
+            }
+
+            // set new list
+            d->dbPathModificationDateList = modList;
+        }
+    }
+
+    /*
     KUrl fileUrl;
     // we need to provide a trailing slash to DatabaseUrl to mark it as a directory
     fileUrl.setPath(QDir::cleanPath(path) + '/');
@@ -1487,6 +1565,7 @@ void AlbumManager::slotDirty(const QString& path)
     d->dirtyAlbums.pop_front();
 
     DIO::scan(u);
+    */
 }
 
 }  // namespace Digikam
