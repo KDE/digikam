@@ -33,6 +33,7 @@
 #include <QApplication>
 #include <QSplitter>
 #include <QTimer>
+#include <QListView>
 
 // KDE includes.
 
@@ -279,6 +280,15 @@ void DigikamView::setupConnections()
     //connect(d->iconView, SIGNAL(signalItemDeleted(AlbumIconItem*)),
       //      this, SIGNAL(signalNoCurrentItem()));
 
+    connect(d->iconView, SIGNAL(signalGotoAlbumAndItem(AlbumIconItem *)),
+            this, SLOT(slotGotoAlbumAndItem(AlbumIconItem *)));
+
+    connect(d->iconView, SIGNAL(signalGotoDateAndItem(AlbumIconItem *)),
+            this, SLOT(slotGotoDateAndItem(AlbumIconItem *)));
+
+    connect(d->iconView, SIGNAL(signalGotoTagAndItem(int)),
+            this, SLOT(slotGotoTagAndItem(int)));
+
     connect(d->folderView, SIGNAL(signalAlbumModified()),
             d->iconView, SLOT(slotAlbumModified()));
 
@@ -364,10 +374,11 @@ void DigikamView::setupConnections()
 void DigikamView::loadViewState()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("MainWindow");
+    KConfigGroup group        = config->group("MainWindow");
 
     DDebug() << "DigikamView::loadViewState()" << endl;
-    if (group.hasKey("SplitterState")) {
+    if (group.hasKey("SplitterState")) 
+    {
         QByteArray state;
         state = group.readEntry("SplitterState", state);
         d->splitter->restoreState(QByteArray::fromBase64(state));
@@ -379,7 +390,7 @@ void DigikamView::loadViewState()
 void DigikamView::saveViewState()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("MainWindow");
+    KConfigGroup group        = config->group("MainWindow");
     group.writeEntry("SplitterState", d->splitter->saveState().toBase64());
 
     Album *album = AlbumManager::instance()->currentAlbum();
@@ -514,8 +525,6 @@ void DigikamView::slotNewAdvancedSearch()
     d->searchFolderView->extendedSearchNew();
 }
 
-// ----------------------------------------------------------------
-
 void DigikamView::slotAlbumDeleted(Album *delalbum)
 {
     d->albumHistory->deleteAlbum(delalbum);
@@ -624,7 +633,76 @@ void DigikamView::slotSelectAlbum(const KUrl &)
     */
 }
 
-// ----------------------------------------------------------------
+void DigikamView::slotGotoAlbumAndItem(AlbumIconItem* iconItem)
+{
+    KUrl url( iconItem->imageInfo().fileUrl() );
+    url.cleanPath();
+
+    emit signalNoCurrentItem();
+
+    Album* album = dynamic_cast<Album*>(AlbumManager::instance()->findPAlbum(iconItem->imageInfo().albumId()));
+
+    // Change the current album in list view.
+    d->folderView->setCurrentAlbum(album);
+
+    // Change to (physical) Album view.
+    // Note, that this also opens the side bar if it is closed; this is
+    // considered as a feature, because it highlights that the view was changed.
+    d->leftSideBar->setActiveTab(d->folderView);
+
+    // Set the activate item url to find in the Album View after  
+    // all items have be reloaded.
+    d->iconView->setAlbumItemToFind(url);
+
+    // And finally toggle album manager to handle album history and 
+    // reload all items.
+    d->albumManager->setCurrentAlbum(album);
+}
+
+void DigikamView::slotGotoDateAndItem(AlbumIconItem* iconItem)
+{
+    KUrl url( iconItem->imageInfo().fileUrl() );
+    url.cleanPath();
+    QDate date = iconItem->imageInfo().dateTime().date();
+
+    emit signalNoCurrentItem();
+
+    // Change to Date Album view.
+    // Note, that this also opens the side bar if it is closed; this is
+    // considered as a feature, because it highlights that the view was changed.
+    d->leftSideBar->setActiveTab(d->dateFolderView);
+
+    // Set the activate item url to find in the Album View after  
+    // all items have be reloaded.
+    d->iconView->setAlbumItemToFind(url);  
+
+    // Change the year and month of the iconItem (day is unused).
+    d->dateFolderView->gotoDate(date.year(), date.month(), date.day()); 
+
+}
+
+void DigikamView::slotGotoTagAndItem(int tagID)
+{
+    // FIXME: Arnd: don't know yet how to get the iconItem passed through ...
+    // FIXME: then we would know how to use the following ...
+    //  KURL url( iconItem->imageInfo()->kurl() );
+    //  url.cleanPath();
+
+    emit signalNoCurrentItem();
+
+    // Change to Tag Folder view.
+    // Note, that this also opens the side bar if it is closed; this is
+    // considered as a feature, because it highlights that the view was changed.
+    d->leftSideBar->setActiveTab(d->tagFolderView);
+
+    // Set the current tag in the tag folder view.
+    d->tagFolderView->selectItem(tagID);
+
+    // Set the activate item url to find in the Tag View after  
+    // all items have be reloaded.
+    // FIXME: see above
+    // d->iconView->setAlbumItemToFind(url);  
+}
 
 void DigikamView::slotAlbumSelected(Album* album)
 {
@@ -727,8 +805,6 @@ void DigikamView::slotAlbumsCleared()
     d->iconView->clear();
     emit signalAlbumSelected(false);
 }
-
-// ----------------------------------------------------------------
 
 void DigikamView::setThumbSize(int size)
 {

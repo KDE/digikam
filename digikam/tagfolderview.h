@@ -59,6 +59,8 @@ public:
     void tagEdit();    
     void tagDelete();
 
+    void selectItem(int id);
+
 signals:
 
     void signalProgressBarMode(int, const QString&);
@@ -69,8 +71,6 @@ protected:
     void contentsDropEvent(QDropEvent *e);
     Q3DragObject* dragObject();
     bool acceptDrop(const QDropEvent *e) const;
-
-    void selectItem(int id);
 
 private slots:
 

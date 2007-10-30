@@ -191,6 +191,8 @@ public:
     Q3Dict<AlbumIconItem>            itemDict;
     QHash<ImageInfo, AlbumIconItem*> itemInfoMap;
 
+    KUrl                             itemUrlToFind;
+
     AlbumLister                     *imageLister;
     Album                           *currentAlbum;
     const AlbumSettings             *albumSettings;
@@ -344,6 +346,11 @@ void AlbumIconView::setAlbum(Album* album)
     updateRectsAndPixmaps();
 }
 
+void AlbumIconView::setAlbumItemToFind(const KUrl& url)
+{
+    d->itemUrlToFind = url;
+}
+
 void AlbumIconView::refreshIcon(AlbumIconItem* item)
 {
     if (!item)
@@ -401,6 +408,35 @@ void AlbumIconView::slotImageListerNewItems(const ImageInfoList& itemList)
 
         d->itemDict.insert(url.url(), iconItem);
         d->itemInfoMap.insert((*it), iconItem);
+    }
+
+    // Make the icon, specified by d->itemUrlToFind, the current one 
+    // in the album icon view and make it visible.
+    // This is for example used after a "Go To",
+    // e.g. from tags (or date) view to folder view.
+    // Note that AlbumIconView::slotImageListerNewItems may
+    // be called several times after another, because images get
+    // listed in packages of 200. 
+    // Therefore the item might not always be available in the very
+    // first call when there are sufficiently many images.
+    // Also, because of this, we cannot reset the item which is to be found,
+    // i.e. something like d->itemUrlToFind = 0, after the item was found,
+    // as then the visibility of this item is lost in a subsequent call.
+    if (!d->itemUrlToFind.isEmpty())
+    {
+        AlbumIconItem* icon = findItem(d->itemUrlToFind.url());
+        if (icon) 
+        {
+            clearSelection();
+            updateContents();
+            setCurrentItem(icon); 
+            ensureItemVisible(icon);
+
+            // make the item really visible 
+            // (the previous ensureItemVisible does not work)
+            setStoredVisibleItem(icon);
+            triggerRearrangement();
+        }
     }
 
     emit signalItemsAdded();
@@ -534,10 +570,64 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 
     // --------------------------------------------------------
 
+    // Obtain a list of all selected images. 
+    // This is needed both for the goto tags submenu here and also
+    // for the "move to trash" and further actions below.
+    QList<qlonglong> selectedImageIDs;
+    
+    for (IconItem *it = firstItem(); it; it=it->nextItem())
+    {
+        if (it->isSelected())
+        {
+            AlbumIconItem *selItem = static_cast<AlbumIconItem *>(it);
+            selectedImageIDs.append(selItem->imageInfo().id());
+        }
+    }
+ 
+    // --------------------------------------------------------
+    // Provide Goto folder and/or date pop-up menu
+    QMenu gotoMenu;
+ 
+    QAction *gotoAlbum = gotoMenu.addAction(SmallIcon("folder-image"),        i18n("Album"));
+    QAction *gotoDate  = gotoMenu.addAction(SmallIcon("view-calendar-month"), i18n("Date"));
+ 
+    TagsPopupMenu* gotoTagsPopup = new TagsPopupMenu(selectedImageIDs, TagsPopupMenu::REMOVE);
+    QAction *gotoTag             = gotoMenu.addMenu(gotoTagsPopup);
+    gotoTag->setIcon(SmallIcon("tag"));
+    gotoTag->setText(i18n("Tag")); 
+
+    // Disable the goto Tag popup menu, if there are no tags at all.
+    if (!DatabaseAccess().db()->hasTags(selectedImageIDs))
+        gotoTag->setEnabled(false);
+
+    connect(gotoTagsPopup, SIGNAL(signalTagActivated(int)),
+            this, SLOT(slotGotoTag(int)));
+ 
+    if (d->currentAlbum->type() == Album::PHYSICAL ) 
+    {
+        gotoAlbum->setEnabled(false);
+    }
+    else if (d->currentAlbum->type() == Album::DATE )
+    {
+        gotoDate->setEnabled(false);
+    }
+   
+    // --------------------------------------------------------
+
     DPopupMenu popmenu(this);
     QAction *viewAction       = popmenu.addAction(SmallIcon("viewimage"),     i18n("View..."));
     QAction *editAction       = popmenu.addAction(SmallIcon("editimage"),     i18n("Edit..."));
     QAction *lighttableAction = popmenu.addAction(SmallIcon("lighttableadd"), i18n("Add to Light Table"));
+    QAction *gotoAction       = popmenu.addMenu(&gotoMenu); 
+    gotoAction->setIcon(SmallIcon("go-jump"));
+    gotoAction->setText(i18n("Go To"));
+
+    // If there is more than one image selected, disable the goto menu entry. 
+    if (selectedImageIDs.count() > 1) 
+    {
+        gotoAction->setEnabled(false);
+    }
+
     popmenu.addMenu(&openWithMenu);
     openWithMenu.menuAction()->setText(i18n("Open With"));
 
@@ -609,19 +699,8 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 
     // --------------------------------------------------------
 
-    QList<qlonglong> selectedImageIDs;
-
-    for (IconItem *it = firstItem(); it; it=it->nextItem())
-    {
-        if (it->isSelected())
-        {
-            AlbumIconItem *selItem = static_cast<AlbumIconItem *>(it);
-            selectedImageIDs.append(selItem->imageInfo().id());
-        }
-    }
-
     QAction *trashAction = popmenu.addAction(SmallIcon("user-trash"),
-                                             i18np("Move to Trash", "Move %1 Files to Trash" , selectedImageIDs.count() ));
+                           i18np("Move to Trash", "Move %1 Files to Trash", selectedImageIDs.count()));
 
     popmenu.addSeparator();
 
@@ -643,8 +722,9 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     removeTagsPopup->menuAction()->setText(i18n("Remove Tag"));
 
     // Performance: Only check for tags if there are <250 images selected
-    if (selectedImageIDs.count() > 250
-         || !DatabaseAccess().db()->hasTags(selectedImageIDs))
+    // Also disable the remove Tag popup menu, if there are no tags at all.
+    if (selectedImageIDs.count() > 250 || 
+        !DatabaseAccess().db()->hasTags(selectedImageIDs))
         removeTagsPopup->menuAction()->setEnabled(false);
 
     popmenu.addSeparator();
@@ -689,6 +769,16 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
         {
             //  add images to existing images in the light table
             insertSelectionToLightTable(true);
+        }
+        else if (choice == gotoAlbum)
+        { 
+            // send a signal to the parent widget (digikamview.cpp)
+            emit signalGotoAlbumAndItem(iconItem);
+        }
+        else if (choice == gotoDate)
+        { 
+            // send a signal to the parent widget (digikamview.cpp)
+            emit signalGotoDateAndItem(iconItem);
         }
         else
         {
@@ -2004,6 +2094,14 @@ void AlbumIconView::slotAlbumModified()
     d->imageLister->openAlbum(d->currentAlbum);
 
     updateRectsAndPixmaps();
+}
+
+void AlbumIconView::slotGotoTag(int tagID)
+{
+    // send a signal to the parent widget (digikamview.cpp) to change 
+    // to Tag view and the corresponding item
+  
+    emit signalGotoTagAndItem(tagID);
 }
 
 void AlbumIconView::slotAssignTag(int tagID)

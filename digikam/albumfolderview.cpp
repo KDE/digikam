@@ -349,6 +349,17 @@ void AlbumFolderView::setAlbumThumbnail(PAlbum *album)
     loader->getAlbumThumbnail(album);
 }
 
+void AlbumFolderView::setCurrentAlbum(Album *album)
+{
+    if(!album) return;
+
+    AlbumFolderViewItem* item = (AlbumFolderViewItem*) album->extraData(this);
+    if(!item) return;
+
+    setCurrentItem(item);
+    ensureItemVisible(item);
+}
+
 void AlbumFolderView::slotGotThumbnailFromIcon(Album *album,
                                                const QPixmap& thumbnail)
 {

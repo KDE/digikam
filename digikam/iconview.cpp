@@ -389,6 +389,11 @@ void IconView::selectItem(IconItem* item, bool select)
     emit signalSelectionChanged();
 }
 
+void IconView::setStoredVisibleItem(IconItem *item) 
+{ 
+    d->storedVisibleItem = item; 
+}
+
 void IconView::insertGroup(IconGroupItem* group)
 {
     if (!group)

@@ -49,7 +49,9 @@ public:
     void setActive(bool val);
 
     void setSelected(Q3ListViewItem *item);
-    
+
+    void gotoDate(int year, int month, int day);
+
 private slots:
 
     void slotAllDAlbumsLoaded();

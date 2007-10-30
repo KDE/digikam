@@ -39,6 +39,7 @@
 #include <kdeversion.h>
 #include <kcalendarsystem.h>
 #include <kconfiggroup.h>
+
 // Local includes.
 
 #include "ddebug.h"
@@ -58,15 +59,24 @@ class DateFolderViewPriv
 {
 public:
 
-    FolderView*             listview;
-    MonthWidget*            monthview;
-    bool                    active;
+    DateFolderViewPriv()
+    {
+        active    = false;
+        listview  = 0;
+        monthview = 0;
+    }
+
+    bool         active;
     
-    QString                 selected;
+    QString      selected;
+
+    FolderView  *listview;
+    MonthWidget *monthview;    
 };
 
 class DateFolderItem : public FolderItem
 {
+
 public:
 
     DateFolderItem(Q3ListView* parent, const QString& name)
@@ -113,7 +123,6 @@ DateFolderView::DateFolderView(QWidget* parent)
               : KVBox(parent)
 {
     d = new DateFolderViewPriv;
-    d->active    = false;
     d->listview  = new FolderView(this);
     d->monthview = new MonthWidget(this);
 
@@ -123,10 +132,13 @@ DateFolderView::DateFolderView(QWidget* parent)
 
     connect(AlbumManager::instance(), SIGNAL(signalAlbumAdded(Album*)),
             this, SLOT(slotAlbumAdded(Album*)));
+
     connect(AlbumManager::instance(), SIGNAL(signalAlbumDeleted(Album*)),
             this, SLOT(slotAlbumDeleted(Album*)));
+
     connect(AlbumManager::instance(), SIGNAL(signalAllDAlbumsLoaded()),
             this, SLOT(slotAllDAlbumsLoaded()));    
+
     connect(AlbumManager::instance(), SIGNAL(signalAlbumsCleared()),
             d->listview, SLOT(clear()));
 
@@ -277,6 +289,29 @@ void DateFolderView::loadViewState()
         
         if(id == selected)
             d->listview->setSelected(item, true);
+    }    
+}
+
+void DateFolderView::gotoDate(int year, int month, int day)
+{
+    DateFolderItem *item = 0;
+    QString         id;
+    
+    QDate date = QDate(year, month, 1);
+    // Get string in the format:  Sat Jul 1 2006
+    QString date_id = date.toString("ddd MMM d yyyy");
+
+    // Find that date in the side-bar list.
+    Q3ListViewItemIterator it(d->listview);
+    for( ; it.current(); ++it)
+    {        
+        item = dynamic_cast<DateFolderItem*>(it.current());
+        id = item->date();
+        if(id == date_id) 
+        {
+            d->listview->setSelected(item, true);
+            d->listview->ensureItemVisible(item);
+        }
     }    
 }
 

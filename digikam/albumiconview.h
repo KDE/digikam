@@ -73,6 +73,11 @@ public:
     ~AlbumIconView();
 
     void setAlbum(Album* album);
+
+    /** set the Url of item to select in Album View when all items will be reloaded
+        by setAlbum()*/
+    void setAlbumItemToFind(const KUrl& url);
+
     void setThumbnailSize(const ThumbnailSize& thumbSize);
     ThumbnailSize thumbnailSize() const;
 
@@ -132,6 +137,10 @@ signals:
     void signalProgressValue(int);
     void signalItemsUpdated(const KUrl::List&);
 
+    void signalGotoAlbumAndItem(AlbumIconItem *);
+    void signalGotoDateAndItem(AlbumIconItem *);
+    void signalGotoTagAndItem(int);
+
 public slots:
 
     void slotSetExifOrientation(int orientation);
@@ -183,6 +192,8 @@ private slots:
     void slotShowToolTip(IconItem* item);
 
     void slotThemeChanged();
+
+    void slotGotoTag(int tagID);
 
     void slotAssignTag(int tagID);
     void slotRemoveTag(int tagID);
