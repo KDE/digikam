@@ -214,6 +214,7 @@ signals:
     void finishedScanningAlbumRoot(const QString &albumRoot);
     void finishedScanningAlbum(const QString &albumRoot, const QString &album, int filesScanned);
     void finishedScanningForStaleAlbums();
+    void finishedCompleteScan();
 
 protected:
 

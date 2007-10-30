@@ -136,11 +136,15 @@ void CollectionScanner::completeScan()
     DatabaseAccess().db()->deleteRemovedItems(d->scannedAlbums);
 
     markDatabaseAsScanned();
+
+    emit finishedCompleteScan();
 }
 
 void CollectionScanner::partialScan(const QString &filePath)
 {
     QString albumRoot = CollectionManager::instance()->albumRootPath(filePath);
+    if (albumRoot.isNull())
+        return;
     QString album = CollectionManager::instance()->album(filePath);
     partialScan(albumRoot, album);
 }

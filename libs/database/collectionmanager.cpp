@@ -100,7 +100,7 @@ public:
             available = false;
             hidden    = true;
         }
-        else // Unavailable
+        else // Unavailable, Null, Deleted
         {
             available = false;
             hidden    = false;
@@ -229,6 +229,8 @@ CollectionManager::CollectionManager()
 {
     d = new CollectionManagerPrivate;
 
+    qRegisterMetaType<CollectionLocation>("CollectionLocation");
+
     connect(Solid::DeviceNotifier::instance(),
             SIGNAL(deviceAdded(const QString &)),
             this,
@@ -291,10 +293,10 @@ CollectionLocation CollectionManager::addLocation(const KUrl &fileUrl)
     else
         type = CollectionLocation::TypeVolumeHardWired;
 
-    int id = access.db()->addAlbumRoot(type, volume.uuid, specificPath);
+    access.db()->addAlbumRoot(type, volume.uuid, specificPath);
 
+    // Do not emit the locationAdded signal here, it is done in updateLocations()
     updateLocations();
-    DDebug() << "addAlbumRoot returned id " << id << ", after updateLocations count is " << d->locations.size() << endl;
 
     return locationForPath(path);
 }
@@ -308,6 +310,9 @@ void CollectionManager::removeLocation(const CollectionLocation &location)
         return;
 
     access.db()->deleteAlbumRoot(albumLoc->id());
+
+    // Do not emit the locationRemoved signal here, it is done in updateLocations()
+
     updateLocations();
 }
 
@@ -490,29 +495,36 @@ void CollectionManager::updateLocations()
         QList<AlbumRootInfo> infos = access.db()->getAlbumRoots();
 
         // synchronize map with database
-        QMap<int, AlbumRootLocation *> locs;
+        QMap<int, AlbumRootLocation *> locs = d->locations;
+        d->locations.clear();
         foreach (AlbumRootInfo info, infos)
         {
-            if (d->locations.contains(info.id))
+            if (locs.contains(info.id))
             {
-                locs[info.id] = d->locations.value(info.id);
-                d->locations.remove(info.id);
+                d->locations[info.id] = d->locations.value(info.id);
+                locs.remove(info.id);
             }
             else
             {
-                locs[info.id] = new AlbumRootLocation(info);
+                d->locations[info.id] = new AlbumRootLocation(info);
             }
         }
 
         // delete old locations
-        foreach (AlbumRootLocation *location, d->locations)
+        foreach (AlbumRootLocation *location, locs)
+        {
+            CollectionLocation::Status oldStatus = location->status();
+            location->setStatus(CollectionLocation::LocationDeleted);
+            emit locationStatusChanged(*location, oldStatus);
             delete location;
-        // replace with new list
-        d->locations = locs;
+        }
 
         // update status with current access state
+        QList<CollectionLocation::Status> oldStatus;
         foreach (AlbumRootLocation *location, d->locations)
         {
+            oldStatus << location->status();
+
             QString volumePath;
             bool available = false;
             // if volume is in list, it is accessible
@@ -527,14 +539,25 @@ void CollectionManager::updateLocations()
                     volumePath.chop(1);
                 }
             }
+
+            //TODO: Network locations (NFS, Samba etc.)
+
             // set values in location
             // dont touch location->status, do not interfer with "hidden" setting
             location->available = available;
             location->setAbsolutePath(volumePath + location->specificPath);
             DDebug() << "location for " << volumePath + location->specificPath << " is available " << available << endl;
+            // set the status depending on "hidden" and "available"
             location->setStatusFromFlags();
-            // set the volatile values in db
-            //access.db()->setAlbumRootStatus(location->id(), location->status(), location->albumRootPath());
+        }
+
+        // emit status changes (and new locations)
+        for (int i=0; i<d->locations.size(); i++)
+        {
+            if (oldStatus[i] != d->locations[i]->status())
+            {
+                emit locationStatusChanged(*d->locations[i], oldStatus[i]);
+            }
         }
     }
 }

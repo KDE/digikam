@@ -159,8 +159,20 @@ public:
 
 signals:
 
-    void locationAdded(CollectionLocation *location);
-    void locationRemoved(CollectionLocation *location);
+    /** Emitted when the status of a collection location changed.
+     *  This means that the location became available, hidden or unavailable.
+     *
+     *  An added location will change its status after addition,
+     *  from Null to Available, Hidden or Unavailable.
+     *
+     *  A removed location will change its status to Deleted
+     *  during the removal; in this case, you shall not use the object
+     *  passed with this signal with any method of CollectionManager.
+     *
+     *  The second signal argument is of type CollectionLocation::Status
+     *  and describes the status before the state change occurred
+     */
+    void locationStatusChanged(const CollectionLocation &location, int oldStatus);
 
 private slots:
 
