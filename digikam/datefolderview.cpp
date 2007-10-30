@@ -61,11 +61,19 @@ class DateFolderViewPriv
 {
 public:
 
-    FolderView*             listview;
-    MonthWidget*            monthview;
-    bool                    active;
-    
-    QString                 selected;
+    DateFolderViewPriv()
+    {
+        active    = false;
+	listview  = 0;
+	monthview = 0;
+    }
+
+    bool         active;
+
+    QString      selected;
+
+    FolderView  *listview;
+    MonthWidget *monthview;
 };
 
 class DateFolderItem : public FolderItem
@@ -109,14 +117,11 @@ public:
     
     DAlbum* m_album;
 };
-    
-
 
 DateFolderView::DateFolderView(QWidget* parent)
-    : QVBox(parent, "DateFolderView")
+              : QVBox(parent, "DateFolderView")
 {
     d = new DateFolderViewPriv;
-    d->active    = false;
     d->listview  = new FolderView(this);
     d->monthview = new MonthWidget(this);
 
@@ -126,10 +131,13 @@ DateFolderView::DateFolderView(QWidget* parent)
 
     connect(AlbumManager::instance(), SIGNAL(signalAlbumAdded(Album*)),
             SLOT(slotAlbumAdded(Album*)));
+	    
     connect(AlbumManager::instance(), SIGNAL(signalAlbumDeleted(Album*)),
             SLOT(slotAlbumDeleted(Album*)));
+	    
     connect(AlbumManager::instance(), SIGNAL(signalAllDAlbumsLoaded()),
             SLOT(slotAllDAlbumsLoaded()));    
+	    
     connect(AlbumManager::instance(), SIGNAL(signalAlbumsCleared()),
             d->listview, SLOT(clear()));
 
@@ -291,8 +299,8 @@ void DateFolderView::loadViewState()
 
 void DateFolderView::gotoDate(int year, int month, int day)
 {
-    DateFolderItem *item;
-    QString id;
+    DateFolderItem *item = 0;
+    QString         id;
     
     QDate date = QDate(year, month, 1);
     // Get string in the format:  Sat Jul 1 2006
@@ -304,7 +312,8 @@ void DateFolderView::gotoDate(int year, int month, int day)
     {        
         item = dynamic_cast<DateFolderItem*>(it.current());
         id = item->date();
-        if(id == date_id) {
+        if(id == date_id) 
+	{
             d->listview->setSelected(item, true);
             d->listview->ensureItemVisible(item);
         }
