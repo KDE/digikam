@@ -95,7 +95,7 @@
 #include "imageinfo.h"
 #include "thumbnailsize.h"
 #include "themeengine.h"
-#include "scanlib.h"
+#include "scancontroller.h"
 #include "loadingcache.h"
 #include "loadingcacheinterface.h"
 #include "imageattributeswatch.h"
@@ -1795,8 +1795,8 @@ void DigikamApp::slotSetupChanged()
     //if(AlbumSettings::instance()->getAlbumLibraryPath() != AlbumManager::instance()->getLibraryPath())
       //  d->view->clearHistory();
 
-    AlbumManager::instance()->setAlbumRoot(AlbumSettings::instance()->getAlbumLibraryPath(), false);// TEMPORARY SOLUTION
-    AlbumManager::instance()->startScan();
+    if (AlbumManager::instance()->setDatabase(AlbumSettings::instance()->getAlbumLibraryPath(), false))
+        AlbumManager::instance()->startScan();
 
     d->view->applySettings(AlbumSettings::instance());
 
@@ -2040,8 +2040,7 @@ void DigikamApp::slotChangeTheme(const QString& theme)
 
 void DigikamApp::slotDatabaseRescan()
 {
-    ScanLib sLib;
-    sLib.startScan();
+    ScanController::instance()->completeCollectionScan();
 }
 
 void DigikamApp::slotRebuildAllThumbs()

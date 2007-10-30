@@ -282,7 +282,8 @@ int main(int argc, char *argv[])
     }
 
     Digikam::AlbumManager* man = Digikam::AlbumManager::instance();
-    man->setAlbumRoot(albumPath, priorityAlbumPath); // TEMPORARY SOLUTION
+    if (!man->setDatabase(albumPath, priorityAlbumPath))
+        return 1;
 
     Digikam::DigikamApp *digikam = new Digikam::DigikamApp();
 
