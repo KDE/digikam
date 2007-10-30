@@ -49,6 +49,7 @@
 #include "collectionmanager.h"
 #include "collectionlocation.h"
 #include "collectionscanner.h"
+#include "initializationobserver.h"
 #include "schemaupdater.h"
 
 namespace Digikam
@@ -66,8 +67,10 @@ int SchemaUpdater::filterSettingsVersion()
 
 SchemaUpdater::SchemaUpdater(DatabaseAccess *access)
 {
-    m_access = access;
+    m_access         = access;
     m_currentVersion = 0;
+    m_observer       = 0;
+    m_setError       = false;
 }
 
 bool SchemaUpdater::update()
@@ -76,7 +79,16 @@ bool SchemaUpdater::update()
     bool success = startUpdates();
     m_access->db()->setSetting("DBVersion",QString::number(m_currentVersion));
     updateFilterSettings();
+
+    if (m_observer)
+        m_observer->finishedSchemaUpdate(InitializationObserver::UpdateSuccess);
+
     return success;
+}
+
+void SchemaUpdater::setObserver(InitializationObserver *observer)
+{
+    m_observer = observer;
 }
 
 bool SchemaUpdater::startUpdates()
@@ -96,12 +108,18 @@ bool SchemaUpdater::startUpdates()
         {
             // Something is damaged. Give up.
             DError() << "DBVersion not available! Giving up schema upgrading." << endl;
-            m_access->setLastError(i18n(
+            QString errorMsg = i18n(
                     "The database is not valid: "
                     "The \"DBVersion\" setting does not exist. "
                     "The current database schema version cannot be verified. "
                     "Try to start with an empty database. "
-                                   ));
+                                   );
+            m_access->setLastError(errorMsg);
+            if (m_observer)
+            {
+                m_observer->error(errorMsg);
+                m_observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
+            }
             return false;
         }
 
@@ -119,12 +137,18 @@ bool SchemaUpdater::startUpdates()
             }
             else
             {
-                m_access->setLastError(i18n(
+                QString errorMsg = i18n(
                             "The database has been used with a more recent version of digiKam "
                             "and has been updated to a database schema which cannot be used with this version. "
                             "(This means this digiKam version is too old, or the database format is to recent) "
                             "Please use the more recent version of digikam that you used before. "
-                                           ));
+                                       );
+                m_access->setLastError(errorMsg);
+                if (m_observer)
+                {
+                    m_observer->error(errorMsg);
+                    m_observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
+                }
                 return false;
             }
         }
@@ -174,8 +198,14 @@ bool SchemaUpdater::startUpdates()
         // No legacy handling: start with a fresh db
         if (!createDatabase())
         {
-            m_access->setLastError(i18n("Failed to create tables on database.\n ")
-                                   + m_access->backend()->lastError());
+            QString errorMsg = i18n("Failed to create tables on database.\n ")
+                                    + m_access->backend()->lastError();
+            m_access->setLastError(errorMsg);
+            if (m_observer)
+            {
+                m_observer->error(errorMsg);
+                m_observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
+            }
             return false;
         }
         return true;
@@ -194,6 +224,15 @@ bool SchemaUpdater::makeUpdates()
             if (!updateV4toV5())
             {
                 m_access->backend()->rollbackTransaction();
+                if (m_observer && !m_setError)
+                {
+                    QString errorMsg = i18n("The schema updating process from version 4 to 5 failed, "
+                                            "caused by an internal error. "
+                                            "Please delete the old database file "
+                                            "if you want to continue with an empty database.");
+                    m_observer->error(errorMsg);
+                    m_observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
+                }
                 return false;
             }
             DDebug() << "Success updating to v5" << endl;
@@ -542,6 +581,9 @@ bool SchemaUpdater::createTriggersV5()
 
 bool SchemaUpdater::copyV3toV4(const QString &digikam3DBPath, const QString &currentDBPath)
 {
+    if (m_observer)
+        m_observer->moreSchemaUpdateSteps(2);
+
     m_access->backend()->close();
 
     KUrl digikam3DBUrl, currentDBUrl;
@@ -551,28 +593,49 @@ bool SchemaUpdater::copyV3toV4(const QString &digikam3DBPath, const QString &cur
     KIO::Job *job = KIO::file_copy(digikam3DBUrl, currentDBUrl, -1, KIO::Overwrite | KIO::HideProgressInfo);
     if (!KIO::NetAccess::synchronousRun(job, 0))
     {
-        m_access->setLastError(i18n("Failed to copy the old database file (\"%1\")"
-                                    "to its new location (\"%2\")."
-                                    "Please make sure that the file can be copied.", 
-                                    digikam3DBPath, currentDBPath));
+        QString errorMsg = i18n("Failed to copy the old database file (\"%1\")"
+                                "to its new location (\"%2\")."
+                                "Please make sure that the file can be copied, "
+                                "or delete it.",
+                                digikam3DBPath, currentDBPath);
+        m_access->setLastError(errorMsg);
+        if (m_observer)
+        {
+            m_observer->error(errorMsg);
+            m_observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
+        }
     }
+    if (m_observer)
+        m_observer->schemaUpdateProgress(i18n("Copied database file"));
 
     if (!m_access->backend()->open(m_access->parameters()))
     {
-        m_access->setLastError(i18n("The old database file (\"%1\") has been copied "
-                                    "to the new location (\"%2\") but it cannot be opened. "
-                                    "Please remove both files and try again, "
-                                    "starting with an empty database. ",
-                                    digikam3DBPath, currentDBPath));
+        QString errorMsg = i18n("The old database file (\"%1\") has been copied "
+                                "to the new location (\"%2\") but it cannot be opened. "
+                                "Please delete both files and try again, "
+                                "starting with an empty database. ",
+                                digikam3DBPath, currentDBPath);
 
+        m_access->setLastError(errorMsg);
+        if (m_observer)
+        {
+            m_observer->error(errorMsg);
+            m_observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
+        }
         return false;
     }
+    if (m_observer)
+        m_observer->schemaUpdateProgress(i18n("Opened new database file"));
+
     m_currentVersion = 4;
     return true;
 }
 
 bool SchemaUpdater::updateV2toV4(const QString &sqlite2DBPath)
 {
+    if (m_observer)
+        m_observer->moreSchemaUpdateSteps(1);
+
     if (upgradeDB_Sqlite2ToSqlite3(*m_access, sqlite2DBPath))
     {
         m_currentVersion = 4;
@@ -580,11 +643,19 @@ bool SchemaUpdater::updateV2toV4(const QString &sqlite2DBPath)
     }
     else
     {
-        m_access->setLastError(i18n("Could not update from the old SQLite2 file (\"%1\"). "
-                                    "Please remove this file and try again, "
-                                    "starting with an empty database. ", sqlite2DBPath));
+        QString errorMsg = i18n("Could not update from the old SQLite2 file (\"%1\"). "
+                                "Please delete this file and try again, "
+                                "starting with an empty database. ", sqlite2DBPath);
+        m_access->setLastError(errorMsg);
+        if (m_observer)
+        {
+            m_observer->error(errorMsg);
+            m_observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
+        }
         return false;
     }
+    if (m_observer)
+        m_observer->schemaUpdateProgress(i18n("Updated from 0.7 database"));
 }
 
 static QStringList cleanUserFilterString(const QString &filterString)
@@ -614,6 +685,9 @@ static QStringList cleanUserFilterString(const QString &filterString)
 bool SchemaUpdater::updateV4toV5()
 {
     DDebug() << "updateV4toV5" << endl;
+    if (m_observer)
+        m_observer->moreSchemaUpdateSteps(11);
+
     // This update was introduced from digikam version 0.9 to digikam 0.10
     // We operator on an SQLite3 database under a transaction (which will be rolled back on error)
 
@@ -637,11 +711,17 @@ bool SchemaUpdater::updateV4toV5()
     m_access->backend()->execSql(QString("DROP INDEX dir_index;"));
     m_access->backend()->execSql(QString("DROP INDEX tag_index;"));
 
+    if (m_observer)
+        m_observer->schemaUpdateProgress(i18n("Prepared table creation"));
     DDebug() << "Dropped triggers" << endl;
+
     // --- Create new tables ---
 
     if (!createTablesV5() || !createIndicesV5())
         return false;
+
+    if (m_observer)
+        m_observer->schemaUpdateProgress(i18n("Created tables"));
 
     // --- Populate AlbumRoots (from config) ---
 
@@ -652,9 +732,16 @@ bool SchemaUpdater::updateV4toV5()
 
     if (albumLibraryPath.isEmpty())
     {
-        m_access->setLastError(i18n("No album library path has been found in the configuration file. "
-                                    "Giving up the schema updating process. "
-                                    "Please try with an empty database, or repair your configuration."));
+        QString errorMsg = i18n("No album library path has been found in the configuration file. "
+                                "Giving up the schema updating process. "
+                                "Please try with an empty database, or repair your configuration.");
+        m_access->setLastError(errorMsg);
+        m_setError = true;
+        if (m_observer)
+        {
+            m_observer->error(errorMsg);
+            m_observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
+        }
         return false;
     }
 
@@ -666,7 +753,10 @@ bool SchemaUpdater::updateV4toV5()
         return false;
     }
 
+    if (m_observer)
+        m_observer->schemaUpdateProgress(i18n("Configured one album root"));
     DDebug() << "Inserted album root" << endl;
+
     // --- With the album root, populate albums ---
 
     if (!m_access->backend()->execSql(QString(
@@ -678,6 +768,9 @@ bool SchemaUpdater::updateV4toV5()
                     location.id())
        )
         return false;
+
+    if (m_observer)
+        m_observer->schemaUpdateProgress(i18n("Imported albums"));
     DDebug() << "Populated albums" << endl;
 
     // --- Add images ---
@@ -694,6 +787,9 @@ bool SchemaUpdater::updateV4toV5()
 
     // remove orphan images that would not be removed by CollectionScanner
     m_access->backend()->execSql(QString("DELETE FROM Images WHERE album NOT IN (SELECT id FROM Albums);"));
+
+    if (m_observer)
+        m_observer->schemaUpdateProgress(i18n("Imported images information"));
 
     DDebug() << "Populated Images" << endl;
 
@@ -748,13 +844,18 @@ bool SchemaUpdater::updateV4toV5()
     m_access->db()->setUserFilterSettings(configImageFilter.toList(), configVideoFilter.toList(), configAudioFilter.toList());
     DDebug() << "Set initial filter settings with user settings" << configImageFilter << endl;
 
+    if (m_observer)
+        m_observer->schemaUpdateProgress(i18n("Initialized and imported file suffix filter"));
+
     // --- do a full scan ---
 
-    // TODO: Add UI!!!
-    DDebug() << "Starting scan" << endl;
     CollectionScanner scanner;
+    if (m_observer)
+        m_observer->connectCollectionScanner(&scanner);
     scanner.completeScan();
-    DDebug() << "Done scan" << endl;
+
+    if (m_observer)
+        m_observer->schemaUpdateProgress(i18n("Did the initial full scan"));
 
     // --- Port date, comment and rating (_after_ the scan) ---
 
@@ -768,6 +869,9 @@ bool SchemaUpdater::updateV4toV5()
        )
          return false;
 
+    if (m_observer)
+        m_observer->schemaUpdateProgress(i18n("Imported creation dates"));
+
     // Port ImagesV3.comment to ImageComments
     if (!m_access->backend()->execSql(QString(
                     "REPLACE INTO ImageComments "
@@ -777,6 +881,9 @@ bool SchemaUpdater::updateV4toV5()
                     (int)DatabaseComment::Comment, QString("x-default"))
        )
          return false;
+
+    if (m_observer)
+        m_observer->schemaUpdateProgress(i18n("Imported comments"));
 
     // Port rating storage in ImageProperties to ImageInformation
     if (!m_access->backend()->execSql(QString(
@@ -792,10 +899,16 @@ bool SchemaUpdater::updateV4toV5()
     m_access->backend()->execSql(QString("DELETE FROM ImageProperties WHERE property=?;"), QString("Rating"));
     m_access->backend()->execSql(QString("UPDATE ImageInformation SET rating=0 WHERE rating<0;"));
 
+    if (m_observer)
+        m_observer->schemaUpdateProgress(i18n("Imported ratings"));
+
     // --- Drop old tables ---
 
     m_access->backend()->execSql(QString("DROP TABLE ImagesV3;"));
     m_access->backend()->execSql(QString("DROP TABLE AlbumsV3;"));
+
+    if (m_observer)
+        m_observer->schemaUpdateProgress(i18n("Dropped v3 tables"));
 
     m_currentVersion = 5;
     DDebug() << "Returning true from updating to 5" << endl;

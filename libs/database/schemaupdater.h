@@ -32,6 +32,7 @@ namespace Digikam
 {
 
 class DatabaseAccess;
+class InitializationObserver;
 
 class SchemaUpdater
 {
@@ -42,6 +43,7 @@ public:
     static int schemaVersion();
     static int filterSettingsVersion();
     bool update();
+    void setObserver(InitializationObserver *observer);
 
 private:
 
@@ -59,9 +61,11 @@ private:
 
 private:
 
-    DatabaseAccess *m_access;
+    DatabaseAccess         *m_access;
 
-    int             m_currentVersion;
+    int                     m_currentVersion;
+    InitializationObserver *m_observer;
+    bool                    m_setError;
 };
 
 }  // namespace Digikam
