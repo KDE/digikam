@@ -60,7 +60,6 @@ public:
 
     /**
      * Open the database connection.
-     * Shall only be called from the main thread.
      * @returns true on success
      */
     bool open(const DatabaseParameters &parameters);
@@ -107,9 +106,6 @@ public:
 
     bool isOpen() const { return status() > Unavailable; }
     bool isReady() const { return status() == OpenSchemaChecked; }
-
-    /// DEPRECATED: @param values This will be filled with the result of the SQL statement, converted to QString
-    KDE_DEPRECATED bool execSql(const QString& sql, QStringList* values);
 
     /**
      * Executes the sql statement, and write the returned data into the values list.

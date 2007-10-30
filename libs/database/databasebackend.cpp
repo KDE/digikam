@@ -95,6 +95,7 @@ public:
         QSqlDatabase::removeDatabase(connectionName(thread));
     }
 
+    /*
     void closeFirstDatabase()
     {
         QThread *thread = QThread::currentThread();
@@ -105,6 +106,7 @@ public:
         firstDatabase = QSqlDatabase();
         QSqlDatabase::removeDatabase(connectionName(thread));
     }
+    */
 
     bool open(QSqlDatabase &db)
     {
@@ -143,7 +145,6 @@ public:
         return !--transactionCount[thread];
     }
 
-    QSqlDatabase firstDatabase;
     // this is always accessed in mutex context, no need for QThreadStorage
     QHash<QThread*, QSqlDatabase> threadDatabases;
     // this is not only db.isValid(), but also "parameters changed, need to reopen"
@@ -164,6 +165,9 @@ public:
 DatabaseBackend::DatabaseBackend()
 {
     d = new DatabaseBackendPriv(this);
+
+    connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()),
+            this, SLOT(slotMainThreadFinished()));
 }
 
 DatabaseBackend::~DatabaseBackend()
@@ -178,7 +182,7 @@ void DatabaseBackend::slotThreadFinished()
 
 void DatabaseBackend::slotMainThreadFinished()
 {
-    d->closeFirstDatabase();
+    d->closeDatabaseForThread();
 }
 
 bool DatabaseBackend::isCompatible(const DatabaseParameters &parameters)
@@ -188,20 +192,14 @@ bool DatabaseBackend::isCompatible(const DatabaseParameters &parameters)
 
 bool DatabaseBackend::open(const DatabaseParameters &parameters)
 {
-    if (QThread::currentThread() != QCoreApplication::instance()->thread())
-        DWarning() << "DatabaseBackend::open is not called from the main thread! Fix this!" << endl;
-
     d->parameters = parameters;
 
     // Force possibly opened thread dbs to re-open with new parameters.
     // They are not accessible from this thread!
     d->databasesValid.clear();
 
-    if (!d->open(d->firstDatabase))
+    if (!d->databaseForThread().isOpen())
         return false;
-
-    connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()),
-            this, SLOT(slotThreadFinished()));
 
     d->status = Open;
     return true;
@@ -231,6 +229,7 @@ DatabaseBackend::Status DatabaseBackend::status() const
     return d->status;
 }
 
+/*
 bool DatabaseBackend::execSql(const QString& sql, QStringList* values)
 {
     QSqlQuery query = execQuery(sql);
@@ -246,6 +245,7 @@ bool DatabaseBackend::execSql(const QString& sql, QStringList* values)
     }
     return true;
 }
+*/
 
 QList<QVariant> DatabaseBackend::readToList(QSqlQuery &query)
 {

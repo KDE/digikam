@@ -487,7 +487,7 @@ void CollectionManager::updateLocations()
 {
     // get information from Solid
     QList<SolidVolumeInfo> volumes = d->listVolumes();
-    DDebug() << "updateLocations: Have " << volumes.count() << endl;
+    //DDebug() << "updateLocations: Have " << volumes.count() << endl;
 
     {
         DatabaseAccess access;
@@ -501,7 +501,7 @@ void CollectionManager::updateLocations()
         {
             if (locs.contains(info.id))
             {
-                d->locations[info.id] = d->locations.value(info.id);
+                d->locations[info.id] = locs.value(info.id);
                 locs.remove(info.id);
             }
             else
@@ -519,7 +519,7 @@ void CollectionManager::updateLocations()
             delete location;
         }
 
-        // update status with current access state
+        // update status with current access state, store old status in list
         QList<CollectionLocation::Status> oldStatus;
         foreach (AlbumRootLocation *location, d->locations)
         {
@@ -552,12 +552,14 @@ void CollectionManager::updateLocations()
         }
 
         // emit status changes (and new locations)
-        for (int i=0; i<d->locations.size(); i++)
+        int i=0;
+        foreach (AlbumRootLocation *location, d->locations)
         {
-            if (oldStatus[i] != d->locations[i]->status())
+            if (oldStatus[i] != location->status())
             {
-                emit locationStatusChanged(*d->locations[i], oldStatus[i]);
+                emit locationStatusChanged(*location, oldStatus[i]);
             }
+            i++;
         }
     }
 }
