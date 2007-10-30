@@ -106,7 +106,7 @@ public:
         advancedSettingsGB    = 0;
         monitorIcon           = 0;
         monitorProfiles       = 0;
-     }
+    }
 
     QLabel                 *monitorIcon;
     QLabel                 *monitorProfiles;
