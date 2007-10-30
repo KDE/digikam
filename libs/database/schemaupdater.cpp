@@ -658,9 +658,9 @@ bool SchemaUpdater::updateV4toV5()
         return false;
     }
 
-    CollectionLocation *location =
+    CollectionLocation location =
             CollectionManager::instance()->addLocation(KUrl::fromPath(albumLibraryPath));
-    if (!location)
+    if (location.isNull())
     {
         DError() << "Failure to create a collection location. Aborting update." << endl;
         return false;
@@ -675,7 +675,7 @@ bool SchemaUpdater::updateV4toV5()
                     "SELECT id, ?, url, date, caption, collection, icon "
                     " FROM AlbumsV3;"
                                              ),
-                    location->id())
+                    location.id())
        )
         return false;
     DDebug() << "Populated albums" << endl;

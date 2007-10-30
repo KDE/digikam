@@ -58,28 +58,34 @@ public:
      */
     void update();
 
+    /** CollectionLocation objects returned are simple data containers.
+     *  If the corresponding location is returned, the data is still safe to access,
+     *  but does not represent anything.
+     *  Therefore, do not store returned objects, but prefer to retrieve them freshly.
+     */
+
     /**
      * Add the given file system location as new collection location.
      * Type and availability will be detected.
      * On failure returns null. This would be the case if the given
      * url is already contained in another collection location.
      */
-    CollectionLocation *addLocation(const KUrl &fileUrl);
+    CollectionLocation addLocation(const KUrl &fileUrl);
 
     /**
      * Removes the given location. This means that all images contained on the
      * location will be removed from the database, all tags will be lost.
      */
-    void removeLocation(CollectionLocation *location);
+    void removeLocation(const CollectionLocation &location);
 
     /**
      * Returns a list of all CollectionLocations stored in the database
      */
-    QList<CollectionLocation *> allLocations();
+    QList<CollectionLocation> allLocations();
     /**
      * Returns a list of all currently available CollectionLocations
      */
-    QList<CollectionLocation *> allAvailableLocations();
+    QList<CollectionLocation> allAvailableLocations();
     /**
      * Returns a list of the paths of all currently available CollectionLocations
      */
@@ -88,7 +94,7 @@ public:
     /**
      * Returns the location for the given album root id
      */
-    CollectionLocation *locationForAlbumRootId(int id);
+    CollectionLocation locationForAlbumRootId(int id);
 
     /**
      * Returns the CollectionLocation that contains the given album root.
@@ -96,16 +102,16 @@ public:
      * Returns 0 if no collection location matches.
      * Only available (or hidden, but available) locations are guaranteed to be found.
      */
-    CollectionLocation *locationForAlbumRoot(const KUrl &fileUrl);
-    CollectionLocation *locationForAlbumRootPath(const QString &albumRootPath);
+    CollectionLocation locationForAlbumRoot(const KUrl &fileUrl);
+    CollectionLocation locationForAlbumRootPath(const QString &albumRootPath);
 
     /**
      * Returns the CollectionLocation that contains the given path.
      * Equivalent to calling locationForAlbumRoot(albumRoot(fileUrl)).
      * Only available (or hidden, but available) locations are guaranteed to be found.
      */
-    CollectionLocation *locationForUrl(const KUrl &fileUrl);
-    CollectionLocation *locationForPath(const QString &filePath);
+    CollectionLocation locationForUrl(const KUrl &fileUrl);
+    CollectionLocation locationForPath(const QString &filePath);
 
     /**
      * Returns the album root path for the location with the given id.
@@ -150,6 +156,11 @@ public:
      */
     KUrl oneAlbumRoot();
     QString oneAlbumRootPath();
+
+signals:
+
+    void locationAdded(CollectionLocation *location);
+    void locationRemoved(CollectionLocation *location);
 
 private slots:
 

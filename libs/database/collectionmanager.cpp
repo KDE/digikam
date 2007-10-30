@@ -149,7 +149,6 @@ public:
 
     QMap<int, AlbumRootLocation *> locations;
     QList<SolidVolumeInfo> listVolumes();
-    QList<CollectionLocation *> removedLocations;
 };
 
 QList<SolidVolumeInfo> CollectionManagerPrivate::listVolumes()
@@ -251,13 +250,13 @@ void CollectionManager::update()
     updateLocations();
 }
 
-CollectionLocation *CollectionManager::addLocation(const KUrl &fileUrl)
+CollectionLocation CollectionManager::addLocation(const KUrl &fileUrl)
 {
     DDebug() << "addLocation " << fileUrl << endl;
     QString path = fileUrl.path(KUrl::RemoveTrailingSlash);
 
-    if (locationForPath(path))
-        return 0;
+    if (!locationForPath(path).isNull())
+        return CollectionLocation();
 
     QList<SolidVolumeInfo> volumes = d->listVolumes();
     SolidVolumeInfo volume;
@@ -280,7 +279,7 @@ CollectionLocation *CollectionManager::addLocation(const KUrl &fileUrl)
     if (!volumeMatch)
     {
         DError() << "Failed to detect a storage volume for path " << path << " with Solid" << endl;
-        return 0;
+        return CollectionLocation();
     }
 
     DatabaseAccess access;
@@ -300,29 +299,35 @@ CollectionLocation *CollectionManager::addLocation(const KUrl &fileUrl)
     return locationForPath(path);
 }
 
-void CollectionManager::removeLocation(CollectionLocation *location)
+void CollectionManager::removeLocation(const CollectionLocation &location)
 {
-    DatabaseAccess().db()->deleteAlbumRoot(((AlbumRootLocation *)location)->id());
+    DatabaseAccess access;
+
+    AlbumRootLocation *albumLoc = d->locations.value(location.id());
+    if (!albumLoc)
+        return;
+
+    access.db()->deleteAlbumRoot(albumLoc->id());
     updateLocations();
 }
 
-QList<CollectionLocation *> CollectionManager::allLocations()
+QList<CollectionLocation> CollectionManager::allLocations()
 {
     DatabaseAccess access;
-    QList<CollectionLocation *> list;
+    QList<CollectionLocation> list;
     foreach (AlbumRootLocation *location, d->locations)
-        list << location;
+        list << *location;
     return list;
 }
 
-QList<CollectionLocation *> CollectionManager::allAvailableLocations()
+QList<CollectionLocation> CollectionManager::allAvailableLocations()
 {
     DatabaseAccess access;
-    QList<CollectionLocation *> list;
+    QList<CollectionLocation> list;
     foreach (AlbumRootLocation *location, d->locations)
     {
         if (location->status() == CollectionLocation::LocationAvailable)
-            list << location;
+            list << *location;
     }
     return list;
 }
@@ -339,44 +344,44 @@ QStringList CollectionManager::allAvailableAlbumRootPaths()
     return list;
 }
 
-CollectionLocation *CollectionManager::locationForAlbumRootId(int id)
+CollectionLocation CollectionManager::locationForAlbumRootId(int id)
 {
     DatabaseAccess access;
-    return d->locations.value(id);
+    return *d->locations.value(id);
 }
 
-CollectionLocation *CollectionManager::locationForAlbumRoot(const KUrl &fileUrl)
+CollectionLocation CollectionManager::locationForAlbumRoot(const KUrl &fileUrl)
 {
     return locationForAlbumRootPath(fileUrl.path(KUrl::RemoveTrailingSlash));
 }
 
-CollectionLocation *CollectionManager::locationForAlbumRootPath(const QString &albumRootPath)
+CollectionLocation CollectionManager::locationForAlbumRootPath(const QString &albumRootPath)
 {
     DatabaseAccess access;
     QString path = albumRootPath;
     foreach (AlbumRootLocation *location, d->locations)
     {
         if (location->albumRootPath() == path)
-            return location;
+            return *location;
     }
-    return 0;
+    return CollectionLocation();
 }
 
-CollectionLocation *CollectionManager::locationForUrl(const KUrl &fileUrl)
+CollectionLocation CollectionManager::locationForUrl(const KUrl &fileUrl)
 {
     return locationForPath(fileUrl.path());
 }
 
-CollectionLocation *CollectionManager::locationForPath(const QString &filePath)
+CollectionLocation CollectionManager::locationForPath(const QString &filePath)
 {
     DatabaseAccess access;
     foreach (AlbumRootLocation *location, d->locations)
     {
         DDebug() << "Testing location " << location->id() << filePath << location->albumRootPath() << endl;
         if (filePath.startsWith(location->albumRootPath()))
-            return location;
+            return *location;
     }
-    return 0;
+    return CollectionLocation();
 }
 
 QString CollectionManager::albumRootPath(int id)
@@ -498,8 +503,11 @@ void CollectionManager::updateLocations()
                 locs[info.id] = new AlbumRootLocation(info);
             }
         }
+
+        // delete old locations
         foreach (AlbumRootLocation *location, d->locations)
             delete location;
+        // replace with new list
         d->locations = locs;
 
         // update status with current access state

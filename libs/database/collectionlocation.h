@@ -43,6 +43,7 @@ public:
 
     enum Status
     {
+        LocationNull,
         LocationAvailable,
         LocationHidden,
         LocationUnavailable,
@@ -56,21 +57,18 @@ public:
         TypeNetwork         = AlbumRoot::Network
     };
 
+    CollectionLocation();
+
     int     id() const;
     Status  status() const;
     Type    type() const;
     QString albumRootPath() const;
 
-    bool isAvailable() { return status() == LocationAvailable; }
+    bool isAvailable() { return m_status == LocationAvailable; }
+    bool isNull()      { return m_status == LocationNull;      }
 
 protected:
 
-    CollectionLocation()
-        : m_id(-1), m_status(LocationUnavailable), m_type(TypeVolumeHardWired)
-    {
-    }
-
-protected:
 
     int     m_id;
     QString m_path;

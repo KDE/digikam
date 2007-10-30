@@ -334,8 +334,8 @@ QStringList AlbumDB::getSubalbumsForPath(const QString &albumRoot,
                                          const QString& path,
                                          bool onlyDirectSubalbums)
 {
-    CollectionLocation *location = CollectionManager::instance()->locationForAlbumRootPath(albumRoot);
-    if (!location)
+    CollectionLocation location = CollectionManager::instance()->locationForAlbumRootPath(albumRoot);
+    if (location.isNull())
         return QStringList();
 
     QString subURL = path;
@@ -350,19 +350,19 @@ QStringList AlbumDB::getSubalbumsForPath(const QString &albumRoot,
         d->db->execSql( QString("SELECT relativePath FROM Albums WHERE albumRoot=? AND relativePath LIKE '") +
                         subURL + QString("%' ") + QString("AND relativePath NOT LIKE '") +
                         subURL + QString("%/%'; "),
-                        location->id(),
+                        location.id(),
                         &values );
     }
     else
     {
         d->db->execSql( QString("SELECT relativePath FROM Albums WHERE albumRoot=? AND relativePath LIKE '") +
                         subURL + QString("%'; "),
-                        location->id(),
+                        location.id(),
                         &values );
     }
 
     QStringList subalbums;
-    QString albumRootPath = location->albumRootPath();
+    QString albumRootPath = location.albumRootPath();
     for (QList<QVariant>::iterator it = values.begin(); it != values.end(); ++it)
         subalbums << albumRootPath + it->toString();
     return subalbums;
@@ -372,11 +372,11 @@ int AlbumDB::addAlbum(const QString &albumRoot, const QString& relativePath,
                       const QString& caption,
                       const QDate& date, const QString& collection)
 {
-    CollectionLocation *location = CollectionManager::instance()->locationForAlbumRootPath(albumRoot);
-    if (!location)
+    CollectionLocation location = CollectionManager::instance()->locationForAlbumRootPath(albumRoot);
+    if (location.isNull())
         return -1;
 
-    return addAlbum(location->id(), relativePath, caption, date, collection);
+    return addAlbum(location.id(), relativePath, caption, date, collection);
 }
 
 int AlbumDB::addAlbum(int albumRootId, const QString& relativePath,
@@ -1556,11 +1556,11 @@ QList<QPair<QString, QDateTime> > AlbumDB::getItemsAndDate()
 
 int AlbumDB::getAlbumForPath(const QString &albumRoot, const QString& folder, bool create)
 {
-    CollectionLocation *location = CollectionManager::instance()->locationForAlbumRootPath(albumRoot);
-    if (!location)
+    CollectionLocation location = CollectionManager::instance()->locationForAlbumRootPath(albumRoot);
+    if (location.isNull())
         return -1;
 
-    return getAlbumForPath(location->id(), folder, create);
+    return getAlbumForPath(location.id(), folder, create);
 
 }
 

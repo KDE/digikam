@@ -28,6 +28,11 @@
 namespace Digikam
 {
 
+CollectionLocation::CollectionLocation()
+    : m_id(-1), m_status(LocationNull), m_type(TypeVolumeHardWired)
+{
+}
+
 int CollectionLocation::id() const
 {
     return m_id;

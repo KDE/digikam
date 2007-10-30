@@ -86,10 +86,10 @@ public:
 
 protected:
 
-    void scanForStaleAlbums(QList<CollectionLocation*> locations);
-    void scanAlbumRoot(CollectionLocation *location);
-    void scanAlbum(CollectionLocation *location, const QString &album);
-    int checkAlbum(CollectionLocation *location, const QString &album);
+    void scanForStaleAlbums(QList<CollectionLocation> locations);
+    void scanAlbumRoot(const CollectionLocation &location);
+    void scanAlbum(const CollectionLocation &location, const QString &album);
+    int checkAlbum(const CollectionLocation &location, const QString &album);
 
 #if 0
     /**
