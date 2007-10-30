@@ -57,6 +57,7 @@ Q_OBJECT
     void reset();
 
     void setMaximum(int max);
+    void incrementMaximum(int added);
     void advance(int offset);
     void setValue(int value);
     int  value();

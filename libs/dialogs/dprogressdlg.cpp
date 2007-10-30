@@ -177,6 +177,11 @@ void DProgressDlg::setMaximum(int max)
     d->progress->setMaximum(max);
 }
 
+void DProgressDlg::incrementMaximum(int added)
+{
+    d->progress->setMaximum(d->progress->maximum() + added);
+}
+
 void DProgressDlg::setValue(int value)
 {
     d->progress->setValue(value);
