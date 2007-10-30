@@ -79,8 +79,9 @@ extern "C"
 #include <kaction.h>
 #include <kstandarddirs.h>
 #include <kiconeffect.h>
-                            #include <kdebug.h>
+#include <kdebug.h>
 #include <kdeversion.h>
+
 #if KDE_IS_VERSION(3,2,0)
 #include <kcalendarsystem.h>
 #include <kinputdialog.h>
@@ -572,12 +573,16 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     if (d->currentAlbum)
     {
         if (d->currentAlbum->type() == Album::PHYSICAL )
+        {
             popmenu.insertItem(i18n("Set as Album Thumbnail"), 17);
+            popmenu.insertSeparator();
+        }        
         else if (d->currentAlbum->type() == Album::TAG )
+        {
             popmenu.insertItem(i18n("Set as Tag Thumbnail"), 17);
+            popmenu.insertSeparator();
+        }
     }
-
-    popmenu.insertSeparator();
 
     // --------------------------------------------------------
     
