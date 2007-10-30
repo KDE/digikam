@@ -384,6 +384,13 @@ void IconView::selectItem(IconItem* item, bool select)
     emit signalSelectionChanged();
 }
 
+// Define the item which is visible after changing an album 
+// (applies both to physical and virtual albums, like tags and date view).
+void IconView::setStoredVisibleItem(IconItem *item) 
+{ 
+    d->storedVisibleItem = item; 
+}
+
 void IconView::insertGroup(IconGroupItem* group)
 {
     if (!group)

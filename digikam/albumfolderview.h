@@ -65,6 +65,8 @@ public:
 
     void setAlbumThumbnail(PAlbum *album);
 
+    void setCurrentAlbum(Album *album);
+
 signals:
     
     void signalAlbumModified();

@@ -172,6 +172,8 @@ public:
     QFont                         fnCom;
     QFont                         fnXtra;
 
+    KURL                          itemUrlToFind;
+
     QDict<AlbumIconItem>          itemDict;
     
     AlbumLister                  *imageLister;
@@ -346,6 +348,11 @@ void AlbumIconView::setAlbum(Album* album)
     updateItemRectsPixmap();
 }
 
+void AlbumIconView::setAlbumItemToFind(const KURL& url)
+{
+    d->itemUrlToFind = url;
+}
+
 void AlbumIconView::refreshIcon(AlbumIconItem* item)
 {
     if (!item)
@@ -401,6 +408,35 @@ void AlbumIconView::slotImageListerNewItems(const ImageInfoList& itemList)
         item->setViewItem(iconItem);
 
         d->itemDict.insert(url.url(), iconItem);
+    }
+
+    // Make the icon, specified by d->itemUrlToFind, the current one 
+    // in the album icon view and make it visible.
+    // This is for example used after a "Go To",
+    // e.g. from tags (or date) view to folder view.
+    // Note that AlbumIconView::slotImageListerNewItems may
+    // be called several times after another, because images get
+    // listed in packages of 200. 
+    // Therefore the item might not always be available in the very
+    // first call when there are sufficiently many images.
+    // Also, because of this, we cannot reset the item which is to be found,
+    // i.e. something like d->itemUrlToFind = 0, after the item was found,
+    // as then the visibility of this item is lost in a subsequent call.
+    if (!d->itemUrlToFind.isEmpty())
+    {
+        AlbumIconItem* icon = findItem(d->itemUrlToFind.url());
+        if (icon) 
+        {
+            clearSelection();
+            updateContents();
+            setCurrentItem(icon); 
+            ensureItemVisible(icon);
+
+            // make the item really visible 
+            // (the previous ensureItemVisible does not work)
+            setStoredVisibleItem(icon);
+            triggerRearrangement();
+        }
     }
 
     emit signalItemsAdded();
@@ -524,13 +560,66 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
         openWithMenu.insertItem( ptr->pixmap(KIcon::Small), ptr->name(), index++);
         serviceVector.push_back(ptr);
     }
+     
+    // Obtain a list of all selected images. 
+    // This is needed both for the goto tags submenu here and also
+    // for the "move to trash" and further actions below.
+    QValueList<Q_LLONG> selectedImageIDs;
+    
+    for (IconItem *it = firstItem(); it; it=it->nextItem())
+    {
+        if (it->isSelected())
+        {
+            AlbumIconItem *selItem = static_cast<AlbumIconItem *>(it);
+            selectedImageIDs.append(selItem->imageInfo()->id());
+        }
+    }
 
+    // --------------------------------------------------------
+    // Provide Goto folder and/or date pop-up menu
+    QPopupMenu gotoMenu;
+ 
+    gotoMenu.insertItem(SmallIcon("folder_image"), i18n("Album"), 20);
+    gotoMenu.insertItem(SmallIcon("date"), i18n("Date"), 21);
+
+    TagsPopupMenu* gotoTagsPopup = new TagsPopupMenu(selectedImageIDs, 1000, TagsPopupMenu::REMOVE);
+    int gotoTagId                = gotoMenu.insertItem(SmallIcon("tag"), i18n("Tag"), gotoTagsPopup);
+
+    // Disable the goto Tag popup menu, if there are no tags at all.
+    AlbumManager* man = AlbumManager::instance();
+    if (!man->albumDB()->hasTags(selectedImageIDs))
+            gotoMenu.setItemEnabled(gotoTagId, false);
+
+    connect(gotoTagsPopup, SIGNAL(signalTagActivated(int)),
+            this, SLOT(slotGotoTag(int)));
+ 
+    if (d->currentAlbum->type() == Album::PHYSICAL ) 
+    {
+        gotoMenu.setItemEnabled(20, false);
+    }
+    else if (d->currentAlbum->type() == Album::DATE )
+    {
+        gotoMenu.setItemEnabled(21, false);
+    }
+   
     // --------------------------------------------------------
 
     DPopupMenu popmenu(this);
     popmenu.insertItem(SmallIcon("viewimage"), i18n("View..."), 18);
     popmenu.insertItem(SmallIcon("editimage"), i18n("Edit..."), 10);
     popmenu.insertItem(SmallIcon("lighttableadd"), i18n("Add to Light Table"), 19);
+    // Note that the numbers 18, 10, 19 are used below in 
+    // the switch(id) for popmenu.exec(pos);
+    // For the goto menu such a number is not needed, 
+    // because only the above 20 and 21 of the goto popup are used,
+    // but it has to be provided.
+    popmenu.insertItem(SmallIcon("goto"), i18n("Go To"), &gotoMenu, 12); 
+    // If there is more than one image selected, disable the goto menu entry. 
+    if (selectedImageIDs.count() > 1) 
+    {
+        popmenu.setItemEnabled(12, false);
+    }
+
     popmenu.insertItem(i18n("Open With"), &openWithMenu, 11);
 
     // Merge in the KIPI plugins actions ----------------------------
@@ -600,16 +689,6 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 
     // --------------------------------------------------------
 
-    QValueList<Q_LLONG> selectedImageIDs;
-    
-    for (IconItem *it = firstItem(); it; it=it->nextItem())
-    {
-        if (it->isSelected())
-        {
-            AlbumIconItem *selItem = static_cast<AlbumIconItem *>(it);
-            selectedImageIDs.append(selItem->imageInfo()->id());
-        }
-    }
 
     popmenu.insertItem(SmallIcon("edittrash"),
                        i18n("Move to Trash", "Move %n Files to Trash" , selectedImageIDs.count() ), 16);
@@ -631,9 +710,8 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 
     int removeTagId = popmenu.insertItem(i18n("Remove Tag"), removeTagsPopup);
 
-    AlbumManager* man = AlbumManager::instance();
-
     // Performance: Only check for tags if there are <250 images selected
+    // Also disable the remove Tag popup menu, if there are no tags at all.
     if (selectedImageIDs.count() > 250 ||
         !man->albumDB()->hasTags(selectedImageIDs))
             popmenu.setItemEnabled(removeTagId, false);
@@ -691,6 +769,21 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
           insertSelectionToLightTable(true);
           break;
       }
+
+      case 20:     // goto album 
+      { 
+          // send a signal to the parent widget (digikamview.cpp)
+          emit signalGotoAlbumAndItem(iconItem);
+          break;
+      }
+
+      case 21:     // goto date
+      { 
+          // send a signal to the parent widget (digikamview.cpp)
+          emit signalGotoDateAndItem(iconItem);
+          break;
+      }
+
 
       default:
           break;
@@ -1980,6 +2073,14 @@ void AlbumIconView::slotAlbumModified()
 
     updateBannerRectPixmap();
     updateItemRectsPixmap();
+}
+
+void AlbumIconView::slotGotoTag(int tagID)
+{
+    // send a signal to the parent widget (digikamview.cpp) to change 
+    // to Tag view and the corresponding item
+  
+    emit signalGotoTagAndItem(tagID); //(iconItem);
 }
 
 void AlbumIconView::slotAssignTag(int tagID)

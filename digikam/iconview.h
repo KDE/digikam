@@ -78,6 +78,8 @@ public:
     
     void selectItem(IconItem* item, bool select);
 
+    void setStoredVisibleItem(IconItem *item);
+ 
     void triggerRearrangement();
     
     void insertGroup(IconGroupItem* group);

@@ -34,6 +34,7 @@
 #include <qapplication.h>
 #include <qsplitter.h>
 #include <qtimer.h>
+#include <qlistview.h>
 
 // KDE includes.
 
@@ -273,6 +274,15 @@ void DigikamView::setupConnections()
     //connect(d->iconView, SIGNAL(signalItemDeleted(AlbumIconItem*)),
       //      this, SIGNAL(signalNoCurrentItem()));
 
+    connect(d->iconView, SIGNAL(signalGotoAlbumAndItem(AlbumIconItem *)),
+            this, SLOT(slotGotoAlbumAndItem(AlbumIconItem *)));
+
+    connect(d->iconView, SIGNAL(signalGotoDateAndItem(AlbumIconItem *)),
+            this, SLOT(slotGotoDateAndItem(AlbumIconItem *)));
+
+    connect(d->iconView, SIGNAL(signalGotoTagAndItem(int)),
+            this, SLOT(slotGotoTagAndItem(int)));
+
     connect(d->folderView, SIGNAL(signalAlbumModified()),
             d->iconView, SLOT(slotAlbumModified()));
 
@@ -504,8 +514,6 @@ void DigikamView::slotNewAdvancedSearch()
     d->searchFolderView->extendedSearchNew();
 }
 
-// ----------------------------------------------------------------
-
 void DigikamView::slotAlbumDeleted(Album *delalbum)
 {
     d->albumHistory->deleteAlbum(delalbum);
@@ -614,7 +622,76 @@ void DigikamView::slotSelectAlbum(const KURL &)
     */
 }
 
-// ----------------------------------------------------------------
+void DigikamView::slotGotoAlbumAndItem(AlbumIconItem* iconItem)
+{
+    KURL url( iconItem->imageInfo()->kurl() );
+    url.cleanPath();
+
+    emit signalNoCurrentItem();
+
+    Album* album = iconItem->imageInfo()->album();
+
+    // Change the current album in list view.
+    d->folderView->setCurrentAlbum(album);
+
+    // Change to (physical) Album view.
+    // Note, that this also opens the side bar if it is closed; this is
+    // considered as a feature, because it highlights that the view was changed.
+    d->leftSideBar->setActiveTab(d->folderView);
+
+    // Set the activate item url to find in the Album View after  
+    // all items have be reloaded.
+    d->iconView->setAlbumItemToFind(url);
+
+    // And finally toggle album manager to handle album history and 
+    // reload all items.
+    d->albumManager->setCurrentAlbum(album);
+}
+
+void DigikamView::slotGotoDateAndItem(AlbumIconItem* iconItem)
+{
+    KURL url( iconItem->imageInfo()->kurl() );
+    url.cleanPath();
+    QDate date = iconItem->imageInfo()->dateTime().date();
+
+    emit signalNoCurrentItem();
+
+    // Change to Date Album view.
+    // Note, that this also opens the side bar if it is closed; this is
+    // considered as a feature, because it highlights that the view was changed.
+    d->leftSideBar->setActiveTab(d->dateFolderView);
+
+    // Set the activate item url to find in the Album View after  
+    // all items have be reloaded.
+    d->iconView->setAlbumItemToFind(url);  
+
+    // Change the year and month of the iconItem (day is unused).
+    d->dateFolderView->gotoDate(date.year(), date.month(), date.day()); 
+
+}
+
+void DigikamView::slotGotoTagAndItem(int tagID)
+{
+    // FIXME: Arnd: don't know yet how to get the iconItem passed through ...
+    // FIXME: then we would know how to use the following ...
+    //  KURL url( iconItem->imageInfo()->kurl() );
+    //  url.cleanPath();
+
+    emit signalNoCurrentItem();
+
+    // Change to Tag Folder view.
+    // Note, that this also opens the side bar if it is closed; this is
+    // considered as a feature, because it highlights that the view was changed.
+    d->leftSideBar->setActiveTab(d->tagFolderView);
+
+    // Set the current tag in the tag folder view.
+    d->tagFolderView->selectItem(tagID);
+
+    // Set the activate item url to find in the Tag View after  
+    // all items have be reloaded.
+    // FIXME: see above
+    // d->iconView->setAlbumItemToFind(url);  
+}
 
 void DigikamView::slotAlbumSelected(Album* album)
 {
@@ -718,8 +795,6 @@ void DigikamView::slotAlbumsCleared()
     d->iconView->clear();
     emit signalAlbumSelected(false);
 }
-
-// ----------------------------------------------------------------
 
 void DigikamView::setThumbSize(int size)
 {
@@ -907,8 +982,6 @@ void DigikamView::slotAlbumHighlight()
     d->folderView->setAlbumThumbnail(dynamic_cast<PAlbum*>(album));
     */
 }
-
-// ----------------------------------------------------------------
 
 void DigikamView::slotEscapePreview()
 {

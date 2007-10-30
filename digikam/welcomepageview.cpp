@@ -146,6 +146,7 @@ QString WelcomePageView::infoPage()
     newFeatures << i18n("New Light Table provides easy comparison for similar images");
     newFeatures << i18n("Camera Interface used as generic import tool");
     newFeatures << i18n("New mime-type and rating filters on status bar");
+    newFeatures << i18n("New options to easy navigate between albums, tags and collections");
 
     QString featureItems;
     for ( uint i = 0 ; i < newFeatures.count() ; i++ )

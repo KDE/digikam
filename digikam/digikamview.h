@@ -73,7 +73,11 @@ signals:
     void signalThumbSizeChanged(int);
     void signalZoomChanged(double, int);
     void signalTogglePreview(bool);
-
+    void signalGotoAlbumAndItem(AlbumIconItem *);
+    void signalGotoDateAndItem(AlbumIconItem *);
+    void signalGotoTagAndItem(int tagID);
+    void signalChangedTab(QWidget*);
+     
 public slots:
 
     // View Action slots
@@ -101,7 +105,10 @@ public slots:
     void slotAlbumSyncPicturesMetadata();
     void slotAlbumSyncPicturesMetadataDone();
     void slotAlbumSelected(Album* album);
-
+    void slotGotoAlbumAndItem(AlbumIconItem* iconItem);
+    void slotGotoDateAndItem(AlbumIconItem* iconItem);
+    void slotGotoTagAndItem(int tagID);
+   
     // Tag action slots
     void slotNewTag();
     void slotDeleteTag();

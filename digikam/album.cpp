@@ -419,6 +419,9 @@ DAlbum::DAlbum(const QDate& date, bool root)
       : Album(Album::DATE, root ? 0 : ++m_uniqueID, root),
               m_date(date)
 {
+    // Set the name of the date album
+    QString dateTitle = date.toString("MMMM yyyy");
+    setTitle(dateTitle);
 }
 
 DAlbum::~DAlbum()
