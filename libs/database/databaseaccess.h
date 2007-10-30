@@ -38,6 +38,7 @@ class DatabaseBackend;
 class AlbumDB;
 class ImageInfoCache;
 class DatabaseAttributesWatch;
+class InitializationObserver;
 class DatabaseAccessStaticPriv;
 
 class DIGIKAM_EXPORT DatabaseAccess
@@ -106,7 +107,7 @@ public:
       * If the parameters were not changed, this method has no effect.
       * @returns if the database is ready for use
       */
-    static bool checkReadyForUse();
+    static bool checkReadyForUse(InitializationObserver *observer = 0);
 
     /**
       * Clean up the database access.

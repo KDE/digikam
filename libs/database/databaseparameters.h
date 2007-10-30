@@ -74,6 +74,7 @@ public:
     bool operator!=(const DatabaseParameters &other);
 
     bool isSQLite() const;
+    QString SQLiteDatabaseFile() const;
 
     /**
      * Convenience method to create a DatabaseParameters object for an

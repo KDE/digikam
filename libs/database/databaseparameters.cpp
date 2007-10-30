@@ -86,6 +86,13 @@ bool DatabaseParameters::isSQLite() const
     return databaseType == "QSQLITE";
 }
 
+QString DatabaseParameters::SQLiteDatabaseFile() const
+{
+    if (isSQLite())
+        return databaseName;
+    return QString();
+}
+
 DatabaseParameters DatabaseParameters::parametersForSQLite(const QString &databaseFile)
 {
     // only the database name is needed

@@ -142,7 +142,7 @@ void DatabaseAccess::setParameters(const DatabaseParameters &parameters)
     }
 }
 
-bool DatabaseAccess::checkReadyForUse()
+bool DatabaseAccess::checkReadyForUse(InitializationObserver *observer)
 {
     QStringList drivers = QSqlDatabase::drivers();
     if (!drivers.contains("QSQLITE"))
@@ -176,6 +176,7 @@ bool DatabaseAccess::checkReadyForUse()
 
     // update schema
     SchemaUpdater updater(&access);
+    updater.setObserver(observer);
     if (!d->backend->initSchema(&updater))
         return false;
 
