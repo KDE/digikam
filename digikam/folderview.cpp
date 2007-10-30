@@ -350,7 +350,7 @@ void FolderView::slotAllAlbumsLoaded()
 void FolderView::loadViewState()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(objectName());
+    KConfigGroup group        = config->group(objectName());
     
     int selectedItem = group.readEntry("LastSelectedItem", 0);
     
@@ -360,8 +360,10 @@ void FolderView::loadViewState()
         openFolders = group.readEntry("OpenFolders",QList<int>());
     }
     
-    FolderItem *item;    
+    FolderItem *item      = 0;    
+    FolderItem *foundItem = 0;
     Q3ListViewItemIterator it(this->lastItem());
+
     for( ; it.current(); --it)
     {
         item = dynamic_cast<FolderItem*>(it.current());
@@ -372,11 +374,22 @@ void FolderView::loadViewState()
             setOpen(item, true);
         else
             setOpen(item, false);
+
         if(item->id() == selectedItem)
         {
-            setSelected(item, true);
-            ensureItemVisible(item);
+            // Save the found selected item so that it can be made visible.
+            foundItem = item;
         }
+    }
+
+    // Important note: this cannot be done inside the previous loop
+    // because opening folders prevents the visibility.
+    // Fixes bug #144815.
+    // (Looks a bit like a bug in Qt to me ...)
+    if (foundItem)
+    {
+        setSelected(foundItem, true);
+        ensureItemVisible(foundItem);
     }
 }
 
