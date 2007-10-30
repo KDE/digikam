@@ -78,6 +78,8 @@ public:
     
     void selectItem(IconItem* item, bool select);
 
+    /** Define the item which is visible after changing an album 
+        (applies both to physical and virtual albums, like tags and date view). */
     void setStoredVisibleItem(IconItem *item);
  
     void triggerRearrangement();
