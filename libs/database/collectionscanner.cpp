@@ -108,6 +108,8 @@ void CollectionScanner::loadNameFilters()
 
 void CollectionScanner::completeScan()
 {
+    emit startCompleteScan();
+
     loadNameFilters();
 
     //TODO: Implement a mechanism to watch for album root changes while we keep this list

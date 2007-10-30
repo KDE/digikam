@@ -85,6 +85,7 @@ signals:
 
     void databaseInitialized(bool success);
     void completeScanDone();
+    void triggerShowProgressDialog();
 
 private slots:
 
@@ -94,6 +95,9 @@ private slots:
     void slotStartScanningAlbumRoot(const QString &albumRoot);
     void slotStartScanningForStaleAlbums();
     void slotStartScanningAlbumRoots();
+
+    void slotShowProgressDialog();
+    void slotTriggerShowProgressDialog();
 
 protected:
 
@@ -114,7 +118,6 @@ private:
     virtual void error(const QString &errorMessage);
 
     void createProgressDialog();
-
 };
 
 }  // namespace Digikam

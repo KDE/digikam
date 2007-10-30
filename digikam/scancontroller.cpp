@@ -35,6 +35,7 @@
 #include <QMutex>
 #include <QMutexLocker>
 #include <QWaitCondition>
+#include <QTimer>
 
 // KDE includes.
 
@@ -70,6 +71,7 @@ public:
         needsInitialization = false;
         needsCompleteScan   = false;
         eventLoop           = 0;
+        showTimer           = 0;
         advice              = ScanController::Success;
     }
 
@@ -84,6 +86,8 @@ public:
     QWaitCondition       condVar;
 
     QEventLoop          *eventLoop;
+
+    QTimer              *showTimer;
 
     QPixmap              albumPix;
     QPixmap              rootPix;
@@ -119,6 +123,7 @@ public:
             errorPix = KIconLoader::global()->loadIcon("dialog-error", KIconLoader::NoGroup, 32);
         return errorPix;
     }
+
 };
 
 class ScanControllerCreator { public: ScanController object; };
@@ -131,6 +136,8 @@ ScanController* ScanController::instance()
 
 ScanController::ScanController()
 {
+    d = new ScanControllerPriv;
+
     d->eventLoop = new QEventLoop(this);
 
     connect(this, SIGNAL(databaseInitialized(bool)),
@@ -138,6 +145,18 @@ ScanController::ScanController()
 
     connect(this, SIGNAL(completeScanDone()),
             d->eventLoop, SLOT(quit()));
+
+    d->showTimer = new QTimer(this);
+    d->showTimer->setSingleShot(true);
+
+    connect(d->showTimer, SIGNAL(timeout()),
+            this, SLOT(slotShowProgressDialog()));
+
+    connect(this, SIGNAL(triggerShowProgressDialog()),
+            this, SLOT(slotTriggerShowProgressDialog()));
+
+    d->running = true;
+    start();
 }
 
 
@@ -152,6 +171,7 @@ ScanController::~ScanController()
     wait();
 
     delete d->progressDialog;
+    delete d;
 }
 
 void ScanController::createProgressDialog()
@@ -168,6 +188,18 @@ void ScanController::createProgressDialog()
 
     d->progressDialog->setMaximum(1);
     d->progressDialog->setValue(1);
+}
+
+void ScanController::slotTriggerShowProgressDialog()
+{
+    if (d->progressDialog && !d->showTimer->isActive() && !d->progressDialog->isVisible())
+        d->showTimer->start(300);
+}
+
+void ScanController::slotShowProgressDialog()
+{
+    if (d->progressDialog)
+        d->progressDialog->show();
 }
 
 ScanController::Advice ScanController::databaseInitialization()
@@ -280,13 +312,14 @@ void ScanController::connectCollectionScanner(CollectionScanner *scanner)
 
     connect(scanner, SIGNAL(startScanningAlbumRoots()),
             this, SLOT(slotStartScanningAlbumRoots()));
+
+    connect(scanner, SIGNAL(startCompleteScan()),
+            this, SLOT(slotTriggerShowProgressDialog()));
 }
 
 void ScanController::slotTotalFilesToScan(int count)
 {
     d->progressDialog->incrementMaximum(count);
-    if (count > 0)
-        d->progressDialog->show();
 }
 
 void ScanController::slotStartScanningAlbum(const QString &albumRoot, const QString &album)
@@ -317,6 +350,7 @@ void ScanController::slotStartScanningAlbumRoots()
 
 void ScanController::moreSchemaUpdateSteps(int numberOfSteps)
 {
+    emit triggerShowProgressDialog();
     d->progressDialog->incrementMaximum(numberOfSteps);
 }
 

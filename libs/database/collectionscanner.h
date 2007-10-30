@@ -207,6 +207,7 @@ signals:
     void startScanningAlbum(const QString &albumRoot, const QString &album);
     void startScanningForStaleAlbums();
     void startScanningAlbumRoots();
+    void startCompleteScan();
 
     /**
      * Emitted when the scanning has finished.
