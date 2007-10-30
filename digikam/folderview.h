@@ -108,7 +108,7 @@ private slots:
 
 private:
 
-    FolderViewPriv      *d;
+    FolderViewPriv *d;
 };
 
 }  // namespace Digikam
