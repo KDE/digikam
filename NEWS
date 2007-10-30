@@ -14,8 +14,9 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 042 ==> 148993 : Filter images by rating in album view.
 043 ==> 151357 : Ratings can exceed 5 stars
 044 ==> 144815 : scroll left-pane to the selected album/date on start-up
-045 ==> 96894  : easier navigation between albums, tags and collections
-046 ==>  
+045 ==>  96894 : easier navigation between albums, tags and collections
+046 ==> 147426 : Search for non-voted pics
+047 ==>
 
 **********************************************************************************************
 

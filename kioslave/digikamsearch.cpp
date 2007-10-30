@@ -538,10 +538,23 @@ QString kio_digikamsearch::subQuery(enum kio_digikamsearch::SKey key,
             break;
         }
         case(RATING):
-        {
-            query = " (ImageProperties.value $$##$$ $$@@$$ and ImageProperties.property='Rating') ";
+        {   
+            // For searches for `rating=0`, `rating>=0`, `rating<=0`, 
+            // `rating <c`, `rating<=c`, `rating<>c` with c=1,2,3,4,5, 
+            // special care has to be taken: Images which were never rated  
+            // have no ImageProperties.property='Rating', but 
+            // need to be treated like having a rating of 0.
+            // This is achieved by including all images which do
+            // not have property='Rating'.
+            if ( (   val=="0" and (op==EQ or op==GTE or op==LTE) )
+                 or (val!="0" and (op==LT or op==LTE or op==NE) ) ) {
+                query = " ( (ImageProperties.value $$##$$ $$@@$$ and ImageProperties.property='Rating') or (Images.id NOT IN (SELECT imageid FROM ImageProperties WHERE property='Rating') ) )";
+            } else {           
+                query = " (ImageProperties.value $$##$$ $$@@$$ and ImageProperties.property='Rating') ";
+            }
             break;
         }
+
     }
     
     if (key != TAG) 
