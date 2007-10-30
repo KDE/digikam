@@ -172,9 +172,9 @@ public:
     QFont                         fnCom;
     QFont                         fnXtra;
 
-    KURL                          itemUrlToFind;
-
     QDict<AlbumIconItem>          itemDict;
+
+    KURL                          itemUrlToFind;
     
     AlbumLister                  *imageLister;
     Album                        *currentAlbum;
