@@ -86,7 +86,7 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
     iccpreviewwidget.cpp                Gilles          X      X       DONE        DONE
     iccprofilewidget.cpp                Gilles          X      X       DONE        DONE
 |-----imageplugins                      Gilles          X      X       DONE
-|-----metadata                          Gilles          X      X       DONE
+|-----metadata                          Gilles          X      X       DONE        DONE
 
 |-utilities
 |---batch                               Gilles                 X       DONE
@@ -100,7 +100,7 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
     cameraiconitem.cpp                  Gilles                 X       DONE
     cameraiconview.cpp                  Gilles                 X       DONE
     camerainfodialog.cpp                Gilles                 X       DONE
-    cameraui.cpp                        Gilles                 X       DONE
+    cameraui.cpp                        Gilles                 X       DONE                 QToolBox color background is not right.
     dkcamera.cpp                        Gilles                 X       DONE
     gpcamera.cpp                        Gilles                 X       DONE
     gpiteminfo.cpp                      Gilles                 X       DONE
@@ -180,7 +180,7 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
     kdatetimeedit.cpp                   Gilles                 X       DONE
     kipiinterface.cpp                   Gilles                 X       DONE
     main.cpp                            Gilles                 X       DONE
-    mediaplayerview.cpp                 Gilles                 X       DONE
+    mediaplayerview.cpp                 Gilles                 X       DONE                 Must be ported to Phonon API.
     metadatahub.cpp                     Gilles                 X       DONE
     monthwidget.cpp                     Gilles                 X       DONE
     pixmapmanager.cpp                   Gilles                 X       DONE
@@ -192,7 +192,7 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
     searchquickdialog.cpp               Laurent                X       DONE
     searchresultsitem.cpp               Gilles                 X       DONE
     searchresultsview.cpp               Gilles                 X       DONE
-    searchwidgets.cpp                   Gilles                 X       DONE       Layout is broken in advanced search dialog
+    searchwidgets.cpp                   Gilles                 X       DONE                 Layout is broken in advanced search dialog.
     syncjob.cpp                         Gilles                 X       DONE
     tagcreatedlg.cpp                    Gilles                 X       DONE
     tagfilterview.cpp                   Gilles                 X       DONE
@@ -208,9 +208,9 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
 |---border                              Laurent                        DONE       DONE
 |-----patterns                          Laurent                        DONE        -
 |---channelmixer                        Laurent                        DONE       DONE
-|---charcoal                            Laurent                        DONE       DONE
+|---charcoal                            Laurent                        DONE                 Render is broken.
 |---colorfx                             Laurent                        DONE       DONE
-|---coreplugin                          Gilles                         DONE       DONE
+|---coreplugin                          Gilles                         DONE                 Auto color correction rendering is broken.
 |-----hsl                               Gilles                         DONE       DONE
 |-----ratiocrop                         Gilles                         DONE       DONE
 |-----sharpnesseditor                   Gilles                         DONE       DONE
@@ -235,4 +235,4 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
 |-----patterns                          Laurent                        DONE        -
 |---whitebalance                        Gilles                         DONE       DONE
 
-|-themedesigner                         Gilles                         DONE       DONE
+|-themedesigner                         Gilles                         DONE                 Thumbnails view is broken.
