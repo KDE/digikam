@@ -346,6 +346,7 @@ void FolderView::loadViewState()
     }
     
     FolderItem *item;    
+    FolderItem *foundItem = 0;    
     QListViewItemIterator it(this->lastItem());
     for( ; it.current(); --it)
     {
@@ -359,10 +360,17 @@ void FolderView::loadViewState()
             setOpen(item, false);
         if(item->id() == selectedItem)
         {
-            setSelected(item, true);
-            ensureItemVisible(item);
+            // Save the found selected item so that it can be made visible.
+            foundItem = item;
         }
     }
+
+    // Important note: this cannot be done inside the previous loop
+    // because opening folders prevents the visibility.
+    // Fixes bug #144815.
+    // (Looks a bit like a bug in Qt to me ...)
+    setSelected(foundItem, true);
+    ensureItemVisible(foundItem);
 }
 
 void FolderView::saveViewState()
