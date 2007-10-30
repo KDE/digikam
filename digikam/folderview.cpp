@@ -49,13 +49,16 @@
 namespace Digikam
 {
 
-//-----------------------------------------------------------------------------
-// FolderViewPriv class
-//-----------------------------------------------------------------------------
-
 class FolderViewPriv
 {
 public:
+
+    FolderViewPriv()
+    {
+        active           = false;
+        dragItem         = 0;
+        oldHighlightItem = 0;
+    }
 
     bool         active;
     
@@ -71,18 +74,12 @@ public:
 };
 
 //-----------------------------------------------------------------------------
-// FolderView class
-//-----------------------------------------------------------------------------
 
 FolderView::FolderView(QWidget *parent, const char *name)
           : QListView(parent, name)
 {
 
     d = new FolderViewPriv;
-
-    d->active = false;
-    d->dragItem         = 0;
-    d->oldHighlightItem = 0;
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
