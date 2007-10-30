@@ -581,12 +581,16 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     if (d->currentAlbum)
     {
         if (d->currentAlbum->type() == Album::PHYSICAL )
+        {
             thumbnailAction = popmenu.addAction(i18n("Set as Album Thumbnail"));
+            popmenu.addSeparator();
+        }
         else if (d->currentAlbum->type() == Album::TAG )
+        {
             thumbnailAction = popmenu.addAction(i18n("Set as Tag Thumbnail"));
+            popmenu.addSeparator();
+        }
     }
-
-    popmenu.addSeparator();
 
     // --------------------------------------------------------
 
