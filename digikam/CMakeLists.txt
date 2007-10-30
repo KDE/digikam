@@ -183,7 +183,7 @@ SET(digikam_bin_SRCS
                      mimefilter.cpp 
                      monthwidget.cpp 
                      pixmapmanager.cpp 
-		             ratingfilter.cpp
+                     ratingfilter.cpp
                      ratingpopupmenu.cpp 
                      ratingwidget.cpp 
                      scancontroller.cpp
