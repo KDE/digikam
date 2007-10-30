@@ -35,6 +35,7 @@
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kconfiggroup.h>
+
 // Local includes.
 
 #include "ddebug.h"
@@ -50,40 +51,36 @@
 namespace Digikam
 {
 
-//-----------------------------------------------------------------------------
-// FolderViewPriv class
-//-----------------------------------------------------------------------------
-
 class FolderViewPriv
 {
 public:
 
+    FolderViewPriv()
+    {
+        active           = false;
+        dragItem         = 0;
+        oldHighlightItem = 0;
+    }
+
     bool         active;
-    
+
     int          itemHeight;
 
     QPixmap      itemRegPix;
     QPixmap      itemSelPix;
-    
-    QPoint       dragStartPos;    
+
+    QPoint       dragStartPos;
 
     FolderItem  *dragItem;
     FolderItem  *oldHighlightItem;
 };
 
 //-----------------------------------------------------------------------------
-// FolderView class
-//-----------------------------------------------------------------------------
 
 FolderView::FolderView(QWidget *parent, const char *name)
           : Q3ListView(parent)
 {
-
     d = new FolderViewPriv;
-    d->active           = false;
-    d->dragItem         = 0;
-    d->oldHighlightItem = 0;
-
     setObjectName(name);
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
