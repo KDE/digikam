@@ -345,19 +345,22 @@ void FolderView::loadViewState()
         openFolders = config->readIntListEntry("OpenFolders");
     }
     
-    FolderItem *item;    
+    FolderItem *item      = 0;    
     FolderItem *foundItem = 0;    
     QListViewItemIterator it(this->lastItem());
+    
     for( ; it.current(); --it)
     {
         item = dynamic_cast<FolderItem*>(it.current());
         if(!item)
             continue;
+    
         // Start the album root always open
         if(openFolders.contains(item->id()) || item->id() == 0)
             setOpen(item, true);
         else
             setOpen(item, false);
+    
         if(item->id() == selectedItem)
         {
             // Save the found selected item so that it can be made visible.
@@ -369,8 +372,11 @@ void FolderView::loadViewState()
     // because opening folders prevents the visibility.
     // Fixes bug #144815.
     // (Looks a bit like a bug in Qt to me ...)
-    setSelected(foundItem, true);
-    ensureItemVisible(foundItem);
+    if (foundItem)
+    {
+        setSelected(foundItem, true);
+        ensureItemVisible(foundItem);
+    }
 }
 
 void FolderView::saveViewState()
