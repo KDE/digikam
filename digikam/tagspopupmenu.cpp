@@ -68,43 +68,49 @@ namespace Digikam
 class TagToggleAction : public QWidgetAction
 {
 public:
+
     TagToggleAction(const QString &text, QObject *parent);
     TagToggleAction(const KIcon &icon, const QString &text, QObject *parent);
     virtual QWidget *createWidget(QWidget * parent);
 
     void setSpecialChecked(bool checked);
     bool isChecked() const;
+
 private:
+
     bool m_checked;
 };
-
 
 class TagToggleMenuWidget : public QWidget
 {
 public:
+
     TagToggleMenuWidget(QMenu *parent, TagToggleAction *action);
 
 protected:
+
     virtual QSize sizeHint() const;
     virtual void paintEvent(QPaintEvent *);
 
 private:
+
     void initMenuStyleOption(QStyleOptionMenuItem *option) const;
     void initViewStyleOption(QStyleOptionViewItem *option) const;
     QSize menuItemSize(QStyleOptionMenuItem *opt) const;
     QRect checkIndicatorSize(QStyleOption *option) const;
 
-    QMenu *m_menu;
+private:
+
+    QMenu           *m_menu;
     TagToggleAction *m_action;
 };
 
-
-// ---- TagToggleMenuWidget ----
+// ------------------------------------------------------------------------
 
 TagToggleMenuWidget::TagToggleMenuWidget(QMenu *parent, TagToggleAction *action)
-    : QWidget(parent)
+                   : QWidget(parent)
 {
-    m_menu = parent;
+    m_menu   = parent;
     m_action = action;
     setMouseTracking(style()->styleHint(QStyle::SH_Menu_MouseTracking, 0, this));
 }
@@ -189,7 +195,8 @@ void TagToggleMenuWidget::paintEvent(QPaintEvent *)
 
     // draw the frame on the right
     // TODO: Frame is not displayed
-    if (frameMargin) {
+    if (frameMargin) 
+    {
         QRegion borderReg;
         borderReg += QRect(width()-frameMargin, 0, frameMargin, height()); //right
         p.setClipRegion(borderReg);
@@ -214,6 +221,7 @@ void TagToggleMenuWidget::initMenuStyleOption(QStyleOptionMenuItem *option) cons
     if (m_menu->activeAction() == m_action) // if hovered etc.
         option->state |= QStyle::State_Selected;
         // if (mouseDown) option->state |= QStyle::State_Sunken;
+
     // We have a special case here: menu items which are checked are not selectable,
     // it is an "Assign Tags" menu. To signal this, we change the pallette.
     // But only if there is no submenu...
@@ -280,11 +288,10 @@ QRect TagToggleMenuWidget::checkIndicatorSize(QStyleOption *option) const
     return style()->subElementRect(QStyle::SE_ViewItemCheckIndicator, &opt, this);
 }
 
-
-// ---- TagToggleAction ----
+// ------------------------------------------------------------------------
 
 TagToggleAction::TagToggleAction(const QString &text, QObject *parent)
-    : QWidgetAction(parent)
+               : QWidgetAction(parent)
 {
     m_checked = false;
     setText(text);
@@ -292,7 +299,7 @@ TagToggleAction::TagToggleAction(const QString &text, QObject *parent)
 }
 
 TagToggleAction::TagToggleAction(const KIcon &icon, const QString &text, QObject *parent)
-    : QWidgetAction(parent)
+               : QWidgetAction(parent)
 {
     m_checked = false;
     setIcon(icon);
@@ -329,17 +336,21 @@ class TagsPopupMenuPriv
 {
 public:
 
-    TagsPopupMenuPriv(){}
+    TagsPopupMenuPriv()
+    {
+        addTagActions    = 0;
+        toggleTagActions = 0;
+    }
 
-    QPixmap                addTagPix;
+    QPixmap              addTagPix;
 
-    QSet<int>              assignedTags;
-    QList<qlonglong>       selectedImageIDs;
+    QSet<int>            assignedTags;
+    QList<qlonglong>     selectedImageIDs;
 
-    TagsPopupMenu::Mode    mode;
+    QActionGroup        *addTagActions;
+    QActionGroup        *toggleTagActions;
 
-    QActionGroup          *addTagActions;
-    QActionGroup          *toggleTagActions;
+    TagsPopupMenu::Mode  mode;
 };
 
 TagsPopupMenu::TagsPopupMenu(qlonglong selectedImageId, Mode mode)
@@ -360,7 +371,7 @@ TagsPopupMenu::TagsPopupMenu(const QList<qlonglong>& selectedImageIds, Mode mode
 
 void TagsPopupMenu::setup(Mode mode)
 {
-    d->mode             = mode;
+    d->mode = mode;
 
     KIconLoader *iconLoader = KIconLoader::global();
     d->addTagPix            = iconLoader->loadIcon("tag", KIconLoader::NoGroup, KIconLoader::SizeSmall);
