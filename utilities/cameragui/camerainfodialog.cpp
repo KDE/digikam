@@ -58,7 +58,7 @@ CameraInfoDialog::CameraInfoDialog(QWidget *parent, const QString& summary, cons
 
     KPageWidgetItem *p1 = addPage(summaryView, i18n("Summary"));
     p1->setHeader( i18n("Device Summary") );
-    p1->setIcon( KIcon("book2") );
+    p1->setIcon( KIcon("dialog-information") );
     
     // ----------------------------------------------------------
 
@@ -78,7 +78,7 @@ CameraInfoDialog::CameraInfoDialog(QWidget *parent, const QString& summary, cons
 
     KPageWidgetItem *p3 = addPage(aboutView, i18n("About"));
     p3->setHeader( i18n("About Driver") );
-    p3->setIcon( KIcon("system-help") );
+    p3->setIcon( KIcon("digikam") );
 }
 
 CameraInfoDialog::~CameraInfoDialog()
