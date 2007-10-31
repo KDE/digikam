@@ -5,17 +5,17 @@ NEW FEATURES:
 General        : Updated internal CImg library to last stable 1.2.4 (released at 2007/09/26).
 AlbumGUI       : Add Rating filter widget on status bar.
 AlbumGUI       : Add MimeType filter widget on status bar.
-AlbumGUI       : Navigate from album, tag and date view to any other view.
+AlbumGUI       : Add tool to navigate from album, tag and date view to any other view.
 
 digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 040 ==> 147533 : New rating filter for the statusbar.
 041 ==> 131963 : Add a file type filter tab to the right.
 042 ==> 148993 : Filter images by rating in album view.
-043 ==> 151357 : Ratings can exceed 5 stars
-044 ==> 144815 : scroll left-pane to the selected album/date on start-up
-045 ==>  96894 : easier navigation between albums, tags and collections
-046 ==> 147426 : Search for non-voted pics
+043 ==> 151357 : Ratings can exceed 5 stars.
+044 ==> 144815 : Scroll left-pane to the selected album/date on start-up.
+045 ==>  96894 : Easier navigation between albums, tags and collections.
+046 ==> 147426 : Search for non-voted pics.
 047 ==>
 
 **********************************************************************************************
