@@ -50,7 +50,7 @@ namespace AlbumRoot
         VolumeRemovable = 2,
         Network         = 3
     };
-};
+}
 
 /**
  * \class AlbumRootInfo

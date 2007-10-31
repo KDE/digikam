@@ -130,11 +130,11 @@ enum ImageCommentsField
     ImageCommentsLast  = Comment
 };
 
-Q_DECLARE_FLAGS(Images, ImagesField);
-Q_DECLARE_FLAGS(ImageInformation, ImageInformationField);
-Q_DECLARE_FLAGS(ImageMetadata, ImageMetadataField);
-Q_DECLARE_FLAGS(ImageComments, ImageCommentsField);
-Q_DECLARE_FLAGS(ImagePositions, ImagePositionsField);
+Q_DECLARE_FLAGS(Images, ImagesField)
+Q_DECLARE_FLAGS(ImageInformation, ImageInformationField)
+Q_DECLARE_FLAGS(ImageMetadata, ImageMetadataField)
+Q_DECLARE_FLAGS(ImageComments, ImageCommentsField)
+Q_DECLARE_FLAGS(ImagePositions, ImagePositionsField)
 
 
 
