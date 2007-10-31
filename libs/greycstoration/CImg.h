@@ -3406,7 +3406,7 @@ namespace cimg_library {
 
 #define cimg_test_temporary_path(p) \
       if (!path_found) { \
-        std::sprintf(st_temporary_path,p); \
+        std::sprintf(st_temporary_path,"%s", p); \
         std::sprintf(tmp,"%s%s%s",st_temporary_path,cimg_OS==2?"\\":"/",filetmp); \
         if ((file=std::fopen(tmp,"wb"))!=0) { std::fclose(file); std::remove(tmp); path_found = true; } \
       }
