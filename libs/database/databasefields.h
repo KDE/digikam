@@ -168,7 +168,7 @@ DATABASEFIELDS_ENUM_ITERATOR(ImageComments)
 enum CustomEnumFlags
 {
 };
-Q_DECLARE_FLAGS(CustomEnum, CustomEnumFlags);
+Q_DECLARE_FLAGS(CustomEnum, CustomEnumFlags)
 
 #define DATABASEFIELDS_SET_DECLARE_METHODS(Flag, variable) \
     inline Flag &operator=(const Flag &f) { return variable.operator=(f); } \
@@ -274,10 +274,10 @@ public:
 } // end of namespace Digikam
 
 // must be outside the namespace!
-Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::Images);
-Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImageInformation);
-Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImageMetadata);
-Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImageComments);
-Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImagePositions);
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::Images)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImageInformation)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImageMetadata)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImageComments)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImagePositions)
 
 #endif // DATABASEFIELDS_H
