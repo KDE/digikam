@@ -70,30 +70,40 @@ int main(int argc, char *argv[])
                           "marcel dot wiesweg at gmx dot de",
                           "http://www.digikam.org/?q=blog/8");
 
+    aboutData.addAuthor ( "Arnd Baecker",
+                          I18N_NOOP("Developer"),
+                          "arnd dot baecker at web dot de",
+                          "http://www.digikam.org/?q=blog/133");
+
     aboutData.addAuthor ( "Francisco J. Cruz",
                           I18N_NOOP("Developer"),
                           "fj dot cruz at supercable dot es",
                           "http://www.digikam.org/?q=blog/5");
 
     aboutData.addAuthor ( "Renchi Raju",
-                          I18N_NOOP("Developer"),
+                          I18N_NOOP("Developer (2002-2005"),
                           "renchi at pooh dot tam dot uiuc dot edu",
                           0);
     
-    aboutData.addAuthor ( "Ralf Holzer",
-                          I18N_NOOP("Developer"),
-                          "kde at ralfhoelzer dot com",
-                          0);
-
     aboutData.addAuthor ( "Joern Ahrens",
-                          I18N_NOOP("Developer"),
+                          I18N_NOOP("Developer (2004-2005)"),
                           "joern dot ahrens at kdemail dot net",
                           "http://www.digikam.org/?q=blog/1");
     
     aboutData.addAuthor ( "Tom Albers",
-                          I18N_NOOP("Developer"),
+                          I18N_NOOP("Developer (2004-2005)"),
                           "tomalbers at kde dot nl",
                           "http://www.omat.nl/drupal/?q=blog/1");
+
+    aboutData.addAuthor ( "Ralf Holzer",
+                          I18N_NOOP("Developer (2004)"),
+                          "kde at ralfhoelzer dot com",
+                          0);
+
+    aboutData.addCredit ( "Mikolaj Machowski",
+                          I18N_NOOP("Bug reports and patches"),
+                          "mikmach at wp dot pl",
+                          0);
 
     aboutData.addCredit ( "Achim Bohnet",
                           I18N_NOOP("Bug reports and patches"),
@@ -109,11 +119,6 @@ int main(int argc, char *argv[])
                           I18N_NOOP("Developer"),
                           "a dot naselli at libero dot it",
                           0);
-
-    aboutData.addCredit ( "Arnd Baecker",
-                          I18N_NOOP("Developer"),
-                          "arnd dot baecker at web dot de",
-                          "http://www.digikam.org/?q=blog/133");
 
     aboutData.addCredit ( "Fabien Salvi",
                           I18N_NOOP("Webmaster"),
