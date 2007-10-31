@@ -1,3 +1,365 @@
+v0.9.3-beta2 - 2007-11-01
+----------------------------------------------------------------------------
+2007-10-31 07:55  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/NEWS: polish
+
+2007-10-30 21:17  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/digikam/iconview.cpp,
+	  branches/extragear/kde3/graphics/digikam/digikam/iconview.h:
+	  polish
+
+2007-10-30 21:12  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/digikam/albumiconview.cpp:
+	  polish
+
+2007-10-30 20:57  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/digikam/albumiconview.cpp:
+	  polish
+
+2007-10-30 20:52  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/digikam/datefolderview.cpp:
+	  polish
+
+2007-10-30 18:21  abaecker
+
+	* branches/extragear/kde3/graphics/digikam/NEWS,
+	  branches/extragear/kde3/graphics/digikam/kioslave/digikamsearch.cpp:
+	  Treat non-voted pictures as if they have 0-rating when doing a
+	  search.
+	  
+	  CCBUGS: 147426
+	  TODO:KDE4PORT
+
+2007-10-30 18:16  abaecker
+
+	* branches/extragear/kde3/graphics/digikam/NEWS,
+	  branches/extragear/kde3/graphics/digikam/digikam/album.cpp,
+	  branches/extragear/kde3/graphics/digikam/digikam/albumfolderview.cpp,
+	  branches/extragear/kde3/graphics/digikam/digikam/albumfolderview.h,
+	  branches/extragear/kde3/graphics/digikam/digikam/albumiconview.cpp,
+	  branches/extragear/kde3/graphics/digikam/digikam/albumiconview.h,
+	  branches/extragear/kde3/graphics/digikam/digikam/datefolderview.cpp,
+	  branches/extragear/kde3/graphics/digikam/digikam/datefolderview.h,
+	  branches/extragear/kde3/graphics/digikam/digikam/digikamview.cpp,
+	  branches/extragear/kde3/graphics/digikam/digikam/digikamview.h,
+	  branches/extragear/kde3/graphics/digikam/digikam/iconview.cpp,
+	  branches/extragear/kde3/graphics/digikam/digikam/iconview.h,
+	  branches/extragear/kde3/graphics/digikam/digikam/tagfolderview.h,
+	  branches/extragear/kde3/graphics/digikam/digikam/welcomepageview.cpp:
+	  New entry of the right-mouse-click menu in the album view to go
+	  to the folder of a given image (when in tags/searches or date
+	  view)
+	  or to the images of the same date (when in folder/searches or
+	  tags view).
+	  
+	  CCBUGS: 96894
+	  TODO:KDE4PORT
+
+2007-10-30 13:37  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/digikam/welcomepageview.cpp:
+	  update new features
+
+2007-10-30 08:51  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/digikam/albumiconview.cpp:
+	  do not mix both separator on menu, especially with Date and
+	  Search view
+
+2007-10-30 08:51  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/digikam/folderview.h:
+	  polish
+
+2007-10-30 08:42  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/digikam/folderview.cpp:
+	  init private members in private class
+
+2007-10-30 08:41  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/utilities/setup/setupicc.cpp:
+	  fix indent
+
+2007-10-30 08:29  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/digikam/folderview.cpp:
+	  few polish. test if foundItem exist before to call Qt methods. I
+	  don't know if api test validity of pointer. This will prevent a
+	  possible crash.
+	  CCMAIL: arnd.baecker@web.de
+
+2007-10-30 08:10  abaecker
+
+	* branches/extragear/kde3/graphics/digikam/NEWS,
+	  branches/extragear/kde3/graphics/digikam/digikam/folderview.cpp:
+	  Scroll the left panel on start up to so that the current
+	  selection is visible.
+	  
+	  CCBUGS: 144815
+	  TODO:KDE4PORT
+
+2007-10-26 17:15  abaecker
+
+	* branches/extragear/kde3/graphics/digikam/digikam/ratingwidget.cpp:
+	  Ensure that rating cannot be smaller than RatingMin when dragging
+	  the mouse.
+	  
+	  CCBUGS: 151357
+	  TODO:KDE4PORT
+
+2007-10-26 16:52  abaecker
+
+	* branches/extragear/kde3/graphics/digikam/NEWS,
+	  branches/extragear/kde3/graphics/digikam/digikam/ratingwidget.cpp:
+	  Ensure that rating cannot be larger than RatingMax when dragging
+	  the mouse.
+	  
+	  CCBUGS: 151357
+	  TODO:KDE4PORT
+
+2007-10-26 13:29  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/digikam/mimefilter.cpp:
+	  add tool tip
+
+2007-10-26 13:23  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2007-10-26 13:22  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/libs/greycstoration/CImg.h:
+	  update internal CImg library from 1.2.3 to last stable 1.2.4
+
+2007-10-23 17:16  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/digikam/mimefilter.cpp:
+	  typo
+
+2007-10-23 09:31  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/digikam/kipiinterface.cpp:
+	  clone all attributes
+
+2007-10-23 08:40  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2007-10-23 08:38  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/digikam/albumsettings.cpp:
+	  polish
+
+2007-10-23 08:23  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/digikam/albumlister.cpp:
+	  polish
+
+2007-10-23 07:56  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2007-10-23 07:54  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/release_digikam.rb: fix
+	  release
+
+2007-10-23 07:54  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/digikam.lsm: fix version
+
+2007-10-23 07:53  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/digikam/version.h: fix
+	  version
+
+2007-10-23 07:50  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/digikam/Makefile.am,
+	  branches/extragear/kde3/graphics/digikam/digikam/albumlister.cpp,
+	  branches/extragear/kde3/graphics/digikam/digikam/albumlister.h,
+	  branches/extragear/kde3/graphics/digikam/digikam/albumsettings.cpp,
+	  branches/extragear/kde3/graphics/digikam/digikam/albumsettings.h,
+	  branches/extragear/kde3/graphics/digikam/digikam/digikamapp.cpp,
+	  branches/extragear/kde3/graphics/digikam/digikam/digikamapp.h,
+	  branches/extragear/kde3/graphics/digikam/digikam/digikamappprivate.h,
+	  branches/extragear/kde3/graphics/digikam/digikam/mimefilter.cpp,
+	  branches/extragear/kde3/graphics/digikam/digikam/mimefilter.h,
+	  branches/extragear/kde3/graphics/digikam/digikam/ratingfilter.cpp,
+	  branches/extragear/kde3/graphics/digikam/digikam/ratingfilter.h:
+	  digiKam from KDE3 branch : added a mime type pattern selection to
+	  the Album GUI status bar to filter album content based on file
+	  mime type.
+	  Current options available are:
+	  - All files (default)
+	  - JPEG files
+	  - PNG files
+	  - TIFF files.
+	  - RAW files.
+	  - Movies files
+	  - Audio files
+	  
+	  This new feature can be used accordinly with the new Rating
+	  Filter tool and of course the Tags Filter sidebar tab.
+	  Of course digiKam remember MimeType/Rating Filter settings
+	  between sessions.
+	  A fresh screenshot can be seen at this url:
+	  
+	  http://digikam3rdparty.free.fr/Screenshots/ratingandmimetypefilters.png
+
+2007-10-23 06:42  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/digikam/albumsettings.cpp,
+	  branches/extragear/kde3/graphics/digikam/digikam/albumsettings.h:
+	  fix credits
+
+2007-10-23 06:09  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/digikam/ratingfilter.cpp:
+	  compile
+
+2007-10-23 05:48  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/digikam/ratingfilter.cpp,
+	  branches/extragear/kde3/graphics/digikam/digikam/ratingfilter.h:
+	  add whatsthis
+
+2007-10-22 14:08  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/digikam/albumsettings.cpp,
+	  branches/extragear/kde3/graphics/digikam/digikam/digikamapp.cpp:
+	  polish
+
+2007-10-22 13:20  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/digikam/albumlister.cpp,
+	  branches/extragear/kde3/graphics/digikam/digikam/albumlister.h:
+	  polish
+
+2007-10-22 13:01  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/NEWS: polish
+
+2007-10-22 10:36  abaecker
+
+	* branches/extragear/kde3/graphics/digikam/NEWS,
+	  branches/extragear/kde3/graphics/digikam/digikam/Makefile.am,
+	  branches/extragear/kde3/graphics/digikam/digikam/albumlister.cpp,
+	  branches/extragear/kde3/graphics/digikam/digikam/albumlister.h,
+	  branches/extragear/kde3/graphics/digikam/digikam/albumsettings.cpp,
+	  branches/extragear/kde3/graphics/digikam/digikam/albumsettings.h,
+	  branches/extragear/kde3/graphics/digikam/digikam/digikamapp.cpp,
+	  branches/extragear/kde3/graphics/digikam/digikam/digikamapp.h,
+	  branches/extragear/kde3/graphics/digikam/digikam/digikamappprivate.h,
+	  branches/extragear/kde3/graphics/digikam/digikam/ratingfilter.cpp,
+	  branches/extragear/kde3/graphics/digikam/digikam/ratingfilter.h:
+	  Addition of a Rating filter in the status bar.
+	  This allows to restrict the displayed images to be >=, =, <= a
+	  given rating.
+	  
+	  CCBUGS 147533
+	  TODO:KDE4PORT
+
+2007-10-21 17:53  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/utilities/setup/setupicc.cpp:
+	  bug fix : the list of color profiles is not set properly into the
+	  squeezed combo box
+
+2007-10-21 17:53  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/libs/widgets/common/squeezedcombobox.cpp,
+	  branches/extragear/kde3/graphics/digikam/libs/widgets/common/squeezedcombobox.h:
+	  new method to set a list of items to a squeezed combo box
+
+2007-10-21 15:05  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/libs/widgets/common/squeezedcombobox.cpp:
+	  backport commit #727706 from libkipiplugins
+
+2007-10-21 12:08  hasso
+
+	* branches/extragear/kde3/graphics/digikam/configure.in.in: Make it
+	  to find the lcms from nonstandard places provided by user via
+	  --with-extra-* flags. Fixes detecting lcms installed from pkgsrc
+	  package
+	  system.
+
+2007-10-15 09:52  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/utilities/cameragui/renamecustomizer.cpp:
+	  typo
+
+2007-10-15 05:45  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/NEWS.0.9.1: fix
+	  duplicate
+
+2007-10-13 07:11  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/showfoto/showfoto.desktop:
+	  patch from Angelo
+
+2007-10-09 16:08  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/digikam/ratingwidget.cpp:
+	  check rating limits
+
+2007-10-09 13:15  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/digikam/ratingwidget.cpp,
+	  branches/extragear/kde3/graphics/digikam/digikam/ratingwidget.h:
+	  update
+
+2007-10-09 12:55  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/digikam/ratingwidget.cpp,
+	  branches/extragear/kde3/graphics/digikam/digikam/ratingwidget.h:
+	  prepare rating widget to be derivated to a Rating filter widget
+	  dixit a patch from Arnd
+	  CCMAIL: baecker@physik.tu-dresden.de
+
+2007-10-09 11:19  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/libs/widgets/common/squeezedcombobox.h:
+	  link
+
+2007-10-09 11:08  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/utilities/setup/setupicc.cpp:
+	  backport commits #723326 on digiKam for KDE3
+	  CCBUGS: 148151
+
+2007-10-09 11:07  cgilles
+
+	* branches/extragear/kde3/graphics/digikam/libs/widgets/common/squeezedcombobox.h:
+	  backport depreceate methods from KDE4
+
+2007-10-09 08:34  gkulzer
+
+	* branches/extragear/kde3/graphics/digikam/PACKAGING: ML update
+
+2007-10-08 14:01  gkulzer
+
+	* branches/extragear/kde3/graphics/digikam/release_digikam.rb:
+	  update for 0.9.3-beta1 release
+
+2007-10-08 05:51  gkulzer
+
+	* branches/extragear/kde3/graphics/digikam/ChangeLog: beta1
+
+2007-10-08 05:35  gkulzer
+
+	* branches/extragear/kde3/graphics/digikam/NEWS: add digikamui.rc
+	  fix for missing toolbar
+
+
 v0.9.3-beta1 - 2007-010-08
 ----------------------------------------------------------------------------
 2007-10-08 05:10  gkulzer
