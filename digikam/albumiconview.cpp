@@ -582,7 +582,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     gotoMenu.insertItem(SmallIcon("folder_image"), i18n("Album"), 20);
     gotoMenu.insertItem(SmallIcon("date"), i18n("Date"), 21);
 
-    TagsPopupMenu* gotoTagsPopup = new TagsPopupMenu(selectedImageIDs, 1000, TagsPopupMenu::REMOVE);
+    TagsPopupMenu* gotoTagsPopup = new TagsPopupMenu(selectedImageIDs, 1000, TagsPopupMenu::DISPLAY);
     int gotoTagId                = gotoMenu.insertItem(SmallIcon("tag"), i18n("Tag"), gotoTagsPopup);
 
     // Disable the goto Tag popup menu, if there are no tags at all.

@@ -220,7 +220,7 @@ void TagsPopupMenu::slotAboutToShow()
 
     AlbumManager* man = AlbumManager::instance();
 
-    if (d->mode == REMOVE)
+    if (d->mode == REMOVE || d->mode == DISPLAY)
     {
         if (d->selectedImageIDs.isEmpty())
             return;
@@ -299,7 +299,7 @@ void TagsPopupMenu::iterateAndBuildMenu(QPopupMenu *menu, TAlbum *album)
     {
         Album *a = i->second;
         
-        if (d->mode == REMOVE)
+        if (d->mode == REMOVE || d->mode == DISPLAY)
         {
             IntList::iterator it = qFind(d->assignedTags.begin(), 
                                          d->assignedTags.end(), a->id());

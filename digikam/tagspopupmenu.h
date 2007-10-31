@@ -45,7 +45,8 @@ public:
     enum Mode
     {
         ASSIGN = 0,
-        REMOVE
+        REMOVE,
+        DISPLAY     // Used by "GoTo Tag" feature
     };
     
     TagsPopupMenu(const QValueList<Q_LLONG>& selectedImageIDs, int addToID, Mode mode);
