@@ -58,28 +58,33 @@ int main(int argc, char *argv[])
                           "marcel dot wiesweg at gmx dot de",
                           "http://www.digikam.org/?q=blog/8");
 
+    aboutData.addAuthor ( ki18n("Arnd Baecker"),
+                          ki18n("Developer"),
+                          "arnd dot baecker at web dot de",
+                          "http://www.digikam.org/?q=blog/133");
+
     aboutData.addAuthor ( ki18n("Francisco J. Cruz"),
                           ki18n("Developer"),
                           "fj dot cruz at supercable dot es",
                           "http://www.digikam.org/?q=blog/5");
 
     aboutData.addAuthor ( ki18n("Renchi Raju"),
-                          ki18n("Developer"),
+                          ki18n("Developer (2002-2005)"),
                           "renchi at pooh dot tam dot uiuc dot edu");
 
-    aboutData.addAuthor ( ki18n("Ralf Holzer"),
-                          ki18n("Developer"),
-                          "kde at ralfhoelzer dot com");
-
-    aboutData.addAuthor ( ki18n("Joern Ahrens"),
+    aboutData.addAuthor ( ki18n("Joern Ahrens (2004-2005)"),
                           ki18n("Developer"),
                           "joern dot ahrens at kdemail dot net",
                           "http://www.digikam.org/?q=blog/1");
 
     aboutData.addAuthor ( ki18n("Tom Albers"),
-                          ki18n("Developer"),
+                          ki18n("Developer (2004-2005)"),
                           "tomalbers at kde dot nl",
                           "http://www.omat.nl/drupal/?q=blog/1");
+
+    aboutData.addAuthor ( ki18n("Ralf Holzer"),
+                          ki18n("Developer (2004)"),
+                          "kde at ralfhoelzer dot com");
 
     aboutData.addCredit ( ki18n("Achim Bohnet"),
                           ki18n("Bug reports and patches"),
@@ -93,11 +98,6 @@ int main(int argc, char *argv[])
                           ki18n("Developer"),
                           "a dot naselli at libero dot it");
 
-    aboutData.addCredit ( ki18n("Arnd Baecker"),
-                          ki18n("Developer"),
-                          "arnd dot baecker at web dot de",
-                          "http://www.digikam.org/?q=blog/133");
-			  
     aboutData.addCredit ( ki18n("Fabien Salvi"),
                           ki18n("Webmaster"),
                           "fabien dot ubuntu at gmail dot com");
