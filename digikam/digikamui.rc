@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="40" name="digikam" >
+<gui version="41" name="digikam" >
 
  <MenuBar>
 
@@ -14,10 +14,6 @@
      <Action name="album_refresh" />
      <Action name="album_syncmetadata" />
      <Action name="album_openinkonqui" />
-   <Separator/>
-   <Menu name="Export"><text>&amp;Export</text>
-        <ActionList name="file_actions_export"/>
-   </Menu>
    <Separator/>
      <Action name="album_remove" />
      <Action name="album_delete" />
@@ -98,6 +94,10 @@
       <Separator/>
       <ActionList name="file_actions_import"/>
   </Menu>
+
+   <Menu name="Export"><text>&amp;Export</text>
+        <ActionList name="file_actions_export"/>
+   </Menu>
   
   <Menu name="settings" noMerge="1"><Text>&amp;Settings</Text>
      <Action name="options_show_toolbar"/>
