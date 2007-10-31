@@ -415,7 +415,7 @@ void TagsPopupMenu::slotAboutToShow()
 
     AlbumManager* man = AlbumManager::instance();
 
-    if (d->mode == REMOVE)
+    if (d->mode == REMOVE || d->mode == DISPLAY)
     {
         if (d->selectedImageIDs.isEmpty())
             return;
@@ -485,7 +485,7 @@ void TagsPopupMenu::iterateAndBuildMenu(QMenu *menu, TAlbum *album)
     {
         TAlbum *a = (TAlbum*)*it;
 
-        if (d->mode == REMOVE)
+        if (d->mode == REMOVE || d->mode == DISPLAY)
         {
             if (!d->assignedTags.contains(a->id()))
                 continue;
@@ -502,7 +502,7 @@ void TagsPopupMenu::iterateAndBuildMenu(QMenu *menu, TAlbum *album)
                 toggleAction->setSpecialChecked(true);
             action = toggleAction;
         }
-        else
+        else     // REMOVE or DISPLAY mode
         {
             action = new KToggleAction(t, d->toggleTagActions);
         }

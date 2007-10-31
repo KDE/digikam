@@ -46,7 +46,8 @@ public:
     enum Mode
     {
         ASSIGN = 0,
-        REMOVE
+        REMOVE,
+        DISPLAY      // Used by "GoTo Tag" feature
     };
 
     TagsPopupMenu(qlonglong selectedImageId, Mode mode);

@@ -591,7 +591,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     QAction *gotoAlbum = gotoMenu.addAction(SmallIcon("folder-image"),        i18n("Album"));
     QAction *gotoDate  = gotoMenu.addAction(SmallIcon("view-calendar-month"), i18n("Date"));
  
-    TagsPopupMenu* gotoTagsPopup = new TagsPopupMenu(selectedImageIDs, TagsPopupMenu::REMOVE);
+    TagsPopupMenu* gotoTagsPopup = new TagsPopupMenu(selectedImageIDs, TagsPopupMenu::DISPLAY);
     QAction *gotoTag             = gotoMenu.addMenu(gotoTagsPopup);
     gotoTag->setIcon(SmallIcon("tag"));
     gotoTag->setText(i18n("Tag")); 
