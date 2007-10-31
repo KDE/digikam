@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #
-# Ruby script for generating amaroK tarball releases from KDE SVN
+# Ruby script for generating digiKam tarball releases from KDE SVN
 #
 # (c) 2005 Mark Kretschmann <markey@web.de>
 # Some parts of this code taken from cvs2dist
@@ -9,7 +9,7 @@
 
 name       = "digikam"
 egmodule   = "graphics"
-version    = "doc-0.9.2-rc1"
+version    = "doc-0.9.3-beta2"
 docs       = "yes"
 
 # The last one will be taken
