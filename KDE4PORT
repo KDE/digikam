@@ -109,18 +109,18 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
 |---hotplug                             Laurent                        DONE        -
 |---imageeditor
 |-----canvas  
-    canvas.cpp                          Gilles          X      X       DONE                 Pan tool crash digiKam 
-    colorcorrectiondlg.cpp              Gilles          X      X       DONE
-    dimginterface.cpp                   Gilles          X      X       DONE
-    imageplugin.cpp                     Gilles          X      X       DONE
-    imagepluginloader.cpp               Gilles          X      X       DONE
-    undoaction.cpp                      Gilles          X      X       DONE
-    undocache.cpp                       Gilles          X      X       DONE
-    undomanager.cpp                     Gilles          X      X       DONE
+    canvas.cpp                          Gilles          X      X       DONE        DONE         
+    colorcorrectiondlg.cpp              Gilles          X      X       DONE        DONE
+    dimginterface.cpp                   Gilles          X      X       DONE        DONE 
+    imageplugin.cpp                     Gilles          X      X       DONE        DONE
+    imagepluginloader.cpp               Gilles          X      X       DONE        DONE
+    undoaction.cpp                      Gilles          X      X       DONE        DONE
+    undocache.cpp                       Gilles          X      X       DONE        DONE
+    undomanager.cpp                     Gilles          X      X       DONE        DONE
 |-----editor
-    editorwindow.cpp                    Gilles          X      X       DONE
-    imageiface.cpp                      Gilles          X      X       DONE
-    imagewindow.cpp                     Gilles                 X       DONE
+    editorwindow.cpp                    Gilles          X      X       DONE        DONE
+    imageiface.cpp                      Gilles          X      X       DONE        DONE
+    imagewindow.cpp                     Gilles                 X       DONE        DONE
 |-----tools                             Laurent         X      X       DONE
 |---lighttable
     lighttablepreview.cpp               Gilles                 X       DONE
@@ -129,7 +129,7 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
     lighttablewindow.cpp                Gilles                 X       DONE
 |---scripts                             Gilles                         DONE        -
 |---setup                               Gilles          X      X       DONE
-|---slideshow                           Laurent         X      X       DONE
+|---slideshow                           Laurent         X      X       DONE        DONE
 
 |-kioslave
     digikamalbums.cpp                   Marcel                 X       DONE
