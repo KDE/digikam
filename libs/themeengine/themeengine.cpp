@@ -74,7 +74,7 @@ public:
 
 class ThemeEngineCreator { public: ThemeEngine object; };
 
-K_GLOBAL_STATIC(ThemeEngineCreator, creator);
+K_GLOBAL_STATIC(ThemeEngineCreator, creator)
 ThemeEngine* ThemeEngine::instance()
 {
     return &creator->object;
