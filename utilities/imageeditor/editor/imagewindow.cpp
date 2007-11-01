@@ -1017,7 +1017,7 @@ void ImageWindow::slotThemeChanged()
 void ImageWindow::slotFilePrint()
 {
     printImage(d->urlCurrent); 
-};
+}
 
 void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
 {
