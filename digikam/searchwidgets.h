@@ -8,6 +8,7 @@
  * 
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2005 by Tom Albers <tomalbers@kde.nl>
+ * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -196,7 +197,7 @@ class SearchAdvancedGroup;
  * This inherits SearchAdvancedBase and is one rule in the search dialog
  * it contains all widgets to create a rule
  */
-class SearchAdvancedRule :  public SearchAdvancedBase
+class SearchAdvancedRule : public SearchAdvancedBase
 {
     Q_OBJECT
 
