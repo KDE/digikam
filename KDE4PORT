@@ -192,7 +192,7 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
     searchquickdialog.cpp               Laurent                X       DONE
     searchresultsitem.cpp               Gilles                 X       DONE
     searchresultsview.cpp               Gilles                 X       DONE
-    searchwidgets.cpp                   Gilles                 X       DONE                 Layout is broken in advanced search dialog.
+    searchwidgets.cpp                   Gilles                 X       DONE            
     syncjob.cpp                         Gilles                 X       DONE
     tagcreatedlg.cpp                    Gilles                 X       DONE
     tagfilterview.cpp                   Gilles                 X       DONE
