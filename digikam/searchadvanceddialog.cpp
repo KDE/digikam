@@ -40,6 +40,7 @@
 // KDE includes.
 
 #include <kvbox.h>
+#include <kiconloader.h>
 #include <kurl.h>
 #include <klocale.h>
 #include <klineedit.h>
@@ -57,6 +58,7 @@ namespace Digikam
 
 class SearchAdvancedDialogPriv
 {
+
 public:
 
     SearchAdvancedDialogPriv()
@@ -73,24 +75,24 @@ public:
         vlayRulesBox  = 0;
     }
 
-    QGroupBox                        *rulesBox;
+    QGroupBox                  *rulesBox;
 
-    QVBoxLayout                      *vlayRulesBox;
+    QVBoxLayout                *vlayRulesBox;
 
-    QPushButton                      *addButton;
-    QPushButton                      *delButton;
-    QPushButton                      *groupButton;
-    QPushButton                      *ungroupButton;
+    QPushButton                *addButton;
+    QPushButton                *delButton;
+    QPushButton                *groupButton;
+    QPushButton                *ungroupButton;
 
-    QComboBox                        *optionsCombo;
+    QComboBox                  *optionsCombo;
 
-    QList<SearchAdvancedBase*>        baseList;
+    QList<SearchAdvancedBase*>  baseList;
 
-    QTimer                           *timer;
+    QTimer                     *timer;
 
-    KLineEdit                        *title;
+    KLineEdit                  *title;
 
-    SearchResultsView                *resultsView;
+    SearchResultsView          *resultsView;
 };
 
 SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KUrl& url)
@@ -122,7 +124,7 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KUrl& url)
     d->resultsView->setWhatsThis(i18n("<p>Here you can review the images found "
                                       "using the current search settings."));
 
-    hbox->setMargin(spacingHint());
+    hbox->setMargin(0);
     hbox->setSpacing(0);
     hbox->addLayout(leftSide);
     hbox->addWidget(d->resultsView);
@@ -136,7 +138,7 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KUrl& url)
     d->rulesBox->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
 
     d->vlayRulesBox = new QVBoxLayout(d->rulesBox);
-    d->vlayRulesBox->setMargin(spacingHint());
+    d->vlayRulesBox->setMargin(0);
     d->vlayRulesBox->setSpacing(spacingHint());
     d->vlayRulesBox->setAlignment(Qt::AlignTop);
 
@@ -156,8 +158,14 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KUrl& url)
 
     d->addButton = new QPushButton(i18n("&Add"), groupbox1);
     d->delButton = new QPushButton(i18n("&Del"), groupbox1);
+    d->addButton->setIcon(SmallIcon("edit-add"));
+    d->delButton->setIcon(SmallIcon("edit-delete"));
+    d->addButton->setMaximumHeight( fontMetrics().height()+4 );
+    d->delButton->setMaximumHeight( fontMetrics().height()+4 );
 
     QHBoxLayout* box1 = new QHBoxLayout();
+    box1->setMargin(0);
+    box1->setSpacing(0);
     box1->addWidget(d->optionsCombo);
     box1->addWidget(d->addButton);
     box1->addStretch(10);
@@ -178,8 +186,12 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KUrl& url)
     
     d->groupButton   = new QPushButton(i18n("&Group"), groupbox2);
     d->ungroupButton = new QPushButton(i18n("&Ungroup"), groupbox2);
+    d->groupButton->setMaximumHeight( fontMetrics().height()+4 );
+    d->ungroupButton->setMaximumHeight( fontMetrics().height()+4 );
 
     QHBoxLayout *box2 = new QHBoxLayout();
+    box2->setMargin(0);
+    box2->setSpacing(0);
     box2->addWidget(d->groupButton);
     box2->addStretch(10);
     box2->addWidget(d->ungroupButton);
@@ -194,13 +206,15 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KUrl& url)
     KVBox *groupbox3 = new KVBox(page);
     groupbox3->layout()->setSpacing(KDialog::spacingHint());
 
-    QLabel* label = new QLabel(i18n("&Save search as:"), groupbox3);
+    QLabel* label = new QLabel(i18n("&Save search as: "), groupbox3);
     d->title      = new KLineEdit(groupbox3);
     d->title->setWhatsThis( i18n("<p>Enter the name used to save the current search in "
                                  "\"My Searches\" view"));
     label->setBuddy(d->title);
 
     QHBoxLayout *box3 = new QHBoxLayout();
+    box3->setMargin(0);
+    box3->setSpacing(0);
     box3->addWidget(label);
     box3->addWidget(d->title);
 
@@ -277,6 +291,7 @@ void SearchAdvancedDialog::slotAddRule()
     }
 
     SearchAdvancedRule* rule = new SearchAdvancedRule( d->rulesBox, type );
+    d->vlayRulesBox->addWidget(rule->widget());
     d->baseList.append(rule);
 
     connect(rule, SIGNAL(signalBaseItemToggled()),
