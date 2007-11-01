@@ -127,7 +127,7 @@ public:
 };
 
 class ScanControllerCreator { public: ScanController object; };
-K_GLOBAL_STATIC(ScanControllerCreator, creator);
+K_GLOBAL_STATIC(ScanControllerCreator, creator)
 
 ScanController* ScanController::instance()
 {
