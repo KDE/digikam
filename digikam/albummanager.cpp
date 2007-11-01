@@ -131,7 +131,7 @@ public:
 };
 
 class AlbumManagerCreator { public: AlbumManager object; };
-K_GLOBAL_STATIC(AlbumManagerCreator, creator);
+K_GLOBAL_STATIC(AlbumManagerCreator, creator)
 
 AlbumManager* AlbumManager::instance()
 {
