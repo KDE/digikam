@@ -32,8 +32,6 @@
 #include <Q3ValueList>
 #include <QMap>
 
-class KHBox;
-class KVBox;
 class QCheckBox;
 class QComboBox;
 class QLineEdit;
@@ -43,8 +41,9 @@ class QLabel;
 class QHBoxLayout;
 class QVBoxLayout;
 
+class KHBox;
+class KVBox;
 class KUrl;
-
 class KDateEdit;
 
 namespace Digikam
@@ -72,9 +71,6 @@ public:
      */
     SearchRuleLabel(const QString & text, QWidget * parent,
                     const char * name=0, Qt::WFlags f=0 );
-private:
-
-    void mouseDoubleClickEvent( QMouseEvent * e );
 
 signals:
 
@@ -84,6 +80,10 @@ signals:
      * @param e the mouse event received
      */
     void signalDoubleClick( QMouseEvent * e );
+
+private:
+
+    void mouseDoubleClickEvent( QMouseEvent * e );
 };
 
 /** @class SearchAdvancedBase
@@ -170,6 +170,7 @@ public:
     virtual void removeOption() = 0;
 
 signals:
+
     /**
      * This signal is emitted when a rule or group is checked or unchecked
      * This is used to determine the state of the buttons of the dialog
@@ -336,6 +337,7 @@ class SearchAdvancedGroup : public SearchAdvancedBase
 {
 
 public:
+
     /**
      * Constructor
      * @param parent the parent
