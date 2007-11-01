@@ -300,7 +300,7 @@ void SearchAdvancedRule::setValueWidget(valueWidgetTypes oldType, valueWidgetTyp
         delete m_dateEdit;
 
     if (m_ratingWidget && oldType == RATING)
-	delete m_ratingWidget;
+	   delete m_ratingWidget;
 
     if (m_valueCombo && (oldType == ALBUMS || oldType == TAGS))
         delete m_valueCombo;
@@ -312,8 +312,8 @@ void SearchAdvancedRule::setValueWidget(valueWidgetTypes oldType, valueWidgetTyp
         m_dateEdit->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
         m_dateEdit->show();
 
-        connect( m_dateEdit, SIGNAL( dateChanged(const QDate& ) ),
-                 this, SIGNAL(signalPropertyChanged()));
+        connect(m_dateEdit, SIGNAL( dateChanged(const QDate& ) ),
+                this, SIGNAL(signalPropertyChanged()));
     }
     else if (newType == LINEEDIT)
     {
@@ -324,7 +324,6 @@ void SearchAdvancedRule::setValueWidget(valueWidgetTypes oldType, valueWidgetTyp
 
         connect(m_lineEdit, SIGNAL(textChanged(const QString&)),
                 this, SIGNAL(signalPropertyChanged()));
-
     }
     else if (newType == ALBUMS)
     {
@@ -333,12 +332,12 @@ void SearchAdvancedRule::setValueWidget(valueWidgetTypes oldType, valueWidgetTyp
         m_valueCombo->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
 
         AlbumManager* aManager = AlbumManager::instance();
-        AlbumList aList = aManager->allPAlbums();
+        AlbumList aList        = aManager->allPAlbums();
 
         m_itemsIndexIDMap.clear();
         int index = 0;
-        for ( AlbumList::Iterator it = aList.begin();
-              it != aList.end(); ++it )
+        for( AlbumList::Iterator it = aList.begin();
+             it != aList.end(); ++it )
         {
             PAlbum *album = (PAlbum*)(*it);
             if ( !album->isRoot() )
@@ -365,8 +364,8 @@ void SearchAdvancedRule::setValueWidget(valueWidgetTypes oldType, valueWidgetTyp
 
         m_itemsIndexIDMap.clear();
         int index = 0;
-        for ( AlbumList::Iterator it = tList.begin();
-              it != tList.end(); ++it )
+        for( AlbumList::Iterator it = tList.begin();
+             it != tList.end(); ++it )
         {
             TAlbum *album = (TAlbum*)(*it);
             if ( !album->isRoot() )
@@ -406,7 +405,7 @@ QString SearchAdvancedRule::urlOperator() const
     {
         if ( RuleOpTable[i].cat == m_widgetType )
         {
-            if ( countItems == m_operator->currentIndex() )
+            if( countItems == m_operator->currentIndex() )
                 string = RuleOpTable[i].key;
             ++countItems;
         }
