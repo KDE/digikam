@@ -1,3 +1,16 @@
+**********************************************************************************************
+
+digiKam 0.9.3-beta3 - Release date: 2007-11-??
+
+NEW FEATURES:
+
+
+digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+
+047 ==> 
+
+**********************************************************************************************
+
 digiKam 0.9.3-beta2 - Release date: 2007-11-01
 
 NEW FEATURES:
@@ -16,7 +29,6 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 044 ==> 144815 : Scroll left-pane to the selected album/date on start-up.
 045 ==>  96894 : Easier navigation between albums, tags and collections.
 046 ==> 147426 : Search for non-voted pics.
-047 ==>
 
 **********************************************************************************************
 
