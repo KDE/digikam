@@ -48,9 +48,9 @@ private:  // Refocus filter methods.
     void refocusImage(uchar* data, int width, int height, bool sixteenBit,
                       int matrixSize, double radius, double gauss, 
                       double correlation, double noise);
-                               
+
     void convolveImage(uchar *orgData, uchar *destData, int width, int height,
-                       bool sixteenBit, const double *const mat, int mat_size);
+                       bool sixteenBit, const double *const matrix, int mat_size);
     
 private:  // Refocus filter data.
 
