@@ -118,16 +118,15 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KUrl& url)
     QHBoxLayout* hbox     = new QHBoxLayout(page);
     QVBoxLayout* leftSide = new QVBoxLayout();
 
-    d->resultsView = new SearchResultsView( page );
+    d->resultsView = new SearchResultsView(page);
     d->resultsView->setMinimumSize(QSize(200, 200));
-    d->resultsView->setMaximumWidth( 130*2 + d->resultsView->spacing()*3 + 20);
     d->resultsView->setWhatsThis(i18n("<p>Here you can review the images found "
                                       "using the current search settings."));
 
     hbox->setMargin(0);
     hbox->setSpacing(0);
-    hbox->addLayout(leftSide);
-    hbox->addWidget(d->resultsView);
+    hbox->addLayout(leftSide, 10);
+    hbox->addWidget(d->resultsView, 5);
 
     // -------------------------------------------------------------
     // Box for all the rules
@@ -246,6 +245,8 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KUrl& url)
     slotChangeButtonStates();
     d->timer->setSingleShot(true);
     d->timer->start(0);
+
+    // -------------------------------------------------------------
 
     connect(d->addButton, SIGNAL(clicked()),
             this, SLOT(slotAddRule()));
