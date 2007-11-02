@@ -127,78 +127,75 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KURL& url)
     d->rulesBox->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
     d->rulesBox->layout()->setAlignment( Qt::AlignTop );
 
-    leftSide->addWidget( d->rulesBox );
-    // Push the rulesbox to top and the buttons down.
-    leftSide->addStretch(10);
-
     // ----------------------------------------------------------------
     // Box for the add/delete
 
-    QGroupBox* groupbox = 0;
-    groupbox            = new QGroupBox( i18n("Add/Delete Option"),
-                                         page, "groupbox" );
-    QWhatsThis::add( groupbox, i18n("<p>You can edit the search rules "
+    QGroupBox *groupbox1 = new QGroupBox( i18n("Add/Delete Option"), page, "groupbox1" );
+    QWhatsThis::add(groupbox1, i18n("<p>You can edit the search rules "
                                     "by adding/removing criteria."));
                                          
-    groupbox->setColumnLayout(0, Qt::Vertical );
-    groupbox->layout()->setSpacing( KDialog::spacingHint() );
-    groupbox->layout()->setMargin( KDialog::marginHint() );
-    d->optionsCombo = new QComboBox( groupbox );
+    groupbox1->setColumnLayout(0, Qt::Vertical );
+    groupbox1->layout()->setSpacing( KDialog::spacingHint() );
+    groupbox1->layout()->setMargin( KDialog::marginHint() );
+    d->optionsCombo = new QComboBox(groupbox1);
     d->optionsCombo->insertItem(i18n("As well as"), 0);
     d->optionsCombo->insertItem(i18n("Or"), 1);
     d->optionsCombo->setEnabled(false);
 
-    d->addButton = new QPushButton(i18n("&Add"), groupbox);
-    d->delButton = new QPushButton(i18n("&Del"), groupbox);
+    d->addButton = new QPushButton(i18n("&Add"), groupbox1);
+    d->delButton = new QPushButton(i18n("&Del"), groupbox1);
     d->addButton->setIconSet(SmallIcon("add"));
     d->delButton->setIconSet(SmallIcon("remove"));
 
-    QHBoxLayout* box = 0;
-    box = new QHBoxLayout( groupbox->layout() );
-    box->addWidget( d->optionsCombo );
-    box->addWidget( d->addButton );
-    box->addStretch( 10 );
-    box->addWidget( d->delButton );
-
-    leftSide->addWidget( groupbox );
+    QHBoxLayout* box1 = new QHBoxLayout(groupbox1->layout());
+    box1->addWidget(d->optionsCombo);
+    box1->addWidget(d->addButton);
+    box1->addStretch(10);
+    box1->addWidget(d->delButton);
 
     // ----------------------------------------------------------------
     // Box for the group/ungroup
 
-    groupbox = new QGroupBox( i18n("Group/Ungroup Options"), page, "groupbox" );
-    QWhatsThis::add( groupbox, i18n("<p>You can group or ungroup any search criteria "
+    QGroupBox *groupbox2 = new QGroupBox( i18n("Group/Ungroup Options"), page, "groupbox2" );
+    QWhatsThis::add(groupbox1, i18n("<p>You can group or ungroup any search criteria "
                                     "from the Search Rule set."));
-    groupbox->setColumnLayout(0, Qt::Vertical );
-    groupbox->layout()->setSpacing( KDialog::spacingHint() );
-    groupbox->layout()->setMargin( KDialog::marginHint() );
-    d->groupButton   = new QPushButton(i18n("&Group"), groupbox);
-    d->ungroupButton = new QPushButton(i18n("&Ungroup"), groupbox);
+    groupbox2->setColumnLayout(0, Qt::Vertical);
+    groupbox2->layout()->setSpacing( KDialog::spacingHint() );
+    groupbox2->layout()->setMargin( KDialog::marginHint() );
+    d->groupButton   = new QPushButton(i18n("&Group"), groupbox2);
+    d->ungroupButton = new QPushButton(i18n("&Ungroup"), groupbox2);
 
-    box = new QHBoxLayout( groupbox->layout() );
-    box->addWidget( d->groupButton );
-    box->addStretch( 10 );
-    box->addWidget( d->ungroupButton );
-
-    leftSide->addWidget( groupbox );
+    QHBoxLayout* box2 = new QHBoxLayout(groupbox2->layout());
+    box2->addWidget(d->groupButton);
+    box2->addStretch(10);
+    box2->addWidget(d->ungroupButton);
 
     // ----------------------------------------------------------------
     // box for saving the search.
 
-    groupbox = new QGroupBox( page, "groupbox");
-    groupbox->setColumnLayout(0, Qt::Vertical );
-    groupbox->layout()->setSpacing( KDialog::spacingHint() );
-    QLabel* label = new QLabel(i18n("&Save search as: "), groupbox);
-    d->title      = new KLineEdit(groupbox, "searchTitle");
-    QWhatsThis::add( d->title, i18n("<p>Enter the name used to save the current search in "
+    QGroupBox *groupbox3 = new QGroupBox( page, "groupbox3");
+    groupbox3->setColumnLayout(0, Qt::Vertical );
+    groupbox3->layout()->setSpacing( KDialog::spacingHint() );
+    groupbox3->setFrameStyle( QFrame::NoFrame );
+    QLabel* label = new QLabel(i18n("&Save search as: "), groupbox3);
+    d->title      = new KLineEdit(groupbox3, "searchTitle");
+    QWhatsThis::add(d->title, i18n("<p>Enter the name used to save the current search in "
                                    "\"My Searches\" view"));
-    groupbox->setFrameStyle( QFrame::NoFrame );
 
-    box = new QHBoxLayout( groupbox->layout() );
-    box->addWidget( label );
-    box->addWidget( d->title );
+    QHBoxLayout* box3 = new QHBoxLayout(groupbox3->layout());
+    box3->addWidget(label);
+    box3->addWidget(d->title);
     label->setBuddy(d->title);
 
-    leftSide->addWidget( groupbox );
+    // ----------------------------------------------------------------
+
+    leftSide->addWidget( d->rulesBox );
+    leftSide->addStretch(10);           // Push the rulesbox to top and the buttons down.
+    leftSide->addWidget(groupbox1);
+    leftSide->addWidget(groupbox2);
+    leftSide->addWidget(groupbox3);
+
+    // ----------------------------------------------------------------
 
     if ( url.isEmpty() )
     {
@@ -213,6 +210,8 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KURL& url)
 
     slotChangeButtonStates();
     d->timer->start(0, true);
+
+    // ----------------------------------------------------------------
 
     connect(d->addButton, SIGNAL(clicked()),
             this, SLOT(slotAddRule()));
