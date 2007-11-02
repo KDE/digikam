@@ -78,7 +78,7 @@ private:
         NoPreset=0,
         ReduceUniformNoise,
         ReduceJPEGArtefacts,
-        ReduceTexturing,
+        ReduceTexturing
     };
 
     QTabWidget                    *m_mainTab;        
