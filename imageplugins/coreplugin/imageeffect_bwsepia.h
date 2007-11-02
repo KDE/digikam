@@ -126,7 +126,8 @@ private:
         BWBrownTone,
         BWColdTone,
         BWSeleniumTone,
-        BWPlatinumTone
+        BWPlatinumTone,
+        BWGreenTone
     };
 
     enum HistogramScale
