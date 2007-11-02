@@ -107,23 +107,23 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KURL& url)
     // two columns, one for the rules, one for the preview.
 
     QHBoxLayout* hbox     = new QHBoxLayout( page );
-    QVBoxLayout* leftSide = new QVBoxLayout( hbox );
-    d->resultsView        = new SearchResultsView( page );
-    d->resultsView->setMinimumSize( QSize(200, 200) );
-    d->resultsView->setMaximumWidth(  130*2 + d->resultsView->spacing()*3 + 20 );
-    QWhatsThis::add( d->resultsView, i18n("<p>Here you can review the images found "
+    QVBoxLayout* leftSide = new QVBoxLayout();
+    d->resultsView        = new SearchResultsView(page);
+    d->resultsView->setMinimumSize(QSize(200, 200));
+    QWhatsThis::add(d->resultsView, i18n("<p>Here you can review the images found "
                                          "using the current search settings."));
-    hbox->setSpacing( spacingHint() );
-    hbox->addWidget( d->resultsView );
+    hbox->addLayout(leftSide, 10);
+    hbox->setSpacing(spacingHint());
+    hbox->addWidget(d->resultsView, 5);
 
     // ----------------------------------------------------------------
     // Box for all the rules
 
-    d->rulesBox = new QVGroupBox( i18n("Search Rules"), page);
-    QWhatsThis::add( d->rulesBox, i18n("<p>Here you can review the search rules used to filter images "
+    d->rulesBox = new QVGroupBox(i18n("Search Rules"), page);
+    QWhatsThis::add(d->rulesBox, i18n("<p>Here you can review the search rules used to filter images "
                                       "searching in album library."));
     d->rulesBox->layout()->setSpacing( spacingHint() );
-    d->rulesBox->layout()->setMargin( 5 );
+    d->rulesBox->layout()->setMargin( spacingHint() );
     d->rulesBox->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
     d->rulesBox->layout()->setAlignment( Qt::AlignTop );
 
