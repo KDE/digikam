@@ -88,20 +88,17 @@ void Refocus::refocusImage(uchar* data, int width, int height, bool sixteenBit,
 }
 
 void Refocus::convolveImage(uchar *orgData, uchar *destData, int width, int height,
-                            bool sixteenBit, const double *const mat, int mat_size)
+                            bool sixteenBit, const double *const matrix, int mat_size)
 {
     int progress;
     unsigned short *orgData16  = (unsigned short *)orgData;
     unsigned short *destData16 = (unsigned short *)destData;
     
-    double matrix[mat_size][mat_size];
     double valRed, valGreen, valBlue;
     int    x1, y1, x2, y2, index1, index2;
     
     const int imageSize  = width*height;
     const int mat_offset = mat_size / 2;
-    
-    memcpy (&matrix, mat, mat_size* mat_size * sizeof(double));
     
     for (y1 = 0; !m_cancel && (y1 < height); y1++)
     {
@@ -127,9 +124,10 @@ void Refocus::convolveImage(uchar *orgData, uchar *destData, int width, int heig
                             blue  = ptr[0];
                             green = ptr[1];
                             red   = ptr[2];
-                            valRed   += matrix[y2][x2] * red;
-                            valGreen += matrix[y2][x2] * green;
-                            valBlue  += matrix[y2][x2] * blue;
+                            const double matrixValue = matrix[y2 * mat_size + x2];
+                            valRed   += matrixValue * red;
+                            valGreen += matrixValue * green;
+                            valBlue  += matrixValue * blue;
                         }
                     }
                 }
@@ -166,9 +164,10 @@ void Refocus::convolveImage(uchar *orgData, uchar *destData, int width, int heig
                             blue  = ptr[0];
                             green = ptr[1];
                             red   = ptr[2];
-                            valRed   += matrix[y2][x2] * red;
-                            valGreen += matrix[y2][x2] * green;
-                            valBlue  += matrix[y2][x2] * blue;
+                            const double matrixValue = matrix[y2 * mat_size + x2];
+                            valRed   += matrixValue * red;
+                            valGreen += matrixValue * green;
+                            valBlue  += matrixValue * blue;
                         }
                     }
                 }
@@ -197,4 +196,3 @@ void Refocus::convolveImage(uchar *orgData, uchar *destData, int width, int heig
 }
 
 }  // NameSpace DigikamImagesPluginCore
-
