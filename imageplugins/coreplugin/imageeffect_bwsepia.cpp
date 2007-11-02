@@ -351,13 +351,13 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     item = new ListBoxBWPreviewItem(m_bwFilters, 
                                      i18n("No Lens Filter"), m_previewPixmapFactory, type);
     whatsThis->add( item, i18n("<b>No Lens Filter</b>:"
-                               "<p>Do not apply a lens filter to render the picture.</p>"));
+                               "<p>Do not apply a lens filter to render the image.</p>"));
     
     ++type;
     item = new ListBoxBWPreviewItem(m_bwFilters, i18n("Green Filter"), m_previewPixmapFactory, type);
     whatsThis->add( item, i18n("<b>Black & White with Green Filter</b>:"
                                "<p>Simulate black and white film exposure using green filter. "
-                               "This provides an universal asset for all scenics, especially suited "
+                               "This provides a universal asset for all scenic shooting, especially suited "
                                "for portraits photographed against sky.</p>"));
 
     ++type;
@@ -432,6 +432,11 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     whatsThis3->add( item, i18n("<b>Black & White with Platinum Tone</b>:"
                                 "<p>This effect replicate traditional platinum chemical toning done "
                                 "in the darkroom.</p>"));
+    
+    ++type;
+    item = new ListBoxBWPreviewItem(m_bwTone, i18n("Green Tone"), m_previewPixmapFactory, type);
+    whatsThis3->add( item, i18n("<b>Black & White with greenish tint</b>:"
+                                "<p>This effect is also known as Verdante.</p>"));
     
     // -------------------------------------------------------------
     
@@ -1052,6 +1057,11 @@ void ImageEffect_BWSepia::blackAndWhiteConversion(uchar *data, int w, int h, boo
        case BWPlatinumTone:
           filter.changeTonality(data, w, h, sb, 115*mul, 110*mul, 106*mul);
           break;
+
+       case BWGreenTone:
+          filter.changeTonality(data, w, h, sb, 108*mul, 116*mul, 100*mul);
+          break;
+
     }
 }
 
