@@ -83,13 +83,13 @@ public:
     /** Convert a QVariant value of the specified field to a user-presentable, i18n'ed string.
         The QVariant must be of the type as specified in metadatainfo.h and as obtained by getMetadataField.
      */
-    QString     valueToString (const QVariant &value, MetadataInfo::Field field);
-    QStringList valuesToString(const QVariantList &list, const MetadataFields &fields);
+    static QString     valueToString (const QVariant &value, MetadataInfo::Field field);
+    static QStringList valuesToString(const QVariantList &list, const MetadataFields &fields);
 
     /** Returns a map of possible enum values and their user-presentable, i18n'ed representation.
         Valid fields are those which are described as "enum from" or "bit mask from" in metadatainfo.h.
      */
-    QMap<int, QString> possibleValuesForEnumField(MetadataInfo::Field field);
+    static QMap<int, QString> possibleValuesForEnumField(MetadataInfo::Field field);
 
     /** Methods dedicaced to record/read a private Iptc tag used to store digiKam image properties.
         Code tested but not used because Xmp is more simple to use for that. */

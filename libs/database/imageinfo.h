@@ -46,6 +46,7 @@
 #include "imagelisterrecord.h"
 #include "imageinfolist.h"
 #include "imagecomments.h"
+#include "imageposition.h"
 
 namespace Digikam
 {
@@ -198,6 +199,11 @@ public:
      * For simple, cached read access see comment().
      */
     ImageComments imageComments(DatabaseAccess &access);
+
+    /**
+     * Retrieve the ImagePosition object for this item.
+     */
+    ImagePosition imagePosition();
 
     /**
      * Set the date and time (write it to database)

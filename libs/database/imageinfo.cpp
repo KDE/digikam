@@ -375,6 +375,14 @@ ImageComments ImageInfo::imageComments(DatabaseAccess &access)
     return ImageComments(access, m_data->id);
 }
 
+ImagePosition ImageInfo::imagePosition()
+{
+    if (!m_data)
+        return ImagePosition();
+
+    return ImagePosition(m_data->id);
+}
+
 void ImageInfo::setRating(int value)
 {
     if (!m_data)
