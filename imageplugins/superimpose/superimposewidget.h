@@ -51,7 +51,7 @@ enum Action
 {
     ZOOMIN=0,
     ZOOMOUT,
-    MOVE,
+    MOVE
 };
 
 class SuperImposeWidget : public QWidget
