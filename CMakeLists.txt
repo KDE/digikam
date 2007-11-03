@@ -471,6 +471,7 @@ SET(libdatabase_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagelisterreceiver.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagecomments.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imageposition.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/downloadhistory.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagequerybuilder.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/namefilter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/schemaupdater.cpp

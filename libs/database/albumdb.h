@@ -905,6 +905,20 @@ public:
                  int dstAlbumID, const QString& dstName);
 
 
+    // ----------- Download history methods -----------
+
+    /**
+     * Search for the specified fingerprint in the download history table.
+     * Returns the id of the entry, or -1 if not found.
+     */
+    int findInDownloadHistory(const QString &path, const QString &name, int fileSize, const QDateTime &date);
+
+    /**
+     * Add the specified fingerprint to the download history table.
+     * Returns the id of the entry.
+     */
+    int addToDownloadHistory(const QString &path, const QString &name, int fileSize, const QDateTime &date);
+
     // ----------- Static helper methods for constructing SQL queries -----------
 
     static QStringList imagesFieldList(DatabaseFields::Images fields);
