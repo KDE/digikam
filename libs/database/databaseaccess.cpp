@@ -70,7 +70,7 @@ DatabaseAccess::DatabaseAccess()
     if (!d->backend->isOpen())
     {
         d->backend->open(d->parameters);
-        CollectionManager::instance()->update();
+        CollectionManager::instance()->refresh();
     }
 }
 
@@ -135,11 +135,12 @@ void DatabaseAccess::setParameters(const DatabaseParameters &parameters)
     {
         delete d->db;
         delete d->backend;
-        delete d->infoCache;
         d->backend = new DatabaseBackend();
         d->db = new AlbumDB(d->backend);
-        d->infoCache = new ImageInfoCache();
     }
+
+    delete d->infoCache;
+    d->infoCache = new ImageInfoCache();
 }
 
 bool DatabaseAccess::checkReadyForUse(InitializationObserver *observer)
@@ -181,7 +182,7 @@ bool DatabaseAccess::checkReadyForUse(InitializationObserver *observer)
         return false;
 
     // initialize CollectionManager
-    CollectionManager::instance()->update();
+    CollectionManager::instance()->refresh();
 
     return d->backend->isReady();
 }

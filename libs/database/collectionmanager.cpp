@@ -247,8 +247,20 @@ CollectionManager::~CollectionManager()
     delete d;
 }
 
-void CollectionManager::update()
+void CollectionManager::refresh()
 {
+    DatabaseAccess access;
+
+    // clear list
+    foreach (AlbumRootLocation *location, d->locations)
+    {
+        CollectionLocation::Status oldStatus = location->status();
+        location->setStatus(CollectionLocation::LocationDeleted);
+        emit locationStatusChanged(*location, oldStatus);
+        delete location;
+    }
+    d->locations.clear();
+
     updateLocations();
 }
 

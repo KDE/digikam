@@ -222,6 +222,7 @@ bool DatabaseBackend::initSchema(SchemaUpdater *updater)
 void DatabaseBackend::close()
 {
     d->closeDatabaseForThread();
+    d->status = Unavailable;
 }
 
 DatabaseBackend::Status DatabaseBackend::status() const

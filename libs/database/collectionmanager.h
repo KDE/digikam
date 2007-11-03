@@ -54,9 +54,9 @@ public:
     static void cleanUp();
 
     /**
-     * Reads the lists of collection locations
+     * Clears all locations and re-reads the lists of collection locations
      */
-    void update();
+    void refresh();
 
     /** CollectionLocation objects returned are simple data containers.
      *  If the corresponding location is returned, the data is still safe to access,
