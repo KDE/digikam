@@ -49,6 +49,10 @@ private:
 
     bool startUpdates();
     bool makeUpdates();
+    void defaultFilterSettings(QStringList &defaultImageFilter,
+                               QStringList &defaultVideoFilter,
+                               QStringList &defaultAudioFilter);
+    bool createFilterSettings();
     bool updateFilterSettings();
     bool createDatabase();
     bool createTablesV5();

@@ -203,7 +203,7 @@ bool SchemaUpdater::startUpdates()
         }
 
         // No legacy handling: start with a fresh db
-        if (!createDatabase())
+        if (!createDatabase() || !createFilterSettings())
         {
             QString errorMsg = i18n("Failed to create tables on database.\n ")
                                     + m_access->backend()->lastError();
@@ -251,6 +251,43 @@ bool SchemaUpdater::makeUpdates()
         }
         // add future updates here
     }
+    return true;
+}
+
+void SchemaUpdater::defaultFilterSettings(QStringList &defaultImageFilter,
+                                          QStringList &defaultVideoFilter,
+                                          QStringList &defaultAudioFilter)
+{
+    defaultImageFilter << "jpg" << "jpeg" << "jpe"               // JPEG
+                       << "jp2" << "jpx"  << "jpc" << "pgx"      // JPEG-2000
+                       << "tif" << "tiff"                        // TIFF
+                       << "png"                                  // PNG
+                       << "xpm" << "ppm" << "pnm"
+                       << "gif" << "bmp" << "xcf" << "pcx";
+
+    // RAW file extentions supported by dcraw 8.77
+    // This information belongs to libkdcraw, but here at least this will be included statically.
+    defaultImageFilter << "bay" << "bmq" << "cr2" << "crw" << "cs1"
+                       << "dc2" << "dcr" << "dng" << "erf" << "fff"
+                       << "hdr" << "k25" << "kdc" << "mdc" << "mos"
+                       << "mrw" << "nef" << "orf" << "pef" << "pxn"
+                       << "raf" << "raw" << "rdc" << "sr2" << "srf"
+                       << "x3f" << "arw";
+
+    defaultVideoFilter << "mpeg" << "mpg" << "mpo" << "mpe"     // MPEG
+                       << "avi"  << "mov" << "wmf" << "asf" << "mp4";
+
+    defaultAudioFilter << "ogg" << "mp3" << "wma" << "wav";
+}
+
+bool SchemaUpdater::createFilterSettings()
+{
+    QStringList defaultImageFilter, defaultVideoFilter, defaultAudioFilter;
+    defaultFilterSettings(defaultImageFilter, defaultVideoFilter, defaultAudioFilter);
+
+    m_access->db()->setFilterSettings(defaultImageFilter, defaultVideoFilter, defaultAudioFilter);
+    m_access->db()->setSetting("FilterSettingsVersion", "1");
+
     return true;
 }
 
@@ -818,33 +855,12 @@ bool SchemaUpdater::updateV4toV5()
 
     // --- Populate name filters ---
 
+    createFilterSettings();
+
+    // --- Set user settings from config ---
+
     QStringList defaultImageFilter, defaultVideoFilter, defaultAudioFilter;
-
-    defaultImageFilter << "jpg" << "jpeg" << "jpe"               // JPEG
-                       << "jp2" << "jpx"  << "jpc" << "pgx"      // JPEG-2000
-                       << "tif" << "tiff"                        // TIFF
-                       << "png"                                  // PNG
-                       << "xpm" << "ppm" << "pnm"
-                       << "gif" << "bmp" << "xcf" << "pcx";
-
-    // RAW file extentions supported by dcraw 8.77
-    // This information belongs to libkdcraw, but here at least this will be included statically.
-    defaultImageFilter << "bay" << "bmq" << "cr2" << "crw" << "cs1"
-                       << "dc2" << "dcr" << "dng" << "erf" << "fff"
-                       << "hdr" << "k25" << "kdc" << "mdc" << "mos"
-                       << "mrw" << "nef" << "orf" << "pef" << "pxn"
-                       << "raf" << "raw" << "rdc" << "sr2" << "srf"
-                       << "x3f" << "arw";
-
-    defaultVideoFilter << "mpeg" << "mpg" << "mpo" << "mpe"     // MPEG
-                       << "avi"  << "mov" << "wmf" << "asf" << "mp4";
-
-    defaultAudioFilter << "ogg" << "mp3" << "wma" << "wav";
-
-    m_access->db()->setFilterSettings(defaultImageFilter, defaultVideoFilter, defaultAudioFilter);
-    m_access->db()->setSetting("FilterSettingsVersion", "1");
-
-    // Set user settings from config
+    defaultFilterSettings(defaultImageFilter, defaultVideoFilter, defaultAudioFilter);
 
     QSet<QString> configImageFilter, configVideoFilter, configAudioFilter;
 

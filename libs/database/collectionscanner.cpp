@@ -407,8 +407,10 @@ DatabaseItem::Category CollectionScanner::category(const QFileInfo &info)
         return DatabaseItem::Image;
     else if (d->audioFilterSet.contains(suffix))
         return DatabaseItem::Audio;
-    else //if (d->videoFilterSet.contains(suffix))
+    else if (d->videoFilterSet.contains(suffix))
         return DatabaseItem::Video;
+    else
+        return DatabaseItem::Other;
 }
 
 void CollectionScanner::markDatabaseAsScanned()
