@@ -125,6 +125,7 @@ public:
 
     // database settings
     QString                             albumLibraryPath;
+    QString                             databaseFilePath;
     QString                             imageFilefilter;
     QString                             movieFilefilter;
     QString                             audioFilefilter;
@@ -181,77 +182,77 @@ void AlbumSettings::init()
     d->albumCollectionNames.append(i18n("Miscellaneous"));
     d->albumCollectionNames.sort();
 
-    d->albumSortOrder       = AlbumSettings::ByFolder;
-    d->imageSortOrder       = AlbumSettings::ByIName;
-    d->itemRightClickAction = AlbumSettings::ShowPreview;
+    d->albumSortOrder           = AlbumSettings::ByFolder;
+    d->imageSortOrder           = AlbumSettings::ByIName;
+    d->itemRightClickAction     = AlbumSettings::ShowPreview;
 
-    d->defaultImageFilefilter = "*.jpg *.jpeg *.jpe "               // JPEG
-                                "*.jp2 *.jpx *.jpc *.pgx "          // JPEG-2000
-                                "*.tif *.tiff "                     // TIFF
-                                "*.png *.gif *.bmp *.xpm *.ppm *.pnm *.xcf *.pcx";
+    d->defaultImageFilefilter   = "*.jpg *.jpeg *.jpe "               // JPEG
+                                  "*.jp2 *.jpx *.jpc *.pgx "          // JPEG-2000
+                                  "*.tif *.tiff "                     // TIFF
+                                  "*.png *.gif *.bmp *.xpm *.ppm *.pnm *.xcf *.pcx";
 			 
-    d->defaultMovieFilefilter = "*.mpeg *.mpg *.mpo *.mpe "         // MPEG
-                                "*.avi *.mov *.wmf *.asf *.mp4";
+    d->defaultMovieFilefilter   = "*.mpeg *.mpg *.mpo *.mpe "         // MPEG
+                                  "*.avi *.mov *.wmf *.asf *.mp4";
 			 
-    d->defaultAudioFilefilter = "*.ogg *.mp3 *.wma *.wav";
+    d->defaultAudioFilefilter   = "*.ogg *.mp3 *.wma *.wav";
 
     // RAW files estentions supported by dcraw program and 
     // defines to digikam/libs/dcraw/rawfiles.h
-    d->defaultRawFilefilter   = QString(raw_file_extentions);
+    d->defaultRawFilefilter     = QString(raw_file_extentions);
 
-    d->imageFilefilter = d->defaultImageFilefilter;
-    d->movieFilefilter = d->defaultMovieFilefilter;
-    d->audioFilefilter = d->defaultAudioFilefilter;
-    d->rawFilefilter   = d->defaultRawFilefilter;
+    d->imageFilefilter          = d->defaultImageFilefilter;
+    d->movieFilefilter          = d->defaultMovieFilefilter;
+    d->audioFilefilter          = d->defaultAudioFilefilter;
+    d->rawFilefilter            = d->defaultRawFilefilter;
 
-    d->thumbnailSize      = ThumbnailSize::Medium;
-    d->treeThumbnailSize  = 32;
+    d->thumbnailSize            = ThumbnailSize::Medium;
+    d->treeThumbnailSize        = 32;
+ 
+    d->ratingFilterValue        = 0;
+    d->ratingFilterCond         = AlbumLister::GreaterEqualCondition;
 
-    d->ratingFilterValue  = 0;
-    d->ratingFilterCond   = AlbumLister::GreaterEqualCondition;
+    d->showToolTips             = true;
+    d->showSplash               = true;
+    d->useTrash                 = true;
+    d->showTrashDeleteDialog    = true;
+    d->sidebarApplyDirectly     = false;
 
-    d->showToolTips           = true;
-    d->showSplash             = true;
-    d->useTrash               = true;
-    d->showTrashDeleteDialog  = true;
-    d->sidebarApplyDirectly   = false;
+    d->iconShowName             = false;
+    d->iconShowSize             = false;
+    d->iconShowDate             = true;
+    d->iconShowModDate          = true;
+    d->iconShowComments         = true;
+    d->iconShowResolution       = false;
+    d->iconShowTags             = true;
+    d->iconShowRating           = true;
 
-    d->iconShowName           = false;
-    d->iconShowSize           = false;
-    d->iconShowDate           = true;
-    d->iconShowModDate        = true;
-    d->iconShowComments       = true;
-    d->iconShowResolution     = false;
-    d->iconShowTags           = true;
-    d->iconShowRating         = true;
+    d->tooltipShowFileName      = true;
+    d->tooltipShowFileDate      = false;
+    d->tooltipShowFileSize      = false;
+    d->tooltipShowImageType     = false;
+    d->tooltipShowImageDim      = true;
+    d->tooltipShowPhotoMake     = true;
+    d->tooltipShowPhotoDate     = true;
+    d->tooltipShowPhotoFocal    = true;
+    d->tooltipShowPhotoExpo     = true;
+    d->tooltipShowPhotoMode     = true;
+    d->tooltipShowPhotoFlash    = false;
+    d->tooltipShowPhotoWb       = false;
+    d->tooltipShowAlbumName     = false;
+    d->tooltipShowComments      = true;
+    d->tooltipShowTags          = true;
+    d->tooltipShowRating        = true;
 
-    d->tooltipShowFileName    = true;
-    d->tooltipShowFileDate    = false;
-    d->tooltipShowFileSize    = false;
-    d->tooltipShowImageType   = false;
-    d->tooltipShowImageDim    = true;
-    d->tooltipShowPhotoMake   = true;
-    d->tooltipShowPhotoDate   = true;
-    d->tooltipShowPhotoFocal  = true;
-    d->tooltipShowPhotoExpo   = true;
-    d->tooltipShowPhotoMode   = true;
-    d->tooltipShowPhotoFlash  = false;
-    d->tooltipShowPhotoWb     = false;
-    d->tooltipShowAlbumName   = false;
-    d->tooltipShowComments    = true;
-    d->tooltipShowTags        = true;
-    d->tooltipShowRating      = true;
+    d->exifRotate               = true;
+    d->exifSetOrientation       = true;
 
-    d->exifRotate             = true;
-    d->exifSetOrientation     = true;
+    d->saveTags                 = false;
+    d->savePhotographerId       = false;
+    d->saveCredits              = false;
 
-    d->saveTags               = false;
-    d->savePhotographerId     = false;
-    d->saveCredits            = false;
-
-    d->saveComments           = false;
-    d->saveDateTime           = false;
-    d->saveRating             = false;
+    d->saveComments             = false;
+    d->saveDateTime             = false;
+    d->saveRating               = false;
 
     d->previewLoadFullImageSize = false;
 }
@@ -262,9 +263,11 @@ void AlbumSettings::readSettings()
 
     // ---------------------------------------------------------------------
 
-    KConfigGroup group = config->group("Album Settings");
+    KConfigGroup group  = config->group("Album Settings");
 
     d->albumLibraryPath = group.readEntry("Album Path", QString());
+    // NOTE: default database file path is root album library path, like 0.7.x-0.9.x series work.
+    d->databaseFilePath = group.readEntry("Database File Path", d->albumLibraryPath);
 
     QStringList collectionList = group.readEntry("Album Collections",QStringList());
     if (!collectionList.isEmpty())
@@ -372,6 +375,7 @@ void AlbumSettings::saveSettings()
     KConfigGroup group = config->group("Album Settings");
 
     group.writeEntry("Album Path", d->albumLibraryPath);
+    group.writeEntry("Database File Path", d->databaseFilePath);
     group.writeEntry("Album Collections", d->albumCollectionNames);
     group.writeEntry("Album Sort Order", (int)d->albumSortOrder);
     group.writeEntry("Image Sort Order", (int)d->imageSortOrder);
@@ -457,6 +461,16 @@ void AlbumSettings::saveSettings()
 void AlbumSettings::setAlbumLibraryPath(const QString& path)
 {
     d->albumLibraryPath = path;
+}
+
+QString AlbumSettings::getDatabaseFilePath() const
+{
+    return d->databaseFilePath;
+}
+
+void AlbumSettings::setDatabaseFilePath(const QString& path)
+{
+    d->databaseFilePath = path;
 }
 
 QString AlbumSettings::getAlbumLibraryPath() const

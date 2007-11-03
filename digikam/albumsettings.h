@@ -74,6 +74,9 @@ public:
     void setAlbumLibraryPath(const QString& path);
     QString getAlbumLibraryPath() const;
 
+    void setDatabaseFilePath(const QString& path);
+    QString getDatabaseFilePath() const;
+
     void setShowSplashScreen(bool val);
     bool getShowSplashScreen() const;
 

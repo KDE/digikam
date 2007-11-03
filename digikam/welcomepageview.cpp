@@ -107,6 +107,7 @@ QString WelcomePageView::infoPage()
     newFeatures << i18n("XMP metadata support");
     newFeatures << i18n("A new camera interface");
     newFeatures << i18n("A new tool to capture photographs from Camera");
+    newFeatures << i18n("Storage of database file on a customized place");
     newFeatures << i18n("Supports the latest camera RAW files");
 
     QString featureItems;
@@ -147,8 +148,8 @@ QString WelcomePageView::infoPage()
     "help:/digikam/index.html",          // %2 : digiKam help:// Url
     "http://www.digikam.org",            // %3 : digiKam homepage Url
     "0.9.3",                             // %4 : prior digiKam version
-	featureItems,                        // %5 : prior KDE version
-	QString(),                           // %6 : generated list of new features
+    featureItems,                        // %5 : prior KDE version
+    QString(),                           // %6 : generated list of new features
     QString());                          // %7 : previous digiKam release.
     
     return info;

@@ -50,11 +50,15 @@ public:
 private:
 
     void readSettings();
+    void checkforOkButton();
 
 private slots:
 
     void slotChangeAlbumPath(const KUrl&);
-    void slotPathEdited(const QString&);
+    void slotAlbumPathEdited(const QString&);
+
+    void slotChangeDatabasePath(const KUrl&);
+    void slotDatabasePathEdited(const QString&);
 
 private:
 

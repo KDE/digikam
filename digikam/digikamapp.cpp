@@ -1795,7 +1795,7 @@ void DigikamApp::slotSetupChanged()
     //if(AlbumSettings::instance()->getAlbumLibraryPath() != AlbumManager::instance()->getLibraryPath())
       //  d->view->clearHistory();
 
-    if (AlbumManager::instance()->setDatabase(AlbumSettings::instance()->getAlbumLibraryPath(), false))
+    if (AlbumManager::instance()->setDatabase(AlbumSettings::instance()->getDatabaseFilePath(), false))
         AlbumManager::instance()->startScan();
 
     d->view->applySettings(AlbumSettings::instance());
