@@ -272,9 +272,15 @@ bool SchemaUpdater::updateFilterSettings()
 
 bool SchemaUpdater::createDatabase()
 {
-    return createTablesV5()
-        && createIndicesV5()
-        && createTriggersV5();
+    if ( createTablesV5()
+         && createIndicesV5()
+         && createTriggersV5())
+    {
+        m_currentVersion = 5;
+        return true;
+    }
+    else
+        return false;
 }
 
 bool SchemaUpdater::createTablesV5()

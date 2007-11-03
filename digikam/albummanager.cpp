@@ -231,7 +231,15 @@ bool AlbumManager::setDatabase(const QString &dbPath, bool priority)
     switch (advice)
     {
         case ScanController::Success:
+        {
+            // If is a db path, but with an empty db, we have no album roots.
+            // Add db path as album root.
+            if (CollectionManager::instance()->allLocations().isEmpty())
+            {
+                CollectionManager::instance()->addLocation(d->dbPath);
+            }
             break;
+        }
         case ScanController::ContinueWithoutDatabase:
         {
             QString errorMsg = DatabaseAccess().lastError();
