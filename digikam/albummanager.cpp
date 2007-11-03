@@ -231,15 +231,7 @@ bool AlbumManager::setDatabase(const QString &dbPath, bool priority)
     switch (advice)
     {
         case ScanController::Success:
-        {
-            // If is a db path, but with an empty db, we have no album roots.
-            // Add db path as album root.
-            if (CollectionManager::instance()->allLocations().isEmpty())
-            {
-                CollectionManager::instance()->addLocation(d->dbPath);
-            }
             break;
-        }
         case ScanController::ContinueWithoutDatabase:
         {
             QString errorMsg = DatabaseAccess().lastError();
@@ -337,16 +329,6 @@ bool AlbumManager::setDatabase(const QString &dbPath, bool priority)
             exit(0);
 
         DatabaseAccess().db()->setSetting("Locale",currLocale);
-    }
-
-    // -- Check if we need to do scanning -------------------------------------
-
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("General Settings");
-    if (group.readEntry("Scan At Start", true) ||
-        DatabaseAccess().db()->getSetting("Scanned").isEmpty())
-    {
-        ScanController::instance()->completeCollectionScan();
     }
 
     return true;

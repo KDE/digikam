@@ -72,6 +72,9 @@ extern "C"
 #include "albummanager.h"
 #include "databaseaccess.h"
 #include "databaseparameters.h"
+#include "scancontroller.h"
+#include "collectionmanager.h"
+#include "collectionlocation.h"
 #include "digikamapp.h"
 #include "digikamfirstrun.h"
 
@@ -257,7 +260,11 @@ int main(int argc, char *argv[])
     QString version = group.readEntry("Version", QString());
 
     group = config->group("Album Settings");
+    QString dbPath = group.readEntry("Database File Path", QString());
     QString albumPath = group.readEntry("Album Path", QString());
+    // 0.9 legacy
+    if (dbPath.isEmpty())
+        dbPath = albumPath;
 
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
     // TEMPORARY SOLUTION
@@ -268,7 +275,7 @@ int main(int argc, char *argv[])
         albumPath = args->getOption("album-root");
     }
 
-    QFileInfo dirInfo(albumPath);
+    QFileInfo dirInfo(dbPath);
 
     // version 0.6 was the version when the new Albums Library
     // storage was implemented
@@ -284,9 +291,24 @@ int main(int argc, char *argv[])
         return app.exec();
     }
 
+    // initialize database
     Digikam::AlbumManager* man = Digikam::AlbumManager::instance();
-    if (!man->setDatabase(albumPath, priorityAlbumPath))
+    if (!man->setDatabase(dbPath, priorityAlbumPath))
         return 1;
+
+    // ensure we have one album root
+    if (Digikam::CollectionManager::instance()->allLocations().isEmpty())
+    {
+        Digikam::CollectionManager::instance()->addLocation(albumPath);
+    }
+
+    // collection scan
+    group = config->group("General Settings");
+    if (group.readEntry("Scan At Start", true) ||
+        Digikam::DatabaseAccess().db()->getSetting("Scanned").isEmpty())
+    {
+        Digikam::ScanController::instance()->completeCollectionScan();
+    }
 
     Digikam::DigikamApp *digikam = new Digikam::DigikamApp();
 
