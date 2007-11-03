@@ -6,6 +6,7 @@ General        : Ported to CMake/Qt4/KDE4.
 General        : Removed all X11 library dependencies. Code is now portable under MACOS-X and Win32.
 General        : Support of XMP metadata (require Exiv2 0.16).
 General        : Hardware handling using KDE4 Solid interface.
+General        : Database file can be stored on a customized place to support remote album library path.
 CameraGUI      : New design for camera interface.
 CameraGUI      : New Capture tool.
 CameraGUI      : New bargraph to display camera media free-space.
@@ -17,4 +18,7 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 002 ==> 145096 : Request: acquire mass storage from printer as from camera. Change menu "Camera" to "Acquire".
 003 ==> 134206 : rethink about: Iptc.Application2.Urgency <==> digiKam Rating.
 004 ==> 149966 : Alternative IPTC Keyword Separator (dot notation).
-005 ==> 
+005 ==> 129437 : Album could point to network path. Now it's impossible to view photos from shared network drive.
+006 ==> 137694 : Allow album pictures to be stored on network devices.
+007 ==> 
+
