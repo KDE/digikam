@@ -77,7 +77,10 @@ bool SchemaUpdater::update()
 {
     DDebug() << "SchemaUpdater update" << endl;
     bool success = startUpdates();
+    // even on failure, try to set current version - it may have incremented
     m_access->db()->setSetting("DBVersion",QString::number(m_currentVersion));
+    if (!success)
+        return false;
     updateFilterSettings();
 
     if (m_observer)
@@ -184,15 +187,19 @@ bool SchemaUpdater::startUpdates()
             {
                 if (!copyV3toV4(digikam3DB.filePath(), currentDBFile.filePath()))
                     return false;
+
+                // m_currentVersion is now 4;
+                return makeUpdates();
             }
             else if (digikamDB.exists())
             {
                 if (!updateV2toV4(digikamDB.path()))
                     return false;
-            }
 
-            // m_currentVersion is now 4;
-            return makeUpdates();
+                // m_currentVersion is now 4;
+                return makeUpdates();
+            }
+            // no else, fall through!
         }
 
         // No legacy handling: start with a fresh db
@@ -226,10 +233,14 @@ bool SchemaUpdater::makeUpdates()
                 m_access->backend()->rollbackTransaction();
                 if (m_observer && !m_setError)
                 {
+                    QFileInfo currentDBFile(m_access->parameters().databaseName);
                     QString errorMsg = i18n("The schema updating process from version 4 to 5 failed, "
                                             "caused by an internal error. "
-                                            "Please delete the old database file "
-                                            "if you want to continue with an empty database.");
+                                            "Please delete the database files "
+                                            "(\"%1\" and \"%2\" in \"%3\") "
+                                            "if you want to try to run digiKam with an empty database "
+                                            " - it might work then.",
+                                            QString("digikam3.db"), QString("digikam4.db"), currentDBFile.dir().path());
                     m_observer->error(errorMsg);
                     m_observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
                 }
@@ -275,7 +286,7 @@ bool SchemaUpdater::createTablesV5()
                             "  status INTEGER NOT NULL,\n"
                             "  type INTEGER NOT NULL,\n"
                             "  identifier TEXT,\n"
-                            "  specificPath TEXT);") ))
+                            "  specificPath TEXT);") )) // FIXME: Add label
     {
         return false;
     }
@@ -452,7 +463,7 @@ bool SchemaUpdater::createTablesV5()
                             "  filepath TEXT,\n"
                             "  filename TEXT,\n"
                             "  filesize INTEGER,\n"
-                            "  filedate DATETIME);"
+                            "  filedate DATETIME);" //FIXME: Add UNIQUE restriction, rename filepath
                            ) ))
     {
         return false;
