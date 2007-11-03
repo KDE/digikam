@@ -290,10 +290,15 @@ bool AlbumLister::matchesFilter(const ImageInfo &info) const
     // Filter by rating.
     if (d->ratingFilter >= 0) 
     {
+        // for now we treat -1 (no rating) just like a rating of 0.
+        int rating = info.rating();
+        if (rating == -1)
+            rating = 0;
+
         if (d->ratingCond == GreaterEqualCondition)
         {
             // If the rating is not >=, i.e it is <, then it does not match.
-            if (info.rating() < d->ratingFilter)
+            if (rating < d->ratingFilter)
             {
                 match = false;
             }
@@ -301,7 +306,7 @@ bool AlbumLister::matchesFilter(const ImageInfo &info) const
         else if (d->ratingCond == EqualCondition)
         {
             // If the rating is not =, i.e it is !=, then it does not match.
-            if (info.rating() != d->ratingFilter)
+            if (rating != d->ratingFilter)
             {
                 match = false;
             }
@@ -309,7 +314,7 @@ bool AlbumLister::matchesFilter(const ImageInfo &info) const
         else
         {
             // If the rating is not <=, i.e it is >, then it does not match.
-            if (info.rating() > d->ratingFilter)
+            if (rating > d->ratingFilter)
             {
                 match = false;
             }
