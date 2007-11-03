@@ -107,7 +107,7 @@ QString WelcomePageView::infoPage()
     newFeatures << i18n("XMP metadata support");
     newFeatures << i18n("A new camera interface");
     newFeatures << i18n("A new tool to capture photographs from Camera");
-    newFeatures << i18n("Storage of database file on a customized place");
+    newFeatures << i18n("Database file can be stored on a customized place to support remote album library path");
     newFeatures << i18n("Supports the latest camera RAW files");
 
     QString featureItems;
