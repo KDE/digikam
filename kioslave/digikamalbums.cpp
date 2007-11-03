@@ -78,30 +78,14 @@ kio_digikamalbums::~kio_digikamalbums()
 void kio_digikamalbums::special(const QByteArray& data)
 {
     KUrl    kurl;
-    QString filter;
-    int     scan = 0;
 
     QDataStream ds(data);
     ds >> kurl;
-    if (!ds.atEnd())
-    {
-        ds >> filter;
-        ds >> scan;
-    }
 
     kDebug() << "kio_digikamalbums::special " << kurl;
 
     Digikam::DatabaseUrl dbUrl(kurl);
     Digikam::DatabaseAccess::setParameters(dbUrl);
-
-    if (scan)
-    {
-        kDebug() << "Scanning with partial scan" << dbUrl.albumRootPath() << dbUrl.album() << endl;
-        Digikam::CollectionScanner scanner;
-        scanner.partialScan(dbUrl.albumRootPath(), dbUrl.album());
-        finished();
-        return;
-    }
 
     Digikam::ImageLister lister;
     Digikam::ImageListerSlaveBaseReceiver receiver(this);

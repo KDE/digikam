@@ -46,8 +46,6 @@ namespace DIO
     
     KIO::CopyJob* rename(const KUrl& src, const KUrl& dest);
     
-    KIO::Job* scan(const KUrl& albumURL);
-    
     bool      running();
 
 }  // namespace DIO

@@ -109,8 +109,6 @@ public:
     QString           dbPath;
     bool              hasPriorizedDbPath;
 
-    QStringList       dirtyAlbums;
-
     KIO::TransferJob *dateListJob;
 
     KDirWatch        *dirWatch;
@@ -204,7 +202,6 @@ bool AlbumManager::setDatabase(const QString &dbPath, bool priority)
 
     delete d->dirWatch;
     d->dirWatch = 0;
-    d->dirtyAlbums.clear();
 
     d->currentAlbum = 0;
     emit signalAlbumCurrentChanged(0);
@@ -393,14 +390,6 @@ void AlbumManager::refresh()
     scanTAlbums();
     scanSAlbums();
     scanDAlbums();
-
-    if (!d->dirtyAlbums.empty())
-    {
-        KUrl u(d->dirtyAlbums.first());
-        d->dirtyAlbums.pop_front();
-
-        DIO::scan(u);
-    }
 }
 
 void AlbumManager::scanPAlbums()
@@ -1366,7 +1355,6 @@ void AlbumManager::removePAlbum(PAlbum *album)
     d->albumIntDict.remove(album->globalID());
 
     DatabaseUrl url = album->databaseUrl();
-    d->dirtyAlbums.removeAll(url.url());
 
     if (album == d->currentAlbum)
     {
