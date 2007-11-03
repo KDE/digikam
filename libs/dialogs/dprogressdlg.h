@@ -52,16 +52,6 @@ Q_OBJECT
     DProgressDlg(QWidget *parent=0, const QString &caption=QString());
     ~DProgressDlg();
 
-    void setButtonText(const QString &text);
-    void addedAction(const QPixmap& pix, const QString &text);
-    void reset();
-
-    void setMaximum(int max);
-    void incrementMaximum(int added);
-    void advance(int offset);
-    void setValue(int value);
-    int  value();
-
     void setLabel(const QString &text);
     void setTitle(const QString &text);
     void setActionListVSBarVisible(bool visible);
@@ -69,13 +59,26 @@ Q_OBJECT
     void setAllowCancel(bool allowCancel);
     bool wasCancelled() const;
     bool allowCancel() const;
- 
- protected slots:
+
+    int  value();
+
+ public slots:
+
+    void setMaximum(int max);
+    void incrementMaximum(int added);
+    void advance(int offset);
+    void setValue(int value);
+
+    void setButtonText(const QString &text);
+    void addedAction(const QPixmap& pix, const QString &text);
+    void reset();
+
+protected slots:
 
     void slotCancel();
 
  private:
- 
+
     DProgressDlgPriv* d;
 };
 

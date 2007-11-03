@@ -86,6 +86,9 @@ signals:
     void databaseInitialized(bool success);
     void completeScanDone();
     void triggerShowProgressDialog();
+    void incrementProgressDialog(int);
+    void errorFromInitialization(const QString &);
+    void progressFromInitialization(const QString &, int);
 
 private slots:
 
@@ -98,6 +101,9 @@ private slots:
 
     void slotShowProgressDialog();
     void slotTriggerShowProgressDialog();
+
+    void slotProgressFromInitialization(const QString &message, int numberOfSteps);
+    void slotErrorFromInitialization(const QString &errorMessage);
 
 protected:
 

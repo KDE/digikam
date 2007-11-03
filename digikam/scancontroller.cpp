@@ -138,6 +138,7 @@ ScanController::ScanController()
 {
     d = new ScanControllerPriv;
 
+    // create event loop
     d->eventLoop = new QEventLoop(this);
 
     connect(this, SIGNAL(databaseInitialized(bool)),
@@ -146,6 +147,7 @@ ScanController::ScanController()
     connect(this, SIGNAL(completeScanDone()),
             d->eventLoop, SLOT(quit()));
 
+    // create timer to show progress dialog
     d->showTimer = new QTimer(this);
     d->showTimer->setSingleShot(true);
 
@@ -155,6 +157,14 @@ ScanController::ScanController()
     connect(this, SIGNAL(triggerShowProgressDialog()),
             this, SLOT(slotTriggerShowProgressDialog()));
 
+    // interthread connections
+    connect(this, SIGNAL(errorFromInitialization(const QString &)),
+            this, SLOT(slotErrorFromInitialization(const QString &)));
+
+    connect(this, SIGNAL(progressFromInitialization(const QString &, int)),
+            this, SLOT(slotProgressFromInitialization(const QString &, int)));
+
+    // start thread
     d->running = true;
     start();
 }
@@ -188,6 +198,9 @@ void ScanController::createProgressDialog()
 
     d->progressDialog->setMaximum(1);
     d->progressDialog->setValue(1);
+
+    connect(this, SIGNAL(incrementProgressDialog(int)),
+            d->progressDialog, SLOT(incrementMaximum(int)));
 }
 
 void ScanController::slotTriggerShowProgressDialog()
@@ -350,18 +363,27 @@ void ScanController::slotStartScanningAlbumRoots()
 
 void ScanController::moreSchemaUpdateSteps(int numberOfSteps)
 {
+    // not from main thread
     emit triggerShowProgressDialog();
-    d->progressDialog->incrementMaximum(numberOfSteps);
+    emit incrementProgressDialog(numberOfSteps);
 }
 
 void ScanController::schemaUpdateProgress(const QString &message, int numberOfSteps)
 {
+    // not from main thread
+    emit progressFromInitialization(message, numberOfSteps);
+}
+
+void ScanController::slotProgressFromInitialization(const QString &message, int numberOfSteps)
+{
+    // main thread
     d->progressDialog->addedAction(d->actionPixmap(), message);
     d->progressDialog->advance(numberOfSteps);
 }
 
 void ScanController::finishedSchemaUpdate(UpdateResult result)
 {
+    // not from main thread
     switch(result)
     {
         case InitializationObserver::UpdateSuccess:
@@ -378,6 +400,13 @@ void ScanController::finishedSchemaUpdate(UpdateResult result)
 
 void ScanController::error(const QString &errorMessage)
 {
+    // not from main thread
+    emit errorFromInitialization(errorMessage);
+}
+
+void ScanController::slotErrorFromInitialization(const QString &errorMessage)
+{
+    // main thread
     d->progressDialog->addedAction(d->errorPixmap(), i18n("Error"));
     KMessageBox::error(d->progressDialog, errorMessage);
 }
