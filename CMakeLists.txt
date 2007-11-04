@@ -409,7 +409,7 @@ SET(libthemeengine_SRCS
 SET(libsetup_SRCS 
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupicc.cpp 
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupcollections.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupalbum.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupalbumview.cpp 
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setup.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setuptooltip.cpp 
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupidentity.cpp 
