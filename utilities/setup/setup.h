@@ -48,7 +48,7 @@ public:
         ToolTipPage,
         MetadataPage,
         IdentifyPage,
-        CollectionsPage,
+        AlbumTypePage,
         MimePage,
         LightTablePage,
         EditorPage,

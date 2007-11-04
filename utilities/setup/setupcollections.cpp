@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-01-02
- * Description : collection setup tab.
+ * Description : album type setup tab.
  * 
  * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -54,11 +54,11 @@
 namespace Digikam
 {
 
-class SetupCollectionsPriv
+class SetupAlbumTypePriv
 {
 public:
 
-    SetupCollectionsPriv()
+    SetupAlbumTypePriv()
     {
         collectionEdit      = 0;
         albumCollectionBox  = 0;
@@ -76,10 +76,10 @@ public:
     KLineEdit   *collectionEdit;
 };
 
-SetupCollections::SetupCollections(QWidget* parent )
-                : QWidget(parent)
+SetupAlbumType::SetupAlbumType(QWidget* parent )
+              : QWidget(parent)
 {
-    d = new SetupCollectionsPriv;
+    d = new SetupAlbumTypePriv;
 
     QGridLayout *grid = new QGridLayout(this);
 
@@ -136,12 +136,12 @@ SetupCollections::SetupCollections(QWidget* parent )
     adjustSize();
 }
 
-SetupCollections::~SetupCollections()
+SetupAlbumType::~SetupAlbumType()
 {
     delete d;
 }
 
-void SetupCollections::slotDelCollection()
+void SetupAlbumType::slotDelCollection()
 {
     QListWidgetItem *item = d->albumCollectionBox->currentItem();
     if (!item) return;
@@ -149,7 +149,7 @@ void SetupCollections::slotDelCollection()
     delete item;
 }
 
-void SetupCollections::slotRepCollection()
+void SetupAlbumType::slotRepCollection()
 {
     QString newCollection = d->collectionEdit->text();
     if (newCollection.isEmpty()) return;
@@ -161,7 +161,7 @@ void SetupCollections::slotRepCollection()
     }
 }
 
-void SetupCollections::slotCollectionSelectionChanged()
+void SetupAlbumType::slotCollectionSelectionChanged()
 {
     if (!d->albumCollectionBox->selectedItems().isEmpty())
     {
@@ -176,7 +176,7 @@ void SetupCollections::slotCollectionSelectionChanged()
     }
 }
 
-void SetupCollections::slotAddCollection()
+void SetupAlbumType::slotAddCollection()
 {
     QString newCollection = d->collectionEdit->text();
     if (newCollection.isEmpty()) return;
@@ -199,7 +199,7 @@ void SetupCollections::slotAddCollection()
     }
 }
 
-void SetupCollections::applySettings()
+void SetupAlbumType::applySettings()
 {
     AlbumSettings* settings = AlbumSettings::instance();
 
@@ -217,7 +217,7 @@ void SetupCollections::applySettings()
     settings->saveSettings();
 }
 
-void SetupCollections::readSettings()
+void SetupAlbumType::readSettings()
 {
     AlbumSettings* settings = AlbumSettings::instance();
     if (!settings) return;

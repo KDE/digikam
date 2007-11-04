@@ -66,7 +66,7 @@ public:
         page_tooltip     = 0;
         page_metadata    = 0;
         page_identity    = 0;
-        page_collections = 0;
+        page_albumType   = 0;
         page_mime        = 0;
         page_lighttable  = 0;
         page_editor      = 0;
@@ -82,7 +82,7 @@ public:
         tooltipPage      = 0;
         metadataPage     = 0;
         identityPage     = 0;
-        collectionsPage  = 0;
+        albumTypePage    = 0;
         mimePage         = 0;
         lighttablePage   = 0;
         editorPage       = 0;
@@ -99,7 +99,7 @@ public:
     KPageWidgetItem  *page_tooltip;
     KPageWidgetItem  *page_metadata;
     KPageWidgetItem  *page_identity;
-    KPageWidgetItem  *page_collections;
+    KPageWidgetItem  *page_albumType;
     KPageWidgetItem  *page_mime;
     KPageWidgetItem  *page_lighttable;
     KPageWidgetItem  *page_editor;
@@ -115,7 +115,7 @@ public:
     SetupToolTip     *tooltipPage;
     SetupMetadata    *metadataPage;
     SetupIdentity    *identityPage;
-    SetupCollections *collectionsPage;
+    SetupAlbumType   *albumTypePage;
     SetupMime        *mimePage;
     SetupLightTable  *lighttablePage;
     SetupEditor      *editorPage;
@@ -145,10 +145,10 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->page_albumView->setHeader( i18n("Album View Settings") );
     d->page_albumView->setIcon( KIcon("view-icon") );
 
-    d->collectionsPage  = new SetupCollections();
-    d->page_collections = addPage( d->collectionsPage, i18n("Collections") );
-    d->page_collections->setHeader( i18n("Album Collections") );
-    d->page_collections->setIcon( KIcon("view-calendar-list") );
+    d->albumTypePage  = new SetupAlbumType();
+    d->page_albumType = addPage( d->albumTypePage, i18n("Album Type") );
+    d->page_albumType->setHeader( i18n("Album Type Settings") );
+    d->page_albumType->setIcon( KIcon("view-calendar-list") );
 
     d->identityPage  = new SetupIdentity();
     d->page_identity = addPage( d->identityPage, i18n("Identity") );
@@ -245,7 +245,7 @@ void Setup::slotOkClicked()
     d->tooltipPage->applySettings();
     d->metadataPage->applySettings();
     d->identityPage->applySettings();
-    d->collectionsPage->applySettings();
+    d->albumTypePage->applySettings();
     d->mimePage->applySettings();
     d->cameraPage->applySettings();
     d->lighttablePage->applySettings();
@@ -291,8 +291,8 @@ void Setup::showPage(Setup::Page page)
         case IdentifyPage:
             setCurrentPage(d->page_identity); 
             break;
-        case CollectionsPage:
-            setCurrentPage(d->page_collections); 
+        case AlbumTypePage:
+            setCurrentPage(d->page_albumType); 
             break;
         case MimePage:
             setCurrentPage(d->page_mime); 
@@ -337,7 +337,7 @@ Setup::Page Setup::activePageIndex()
     if (cur == d->page_tooltip)     return ToolTipPage;
     if (cur == d->page_metadata)    return MetadataPage;
     if (cur == d->page_identity)    return IdentifyPage;
-    if (cur == d->page_collections) return CollectionsPage;
+    if (cur == d->page_albumType)   return AlbumTypePage;
     if (cur == d->page_mime)        return MimePage;
     if (cur == d->page_lighttable)  return LightTablePage;
     if (cur == d->page_editor)      return EditorPage;

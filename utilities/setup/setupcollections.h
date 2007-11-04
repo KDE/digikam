@@ -4,7 +4,7 @@
  * http://www.digikam.org
  * 
  * Date        : 2004-01-02
- * Description : collection setup tab.
+ * Description : album type setup tab.
  * 
  * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,8 +21,8 @@
  * 
  * ============================================================ */
 
-#ifndef SETUPCOLLECTIONS_H
-#define SETUPCOLLECTIONS_H
+#ifndef SETUPALBUMTYPE_H
+#define SETUPALBUMTYPE_H
 
 // Qt includes.
 
@@ -31,16 +31,16 @@
 namespace Digikam
 {
 
-class SetupCollectionsPriv;
+class SetupAlbumTypePriv;
 
-class SetupCollections : public QWidget
+class SetupAlbumType : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    SetupCollections(QWidget* parent = 0);
-    ~SetupCollections();
+    SetupAlbumType(QWidget* parent = 0);
+    ~SetupAlbumType();
 
     void applySettings();
 
@@ -57,9 +57,9 @@ private slots:
 
 private:
 
-    SetupCollectionsPriv* d;
+    SetupAlbumTypePriv* d;
 };
 
 }  // namespace Digikam
 
-#endif // SETUPCOLLECTIONS_H 
+#endif // SETUPALBUMTYPE_H 
