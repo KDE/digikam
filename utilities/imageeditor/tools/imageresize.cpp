@@ -101,6 +101,7 @@ public:
         progressBar          = 0;
         greycstorationIface  = 0;
         settingsWidget       = 0;
+        cimgLogoLabel        = 0;
     }
 
     int                   currentRenderingMode;
@@ -127,6 +128,8 @@ public:
     
     KProgress            *progressBar;
     
+    KURLLabel            *cimgLogoLabel;
+
     GreycstorationIface  *greycstorationIface;
     GreycstorationWidget *settingsWidget;
 };
@@ -193,14 +196,14 @@ ImageResize::ImageResize(QWidget* parent)
     QWhatsThis::add( d->preserveRatioBox, i18n("<p>Enable this option to maintain aspect "
                                               "ratio with new image sizes."));
 
-    KURLLabel *cimgLogoLabel = new KURLLabel(firstPage);
-    cimgLogoLabel->setText(QString());
-    cimgLogoLabel->setURL("http://cimg.sourceforge.net");
+    d->cimgLogoLabel = new KURLLabel(firstPage);
+    d->cimgLogoLabel->setText(QString());
+    d->cimgLogoLabel->setURL("http://cimg.sourceforge.net");
     KGlobal::dirs()->addResourceType("logo-cimg", KGlobal::dirs()->kde_default("data") +
                                      "digikam/data");
     QString directory = KGlobal::dirs()->findResourceDir("logo-cimg", "logo-cimg.png");
     cimgLogoLabel->setPixmap( QPixmap( directory + "logo-cimg.png" ) );
-    QToolTip::add(cimgLogoLabel, i18n("Visit CImg library website"));
+    QToolTip::add(d->cimgLogoLabel, i18n("Visit CImg library website"));
 
     d->useGreycstorationBox = new QCheckBox(i18n("Restore photograph (slow)"), firstPage);
     QWhatsThis::add( d->useGreycstorationBox, i18n("<p>Enable this option to restore photograph content. "
@@ -220,7 +223,7 @@ ImageResize::ImageResize(QWidget* parent)
     grid->addMultiCellWidget(label4, 4, 4, 0, 0);
     grid->addMultiCellWidget(d->hpInput, 4, 4, 1, 2);
     grid->addMultiCellWidget(new KSeparator(firstPage), 5, 5, 0, 2);
-    grid->addMultiCellWidget(cimgLogoLabel, 6, 7, 0, 0);
+    grid->addMultiCellWidget(d->cimgLogoLabel, 6, 7, 0, 0);
     grid->addMultiCellWidget(d->useGreycstorationBox, 6, 6, 1, 2);
     grid->addMultiCellWidget(d->progressBar, 7, 7, 1, 2);
     grid->setRowStretch(8, 10);
@@ -269,6 +272,7 @@ void ImageResize::slotRestorationToggled(bool b)
 {
     d->settingsWidget->setEnabled(b);
     d->progressBar->setEnabled(b);
+    d->cimgLogoLabel->setEnabled(b);
     enableButton(User2, b);
     enableButton(User3, b);
 }    
