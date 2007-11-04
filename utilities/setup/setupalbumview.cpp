@@ -30,19 +30,13 @@
 #include <QRadioButton>
 #include <QCheckBox>
 #include <QLabel>
-#include <QDir>
-#include <QFileInfo>
 #include <QGridLayout>
 #include <QVBoxLayout>
 
 // KDE includes.
 
 #include <klocale.h>
-#include <kpagedialog.h>
-#include <kfiledialog.h>
-#include <kurl.h>
-#include <kmessagebox.h>
-#include <kurlrequester.h>
+#include <kdialog.h>
 
 // // Local includes.
 
@@ -59,7 +53,6 @@ public:
 
     SetupAlbumViewPriv()
     {
-        albumPathEdit            = 0;
         iconTreeThumbSize        = 0;
         iconTreeThumbLabel       = 0;
         iconShowNameBox          = 0;
@@ -72,7 +65,6 @@ public:
         iconShowRatingBox        = 0;
         rightClickActionComboBox = 0;
         previewLoadFullImageSize = 0;
-        databasePathEdit         = 0;
     }
 
     QLabel        *iconTreeThumbLabel;
@@ -89,62 +81,15 @@ public:
 
     QComboBox     *iconTreeThumbSize;
     QComboBox     *rightClickActionComboBox;
-
-    KUrlRequester *albumPathEdit;
-    KUrlRequester *databasePathEdit;
-
-    KPageDialog   *mainDialog;
 };
 
-SetupAlbumView::SetupAlbumView(KPageDialog* dialog, QWidget* parent)
+SetupAlbumView::SetupAlbumView(QWidget* parent)
               : QWidget(parent)
 {
     d = new SetupAlbumViewPriv;
-    d->mainDialog = dialog;
 
     QVBoxLayout *layout = new QVBoxLayout( this );
 
-    // --------------------------------------------------------
-
-    QGroupBox *albumPathBox = new QGroupBox(i18n("Album &Library"), this);
-    QVBoxLayout *gLayout1   = new QVBoxLayout(albumPathBox);
-
-    QLabel *rootsPathLabel  = new QLabel(i18n("Root album path:"), albumPathBox);
-
-    d->albumPathEdit = new KUrlRequester(albumPathBox);
-    d->albumPathEdit->setMode(KFile::Directory | KFile::LocalOnly | KFile::ExistingOnly);    
-    d->albumPathEdit->setToolTip(i18n("<p>Here you can set the main path to the digiKam album "
-                                      "library in your computer."
-                                      "<p>Write access is required for this path."));
-
-    connect(d->albumPathEdit, SIGNAL(urlSelected(const KUrl &)),
-            this, SLOT(slotChangeAlbumPath(const KUrl &)));
-
-    connect(d->albumPathEdit, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotAlbumPathEdited(const QString&)) );
-
-    QLabel *databasePathLabel = new QLabel(i18n("Path to store database:"), albumPathBox);
-    d->databasePathEdit       = new KUrlRequester(albumPathBox);
-    d->databasePathEdit->setMode(KFile::Directory | KFile::LocalOnly);    
-
-    d->databasePathEdit->setToolTip(i18n("<p>Here you can set the path use to host to the digiKam database "
-                                         "in your computer. The database file is common for all roots album path. "
-                                         "<p>Write access is required for this path."
-                                         "<p>Do not use a remote path here, like an NFS mounted file system."));
-
-    connect(d->databasePathEdit, SIGNAL(urlSelected(const KUrl &)),
-            this, SLOT(slotChangeDatabsePath(const KUrl &)));
-
-    connect(d->databasePathEdit, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotDatabasePathEdited(const QString&)) );
-
-    gLayout1->addWidget(rootsPathLabel);
-    gLayout1->addWidget(d->albumPathEdit);
-    gLayout1->addWidget(databasePathLabel);
-    gLayout1->addWidget(d->databasePathEdit);
-    gLayout1->setSpacing(0);
-    gLayout1->setMargin(KDialog::spacingHint());
-   
     // --------------------------------------------------------
 
     QGroupBox *iconTextGroup = new QGroupBox(i18n("Thumbnail Information"), this);
@@ -231,7 +176,6 @@ SetupAlbumView::SetupAlbumView(KPageDialog* dialog, QWidget* parent)
 
     layout->setMargin(0);
     layout->setSpacing(KDialog::spacingHint());
-    layout->addWidget(albumPathBox);
     layout->addWidget(iconTextGroup);
     layout->addWidget(interfaceOptionsGroup);
     layout->addStretch();
@@ -251,9 +195,6 @@ void SetupAlbumView::applySettings()
 {
     AlbumSettings* settings = AlbumSettings::instance();
     if (!settings) return;
-
-    settings->setAlbumLibraryPath(d->albumPathEdit->url().path());
-    settings->setDatabaseFilePath(d->databasePathEdit->url().path());
 
     settings->setDefaultTreeIconSize(d->iconTreeThumbSize->currentText().toInt());
     settings->setIconShowName(d->iconShowNameBox->isChecked());
@@ -278,9 +219,6 @@ void SetupAlbumView::readSettings()
 
     if (!settings) return;
 
-    d->albumPathEdit->setUrl(settings->getAlbumLibraryPath());
-    d->databasePathEdit->setUrl(settings->getDatabaseFilePath());
-
     if (settings->getDefaultTreeIconSize() == 16)
         d->iconTreeThumbSize->setCurrentIndex(0);
     else if (settings->getDefaultTreeIconSize() == 22)
@@ -302,78 +240,6 @@ void SetupAlbumView::readSettings()
     d->rightClickActionComboBox->setCurrentIndex((int)settings->getItemRightClickAction());
 
     d->previewLoadFullImageSize->setChecked(settings->getPreviewLoadFullImageSize());
-}
-
-void SetupAlbumView::slotChangeAlbumPath(const KUrl &result)
-{
-    if (KUrl(result).equals(KUrl(QDir::homePath()), KUrl::CompareWithoutTrailingSlash)) 
-    {
-        KMessageBox::sorry(0, i18n("Sorry; cannot use home directory as album library."));
-        return;
-    }
-
-    QFileInfo targetPath(result.path());
-
-    if (!result.isEmpty() && !targetPath.isWritable()) 
-    {
-        KMessageBox::information(0, i18n("No write access for this root album path.\n"
-                                         "Warning: image and metadata editing will not work."));
-    }
-}
-
-void SetupAlbumView::slotChangeDatabasePath(const KUrl &result)
-{
-    QFileInfo targetPath(result.path());
-
-    if (!result.isEmpty() && !targetPath.isWritable()) 
-    {
-        KMessageBox::information(0, i18n("No write access for this path to store database.\n"
-                                         "Warning: the caption and tag features will not work."));
-    }
-}
-
-void SetupAlbumView::slotAlbumPathEdited(const QString& newPath)
-{
-    if (newPath.isEmpty()) 
-    {
-        d->mainDialog->enableButtonOk(false);
-        return;
-    }
-
-    if (!newPath.startsWith("/")) 
-    {
-        d->albumPathEdit->setUrl(QDir::homePath() + '/' + newPath);
-    }
-
-    checkforOkButton();
-}
-
-void SetupAlbumView::slotDatabasePathEdited(const QString& newPath)
-{
-    if (newPath.isEmpty()) 
-    {
-        d->mainDialog->enableButtonOk(false);
-        return;
-    }
-
-    if (!newPath.startsWith("/")) 
-    {
-        d->databasePathEdit->setUrl(QDir::homePath() + '/' + newPath);
-    }
-
-    checkforOkButton();
-}
-
-void SetupAlbumView::checkforOkButton()
-{
-    QFileInfo albumPath(d->albumPathEdit->url().path());
-    QDir albumDir(d->albumPathEdit->url().path());
-    bool albumOk = albumDir.exists() && (albumDir.path() != QDir::homePath());
-    
-    QDir dbDir(d->databasePathEdit->url().path());
-    bool dbOk = dbDir.exists();
-
-    d->mainDialog->enableButtonOk(dbOk && albumOk);
 }
 
 }  // namespace Digikam

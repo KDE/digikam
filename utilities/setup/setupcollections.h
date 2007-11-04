@@ -4,9 +4,8 @@
  * http://www.digikam.org
  *
  * Date        : 2003-02-01
- * Description : album view configuration setup tab
+ * Description : collections setup tab
  *
- * Copyright (C) 2003-2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -22,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SETUPALBUMVIEW_H
-#define SETUPALBUMVIEW_H
+#ifndef SETUPCOLLECTIONS_H
+#define SETUPCOLLECTIONS_H
 
 // Qt includes.
 
@@ -34,28 +33,37 @@ class KPageDialog;
 namespace Digikam
 {
 
-class SetupAlbumViewPriv;
+class SetupCollectionsPriv;
 
-class SetupAlbumView : public QWidget
+class SetupCollections : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    SetupAlbumView(QWidget* parent=0);
-    ~SetupAlbumView();
+    SetupCollections(KPageDialog* dialog, QWidget* parent=0);
+    ~SetupCollections();
 
     void applySettings();
 
 private:
 
     void readSettings();
+    void checkforOkButton();
+
+private slots:
+
+    void slotChangeAlbumPath(const KUrl&);
+    void slotAlbumPathEdited(const QString&);
+
+    void slotChangeDatabasePath(const KUrl&);
+    void slotDatabasePathEdited(const QString&);
 
 private:
 
-    SetupAlbumViewPriv* d;
+    SetupCollectionsPriv* d;
 };
 
 }  // namespace Digikam
 
-#endif // SETUPALBUMVIEW_H
+#endif // SETUPCOLLECTIONS_H

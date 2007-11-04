@@ -35,6 +35,7 @@
 // Local includes.
 
 #include "batchthumbsgenerator.h"
+#include "setupcollections.h"
 #include "setupalbumview.h"
 #include "setuptooltip.h"
 #include "setupmetadata.h"
@@ -62,6 +63,7 @@ public:
 
     SetupPrivate()
     {
+        page_collections = 0;
         page_albumView   = 0;
         page_tooltip     = 0;
         page_metadata    = 0;
@@ -78,6 +80,7 @@ public:
         page_camera      = 0;
         page_misc        = 0;
 
+        collectionsPage  = 0;
         albumViewPage    = 0;
         tooltipPage      = 0;
         metadataPage     = 0;
@@ -95,6 +98,7 @@ public:
         pluginsPage      = 0;
     }
 
+    KPageWidgetItem  *page_collections;
     KPageWidgetItem  *page_albumView;
     KPageWidgetItem  *page_tooltip;
     KPageWidgetItem  *page_metadata;
@@ -111,6 +115,7 @@ public:
     KPageWidgetItem  *page_camera;
     KPageWidgetItem  *page_misc;
 
+    SetupCollections *collectionsPage;
     SetupAlbumView   *albumViewPage;
     SetupToolTip     *tooltipPage;
     SetupMetadata    *metadataPage;
@@ -140,7 +145,12 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     setFaceType(List);
     setModal(true);
 
-    d->albumViewPage  = new SetupAlbumView(this);
+    d->collectionsPage  = new SetupCollections(this);
+    d->page_collections = addPage( d->collectionsPage, i18n("Collections") );
+    d->page_collections->setHeader( i18n("Collections Settings") );
+    d->page_collections->setIcon( KIcon("folder-image") );
+
+    d->albumViewPage  = new SetupAlbumView();
     d->page_albumView = addPage( d->albumViewPage, i18n("Album View") );
     d->page_albumView->setHeader( i18n("Album View Settings") );
     d->page_albumView->setIcon( KIcon("view-icon") );
@@ -224,7 +234,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     {
         KSharedConfig::Ptr config = KGlobal::config();
         KConfigGroup group = config->group(QString("Album Settings"));
-        showPage((Page)group.readEntry("Setup Page", (int)AlbumViewPage));
+        showPage((Page)group.readEntry("Setup Page", (int)CollectionsPage));
     }
 
     show();
@@ -241,6 +251,7 @@ Setup::~Setup()
 
 void Setup::slotOkClicked()
 {
+    d->collectionsPage->applySettings();
     d->albumViewPage->applySettings();
     d->tooltipPage->applySettings();
     d->metadataPage->applySettings();
@@ -282,6 +293,9 @@ void Setup::showPage(Setup::Page page)
 {
     switch(page)
     {
+        case AlbumViewPage:
+            setCurrentPage(d->page_albumView); 
+            break;
         case ToolTipPage:
             setCurrentPage(d->page_tooltip); 
             break;
@@ -325,7 +339,7 @@ void Setup::showPage(Setup::Page page)
             setCurrentPage(d->page_misc); 
             break;
         default: 
-            setCurrentPage(d->page_albumView); 
+            setCurrentPage(d->page_collections); 
             break;
     }
 }
@@ -334,6 +348,7 @@ Setup::Page Setup::activePageIndex()
 {
     KPageWidgetItem *cur = currentPage();
 
+    if (cur == d->page_albumView)   return AlbumViewPage;
     if (cur == d->page_tooltip)     return ToolTipPage;
     if (cur == d->page_metadata)    return MetadataPage;
     if (cur == d->page_identity)    return IdentifyPage;
@@ -349,7 +364,7 @@ Setup::Page Setup::activePageIndex()
     if (cur == d->page_camera)      return CameraPage; 
     if (cur == d->page_misc)        return MiscellaneousPage; 
 
-    return AlbumViewPage;
+    return CollectionsPage;
 }
 
 }  // namespace Digikam
