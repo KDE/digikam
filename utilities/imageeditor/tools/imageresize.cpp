@@ -202,7 +202,7 @@ ImageResize::ImageResize(QWidget* parent)
     KGlobal::dirs()->addResourceType("logo-cimg", KGlobal::dirs()->kde_default("data") +
                                      "digikam/data");
     QString directory = KGlobal::dirs()->findResourceDir("logo-cimg", "logo-cimg.png");
-    cimgLogoLabel->setPixmap( QPixmap( directory + "logo-cimg.png" ) );
+    d->cimgLogoLabel->setPixmap( QPixmap( directory + "logo-cimg.png" ) );
     QToolTip::add(d->cimgLogoLabel, i18n("Visit CImg library website"));
 
     d->useGreycstorationBox = new QCheckBox(i18n("Restore photograph (slow)"), firstPage);
@@ -241,7 +241,7 @@ ImageResize::ImageResize(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    connect(cimgLogoLabel, SIGNAL(leftClickedURL(const QString&)),
+    connect(d->cimgLogoLabel, SIGNAL(leftClickedURL(const QString&)),
             this, SLOT(processCImgURL(const QString&)));
 
     connect(d->wInput, SIGNAL(valueChanged(int)),
