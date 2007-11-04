@@ -35,7 +35,7 @@
 // Local includes.
 
 #include "batchthumbsgenerator.h"
-#include "setupalbum.h"
+#include "setupalbumview.h"
 #include "setuptooltip.h"
 #include "setupmetadata.h"
 #include "setupidentity.h"
@@ -62,7 +62,7 @@ public:
 
     SetupPrivate()
     {
-        page_album       = 0;
+        page_albumView   = 0;
         page_tooltip     = 0;
         page_metadata    = 0;
         page_identity    = 0;
@@ -78,7 +78,7 @@ public:
         page_camera      = 0;
         page_misc        = 0;
 
-        albumPage        = 0;
+        albumViewPage    = 0;
         tooltipPage      = 0;
         metadataPage     = 0;
         identityPage     = 0;
@@ -95,7 +95,7 @@ public:
         pluginsPage      = 0;
     }
 
-    KPageWidgetItem  *page_album;
+    KPageWidgetItem  *page_albumView;
     KPageWidgetItem  *page_tooltip;
     KPageWidgetItem  *page_metadata;
     KPageWidgetItem  *page_identity;
@@ -111,7 +111,7 @@ public:
     KPageWidgetItem  *page_camera;
     KPageWidgetItem  *page_misc;
 
-    SetupAlbum     *albumPage;
+    SetupAlbumView   *albumViewPage;
     SetupToolTip     *tooltipPage;
     SetupMetadata    *metadataPage;
     SetupIdentity    *identityPage;
@@ -140,10 +140,10 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     setFaceType(List);
     setModal(true);
 
-    d->albumPage  = new SetupAlbum(this);
-    d->page_album = addPage( d->albumPage, i18n("Albums") );
-    d->page_album->setHeader( i18n("Album View Settings") );
-    d->page_album->setIcon( KIcon("view-icon") );
+    d->albumViewPage  = new SetupAlbumView(this);
+    d->page_albumView = addPage( d->albumViewPage, i18n("Album View") );
+    d->page_albumView->setHeader( i18n("Album View Settings") );
+    d->page_albumView->setIcon( KIcon("view-icon") );
 
     d->collectionsPage  = new SetupCollections();
     d->page_collections = addPage( d->collectionsPage, i18n("Collections") );
@@ -224,7 +224,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     {
         KSharedConfig::Ptr config = KGlobal::config();
         KConfigGroup group = config->group(QString("Album Settings"));
-        showPage((Page)group.readEntry("Setup Page", (int)AlbumPage));
+        showPage((Page)group.readEntry("Setup Page", (int)AlbumViewPage));
     }
 
     show();
@@ -241,7 +241,7 @@ Setup::~Setup()
 
 void Setup::slotOkClicked()
 {
-    d->albumPage->applySettings();
+    d->albumViewPage->applySettings();
     d->tooltipPage->applySettings();
     d->metadataPage->applySettings();
     d->identityPage->applySettings();
@@ -325,7 +325,7 @@ void Setup::showPage(Setup::Page page)
             setCurrentPage(d->page_misc); 
             break;
         default: 
-            setCurrentPage(d->page_album); 
+            setCurrentPage(d->page_albumView); 
             break;
     }
 }
@@ -349,7 +349,7 @@ Setup::Page Setup::activePageIndex()
     if (cur == d->page_camera)      return CameraPage; 
     if (cur == d->page_misc)        return MiscellaneousPage; 
 
-    return AlbumPage;
+    return AlbumViewPage;
 }
 
 }  // namespace Digikam

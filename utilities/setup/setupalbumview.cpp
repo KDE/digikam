@@ -47,17 +47,17 @@
 // // Local includes.
 
 #include "albumsettings.h"
-#include "setupalbum.h"
-#include "setupalbum.moc"
+#include "setupalbumview.h"
+#include "setupalbumview.moc"
 
 namespace Digikam
 {
 
-class SetupAlbumPriv
+class SetupAlbumViewPriv
 {
 public:
 
-    SetupAlbumPriv()
+    SetupAlbumViewPriv()
     {
         albumPathEdit            = 0;
         iconTreeThumbSize        = 0;
@@ -96,10 +96,10 @@ public:
     KPageDialog   *mainDialog;
 };
 
-SetupAlbum::SetupAlbum(KPageDialog* dialog, QWidget* parent)
-          : QWidget(parent)
+SetupAlbumView::SetupAlbumView(KPageDialog* dialog, QWidget* parent)
+              : QWidget(parent)
 {
-    d = new SetupAlbumPriv;
+    d = new SetupAlbumViewPriv;
     d->mainDialog = dialog;
 
     QVBoxLayout *layout = new QVBoxLayout( this );
@@ -242,12 +242,12 @@ SetupAlbum::SetupAlbum(KPageDialog* dialog, QWidget* parent)
     adjustSize();
 }
 
-SetupAlbum::~SetupAlbum()
+SetupAlbumView::~SetupAlbumView()
 {
     delete d;
 }
 
-void SetupAlbum::applySettings()
+void SetupAlbumView::applySettings()
 {
     AlbumSettings* settings = AlbumSettings::instance();
     if (!settings) return;
@@ -272,7 +272,7 @@ void SetupAlbum::applySettings()
     settings->saveSettings();
 }
 
-void SetupAlbum::readSettings()
+void SetupAlbumView::readSettings()
 {
     AlbumSettings* settings = AlbumSettings::instance();
 
@@ -304,7 +304,7 @@ void SetupAlbum::readSettings()
     d->previewLoadFullImageSize->setChecked(settings->getPreviewLoadFullImageSize());
 }
 
-void SetupAlbum::slotChangeAlbumPath(const KUrl &result)
+void SetupAlbumView::slotChangeAlbumPath(const KUrl &result)
 {
     if (KUrl(result).equals(KUrl(QDir::homePath()), KUrl::CompareWithoutTrailingSlash)) 
     {
@@ -321,7 +321,7 @@ void SetupAlbum::slotChangeAlbumPath(const KUrl &result)
     }
 }
 
-void SetupAlbum::slotChangeDatabasePath(const KUrl &result)
+void SetupAlbumView::slotChangeDatabasePath(const KUrl &result)
 {
     QFileInfo targetPath(result.path());
 
@@ -332,7 +332,7 @@ void SetupAlbum::slotChangeDatabasePath(const KUrl &result)
     }
 }
 
-void SetupAlbum::slotAlbumPathEdited(const QString& newPath)
+void SetupAlbumView::slotAlbumPathEdited(const QString& newPath)
 {
     if (newPath.isEmpty()) 
     {
@@ -348,7 +348,7 @@ void SetupAlbum::slotAlbumPathEdited(const QString& newPath)
     checkforOkButton();
 }
 
-void SetupAlbum::slotDatabasePathEdited(const QString& newPath)
+void SetupAlbumView::slotDatabasePathEdited(const QString& newPath)
 {
     if (newPath.isEmpty()) 
     {
@@ -364,7 +364,7 @@ void SetupAlbum::slotDatabasePathEdited(const QString& newPath)
     checkforOkButton();
 }
 
-void SetupAlbum::checkforOkButton()
+void SetupAlbumView::checkforOkButton()
 {
     QFileInfo albumPath(d->albumPathEdit->url().path());
     QDir albumDir(d->albumPathEdit->url().path());

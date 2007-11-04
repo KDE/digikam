@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef SETUPALBUM_H
-#define SETUPALBUM_H
+#ifndef SETUPALBUMVIEW_H
+#define SETUPALBUMVIEW_H
 
 // Qt includes.
 
@@ -34,16 +34,16 @@ class KPageDialog;
 namespace Digikam
 {
 
-class SetupAlbumPriv;
+class SetupAlbumViewPriv;
 
-class SetupAlbum : public QWidget
+class SetupAlbumView : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    SetupAlbum(KPageDialog* dialog, QWidget* parent=0);
-    ~SetupAlbum();
+    SetupAlbumView(KPageDialog* dialog, QWidget* parent=0);
+    ~SetupAlbumView();
 
     void applySettings();
 
@@ -62,9 +62,9 @@ private slots:
 
 private:
 
-    SetupAlbumPriv* d;
+    SetupAlbumViewPriv* d;
 };
 
 }  // namespace Digikam
 
-#endif // SETUPALBUM_H
+#endif // SETUPALBUMVIEW_H
