@@ -104,6 +104,7 @@ public:
         progressBar          = 0;
         greycstorationIface  = 0;
         settingsWidget       = 0;
+        cimgLogoLabel        = 0;
     }
 
     int                   currentRenderingMode;
@@ -122,13 +123,15 @@ public:
 
     QTabWidget           *mainTab;
 
+    QProgressBar         *progressBar;
+
     KIntNumInput         *wInput;
     KIntNumInput         *hInput;
 
     KDoubleNumInput      *wpInput;
     KDoubleNumInput      *hpInput;
 
-    QProgressBar         *progressBar;
+    KUrlLabel            *cimgLogoLabel;
 
     GreycstorationIface  *greycstorationIface;
     GreycstorationWidget *settingsWidget;
@@ -176,13 +179,15 @@ ImageResize::ImageResize(QWidget* parent)
 
     QLabel *label1 = new QLabel(i18n("Width:"), firstPage);
     d->wInput      = new KIntNumInput(firstPage);
-    d->wInput->setRange(1, qMax(d->orgWidth * 10, 9999), 1, true);
+    d->wInput->setSliderEnabled(true);
+    d->wInput->setRange(1, qMax(d->orgWidth * 10, 9999), 1);
     d->wInput->setObjectName("d->wInput");
     d->wInput->setWhatsThis( i18n("<p>Set here the new image width in pixels."));
 
     QLabel *label2 = new QLabel(i18n("Height:"), firstPage);
     d->hInput      = new KIntNumInput(firstPage);
-    d->hInput->setRange(1, qMax(d->orgHeight * 10, 9999), 1, true);
+    d->hInput->setSliderEnabled(true);
+    d->hInput->setRange(1, qMax(d->orgHeight * 10, 9999), 1);
     d->hInput->setObjectName("d->hInput");
     d->hInput->setWhatsThis( i18n("<p>Set here the new image height in pixels."));
 
@@ -202,11 +207,11 @@ ImageResize::ImageResize(QWidget* parent)
     d->preserveRatioBox->setWhatsThis( i18n("<p>Enable this option to maintain aspect "
                                             "ratio with new image sizes."));
 
-    KUrlLabel *cimgLogoLabel = new KUrlLabel(firstPage);
-    cimgLogoLabel->setText(QString());
-    cimgLogoLabel->setUrl("http://cimg.sourceforge.net");
-    cimgLogoLabel->setPixmap( QPixmap( KStandardDirs::locate("data", "digikam/data/logo-cimg.png" ) ));
-    cimgLogoLabel->setToolTip( i18n("Visit CImg library website"));
+    d->cimgLogoLabel = new KUrlLabel(firstPage);
+    d->cimgLogoLabel->setText(QString());
+    d->cimgLogoLabel->setUrl("http://cimg.sourceforge.net");
+    d->cimgLogoLabel->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-cimg.png")));
+    d->cimgLogoLabel->setToolTip(i18n("Visit CImg library website"));
 
     d->useGreycstorationBox = new QCheckBox(i18n("Restore photograph (slow)"), firstPage);
     d->useGreycstorationBox->setWhatsThis( i18n("<p>Enable this option to restore photograph content. "
@@ -217,7 +222,7 @@ ImageResize::ImageResize(QWidget* parent)
     d->progressBar->setMaximum(100);
     d->progressBar->setWhatsThis( i18n("<p>This is the current progress when you use Restoration mode."));
 
-    grid->addWidget(d->preserveRatioBox, 0, 0, 1, 3 );
+    grid->addWidget(d->preserveRatioBox, 0, 0, 1, 3);
     grid->addWidget(label1, 1, 0, 1, 1);
     grid->addWidget(d->wInput, 1, 1, 1, 2);
     grid->addWidget(label2, 2, 0, 1, 1);
@@ -226,13 +231,13 @@ ImageResize::ImageResize(QWidget* parent)
     grid->addWidget(d->wpInput, 3, 1, 1, 2);
     grid->addWidget(label4, 4, 0, 1, 1);
     grid->addWidget(d->hpInput, 4, 1, 1, 2);
-    grid->addWidget(new KSeparator(firstPage), 5, 0, 1, 3 );
-    grid->addWidget(cimgLogoLabel, 6, 0, 7- 6+1, 1);
+    grid->addWidget(new KSeparator(firstPage), 5, 0, 1, 3);
+    grid->addWidget(d->cimgLogoLabel, 6, 0, 2, 1);
     grid->addWidget(d->useGreycstorationBox, 6, 1, 1, 2);
     grid->addWidget(d->progressBar, 7, 1, 1, 2);
     grid->setRowStretch(8, 10);
     grid->setMargin(spacingHint());
-    grid->setSpacing(0);
+    grid->setSpacing(spacingHint());
     
     // -------------------------------------------------------------
 
@@ -246,7 +251,7 @@ ImageResize::ImageResize(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    connect(cimgLogoLabel, SIGNAL(leftClickedUrl(const QString&)),
+    connect(d->cimgLogoLabel, SIGNAL(leftClickedUrl(const QString&)),
             this, SLOT(processCImgUrl(const QString&)));
 
     connect(d->wInput, SIGNAL(valueChanged(int)),
@@ -277,6 +282,7 @@ void ImageResize::slotRestorationToggled(bool b)
 {
     d->settingsWidget->setEnabled(b);
     d->progressBar->setEnabled(b);
+    d->cimgLogoLabel->setEnabled(b);
     enableButton(User2, b);
     enableButton(User3, b);
 }
