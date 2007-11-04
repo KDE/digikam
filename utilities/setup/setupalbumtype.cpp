@@ -48,8 +48,8 @@
 
 #include "thumbnailsize.h"
 #include "albumsettings.h"
-#include "setupcollections.h"
-#include "setupcollections.moc"
+#include "setupalbumtype.h"
+#include "setupalbumtype.moc"
 
 namespace Digikam
 {

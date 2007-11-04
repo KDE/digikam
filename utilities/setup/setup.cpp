@@ -39,7 +39,7 @@
 #include "setuptooltip.h"
 #include "setupmetadata.h"
 #include "setupidentity.h"
-#include "setupcollections.h"
+#include "setupalbumtype.h"
 #include "setupmime.h"
 #include "setuplighttable.h"
 #include "setupeditor.h"
