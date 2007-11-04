@@ -4,7 +4,7 @@
  * http://www.digikam.org
  * 
  * Date        : 2003-02-01
- * Description : general configuration setup tab
+ * Description : album view configuration setup tab
  *
  * Copyright (C) 2003-2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -47,17 +47,17 @@
 // // Local includes.
 
 #include "albumsettings.h"
-#include "setupgeneral.h"
-#include "setupgeneral.moc"
+#include "setupalbum.h"
+#include "setupalbum.moc"
 
 namespace Digikam
 {
 
-class SetupGeneralPriv
+class SetupAlbumPriv
 {
 public:
 
-    SetupGeneralPriv()
+    SetupAlbumPriv()
     {
         albumPathEdit            = 0;
         iconTreeThumbSize        = 0;
@@ -96,10 +96,10 @@ public:
     KPageDialog   *mainDialog;
 };
 
-SetupGeneral::SetupGeneral(KPageDialog* dialog, QWidget* parent)
-            : QWidget(parent)
+SetupAlbum::SetupAlbum(KPageDialog* dialog, QWidget* parent)
+          : QWidget(parent)
 {
-    d = new SetupGeneralPriv;
+    d = new SetupAlbumPriv;
     d->mainDialog = dialog;
 
     QVBoxLayout *layout = new QVBoxLayout( this );
@@ -242,12 +242,12 @@ SetupGeneral::SetupGeneral(KPageDialog* dialog, QWidget* parent)
     adjustSize();
 }
 
-SetupGeneral::~SetupGeneral()
+SetupAlbum::~SetupAlbum()
 {
     delete d;
 }
 
-void SetupGeneral::applySettings()
+void SetupAlbum::applySettings()
 {
     AlbumSettings* settings = AlbumSettings::instance();
     if (!settings) return;
@@ -272,7 +272,7 @@ void SetupGeneral::applySettings()
     settings->saveSettings();
 }
 
-void SetupGeneral::readSettings()
+void SetupAlbum::readSettings()
 {
     AlbumSettings* settings = AlbumSettings::instance();
 
@@ -304,7 +304,7 @@ void SetupGeneral::readSettings()
     d->previewLoadFullImageSize->setChecked(settings->getPreviewLoadFullImageSize());
 }
 
-void SetupGeneral::slotChangeAlbumPath(const KUrl &result)
+void SetupAlbum::slotChangeAlbumPath(const KUrl &result)
 {
     if (KUrl(result).equals(KUrl(QDir::homePath()), KUrl::CompareWithoutTrailingSlash)) 
     {
@@ -321,7 +321,7 @@ void SetupGeneral::slotChangeAlbumPath(const KUrl &result)
     }
 }
 
-void SetupGeneral::slotChangeDatabasePath(const KUrl &result)
+void SetupAlbum::slotChangeDatabasePath(const KUrl &result)
 {
     QFileInfo targetPath(result.path());
 
@@ -332,7 +332,7 @@ void SetupGeneral::slotChangeDatabasePath(const KUrl &result)
     }
 }
 
-void SetupGeneral::slotAlbumPathEdited(const QString& newPath)
+void SetupAlbum::slotAlbumPathEdited(const QString& newPath)
 {
     if (newPath.isEmpty()) 
     {
@@ -348,7 +348,7 @@ void SetupGeneral::slotAlbumPathEdited(const QString& newPath)
     checkforOkButton();
 }
 
-void SetupGeneral::slotDatabasePathEdited(const QString& newPath)
+void SetupAlbum::slotDatabasePathEdited(const QString& newPath)
 {
     if (newPath.isEmpty()) 
     {
@@ -364,7 +364,7 @@ void SetupGeneral::slotDatabasePathEdited(const QString& newPath)
     checkforOkButton();
 }
 
-void SetupGeneral::checkforOkButton()
+void SetupAlbum::checkforOkButton()
 {
     QFileInfo albumPath(d->albumPathEdit->url().path());
     QDir albumDir(d->albumPathEdit->url().path());

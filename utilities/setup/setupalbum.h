@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2003-02-01
- * Description : general configuration setup tab
+ * Description : album view configuration setup tab
  *
  * Copyright (C) 2003-2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef SETUPGENERAL_H
-#define SETUPGENERAL_H
+#ifndef SETUPALBUM_H
+#define SETUPALBUM_H
 
 // Qt includes.
 
@@ -34,16 +34,16 @@ class KPageDialog;
 namespace Digikam
 {
 
-class SetupGeneralPriv;
+class SetupAlbumPriv;
 
-class SetupGeneral : public QWidget
+class SetupAlbum : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    SetupGeneral(KPageDialog* dialog, QWidget* parent=0);
-    ~SetupGeneral();
+    SetupAlbum(KPageDialog* dialog, QWidget* parent=0);
+    ~SetupAlbum();
 
     void applySettings();
 
@@ -62,9 +62,9 @@ private slots:
 
 private:
 
-    SetupGeneralPriv* d;
+    SetupAlbumPriv* d;
 };
 
 }  // namespace Digikam
 
-#endif // SETUPGENERAL_H
+#endif // SETUPALBUM_H

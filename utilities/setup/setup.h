@@ -44,7 +44,7 @@ public:
     enum Page 
     {
         LastPageUsed = -1,
-        GeneralPage = 0,
+        AlbumPage = 0,
         ToolTipPage,
         MetadataPage,
         IdentifyPage,

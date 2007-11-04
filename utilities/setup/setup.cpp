@@ -10,7 +10,7 @@
  * Copyright (C) 2003-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
- * and/or modify it under the terms of the GNU General
+ * and/or modify it under the terms of the GNU Album
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
@@ -18,7 +18,7 @@
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Album Public License for more details.
  * 
  * ============================================================ */
 
@@ -35,7 +35,7 @@
 // Local includes.
 
 #include "batchthumbsgenerator.h"
-#include "setupgeneral.h"
+#include "setupalbum.h"
 #include "setuptooltip.h"
 #include "setupmetadata.h"
 #include "setupidentity.h"
@@ -62,7 +62,7 @@ public:
 
     SetupPrivate()
     {
-        page_general     = 0;
+        page_album       = 0;
         page_tooltip     = 0;
         page_metadata    = 0;
         page_identity    = 0;
@@ -78,7 +78,7 @@ public:
         page_camera      = 0;
         page_misc        = 0;
 
-        generalPage      = 0;
+        albumPage        = 0;
         tooltipPage      = 0;
         metadataPage     = 0;
         identityPage     = 0;
@@ -95,7 +95,7 @@ public:
         pluginsPage      = 0;
     }
 
-    KPageWidgetItem  *page_general;
+    KPageWidgetItem  *page_album;
     KPageWidgetItem  *page_tooltip;
     KPageWidgetItem  *page_metadata;
     KPageWidgetItem  *page_identity;
@@ -111,7 +111,7 @@ public:
     KPageWidgetItem  *page_camera;
     KPageWidgetItem  *page_misc;
 
-    SetupGeneral     *generalPage;
+    SetupAlbum     *albumPage;
     SetupToolTip     *tooltipPage;
     SetupMetadata    *metadataPage;
     SetupIdentity    *identityPage;
@@ -140,10 +140,10 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     setFaceType(List);
     setModal(true);
 
-    d->generalPage  = new SetupGeneral(this);
-    d->page_general = addPage( d->generalPage, i18n("Albums") );
-    d->page_general->setHeader( i18n("Album Settings") );
-    d->page_general->setIcon( KIcon("folder-image") );
+    d->albumPage  = new SetupAlbum(this);
+    d->page_album = addPage( d->albumPage, i18n("Albums") );
+    d->page_album->setHeader( i18n("Album View Settings") );
+    d->page_album->setIcon( KIcon("view-icon") );
 
     d->collectionsPage  = new SetupCollections();
     d->page_collections = addPage( d->collectionsPage, i18n("Collections") );
@@ -177,7 +177,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     
     d->editorPage  = new SetupEditor();
     d->page_editor = addPage( d->editorPage, i18n("Image Editor") );
-    d->page_editor->setHeader( i18n("Image Editor General Settings") );
+    d->page_editor->setHeader( i18n("Image Editor Album Settings") );
     d->page_editor->setIcon( KIcon("editimage") );
 
     d->iofilesPage  = new SetupIOFiles();
@@ -223,8 +223,8 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     else 
     {
         KSharedConfig::Ptr config = KGlobal::config();
-        KConfigGroup group = config->group(QString("General Settings"));
-        showPage((Page)group.readEntry("Setup Page", (int)GeneralPage));
+        KConfigGroup group = config->group(QString("Album Settings"));
+        showPage((Page)group.readEntry("Setup Page", (int)AlbumPage));
     }
 
     show();
@@ -233,7 +233,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
 Setup::~Setup()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(QString("General Settings"));
+    KConfigGroup group = config->group(QString("Album Settings"));
     group.writeEntry("Setup Page", (int)activePageIndex());
     config->sync();
     delete d;
@@ -241,7 +241,7 @@ Setup::~Setup()
 
 void Setup::slotOkClicked()
 {
-    d->generalPage->applySettings();
+    d->albumPage->applySettings();
     d->tooltipPage->applySettings();
     d->metadataPage->applySettings();
     d->identityPage->applySettings();
@@ -325,7 +325,7 @@ void Setup::showPage(Setup::Page page)
             setCurrentPage(d->page_misc); 
             break;
         default: 
-            setCurrentPage(d->page_general); 
+            setCurrentPage(d->page_album); 
             break;
     }
 }
@@ -349,7 +349,7 @@ Setup::Page Setup::activePageIndex()
     if (cur == d->page_camera)      return CameraPage; 
     if (cur == d->page_misc)        return MiscellaneousPage; 
 
-    return GeneralPage;
+    return AlbumPage;
 }
 
 }  // namespace Digikam
