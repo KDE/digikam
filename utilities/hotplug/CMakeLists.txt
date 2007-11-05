@@ -8,7 +8,7 @@ install( FILES
 	${CMAKE_CURRENT_BINARY_DIR}/digikam-download.desktop 
 	${CMAKE_CURRENT_BINARY_DIR}/digikam-gphoto2-camera.desktop 
 	${CMAKE_CURRENT_BINARY_DIR}/digikam-mount-and-download.desktop 
-	DESTINATION ${DATA_INSTALL_DIR}/konqueror/servicemenus )
+	DESTINATION ${SERVICES_INSTALL_DIR}/ServiceMenus )
 
 if(NOT WIN32)
   install( PROGRAMS  digikam-camera DESTINATION ${BIN_INSTALL_DIR} )

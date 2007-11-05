@@ -10,4 +10,4 @@ Name[tr]=digiKam ile resimleri göster
 Encoding=UTF-8
 Actions=digiKam Download
 Type=Service
-ServiceTypes=media/removable_mounted,media/camera_mounted
+ServiceTypes=KonqPopupMenu/Plugin,media/removable_mounted,media/camera_mounted

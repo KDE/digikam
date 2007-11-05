@@ -10,4 +10,4 @@ Name[tr]=digiKam ile resimleri indir
 Encoding=UTF-8
 Type=Service
 Actions=digiKam Mount and Download
-ServiceTypes=media/removable_unmounted,media/camera_unmounted
+ServiceTypes=KonqPopupMenu/Plugin,media/removable_unmounted,media/camera_unmounted

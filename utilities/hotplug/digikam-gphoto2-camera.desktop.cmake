@@ -9,5 +9,5 @@ Name[tr]=digiKam ile resimler göster
 [Desktop Entry]
 Encoding=UTF-8
 Actions=digiKam Detect and Download
-ServiceTypes=media/gphoto2camera
+ServiceTypes=KonqPopupMenu/Plugin,media/gphoto2camera
 Type=Service
