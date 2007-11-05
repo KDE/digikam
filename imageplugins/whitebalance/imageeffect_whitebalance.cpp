@@ -190,7 +190,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
                                                   " (K): </qt>"), gboxSettings);
     m_adjTemperatureLabel = new QLabel(i18n("Adjustment:"), gboxSettings);
     m_temperatureInput    = new KDoubleNumInput(gboxSettings);
-    m_temperatureInput->setPrecision(1);
+    m_temperatureInput->setDecimals(1);
     m_temperatureInput->setRange(2200.0, 7000.0, 10.0, true);
     m_temperatureInput->setWhatsThis( i18n("<p>Set here the white balance color temperature in Kelvin."));
     
@@ -241,31 +241,31 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
     
     m_blackLabel = new QLabel(i18n("Black point:"), gboxSettings);
     m_blackInput = new KDoubleNumInput(gboxSettings);
-    m_blackInput->setPrecision(2);
+    m_blackInput->setDecimals(2);
     m_blackInput->setRange(0.0, 0.05, 0.01, true);
     m_blackInput->setWhatsThis( i18n("<p>Set here the black level value."));
         
     m_darkLabel = new QLabel(i18n("Shadows:"), gboxSettings);
     m_darkInput = new KDoubleNumInput(gboxSettings);
-    m_darkInput->setPrecision(2);
+    m_darkInput->setDecimals(2);
     m_darkInput->setRange(0.0, 1.0, 0.01, true);
     m_darkInput->setWhatsThis( i18n("<p>Set here the shadows noise suppresion level."));
 
     m_saturationLabel = new QLabel(i18n("Saturation:"), gboxSettings);
     m_saturationInput = new KDoubleNumInput(gboxSettings);
-    m_saturationInput->setPrecision(2);
+    m_saturationInput->setDecimals(2);
     m_saturationInput->setRange(0.0, 2.0, 0.01, true);
     m_saturationInput->setWhatsThis( i18n("<p>Set here the saturation value."));
         
     m_gammaLabel = new QLabel(i18n("Gamma:"), gboxSettings);
     m_gammaInput = new KDoubleNumInput(gboxSettings);
-    m_gammaInput->setPrecision(2);
+    m_gammaInput->setDecimals(2);
     m_gammaInput->setRange(0.1, 3.0, 0.01, true);
     m_gammaInput->setWhatsThis( i18n("<p>Set here the gamma correction value."));
 
     m_greenLabel = new QLabel(i18n("Green:"), gboxSettings);
     m_greenInput = new KDoubleNumInput(gboxSettings);
-    m_greenInput->setPrecision(2);
+    m_greenInput->setDecimals(2);
     m_greenInput->setRange(1.0, 2.5, 0.01, true);
     m_greenInput->setWhatsThis( i18n("<p>Set here the green component to set magenta color "
                                      "cast removal level."));
@@ -283,13 +283,13 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
     m_autoAdjustExposure->setWhatsThis( i18n("<p>With this button, you can automatically adjust Exposure "
                                              "and Black Point values."));
     m_mainExposureInput = new KDoubleNumInput(gboxSettings);
-    m_mainExposureInput->setPrecision(2);
+    m_mainExposureInput->setDecimals(2);
     m_mainExposureInput->setRange(-6.0, 8.0, 0.1, true);
     m_mainExposureInput->setWhatsThis( i18n("<p>Set here the main exposure compensation value in E.V."));
 
     m_fineExposureLabel = new QLabel(i18n("Fine:"), gboxSettings);
     m_fineExposureInput = new KDoubleNumInput(gboxSettings);
-    m_fineExposureInput->setPrecision(2);
+    m_fineExposureInput->setDecimals(2);
     m_fineExposureInput->setRange(-0.5, 0.5, 0.01, true);
     m_fineExposureInput->setWhatsThis( i18n("<p>This value in E.V will be added to main exposure "
                                             "compensation value to set fine exposure adjustment."));

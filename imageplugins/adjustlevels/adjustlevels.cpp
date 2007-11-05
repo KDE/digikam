@@ -222,7 +222,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     m_minInput->setToolTip( i18n( "Minimal intensity input." ) );
 
     m_gammaInput = new KDoubleNumInput(gboxSettings);
-    m_gammaInput->setPrecision(2);
+    m_gammaInput->setDecimals(2);
     m_gammaInput->setRange(0.1, 3.0, 0.01);
     m_gammaInput->setValue(1.0);
     m_gammaInput->setToolTip( i18n( "Gamma input value." ) );

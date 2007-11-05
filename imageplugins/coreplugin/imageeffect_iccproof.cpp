@@ -457,7 +457,8 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     m_cInput = new KIntNumInput(lightnessadjust);
     m_cInput->setLabel(i18n("Contrast:"), Qt::AlignLeft | Qt::AlignVCenter);
-    m_cInput->setRange(-100, 100, 1, true);
+    m_cInput->setRange(-100, 100, 1);
+    m_cInput->setSliderEnabled(true);
     m_cInput->setValue(0);
     m_cInput->setWhatsThis( i18n("<p>Set here the contrast adjustment of the image."));
 

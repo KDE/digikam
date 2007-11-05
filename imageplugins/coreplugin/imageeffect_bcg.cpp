@@ -161,7 +161,7 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
 
     QLabel *label4 = new QLabel(i18n("Gamma:"), gboxSettings);
     m_gInput = new KDoubleNumInput(gboxSettings);
-    m_gInput->setPrecision(2);
+    m_gInput->setDecimals(2);
     m_gInput->setRange(0.1, 3.0, 0.01, true);
     m_gInput->setValue(1.0);
     m_gInput->setWhatsThis( i18n("<p>Set here the gamma adjustment of the image."));

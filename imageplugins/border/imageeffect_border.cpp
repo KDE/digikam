@@ -127,11 +127,13 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
 
     m_labelBorderPercent  = new QLabel(i18n("Width (%):"), gboxSettings);
     m_borderPercent       = new KIntNumInput(gboxSettings);
-    m_borderPercent->setRange(1, 50, 1, true); 
+    m_borderPercent->setRange(1, 50, 1); 
+    m_borderPercent->setSliderEnabled(true); 
     m_borderPercent->setWhatsThis( i18n("<p>Set here the border width in percents of image size."));
             
     m_labelBorderWidth = new QLabel(i18n("Width (pixels):"), gboxSettings);
     m_borderWidth      = new KIntNumInput(gboxSettings);
+    m_borderWidth->setSliderEnabled(true); 
     m_borderWidth->setWhatsThis( i18n("<p>Set here the border width in pixels to add around the image."));
 
     Digikam::ImageIface iface(0, 0);
@@ -139,9 +141,9 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     int h = iface.originalHeight();
     
     if (w > h) 
-       m_borderWidth->setRange(1, h/2, 1, true);       
-    else 
-       m_borderWidth->setRange(1, w/2, 1, true);
+        m_borderWidth->setRange(1, h/2, 1);       
+    else
+        m_borderWidth->setRange(1, w/2, 1);
 
     KSeparator *line2 = new KSeparator(Qt::Horizontal, gboxSettings);
 

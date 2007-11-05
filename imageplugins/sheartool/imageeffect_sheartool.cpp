@@ -111,7 +111,8 @@ ImageEffect_ShearTool::ImageEffect_ShearTool(QWidget* parent)
 
     QLabel *label3    = new QLabel(i18n("Main horizontal angle:"), gboxSettings);
     m_mainHAngleInput = new KIntNumInput(gboxSettings);
-    m_mainHAngleInput->setRange(-45, 45, 1, true);
+    m_mainHAngleInput->setRange(-45, 45, 1);
+    m_mainHAngleInput->setSliderEnabled(true);
     m_mainHAngleInput->setValue(0);
     m_mainHAngleInput->setWhatsThis( i18n("<p>The main horizontal shearing angle, in degrees."));
             
@@ -123,7 +124,8 @@ ImageEffect_ShearTool::ImageEffect_ShearTool(QWidget* parent)
                                           "horizontal angle value to set fine adjustments."));
     QLabel *label5 = new QLabel(i18n("Main vertical angle:"), gboxSettings);
     m_mainVAngleInput = new KIntNumInput(gboxSettings);
-    m_mainVAngleInput->setRange(-45, 45, 1, true);
+    m_mainVAngleInput->setRange(-45, 45, 1);
+    m_mainVAngleInput->setSliderEnabled(true);
     m_mainVAngleInput->setValue(0);
     m_mainVAngleInput->setWhatsThis( i18n("<p>The main vertical shearing angle, in degrees."));
 

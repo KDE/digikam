@@ -126,12 +126,14 @@ ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent)
                                                   
     m_distanceLabel = new QLabel(i18n("Distance:"), gboxSettings);
     m_distanceInput = new KIntNumInput(gboxSettings);
-    m_distanceInput->setRange(0, 100, 1, true);    
+    m_distanceInput->setRange(0, 100, 1);    
+    m_distanceInput->setSliderEnabled(true);  
     m_distanceInput->setWhatsThis( i18n("<p>Set here the blur distance in pixels."));
     
     m_levelLabel = new QLabel(i18n("Level:"), gboxSettings);
     m_levelInput = new KIntNumInput(gboxSettings);
-    m_levelInput->setRange(0, 360, 1, true);
+    m_levelInput->setRange(0, 360, 1);
+    m_levelInput->setSliderEnabled(true); 
     m_levelInput->setWhatsThis( i18n("<p>This value controls the level to use with the current effect."));  
 
     // -------------------------------------------------------------
@@ -233,9 +235,11 @@ void ImageEffect_BlurFX::slotEffectTypeChanged(int type)
     
     m_distanceInput->blockSignals(true);
     m_levelInput->blockSignals(true);
-    m_distanceInput->setRange(0, 200, 1, true);
+    m_distanceInput->setRange(0, 200, 1);
+    m_distanceInput->setSliderEnabled(true); 
     m_distanceInput->setValue(100);
-    m_levelInput->setRange(0, 360, 1, true);
+    m_levelInput->setRange(0, 360, 1);
+    m_levelInput->setSliderEnabled(true); 
     m_levelInput->setValue(45);
     
     m_levelInput->setEnabled(false);
@@ -248,19 +252,22 @@ void ImageEffect_BlurFX::slotEffectTypeChanged(int type)
        
        case BlurFX::RadialBlur:
        case BlurFX::FrostGlass: 
-          m_distanceInput->setRange(0, 10, 1, true);
+          m_distanceInput->setRange(0, 10, 1);
+          m_distanceInput->setSliderEnabled(true); 
           m_distanceInput->setValue(3);
           break;
           
        case BlurFX::FarBlur:
-          m_distanceInput->setRange(0, 20, 1, true);
+          m_distanceInput->setRange(0, 20, 1);
+          m_distanceInput->setSliderEnabled(true); 
           m_distanceInput->setMaximum(20);
           m_distanceInput->setValue(10);
           break;
        
        case BlurFX::MotionBlur:
        case BlurFX::FocusBlur:
-          m_distanceInput->setRange(0, 100, 1, true);
+          m_distanceInput->setRange(0, 100, 1);
+          m_distanceInput->setSliderEnabled(true); 
           m_distanceInput->setValue(20);
           m_levelInput->setEnabled(true);
           m_levelLabel->setEnabled(true);
@@ -272,21 +279,25 @@ void ImageEffect_BlurFX::slotEffectTypeChanged(int type)
           break;
           
        case BlurFX::ShakeBlur:   
-          m_distanceInput->setRange(0, 100, 1, true);
+          m_distanceInput->setRange(0, 100, 1);
+          m_distanceInput->setSliderEnabled(true); 
           m_distanceInput->setValue(20);
           break;
        
        case BlurFX::SmartBlur:
-          m_distanceInput->setRange(0, 20, 1, true);
+          m_distanceInput->setRange(0, 20, 1);
+          m_distanceInput->setSliderEnabled(true); 
           m_distanceInput->setValue(3);
           m_levelInput->setEnabled(true);
           m_levelLabel->setEnabled(true);
-          m_levelInput->setRange(0, 255, 1, true);
+          m_levelInput->setRange(0, 255, 1);
+          m_levelInput->setSliderEnabled(true); 
           m_levelInput->setValue(128);
           break;
        
        case BlurFX::Mosaic: 
-          m_distanceInput->setRange(0, 50, 1, true);
+          m_distanceInput->setRange(0, 50, 1);
+          m_distanceInput->setSliderEnabled(true); 
           m_distanceInput->setValue(3);
           break;
     }

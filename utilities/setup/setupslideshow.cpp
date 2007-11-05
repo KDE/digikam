@@ -80,7 +80,8 @@ SetupSlideShow::SetupSlideShow(QWidget* parent )
     QVBoxLayout *layout = new QVBoxLayout( this );
     
     d->delayInput = new KIntNumInput(5, this);
-    d->delayInput->setRange(1, 3600, 1, true );
+    d->delayInput->setRange(1, 3600, 1);
+    d->delayInput->setSliderEnabled(true);
     d->delayInput->setLabel( i18n("&Delay between images:"), Qt::AlignLeft|Qt::AlignTop );
     d->delayInput->setWhatsThis( i18n("<p>The delay, in seconds, between images."));
     

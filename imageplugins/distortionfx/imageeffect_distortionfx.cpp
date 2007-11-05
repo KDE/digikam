@@ -142,12 +142,14 @@ ImageEffect_DistortionFX::ImageEffect_DistortionFX(QWidget* parent)
                                                   
     m_levelLabel = new QLabel(i18n("Level:"), gboxSettings);
     m_levelInput = new KIntNumInput(gboxSettings);
-    m_levelInput->setRange(0, 100, 1, true);
+    m_levelInput->setRange(0, 100, 1);
+    m_levelInput->setSliderEnabled(true);
     m_levelInput->setWhatsThis( i18n("<p>Set here the level of the effect."));
     
     m_iterationLabel = new QLabel(i18n("Iteration:"), gboxSettings);
     m_iterationInput = new KIntNumInput(gboxSettings);
-    m_iterationInput->setRange(0, 100, 1, true);
+    m_iterationInput->setRange(0, 100, 1);
+    m_iterationInput->setSliderEnabled(true);
     m_iterationInput->setWhatsThis( i18n("<p>This value controls the iterations to use for Waves, "
                                          "Tile, and Neon effects."));
     
@@ -264,13 +266,15 @@ void ImageEffect_DistortionFX::slotEffectTypeChanged(int type)
     
     m_levelInput->blockSignals(true);
     m_iterationInput->blockSignals(true);
-    m_levelInput->setRange(0, 100, 1, true);
+    m_levelInput->setRange(0, 100, 1);
+    m_levelInput->setSliderEnabled(true);
     m_levelInput->setValue(25);
           
     switch (type)
     {
        case DistortionFX::Twirl: 
-          m_levelInput->setRange(-50, 50, 1, true);
+          m_levelInput->setRange(-50, 50, 1);
+          m_levelInput->setSliderEnabled(true);
           m_levelInput->setValue(10);
           break;
 
@@ -279,12 +283,14 @@ void ImageEffect_DistortionFX::slotEffectTypeChanged(int type)
        case DistortionFX::CilindricalVert:  
        case DistortionFX::CilindricalHV:  
        case DistortionFX::Caricature:  
-          m_levelInput->setRange(0, 200, 1, true);
+          m_levelInput->setRange(0, 200, 1);
+          m_levelInput->setSliderEnabled(true);
           m_levelInput->setValue(50);
           break;
 
        case DistortionFX::MultipleCorners: 
-          m_levelInput->setRange(1, 10, 1, true);
+          m_levelInput->setRange(1, 10, 1);
+          m_levelInput->setSliderEnabled(true);
           m_levelInput->setValue(4);
           break;
                                                   
@@ -297,7 +303,8 @@ void ImageEffect_DistortionFX::slotEffectTypeChanged(int type)
        case DistortionFX::Tile: 
           m_iterationInput->setEnabled(true);
           m_iterationLabel->setEnabled(true);
-          m_iterationInput->setRange(0, 200, 1, true);
+          m_iterationInput->setRange(0, 200, 1);
+          m_iterationInput->setSliderEnabled(true);
           m_iterationInput->setValue(10);
           break;
 

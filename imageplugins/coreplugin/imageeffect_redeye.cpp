@@ -150,7 +150,8 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
 
     m_thresholdLabel = new QLabel(i18n("Sensitivity:"), gboxSettings);
     m_redThreshold   = new KIntNumInput(gboxSettings);
-    m_redThreshold->setRange(10, 90, 1, true);
+    m_redThreshold->setRange(10, 90, 1);
+    m_redThreshold->setSliderEnabled(true);
     m_redThreshold->setValue(20);
     m_redThreshold->setWhatsThis( i18n("<p>Sets the red color pixels selection threshold. "
                                        "Low values will select more red color pixels, high "
@@ -158,7 +159,8 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
 
     m_smoothLabel = new QLabel(i18n("Smooth:"), gboxSettings);
     m_smoothLevel = new KIntNumInput(gboxSettings);
-    m_smoothLevel->setRange(0, 5, 1, true);
+    m_smoothLevel->setRange(0, 5, 1);
+    m_smoothLevel->setSliderEnabled(true);
     m_smoothLevel->setValue(1);
     m_smoothLevel->setWhatsThis( i18n("<p>Sets the smoothness value to blur red color "
                                       "pixels selection."));
@@ -171,7 +173,8 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
 
     QLabel *label4 = new QLabel(i18n("Tint Level:"), gboxSettings);
     m_tintLevel    = new KIntNumInput(gboxSettings);
-    m_tintLevel->setRange(1, 200, 1, true);
+    m_tintLevel->setRange(1, 200, 1);
+    m_tintLevel->setSliderEnabled(true);
     m_tintLevel->setValue(128);
     m_tintLevel->setWhatsThis( i18n("<p>Set here the tint level used to coloring red eye."));
 

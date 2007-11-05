@@ -186,21 +186,21 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent)
         
     QLabel *redLabel = new QLabel(i18n("Red:"), gboxSettings);
     m_redGain = new KDoubleNumInput(gboxSettings);
-    m_redGain->setPrecision(0);
+    m_redGain->setDecimals(0);
     m_redGain->setRange(-200.0, 200.0, 1, true);
     m_redGain->setWhatsThis( i18n("<p>Select here the red color gain in percent for "
                                   "the current channel."));
     
     QLabel *blueLabel = new QLabel(i18n("Blue:"), gboxSettings);
     m_greenGain = new KDoubleNumInput(gboxSettings);
-    m_greenGain->setPrecision(0);
+    m_greenGain->setDecimals(0);
     m_greenGain->setRange(-200.0, 200.0, 1, true);
     m_greenGain->setWhatsThis( i18n("<p>Select here the green color gain in percent "
                                     "for the current channel."));
     
     QLabel *greenLabel = new QLabel(i18n("Green:"), gboxSettings);
     m_blueGain = new KDoubleNumInput(gboxSettings);
-    m_blueGain->setPrecision(0);
+    m_blueGain->setDecimals(0);
     m_blueGain->setRange(-200.0, 200.0, 1, true);
     m_blueGain->setWhatsThis( i18n("<p>Select here the blue color gain in percent for "
                                    "the current channel."));

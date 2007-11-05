@@ -382,7 +382,8 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     
     m_strengthInput = new KIntNumInput(vbox);
     m_strengthInput->setLabel(i18n("Strength:"), Qt::AlignLeft | Qt::AlignVCenter);
-    m_strengthInput->setRange(1, 5, 1, true);
+    m_strengthInput->setRange(1, 5, 1);
+    m_strengthInput->setSliderEnabled(true);
     m_strengthInput->setValue(1);
     m_strengthInput->setWhatsThis( i18n("<p>Set here the strength adjustment of lens filter."));
 
@@ -465,7 +466,8 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     
     m_cInput = new KIntNumInput(curveBox);
     m_cInput->setLabel(i18n("Contrast:"), Qt::AlignLeft | Qt::AlignVCenter);
-    m_cInput->setRange(-100, 100, 1, true);
+    m_cInput->setRange(-100, 100, 1);
+    m_cInput->setSliderEnabled(true);
     m_cInput->setValue(0);
     m_cInput->setWhatsThis( i18n("<p>Set here the contrast adjustment of the image."));
 

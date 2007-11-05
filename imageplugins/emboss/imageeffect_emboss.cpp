@@ -87,7 +87,8 @@ ImageEffect_Emboss::ImageEffect_Emboss(QWidget* parent)
     QLabel *label1 = new QLabel(i18n("Depth:"), gboxSettings);
     
     m_depthInput   = new KIntNumInput(gboxSettings);
-    m_depthInput->setRange(10, 300, 1, true);
+    m_depthInput->setRange(10, 300, 1);
+    m_depthInput->setSliderEnabled(true);
     m_depthInput->setWhatsThis( i18n("<p>Set here the depth of the embossing image effect.") );
 
     // -------------------------------------------------------------

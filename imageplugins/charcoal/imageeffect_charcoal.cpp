@@ -81,7 +81,8 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
     QLabel *label1 = new QLabel(i18n("Pencil size:"), gboxSettings);
     
     m_pencilInput  = new KIntNumInput(gboxSettings);
-    m_pencilInput->setRange(1, 100, 1, true);  
+    m_pencilInput->setRange(1, 100, 1); 
+    m_pencilInput->setSliderEnabled(true);  
     m_pencilInput->setValue(5);
     m_pencilInput->setWhatsThis( i18n("<p>Set here the charcoal pencil size used to simulate the drawing."));
 
@@ -90,7 +91,8 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
     QLabel *label2 = new QLabel(i18n("Smooth:"), gboxSettings);
     
     m_smoothInput = new KIntNumInput(gboxSettings);
-    m_smoothInput->setRange(1, 100, 1, true);  
+    m_smoothInput->setRange(1, 100, 1);  
+    m_smoothInput->setSliderEnabled(true);  
     m_smoothInput->setValue(10);
     m_smoothInput->setWhatsThis( i18n("<p>This value controls the smoothing effect of the pencil "
                                       "under the canvas."));

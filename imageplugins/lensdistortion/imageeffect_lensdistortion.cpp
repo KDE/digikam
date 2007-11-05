@@ -105,7 +105,7 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
     QLabel *label1 = new QLabel(i18n("Main:"), gboxSettings);
     
     m_mainInput = new KDoubleNumInput(gboxSettings);
-    m_mainInput->setPrecision(1);
+    m_mainInput->setDecimals(1);
     m_mainInput->setRange(-100.0, 100.0, 0.1, true);
     m_mainInput->setWhatsThis( i18n("<p>This value controls the amount of distortion. Negative values "
                                     "correct lens barrel distortion, while positive values correct lens "
@@ -116,7 +116,7 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
     QLabel *label2 = new QLabel(i18n("Edge:"), gboxSettings);
     
     m_edgeInput = new KDoubleNumInput(gboxSettings);
-    m_edgeInput->setPrecision(1);
+    m_edgeInput->setDecimals(1);
     m_edgeInput->setRange(-100.0, 100.0, 0.1, true);
     m_edgeInput->setWhatsThis( i18n("<p>This value controls in the same manner as the Main control, "
                                     "but has more effect at the edges of the image than at the center."));
@@ -126,7 +126,7 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
     QLabel *label3 = new QLabel(i18n("Zoom:"), gboxSettings);
     
     m_rescaleInput = new KDoubleNumInput(gboxSettings);
-    m_rescaleInput->setPrecision(1);
+    m_rescaleInput->setDecimals(1);
     m_rescaleInput->setRange(-100.0, 100.0, 0.1, true);
     m_rescaleInput->setWhatsThis( i18n("<p>This value rescales the overall image size."));
     
@@ -135,7 +135,7 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
     QLabel *label4 = new QLabel(i18n("Brighten:"), gboxSettings);
     
     m_brightenInput = new KDoubleNumInput(gboxSettings);
-    m_brightenInput->setPrecision(1);
+    m_brightenInput->setDecimals(1);
     m_brightenInput->setRange(-100.0, 100.0, 0.1, true);
     m_brightenInput->setWhatsThis( i18n("<p>This value adjusts the brightness in image corners."));
 

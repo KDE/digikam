@@ -111,7 +111,8 @@ ImageEffect_Texture::ImageEffect_Texture(QWidget* parent)
     QLabel *label2 = new QLabel(i18n("Relief:"), gboxSettings);
     
     m_blendGain    = new KIntNumInput(gboxSettings);
-    m_blendGain->setRange(1, 255, 1, true);  
+    m_blendGain->setRange(1, 255, 1);  
+    m_blendGain->setSliderEnabled(true);
     m_blendGain->setValue(200);
     m_blendGain->setWhatsThis( i18n("<p>Set here the relief gain used to merge "
                                     "texture and image."));

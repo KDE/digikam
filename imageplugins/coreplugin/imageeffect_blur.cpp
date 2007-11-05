@@ -62,7 +62,8 @@ ImageEffect_Blur::ImageEffect_Blur(QWidget* parent)
     QLabel *label = new QLabel(i18n("Smoothness:"), gboxSettings);
     
     m_radiusInput = new KIntNumInput(gboxSettings);
-    m_radiusInput->setRange(0, 100, 1, true);
+    m_radiusInput->setRange(0, 100, 1);
+    m_radiusInput->setSliderEnabled(true);
     m_radiusInput->setValue(0);
     m_radiusInput->setWhatsThis( i18n("<p>A smoothness of 0 has no effect, "
                                       "1 and above determine the Gaussian blur matrix radius "

@@ -89,7 +89,8 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
 
     QLabel *label1   = new QLabel(i18n("Brush size:"), gboxSettings);
     m_brushSizeInput = new KIntNumInput(gboxSettings);
-    m_brushSizeInput->setRange(1, 5, 1, true);
+    m_brushSizeInput->setRange(1, 5, 1);
+    m_brushSizeInput->setSliderEnabled(true);
     m_brushSizeInput->setWhatsThis( i18n("<p>Set here the brush size to use for "
                                          "simulating the oil painting.") );
 
@@ -97,7 +98,8 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
 
     QLabel *label2 = new QLabel(i18n("Smooth:"), gboxSettings);
     m_smoothInput  = new KIntNumInput(gboxSettings);
-    m_smoothInput->setRange(10, 255, 1, true);
+    m_smoothInput->setRange(10, 255, 1);
+    m_smoothInput->setSliderEnabled(true);
     m_smoothInput->setWhatsThis( i18n("<p>This value controls the smoothing effect "
                                       "of the brush under the canvas.") );
 

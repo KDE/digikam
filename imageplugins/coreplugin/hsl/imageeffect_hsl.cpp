@@ -160,21 +160,21 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
 
     QLabel *label2 = new QLabel(i18n("Hue:"), gboxSettings);
     m_hInput       = new KDoubleNumInput(gboxSettings);
-    m_hInput->setPrecision(0);
+    m_hInput->setDecimals(0);
     m_hInput->setRange(-180.0, 180.0, 1.0, true);
     m_hInput->setValue(0.0);
     m_hInput->setWhatsThis( i18n("<p>Set here the hue adjustment of the image."));
 
     QLabel *label3 = new QLabel(i18n("Saturation:"), gboxSettings);
     m_sInput       = new KDoubleNumInput(gboxSettings);
-    m_sInput->setPrecision(2);
+    m_sInput->setDecimals(2);
     m_sInput->setRange(-100.0, 100.0, 0.01, true);
     m_sInput->setValue(0.0);
     m_sInput->setWhatsThis( i18n("<p>Set here the saturation adjustment of the image."));
 
     QLabel *label4 = new QLabel(i18n("Lightness:"), gboxSettings);
     m_lInput       = new KDoubleNumInput(gboxSettings);
-    m_lInput->setPrecision(2);
+    m_lInput->setDecimals(2);
     m_lInput->setRange(-100.0, 100.0, 0.01, true);
     m_lInput->setValue(0.0);
     m_lInput->setWhatsThis( i18n("<p>Set here the lightness adjustment of the image."));    

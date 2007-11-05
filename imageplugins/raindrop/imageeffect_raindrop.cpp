@@ -94,7 +94,8 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     QLabel *label1 = new QLabel(i18n("Drop size:"), gboxSettings);
     
     m_dropInput = new KIntNumInput(gboxSettings);
-    m_dropInput->setRange(0, 200, 1, true);
+    m_dropInput->setRange(0, 200, 1);
+    m_dropInput->setSliderEnabled(true);
     m_dropInput->setValue(80);
     m_dropInput->setWhatsThis( i18n("<p>Set here the raindrops' size."));
    
@@ -103,7 +104,8 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     QLabel *label2 = new QLabel(i18n("Number:"), gboxSettings);
     
     m_amountInput = new KIntNumInput(gboxSettings);
-    m_amountInput->setRange(1, 500, 1, true);
+    m_amountInput->setRange(1, 500, 1);
+    m_amountInput->setSliderEnabled(true);
     m_amountInput->setValue(150);
     m_amountInput->setWhatsThis( i18n("<p>This value controls the maximum number of raindrops.")); 
     
@@ -112,7 +114,8 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
     QLabel *label3 = new QLabel(i18n("Fish eyes:"), gboxSettings);
     
     m_coeffInput = new KIntNumInput(gboxSettings);
-    m_coeffInput->setRange(1, 100, 1, true);
+    m_coeffInput->setRange(1, 100, 1);
+    m_coeffInput->setSliderEnabled(true);
     m_coeffInput->setValue(30);
     m_coeffInput->setWhatsThis( i18n("<p>This value is the fish-eye-effect optical "
                                      "distortion coefficient."));     

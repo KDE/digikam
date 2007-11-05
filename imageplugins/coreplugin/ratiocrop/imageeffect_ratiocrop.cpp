@@ -161,12 +161,14 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     m_xInput = new KIntNumInput(cropSelection);
     m_xInput->setWhatsThis( i18n("<p>Set here the top left selection corner position for cropping."));
     m_xInput->setLabel(i18n("X:"), Qt::AlignLeft|Qt::AlignVCenter);
-    m_xInput->setRange(0, m_imageSelectionWidget->getOriginalImageWidth(), 1, true);
+    m_xInput->setRange(0, m_imageSelectionWidget->getOriginalImageWidth(), 1);
+    m_xInput->setSliderEnabled(true);
 
     m_widthInput = new KIntNumInput(cropSelection);
     m_widthInput->setLabel(i18n("Width:"), Qt::AlignLeft|Qt::AlignVCenter);
     m_widthInput->setWhatsThis( i18n("<p>Set here the width selection for cropping."));
-    m_widthInput->setRange(10, m_imageSelectionWidget->getOriginalImageWidth(), 1, true);
+    m_widthInput->setRange(10, m_imageSelectionWidget->getOriginalImageWidth(), 1);
+    m_widthInput->setSliderEnabled(true);
 
     m_centerWidth = new QPushButton(cropSelection);
     m_centerWidth->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/centerwidth.png")));
@@ -177,12 +179,14 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     m_yInput = new KIntNumInput(cropSelection);
     m_yInput->setLabel(i18n("Y:"), Qt::AlignLeft|Qt::AlignVCenter);
     m_yInput->setWhatsThis( i18n("<p>Set here the top left selection corner position for cropping."));
-    m_yInput->setRange(0, m_imageSelectionWidget->getOriginalImageWidth(), 1, true);
+    m_yInput->setRange(0, m_imageSelectionWidget->getOriginalImageWidth(), 1);
+    m_yInput->setSliderEnabled(true);
 
     m_heightInput = new KIntNumInput(cropSelection);
     m_heightInput->setLabel(i18n("Height:"), Qt::AlignLeft|Qt::AlignVCenter);
     m_heightInput->setWhatsThis( i18n("<p>Set here the height selection for cropping."));
-    m_heightInput->setRange(10, m_imageSelectionWidget->getOriginalImageHeight(), 1, true);
+    m_heightInput->setRange(10, m_imageSelectionWidget->getOriginalImageHeight(), 1);
+    m_heightInput->setSliderEnabled(true);
 
     m_centerHeight = new QPushButton(cropSelection);
     m_centerHeight->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/centerheight.png")));
@@ -523,12 +527,16 @@ void ImageEffect_RatioCrop::slotSelectionChanged(QRect rect)
     m_widthInput->setValue(rect.width());
     m_heightInput->setValue(rect.height());
 
-    m_xInput->setRange(0, m_imageSelectionWidget->getOriginalImageWidth() - rect.width(), 1, true);
-    m_yInput->setRange(0, m_imageSelectionWidget->getOriginalImageHeight() - rect.height(), 1, true);
+    m_xInput->setRange(0, m_imageSelectionWidget->getOriginalImageWidth() - rect.width(), 1);
+    m_xInput->setSliderEnabled(true);
+    m_yInput->setRange(0, m_imageSelectionWidget->getOriginalImageHeight() - rect.height(), 1);
+    m_yInput->setSliderEnabled(true);
     m_widthInput->setRange(m_imageSelectionWidget->getMinWidthRange(),
-                           m_imageSelectionWidget->getOriginalImageWidth() - rect.x() , 1, true);
+                           m_imageSelectionWidget->getOriginalImageWidth() - rect.x() , 1);
+    m_widthInput->setSliderEnabled(true);
     m_heightInput->setRange(m_imageSelectionWidget->getMinHeightRange(),
-                            m_imageSelectionWidget->getOriginalImageHeight() - rect.y(), 1, true);
+                            m_imageSelectionWidget->getOriginalImageHeight() - rect.y(), 1);
+    m_heightInput->setSliderEnabled(true);
 
     m_xInput->blockSignals(false);
     m_yInput->blockSignals(false);
@@ -542,7 +550,9 @@ void ImageEffect_RatioCrop::slotSelectionWidthChanged(int newWidth)
     m_widthInput->setValue(newWidth);
     m_widthInput->setRange(m_imageSelectionWidget->getMinWidthRange(),
                            m_imageSelectionWidget->getOriginalImageWidth() -
-                           m_imageSelectionWidget->getRegionSelection().x(), 1, true);
+                           m_imageSelectionWidget->getRegionSelection().x(), 1);
+    m_widthInput->setSliderEnabled(true);
+
     m_widthInput->blockSignals(false);
 }
 
@@ -552,7 +562,8 @@ void ImageEffect_RatioCrop::slotSelectionHeightChanged(int newHeight)
     m_heightInput->setValue(newHeight);
     m_heightInput->setRange(m_imageSelectionWidget->getMinHeightRange(),
                             m_imageSelectionWidget->getOriginalImageHeight() -
-                            m_imageSelectionWidget->getRegionSelection().y(), 1, true);
+                            m_imageSelectionWidget->getRegionSelection().y(), 1);
+    m_heightInput->setSliderEnabled(true);
     m_heightInput->blockSignals(false);
 }
 

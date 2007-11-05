@@ -97,7 +97,8 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
 
     QLabel *label = new QLabel(i18n("Sharpness:"), simpleSharpSettings);
     m_radiusInput = new KIntNumInput(simpleSharpSettings);
-    m_radiusInput->setRange(0, 100, 1, true);
+    m_radiusInput->setRange(0, 100, 1);
+    m_radiusInput->setSliderEnabled(true);
     m_radiusInput->setValue(0);
     m_radiusInput->setWhatsThis( i18n("<p>A sharpness of 0 has no effect, "
                                       "1 and above determine the sharpen matrix radius "
@@ -118,20 +119,21 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
 
     QLabel *label2 = new QLabel(i18n("Radius:"), unsharpMaskSettings);
     m_radiusInput2 = new KIntNumInput(unsharpMaskSettings);
-    m_radiusInput2->setRange(1, 120, 1, true);
+    m_radiusInput2->setRange(1, 120, 1);
+    m_radiusInput2->setSliderEnabled(true);
     m_radiusInput2->setWhatsThis( i18n("<p>Radius value is the gaussian blur matrix radius value "
                                        "used to determines how much to blur the image.") );
     
     QLabel *label3 = new QLabel(i18n("Amount:"), unsharpMaskSettings);
     m_amountInput  = new KDoubleNumInput(unsharpMaskSettings);
-    m_amountInput->setPrecision(1);
+    m_amountInput->setDecimals(1);
     m_amountInput->setRange(0.0, 5.0, 0.1, true);
     m_amountInput->setWhatsThis( i18n("<p>The value of the difference between the "
                      "original and the blur image that is added back into the original.") );
     
     QLabel *label4   = new QLabel(i18n("Threshold:"), unsharpMaskSettings);
     m_thresholdInput = new KDoubleNumInput(unsharpMaskSettings);
-    m_thresholdInput->setPrecision(2);
+    m_thresholdInput->setDecimals(2);
     m_thresholdInput->setRange(0.0, 1.0, 0.01, true);
     m_thresholdInput->setWhatsThis( i18n("<p>The threshold, as a fraction of the maximum "
                      "luminosity value, needed to apply the difference amount.") );
@@ -155,7 +157,7 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
     
     QLabel *label5 = new QLabel(i18n("Circular sharpness:"), refocusSettings);
     m_radius       = new KDoubleNumInput(refocusSettings);
-    m_radius->setPrecision(2);
+    m_radius->setDecimals(2);
     m_radius->setRange(0.0, 5.0, 0.01, true);
     m_radius->setWhatsThis( i18n("<p>This is the radius of the circular convolution. It is the most important "
                                  "parameter for using the plugin. For most images the default value of 1.0 "
@@ -163,7 +165,7 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
     
     QLabel *label6 = new QLabel(i18n("Correlation:"), refocusSettings);
     m_correlation  = new KDoubleNumInput(refocusSettings);
-    m_correlation->setPrecision(2);
+    m_correlation->setDecimals(2);
     m_correlation->setRange(0.0, 1.0, 0.01, true);
     m_correlation->setWhatsThis( i18n("<p>Increasing the correlation may help to reduce artifacts. The correlation can "
                                       "range from 0-1. Useful values are 0.5 and values close to 1, e.g. 0.95 and 0.99. "
@@ -172,7 +174,7 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
 
     QLabel *label7 = new QLabel(i18n("Noise filter:"), refocusSettings);
     m_noise        = new KDoubleNumInput(refocusSettings);
-    m_noise->setPrecision(3);
+    m_noise->setDecimals(3);
     m_noise->setRange(0.0, 1.0, 0.001, true);
     m_noise->setWhatsThis( i18n("<p>Increasing the noise filter parameter may help to reduce artifacts. The noise filter "
                                 "can range from 0-1 but values higher than 0.1 are rarely helpful. When the noise filter "
@@ -182,7 +184,7 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
 
     QLabel *label8 = new QLabel(i18n("Gaussian sharpness:"), refocusSettings);
     m_gauss        = new KDoubleNumInput(refocusSettings);
-    m_gauss->setPrecision(2);
+    m_gauss->setDecimals(2);
     m_gauss->setRange(0.0, 1.0, 0.01, true);
     m_gauss->setWhatsThis( i18n("<p>This is the sharpness for the gaussian convolution. Use this parameter when your "
                                 "blurring is of gaussian type. In most cases you should set this parameter to 0, because "
@@ -191,7 +193,8 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
 
     QLabel *label9 = new QLabel(i18n("Matrix size:"), refocusSettings);
     m_matrixSize   = new KIntNumInput(refocusSettings);
-    m_matrixSize->setRange(0, MAX_MATRIX_SIZE, 1, true);  
+    m_matrixSize->setRange(0, MAX_MATRIX_SIZE, 1);  
+    m_matrixSize->setSliderEnabled(true);
     m_matrixSize->setWhatsThis( i18n("<p>This parameter determines the size of the transformation matrix. "
                                      "Increasing the matrix width may give better results, especially when you have "
                                      "chosen large values for circular or gaussian sharpness."));
