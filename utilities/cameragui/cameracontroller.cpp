@@ -296,7 +296,7 @@ void CameraThread::run()
                 QString folder = cmd->map["folder"].asString();
                 QString file   = cmd->map["file"].asString();
     
-                sendInfo(i18n("Getting thumbnail for %1/%2...").arg(folder).arg(file));
+                sendInfo(i18n("Getting thumbnails..."));
     
                 QImage thumbnail;
                 d->camera->getThumbnail(folder, file, thumbnail);
