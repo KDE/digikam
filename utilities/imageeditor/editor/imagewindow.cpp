@@ -866,11 +866,15 @@ bool ImageWindow::save()
 
 bool ImageWindow::saveAs()
 {
-    // Write metadata from database to DImg
-    MetadataHub hub;
-    hub.load(d->imageInfoCurrent);
-    DImg image(m_canvas->currentImage());
-    hub.write(image, MetadataHub::FullWrite);
+    // If image editor is started from CameraGUI, there is no ImageInfo instance to use.
+    if (d->imageInfoCurrent)
+    {
+        // Write metadata from database to DImg
+        MetadataHub hub;
+        hub.load(d->imageInfoCurrent);
+        DImg image(m_canvas->currentImage());
+        hub.write(image, MetadataHub::FullWrite);
+    }
 
     return ( startingSaveAs(d->urlCurrent) );
 }
