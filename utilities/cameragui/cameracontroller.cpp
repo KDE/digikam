@@ -399,7 +399,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
             QString folder = cmd->map["folder"].toString();
             QString file   = cmd->map["file"].toString();
 
-            sendInfo(i18n("Getting thumbnail in progress..."));
+            sendInfo(i18n("Getting thumbnails..."));
 
             QImage thumbnail;
             d->camera->getThumbnail(folder, file, thumbnail);
