@@ -7,6 +7,8 @@ General        : Removed all X11 library dependencies. Code is now portable unde
 General        : Support of XMP metadata (require Exiv2 0.16).
 General        : Hardware handling using KDE4 Solid interface.
 General        : Database file can be stored on a customized place to support remote album library path.
+General        : Support of multiple roots album paths.
+
 CameraGUI      : New design for camera interface.
 CameraGUI      : New Capture tool.
 CameraGUI      : New bargraph to display camera media free-space.
@@ -20,5 +22,8 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 004 ==> 149966 : Alternative IPTC Keyword Separator (dot notation).
 005 ==> 129437 : Album could point to network path. Now it's impossible to view photos from shared network drive.
 006 ==> 137694 : Allow album pictures to be stored on network devices.
-007 ==> 
+007 ==> 114682 : Wish: about library path.
+008 ==> 122516 : Album Path cannot be on Network device (Unmounted).
+009 ==> 107871 : Allow multiple album library path.
+010 ==> 
 
