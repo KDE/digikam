@@ -861,7 +861,7 @@ void ImageWindow::saveAsIsComplete()
 bool ImageWindow::save()
 {
     // Sanity check. Just to be homogenous with SaveAs.
-    if (d->imageInfoCurrent)
+    if (!d->imageInfoCurrent.isNull())
     {
         // Write metadata from database to DImg
         MetadataHub hub;
@@ -877,7 +877,7 @@ bool ImageWindow::save()
 bool ImageWindow::saveAs()
 {
     // If image editor is started from CameraGUI, there is no ImageInfo instance to use.
-    if (d->imageInfoCurrent)
+    if (!d->imageInfoCurrent.isNull())
     {
         // Write metadata from database to DImg
         MetadataHub hub;
