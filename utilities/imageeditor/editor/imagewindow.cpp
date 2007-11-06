@@ -854,11 +854,15 @@ void ImageWindow::saveAsIsComplete()
 
 bool ImageWindow::save()
 {
-    // Write metadata from database to DImg
-    MetadataHub hub;
-    hub.load(d->imageInfoCurrent);
-    DImg image(m_canvas->currentImage());
-    hub.write(image, MetadataHub::FullWrite);
+    // Sanity check. Just to be homogenous with SaveAs.
+    if (d->imageInfoCurrent)
+    {
+        // Write metadata from database to DImg
+        MetadataHub hub;
+        hub.load(d->imageInfoCurrent);
+        DImg image(m_canvas->currentImage());
+        hub.write(image, MetadataHub::FullWrite);
+    }
 
     startingSave(d->urlCurrent);
     return true;
