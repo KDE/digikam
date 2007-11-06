@@ -7,6 +7,7 @@
  * Description : Albums manager interface.
  * 
  * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,7 +37,6 @@ extern "C"
 #include <cstdlib>
 #include <cstdio>
 #include <cerrno> 
-
 
 // Qt includes.
 
@@ -94,20 +94,22 @@ public:
     {
         changed            = false;
         hasPriorizedDbPath = false;
-        dateListJob  = 0;
-        dirWatch     = 0;
-        itemHandler  = 0;
-        rootPAlbum   = 0;
-        rootTAlbum   = 0;
-        rootDAlbum   = 0;
-        rootSAlbum   = 0;
-        currentAlbum = 0;
+        dateListJob        = 0;
+        dirWatch           = 0;
+        itemHandler        = 0;
+        rootPAlbum         = 0;
+        rootTAlbum         = 0;
+        rootDAlbum         = 0;
+        rootSAlbum         = 0;
+        currentAlbum       = 0;
     }
 
     bool              changed;
+    bool              hasPriorizedDbPath;
 
     QString           dbPath;
-    bool              hasPriorizedDbPath;
+
+    QList<QDateTime>  dbPathModificationDateList;
 
     KIO::TransferJob *dateListJob;
 
@@ -124,8 +126,6 @@ public:
     AlbumIntDict      albumIntDict;
 
     Album            *currentAlbum;
-
-    QList<QDateTime>  dbPathModificationDateList;
 };
 
 class AlbumManagerCreator { public: AlbumManager object; };
@@ -139,20 +139,6 @@ AlbumManager* AlbumManager::instance()
 AlbumManager::AlbumManager()
 {
     d = new AlbumManagerPriv;
-
-    d->dateListJob = 0;
-
-    d->rootPAlbum = 0;
-    d->rootTAlbum = 0;
-    d->rootDAlbum = 0;
-    d->rootSAlbum = 0;
-
-    d->itemHandler  = 0;
-    d->currentAlbum = 0;
-
-    d->dirWatch = 0;
-
-    d->changed  = false;
 }
 
 AlbumManager::~AlbumManager()
@@ -188,7 +174,7 @@ bool AlbumManager::setDatabase(const QString &dbPath, bool priority)
         return true;
     }
 
-    d->dbPath = dbPath;
+    d->dbPath  = dbPath;
     d->changed = true;
 
     disconnect(CollectionManager::instance(), 0, this, 0);
@@ -567,12 +553,12 @@ void AlbumManager::scanTAlbums()
         AlbumIterator it(rootTag);
         while (it.current())
         {
-            TAlbum* album = (TAlbum*)it.current();
             TagInfo info;
-            info.id   = album->m_id;
-            info.pid  = album->m_pid;
-            info.name = album->m_title;
-            info.icon = album->m_icon;
+            TAlbum* album = (TAlbum*)it.current();
+            info.id       = album->m_id;
+            info.pid      = album->m_pid;
+            info.name     = album->m_title;
+            info.icon     = album->m_icon;
             tList.append(info);
             ++it;
         }
@@ -594,9 +580,9 @@ void AlbumManager::scanTAlbums()
         if (iter == tmap.end())
         {
             DWarning() << "Failed to find parent tag for tag "
-                        << info.name 
-                        << " with pid "
-                        << info.pid << endl;
+                       << info.name 
+                       << " with pid "
+                       << info.pid << endl;
             continue;
         }
 
@@ -669,9 +655,10 @@ void AlbumManager::scanDAlbums()
     d->dateListJob->addMetaData("folders", "yes");
 
     connect(d->dateListJob, SIGNAL(result(KJob*)),
-            SLOT(slotResult(KJob*)));
+            this, SLOT(slotResult(KJob*)));
+
     connect(d->dateListJob, SIGNAL(data(KIO::Job*, const QByteArray&)),
-            SLOT(slotData(KIO::Job*, const QByteArray&)));
+            this, SLOT(slotData(KIO::Job*, const QByteArray&)));
 }
 
 AlbumList AlbumManager::allPAlbums() const
@@ -816,7 +803,6 @@ TAlbum* AlbumManager::findTAlbum(const QString &tagPath) const
 
 }
 
-
 PAlbum* AlbumManager::createPAlbum(PAlbum* parent,
                                    const QString& albumRoot,
                                    const QString& name,
@@ -900,7 +886,7 @@ PAlbum* AlbumManager::createPAlbum(PAlbum* parent,
         return 0;
     }
 
-    PAlbum *album = new PAlbum(albumRootPath, name, id);
+    PAlbum *album       = new PAlbum(albumRootPath, name, id);
     album->m_caption    = caption;
     album->m_collection = collection;
     album->m_date       = date;
