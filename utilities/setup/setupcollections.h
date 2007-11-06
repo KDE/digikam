@@ -3,7 +3,7 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2003-02-01
+ * Date        : 2005-02-01
  * Description : collections setup tab
  *
  * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -28,6 +28,8 @@
 
 #include <QWidget>
 
+class Q3ListViewItem;
+
 class KPageDialog;
 
 namespace Digikam
@@ -50,8 +52,18 @@ private:
 
     void readSettings();
     void checkforOkButton();
+    void checkforAddButton();
+    bool checkForCollection(const QString& name, const QString& path);
 
 private slots:
+
+    void slotSelectionChanged(Q3ListViewItem*);
+    void slotNewCollectionItem();
+    void slotAddCollectionItem();
+    void slotRemoveCollectionItem();
+    void slotReplaceCollectionItem();
+
+    void slotAlbumNameEdited(const QString&);
 
     void slotChangeAlbumPath(const KUrl&);
     void slotAlbumPathEdited(const QString&);
