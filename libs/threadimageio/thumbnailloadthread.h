@@ -67,7 +67,7 @@ public:
 
     /**
      * Find a thumbnail.
-     * This method sends the signals and does not return values like the medthod above.
+     * This method sends the signals and does not return values like the method above.
      * If you certainly need asynchronous return, connect with Qt::QueuedConnection to the signals.
      * If you connect directly, the signals may be sent from within the method call.
      */
@@ -80,7 +80,6 @@ public:
      * (in the description constructor, you need to specify file path, thumbnail size and exif rotation)
      */
     void load(const LoadingDescription &description);
-
 
     /// If the thread is currently loading thumbnails, there is no guarantee as to when
     /// the property change by one of the following methods takes effect.
@@ -124,7 +123,6 @@ public:
      */
     void setSendSurrogatePixmap(bool send);
 
-
     /**
      * This is a tool to force regeneration of thumbnails.
      * All thumbnail files for the given file will be removed from disk,
@@ -137,7 +135,6 @@ public:
 signals:
 
     // See LoadSaveThread for a QImage-based thumbnailLoaded() signal.
-
     void signalThumbnailLoaded(const LoadingDescription &loadingDescription, const QPixmap& pix);
 
 public:
