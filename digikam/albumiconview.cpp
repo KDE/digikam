@@ -1167,8 +1167,7 @@ void AlbumIconView::insertToLightTable(const ImageInfoList& list, ImageInfo* cur
     // If addTo is false, the light table will be emptied before adding
     // the images.
     ltview->loadImageInfos(list, current, addTo);
-    if (list.count()>1)
-        ltview->setLeftRightItems(list);
+    ltview->setLeftRightItems(list);
 }
 
 // ------------------------------------------------------------------------------

@@ -8,7 +8,8 @@ ImageEditor    : New black & white Green color tone filter.
 
 digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-047 ==> 
+047 ==> 150296 : Images in LightTable are not compared in right order
+048 ==> 
 
 **********************************************************************************************
 

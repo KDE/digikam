@@ -505,8 +505,7 @@ void LightTableWindow::slotThumbbarDroppedItems(const ImageInfoList& list)
     // Setting the third parameter of loadImageInfos to true 
     // means that the images are added to the presently available images.
     loadImageInfos(list, 0, true);
-    if (list.count()>1)
-        setLeftRightItems(list);
+    setLeftRightItems(list);
 }
 
 // We get here either
@@ -620,7 +619,7 @@ void LightTableWindow::slotLeftPanelLeftButtonClicked()
 
 void LightTableWindow::slotRightPanelLeftButtonClicked()
 {
-    // With navigate by pair option, only the Feft panel can be selected.
+    // With navigate by pair option, only the left panel can be selected.
     if (d->navigateByPairAction->isChecked()) return;
 
     d->barView->setSelectedItem(d->barView->findItemByInfo(d->previewView->rightImageInfo()));
@@ -759,8 +758,7 @@ void LightTableWindow::slotLeftDroppedItems(const ImageInfoList& list)
         // Therefore we use setLeftRightItems if there is more than 
         // one item in the list of dropped images.        
     }
-    if (list.count()>1)
-        setLeftRightItems(list);
+    setLeftRightItems(list);
 }
 
 // Deal with one (or more) items dropped onto the right panel
@@ -769,8 +767,7 @@ void LightTableWindow::slotRightDroppedItems(const ImageInfoList& list)
     ImageInfo *info = *(list.begin());
     // add the image to the existing images
     loadImageInfos(list, info, true);
-    if (list.count()>1)
-        setLeftRightItems(list);
+    setLeftRightItems(list);
 
     // We will check if first item from list is already stored in thumbbar
     // Note that the thumbbar stores all ImageInfo reference 
@@ -782,8 +779,6 @@ void LightTableWindow::slotRightDroppedItems(const ImageInfoList& list)
         // Make this item the current one.
         d->barView->setSelectedItem(item);
     }
-    if (list.count()>1)
-        setLeftRightItems(list);
 }
 
 // Set the images for the left and right panel.
@@ -791,12 +786,24 @@ void LightTableWindow::setLeftRightItems(const ImageInfoList &list)
 {
     ImageInfoList l = list;
 
-    // Make sure that more than just one item is in the list.
-    if (l.count()<=1)
+    if (l.count()==0)
         return;
+    
 
     ImageInfo *info = l.first();
+
     LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(d->barView->findItemByInfo(info));
+
+
+    if (l.count()==1)
+    {
+        // Just one item; this is used for the left panel.
+        d->barView->setOnLeftPanel(info);
+        slotSetItemOnLeftPanel(info);
+        d->barView->setSelectedItem(ltItem); 
+        d->barView->ensureItemVisible(ltItem);
+        return;
+    }
 
     if (ltItem)
     {
@@ -810,12 +817,25 @@ void LightTableWindow::setLeftRightItems(const ImageInfoList &list)
         {
             d->barView->setOnRightPanel(next->info());
             slotSetItemOnRightPanel(next->info());
-            d->barView->setSelectedItem(next);
-            // ensure that the selected item is visible
-            // FIXME: this does not work:
-            d->barView->ensureItemVisible(next);
+            if (!d->navigateByPairAction->isChecked())
+            {
+                d->barView->setSelectedItem(next);
+                // ensure that the selected item is visible
+                // FIXME: this does not work:
+                d->barView->ensureItemVisible(next);
+            }
         }
+
+        // If navigate by pairs is active, the left panel item is selected.
+        // (Fixes parts of bug #150296)
+        if (d->navigateByPairAction->isChecked())
+        {
+            d->barView->setSelectedItem(ltItem); 
+            d->barView->ensureItemVisible(ltItem);
+        }
+
     }
+
 }
 
 void LightTableWindow::slotSetItemLeft()
@@ -1053,6 +1073,19 @@ void LightTableWindow::slotRemoveItem(ImageInfo* info)
             LightTableBarItem* first = dynamic_cast<LightTableBarItem*>(d->barView->firstItem());
             new_linfo = first->info();
         }
+    }
+
+
+    // Make sure that new_linfo and new_rinfo exist.
+    // This addresses a crash occuring if the last image is removed 
+    // in the navigate by pairs mode.
+    if (!d->barView->findItemByInfo(new_linfo))
+    {
+         new_linfo = 0;
+    }
+    if (!d->barView->findItemByInfo(new_rinfo))
+    {
+         new_rinfo = 0;
     }
 
     // no right item defined?
