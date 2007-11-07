@@ -544,9 +544,7 @@ void ShowFoto::saveSettings()
     group.writeEntry("Show Thumbnails", d->showBarAction->isChecked());
 
     if (d->vSplitter)
-    {
         group.writeEntry("Vertical Splitter State", d->vSplitter->saveState().toBase64());
-    }
 
     group.sync();    
 }
@@ -623,9 +621,7 @@ void ShowFoto::slotOpenFile()
     // Nota: we cannot use here "image/x-raw" type mime from KDE because it uncomplete 
     // or unavailable(dcraw_0)(see file #121242 in B.K.O).
     if (KDcrawIface::DcrawBinary::instance()->versionIsRight())
-    {
         patternList.append(i18n("\n%1|Camera RAW files",QString(raw_file_extentions)));
-    }
     
     fileformats = patternList.join("\n");
 
@@ -635,7 +631,7 @@ void ShowFoto::slotOpenFile()
 
     if (!urls.isEmpty())
     {
-	d->currentItem = 0;
+        d->currentItem = 0;
         d->thumbBar->clear();
 
         for (KUrl::List::const_iterator it = urls.begin();
@@ -871,6 +867,7 @@ void ShowFoto::openFolder(const KUrl& url)
     // Because KImageIO return only *.JPEG and *.TIFF mime types.
     if ( filter.contains("*.TIFF") )
         filter.append (" *.TIF");
+
     if ( filter.contains("*.JPEG") )
     {
         filter.append (" *.JPG");
@@ -1188,10 +1185,10 @@ void ShowFoto::slideShow(bool startWithCurrent, Digikam::SlideShowSettings& sett
     settings.exifRotate = group.readEntry("EXIF Rotate", true);
     settings.fileList   = d->thumbBar->itemsURLs();
 
-    int       i   = 0;
-    float     cnt = settings.fileList.count();
-    Digikam::DMetadata meta;
+    int   i           = 0;
+    float cnt         = settings.fileList.count();
     m_cancelSlideShow = false;
+    Digikam::DMetadata meta;
 
     m_nameLabel->progressBarMode(Digikam::StatusProgressBar::CancelProgressBarMode, 
                                  i18n("Prepare slideshow. Please wait..."));
@@ -1222,4 +1219,3 @@ void ShowFoto::slideShow(bool startWithCurrent, Digikam::SlideShowSettings& sett
 }
 
 }   // namespace ShowFoto
-
