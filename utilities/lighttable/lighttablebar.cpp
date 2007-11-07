@@ -199,7 +199,7 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent *e)
 
         popmenu.addSeparator();
         QAction *removeAction   = popmenu.addAction(SmallIcon("dialog-close"), i18n("Remove item"));
-        QAction *clearAllAction = popmenu.addAction(SmallIcon("editshred"), i18n("Clear all"));
+        QAction *clearAllAction = popmenu.addAction(SmallIcon("edit-delete-shred"), i18n("Clear all"));
         popmenu.addSeparator();
 
         // Assign Star Rating -------------------------------------------
