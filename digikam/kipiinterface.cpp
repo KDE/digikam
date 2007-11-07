@@ -581,8 +581,7 @@ void DigikamKipiInterface::refreshImages( const KUrl::List& urls )
 int DigikamKipiInterface::features() const
 {
     return (
-
-           KIPI::HostSupportsTags |
+           KIPI::HostSupportsTags           | KIPI::HostSupportsRating         |
            KIPI::ImagesHasComments          | KIPI::AcceptNewImages            |
            KIPI::AlbumsHaveComments         | KIPI::ImageTitlesWritable        |
            KIPI::ImagesHasTime              | KIPI::AlbumsHaveCategory         |
