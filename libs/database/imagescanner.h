@@ -47,7 +47,7 @@ public:
      * and ItemScanInfo object.
      * This constructor shall be used with fileModified() or fullScan().
      */
-    ImageScanner(const QFileInfo &info, const ItemScanInfo &info);
+    ImageScanner(const QFileInfo &info, const ItemScanInfo &Iteminfo);
     /**
      * Construct an ImageScanner from an existing QFileInfo object.
      * Use this constructor if you intend to call newFile().
