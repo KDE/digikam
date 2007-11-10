@@ -289,7 +289,7 @@ void EditorWindow::setupStandardActions()
     m_saveAsAction->setEnabled(false);
     m_revertAction->setEnabled(false);
 
-    d->filePrintAction = new KAction(KIcon("print-frame"), i18n("Print Image..."), this);
+    d->filePrintAction = new KAction(KIcon("document-print-frame"), i18n("Print Image..."), this);
     d->filePrintAction->setShortcut(Qt::CTRL+Qt::Key_P);
     connect(d->filePrintAction, SIGNAL(triggered()), this, SLOT(slotFilePrint()));
     actionCollection()->addAction("editorwindow_print", d->filePrintAction);
