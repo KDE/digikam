@@ -188,7 +188,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     //---------- "General" Page Setup ----------------------------------
 
     m_toolBoxWidgets->insertItem(GENERALPAGE, generalOptions, 
-                                 SmallIcon("exec"), i18n("General Settings"));
+                                 SmallIcon("system-run"), i18n("General Settings"));
     generalOptions->setWhatsThis( i18n("<p>Here you can set general parameters.</p>"));
 
     QGridLayout *zeroPageLayout = new QGridLayout(generalOptions);
