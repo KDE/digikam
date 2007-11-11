@@ -100,7 +100,7 @@ public:
         setPixmap(2, status);
 
         setName(name);
-        setPath(collection.albumRootPath());
+        setLocation(collection);
         setPathEditable(false);
     }
 
@@ -134,8 +134,13 @@ public:
         setText(3, m_path);
     }
 
-    QString path() { return m_path; }
-    
+    QString path() const { return m_path; }
+
+    void setLocation(const CollectionLocation &location)
+    {
+        m_path = location.albumRootPath();
+    }
+
 private: 
 
     bool    m_pathIsEditable;
@@ -263,11 +268,12 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
     QGroupBox *dbPathBox = new QGroupBox(i18n("Database File Path"), this);
     QVBoxLayout *vlay    = new QVBoxLayout(dbPathBox);
 
-    QLabel *databasePathLabel = new QLabel(i18n("Here you can set the path use to host digiKam "
-                                                "database in your computer. This file is common "
-                                                "for all roots album path. Write access is recommended for "
-                                                "this path to be able to edit images properties. "
-                                                "However, you cannot use a remote file systems here, like NFS."), 
+    QLabel *databasePathLabel = new QLabel(i18n("Here you can edit the directory where the "
+                                                "digiKam database file will be stored. "
+                                                "here is only one file common to all album roots."
+                                                "Write access is recommended "
+                                                "to be able to edit image properties. "
+                                                "Please note that you cannot use a remote file system here, such as NFS."),
                                            dbPathBox);
     databasePathLabel->setWordWrap(true);
 
@@ -352,15 +358,18 @@ void SetupCollections::applySettings()
         QString path(item->path());
 
         bool exist = false;
-        for (QList<CollectionLocation>::Iterator it2 = d->collections.begin(); 
+        for (QList<CollectionLocation>::Iterator it2 = d->collections.begin();
              it2 != d->collections.end(); ++it2)
         {
             if ((*it2).albumRootPath() == path)
                 exist = true;
         }
-        
-        if (!exist)   
-            manager->addLocation(KUrl(path));
+
+        if (!exist)
+        {
+            CollectionLocation location = manager->addLocation(KUrl(path));
+            item->setLocation(location);
+        }
     }
 
     d->collections = manager->allLocations();
@@ -375,16 +384,15 @@ void SetupCollections::applySettings()
         for ( ; it.current(); ++it )
         {
             CollectionListViewItem* item = dynamic_cast<CollectionListViewItem*>(it.current());
-            QString path(item->path());   
 
-            if ((*it2).albumRootPath() == path)
+            if ((*it2).albumRootPath() == item->path())
                 exist = true;
         }
 
-        if (!exist)   
+        if (!exist)
             manager->removeLocation(*it2);
     }
-    
+
     if (d->rootsPathChanged)
         ScanController::instance()->completeCollectionScan();
 }
