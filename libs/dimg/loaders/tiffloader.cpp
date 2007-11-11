@@ -149,7 +149,8 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     TIFFGetFieldDefaulted(tif, TIFFTAG_BITSPERSAMPLE, &bits_per_sample);
     TIFFGetFieldDefaulted(tif, TIFFTAG_SAMPLESPERPIXEL, &samples_per_pixel);
 
-    if (TIFFGetFieldDefaulted(tif, TIFFTAG_ROWSPERSTRIP, &rows_per_strip) == 0 || rows_per_strip == 0)
+    if (TIFFGetFieldDefaulted(tif, TIFFTAG_ROWSPERSTRIP, &rows_per_strip) == 0
+        || rows_per_strip == 0 || rows_per_strip == (unsigned int)-1)
     {
         DWarning()  << "TIFF loader: Cannot handle non-stripped images. Loading file " 
                     << filePath << endl;
@@ -159,7 +160,8 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     if (bits_per_sample == 0 ||
         samples_per_pixel == 0 ||
-        rows_per_strip == 0)
+        rows_per_strip == 0 ||
+        rows_per_strip > h)
     {
         DWarning() << "TIFF loader: Encountered invalid value 0 in image."
                    << " bits_per_sample " << bits_per_sample
