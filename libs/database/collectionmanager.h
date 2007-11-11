@@ -148,6 +148,8 @@ public:
      */
     QString album(const KUrl &fileUrl);
     QString album(const QString &filePath);
+    QString album(const CollectionLocation &location, const KUrl &fileUrl);
+    QString album(const CollectionLocation &location, const QString &filePath);
 
     /**
      * Returns just one album root, out of the list of available location,

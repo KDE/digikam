@@ -207,7 +207,7 @@ AlbumInfo::List AlbumDB::scanAlbums()
         ++it;
         info.id = (*it).toInt();
         ++it;
-        info.url = (*it).toString();
+        info.relativePath = (*it).toString();
         ++it;
         info.date = QDate::fromString((*it).toString(), Qt::ISODate);
         ++it;

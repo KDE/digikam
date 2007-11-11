@@ -83,7 +83,7 @@ public:
 
     int      id;
     int      albumRootId;
-    QString  url;
+    QString  relativePath;
     QString  caption;
     QString  collection;
     QDate    date;
@@ -94,7 +94,8 @@ public:
      */
     bool operator<(const AlbumInfo& info) const
     {
-        return url < info.url;
+        // include album root id?
+        return info.relativePath < info.relativePath;
     }
 };
 

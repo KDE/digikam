@@ -64,8 +64,8 @@ public:
     Type    type() const;
     QString albumRootPath() const;
 
-    bool isAvailable() { return m_status == LocationAvailable; }
-    bool isNull()      { return m_status == LocationNull;      }
+    bool isAvailable() const { return m_status == LocationAvailable; }
+    bool isNull() const      { return m_status == LocationNull;      }
 
 protected:
 

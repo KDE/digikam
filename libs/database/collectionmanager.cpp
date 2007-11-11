@@ -472,6 +472,22 @@ QString CollectionManager::album(const QString &filePath)
     return QString();
 }
 
+QString CollectionManager::album(const CollectionLocation &location, const KUrl &fileUrl)
+{
+    return album(location, fileUrl.path(KUrl::LeaveTrailingSlash));
+}
+
+QString CollectionManager::album(const CollectionLocation &location, const QString &filePath)
+{
+    if (location.isNull())
+        return QString();
+    QString absolutePath = location.albumRootPath();
+    if (filePath == absolutePath)
+        return "/";
+    else
+        return filePath.mid(absolutePath.length());
+}
+
 KUrl CollectionManager::oneAlbumRoot()
 {
     return KUrl::fromPath(oneAlbumRootPath());

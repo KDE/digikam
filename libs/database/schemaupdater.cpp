@@ -322,14 +322,14 @@ bool SchemaUpdater::createDatabase()
 
 bool SchemaUpdater::createTablesV5()
 {
-    DDebug() << "createTablesV5" << endl;
     if (!m_access->backend()->execSql(
                     QString("CREATE TABLE AlbumRoots\n"
                             " (id INTEGER PRIMARY KEY,\n"
+                            "  label TEXT,\n"
                             "  status INTEGER NOT NULL,\n"
                             "  type INTEGER NOT NULL,\n"
                             "  identifier TEXT,\n"
-                            "  specificPath TEXT);") )) // FIXME: Add label
+                            "  specificPath TEXT);") ))
     {
         return false;
     }
@@ -339,11 +339,12 @@ bool SchemaUpdater::createTablesV5()
                     QString("CREATE TABLE Albums\n"
                             " (id INTEGER PRIMARY KEY,\n"
                             "  albumRoot INTEGER NOT NULL,\n"
-                            "  relativePath TEXT NOT NULL UNIQUE,\n"
+                            "  relativePath TEXT NOT NULL,\n"
                             "  date DATE,\n"
                             "  caption TEXT,\n"
                             "  collection TEXT,\n"
-                            "  icon INTEGER);") ))
+                            "  icon INTEGER,"
+                            "  UNIQUE(albumRoot, relativePath));") ))
     {
         return false;
     }
@@ -503,10 +504,11 @@ bool SchemaUpdater::createTablesV5()
     if (!m_access->backend()->execSql(
                     QString("CREATE TABLE DownloadHistory\n"
                             " (id  INTEGER PRIMARY KEY,\n"
-                            "  filepath TEXT,\n"
+                            "  identifier TEXT,\n"
                             "  filename TEXT,\n"
                             "  filesize INTEGER,\n"
-                            "  filedate DATETIME);" //FIXME: Add UNIQUE restriction, rename filepath
+                            "  filedate DATETIME,\n"
+                            "  UNIQUE(identifier, filename, filesize, filedate));"
                            ) ))
     {
         return false;
