@@ -83,8 +83,46 @@ extern "C"
 namespace Digikam
 {
 
-typedef Q3Dict<PAlbum>   PAlbumDict;
-typedef Q3IntDict<Album> AlbumIntDict;
+class PAlbumPath
+{
+public:
+
+    PAlbumPath()
+        : albumRootId(-1)
+    {
+    }
+
+    PAlbumPath(int albumRootId, const QString &albumPath)
+       : albumRootId(albumRootId), albumPath(albumPath)
+    {
+    }
+
+    PAlbumPath(PAlbum *album)
+    {
+        if (album->isRoot())
+        {
+            albumRootId = -1;
+        }
+        else
+        {
+            albumRootId = album->albumRootId();
+            albumPath   = album->albumPath();
+        }
+    }
+
+    bool operator==(const PAlbumPath &other) const
+    {
+        return other.albumRootId == albumRootId && other.albumPath == albumPath;
+    }
+
+    int     albumRootId;
+    QString albumPath;
+};
+
+uint qHash(const PAlbumPath &id)
+{
+    return ::qHash(id.albumRootId) xor ::qHash(id.albumPath);
+}
 
 class AlbumManagerPriv
 {
@@ -122,8 +160,8 @@ public:
     DAlbum           *rootDAlbum;
     SAlbum           *rootSAlbum;
 
-    PAlbumDict        pAlbumDict;
-    AlbumIntDict      albumIntDict;
+    QHash<int,Album *>         allAlbumsIdHash;
+    QHash<PAlbumPath, PAlbum*> albumPathHash;
 
     Album            *currentAlbum;
 };
@@ -193,8 +231,8 @@ bool AlbumManager::setDatabase(const QString &dbPath, bool priority)
     emit signalAlbumCurrentChanged(0);
     emit signalAlbumsCleared();
 
-    d->pAlbumDict.clear();
-    d->albumIntDict.clear();
+    d->albumPathHash.clear();
+    d->allAlbumsIdHash.clear();
 
     delete d->rootPAlbum;
     delete d->rootTAlbum;
@@ -381,21 +419,20 @@ void AlbumManager::refresh()
 void AlbumManager::scanPAlbums()
 {
     // first insert all the current PAlbums into a map for quick lookup
-    typedef QMap<QString, PAlbum*> AlbumMap;
-    AlbumMap aMap;
+    QHash<int, PAlbum *> oldAlbums;
 
     AlbumIterator it(d->rootPAlbum);
     while (it.current())
     {
         PAlbum* a = (PAlbum*)(*it);
-        aMap.insert(a->albumRootPath() + a->albumPath(), a);
+        oldAlbums[a->id()] = a;
         ++it;
     }
 
     // scan db and get a list of all albums
-    AlbumInfo::List aList = DatabaseAccess().db()->scanAlbums();
+    QList<AlbumInfo> currentAlbums = DatabaseAccess().db()->scanAlbums();
 
-    qSort(aList);
+    qSort(currentAlbums);
 
     /*
     QList<CollectionLocation *> allLocations = CollectionManager::instance()->allAvailableLocations();
@@ -404,75 +441,68 @@ void AlbumManager::scanPAlbums()
         statusHash[location->id()] = location->status();
     */
 
-    AlbumInfo::List newAlbumList;
+    QList<AlbumInfo> newAlbums;
 
     // go through all the Albums and see which ones are already present
-    for (AlbumInfo::List::iterator it = aList.begin(); it != aList.end(); ++it)
+    foreach (AlbumInfo info, currentAlbums)
     {
-        AlbumInfo info = *it;
-        info.url = QDir::cleanPath(info.url);
-
-        if (!aMap.contains(info.url))
-        {
-            newAlbumList.append(info);
-        }
+        if (oldAlbums.contains(info.id))
+            oldAlbums.remove(info.id);
         else
-        {
-            aMap.remove(info.url);
-        }
+            newAlbums << info;
     }
 
-    // now aMap contains all the deleted albums and
-    // newAlbumList contains all the new albums
+    // now oldAlbums contains all the deleted albums and
+    // newAlbums contains all the new albums
 
-    // first inform all frontends of the deleted albums
-    for (AlbumMap::iterator it = aMap.begin(); it != aMap.end(); ++it)
+    // delete old albums, informing all frontends
+
+    // The albums have to be removed with children being removed first,
+    // removePAlbum takes care of that.
+    // So we only feed it the albums from oldAlbums topmost in hierarchy.
+    QSet<PAlbum *> topMostOldAlbums;
+    foreach (PAlbum *album, oldAlbums)
     {
-        // the albums have to be removed with children being removed first.
-        // removePAlbum takes care of that.
-        // So never delete the PAlbum using it.data(). instead check if the
-        // PAlbum is still in the Album Dict before trying to remove it.
+        if (!album->parent() || !oldAlbums.contains(album->parent()->id()))
+            topMostOldAlbums << album;
+    }
 
+    foreach(PAlbum *album, topMostOldAlbums)
+    {
         // this might look like there is memory leak here, since removePAlbum
         // doesn't delete albums and looks like child Albums don't get deleted.
         // But when the parent album gets deleted, the children are also deleted.
-
-        PAlbum* album = d->pAlbumDict.find(it.key());
-        if (!album)
-            continue;
-
         removePAlbum(album);
         delete album;
     }
 
-    qSort(newAlbumList);
+    qSort(newAlbums);
 
-    for (AlbumInfo::List::iterator it = newAlbumList.begin(); it != newAlbumList.end(); ++it)
+    foreach (AlbumInfo info, newAlbums)
     {
-        AlbumInfo info = *it;
-        if (info.url.isEmpty() || info.url == "/")
+        if (info.relativePath.isEmpty() || info.relativePath == "/")
             continue;
 
-        // Despite its name info.url is a QString.
-        // setPath takes care for escaping characters that are valid for files but not for URLs ('#')
-        KUrl u;
-        u.setPath(info.url);
-        QString name = u.fileName();
-        // Get its parent
-        QString purl = u.upUrl().path(KUrl::RemoveTrailingSlash);
+        // last section, no slash
+        QString name = info.relativePath.section('/', -1, -1);
+        // all but last sections, leading slash, no trailing slash
+        QString parentPath = info.relativePath.section('/', 0, -2);
 
-        PAlbum* parent = d->pAlbumDict.find(purl);
+        PAlbum* parent;
+        if (parentPath.isEmpty())
+            parent = d->rootPAlbum;
+        else
+            parent = d->albumPathHash.value(PAlbumPath(info.albumRootId, parentPath));
+
         if (!parent)
         {
             DWarning() <<  "Could not find parent with url: "
-                       << purl << " for: " << info.url << endl;
+                       << parentPath << " for: " << info.relativePath << endl;
             continue;
         }
 
-        QString albumRootPath = CollectionManager::instance()->albumRootPath(info.albumRootId);
-
         // Create the new album
-        PAlbum* album       = new PAlbum(albumRootPath, name, info.id);
+        PAlbum* album       = new PAlbum(info.albumRootId, parentPath, name, info.id);
         album->m_caption    = info.caption;
         album->m_collection = info.collection;
         album->m_date       = info.date;
@@ -481,7 +511,7 @@ void AlbumManager::scanPAlbums()
         album->setParent(parent);
 
         insertPAlbum(album);
-    } 
+    }
 }
 
 void AlbumManager::scanTAlbums()
@@ -630,7 +660,7 @@ void AlbumManager::scanSAlbums()
         // Its a new album.
         SAlbum* album = new SAlbum(info.id, info.url, simple, false);
         album->setParent(d->rootSAlbum);
-        d->albumIntDict.insert(album->globalID(), album);
+        d->allAlbumsIdHash[album->globalID()] = album;
         emit signalAlbumAdded(album);
     }
 }
@@ -738,8 +768,10 @@ Album* AlbumManager::currentAlbum() const
 
 PAlbum* AlbumManager::findPAlbum(const KUrl& url) const
 {
-#warning Reimplement this, not safe for multiple roots!
-    return d->pAlbumDict.find(CollectionManager::instance()->album(url));
+    CollectionLocation location = CollectionManager::instance()->locationForUrl(url);
+    if (location.isNull())
+        return 0;
+    return d->albumPathHash.value(PAlbumPath(location.id(), CollectionManager::instance()->album(location, url)));
 }
 
 PAlbum* AlbumManager::findPAlbum(int id) const
@@ -749,7 +781,7 @@ PAlbum* AlbumManager::findPAlbum(int id) const
 
     int gid = d->rootPAlbum->globalID() + id;
 
-    return (PAlbum*)(d->albumIntDict.find(gid));
+    return (PAlbum*)(d->allAlbumsIdHash.value(gid));
 }
 
 TAlbum* AlbumManager::findTAlbum(int id) const
@@ -759,7 +791,7 @@ TAlbum* AlbumManager::findTAlbum(int id) const
 
     int gid = d->rootTAlbum->globalID() + id;
 
-    return (TAlbum*)(d->albumIntDict.find(gid));
+    return (TAlbum*)(d->allAlbumsIdHash.value(gid));
 }
 
 SAlbum* AlbumManager::findSAlbum(int id) const
@@ -769,7 +801,7 @@ SAlbum* AlbumManager::findSAlbum(int id) const
 
     int gid = d->rootSAlbum->globalID() + id;
 
-    return (SAlbum*)(d->albumIntDict.find(gid));
+    return (SAlbum*)(d->allAlbumsIdHash.value(gid));
 }
 
 DAlbum* AlbumManager::findDAlbum(int id) const
@@ -779,12 +811,12 @@ DAlbum* AlbumManager::findDAlbum(int id) const
 
     int gid = d->rootDAlbum->globalID() + id;
 
-    return (DAlbum*)(d->albumIntDict.find(gid));
+    return (DAlbum*)(d->allAlbumsIdHash.value(gid));
 }
 
 Album* AlbumManager::findAlbum(int gid) const
 {
-    return d->albumIntDict.find(gid);
+    return d->allAlbumsIdHash.value(gid);
 }
 
 TAlbum* AlbumManager::findTAlbum(const QString &tagPath) const
@@ -831,6 +863,7 @@ PAlbum* AlbumManager::createPAlbum(PAlbum* parent,
     }
 
     QString albumRootPath;
+    QString albumPath;
     if (parent->isRoot())
     {
         if (albumRoot.isNull())
@@ -839,22 +872,26 @@ PAlbum* AlbumManager::createPAlbum(PAlbum* parent,
             return 0;
         }
         albumRootPath = albumRoot;
+        albumPath     = "/" + name;
     }
     else
     {
         albumRootPath = parent->albumRootPath();
+        albumPath     = parent->albumPath() + "/" + name;
     }
 
+    int albumRootId = CollectionManager::instance()->locationForAlbumRootPath(albumRootPath).id();
+
     // first check if we have another album with the same name
-    Album *child = parent->m_firstChild;
+    PAlbum *child = (PAlbum *)parent->m_firstChild;
     while (child)
     {
-        if (child->title() == name)
+        if (child->albumRootId() == albumRootId && child->albumPath() == albumPath)
         {
             errMsg = i18n("An existing album has the same name.");
             return 0;
         }
-        child = child->m_next;
+        child = (PAlbum *)child->m_next;
     }
 
     DatabaseUrl url = parent->databaseUrl();
@@ -878,7 +915,7 @@ PAlbum* AlbumManager::createPAlbum(PAlbum* parent,
         return 0;
     }
 
-    int id = DatabaseAccess().db()->addAlbum(albumRootPath, url.album(), caption, date, collection);
+    int id = DatabaseAccess().db()->addAlbum(albumRootId, albumPath, caption, date, collection);
 
     if (id == -1)
     {
@@ -886,7 +923,7 @@ PAlbum* AlbumManager::createPAlbum(PAlbum* parent,
         return 0;
     }
 
-    PAlbum *album       = new PAlbum(albumRootPath, name, id);
+    PAlbum *album       = new PAlbum(albumRootId, parent->albumPath(), name, id);
     album->m_caption    = caption;
     album->m_collection = collection;
     album->m_date       = date;
@@ -967,13 +1004,12 @@ bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName,
 
     // Update AlbumDict. basically clear it and rebuild from scratch
     {
-        d->pAlbumDict.clear();
-        d->pAlbumDict.insert(d->rootPAlbum->albumPath(), d->rootPAlbum);
+        d->albumPathHash.clear();
         AlbumIterator it(d->rootPAlbum);
         PAlbum* subAlbum = 0;
         while ((subAlbum = (PAlbum*)it.current()) != 0)
         {
-            d->pAlbumDict.insert(subAlbum->albumPath(), subAlbum);
+            d->albumPathHash[subAlbum] = subAlbum;
             ++it;
         }
     }
@@ -1105,7 +1141,7 @@ bool AlbumManager::deleteTAlbum(TAlbum* album, QString& errMsg)
 
     removeTAlbum(album);
 
-    d->albumIntDict.remove(album->globalID());
+    d->allAlbumsIdHash.remove(album->globalID());
     delete album;
     
     return true;
@@ -1274,7 +1310,7 @@ SAlbum* AlbumManager::createSAlbum(const KUrl& url, bool simple)
     album->setTitle(url.queryItem("name"));
     album->setParent(d->rootSAlbum);
 
-    d->albumIntDict.insert(album->globalID(), album);
+    d->allAlbumsIdHash.insert(album->globalID(), album);
     emit signalAlbumAdded(album);
 
     return album;
@@ -1306,7 +1342,7 @@ bool AlbumManager::deleteSAlbum(SAlbum* album)
 
     DatabaseAccess().db()->deleteSearch(album->id());
 
-    d->albumIntDict.remove(album->globalID());
+    d->allAlbumsIdHash.remove(album->globalID());
     delete album;
 
     return true;
@@ -1317,8 +1353,8 @@ void AlbumManager::insertPAlbum(PAlbum *album)
     if (!album)
         return;
 
-    d->pAlbumDict.insert(album->albumPath(), album);
-    d->albumIntDict.insert(album->globalID(), album);
+    d->albumPathHash[album]  = album;
+    d->allAlbumsIdHash[album->globalID()] = album;
 
     emit signalAlbumAdded(album);
 }
@@ -1336,9 +1372,9 @@ void AlbumManager::removePAlbum(PAlbum *album)
         removePAlbum((PAlbum*)child);
         child = next;
     }
-    
-    d->pAlbumDict.remove(album->albumPath());
-    d->albumIntDict.remove(album->globalID());
+
+    d->albumPathHash.remove(album);
+    d->allAlbumsIdHash.remove(album->globalID());
 
     DatabaseUrl url = album->databaseUrl();
 
@@ -1356,7 +1392,7 @@ void AlbumManager::insertTAlbum(TAlbum *album)
     if (!album)
         return;
 
-    d->albumIntDict.insert(album->globalID(), album);
+    d->allAlbumsIdHash.insert(album->globalID(), album);
 
     emit signalAlbumAdded(album);
 }
@@ -1375,7 +1411,7 @@ void AlbumManager::removeTAlbum(TAlbum *album)
         child = next;
     }
     
-    d->albumIntDict.remove(album->globalID());    
+    d->allAlbumsIdHash.remove(album->globalID());
 
     if (album == d->currentAlbum)
     {
@@ -1457,7 +1493,7 @@ void AlbumManager::slotData(KIO::Job*, const QByteArray& data)
         // new album. create one
         DAlbum* album = new DAlbum(date);
         album->setParent(d->rootDAlbum);
-        d->albumIntDict.insert(album->globalID(), album);
+        d->allAlbumsIdHash.insert(album->globalID(), album);
         emit signalAlbumAdded(album);
     }
 
@@ -1468,7 +1504,7 @@ void AlbumManager::slotData(KIO::Job*, const QByteArray& data)
     {
         DAlbum* album = it.value();
         emit signalAlbumDeleted(album);
-        d->albumIntDict.remove(album->globalID());
+        d->allAlbumsIdHash.remove(album->globalID());
         delete album;
     }
 }

@@ -5,7 +5,7 @@
  *
  * Date        : 2004-06-15
  * Description : digiKam album types
- * 
+ *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
  * This program is free software; you can redistribute it
@@ -13,12 +13,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 /** @file album.h */
@@ -53,14 +53,14 @@ namespace Digikam
  * to that to Album::Type
  *
  * This class provides a means of building a tree representation for
- * Albums @see Album::setParent(). 
+ * Albums @see Album::setParent().
  */
 
 class Album
 {
 public:
 
-    enum Type 
+    enum Type
     {
         PHYSICAL=0, /**<  PHYSICAL: A physical album type @see PAlbum */
         TAG,        /**<  TAG:      A tag      album type @see TAlbum */
@@ -79,22 +79,22 @@ public:
      * Delete all child albums and also remove any associated extra data
      */
     void    clear();
-    
+
     /**
      * @return the parent album for this album
      */
     Album*  parent() const;
-            
+
     /**
      * @return the first child of this album or 0 if no children
      */
     Album*  firstChild() const;
-    
+
     /**
      * @return the last child of this album or 0 if no children
      */
     Album*  lastChild() const;
-    
+
     /**
      * @return the next sibling of this album of this album or 0
      * if no next sibling
@@ -139,7 +139,7 @@ public:
      * \code
      * int albumID = rootAlbum->globalID() - album->globalID();
      * \endcode
-     * 
+     *
      * @return the @p globalID of the album
      * @see id()
      */
@@ -159,7 +159,7 @@ public:
      * @return true is the album is a Root Album
      */
     bool    isRoot() const;
-    
+
     /**
      * @return true if the @p album is in the parent hierarchy
      *
@@ -167,7 +167,7 @@ public:
      * hierarchy
      */
     bool    isAncestorOf(Album* album) const;
-    
+
     /**
      * This allows to associate some "extra" data to a Album. As one
      * Album can be used by several objects (often views) which all need
@@ -195,7 +195,7 @@ public:
      * @param key the key of the extra data
      * @param value the value of the extra data
      * @see extraData
-     * @see removeExtraData                                   
+     * @see removeExtraData
      */
     void    setExtraData(const void* key, void *value);
 
@@ -207,7 +207,7 @@ public:
      * @see extraData
      */
     void    removeExtraData(const void* key);
-    
+
     /**
      * Retrieve the associated extra data associated with @p key
      *
@@ -218,7 +218,7 @@ public:
     void*   extraData(const void* key) const;
 
 protected:
-    
+
     /**
      * Constructor
      */
@@ -261,21 +261,21 @@ protected:
     void removeChild(Album* child);
 
 private:
-    
+
     /**
      * Disable copy and default constructor
      */
     Album();
     Album(const Album&);
     Album& operator==(const Album&);
-    
+
 private:
-    
+
     Type                       m_type;
     int                        m_id;
     bool                       m_root;
     QString                    m_title;
-                               
+
     Album*                     m_parent;
     Album*                     m_firstChild;
     Album*                     m_lastChild;
@@ -287,11 +287,11 @@ private:
 
     friend class AlbumManager;
 };
-    
+
 /**
  * \class PAlbum
  *
- * A Physical Album representation 
+ * A Physical Album representation
  */
 
 class PAlbum : public Album
@@ -299,7 +299,7 @@ class PAlbum : public Album
 public:
 
     PAlbum(const QString& title);
-    PAlbum(const QString &albumRoot, const QString& title, int id);
+    PAlbum(int albumRoot, const QString &parentPath, const QString& title, int id);
     ~PAlbum();
 
     void setCaption(const QString& caption);
@@ -307,6 +307,7 @@ public:
     void setDate(const QDate& date);
 
     QString    albumRootPath() const;
+    int        albumRootId() const;
     QString    caption() const;
     QString    collection() const;
     QDate      date() const;
@@ -322,7 +323,8 @@ public:
 
 private:
 
-    QString    m_albumRoot;
+    int        m_albumRootId;
+    QString    m_parentPath;
     QString    m_collection;
     QString    m_caption;
     QDate      m_date;
@@ -334,7 +336,7 @@ private:
 /**
  * \class TAlbum
  *
- * A Tag Album representation 
+ * A Tag Album representation
  */
 
 class TAlbum : public Album
@@ -366,7 +368,7 @@ private:
 /**
  * \class DAlbum
  *
- * A Date Album representation 
+ * A Date Album representation
  */
 
 class DAlbum : public Album
@@ -390,7 +392,7 @@ private:
 /**
  * \class SAlbum
  *
- * A Search Album representation 
+ * A Search Album representation
  */
 
 class SAlbum : public Album
@@ -414,7 +416,7 @@ private:
 
 /**
  *  \class AlbumIterator
- *  
+ *
  *  Iterate over all children of this Album.
  *  \note It will not include the specified album
  *
@@ -441,17 +443,17 @@ public:
     AlbumIterator& operator++();
     Album*         operator*();
     Album*         current() const;
-    
+
 private:
 
     AlbumIterator() {}
     AlbumIterator(const AlbumIterator&) {}
     AlbumIterator& operator=(const AlbumIterator&){ return *this; }
-    
+
     Album* m_current;
     Album* m_root;
 };
-    
+
 }  // namespace Digikam
 
 #endif /* ALBUM_H */

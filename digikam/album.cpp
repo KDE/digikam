@@ -30,6 +30,7 @@
 #include "ddebug.h"
 #include "albummanager.h"
 #include "albumdb.h"
+#include "collectionmanager.h"
 #include "databaseaccess.h"
 #include "databaseurl.h"
 #include "album.h"
@@ -165,14 +166,15 @@ int Album::globalID() const
 {
     switch (m_type)
     {
+        // Use the upper bits to create unique ids.
         case (PHYSICAL):
-            return 10000 + m_id;
+            return m_id;
         case(TAG):
-            return 20000 + m_id;
+            return m_id | (1 << 28);
         case(DATE):
-            return 30000 + m_id;
+            return m_id | (1 << 29);
         case(SEARCH):
-            return 40000 + m_id;
+            return m_id | (1 << 30);
         default:
             DError() << "Unknown album type" << endl;
             return -1;
@@ -246,17 +248,19 @@ PAlbum::PAlbum(const QString& title)
       : Album(Album::PHYSICAL, 0, true)
 {
     setTitle(title);
-    m_date       = QDate::currentDate();
+    m_albumRootId = -1;
+    m_parentPath   = "/";
+    m_date        = QDate::currentDate();
 }
 
-PAlbum::PAlbum(const QString &albumRoot, const QString& title, int id)
+PAlbum::PAlbum(int albumRoot, const QString &parentPath, const QString& title, int id)
       : Album(Album::PHYSICAL, id, false)
 {
-    // Note that the title here is really only the title, not the full path under root!
-    // Be root=/media/fotos, album is /holidays/2007, then title is only "2007".
+    // If path is /holidays/2007, title is only "2007", path is "/holidays"
     setTitle(title);
-    m_albumRoot  = albumRoot;
-    m_date       = QDate::currentDate();
+    m_albumRootId = albumRoot;
+    m_parentPath   = parentPath + "/";
+    m_date        = QDate::currentDate();
 }
 
 PAlbum::~PAlbum()
@@ -289,7 +293,12 @@ void PAlbum::setDate(const QDate& date)
 
 QString PAlbum::albumRootPath() const
 {
-    return m_albumRoot;
+    return CollectionManager::instance()->albumRootPath(m_albumRootId);
+}
+
+int PAlbum::albumRootId() const
+{
+    return m_albumRootId;
 }
 
 QString PAlbum::caption() const
@@ -314,19 +323,7 @@ QString PAlbum::url() const
 
 QString PAlbum::albumPath() const
 {
-    QString u;
-    if (isRoot())
-    {
-        return "/";
-    }
-    else if (parent())
-    {
-        u = ((PAlbum*)parent())->albumPath();
-        if (!u.endsWith("/"))
-            u += '/';
-    }
-    u += title();
-    return u;
+    return m_parentPath + title();
 }
 
 DatabaseUrl PAlbum::kurl() const
@@ -336,7 +333,7 @@ DatabaseUrl PAlbum::kurl() const
 
 DatabaseUrl PAlbum::databaseUrl() const
 {
-    return DatabaseUrl::fromAlbumAndName(QString(), albumPath(), m_albumRoot);
+    return DatabaseUrl::fromAlbumAndName(QString(), albumPath(), albumRootPath());
 }
 
 QString PAlbum::prettyUrl() const
