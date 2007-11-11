@@ -329,7 +329,8 @@ bool SchemaUpdater::createTablesV5()
                             "  status INTEGER NOT NULL,\n"
                             "  type INTEGER NOT NULL,\n"
                             "  identifier TEXT,\n"
-                            "  specificPath TEXT);") ))
+                            "  specificPath TEXT,\n"
+                            "  UNIQUE(identifier, specificPath));") ))
     {
         return false;
     }
@@ -343,7 +344,7 @@ bool SchemaUpdater::createTablesV5()
                             "  date DATE,\n"
                             "  caption TEXT,\n"
                             "  collection TEXT,\n"
-                            "  icon INTEGER,"
+                            "  icon INTEGER,\n"
                             "  UNIQUE(albumRoot, relativePath));") ))
     {
         return false;
@@ -366,7 +367,7 @@ bool SchemaUpdater::createTablesV5()
 
     if (!m_access->backend()->execSql(
                     QString("CREATE TABLE ImageHaarMatrix\n"
-                            " (imageid INTEGER UNIQUE PRIMARY KEY,\n"
+                            " (imageid INTEGER PRIMARY KEY,\n"
                             "  modificationDate DATETIME,\n"
                             "  uniqueHash TEXT,\n"
                             "  matrix BLOB);") ))
@@ -376,7 +377,7 @@ bool SchemaUpdater::createTablesV5()
 
     if (!m_access->backend()->execSql(
                     QString("CREATE TABLE ImageInformation\n"
-                            " (imageid INTEGER UNIQUE PRIMARY KEY,\n"
+                            " (imageid INTEGER PRIMARY KEY,\n"
                             "  rating INTEGER,\n"
                             "  creationDate DATETIME,\n"
                             "  digitizationDate DATETIME,\n"
@@ -392,7 +393,7 @@ bool SchemaUpdater::createTablesV5()
 
     if (!m_access->backend()->execSql(
                     QString("CREATE TABLE ImageMetadata\n"
-                            " (imageid INTEGER UNIQUE PRIMARY KEY,\n"
+                            " (imageid INTEGER PRIMARY KEY,\n"
                             "  make TEXT,\n"
                             "  model TEXT,\n"
                             "  aperture REAL,\n"
@@ -414,7 +415,7 @@ bool SchemaUpdater::createTablesV5()
 
     if (!m_access->backend()->execSql(
                     QString("CREATE TABLE ImagePositions\n"
-                            " (imageid INTEGER UNIQUE PRIMARY KEY,\n"
+                            " (imageid INTEGER PRIMARY KEY,\n"
                             "  latitude TEXT,\n"
                             "  latitudeNumber REAL,\n"
                             "  longitude TEXT,\n"
@@ -538,21 +539,22 @@ bool SchemaUpdater::createIndicesV5()
 
 bool SchemaUpdater::createTriggersV5()
 {
-    // Triggers for deletion of images
+    // Triggers for deletion
 
-    // trigger: delete from Images/ImageTags/ImageProperties
+    // if AlbumRoot has been deleted
+    m_access->backend()->execSql("CREATE TRIGGER delete_albumroot DELETE ON AlbumRoots\n"
+            "BEGIN\n"
+            " DELETE FROM Albums\n"
+            "   WHERE Albums.albumRoot = OLD.id;\n"
+            "END;");
+
     // if Album has been deleted
     m_access->backend()->execSql("CREATE TRIGGER delete_album DELETE ON Albums\n"
             "BEGIN\n"
-            " DELETE FROM ImageTags\n"
-            "   WHERE imageid IN (SELECT id FROM Images WHERE album=OLD.id);\n"
-            " DELETE From ImageProperties\n"
-            "   WHERE imageid IN (SELECT id FROM Images WHERE album=OLD.id);\n"
             " DELETE FROM Images\n"
-            "   WHERE dirid = OLD.id;\n"
+            "   WHERE Images.album = OLD.id;\n"
             "END;");
 
-    // trigger: delete from ImageTags/ImageProperties
     // if Image has been deleted
     m_access->backend()->execSql(
             "CREATE TRIGGER delete_image DELETE ON Images\n"
