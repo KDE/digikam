@@ -1382,7 +1382,7 @@ void DImg::rotate(ANGLE angle)
         uint w  = width();
         uint h  = height();
 
-        uint middle_line = -1;
+        int middle_line = -1;
         if (h % 2)
            middle_line = h / 2;
 
@@ -1407,7 +1407,7 @@ void DImg::rotate(ANGLE angle)
 
                     line1++;
                     line2--;
-                    if (y == middle_line && x * 2 >= w)
+                    if ((int)y == middle_line && x * 2 >= w)
                         break;
                 }
             }
@@ -1434,8 +1434,8 @@ void DImg::rotate(ANGLE angle)
 
                     line1++;
                     line2--;
-                    if (y == middle_line && x * 2 >= w)
-			break;
+                    if ((int)y == middle_line && x * 2 >= w)
+                        break;
                 }
             }
         }
