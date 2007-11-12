@@ -30,6 +30,7 @@
 
 #include <QList>
 #include <QString>
+#include <QPixmap>
 #include <QMap>
 
 // KDE includes.
@@ -47,6 +48,7 @@
 
 // Local includes
 
+#include "loadingdescription.h"
 #include "imageinfo.h"
 
 class QDateTime;
@@ -158,24 +160,29 @@ public:
     DigikamKipiInterface( QObject *parent, const char *name=0);
     ~DigikamKipiInterface();
 
-    virtual KIPI::ImageCollection currentAlbum();
-    virtual KIPI::ImageCollection currentSelection();
-    virtual QList<KIPI::ImageCollection> allAlbums();
-    virtual KIPI::ImageInfo info( const KUrl& );
-    virtual bool addImage( const KUrl&, QString& errmsg );
-    virtual void delImage( const KUrl& );
-    virtual void refreshImages( const KUrl::List& urls );
-    virtual int features() const;
-    virtual QString fileExtensions();
+    KIPI::ImageCollection currentAlbum();
+    KIPI::ImageCollection currentSelection();
+    QList<KIPI::ImageCollection> allAlbums();
+    KIPI::ImageInfo info( const KUrl& );
+    bool addImage( const KUrl&, QString& errmsg );
+    void delImage( const KUrl& );
+    void refreshImages( const KUrl::List& urls );
+    int features() const;
+    QString fileExtensions();
+    void thumbnail( const KUrl& url, int size );
 
 public slots:
 
     void slotSelectionChanged( bool b );
     void slotCurrentAlbumChanged( Album *palbum );
 
+private slots:
+
+    void slotThumbnailLoaded(const LoadingDescription&, const QPixmap&);
+
 private:
 
-    AlbumManager *albumManager_;
+    AlbumManager *m_albumManager;
 };
 
 }  // namespace Digikam

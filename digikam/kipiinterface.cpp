@@ -65,6 +65,7 @@ extern "C"
 #include "imageattributeswatch.h"
 #include "imagelister.h"
 #include "namefilter.h"
+#include "thumbnailloadthread.h"
 #include "kipiinterface.h"
 #include "kipiinterface.moc"
 
@@ -483,13 +484,16 @@ bool DigikamImageCollection::operator==(ImageCollectionShared& imgCollection)
 DigikamKipiInterface::DigikamKipiInterface( QObject *parent, const char *name)
                     : KIPI::Interface( parent, name )
 {
-    albumManager_ = AlbumManager::instance();
+    m_albumManager = AlbumManager::instance();
 
-    connect( albumManager_, SIGNAL( signalAlbumItemsSelected( bool ) ),
+    connect( m_albumManager, SIGNAL( signalAlbumItemsSelected( bool ) ),
              this, SLOT( slotSelectionChanged( bool ) ) );
 
-    connect( albumManager_, SIGNAL( signalAlbumCurrentChanged(Album*) ),
+    connect( m_albumManager, SIGNAL( signalAlbumCurrentChanged(Album*) ),
              this, SLOT( slotCurrentAlbumChanged(Album*) ) );
+
+    connect(ThumbnailLoadThread::defaultThread(), SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
+            this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
 }
 
 DigikamKipiInterface::~DigikamKipiInterface()
@@ -498,7 +502,7 @@ DigikamKipiInterface::~DigikamKipiInterface()
 
 KIPI::ImageCollection DigikamKipiInterface::currentAlbum()
 {
-    Album* currAlbum = albumManager_->currentAlbum();
+    Album* currAlbum = m_albumManager->currentAlbum();
     if ( currAlbum )
     {
         return KIPI::ImageCollection(
@@ -513,7 +517,7 @@ KIPI::ImageCollection DigikamKipiInterface::currentAlbum()
 
 KIPI::ImageCollection DigikamKipiInterface::currentSelection()
 {
-    Album* currAlbum = albumManager_->currentAlbum();
+    Album* currAlbum = m_albumManager->currentAlbum();
     if ( currAlbum )
     {
         return KIPI::ImageCollection(
@@ -532,7 +536,7 @@ QList<KIPI::ImageCollection> DigikamKipiInterface::allAlbums()
 
     QString fileFilter(fileExtensions());
 
-    AlbumList palbumList = albumManager_->allPAlbums();
+    AlbumList palbumList = m_albumManager->allPAlbums();
     for ( AlbumList::Iterator it = palbumList.begin();
           it != palbumList.end(); ++it )
     {
@@ -545,7 +549,7 @@ QList<KIPI::ImageCollection> DigikamKipiInterface::allAlbums()
         result.append( KIPI::ImageCollection( col ) );
     }
 
-    AlbumList talbumList = albumManager_->allTAlbums();
+    AlbumList talbumList = m_albumManager->allTAlbums();
     for ( AlbumList::Iterator it = talbumList.begin();
           it != talbumList.end(); ++it )
     {
@@ -575,7 +579,7 @@ void DigikamKipiInterface::refreshImages( const KUrl::List& urls )
         ImageAttributesWatch::instance()->fileMetadataChanged(*it);
     
     // Refresh preview.
-    albumManager_->refreshItemHandler(urls);
+    m_albumManager->refreshItemHandler(urls);
 }
 
 int DigikamKipiInterface::features() const
@@ -599,7 +603,7 @@ bool DigikamKipiInterface::addImage( const KUrl& url, QString& errmsg )
         return false;
     }
 
-    PAlbum *targetAlbum = albumManager_->findPAlbum(url.directory());
+    PAlbum *targetAlbum = m_albumManager->findPAlbum(url.directory());
 
     if ( !targetAlbum )
     {
@@ -607,7 +611,7 @@ bool DigikamKipiInterface::addImage( const KUrl& url, QString& errmsg )
         return false;
     }
 
-    albumManager_->refreshItemHandler( url );
+    m_albumManager->refreshItemHandler( url );
 
     return true;
 }
@@ -622,7 +626,7 @@ void DigikamKipiInterface::delImage( const KUrl& url )
 
     // Is there a PAlbum for this url
 
-    PAlbum *palbum = albumManager_->findPAlbum( KUrl(url.directory()) );
+    PAlbum *palbum = m_albumManager->findPAlbum( KUrl(url.directory()) );
 
     if ( palbum )
     {
@@ -655,6 +659,16 @@ QString DigikamKipiInterface::fileExtensions()
             s->getMovieFileFilter() + ' ' +
             s->getAudioFileFilter() + ' ' +
             s->getRawFileFilter());
+}
+
+void DigikamKipiInterface::thumbnail( const KUrl& url, int /*size*/ )
+{
+    ThumbnailLoadThread::defaultThread()->find(url.path());
+}
+
+void DigikamKipiInterface::slotThumbnailLoaded(const LoadingDescription& desc, const QPixmap& pix)
+{
+        emit gotThumbnail( KUrl(desc.filePath), pix );
 }
 
 }  // namespace Digikam
