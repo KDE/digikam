@@ -148,16 +148,16 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     TIFFGetFieldDefaulted(tif, TIFFTAG_BITSPERSAMPLE, &bits_per_sample);
     TIFFGetFieldDefaulted(tif, TIFFTAG_SAMPLESPERPIXEL, &samples_per_pixel);
 
-    if (TIFFGetFieldDefaulted(tif, TIFFTAG_ROWSPERSTRIP, &rows_per_strip) == 0 || rows_per_strip == 0)
+    if (TIFFGetFieldDefaulted(tif, TIFFTAG_ROWSPERSTRIP, &rows_per_strip) == 0 || 
+        rows_per_strip == 0 || rows_per_strip == (unsigned int)-1)
     {
         DWarning()  << "TIFF loader: Cannot handle non-stripped images. Loading file " << filePath << endl;
         TIFFClose(tif);
         return false;
     }
 
-    if (bits_per_sample == 0 ||
-        samples_per_pixel == 0 ||
-        rows_per_strip == 0)
+    if (bits_per_sample == 0 || samples_per_pixel == 0 ||
+        rows_per_strip == 0  || rows_per_strip > h)
     {
         DWarning() << "TIFF loader: Encountered invalid value 0 in image."
                     << " bits_per_sample " << bits_per_sample
@@ -167,7 +167,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         TIFFClose(tif);
         return false;
     }
-    
+
     // TODO: check others TIFF color-spaces here. Actually, only RGB and MINISBLACK 
     // have been tested.
     // Complete description of TIFFTAG_PHOTOMETRIC tag can be found at this url: 
@@ -182,7 +182,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         TIFFClose(tif);
         return false;
     }
-    
+
     if (samples_per_pixel == 4)
         m_hasAlpha = true;
     else
