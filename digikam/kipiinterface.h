@@ -170,6 +170,7 @@ public:
     int features() const;
     QString fileExtensions();
     void thumbnail( const KUrl& url, int size );
+    void thumbnails( const KUrl::List& list, int size );
 
 public slots:
 

@@ -666,9 +666,15 @@ void DigikamKipiInterface::thumbnail( const KUrl& url, int /*size*/ )
     ThumbnailLoadThread::defaultThread()->find(url.path());
 }
 
+void DigikamKipiInterface::thumbnails( const KUrl::List& list, int /*size*/ )
+{
+    for (KUrl::List::const_iterator it = list.begin() ; it != list.end() ; ++it)
+        ThumbnailLoadThread::defaultThread()->find((*it).path());
+}
+
 void DigikamKipiInterface::slotThumbnailLoaded(const LoadingDescription& desc, const QPixmap& pix)
 {
-        emit gotThumbnail( KUrl(desc.filePath), pix );
+    emit gotThumbnail( KUrl(desc.filePath), pix );
 }
 
 }  // namespace Digikam
