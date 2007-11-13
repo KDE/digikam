@@ -530,34 +530,21 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------------
 
-    d->newAction = new KAction(KIcon("albumfolder-new"), i18n("&New Album..."), this);
+    d->newAction = new KAction(KIcon("albumfolder-new"), i18n("&New..."), this);
     d->newAction->setShortcut(KStandardShortcut::New);
-    d->newAction->setWhatsThis(i18n("Creates a new empty Album in the database."));
+    d->newAction->setWhatsThis(i18n("Creates a new empty Album in the collection."));
     connect(d->newAction, SIGNAL(triggered()), d->view, SLOT(slotNewAlbum()));
     actionCollection()->addAction("album_new", d->newAction);
 
     // -----------------------------------------------------------------
 
-    d->albumSortAction = new KSelectAction(i18n("&Sort Albums"), this);
-    connect(d->albumSortAction, SIGNAL(triggered(int)), d->view, SLOT(slotSortAlbums(int)));
-    actionCollection()->addAction("album_sort", d->albumSortAction);
-
-    // Use same list order as in albumsettings enum
-    QStringList sortActionList;
-    sortActionList.append(i18n("By Folder"));
-    sortActionList.append(i18n("By Collection"));
-    sortActionList.append(i18n("By Date"));
-    d->albumSortAction->setItems(sortActionList);
-
-    // -----------------------------------------------------------------
-
-    d->deleteAction = new KAction(KIcon("user-trash"), i18n("Delete Album"), this);
+    d->deleteAction = new KAction(KIcon("user-trash"), i18n("Delete"), this);
     connect(d->deleteAction, SIGNAL(triggered()), d->view, SLOT(slotDeleteAlbum()));
     actionCollection()->addAction("album_delete", d->deleteAction);
 
     // -----------------------------------------------------------------
 
-    d->propsEditAction = new KAction(KIcon("albumfolder-properties"), i18n("Edit Album Properties..."), this);
+    d->propsEditAction = new KAction(KIcon("albumfolder-properties"), i18n("Properties..."), this);
     d->propsEditAction->setWhatsThis(i18n("Edit Album Properties and Collection information."));
     connect(d->propsEditAction, SIGNAL(triggered()), d->view, SLOT(slotAlbumPropsEdit()));
     actionCollection()->addAction("album_propsEdit", d->propsEditAction);
@@ -588,19 +575,19 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->newTagAction = new KAction(KIcon("tag-new"), i18n("New &Tag..."), this);
+    d->newTagAction = new KAction(KIcon("tag-new"), i18n("N&ew..."), this);
     connect(d->newTagAction, SIGNAL(triggered()), d->view, SLOT(slotNewTag()));
     actionCollection()->addAction("tag_new", d->newTagAction);
 
     // -----------------------------------------------------------
 
-    d->editTagAction = new KAction(KIcon("tag-properties"), i18n("Edit Tag Properties..."), this);
+    d->editTagAction = new KAction(KIcon("tag-properties"), i18n("Properties..."), this);
     connect(d->editTagAction, SIGNAL(triggered()), d->view, SLOT(slotEditTag()));
     actionCollection()->addAction("tag_edit", d->editTagAction);
 
     // -----------------------------------------------------------
 
-    d->deleteTagAction = new KAction(KIcon("tag-delete"), i18n("Delete Tag"), this);
+    d->deleteTagAction = new KAction(KIcon("tag-delete"), i18n("Delete"), this);
     connect(d->deleteTagAction, SIGNAL(triggered()), d->view, SLOT(slotDeleteTag()));
     actionCollection()->addAction("tag_delete", d->deleteTagAction);
 
@@ -677,11 +664,26 @@ void DigikamApp::setupActions()
             d->view, SLOT(slotImageTrashDirectly()));
     actionCollection()->addAction("image_trash_directly", d->imageTrashDirectlyAction);
 
+    // -----------------------------------------------------------------
+
+    d->albumSortAction = new KSelectAction(i18n("&Sort Albums"), this);
+    d->albumSortAction->setWhatsThis(i18n("Sort Albums in tree-view."));
+    connect(d->albumSortAction, SIGNAL(triggered(int)), d->view, SLOT(slotSortAlbums(int)));
+    actionCollection()->addAction("album_sort", d->albumSortAction);
+
+    // Use same list order as in albumsettings enum
+    QStringList sortActionList;
+    sortActionList.append(i18n("By Folder"));
+    sortActionList.append(i18n("By Collection"));
+    sortActionList.append(i18n("By Date"));
+    d->albumSortAction->setItems(sortActionList);
+
     // -----------------------------------------------------------
 
     d->imageSortAction = new KSelectAction(i18n("&Sort Images"), this);
+    d->imageSortAction->setWhatsThis(i18n("Sort Albums contents."));
     connect(d->imageSortAction, SIGNAL(triggered(int)), d->view, SLOT(slotSortImages(int)));
-    actionCollection()->addAction("album_sort", d->imageSortAction);
+    actionCollection()->addAction("image_sort", d->imageSortAction);
 
     // Use same list order as in albumsettings enum
     QStringList sortImagesActionList;
