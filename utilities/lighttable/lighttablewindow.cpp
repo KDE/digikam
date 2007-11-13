@@ -354,15 +354,17 @@ void LightTableWindow::setupActions()
     connect(d->lastAction, SIGNAL(triggered()), this, SLOT(slotLast()));
     actionCollection()->addAction("lighttable_last", d->lastAction);
 
-    d->setItemLeftAction = new KAction(KIcon("arrow-left"), i18n("Show item on left panel"), this);
+    d->setItemLeftAction = new KAction(KIcon("arrow-left"), i18n("On left"), this);
     d->setItemLeftAction->setShortcut(Qt::CTRL+Qt::Key_L);
     d->setItemLeftAction->setEnabled(false);
+    d->setItemLeftAction->setWhatsThis(i18n("Show item on left panel"));
     connect(d->setItemLeftAction, SIGNAL(triggered()), this, SLOT(slotSetItemLeft()));
     actionCollection()->addAction("lighttable_setitemleft", d->setItemLeftAction);
 
-    d->setItemRightAction = new KAction(KIcon("arrow-right"), i18n("Show item on right panel"), this);
+    d->setItemRightAction = new KAction(KIcon("arrow-right"), i18n("On right"), this);
     d->setItemRightAction->setShortcut(Qt::CTRL+Qt::Key_R);
     d->setItemRightAction->setEnabled(false);
+    d->setItemRightAction->setWhatsThis(i18n("Show item on right panel"));
     connect(d->setItemRightAction, SIGNAL(triggered()), this, SLOT(slotSetItemRight()));
     actionCollection()->addAction("lighttable_setitemright", d->setItemRightAction);
 
@@ -395,15 +397,17 @@ void LightTableWindow::setupActions()
 
     // -- Standard 'View' menu actions ---------------------------------------------
 
-    d->syncPreviewAction = new KToggleAction(KIcon("view-left-right"), i18n("Synchronize Preview"), this);
+    d->syncPreviewAction = new KToggleAction(KIcon("view-left-right"), i18n("Synchronize"), this);
     d->syncPreviewAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_Y);
     d->syncPreviewAction->setEnabled(false);
+    d->syncPreviewAction->setWhatsThis(i18n("Synchronize preview from left and right panels"));
     connect(d->syncPreviewAction, SIGNAL(triggered()), this, SLOT(slotToggleSyncPreview()));
     actionCollection()->addAction("lighttable_syncpreview", d->syncPreviewAction);
 
-    d->navigateByPairAction = new KToggleAction(KIcon("system-run"), i18n("Navigate by Pair"), this);
+    d->navigateByPairAction = new KToggleAction(KIcon("system-run"), i18n("By Pair"), this);
     d->navigateByPairAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_P);
     d->navigateByPairAction->setEnabled(false);
+    d->navigateByPairAction->setWhatsThis(i18n("Navigate by pair with all items"));
     connect(d->navigateByPairAction, SIGNAL(triggered()), this, SLOT(slotToggleNavigateByPair()));
     actionCollection()->addAction("lighttable_navigatebypair", d->navigateByPairAction);
 
