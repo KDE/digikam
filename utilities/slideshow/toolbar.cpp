@@ -27,7 +27,6 @@
 #include <QToolButton>
 #include <QPixmap>
 #include <QHBoxLayout>
-#include <QKeyEvent>
 
 // KDE includes.
 
