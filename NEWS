@@ -10,7 +10,8 @@ LightTable     : Several usability improvements.
 digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 047 ==> 150296 : Images in LightTable are not compared in right order
-048 ==> 
+048 ==> 151956 : Red eye enhance feature no longer works.
+049 ==> 
 
 **********************************************************************************************
 
