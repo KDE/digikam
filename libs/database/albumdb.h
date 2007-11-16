@@ -177,8 +177,6 @@ public:
 
     /**
      * Add a new album to the database with the given attributes
-     * @param albumRoot     path of the album root of the new album
-     *   - or -
      * @param albumRootId   id of the album root of the new album
      * @param relativePath  url of the album
      * @param caption       the album caption
@@ -186,18 +184,18 @@ public:
      * @param collection    the album collection
      * @return the id of the album added or -1 if it failed
      */
-    int addAlbum(const QString& albumRoot, const QString& relativePath,
-                 const QString& caption,
-                 const QDate& date, const QString& collection);
-
     int addAlbum(int albumRootId, const QString& relativePath,
                  const QString& caption,
                  const QDate& date, const QString& collection);
 
+    /*
+    int addAlbum(const QString& albumRoot, const QString& relativePath,
+                 const QString& caption,
+                 const QDate& date, const QString& collection);
+    */
+
     /**
      * Find out the album for a given folder.
-     * @param albumRoot    path of the album root of the new album
-     *   - or -
      * @param albumRootId  id of the album root of the new album
      * @param relativePath The folder for which you want the albumID relative to the album root
      * @param create       If true, an album is newly created if it does not yet exist.
@@ -205,16 +203,16 @@ public:
      * @return The albumID for that folder,
                or -1 if it does not exist and create is false.
      */
-    int  getAlbumForPath(const QString &albumRoot, const QString& relativePath, bool create = true);
-
     int  getAlbumForPath(int albumRootId, const QString& relativePath, bool create = true);
 
-    /**
+    //int  getAlbumForPath(const QString &albumRoot, const QString& relativePath, bool create = true);
+
+    /* *
      * List the urls of all subalbums of the album specified by albumRoot and path.
      * @param onlyDirectSubalbums if this is true, only first-level subalbums are returned,
      *                            if false, all levels of children are returned (include subalbums of subalbums).
      */
-    QStringList getSubalbumsForPath(const QString &albumRoot, const QString& path, bool onlyDirectSubalbums = true);
+    //QStringList getSubalbumsForPath(const QString &albumRoot, const QString& path, bool onlyDirectSubalbums = true);
 
     /**
      * Deletes an album from the database. This will not delete the
@@ -268,10 +266,13 @@ public:
     void setAlbumIcon(int albumID, qlonglong iconID);
 
     /**
-     * Get the fullpath for the album icon file
+     * Get the image that is set as album icon
      * @param albumID the id of the album
+     * @param iconAlbumRootId Returns the album root id of the image
+     * @param iconAlbumRelativePath Returns the path below the album root of the image
+     * @returns true if there is an icon set.
      */
-    QString getAlbumIcon(int albumID);
+    bool getAlbumIcon(int albumID, int *iconAlbumRootId, QString *iconAlbumRelativePath);
 
     /**
      * Given an albumid, this returns the album root id for that album
@@ -372,11 +373,15 @@ public:
 
     /**
      * Get the icon for the tag.
+     * This can be either an image of the collection, or a system icon name.
+     * So either iconAlbumRelativePath or icon will be null.
      * @param tagID the id of the tag
-     * @return the path for the icon file. this could be either a simple filename
-     * which can be loaded by kiconloader or an absolute filepath to the file
+     * @param iconAlbumRootId Returns the album root id of the image
+     * @param iconAlbumRelativePath Returns the path below the album root of the image
+     * @param icon an icon name that can be loaded by the system iconloader
+     * @returns true if there is an icon set.
      */
-    QString getTagIcon(int tagID);
+    bool getTagIcon(int tagID, int *iconAlbumRootId, QString *iconAlbumRelativePath, QString *icon);
 
     /**
      * Set the parent tagid for the tag. This is equivalent to reparenting
@@ -495,6 +500,7 @@ public:
 
     /**
      * Given a albumID, get a list of the url of all items in the album
+     * NOTE: Uses the CollectionManager
      * @param  albumID the id of the album
      * @return a list of urls for the items in the album. The urls are the
      * absolute path of the items
@@ -510,6 +516,7 @@ public:
 
     /**
      * Given a tagid, get a list of the url of all items in the tag
+     * NOTE: Uses the CollectionManager
      * @param  tagID the id of the tag
      * @return a list of urls for the items in the tag. The urls are the
      * absolute path of the items

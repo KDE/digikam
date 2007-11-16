@@ -197,7 +197,6 @@ AlbumInfo::List AlbumDB::scanAlbums()
                     "  LEFT OUTER JOIN Albums AS B ON B.id=I.album;", &values);
 
     QString iconAlbumUrl, iconName;
-    int iconAlbumRootId;
 
     for (QList<QVariant>::iterator it = values.begin(); it != values.end();)
     {
@@ -215,7 +214,7 @@ AlbumInfo::List AlbumDB::scanAlbums()
         ++it;
         info.collection = (*it).toString();
         ++it;
-        iconAlbumRootId = (*it).toInt();
+        info.iconAlbumRootId = (*it).toInt(); // will be 0 if null
         ++it;
         iconAlbumUrl = (*it).toString();
         ++it;
@@ -223,11 +222,7 @@ AlbumInfo::List AlbumDB::scanAlbums()
         ++it;
 
         if (!iconName.isEmpty())
-        {
-            QString albumRootPath = CollectionManager::instance()->albumRootPath(iconAlbumRootId);
-            if (!albumRootPath.isNull())
-                info.icon = albumRootPath + iconAlbumUrl + '/' + iconName;
-        }
+            info.iconRelativePath = iconAlbumUrl + '/' + iconName;
 
         aList.append(info);
     }
@@ -264,15 +259,17 @@ TagInfo::List AlbumDB::scanTags()
         ++it;
         iconKDE     = (*it).toString();
         ++it;
-        iconAlbumRootId = (*it).toInt();
+        iconAlbumRootId = (*it).toInt(); // will be 0 if null
         ++it;
 
-        info.icon = iconKDE;
-        if (!albumURL.isEmpty())
+        if (albumURL.isEmpty())
         {
-            QString albumRootPath = CollectionManager::instance()->albumRootPath(iconAlbumRootId);
-            if (!albumRootPath.isNull())
-                info.icon = albumRootPath + albumURL + '/' + iconName;
+            info.icon = iconKDE;
+        }
+        else
+        {
+            info.iconAlbumRootId  = iconAlbumRootId;
+            info.iconRelativePath = albumURL + '/' + iconName;
         }
 
         tList.append(info);
@@ -330,6 +327,7 @@ QList<AlbumShortInfo> AlbumDB::getAlbumShortInfos()
     return albumList;
 }
 
+/*
 QStringList AlbumDB::getSubalbumsForPath(const QString &albumRoot,
                                          const QString& path,
                                          bool onlyDirectSubalbums)
@@ -367,7 +365,9 @@ QStringList AlbumDB::getSubalbumsForPath(const QString &albumRoot,
         subalbums << albumRootPath + it->toString();
     return subalbums;
 }
+*/
 
+/*
 int AlbumDB::addAlbum(const QString &albumRoot, const QString& relativePath,
                       const QString& caption,
                       const QDate& date, const QString& collection)
@@ -378,6 +378,7 @@ int AlbumDB::addAlbum(const QString &albumRoot, const QString& relativePath,
 
     return addAlbum(location.id(), relativePath, caption, date, collection);
 }
+*/
 
 int AlbumDB::addAlbum(int albumRootId, const QString& relativePath,
                       const QString& caption,
@@ -420,7 +421,7 @@ void AlbumDB::setAlbumIcon(int albumID, qlonglong iconID)
                     albumID );
 }
 
-QString AlbumDB::getAlbumIcon(int albumID)
+bool AlbumDB::getAlbumIcon(int albumID, int *albumRootId, QString *iconRelativePath)
 {
     QList<QVariant> values;
     d->db->execSql( QString("SELECT B.relativePath, I.name, B.albumRoot \n "
@@ -430,24 +431,18 @@ QString AlbumDB::getAlbumIcon(int albumID)
                             "WHERE A.id=?;"),
                     albumID, &values );
     if (values.isEmpty())
-        return QString();
+        return false;
 
     QList<QVariant>::iterator it = values.begin();
     QString album     = (*it).toString();
     ++it;
     QString iconName  = (*it).toString();
     ++it;
-    int albumRootId = (*it).toInt();
+    *albumRootId = (*it).toInt();
 
-    if (!iconName.isEmpty())
-    {
-        QString albumRootPath = CollectionManager::instance()->albumRootPath(albumRootId);
-        if (!albumRootPath.isNull())
-        {
-            return albumRootPath + album + '/' + iconName;
-        }
-    }
-    return QString();
+    *iconRelativePath = album + '/' + iconName;
+
+    return !iconName.isEmpty();
 }
 
 void AlbumDB::deleteAlbum(int albumID)
@@ -505,7 +500,7 @@ void AlbumDB::setTagIcon(int tagID, const QString& iconKDE, qlonglong iconID)
     }
 }
 
-QString AlbumDB::getTagIcon(int tagID)
+bool AlbumDB::getTagIcon(int tagID, int *iconAlbumRootId, QString *iconAlbumRelativePath, QString *icon)
 {
     QList<QVariant> values;
     d->db->execSql( QString("SELECT A.relativePath, I.name, T.iconkde, A.albumRoot \n "
@@ -516,9 +511,9 @@ QString AlbumDB::getTagIcon(int tagID)
                     tagID, &values );
 
     if (values.isEmpty())
-        return QString();
+        return false;
 
-    QString iconName, iconKDE, albumURL, icon, basePath;
+    QString iconName, iconKDE, albumURL;
 
     QList<QVariant>::iterator it = values.begin();
 
@@ -529,19 +524,21 @@ QString AlbumDB::getTagIcon(int tagID)
     iconKDE     = (*it).toString();
     ++it;
 
-    int albumRootId = (*it).toInt();
+    *iconAlbumRootId = (*it).toInt();
     ++it;
 
-    icon = iconKDE;
-
-    if (!albumURL.isEmpty())
+    if (albumURL.isEmpty())
     {
-        QString albumRootPath = CollectionManager::instance()->albumRootPath(albumRootId);
-        if (!albumRootPath.isNull())
-            icon = albumRootPath + albumURL + '/' + iconName;
+        *iconAlbumRelativePath = QString();
+        *icon = iconKDE;
+        return !iconKDE.isEmpty();
     }
-
-    return icon;
+    else
+    {
+        *iconAlbumRelativePath = albumURL + '/' + iconName;
+        *icon = QString();
+        return true;
+    }
 }
 
 void AlbumDB::setTagParentID(int tagID, int newParentTagID)
@@ -1578,6 +1575,7 @@ QList<QPair<QString, QDateTime> > AlbumDB::getItemsAndDate()
 }
 */
 
+/*
 int AlbumDB::getAlbumForPath(const QString &albumRoot, const QString& folder, bool create)
 {
     CollectionLocation location = CollectionManager::instance()->locationForAlbumRootPath(albumRoot);
@@ -1587,6 +1585,7 @@ int AlbumDB::getAlbumForPath(const QString &albumRoot, const QString& folder, bo
     return getAlbumForPath(location.id(), folder, create);
 
 }
+*/
 
 int AlbumDB::getAlbumForPath(int albumRootId, const QString& folder, bool create)
 {
