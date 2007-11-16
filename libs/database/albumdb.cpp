@@ -1344,25 +1344,25 @@ void AlbumDB::addBoundValuePlaceholders(QString &query, int count)
     query += questionMarks;
 }
 
-int AlbumDB::findInDownloadHistory(const QString &path, const QString &name, int fileSize, const QDateTime &date)
+int AlbumDB::findInDownloadHistory(const QString &identifier, const QString &name, int fileSize, const QDateTime &date)
 {
     QList<QVariant> values;
     d->db->execSql( QString("SELECT id FROM DownloadHistory WHERE "
-                            "filepath=? AND filename=? AND filesize=? AND filedate=?;"),
-                    path, name, fileSize, date.toString(Qt::ISODate), &values);
+                            "identifier=? AND filename=? AND filesize=? AND filedate=?;"),
+                    identifier, name, fileSize, date.toString(Qt::ISODate), &values);
 
     if (values.isEmpty())
         return -1;
     return values.first().toInt();
 }
 
-int AlbumDB::addToDownloadHistory(const QString &path, const QString &name, int fileSize, const QDateTime &date)
+int AlbumDB::addToDownloadHistory(const QString &identifier, const QString &name, int fileSize, const QDateTime &date)
 {
     QVariant id;
     d->db->execSql( QString("REPLACE INTO DownloadHistory "
-                            "(filepath, filename, filesize, filedate) "
+                            "(identifier, filename, filesize, filedate) "
                             "VALUES (?,?,?,?);"),
-                    path, name, fileSize, date.toString(Qt::ISODate), 0, &id);
+                    identifier, name, fileSize, date.toString(Qt::ISODate), 0, &id);
 
     return id.toInt();
 }
