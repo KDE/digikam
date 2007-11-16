@@ -27,6 +27,8 @@
 
 // Local includes
 
+#include "collectionmanager.h"
+#include "collectionlocation.h"
 #include "databaseurl.h"
 
 namespace Digikam
@@ -34,6 +36,15 @@ namespace Digikam
 
 DatabaseUrl DatabaseUrl::fromFileUrl(const KUrl &fileUrl,
                                      const KUrl &albumRoot,
+                                     const DatabaseParameters &parameters)
+{
+    CollectionLocation location = CollectionManager::instance()->locationForAlbumRoot(albumRoot);
+    return fromFileUrl(fileUrl, albumRoot, location.id(), parameters);
+}
+
+DatabaseUrl DatabaseUrl::fromFileUrl(const KUrl &fileUrl,
+                                     const KUrl &albumRoot,
+                                     int   albumRootId,
                                      const DatabaseParameters &parameters)
 {
     DatabaseUrl url;
@@ -44,6 +55,7 @@ DatabaseUrl DatabaseUrl::fromFileUrl(const KUrl &fileUrl,
     QString pathUnderRoot = fileUrl.path().remove(albumRootPath);
     url.setPath(pathUnderRoot);
     url.addQueryItem("albumRoot", albumRootPath);
+    url.addQueryItem("albumRootId", QString::number(albumRootId));
     url.setParameters(parameters);
     return url;
 }
@@ -51,6 +63,16 @@ DatabaseUrl DatabaseUrl::fromFileUrl(const KUrl &fileUrl,
 DatabaseUrl DatabaseUrl::fromAlbumAndName(const QString &name,
                                           const QString &album,
                                           const KUrl &albumRoot,
+                                          const DatabaseParameters &parameters)
+{
+    CollectionLocation location = CollectionManager::instance()->locationForAlbumRoot(albumRoot);
+    return fromAlbumAndName(name, album, albumRoot, location.id(), parameters);
+}
+
+DatabaseUrl DatabaseUrl::fromAlbumAndName(const QString &name,
+                                          const QString &album,
+                                          const KUrl &albumRoot,
+                                          int   albumRootId,
                                           const DatabaseParameters &parameters)
 {
     DatabaseUrl url;
@@ -61,6 +83,7 @@ DatabaseUrl DatabaseUrl::fromAlbumAndName(const QString &name,
     url.addPath(name);
 
     url.addQueryItem("albumRoot", albumRoot.path(KUrl::RemoveTrailingSlash));
+    url.addQueryItem("albumRootId", QString::number(albumRootId));
     url.setParameters(parameters);
     return url;
 }
@@ -194,6 +217,11 @@ KUrl DatabaseUrl::albumRoot() const
 QString DatabaseUrl::albumRootPath() const
 {
     return queryItem("albumRoot");
+}
+
+int DatabaseUrl::albumRootId() const
+{
+    return queryItem("albumRootId").toInt();
 }
 
 QString DatabaseUrl::album() const

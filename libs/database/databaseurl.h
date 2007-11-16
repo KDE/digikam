@@ -65,6 +65,11 @@ public:
       */
     static DatabaseUrl fromFileUrl(const KUrl &fileUrl,
                                    const KUrl &albumRoot,
+                                   int   albumRootId,
+                                   const DatabaseParameters &parameters = DatabaseAccess::parameters());
+
+    static DatabaseUrl fromFileUrl(const KUrl &fileUrl,
+                                   const KUrl &albumRoot,
                                    const DatabaseParameters &parameters = DatabaseAccess::parameters());
 
     /**
@@ -72,6 +77,12 @@ public:
      * If name is empty, the album is referenced.
      * Other parameters as above.
      */
+    static DatabaseUrl fromAlbumAndName(const QString &name,
+                                        const QString &album,
+                                        const KUrl &albumRoot,
+                                        int   albumRootId,
+                                        const DatabaseParameters &parameters = DatabaseAccess::parameters());
+
     static DatabaseUrl fromAlbumAndName(const QString &name,
                                         const QString &album,
                                         const KUrl &albumRoot,
@@ -140,18 +151,25 @@ public:
      *  In the example above, this is "file://media/fotos"
      */
     KUrl albumRoot() const;
+
     /** Returns the album root path of the file or album referenced by this URL
      *  In the example above, this is "/media/fotos"
      */
     QString albumRootPath() const;
+
+    /** Returns the album root id */
+    int albumRootId() const;
+
     /** Returns the album: This is the directory hierarchy below the album root.
      *  In the example above, the album is "/Summer 2007"
      */
     QString album() const;
+
     /**
      * Returns the file name. In the example above, this is "001.jpg"
      */
     QString name() const;
+
     /**
      * Converts this digikamalbums:// URL to a file:// URL
      */

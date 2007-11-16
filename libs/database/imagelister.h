@@ -78,9 +78,9 @@ public:
       * @param getDimension retrieve dimension - slow!. If false, dimension will be QSize()
       */
     void listAlbum(ImageListerReceiver *receiver,
-                   const QString &albumRoot, const QString &album);
+                   int albumRootId, const QString &album);
     void listAlbum(ImageListerReceiver *receiver,
-                   const QString &albumRoot, int albumRootId, const QString &album, int albumid);
+                   int albumRootId, int albumid);
     /**
      * List the images which have assigned the tag specified by tagId
      */

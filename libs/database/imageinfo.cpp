@@ -344,7 +344,7 @@ DatabaseUrl ImageInfo::databaseUrl() const
     QString album = access.imageInfoCache()->albumName(access, m_data->albumId);
     QString albumRoot = CollectionManager::instance()->albumRootPath(m_data->albumRootId);
 
-    return DatabaseUrl::fromAlbumAndName(m_data->name, album, albumRoot);
+    return DatabaseUrl::fromAlbumAndName(m_data->name, album, albumRoot, m_data->albumRootId);
 }
 
 KUrl ImageInfo::fileUrl() const

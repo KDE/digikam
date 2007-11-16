@@ -55,9 +55,6 @@
 #include "albumdb.h"
 #include "databaseaccess.h"
 #include "databasebackend.h"
-#include "collectionmanager.h"
-#include "collectionlocation.h"
-#include "collectionlocation.h"
 #include "dmetadata.h"
 #include "imagelister.h"
 
@@ -153,9 +150,9 @@ void ImageLister::list(ImageListerReceiver *receiver, const DatabaseUrl &url)
 {
     if (url.isAlbumUrl())
     {
-        QString albumRoot = url.albumRootPath();
-        QString album     = url.album();
-        listAlbum(receiver, albumRoot, album);
+        int albumRootId = url.albumRootId();
+        QString album   = url.album();
+        listAlbum(receiver, albumRootId, album);
     }
     else if (url.isTagUrl())
     {
@@ -168,24 +165,18 @@ void ImageLister::list(ImageListerReceiver *receiver, const DatabaseUrl &url)
 }
 
 void ImageLister::listAlbum(ImageListerReceiver *receiver,
-                            const QString &albumRoot, const QString &album)
+                            int albumRootId, const QString &album)
 {
-    CollectionLocation location = CollectionManager::instance()->locationForAlbumRootPath(albumRoot);
-    if (location.isNull())
-        return;
-
-    int albumid = DatabaseAccess().db()->getAlbumForPath(albumRoot, album, false);
+    int albumid = DatabaseAccess().db()->getAlbumForPath(albumRootId, album, false);
     if (albumid == -1)
         return;
 
-    listAlbum(receiver, albumRoot, location.id(), album, albumid);
+    listAlbum(receiver, albumRootId, albumid);
 }
 
 void ImageLister::listAlbum(ImageListerReceiver *receiver,
-                            const QString &albumRoot, int albumRootID, const QString &album, int albumId)
+                            int albumRootID, int albumId)
 {
-    QString base      = albumRoot + album;
-
     QList<QVariant> values;
 
     {
