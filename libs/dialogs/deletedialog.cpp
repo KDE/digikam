@@ -199,7 +199,8 @@ DeleteDialog::DeleteDialog(QWidget *parent, const char *name)
     adjustSize();
 
     slotShouldDelete(shouldDelete());
-    connect(m_widget->ddShouldDelete, SIGNAL(toggled(bool)), SLOT(slotShouldDelete(bool)));
+    connect(m_widget->ddShouldDelete, SIGNAL(toggled(bool)),
+            this, SLOT(slotShouldDelete(bool)));
 
     actionButton(Ok)->setFocus();
 }
@@ -257,19 +258,26 @@ void DeleteDialog::presetDeleteMode(DeleteDialogMode::DeleteMode mode)
     switch (mode)
     {
         case DeleteDialogMode::NoChoiceTrash:
+        {
             // access the widget directly, signals will be fired to DeleteDialog and DeleteWidget
             m_widget->ddShouldDelete->setChecked(false);
             m_widget->ddCheckBoxStack->raiseWidget(m_widget->ddDoNotShowAgain);
             m_saveDoNotShowAgain = true;
             break;
+        }
         case DeleteDialogMode::NoChoiceDeletePermanently:
+        {
             m_widget->ddShouldDelete->setChecked(true);
             m_widget->ddCheckBoxStack->hide();
             break;
+        }
         case DeleteDialogMode::UserPreference:
+        {
             break;
+        }
         case DeleteDialogMode::UseTrash:
         case DeleteDialogMode::DeletePermanently:
+        {
             // toggles signals which do the rest
             m_widget->ddShouldDelete->setChecked(mode == DeleteDialogMode::DeletePermanently);
 
@@ -278,6 +286,7 @@ void DeleteDialog::presetDeleteMode(DeleteDialogMode::DeleteMode mode)
             // Only if the user once changes this value, it will be taken as user preference.
             m_saveShouldDeleteUserPreference = false;
             break;
+        }
     }
 }
 
@@ -298,5 +307,3 @@ void DeleteDialog::setListMode(DeleteDialogMode::ListMode mode)
 }
 
 } // namespace Digikam
-
-
