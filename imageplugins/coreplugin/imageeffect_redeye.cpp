@@ -138,9 +138,9 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
 
     KVBox *histoBox   = new KVBox(gboxSettings);
     m_histogramWidget = new Digikam::HistogramWidget(256, 140, histoBox, false, true, true);
-    m_histogramWidget->setWhatsThis( i18n("<p>Here you can see the target preview image histogram "
-                                          "of the selected image channel. It is "
-                                          "updated upon setting changes."));
+    m_histogramWidget->setWhatsThis(i18n("<p>Here you can see the target preview image histogram "
+                                         "of the selected image channel. It is "
+                                         "updated upon setting changes."));
     QLabel *space = new QLabel(histoBox);
     space->setFixedHeight(1);    
     m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, histoBox );
@@ -153,21 +153,24 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
     m_redThreshold->setRange(10, 90, 1);
     m_redThreshold->setSliderEnabled(true);
     m_redThreshold->setValue(20);
-    m_redThreshold->setWhatsThis( i18n("<p>Sets the red color pixels selection threshold. "
-                                       "Low values will select more red color pixels, high "
-                                       "values less."));
+    m_redThreshold->setWhatsThis(i18n("<p>Sets the red color pixels selection threshold. "
+                                      "Low values will select more red color pixels (agressive correction), high "
+                                      "values less (mild correction). Use low value if eye have been selected "
+                                      "exactly. Use high value if other parts of the face are also selected."));
 
     m_smoothLabel = new QLabel(i18n("Smooth:"), gboxSettings);
     m_smoothLevel = new KIntNumInput(gboxSettings);
     m_smoothLevel->setRange(0, 5, 1);
     m_smoothLevel->setSliderEnabled(true);
     m_smoothLevel->setValue(1);
-    m_smoothLevel->setWhatsThis( i18n("<p>Sets the smoothness value to blur red color "
-                                      "pixels selection."));
+    m_smoothLevel->setWhatsThis(i18n("<p>Sets the smoothness value to blur the border "
+                                     "of the changed pixels. "
+                                     "This leads to a more naturally looking pupil."));
 
     QLabel *label3 = new QLabel(i18n("Coloring Tint:"), gboxSettings);
     m_HSSelector   = new KHueSaturationSelector(gboxSettings);
     m_VSelector    = new KColorValueSelector(gboxSettings);
+    m_HSSelector->setWhatsThis(i18n("<p>Sets a custom color to re-colorize the eyes."));
     m_HSSelector->setMinimumSize(200, 142);
     m_VSelector->setMinimumSize(26, 142);
 
@@ -176,7 +179,8 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
     m_tintLevel->setRange(1, 200, 1);
     m_tintLevel->setSliderEnabled(true);
     m_tintLevel->setValue(128);
-    m_tintLevel->setWhatsThis( i18n("<p>Set here the tint level used to coloring red eye."));
+    m_tintLevel->setWhatsThis(i18n("<p>Set the tint level to adjust the luminosity of "
+                                   "the new color of the pupil."));
 
     // -------------------------------------------------------------
 
