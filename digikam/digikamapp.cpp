@@ -1918,7 +1918,8 @@ void DigikamApp::slotRawCameraList()
 {
     QStringList list = KDcrawIface::DcrawBinary::instance()->supportedCamera();
     QString     ver  = KDcrawIface::DcrawBinary::instance()->internalVersion();
-    KMessageBox::informationList(this, i18n("List of supported camera RAW files"),
+    KMessageBox::informationList(this, i18n("<p>List of supported camera RAW files"
+                                            "<p>%1 models in the list", list.count()),
                                  list, i18n("Using dcraw version %1", ver));
 }
 
