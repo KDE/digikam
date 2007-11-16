@@ -40,9 +40,10 @@
 #include <kio/job.h>
 #include <klocale.h>
 #include <kstdguiitem.h>
-#include <kdebug.h>
+
 // Local includes.
 
+#include "ddebug.h"
 #include "albumsettings.h"
 #include "deletedialog.h"
 #include "deletedialog.moc"
@@ -229,7 +230,7 @@ void DeleteDialog::accept()
     }
     if (m_saveDoNotShowAgain)
     {
-        kDebug() << "setShowTrashDeleteDialog " << !m_widget->ddDoNotShowAgain->isChecked();
+        DDebug() << "setShowTrashDeleteDialog " << !m_widget->ddDoNotShowAgain->isChecked() << endl;
         settings->setShowTrashDeleteDialog(!m_widget->ddDoNotShowAgain->isChecked());
     }
 
@@ -251,19 +252,26 @@ void DeleteDialog::presetDeleteMode(DeleteDialogMode::DeleteMode mode)
     switch (mode)
     {
         case DeleteDialogMode::NoChoiceTrash:
+        {
             // access the widget directly, signals will be fired to DeleteDialog and DeleteWidget
             m_widget->ddShouldDelete->setChecked(false);
             m_widget->ddCheckBoxStack->raiseWidget(m_widget->ddDoNotShowAgain);
             m_saveDoNotShowAgain = true;
             break;
+        }
         case DeleteDialogMode::NoChoiceDeletePermanently:
+        {
             m_widget->ddShouldDelete->setChecked(true);
             m_widget->ddCheckBoxStack->hide();
             break;
+        }
         case DeleteDialogMode::UserPreference:
+        {
             break;
+        }
         case DeleteDialogMode::UseTrash:
         case DeleteDialogMode::DeletePermanently:
+        {
             // toggles signals which do the rest
             m_widget->ddShouldDelete->setChecked(mode == DeleteDialogMode::DeletePermanently);
 
@@ -272,6 +280,7 @@ void DeleteDialog::presetDeleteMode(DeleteDialogMode::DeleteMode mode)
             // Only if the user once changes this value, it will be taken as user preference.
             m_saveShouldDeleteUserPreference = false;
             break;
+        }
     }
 }
 
