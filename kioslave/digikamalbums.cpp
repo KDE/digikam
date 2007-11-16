@@ -125,7 +125,7 @@ void kio_digikamalbums::put(const KUrl& url, int permissions, KIO::JobFlags flag
     Digikam::DatabaseAccess access;
 
     // get the parent album
-    int albumID = access.db()->getAlbumForPath(dbUrl.albumRootPath(), dbUrl.album(), false);
+    int albumID = access.db()->getAlbumForPath(dbUrl.albumRootId(), dbUrl.album(), false);
     if (albumID == -1)
     {
         error(KIO::ERR_UNKNOWN, i18n("Source album %1 not found in database")
@@ -140,7 +140,7 @@ void kio_digikamalbums::put(const KUrl& url, int permissions, KIO::JobFlags flag
 
     // Necessary?
     //CollectionScanner scanner;
-    //scanner.scanFile(dbUrl.albumRootPath(), dbUrl.album(), dbUrl.name())
+    //scanner.scanFile(dbUrl.albumRootId(), dbUrl.album(), dbUrl.name())
 
     // We have done our job => finish
     finished();
@@ -169,7 +169,7 @@ void kio_digikamalbums::copy( const KUrl &src, const KUrl &dst, int mode, KIO::J
     Digikam::DatabaseAccess access;
 
     // find the src parent album - do not create
-    int srcAlbumID = access.db()->getAlbumForPath(dbUrlSrc.albumRootPath(), dbUrlSrc.album(), false);
+    int srcAlbumID = access.db()->getAlbumForPath(dbUrlSrc.albumRootId(), dbUrlSrc.album(), false);
     if (srcAlbumID == -1)
     {
         error(KIO::ERR_UNKNOWN, QString("Source album %1 not found in database")
@@ -178,7 +178,7 @@ void kio_digikamalbums::copy( const KUrl &src, const KUrl &dst, int mode, KIO::J
     }
 
     // find the dst parent album - do not create
-    int dstAlbumID = access.db()->getAlbumForPath(dbUrlDst.albumRootPath(), dbUrlDst.album(), false);
+    int dstAlbumID = access.db()->getAlbumForPath(dbUrlDst.albumRootId(), dbUrlDst.album(), false);
     if (dstAlbumID == -1)
     {
         error(KIO::ERR_UNKNOWN, QString("Destination album %1 not found in database")
@@ -244,7 +244,7 @@ void kio_digikamalbums::rename( const KUrl& src, const KUrl& dst, KIO::JobFlags 
 
     if (renamingAlbum)
     {
-        srcAlbumID = access.db()->getAlbumForPath(dbUrlSrc.albumRootPath(), dbUrlSrc.album(), false);
+        srcAlbumID = access.db()->getAlbumForPath(dbUrlSrc.albumRootId(), dbUrlSrc.album(), false);
         if (srcAlbumID == -1)
         {
             error(KIO::ERR_UNKNOWN, i18n("Source album %1 not found in database")
@@ -254,7 +254,7 @@ void kio_digikamalbums::rename( const KUrl& src, const KUrl& dst, KIO::JobFlags 
     }
     else
     {
-        srcAlbumID = access.db()->getAlbumForPath(dbUrlSrc.albumRootPath(), dbUrlSrc.album(), false);
+        srcAlbumID = access.db()->getAlbumForPath(dbUrlSrc.albumRootId(), dbUrlSrc.album(), false);
         if (srcAlbumID == -1)
         {
             error(KIO::ERR_UNKNOWN, i18n("Source album %1 not found in database")
@@ -262,7 +262,7 @@ void kio_digikamalbums::rename( const KUrl& src, const KUrl& dst, KIO::JobFlags 
             return;
         }
 
-        dstAlbumID = access.db()->getAlbumForPath(dbUrlDst.albumRootPath(), dbUrlDst.album(), false);
+        dstAlbumID = access.db()->getAlbumForPath(dbUrlDst.albumRootId(), dbUrlDst.album(), false);
         if (dstAlbumID == -1)
         {
             error(KIO::ERR_UNKNOWN, i18n("Destination album %1 not found in database")
@@ -304,7 +304,7 @@ void kio_digikamalbums::mkdir( const KUrl& url, int permissions )
     if (m_eventLoop->exec() != 0)
         return;
 
-    access.db()->addAlbum(dbUrl.albumRootPath(), dbUrl.album(), QString(), QDate::currentDate(), QString());
+    access.db()->addAlbum(dbUrl.albumRootId(), dbUrl.album(), QString(), QDate::currentDate(), QString());
 
     finished();
 }
@@ -343,7 +343,7 @@ void kio_digikamalbums::del( const KUrl& url, bool isFile)
     if (isFile)
     {
         // find the Album to which this file belongs.
-        albumID = access.db()->getAlbumForPath(dbUrl.albumRootPath(), dbUrl.album(), false);
+        albumID = access.db()->getAlbumForPath(dbUrl.albumRootId(), dbUrl.album(), false);
         if (albumID == -1)
         {
             error(KIO::ERR_UNKNOWN, i18n("Source album %1 not found in database")
@@ -354,7 +354,7 @@ void kio_digikamalbums::del( const KUrl& url, bool isFile)
     else
     {
         // find the corresponding album entry
-        albumID = access.db()->getAlbumForPath(dbUrl.albumRootPath(), dbUrl.album(), false);
+        albumID = access.db()->getAlbumForPath(dbUrl.albumRootId(), dbUrl.album(), false);
         if (albumID == -1)
         {
             error(KIO::ERR_UNKNOWN, i18n("Source album %1 not found in database")

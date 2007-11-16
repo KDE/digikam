@@ -333,7 +333,7 @@ DatabaseUrl PAlbum::kurl() const
 
 DatabaseUrl PAlbum::databaseUrl() const
 {
-    return DatabaseUrl::fromAlbumAndName(QString(), albumPath(), albumRootPath());
+    return DatabaseUrl::fromAlbumAndName(QString(), albumPath(), albumRootPath(), m_albumRootId);
 }
 
 QString PAlbum::prettyUrl() const
