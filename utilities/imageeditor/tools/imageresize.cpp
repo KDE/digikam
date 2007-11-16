@@ -102,6 +102,7 @@ public:
         greycstorationIface  = 0;
         settingsWidget       = 0;
         cimgLogoLabel        = 0;
+        restorationTips      = 0;
     }
 
     int                   currentRenderingMode;
@@ -114,6 +115,8 @@ public:
     double                prevHP;    
 
     QWidget              *parent;
+
+    QLabel               *restorationTips;
     
     QCheckBox            *preserveRatioBox;
     QCheckBox            *useGreycstorationBox;
@@ -146,48 +149,48 @@ ImageResize::ImageResize(QWidget* parent)
     d->parent = parent;
     setHelp("resizetool.anchor", "digikam");
     QString whatsThis;
-    setButtonWhatsThis ( Default, i18n("<p>Reset all filter parameters to their default values.") );
-    setButtonWhatsThis ( User3, i18n("<p>Load all filter parameters from settings text file.") );
-    setButtonWhatsThis ( User2, i18n("<p>Save all filter parameters to settings text file.") );
+    setButtonWhatsThis( Default, i18n("<p>Reset all filter parameters to their default values.") );
+    setButtonWhatsThis( User3, i18n("<p>Load all filter parameters from settings text file.") );
+    setButtonWhatsThis( User2, i18n("<p>Save all filter parameters to settings text file.") );
     enableButton(Ok, false);
 
     ImageIface iface(0, 0);
-    d->orgWidth    = iface.originalWidth();
-    d->orgHeight   = iface.originalHeight();
-    d->prevW       = d->orgWidth;
-    d->prevH       = d->orgHeight;
-    d->prevWP      = 100.0;
-    d->prevHP      = 100.0;
+    d->orgWidth  = iface.originalWidth();
+    d->orgHeight = iface.originalHeight();
+    d->prevW     = d->orgWidth;
+    d->prevH     = d->orgHeight;
+    d->prevWP    = 100.0;
+    d->prevHP    = 100.0;
 
     // -------------------------------------------------------------
 
     QVBoxLayout *vlay  = new QVBoxLayout(plainPage(), 0, spacingHint());
-    d->mainTab          = new QTabWidget( plainPage() );
+    d->mainTab         = new QTabWidget( plainPage() );
 
     QWidget* firstPage = new QWidget( d->mainTab );
     QGridLayout* grid  = new QGridLayout( firstPage, 8, 2, spacingHint());
     d->mainTab->addTab( firstPage, i18n("New Size") );
 
     QLabel *label1 = new QLabel(i18n("Width:"), firstPage);
-    d->wInput = new KIntNumInput(firstPage);
+    d->wInput      = new KIntNumInput(firstPage);
     d->wInput->setRange(1, QMAX(d->orgWidth * 10, 9999), 1, true);
     d->wInput->setName("d->wInput");
     QWhatsThis::add( d->wInput, i18n("<p>Set here the new image width in pixels."));
 
     QLabel *label2 = new QLabel(i18n("Height:"), firstPage);
-    d->hInput = new KIntNumInput(firstPage);
+    d->hInput      = new KIntNumInput(firstPage);
     d->hInput->setRange(1, QMAX(d->orgHeight * 10, 9999), 1, true);
     d->hInput->setName("d->hInput");
     QWhatsThis::add( d->hInput, i18n("<p>Set here the new image height in pixels."));
 
     QLabel *label3 = new QLabel(i18n("Width (%):"), firstPage);
-    d->wpInput = new KDoubleNumInput(firstPage);
+    d->wpInput     = new KDoubleNumInput(firstPage);
     d->wpInput->setRange(1.0, 999.0, 1.0, true);
     d->wpInput->setName("d->wpInput");
     QWhatsThis::add( d->wpInput, i18n("<p>Set here the new image width in percents."));
 
     QLabel *label4 = new QLabel(i18n("Height (%):"), firstPage);
-    d->hpInput = new KDoubleNumInput(firstPage);
+    d->hpInput     = new KDoubleNumInput(firstPage);
     d->hpInput->setRange(1.0, 999.0, 1.0, true);
     d->hpInput->setName("d->hpInput");
     QWhatsThis::add( d->hpInput, i18n("<p>Set here the new image height in percents."));
@@ -205,9 +208,13 @@ ImageResize::ImageResize(QWidget* parent)
     d->cimgLogoLabel->setPixmap( QPixmap( directory + "logo-cimg.png" ) );
     QToolTip::add(d->cimgLogoLabel, i18n("Visit CImg library website"));
 
-    d->useGreycstorationBox = new QCheckBox(i18n("Restore photograph (slow)"), firstPage);
+    d->useGreycstorationBox = new QCheckBox(i18n("Restore photograph"), firstPage);
     QWhatsThis::add( d->useGreycstorationBox, i18n("<p>Enable this option to restore photograph content. "
-                                                  "Warning: this process can take a while."));
+                                                   "This way is usefull to scale-up an image to an huge size. "
+                                                   "Warning: this process can take a while."));
+    
+    d->restorationTips = new QLabel(i18n("<b>Note: use Restoration Mode to only scale-up an image to huge size. "
+                                         "Warning, this process can take a while.</b>"), firstPage);
 
     d->progressBar = new KProgress(100, firstPage);
     d->progressBar->setValue(0);
@@ -223,9 +230,10 @@ ImageResize::ImageResize(QWidget* parent)
     grid->addMultiCellWidget(label4, 4, 4, 0, 0);
     grid->addMultiCellWidget(d->hpInput, 4, 4, 1, 2);
     grid->addMultiCellWidget(new KSeparator(firstPage), 5, 5, 0, 2);
-    grid->addMultiCellWidget(d->cimgLogoLabel, 6, 7, 0, 0);
+    grid->addMultiCellWidget(d->cimgLogoLabel, 6, 8, 0, 0);
     grid->addMultiCellWidget(d->useGreycstorationBox, 6, 6, 1, 2);
-    grid->addMultiCellWidget(d->progressBar, 7, 7, 1, 2);
+    grid->addMultiCellWidget(d->restorationTips, 7, 7, 1, 2);
+    grid->addMultiCellWidget(d->progressBar, 8, 8, 1, 2);
     grid->setRowStretch(8, 10);
 
     // -------------------------------------------------------------
