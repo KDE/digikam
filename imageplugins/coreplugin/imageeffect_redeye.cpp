@@ -152,8 +152,9 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
     m_redThreshold->setRange(10, 90, 1, true);
     m_redThreshold->setValue(20);
     QWhatsThis::add(m_redThreshold, i18n("<p>Sets the red color pixels selection threshold. "
-                                         "Low values will select more red color pixels, high "
-                                         "values less."));
+                                         "Low values will select more red color pixels (agressive correction), high "
+                                         "values less (mild correction). Use low value if eye have been selected "
+                                         "exactly. Use high value if other parts of the face are also selected."));
     gridSettings->addMultiCellWidget(m_thresholdLabel, 3, 3, 0, 4);
     gridSettings->addMultiCellWidget(m_redThreshold, 4, 4, 0, 4);
 
@@ -161,8 +162,9 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
     m_smoothLevel = new KIntNumInput(gboxSettings);
     m_smoothLevel->setRange(0, 5, 1, true);
     m_smoothLevel->setValue(1);
-    QWhatsThis::add(m_smoothLevel, i18n("<p>Sets the smoothness value to blur red color "
-                                        "pixels selection."));
+    QWhatsThis::add(m_smoothLevel, i18n("<p>Sets the smoothness value to blur the border "
+                                        "of the changed pixels. "
+                                        "This leads to a more naturally looking pupil."));
     gridSettings->addMultiCellWidget(m_smoothLabel, 5, 5, 0, 4);
     gridSettings->addMultiCellWidget(m_smoothLevel, 6, 6, 0, 4);
 
@@ -171,6 +173,7 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
     m_VSelector    = new KValueSelector(gboxSettings);
     m_HSSelector->setMinimumSize(200, 142);
     m_VSelector->setMinimumSize(26, 142);
+    QWhatsThis::add(m_HSSelector, i18n("<p>Sets a custom color to re-colorize the eyes."));
     gridSettings->addMultiCellWidget(label3, 7, 7, 0, 4);
     gridSettings->addMultiCellWidget(m_HSSelector, 8, 8, 0, 3);
     gridSettings->addMultiCellWidget(m_VSelector, 8, 8, 4, 4);
@@ -179,7 +182,8 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
     m_tintLevel    = new KIntNumInput(gboxSettings);
     m_tintLevel->setRange(1, 200, 1, true);
     m_tintLevel->setValue(128);
-    QWhatsThis::add( m_tintLevel, i18n("<p>Set here the tint level used to coloring red eye."));
+    QWhatsThis::add(m_tintLevel, i18n("<p>Set the tint level to adjust the luminosity of "
+                                      "the new color of the pupil."));
     gridSettings->addMultiCellWidget(label4, 9, 9, 0, 4);
     gridSettings->addMultiCellWidget(m_tintLevel, 10, 10, 0, 4);
 
