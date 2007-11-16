@@ -229,7 +229,7 @@ void DeleteDialog::accept()
     }
     if (m_saveDoNotShowAgain)
     {
-        kDebug() << "setShowTrashDeleteDialog " << !m_widget->ddDoNotShowAgain->isChecked() << endl;
+        kDebug() << "setShowTrashDeleteDialog " << !m_widget->ddDoNotShowAgain->isChecked();
         settings->setShowTrashDeleteDialog(!m_widget->ddDoNotShowAgain->isChecked());
     }
 
