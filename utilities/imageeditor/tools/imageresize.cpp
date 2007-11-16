@@ -105,6 +105,7 @@ public:
         greycstorationIface  = 0;
         settingsWidget       = 0;
         cimgLogoLabel        = 0;
+        restorationTips      = 0;
     }
 
     int                   currentRenderingMode;
@@ -117,6 +118,8 @@ public:
     double                prevHP;
 
     QWidget              *parent;
+
+    QLabel               *restorationTips;
 
     QCheckBox            *preserveRatioBox;
     QCheckBox            *useGreycstorationBox;
@@ -156,12 +159,12 @@ ImageResize::ImageResize(QWidget* parent)
     enableButton(Ok, false);
 
     ImageIface iface(0, 0);
-    d->orgWidth    = iface.originalWidth();
-    d->orgHeight   = iface.originalHeight();
-    d->prevW       = d->orgWidth;
-    d->prevH       = d->orgHeight;
-    d->prevWP      = 100.0;
-    d->prevHP      = 100.0;
+    d->orgWidth  = iface.originalWidth();
+    d->orgHeight = iface.originalHeight();
+    d->prevW     = d->orgWidth;
+    d->prevH     = d->orgHeight;
+    d->prevWP    = 100.0;
+    d->prevHP    = 100.0;
 
     // -------------------------------------------------------------
 
@@ -215,7 +218,12 @@ ImageResize::ImageResize(QWidget* parent)
 
     d->useGreycstorationBox = new QCheckBox(i18n("Restore photograph (slow)"), firstPage);
     d->useGreycstorationBox->setWhatsThis( i18n("<p>Enable this option to restore photograph content. "
+                                                "This way is usefull to scale-up an image to an huge size. "
                                                 "Warning: this process can take a while."));
+
+    d->restorationTips = new QLabel(i18n("<b>Note: use Restoration Mode to only scale-up an image to huge size. "
+                                         "Warning, this process can take a while.</b>"), firstPage);
+    d->restorationTips->setWordWrap(true);
 
     d->progressBar = new QProgressBar(firstPage);
     d->progressBar->setValue(0);
@@ -232,9 +240,10 @@ ImageResize::ImageResize(QWidget* parent)
     grid->addWidget(label4, 4, 0, 1, 1);
     grid->addWidget(d->hpInput, 4, 1, 1, 2);
     grid->addWidget(new KSeparator(firstPage), 5, 0, 1, 3);
-    grid->addWidget(d->cimgLogoLabel, 6, 0, 2, 1);
+    grid->addWidget(d->cimgLogoLabel, 6, 0, 3, 1);
     grid->addWidget(d->useGreycstorationBox, 6, 1, 1, 2);
-    grid->addWidget(d->progressBar, 7, 1, 1, 2);
+    grid->addWidget(d->restorationTips, 7, 1, 1, 2);
+    grid->addWidget(d->progressBar, 8, 1, 1, 2);
     grid->setRowStretch(8, 10);
     grid->setMargin(spacingHint());
     grid->setSpacing(spacingHint());
@@ -624,4 +633,3 @@ void ImageResize::slotUser2()
 }
 
 }  // NameSpace Digikam
-
