@@ -115,6 +115,7 @@ private slots:
     void slotShowTip();
     void slotShowKipiHelp();
     void slotDonateMoney();
+    void slotRawCameraList();
     void slotRatingFilterChanged(int, AlbumLister::RatingCondition);
     void slotMimeTypeFilterChanged(int);
 

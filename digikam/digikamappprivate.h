@@ -131,6 +131,7 @@ public:
         rating5Star                          = 0;
         quitAction                           = 0;
         tipAction                            = 0;
+        rawCameraListAction                  = 0;
         kipiHelpAction                       = 0;
         donateMoneyAction                    = 0;
         addCameraSeparatorAction             = 0;
@@ -243,6 +244,7 @@ public:
     KAction                            *rating5Star;
 
     // Application Actions
+    KAction                            *rawCameraListAction;
     KAction                            *kipiHelpAction;
     KAction                            *donateMoneyAction;
     KSelectAction                      *themeMenuAction;

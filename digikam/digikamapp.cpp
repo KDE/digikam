@@ -836,6 +836,12 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
+    d->rawCameraListAction = new KAction(KIcon("kdcraw"), i18n("RAW camera supported"), this);
+    connect(d->rawCameraListAction, SIGNAL(triggered()), this, SLOT(slotRawCameraList()));
+    actionCollection()->addAction("help_rawcameralist", d->rawCameraListAction);
+
+    // -----------------------------------------------------------
+
     d->kipiHelpAction = new KAction(KIcon("kipi"), i18n("Kipi Plugins Handbook"), this);
     connect(d->kipiHelpAction, SIGNAL(triggered()), this, SLOT(slotShowKipiHelp()));
     actionCollection()->addAction("help_kipi", d->kipiHelpAction);
@@ -1906,6 +1912,14 @@ void DigikamApp::slotShowTip()
 void DigikamApp::slotShowKipiHelp()
 {
     KToolInvocation::invokeHelp( QString(), "kipi-plugins" );
+}
+
+void DigikamApp::slotRawCameraList()
+{
+    QStringList list = KDcrawIface::DcrawBinary::instance()->supportedCamera();
+    QString     ver  = KDcrawIface::DcrawBinary::instance()->internalVersion();
+    KMessageBox::informationList(this, i18n("List of supported camera RAW files"),
+                                 list, i18n("Using dcraw version %1", ver));
 }
 
 void DigikamApp::loadPlugins()
