@@ -28,7 +28,6 @@
 
 // Qt includes.
 
-#include <Q3ValueList>
 #include <QProgressBar>
 #include <QTimer>
 #include <QLabel>

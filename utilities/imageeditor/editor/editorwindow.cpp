@@ -27,7 +27,6 @@
 
 // Qt includes.
 
-#include <Q3PtrList>
 #include <QLabel>
 #include <QLayout>
 #include <QToolButton>
