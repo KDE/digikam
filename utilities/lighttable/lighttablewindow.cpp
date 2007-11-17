@@ -23,7 +23,6 @@
 
 // Qt includes.
 
-#include <Q3PtrList>
 #include <QHBoxLayout>
 #include <QFrame>
 #include <QVBoxLayout>
