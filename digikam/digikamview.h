@@ -27,7 +27,6 @@
 
 // Qt includes.
 
-#include <Q3PtrList>
 #include <QStringList>
 #include <QMap>
 
