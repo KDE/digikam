@@ -634,12 +634,12 @@ inline QVariant DMetadata::fromXmpList(const char *xmpTagName) const
 
 inline QVariant DMetadata::fromIptcEmulateLangAlt(const char *iptcTagName) const
 {
-    QString var = getIptcTagString(iptcTagName);
-    if (!var.isNull())
+    QString str = getIptcTagString(iptcTagName);
+    if (str.isNull())
         return QVariant(QVariant::Map);
 
     QMap<QString, QVariant> map;
-    map["x-default"] = var;
+    map["x-default"] = str;
     return map;
 }
 
