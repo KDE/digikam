@@ -367,9 +367,8 @@ void DigikamApp::setupStatusBar()
 
     d->statusTextFilterBar = new KLineEdit(statusBar());
     d->statusTextFilterBar->setMaximumHeight(fontMetrics().height()+2);
-    QToolTip::add(d->statusTextFilterBar, i18n("Text pattern filter"));
-    QWhatsThis::add(d->statusTextFilterBar, i18n("Set here the text pattern to filter albums contents "
-                                                 "based on items name, comments, and tags"));
+    QToolTip::add(d->statusTextFilterBar, i18n("Text quick filter (search)"));
+    QWhatsThis::add(d->statusTextFilterBar, i18n("Here you can enter search patterns to quickly "                                                  "filter this view on file names, captions "                                                       "(comments), and tags"));
     statusBar()->addWidget(d->statusTextFilterBar, 30, true);
 
     //------------------------------------------------------------------------------
