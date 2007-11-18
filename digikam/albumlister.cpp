@@ -77,7 +77,7 @@ public:
         filterTimer    = 0;
         job            = 0;
         currAlbum      = 0;
-        filter         = "*";
+        namesFilter    = "*";
         mimeTypeFilter = MimeFilter::AllFiles;
         ratingCond     = AlbumLister::GreaterEqualCondition;
         matchingCond   = AlbumLister::OrCondition;
@@ -85,7 +85,8 @@ public:
 
     bool                            untaggedFilter;
 
-    QString                         filter;
+    QString                         namesFilter;
+    QString                         textFilter;
 
     QMap<qlonglong, ImageInfo>      itemMap;
     QSet<int>                       invalidatedItems;
@@ -161,7 +162,7 @@ void AlbumLister::openAlbum(Album *album)
 
     // Protocol = digikamalbums -> kio_digikamalbums
     d->job = ImageLister::startListJob(album->kurl());
-                                       //d->filter,
+                                       //d->namesFilter,
                                        //AlbumSettings::instance()->getIconShowResolution());
 
     connect(d->job, SIGNAL(result(KJob*)),
@@ -191,7 +192,7 @@ void AlbumLister::refresh()
     }
 
     ImageLister lister;
-    d->job = lister.startListJob(d->currAlbum->kurl());//, d->filter, AlbumSettings::instance()->getIconShowResolution());
+    d->job = lister.startListJob(d->currAlbum->kurl());//, d->namesFilter, AlbumSettings::instance()->getIconShowResolution());
 
     connect(d->job, SIGNAL(result(KJob*)),
             this, SLOT(slotResult(KJob*)));
@@ -233,10 +234,17 @@ void AlbumLister::setMimeTypeFilter(int mimeTypeFilter)
     d->filterTimer->start(100);
 }
 
+void AlbumLister::setTextFilter(const QString& text)
+{
+    d->textFilter = text;
+    d->filterTimer->setSingleShot(true);
+    d->filterTimer->start(100);
+}
+
 bool AlbumLister::matchesFilter(const ImageInfo &info) const
 {
-    if (d->dayFilter.isEmpty() && d->tagFilter.isEmpty() &&
-        !d->untaggedFilter && d->ratingFilter == -1)
+    if (d->dayFilter.isEmpty() && d->tagFilter.isEmpty() && d->textFilter.isEmpty() &&
+        !d->untaggedFilter && d->ratingFilter==-1)
         return true;
 
     bool match = false;
@@ -287,7 +295,8 @@ bool AlbumLister::matchesFilter(const ImageInfo &info) const
         match &= d->dayFilter.contains(info.dateTime().date().day());
     }
 
-    // Filter by rating.
+    //-- Filter by rating ---------------------------------------------------------
+
     if (d->ratingFilter >= 0) 
     {
         // for now we treat -1 (no rating) just like a rating of 0.
@@ -321,7 +330,8 @@ bool AlbumLister::matchesFilter(const ImageInfo &info) const
         }
     }
 
-    // Filter by mime type.
+    // -- Filter by mime type -----------------------------------------------------
+
     QFileInfo fi(info.filePath());
     QString mimeType = fi.suffix().toUpper();
 
@@ -371,6 +381,35 @@ bool AlbumLister::matchesFilter(const ImageInfo &info) const
             break;
     }
 
+    //-- Filter by text -----------------------------------------------------------
+
+    AlbumSettings *settings = AlbumSettings::instance();
+    if (settings->getIconShowName() || settings->getIconShowComments() || settings->getIconShowTags())
+    {
+        bool foundText = false;
+        if (settings->getIconShowName())
+        {
+            if (info.name().contains(d->textFilter))
+                foundText = true;
+        }
+        if (settings->getIconShowComments())
+        {
+            if (info.comment().contains(d->textFilter))
+                foundText = true;
+        }
+        if (settings->getIconShowTags())
+        {
+#warning "TODO: Fix text filter for tags name when ImageInfo::tagNames() will be restored...";
+            QStringList tags = QStringList() /* FIXME QStringList tags = info.tagNames()*/;
+            for (QStringList::const_iterator it = tags.begin() ; it != tags.end() ; ++it)
+            {
+                if ((*it).contains(d->textFilter))
+                    foundText = true;
+            }
+        }
+        match &= foundText;
+    }
+
     return match;
 }
 
@@ -390,9 +429,9 @@ void AlbumLister::stop()
     }
 }
 
-void AlbumLister::setNameFilter(const QString& nameFilter)
+void AlbumLister::setNamesFilter(const QString& namesFilter)
 {
-    d->filter = nameFilter;
+    d->namesFilter = namesFilter;
 }
 
 void AlbumLister::invalidateItem(const ImageInfo &item)

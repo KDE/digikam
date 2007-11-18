@@ -47,6 +47,7 @@
 #include <kiconloader.h>
 #include <ktip.h>
 #include <kdeversion.h>
+#include <klineedit.h>
 #include <kapplication.h>
 #include <kmenubar.h>
 #include <kmessagebox.h>
@@ -363,6 +364,17 @@ void DigikamApp::setupStatusBar()
 
     //------------------------------------------------------------------------------
 
+    d->statusTextFilterBar = new KLineEdit(statusBar());
+    d->statusTextFilterBar->setMaximumHeight(fontMetrics().height()+2);
+    d->statusTextFilterBar->setClearButtonShown(true);
+    d->statusTextFilterBar->setToolTip(i18n("Text quick filter (search)"));
+    d->statusTextFilterBar->setWhatsThis(i18n("Here you can enter search patterns to quickly "
+                                              "filter this view on file names, captions "
+                                              "(comments), and tags"));
+    statusBar()->addWidget(d->statusTextFilterBar, 30, true);
+
+    //------------------------------------------------------------------------------
+
     d->statusMimeFilterBar = new MimeFilter(statusBar());
     d->statusMimeFilterBar->setMaximumHeight(fontMetrics().height()+2);
     statusBar()->addPermanentWidget(d->statusMimeFilterBar, 1);
@@ -393,6 +405,9 @@ void DigikamApp::setupStatusBar()
 
     connect(d->statusMimeFilterBar, SIGNAL(activated(int)),
             this, SLOT(slotMimeTypeFilterChanged(int)));
+
+    connect(d->statusTextFilterBar, SIGNAL(textChanged(const QString&)),
+            this, SLOT(slotTextFilterChanged(const QString&)));
 
     connect(d->statusZoomBar, SIGNAL(signalZoomMinusClicked()),
             d->view, SLOT(slotZoomOut()));
@@ -2112,6 +2127,11 @@ void DigikamApp::slotDonateMoney()
 void DigikamApp::slotMimeTypeFilterChanged(int mimeTypeFilter)
 {
     AlbumLister::instance()->setMimeTypeFilter(mimeTypeFilter);
+}
+
+void DigikamApp::slotTextFilterChanged(const QString& text)
+{
+    AlbumLister::instance()->setTextFilter(text);
 }
 
 void DigikamApp::slotRatingFilterChanged(int rating, AlbumLister::RatingCondition cond)

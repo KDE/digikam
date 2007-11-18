@@ -63,6 +63,7 @@ class KToolBarPopupAction;
 class KToggleAction;
 class KActionMenu;
 class KSelectAction;
+class KLineEdit;
 
 namespace Digikam
 {
@@ -143,6 +144,7 @@ public:
         kipiInterface                        = 0;
         cameraList                           = 0;
         statusRatingFilterBar                = 0;
+        statusTextFilterBar                  = 0; 
         statusMimeFilterBar                  = 0;
         statusProgressBar                    = 0;
         statusNavigateBar                    = 0;
@@ -179,6 +181,8 @@ public:
     KMenu                              *manuallyAddedCamerasMenu;
 
     KSharedConfig::Ptr                  config;
+
+    KLineEdit                          *statusTextFilterBar;
 
     // Album Actions
     KAction                            *newAction;

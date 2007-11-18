@@ -102,7 +102,7 @@ public:
      */
     void refresh();
 
-    void setNameFilter(const QString& nameFilter);
+    void setNamesFilter(const QString& namesFilter);
 
     void setDayFilter(const QList<int>& days);
 
@@ -112,6 +112,8 @@ public:
     void setRatingFilter(int rating, const RatingCondition& ratingCond);
 
     void setMimeTypeFilter(int mimeTypeFilter);
+
+    void setTextFilter(const QString& text);
 
     /**
       * Trigger a recreation of the given ImageInfo object

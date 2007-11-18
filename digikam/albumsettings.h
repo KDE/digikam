@@ -119,6 +119,9 @@ public:
     void setDefaultTreeIconSize(int val);
     int  getDefaultTreeIconSize() const;
 
+    void setTextFilter(const QString& text);
+    QString getTextFilter() const;
+
     void setMimeTypeFilter(int val);
     int  getMimeTypeFilter() const;
 
