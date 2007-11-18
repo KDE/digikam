@@ -388,22 +388,28 @@ bool AlbumLister::matchesFilter(const ImageInfo* info) const
 
     //-- Filter by text -----------------------------------------------------------
 
+    bool foundText = false;
     AlbumSettings *settings = AlbumSettings::instance();
     if (settings->getIconShowName())
     {
-        if (info->name().contains(d->textFilter) == false)
-            match = false;
+        if (info->name().contains(d->textFilter))
+            foundText = true;
     }
-    else if (settings->getIconShowComments())
+    if (settings->getIconShowComments())
     {
-        if (info->caption().contains(d->textFilter) == false)
-            match = false;
+        if (info->caption().contains(d->textFilter))
+            foundText = true;
     }
-    else if (settings->getIconShowTags())
+    if (settings->getIconShowTags())
     {
-        if (info->tagNames().contains(d->textFilter) == false)
-            match = false;
+        QStringList tags = info->tagNames();
+        for (QStringList::const_iterator it = tags.begin() ; it != tags.end() ; ++it)
+        {
+            if ((*it).contains(d->textFilter))
+                foundText = true;
+        }
     }
+    match &= foundText;
 
     return match;
 }
