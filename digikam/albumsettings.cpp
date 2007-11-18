@@ -167,80 +167,80 @@ void AlbumSettings::init()
     d->albumCollectionNames.append(i18n("Miscellaneous"));
     d->albumCollectionNames.sort();
 
-    d->albumSortOrder       = AlbumSettings::ByFolder;
-    d->imageSortOrder       = AlbumSettings::ByIName;
-    d->itemRightClickAction = AlbumSettings::ShowPreview;
+    d->albumSortOrder           = AlbumSettings::ByFolder;
+    d->imageSortOrder           = AlbumSettings::ByIName;
+    d->itemRightClickAction     = AlbumSettings::ShowPreview;
 
-    d->defaultImageFilefilter = "*.jpg *.jpeg *.jpe "               // JPEG
-                                "*.jp2 *.jpx *.jpc *.pgx "          // JPEG-2000
-                                "*.tif *.tiff "                     // TIFF
-                                "*.png *.gif *.bmp *.xpm *.ppm *.pnm *.xcf *.pcx";
+    d->defaultImageFilefilter   = "*.jpg *.jpeg *.jpe "               // JPEG
+                                  "*.jp2 *.jpx *.jpc *.pgx "          // JPEG-2000
+                                  "*.tif *.tiff "                     // TIFF
+                                  "*.png *.gif *.bmp *.xpm *.ppm *.pnm *.xcf *.pcx";
 			 
-    d->defaultMovieFilefilter = "*.mpeg *.mpg *.mpo *.mpe "         // MPEG
+    d->defaultMovieFilefilter   = "*.mpeg *.mpg *.mpo *.mpe "         // MPEG
                                 "*.avi *.mov *.wmf *.asf *.mp4";
 			 
-    d->defaultAudioFilefilter = "*.ogg *.mp3 *.wma *.wav";
+    d->defaultAudioFilefilter   = "*.ogg *.mp3 *.wma *.wav";
 
     // RAW files estentions supported by dcraw program and 
     // defines to digikam/libs/dcraw/rawfiles.h
-    d->defaultRawFilefilter   = QString(raw_file_extentions);
+    d->defaultRawFilefilter     = QString(raw_file_extentions);
 
-    d->imageFilefilter = d->defaultImageFilefilter;
-    d->movieFilefilter = d->defaultMovieFilefilter;
-    d->audioFilefilter = d->defaultAudioFilefilter;
-    d->rawFilefilter   = d->defaultRawFilefilter;
+    d->imageFilefilter          = d->defaultImageFilefilter;
+    d->movieFilefilter          = d->defaultMovieFilefilter;
+    d->audioFilefilter          = d->defaultAudioFilefilter;
+    d->rawFilefilter            = d->defaultRawFilefilter;
 
-    d->thumbnailSize      = ThumbnailSize::Medium;
-    d->treeThumbnailSize  = 32;
+    d->thumbnailSize            = ThumbnailSize::Medium;
+    d->treeThumbnailSize        = 32;
 
-    d->textFilter             = QString();
-    d->mimeTypeFilter         = MimeFilter::AllFiles;
+    d->textFilter               = QString();
+    d->mimeTypeFilter           = MimeFilter::AllFiles;
 
-    d->ratingFilterValue      = 0;
-    d->ratingFilterCond       = AlbumLister::GreaterEqualCondition;
+    d->ratingFilterValue        = 0;
+    d->ratingFilterCond         = AlbumLister::GreaterEqualCondition;
 
-    d->showToolTips           = true;
-    d->showSplash             = true;
-    d->useTrash               = true;
-    d->showTrashDeleteDialog  = true;
-    d->sidebarApplyDirectly   = false;
+    d->showToolTips             = true;
+    d->showSplash               = true;
+    d->useTrash                 = true;
+    d->showTrashDeleteDialog    = true;
+    d->sidebarApplyDirectly     = false;
 
-    d->iconShowName           = false;
-    d->iconShowSize           = false;
-    d->iconShowDate           = true;
-    d->iconShowModDate        = true;
-    d->iconShowComments       = true;
-    d->iconShowResolution     = false;
-    d->iconShowTags           = true;
-    d->iconShowRating         = true;
+    d->iconShowName             = false;
+    d->iconShowSize             = false;
+    d->iconShowDate             = true;
+    d->iconShowModDate          = true;
+    d->iconShowComments         = true;
+    d->iconShowResolution       = false;
+    d->iconShowTags             = true;
+    d->iconShowRating           = true;
 
-    d->tooltipShowFileName    = true;
-    d->tooltipShowFileDate    = false;
-    d->tooltipShowFileSize    = false;
-    d->tooltipShowImageType   = false;
-    d->tooltipShowImageDim    = true;
-    d->tooltipShowPhotoMake   = true;
-    d->tooltipShowPhotoDate   = true;
-    d->tooltipShowPhotoFocal  = true;
-    d->tooltipShowPhotoExpo   = true;
-    d->tooltipShowPhotoMode   = true;
-    d->tooltipShowPhotoFlash  = false;
-    d->tooltipShowPhotoWb     = false;
-    d->tooltipShowAlbumName   = false;
-    d->tooltipShowComments    = true;
-    d->tooltipShowTags        = true;
-    d->tooltipShowRating      = true;
+    d->tooltipShowFileName      = true;
+    d->tooltipShowFileDate      = false;
+    d->tooltipShowFileSize      = false;
+    d->tooltipShowImageType     = false;
+    d->tooltipShowImageDim      = true;
+    d->tooltipShowPhotoMake     = true;
+    d->tooltipShowPhotoDate     = true;
+    d->tooltipShowPhotoFocal    = true;
+    d->tooltipShowPhotoExpo     = true;
+    d->tooltipShowPhotoMode     = true;
+    d->tooltipShowPhotoFlash    = false;
+    d->tooltipShowPhotoWb       = false;
+    d->tooltipShowAlbumName     = false;
+    d->tooltipShowComments      = true;
+    d->tooltipShowTags          = true;
+    d->tooltipShowRating        = true;
 
-    d->exifRotate             = true;
-    d->exifSetOrientation     = true;
+    d->exifRotate               = true;
+    d->exifSetOrientation       = true;
 
-    d->saveIptcTags           = false;
-    d->saveIptcPhotographerId = false;
-    d->saveIptcCredits        = false;
+    d->saveIptcTags             = false;
+    d->saveIptcPhotographerId   = false;
+    d->saveIptcCredits          = false;
 
-    d->saveComments           = false;
-    d->saveDateTime           = false;
-    d->saveRating             = false;
+    d->saveComments             = false;
+    d->saveDateTime             = false;
+    d->saveRating               = false;
 
     d->previewLoadFullImageSize = false;
 }
