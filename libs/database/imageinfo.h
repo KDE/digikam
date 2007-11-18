@@ -189,8 +189,6 @@ public:
      */
     QList<int> tagIds() const;
 
-
-
     /**
      * Retrieve the ImageComments object for this item.
      * This object allows full read and write access to all comments
