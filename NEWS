@@ -4,6 +4,8 @@ digiKam 0.9.3-beta3 - Release date: 2007-11-??
 
 NEW FEATURES:
 
+AlbumGUI       : Add Text pattern widget on status bar to filter Album contents based on items 
+                 name, comments, and tags strings.
 ImageEditor    : New black & white Green color tone filter.
 LightTable     : Several usability improvements.
 
@@ -11,7 +13,8 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 047 ==> 150296 : Images in LightTable are not compared in right order
 048 ==> 151956 : Red eye enhance feature no longer works.
-049 ==> 
+049 ==> 110136 : Filter textbox in album tree like in amaroks collection list.
+050 ==> 
 
 **********************************************************************************************
 
