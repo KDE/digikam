@@ -287,7 +287,7 @@ void AlbumIconView::applySettings(const AlbumSettings* settings)
 
     d->albumSettings = settings;
 
-    d->imageLister->setNameFilter(d->albumSettings->getAllFileFilter());
+    d->imageLister->setNamesFilter(d->albumSettings->getAllFileFilter());
 
     d->thumbSize = (ThumbnailSize::Size)d->albumSettings->getDefaultIconSize();
 

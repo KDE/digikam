@@ -29,12 +29,14 @@
 #include <qlabel.h>
 #include <qstringlist.h>
 #include <qtooltip.h>
+#include <qwhatsthis.h>
 #include <qsignalmapper.h>
 #include <qdockarea.h>
 #include <qhbox.h>
 
 // KDE includes.
 
+#include <klineedit.h>
 #include <kaboutdata.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
@@ -196,6 +198,7 @@ DigikamApp::~DigikamApp()
     if (d->view)
         delete d->view;
 
+    d->albumSettings->setTextFilter(d->statusTextFilterBar->text());
     d->albumSettings->setMimeTypeFilter(d->statusMimeFilterBar->mimeFilter());
     d->albumSettings->setRatingFilterCond(d->statusRatingFilterBar->ratingFilterCondition());
     d->albumSettings->setRatingFilterValue(d->statusRatingFilterBar->rating());
@@ -362,6 +365,15 @@ void DigikamApp::setupStatusBar()
 
     //------------------------------------------------------------------------------
 
+    d->statusTextFilterBar = new KLineEdit(statusBar());
+    d->statusTextFilterBar->setMaximumHeight(fontMetrics().height()+2);
+    QToolTip::add(d->statusTextFilterBar, i18n("Text pattern filter"));
+    QWhatsThis::add(d->statusTextFilterBar, i18n("Set here the text pattern to filter albums contents "
+                                                 "based on items name, comments, and tags"));
+    statusBar()->addWidget(d->statusTextFilterBar, 30, true);
+
+    //------------------------------------------------------------------------------
+
     d->statusMimeFilterBar = new MimeFilter(statusBar());
     d->statusMimeFilterBar->setMaximumHeight(fontMetrics().height()+2);
     statusBar()->addWidget(d->statusMimeFilterBar, 1, true);
@@ -392,6 +404,9 @@ void DigikamApp::setupStatusBar()
 
     connect(d->statusMimeFilterBar, SIGNAL(activated(int)),
             this, SLOT(slotMimeTypeFilterChanged(int)));
+
+    connect(d->statusTextFilterBar, SIGNAL(textChanged(const QString&)),
+            this, SLOT(slotTextFilterChanged(const QString&)));
 
     connect(d->statusZoomBar, SIGNAL(signalZoomMinusClicked()),
             d->view, SLOT(slotZoomOut()));
@@ -1006,6 +1021,7 @@ void DigikamApp::setupActions()
     d->albumSortAction->setCurrentItem((int)d->albumSettings->getAlbumSortOrder());
     d->imageSortAction->setCurrentItem((int)d->albumSettings->getImageSortOrder());
 
+    d->statusTextFilterBar->setText(d->albumSettings->getTextFilter());
     d->statusMimeFilterBar->setMimeFilter(d->albumSettings->getMimeTypeFilter());
 
     d->statusRatingFilterBar->setRating(d->albumSettings->getRatingFilterValue());
@@ -1929,6 +1945,11 @@ void DigikamApp::slotRatingFilterChanged(int rating, AlbumLister::RatingConditio
 void DigikamApp::slotMimeTypeFilterChanged(int mimeTypeFilter)
 {
     AlbumLister::instance()->setMimeTypeFilter(mimeTypeFilter);
+}
+
+void DigikamApp::slotTextFilterChanged(const QString& text)
+{
+    AlbumLister::instance()->setTextFilter(text);
 }
 
 void DigikamApp::slotZoomSliderChanged(int size)

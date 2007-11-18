@@ -123,6 +123,7 @@ private slots:
     void slotDonateMoney();
     void slotRatingFilterChanged(int, AlbumLister::RatingCondition);
     void slotMimeTypeFilterChanged(int);
+    void slotTextFilterChanged(const QString&);
 
     void slotAboutToShowForwardMenu();
     void slotAboutToShowBackwardMenu();

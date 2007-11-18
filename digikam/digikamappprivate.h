@@ -60,6 +60,7 @@ class KToolBarPopupAction;
 class KToggleAction;
 class KActionMenu;
 class KSelectAction;
+class KLineEdit;
 
 namespace Digikam
 {
@@ -139,6 +140,7 @@ public:
         statusProgressBar                    = 0;
         statusMimeFilterBar                  = 0;
         statusRatingFilterBar                = 0;
+        statusTextFilterBar                  = 0; 
         statusNavigateBar                    = 0;
         statusZoomBar                        = 0;
         kipiPluginLoader                     = 0;
@@ -170,6 +172,8 @@ public:
     KAccel                *accelerators;
 
     KConfig               *config;
+
+    KLineEdit             *statusTextFilterBar;
 
     // Album Actions
     KAction               *newAction;

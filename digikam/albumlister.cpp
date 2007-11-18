@@ -78,7 +78,7 @@ public:
         filterTimer    = 0;
         job            = 0;
         currAlbum      = 0;
-        filter         = "*";
+        namesFilter    = "*";
         mimeTypeFilter = MimeFilter::AllFiles;
         ratingCond     = AlbumLister::GreaterEqualCondition;
         matchingCond   = AlbumLister::OrCondition;
@@ -86,7 +86,8 @@ public:
 
     bool                            untaggedFilter;
 
-    QString                         filter;
+    QString                         namesFilter;
+    QString                         textFilter;
 
     QMap<Q_LLONG, ImageInfo*>       itemMap;
     QMap<int,int>                   invalidatedItems;
@@ -161,7 +162,7 @@ void AlbumLister::openAlbum(Album *album)
     QDataStream ds(ba, IO_WriteOnly);
     ds << AlbumManager::instance()->getLibraryPath();
     ds << album->kurl();
-    ds << d->filter;
+    ds << d->namesFilter;
     ds << AlbumSettings::instance()->getIconShowResolution();
 
     // Protocol = digikamalbums -> kio_digikamalbums
@@ -199,7 +200,7 @@ void AlbumLister::refresh()
     QDataStream ds(ba, IO_WriteOnly);
     ds << AlbumManager::instance()->getLibraryPath();
     ds << d->currAlbum->kurl();
-    ds << d->filter;
+    ds << d->namesFilter;
     ds << AlbumSettings::instance()->getIconShowResolution();
 
     d->job = new KIO::TransferJob(d->currAlbum->kurl(), KIO::CMD_SPECIAL,
@@ -244,9 +245,15 @@ void AlbumLister::setMimeTypeFilter(int mimeTypeFilter)
     d->filterTimer->start(100, true);
 }
 
+void AlbumLister::setTextFilter(const QString& text)
+{
+    d->textFilter = text;
+    d->filterTimer->start(100, true);
+}
+
 bool AlbumLister::matchesFilter(const ImageInfo* info) const
 {
-    if (d->dayFilter.isEmpty() && d->tagFilter.isEmpty() &&
+    if (d->dayFilter.isEmpty() && d->tagFilter.isEmpty() && d->textFilter.isEmpty() &&
         !d->untaggedFilter && d->ratingFilter==-1)
         return true;
 
@@ -298,7 +305,8 @@ bool AlbumLister::matchesFilter(const ImageInfo* info) const
         match &= d->dayFilter.contains(info->dateTime().date().day());
     }
 
-    // Filter by rating.
+    //-- Filter by rating ---------------------------------------------------------
+
     if (d->ratingFilter >= 0) 
     {
         if (d->ratingCond == GreaterEqualCondition)
@@ -327,7 +335,8 @@ bool AlbumLister::matchesFilter(const ImageInfo* info) const
         }
     }
 
-    // Filter by mime type.
+    // -- Filter by mime type -----------------------------------------------------
+
     QFileInfo fi(info->filePath());
     QString mimeType = fi.extension(false).upper();
 
@@ -377,6 +386,25 @@ bool AlbumLister::matchesFilter(const ImageInfo* info) const
             break;
     }
 
+    //-- Filter by text -----------------------------------------------------------
+
+    AlbumSettings *settings = AlbumSettings::instance();
+    if (settings->getIconShowName())
+    {
+        if (info->name().contains(d->textFilter) == false)
+            match = false;
+    }
+    else if (settings->getIconShowComments())
+    {
+        if (info->caption().contains(d->textFilter) == false)
+            match = false;
+    }
+    else if (settings->getIconShowTags())
+    {
+        if (info->tagNames().contains(d->textFilter) == false)
+            match = false;
+    }
+
     return match;
 }
 
@@ -396,9 +424,9 @@ void AlbumLister::stop()
     }
 }
 
-void AlbumLister::setNameFilter(const QString& nameFilter)
+void AlbumLister::setNamesFilter(const QString& namesFilter)
 {
-    d->filter = nameFilter;
+    d->namesFilter = namesFilter;
 }
 
 void AlbumLister::invalidateItem(const ImageInfo *item)
