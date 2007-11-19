@@ -277,6 +277,21 @@ ImageResize::ImageResize(QWidget* parent)
 
     connect(d->useGreycstorationBox, SIGNAL(toggled(bool)),
              this, SLOT(slotRestorationToggled(bool)) );
+
+    connect(this, SIGNAL(cancelClicked()),
+            this, SLOT(slotCancel()));
+
+    connect(this, SIGNAL(defaultClicked()),
+            this, SLOT(slotDefault()));
+
+    connect(this, SIGNAL(user2Clicked()),
+            this, SLOT(slotUser2()));
+
+    connect(this, SIGNAL(user3Clicked()),
+            this, SLOT(slotUser3()));
+
+    connect(this, SIGNAL(helpClicked()),
+            this, SLOT(slotHelp()));
 }
 
 ImageResize::~ImageResize()
