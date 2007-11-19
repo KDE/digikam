@@ -505,45 +505,55 @@ void ImageResize::slotOk()
     enableButton(User3, false);
 
     d->parent->setCursor( Qt::WaitCursor );
+    writeUserSettings();
+    ImageIface iface(0, 0);
+    uchar *data = iface.getOriginalImage();
+    DImg image = DImg(iface.originalWidth(), iface.originalHeight(),
+                      iface.originalSixteenBit(), iface.originalHasAlpha(), data);
+    delete [] data;
+
     if (d->useGreycstorationBox->isChecked())
     {
         d->progressBar->setValue(0);
         d->progressBar->setEnabled(true);
+
+        if (d->greycstorationIface)
+        {
+            delete d->greycstorationIface;
+            d->greycstorationIface = 0;
+        }
+    
+        d->greycstorationIface = new GreycstorationIface(
+                                     &image,
+                                     d->settingsWidget->getSettings(),
+                                     GreycstorationIface::Resize,
+                                     d->wInput->value(),
+                                     d->hInput->value(),
+                                     QImage(),
+                                     this);
+    
+        connect(d->greycstorationIface, SIGNAL(started()),
+                this, SLOT(slotFilterStarted()));
+    
+        connect(d->greycstorationIface, SIGNAL(finished(bool)),
+                this, SLOT(slotFilterFinished(bool)));
+    
+        connect(d->greycstorationIface, SIGNAL(progress(int)),
+                this, SLOT(slotFilterProgress(int)));
+    
+        d->greycstorationIface->startFilter();
     }
-    writeUserSettings();
-
-    ImageIface iface(0, 0);
-    uchar *data = iface.getOriginalImage();
-    DImg originalImage = DImg(iface.originalWidth(), iface.originalHeight(),
-                              iface.originalSixteenBit(), iface.originalHasAlpha(), data);
-    delete [] data;
-
-    if (d->greycstorationIface)
+    else
     {
-        delete d->greycstorationIface;
-        d->greycstorationIface = 0;
+        // See B.K.O #152192: CImg resize() sound like bugous or unadapted
+        // to resize image without good quality.
+    
+        image.resize(d->wInput->value(), d->hInput->value());
+        iface.putOriginalImage(i18n("Resize"), image.bits(),
+                               image.width(), image.height());
+        d->parent->unsetCursor();
+        accept();
     }
-
-    int mode = d->useGreycstorationBox->isChecked() ? GreycstorationIface::Resize
-                                                    : GreycstorationIface::SimpleResize;
-
-    d->greycstorationIface = new GreycstorationIface(
-                                    &originalImage,
-                                    d->settingsWidget->getSettings(),
-                                    mode,
-                                    d->wInput->value(),
-                                    d->hInput->value(),
-                                    QImage(),
-                                    this);
-
-    connect(d->greycstorationIface, SIGNAL(started()),
-            this, SLOT(slotFilterStarted()));
-    connect(d->greycstorationIface, SIGNAL(finished(bool)),
-            this, SLOT(slotFilterFinished(bool)));
-    connect(d->greycstorationIface, SIGNAL(progress(int)),
-            this, SLOT(slotFilterProgress(int)));
-
-    d->greycstorationIface->startFilter();
 }
 
 void ImageResize::slotFilterStarted()
