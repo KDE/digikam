@@ -302,6 +302,17 @@ ImageResize::~ImageResize()
     delete d;
 }
 
+void ImageResize::slotButtonClicked(int button)
+{
+    // KDialog calls QDialog::accept() for Ok.
+    // We need to override this, we can only accept() when the thread has finished.
+
+    if (button == Ok)
+        slotOk();
+    else
+        KDialog::slotButtonClicked(button);
+}
+
 void ImageResize::slotRestorationToggled(bool b)
 {
     d->settingsWidget->setEnabled(b);

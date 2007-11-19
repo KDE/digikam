@@ -73,6 +73,8 @@ private slots:
     void readUserSettings();
     void slotRestorationToggled(bool);
 
+    virtual void slotButtonClicked(int);
+
     void slotFilterStarted();
     void slotFilterFinished(bool);
     void slotFilterProgress(int);
