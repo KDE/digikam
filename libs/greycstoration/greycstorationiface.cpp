@@ -423,12 +423,12 @@ void GreycstorationIface::resize()
 
 void GreycstorationIface::simpleResize()
 {
-    const unsigned int init = 5;      // Initial estimate (1=block, 3=linear, 5=bicubic).
+    const unsigned int init = 3;      // Initial estimate (0, none, 1=block, 3=linear, 4=grid, 5=bicubic).
 
     int w = m_destImage.width();
     int h = m_destImage.height();
 
-    d->img.resize(w, h, 1, -100, init);
+    d->img.resize(w, h, -100, -100, init);
 }
 
 void GreycstorationIface::iterationLoop(uint iter)
