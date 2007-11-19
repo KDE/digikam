@@ -591,8 +591,18 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iof
     // Note : There is no limitation with TIFF and PNG about IPTC byte array size.
 
     if ( mimeType.upper() != QString("JPG") && mimeType.upper() != QString("JPEG") && 
-         mimeType.upper() != QString("JPE")) 
+         mimeType.upper() != QString("JPE"))
+    {
+        // Non JPEG file, we update IPTC preview
         meta.setImagePreview(preview);
+    }
+    else
+    {
+        // JPEG file, we remove IPTC preview.
+        meta.removeIptcTag("Iptc.Application2.Preview");
+        meta.removeIptcTag("Iptc.Application2.PreviewFormat");
+        meta.removeIptcTag("Iptc.Application2.PreviewVersion");
+    }
 
     // Update Exif thumbnail.
     QImage thumb = preview.smoothScale(160, 120, QImage::ScaleMin);
