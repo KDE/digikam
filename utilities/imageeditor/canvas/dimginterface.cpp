@@ -583,18 +583,26 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iof
     meta.setIptc(d->image.getIptc());
 
     // Update Iptc preview.
-    QImage preview = d->image.smoothScale(800, 600, Qt::KeepAspectRatio).copyQImage();
-
-    // TODO: see B.K.O #130525. a JPEG segment is limited to 64K. If the IPTC byte array is
+    // NOTE: see B.K.O #130525. a JPEG segment is limited to 64K. If the IPTC byte array is
     // bigger than 64K duing of image preview tag size, the target JPEG image will be
     // broken. Note that IPTC image preview tag is limited to 256K!!!
-    // Temp. solution to disable IPTC preview record in JPEG file until a right solution 
-    // will be found into Exiv2.
-    // Note : There is no limitation with TIFF and PNG about IPTC byte array size.
+    // There is no limitation with TIFF and PNG about IPTC byte array size.
+
+    QImage preview = d->image.smoothScale(800, 600, Qt::KeepAspectRatio).copyQImage();
 
     if ( mimeType.toUpper() != QString("JPG") && mimeType.toUpper() != QString("JPEG") && 
          mimeType.toUpper() != QString("JPE")) 
+    {
+        // Non JPEG file, we update IPTC preview
         meta.setImagePreview(preview);
+    }
+    else
+    {
+        // JPEG file, we remove IPTC preview.
+        meta.removeIptcTag("Iptc.Application2.Preview");
+        meta.removeIptcTag("Iptc.Application2.PreviewFormat");
+        meta.removeIptcTag("Iptc.Application2.PreviewVersion");        
+    }
 
     // Update Exif thumbnail.
     QImage thumb = preview.scaled(160, 120, Qt::KeepAspectRatio, Qt::SmoothTransformation);
