@@ -399,8 +399,7 @@ bool AlbumLister::matchesFilter(const ImageInfo &info) const
         }
         if (settings->getIconShowTags())
         {
-#warning "TODO: Fix text filter for tags name when ImageInfo::tagNames() will be restored...";
-            QStringList tags = QStringList() /* FIXME QStringList tags = info.tagNames()*/;
+            QStringList tags = AlbumManager::instance()->tagNames(info.tagIds());
             for (QStringList::const_iterator it = tags.begin() ; it != tags.end() ; ++it)
             {
                 if ((*it).contains(d->textFilter))
