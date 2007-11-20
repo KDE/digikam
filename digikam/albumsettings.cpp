@@ -194,7 +194,7 @@ void AlbumSettings::init()
                                   "*.png *.gif *.bmp *.xpm *.ppm *.pnm *.xcf *.pcx";
 			 
     d->defaultMovieFilefilter   = "*.mpeg *.mpg *.mpo *.mpe "         // MPEG
-                                  "*.avi *.mov *.wmf *.asf *.mp4";
+                                  "*.avi *.mov *.wmf *.asf *.mp4 *.3gp";
 			 
     d->defaultAudioFilefilter   = "*.ogg *.mp3 *.wma *.wav";
 
