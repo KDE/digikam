@@ -275,7 +275,7 @@ void SchemaUpdater::defaultFilterSettings(QStringList &defaultImageFilter,
                        << "x3f" << "arw";
 
     defaultVideoFilter << "mpeg" << "mpg" << "mpo" << "mpe"     // MPEG
-                       << "avi"  << "mov" << "wmf" << "asf" << "mp4";
+                       << "avi"  << "mov" << "wmf" << "asf" << "mp4" << "3gp";
 
     defaultAudioFilter << "ogg" << "mp3" << "wma" << "wav";
 }
