@@ -19,7 +19,7 @@ svnbase    = "https://fjcruz@svn.kde.org/home/kde"
 svnbase    = "https://ach@svn.kde.org/home/kde"
 svnbase    = "svn+ssh://gkulzer@svn.kde.org/home/kde"
 
-svnroot    = "#{svnbase}/branches"
+svnroot    = "#{svnbase}/branches/extragear/kde3/"
 adminroot  = "#{svnbase}/branches/KDE/3.5"
 
 addDocs    = ["showfoto"]
@@ -35,7 +35,7 @@ addDocs    = [name] + addDocs
 oldmake = ENV["UNSERMAKE"]
 ENV["UNSERMAKE"] = "no"
 
-puts "Fetching #{svnroot}/extragear/#{egmodule}/#{name}..."
+puts "Fetching #{svnroot}#{egmodule}/#{name}..."
 # Remove old folder, if exists
 `rm -rf #{folder} 2> /dev/null`
 `rm -rf #{folder}.tar.bz2 2> /dev/null`
@@ -43,7 +43,7 @@ puts "Fetching #{svnroot}/extragear/#{egmodule}/#{name}..."
 Dir.mkdir( folder )
 Dir.chdir( folder )
 
-`svn co -N #{svnroot}/extragear/#{egmodule}`
+`svn co -N #{svnroot}#{egmodule}`
 Dir.chdir( egmodule )
 `svn up -N #{name}`
 `svn up -N doc`
