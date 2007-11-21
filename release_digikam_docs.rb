@@ -19,7 +19,7 @@ svnbase    = "https://fjcruz@svn.kde.org/home/kde"
 svnbase    = "https://ach@svn.kde.org/home/kde"
 svnbase    = "svn+ssh://gkulzer@svn.kde.org/home/kde"
 
-svnroot    = "#{svnbase}/branches/stable"
+svnroot    = "#{svnbase}/branches"
 adminroot  = "#{svnbase}/branches/KDE/3.5"
 
 addDocs    = ["showfoto"]
