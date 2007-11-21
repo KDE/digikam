@@ -117,6 +117,8 @@ private slots:
 
     void slotContextMenu();
 
+    void slotRawCameraList();
+
 private:
     
     ShowFotoPriv* d;

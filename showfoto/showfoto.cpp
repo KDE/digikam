@@ -79,6 +79,7 @@ extern "C"
 
 // LibKDcraw includes.
 
+#include <libkdcraw/version.h>
 #include <libkdcraw/rawfiles.h>
 #include <libkdcraw/dcrawbinary.h>
 
@@ -127,6 +128,7 @@ public:
         splash                  = 0;
         itemsNb                 = 0;
         vSplitter               = 0;
+        rawCameraListAction     = 0;
         deleteItem2Trash        = true;
         fullScreenHideThumbBar  = true;
         validIccPath            = true;
@@ -147,6 +149,7 @@ public:
     KToggleAction                   *showBarAction;
 
     KAction                         *openFilesInFolderAction;
+    KAction                         *rawCameraListAction;
 
     KActionMenu                     *BCGAction;
 
@@ -501,7 +504,13 @@ void ShowFoto::setupActions()
     connect(d->showBarAction, SIGNAL(triggered()), this, SLOT(slotToggleShowBar()));
     actionCollection()->addAction("shofoto_showthumbs", d->showBarAction);
 
-    // --- Create the gui --------------------------------------------------------------
+    // Extra 'Help' menu actions ---------------------------------------------
+
+    d->rawCameraListAction = new KAction(KIcon("kdcraw"), i18n("RAW camera supported"), this);
+    connect(d->rawCameraListAction, SIGNAL(triggered()), this, SLOT(slotRawCameraList()));
+    actionCollection()->addAction("help_rawcameralist", d->rawCameraListAction);
+
+    // --- Create the gui ----------------------------------------------------
 
     createGUI("showfotoui.rc");
 }
@@ -1216,6 +1225,18 @@ void ShowFoto::slideShow(bool startWithCurrent, Digikam::SlideShowSettings& sett
     
         slide->show();
     }
+}
+
+void ShowFoto::slotRawCameraList()
+{
+    QStringList list      = KDcrawIface::DcrawBinary::instance()->supportedCamera();
+    QString     dcrawVer  = KDcrawIface::DcrawBinary::instance()->internalVersion();
+    QString     KDcrawVer = QString(kdcraw_version);
+    KMessageBox::informationList(this, 
+                                 i18n("<p>Using KDcraw library version %1"
+                                      "<p>Using Dcraw program version %2"
+                                      "<p>%3 models in the list", KDcrawVer, dcrawVer, list.count()),
+                                 list, i18n("List of supported RAW camera"));
 }
 
 }   // namespace ShowFoto
