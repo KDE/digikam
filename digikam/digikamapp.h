@@ -125,6 +125,9 @@ private slots:
     void slotMimeTypeFilterChanged(int);
     void slotTextFilterChanged(const QString&);
 
+    void slotRecurseAlbums(bool);
+    void slotRecurseTags(bool);
+    
     void slotAboutToShowForwardMenu();
     void slotAboutToShowBackwardMenu();
             

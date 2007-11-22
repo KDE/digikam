@@ -616,16 +616,19 @@ void AlbumManager::scanDAlbums()
     ds << d->libraryPath;
     ds << KURL();
     ds << AlbumSettings::instance()->getAllFileFilter();
-
+    ds << 0; // getting dimensions (not needed here)
+    ds << 0; // recursive sub-album (not needed here)
+    ds << 0; // recursive sub-tags (not needed here)
     
     d->dateListJob = new KIO::TransferJob(u, KIO::CMD_SPECIAL,
                                           ba, QByteArray(), false);
     d->dateListJob->addMetaData("folders", "yes");
 
     connect(d->dateListJob, SIGNAL(result(KIO::Job*)),
-            SLOT(slotResult(KIO::Job*)));
+            this, SLOT(slotResult(KIO::Job*)));
+
     connect(d->dateListJob, SIGNAL(data(KIO::Job*, const QByteArray&)),
-            SLOT(slotData(KIO::Job*, const QByteArray&)));
+            this, SLOT(slotData(KIO::Job*, const QByteArray&)));
 }
 
 AlbumList AlbumManager::allPAlbums() const

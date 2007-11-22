@@ -198,6 +198,8 @@ DigikamApp::~DigikamApp()
     if (d->view)
         delete d->view;
 
+    d->albumSettings->setRecurseAlbums(d->recurseAlbumsAction->isChecked());
+    d->albumSettings->setRecurseTags(d->recurseTagsAction->isChecked());
     d->albumSettings->setTextFilter(d->statusTextFilterBar->text());
     d->albumSettings->setMimeTypeFilter(d->statusMimeFilterBar->mimeFilter());
     d->albumSettings->setRatingFilterCond(d->statusRatingFilterBar->ratingFilterCondition());
@@ -570,6 +572,30 @@ void DigikamApp::setupActions()
     sortActionList.append(i18n("By Collection"));
     sortActionList.append(i18n("By Date"));
     d->albumSortAction->setItems(sortActionList);
+
+    d->recurseAlbumsAction = new KToggleAction(i18n("Include Album Sub-Tree"), 
+                                               0,
+                                               this, 
+                                               0,
+                                               actionCollection(), 
+                                               "albums_recursive");
+    d->recurseAlbumsAction->setWhatsThis(i18n("Activate this option to recursively show all sub-albums below "
+                                              "the current album."));
+
+    connect(d->recurseAlbumsAction, SIGNAL(toggled(bool)),
+            this, SLOT(slotRecurseAlbums(bool)));
+
+    d->recurseTagsAction = new KToggleAction(i18n("Include Tag Sub-Tree"), 
+                                             0,
+                                             this, 
+                                             0,
+                                             actionCollection(), 
+                                             "tags_recursive");
+    d->recurseTagsAction->setWhatsThis(i18n("Activate this option to show all images marked by the given tag " 
+                                            "and its all its sub-tags."));
+
+    connect(d->recurseTagsAction, SIGNAL(toggled(bool)),
+            this, SLOT(slotRecurseTags(bool)));
 
     d->deleteAction = new KAction(i18n("Delete Album"),
                                     "editdelete",
@@ -1021,6 +1047,11 @@ void DigikamApp::setupActions()
 
     d->albumSortAction->setCurrentItem((int)d->albumSettings->getAlbumSortOrder());
     d->imageSortAction->setCurrentItem((int)d->albumSettings->getImageSortOrder());
+
+    d->recurseAlbumsAction->setChecked(d->albumSettings->getRecurseAlbums());
+    d->recurseTagsAction->setChecked(d->albumSettings->getRecurseTags());
+    slotRecurseAlbums(d->recurseAlbumsAction->isChecked());
+    slotRecurseTags(d->recurseTagsAction->isChecked());
 
     d->statusTextFilterBar->setText(d->albumSettings->getTextFilter());
     d->statusMimeFilterBar->setMimeFilter(d->albumSettings->getMimeTypeFilter());
@@ -1951,6 +1982,16 @@ void DigikamApp::slotMimeTypeFilterChanged(int mimeTypeFilter)
 void DigikamApp::slotTextFilterChanged(const QString& text)
 {
     AlbumLister::instance()->setTextFilter(text);
+}
+
+void DigikamApp::slotRecurseAlbums(bool checked)
+{
+    AlbumLister::instance()->setRecurseAlbums(checked);
+}
+
+void DigikamApp::slotRecurseTags(bool checked)
+{
+    AlbumLister::instance()->setRecurseTags(checked);
 }
 
 void DigikamApp::slotZoomSliderChanged(int size)

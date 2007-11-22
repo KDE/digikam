@@ -58,6 +58,8 @@ public:
     bool                                 showTrashDeleteDialog;
     bool                                 sidebarApplyDirectly;
     bool                                 scanAtStart;
+    bool                                 recursiveAlbums;
+    bool                                 recursiveTags;
 
     bool                                 iconShowName;
     bool                                 iconShowSize;
@@ -243,6 +245,9 @@ void AlbumSettings::init()
     d->saveRating               = false;
 
     d->previewLoadFullImageSize = false;
+    
+    d->recursiveAlbums          = false;
+    d->recursiveTags            = true;
 }
 
 void AlbumSettings::readSettings()
@@ -315,6 +320,9 @@ void AlbumSettings::readSettings()
     d->tooltipShowRating        = config->readBoolEntry("ToolTips Show Rating", true);
 
     d->previewLoadFullImageSize = config->readBoolEntry("Preview Load Full Image Size", false);
+
+    d->recursiveAlbums          = config->readBoolEntry("Recursive Albums", false);
+    d->recursiveTags            = config->readBoolEntry("Recursive Tags", true);
 
     // ---------------------------------------------------------------------
 
@@ -405,6 +413,9 @@ void AlbumSettings::saveSettings()
     config->writeEntry("ToolTips Show Rating", d->tooltipShowRating);
 
     config->writeEntry("Preview Load Full Image Size", d->previewLoadFullImageSize);
+
+    config->writeEntry("Recursive Albums", d->recursiveAlbums);
+    config->writeEntry("Recursive Tags", d->recursiveTags);
 
     // ---------------------------------------------------------------------
 
@@ -1123,6 +1134,26 @@ void AlbumSettings::setPreviewLoadFullImageSize(bool val)
 bool AlbumSettings::getPreviewLoadFullImageSize() const
 {
     return d->previewLoadFullImageSize;
+}
+
+void AlbumSettings::setRecurseAlbums(bool val)
+{
+    d->recursiveAlbums = val;
+}
+
+bool AlbumSettings::getRecurseAlbums() const
+{
+    return d->recursiveAlbums;
+}
+
+void AlbumSettings::setRecurseTags(bool val)
+{
+    d->recursiveTags = val;
+}
+
+bool AlbumSettings::getRecurseTags() const
+{
+    return d->recursiveTags;
 }
 
 }  // namespace Digikam

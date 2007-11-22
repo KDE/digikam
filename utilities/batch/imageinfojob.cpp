@@ -90,7 +90,9 @@ void ImageInfoJob::allItemsFromAlbum(Album *album)
     ds << AlbumManager::instance()->getLibraryPath();
     ds << album->kurl();
     ds << d->imagefilter;
-    ds << false;            // No need image resolution info.
+    ds << 0; // getting dimensions (not needed here)
+    ds << 0; // recursive sub-album (not needed here)
+    ds << 0; // recursive sub-tags (not needed here)
 
     // Protocol = digikamalbums -> kio_digikamalbums
     d->job = new KIO::TransferJob(album->kurl(), KIO::CMD_SPECIAL,

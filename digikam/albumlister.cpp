@@ -82,9 +82,15 @@ public:
         mimeTypeFilter = MimeFilter::AllFiles;
         ratingCond     = AlbumLister::GreaterEqualCondition;
         matchingCond   = AlbumLister::OrCondition;
+        recurseAlbums  = false;
+        recurseTags    = false;
     }
 
     bool                            untaggedFilter;
+
+    int                             ratingFilter; 
+    int                             recurseAlbums;
+    int                             recurseTags;
 
     QString                         namesFilter;
     QString                         textFilter;
@@ -94,8 +100,6 @@ public:
     QMap<int,bool>                  dayFilter;
 
     QValueList<int>                 tagFilter;
-
-    int                             ratingFilter; 
 
     QTimer                         *filterTimer;
 
@@ -164,6 +168,8 @@ void AlbumLister::openAlbum(Album *album)
     ds << album->kurl();
     ds << d->namesFilter;
     ds << AlbumSettings::instance()->getIconShowResolution();
+    ds << d->recurseAlbums;
+    ds << d->recurseTags;
 
     // Protocol = digikamalbums -> kio_digikamalbums
     d->job = new KIO::TransferJob(album->kurl(), KIO::CMD_SPECIAL,
@@ -202,6 +208,8 @@ void AlbumLister::refresh()
     ds << d->currAlbum->kurl();
     ds << d->namesFilter;
     ds << AlbumSettings::instance()->getIconShowResolution();
+    ds << d->recurseAlbums;
+    ds << d->recurseTags;
 
     d->job = new KIO::TransferJob(d->currAlbum->kurl(), KIO::CMD_SPECIAL,
                                   ba, QByteArray(), false);
@@ -249,6 +257,18 @@ void AlbumLister::setTextFilter(const QString& text)
 {
     d->textFilter = text;
     d->filterTimer->start(100, true);
+}
+
+void AlbumLister::setRecurseAlbums(bool recursive)
+{
+    d->recurseAlbums = recursive;
+    refresh();
+}
+
+void AlbumLister::setRecurseTags(bool recursive)
+{
+    d->recurseTags = recursive;
+    refresh();
 }
 
 bool AlbumLister::matchesFilter(const ImageInfo* info) const

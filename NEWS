@@ -10,7 +10,8 @@ NEW FEATURES:
 digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 052 ==> 152522 : Support for *.3gp and *.mp4 video files in digiKam (already supported by KDE video players).
-053 ==> 
+053 ==> 128231 : A way to view pictures recursively in albums and sub-albums at the same time would be cool
+054 ==> 
 
 **********************************************************************************************
 

@@ -128,15 +128,20 @@ void kio_digikamalbums::special(const QByteArray& data)
     QString libraryPath;
     KURL    kurl;
     QString url;
+    QString urlWithTrailingSlash;
     QString filter;
     int     getDimensions;
     int     scan = 0;
-    
+    int     recurseAlbums;
+    int     recurseTags;
+
     QDataStream ds(data, IO_ReadOnly);
     ds >> libraryPath;
     ds >> kurl;
     ds >> filter;
     ds >> getDimensions;
+    ds >> recurseAlbums;
+    ds >> recurseTags;
     if (!ds.atEnd())
         ds >> scan;
 
@@ -149,7 +154,7 @@ void kio_digikamalbums::special(const QByteArray& data)
         m_sqlDB.openDB(libraryPath);
     }
 
-    url = QDir::cleanDirPath(kurl.path());
+    url = kurl.path();
     
     if (scan)
     {
@@ -160,84 +165,132 @@ void kio_digikamalbums::special(const QByteArray& data)
     
     QValueList<QRegExp> regex = makeFilterList(filter);
     
-    QStringList values;
-    m_sqlDB.execSql(QString("SELECT id FROM Albums WHERE url='%1';")
-                    .arg(escapeString(url)), &values);
-    int albumid = values.first().toInt();
+    QStringList albumvalues;
+    if (recurseAlbums)
+    {
+        // Search for albums and sub-albums:
+        // For this, get the path with a trailing "/".
+        // Otherwise albums on the same level like "Paris", "Paris 2006",
+        // would be found in addition to "Paris/*".
+        urlWithTrailingSlash = kurl.path(1);
 
-    
-    values.clear();
-    m_sqlDB.execSql(QString("SELECT id, name, datetime FROM Images "
-                                    "WHERE dirid = %1;")
-                            .arg(albumid), &values);
+        m_sqlDB.execSql(QString("SELECT DISTINCT id, url FROM Albums WHERE  url='%1' OR url LIKE '\%%2\%';")
+                        .arg(escapeString(url)).arg(escapeString(urlWithTrailingSlash)), &albumvalues);
+    }
+    else
+    {
+        // Search for albums 
+
+        m_sqlDB.execSql(QString("SELECT DISTINCT id, url FROM Albums WHERE url='%1';")
+                        .arg(escapeString(url)), &albumvalues);
+    }
 
     QByteArray  ba;
-    QDataStream os(ba, IO_WriteOnly);
-    
-    QString base = libraryPath + url + '/';
+    QDataStream* os = new QDataStream(ba, IO_WriteOnly);
+
+    QString base;  
     Q_LLONG id;
     QString name;
     QString date;
     QSize   dims;
 
     struct stat stbuf;
-    for (QStringList::iterator it = values.begin(); it != values.end();)
+    
+    QStringList values;
+    QString albumurl;
+    int albumid;
+
+    // Loop over all albums:
+    int count = 0 ;
+    for (QStringList::iterator albumit = albumvalues.begin(); albumit != albumvalues.end();)
     {
-        id   = (*it).toLongLong();
-        ++it;
-        name = *it;
-        ++it;
-        date = *it;
-        ++it;
+        albumid = (*albumit).toLongLong();
+        ++albumit;
+        albumurl = *albumit;
+        ++albumit;
 
-        if (!matchFilterList(regex, name))
-            continue;
+        base = libraryPath + albumurl + '/';
 
-        if (::stat(QFile::encodeName(base + name), &stbuf) != 0)
-            continue;
+        values.clear();
+        m_sqlDB.execSql(QString("SELECT id, name, datetime FROM Images "
+                                "WHERE dirid = %1;")
+                        .arg(albumid), &values);
 
-        dims = QSize();
-        if (getDimensions)
+        // Loop over all images in each album (specified by its albumid).
+        for (QStringList::iterator it = values.begin(); it != values.end();)
         {
-            QFileInfo fileInfo(base + name);
-            QString rawFilesExt(raw_file_extentions);
-            QString ext = fileInfo.extension(false).upper();
+            id   = (*it).toLongLong();
+            ++it;
+            name = *it;
+            ++it;
+            date = *it;
+            ++it;
 
-            if (!ext.isEmpty() && rawFilesExt.upper().contains(ext))
+            if (!matchFilterList(regex, name))
+              continue;
+
+            if (::stat(QFile::encodeName(base + name), &stbuf) != 0)
+              continue;
+
+            dims = QSize();
+            if (getDimensions)
             {
-                Digikam::DMetadata metaData(base + name);
-                dims = metaData.getImageDimensions();
-            }
-            else
-            {
-                KFileMetaInfo metaInfo(base + name);
-                if (metaInfo.isValid())
+                QFileInfo fileInfo(base + name);
+                QString rawFilesExt(raw_file_extentions);
+                QString ext = fileInfo.extension(false).upper();
+
+                if (!ext.isEmpty() && rawFilesExt.upper().contains(ext))
                 {
-                    if (metaInfo.containsGroup("Jpeg EXIF Data"))
+                    Digikam::DMetadata metaData(base + name);
+                    dims = metaData.getImageDimensions();
+                }
+                else
+                {
+                    KFileMetaInfo metaInfo(base + name);
+                    if (metaInfo.isValid())
                     {
-                        dims = metaInfo.group("Jpeg EXIF Data").
-                            item("Dimensions").value().toSize();
-                    }
-                    else if (metaInfo.containsGroup("General"))
-                    {
-                        dims = metaInfo.group("General").
-                            item("Dimensions").value().toSize();
-                    }
-                    else if (metaInfo.containsGroup("Technical"))
-                    {
-                        dims = metaInfo.group("Technical").
-                            item("Dimensions").value().toSize();
-                    }
+                        if (metaInfo.containsGroup("Jpeg EXIF Data"))
+                        {
+                            dims = metaInfo.group("Jpeg EXIF Data").
+                              item("Dimensions").value().toSize();
+                        }
+                        else if (metaInfo.containsGroup("General"))
+                        {
+                            dims = metaInfo.group("General").
+                              item("Dimensions").value().toSize();
+                        }
+                        else if (metaInfo.containsGroup("Technical"))
+                        {
+                            dims = metaInfo.group("Technical").
+                              item("Dimensions").value().toSize();
+                        }                         
+                    }                    
                 }
             }
-        }
 
-        os << id;
-        os << albumid;
-        os << name;
-        os << date;
-        os << static_cast<size_t>(stbuf.st_size);
-        os << dims;
+            *os << id;
+            *os << albumid;
+            *os << name;
+            *os << date;
+            *os << static_cast<size_t>(stbuf.st_size);
+            *os << dims;
+
+            count++;
+
+            // Send images in batches of 200.
+            if (count > 200)
+            {
+                delete os;
+                os = 0;
+
+                SlaveBase::data(ba);
+                ba.resize(0);
+
+                count = 0;
+                os = new QDataStream(ba, IO_WriteOnly);
+            }
+        }
+        count++;
     }
 
     SlaveBase::data(ba);

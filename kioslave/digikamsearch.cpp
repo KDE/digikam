@@ -126,12 +126,16 @@ void kio_digikamsearch::special(const QByteArray& data)
     QString filter;
     int     getDimensions;
     int     listingType = 0;
+    int     recurseAlbums;
+    int     recurseTags;
 
     QDataStream ds(data, IO_ReadOnly);
     ds >> libraryPath;
     ds >> url;
     ds >> filter;
     ds >> getDimensions;
+    ds >> recurseAlbums;
+    ds >> recurseTags;
     if (!ds.atEnd())
         ds >> listingType;
 

@@ -110,12 +110,16 @@ void kio_digikamdates::special(const QByteArray& data)
     QString url;
     QString filter;
     int     getDimensions;
+    int     recurseAlbums;
+    int     recurseTags;
 
     QDataStream ds(data, IO_ReadOnly);
     ds >> libraryPath;
     ds >> kurl;
     ds >> filter;
     ds >> getDimensions;
+    ds >> recurseAlbums;
+    ds >> recurseTags;
 
     url = kurl.path();
 

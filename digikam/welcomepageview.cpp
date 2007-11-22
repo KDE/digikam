@@ -147,6 +147,7 @@ QString WelcomePageView::infoPage()
     newFeatures << i18n("Camera Interface used as generic import tool");
     newFeatures << i18n("New mime-type and rating filters on status bar");
     newFeatures << i18n("New options to easy navigate between albums, tags and collections");
+    newFeatures << i18n("New options to recursively show the contents of sub-folders");
 
     QString featureItems;
     for ( uint i = 0 ; i < newFeatures.count() ; i++ )

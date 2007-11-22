@@ -222,6 +222,8 @@ KIO::Job* scan(const KURL& albumURL)
     ds << QString();
     ds << 0;
     ds << 1;
+    ds << 0;
+    ds << 0;
 
     KIO::Job* job = new KIO::TransferJob(albumURL,
                                          KIO::CMD_SPECIAL,
