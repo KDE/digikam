@@ -101,12 +101,10 @@ enum Field
     // Dublin Core: Description, Title, Subject (keywords) see above
 };
 
-}
+} // namespace MetadataInfo
 
 typedef QList<MetadataInfo::Field> MetadataFields;
 
+} // namespace Digikam
 
-}
-
-#endif
-
+#endif // METADATAINFO_H
