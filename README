@@ -87,7 +87,7 @@ Name          Version                         URL                               
 
 CMake         >= 2.4.x                        http://www.cmake.org
 libqt         >= 4.3.x                        http://www.trolltech.com                     Including Sqlite database plugin
-libkde        >= 4.0.x                        http://www.kde.org                           
+kdelibs        >= 4.0.x                        http://www.kde.org                           
 libkdepimlibs >= 4.0.x                        http://pim.kde.org                           Optional to support KAddressBook entries.
 libsqlite     >= 3.x                          http://www.sqlite.org
 libgphoto2    >= 2.4.0                        http://www.gphoto.org
