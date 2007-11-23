@@ -24,7 +24,7 @@
 #ifndef DIGIKAM_VERSION_H
 #define DIGIKAM_VERSION_H
 
-static const char digikam_version[] = "0.9.3-beta3";
+static const char digikam_version[] = "0.9.3-rc1";
 
 #endif // DIGIKAM_VERSION_H
 
