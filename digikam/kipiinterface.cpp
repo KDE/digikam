@@ -593,9 +593,10 @@ int DigikamKipiInterface::features() const
 {
     return (
            KIPI::HostSupportsTags           | KIPI::HostSupportsRating         |
-           KIPI::ImagesHasComments          | KIPI::AcceptNewImages            |
-           KIPI::AlbumsHaveComments         | KIPI::ImageTitlesWritable        |
-           KIPI::ImagesHasTime              | KIPI::AlbumsHaveCategory         |
+           KIPI::HostAcceptNewImages        | KIPI::HostSupportsThumbnails     |
+           KIPI::ImagesHasComments          | 
+           KIPI::ImagesHasTime              | KIPI::ImageHasTitlesWritable     |
+           KIPI::AlbumsHaveComments         | KIPI::AlbumsHaveCategory         |
            KIPI::AlbumsHaveCreationDate     | KIPI::AlbumsUseFirstImagePreview 
            );
 }
