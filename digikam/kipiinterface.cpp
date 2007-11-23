@@ -248,7 +248,7 @@ void DigikamImageInfo::setAngle(int /*angle*/)
 //-- Image Collection ------------------------------------------------------------
 
 DigikamImageCollection::DigikamImageCollection( Type tp, Album* album, const QString& filter )
-                      : tp_( tp ), album_(album), imgFilter_(filter)
+                      : m_tp( tp ), m_album(album), m_imgFilter(filter)
 {
     if (!album)
     {
@@ -262,24 +262,24 @@ DigikamImageCollection::~DigikamImageCollection()
 
 QString DigikamImageCollection::name()
 {
-    if ( album_->type() == Album::TAG )
+    if ( m_album->type() == Album::TAG )
     {
-        return i18n("Tag: %1",album_->title());
+        return i18n("Tag: %1",m_album->title());
     }
     else
-        return album_->title();
+        return m_album->title();
 }
 
 QString DigikamImageCollection::category()
 {
-    if ( album_->type() == Album::PHYSICAL )
+    if ( m_album->type() == Album::PHYSICAL )
     {
-        PAlbum *p = dynamic_cast<PAlbum*>(album_);
+        PAlbum *p = dynamic_cast<PAlbum*>(m_album);
         return p->collection();
     }
-    else if ( album_->type() == Album::TAG )
+    else if ( m_album->type() == Album::TAG )
     {
-        TAlbum *p = dynamic_cast<TAlbum*>(album_);
+        TAlbum *p = dynamic_cast<TAlbum*>(m_album);
         return i18n("Tag: %1",p->tagPath());
     }
     else
@@ -288,9 +288,9 @@ QString DigikamImageCollection::category()
 
 QDate DigikamImageCollection::date()
 {
-    if ( album_->type() == Album::PHYSICAL )
+    if ( m_album->type() == Album::PHYSICAL )
     {
-        PAlbum *p = dynamic_cast<PAlbum*>(album_);
+        PAlbum *p = dynamic_cast<PAlbum*>(m_album);
         return p->date();
     }
     else
@@ -299,9 +299,9 @@ QDate DigikamImageCollection::date()
 
 QString DigikamImageCollection::comment()
 {
-    if ( album_->type() == Album::PHYSICAL )
+    if ( m_album->type() == Album::PHYSICAL )
     {
-        PAlbum *p = dynamic_cast<PAlbum*>(album_);
+        PAlbum *p = dynamic_cast<PAlbum*>(m_album);
         return p->caption();
     }
     else
@@ -310,20 +310,20 @@ QString DigikamImageCollection::comment()
 
 KUrl::List DigikamImageCollection::images()
 {
-    switch ( tp_ )
+    switch ( m_tp )
     {
         case AllItems:
         {
-            if (album_->type() == Album::PHYSICAL)
+            if (m_album->type() == Album::PHYSICAL)
             {
-                return imagesFromPAlbum(dynamic_cast<PAlbum*>(album_));
+                return imagesFromPAlbum(dynamic_cast<PAlbum*>(m_album));
             }
-            else if (album_->type() == Album::TAG)
+            else if (m_album->type() == Album::TAG)
             {
-                return imagesFromTAlbum(dynamic_cast<TAlbum*>(album_));
+                return imagesFromTAlbum(dynamic_cast<TAlbum*>(m_album));
             }
-            else if (album_->type() == Album::DATE || 
-                    album_->type() == Album::SEARCH)
+            else if (m_album->type() == Album::DATE || 
+                    m_album->type() == Album::SEARCH)
             {
                 AlbumItemHandler* handler = AlbumManager::instance()->getItemHandler();
     
@@ -392,7 +392,7 @@ KUrl::List DigikamImageCollection::imagesFromPAlbum(PAlbum* album) const
 
     KUrl::List urlList;
 
-    NameFilter nameFilter(imgFilter_);
+    NameFilter nameFilter(m_imgFilter);
 
     for (QStringList::iterator it = urls.begin(); it != urls.end(); ++it)
     {
@@ -412,7 +412,7 @@ KUrl::List DigikamImageCollection::imagesFromTAlbum(TAlbum* album) const
 
     KUrl::List urlList;
 
-    NameFilter nameFilter(imgFilter_);
+    NameFilter nameFilter(m_imgFilter);
 
     for (QStringList::iterator it = urls.begin(); it != urls.end(); ++it)
     {
@@ -425,9 +425,9 @@ KUrl::List DigikamImageCollection::imagesFromTAlbum(TAlbum* album) const
 
 KUrl DigikamImageCollection::path()
 {
-    if (album_->type() == Album::PHYSICAL)
+    if (m_album->type() == Album::PHYSICAL)
     {
-        PAlbum *p = dynamic_cast<PAlbum*>(album_);
+        PAlbum *p = dynamic_cast<PAlbum*>(m_album);
         KUrl url;
         url.setPath(p->folderPath());
         return url;
@@ -441,9 +441,9 @@ KUrl DigikamImageCollection::path()
 
 KUrl DigikamImageCollection::uploadPath()
 {
-    if (album_->type() == Album::PHYSICAL)
+    if (m_album->type() == Album::PHYSICAL)
     {
-        PAlbum *p = dynamic_cast<PAlbum*>(album_);
+        PAlbum *p = dynamic_cast<PAlbum*>(m_album);
         KUrl url;
         url.setPath(p->folderPath());
         return url;
@@ -467,7 +467,7 @@ QString DigikamImageCollection::uploadRootName()
 
 bool DigikamImageCollection::isDirectory()
 {
-    if (album_->type() == Album::PHYSICAL)
+    if (m_album->type() == Album::PHYSICAL)
         return true;
     else
         return false;
@@ -476,7 +476,7 @@ bool DigikamImageCollection::isDirectory()
 bool DigikamImageCollection::operator==(ImageCollectionShared& imgCollection)
 {
     DigikamImageCollection* thatCollection = static_cast<DigikamImageCollection*>(&imgCollection);
-    return (album_ == thatCollection->album_);
+    return (m_album == thatCollection->m_album);
 }
 
 //-- LibKipi interface -----------------------------------------------------------
@@ -484,15 +484,22 @@ bool DigikamImageCollection::operator==(ImageCollectionShared& imgCollection)
 DigikamKipiInterface::DigikamKipiInterface( QObject *parent, const char *name)
                     : KIPI::Interface( parent, name )
 {
+    m_thumbLoadThread = new ThumbnailLoadThread();
+
+    // Set cache size to 256 to have the max quality thumb.
+    m_thumbLoadThread->setThumbnailSize(256);          
+    m_thumbLoadThread->setSendSurrogatePixmap(true);
+    m_thumbLoadThread->setExifRotate(AlbumSettings::instance()->getExifRotate());
+
     m_albumManager = AlbumManager::instance();
 
-    connect( m_albumManager, SIGNAL( signalAlbumItemsSelected( bool ) ),
-             this, SLOT( slotSelectionChanged( bool ) ) );
+    connect(m_albumManager, SIGNAL( signalAlbumItemsSelected( bool ) ),
+            this, SLOT( slotSelectionChanged( bool ) ));
 
-    connect( m_albumManager, SIGNAL( signalAlbumCurrentChanged(Album*) ),
-             this, SLOT( slotCurrentAlbumChanged(Album*) ) );
+    connect(m_albumManager, SIGNAL( signalAlbumCurrentChanged(Album*) ),
+            this, SLOT( slotCurrentAlbumChanged(Album*) ));
 
-    connect(ThumbnailLoadThread::defaultThread(), SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
+    connect(m_thumbLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
             this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
 }
 
@@ -661,15 +668,16 @@ QString DigikamKipiInterface::fileExtensions()
             s->getRawFileFilter());
 }
 
-void DigikamKipiInterface::thumbnail( const KUrl& url, int /*size*/ )
+void DigikamKipiInterface::thumbnail(const KUrl& url, int /*size*/)
 {
-    ThumbnailLoadThread::defaultThread()->find(url.path());
+    // NOTE: size is not used here. Cache use the max pixmap size to store thumbs (256).
+    m_thumbLoadThread->find(url.path());
 }
 
-void DigikamKipiInterface::thumbnails( const KUrl::List& list, int /*size*/ )
+void DigikamKipiInterface::thumbnails(const KUrl::List& list, int size)
 {
     for (KUrl::List::const_iterator it = list.begin() ; it != list.end() ; ++it)
-        ThumbnailLoadThread::defaultThread()->find((*it).path());
+        thumbnail((*it).path(), size);
 }
 
 void DigikamKipiInterface::slotThumbnailLoaded(const LoadingDescription& desc, const QPixmap& pix)

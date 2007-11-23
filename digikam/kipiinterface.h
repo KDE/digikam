@@ -63,6 +63,7 @@ class ImageInfo;
 namespace Digikam
 {
 
+class ThumbnailLoadThread;
 class AlbumManager;
 class Album;
 class PAlbum;
@@ -143,9 +144,10 @@ private:
     
 private:
 
-    Type     tp_;
-    Album   *album_;
-    QString  imgFilter_;
+    QString  m_imgFilter;
+
+    Type     m_tp;
+    Album   *m_album;
 };
 
 
@@ -164,11 +166,14 @@ public:
     KIPI::ImageCollection currentSelection();
     QList<KIPI::ImageCollection> allAlbums();
     KIPI::ImageInfo info( const KUrl& );
+
     bool addImage( const KUrl&, QString& errmsg );
     void delImage( const KUrl& );
     void refreshImages( const KUrl::List& urls );
+
     int features() const;
     QString fileExtensions();
+
     void thumbnail( const KUrl& url, int size );
     void thumbnails( const KUrl::List& list, int size );
 
@@ -183,7 +188,8 @@ private slots:
 
 private:
 
-    AlbumManager *m_albumManager;
+    AlbumManager        *m_albumManager;
+    ThumbnailLoadThread *m_thumbLoadThread;
 };
 
 }  // namespace Digikam
