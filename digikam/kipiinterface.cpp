@@ -595,7 +595,7 @@ int DigikamKipiInterface::features() const
            KIPI::HostSupportsTags           | KIPI::HostSupportsRating         |
            KIPI::HostAcceptNewImages        | KIPI::HostSupportsThumbnails     |
            KIPI::ImagesHasComments          | 
-           KIPI::ImagesHasTime              | KIPI::ImageHasTitlesWritable     |
+           KIPI::ImagesHasTime              | KIPI::ImagesHasTitlesWritable    |
            KIPI::AlbumsHaveComments         | KIPI::AlbumsHaveCategory         |
            KIPI::AlbumsHaveCreationDate     | KIPI::AlbumsUseFirstImagePreview 
            );
