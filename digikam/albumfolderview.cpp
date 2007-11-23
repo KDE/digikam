@@ -60,7 +60,6 @@
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "collectionmanager.h"
-#include "thumbnailjob.h"
 #include "thumbnailsize.h"
 #include "albumpropsedit.h"
 #include "folderitem.h"
