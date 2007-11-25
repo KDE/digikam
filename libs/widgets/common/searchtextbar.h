@@ -47,6 +47,9 @@ public:
     SearchTextBar(QWidget *parent=0);
     ~SearchTextBar();
 
+    void setText(const QString& text);
+    QString text() const;
+
 signals:
     
     void signalTextChanged(const QString&);    

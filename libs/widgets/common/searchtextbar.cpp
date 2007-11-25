@@ -98,6 +98,16 @@ SearchTextBar::~SearchTextBar()
     delete d;
 }
 
+void SearchTextBar::setText(const QString& text)
+{
+    d->searchEdit->setText(text);
+}
+
+QString SearchTextBar::text() const
+{
+    return d->searchEdit->text();
+}
+
 void SearchTextBar::slotSearchResult(bool match)
 {
     if (d->searchEdit->text().isEmpty())
