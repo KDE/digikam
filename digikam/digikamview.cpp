@@ -825,7 +825,6 @@ void DigikamView::slotImageSelected()
     d->selectionTimer->start(75, true);
 }
 
-
 void DigikamView::slotDispatchImageSelected()
 {
     if (d->needDispatchSelection)

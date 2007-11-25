@@ -83,6 +83,7 @@
 #include "thumbnailsize.h"
 #include "themeengine.h"
 #include "scanlib.h"
+#include "searchtextbar.h"
 #include "loadingcacheinterface.h"
 #include "imageattributeswatch.h"
 #include "batchthumbsgenerator.h"
@@ -367,7 +368,7 @@ void DigikamApp::setupStatusBar()
 
     //------------------------------------------------------------------------------
 
-    d->statusTextFilterBar = new KLineEdit(statusBar());
+    d->statusTextFilterBar = new SearchTextBar(statusBar());
     d->statusTextFilterBar->setMaximumHeight(fontMetrics().height()+2);
     QToolTip::add(d->statusTextFilterBar, i18n("Text quick filter (search)"));
     QWhatsThis::add(d->statusTextFilterBar, i18n("Here you can enter search patterns to quickly "
@@ -408,7 +409,7 @@ void DigikamApp::setupStatusBar()
     connect(d->statusMimeFilterBar, SIGNAL(activated(int)),
             this, SLOT(slotMimeTypeFilterChanged(int)));
 
-    connect(d->statusTextFilterBar, SIGNAL(textChanged(const QString&)),
+    connect(d->statusTextFilterBar, SIGNAL(signalTextChanged(const QString&)),
             this, SLOT(slotTextFilterChanged(const QString&)));
 
     connect(d->statusZoomBar, SIGNAL(signalZoomMinusClicked()),

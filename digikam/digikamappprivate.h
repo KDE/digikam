@@ -66,6 +66,7 @@ namespace Digikam
 {
 
 class DCOPIface;
+class SearchTextBar;
 
 class DigikamAppPriv
 {
@@ -175,7 +176,7 @@ public:
 
     KConfig               *config;
 
-    KLineEdit             *statusTextFilterBar;
+    SearchTextBar         *statusTextFilterBar;
 
     // Album Actions
     KAction               *newAction;
