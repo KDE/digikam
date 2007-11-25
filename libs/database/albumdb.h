@@ -196,8 +196,8 @@ public:
 
     /**
      * Find out the album for a given folder.
-     * @param albumRootId  id of the album root of the new album
-     * @param relativePath The folder for which you want the albumID relative to the album root
+     * @param albumRootId  id of the album root of the album
+     * @param relativePath The relative path for which you want the albumID relative to the album root
      * @param create       If true, an album is newly created if it does not yet exist.
      *                     If false, -1 is returned if no album exists.
      * @return The albumID for that folder,
@@ -206,6 +206,14 @@ public:
     int  getAlbumForPath(int albumRootId, const QString& relativePath, bool create = true);
 
     //int  getAlbumForPath(const QString &albumRoot, const QString& relativePath, bool create = true);
+
+    /**
+     * Find out the album ids for a given relative path, including the subalbums.
+     * @param albumRootId  id of the album root of the album
+     * @param relativePath The path for which you want the albumIDs relative to the album root
+     * @return a list of album ids. The list is empty if now albums are found.
+     */
+    QList<int> getAlbumAndSubalbumsForPath(int albumRootId, const QString& relativePath);
 
     /* *
      * List the urls of all subalbums of the album specified by albumRoot and path.

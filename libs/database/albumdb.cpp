@@ -1607,6 +1607,20 @@ int AlbumDB::getAlbumForPath(int albumRootId, const QString& folder, bool create
     return albumID;
 }
 
+QList<int> AlbumDB::getAlbumAndSubalbumsForPath(int albumRootId, const QString& relativePath)
+{
+    QList<QVariant> values;
+    d->db->execSql( QString("SELECT id FROM Albums WHERE albumRoot=? AND (relativePath=? OR relativePath LIKE ?);"),
+                    albumRootId, relativePath, relativePath + "/%", &values);
+
+    QList<int> albumIds;
+    for (QList<QVariant>::iterator it = values.begin(); it != values.end(); ++it)
+    {
+        albumIds << (*it).toInt();
+    }
+    return albumIds;
+}
+
 qlonglong AlbumDB::addItem(int albumID, const QString& name,
                            DatabaseItem::Status status,
                            DatabaseItem::Category category,
@@ -2274,8 +2288,8 @@ void AlbumDB::renameAlbum(int albumID, const QString& newRelativePath, bool rena
     {
         // now find the list of all subalbums which need to be updated
         QList<QVariant> values;
-        d->db->execSql( QString("SELECT relativePath FROM Albums WHERE albumRoot=? AND relativePath LIKE '?/%';"),
-                        albumRoot, oldUrl, &values );
+        d->db->execSql( QString("SELECT relativePath FROM Albums WHERE albumRoot=? AND relativePath LIKE ?;"),
+                        albumRoot, oldUrl + "/%", &values );
 
         // and update their url
         QString newChildURL;
