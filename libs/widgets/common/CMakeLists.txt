@@ -4,12 +4,13 @@ INSTALL(FILES histogramwidget.h
               sidebar.h
               squeezedcombobox.h 
               dpopupmenu.h 
-	          dlogoaction.h
+              dlogoaction.h
               statuszoombar.h 
               statusnavigatebar.h
               statusprogressbar.h 
               dcursortracker.h 
               paniconwidget.h 
               previewwidget.h  
+	      searchtextbar.h
          DESTINATION ${INCLUDE_INSTALL_DIR}/digikam)
 

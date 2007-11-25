@@ -320,6 +320,7 @@ SET(libcommonwidgets_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/curveswidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/histogramwidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/splashscreen.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/searchtextbar.cpp
    )
 
 SET(libiccprofileswidgets_SRCS
