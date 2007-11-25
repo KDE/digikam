@@ -446,10 +446,13 @@ void AlbumManager::scanPAlbums()
     // go through all the Albums and see which ones are already present
     foreach (AlbumInfo info, currentAlbums)
     {
-        if (oldAlbums.contains(info.id))
-            oldAlbums.remove(info.id);
-        else
-            newAlbums << info;
+        if (CollectionManager::instance()->locationForAlbumRootId(info.albumRootId).isAvailable())
+        {
+            if (oldAlbums.contains(info.id))
+                oldAlbums.remove(info.id);
+            else
+                newAlbums << info;
+        }
     }
 
     // now oldAlbums contains all the deleted albums and
