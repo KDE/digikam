@@ -36,7 +36,6 @@
 
 // KDE includes.
 
-#include <klineedit.h>
 #include <kaboutdata.h>
 #include <klocale.h>
 #include <kstandarddirs.h>

@@ -60,7 +60,6 @@ class KToolBarPopupAction;
 class KToggleAction;
 class KActionMenu;
 class KSelectAction;
-class KLineEdit;
 
 namespace Digikam
 {
