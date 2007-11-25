@@ -66,6 +66,7 @@ signals:
 
     void signalProgressBarMode(int, const QString&);
     void signalProgressValue(int);
+    void signalTagFilterMatch(bool);
 
 protected:
 
@@ -105,7 +106,7 @@ private slots:
     void slotRatingChanged(int rating);
     void slotModified();
     void slotRightButtonClicked(QListViewItem *, const QPoint &, int);
-    void slotTagsSearchChanged();
+    void slotTagsSearchChanged(const QString&);
 
     void slotAlbumAdded(Album* a);
     void slotAlbumDeleted(Album* a);

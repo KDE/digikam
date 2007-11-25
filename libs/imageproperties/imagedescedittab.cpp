@@ -70,6 +70,7 @@
 #include "imageattributeswatch.h"
 #include "metadatahub.h"
 #include "statusprogressbar.h"
+#include "searchtextbar.h"
 #include "imagedescedittab.h"
 #include "imagedescedittab.moc"
 
@@ -86,9 +87,8 @@ public:
         modified                   = false;
         ignoreImageAttributesWatch = false;
         recentTagsBtn              = 0;
-        tagsSearchClearBtn         = 0;
         commentsEdit               = 0;
-        tagsSearchEdit             = 0;
+        tagsSearchBar              = 0;
         dateTimeEdit               = 0;
         tagsView                   = 0;
         ratingWidget               = 0;
@@ -103,7 +103,6 @@ public:
     bool                           ignoreImageAttributesWatch;
 
     QToolButton                   *recentTagsBtn;
-    QToolButton                   *tagsSearchClearBtn;
     QToolButton                   *assignedTagsBtn;
     QToolButton                   *revertBtn;
 
@@ -116,9 +115,9 @@ public:
 
     KTextEdit                     *commentsEdit;
 
-    KLineEdit                     *tagsSearchEdit;
-
     KDateTimeEdit                 *dateTimeEdit;
+
+    SearchTextBar                 *tagsSearchBar;
 
     QPtrList<ImageInfo>            currInfos;
 
@@ -162,17 +161,10 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
 
     // Tags view ---------------------------------------------------
 
-    QHBox *tagsSearch = new QHBox(settingsArea);
+    QHBox *tagsSearch  = new QHBox(settingsArea);
     tagsSearch->setSpacing(KDialog::spacingHint());
 
-    d->tagsSearchClearBtn = new QToolButton(tagsSearch);
-    d->tagsSearchClearBtn->setAutoRaise(true);
-    d->tagsSearchClearBtn->setIconSet(kapp->iconLoader()->loadIcon("locationbar_erase",
-                                      KIcon::Toolbar, KIcon::SizeSmall));
-
-    new QLabel(i18n("Search:"), tagsSearch);
-    d->tagsSearchEdit = new KLineEdit(tagsSearch);
-    d->tagsSearchEdit->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum));
+    d->tagsSearchBar   = new SearchTextBar(tagsSearch);
 
     d->assignedTagsBtn = new QToolButton(tagsSearch);
     QToolTip::add(d->assignedTagsBtn, i18n("Already assigned tags"));
@@ -210,7 +202,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     buttonsBox->setStretchFactor(d->applyBtn, 10);
 
     d->moreButton = new QPushButton(i18n("More"), buttonsBox);
-    d->moreMenu = new QPopupMenu(this);
+    d->moreMenu   = new QPopupMenu(this);
     d->moreButton->setPopup(d->moreMenu);
 
     // --------------------------------------------------
@@ -249,11 +241,11 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     connect(d->tagsView, SIGNAL(rightButtonClicked(QListViewItem*, const QPoint &, int)),
             this, SLOT(slotRightButtonClicked(QListViewItem*, const QPoint&, int)));
             
-    connect(d->tagsSearchClearBtn, SIGNAL(clicked()),
-            d->tagsSearchEdit, SLOT(clear()));
-            
-    connect(d->tagsSearchEdit, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotTagsSearchChanged()));
+    connect(d->tagsSearchBar, SIGNAL(signalTextChanged(const QString&)),
+            this, SLOT(slotTagsSearchChanged(const QString&)));
+
+    connect(this, SIGNAL(signalTagFilterMatch(bool)),
+            d->tagsSearchBar, SLOT(slotSearchResult(bool)));
 
     connect(d->assignedTagsBtn, SIGNAL(toggled(bool)),
             this, SLOT(slotAssignedTagsToggled(bool)));
@@ -1468,11 +1460,10 @@ void ImageDescEditTab::slotRecentTagsMenuActivated(int id)
     }
 }
 
-void ImageDescEditTab::slotTagsSearchChanged()
+void ImageDescEditTab::slotTagsSearchChanged(const QString& filter)
 {
     //TODO: this will destroy assigned-tags filtering. Unify in one method.
-    QString search(d->tagsSearchEdit->text());
-    search = search.lower();
+    QString search = filter.lower();
 
     bool atleastOneMatch = false;
 
@@ -1537,7 +1528,6 @@ void ImageDescEditTab::slotTagsSearchChanged()
 
     if (search.isEmpty())
     {
-        d->tagsSearchEdit->unsetPalette();
         TAlbum* root = AlbumManager::instance()->findTAlbum(0);
         TAlbumCheckListItem* rootItem = (TAlbumCheckListItem*)(root->extraData(this));
         if (rootItem)
@@ -1549,13 +1539,9 @@ void ImageDescEditTab::slotTagsSearchChanged()
         TAlbumCheckListItem* rootItem = (TAlbumCheckListItem*)(root->extraData(this));
         if (rootItem)
             rootItem->setText(0, i18n("Found Tags"));
-
-        QPalette pal = d->tagsSearchEdit->palette();
-        pal.setColor(QPalette::Active, QColorGroup::Base,
-                     atleastOneMatch ?  QColor(200,255,200) :
-                     QColor(255,200,200));
-        d->tagsSearchEdit->setPalette(pal);
     }
+
+    emit signalTagFilterMatch(atleastOneMatch);
 }
 
 void ImageDescEditTab::slotAssignedTagsToggled(bool t)
