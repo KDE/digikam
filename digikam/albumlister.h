@@ -115,6 +115,9 @@ public:
 
     void setTextFilter(const QString& text);
 
+    void setRecurseAlbums(bool recursive);
+    void setRecurseTags(bool recursive);
+
     /**
       * Trigger a recreation of the given ImageInfo object
       * for the next refresh.
@@ -142,6 +145,7 @@ private:
 
     AlbumLister();
     bool matchesFilter(const ImageInfo &info) const;
+    void startListJob(const KUrl &url);
 
 private:
 

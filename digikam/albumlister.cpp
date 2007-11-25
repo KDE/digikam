@@ -81,9 +81,15 @@ public:
         mimeTypeFilter = MimeFilter::AllFiles;
         ratingCond     = AlbumLister::GreaterEqualCondition;
         matchingCond   = AlbumLister::OrCondition;
+        recurseAlbums  = false;
+        recurseTags    = false;
     }
 
     bool                            untaggedFilter;
+
+    int                             ratingFilter; 
+    int                             recurseAlbums;
+    int                             recurseTags;
 
     QString                         namesFilter;
     QString                         textFilter;
@@ -93,8 +99,6 @@ public:
     QSet<int>                       dayFilter;
 
     QList<int>                      tagFilter;
-
-    int                             ratingFilter; 
 
     QTimer                         *filterTimer;
 
@@ -160,16 +164,7 @@ void AlbumLister::openAlbum(Album *album)
     if (!album)
         return;
 
-    // Protocol = digikamalbums -> kio_digikamalbums
-    d->job = ImageLister::startListJob(album->kurl());
-                                       //d->namesFilter,
-                                       //AlbumSettings::instance()->getIconShowResolution());
-
-    connect(d->job, SIGNAL(result(KJob*)),
-            this, SLOT(slotResult(KJob*)));
-
-    connect(d->job, SIGNAL(data(KIO::Job*, const QByteArray&)),
-            this, SLOT(slotData(KIO::Job*, const QByteArray&)));
+    startListJob(album->kurl());
 }
 
 void AlbumLister::refresh()
@@ -191,14 +186,32 @@ void AlbumLister::refresh()
         d->itemMap.insert(it->id(), *it);
     }
 
-    ImageLister lister;
-    d->job = lister.startListJob(d->currAlbum->kurl());//, d->namesFilter, AlbumSettings::instance()->getIconShowResolution());
+    startListJob(d->currAlbum->kurl());
+}
+
+void AlbumLister::startListJob(const KUrl &url)
+{
+    d->job = ImageLister::startListJob(url);
+    d->job->addMetaData("listAlbumsRecursively", d->recurseAlbums ? "true" : "false");
+    d->job->addMetaData("listTagsRecursively", d->recurseTags ? "true" : "false");
 
     connect(d->job, SIGNAL(result(KJob*)),
             this, SLOT(slotResult(KJob*)));
 
     connect(d->job, SIGNAL(data(KIO::Job*, const QByteArray&)),
             this, SLOT(slotData(KIO::Job*, const QByteArray&)));
+}
+
+void AlbumLister::setRecurseAlbums(bool recursive)
+{
+    d->recurseAlbums = recursive;
+    refresh();
+}
+
+void AlbumLister::setRecurseTags(bool recursive)
+{
+    d->recurseTags = recursive;
+    refresh();
 }
 
 void AlbumLister::setDayFilter(const QList<int>& days)
@@ -389,12 +402,12 @@ bool AlbumLister::matchesFilter(const ImageInfo &info) const
         bool foundText = false;
         if (settings->getIconShowName())
         {
-            if (info.name().toLower().contains(d->textFilter.toLower()))
+            if (info.name().contains(d->textFilter))
                 foundText = true;
         }
         if (settings->getIconShowComments())
         {
-            if (info.comment().toLower().contains(d->textFilter.toLower()))
+            if (info.comment().contains(d->textFilter))
                 foundText = true;
         }
         if (settings->getIconShowTags())
@@ -402,7 +415,7 @@ bool AlbumLister::matchesFilter(const ImageInfo &info) const
             QStringList tags = AlbumManager::instance()->tagNames(info.tagIds());
             for (QStringList::const_iterator it = tags.begin() ; it != tags.end() ; ++it)
             {
-                if ((*it).toLower().contains(d->textFilter.toLower()))
+                if ((*it).contains(d->textFilter))
                     foundText = true;
             }
         }

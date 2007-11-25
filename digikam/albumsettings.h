@@ -265,6 +265,12 @@ public:
     void setPreviewLoadFullImageSize(bool val);
     bool getPreviewLoadFullImageSize() const;
 
+    void setRecurseAlbums(bool val);
+    bool getRecurseAlbums() const;
+
+    void setRecurseTags(bool val);
+    bool getRecurseTags() const;
+
     static AlbumSettings *instance();
 
 private:

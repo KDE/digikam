@@ -71,7 +71,10 @@ void kio_digikamtagsProtocol::special(const QByteArray& data)
     Digikam::DatabaseUrl dbUrl(kurl);
     Digikam::DatabaseAccess::setParameters(dbUrl);
 
+    bool recursive = (metaData("listTagsRecursively") == "true");
+
     Digikam::ImageLister lister;
+    lister.setRecursive(recursive);
     // send data every 200 images to be more responsive
     Digikam::ImageListerSlaveBasePartsSendingReceiver receiver(this, 200);
     lister.list(&receiver, kurl);

@@ -89,6 +89,8 @@ public:
         imageDeletePermanentlyDirectlyAction = 0;
         imageTrashDirectlyAction             = 0;
         albumSortAction                      = 0;
+        recurseAlbumsAction                  = 0;
+        recurseTagsAction                    = 0;
         backwardActionMenu                   = 0;
         forwardActionMenu                    = 0;
         addImagesAction                      = 0;
@@ -239,6 +241,8 @@ public:
     KAction                            *slideShowRecursiveAction;
     KSelectAction                      *imageSortAction;
     KSelectAction                      *albumSortAction;
+    KToggleAction                      *recurseAlbumsAction;
+    KToggleAction                      *recurseTagsAction;
 
     KAction                            *rating0Star;
     KAction                            *rating1Star;

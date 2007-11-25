@@ -435,10 +435,11 @@ void AlbumManager::scanPAlbums()
     qSort(currentAlbums);
 
     /*
-    QList<CollectionLocation *> allLocations = CollectionManager::instance()->allAvailableLocations();
+    // cache location status
+    QList<CollectionLocation> allLocations = CollectionManager::instance()->allLocations();
     QHash<int, CollectionLocation::Status> statusHash;
-    foreach (CollectionLocation *location, allLocations)
-        statusHash[location->id()] = location->status();
+    foreach (CollectionLocation location, allLocations)
+        statusHash[location->id()] = location.status();
     */
 
     QList<AlbumInfo> newAlbums;
@@ -446,7 +447,9 @@ void AlbumManager::scanPAlbums()
     // go through all the Albums and see which ones are already present
     foreach (AlbumInfo info, currentAlbums)
     {
+        // check that location of album is available
         if (CollectionManager::instance()->locationForAlbumRootId(info.albumRootId).isAvailable())
+        //if (statusHash.value(info.albumRootId) == CollectionLocation::LocationAvailable)
         {
             if (oldAlbums.contains(info.id))
                 oldAlbums.remove(info.id);

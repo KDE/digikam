@@ -87,8 +87,12 @@ void kio_digikamalbums::special(const QByteArray& data)
     Digikam::DatabaseUrl dbUrl(kurl);
     Digikam::DatabaseAccess::setParameters(dbUrl);
 
+    bool recursive = (metaData("listAlbumsRecursively") == "true");
+
     Digikam::ImageLister lister;
-    Digikam::ImageListerSlaveBaseReceiver receiver(this);
+    lister.setRecursive(recursive);
+    // send data every 200 images to be more responsive
+    Digikam::ImageListerSlaveBasePartsSendingReceiver receiver(this, 200);
     lister.list(&receiver, kurl);
     receiver.sendData();
 

@@ -119,6 +119,8 @@ public:
     int                                 mimeTypeFilter;
     int                                 ratingFilterValue;
     int                                 ratingFilterCond;
+    bool                                recursiveAlbums;
+    bool                                recursiveTags;
 
     QString                             textFilter;
 
@@ -260,6 +262,9 @@ void AlbumSettings::init()
     d->saveRating               = false;
 
     d->previewLoadFullImageSize = false;
+
+    d->recursiveAlbums          = false;
+    d->recursiveTags            = true;
 }
 
 void AlbumSettings::readSettings()
@@ -306,6 +311,9 @@ void AlbumSettings::readSettings()
     d->ratingFilterValue        = group.readEntry("Rating Filter Value", 0);
     d->ratingFilterCond         = group.readEntry("Rating Filter Condition",
                                                   (int)AlbumLister::GreaterEqualCondition);
+    d->recursiveAlbums          = group.readEntry("Recursive Albums", false);
+    d->recursiveTags            = group.readEntry("Recursive Tags", true);
+
 
     d->iconShowName             = group.readEntry("Icon Show Name", false); 
     d->iconShowResolution       = group.readEntry("Icon Show Resolution", false);
@@ -335,7 +343,7 @@ void AlbumSettings::readSettings()
     d->tooltipShowRating        = group.readEntry("ToolTips Show Rating", true);
 
     d->previewLoadFullImageSize = group.readEntry("Preview Load Full Image Size", false);
-    
+
     // ---------------------------------------------------------------------
 
     group = config->group("EXIF Settings");
@@ -396,6 +404,8 @@ void AlbumSettings::saveSettings()
     group.writeEntry("Mime Type Filter", d->mimeTypeFilter);
     group.writeEntry("Rating Filter Value", d->ratingFilterValue);
     group.writeEntry("Rating Filter Condition", d->ratingFilterCond);
+    group.writeEntry("Recursive Albums", d->recursiveAlbums);
+    group.writeEntry("Recursive Tags", d->recursiveTags);
     group.writeEntry("Theme", d->currentTheme);
 
     group.writeEntry("Icon Show Name", d->iconShowName);
@@ -1154,6 +1164,26 @@ void AlbumSettings::setPreviewLoadFullImageSize(bool val)
 bool AlbumSettings::getPreviewLoadFullImageSize() const
 {
     return d->previewLoadFullImageSize;
+}
+
+void AlbumSettings::setRecurseAlbums(bool val)
+{
+    d->recursiveAlbums = val;
+}
+
+bool AlbumSettings::getRecurseAlbums() const
+{
+    return d->recursiveAlbums;
+}
+
+void AlbumSettings::setRecurseTags(bool val)
+{
+    d->recursiveTags = val;
+}
+
+bool AlbumSettings::getRecurseTags() const
+{
+    return d->recursiveTags;
 }
 
 }  // namespace Digikam

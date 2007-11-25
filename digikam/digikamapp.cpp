@@ -213,6 +213,8 @@ DigikamApp::~DigikamApp()
     if (d->view)
         delete d->view;
 
+    AlbumSettings::instance()->setRecurseAlbums(d->recurseAlbumsAction->isChecked());
+    AlbumSettings::instance()->setRecurseTags(d->recurseTagsAction->isChecked());
     AlbumSettings::instance()->setMimeTypeFilter(d->statusMimeFilterBar->mimeFilter());
     AlbumSettings::instance()->setRatingFilterCond(d->statusRatingFilterBar->ratingFilterCondition());
     AlbumSettings::instance()->setRatingFilterValue(d->statusRatingFilterBar->rating());
@@ -695,6 +697,20 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
+    d->recurseAlbumsAction = new KToggleAction(i18n("Include Album Sub-Tree"), this);
+    d->recurseAlbumsAction->setWhatsThis(i18n("Activate this option to recursively show all sub-albums below "
+                                              "the current album."));
+    connect(d->recurseAlbumsAction, SIGNAL(toggled(bool)), this, SLOT(slotRecurseAlbums(bool)));
+    actionCollection()->addAction("albums_recursive", d->recurseAlbumsAction);
+
+    d->recurseTagsAction = new KToggleAction(i18n("Include Tag Sub-Tree"), this);
+    d->recurseTagsAction->setWhatsThis(i18n("Activate this option to show all images marked by the given tag "
+                                            "and its all its sub-tags."));
+    connect(d->recurseTagsAction, SIGNAL(toggled(bool)), this, SLOT(slotRecurseTags(bool)));
+    actionCollection()->addAction("tags_recursive", d->recurseTagsAction);
+
+    // -----------------------------------------------------------
+
     d->imageSortAction = new KSelectAction(i18n("&Sort Images"), this);
     d->imageSortAction->setWhatsThis(i18n("Sort Albums contents."));
     connect(d->imageSortAction, SIGNAL(triggered(int)), d->view, SLOT(slotSortImages(int)));
@@ -983,6 +999,8 @@ void DigikamApp::setupActions()
 
     d->albumSortAction->setCurrentItem((int)AlbumSettings::instance()->getAlbumSortOrder());
     d->imageSortAction->setCurrentItem((int)AlbumSettings::instance()->getImageSortOrder());
+    d->recurseAlbumsAction->setChecked(AlbumSettings::instance()->getRecurseAlbums());
+    d->recurseTagsAction->setChecked(AlbumSettings::instance()->getRecurseTags());
     d->statusRatingFilterBar->setRating(AlbumSettings::instance()->getRatingFilterValue());
     // Setting the filter condition also updates the tooltip.
     // (So `setRating` is called first, as otherwise the filter value is not respected).
@@ -2137,6 +2155,16 @@ void DigikamApp::slotTextFilterChanged(const QString& text)
 void DigikamApp::slotRatingFilterChanged(int rating, AlbumLister::RatingCondition cond)
 {
     AlbumLister::instance()->setRatingFilter(rating, cond);
+}
+
+void DigikamApp::slotRecurseAlbums(bool checked)
+{
+    AlbumLister::instance()->setRecurseAlbums(checked);
+}
+
+void DigikamApp::slotRecurseTags(bool checked)
+{
+    AlbumLister::instance()->setRecurseTags(checked);
 }
 
 void DigikamApp::slotZoomSliderChanged(int size)
