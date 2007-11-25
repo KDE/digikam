@@ -4,7 +4,7 @@ noinst_LTLIBRARIES = libcommonwidgets.la
 
 libcommonwidgets_la_SOURCES = histogramwidget.cpp colorgradientwidget.cpp curveswidget.cpp dlogoaction.cpp \
                               sidebar.cpp squeezedcombobox.cpp filesaveoptionsbox.cpp dpopupmenu.cpp \
-                              statuszoombar.cpp statusnavigatebar.cpp statusprogressbar.cpp \
+                              statuszoombar.cpp statusnavigatebar.cpp statusprogressbar.cpp searchtextbar.cpp \
                               dcursortracker.cpp paniconwidget.cpp previewwidget.cpp splashscreen.cpp 
 
 libcommonwidgets_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
@@ -19,7 +19,7 @@ INCLUDES = -I$(top_srcdir)/digikam/libs/histogram \
 
 
 digikaminclude_HEADERS = histogramwidget.h colorgradientwidget.h curveswidget.h sidebar.h dlogoaction.h \
-	                     squeezedcombobox.h dpopupmenu.h statuszoombar.h statusnavigatebar.h \
+	                     squeezedcombobox.h dpopupmenu.h statuszoombar.h statusnavigatebar.h searchtextbar.h \
 	                     statusprogressbar.h dcursortracker.h paniconwidget.h previewwidget.h 
 
 digikamincludedir = $(includedir)/digikam
