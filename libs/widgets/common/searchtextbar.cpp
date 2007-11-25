@@ -28,7 +28,6 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qtoolbutton.h>
-#include <qtooltip.h>
 
 // KDE includes.
 
@@ -65,7 +64,7 @@ public:
 };
 
 SearchTextBar::SearchTextBar(QWidget *parent)
-                 : QWidget(parent, 0, Qt::WDestructiveClose)
+             : QWidget(parent, 0, Qt::WDestructiveClose)
 {
     d = new SearchTextBarPriv;
     setFocusPolicy(QWidget::NoFocus);
