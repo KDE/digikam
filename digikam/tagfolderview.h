@@ -60,6 +60,11 @@ public:
 
     void signalProgressBarMode(int, const QString&);
     void signalProgressValue(int);
+    void signalTagFilterMatch(bool);
+
+public slots:
+
+    void slotTagFilterChanged(const QString&);
 
 protected:
 

@@ -265,6 +265,74 @@ TagFilterView::~TagFilterView()
     delete d;
 }
 
+void TagFilterView::slotTagFilterChanged(const QString& filter)
+{
+    QString search = filter.lower();
+
+    bool atleastOneMatch = false;
+
+    AlbumList tList = AlbumManager::instance()->allTAlbums();
+    for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
+    {
+        TAlbum* talbum  = (TAlbum*)(*it);
+
+        // don't touch the root Album
+        if (talbum->isRoot())
+            continue;
+
+        bool match = talbum->title().lower().contains(search);
+        if (!match)
+        {
+            // check if any of the parents match the search
+            Album* parent = talbum->parent();
+            while (parent && !parent->isRoot())
+            {
+                if (parent->title().lower().contains(search))
+                {
+                    match = true;
+                    break;
+                }
+
+                parent = parent->parent();
+            }
+        }
+
+        if (!match)
+        {
+            // check if any of the children match the search
+            AlbumIterator it(talbum);
+            while (it.current())
+            {
+                if ((*it)->title().lower().contains(search))
+                {
+                    match = true;
+                    break;
+                }
+                ++it;
+            }
+        }
+    
+        TagFilterViewItem* viewItem = (TagFilterViewItem*) talbum->extraData(this);
+
+        if (match)
+        {
+            atleastOneMatch = true;
+
+            if (viewItem)
+                viewItem->setVisible(true);
+        }
+        else
+        {
+            if (viewItem)
+            {
+                viewItem->setVisible(false);
+            }
+        }
+    }
+
+    emit signalTagFilterMatch(atleastOneMatch);
+}
+
 void TagFilterView::stateChanged(TagFilterViewItem* item)
 {
     ToggleAutoTags oldAutoTags = d->toggleAutoTags;            

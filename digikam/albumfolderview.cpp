@@ -266,6 +266,74 @@ AlbumFolderView::~AlbumFolderView()
     delete d;
 }
 
+void AlbumFolderView::slotFolderFilterChanged(const QString& filter)
+{
+    QString search = filter.lower();
+
+    bool atleastOneMatch = false;
+
+    AlbumList pList = AlbumManager::instance()->allPAlbums();
+    for (AlbumList::iterator it = pList.begin(); it != pList.end(); ++it)
+    {
+        PAlbum* palbum  = (PAlbum*)(*it);
+
+        // don't touch the root Album
+        if (palbum->isRoot())
+            continue;
+
+        bool match = palbum->title().lower().contains(search);
+        if (!match)
+        {
+            // check if any of the parents match the search
+            Album* parent = palbum->parent();
+            while (parent && !parent->isRoot())
+            {
+                if (parent->title().lower().contains(search))
+                {
+                    match = true;
+                    break;
+                }
+
+                parent = parent->parent();
+            }
+        }
+
+        if (!match)
+        {
+            // check if any of the children match the search
+            AlbumIterator it(palbum);
+            while (it.current())
+            {
+                if ((*it)->title().lower().contains(search))
+                {
+                    match = true;
+                    break;
+                }
+                ++it;
+            }
+        }
+    
+        AlbumFolderViewItem* viewItem = (AlbumFolderViewItem*) palbum->extraData(this);
+
+        if (match)
+        {
+            atleastOneMatch = true;
+
+            if (viewItem)
+                viewItem->setVisible(true);
+        }
+        else
+        {
+            if (viewItem)
+            {
+                viewItem->setVisible(false);
+            }
+        }
+    }
+
+    emit signalFolderFilterMatch(atleastOneMatch);
+}
+
 void AlbumFolderView::slotAlbumAdded(Album *album)
 {
     if(!album)
@@ -415,7 +483,7 @@ void AlbumFolderView::slotAlbumIconChanged(Album* album)
 
 void AlbumFolderView::slotSelectionChanged()
 {
-    if(!active())
+    if (!active())
         return;
 
     QListViewItem* selItem = 0;
