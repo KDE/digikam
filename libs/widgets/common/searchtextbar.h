@@ -51,6 +51,10 @@ signals:
     
     void signalTextChanged(const QString&);    
         
+public slots:
+
+    void slotSearchResult(bool);
+
 private :
 
     SearchTextBarPriv* d;    
