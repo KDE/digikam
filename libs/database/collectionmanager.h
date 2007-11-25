@@ -72,6 +72,26 @@ public:
      */
     CollectionLocation addLocation(const KUrl &fileUrl);
 
+    enum LocationCheckResult
+    {
+        /// The check did not succeed, status unknown
+        LocationInvalidCheck,
+        /// All right. The accompanying message may be empty.
+        LocationAllRight,
+        /// Location can be added, but the user should be aware of a problem
+        LocationHasProblems,
+        /// Adding the location will fail (e.g. there is already a location for the path)
+        LocationNotAllowed
+    };
+
+    /**
+     * Analyzes the given file path. Creates an info message
+     * describing the result of identification or possible problems.
+     * The text is i18n'ed and can be presented to the user.
+     * The returned result enum describes the test result.
+     */
+    LocationCheckResult checkLocation(const KUrl &fileUrl, QString *message = 0);
+
     /**
      * Removes the given location. This means that all images contained on the
      * location will be removed from the database, all tags will be lost.

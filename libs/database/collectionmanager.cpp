@@ -28,12 +28,15 @@
 // KDE includes
 
 #include <kglobal.h>
+#include <kcodecs.h>
+#include <klocale.h>
 #include <solid/device.h>
 #include <solid/deviceinterface.h>
 #include <solid/devicenotifier.h>
 #include <solid/storageaccess.h>
 #include <solid/storagedrive.h>
 #include <solid/storagevolume.h>
+#include <solid/opticaldisc.h>
 #include <solid/predicate.h>
 
 // Local includes
@@ -134,7 +137,11 @@ class SolidVolumeInfo
 public:
     QString path; // mount path of volume, with trailing slash
     QString uuid; // UUID as from Solid
-    bool removableOrPluggable; // may be removed
+    QString label; // volume label (think of CDs)
+    bool isRemovable; // may be removed
+    bool isOpticalDisc;
+
+    bool isNull() const { return path.isNull(); }
 };
 
 // -------------------------------------------------
@@ -148,14 +155,43 @@ public:
     }
 
     QMap<int, AlbumRootLocation *> locations;
+
+
+    /// Access Solid and return a list of storage volumes
     QList<SolidVolumeInfo> listVolumes();
+
+    /**
+     *  Find from a given list (usually the result of listVolumes) the volume
+     *  corresponding to the location
+     */
+    SolidVolumeInfo findVolumeForLocation(const AlbumRootLocation *location, const QList<SolidVolumeInfo> volumes);
+
+    /**
+     *  Find from a given list (usually the result of listVolumes) the volume
+     *  on which the file path specified by the url is located.
+     */
+    SolidVolumeInfo findVolumeForUrl(const KUrl &url, const QList<SolidVolumeInfo> volumes);
+
+    /// Create the volume identifier for the given volume info
+    static QString volumeIdentifier(const SolidVolumeInfo &info);
+
+    /// Create a volume identifier based on the path only
+    QString volumeIdentifier(const QString &path);
+
+    /// Return the path, if location has a path-only identifier. Else returns a null string.
+    QString pathIdentifier(const AlbumRootLocation *location);
+
+    /// Create an MD5 hash of the top-level entries (file names, not file content) of the given path
+    static QString directoryHash(const QString &path);
 };
 
 QList<SolidVolumeInfo> CollectionManagerPrivate::listVolumes()
 {
     QList<SolidVolumeInfo> volumes;
 
+    DDebug() << "listFromType" << endl;
     QList<Solid::Device> devices = Solid::Device::listFromType(Solid::DeviceInterface::StorageAccess);
+    DDebug() << "got listFromType" << endl;
 
     foreach(Solid::Device accessDevice, devices)
     {
@@ -203,12 +239,195 @@ QList<SolidVolumeInfo> CollectionManagerPrivate::listVolumes()
         if (!info.path.endsWith("/"))
             info.path += "/";
         info.uuid = volume->uuid();
-        info.removableOrPluggable = drive->isRemovable() || drive->isHotpluggable();
+        info.label = volume->label();
+        info.isRemovable = drive->isRemovable();
+        info.isOpticalDisc = volumeDevice.is<Solid::OpticalDisc>();
+
         volumes << info;
     }
 
     return volumes;
 }
+
+QString CollectionManagerPrivate::volumeIdentifier(const SolidVolumeInfo &volume)
+{
+    KUrl url;
+    url.setProtocol("volumeid");
+
+    // On changing these, please update the checkLocation() code
+    bool identifyByUUID      = !volume.uuid.isEmpty();
+    bool identifyByLabel     = !identifyByUUID && !volume.label.isEmpty() && (volume.isOpticalDisc || volume.isRemovable);
+    bool addDirectoryHash    = identifyByLabel && volume.isOpticalDisc;
+    bool identifyByMountPath = !identifyByUUID && !identifyByLabel;
+
+    if (identifyByUUID)
+        url.addQueryItem("uuid", volume.uuid);
+    if (identifyByLabel)
+        url.addQueryItem("label", volume.label);
+    if (addDirectoryHash)
+    {
+        // for CDs, we store a hash of the root directory. May be useful.
+        QString dirHash = directoryHash(volume.path);
+        if (!dirHash.isNull())
+            url.addQueryItem("directoryhash", dirHash);
+    }
+    if (identifyByMountPath)
+        url.addQueryItem("mountpath", volume.path);
+
+    return url.url();
+}
+
+QString CollectionManagerPrivate::volumeIdentifier(const QString &path)
+{
+    KUrl url;
+    url.setProtocol("volumeid");
+    url.addQueryItem("path", path);
+    return url.url();
+}
+
+QString CollectionManagerPrivate::pathIdentifier(const AlbumRootLocation *location)
+{
+    KUrl url(location->identifier);
+
+    if (url.protocol() != "volumeid")
+        return QString();
+
+    return url.queryItem("path");
+}
+
+QString CollectionManagerPrivate::directoryHash(const QString &path)
+{
+    QDir dir(path);
+    if (dir.isReadable())
+    {
+        QStringList entries = dir.entryList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
+        KMD5 hash;
+        foreach (QString entry, entries)
+        {
+            hash.update(entry.toUtf8());
+        }
+        return hash.hexDigest();
+    }
+    return QString();
+}
+
+SolidVolumeInfo CollectionManagerPrivate::findVolumeForLocation(const AlbumRootLocation *location, const QList<SolidVolumeInfo> volumes)
+{
+    KUrl url(location->identifier);
+    QString queryItem;
+
+    if (url.protocol() != "volumeid")
+        return SolidVolumeInfo();
+
+    if (!(queryItem = url.queryItem("uuid")).isNull())
+    {
+        foreach (SolidVolumeInfo volume, volumes)
+        {
+            if (volume.uuid == queryItem)
+                return volume;
+        }
+        return SolidVolumeInfo();
+    }
+    else if (!(queryItem = url.queryItem("label")).isNull())
+    {
+        // This one is a bit more difficult, as we take into account the possibility
+        // that the label is not unique, and we take some care to make it work anyway.
+
+        // find all available volumes with the given label (usually one)
+        QList<SolidVolumeInfo> candidateVolumes;
+        foreach (SolidVolumeInfo volume, volumes)
+        {
+            if (volume.label == queryItem)
+                candidateVolumes << volume;
+        }
+
+        if (candidateVolumes.isEmpty())
+            return SolidVolumeInfo();
+
+        // find out of there is another location with the same label (usually not)
+        bool hasOtherLocation = false;
+        foreach (AlbumRootLocation *otherLocation, locations)
+        {
+            if (otherLocation == location)
+                continue;
+
+            KUrl otherUrl(otherLocation->identifier);
+            if (otherUrl.protocol() == "volumeid"
+                && otherUrl.queryItem("label") == queryItem)
+            {
+                hasOtherLocation = true;
+                break;
+            }
+        }
+
+        // the usual, easy case
+        if (candidateVolumes.size() == 1 && !hasOtherLocation)
+            return candidateVolumes.first();
+        else
+        {
+            // not unique: try to use the directoryhash
+            QString dirHash = url.queryItem("directoryhash");
+
+            // bail out if not provided
+            if (dirHash.isNull())
+            {
+                DDebug() << "No directory hash specified for the non-unique Label"
+                         << queryItem << "Resorting to returning the first match." << endl;
+                return candidateVolumes.first();
+            }
+
+            // match against directory hash
+            foreach (SolidVolumeInfo volume, candidateVolumes)
+            {
+                QString volumeDirHash = directoryHash(volume.path);
+                if (volumeDirHash == dirHash)
+                    return volume;
+            }
+        }
+        return SolidVolumeInfo();
+    }
+    else if (!(queryItem = url.queryItem("mountpath")).isNull())
+    {
+        foreach (SolidVolumeInfo volume, volumes)
+        {
+            if (volume.path == queryItem)
+                return volume;
+        }
+        return SolidVolumeInfo();
+    }
+
+    return SolidVolumeInfo();
+}
+
+SolidVolumeInfo CollectionManagerPrivate::findVolumeForUrl(const KUrl &url, const QList<SolidVolumeInfo> volumes)
+{
+    SolidVolumeInfo volume;
+    QString path = url.path(KUrl::RemoveTrailingSlash);
+    int volumeMatch = 0;
+
+    //FIXME: Network shares! Here we get only the volume of the mount path...
+    // This is probably not really clean. But Solid does not help us.
+    foreach (SolidVolumeInfo v, volumes)
+    {
+        if (path.startsWith(v.path))
+        {
+            int length = v.path.length();
+            if (length > volumeMatch)
+            {
+                volumeMatch = v.path.length();
+                volume = v;
+            }
+        }
+    }
+
+    if (!volumeMatch)
+    {
+        DError() << "Failed to detect a storage volume for path " << path << " with Solid" << endl;
+    }
+
+    return volume;
+}
+
 
 // -------------------------------------------------
 
@@ -273,44 +492,128 @@ CollectionLocation CollectionManager::addLocation(const KUrl &fileUrl)
         return CollectionLocation();
 
     QList<SolidVolumeInfo> volumes = d->listVolumes();
-    SolidVolumeInfo volume;
-    int volumeMatch = 0;
+    SolidVolumeInfo volume = d->findVolumeForUrl(fileUrl, volumes);
 
-    // This is probably not really clean. But Solid does not help us.
-    foreach (SolidVolumeInfo v, volumes)
+    if (!volume.isNull())
     {
-        if (path.startsWith(v.path))
-        {
-            int length = v.path.length();
-            if (length > volumeMatch)
-            {
-                volumeMatch = v.path.length();
-                volume = v;
-            }
-        }
-    }
+        DatabaseAccess access;
+        // volume.path has a trailing slash. We want to split in front of this.
+        QString specificPath = path.mid(volume.path.length() - 1);
+        CollectionLocation::Type type;
+        if (volume.isRemovable)
+            type = CollectionLocation::TypeVolumeRemovable;
+        else
+            type = CollectionLocation::TypeVolumeHardWired;
 
-    if (!volumeMatch)
-    {
-        DError() << "Failed to detect a storage volume for path " << path << " with Solid" << endl;
-        return CollectionLocation();
+        access.db()->addAlbumRoot(type, d->volumeIdentifier(volume), specificPath);
     }
-
-    DatabaseAccess access;
-    // volume.path has a trailing slash. We want to split in front of this.
-    QString specificPath = path.mid(volume.path.length() - 1);
-    CollectionLocation::Type type;
-    if (volume.removableOrPluggable)
-        type = CollectionLocation::TypeVolumeRemovable;
     else
-        type = CollectionLocation::TypeVolumeHardWired;
-
-    access.db()->addAlbumRoot(type, volume.uuid, specificPath);
+    {
+        DWarning() << "Unable to identify a path with Solid. Adding the location with path only." << endl;
+        DatabaseAccess().db()->addAlbumRoot(CollectionLocation::TypeVolumeHardWired,
+                                            d->volumeIdentifier(path), "/");
+    }
 
     // Do not emit the locationAdded signal here, it is done in updateLocations()
     updateLocations();
 
     return locationForPath(path);
+}
+
+CollectionManager::LocationCheckResult CollectionManager::checkLocation(const KUrl &fileUrl, QString *message)
+{
+    QString path = fileUrl.path(KUrl::RemoveTrailingSlash);
+
+    if (!locationForPath(path).isNull())
+    {
+        if (message)
+            *message = i18n("There is already an entry with the same path");
+        return LocationNotAllowed;
+    }
+
+    QList<SolidVolumeInfo> volumes = d->listVolumes();
+    SolidVolumeInfo volume = d->findVolumeForUrl(fileUrl, volumes);
+
+    if (!volume.isNull())
+    {
+        if (!volume.uuid.isEmpty())
+        {
+            if (volume.isRemovable)
+            {
+                if (message)
+                    *message = i18n("The storage media can be uniquely identified.");
+            }
+            else
+            {
+                if (message)
+                    *message = QString();
+            }
+            return LocationAllRight;
+        }
+        else if (!volume.label.isEmpty() && (volume.isOpticalDisc || volume.isRemovable))
+        {
+            if (volume.isOpticalDisc)
+            {
+                bool hasOtherLocation = false;
+                foreach (AlbumRootLocation *otherLocation, d->locations)
+                {
+                    KUrl otherUrl(otherLocation->identifier);
+                    if (otherUrl.protocol() == "volumeid"
+                        && otherUrl.queryItem("label") == volume.label)
+                    {
+                        hasOtherLocation = true;
+                        break;
+                    }
+                }
+
+                if (hasOtherLocation)
+                {
+                    if (message)
+                        *message = i18n("This is a CD/DVD, which is identified by the label "
+                                        "that you can set in your CD burning application. "
+                                        "There is already another entry with the same label. "
+                                        "The two will be distinguished by the files in the top directory, "
+                                        "so please do not append files to the CD, or it will not be recognized. "
+                                        "In the future, please set a unique label on your CDs and DVDs "
+                                        "if you intend to use them with digiKam.");
+                    return LocationHasProblems;
+                }
+                else
+                {
+                    if (message)
+                        *message = i18n("This is a CD/DVD. It will be identified by the label (\"%1\")"
+                                        "that you have set in your CD burning application. "
+                                        "If you create further CDs for use with digikam in the future, "
+                                        "please remember to give them a unique label as well.",
+                                        volume.label);
+                    return LocationAllRight;
+                }
+            }
+            else
+            {
+                // Which situation? HasProblems or AllRight?
+                if (message)
+                    *message = i18n("This is a removable storage media that will be identified by its label (\"%1\")",
+                                    volume.label);
+                return LocationAllRight;
+            }
+        }
+        else
+        {
+            if (message)
+                *message = i18n("This entry will only be identified by the path where it is found on your system (\"%1\"). "
+                                "No more specific means of identification (UUID, label) is available.",
+                                volume.path);
+            return LocationHasProblems;
+        }
+    }
+    else
+    {
+        if (message)
+            *message = i18n("There is a problem identifying the storage media of this path. "
+                            "It will be added using the file path as the only identifier");
+        return LocationHasProblems;
+    }
 }
 
 void CollectionManager::removeLocation(const CollectionLocation &location)
@@ -364,7 +667,11 @@ QStringList CollectionManager::allAvailableAlbumRootPaths()
 CollectionLocation CollectionManager::locationForAlbumRootId(int id)
 {
     DatabaseAccess access;
-    return *d->locations.value(id);
+    AlbumRootLocation *location = d->locations.value(id);
+    if (location)
+        return *location;
+    else
+        return CollectionLocation();
 }
 
 CollectionLocation CollectionManager::locationForAlbumRoot(const KUrl &fileUrl)
@@ -555,16 +862,24 @@ void CollectionManager::updateLocations()
 
             QString volumePath;
             bool available = false;
-            // if volume is in list, it is accessible
-            foreach (SolidVolumeInfo volume, volumes)
+
+            SolidVolumeInfo info = d->findVolumeForLocation(location, volumes);
+
+            if (!info.isNull())
             {
-                if (volume.uuid == location->identifier)
+                available = true;
+                volumePath = info.path;
+                // volume.path has a trailing slash (and this is good)
+                // but specific path has a leading slash, so remove it
+                volumePath.chop(1);
+            }
+            else
+            {
+                QString path = d->pathIdentifier(location);
+                if (!path.isNull())
                 {
                     available = true;
-                    volumePath = volume.path;
-                    // volume.path has a trailing slash (and this is good)
-                    // but specific path has a leading slash, so remove it
-                    volumePath.chop(1);
+                    volumePath = path;
                 }
             }
 
