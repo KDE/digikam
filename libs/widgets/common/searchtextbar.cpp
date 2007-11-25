@@ -23,6 +23,8 @@
 
 // Qt includes.
 
+#include <qcolor.h>
+#include <qpalette.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qtoolbutton.h>
@@ -95,6 +97,21 @@ SearchTextBar::SearchTextBar(QWidget *parent)
 SearchTextBar::~SearchTextBar()
 {
     delete d;
+}
+
+void SearchTextBar::slotSearchResult(bool match)
+{
+    if (d->searchEdit->text().isEmpty())
+    {
+        d->searchEdit->unsetPalette();
+        return;
+    }
+
+    QPalette pal = d->searchEdit->palette();
+    pal.setColor(QPalette::Active, QColorGroup::Base,
+                 match ?  QColor(200, 255, 200) :
+                 QColor(255, 200, 200));
+    d->searchEdit->setPalette(pal);
 }
 
 }  // namespace Digikam
