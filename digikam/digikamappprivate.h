@@ -63,13 +63,13 @@ class KToolBarPopupAction;
 class KToggleAction;
 class KActionMenu;
 class KSelectAction;
-class KLineEdit;
 
 namespace Digikam
 {
 
 class DCOPIface;
 class CameraUI;
+class SearchTextBar;
 
 class DigikamAppPriv
 {
@@ -184,7 +184,7 @@ public:
 
     KSharedConfig::Ptr                  config;
 
-    KLineEdit                          *statusTextFilterBar;
+    SearchTextBar                      *statusTextFilterBar;
 
     // Album Actions
     KAction                            *newAction;

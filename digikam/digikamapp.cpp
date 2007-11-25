@@ -47,7 +47,6 @@
 #include <kiconloader.h>
 #include <ktip.h>
 #include <kdeversion.h>
-#include <klineedit.h>
 #include <kapplication.h>
 #include <kmenubar.h>
 #include <kmessagebox.h>
@@ -97,6 +96,7 @@
 #include "thumbnailsize.h"
 #include "themeengine.h"
 #include "scancontroller.h"
+#include "searchtextbar.h"
 #include "loadingcache.h"
 #include "loadingcacheinterface.h"
 #include "imageattributeswatch.h"
@@ -366,14 +366,13 @@ void DigikamApp::setupStatusBar()
 
     //------------------------------------------------------------------------------
 
-    d->statusTextFilterBar = new KLineEdit(statusBar());
+    d->statusTextFilterBar = new SearchTextBar(statusBar());
     d->statusTextFilterBar->setMaximumHeight(fontMetrics().height()+2);
-    d->statusTextFilterBar->setClearButtonShown(true);
     d->statusTextFilterBar->setToolTip(i18n("Text quick filter (search)"));
     d->statusTextFilterBar->setWhatsThis(i18n("Here you can enter search patterns to quickly "
                                               "filter this view on file names, captions "
                                               "(comments), and tags"));
-    statusBar()->addWidget(d->statusTextFilterBar, 30, true);
+    statusBar()->addWidget(d->statusTextFilterBar, 30);
 
     //------------------------------------------------------------------------------
 
@@ -408,7 +407,7 @@ void DigikamApp::setupStatusBar()
     connect(d->statusMimeFilterBar, SIGNAL(activated(int)),
             this, SLOT(slotMimeTypeFilterChanged(int)));
 
-    connect(d->statusTextFilterBar, SIGNAL(textChanged(const QString&)),
+    connect(d->statusTextFilterBar, SIGNAL(signalTextChanged(const QString&)),
             this, SLOT(slotTextFilterChanged(const QString&)));
 
     connect(d->statusZoomBar, SIGNAL(signalZoomMinusClicked()),
