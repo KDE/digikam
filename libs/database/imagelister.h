@@ -64,6 +64,13 @@ public:
      */
     static KIO::TransferJob *startScanJob(const DatabaseUrl &url, const QString &filter, int extraValue);
 
+    ImageLister();
+
+    /**
+     * Adjust the setting if album or tags will be listed recurively (i.e. including subalbums / subtags)
+     */
+    void setRecursive(bool recursive);
+
 
     /**
      * Convenience method for Album, Tag and Date URLs, _not_ for Search URLs.
@@ -72,15 +79,12 @@ public:
               const DatabaseUrl &url);
 
     /**
-      * List images in the Album (physical album) specified by albumRoot, album (and albumid).
+      * List images in the Album (physical album) specified by albumRoot, album.
       * The results will be fed to the specified receiver.
-      * @param filter The file format filter to use
-      * @param getDimension retrieve dimension - slow!. If false, dimension will be QSize()
       */
     void listAlbum(ImageListerReceiver *receiver,
                    int albumRootId, const QString &album);
-    void listAlbum(ImageListerReceiver *receiver,
-                   int albumRootId, int albumid);
+
     /**
      * List the images which have assigned the tag specified by tagId
      */
@@ -106,6 +110,10 @@ public:
      * Tool method to retrieve the dimension from a file. Not a database query, slow!
      */
     static QSize retrieveDimension(const QString &filePath);
+
+private:
+
+    bool m_recursive;
 };
 
 }  // namespace Digikam

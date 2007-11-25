@@ -93,6 +93,16 @@ QDataStream &operator>>(QDataStream &ds, ImageListerRecord &record)
     return ds;
 }
 
+ImageLister::ImageLister()
+{
+    m_recursive = true;
+}
+
+void ImageLister::setRecursive(bool recursive)
+{
+    m_recursive = recursive;
+}
+
 KIO::TransferJob *ImageLister::startListJob(const DatabaseUrl &url, int extraValue)
 {
     QByteArray ba;
@@ -167,28 +177,47 @@ void ImageLister::list(ImageListerReceiver *receiver, const DatabaseUrl &url)
 void ImageLister::listAlbum(ImageListerReceiver *receiver,
                             int albumRootId, const QString &album)
 {
-    int albumid = DatabaseAccess().db()->getAlbumForPath(albumRootId, album, false);
-    if (albumid == -1)
-        return;
+    QList<QVariant> albumIds;
 
-    listAlbum(receiver, albumRootId, albumid);
-}
+    if (m_recursive)
+    {
+        QList<int> intAlbumIds = DatabaseAccess().db()->getAlbumAndSubalbumsForPath(albumRootId, album);
+        if (intAlbumIds.isEmpty())
+            return;
+        foreach (int id, intAlbumIds)
+            albumIds << id;
+    }
+    else
+    {
+        int albumId = DatabaseAccess().db()->getAlbumForPath(albumRootId, album, false);
+        if (albumId == -1)
+            return;
+        albumIds << albumId;
+    }
 
-void ImageLister::listAlbum(ImageListerReceiver *receiver,
-                            int albumRootID, int albumId)
-{
     QList<QVariant> values;
 
+    QString query = "SELECT DISTINCT Images.id, Images.name, Images.album, "
+                    "       ImageInformation.rating, ImageInformation.creationDate, "
+                    "       Images.modificationDate, Images.fileSize, "
+                    "       ImageInformation.width, ImageInformation.height "
+                    " FROM Images "
+                    "       LEFT OUTER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
+                    " WHERE ";
+
+    if (m_recursive)
     {
         DatabaseAccess access;
-        access.backend()->execSql(QString("SELECT DISTINCT Images.id, Images.name, "
-                                          "       ImageInformation.rating, ImageInformation.creationDate, "
-                                          "       Images.modificationDate, Images.fileSize, "
-                                          "       ImageInformation.width, ImageInformation.height "
-                                          " FROM Images "
-                                          "       LEFT OUTER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
-                                          " WHERE Images.album = ?;"),
-                                  albumId, &values);
+        query += "Images.album IN (";
+        access.db()->addBoundValuePlaceholders(query, albumIds.size());
+        query += ");";
+        access.backend()->execSql(query, albumIds, &values);
+    }
+    else
+    {
+        DatabaseAccess access;
+        query += "Images.album = ?;";
+        access.backend()->execSql(query, albumIds, &values);
     }
 
     int width, height;
@@ -198,6 +227,8 @@ void ImageLister::listAlbum(ImageListerReceiver *receiver,
         record.imageID           = (*it).toLongLong();
         ++it;
         record.name              = (*it).toString();
+        ++it;
+        record.albumID           = (*it).toInt();
         ++it;
         record.rating            = (*it).toInt();
         ++it;
@@ -214,8 +245,7 @@ void ImageLister::listAlbum(ImageListerReceiver *receiver,
 
         record.imageSize         = QSize(width, height);
 
-        record.albumID     = albumId;
-        record.albumRootID = albumRootID;
+        record.albumRootID = albumRootId;
 
         receiver->receive(record);
     }
@@ -225,22 +255,24 @@ void ImageLister::listTag(ImageListerReceiver *receiver, int tagId)
 {
     QList<QVariant> values;
 
-    {
-        DatabaseAccess access;
-        access.backend()->execSql( QString( "SELECT DISTINCT Images.id, Images.name, Images.album, "
-                                            "       Albums.albumRoot, "
-                                            "       ImageInformation.rating, ImageInformation.creationDate, "
-                                            "       Images.modificationDate, Images.fileSize, "
-                                            "       ImageInformation.width, ImageInformation.height "
-                                            " FROM Images "
-                                            "       LEFT OUTER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
-                                            "       LEFT OUTER JOIN Albums ON Albums.id=Images.album "
-                                            " WHERE Images.id IN "
-                                            "       (SELECT imageid FROM ImageTags "
-                                            "        WHERE tagid=? "
-                                            "           OR tagid IN (SELECT id FROM TagsTree WHERE pid=?)); "),
-                                    tagId, tagId, &values );
-    }
+    QString query = QString( "SELECT DISTINCT Images.id, Images.name, Images.album, "
+                             "       Albums.albumRoot, "
+                             "       ImageInformation.rating, ImageInformation.creationDate, "
+                             "       Images.modificationDate, Images.fileSize, "
+                             "       ImageInformation.width, ImageInformation.height "
+                             " FROM Images "
+                             "       LEFT OUTER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
+                             "       LEFT OUTER JOIN Albums ON Albums.id=Images.album "
+                             " WHERE Images.id IN "
+                             "       (SELECT imageid FROM ImageTags "
+                             "        WHERE tagid=? ");
+
+    if (m_recursive)
+        query += "OR tagid IN (SELECT id FROM TagsTree WHERE pid=?)); ";
+    else
+        query += "); ";
+
+    DatabaseAccess().backend()->execSql( query, tagId, tagId, &values );
 
     int width, height;
     for (QList<QVariant>::iterator it = values.begin(); it != values.end();)
