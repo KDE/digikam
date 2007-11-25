@@ -414,12 +414,12 @@ bool AlbumLister::matchesFilter(const ImageInfo* info) const
         bool foundText = false;
         if (settings->getIconShowName())
         {
-            if (info->name().contains(d->textFilter))
+            if (info->name().lower().contains(d->textFilter.lower()))
                 foundText = true;
         }
         if (settings->getIconShowComments())
         {
-            if (info->caption().contains(d->textFilter))
+            if (info->caption().lower().contains(d->textFilter.lower()))
                 foundText = true;
         }
         if (settings->getIconShowTags())
@@ -427,7 +427,7 @@ bool AlbumLister::matchesFilter(const ImageInfo* info) const
             QStringList tags = info->tagNames();
             for (QStringList::const_iterator it = tags.begin() ; it != tags.end() ; ++it)
             {
-                if ((*it).contains(d->textFilter))
+                if ((*it).lower().contains(d->textFilter.lower()))
                     foundText = true;
             }
         }
