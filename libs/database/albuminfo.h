@@ -96,7 +96,7 @@ public:
     bool operator<(const AlbumInfo& info) const
     {
         // include album root id?
-        return info.relativePath < info.relativePath;
+        return relativePath < info.relativePath;
     }
 };
 
