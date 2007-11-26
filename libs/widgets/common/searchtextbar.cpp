@@ -81,7 +81,7 @@ SearchTextBar::SearchTextBar(QWidget *parent)
     d->searchEdit  = new KLineEdit(this);
     d->searchEdit->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum));
 
-    hlay->setSpacing(KDialog::spacingHint());
+    hlay->setSpacing(0);
     hlay->setMargin(0);
     hlay->addWidget(d->searchLabel);
     hlay->addWidget(d->searchEdit);
