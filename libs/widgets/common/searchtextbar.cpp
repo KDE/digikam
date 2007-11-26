@@ -63,7 +63,7 @@ DLineEdit::DLineEdit(const QString &msg, QWidget *parent)
          : KLineEdit(parent)
 {
     d = new DLineEditPriv;
-    setClickMessage(msg);
+    setMessage(msg);
 }
 
 DLineEdit::~DLineEdit()
@@ -71,7 +71,12 @@ DLineEdit::~DLineEdit()
     delete d;
 }
 
-void DLineEdit::setClickMessage(const QString &msg)
+QString DLineEdit::message() const
+{
+    return d->message;
+}
+
+void DLineEdit::setMessage(const QString &msg)
 {
     d->message = msg;
     repaint();
@@ -91,12 +96,12 @@ void DLineEdit::drawContents(QPainter *p)
     if (d->drawMsg && !hasFocus())
     {
         QPen tmp = p->pen();
-        p->setPen(palette().color( QPalette::Disabled, QColorGroup::Text));
+        p->setPen(palette().color(QPalette::Disabled, QColorGroup::Text));
         QRect cr = contentsRect();
 
         // Add two pixel margin on the left side
         cr.rLeft() += 3;
-        p->drawText( cr, AlignAuto | AlignVCenter, d->message );
+        p->drawText(cr, AlignAuto | AlignVCenter, d->message);
         p->setPen( tmp );
     }
 }

@@ -52,8 +52,8 @@ public:
     DLineEdit(const QString &msg, QWidget *parent);
     ~DLineEdit();
 
-    void    setClickMessage(const QString &msg);
-    QString clickMessage() const;
+    void    setMessage(const QString &msg);
+    QString message() const;
 
     void setText(const QString& txt);
 
