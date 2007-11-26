@@ -73,6 +73,7 @@ SET(libdigikamtheme_SRCS
     ../digikam/pixmapmanager.cpp 
     ../digikam/ratingpopupmenu.cpp 
     ../digikam/ratingwidget.cpp 
+    ../digikam/scancontroller.cpp
     ../digikam/scanlib.cpp 
     ../digikam/syncjob.cpp 
     ../digikam/tagcreatedlg.cpp 
