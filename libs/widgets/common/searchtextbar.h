@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-11-25
- * Description : a bar used to search a text somewhere.
+ * Description : a bar used to search a string.
  * 
  * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -29,6 +29,10 @@
 #include <qwidget.h>
 #include <qstring.h>
 
+// KDE includes.
+
+#include <klineedit.h>
+
 // Local includes.
 
 #include "digikam_export.h"
@@ -36,7 +40,37 @@
 namespace Digikam
 {
 
+class DLineEditPriv;
 class SearchTextBarPriv;
+
+class DIGIKAM_EXPORT DLineEdit : public KLineEdit
+{
+    Q_OBJECT
+
+public:
+
+    DLineEdit(const QString &msg, QWidget *parent);
+    ~DLineEdit();
+
+    void    setClickMessage(const QString &msg);
+    QString clickMessage() const;
+
+    void setDrawMessage(bool draw);
+    bool drawMessage() const;
+
+    void setText(const QString& txt);
+
+protected:
+
+    void drawContents(QPainter *p);
+    void dropEvent(QDropEvent *e);
+    void focusInEvent(QFocusEvent *e);
+    void focusOutEvent(QFocusEvent *e);
+
+private :
+
+    DLineEditPriv* d;    
+};
 
 class DIGIKAM_EXPORT SearchTextBar : public QWidget
 {
