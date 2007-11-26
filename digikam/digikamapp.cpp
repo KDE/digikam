@@ -361,42 +361,36 @@ void DigikamApp::setupStatusBar()
 {
     d->statusProgressBar = new StatusProgressBar(statusBar());
     d->statusProgressBar->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
-    d->statusProgressBar->setMaximumHeight(fontMetrics().height()+2);
+    d->statusProgressBar->setMaximumHeight(fontMetrics().height()+4);
     statusBar()->addWidget(d->statusProgressBar, 100);
 
     //------------------------------------------------------------------------------
 
-    d->statusTextFilterBar = new SearchTextBar(statusBar());
-    d->statusTextFilterBar->setMaximumHeight(fontMetrics().height()+2);
+    KHBox *filterBox       = new KHBox(statusBar());
+    d->statusTextFilterBar = new SearchTextBar(filterBox);
     d->statusTextFilterBar->setToolTip(i18n("Text quick filter (search)"));
     d->statusTextFilterBar->setWhatsThis(i18n("Here you can enter search patterns to quickly "
                                               "filter this view on file names, captions "
                                               "(comments), and tags"));
-    statusBar()->addWidget(d->statusTextFilterBar, 50);
 
-    //------------------------------------------------------------------------------
+    d->statusMimeFilterBar   = new MimeFilter(filterBox);
+    d->statusRatingFilterBar = new RatingFilter(filterBox);
+    filterBox->setMaximumHeight(fontMetrics().height()+4);
+    filterBox->setMargin(0);
+    filterBox->setSpacing(KDialog::spacingHint());
 
-    d->statusMimeFilterBar = new MimeFilter(statusBar());
-    d->statusMimeFilterBar->setMaximumHeight(fontMetrics().height()+2);
-    statusBar()->addPermanentWidget(d->statusMimeFilterBar, 1);
-
-    //------------------------------------------------------------------------------
-
-    KHBox *hbox              = new KHBox(statusBar());
-    d->statusRatingFilterBar = new RatingFilter(hbox);
-    hbox->setMaximumHeight(fontMetrics().height()+2);
-    statusBar()->addPermanentWidget(hbox, 1);
+    statusBar()->addWidget(filterBox, 100);
 
     //------------------------------------------------------------------------------
 
     d->statusZoomBar = new StatusZoomBar(statusBar());
-    d->statusZoomBar->setMaximumHeight(fontMetrics().height()+2);
+    d->statusZoomBar->setMaximumHeight(fontMetrics().height()+4);
     statusBar()->addPermanentWidget(d->statusZoomBar, 1);
 
     //------------------------------------------------------------------------------
 
     d->statusNavigateBar = new StatusNavigateBar(statusBar());
-    d->statusNavigateBar->setMaximumHeight(fontMetrics().height()+2);
+    d->statusNavigateBar->setMaximumHeight(fontMetrics().height()+4);
     statusBar()->addPermanentWidget(d->statusNavigateBar, 1);
 
     //------------------------------------------------------------------------------
