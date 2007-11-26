@@ -401,6 +401,9 @@ void DigikamApp::setupStatusBar()
     connect(d->statusTextFilterBar, SIGNAL(signalTextChanged(const QString&)),
             this, SLOT(slotTextFilterChanged(const QString&)));
 
+    connect(AlbumLister::instance(), SIGNAL(signalItemsTextFilterMatch(bool)),
+            d->statusTextFilterBar, SLOT(slotSearchResult(bool)));
+            
     connect(d->statusZoomBar, SIGNAL(signalZoomMinusClicked()),
             d->view, SLOT(slotZoomOut()));
 
