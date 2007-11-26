@@ -77,17 +77,6 @@ void DLineEdit::setClickMessage(const QString &msg)
     repaint();
 }
 
-void DLineEdit::setDrawMessage(bool draw)
-{
-    d->drawMsg = draw;
-    repaint();
-}
-
-bool DLineEdit::drawMessage() const
-{
-    return d->drawMsg;
-}
-
 void DLineEdit::setText(const QString &txt)
 {
     d->drawMsg = txt.isEmpty();

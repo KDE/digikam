@@ -55,9 +55,6 @@ public:
     void    setClickMessage(const QString &msg);
     QString clickMessage() const;
 
-    void setDrawMessage(bool draw);
-    bool drawMessage() const;
-
     void setText(const QString& txt);
 
 protected:
