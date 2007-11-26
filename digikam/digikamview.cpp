@@ -385,16 +385,16 @@ void DigikamView::setupConnections()
 
     // -- Filter Bars Connections ---------------------------------
 
-    connect(d->folderSearchBar, SIGNAL(signalTextChanged(const QString&)),
+    connect(d->folderSearchBar, SIGNAL(textChanged(const QString&)),
             d->folderView, SLOT(slotFolderFilterChanged(const QString&)));
 
-    connect(d->tagSearchBar, SIGNAL(signalTextChanged(const QString&)),
+    connect(d->tagSearchBar, SIGNAL(textChanged(const QString&)),
             d->tagFolderView, SLOT(slotTagFilterChanged(const QString&)));
 
-    connect(d->searchSearchBar, SIGNAL(signalTextChanged(const QString&)),
+    connect(d->searchSearchBar, SIGNAL(textChanged(const QString&)),
             d->searchFolderView, SLOT(slotSearchFilterChanged(const QString&)));
 
-    connect(d->tagFilterSearchBar, SIGNAL(signalTextChanged(const QString&)),
+    connect(d->tagFilterSearchBar, SIGNAL(textChanged(const QString&)),
             d->tagFilterView, SLOT(slotTagFilterChanged(const QString&)));
 
     connect(d->folderView, SIGNAL(signalFolderFilterMatch(bool)),

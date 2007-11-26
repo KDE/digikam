@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-11-25
- * Description : a bar used to search a text somewhere.
+ * Description : a bar used to search a string.
  * 
  * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -25,15 +25,11 @@
 
 #include <QColor>
 #include <QPalette>
-#include <QLabel>
-#include <QLayout>
+#include <QString>
 
 // KDE includes.
 
-#include <kapplication.h>
 #include <klocale.h>
-#include <klineedit.h>
-#include <kdialog.h>
 
 // Local includes
 
@@ -43,72 +39,32 @@
 namespace Digikam
 {
 
-class SearchTextBarPriv
-{
-public:
-
-    SearchTextBarPriv()
-    {
-        searchEdit  = 0;
-        searchLabel = 0;
-    }
-
-    QLabel      *searchLabel;
-
-    KLineEdit   *searchEdit;
-};
-
 SearchTextBar::SearchTextBar(QWidget *parent)
-             : QWidget(parent)
+             : KLineEdit(parent)
 {
-    d = new SearchTextBarPriv;
     setAttribute(Qt::WA_DeleteOnClose);
-    setFocusPolicy(Qt::NoFocus);
-
-    QHBoxLayout *hlay = new QHBoxLayout(this);
-
-    d->searchLabel = new QLabel(i18n("Search:"), this);
-    d->searchEdit  = new KLineEdit(this);
-    d->searchEdit->setClearButtonShown(true);
-    d->searchEdit->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum));
-
-    hlay->setSpacing(KDialog::spacingHint());
-    hlay->setMargin(0);
-    hlay->addWidget(d->searchLabel);
-    hlay->addWidget(d->searchEdit);
-
-    connect(d->searchEdit, SIGNAL(textChanged(const QString&)),
-            this, SIGNAL(signalTextChanged(const QString&)));
+    setClearButtonShown(true);
+    setClickMessage(i18n("Search..."));
+    setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum));
 }
 
 SearchTextBar::~SearchTextBar()
 {
-    delete d;
-}
-
-void SearchTextBar::setText(const QString& text)
-{
-    d->searchEdit->setText(text);
-}
-
-QString SearchTextBar::text() const
-{
-    return d->searchEdit->text();
 }
 
 void SearchTextBar::slotSearchResult(bool match)
 {
-    if (d->searchEdit->text().isEmpty())
+    if (text().isEmpty())
     {
-        d->searchEdit->setPalette(QPalette());
+        setPalette(QPalette());
         return;
     }
 
-    QPalette pal = d->searchEdit->palette();
+    QPalette pal = palette();
     pal.setColor(QPalette::Active, QColorGroup::Base,
                  match ?  QColor(200, 255, 200) :
                  QColor(255, 200, 200));
-    d->searchEdit->setPalette(pal);
+    setPalette(pal);
 }
 
 }  // namespace Digikam

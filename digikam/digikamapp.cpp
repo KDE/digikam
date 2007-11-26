@@ -399,7 +399,7 @@ void DigikamApp::setupStatusBar()
     connect(d->statusMimeFilterBar, SIGNAL(activated(int)),
             this, SLOT(slotMimeTypeFilterChanged(int)));
 
-    connect(d->statusTextFilterBar, SIGNAL(signalTextChanged(const QString&)),
+    connect(d->statusTextFilterBar, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotTextFilterChanged(const QString&)));
 
     connect(AlbumLister::instance(), SIGNAL(signalItemsTextFilterMatch(bool)),
