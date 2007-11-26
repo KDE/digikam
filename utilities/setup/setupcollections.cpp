@@ -138,7 +138,7 @@ public:
 
     void setLocation(const CollectionLocation &location)
     {
-        m_path = location.albumRootPath();
+        setPath(location.albumRootPath());
     }
 
 private: 
