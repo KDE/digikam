@@ -132,6 +132,7 @@ signals:
     void signalDeleteFilteredItem(const ImageInfo &item);
     void signalClear();
     void signalCompleted();
+    void signalItemsTextFilterMatch(bool);
 
 private slots:
 
@@ -144,7 +145,7 @@ private slots:
 private:
 
     AlbumLister();
-    bool matchesFilter(const ImageInfo &info) const;
+    bool matchesFilter(const ImageInfo &info, bool& foundText);
     void startListJob(const KUrl &url);
 
 private:

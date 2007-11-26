@@ -254,7 +254,7 @@ void AlbumLister::setTextFilter(const QString& text)
     d->filterTimer->start(100);
 }
 
-bool AlbumLister::matchesFilter(const ImageInfo &info) const
+bool AlbumLister::matchesFilter(const ImageInfo &info, bool &foundText)
 {
     if (d->dayFilter.isEmpty() && d->tagFilter.isEmpty() && d->textFilter.isEmpty() &&
         !d->untaggedFilter && d->ratingFilter==-1)
@@ -399,7 +399,7 @@ bool AlbumLister::matchesFilter(const ImageInfo &info) const
     AlbumSettings *settings = AlbumSettings::instance();
     if (settings->getIconShowName() || settings->getIconShowComments() || settings->getIconShowTags())
     {
-        bool foundText = false;
+        foundText = false;
         if (settings->getIconShowName())
         {
             if (info.name().contains(d->textFilter))
@@ -467,11 +467,13 @@ void AlbumLister::slotFilterItems()
 
     ImageInfoList newFilteredItemsList;
     ImageInfoList deleteFilteredItemsList;
+    bool          atleastOneMatch = false;
 
     for (ImageInfoListIterator it = d->itemList.begin();
          it != d->itemList.end(); ++it)
     {
-        if (matchesFilter(*it))
+        bool foundText = false;
+        if (matchesFilter(*it, foundText))
         {
             newFilteredItemsList.append(*it);
         }
@@ -479,12 +481,17 @@ void AlbumLister::slotFilterItems()
         {
             deleteFilteredItemsList.append(*it);
         }
+
+        if (foundText)
+            atleastOneMatch = true;
     }
 
     // This takes linear time - and deleting seems to take longer. Set wait cursor for large numbers.
     bool setCursor = (3*deleteFilteredItemsList.count() + newFilteredItemsList.count()) > 1500;
     if (setCursor)
         kapp->setOverrideCursor(Qt::WaitCursor);
+
+    emit signalItemsTextFilterMatch(atleastOneMatch);
 
     if (!deleteFilteredItemsList.isEmpty())
     {
@@ -531,6 +538,7 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
     if (data.isEmpty())
         return;
 
+    bool          foundText = false;
     ImageInfoList newItemsList;
     ImageInfoList newFilteredItemsList;
 
@@ -555,7 +563,7 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
             }
             else
             {
-                if (!matchesFilter(info))
+                if (!matchesFilter(info, foundText))
                 {
                     emit signalDeleteFilteredItem(info);
                 }
@@ -565,7 +573,7 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
 
         ImageInfo info(record);
 
-        if (matchesFilter(info))
+        if (matchesFilter(info, foundText))
             newFilteredItemsList.append(info);
 
         newItemsList.append(info);
@@ -580,6 +588,3 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
 }
 
 }  // namespace Digikam
-
-
-
