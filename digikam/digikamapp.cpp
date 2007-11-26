@@ -372,7 +372,7 @@ void DigikamApp::setupStatusBar()
     d->statusTextFilterBar->setWhatsThis(i18n("Here you can enter search patterns to quickly "
                                               "filter this view on file names, captions "
                                               "(comments), and tags"));
-    statusBar()->addWidget(d->statusTextFilterBar, 30);
+    statusBar()->addWidget(d->statusTextFilterBar, 50);
 
     //------------------------------------------------------------------------------
 
