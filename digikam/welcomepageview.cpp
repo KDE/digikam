@@ -145,9 +145,10 @@ QString WelcomePageView::infoPage()
     newFeatures << i18n("New zooming/panning support in preview mode");
     newFeatures << i18n("New Light Table provides easy comparison for similar images");
     newFeatures << i18n("Camera Interface used as generic import tool");
-    newFeatures << i18n("New mime-type and rating filters on status bar");
+    newFeatures << i18n("New text, mime-type, and rating filters to search contents on icon view");
     newFeatures << i18n("New options to easy navigate between albums, tags and collections");
     newFeatures << i18n("New options to recursively show the contents of sub-folders");
+    newFeatures << i18n("New text filter to search contents on folder views");
 
     QString featureItems;
     for ( uint i = 0 ; i < newFeatures.count() ; i++ )
