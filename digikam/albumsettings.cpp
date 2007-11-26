@@ -112,17 +112,13 @@ public:
     QString                             copyright;
 
     // album view settings
-    int                                 treeThumbnailSize;             
+    int                                 treeThumbnailSize;
 
     // icon view settings
-    int                                 thumbnailSize;                 
-    int                                 mimeTypeFilter;
-    int                                 ratingFilterValue;
+    int                                 thumbnailSize;
     int                                 ratingFilterCond;
     bool                                recursiveAlbums;
     bool                                recursiveTags;
-
-    QString                             textFilter;
 
     // theme settings
     QString                             currentTheme;
@@ -212,10 +208,6 @@ void AlbumSettings::init()
     d->thumbnailSize            = ThumbnailSize::Medium;
     d->treeThumbnailSize        = 32;
  
-    d->textFilter               = QString();
-    d->mimeTypeFilter           = MimeFilter::AllFiles;
-
-    d->ratingFilterValue        = 0;
     d->ratingFilterCond         = AlbumLister::GreaterEqualCondition;
 
     d->showToolTips             = true;
@@ -305,10 +297,6 @@ void AlbumSettings::readSettings()
     d->treeThumbnailSize        = group.readEntry("Default Tree Icon Size", (int)ThumbnailSize::Tiny);
     d->currentTheme             = group.readEntry("Theme", i18n("Default"));
 
-    d->textFilter               = group.readEntry("Text Filter", QString());
-    d->mimeTypeFilter           = group.readEntry("Mime Type Filter", (int)MimeFilter::AllFiles);
-
-    d->ratingFilterValue        = group.readEntry("Rating Filter Value", 0);
     d->ratingFilterCond         = group.readEntry("Rating Filter Condition",
                                                   (int)AlbumLister::GreaterEqualCondition);
     d->recursiveAlbums          = group.readEntry("Recursive Albums", false);
@@ -400,9 +388,6 @@ void AlbumSettings::saveSettings()
     group.writeEntry("Raw File Filter", d->rawFilefilter);
     group.writeEntry("Default Icon Size", QString::number(d->thumbnailSize));
     group.writeEntry("Default Tree Icon Size", QString::number(d->treeThumbnailSize));
-    group.writeEntry("Text Filter", d->textFilter);
-    group.writeEntry("Mime Type Filter", d->mimeTypeFilter);
-    group.writeEntry("Rating Filter Value", d->ratingFilterValue);
     group.writeEntry("Rating Filter Condition", d->ratingFilterCond);
     group.writeEntry("Recursive Albums", d->recursiveAlbums);
     group.writeEntry("Recursive Tags", d->recursiveTags);
@@ -648,36 +633,6 @@ void AlbumSettings::setDefaultTreeIconSize(int val)
 int AlbumSettings::getDefaultTreeIconSize() const
 {
     return ((d->treeThumbnailSize < 8) || (d->treeThumbnailSize > 48)) ? 48 : d->treeThumbnailSize;
-}
-
-void AlbumSettings::setTextFilter(const QString& text)
-{
-    d->textFilter = text;
-}
-
-QString AlbumSettings::getTextFilter() const
-{
-    return d->textFilter;
-}
-
-void AlbumSettings::setMimeTypeFilter(int val)
-{
-    d->mimeTypeFilter = val;
-}
-
-int AlbumSettings::getMimeTypeFilter() const
-{
-    return d->mimeTypeFilter;
-}
-
-void AlbumSettings::setRatingFilterValue(int val)
-{
-    d->ratingFilterValue = val;
-}
-
-int AlbumSettings::getRatingFilterValue() const
-{
-    return d->ratingFilterValue;
 }
 
 void AlbumSettings::setRatingFilterCond(int val)

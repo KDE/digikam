@@ -215,9 +215,7 @@ DigikamApp::~DigikamApp()
 
     AlbumSettings::instance()->setRecurseAlbums(d->recurseAlbumsAction->isChecked());
     AlbumSettings::instance()->setRecurseTags(d->recurseTagsAction->isChecked());
-    AlbumSettings::instance()->setMimeTypeFilter(d->statusMimeFilterBar->mimeFilter());
     AlbumSettings::instance()->setRatingFilterCond(d->statusRatingFilterBar->ratingFilterCondition());
-    AlbumSettings::instance()->setRatingFilterValue(d->statusRatingFilterBar->rating());
     AlbumSettings::instance()->saveSettings();
 
     AlbumLister::cleanUp();
@@ -994,7 +992,6 @@ void DigikamApp::setupActions()
     d->imageSortAction->setCurrentItem((int)AlbumSettings::instance()->getImageSortOrder());
     d->recurseAlbumsAction->setChecked(AlbumSettings::instance()->getRecurseAlbums());
     d->recurseTagsAction->setChecked(AlbumSettings::instance()->getRecurseTags());
-    d->statusRatingFilterBar->setRating(AlbumSettings::instance()->getRatingFilterValue());
     // Setting the filter condition also updates the tooltip.
     // (So `setRating` is called first, as otherwise the filter value is not respected).
     d->statusRatingFilterBar->setRatingFilterCondition((Digikam::AlbumLister::RatingCondition)
