@@ -74,7 +74,7 @@ SearchTextBar::SearchTextBar(QWidget *parent)
     d->clearButton = new QToolButton(this);
     d->clearButton->setEnabled(false);
     d->clearButton->setAutoRaise(true);
-    d->clearButton->setIconSet(kapp->iconLoader()->loadIcon("locationbar_erase",
+    d->clearButton->setIconSet(kapp->iconLoader()->loadIcon("clear_left",
                                KIcon::Toolbar, KIcon::SizeSmall));
 
     d->searchLabel = new QLabel(i18n("Search:"), this);
@@ -83,9 +83,9 @@ SearchTextBar::SearchTextBar(QWidget *parent)
 
     hlay->setSpacing(KDialog::spacingHint());
     hlay->setMargin(0);
-    hlay->addWidget(d->clearButton);
     hlay->addWidget(d->searchLabel);
     hlay->addWidget(d->searchEdit);
+    hlay->addWidget(d->clearButton);
 
     connect(d->clearButton, SIGNAL(clicked()),
             d->searchEdit, SLOT(clear()));
