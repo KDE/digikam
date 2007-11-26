@@ -187,6 +187,74 @@ TagFolderView::~TagFolderView()
     delete d;
 }
 
+void TagFolderView::slotTagFilterChanged(const QString& filter)
+{
+    QString search = filter.toLower();
+
+    bool atleastOneMatch = false;
+
+    AlbumList tList = AlbumManager::instance()->allTAlbums();
+    for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
+    {
+        TAlbum* talbum  = (TAlbum*)(*it);
+
+        // don't touch the root Album
+        if (talbum->isRoot())
+            continue;
+
+        bool match = talbum->title().toLower().contains(search);
+        if (!match)
+        {
+            // check if any of the parents match the search
+            Album* parent = talbum->parent();
+            while (parent && !parent->isRoot())
+            {
+                if (parent->title().toLower().contains(search))
+                {
+                    match = true;
+                    break;
+                }
+
+                parent = parent->parent();
+            }
+        }
+
+        if (!match)
+        {
+            // check if any of the children match the search
+            AlbumIterator it(talbum);
+            while (it.current())
+            {
+                if ((*it)->title().toLower().contains(search))
+                {
+                    match = true;
+                    break;
+                }
+                ++it;
+            }
+        }
+    
+        TagFolderViewItem* viewItem = (TagFolderViewItem*) talbum->extraData(this);
+
+        if (match)
+        {
+            atleastOneMatch = true;
+
+            if (viewItem)
+                viewItem->setVisible(true);
+        }
+        else
+        {
+            if (viewItem)
+            {
+                viewItem->setVisible(false);
+            }
+        }
+    }
+
+    emit signalTagFilterMatch(atleastOneMatch);
+}
+
 void TagFolderView::slotAlbumAdded(Album *album)
 {
     if(!album)

@@ -7,6 +7,7 @@
  * Description : Albums folder view.
  *
  * Copyright (C) 2005-2006 by Joern Ahrens <joern.ahrens@kdemail.net>
+ * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -250,6 +251,74 @@ AlbumFolderView::AlbumFolderView(QWidget *parent)
 AlbumFolderView::~AlbumFolderView()
 {
     delete d;
+}
+
+void AlbumFolderView::slotFolderFilterChanged(const QString& filter)
+{
+    QString search = filter.toLower();
+
+    bool atleastOneMatch = false;
+
+    AlbumList pList = AlbumManager::instance()->allPAlbums();
+    for (AlbumList::iterator it = pList.begin(); it != pList.end(); ++it)
+    {
+        PAlbum* palbum  = (PAlbum*)(*it);
+
+        // don't touch the root Album
+        if (palbum->isRoot())
+            continue;
+
+        bool match = palbum->title().toLower().contains(search);
+        if (!match)
+        {
+            // check if any of the parents match the search
+            Album* parent = palbum->parent();
+            while (parent && !parent->isRoot())
+            {
+                if (parent->title().toLower().contains(search))
+                {
+                    match = true;
+                    break;
+                }
+
+                parent = parent->parent();
+            }
+        }
+
+        if (!match)
+        {
+            // check if any of the children match the search
+            AlbumIterator it(palbum);
+            while (it.current())
+            {
+                if ((*it)->title().toLower().contains(search))
+                {
+                    match = true;
+                    break;
+                }
+                ++it;
+            }
+        }
+    
+        AlbumFolderViewItem* viewItem = (AlbumFolderViewItem*) palbum->extraData(this);
+
+        if (match)
+        {
+            atleastOneMatch = true;
+
+            if (viewItem)
+                viewItem->setVisible(true);
+        }
+        else
+        {
+            if (viewItem)
+            {
+                viewItem->setVisible(false);
+            }
+        }
+    }
+
+    emit signalFolderFilterMatch(atleastOneMatch);
 }
 
 void AlbumFolderView::slotAlbumAdded(Album *album)

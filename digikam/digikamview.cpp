@@ -33,6 +33,7 @@
 #include <QApplication>
 #include <QSplitter>
 #include <QTimer>
+#include <QLabel>
 #include <QListView>
 
 // KDE includes.
@@ -41,6 +42,7 @@
 #include <klocale.h>
 #include <kapplication.h>
 #include <kconfig.h>
+#include <kdialog.h>
 #include <krun.h>
 #include <kiconloader.h>
 #include <kstandarddirs.h>
@@ -68,6 +70,7 @@
 #include "collectionmanager.h"
 #include "slideshow.h"
 #include "sidebar.h"
+#include "searchtextbar.h"
 #include "imagepropertiessidebardb.h"
 #include "imageinfoalbumsjob.h"
 #include "imagepreviewview.h"
@@ -91,6 +94,14 @@ public:
 
     DigikamViewPriv()
     {
+        folderBox             = 0;
+        tagBox                = 0;
+        searchBox             = 0;
+        tagFilterBox          = 0;
+        folderSearchBar       = 0;
+        tagSearchBar          = 0;
+        searchSearchBar       = 0;
+        tagFilterSearchBar    = 0;
         splitter              = 0;
         parent                = 0;
         iconView              = 0;
@@ -122,6 +133,16 @@ public:
     QTimer                   *selectionTimer;
     QTimer                   *thumbSizeTimer;
 
+    KVBox                    *folderBox;
+    KVBox                    *tagBox;
+    KVBox                    *searchBox;
+    KVBox                    *tagFilterBox;
+
+    SearchTextBar            *folderSearchBar;
+    SearchTextBar            *tagSearchBar;
+    SearchTextBar            *searchSearchBar;
+    SearchTextBar            *tagFilterSearchBar;
+
     DigikamApp               *parent;
 
     AlbumIconView            *iconView;
@@ -129,7 +150,7 @@ public:
     AlbumManager             *albumManager;
     AlbumHistory             *albumHistory;
     AlbumWidgetStack         *albumWidgetStack;
-    
+
     Sidebar                  *leftSideBar;
     ImagePropertiesSideBarDB *rightSideBar;
 
@@ -167,18 +188,44 @@ DigikamView::DigikamView(QWidget *parent)
     d->rightSideBar->setObjectName("Digikam Right Sidebar");
 
     // To the left.
-    d->folderView       = new AlbumFolderView(this);
+    // Folders sidebar tab contents.
+    d->folderBox       = new KVBox(this);
+    d->folderView      = new AlbumFolderView(d->folderBox);
+    d->folderSearchBar = new SearchTextBar(d->folderBox);
+    d->folderBox->setSpacing(KDialog::spacingHint());
+    d->folderBox->setMargin(0);
+
+    // Tags sidebar tab contents.
+    d->tagBox        = new KVBox(this);
+    d->tagFolderView = new TagFolderView(d->tagBox);
+    d->tagSearchBar  = new SearchTextBar(d->tagBox);
+    d->tagBox->setSpacing(KDialog::spacingHint());
+    d->tagBox->setMargin(0);
+
+    // Search sidebar tab contents.
+    d->searchBox        = new KVBox(this);
+    d->searchFolderView = new SearchFolderView(d->searchBox);
+    d->searchSearchBar  = new SearchTextBar(d->searchBox);
+    d->searchBox->setSpacing(KDialog::spacingHint());
+    d->searchBox->setMargin(0);
+
     d->dateFolderView   = new DateFolderView(this);
-    d->tagFolderView    = new TagFolderView(this);
-    d->searchFolderView = new SearchFolderView(this);
-    d->leftSideBar->appendTab(d->folderView, SmallIcon("folder-image"), i18n("Albums"));
+
+    d->leftSideBar->appendTab(d->folderBox, SmallIcon("folder-image"), i18n("Albums"));
     d->leftSideBar->appendTab(d->dateFolderView, SmallIcon("view-calendar-month"), i18n("Dates"));
-    d->leftSideBar->appendTab(d->tagFolderView, SmallIcon("tag"), i18n("Tags"));
-    d->leftSideBar->appendTab(d->searchFolderView, SmallIcon("edit-find"), i18n("Searches"));
+    d->leftSideBar->appendTab(d->tagBox, SmallIcon("tag"), i18n("Tags"));
+    d->leftSideBar->appendTab(d->searchBox, SmallIcon("edit-find"), i18n("Searches"));
 
     // To the right.
-    d->tagFilterView = new TagFilterView(this);
-    d->rightSideBar->appendTab(d->tagFilterView, SmallIcon("tag-assigned"), i18n("Tag Filters"));
+
+    // Tags Filter sidebar tab contents.
+    d->tagFilterBox       = new KVBox(this);
+    d->tagFilterView      = new TagFilterView(d->tagFilterBox);
+    d->tagFilterSearchBar = new SearchTextBar(d->tagFilterBox);
+    d->tagFilterBox->setSpacing(KDialog::spacingHint());
+    d->tagFilterBox->setMargin(0);
+
+    d->rightSideBar->appendTab(d->tagFilterBox, SmallIcon("tag-assigned"), i18n("Tag Filters"));
 
     d->selectionTimer = new QTimer(this);
 
@@ -335,6 +382,32 @@ void DigikamView::setupConnections()
 
     connect(d->tagFolderView, SIGNAL(signalProgressValue(int)),
             d->parent, SLOT(slotProgressValue(int)));
+
+    // -- Filter Bars Connections ---------------------------------
+
+    connect(d->folderSearchBar, SIGNAL(signalTextChanged(const QString&)),
+            d->folderView, SLOT(slotFolderFilterChanged(const QString&)));
+
+    connect(d->tagSearchBar, SIGNAL(signalTextChanged(const QString&)),
+            d->tagFolderView, SLOT(slotTagFilterChanged(const QString&)));
+
+    connect(d->searchSearchBar, SIGNAL(signalTextChanged(const QString&)),
+            d->searchFolderView, SLOT(slotSearchFilterChanged(const QString&)));
+
+    connect(d->tagFilterSearchBar, SIGNAL(signalTextChanged(const QString&)),
+            d->tagFilterView, SLOT(slotTagFilterChanged(const QString&)));
+
+    connect(d->folderView, SIGNAL(signalFolderFilterMatch(bool)),
+            d->folderSearchBar, SLOT(slotSearchResult(bool)));
+
+    connect(d->tagFolderView, SIGNAL(signalTagFilterMatch(bool)),
+            d->tagSearchBar, SLOT(slotSearchResult(bool)));
+
+    connect(d->searchFolderView, SIGNAL(signalSearchFilterMatch(bool)),
+            d->searchSearchBar, SLOT(slotSearchResult(bool)));
+
+    connect(d->tagFilterView, SIGNAL(signalTagFilterMatch(bool)),
+            d->tagFilterSearchBar, SLOT(slotSearchResult(bool)));
 
     // -- Preview image widget Connections ------------------------
 
@@ -1180,9 +1253,9 @@ void DigikamView::slotLeftSidebarChangedTab(QWidget* w)
     // So this is the place which causes the behavior that when the left sidebar
     // tab is changed, the current album is changed as well.
     d->dateFolderView->setActive(w == d->dateFolderView);
-    d->folderView->setActive(w == d->folderView);
-    d->tagFolderView->setActive(w == d->tagFolderView);
-    d->searchFolderView->setActive(w == d->searchFolderView);
+    d->folderView->setActive(w == d->folderBox);
+    d->tagFolderView->setActive(w == d->tagBox);
+    d->searchFolderView->setActive(w == d->searchBox);
 }
 
 void DigikamView::slotAssignRating(int rating)
