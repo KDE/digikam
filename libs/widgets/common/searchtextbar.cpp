@@ -72,6 +72,7 @@ SearchTextBar::SearchTextBar(QWidget *parent)
     QHBoxLayout *hlay = new QHBoxLayout(this);
 
     d->clearButton = new QToolButton(this);
+    d->clearButton->setEnabled(false);
     d->clearButton->setAutoRaise(true);
     d->clearButton->setIconSet(kapp->iconLoader()->loadIcon("locationbar_erase",
                                KIcon::Toolbar, KIcon::SizeSmall));
@@ -90,7 +91,7 @@ SearchTextBar::SearchTextBar(QWidget *parent)
             d->searchEdit, SLOT(clear()));
 
     connect(d->searchEdit, SIGNAL(textChanged(const QString&)),
-            this, SIGNAL(signalTextChanged(const QString&)));
+            this, SLOT(slotTextChanged(const QString&)));
 }
 
 SearchTextBar::~SearchTextBar()
@@ -106,6 +107,13 @@ void SearchTextBar::setText(const QString& text)
 QString SearchTextBar::text() const
 {
     return d->searchEdit->text();
+}
+
+void SearchTextBar::slotTextChanged(const QString& text)
+{
+    d->clearButton->setEnabled(text.isEmpty() ? false : true);
+        
+    emit signalTextChanged(text);
 }
 
 void SearchTextBar::slotSearchResult(bool match)

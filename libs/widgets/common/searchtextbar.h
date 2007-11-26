@@ -58,6 +58,10 @@ public slots:
 
     void slotSearchResult(bool);
 
+private slots:
+
+    void slotTextChanged(const QString&);
+
 private :
 
     SearchTextBarPriv* d;    
