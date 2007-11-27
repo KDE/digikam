@@ -42,6 +42,7 @@
 // Local includes.
 
 #include "ddebug.h"
+#include "searchtextbar.h"
 #include "searchresultsview.h"
 #include "searchquickdialog.h"
 #include "searchquickdialog.moc"
@@ -63,8 +64,9 @@ public:
 
     QTimer            *timer;
 
-    KLineEdit         *searchEdit;
     KLineEdit         *nameEdit;
+
+    SearchTextBar     *searchEdit;
 
     SearchResultsView *resultsView;
 };
@@ -89,9 +91,9 @@ SearchQuickDialog::SearchQuickDialog(QWidget* parent, KUrl& url)
     // -------------------------------------------------------------
     
     QLabel *label1 = new QLabel("<b>" + i18n("Search:") + "</b>", w);
-    d->searchEdit  = new KLineEdit(w);
+    d->searchEdit  = new SearchTextBar(w, i18n("Enter your search criteria"));
     d->searchEdit->setClearButtonShown(true);
-    d->searchEdit->setWhatsThis( i18n("<p>Enter your search criteria to find items in the album library"));
+    d->searchEdit->setWhatsThis(i18n("<p>Enter your search criteria to find items in the album library"));
     
     d->resultsView = new SearchResultsView(w);
     d->resultsView->setMinimumSize(320, 200);
@@ -102,6 +104,7 @@ SearchQuickDialog::SearchQuickDialog(QWidget* parent, KUrl& url)
     d->nameEdit    = new KLineEdit(w);
     d->nameEdit->setClearButtonShown(true);
     d->nameEdit->setText(i18n("Last Search"));
+    d->nameEdit->setMessage(i18n("Enter the name of the current search"));
     d->nameEdit->setWhatsThis( i18n("<p>Enter the name of the current search to save in the "
                                     "\"My Searches\" view"));
 
@@ -119,6 +122,9 @@ SearchQuickDialog::SearchQuickDialog(QWidget* parent, KUrl& url)
 
     connect(d->searchEdit, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotSearchChanged(const QString&)));
+
+    connect(d->resultsView, SIGNAL(signalSearchResultsMatch(bool)),
+            d->searchEdit, SLOT(slotSearchResult(bool)));
 
     connect(d->timer, SIGNAL(timeout()),
             this, SLOT(slotTimeOut()));
