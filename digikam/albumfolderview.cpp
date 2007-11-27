@@ -54,10 +54,9 @@
 
 #include "ddebug.h"
 #include "digikamapp.h"
-#include "album.h"
 #include "albumpropsedit.h"
 #include "album.h"
-#include "albummanager.h"
+#include "albumdb.h"
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "collectionmanager.h"
@@ -190,10 +189,10 @@ public:
 
     AlbumFolderViewPriv()
     {
-        albumMan     = 0;
+        albumMan = 0;
     }
 
-    AlbumManager                     *albumMan;
+    AlbumManager                      *albumMan;
     Q3ValueList<AlbumFolderViewItem*>  groupItems;
 };
 
@@ -205,7 +204,7 @@ AlbumFolderView::AlbumFolderView(QWidget *parent)
                : FolderView(parent, "AlbumFolderView")
 {
     d = new AlbumFolderViewPriv();
-    d->albumMan     = AlbumManager::instance();
+    d->albumMan = AlbumManager::instance();
 
     addColumn(i18n("My Albums"));
     setResizeMode(Q3ListView::LastColumn);
@@ -259,7 +258,7 @@ void AlbumFolderView::slotFolderFilterChanged(const QString& filter)
 
     bool atleastOneMatch = false;
 
-    AlbumList pList = AlbumManager::instance()->allPAlbums();
+    AlbumList pList = d->albumMan->allPAlbums();
     for (AlbumList::iterator it = pList.begin(); it != pList.end(); ++it)
     {
         PAlbum* palbum  = (PAlbum*)(*it);
@@ -449,7 +448,7 @@ void AlbumFolderView::slotThumbnailLost(Album *)
 
 void AlbumFolderView::slotReloadThumbnails()
 {
-    AlbumList tList = AlbumManager::instance()->allPAlbums();
+    AlbumList tList = d->albumMan->allPAlbums();
     for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
     {
         PAlbum* album  = (PAlbum*)(*it);
@@ -585,7 +584,7 @@ void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, 
         else if (choice == resetIconAction)
         {
             QString err;
-            AlbumManager::instance()->updatePAlbumIcon(item->getAlbum(), 0, err);
+            d->albumMan->updatePAlbumIcon(item->getAlbum(), 0, err);
         }
         else if (choice == renameAction)
         {
@@ -1061,7 +1060,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
             if(set)
             {
                 QString errMsg;
-                AlbumManager::instance()->updatePAlbumIcon(destAlbum, imageIDs.first(), errMsg);
+                d->albumMan->updatePAlbumIcon(destAlbum, imageIDs.first(), errMsg);
             }
             return;
         }
@@ -1118,7 +1117,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
         else if (setThumbnail)
         {
             QString errMsg;
-            AlbumManager::instance()->updatePAlbumIcon(destAlbum, imageIDs.first(), errMsg);
+            d->albumMan->updatePAlbumIcon(destAlbum, imageIDs.first(), errMsg);
         }
 
         return;
@@ -1371,7 +1370,7 @@ void AlbumFolderView::resort()
     if (prevSelectedItem && prevSelectedItem->isGroupItem())
         prevSelectedItem = 0;
 
-    AlbumList pList(AlbumManager::instance()->allPAlbums());
+    AlbumList pList(d->albumMan->allPAlbums());
     for (AlbumList::iterator it = pList.begin(); it != pList.end(); ++it)
     {
         PAlbum *album = (PAlbum*)(*it);

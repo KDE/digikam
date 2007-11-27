@@ -39,6 +39,7 @@
 namespace Digikam
 {
 
+class PAlbum;
 class AlbumPropsEditPriv;
 
 class AlbumPropsEdit : public KDialog
@@ -79,7 +80,7 @@ private slots:
 
 private:
 
-    AlbumPropsEditPriv* d;    
+    AlbumPropsEditPriv* d;
 };
 
 }  // namespace Digikam

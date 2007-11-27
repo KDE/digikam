@@ -193,7 +193,7 @@ void TagFolderView::slotTagFilterChanged(const QString& filter)
 
     bool atleastOneMatch = false;
 
-    AlbumList tList = AlbumManager::instance()->allTAlbums();
+    AlbumList tList = d->albumMan->allTAlbums();
     for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
     {
         TAlbum* talbum  = (TAlbum*)(*it);
@@ -415,7 +415,7 @@ void TagFolderView::slotThumbnailLost(Album *)
 
 void TagFolderView::slotReloadThumbnails()
 {
-    AlbumList tList = AlbumManager::instance()->allTAlbums();
+    AlbumList tList = d->albumMan->allTAlbums();
     for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
     {
         TAlbum* tag  = (TAlbum*)(*it);
@@ -512,7 +512,7 @@ void TagFolderView::slotContextMenu(Q3ListViewItem *item, const QPoint &, int)
         else if (choice == resetIconAction)
         {
             QString errMsg;
-            AlbumManager::instance()->updateTAlbumIcon(tag->getTag(), QString("tag"), 0, errMsg);
+            d->albumMan->updateTAlbumIcon(tag->getTag(), QString("tag"), 0, errMsg);
         }
         else
         {
@@ -761,8 +761,7 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
         int tagID;
         ds >> tagID;
 
-        AlbumManager* man = AlbumManager::instance();
-        TAlbum* talbum    = man->findTAlbum(tagID);
+        TAlbum* talbum = d->albumMan->findTAlbum(tagID);
 
         if(!talbum)
             return;
@@ -859,8 +858,7 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
             if(set)
             {
                 QString errMsg;
-                AlbumManager::instance()->updateTAlbumIcon(destAlbum, QString(),
-                                                           imageIDs.first(), errMsg);
+                d->albumMan->updateTAlbumIcon(destAlbum, QString(), imageIDs.first(), errMsg);
             }
             return;
         }
