@@ -198,9 +198,9 @@ DigikamApp::~DigikamApp()
     if (d->view)
         delete d->view;
 
+    d->albumIconViewFilter->saveSettings();
     d->albumSettings->setRecurseAlbums(d->recurseAlbumsAction->isChecked());
     d->albumSettings->setRecurseTags(d->recurseTagsAction->isChecked());
-    d->albumSettings->setRatingFilterCond(d->albumIconViewFilter->ratingFilterCondition());
     d->albumSettings->saveSettings();
     delete d->albumSettings;
 
@@ -1026,8 +1026,7 @@ void DigikamApp::setupActions()
 
     // Setting the filter condition also updates the tooltip.
     // (So `setRating` is called first, as otherwise the filter value is not respected).
-    d->albumIconViewFilter->setRatingFilterCondition((Digikam::AlbumLister::RatingCondition)
-                                                     d->albumSettings->getRatingFilterCond());
+    d->albumIconViewFilter->readSettings();
 }
 
 void DigikamApp::enableZoomPlusAction(bool val)
@@ -1628,7 +1627,8 @@ void DigikamApp::slotSetupChanged()
     d->albumManager->startScan();
 
     d->view->applySettings(d->albumSettings);
-
+    d->albumIconViewFilter->readSettings();
+    
     AlbumThumbnailLoader::instance()->setThumbnailSize(d->albumSettings->getDefaultTreeIconSize());
 
     if (ImageWindow::imagewindowCreated())

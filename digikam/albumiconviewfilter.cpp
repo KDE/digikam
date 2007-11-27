@@ -34,6 +34,7 @@
 // Local includes.
 
 #include "ddebug.h"
+#include "albumsettings.h"
 #include "searchtextbar.h"
 #include "ratingfilter.h"
 #include "mimefilter.h"
@@ -96,6 +97,23 @@ AlbumIconViewFilter::~AlbumIconViewFilter()
     delete d;
 }
 
+void AlbumIconViewFilter::readSettings()
+{
+    AlbumSettings *settings = AlbumSettings::instance();
+    d->ratingFilter->setRatingFilterCondition((Digikam::AlbumLister::RatingCondition)
+                                              (settings->getRatingFilterCond()));
+    d->ratingFilter->setEnabled(settings->getIconShowRating());
+    d->textFilter->setEnabled(settings->getIconShowName()     ||
+                              settings->getIconShowComments() ||
+                              settings->getIconShowTags());
+    // NOTE: Mime Type filter is always enable.
+}
+
+void AlbumIconViewFilter::saveSettings()
+{
+    AlbumSettings::instance()->setRatingFilterCond(d->ratingFilter->ratingFilterCondition());
+}
+
 void AlbumIconViewFilter::slotRatingFilterChanged(int rating, AlbumLister::RatingCondition cond)
 {
     AlbumLister::instance()->setRatingFilter(rating, cond);
@@ -109,16 +127,6 @@ void AlbumIconViewFilter::slotMimeTypeFilterChanged(int mimeTypeFilter)
 void AlbumIconViewFilter::slotTextFilterChanged(const QString& text)
 {
     AlbumLister::instance()->setTextFilter(text);
-}
-
-void AlbumIconViewFilter::setRatingFilterCondition(AlbumLister::RatingCondition cond)
-{
-    d->ratingFilter->setRatingFilterCondition(cond);
-}
-
-AlbumLister::RatingCondition AlbumIconViewFilter::ratingFilterCondition()
-{
-    return d->ratingFilter->ratingFilterCondition();
 }
 
 }  // namespace Digikam
