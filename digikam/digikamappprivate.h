@@ -56,8 +56,6 @@
 #include "statusprogressbar.h"
 #include "statusnavigatebar.h"
 #include "digikamview.h"
-#include "ratingfilter.h"
-#include "mimefilter.h"
 
 class KToolBarPopupAction;
 class KToggleAction;
@@ -70,6 +68,7 @@ namespace Digikam
 class DCOPIface;
 class CameraUI;
 class SearchTextBar;
+class AlbumIconViewFilter;
 
 class DigikamAppPriv
 {
@@ -145,9 +144,6 @@ public:
         imagePluginsLoader                   = 0;
         kipiInterface                        = 0;
         cameraList                           = 0;
-        statusRatingFilterBar                = 0;
-        statusTextFilterBar                  = 0; 
-        statusMimeFilterBar                  = 0;
         statusProgressBar                    = 0;
         statusNavigateBar                    = 0;
         statusZoomBar                        = 0;
@@ -162,6 +158,7 @@ public:
         solidCameraActionGroup               = 0;
         solidUsmActionGroup                  = 0;
         eventLoop                            = 0;
+        albumIconViewFilter                  = 0;
     }
 
     bool                                fullScreen;
@@ -183,8 +180,6 @@ public:
     KMenu                              *manuallyAddedCamerasMenu;
 
     KSharedConfig::Ptr                  config;
-
-    SearchTextBar                      *statusTextFilterBar;
 
     // Album Actions
     KAction                            *newAction;
@@ -271,6 +266,7 @@ public:
     QEventLoop                         *eventLoop;
     QString                             solidErrorMessage;
 
+    AlbumIconViewFilter                *albumIconViewFilter;
     SplashScreen                       *splashScreen;
     DCOPIface                          *dcopIface;
     ImagePluginLoader                  *imagePluginsLoader;
@@ -280,8 +276,6 @@ public:
     StatusZoomBar                      *statusZoomBar;
     StatusProgressBar                  *statusProgressBar;
     StatusNavigateBar                  *statusNavigateBar;
-    RatingFilter                       *statusRatingFilterBar;
-    MimeFilter                         *statusMimeFilterBar;
 
     KIPI::PluginLoader                 *kipiPluginLoader;
 };

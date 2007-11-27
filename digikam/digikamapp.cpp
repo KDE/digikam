@@ -83,6 +83,7 @@
 #include "ddebug.h"
 #include "album.h"
 #include "albumthumbnailloader.h"
+#include "albumiconviewfilter.h"
 #include "albumselectdialog.h"
 #include "cameratype.h"
 #include "cameraui.h"
@@ -96,7 +97,6 @@
 #include "thumbnailsize.h"
 #include "themeengine.h"
 #include "scancontroller.h"
-#include "searchtextbar.h"
 #include "loadingcache.h"
 #include "loadingcacheinterface.h"
 #include "imageattributeswatch.h"
@@ -215,7 +215,7 @@ DigikamApp::~DigikamApp()
 
     AlbumSettings::instance()->setRecurseAlbums(d->recurseAlbumsAction->isChecked());
     AlbumSettings::instance()->setRecurseTags(d->recurseTagsAction->isChecked());
-    AlbumSettings::instance()->setRatingFilterCond(d->statusRatingFilterBar->ratingFilterCondition());
+    AlbumSettings::instance()->setRatingFilterCond(d->albumIconViewFilter->ratingFilterCondition());
     AlbumSettings::instance()->saveSettings();
 
     AlbumLister::cleanUp();
@@ -364,20 +364,9 @@ void DigikamApp::setupStatusBar()
 
     //------------------------------------------------------------------------------
 
-    KHBox *filterBox       = new KHBox(statusBar());
-    d->statusTextFilterBar = new SearchTextBar(filterBox);
-    d->statusTextFilterBar->setToolTip(i18n("Text quick filter (search)"));
-    d->statusTextFilterBar->setWhatsThis(i18n("Here you can enter search patterns to quickly "
-                                              "filter this view on file names, captions "
-                                              "(comments), and tags"));
-
-    d->statusMimeFilterBar   = new MimeFilter(filterBox);
-    d->statusRatingFilterBar = new RatingFilter(filterBox);
-    filterBox->setMaximumHeight(fontMetrics().height()+4);
-    filterBox->setMargin(0);
-    filterBox->setSpacing(KDialog::spacingHint());
-
-    statusBar()->addWidget(filterBox, 100);
+    d->albumIconViewFilter = new AlbumIconViewFilter(statusBar());
+    d->albumIconViewFilter->setMaximumHeight(fontMetrics().height()+4);
+    statusBar()->addWidget(d->albumIconViewFilter, 100);
 
     //------------------------------------------------------------------------------
 
@@ -392,18 +381,6 @@ void DigikamApp::setupStatusBar()
     statusBar()->addPermanentWidget(d->statusNavigateBar, 1);
 
     //------------------------------------------------------------------------------
-
-    connect(d->statusRatingFilterBar, SIGNAL(signalRatingFilterChanged(int, AlbumLister::RatingCondition)),
-            this, SLOT(slotRatingFilterChanged(int, AlbumLister::RatingCondition)));
-
-    connect(d->statusMimeFilterBar, SIGNAL(activated(int)),
-            this, SLOT(slotMimeTypeFilterChanged(int)));
-
-    connect(d->statusTextFilterBar, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotTextFilterChanged(const QString&)));
-
-    connect(AlbumLister::instance(), SIGNAL(signalItemsTextFilterMatch(bool)),
-            d->statusTextFilterBar, SLOT(slotSearchResult(bool)));
 
     connect(d->statusZoomBar, SIGNAL(signalZoomMinusClicked()),
             d->view, SLOT(slotZoomOut()));
@@ -997,8 +974,8 @@ void DigikamApp::setupActions()
     d->recurseTagsAction->setChecked(AlbumSettings::instance()->getRecurseTags());
     // Setting the filter condition also updates the tooltip.
     // (So `setRating` is called first, as otherwise the filter value is not respected).
-    d->statusRatingFilterBar->setRatingFilterCondition((Digikam::AlbumLister::RatingCondition)
-                                                        AlbumSettings::instance()->getRatingFilterCond());
+    d->albumIconViewFilter->setRatingFilterCondition((Digikam::AlbumLister::RatingCondition)
+                                                     AlbumSettings::instance()->getRatingFilterCond());
 }
 
 void DigikamApp::enableZoomPlusAction(bool val)
@@ -2133,21 +2110,6 @@ void DigikamApp::slotSyncAllPicturesMetadataDone()
 void DigikamApp::slotDonateMoney()
 {
     KToolInvocation::invokeBrowser("http://www.digikam.org/?q=donation");
-}
-
-void DigikamApp::slotMimeTypeFilterChanged(int mimeTypeFilter)
-{
-    AlbumLister::instance()->setMimeTypeFilter(mimeTypeFilter);
-}
-
-void DigikamApp::slotTextFilterChanged(const QString& text)
-{
-    AlbumLister::instance()->setTextFilter(text);
-}
-
-void DigikamApp::slotRatingFilterChanged(int rating, AlbumLister::RatingCondition cond)
-{
-    AlbumLister::instance()->setRatingFilter(rating, cond);
 }
 
 void DigikamApp::slotRecurseAlbums(bool checked)
