@@ -147,8 +147,11 @@ void SearchResultsView::slotData(KIO::Job*, const QByteArray &data)
     }
     arrangeItemsInGrid();
 
+    bool match = !ulist.isEmpty();
 
-    if (!ulist.isEmpty())
+    emit signalSearchResultsMatch(match);
+
+    if (match)
     {
         m_thumbJob = new ThumbnailJob(ulist, 128, true, true);
 

@@ -59,6 +59,10 @@ public:
     void openURL(const KUrl& url);
     void clear();
 
+signals:
+    
+    void signalSearchResultsMatch(bool);
+
 private slots:
 
     void slotData(KIO::Job *job, const QByteArray &data);
