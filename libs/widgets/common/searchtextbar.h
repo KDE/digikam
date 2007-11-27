@@ -44,11 +44,13 @@ public:
     SearchTextBar(QWidget *parent=0);
     ~SearchTextBar();
 
-    void signalTextChanged(const QString&);
-
 public slots:
 
     void slotSearchResult(bool);
+
+private slots:
+
+    void slotTextChanged(const QString&);
 };
 
 }  // namespace Digikam

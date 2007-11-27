@@ -46,10 +46,19 @@ SearchTextBar::SearchTextBar(QWidget *parent)
     setClearButtonShown(true);
     setClickMessage(i18n("Search..."));
     setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum));
+
+    connect(this, SIGNAL(textChanged(const QString&)),
+            this, SLOT(slotTextChanged(const QString&)));
 }
 
 SearchTextBar::~SearchTextBar()
 {
+}
+
+void SearchTextBar::slotTextChanged(const QString& text)
+{
+    if (text.isEmpty())
+        setPalette(QPalette());
 }
 
 void SearchTextBar::slotSearchResult(bool match)
