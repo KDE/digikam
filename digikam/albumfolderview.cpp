@@ -55,9 +55,8 @@
 #include "ddebug.h"
 #include "digikamapp.h"
 #include "album.h"
+#include "albumdb.h"
 #include "albumpropsedit.h"
-#include "album.h"
-#include "albummanager.h"
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "thumbnailjob.h"
@@ -125,6 +124,9 @@ AlbumFolderViewItem::AlbumFolderViewItem(QListViewItem *parent, PAlbum *album)
     setDragEnabled(true);
     m_album     = album;
     m_groupItem = false;
+/*    setText(0, album->title() + QString(" (%1)")
+            .arg(AlbumManager::instance()->albumDB()->getItemNamesInAlbum(album->id()).count()));*/
+
 }
 
 // special group item (collection/dates)
@@ -272,7 +274,7 @@ void AlbumFolderView::slotFolderFilterChanged(const QString& filter)
 
     bool atleastOneMatch = false;
 
-    AlbumList pList = AlbumManager::instance()->allPAlbums();
+    AlbumList pList = d->albumMan->allPAlbums();
     for (AlbumList::iterator it = pList.begin(); it != pList.end(); ++it)
     {
         PAlbum* palbum  = (PAlbum*)(*it);
@@ -465,7 +467,7 @@ void AlbumFolderView::slotThumbnailLost(Album *)
 
 void AlbumFolderView::slotReloadThumbnails()
 {
-    AlbumList tList = AlbumManager::instance()->allPAlbums();
+    AlbumList tList = d->albumMan->allPAlbums();
     for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
     {
         PAlbum* album  = (PAlbum*)(*it);
@@ -629,7 +631,7 @@ void AlbumFolderView::slotContextMenu(QListViewItem *listitem, const QPoint &, i
         case 13:
         {
             QString err;
-            AlbumManager::instance()->updatePAlbumIcon(item->getAlbum(), 0, err);
+            d->albumMan->updatePAlbumIcon(item->getAlbum(), 0, err);
             break;
         }
         case 14:
@@ -1104,7 +1106,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
             if(id == 12)
             {
                 QString errMsg;
-                AlbumManager::instance()->updatePAlbumIcon(destAlbum, imageIDs.first(), errMsg);
+                d->albumMan->updatePAlbumIcon(destAlbum, imageIDs.first(), errMsg);
             }
             return;
         }
@@ -1156,7 +1158,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
             case 12:
             {
                 QString errMsg;
-                AlbumManager::instance()->updatePAlbumIcon(destAlbum, imageIDs.first(), errMsg);
+                d->albumMan->updatePAlbumIcon(destAlbum, imageIDs.first(), errMsg);
             }
             default:
                 break;
@@ -1449,7 +1451,7 @@ void AlbumFolderView::resort()
     if (prevSelectedItem && prevSelectedItem->isGroupItem())
         prevSelectedItem = 0;
 
-    AlbumList pList(AlbumManager::instance()->allPAlbums());
+    AlbumList pList(d->albumMan->allPAlbums());
     for (AlbumList::iterator it = pList.begin(); it != pList.end(); ++it)
     {
         PAlbum *album = (PAlbum*)(*it);
