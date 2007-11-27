@@ -34,7 +34,6 @@
 
 #include <kapplication.h>
 #include <kiconloader.h>
-#include <klocale.h>
 #include <kdialogbase.h>
 
 // Local includes
@@ -149,7 +148,7 @@ public:
     KLineEdit   *searchEdit;
 };
 
-SearchTextBar::SearchTextBar(QWidget *parent)
+SearchTextBar::SearchTextBar(QWidget *parent, const QString &msg)
              : QWidget(parent, 0, Qt::WDestructiveClose)
 {
     d = new SearchTextBarPriv;
@@ -163,7 +162,7 @@ SearchTextBar::SearchTextBar(QWidget *parent)
     d->clearButton->setIconSet(kapp->iconLoader()->loadIcon("clear_left",
                                KIcon::Toolbar, KIcon::SizeSmall));
 
-    d->searchEdit  = new DLineEdit(i18n("Search..."), this);
+    d->searchEdit  = new DLineEdit(msg, this);
     d->searchEdit->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum));
 
     hlay->setSpacing(0);

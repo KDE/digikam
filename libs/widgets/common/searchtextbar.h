@@ -32,6 +32,7 @@
 // KDE includes.
 
 #include <klineedit.h>
+#include <klocale.h>
 
 // Local includes.
 
@@ -75,7 +76,7 @@ Q_OBJECT
 
 public:
 
-    SearchTextBar(QWidget *parent=0);
+    SearchTextBar(QWidget *parent=0, const QString &msg=i18n("Search..."));
     ~SearchTextBar();
 
     void setText(const QString& text);
