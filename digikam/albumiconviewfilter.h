@@ -50,8 +50,8 @@ public:
     AlbumIconViewFilter(QWidget* parent);
     ~AlbumIconViewFilter();
 
-    void setRatingFilterCondition(AlbumLister::RatingCondition cond);
-    AlbumLister::RatingCondition ratingFilterCondition();
+    void readSettings();
+    void saveSettings();
 
 private slots:
 

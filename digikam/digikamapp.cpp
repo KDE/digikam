@@ -213,9 +213,9 @@ DigikamApp::~DigikamApp()
     if (d->view)
         delete d->view;
 
+    d->albumIconViewFilter->saveSettings();
     AlbumSettings::instance()->setRecurseAlbums(d->recurseAlbumsAction->isChecked());
     AlbumSettings::instance()->setRecurseTags(d->recurseTagsAction->isChecked());
-    AlbumSettings::instance()->setRatingFilterCond(d->albumIconViewFilter->ratingFilterCondition());
     AlbumSettings::instance()->saveSettings();
 
     AlbumLister::cleanUp();
@@ -972,10 +972,10 @@ void DigikamApp::setupActions()
     d->imageSortAction->setCurrentItem((int)AlbumSettings::instance()->getImageSortOrder());
     d->recurseAlbumsAction->setChecked(AlbumSettings::instance()->getRecurseAlbums());
     d->recurseTagsAction->setChecked(AlbumSettings::instance()->getRecurseTags());
+
     // Setting the filter condition also updates the tooltip.
     // (So `setRating` is called first, as otherwise the filter value is not respected).
-    d->albumIconViewFilter->setRatingFilterCondition((Digikam::AlbumLister::RatingCondition)
-                                                     AlbumSettings::instance()->getRatingFilterCond());
+    d->albumIconViewFilter->readSettings();
 }
 
 void DigikamApp::enableZoomPlusAction(bool val)
@@ -1810,6 +1810,7 @@ void DigikamApp::slotSetupChanged()
         AlbumManager::instance()->startScan();
 
     d->view->applySettings(AlbumSettings::instance());
+    d->albumIconViewFilter->readSettings();
 
     AlbumThumbnailLoader::instance()->setThumbnailSize(AlbumSettings::instance()->getDefaultTreeIconSize());
 
