@@ -56,6 +56,7 @@ public:
     
     QString ratingPixPath;
 
+    QPixmap disPixmap;
     QPixmap selPixmap;
     QPixmap regPixmap;
 };
@@ -137,18 +138,30 @@ void RatingWidget::mousePressEvent(QMouseEvent* e)
 void RatingWidget::paintEvent(QPaintEvent*)
 {
     QPainter p(this);
-
     int x = 0;
-    for (int i=0; i<d->rating; i++)
+    
+    // Widget is disable : drawing grayed frame.
+    if (!isEnabled())
     {
-        p.drawPixmap(x, 0, d->selPixmap);
-        x += d->selPixmap.width();
+        for (int i=0; i<RatingMax; i++)
+        {
+            p.drawPixmap(x, 0, d->disPixmap);
+            x += d->disPixmap.width();
+        }
     }
-
-    for (int i=d->rating; i<RatingMax; i++)
+    else
     {
-        p.drawPixmap(x, 0, d->regPixmap);
-        x += d->regPixmap.width();
+        for (int i=0; i<d->rating; i++)
+        {
+            p.drawPixmap(x, 0, d->selPixmap);
+            x += d->selPixmap.width();
+        }
+    
+        for (int i=d->rating; i<RatingMax; i++)
+        {
+            p.drawPixmap(x, 0, d->regPixmap);
+            x += d->regPixmap.width();
+        }
     }
 
     p.end();
@@ -158,6 +171,7 @@ void RatingWidget::slotThemeChanged()
 {
     d->regPixmap = QPixmap(d->ratingPixPath);
     d->selPixmap = d->regPixmap;
+    d->disPixmap = d->regPixmap;
 
     QPainter painter(&d->regPixmap);
     painter.fillRect(0, 0, d->regPixmap.width(), d->regPixmap.height(),
@@ -169,6 +183,11 @@ void RatingWidget::slotThemeChanged()
                       ThemeEngine::instance()->textSpecialRegColor());
     painter2.end();
     
+    QPainter painter3(&d->disPixmap);
+    painter3.fillRect(0, 0, d->disPixmap.width(), d->disPixmap.height(),
+                      palette().disabled().foreground());
+    painter3.end();
+
     setFixedSize(QSize(d->regPixmap.width()*5, d->regPixmap.height()));
     update();
 }
