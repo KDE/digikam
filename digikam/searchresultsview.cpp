@@ -43,13 +43,32 @@
 namespace Digikam
 {
 
+class SearchResultsViewPriv
+{
+public:
+
+    SearchResultsViewPriv()
+    {
+        listJob  = 0;
+        thumbJob = 0;
+    }
+
+    QString                   libraryPath;
+    QString                   filter;
+
+    QDict<QIconViewItem>      itemDict;
+
+    QGuardedPtr<ThumbnailJob> thumbJob;
+
+    KIO::TransferJob*         listJob;
+};
+
 SearchResultsView::SearchResultsView(QWidget* parent)
                  : QIconView(parent)
 {
-    m_listJob     = 0;
-    m_thumbJob    = 0;
-    m_libraryPath = AlbumManager::instance()->getLibraryPath();
-    m_filter      = AlbumSettings::instance()->getAllFileFilter();
+    d = new SearchResultsViewPriv;
+    d->libraryPath = AlbumManager::instance()->getLibraryPath();
+    d->filter      = AlbumSettings::instance()->getAllFileFilter();
 
     setAutoArrange(true);
     setResizeMode(QIconView::Adjust);
@@ -57,53 +76,55 @@ SearchResultsView::SearchResultsView(QWidget* parent)
 
 SearchResultsView::~SearchResultsView()
 {
-    if (!m_thumbJob.isNull())
-        m_thumbJob->kill();
-    if (m_listJob)
-        m_listJob->kill();
+    if (!d->thumbJob.isNull())
+        d->thumbJob->kill();
+    if (d->listJob)
+        d->listJob->kill();
+
+    delete d;
 }
 
 void SearchResultsView::openURL(const KURL& url)
 {
-    if (m_listJob)
-        m_listJob->kill();
-    m_listJob = 0;
+    if (d->listJob)
+        d->listJob->kill();
+    d->listJob = 0;
 
-    if (!m_thumbJob.isNull())
-        m_thumbJob->kill();
-    m_thumbJob = 0;
+    if (!d->thumbJob.isNull())
+        d->thumbJob->kill();
+    d->thumbJob = 0;
     
     QByteArray ba;
     QDataStream ds(ba, IO_WriteOnly);
-    ds << m_libraryPath;
+    ds << d->libraryPath;
     ds << url;
-    ds << m_filter;
+    ds << d->filter;
     ds << 0; // getting dimensions (not needed here)
     ds << 0; // recursive sub-album (not needed here)
     ds << 0; // recursive sub-tags (not needed here)
     ds << 2; // miniListing (Use 1 for full listing)
 
-    m_listJob = new KIO::TransferJob(url, KIO::CMD_SPECIAL,
-                                     ba, QByteArray(), false);
+    d->listJob = new KIO::TransferJob(url, KIO::CMD_SPECIAL,
+                                      ba, QByteArray(), false);
 
-    connect(m_listJob, SIGNAL(result(KIO::Job*)),
+    connect(d->listJob, SIGNAL(result(KIO::Job*)),
             this, SLOT(slotResult(KIO::Job*)));
 
-    connect(m_listJob, SIGNAL(data(KIO::Job*, const QByteArray&)),
+    connect(d->listJob, SIGNAL(data(KIO::Job*, const QByteArray&)),
             this, SLOT(slotData(KIO::Job*, const QByteArray&)));
 }
 
 void SearchResultsView::clear()
 {
-    if (m_listJob)
-        m_listJob->kill();
-    m_listJob = 0;
+    if (d->listJob)
+        d->listJob->kill();
+    d->listJob = 0;
 
-    if (!m_thumbJob.isNull())
-        m_thumbJob->kill();
-    m_thumbJob = 0;
+    if (!d->thumbJob.isNull())
+        d->thumbJob->kill();
+    d->thumbJob = 0;
 
-    m_itemDict.clear();
+    d->itemDict.clear();
     QIconView::clear();
 }
 
@@ -120,7 +141,7 @@ void SearchResultsView::slotData(KIO::Job*, const QByteArray &data)
     {
         ds >> path;
 
-        SearchResultsItem* existingItem = (SearchResultsItem*) m_itemDict.find(path);
+        SearchResultsItem* existingItem = (SearchResultsItem*) d->itemDict.find(path);
         if (existingItem)
         {
             existingItem->m_marked = true;
@@ -128,7 +149,7 @@ void SearchResultsView::slotData(KIO::Job*, const QByteArray &data)
         }
             
         SearchResultsItem* item = new SearchResultsItem(this, path);
-        m_itemDict.insert(path, item);
+        d->itemDict.insert(path, item);
 
         ulist.append(KURL(path));
     }
@@ -140,7 +161,7 @@ void SearchResultsView::slotData(KIO::Job*, const QByteArray &data)
         nextItem = item->nextItem();
         if (!item->m_marked)
         {
-            m_itemDict.remove(item->m_path);
+            d->itemDict.remove(item->m_path);
             delete item;
         }
         item = (SearchResultsItem*)nextItem;
@@ -153,12 +174,12 @@ void SearchResultsView::slotData(KIO::Job*, const QByteArray &data)
     
     if (match)
     {
-        m_thumbJob = new ThumbnailJob(ulist, 128, true, true);
+        d->thumbJob = new ThumbnailJob(ulist, 128, true, true);
     
-        connect(m_thumbJob, SIGNAL(signalThumbnail(const KURL&, const QPixmap&)),
+        connect(d->thumbJob, SIGNAL(signalThumbnail(const KURL&, const QPixmap&)),
                 this, SLOT(slotGotThumbnail(const KURL&, const QPixmap&)));
    
-        connect(m_thumbJob, SIGNAL(signalFailed(const KURL&)),
+        connect(d->thumbJob, SIGNAL(signalFailed(const KURL&)),
                 this, SLOT(slotFailedThumbnail(const KURL&)));     
     }
 }
@@ -167,21 +188,21 @@ void SearchResultsView::slotResult(KIO::Job *job)
 {
     if (job->error())
         job->showErrorDialog(this);
-    m_listJob = 0;
+    d->listJob = 0;
 }
 
 void SearchResultsView::slotGotThumbnail(const KURL& url, const QPixmap& pix)
 {
-    QIconViewItem* i = m_itemDict.find(url.path());
+    QIconViewItem* i = d->itemDict.find(url.path());
     if (i)
         i->setPixmap(pix);
     
-    m_thumbJob = 0;
+    d->thumbJob = 0;
 }
 
 void SearchResultsView::slotFailedThumbnail(const KURL&)
 {
-    m_thumbJob = 0;    
+    d->thumbJob = 0;    
 }
 
 }  // namespace Digikam

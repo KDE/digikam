@@ -37,6 +37,7 @@
 #include "thumbnailjob.h"
 
 class QPixmap;
+
 class KFileItem;
 
 namespace KIO
@@ -47,6 +48,8 @@ class Job;
 
 namespace Digikam
 {
+
+class SearchResultsViewPriv;
 
 class SearchResultsView : public QIconView
 {
@@ -73,14 +76,7 @@ private slots:
 
 private:
     
-    QString                   m_libraryPath;
-    QString                   m_filter;
-
-    QDict<QIconViewItem>      m_itemDict;
-
-    QGuardedPtr<ThumbnailJob> m_thumbJob;
-
-    KIO::TransferJob*         m_listJob;
+    SearchResultsViewPriv *d;
 };
 
 }  // namespace Digikam
