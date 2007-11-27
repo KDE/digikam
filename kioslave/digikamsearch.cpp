@@ -136,6 +136,7 @@ void kio_digikamsearch::special(const QByteArray& data)
     ds >> getDimensions;
     ds >> recurseAlbums;
     ds >> recurseTags;
+
     if (!ds.atEnd())
         ds >> listingType;
 
