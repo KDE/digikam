@@ -27,10 +27,6 @@
 #include <QPalette>
 #include <QString>
 
-// KDE includes.
-
-#include <klocale.h>
-
 // Local includes
 
 #include "searchtextbar.h"
@@ -39,12 +35,12 @@
 namespace Digikam
 {
 
-SearchTextBar::SearchTextBar(QWidget *parent)
+SearchTextBar::SearchTextBar(QWidget *parent, const QString& msg)
              : KLineEdit(parent)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setClearButtonShown(true);
-    setClickMessage(i18n("Search..."));
+    setClickMessage(msg);
     setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum));
 
     connect(this, SIGNAL(textChanged(const QString&)),
