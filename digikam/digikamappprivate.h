@@ -53,8 +53,6 @@
 #include "statusprogressbar.h"
 #include "statusnavigatebar.h"
 #include "digikamview.h"
-#include "ratingfilter.h"
-#include "mimefilter.h"
 
 class KToolBarPopupAction;
 class KToggleAction;
@@ -66,6 +64,7 @@ namespace Digikam
 
 class DCOPIface;
 class SearchTextBar;
+class AlbumIconViewFilter;
 
 class DigikamAppPriv
 {
@@ -140,9 +139,6 @@ public:
         kipiInterface                        = 0;
         cameraList                           = 0;
         statusProgressBar                    = 0;
-        statusMimeFilterBar                  = 0;
-        statusRatingFilterBar                = 0;
-        statusTextFilterBar                  = 0; 
         statusNavigateBar                    = 0;
         statusZoomBar                        = 0;
         kipiPluginLoader                     = 0;
@@ -152,6 +148,7 @@ public:
         zoomFitToWindowAction                = 0;
         zoomPlusAction                       = 0;
         zoomMinusAction                      = 0;
+        albumIconViewFilter                  = 0;
     }
 
     bool                   fullScreen;
@@ -174,8 +171,6 @@ public:
     KAccel                *accelerators;
 
     KConfig               *config;
-
-    SearchTextBar         *statusTextFilterBar;
 
     // Album Actions
     KAction               *newAction;
@@ -252,6 +247,7 @@ public:
 
     AlbumSettings         *albumSettings;
     AlbumManager          *albumManager;
+    AlbumIconViewFilter   *albumIconViewFilter;
     SplashScreen          *splashScreen;
     DCOPIface             *dcopIface;
     ImagePluginLoader     *imagePluginsLoader;
@@ -261,9 +257,6 @@ public:
     StatusZoomBar         *statusZoomBar;
     StatusProgressBar     *statusProgressBar;
     StatusNavigateBar     *statusNavigateBar;
-    RatingFilter          *statusRatingFilterBar;
-    MimeFilter            *statusMimeFilterBar;
-
     KIPI::PluginLoader    *kipiPluginLoader;
 };
 

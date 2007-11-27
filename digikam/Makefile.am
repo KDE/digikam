@@ -41,9 +41,10 @@ libdigikam_la_SOURCES = kdateedit.cpp \
 	                album.cpp \
 	                albumdb.cpp \
 	                albumdb_sqlite2.cpp \
-	                albumiconview.cpp \
 	                albumicongroupitem.cpp \
 	                albumiconitem.cpp \
+	                albumiconview.cpp \
+	                albumiconviewfilter.cpp \
 	                albumitemhandler.cpp \
 	                albumfiletip.cpp \
 	                albumfolderview.cpp \
@@ -77,7 +78,7 @@ libdigikam_la_SOURCES = kdateedit.cpp \
 	                kdatepickerpopup.cpp \
 	                kipiinterface.cpp \
 	                mediaplayerview.cpp \
-                        mimefilter.cpp \
+	                mimefilter.cpp \
 	                monthwidget.cpp \
 	                pixmapmanager.cpp \
 	                ratingfilter.cpp \
@@ -100,10 +101,10 @@ libdigikam_la_SOURCES = kdateedit.cpp \
 
 libdigikam_la_LIBADD = $(LIB_KIO) \
 	               $(LIB_SQLITE3) \
-		       $(LIB_KABC) \
-		       $(LIB_KHTML) \
+	               $(LIB_KABC) \
+	               $(LIB_KHTML) \
 	               $(LIBKIPI_LIBS) \
-		       $(LIB_KUTILS) \
+	               $(LIB_KUTILS) \
 	               $(top_builddir)/digikam/libs/sqlite2/libsqlite2.la \
 	               $(top_builddir)/digikam/libs/thumbbar/libthumbbar.la \
 	               $(top_builddir)/digikam/libs/themeengine/libthemeengine.la \

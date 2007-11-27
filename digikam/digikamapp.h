@@ -121,9 +121,6 @@ private slots:
     void slotShowTip();
     void slotShowKipiHelp();
     void slotDonateMoney();
-    void slotRatingFilterChanged(int, AlbumLister::RatingCondition);
-    void slotMimeTypeFilterChanged(int);
-    void slotTextFilterChanged(const QString&);
 
     void slotRecurseAlbums(bool);
     void slotRecurseTags(bool);
