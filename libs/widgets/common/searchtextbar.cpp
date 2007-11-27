@@ -195,6 +195,9 @@ QString SearchTextBar::text() const
 
 void SearchTextBar::slotTextChanged(const QString& text)
 {
+    if (d->searchEdit->text().isEmpty())
+        d->searchEdit->unsetPalette();
+
     d->clearButton->setEnabled(text.isEmpty() ? false : true);
         
     emit signalTextChanged(text);
