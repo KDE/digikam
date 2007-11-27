@@ -24,6 +24,7 @@
 
 // Qt includes.
 
+#include <Q3Dict>
 #include <QDataStream>
 #include <QPixmap>
 
@@ -32,10 +33,10 @@
 #include <kio/job.h>
 #include <kio/jobuidelegate.h>
 #include <kfileitem.h>
-#include <kurl.h>
 
 // Local includes.
 
+#include "thumbnailjob.h"
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "databaseurl.h"
@@ -47,13 +48,30 @@
 namespace Digikam
 {
 
+class SearchResultsViewPriv
+{
+public:
+
+    SearchResultsViewPriv()
+    {
+        listJob  = 0;
+        thumbJob = 0;
+    }
+
+    QString                filter;
+
+    Q3Dict<Q3IconViewItem> itemDict;
+
+    QPointer<ThumbnailJob> thumbJob;
+
+    KIO::TransferJob*      listJob;
+};
+
 SearchResultsView::SearchResultsView(QWidget* parent)
                  : Q3IconView(parent)
 {
-    m_listJob  = 0;
-    m_thumbJob = 0;
-
-    m_filter   = AlbumSettings::instance()->getAllFileFilter();
+    d = new SearchResultsViewPriv;
+    d->filter = AlbumSettings::instance()->getAllFileFilter();
 
     setAutoArrange(true);
     setResizeMode(Q3IconView::Adjust);
@@ -61,45 +79,47 @@ SearchResultsView::SearchResultsView(QWidget* parent)
 
 SearchResultsView::~SearchResultsView()
 {
-    if (!m_thumbJob.isNull())
-        m_thumbJob->kill();
-    if (m_listJob)
-        m_listJob->kill();
+    if (!d->thumbJob.isNull())
+        d->thumbJob->kill();
+    if (d->listJob)
+        d->listJob->kill();
+
+    delete d;
 }
 
 void SearchResultsView::openURL(const KUrl& url)
 {
-    if (m_listJob)
-        m_listJob->kill();
-    m_listJob = 0;
+    if (d->listJob)
+        d->listJob->kill();
+    d->listJob = 0;
 
-    if (!m_thumbJob.isNull())
-        m_thumbJob->kill();
-    m_thumbJob = 0;
+    if (!d->thumbJob.isNull())
+        d->thumbJob->kill();
+    d->thumbJob = 0;
 
-    m_listJob = ImageLister::startListJob(DatabaseUrl::fromSearchUrl(url),
-                    //m_filter,
+    d->listJob = ImageLister::startListJob(DatabaseUrl::fromSearchUrl(url),
+                    //d->filter,
                     //false, // getting dimensions (not needed here)
                     1);    // miniListing (Use 0 for full listing)
 
-    connect(m_listJob, SIGNAL(result(KJob*)),
+    connect(d->listJob, SIGNAL(result(KJob*)),
             this, SLOT(slotResult(KJob*)));
 
-    connect(m_listJob, SIGNAL(data(KIO::Job*, const QByteArray&)),
+    connect(d->listJob, SIGNAL(data(KIO::Job*, const QByteArray&)),
             this, SLOT(slotData(KIO::Job*, const QByteArray&)));
 }
 
 void SearchResultsView::clear()
 {
-    if (m_listJob)
-        m_listJob->kill();
-    m_listJob = 0;
+    if (d->listJob)
+        d->listJob->kill();
+    d->listJob = 0;
 
-    if (!m_thumbJob.isNull())
-        m_thumbJob->kill();
-    m_thumbJob = 0;
+    if (!d->thumbJob.isNull())
+        d->thumbJob->kill();
+    d->thumbJob = 0;
 
-    m_itemDict.clear();
+    d->itemDict.clear();
     Q3IconView::clear();
 }
 
@@ -120,7 +140,7 @@ void SearchResultsView::slotData(KIO::Job*, const QByteArray &data)
         ImageInfo info(record);
         path = info.filePath();
 
-        SearchResultsItem* existingItem = (SearchResultsItem*) m_itemDict.find(path);
+        SearchResultsItem* existingItem = (SearchResultsItem*) d->itemDict.find(path);
         if (existingItem)
         {
             existingItem->m_marked = true;
@@ -128,7 +148,7 @@ void SearchResultsView::slotData(KIO::Job*, const QByteArray &data)
         }
 
         SearchResultsItem* item = new SearchResultsItem(this, path);
-        m_itemDict.insert(path, item);
+        d->itemDict.insert(path, item);
 
         ulist.append(KUrl(path));
     }
@@ -140,7 +160,7 @@ void SearchResultsView::slotData(KIO::Job*, const QByteArray &data)
         nextItem = item->nextItem();
         if (!item->m_marked)
         {
-            m_itemDict.remove(item->m_path);
+            d->itemDict.remove(item->m_path);
             delete item;
         }
         item = (SearchResultsItem*)nextItem;
@@ -153,12 +173,12 @@ void SearchResultsView::slotData(KIO::Job*, const QByteArray &data)
 
     if (match)
     {
-        m_thumbJob = new ThumbnailJob(ulist, 128, true, true);
+        d->thumbJob = new ThumbnailJob(ulist, 128, true, true);
 
-        connect(m_thumbJob, SIGNAL(signalThumbnail(const KUrl&, const QPixmap&)),
+        connect(d->thumbJob, SIGNAL(signalThumbnail(const KUrl&, const QPixmap&)),
                 this, SLOT(slotGotThumbnail(const KUrl&, const QPixmap&)));
 
-        connect(m_thumbJob, SIGNAL(signalFailed(const KUrl&)),
+        connect(d->thumbJob, SIGNAL(signalFailed(const KUrl&)),
                 this, SLOT(slotFailedThumbnail(const KUrl&)));     
     }
 }
@@ -171,21 +191,21 @@ void SearchResultsView::slotResult(KJob *kjob)
         job->ui()->setWindow(this);
         job->ui()->showErrorMessage();
     }
-    m_listJob = 0;
+    d->listJob = 0;
 }
 
 void SearchResultsView::slotGotThumbnail(const KUrl& url, const QPixmap& pix)
 {
-    Q3IconViewItem* i = m_itemDict.find(url.path());
+    Q3IconViewItem* i = d->itemDict.find(url.path());
     if (i)
         i->setPixmap(pix);
     
-    m_thumbJob = 0;
+    d->thumbJob = 0;
 }
 
 void SearchResultsView::slotFailedThumbnail(const KUrl&)
 {
-    m_thumbJob = 0;    
+    d->thumbJob = 0;    
 }
 
 }  // namespace Digikam

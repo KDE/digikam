@@ -104,7 +104,7 @@ SearchQuickDialog::SearchQuickDialog(QWidget* parent, KUrl& url)
     d->nameEdit    = new KLineEdit(w);
     d->nameEdit->setClearButtonShown(true);
     d->nameEdit->setText(i18n("Last Search"));
-    d->nameEdit->setMessage(i18n("Enter the name of the current search"));
+    d->nameEdit->setClickMessage(i18n("Enter the name of the current search"));
     d->nameEdit->setWhatsThis( i18n("<p>Enter the name of the current search to save in the "
                                     "\"My Searches\" view"));
 

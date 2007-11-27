@@ -28,15 +28,16 @@
 // Qt includes.
 
 #include <Q3IconView>
-#include <Q3Dict>
 #include <QByteArray>
 #include <QPointer>
 
-// Local includes.
+// KDE includes.
 
-#include "thumbnailjob.h"
+#include <kurl.h>
 
 class QPixmap;
+
+class KJob;
 
 namespace KIO
 {
@@ -46,6 +47,8 @@ class Job;
 
 namespace Digikam
 {
+
+class SearchResultsViewPriv;
 
 class SearchResultsView : public Q3IconView
 {
@@ -72,13 +75,7 @@ private slots:
 
 private:
 
-    QString                m_filter;
-
-    Q3Dict<Q3IconViewItem> m_itemDict;
-
-    QPointer<ThumbnailJob> m_thumbJob;
-
-    KIO::TransferJob*      m_listJob;
+    SearchResultsViewPriv *d;
 };
 
 }  // namespace Digikam
