@@ -79,14 +79,18 @@ void SearchResultsView::openURL(const KURL& url)
     ds << url;
     ds << m_filter;
     ds << 0; // getting dimensions (not needed here)
+    ds << 0; // recursive sub-album (not needed here)
+    ds << 0; // recursive sub-tags (not needed here)
     ds << 2; // miniListing (Use 1 for full listing)
 
     m_listJob = new KIO::TransferJob(url, KIO::CMD_SPECIAL,
                                      ba, QByteArray(), false);
+
     connect(m_listJob, SIGNAL(result(KIO::Job*)),
-            SLOT(slotResult(KIO::Job*)));
+            this, SLOT(slotResult(KIO::Job*)));
+
     connect(m_listJob, SIGNAL(data(KIO::Job*, const QByteArray&)),
-            SLOT(slotData(KIO::Job*, const QByteArray&)));
+            this, SLOT(slotData(KIO::Job*, const QByteArray&)));
 }
 
 void SearchResultsView::clear()
@@ -163,7 +167,6 @@ void SearchResultsView::slotResult(KIO::Job *job)
     m_listJob = 0;
 }
 
-
 void SearchResultsView::slotGotThumbnail(const KURL& url, const QPixmap& pix)
 {
     QIconViewItem* i = m_itemDict.find(url.path());
@@ -179,5 +182,3 @@ void SearchResultsView::slotFailedThumbnail(const KURL&)
 }
 
 }  // namespace Digikam
-
-
