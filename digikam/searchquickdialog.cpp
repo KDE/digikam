@@ -42,6 +42,7 @@
 // Local includes.
 
 #include "ddebug.h"
+#include "searchtextbar.h"
 #include "searchresultsview.h"
 #include "searchquickdialog.h"
 #include "searchquickdialog.moc"
@@ -63,8 +64,9 @@ public:
 
     QTimer            *timer;
 
-    KLineEdit         *searchEdit;
     KLineEdit         *nameEdit;
+
+    SearchTextBar     *searchEdit;
 
     SearchResultsView *resultsView;
 };
@@ -80,7 +82,7 @@ SearchQuickDialog::SearchQuickDialog(QWidget* parent, KURL& url)
     QGridLayout* grid = new QGridLayout(plainPage(), 2, 2, 0, spacingHint());
     
     QLabel *label1 = new QLabel("<b>" + i18n("Search:") + "</b>", plainPage());
-    d->searchEdit  = new KLineEdit(plainPage());
+    d->searchEdit  = new SearchTextBar(plainPage());
     QWhatsThis::add( d->searchEdit, i18n("<p>Enter your search criteria to find items in the album library"));
     
     d->resultsView = new SearchResultsView(plainPage());
@@ -100,8 +102,11 @@ SearchQuickDialog::SearchQuickDialog(QWidget* parent, KURL& url)
     grid->addMultiCellWidget(label2, 2, 2, 0, 1);
     grid->addMultiCellWidget(d->nameEdit, 2, 2, 2, 2);
     
-    connect(d->searchEdit, SIGNAL(textChanged(const QString&)),
+    connect(d->searchEdit, SIGNAL(signalTextChanged(const QString&)),
             this, SLOT(slotSearchChanged(const QString&)));
+
+    connect(d->resultsView, SIGNAL(signalSearchResultsMatch(bool)),
+            d->searchEdit, SLOT(slotSearchResult(bool)));
 
     connect(d->timer, SIGNAL(timeout()),
             this, SLOT(slotTimeOut()));
@@ -193,4 +198,3 @@ void SearchQuickDialog::hideEvent(QHideEvent* e)
 }
 
 }  // namespace Digikam
-
