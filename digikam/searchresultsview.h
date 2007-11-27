@@ -59,6 +59,10 @@ public:
 
     void openURL(const KURL& url);
     void clear();
+
+signals:
+
+    void signalSearchResultsMatch(bool);
     
 private slots:
 
