@@ -28,7 +28,6 @@
 // Qt includes.
 
 #include <qcstring.h>
-#include <qpixmap.h>
 #include <qiconview.h>
 
 // KDE includes.
