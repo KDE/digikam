@@ -82,7 +82,7 @@ SearchQuickDialog::SearchQuickDialog(QWidget* parent, KURL& url)
     QGridLayout* grid = new QGridLayout(plainPage(), 2, 2, 0, spacingHint());
     
     QLabel *label1 = new QLabel("<b>" + i18n("Search:") + "</b>", plainPage());
-    d->searchEdit  = new SearchTextBar(plainPage());
+    d->searchEdit  = new SearchTextBar(plainPage(), i18n("Enter here your search criteria"));
     QWhatsThis::add( d->searchEdit, i18n("<p>Enter your search criteria to find items in the album library"));
     
     d->resultsView = new SearchResultsView(plainPage());
