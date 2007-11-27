@@ -39,6 +39,7 @@
 namespace Digikam
 {
 
+class PAlbum;
 class AlbumPropsEditPriv;
 
 class AlbumPropsEdit : public KDialogBase
