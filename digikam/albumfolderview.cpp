@@ -126,7 +126,6 @@ AlbumFolderViewItem::AlbumFolderViewItem(QListViewItem *parent, PAlbum *album)
     m_groupItem = false;
 /*    setText(0, album->title() + QString(" (%1)")
             .arg(AlbumManager::instance()->albumDB()->getItemNamesInAlbum(album->id()).count()));*/
-
 }
 
 // special group item (collection/dates)

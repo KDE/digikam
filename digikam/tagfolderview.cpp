@@ -82,7 +82,7 @@ public:
 
 private:
 
-    TAlbum      *m_tag;
+    TAlbum *m_tag;
 };
 
 TagFolderViewItem::TagFolderViewItem(QListView *parent, TAlbum *tag)
@@ -97,6 +97,8 @@ TagFolderViewItem::TagFolderViewItem(QListViewItem *parent, TAlbum *tag)
 {
     setDragEnabled(true);
     m_tag = tag;
+    /*    setText(0, tag->title() + QString(" (%1)")
+            .arg(AlbumManager::instance()->albumDB()->getItemNamesInAlbum(tag->id()).count()));*/
 }
 
 TAlbum* TagFolderViewItem::getTag() const
@@ -194,7 +196,7 @@ void TagFolderView::slotTagFilterChanged(const QString& filter)
 
     bool atleastOneMatch = false;
 
-    AlbumList tList = AlbumManager::instance()->allTAlbums();
+    AlbumList tList = d->albumMan->allTAlbums();
     for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
     {
         TAlbum* talbum  = (TAlbum*)(*it);
@@ -416,7 +418,7 @@ void TagFolderView::slotThumbnailLost(Album *)
 
 void TagFolderView::slotReloadThumbnails()
 {
-    AlbumList tList = AlbumManager::instance()->allTAlbums();
+    AlbumList tList = d->albumMan->allTAlbums();
     for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
     {
         TAlbum* tag  = (TAlbum*)(*it);
@@ -508,7 +510,7 @@ void TagFolderView::slotContextMenu(QListViewItem *item, const QPoint &, int)
         case 13:
         {
             QString errMsg;
-            AlbumManager::instance()->updateTAlbumIcon(tag->getTag(), QString("tag"), 0, errMsg);
+            d->albumMan->updateTAlbumIcon(tag->getTag(), QString("tag"), 0, errMsg);
             break;
         }
         default:
@@ -759,8 +761,7 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
         int tagID;
         ds >> tagID;
 
-        AlbumManager* man = AlbumManager::instance();
-        TAlbum* talbum    = man->findTAlbum(tagID);
+        TAlbum* talbum = d->albumMan->findTAlbum(tagID);
 
         if(!talbum)
             return;
@@ -861,8 +862,7 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
             if(id == 12)
             {
                 QString errMsg;
-                AlbumManager::instance()->updateTAlbumIcon(destAlbum, QString(),
-                                                           imageIDs.first(), errMsg);
+                d->albumMan->updateTAlbumIcon(destAlbum, QString(), imageIDs.first(), errMsg);
             }
             return;
         }
@@ -893,7 +893,7 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
             emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
                                        i18n("Assigning image tags. Please wait..."));
 
-            AlbumManager::instance()->albumDB()->beginTransaction();
+            d->albumMan->albumDB()->beginTransaction();
             int i=0;
             for (QValueList<int>::const_iterator it = imageIDs.begin();
                  it != imageIDs.end(); ++it)
@@ -910,7 +910,7 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
                 emit signalProgressValue((int)((i++/(float)imageIDs.count())*100.0));
                 kapp->processEvents();
             }
-            AlbumManager::instance()->albumDB()->commitTransaction();
+            d->albumMan->albumDB()->commitTransaction();
 
             ImageAttributesWatch::instance()->imagesChanged(destAlbum->id());
 
