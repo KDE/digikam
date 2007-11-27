@@ -27,14 +27,13 @@
 
 // Qt includes.
 
-#include <qiconview.h>
 #include <qcstring.h>
-#include <qdict.h>
-#include <qguardedptr.h>
+#include <qpixmap.h>
+#include <qiconview.h>
 
-// Local includes.
+// KDE includes.
 
-#include "thumbnailjob.h"
+#include <kurl.h>
 
 class QPixmap;
 

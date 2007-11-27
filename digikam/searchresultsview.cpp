@@ -25,6 +25,8 @@
 // Qt includes.
 
 #include <qdatastream.h>
+#include <qdict.h>
+#include <qguardedptr.h>
 
 // KDE includes.
 
@@ -34,6 +36,7 @@
 
 // Local includes.
 
+#include "thumbnailjob.h"
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "searchresultsitem.h"
