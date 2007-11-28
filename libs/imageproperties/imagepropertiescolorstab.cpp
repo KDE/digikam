@@ -283,35 +283,35 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
                                 "selected histogram part. These values are available for all "
                                 "channels."));
 
-    QLabel *label4 = new QLabel(i18n("Mean:"), gbox);
-    label4->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
-    d->labelMeanValue = new QLabel(gbox);
-    d->labelMeanValue->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
-
     QLabel *label5 = new QLabel(i18n("Pixels:"), gbox);
-    label5->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
+    label5->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     d->labelPixelsValue = new QLabel(gbox);
-    d->labelPixelsValue->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
-
-    QLabel *label6 = new QLabel(i18n("Standard deviation:"), gbox);
-    label6->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
-    d->labelStdDevValue = new QLabel(gbox);
-    d->labelStdDevValue->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
+    d->labelPixelsValue->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
     QLabel *label7 = new QLabel(i18n("Count:"), gbox);
-    label7->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
+    label7->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     d->labelCountValue = new QLabel(gbox);
-    d->labelCountValue->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
+    d->labelCountValue->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+
+    QLabel *label4 = new QLabel(i18n("Mean:"), gbox);
+    label4->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    d->labelMeanValue = new QLabel(gbox);
+    d->labelMeanValue->setAlignment (Qt::AlignRight | Qt::AlignVCenter);
+
+    QLabel *label6 = new QLabel(i18n("Std. deviation:"), gbox);
+    label6->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    d->labelStdDevValue = new QLabel(gbox);
+    d->labelStdDevValue->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
     QLabel *label8 = new QLabel(i18n("Median:"), gbox);
-    label8->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
+    label8->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     d->labelMedianValue = new QLabel(gbox);
-    d->labelMedianValue->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
+    d->labelMedianValue->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
     QLabel *label9 = new QLabel(i18n("Percentile:"), gbox);
-    label9->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
+    label9->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     d->labelPercentileValue = new QLabel(gbox);
-    d->labelPercentileValue->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
+    d->labelPercentileValue->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
     topLayout->addMultiCellWidget(gbox, 6, 6, 0, 3);
 
@@ -322,13 +322,13 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
     gbox2->setInsideMargin(0);
 
     QLabel *label11     = new QLabel(i18n("Color depth:"), gbox2);
-    label11->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
+    label11->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     d->labelColorDepth  = new QLabel(gbox2);
-    d->labelColorDepth->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
+    d->labelColorDepth->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     QLabel *label12     = new QLabel(i18n("Alpha Channel:"), gbox2);
-    label12->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
+    label12->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     d->labelAlphaChannel = new QLabel(gbox2);
-    d->labelAlphaChannel->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
+    d->labelAlphaChannel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
     topLayout->addMultiCellWidget(gbox2, 7, 7, 0, 3);
 
