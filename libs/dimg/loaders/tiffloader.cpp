@@ -270,10 +270,21 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                 {
                     p = dataPtr;
 
-                    p[2] = *stripPtr++;
-                    p[1] = *stripPtr++;
-                    p[0] = *stripPtr++;
-                    p[3] = 0xFFFF;
+                    // See B.K.O #148037 : take a care about byte order with Motorola computers.
+                    if (QImage::systemByteOrder() == QImage::BigEndian)     // PPC
+                    {
+                        p[3] = *stripPtr++;
+                        p[0] = *stripPtr++;
+                        p[1] = *stripPtr++;
+                        p[2] = 0xFFFF;
+                    }
+                    else
+                    {
+                        p[2] = *stripPtr++;
+                        p[1] = *stripPtr++;
+                        p[0] = *stripPtr++;
+                        p[3] = 0xFFFF;
+                    }
 
                     dataPtr += 4;
                 }
@@ -286,10 +297,21 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                 {
                     p = dataPtr;
 
-                    p[2] = *stripPtr++;
-                    p[1] = *stripPtr++;
-                    p[0] = *stripPtr++;
-                    p[3] = *stripPtr++;
+                    // See B.K.O #148037 : take a care about byte order with Motorola computers.
+                    if (QImage::systemByteOrder() == QImage::BigEndian)     // PPC
+                    {
+                        p[3] = *stripPtr++;
+                        p[0] = *stripPtr++;
+                        p[1] = *stripPtr++;
+                        p[2] = *stripPtr++;
+                    }
+                    else
+                    {
+                        p[2] = *stripPtr++;
+                        p[1] = *stripPtr++;
+                        p[0] = *stripPtr++;
+                        p[3] = *stripPtr++;
+                    }
 
                     dataPtr += 4;
                 }
@@ -374,11 +396,22 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             for (int i=0; i < pixelsRead; i++)
             {
                 p = dataPtr;
-
-                p[2] = *stripPtr++;
-                p[1] = *stripPtr++;
-                p[0] = *stripPtr++;
-                p[3] = *stripPtr++;
+                
+                // See B.K.O #148037 : take a care about byte order with Motorola computers.
+                if (QImage::systemByteOrder() == QImage::BigEndian)     // PPC
+                {
+                    p[3] = *stripPtr++;
+                    p[0] = *stripPtr++;
+                    p[1] = *stripPtr++;
+                    p[2] = *stripPtr++;
+                }
+                else
+                {
+                    p[2] = *stripPtr++;
+                    p[1] = *stripPtr++;
+                    p[0] = *stripPtr++;
+                    p[3] = *stripPtr++;
+                }
 
                 dataPtr += 4;
             }
