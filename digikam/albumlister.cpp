@@ -397,7 +397,8 @@ bool AlbumLister::matchesFilter(const ImageInfo &info, bool &foundText)
     //-- Filter by text -----------------------------------------------------------
 
     AlbumSettings *settings = AlbumSettings::instance();
-    if (settings->getIconShowName() || settings->getIconShowComments() || settings->getIconShowTags())
+    if ((settings->getIconShowName() || settings->getIconShowComments() || settings->getIconShowTags()) &&
+        !d->textFilter.isEmpty())
     {
         foundText = false;
         if (settings->getIconShowName())
