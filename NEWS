@@ -16,7 +16,8 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 055 ==> 146364 : Incremental search for tags in all tag fields.
 056 ==> 152843 : Live filter does not work if no text is displayed under thumbnails.
 057 ==> 148629 : "Adjust Exif orientation tag" does not continue after error.
-058 ==> 
+058 ==> 144165 : Numeric values in Histogram -> Statistics frame should be right-aligned.
+059 ==> 
 
 **********************************************************************************************
 
