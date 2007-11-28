@@ -294,43 +294,43 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
                              "channels."));
     QGridLayout* grid = new QGridLayout(gbox);
 
-    QLabel *label4 = new QLabel(i18n("Mean:"), gbox);
-    label4->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
-    d->labelMeanValue = new QLabel(gbox);
-    d->labelMeanValue->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
-
     QLabel *label5 = new QLabel(i18n("Pixels:"), gbox);
-    label5->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
+    label5->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     d->labelPixelsValue = new QLabel(gbox);
-    d->labelPixelsValue->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
-
-    QLabel *label6 = new QLabel(i18n("Standard deviation:"), gbox);
-    label6->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
-    d->labelStdDevValue = new QLabel(gbox);
-    d->labelStdDevValue->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
+    d->labelPixelsValue->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
     QLabel *label7 = new QLabel(i18n("Count:"), gbox);
-    label7->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
+    label7->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     d->labelCountValue = new QLabel(gbox);
-    d->labelCountValue->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
+    d->labelCountValue->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+
+    QLabel *label4 = new QLabel(i18n("Mean:"), gbox);
+    label4->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    d->labelMeanValue = new QLabel(gbox);
+    d->labelMeanValue->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+
+    QLabel *label6 = new QLabel(i18n("Std. deviation:"), gbox);
+    label6->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    d->labelStdDevValue = new QLabel(gbox);
+    d->labelStdDevValue->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
     QLabel *label8 = new QLabel(i18n("Median:"), gbox);
-    label8->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
+    label8->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     d->labelMedianValue = new QLabel(gbox);
-    d->labelMedianValue->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
+    d->labelMedianValue->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
     QLabel *label9 = new QLabel(i18n("Percentile:"), gbox);
-    label9->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
+    label9->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     d->labelPercentileValue = new QLabel(gbox);
-    d->labelPercentileValue->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
+    d->labelPercentileValue->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
-    grid->addWidget(label4,                  0, 0, 1, 1);
+    grid->addWidget(label5,                  0, 0, 1, 1);
     grid->addWidget(d->labelMeanValue,       0, 1, 1, 1);
-    grid->addWidget(label5,                  1, 0, 1, 1);
+    grid->addWidget(label7,                  1, 0, 1, 1);
     grid->addWidget(d->labelPixelsValue,     1, 1, 1, 1);
-    grid->addWidget(label6,                  2, 0, 1, 1);
+    grid->addWidget(label4,                  2, 0, 1, 1);
     grid->addWidget(d->labelStdDevValue,     2, 1, 1, 1);
-    grid->addWidget(label7,                  3, 0, 1, 1);
+    grid->addWidget(label6,                  3, 0, 1, 1);
     grid->addWidget(d->labelCountValue,      3, 1, 1, 1);
     grid->addWidget(label8,                  4, 0, 1, 1);
     grid->addWidget(d->labelMedianValue,     4, 1, 1, 1);
@@ -345,14 +345,14 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
     QGridLayout* grid2 = new QGridLayout(gbox2);
 
     QLabel *label11     = new QLabel(i18n("Color depth:"), gbox2);
-    label11->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
+    label11->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     d->labelColorDepth  = new QLabel(gbox2);
-    d->labelColorDepth->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
+    d->labelColorDepth->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
     QLabel *label12     = new QLabel(i18n("Alpha Channel:"), gbox2);
-    label12->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
+    label12->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     d->labelAlphaChannel = new QLabel(gbox2);
-    d->labelAlphaChannel->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
+    d->labelAlphaChannel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
     grid2->addWidget(label11,              0, 0, 1, 1);
     grid2->addWidget(d->labelColorDepth,   0, 1, 1, 1);
