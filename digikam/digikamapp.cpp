@@ -748,8 +748,8 @@ void DigikamApp::setupActions()
 
     QSignalMapper *exifOrientationMapper = new QSignalMapper( d->view );
     
-    connect( exifOrientationMapper, SIGNAL( mapped( int ) ),
-             d->view, SLOT( slotImageExifOrientation( int ) ) );
+    connect(exifOrientationMapper, SIGNAL(mapped(int) ),
+            d->view, SLOT(slotImageExifOrientation(int)));
 
     d->imageExifOrientationActionMenu = new KActionMenu(i18n("Adjust Exif orientation tag"),
                                                         actionCollection(),
@@ -765,13 +765,11 @@ void DigikamApp::setupActions()
     d->imageSetExifOrientation4Action =
         new KAction(i18n("Flipped Vertically"),0,d->imageExifOrientationActionMenu);
     d->imageSetExifOrientation5Action =
-        new KAction(i18n("Rotated right / Horiz. Flipped"),
-                    0, d->imageExifOrientationActionMenu);
+        new KAction(i18n("Rotated right / Horiz. Flipped"), 0, d->imageExifOrientationActionMenu);
     d->imageSetExifOrientation6Action =
         new KAction(i18n("Rotated right"),0,d->imageExifOrientationActionMenu);
     d->imageSetExifOrientation7Action =
-        new KAction(i18n("Rotated right / Vert. Flipped"),
-                    0, d->imageExifOrientationActionMenu);
+        new KAction(i18n("Rotated right / Vert. Flipped"), 0, d->imageExifOrientationActionMenu);
     d->imageSetExifOrientation8Action =
         new KAction(i18n("Rotated left"),0,d->imageExifOrientationActionMenu);
 
@@ -784,23 +782,38 @@ void DigikamApp::setupActions()
     d->imageExifOrientationActionMenu->insert(d->imageSetExifOrientation7Action);
     d->imageExifOrientationActionMenu->insert(d->imageSetExifOrientation8Action);
 
-    connect( d->imageSetExifOrientation1Action, SIGNAL( activated() ), exifOrientationMapper, SLOT( map() ) );
-    connect( d->imageSetExifOrientation2Action, SIGNAL( activated() ), exifOrientationMapper, SLOT( map() ) );
-    connect( d->imageSetExifOrientation3Action, SIGNAL( activated() ), exifOrientationMapper, SLOT( map() ) );
-    connect( d->imageSetExifOrientation4Action, SIGNAL( activated() ), exifOrientationMapper, SLOT( map() ) );
-    connect( d->imageSetExifOrientation5Action, SIGNAL( activated() ), exifOrientationMapper, SLOT( map() ) );
-    connect( d->imageSetExifOrientation6Action, SIGNAL( activated() ), exifOrientationMapper, SLOT( map() ) );
-    connect( d->imageSetExifOrientation7Action, SIGNAL( activated() ), exifOrientationMapper, SLOT( map() ) );
-    connect( d->imageSetExifOrientation8Action, SIGNAL( activated() ), exifOrientationMapper, SLOT( map() ) );
+    connect(d->imageSetExifOrientation1Action, SIGNAL(activated()),
+            exifOrientationMapper, SLOT(map()));
+            
+    connect(d->imageSetExifOrientation2Action, SIGNAL(activated()),
+            exifOrientationMapper, SLOT(map()));
+            
+    connect(d->imageSetExifOrientation3Action, SIGNAL(activated()),
+            exifOrientationMapper, SLOT(map()));
+            
+    connect(d->imageSetExifOrientation4Action, SIGNAL(activated()),
+            exifOrientationMapper, SLOT(map()));
+    
+    connect(d->imageSetExifOrientation5Action, SIGNAL(activated()),
+            exifOrientationMapper, SLOT(map()));
+    
+    connect(d->imageSetExifOrientation6Action, SIGNAL(activated()),
+            exifOrientationMapper, SLOT(map()));
+    
+    connect(d->imageSetExifOrientation7Action, SIGNAL(activated()),
+            exifOrientationMapper, SLOT(map()));
+    
+    connect(d->imageSetExifOrientation8Action, SIGNAL(activated()),
+            exifOrientationMapper, SLOT(map()));
 
-    exifOrientationMapper->setMapping( d->imageSetExifOrientation1Action, 1);
-    exifOrientationMapper->setMapping( d->imageSetExifOrientation2Action, 2);
-    exifOrientationMapper->setMapping( d->imageSetExifOrientation3Action, 3);
-    exifOrientationMapper->setMapping( d->imageSetExifOrientation4Action, 4);
-    exifOrientationMapper->setMapping( d->imageSetExifOrientation5Action, 5);
-    exifOrientationMapper->setMapping( d->imageSetExifOrientation6Action, 6);
-    exifOrientationMapper->setMapping( d->imageSetExifOrientation7Action, 7);
-    exifOrientationMapper->setMapping( d->imageSetExifOrientation8Action, 8);
+    exifOrientationMapper->setMapping(d->imageSetExifOrientation1Action, 1);
+    exifOrientationMapper->setMapping(d->imageSetExifOrientation2Action, 2);
+    exifOrientationMapper->setMapping(d->imageSetExifOrientation3Action, 3);
+    exifOrientationMapper->setMapping(d->imageSetExifOrientation4Action, 4);
+    exifOrientationMapper->setMapping(d->imageSetExifOrientation5Action, 5);
+    exifOrientationMapper->setMapping(d->imageSetExifOrientation6Action, 6);
+    exifOrientationMapper->setMapping(d->imageSetExifOrientation7Action, 7);
+    exifOrientationMapper->setMapping(d->imageSetExifOrientation8Action, 8);
 
     // -----------------------------------------------------------------
 
