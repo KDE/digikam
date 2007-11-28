@@ -1725,6 +1725,7 @@ void AlbumIconView::slotSetExifOrientation( int orientation )
 
     if (urlList.count() <= 0) return;
 
+    QStringList faildItems;
     KURL::List::Iterator it;
     float cnt = (float)urlList.count();
     emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
@@ -1740,9 +1741,7 @@ void AlbumIconView::slotSetExifOrientation( int orientation )
 
         if (!metadata.applyChanges())
         {
-            KMessageBox::sorry(0, i18n("Failed to revise Exif orientation for file %1.")
-                               .arg((*it).filename()));
-            return;
+            faildItems.append((*it).filename());
         }
         else
         {
@@ -1753,7 +1752,23 @@ void AlbumIconView::slotSetExifOrientation( int orientation )
         kapp->processEvents();
     }
 
-    emit signalProgressBarMode(StatusProgressBar::TextMode, QString());    
+    emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
+
+    if (!faildItems.isEmpty())
+    {
+        if (faildItems.count() == 1)
+        {
+            KMessageBox::error(0, i18n("Failed to revise Exif orientation for file %1.")
+                               .arg(faildItems[0]));
+
+        }
+        else
+        {
+            KMessageBox::errorList(0, i18n("Failed to revise Exif orientation these files:"),
+                                   faildItems);
+        }
+    }
+    
     refreshItems(urlList);
 }
 
