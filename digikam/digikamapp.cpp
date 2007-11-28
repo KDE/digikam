@@ -733,14 +733,29 @@ void DigikamApp::setupActions()
     d->imageExifOrientationActionMenu->addAction(d->imageSetExifOrientation7Action);
     d->imageExifOrientationActionMenu->addAction(d->imageSetExifOrientation8Action);
 
-    connect(d->imageSetExifOrientation1Action, SIGNAL(triggered()), exifOrientationMapper, SLOT(map()));
-    connect(d->imageSetExifOrientation2Action, SIGNAL(triggered()), exifOrientationMapper, SLOT(map()));
-    connect(d->imageSetExifOrientation3Action, SIGNAL(triggered()), exifOrientationMapper, SLOT(map()));
-    connect(d->imageSetExifOrientation4Action, SIGNAL(triggered()), exifOrientationMapper, SLOT(map()));
-    connect(d->imageSetExifOrientation5Action, SIGNAL(triggered()), exifOrientationMapper, SLOT(map()));
-    connect(d->imageSetExifOrientation6Action, SIGNAL(triggered()), exifOrientationMapper, SLOT(map()));
-    connect(d->imageSetExifOrientation7Action, SIGNAL(triggered()), exifOrientationMapper, SLOT(map()));
-    connect(d->imageSetExifOrientation8Action, SIGNAL(triggered()), exifOrientationMapper, SLOT(map()));
+    connect(d->imageSetExifOrientation1Action, SIGNAL(triggered()), 
+            exifOrientationMapper, SLOT(map()));
+
+    connect(d->imageSetExifOrientation2Action, SIGNAL(triggered()), 
+            exifOrientationMapper, SLOT(map()));
+
+    connect(d->imageSetExifOrientation3Action, SIGNAL(triggered()), 
+            exifOrientationMapper, SLOT(map()));
+
+    connect(d->imageSetExifOrientation4Action, SIGNAL(triggered()), 
+            exifOrientationMapper, SLOT(map()));
+
+    connect(d->imageSetExifOrientation5Action, SIGNAL(triggered()), 
+            exifOrientationMapper, SLOT(map()));
+
+    connect(d->imageSetExifOrientation6Action, SIGNAL(triggered()), 
+            exifOrientationMapper, SLOT(map()));
+
+    connect(d->imageSetExifOrientation7Action, SIGNAL(triggered()), 
+            exifOrientationMapper, SLOT(map()));
+
+    connect(d->imageSetExifOrientation8Action, SIGNAL(triggered()), 
+            exifOrientationMapper, SLOT(map()));
 
     exifOrientationMapper->setMapping(d->imageSetExifOrientation1Action, 1);
     exifOrientationMapper->setMapping(d->imageSetExifOrientation2Action, 2);
