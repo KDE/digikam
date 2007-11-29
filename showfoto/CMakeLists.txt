@@ -31,6 +31,9 @@ INCLUDE_DIRECTORIES( ../showfoto/setup
                      ../utilities/imageeditor/tools 
                      ../utilities/slideshow 
                      ../digikam 
+
+                     # external library paths
+                     ${LCMS_INCLUDE_DIR}
                    )
 
 SET(showfoto_SRCS

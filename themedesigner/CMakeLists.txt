@@ -41,6 +41,9 @@ INCLUDE_DIRECTORIES(
                      ../utilities/lighttable
                      ../digikam
                      ${CMAKE_BINARY_DIR}/digikam/digikam
+
+                     # external paths
+                     ${LCMS_INCLUDE_DIR}
                    )
 
 SET(libdigikamtheme_SRCS 

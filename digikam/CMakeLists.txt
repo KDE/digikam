@@ -47,6 +47,11 @@ INCLUDE_DIRECTORIES(
                      ../utilities/batch
                      ../utilities/lighttable
                      ../digikam
+
+                     # external library paths
+                     ${JPEG_INCLUDE_DIS}
+                     ${PNG_PNG_INCLUDE_DIR}
+                     ${TIFF_INCLUDE_DIR}
                    )
 
 
