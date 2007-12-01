@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2007 by Arnd Baecker <arnd dot baecker at web dot de> 
+ * Copyright (C) 2007 by Arnd Baecker <arnd dot baecker at web dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -267,7 +267,7 @@ bool AlbumLister::matchesFilter(const ImageInfo &info, bool &foundText)
         QList<int> tagIds = info.tagIds();
         QList<int>::iterator it;
 
-        if (d->matchingCond == OrCondition)        
+        if (d->matchingCond == OrCondition)
         {
             for (it = d->tagFilter.begin(); it != d->tagFilter.end(); ++it)
             {
@@ -310,7 +310,7 @@ bool AlbumLister::matchesFilter(const ImageInfo &info, bool &foundText)
 
     //-- Filter by rating ---------------------------------------------------------
 
-    if (d->ratingFilter >= 0) 
+    if (d->ratingFilter >= 0)
     {
         // for now we treat -1 (no rating) just like a rating of 0.
         int rating = info.rating();
@@ -348,11 +348,11 @@ bool AlbumLister::matchesFilter(const ImageInfo &info, bool &foundText)
     QFileInfo fi(info.filePath());
     QString mimeType = fi.suffix().toUpper();
 
-    switch(d->mimeTypeFilter) 
+    switch(d->mimeTypeFilter)
     {
         case MimeFilter::JPGFiles:
         {
-            if (mimeType != QString("JPG") && mimeType != QString("JPE") && 
+            if (mimeType != QString("JPG") && mimeType != QString("JPE") &&
                 mimeType != QString("JPEG"))
                 match = false;
             break;
@@ -366,6 +366,13 @@ bool AlbumLister::matchesFilter(const ImageInfo &info, bool &foundText)
         case MimeFilter::TIFFiles:
         {
             if (mimeType != QString("TIF") && mimeType != QString("TIFF"))
+                match = false;
+            break;
+        }
+        case MimeFilter::NoRAWFiles:
+        {
+            QString rawFilesExt(AlbumSettings::instance()->getRawFileFilter());
+            if (rawFilesExt.toUpper().contains(mimeType))
                 match = false;
             break;
         }
