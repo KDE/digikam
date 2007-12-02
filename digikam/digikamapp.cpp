@@ -343,7 +343,7 @@ void DigikamApp::setupView()
 
     d->view = new DigikamView(this);
     setCentralWidget(d->view);
-    d->view->applySettings(d->albumSettings);
+    d->view->applySettings();
 
     connect(d->view, SIGNAL(signalAlbumSelected(bool)),
             this, SLOT(slotAlbumSelected(bool)));
@@ -1639,7 +1639,7 @@ void DigikamApp::slotSetupChanged()
     d->albumManager->setLibraryPath(d->albumSettings->getAlbumLibraryPath());
     d->albumManager->startScan();
 
-    d->view->applySettings(d->albumSettings);
+    d->view->applySettings();
     d->albumIconViewFilter->readSettings();
     
     AlbumThumbnailLoader::instance()->setThumbnailSize(d->albumSettings->getDefaultTreeIconSize());
@@ -1924,7 +1924,7 @@ void DigikamApp::slotRebuildAllThumbs()
 
 void DigikamApp::slotRebuildAllThumbsDone()
 {
-    d->view->applySettings(d->albumSettings);
+    d->view->applySettings();
 }
 
 void DigikamApp::slotSyncAllPicturesMetadata()
@@ -1944,7 +1944,7 @@ void DigikamApp::slotSyncAllPicturesMetadata()
 
 void DigikamApp::slotSyncAllPicturesMetadataDone()
 {
-    d->view->applySettings(d->albumSettings);
+    d->view->applySettings();
 }
 
 void DigikamApp::slotDonateMoney()

@@ -243,8 +243,9 @@ DigikamView::~DigikamView()
     delete d;
 }
 
-void DigikamView::applySettings(const AlbumSettings* settings)
+void DigikamView::applySettings()
 {
+    AlbumSettings *settings = AlbumSettings::instance();
     d->iconView->applySettings(settings);
     d->albumWidgetStack->imagePreviewView()->setLoadFullImageSize(settings->getPreviewLoadFullImageSize());
 }
@@ -1035,7 +1036,7 @@ void DigikamView::slotAlbumSyncPicturesMetadata()
 
 void DigikamView::slotAlbumSyncPicturesMetadataDone()
 {
-    applySettings(AlbumSettings::instance());
+    applySettings();
 }
 
 void DigikamView::slotAlbumImportFolder()
