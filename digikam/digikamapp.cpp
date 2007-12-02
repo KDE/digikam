@@ -1647,6 +1647,9 @@ void DigikamApp::slotSetupChanged()
     if (ImageWindow::imagewindowCreated())
         ImageWindow::imagewindow()->applySettings();
 
+    if (LightTableWindow::lightTableWindowCreated())
+        LightTableWindow::lightTableWindow()->applySettings();
+
     d->config->sync();
 }
 
