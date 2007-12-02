@@ -59,6 +59,7 @@ public:
 
     void loadImageInfos(const ImageInfoList &list, const ImageInfo &imageInfoCurrent, bool addTo);
     void setLeftRightItems(const ImageInfoList &list);
+    void applySettings();
 
 signals: 
 
@@ -80,7 +81,6 @@ private:
     void hideToolBars();
     void readSettings();
     void writeSettings();
-    void applySettings();
     void refreshStatusBar();
 
     LightTableWindow();
