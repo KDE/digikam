@@ -689,7 +689,6 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 
     // --------------------------------------------------------
 
-
     popmenu.insertItem(SmallIcon("edittrash"),
                        i18n("Move to Trash", "Move %n Files to Trash" , selectedImageIDs.count() ), 16);
 
@@ -848,29 +847,56 @@ void AlbumIconView::slotCopy()
 void AlbumIconView::slotPaste()
 {
     QMimeSource *data = kapp->clipboard()->data(QClipboard::Clipboard);
-    if(!data || !QUriDrag::canDecode(data))
+    if(!data)
         return;
 
-    if(d->currentAlbum->type() == Album::PHYSICAL)
+    if(d->currentAlbum->type() == Album::PHYSICAL && 
+       QUriDrag::canDecode(data))
     {
-        if (QUriDrag::canDecode(data) &&
-            d->currentAlbum->type() == Album::PHYSICAL)
+        PAlbum* palbum = (PAlbum*)d->currentAlbum;
+        
+        // B.K.O #119205: do not handle root album.
+        if (palbum->isRoot())
+            return;
+
+        KURL destURL(palbum->kurl());
+
+        KURL::List srcURLs;
+        KURLDrag::decode(data, srcURLs);
+
+        KIO::Job* job = DIO::copy(srcURLs, destURL);
+        connect(job, SIGNAL(result(KIO::Job*)),
+                this, SLOT(slotDIOResult(KIO::Job*)));
+    }
+    else if(d->currentAlbum->type() == Album::TAG && 
+            ItemDrag::canDecode(data))
+    {
+        TAlbum* talbum = (TAlbum*)d->currentAlbum;
+        
+        // B.K.O #119205: do not handle root album.
+        if (talbum->isRoot())
+            return;
+
+        KURL::List      urls;
+        KURL::List      kioURLs;
+        QValueList<int> albumIDs;
+        QValueList<int> imageIDs;
+
+        if (!ItemDrag::decode(data, urls, kioURLs, albumIDs, imageIDs))
+            return;
+
+        if (urls.isEmpty() || kioURLs.isEmpty() || albumIDs.isEmpty() || imageIDs.isEmpty())
+            return;
+
+        QPtrList<ImageInfo> list;
+        for (QValueList<int>::const_iterator it = imageIDs.begin();
+             it != imageIDs.end(); ++it)
         {
-            PAlbum* palbum = (PAlbum*)d->currentAlbum;
-            
-            // B.K.O #119205: do not handle root album.
-            if (palbum->isRoot())
-                return;
-
-            KURL destURL(palbum->kurl());
-
-            KURL::List srcURLs;
-            KURLDrag::decode(data, srcURLs);
-
-            KIO::Job* job = DIO::copy(srcURLs, destURL);
-            connect(job, SIGNAL(result(KIO::Job*)),
-                    this, SLOT(slotDIOResult(KIO::Job*)));
+            ImageInfo *info = new ImageInfo(*it);
+            list.append(info);
         }
+
+        changeTagOnImageInfos(list, QValueList<int>() << talbum->id(), true, true);
     }
 }
 
