@@ -55,7 +55,7 @@ public:
     DigikamView(QWidget *parent);
     ~DigikamView();
 
-    void applySettings(const AlbumSettings* settings);
+    void applySettings();
     void clearHistory();
     void getForwardHistory(QStringList &titles);
     void getBackwardHistory(QStringList &titles);
