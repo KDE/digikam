@@ -247,9 +247,12 @@ void DigikamImageInfo::setAngle(int /*angle*/)
 
 //-- Image Collection ------------------------------------------------------------
 
-DigikamImageCollection::DigikamImageCollection( Type tp, Album* album, const QString& filter )
-                      : m_tp( tp ), m_album(album), m_imgFilter(filter)
+DigikamImageCollection::DigikamImageCollection(Type tp, Album* album, const QString& filter)
 {
+    m_tp        = tp;
+    m_album     = album;
+    m_imgFilter = filter;
+
     if (!album)
     {
         DWarning() << "This should not happen. No album specified" << endl;
