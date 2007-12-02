@@ -59,6 +59,7 @@ public:
 
     void loadImageInfos(const ImageInfoList &list, ImageInfo *imageInfoCurrent, bool addTo);
     void setLeftRightItems(const ImageInfoList &list);
+    void applySettings();
 
 signals: 
 
@@ -83,7 +84,6 @@ private:
     void unplugActionAccel(KAction* action);
     void readSettings();
     void writeSettings();
-    void applySettings();
     void refreshStatusBar();
 
     LightTableWindow();
