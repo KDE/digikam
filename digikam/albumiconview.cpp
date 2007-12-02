@@ -843,29 +843,56 @@ void AlbumIconView::slotCopy()
 void AlbumIconView::slotPaste()
 {
     QMimeSource *data = kapp->clipboard()->data(QClipboard::Clipboard);
-    if(!data || !Q3UriDrag::canDecode(data))
+    if(!data)
         return;
 
-    if(d->currentAlbum->type() == Album::PHYSICAL)
+    if (d->currentAlbum->type() == Album::PHYSICAL && 
+        Q3UriDrag::canDecode(data))
     {
-        if (Q3UriDrag::canDecode(data) &&
-            d->currentAlbum->type() == Album::PHYSICAL)
+        PAlbum* palbum = (PAlbum*)d->currentAlbum;
+
+        // B.K.O #119205: do not handle root album.
+        if (palbum->isRoot())
+            return;
+
+        KUrl destURL(palbum->databaseUrl());
+
+        KUrl::List srcURLs;
+        K3URLDrag::decode(data, srcURLs);
+
+        KIO::Job* job = DIO::copy(srcURLs, destURL);
+        connect(job, SIGNAL(result(KJob*)),
+                this, SLOT(slotDIOResult(KJob*)));
+    }
+    else if(d->currentAlbum->type() == Album::TAG && 
+            ItemDrag::canDecode(data))
+    {
+        TAlbum* talbum = (TAlbum*)d->currentAlbum;
+        
+        // B.K.O #119205: do not handle root album.
+        if (talbum->isRoot())
+            return;
+
+        KUrl::List       urls;
+        KUrl::List       kioURLs;
+        Q3ValueList<int> albumIDs;
+        Q3ValueList<int> imageIDs;
+
+        if (!ItemDrag::decode(data, urls, kioURLs, albumIDs, imageIDs))
+            return;
+
+        if (urls.isEmpty() || kioURLs.isEmpty() || albumIDs.isEmpty() || imageIDs.isEmpty())
+            return;
+
+        ImageInfoList list;
+        for (Q3ValueList<int>::const_iterator it = imageIDs.begin();
+             it != imageIDs.end(); ++it)
         {
-            PAlbum* palbum = (PAlbum*)d->currentAlbum;
-
-            // B.K.O #119205: do not handle root album.
-            if (palbum->isRoot())
-                return;
-
-            KUrl destURL(palbum->databaseUrl());
-
-            KUrl::List srcURLs;
-            K3URLDrag::decode(data, srcURLs);
-
-            KIO::Job* job = DIO::copy(srcURLs, destURL);
-            connect(job, SIGNAL(result(KJob*)),
-                    this, SLOT(slotDIOResult(KJob*)));
+            ImageInfo info(*it);
+            list.append(info);
         }
+
+        changeTagOnImageInfos(list, QList<int>() << talbum->id(), true, true);
     }
 }
 
