@@ -18,7 +18,8 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 057 ==> 148629 : "Adjust Exif orientation tag" does not continue after error.
 058 ==> 144165 : Numeric values in Histogram -> Statistics frame should be right-aligned.
 059 ==> 148037 : Tiff images are not displayed with correct colours.
-060 ==> 
+060 ==> 152961 : Cannot remove album from tree.
+061 ==> 
 
 **********************************************************************************************
 
