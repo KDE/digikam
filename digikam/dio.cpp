@@ -243,7 +243,7 @@ Watch::Watch(KIO::Job* job)
 {
     m_runCount++;
     connect(job, SIGNAL(result(KIO::Job*)),
-            SLOT(slotDone(KIO::Job*)));
+            this, SLOT(slotDone(KIO::Job*)));
 }
 
 void Watch::slotDone(KIO::Job*)
@@ -258,4 +258,3 @@ void Watch::slotDone(KIO::Job*)
 uint Watch::m_runCount = 0;
 
 }  // namespace DIO
-
