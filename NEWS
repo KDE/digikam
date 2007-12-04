@@ -21,7 +21,8 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 060 ==> 152961 : Cannot remove album from tree.
 061 ==> 121314 : More options to display the album tree.
 062 ==> 141085 : Some strings are untranslated in digiKam.
-063 ==> 
+063 ==> 151403 : Crashed trying to save a image downloaded from the camera.
+064 ==> 
 
 **********************************************************************************************
 
