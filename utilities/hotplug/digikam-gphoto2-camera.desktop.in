@@ -2,6 +2,10 @@
 Exec=@digikamhelper_dir@/digikam-camera detect %u
 Icon=digikam
 Name=digiKam Detect and Download
+Name[ja]=digiKam 検出とダウンロード
+Name[pt]=Detectar e Transferir com o digiKam
+Name[pt_BR]=Detectar e Transferir com o digiKam
+Name[sv]=Digikam detektering och nerladdning
 
 [Desktop Entry]
 Actions=digiKam Detect and Download

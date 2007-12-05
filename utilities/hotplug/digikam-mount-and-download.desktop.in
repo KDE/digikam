@@ -2,6 +2,10 @@
 Exec=@digikamhelper_dir@/digikam-camera storage %u
 Icon=digikam
 Name=Download Photos with digiKam
+Name[ja]=digiKam で写真をダウンロード
+Name[pt]=Obter Fotografias com o digiKam
+Name[pt_BR]=Obter Fotografias com o digiKam
+Name[sv]=Ladda ner foton med Digikam
 
 [Desktop Entry]
 Actions=digiKam Mount and Download
