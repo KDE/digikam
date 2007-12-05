@@ -26,5 +26,6 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 007 ==> 114682 : Wish: about library path.
 008 ==> 122516 : Album Path cannot be on Network device (Unmounted).
 009 ==> 107871 : Allow multiple album library path.
-010 ==> 
+010 ==> 105645 : Impossible to not copy images in ~/Pictures.
+011 ==> 
 
