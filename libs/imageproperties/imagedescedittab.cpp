@@ -252,7 +252,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     connect(d->tagsView, SIGNAL(rightButtonClicked(Q3ListViewItem*, const QPoint &, int)),
             this, SLOT(slotRightButtonClicked(Q3ListViewItem*, const QPoint&, int)));
 
-    connect(d->tagsSearchBar, SIGNAL(signalTextChanged(const QString&)),
+    connect(d->tagsSearchBar, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotTagsSearchChanged(const QString&)));
 
     connect(this, SIGNAL(signalTagFilterMatch(bool)),
