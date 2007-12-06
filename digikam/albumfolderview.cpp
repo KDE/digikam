@@ -54,6 +54,7 @@
 
 #include "ddebug.h"
 #include "digikamapp.h"
+#include "albumlister.h"
 #include "albumpropsedit.h"
 #include "album.h"
 #include "albumdb.h"
@@ -1012,7 +1013,6 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
             return;
 
         PAlbum *destAlbum = itemDrop->getAlbum();
-        PAlbum *srcAlbum;
 
         KUrl::List       urls;
         KUrl::List       kioURLs;
@@ -1025,17 +1025,21 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
         if (urls.isEmpty() || kioURLs.isEmpty() || albumIDs.isEmpty() || imageIDs.isEmpty())
             return;
 
-        // all the albumids will be the same
-        int albumID = albumIDs.first();
-        srcAlbum    = d->albumMan->findPAlbum(albumID);
-        if (!srcAlbum)
+        // Check if items dropped come from outside current album.
+        // This can be the case with reccursive content album mode.
+        KUrl::List extUrls;
+        ImageInfoList extImgInfList;
+        for (Q3ValueList<int>::iterator it = imageIDs.begin(); it != imageIDs.end(); ++it)
         {
-            DWarning() << "Could not find drag source album"
-                    << endl;
-            return;
+            ImageInfo info(*it);
+            if (info.albumId() != destAlbum->id())
+            {
+                extUrls.append(info.databaseUrl());
+                extImgInfList.append(info);
+            }
         }
 
-        if(srcAlbum == destAlbum)
+        if(extUrls.isEmpty())
         {
             // Setting the dropped image as the album thumbnail
             // If the ctrl key is pressed, when dropping the image, the
@@ -1104,13 +1108,20 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
 
         if (move)
         {
-            KIO::Job* job = DIO::move(kioURLs, destAlbum->kurl());
+            KIO::Job* job = DIO::move(extUrls, destAlbum->kurl());
             connect(job, SIGNAL(result(KJob*)),
                     this, SLOT(slotDIOResult(KJob*)));
+
+            // In recurssive album contents mode, we need to force AlbumLister to take a care about
+            // moved items. This will have no incidence in normal mode.
+            for (ImageInfoListIterator it = extImgInfList.begin(); it != extImgInfList.end(); ++it)
+            {
+                AlbumLister::instance()->invalidateItem(*it);
+            }
         }
         else if (copy)
         {
-            KIO::Job* job = DIO::copy(kioURLs, destAlbum->kurl());
+            KIO::Job* job = DIO::copy(extUrls, destAlbum->kurl());
             connect(job, SIGNAL(result(KJob*)),
                     this, SLOT(slotDIOResult(KJob*)));
         }
