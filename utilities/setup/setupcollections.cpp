@@ -270,7 +270,7 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
 
     QLabel *databasePathLabel = new QLabel(i18n("Here you can edit the directory where the "
                                                 "digiKam database file will be stored. "
-                                                "here is only one file common to all album roots."
+                                                "here is only one file common to all album roots. "
                                                 "Write access is recommended "
                                                 "to be able to edit image properties. "
                                                 "Please note that you cannot use a remote file system here, such as NFS."),
