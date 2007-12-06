@@ -595,7 +595,11 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
  
     if (d->currentAlbum->type() == Album::PHYSICAL ) 
     {
-        gotoMenu.setItemEnabled(20, false);
+        // If the currently selected album is the same as album to 
+        // which the image belongs, then disable the "Go To" Album.
+        // (Note that in recursive album view these can be different).
+        if (iconItem->imageInfo()->albumID() == d->currentAlbum->id())
+            gotoMenu.setItemEnabled(20, false);
     }
     else if (d->currentAlbum->type() == Album::DATE )
     {
