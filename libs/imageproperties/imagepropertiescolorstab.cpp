@@ -99,9 +99,11 @@ public:
         hGradient            = 0;
         histogramWidget      = 0;
         imageLoaderThread    = 0;
+
+        inLoadingProcess     = false;
     }
 
-    bool                   blinkFlag;
+    bool                   inLoadingProcess;
 
     QComboBox             *channelCB;
     QComboBox             *colorsCB;
@@ -424,7 +426,7 @@ void ImagePropertiesColorsTab::setData(const KURL& url, const QRect &selectionAr
     // More importantly, while the loading thread can handle this pretty well,
     // this will completely mess up the timing of progress info in the histogram widget.
     // So filter here, before the stopHistogramComputation!
-    if (!img && url.path() == d->currentFilePath)
+    if (!img && url.path() == d->currentFilePath && d->inLoadingProcess)
         return;
 
     // This is necessary to stop computation because d->image.bits() is currently used by
@@ -525,6 +527,7 @@ void ImagePropertiesColorsTab::loadImageFromUrl(const KURL& url)
 
     d->currentFilePath = desc.filePath;
     d->currentLoadingDescription = desc;
+    d->inLoadingProcess = true;
 
     d->imageLoaderThread->load(d->currentLoadingDescription,
                                SharedLoadSaveThread::AccessModeRead,
@@ -557,6 +560,7 @@ void ImagePropertiesColorsTab::slotLoadImageFromUrlComplete(const LoadingDescrip
         d->iccProfileWidget->setLoadingFailed();
         slotHistogramComputationFailed();
     }
+    d->inLoadingProcess = false;
 }
 
 void ImagePropertiesColorsTab::slotMoreCompleteLoadingAvailable(const LoadingDescription &oldLoadingDescription,
@@ -569,6 +573,7 @@ void ImagePropertiesColorsTab::slotMoreCompleteLoadingAvailable(const LoadingDes
         // Even the time-optimized raw loading takes significant time, and we must avoid two dcraw instances running
         // at a time.
         d->currentLoadingDescription = newLoadingDescription;
+        d->inLoadingProcess = true;
         d->imageLoaderThread->load(newLoadingDescription,
                                    SharedLoadSaveThread::AccessModeRead,
                                    SharedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
