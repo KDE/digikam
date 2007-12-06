@@ -54,6 +54,7 @@
 
 #include "ddebug.h"
 #include "digikamapp.h"
+#include "albumlister.h"
 #include "album.h"
 #include "albumdb.h"
 #include "albumpropsedit.h"
@@ -1050,7 +1051,6 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
             return;
 
         PAlbum *destAlbum = itemDrop->getAlbum();
-        PAlbum *srcAlbum;
 
         KURL::List      urls;
         KURL::List      kioURLs;
@@ -1063,16 +1063,20 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
         if (urls.isEmpty() || kioURLs.isEmpty() || albumIDs.isEmpty() || imageIDs.isEmpty())
             return;
 
-        // all the albumids will be the same
-        int albumID = albumIDs.first();
-        srcAlbum    = d->albumMan->findPAlbum(albumID);
-        if (!srcAlbum)
+        // Check if items dropped come from outside current album.
+        // This can be the case with reccursive content album mode.
+        KURL::List extUrls;
+        ImageInfoList extImgInfList;
+        for (QValueList<int>::iterator it = imageIDs.begin(); it != imageIDs.end(); ++it)
         {
-            DWarning() << "Could not find drag source album"
-                    << endl;
-            return;
+            ImageInfo *info = new ImageInfo(*it);
+            if (info->albumID() != destAlbum->id())
+            {
+                extUrls.append(info->kurlForKIO());
+                extImgInfList.append(info);
+            }
         }
-
+                
         int id = 0;
         char keys_return[32];
         XQueryKeymap(x11Display(), keys_return);
@@ -1081,7 +1085,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
         int key_3 = XKeysymToKeycode(x11Display(), 0xFFE1);
         int key_4 = XKeysymToKeycode(x11Display(), 0xFFE2);
 
-        if(srcAlbum == destAlbum)
+        if(extUrls.isEmpty())
         {
             // Setting the dropped image as the album thumbnail
             // If the ctrl key is pressed, when dropping the image, the
@@ -1142,14 +1146,22 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
         {
             case 10:
             {
-                KIO::Job* job = DIO::move(kioURLs, destAlbum->kurl());
+                KIO::Job* job = DIO::move(extUrls, destAlbum->kurl());
                 connect(job, SIGNAL(result(KIO::Job*)),
                         this, SLOT(slotDIOResult(KIO::Job*)));
+
+                // In recurssive album contents mode, we need to force AlbumLister to take a care about
+                // moved items. This will have no incidence in normal mode.
+                ImageInfo* item;
+                for (ImageInfoListIterator it(extImgInfList); (item = it.current()) ; ++it)
+                {
+                    AlbumLister::instance()->invalidateItem(item);
+                }
                 break;
             }
             case 11:
             {
-                KIO::Job* job = DIO::copy(kioURLs, destAlbum->kurl());
+                KIO::Job* job = DIO::copy(extUrls, destAlbum->kurl());
                 connect(job, SIGNAL(result(KIO::Job*)),
                         this, SLOT(slotDIOResult(KIO::Job*)));
                 break;
