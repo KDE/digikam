@@ -970,14 +970,28 @@ void AlbumDB::removeItemAllTags(Q_LLONG imageID)
              .arg(imageID) );
 }
 
-QStringList AlbumDB::getItemNamesInAlbum(int albumID)
+QStringList AlbumDB::getItemNamesInAlbum(int albumID, bool recurssive)
 {
     QStringList values;
-    execSql( QString("SELECT Images.name "
-                     "FROM Images "
-                     "WHERE Images.dirid=%1")
-             .arg(albumID), &values );
 
+    if (recurssive)
+    {
+        KURL url(getAlbumURL(albumID));
+        execSql( QString("SELECT Images.name "
+                         "FROM Images "
+                         "WHERE Images.dirid "
+                         "IN (SELECT DISTINCT id "
+                             "FROM Albums "
+                             "WHERE url='%1' OR url LIKE '\%%2\%')")
+                .arg(escapeString(url.path())).arg(escapeString(url.path(1))), &values);
+    }
+    else
+    {
+        execSql( QString("SELECT Images.name "
+                         "FROM Images "
+                         "WHERE Images.dirid=%1")
+                .arg(albumID), &values );
+    }
     return values;
 }
 

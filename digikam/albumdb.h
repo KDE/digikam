@@ -473,9 +473,10 @@ public:
      * verify if all items on disk are consistent with the database
      * in the scanlib class.
      * @param albumID The albumID for which you want all items.
+     * @param recursive perform a recursive folder hierarchy parsing
      * @return It returns a QStringList with the filenames.
      */
-    QStringList getItemNamesInAlbum(int albumID);
+    QStringList getItemNamesInAlbum(int albumID, bool recurssive=false);
 
     /**
      * Given a albumID, get a list of the url of all items in the album
@@ -505,6 +506,7 @@ public:
     /**
      * Given a tagid, get a list of the url of all items in the tag
      * @param  tagID the id of the tag
+     * @param  recursive perform a recursive folder hierarchy parsing
      * @return a list of urls for the items in the tag. The urls are the
      * absolute path of the items
      */
@@ -513,6 +515,7 @@ public:
     /**
      * Given a tagID, get a list of Ids of all items in the tag
      * @param  tagID the id of the tag
+     * @param  recursive perform a recursive folder hierarchy parsing
      * @return a list of Ids for the items in the tag.
      */
     LLongList getItemIDsInTag(int tagID, bool recursive = false);
