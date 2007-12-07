@@ -1502,13 +1502,32 @@ void AlbumDB::removeTagsFromItems(QList<qlonglong> imageIDs, QList<int> tagIDs)
     d->db->execBatch(query);
 }
 
-QStringList AlbumDB::getItemNamesInAlbum(int albumID)
+QStringList AlbumDB::getItemNamesInAlbum(int albumID, bool recurssive)
 {
     QList<QVariant> values;
-    d->db->execSql( QString("SELECT Images.name "
-                            "FROM Images "
-                            "WHERE Images.album=?"),
-                    albumID, &values );
+
+    if (recurssive)
+    {
+        KUrl url(getAlbumRelativePath(albumID));
+        int rootId = getAlbumRootId(albumID);
+        QVariantList boundValues;
+        boundValues << rootId << url.path() << url.path(KUrl::AddTrailingSlash);
+        d->db->execSql( QString("SELECT Images.name "
+                                "FROM Images "
+                                "WHERE Images.album "
+                                "IN (SELECT DISTINCT id "
+                                    "FROM Albums "
+                                    "WHERE albumRoot=? AND (relativePath='?' OR relativePath LIKE '\%?\%'))"), 
+                        boundValues,
+                        &values );
+    }
+    else
+    {
+        d->db->execSql( QString("SELECT Images.name "
+                                "FROM Images "
+                                "WHERE Images.album=?"),
+                        albumID, &values );
+    }
 
     QStringList names;
     for (QList<QVariant>::iterator it=values.begin(); it != values.end(); ++it)

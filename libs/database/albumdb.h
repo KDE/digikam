@@ -211,7 +211,7 @@ public:
      * Find out the album ids for a given relative path, including the subalbums.
      * @param albumRootId  id of the album root of the album
      * @param relativePath The path for which you want the albumIDs relative to the album root
-     * @return a list of album ids. The list is empty if now albums are found.
+     * @return a list of album ids. The list is empty if no albums are found.
      */
     QList<int> getAlbumAndSubalbumsForPath(int albumRootId, const QString& relativePath);
 
@@ -496,9 +496,10 @@ public:
      * verify if all items on disk are consistent with the database
      * in the scanlib class.
      * @param albumID The albumID for which you want all items.
+     * @param recursive perform a recursive folder hierarchy parsing
      * @return It returns a QStringList with the filenames.
      */
-    QStringList getItemNamesInAlbum(int albumID);
+    QStringList getItemNamesInAlbum(int albumID, bool recurssive=false);
 
     /**
      * Returns an ItemScanInfo object for each item in the album
@@ -526,6 +527,7 @@ public:
      * Given a tagid, get a list of the url of all items in the tag
      * NOTE: Uses the CollectionManager
      * @param  tagID the id of the tag
+     * @param  recursive perform a recursive folder hierarchy parsing
      * @return a list of urls for the items in the tag. The urls are the
      * absolute path of the items
      */
@@ -534,6 +536,7 @@ public:
     /**
      * Given a tagID, get a list of Ids of all items in the tag
      * @param  tagID the id of the tag
+     * @param  recursive perform a recursive folder hierarchy parsing
      * @return a list of Ids for the items in the tag.
      */
     QList<qlonglong> getItemIDsInTag(int tagID, bool recursive = false);
