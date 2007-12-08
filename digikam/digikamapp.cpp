@@ -547,7 +547,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------------
 
-    d->syncAlbumMetadataAction = new KAction(KIcon("rebuild"), i18n("Synchronize images with database"), this);
+    d->syncAlbumMetadataAction = new KAction(KIcon("view-refresh"), i18n("Synchronize images with database"), this);
     d->syncAlbumMetadataAction->setWhatsThis(i18n("Updates all image metadata of the current "
                                                   "album with digiKam database contents "
                                                   "(image metadata will be over-written with data from "
@@ -915,7 +915,7 @@ void DigikamApp::setupActions()
     QAction* findAction = actionCollection()->addAction(KStandardAction::Find, "search_quick",
                                                         d->view, SLOT(slotNewQuickSearch()));
     findAction->setText(i18n("Quick Search..."));
-    findAction->setIcon(BarIcon("filefind"));
+    findAction->setIcon(BarIcon("system-search"));
 
     // -----------------------------------------------------------
 
@@ -933,13 +933,13 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    KAction *scanNewAction = new KAction(KIcon("rebuild"), i18n("Scan for New Images"), this);
+    KAction *scanNewAction = new KAction(KIcon("view-refresh"), i18n("Scan for New Images"), this);
     connect(scanNewAction, SIGNAL(triggered()), this, SLOT(slotDatabaseRescan()));
     actionCollection()->addAction("database_rescan", scanNewAction);
 
     // -----------------------------------------------------------
 
-    KAction *rebuildThumbsAction = new KAction(KIcon("recycled"), i18n("Rebuild all Thumbnails..."), this);
+    KAction *rebuildThumbsAction = new KAction(KIcon("run-build"), i18n("Rebuild all Thumbnails..."), this);
     connect(rebuildThumbsAction, SIGNAL(triggered()), this, SLOT(slotRebuildAllThumbs()));
     actionCollection()->addAction("thumbs_rebuild", rebuildThumbsAction);
 
@@ -1242,13 +1242,13 @@ void DigikamApp::cameraAutoDetect()
 void DigikamApp::loadCameras()
 {
     d->cameraSolidMenu->menuAction()->setText(i18n("Digital Cameras"));
-    d->cameraSolidMenu->menuAction()->setIcon(KIcon("camera"));
+    d->cameraSolidMenu->menuAction()->setIcon(KIcon("camera-photo"));
     d->usbMediaMenu->menuAction()->setText(i18n("USB Storage Devices"));
     d->usbMediaMenu->menuAction()->setIcon(KIcon("drive-removable-media-usb"));
     d->cardReaderMenu->menuAction()->setText(i18n("Card Readers"));
     d->cardReaderMenu->menuAction()->setIcon(KIcon("media-flash-smart-media"));
     d->manuallyAddedCamerasMenu->menuAction()->setText(i18n("Cameras Added Manually"));
-    d->manuallyAddedCamerasMenu->menuAction()->setIcon(KIcon("camera-test"));
+    d->manuallyAddedCamerasMenu->menuAction()->setIcon(KIcon("preferences-other"));
 
     actionCollection()->addAction("camera_solid", d->cameraSolidMenu->menuAction());
     actionCollection()->addAction("usb_media", d->usbMediaMenu->menuAction());
