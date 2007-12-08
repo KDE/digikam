@@ -666,7 +666,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 
     // --------------------------------------------------------
 
-    QAction *renameAction = popmenu.addAction(SmallIcon("pencil"), i18n("Rename..."));
+    QAction *renameAction = popmenu.addAction(SmallIcon("edit-rename"), i18n("Rename..."));
     popmenu.addSeparator();
 
     // --------------------------------------------------------

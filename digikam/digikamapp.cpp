@@ -612,7 +612,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->imageRenameAction = new KAction(KIcon("pencil"), i18n("Rename..."), this);
+    d->imageRenameAction = new KAction(KIcon("edit-rename"), i18n("Rename..."), this);
     d->imageRenameAction->setShortcut(Qt::Key_F2);
     d->imageRenameAction->setWhatsThis(i18n("Rename the filename of the currently selected item."));
     connect(d->imageRenameAction, SIGNAL(triggered()), d->view, SLOT(slotImageRename()));
