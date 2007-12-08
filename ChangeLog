@@ -1,3 +1,462 @@
+2007-12-06 13:49  cgilles
+
+	* digikam/albumiconview.cpp: digiKam from KDE3 branch : 0.9.3-rc1
+	  will be released tomorow by Gerhard : apply patch from Arnd to
+	  Enable Go To, if the destination album is different.
+	  CCBUGS: 128231
+
+2007-12-06 13:47  cgilles
+
+	* digikam/albumfolderview.cpp: digiKam from KDE3 branch :
+	  invalidate items from album lister when drag & drop is used
+	  between
+	  icon view and album folder view to move files.
+	  CCBUGS: 128231
+
+2007-12-04 10:36  cgilles
+
+	* NEWS: update
+
+2007-12-04 09:45  cgilles
+
+	* NEWS: update
+
+2007-12-04 07:26  cgilles
+
+	* NEWS: update
+
+2007-12-03 21:50  cgilles
+
+	* NEWS: update
+
+2007-12-03 21:49  mwiesweg
+
+	* digikam/dio.cpp: Properly order parameters passed to ioslave -
+	  this effectively disabled all scanning while digikam was running!
+
+	  BUG: 152961
+
+2007-12-03 15:22  cgilles
+
+	* digikam/dio.cpp: polish
+
+2007-12-02 18:53  cgilles
+
+	* digikam/digikamapp.cpp, digikam/digikamview.cpp,
+	  digikam/digikamview.h: polish
+
+2007-12-02 16:32  cgilles
+
+	* utilities/lighttable/lighttablewindow.h: compile
+
+2007-12-02 16:28  cgilles
+
+	* digikam/digikamapp.cpp: bugfix : When Setup is changed, we
+	  missing to apply settings to light table if an instance is
+	  already created
+
+2007-12-02 12:19  cgilles
+
+	* digikam/albumiconview.cpp: digiKam from KDE3 branch : support
+	  Copy and Paste between Physical Albums and Tags Albums
+	  CCMAIL: digikam-devel@kde.org
+
+2007-12-02 09:36  cgilles
+
+	* data/pics/Makefile.am, data/pics/zoom10.png,
+	  data/pics/zoom20.png, data/pics/zoom30.png: restore zoom pics
+
+2007-12-01 07:33  gkulzer
+
+	* digikam/mimefilter.cpp: polish i18n, patch from Mikolaj
+
+2007-12-01 06:35  gkulzer
+
+	* digikam/albumlister.cpp, digikam/mimefilter.cpp,
+	  digikam/mimefilter.h: add a NoRAWFile to the mime type quick
+	  filter, polish i18n
+
+2007-11-29 17:19  cgilles
+
+	* DBSCHEMA.ODS: digiKam from KDE3 branch: added database schema
+	  used with 0.8.x and 0.9.x releases (OpenOffice file)
+	  CCMAIL: digikam-devel@kde.org
+
+2007-11-28 21:09  cgilles
+
+	* NEWS: update
+
+2007-11-28 21:02  cgilles
+
+	* libs/dimg/loaders/tiffloader.cpp: fix byte order problem with
+	  tiff image under PPC
+	  CCBUGS: 148037
+
+2007-11-28 11:18  cgilles
+
+	* NEWS: update
+
+2007-11-28 11:14  cgilles
+
+	* libs/imageproperties/imagepropertiescolorstab.cpp: fix histogram
+	  statistics layout to be more readable.
+	  BUG: 144165
+	  KDE4PORT
+
+2007-11-28 09:12  cgilles
+
+	* NEWS: update
+
+2007-11-28 09:11  cgilles
+
+	* digikam/albumiconview.cpp: digiKam from KDE3 branch : fix error
+	  dialog when user adjust Exif orientation tag
+	  BUG: 148629
+	  KDE4PORT
+
+2007-11-28 08:52  cgilles
+
+	* digikam/digikamapp.cpp: polish
+
+2007-11-28 07:23  cgilles
+
+	* digikam/albumlister.cpp: polish
+
+2007-11-27 22:07  cgilles
+
+	* digikam/searchresultsview.h: polish
+
+2007-11-27 22:05  cgilles
+
+	* digikam/searchresultsview.cpp, digikam/searchresultsview.h:
+	  polish
+
+2007-11-27 21:58  cgilles
+
+	* digikam/searchresultsview.cpp, digikam/searchresultsview.h: using
+	  d private internal class
+
+2007-11-27 21:44  cgilles
+
+	* digikam/searchquickdialog.cpp: polish
+
+2007-11-27 21:44  cgilles
+
+	* libs/widgets/common/searchtextbar.cpp,
+	  libs/widgets/common/searchtextbar.h: polish
+
+2007-11-27 21:34  cgilles
+
+	* digikam/searchquickdialog.cpp: using search text bar widget in
+	  quick search dialog
+
+2007-11-27 21:27  cgilles
+
+	* digikam/searchresultsview.cpp, digikam/searchresultsview.h: new
+	  signal to dispatch if query is match
+
+2007-11-27 21:23  cgilles
+
+	* digikam/searchresultsview.cpp, digikam/searchresultsview.h:
+	  polish
+
+2007-11-27 21:21  cgilles
+
+	* digikam/searchresultsview.cpp: fix broken simple search:
+	  kio-slave ars missing in serialization
+
+2007-11-27 21:16  cgilles
+
+	* kioslave/digikamsearch.cpp: polish
+
+2007-11-27 20:55  cgilles
+
+	* libs/widgets/common/searchtextbar.cpp: polish
+
+2007-11-27 15:47  cgilles
+
+	* digikam/albumpropsedit.h: polish
+
+2007-11-27 15:41  cgilles
+
+	* digikam/albumfolderview.cpp, digikam/tagfolderview.cpp: polish
+
+2007-11-27 15:38  cgilles
+
+	* digikam/albumfolderview.cpp: polish
+
+2007-11-27 12:10  cgilles
+
+	* NEWS: update
+
+2007-11-27 12:03  cgilles
+
+	* digikam/albumiconviewfilter.cpp, digikam/albumiconviewfilter.h,
+	  digikam/digikamapp.cpp: digiKam from KDE3 branch: Rating and Text
+	  filters are enabled/disabled accordinly with album icon view
+	  settings.
+	  BUG: 152843
+	  TODO: KDE4PORT
+
+2007-11-27 11:47  cgilles
+
+	* digikam/ratingwidget.cpp: if rating widget is disable, use gray
+	  frame
+
+2007-11-27 10:06  cgilles
+
+	* digikam/Makefile.am, digikam/albumiconviewfilter.cpp,
+	  digikam/albumiconviewfilter.h, digikam/digikamapp.cpp,
+	  digikam/digikamapp.h, digikam/digikamappprivate.h: digiKam from
+	  KDE3 branch : code polish : grouping album icon view filter in a
+	  common class.
+
+2007-11-26 14:50  cgilles
+
+	* libs/widgets/common/searchtextbar.cpp,
+	  libs/widgets/common/searchtextbar.h: polish
+
+2007-11-26 14:46  cgilles
+
+	* libs/widgets/common/searchtextbar.cpp,
+	  libs/widgets/common/searchtextbar.h: polish
+
+2007-11-26 12:25  cgilles
+
+	* libs/widgets/common/searchtextbar.cpp,
+	  libs/widgets/common/searchtextbar.h: digiKam from KDE3 branch :
+	  optimize space everywhere when Search Text Bar is used. No need a
+	  label on the left of line edit.
+	  We use a gray text into edit field like Amarok. When user take
+	  focus on edit field, gray text desappear. When focus go out, gray
+	  text re-appear.
+	  CCMAIL: digikam-devel@kde.org
+
+2007-11-26 11:09  cgilles
+
+	* libs/widgets/common/searchtextbar.cpp: fix spacing
+
+2007-11-26 11:08  cgilles
+
+	* libs/widgets/common/searchtextbar.cpp: clear button must be on
+	  the right, not on the left
+
+2007-11-26 11:06  cgilles
+
+	* libs/widgets/common/searchtextbar.cpp,
+	  libs/widgets/common/searchtextbar.h: disable clear button if line
+	  edit is empty
+
+2007-11-26 10:14  cgilles
+
+	* digikam/albumlister.cpp, digikam/albumlister.h,
+	  digikam/digikamapp.cpp: album lister now return a feedback to
+	  album icon view text filter with string match the query
+
+2007-11-26 09:28  cgilles
+
+	* digikam/albumsettings.cpp, digikam/albumsettings.h,
+	  digikam/digikamapp.cpp: digiKAm from KDE3 branch : do not store
+	  all Icon View Filter settings between sessions, but only Rating
+	  Condition configuration.
+	  CCMAIL: digikam-devel@kde.org
+
+2007-11-26 07:22  cgilles
+
+	* digikam/welcomepageview.cpp: update new feature
+
+2007-11-26 07:01  cgilles
+
+	* digikam/digikamapp.cpp: grouping all filter option on the same
+	  box
+
+2007-11-26 06:51  cgilles
+
+	* digikam/digikamapp.cpp: polish
+
+2007-11-25 21:34  cgilles
+
+	* digikam/digikamapp.cpp, digikam/digikamappprivate.h: polish
+
+2007-11-25 21:29  cgilles
+
+	* digikam/digikamapp.cpp, digikam/digikamappprivate.h,
+	  digikam/digikamview.cpp: use SearchTextFilter widget on statusbar
+
+2007-11-25 21:26  cgilles
+
+	* libs/widgets/common/searchtextbar.cpp,
+	  libs/widgets/common/searchtextbar.h: polish
+
+2007-11-25 21:12  cgilles
+
+	* digikam/albumlister.cpp: digiKam from KDE3 branch : use
+	  insensitive case with icon item text filter
+	  CCMAIL: digikam-devel@kde.org
+
+2007-11-25 21:01  cgilles
+
+	* NEWS: update
+
+2007-11-25 20:56  cgilles
+
+	* digikam/albumfolderview.cpp, digikam/albumfolderview.h,
+	  digikam/digikamview.cpp, digikam/searchfolderview.cpp,
+	  digikam/searchfolderview.h, digikam/tagfilterview.cpp,
+	  digikam/tagfilterview.h, digikam/tagfolderview.cpp,
+	  digikam/tagfolderview.h: digiKam from KDE3 branch : new text
+	  filters have been added to the bottom of left and right sidebars.
+	  View listed below can be filtered:
+	  - Album folder view.
+	  - Tags folder view.
+	  - Search folder view
+	  - Tags Filter folder view.
+
+	  When user type a string, a search is performed to tree view
+	  contents and only items including the strings are displayed.
+	  A screenshot of digiKam in action is available at this url:
+
+	  http://digikam3rdparty.free.fr/Screenshots/digikam0.9.3-searchfolderbar.png
+
+	  BUG: 133191
+	  BUG: 146364
+	  CCBUGS: 110136
+	  CCMAIL: digikam-devel@kde.org
+
+2007-11-25 18:14  cgilles
+
+	* libs/imageproperties/imagedescedittab.cpp,
+	  libs/imageproperties/imagedescedittab.h: Caption & Tags sidebar
+	  tab use new SearchTextBar widget
+
+2007-11-25 17:56  cgilles
+
+	* libs/widgets/common/searchtextbar.cpp: polish
+
+2007-11-25 17:41  cgilles
+
+	* libs/widgets/common/searchtextbar.cpp,
+	  libs/widgets/common/searchtextbar.h: colorize text search edit
+	  depending of the match result
+
+2007-11-25 16:54  cgilles
+
+	* libs/widgets/common/Makefile.am,
+	  libs/widgets/common/searchtextbar.cpp,
+	  libs/widgets/common/searchtextbar.h: new widget to preform text
+	  search
+
+2007-11-23 11:35  cgilles
+
+	* digikam/version.h: fix version
+
+2007-11-23 11:35  cgilles
+
+	* digikam.lsm: fix version
+
+2007-11-22 19:39  abaecker
+
+	* NEWS, digikam/albumlister.cpp, digikam/albumlister.h,
+	  digikam/albummanager.cpp, digikam/albumsettings.cpp,
+	  digikam/albumsettings.h, digikam/digikamapp.cpp,
+	  digikam/digikamapp.h, digikam/digikamappprivate.h,
+	  digikam/digikamui.rc, digikam/dio.cpp,
+	  digikam/welcomepageview.cpp, kioslave/digikamalbums.cpp,
+	  kioslave/digikamdates.cpp, kioslave/digikamsearch.cpp,
+	  kioslave/digikamtags.cpp, utilities/batch/imageinfojob.cpp: New
+	  feature: Recursive display of sub-albums and sub-tags,
+	  which can be selected by the user.
+
+	  CCBUGS: 128231
+	  TODO:KDE4PORT
+
+2007-11-21 10:56  cgilles
+
+	* kioslave/digikamthumbnail.cpp: using const QString
+
+2007-11-21 09:03  gkulzer
+
+	* release_digikam_docs.rb: path correction
+
+2007-11-21 08:55  cgilles
+
+	* libs/greycstoration/greycstorationiface.cpp: Cimg simple resize
+	  code cleanup foloowing David tips.
+
+2007-11-21 08:53  gkulzer
+
+	* release_digikam_docs.rb: path correction
+
+2007-11-20 20:50  cgilles
+
+	* NEWS: polish
+
+2007-11-20 20:42  cgilles
+
+	* NEWS: update
+
+2007-11-20 20:36  cgilles
+
+	* digikam/albumsettings.cpp: add 3GP video file format by default
+	  support by new camera.
+
+2007-11-19 15:16  gkulzer
+
+	* ChangeLog: 0.9.3-beta3
+
+2007-11-19 15:03  gkulzer
+
+	* data/themes/Dark: 0.9.3-beta3
+
+2007-11-19 15:02  gkulzer
+
+	* release_digikam.rb, release_digikam_docs.rb: 0.9.3-beta3
+
+2007-11-19 13:07  cgilles
+
+	* NEWS: update
+
+2007-11-19 13:05  cgilles
+
+	* utilities/imageeditor/canvas/dimginterface.cpp: polish
+
+2007-11-19 13:01  cgilles
+
+	* utilities/imageeditor/canvas/dimginterface.cpp: digiKam from KDE3
+	  branch: force to remove IPTC preview tags from IPTC metadata if
+	  target file is JPEG.
+	  CCBUGS: 150801
+
+2007-11-19 11:26  cgilles
+
+	* NEWS: update
+
+2007-11-19 11:10  cgilles
+
+	* utilities/imageeditor/tools/imageresize.cpp: digiKam from KDE3
+	  branch : With Simple resize mode, use DImg::resize() intead
+	  CImg::resize() to have the most image quality result.
+	  CCBUGS: 152192
+
+2007-11-19 11:08  cgilles
+
+	* libs/greycstoration/greycstorationiface.cpp: polish
+
+2007-11-18 18:06  cgilles
+
+	* digikam/digikamapp.cpp: polish
+
+2007-11-18 18:00  cgilles
+
+	* digikam/albumsettings.cpp: polish
+
+2007-11-18 17:26  gkulzer
+
+	* digikam/digikamapp.cpp: update i18 strings
+	  CCMAIL:caulier.gilles@gmail.com
+
+
+
 v0.9.3-beta3 - 2007-11-19
 ----------------------------------------------------------------------------
 2007-11-18 17:04  cgilles
