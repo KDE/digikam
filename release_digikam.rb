@@ -9,11 +9,11 @@
 
 name       = "digikam"
 egmodule   = "graphics"
-version    = "0.9.3-beta3"
+version    = "0.9.3-rc1"
 docs       = "no"
 
 svnbase    = "svn+ssh://gkulzer@svn.kde.org/home/kde"
-svnroot    = "#{svnbase}/branches"
+svnroot    = "#{svnbase}/branches/extragear/kde3/"
 adminroot  = "#{svnbase}/branches/KDE/3.5"
 
 addDocs    = []
@@ -37,7 +37,7 @@ puts "Fetching #{egmodule}/#{name}..."
 Dir.mkdir( folder )
 Dir.chdir( folder )
 
-`svn co -N #{svnroot}/extragear/kde3/#{egmodule}`
+`svn co -N #{svnroot}#{egmodule}`
 Dir.chdir( egmodule )
 `svn up #{name}`
 `svn up -N doc`
