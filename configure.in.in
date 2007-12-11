@@ -200,7 +200,7 @@ fi
 if test "$PKGCONFIGFOUND" = "yes" ; then
    have_libkexiv2=no
 
-   KDE_PKG_CHECK_MODULES(LIBKEXIV2, libkexiv2 >= 0.1.5,
+   KDE_PKG_CHECK_MODULES(LIBKEXIV2, libkexiv2 >= 0.1.6,
                          have_libkexiv2=yes, have_libkexiv2=no)
 
    if test "x$have_libkexiv2" = "xno"; then
