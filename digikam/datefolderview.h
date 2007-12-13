@@ -50,7 +50,7 @@ public:
 
     void setSelected(Q3ListViewItem *item);
 
-    void gotoDate(int year, int month, int day);
+    void gotoDate(const QDate& dt);
 
 private slots:
 

@@ -751,8 +751,7 @@ void DigikamView::slotGotoDateAndItem(AlbumIconItem* iconItem)
     d->iconView->setAlbumItemToFind(url);  
 
     // Change the year and month of the iconItem (day is unused).
-    d->dateFolderView->gotoDate(date.year(), date.month(), date.day()); 
-
+    d->dateFolderView->gotoDate(date); 
 }
 
 void DigikamView::slotGotoTagAndItem(int tagID)
