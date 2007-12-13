@@ -296,30 +296,29 @@ void DateFolderView::loadViewState()
     }    
 }
 
-
-void DateFolderView::gotoDate(int year, int month, int day)
+void DateFolderView::gotoDate(const QDate& dt)
 {
     DateFolderItem *item = 0;
-    QString         id;
+    QDate           id;
     
-    QDate date = QDate(year, month, 1);
-    // Get string in the format:  Sat Jul 1 2006
-    QString date_id = date.toString("ddd MMM d yyyy");
+    QDate date = QDate(dt.year(), dt.month(), 1);
 
     // Find that date in the side-bar list.
     QListViewItemIterator it(d->listview);
     for( ; it.current(); ++it)
     {        
         item = dynamic_cast<DateFolderItem*>(it.current());
-        id = item->date();
-        if(id == date_id) 
-	{
-            d->listview->setSelected(item, true);
-            d->listview->ensureItemVisible(item);
+        if (item->m_album)
+        {
+            id = item->m_album->date();
+            if(id == date)
+            {
+                d->listview->setSelected(item, true);
+                d->listview->ensureItemVisible(item);
+            }
         }
-    }    
+    }
 }
-
 
 void DateFolderView::saveViewState()
 {
