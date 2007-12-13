@@ -7,6 +7,7 @@
  * Description : a widget to perform month selection.
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,18 +27,21 @@
 
 // Qt includes.
 
-#include <Q3Frame>
-#include <QResizeEvent>
-#include <QMouseEvent>
+#include <QWidget>
 
 // Local includes.
 
 #include "imageinfo.h"
 
+class QResizeEvent;
+class QPaintEvent;
+class QMouseEvent;
+
 namespace Digikam
 {
+class MonthWidgetPriv;
 
-class MonthWidget : public Q3Frame
+class MonthWidget : public QWidget
 {
     Q_OBJECT
 
@@ -50,11 +54,11 @@ public:
     QSize sizeHint() const;
 
     void setActive(bool val);
-    
+
 protected:
-    
+
     void resizeEvent(QResizeEvent *e);
-    void drawContents(QPainter *p);
+    void paintEvent(QPaintEvent*);
     void mousePressEvent(QMouseEvent *e);
 
 private:
@@ -65,25 +69,10 @@ private slots:
 
     void slotAddItems(const ImageInfoList& items);
     void slotDeleteItem(const ImageInfo& item);
-    
-private:
-    
-    struct Month
-    {
-        bool active;
-        bool selected;
-        int  day;
-        int  numImages;
-    };
 
-    bool         m_active;
-    int          m_year;
-    int          m_month;
-    int          m_w;
-    int          m_h;
-    int          m_currw;
-    int          m_currh;
-    struct Month m_days[42];
+private:
+
+    MonthWidgetPriv *d;
 };
 
 }  // namespace Digikam
