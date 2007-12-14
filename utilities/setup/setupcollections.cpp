@@ -2,7 +2,7 @@
  *
  * This file is a part of digiKam project
  * http://www.digikam.org
- * 
+ *
  * Date        : 2005-02-01
  * Description : collections setup tab
  *
@@ -67,35 +67,35 @@ public:
         switch (collection.type())
         {
             case CollectionLocation::TypeVolumeHardWired:
-                type = SmallIcon("drive-harddisk");     
+                type = SmallIcon("drive-harddisk");
                 break;
             case CollectionLocation::TypeVolumeRemovable:
-                type = SmallIcon("drive-removable-media");     
+                type = SmallIcon("drive-removable-media");
                 break;
             case CollectionLocation::TypeNetwork:
-                type = SmallIcon("drive-remote");     
+                type = SmallIcon("drive-remote");
                 break;
         }
 
         switch (collection.status())
         {
             case CollectionLocation::LocationNull:
-                status = SmallIcon("flag-black");     
+                status = SmallIcon("flag-black");
                 break;
             case CollectionLocation::LocationAvailable:
-                status = SmallIcon("flag-green");     
+                status = SmallIcon("flag-green");
                 break;
             case CollectionLocation::LocationHidden:
-                status = SmallIcon("flag-yellow");     
+                status = SmallIcon("flag-yellow");
                 break;
             case CollectionLocation::LocationUnavailable:
-                type = SmallIcon("flag-red");     
+                type = SmallIcon("flag-red");
                 break;
             case CollectionLocation::LocationDeleted:
-                status = SmallIcon("edit-delete");     
+                status = SmallIcon("edit-delete");
                 break;
-        }   
- 
+        }
+
         setPixmap(1, type);
         setPixmap(2, status);
 
@@ -141,7 +141,7 @@ public:
         setPath(location.albumRootPath());
     }
 
-private: 
+private:
 
     bool    m_pathIsEditable;
 
@@ -166,7 +166,7 @@ public:
         removeButton     = 0;
         replaceButton    = 0;
         databasePathEdit = 0;
-        rootsPathChanged = false; 
+        rootsPathChanged = false;
     }
 
     bool                       rootsPathChanged;
@@ -180,12 +180,12 @@ public:
     QLabel                    *nameLabel;
 
     KLineEdit                 *nameEdit;
- 
+
     KUrlRequester             *pathEdit;
     KUrlRequester             *databasePathEdit;
 
     KPageDialog               *mainDialog;
-    
+
     K3ListView                *listView;
 
     QList<CollectionLocation>  collections;
@@ -204,10 +204,9 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
     QGroupBox *albumPathBox = new QGroupBox(i18n("Roots Album Path"), this);
     QGridLayout* grid       = new QGridLayout(albumPathBox);
 
-    QLabel *albumPathLabel = new QLabel(i18n("Here you can set the paths of the root albums with "
-                                             "your images. Write access is not necessary, "
-                                             "however, with read-only access, you cannot edit "
-                                             "your images. You can use removable media and remote "
+    QLabel *albumPathLabel = new QLabel(i18n("Here you can set the paths to the root albums with your "
+                                             "images. Write access is necessary to edit your images.\n"
+                                             "You can use removable media and remote "
                                              "file systems shared over NFS for example."),
                                         albumPathBox);
     albumPathLabel->setWordWrap(true);
@@ -220,7 +219,7 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
     d->listView->setAllColumnsShowFocus(true);
     d->listView->setSelectionMode(Q3ListView::Single);
     d->listView->setFullWidth(true);
-    d->listView->setWhatsThis(i18n("<p>Here you can see all roots album path used by digiKam "
+    d->listView->setWhatsThis(i18n("<p>This shows all root album paths used by digiKam "
                                    "as collections."));
 
     d->newButton     = new QPushButton(albumPathBox);
@@ -238,14 +237,14 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
     d->replaceButton->setIcon(SmallIcon("view-refresh"));
     d->removeButton->setEnabled(false);
     d->replaceButton->setEnabled(false);
-    
+
     d->nameLabel     = new QLabel(i18n("Name:"), albumPathBox);
     d->nameEdit      = new KLineEdit(albumPathBox);
     d->nameEdit->setClearButtonShown(true);
 
     d->pathLabel     = new QLabel(i18n("Path:"), albumPathBox);
     d->pathEdit = new KUrlRequester(albumPathBox);
-    d->pathEdit->setMode(KFile::Directory | KFile::LocalOnly | KFile::ExistingOnly);    
+    d->pathEdit->setMode(KFile::Directory | KFile::LocalOnly | KFile::ExistingOnly);
 
     grid->addWidget(albumPathLabel, 0, 0, 1, 3);
     grid->addWidget(d->listView, 1, 0, 5, 2);
@@ -268,17 +267,15 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
     QGroupBox *dbPathBox = new QGroupBox(i18n("Database File Path"), this);
     QVBoxLayout *vlay    = new QVBoxLayout(dbPathBox);
 
-    QLabel *databasePathLabel = new QLabel(i18n("Here you can edit the directory where the "
-                                                "digiKam database file will be stored. "
-                                                "here is only one file common to all album roots. "
-                                                "Write access is recommended "
-                                                "to be able to edit image properties. "
-                                                "Please note that you cannot use a remote file system here, such as NFS."),
+    QLabel *databasePathLabel = new QLabel(i18n("Here you can enter the location on your computer "                                                "where the digiKam database file will be stored. "
+                                                "It is only one DB file common to all album roots.\n "
+                                                "Write access is required to be able to edit image " "properties. \nPlease note that you cannot use a "
+                                                "remote file system here, such as NFS."),
                                            dbPathBox);
     databasePathLabel->setWordWrap(true);
 
     d->databasePathEdit = new KUrlRequester(dbPathBox);
-    d->databasePathEdit->setMode(KFile::Directory | KFile::LocalOnly);    
+    d->databasePathEdit->setMode(KFile::Directory | KFile::LocalOnly);
 
     vlay->addWidget(databasePathLabel);
     vlay->addWidget(d->databasePathEdit);
@@ -376,7 +373,7 @@ void SetupCollections::applySettings()
 
     // Check what root path need to be removed from DB.
 
-    for (QList<CollectionLocation>::Iterator it2 = d->collections.begin(); 
+    for (QList<CollectionLocation>::Iterator it2 = d->collections.begin();
         it2 != d->collections.end(); ++it2)
     {
         bool exist = false;
@@ -410,9 +407,9 @@ void SetupCollections::readSettings()
     d->collections = manager->allLocations();
 
     int i = 0;
-    for (QList<CollectionLocation>::Iterator it = d->collections.begin(); 
+    for (QList<CollectionLocation>::Iterator it = d->collections.begin();
          it != d->collections.end(); ++it)
-    {   
+    {
         QString name = i18n("Col. %1", i++);       // TODO: handle root album name set in DB.
         new CollectionListViewItem(d->listView, name, *it);
     }
@@ -421,7 +418,7 @@ void SetupCollections::readSettings()
 void SetupCollections::slotSelectionChanged(Q3ListViewItem *item)
 {
     CollectionListViewItem* colItem = dynamic_cast<CollectionListViewItem*>(item);
-    if (!colItem) 
+    if (!colItem)
     {
         slotNewCollectionItem();
         return;
@@ -448,9 +445,9 @@ void SetupCollections::slotNewCollectionItem()
 
 void SetupCollections::slotAddCollectionItem()
 {
-    if (!checkForCollection(d->nameEdit->text(), d->pathEdit->url().path())) 
+    if (!checkForCollection(d->nameEdit->text(), d->pathEdit->url().path()))
         return;
-    
+
     new CollectionListViewItem(d->listView, d->nameEdit->text(), d->pathEdit->url().path());
     d->rootsPathChanged = true;
     d->pathEdit->clear();
@@ -476,7 +473,7 @@ void SetupCollections::slotReplaceCollectionItem()
         item->path() == d->pathEdit->url().path())
         return;
 
-    if (!checkForCollection(d->nameEdit->text(), QString())) 
+    if (!checkForCollection(d->nameEdit->text(), QString()))
         return;
 
     item->setName(d->nameEdit->text());
@@ -491,7 +488,7 @@ void SetupCollections::slotChangeDatabasePath(const KUrl &result)
 {
     QFileInfo targetPath(result.path());
 
-    if (!result.isEmpty() && !targetPath.isWritable()) 
+    if (!result.isEmpty() && !targetPath.isWritable())
     {
         KMessageBox::information(0, i18n("No write access for this path to store database.\n"
                                          "Warning: the caption and tag features will not work."));
@@ -502,7 +499,7 @@ void SetupCollections::slotChangeDatabasePath(const KUrl &result)
 
 void SetupCollections::slotDatabasePathEdited(const QString& newPath)
 {
-    if (!newPath.isEmpty() && !newPath.startsWith("/")) 
+    if (!newPath.isEmpty() && !newPath.startsWith("/"))
     {
         d->databasePathEdit->setUrl(QDir::homePath() + '/' + newPath);
     }
@@ -517,7 +514,7 @@ void SetupCollections::slotAlbumNameEdited(const QString&)
 
 void SetupCollections::slotChangeAlbumPath(const KUrl &result)
 {
-    if (KUrl(result).equals(KUrl(QDir::homePath()), KUrl::CompareWithoutTrailingSlash)) 
+    if (KUrl(result).equals(KUrl(QDir::homePath()), KUrl::CompareWithoutTrailingSlash))
     {
         KMessageBox::sorry(0, i18n("Sorry; cannot use home directory as album library."));
     }
@@ -525,10 +522,10 @@ void SetupCollections::slotChangeAlbumPath(const KUrl &result)
     {
         QFileInfo targetPath(result.path());
 
-        if (!result.isEmpty() && !targetPath.isWritable()) 
+        if (!result.isEmpty() && !targetPath.isWritable())
         {
             KMessageBox::information(0, i18n("No write access for this root album path.\n"
-                                             "Warning: image and metadata editing will not work at this place."));
+                                             "Warning: image and metadata editing will not work with this path."));
         }
     }
 
@@ -537,11 +534,11 @@ void SetupCollections::slotChangeAlbumPath(const KUrl &result)
 
 void SetupCollections::slotAlbumPathEdited(const QString& newPath)
 {
-    if (newPath.isEmpty()) 
+    if (newPath.isEmpty())
     {
         d->replaceButton->setEnabled(false);
     }
-    else if (!newPath.startsWith("/")) 
+    else if (!newPath.startsWith("/"))
     {
         d->pathEdit->setUrl(QDir::homePath() + '/' + newPath);
     }
@@ -552,7 +549,7 @@ void SetupCollections::slotAlbumPathEdited(const QString& newPath)
 void SetupCollections::checkforOkButton()
 {
     bool albumOk = d->listView->childCount() ? true : false;
-    
+
     bool dbOk = false;
     if (!d->databasePathEdit->url().path().isEmpty())
     {
@@ -566,7 +563,7 @@ void SetupCollections::checkforOkButton()
 void SetupCollections::checkforAddButton()
 {
     bool nameOk = !d->nameEdit->text().isEmpty();
-    
+
     bool pathOk = false;
     if (d->pathEdit->isEnabled() && !d->pathEdit->url().path().isEmpty())
     {
