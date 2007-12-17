@@ -885,7 +885,7 @@ void TagFilterView::slotContextMenu(QListViewItem* it, const QPoint&, int)
     toggleAutoMenu.insertItem(i18n("Parents"), 23);
     toggleAutoMenu.insertItem(i18n("Both"),    24);
     toggleAutoMenu.setItemChecked(21 + d->toggleAutoTags, true);
-    popmenu.insertItem(i18n("Toogle Auto"), &toggleAutoMenu);
+    popmenu.insertItem(i18n("Toggle Auto"), &toggleAutoMenu);
 
     QPopupMenu matchingCongMenu;
     matchingCongMenu.setCheckable(true);

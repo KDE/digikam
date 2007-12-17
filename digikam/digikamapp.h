@@ -163,7 +163,7 @@ private slots:
     void slotZoomSliderChanged(int);
     void slotThumbSizeChanged(int);
     void slotZoomChanged(double, int);
-    void slotTooglePreview(bool);
+    void slotTogglePreview(bool);
 
 private:
 

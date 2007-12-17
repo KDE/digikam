@@ -838,7 +838,7 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
     toggleAutoMenu.insertItem(i18n("Parents"), 23);
     toggleAutoMenu.insertItem(i18n("Both"),    24);
     toggleAutoMenu.setItemChecked(21 + d->toggleAutoTags, true);
-    popmenu.insertItem(i18n("Toogle Auto"), &toggleAutoMenu);
+    popmenu.insertItem(i18n("Toggle Auto"), &toggleAutoMenu);
 
     TagFilterView::ToggleAutoTags oldAutoTags = d->toggleAutoTags;            
 

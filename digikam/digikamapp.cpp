@@ -398,7 +398,7 @@ void DigikamApp::setupStatusBar()
             this, SLOT(slotZoomChanged(double, int)));
     
     connect(d->view, SIGNAL(signalTogglePreview(bool)),
-            this, SLOT(slotTooglePreview(bool)));
+            this, SLOT(slotTogglePreview(bool)));
 
     connect(d->statusNavigateBar, SIGNAL(signalFirstItem()),
             d->view, SLOT(slotFirstItem()));
@@ -1979,7 +1979,7 @@ void DigikamApp::slotZoomChanged(double zoom, int size)
     d->statusZoomBar->setZoomTrackerText(i18n("zoom: %1%").arg((int)(zoom*100.0)));
 }
 
-void DigikamApp::slotTooglePreview(bool t)
+void DigikamApp::slotTogglePreview(bool t)
 {
     // NOTE: if 't' is true, we are in Preview Mode, else we are in AlbumView Mode
 

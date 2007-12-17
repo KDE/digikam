@@ -148,7 +148,7 @@ public slots:
 
 private:
 
-    void toogleZoomActions();
+    void toggleZoomActions();
     void setupConnections();
     void loadViewState();
     void saveViewState();
