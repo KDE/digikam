@@ -359,25 +359,21 @@ void DigikamApp::setupStatusBar()
 {
     d->statusProgressBar = new StatusProgressBar(statusBar());
     d->statusProgressBar->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
-    d->statusProgressBar->setMaximumHeight(fontMetrics().height()+4);
     statusBar()->addWidget(d->statusProgressBar, 100);
 
     //------------------------------------------------------------------------------
 
     d->albumIconViewFilter = new AlbumIconViewFilter(statusBar());
-    d->albumIconViewFilter->setMaximumHeight(fontMetrics().height()+4);
     statusBar()->addWidget(d->albumIconViewFilter, 100);
 
     //------------------------------------------------------------------------------
 
     d->statusZoomBar = new StatusZoomBar(statusBar());
-    d->statusZoomBar->setMaximumHeight(fontMetrics().height()+4);
     statusBar()->addPermanentWidget(d->statusZoomBar, 1);
 
     //------------------------------------------------------------------------------
 
     d->statusNavigateBar = new StatusNavigateBar(statusBar());
-    d->statusNavigateBar->setMaximumHeight(fontMetrics().height()+4);
     statusBar()->addPermanentWidget(d->statusNavigateBar, 1);
 
     //------------------------------------------------------------------------------
