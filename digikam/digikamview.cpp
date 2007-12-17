@@ -922,7 +922,7 @@ void DigikamView::slotThumbSizeEffect()
     emit signalNoCurrentItem();
 
     d->iconView->setThumbnailSize(d->thumbSize);
-    toogleZoomActions();
+    toggleZoomActions();
 
     AlbumSettings* settings = AlbumSettings::instance();
     if (!settings)
@@ -930,7 +930,7 @@ void DigikamView::slotThumbSizeEffect()
     settings->setDefaultIconSize(d->thumbSize);
 }
 
-void DigikamView::toogleZoomActions()
+void DigikamView::toggleZoomActions()
 {
     if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewImageMode)
     {
@@ -961,7 +961,7 @@ void DigikamView::slotZoomIn()
     if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
     {
         setThumbSize(d->thumbSize + ThumbnailSize::Step);
-        toogleZoomActions();
+        toggleZoomActions();
         emit signalThumbSizeChanged(d->thumbSize);
     }
     else if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewImageMode)
@@ -975,7 +975,7 @@ void DigikamView::slotZoomOut()
     if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
     {
         setThumbSize(d->thumbSize - ThumbnailSize::Step);
-        toogleZoomActions();
+        toggleZoomActions();
         emit signalThumbSizeChanged(d->thumbSize);
     }  
     else if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewImageMode)
@@ -1002,7 +1002,7 @@ void DigikamView::slotFitToWindow()
 
 void DigikamView::slotZoomFactorChanged(double zoom)
 {
-    toogleZoomActions();
+    toggleZoomActions();
 
     double h    = (double)ThumbnailSize::Huge;
     double s    = (double)ThumbnailSize::Small;
@@ -1081,7 +1081,7 @@ void DigikamView::slotImagePreview()
         slotTogglePreviewMode(currItem);
 }
 
-// This method toogle between AlbumView and ImagePreview Modes, depending of context.
+// This method toggle between AlbumView and ImagePreview Modes, depending of context.
 void DigikamView::slotTogglePreviewMode(AlbumIconItem *iconItem)
 {
     if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode && iconItem)
@@ -1106,7 +1106,7 @@ void DigikamView::slotTogglePreviewMode(AlbumIconItem *iconItem)
 
 void DigikamView::slotToggledToPreviewMode(bool b)
 {
-    toogleZoomActions();
+    toggleZoomActions();
 
     if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
         emit signalThumbSizeChanged(d->iconView->thumbnailSize().size());

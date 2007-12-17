@@ -861,7 +861,7 @@ void ImageDescEditTab::slotRightButtonClicked(Q3ListViewItem *item, const QPoint
     popmenu.addSeparator();
 
 
-    KSelectAction *toggleAutoAction = new KSelectAction(i18n("Toogle Auto"), &popmenu);
+    KSelectAction *toggleAutoAction = new KSelectAction(i18n("Toggle Auto"), &popmenu);
     QAction *toggleNoneAction     = toggleAutoAction->addAction(i18n("None"));
     toggleAutoAction->menu()->addSeparator();
     QAction *toggleChildrenAction = toggleAutoAction->addAction(i18n("Children"));
