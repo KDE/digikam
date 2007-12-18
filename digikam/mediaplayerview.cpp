@@ -157,6 +157,8 @@ void MediaPlayerView::setMediaPlayerFromUrl(const KUrl& url)
     const KService::List services = KMimeTypeTrader::self()->query(mimePtr->name(),
                                     QString::fromLatin1("KParts/ReadOnlyPart"));
 
+    DDebug() << "Search a KPart to preview " << url.fileName() << " (" << mimePtr->name() << ") " << endl;
+
     if (d->mediaPlayerPart)
     {
         d->mediaPlayerPart->closeUrl();
@@ -170,22 +172,23 @@ void MediaPlayerView::setMediaPlayerFromUrl(const KUrl& url)
     {
         // Ask for a part for this mime type
         KService::Ptr service = *it;
-    
+
         if (!service.data()) 
         {
-            DWarning() << "Couldn't find a KPart for video" << endl;
+            DWarning() << "Couldn't find a KPart for media" << endl;
             continue;
         }
-    
+
         QString library = service->library();
         if ( library.isNull() ) 
         {
             DWarning() << "The library returned from the service was null, "
-                       << "indicating we could not display videos." 
+                       << "indicating we could not play media." 
                        << endl;
             continue;
         }
 
+        DDebug() << "Find KPart library " << library << endl;
         int error = 0;
         d->mediaPlayerPart = KParts::ComponentFactory::createPartInstanceFromService
                              <KParts::ReadOnlyPart>(service, d->mediaPlayerView, d->mediaPlayerView,
@@ -196,14 +199,14 @@ void MediaPlayerView::setMediaPlayerFromUrl(const KUrl& url)
                        << " error=" << error << endl;
             continue;
         }
-    
+
         mediaPlayerWidget = d->mediaPlayerPart->widget(); 
         if ( !mediaPlayerWidget ) 
-        {            
+        {
             DWarning() << "Failed to get KPart widget from library " << library << endl;
             continue;
         }
-    
+
         break;
     }
 
@@ -212,7 +215,7 @@ void MediaPlayerView::setMediaPlayerFromUrl(const KUrl& url)
         setPreviewMode(MediaPlayerViewPriv::ErrorView);
         return;
     }
-    
+
     d->grid->addWidget(mediaPlayerWidget, 0, 0, 1, 3 );
     mediaPlayerWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     d->mediaPlayerPart->openUrl(url);
