@@ -185,12 +185,14 @@ void MediaPlayerView::setMediaPlayerFromUrl(const KURL& url)
         }
 
         DDebug() << "Find KPart library " << library << endl;
-
+        int error = 0;
         d->mediaPlayerPart = KParts::ComponentFactory::createPartInstanceFromService
-                             <KParts::ReadOnlyPart>(service, d->mediaPlayerView, 0, d->mediaPlayerView, 0);
+                             <KParts::ReadOnlyPart>(service, d->mediaPlayerView, 0, d->mediaPlayerView, 
+                                                    0, QStringList(), &error);
         if (!d->mediaPlayerPart) 
         {
-            DWarning() << "Failed to instantiate KPart from library " << library << endl;
+            DWarning() << "Failed to instantiate KPart from library " << library 
+                       << " error=" << error << endl;
             continue;
         }
 
