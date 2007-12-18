@@ -207,6 +207,7 @@ void MediaPlayerView::setMediaPlayerFromUrl(const KUrl& url)
             continue;
         }
 
+        mediaPlayerWidget->show();
         break;
     }
 
