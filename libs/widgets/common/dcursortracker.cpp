@@ -67,7 +67,6 @@ bool DCursorTracker::eventFilter(QObject *object, QEvent *e)
     {
         case QEvent::MouseMove: 
         {
-            QMouseEvent *event = static_cast<QMouseEvent*>(e);
             if (m_enable)
             {
                 show();
