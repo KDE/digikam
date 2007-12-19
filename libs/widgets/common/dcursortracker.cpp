@@ -38,7 +38,7 @@ namespace Digikam
 {
 
 DCursorTracker::DCursorTracker(const QString& txt, QWidget *parent)
-              : QLabel(txt, 0, Qt::X11BypassWindowManagerHint) 
+              : QLabel(txt, 0, Qt::ToolTip ) 
 {
     parent->setMouseTracking(true);
     parent->installEventFilter(this);
@@ -50,8 +50,8 @@ DCursorTracker::DCursorTracker(const QString& txt, QWidget *parent)
  */
 void DCursorTracker::setText(const QString& txt) 
 {
-	QLabel::setText(txt);
-	adjustSize();
+    QLabel::setText(txt);
+    adjustSize();
 }
 
 void DCursorTracker::setEnable(bool b) 
@@ -61,15 +61,14 @@ void DCursorTracker::setEnable(bool b)
 
 bool DCursorTracker::eventFilter(QObject *object, QEvent *e) 
 {
-	QWidget *widget = static_cast<QWidget*>(object);
-	
-	switch (e->type()) 
+    QWidget *widget = static_cast<QWidget*>(object);
+
+    switch (e->type()) 
     {
         case QEvent::MouseMove: 
         {
             QMouseEvent *event = static_cast<QMouseEvent*>(e);
-            if (m_enable && (widget->rect().contains(event->pos()) || 
-                            (event->buttons() & Qt::LeftButton))) 
+            if (m_enable)
             {
                 show();
                 QPoint p = widget->mapToGlobal(QPoint(widget->width()/2, 0));
@@ -81,32 +80,28 @@ bool DCursorTracker::eventFilter(QObject *object, QEvent *e)
             }
             break;
         }
-    
-        case QEvent::MouseButtonRelease: 
+
+        case QEvent::Leave:
         {
-            QMouseEvent* event = static_cast<QMouseEvent*>(e);
-            if ( !widget->rect().contains(event->pos()) ) 
-            {
-                hide();
-            }
+            hide();
             break;
         }
-        
+
         default:
             break;
-	}
+    }
 
-	return false;
+    return false;
 }
 
 
 DTipTracker::DTipTracker(const QString& txt, QWidget *parent)
            : DCursorTracker(txt, parent) 
 {
-	setPalette(QToolTip::palette());
-	setFrameStyle(QFrame::Plain | QFrame::Box);
-	setLineWidth(1);
-	setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    setPalette(QToolTip::palette());
+    setFrameStyle(QFrame::Plain | QFrame::Box);
+    setLineWidth(1);
+    setAlignment(Qt::AlignLeft | Qt::AlignTop);
 }
 	
 } // namespace Digikam
