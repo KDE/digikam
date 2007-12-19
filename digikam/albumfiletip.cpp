@@ -102,8 +102,7 @@ AlbumFileTip::AlbumFileTip(AlbumIconView* view)
     setPalette(QToolTip::palette());
     setFrameStyle(Q3Frame::Plain | Q3Frame::Box);
     setLineWidth(1);
-    setWindowFlags(Qt::WStyle_Customize | Qt::WStyle_NoBorder | Qt::WStyle_Tool |
-                   Qt::WStyle_StaysOnTop | Qt::WX11BypassWM);
+    setWindowFlags(Qt::ToolTip);
 
     QVBoxLayout *layout = new QVBoxLayout(this);
 
