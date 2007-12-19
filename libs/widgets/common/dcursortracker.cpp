@@ -67,7 +67,9 @@ bool DCursorTracker::eventFilter(QObject *object, QEvent *e)
     {
         case QEvent::MouseMove: 
         {
-            if (m_enable)
+            QMouseEvent *event = static_cast<QMouseEvent*>(e);
+            if (m_enable && (widget->rect().contains(event->pos()) || 
+                            (event->buttons() & Qt::LeftButton))) 
             {
                 show();
                 QPoint p = widget->mapToGlobal(QPoint(widget->width()/2, 0));
