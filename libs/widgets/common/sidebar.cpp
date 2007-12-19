@@ -35,7 +35,6 @@
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kdeversion.h>
-#include <kmultitabbar.h>
 #include <kiconloader.h>
 
 // Local includes.
@@ -46,7 +45,7 @@
 
 namespace Digikam
 {
-    
+
 class SidebarPriv
 {
 public:
