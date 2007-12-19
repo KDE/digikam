@@ -31,7 +31,6 @@
 
 #include <QPixmap>
 
-
 // KDE includes.
 
 #include <kmultitabbar.h>

@@ -36,10 +36,10 @@
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kdeversion.h>
-#include <kmultitabbar.h>
 #include <kiconloader.h>
 #include <kglobal.h>
 #include <kconfiggroup.h>
+
 // Local includes.
 
 #include "ddebug.h"
