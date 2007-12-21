@@ -578,15 +578,15 @@ void DigikamView::slotEditTag()
 
 void DigikamView::slotNewQuickSearch()
 {
-    if (d->leftSideBar->getActiveTab() != d->searchFolderView)
-        d->leftSideBar->setActiveTab(d->searchFolderView);
+    if (d->leftSideBar->getActiveTab() != d->searchBox)
+        d->leftSideBar->setActiveTab(d->searchBox);
     d->searchFolderView->quickSearchNew();
 }
 
 void DigikamView::slotNewAdvancedSearch()
 {
-    if (d->leftSideBar->getActiveTab() != d->searchFolderView)
-        d->leftSideBar->setActiveTab(d->searchFolderView);
+    if (d->leftSideBar->getActiveTab() != d->searchBox)
+        d->leftSideBar->setActiveTab(d->searchBox);
     d->searchFolderView->extendedSearchNew();
 }
 
@@ -713,7 +713,7 @@ void DigikamView::slotGotoAlbumAndItem(AlbumIconItem* iconItem)
     // Change to (physical) Album view.
     // Note, that this also opens the side bar if it is closed; this is
     // considered as a feature, because it highlights that the view was changed.
-    d->leftSideBar->setActiveTab(d->folderView);
+    d->leftSideBar->setActiveTab(d->folderBox);
 
     // Set the activate item url to find in the Album View after  
     // all items have be reloaded.
@@ -757,7 +757,7 @@ void DigikamView::slotGotoTagAndItem(int tagID)
     // Change to Tag Folder view.
     // Note, that this also opens the side bar if it is closed; this is
     // considered as a feature, because it highlights that the view was changed.
-    d->leftSideBar->setActiveTab(d->tagFolderView);
+    d->leftSideBar->setActiveTab(d->tagBox);
 
     // Set the current tag in the tag folder view.
     d->tagFolderView->selectItem(tagID);
