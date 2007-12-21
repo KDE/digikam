@@ -1371,14 +1371,11 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
         ImageInfoList extImgInfList;
         for (QValueList<int>::iterator it = imageIDs.begin(); it != imageIDs.end(); ++it)
         {
-            for (QValueList<int>::iterator it = imageIDs.begin(); it != imageIDs.end(); ++it)
+            ImageInfo *info = new ImageInfo(*it);
+            if (info->albumID() != album->id())
             {
-                ImageInfo *info = new ImageInfo(*it);
-                if (info->albumID() != album->id())
-                {
-                    extUrls.append(info->kurlForKIO());
-                    extImgInfList.append(info);
-                }
+                extUrls.append(info->kurlForKIO());
+                extImgInfList.append(info);
             }
         }
 
