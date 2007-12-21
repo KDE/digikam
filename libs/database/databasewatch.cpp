@@ -37,6 +37,11 @@ DatabaseWatch::DatabaseWatch()
 {
     qRegisterMetaType<ImageChangeset>("ImageChangeset");
     qRegisterMetaType<ImageTagChangeset>("ImageTagChangeset");
+    qRegisterMetaType<CollectionImageChangeset>("CollectionImageChangeset");
+    qRegisterMetaType<AlbumChangeset>("AlbumChangeset");
+    qRegisterMetaType<TagChangeset>("TagChangeset");
+    qRegisterMetaType<AlbumRootChangeset>("AlbumRootChangeset");
+    qRegisterMetaType<SearchChangeset>("SearchChangeset");
 }
 
 DatabaseWatch::~DatabaseWatch()
@@ -70,6 +75,7 @@ void DatabaseWatch::sendTagChange(TagChangeset changeset)
 
 void DatabaseWatch::sendAlbumRootChange(AlbumRootChangeset changeset)
 {
+    Q_UNUSED(changeset);
 }
 
 void DatabaseWatch::sendSearchChange(SearchChangeset changeset)

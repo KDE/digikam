@@ -24,7 +24,7 @@
 // Local includes
 
 #include "databaseaccess.h"
-#include "databaseattributeswatch.h"
+#include "databasewatch.h"
 #include "imageattributeswatch.h"
 #include "imageattributeswatch.moc"
 
@@ -35,10 +35,13 @@ ImageAttributesWatch *ImageAttributesWatch::m_instance = 0;
 
 ImageAttributesWatch::ImageAttributesWatch()
 {
-    DatabaseAttributesWatch *dbwatch = DatabaseAccess::attributesWatch();
+    DatabaseWatch *dbwatch = DatabaseAccess::databaseWatch();
 
-    connect(dbwatch, SIGNAL(imageFieldChanged(qlonglong, int)),
-            this, SLOT(slotImageFieldChanged(qlonglong, int)));
+    connect(dbwatch, SIGNAL(imageChange(ImageChangeset)),
+            this, SLOT(slotImageChange(ImageChangeset)));
+
+    connect(dbwatch, SIGNAL(imageTagChange(ImageTagChangeset)),
+            this, SLOT(slotImageTagChange(ImageTagChangeset)));
 }
 
 ImageAttributesWatch::~ImageAttributesWatch()
@@ -65,6 +68,35 @@ ImageAttributesWatch *ImageAttributesWatch::instance()
     return m_instance;
 }
 
+void ImageAttributesWatch::slotImageChange(ImageChangeset changeset)
+{
+    DatabaseFields::Set set = changeset.changes();
+
+    if ((set & DatabaseFields::ImageCommentsAll) ||
+        (set & DatabaseFields::CreationDate) ||
+        (set & DatabaseFields::ModificationDate) ||
+        (set & DatabaseFields::Rating))
+    {
+        foreach(qlonglong imageId, changeset.ids())
+        {
+            if (set & DatabaseFields::ImageCommentsAll)
+                emit signalImageCaptionChanged(imageId);
+            if ((set & DatabaseFields::CreationDate) ||
+                (set & DatabaseFields::ModificationDate))
+                emit signalImageDateChanged(imageId);
+            if (set & DatabaseFields::Rating)
+                emit signalImageRatingChanged(imageId);
+        }
+    }
+}
+
+void ImageAttributesWatch::slotImageTagChange(ImageTagChangeset changeset)
+{
+    foreach(qlonglong imageId, changeset.ids())
+        emit signalImageTagsChanged(imageId);
+}
+
+/*
 void ImageAttributesWatch::slotImageFieldChanged(qlonglong imageId, int field)
 {
     // Translate signals
@@ -87,7 +119,6 @@ void ImageAttributesWatch::slotImageFieldChanged(qlonglong imageId, int field)
     }
 }
 
-/*
 void ImageAttributesWatch::imageTagsChanged(qint64 imageId)
 {
     emit signalImageTagsChanged(imageId);

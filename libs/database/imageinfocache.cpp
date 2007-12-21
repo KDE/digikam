@@ -35,10 +35,10 @@ ImageInfoCache::ImageInfoCache()
 {
     DatabaseWatch *dbwatch = DatabaseAccess::databaseWatch();
 
-    connect(dbwatch, SIGNAL(void imageChange(ImageChangeset)),
-            this, SLOT(slotImageFieldChanged(ImageChangeset)));
+    connect(dbwatch, SIGNAL(imageChange(ImageChangeset)),
+            this, SLOT(slotImageChanged(ImageChangeset)));
 
-    connect(dbwatch, SIGNAL(void imageChange(ImageTagChangeset)),
+    connect(dbwatch, SIGNAL(imageTagChange(ImageTagChangeset)),
             this, SLOT(slotImageTagChanged(ImageTagChangeset)));
 }
 
@@ -86,7 +86,7 @@ QString ImageInfoCache::albumName(DatabaseAccess &access, int albumId)
     return (*it);
 }
 
-void ImageInfoCache::slotImageFieldChanged(ImageChangeset changeset)
+void ImageInfoCache::slotImageChanged(ImageChangeset changeset)
 {
     // we cannot know if we have databaseaccess lock here as well
     DatabaseAccess access;
@@ -112,7 +112,7 @@ void ImageInfoCache::slotImageFieldChanged(ImageChangeset changeset)
     }
 }
 
-void ImageInfoCache::slotImageFieldChanged(ImageTagChangeset changeset)
+void ImageInfoCache::slotImageTagChanged(ImageTagChangeset changeset)
 {
     DatabaseAccess access;
 
