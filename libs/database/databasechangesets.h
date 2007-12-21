@@ -169,8 +169,102 @@ private:
     Operation           m_operation;
 };
 
-class DIGIKAM_EXPORT CollectionAlbumChangeset
+class DIGIKAM_EXPORT AlbumChangeset
 {
+public:
+
+    enum Operation
+    {
+        Unknown,
+        Added,
+        Deleted,
+        Renamed,
+        PropertiesChanged
+    };
+
+    AlbumChangeset();
+    AlbumChangeset(int albumId, Operation operation);
+
+    int albumId() const;
+    Operation operation() const;
+
+private:
+
+    int       m_id;
+    Operation m_operation;
+};
+
+class DIGIKAM_EXPORT TagChangeset
+{
+public:
+
+    enum Operation
+    {
+        Unknown,
+        Added,
+        Deleted,
+        Renamed,
+        Reparented,
+        IconChanged
+    };
+
+    TagChangeset();
+    TagChangeset(int albumId, Operation operation);
+
+    int tagId() const;
+    Operation operation() const;
+
+private:
+
+    int       m_id;
+    Operation m_operation;
+};
+
+class DIGIKAM_EXPORT AlbumRootChangeset
+{
+public:
+
+    enum Operation
+    {
+        Unknown,
+        Added,
+        Deleted
+    };
+
+    AlbumRootChangeset();
+    AlbumRootChangeset(int albumRootId, Operation operation);
+
+    int albumRootId() const;
+    Operation operation() const;
+
+private:
+
+    int       m_id;
+    Operation m_operation;
+};
+
+class DIGIKAM_EXPORT SearchChangeset
+{
+public:
+
+    enum Operation
+    {
+        Unknown,
+        Added,
+        Deleted,
+        Changed
+    };
+
+    SearchChangeset();
+    SearchChangeset(int searchId, Operation operation);
+
+    int searchId() const;
+    Operation operation() const;
+
+private:
+
+    int       m_id;
+    Operation m_operation;
 };
 
 

@@ -149,6 +149,7 @@ int AlbumDB::addAlbumRoot(int type, const QString &identifier, const QString &sp
                             "VALUES(?, 0, ?, ?);"),
                     type, identifier, specificPath, 0, &id);
 
+    d->db->recordChangeset(AlbumRootChangeset(id.toInt(), AlbumRootChangeset::Added));
     return id.toInt();
 }
 
@@ -156,6 +157,7 @@ void AlbumDB::deleteAlbumRoot(int rootId)
 {
     d->db->execSql( QString("DELETE FROM AlbumRoots WHERE id=?;"),
                     rootId );
+    d->db->recordChangeset(AlbumRootChangeset(rootId, AlbumRootChangeset::Deleted));
 }
 
 /*
@@ -391,6 +393,7 @@ int AlbumDB::addAlbum(int albumRootId, const QString& relativePath,
                             "VALUES(?, ?, ?, ?, ?);"),
                     boundValues, 0, &id);
 
+    d->db->recordChangeset(AlbumChangeset(id.toInt(), AlbumChangeset::Added));
     return id.toInt();
 }
 
@@ -398,12 +401,14 @@ void AlbumDB::setAlbumCaption(int albumID, const QString& caption)
 {
     d->db->execSql( QString("UPDATE Albums SET caption=? WHERE id=?;"),
                     caption, albumID );
+    d->db->recordChangeset(AlbumChangeset(albumID, AlbumChangeset::PropertiesChanged));
 }
 
 void AlbumDB::setAlbumCollection(int albumID, const QString& collection)
 {
     d->db->execSql( QString("UPDATE Albums SET collection=? WHERE id=?;"),
                     collection, albumID );
+    d->db->recordChangeset(AlbumChangeset(albumID, AlbumChangeset::PropertiesChanged));
 }
 
 void AlbumDB::setAlbumDate(int albumID, const QDate& date)
@@ -411,6 +416,7 @@ void AlbumDB::setAlbumDate(int albumID, const QDate& date)
     d->db->execSql( QString("UPDATE Albums SET date=? WHERE id=?;"),
                     date.toString(Qt::ISODate),
                     albumID );
+    d->db->recordChangeset(AlbumChangeset(albumID, AlbumChangeset::PropertiesChanged));
 }
 
 void AlbumDB::setAlbumIcon(int albumID, qlonglong iconID)
@@ -418,6 +424,7 @@ void AlbumDB::setAlbumIcon(int albumID, qlonglong iconID)
     d->db->execSql( QString("UPDATE Albums SET icon=? WHERE id=?;"),
                     iconID,
                     albumID );
+    d->db->recordChangeset(AlbumChangeset(albumID, AlbumChangeset::PropertiesChanged));
 }
 
 bool AlbumDB::getAlbumIcon(int albumID, int *albumRootId, QString *iconRelativePath)
@@ -448,6 +455,7 @@ void AlbumDB::deleteAlbum(int albumID)
 {
     d->db->execSql( QString("DELETE FROM Albums WHERE id=?;"),
                     albumID );
+    d->db->recordChangeset(AlbumChangeset(albumID, AlbumChangeset::Deleted));
 }
 
 int AlbumDB::addTag(int parentTagID, const QString& name, const QString& iconKDE,
@@ -476,6 +484,7 @@ int AlbumDB::addTag(int parentTagID, const QString& name, const QString& iconKDE
                         id.toInt());
     }
 
+    d->db->recordChangeset(TagChangeset(id.toInt(), TagChangeset::Added));
     return id.toInt();
 }
 
@@ -483,6 +492,7 @@ void AlbumDB::deleteTag(int tagID)
 {
     d->db->execSql( QString("DELETE FROM Tags WHERE id=?;"),
                     tagID );
+    d->db->recordChangeset(TagChangeset(tagID, TagChangeset::Deleted));
 }
 
 void AlbumDB::setTagIcon(int tagID, const QString& iconKDE, qlonglong iconID)
@@ -497,6 +507,7 @@ void AlbumDB::setTagIcon(int tagID, const QString& iconKDE, qlonglong iconID)
         d->db->execSql( QString("UPDATE Tags SET icon=? WHERE id=?;"),
                         iconID, tagID );
     }
+    d->db->recordChangeset(TagChangeset(tagID, TagChangeset::IconChanged));
 }
 
 bool AlbumDB::getTagIcon(int tagID, int *iconAlbumRootId, QString *iconAlbumRelativePath, QString *icon)
@@ -544,6 +555,7 @@ void AlbumDB::setTagParentID(int tagID, int newParentTagID)
 {
     d->db->execSql( QString("UPDATE Tags SET pid=? WHERE id=?;"),
                     newParentTagID, tagID );
+    d->db->recordChangeset(TagChangeset(tagID, TagChangeset::Reparented));
 }
 
 int AlbumDB::addSearch(const QString& name, const KUrl& url)
@@ -556,6 +568,7 @@ int AlbumDB::addSearch(const QString& name, const KUrl& url)
         return -1;
     }
 
+    d->db->recordChangeset(SearchChangeset(id.toInt(), SearchChangeset::Added));
     return id.toInt();
 }
 
@@ -565,12 +578,14 @@ void AlbumDB::updateSearch(int searchID, const QString& name,
     d->db->execSql(QString("UPDATE Searches SET name=?, url=? "
                             "WHERE id=?"),
                     name, url.url(), searchID);
+    d->db->recordChangeset(SearchChangeset(searchID, SearchChangeset::Changed));
 }
 
 void AlbumDB::deleteSearch(int searchID)
 {
     d->db->execSql( QString("DELETE FROM Searches WHERE id=?"),
                     searchID );
+    d->db->recordChangeset(SearchChangeset(searchID, SearchChangeset::Deleted));
 }
 
 void AlbumDB::setSetting(const QString& keyword,
@@ -917,7 +932,6 @@ QVariantList AlbumDB::getImagesFields(qlonglong imageID, DatabaseFields::Images 
                               : QDateTime::fromString(values[index].toString(), Qt::ISODate));
         }
     }
-#warning TODO: DatabaseAttributesWatch
     return values;
 }
 
@@ -2325,22 +2339,27 @@ void AlbumDB::renameAlbum(int albumID, const QString& newRelativePath, bool rena
     // now update the album url
     d->db->execSql( QString("UPDATE Albums SET relativePath = ? WHERE id = ? AND albumRoot=?;"),
                     newRelativePath, albumID, albumRoot );
+    d->db->recordChangeset(AlbumChangeset(albumID, AlbumChangeset::Renamed));
 
     if (renameSubalbums)
     {
         // now find the list of all subalbums which need to be updated
         QList<QVariant> values;
-        d->db->execSql( QString("SELECT relativePath FROM Albums WHERE albumRoot=? AND relativePath LIKE ?;"),
+        d->db->execSql( QString("SELECT id, relativePath FROM Albums WHERE albumRoot=? AND relativePath LIKE ?;"),
                         albumRoot, oldUrl + "/%", &values );
 
         // and update their url
         QString newChildURL;
-        for (QList<QVariant>::iterator it = values.begin(); it != values.end(); ++it)
+        for (QList<QVariant>::iterator it = values.begin(); it != values.end(); )
         {
+            int childAlbumId = (*it).toInt();
+            ++it;
             newChildURL = (*it).toString();
+            ++it;
             newChildURL.replace(oldUrl, newRelativePath);
             d->db->execSql(QString("UPDATE Albums SET url=? WHERE albumRoot=? AND url=?"),
                            newChildURL, albumRoot, (*it) );
+            d->db->recordChangeset(AlbumChangeset(childAlbumId, AlbumChangeset::Renamed));
         }
     }
 }
@@ -2349,6 +2368,7 @@ void AlbumDB::setTagName(int tagID, const QString& name)
 {
     d->db->execSql( QString("UPDATE Tags SET name=? WHERE id=?;"),
                     name, tagID );
+    d->db->recordChangeset(TagChangeset(tagID, TagChangeset::Renamed));
 }
 
 void AlbumDB::moveItem(int srcAlbumID, const QString& srcName,
@@ -2361,6 +2381,7 @@ void AlbumDB::moveItem(int srcAlbumID, const QString& srcName,
     d->db->execSql( QString("UPDATE Images SET album=?, name=? "
                             "WHERE album=? AND name=?;"),
                     dstAlbumID, dstName, srcAlbumID, srcName );
+#warning moveItem: Proper changeset
 }
 
 int AlbumDB::copyItem(int srcAlbumID, const QString& srcName,
@@ -2406,7 +2427,7 @@ int AlbumDB::copyItem(int srcAlbumID, const QString& srcName,
                             "WHERE imageid=?;"),
                     dstId, srcId );
 
-#warning copyItem: Make me complete!
+#warning copyItem: Make me complete, proper changeset
     DWarning() << "AlbumDB::copyItem: Not completely implemented!";
 
     return dstId;

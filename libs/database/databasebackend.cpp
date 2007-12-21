@@ -494,4 +494,27 @@ void DatabaseBackend::recordChangeset(const CollectionImageChangeset changeset)
     d->watch->sendCollectionImageChange(changeset);
 }
 
+void DatabaseBackend::recordChangeset(const AlbumChangeset changeset)
+{
+    d->watch->sendAlbumChange(changeset);
+}
+
+void DatabaseBackend::recordChangeset(const TagChangeset changeset)
+{
+    d->watch->sendTagChange(changeset);
+}
+
+void DatabaseBackend::recordChangeset(const AlbumRootChangeset changeset)
+{
+    d->watch->sendAlbumRootChange(changeset);
+}
+
+void DatabaseBackend::recordChangeset(const SearchChangeset changeset)
+{
+    d->watch->sendSearchChange(changeset);
+}
+
+
+
+
 }  // namespace Digikam

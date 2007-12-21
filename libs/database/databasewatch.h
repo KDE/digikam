@@ -62,6 +62,9 @@ signals:
     void imageChange(ImageChangeset changeset);
     void imageTagChange(ImageTagChangeset changeset);
     void collectionImageChange(CollectionImageChangeset changeset);
+    void albumChange(AlbumChangeset changeset);
+    void tagChange(TagChangeset changeset);
+    void searchChange(SearchChangeset changeset);
 
 protected:
 
@@ -74,6 +77,10 @@ public:
     void sendImageChange(ImageChangeset changeset);
     void sendImageTagChange(ImageTagChangeset changeset);
     void sendCollectionImageChange(CollectionImageChangeset changeset);
+    void sendAlbumChange(AlbumChangeset changeset);
+    void sendTagChange(TagChangeset changeset);
+    void sendAlbumRootChange(AlbumRootChangeset changeset);
+    void sendSearchChange(SearchChangeset changeset);
 };
 
 } // namespace Digikam

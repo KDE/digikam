@@ -58,4 +58,26 @@ void DatabaseWatch::sendCollectionImageChange(CollectionImageChangeset changeset
     emit collectionImageChange(changeset);
 }
 
+void DatabaseWatch::sendAlbumChange(AlbumChangeset changeset)
+{
+    emit albumChange(changeset);
+}
+
+void DatabaseWatch::sendTagChange(TagChangeset changeset)
+{
+    emit tagChange(changeset);
+}
+
+void DatabaseWatch::sendAlbumRootChange(AlbumRootChangeset changeset)
+{
+}
+
+void DatabaseWatch::sendSearchChange(SearchChangeset changeset)
+{
+    emit searchChange(changeset);
+}
+
+
+
+
 } // namespace Digikam

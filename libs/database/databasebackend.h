@@ -191,6 +191,10 @@ public:
     void recordChangeset(const ImageChangeset changeset);
     void recordChangeset(const ImageTagChangeset changeset);
     void recordChangeset(const CollectionImageChangeset changeset);
+    void recordChangeset(const AlbumChangeset changeset);
+    void recordChangeset(const TagChangeset changeset);
+    void recordChangeset(const AlbumRootChangeset changeset);
+    void recordChangeset(const SearchChangeset changeset);
 
 /*
     Qt SQL driver supported features

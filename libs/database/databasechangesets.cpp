@@ -180,6 +180,93 @@ CollectionImageChangeset::Operation CollectionImageChangeset::operation() const
     return m_operation;
 }
 
+// ------------------------ //
+
+AlbumChangeset::AlbumChangeset()
+    : m_id(-1), m_operation(Unknown)
+{
+}
+
+AlbumChangeset::AlbumChangeset(int albumId, Operation operation)
+    : m_id(albumId), m_operation(operation)
+{
+}
+
+int AlbumChangeset::albumId() const
+{
+    return m_id;
+}
+
+AlbumChangeset::Operation AlbumChangeset::operation() const
+{
+    return m_operation;
+}
+
+// ------------------------ //
+
+TagChangeset::TagChangeset()
+    : m_id(-1), m_operation(Unknown)
+{
+}
+
+TagChangeset::TagChangeset(int albumId, Operation operation)
+    : m_id(albumId), m_operation(operation)
+{
+}
+
+int TagChangeset::tagId() const
+{
+    return m_id;
+}
+
+TagChangeset::Operation TagChangeset::operation() const
+{
+    return m_operation;
+}
+
+// ------------------------ //
+
+AlbumRootChangeset::AlbumRootChangeset()
+    : m_id(-1), m_operation(Unknown)
+{
+}
+
+AlbumRootChangeset::AlbumRootChangeset(int albumId, Operation operation)
+    : m_id(albumId), m_operation(operation)
+{
+}
+
+int AlbumRootChangeset::albumRootId() const
+{
+    return m_id;
+}
+
+AlbumRootChangeset::Operation AlbumRootChangeset::operation() const
+{
+    return m_operation;
+}
+
+// ------------------------ //
+
+SearchChangeset::SearchChangeset()
+    : m_id(-1), m_operation(Unknown)
+{
+}
+
+SearchChangeset::SearchChangeset(int albumId, Operation operation)
+    : m_id(albumId), m_operation(operation)
+{
+}
+
+int SearchChangeset::searchId() const
+{
+    return m_id;
+}
+
+SearchChangeset::Operation SearchChangeset::operation() const
+{
+    return m_operation;
+}
 
 
 }
