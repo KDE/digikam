@@ -35,11 +35,13 @@
 
 #include "digikam_export.h"
 #include "databaseparameters.h"
+#include "databasechangesets.h"
 
 namespace Digikam
 {
 
 class SchemaUpdater;
+class DatabaseWatch;
 class DatabaseBackendPriv;
 
 class DIGIKAM_EXPORT DatabaseBackend : public QObject
@@ -47,11 +49,12 @@ class DIGIKAM_EXPORT DatabaseBackend : public QObject
 
 Q_OBJECT
 
-    // NOTE: when porting to Qt SQL, most of the methods can be implemented here
 public:
 
     DatabaseBackend();
     ~DatabaseBackend();
+
+    void setDatabaseWatch(DatabaseWatch *watch);
 
     /**
      * Checks if the parameters can be used for this database backend.
@@ -181,6 +184,12 @@ public:
      * It may be empty.
      */
     QString lastError();
+
+    /**
+     * Notify all listeners of the changeset
+     */
+    void recordChangeset(const ImageChangeset changeset);
+    void recordChangeset(const ImageTagChangeset changeset);
 
 /*
     Qt SQL driver supported features

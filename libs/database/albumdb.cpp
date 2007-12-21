@@ -51,7 +51,6 @@ extern "C"
 // Local includes.
 
 #include "ddebug.h"
-#include "databaseattributeswatch.h"
 #include "databasebackend.h"
 #include "collectionmanager.h"
 #include "collectionlocation.h"
@@ -1015,6 +1014,7 @@ void AlbumDB::addImageInformation(qlonglong imageID, const QVariantList &infos, 
         boundValues << infos;
 
     d->db->execSql( query, boundValues );
+    d->db->recordChangeset(ImageChangeset(imageID, fields));
 }
 
 void AlbumDB::changeImageInformation(qlonglong imageId, const QVariantList &infos,
@@ -1048,6 +1048,7 @@ void AlbumDB::changeImageInformation(qlonglong imageId, const QVariantList &info
         boundValues << infos << imageId;
 
     d->db->execSql( query, boundValues );
+    d->db->recordChangeset(ImageChangeset(imageId, fields));
 }
 
 void AlbumDB::addImageMetadata(qlonglong imageID, const QVariantList &infos, DatabaseFields::ImageMetadata fields)
@@ -1069,6 +1070,7 @@ void AlbumDB::addImageMetadata(qlonglong imageID, const QVariantList &infos, Dat
     boundValues << imageID << infos;
 
     d->db->execSql( query, boundValues );
+    d->db->recordChangeset(ImageChangeset(imageID, fields));
 }
 
 void AlbumDB::changeImageMetadata(qlonglong imageId, const QVariantList &infos,
@@ -1089,6 +1091,7 @@ void AlbumDB::changeImageMetadata(qlonglong imageId, const QVariantList &infos,
     boundValues << infos << imageId;
 
     d->db->execSql( query, boundValues );
+    d->db->recordChangeset(ImageChangeset(imageId, fields));
 }
 
 void AlbumDB::addImagePosition(qlonglong imageID, const QVariantList &infos, DatabaseFields::ImagePositions fields)
@@ -1110,6 +1113,7 @@ void AlbumDB::addImagePosition(qlonglong imageID, const QVariantList &infos, Dat
     boundValues << imageID << infos;
 
     d->db->execSql( query, boundValues );
+    d->db->recordChangeset(ImageChangeset(imageID, fields));
 }
 
 void AlbumDB::changeImagePosition(qlonglong imageId, const QVariantList &infos,
@@ -1130,6 +1134,7 @@ void AlbumDB::changeImagePosition(qlonglong imageId, const QVariantList &infos,
     boundValues << infos << imageId;
 
     d->db->execSql( query, boundValues );
+    d->db->recordChangeset(ImageChangeset(imageId, fields));
 }
 
 QList<CommentInfo> AlbumDB::getImageComments(qlonglong imageID)
@@ -1178,9 +1183,10 @@ int AlbumDB::setImageComment(qlonglong imageID, const QString &comment, Database
                     boundValues, 0, &id);
 
     return id.toInt();
+    d->db->recordChangeset(ImageChangeset(imageID, DatabaseFields::ImageCommentsAll));
 }
 
-void AlbumDB::changeImageComment(int commentId, const QVariantList &infos, DatabaseFields::ImageComments fields)
+void AlbumDB::changeImageComment(int commentId, qlonglong imageID, const QVariantList &infos, DatabaseFields::ImageComments fields)
 {
     if (fields == DatabaseFields::ImageCommentsNone)
         return;
@@ -1196,6 +1202,7 @@ void AlbumDB::changeImageComment(int commentId, const QVariantList &infos, Datab
     boundValues << infos << commentId;
 
     d->db->execSql( query, boundValues );
+    d->db->recordChangeset(ImageChangeset(imageID, fields));
 }
 
 QStringList AlbumDB::imagesFieldList(DatabaseFields::Images fields)
@@ -1408,8 +1415,7 @@ void AlbumDB::addItemTag(qlonglong imageID, int tagID)
                     imageID,
                     tagID );
 
-    DatabaseAccess::attributesWatch()
-            ->sendImageFieldChanged(imageID, DatabaseAttributesWatch::ImageTags);
+    d->db->recordChangeset(ImageTagChangeset(imageID, tagID, ImageTagChangeset::Added));
 
     if (!d->recentlyAssignedTags.contains(tagID))
     {
@@ -1453,6 +1459,7 @@ void AlbumDB::addTagsToItems(QList<qlonglong> imageIDs, QList<int> tagIDs)
     query.addBindValue(images);
     query.addBindValue(tags);
     d->db->execBatch(query);
+    d->db->recordChangeset(ImageTagChangeset(imageIDs, tagIDs, ImageTagChangeset::Added));
 }
 
 QList<int> AlbumDB::getRecentlyAssignedTags() const
@@ -1467,8 +1474,7 @@ void AlbumDB::removeItemTag(qlonglong imageID, int tagID)
                     imageID,
                     tagID );
 
-    DatabaseAccess::attributesWatch()
-            ->sendImageFieldChanged(imageID, DatabaseAttributesWatch::ImageTags);
+    d->db->recordChangeset(ImageTagChangeset(imageID, tagID, ImageTagChangeset::Removed));
 }
 
 void AlbumDB::removeItemAllTags(qlonglong imageID)
@@ -1477,8 +1483,7 @@ void AlbumDB::removeItemAllTags(qlonglong imageID)
                             "WHERE imageID=?;"),
                     imageID );
 
-    DatabaseAccess::attributesWatch()
-            ->sendImageFieldChanged(imageID, DatabaseAttributesWatch::ImageTags);
+    d->db->recordChangeset(ImageTagChangeset(imageID, QList<int>(), ImageTagChangeset::RemovedAllOperation));
 }
 
 void AlbumDB::removeTagsFromItems(QList<qlonglong> imageIDs, QList<int> tagIDs)
@@ -1500,6 +1505,7 @@ void AlbumDB::removeTagsFromItems(QList<qlonglong> imageIDs, QList<int> tagIDs)
     query.addBindValue(images);
     query.addBindValue(tags);
     d->db->execBatch(query);
+    d->db->recordChangeset(ImageTagChangeset(imageIDs, tagIDs, ImageTagChangeset::Removed));
 }
 
 QStringList AlbumDB::getItemNamesInAlbum(int albumID, bool recurssive)
@@ -1660,6 +1666,7 @@ qlonglong AlbumDB::addItem(int albumID, const QString& name,
 
     if (id.isNull())
         return -1;
+    d->db->recordChangeset(ImageChangeset(id.toLongLong(), DatabaseFields::ImagesAll));
     return id.toLongLong();
 }
 
@@ -1671,6 +1678,10 @@ void AlbumDB::updateItem(qlonglong imageID, DatabaseItem::Category category,
     boundValues << category << modificationDate << fileSize << uniqueHash << imageID;
     d->db->execSql( QString("UPDATE Images SET category=?, modificationDate=?, fileSize=?, uniqueHash=? WHERE id=?;"),
                     boundValues );
+    d->db->recordChangeset(ImageChangeset(imageID, DatabaseFields::Category
+                                                 | DatabaseFields::ModificationDate
+                                                 | DatabaseFields::FileSize
+                                                 | DatabaseFields::UniqueHash ));
 }
 
 QList<int> AlbumDB::getTagsFromTagPaths(const QStringList &keywordsList, bool create)

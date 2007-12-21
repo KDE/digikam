@@ -738,7 +738,7 @@ public:
      * 3) DateTime  Date
      * 4) String    Comment
      */
-    void changeImageComment(int commentId, const QVariantList &infos,
+    void changeImageComment(int commentId, qlonglong imageID, const QVariantList &infos,
                             DatabaseFields::ImageComments fields = DatabaseFields::ImageCommentsAll);
 
 

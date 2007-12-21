@@ -37,6 +37,7 @@
 
 #include "ddebug.h"
 #include "schemaupdater.h"
+#include "databasewatch.h"
 #include "databasebackend.h"
 
 namespace Digikam
@@ -50,6 +51,7 @@ public:
     {
         q               = backend;
         status          = DatabaseBackend::Unavailable;
+        watch           = 0;
     }
 
     // "A connection can only be used from within the thread that created it.
@@ -156,7 +158,7 @@ public:
 
     DatabaseBackend::Status status;
 
-    qlonglong lastInsertedRow;
+    DatabaseWatch *watch;
 
     DatabaseBackend *q;
 
@@ -173,6 +175,11 @@ DatabaseBackend::DatabaseBackend()
 DatabaseBackend::~DatabaseBackend()
 {
     delete d;
+}
+
+void DatabaseBackend::setDatabaseWatch(DatabaseWatch *watch)
+{
+    d->watch = watch;
 }
 
 void DatabaseBackend::slotThreadFinished()
@@ -469,6 +476,17 @@ QStringList DatabaseBackend::tables()
 QString DatabaseBackend::lastError()
 {
     return d->databaseForThread().lastError().text();
+}
+
+void DatabaseBackend::recordChangeset(const ImageChangeset changeset)
+{
+    // if we want to do compression of changesets, think about doing this here
+    d->watch->sendImageChange(changeset);
+}
+
+void DatabaseBackend::recordChangeset(const ImageTagChangeset changeset)
+{
+    d->watch->sendImageTagChange(changeset);
 }
 
 }  // namespace Digikam
