@@ -21,21 +21,36 @@
  * 
  * ============================================================ */
 
+// Qt includes
+
+#include <QMetaType>
+
 // Local includes
 
-#include "databaseattributeswatch.h"
-#include "databaseattributeswatch.moc"
+#include "databasewatch.h"
+#include "databasewatch.moc"
 
 namespace Digikam
 {
 
-DatabaseAttributesWatch::~DatabaseAttributesWatch()
+DatabaseWatch::DatabaseWatch()
+{
+    qRegisterMetaType<ImageChangeset>("ImageChangeset");
+    qRegisterMetaType<ImageTagChangeset>("ImageTagChangeset");
+}
+
+DatabaseWatch::~DatabaseWatch()
 {
 }
 
-void DatabaseAttributesWatch::sendImageFieldChanged(qlonglong imageId, ImageDataField field)
+void DatabaseWatch::sendImageChange(ImageChangeset changeset)
 {
-    emit imageFieldChanged(imageId, field);
+    emit imageChange(changeset);
+}
+
+void DatabaseWatch::sendImageTagChange(ImageTagChangeset changeset)
+{
+    emit imageTagChange(changeset);
 }
 
 } // namespace Digikam

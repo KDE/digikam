@@ -21,8 +21,8 @@
  * 
  * ============================================================ */
 
-#ifndef DATABASEATTRIBUTESWATCH_H
-#define DATABASEATTRIBUTESWATCH_H
+#ifndef DATABASEWATCH_H
+#define DATABASEWATCH_H
 
 // Qt includes
 
@@ -30,16 +30,15 @@
 
 // KDE includes
 
-#include <kurl.h>
-
 // Local includes.
 
 #include "digikam_export.h"
+#include "databasechangesets.h"
 
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DatabaseAttributesWatch : public QObject
+class DIGIKAM_EXPORT DatabaseWatch : public QObject
 {
 
     Q_OBJECT
@@ -53,31 +52,26 @@ class DIGIKAM_EXPORT DatabaseAttributesWatch : public QObject
 
 public:
 
-    enum ImageDataField
-    {
-        ImageRating,
-        ImageDate,
-        ImageComment,
-        ImageTags
-    };
+    DatabaseWatch();
 
 signals:
 
     /**
-     * This signal indicates that the specified field of the
-     * specified image has been changed.
-     * (Note: there is no absolute guarantee
-     *  that the field has actually been changed)
+     * Notifies of an image-related change
      */
-    void imageFieldChanged(qlonglong imageId, int field);
+    void imageChange(ImageChangeset changeset);
+    void imageTagChange(ImageTagChangeset changeset);
 
 protected:
 
-    ~DatabaseAttributesWatch();
+    ~DatabaseWatch();
 
 public:
 
-    void sendImageFieldChanged(qlonglong imageId, ImageDataField field);
+    // --- internal ---
+
+    void sendImageChange(ImageChangeset changeset);
+    void sendImageTagChange(ImageTagChangeset changeset);
 };
 
 } // namespace Digikam

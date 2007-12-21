@@ -461,11 +461,12 @@ SET(libdatabase_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collectionmanager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collectionlocation.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseaccess.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseattributeswatch.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasewatch.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasebackend.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseparameters.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasetransaction.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseurl.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasechangesets.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imageinfo.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imageinfolist.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imageinfocache.cpp
