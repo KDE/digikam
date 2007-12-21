@@ -1308,8 +1308,8 @@ void AlbumIconView::contentsDragMoveEvent(QDragMoveEvent *event)
                              !CameraDragObject::canDecode(event) &&
                              !TagListDrag::canDecode(event) &&
                              !TagDrag::canDecode(event) &&
-                             !CameraItemListDrag::canDecode(event))
-        || event->source() == this) 
+                             !CameraItemListDrag::canDecode(event) &&
+                             !ItemDrag::canDecode(event)))
     {
         event->ignore();
         return;
@@ -1319,25 +1319,95 @@ void AlbumIconView::contentsDragMoveEvent(QDragMoveEvent *event)
 
 void AlbumIconView::contentsDropEvent(QDropEvent *event)
 {
-    // TODO: need to rework this with specific to in which
-    // groupitem items are dropped
-
     if (!d->currentAlbum || (AlbumDrag::canDecode(event) ||
                              !Q3UriDrag::canDecode(event) &&
                              !CameraDragObject::canDecode(event) &&
                              !TagListDrag::canDecode(event) &&
                              !TagDrag::canDecode(event) &&
-                             !CameraItemListDrag::canDecode(event))
-         || event->source() == this)
+                             !CameraItemListDrag::canDecode(event) &&
+                             !ItemDrag::canDecode(event)))
     {
         event->ignore();
         return;
     }
 
-    if (Q3UriDrag::canDecode(event) &&
-        d->currentAlbum->type() == Album::PHYSICAL)
+    Album *album = 0;
+
+    // Check if we working on grouped items view.
+    if (groupCount() > 1)
     {
-        PAlbum* palbum = (PAlbum*)d->currentAlbum;
+        AlbumIconGroupItem *grp = dynamic_cast<AlbumIconGroupItem*>(findGroup(QCursor::pos()));
+        if (grp)
+        {
+            if(d->currentAlbum->type() == Album::PHYSICAL)
+                album = dynamic_cast<Album*>(AlbumManager::instance()->findPAlbum(grp->albumID()));
+            else if(d->currentAlbum->type() == Album::TAG)
+                album = dynamic_cast<Album*>(AlbumManager::instance()->findTAlbum(grp->albumID()));
+        }
+    }
+    if (!album) 
+        album = d->currentAlbum;
+
+    KUrl::List       urls;
+    KUrl::List       kioURLs;
+    Q3ValueList<int> albumIDs;
+    Q3ValueList<int> imageIDs;
+
+    if (ItemDrag::decode(event, urls, kioURLs, albumIDs, imageIDs))
+    {
+        // Drag & drop inside of digiKam 
+
+        // Check if items dropped come from outside current album.
+        KUrl::List extUrls;
+        ImageInfoList extImgInfList;
+        for (Q3ValueList<int>::iterator it = imageIDs.begin(); it != imageIDs.end(); ++it)
+        {
+            ImageInfo info(*it);
+            if (info.albumId() != album->id())
+            {
+                extUrls.append(info.databaseUrl());
+                extImgInfList.append(info);
+            }
+        }
+
+        if(extUrls.isEmpty())
+        {
+            event->ignore();
+            return;
+        }
+        else if (album->type() == Album::PHYSICAL)
+        {
+            PAlbum* palbum = (PAlbum*)album;
+            KUrl destURL(palbum->databaseUrl());
+
+            KUrl::List srcURLs = KUrl::List::fromMimeData( event->mimeData() );
+
+            QMenu popMenu(this);
+            QAction *moveAction = popMenu.addAction( SmallIcon("goto"), i18n("&Move Here"));
+            QAction *copyAction = popMenu.addAction( SmallIcon("editcopy"), i18n("&Copy Here"));
+            popMenu.addSeparator();
+            popMenu.addAction( SmallIcon("cancel"), i18n("C&ancel") );
+
+            popMenu.setMouseTracking(true);
+            QAction *choice = popMenu.exec(QCursor::pos());
+            if (choice == moveAction)
+            {
+                KIO::Job* job = DIO::move(srcURLs, destURL);
+                connect(job, SIGNAL(result(KJob*)),
+                        this, SLOT(slotDIOResult(KJob*)));
+            }
+            else if (choice == copyAction)
+            {
+                KIO::Job* job = DIO::copy(srcURLs, destURL);
+                connect(job, SIGNAL(result(KJob*)),
+                        this, SLOT(slotDIOResult(KJob*)));
+            }
+        }
+    }
+    else if (Q3UriDrag::canDecode(event) && d->currentAlbum->type() == Album::PHYSICAL)
+    {
+        // Drag & drop outside of digiKam 
+        PAlbum* palbum = (PAlbum*)album;
         KUrl destURL(palbum->databaseUrl());
 
         KUrl::List srcURLs = KUrl::List::fromMimeData( event->mimeData() );
@@ -1536,9 +1606,9 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
             if (choice)
             {
                 if (choice == downAction)
-                    ui->slotDownload(true, false, d->currentAlbum);
+                    ui->slotDownload(true, false, album);
                 else if (choice == downDelAction)
-                    ui->slotDownload(true, true, d->currentAlbum);
+                    ui->slotDownload(true, true, album);
             }
         }
     }
