@@ -241,7 +241,6 @@ IconGroupItem* IconView::findGroup(const QPoint& pos)
 
         rect.setBottom(bottom);
 
-//        QRect r = contentsRectToViewport(rect);
         if ( rect.contains(p) ) 
         {
             return group;
