@@ -1317,8 +1317,8 @@ void AlbumIconView::contentsDragMoveEvent(QDragMoveEvent *event)
                              !CameraDragObject::canDecode(event) &&
                              !TagListDrag::canDecode(event) &&
                              !TagDrag::canDecode(event) &&
-                             !CameraItemListDrag::canDecode(event))
-        || event->source() == this) 
+                             !CameraItemListDrag::canDecode(event) &&
+                             !ItemDrag::canDecode(event)))
     {
         event->ignore();
         return;
@@ -1328,32 +1328,113 @@ void AlbumIconView::contentsDragMoveEvent(QDragMoveEvent *event)
 
 void AlbumIconView::contentsDropEvent(QDropEvent *event)
 {
-    // TODO: need to rework this with specific to in which
-    // groupitem items are dropped
-
     if (!d->currentAlbum || (AlbumDrag::canDecode(event) ||
                              !QUriDrag::canDecode(event) &&
                              !CameraDragObject::canDecode(event) &&
                              !TagListDrag::canDecode(event) &&
                              !TagDrag::canDecode(event) &&
-                             !CameraItemListDrag::canDecode(event))
-         || event->source() == this)
+                             !CameraItemListDrag::canDecode(event) &&
+                             !ItemDrag::canDecode(event)))
     {
         event->ignore();
         return;
     }
 
-    if (QUriDrag::canDecode(event) &&
-        d->currentAlbum->type() == Album::PHYSICAL)
+    Album *album = 0;
+
+    // Check if we working on grouped items view.
+    if (groupCount() > 1)
     {
-        PAlbum* palbum = (PAlbum*)d->currentAlbum;
+        AlbumIconGroupItem *grp = dynamic_cast<AlbumIconGroupItem*>(findGroup(QCursor::pos()));
+        if (grp)
+        {
+            if(d->currentAlbum->type() == Album::PHYSICAL)
+                album = dynamic_cast<Album*>(AlbumManager::instance()->findPAlbum(grp->albumID()));
+            else if(d->currentAlbum->type() == Album::TAG)
+                album = dynamic_cast<Album*>(AlbumManager::instance()->findTAlbum(grp->albumID()));
+        }
+    }
+    if (!album) 
+        album = d->currentAlbum;
+
+    KURL::List      urls;
+    KURL::List      kioURLs;
+    QValueList<int> albumIDs;
+    QValueList<int> imageIDs;
+
+    if (ItemDrag::decode(event, urls, kioURLs, albumIDs, imageIDs))
+    {
+        // Drag & drop inside of digiKam 
+
+        // Check if items dropped come from outside current album.
+        KURL::List extUrls;
+        ImageInfoList extImgInfList;
+        for (QValueList<int>::iterator it = imageIDs.begin(); it != imageIDs.end(); ++it)
+        {
+            for (QValueList<int>::iterator it = imageIDs.begin(); it != imageIDs.end(); ++it)
+            {
+                ImageInfo *info = new ImageInfo(*it);
+                if (info->albumID() != album->id())
+                {
+                    extUrls.append(info->kurlForKIO());
+                    extImgInfList.append(info);
+                }
+            }
+        }
+
+        if(extUrls.isEmpty())
+        {
+            event->ignore();
+            return;
+        }
+        else if (album->type() == Album::PHYSICAL)
+        {
+            PAlbum* palbum = (PAlbum*)album;
+            KURL destURL(palbum->kurl());
+
+            KURL::List srcURLs;
+            KURLDrag::decode(event, srcURLs);
+
+            QPopupMenu popMenu(this);
+            popMenu.insertItem( SmallIcon("goto"), i18n("&Move Here"),     10 );
+            popMenu.insertItem( SmallIcon("editcopy"), i18n("&Copy Here"), 11 );
+            popMenu.insertSeparator(-1);
+            popMenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );
+
+            popMenu.setMouseTracking(true);
+            int id = popMenu.exec(QCursor::pos());
+            switch(id) 
+            {
+                case 10: 
+                {
+                    KIO::Job* job = DIO::move(srcURLs, destURL);
+                    connect(job, SIGNAL(result(KIO::Job*)),
+                            this, SLOT(slotDIOResult(KIO::Job*)));
+                    break;
+                }
+                case 11: 
+                {
+                    KIO::Job* job = DIO::copy(srcURLs, destURL);
+                    connect(job, SIGNAL(result(KIO::Job*)),
+                            this, SLOT(slotDIOResult(KIO::Job*)));
+                    break;
+                }
+                default:
+                    break;
+            }
+        }
+    }
+    else if (QUriDrag::canDecode(event) && album->type() == Album::PHYSICAL)
+    {
+        // Drag & drop outside of digiKam 
+        PAlbum* palbum = (PAlbum*)album;
         KURL destURL(palbum->kurl());
 
         KURL::List srcURLs;
         KURLDrag::decode(event, srcURLs);
 
         QPopupMenu popMenu(this);
-        popMenu.insertItem( SmallIcon("goto"), i18n("&Move Here"), 10 );
+        popMenu.insertItem( SmallIcon("goto"), i18n("&Move Here"),     10 );
         popMenu.insertItem( SmallIcon("editcopy"), i18n("&Copy Here"), 11 );
         popMenu.insertSeparator(-1);
         popMenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );
@@ -1416,7 +1497,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
 
             if (itemDropped)
                 popMenu.insertItem(SmallIcon("tag"),
-                                   i18n("Assign '%1' to &This Item").arg(talbum->tagPath().mid(1)),   12);
+                                   i18n("Assign '%1' to &This Item").arg(talbum->tagPath().mid(1)),      12);
 
             popMenu.insertItem(SmallIcon("tag"), 
                                i18n("Assign '%1' to &All Items").arg(talbum->tagPath().mid(1)),          11);
@@ -1556,12 +1637,12 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
             {
                 case 10:    // Download from camera
                 {
-                    ui->slotDownload(true, false, d->currentAlbum);
+                    ui->slotDownload(true, false, album);
                     break;
                 }
                 case 11:    // Download and Delete from camera
                 {
-                    ui->slotDownload(true, true, d->currentAlbum);
+                    ui->slotDownload(true, true, album);
                     break;
                 }
                 default:
