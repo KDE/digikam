@@ -235,7 +235,7 @@ IconItem* IconView::findItem(const QPoint& pos)
 
 IconGroupItem* IconView::findGroup(const QPoint& pos)
 {
-    QPoint p = viewport()->mapFromGlobal(pos);
+    QPoint p = viewportToContents(viewport()->mapFromGlobal(pos));
     for (IconGroupItem* group = d->firstGroup; group; group = group->nextGroup())
     {
         QRect rect = group->rect();
@@ -247,8 +247,7 @@ IconGroupItem* IconView::findGroup(const QPoint& pos)
 
         rect.setBottom(bottom);
 
-        QRect r = contentsRectToViewport(rect);
-        if ( r.contains(p) ) 
+        if ( rect.contains(p) ) 
         {
             return group;
         }
