@@ -854,11 +854,27 @@ void AlbumIconView::slotPaste()
     if(!data)
         return;
 
-    if(d->currentAlbum->type() == Album::PHYSICAL && 
-       QUriDrag::canDecode(data))
+    Album *album = 0;
+
+    // Check if we working on grouped items view.
+    if (groupCount() > 1)
     {
-        PAlbum* palbum = (PAlbum*)d->currentAlbum;
-        
+        AlbumIconGroupItem *grp = dynamic_cast<AlbumIconGroupItem*>(findGroup(QCursor::pos()));
+        if (grp)
+        {
+            if(d->currentAlbum->type() == Album::PHYSICAL)
+                album = dynamic_cast<Album*>(AlbumManager::instance()->findPAlbum(grp->albumID()));
+            else if(d->currentAlbum->type() == Album::TAG)
+                album = dynamic_cast<Album*>(AlbumManager::instance()->findTAlbum(grp->albumID()));
+        }
+    }
+    if (!album) 
+        album = d->currentAlbum;
+
+    if(d->currentAlbum->type() == Album::PHYSICAL && QUriDrag::canDecode(data))
+    {
+        PAlbum* palbum = (PAlbum*)album;
+
         // B.K.O #119205: do not handle root album.
         if (palbum->isRoot())
             return;
@@ -872,11 +888,10 @@ void AlbumIconView::slotPaste()
         connect(job, SIGNAL(result(KIO::Job*)),
                 this, SLOT(slotDIOResult(KIO::Job*)));
     }
-    else if(d->currentAlbum->type() == Album::TAG && 
-            ItemDrag::canDecode(data))
+    else if(d->currentAlbum->type() == Album::TAG && ItemDrag::canDecode(data))
     {
-        TAlbum* talbum = (TAlbum*)d->currentAlbum;
-        
+        TAlbum* talbum = (TAlbum*)album;
+
         // B.K.O #119205: do not handle root album.
         if (talbum->isRoot())
             return;
