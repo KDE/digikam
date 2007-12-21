@@ -30,6 +30,9 @@
 #include <QStackedWidget>
 #include <QDataStream>
 #include <QPixmap>
+#include <QTimer>
+#include <QEvent>
+#include <QDragEnterEvent>
 
 // KDE includes.
 
@@ -63,9 +66,11 @@ public:
         activeTab        = -1;
         minSize          = 0;
         maxSize          = 0;
+        dragSwitchId     = -1;
 
         stack            = 0;
         splitter         = 0;
+        dragSwitchTimer  = 0;
     }
 
     bool            minimizedDefault;
@@ -76,10 +81,12 @@ public:
     int             activeTab;
     int             minSize;
     int             maxSize;
+    int             dragSwitchId;
 
     QStackedWidget *stack;
     QSplitter      *splitter;
     QSize           bigSize;
+    QTimer         *dragSwitchTimer; 
 
     Sidebar::Side   side;
 };
@@ -90,6 +97,11 @@ Sidebar::Sidebar(QWidget *parent, Side side, bool minimizedDefault)
     d = new SidebarPriv;
     d->minimizedDefault = minimizedDefault;
     d->side             = side;
+    d->dragSwitchTimer  = new QTimer(this);
+
+    connect(d->dragSwitchTimer, SIGNAL(timeout()),
+            this, SLOT(slotDragSwitchTimer()));
+
     setStyle(KMultiTabBar::VSNET);
 }
 
@@ -162,6 +174,9 @@ void Sidebar::appendTab(QWidget *w, const QPixmap &pic, const QString &title)
     w->setParent(d->stack);
     KMultiTabBar::appendTab(pic, d->tabs, title);
     d->stack->insertWidget(d->tabs, w);
+
+    tab(d->tabs)->setAcceptDrops(true);
+    tab(d->tabs)->installEventFilter(this);
 
     connect(tab(d->tabs), SIGNAL(clicked(int)),
             this, SLOT(clicked(int)));
@@ -262,6 +277,59 @@ void Sidebar::expand()
 bool Sidebar::isExpanded()
 {
     return !d->minimized; 
+}
+
+bool Sidebar::eventFilter(QObject *obj, QEvent *ev)
+{
+    for (int i = 0 ; i < d->tabs; i++)
+    {
+        if ( obj == tab(i) )
+        {
+            if ( ev->type() == QEvent::DragEnter)
+            {
+                QDragEnterEvent *e = static_cast<QDragEnterEvent *>(ev);
+                enterEvent(e);
+                e->accept();
+                return false;
+            }
+            else if (ev->type() == QEvent::DragMove)
+            {
+                if (!d->dragSwitchTimer->isActive())
+                {
+                    d->dragSwitchTimer->setSingleShot(true);
+                    d->dragSwitchTimer->start(800);
+                    d->dragSwitchId = i;
+                }
+                return false;
+            }
+            else if (ev->type() == QEvent::DragLeave)
+            {
+                d->dragSwitchTimer->stop();
+                QDragLeaveEvent *e = static_cast<QDragLeaveEvent *>(ev);
+                leaveEvent(e);
+                return false;
+            }
+            else if (ev->type() == QEvent::Drop)
+            {
+                d->dragSwitchTimer->stop();
+                QDropEvent *e = static_cast<QDropEvent *>(ev);
+                leaveEvent(e);
+                return false;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+
+    // Else, pass the event on to the parent class
+    return KMultiTabBar::eventFilter(obj, ev);
+}
+
+void Sidebar::slotDragSwitchTimer()
+{
+    clicked(d->dragSwitchId);
 }
 
 }  // namespace Digikam
