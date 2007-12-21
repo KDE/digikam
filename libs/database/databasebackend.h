@@ -190,6 +190,7 @@ public:
      */
     void recordChangeset(const ImageChangeset changeset);
     void recordChangeset(const ImageTagChangeset changeset);
+    void recordChangeset(const CollectionImageChangeset changeset);
 
 /*
     Qt SQL driver supported features

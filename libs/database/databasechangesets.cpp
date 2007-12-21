@@ -58,7 +58,7 @@ DatabaseFields::Set ImageChangeset::changes() const
     return m_changes;
 }
 
-
+// ------------------------ //
 
 ImageTagChangeset::ImageTagChangeset()
     : m_operation(Unknown)
@@ -83,6 +83,17 @@ ImageTagChangeset::ImageTagChangeset(qlonglong id, int tag, Operation op)
     m_tags << tag;
 }
 
+ImageTagChangeset &ImageTagChangeset::operator<<(const ImageTagChangeset &other)
+{
+    if (m_operation != other.m_operation)
+        m_operation = Unknown;
+
+    m_ids << other.m_ids;
+    m_tags << other.m_tags;
+
+    return *this;
+}
+
 QList<qlonglong> ImageTagChangeset::ids() const
 {
     return m_ids;
@@ -100,10 +111,71 @@ QList<int> ImageTagChangeset::tags() const
 
 bool ImageTagChangeset::containsTag(int id)
 {
-    return (m_operation & RemovedAll) || m_tags.contains(id);
+    return (m_operation == RemovedAll) || m_tags.contains(id);
 }
 
 ImageTagChangeset::Operation ImageTagChangeset::operation() const
+{
+    return m_operation;
+}
+
+// ------------------------ //
+
+CollectionImageChangeset::CollectionImageChangeset()
+    : m_operation(Unknown)
+{
+}
+
+CollectionImageChangeset::CollectionImageChangeset(QList<qlonglong> ids, QList<int> albums, Operation op)
+    : m_ids(ids), m_albums(albums), m_operation(op)
+{
+}
+
+CollectionImageChangeset::CollectionImageChangeset(QList<qlonglong> ids, int album, Operation op)
+    : m_ids(ids), m_operation(op)
+{
+    m_albums << album;
+}
+
+CollectionImageChangeset::CollectionImageChangeset(qlonglong id, int album, Operation op)
+    : m_operation(op)
+{
+    m_ids << id;
+    m_albums << album;
+}
+
+CollectionImageChangeset &CollectionImageChangeset::operator<<(const CollectionImageChangeset &other)
+{
+    if (m_operation != other.m_operation)
+        m_operation = Unknown;
+
+    m_ids << other.m_ids;
+    m_albums << other.m_albums;
+
+    return *this;
+}
+
+QList<qlonglong> CollectionImageChangeset::ids() const
+{
+    return m_ids;
+}
+
+bool CollectionImageChangeset::containsImage(qlonglong id) const
+{
+    return (m_operation == RemovedAll) || m_ids.contains(id);
+}
+
+QList<int> CollectionImageChangeset::albums() const
+{
+    return m_albums;
+}
+
+bool CollectionImageChangeset::containsAlbum(int id)
+{
+    return m_albums.contains(id);
+}
+
+CollectionImageChangeset::Operation CollectionImageChangeset::operation() const
 {
     return m_operation;
 }

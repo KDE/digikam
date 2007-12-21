@@ -457,8 +457,10 @@ public:
      * resets their dirids.
      * The items can later be removed by deleteRemovedItems().
      * @param itemIDs a list of item IDs to be marked
+     * @param albumIDs this parameter is purely informational.
+     *                 it shall contain the albums that the items are removed from.
      */
-    void removeItems(QList<qlonglong> itemIDs);
+    void removeItems(QList<qlonglong> itemIDs, QList<int> albumIDs = QList<int>());
 
     /**
      * Delete all items from the database that are marked as removed.

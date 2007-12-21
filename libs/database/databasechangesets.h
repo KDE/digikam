@@ -70,25 +70,31 @@ public:
      * and an operation.
      * There is no guarantee that information in the database has actually been changed.
      * Special case:
-     * If all tags have been removed from an item, operation is Removed | RemovedAll,
+     * If all tags have been removed from an item, operation is RemovedAll,
      * and the tags list is empty. containsTag() will always return true in this case.
+     * The "combined" operation shall not be used,
      */
 
-    enum Operations
+    enum Operation
     {
-        Unknown    = 1 << 0,
-        Added      = 1 << 1,
-        Removed    = 1 << 2,
-        RemovedAll = 1 << 3,
-
-        RemovedAllOperation = Removed | RemovedAll
+        Unknown,
+        Added,
+        Removed,
+        RemovedAll,
     };
-    Q_DECLARE_FLAGS(Operation, Operations)
 
     ImageTagChangeset();
-    ImageTagChangeset(QList<qlonglong> ids, QList<int> tags, Operation operation = Unknown);
-    ImageTagChangeset(qlonglong id, QList<int> tags, Operation operation = Unknown);
-    ImageTagChangeset(qlonglong id, int tag, Operation operation = Unknown);
+    ImageTagChangeset(QList<qlonglong> ids, QList<int> tags, Operation operation);
+    ImageTagChangeset(qlonglong id, QList<int> tags, Operation operation);
+    ImageTagChangeset(qlonglong id, int tag, Operation operation);
+
+    /**
+     * Combines two ImageTagChangesets.
+     * The operations shall not differ between the two sets;
+     * the operation is set to Unknown if it differs.
+     * This is especially not suitable for RemovedAll changesets.
+     */
+    ImageTagChangeset &operator<<(const ImageTagChangeset &other);
 
     QList<qlonglong> ids() const;
     bool containsImage(qlonglong id) const;
@@ -97,15 +103,74 @@ public:
     Operation operation() const;
 
     bool tagsWereAdded() const
-    { return operation() & Added; }
+    { return operation() == Added; }
     bool tagsWereRemoved() const
-    { return operation() & Removed; }
+    { return operation() == Removed; }
 
 private:
 
     QList<qlonglong>    m_ids;
     QList<int>          m_tags;
     Operation           m_operation;
+};
+
+class DIGIKAM_EXPORT CollectionImageChangeset
+{
+public:
+
+    enum Operation
+    {
+        Unknown,
+        Added,
+        Removed,
+        RemovedAll,
+        Deleted,
+        RemovedDeleted,
+        Moved,
+        Copied
+    };
+
+    /**
+     * An CollectionImageChangeset covers adding and removing an image to/from the collection.
+     * It is described by a list of affected image ids, a list of affected albums,
+     * and an operation.
+     * Special Case "RemovedAll":
+     * If all images have been removed from an album, operation is RemovedAll,
+     * the album list contains the (now empty) albums, ids() is empty,
+     * but containsImage() always returns true.
+     * Special Case "RemovedDeleted":
+     * Images with the "Removed" status are now irreversibly deleted.
+     * ids() and/or albums() may be empty (this means information is not available).
+     */
+
+    CollectionImageChangeset();
+    CollectionImageChangeset(QList<qlonglong> ids, QList<int> albums, Operation operation);
+    CollectionImageChangeset(QList<qlonglong> ids, int album, Operation operation);
+    CollectionImageChangeset(qlonglong id, int album, Operation operation);
+
+    /**
+     * Combines two CollectionImageChangesets.
+     * The operations shall not differ between the two sets;
+     * the operation is set to Unknown if it differs.
+     * This is especially not suitable for RemovedAll changesets.
+     */
+    CollectionImageChangeset &operator<<(const CollectionImageChangeset &other);
+
+    QList<qlonglong> ids() const;
+    bool containsImage(qlonglong id) const;
+    QList<int> albums() const;
+    bool containsAlbum(int id);
+    Operation operation() const;
+
+private:
+
+    QList<qlonglong>    m_ids;
+    QList<int>          m_albums;
+    Operation           m_operation;
+};
+
+class DIGIKAM_EXPORT CollectionAlbumChangeset
+{
 };
 
 

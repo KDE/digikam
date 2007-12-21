@@ -53,4 +53,9 @@ void DatabaseWatch::sendImageTagChange(ImageTagChangeset changeset)
     emit imageTagChange(changeset);
 }
 
+void DatabaseWatch::sendCollectionImageChange(CollectionImageChangeset changeset)
+{
+    emit collectionImageChange(changeset);
+}
+
 } // namespace Digikam

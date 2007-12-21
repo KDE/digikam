@@ -489,4 +489,9 @@ void DatabaseBackend::recordChangeset(const ImageTagChangeset changeset)
     d->watch->sendImageTagChange(changeset);
 }
 
+void DatabaseBackend::recordChangeset(const CollectionImageChangeset changeset)
+{
+    d->watch->sendCollectionImageChange(changeset);
+}
+
 }  // namespace Digikam

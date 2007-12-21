@@ -1483,7 +1483,7 @@ void AlbumDB::removeItemAllTags(qlonglong imageID)
                             "WHERE imageID=?;"),
                     imageID );
 
-    d->db->recordChangeset(ImageTagChangeset(imageID, QList<int>(), ImageTagChangeset::RemovedAllOperation));
+    d->db->recordChangeset(ImageTagChangeset(imageID, QList<int>(), ImageTagChangeset::RemovedAll));
 }
 
 void AlbumDB::removeTagsFromItems(QList<qlonglong> imageIDs, QList<int> tagIDs)
@@ -1667,6 +1667,7 @@ qlonglong AlbumDB::addItem(int albumID, const QString& name,
     if (id.isNull())
         return -1;
     d->db->recordChangeset(ImageChangeset(id.toLongLong(), DatabaseFields::ImagesAll));
+    d->db->recordChangeset(CollectionImageChangeset(id.toLongLong(), albumID, CollectionImageChangeset::Added));
     return id.toLongLong();
 }
 
@@ -2247,18 +2248,23 @@ QDate AlbumDB::getAlbumAverageDate(int albumID)
 
 void AlbumDB::deleteItem(int albumID, const QString& file)
 {
-    d->db->execSql( QString("DELETE FROM Images "
-                            "WHERE album=? AND name=?;"),
-                    albumID, file );
+    qlonglong imageId = getImageId(albumID, file);
+
+    d->db->execSql( QString("DELETE FROM Images WHERE id=?;"),
+                    imageId );
+
+    d->db->recordChangeset(CollectionImageChangeset(imageId, albumID, CollectionImageChangeset::Deleted));
 }
 
 void AlbumDB::removeItemsFromAlbum(int albumID)
 {
     d->db->execSql( QString("UPDATE Images SET status=?, album=NULL WHERE album=?;"),
                     (int)DatabaseItem::Removed, albumID );
+
+    d->db->recordChangeset(CollectionImageChangeset(QList<qlonglong>(), albumID, CollectionImageChangeset::RemovedAll));
 }
 
-void AlbumDB::removeItems(QList<qlonglong> itemIDs)
+void AlbumDB::removeItems(QList<qlonglong> itemIDs, QList<int> albumIDs)
 {
     QSqlQuery query = d->db->prepareQuery( QString("UPDATE Images SET status=?, album=NULL WHERE id=?;") );
 
@@ -2273,12 +2279,16 @@ void AlbumDB::removeItems(QList<qlonglong> itemIDs)
     query.addBindValue(status);
     query.addBindValue(imageIds);
     d->db->execBatch(query);
+
+    d->db->recordChangeset(CollectionImageChangeset(itemIDs, albumIDs, CollectionImageChangeset::RemovedAll));
 }
 
 void AlbumDB::deleteRemovedItems()
 {
     d->db->execSql( QString("DELETE FROM Images WHERE status=?;"),
                     (int)DatabaseItem::Removed );
+
+    d->db->recordChangeset(CollectionImageChangeset(QList<qlonglong>(), QList<int>(), CollectionImageChangeset::RemovedDeleted));
 }
 
 void AlbumDB::deleteRemovedItems(QList<int> albumIds)
@@ -2296,6 +2306,8 @@ void AlbumDB::deleteRemovedItems(QList<int> albumIds)
     query.addBindValue(status);
     query.addBindValue(albumBindIds);
     d->db->execBatch(query);
+
+    d->db->recordChangeset(CollectionImageChangeset(QList<qlonglong>(), albumIds, CollectionImageChangeset::RemovedDeleted));
 }
 
 void AlbumDB::renameAlbum(int albumID, const QString& newRelativePath, bool renameSubalbums)

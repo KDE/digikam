@@ -368,7 +368,7 @@ void CollectionScanner::scanAlbum(const CollectionLocation &location, const QStr
     }
 
     // Mark items in the db which we did not see on disk.
-    DatabaseAccess().db()->removeItems(itemIdSet.toList());
+    DatabaseAccess().db()->removeItems(itemIdSet.toList(), QList<int>() << albumID);
 
     if (d->wantSignals)
         emit finishedScanningAlbum(location.albumRootPath(), album, list.count());
