@@ -227,6 +227,30 @@ IconItem* IconView::findItem(const QPoint& pos)
     return 0;
 }
 
+IconGroupItem* IconView::findGroup(const QPoint& pos)
+{
+    QPoint p = viewport()->mapFromGlobal(pos);
+    for (IconGroupItem* group = d->firstGroup; group; group = group->nextGroup())
+    {
+        QRect rect = group->rect();
+        int bottom;
+        if (group == d->lastGroup)
+            bottom = contentsHeight();
+        else
+            bottom = group->nextGroup()->rect().top();
+
+        rect.setBottom(bottom);
+
+        QRect r = contentsRectToViewport(rect);
+        if ( r.contains(p) ) 
+        {
+            return group;
+        }
+    }
+
+    return 0;
+}
+
 int IconView::count() const
 {
     int c = 0;

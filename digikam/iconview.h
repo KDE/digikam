@@ -57,7 +57,8 @@ public:
 
     IconGroupItem* firstGroup() const;
     IconGroupItem* lastGroup() const;
-    
+    IconGroupItem* findGroup(const QPoint& pos);
+
     IconItem* firstItem() const;
     IconItem* lastItem() const;
     IconItem* currentItem() const;
