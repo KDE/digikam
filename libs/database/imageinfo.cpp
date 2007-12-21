@@ -34,7 +34,6 @@
 
 #include "ddebug.h"
 #include "albumdb.h"
-#include "databaseattributeswatch.h"
 #include "databaseaccess.h"
 #include "collectionmanager.h"
 #include "collectionlocation.h"

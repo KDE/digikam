@@ -33,10 +33,13 @@ namespace Digikam
 
 ImageInfoCache::ImageInfoCache()
 {
-    DatabaseAttributesWatch *dbwatch = DatabaseAccess::attributesWatch();
+    DatabaseWatch *dbwatch = DatabaseAccess::databaseWatch();
 
-    connect(dbwatch, SIGNAL(imageFieldChanged(qlonglong, int)),
-            this, SLOT(slotImageFieldChanged(qlonglong, int)));
+    connect(dbwatch, SIGNAL(void imageChange(ImageChangeset)),
+            this, SLOT(slotImageFieldChanged(ImageChangeset)));
+
+    connect(dbwatch, SIGNAL(void imageChange(ImageTagChangeset)),
+            this, SLOT(slotImageTagChanged(ImageTagChangeset)));
 }
 
 ImageInfoCache::~ImageInfoCache()
@@ -83,29 +86,41 @@ QString ImageInfoCache::albumName(DatabaseAccess &access, int albumId)
     return (*it);
 }
 
-void ImageInfoCache::slotImageFieldChanged(qlonglong imageId, int field)
+void ImageInfoCache::slotImageFieldChanged(ImageChangeset changeset)
 {
-    // we have databaseaccess lock here as well!
-    QHash<qlonglong, ImageInfoData *>::iterator it = m_infos.find(imageId);
-    if (it != m_infos.end())
+    // we cannot know if we have databaseaccess lock here as well
+    DatabaseAccess access;
+
+    foreach (qlonglong imageId, changeset.ids())
     {
-        // invalidate the relevant field. It will be lazy-loaded at first access.
-        switch (field)
+        QHash<qlonglong, ImageInfoData *>::iterator it = m_infos.find(imageId);
+        if (it != m_infos.end())
         {
-            /*
-            case DatabaseAttributesWatch::ImageComment:
-                (*it)->commentValid = false;
-                break;
-            case DatabaseAttributesWatch::ImageDate:
-                (*it)->dateTime = QDateTime();
-                break;
-            case DatabaseAttributesWatch::ImageRating:
-                (*it)->rating = -1;
-                break;
-            case DatabaseAttributesWatch::ImageTags:
-                break;
-            */
+            // invalidate the relevant field. It will be lazy-loaded at first access.
+            DatabaseFields::Set changes = changeset.changes();
+            if (changes & DatabaseFields::ImageCommentsAll)
+                (*it)->defaultCommentCached = false;
+            if (changes & DatabaseFields::Rating)
+                (*it)->ratingCached = false;
+            if (changes & DatabaseFields::CreationDate)
+                (*it)->creationDateCached = false;
+            if (changes & DatabaseFields::ModificationDate)
+                (*it)->modificationDateCached = false;
+            if (changes & DatabaseFields::FileSize)
+                (*it)->fileSizeCached = false;
         }
+    }
+}
+
+void ImageInfoCache::slotImageFieldChanged(ImageTagChangeset changeset)
+{
+    DatabaseAccess access;
+
+    foreach (qlonglong imageId, changeset.ids())
+    {
+        QHash<qlonglong, ImageInfoData *>::iterator it = m_infos.find(imageId);
+        if (it != m_infos.end())
+            (*it)->tagIdsCached = false;
     }
 }
 

@@ -37,7 +37,7 @@ namespace Digikam
 class DatabaseBackend;
 class AlbumDB;
 class ImageInfoCache;
-class DatabaseAttributesWatch;
+class DatabaseWatch;
 class InitializationObserver;
 class DatabaseAccessStaticPriv;
 
@@ -122,9 +122,9 @@ public:
     ImageInfoCache *imageInfoCache() const;
 
     /**
-      * Return the DatabaseAttributesWatch. This object is not for public use outside libs/database/
+      * Return the DatabaseWatch. This object is not for public use outside libs/database/
       */
-    static DatabaseAttributesWatch *attributesWatch();
+    static DatabaseWatch *databaseWatch();
 
     /**
       * Set the "last error" message. This method is not for public use.

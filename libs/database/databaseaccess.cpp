@@ -37,7 +37,7 @@
 #include "imageinfocache.h"
 #include "schemaupdater.h"
 #include "collectionmanager.h"
-#include "databaseattributeswatch.h"
+#include "databasewatch.h"
 #include "databasebackend.h"
 #include "databaseaccess.h"
 
@@ -48,7 +48,7 @@ class DatabaseAccessStaticPriv
 {
 public:
     DatabaseAccessStaticPriv()
-    : backend(0), db(0), infoCache(0), attributesWatch(0), mutex(QMutex::Recursive) // create a recursive mutex
+    : backend(0), db(0), infoCache(0), databaseWatch(0), mutex(QMutex::Recursive) // create a recursive mutex
     {
     };
     ~DatabaseAccessStaticPriv() {};
@@ -56,7 +56,7 @@ public:
     DatabaseBackend *backend;
     AlbumDB *db;
     ImageInfoCache *infoCache;
-    DatabaseAttributesWatch *attributesWatch;
+    DatabaseWatch *databaseWatch;
     DatabaseParameters parameters;
     QMutex mutex;
     QString lastError;
@@ -101,9 +101,9 @@ ImageInfoCache *DatabaseAccess::imageInfoCache() const
     return d->infoCache;
 }
 
-DatabaseAttributesWatch *DatabaseAccess::attributesWatch()
+DatabaseWatch *DatabaseAccess::databaseWatch()
 {
-    return d->attributesWatch;
+    return d->databaseWatch;
 }
 
 DatabaseParameters DatabaseAccess::parameters()
@@ -128,14 +128,15 @@ void DatabaseAccess::setParameters(const DatabaseParameters &parameters)
 
     d->parameters = parameters;
 
-    if (!d->attributesWatch)
-        d->attributesWatch = new DatabaseAttributesWatch();
+    if (!d->databaseWatch)
+        d->databaseWatch = new DatabaseWatch();
 
     if (!d->backend || !d->backend->isCompatible(parameters))
     {
         delete d->db;
         delete d->backend;
         d->backend = new DatabaseBackend();
+        d->backend->setDatabaseWatch(d->databaseWatch);
         d->db = new AlbumDB(d->backend);
     }
 

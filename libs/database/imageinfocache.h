@@ -31,7 +31,7 @@
 
 // Local includes
 
-#include "databaseattributeswatch.h"
+#include "databasewatch.h"
 
 namespace Digikam
 {
@@ -73,7 +73,8 @@ public:
 
 private slots:
 
-    void slotImageFieldChanged(qlonglong imageId, int field);
+    void slotImageFieldChanged(ImageChangeset changeset);
+    void slotImageFieldChanged(ImageTagChangeset changeset);
 
 private:
 

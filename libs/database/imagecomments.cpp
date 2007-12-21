@@ -394,7 +394,7 @@ void ImageComments::apply(DatabaseAccess &access)
         QVariantList values;
         CommentInfo &info = d->infos[index];
         values << (int)info.type << info.language << info.author << info.date << info.comment;
-        access.db()->changeImageComment(info.id, values);
+        access.db()->changeImageComment(info.id, d->id, values);
     }
     d->dirtyIndices.clear();
 }
