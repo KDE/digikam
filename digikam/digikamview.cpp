@@ -649,19 +649,40 @@ void DigikamView::changeAlbumFromHistory(Album *album, QWidget *widget)
 {
     if (album && widget)
     {
-        Q3ListViewItem *item;
-        item = (Q3ListViewItem*)album->extraData(widget);
-        if(!item)
-            return;
+        Q3ListViewItem *item = 0;
 
-        // AlbumFolderview, TagFolderView, SearchFolderView inherit from FolderView
-        if (FolderView *v = dynamic_cast<FolderView*>(widget))
+        // Check if widget is a vbox used to host folderview, tagview or searchview.
+        if (KVBox *v = dynamic_cast<KVBox*>(widget))
         {
-            v->setSelected(item, true);
-            v->ensureItemVisible(item);
+            if (v == d->folderBox)
+            {
+                item = (Q3ListViewItem*)album->extraData(d->folderView);
+                if(!item) return;
+
+                d->folderView->setSelected(item, true);
+                d->folderView->ensureItemVisible(item);
+            }
+            else if (v == d->tagBox)
+            {
+                item = (Q3ListViewItem*)album->extraData(d->tagFolderView);
+                if(!item) return;
+
+                d->tagFolderView->setSelected(item, true);
+                d->tagFolderView->ensureItemVisible(item);
+            }
+            else if (v == d->searchBox)
+            {
+                item = (Q3ListViewItem*)album->extraData(d->searchFolderView);
+                if(!item) return;
+
+                d->searchFolderView->setSelected(item, true);
+                d->searchFolderView->ensureItemVisible(item);
+            }
         }
         else if (DateFolderView *v = dynamic_cast<DateFolderView*>(widget))
         {
+            item = (Q3ListViewItem*)album->extraData(v);
+            if(!item) return;
             v->setSelected(item);
         }
 
