@@ -29,6 +29,7 @@
 #include <qsplitter.h>
 #include <qwidgetstack.h>
 #include <qdatastream.h>
+#include <qtimer.h>
 
 // KDE includes.
 
@@ -60,9 +61,11 @@ public:
         activeTab        = -1;
         minSize          = 0;
         maxSize          = 0;
+        dragSwitchId     = -1;
 
         stack            = 0;
         splitter         = 0;
+        dragSwitchTimer  = 0;
     }
 
     bool           minimizedDefault;
@@ -73,10 +76,12 @@ public:
     int            activeTab;
     int            minSize;
     int            maxSize;
+    int            dragSwitchId;
 
     QWidgetStack  *stack;
     QSplitter     *splitter;
     QSize          bigSize;
+    QTimer        *dragSwitchTimer; 
 
     Sidebar::Side  side;
 };
@@ -87,6 +92,10 @@ Sidebar::Sidebar(QWidget *parent, const char *name, Side side, bool minimizedDef
     d = new SidebarPriv;
     d->minimizedDefault = minimizedDefault;
     d->side             = side;
+    d->dragSwitchTimer  = new QTimer(this);
+
+    connect(d->dragSwitchTimer, SIGNAL(timeout()),
+            this, SLOT(slotDragSwitchTimer()));
 }
 
 Sidebar::~Sidebar()
@@ -104,7 +113,7 @@ void Sidebar::setSplitter(QSplitter *sp)
 #endif
 
     d->stack = new QWidgetStack(sp);
-            
+
     if(d->side == Left)
         setPosition(KMultiTabBar::Left);
     else
@@ -118,7 +127,7 @@ void Sidebar::loadViewState()
 
     int tab        = config->readNumEntry("ActiveTab", 0);
     bool minimized = config->readBoolEntry("Minimized", d->minimizedDefault);
-        
+
     if (minimized)
     {
         d->activeTab = tab;
@@ -165,9 +174,12 @@ void Sidebar::appendTab(QWidget *w, const QPixmap &pic, const QString &title)
     KMultiTabBar::appendTab(pic, d->tabs, title);
     d->stack->addWidget(w, d->tabs);
 
+    tab(d->tabs)->setAcceptDrops(true);
+    tab(d->tabs)->installEventFilter(this);
+
     connect(tab(d->tabs), SIGNAL(clicked(int)),
             this, SLOT(clicked(int)));
-    
+
     d->tabs++;
 }
 
@@ -176,10 +188,10 @@ void Sidebar::deleteTab(QWidget *w)
     int tab = d->stack->id(w);
     if(tab < 0)
         return;
-    
+
     if(tab == d->activeTab)
         d->activeTab = -1;
-    
+
     removeTab(tab);
     //TODO show another widget
 }
@@ -188,7 +200,7 @@ void Sidebar::clicked(int tab)
 {
     if(tab >= d->tabs || tab < 0)
         return;
-    
+
     if(tab == d->activeTab)
     {
         d->stack->isHidden() ? expand() : shrink();
@@ -197,11 +209,11 @@ void Sidebar::clicked(int tab)
     {
         if(d->activeTab >= 0)
             setTab(d->activeTab, false);
-    
+
         d->activeTab = tab;
         setTab(d->activeTab, true);
         d->stack->raiseWidget(d->activeTab);
-        
+
         if(d->minimized)
             expand();
 
@@ -214,14 +226,14 @@ void Sidebar::setActiveTab(QWidget *w)
     int tab = d->stack->id(w);
     if(tab < 0)
         return;
-    
+
     if(d->activeTab >= 0)
         setTab(d->activeTab, false);
-    
+
     d->activeTab = tab;
     setTab(d->activeTab, true);
     d->stack->raiseWidget(d->activeTab);
-        
+
     if(d->minimized)
         expand();    
 
@@ -239,7 +251,7 @@ void Sidebar::shrink()
     d->bigSize   = size();
     d->minSize   = minimumWidth();
     d->maxSize   = maximumWidth();
-            
+
     d->stack->hide();
 
     KMultiTabBarTab* tab = tabs()->first();
@@ -264,6 +276,60 @@ void Sidebar::expand()
 bool Sidebar::isExpanded()
 {
     return !d->minimized; 
+}
+
+bool Sidebar::eventFilter(QObject *obj, QEvent *ev)
+{
+    QPtrList<KMultiTabBarTab>* pTabs = tabs();
+
+    for (QPtrListIterator<KMultiTabBarTab> it(*pTabs); it.current(); ++it)
+    {
+        if ( obj == *it )
+        {
+            if ( ev->type() == QEvent::DragEnter)
+            {
+                QDragEnterEvent *e = static_cast<QDragEnterEvent *>(ev);
+                enterEvent(e);
+                e->accept(true);
+                return false;
+            }
+            else if (ev->type() == QEvent::DragMove)
+            {
+                if (!d->dragSwitchTimer->isActive())
+                {
+                    d->dragSwitchTimer->start(800, true);
+                    d->dragSwitchId = (*it)->id();
+                }
+                return false;
+            }
+            else if (ev->type() == QEvent::DragLeave)
+            {
+                d->dragSwitchTimer->stop();
+                QDragLeaveEvent *e = static_cast<QDragLeaveEvent *>(ev);
+                leaveEvent(e);
+                return false;
+            }
+            else if (ev->type() == QEvent::Drop)
+            {
+                d->dragSwitchTimer->stop();
+                QDropEvent *e = static_cast<QDropEvent *>(ev);
+                leaveEvent(e);
+                return false;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+
+    // Else, pass the event on to the parent class
+    return KMultiTabBar::eventFilter(obj, ev);
+}
+
+void Sidebar::slotDragSwitchTimer()
+{
+    clicked(d->dragSwitchId);
 }
 
 }  // namespace Digikam

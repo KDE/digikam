@@ -142,6 +142,7 @@ private:
      * save the view state to disk
      */
     void saveViewState();
+    bool eventFilter(QObject *o, QEvent *e);
     
 private slots:
     
@@ -149,6 +150,8 @@ private slots:
      * Activates a tab
      */
     void clicked(int tab);
+
+    void slotDragSwitchTimer();
     
 signals:
     
