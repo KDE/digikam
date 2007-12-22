@@ -1,3 +1,135 @@
+0.9.3 2007-12-23
+-------------------------------------------------------------------------
+2007-12-21 14:23  cgilles
+
+	* libs/widgets/common/sidebar.cpp, libs/widgets/common/sidebar.h:
+	  digiKam from KDE3 branch : support Drag & drop with Sidebar
+	  widget
+
+2007-12-21 14:17  cgilles
+
+	* digikam/albumiconview.cpp: polish
+
+2007-12-21 14:00  cgilles
+
+	* digikam/albumiconview.cpp: digiKam from KDE3 branch : support D&D
+	  between albums to move/copy items when recurssive mode is enable
+	  CCBUGS: 142774
+
+2007-12-21 12:48  cgilles
+
+	* digikam/iconview.cpp: polish
+
+2007-12-21 12:45  cgilles
+
+	* digikam/iconview.cpp: polish
+
+2007-12-21 11:40  cgilles
+
+	* digikam/albumiconview.cpp: digiKam from KDE3 branch : support of
+	  copy and paste over albums on the same icon view using recursive
+	  mode
+	  CCBUGS: 142774
+
+2007-12-21 11:33  cgilles
+
+	* digikam/iconview.cpp, digikam/iconview.h: new method to find an
+	  icon items group from a cursor position
+
+2007-12-21 06:49  cgilles
+
+	* digikam/digikamview.cpp: And now restore Album history mechanism
+	  in digikamview.
+	  Arnd, please check if all is fine for you...
+	  CCBUGS: 128231
+
+2007-12-21 06:21  cgilles
+
+	* digikam/digikamview.cpp: apply patch from Arnd to restore GOto
+	  feature from digikamview.
+	  still TODO : check album history mechanism
+	  CCBUGS: 128231
+
+2007-12-19 13:44  cgilles
+
+	* libs/widgets/common/dcursortracker.cpp: polish
+
+2007-12-19 13:33  cgilles
+
+	* libs/widgets/common/sidebar.cpp, libs/widgets/common/sidebar.h:
+	  polish
+
+2007-12-18 15:49  cgilles
+
+	* digikam/mediaplayerview.cpp: digiKam from KDE3 branch : important
+	  bugfix here : always force to show mediaplayer widget to preview
+	  video in embeded mode...
+	  Like this, AVI, MPEG, MOV, etc files can be preview properlly...
+	  CCMAIL: digikam-devel@kde.org
+
+2007-12-18 10:11  cgilles
+
+	* digikam/mediaplayerview.cpp: get error code
+
+2007-12-18 09:56  cgilles
+
+	* digikam/mediaplayerview.cpp: add more debug messages
+
+2007-12-17 20:04  cgilles
+
+	* digikam/digikamapp.cpp, digikam/digikamapp.h,
+	  digikam/digikamview.cpp, digikam/digikamview.h,
+	  digikam/tagfilterview.cpp,
+	  libs/imageproperties/imagedescedittab.cpp: Fix typo : toogle ==>
+	  toggle
+
+2007-12-13 14:00  cgilles
+
+	* digikam/datefolderview.cpp, digikam/datefolderview.h,
+	  digikam/digikamview.cpp: digiKam from KDE3 branch : using a
+	  string to compare date is unadapted. using QDate object work in
+	  all cases.
+	  CCMAIL: arnd.baecker@web.de
+
+2007-12-13 07:10  cgilles
+
+	* digikam/monthwidget.cpp, digikam/monthwidget.h: use d private
+	  internal class
+
+2007-12-11 19:53  cgilles
+
+	* README, configure.in.in: fix libkexiv2 release to use with
+	  digiKam 0.9.3
+
+2007-12-08 15:50  gkulzer
+
+	* ChangeLog: release 0.9.3-rc1
+
+2007-12-08 15:19  gkulzer
+
+	* digikam.lsm, release_digikam.rb: release 0.9.3-rc1
+
+2007-12-07 07:34  cgilles
+
+	* digikam/albumdb.cpp, digikam/albumdb.h: add recursive parsing in
+	  PAlbum
+
+2007-12-06 19:44  cgilles
+
+	* NEWS: update
+
+2007-12-06 19:42  mwiesweg
+
+	* libs/imageproperties/imagepropertiescolorstab.cpp: Improve a
+	  condition that is meant to filter out duplicate calls, but
+	  filters too much.
+	  Restrict to the time while loading.
+
+	  BUG: 148772
+
+
+0.9.3-rc1 2007-12-08
+-------------------------------------------------------------------------
 2007-12-06 13:49  cgilles
 
 	* digikam/albumiconview.cpp: digiKam from KDE3 branch : 0.9.3-rc1
