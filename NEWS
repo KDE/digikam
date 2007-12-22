@@ -1,11 +1,33 @@
 
 **********************************************************************************************
 
-digiKam 0.9.3-RC1 - Release date: 2007-12-??
+digiKam 0.9.3 - Release date: 2007-12-23
 
 NEW FEATURES:
 
-AlbumGUI       : Add new Filter Bar on bottom of Albums/Tags/Searches/TagsFilter view filter contents 
+AlbumGUI
+
+Drag&Drop      : D&D from anywhere into album tree. When the albumview is flattened
+                 (Include Album Sub-tree) images can be d&ded across horizontal separations.
+                 That one satisfies wish #142774.
+
+Goto           : A new quick navigation feature has been added: it is now possible (by RMB context menu)
+                 to GOTO any other view with pertinent context, e.g. from date view right-click on an
+                 image and GOTO the Album or Tag view that this image is associated with.
+                 Try any other combination.
+                 That covers wish #128231.
+
+digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+
+065 ==>        : ????? always force to show mediaplayer widget to preview video in embeded mode.
+
+**********************************************************************************************
+
+digiKam 0.9.3-RC1 - Release date: 2007-12-08
+
+NEW FEATURES:
+
+AlbumGUI       : Add new Filter Bar on bottom of Albums/Tags/Searches/TagsFilter view filter contents
                  based on string.
 
 digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
@@ -23,7 +45,6 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 062 ==> 141085 : Some strings are untranslated in digiKam.
 063 ==> 151403 : Crashed trying to save a image downloaded from the camera.
 064 ==> 148772 : Histogram should refresh after editor save.
-065 ==> 
 
 **********************************************************************************************
 
@@ -31,7 +52,7 @@ digiKam 0.9.3-beta3 - Release date: 2007-11-20
 
 NEW FEATURES:
 
-AlbumGUI       : Add Text pattern widget on status bar to filter Album contents based on items 
+AlbumGUI       : Add Text pattern widget on status bar to filter Album contents based on items
                  name, comments, and tags strings.
 ImageEditor    : New black & white Green color tone filter.
 LightTable     : Several usability improvements.
@@ -76,7 +97,7 @@ General        : Color scheme theme are now XML based (instead X11 format).
 General        : Camera interface is now used to import new pictures in collection.
 CameraGUI      : New options to Download pictures and Delete it from camera at the same time.
 CameraGUI      : Support of Drag & Drop to download files from camera gui to album gui.
-CameraGUI      : Add new Bargarph to indicate statistics about free space available on Album 
+CameraGUI      : Add new Bargarph to indicate statistics about free space available on Album
                  Library Path.
 
 digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
@@ -111,7 +132,7 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 028 ==> 148648 : Color managed previews not working in all plugins.
 029 ==> 126427 : In "rename file" dialog, the 2nd picture is (and can't) not displayed.
 030 ==> 144336 : Selecting pictures on the camera lets the scroll-bar jump back to the top of the list.
-031 ==> 136927 : Failed to download file DCP_4321.jpg. Do you want to continue? and when continue is 
+031 ==> 136927 : Failed to download file DCP_4321.jpg. Do you want to continue? and when continue is
                  clicked the same warning comes for the next image and so on.
 032 ==> 146083 : Bugs in drag and drop.
 033 ==> 147854 : Put images into an emptied light-table.
