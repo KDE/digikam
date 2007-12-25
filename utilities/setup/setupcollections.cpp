@@ -73,7 +73,7 @@ public:
                 type = SmallIcon("drive-removable-media");
                 break;
             case CollectionLocation::TypeNetwork:
-                type = SmallIcon("drive-remote");
+                type = SmallIcon("folder-remote");
                 break;
         }
 
