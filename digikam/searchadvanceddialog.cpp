@@ -157,8 +157,8 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KUrl& url)
 
     d->addButton = new QPushButton(i18n("&Add"), groupbox1);
     d->delButton = new QPushButton(i18n("&Del"), groupbox1);
-    d->addButton->setIcon(SmallIcon("edit-add"));
-    d->delButton->setIcon(SmallIcon("edit-delete"));
+    d->addButton->setIcon(SmallIcon("list-add"));
+    d->delButton->setIcon(SmallIcon("list-remove"));
     d->addButton->setMaximumHeight( fontMetrics().height()+4 );
     d->delButton->setMaximumHeight( fontMetrics().height()+4 );
 

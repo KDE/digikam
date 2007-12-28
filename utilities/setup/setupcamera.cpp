@@ -103,9 +103,9 @@ SetupCamera::SetupCamera( QWidget* parent )
     d->autoDetectButton = new QPushButton( this );
 
     d->addButton->setText( i18n( "&Add..." ) );
-    d->addButton->setIcon(SmallIcon("edit-add"));
+    d->addButton->setIcon(SmallIcon("list-add"));
     d->removeButton->setText( i18n( "&Remove" ) );
-    d->removeButton->setIcon(SmallIcon("edit-delete"));
+    d->removeButton->setIcon(SmallIcon("list-remove"));
     d->editButton->setText( i18n( "&Edit..." ) );
     d->editButton->setIcon(SmallIcon("configure"));
     d->autoDetectButton->setText( i18n( "Auto-&Detect" ) );
