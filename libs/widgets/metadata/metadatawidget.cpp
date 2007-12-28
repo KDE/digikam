@@ -114,7 +114,7 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
     d->levelButtons->setExclusive(true);
 
     QPushButton *simpleLevel = new QPushButton( d->levelGBox );
-    simpleLevel->setIcon( iconLoader->loadIcon( "user", (KIconLoader::Group)KIconLoader::Toolbar ) );
+    simpleLevel->setIcon( iconLoader->loadIcon( "user-identity", (KIconLoader::Group)KIconLoader::Toolbar ) );
     simpleLevel->setCheckable(true);
     simpleLevel->setWhatsThis( i18n( "Toggle tags view to a simple human-readable list" ) );
     d->levelButtons->addButton(simpleLevel, SIMPLE);
