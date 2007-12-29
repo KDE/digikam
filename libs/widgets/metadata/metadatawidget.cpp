@@ -121,7 +121,7 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
     hlay1->addWidget(simpleLevel);
 
     QPushButton *fullLevel = new QPushButton( d->levelGBox );
-    fullLevel->setIcon( iconLoader->loadIcon( "media-playlist", (KIconLoader::Group)KIconLoader::Toolbar ) );
+    fullLevel->setIcon( iconLoader->loadIcon( "view-media-playlist", (KIconLoader::Group)KIconLoader::Toolbar ) );
     fullLevel->setCheckable(true);
     fullLevel->setWhatsThis( i18n( "Toggle tags view to a full list" ) );
     d->levelButtons->addButton(fullLevel, FULL);
