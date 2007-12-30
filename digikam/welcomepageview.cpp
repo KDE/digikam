@@ -149,6 +149,7 @@ QString WelcomePageView::infoPage()
     newFeatures << i18n("New options to easy navigate between albums, tags and collections");
     newFeatures << i18n("New options to recursively show the contents of sub-folders");
     newFeatures << i18n("New text filter to search contents on folder views");
+    newFeatures << i18n("New options to count of items on all folder views");
 
     QString featureItems;
     for ( uint i = 0 ; i < newFeatures.count() ; i++ )
