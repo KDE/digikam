@@ -373,4 +373,9 @@ void ImagePropertiesSideBarDB::slotThemeChanged()
     m_propertiesTab->colorChanged(backgroundColor, foregroundColor);
 }
 
+void ImagePropertiesSideBarDB::refreshTagsView()
+{
+    d->desceditTab->refreshTagsView();
+}
+
 }  // NameSpace Digikam

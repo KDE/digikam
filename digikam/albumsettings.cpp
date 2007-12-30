@@ -101,6 +101,8 @@ public:
 
     bool                                 previewLoadFullImageSize;
 
+    bool                                 showFolderTreeViewItemsCount;
+
     int                                  thumbnailSize;
     int                                  treeThumbnailSize;
     int                                  ratingFilterCond;
@@ -166,81 +168,83 @@ void AlbumSettings::init()
     d->albumCollectionNames.append(i18n("Miscellaneous"));
     d->albumCollectionNames.sort();
 
-    d->albumSortOrder           = AlbumSettings::ByFolder;
-    d->imageSortOrder           = AlbumSettings::ByIName;
-    d->itemRightClickAction     = AlbumSettings::ShowPreview;
+    d->albumSortOrder               = AlbumSettings::ByFolder;
+    d->imageSortOrder               = AlbumSettings::ByIName;
+    d->itemRightClickAction         = AlbumSettings::ShowPreview;
 
-    d->defaultImageFilefilter   = "*.jpg *.jpeg *.jpe "               // JPEG
-                                  "*.jp2 *.jpx *.jpc *.pgx "          // JPEG-2000
-                                  "*.tif *.tiff "                     // TIFF
-                                  "*.png *.gif *.bmp *.xpm *.ppm *.pnm *.xcf *.pcx";
+    d->defaultImageFilefilter       = "*.jpg *.jpeg *.jpe "               // JPEG
+                                      "*.jp2 *.jpx *.jpc *.pgx "          // JPEG-2000
+                                      "*.tif *.tiff "                     // TIFF
+                                      "*.png *.gif *.bmp *.xpm *.ppm *.pnm *.xcf *.pcx";
 			 
-    d->defaultMovieFilefilter   = "*.mpeg *.mpg *.mpo *.mpe "         // MPEG
-                                  "*.avi *.mov *.wmf *.asf *.mp4 *.3gp";
+    d->defaultMovieFilefilter       = "*.mpeg *.mpg *.mpo *.mpe "         // MPEG
+                                      "*.avi *.mov *.wmf *.asf *.mp4 *.3gp";
 			 
-    d->defaultAudioFilefilter   = "*.ogg *.mp3 *.wma *.wav";
+    d->defaultAudioFilefilter       = "*.ogg *.mp3 *.wma *.wav";
 
     // RAW files estentions supported by dcraw program and 
     // defines to digikam/libs/dcraw/rawfiles.h
-    d->defaultRawFilefilter     = QString(raw_file_extentions);
+    d->defaultRawFilefilter         = QString(raw_file_extentions);
 
-    d->imageFilefilter          = d->defaultImageFilefilter;
-    d->movieFilefilter          = d->defaultMovieFilefilter;
-    d->audioFilefilter          = d->defaultAudioFilefilter;
-    d->rawFilefilter            = d->defaultRawFilefilter;
+    d->imageFilefilter              = d->defaultImageFilefilter;
+    d->movieFilefilter              = d->defaultMovieFilefilter;
+    d->audioFilefilter              = d->defaultAudioFilefilter;
+    d->rawFilefilter                = d->defaultRawFilefilter;
 
-    d->thumbnailSize            = ThumbnailSize::Medium;
-    d->treeThumbnailSize        = 32;
+    d->thumbnailSize                = ThumbnailSize::Medium;
+    d->treeThumbnailSize            = 32;
 
-    d->ratingFilterCond         = AlbumLister::GreaterEqualCondition;
+    d->ratingFilterCond             = AlbumLister::GreaterEqualCondition;
 
-    d->showToolTips             = true;
-    d->showSplash               = true;
-    d->useTrash                 = true;
-    d->showTrashDeleteDialog    = true;
-    d->sidebarApplyDirectly     = false;
+    d->showToolTips                 = true;
+    d->showSplash                   = true;
+    d->useTrash                     = true;
+    d->showTrashDeleteDialog        = true;
+    d->sidebarApplyDirectly         = false;
 
-    d->iconShowName             = false;
-    d->iconShowSize             = false;
-    d->iconShowDate             = true;
-    d->iconShowModDate          = true;
-    d->iconShowComments         = true;
-    d->iconShowResolution       = false;
-    d->iconShowTags             = true;
-    d->iconShowRating           = true;
+    d->iconShowName                 = false;
+    d->iconShowSize                 = false;
+    d->iconShowDate                 = true;
+    d->iconShowModDate              = true;
+    d->iconShowComments             = true;
+    d->iconShowResolution           = false;
+    d->iconShowTags                 = true;
+    d->iconShowRating               = true;
 
-    d->tooltipShowFileName      = true;
-    d->tooltipShowFileDate      = false;
-    d->tooltipShowFileSize      = false;
-    d->tooltipShowImageType     = false;
-    d->tooltipShowImageDim      = true;
-    d->tooltipShowPhotoMake     = true;
-    d->tooltipShowPhotoDate     = true;
-    d->tooltipShowPhotoFocal    = true;
-    d->tooltipShowPhotoExpo     = true;
-    d->tooltipShowPhotoMode     = true;
-    d->tooltipShowPhotoFlash    = false;
-    d->tooltipShowPhotoWb       = false;
-    d->tooltipShowAlbumName     = false;
-    d->tooltipShowComments      = true;
-    d->tooltipShowTags          = true;
-    d->tooltipShowRating        = true;
+    d->tooltipShowFileName          = true;
+    d->tooltipShowFileDate          = false;
+    d->tooltipShowFileSize          = false;
+    d->tooltipShowImageType         = false;
+    d->tooltipShowImageDim          = true;
+    d->tooltipShowPhotoMake         = true;
+    d->tooltipShowPhotoDate         = true;
+    d->tooltipShowPhotoFocal        = true;
+    d->tooltipShowPhotoExpo         = true;
+    d->tooltipShowPhotoMode         = true;
+    d->tooltipShowPhotoFlash        = false;
+    d->tooltipShowPhotoWb           = false;
+    d->tooltipShowAlbumName         = false;
+    d->tooltipShowComments          = true;
+    d->tooltipShowTags              = true;
+    d->tooltipShowRating            = true;
 
-    d->exifRotate               = true;
-    d->exifSetOrientation       = true;
+    d->exifRotate                   = true;
+    d->exifSetOrientation           = true;
 
-    d->saveIptcTags             = false;
-    d->saveIptcPhotographerId   = false;
-    d->saveIptcCredits          = false;
+    d->saveIptcTags                 = false;
+    d->saveIptcPhotographerId       = false;
+    d->saveIptcCredits              = false;
 
-    d->saveComments             = false;
-    d->saveDateTime             = false;
-    d->saveRating               = false;
+    d->saveComments                 = false;
+    d->saveDateTime                 = false;
+    d->saveRating                   = false;
 
-    d->previewLoadFullImageSize = false;
+    d->previewLoadFullImageSize     = false;
     
-    d->recursiveAlbums          = false;
-    d->recursiveTags            = true;
+    d->recursiveAlbums              = false;
+    d->recursiveTags                = true;
+
+    d->showFolderTreeViewItemsCount = false;
 }
 
 void AlbumSettings::readSettings()
@@ -251,67 +255,69 @@ void AlbumSettings::readSettings()
 
     config->setGroup("Album Settings");
 
-    d->albumLibraryPath = config->readPathEntry("Album Path", QString());
+    d->albumLibraryPath             = config->readPathEntry("Album Path", QString());
 
-    QStringList collectionList = config->readListEntry("Album Collections");
+    QStringList collectionList      = config->readListEntry("Album Collections");
     if (!collectionList.isEmpty())
     {
         collectionList.sort();
         d->albumCollectionNames = collectionList;
     }
 
-    d->albumSortOrder           = AlbumSettings::AlbumSortOrder(config->readNumEntry("Album Sort Order",
-                                                                (int)AlbumSettings::ByFolder));
+    d->albumSortOrder               = AlbumSettings::AlbumSortOrder(config->readNumEntry("Album Sort Order",
+                                                                    (int)AlbumSettings::ByFolder));
 
-    d->imageSortOrder           = AlbumSettings::ImageSortOrder(config->readNumEntry("Image Sort Order",
-                                                                (int)AlbumSettings::ByIName));
+    d->imageSortOrder               = AlbumSettings::ImageSortOrder(config->readNumEntry("Image Sort Order",
+                                                                    (int)AlbumSettings::ByIName));
 
-    d->itemRightClickAction     = AlbumSettings::ItemRightClickAction(config->readNumEntry(
-                                                                      "Item Right Click Action",
-                                                                      (int)AlbumSettings::ShowPreview));
+    d->itemRightClickAction         = AlbumSettings::ItemRightClickAction(config->readNumEntry(
+                                                                          "Item Right Click Action",
+                                                                          (int)AlbumSettings::ShowPreview));
 
-    d->imageFilefilter          = config->readEntry("File Filter", d->imageFilefilter);
-    d->movieFilefilter          = config->readEntry("Movie File Filter", d->movieFilefilter);
-    d->audioFilefilter          = config->readEntry("Audio File Filter", d->audioFilefilter);
-    d->rawFilefilter            = config->readEntry("Raw File Filter", d->rawFilefilter);
-    d->thumbnailSize            = config->readNumEntry("Default Icon Size", ThumbnailSize::Medium);
-    d->treeThumbnailSize        = config->readNumEntry("Default Tree Icon Size", ThumbnailSize::Tiny);
-    d->currentTheme             = config->readEntry("Theme", i18n("Default"));
+    d->imageFilefilter              = config->readEntry("File Filter", d->imageFilefilter);
+    d->movieFilefilter              = config->readEntry("Movie File Filter", d->movieFilefilter);
+    d->audioFilefilter              = config->readEntry("Audio File Filter", d->audioFilefilter);
+    d->rawFilefilter                = config->readEntry("Raw File Filter", d->rawFilefilter);
+    d->thumbnailSize                = config->readNumEntry("Default Icon Size", ThumbnailSize::Medium);
+    d->treeThumbnailSize            = config->readNumEntry("Default Tree Icon Size", ThumbnailSize::Tiny);
+    d->currentTheme                 = config->readEntry("Theme", i18n("Default"));
 
-    d->ratingFilterCond         = config->readNumEntry("Rating Filter Condition",
-                                                       AlbumLister::GreaterEqualCondition);
+    d->ratingFilterCond             = config->readNumEntry("Rating Filter Condition",
+                                                           AlbumLister::GreaterEqualCondition);
 
-    d->iconShowName             = config->readBoolEntry("Icon Show Name", false); 
-    d->iconShowResolution       = config->readBoolEntry("Icon Show Resolution", false);
-    d->iconShowSize             = config->readBoolEntry("Icon Show Size", false);
-    d->iconShowDate             = config->readBoolEntry("Icon Show Date", true);
-    d->iconShowModDate          = config->readBoolEntry("Icon Show Modification Date", true);
-    d->iconShowComments         = config->readBoolEntry("Icon Show Comments", true);
-    d->iconShowTags             = config->readBoolEntry("Icon Show Tags", true);
-    d->iconShowRating           = config->readBoolEntry("Icon Show Rating", true);
+    d->iconShowName                 = config->readBoolEntry("Icon Show Name", false); 
+    d->iconShowResolution           = config->readBoolEntry("Icon Show Resolution", false);
+    d->iconShowSize                 = config->readBoolEntry("Icon Show Size", false);
+    d->iconShowDate                 = config->readBoolEntry("Icon Show Date", true);
+    d->iconShowModDate              = config->readBoolEntry("Icon Show Modification Date", true);
+    d->iconShowComments             = config->readBoolEntry("Icon Show Comments", true);
+    d->iconShowTags                 = config->readBoolEntry("Icon Show Tags", true);
+    d->iconShowRating               = config->readBoolEntry("Icon Show Rating", true);
 
-    d->showToolTips             = config->readBoolEntry("Show ToolTips", false);
-    d->tooltipShowFileName      = config->readBoolEntry("ToolTips Show File Name", true);
-    d->tooltipShowFileDate      = config->readBoolEntry("ToolTips Show File Date", false);
-    d->tooltipShowFileSize      = config->readBoolEntry("ToolTips Show File Size", false);
-    d->tooltipShowImageType     = config->readBoolEntry("ToolTips Show Image Type", false);
-    d->tooltipShowImageDim      = config->readBoolEntry("ToolTips Show Image Dim", true);
-    d->tooltipShowPhotoMake     = config->readBoolEntry("ToolTips Show Photo Make", true);
-    d->tooltipShowPhotoDate     = config->readBoolEntry("ToolTips Show Photo Date", true);
-    d->tooltipShowPhotoFocal    = config->readBoolEntry("ToolTips Show Photo Focal", true);
-    d->tooltipShowPhotoExpo     = config->readBoolEntry("ToolTips Show Photo Expo", true);
-    d->tooltipShowPhotoMode     = config->readBoolEntry("ToolTips Show Photo Mode", true);
-    d->tooltipShowPhotoFlash    = config->readBoolEntry("ToolTips Show Photo Flash", false);
-    d->tooltipShowPhotoWb       = config->readBoolEntry("ToolTips Show Photo WB", false);
-    d->tooltipShowAlbumName     = config->readBoolEntry("ToolTips Show Album Name", false);
-    d->tooltipShowComments      = config->readBoolEntry("ToolTips Show Comments", true);
-    d->tooltipShowTags          = config->readBoolEntry("ToolTips Show Tags", true);
-    d->tooltipShowRating        = config->readBoolEntry("ToolTips Show Rating", true);
+    d->showToolTips                 = config->readBoolEntry("Show ToolTips", false);
+    d->tooltipShowFileName          = config->readBoolEntry("ToolTips Show File Name", true);
+    d->tooltipShowFileDate          = config->readBoolEntry("ToolTips Show File Date", false);
+    d->tooltipShowFileSize          = config->readBoolEntry("ToolTips Show File Size", false);
+    d->tooltipShowImageType         = config->readBoolEntry("ToolTips Show Image Type", false);
+    d->tooltipShowImageDim          = config->readBoolEntry("ToolTips Show Image Dim", true);
+    d->tooltipShowPhotoMake         = config->readBoolEntry("ToolTips Show Photo Make", true);
+    d->tooltipShowPhotoDate         = config->readBoolEntry("ToolTips Show Photo Date", true);
+    d->tooltipShowPhotoFocal        = config->readBoolEntry("ToolTips Show Photo Focal", true);
+    d->tooltipShowPhotoExpo         = config->readBoolEntry("ToolTips Show Photo Expo", true);
+    d->tooltipShowPhotoMode         = config->readBoolEntry("ToolTips Show Photo Mode", true);
+    d->tooltipShowPhotoFlash        = config->readBoolEntry("ToolTips Show Photo Flash", false);
+    d->tooltipShowPhotoWb           = config->readBoolEntry("ToolTips Show Photo WB", false);
+    d->tooltipShowAlbumName         = config->readBoolEntry("ToolTips Show Album Name", false);
+    d->tooltipShowComments          = config->readBoolEntry("ToolTips Show Comments", true);
+    d->tooltipShowTags              = config->readBoolEntry("ToolTips Show Tags", true);
+    d->tooltipShowRating            = config->readBoolEntry("ToolTips Show Rating", true);
 
-    d->previewLoadFullImageSize = config->readBoolEntry("Preview Load Full Image Size", false);
+    d->previewLoadFullImageSize     = config->readBoolEntry("Preview Load Full Image Size", false);
 
-    d->recursiveAlbums          = config->readBoolEntry("Recursive Albums", false);
-    d->recursiveTags            = config->readBoolEntry("Recursive Tags", true);
+    d->recursiveAlbums              = config->readBoolEntry("Recursive Albums", false);
+    d->recursiveTags                = config->readBoolEntry("Recursive Tags", true);
+
+    d->showFolderTreeViewItemsCount = config->readBoolEntry("Show Folder Tree View Items Count", false);
 
     // ---------------------------------------------------------------------
 
@@ -402,6 +408,8 @@ void AlbumSettings::saveSettings()
 
     config->writeEntry("Recursive Albums", d->recursiveAlbums);
     config->writeEntry("Recursive Tags", d->recursiveTags);
+
+    config->writeEntry("Show Folder Tree View Items Count", d->showFolderTreeViewItemsCount);
 
     // ---------------------------------------------------------------------
 
@@ -1110,6 +1118,16 @@ void AlbumSettings::setRecurseTags(bool val)
 bool AlbumSettings::getRecurseTags() const
 {
     return d->recursiveTags;
+}
+
+void AlbumSettings::setShowFolderTreeViewItemsCount(bool val)
+{
+    d->showFolderTreeViewItemsCount = val;
+}
+
+bool AlbumSettings::getShowFolderTreeViewItemsCount() const
+{
+    return d->showFolderTreeViewItemsCount;
 }
 
 }  // namespace Digikam

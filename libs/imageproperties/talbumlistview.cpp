@@ -67,16 +67,54 @@ namespace Digikam
 {
 
 TAlbumCheckListItem::TAlbumCheckListItem(QListView* parent, TAlbum* album)
-                   : QCheckListItem(parent, album->title()), m_album(album)
+                   : QCheckListItem(parent, album->title())
 {
     setDragEnabled(true);
+    m_album = album;
+    m_count = 0;
 }
 
 TAlbumCheckListItem::TAlbumCheckListItem(QCheckListItem* parent, TAlbum* album)
-                   : QCheckListItem(parent, album->title(), QCheckListItem::CheckBox),
-                     m_album(album)
+                   : QCheckListItem(parent, album->title(), QCheckListItem::CheckBox)
 {
     setDragEnabled(true);
+    m_album = album;
+    m_count = 0;
+}
+
+void TAlbumCheckListItem::refresh()
+{
+    if (!m_album) return;
+    
+    if (AlbumSettings::instance()->getShowFolderTreeViewItemsCount() &&
+        dynamic_cast<TAlbumCheckListItem*>(parent()))
+    {
+        if (isOpen())
+            setText(0, QString("%1 (%2)").arg(m_album->title()).arg(m_count));
+        else
+        {
+            int countRecursive = m_count;
+            AlbumIterator it(m_album);
+            while ( it.current() )
+            {
+                TAlbumCheckListItem *item = (TAlbumCheckListItem*)it.current()->extraData(listView());
+                if (item)
+                    countRecursive += item->count();
+                ++it;
+            }
+            setText(0, QString("%1 (%2)").arg(m_album->title()).arg(countRecursive));
+        }
+    }
+    else
+    {
+        setText(0, m_album->title());
+    }
+}
+
+void TAlbumCheckListItem::setOpen(bool o)
+{
+    QListViewItem::setOpen(o);
+    refresh();
 }
 
 void TAlbumCheckListItem::setStatus(MetadataHub::TagStatus status)
@@ -96,6 +134,27 @@ void TAlbumCheckListItem::stateChange(bool val)
     QCheckListItem::stateChange(val);
     TAlbumListView* view = dynamic_cast<TAlbumListView*>(listView());
     view->emitSignalItemStateChanged(this);
+}
+
+TAlbum* TAlbumCheckListItem::album() const
+{
+    return m_album;
+}
+
+int TAlbumCheckListItem::id() const
+{
+    return m_album ? m_album->id() : 0;
+}
+
+void TAlbumCheckListItem::setCount(int count)
+{
+    m_count = count;
+    refresh();
+}
+
+int TAlbumCheckListItem::count()
+{
+    return m_count;
 }
 
 // ------------------------------------------------------------------------
@@ -124,6 +183,9 @@ TAlbumListView::TAlbumListView(QWidget* parent)
     setResizeMode(QListView::LastColumn);
     setAcceptDrops(true);
     viewport()->setAcceptDrops(true);
+
+    connect(AlbumManager::instance(), SIGNAL(signalTAlbumsDirty(const QMap<int, int>&)),
+            this, SLOT(slotRefresh(const QMap<int, int>&)));
 }
 
 TAlbumListView::~TAlbumListView()
@@ -219,7 +281,7 @@ QDragObject* TAlbumListView::dragObject()
     if(!item->parent())
         return 0;
 
-    TagDrag *t = new TagDrag(item->m_album->id(), this);
+    TagDrag *t = new TagDrag(item->id(), this);
     t->setPixmap(*item->pixmap(0));
 
     return t;
@@ -254,13 +316,13 @@ bool TAlbumListView::acceptDrop(const QDropEvent *e) const
             return false;
 
         // Dragging a parent on its child makes no sense
-        if(itemDrag && itemDrag->m_album->isAncestorOf(itemDrop->m_album))
+        if(itemDrag && itemDrag->album()->isAncestorOf(itemDrop->album()))
             return false;
 
         return true;
     }
 
-    if (ItemDrag::canDecode(e) && itemDrop && itemDrop->m_album->parent())
+    if (ItemDrag::canDecode(e) && itemDrop && itemDrop->album()->parent())
     {
         // Only other possibility is image items being dropped
         // And allow this only if there is a Tag to be dropped
@@ -294,7 +356,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
         if(!talbum)
             return;
 
-        if (talbum == itemDrop->m_album)
+        if (talbum == itemDrop->album())
             return;
 
         KPopupMenu popMenu(this);
@@ -317,7 +379,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
             else
             {
                 // move dragItem as child of dropItem
-                newParentTag = itemDrop->m_album;
+                newParentTag = itemDrop->album();
             }
 
             QString errMsg;
@@ -335,7 +397,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
 
     if (ItemDrag::canDecode(e))
     {
-        TAlbum *destAlbum = itemDrop->m_album;
+        TAlbum *destAlbum = itemDrop->album();
         TAlbum *srcAlbum;
 
         KURL::List      urls;
@@ -448,5 +510,40 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
     }
 }
 
-}  // NameSpace Digikam
+void TAlbumListView::refresh()
+{
+    QListViewItemIterator it(this);
+    
+    while (it.current())
+    {
+        TAlbumCheckListItem* item = dynamic_cast<TAlbumCheckListItem*>(*it);
+        if (item)
+            item->refresh();
+        ++it;
+    }
+}
 
+void TAlbumListView::slotRefresh(const QMap<int, int>& tagsStatMap)
+{
+    QListViewItemIterator it(this);
+    
+    while (it.current())
+    {
+        TAlbumCheckListItem* item = dynamic_cast<TAlbumCheckListItem*>(*it);
+        if (item)
+        {
+            if (item->album())
+            {
+                int id = item->id();
+                QMap<int, int>::const_iterator it2 = tagsStatMap.find(id);
+                if ( it2 != tagsStatMap.end() )
+                    item->setCount(it2.data());
+            }
+        }
+        ++it;
+    }
+
+    refresh();
+}
+
+}  // NameSpace Digikam

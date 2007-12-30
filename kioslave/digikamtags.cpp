@@ -106,6 +106,8 @@ static bool matchFilterList( const QValueList<QRegExp>& filters,
 
 void kio_digikamtagsProtocol::special(const QByteArray& data)
 {
+    bool folders = (metaData("folders") == "yes");
+
     QString libraryPath;
     KURL    kurl;
     QString url;
@@ -134,118 +136,150 @@ void kio_digikamtagsProtocol::special(const QByteArray& data)
         m_db.openDB(libraryPath);
     }
 
-    tagID = QStringList::split('/',url).last().toInt();
+    QByteArray  ba;
 
-    QStringList values;
-
-    if (recurseTags)
+    if (folders)       // Special mode to stats all tag items
     {
-        // Obtain all images with the given tag, or with this tag as a parent.
-        m_db.execSql( QString( "SELECT DISTINCT Images.id, Images.name, Images.dirid, \n "
-                               "       Images.datetime, Albums.url \n "
-                               " FROM Images, Albums \n "
-                               " WHERE Images.id IN \n "
-                               "       (SELECT imageid FROM ImageTags \n "
-                               "        WHERE tagid=%1 \n "
-                               "           OR tagid IN (SELECT id FROM TagsTree WHERE pid=%2)) \n "
-                               "   AND Albums.id=Images.dirid \n " )
-                      .arg(tagID)
-                      .arg(tagID), &values );
+        QMap<int, int> tagsStatMap;
+        int            tagID, imageID;
+        QStringList    values;
+
+        m_db.execSql(QString("SELECT ImageTags.tagid, Images.name FROM ImageTags, Images "
+                             "WHERE ImageTags.imageid=Images.id"), &values);
+
+        for ( QStringList::iterator it = values.begin(); it != values.end(); )
+        {
+            tagID = (*it).toInt();
+            ++it;
+
+            if ( matchFilterList( regex, *it ) )
+            {
+                QMap<int, int>::iterator it2 = tagsStatMap.find(tagID);
+                if ( it2 == tagsStatMap.end() )
+                    tagsStatMap.insert(tagID, 1);
+                else
+                    tagsStatMap.replace(tagID, it2.data() + 1);
+            }
+
+            ++it;
+        }
+
+        QDataStream os(ba, IO_WriteOnly);
+        os << tagsStatMap;
     }
     else
     {
-         // Obtain all images with the given tag
-         m_db.execSql( QString( "SELECT DISTINCT Images.id, Images.name, Images.dirid, \n "
+        tagID = QStringList::split('/',url).last().toInt();
+
+        QStringList values;
+    
+        if (recurseTags)
+        {
+            // Obtain all images with the given tag, or with this tag as a parent.
+            m_db.execSql( QString( "SELECT DISTINCT Images.id, Images.name, Images.dirid, \n "
                                 "       Images.datetime, Albums.url \n "
                                 " FROM Images, Albums \n "
                                 " WHERE Images.id IN \n "
                                 "       (SELECT imageid FROM ImageTags \n "
-                                "        WHERE tagid=%1) \n "
+                                "        WHERE tagid=%1 \n "
+                                "           OR tagid IN (SELECT id FROM TagsTree WHERE pid=%2)) \n "
                                 "   AND Albums.id=Images.dirid \n " )
-                       .arg(tagID), &values );
-    }
-
-    QByteArray  ba;
-
-    Q_LLONG imageid;
-    QString name;
-    QString path;
-    int     dirid;
-    QString date;
-    QString purl;
-    QSize   dims;
-
-    int count = 0;
-    QDataStream* os = new QDataStream(ba, IO_WriteOnly);
-
-    struct stat stbuf;
-    for (QStringList::iterator it = values.begin(); it != values.end();)
-    {
-        imageid = (*it).toLongLong();
-        ++it;
-        name  = *it;
-        ++it;
-        dirid = (*it).toInt();
-        ++it;
-        date  = *it;
-        ++it;
-        purl  = *it;
-        ++it;
-
-        if (!matchFilterList(regex, name))
-            continue;
-
-        path = m_libraryPath + purl + '/' + name;
-        if (::stat(QFile::encodeName(path), &stbuf) != 0)
-            continue;
-
-        dims = QSize();
-        if (getDimensions)
+                        .arg(tagID)
+                        .arg(tagID), &values );
+        }
+        else
         {
-            KFileMetaInfo metaInfo(path);
-            if (metaInfo.isValid())
+            // Obtain all images with the given tag
+            m_db.execSql( QString( "SELECT DISTINCT Images.id, Images.name, Images.dirid, \n "
+                                    "       Images.datetime, Albums.url \n "
+                                    " FROM Images, Albums \n "
+                                    " WHERE Images.id IN \n "
+                                    "       (SELECT imageid FROM ImageTags \n "
+                                    "        WHERE tagid=%1) \n "
+                                    "   AND Albums.id=Images.dirid \n " )
+                        .arg(tagID), &values );
+        }
+    
+        Q_LLONG imageid;
+        QString name;
+        QString path;
+        int     dirid;
+        QString date;
+        QString purl;
+        QSize   dims;
+    
+        int count = 0;
+        QDataStream* os = new QDataStream(ba, IO_WriteOnly);
+    
+        struct stat stbuf;
+        for (QStringList::iterator it = values.begin(); it != values.end();)
+        {
+            imageid = (*it).toLongLong();
+            ++it;
+            name  = *it;
+            ++it;
+            dirid = (*it).toInt();
+            ++it;
+            date  = *it;
+            ++it;
+            purl  = *it;
+            ++it;
+    
+            if (!matchFilterList(regex, name))
+                continue;
+    
+            path = m_libraryPath + purl + '/' + name;
+            if (::stat(QFile::encodeName(path), &stbuf) != 0)
+                continue;
+    
+            dims = QSize();
+            if (getDimensions)
             {
-                if (metaInfo.containsGroup("Jpeg EXIF Data"))
+                KFileMetaInfo metaInfo(path);
+                if (metaInfo.isValid())
                 {
-                    dims = metaInfo.group("Jpeg EXIF Data").
-                           item("Dimensions").value().toSize();
-                }
-                else if (metaInfo.containsGroup("General"))
-                {
-                    dims = metaInfo.group("General").
-                           item("Dimensions").value().toSize();
-                }
-                else if (metaInfo.containsGroup("Technical"))
-                {
-                    dims = metaInfo.group("Technical").
-                           item("Dimensions").value().toSize();
+                    if (metaInfo.containsGroup("Jpeg EXIF Data"))
+                    {
+                        dims = metaInfo.group("Jpeg EXIF Data").
+                            item("Dimensions").value().toSize();
+                    }
+                    else if (metaInfo.containsGroup("General"))
+                    {
+                        dims = metaInfo.group("General").
+                            item("Dimensions").value().toSize();
+                    }
+                    else if (metaInfo.containsGroup("Technical"))
+                    {
+                        dims = metaInfo.group("Technical").
+                            item("Dimensions").value().toSize();
+                    }
                 }
             }
+    
+            *os << imageid;
+            *os << dirid;
+            *os << name;
+            *os << date;
+            *os << static_cast<size_t>(stbuf.st_size);
+            *os << dims;
+    
+            count++;
+    
+            if (count > 200)
+            {
+                delete os;
+                os = 0;
+    
+                SlaveBase::data(ba);
+                ba.resize(0);
+    
+                count = 0;
+                os = new QDataStream(ba, IO_WriteOnly);
+            }
         }
-
-        *os << imageid;
-        *os << dirid;
-        *os << name;
-        *os << date;
-        *os << static_cast<size_t>(stbuf.st_size);
-        *os << dims;
-
-        count++;
-
-        if (count > 200)
-        {
-            delete os;
-            os = 0;
-
-            SlaveBase::data(ba);
-            ba.resize(0);
-
-            count = 0;
-            os = new QDataStream(ba, IO_WriteOnly);
-        }
+    
+        delete os;
     }
-
-    delete os;
 
     SlaveBase::data(ba);
 

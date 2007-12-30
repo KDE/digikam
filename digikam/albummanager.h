@@ -6,7 +6,8 @@
  * Date        : 2004-06-15
  * Description : Albums manager interface.
  * 
- * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,9 +29,11 @@
 
 // Qt includes.
 
+#include <qdatetime.h>
 #include <qobject.h>
 #include <qstring.h>
 #include <qvaluelist.h>
+#include <qmap.h>
 
 // KDE includes.
 
@@ -60,6 +63,7 @@ class AlbumItemHandler;
 class AlbumManagerPriv;
 
 typedef QValueList<Album*> AlbumList;
+typedef QPair<int, int> YearMonth;
 
 /**
  * \class AlbumManager
@@ -350,7 +354,6 @@ public:
     bool updateTAlbumIcon(TAlbum* album, const QString& iconKDE,
                           Q_LLONG iconID, QString& errMsg);
     //@}
-    
 
     /** @name Operations on SAlbum
      */
@@ -392,10 +395,35 @@ public:
     void refreshItemHandler(const KURL::List& itemList=KURL::List());
     void emitAlbumItemsSelected(bool val);
 
-private:
+signals:
 
-    static AlbumManager* m_instance;
-    AlbumManagerPriv*    d;
+    void signalAlbumAdded(Album* album);
+    void signalAlbumDeleted(Album* album);
+    void signalAlbumItemsSelected(bool selected);
+    void signalAlbumsCleared();
+    void signalAlbumCurrentChanged(Album* album);
+    void signalAllAlbumsLoaded();
+    void signalAllDAlbumsLoaded();    
+    void signalAlbumIconChanged(Album* album);
+    void signalAlbumRenamed(Album* album);
+    void signalTAlbumMoved(TAlbum* album, TAlbum* newParent);
+    void signalPAlbumDirty(PAlbum* album);
+    void signalPAlbumsDirty(const QMap<int, int>&);
+    void signalTAlbumsDirty(const QMap<int, int>&);
+    void signalDAlbumsDirty(const QMap<YearMonth, int>&);
+    void signalDatesMapDirty(const QMap<QDateTime, int>&);
+
+private slots:
+
+    void slotDatesJobResult(KIO::Job* job);
+    void slotDatesJobData(KIO::Job* job, const QByteArray& data);
+    void slotAlbumsJobResult(KIO::Job* job);
+    void slotAlbumsJobData(KIO::Job* job, const QByteArray& data);
+    void slotTagsJobResult(KIO::Job* job);
+    void slotTagsJobData(KIO::Job* job, const QByteArray& data);
+    void slotDirty(const QString& path);
+
+private:
 
     void insertPAlbum(PAlbum *album);
     void removePAlbum(PAlbum *album);
@@ -430,24 +458,11 @@ private:
      */
     void scanDAlbums();
 
-private slots:
+private:
 
-    void slotResult(KIO::Job* job);
-    void slotData(KIO::Job* job, const QByteArray& data);
-    void slotDirty(const QString& path);
-
-signals:
-
-    void signalAlbumAdded(Album* album);
-    void signalAlbumDeleted(Album* album);
-    void signalAlbumItemsSelected(bool selected);
-    void signalAlbumsCleared();
-    void signalAlbumCurrentChanged(Album* album);
-    void signalAllAlbumsLoaded();
-    void signalAllDAlbumsLoaded();    
-    void signalAlbumIconChanged(Album* album);
-    void signalAlbumRenamed(Album* album);
-    void signalTAlbumMoved(TAlbum* album, TAlbum* newParent);
+    static AlbumManager *m_instance;
+    
+    AlbumManagerPriv    *d;
 };
 
 }  // namespace Digikam

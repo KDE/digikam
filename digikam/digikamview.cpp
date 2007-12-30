@@ -248,6 +248,16 @@ void DigikamView::applySettings()
     AlbumSettings *settings = AlbumSettings::instance();
     d->iconView->applySettings(settings);
     d->albumWidgetStack->imagePreviewView()->setLoadFullImageSize(settings->getPreviewLoadFullImageSize());
+    refreshView();
+}
+    
+void DigikamView::refreshView()
+{
+    d->folderView->refresh();
+    d->dateFolderView->refresh();
+    d->tagFolderView->refresh();
+    d->tagFilterView->refresh();
+    d->rightSideBar->refreshTagsView();
 }
 
 void DigikamView::setupConnections()

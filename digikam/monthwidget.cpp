@@ -334,11 +334,11 @@ void MonthWidget::mousePressEvent(QMouseEvent *e)
             d->days[j*7+i].selected = !d->days[j*7+i].selected;
     }
 
-    QValueList<int> filterDays;
+    QValueList<QDateTime> filterDays;
     for (int i=0; i<42; i++)
     {
         if (d->days[i].selected && d->days[i].day != -1)
-            filterDays.append(d->days[i].day);
+            filterDays.append(QDateTime(QDate(d->year, d->month, d->days[i].day), QTime()));
     }
 
     AlbumLister::instance()->setDayFilter(filterDays);
@@ -365,7 +365,7 @@ void MonthWidget::setActive(bool val)
     {
         QDate date = QDate::currentDate();
         setYearMonth(date.year(), date.month());
-        AlbumLister::instance()->setDayFilter(QValueList<int>());
+        AlbumLister::instance()->setDayFilter(QValueList<QDateTime>());
 
         disconnect(AlbumLister::instance());
     }

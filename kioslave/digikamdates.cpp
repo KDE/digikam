@@ -134,48 +134,42 @@ void kio_digikamdates::special(const QByteArray& data)
 
     QByteArray  ba;
 
-    if (folders)
+    if (folders)       // Special mode to stats all dates from collection
     {
-        typedef QPair<int, int> YearMonth;
-        QMap<YearMonth, bool> yearMonthMap;
-        
-        QStringList values;
+        QMap<QDateTime, int> datesStatMap;
+        QStringList          values;
+        QString              name, dateStr;
+        QDateTime            dateTime;
+
         m_db.execSql( "SELECT name, datetime FROM Images;", &values );
 
-        QString name, dateStr;
-        QDate date;
         for ( QStringList::iterator it = values.begin(); it != values.end(); )
         {
             name    = *it;
             ++it;
             dateStr = *it;
             ++it;
-            
+
             if ( !matchFilterList( regex, name ) )
                 continue;
 
-            date = QDate::fromString( dateStr,  Qt::ISODate );
-            if ( !date.isValid() )
+            dateTime = QDateTime::fromString( dateStr, Qt::ISODate );
+            if ( !dateTime.isValid() )
                 continue;
 
-            if ( !yearMonthMap.contains(YearMonth(date.year(), date.month())) )
+            QMap<QDateTime, int>::iterator it2 = datesStatMap.find(dateTime);
+            if ( it2 == datesStatMap.end() )
             {
-                yearMonthMap.insert( YearMonth( date.year(), date.month() ), true );
+                datesStatMap.insert( dateTime, 1 );
+            }
+            else
+            {
+                datesStatMap.replace( dateTime, it2.data() + 1 );
             }
         }
 
         QDataStream os(ba, IO_WriteOnly);
-        
-        int year, month;
-        for ( QMap<YearMonth, bool>::iterator it = yearMonthMap.begin();
-              it != yearMonthMap.end(); ++it )
-        {
-            year  = it.key().first;
-            month = it.key().second;
-
-            QDate date( year,  month,  1 );
-            os << date;
-        }
+        os << datesStatMap;
     }
     else
     {

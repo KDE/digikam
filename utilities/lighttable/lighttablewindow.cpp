@@ -155,6 +155,13 @@ void LightTableWindow::applySettings()
     d->autoSyncPreview       = config->readBoolEntry("Auto Sync Preview",       true);
     d->fullScreenHideToolBar = config->readBoolEntry("FullScreen Hide ToolBar", false);
     d->previewView->setLoadFullImageSize(config->readBoolEntry("Load Full Image size", false));
+    refreshView();
+}
+
+void LightTableWindow::refreshView()
+{
+    d->leftSidebar->refreshTagsView();
+    d->rightSidebar->refreshTagsView();
 }
 
 void LightTableWindow::closeEvent(QCloseEvent* e)

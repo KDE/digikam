@@ -1639,6 +1639,9 @@ void DigikamApp::slotSetupChanged()
     d->albumManager->setLibraryPath(d->albumSettings->getAlbumLibraryPath());
     d->albumManager->startScan();
 
+    if(d->albumSettings->getShowFolderTreeViewItemsCount())
+        d->albumManager->refresh();
+
     d->view->applySettings();
     d->albumIconViewFilter->readSettings();
     
@@ -1904,6 +1907,14 @@ void DigikamApp::slotDatabaseRescan()
 {
     ScanLib sLib;
     sLib.startScan();
+
+    d->view->refreshView();
+    
+    if (ImageWindow::imagewindowCreated())
+        ImageWindow::imagewindow()->refreshView();
+
+    if (LightTableWindow::lightTableWindowCreated())
+        LightTableWindow::lightTableWindow()->refreshView();
 }
 
 void DigikamApp::slotRebuildAllThumbs()

@@ -256,6 +256,9 @@ public:
     void setPreviewLoadFullImageSize(bool val);
     bool getPreviewLoadFullImageSize() const;
 
+    void setShowFolderTreeViewItemsCount(bool val);
+    bool getShowFolderTreeViewItemsCount() const;
+
     void setRecurseAlbums(bool val);
     bool getRecurseAlbums() const;
 

@@ -101,7 +101,7 @@ public:
 
     void setNamesFilter(const QString& namesFilter);
 
-    void setDayFilter(const QValueList<int>& days);
+    void setDayFilter(const QValueList<QDateTime>& days);
 
     void setTagFilter(const QValueList<int>& tags, const MatchingCondition& matchingCond, 
                       bool showUnTagged=false);

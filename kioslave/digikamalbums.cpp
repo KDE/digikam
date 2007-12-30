@@ -125,6 +125,8 @@ static bool matchFilterList( const QValueList<QRegExp>& filters,
 
 void kio_digikamalbums::special(const QByteArray& data)
 {
+    bool folders = (metaData("folders") == "yes");
+
     QString libraryPath;
     KURL    kurl;
     QString url;
@@ -146,7 +148,7 @@ void kio_digikamalbums::special(const QByteArray& data)
         ds >> scan;
 
     libraryPath = QDir::cleanDirPath(libraryPath);
-    
+
     if (m_libraryPath != libraryPath)
     {
         m_libraryPath = libraryPath;
@@ -155,142 +157,174 @@ void kio_digikamalbums::special(const QByteArray& data)
     }
 
     url = kurl.path();
-    
+
     if (scan)
     {
         scanAlbum(url);
         finished();
         return;
     }
-    
-    QValueList<QRegExp> regex = makeFilterList(filter);
-    
-    QStringList albumvalues;
-    if (recurseAlbums)
-    {
-        // Search for albums and sub-albums:
-        // For this, get the path with a trailing "/".
-        // Otherwise albums on the same level like "Paris", "Paris 2006",
-        // would be found in addition to "Paris/*".
-        urlWithTrailingSlash = kurl.path(1);
 
-        m_sqlDB.execSql(QString("SELECT DISTINCT id, url FROM Albums WHERE  url='%1' OR url LIKE '\%%2\%';")
-                        .arg(escapeString(url)).arg(escapeString(urlWithTrailingSlash)), &albumvalues);
+    QValueList<QRegExp> regex = makeFilterList(filter);
+    QByteArray ba;
+
+    if (folders)       // Special mode to stats all album items
+    {
+        QMap<int, int> albumsStatMap;
+        QStringList    values;
+        int            albumID;
+
+        m_sqlDB.execSql(QString("SELECT dirid, Images.name FROM Images "
+                                "WHERE Images.dirid IN (SELECT DISTINCT id FROM Albums)"), &values);
+
+        for ( QStringList::iterator it = values.begin(); it != values.end(); )
+        {
+            albumID = (*it).toInt();
+            ++it;
+
+            if ( matchFilterList( regex, *it ) )
+            {
+                QMap<int, int>::iterator it2 = albumsStatMap.find(albumID);
+                if ( it2 == albumsStatMap.end() )
+                    albumsStatMap.insert(albumID, 1);
+                else
+                    albumsStatMap.replace(albumID, it2.data() + 1);
+            }
+
+            ++it;
+        }
+
+        QDataStream os(ba, IO_WriteOnly);
+        os << albumsStatMap;
     }
     else
     {
-        // Search for albums 
-
-        m_sqlDB.execSql(QString("SELECT DISTINCT id, url FROM Albums WHERE url='%1';")
-                        .arg(escapeString(url)), &albumvalues);
-    }
-
-    QByteArray  ba;
-    QDataStream* os = new QDataStream(ba, IO_WriteOnly);
-
-    QString base;  
-    Q_LLONG id;
-    QString name;
-    QString date;
-    QSize   dims;
-
-    struct stat stbuf;
-    
-    QStringList values;
-    QString albumurl;
-    int albumid;
-
-    // Loop over all albums:
-    int count = 0 ;
-    for (QStringList::iterator albumit = albumvalues.begin(); albumit != albumvalues.end();)
-    {
-        albumid = (*albumit).toLongLong();
-        ++albumit;
-        albumurl = *albumit;
-        ++albumit;
-
-        base = libraryPath + albumurl + '/';
-
-        values.clear();
-        m_sqlDB.execSql(QString("SELECT id, name, datetime FROM Images "
-                                "WHERE dirid = %1;")
-                        .arg(albumid), &values);
-
-        // Loop over all images in each album (specified by its albumid).
-        for (QStringList::iterator it = values.begin(); it != values.end();)
+        QStringList albumvalues;
+        if (recurseAlbums)
         {
-            id   = (*it).toLongLong();
-            ++it;
-            name = *it;
-            ++it;
-            date = *it;
-            ++it;
-
-            if (!matchFilterList(regex, name))
-              continue;
-
-            if (::stat(QFile::encodeName(base + name), &stbuf) != 0)
-              continue;
-
-            dims = QSize();
-            if (getDimensions)
-            {
-                QFileInfo fileInfo(base + name);
-                QString rawFilesExt(raw_file_extentions);
-                QString ext = fileInfo.extension(false).upper();
-
-                if (!ext.isEmpty() && rawFilesExt.upper().contains(ext))
-                {
-                    Digikam::DMetadata metaData(base + name);
-                    dims = metaData.getImageDimensions();
-                }
-                else
-                {
-                    KFileMetaInfo metaInfo(base + name);
-                    if (metaInfo.isValid())
-                    {
-                        if (metaInfo.containsGroup("Jpeg EXIF Data"))
-                        {
-                            dims = metaInfo.group("Jpeg EXIF Data").
-                              item("Dimensions").value().toSize();
-                        }
-                        else if (metaInfo.containsGroup("General"))
-                        {
-                            dims = metaInfo.group("General").
-                              item("Dimensions").value().toSize();
-                        }
-                        else if (metaInfo.containsGroup("Technical"))
-                        {
-                            dims = metaInfo.group("Technical").
-                              item("Dimensions").value().toSize();
-                        }                         
-                    }                    
-                }
-            }
-
-            *os << id;
-            *os << albumid;
-            *os << name;
-            *os << date;
-            *os << static_cast<size_t>(stbuf.st_size);
-            *os << dims;
-
-            count++;
-
-            // Send images in batches of 200.
-            if (count > 200)
-            {
-                delete os;
-                os = 0;
-
-                SlaveBase::data(ba);
-                ba.resize(0);
-
-                count = 0;
-                os = new QDataStream(ba, IO_WriteOnly);
-            }
+            // Search for albums and sub-albums:
+            // For this, get the path with a trailing "/".
+            // Otherwise albums on the same level like "Paris", "Paris 2006",
+            // would be found in addition to "Paris/*".
+            urlWithTrailingSlash = kurl.path(1);
+    
+            m_sqlDB.execSql(QString("SELECT DISTINCT id, url FROM Albums WHERE  url='%1' OR url LIKE '\%%2\%';")
+                            .arg(escapeString(url)).arg(escapeString(urlWithTrailingSlash)), &albumvalues);
         }
-        count++;
+        else
+        {
+            // Search for albums 
+    
+            m_sqlDB.execSql(QString("SELECT DISTINCT id, url FROM Albums WHERE url='%1';")
+                            .arg(escapeString(url)), &albumvalues);
+        }
+    
+        QDataStream* os = new QDataStream(ba, IO_WriteOnly);
+    
+        QString base;  
+        Q_LLONG id;
+        QString name;
+        QString date;
+        QSize   dims;
+    
+        struct stat stbuf;
+        
+        QStringList values;
+        QString albumurl;
+        int albumid;
+    
+        // Loop over all albums:
+        int count = 0 ;
+        for (QStringList::iterator albumit = albumvalues.begin(); albumit != albumvalues.end();)
+        {
+            albumid = (*albumit).toLongLong();
+            ++albumit;
+            albumurl = *albumit;
+            ++albumit;
+    
+            base = libraryPath + albumurl + '/';
+    
+            values.clear();
+            m_sqlDB.execSql(QString("SELECT id, name, datetime FROM Images "
+                                    "WHERE dirid = %1;")
+                            .arg(albumid), &values);
+    
+            // Loop over all images in each album (specified by its albumid).
+            for (QStringList::iterator it = values.begin(); it != values.end();)
+            {
+                id   = (*it).toLongLong();
+                ++it;
+                name = *it;
+                ++it;
+                date = *it;
+                ++it;
+    
+                if (!matchFilterList(regex, name))
+                continue;
+    
+                if (::stat(QFile::encodeName(base + name), &stbuf) != 0)
+                continue;
+    
+                dims = QSize();
+                if (getDimensions)
+                {
+                    QFileInfo fileInfo(base + name);
+                    QString rawFilesExt(raw_file_extentions);
+                    QString ext = fileInfo.extension(false).upper();
+    
+                    if (!ext.isEmpty() && rawFilesExt.upper().contains(ext))
+                    {
+                        Digikam::DMetadata metaData(base + name);
+                        dims = metaData.getImageDimensions();
+                    }
+                    else
+                    {
+                        KFileMetaInfo metaInfo(base + name);
+                        if (metaInfo.isValid())
+                        {
+                            if (metaInfo.containsGroup("Jpeg EXIF Data"))
+                            {
+                                dims = metaInfo.group("Jpeg EXIF Data").
+                                item("Dimensions").value().toSize();
+                            }
+                            else if (metaInfo.containsGroup("General"))
+                            {
+                                dims = metaInfo.group("General").
+                                item("Dimensions").value().toSize();
+                            }
+                            else if (metaInfo.containsGroup("Technical"))
+                            {
+                                dims = metaInfo.group("Technical").
+                                item("Dimensions").value().toSize();
+                            }                         
+                        }                    
+                    }
+                }
+    
+                *os << id;
+                *os << albumid;
+                *os << name;
+                *os << date;
+                *os << static_cast<size_t>(stbuf.st_size);
+                *os << dims;
+    
+                count++;
+    
+                // Send images in batches of 200.
+                if (count > 200)
+                {
+                    delete os;
+                    os = 0;
+    
+                    SlaveBase::data(ba);
+                    ba.resize(0);
+    
+                    count = 0;
+                    os = new QDataStream(ba, IO_WriteOnly);
+                }
+            }
+            count++;
+        }
     }
 
     SlaveBase::data(ba);

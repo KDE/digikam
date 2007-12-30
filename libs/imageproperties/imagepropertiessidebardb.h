@@ -72,6 +72,7 @@ public:
     void takeImageInfoOwnership(bool takeOwnership);
 
     void populateTags(void);
+    void refreshTagsView();
 
 signals:
 

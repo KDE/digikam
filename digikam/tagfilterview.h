@@ -56,7 +56,8 @@ public:
     ~TagFilterView();
 
     void stateChanged(TagFilterViewItem*);
-
+    void refresh();
+    
 signals:
 
     void signalProgressBarMode(int, const QString&);
@@ -93,6 +94,7 @@ private slots:
     void slotGotThumbnailFromIcon(Album *album, const QPixmap& thumbnail);
     void slotThumbnailLost(Album *album);
     void slotReloadThumbnails();
+    void slotRefresh(const QMap<int, int>&);
 
 private:
 

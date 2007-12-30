@@ -63,19 +63,20 @@ public:
 
     SetupGeneralPriv()
     {
-        albumPathEdit            = 0;
-        iconTreeThumbSize        = 0;
-        iconTreeThumbLabel       = 0;
-        iconShowNameBox          = 0;
-        iconShowSizeBox          = 0;
-        iconShowDateBox          = 0;
-        iconShowModDateBox       = 0;
-        iconShowResolutionBox    = 0;
-        iconShowCommentsBox      = 0;
-        iconShowTagsBox          = 0;
-        iconShowRatingBox        = 0;
-        rightClickActionComboBox = 0;
-        previewLoadFullImageSize = 0;
+        albumPathEdit                = 0;
+        iconTreeThumbSize            = 0;
+        iconTreeThumbLabel           = 0;
+        iconShowNameBox              = 0;
+        iconShowSizeBox              = 0;
+        iconShowDateBox              = 0;
+        iconShowModDateBox           = 0;
+        iconShowResolutionBox        = 0;
+        iconShowCommentsBox          = 0;
+        iconShowTagsBox              = 0;
+        iconShowRatingBox            = 0;
+        rightClickActionComboBox     = 0;
+        previewLoadFullImageSize     = 0;
+        showFolderTreeViewItemsCount = 0;
     }
 
     QLabel        *iconTreeThumbLabel;
@@ -89,6 +90,7 @@ public:
     QCheckBox     *iconShowTagsBox;
     QCheckBox     *iconShowRatingBox;
     QCheckBox     *previewLoadFullImageSize;
+    QCheckBox     *showFolderTreeViewItemsCount;
 
     QComboBox     *iconTreeThumbSize;
     QComboBox     *rightClickActionComboBox;
@@ -166,7 +168,7 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
     QVGroupBox *interfaceOptionsGroup = new QVGroupBox(i18n("Interface Options"), parent);
     interfaceOptionsGroup->setColumnLayout(0, Qt::Vertical );
     interfaceOptionsGroup->layout()->setMargin(KDialog::marginHint());
-    QGridLayout* ifaceSettingsLayout = new QGridLayout(interfaceOptionsGroup->layout(), 2, 4, KDialog::spacingHint());
+    QGridLayout* ifaceSettingsLayout = new QGridLayout(interfaceOptionsGroup->layout(), 3, 4, KDialog::spacingHint());
 
     d->iconTreeThumbLabel = new QLabel(i18n("Sidebar thumbnail size:"), interfaceOptionsGroup);
     d->iconTreeThumbSize = new QComboBox(false, interfaceOptionsGroup);
@@ -181,20 +183,24 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
     ifaceSettingsLayout->addMultiCellWidget(d->iconTreeThumbLabel, 0, 0, 0, 0);
     ifaceSettingsLayout->addMultiCellWidget(d->iconTreeThumbSize, 0, 0, 1, 1);
 
+    d->showFolderTreeViewItemsCount = new QCheckBox(i18n("Show count of items in all tree-view"), interfaceOptionsGroup);
+    ifaceSettingsLayout->addMultiCellWidget(d->showFolderTreeViewItemsCount, 1, 1, 0, 4);
+
+
     QLabel *rightClickLabel     = new QLabel(i18n("Thumbnail click action:"), interfaceOptionsGroup);
     d->rightClickActionComboBox = new QComboBox(false, interfaceOptionsGroup);
     d->rightClickActionComboBox->insertItem(i18n("Show embedded preview"), AlbumSettings::ShowPreview);
     d->rightClickActionComboBox->insertItem(i18n("Start image editor"), AlbumSettings::StartEditor);
     QToolTip::add( d->rightClickActionComboBox, i18n("<p>Select here the right action to do when you "
                                                      "right click with mouse button on thumbnail."));
-    ifaceSettingsLayout->addMultiCellWidget(rightClickLabel, 1 ,1, 0, 0);
-    ifaceSettingsLayout->addMultiCellWidget(d->rightClickActionComboBox, 1, 1, 1, 4);
+    ifaceSettingsLayout->addMultiCellWidget(rightClickLabel, 2 ,2, 0, 0);
+    ifaceSettingsLayout->addMultiCellWidget(d->rightClickActionComboBox, 2, 2, 1, 4);
 
     d->previewLoadFullImageSize = new QCheckBox(i18n("Embedded preview load full image size"), interfaceOptionsGroup);
     QWhatsThis::add( d->previewLoadFullImageSize, i18n("<p>Set this option to load full image size "
                      "with embedded preview instead a reduced one. Because this option will take more time "
                      "to load image, use it only if you have a fast computer."));
-    ifaceSettingsLayout->addMultiCellWidget(d->previewLoadFullImageSize, 2, 2, 0, 4);
+    ifaceSettingsLayout->addMultiCellWidget(d->previewLoadFullImageSize, 3, 3, 0, 4);
 
     layout->addWidget(interfaceOptionsGroup);
 
@@ -232,6 +238,7 @@ void SetupGeneral::applySettings()
                                       d->rightClickActionComboBox->currentItem());
 
     settings->setPreviewLoadFullImageSize(d->previewLoadFullImageSize->isChecked());
+    settings->setShowFolderTreeViewItemsCount(d->showFolderTreeViewItemsCount->isChecked());
     settings->saveSettings();
 }
 
@@ -264,6 +271,7 @@ void SetupGeneral::readSettings()
     d->rightClickActionComboBox->setCurrentItem((int)settings->getItemRightClickAction());
 
     d->previewLoadFullImageSize->setChecked(settings->getPreviewLoadFullImageSize());
+    d->showFolderTreeViewItemsCount->setChecked(settings->getShowFolderTreeViewItemsCount());
 }
 
 void SetupGeneral::slotChangeAlbumPath(const QString &result)

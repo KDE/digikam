@@ -55,7 +55,8 @@ public:
     void tagDelete();
 
     void selectItem(int id);
-
+    void refresh();
+    
  signals:
 
     void signalProgressBarMode(int, const QString&);
@@ -74,7 +75,7 @@ protected:
 
 private slots:
 
-    void slotAlbumAdded(Album *);
+    void slotAlbumAdded(Album*);
     void slotSelectionChanged();
     void slotAlbumDeleted(Album*);
     void slotAlbumRenamed(Album*);
@@ -86,6 +87,7 @@ private slots:
     void slotGotThumbnailFromIcon(Album *album, const QPixmap& thumbnail);
     void slotThumbnailLost(Album *album);
     void slotReloadThumbnails();
+    void slotRefresh(const QMap<int, int>&);
 
 private:
 

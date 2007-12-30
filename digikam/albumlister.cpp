@@ -96,8 +96,8 @@ public:
     QString                         textFilter;
 
     QMap<Q_LLONG, ImageInfo*>       itemMap;
-    QMap<int,int>                   invalidatedItems;
-    QMap<int,bool>                  dayFilter;
+    QMap<int, int>                  invalidatedItems;
+    QMap<QDateTime, bool>           dayFilter;
 
     QValueList<int>                 tagFilter;
 
@@ -221,11 +221,11 @@ void AlbumLister::refresh()
             this, SLOT(slotData(KIO::Job*, const QByteArray&)));
 }
 
-void AlbumLister::setDayFilter(const QValueList<int>& days)
+void AlbumLister::setDayFilter(const QValueList<QDateTime>& days)
 {
     d->dayFilter.clear();
 
-    for (QValueList<int>::const_iterator it = days.begin(); it != days.end(); ++it)
+    for (QValueList<QDateTime>::const_iterator it = days.begin(); it != days.end(); ++it)
         d->dayFilter.insert(*it, true);
 
     d->filterTimer->start(100, true);
@@ -322,7 +322,7 @@ bool AlbumLister::matchesFilter(const ImageInfo* info, bool &foundText)
 
     if (!d->dayFilter.isEmpty())
     {
-        match &= d->dayFilter.contains(info->dateTime().date().day());
+        match &= d->dayFilter.contains(QDateTime(info->dateTime().date(), QTime()));
     }
 
     //-- Filter by rating ---------------------------------------------------------

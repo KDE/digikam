@@ -50,13 +50,23 @@ public:
 
     TAlbumCheckListItem(QCheckListItem* parent, TAlbum* album);
 
-    void setStatus(MetadataHub::TagStatus status);
+    void    setStatus(MetadataHub::TagStatus status);
+    void    refresh();
+    void    setOpen(bool o);
+    TAlbum* album() const;
+    int     id() const;
+    void    setCount(int count);
+    int     count();
 
-    TAlbum *m_album;
-
-protected:
+private :
     
-    virtual void stateChange(bool val);
+    void stateChange(bool val);
+
+private :
+    
+    int     m_count;
+    
+    TAlbum *m_album;
 };
 
 // ------------------------------------------------------------------------
@@ -71,13 +81,18 @@ public:
     ~TAlbumListView();
 
     void emitSignalItemStateChanged(TAlbumCheckListItem *item);
-
+    void refresh();
+    
 signals:
 
     void signalProgressBarMode(int, const QString&);
     void signalProgressValue(int);
     void signalItemStateChanged(TAlbumCheckListItem *item);
 
+private slots:
+
+    void slotRefresh(const QMap<int, int>&);
+    
 protected:
 
     void contentsMousePressEvent(QMouseEvent *e);
