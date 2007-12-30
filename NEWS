@@ -17,9 +17,7 @@ Goto           : A new quick navigation feature has been added: it is now possib
                  Try any other combination.
                  That covers wish #128231.
 
-digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
-
-065 ==>        : ????? always force to show mediaplayer widget to preview video in embeded mode.
+AlbumGUI       : Always force to show mediaplayer widget to preview video in embeded mode.
 
 **********************************************************************************************
 
