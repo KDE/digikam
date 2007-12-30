@@ -245,7 +245,8 @@ bool AlbumManager::setDatabase(const QString &dbPath, bool priority)
 
     // -- Database initialization -------------------------------------------------
 
-    DatabaseAccess::setParameters(Digikam::DatabaseParameters::parametersForSQLiteDefaultFile(d->dbPath));
+    DatabaseAccess::setParameters(Digikam::DatabaseParameters::parametersForSQLiteDefaultFile(d->dbPath),
+                                  DatabaseAccess::MainApplication);
 
     ScanController::Advice advice = ScanController::instance()->databaseInitialization();
 

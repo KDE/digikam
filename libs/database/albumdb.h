@@ -35,6 +35,7 @@
 #include <QStringList>
 #include <QDateTime>
 #include <QPair>
+#include <QUuid>
 
 // KDE includes.
 
@@ -70,7 +71,8 @@ public:
      * This function returns the value which is stored in the database
      * (table Settings).
      * @param keyword The keyword for which the value has to be returned.
-     * @return The values which belongs to the keyword.
+     * @return The values which belongs to the keyword, or a null string if
+     *         no value is set.
      */
     QString getSetting(const QString& keyword);
 
@@ -103,6 +105,12 @@ public:
      * Extra whitespace, dots and wildcard characters (*.) are removed.
      */
     void setUserFilterSettings(const QString &imageFilterString, const QString &videoFilterString, const QString &audioFilterString);
+
+    /**
+     * Returns a UUID for the database file.
+     * This UUID is kept stable over schema updates.
+     */
+    QUuid databaseUuid();
 
     // ----------- AlbumRoot operations -----------
 

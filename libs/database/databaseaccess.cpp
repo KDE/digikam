@@ -25,6 +25,7 @@
 
 #include <QMutex>
 #include <QSqlDatabase>
+#include <QUuid>
 
 // KDE includes
 
@@ -50,6 +51,8 @@ public:
     DatabaseAccessStaticPriv()
     : backend(0), db(0), infoCache(0), databaseWatch(0), mutex(QMutex::Recursive) // create a recursive mutex
     {
+        // create a unique identifier for this application (as an application accessing a database
+        applicationIdentifier = QUuid::createUuid();
     };
     ~DatabaseAccessStaticPriv() {};
 
@@ -60,6 +63,7 @@ public:
     DatabaseParameters parameters;
     QMutex mutex;
     QString lastError;
+    QUuid applicationIdentifier;
 };
 
 DatabaseAccessStaticPriv *DatabaseAccess::d = 0;
@@ -70,6 +74,7 @@ DatabaseAccess::DatabaseAccess()
     if (!d->backend->isOpen())
     {
         d->backend->open(d->parameters);
+        d->databaseWatch->setDatabaseIdentifier(d->db->databaseUuid());
         CollectionManager::instance()->refresh();
     }
 }
@@ -113,6 +118,11 @@ DatabaseParameters DatabaseAccess::parameters()
 
 void DatabaseAccess::setParameters(const DatabaseParameters &parameters)
 {
+    return setParameters(parameters, DatabaseSlave);
+}
+
+void DatabaseAccess::setParameters(const DatabaseParameters &parameters, ApplicationStatus status)
+{
     if (!d)
     {
         d = new DatabaseAccessStaticPriv();
@@ -129,7 +139,14 @@ void DatabaseAccess::setParameters(const DatabaseParameters &parameters)
     d->parameters = parameters;
 
     if (!d->databaseWatch)
+    {
         d->databaseWatch = new DatabaseWatch();
+        d->databaseWatch->setApplicationIdentifier(d->applicationIdentifier);
+        if (status == MainApplication)
+            d->databaseWatch->initializeRemote(DatabaseWatch::DatabaseMaster);
+        else
+            d->databaseWatch->initializeRemote(DatabaseWatch::DatabaseSlave);
+    }
 
     if (!d->backend || !d->backend->isCompatible(parameters))
     {
@@ -142,6 +159,7 @@ void DatabaseAccess::setParameters(const DatabaseParameters &parameters)
 
     delete d->infoCache;
     d->infoCache = new ImageInfoCache();
+    d->databaseWatch->setDatabaseIdentifier(QString());
 }
 
 bool DatabaseAccess::checkReadyForUse(InitializationObserver *observer)
@@ -176,11 +194,17 @@ bool DatabaseAccess::checkReadyForUse(InitializationObserver *observer)
         }
     }
 
+    // set identifier
+    d->databaseWatch->setDatabaseIdentifier(d->db->databaseUuid());
+
     // update schema
     SchemaUpdater updater(&access);
     updater.setObserver(observer);
     if (!d->backend->initSchema(&updater))
         return false;
+
+    // set identifier again
+    d->databaseWatch->setDatabaseIdentifier(d->db->databaseUuid());
 
     // initialize CollectionManager
     CollectionManager::instance()->refresh();

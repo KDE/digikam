@@ -89,6 +89,11 @@ public:
       */
     static DatabaseParameters parameters();
 
+    enum ApplicationStatus
+    {
+        MainApplication,
+        DatabaseSlave
+    };
     /**
       * Set the default parameters.
       * Call this function at least once in the starting phase of your application,
@@ -100,6 +105,7 @@ public:
       * i.e. when the first DatabaseAccess object is constructed.
       */
     static void setParameters(const DatabaseParameters &parameters);
+    static void setParameters(const DatabaseParameters &parameters, ApplicationStatus status);
 
     /**
       * Method to one-time initialize a database when new parameters have been set:

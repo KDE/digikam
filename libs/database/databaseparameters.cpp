@@ -25,6 +25,10 @@
 
 #include <QDir>
 
+// KDE includes
+
+#include <kcodecs.h>
+
 // Local includes.
 
 #include "databaseparameters.h"
@@ -91,6 +95,19 @@ QString DatabaseParameters::SQLiteDatabaseFile() const
     if (isSQLite())
         return databaseName;
     return QString();
+}
+
+QByteArray DatabaseParameters::hash() const
+{
+    KMD5 md5;
+    md5.update(databaseType.toUtf8());
+    md5.update(databaseName.toUtf8());
+    md5.update(connectOptions.toUtf8());
+    md5.update(hostName.toUtf8());
+    md5.update((const char *)&port, sizeof(int));
+    md5.update(userName.toUtf8());
+    md5.update(password.toUtf8());
+    return md5.hexDigest();
 }
 
 DatabaseParameters DatabaseParameters::parametersForSQLite(const QString &databaseFile)

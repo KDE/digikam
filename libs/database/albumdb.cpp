@@ -702,6 +702,18 @@ void AlbumDB::setUserFilterSettings(const QStringList &imageFilter, const QStrin
     setSetting("databaseUserAudioFormats", audioFilter.join(";"));
 }
 
+QUuid AlbumDB::databaseUuid()
+{
+    QString uuidString = getSetting("databaseUUID");
+    QUuid uuid = QUuid(uuidString);
+    if (uuidString.isNull() || uuid.isNull())
+    {
+        uuid = QUuid::createUuid();
+        setSetting("databaseUUID", uuid.toString());
+    }
+    return uuid;
+}
+
 /*
 QString AlbumDB::getItemCaption(qlonglong imageID)
 {

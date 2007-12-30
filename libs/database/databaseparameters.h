@@ -77,6 +77,11 @@ public:
     QString SQLiteDatabaseFile() const;
 
     /**
+     * Creates a unique hash of the values stored in this object.
+     */
+    QByteArray hash() const;
+
+    /**
      * Convenience method to create a DatabaseParameters object for an
      * SQLITE 3 database specified by the local file path.
      */
