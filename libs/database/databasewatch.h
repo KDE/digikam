@@ -38,41 +38,64 @@
 namespace Digikam
 {
 
+class DatabaseWatchPriv;
+
 class DIGIKAM_EXPORT DatabaseWatch : public QObject
 {
 
     Q_OBJECT
 
-    /**
-     * This class notifies of changes in the database.
-     * The context when these signals are emitted is important:
-     * DatabaseAccess is locked when these signals are emitted,
-     * but this allows direct notification immediately after the change.
-     */
-
-public:
-
-    DatabaseWatch();
-
 signals:
 
     /**
-     * Notifies of an image-related change
+     * Notifies of changes in the database.
+     * Connect to the set of signals that you are interested in.
      */
     void imageChange(ImageChangeset changeset);
     void imageTagChange(ImageTagChangeset changeset);
     void collectionImageChange(CollectionImageChangeset changeset);
     void albumChange(AlbumChangeset changeset);
     void tagChange(TagChangeset changeset);
+    void albumRootChange(AlbumRootChangeset changeset);
     void searchChange(SearchChangeset changeset);
+
+    // --------------- //
 
 protected:
 
     ~DatabaseWatch();
 
+protected slots:
+
+    // DBus slots, for internal use
+    void slotDBusChangeset(const QString &databaseIdentifier,
+                           const QString &applicationIdentifier,
+                           const QDBusVariant &changeset);
+
+signals:
+
+    // DBus signals, for internal use
+    void changeset(const QString &databaseIdentifier,
+                   const QString &applicationIdentifier,
+                   const QDBusVariant &changeset);
+
 public:
 
-    // --- internal ---
+    // library-internal initialization API
+
+    DatabaseWatch();
+
+    enum DatabaseMode
+    {
+        DatabaseMaster,
+        DatabaseSlave
+    };
+
+    void initializeRemote(DatabaseMode mode);
+    void setDatabaseIdentifier(const QString &identifier);
+    void setApplicationIdentifier(const QString &identifier);
+
+    // library-internal signal-trigger methods
 
     void sendImageChange(ImageChangeset changeset);
     void sendImageTagChange(ImageTagChangeset changeset);
@@ -81,6 +104,10 @@ public:
     void sendTagChange(TagChangeset changeset);
     void sendAlbumRootChange(AlbumRootChangeset changeset);
     void sendSearchChange(SearchChangeset changeset);
+
+private:
+
+    DatabaseWatchPriv *d;
 };
 
 } // namespace Digikam
