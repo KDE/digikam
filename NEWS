@@ -5,7 +5,15 @@ digiKam 0.9.4-beta1 - Release date: 2008-??-??
 
 NEW FEATURES:
 
+General        : Add capability to display count of items in all Album, Date, Tags, and 
+                 Tags Filter Folder View.
+                 The number of items contained in virtual or physical albums can be 
+		 displayed on the right of album name. If a tree branch is collapsed, 
+		 parents album sum-up the number of items from all undisplayed children albums.
+                 Count of items is performed in background by digiKam KIO-Slaves.
+                 A new option from Setup/Album dialog page can toggle on/off this feature.
 
 digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-001 ==> 
+001 ==>  96388 : show number of images in the album.
+002 ==> 
