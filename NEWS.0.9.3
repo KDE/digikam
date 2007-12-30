@@ -1,0 +1,142 @@
+
+**********************************************************************************************
+
+digiKam 0.9.3 - Release date: 2007-12-23
+
+NEW FEATURES:
+
+AlbumGUI
+
+Drag&Drop      : D&D from anywhere into album tree. When the albumview is flattened
+                 (Include Album Sub-tree) images can be d&ded across horizontal separations.
+                 That one satisfies wish #142774.
+
+Goto           : A new quick navigation feature has been added: it is now possible (by RMB context menu)
+                 to GOTO any other view with pertinent context, e.g. from date view right-click on an
+                 image and GOTO the Album or Tag view that this image is associated with.
+                 Try any other combination.
+                 That covers wish #128231.
+
+AlbumGUI       : Always force to show mediaplayer widget to preview video in embeded mode.
+
+**********************************************************************************************
+
+digiKam 0.9.3-RC1 - Release date: 2007-12-08
+
+NEW FEATURES:
+
+AlbumGUI       : Add new Filter Bar on bottom of Albums/Tags/Searches/TagsFilter view filter contents
+                 based on string.
+
+digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+
+052 ==> 152522 : Support for *.3gp and *.mp4 video files in digiKam (already supported by KDE video players).
+053 ==> 128231 : A way to view pictures recursively in albums and sub-albums at the same time would be cool.
+054 ==> 133191 : Quick search/filter for albums like in amarok.
+055 ==> 146364 : Incremental search for tags in all tag fields.
+056 ==> 152843 : Live filter does not work if no text is displayed under thumbnails.
+057 ==> 148629 : "Adjust Exif orientation tag" does not continue after error.
+058 ==> 144165 : Numeric values in Histogram -> Statistics frame should be right-aligned.
+059 ==> 148037 : Tiff images are not displayed with correct colours.
+060 ==> 152961 : Cannot remove album from tree.
+061 ==> 121314 : More options to display the album tree.
+062 ==> 141085 : Some strings are untranslated in digiKam.
+063 ==> 151403 : Crashed trying to save a image downloaded from the camera.
+064 ==> 148772 : Histogram should refresh after editor save.
+
+**********************************************************************************************
+
+digiKam 0.9.3-beta3 - Release date: 2007-11-20
+
+NEW FEATURES:
+
+AlbumGUI       : Add Text pattern widget on status bar to filter Album contents based on items
+                 name, comments, and tags strings.
+ImageEditor    : New black & white Green color tone filter.
+LightTable     : Several usability improvements.
+
+digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+
+047 ==> 150296 : Images in LightTable are not compared in right order
+048 ==> 151956 : Red eye enhance feature no longer works.
+049 ==> 110136 : Filter textbox in album tree like in amaroks collection list.
+050 ==> 152192 : Resize really bad qualitatively.
+051 ==> 150801 : Thumbnail and image view does not update after editing image.
+
+**********************************************************************************************
+
+digiKam 0.9.3-beta2 - Release date: 2007-11-01
+
+NEW FEATURES:
+
+General        : Updated internal CImg library to last stable 1.2.4 (released at 2007/09/26).
+AlbumGUI       : Add Rating filter widget on status bar.
+AlbumGUI       : Add MimeType filter widget on status bar.
+AlbumGUI       : Add tool to navigate from album, tag and date view to any other view.
+
+digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+
+040 ==> 147533 : New rating filter for the statusbar.
+041 ==> 131963 : Add a file type filter tab to the right.
+042 ==> 148993 : Filter images by rating in album view.
+043 ==> 151357 : Ratings can exceed 5 stars.
+044 ==> 144815 : Scroll left-pane to the selected album/date on start-up.
+045 ==>  96894 : Easier navigation between albums, tags and collections.
+046 ==> 147426 : Search for non-voted pics.
+
+**********************************************************************************************
+
+digiKam 0.9.3-beta1 - Release date: 2007-10-08
+
+NEW FEATURES:
+
+General        : Updated internal CImg library to last stable 1.2.3 (released at 2007/08/24).
+General        : Color scheme theme are now XML based (instead X11 format).
+General        : Camera interface is now used to import new pictures in collection.
+CameraGUI      : New options to Download pictures and Delete it from camera at the same time.
+CameraGUI      : Support of Drag & Drop to download files from camera gui to album gui.
+CameraGUI      : Add new Bargarph to indicate statistics about free space available on Album
+                 Library Path.
+
+digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+
+001 ==> 120450 : Strange helper lines behavior in ratio crop tool.
+002 ==> 147248 : Image info doesn't follow image in the editor.
+003 ==> 147147 : digiKam does not apply tags to some selected images.
+004 ==> 143200 : Renaming like crasy with F2 crash digiKam.
+005 ==> 147347 : Showfoto crashes when opening twice multiple files.
+006 ==> 147269 : digiKam finds but fails to use libkdcraw.
+007 ==> 147263 : Some icons are missing.
+008 ==> 146636 : Adjust levels: helper line for sliders.
+009 ==> 147671 : Portability problem in configure script.
+010 ==> 147670 : Compilation problems on NetBSD in greycstoration.
+011 ==> 147362 : Tool-tip for zoom indicator is below the screen if window is maximised.
+012 ==> 145017 : Deleting an image from within digiKam does not update the digiKam database.
+013 ==> 148925 : Light Table thumb bar not updated when deleting images.
+014 ==> 148971 : Awful menu entry "digiKamThemeDesigner".
+015 ==> 148930 : digiKam-0.9.2 does not compile with lcms-1.17.
+016 ==> 141774 : Autorotate does not work however kipi rotate works.
+017 ==> 103350 : Original image is silently overwritten when saving.
+018 ==> 144431 : Add option in Camera Download Dialog.
+019 ==> 131407 : Use camera GUI also for import of images from different locations.
+020 ==> 143934 : Cannot download all photos from camera.
+021 ==> 147119 : Can't link against static libjasper, configure reports jasper is missing.
+022 ==> 147439 : It is too easy to delete a search.
+023 ==> 147687 : Error when downloading and converting images.
+024 ==> 137590 : Be able to modifiy the extension of images in the interface.
+025 ==> 139024 : Camera GUI new items selection doesn't work.
+026 ==> 139519 : digiKam silently fails to import when out of disc space.
+027 ==> 149469 : Excessive trash confirmation dialogs after album is deleted.
+028 ==> 148648 : Color managed previews not working in all plugins.
+029 ==> 126427 : In "rename file" dialog, the 2nd picture is (and can't) not displayed.
+030 ==> 144336 : Selecting pictures on the camera lets the scroll-bar jump back to the top of the list.
+031 ==> 136927 : Failed to download file DCP_4321.jpg. Do you want to continue? and when continue is
+                 clicked the same warning comes for the next image and so on.
+032 ==> 146083 : Bugs in drag and drop.
+033 ==> 147854 : Put images into an emptied light-table.
+034 ==> 149578 : libjpeg JPEG subsampling setting is not user-controlable.
+035 ==> 149685 : Go to next photo after current photo deletion (vs. to previous photo).
+036 ==> 148233 : Adding texture generates black image.
+037 ==> 147311 : Ligth Table RAW images does not rotate as def. by exif info.
+038 ==> 146773 : Metadata sources preference when sorting images.
+039 ==> 140133 : Metadata Edit Picture Comments Syncs to IPTC and EXIF when option is de-selected.
