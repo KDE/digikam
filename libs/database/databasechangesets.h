@@ -27,6 +27,8 @@
 // Qt includes
 
 #include <QList>
+#include <QMetaType>
+#include <QDBusArgument>
 
 // Local includes
 
@@ -53,6 +55,9 @@ public:
     QList<qlonglong> ids() const;
     bool containsImage(qlonglong id) const;
     DatabaseFields::Set changes() const;
+
+    ImageChangeset &operator<<(const QDBusArgument &argument);
+    const ImageChangeset &operator>>(QDBusArgument &argument) const;
 
 private:
 
@@ -95,6 +100,9 @@ public:
      * This is especially not suitable for RemovedAll changesets.
      */
     ImageTagChangeset &operator<<(const ImageTagChangeset &other);
+
+    ImageTagChangeset &operator<<(const QDBusArgument &argument);
+    const ImageTagChangeset &operator>>(QDBusArgument &argument) const;
 
     QList<qlonglong> ids() const;
     bool containsImage(qlonglong id) const;
@@ -156,6 +164,9 @@ public:
      */
     CollectionImageChangeset &operator<<(const CollectionImageChangeset &other);
 
+    CollectionImageChangeset &operator<<(const QDBusArgument &argument);
+    const CollectionImageChangeset &operator>>(QDBusArgument &argument) const;
+
     QList<qlonglong> ids() const;
     bool containsImage(qlonglong id) const;
     QList<int> albums() const;
@@ -188,6 +199,9 @@ public:
     int albumId() const;
     Operation operation() const;
 
+    AlbumChangeset &operator<<(const QDBusArgument &argument);
+    const AlbumChangeset &operator>>(QDBusArgument &argument) const;
+
 private:
 
     int       m_id;
@@ -214,6 +228,9 @@ public:
     int tagId() const;
     Operation operation() const;
 
+    TagChangeset &operator<<(const QDBusArgument &argument);
+    const TagChangeset &operator>>(QDBusArgument &argument) const;
+
 private:
 
     int       m_id;
@@ -236,6 +253,9 @@ public:
 
     int albumRootId() const;
     Operation operation() const;
+
+    AlbumRootChangeset &operator<<(const QDBusArgument &argument);
+    const AlbumRootChangeset &operator>>(QDBusArgument &argument) const;
 
 private:
 
@@ -261,15 +281,43 @@ public:
     int searchId() const;
     Operation operation() const;
 
+    SearchChangeset &operator<<(const QDBusArgument &argument);
+    const SearchChangeset &operator>>(QDBusArgument &argument) const;
+
 private:
 
     int       m_id;
     Operation m_operation;
 };
 
+} // namespace Digikam
 
-
+#define DECLARE_METATYPE_FOR_DBUS(x) \
+Q_DECLARE_METATYPE(x)\
+\
+inline QDBusArgument &operator<<(QDBusArgument &argument, const x &changeset) \
+{ \
+    changeset >> argument; \
+    return argument; \
+} \
+\
+inline const QDBusArgument &operator>>(const QDBusArgument &argument, x &changeset) \
+{ \
+    changeset << argument; \
+    return argument; \
 }
+
+DECLARE_METATYPE_FOR_DBUS(Digikam::ImageChangeset)
+DECLARE_METATYPE_FOR_DBUS(Digikam::ImageTagChangeset)
+DECLARE_METATYPE_FOR_DBUS(Digikam::CollectionImageChangeset)
+DECLARE_METATYPE_FOR_DBUS(Digikam::AlbumChangeset)
+DECLARE_METATYPE_FOR_DBUS(Digikam::TagChangeset)
+DECLARE_METATYPE_FOR_DBUS(Digikam::SearchChangeset)
+DECLARE_METATYPE_FOR_DBUS(Digikam::AlbumRootChangeset)
+DECLARE_METATYPE_FOR_DBUS(Digikam::DatabaseFields::Set)
+
+Q_DECLARE_METATYPE(QList<int>)
+Q_DECLARE_METATYPE(QList<qlonglong>)
 
 #endif //DATABASECHANGESETS_H
 

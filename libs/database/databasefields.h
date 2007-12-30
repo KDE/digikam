@@ -29,6 +29,8 @@
 #include <QFlags>
 #include <QHash>
 
+class QDBusArgument;
+
 namespace Digikam
 {
 
@@ -217,6 +219,11 @@ public:
     inline CustomEnum operator|(CustomEnum f) const { return customEnum.operator|(f); }
     inline CustomEnum operator^(CustomEnum f) const { return customEnum.operator^(f); }
     inline CustomEnum operator&(CustomEnum f) const { return customEnum.operator&(f); }
+
+
+    // databasechangesets.cpp
+    Set &operator<<(const QDBusArgument &argument);
+    const Set &operator>>(QDBusArgument &argument) const;
 
 private:
 

@@ -58,6 +58,22 @@ DatabaseFields::Set ImageChangeset::changes() const
     return m_changes;
 }
 
+ImageChangeset &ImageChangeset::operator<<(const QDBusArgument &argument)
+{
+    argument.beginStructure();
+    argument >> m_ids >> m_changes;
+    argument.endStructure();
+    return *this;
+}
+
+const ImageChangeset &ImageChangeset::operator>>(QDBusArgument &argument) const
+{
+    argument.beginStructure();
+    argument << m_ids << m_changes;
+    argument.endStructure();
+    return *this;
+}
+
 // ------------------------ //
 
 ImageTagChangeset::ImageTagChangeset()
@@ -91,6 +107,24 @@ ImageTagChangeset &ImageTagChangeset::operator<<(const ImageTagChangeset &other)
     m_ids << other.m_ids;
     m_tags << other.m_tags;
 
+    return *this;
+}
+
+ImageTagChangeset &ImageTagChangeset::operator<<(const QDBusArgument &argument)
+{
+    argument.beginStructure();
+    int intValue;
+    argument >> m_ids >> m_tags >> intValue;
+    m_operation = (Operation)intValue;
+    argument.endStructure();
+    return *this;
+}
+
+const ImageTagChangeset &ImageTagChangeset::operator>>(QDBusArgument &argument) const
+{
+    argument.beginStructure();
+    argument << m_ids << m_tags << (int)m_operation;
+    argument.endStructure();
     return *this;
 }
 
@@ -155,6 +189,24 @@ CollectionImageChangeset &CollectionImageChangeset::operator<<(const CollectionI
     return *this;
 }
 
+CollectionImageChangeset &CollectionImageChangeset::operator<<(const QDBusArgument &argument)
+{
+    argument.beginStructure();
+    int intValue;
+    argument >> m_ids >> m_albums >> intValue;
+    m_operation = (Operation)intValue;
+    argument.endStructure();
+    return *this;
+}
+
+const CollectionImageChangeset &CollectionImageChangeset::operator>>(QDBusArgument &argument) const
+{
+    argument.beginStructure();
+    argument << m_ids << m_albums << (int)m_operation;
+    argument.endStructure();
+    return *this;
+}
+
 QList<qlonglong> CollectionImageChangeset::ids() const
 {
     return m_ids;
@@ -202,6 +254,24 @@ AlbumChangeset::Operation AlbumChangeset::operation() const
     return m_operation;
 }
 
+AlbumChangeset &AlbumChangeset::operator<<(const QDBusArgument &argument)
+{
+    argument.beginStructure();
+    int intValue;
+    argument >> m_id >> intValue;
+    m_operation = (Operation)intValue;
+    argument.endStructure();
+    return *this;
+}
+
+const AlbumChangeset &AlbumChangeset::operator>>(QDBusArgument &argument) const
+{
+    argument.beginStructure();
+    argument << m_id << (int)m_operation;
+    argument.endStructure();
+    return *this;
+}
+
 // ------------------------ //
 
 TagChangeset::TagChangeset()
@@ -222,6 +292,24 @@ int TagChangeset::tagId() const
 TagChangeset::Operation TagChangeset::operation() const
 {
     return m_operation;
+}
+
+TagChangeset &TagChangeset::operator<<(const QDBusArgument &argument)
+{
+    argument.beginStructure();
+    int intValue;
+    argument >> m_id >> intValue;
+    m_operation = (Operation)intValue;
+    argument.endStructure();
+    return *this;
+}
+
+const TagChangeset &TagChangeset::operator>>(QDBusArgument &argument) const
+{
+    argument.beginStructure();
+    argument << m_id << (int)m_operation;
+    argument.endStructure();
+    return *this;
 }
 
 // ------------------------ //
@@ -246,6 +334,24 @@ AlbumRootChangeset::Operation AlbumRootChangeset::operation() const
     return m_operation;
 }
 
+AlbumRootChangeset &AlbumRootChangeset::operator<<(const QDBusArgument &argument)
+{
+    argument.beginStructure();
+    int intValue;
+    argument >> m_id >> intValue;
+    m_operation = (Operation)intValue;
+    argument.endStructure();
+    return *this;
+}
+
+const AlbumRootChangeset &AlbumRootChangeset::operator>>(QDBusArgument &argument) const
+{
+    argument.beginStructure();
+    argument << m_id << (int)m_operation;
+    argument.endStructure();
+    return *this;
+}
+
 // ------------------------ //
 
 SearchChangeset::SearchChangeset()
@@ -266,6 +372,63 @@ int SearchChangeset::searchId() const
 SearchChangeset::Operation SearchChangeset::operation() const
 {
     return m_operation;
+}
+
+SearchChangeset &SearchChangeset::operator<<(const QDBusArgument &argument)
+{
+    argument.beginStructure();
+    int intValue;
+    argument >> m_id >> intValue;
+    m_operation = (Operation)intValue;
+    argument.endStructure();
+    return *this;
+}
+
+const SearchChangeset &SearchChangeset::operator>>(QDBusArgument &argument) const
+{
+    argument.beginStructure();
+    argument << m_id << (int)m_operation;
+    argument.endStructure();
+    return *this;
+}
+
+// ------------------------ //
+
+DatabaseFields::Set &DatabaseFields::Set::operator<<(const QDBusArgument &argument)
+{
+    argument.beginStructure();
+
+    int imagesInt, imageInformationInt, imageMetadataInt, imageCommentsInt, imagePositionsInt, customEnumInt;
+
+    argument >> imagesInt
+             >> imageInformationInt
+             >> imageMetadataInt
+             >> imageCommentsInt
+             >> imagePositionsInt
+             >> customEnumInt;
+
+    images = (DatabaseFields::Images)imagesInt;
+    imageInformation = (DatabaseFields::ImageInformation)imagesInt;
+    imageMetadata = (DatabaseFields::ImageMetadata)imagesInt;
+    imageComments = (DatabaseFields::ImageComments)imagesInt;
+    imagePositions = (DatabaseFields::ImagePositions)imagesInt;
+    customEnum = (DatabaseFields::CustomEnum)imagesInt;
+
+    argument.endStructure();
+    return *this;
+}
+
+const DatabaseFields::Set &DatabaseFields::Set::operator>>(QDBusArgument &argument) const
+{
+    argument.beginStructure();
+    argument << (int)images
+             << (int) imageInformation
+             << (int) imageMetadata
+             << (int) imageComments
+             << (int) imagePositions
+             << (int) customEnum;
+    argument.endStructure();
+    return *this;
 }
 
 
