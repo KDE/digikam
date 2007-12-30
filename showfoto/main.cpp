@@ -33,20 +33,56 @@
 #include <kglobal.h>
 #include <kimageio.h>
 
+// Libkexiv2 includes.
+
+#include <libkexiv2/kexiv2.h>
+
+// Libkdcraw includes.
+
+#include <libkdcraw/kdcraw.h>
+#include <libkdcraw/dcrawbinary.h>
+
+// C Ansi includes.
+
+extern "C"
+{
+#include <png.h>
+}
+
 // Local includes.
 
 #include "showfoto.h"
 
 int main(int argc, char *argv[])
 {
+    QString DcrawVer    = KDcrawIface::DcrawBinary::internalVersion();
+
+    QString Exiv2Ver    = KExiv2Iface::KExiv2::Exiv2Version();
+
+    QString XmpSupport  = KExiv2Iface::KExiv2::supportXmp() ? I18N_NOOP("yes") : I18N_NOOP("no");
+
+    QString libInfo     = QString(I18N_NOOP("Using KDcraw library version %1")).arg(KDcrawIface::KDcraw::version()) +
+                          QString("\n") +                           
+                          QString(I18N_NOOP("Using Dcraw program version %1")).arg(DcrawVer) +
+                          QString("\n") +                           
+                          QString(I18N_NOOP("Using PNG library version %1")).arg(PNG_LIBPNG_VER_STRING) +
+                          QString("\n") + 
+                          QString(I18N_NOOP("Using KExiv2 library version %1")).arg(KExiv2Iface::KExiv2::version()) +
+                          QString("\n") +                           
+                          QString(I18N_NOOP("Using Exiv2 library version %1")).arg(Exiv2Ver) +
+                          QString("\n") +                           
+                          QString(I18N_NOOP("XMP support available: %1")).arg(XmpSupport);
+
     KAboutData aboutData( "showfoto", 0,
                           ki18n("showFoto"),
                           "0.8.0",
                           ki18n("KDE Photo Viewer and Editor"),
                           KAboutData::License_GPL,
-                          ki18n("(c) 2004-2007, digiKam developers team"),
+                          ki18n("(c) 2004-2008, digiKam developers team"),
                           KLocalizedString(),
                           "http://www.digikam.org");
+
+    aboutData.setOtherText(ki18n(libInfo.toLatin1()));
 
     aboutData.addAuthor ( ki18n("Caulier Gilles"),
                           ki18n("Main developer and coordinator"),
