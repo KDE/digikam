@@ -37,6 +37,22 @@
 #include <kglobal.h>
 #include <kimageio.h>
 
+// Libkexiv2 includes.
+
+#include <libkexiv2/kexiv2.h>
+
+// Libkdcraw includes.
+
+#include <libkdcraw/kdcraw.h>
+#include <libkdcraw/dcrawbinary.h>
+
+// C Ansi includes.
+
+extern "C"
+{
+#include <png.h>
+}
+
 // Local includes.
 
 #include "showfoto.h"
@@ -49,16 +65,32 @@ static KCmdLineOptions options[] =
 
 int main(int argc, char *argv[])
 {
+    QString DcrawVer    = KDcrawIface::DcrawBinary::internalVersion();
+
+    QString Exiv2Ver    = KExiv2Iface::KExiv2::Exiv2Version();
+
+    QString libInfo     = QString(I18N_NOOP("Using KExiv2 library version %1")).arg(KExiv2Iface::KExiv2::version()) +
+                          QString("\n") +                           
+                          QString(I18N_NOOP("Using Exiv2 library version %1")).arg(Exiv2Ver) +
+                          QString("\n") +                           
+                          QString(I18N_NOOP("Using KDcraw library version %1")).arg(KDcrawIface::KDcraw::version()) +
+                          QString("\n") +                           
+                          QString(I18N_NOOP("Using Dcraw program version %1")).arg(DcrawVer) +
+                          QString("\n") +                           
+                          QString(I18N_NOOP("Using PNG library version %1")).arg(PNG_LIBPNG_VER_STRING);
+
     QString Description = i18n("KDE Photo Viewer and Editor");
 
     KAboutData aboutData( "showfoto",
                           I18N_NOOP("showFoto"),
-                          "0.7.0",
+                          "0.8.0",
                           Description.latin1(),
                           KAboutData::License_GPL,
-                          I18N_NOOP("(c) 2004-2007, digiKam developers team"),
+                          I18N_NOOP("(c) 2004-2008, digiKam developers team"),
                           0,
                           "http://www.digikam.org");
+
+    aboutData.setOtherText(libInfo.latin1());
 
     aboutData.addAuthor ( "Caulier Gilles",
                           I18N_NOOP("Main developer and coordinator"),
