@@ -106,6 +106,7 @@ libdigikam_la_LIBADD = $(LIB_KIO) \
 	               $(LIB_KABC) \
 	               $(LIB_KHTML) \
 	               $(LIBKIPI_LIBS) \
+		       $(LIBKEXIV2_LIBS) \
 	               $(LIB_KUTILS) \
 	               $(top_builddir)/digikam/libs/sqlite2/libsqlite2.la \
 	               $(top_builddir)/digikam/libs/thumbbar/libthumbbar.la \
@@ -125,7 +126,7 @@ libdigikam_la_LIBADD = $(LIB_KIO) \
 	               $(top_builddir)/digikam/utilities/setup/libsetup.la \
 	               $(top_builddir)/digikam/utilities/lighttable/liblighttable.la
 
-libdigikam_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -no-undefined
+libdigikam_la_LDFLAGS = $(LIBKEXIV2_LIBS) $(all_libraries) $(KDE_RPATH) -no-undefined
 
 # -- main digiKam binary target file rules ----------------------------------------------
 
