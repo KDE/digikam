@@ -48,16 +48,15 @@
 
 // KIPI Includes.
 
-#include <libkipi/version.h>
+#include <libkipi/interface.h>
 
 // Libkexiv2 includes.
 
-#include <libkexiv2/version.h>
 #include <libkexiv2/kexiv2.h>
 
 // Libkdcraw includes.
 
-#include <libkdcraw/version.h>
+#include <libkdcraw/kdcraw.h>
 #include <libkdcraw/dcrawbinary.h>
 
 // C Ansi includes.
@@ -91,13 +90,13 @@ int main(int argc, char *argv[])
 
     QString Gphoto2Ver  = QString(gp_library_version(GP_VERSION_SHORT)[0]);
 
-    QString libInfo     = QString(I18N_NOOP("Using Kipi library version %1")).arg(kipi_version) +
+    QString libInfo     = QString(I18N_NOOP("Using Kipi library version %1")).arg(KIPI::Interface::version()) +
                           QString("\n") + 
-                          QString(I18N_NOOP("Using KExiv2 library version %1")).arg(kexiv2_version) +
+                          QString(I18N_NOOP("Using KExiv2 library version %1")).arg(KExiv2Iface::KExiv2::version()) +
                           QString("\n") +                           
                           QString(I18N_NOOP("Using Exiv2 library version %1")).arg(Exiv2Ver) +
                           QString("\n") +                           
-                          QString(I18N_NOOP("Using KDcraw library version %1")).arg(kdcraw_version) +
+                          QString(I18N_NOOP("Using KDcraw library version %1")).arg(KDcrawIface::KDcraw::version()) +
                           QString("\n") +                           
                           QString(I18N_NOOP("Using Dcraw program version %1")).arg(DcrawVer) +
                           QString("\n") +                           
@@ -112,7 +111,7 @@ int main(int argc, char *argv[])
                           digikam_version,        
                           description.latin1(),
                           KAboutData::License_GPL,
-                          I18N_NOOP("(c) 2002-2007, digiKam developers team"),
+                          I18N_NOOP("(c) 2002-2008, digiKam developers team"),
                           0,
                           "http://www.digikam.org");
 
