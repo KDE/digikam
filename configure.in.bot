@@ -29,7 +29,7 @@ fi
 if test "x$have_libkipi" != "xyes"; then
   echo "-- libkipi library found.......... NO"
   echo ""
-  echo "digiKam needs libkipi. You need to install libkipi first"
+  echo "digiKam needs libkipi library >= 0.1.6. You need to install libkipi first"
   echo "libkipi website is at http://www.kipi-plugins.org"
   echo ""
   all_tests=bad
@@ -87,7 +87,7 @@ fi
 if test "x$have_libkexiv2" != "xyes"; then
   echo "-- libkexiv2 library found........ NO"
   echo ""
-  echo "digiKam needs libkexiv2 library >= 0.1.5. You need to install libkexiv2 first"
+  echo "digiKam needs libkexiv2 library >= 0.1.7. You need to install libkexiv2 first"
   echo "libkexiv2 website is at http://www.kipi-plugins.org"
   echo ""
   all_tests=bad
@@ -98,7 +98,7 @@ fi
 if test "x$have_libkdcraw" != "xyes"; then
   echo "-- libkdcraw library found........ NO"
   echo ""
-  echo "digiKam needs libkdcraw library >= 0.1.2. You need to install libkdcraw first"
+  echo "digiKam needs libkdcraw library >= 0.1.4. You need to install libkdcraw first"
   echo "libkdcraw website is at http://www.kipi-plugins.org"
   echo ""
   all_tests=bad
