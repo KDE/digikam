@@ -200,13 +200,13 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     buttonsBox->setSpacing(KDialog::spacingHint());
 
     d->revertBtn = new QToolButton(buttonsBox);
-    d->revertBtn->setIcon(SmallIcon("view-refresh"));
+    d->revertBtn->setIcon(SmallIcon("document-revert"));
     d->revertBtn->setMaximumHeight( fontMetrics().height()+4 );
     d->revertBtn->setToolTip( i18n("Revert all changes"));
     d->revertBtn->setEnabled(false);
 
     d->applyBtn = new QPushButton(i18n("Apply"), buttonsBox);
-    d->applyBtn->setIcon(SmallIcon("ok"));
+    d->applyBtn->setIcon(SmallIcon("dialog-ok-apply"));
     d->applyBtn->setMaximumHeight( fontMetrics().height()+4 );
     d->applyBtn->setEnabled(false);
     d->applyBtn->setToolTip( i18n("Apply all changes to images"));
