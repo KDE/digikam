@@ -32,7 +32,7 @@ showfoto_LDADD   = $(top_builddir)/digikam/showfoto/setup/libsetup.la \
 	           $(top_builddir)/digikam/libs/jpegutils/libjpegutils.la \
 	           $(LIB_KUTILS) $(LIB_KPARTS) $(LIBJPEG)  
 
-showfoto_LDFLAGS = $(KDE_RPATH) $(all_libraries)
+showfoto_LDFLAGS = $(LIBKEXIV2_LIBS) $(LIBKDCRAW_LIBS) $(KDE_RPATH) $(all_libraries)
 
 rcdir = $(kde_datadir)/showfoto
 rc_DATA = showfotoui.rc

@@ -142,7 +142,7 @@ digikam_LDADD   = $(LIB_QT) \
 		  $(LIB_KUTILS) \
 		  libdigikam.la
 
-digikam_LDFLAGS = $(KDE_RPATH) $(all_libraries) $(LIB_KUTILS) 
+digikam_LDFLAGS = $(LIBKIPI_LIBS) $(LIBKDCRAW_LIBS) $(LIBKEXIV2_LIBS) $(KDE_RPATH) $(all_libraries) $(LIB_KUTILS) 
 
 rcdir = $(kde_datadir)/digikam
 rc_DATA = digikamui.rc
