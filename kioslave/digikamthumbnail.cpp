@@ -69,7 +69,7 @@
 
 // LibKDcraw includes.
 
-#include <libkdcraw/rawfiles.h>
+#include <libkdcraw/dcrawbinary.h>
 #include <libkdcraw/kdcraw.h>
 
 // Local includes
@@ -264,7 +264,7 @@ bool kio_digikamthumbnailProtocol::loadByExtension(QImage& image, const QString&
         
     // Else, use the right way depending of image file extension.
     QString ext = fileInfo.extension(false).upper();
-    QString rawFilesExt(raw_file_extentions);
+    QString rawFilesExt(KDcrawIface::DcrawBinary::instance()->rawFiles());
 
     if (!ext.isEmpty())
     {

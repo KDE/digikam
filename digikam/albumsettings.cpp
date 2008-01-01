@@ -36,7 +36,7 @@
 
 // LibKDcraw includes.
 
-#include <libkdcraw/rawfiles.h>
+#include <libkdcraw/dcrawbinary.h>
 
 // Local includes.
 
@@ -184,7 +184,7 @@ void AlbumSettings::init()
 
     // RAW files estentions supported by dcraw program and 
     // defines to digikam/libs/dcraw/rawfiles.h
-    d->defaultRawFilefilter         = QString(raw_file_extentions);
+    d->defaultRawFilefilter         = QString(KDcrawIface::DcrawBinary::instance()->rawFiles());
 
     d->imageFilefilter              = d->defaultImageFilefilter;
     d->movieFilefilter              = d->defaultMovieFilefilter;

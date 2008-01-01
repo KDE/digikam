@@ -72,7 +72,6 @@ extern "C"
 
 // LibKDcraw includes.
 
-#include <libkdcraw/rawfiles.h>
 #include <libkdcraw/dcrawbinary.h>
 
 // Local includes.
@@ -573,7 +572,7 @@ void ShowFoto::slotOpenFile()
     // Add other files format witch are missing to All Images" type mime provided by KDE and remplace current.
     if (KDcrawIface::DcrawBinary::instance()->versionIsRight())
     {
-        allPictures.insert(allPictures.find("|"), QString(raw_file_extentions) + QString(" *.JPE *.TIF"));
+        allPictures.insert(allPictures.find("|"), QString(KDcrawIface::DcrawBinary::instance()->rawFiles()) + QString(" *.JPE *.TIF"));
         patternList.remove(patternList[0]);
         patternList.prepend(allPictures);
     }
@@ -583,7 +582,7 @@ void ShowFoto::slotOpenFile()
     // or unavailable(dcraw_0)(see file #121242 in B.K.O).
     if (KDcrawIface::DcrawBinary::instance()->versionIsRight())
     {
-        patternList.append(i18n("\n%1|Camera RAW files").arg(QString(raw_file_extentions)));
+        patternList.append(i18n("\n%1|Camera RAW files").arg(QString(KDcrawIface::DcrawBinary::instance()->rawFiles())));
     }
     
     fileformats = patternList.join("\n");
@@ -845,7 +844,7 @@ void ShowFoto::openFolder(const KURL& url)
     // Added RAW files estentions supported by dcraw program and 
     // defines to digikam/libs/dcraw/rawfiles.h
     filter.append (" ");
-    filter.append ( QString(raw_file_extentions) );  
+    filter.append ( QString(KDcrawIface::DcrawBinary::instance()->rawFiles()) );  
     filter.append (" ");
 
     QString patterns = filter.lower();

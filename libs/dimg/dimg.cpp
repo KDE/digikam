@@ -42,7 +42,7 @@ extern "C"
 
 // LibKDcraw includes.
 
-#include <libkdcraw/rawfiles.h>
+#include <libkdcraw/dcrawbinary.h>
 #include <libkdcraw/kdcraw.h>
 
 // Local includes.
@@ -493,7 +493,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
         return NONE;
     }
 
-    QString rawFilesExt(raw_file_extentions);
+    QString rawFilesExt(KDcrawIface::DcrawBinary::instance()->rawFiles());
     QString ext = fileInfo.extension(false).upper();
 
     if (!ext.isEmpty())
