@@ -352,7 +352,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     
     d->status   = new KSqueezedTextLabel(plainPage());
     d->progress = new KProgress(plainPage());
-    d->progress->setMaximumHeight( fontMetrics().height() );
+    d->progress->setMaximumHeight( fontMetrics().height()+4 );
     d->progress->hide();
 
     QWidget *frame      = new QWidget(plainPage());
@@ -1299,10 +1299,7 @@ void CameraUI::slotDownloaded(const QString& folder, const QString& file, int st
 {
     CameraIconViewItem* iconItem = d->view->findItem(folder, file);
     if (iconItem)
-    {
         iconItem->setDownloaded(status);
-        d->view->ensureItemVisible(iconItem);
-    }
     
     if (status == GPItemInfo::DownloadedYes || status == GPItemInfo::DownloadFailed)
     {
@@ -1315,10 +1312,7 @@ void CameraUI::slotSkipped(const QString& folder, const QString& file)
 {
     CameraIconViewItem* iconItem = d->view->findItem(folder, file);
     if (iconItem)
-    {
         iconItem->setDownloaded(GPItemInfo::DownloadedNo);
-        d->view->ensureItemVisible(iconItem);
-    }
 
     int curr = d->progress->progress();
     d->progress->setProgress(curr+1);
