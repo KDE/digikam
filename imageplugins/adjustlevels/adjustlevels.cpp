@@ -318,7 +318,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     // -------------------------------------------------------------
 
     m_autoButton = new QPushButton(gboxSettings);
-    m_autoButton->setIcon(KIconLoader::global()->loadIcon("gear", KIconLoader::Toolbar));    
+    m_autoButton->setIcon(KIconLoader::global()->loadIcon("system-run", KIconLoader::Toolbar));    
     m_autoButton->setToolTip( i18n( "Adjust all levels automatically." ) );
     m_autoButton->setWhatsThis( i18n("<p>If you press this button, all channel levels will be adjusted "
                                      "automatically."));
