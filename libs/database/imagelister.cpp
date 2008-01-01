@@ -48,7 +48,7 @@
 
 // LibKDcraw includes.
 
-#include <libkdcraw/rawfiles.h>
+#include <libkdcraw/dcrawbinary.h>
 
 // Local includes
 
@@ -129,7 +129,7 @@ KIO::TransferJob *ImageLister::startScanJob(const DatabaseUrl &url, const QStrin
 QSize ImageLister::retrieveDimension(const QString &filePath)
 {
     QFileInfo fileInfo(filePath);
-    QString rawFilesExt(raw_file_extentions);
+    QString rawFilesExt(KDcrawIface::DcrawBinary::instance()->rawFiles());
     QString ext = fileInfo.suffix().toUpper();
 
     if (!ext.isEmpty() && rawFilesExt.toUpper().contains(ext))

@@ -77,7 +77,6 @@
 
 // LibKDcraw includes.
 
-#include <libkdcraw/rawfiles.h>
 #include <libkdcraw/kdcraw.h>
 #include <libkdcraw/dcrawbinary.h>
 
@@ -1034,14 +1033,14 @@ void CameraUI::slotUpload()
     QString allPictures = patternList[0];
 
     // Add RAW file format to All Images" type mime and remplace current.
-    allPictures.insert(allPictures.indexOf("|"), QString(raw_file_extentions));
+    allPictures.insert(allPictures.indexOf("|"), QString(KDcrawIface::DcrawBinary::instance()->rawFiles()));
     patternList.removeAll(patternList[0]);
     patternList.prepend(allPictures);
 
     // Added RAW file formats supported by dcraw program like a type mime. 
     // Nota: we cannot use here "image/x-raw" type mime from KDE because it uncomplete 
     // or unavailable(dcraw_0)(see file #121242 in B.K.O).
-    patternList.append(QString("\n%1|Camera RAW files").arg(QString(raw_file_extentions)));
+    patternList.append(QString("\n%1|Camera RAW files").arg(QString(KDcrawIface::DcrawBinary::instance()->rawFiles())));
 
     fileformats = patternList.join("\n");
 

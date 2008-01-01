@@ -49,7 +49,7 @@
 
 // LibKDcraw includes. 
  
-#include <libkdcraw/rawfiles.h> 
+#include <libkdcraw/dcrawbinary.h>
  
 // Local includes.
 
@@ -366,7 +366,7 @@ void AlbumFileTip::updateText()
         }
 
         QSize   dims;
-        QString rawFilesExt(raw_file_extentions);
+        QString rawFilesExt(KDcrawIface::DcrawBinary::instance()->rawFiles());
         QString ext = fileInfo.suffix().toUpper();
 
         if (!ext.isEmpty() && rawFilesExt.toUpper().contains(ext))
