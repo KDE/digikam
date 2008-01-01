@@ -61,6 +61,7 @@
 
 // LibKDcraw includes.
 
+#include <libkdcraw/kdcraw.h>
 #include <libkdcraw/dcrawbinary.h>
 
 // Local includes.
@@ -924,6 +925,14 @@ void DigikamApp::setupActions()
                                    actionCollection(),
                                    "app_exit");
 
+    d->rawCameraListAction = new KAction(i18n("RAW camera supported"), 
+                                   "kdcraw", 
+                                   0, 
+                                   this,
+                                   SLOT(slotRawCameraList()),
+                                   actionCollection(),
+                                   "help_rawcameralist");
+
     d->kipiHelpAction = new KAction(i18n("Kipi Plugins Handbook"),
                                    "kipi",
                                    0,
@@ -1752,6 +1761,19 @@ void DigikamApp::slotShowTip()
 void DigikamApp::slotShowKipiHelp()
 {
     KApplication::kApplication()->invokeHelp( QString(), "kipi-plugins" );
+}
+
+void DigikamApp::slotRawCameraList()
+{
+    QStringList list      = KDcrawIface::DcrawBinary::instance()->supportedCamera();
+    QString     dcrawVer  = KDcrawIface::DcrawBinary::instance()->internalVersion();
+    QString     KDcrawVer = KDcrawIface::KDcraw::version();
+    KMessageBox::informationList(this, 
+                                 i18n("<p>Using KDcraw library version %1"
+                                      "<p>Using Dcraw program version %2"
+                                      "<p>%3 models in the list")
+                                      .arg(KDcrawVer).arg(dcrawVer).arg(list.count()),
+                                 list, i18n("List of supported RAW camera"));
 }
 
 void DigikamApp::loadPlugins()

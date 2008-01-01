@@ -115,12 +115,12 @@ private slots:
     void slotAlbumAddImages();
     void slotAlbumSelected(bool val);
     void slotTagSelected(bool val);
-    void slotImageSelected(const QPtrList<ImageInfo>&, bool, bool,
-                           const KURL::List&);
+    void slotImageSelected(const QPtrList<ImageInfo>&, bool, bool, const KURL::List&);
     void slotExit();
     void slotShowTip();
     void slotShowKipiHelp();
     void slotDonateMoney();
+    void slotRawCameraList();
 
     void slotRecurseAlbums(bool);
     void slotRecurseTags(bool);

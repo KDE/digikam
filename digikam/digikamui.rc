@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="34" name="digikam" >
+<kpartgui version="35" name="digikam" >
 
  <MenuBar>
 
@@ -91,7 +91,7 @@
   </Menu>
 
   <Menu name="Batch"><text>&amp;Batch</text>
-        <ActionList name="batch_actions"/>
+     <ActionList name="batch_actions"/>
   </Menu>
 
   <Action name="camera_menu" />
@@ -108,6 +108,7 @@
   </Menu>
 
   <Menu name="help"><Text>&amp;Help</Text>
+    <Action name="help_rawcameralist"/>
     <Action name="help_kipi"/>
     <Action name="help_tipofday"/>
     <Separator/>
