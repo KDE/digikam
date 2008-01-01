@@ -369,9 +369,9 @@ void ImagePreviewView::slotContextMenu()
     //-- Edit actions -----------------------------------------------
 
     popmenu.addSeparator();
-    QAction *slideshowAction  = popmenu.addAction(SmallIcon("datashow"),      i18n("SlideShow"));
-    QAction *editAction       = popmenu.addAction(SmallIcon("editimage"),     i18n("Edit..."));
-    QAction *lighttableAction = popmenu.addAction(SmallIcon("lighttableadd"), i18n("Add to Light Table"));
+    QAction *slideshowAction  = popmenu.addAction(SmallIcon("view-presentation"), i18n("SlideShow"));
+    QAction *editAction       = popmenu.addAction(SmallIcon("editimage"),         i18n("Edit..."));
+    QAction *lighttableAction = popmenu.addAction(SmallIcon("lighttableadd"),     i18n("Add to Light Table"));
     popmenu.addMenu(&openWithMenu);
     openWithMenu.menuAction()->setText(i18n("Open With"));
 

@@ -373,13 +373,13 @@ void LightTableWindow::setupActions()
     connect(d->editItemAction, SIGNAL(triggered()), this, SLOT(slotEditItem()));
     actionCollection()->addAction("lighttable_edititem", d->editItemAction);
 
-    d->removeItemAction = new KAction(KIcon("dialog-close"), i18n("Remove item from LightTable"), this);
+    d->removeItemAction = new KAction(KIcon("list-remove"), i18n("Remove item from LightTable"), this);
     d->removeItemAction->setShortcut(Qt::CTRL+Qt::Key_K);
     d->removeItemAction->setEnabled(false);
     connect(d->removeItemAction, SIGNAL(triggered()), this, SLOT(slotRemoveItem()));
     actionCollection()->addAction("lighttable_removeitem", d->removeItemAction);
 
-    d->clearListAction = new KAction(KIcon("list-remove"), i18n("Remove all items from LightTable"), this);
+    d->clearListAction = new KAction(KIcon("edit-clear"), i18n("Remove all items from LightTable"), this);
     d->clearListAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_K);
     d->clearListAction->setEnabled(false);
     connect(d->clearListAction, SIGNAL(triggered()), this, SLOT(slotClearItemsList()));
@@ -433,7 +433,7 @@ void LightTableWindow::setupActions()
     d->fullScreenAction = actionCollection()->addAction(KStandardAction::FullScreen,
                           "lighttable_fullscreen", this, SLOT(slotToggleFullScreen()));
 
-    d->slideShowAction = new KAction(KIcon("datashow"), i18n("Slide Show"), this);
+    d->slideShowAction = new KAction(KIcon("view-presentation"), i18n("Slide Show"), this);
     d->slideShowAction->setShortcut(Qt::Key_F9);
     connect(d->slideShowAction, SIGNAL(triggered()), this, SLOT(slotToggleSlideShow()));
     actionCollection()->addAction("lighttable_slideshow", d->slideShowAction);

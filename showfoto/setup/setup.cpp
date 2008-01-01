@@ -120,7 +120,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->slideshowPage = new Digikam::SetupSlideShow();
     d->page_slideshow = addPage( d->slideshowPage, i18n("Slide Show") );
     d->page_slideshow->setHeader( i18n("Slide Show Settings") );
-    d->page_slideshow->setIcon( KIcon("datashow") );
+    d->page_slideshow->setIcon( KIcon("view-presentation") );
     
     connect(this, SIGNAL(okClicked()),
             this, SLOT(slotOkClicked()) );
