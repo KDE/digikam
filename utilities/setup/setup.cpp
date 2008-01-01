@@ -153,7 +153,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->albumViewPage  = new SetupAlbumView();
     d->page_albumView = addPage( d->albumViewPage, i18n("Album View") );
     d->page_albumView->setHeader( i18n("Album View Settings") );
-    d->page_albumView->setIcon( KIcon("view-icon") );
+    d->page_albumView->setIcon( KIcon("view-list-icons") );
 
     d->albumTypePage  = new SetupAlbumType();
     d->page_albumType = addPage( d->albumTypePage, i18n("Album Type") );
@@ -163,7 +163,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->identityPage  = new SetupIdentity();
     d->page_identity = addPage( d->identityPage, i18n("Identity") );
     d->page_identity->setHeader( i18n("Default identity information") );
-    d->page_identity->setIcon( KIcon("kontact-contacts") );
+    d->page_identity->setIcon( KIcon("user-identity") );
 
     d->metadataPage  = new SetupMetadata();
     d->page_metadata = addPage( d->metadataPage, i18n("Metadata") );
@@ -213,17 +213,17 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->slideshowPage  = new SetupSlideShow();
     d->page_slideshow = addPage( d->slideshowPage, i18n("Slide Show") );
     d->page_slideshow->setHeader( i18n("Slide Show Settings") );
-    d->page_slideshow->setIcon( KIcon("datashow") );
+    d->page_slideshow->setIcon( KIcon("view-presentation") );
 
     d->cameraPage  = new SetupCamera();
     d->page_camera = addPage( d->cameraPage, i18n("Cameras") );
     d->page_camera->setHeader( i18n("Camera Settings") );
-    d->page_camera->setIcon( KIcon("digitalcam") );
+    d->page_camera->setIcon( KIcon("camera-photo") );
 
     d->miscPage  = new SetupMisc();
     d->page_misc = addPage( d->miscPage, i18n("Miscellaneous") );
     d->page_misc->setHeader( i18n("Miscellaneous Settings") );
-    d->page_misc->setIcon( KIcon("gear") );
+    d->page_misc->setIcon( KIcon("preferences-other") );
 
     connect(this, SIGNAL(okClicked()),
             this, SLOT(slotOkClicked()) );

@@ -577,7 +577,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->imagePreviewAction = new KToggleAction(KIcon("fileview-preview"), i18n("View..."), this);
+    d->imagePreviewAction = new KToggleAction(KIcon("view-preview"), i18n("View..."), this);
     d->imagePreviewAction->setShortcut(Qt::Key_F3);
     connect(d->imagePreviewAction, SIGNAL(triggered()), d->view, SLOT(slotImagePreview()));
     actionCollection()->addAction("image_view", d->imagePreviewAction);
@@ -820,7 +820,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->slideShowAction = new KActionMenu(KIcon("datashow"), i18n("Slide Show"), this);
+    d->slideShowAction = new KActionMenu(KIcon("view-presentation"), i18n("Slide Show"), this);
     d->slideShowAction->setDelayed(false);
     actionCollection()->addAction("slideshow", d->slideShowAction);
 
