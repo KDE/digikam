@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2005-2006 by Tom Albers <tomalbers@kde.nl>
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
@@ -79,7 +79,6 @@ extern "C"
 
 // LibKDcraw includes.
 
-#include <libkdcraw/kdcraw.h>
 #include <libkdcraw/rawfiles.h>
 #include <libkdcraw/dcrawbinary.h>
 
@@ -128,7 +127,6 @@ public:
         splash                  = 0;
         itemsNb                 = 0;
         vSplitter               = 0;
-        rawCameraListAction     = 0;
         deleteItem2Trash        = true;
         fullScreenHideThumbBar  = true;
         validIccPath            = true;
@@ -149,7 +147,6 @@ public:
     KToggleAction                   *showBarAction;
 
     KAction                         *openFilesInFolderAction;
-    KAction                         *rawCameraListAction;
 
     KActionMenu                     *BCGAction;
 
@@ -503,12 +500,6 @@ void ShowFoto::setupActions()
     d->showBarAction->setShortcut(Qt::CTRL+Qt::Key_T);
     connect(d->showBarAction, SIGNAL(triggered()), this, SLOT(slotToggleShowBar()));
     actionCollection()->addAction("shofoto_showthumbs", d->showBarAction);
-
-    // Extra 'Help' menu actions ---------------------------------------------
-
-    d->rawCameraListAction = new KAction(KIcon("kdcraw"), i18n("RAW camera supported"), this);
-    connect(d->rawCameraListAction, SIGNAL(triggered()), this, SLOT(slotRawCameraList()));
-    actionCollection()->addAction("help_rawcameralist", d->rawCameraListAction);
 
     // --- Create the gui ----------------------------------------------------
 
@@ -1225,19 +1216,6 @@ void ShowFoto::slideShow(bool startWithCurrent, Digikam::SlideShowSettings& sett
     
         slide->show();
     }
-}
-
-void ShowFoto::slotRawCameraList()
-{
-    QStringList list      = KDcrawIface::DcrawBinary::instance()->supportedCamera();
-    QString     dcrawVer  = KDcrawIface::DcrawBinary::instance()->internalVersion();
-    QString     KDcrawVer = KDcrawIface::KDcraw::version();
-    KMessageBox::informationList(this, 
-                                 i18n("<p>Using KDcraw library version %1"
-                                      "<p>Using Dcraw program version %2"
-                                      "<p>%3 models in the list", 
-                                      KDcrawVer, dcrawVer, list.count()),
-                                 list, i18n("List of supported RAW camera"));
 }
 
 }   // namespace ShowFoto

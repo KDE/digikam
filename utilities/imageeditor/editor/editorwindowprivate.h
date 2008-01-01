@@ -7,7 +7,7 @@
  * Description : main image editor GUI implementation
  *               private data.
  *
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -81,6 +81,7 @@ public:
         waitingLoop            = 0;
         undoSignalMapper       = 0;
         redoSignalMapper       = 0;
+        rawCameraListAction    = 0;
     }
 
     ~EditorWindowPriv()
@@ -114,6 +115,7 @@ public:
     KAction                   *slideShowAction;
     KAction                   *selectAllAction;
     KAction                   *selectNoneAction;
+    KAction                   *rawCameraListAction;
 
     QSignalMapper             *undoSignalMapper;
     QSignalMapper             *redoSignalMapper;

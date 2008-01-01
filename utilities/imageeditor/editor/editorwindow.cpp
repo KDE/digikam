@@ -80,6 +80,11 @@
 #include <kservicetypetrader.h>
 #include <ktogglefullscreenaction.h>
 
+// LibKDcraw includes.
+
+#include <libkdcraw/kdcraw.h>
+#include <libkdcraw/dcrawbinary.h>
+
 // Local includes.
 
 #include "ddebug.h"
@@ -491,6 +496,10 @@ void EditorWindow::setupStandardActions()
     d->donateMoneyAction = new KAction(i18n("Donate Money..."), this);
     connect(d->donateMoneyAction, SIGNAL(triggered()), this, SLOT(slotDonateMoney()));
     actionCollection()->addAction("editorwindow_donatemoney", d->donateMoneyAction);
+
+    d->rawCameraListAction = new KAction(KIcon("kdcraw"), i18n("RAW camera supported"), this);
+    connect(d->rawCameraListAction, SIGNAL(triggered()), this, SLOT(slotRawCameraList()));
+    actionCollection()->addAction("editorwindow_rawcameralist", d->rawCameraListAction);
 
     // -- Keyboard-only actions added to <MainWindow> ------------------------------
 
@@ -1729,6 +1738,19 @@ void EditorWindow::slotSelectionChanged(const QRect& sel)
 {
     d->selectLabel->setText(QString("(%1, %2) (%3 x %4)").arg(sel.x()).arg(sel.y())
                            .arg(sel.width()).arg(sel.height()));
+}
+
+void EditorWindow::slotRawCameraList()
+{
+    QStringList list      = KDcrawIface::DcrawBinary::instance()->supportedCamera();
+    QString     dcrawVer  = KDcrawIface::DcrawBinary::instance()->internalVersion();
+    QString     KDcrawVer = KDcrawIface::KDcraw::version();
+    KMessageBox::informationList(this, 
+                                 i18n("<p>Using KDcraw library version %1"
+                                      "<p>Using Dcraw program version %2"
+                                      "<p>%3 models in the list", 
+                                      KDcrawVer, dcrawVer, list.count()),
+                                 list, i18n("List of supported RAW camera"));
 }
 
 }  // namespace Digikam

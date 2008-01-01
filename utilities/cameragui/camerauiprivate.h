@@ -7,7 +7,7 @@
  * Description : Camera interface dialog
  * 
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -108,6 +108,7 @@ public:
         imageViewAction           = 0;
         albumLibraryFreeSpace     = 0;
         cameraFreeSpace           = 0;
+        rawCameraListAction       = 0;
     }
 
     bool                          busy;
@@ -167,6 +168,7 @@ public:
     KAction                      *selectNewItemsAction;
     KAction                      *donateMoneyAction;
     KAction                      *cameraCancelAction;
+    KAction                      *rawCameraListAction;
 
     KUrl                          lastDestURL;
 

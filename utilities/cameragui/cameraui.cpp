@@ -7,7 +7,7 @@
  * Description : Camera interface dialog
  * 
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -78,6 +78,8 @@
 // LibKDcraw includes.
 
 #include <libkdcraw/rawfiles.h>
+#include <libkdcraw/kdcraw.h>
+#include <libkdcraw/dcrawbinary.h>
 
 // Local includes.
 
@@ -415,6 +417,10 @@ void CameraUI::setupActions()
     d->donateMoneyAction = new KAction(i18n("Donate Money..."), this);
     connect(d->donateMoneyAction, SIGNAL(triggered()), this, SLOT(slotDonateMoney()));
     actionCollection()->addAction("cameraui_donatemoney", d->donateMoneyAction);
+
+    d->rawCameraListAction = new KAction(KIcon("kdcraw"), i18n("RAW camera supported"), this);
+    connect(d->rawCameraListAction, SIGNAL(triggered()), this, SLOT(slotRawCameraList()));
+    actionCollection()->addAction("cameraui_rawcameralist", d->rawCameraListAction);
 
     // Provides a menu entry that allows showing/hiding the toolbar(s)
     setStandardToolBarMenuEnabled(true);
@@ -1932,6 +1938,19 @@ bool CameraUI::cameraMkDirSupport()
 bool CameraUI::cameraDelDirSupport()
 {
     return d->controller->cameraDelDirSupport();
+}
+
+void CameraUI::slotRawCameraList()
+{
+    QStringList list      = KDcrawIface::DcrawBinary::instance()->supportedCamera();
+    QString     dcrawVer  = KDcrawIface::DcrawBinary::instance()->internalVersion();
+    QString     KDcrawVer = KDcrawIface::KDcraw::version();
+    KMessageBox::informationList(this, 
+                                 i18n("<p>Using KDcraw library version %1"
+                                      "<p>Using Dcraw program version %2"
+                                      "<p>%3 models in the list", 
+                                      KDcrawVer, dcrawVer, list.count()),
+                                 list, i18n("List of supported RAW camera"));
 }
 
 }  // namespace Digikam
