@@ -1596,10 +1596,80 @@ QList<QDateTime> AlbumDB::getAllCreationDates()
     foreach (QVariant value, values)
     {
         if (!value.isNull())
-            list << (value.isNull() ? QDateTime()
-                        : QDateTime::fromString(value.toString(), Qt::ISODate));
+            list << QDateTime::fromString(value.toString(), Qt::ISODate);
     }
     return list;
+}
+
+QMap<QDateTime, int> AlbumDB::getAllCreationDatesAndNumberOfImages()
+{
+    QList<QVariant> values;
+    d->db->execSql( "SELECT creationDate FROM ImageInformation;", &values );
+
+    QMap<QDateTime, int> datesStatMap;
+    foreach (QVariant value, values)
+    {
+        if (!value.isNull())
+        {
+            QDateTime dateTime = QDateTime::fromString(value.toString(), Qt::ISODate);
+            if ( !dateTime.isValid() )
+                continue;
+
+            QMap<QDateTime, int>::iterator it2 = datesStatMap.find(dateTime);
+            if ( it2 == datesStatMap.end() )
+                datesStatMap.insert( dateTime, 1 );
+            else
+                it2.value()++;
+        }
+    }
+    return datesStatMap;
+}
+
+QMap<int, int> AlbumDB::getNumberOfImagesInAlbums()
+{
+    QList<QVariant> values;
+
+    d->db->execSql( "SELECT album FROM Images;", &values );
+
+    QMap<int, int>  albumsStatMap;
+    int             albumID;
+
+    for (QList<QVariant>::iterator it=values.begin(); it != values.end(); ++it)
+    {
+        albumID = (*it).toInt();
+        ++it;
+
+        QMap<int, int>::iterator it2 = albumsStatMap.find(albumID);
+        if ( it2 == albumsStatMap.end() )
+            albumsStatMap.insert(albumID, 1);
+        else
+            it2.value()++;
+    }
+
+    return albumsStatMap;
+}
+
+QMap<int, int> AlbumDB::getNumberOfImagesInTags()
+{
+    QList<QVariant> values;
+
+    d->db->execSql( "SELECT tagid FROM ImageTags;", &values );
+
+    QMap<int, int> tagsStatMap;
+    int            tagID;
+    for (QList<QVariant>::iterator it=values.begin(); it != values.end(); ++it)
+    {
+        tagID = (*it).toInt();
+        ++it;
+
+        QMap<int, int>::iterator it2 = tagsStatMap.find(tagID);
+        if ( it2 == tagsStatMap.end() )
+            tagsStatMap.insert(tagID, 1);
+        else
+            it2.value()++;
+    }
+
+    return tagsStatMap;
 }
 
 /*

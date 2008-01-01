@@ -333,6 +333,12 @@ public:
      */
     QDate getAlbumAverageDate(int albumID);
 
+    /**
+     * Returns a QMap<int,int> of album id -> count of items
+     * in the album
+     */
+    QMap<int, int> getNumberOfImagesInAlbums();
+
     // ----------- Operations on TAlbums -----------
 
     /**
@@ -555,6 +561,12 @@ public:
      * Returns all creation dates found in the image metadata table
      */
     QList<QDateTime> getAllCreationDates();
+
+    /**
+     * Returns a QMap<QDateTime,int> of creationDate -> count of items
+     * with the tag
+     */
+    QMap<QDateTime, int> getAllCreationDatesAndNumberOfImages();
 
     // ----------- Item properties -----------
 
@@ -905,6 +917,12 @@ public:
      * @return the list of common IDs of the given items
      */
     QList<int> getItemCommonTagIDs(const QList<qlonglong>& imageIDList);
+
+    /**
+     * Returns a QMap<int,int> of tag id -> count of items
+     * with the tag
+     */
+    QMap<int, int> getNumberOfImagesInTags();
 
     // ----------- Moving and Copying Items -----------
 
