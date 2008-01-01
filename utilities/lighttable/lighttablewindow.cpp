@@ -6,7 +6,7 @@
  * Date        : 2007-03-05
  * Description : digiKam light table GUI
  *
- * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -40,6 +40,9 @@
 
 // LibKDcraw includes.
 
+// LibKDcraw includes.
+
+#include <libkdcraw/kdcraw.h>
 #include <libkdcraw/dcrawbinary.h>
 
 // Local includes.
@@ -431,6 +434,15 @@ void LightTableWindow::setupActions()
                                        this, SLOT(slotDonateMoney()),
                                        actionCollection(),
                                        "lighttable_donatemoney");    
+
+    d->rawCameraListAction = new KAction(i18n("RAW camera supported"), 
+                                         "kdcraw", 
+                                         0, 
+                                         this,
+                                         SLOT(slotRawCameraList()),
+                                         actionCollection(),
+                                         "lighttable_rawcameralist");
+
 
     // Provides a menu entry that allows showing/hiding the toolbar(s)
     setStandardToolBarMenuEnabled(true);
@@ -1578,5 +1590,17 @@ void LightTableWindow::slotToggleNavigateByPair()
     slotItemSelected(d->barView->currentItemImageInfo());
 }
 
-}  // namespace Digikam
+void LightTableWindow::slotRawCameraList()
+{
+    QStringList list      = KDcrawIface::DcrawBinary::instance()->supportedCamera();
+    QString     dcrawVer  = KDcrawIface::DcrawBinary::instance()->internalVersion();
+    QString     KDcrawVer = KDcrawIface::KDcraw::version();
+    KMessageBox::informationList(this, 
+                                 i18n("<p>Using KDcraw library version %1"
+                                      "<p>Using Dcraw program version %2"
+                                      "<p>%3 models in the list")
+                                      .arg(KDcrawVer).arg(dcrawVer).arg(list.count()),
+                                 list, i18n("List of supported RAW camera"));
+}
 
+}  // namespace Digikam

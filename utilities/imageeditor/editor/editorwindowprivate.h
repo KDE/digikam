@@ -81,6 +81,7 @@ public:
         zoomComboAction        = 0;
         selectAllAction        = 0;
         selectNoneAction       = 0;
+        rawCameraListAction    = 0;
     }
 
     ~EditorWindowPriv()
@@ -96,6 +97,7 @@ public:
     QToolButton               *underExposureIndicator; 
     QToolButton               *overExposureIndicator; 
 
+    KAction                   *rawCameraListAction;
     KAction                   *donateMoneyAction;
     KAction                   *filePrintAction;
     KAction                   *copyAction;
