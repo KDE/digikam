@@ -87,14 +87,28 @@ void kio_digikamalbums::special(const QByteArray& data)
     Digikam::DatabaseUrl dbUrl(kurl);
     Digikam::DatabaseAccess::setParameters(dbUrl);
 
-    bool recursive = (metaData("listAlbumsRecursively") == "true");
+    bool folders = (metaData("folders") == "true");
 
-    Digikam::ImageLister lister;
-    lister.setRecursive(recursive);
-    // send data every 200 images to be more responsive
-    Digikam::ImageListerSlaveBasePartsSendingReceiver receiver(this, 200);
-    lister.list(&receiver, kurl);
-    receiver.sendData();
+    if (folders)
+    {
+        QMap<int, int> albumNumberMap = Digikam::DatabaseAccess().db()->getNumberOfImagesInAlbums();
+
+        QByteArray  ba;
+        QDataStream os(&ba, QIODevice::WriteOnly);
+        os << albumNumberMap;
+        SlaveBase::data(ba);
+    }
+    else
+    {
+        bool recursive = (metaData("listAlbumsRecursively") == "true");
+
+        Digikam::ImageLister lister;
+        lister.setRecursive(recursive);
+        // send data every 200 images to be more responsive
+        Digikam::ImageListerSlaveBasePartsSendingReceiver receiver(this, 200);
+        lister.list(&receiver, kurl);
+        receiver.sendData();
+    }
 
     finished();
 }

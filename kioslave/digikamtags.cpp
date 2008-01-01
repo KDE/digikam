@@ -45,6 +45,7 @@
 #include "digikam_export.h"
 #include "databaseaccess.h"
 #include "databaseurl.h"
+#include "albumdb.h"
 #include "imagelister.h"
 #include "imagelisterreceiver.h"
 #include "digikamtags.h"
@@ -71,15 +72,29 @@ void kio_digikamtagsProtocol::special(const QByteArray& data)
     Digikam::DatabaseUrl dbUrl(kurl);
     Digikam::DatabaseAccess::setParameters(dbUrl);
 
-    bool recursive = (metaData("listTagsRecursively") == "true");
+    bool folders = (metaData("folders") == "true");
 
-    Digikam::ImageLister lister;
-    lister.setRecursive(recursive);
-    // send data every 200 images to be more responsive
-    Digikam::ImageListerSlaveBasePartsSendingReceiver receiver(this, 200);
-    lister.list(&receiver, kurl);
-    // send rest
-    receiver.sendData();
+    if (folders)
+    {
+        QMap<int, int> tagNumberMap = Digikam::DatabaseAccess().db()->getNumberOfImagesInTags();
+
+        QByteArray  ba;
+        QDataStream os(&ba, QIODevice::WriteOnly);
+        os << tagNumberMap;
+        SlaveBase::data(ba);
+    }
+    else
+    {
+        bool recursive = (metaData("listTagsRecursively") == "true");
+
+        Digikam::ImageLister lister;
+        lister.setRecursive(recursive);
+        // send data every 200 images to be more responsive
+        Digikam::ImageListerSlaveBasePartsSendingReceiver receiver(this, 200);
+        lister.list(&receiver, kurl);
+        // send rest
+        receiver.sendData();
+    }
 
     finished();
 }

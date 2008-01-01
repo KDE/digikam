@@ -107,6 +107,13 @@ void kio_digikamdates::special(const QByteArray& data)
         }
 
         SlaveBase::data(ba);
+/*
+        QMap<QDateTime, int> dateNumberMap = Digikam::DatabaseAccess().db()->getAllCreationDatesAndNumberOfImages();
+
+        QByteArray  ba;
+        QDataStream os(&ba, QIODevice::WriteOnly);
+        os << dateNumberMap;
+        SlaveBase::data(ba);*/
     }
     else
     {
