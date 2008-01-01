@@ -395,7 +395,7 @@ void LightTableWindow::setupActions()
 
     // -- Standard 'View' menu actions ---------------------------------------------
 
-    d->syncPreviewAction = new KToggleAction(KIcon("view-left-right"), i18n("Synchronize"), this);
+    d->syncPreviewAction = new KToggleAction(KIcon("view-split-left-right"), i18n("Synchronize"), this);
     d->syncPreviewAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_Y);
     d->syncPreviewAction->setEnabled(false);
     d->syncPreviewAction->setWhatsThis(i18n("Synchronize preview from left and right panels"));
