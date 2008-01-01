@@ -174,7 +174,7 @@ int main(int argc, char *argv[])
 
     aboutData.addCredit ( "Angelo Naselli",
                           I18N_NOOP("Developer"),
-                          "a dot naselli at libero dot it",
+                          "anaselli at linux dot it",
                           0);
 
     aboutData.addCredit ( "Fabien Salvi",

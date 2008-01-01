@@ -10,7 +10,7 @@
  * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com> 
  *
  * KeepRatio and Alignment options imported from Gwenview program.
- * Copyright (c) 2003 Angelo Naselli
+ * Copyright (c) 2003 Angelo Naselli <anaselli at linux dot it>
  * 
  * Original printing code from Kuickshow program.
  * Copyright (C) 2002 Carsten Pfeiffer <pfeiffer at kde.org>
