@@ -286,6 +286,10 @@ QPixmap ThumbnailLoadThread::surrogatePixmap(const LoadingDescription &descripti
     if (pix.isNull())
         pix = DesktopIcon("image-missing", KIconLoader::SizeEnormous);
 
+    if (pix.isNull())
+        // give up
+        return QPixmap();
+
     // Resize icon to the right size depending of current settings.
 
     QSize size(pix.size());

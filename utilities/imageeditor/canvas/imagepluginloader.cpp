@@ -137,7 +137,7 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)
 
     KService::Ptr corePlugin = d->pluginServiceMap.value("ImagePlugin_Core");
 
-    if (!pluginIsLoaded(corePlugin->name()) )
+    if (corePlugin && !pluginIsLoaded(corePlugin->name()) )
     {
         QString error;
 
