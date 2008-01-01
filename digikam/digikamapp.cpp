@@ -75,7 +75,7 @@
 
 // LibKDcraw includes.
 
-#include <libkdcraw/version.h>
+#include <libkdcraw/kdcraw.h>
 #include <libkdcraw/dcrawbinary.h>
 
 // Local includes.
@@ -1936,11 +1936,12 @@ void DigikamApp::slotRawCameraList()
 {
     QStringList list      = KDcrawIface::DcrawBinary::instance()->supportedCamera();
     QString     dcrawVer  = KDcrawIface::DcrawBinary::instance()->internalVersion();
-    QString     KDcrawVer = QString(kdcraw_version);
+    QString     KDcrawVer = KDcrawIface::KDcraw::version();
     KMessageBox::informationList(this, 
                                  i18n("<p>Using KDcraw library version %1"
                                       "<p>Using Dcraw program version %2"
-                                      "<p>%3 models in the list", KDcrawVer, dcrawVer, list.count()),
+                                      "<p>%3 models in the list", 
+                                      KDcrawVer, dcrawVer, list.count()),
                                  list, i18n("List of supported RAW camera"));
 }
 
