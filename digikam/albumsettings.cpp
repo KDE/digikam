@@ -7,7 +7,7 @@
  * Description : albums settings interface
  *
  * Copyright (C) 2003-2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu> 
- * Copyright (C) 2003-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2007 by Arnd Baecker <arnd dot baecker at web dot de>
  *
  * This program is free software; you can redistribute it
@@ -105,6 +105,8 @@ public:
     // preview settings
     bool                                previewLoadFullImageSize;      
 
+    bool                                showFolderTreeViewItemsCount;
+
     QString                             author;
     QString                             authorTitle;
     QString                             credit;
@@ -182,81 +184,84 @@ void AlbumSettings::init()
     d->albumCollectionNames.append(i18n("Miscellaneous"));
     d->albumCollectionNames.sort();
 
-    d->albumSortOrder           = AlbumSettings::ByFolder;
-    d->imageSortOrder           = AlbumSettings::ByIName;
-    d->itemRightClickAction     = AlbumSettings::ShowPreview;
+    d->albumSortOrder               = AlbumSettings::ByFolder;
+    d->imageSortOrder               = AlbumSettings::ByIName;
+    d->itemRightClickAction         = AlbumSettings::ShowPreview;
 
-    d->defaultImageFilefilter   = "*.jpg *.jpeg *.jpe "               // JPEG
-                                  "*.jp2 *.jpx *.jpc *.pgx "          // JPEG-2000
-                                  "*.tif *.tiff "                     // TIFF
-                                  "*.png *.gif *.bmp *.xpm *.ppm *.pnm *.xcf *.pcx";
+    d->defaultImageFilefilter       = "*.jpg *.jpeg *.jpe "               // JPEG
+                                      "*.jp2 *.jpx *.jpc *.pgx "          // JPEG-2000
+                                      "*.tif *.tiff "                     // TIFF
+                                      "*.png *.gif *.bmp *.xpm *.ppm *.pnm *.xcf *.pcx";
 			 
-    d->defaultMovieFilefilter   = "*.mpeg *.mpg *.mpo *.mpe "         // MPEG
-                                  "*.avi *.mov *.wmf *.asf *.mp4 *.3gp";
+    d->defaultMovieFilefilter       = "*.mpeg *.mpg *.mpo *.mpe "         // MPEG
+                                      "*.avi *.mov *.wmf *.asf *.mp4 *.3gp";
 			 
-    d->defaultAudioFilefilter   = "*.ogg *.mp3 *.wma *.wav";
+    d->defaultAudioFilefilter       = "*.ogg *.mp3 *.wma *.wav";
 
     // RAW files estentions supported by dcraw program and 
     // defines to digikam/libs/dcraw/rawfiles.h
-    d->defaultRawFilefilter     = QString(KDcrawIface::DcrawBinary::instance()->rawFiles());
+    d->defaultRawFilefilter         = QString(KDcrawIface::DcrawBinary::instance()->rawFiles());
 
-    d->imageFilefilter          = d->defaultImageFilefilter;
-    d->movieFilefilter          = d->defaultMovieFilefilter;
-    d->audioFilefilter          = d->defaultAudioFilefilter;
-    d->rawFilefilter            = d->defaultRawFilefilter;
+    d->imageFilefilter              = d->defaultImageFilefilter;
+    d->movieFilefilter              = d->defaultMovieFilefilter;
+    d->audioFilefilter              = d->defaultAudioFilefilter;
+    d->rawFilefilter                = d->defaultRawFilefilter;
 
-    d->thumbnailSize            = ThumbnailSize::Medium;
-    d->treeThumbnailSize        = 32;
+    d->thumbnailSize                = ThumbnailSize::Medium;
+    d->treeThumbnailSize            = 32;
  
-    d->ratingFilterCond         = AlbumLister::GreaterEqualCondition;
+    d->ratingFilterCond             = AlbumLister::GreaterEqualCondition;
 
-    d->showToolTips             = true;
-    d->showSplash               = true;
-    d->useTrash                 = true;
-    d->showTrashDeleteDialog    = true;
-    d->sidebarApplyDirectly     = false;
+    d->showToolTips                 = true;
+    d->showSplash                   = true;
+    d->useTrash                     = true;
+    d->showTrashDeleteDialog        = true;
+    d->sidebarApplyDirectly         = false;
 
-    d->iconShowName             = false;
-    d->iconShowSize             = false;
-    d->iconShowDate             = true;
-    d->iconShowModDate          = true;
-    d->iconShowComments         = true;
-    d->iconShowResolution       = false;
-    d->iconShowTags             = true;
-    d->iconShowRating           = true;
+    d->iconShowName                 = false;
+    d->iconShowSize                 = false;
+    d->iconShowDate                 = true;
+    d->iconShowModDate              = true;
+    d->iconShowComments             = true;
+    d->iconShowResolution           = false;
+    d->iconShowTags                 = true;
+    d->iconShowRating               = true;
 
-    d->tooltipShowFileName      = true;
-    d->tooltipShowFileDate      = false;
-    d->tooltipShowFileSize      = false;
-    d->tooltipShowImageType     = false;
-    d->tooltipShowImageDim      = true;
-    d->tooltipShowPhotoMake     = true;
-    d->tooltipShowPhotoDate     = true;
-    d->tooltipShowPhotoFocal    = true;
-    d->tooltipShowPhotoExpo     = true;
-    d->tooltipShowPhotoMode     = true;
-    d->tooltipShowPhotoFlash    = false;
-    d->tooltipShowPhotoWb       = false;
-    d->tooltipShowAlbumName     = false;
-    d->tooltipShowComments      = true;
-    d->tooltipShowTags          = true;
-    d->tooltipShowRating        = true;
+    d->tooltipShowFileName          = true;
+    d->tooltipShowFileDate          = false;
+    d->tooltipShowFileSize          = false;
+    d->tooltipShowImageType         = false;
+    d->tooltipShowImageDim          = true;
+    d->tooltipShowPhotoMake         = true;
+    d->tooltipShowPhotoDate         = true;
+    d->tooltipShowPhotoFocal        = true;
+    d->tooltipShowPhotoExpo         = true;
+    d->tooltipShowPhotoMode         = true;
+    d->tooltipShowPhotoFlash        = false;
+    d->tooltipShowPhotoWb           = false;
+    d->tooltipShowAlbumName         = false;
+    d->tooltipShowComments          = true;
+    d->tooltipShowTags              = true;
+    d->tooltipShowRating            = true;
 
-    d->exifRotate               = true;
-    d->exifSetOrientation       = true;
+    d->exifRotate                   = true;
+    d->exifSetOrientation           = true;
 
-    d->saveTags                 = false;
-    d->savePhotographerId       = false;
-    d->saveCredits              = false;
+    d->saveTags                     = false;
+    d->savePhotographerId           = false;
+    d->saveCredits                  = false;
 
-    d->saveComments             = false;
-    d->saveDateTime             = false;
-    d->saveRating               = false;
+    d->saveComments                 = false;
+    d->saveDateTime                 = false;
+    d->saveRating                   = false;
 
-    d->previewLoadFullImageSize = false;
+    d->previewLoadFullImageSize     = false;
 
-    d->recursiveAlbums          = false;
-    d->recursiveTags            = true;
+    d->recursiveAlbums              = false;
+    d->recursiveTags                = true;
+
+    d->showFolderTreeViewItemsCount = false;
+
 }
 
 void AlbumSettings::readSettings()
@@ -281,56 +286,58 @@ void AlbumSettings::readSettings()
     d->albumSortOrder = AlbumSettings::AlbumSortOrder(group.readEntry("Album Sort Order",
                                                       (int)AlbumSettings::ByFolder));
 
-    d->imageSortOrder           = AlbumSettings::ImageSortOrder(group.readEntry("Image Sort Order",
-                                                      (int)AlbumSettings::ByIName));
+    d->imageSortOrder               = AlbumSettings::ImageSortOrder(group.readEntry("Image Sort Order",
+                                                                    (int)AlbumSettings::ByIName));
 
-    d->itemRightClickAction     = AlbumSettings::ItemRightClickAction(group.readEntry(
-                                                                  "Item Right Click Action",
-                                                                  (int)AlbumSettings::ShowPreview));
+    d->itemRightClickAction         = AlbumSettings::ItemRightClickAction(group.readEntry(
+                                                                         "Item Right Click Action",
+                                                                          (int)AlbumSettings::ShowPreview));
 
 #warning File formats are now stored in the database. Remove this here and update settings tab.
-    d->imageFilefilter          = group.readEntry("File Filter", d->imageFilefilter);
-    d->movieFilefilter          = group.readEntry("Movie File Filter", d->movieFilefilter);
-    d->audioFilefilter          = group.readEntry("Audio File Filter", d->audioFilefilter);
-    d->rawFilefilter            = group.readEntry("Raw File Filter", d->rawFilefilter);
-    d->thumbnailSize            = group.readEntry("Default Icon Size", (int)ThumbnailSize::Medium);
-    d->treeThumbnailSize        = group.readEntry("Default Tree Icon Size", (int)ThumbnailSize::Tiny);
-    d->currentTheme             = group.readEntry("Theme", i18n("Default"));
+    d->imageFilefilter              = group.readEntry("File Filter", d->imageFilefilter);
+    d->movieFilefilter              = group.readEntry("Movie File Filter", d->movieFilefilter);
+    d->audioFilefilter              = group.readEntry("Audio File Filter", d->audioFilefilter);
+    d->rawFilefilter                = group.readEntry("Raw File Filter", d->rawFilefilter);
+    d->thumbnailSize                = group.readEntry("Default Icon Size", (int)ThumbnailSize::Medium);
+    d->treeThumbnailSize            = group.readEntry("Default Tree Icon Size", (int)ThumbnailSize::Tiny);
+    d->currentTheme                 = group.readEntry("Theme", i18n("Default"));
 
-    d->ratingFilterCond         = group.readEntry("Rating Filter Condition",
+    d->ratingFilterCond             = group.readEntry("Rating Filter Condition",
                                                   (int)AlbumLister::GreaterEqualCondition);
-    d->recursiveAlbums          = group.readEntry("Recursive Albums", false);
-    d->recursiveTags            = group.readEntry("Recursive Tags", true);
+    d->recursiveAlbums              = group.readEntry("Recursive Albums", false);
+    d->recursiveTags                = group.readEntry("Recursive Tags", true);
 
 
-    d->iconShowName             = group.readEntry("Icon Show Name", false); 
-    d->iconShowResolution       = group.readEntry("Icon Show Resolution", false);
-    d->iconShowSize             = group.readEntry("Icon Show Size", false);
-    d->iconShowDate             = group.readEntry("Icon Show Date", true);
-    d->iconShowModDate          = group.readEntry("Icon Show Modification Date", true);
-    d->iconShowComments         = group.readEntry("Icon Show Comments", true);
-    d->iconShowTags             = group.readEntry("Icon Show Tags", true);
-    d->iconShowRating           = group.readEntry("Icon Show Rating", true);
+    d->iconShowName                 = group.readEntry("Icon Show Name", false); 
+    d->iconShowResolution           = group.readEntry("Icon Show Resolution", false);
+    d->iconShowSize                 = group.readEntry("Icon Show Size", false);
+    d->iconShowDate                 = group.readEntry("Icon Show Date", true);
+    d->iconShowModDate              = group.readEntry("Icon Show Modification Date", true);
+    d->iconShowComments             = group.readEntry("Icon Show Comments", true);
+    d->iconShowTags                 = group.readEntry("Icon Show Tags", true);
+    d->iconShowRating               = group.readEntry("Icon Show Rating", true);
 
-    d->showToolTips             = group.readEntry("Show ToolTips", false);
-    d->tooltipShowFileName      = group.readEntry("ToolTips Show File Name", true);
-    d->tooltipShowFileDate      = group.readEntry("ToolTips Show File Date", false);
-    d->tooltipShowFileSize      = group.readEntry("ToolTips Show File Size", false);
-    d->tooltipShowImageType     = group.readEntry("ToolTips Show Image Type", false);
-    d->tooltipShowImageDim      = group.readEntry("ToolTips Show Image Dim", true);
-    d->tooltipShowPhotoMake     = group.readEntry("ToolTips Show Photo Make", true);
-    d->tooltipShowPhotoDate     = group.readEntry("ToolTips Show Photo Date", true);
-    d->tooltipShowPhotoFocal    = group.readEntry("ToolTips Show Photo Focal", true);
-    d->tooltipShowPhotoExpo     = group.readEntry("ToolTips Show Photo Expo", true);
-    d->tooltipShowPhotoMode     = group.readEntry("ToolTips Show Photo Mode", true);
-    d->tooltipShowPhotoFlash    = group.readEntry("ToolTips Show Photo Flash", false);
-    d->tooltipShowPhotoWb       = group.readEntry("ToolTips Show Photo WB", false);
-    d->tooltipShowAlbumName     = group.readEntry("ToolTips Show Album Name", false);
-    d->tooltipShowComments      = group.readEntry("ToolTips Show Comments", true);
-    d->tooltipShowTags          = group.readEntry("ToolTips Show Tags", true);
-    d->tooltipShowRating        = group.readEntry("ToolTips Show Rating", true);
+    d->showToolTips                 = group.readEntry("Show ToolTips", false);
+    d->tooltipShowFileName          = group.readEntry("ToolTips Show File Name", true);
+    d->tooltipShowFileDate          = group.readEntry("ToolTips Show File Date", false);
+    d->tooltipShowFileSize          = group.readEntry("ToolTips Show File Size", false);
+    d->tooltipShowImageType         = group.readEntry("ToolTips Show Image Type", false);
+    d->tooltipShowImageDim          = group.readEntry("ToolTips Show Image Dim", true);
+    d->tooltipShowPhotoMake         = group.readEntry("ToolTips Show Photo Make", true);
+    d->tooltipShowPhotoDate         = group.readEntry("ToolTips Show Photo Date", true);
+    d->tooltipShowPhotoFocal        = group.readEntry("ToolTips Show Photo Focal", true);
+    d->tooltipShowPhotoExpo         = group.readEntry("ToolTips Show Photo Expo", true);
+    d->tooltipShowPhotoMode         = group.readEntry("ToolTips Show Photo Mode", true);
+    d->tooltipShowPhotoFlash        = group.readEntry("ToolTips Show Photo Flash", false);
+    d->tooltipShowPhotoWb           = group.readEntry("ToolTips Show Photo WB", false);
+    d->tooltipShowAlbumName         = group.readEntry("ToolTips Show Album Name", false);
+    d->tooltipShowComments          = group.readEntry("ToolTips Show Comments", true);
+    d->tooltipShowTags              = group.readEntry("ToolTips Show Tags", true);
+    d->tooltipShowRating            = group.readEntry("ToolTips Show Rating", true);
 
-    d->previewLoadFullImageSize = group.readEntry("Preview Load Full Image Size", false);
+    d->previewLoadFullImageSize     = group.readEntry("Preview Load Full Image Size", false);
+
+    d->showFolderTreeViewItemsCount = group.readEntry("Show Folder Tree View Items Count", false);
 
     // ---------------------------------------------------------------------
 
@@ -421,6 +428,8 @@ void AlbumSettings::saveSettings()
     group.writeEntry("ToolTips Show Rating", d->tooltipShowRating);
 
     group.writeEntry("Preview Load Full Image Size", d->previewLoadFullImageSize);
+
+    group.writeEntry("Show Folder Tree View Items Count", d->showFolderTreeViewItemsCount);
 
     // ---------------------------------------------------------------------
 
@@ -1139,6 +1148,16 @@ void AlbumSettings::setRecurseTags(bool val)
 bool AlbumSettings::getRecurseTags() const
 {
     return d->recursiveTags;
+}
+
+void AlbumSettings::setShowFolderTreeViewItemsCount(bool val)
+{
+    d->showFolderTreeViewItemsCount = val;
+}
+
+bool AlbumSettings::getShowFolderTreeViewItemsCount() const
+{
+    return d->showFolderTreeViewItemsCount;
 }
 
 }  // namespace Digikam
