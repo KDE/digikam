@@ -7,6 +7,7 @@
  * Description : Albums manager interface.
  * 
  * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -126,6 +127,7 @@ uint qHash(const PAlbumPath &id)
 
 class AlbumManagerPriv
 {
+
 public:
 
     AlbumManagerPriv()
@@ -133,6 +135,8 @@ public:
         changed            = false;
         hasPriorizedDbPath = false;
         dateListJob        = 0;
+        albumListJob       = 0;
+        tagListJob         = 0;
         dirWatch           = 0;
         itemHandler        = 0;
         rootPAlbum         = 0;
@@ -149,7 +153,9 @@ public:
 
     QList<QDateTime>  dbPathModificationDateList;
 
+    KIO::TransferJob *albumListJob;
     KIO::TransferJob *dateListJob;
+    KIO::TransferJob *tagListJob;
 
     KDirWatch        *dirWatch;
 
@@ -187,6 +193,18 @@ AlbumManager::~AlbumManager()
         d->dateListJob = 0; 
     }
 
+    if (d->albumListJob)
+    {
+        d->albumListJob->kill();
+        d->albumListJob = 0;
+    }
+
+    if (d->tagListJob)
+    {
+        d->tagListJob->kill();
+        d->tagListJob = 0;
+    }
+
     delete d->rootPAlbum;
     delete d->rootTAlbum;
     delete d->rootDAlbum;
@@ -222,6 +240,18 @@ bool AlbumManager::setDatabase(const QString &dbPath, bool priority)
     {
         d->dateListJob->kill();
         d->dateListJob = 0;
+    }
+
+    if (d->albumListJob)
+    {
+        d->albumListJob->kill();
+        d->albumListJob = 0;
+    }
+
+    if (d->tagListJob)
+    {
+        d->tagListJob->kill();
+        d->tagListJob = 0;
     }
 
     delete d->dirWatch;
@@ -522,6 +552,33 @@ void AlbumManager::scanPAlbums()
 
         insertPAlbum(album);
     }
+
+    getAlbumItemsCount();
+}
+
+void AlbumManager::getAlbumItemsCount()
+{
+    if (!AlbumSettings::instance()->getShowFolderTreeViewItemsCount())
+        return;
+
+    // List albums using kioslave
+
+    if (d->albumListJob)
+    {
+        d->albumListJob->kill();
+        d->albumListJob = 0;
+    }
+
+    DatabaseUrl u = DatabaseUrl::albumUrl();
+
+    d->albumListJob = ImageLister::startListJob(u);
+    d->albumListJob->addMetaData("folders", "true");
+
+    connect(d->albumListJob, SIGNAL(result(KJob*)),
+            this, SLOT(slotAlbumsJobResult(KJob*)));
+
+    connect(d->albumListJob, SIGNAL(data(KIO::Job*, const QByteArray&)),
+            this, SLOT(slotAlbumsJobData(KIO::Job*, const QByteArray&)));
 }
 
 void AlbumManager::scanTAlbums()
@@ -647,6 +704,33 @@ void AlbumManager::scanTAlbums()
         // also insert it in the map we are doing lookup of parent tags
         tmap.insert(info.id, album);
     }
+
+    getTagItemsCount();
+}
+
+void AlbumManager::getTagItemsCount()
+{
+    if (!AlbumSettings::instance()->getShowFolderTreeViewItemsCount())
+        return;
+
+    // List tags using kioslave
+
+    if (d->tagListJob)
+    {
+        d->tagListJob->kill();
+        d->tagListJob = 0;
+    }
+
+    DatabaseUrl u = DatabaseUrl::fromTagIds(QList<int>());
+
+    d->tagListJob = ImageLister::startListJob(u);
+    d->tagListJob->addMetaData("folders", "true");
+
+    connect(d->tagListJob, SIGNAL(result(KJob*)),
+            this, SLOT(slotTagsJobResult(KJob*)));
+
+    connect(d->tagListJob, SIGNAL(data(KIO::Job*, const QByteArray&)),
+            this, SLOT(slotTagsJobData(KIO::Job*, const QByteArray&)));
 }
 
 void AlbumManager::scanSAlbums()
@@ -700,15 +784,13 @@ void AlbumManager::scanDAlbums()
     DatabaseUrl u = DatabaseUrl::fromDate(QDate());
 
     d->dateListJob = ImageLister::startListJob(u);
-                                               //AlbumSettings::instance()->getAllFileFilter(),
-                                               //0);
-    d->dateListJob->addMetaData("folders", "yes");
+    d->dateListJob->addMetaData("folders", "true");
 
     connect(d->dateListJob, SIGNAL(result(KJob*)),
-            this, SLOT(slotResult(KJob*)));
+            this, SLOT(slotDatesJobResult(KJob*)));
 
     connect(d->dateListJob, SIGNAL(data(KIO::Job*, const QByteArray&)),
-            this, SLOT(slotData(KIO::Job*, const QByteArray&)));
+            this, SLOT(slotDatesJobData(KIO::Job*, const QByteArray&)));
 }
 
 AlbumList AlbumManager::allPAlbums() const
@@ -1488,7 +1570,55 @@ void AlbumManager::refreshItemHandler(const KUrl::List& itemList)
         d->itemHandler->refreshItems(itemList);
 }
 
-void AlbumManager::slotResult(KJob* job)
+void AlbumManager::slotAlbumsJobResult(KJob* job)
+{
+    d->albumListJob = 0;
+
+    if (job->error())
+    {
+        DWarning() << k_funcinfo << "Failed to list albums" << endl;
+        return;
+    }
+}
+
+void AlbumManager::slotAlbumsJobData(KIO::Job*, const QByteArray& data)
+{
+    if (data.isEmpty())
+        return;
+
+    QMap<int, int> albumsStatMap;
+    QByteArray di(data);
+    QDataStream ds(&di, QIODevice::ReadOnly);
+    ds >> albumsStatMap;
+
+    emit signalPAlbumsDirty(albumsStatMap);
+}
+
+void AlbumManager::slotTagsJobResult(KJob* job)
+{
+    d->tagListJob = 0;
+
+    if (job->error())
+    {
+        DWarning() << k_funcinfo << "Failed to list tags" << endl;
+        return;
+    }
+}
+
+void AlbumManager::slotTagsJobData(KIO::Job*, const QByteArray& data)
+{
+    if (data.isEmpty())
+        return;
+
+    QMap<int, int> tagsStatMap;
+    QByteArray di(data);
+    QDataStream ds(&di, QIODevice::ReadOnly);
+    ds >> tagsStatMap;
+
+    emit signalTAlbumsDirty(tagsStatMap);
+}
+
+void AlbumManager::slotDatesJobResult(KJob* job)
 {
     d->dateListJob = 0;
 
@@ -1497,19 +1627,19 @@ void AlbumManager::slotResult(KJob* job)
         DWarning() << "Failed to list dates" << endl;
         return;
     }
-    
+
     emit signalAllDAlbumsLoaded();
 }
 
 
-void AlbumManager::slotData(KIO::Job*, const QByteArray& data)
+void AlbumManager::slotDatesJobData(KIO::Job*, const QByteArray& data)
 {
     if (data.isEmpty())
         return;
 
     // insert all the DAlbums into a qmap for quick access
     QMap<QDate, DAlbum*> albumMap;
-    
+
     AlbumIterator it(d->rootDAlbum);
     while (it.current())
     {
@@ -1517,13 +1647,45 @@ void AlbumManager::slotData(KIO::Job*, const QByteArray& data)
         albumMap.insert(a->date(), a);
         ++it;
     }
-    
+
+    QMap<QDateTime, int> datesStatMap;
     QByteArray di(data);
     QDataStream ds(&di, QIODevice::ReadOnly);
-    while (!ds.atEnd())
+    ds >> datesStatMap;
+
+    QMap<YearMonth, int> yearMonthMap;
+    for ( QMap<QDateTime, int>::iterator it = datesStatMap.begin();
+          it != datesStatMap.end(); ++it )
     {
-        QDate date;
-        ds >> date;
+        YearMonth yearMonth = YearMonth(it.key().date().year(), it.key().date().month());
+        QMap<YearMonth, int>::iterator it2 = yearMonthMap.find(yearMonth);
+        if ( it2 == yearMonthMap.end() )
+        {
+            yearMonthMap.insert( yearMonth, *it );
+        }
+        else
+        {
+            *it2 += *it;
+        }
+    }
+    /*
+    foreach (QDateTime dateTime, allDateTimes)
+    {
+        if ( !yearMonthMap.contains(YearMonth(dateTime.date().year(), dateTime.date().month())) )
+        {
+            yearMonthMap.insert( YearMonth( dateTime.date().year(), dateTime.date().month() ), true );
+        }
+    }
+    */
+
+    int year, month;
+    for ( QMap<YearMonth, int>::iterator it = yearMonthMap.begin();
+          it != yearMonthMap.end(); ++it )
+    {
+        year  = it.key().first;
+        month = it.key().second;
+
+        QDate date( year, month, 1 );
 
         // Do we already have this album
         if (albumMap.contains(date))
@@ -1542,14 +1704,17 @@ void AlbumManager::slotData(KIO::Job*, const QByteArray& data)
 
     // Now the items contained in the map are the ones which
     // have been deleted. 
-    for (QMap<QDate,DAlbum*>::iterator it = albumMap.begin();
+    for (QMap<QDate, DAlbum*>::iterator it = albumMap.begin();
          it != albumMap.end(); ++it)
     {
-        DAlbum* album = it.value();
+        DAlbum* album = *it;
         emit signalAlbumDeleted(album);
         d->allAlbumsIdHash.remove(album->globalID());
         delete album;
     }
+
+    emit signalDAlbumsDirty(yearMonthMap);
+    emit signalDatesMapDirty(datesStatMap);
 }
 
 void AlbumManager::slotDirty(const QString& path)

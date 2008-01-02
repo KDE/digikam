@@ -32,6 +32,7 @@
 #include <Q3ValueList>
 #include <QObject>
 #include <QString>
+#include <QMap>
 
 // KDE includes.
 
@@ -62,6 +63,7 @@ class AlbumItemHandler;
 class AlbumManagerPriv;
 
 typedef Q3ValueList<Album*> AlbumList;
+typedef QPair<int, int> YearMonth;
 
 /**
  * \class AlbumManager
@@ -389,6 +391,24 @@ public:
     void refreshItemHandler(const KUrl::List& itemList=KUrl::List());
     void emitAlbumItemsSelected(bool val);
 
+signals:
+
+    void signalAlbumAdded(Album* album);
+    void signalAlbumDeleted(Album* album);
+    void signalAlbumItemsSelected(bool selected);
+    void signalAlbumsCleared();
+    void signalAlbumCurrentChanged(Album* album);
+    void signalAllAlbumsLoaded();
+    void signalAllDAlbumsLoaded();
+    void signalAlbumIconChanged(Album* album);
+    void signalAlbumRenamed(Album* album);
+    void signalTAlbumMoved(TAlbum* album, TAlbum* newParent);
+    void signalPAlbumDirty(PAlbum* album);
+    void signalPAlbumsDirty(const QMap<int, int>&);
+    void signalTAlbumsDirty(const QMap<int, int>&);
+    void signalDAlbumsDirty(const QMap<YearMonth, int>&);
+    void signalDatesMapDirty(const QMap<QDateTime, int>&);
+
 private:
 
     friend class AlbumManagerCreator;
@@ -430,25 +450,20 @@ private:
      */
     void scanDAlbums();
 
+    void getAlbumItemsCount();
+    void getTagItemsCount();
+
 private slots:
 
-    void slotResult(KJob* job);
-    void slotData(KIO::Job* job, const QByteArray& data);
+    void slotDatesJobResult(KJob* job);
+    void slotDatesJobData(KIO::Job* job, const QByteArray& data);
+    void slotAlbumsJobResult(KJob* job);
+    void slotAlbumsJobData(KIO::Job* job, const QByteArray& data);
+    void slotTagsJobResult(KJob* job);
+    void slotTagsJobData(KIO::Job* job, const QByteArray& data);
     void slotDirty(const QString& path);
     void slotCollectionLocationStatusChanged(const CollectionLocation &, int);
 
-signals:
-
-    void signalAlbumAdded(Album* album);
-    void signalAlbumDeleted(Album* album);
-    void signalAlbumItemsSelected(bool selected);
-    void signalAlbumsCleared();
-    void signalAlbumCurrentChanged(Album* album);
-    void signalAllAlbumsLoaded();
-    void signalAllDAlbumsLoaded();    
-    void signalAlbumIconChanged(Album* album);
-    void signalAlbumRenamed(Album* album);
-    void signalTAlbumMoved(TAlbum* album, TAlbum* newParent);
 };
 
 }  // namespace Digikam

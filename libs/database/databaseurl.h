@@ -89,6 +89,11 @@ public:
                                         const DatabaseParameters &parameters = DatabaseAccess::parameters());
 
     /**
+     * Create an empty digikamalbums:/ url
+     */
+    static DatabaseUrl albumUrl(const DatabaseParameters &parameters = DatabaseAccess::parameters());
+
+    /**
      * Create a digikamtags:/ url from a list of tag IDs, where this list is the tag hierarchy
      * of the referenced tag, with the topmost parent first, and the tag last in the list.
      * An empty list references the root tag.

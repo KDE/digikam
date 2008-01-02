@@ -88,6 +88,14 @@ DatabaseUrl DatabaseUrl::fromAlbumAndName(const QString &name,
     return url;
 }
 
+DatabaseUrl DatabaseUrl::albumUrl(const DatabaseParameters &parameters)
+{
+    DatabaseUrl url;
+    url.setProtocol("digikamalbums");
+    url.setParameters(parameters);
+    return url;
+}
+
 DatabaseUrl DatabaseUrl::fromTagIds(const QList<int> &tagIds,
                                    const DatabaseParameters &parameters)
 {

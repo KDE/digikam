@@ -61,7 +61,7 @@ kio_digikamdates::~kio_digikamdates()
 
 void kio_digikamdates::special(const QByteArray& data)
 {
-    bool folders = (metaData("folders") == "yes");
+    bool folders = (metaData("folders") == "true");
 
     KUrl    kurl;
     QString url;
