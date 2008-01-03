@@ -7,7 +7,7 @@
  * Description : Albums lister. 
  * 
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2007 by Arnd Baecker <arnd dot baecker at web dot de> 
  *
  * This program is free software; you can redistribute it
@@ -30,9 +30,11 @@
 
 // Qt includes.
 
-#include <Q3ValueList>
+#include <QString>
 #include <QObject>
 #include <QByteArray>
+#include <QDateTime>
+#include <QList>
 
 // Local includes.
 
@@ -104,7 +106,7 @@ public:
 
     void setNamesFilter(const QString& namesFilter);
 
-    void setDayFilter(const QList<int>& days);
+    void setDayFilter(const QList<QDateTime>& days);
 
     void setTagFilter(const QList<int>& tags, const MatchingCondition& matchingCond,
                       bool showUnTagged=false);

@@ -24,7 +24,7 @@
 
 // Qt includes.
 
-#include <Q3ValueList>
+#include <QList>
 #include <QResizeEvent>
 #include <QMouseEvent>
 #include <QDateTime>
@@ -325,11 +325,11 @@ void MonthWidget::mousePressEvent(QMouseEvent *e)
             d->days[j*7+i].selected = !d->days[j*7+i].selected;
     }
 
-    Q3ValueList<int> filterDays;
+    QList<QDateTime> filterDays;
     for (int i=0; i<42; i++)
     {
         if (d->days[i].selected && d->days[i].day != -1)
-            filterDays.append(d->days[i].day);
+            filterDays.append(QDateTime(QDate(d->year, d->month, d->days[i].day), QTime()));
     }
 
     AlbumLister::instance()->setDayFilter(filterDays);
@@ -356,7 +356,7 @@ void MonthWidget::setActive(bool val)
     {
         QDate date = QDate::currentDate();
         setYearMonth(date.year(), date.month());
-        AlbumLister::instance()->setDayFilter(Q3ValueList<int>());
+        AlbumLister::instance()->setDayFilter(QList<QDateTime>());
 
         disconnect(AlbumLister::instance());
     }

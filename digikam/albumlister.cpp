@@ -7,7 +7,7 @@
  * Description : Albums lister.
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2007 by Arnd Baecker <arnd dot baecker at web dot de>
  *
  * This program is free software; you can redistribute it
@@ -37,7 +37,6 @@ extern "C"
 
 // Qt includes.
 
-#include <QString>
 #include <QDataStream>
 #include <QFileInfo>
 #include <QDir>
@@ -95,8 +94,8 @@ public:
     QString                         textFilter;
 
     QMap<qlonglong, ImageInfo>      itemMap;
+    QMap<QDateTime, bool>           dayFilter;
     QSet<int>                       invalidatedItems;
-    QSet<int>                       dayFilter;
 
     QList<int>                      tagFilter;
 
@@ -214,9 +213,12 @@ void AlbumLister::setRecurseTags(bool recursive)
     refresh();
 }
 
-void AlbumLister::setDayFilter(const QList<int>& days)
+void AlbumLister::setDayFilter(const QList<QDateTime>& days)
 {
-    d->dayFilter = QSet<int>::fromList(days);
+    d->dayFilter.clear();
+
+    for (QList<QDateTime>::const_iterator it = days.begin(); it != days.end(); ++it)
+        d->dayFilter.insert(*it, true);
 
     d->filterTimer->setSingleShot(true);
     d->filterTimer->start(100);
@@ -305,7 +307,7 @@ bool AlbumLister::matchesFilter(const ImageInfo &info, bool &foundText)
 
     if (!d->dayFilter.isEmpty())
     {
-        match &= d->dayFilter.contains(info.dateTime().date().day());
+        match &= d->dayFilter.contains(QDateTime(info.dateTime().date(), QTime()));
     }
 
     //-- Filter by rating ---------------------------------------------------------
