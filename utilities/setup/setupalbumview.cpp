@@ -53,18 +53,19 @@ public:
 
     SetupAlbumViewPriv()
     {
-        iconTreeThumbSize        = 0;
-        iconTreeThumbLabel       = 0;
-        iconShowNameBox          = 0;
-        iconShowSizeBox          = 0;
-        iconShowDateBox          = 0;
-        iconShowModDateBox       = 0;
-        iconShowResolutionBox    = 0;
-        iconShowCommentsBox      = 0;
-        iconShowTagsBox          = 0;
-        iconShowRatingBox        = 0;
-        rightClickActionComboBox = 0;
-        previewLoadFullImageSize = 0;
+        iconTreeThumbSize            = 0;
+        iconTreeThumbLabel           = 0;
+        iconShowNameBox              = 0;
+        iconShowSizeBox              = 0;
+        iconShowDateBox              = 0;
+        iconShowModDateBox           = 0;
+        iconShowResolutionBox        = 0;
+        iconShowCommentsBox          = 0;
+        iconShowTagsBox              = 0;
+        iconShowRatingBox            = 0;
+        rightClickActionComboBox     = 0;
+        previewLoadFullImageSize     = 0;
+        showFolderTreeViewItemsCount = 0;
     }
 
     QLabel        *iconTreeThumbLabel;
@@ -78,6 +79,7 @@ public:
     QCheckBox     *iconShowTagsBox;
     QCheckBox     *iconShowRatingBox;
     QCheckBox     *previewLoadFullImageSize;
+    QCheckBox     *showFolderTreeViewItemsCount;
 
     QComboBox     *iconTreeThumbSize;
     QComboBox     *rightClickActionComboBox;
@@ -152,6 +154,8 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
                                           "This option will take effect when you restart "
                                           "digiKam."));
 
+    d->showFolderTreeViewItemsCount = new QCheckBox(i18n("Show count of items in all tree-view"), interfaceOptionsGroup);
+
     QLabel *rightClickLabel     = new QLabel(i18n("Thumbnail click action:"), interfaceOptionsGroup);
     d->rightClickActionComboBox = new QComboBox(interfaceOptionsGroup);
     d->rightClickActionComboBox->addItem(i18n("Show embedded preview"), AlbumSettings::ShowPreview);
@@ -168,9 +172,10 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
     ifaceSettingsLayout->setSpacing(KDialog::spacingHint());
     ifaceSettingsLayout->addWidget(d->iconTreeThumbLabel, 0, 0, 1, 1);
     ifaceSettingsLayout->addWidget(d->iconTreeThumbSize, 0, 1, 1, 1);
-    ifaceSettingsLayout->addWidget(rightClickLabel, 1 , 0, 1, 1);
-    ifaceSettingsLayout->addWidget(d->rightClickActionComboBox, 1, 1, 1, 4);
-    ifaceSettingsLayout->addWidget(d->previewLoadFullImageSize, 2, 0, 1, 5 );
+    ifaceSettingsLayout->addWidget(d->showFolderTreeViewItemsCount, 1, 0, 1, 4);
+    ifaceSettingsLayout->addWidget(rightClickLabel, 2 , 0, 1, 1);
+    ifaceSettingsLayout->addWidget(d->rightClickActionComboBox, 2, 1, 1, 4);
+    ifaceSettingsLayout->addWidget(d->previewLoadFullImageSize, 3, 0, 1, 5 );
 
     // --------------------------------------------------------
 
@@ -210,6 +215,7 @@ void SetupAlbumView::applySettings()
                                       d->rightClickActionComboBox->currentIndex());
 
     settings->setPreviewLoadFullImageSize(d->previewLoadFullImageSize->isChecked());
+    settings->setShowFolderTreeViewItemsCount(d->showFolderTreeViewItemsCount->isChecked());
     settings->saveSettings();
 }
 
@@ -240,6 +246,7 @@ void SetupAlbumView::readSettings()
     d->rightClickActionComboBox->setCurrentIndex((int)settings->getItemRightClickAction());
 
     d->previewLoadFullImageSize->setChecked(settings->getPreviewLoadFullImageSize());
+    d->showFolderTreeViewItemsCount->setChecked(settings->getShowFolderTreeViewItemsCount());
 }
 
 }  // namespace Digikam
