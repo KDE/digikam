@@ -429,7 +429,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     //---------- "Lightness" Page Setup ----------------------------------
 
     m_toolBoxWidgets->insertItem(LIGHTNESSPAGE, lightnessadjust, 
-                                 SmallIcon("color-line"), i18n("Lightness Adjustments"));
+                                 SmallIcon("format-stroke-color"), i18n("Lightness Adjustments"));
     lightnessadjust->setWhatsThis( i18n("<p>Set here all lightness adjustments of target image.</p>"));
 
     QGridLayout *fourPageLayout = new QGridLayout( lightnessadjust );

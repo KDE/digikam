@@ -67,7 +67,7 @@ ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget *parent,
          
     appendTab(m_propertiesTab, SmallIcon("document-properties"), i18n("Properties"));
     appendTab(m_metadataTab, SmallIcon("exifinfo"), i18n("Metadata"));
-    appendTab(m_colorTab, SmallIcon("color-fill"), i18n("Colors"));
+    appendTab(m_colorTab, SmallIcon("format-fill-color"), i18n("Colors"));
     
     connect(this, SIGNAL(signalChangedTab(QWidget*)),
             this, SLOT(slotChangedTab(QWidget*)));
