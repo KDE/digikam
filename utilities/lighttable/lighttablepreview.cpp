@@ -142,7 +142,7 @@ LightTablePreview::LightTablePreview(QWidget *parent)
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     d->cornerButton = new QToolButton(this);
-    d->cornerButton->setIcon(SmallIcon("move"));
+    d->cornerButton->setIcon(SmallIcon("transform-move"));
     d->cornerButton->hide();
     d->cornerButton->setToolTip( i18n("Pan the image"));
     setCornerWidget(d->cornerButton);
@@ -383,7 +383,7 @@ void LightTablePreview::slotContextMenu()
 
     QAction *zoomInAction    = popmenu.addAction(SmallIcon("zoom-in"), i18n("Zoom in"));
     QAction *zoomOutAction   = popmenu.addAction(SmallIcon("zoom-out"), i18n("Zoom out"));
-    QAction *fitWindowAction = popmenu.addAction(SmallIcon("zoom-best-fit"), i18n("Fit to &Window"));
+    QAction *fitWindowAction = popmenu.addAction(SmallIcon("zoom-fit-best"), i18n("Fit to &Window"));
 
     //-- Edit actions -----------------------------------------------
 

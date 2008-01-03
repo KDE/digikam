@@ -425,7 +425,7 @@ void LightTableWindow::setupActions()
     connect(d->zoomTo100percents, SIGNAL(triggered()), this, SLOT(slotZoomTo100Percents()));
     actionCollection()->addAction("lighttable_zoomto100percents", d->zoomTo100percents);
 
-    d->zoomFitToWindowAction = new KToggleAction(KIcon("zoom-best-fit"), i18n("Fit to &Window"), this);
+    d->zoomFitToWindowAction = new KToggleAction(KIcon("zoom-fit-best"), i18n("Fit to &Window"), this);
     d->zoomFitToWindowAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_E); // NOTE: Gimp 2 use CTRL+SHIFT+E.
     connect(d->zoomFitToWindowAction, SIGNAL(triggered()), this, SLOT(slotFitToWindow()));
     actionCollection()->addAction("lighttable_zoomfit2window", d->zoomFitToWindowAction);

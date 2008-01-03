@@ -376,7 +376,7 @@ void EditorWindow::setupStandardActions()
     connect(d->zoomTo100percents, SIGNAL(triggered()), this, SLOT(slotZoomTo100Percents()));
     actionCollection()->addAction("editorwindow_zoomto100percents", d->zoomTo100percents);
 
-    d->zoomFitToWindowAction = new KToggleAction(KIcon("zoom-best-fit"), i18n("Fit to &Window"), this);
+    d->zoomFitToWindowAction = new KToggleAction(KIcon("zoom-fit-best"), i18n("Fit to &Window"), this);
     d->zoomFitToWindowAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_E); // NOTE: Gimp 2 use CTRL+SHIFT+E.
     connect(d->zoomFitToWindowAction, SIGNAL(triggered()), this, SLOT(slotToggleFitToWindow()));
     actionCollection()->addAction("editorwindow_zoomfit2window", d->zoomFitToWindowAction);
@@ -445,7 +445,7 @@ void EditorWindow::setupStandardActions()
 
     // -- Standard 'Transform' menu actions ---------------------------------------------
 
-    d->resizeAction = new KAction(KIcon("resize_image"), i18n("&Resize..."), this);
+    d->resizeAction = new KAction(KIcon("transform-scale"), i18n("&Resize..."), this);
     connect(d->resizeAction, SIGNAL(triggered()), this, SLOT(slotResize()));
     actionCollection()->addAction("editorwindow_resize", d->resizeAction);
 

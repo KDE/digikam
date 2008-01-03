@@ -808,7 +808,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->zoomFitToWindowAction = new KAction(KIcon("zoom-best-fit"), i18n("Fit to &Window"), this);
+    d->zoomFitToWindowAction = new KAction(KIcon("zoom-fit-best"), i18n("Fit to &Window"), this);
     d->zoomFitToWindowAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_E); // NOTE: Gimp 2 use CTRL+SHIFT+E.
     connect(d->zoomFitToWindowAction, SIGNAL(triggered()), d->view, SLOT(slotFitToWindow()));
     actionCollection()->addAction("album_zoomfit2window", d->zoomFitToWindowAction);
