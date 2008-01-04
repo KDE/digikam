@@ -1505,19 +1505,25 @@ bool EditorWindow::startingSaveAs(const KURL& url)
                                     false,
                                     options);
 
-    imageFileSaveDialog.setOperationMode(KFileDialog::Saving);
-    imageFileSaveDialog.setMode(KFile::File);
-    imageFileSaveDialog.setSelection(m_savingContext->srcURL.fileName());
-    imageFileSaveDialog.setCaption(i18n("New Image File Name"));
-    imageFileSaveDialog.setFilter(mimetypes);
-
     connect(&imageFileSaveDialog, SIGNAL(filterChanged(const QString &)),
             options, SLOT(slotImageFileFormatChanged(const QString &)));
 
     connect(&imageFileSaveDialog, SIGNAL(fileSelected(const QString &)),
             options, SLOT(slotImageFileSelected(const QString &)));
 
-    options->slotImageFileSelected(m_savingContext->srcURL.path());
+    imageFileSaveDialog.setOperationMode(KFileDialog::Saving);
+    imageFileSaveDialog.setMode(KFile::File);
+    imageFileSaveDialog.setCaption(i18n("New Image File Name"));
+    imageFileSaveDialog.setFilter(mimetypes);
+
+    QFileInfo info(m_savingContext->srcURL.fileName());
+    KConfig* config = kapp->config();
+    config->setGroup("ImageViewer Settings");
+    QString ext      = config->readEntry("LastSavedImageTypeMime", "png");
+    QString fileName = info.baseName(false) + QString(".") + ext;
+    imageFileSaveDialog.setSelection(fileName);
+
+    options->slotImageFileSelected(fileName);
 
     // Start dialog and check if canceled.
     if ( imageFileSaveDialog.exec() != KFileDialog::Accepted )
@@ -1580,6 +1586,9 @@ bool EditorWindow::startingSaveAs(const KURL& url)
         DWarning() << k_funcinfo << "target URL is not valid !" << endl;
         return false;
     }
+
+    config->writeEntry("LastSavedImageTypeMime", m_savingContext->format);
+    config->sync();
 
     // if new and original url are equal use slotSave() ------------------------------
     
