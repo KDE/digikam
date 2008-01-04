@@ -120,6 +120,7 @@ private slots:
     void slotSavingStarted(const QString &filename);
 
     void slotContextMenu();
+    void slotRevert();
 
 private:
     

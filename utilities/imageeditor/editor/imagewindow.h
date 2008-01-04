@@ -124,6 +124,7 @@ private slots:
     void slotUpdateItemInfo();
 
     void slotContextMenu();
+    void slotRevert();
 
     void slotAssignTag(int tagID);
     void slotRemoveTag(int tagID);

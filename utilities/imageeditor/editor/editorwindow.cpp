@@ -275,7 +275,7 @@ void EditorWindow::setupStandardActions()
     m_saveAsAction = KStdAction::saveAs(this, SLOT(slotSaveAs()),
                                         actionCollection(), "editorwindow_saveas");
 
-    m_revertAction = KStdAction::revert(m_canvas, SLOT(slotRestore()),
+    m_revertAction = KStdAction::revert(this, SLOT(slotRevert()),
                                         actionCollection(), "editorwindow_revert");
 
     m_saveAction->setEnabled(false);

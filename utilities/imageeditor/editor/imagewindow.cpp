@@ -1224,6 +1224,12 @@ void ImageWindow::dropEvent(QDropEvent *e)
     }
 }
 
+void ImageWindow::slotRevert()
+{
+    if(!promptUserSave(d->urlCurrent))
+        return;
+
+    m_canvas->slotRestore();
+}
+
 }  // namespace Digikam
-
-

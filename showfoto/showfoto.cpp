@@ -1193,4 +1193,12 @@ void ShowFoto::slideShow(bool startWithCurrent, Digikam::SlideShowSettings& sett
     }
 }
 
+void ShowFoto::slotRevert()
+{
+    if(!promptUserSave(d->currentItem->url()))
+        return;
+
+    m_canvas->slotRestore();
+}
+
 }   // namespace ShowFoto
