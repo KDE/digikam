@@ -208,6 +208,13 @@ private:
     void updateLocations();
 
     CollectionManagerPrivate *d;
+    friend class CollectionManagerPrivate;
+
+    Q_PRIVATE_SLOT(d, void slotTriggerUpdateVolumesList());
+
+signals: // private
+
+    void triggerUpdateVolumesList();
 };
 
 }  // namespace Digikam

@@ -23,7 +23,9 @@
 
 // Qt includes
 
+#include <QCoreApplication>
 #include <QDir>
+#include <QThread>
 
 // KDE includes
 
@@ -46,7 +48,6 @@
 #include "albumdb.h"
 #include "collectionlocation.h"
 #include "collectionmanager.h"
-#include "collectionmanager.moc"
 
 namespace Digikam
 {
@@ -150,11 +151,14 @@ class CollectionManagerPrivate
 {
 public:
 
-    CollectionManagerPrivate()
-    {
-    }
+    CollectionManagerPrivate(CollectionManager *s);
 
     QMap<int, AlbumRootLocation *> locations;
+
+    // hack for Solid's threading problems
+    QList<SolidVolumeInfo> actuallyListVolumes();
+    void slotTriggerUpdateVolumesList();
+    QList<SolidVolumeInfo> volumesListCache;
 
 
     /// Access Solid and return a list of storage volumes
@@ -183,9 +187,50 @@ public:
 
     /// Create an MD5 hash of the top-level entries (file names, not file content) of the given path
     static QString directoryHash(const QString &path);
+
+    CollectionManager *s;
 };
 
+}
+
+// This is because of the private slot; we'd want a collectionmanager_p.h
+#include "collectionmanager.moc"
+
+namespace Digikam
+{
+
+CollectionManagerPrivate::CollectionManagerPrivate(CollectionManager *s)
+    : s(s)
+{
+    QObject::connect(s, SIGNAL(triggerUpdateVolumesList()),
+                     s, SLOT(slotTriggerUpdateVolumesList()),
+                     Qt::BlockingQueuedConnection);
+}
+
 QList<SolidVolumeInfo> CollectionManagerPrivate::listVolumes()
+{
+    // Move calls to Solid to the main thread.
+    // Solid was meant to be thread-safe, but it is not (KDE4.0),
+    // calling from a non-UI thread leads to a reversible
+    // lock-up of variable length.
+    if (QThread::currentThread() == QCoreApplication::instance()->thread())
+    {
+        return actuallyListVolumes();
+    }
+    else
+    {
+        // emit a blocking queued signal to move call to main thread
+        emit s->triggerUpdateVolumesList();
+        return volumesListCache;
+    }
+}
+
+void CollectionManagerPrivate::slotTriggerUpdateVolumesList()
+{
+    volumesListCache = actuallyListVolumes();
+}
+
+QList<SolidVolumeInfo> CollectionManagerPrivate::actuallyListVolumes()
 {
     QList<SolidVolumeInfo> volumes;
 
@@ -446,7 +491,7 @@ void CollectionManager::cleanUp()
 
 CollectionManager::CollectionManager()
 {
-    d = new CollectionManagerPrivate;
+    d = new CollectionManagerPrivate(this);
 
     qRegisterMetaType<CollectionLocation>("CollectionLocation");
 
