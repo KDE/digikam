@@ -1414,7 +1414,8 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     // inspired by kimageio.cpp, typeForMime(). This here is "mimeForType".
     KService::List services = KServiceTypeTrader::self()->query("QImageIOPlugins");
     KService::Ptr service;
-    foreach(service, services) {
+    foreach(service, services) 
+    {
         if (service->property("X-KDE-ImageFormat").toStringList().contains(originalFormat))
         {
             defaultMimeType = service->property("X-KDE-MimeType").toString();
@@ -1434,18 +1435,24 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
                                     this,
                                     options);
 
-    imageFileSaveDialog.setModal(false);
-    imageFileSaveDialog.setOperationMode(KFileDialog::Saving);
-    imageFileSaveDialog.setMode(KFile::File);
-    imageFileSaveDialog.setSelection(m_savingContext->srcURL.fileName());
-    imageFileSaveDialog.setCaption(i18n("New Image File Name"));
-    imageFileSaveDialog.setMimeFilter(writableMimetypes, defaultMimeType);
-
     connect(&imageFileSaveDialog, SIGNAL(filterChanged(const QString &)),
             options, SLOT(slotImageFileFormatChanged(const QString &)));
 
     connect(&imageFileSaveDialog, SIGNAL(fileSelected(const QString &)),
             options, SLOT(slotImageFileSelected(const QString &)));
+
+    imageFileSaveDialog.setModal(false);
+    imageFileSaveDialog.setOperationMode(KFileDialog::Saving);
+    imageFileSaveDialog.setMode(KFile::File);
+    imageFileSaveDialog.setCaption(i18n("New Image File Name"));
+    imageFileSaveDialog.setMimeFilter(writableMimetypes, defaultMimeType);
+
+    QFileInfo info(m_savingContext->srcURL.fileName());
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group("ImageViewer Settings");
+    QString ext               = group.readEntry("LastSavedImageTypeMime", "png");
+    QString fileName          = info.baseName(false) + QString(".") + ext;
+    imageFileSaveDialog.setSelection(fileName);
 
     options->slotImageFileSelected(m_savingContext->srcURL.path());
 
@@ -1505,6 +1512,9 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
         DWarning() << "target URL is not valid !" << endl;
         return false;
     }
+
+    group.writeEntry("LastSavedImageTypeMime", m_savingContext->format);
+    config->sync();
 
     // if new and original url are equal use slotSave() ------------------------------
 
