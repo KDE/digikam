@@ -66,7 +66,6 @@ void kio_digikamdates::special(const QByteArray& data)
     KUrl    kurl;
     QString url;
     QString filter;
-    //int     getDimensions;
 
     QDataStream ds(data);
     ds >> kurl;
@@ -78,42 +77,12 @@ void kio_digikamdates::special(const QByteArray& data)
 
     if (folders)
     {
-        QByteArray  ba;
-
-        typedef QPair<int, int> YearMonth;
-        QMap<YearMonth, bool> yearMonthMap;
-
-        QList<QDateTime> allDateTimes = Digikam::DatabaseAccess().db()->getAllCreationDates();
-
-        foreach (QDateTime dateTime, allDateTimes)
-        {
-            if ( !yearMonthMap.contains(YearMonth(dateTime.date().year(), dateTime.date().month())) )
-            {
-                yearMonthMap.insert( YearMonth( dateTime.date().year(), dateTime.date().month() ), true );
-            }
-        }
-
-        QDataStream os(&ba, QIODevice::WriteOnly);
-
-        int year, month;
-        for ( QMap<YearMonth, bool>::iterator it = yearMonthMap.begin();
-              it != yearMonthMap.end(); ++it )
-        {
-            year  = it.key().first;
-            month = it.key().second;
-
-            QDate date( year,  month,  1 );
-            os << date;
-        }
-
-        SlaveBase::data(ba);
-/*
         QMap<QDateTime, int> dateNumberMap = Digikam::DatabaseAccess().db()->getAllCreationDatesAndNumberOfImages();
 
         QByteArray  ba;
         QDataStream os(&ba, QIODevice::WriteOnly);
         os << dateNumberMap;
-        SlaveBase::data(ba);*/
+        SlaveBase::data(ba);
     }
     else
     {

@@ -1658,6 +1658,7 @@ void AlbumManager::slotDatesJobData(KIO::Job*, const QByteArray& data)
           it != datesStatMap.end(); ++it )
     {
         YearMonth yearMonth = YearMonth(it.key().date().year(), it.key().date().month());
+
         QMap<YearMonth, int>::iterator it2 = yearMonthMap.find(yearMonth);
         if ( it2 == yearMonthMap.end() )
         {
@@ -1668,15 +1669,6 @@ void AlbumManager::slotDatesJobData(KIO::Job*, const QByteArray& data)
             *it2 += *it;
         }
     }
-    /*
-    foreach (QDateTime dateTime, allDateTimes)
-    {
-        if ( !yearMonthMap.contains(YearMonth(dateTime.date().year(), dateTime.date().month())) )
-        {
-            yearMonthMap.insert( YearMonth( dateTime.date().year(), dateTime.date().month() ), true );
-        }
-    }
-    */
 
     int year, month;
     for ( QMap<YearMonth, int>::iterator it = yearMonthMap.begin();
