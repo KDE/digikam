@@ -7,6 +7,7 @@
  * Description : Albums manager interface.
  * 
  * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -409,13 +410,22 @@ signals:
     void signalDAlbumsDirty(const QMap<YearMonth, int>&);
     void signalDatesMapDirty(const QMap<QDateTime, int>&);
 
+private slots:
+
+    void slotDatesJobResult(KJob* job);
+    void slotDatesJobData(KIO::Job* job, const QByteArray& data);
+    void slotAlbumsJobResult(KJob* job);
+    void slotAlbumsJobData(KIO::Job* job, const QByteArray& data);
+    void slotTagsJobResult(KJob* job);
+    void slotTagsJobData(KIO::Job* job, const QByteArray& data);
+    void slotDirty(const QString& path);
+    void slotCollectionLocationStatusChanged(const CollectionLocation &, int);
+
 private:
 
     friend class AlbumManagerCreator;
     AlbumManager();
     ~AlbumManager();
-
-    AlbumManagerPriv *d;
 
     void insertPAlbum(PAlbum *album);
     void removePAlbum(PAlbum *album);
@@ -453,17 +463,9 @@ private:
     void getAlbumItemsCount();
     void getTagItemsCount();
 
-private slots:
+private:
 
-    void slotDatesJobResult(KJob* job);
-    void slotDatesJobData(KIO::Job* job, const QByteArray& data);
-    void slotAlbumsJobResult(KJob* job);
-    void slotAlbumsJobData(KIO::Job* job, const QByteArray& data);
-    void slotTagsJobResult(KJob* job);
-    void slotTagsJobData(KIO::Job* job, const QByteArray& data);
-    void slotDirty(const QString& path);
-    void slotCollectionLocationStatusChanged(const CollectionLocation &, int);
-
+    AlbumManagerPriv *d;
 };
 
 }  // namespace Digikam

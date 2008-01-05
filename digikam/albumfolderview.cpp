@@ -7,7 +7,7 @@
  * Description : Albums folder view.
  *
  * Copyright (C) 2005-2006 by Joern Ahrens <joern.ahrens@kdemail.net>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -75,10 +75,6 @@
 namespace Digikam
 {
 
-//-----------------------------------------------------------------------------
-// AlbumFolderViewItem
-//-----------------------------------------------------------------------------
-
 class AlbumFolderViewItem : public FolderItem
 {
 public:
@@ -90,18 +86,24 @@ public:
     AlbumFolderViewItem(Q3ListViewItem* parent, const QString& name,
                         int year, int month);
 
-    PAlbum* getAlbum() const;
-    int id() const;
-    bool isGroupItem() const;
-
-    int compare(Q3ListViewItem *i, int col, bool ascending) const;
+    PAlbum* album() const;
+    int     id() const;
+    bool    isGroupItem() const;
+    int     compare(Q3ListViewItem *i, int col, bool ascending) const;
+    void    refresh();
+    void    setOpen(bool o);
+    void    setCount(int count);
+    int     count();
 
 private:
 
-    PAlbum *m_album;
+    bool    m_groupItem;
+
     int     m_year;
     int     m_month;
-    bool    m_groupItem;
+    int     m_count;
+ 
+    PAlbum *m_album;
 };
 
 AlbumFolderViewItem::AlbumFolderViewItem(Q3ListView *parent, PAlbum *album)
@@ -110,6 +112,7 @@ AlbumFolderViewItem::AlbumFolderViewItem(Q3ListView *parent, PAlbum *album)
     setDragEnabled(true);
     m_album     = album;
     m_groupItem = false;
+    m_count     = 0;
 }
 
 AlbumFolderViewItem::AlbumFolderViewItem(Q3ListViewItem *parent, PAlbum *album)
@@ -118,18 +121,58 @@ AlbumFolderViewItem::AlbumFolderViewItem(Q3ListViewItem *parent, PAlbum *album)
     setDragEnabled(true);
     m_album     = album;
     m_groupItem = false;
-}
+    m_count     = 0;
+ }
 
 // special group item (collection/dates)
 AlbumFolderViewItem::AlbumFolderViewItem(Q3ListViewItem* parent, const QString& name,
                                          int year, int month)
-                   : FolderItem(parent, name, true),
-                     m_album(0), m_year(year), m_month(month), m_groupItem(true)
+                   : FolderItem(parent, name, true)
 {
     setDragEnabled(false);
+    m_album     = 0;
+    m_year      = year;
+    m_month     = month;
+    m_groupItem = true;
+    m_count     = 0;
 }
 
-PAlbum* AlbumFolderViewItem::getAlbum() const
+void AlbumFolderViewItem::refresh()
+{
+    if (!m_album) return;
+    
+    if (AlbumSettings::instance()->getShowFolderTreeViewItemsCount() &&
+        dynamic_cast<AlbumFolderViewItem*>(parent()))
+    {
+        if (isOpen())
+            setText(0, QString("%1 (%2)").arg(m_album->title()).arg(m_count));
+        else
+        {
+            int countRecursive = m_count;
+            AlbumIterator it(m_album);
+            while ( it.current() )
+            {
+                AlbumFolderViewItem *item = (AlbumFolderViewItem*)it.current()->extraData(listView());
+                if (item)
+                    countRecursive += item->count();
+                ++it;
+            }
+            setText(0, QString("%1 (%2)").arg(m_album->title()).arg(countRecursive));
+        }
+    }
+    else
+    {
+        setText(0, m_album->title());
+    }
+}
+
+void AlbumFolderViewItem::setOpen(bool o)
+{
+    Q3ListViewItem::setOpen(o);
+    refresh();
+}
+
+PAlbum* AlbumFolderViewItem::album() const
 {
     return m_album;
 }
@@ -179,11 +222,19 @@ int AlbumFolderViewItem::compare(Q3ListViewItem *i, int col, bool ascending) con
         return -1;
 }
 
+void AlbumFolderViewItem::setCount(int count)
+{
+    m_count = count;
+    refresh();
+}
 
-//-----------------------------------------------------------------------------
-// AlbumFolderViewPriv
-//-----------------------------------------------------------------------------
-
+int AlbumFolderViewItem::count()
+{
+    return m_count;
+}
+ 
+// -----------------------------------------------------------------------------
+ 
 class AlbumFolderViewPriv
 {
 public:
@@ -196,10 +247,6 @@ public:
     AlbumManager                      *albumMan;
     Q3ValueList<AlbumFolderViewItem*>  groupItems;
 };
-
-//-----------------------------------------------------------------------------
-// AlbumFolderView
-//-----------------------------------------------------------------------------
 
 AlbumFolderView::AlbumFolderView(QWidget *parent)
                : FolderView(parent, "AlbumFolderView")
@@ -229,6 +276,9 @@ AlbumFolderView::AlbumFolderView(QWidget *parent)
 
     connect(d->albumMan, SIGNAL(signalAlbumRenamed(Album*)),
             this, SLOT(slotAlbumRenamed(Album*)));
+
+    connect(d->albumMan, SIGNAL(signalPAlbumsDirty(const QMap<int, int>&)),
+            this, SLOT(slotRefresh(const QMap<int, int>&)));
 
     AlbumThumbnailLoader *loader = AlbumThumbnailLoader::instance();
 
@@ -388,9 +438,7 @@ void AlbumFolderView::slotAlbumRenamed(Album *album)
 
     AlbumFolderViewItem* item = (AlbumFolderViewItem*) palbum->extraData(this);
     if(item)
-    {
-        item->setText(0, palbum->title());
-    }
+        item->refresh();
 }
 
 void AlbumFolderView::slotAlbumsCleared()
@@ -495,7 +543,7 @@ void AlbumFolderView::slotSelectionChanged()
         return;
     }
 
-    d->albumMan->setCurrentAlbum(albumitem->getAlbum());
+    d->albumMan->setCurrentAlbum(albumitem->album());
 }
 
 void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, int)
@@ -509,7 +557,7 @@ void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, 
     QAction *newAction = popmenu.addAction(SmallIcon("albumfolder-new"), i18n("New Album..."));
 
     AlbumFolderViewItem *item = dynamic_cast<AlbumFolderViewItem*>(listitem);
-    if (item && !item->getAlbum())
+    if (item && !item->album())
     {
         // if collection/date return
         return;
@@ -585,7 +633,7 @@ void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, 
         else if (choice == resetIconAction)
         {
             QString err;
-            d->albumMan->updatePAlbumIcon(item->getAlbum(), 0, err);
+            d->albumMan->updatePAlbumIcon(item->album(), 0, err);
         }
         else if (choice == renameAction)
         {
@@ -639,7 +687,7 @@ void AlbumFolderView::albumNew(AlbumFolderViewItem *item)
     if(!item)
         parent = d->albumMan->findPAlbum(0);
     else
-        parent = item->getAlbum();
+        parent = item->album();
 
     if (!parent)
         return;
@@ -702,7 +750,7 @@ void AlbumFolderView::albumDelete()
 
 void AlbumFolderView::albumDelete(AlbumFolderViewItem *item)
 {
-    PAlbum *album = item->getAlbum();
+    PAlbum *album = item->album();
 
     if(!album || album->isRoot())
         return;
@@ -769,7 +817,7 @@ void AlbumFolderView::albumRename()
 
 void AlbumFolderView::albumRename(AlbumFolderViewItem* item)
 {
-    PAlbum *album = item->getAlbum();
+    PAlbum *album = item->album();
 
     if (!album)
         return;
@@ -804,7 +852,7 @@ void AlbumFolderView::albumEdit()
 
 void AlbumFolderView::albumEdit(AlbumFolderViewItem* item)
 {
-    PAlbum *album = item->getAlbum();
+    PAlbum *album = item->album();
 
     if (!album)
         return;
@@ -854,7 +902,7 @@ Q3DragObject* AlbumFolderView::dragObject()
     if(!item)
         return 0;
 
-    PAlbum *album = item->getAlbum();
+    PAlbum *album = item->album();
     if(album->isRoot())
         return 0;
 
@@ -887,7 +935,7 @@ bool AlbumFolderView::acceptDrop(const QDropEvent *e) const
                     return false;
     
                 // Dragging a parent on its child makes no sense
-                if(itemDrag && itemDrag->getAlbum()->isAncestorOf(itemDrop->getAlbum()))
+                if(itemDrag && itemDrag->album()->isAncestorOf(itemDrop->album()))
                     return false;
     
                 return true;
@@ -970,7 +1018,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
 
             if(choice == moveAction)
             {
-                PAlbum *album = itemDrag->getAlbum();
+                PAlbum *album = itemDrag->album();
                 PAlbum *destAlbum;
                 if(!itemDrop)
                 {
@@ -980,7 +1028,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
                 else
                 {
                     // move dragItem below dropItem
-                    destAlbum = itemDrop->getAlbum();
+                    destAlbum = itemDrop->album();
                 }
                 KIO::Job* job = DIO::move(album->kurl(), destAlbum->kurl());
                 connect(job, SIGNAL(result(KJob*)),
@@ -995,7 +1043,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
 
             if (itemDrop->isGroupItem())
             {
-                PAlbum *album = itemDrag->getAlbum();
+                PAlbum *album = itemDrag->album();
                 if (!album)
                     return;
 
@@ -1012,7 +1060,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
         if (!itemDrop)
             return;
 
-        PAlbum *destAlbum = itemDrop->getAlbum();
+        PAlbum *destAlbum = itemDrop->album();
 
         KUrl::List       urls;
         KUrl::List       kioURLs;
@@ -1138,7 +1186,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
 
     if(CameraItemListDrag::canDecode(e))
     {
-        Album *album = dynamic_cast<Album*>(itemDrop->getAlbum());
+        Album *album = dynamic_cast<Album*>(itemDrop->album());
         if (!album) return;
         
         CameraUI *ui = dynamic_cast<CameraUI*>(e->source());
@@ -1171,7 +1219,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
         PAlbum* destAlbum = 0;
 
         if (itemDrop)
-            destAlbum = itemDrop->getAlbum();
+            destAlbum = itemDrop->album();
         else
             destAlbum = d->albumMan->findPAlbum(0);
 
@@ -1406,7 +1454,7 @@ void AlbumFolderView::reparentItem(AlbumFolderViewItem* folderItem)
     if (!folderItem)
         return;
 
-    PAlbum* album = folderItem->getAlbum();
+    PAlbum* album = folderItem->album();
     if (!album || album->isRoot())
         return;
 
@@ -1453,6 +1501,42 @@ void AlbumFolderView::clearEmptyGroupItems()
         d->groupItems.remove(*it);
         delete *it;
     }
+}
+
+void AlbumFolderView::refresh()
+{
+    Q3ListViewItemIterator it(this);
+    
+    while (it.current())
+    {
+        AlbumFolderViewItem* item = dynamic_cast<AlbumFolderViewItem*>(*it);
+        if (item)
+            item->refresh();
+        ++it;
+    }
+}
+
+void AlbumFolderView::slotRefresh(const QMap<int, int>& albumsStatMap)
+{
+    Q3ListViewItemIterator it(this);
+    
+    while (it.current())
+    {
+        AlbumFolderViewItem* item = dynamic_cast<AlbumFolderViewItem*>(*it);
+        if (item)
+        {
+            if (item->album())
+            {
+                int id = item->id();
+                QMap<int, int>::const_iterator it2 = albumsStatMap.find(id);
+                if ( it2 != albumsStatMap.end() )
+                    item->setCount(it2.data());
+            }
+        }
+        ++it;
+    }
+
+    refresh();
 }
 
 }  // namespace Digikam

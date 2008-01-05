@@ -7,7 +7,7 @@
  * Description : Albums manager interface.
  * 
  * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -146,30 +146,30 @@ public:
         currentAlbum       = 0;
     }
 
-    bool              changed;
-    bool              hasPriorizedDbPath;
+    bool                        changed;
+    bool                        hasPriorizedDbPath;
 
-    QString           dbPath;
+    QString                     dbPath;
 
-    QList<QDateTime>  dbPathModificationDateList;
+    QList<QDateTime>            dbPathModificationDateList;
 
-    KIO::TransferJob *albumListJob;
-    KIO::TransferJob *dateListJob;
-    KIO::TransferJob *tagListJob;
+    KIO::TransferJob           *albumListJob;
+    KIO::TransferJob           *dateListJob;
+    KIO::TransferJob           *tagListJob;
 
-    KDirWatch        *dirWatch;
+    KDirWatch                  *dirWatch;
 
-    AlbumItemHandler *itemHandler;
+    AlbumItemHandler           *itemHandler;
 
-    PAlbum           *rootPAlbum;
-    TAlbum           *rootTAlbum;
-    DAlbum           *rootDAlbum;
-    SAlbum           *rootSAlbum;
+    PAlbum                     *rootPAlbum;
+    TAlbum                     *rootTAlbum;
+    DAlbum                     *rootDAlbum;
+    SAlbum                     *rootSAlbum;
 
-    QHash<int,Album *>         allAlbumsIdHash;
-    QHash<PAlbumPath, PAlbum*> albumPathHash;
+    QHash<int,Album *>          allAlbumsIdHash;
+    QHash<PAlbumPath, PAlbum*>  albumPathHash;
 
-    Album            *currentAlbum;
+    Album                      *currentAlbum;
 };
 
 class AlbumManagerCreator { public: AlbumManager object; };
@@ -1630,7 +1630,6 @@ void AlbumManager::slotDatesJobResult(KJob* job)
 
     emit signalAllDAlbumsLoaded();
 }
-
 
 void AlbumManager::slotDatesJobData(KIO::Job*, const QByteArray& data)
 {

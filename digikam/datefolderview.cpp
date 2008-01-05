@@ -7,6 +7,7 @@
  * Description : a view for date albums.
  * 
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,6 +29,7 @@
 #include <QFont>
 #include <QPainter>
 #include <QStyle>
+#include <QFileInfo>
 
 // KDE includes.
 
@@ -44,16 +46,95 @@
 
 #include "ddebug.h"
 #include "album.h"
-#include "albummanager.h"
+#include "albumdb.h"
 #include "albumsettings.h"
 #include "monthwidget.h"
-#include "folderitem.h"
 #include "folderview.h"
 #include "datefolderview.h"
 #include "datefolderview.moc"
 
 namespace Digikam
 {
+
+DateFolderItem::DateFolderItem(Q3ListView* parent, const QString& name)
+              : FolderItem(parent, name, true)
+{
+    m_count = 0;
+    m_name  = name;
+    m_album = 0;
+}
+
+DateFolderItem::DateFolderItem(Q3ListViewItem* parent, const QString& name, DAlbum* album)
+              : FolderItem(parent, name)
+{
+    m_count = 0;
+    m_name  = name;
+    m_album = album;
+}
+
+DateFolderItem::~DateFolderItem()
+{
+}
+
+void DateFolderItem::refresh()
+{
+    if (AlbumSettings::instance()->getShowFolderTreeViewItemsCount())
+    {
+        setText(0, QString("%1 (%2)").arg(m_name).arg(m_count));
+    }
+    else
+    {
+        setText(0, m_name);
+    }
+}
+
+int DateFolderItem::compare(Q3ListViewItem* i, int , bool ) const
+{
+    if (!i)
+        return 0;
+
+    DateFolderItem* dItem = dynamic_cast<DateFolderItem*>(i);
+    if (!dItem || !dItem->m_album)
+    {
+        return text(0).localeAwareCompare(i->text(0));
+    }
+
+    if (m_album->date() == dItem->m_album->date())
+        return 0;
+    else if (m_album->date() > dItem->m_album->date())
+        return 1;
+    else
+        return -1;
+}
+
+QString DateFolderItem::date() const
+{
+    // If an album is set, return it's date, otherwise just the year
+    return m_album ? m_album->date().toString() : m_name;
+}
+
+QString DateFolderItem::name() const
+{
+    return m_name;
+}
+
+DAlbum* DateFolderItem::album() const
+{
+    return m_album;
+}
+
+int DateFolderItem::count() const
+{
+    return m_count;
+}
+
+void DateFolderItem::setCount(int v)
+{
+    m_count = v;
+    refresh();
+}
+
+// -----------------------------------------------------------------
 
 class DateFolderViewPriv
 {
@@ -73,51 +154,6 @@ public:
     FolderView  *listview;
     MonthWidget *monthview;    
 };
-
-class DateFolderItem : public FolderItem
-{
-
-public:
-
-    DateFolderItem(Q3ListView* parent, const QString& name)
-        : FolderItem(parent, name, true), m_album(0)
-    {
-    }
-
-    DateFolderItem(Q3ListViewItem* parent, const QString& name, DAlbum* album)
-        : FolderItem(parent, name), m_album(album)
-    {
-    }
-
-    int compare(Q3ListViewItem* i, int , bool ) const
-    {
-        if (!i)
-            return 0;
-        
-        DateFolderItem* dItem = dynamic_cast<DateFolderItem*>(i);
-        if (!dItem || !dItem->m_album)
-        {
-            return text(0).localeAwareCompare(i->text(0));
-        } 
-
-        if (m_album->date() == dItem->m_album->date())
-            return 0;
-        else if (m_album->date() > dItem->m_album->date())
-            return 1;
-        else
-            return -1;
-    }
-    
-    QString date() const
-    {
-        // If an album is set, return it's date, otherwise just the year
-        return m_album ? m_album->date().toString() : text(0);
-    }
-    
-    DAlbum* m_album;
-};
-    
-
 
 DateFolderView::DateFolderView(QWidget* parent)
               : KVBox(parent)
@@ -141,6 +177,9 @@ DateFolderView::DateFolderView(QWidget* parent)
 
     connect(AlbumManager::instance(), SIGNAL(signalAlbumsCleared()),
             d->listview, SLOT(clear()));
+
+    connect(AlbumManager::instance(), SIGNAL(signalDAlbumsDirty(const QMap<YearMonth, int>&)),
+            this, SLOT(slotRefresh(const QMap<YearMonth, int>&)));
 
     connect(d->listview, SIGNAL(selectionChanged()),
             this, SLOT(slotSelectionChanged()));
@@ -187,7 +226,7 @@ void DateFolderView::slotAlbumAdded(Album* a)
     QString yr = QString::number(date.year());
     
     QString mo = KGlobal::locale()->calendar()->monthName(date, KCalendarSystem::LongName);
-    Q3ListViewItem* parent = d->listview->findItem(yr, 0);
+    Q3ListViewItem* parent = findRootItemByYear(yr);
     if (!parent)
     {
         parent = new DateFolderItem(d->listview, yr);
@@ -243,16 +282,16 @@ void DateFolderView::slotSelectionChanged()
 
     DateFolderItem* dateItem = dynamic_cast<DateFolderItem*>(selItem);
     
-    if (!dateItem || !dateItem->m_album)
+    if (!dateItem || !dateItem->album())
     {
         AlbumManager::instance()->setCurrentAlbum(0);
         d->monthview->setActive(false);
     }
     else
     {
-        AlbumManager::instance()->setCurrentAlbum(dateItem->m_album);
+        AlbumManager::instance()->setCurrentAlbum(dateItem->album());
 
-        QDate date = dateItem->m_album->date();        
+        QDate date = dateItem->album()->date();        
         d->monthview->setActive(true);
         d->monthview->setYearMonth(date.year(), date.month());
     }
@@ -304,9 +343,9 @@ void DateFolderView::gotoDate(const QDate& dt)
     for( ; it.current(); ++it)
     {
         item = dynamic_cast<DateFolderItem*>(it.current());
-        if (item->m_album)
+        if (item->album())
         {
-            id = item->m_album->date();
+            id = item->album()->date();
             if(id == date)
             {
                 d->listview->setSelected(item, true);
@@ -345,6 +384,69 @@ void DateFolderView::setSelected(Q3ListViewItem *item)
     
     d->listview->setSelected(item, true);
     d->listview->ensureItemVisible(item);
+}
+
+Q3ListViewItem *DateFolderView::findRootItemByYear(const QString& year)
+{
+    Q3ListViewItemIterator it(d->listview);
+    
+    while (it.current())
+    {
+        DateFolderItem* item = dynamic_cast<DateFolderItem*>(*it);
+        if (item)
+        {
+            if (!item->album() && item->name() == year)
+                return item;
+        }
+        ++it;
+    }
+    return 0;
+}
+
+void DateFolderView::refresh()
+{
+    Q3ListViewItemIterator it(d->listview);
+    
+    while (it.current())
+    {
+        DateFolderItem* item = dynamic_cast<DateFolderItem*>(*it);
+        if (item)
+            item->refresh();
+        ++it;
+    }
+}
+
+void DateFolderView::slotRefresh(const QMap<YearMonth, int>& yearMonthMap)
+{
+    Q3ListViewItemIterator it(d->listview);
+    
+    while (it.current())
+    {
+        DateFolderItem* item = dynamic_cast<DateFolderItem*>(*it);
+        if (item)
+        {
+            if (item->album())
+            {
+                QDate date = item->album()->date();
+                QMap<YearMonth, int>::const_iterator it2 = yearMonthMap.find(YearMonth(date.year(), date.month()));
+                if ( it2 != yearMonthMap.end() )
+                    item->setCount(it2.data());
+            }
+            else
+            {
+                QString year = item->date();
+                int count    = 0;
+                for ( QMap<YearMonth, int>::const_iterator it2 = yearMonthMap.begin();
+                      it2 != yearMonthMap.end(); ++it2 )
+                {
+                    if (QString::number(it2.key().first) == year)
+                        count += it2.data();
+                }
+                item->setCount(count);
+            }   
+        }
+        ++it;
+    }
 }
 
 }  // namespace Digikam
