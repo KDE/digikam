@@ -933,7 +933,6 @@ QVariantList AlbumDB::getImagesFields(qlonglong imageID, DatabaseFields::Images 
         query += fieldNames.join(", ");
         query += (" FROM Images WHERE id=?;");
 
-        QVariantList values;
         d->db->execSql(query, imageID, &values);
 
         // Convert date times to QDateTime, they come as QString
@@ -957,7 +956,6 @@ QVariantList AlbumDB::getImageInformation(qlonglong imageID, DatabaseFields::Ima
         query += fieldNames.join(", ");
         query += (" FROM ImageInformation WHERE imageid=?;");
 
-        QVariantList values;
         d->db->execSql(query, imageID, &values);
 
         // Convert date times to QDateTime, they come as QString
@@ -987,7 +985,6 @@ QVariantList AlbumDB::getImageMetadata(qlonglong imageID, DatabaseFields::ImageM
         query += fieldNames.join(", ");
         query += (" FROM ImageMetadata WHERE imageid=?;");
 
-        QVariantList values;
         d->db->execSql(query, imageID, &values);
     }
     return values;
