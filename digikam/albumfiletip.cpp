@@ -329,10 +329,10 @@ void AlbumFileTip::updateText()
 
     AlbumSettings* settings = AlbumSettings::instance();
     const ImageInfo info   = d->iconItem->imageInfo();
-    KUrl fileUrl(info.fileUrl());
-    QFileInfo fileInfo(fileUrl.path());
-    KFileItem fi(KFileItem::Unknown, KFileItem::Unknown, fileUrl);
-    DMetadata metaData(fileUrl.path());
+    //KUrl fileUrl(info.fileUrl());
+    //QFileInfo fileInfo(fileUrl.path());
+    ImageCommonContainer commonInfo = info.imageCommonContainer();
+    ImageMetadataContainer photoInfo = info.imageMetadataContainer();
 
     // -- File properties ----------------------------------------------
 
@@ -347,12 +347,12 @@ void AlbumFileTip::updateText()
         if (settings->getToolTipsShowFileName())
         {
             tip += cellBeg + i18n("Name:") + cellMid;
-            tip += fileUrl.fileName() + cellEnd;
+            tip += commonInfo.fileName + cellEnd;
         }
 
         if (settings->getToolTipsShowFileDate())
         {
-            QDateTime modifiedDate = fileInfo.lastModified();
+            QDateTime modifiedDate = commonInfo.fileModificationDate;
             str = KGlobal::locale()->formatDateTime(modifiedDate, KLocale::ShortDate, true);
             tip += cellBeg + i18n("Modified:") + cellMid + str + cellEnd;
         }
@@ -360,56 +360,29 @@ void AlbumFileTip::updateText()
         if (settings->getToolTipsShowFileSize())
         {
             tip += cellBeg + i18n("Size:") + cellMid;
-            str = i18n("%1 (%2)",KIO::convertSize(fi.size())
-                                ,KGlobal::locale()->formatNumber(fi.size(), 0));
+            str = i18n("%1 (%2)",KIO::convertSize(commonInfo.fileSize)
+                                ,KGlobal::locale()->formatNumber(commonInfo.fileSize, 0));
             tip += str + cellEnd;
         }
 
         QSize   dims;
-        QString rawFilesExt(KDcrawIface::DcrawBinary::instance()->rawFiles());
-        QString ext = fileInfo.suffix().toUpper();
-
-        if (!ext.isEmpty() && rawFilesExt.toUpper().contains(ext))
-        {
-            str = i18n("RAW Image");
-            dims = metaData.getImageDimensions();
-        }
-        else
-        {
-            str = fi.mimeComment();
-
-            KFileMetaInfo meta = fi.metaInfo();
-    
-/*          TODO: KDE4PORT: KFileMetaInfo API as Changed.
-                            Check if new method to search "Dimensions" information is enough.
-
-            if (meta.isValid())
-            {
-                if (meta.containsGroup("Jpeg EXIF Data"))
-                    dims = meta.group("Jpeg EXIF Data").item("Dimensions").value().toSize();
-                else if (meta.containsGroup("General"))
-                    dims = meta.group("General").item("Dimensions").value().toSize();
-                else if (meta.containsGroup("Technical"))
-                    dims = meta.group("Technical").item("Dimensions").value().toSize();
-            }*/
-
-            if (meta.isValid() && meta.item("Dimensions").isValid())
-            {
-                dims = meta.item("Dimensions").value().toSize();
-            }
-        }
 
         if (settings->getToolTipsShowImageType())
         {
-            tip += cellBeg + i18n("Type:") + cellMid + str + cellEnd;
+            tip += cellBeg + i18n("Type:") + cellMid + commonInfo.format + cellEnd;
         }
 
         if (settings->getToolTipsShowImageDim())
         {
-            QString mpixels;
-            mpixels.setNum(dims.width()*dims.height()/1000000.0, 'f', 2);
-            str = (!dims.isValid()) ? i18n("Unknown") : i18n("%1x%2 (%3Mpx)",
-                dims.width(),dims.height(),mpixels);
+            if (commonInfo.width == 0 || commonInfo.height == 0)
+                str = i18n("Unknown");
+            else
+            {
+                QString mpixels;
+                mpixels.setNum(commonInfo.width*commonInfo.height/1000000.0, 'f', 2);
+                str = i18nc("width x height (megapixels Mpx)", "%1x%2 (%3Mpx)",
+                           commonInfo.width, commonInfo.height, mpixels);
+            }
             tip += cellBeg + i18n("Dimensions:") + cellMid + str + cellEnd;
         }
     }
@@ -425,9 +398,7 @@ void AlbumFileTip::updateText()
         settings->getToolTipsShowPhotoFlash() ||
         settings->getToolTipsShowPhotoWB())
     {
-        PhotoInfoContainer photoInfo = metaData.getPhotographInformations();
-
-        if (!photoInfo.isEmpty())
+        if (!photoInfo.allFieldsNull)
         {
             QString metaStr;
             tip += headBeg + i18n("Photograph Properties") + headEnd;
@@ -442,9 +413,9 @@ void AlbumFileTip::updateText()
 
             if (settings->getToolTipsShowPhotoDate())
             {
-                if (photoInfo.dateTime.isValid())
+                if (commonInfo.creationDate.isValid())
                 {
-                    str = KGlobal::locale()->formatDateTime(photoInfo.dateTime, KLocale::ShortDate, true);
+                    str = KGlobal::locale()->formatDateTime(commonInfo.creationDate, KLocale::ShortDate, true);
                     if (str.length() > d->maxStringLen) str = str.left(d->maxStringLen-3) + "...";
                     metaStr += cellBeg + i18n("Created:") + cellMid + Qt::escape( str ) + cellEnd;
                 }
@@ -456,10 +427,10 @@ void AlbumFileTip::updateText()
             {
                 str = photoInfo.aperture.isEmpty() ? unavailable : photoInfo.aperture;
 
-                if (photoInfo.focalLength35mm.isEmpty())
+                if (photoInfo.focalLength35.isEmpty())
                     str += QString(" / %1").arg(photoInfo.focalLength.isEmpty() ? unavailable : photoInfo.focalLength);
                 else 
-                    str += QString(" / %1").arg(i18n("%1 (35mm: %2)",photoInfo.focalLength,photoInfo.focalLength35mm));
+                    str += QString(" / %1").arg(i18n("%1 (35mm: %2)",photoInfo.focalLength,photoInfo.focalLength35));
 
                 if (str.length() > d->maxStringLen) str = str.left(d->maxStringLen-3) + "...";
                 metaStr += cellBeg + i18n("Aperture/Focal:") + cellMid + Qt::escape( str ) + cellEnd;
@@ -490,7 +461,7 @@ void AlbumFileTip::updateText()
 
             if (settings->getToolTipsShowPhotoFlash())
             {
-                str = photoInfo.flash.isEmpty() ? unavailable : photoInfo.flash;
+                str = photoInfo.flashMode.isEmpty() ? unavailable : photoInfo.flashMode;
                 if (str.length() > d->maxStringLen) str = str.left(d->maxStringLen-3) + "...";
                 metaStr += cellBeg + i18n("Flash:") + cellMid + Qt::escape( str ) + cellEnd;
             }
@@ -507,7 +478,7 @@ void AlbumFileTip::updateText()
     }
 
     // -- digiKam properties  ------------------------------------------
-    
+
     if (settings->getToolTipsShowAlbumName() ||
         settings->getToolTipsShowComments()  ||
         settings->getToolTipsShowTags()      ||
@@ -541,8 +512,11 @@ void AlbumFileTip::updateText()
 
         if (settings->getToolTipsShowRating())
         {
-            str.fill( 'X', info.rating() );
-            if (str.isEmpty()) str = QString("---");
+            int rating = info.rating();
+            if (rating <= 0)
+                str = QString("---");
+            else
+                str.fill( 'X', info.rating() );
             tip += cellSpecBeg + i18n("Rating:") + cellSpecMid + str + cellSpecEnd;
         }
     }
