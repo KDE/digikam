@@ -2,11 +2,11 @@
  *
  * This file is a part of digiKam project
  * http://www.digikam.org
- * 
+ *
  * Date        : 2006-12-20
- * Description : a widget to display a welcome page 
+ * Description : a widget to display a welcome page
  *               on root album.
- * 
+ *
  * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -14,7 +14,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-// Qt includes. 
+// Qt includes.
 
 #include <QWidget>
 #include <QFile>
@@ -87,7 +87,7 @@ WelcomePageView::WelcomePageView(QWidget* parent)
     show();
 
     connect(browserExtension(), SIGNAL(openUrlRequest(const KUrl &, const KParts::OpenUrlArguments&, const KParts::BrowserArguments&)),
-            this, SLOT(slotUrlOpen(const KUrl &)));    
+            this, SLOT(slotUrlOpen(const KUrl &)));
 }
 
 WelcomePageView::~WelcomePageView()
@@ -117,26 +117,28 @@ QString WelcomePageView::infoPage()
 
     QString info =
         i18nc(
-        "%1: current digiKam version; " 
+        "%1: current digiKam version; "
         "%2: digiKam help:// Url; "
         "%3: digiKam homepage Url; "
-        "%4: prior digiKam version; " 
+        "%4: prior digiKam version; "
         "%5: prior KDE version; "
         "%6: generated list of new features; "
         "%7: generated list of important changes; "
         "--- end of comment ---",
-        
+
         "<h2 style='margin-top: 0px;'>"
         "Welcome to digiKam %1"
         "</h2><p>"
         "digiKam is a photo management program for the K Desktop Environment. "
-        "It is designed to import, organize, and export your digital photographs on your computer."
-        "</p>\n<ul><li>"
+        "It is designed to import, organize, and export your digital photographs on your computer.</p>"
+        "<p>You are currently in the Album view mode of digiKam. The Albums are the real "
+        "containers where your files are stored, they are identical with the folders "
+        "on disk.</p>\n<ul><li>"
         "digiKam has many powerful features which are described in the "
         "<a href=\"%2\">documentation</a></li>\n"
         "<li>The <a href=\"%3\">digiKam homepage</A> provides information about "
         "new versions of digiKam</li></ul>\n"
-        "%7\n<p>"                        
+        "%7\n<p>"
         "Some of the new features in this release of digiKam include "
         "(compared to digiKam %4):</p>\n"
         "<ul>\n%5</ul>\n"
@@ -144,7 +146,7 @@ QString WelcomePageView::infoPage()
         "<p>We hope that you will enjoy digiKam.</p>\n"
         "<p>Thank you,</p>\n"
         "<p style='margin-bottom: 0px'>&nbsp; &nbsp; The digiKam Team</p>",
- 
+
     QString(digikam_version),            // %1 : current digiKam version
     "help:/digikam/index.html",          // %2 : digiKam help:// Url
     "http://www.digikam.org",            // %3 : digiKam homepage Url
@@ -152,7 +154,7 @@ QString WelcomePageView::infoPage()
     featureItems,                        // %5 : prior KDE version
     QString(),                           // %6 : generated list of new features
     QString());                          // %7 : previous digiKam release.
-    
+
     return info;
 }
 
@@ -163,12 +165,12 @@ QByteArray WelcomePageView::fileToString(const QString &aFileName)
     unsigned int readLen;
     unsigned int len = info.size();
     QFile        file(aFileName);
-    
-    if (aFileName.isEmpty() || len <= 0 || 
+
+    if (aFileName.isEmpty() || len <= 0 ||
         !info.exists() || info.isDir() || !info.isReadable() ||
-        !file.open(QIODevice::Unbuffered|QIODevice::ReadOnly)) 
+        !file.open(QIODevice::Unbuffered|QIODevice::ReadOnly))
         return QByteArray();
-    
+
     result.resize(len + 2);
     readLen = file.read(result.data(), len);
     if (1 && result[len-1]!='\n')
@@ -177,10 +179,10 @@ QByteArray WelcomePageView::fileToString(const QString &aFileName)
         readLen++;
     }
     result[len] = '\0';
-    
+
     if (readLen < len)
         return QByteArray();
-    
+
     return result;
 }
 
