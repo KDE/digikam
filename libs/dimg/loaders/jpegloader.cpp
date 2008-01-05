@@ -65,9 +65,9 @@ void JPEGLoader::dimg_jpeg_error_exit(j_common_ptr cinfo)
     char buffer[JMSG_LENGTH_MAX];
     (*cinfo->err->format_message)(cinfo, buffer);
 
-#ifdef ENABLE_DEBUG_MESSAGES
-    DDebug() << buffer << endl;
-#endif
+//#ifdef ENABLE_DEBUG_MESSAGES
+    DError() << buffer << endl;
+//#endif
 
     longjmp(myerr->setjmp_buffer, 1);
 }
@@ -162,30 +162,15 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     jpeg_stdio_src(&cinfo, file);
 
     // Recording ICC profile marker (from iccjpeg.c)
-    setup_read_icc_profile(&cinfo);
+    if (m_loadFlags & LoadICCData)
+        setup_read_icc_profile(&cinfo);
 
     // read image information
     jpeg_read_header(&cinfo, true);
 
-    // set decompression parameters
-    cinfo.do_fancy_upsampling = false;
-    cinfo.do_block_smoothing  = false;
-
-    if (scaledLoadingSize)
-    {
-        int imgSize = qMax(cinfo.image_width, cinfo.image_height);
-
-        // libjpeg supports 1/1, 1/2, 1/4, 1/8
-        int scale=1;
-        while(scaledLoadingSize*scale*2<=imgSize)
-        {
-            scale*=2;
-        }
-        if(scale>8) scale=8;
-
-        cinfo.scale_num=1;
-        cinfo.scale_denom=scale;
-    }
+    // read dimension (nominal values from header)
+    int w = cinfo.image_width;
+    int h = cinfo.image_height;
 
     // Libjpeg handles the following conversions:
     // YCbCr => GRAYSCALE, YCbCr => RGB, GRAYSCALE => RGB, YCCK => CMYK
@@ -215,23 +200,48 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             break;
     }
 
-    // initialize decompression
-    jpeg_start_decompress(&cinfo);
-
-    // some pseudo-progress
-    if (observer)
-        observer->progressInfo(m_image, 0.1);
-
     // -------------------------------------------------------------------
-    // Get image data.
-
-    int w = cinfo.output_width;
-    int h = cinfo.output_height;
+    // Load image data.
 
     uchar *dest = 0;
 
     if (m_loadFlags & LoadImageData)
     {
+        // set decompression parameters
+        cinfo.do_fancy_upsampling = false;
+        cinfo.do_block_smoothing  = false;
+
+        // handle scaled loading
+        if (scaledLoadingSize)
+        {
+            int imgSize = qMax(cinfo.image_width, cinfo.image_height);
+
+            // libjpeg supports 1/1, 1/2, 1/4, 1/8
+            int scale=1;
+            while(scaledLoadingSize*scale*2<=imgSize)
+            {
+                scale*=2;
+            }
+            if(scale>8) scale=8;
+
+            cinfo.scale_num=1;
+            cinfo.scale_denom=scale;
+        }
+
+        // initialize decompression
+        jpeg_start_decompress(&cinfo);
+
+        // some pseudo-progress
+        if (observer)
+            observer->progressInfo(m_image, 0.1);
+
+        // re-read dimension (scaling included)
+        w = cinfo.output_width;
+        h = cinfo.output_height;
+
+        // -------------------------------------------------------------------
+        // Get scanlines
+
         uchar *ptr, *line[16], *data=0;
         uchar *ptr2=0;
         int    x, y, l, i, scans, count, prevy;
@@ -428,7 +438,9 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             }
         }
 
+        // clean up
         delete [] data;
+        jpeg_finish_decompress(&cinfo);
     }
 
     // -------------------------------------------------------------------
@@ -460,7 +472,6 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     // -------------------------------------------------------------------
 
-    jpeg_finish_decompress(&cinfo);
     jpeg_destroy_decompress(&cinfo);
 
     // -------------------------------------------------------------------
