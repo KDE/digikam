@@ -64,7 +64,6 @@ void kio_digikamtagsProtocol::special(const QByteArray& data)
 {
     KUrl    kurl;
     QString filter;
-    int     getDimensions;
 
     QDataStream ds(data);
     ds >> kurl;

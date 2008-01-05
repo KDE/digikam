@@ -321,8 +321,8 @@ void CollectionScanner::scanAlbum(const CollectionLocation &location, const QStr
                 // mark item as "seen"
                 itemIdSet.remove(scanInfos[index].id);
 
-                // if the hash is null, this signals a full rescan
-                if (scanInfos[index].uniqueHash.isEmpty())
+                // if the date is null, this signals a full rescan
+                if (scanInfos[index].modificationDate.isNull())
                 {
                     ImageScanner scanner((*fi), scanInfos[index]);
                     scanner.setCategory(category(*fi));
