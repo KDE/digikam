@@ -33,6 +33,7 @@
 #include "dimg.h"
 #include "dmetadata.h"
 #include "albuminfo.h"
+#include "databaseinfocontainers.h"
 
 namespace Digikam
 {
@@ -88,6 +89,19 @@ public:
      * and read all information into the database.
      */
     void newFile(int albumId);
+
+    /**
+     * Returns containers with user-presentable information.
+     * These methods provide the reverse service: Not writing into the db, but reading from the db.
+     */
+    static void fillCommonContainer(qlonglong imageid, ImageCommonContainer *container);
+    static void fillMetadataContainer(qlonglong imageid, ImageMetadataContainer *container);
+
+    /**
+     * Helper methods to translate enum values to user presentable strings
+     */
+    static QString formatToString(const QString &format);
+    static QString colorModelToString(DImg::COLORMODEL colorModel);
 
 protected:
 

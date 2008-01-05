@@ -40,6 +40,7 @@
 #include "imagelister.h"
 #include "imageinfodata.h"
 #include "imageinfocache.h"
+#include "imagescanner.h"
 #include "imageinfo.h"
 
 namespace Digikam
@@ -366,7 +367,7 @@ KUrl ImageInfo::kurlForKIO() const
     return databaseUrl();
 }
 
-ImageComments ImageInfo::imageComments(DatabaseAccess &access)
+ImageComments ImageInfo::imageComments(DatabaseAccess &access) const
 {
     if (!m_data)
         return ImageComments();
@@ -374,12 +375,32 @@ ImageComments ImageInfo::imageComments(DatabaseAccess &access)
     return ImageComments(access, m_data->id);
 }
 
-ImagePosition ImageInfo::imagePosition()
+ImagePosition ImageInfo::imagePosition() const
 {
     if (!m_data)
         return ImagePosition();
 
     return ImagePosition(m_data->id);
+}
+
+ImageCommonContainer ImageInfo::imageCommonContainer() const
+{
+    if (!m_data)
+        return ImageCommonContainer();
+
+    ImageCommonContainer container;
+    ImageScanner::fillCommonContainer(m_data->id, &container);
+    return container;
+}
+
+ImageMetadataContainer ImageInfo::imageMetadataContainer() const
+{
+    if (!m_data)
+        return ImageMetadataContainer();
+
+    ImageMetadataContainer container;
+    ImageScanner::fillMetadataContainer(m_data->id, &container);
+    return container;
 }
 
 void ImageInfo::setRating(int value)

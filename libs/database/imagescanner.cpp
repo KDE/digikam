@@ -24,6 +24,7 @@
 // KDE includes
 
 #include <kmimetype.h>
+#include <klocale.h>
 
 // Local includes
 
@@ -197,7 +198,7 @@ void ImageScanner::updateImageInformation()
                                                     | DatabaseFields::ColorModel);
 }
 
-void ImageScanner::scanImageMetadata()
+static MetadataFields allImageMetadataFields()
 {
     MetadataFields fields;
     fields << MetadataInfo::Make
@@ -215,8 +216,12 @@ void ImageScanner::scanImageMetadata()
            << MetadataInfo::MeteringMode
            << MetadataInfo::SubjectDistance
            << MetadataInfo::SubjectDistanceCategory;
+    return fields;
+}
 
-    QVariantList metadataInfos = m_metadata.getMetadataFields(fields);
+void ImageScanner::scanImageMetadata()
+{
+    QVariantList metadataInfos = m_metadata.getMetadataFields(allImageMetadataFields());
 
     if (hasValidField(metadataInfos))
         DatabaseAccess().db()->addImageMetadata(m_scanInfo.id, metadataInfos);
@@ -324,14 +329,8 @@ void ImageScanner::scanTags()
 
 void ImageScanner::loadFromDisk()
 {
-    QTime time;
-    time.start();
     m_hasMetadata = m_metadata.load(m_fileInfo.filePath());
-    int metadataTime = time.elapsed();
-    time.restart();
     m_hasImage    = m_img.loadImageInfo(m_fileInfo.filePath(), false, false);
-    int dimgTime = time.elapsed();
-    time.restart();
     // faster than loading twice from disk
     if (m_hasMetadata)
     {
@@ -340,8 +339,6 @@ void ImageScanner::loadFromDisk()
         m_img.setIptc(m_metadata.getIptc());
         m_img.setXmp(m_metadata.getXmp());
     }
-    int setTime = time.elapsed();
-    //DDebug() << "loadFromDisk times:" << metadataTime << dimgTime << setTime << endl;
 }
 
 QString ImageScanner::detectFormat()
@@ -380,5 +377,144 @@ QString ImageScanner::detectFormat()
     }
     return QString();
 }
+
+QString ImageScanner::formatToString(const QString &format)
+{
+    if (format == "JPG")
+    {
+        return "JPEG";
+    }
+    else if (format == "PNG")
+    {
+        return format;
+    }
+    else if (format == "TIFF")
+    {
+        return format;
+    }
+    else if (format == "PPM")
+    {
+        return format;
+    }
+    else if (format == "JP2K")
+    {
+        return "JPEG 2000";
+    }
+    else if (format.startsWith("RAW-"))
+    {
+        return i18nc("RAW image file (), the parentheses contain the file suffix, like MRW",
+                     "RAW image file (%1)",
+                     format.mid(4));
+    }
+    else
+        return format;
+}
+
+QString ImageScanner::colorModelToString(DImg::COLORMODEL colorModel)
+{
+    switch (colorModel)
+    {
+        case DImg::RGB:
+            return i18nc("Color Model: RGB", "RGB");
+        case DImg::GRAYSCALE:
+            return i18nc("Color Model: Grayscale", "Grayscale");
+        case DImg::MONOCHROME:
+            return i18nc("Color Model: Monochrome", "Monochrome");
+        case DImg::INDEXED:
+            return i18nc("Color Model: Indexed", "Indexed");
+        case DImg::YCBCR:
+            return i18nc("Color Model: YCbCr", "YCbCr");
+        case DImg::CMYK:
+            return i18nc("Color Model: CMYK", "CMYK");
+        case DImg::CIELAB:
+            return i18nc("Color Model: CIE L*a*b*", "CIE L*a*b*");
+        case DImg::COLORMODELRAW:
+            return i18nc("Color Model: Uncalibrated (RAW)", "Uncalibrated (RAW)");
+        case DImg::COLORMODELUNKNOWN:
+        default:
+            return i18nc("Color Model: Unknown", "Unknown");
+    }
+}
+
+void ImageScanner::fillCommonContainer(qlonglong imageid, ImageCommonContainer *container)
+{
+    QVariantList imagesFields;
+    QVariantList imageInformationFields;
+
+    {
+        DatabaseAccess access;
+        imagesFields = access.db()->getImagesFields(imageid,
+                                           DatabaseFields::Name |
+                                           DatabaseFields::ModificationDate |
+                                           DatabaseFields::FileSize
+                                                   );
+        imageInformationFields = access.db()->getImageInformation(imageid,
+                                           DatabaseFields::Rating |
+                                           DatabaseFields::CreationDate |
+                                           DatabaseFields::DigitizationDate |
+                                           DatabaseFields::Orientation |
+                                           DatabaseFields::Width |
+                                           DatabaseFields::Height |
+                                           DatabaseFields::Format |
+                                           DatabaseFields::ColorDepth |
+                                           DatabaseFields::ColorModel
+                                                                 );
+    }
+
+    if (!imagesFields.isEmpty())
+    {
+        container->fileName             = imagesFields[0].toString();
+        container->fileModificationDate = imagesFields[1].toDateTime();
+        container->fileSize             = imagesFields[2].toInt();
+    }
+
+    if (!imageInformationFields.isEmpty())
+    {
+        container->rating           = imageInformationFields[0].toInt();
+        container->creationDate     = imageInformationFields[1].toDateTime();
+        container->digitizationDate = imageInformationFields[2].toDateTime();
+        container->orientation      = DMetadata::valueToString(imageInformationFields[3], MetadataInfo::Orientation);
+        container->width            = imageInformationFields[4].toInt();
+        container->height           = imageInformationFields[5].toInt();
+        container->format           = formatToString(imageInformationFields[6].toString());
+        container->colorDepth       = imageInformationFields[7].toInt();
+        container->colorModel       = colorModelToString((DImg::COLORMODEL)imageInformationFields[8].toInt());
+    }
+}
+
+void ImageScanner::fillMetadataContainer(qlonglong imageid, ImageMetadataContainer *container)
+{
+    // read from database
+    QVariantList fields = DatabaseAccess().db()->getImageMetadata(imageid);
+
+    // check we have at least one valid field
+    container->allFieldsNull = !hasValidField(fields);
+
+    if (container->allFieldsNull)
+        return;
+
+    // DMetadata does all translation work
+    QStringList strings = DMetadata::valuesToString(fields, allImageMetadataFields());
+
+    // associate with hard-coded variables
+    container->make             = strings[0];
+    container->model            = strings[1];
+    container->aperture         = strings[2];
+    container->focalLength      = strings[3];
+    container->focalLength35    = strings[4];
+    container->exposureTime     = strings[5];
+    container->exposureProgram  = strings[6];
+    container->exposureMode     = strings[7];
+    container->sensitivity      = strings[8];
+    container->flashMode        = strings[9];
+    container->whiteBalance     = strings[10];
+    container->whiteBalanceColorTemperature
+                               = strings[11];
+    container->meteringMode     = strings[12];
+    container->subjectDistance  = strings[13];
+    container->subjectDistanceCategory
+                               = strings[14];
+}
+
 
 }

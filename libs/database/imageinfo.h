@@ -47,6 +47,7 @@
 #include "imageinfolist.h"
 #include "imagecomments.h"
 #include "imageposition.h"
+#include "databaseinfocontainers.h"
 
 namespace Digikam
 {
@@ -196,12 +197,20 @@ public:
      * You need to hold DatabaseAccess to ensure the validity.
      * For simple, cached read access see comment().
      */
-    ImageComments imageComments(DatabaseAccess &access);
+    ImageComments imageComments(DatabaseAccess &access) const;
 
     /**
      * Retrieve the ImagePosition object for this item.
      */
-    ImagePosition imagePosition();
+    ImagePosition imagePosition() const;
+
+    /**
+     * Retrieve information about the image,
+     * in form of numbers and user presentable strings,
+     * for certain defined fields of information (see databaseinfocontainers.h)
+     */
+    ImageCommonContainer   imageCommonContainer() const;
+    ImageMetadataContainer imageMetadataContainer() const;
 
     /**
      * Set the date and time (write it to database)

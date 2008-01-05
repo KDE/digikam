@@ -1,0 +1,96 @@
+/* ============================================================
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2008-01-04
+ * Description : Container classes holding user presentable information
+ *
+ * Copyright (C) 2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * ============================================================ */
+
+#ifndef DATABASEINFOCONTAINERS_H
+#define DATABASEINFOCONTAINERS_H
+
+// Qt includes
+
+#include <QString>
+#include <QDateTime>
+
+namespace Digikam
+{
+
+class ImageCommonContainer
+{
+public:
+
+    ImageCommonContainer()
+    {
+        fileSize   = 0;
+        rating     = -1;
+        width      = 0;
+        height     = 0;
+        colorDepth = 0;
+    }
+
+    QString   fileName;
+    QDateTime fileModificationDate;
+    qint64    fileSize;
+
+    int       rating;
+    QDateTime creationDate;
+    QDateTime digitizationDate;
+    QString   orientation;
+    int       width;
+    int       height;
+    QString   format;
+    int       colorDepth; // bits per channel, 8/16
+    QString   colorModel;
+};
+
+class ImageMetadataContainer
+{
+public:
+
+    ImageMetadataContainer()
+    {
+        allFieldsNull = true;
+    }
+
+    bool allFieldsNull;
+
+    QString make;
+    QString model;
+    QString aperture;
+    QString focalLength;
+    QString focalLength35;
+    QString exposureTime;
+    QString exposureProgram;
+    QString exposureMode;
+    QString sensitivity;
+    QString flashMode;
+    QString whiteBalance;
+    QString whiteBalanceColorTemperature;
+    QString meteringMode;
+    QString subjectDistance;
+    QString subjectDistanceCategory;
+};
+
+
+
+} // namespace Digikam
+
+#endif
+
