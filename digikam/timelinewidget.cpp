@@ -236,6 +236,8 @@ void TimeLineWidget::slotDatesMap(const QMap<QDateTime, int>& datesStatMap)
         }
     }
 
+    setCurrentDateTime(QDateTime::currentDateTime());
+
     updatePixmap();
     update();
 }
