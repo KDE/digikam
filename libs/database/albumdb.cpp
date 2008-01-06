@@ -1631,7 +1631,7 @@ QMap<int, int> AlbumDB::getNumberOfImagesInAlbums()
     QMap<int, int>  albumsStatMap;
     int             albumID;
 
-    for (QList<QVariant>::iterator it=values.begin(); it != values.end(); ++it)
+    for (QList<QVariant>::iterator it=values.begin(); it != values.end();)
     {
         albumID = (*it).toInt();
         ++it;
@@ -1654,7 +1654,7 @@ QMap<int, int> AlbumDB::getNumberOfImagesInTags()
 
     QMap<int, int> tagsStatMap;
     int            tagID;
-    for (QList<QVariant>::iterator it=values.begin(); it != values.end(); ++it)
+    for (QList<QVariant>::iterator it=values.begin(); it != values.end();)
     {
         tagID = (*it).toInt();
         ++it;
