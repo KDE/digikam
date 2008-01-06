@@ -7,7 +7,7 @@
  * Description : Comments, Tags, and Rating properties editor
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2003-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
@@ -656,28 +656,28 @@ void ImageDescEditTab::slotItemStateChanged(TAlbumCheckListItem *item)
     {
         case TagFilterView::Children:
             d->toggleAutoTags = TagFilterView::NoToggleAuto;
-            toggleChildTags(item->m_album, item->isOn());
+            toggleChildTags(item->album(), item->isOn());
             d->toggleAutoTags = oldAutoTags;
             break;
         case TagFilterView::Parents:
             d->toggleAutoTags = TagFilterView::NoToggleAuto;
-            toggleParentTags(item->m_album, item->isOn());
+            toggleParentTags(item->album(), item->isOn());
             d->toggleAutoTags = oldAutoTags;
             break;
         case TagFilterView::ChildrenAndParents:
             d->toggleAutoTags = TagFilterView::NoToggleAuto;
-            toggleChildTags(item->m_album, item->isOn());
-            toggleParentTags(item->m_album, item->isOn());
+            toggleChildTags(item->album(), item->isOn());
+            toggleParentTags(item->album(), item->isOn());
             d->toggleAutoTags = oldAutoTags;
             break;
         default:
             break;
     }
 
-    d->hub.setTag(item->m_album, item->isOn());
+    d->hub.setTag(item->album(), item->isOn());
 
     d->tagsView->blockSignals(true);
-    item->setStatus(d->hub.tagStatus(item->m_album));
+    item->setStatus(d->hub.tagStatus(item->album()));
     d->tagsView->blockSignals(false);
 
     slotModified();
@@ -732,7 +732,7 @@ void ImageDescEditTab::updateTagsView()
     {
         TAlbumCheckListItem* tItem = dynamic_cast<TAlbumCheckListItem*>(it.current());
         if (tItem)
-            tItem->setStatus(d->hub.tagStatus(tItem->m_album));
+            tItem->setStatus(d->hub.tagStatus(tItem->album()));
         ++it;
     }
 
@@ -800,7 +800,7 @@ void ImageDescEditTab::slotRightButtonClicked(Q3ListViewItem *item, const QPoint
         if(!viewItem)
             album = AlbumManager::instance()->findTAlbum(0);
         else
-            album = viewItem->m_album;
+            album = viewItem->album();
     }
 
     if(!album)
@@ -1278,12 +1278,12 @@ void ImageDescEditTab::toggleParentTags(TAlbum *album, bool b)
         TAlbumCheckListItem* item = dynamic_cast<TAlbumCheckListItem*>(it.current());
         if (item->isVisible())
         {
-            if (!item->m_album)
+            if (!item->album())
                 continue;
-            if (item->m_album == album->parent())
+            if (item->album() == album->parent())
             {
                 item->setOn(b);
-                toggleParentTags(item->m_album , b);
+                toggleParentTags(item->album() , b);
             }
         }
         ++it;
@@ -1573,14 +1573,14 @@ void ImageDescEditTab::slotAssignedTagsToggled(bool t)
     while (it.current())
     {
         TAlbumCheckListItem* item = dynamic_cast<TAlbumCheckListItem*>(it.current());
-        TAlbum *tag               = item->m_album;
+        TAlbum *tag               = item->album();
         if (tag)
         {
             if (!tag->isRoot())
             {
                 if (t)
                 {
-                    MetadataHub::TagStatus status = d->hub.tagStatus(item->m_album);
+                    MetadataHub::TagStatus status = d->hub.tagStatus(item->album());
                     bool tagAssigned = (status == MetadataHub::MetadataAvailable && status.hasTag)
                                         || status == MetadataHub::MetadataDisjoint;
                     item->setVisible(tagAssigned);
@@ -1614,13 +1614,13 @@ void ImageDescEditTab::slotAssignedTagsToggled(bool t)
         while (it.current())
         {
             TAlbumCheckListItem* item = dynamic_cast<TAlbumCheckListItem*>(it.current());
-            TAlbum *tag               = item->m_album;
+            TAlbum *tag               = item->album();
             if (tag)
             {
                 if (!tag->isRoot())
                 {
                     // only if the current item is not marked as tagged, check all children 
-                    MetadataHub::TagStatus status = d->hub.tagStatus(item->m_album);
+                    MetadataHub::TagStatus status = d->hub.tagStatus(item->album());
                     bool tagAssigned = (status == MetadataHub::MetadataAvailable && status.hasTag)
                                         || status == MetadataHub::MetadataDisjoint;
                     if (!tagAssigned)
@@ -1632,7 +1632,7 @@ void ImageDescEditTab::slotAssignedTagsToggled(bool t)
                         while (*tmpIt != nextSibling )
                         {
                             TAlbumCheckListItem* tmpItem = dynamic_cast<TAlbumCheckListItem*>(tmpIt.current());
-                            MetadataHub::TagStatus tmpStatus = d->hub.tagStatus(tmpItem->m_album);
+                            MetadataHub::TagStatus tmpStatus = d->hub.tagStatus(tmpItem->album());
                             bool tmpTagAssigned = (tmpStatus == MetadataHub::MetadataAvailable && tmpStatus.hasTag)
                                                 || tmpStatus == MetadataHub::MetadataDisjoint;
                             if(tmpTagAssigned)
@@ -1661,6 +1661,11 @@ void ImageDescEditTab::slotAssignedTagsToggled(bool t)
         else
             rootItem->setText(0, root->title());
     }
+}
+
+void ImageDescEditTab::refreshTagsView()
+{
+    d->tagsView->refresh();
 }
 
 }  // NameSpace Digikam

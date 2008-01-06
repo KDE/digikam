@@ -6,7 +6,7 @@
  * Date        : 2006-18-12
  * Description : A list view to display digiKam Tags.
  *
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -51,13 +51,23 @@ public:
 
     TAlbumCheckListItem(Q3CheckListItem* parent, TAlbum* album);
 
-    void setStatus(MetadataHub::TagStatus status);
+    void    setStatus(MetadataHub::TagStatus status);
+    void    refresh();
+    void    setOpen(bool o);
+    TAlbum* album() const;
+    int     id() const;
+    void    setCount(int count);
+    int     count();
 
-    TAlbum *m_album;
-
-protected:
+private:
     
-    virtual void stateChange(bool val);
+    void stateChange(bool val);
+
+private:
+
+    int     m_count;
+    
+    TAlbum *m_album;
 };
 
 // ------------------------------------------------------------------------
@@ -72,6 +82,7 @@ public:
     ~TAlbumListView();
 
     void emitSignalItemStateChanged(TAlbumCheckListItem *item);
+    void refresh();
 
 signals:
 
@@ -91,6 +102,10 @@ protected:
     Q3DragObject* dragObject();
     void startDrag();
     TAlbumCheckListItem* dragItem() const;
+
+private slots:
+
+    void slotRefresh(const QMap<int, int>&);
 
 private:
 

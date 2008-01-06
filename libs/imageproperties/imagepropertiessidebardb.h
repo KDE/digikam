@@ -66,6 +66,7 @@ public:
     virtual void itemChanged(const ImageInfoList &infos);
 
     void populateTags(void);
+    void refreshTagsView();
 
 signals:
 
