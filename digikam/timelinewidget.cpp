@@ -236,7 +236,9 @@ void TimeLineWidget::slotDatesMap(const QMap<QDateTime, int>& datesStatMap)
         }
     }
 
-    setCurrentDateTime(QDateTime::currentDateTime());
+    QDateTime ref;
+    ref.setDate(QDate(QDate::currentDate().year(), 1, 1));
+    setCurrentDateTime(ref);
 
     updatePixmap();
     update();
