@@ -514,11 +514,11 @@ void TimeLineWidget::updatePixmap()
 
                 if (ref.date().month() == 1)
                 {
-                    p.drawLine(barRect.right(), barRect.bottom(), 
-                               barRect.right(), barRect.bottom()+d->bottomMargin/2);
+                    p.drawLine(barRect.left(), barRect.bottom(), 
+                               barRect.left(), barRect.bottom()+d->bottomMargin/2);
                     QString txt = QString::number(ref.date().year());
                     QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt); 
-                    p.drawText(barRect.right()-br.width()/2, barRect.bottom() + d->bottomMargin, txt);
+                    p.drawText(barRect.left()-br.width()/2, barRect.bottom() + d->bottomMargin, txt);
                 }
                 else if (ref.date().month() == 7)
                 {
