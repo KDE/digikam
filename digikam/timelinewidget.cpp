@@ -100,7 +100,7 @@ TimeLineWidget::TimeLineWidget(QWidget *parent)
     setBackgroundMode(Qt::NoBackground);
     setMouseTracking(true);
     setMinimumWidth(192);
-    setMinimumHeight(80);
+    setMinimumHeight(128);
 }
 
 TimeLineWidget::~TimeLineWidget()

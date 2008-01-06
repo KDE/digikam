@@ -23,6 +23,7 @@
 
 // Qt includes.
 
+#include <qhbox.h>
 #include <qlayout.h>
 #include <qtoolbutton.h>
 #include <qcombobox.h>
@@ -82,20 +83,12 @@ TimeLineView::TimeLineView(QWidget *parent)
     setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     setLineWidth(1);
 
-    QGridLayout *grid = new QGridLayout(this, 1, 6);
+    QGridLayout *grid = new QGridLayout(this, 6, 5);
     d->timeLineWidget = new TimeLineWidget(this);
-    d->infoLabel      = new KSqueezedTextLabel(0, this);
     d->backBtn        = new QToolButton(this);
     d->prevBtn        = new QToolButton(this);
     d->nextBtn        = new QToolButton(this);
     d->forwBtn        = new QToolButton(this);
-    d->dateModeCB     = new QComboBox(false, this);
-    d->dateModeCB->insertItem(i18n("Day"),   TimeLineWidget::Day);
-    d->dateModeCB->insertItem(i18n("Week"),  TimeLineWidget::Week);
-    d->dateModeCB->insertItem(i18n("Month"), TimeLineWidget::Month);
-    d->dateModeCB->insertItem(i18n("Year"),  TimeLineWidget::Year);
-    d->dateModeCB->setCurrentItem((int)d->timeLineWidget->dateMode());
-    d->dateModeCB->setFocusPolicy(QWidget::NoFocus);
 
     d->backBtn->setIconSet(SmallIconSet("2leftarrow"));
     d->backBtn->setAutoRaise(true);
@@ -117,13 +110,27 @@ TimeLineView::TimeLineView(QWidget *parent)
     d->forwBtn->setAutoRepeat(true);
     d->forwBtn->setSizePolicy(QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Minimum));
 
+    QHBox *hBox1  = new QHBox(this);
+    new QLabel(i18n("Scale:"), hBox1);
+    d->dateModeCB = new QComboBox(false, hBox1);
+    d->dateModeCB->insertItem(i18n("Day"),   TimeLineWidget::Day);
+    d->dateModeCB->insertItem(i18n("Week"),  TimeLineWidget::Week);
+    d->dateModeCB->insertItem(i18n("Month"), TimeLineWidget::Month);
+    d->dateModeCB->insertItem(i18n("Year"),  TimeLineWidget::Year);
+    d->dateModeCB->setCurrentItem((int)d->timeLineWidget->dateMode());
+    d->dateModeCB->setFocusPolicy(QWidget::NoFocus);
+
+    d->infoLabel      = new KSqueezedTextLabel(0, this);
+
     grid->addMultiCellWidget(d->timeLineWidget, 0, 0, 0, 5);
     grid->addMultiCellWidget(d->backBtn,        1, 1, 0, 0);
     grid->addMultiCellWidget(d->prevBtn,        1, 1, 1, 1);
-    grid->addMultiCellWidget(d->infoLabel,      1, 1, 2, 2);
-    grid->addMultiCellWidget(d->dateModeCB,     1, 1, 3, 3);
-    grid->addMultiCellWidget(d->nextBtn,        1, 1, 4, 4);
-    grid->addMultiCellWidget(d->forwBtn,        1, 1, 5, 5);
+    grid->addMultiCellWidget(d->nextBtn,        1, 1, 3, 3);
+    grid->addMultiCellWidget(d->forwBtn,        1, 1, 4, 4);
+    grid->addMultiCellWidget(hBox1,             2, 2, 0, 4);
+    grid->addMultiCellWidget(d->infoLabel,      3, 3, 0, 4);
+
+    grid->setColStretch(2, 10);
     grid->setRowStretch(6, 10);
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
@@ -170,7 +177,7 @@ void TimeLineView::slotSelectionChanged()
     QDateTime start, end;
     int val = d->timeLineWidget->currentSelectionInfo(start, end);
 
-    QString txt = i18n("%1 to %2 : %3")
+    QString txt = i18n("%1 to %2 : %3 items")
                   .arg(KGlobal::locale()->formatDate(start.date(), true))
                   .arg(KGlobal::locale()->formatDate(end.date(), true))
                   .arg(val);
