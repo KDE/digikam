@@ -1820,6 +1820,9 @@ void DigikamApp::slotSetupChanged()
     if (AlbumManager::instance()->setDatabase(AlbumSettings::instance()->getDatabaseFilePath(), false))
         AlbumManager::instance()->startScan();
 
+    if(AlbumSettings::instance()->getShowFolderTreeViewItemsCount())
+        AlbumManager::instance()->refresh();
+
     d->view->applySettings();
     d->albumIconViewFilter->readSettings();
 
@@ -2080,6 +2083,14 @@ void DigikamApp::slotChangeTheme(const QString& theme)
 void DigikamApp::slotDatabaseRescan()
 {
     ScanController::instance()->completeCollectionScan();
+
+    d->view->refreshView();
+    
+    if (ImageWindow::imagewindowCreated())
+        ImageWindow::imagewindow()->refreshView();
+
+    if (LightTableWindow::lightTableWindowCreated())
+        LightTableWindow::lightTableWindow()->refreshView();
 }
 
 void DigikamApp::slotRebuildAllThumbs()

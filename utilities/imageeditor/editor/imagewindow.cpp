@@ -397,6 +397,12 @@ void ImageWindow::applySettings()
     AlbumSettings *settings = AlbumSettings::instance();
     m_canvas->setExifOrient(settings->getExifRotate());
     m_setExifOrientationTag = settings->getExifSetOrientation();
+    refreshView();
+}
+
+void ImageWindow::refreshView()
+{
+    d->rightSidebar->refreshTagsView();
 }
 
 void ImageWindow::loadURL(const KUrl::List& urlList, const KUrl& urlCurrent,

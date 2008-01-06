@@ -56,6 +56,7 @@ public:
     ~DigikamView();
 
     void applySettings();
+    void refreshView();
     void clearHistory();
     void getForwardHistory(QStringList &titles);
     void getBackwardHistory(QStringList &titles);
