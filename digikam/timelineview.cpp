@@ -82,7 +82,7 @@ TimeLineView::TimeLineView(QWidget *parent)
     setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     setLineWidth(1);
 
-    QGridLayout *grid = new QGridLayout(this, 1, 5);
+    QGridLayout *grid = new QGridLayout(this, 1, 6);
     d->timeLineWidget = new TimeLineWidget(this);
     d->infoLabel      = new KSqueezedTextLabel(0, this);
     d->backBtn        = new QToolButton(this);
@@ -124,6 +124,7 @@ TimeLineView::TimeLineView(QWidget *parent)
     grid->addMultiCellWidget(d->dateModeCB,     1, 1, 3, 3);
     grid->addMultiCellWidget(d->nextBtn,        1, 1, 4, 4);
     grid->addMultiCellWidget(d->forwBtn,        1, 1, 5, 5);
+    grid->setRowStretch(6, 10);
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
 
