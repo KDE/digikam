@@ -7,7 +7,7 @@
  * Description : tags folder view.
  * 
  * Copyright (C) 2005-2006 by Joern Ahrens <joern.ahrens@kdemail.net>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -61,6 +61,8 @@ public:
 
     void selectItem(int id);
 
+    void refresh();
+
 signals:
 
     void signalProgressBarMode(int, const QString&);
@@ -79,7 +81,7 @@ protected:
 
 private slots:
 
-    void slotAlbumAdded(Album *);
+    void slotAlbumAdded(Album*);
     void slotSelectionChanged();
     void slotAlbumDeleted(Album*);
     void slotAlbumRenamed(Album*);
@@ -91,6 +93,7 @@ private slots:
     void slotGotThumbnailFromIcon(Album *album, const QPixmap& thumbnail);
     void slotThumbnailLost(Album *album);
     void slotReloadThumbnails();
+    void slotRefresh(const QMap<int, int>&);
 
 private:
 
