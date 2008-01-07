@@ -138,8 +138,11 @@ void TimeLineWidget::setCurrentDateTime(const QDateTime& dateTime)
         case Week:
         {
             // Go to the first day of week.
+            int y = dt.date().year();
+            int m = dt.date().month();
+            int d = dt.date().day();
             int dayWeekOffset = (-1) * (KGlobal::locale()->calendar()->dayOfWeek(dt.date()) - 1);
-            dt.addDays(dayWeekOffset);
+            dt = dt.addDays(dayWeekOffset);
             break;
         }
         case Month:
@@ -183,7 +186,7 @@ void TimeLineWidget::setRefDateTime(const QDateTime& dateTime)
         {
             // Go to the first day of week.
             int dayWeekOffset = (-1) * (KGlobal::locale()->calendar()->dayOfWeek(dt.date()) - 1);
-            dt.addDays(dayWeekOffset);
+            dt = dt.addDays(dayWeekOffset);
             break;
         }
         case Month:
@@ -302,6 +305,12 @@ void TimeLineWidget::slotDatesMap(const QMap<QDateTime, int>& datesStatMap)
             if (d->maxCountByDay < it4.data().first + it.data()) 
                 d->maxCountByDay = it4.data().first + it.data();
         }
+    }
+
+    QMap<TimeLineWidgetPriv::YearRefPair, TimeLineWidgetPriv::StatPair>::iterator it6;
+    for (it6 = d->weekStatMap.begin() ; it6 != d->weekStatMap.end() ; it6++)
+    {
+        DDebug() << "(" << it6.key().first << ", " << it6.key().second << ") : " << it6.data().first << endl;
     }
 
     updatePixmap();
