@@ -6,7 +6,7 @@
  * Date        : 2007-12-08
  * Description : a widget to display date and time statistics of pictures
  *
- * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -99,8 +99,12 @@ TimeLineWidget::TimeLineWidget(QWidget *parent)
     d = new TimeLineWidgetPriv;
     setBackgroundMode(Qt::NoBackground);
     setMouseTracking(true);
-    setMinimumWidth(192);
-    setMinimumHeight(128);
+    setMinimumWidth(256);
+    setMinimumHeight(192);
+
+    QDateTime ref;
+    ref.setDate(QDate(QDate::currentDate().year(), 1, 1));
+    setCurrentDateTime(ref);
 }
 
 TimeLineWidget::~TimeLineWidget()
@@ -148,12 +152,17 @@ int TimeLineWidget::currentSelectionInfo(QDateTime& start, QDateTime& end)
 {
     bool selected;
     start = currentDateTime();
-    end   = nextDateTime(currentDateTime());
-    return statForDateTime(currentDateTime(), selected);
+    end   = nextDateTime(start);
+    return statForDateTime(start, selected);
 }
 
 void TimeLineWidget::slotDatesMap(const QMap<QDateTime, int>& datesStatMap)
 {
+    d->dayStatMap.clear();
+    d->weekStatMap.clear();
+    d->monthStatMap.clear();
+    d->yearStatMap.clear();
+
     for ( QMap<QDateTime, int>::const_iterator it = datesStatMap.begin();
           it != datesStatMap.end(); ++it )
     {
@@ -235,10 +244,6 @@ void TimeLineWidget::slotDatesMap(const QMap<QDateTime, int>& datesStatMap)
                 d->maxCountByDay = it4.data().first + it.data();
         }
     }
-
-    QDateTime ref;
-    ref.setDate(QDate(QDate::currentDate().year(), 1, 1));
-    setCurrentDateTime(ref);
 
     updatePixmap();
     update();
@@ -533,11 +538,11 @@ void TimeLineWidget::updatePixmap()
             {
                 if (ref.date().year() % 10 == 0)
                 {
-                    p.drawLine(barRect.right(), barRect.bottom(), 
-                               barRect.right(), barRect.bottom()+d->bottomMargin/2);
+                    p.drawLine(barRect.left(), barRect.bottom(), 
+                               barRect.left(), barRect.bottom()+d->bottomMargin/2);
                     QString txt = QString::number(ref.date().year());
                     QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt); 
-                    p.drawText(barRect.right()-br.width()/2, barRect.bottom() + d->bottomMargin, txt);
+                    p.drawText(barRect.left()-br.width()/2, barRect.bottom() + d->bottomMargin, txt);
                 }
                 else if (ref.date().year() % 5 == 0)
                     p.drawLine(barRect.right(), barRect.bottom(), 
