@@ -61,6 +61,8 @@ public:
     void setDateMode(DateMode dateMode);
     DateMode dateMode() const;
 
+    void setRefDateTime(const QDateTime& dateTime);
+
     void setCurrentDateTime(const QDateTime& dateTime);
     QDateTime currentDateTime() const;
 
@@ -86,7 +88,6 @@ private:
     int       maxCount();
     int       statForDateTime(const QDateTime& dt, bool& selected);
     void      setDateTimeSelected(const QDateTime& dt, bool selected);
-    void      setRefDateTime(const QDateTime& dateTime);
 
     void      updatePixmap();
     void      paintEvent(QPaintEvent*);

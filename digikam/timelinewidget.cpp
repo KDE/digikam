@@ -80,7 +80,7 @@ public:
     int                         nbItems;
     int                         startPos;
 
-    QDateTime                   refDateTime;    // Reference date-time used to draw histogram from the central of widget.
+    QDateTime                   refDateTime;    // Reference date-time used to draw histogram from middle of widget.
     QDateTime                   selDateTime;    // Current date-time used to draw focus cursor.
 
     QPixmap                     pixmap;
@@ -102,9 +102,9 @@ TimeLineWidget::TimeLineWidget(QWidget *parent)
     setMinimumWidth(256);
     setMinimumHeight(192);
 
-    QDateTime ref;
-    ref.setDate(QDate(QDate::currentDate().year(), 1, 1));
+    QDateTime ref = QDateTime::currentDateTime();
     setCurrentDateTime(ref);
+    setRefDateTime(ref);
 }
 
 TimeLineWidget::~TimeLineWidget()
@@ -115,6 +115,10 @@ TimeLineWidget::~TimeLineWidget()
 void TimeLineWidget::setDateMode(DateMode dateMode)
 {
     d->dateMode = dateMode;
+    QDateTime ref = currentDateTime();
+    setCurrentDateTime(ref);
+    setRefDateTime(ref);
+
     updatePixmap();
     update();
 }
@@ -126,11 +130,38 @@ TimeLineWidget::DateMode TimeLineWidget::dateMode() const
 
 void TimeLineWidget::setCurrentDateTime(const QDateTime& dateTime)
 {
-    if (d->selDateTime == dateTime)
+    QDateTime dt = dateTime;
+    dt.setTime(QTime());
+
+    switch(d->dateMode)
+    {
+        case Week:
+        {
+            // Go to the first day of week.
+            int dayWeekOffset = (-1) * (KGlobal::locale()->calendar()->dayOfWeek(dt.date()) - 1);
+            dt.addDays(dayWeekOffset);
+            break;
+        }
+        case Month:
+        {
+            // Go to the first day of month.
+            dt.setDate(QDate(dt.date().year(), dt.date().month(), 1));
+            break;
+        }
+        case Year:
+        {
+            // Go to the first day of year.
+            dt.setDate(QDate(dt.date().year(), 1, 1));
+            break;
+        }
+        default:
+            break;
+    }
+
+    if (d->selDateTime == dt)
         return;
 
-    d->refDateTime = dateTime;
-    d->selDateTime = dateTime;
+    d->selDateTime = dt;
     updatePixmap();
     update();
     emit signalSelectionChanged();
@@ -143,7 +174,35 @@ QDateTime TimeLineWidget::currentDateTime() const
 
 void TimeLineWidget::setRefDateTime(const QDateTime& dateTime)
 {
-    d->refDateTime = dateTime;
+    QDateTime dt = dateTime;
+    dt.setTime(QTime());
+
+    switch(d->dateMode)
+    {
+        case Week:
+        {
+            // Go to the first day of week.
+            int dayWeekOffset = (-1) * (KGlobal::locale()->calendar()->dayOfWeek(dt.date()) - 1);
+            dt.addDays(dayWeekOffset);
+            break;
+        }
+        case Month:
+        {
+            // Go to the first day of month.
+            dt.setDate(QDate(dt.date().year(), dt.date().month(), 1));
+            break;
+        }
+        case Year:
+        {
+            // Go to the first day of year.
+            dt.setDate(QDate(dt.date().year(), 1, 1));
+            break;
+        }
+        default:
+            break;
+    }
+
+    d->refDateTime = dt;
     updatePixmap();
     update();
 }
@@ -889,7 +948,6 @@ void TimeLineWidget::mouseMoveEvent(QMouseEvent *e)
 void TimeLineWidget::mouseReleaseEvent(QMouseEvent*)
 {
     d->selectMode = false;
-
 }
 
 void TimeLineWidget::checkForSelection(const QPoint& pt)
@@ -907,7 +965,7 @@ void TimeLineWidget::checkForSelection(const QPoint& pt)
 
         if (barRect.contains(pt) && d->selDateTime != ref)
         {
-            d->selDateTime = ref;
+            setCurrentDateTime(ref);
             bool sel;
             statForDateTime(ref, sel);
             setDateTimeSelected(ref, !sel);
@@ -934,7 +992,7 @@ void TimeLineWidget::checkForSelection(const QPoint& pt)
 
         if (barRect.contains(pt) && d->selDateTime != ref)
         {
-            d->selDateTime = ref;
+            setCurrentDateTime(ref);
             bool sel;
             statForDateTime(ref, sel);
             setDateTimeSelected(ref, !sel);

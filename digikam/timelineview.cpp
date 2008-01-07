@@ -166,6 +166,7 @@ TimeLineView::~TimeLineView()
 void TimeLineView::setCurrentDateTime(const QDateTime& dateTime)
 {
     d->timeLineWidget->setCurrentDateTime(dateTime);
+    d->timeLineWidget->setRefDateTime(dateTime);
 }
 
 void TimeLineView::slotScaleChanged(int mode)
