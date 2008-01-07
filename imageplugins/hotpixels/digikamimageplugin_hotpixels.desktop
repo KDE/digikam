@@ -15,6 +15,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Hot pixel correction plugin for digiKam
+Comment[ca]=Connector per al digiKam de correcció de píxels cremats
 Comment[da]=Hot pixel rettelsesplugin for Digikam
 Comment[de]=digiKam-Modul zur Korrektur von heißen (defekten) Pixeln
 Comment[el]=Πρόσθετο διόρθωσης έντονων εικονοστοιχείων για το digiKam
