@@ -15,6 +15,7 @@ General        : Add capability to display count of items in all Album, Date, Ta
 
 digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-001 ==>  96388 : show number of images in the album.
-002 ==> 155271 : configure suggests wrong parameter for libjasper
-003 ==> 
+001 ==>  96388 : Show number of images in the album.
+002 ==> 155271 : Configure suggests wrong parameter for libjasper
+003 ==> 155105 : Broken png image present in albums folder causes digikam to crash when starting.
+004 ==> 
