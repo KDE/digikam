@@ -226,21 +226,43 @@ void TimeLineView::slotSelectionChanged()
 
 void TimeLineView::slotQuerySearchKIOSlave()
 {
+    int totalCount = 0;
     QDateTime start, end;
-    d->timeLineWidget->currentSelectionInfo(start, end);
+    DateRangeList list = d->timeLineWidget->currentSelectedDateRange(totalCount);
 
     KURL url;
     url.setProtocol("digikamsearch");
 
-    url.setPath("1 AND 2");
-    url.addQueryItem(QString("1.key"), QString("imagedate"));
-    url.addQueryItem(QString("1.op"),  QString("GT"));
-    url.addQueryItem(QString("1.val"), start.date().toString(Qt::ISODate));
-    url.addQueryItem(QString("2.key"), QString("imagedate"));
-    url.addQueryItem(QString("2.op"),  QString("LT"));
-    url.addQueryItem(QString("2.val"), end.date().toString(Qt::ISODate));
+    int grp = list.count();
+    QString path("1 AND 2");
+
+    if (grp > 1 )
+    {
+        for (int i = 1 ; i < grp; i++)
+        {
+            path.append(" OR ");
+            path.append(QString("%1 AND %2").arg(i*2+1).arg(i*2+2));
+        }
+    }
+    url.setPath(path);
+
+    int i = 0;
+    DateRangeList::iterator it;
+    for (it = list.begin() ; it != list.end(); ++it)
+    {
+        start = (*it).first;
+        end   = (*it).second;
+        url.addQueryItem(QString("%1.key").arg(i*2+1), QString("imagedate"));
+        url.addQueryItem(QString("%1.op").arg(i*2+1),  QString("GT"));
+        url.addQueryItem(QString("%1.val").arg(i*2+1), start.date().toString(Qt::ISODate));
+        url.addQueryItem(QString("%1.key").arg(i*2+2), QString("imagedate"));
+        url.addQueryItem(QString("%1.op").arg(i*2+2),  QString("LT"));
+        url.addQueryItem(QString("%1.val").arg(i*2+2), end.date().toString(Qt::ISODate));
+        i++;
+    }
+
     url.addQueryItem("name", QString("TimeLineSelection"));
-    url.addQueryItem("count", QString::number(2));
+    url.addQueryItem("count", QString::number(grp*2));
 
     DDebug() << url << endl;
 
