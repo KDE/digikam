@@ -70,7 +70,7 @@ public:
     QDateTime currentDateTime() const;
 
     int currentSelectionInfo(QDateTime& start, QDateTime& end);
-    DateRangeList currentSelectedDateRange();
+    DateRangeList currentSelectedDateRange(int& totalCoun);
 
 signals:
 

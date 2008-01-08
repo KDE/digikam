@@ -215,8 +215,9 @@ int TimeLineWidget::currentSelectionInfo(QDateTime& start, QDateTime& end)
     return statForDateTime(start, selected);
 }
 
-DateRangeList TimeLineWidget::currentSelectedDateRange()
+DateRangeList TimeLineWidget::currentSelectedDateRange(int& totalCount)
 {
+    totalCount = 0;
     DateRangeList list;
 
     switch(d->dateMode)
@@ -234,6 +235,7 @@ DateRangeList TimeLineWidget::currentSelectedDateRange()
                     QDateTime sdt(date);
                     QDateTime edt = nextDateTime(sdt); 
                     list.append(DateRange(sdt, edt));
+                    totalCount += it.data().first;
                 }
             }
             break;
@@ -249,6 +251,7 @@ DateRangeList TimeLineWidget::currentSelectedDateRange()
                     QDateTime sdt = firstDayOfWeek(it.key().first, it.key().second);
                     QDateTime edt = nextDateTime(sdt); 
                     list.append(DateRange(sdt, edt));
+                    totalCount += it.data().first;
                 }
             }
             break;
@@ -265,6 +268,7 @@ DateRangeList TimeLineWidget::currentSelectedDateRange()
                     QDateTime sdt(date);
                     QDateTime edt = nextDateTime(sdt); 
                     list.append(DateRange(sdt, edt));
+                    totalCount += it.data().first;
                 }
             }
             break;
@@ -281,6 +285,7 @@ DateRangeList TimeLineWidget::currentSelectedDateRange()
                     QDateTime sdt(date);
                     QDateTime edt = nextDateTime(sdt); 
                     list.append(DateRange(sdt, edt));
+                    totalCount += it.data().first;
                 }
             }
             break;
@@ -291,6 +296,7 @@ DateRangeList TimeLineWidget::currentSelectedDateRange()
     for (it = list.begin() ; it != list.end(); ++it)
         DDebug() << (*it).first.date().toString(Qt::ISODate) << " :: " << (*it).second.date().toString(Qt::ISODate) << endl;
 
+    DDebug() << "Total Count of Items = " << totalCount << endl;
     return list;
 }
 
