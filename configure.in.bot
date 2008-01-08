@@ -65,7 +65,7 @@ if test "x$have_jasper" != "xyes"; then
   echo "digiKam needs libjasper to support JPEG2000. "
   echo "You need to install the correct version (>= 1.7.0)."
   echo "Libjasper website is at http://www.ece.uvic.ca/~mdadams/jasper"
-  echo "Important note: libjaspeer has to be configured with --enable-dynamic"
+  echo "Important note: libjasper has to be configured with --enable-shared=yes"
   echo "as otherwise the required dynamic libraries are not created."
   echo ""
   all_tests=bad
