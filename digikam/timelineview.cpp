@@ -121,7 +121,7 @@ TimeLineView::TimeLineView(QWidget *parent)
     QWidget *info      = new QWidget(this);
     QGridLayout *grid2 = new QGridLayout(info, 3, 2);
 
-    QLabel *label1 = new QLabel(i18n("Scale:"), info);
+    QLabel *label1 = new QLabel(i18n("Time Units:"), info);
     d->dateModeCB  = new QComboBox(false, info);
     d->dateModeCB->insertItem(i18n("Day"),   TimeLineWidget::Day);
     d->dateModeCB->insertItem(i18n("Week"),  TimeLineWidget::Week);
