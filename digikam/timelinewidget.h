@@ -64,9 +64,6 @@ public:
     void setDateMode(DateMode dateMode);
     DateMode dateMode() const;
 
-    void resetSelection();
-    void resetAllSelection();
-
     void setRefDateTime(const QDateTime& dateTime);
 
     void setCurrentDateTime(const QDateTime& dateTime);
@@ -81,6 +78,8 @@ signals:
 
 public slots:
 
+    void slotResetSelection();
+    void slotResetAllSelection();
     void slotDatesMap(const QMap<QDateTime, int>&);
     void slotBackward();
     void slotPrevious();

@@ -28,9 +28,11 @@
 #include <qlayout.h>
 #include <qtoolbutton.h>
 #include <qcombobox.h>
+#include <qpushbutton.h>
 
 // KDE include.
 
+#include <kseparator.h>
 #include <klocale.h>
 #include <kdialog.h>
 #include <kiconloader.h>
@@ -64,8 +66,10 @@ public:
         dateModeCB     = 0;
         dRangeLabel    = 0;
         itemsLabel     = 0;
+        totalLabel     = 0;
         timeLineWidget = 0;
         timer          = 0;
+        resetButton    = 0;
     }
 
     bool                dateSAlbumSet;
@@ -79,8 +83,11 @@ public:
 
     QComboBox          *dateModeCB;
 
+    QPushButton        *resetButton;
+
     KSqueezedTextLabel *dRangeLabel;
     KSqueezedTextLabel *itemsLabel;
+    KSqueezedTextLabel *totalLabel;
 
     TimeLineWidget     *timeLineWidget;
 };
@@ -124,7 +131,7 @@ TimeLineView::TimeLineView(QWidget *parent)
     // ---------------------------------------------------------------
 
     QWidget *info      = new QWidget(this);
-    QGridLayout *grid2 = new QGridLayout(info, 3, 2);
+    QGridLayout *grid2 = new QGridLayout(info, 6, 2);
 
     QLabel *label1 = new QLabel(i18n("Time Units:"), info);
     d->dateModeCB  = new QComboBox(false, info);
@@ -135,6 +142,8 @@ TimeLineView::TimeLineView(QWidget *parent)
     d->dateModeCB->setCurrentItem((int)d->timeLineWidget->dateMode());
     d->dateModeCB->setFocusPolicy(QWidget::NoFocus);
 
+    KSeparator *line1 = new KSeparator(Horizontal, info);
+
     QLabel *label2 = new QLabel(i18n("Date:"), info);
     d->dRangeLabel = new KSqueezedTextLabel(0, info);
     d->dRangeLabel->setAlignment(Qt::AlignRight);
@@ -143,12 +152,25 @@ TimeLineView::TimeLineView(QWidget *parent)
     d->itemsLabel  = new KSqueezedTextLabel(0, info);
     d->itemsLabel->setAlignment(Qt::AlignRight);
 
-    grid2->addMultiCellWidget(label1,         0, 0, 0, 0);
-    grid2->addMultiCellWidget(d->dateModeCB,  0, 0, 2, 2);
-    grid2->addMultiCellWidget(label2,         1, 1, 0, 0);
-    grid2->addMultiCellWidget(d->dRangeLabel, 1, 1, 1, 2);
-    grid2->addMultiCellWidget(label3,         2, 2, 0, 0);
-    grid2->addMultiCellWidget(d->itemsLabel , 2, 2, 2, 2);
+    KSeparator *line2 = new KSeparator(Horizontal, info);
+
+    QLabel *label4 = new QLabel(i18n("Total:"), info);
+    d->totalLabel  = new KSqueezedTextLabel(0, info);
+    d->totalLabel->setAlignment(Qt::AlignRight);
+
+    d->resetButton = new QPushButton(i18n("&Reset Selection"), info);
+
+    grid2->addMultiCellWidget(label1,          0, 0, 0, 0);
+    grid2->addMultiCellWidget(d->dateModeCB,   0, 0, 2, 2);
+    grid2->addMultiCellWidget(line1,           1, 1, 0, 2);
+    grid2->addMultiCellWidget(label2,          2, 2, 0, 0);
+    grid2->addMultiCellWidget(d->dRangeLabel,  2, 2, 1, 2);
+    grid2->addMultiCellWidget(label3,          3, 3, 0, 0);
+    grid2->addMultiCellWidget(d->itemsLabel ,  3, 3, 2, 2);
+    grid2->addMultiCellWidget(line2,           4, 4, 0, 2);
+    grid2->addMultiCellWidget(label4,          5, 5, 0, 0);
+    grid2->addMultiCellWidget(d->totalLabel ,  5, 5, 2, 2);
+    grid2->addMultiCellWidget(d->resetButton , 6, 6, 0, 0);
     grid2->setColStretch(1, 10);
     grid2->setMargin(0);
     grid2->setSpacing(KDialog::spacingHint());
@@ -191,6 +213,9 @@ TimeLineView::TimeLineView(QWidget *parent)
 
     connect(d->timer, SIGNAL(timeout()),
             this, SLOT(slotQuerySearchKIOSlave()));
+
+    connect(d->resetButton, SIGNAL(clicked()),
+            d->timeLineWidget, SLOT(slotResetSelection()));
 }
 
 TimeLineView::~TimeLineView()
@@ -229,6 +254,7 @@ void TimeLineView::slotQuerySearchKIOSlave()
     int totalCount = 0;
     QDateTime start, end;
     DateRangeList list = d->timeLineWidget->currentSelectedDateRange(totalCount);
+    d->totalLabel->setText(QString::number(totalCount));
 
     KURL url;
     url.setProtocol("digikamsearch");

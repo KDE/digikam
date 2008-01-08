@@ -215,20 +215,22 @@ int TimeLineWidget::cursorInfo(QDateTime& start, QDateTime& end)
     return statForDateTime(start, selected);
 }
 
-void TimeLineWidget::resetSelection()
+void TimeLineWidget::slotResetSelection()
 {
     resetSelection(d->dateMode);
     updatePixmap();
     update();
+    emit signalSelectionChanged();
 }
 
-void TimeLineWidget::resetAllSelection()
+void TimeLineWidget::slotResetAllSelection()
 {
     for (int i=(int)Day ; i<=(int)Year ; i++)
         resetSelection((TimeLineWidget::DateMode)i);
 
     updatePixmap();
     update();
+    emit signalSelectionChanged();
 }
 
 void TimeLineWidget::resetSelection(TimeLineWidget::DateMode mode)
