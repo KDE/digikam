@@ -965,13 +965,10 @@ void TimeLineWidget::checkForSelection(const QPoint& pt)
 
         if (barRect.contains(pt) && d->selDateTime != ref)
         {
-            setCurrentDateTime(ref);
             bool sel;
             statForDateTime(ref, sel);
             setDateTimeSelected(ref, !sel);
-            emit signalSelectionChanged();
-            updatePixmap();
-            update();
+            setCurrentDateTime(ref);
             return;
         }
 
@@ -992,13 +989,10 @@ void TimeLineWidget::checkForSelection(const QPoint& pt)
 
         if (barRect.contains(pt) && d->selDateTime != ref)
         {
-            setCurrentDateTime(ref);
             bool sel;
             statForDateTime(ref, sel);
             setDateTimeSelected(ref, !sel);
-            emit signalSelectionChanged();
-            updatePixmap();
-            update();
+            setCurrentDateTime(ref);
             return;
         }
 
