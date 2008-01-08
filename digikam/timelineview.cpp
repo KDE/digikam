@@ -23,6 +23,7 @@
 
 // Qt includes.
 
+#include <qtimer.h>
 #include <qhbox.h>
 #include <qlayout.h>
 #include <qtoolbutton.h>
@@ -64,6 +65,7 @@ public:
         dRangeLabel    = 0;
         itemsLabel     = 0;
         timeLineWidget = 0;
+        timer          = 0;
     }
 
     bool                dateSAlbumSet;
@@ -72,6 +74,8 @@ public:
     QToolButton        *prevBtn;
     QToolButton        *nextBtn;
     QToolButton        *forwBtn;
+
+    QTimer             *timer;
 
     QComboBox          *dateModeCB;
 
@@ -85,6 +89,7 @@ TimeLineView::TimeLineView(QWidget *parent)
             : QFrame(parent, 0, Qt::WDestructiveClose)
 {
     d = new TimeLineViewPriv;
+    d->timer = new QTimer(this);
 
     setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     setLineWidth(1);
@@ -183,10 +188,14 @@ TimeLineView::TimeLineView(QWidget *parent)
 
     connect(d->timeLineWidget, SIGNAL(signalSelectionChanged()),
             this, SLOT(slotSelectionChanged()));
+
+    connect(d->timer, SIGNAL(timeout()),
+            this, SLOT(slotQuerySearchKIOSlave()));
 }
 
 TimeLineView::~TimeLineView()
 {
+    delete d->timer;
     delete d;
 }
 
@@ -212,6 +221,13 @@ void TimeLineView::slotSelectionChanged()
 
     d->dRangeLabel->setText(txt);
     d->itemsLabel->setText(QString::number(val));
+    d->timer->start(500, true);
+}
+
+void TimeLineView::slotQuerySearchKIOSlave()
+{
+    QDateTime start, end;
+    d->timeLineWidget->currentSelectionInfo(start, end);
 
     KURL url;
     url.setProtocol("digikamsearch");
