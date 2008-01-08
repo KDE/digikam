@@ -207,7 +207,7 @@ void TimeLineWidget::setRefDateTime(const QDateTime& dateTime)
     update();
 }
 
-int TimeLineWidget::currentSelectionInfo(QDateTime& start, QDateTime& end)
+int TimeLineWidget::cursorInfo(QDateTime& start, QDateTime& end)
 {
     bool selected;
     start = currentDateTime();
@@ -215,6 +215,59 @@ int TimeLineWidget::currentSelectionInfo(QDateTime& start, QDateTime& end)
     return statForDateTime(start, selected);
 }
 
+void TimeLineWidget::resetSelection()
+{
+    resetSelection(d->dateMode);
+}
+
+void TimeLineWidget::resetAllSelection()
+{
+    for (int i=(int)Day ; i<=(int)Year ; i++)
+        resetSelection((TimeLineWidget::DateMode)i);
+}
+
+void TimeLineWidget::resetSelection(TimeLineWidget::DateMode mode)
+{
+    switch(d->dateMode)
+    {
+        case Day:
+        {
+            QMap<TimeLineWidgetPriv::YearRefPair, TimeLineWidgetPriv::StatPair>::iterator it;
+
+            for (it = d->dayStatMap.begin() ; it != d->dayStatMap.end(); ++it)
+                it.data().second = false;
+
+            break;
+        }
+        case Week:
+        {
+            QMap<TimeLineWidgetPriv::YearRefPair, TimeLineWidgetPriv::StatPair>::iterator it;
+
+            for (it = d->weekStatMap.begin() ; it != d->weekStatMap.end(); ++it)
+                it.data().second = false;
+
+            break;
+        }
+        case Month:
+        {
+            QMap<TimeLineWidgetPriv::YearRefPair, TimeLineWidgetPriv::StatPair>::iterator it;
+
+            for (it = d->monthStatMap.begin() ; it != d->monthStatMap.end(); ++it)
+                it.data().second = false;
+
+            break;
+        }
+        case Year:
+        {
+            QMap<int, TimeLineWidgetPriv::StatPair>::iterator it;
+
+            for (it = d->yearStatMap.begin() ; it != d->yearStatMap.end(); ++it)
+                it.data().second = false;
+
+            break;
+        }
+    }
+}
 DateRangeList TimeLineWidget::currentSelectedDateRange(int& totalCount)
 {
     totalCount = 0;

@@ -213,7 +213,7 @@ void TimeLineView::slotScaleChanged(int mode)
 void TimeLineView::slotSelectionChanged()
 {
     QDateTime start, end;
-    int val = d->timeLineWidget->currentSelectionInfo(start, end);
+    int val = d->timeLineWidget->cursorInfo(start, end);
 
     QString txt = i18n("%1 to %2")
                   .arg(KGlobal::locale()->formatDate(start.date(), true))

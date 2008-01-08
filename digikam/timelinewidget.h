@@ -64,12 +64,16 @@ public:
     void setDateMode(DateMode dateMode);
     DateMode dateMode() const;
 
+    void resetSelection();
+    void resetSelection(TimeLineWidget::DateMode mode);
+    void resetAllSelection();
+
     void setRefDateTime(const QDateTime& dateTime);
 
     void setCurrentDateTime(const QDateTime& dateTime);
     QDateTime currentDateTime() const;
 
-    int currentSelectionInfo(QDateTime& start, QDateTime& end);
+    int cursorInfo(QDateTime& start, QDateTime& end);
     DateRangeList currentSelectedDateRange(int& totalCoun);
 
 signals:
