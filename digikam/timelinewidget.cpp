@@ -218,17 +218,22 @@ int TimeLineWidget::cursorInfo(QDateTime& start, QDateTime& end)
 void TimeLineWidget::resetSelection()
 {
     resetSelection(d->dateMode);
+    updatePixmap();
+    update();
 }
 
 void TimeLineWidget::resetAllSelection()
 {
     for (int i=(int)Day ; i<=(int)Year ; i++)
         resetSelection((TimeLineWidget::DateMode)i);
+
+    updatePixmap();
+    update();
 }
 
 void TimeLineWidget::resetSelection(TimeLineWidget::DateMode mode)
 {
-    switch(d->dateMode)
+    switch(mode)
     {
         case Day:
         {

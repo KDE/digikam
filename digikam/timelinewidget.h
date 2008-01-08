@@ -65,7 +65,6 @@ public:
     DateMode dateMode() const;
 
     void resetSelection();
-    void resetSelection(TimeLineWidget::DateMode mode);
     void resetAllSelection();
 
     void setRefDateTime(const QDateTime& dateTime);
@@ -96,6 +95,7 @@ private:
     int       maxCount();
     int       statForDateTime(const QDateTime& dt, bool& selected);
     void      setDateTimeSelected(const QDateTime& dt, bool selected);
+    void      resetSelection(TimeLineWidget::DateMode mode);
 
     void      updatePixmap();
     void      paintEvent(QPaintEvent*);
