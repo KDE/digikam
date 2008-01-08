@@ -28,6 +28,8 @@
 
 #include <qdatetime.h>
 #include <qvaluelist.h>
+#include <qmap.h>
+#include <qdatetime.h>
 #include <qframe.h>
 
 namespace Digikam
@@ -50,6 +52,7 @@ private slots:
 
     void slotScaleChanged(int);
     void slotSelectionChanged();
+    void slotDatesMap(const QMap<QDateTime, int>&);
 
 private:
 
