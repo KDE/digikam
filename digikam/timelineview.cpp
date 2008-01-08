@@ -55,7 +55,7 @@ public:
 
     TimeLineViewPriv()
     {
-        dateSAlbumSet  = 0;
+        dateSAlbumSet  = false;
         backBtn        = 0;
         prevBtn        = 0;
         nextBtn        = 0;
@@ -66,9 +66,6 @@ public:
         timeLineWidget = 0;
     }
 
-    /** AlbumManager call refresh() when a SAlbum is created or updated.
-        This way emit signalDatesMapDirty() witch reset all selection 
-        in TimeLineWidget. We need to catch this signal/slot side effect. */
     bool                dateSAlbumSet;
 
     QToolButton        *backBtn;
@@ -238,6 +235,10 @@ void TimeLineView::slotSelectionChanged()
 
 void TimeLineView::slotDatesMap(const QMap<QDateTime, int>& map)
 {
+    /** AlbumManager call refresh() when a SAlbum is created or updated.
+        This way emit signalDatesMapDirty() witch reset all selection 
+        in TimeLineWidget. We need to catch this signal/slot side effect. */
+
     if (!d->dateSAlbumSet)
         d->timeLineWidget->slotDatesMap(map);
     else
