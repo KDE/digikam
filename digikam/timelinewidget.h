@@ -37,6 +37,9 @@
 namespace Digikam
 {
 
+typedef QPair<QDateTime, QDateTime> DateRange;    // Range of a contigue dates selection <start date, end date>.
+typedef QValueList<DateRange> DateRangeList;      // List of dates range selected.
+
 class TimeLineWidgetPriv;
 
 class TimeLineWidget : public QWidget
@@ -67,6 +70,7 @@ public:
     QDateTime currentDateTime() const;
 
     int currentSelectionInfo(QDateTime& start, QDateTime& end);
+    DateRangeList currentSelectedDateRange();
 
 signals:
 
@@ -98,6 +102,8 @@ private:
     void      mouseMoveEvent(QMouseEvent*);
     void      mouseReleaseEvent(QMouseEvent*);
     void      checkForSelection(const QPoint& pt);
+
+    QDateTime firstDayOfWeek(int year, int weekNumber);
 
 private:
 

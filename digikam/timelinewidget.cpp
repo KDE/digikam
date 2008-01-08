@@ -215,6 +215,85 @@ int TimeLineWidget::currentSelectionInfo(QDateTime& start, QDateTime& end)
     return statForDateTime(start, selected);
 }
 
+DateRangeList TimeLineWidget::currentSelectedDateRange()
+{
+    DateRangeList list;
+
+    switch(d->dateMode)
+    {
+        case Day:
+        {
+            QMap<TimeLineWidgetPriv::YearRefPair, TimeLineWidgetPriv::StatPair>::iterator it;
+
+            for (it = d->dayStatMap.begin() ; it != d->dayStatMap.end(); ++it)
+            {
+                if (it.data().second)  // Selected ?
+                {
+                    QDate date(it.key().first, 1, 1);
+                    date = date.addDays(it.key().second-1);
+                    QDateTime sdt(date);
+                    QDateTime edt = nextDateTime(sdt); 
+                    list.append(DateRange(sdt, edt));
+                }
+            }
+            break;
+        }
+        case Week:
+        {
+            QMap<TimeLineWidgetPriv::YearRefPair, TimeLineWidgetPriv::StatPair>::iterator it;
+
+            for (it = d->weekStatMap.begin() ; it != d->weekStatMap.end(); ++it)
+            {
+                if (it.data().second)  // Selected ?
+                {
+                    QDateTime sdt = firstDayOfWeek(it.key().first, it.key().second);
+                    QDateTime edt = nextDateTime(sdt); 
+                    list.append(DateRange(sdt, edt));
+                }
+            }
+            break;
+        }
+        case Month:
+        {
+            QMap<TimeLineWidgetPriv::YearRefPair, TimeLineWidgetPriv::StatPair>::iterator it;
+
+            for (it = d->monthStatMap.begin() ; it != d->monthStatMap.end(); ++it)
+            {
+                if (it.data().second)  // Selected ?
+                {
+                    QDate date(it.key().first, it.key().second, 1);
+                    QDateTime sdt(date);
+                    QDateTime edt = nextDateTime(sdt); 
+                    list.append(DateRange(sdt, edt));
+                }
+            }
+            break;
+        }
+        case Year:
+        {
+            QMap<int, TimeLineWidgetPriv::StatPair>::iterator it;
+
+            for (it = d->yearStatMap.begin() ; it != d->yearStatMap.end(); ++it)
+            {
+                if (it.data().second)  // Selected ?
+                {
+                    QDate date(it.key(), 1, 1);
+                    QDateTime sdt(date);
+                    QDateTime edt = nextDateTime(sdt); 
+                    list.append(DateRange(sdt, edt));
+                }
+            }
+            break;
+        }
+    }
+
+    DateRangeList::iterator it;
+    for (it = list.begin() ; it != list.end(); ++it)
+        DDebug() << (*it).first.date().toString(Qt::ISODate) << " :: " << (*it).second.date().toString(Qt::ISODate) << endl;
+
+    return list;
+}
+
 void TimeLineWidget::slotDatesMap(const QMap<QDateTime, int>& datesStatMap)
 {
     d->dayStatMap.clear();
@@ -998,6 +1077,26 @@ void TimeLineWidget::checkForSelection(const QPoint& pt)
 
         ref = prevDateTime(ref);
     }
+}
+
+QDateTime TimeLineWidget::firstDayOfWeek(int year, int weekNumber)
+{
+    QDateTime date(QDate(year, 1, 1));
+    for (int i = 0 ; i < KGlobal::locale()->calendar()->daysInYear(date.date()) ; i++)
+    {
+        QDateTime dt = date.addDays(i);
+
+        if (KGlobal::locale()->calendar()->weekNumber(dt.date()) == weekNumber)
+        {
+            if (weekNumber == 1 && KGlobal::locale()->calendar()->dayOfWeek(dt.date()) > 1)
+            {
+                int dayWeekOffset = (-1) * (KGlobal::locale()->calendar()->dayOfWeek(dt.date()) - 1);
+                dt = dt.addDays(dayWeekOffset);
+            }
+            return dt;
+        }
+    }
+    return QDateTime();
 }
 
 }  // NameSpace Digikam
