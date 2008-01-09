@@ -65,7 +65,6 @@ LATER 0.9.3 TODO LIST
 
 * General:
    - Custom ordering of images
-   - New TimeLine tool (take a look in kphotoalbum and f-spot)
    - Post conversion to qlistview: allow selection of multiple albums/tags/dates:
      1/ instead of a "current album" there will a list of "current urls"
      2/ will lead to widesweeping changes all over the core and the kioslaves
