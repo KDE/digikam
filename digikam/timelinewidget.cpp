@@ -358,6 +358,8 @@ DateRangeList TimeLineWidget::currentSelectedDateRange(int& totalCount)
 
     DDebug() << "Total Count of Items = " << totalCount << endl;
 
+    // Group contiguous date ranges to optimize query to database.
+
     DateRangeList list2;
     QDateTime     first, second;
 
