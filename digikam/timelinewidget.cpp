@@ -71,8 +71,7 @@ public:
         startPos        = 96;
         nbItems         = 10;
         dateMode        = TimeLineWidget::Month;
-        scaleMode       = TimeLineWidget::LogScale;
-//        scaleMode       = TimeLineWidget::LinScale;
+        scaleMode       = TimeLineWidget::LinScale;
     }
 
     bool                        validMouseEvent;   // Current mouse enter event is valid to set cursor position or selection.

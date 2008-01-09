@@ -63,6 +63,7 @@ public:
         nextBtn        = 0;
         forwBtn        = 0;
         dateModeCB     = 0;
+        scaleModeCB    = 0;
         dRangeLabel    = 0;
         itemsLabel     = 0;
         totalLabel     = 0;
@@ -79,6 +80,7 @@ public:
     QTimer             *timer;
 
     QComboBox          *dateModeCB;
+    QComboBox          *scaleModeCB;
 
     QPushButton        *resetButton;
 
@@ -128,7 +130,7 @@ TimeLineView::TimeLineView(QWidget *parent)
     // ---------------------------------------------------------------
 
     QWidget *info      = new QWidget(this);
-    QGridLayout *grid2 = new QGridLayout(info, 6, 2);
+    QGridLayout *grid2 = new QGridLayout(info, 7, 2);
 
     QLabel *label1 = new QLabel(i18n("Time Units:"), info);
     d->dateModeCB  = new QComboBox(false, info);
@@ -138,6 +140,13 @@ TimeLineView::TimeLineView(QWidget *parent)
     d->dateModeCB->insertItem(i18n("Year"),  TimeLineWidget::Year);
     d->dateModeCB->setCurrentItem((int)d->timeLineWidget->dateMode());
     d->dateModeCB->setFocusPolicy(QWidget::NoFocus);
+
+    QLabel *label5 = new QLabel(i18n("Scale:"), info);
+    d->scaleModeCB = new QComboBox(false, info);
+    d->scaleModeCB->insertItem(i18n("Linear"),      TimeLineWidget::LinScale);
+    d->scaleModeCB->insertItem(i18n("Logarithmic"), TimeLineWidget::LogScale);
+    d->scaleModeCB->setCurrentItem((int)d->timeLineWidget->scaleMode());
+    d->scaleModeCB->setFocusPolicy(QWidget::NoFocus);
 
     KSeparator *line1 = new KSeparator(Horizontal, info);
 
@@ -159,15 +168,17 @@ TimeLineView::TimeLineView(QWidget *parent)
 
     grid2->addMultiCellWidget(label1,          0, 0, 0, 0);
     grid2->addMultiCellWidget(d->dateModeCB,   0, 0, 2, 2);
-    grid2->addMultiCellWidget(line1,           1, 1, 0, 2);
-    grid2->addMultiCellWidget(label2,          2, 2, 0, 0);
-    grid2->addMultiCellWidget(d->dRangeLabel,  2, 2, 1, 2);
-    grid2->addMultiCellWidget(label3,          3, 3, 0, 0);
-    grid2->addMultiCellWidget(d->itemsLabel ,  3, 3, 2, 2);
-    grid2->addMultiCellWidget(line2,           4, 4, 0, 2);
-    grid2->addMultiCellWidget(label4,          5, 5, 0, 0);
-    grid2->addMultiCellWidget(d->totalLabel ,  5, 5, 2, 2);
-    grid2->addMultiCellWidget(d->resetButton , 6, 6, 0, 0);
+    grid2->addMultiCellWidget(label5,          1, 1, 0, 0);
+    grid2->addMultiCellWidget(d->scaleModeCB,  1, 1, 2, 2);
+    grid2->addMultiCellWidget(line1,           2, 2, 0, 2);
+    grid2->addMultiCellWidget(label2,          3, 3, 0, 0);
+    grid2->addMultiCellWidget(d->dRangeLabel,  3, 3, 1, 2);
+    grid2->addMultiCellWidget(label3,          4, 4, 0, 0);
+    grid2->addMultiCellWidget(d->itemsLabel ,  4, 4, 2, 2);
+    grid2->addMultiCellWidget(line2,           5, 5, 0, 2);
+    grid2->addMultiCellWidget(label4,          6, 6, 0, 0);
+    grid2->addMultiCellWidget(d->totalLabel ,  6, 6, 2, 2);
+    grid2->addMultiCellWidget(d->resetButton , 7, 7, 0, 0);
     grid2->setColStretch(1, 10);
     grid2->setMargin(0);
     grid2->setSpacing(KDialog::spacingHint());
@@ -191,6 +202,9 @@ TimeLineView::TimeLineView(QWidget *parent)
             d->timeLineWidget, SLOT(slotDatesMap(const QMap<QDateTime, int>&)));
 
     connect(d->dateModeCB, SIGNAL(activated(int)),
+            this, SLOT(slotDateUnitChanged(int)));
+
+    connect(d->scaleModeCB, SIGNAL(activated(int)),
             this, SLOT(slotScaleChanged(int)));
 
     connect(d->backBtn, SIGNAL(clicked()),
@@ -230,9 +244,14 @@ void TimeLineView::setCurrentDateTime(const QDateTime& dateTime)
     d->timeLineWidget->setRefDateTime(dateTime);
 }
 
-void TimeLineView::slotScaleChanged(int mode)
+void TimeLineView::slotDateUnitChanged(int mode)
 {
     d->timeLineWidget->setDateMode((TimeLineWidget::DateMode)mode);
+}
+
+void TimeLineView::slotScaleChanged(int mode)
+{
+    d->timeLineWidget->setScaleMode((TimeLineWidget::ScaleMode)mode);
 }
 
 void TimeLineView::slotCursorPositionChanged()
