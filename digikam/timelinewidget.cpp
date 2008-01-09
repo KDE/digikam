@@ -21,6 +21,10 @@
  * 
  * ============================================================ */
 
+// C++ includes.
+
+#include <cmath>
+
 // Qt includes.
 
 #include <qpainter.h>
@@ -67,7 +71,8 @@ public:
         startPos        = 96;
         nbItems         = 10;
         dateMode        = TimeLineWidget::Month;
-        scaleMode       = TimeLineWidget::LinScale;
+        scaleMode       = TimeLineWidget::LogScale;
+//        scaleMode       = TimeLineWidget::LinScale;
     }
 
     bool                        validMouseEvent;   // Current mouse enter event is valid to set cursor position or selection.
@@ -548,9 +553,10 @@ void TimeLineWidget::updatePixmap()
     int dim         = height() - d->bottomMargin - d->topMargin;
     QDateTime ref   = d->refDateTime;
     ref.setTime(QTime());
-    int   val;
-    bool  sel;
-    QRect focusRect, selRect;
+    double max;
+    int    val, top;
+    bool   sel;
+    QRect  focusRect, selRect;
 
     // Date histogram drawing is divided in 2 parts. The current date-time 
     // is placed on the center of the view and all dates on right are computed,
@@ -562,8 +568,27 @@ void TimeLineWidget::updatePixmap()
     {
         val = statForDateTime(ref, sel);
 
+        max = (double)maxCount();
+        if (d->scaleMode == TimeLineWidget::LogScale)
+        {
+            if (max > 0.0)
+                max = log(max);
+            else
+                max = 1.0;
+
+            if (val <= 0) val = 1;
+
+            top = (int)(dim + d->topMargin - ((log(val) * dim) / max));
+
+            if (top < 0) val = 0;
+        }
+        else
+        {
+            top = dim + d->topMargin - ((val * dim) / max);
+        }
+
         QRect barRect;
-        barRect.setTop(dim + d->topMargin - ((val * dim) / maxCount()));
+        barRect.setTop(top);
         barRect.setLeft(d->startPos + i*d->barWidth);
         barRect.setBottom(height() - d->bottomMargin);
         barRect.setRight(d->startPos + (i+1)*d->barWidth);
@@ -705,8 +730,27 @@ void TimeLineWidget::updatePixmap()
     {
         val = statForDateTime(ref, sel);
 
+        max = (double)maxCount();
+        if (d->scaleMode == TimeLineWidget::LogScale)
+        {
+            if (max > 0.0)
+                max = log(max);
+            else
+                max = 1.0;
+
+            if (val <= 0) val = 1;
+
+            top = (int)(dim + d->topMargin - ((log(val) * dim) / max));
+
+            if (top < 0) val = 0;
+        }
+        else
+        {
+            top = dim + d->topMargin - ((val * dim) / max);
+        }
+
         QRect barRect;
-        barRect.setTop(dim + d->topMargin - ((val * dim) / maxCount()));
+        barRect.setTop(top);
         barRect.setRight(d->startPos - i*d->barWidth);
         barRect.setBottom(height() - d->bottomMargin);
         barRect.setLeft(d->startPos - (i+1)*d->barWidth);
