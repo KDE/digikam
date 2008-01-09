@@ -104,7 +104,7 @@ private:
     void      mousePressEvent(QMouseEvent*);
     void      mouseMoveEvent(QMouseEvent*);
     void      mouseReleaseEvent(QMouseEvent*);
-    void      checkForSelection(const QPoint& pt);
+    void      checkForSelection(const QPoint& pt, bool ctrlPressed);
 
     QDateTime firstDayOfWeek(int year, int weekNumber);
 

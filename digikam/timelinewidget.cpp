@@ -164,7 +164,6 @@ void TimeLineWidget::setCurrentDateTime(const QDateTime& dateTime)
     d->selDateTime = dt;
     updatePixmap();
     update();
-    emit signalSelectionChanged();
 }
 
 QDateTime TimeLineWidget::currentDateTime() const
@@ -354,7 +353,8 @@ DateRangeList TimeLineWidget::currentSelectedDateRange(int& totalCount)
 
     DateRangeList::iterator it;
     for (it = list.begin() ; it != list.end(); ++it)
-        DDebug() << (*it).first.date().toString(Qt::ISODate) << " :: " << (*it).second.date().toString(Qt::ISODate) << endl;
+        DDebug() << (*it).first.date().toString(Qt::ISODate) << " :: " 
+                 << (*it).second.date().toString(Qt::ISODate) << endl;
 
     DDebug() << "Total Count of Items = " << totalCount << endl;
     return list;
@@ -978,6 +978,10 @@ void TimeLineWidget::setDateTimeSelected(const QDateTime& dt, bool selected)
             break;
         }
     }
+
+    updatePixmap();
+    update();
+    emit signalSelectionChanged();
 }
 
 void TimeLineWidget::paintEvent(QPaintEvent*)
@@ -1092,7 +1096,12 @@ void TimeLineWidget::mousePressEvent(QMouseEvent *e)
     if (e->button() == Qt::LeftButton)
     {
         QPoint pt(e->x(), e->y());
-        checkForSelection(pt);
+
+        bool ctrlPressed = e->state() & Qt::ControlButton;
+        if (!ctrlPressed)
+            slotResetSelection();
+
+        checkForSelection(pt, ctrlPressed);
         d->selectMode = true;
     }
 }
@@ -1102,7 +1111,7 @@ void TimeLineWidget::mouseMoveEvent(QMouseEvent *e)
     if (d->selectMode == true)
     {
         QPoint pt(e->x(), e->y());
-        checkForSelection(pt);
+        checkForSelection(pt, e->state() & Qt::ControlButton);
     }
 }
 
@@ -1111,7 +1120,7 @@ void TimeLineWidget::mouseReleaseEvent(QMouseEvent*)
     d->selectMode = false;
 }
 
-void TimeLineWidget::checkForSelection(const QPoint& pt)
+void TimeLineWidget::checkForSelection(const QPoint& pt, bool ctrlPressed)
 {
     QRect barRect, selRect;
     bool  sel;
@@ -1136,17 +1145,22 @@ void TimeLineWidget::checkForSelection(const QPoint& pt)
         // Set cursor position if necessary
         if (barRect.contains(pt) && d->selDateTime != ref)
         {
-            statForDateTime(ref, sel);
             setCurrentDateTime(ref);
             return;
         }
 
         // Set selection mark if necessary
-        if (selRect.contains(pt) && d->selDateTime != ref)
+        if (selRect.contains(pt))
         {
-            statForDateTime(ref, sel);
-            setDateTimeSelected(ref, !sel);
-            setCurrentDateTime(ref);
+            if (ctrlPressed)
+            {
+                statForDateTime(ref, sel);
+                setDateTimeSelected(ref, !sel);
+            }
+            else
+            {
+                setDateTimeSelected(ref, true);
+            }
             return;
         }
 
@@ -1174,17 +1188,22 @@ void TimeLineWidget::checkForSelection(const QPoint& pt)
         // Set cursor position if necessary
         if (barRect.contains(pt) && d->selDateTime != ref)
         {
-            statForDateTime(ref, sel);
             setCurrentDateTime(ref);
             return;
         }
 
         // Set selection mark if necessary
-        if (selRect.contains(pt) && d->selDateTime != ref)
+        if (selRect.contains(pt))
         {
-            statForDateTime(ref, sel);
-            setDateTimeSelected(ref, !sel);
-            setCurrentDateTime(ref);
+            if (ctrlPressed)
+            {
+                statForDateTime(ref, sel);
+                setDateTimeSelected(ref, !sel);
+            }
+            else
+            {
+                setDateTimeSelected(ref, true);
+            }
             return;
         }
 
