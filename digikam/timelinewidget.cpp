@@ -1162,15 +1162,15 @@ void TimeLineWidget::mousePressEvent(QMouseEvent *e)
     {
         QPoint pt(e->x(), e->y());
 
-        bool ctrlPressed = e->state() & Qt::ControlButton;
-        if (!ctrlPressed)
-            slotResetSelection();
-
         bool selected;
-        d->selStartDateTime = QDateTime();
+        bool ctrlPressed    = e->state() & Qt::ControlButton;
         QDateTime ref       = dateTimeForPoint(pt, selected);
+        d->selStartDateTime = QDateTime();
         if (selected) 
         {
+            if (!ctrlPressed)
+                slotResetSelection();
+
             d->selStartDateTime = ref;
             d->selMinDateTime   = ref;
             d->selMaxDateTime   = ref;
