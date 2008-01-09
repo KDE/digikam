@@ -397,6 +397,16 @@ void AlbumManager::startScan()
     connect(d->dirWatch, SIGNAL(dirty(const QString&)),
             this, SLOT(slotDirty(const QString&)));
 
+    KDirWatch::Method m = d->dirWatch->internalMethod();
+    QString mName("FAM");
+    if (m == KDirWatch::DNotify)
+        mName = QString("DNotify");
+    else if (m == KDirWatch::Stat)
+        mName = QString("Stat");
+    else if (m == KDirWatch::INotify)
+        mName = QString("INotify");
+    DDebug() << "KDirWatch method = " << mName << endl;
+
     // listen to location status changes
     connect(CollectionManager::instance(), SIGNAL(locationStatusChanged(const CollectionLocation &, int)),
             this, SLOT(slotCollectionLocationStatusChanged(const CollectionLocation &, int)));
