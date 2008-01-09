@@ -55,7 +55,7 @@ public:
 
     TimeLineWidgetPriv()
     {
-        selectMode      = false;
+        selection       = false;
         maxCountByDay   = 1;
         maxCountByWeek  = 1;
         maxCountByMonth = 1;
@@ -68,7 +68,7 @@ public:
         nbItems         = 10;
     }
 
-    bool                        selectMode;
+    bool                        selection;
 
     int                         maxCountByDay;
     int                         maxCountByWeek;
@@ -80,10 +80,13 @@ public:
     int                         nbItems;
     int                         startPos;
 
-    QDateTime                   refDateTime;    // Reference date-time used to draw histogram from middle of widget.
-    QDateTime                   selDateTime;    // Current date-time used to draw focus cursor.
-    QDateTime                   minDateTime;    // Higher date on histogram.
-    QDateTime                   maxDateTime;    // Lower date on histogram.
+    QDateTime                   refDateTime;       // Reference date-time used to draw histogram from middle of widget.
+    QDateTime                   selDateTime;       // Current date-time used to draw focus cursor.
+    QDateTime                   minDateTime;       // Higher date on histogram.
+    QDateTime                   maxDateTime;       // Lower date on histogram.
+    QDateTime                   selStartDateTime;
+    QDateTime                   selMinDateTime;
+    QDateTime                   selMaxDateTime;
 
     QPixmap                     pixmap;
 
@@ -1163,29 +1166,101 @@ void TimeLineWidget::mousePressEvent(QMouseEvent *e)
         if (!ctrlPressed)
             slotResetSelection();
 
-        checkForSelection(pt, ctrlPressed);
-        d->selectMode = true;
+        bool selected;
+        d->selStartDateTime = QDateTime();
+        QDateTime ref       = dateTimeForPoint(pt, selected);
+        if (selected) 
+        {
+            d->selStartDateTime = ref;
+            d->selMinDateTime   = ref;
+            d->selMaxDateTime   = ref;
+            setDateTimeSelected(ref, true);
+        }
+        else
+        {
+            setCurrentDateTime(ref);
+        }
+
+        d->selection = true;
     }
 }
 
 void TimeLineWidget::mouseMoveEvent(QMouseEvent *e)
 {
-    if (d->selectMode == true)
+    if (d->selection == true)
     {
         QPoint pt(e->x(), e->y());
-        checkForSelection(pt, e->state() & Qt::ControlButton);
+
+        bool selected;
+        bool ctrlPressed         = e->state() & Qt::ControlButton;
+        QDateTime selEndDateTime = dateTimeForPoint(pt, selected);
+
+        if (!selEndDateTime.isNull())
+        {
+            if (selEndDateTime > d->selStartDateTime && 
+                selEndDateTime > d->selMaxDateTime)
+            {
+                d->selMaxDateTime = selEndDateTime;
+            }
+            else if (selEndDateTime < d->selStartDateTime && 
+                     selEndDateTime < d->selMinDateTime)
+            {
+                d->selMinDateTime = selEndDateTime;
+            }
+
+            QDateTime dt = d->selMinDateTime;
+            do
+            {
+                setDateTimeSelected(dt, false);
+                dt = nextDateTime(dt);
+            }
+            while(dt <= d->selMaxDateTime);
+        }
+
+        if (selected)
+        {
+            if (!d->selStartDateTime.isNull() && !selEndDateTime.isNull())
+            {
+                if (!ctrlPressed)
+                    slotResetSelection();
+
+                QDateTime dt = d->selStartDateTime;
+                if (selEndDateTime > d->selStartDateTime)
+                {
+                    do
+                    {
+                        setDateTimeSelected(dt, true);
+                        dt = nextDateTime(dt);
+                    }
+                    while(dt <= selEndDateTime);
+                }
+                else
+                {
+                    do
+                    {
+                        setDateTimeSelected(dt, true);
+                        dt = prevDateTime(dt);
+                    }
+                    while(dt >= selEndDateTime);
+                }
+            }
+        }
+        else
+        {
+            setCurrentDateTime(selEndDateTime);
+        }
     }
 }
 
 void TimeLineWidget::mouseReleaseEvent(QMouseEvent*)
 {
-    d->selectMode = false;
+    d->selection = false;
 }
 
-void TimeLineWidget::checkForSelection(const QPoint& pt, bool ctrlPressed)
+QDateTime TimeLineWidget::dateTimeForPoint(const QPoint& pt, bool &isOnSelectionArea)
 {
     QRect barRect, selRect;
-    bool  sel;
+    isOnSelectionArea = false;
 
     // Check on the left of reference date.
 
@@ -1204,27 +1279,11 @@ void TimeLineWidget::checkForSelection(const QPoint& pt, bool ctrlPressed)
         selRect.setBottom(height());
         selRect.setRight(d->startPos + (i+1)*d->barWidth);
 
-        // Set cursor position if necessary
-        if (barRect.contains(pt) && d->selDateTime != ref)
-        {
-            setCurrentDateTime(ref);
-            return;
-        }
-
-        // Set selection mark if necessary
         if (selRect.contains(pt))
-        {
-            if (ctrlPressed)
-            {
-                statForDateTime(ref, sel);
-                setDateTimeSelected(ref, !sel);
-            }
-            else
-            {
-                setDateTimeSelected(ref, true);
-            }
-            return;
-        }
+            isOnSelectionArea = true;
+
+        if (barRect.contains(pt) || selRect.contains(pt))
+            return ref;
 
         ref = nextDateTime(ref);
     }
@@ -1247,30 +1306,16 @@ void TimeLineWidget::checkForSelection(const QPoint& pt, bool ctrlPressed)
         selRect.setBottom(height());
         selRect.setRight(d->startPos - i*d->barWidth);
 
-        // Set cursor position if necessary
-        if (barRect.contains(pt) && d->selDateTime != ref)
-        {
-            setCurrentDateTime(ref);
-            return;
-        }
-
-        // Set selection mark if necessary
         if (selRect.contains(pt))
-        {
-            if (ctrlPressed)
-            {
-                statForDateTime(ref, sel);
-                setDateTimeSelected(ref, !sel);
-            }
-            else
-            {
-                setDateTimeSelected(ref, true);
-            }
-            return;
-        }
+            isOnSelectionArea = true;
+
+        if (barRect.contains(pt) || selRect.contains(pt))
+            return ref;
 
         ref = prevDateTime(ref);
     }
+
+    return QDateTime();
 }
 
 QDateTime TimeLineWidget::firstDayOfWeek(int year, int weekNumber)
