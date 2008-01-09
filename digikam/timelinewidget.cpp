@@ -351,13 +351,42 @@ DateRangeList TimeLineWidget::currentSelectedDateRange(int& totalCount)
         }
     }
 
-    DateRangeList::iterator it;
+    DateRangeList::iterator it, it2;
     for (it = list.begin() ; it != list.end(); ++it)
         DDebug() << (*it).first.date().toString(Qt::ISODate) << " :: " 
                  << (*it).second.date().toString(Qt::ISODate) << endl;
 
     DDebug() << "Total Count of Items = " << totalCount << endl;
-    return list;
+
+    DateRangeList list2;
+    QDateTime     first, second;
+
+    for (it = list.begin() ; it != list.end(); ++it)
+    { 
+        first  = (*it).first;
+        second = (*it).second;
+        it2 = it;
+        do
+        {
+            ++it2;
+            if ((*it2).first == second)
+            {
+                second = (*it2).second;
+                ++it;
+            }
+            else 
+                break;
+        }
+        while(it2 != list.end());
+
+        list2.append(DateRange(first, second));
+    }
+
+    for (it = list2.begin() ; it != list2.end(); ++it)
+        DDebug() << (*it).first.date().toString(Qt::ISODate) << " :: " 
+                 << (*it).second.date().toString(Qt::ISODate) << endl;
+
+    return list2;
 }
 
 void TimeLineWidget::slotDatesMap(const QMap<QDateTime, int>& datesStatMap)
