@@ -81,9 +81,9 @@ public slots:
     void slotResetSelection();
     void slotResetAllSelection();
     void slotDatesMap(const QMap<QDateTime, int>&);
-    void slotBackward();
     void slotPrevious();
     void slotNext();
+    void slotBackward();
     void slotForward();
 
 private:

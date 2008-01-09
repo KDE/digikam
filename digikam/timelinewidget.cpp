@@ -1113,20 +1113,37 @@ void TimeLineWidget::mouseReleaseEvent(QMouseEvent*)
 
 void TimeLineWidget::checkForSelection(const QPoint& pt)
 {
+    QRect barRect, selRect;
+    bool  sel;
+
+    // Check on the left of reference date.
+
     QDateTime ref = d->refDateTime;
     ref.setTime(QTime());
 
     for (int i = 0 ; i < d->nbItems ; i++)
     {
-        QRect barRect;
         barRect.setTop(0);
         barRect.setLeft(d->startPos + i*d->barWidth);
-        barRect.setBottom(height());
+        barRect.setBottom(height() - d->bottomMargin + 1);
         barRect.setRight(d->startPos + (i+1)*d->barWidth);
 
+        selRect.setTop(height() - d->bottomMargin + 1);
+        selRect.setLeft(d->startPos + i*d->barWidth);
+        selRect.setBottom(height());
+        selRect.setRight(d->startPos + (i+1)*d->barWidth);
+
+        // Set cursor position if necessary
         if (barRect.contains(pt) && d->selDateTime != ref)
         {
-            bool sel;
+            statForDateTime(ref, sel);
+            setCurrentDateTime(ref);
+            return;
+        }
+
+        // Set selection mark if necessary
+        if (selRect.contains(pt) && d->selDateTime != ref)
+        {
             statForDateTime(ref, sel);
             setDateTimeSelected(ref, !sel);
             setCurrentDateTime(ref);
@@ -1136,21 +1153,35 @@ void TimeLineWidget::checkForSelection(const QPoint& pt)
         ref = nextDateTime(ref);
     }
 
+    // Check on the right of reference date.
+
     ref = d->refDateTime;
     ref.setTime(QTime());
     ref = prevDateTime(ref);
 
     for (int i = 0 ; i < d->nbItems-1 ; i++)
     {
-        QRect barRect;
         barRect.setTop(0);
         barRect.setRight(d->startPos - i*d->barWidth);
-        barRect.setBottom(height());
+        barRect.setBottom(height() - d->bottomMargin + 1);
         barRect.setLeft(d->startPos - (i+1)*d->barWidth);
 
+        selRect.setTop(height() - d->bottomMargin + 1);
+        selRect.setLeft(d->startPos - (i+1)*d->barWidth);
+        selRect.setBottom(height());
+        selRect.setRight(d->startPos - i*d->barWidth);
+
+        // Set cursor position if necessary
         if (barRect.contains(pt) && d->selDateTime != ref)
         {
-            bool sel;
+            statForDateTime(ref, sel);
+            setCurrentDateTime(ref);
+            return;
+        }
+
+        // Set selection mark if necessary
+        if (selRect.contains(pt) && d->selDateTime != ref)
+        {
             statForDateTime(ref, sel);
             setDateTimeSelected(ref, !sel);
             setCurrentDateTime(ref);
