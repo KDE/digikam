@@ -362,10 +362,25 @@ DateRangeList TimeLineWidget::currentSelectedDateRange(int& totalCount)
 
 void TimeLineWidget::slotDatesMap(const QMap<QDateTime, int>& datesStatMap)
 {
-    d->dayStatMap.clear();
-    d->weekStatMap.clear();
-    d->monthStatMap.clear();
-    d->yearStatMap.clear();
+    // Clear all counts in all stats maps before to update it. Do not clear selections.
+
+    QMap<int, TimeLineWidgetPriv::StatPair>::iterator it_iP;
+    for ( it_iP = d->yearStatMap.begin() ; it_iP != d->yearStatMap.end(); ++it_iP )
+        it_iP.data().first = 0;
+
+    QMap<TimeLineWidgetPriv::YearRefPair, TimeLineWidgetPriv::StatPair>::iterator it_YP;
+    for ( it_YP = d->monthStatMap.begin() ; it_YP != d->monthStatMap.end(); ++it_YP )
+        it_YP.data().first = 0;
+
+    for ( it_YP = d->weekStatMap.begin() ; it_YP != d->weekStatMap.end(); ++it_YP )
+        it_YP.data().first = 0;
+
+    for ( it_YP = d->dayStatMap.begin() ; it_YP != d->dayStatMap.end(); ++it_YP )
+        it_YP.data().first = 0;
+
+    // Parse all new Date stamp and store histogram stats relevant in maps.
+
+    int count;
 
     for ( QMap<QDateTime, int>::const_iterator it = datesStatMap.begin();
           it != datesStatMap.end(); ++it )
@@ -377,76 +392,77 @@ void TimeLineWidget::slotDatesMap(const QMap<QDateTime, int>& datesStatMap)
 
         // Stats Years values.
 
-        QMap<int, TimeLineWidgetPriv::StatPair>::iterator it5 = d->yearStatMap.find(year);
-        if ( it5 == d->yearStatMap.end() )
+        it_iP = d->yearStatMap.find(year);
+        if ( it_iP == d->yearStatMap.end() )
         {
-            d->yearStatMap.insert( year, TimeLineWidgetPriv::StatPair(it.data(), false) );
-            if (d->maxCountByYear < it.data()) 
-                d->maxCountByYear = it.data();
+            count = it.data();
+            d->yearStatMap.insert( year, TimeLineWidgetPriv::StatPair(count, false) );
         }
         else
         {
-            d->yearStatMap.replace( year, TimeLineWidgetPriv::StatPair(it5.data().first + it.data(), false) );
-            if (d->maxCountByYear < it5.data().first + it.data()) 
-                d->maxCountByYear = it5.data().first + it.data();
+            count = it_iP.data().first + it.data();
+            d->yearStatMap.replace( year, TimeLineWidgetPriv::StatPair(count, it_iP.data().second) );
         }
+
+        if (d->maxCountByYear < count) 
+            d->maxCountByYear = count;
 
         // Stats Months values.
 
-        QMap<TimeLineWidgetPriv::YearRefPair, TimeLineWidgetPriv::StatPair>::iterator it2 = 
-             d->monthStatMap.find(TimeLineWidgetPriv::YearRefPair(year, month));
-        if ( it2 == d->monthStatMap.end() )
+        it_YP = d->monthStatMap.find(TimeLineWidgetPriv::YearRefPair(year, month));
+        if ( it_YP == d->monthStatMap.end() )
         {
+            count = it.data();
             d->monthStatMap.insert( TimeLineWidgetPriv::YearRefPair(year, month), 
-                                    TimeLineWidgetPriv::StatPair(it.data(), false) );
-            if (d->maxCountByMonth < it.data()) 
-                d->maxCountByMonth = it.data();
+                                    TimeLineWidgetPriv::StatPair(count, false) );
         }
         else
         {
+            count = it_YP.data().first + it.data();
             d->monthStatMap.replace( TimeLineWidgetPriv::YearRefPair(year, month), 
-                                     TimeLineWidgetPriv::StatPair(it2.data().first + it.data(), false) );
-            if (d->maxCountByMonth < it2.data().first + it.data()) 
-                d->maxCountByMonth = it2.data().first + it.data();
+                                     TimeLineWidgetPriv::StatPair(count, it_YP.data().second) );
         }
+
+        if (d->maxCountByMonth < count) 
+            d->maxCountByMonth = count;
 
         // Stats Weeks values.
 
-        QMap<TimeLineWidgetPriv::YearRefPair, TimeLineWidgetPriv::StatPair>::iterator it3 = 
-             d->weekStatMap.find(TimeLineWidgetPriv::YearRefPair(year, week));
-        if ( it3 == d->weekStatMap.end() )
+        it_YP = d->weekStatMap.find(TimeLineWidgetPriv::YearRefPair(year, week));
+        if ( it_YP == d->weekStatMap.end() )
         {
+            count = it.data();
             d->weekStatMap.insert( TimeLineWidgetPriv::YearRefPair(year, week), 
-                                   TimeLineWidgetPriv::StatPair(it.data(), false) );
-            if (d->maxCountByWeek < it.data()) 
-                d->maxCountByWeek = it.data();
+                                   TimeLineWidgetPriv::StatPair(count, false) );
         }
         else
         {
+            count = it_YP.data().first + it.data();
             d->weekStatMap.replace( TimeLineWidgetPriv::YearRefPair(year, week), 
-                                    TimeLineWidgetPriv::StatPair(it3.data().first + it.data(), false) );
-            if (d->maxCountByWeek < it3.data().first + it.data()) 
-                d->maxCountByWeek = it3.data().first + it.data();
+                                    TimeLineWidgetPriv::StatPair(count, it_YP.data().second) );
         }
+
+        if (d->maxCountByWeek < count) 
+            d->maxCountByWeek = count;
 
         // Stats Days values.
 
-        QMap<TimeLineWidgetPriv::YearRefPair, TimeLineWidgetPriv::StatPair>::iterator it4 =
-             d->dayStatMap.find(TimeLineWidgetPriv::YearRefPair(year, day));
-        if ( it4 == d->dayStatMap.end() )
+        it_YP = d->dayStatMap.find(TimeLineWidgetPriv::YearRefPair(year, day));
+        if ( it_YP == d->dayStatMap.end() )
         {
+            count = it.data();
             d->dayStatMap.insert( TimeLineWidgetPriv::YearRefPair(year, day), 
-                                  TimeLineWidgetPriv::StatPair(it.data(), false) );
-            if (d->maxCountByDay < it.data()) 
-                d->maxCountByDay = it.data();
+                                  TimeLineWidgetPriv::StatPair(count, false) );
         }
         else
         {
+            count = it_YP.data().first + it.data();
             d->dayStatMap.replace( TimeLineWidgetPriv::YearRefPair(year, day), 
-                                   TimeLineWidgetPriv::StatPair(it4.data().first + it.data(), false) );
-            if (d->maxCountByDay < it4.data().first + it.data()) 
-                d->maxCountByDay = it4.data().first + it.data();
+                                   TimeLineWidgetPriv::StatPair(count, it_YP.data().second) );
         }
+
+        if (d->maxCountByDay < count) 
+            d->maxCountByDay = count;
     }
 
     updatePixmap();

@@ -52,7 +52,6 @@ private slots:
 
     void slotScaleChanged(int);
     void slotSelectionChanged();
-    void slotDatesMap(const QMap<QDateTime, int>&);
     void slotQuerySearchKIOSlave();
 
 private:
