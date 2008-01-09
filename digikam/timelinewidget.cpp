@@ -164,6 +164,8 @@ void TimeLineWidget::setCurrentDateTime(const QDateTime& dateTime)
     d->selDateTime = dt;
     updatePixmap();
     update();
+
+    emit signalCursorPositionChanged();
 }
 
 QDateTime TimeLineWidget::currentDateTime() const

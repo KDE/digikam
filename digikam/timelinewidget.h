@@ -74,6 +74,7 @@ public:
 
 signals:
 
+    void signalCursorPositionChanged();
     void signalSelectionChanged();
 
 public slots:

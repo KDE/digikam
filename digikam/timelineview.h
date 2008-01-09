@@ -51,6 +51,7 @@ public:
 private slots:
 
     void slotScaleChanged(int);
+    void slotCursorPositionChanged();
     void slotSelectionChanged();
     void slotQuerySearchKIOSlave();
 

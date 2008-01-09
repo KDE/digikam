@@ -205,6 +205,9 @@ TimeLineView::TimeLineView(QWidget *parent)
     connect(d->forwBtn, SIGNAL(clicked()),
             d->timeLineWidget, SLOT(slotForward()));
 
+    connect(d->timeLineWidget, SIGNAL(signalCursorPositionChanged()),
+            this, SLOT(slotCursorPositionChanged()));
+
     connect(d->timeLineWidget, SIGNAL(signalSelectionChanged()),
             this, SLOT(slotSelectionChanged()));
 
@@ -232,7 +235,7 @@ void TimeLineView::slotScaleChanged(int mode)
     d->timeLineWidget->setDateMode((TimeLineWidget::DateMode)mode);
 }
 
-void TimeLineView::slotSelectionChanged()
+void TimeLineView::slotCursorPositionChanged()
 {
     QDateTime start, end;
     int val = d->timeLineWidget->cursorInfo(start, end);
@@ -243,6 +246,10 @@ void TimeLineView::slotSelectionChanged()
 
     d->dRangeLabel->setText(txt);
     d->itemsLabel->setText(QString::number(val));
+}
+
+void TimeLineView::slotSelectionChanged()
+{
     d->timer->start(500, true);
 }
 
@@ -252,6 +259,12 @@ void TimeLineView::slotQuerySearchKIOSlave()
     QDateTime start, end;
     DateRangeList list = d->timeLineWidget->currentSelectedDateRange(totalCount);
     d->totalLabel->setText(QString::number(totalCount));
+
+    if (list.isEmpty())
+    {
+        AlbumManager::instance()->setCurrentAlbum(0);
+        return;
+    }
 
     KURL url;
     url.setProtocol("digikamsearch");
