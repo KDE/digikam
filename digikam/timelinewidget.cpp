@@ -1174,7 +1174,7 @@ void TimeLineWidget::mousePressEvent(QMouseEvent *e)
             d->selMaxDateTime   = ref;
             setDateTimeSelected(ref, true);
         }
-        else
+        else if (!ref.isNull())
         {
             setCurrentDateTime(ref);
         }
@@ -1239,7 +1239,7 @@ void TimeLineWidget::mouseMoveEvent(QMouseEvent *e)
                 }
             }
         }
-        else
+        else if (!selEndDateTime.isNull())
         {
             setCurrentDateTime(selEndDateTime);
         }
