@@ -56,6 +56,12 @@ public:
         Year
     };
 
+    enum ScaleMode
+    {
+        LinScale=0,      // Linear scale.
+        LogScale         // Logarithmic scale.
+    };
+
 public:
 
     TimeLineWidget(QWidget *parent=0);
@@ -63,6 +69,9 @@ public:
 
     void setDateMode(DateMode dateMode);
     DateMode dateMode() const;
+
+    void setScaleMode(ScaleMode scaleMode);
+    ScaleMode scaleMode() const;
 
     void setRefDateTime(const QDateTime& dateTime);
 

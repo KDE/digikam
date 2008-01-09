@@ -61,12 +61,13 @@ public:
         maxCountByWeek  = 1;
         maxCountByMonth = 1;
         maxCountByYear  = 1;
-        dateMode        = TimeLineWidget::Month;
         topMargin       = 3;
         bottomMargin    = 20;
         barWidth        = 20;
         startPos        = 96;
         nbItems         = 10;
+        dateMode        = TimeLineWidget::Month;
+        scaleMode       = TimeLineWidget::LinScale;
     }
 
     bool                        validMouseEvent;   // Current mouse enter event is valid to set cursor position or selection.
@@ -98,6 +99,7 @@ public:
     QMap<int,         StatPair> yearStatMap;
 
     TimeLineWidget::DateMode    dateMode;
+    TimeLineWidget::ScaleMode   scaleMode;
 };
 
 TimeLineWidget::TimeLineWidget(QWidget *parent)
@@ -121,11 +123,10 @@ TimeLineWidget::~TimeLineWidget()
 
 void TimeLineWidget::setDateMode(DateMode dateMode)
 {
-    d->dateMode = dateMode;
+    d->dateMode   = dateMode;
     QDateTime ref = currentDateTime();
     setCurrentDateTime(ref);
     setRefDateTime(ref);
-
     updatePixmap();
     update();
 }
@@ -133,6 +134,18 @@ void TimeLineWidget::setDateMode(DateMode dateMode)
 TimeLineWidget::DateMode TimeLineWidget::dateMode() const
 {
     return d->dateMode;
+}
+
+void TimeLineWidget::setScaleMode(ScaleMode scaleMode)
+{
+    d->scaleMode = scaleMode;
+    updatePixmap();
+    update();
+}
+
+TimeLineWidget::ScaleMode TimeLineWidget::scaleMode() const
+{
+    return d->scaleMode;
 }
 
 void TimeLineWidget::setCurrentDateTime(const QDateTime& dateTime)
