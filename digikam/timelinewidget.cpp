@@ -82,6 +82,8 @@ public:
 
     QDateTime                   refDateTime;    // Reference date-time used to draw histogram from middle of widget.
     QDateTime                   selDateTime;    // Current date-time used to draw focus cursor.
+    QDateTime                   minDateTime;    // Higher date on histogram.
+    QDateTime                   maxDateTime;    // Lower date on histogram.
 
     QPixmap                     pixmap;
 
@@ -414,10 +416,18 @@ void TimeLineWidget::slotDatesMap(const QMap<QDateTime, int>& datesStatMap)
     // Parse all new Date stamp and store histogram stats relevant in maps.
 
     int count;
+    QMap<QDateTime, int>::const_iterator it;
+    d->minDateTime = datesStatMap.begin().key();
+    d->maxDateTime = datesStatMap.begin().key();
 
-    for ( QMap<QDateTime, int>::const_iterator it = datesStatMap.begin();
-          it != datesStatMap.end(); ++it )
+    for ( it = datesStatMap.begin(); it != datesStatMap.end(); ++it )
     {
+        if (it.key() > d->maxDateTime)
+            d->maxDateTime = it.key();
+
+        if (it.key() < d->minDateTime)
+            d->minDateTime = it.key();
+
         int year  = it.key().date().year();
         int month = it.key().date().month();
         int day   = KGlobal::locale()->calendar()->dayOfYear(it.key().date());
@@ -497,6 +507,11 @@ void TimeLineWidget::slotDatesMap(const QMap<QDateTime, int>& datesStatMap)
         if (d->maxCountByDay < count) 
             d->maxCountByDay = count;
     }
+
+    d->maxDateTime.setDate(QDate(d->maxDateTime.date().year()+1, 1, 1));
+    d->maxDateTime.setTime(QTime());
+    d->minDateTime.setDate(QDate(d->minDateTime.date().year(), 1, 1));
+    d->minDateTime.setTime(QTime());
 
     updatePixmap();
     update();
@@ -1058,17 +1073,27 @@ void TimeLineWidget::slotBackward()
             break;
         }
     }
+
+    if (ref < d->minDateTime)
+        ref = d->minDateTime;
+
     setRefDateTime(ref);
 }
 
 void TimeLineWidget::slotPrevious()
 {
-    setRefDateTime(prevDateTime(d->refDateTime));
+    QDateTime ref = prevDateTime(d->refDateTime);
+    if (ref < d->minDateTime)
+        ref = d->minDateTime;
+    setRefDateTime(ref);
 }
 
 void TimeLineWidget::slotNext()
 {
-    setRefDateTime(nextDateTime(d->refDateTime));
+    QDateTime ref = nextDateTime(d->refDateTime);
+    if (ref > d->maxDateTime)
+        ref = d->maxDateTime;
+    setRefDateTime(ref);
 }
 
 void TimeLineWidget::slotForward()
@@ -1102,6 +1127,10 @@ void TimeLineWidget::slotForward()
             break;
         }
     }
+
+    if (ref > d->maxDateTime)
+        ref = d->maxDateTime;
+
     setRefDateTime(ref);
 }
 
