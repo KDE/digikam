@@ -54,6 +54,7 @@ private slots:
     void slotCursorPositionChanged();
     void slotSelectionChanged();
     void slotQuerySearchKIOSlave();
+    void slotResetSelection();
 
 private:
 

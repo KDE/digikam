@@ -215,7 +215,7 @@ TimeLineView::TimeLineView(QWidget *parent)
             this, SLOT(slotQuerySearchKIOSlave()));
 
     connect(d->resetButton, SIGNAL(clicked()),
-            d->timeLineWidget, SLOT(slotResetSelection()));
+            this, SLOT(slotResetSelection()));
 }
 
 TimeLineView::~TimeLineView()
@@ -250,7 +250,7 @@ void TimeLineView::slotCursorPositionChanged()
 
 void TimeLineView::slotSelectionChanged()
 {
-    d->timer->start(500, true);
+    d->timer->start(100, true);
 }
 
 void TimeLineView::slotQuerySearchKIOSlave()
@@ -304,6 +304,12 @@ void TimeLineView::slotQuerySearchKIOSlave()
 
     SAlbum* album = AlbumManager::instance()->createSAlbum(url, false);
     AlbumManager::instance()->setCurrentAlbum(album);
+}
+
+void TimeLineView::slotResetSelection()
+{
+    d->timeLineWidget->resetSelection();
+    AlbumManager::instance()->setCurrentAlbum(0);
 }
 
 }  // NameSpace Digikam

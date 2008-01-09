@@ -72,6 +72,9 @@ public:
     int cursorInfo(QDateTime& start, QDateTime& end);
     DateRangeList currentSelectedDateRange(int& totalCoun);
 
+    void resetSelection();
+    void resetAllSelection();
+
 signals:
 
     void signalCursorPositionChanged();
@@ -79,8 +82,6 @@ signals:
 
 public slots:
 
-    void slotResetSelection();
-    void slotResetAllSelection();
     void slotDatesMap(const QMap<QDateTime, int>&);
     void slotPrevious();
     void slotNext();

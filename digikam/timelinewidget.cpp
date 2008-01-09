@@ -55,7 +55,8 @@ public:
 
     TimeLineWidgetPriv()
     {
-        selection       = false;
+        validMouseEvent = false;
+        selMouseEvent   = false;
         maxCountByDay   = 1;
         maxCountByWeek  = 1;
         maxCountByMonth = 1;
@@ -68,7 +69,8 @@ public:
         nbItems         = 10;
     }
 
-    bool                        selection;
+    bool                        validMouseEvent;   // Current mouse enter event is valid to set cursor position or selection.
+    bool                        selMouseEvent;     // Current mouse enter event is about to make a selection.
 
     int                         maxCountByDay;
     int                         maxCountByWeek;
@@ -221,22 +223,20 @@ int TimeLineWidget::cursorInfo(QDateTime& start, QDateTime& end)
     return statForDateTime(start, selected);
 }
 
-void TimeLineWidget::slotResetSelection()
+void TimeLineWidget::resetSelection()
 {
     resetSelection(d->dateMode);
     updatePixmap();
     update();
-    emit signalSelectionChanged();
 }
 
-void TimeLineWidget::slotResetAllSelection()
+void TimeLineWidget::resetAllSelection()
 {
     for (int i=(int)Day ; i<=(int)Year ; i++)
         resetSelection((TimeLineWidget::DateMode)i);
 
     updatePixmap();
     update();
-    emit signalSelectionChanged();
 }
 
 void TimeLineWidget::resetSelection(TimeLineWidget::DateMode mode)
@@ -1032,7 +1032,6 @@ void TimeLineWidget::setDateTimeSelected(const QDateTime& dt, bool selected)
 
     updatePixmap();
     update();
-    emit signalSelectionChanged();
 }
 
 void TimeLineWidget::paintEvent(QPaintEvent*)
@@ -1162,14 +1161,13 @@ void TimeLineWidget::mousePressEvent(QMouseEvent *e)
     {
         QPoint pt(e->x(), e->y());
 
-        bool selected;
         bool ctrlPressed    = e->state() & Qt::ControlButton;
-        QDateTime ref       = dateTimeForPoint(pt, selected);
+        QDateTime ref       = dateTimeForPoint(pt, d->selMouseEvent);
         d->selStartDateTime = QDateTime();
-        if (selected) 
+        if (d->selMouseEvent) 
         {
             if (!ctrlPressed)
-                slotResetSelection();
+                resetSelection();
 
             d->selStartDateTime = ref;
             d->selMinDateTime   = ref;
@@ -1181,21 +1179,20 @@ void TimeLineWidget::mousePressEvent(QMouseEvent *e)
             setCurrentDateTime(ref);
         }
 
-        d->selection = true;
+        d->validMouseEvent = true;
     }
 }
 
 void TimeLineWidget::mouseMoveEvent(QMouseEvent *e)
 {
-    if (d->selection == true)
+    if (d->validMouseEvent == true)
     {
         QPoint pt(e->x(), e->y());
 
-        bool selected;
-        bool ctrlPressed         = e->state() & Qt::ControlButton;
-        QDateTime selEndDateTime = dateTimeForPoint(pt, selected);
+        bool sel;
+        QDateTime selEndDateTime = dateTimeForPoint(pt, sel);
 
-        if (!selEndDateTime.isNull())
+        if (!selEndDateTime.isNull() && !d->selStartDateTime.isNull())
         {
             if (selEndDateTime > d->selStartDateTime && 
                 selEndDateTime > d->selMaxDateTime)
@@ -1217,13 +1214,10 @@ void TimeLineWidget::mouseMoveEvent(QMouseEvent *e)
             while(dt <= d->selMaxDateTime);
         }
 
-        if (selected)
+        if (d->selMouseEvent)
         {
             if (!d->selStartDateTime.isNull() && !selEndDateTime.isNull())
             {
-                if (!ctrlPressed)
-                    slotResetSelection();
-
                 QDateTime dt = d->selStartDateTime;
                 if (selEndDateTime > d->selStartDateTime)
                 {
@@ -1254,7 +1248,14 @@ void TimeLineWidget::mouseMoveEvent(QMouseEvent *e)
 
 void TimeLineWidget::mouseReleaseEvent(QMouseEvent*)
 {
-    d->selection = false;
+    d->validMouseEvent = false;
+
+    // Only dispatch changes about selection when user release mouse selection
+    // to prevent multiple queries on database.
+    if (d->selMouseEvent)
+            emit signalSelectionChanged();
+
+    d->selMouseEvent   = false;
 }
 
 QDateTime TimeLineWidget::dateTimeForPoint(const QPoint& pt, bool &isOnSelectionArea)
