@@ -395,18 +395,14 @@ void EditorWindow::setupStandardActions()
     connect(d->zoomCombo, SIGNAL(returnPressed(const QString&)),
             this, SLOT(slotZoomTextChanged(const QString &)) );
 
-
-#if KDE_IS_VERSION(3,2,0)
-    m_fullScreenAction = KStdAction::fullScreen(this, SLOT(slotToggleFullScreen()),
-                                                actionCollection(), this, "editorwindow_fullscreen");
-#else
-    m_fullScreenAction = new KToggleAction(i18n("Fullscreen"), "window_fullscreen",
+    // Do not use std KDE action for full screen because action text is too large for app. toolbar.
+    m_fullScreenAction = new KToggleAction(i18n("Full Screen"), "window_fullscreen",
                                            CTRL+SHIFT+Key_F, this,
                                            SLOT(slotToggleFullScreen()),
                                            actionCollection(), "editorwindow_fullscreen");
-#endif
+    m_fullScreenAction->setWhatsThis(i18n("Toggle the window to full screen mode"));
 
-    d->slideShowAction = new KAction(i18n("Slide Show"), "slideshow", Key_F9,
+    d->slideShowAction = new KAction(i18n("Slide"), "slideshow", Key_F9,
                                      this, SLOT(slotToggleSlideShow()),
                                      actionCollection(),"editorwindow_slideshow");
 
