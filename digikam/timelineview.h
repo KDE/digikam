@@ -47,20 +47,21 @@ public:
     TimeLineView(QWidget *parent=0);
     ~TimeLineView();
 
-    void setCurrentDateTime(const QDateTime& dateTime);
-
 private:
 
     DateRangeList SAlbumUrlToDateRangeList();
 
 private slots:
 
+    void slotScrollBarValueChanged(int);
+    void slotRefDateTimeChanged();
     void slotScaleChanged(int);
     void slotDateUnitChanged(int);
     void slotCursorPositionChanged();
     void slotSelectionChanged();
     void slotQuerySearchKIOSlave();
     void slotResetSelection();
+    void slotDateMapChanged();
 
 private:
 

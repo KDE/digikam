@@ -128,10 +128,8 @@ TimeLineWidget::~TimeLineWidget()
 
 void TimeLineWidget::setDateMode(DateMode dateMode)
 {
-    d->dateMode   = dateMode;
-    QDateTime ref = currentDateTime();
-    setCurrentDateTime(ref);
-    setRefDateTime(ref);
+    d->dateMode = dateMode;
+    setRefDateTime(d->refDateTime);
     updatePixmap();
     update();
 }
@@ -151,6 +149,65 @@ void TimeLineWidget::setScaleMode(ScaleMode scaleMode)
 TimeLineWidget::ScaleMode TimeLineWidget::scaleMode() const
 {
     return d->scaleMode;
+}
+
+int TimeLineWidget::totalIndex()
+{
+    if (d->minDateTime.isNull() || d->maxDateTime.isNull())
+        return 0;
+
+    int        i = 0;
+    QDateTime dt = d->minDateTime;
+
+    do
+    {
+        dt = nextDateTime(dt);
+        i++;
+    }
+    while(dt <= d->maxDateTime);
+
+    return i;
+}
+
+int TimeLineWidget::indexForDateTime(const QDateTime& date)
+{
+    if (d->minDateTime.isNull() || d->maxDateTime.isNull() || date.isNull())
+        return 0;
+
+    int        i = 0;
+    QDateTime dt = d->minDateTime;
+
+    do
+    {
+        dt = nextDateTime(dt);
+        i++;
+    }
+    while(dt < date);
+
+    return i;
+}
+
+int TimeLineWidget::indexForRefDateTime()
+{
+    return (indexForDateTime(d->refDateTime));
+}
+
+void TimeLineWidget::setCurrentIndex(int index)
+{
+    if (d->minDateTime.isNull() || d->maxDateTime.isNull())
+        return;
+
+    int        i = 0;
+    QDateTime dt = d->minDateTime;
+
+    do
+    {
+        dt = nextDateTime(dt);
+        i++;
+    }
+    while(i < index);
+
+    setRefDateTime(dt);
 }
 
 void TimeLineWidget::setCurrentDateTime(const QDateTime& dateTime)
@@ -229,6 +286,7 @@ void TimeLineWidget::setRefDateTime(const QDateTime& dateTime)
     d->refDateTime = dt;
     updatePixmap();
     update();
+    emit signalRefDateTimeChanged();
 }
 
 int TimeLineWidget::cursorInfo(QDateTime& start, QDateTime& end)
@@ -540,6 +598,7 @@ void TimeLineWidget::slotDatesMap(const QMap<QDateTime, int>& datesStatMap)
 
     updatePixmap();
     update();
+    emit signalDateMapChanged();
 }
 
 void TimeLineWidget::updatePixmap()

@@ -73,8 +73,6 @@ public:
     void setScaleMode(ScaleMode scaleMode);
     ScaleMode scaleMode() const;
 
-    void setRefDateTime(const QDateTime& dateTime);
-
     void setCurrentDateTime(const QDateTime& dateTime);
     QDateTime currentDateTime() const;
 
@@ -86,10 +84,16 @@ public:
     void resetSelection();
     void resetAllSelection();
 
+    int  totalIndex();
+    int  indexForRefDateTime();
+    void setCurrentIndex(int index);
+
 signals:
 
     void signalCursorPositionChanged();
     void signalSelectionChanged();
+    void signalRefDateTimeChanged();
+    void signalDateMapChanged();
 
 public slots:
 
@@ -105,9 +109,11 @@ private:
     QDateTime nextDateTime(const QDateTime& dt);
 
     int       maxCount();
+    int       indexForDateTime(const QDateTime& date);
     int       statForDateTime(const QDateTime& dt, bool& selected);
     void      setDateTimeSelected(const QDateTime& dt, bool selected);
     void      resetSelection(TimeLineWidget::DateMode mode);
+    void      setRefDateTime(const QDateTime& dateTime);
 
     void      updatePixmap();
     void      paintEvent(QPaintEvent*);

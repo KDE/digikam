@@ -26,11 +26,11 @@
 #include <qtimer.h>
 #include <qhbox.h>
 #include <qlayout.h>
-#include <qtoolbutton.h>
 #include <qcombobox.h>
 #include <qpushbutton.h>
 #include <qvaluelist.h>
 #include <qmap.h>
+#include <qscrollbar.h>
 
 // KDE include.
 
@@ -59,10 +59,6 @@ public:
 
     TimeLineViewPriv()
     {
-        backBtn        = 0;
-        prevBtn        = 0;
-        nextBtn        = 0;
-        forwBtn        = 0;
         dateModeCB     = 0;
         scaleModeCB    = 0;
         dRangeLabel    = 0;
@@ -71,12 +67,10 @@ public:
         timeLineWidget = 0;
         timer          = 0;
         resetButton    = 0;
+        scrollBar      = 0;
     }
 
-    QToolButton        *backBtn;
-    QToolButton        *prevBtn;
-    QToolButton        *nextBtn;
-    QToolButton        *forwBtn;
+    QScrollBar         *scrollBar;
 
     QTimer             *timer;
 
@@ -103,30 +97,11 @@ TimeLineView::TimeLineView(QWidget *parent)
 
     QGridLayout *grid = new QGridLayout(this, 3, 5);
     d->timeLineWidget = new TimeLineWidget(this);
-    d->backBtn        = new QToolButton(this);
-    d->prevBtn        = new QToolButton(this);
-    d->nextBtn        = new QToolButton(this);
-    d->forwBtn        = new QToolButton(this);
+    d->scrollBar      = new QScrollBar(this);
+    d->scrollBar->setOrientation(Qt::Horizontal);
+    d->scrollBar->setMinValue(0);
+    d->scrollBar->setLineStep(1);
 
-    d->backBtn->setIconSet(SmallIconSet("2leftarrow"));
-    d->backBtn->setAutoRaise(true);
-    d->backBtn->setAutoRepeat(true);
-    d->backBtn->setSizePolicy(QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Minimum));
-
-    d->prevBtn->setIconSet(SmallIconSet("1leftarrow"));
-    d->prevBtn->setAutoRaise(true);
-    d->prevBtn->setAutoRepeat(true);
-    d->prevBtn->setSizePolicy(QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Minimum));
-
-    d->nextBtn->setIconSet(SmallIconSet("1rightarrow"));
-    d->nextBtn->setAutoRaise(true);
-    d->nextBtn->setAutoRepeat(true);
-    d->nextBtn->setSizePolicy(QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Minimum));
-
-    d->forwBtn->setIconSet(SmallIconSet("2rightarrow"));
-    d->forwBtn->setAutoRaise(true);
-    d->forwBtn->setAutoRepeat(true);
-    d->forwBtn->setSizePolicy(QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Minimum));
 
     // ---------------------------------------------------------------
 
@@ -139,7 +114,7 @@ TimeLineView::TimeLineView(QWidget *parent)
     d->dateModeCB->insertItem(i18n("Week"),  TimeLineWidget::Week);
     d->dateModeCB->insertItem(i18n("Month"), TimeLineWidget::Month);
     d->dateModeCB->insertItem(i18n("Year"),  TimeLineWidget::Year);
-    d->dateModeCB->setCurrentItem((int)d->timeLineWidget->dateMode());
+    d->dateModeCB->setCurrentItem((int)TimeLineWidget::Month);
     d->dateModeCB->setFocusPolicy(QWidget::NoFocus);
 
     QLabel *label5 = new QLabel(i18n("Scale:"), info);
@@ -187,10 +162,7 @@ TimeLineView::TimeLineView(QWidget *parent)
     // ---------------------------------------------------------------
 
     grid->addMultiCellWidget(d->timeLineWidget, 0, 0, 0, 5);
-    grid->addMultiCellWidget(d->backBtn,        1, 1, 0, 0);
-    grid->addMultiCellWidget(d->prevBtn,        1, 1, 1, 1);
-    grid->addMultiCellWidget(d->nextBtn,        1, 1, 3, 3);
-    grid->addMultiCellWidget(d->forwBtn,        1, 1, 4, 4);
+    grid->addMultiCellWidget(d->scrollBar,      1, 1, 0, 4);
     grid->addMultiCellWidget(info,              2, 2, 0, 4);
     grid->setColStretch(2, 10);
     grid->setRowStretch(3, 10);
@@ -208,29 +180,26 @@ TimeLineView::TimeLineView(QWidget *parent)
     connect(d->scaleModeCB, SIGNAL(activated(int)),
             this, SLOT(slotScaleChanged(int)));
 
-    connect(d->backBtn, SIGNAL(clicked()),
-            d->timeLineWidget, SLOT(slotBackward()));
-
-    connect(d->prevBtn, SIGNAL(clicked()),
-            d->timeLineWidget, SLOT(slotPrevious()));
-
-    connect(d->nextBtn, SIGNAL(clicked()),
-            d->timeLineWidget, SLOT(slotNext()));
-
-    connect(d->forwBtn, SIGNAL(clicked()),
-            d->timeLineWidget, SLOT(slotForward()));
-
     connect(d->timeLineWidget, SIGNAL(signalCursorPositionChanged()),
             this, SLOT(slotCursorPositionChanged()));
 
     connect(d->timeLineWidget, SIGNAL(signalSelectionChanged()),
             this, SLOT(slotSelectionChanged()));
 
+    connect(d->timeLineWidget, SIGNAL(signalRefDateTimeChanged()),
+            this, SLOT(slotRefDateTimeChanged()));
+
+    connect(d->timeLineWidget, SIGNAL(signalDateMapChanged()),
+            this, SLOT(slotDateMapChanged()));
+
     connect(d->timer, SIGNAL(timeout()),
             this, SLOT(slotQuerySearchKIOSlave()));
 
     connect(d->resetButton, SIGNAL(clicked()),
             this, SLOT(slotResetSelection()));
+
+    connect(d->scrollBar, SIGNAL(valueChanged(int)),
+            this, SLOT(slotScrollBarValueChanged(int)));
 }
 
 TimeLineView::~TimeLineView()
@@ -239,15 +208,25 @@ TimeLineView::~TimeLineView()
     delete d;
 }
 
-void TimeLineView::setCurrentDateTime(const QDateTime& dateTime)
+void TimeLineView::slotDateMapChanged()
 {
-    d->timeLineWidget->setCurrentDateTime(dateTime);
-    d->timeLineWidget->setRefDateTime(dateTime);
+    slotDateUnitChanged(d->dateModeCB->currentItem());
+}
+
+void TimeLineView::slotRefDateTimeChanged()
+{
+    d->scrollBar->setValue(d->timeLineWidget->indexForRefDateTime());
 }
 
 void TimeLineView::slotDateUnitChanged(int mode)
 {
     d->timeLineWidget->setDateMode((TimeLineWidget::DateMode)mode);
+    d->scrollBar->setMaxValue(d->timeLineWidget->totalIndex());
+}
+
+void TimeLineView::slotScrollBarValueChanged(int val)
+{
+    d->timeLineWidget->setCurrentIndex(val);
 }
 
 void TimeLineView::slotScaleChanged(int mode)
