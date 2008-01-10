@@ -558,10 +558,10 @@ void TimeLineWidget::updatePixmap()
     int dim         = height() - d->bottomMargin - d->topMargin;
     QDateTime ref   = d->refDateTime;
     ref.setTime(QTime());
-    double max;
+    double max, logVal;
     int    val, top;
     bool   sel;
-    QRect  focusRect, selRect;
+    QRect  focusRect, selRect, barRect;
 
     // Date histogram drawing is divided in 2 parts. The current date-time 
     // is placed on the center of the view and all dates on right are computed,
@@ -572,18 +572,17 @@ void TimeLineWidget::updatePixmap()
     for (int i = 0 ; i < d->nbItems ; i++)
     {
         val = statForDateTime(ref, sel);
-
         max = (double)maxCount();
+
         if (d->scaleMode == TimeLineWidget::LogScale)
         {
-            if (max > 0.0)
-                max = log(max);
-            else
-                max = 1.0;
+            if (max > 0.0) max = log(max);
+            else           max = 1.0;
 
-            if (val <= 0) val = 1;
+            if (val <= 0) logVal = 0;
+            else          logVal = log(val);
 
-            top = (int)(dim + d->topMargin - ((log(val) * dim) / max));
+            top = (int)(dim + d->topMargin - ((logVal * dim) / max));
 
             if (top < 0) val = 0;
         }
@@ -592,7 +591,6 @@ void TimeLineWidget::updatePixmap()
             top = dim + d->topMargin - ((val * dim) / max);
         }
 
-        QRect barRect;
         barRect.setTop(top);
         barRect.setLeft(d->startPos + i*d->barWidth);
         barRect.setBottom(height() - d->bottomMargin);
@@ -734,18 +732,17 @@ void TimeLineWidget::updatePixmap()
     for (int i = 0 ; i < d->nbItems-1 ; i++)
     {
         val = statForDateTime(ref, sel);
-
         max = (double)maxCount();
+
         if (d->scaleMode == TimeLineWidget::LogScale)
         {
-            if (max > 0.0)
-                max = log(max);
-            else
-                max = 1.0;
+            if (max > 0.0) max = log(max);
+            else           max = 1.0;
 
-            if (val <= 0) val = 1;
+            if (val <= 0) logVal = 0;
+            else          logVal = log(val);
 
-            top = (int)(dim + d->topMargin - ((log(val) * dim) / max));
+            top = (int)(dim + d->topMargin - ((logVal * dim) / max));
 
             if (top < 0) val = 0;
         }
@@ -754,7 +751,6 @@ void TimeLineWidget::updatePixmap()
             top = dim + d->topMargin - ((val * dim) / max);
         }
 
-        QRect barRect;
         barRect.setTop(top);
         barRect.setRight(d->startPos - i*d->barWidth);
         barRect.setBottom(height() - d->bottomMargin);
