@@ -37,6 +37,7 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kcalendarsystem.h>
+#include <kglobalsettings.h>
 
 // Local includes.
 
@@ -186,8 +187,6 @@ void TimeLineWidget::setCurrentDateTime(const QDateTime& dateTime)
         return;
 
     d->selDateTime = dt;
-    updatePixmap();
-    update();
 
     emit signalCursorPositionChanged();
 }
@@ -1087,9 +1086,6 @@ void TimeLineWidget::setDateTimeSelected(const QDateTime& dt, bool selected)
             break;
         }
     }
-
-    updatePixmap();
-    update();
 }
 
 void TimeLineWidget::paintEvent(QPaintEvent*)
@@ -1238,6 +1234,8 @@ void TimeLineWidget::mousePressEvent(QMouseEvent *e)
         }
 
         d->validMouseEvent = true;
+        updatePixmap();
+        update();
     }
 }
 
@@ -1301,6 +1299,9 @@ void TimeLineWidget::mouseMoveEvent(QMouseEvent *e)
         {
             setCurrentDateTime(selEndDateTime);
         }
+
+        updatePixmap();
+        update();
     }
 }
 
@@ -1321,12 +1322,15 @@ QDateTime TimeLineWidget::dateTimeForPoint(const QPoint& pt, bool &isOnSelection
     QRect barRect, selRect;
     isOnSelectionArea = false;
 
-    // Check on the left of reference date.
+    // Check on the right of reference date.
 
     QDateTime ref = d->refDateTime;
     ref.setTime(QTime());
 
-    for (int i = 0 ; i < d->nbItems ; i++)
+    QRect deskRect = KGlobalSettings::desktopGeometry(this);
+    int items = deskRect.width() / d->barWidth;
+
+    for (int i = 0 ; i < items ; i++)
     {
         barRect.setTop(0);
         barRect.setLeft(d->startPos + i*d->barWidth);
@@ -1342,18 +1346,28 @@ QDateTime TimeLineWidget::dateTimeForPoint(const QPoint& pt, bool &isOnSelection
             isOnSelectionArea = true;
 
         if (barRect.contains(pt) || selRect.contains(pt))
+        {
+            if (i >= d->nbItems)
+            {
+                // Point is outside visible widget area.
+
+                for (int j = i-d->nbItems ; j < i ; j++)
+                    slotNext();
+            }
+
             return ref;
+        }
 
         ref = nextDateTime(ref);
     }
 
-    // Check on the right of reference date.
+    // Check on the left of reference date.
 
     ref = d->refDateTime;
     ref.setTime(QTime());
     ref = prevDateTime(ref);
 
-    for (int i = 0 ; i < d->nbItems-1 ; i++)
+    for (int i = 0 ; i < items ; i++)
     {
         barRect.setTop(0);
         barRect.setRight(d->startPos - i*d->barWidth);
@@ -1369,7 +1383,17 @@ QDateTime TimeLineWidget::dateTimeForPoint(const QPoint& pt, bool &isOnSelection
             isOnSelectionArea = true;
 
         if (barRect.contains(pt) || selRect.contains(pt))
+        {
+            if (i >= d->nbItems-1)
+            {
+                // Point is outside visible widget area.
+
+                for (int j = i-d->nbItems-1 ; j < i ; j++)
+                    slotPrevious();
+            }
+
             return ref;
+        }
 
         ref = prevDateTime(ref);
     }
