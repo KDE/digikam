@@ -79,7 +79,9 @@ public:
     QDateTime currentDateTime() const;
 
     int cursorInfo(QDateTime& start, QDateTime& end);
-    DateRangeList currentSelectedDateRange(int& totalCoun);
+
+    void setSelectedDateRange(const DateRangeList& list);
+    DateRangeList selectedDateRange(int& totalCoun);
 
     void resetSelection();
     void resetAllSelection();
@@ -110,7 +112,7 @@ private:
     void      updatePixmap();
     void      paintEvent(QPaintEvent*);
     void      resizeEvent(QResizeEvent*);
-    void      wheelEvent(QWheelEvent* e); 
+    void      wheelEvent(QWheelEvent*); 
 
     void      mousePressEvent(QMouseEvent*);
     void      mouseMoveEvent(QMouseEvent*);

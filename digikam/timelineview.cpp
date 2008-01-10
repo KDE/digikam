@@ -276,7 +276,7 @@ void TimeLineView::slotQuerySearchKIOSlave()
 {
     int totalCount = 0;
     QDateTime start, end;
-    DateRangeList list = d->timeLineWidget->currentSelectedDateRange(totalCount);
+    DateRangeList list = d->timeLineWidget->selectedDateRange(totalCount);
     d->totalLabel->setText(QString::number(totalCount));
 
     if (list.isEmpty())

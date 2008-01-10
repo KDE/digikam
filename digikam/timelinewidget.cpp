@@ -298,7 +298,13 @@ void TimeLineWidget::resetSelection(TimeLineWidget::DateMode mode)
         }
     }
 }
-DateRangeList TimeLineWidget::currentSelectedDateRange(int& totalCount)
+
+void TimeLineWidget::setSelectedDateRange(const DateRangeList& list)
+{
+    // TODO
+}
+
+DateRangeList TimeLineWidget::selectedDateRange(int& totalCount)
 {
     totalCount = 0;
     DateRangeList list;
