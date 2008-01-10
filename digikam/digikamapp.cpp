@@ -820,7 +820,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->slideShowAction = new KActionMenu(KIcon("view-presentation"), i18n("Slide Show"), this);
+    d->slideShowAction = new KActionMenu(KIcon("view-presentation"), i18n("Slide"), this);
     d->slideShowAction->setDelayed(false);
     actionCollection()->addAction("slideshow", d->slideShowAction);
 
@@ -910,7 +910,7 @@ void DigikamApp::setupActions()
 
     QAction* findAction = actionCollection()->addAction(KStandardAction::Find, "search_quick",
                                                         d->view, SLOT(slotNewQuickSearch()));
-    findAction->setText(i18n("Quick Search..."));
+    findAction->setText(i18n("Search..."));
     findAction->setIcon(BarIcon("system-search"));
 
     // -----------------------------------------------------------

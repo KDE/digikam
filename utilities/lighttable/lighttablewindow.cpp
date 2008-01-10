@@ -440,7 +440,7 @@ void LightTableWindow::setupActions()
     d->fullScreenAction = actionCollection()->addAction(KStandardAction::FullScreen,
                           "lighttable_fullscreen", this, SLOT(slotToggleFullScreen()));
 
-    d->slideShowAction = new KAction(KIcon("view-presentation"), i18n("Slide Show"), this);
+    d->slideShowAction = new KAction(KIcon("view-presentation"), i18n("Slide"), this);
     d->slideShowAction->setShortcut(Qt::Key_F9);
     connect(d->slideShowAction, SIGNAL(triggered()), this, SLOT(slotToggleSlideShow()));
     actionCollection()->addAction("lighttable_slideshow", d->slideShowAction);
