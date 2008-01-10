@@ -1349,10 +1349,8 @@ QDateTime TimeLineWidget::dateTimeForPoint(const QPoint& pt, bool &isOnSelection
         {
             if (i >= d->nbItems)
             {
-                // Point is outside visible widget area.
-
-                for (int j = i-d->nbItems ; j < i ; j++)
-                    slotNext();
+                // Point is outside visible widget area. We scrolling widget contents.
+                slotNext();
             }
 
             return ref;
@@ -1386,10 +1384,8 @@ QDateTime TimeLineWidget::dateTimeForPoint(const QPoint& pt, bool &isOnSelection
         {
             if (i >= d->nbItems-1)
             {
-                // Point is outside visible widget area.
-
-                for (int j = i-d->nbItems-1 ; j < i ; j++)
-                    slotPrevious();
+                // Point is outside visible widget area. We scrolling widget contents.
+                slotPrevious();
             }
 
             return ref;
