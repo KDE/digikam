@@ -27,10 +27,11 @@
 // Qt includes.
 
 #include <qdatetime.h>
-#include <qvaluelist.h>
-#include <qmap.h>
-#include <qdatetime.h>
 #include <qframe.h>
+
+// Local includes.
+
+#include "timelinewidget.h"
 
 namespace Digikam
 {
@@ -47,6 +48,10 @@ public:
     ~TimeLineView();
 
     void setCurrentDateTime(const QDateTime& dateTime);
+
+private:
+
+    DateRangeList SAlbumUrlToDateRangeList();
 
 private slots:
 

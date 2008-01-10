@@ -29,6 +29,8 @@
 #include <qtoolbutton.h>
 #include <qcombobox.h>
 #include <qpushbutton.h>
+#include <qvaluelist.h>
+#include <qmap.h>
 
 // KDE include.
 
@@ -44,7 +46,6 @@
 #include "album.h"
 #include "albummanager.h"
 #include "ddebug.h"
-#include "timelinewidget.h"
 #include "timelineview.h"
 #include "timelineview.moc"
 
@@ -323,6 +324,11 @@ void TimeLineView::slotQuerySearchKIOSlave()
 
     SAlbum* album = AlbumManager::instance()->createSAlbum(url, false);
     AlbumManager::instance()->setCurrentAlbum(album);
+}
+
+DateRangeList TimeLineView::SAlbumUrlToDateRangeList()
+{
+    // TODO
 }
 
 void TimeLineView::slotResetSelection()
