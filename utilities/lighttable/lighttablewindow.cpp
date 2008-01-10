@@ -342,15 +342,17 @@ void LightTableWindow::setupActions()
                                 actionCollection(), "lighttable_last");
     d->lastAction->setEnabled(false);
 
-    d->setItemLeftAction = new KAction(i18n("Show item on left panel"), "previous",
+    d->setItemLeftAction = new KAction(i18n("On Left"), "previous",
                                        CTRL+Key_L, this, SLOT(slotSetItemLeft()),
                                        actionCollection(), "lighttable_setitemleft");
     d->setItemLeftAction->setEnabled(false);
+    d->setItemLeftAction->setWhatsThis(i18n("Show item on left panel"));
 
-    d->setItemRightAction = new KAction(i18n("Show item on right panel"), "next",
+    d->setItemRightAction = new KAction(i18n("On Right"), "next",
                                        CTRL+Key_R, this, SLOT(slotSetItemRight()),
                                        actionCollection(), "lighttable_setitemright");
     d->setItemRightAction->setEnabled(false);
+    d->setItemRightAction->setWhatsThis(i18n("Show item on right panel"));
 
     d->editItemAction = new KAction(i18n("Edit"), "editimage",
                                        Key_F4, this, SLOT(slotEditItem()),
@@ -377,17 +379,19 @@ void LightTableWindow::setupActions()
 
     // -- Standard 'View' menu actions ---------------------------------------------
 
-    d->syncPreviewAction = new KToggleAction(i18n("Synchronize Preview"), "goto",
+    d->syncPreviewAction = new KToggleAction(i18n("Synchronize"), "goto",
                                             CTRL+SHIFT+Key_Y, this,
                                             SLOT(slotToggleSyncPreview()),
                                             actionCollection(), "lighttable_syncpreview");
     d->syncPreviewAction->setEnabled(false);
+    d->syncPreviewAction->setWhatsThis(i18n("Synchronize preview from left and right panels"));
 
-    d->navigateByPairAction = new KToggleAction(i18n("Navigate by Pair"), "kcmsystem",
+    d->navigateByPairAction = new KToggleAction(i18n("By Pair"), "kcmsystem",
                                             CTRL+SHIFT+Key_P, this,
                                             SLOT(slotToggleNavigateByPair()),
                                             actionCollection(), "lighttable_navigatebypair");
     d->navigateByPairAction->setEnabled(false);
+    d->navigateByPairAction->setWhatsThis(i18n("Navigate by pair with all items"));
 
     d->zoomPlusAction = KStdAction::zoomIn(d->previewView, SLOT(slotIncreaseZoom()),
                                           actionCollection(), "lighttable_zoomplus");
@@ -406,17 +410,14 @@ void LightTableWindow::setupActions()
                                            CTRL+SHIFT+Key_E, this, SLOT(slotFitToWindow()),
                                            actionCollection(), "lighttable_zoomfit2window");
 
-#if KDE_IS_VERSION(3,2,0)
-    d->fullScreenAction = KStdAction::fullScreen(this, SLOT(slotToggleFullScreen()),
-                                                 actionCollection(), this, "lighttable_fullscreen");
-#else
-    d->fullScreenAction = new KToggleAction(i18n("Fullscreen"), "window_fullscreen",
+    // Do not use std KDE action for full screen because action text is too large for app. toolbar.
+    d->fullScreenAction = new KToggleAction(i18n("Full Screen"), "window_fullscreen",
                                             CTRL+SHIFT+Key_F, this,
                                             SLOT(slotToggleFullScreen()),
                                             actionCollection(), "lighttable_fullscreen");
-#endif
+    d->fullScreenAction->setWhatsThis(i18n("Toggle the window to full screen mode"));
 
-    d->slideShowAction = new KAction(i18n("Slide Show"), "slideshow", Key_F9,
+    d->slideShowAction = new KAction(i18n("Slide"), "slideshow", Key_F9,
                                      this, SLOT(slotToggleSlideShow()),
                                      actionCollection(),"lighttable_slideshow");
 
