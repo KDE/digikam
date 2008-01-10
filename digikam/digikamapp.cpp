@@ -520,7 +520,7 @@ void DigikamApp::setupActions()
     connect(d->forwardActionMenu->popupMenu(), SIGNAL(activated(int)),
             d->view, SLOT(slotAlbumHistoryForward(int)));
 
-    d->newAction = new KAction(i18n("&New Album..."),
+    d->newAction = new KAction(i18n("&New..."),
                                    "albumfolder-new",
                                    KStdAccel::shortcut(KStdAccel::New),
                                    d->view,
@@ -594,7 +594,7 @@ void DigikamApp::setupActions()
                                     actionCollection(),
                                     "album_importFolder");
 
-    d->propsEditAction = new KAction( i18n("Album Properties..."),
+    d->propsEditAction = new KAction( i18n("Properties..."),
                                     "albumfolder-properties",
                                     0,
                                     d->view,
@@ -882,10 +882,7 @@ void DigikamApp::setupActions()
                                    actionCollection(), 
                                    "album_zoomfit2window");
 
-#if KDE_IS_VERSION(3,2,0)
-    d->fullScreenAction = KStdAction::fullScreen(this, SLOT(slotToggleFullScreen()),
-                                                 actionCollection(), this, "full_screen");
-#else
+    // Do not use std KDE action for full screen because action text is too large for app. toolbar.
     d->fullScreenAction = new KToggleAction(i18n("Full Screen"),
                                    "window_fullscreen",
                                    CTRL+SHIFT+Key_F,
@@ -893,10 +890,9 @@ void DigikamApp::setupActions()
                                    SLOT(slotToggleFullScreen()),
                                    actionCollection(),
                                    "full_screen");
-    d->fullScreenAction->setWhatsThis(i18n("Toggle the main window to full screen mode"));
-#endif
+    d->fullScreenAction->setWhatsThis(i18n("Toggle the window to full screen mode"));
 
-    d->slideShowAction = new KActionMenu(i18n("Slide Show"), "slideshow",
+    d->slideShowAction = new KActionMenu(i18n("Slide"), "slideshow",
                                          actionCollection(), "slideshow");
 
     d->slideShowAction->setDelayed(false);
@@ -981,7 +977,7 @@ void DigikamApp::setupActions()
 
     KAction* findAction = KStdAction::find(d->view, SLOT(slotNewQuickSearch()),
                                            actionCollection(), "search_quick");
-    findAction->setText(i18n("Quick Search..."));
+    findAction->setText(i18n("Search..."));
     findAction->setIconSet(BarIcon("filefind"));
 
     KAction* advFindAction = KStdAction::find(d->view, SLOT(slotNewAdvancedSearch()),
