@@ -325,12 +325,28 @@ void TimeLineWidget::resetSelection()
 
 void TimeLineWidget::setSelectedDateRange(const DateRangeList& list)
 {
-    // TODO
+    if (list.isEmpty())
+        return;
+
+    resetSelection();
+
+    QDateTime start, end;
+    DateRangeList::const_iterator it;
+
+    for (it = list.begin() ; it != list.end(); ++it)
+    {
+        start = (*it).first;
+        end   = (*it).second;
+        setDaysRangeSelection(start, end, Selected);
+    }
+
+    updatePixmap();
+    update();
 }
 
 DateRangeList TimeLineWidget::selectedDateRange(int& totalCount)
 {
-    // We wil parse all selected done on days stats map.
+    // We will parse all selected done on days stats map.
 
     DateRangeList list;
     totalCount = 0;
