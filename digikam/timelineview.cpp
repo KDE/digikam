@@ -214,7 +214,6 @@ TimeLineView::~TimeLineView()
 void TimeLineView::slotDateMapChanged()
 {
     slotDateUnitChanged(d->dateModeCB->currentItem());
-    slotAllAlbumsLoaded();
 }
 
 void TimeLineView::slotRefDateTimeChanged()
