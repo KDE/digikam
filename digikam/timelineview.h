@@ -47,10 +47,6 @@ public:
     TimeLineView(QWidget *parent=0);
     ~TimeLineView();
 
-private:
-
-    DateRangeList SAlbumUrlToDateRangeList();
-
 private slots:
 
     void slotScrollBarValueChanged(int);
@@ -62,6 +58,7 @@ private slots:
     void slotQuerySearchKIOSlave();
     void slotResetSelection();
     void slotDateMapChanged();
+    void slotAllAlbumsLoaded();
 
 private:
 

@@ -171,6 +171,9 @@ TimeLineView::TimeLineView(QWidget *parent)
 
     // ---------------------------------------------------------------
 
+    connect(AlbumManager::instance(), SIGNAL(signalAllAlbumsLoaded()),
+            d->timeLineWidget, SLOT(slotAllAlbumsLoaded()));
+
     connect(AlbumManager::instance(), SIGNAL(signalDatesMapDirty(const QMap<QDateTime, int>&)),
             d->timeLineWidget, SLOT(slotDatesMap(const QMap<QDateTime, int>&)));
 
@@ -211,6 +214,7 @@ TimeLineView::~TimeLineView()
 void TimeLineView::slotDateMapChanged()
 {
     slotDateUnitChanged(d->dateModeCB->currentItem());
+    slotAllAlbumsLoaded();
 }
 
 void TimeLineView::slotRefDateTimeChanged()
@@ -307,9 +311,63 @@ void TimeLineView::slotQuerySearchKIOSlave()
     AlbumManager::instance()->setCurrentAlbum(album);
 }
 
-DateRangeList TimeLineView::SAlbumUrlToDateRangeList()
+void TimeLineView::slotAllAlbumsLoaded()
 {
-    // TODO
+    // Date Search url for KIO-Slave is something like that :
+    // digikamsearch:1 AND 2 OR 3 AND 4 OR 5 AND 6?
+    //               1.key=imagedate&1.op=GT&1.val=2006-02-06&
+    //               2.key=imagedate&2.op=LT&2.val=2006-02-07&
+    //               3.key=imagedate&3.op=GT&3.val=2006-02-10&
+    //               4.key=imagedate&4.op=LT&4.val=2006-02-11&
+    //               5.key=imagedate&5.op=GT&5.val=2006-02-12&
+    //               6.key=imagedate&6.op=LT&6.val=2006-02-13&
+    //               name=TimeLineSelection&
+    //               count=6
+
+    SAlbum *salbum  = 0;
+    AlbumList sList = AlbumManager::instance()->allSAlbums();
+    AlbumList::iterator it;
+    for (it = sList.begin(); it != sList.end(); ++it)
+    {
+        salbum = (SAlbum*)(*it);
+        if (salbum)
+        {
+            if (salbum->title() == QString("TimeLineSelection"))
+                break;
+        }
+    }
+
+    if (it == sList.end()) return;
+
+    KURL url = salbum->kurl();
+    QMap<QString, QString> queries = url.queryItems();
+    if (queries.isEmpty()) return;
+
+    QMap<QString, QString>::iterator it2;
+    QString       key;
+    QDateTime     start, end;
+    DateRangeList list;
+    for (uint i = 1 ; i <= queries.count() ; i+=2)
+    {
+        key = QString("%1.val").arg(QString::number(i));
+        it2 = queries.find(key);
+        if (it2 != queries.end())
+            start = QDateTime(QDate::fromString(it2.data(), Qt::ISODate));
+
+        key = QString("%1.val").arg(QString::number(i+1));
+        it2 = queries.find(key);
+        if (it2 != queries.end())
+            end = QDateTime(QDate::fromString(it2.data(), Qt::ISODate));
+
+        list.append(DateRange(start, end));
+    }
+
+    DateRangeList::iterator it3;
+    for (it3 = list.begin() ; it3 != list.end(); ++it3)
+        DDebug() << (*it3).first.date().toString(Qt::ISODate) << " :: " 
+                 << (*it3).second.date().toString(Qt::ISODate) << endl;
+
+    d->timeLineWidget->setSelectedDateRange(list);
 }
 
 void TimeLineView::slotResetSelection()
