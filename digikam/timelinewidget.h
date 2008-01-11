@@ -56,10 +56,17 @@ public:
         Year
     };
 
+    enum SelectionMode
+    {
+        Unselected=0,      // No selection.
+        FuzzySelection,    // Partially selected.
+        Selected           // Fully selected.
+    };
+
     enum ScaleMode
     {
-        LinScale=0,      // Linear scale.
-        LogScale         // Logarithmic scale.
+        LinScale=0,        // Linear scale.
+        LogScale           // Logarithmic scale.
     };
 
 public:
@@ -110,8 +117,8 @@ private:
 
     int       maxCount();
     int       indexForDateTime(const QDateTime& date);
-    int       statForDateTime(const QDateTime& dt, bool& selected);
-    void      setDateTimeSelected(const QDateTime& dt, bool selected);
+    int       statForDateTime(const QDateTime& dt, SelectionMode& selected);
+    void      setDateTimeSelected(const QDateTime& dt, SelectionMode selected);
     void      resetSelection(TimeLineWidget::DateMode mode);
     void      setRefDateTime(const QDateTime& dateTime);
 
