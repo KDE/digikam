@@ -85,11 +85,9 @@ public:
 
     int cursorInfo(QDateTime& start, QDateTime& end);
 
-    void setSelectedDateRange(const DateRangeList& list);
+    /** Return a list of Date-Range based on selection performed on days-map */
     DateRangeList selectedDateRange(int& totalCoun);
-
-    void resetSelection();
-    void resetAllSelection();
+    void setSelectedDateRange(const DateRangeList& list);
 
     int  totalIndex();
     int  indexForRefDateTime();
@@ -109,30 +107,34 @@ public slots:
     void slotNext();
     void slotBackward();
     void slotForward();
+    void slotResetSelection();
 
 private:
 
-    QDateTime prevDateTime(const QDateTime& dt);
-    QDateTime nextDateTime(const QDateTime& dt);
+    QDateTime     prevDateTime(const QDateTime& dt);
+    QDateTime     nextDateTime(const QDateTime& dt);
 
-    int       maxCount();
-    int       indexForDateTime(const QDateTime& date);
-    int       statForDateTime(const QDateTime& dt, SelectionMode& selected);
-    void      setDateTimeSelected(const QDateTime& dt, SelectionMode selected);
-    void      resetSelection(TimeLineWidget::DateMode mode);
-    void      setRefDateTime(const QDateTime& dateTime);
+    int           maxCount();
+    int           indexForDateTime(const QDateTime& date);
+    int           statForDateTime(const QDateTime& dt, SelectionMode& selected);
+    void          setRefDateTime(const QDateTime& dateTime);
 
-    void      updatePixmap();
-    void      paintEvent(QPaintEvent*);
-    void      resizeEvent(QResizeEvent*);
-    void      wheelEvent(QWheelEvent*); 
+    void          updatePixmap();
+    void          paintEvent(QPaintEvent*);
+    void          resizeEvent(QResizeEvent*);
+    void          wheelEvent(QWheelEvent*); 
 
-    void      mousePressEvent(QMouseEvent*);
-    void      mouseMoveEvent(QMouseEvent*);
-    void      mouseReleaseEvent(QMouseEvent*);
+    void          mousePressEvent(QMouseEvent*);
+    void          mouseMoveEvent(QMouseEvent*);
+    void          mouseReleaseEvent(QMouseEvent*);
 
-    QDateTime dateTimeForPoint(const QPoint& pt, bool &isOnSelectionArea);
-    QDateTime firstDayOfWeek(int year, int weekNumber);
+    QDateTime     dateTimeForPoint(const QPoint& pt, bool &isOnSelectionArea);
+    QDateTime     firstDayOfWeek(int year, int weekNumber);
+
+    void          resetSelection();
+    void          setDateTimeSelected(const QDateTime& dt, SelectionMode selected);
+    void          setDaysRangeSelection(const QDateTime dts, const QDateTime dte, SelectionMode selected);
+    SelectionMode checkDaysRangeForSelection(const QDateTime dts, const QDateTime dte);
 
 private:
 

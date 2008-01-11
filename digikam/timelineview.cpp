@@ -265,6 +265,8 @@ void TimeLineView::slotQuerySearchKIOSlave()
         return;
     }
 
+    // We will make now the Url for digiKam Search KIO-Slave
+
     KURL url;
     url.setProtocol("digikamsearch");
 
@@ -312,7 +314,7 @@ DateRangeList TimeLineView::SAlbumUrlToDateRangeList()
 
 void TimeLineView::slotResetSelection()
 {
-    d->timeLineWidget->resetSelection();
+    d->timeLineWidget->slotResetSelection();
     AlbumManager::instance()->setCurrentAlbum(0);
 }
 

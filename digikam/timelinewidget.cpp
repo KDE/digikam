@@ -297,63 +297,30 @@ int TimeLineWidget::cursorInfo(QDateTime& start, QDateTime& end)
     return statForDateTime(start, selected);
 }
 
+void TimeLineWidget::slotResetSelection()
+{
+    resetSelection();
+    updatePixmap();
+    update();
+}
+
 void TimeLineWidget::resetSelection()
 {
-    resetSelection(d->dateMode);
-    updatePixmap();
-    update();
-}
+    QMap<TimeLineWidgetPriv::YearRefPair, TimeLineWidgetPriv::StatPair>::iterator it;
 
-void TimeLineWidget::resetAllSelection()
-{
-    for (int i=(int)Day ; i<=(int)Year ; i++)
-        resetSelection((TimeLineWidget::DateMode)i);
+    for (it = d->dayStatMap.begin() ; it != d->dayStatMap.end(); ++it)
+        it.data().second = Unselected;
 
-    updatePixmap();
-    update();
-}
+    for (it = d->weekStatMap.begin() ; it != d->weekStatMap.end(); ++it)
+        it.data().second = Unselected;
 
-void TimeLineWidget::resetSelection(TimeLineWidget::DateMode mode)
-{
-    switch(mode)
-    {
-        case Day:
-        {
-            QMap<TimeLineWidgetPriv::YearRefPair, TimeLineWidgetPriv::StatPair>::iterator it;
+    for (it = d->monthStatMap.begin() ; it != d->monthStatMap.end(); ++it)
+        it.data().second = Unselected;
 
-            for (it = d->dayStatMap.begin() ; it != d->dayStatMap.end(); ++it)
-                it.data().second = Unselected;
+    QMap<int, TimeLineWidgetPriv::StatPair>::iterator it2;
 
-            break;
-        }
-        case Week:
-        {
-            QMap<TimeLineWidgetPriv::YearRefPair, TimeLineWidgetPriv::StatPair>::iterator it;
-
-            for (it = d->weekStatMap.begin() ; it != d->weekStatMap.end(); ++it)
-                it.data().second = Unselected;
-
-            break;
-        }
-        case Month:
-        {
-            QMap<TimeLineWidgetPriv::YearRefPair, TimeLineWidgetPriv::StatPair>::iterator it;
-
-            for (it = d->monthStatMap.begin() ; it != d->monthStatMap.end(); ++it)
-                it.data().second = Unselected;
-
-            break;
-        }
-        case Year:
-        {
-            QMap<int, TimeLineWidgetPriv::StatPair>::iterator it;
-
-            for (it = d->yearStatMap.begin() ; it != d->yearStatMap.end(); ++it)
-                it.data().second = Unselected;
-
-            break;
-        }
-    }
+    for (it2 = d->yearStatMap.begin() ; it2 != d->yearStatMap.end(); ++it2)
+        it2.data().second = Unselected;
 }
 
 void TimeLineWidget::setSelectedDateRange(const DateRangeList& list)
@@ -363,89 +330,34 @@ void TimeLineWidget::setSelectedDateRange(const DateRangeList& list)
 
 DateRangeList TimeLineWidget::selectedDateRange(int& totalCount)
 {
-    totalCount = 0;
+    // We wil parse all selected done on days stats map.
+
     DateRangeList list;
+    totalCount = 0;
+    QMap<TimeLineWidgetPriv::YearRefPair, TimeLineWidgetPriv::StatPair>::iterator it3;
 
-    switch(d->dateMode)
+    for (it3 = d->dayStatMap.begin() ; it3 != d->dayStatMap.end(); ++it3)
     {
-        case Day:
+        if (it3.data().second == Selected)
         {
-            QMap<TimeLineWidgetPriv::YearRefPair, TimeLineWidgetPriv::StatPair>::iterator it;
-
-            for (it = d->dayStatMap.begin() ; it != d->dayStatMap.end(); ++it)
-            {
-                if (it.data().second == Selected)
-                {
-                    QDate date(it.key().first, 1, 1);
-                    date = date.addDays(it.key().second-1);
-                    QDateTime sdt(date);
-                    QDateTime edt = nextDateTime(sdt); 
-                    list.append(DateRange(sdt, edt));
-                    totalCount += it.data().first;
-                }
-            }
-            break;
-        }
-        case Week:
-        {
-            QMap<TimeLineWidgetPriv::YearRefPair, TimeLineWidgetPriv::StatPair>::iterator it;
-
-            for (it = d->weekStatMap.begin() ; it != d->weekStatMap.end(); ++it)
-            {
-                if (it.data().second == Selected)
-                {
-                    QDateTime sdt = firstDayOfWeek(it.key().first, it.key().second);
-                    QDateTime edt = nextDateTime(sdt); 
-                    list.append(DateRange(sdt, edt));
-                    totalCount += it.data().first;
-                }
-            }
-            break;
-        }
-        case Month:
-        {
-            QMap<TimeLineWidgetPriv::YearRefPair, TimeLineWidgetPriv::StatPair>::iterator it;
-
-            for (it = d->monthStatMap.begin() ; it != d->monthStatMap.end(); ++it)
-            {
-                if (it.data().second == Selected)
-                {
-                    QDate date(it.key().first, it.key().second, 1);
-                    QDateTime sdt(date);
-                    QDateTime edt = nextDateTime(sdt); 
-                    list.append(DateRange(sdt, edt));
-                    totalCount += it.data().first;
-                }
-            }
-            break;
-        }
-        case Year:
-        {
-            QMap<int, TimeLineWidgetPriv::StatPair>::iterator it;
-
-            for (it = d->yearStatMap.begin() ; it != d->yearStatMap.end(); ++it)
-            {
-                if (it.data().second == Selected)
-                {
-                    QDate date(it.key(), 1, 1);
-                    QDateTime sdt(date);
-                    QDateTime edt = nextDateTime(sdt); 
-                    list.append(DateRange(sdt, edt));
-                    totalCount += it.data().first;
-                }
-            }
-            break;
+            QDate date(it3.key().first, 1, 1);
+            date = date.addDays(it3.key().second-1);
+            QDateTime sdt(date);
+            QDateTime edt = nextDateTime(sdt); 
+            list.append(DateRange(sdt, edt));
+            totalCount += it3.data().first;
         }
     }
 
     DateRangeList::iterator it, it2;
+
     for (it = list.begin() ; it != list.end(); ++it)
         DDebug() << (*it).first.date().toString(Qt::ISODate) << " :: " 
                  << (*it).second.date().toString(Qt::ISODate) << endl;
 
     DDebug() << "Total Count of Items = " << totalCount << endl;
 
-    // Group contiguous date ranges to optimize query to database.
+    // Group contiguous date ranges to optimize query on database.
 
     DateRangeList list2;
     QDateTime     first, second;
@@ -1122,40 +1034,117 @@ void TimeLineWidget::setDateTimeSelected(const QDateTime& dt, SelectionMode sele
     int day   = KGlobal::locale()->calendar()->dayOfYear(dt.date());
     int week  = KGlobal::locale()->calendar()->weekNumber(dt.date());
 
+    QMap<TimeLineWidgetPriv::YearRefPair, TimeLineWidgetPriv::StatPair>::iterator it;
+    QMap<int, TimeLineWidgetPriv::StatPair>::iterator it2;
+    QDateTime dts, dte;
+
     switch(d->dateMode)
     {
         case Day:
         {
-            QMap<TimeLineWidgetPriv::YearRefPair, TimeLineWidgetPriv::StatPair>::iterator it =
-                d->dayStatMap.find(TimeLineWidgetPriv::YearRefPair(year, day));
+            it = d->dayStatMap.find(TimeLineWidgetPriv::YearRefPair(year, day));
             if ( it != d->dayStatMap.end() )
                 it.data().second = selected;
             break;
         }
         case Week:
         {
-            QMap<TimeLineWidgetPriv::YearRefPair, TimeLineWidgetPriv::StatPair>::iterator it =
-                d->weekStatMap.find(TimeLineWidgetPriv::YearRefPair(year, week));
-            if ( it != d->weekStatMap.end() )
-                it.data().second = selected;
+            dts = firstDayOfWeek(year, week);
+            dte = dts.addDays(7);
+            setDaysRangeSelection(dts, dte, selected);
             break;
         }
         case Month:
         {
-            QMap<TimeLineWidgetPriv::YearRefPair, TimeLineWidgetPriv::StatPair>::iterator it =
-                d->monthStatMap.find(TimeLineWidgetPriv::YearRefPair(year, month));
-            if ( it != d->monthStatMap.end() )
-                it.data().second = selected;
+            dts = QDateTime(QDate(year, month, 1));
+            dte = dts.addDays(KGlobal::locale()->calendar()->daysInMonth(dts.date()));
+            setDaysRangeSelection(dts, dte, selected);
             break;
         }
         case Year:
         {
-            QMap<int, TimeLineWidgetPriv::StatPair>::iterator it = d->yearStatMap.find(year);
-            if ( it != d->yearStatMap.end() )
-                it.data().second = selected;
+            dts = QDateTime(QDate(year, 1, 1));
+            dte = dts.addDays(KGlobal::locale()->calendar()->daysInYear(dts.date()));
+            setDaysRangeSelection(dts, dte, selected);
             break;
         }
     }
+
+    // Update Week stats map
+
+    dts = firstDayOfWeek(year, week);
+    dte = dts.addDays(7);
+    it  = d->weekStatMap.find(TimeLineWidgetPriv::YearRefPair(year, week));
+    if ( it != d->weekStatMap.end() )
+        it.data().second = checkDaysRangeForSelection(dts, dte);
+
+    // Update Month stats map
+
+    dts = QDateTime(QDate(year, month, 1));
+    dte = dts.addDays(KGlobal::locale()->calendar()->daysInMonth(dts.date()));
+    it = d->monthStatMap.find(TimeLineWidgetPriv::YearRefPair(year, month));
+    if ( it != d->monthStatMap.end() )
+        it.data().second = checkDaysRangeForSelection(dts, dte);
+
+    // Update Year stats map
+
+    dts = QDateTime(QDate(year, 1, 1));
+    dte = dts.addDays(KGlobal::locale()->calendar()->daysInYear(dts.date()));
+    it2 = d->yearStatMap.find(year);
+    if ( it2 != d->yearStatMap.end() )
+        it2.data().second = checkDaysRangeForSelection(dts, dte);
+}
+
+void TimeLineWidget::setDaysRangeSelection(const QDateTime dts, const QDateTime dte, SelectionMode selected)
+{
+    int year, day;
+    QDateTime dt = dts;
+    QMap<TimeLineWidgetPriv::YearRefPair, TimeLineWidgetPriv::StatPair>::iterator it;
+
+    do
+    {
+        year = dt.date().year();
+        day  = KGlobal::locale()->calendar()->dayOfYear(dt.date());
+        it = d->dayStatMap.find(TimeLineWidgetPriv::YearRefPair(year, day));
+        if ( it != d->dayStatMap.end() )
+            it.data().second = selected;
+
+        dt = dt.addDays(1);
+    }
+    while(dt <= dte);
+}
+
+TimeLineWidget::SelectionMode TimeLineWidget::checkDaysRangeForSelection(const QDateTime dts, const QDateTime dte)
+{
+    int year, day;
+    int delta         = dts.daysTo(dte);
+    int count         = 0;
+    SelectionMode sel = Unselected;
+    QDateTime dt      = dts;
+    QMap<TimeLineWidgetPriv::YearRefPair, TimeLineWidgetPriv::StatPair>::iterator it;
+
+    do
+    {
+        year = dt.date().year();
+        day  = KGlobal::locale()->calendar()->dayOfYear(dt.date());
+
+        it = d->dayStatMap.find(TimeLineWidgetPriv::YearRefPair(year, day));
+        if ( it != d->dayStatMap.end() )
+        {
+            if (it.data().second != Unselected)
+            {
+                sel = FuzzySelection;
+                count++;
+            }
+        }
+        dt = dt.addDays(1);
+    }
+    while (dt <= dte);
+
+    if (count == delta)
+        sel = Selected;
+
+    return sel;
 }
 
 void TimeLineWidget::paintEvent(QPaintEvent*)
@@ -1484,6 +1473,7 @@ QDateTime TimeLineWidget::firstDayOfWeek(int year, int weekNumber)
             return dt;
         }
     }
+
     return QDateTime();
 }
 
