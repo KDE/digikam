@@ -172,7 +172,7 @@ TimeLineView::TimeLineView(QWidget *parent)
     // ---------------------------------------------------------------
 
     connect(AlbumManager::instance(), SIGNAL(signalAllAlbumsLoaded()),
-            d->timeLineWidget, SLOT(slotAllAlbumsLoaded()));
+            this, SLOT(slotAllAlbumsLoaded()));
 
     connect(AlbumManager::instance(), SIGNAL(signalDatesMapDirty(const QMap<QDateTime, int>&)),
             d->timeLineWidget, SLOT(slotDatesMap(const QMap<QDateTime, int>&)));
