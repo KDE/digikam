@@ -330,14 +330,23 @@ void TimeLineWidget::setSelectedDateRange(const DateRangeList& list)
 
     resetSelection();
 
-    QDateTime start, end;
+    QDateTime start, end, dt;
     DateRangeList::const_iterator it;
 
     for (it = list.begin() ; it != list.end(); ++it)
     {
         start = (*it).first;
         end   = (*it).second;
-        setDaysRangeSelection(start, end, Selected);
+        if (end > start)
+        {
+            dt = start;
+            do
+            {
+                setDateTimeSelected(dt, Selected);
+                dt = dt.addDays(1);
+            }
+            while (dt < end);
+        }        
     }
 
     updatePixmap();
@@ -1127,7 +1136,7 @@ void TimeLineWidget::setDaysRangeSelection(const QDateTime dts, const QDateTime 
 
         dt = dt.addDays(1);
     }
-    while(dt <= dte);
+    while(dt < dte);
 }
 
 TimeLineWidget::SelectionMode TimeLineWidget::checkDaysRangeForSelection(const QDateTime dts, const QDateTime dte)
@@ -1155,7 +1164,7 @@ TimeLineWidget::SelectionMode TimeLineWidget::checkDaysRangeForSelection(const Q
         }
         dt = dt.addDays(1);
     }
-    while (dt <= dte);
+    while (dt < dte);
 
     if (count == delta)
         sel = Selected;

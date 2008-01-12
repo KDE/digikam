@@ -171,8 +171,8 @@ TimeLineView::TimeLineView(QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    connect(AlbumManager::instance(), SIGNAL(signalAllAlbumsLoaded()),
-            this, SLOT(slotAllAlbumsLoaded()));
+    connect(d->timeLineWidget, SIGNAL(signalDateMapChanged()),
+            this, SLOT(slotDateMapLoaded()));
 
     connect(AlbumManager::instance(), SIGNAL(signalDatesMapDirty(const QMap<QDateTime, int>&)),
             d->timeLineWidget, SLOT(slotDatesMap(const QMap<QDateTime, int>&)));
@@ -310,7 +310,7 @@ void TimeLineView::slotQuerySearchKIOSlave()
     AlbumManager::instance()->setCurrentAlbum(album);
 }
 
-void TimeLineView::slotAllAlbumsLoaded()
+void TimeLineView::dateSearchUrlToDateRangeList()
 {
     // Date Search url for KIO-Slave is something like that :
     // digikamsearch:1 AND 2 OR 3 AND 4 OR 5 AND 6?
@@ -342,21 +342,27 @@ void TimeLineView::slotAllAlbumsLoaded()
     QMap<QString, QString> queries = url.queryItems();
     if (queries.isEmpty()) return;
 
+    DDebug() << url << endl;
+
     QMap<QString, QString>::iterator it2;
     QString       key;
     QDateTime     start, end;
     DateRangeList list;
-    for (uint i = 1 ; i <= queries.count() ; i+=2)
+    for (uint i = 1 ; i <= (queries.count()/2)-4 ; i+=2)
     {
         key = QString("%1.val").arg(QString::number(i));
         it2 = queries.find(key);
         if (it2 != queries.end())
             start = QDateTime(QDate::fromString(it2.data(), Qt::ISODate));
 
+        DDebug() << key << " :: " << it2.data() << endl;
+
         key = QString("%1.val").arg(QString::number(i+1));
         it2 = queries.find(key);
         if (it2 != queries.end())
             end = QDateTime(QDate::fromString(it2.data(), Qt::ISODate));
+
+        DDebug() << key << " :: " << it2.data() << endl;
 
         list.append(DateRange(start, end));
     }
@@ -367,6 +373,13 @@ void TimeLineView::slotAllAlbumsLoaded()
                  << (*it3).second.date().toString(Qt::ISODate) << endl;
 
     d->timeLineWidget->setSelectedDateRange(list);
+}
+
+void TimeLineView::slotDateMapLoaded()
+{
+    dateSearchUrlToDateRangeList();
+    disconnect(d->timeLineWidget, SIGNAL(signalDateMapChanged()),
+               this, SLOT(slotDateMapLoaded()));
 }
 
 void TimeLineView::slotResetSelection()
