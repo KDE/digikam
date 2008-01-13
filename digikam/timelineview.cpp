@@ -28,9 +28,12 @@
 #include <qlayout.h>
 #include <qcombobox.h>
 #include <qpushbutton.h>
+#include <qhbuttongroup.h> 
 #include <qvaluelist.h>
 #include <qmap.h>
 #include <qscrollbar.h>
+#include <qwhatsthis.h>
+#include <qtooltip.h>
 
 // KDE include.
 
@@ -40,6 +43,7 @@
 #include <kiconloader.h>
 #include <kapplication.h>
 #include <ksqueezedtextlabel.h>
+#include <kstandarddirs.h>
 
 // Local includes.
 
@@ -60,7 +64,7 @@ public:
     TimeLineViewPriv()
     {
         dateModeCB     = 0;
-        scaleModeCB    = 0;
+        scaleBG        = 0;
         dRangeLabel    = 0;
         itemsLabel     = 0;
         totalLabel     = 0;
@@ -75,7 +79,8 @@ public:
     QTimer             *timer;
 
     QComboBox          *dateModeCB;
-    QComboBox          *scaleModeCB;
+
+    QHButtonGroup      *scaleBG;
 
     QPushButton        *resetButton;
 
@@ -95,21 +100,10 @@ TimeLineView::TimeLineView(QWidget *parent)
     setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     setLineWidth(1);
 
-    QGridLayout *grid = new QGridLayout(this, 3, 5);
-    d->timeLineWidget = new TimeLineWidget(this);
-    d->scrollBar      = new QScrollBar(this);
-    d->scrollBar->setOrientation(Qt::Horizontal);
-    d->scrollBar->setMinValue(0);
-    d->scrollBar->setLineStep(1);
+    QGridLayout *grid = new QGridLayout(this, 4, 3);
 
-
-    // ---------------------------------------------------------------
-
-    QWidget *info      = new QWidget(this);
-    QGridLayout *grid2 = new QGridLayout(info, 7, 2);
-
-    QLabel *label1 = new QLabel(i18n("Time Units:"), info);
-    d->dateModeCB  = new QComboBox(false, info);
+    QLabel *label1 = new QLabel(i18n("Time Unit:"), this);
+    d->dateModeCB  = new QComboBox(false, this);
     d->dateModeCB->insertItem(i18n("Day"),   TimeLineWidget::Day);
     d->dateModeCB->insertItem(i18n("Week"),  TimeLineWidget::Week);
     d->dateModeCB->insertItem(i18n("Month"), TimeLineWidget::Month);
@@ -117,14 +111,42 @@ TimeLineView::TimeLineView(QWidget *parent)
     d->dateModeCB->setCurrentItem((int)TimeLineWidget::Month);
     d->dateModeCB->setFocusPolicy(QWidget::NoFocus);
 
-    QLabel *label5 = new QLabel(i18n("Scale:"), info);
-    d->scaleModeCB = new QComboBox(false, info);
-    d->scaleModeCB->insertItem(i18n("Linear"),      TimeLineWidget::LinScale);
-    d->scaleModeCB->insertItem(i18n("Logarithmic"), TimeLineWidget::LogScale);
-    d->scaleModeCB->setCurrentItem((int)d->timeLineWidget->scaleMode());
-    d->scaleModeCB->setFocusPolicy(QWidget::NoFocus);
+    d->scaleBG = new QHButtonGroup(this);
+    d->scaleBG->setExclusive(true);
+    d->scaleBG->setFrameShape(QFrame::NoFrame);
+    d->scaleBG->setInsideMargin( 0 );
+    QWhatsThis::add( d->scaleBG, i18n("<p>Select here the histogram scale.<p>"
+                                      "If the date count's maximal values are small, you can use the linear scale.<p>"
+                                      "Logarithmic scale can be used when the maximal values are big; "
+                                      "if it is used, all values (small and large) will be visible on the "
+                                      "graph."));
 
-    KSeparator *line1 = new KSeparator(Horizontal, info);
+    QPushButton *linHistoButton = new QPushButton( d->scaleBG );
+    QToolTip::add( linHistoButton, i18n( "<p>Linear" ) );
+    d->scaleBG->insert(linHistoButton, TimeLineWidget::LinScale);
+    KGlobal::dirs()->addResourceType("histogram-lin", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    QString directory = KGlobal::dirs()->findResourceDir("histogram-lin", "histogram-lin.png");
+    linHistoButton->setPixmap( QPixmap( directory + "histogram-lin.png" ) );
+    linHistoButton->setToggleButton(true);
+
+    QPushButton *logHistoButton = new QPushButton( d->scaleBG );
+    QToolTip::add( logHistoButton, i18n( "<p>Logarithmic" ) );
+    d->scaleBG->insert(logHistoButton, TimeLineWidget::LogScale);
+    KGlobal::dirs()->addResourceType("histogram-log", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    directory = KGlobal::dirs()->findResourceDir("histogram-log", "histogram-log.png");
+    logHistoButton->setPixmap( QPixmap( directory + "histogram-log.png" ) );
+    logHistoButton->setToggleButton(true);
+
+    d->timeLineWidget = new TimeLineWidget(this);
+    d->scrollBar      = new QScrollBar(this);
+    d->scrollBar->setOrientation(Qt::Horizontal);
+    d->scrollBar->setMinValue(0);
+    d->scrollBar->setLineStep(1);
+
+    // ---------------------------------------------------------------
+
+    QWidget *info      = new QWidget(this);
+    QGridLayout *grid2 = new QGridLayout(info, 4, 2);
 
     QLabel *label2 = new QLabel(i18n("Date:"), info);
     d->dRangeLabel = new KSqueezedTextLabel(0, info);
@@ -142,30 +164,28 @@ TimeLineView::TimeLineView(QWidget *parent)
 
     d->resetButton = new QPushButton(i18n("&Reset Selection"), info);
 
-    grid2->addMultiCellWidget(label1,          0, 0, 0, 0);
-    grid2->addMultiCellWidget(d->dateModeCB,   0, 0, 2, 2);
-    grid2->addMultiCellWidget(label5,          1, 1, 0, 0);
-    grid2->addMultiCellWidget(d->scaleModeCB,  1, 1, 2, 2);
-    grid2->addMultiCellWidget(line1,           2, 2, 0, 2);
-    grid2->addMultiCellWidget(label2,          3, 3, 0, 0);
-    grid2->addMultiCellWidget(d->dRangeLabel,  3, 3, 1, 2);
-    grid2->addMultiCellWidget(label3,          4, 4, 0, 0);
-    grid2->addMultiCellWidget(d->itemsLabel ,  4, 4, 2, 2);
-    grid2->addMultiCellWidget(line2,           5, 5, 0, 2);
-    grid2->addMultiCellWidget(label4,          6, 6, 0, 0);
-    grid2->addMultiCellWidget(d->totalLabel ,  6, 6, 2, 2);
-    grid2->addMultiCellWidget(d->resetButton , 7, 7, 0, 0);
+    grid2->addMultiCellWidget(label2,          0, 0, 0, 0);
+    grid2->addMultiCellWidget(d->dRangeLabel,  0, 0, 1, 2);
+    grid2->addMultiCellWidget(label3,          1, 1, 0, 0);
+    grid2->addMultiCellWidget(d->itemsLabel ,  1, 1, 2, 2);
+    grid2->addMultiCellWidget(line2,           2, 2, 0, 2);
+    grid2->addMultiCellWidget(label4,          3, 3, 0, 0);
+    grid2->addMultiCellWidget(d->totalLabel ,  3, 3, 2, 2);
+    grid2->addMultiCellWidget(d->resetButton , 4, 4, 0, 0);
     grid2->setColStretch(1, 10);
     grid2->setMargin(0);
     grid2->setSpacing(KDialog::spacingHint());
 
     // ---------------------------------------------------------------
 
-    grid->addMultiCellWidget(d->timeLineWidget, 0, 0, 0, 5);
-    grid->addMultiCellWidget(d->scrollBar,      1, 1, 0, 4);
-    grid->addMultiCellWidget(info,              2, 2, 0, 4);
+    grid->addMultiCellWidget(label1,            0, 0, 0, 0);
+    grid->addMultiCellWidget(d->dateModeCB,     0, 0, 1, 1);
+    grid->addMultiCellWidget(d->scaleBG,        0, 0, 3, 3);
+    grid->addMultiCellWidget(d->timeLineWidget, 1, 1, 0, 4);
+    grid->addMultiCellWidget(d->scrollBar,      2, 2, 0, 3);
+    grid->addMultiCellWidget(info,              3, 3, 0, 3);
     grid->setColStretch(2, 10);
-    grid->setRowStretch(3, 10);
+    grid->setRowStretch(4, 10);
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
 
@@ -180,7 +200,7 @@ TimeLineView::TimeLineView(QWidget *parent)
     connect(d->dateModeCB, SIGNAL(activated(int)),
             this, SLOT(slotDateUnitChanged(int)));
 
-    connect(d->scaleModeCB, SIGNAL(activated(int)),
+    connect(d->scaleBG, SIGNAL(released(int)),
             this, SLOT(slotScaleChanged(int)));
 
     connect(d->timeLineWidget, SIGNAL(signalCursorPositionChanged()),
