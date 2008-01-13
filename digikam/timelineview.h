@@ -49,6 +49,8 @@ public:
 
 private: 
 
+    void readConfig();
+    void writeConfig();
     void dateSearchUrlToDateRangeList();
 
 private slots:

@@ -39,6 +39,7 @@
 
 #include <kseparator.h>
 #include <klocale.h>
+#include <kconfig.h>
 #include <kdialog.h>
 #include <kiconloader.h>
 #include <kapplication.h>
@@ -223,12 +224,34 @@ TimeLineView::TimeLineView(QWidget *parent)
 
     connect(d->scrollBar, SIGNAL(valueChanged(int)),
             this, SLOT(slotScrollBarValueChanged(int)));
+
+    // ---------------------------------------------------------------
+
+    readConfig();
 }
 
 TimeLineView::~TimeLineView()
 {
+    writeConfig();
     delete d->timer;
     delete d;
+}
+
+void TimeLineView::readConfig()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("TimeLine SideBar");
+    d->dateModeCB->setCurrentItem(config->readNumEntry("Histogram TimeUnit", TimeLineWidget::Month));
+    d->scaleBG->setButton(config->readNumEntry("Histogram Scale", TimeLineWidget::LinScale));
+}
+
+void TimeLineView::writeConfig()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("TimeLine SideBar");
+    config->writeEntry("Histogram TimeUnit", d->dateModeCB->currentItem());
+    config->writeEntry("Histogram Scale", d->scaleBG->selectedId());
+    config->sync();
 }
 
 void TimeLineView::slotDateMapChanged()
