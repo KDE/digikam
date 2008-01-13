@@ -130,8 +130,6 @@ void TimeLineWidget::setDateMode(DateMode dateMode)
 {
     d->dateMode = dateMode;
     setRefDateTime(d->refDateTime);
-    updatePixmap();
-    update();
 }
 
 TimeLineWidget::DateMode TimeLineWidget::dateMode() const
