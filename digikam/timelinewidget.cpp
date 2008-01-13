@@ -253,6 +253,14 @@ QDateTime TimeLineWidget::cursorDateTime() const
     return d->cursorDateTime;
 }
 
+int TimeLineWidget::cursorInfo(QDateTime& start, QDateTime& end)
+{
+    SelectionMode selected;
+    start = cursorDateTime();
+    end   = nextDateTime(start);
+    return statForDateTime(start, selected);
+}
+
 void TimeLineWidget::setRefDateTime(const QDateTime& dateTime)
 {
     QDateTime dt = dateTime;
@@ -287,14 +295,6 @@ void TimeLineWidget::setRefDateTime(const QDateTime& dateTime)
     updatePixmap();
     update();
     emit signalRefDateTimeChanged();
-}
-
-int TimeLineWidget::cursorInfo(QDateTime& start, QDateTime& end)
-{
-    SelectionMode selected;
-    start = cursorDateTime();
-    end   = nextDateTime(start);
-    return statForDateTime(start, selected);
 }
 
 void TimeLineWidget::slotResetSelection()
