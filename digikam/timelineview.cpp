@@ -261,13 +261,13 @@ void TimeLineView::slotDateMapChanged()
 
 void TimeLineView::slotRefDateTimeChanged()
 {
+    d->scrollBar->setMaxValue(d->timeLineWidget->totalIndex());
     d->scrollBar->setValue(d->timeLineWidget->indexForRefDateTime());
 }
 
 void TimeLineView::slotDateUnitChanged(int mode)
 {
     d->timeLineWidget->setDateMode((TimeLineWidget::DateMode)mode);
-    d->scrollBar->setMaxValue(d->timeLineWidget->totalIndex());
 }
 
 void TimeLineView::slotScrollBarValueChanged(int val)
