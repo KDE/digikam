@@ -1101,7 +1101,7 @@ void TimeLineWidget::setDateTimeSelected(const QDateTime& dt, SelectionMode sele
     dte = dts.addDays(7);
     it  = d->weekStatMap.find(TimeLineWidgetPriv::YearRefPair(year, week));
     if ( it != d->weekStatMap.end() )
-        it.data().second = checkDaysRangeForSelection(dts, dte);
+        it.data().second = checkSelectionForDaysRange(dts, dte);
 
     // Update Month stats map
 
@@ -1109,7 +1109,7 @@ void TimeLineWidget::setDateTimeSelected(const QDateTime& dt, SelectionMode sele
     dte = dts.addDays(KGlobal::locale()->calendar()->daysInMonth(dts.date()));
     it = d->monthStatMap.find(TimeLineWidgetPriv::YearRefPair(year, month));
     if ( it != d->monthStatMap.end() )
-        it.data().second = checkDaysRangeForSelection(dts, dte);
+        it.data().second = checkSelectionForDaysRange(dts, dte);
 
     // Update Year stats map
 
@@ -1117,7 +1117,7 @@ void TimeLineWidget::setDateTimeSelected(const QDateTime& dt, SelectionMode sele
     dte = dts.addDays(KGlobal::locale()->calendar()->daysInYear(dts.date()));
     it2 = d->yearStatMap.find(year);
     if ( it2 != d->yearStatMap.end() )
-        it2.data().second = checkDaysRangeForSelection(dts, dte);
+        it2.data().second = checkSelectionForDaysRange(dts, dte);
 }
 
 void TimeLineWidget::setDaysRangeSelection(const QDateTime dts, const QDateTime dte, SelectionMode selected)
@@ -1139,12 +1139,12 @@ void TimeLineWidget::setDaysRangeSelection(const QDateTime dts, const QDateTime 
     while(dt < dte);
 }
 
-TimeLineWidget::SelectionMode TimeLineWidget::checkDaysRangeForSelection(const QDateTime dts, const QDateTime dte)
+TimeLineWidget::SelectionMode TimeLineWidget::checkSelectionForDaysRange(const QDateTime dts, const QDateTime dte)
 {
     int year, day;
-    int delta         = dts.daysTo(dte);
-    int count         = 0;
-    SelectionMode sel = Unselected;
+    int items         = 0;
+    int itemsFuz      = 0;
+    int itemsSel      = 0;
     QDateTime dt      = dts;
     QMap<TimeLineWidgetPriv::YearRefPair, TimeLineWidgetPriv::StatPair>::iterator it;
 
@@ -1156,20 +1156,33 @@ TimeLineWidget::SelectionMode TimeLineWidget::checkDaysRangeForSelection(const Q
         it = d->dayStatMap.find(TimeLineWidgetPriv::YearRefPair(year, day));
         if ( it != d->dayStatMap.end() )
         {
+            items++;
+
             if (it.data().second != Unselected)
             {
-                sel = FuzzySelection;
-                count++;
+                if (it.data().second == FuzzySelection)
+                    itemsFuz++;
+                else
+                    itemsSel++;
             }
         }
         dt = dt.addDays(1);
     }
     while (dt < dte);
 
-    if (count == delta)
-        sel = Selected;
+    if (items == 0)
+        return Unselected;
 
-    return sel;
+    if (itemsFuz == 0 && itemsSel == 0)
+        return Unselected;
+
+    if (itemsFuz > 0)
+        return FuzzySelection;
+
+    if (items > itemsSel)
+        return FuzzySelection;
+
+    return Selected;
 }
 
 void TimeLineWidget::paintEvent(QPaintEvent*)

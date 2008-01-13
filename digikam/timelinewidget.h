@@ -134,7 +134,7 @@ private:
     void          resetSelection();
     void          setDateTimeSelected(const QDateTime& dt, SelectionMode selected);
     void          setDaysRangeSelection(const QDateTime dts, const QDateTime dte, SelectionMode selected);
-    SelectionMode checkDaysRangeForSelection(const QDateTime dts, const QDateTime dte);
+    SelectionMode checkSelectionForDaysRange(const QDateTime dts, const QDateTime dte);
 
 private:
 
