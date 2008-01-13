@@ -80,8 +80,8 @@ public:
     void setScaleMode(ScaleMode scaleMode);
     ScaleMode scaleMode() const;
 
-    void setCurrentDateTime(const QDateTime& dateTime);
-    QDateTime currentDateTime() const;
+    void setCursorDateTime(const QDateTime& dateTime);
+    QDateTime cursorDateTime() const;
 
     int cursorInfo(QDateTime& start, QDateTime& end);
 

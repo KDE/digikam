@@ -89,7 +89,7 @@ public:
     int                         startPos;
 
     QDateTime                   refDateTime;       // Reference date-time used to draw histogram from middle of widget.
-    QDateTime                   selDateTime;       // Current date-time used to draw focus cursor.
+    QDateTime                   cursorDateTime;    // Current date-time used to draw focus cursor.
     QDateTime                   minDateTime;       // Higher date on histogram.
     QDateTime                   maxDateTime;       // Lower date on histogram.
     QDateTime                   selStartDateTime;
@@ -117,7 +117,7 @@ TimeLineWidget::TimeLineWidget(QWidget *parent)
     setMinimumHeight(192);
 
     QDateTime ref = QDateTime::currentDateTime();
-    setCurrentDateTime(ref);
+    setCursorDateTime(ref);
     setRefDateTime(ref);
 }
 
@@ -210,7 +210,7 @@ void TimeLineWidget::setCurrentIndex(int index)
     setRefDateTime(dt);
 }
 
-void TimeLineWidget::setCurrentDateTime(const QDateTime& dateTime)
+void TimeLineWidget::setCursorDateTime(const QDateTime& dateTime)
 {
     QDateTime dt = dateTime;
     dt.setTime(QTime());
@@ -240,17 +240,17 @@ void TimeLineWidget::setCurrentDateTime(const QDateTime& dateTime)
             break;
     }
 
-    if (d->selDateTime == dt)
+    if (d->cursorDateTime == dt)
         return;
 
-    d->selDateTime = dt;
+    d->cursorDateTime = dt;
 
     emit signalCursorPositionChanged();
 }
 
-QDateTime TimeLineWidget::currentDateTime() const
+QDateTime TimeLineWidget::cursorDateTime() const
 {
-    return d->selDateTime;
+    return d->cursorDateTime;
 }
 
 void TimeLineWidget::setRefDateTime(const QDateTime& dateTime)
@@ -292,7 +292,7 @@ void TimeLineWidget::setRefDateTime(const QDateTime& dateTime)
 int TimeLineWidget::cursorInfo(QDateTime& start, QDateTime& end)
 {
     SelectionMode selected;
-    start = currentDateTime();
+    start = cursorDateTime();
     end   = nextDateTime(start);
     return statForDateTime(start, selected);
 }
@@ -592,7 +592,7 @@ void TimeLineWidget::updatePixmap()
         barRect.setBottom(height() - d->bottomMargin);
         barRect.setRight(d->startPos + (i+1)*d->barWidth);
 
-        if (ref == d->selDateTime)
+        if (ref == d->cursorDateTime)
             focusRect = barRect;
 
         p.setPen(palette().active().foreground());
@@ -757,7 +757,7 @@ void TimeLineWidget::updatePixmap()
         barRect.setBottom(height() - d->bottomMargin);
         barRect.setLeft(d->startPos - (i+1)*d->barWidth);
 
-        if (ref == d->selDateTime)
+        if (ref == d->cursorDateTime)
             focusRect = barRect;
 
         p.setPen(palette().active().foreground());
@@ -1327,7 +1327,7 @@ void TimeLineWidget::mousePressEvent(QMouseEvent *e)
         }
         else if (!ref.isNull())
         {
-            setCurrentDateTime(ref);
+            setCursorDateTime(ref);
         }
 
         d->validMouseEvent = true;
@@ -1394,7 +1394,7 @@ void TimeLineWidget::mouseMoveEvent(QMouseEvent *e)
         }
         else if (!selEndDateTime.isNull())
         {
-            setCurrentDateTime(selEndDateTime);
+            setCursorDateTime(selEndDateTime);
         }
 
         updatePixmap();
