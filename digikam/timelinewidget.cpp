@@ -823,17 +823,17 @@ void TimeLineWidget::updatePixmap()
 
                 if (week == 1 || week == 10 || week == 20 || week == 30 || week == 40 || week == 50)
                 {
-                    p.drawLine(barRect.right(), barRect.bottom(), 
-                               barRect.right(), barRect.bottom()+d->bottomMargin/2);
+                    p.drawLine(barRect.left(), barRect.bottom(), 
+                               barRect.left(), barRect.bottom()+d->bottomMargin/2);
                     QString txt = KGlobal::locale()->formatDate(ref.date(), true);
                     QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt); 
                     if (week != 50)
-                        p.drawText(barRect.right()-br.width()/2, barRect.bottom() + d->bottomMargin, txt);
+                        p.drawText(barRect.left()-br.width()/2, barRect.bottom() + d->bottomMargin, txt);
                 }
                 else if (week == 6 || week == 16 || week == 26 || week == 36 || week == 46)
                 {
-                    p.drawLine(barRect.right(), barRect.bottom(), 
-                               barRect.right(), barRect.bottom()+d->bottomMargin/4);
+                    p.drawLine(barRect.left(), barRect.bottom(), 
+                               barRect.left(), barRect.bottom()+d->bottomMargin/4);
                 }
                 break;
             }
