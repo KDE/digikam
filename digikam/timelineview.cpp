@@ -188,7 +188,7 @@ TimeLineView::TimeLineView(QWidget *parent)
     grid->addMultiCellWidget(label1,                0, 0, 0, 0);
     grid->addMultiCellWidget(d->dateModeCB,         0, 0, 1, 1);
     grid->addMultiCellWidget(d->scaleBG,            0, 0, 3, 3);
-    grid->addMultiCellWidget(d->timeLineWidget,     1, 1, 0, 4);
+    grid->addMultiCellWidget(d->timeLineWidget,     1, 1, 0, 3);
     grid->addMultiCellWidget(d->scrollBar,          2, 2, 0, 3);
     grid->addMultiCellWidget(info,                  3, 3, 0, 3);
     grid->addMultiCellWidget(d->timeLineFolderView, 4, 4, 0, 3);
