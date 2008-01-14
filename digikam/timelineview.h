@@ -27,7 +27,7 @@
 // Qt includes.
 
 #include <qdatetime.h>
-#include <qframe.h>
+#include <qwidget.h>
 
 // Local includes.
 
@@ -39,7 +39,7 @@ namespace Digikam
 class TimeLineViewPriv;
 class TimeLineFolderView;
 
-class TimeLineView : public QFrame
+class TimeLineView : public QWidget
 {
     Q_OBJECT
 

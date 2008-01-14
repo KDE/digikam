@@ -24,6 +24,8 @@
 // Qt includes.
 
 #include <qtimer.h>
+#include <qframe.h>
+#include <qlayout.h>
 #include <qhbox.h>
 #include <qlayout.h>
 #include <qcombobox.h>
@@ -97,18 +99,20 @@ public:
 };
 
 TimeLineView::TimeLineView(QWidget *parent)
-            : QFrame(parent, 0, Qt::WDestructiveClose)
+            : QWidget(parent, 0, Qt::WDestructiveClose)
 {
     d = new TimeLineViewPriv;
     d->timer = new QTimer(this);
 
-    setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
-    setLineWidth(1);
+    QVBoxLayout *vlay = new QVBoxLayout(this);
+    QFrame *panel     = new QFrame(this);
+    panel->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+    panel->setLineWidth(1);
 
-    QGridLayout *grid = new QGridLayout(this, 4, 3);
+    QGridLayout *grid = new QGridLayout(panel, 7, 3);
 
-    QLabel *label1 = new QLabel(i18n("Time Unit:"), this);
-    d->dateModeCB  = new QComboBox(false, this);
+    QLabel *label1 = new QLabel(i18n("Time Unit:"), panel);
+    d->dateModeCB  = new QComboBox(false, panel);
     d->dateModeCB->insertItem(i18n("Day"),   TimeLineWidget::Day);
     d->dateModeCB->insertItem(i18n("Week"),  TimeLineWidget::Week);
     d->dateModeCB->insertItem(i18n("Month"), TimeLineWidget::Month);
@@ -116,7 +120,7 @@ TimeLineView::TimeLineView(QWidget *parent)
     d->dateModeCB->setCurrentItem((int)TimeLineWidget::Month);
     d->dateModeCB->setFocusPolicy(QWidget::NoFocus);
 
-    d->scaleBG = new QHButtonGroup(this);
+    d->scaleBG = new QHButtonGroup(panel);
     d->scaleBG->setExclusive(true);
     d->scaleBG->setFrameShape(QFrame::NoFrame);
     d->scaleBG->setInsideMargin( 0 );
@@ -142,60 +146,55 @@ TimeLineView::TimeLineView(QWidget *parent)
     logHistoButton->setPixmap( QPixmap( directory + "histogram-log.png" ) );
     logHistoButton->setToggleButton(true);
 
-    d->timeLineWidget = new TimeLineWidget(this);
-    d->scrollBar      = new QScrollBar(this);
+    d->timeLineWidget = new TimeLineWidget(panel);
+    d->scrollBar      = new QScrollBar(panel);
     d->scrollBar->setOrientation(Qt::Horizontal);
     d->scrollBar->setMinValue(0);
     d->scrollBar->setLineStep(1);
 
-    d->timeLineFolderView = new TimeLineFolderView(this);
-
-    // ---------------------------------------------------------------
-
-    QWidget *info      = new QWidget(this);
-    QGridLayout *grid2 = new QGridLayout(info, 4, 2);
-
-    QLabel *label2 = new QLabel(i18n("Date:"), info);
-    d->dRangeLabel = new KSqueezedTextLabel(0, info);
+    QLabel *label2 = new QLabel(i18n("Date:"), panel);
+    d->dRangeLabel = new KSqueezedTextLabel(0, panel);
     d->dRangeLabel->setAlignment(Qt::AlignRight);
 
-    QLabel *label3 = new QLabel(i18n("Items:"), info);
-    d->itemsLabel  = new KSqueezedTextLabel(0, info);
+    QLabel *label3 = new QLabel(i18n("Items:"), panel);
+    d->itemsLabel  = new KSqueezedTextLabel(0, panel);
     d->itemsLabel->setAlignment(Qt::AlignRight);
 
-    KSeparator *line2 = new KSeparator(Horizontal, info);
+    KSeparator *line2 = new KSeparator(Horizontal, panel);
 
-    QLabel *label4 = new QLabel(i18n("Total:"), info);
-    d->totalLabel  = new KSqueezedTextLabel(0, info);
+    QLabel *label4 = new QLabel(i18n("Total:"), panel);
+    d->totalLabel  = new KSqueezedTextLabel(0, panel);
     d->totalLabel->setAlignment(Qt::AlignRight);
 
-    d->resetButton = new QPushButton(i18n("&Reset Selection"), info);
-
-    grid2->addMultiCellWidget(label2,          0, 0, 0, 0);
-    grid2->addMultiCellWidget(d->dRangeLabel,  0, 0, 1, 2);
-    grid2->addMultiCellWidget(label3,          1, 1, 0, 0);
-    grid2->addMultiCellWidget(d->itemsLabel ,  1, 1, 2, 2);
-    grid2->addMultiCellWidget(line2,           2, 2, 0, 2);
-    grid2->addMultiCellWidget(label4,          3, 3, 0, 0);
-    grid2->addMultiCellWidget(d->totalLabel ,  3, 3, 2, 2);
-    grid2->addMultiCellWidget(d->resetButton , 4, 4, 0, 0);
-    grid2->setColStretch(1, 10);
-    grid2->setMargin(0);
-    grid2->setSpacing(KDialog::spacingHint());
+    d->resetButton = new QPushButton(i18n("&Reset Selection"), panel);
 
     // ---------------------------------------------------------------
 
-    grid->addMultiCellWidget(label1,                0, 0, 0, 0);
-    grid->addMultiCellWidget(d->dateModeCB,         0, 0, 1, 1);
-    grid->addMultiCellWidget(d->scaleBG,            0, 0, 3, 3);
-    grid->addMultiCellWidget(d->timeLineWidget,     1, 1, 0, 3);
-    grid->addMultiCellWidget(d->scrollBar,          2, 2, 0, 3);
-    grid->addMultiCellWidget(info,                  3, 3, 0, 3);
-    grid->addMultiCellWidget(d->timeLineFolderView, 4, 4, 0, 3);
+    grid->addMultiCellWidget(label1,            0, 0, 0, 0);
+    grid->addMultiCellWidget(d->dateModeCB,     0, 0, 1, 1);
+    grid->addMultiCellWidget(d->scaleBG,        0, 0, 3, 3);
+    grid->addMultiCellWidget(d->timeLineWidget, 1, 1, 0, 3);
+    grid->addMultiCellWidget(d->scrollBar,      2, 2, 0, 3);
+    grid->addMultiCellWidget(label2,            3, 3, 0, 0);
+    grid->addMultiCellWidget(d->dRangeLabel,    3, 3, 1, 3);
+    grid->addMultiCellWidget(label3,            4, 4, 0, 0);
+    grid->addMultiCellWidget(d->itemsLabel ,    4, 4, 3, 3);
+    grid->addMultiCellWidget(line2,             5, 5, 0, 3);
+    grid->addMultiCellWidget(label4,            6, 6, 0, 0);
+    grid->addMultiCellWidget(d->totalLabel ,    6, 6, 3, 3);
+    grid->addMultiCellWidget(d->resetButton ,   7, 7, 0, 0);
     grid->setColStretch(2, 10);
-    grid->setRowStretch(4, 10);
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
+
+    // ---------------------------------------------------------------
+
+    d->timeLineFolderView = new TimeLineFolderView(this);
+
+    vlay->addWidget(panel);
+    vlay->addWidget(d->timeLineFolderView);
+    vlay->setMargin(0);
+    vlay->setSpacing(0);
 
     // ---------------------------------------------------------------
 
