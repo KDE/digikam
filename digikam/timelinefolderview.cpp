@@ -221,7 +221,8 @@ void TimeLineFolderView::slotAlbumAdded(Album* a)
     if (!a || a->type() != Album::SEARCH)
         return;
 
-    SAlbum* salbum = (SAlbum*)a;
+    SAlbum *salbum  = dynamic_cast<SAlbum*>(a);
+    if (!salbum) return;
 
     // Check if a special url query exist to identify a SAlbum dedicaced to Date Search
     KURL url = salbum->kurl();
@@ -269,16 +270,16 @@ void TimeLineFolderView::slotSelectionChanged()
 
     if (!selItem)
     {
-        AlbumManager::instance()->setCurrentAlbum(0);
+        emit signalAlbumSelected(0);
         return;
     }
 
     TimeLineFolderItem* searchItem = dynamic_cast<TimeLineFolderItem*>(selItem);
 
     if (!searchItem || !searchItem->m_album)
-        AlbumManager::instance()->setCurrentAlbum(0);
+        emit signalAlbumSelected(0);
     else
-        AlbumManager::instance()->setCurrentAlbum(searchItem->m_album);
+        emit signalAlbumSelected(searchItem->m_album);
 }
 
 void TimeLineFolderView::slotContextMenu(QListViewItem* item, const QPoint&, int)

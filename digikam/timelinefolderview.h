@@ -48,6 +48,7 @@ public:
 signals:
 
     void signalSearchFilterMatch(bool);
+    void signalAlbumSelected(SAlbum*);
 
 public slots:
 

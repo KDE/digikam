@@ -201,11 +201,11 @@ TimeLineView::TimeLineView(QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    connect(d->timeLineWidget, SIGNAL(signalDateMapChanged()),
-            this, SLOT(slotDateMapLoaded()));
-
     connect(AlbumManager::instance(), SIGNAL(signalDatesMapDirty(const QMap<QDateTime, int>&)),
             d->timeLineWidget, SLOT(slotDatesMap(const QMap<QDateTime, int>&)));
+
+    connect(d->timeLineFolderView, SIGNAL(signalAlbumSelected(SAlbum*)),
+            this, SLOT(slotAlbumSelected(SAlbum*)));
 
     connect(d->dateModeCB, SIGNAL(activated(int)),
             this, SLOT(slotDateUnitChanged(int)));
@@ -368,8 +368,14 @@ void TimeLineView::slotQuerySearchKIOSlave()
     AlbumManager::instance()->setCurrentAlbum(album);
 }
 
-void TimeLineView::dateSearchUrlToDateRangeList()
+void TimeLineView::slotAlbumSelected(SAlbum* salbum)
 {
+    if (!salbum) 
+    {
+        AlbumManager::instance()->setCurrentAlbum(0);
+        return;
+    }
+
     // Date Search url for KIO-Slave is something like that :
     // digikamsearch:1 AND 2 OR 3 AND 4 OR 5 AND 6?
     //               1.key=imagedate&1.op=GT&1.val=2006-02-06&
@@ -380,25 +386,17 @@ void TimeLineView::dateSearchUrlToDateRangeList()
     //               6.key=imagedate&6.op=LT&6.val=2006-02-13&
     //               name=TimeLineSelection&
     //               count=6
+    //               type=datesearch
 
-    SAlbum *salbum  = 0;
-    AlbumList sList = AlbumManager::instance()->allSAlbums();
-    AlbumList::iterator it;
-    for (it = sList.begin(); it != sList.end(); ++it)
-    {
-        salbum = (SAlbum*)(*it);
-        if (salbum)
-        {
-            if (salbum->title() == d->salbumDateSearchName)
-                break;
-        }
-    }
-
-    if (it == sList.end()) return;
-
+    // Check if a special url query exist to identify a SAlbum dedicaced to Date Search
     KURL url = salbum->kurl();
     QMap<QString, QString> queries = url.queryItems();
     if (queries.isEmpty()) return;
+
+    QMap<QString, QString>::iterator it = queries.find("type");
+    if (it == queries.end()) return;
+
+    if (it.data() != QString("datesearch")) return;
 
     DDebug() << url << endl;
 
@@ -431,13 +429,6 @@ void TimeLineView::dateSearchUrlToDateRangeList()
                  << (*it3).second.date().toString(Qt::ISODate) << endl;
 
     d->timeLineWidget->setSelectedDateRange(list);
-}
-
-void TimeLineView::slotDateMapLoaded()
-{
-    dateSearchUrlToDateRangeList();
-    disconnect(d->timeLineWidget, SIGNAL(signalDateMapChanged()),
-               this, SLOT(slotDateMapLoaded()));
 }
 
 void TimeLineView::slotResetSelection()

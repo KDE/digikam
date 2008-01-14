@@ -36,8 +36,9 @@
 namespace Digikam
 {
 
-class TimeLineViewPriv;
+class SAlbum;
 class TimeLineFolderView;
+class TimeLineViewPriv;
 
 class TimeLineView : public QWidget
 {
@@ -54,7 +55,6 @@ private:
 
     void readConfig();
     void writeConfig();
-    void dateSearchUrlToDateRangeList();
 
 private slots:
 
@@ -67,7 +67,7 @@ private slots:
     void slotQuerySearchKIOSlave();
     void slotResetSelection();
     void slotDateMapChanged();
-    void slotDateMapLoaded();
+    void slotAlbumSelected(SAlbum*);
 
 private:
 
