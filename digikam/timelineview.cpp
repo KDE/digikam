@@ -67,17 +67,20 @@ public:
 
     TimeLineViewPriv()
     {
-        dateModeCB         = 0;
-        scaleBG            = 0;
-        dRangeLabel        = 0;
-        itemsLabel         = 0;
-        totalLabel         = 0;
-        timeLineWidget     = 0;
-        timer              = 0;
-        resetButton        = 0;
-        scrollBar          = 0;
-        timeLineFolderView = 0;
+        dateModeCB           = 0;
+        scaleBG              = 0;
+        dRangeLabel          = 0;
+        itemsLabel           = 0;
+        totalLabel           = 0;
+        timeLineWidget       = 0;
+        timer                = 0;
+        resetButton          = 0;
+        scrollBar            = 0;
+        timeLineFolderView   = 0;
+        salbumDateSearchName = QString("_Time_Line_Selection_");
     }
+
+    QString             salbumDateSearchName;
 
     QScrollBar         *scrollBar;
 
@@ -355,8 +358,9 @@ void TimeLineView::slotQuerySearchKIOSlave()
         i++;
     }
 
-    url.addQueryItem("name", QString("TimeLineSelection"));
+    url.addQueryItem("name", d->salbumDateSearchName);
     url.addQueryItem("count", QString::number(grp*2));
+    url.addQueryItem("type", QString("datesearch"));
 
     DDebug() << url << endl;
 
@@ -385,7 +389,7 @@ void TimeLineView::dateSearchUrlToDateRangeList()
         salbum = (SAlbum*)(*it);
         if (salbum)
         {
-            if (salbum->title() == QString("TimeLineSelection"))
+            if (salbum->title() == d->salbumDateSearchName)
                 break;
         }
     }

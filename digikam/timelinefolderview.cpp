@@ -221,9 +221,19 @@ void TimeLineFolderView::slotAlbumAdded(Album* a)
     if (!a || a->type() != Album::SEARCH)
         return;
 
-    SAlbum* album = (SAlbum*)a;
+    SAlbum* salbum = (SAlbum*)a;
 
-    TimeLineFolderItem* item = new TimeLineFolderItem(this, album);
+    // Check if a special url query exist to identify a SAlbum dedicaced to Date Search
+    KURL url = salbum->kurl();
+    QMap<QString, QString> queries = url.queryItems();
+    if (queries.isEmpty()) return;
+
+    QMap<QString, QString>::iterator it = queries.find("type");
+    if (it == queries.end()) return;
+
+    if (it.data() != QString("datesearch")) return;
+
+    TimeLineFolderItem* item = new TimeLineFolderItem(this, salbum);
     item->setPixmap(0, SmallIcon("find", AlbumSettings::instance()->getDefaultTreeIconSize()));
 }
 
