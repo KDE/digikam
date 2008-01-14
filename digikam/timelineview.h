@@ -37,6 +37,7 @@ namespace Digikam
 {
 
 class TimeLineViewPriv;
+class TimeLineFolderView;
 
 class TimeLineView : public QFrame
 {
@@ -46,6 +47,8 @@ public:
 
     TimeLineView(QWidget *parent=0);
     ~TimeLineView();
+
+    TimeLineFolderView *folderView() const;
 
 private: 
 

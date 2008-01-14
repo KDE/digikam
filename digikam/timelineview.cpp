@@ -51,6 +51,7 @@
 #include "album.h"
 #include "albummanager.h"
 #include "ddebug.h"
+#include "timelinefolderview.h"
 #include "timelineview.h"
 #include "timelineview.moc"
 
@@ -64,15 +65,16 @@ public:
 
     TimeLineViewPriv()
     {
-        dateModeCB     = 0;
-        scaleBG        = 0;
-        dRangeLabel    = 0;
-        itemsLabel     = 0;
-        totalLabel     = 0;
-        timeLineWidget = 0;
-        timer          = 0;
-        resetButton    = 0;
-        scrollBar      = 0;
+        dateModeCB         = 0;
+        scaleBG            = 0;
+        dRangeLabel        = 0;
+        itemsLabel         = 0;
+        totalLabel         = 0;
+        timeLineWidget     = 0;
+        timer              = 0;
+        resetButton        = 0;
+        scrollBar          = 0;
+        timeLineFolderView = 0;
     }
 
     QScrollBar         *scrollBar;
@@ -90,6 +92,8 @@ public:
     KSqueezedTextLabel *totalLabel;
 
     TimeLineWidget     *timeLineWidget;
+
+    TimeLineFolderView *timeLineFolderView;
 };
 
 TimeLineView::TimeLineView(QWidget *parent)
@@ -144,6 +148,8 @@ TimeLineView::TimeLineView(QWidget *parent)
     d->scrollBar->setMinValue(0);
     d->scrollBar->setLineStep(1);
 
+    d->timeLineFolderView = new TimeLineFolderView(this);
+
     // ---------------------------------------------------------------
 
     QWidget *info      = new QWidget(this);
@@ -179,12 +185,13 @@ TimeLineView::TimeLineView(QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    grid->addMultiCellWidget(label1,            0, 0, 0, 0);
-    grid->addMultiCellWidget(d->dateModeCB,     0, 0, 1, 1);
-    grid->addMultiCellWidget(d->scaleBG,        0, 0, 3, 3);
-    grid->addMultiCellWidget(d->timeLineWidget, 1, 1, 0, 4);
-    grid->addMultiCellWidget(d->scrollBar,      2, 2, 0, 3);
-    grid->addMultiCellWidget(info,              3, 3, 0, 3);
+    grid->addMultiCellWidget(label1,                0, 0, 0, 0);
+    grid->addMultiCellWidget(d->dateModeCB,         0, 0, 1, 1);
+    grid->addMultiCellWidget(d->scaleBG,            0, 0, 3, 3);
+    grid->addMultiCellWidget(d->timeLineWidget,     1, 1, 0, 4);
+    grid->addMultiCellWidget(d->scrollBar,          2, 2, 0, 3);
+    grid->addMultiCellWidget(info,                  3, 3, 0, 3);
+    grid->addMultiCellWidget(d->timeLineFolderView, 4, 4, 0, 3);
     grid->setColStretch(2, 10);
     grid->setRowStretch(4, 10);
     grid->setMargin(KDialog::spacingHint());
@@ -235,6 +242,11 @@ TimeLineView::~TimeLineView()
     writeConfig();
     delete d->timer;
     delete d;
+}
+
+TimeLineFolderView* TimeLineView::folderView() const
+{
+    return d->timeLineFolderView;
 }
 
 void TimeLineView::readConfig()

@@ -96,8 +96,9 @@ libdigikam_la_SOURCES = kdateedit.cpp \
 	                tagfilterview.cpp \
 	                tagfolderview.cpp \
 	                tagspopupmenu.cpp \
-                        timelinewidget.cpp \
+                        timelinefolderview.cpp \
                         timelineview.cpp \
+			timelinewidget.cpp \
 	                upgradedb_sqlite2tosqlite3.cpp \
 	                welcomepageview.cpp 
 
