@@ -49,6 +49,7 @@ signals:
 
     void signalSearchFilterMatch(bool);
     void signalAlbumSelected(SAlbum*);
+    void signalRenameAlbum(SAlbum*);
 
 public slots:
 
@@ -58,6 +59,7 @@ private slots:
 
     void slotAlbumAdded(Album* album);
     void slotAlbumDeleted(Album* album);
+    void slotAlbumRenamed(Album* album);
     void slotSelectionChanged();
     void slotContextMenu(QListViewItem*, const QPoint&, int);
 

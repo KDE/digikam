@@ -245,6 +245,9 @@ TimeLineView::TimeLineView(QWidget *parent)
     connect(d->timeLineFolderView, SIGNAL(signalAlbumSelected(SAlbum*)),
             this, SLOT(slotAlbumSelected(SAlbum*)));
 
+    connect(d->timeLineFolderView, SIGNAL(signalRenameAlbum(SAlbum*)),
+            this, SLOT(slotRenameAlbum(SAlbum*)));
+
     connect(d->dateModeCB, SIGNAL(activated(int)),
             this, SLOT(slotDateUnitChanged(int)));
 
@@ -500,9 +503,7 @@ void TimeLineView::slotResetSelection()
 
 bool TimeLineView::checkName(QString& name)
 {
-    AlbumManager* aManager = AlbumManager::instance();
-    AlbumList aList        = aManager->allSAlbums();
-    bool checked           = checkAlbum(name);
+    bool checked = checkAlbum(name);
 
     while (!checked) 
     {
@@ -525,11 +526,9 @@ bool TimeLineView::checkName(QString& name)
 
 bool TimeLineView::checkAlbum(const QString& name) const
 {
+    AlbumList list = AlbumManager::instance()->allSAlbums();
 
-    AlbumManager* aManager = AlbumManager::instance();
-    AlbumList aList        = aManager->allSAlbums();
-
-    for (AlbumList::Iterator it = aList.begin() ; it != aList.end() ; ++it)
+    for (AlbumList::Iterator it = list.begin() ; it != list.end() ; ++it)
     {
         SAlbum *album = (SAlbum*)(*it);
         if ( album->title() == name )
@@ -546,6 +545,33 @@ void TimeLineView::slotCheckSaveButton()
         d->saveButton->setEnabled(true);
     else
         d->saveButton->setEnabled(false);
+}
+
+void TimeLineView::slotRenameAlbum(SAlbum* salbum)
+{
+    if (!salbum) return;
+
+    QString oldName(salbum->title());
+    bool    ok;
+
+#if KDE_IS_VERSION(3,2,0)
+    QString name = KInputDialog::getText(i18n("Rename Album (%1)").arg(oldName), 
+                                          i18n("Enter new album name:"),
+                                          oldName, &ok, this);
+#else
+    QString name = KLineEditDlg::getText(i18n("Rename Item (%1)").arg(oldName), 
+                                          i18n("Enter new album name:"),
+                                          oldName, &ok, this);
+#endif
+
+    if (!ok || name == oldName || name.isEmpty()) return;
+
+    if (!checkName(name)) return;
+
+    KURL url = salbum->kurl();
+    url.removeQueryItem("name");
+    url.addQueryItem("name", name);
+    AlbumManager::instance()->updateSAlbum(salbum, url);
 }
 
 }  // NameSpace Digikam

@@ -97,6 +97,9 @@ TimeLineFolderView::TimeLineFolderView(QWidget* parent)
     connect(AlbumManager::instance(), SIGNAL(signalAlbumsCleared()),
             this, SLOT(clear()));
 
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumRenamed(Album*)),
+        this, SLOT(slotAlbumRenamed(Album*)));
+
     connect(this, SIGNAL(contextMenuRequested(QListViewItem*, const QPoint&, int)),
             this, SLOT(slotContextMenu(QListViewItem*, const QPoint&, int)));
 
@@ -192,6 +195,20 @@ void TimeLineFolderView::slotAlbumDeleted(Album* a)
         delete item;
 }
 
+void TimeLineFolderView::slotAlbumRenamed(Album* album)
+{
+    if (!album)
+        return;
+
+    SAlbum* salbum = dynamic_cast<SAlbum*>(album);
+    if (!salbum)
+        return;
+
+    TimeLineFolderItem* item = (TimeLineFolderItem*)(salbum->extraData(this));
+    if (item)
+        item->setText(0, item->m_album->title());
+}
+
 void TimeLineFolderView::slotSelectionChanged()
 {
     QListViewItem* selItem = 0;
@@ -236,7 +253,7 @@ void TimeLineFolderView::slotContextMenu(QListViewItem* item, const QPoint&, int
     {
         case 10:
         {
-            // TODO
+            emit signalRenameAlbum(sItem->m_album);
             break;
         }
         case 11:
