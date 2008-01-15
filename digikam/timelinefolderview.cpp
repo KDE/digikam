@@ -78,7 +78,14 @@ public:
         return m_album ? m_album->id() : 0;
     }
 
-    SAlbum* m_album;
+    SAlbum* album() const
+    {
+        return m_album;
+    }
+
+private:
+
+    SAlbum *m_album;
 };
 
 TimeLineFolderView::TimeLineFolderView(QWidget* parent)
@@ -206,7 +213,7 @@ void TimeLineFolderView::slotAlbumRenamed(Album* album)
 
     TimeLineFolderItem* item = (TimeLineFolderItem*)(salbum->extraData(this));
     if (item)
-        item->setText(0, item->m_album->title());
+        item->setText(0, item->album()->title());
 }
 
 void TimeLineFolderView::slotSelectionChanged()
@@ -232,10 +239,10 @@ void TimeLineFolderView::slotSelectionChanged()
 
     TimeLineFolderItem* searchItem = dynamic_cast<TimeLineFolderItem*>(selItem);
 
-    if (!searchItem || !searchItem->m_album)
+    if (!searchItem || !searchItem->album())
         emit signalAlbumSelected(0);
     else
-        emit signalAlbumSelected(searchItem->m_album);
+        emit signalAlbumSelected(searchItem->album());
 }
 
 void TimeLineFolderView::slotContextMenu(QListViewItem* item, const QPoint&, int)
@@ -253,12 +260,12 @@ void TimeLineFolderView::slotContextMenu(QListViewItem* item, const QPoint&, int
     {
         case 10:
         {
-            emit signalRenameAlbum(sItem->m_album);
+            emit signalRenameAlbum(sItem->album());
             break;
         }
         case 11:
         {
-            searchDelete(sItem->m_album);
+            searchDelete(sItem->album());
             break;
         }
         default:
