@@ -344,7 +344,7 @@ void TimeLineWidget::setSelectedDateRange(const DateRangeList& list)
                 dt = dt.addDays(1);
             }
             while (dt < end);
-        }        
+        }
     }
 
     updatePixmap();

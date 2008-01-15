@@ -372,7 +372,7 @@ void TimeLineView::slotAlbumSelected(SAlbum* salbum)
 {
     if (!salbum) 
     {
-        AlbumManager::instance()->setCurrentAlbum(0);
+        slotResetSelection();
         return;
     }
 
@@ -429,6 +429,7 @@ void TimeLineView::slotAlbumSelected(SAlbum* salbum)
                  << (*it3).second.date().toString(Qt::ISODate) << endl;
 
     d->timeLineWidget->setSelectedDateRange(list);
+    AlbumManager::instance()->setCurrentAlbum(salbum);
 }
 
 void TimeLineView::slotResetSelection()

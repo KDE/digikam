@@ -252,9 +252,6 @@ void TimeLineFolderView::slotAlbumDeleted(Album* a)
 
 void TimeLineFolderView::slotSelectionChanged()
 {
-    if (!active())
-        return;
-
     QListViewItem* selItem = 0;
 
     QListViewItemIterator it( this );
@@ -291,7 +288,7 @@ void TimeLineFolderView::slotContextMenu(QListViewItem* item, const QPoint&, int
     KPopupMenu popmenu(this);
     popmenu.insertTitle(SmallIcon("digikam"), i18n("My Date Searches"));
     popmenu.insertItem(SmallIcon("pencil"), i18n("Rename..."), 10);
-    popmenu.insertItem(SmallIcon("editdelete"), i18n("Delete Search"), 11);
+    popmenu.insertItem(SmallIcon("editdelete"), i18n("Delete"), 11);
 
     switch (popmenu.exec(QCursor::pos()))
     {
