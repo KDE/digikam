@@ -39,7 +39,6 @@
 
 // KDE include.
 
-#include <kseparator.h>
 #include <klocale.h>
 #include <kconfig.h>
 #include <kdialog.h>
@@ -78,8 +77,8 @@ public:
     {
         dateModeCB            = 0;
         scaleBG               = 0;
-        dRangeLabel           = 0;
-        itemsLabel            = 0;
+        cursorDateLabel       = 0;
+        cursorCountLabel      = 0;
         totalLabel            = 0;
         timeLineWidget        = 0;
         timer                 = 0;
@@ -103,8 +102,8 @@ public:
 
     KLineEdit          *nameEdit;
 
-    KSqueezedTextLabel *dRangeLabel;
-    KSqueezedTextLabel *itemsLabel;
+    KSqueezedTextLabel *cursorDateLabel;
+    KSqueezedTextLabel *cursorCountLabel;
     KSqueezedTextLabel *totalLabel;
 
     TimeLineWidget     *timeLineWidget;
@@ -123,10 +122,15 @@ TimeLineView::TimeLineView(QWidget *parent)
     panel->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     panel->setLineWidth(1);
 
-    QGridLayout *grid = new QGridLayout(panel, 7, 3);
+    QGridLayout *grid = new QGridLayout(panel, 5, 3);
 
-    QLabel *label1 = new QLabel(i18n("Time Unit:"), panel);
-    d->dateModeCB  = new QComboBox(false, panel);
+    // ---------------------------------------------------------------
+
+    QWidget *hbox1    = new QWidget(panel);
+    QHBoxLayout *hlay = new QHBoxLayout(hbox1);
+
+    QLabel *label1 = new QLabel(i18n("Time Unit:"), hbox1);
+    d->dateModeCB  = new QComboBox(false, hbox1);
     d->dateModeCB->insertItem(i18n("Day"),   TimeLineWidget::Day);
     d->dateModeCB->insertItem(i18n("Week"),  TimeLineWidget::Week);
     d->dateModeCB->insertItem(i18n("Month"), TimeLineWidget::Month);
@@ -134,7 +138,7 @@ TimeLineView::TimeLineView(QWidget *parent)
     d->dateModeCB->setCurrentItem((int)TimeLineWidget::Month);
     d->dateModeCB->setFocusPolicy(QWidget::NoFocus);
 
-    d->scaleBG = new QHButtonGroup(panel);
+    d->scaleBG = new QHButtonGroup(hbox1);
     d->scaleBG->setExclusive(true);
     d->scaleBG->setFrameShape(QFrame::NoFrame);
     d->scaleBG->setInsideMargin( 0 );
@@ -160,21 +164,24 @@ TimeLineView::TimeLineView(QWidget *parent)
     logHistoButton->setPixmap( QPixmap( directory + "histogram-log.png" ) );
     logHistoButton->setToggleButton(true);
 
+    hlay->setMargin(0);
+    hlay->setSpacing(KDialog::spacingHint());
+    hlay->addWidget(label1);
+    hlay->addWidget(d->dateModeCB);
+    hlay->addItem(new QSpacerItem(10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum));
+    hlay->addWidget(d->scaleBG);
+
+    // ---------------------------------------------------------------
+
     d->timeLineWidget = new TimeLineWidget(panel);
     d->scrollBar      = new QScrollBar(panel);
     d->scrollBar->setOrientation(Qt::Horizontal);
     d->scrollBar->setMinValue(0);
     d->scrollBar->setLineStep(1);
 
-    QLabel *label2 = new QLabel(i18n("Date:"), panel);
-    d->dRangeLabel = new KSqueezedTextLabel(0, panel);
-    d->dRangeLabel->setAlignment(Qt::AlignRight);
-
-    QLabel *label3 = new QLabel(i18n("Items:"), panel);
-    d->itemsLabel  = new KSqueezedTextLabel(0, panel);
-    d->itemsLabel->setAlignment(Qt::AlignRight);
-
-    KSeparator *line2 = new KSeparator(Horizontal, panel);
+    d->cursorDateLabel  = new KSqueezedTextLabel(0, panel);
+    d->cursorCountLabel = new KSqueezedTextLabel(0, panel);
+    d->cursorCountLabel->setAlignment(Qt::AlignRight);
 
     QLabel *label4 = new QLabel(i18n("Total:"), panel);
     d->totalLabel  = new KSqueezedTextLabel(0, panel);
@@ -208,19 +215,14 @@ TimeLineView::TimeLineView(QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    grid->addMultiCellWidget(label1,            0, 0, 0, 0);
-    grid->addMultiCellWidget(d->dateModeCB,     0, 0, 1, 1);
-    grid->addMultiCellWidget(d->scaleBG,        0, 0, 3, 3);
-    grid->addMultiCellWidget(d->timeLineWidget, 1, 1, 0, 3);
-    grid->addMultiCellWidget(d->scrollBar,      2, 2, 0, 3);
-    grid->addMultiCellWidget(label2,            3, 3, 0, 0);
-    grid->addMultiCellWidget(d->dRangeLabel,    3, 3, 1, 3);
-    grid->addMultiCellWidget(label3,            4, 4, 0, 0);
-    grid->addMultiCellWidget(d->itemsLabel,     4, 4, 2, 3);
-    grid->addMultiCellWidget(line2,             5, 5, 0, 3);
-    grid->addMultiCellWidget(label4,            6, 6, 0, 0);
-    grid->addMultiCellWidget(d->totalLabel,     6, 6, 2, 3);
-    grid->addMultiCellWidget(hbox2,             7, 7, 0, 3);
+    grid->addMultiCellWidget(hbox1,               0, 0, 0, 3);
+    grid->addMultiCellWidget(d->timeLineWidget,   1, 1, 0, 3);
+    grid->addMultiCellWidget(d->scrollBar,        2, 2, 0, 3);
+    grid->addMultiCellWidget(d->cursorDateLabel,  3, 3, 0, 2);
+    grid->addMultiCellWidget(d->cursorCountLabel, 3, 3, 3, 3);
+    grid->addMultiCellWidget(label4,              4, 4, 0, 0);
+    grid->addMultiCellWidget(d->totalLabel,       4, 4, 3, 3);
+    grid->addMultiCellWidget(hbox2,               5, 5, 0, 3);
     grid->setColStretch(2, 10);
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
@@ -342,12 +344,12 @@ void TimeLineView::slotCursorPositionChanged()
     QDateTime start, end;
     int val = d->timeLineWidget->cursorInfo(start, end);
 
-    QString txt = i18n("%1 to %2")
+    QString txt = i18n("%1 to %2:")
                   .arg(KGlobal::locale()->formatDate(start.date(), true))
                   .arg(KGlobal::locale()->formatDate(end.date(), true));
 
-    d->dRangeLabel->setText(txt);
-    d->itemsLabel->setText(QString::number(val));
+    d->cursorDateLabel->setText(txt);
+    d->cursorCountLabel->setText(QString::number(val));
 }
 
 void TimeLineView::slotSelectionChanged()
