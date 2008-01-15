@@ -43,6 +43,7 @@
 #include <klocale.h>
 #include <kconfig.h>
 #include <kdialog.h>
+#include <klineedit.h>
 #include <kiconloader.h>
 #include <kapplication.h>
 #include <ksqueezedtextlabel.h>
@@ -75,8 +76,10 @@ public:
         timeLineWidget       = 0;
         timer                = 0;
         resetButton          = 0;
+        saveButton           = 0;
         scrollBar            = 0;
         timeLineFolderView   = 0;
+        nameEdit             = 0;
         salbumDateSearchName = QString("_Time_Line_Selection_");
     }
 
@@ -91,6 +94,9 @@ public:
     QHButtonGroup      *scaleBG;
 
     QPushButton        *resetButton;
+    QPushButton        *saveButton;
+
+    KLineEdit          *nameEdit;
 
     KSqueezedTextLabel *dRangeLabel;
     KSqueezedTextLabel *itemsLabel;
@@ -169,7 +175,30 @@ TimeLineView::TimeLineView(QWidget *parent)
     d->totalLabel  = new KSqueezedTextLabel(0, panel);
     d->totalLabel->setAlignment(Qt::AlignRight);
 
-    d->resetButton = new QPushButton(i18n("&Reset Selection"), panel);
+    // ---------------------------------------------------------------
+
+    QHBox *hbox2 = new QHBox(panel);
+    hbox2->setMargin(0);
+    hbox2->setSpacing(KDialog::spacingHint());
+
+    d->resetButton = new QPushButton(hbox2);
+    d->resetButton->setPixmap(SmallIcon("reload_page"));
+    QToolTip::add(d->resetButton, i18n("Clear current selection"));
+    QWhatsThis::add(d->resetButton, i18n("<p>If you press this button, current "
+                                        "dates selection from time-line will be "
+                                        "clear."));
+    d->nameEdit    = new KLineEdit(hbox2);
+    QWhatsThis::add(d->nameEdit, i18n("<p>Enter the name of the current dates search to save in the "
+                                      "\"My Date Searches\" view"));
+
+
+    d->saveButton  = new QPushButton(hbox2);
+    d->saveButton->setPixmap(SmallIcon("filesave"));
+    QToolTip::add(d->saveButton, i18n("Save current selection to a new Album"));
+    QWhatsThis::add(d->saveButton, i18n("<p>If you press this button, current "
+                                        "dates selection from time-line will be "
+                                        "saved to a new search Album using name "
+                                        "set on the left side."));
 
     // ---------------------------------------------------------------
 
@@ -181,11 +210,11 @@ TimeLineView::TimeLineView(QWidget *parent)
     grid->addMultiCellWidget(label2,            3, 3, 0, 0);
     grid->addMultiCellWidget(d->dRangeLabel,    3, 3, 1, 3);
     grid->addMultiCellWidget(label3,            4, 4, 0, 0);
-    grid->addMultiCellWidget(d->itemsLabel ,    4, 4, 3, 3);
+    grid->addMultiCellWidget(d->itemsLabel,     4, 4, 2, 3);
     grid->addMultiCellWidget(line2,             5, 5, 0, 3);
     grid->addMultiCellWidget(label4,            6, 6, 0, 0);
-    grid->addMultiCellWidget(d->totalLabel ,    6, 6, 3, 3);
-    grid->addMultiCellWidget(d->resetButton ,   7, 7, 0, 0);
+    grid->addMultiCellWidget(d->totalLabel,     6, 6, 2, 3);
+    grid->addMultiCellWidget(hbox2,             7, 7, 0, 3);
     grid->setColStretch(2, 10);
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
@@ -230,6 +259,9 @@ TimeLineView::TimeLineView(QWidget *parent)
 
     connect(d->resetButton, SIGNAL(clicked()),
             this, SLOT(slotResetSelection()));
+
+    connect(d->saveButton, SIGNAL(clicked()),
+            this, SLOT(slotSaveSelection()));
 
     connect(d->scrollBar, SIGNAL(valueChanged(int)),
             this, SLOT(slotScrollBarValueChanged(int)));
@@ -314,6 +346,18 @@ void TimeLineView::slotSelectionChanged()
 
 void TimeLineView::slotQuerySearchKIOSlave()
 {
+    createNewDateSearchAlbum(d->salbumDateSearchName);
+}
+
+void TimeLineView::slotSaveSelection()
+{
+    QString name = d->nameEdit->text();
+
+    createNewDateSearchAlbum(name);
+}
+
+void TimeLineView::createNewDateSearchAlbum(const QString& name)
+{
     int totalCount = 0;
     QDateTime start, end;
     DateRangeList list = d->timeLineWidget->selectedDateRange(totalCount);
@@ -358,7 +402,7 @@ void TimeLineView::slotQuerySearchKIOSlave()
         i++;
     }
 
-    url.addQueryItem("name", d->salbumDateSearchName);
+    url.addQueryItem("name", name);
     url.addQueryItem("count", QString::number(grp*2));
     url.addQueryItem("type", QString("datesearch"));
 

@@ -28,6 +28,7 @@
 
 #include <qdatetime.h>
 #include <qwidget.h>
+#include <qstring.h>
 
 // Local includes.
 
@@ -55,6 +56,7 @@ private:
 
     void readConfig();
     void writeConfig();
+    void createNewDateSearchAlbum(const QString& name);
 
 private slots:
 
@@ -64,8 +66,9 @@ private slots:
     void slotDateUnitChanged(int);
     void slotCursorPositionChanged();
     void slotSelectionChanged();
-    void slotQuerySearchKIOSlave();
     void slotResetSelection();
+    void slotSaveSelection();
+    void slotQuerySearchKIOSlave();
     void slotDateMapChanged();
     void slotAlbumSelected(SAlbum*);
 
