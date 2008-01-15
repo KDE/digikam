@@ -404,7 +404,7 @@ void TimeLineView::slotAlbumSelected(SAlbum* salbum)
     QString       key;
     QDateTime     start, end;
     DateRangeList list;
-    for (uint i = 1 ; i <= (queries.count()/2)-4 ; i+=2)
+    for (uint i = 1 ; i <= (queries.count()/2)-6 ; i+=2)
     {
         key = QString("%1.val").arg(QString::number(i));
         it2 = queries.find(key);
