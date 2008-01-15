@@ -91,6 +91,7 @@ private:
 TimeLineFolderView::TimeLineFolderView(QWidget* parent)
                   : FolderView(parent, "TimeLineFolderView")
 {
+    m_currentTimeLineSearchName = QString("_Current_Time_Line_Search_");
     addColumn(i18n("My Date Searches"));
     setResizeMode(QListView::LastColumn);
     setRootIsDecorated(false);
@@ -116,6 +117,11 @@ TimeLineFolderView::TimeLineFolderView(QWidget* parent)
 
 TimeLineFolderView::~TimeLineFolderView()
 {
+}
+
+QString TimeLineFolderView::currentTimeLineSearchName() const
+{
+    return m_currentTimeLineSearchName;
 }
 
 void TimeLineFolderView::slotSearchFilterChanged(const QString& filter)
@@ -185,6 +191,10 @@ void TimeLineFolderView::slotAlbumAdded(Album* a)
 
     QString type = url.queryItem("type");
     if (type != QString("datesearch")) return;
+
+    // We will ignore the internal Dates Search Album used to perform selection from timeline.
+    QString name = url.queryItem("name");
+    if (name == currentTimeLineSearchName()) return;
 
     TimeLineFolderItem* item = new TimeLineFolderItem(this, salbum);
     item->setPixmap(0, SmallIcon("find", AlbumSettings::instance()->getDefaultTreeIconSize()));

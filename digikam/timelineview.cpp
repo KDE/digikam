@@ -88,10 +88,7 @@ public:
         scrollBar             = 0;
         timeLineFolderView    = 0;
         nameEdit              = 0;
-        currentDateSearchName = QString("_Time_Line_Selection_");
     }
-
-    QString             currentDateSearchName;
 
     QScrollBar         *scrollBar;
 
@@ -231,7 +228,6 @@ TimeLineView::TimeLineView(QWidget *parent)
     // ---------------------------------------------------------------
 
     d->timeLineFolderView = new TimeLineFolderView(this);
-
     vlay->addWidget(panel);
     vlay->addWidget(d->timeLineFolderView);
     vlay->setMargin(0);
@@ -362,7 +358,7 @@ void TimeLineView::slotSelectionChanged()
 void TimeLineView::slotUpdateCurrentDateSearchAlbum()
 {
     slotCheckSaveButton();
-    createNewDateSearchAlbum(d->currentDateSearchName);
+    createNewDateSearchAlbum(d->timeLineFolderView->currentTimeLineSearchName());
 }
 
 void TimeLineView::slotSaveSelection()

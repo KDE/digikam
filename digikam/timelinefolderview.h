@@ -44,6 +44,7 @@ public:
     ~TimeLineFolderView();
 
     void searchDelete(SAlbum* album);
+    QString currentTimeLineSearchName() const;
 
 signals:
 
@@ -66,6 +67,12 @@ private slots:
 protected:
 
     void selectItem(int id);
+
+private:
+
+    // Used to store in database the name of search performed by 
+    // current selection from timeline.
+    QString m_currentTimeLineSearchName;
 };
 
 }  // namespace Digikam
