@@ -276,7 +276,7 @@ TimeLineView::TimeLineView(QWidget *parent)
             this, SLOT(slotScrollBarValueChanged(int)));
 
     connect(d->nameEdit, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotNameChanged(const QString&)));
+            this, SLOT(slotCheckSaveButton()));
 
     // ---------------------------------------------------------------
 
@@ -358,6 +358,7 @@ void TimeLineView::slotSelectionChanged()
 
 void TimeLineView::slotUpdateCurrentDateSearchAlbum()
 {
+    slotCheckSaveButton();
     createNewDateSearchAlbum(d->currentDateSearchName);
 }
 
@@ -537,9 +538,14 @@ bool TimeLineView::checkAlbum(const QString& name) const
     return true;
 }
 
-void TimeLineView::slotNameChanged(const QString&)
+void TimeLineView::slotCheckSaveButton()
 {
-    d->saveButton->setEnabled(!d->nameEdit->text().isEmpty());
+    int totalCount     = 0;
+    DateRangeList list = d->timeLineWidget->selectedDateRange(totalCount);
+    if (!list.isEmpty() && !d->nameEdit->text().isEmpty())
+        d->saveButton->setEnabled(true);
+    else
+        d->saveButton->setEnabled(false);
 }
 
 }  // NameSpace Digikam

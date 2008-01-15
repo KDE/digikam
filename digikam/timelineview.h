@@ -73,7 +73,7 @@ private slots:
     void slotUpdateCurrentDateSearchAlbum();
     void slotDateMapChanged();
     void slotAlbumSelected(SAlbum*);
-    void slotNameChanged(const QString&);
+    void slotCheckSaveButton();
 
 private:
 

@@ -86,7 +86,7 @@ public:
     int cursorInfo(QDateTime& start, QDateTime& end);
 
     /** Return a list of Date-Range based on selection performed on days-map */
-    DateRangeList selectedDateRange(int& totalCoun);
+    DateRangeList selectedDateRange(int& totalCount);
     void setSelectedDateRange(const DateRangeList& list);
 
     int  totalIndex();
