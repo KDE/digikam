@@ -48,6 +48,14 @@
 #include <kapplication.h>
 #include <ksqueezedtextlabel.h>
 #include <kstandarddirs.h>
+#include <kdeversion.h>
+#include <kmessagebox.h>
+
+#if KDE_IS_VERSION(3,2,0)
+#include <kinputdialog.h>
+#else
+#include <klineeditdlg.h>
+#endif
 
 // Local includes.
 
@@ -68,22 +76,22 @@ public:
 
     TimeLineViewPriv()
     {
-        dateModeCB           = 0;
-        scaleBG              = 0;
-        dRangeLabel          = 0;
-        itemsLabel           = 0;
-        totalLabel           = 0;
-        timeLineWidget       = 0;
-        timer                = 0;
-        resetButton          = 0;
-        saveButton           = 0;
-        scrollBar            = 0;
-        timeLineFolderView   = 0;
-        nameEdit             = 0;
-        salbumDateSearchName = QString("_Time_Line_Selection_");
+        dateModeCB            = 0;
+        scaleBG               = 0;
+        dRangeLabel           = 0;
+        itemsLabel            = 0;
+        totalLabel            = 0;
+        timeLineWidget        = 0;
+        timer                 = 0;
+        resetButton           = 0;
+        saveButton            = 0;
+        scrollBar             = 0;
+        timeLineFolderView    = 0;
+        nameEdit              = 0;
+        currentDateSearchName = QString("_Time_Line_Selection_");
     }
 
-    QString             salbumDateSearchName;
+    QString             currentDateSearchName;
 
     QScrollBar         *scrollBar;
 
@@ -194,6 +202,7 @@ TimeLineView::TimeLineView(QWidget *parent)
 
     d->saveButton  = new QPushButton(hbox2);
     d->saveButton->setPixmap(SmallIcon("filesave"));
+    d->saveButton->setEnabled(false);
     QToolTip::add(d->saveButton, i18n("Save current selection to a new Album"));
     QWhatsThis::add(d->saveButton, i18n("<p>If you press this button, current "
                                         "dates selection from time-line will be "
@@ -255,7 +264,7 @@ TimeLineView::TimeLineView(QWidget *parent)
             this, SLOT(slotDateMapChanged()));
 
     connect(d->timer, SIGNAL(timeout()),
-            this, SLOT(slotQuerySearchKIOSlave()));
+            this, SLOT(slotUpdateCurrentDateSearchAlbum()));
 
     connect(d->resetButton, SIGNAL(clicked()),
             this, SLOT(slotResetSelection()));
@@ -265,6 +274,9 @@ TimeLineView::TimeLineView(QWidget *parent)
 
     connect(d->scrollBar, SIGNAL(valueChanged(int)),
             this, SLOT(slotScrollBarValueChanged(int)));
+
+    connect(d->nameEdit, SIGNAL(textChanged(const QString&)),
+            this, SLOT(slotNameChanged(const QString&)));
 
     // ---------------------------------------------------------------
 
@@ -344,15 +356,16 @@ void TimeLineView::slotSelectionChanged()
     d->timer->start(100, true);
 }
 
-void TimeLineView::slotQuerySearchKIOSlave()
+void TimeLineView::slotUpdateCurrentDateSearchAlbum()
 {
-    createNewDateSearchAlbum(d->salbumDateSearchName);
+    createNewDateSearchAlbum(d->currentDateSearchName);
 }
 
 void TimeLineView::slotSaveSelection()
 {
     QString name = d->nameEdit->text();
-
+    if (!checkName(name)) 
+        return;
     createNewDateSearchAlbum(name);
 }
 
@@ -437,10 +450,12 @@ void TimeLineView::slotAlbumSelected(SAlbum* salbum)
     QMap<QString, QString> queries = url.queryItems();
     if (queries.isEmpty()) return;
 
-    QMap<QString, QString>::iterator it = queries.find("type");
-    if (it == queries.end()) return;
+    QString type = url.queryItem("type");
+    if (type != QString("datesearch")) return;
 
-    if (it.data() != QString("datesearch")) return;
+    bool ok   = false;
+    int count = url.queryItem("count").toInt(&ok);
+    if (!ok || count <= 0) return;
 
     DDebug() << url << endl;
 
@@ -448,7 +463,7 @@ void TimeLineView::slotAlbumSelected(SAlbum* salbum)
     QString       key;
     QDateTime     start, end;
     DateRangeList list;
-    for (uint i = 1 ; i <= (queries.count()/2)-6 ; i+=2)
+    for (int i = 1 ; i <= count/2 ; i+=2)
     {
         key = QString("%1.val").arg(QString::number(i));
         it2 = queries.find(key);
@@ -480,6 +495,51 @@ void TimeLineView::slotResetSelection()
 {
     d->timeLineWidget->slotResetSelection();
     AlbumManager::instance()->setCurrentAlbum(0);
+}
+
+bool TimeLineView::checkName(QString& name)
+{
+    AlbumManager* aManager = AlbumManager::instance();
+    AlbumList aList        = aManager->allSAlbums();
+    bool checked           = checkAlbum(name);
+
+    while (!checked) 
+    {
+        QString label = i18n( "Search name already exists.\n"
+                              "Please enter a new name:" );
+        bool ok;
+#if KDE_IS_VERSION(3,2,0)
+        QString newTitle = KInputDialog::getText(i18n("Name exists"), label, name, &ok, this);
+#else
+        QString newTitle = KLineEditDlg::getText(i18n("Name exists"), label, name, ok, this);
+#endif
+        if (!ok) return false;
+
+        name    = newTitle;
+        checked = checkAlbum(name);
+    }
+
+    return true;
+}
+
+bool TimeLineView::checkAlbum(const QString& name) const
+{
+
+    AlbumManager* aManager = AlbumManager::instance();
+    AlbumList aList        = aManager->allSAlbums();
+
+    for (AlbumList::Iterator it = aList.begin() ; it != aList.end() ; ++it)
+    {
+        SAlbum *album = (SAlbum*)(*it);
+        if ( album->title() == name )
+            return false;
+    }
+    return true;
+}
+
+void TimeLineView::slotNameChanged(const QString&)
+{
+    d->saveButton->setEnabled(!d->nameEdit->text().isEmpty());
 }
 
 }  // NameSpace Digikam

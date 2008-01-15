@@ -57,6 +57,8 @@ private:
     void readConfig();
     void writeConfig();
     void createNewDateSearchAlbum(const QString& name);
+    bool checkName(QString& name);
+    bool checkAlbum(const QString& name) const;
 
 private slots:
 
@@ -68,9 +70,10 @@ private slots:
     void slotSelectionChanged();
     void slotResetSelection();
     void slotSaveSelection();
-    void slotQuerySearchKIOSlave();
+    void slotUpdateCurrentDateSearchAlbum();
     void slotDateMapChanged();
     void slotAlbumSelected(SAlbum*);
+    void slotNameChanged(const QString&);
 
 private:
 

@@ -34,14 +34,7 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kiconloader.h>
-#include <kdeversion.h>
 #include <kmessagebox.h>
-
-#if KDE_IS_VERSION(3,2,0)
-#include <kinputdialog.h>
-#else
-#include <klineeditdlg.h>
-#endif
 
 // Local includes.
 
@@ -147,55 +140,6 @@ void TimeLineFolderView::slotSearchFilterChanged(const QString& filter)
     emit signalSearchFilterMatch(atleastOneMatch);
 }
 
-bool TimeLineFolderView::checkName( KURL& url )
-{
-    QString albumTitle     = url.queryItem("name");
-    AlbumManager* aManager = AlbumManager::instance();
-    AlbumList aList        = aManager->allSAlbums();
-    bool checked           = checkAlbum( albumTitle );
-
-    while ( !checked) 
-    {
-        QString label = i18n( "Date Search name already exists.\n"
-                              "Please enter a new name:" );
-        bool ok;
-#if KDE_IS_VERSION(3,2,0)
-        QString newTitle = KInputDialog::getText( i18n("Name exists"), label,
-                                                  albumTitle, &ok, this );
-#else
-        QString newTitle = KLineEditDlg::getText( i18n("Name exists"), label,
-                                                  albumTitle, ok, this );
-#endif
-        if (!ok)
-            return( false );
-
-        albumTitle=newTitle;
-        checked = checkAlbum( albumTitle );
-    }
-
-    url.removeQueryItem( "name" );
-    url.addQueryItem( "name", albumTitle );
-    return( true );
-}
-
-bool TimeLineFolderView::checkAlbum( const QString& name ) const
-{
-
-    AlbumManager* aManager = AlbumManager::instance();
-    AlbumList aList        = aManager->allSAlbums();
-
-    for ( AlbumList::Iterator it = aList.begin();
-          it != aList.end(); ++it )
-    {
-        SAlbum *album = (SAlbum*)(*it);
-        if ( album->title() == name )
-        {
-            return( false );
-        }
-    }
-    return( true );
-}
-
 void TimeLineFolderView::searchDelete(SAlbum* album)
 {
     if (!album)
@@ -229,10 +173,8 @@ void TimeLineFolderView::slotAlbumAdded(Album* a)
     QMap<QString, QString> queries = url.queryItems();
     if (queries.isEmpty()) return;
 
-    QMap<QString, QString>::iterator it = queries.find("type");
-    if (it == queries.end()) return;
-
-    if (it.data() != QString("datesearch")) return;
+    QString type = url.queryItem("type");
+    if (type != QString("datesearch")) return;
 
     TimeLineFolderItem* item = new TimeLineFolderItem(this, salbum);
     item->setPixmap(0, SmallIcon("find", AlbumSettings::instance()->getDefaultTreeIconSize()));

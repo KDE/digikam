@@ -64,11 +64,6 @@ private slots:
 protected:
 
     void selectItem(int id);
-
-private:
-
-    bool checkName( KURL& url );
-    bool checkAlbum( const QString& name ) const;
 };
 
 }  // namespace Digikam
