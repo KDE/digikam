@@ -61,6 +61,7 @@
 #include "album.h"
 #include "albummanager.h"
 #include "ddebug.h"
+#include "searchtextbar.h"
 #include "timelinefolderview.h"
 #include "timelineview.h"
 #include "timelineview.moc"
@@ -87,6 +88,7 @@ public:
         scrollBar             = 0;
         timeLineFolderView    = 0;
         nameEdit              = 0;
+        searchDateBar         = 0;
     }
 
     QScrollBar         *scrollBar;
@@ -105,6 +107,8 @@ public:
     KSqueezedTextLabel *cursorDateLabel;
     KSqueezedTextLabel *cursorCountLabel;
     KSqueezedTextLabel *totalLabel;
+
+    SearchTextBar      *searchDateBar;
 
     TimeLineWidget     *timeLineWidget;
 
@@ -203,7 +207,6 @@ TimeLineView::TimeLineView(QWidget *parent)
     QWhatsThis::add(d->nameEdit, i18n("<p>Enter the name of the current dates search to save in the "
                                       "\"My Date Searches\" view"));
 
-
     d->saveButton  = new QPushButton(hbox2);
     d->saveButton->setPixmap(SmallIcon("filesave"));
     d->saveButton->setEnabled(false);
@@ -230,8 +233,13 @@ TimeLineView::TimeLineView(QWidget *parent)
     // ---------------------------------------------------------------
 
     d->timeLineFolderView = new TimeLineFolderView(this);
+    d->searchDateBar      = new SearchTextBar(this);
+
     vlay->addWidget(panel);
     vlay->addWidget(d->timeLineFolderView);
+    vlay->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
+                                  QSizePolicy::Minimum, QSizePolicy::Minimum));
+    vlay->addWidget(d->searchDateBar);
     vlay->setMargin(0);
     vlay->setSpacing(0);
 
@@ -278,6 +286,12 @@ TimeLineView::TimeLineView(QWidget *parent)
 
     connect(d->nameEdit, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotCheckSaveButton()));
+
+    connect(d->searchDateBar, SIGNAL(signalTextChanged(const QString&)),
+            d->timeLineFolderView, SLOT(slotSearchFilterChanged(const QString&)));
+
+    connect(d->timeLineFolderView, SIGNAL(signalSearchFilterMatch(bool)),
+            d->searchDateBar, SLOT(slotSearchResult(bool)));
 
     // ---------------------------------------------------------------
 
