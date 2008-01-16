@@ -7,7 +7,7 @@
  * Description : a widget to display a welcome page 
  *               on root album.
  * 
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -152,6 +152,7 @@ QString WelcomePageView::infoPage()
     newFeatures << i18n("New options to recursively show the contents of sub-folders");
     newFeatures << i18n("New text filter to search contents on folder views");
     newFeatures << i18n("New options to count of items on all folder views");
+    newFeatures << i18n("New tool to perform dates search around whole albums collection: Time-Line");
 
     QString featureItems;
     for ( uint i = 0 ; i < newFeatures.count() ; i++ )
