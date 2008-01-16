@@ -80,7 +80,6 @@ public:
         scaleBG               = 0;
         cursorDateLabel       = 0;
         cursorCountLabel      = 0;
-        totalLabel            = 0;
         timeLineWidget        = 0;
         timer                 = 0;
         resetButton           = 0;
@@ -106,7 +105,6 @@ public:
 
     KSqueezedTextLabel *cursorDateLabel;
     KSqueezedTextLabel *cursorCountLabel;
-    KSqueezedTextLabel *totalLabel;
 
     SearchTextBar      *searchDateBar;
 
@@ -126,7 +124,7 @@ TimeLineView::TimeLineView(QWidget *parent)
     panel->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     panel->setLineWidth(1);
 
-    QGridLayout *grid = new QGridLayout(panel, 5, 3);
+    QGridLayout *grid = new QGridLayout(panel, 4, 3);
 
     // ---------------------------------------------------------------
 
@@ -187,10 +185,6 @@ TimeLineView::TimeLineView(QWidget *parent)
     d->cursorCountLabel = new KSqueezedTextLabel(0, panel);
     d->cursorCountLabel->setAlignment(Qt::AlignRight);
 
-    QLabel *label4 = new QLabel(i18n("Total:"), panel);
-    d->totalLabel  = new KSqueezedTextLabel(0, panel);
-    d->totalLabel->setAlignment(Qt::AlignRight);
-
     // ---------------------------------------------------------------
 
     QHBox *hbox2 = new QHBox(panel);
@@ -223,9 +217,7 @@ TimeLineView::TimeLineView(QWidget *parent)
     grid->addMultiCellWidget(d->scrollBar,        2, 2, 0, 3);
     grid->addMultiCellWidget(d->cursorDateLabel,  3, 3, 0, 2);
     grid->addMultiCellWidget(d->cursorCountLabel, 3, 3, 3, 3);
-    grid->addMultiCellWidget(label4,              4, 4, 0, 0);
-    grid->addMultiCellWidget(d->totalLabel,       4, 4, 3, 3);
-    grid->addMultiCellWidget(hbox2,               5, 5, 0, 3);
+    grid->addMultiCellWidget(hbox2,               4, 4, 0, 3);
     grid->setColStretch(2, 10);
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
@@ -403,7 +395,6 @@ void TimeLineView::createNewDateSearchAlbum(const QString& name)
     int totalCount = 0;
     QDateTime start, end;
     DateRangeList list = d->timeLineWidget->selectedDateRange(totalCount);
-    d->totalLabel->setText(QString::number(totalCount));
 
     if (list.isEmpty())
     {
