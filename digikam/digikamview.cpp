@@ -78,6 +78,8 @@
 #include "searchtextbar.h"
 #include "statusprogressbar.h"
 #include "tagfilterview.h"
+#include "timelineview.h"
+#include "timelinefolderview.h"
 #include "thumbnailsize.h"
 #include "dio.h"
 #include "digikamapp.h"
@@ -110,6 +112,7 @@ public:
         leftSideBar           = 0;
         rightSideBar          = 0;
         dateFolderView        = 0;
+        timeLineView          = 0;
         tagFolderView         = 0;
         searchFolderView      = 0;
         tagFilterView         = 0;
@@ -154,6 +157,7 @@ public:
     ImagePropertiesSideBarDB *rightSideBar;
 
     DateFolderView           *dateFolderView;
+    TimeLineView             *timeLineView;
     TagFolderView            *tagFolderView;
     SearchFolderView         *searchFolderView;
     TagFilterView            *tagFilterView;
@@ -192,9 +196,9 @@ DigikamView::DigikamView(QWidget *parent)
     d->folderBox->setMargin(0);
 
     // Tags sidebar tab contents.
-    d->tagBox        = new QVBox(this);
-    d->tagFolderView = new TagFolderView(d->tagBox);
-    d->tagSearchBar  = new SearchTextBar(d->tagBox);
+    d->tagBox           = new QVBox(this);
+    d->tagFolderView    = new TagFolderView(d->tagBox);
+    d->tagSearchBar     = new SearchTextBar(d->tagBox);
     d->tagBox->setSpacing(KDialog::spacingHint());
     d->tagBox->setMargin(0);
 
@@ -206,10 +210,12 @@ DigikamView::DigikamView(QWidget *parent)
     d->searchBox->setMargin(0);
 
     d->dateFolderView   = new DateFolderView(this);
+    d->timeLineView     = new TimeLineView(this);
 
     d->leftSideBar->appendTab(d->folderBox, SmallIcon("folder_image"), i18n("Albums"));
     d->leftSideBar->appendTab(d->dateFolderView, SmallIcon("date"), i18n("Dates"));
     d->leftSideBar->appendTab(d->tagBox, SmallIcon("tag"), i18n("Tags"));
+    d->leftSideBar->appendTab(d->timeLineView, SmallIcon("clock"), i18n("Timeline"));
     d->leftSideBar->appendTab(d->searchBox, SmallIcon("find"), i18n("Searches"));
 
     // To the right.
@@ -685,6 +691,14 @@ void DigikamView::changeAlbumFromHistory(Album *album, QWidget *widget)
             item = (QListViewItem*)album->extraData(v);
             if(!item) return;
             v->setSelected(item);
+        }
+        else if (TimeLineView *v = dynamic_cast<TimeLineView*>(widget))
+        {
+            item = (QListViewItem*)album->extraData(v->folderView());
+            if(!item) return;
+
+            v->folderView()->setSelected(item, true);
+            v->folderView()->ensureItemVisible(item);
         }
 
         d->leftSideBar->setActiveTab(widget);
@@ -1280,6 +1294,7 @@ void DigikamView::slotLeftSidebarChangedTab(QWidget* w)
     d->folderView->setActive(w == d->folderBox);
     d->tagFolderView->setActive(w == d->tagBox);
     d->searchFolderView->setActive(w == d->searchBox);
+    d->timeLineView->folderView()->setActive(w == d->timeLineView);
 }
 
 void DigikamView::slotAssignRating(int rating)
