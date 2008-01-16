@@ -1093,28 +1093,6 @@ void TimeLineWidget::setDateTimeSelected(const QDateTime& dt, SelectionMode sele
         }
     }
 
-    {
-        // Update Week stats map
-
-        QMap<TimeLineWidgetPriv::YearRefPair, TimeLineWidgetPriv::StatPair>::iterator it;
-        QDateTime dtsWeek, dteWeek, dt;
-        dt = dts;
-        do
-        {
-            int yearWeek = dt.date().year();
-            int weekNb   = KGlobal::locale()->calendar()->weekNumber(dt.date());
-
-            dtsWeek = firstDayOfWeek(yearWeek, weekNb);
-            dteWeek = dtsWeek.addDays(7);
-            it  = d->weekStatMap.find(TimeLineWidgetPriv::YearRefPair(yearWeek, weekNb));
-            if ( it != d->weekStatMap.end() )
-                it.data().second = checkSelectionForDaysRange(dtsWeek, dteWeek);
-
-            dt = dteWeek;
-        }
-        while (dt <= dte);
-    }
-
     // Update Week stats map
     updateWeekSelection(dts, dte);
 
@@ -1151,7 +1129,7 @@ void TimeLineWidget::updateWeekSelection(const QDateTime dts, const QDateTime dt
         if ( it != d->weekStatMap.end() )
             it.data().second = checkSelectionForDaysRange(dtsWeek, dteWeek);
 
-        dt = dteWeek;
+        dt = dt.addDays(7);
     }
     while (dt <= dte);
 }
