@@ -311,7 +311,7 @@ void AlbumFileTip::updateText()
     QString tip, str;
     QString unavailable(i18n("unavailable"));
 
-    QString headBeg("<tr bgcolor=\"orange\"><td colspan=\"2\">"
+    QString headBeg("<tr bgcolor=\"#73CAE6\"><td colspan=\"2\">"
                     "<nobr><font size=\"-1\" color=\"black\"><b>");
     QString headEnd("</b></font></nobr></td></tr>");
 

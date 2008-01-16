@@ -238,7 +238,7 @@ void FreeSpaceWidget::updatePixmap()
         QString tipText, value; 
         QString header = i18n("Camera Media");
         if (d->mode == FreeSpaceWidget::AlbumLibrary) header = i18n("Album Library");
-        QString headBeg("<tr bgcolor=\"orange\"><td colspan=\"2\">"
+        QString headBeg("<tr bgcolor=\"#73CAE6\"><td colspan=\"2\">"
                         "<nobr><font size=\"-1\" color=\"black\"><b>");
         QString headEnd("</b></font></nobr></td></tr>");
         QString cellBeg("<tr><td><nobr><font size=-1>");

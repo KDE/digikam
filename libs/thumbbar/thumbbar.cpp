@@ -855,7 +855,7 @@ void ThumbBarItem::repaint()
 ThumbBarToolTip::ThumbBarToolTip(ThumbBarView* parent) :
     m_maxStringLen(30), m_view(parent)
 {    
-    m_headBeg = QString("<tr bgcolor=\"orange\"><td colspan=\"2\">"
+    m_headBeg = QString("<tr bgcolor=\"#73CAE6\"><td colspan=\"2\">"
                         "<nobr><font size=\"-1\" color=\"black\"><b>");
     m_headEnd = QString("</b></font></nobr></td></tr>");
 
