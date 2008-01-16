@@ -366,7 +366,7 @@ DateRangeList TimeLineWidget::selectedDateRange(int& totalCount)
             QDate date(it3.key().first, 1, 1);
             date = date.addDays(it3.key().second-1);
             QDateTime sdt(date);
-            QDateTime edt = nextDateTime(sdt); 
+            QDateTime edt = sdt.addDays(1); 
             list.append(DateRange(sdt, edt));
             totalCount += it3.data().first;
         }
