@@ -333,7 +333,7 @@ void SearchFolderView::slotAlbumAdded(Album* a)
 
     // Check if a special url query exist to identify a SAlbum dedicaced to Date Search
     // used with TimeLine. In this case, SAlbum is not displayed here, but in TimeLineFolderView.
-    KURL url = album->kurl();
+    KURL url     = album->kurl();
     QString type = url.queryItem("type");
     if (type == QString("datesearch")) return;
 
