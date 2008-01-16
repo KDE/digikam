@@ -101,10 +101,11 @@ public:
     QPushButton        *resetButton;
     QPushButton        *saveButton;
 
+    QLabel             *cursorCountLabel;
+
     KLineEdit          *nameEdit;
 
     KSqueezedTextLabel *cursorDateLabel;
-    KSqueezedTextLabel *cursorCountLabel;
 
     SearchTextBar      *searchDateBar;
 
@@ -182,7 +183,7 @@ TimeLineView::TimeLineView(QWidget *parent)
     d->scrollBar->setLineStep(1);
 
     d->cursorDateLabel  = new KSqueezedTextLabel(0, panel);
-    d->cursorCountLabel = new KSqueezedTextLabel(0, panel);
+    d->cursorCountLabel = new QLabel(panel);
     d->cursorCountLabel->setAlignment(Qt::AlignRight);
 
     // ---------------------------------------------------------------
@@ -213,10 +214,10 @@ TimeLineView::TimeLineView(QWidget *parent)
     // ---------------------------------------------------------------
 
     grid->addMultiCellWidget(hbox1,               0, 0, 0, 3);
-    grid->addMultiCellWidget(d->timeLineWidget,   1, 1, 0, 3);
-    grid->addMultiCellWidget(d->scrollBar,        2, 2, 0, 3);
-    grid->addMultiCellWidget(d->cursorDateLabel,  3, 3, 0, 2);
-    grid->addMultiCellWidget(d->cursorCountLabel, 3, 3, 3, 3);
+    grid->addMultiCellWidget(d->cursorDateLabel,  1, 1, 0, 2);
+    grid->addMultiCellWidget(d->cursorCountLabel, 1, 1, 3, 3);
+    grid->addMultiCellWidget(d->timeLineWidget,   2, 2, 0, 3);
+    grid->addMultiCellWidget(d->scrollBar,        3, 3, 0, 3);
     grid->addMultiCellWidget(hbox2,               4, 4, 0, 3);
     grid->setColStretch(2, 10);
     grid->setMargin(KDialog::spacingHint());
@@ -360,13 +361,8 @@ void TimeLineView::slotScaleChanged(int mode)
 
 void TimeLineView::slotCursorPositionChanged()
 {
-    QDateTime start, end;
-    int val = d->timeLineWidget->cursorInfo(start, end);
-
-    QString txt = i18n("%1 to %2:")
-                  .arg(KGlobal::locale()->formatDate(start.date(), true))
-                  .arg(KGlobal::locale()->formatDate(end.date(), true));
-
+    QString txt;
+    int val = d->timeLineWidget->cursorInfo(txt);
     d->cursorDateLabel->setText(txt);
     d->cursorCountLabel->setText(QString::number(val));
 }

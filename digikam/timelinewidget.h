@@ -74,20 +74,19 @@ public:
     TimeLineWidget(QWidget *parent=0);
     ~TimeLineWidget();
 
-    void setDateMode(DateMode dateMode);
-    DateMode dateMode() const;
+    void      setDateMode(DateMode dateMode);
+    DateMode  dateMode() const;
 
-    void setScaleMode(ScaleMode scaleMode);
+    void      setScaleMode(ScaleMode scaleMode);
     ScaleMode scaleMode() const;
 
-    void setCursorDateTime(const QDateTime& dateTime);
+    void      setCursorDateTime(const QDateTime& dateTime);
     QDateTime cursorDateTime() const;
-
-    int cursorInfo(QDateTime& start, QDateTime& end);
+    int       cursorInfo(QString& infoDate);
 
     /** Return a list of Date-Range based on selection performed on days-map */
     DateRangeList selectedDateRange(int& totalCount);
-    void setSelectedDateRange(const DateRangeList& list);
+    void          setSelectedDateRange(const DateRangeList& list);
 
     int  totalIndex();
     int  indexForRefDateTime();

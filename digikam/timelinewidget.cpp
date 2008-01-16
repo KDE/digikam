@@ -251,12 +251,41 @@ QDateTime TimeLineWidget::cursorDateTime() const
     return d->cursorDateTime;
 }
 
-int TimeLineWidget::cursorInfo(QDateTime& start, QDateTime& end)
+int TimeLineWidget::cursorInfo(QString& infoDate)
 {
     SelectionMode selected;
-    start = cursorDateTime();
-    end   = nextDateTime(start);
-    return statForDateTime(start, selected);
+    QDateTime dt = cursorDateTime();
+
+    switch(d->dateMode)
+    {
+        case Day:
+        {
+            infoDate = KGlobal::locale()->formatDate(dt.date());
+            break;
+        }
+        case Week:
+        {
+            infoDate = i18n("Week #%1 - %2 %3")
+                       .arg(KGlobal::locale()->calendar()->weekNumber(dt.date()))
+                       .arg(KGlobal::locale()->calendar()->monthName(dt.date()))
+                       .arg(KGlobal::locale()->calendar()->yearString(dt.date(), false));
+            break;
+        }
+        case Month:
+        {
+            infoDate = QString("%1 %2")
+                       .arg(KGlobal::locale()->calendar()->monthName(dt.date()))
+                       .arg(KGlobal::locale()->calendar()->yearString(dt.date(), false));
+            break;
+        }
+        case Year:
+        {
+            infoDate = KGlobal::locale()->calendar()->yearString(dt.date(), false);
+            break;
+        }
+    }
+
+    return statForDateTime(dt, selected);
 }
 
 void TimeLineWidget::setRefDateTime(const QDateTime& dateTime)
