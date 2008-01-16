@@ -254,6 +254,12 @@ TimeLineView::TimeLineView(QWidget *parent)
     connect(d->timeLineFolderView, SIGNAL(signalRenameAlbum(SAlbum*)),
             this, SLOT(slotRenameAlbum(SAlbum*)));
 
+    connect(d->timeLineFolderView, SIGNAL(signalSearchFilterMatch(bool)),
+            d->searchDateBar, SLOT(slotSearchResult(bool)));
+
+    connect(d->searchDateBar, SIGNAL(signalTextChanged(const QString&)),
+            d->timeLineFolderView, SLOT(slotSearchFilterChanged(const QString&)));
+
     connect(d->dateModeCB, SIGNAL(activated(int)),
             this, SLOT(slotDateUnitChanged(int)));
 
@@ -286,12 +292,6 @@ TimeLineView::TimeLineView(QWidget *parent)
 
     connect(d->nameEdit, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotCheckSaveButton()));
-
-    connect(d->searchDateBar, SIGNAL(signalTextChanged(const QString&)),
-            d->timeLineFolderView, SLOT(slotSearchFilterChanged(const QString&)));
-
-    connect(d->timeLineFolderView, SIGNAL(signalSearchFilterMatch(bool)),
-            d->searchDateBar, SLOT(slotSearchResult(bool)));
 
     // ---------------------------------------------------------------
 
