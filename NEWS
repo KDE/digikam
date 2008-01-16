@@ -13,9 +13,12 @@ General        : Add capability to display count of items in all Album, Date, Ta
                  Count of items is performed in background by digiKam KIO-Slaves.
                  A new option from Setup/Album dialog page can toggle on/off this feature.
 
+AlbumGUI       : Add a new tool to perform Date search around whole albums collection : Time-Line.
+
 digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==>  96388 : Show number of images in the album.
 002 ==> 155271 : Configure suggests wrong parameter for libjasper
 003 ==> 155105 : Broken png image present in albums folder causes digikam to crash when starting.
-004 ==> 
+004 ==> 146760 : Providing a Timeline-View for quickly narrowing down the date of photos.
+005 ==> 
