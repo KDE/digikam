@@ -210,10 +210,10 @@ TimeLineView::TimeLineView(QWidget *parent)
     d->saveButton  = new QPushButton(hbox2);
     d->saveButton->setPixmap(SmallIcon("filesave"));
     d->saveButton->setEnabled(false);
-    QToolTip::add(d->saveButton, i18n("Save current selection to a new Album"));
+    QToolTip::add(d->saveButton, i18n("Save current selection to a new virtual Album"));
     QWhatsThis::add(d->saveButton, i18n("<p>If you press this button, current "
                                         "dates selection from time-line will be "
-                                        "saved to a new search Album using name "
+                                        "saved to a new search virtual Album using name "
                                         "set on the left side."));
 
     // ---------------------------------------------------------------
