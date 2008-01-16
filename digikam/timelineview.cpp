@@ -584,7 +584,7 @@ void TimeLineView::slotRenameAlbum(SAlbum* salbum)
                                           i18n("Enter new album name:"),
                                           oldName, &ok, this);
 #else
-    QString name = KLineEditDlg::getText(i18n("Rename Item (%1)").arg(oldName), 
+    QString name = KLineEditDlg::getText(i18n("Rename Album (%1)").arg(oldName), 
                                           i18n("Enter new album name:"),
                                           oldName, &ok, this);
 #endif
