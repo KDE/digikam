@@ -7,7 +7,7 @@
  * Description : Searches folder view 
  * 
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -60,7 +60,7 @@ namespace Digikam
 
 class SearchFolderItem : public FolderItem
 {
-    
+
 public:
 
     SearchFolderItem(QListView* parent, SAlbum* album)
@@ -79,19 +79,26 @@ public:
     {
         if (!i)
             return 0;
-        
+
         if (text(0) == i18n("Last Search"))
             return -1;
 
         return text(0).localeAwareCompare(i->text(0));
     }
-    
+
     int id() const
     {
         return m_album ? m_album->id() : 0;
     }
-    
-    SAlbum* m_album;
+
+    SAlbum* album() const
+    {
+        return m_album;
+    }
+
+private:
+
+    SAlbum *m_album;
 };
 
 SearchFolderView::SearchFolderView(QWidget* parent)
@@ -123,7 +130,7 @@ SearchFolderView::SearchFolderView(QWidget* parent)
 }
 
 SearchFolderView::~SearchFolderView()
-{    
+{
 }
 
 void SearchFolderView::slotSearchFilterChanged(const QString& filter)
@@ -232,7 +239,7 @@ bool SearchFolderView::checkName( KURL& url )
                                                   albumTitle, ok, this );
 #endif
         if (!ok)
-            return( false );
+            return false;
 
         albumTitle=newTitle;
         checked = checkAlbum( albumTitle );
@@ -240,7 +247,7 @@ bool SearchFolderView::checkName( KURL& url )
 
     url.removeQueryItem( "name" );
     url.addQueryItem( "name", albumTitle );
-    return( true );
+    return true;
 }
 
 bool SearchFolderView::checkAlbum( const QString& name ) const
@@ -254,11 +261,9 @@ bool SearchFolderView::checkAlbum( const QString& name ) const
     {
         SAlbum *album = (SAlbum*)(*it);
         if ( album->title() == name )
-        {
-            return( false );
-        }
+            return false;
     }
-    return( true );
+    return true;
 }
 
 void SearchFolderView::quickSearchEdit(SAlbum* album)
@@ -326,6 +331,12 @@ void SearchFolderView::slotAlbumAdded(Album* a)
 
     SAlbum* album = (SAlbum*)a;
 
+    // Check if a special url query exist to identify a SAlbum dedicaced to Date Search
+    // used with TimeLine. In this case, SAlbum is not displayed here, but in TimeLineFolderView.
+    KURL url = album->kurl();
+    QString type = url.queryItem("type");
+    if (type == QString("datesearch")) return;
+
     SearchFolderItem* item = new SearchFolderItem(this, album);
     item->setPixmap(0, SmallIcon("find", AlbumSettings::instance()->getDefaultTreeIconSize()));
     m_lastAddedItem = item;
@@ -340,9 +351,7 @@ void SearchFolderView::slotAlbumDeleted(Album* a)
 
     SearchFolderItem* item = (SearchFolderItem*) album->extraData(this);
     if (item)
-    {
         delete item;
-    }
 }
 
 void SearchFolderView::slotSelectionChanged()
@@ -351,7 +360,7 @@ void SearchFolderView::slotSelectionChanged()
         return;
 
     QListViewItem* selItem = 0;
-    
+
     QListViewItemIterator it( this );
     while (it.current())
     {
@@ -370,15 +379,11 @@ void SearchFolderView::slotSelectionChanged()
     }
 
     SearchFolderItem* searchItem = dynamic_cast<SearchFolderItem*>(selItem);
-    
-    if (!searchItem || !searchItem->m_album)
-    {
+
+    if (!searchItem || !searchItem->album())
         AlbumManager::instance()->setCurrentAlbum(0);
-    }
     else
-    {
-        AlbumManager::instance()->setCurrentAlbum(searchItem->m_album);
-    }
+        AlbumManager::instance()->setCurrentAlbum(searchItem->album());
 }
 
 void SearchFolderView::slotContextMenu(QListViewItem* item, const QPoint&, int)
@@ -414,9 +419,9 @@ void SearchFolderView::slotContextMenu(QListViewItem* item, const QPoint&, int)
         popmenu.insertTitle(SmallIcon("digikam"), i18n("My Searches"));
         popmenu.insertItem(SmallIcon("filefind"), i18n("Edit Search..."), 10);
 
-        if ( sItem->m_album->isSimple() )
+        if ( sItem->album()->isSimple() )
             popmenu.insertItem(SmallIcon("find"), i18n("Edit as Advanced Search..."), 11);
-        
+
         popmenu.insertSeparator(-1);
         popmenu.insertItem(SmallIcon("editdelete"), i18n("Delete Search"), 12);
 
@@ -424,20 +429,20 @@ void SearchFolderView::slotContextMenu(QListViewItem* item, const QPoint&, int)
         {
             case 10:
             {
-                if (sItem->m_album->isSimple())
-                    quickSearchEdit(sItem->m_album);
+                if (sItem->album()->isSimple())
+                    quickSearchEdit(sItem->album());
                 else
-                    extendedSearchEdit(sItem->m_album);
+                    extendedSearchEdit(sItem->album());
                 break;
             }
             case 11:
             {
-                extendedSearchEdit(sItem->m_album);
+                extendedSearchEdit(sItem->album());
                 break;
             }
             case 12:
             {
-                searchDelete(sItem->m_album);
+                searchDelete(sItem->album());
                 break;
             }
             default:
@@ -450,13 +455,13 @@ void SearchFolderView::slotDoubleClicked(QListViewItem* item, const QPoint&, int
 {
     if (!item)
         return;
-    
+
     SearchFolderItem* sItem = dynamic_cast<SearchFolderItem*>(item);
-    
-    if (sItem->m_album->isSimple())
-        quickSearchEdit(sItem->m_album);
+
+    if (sItem->album()->isSimple())
+        quickSearchEdit(sItem->album());
     else
-        extendedSearchEdit(sItem->m_album);
+        extendedSearchEdit(sItem->album());
 }
 
 void SearchFolderView::selectItem(int id)
@@ -474,4 +479,3 @@ void SearchFolderView::selectItem(int id)
 }
 
 }  // namespace Digikam
-
