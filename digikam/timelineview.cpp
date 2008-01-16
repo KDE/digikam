@@ -266,6 +266,9 @@ TimeLineView::TimeLineView(QWidget *parent)
     connect(d->scaleBG, SIGNAL(released(int)),
             this, SLOT(slotScaleChanged(int)));
 
+    connect(d->timeLineWidget, SIGNAL(signalDateMapChanged()),
+            this, SLOT(slotInit()));
+
     connect(d->timeLineWidget, SIGNAL(signalCursorPositionChanged()),
             this, SLOT(slotCursorPositionChanged()));
 
@@ -292,10 +295,6 @@ TimeLineView::TimeLineView(QWidget *parent)
 
     connect(d->nameEdit, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotCheckSaveButton()));
-
-    // ---------------------------------------------------------------
-
-    readConfig();
 }
 
 TimeLineView::~TimeLineView()
@@ -310,12 +309,26 @@ TimeLineFolderView* TimeLineView::folderView() const
     return d->timeLineFolderView;
 }
 
+void TimeLineView::slotInit()
+{
+    // Date Maps are loaded from AlbumManager to TimeLineWidget after than GUI is initialized.
+    // AlbumManager query Date KIO slave to stats items from database and it can take a while.
+    // We waiting than TimeLineWidget is ready before to set last config from users.
+
+    readConfig();
+
+    disconnect(d->timeLineWidget, SIGNAL(signalDateMapChanged()),
+               this, SLOT(slotInit()));
+}
+
 void TimeLineView::readConfig()
 {
     KConfig* config = kapp->config();
     config->setGroup("TimeLine SideBar");
     d->dateModeCB->setCurrentItem(config->readNumEntry("Histogram TimeUnit", TimeLineWidget::Month));
     d->scaleBG->setButton(config->readNumEntry("Histogram Scale", TimeLineWidget::LinScale));
+    slotDateUnitChanged(d->dateModeCB->currentItem());
+    slotScaleChanged(d->scaleBG->selectedId());
 }
 
 void TimeLineView::writeConfig()
