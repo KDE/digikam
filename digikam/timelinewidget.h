@@ -137,6 +137,7 @@ private:
     SelectionMode checkSelectionForDaysRange(const QDateTime dts, const QDateTime dte);
     void          updateWeekSelection(const QDateTime dts, const QDateTime dte);
     void          updateMonthSelection(const QDateTime dts, const QDateTime dte);
+    void          updateYearSelection(const QDateTime dts, const QDateTime dte);
 
 private:
 

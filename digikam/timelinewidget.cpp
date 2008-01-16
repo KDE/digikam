@@ -1058,7 +1058,6 @@ void TimeLineWidget::setDateTimeSelected(const QDateTime& dt, SelectionMode sele
     int week  = KGlobal::locale()->calendar()->weekNumber(dt.date());
 
     QMap<TimeLineWidgetPriv::YearRefPair, TimeLineWidgetPriv::StatPair>::iterator it;
-    QMap<int, TimeLineWidgetPriv::StatPair>::iterator it2;
     QDateTime dts, dte;
 
     switch(d->dateMode)
@@ -1100,27 +1099,23 @@ void TimeLineWidget::setDateTimeSelected(const QDateTime& dt, SelectionMode sele
     updateMonthSelection(dts, dte);
 
     // Update Year stats map
-
-    dts = QDateTime(QDate(year, 1, 1));
-    dte = dts.addDays(KGlobal::locale()->calendar()->daysInYear(dts.date()));
-    it2 = d->yearStatMap.find(year);
-    if ( it2 != d->yearStatMap.end() )
-        it2.data().second = checkSelectionForDaysRange(dts, dte);
+    updateYearSelection(dts, dte);
 }
 
 void TimeLineWidget::updateWeekSelection(const QDateTime dts, const QDateTime dte)
 {
     QMap<TimeLineWidgetPriv::YearRefPair, TimeLineWidgetPriv::StatPair>::iterator it;
     QDateTime dtsWeek, dteWeek, dt;
+    int       year, week;
     dt = dts;
     do
     {
-        int yearWeek = dt.date().year();
-        int weekNb   = KGlobal::locale()->calendar()->weekNumber(dt.date());
+        year = dt.date().year();
+        week = KGlobal::locale()->calendar()->weekNumber(dt.date());
 
-        dtsWeek = firstDayOfWeek(yearWeek, weekNb);
+        dtsWeek = firstDayOfWeek(year, week);
         dteWeek = dtsWeek.addDays(7);
-        it  = d->weekStatMap.find(TimeLineWidgetPriv::YearRefPair(yearWeek, weekNb));
+        it  = d->weekStatMap.find(TimeLineWidgetPriv::YearRefPair(year, week));
         if ( it != d->weekStatMap.end() )
             it.data().second = checkSelectionForDaysRange(dtsWeek, dteWeek);
 
@@ -1133,19 +1128,41 @@ void TimeLineWidget::updateMonthSelection(const QDateTime dts, const QDateTime d
 {
     QMap<TimeLineWidgetPriv::YearRefPair, TimeLineWidgetPriv::StatPair>::iterator it;
     QDateTime dtsMonth, dteMonth, dt;
+    int       year, month;
     dt = dts;
     do
     {
-        int yearMonth = dt.date().year();
-        int MonthNb   = dt.date().month();
+        year  = dt.date().year();
+        month = dt.date().month();
 
-        dtsMonth = QDateTime(QDate(yearMonth, MonthNb, 1));
+        dtsMonth = QDateTime(QDate(year, month, 1));
         dteMonth = dtsMonth.addDays(KGlobal::locale()->calendar()->daysInMonth(dtsMonth.date()));
-        it  = d->monthStatMap.find(TimeLineWidgetPriv::YearRefPair(yearMonth, MonthNb));
+        it  = d->monthStatMap.find(TimeLineWidgetPriv::YearRefPair(year, month));
         if ( it != d->weekStatMap.end() )
             it.data().second = checkSelectionForDaysRange(dtsMonth, dteMonth);
 
         dt = dteMonth;
+    }
+    while (dt <= dte);
+}
+
+void TimeLineWidget::updateYearSelection(const QDateTime dts, const QDateTime dte)
+{
+    QMap<int, TimeLineWidgetPriv::StatPair>::iterator it;
+    QDateTime dtsYear, dteYear, dt;
+    int       year;
+    dt = dts;
+    do
+    {
+        year = dt.date().year();
+
+        dtsYear = QDateTime(QDate(year, 1, 1));
+        dteYear = dtsYear.addDays(KGlobal::locale()->calendar()->daysInYear(dtsYear.date()));
+        it = d->yearStatMap.find(year);
+        if ( it != d->yearStatMap.end() )
+            it.data().second = checkSelectionForDaysRange(dtsYear, dteYear);
+
+        dt = dteYear;
     }
     while (dt <= dte);
 }
