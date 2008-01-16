@@ -1093,13 +1093,30 @@ void TimeLineWidget::setDateTimeSelected(const QDateTime& dt, SelectionMode sele
         }
     }
 
-    // Update Week stats map
+    {
+        // Update Week stats map
 
-    dts = firstDayOfWeek(year, week);
-    dte = dts.addDays(7);
-    it  = d->weekStatMap.find(TimeLineWidgetPriv::YearRefPair(year, week));
-    if ( it != d->weekStatMap.end() )
-        it.data().second = checkSelectionForDaysRange(dts, dte);
+        QMap<TimeLineWidgetPriv::YearRefPair, TimeLineWidgetPriv::StatPair>::iterator it;
+        QDateTime dtsWeek, dteWeek, dt;
+        dt = dts;
+        do
+        {
+            int yearWeek = dt.date().year();
+            int weekNb   = KGlobal::locale()->calendar()->weekNumber(dt.date());
+
+            dtsWeek = firstDayOfWeek(yearWeek, weekNb);
+            dteWeek = dtsWeek.addDays(7);
+            it  = d->weekStatMap.find(TimeLineWidgetPriv::YearRefPair(yearWeek, weekNb));
+            if ( it != d->weekStatMap.end() )
+                it.data().second = checkSelectionForDaysRange(dtsWeek, dteWeek);
+
+            dt = dteWeek;
+        }
+        while (dt <= dte);
+    }
+
+    // Update Week stats map
+    updateWeekSelection(dts, dte);
 
     // Update Month stats map
 
@@ -1116,6 +1133,27 @@ void TimeLineWidget::setDateTimeSelected(const QDateTime& dt, SelectionMode sele
     it2 = d->yearStatMap.find(year);
     if ( it2 != d->yearStatMap.end() )
         it2.data().second = checkSelectionForDaysRange(dts, dte);
+}
+
+void TimeLineWidget::updateWeekSelection(const QDateTime dts, const QDateTime dte)
+{
+    QMap<TimeLineWidgetPriv::YearRefPair, TimeLineWidgetPriv::StatPair>::iterator it;
+    QDateTime dtsWeek, dteWeek, dt;
+    dt = dts;
+    do
+    {
+        int yearWeek = dt.date().year();
+        int weekNb   = KGlobal::locale()->calendar()->weekNumber(dt.date());
+
+        dtsWeek = firstDayOfWeek(yearWeek, weekNb);
+        dteWeek = dtsWeek.addDays(7);
+        it  = d->weekStatMap.find(TimeLineWidgetPriv::YearRefPair(yearWeek, weekNb));
+        if ( it != d->weekStatMap.end() )
+            it.data().second = checkSelectionForDaysRange(dtsWeek, dteWeek);
+
+        dt = dteWeek;
+    }
+    while (dt <= dte);
 }
 
 void TimeLineWidget::setDaysRangeSelection(const QDateTime dts, const QDateTime dte, SelectionMode selected)
