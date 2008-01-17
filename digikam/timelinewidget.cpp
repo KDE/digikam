@@ -129,7 +129,8 @@ TimeLineWidget::~TimeLineWidget()
 void TimeLineWidget::setDateMode(DateMode dateMode)
 {
     d->dateMode = dateMode;
-    setRefDateTime(d->refDateTime);
+    setCursorDateTime(cursorDateTime());
+    setRefDateTime(cursorDateTime());
 }
 
 TimeLineWidget::DateMode TimeLineWidget::dateMode() const
