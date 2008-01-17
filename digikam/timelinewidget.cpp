@@ -93,15 +93,15 @@ public:
     QDateTime                   minDateTime;       // Higher date on histogram.
     QDateTime                   maxDateTime;       // Lower date on histogram.
     QDateTime                   selStartDateTime;
-    QDateTime                   selMinDateTime;
-    QDateTime                   selMaxDateTime;
+    QDateTime                   selMinDateTime;    // Lower date available on histogram.
+    QDateTime                   selMaxDateTime;    // Higher date available on histogram.
 
-    QPixmap                     pixmap;
+    QPixmap                     pixmap;            // Used for widget double buffering.
 
-    QMap<YearRefPair, StatPair> dayStatMap;
-    QMap<YearRefPair, StatPair> weekStatMap;
-    QMap<YearRefPair, StatPair> monthStatMap;
-    QMap<int,         StatPair> yearStatMap;
+    QMap<YearRefPair, StatPair> dayStatMap;        // Store Days count statistics.
+    QMap<YearRefPair, StatPair> weekStatMap;       // Store Weeks count statistics.
+    QMap<YearRefPair, StatPair> monthStatMap;      // Store Month count statistics.
+    QMap<int,         StatPair> yearStatMap;       // Store Years count statistics.
 
     TimeLineWidget::DateMode    dateMode;
     TimeLineWidget::ScaleMode   scaleMode;
@@ -1085,19 +1085,17 @@ void TimeLineWidget::setDateTimeSelected(const QDateTime& dt, SelectionMode sele
 {
     int year  = dt.date().year();
     int month = dt.date().month();
-    int day   = KGlobal::locale()->calendar()->dayOfYear(dt.date());
     int week  = KGlobal::locale()->calendar()->weekNumber(dt.date());
 
-    QMap<TimeLineWidgetPriv::YearRefPair, TimeLineWidgetPriv::StatPair>::iterator it;
     QDateTime dts, dte;
 
     switch(d->dateMode)
     {
         case Day:
         {
-            it = d->dayStatMap.find(TimeLineWidgetPriv::YearRefPair(year, day));
-            if ( it != d->dayStatMap.end() )
-                it.data().second = selected;
+            dts = dt;
+            dte = dts.addDays(1);
+            setDaysRangeSelection(dts, dte, selected);
             break;
         }
         case Week:
