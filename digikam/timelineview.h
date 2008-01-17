@@ -66,7 +66,7 @@ private slots:
     void slotScrollBarValueChanged(int);
     void slotRefDateTimeChanged();
     void slotScaleChanged(int);
-    void slotDateUnitChanged(int);
+    void slotTimeUnitChanged(int);
     void slotCursorPositionChanged();
     void slotSelectionChanged();
     void slotResetSelection();

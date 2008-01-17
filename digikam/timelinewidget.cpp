@@ -53,7 +53,7 @@ class TimeLineWidgetPriv
 
 public :
 
-    typedef QPair<int, int>  YearRefPair;                        // Year + a reference association (Month or week or day)
+    typedef QPair<int, int> YearRefPair;                         // Year + a reference association (Month or week or day)
     typedef QPair<int, TimeLineWidget::SelectionMode> StatPair;  // Statistic value + selection status.
 
 public:
@@ -71,7 +71,7 @@ public:
         barWidth        = 20;
         startPos        = 96;
         nbItems         = 10;
-        dateMode        = TimeLineWidget::Month;
+        timeUnit        = TimeLineWidget::Month;
         scaleMode       = TimeLineWidget::LinScale;
     }
 
@@ -103,7 +103,7 @@ public:
     QMap<YearRefPair, StatPair> monthStatMap;      // Store Month count statistics.
     QMap<int,         StatPair> yearStatMap;       // Store Years count statistics.
 
-    TimeLineWidget::DateMode    dateMode;
+    TimeLineWidget::TimeUnit    timeUnit;
     TimeLineWidget::ScaleMode   scaleMode;
 };
 
@@ -126,16 +126,16 @@ TimeLineWidget::~TimeLineWidget()
     delete d;
 }
 
-void TimeLineWidget::setDateMode(DateMode dateMode)
+void TimeLineWidget::setTimeUnit(TimeUnit timeUnit)
 {
-    d->dateMode = dateMode;
+    d->timeUnit = timeUnit;
     setCursorDateTime(cursorDateTime());
     setRefDateTime(cursorDateTime());
 }
 
-TimeLineWidget::DateMode TimeLineWidget::dateMode() const
+TimeLineWidget::TimeUnit TimeLineWidget::timeUnit() const
 {
-    return d->dateMode;
+    return d->timeUnit;
 }
 
 void TimeLineWidget::setScaleMode(ScaleMode scaleMode)
@@ -214,7 +214,7 @@ void TimeLineWidget::setCursorDateTime(const QDateTime& dateTime)
     QDateTime dt = dateTime;
     dt.setTime(QTime());
 
-    switch(d->dateMode)
+    switch(d->timeUnit)
     {
         case Week:
         {
@@ -257,7 +257,7 @@ int TimeLineWidget::cursorInfo(QString& infoDate)
     SelectionMode selected;
     QDateTime dt = cursorDateTime();
 
-    switch(d->dateMode)
+    switch(d->timeUnit)
     {
         case Day:
         {
@@ -294,7 +294,7 @@ void TimeLineWidget::setRefDateTime(const QDateTime& dateTime)
     QDateTime dt = dateTime;
     dt.setTime(QTime());
 
-    switch(d->dateMode)
+    switch(d->timeUnit)
     {
         case Week:
         {
@@ -564,6 +564,7 @@ void TimeLineWidget::slotDatesMap(const QMap<QDateTime, int>& datesStatMap)
 
     updatePixmap();
     update();
+    emit signalDateMapChanged();
 }
 
 void TimeLineWidget::updatePixmap()
@@ -643,7 +644,7 @@ void TimeLineWidget::updatePixmap()
             p.fillRect(selRect, selBrush);
         }
 
-        switch(d->dateMode)
+        switch(d->timeUnit)
         {
             case Day:
             {
@@ -808,7 +809,7 @@ void TimeLineWidget::updatePixmap()
             p.fillRect(selRect, selBrush);
         }
 
-        switch(d->dateMode)
+        switch(d->timeUnit)
         {
             case Day:
             {
@@ -937,7 +938,7 @@ void TimeLineWidget::updatePixmap()
 QDateTime TimeLineWidget::prevDateTime(const QDateTime& dt)
 {
     QDateTime prev;
-    switch(d->dateMode)
+    switch(d->timeUnit)
     {
         case Day:
         {
@@ -966,7 +967,7 @@ QDateTime TimeLineWidget::prevDateTime(const QDateTime& dt)
 QDateTime TimeLineWidget::nextDateTime(const QDateTime& dt)
 {
     QDateTime next;
-    switch(d->dateMode)
+    switch(d->timeUnit)
     {
         case Day:
         {
@@ -995,7 +996,7 @@ QDateTime TimeLineWidget::nextDateTime(const QDateTime& dt)
 int TimeLineWidget::maxCount()
 {
     int max = 1;
-    switch(d->dateMode)
+    switch(d->timeUnit)
     {
         case Day:
         {
@@ -1030,7 +1031,7 @@ int TimeLineWidget::statForDateTime(const QDateTime& dt, SelectionMode& selected
     int week  = KGlobal::locale()->calendar()->weekNumber(dt.date());
     selected  = Unselected;
 
-    switch(d->dateMode)
+    switch(d->timeUnit)
     {
         case Day:
         {
@@ -1088,7 +1089,7 @@ void TimeLineWidget::setDateTimeSelected(const QDateTime& dt, SelectionMode sele
 
     QDateTime dts, dte;
 
-    switch(d->dateMode)
+    switch(d->timeUnit)
     {
         case Day:
         {
@@ -1274,7 +1275,7 @@ void TimeLineWidget::slotBackward()
 {
     QDateTime ref = d->refDateTime;
 
-    switch(d->dateMode)
+    switch(d->timeUnit)
     {
         case Day:
         {
@@ -1328,7 +1329,7 @@ void TimeLineWidget::slotForward()
 {
     QDateTime ref = d->refDateTime;
 
-    switch(d->dateMode)
+    switch(d->timeUnit)
     {
         case Day:
         {

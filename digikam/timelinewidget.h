@@ -48,7 +48,7 @@ Q_OBJECT
 
 public:
 
-    enum DateMode 
+    enum TimeUnit 
     {
         Day = 0,
         Week,
@@ -74,8 +74,8 @@ public:
     TimeLineWidget(QWidget *parent=0);
     ~TimeLineWidget();
 
-    void      setDateMode(DateMode dateMode);
-    DateMode  dateMode() const;
+    void      setTimeUnit(TimeUnit timeUnit);
+    TimeUnit  timeUnit() const;
 
     void      setScaleMode(ScaleMode scaleMode);
     ScaleMode scaleMode() const;
@@ -97,6 +97,7 @@ signals:
     void signalCursorPositionChanged();
     void signalSelectionChanged();
     void signalRefDateTimeChanged();
+    void signalDateMapChanged();
 
 public slots:
 

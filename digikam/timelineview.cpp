@@ -76,7 +76,7 @@ public:
 
     TimeLineViewPriv()
     {
-        dateModeCB            = 0;
+        timeUnitCB            = 0;
         scaleBG               = 0;
         cursorDateLabel       = 0;
         cursorCountLabel      = 0;
@@ -94,7 +94,7 @@ public:
 
     QTimer             *timer;
 
-    QComboBox          *dateModeCB;
+    QComboBox          *timeUnitCB;
 
     QHButtonGroup      *scaleBG;
 
@@ -133,14 +133,14 @@ TimeLineView::TimeLineView(QWidget *parent)
     QHBoxLayout *hlay = new QHBoxLayout(hbox1);
 
     QLabel *label1 = new QLabel(i18n("Time Unit:"), hbox1);
-    d->dateModeCB  = new QComboBox(false, hbox1);
-    d->dateModeCB->insertItem(i18n("Day"),   TimeLineWidget::Day);
-    d->dateModeCB->insertItem(i18n("Week"),  TimeLineWidget::Week);
-    d->dateModeCB->insertItem(i18n("Month"), TimeLineWidget::Month);
-    d->dateModeCB->insertItem(i18n("Year"),  TimeLineWidget::Year);
-    d->dateModeCB->setCurrentItem((int)TimeLineWidget::Month);
-    d->dateModeCB->setFocusPolicy(QWidget::NoFocus);
-    QWhatsThis::add(d->dateModeCB, i18n("<p>Select here histogram time unit.<p>"
+    d->timeUnitCB  = new QComboBox(false, hbox1);
+    d->timeUnitCB->insertItem(i18n("Day"),   TimeLineWidget::Day);
+    d->timeUnitCB->insertItem(i18n("Week"),  TimeLineWidget::Week);
+    d->timeUnitCB->insertItem(i18n("Month"), TimeLineWidget::Month);
+    d->timeUnitCB->insertItem(i18n("Year"),  TimeLineWidget::Year);
+    d->timeUnitCB->setCurrentItem((int)TimeLineWidget::Month);
+    d->timeUnitCB->setFocusPolicy(QWidget::NoFocus);
+    QWhatsThis::add(d->timeUnitCB, i18n("<p>Select here histogram time unit.<p>"
                                         "You can change the graph decade to zoom in or zoom out over time."));
 
     d->scaleBG = new QHButtonGroup(hbox1);
@@ -172,7 +172,7 @@ TimeLineView::TimeLineView(QWidget *parent)
     hlay->setMargin(0);
     hlay->setSpacing(KDialog::spacingHint());
     hlay->addWidget(label1);
-    hlay->addWidget(d->dateModeCB);
+    hlay->addWidget(d->timeUnitCB);
     hlay->addItem(new QSpacerItem(10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum));
     hlay->addWidget(d->scaleBG);
 
@@ -255,8 +255,8 @@ TimeLineView::TimeLineView(QWidget *parent)
     connect(d->searchDateBar, SIGNAL(signalTextChanged(const QString&)),
             d->timeLineFolderView, SLOT(slotSearchFilterChanged(const QString&)));
 
-    connect(d->dateModeCB, SIGNAL(activated(int)),
-            this, SLOT(slotDateUnitChanged(int)));
+    connect(d->timeUnitCB, SIGNAL(activated(int)),
+            this, SLOT(slotTimeUnitChanged(int)));
 
     connect(d->scaleBG, SIGNAL(released(int)),
             this, SLOT(slotScaleChanged(int)));
@@ -317,9 +317,9 @@ void TimeLineView::readConfig()
 {
     KConfig* config = kapp->config();
     config->setGroup("TimeLine SideBar");
-    d->dateModeCB->setCurrentItem(config->readNumEntry("Histogram TimeUnit", TimeLineWidget::Month));
+    d->timeUnitCB->setCurrentItem(config->readNumEntry("Histogram TimeUnit", TimeLineWidget::Month));
     d->scaleBG->setButton(config->readNumEntry("Histogram Scale", TimeLineWidget::LinScale));
-    slotDateUnitChanged(d->dateModeCB->currentItem());
+    slotTimeUnitChanged(d->timeUnitCB->currentItem());
     slotScaleChanged(d->scaleBG->selectedId());
 }
 
@@ -327,7 +327,7 @@ void TimeLineView::writeConfig()
 {
     KConfig* config = kapp->config();
     config->setGroup("TimeLine SideBar");
-    config->writeEntry("Histogram TimeUnit", d->dateModeCB->currentItem());
+    config->writeEntry("Histogram TimeUnit", d->timeUnitCB->currentItem());
     config->writeEntry("Histogram Scale", d->scaleBG->selectedId());
     config->sync();
 }
@@ -340,9 +340,9 @@ void TimeLineView::slotRefDateTimeChanged()
     d->scrollBar->blockSignals(false);
 }
 
-void TimeLineView::slotDateUnitChanged(int mode)
+void TimeLineView::slotTimeUnitChanged(int mode)
 {
-    d->timeLineWidget->setDateMode((TimeLineWidget::DateMode)mode);
+    d->timeLineWidget->setTimeUnit((TimeLineWidget::TimeUnit)mode);
 }
 
 void TimeLineView::slotScrollBarValueChanged(int val)
