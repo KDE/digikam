@@ -72,7 +72,6 @@ private slots:
     void slotResetSelection();
     void slotSaveSelection();
     void slotUpdateCurrentDateSearchAlbum();
-    void slotDateMapChanged();
     void slotAlbumSelected(SAlbum*);
     void slotCheckSaveButton();
     void slotRenameAlbum(SAlbum*);

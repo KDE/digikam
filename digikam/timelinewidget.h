@@ -97,7 +97,6 @@ signals:
     void signalCursorPositionChanged();
     void signalSelectionChanged();
     void signalRefDateTimeChanged();
-    void signalDateMapChanged();
 
 public slots:
 

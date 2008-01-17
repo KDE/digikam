@@ -564,7 +564,6 @@ void TimeLineWidget::slotDatesMap(const QMap<QDateTime, int>& datesStatMap)
 
     updatePixmap();
     update();
-    emit signalDateMapChanged();
 }
 
 void TimeLineWidget::updatePixmap()

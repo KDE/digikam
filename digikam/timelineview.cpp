@@ -273,9 +273,6 @@ TimeLineView::TimeLineView(QWidget *parent)
     connect(d->timeLineWidget, SIGNAL(signalRefDateTimeChanged()),
             this, SLOT(slotRefDateTimeChanged()));
 
-    connect(d->timeLineWidget, SIGNAL(signalDateMapChanged()),
-            this, SLOT(slotDateMapChanged()));
-
     connect(d->timer, SIGNAL(timeout()),
             this, SLOT(slotUpdateCurrentDateSearchAlbum()));
 
@@ -333,11 +330,6 @@ void TimeLineView::writeConfig()
     config->writeEntry("Histogram TimeUnit", d->dateModeCB->currentItem());
     config->writeEntry("Histogram Scale", d->scaleBG->selectedId());
     config->sync();
-}
-
-void TimeLineView::slotDateMapChanged()
-{
-    slotDateUnitChanged(d->dateModeCB->currentItem());
 }
 
 void TimeLineView::slotRefDateTimeChanged()
