@@ -478,7 +478,8 @@ void TimeLineWidget::slotDatesMap(const QMap<QDateTime, int>& datesStatMap)
         int year  = it.key().date().year();
         int month = it.key().date().month();
         int day   = KGlobal::locale()->calendar()->dayOfYear(it.key().date());
-        int week  = KGlobal::locale()->calendar()->weekNumber(it.key().date());
+        int yearForWeek;  // Used with week shared between 2 years decade (Dec/Jan).
+        int week  = KGlobal::locale()->calendar()->weekNumber(it.key().date(), &yearForWeek);
 
         // Stats Years values.
 
@@ -518,17 +519,17 @@ void TimeLineWidget::slotDatesMap(const QMap<QDateTime, int>& datesStatMap)
 
         // Stats Weeks values.
 
-        it_YP = d->weekStatMap.find(TimeLineWidgetPriv::YearRefPair(year, week));
+        it_YP = d->weekStatMap.find(TimeLineWidgetPriv::YearRefPair(yearForWeek, week));
         if ( it_YP == d->weekStatMap.end() )
         {
             count = it.data();
-            d->weekStatMap.insert( TimeLineWidgetPriv::YearRefPair(year, week), 
+            d->weekStatMap.insert( TimeLineWidgetPriv::YearRefPair(yearForWeek, week), 
                                    TimeLineWidgetPriv::StatPair(count, Unselected) );
         }
         else
         {
             count = it_YP.data().first + it.data();
-            d->weekStatMap.replace( TimeLineWidgetPriv::YearRefPair(year, week), 
+            d->weekStatMap.replace( TimeLineWidgetPriv::YearRefPair(yearForWeek, week), 
                                     TimeLineWidgetPriv::StatPair(count, it_YP.data().second) );
         }
 
