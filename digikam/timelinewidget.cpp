@@ -1572,23 +1572,16 @@ QDateTime TimeLineWidget::dateTimeForPoint(const QPoint& pt, bool &isOnSelection
 
 QDateTime TimeLineWidget::firstDayOfWeek(int year, int weekNumber)
 {
-    QDateTime date(QDate(year, 1, 1));
-    for (int i = 0 ; i < KGlobal::locale()->calendar()->daysInYear(date.date()) ; i++)
-    {
-        QDateTime dt = date.addDays(i);
+    QDateTime dt(QDate(year, 1, 1));
 
-        if (KGlobal::locale()->calendar()->weekNumber(dt.date()) == weekNumber)
-        {
-            if (weekNumber == 1 && KGlobal::locale()->calendar()->dayOfWeek(dt.date()) > 1)
-            {
-                int dayWeekOffset = (-1) * (KGlobal::locale()->calendar()->dayOfWeek(dt.date()) - 1);
-                dt = dt.addDays(dayWeekOffset);
-            }
-            return dt;
-        }
-    }
+    // Check if first week of year is shared between 2 years decade.
+    int offset = KGlobal::locale()->calendar()->dayOfWeek(dt.date());
+    if (offset > 1) 
+        dt = dt.addDays(8 - offset); 
 
-    return QDateTime();
+    dt = dt.addDays((weekNumber-1)*7);
+    DDebug() << "year= " << year << " week= " << weekNumber << " offset= " << offset << " 1st day= " << dt << endl;
+    return dt;
 }
 
 }  // NameSpace Digikam
