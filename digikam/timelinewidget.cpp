@@ -1315,17 +1315,17 @@ void TimeLineWidget::slotBackward()
 
 void TimeLineWidget::slotPrevious()
 {
+    if (d->refDateTime <= d->minDateTime)
+        return;
     QDateTime ref = prevDateTime(d->refDateTime);
-    if (ref < d->minDateTime)
-        ref = d->minDateTime;
     setRefDateTime(ref);
 }
 
 void TimeLineWidget::slotNext()
 {
+    if (d->refDateTime >= d->maxDateTime)
+        return;
     QDateTime ref = nextDateTime(d->refDateTime);
-    if (ref > d->maxDateTime)
-        ref = d->maxDateTime;
     setRefDateTime(ref);
 }
 
