@@ -204,7 +204,7 @@ void TimeLineWidget::setCurrentIndex(int index)
         dt = nextDateTime(dt);
         i++;
     }
-    while(i < index);
+    while(i <= index);
 
     setRefDateTime(dt);
 }
