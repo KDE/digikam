@@ -52,6 +52,8 @@ public:
 
     TimeLineFolderView *folderView() const;
 
+    void setActive(bool val);
+
 private: 
 
     void readConfig();
@@ -73,7 +75,7 @@ private slots:
     void slotSaveSelection();
     void slotUpdateCurrentDateSearchAlbum();
     void slotAlbumSelected(SAlbum*);
-    void slotCheckToSaveSelection();
+    void slotCheckAboutSelection();
     void slotRenameAlbum(SAlbum*);
 
 private:

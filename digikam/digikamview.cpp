@@ -1294,7 +1294,7 @@ void DigikamView::slotLeftSidebarChangedTab(QWidget* w)
     d->folderView->setActive(w == d->folderBox);
     d->tagFolderView->setActive(w == d->tagBox);
     d->searchFolderView->setActive(w == d->searchBox);
-    d->timeLineView->folderView()->setActive(w == d->timeLineView);
+    d->timeLineView->setActive(w == d->timeLineView);
 }
 
 void DigikamView::slotAssignRating(int rating)

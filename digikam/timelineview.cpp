@@ -286,7 +286,7 @@ TimeLineView::TimeLineView(QWidget *parent)
             this, SLOT(slotScrollBarValueChanged(int)));
 
     connect(d->nameEdit, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotCheckToSaveSelection()));
+            this, SLOT(slotCheckAboutSelection()));
 }
 
 TimeLineView::~TimeLineView()
@@ -332,6 +332,33 @@ void TimeLineView::writeConfig()
     config->sync();
 }
 
+void TimeLineView::setActive(bool val)
+{
+    if (d->timeLineFolderView->selectedItem()) 
+    {
+        d->timeLineFolderView->setActive(val);
+    }
+    else
+    {
+        int totalCount = 0;
+        DateRangeList list = d->timeLineWidget->selectedDateRange(totalCount);
+        if (list.isEmpty())
+        {
+            AlbumManager::instance()->setCurrentAlbum(0);
+        }
+        else
+        {
+            AlbumList sList = AlbumManager::instance()->allSAlbums();
+            for (AlbumList::iterator it = sList.begin(); it != sList.end(); ++it)
+            {
+                SAlbum* salbum = (SAlbum*)(*it);
+                if (salbum->title() == d->timeLineFolderView->currentTimeLineSearchName())
+                    AlbumManager::instance()->setCurrentAlbum(salbum);
+            }
+        }
+    }
+}
+
 void TimeLineView::slotRefDateTimeChanged()
 {
     d->scrollBar->blockSignals(true);
@@ -371,7 +398,7 @@ void TimeLineView::slotSelectionChanged()
 /** Called from d->timer event.*/
 void TimeLineView::slotUpdateCurrentDateSearchAlbum()
 {
-    slotCheckToSaveSelection();
+    slotCheckAboutSelection();
     createNewDateSearchAlbum(d->timeLineFolderView->currentTimeLineSearchName());
 }
 
@@ -394,6 +421,10 @@ void TimeLineView::createNewDateSearchAlbum(const QString& name)
         AlbumManager::instance()->setCurrentAlbum(0);
         return;
     }
+
+    d->timeLineFolderView->blockSignals(true);
+    d->timeLineFolderView->clearSelection();
+    d->timeLineFolderView->blockSignals(false);
 
     // We will make now the Url for digiKam Search KIO-Slave
 
@@ -509,7 +540,7 @@ void TimeLineView::slotAlbumSelected(SAlbum* salbum)
 void TimeLineView::slotResetSelection()
 {
     d->timeLineWidget->slotResetSelection();
-    slotCheckToSaveSelection();
+    slotCheckAboutSelection();
     AlbumManager::instance()->setCurrentAlbum(0);
 }
 
@@ -549,7 +580,7 @@ bool TimeLineView::checkAlbum(const QString& name) const
     return true;
 }
 
-void TimeLineView::slotCheckToSaveSelection()
+void TimeLineView::slotCheckAboutSelection()
 {
     int totalCount     = 0;
     DateRangeList list = d->timeLineWidget->selectedDateRange(totalCount);
