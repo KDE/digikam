@@ -286,7 +286,7 @@ TimeLineView::TimeLineView(QWidget *parent)
             this, SLOT(slotScrollBarValueChanged(int)));
 
     connect(d->nameEdit, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotCheckSaveButton()));
+            this, SLOT(slotCheckToSaveSelection()));
 }
 
 TimeLineView::~TimeLineView()
@@ -368,9 +368,10 @@ void TimeLineView::slotSelectionChanged()
     d->timer->start(100, true);
 }
 
+/** Called from d->timer event.*/
 void TimeLineView::slotUpdateCurrentDateSearchAlbum()
 {
-    slotCheckSaveButton();
+    slotCheckToSaveSelection();
     createNewDateSearchAlbum(d->timeLineFolderView->currentTimeLineSearchName());
 }
 
@@ -506,6 +507,7 @@ void TimeLineView::slotAlbumSelected(SAlbum* salbum)
 void TimeLineView::slotResetSelection()
 {
     d->timeLineWidget->slotResetSelection();
+    slotCheckToSaveSelection();
     AlbumManager::instance()->setCurrentAlbum(0);
 }
 
@@ -545,14 +547,22 @@ bool TimeLineView::checkAlbum(const QString& name) const
     return true;
 }
 
-void TimeLineView::slotCheckSaveButton()
+void TimeLineView::slotCheckToSaveSelection()
 {
     int totalCount     = 0;
     DateRangeList list = d->timeLineWidget->selectedDateRange(totalCount);
-    if (!list.isEmpty() && !d->nameEdit->text().isEmpty())
-        d->saveButton->setEnabled(true);
+    if (!list.isEmpty())
+    {
+        d->nameEdit->setEnabled(true);
+
+        if (!d->nameEdit->text().isEmpty())
+            d->saveButton->setEnabled(true);
+    }
     else
+    {
+        d->nameEdit->setEnabled(false);
         d->saveButton->setEnabled(false);
+    }
 }
 
 void TimeLineView::slotRenameAlbum(SAlbum* salbum)
