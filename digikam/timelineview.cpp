@@ -432,7 +432,7 @@ void TimeLineView::createNewDateSearchAlbum(const QString& name)
     url.addQueryItem("count", QString::number(grp*2));
     url.addQueryItem("type", QString("datesearch"));
 
-    DDebug() << url << endl;
+    //DDebug() << url << endl;
 
     SAlbum* album = AlbumManager::instance()->createSAlbum(url, false);
     AlbumManager::instance()->setCurrentAlbum(album);
@@ -470,7 +470,7 @@ void TimeLineView::slotAlbumSelected(SAlbum* salbum)
     int count = url.queryItem("count").toInt(&ok);
     if (!ok || count <= 0) return;
 
-    DDebug() << url << endl;
+    //DDebug() << url << endl;
 
     QMap<QString, QString>::iterator it2;
     QString       key;
@@ -483,22 +483,24 @@ void TimeLineView::slotAlbumSelected(SAlbum* salbum)
         if (it2 != queries.end())
             start = QDateTime(QDate::fromString(it2.data(), Qt::ISODate));
 
-        DDebug() << key << " :: " << it2.data() << endl;
+        //DDebug() << key << " :: " << it2.data() << endl;
 
         key = QString("%1.val").arg(QString::number(i+1));
         it2 = queries.find(key);
         if (it2 != queries.end())
             end = QDateTime(QDate::fromString(it2.data(), Qt::ISODate));
 
-        DDebug() << key << " :: " << it2.data() << endl;
+        //DDebug() << key << " :: " << it2.data() << endl;
 
         list.append(DateRange(start, end));
     }
 
+    /*
     DateRangeList::iterator it3;
     for (it3 = list.begin() ; it3 != list.end(); ++it3)
         DDebug() << (*it3).first.date().toString(Qt::ISODate) << " :: " 
                  << (*it3).second.date().toString(Qt::ISODate) << endl;
+    */
 
     d->timeLineWidget->setSelectedDateRange(list);
     AlbumManager::instance()->setCurrentAlbum(salbum);

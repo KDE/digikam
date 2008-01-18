@@ -404,11 +404,13 @@ DateRangeList TimeLineWidget::selectedDateRange(int& totalCount)
 
     DateRangeList::iterator it, it2;
 
+    /*
     for (it = list.begin() ; it != list.end(); ++it)
         DDebug() << (*it).first.date().toString(Qt::ISODate) << " :: " 
                  << (*it).second.date().toString(Qt::ISODate) << endl;
 
     DDebug() << "Total Count of Items = " << totalCount << endl;
+    */
 
     // Group contiguous date ranges to optimize query on database.
 
@@ -436,9 +438,11 @@ DateRangeList TimeLineWidget::selectedDateRange(int& totalCount)
         list2.append(DateRange(first, second));
     }
 
+    /*
     for (it = list2.begin() ; it != list2.end(); ++it)
         DDebug() << (*it).first.date().toString(Qt::ISODate) << " :: " 
                  << (*it).second.date().toString(Qt::ISODate) << endl;
+    */
 
     return list2;
 }
@@ -1580,7 +1584,10 @@ QDateTime TimeLineWidget::firstDayOfWeek(int year, int weekNumber)
         dt = dt.addDays(8 - offset); 
 
     dt = dt.addDays((weekNumber-1)*7);
-    DDebug() << "year= " << year << " week= " << weekNumber << " offset= " << offset << " 1st day= " << dt << endl;
+    /*
+    DDebug() << "year= " << year << " week= " << weekNumber 
+             << " offset= " << offset << " 1st day= " << dt << endl;
+    */
     return dt;
 }
 
