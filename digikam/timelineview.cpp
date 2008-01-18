@@ -362,8 +362,8 @@ void TimeLineView::setActive(bool val)
 void TimeLineView::slotRefDateTimeChanged()
 {
     d->scrollBar->blockSignals(true);
-    d->scrollBar->setMaxValue(d->timeLineWidget->totalIndex());
-    d->scrollBar->setValue(d->timeLineWidget->indexForRefDateTime());
+    d->scrollBar->setMaxValue(d->timeLineWidget->totalIndex()-1);
+    d->scrollBar->setValue(d->timeLineWidget->indexForRefDateTime()-1);
     d->scrollBar->blockSignals(false);
 }
 

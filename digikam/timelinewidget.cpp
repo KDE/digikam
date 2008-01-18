@@ -163,7 +163,7 @@ int TimeLineWidget::totalIndex()
         dt = nextDateTime(dt);
         i++;
     }
-    while(dt <= d->maxDateTime);
+    while(dt < d->maxDateTime);
 
     return i;
 }
