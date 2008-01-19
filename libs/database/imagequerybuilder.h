@@ -32,6 +32,7 @@
 
 // Local includes.
 
+#include "searchxml.h"
 #include "digikam_export.h"
 
 namespace Digikam
@@ -71,10 +72,17 @@ public:
     ImageQueryBuilder();
     QString buildQuery(const KUrl& url, QList<QVariant> &boundValues) const;
 
+    QString buildQuery(const QString &xml, QList<QVariant> *boundValues) const;
+
 protected:
 
     QString subQuery(enum SKey key, enum SOperator op, const QString& val, QList<QVariant> &boundValues) const;
     QString possibleDate(const QString& str, bool& exact) const;
+
+    void buildGroup(QString &sql, SearchXmlReader &reader, QList<QVariant> *boundValues) const;
+    void buildField(QString &sql, SearchXmlReader &reader, const QString &name, QList<QVariant> *boundValues) const;
+    void addSqlOperator(QString &sql, SearchXml::Operator op, bool isFirst) const;
+    void addSqlRelation(QString &sql, SearchXml::Relation rel) const;
 
 protected:
 
