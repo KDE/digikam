@@ -37,7 +37,7 @@
 
 // LibKDcraw includes.
 
-#include <libkdcraw/rawfiles.h>
+#include <libkdcraw/dcrawbinary.h>
 
 // Local includes
 
@@ -265,14 +265,7 @@ void SchemaUpdater::defaultFilterSettings(QStringList &defaultImageFilter,
                        << "xpm" << "ppm" << "pnm"
                        << "gif" << "bmp" << "xcf" << "pcx";
 
-    // RAW file extentions supported by dcraw 8.77
-    // This information belongs to libkdcraw, but here at least this will be included statically.
-    defaultImageFilter << "bay" << "bmq" << "cr2" << "crw" << "cs1"
-                       << "dc2" << "dcr" << "dng" << "erf" << "fff"
-                       << "hdr" << "k25" << "kdc" << "mdc" << "mos"
-                       << "mrw" << "nef" << "orf" << "pef" << "pxn"
-                       << "raf" << "raw" << "rdc" << "sr2" << "srf"
-                       << "x3f" << "arw";
+    defaultImageFilter << KDcrawIface::DcrawBinary::rawFilesList();
 
     defaultVideoFilter << "mpeg" << "mpg" << "mpo" << "mpe"     // MPEG
                        << "avi"  << "mov" << "wmf" << "asf" << "mp4" << "3gp";
@@ -286,24 +279,24 @@ bool SchemaUpdater::createFilterSettings()
     defaultFilterSettings(defaultImageFilter, defaultVideoFilter, defaultAudioFilter);
 
     m_access->db()->setFilterSettings(defaultImageFilter, defaultVideoFilter, defaultAudioFilter);
-    m_access->db()->setSetting("FilterSettingsVersion", "1");
+    m_access->db()->setSetting("FilterSettingsVersion", QString::number(filterSettingsVersion()));
+    m_access->db()->setSetting("DcrawFilterSettingsVersion", QString::number(KDcrawIface::DcrawBinary::rawFilesVersion()));
 
     return true;
 }
 
 bool SchemaUpdater::updateFilterSettings()
 {
-    // No updates available so far, initial settings done in V4toV5
-    /*
     QString filterVersion = m_access->db()->getSetting("FilterSettingsVersion");
-    if (!filterSettingsVersion.isEmpty())
+    QString dcrawFilterVersion = m_access->db()->getSetting("DcrawFilterSettingsVersion");
+
+    if (
+         filterVersion.toInt() < filterSettingsVersion() ||
+         dcrawFilterVersion.toInt() < KDcrawIface::DcrawBinary::rawFilesVersion()
+       )
     {
-        int version = filterVersion.toInt();
-        if (version < filterSettingsVersion())
-        {
-        }
+        createFilterSettings();
     }
-    */
     return true;
 }
 
