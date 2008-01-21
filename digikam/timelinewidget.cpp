@@ -591,6 +591,7 @@ void TimeLineWidget::updatePixmap()
     SelectionMode sel;
     QRect         focusRect, selRect, barRect;
     QBrush        selBrush;
+    QColor        dateColor;
 
     // Date histogram drawing is divided in 2 parts. The current date-time 
     // is placed on the center of the view and all dates on right are computed,
@@ -627,6 +628,11 @@ void TimeLineWidget::updatePixmap()
 
         if (ref == d->cursorDateTime)
             focusRect = barRect;
+
+        if (ref > d->maxDateTime)
+            dateColor = palette().active().mid();
+        else 
+            dateColor = palette().active().foreground(); 
 
         p.setPen(palette().active().foreground());
         p.fillRect(barRect, QBrush(Qt::green));
@@ -667,6 +673,7 @@ void TimeLineWidget::updatePixmap()
 
                 if (KGlobal::locale()->calendar()->dayOfWeek(ref.date()) == 1)
                 {
+                    p.setPen(dateColor);
                     p.drawLine(barRect.left(), barRect.bottom(), 
                                barRect.left(), barRect.bottom()+d->bottomMargin/2);
                     QString txt = KGlobal::locale()->formatDate(ref.date(), true);
@@ -691,6 +698,7 @@ void TimeLineWidget::updatePixmap()
                     p.restore();
                 }
 
+                p.setPen(dateColor);
                 if (week == 1 || week == 10 || week == 20 || week == 30 || week == 40 || week == 50)
                 {
                     p.drawLine(barRect.left(), barRect.bottom(), 
@@ -722,6 +730,7 @@ void TimeLineWidget::updatePixmap()
                     p.restore();
                 }
 
+                p.setPen(dateColor);
                 if (ref.date().month() == 1)
                 {
                     p.drawLine(barRect.left(), barRect.bottom(), 
@@ -739,6 +748,7 @@ void TimeLineWidget::updatePixmap()
             }
             case Year:
             {
+                p.setPen(dateColor);
                 if (ref.date().year() % 10 == 0)
                 {
                     p.drawLine(barRect.left(), barRect.bottom(), 
@@ -793,6 +803,11 @@ void TimeLineWidget::updatePixmap()
         if (ref == d->cursorDateTime)
             focusRect = barRect;
 
+        if (ref < d->minDateTime)
+            dateColor = palette().active().mid();
+        else 
+            dateColor = palette().active().foreground(); 
+
         p.setPen(palette().active().foreground());
         p.fillRect(barRect, QBrush(Qt::green));
         p.drawRect(barRect);
@@ -832,6 +847,7 @@ void TimeLineWidget::updatePixmap()
 
                 if (KGlobal::locale()->calendar()->dayOfWeek(ref.date()) == 1)
                 {
+                    p.setPen(dateColor);
                     p.drawLine(barRect.left(), barRect.bottom(),
                                barRect.left(), barRect.bottom()+d->bottomMargin/2);
                     QString txt = KGlobal::locale()->formatDate(ref.date(), true);
@@ -856,6 +872,7 @@ void TimeLineWidget::updatePixmap()
                     p.restore();
                 }
 
+                p.setPen(dateColor);
                 if (week == 1 || week == 10 || week == 20 || week == 30 || week == 40 || week == 50)
                 {
                     p.drawLine(barRect.left(), barRect.bottom(), 
@@ -887,6 +904,7 @@ void TimeLineWidget::updatePixmap()
                     p.restore();
                 }
 
+                p.setPen(dateColor);
                 if (ref.date().month() == 1)
                 {
                     p.drawLine(barRect.left(), barRect.bottom(), 
@@ -904,6 +922,7 @@ void TimeLineWidget::updatePixmap()
             }
             case Year:
             {
+                p.setPen(dateColor);
                 if (ref.date().year() % 10 == 0)
                 {
                     p.drawLine(barRect.left(), barRect.bottom(), 
