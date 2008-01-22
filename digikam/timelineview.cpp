@@ -315,10 +315,12 @@ void TimeLineView::slotInit()
 
 void TimeLineView::readConfig()
 {
+    QDateTime now = QDateTime::currentDateTime();
     KConfig* config = kapp->config();
     config->setGroup("TimeLine SideBar");
     d->timeUnitCB->setCurrentItem(config->readNumEntry("Histogram TimeUnit", TimeLineWidget::Month));
     d->scaleBG->setButton(config->readNumEntry("Histogram Scale", TimeLineWidget::LinScale));
+    d->timeLineWidget->setCursorDateTime(config->readDateTimeEntry("Cursor Position", &now));
     slotTimeUnitChanged(d->timeUnitCB->currentItem());
     slotScaleChanged(d->scaleBG->selectedId());
 }
@@ -329,6 +331,7 @@ void TimeLineView::writeConfig()
     config->setGroup("TimeLine SideBar");
     config->writeEntry("Histogram TimeUnit", d->timeUnitCB->currentItem());
     config->writeEntry("Histogram Scale", d->scaleBG->selectedId());
+    config->writeEntry("Cursor Position", d->timeLineWidget->cursorDateTime());
     config->sync();
 }
 

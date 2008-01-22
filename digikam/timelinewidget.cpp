@@ -115,10 +115,6 @@ TimeLineWidget::TimeLineWidget(QWidget *parent)
     setMouseTracking(true);
     setMinimumWidth(256);
     setMinimumHeight(192);
-
-    QDateTime ref = QDateTime::currentDateTime();
-    setCursorDateTime(ref);
-    setRefDateTime(ref);
 }
 
 TimeLineWidget::~TimeLineWidget()
