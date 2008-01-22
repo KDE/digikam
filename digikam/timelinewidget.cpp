@@ -215,8 +215,8 @@ void TimeLineWidget::setCursorDateTime(const QDateTime& dateTime)
         case Week:
         {
             // Go to the first day of week.
-            int dayWeekOffset = (-1) * (KGlobal::locale()->calendar()->dayOfWeek(dt.date()) - 1);
-            dt = dt.addDays(dayWeekOffset);
+            int weekYear = 0;
+            dt           = firstDayOfWeek(dt.date().year(), dt.date().weekNumber(&weekYear));
             break;
         }
         case Month:
