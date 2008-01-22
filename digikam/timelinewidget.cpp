@@ -1612,7 +1612,7 @@ QDateTime TimeLineWidget::firstDayOfWeek(int year, int weekNumber)
     do
     {
         dt      = dt.addDays(1);
-        weekNum = dt.date().weekNumber(&weekYear);
+        weekNum = KGlobal::locale()->calendar()->weekNumber(dt.date(), &weekYear);
     }
     while(weekNum != 1 && weekYear != year);
 
