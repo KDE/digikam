@@ -1595,18 +1595,28 @@ QDateTime TimeLineWidget::dateTimeForPoint(const QPoint& pt, bool &isOnSelection
 
 QDateTime TimeLineWidget::firstDayOfWeek(int year, int weekNumber)
 {
-    QDateTime dt(QDate(year, 1, 1));
+    // Search the first day of first week of year.
+    // We start to scan from 1st december of year-1 because 
+    // first week of year OR last week of year-1 can be shared 
+    // between year-1 and year.
+    QDateTime d1(QDate(year-1, 12, 1));
+    QDateTime dt = d1;
+    int weekYear = 0;
+    int weekNum  = 0;
 
-    // Check if first week of year is shared between 2 years decade.
-    int offset = KGlobal::locale()->calendar()->dayOfWeek(dt.date());
-    if (offset > 1) 
-        dt = dt.addDays(8 - offset); 
+    do
+    {
+        dt      = dt.addDays(1);
+        weekNum = dt.date().weekNumber(&weekYear);
+    }
+    while(weekNum != 1 && weekYear != year);
 
     dt = dt.addDays((weekNumber-1)*7);
-    /*
-    DDebug() << "year= " << year << " week= " << weekNumber 
-             << " offset= " << offset << " 1st day= " << dt << endl;
-    */
+
+/*
+    DDebug() << "Year= " << year << " Week= " << weekNumber 
+             << " 1st day= " << dt << endl;
+*/
     return dt;
 }
 
