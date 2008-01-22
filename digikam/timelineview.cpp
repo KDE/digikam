@@ -320,8 +320,9 @@ void TimeLineView::readConfig()
     config->setGroup("TimeLine SideBar");
     d->timeUnitCB->setCurrentItem(config->readNumEntry("Histogram TimeUnit", TimeLineWidget::Month));
     d->scaleBG->setButton(config->readNumEntry("Histogram Scale", TimeLineWidget::LinScale));
-    d->timeLineWidget->setCursorDateTime(config->readDateTimeEntry("Cursor Position", &now));
+    // We need to set Time-Unit before to restore cursor position.
     slotTimeUnitChanged(d->timeUnitCB->currentItem());
+    d->timeLineWidget->setCursorDateTime(config->readDateTimeEntry("Cursor Position", &now));
     slotScaleChanged(d->scaleBG->selectedId());
 }
 
