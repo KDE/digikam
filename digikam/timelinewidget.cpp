@@ -115,6 +115,10 @@ TimeLineWidget::TimeLineWidget(QWidget *parent)
     setMouseTracking(true);
     setMinimumWidth(256);
     setMinimumHeight(192);
+
+    QDateTime ref = QDateTime::currentDateTime();   
+    setCursorDateTime(ref);   
+    setRefDateTime(ref);
 }
 
 TimeLineWidget::~TimeLineWidget()
@@ -185,6 +189,11 @@ int TimeLineWidget::indexForDateTime(const QDateTime& date)
 int TimeLineWidget::indexForRefDateTime()
 {
     return (indexForDateTime(d->refDateTime));
+}
+
+int TimeLineWidget::indexForCursorDateTime()
+{
+    return (indexForDateTime(d->cursorDateTime));
 }
 
 void TimeLineWidget::setCurrentIndex(int index)

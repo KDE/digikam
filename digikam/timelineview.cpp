@@ -315,15 +315,18 @@ void TimeLineView::slotInit()
 
 void TimeLineView::readConfig()
 {
-    QDateTime now = QDateTime::currentDateTime();
     KConfig* config = kapp->config();
     config->setGroup("TimeLine SideBar");
+
     d->timeUnitCB->setCurrentItem(config->readNumEntry("Histogram TimeUnit", TimeLineWidget::Month));
-    d->scaleBG->setButton(config->readNumEntry("Histogram Scale", TimeLineWidget::LinScale));
-    // We need to set Time-Unit before to restore cursor position.
     slotTimeUnitChanged(d->timeUnitCB->currentItem());
-    d->timeLineWidget->setCursorDateTime(config->readDateTimeEntry("Cursor Position", &now));
+
+    d->scaleBG->setButton(config->readNumEntry("Histogram Scale", TimeLineWidget::LinScale));
     slotScaleChanged(d->scaleBG->selectedId());
+
+    QDateTime now = QDateTime::currentDateTime();
+    d->timeLineWidget->setCursorDateTime(config->readDateTimeEntry("Cursor Position", &now));
+    d->timeLineWidget->setCurrentIndex(d->timeLineWidget->indexForCursorDateTime());
 }
 
 void TimeLineView::writeConfig()

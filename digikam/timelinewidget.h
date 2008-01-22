@@ -90,6 +90,7 @@ public:
 
     int  totalIndex();
     int  indexForRefDateTime();
+    int  indexForCursorDateTime();
     void setCurrentIndex(int index);
 
 signals:
