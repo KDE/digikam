@@ -946,7 +946,7 @@ void TimeLineWidget::updatePixmap()
         ref = prevDateTime(ref);
     }
 
-    // Draw focus rectangle over current date-time.
+    // Draw cursor rectangle over current date-time.
     if (focusRect.isValid())
     {
         focusRect.setTop(d->topMargin);
@@ -1429,10 +1429,9 @@ void TimeLineWidget::mousePressEvent(QMouseEvent *e)
             d->selMaxDateTime   = ref;
             setDateTimeSelected(ref, Selected);
         }
-        else if (!ref.isNull())
-        {
+
+        if (!ref.isNull())
             setCursorDateTime(ref);
-        }
 
         d->validMouseEvent = true;
         updatePixmap();
@@ -1448,6 +1447,7 @@ void TimeLineWidget::mouseMoveEvent(QMouseEvent *e)
 
         bool sel;
         QDateTime selEndDateTime = dateTimeForPoint(pt, sel);
+        setCursorDateTime(selEndDateTime);
 
         if (!selEndDateTime.isNull() && !d->selStartDateTime.isNull())
         {
@@ -1495,10 +1495,6 @@ void TimeLineWidget::mouseMoveEvent(QMouseEvent *e)
                     while(dt >= selEndDateTime);
                 }
             }
-        }
-        else if (!selEndDateTime.isNull())
-        {
-            setCursorDateTime(selEndDateTime);
         }
 
         updatePixmap();
@@ -1618,10 +1614,10 @@ QDateTime TimeLineWidget::firstDayOfWeek(int year, int weekNumber)
 
     dt = dt.addDays((weekNumber-1)*7);
 
-/*
+
     DDebug() << "Year= " << year << " Week= " << weekNumber 
              << " 1st day= " << dt << endl;
-*/
+
     return dt;
 }
 
