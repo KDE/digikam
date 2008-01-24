@@ -1615,8 +1615,8 @@ QDateTime TimeLineWidget::firstDayOfWeek(int year, int weekNumber)
     dt = dt.addDays((weekNumber-1)*7);
 
 
-    DDebug() << "Year= " << year << " Week= " << weekNumber 
-             << " 1st day= " << dt << endl;
+/*    DDebug() << "Year= " << year << " Week= " << weekNumber 
+             << " 1st day= " << dt << endl;*/
 
     return dt;
 }
