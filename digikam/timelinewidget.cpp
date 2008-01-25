@@ -1463,10 +1463,7 @@ void TimeLineWidget::mousePressEvent(QMouseEvent *e)
         }
 
         if (!ref.isNull())
-        {
-            // DDebug() << "Cursor Date: " << ref << endl;
             setCursorDateTime(ref);
-        }
 
         d->validMouseEvent = true;
         updatePixmap();

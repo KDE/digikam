@@ -311,6 +311,9 @@ void TimeLineView::slotInit()
 
     disconnect(d->timeLineWidget, SIGNAL(signalDateMapChanged()),
                this, SLOT(slotInit()));
+
+    connect(d->timeLineWidget, SIGNAL(signalDateMapChanged()),
+            this, SLOT(slotCursorPositionChanged()));
 }
 
 void TimeLineView::readConfig()
