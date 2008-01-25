@@ -388,7 +388,7 @@ void TimeLineWidget::setSelectedDateRange(const DateRangeList& list)
 
 DateRangeList TimeLineWidget::selectedDateRange(int& totalCount)
 {
-    // We will parse all selected done on days stats map.
+    // We will parse all selections done on Days stats map.
 
     DateRangeList list;
     totalCount = 0;
