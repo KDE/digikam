@@ -1071,7 +1071,8 @@ int TimeLineWidget::statForDateTime(const QDateTime& dt, SelectionMode& selected
     int year  = dt.date().year();
     int month = dt.date().month();
     int day   = KGlobal::locale()->calendar()->dayOfYear(dt.date());
-    int week  = KGlobal::locale()->calendar()->weekNumber(dt.date());
+    int yearForWeek;  // Used with week shared between 2 years decade (Dec/Jan).
+    int week  = KGlobal::locale()->calendar()->weekNumber(dt.date(), &yearForWeek);
     selected  = Unselected;
 
     switch(d->timeUnit)
@@ -1090,7 +1091,7 @@ int TimeLineWidget::statForDateTime(const QDateTime& dt, SelectionMode& selected
         case Week:
         {
             QMap<TimeLineWidgetPriv::YearRefPair, TimeLineWidgetPriv::StatPair>::iterator it =
-                d->weekStatMap.find(TimeLineWidgetPriv::YearRefPair(year, week));
+                d->weekStatMap.find(TimeLineWidgetPriv::YearRefPair(yearForWeek, week));
             if ( it != d->weekStatMap.end() )
             {
                 count    = it.data().first;
@@ -1128,7 +1129,8 @@ void TimeLineWidget::setDateTimeSelected(const QDateTime& dt, SelectionMode sele
 {
     int year  = dt.date().year();
     int month = dt.date().month();
-    int week  = KGlobal::locale()->calendar()->weekNumber(dt.date());
+    int yearForWeek;  // Used with week shared between 2 years decade (Dec/Jan).
+    int week  = KGlobal::locale()->calendar()->weekNumber(dt.date(), &yearForWeek);
 
     QDateTime dts, dte;
 
@@ -1143,7 +1145,7 @@ void TimeLineWidget::setDateTimeSelected(const QDateTime& dt, SelectionMode sele
         }
         case Week:
         {
-            dts = firstDayOfWeek(year, week);
+            dts = firstDayOfWeek(yearForWeek, week);
             dte = dts.addDays(7);
             setDaysRangeSelection(dts, dte, selected);
             updateWeekSelection(dts, dte);
@@ -1172,16 +1174,16 @@ void TimeLineWidget::updateWeekSelection(const QDateTime dts, const QDateTime dt
 {
     QMap<TimeLineWidgetPriv::YearRefPair, TimeLineWidgetPriv::StatPair>::iterator it;
     QDateTime dtsWeek, dteWeek, dt;
-    int       year, week;
+    int week;
+    int yearForWeek;  // Used with week shared between 2 years decade (Dec/Jan).
     dt = dts;
     do
     {
-        year = dt.date().year();
-        week = KGlobal::locale()->calendar()->weekNumber(dt.date());
+        week = KGlobal::locale()->calendar()->weekNumber(dt.date(), &yearForWeek);
 
-        dtsWeek = firstDayOfWeek(year, week);
+        dtsWeek = firstDayOfWeek(yearForWeek, week);
         dteWeek = dtsWeek.addDays(7);
-        it  = d->weekStatMap.find(TimeLineWidgetPriv::YearRefPair(year, week));
+        it  = d->weekStatMap.find(TimeLineWidgetPriv::YearRefPair(yearForWeek, week));
         if ( it != d->weekStatMap.end() )
             it.data().second = checkSelectionForDaysRange(dtsWeek, dteWeek);
 
