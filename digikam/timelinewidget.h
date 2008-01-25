@@ -26,9 +26,9 @@
 
 // Qt includes.
 
-#include <qstring.h>
-#include <qwidget.h>
-#include <qdatetime.h>
+#include <QString>
+#include <QWidget>
+#include <QDatetime>
 
 // Local includes.
 
@@ -38,7 +38,7 @@ namespace Digikam
 {
 
 typedef QPair<QDateTime, QDateTime> DateRange;    // Range of a contigue dates selection <start date, end date>.
-typedef QValueList<DateRange> DateRangeList;      // List of dates range selected.
+typedef QList<DateRange> DateRangeList;           // List of dates range selected.
 
 class TimeLineWidgetPriv;
 
