@@ -25,7 +25,6 @@
 
 #include <qtimer.h>
 #include <qframe.h>
-#include <qlayout.h>
 #include <qhbox.h>
 #include <qlayout.h>
 #include <qcombobox.h>
