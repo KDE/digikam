@@ -207,12 +207,12 @@ TimeLineView::TimeLineView(QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    grid->addWidget(hbox1,               0, 0, 1, 4 );
-    grid->addWidget(d->cursorDateLabel,  1, 0, 1, 3 );
+    grid->addWidget(hbox1,               0, 0, 1, 4);
+    grid->addWidget(d->cursorDateLabel,  1, 0, 1, 3);
     grid->addWidget(d->cursorCountLabel, 1, 3, 1, 1);
-    grid->addWidget(d->timeLineWidget,   2, 0, 1, 4 );
-    grid->addWidget(d->scrollBar,        3, 0, 1, 4 );
-    grid->addWidget(hbox2,               4, 0, 1, 4 );
+    grid->addWidget(d->timeLineWidget,   2, 0, 1, 4);
+    grid->addWidget(d->scrollBar,        3, 0, 1, 4);
+    grid->addWidget(hbox2,               4, 0, 1, 4);
     grid->setColumnStretch(2, 10);
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
@@ -515,14 +515,14 @@ void TimeLineView::slotAlbumSelected(SAlbum* salbum)
         key = QString("%1.val").arg(QString::number(i));
         it2 = queries.find(key);
         if (it2 != queries.end())
-            start = QDateTime(QDate::fromString(it2.data(), Qt::ISODate));
+            start = QDateTime(QDate::fromString(it2.value(), Qt::ISODate));
 
         //DDebug() << key << " :: " << it2.data() << endl;
 
         key = QString("%1.val").arg(QString::number(i+1));
         it2 = queries.find(key);
         if (it2 != queries.end())
-            end = QDateTime(QDate::fromString(it2.data(), Qt::ISODate));
+            end = QDateTime(QDate::fromString(it2.value(), Qt::ISODate));
 
         //DDebug() << key << " :: " << it2.data() << endl;
 
