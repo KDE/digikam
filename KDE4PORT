@@ -203,7 +203,7 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
     tagfilterview.cpp                   Gilles                 X       DONE
     tagfolderview.cpp                   Gilles                 X       DONE
     tagspopupmenu.cpp                   Gilles                 X       DONE
-    timelinefolderview.cpp              Gilles                 X       TODO
+    timelinefolderview.cpp              Gilles                 X       DONE
     timelineview.cpp                    Gilles                 X       TODO
     timelinewidget.cpp                  Gilles                 X       TODO
     welcomepageview.cpp                 Laurent                X       DONE
