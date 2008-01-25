@@ -30,7 +30,6 @@
 #include <qcombobox.h>
 #include <qpushbutton.h>
 #include <qhbuttongroup.h> 
-#include <qvaluelist.h>
 #include <qmap.h>
 #include <qscrollbar.h>
 #include <qwhatsthis.h>
