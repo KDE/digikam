@@ -207,12 +207,12 @@ TimeLineView::TimeLineView(QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    grid->addMultiCellWidget(hbox1,               0, 0, 0, 3);
-    grid->addMultiCellWidget(d->cursorDateLabel,  1, 1, 0, 2);
-    grid->addMultiCellWidget(d->cursorCountLabel, 1, 1, 3, 3);
-    grid->addMultiCellWidget(d->timeLineWidget,   2, 2, 0, 3);
-    grid->addMultiCellWidget(d->scrollBar,        3, 3, 0, 3);
-    grid->addMultiCellWidget(hbox2,               4, 4, 0, 3);
+    grid->addWidget(hbox1,               0, 0, 1, 4 );
+    grid->addWidget(d->cursorDateLabel,  1, 0, 1, 3 );
+    grid->addWidget(d->cursorCountLabel, 1, 3, 1, 1);
+    grid->addWidget(d->timeLineWidget,   2, 0, 1, 4 );
+    grid->addWidget(d->scrollBar,        3, 0, 1, 4 );
+    grid->addWidget(hbox2,               4, 0, 1, 4 );
     grid->setColumnStretch(2, 10);
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
