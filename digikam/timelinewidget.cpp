@@ -393,15 +393,17 @@ DateRangeList TimeLineWidget::selectedDateRange(int& totalCount)
     DateRangeList list;
     totalCount = 0;
     QMap<TimeLineWidgetPriv::YearRefPair, TimeLineWidgetPriv::StatPair>::iterator it3;
+    QDateTime sdt, edt;
+    QDate     date;
 
     for (it3 = d->dayStatMap.begin() ; it3 != d->dayStatMap.end(); ++it3)
     {
         if (it3.data().second == Selected)
         {
-            QDate date(it3.key().first, 1, 1);
+            date = QDate(it3.key().first, 1, 1);
             date = date.addDays(it3.key().second-1);
-            QDateTime sdt(date);
-            QDateTime edt = sdt.addDays(1); 
+            sdt  = QDateTime(date);
+            edt  = sdt.addDays(1); 
             list.append(DateRange(sdt, edt));
             totalCount += it3.data().first;
         }
@@ -1143,6 +1145,7 @@ void TimeLineWidget::setDateTimeSelected(const QDateTime& dt, SelectionMode sele
             dts = firstDayOfWeek(year, week);
             dte = dts.addDays(7);
             setDaysRangeSelection(dts, dte, selected);
+            updateWeekSelection(dts, dte);
             break;
         }
         case Month:
@@ -1150,6 +1153,7 @@ void TimeLineWidget::setDateTimeSelected(const QDateTime& dt, SelectionMode sele
             dts = QDateTime(QDate(year, month, 1));
             dte = dts.addDays(KGlobal::locale()->calendar()->daysInMonth(dts.date()));
             setDaysRangeSelection(dts, dte, selected);
+            updateMonthSelection(dts, dte);
             break;
         }
         case Year:
@@ -1157,18 +1161,10 @@ void TimeLineWidget::setDateTimeSelected(const QDateTime& dt, SelectionMode sele
             dts = QDateTime(QDate(year, 1, 1));
             dte = dts.addDays(KGlobal::locale()->calendar()->daysInYear(dts.date()));
             setDaysRangeSelection(dts, dte, selected);
+            updateYearSelection(dts, dte);
             break;
         }
     }
-
-    // Update Week stats map
-    updateWeekSelection(dts, dte);
-
-    // Update Month stats map
-    updateMonthSelection(dts, dte);
-
-    // Update Year stats map
-    updateYearSelection(dts, dte);
 }
 
 void TimeLineWidget::updateWeekSelection(const QDateTime dts, const QDateTime dte)
@@ -1234,6 +1230,27 @@ void TimeLineWidget::updateYearSelection(const QDateTime dts, const QDateTime dt
         dt = dteYear;
     }
     while (dt <= dte);
+}
+
+void TimeLineWidget::updateAllSelection()
+{
+    QMap<TimeLineWidgetPriv::YearRefPair, TimeLineWidgetPriv::StatPair>::iterator it;
+    QDateTime dts, dte;
+    QDate     date;
+
+    for (it = d->dayStatMap.begin() ; it != d->dayStatMap.end(); ++it)
+    {
+        if (it.data().second == Selected)
+        {
+            date = QDate(it.key().first, 1, 1);
+            date = date.addDays(it.key().second-1);
+            dts  = QDateTime(date);
+            dte  = dts.addDays(1); 
+            updateWeekSelection(dts, dte);
+            updateMonthSelection(dts, dte);
+            updateYearSelection(dts, dte);
+        }
+    }
 }
 
 void TimeLineWidget::setDaysRangeSelection(const QDateTime dts, const QDateTime dte, SelectionMode selected)
@@ -1461,6 +1478,8 @@ void TimeLineWidget::mouseMoveEvent(QMouseEvent *e)
         QDateTime selEndDateTime = dateTimeForPoint(pt, sel);
         setCursorDateTime(selEndDateTime);
 
+        // Clamp start and end date-time of current contiguous selection.
+
         if (!selEndDateTime.isNull() && !d->selStartDateTime.isNull())
         {
             if (selEndDateTime > d->selStartDateTime && 
@@ -1482,6 +1501,8 @@ void TimeLineWidget::mouseMoveEvent(QMouseEvent *e)
             }
             while(dt <= d->selMaxDateTime);
         }
+
+        // Now perform selections on Date Maps.
 
         if (d->selMouseEvent)
         {
@@ -1521,7 +1542,10 @@ void TimeLineWidget::mouseReleaseEvent(QMouseEvent*)
     // Only dispatch changes about selection when user release mouse selection
     // to prevent multiple queries on database.
     if (d->selMouseEvent)
+    {
+        updateAllSelection();
         emit signalSelectionChanged();
+    }
 
     d->selMouseEvent = false;
 }

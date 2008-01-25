@@ -138,6 +138,7 @@ private:
     void          updateWeekSelection(const QDateTime dts, const QDateTime dte);
     void          updateMonthSelection(const QDateTime dts, const QDateTime dte);
     void          updateYearSelection(const QDateTime dts, const QDateTime dte);
+    void          updateAllSelection();
 
 private:
 
