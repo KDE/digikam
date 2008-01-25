@@ -23,22 +23,18 @@
 
 // Qt includes.
 
-#include <qtimer.h>
-#include <qframe.h>
-#include <qlayout.h>
-#include <qhbox.h>
-#include <qlayout.h>
-#include <qcombobox.h>
-#include <qpushbutton.h>
-#include <qhbuttongroup.h> 
-#include <qvaluelist.h>
-#include <qmap.h>
-#include <qscrollbar.h>
-#include <qwhatsthis.h>
-#include <qtooltip.h>
+#include <Q3HButtonGroup> 
+#include <QTimer>
+#include <QFrame>
+#include <QLayout>
+#include <QComboBox>
+#include <QPushButton>
+#include <QMap>
+#include <QScrollBar>
 
 // KDE include.
 
+#include <khbox.h>
 #include <klocale.h>
 #include <kconfig.h>
 #include <kdialog.h>
@@ -96,7 +92,7 @@ public:
 
     QComboBox          *timeUnitCB;
 
-    QHButtonGroup      *scaleBG;
+    Q3HButtonGroup      *scaleBG;
 
     QPushButton        *resetButton;
     QPushButton        *saveButton;
@@ -115,17 +111,18 @@ public:
 };
 
 TimeLineView::TimeLineView(QWidget *parent)
-            : QWidget(parent, 0, Qt::WDestructiveClose)
+            : QWidget(parent)
 {
     d = new TimeLineViewPriv;
     d->timer = new QTimer(this);
+    setAttribute(Qt::WA_DeleteOnClose);
 
     QVBoxLayout *vlay = new QVBoxLayout(this);
     QFrame *panel     = new QFrame(this);
     panel->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     panel->setLineWidth(1);
 
-    QGridLayout *grid = new QGridLayout(panel, 4, 3);
+    QGridLayout *grid = new QGridLayout(panel);
 
     // ---------------------------------------------------------------
 
@@ -133,41 +130,36 @@ TimeLineView::TimeLineView(QWidget *parent)
     QHBoxLayout *hlay = new QHBoxLayout(hbox1);
 
     QLabel *label1 = new QLabel(i18n("Time Unit:"), hbox1);
-    d->timeUnitCB  = new QComboBox(false, hbox1);
-    d->timeUnitCB->insertItem(i18n("Day"),   TimeLineWidget::Day);
-    d->timeUnitCB->insertItem(i18n("Week"),  TimeLineWidget::Week);
-    d->timeUnitCB->insertItem(i18n("Month"), TimeLineWidget::Month);
-    d->timeUnitCB->insertItem(i18n("Year"),  TimeLineWidget::Year);
-    d->timeUnitCB->setCurrentItem((int)TimeLineWidget::Month);
-    d->timeUnitCB->setFocusPolicy(QWidget::NoFocus);
-    QWhatsThis::add(d->timeUnitCB, i18n("<p>Select here histogram time unit.<p>"
-                                        "You can change the graph decade to zoom in or zoom out over time."));
+    d->timeUnitCB  = new QComboBox(hbox1);
+    d->timeUnitCB->addItem(i18n("Day"),   TimeLineWidget::Day);
+    d->timeUnitCB->addItem(i18n("Week"),  TimeLineWidget::Week);
+    d->timeUnitCB->addItem(i18n("Month"), TimeLineWidget::Month);
+    d->timeUnitCB->addItem(i18n("Year"),  TimeLineWidget::Year);
+    d->timeUnitCB->setCurrentIndex((int)TimeLineWidget::Month);
+    d->timeUnitCB->setFocusPolicy(Qt::NoFocus);
+    d->timeUnitCB->setWhatsThis(i18n("<p>Select here histogram time unit.<p>"
+                                     "You can change the graph decade to zoom in or zoom out over time."));
 
-    d->scaleBG = new QHButtonGroup(hbox1);
+    d->scaleBG = new Q3HButtonGroup(hbox1);
     d->scaleBG->setExclusive(true);
-    d->scaleBG->setFrameShape(QFrame::NoFrame);
     d->scaleBG->setInsideMargin( 0 );
-    QWhatsThis::add(d->scaleBG, i18n("<p>Select here the histogram scale.<p>"
-                                     "If the date count's maximal values are small, you can use the linear scale.<p>"
-                                     "Logarithmic scale can be used when the maximal values are big; "
-                                     "if it is used, all values (small and large) will be visible on the "
-                                     "graph."));
+    d->scaleBG->setWhatsThis(i18n("<p>Select here the histogram scale.<p>"
+                                  "If the date count's maximal values are small, you can use the linear scale.<p>"
+                                  "Logarithmic scale can be used when the maximal values are big; "
+                                  "if it is used, all values (small and large) will be visible on the "
+                                  "graph."));
 
     QPushButton *linHistoButton = new QPushButton( d->scaleBG );
-    QToolTip::add( linHistoButton, i18n( "<p>Linear" ) );
+    linHistoButton->setToolTip(i18n("<p>Linear"));
     d->scaleBG->insert(linHistoButton, TimeLineWidget::LinScale);
-    KGlobal::dirs()->addResourceType("histogram-lin", KGlobal::dirs()->kde_default("data") + "digikam/data");
-    QString directory = KGlobal::dirs()->findResourceDir("histogram-lin", "histogram-lin.png");
-    linHistoButton->setPixmap( QPixmap( directory + "histogram-lin.png" ) );
-    linHistoButton->setToggleButton(true);
+    linHistoButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/histogram-lin.png")));
+    linHistoButton->setCheckable(true);
 
     QPushButton *logHistoButton = new QPushButton( d->scaleBG );
-    QToolTip::add( logHistoButton, i18n( "<p>Logarithmic" ) );
+    logHistoButton->setToolTip(i18n("<p>Logarithmic"));
     d->scaleBG->insert(logHistoButton, TimeLineWidget::LogScale);
-    KGlobal::dirs()->addResourceType("histogram-log", KGlobal::dirs()->kde_default("data") + "digikam/data");
-    directory = KGlobal::dirs()->findResourceDir("histogram-log", "histogram-log.png");
-    logHistoButton->setPixmap( QPixmap( directory + "histogram-log.png" ) );
-    logHistoButton->setToggleButton(true);
+    logHistoButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/histogram-log.png")));;
+    logHistoButton->setCheckable(true);
 
     hlay->setMargin(0);
     hlay->setSpacing(KDialog::spacingHint());
@@ -181,8 +173,8 @@ TimeLineView::TimeLineView(QWidget *parent)
     d->timeLineWidget = new TimeLineWidget(panel);
     d->scrollBar      = new QScrollBar(panel);
     d->scrollBar->setOrientation(Qt::Horizontal);
-    d->scrollBar->setMinValue(0);
-    d->scrollBar->setLineStep(1);
+    d->scrollBar->setMinimum(0);
+    d->scrollBar->setSingleStep(1);
 
     d->cursorDateLabel  = new KSqueezedTextLabel(0, panel);
     d->cursorCountLabel = new QLabel(panel);
@@ -190,28 +182,28 @@ TimeLineView::TimeLineView(QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    QHBox *hbox2 = new QHBox(panel);
+    KHBox *hbox2 = new KHBox(panel);
     hbox2->setMargin(0);
     hbox2->setSpacing(KDialog::spacingHint());
 
     d->resetButton = new QPushButton(hbox2);
-    d->resetButton->setPixmap(SmallIcon("reload_page"));
-    QToolTip::add(d->resetButton, i18n("Clear current selection"));
-    QWhatsThis::add(d->resetButton, i18n("<p>If you press this button, current "
-                                        "dates selection from time-line will be "
-                                        "clear."));
+    d->resetButton->setIcon(SmallIcon("reload_page"));
+    d->resetButton->setToolTip(i18n("Clear current selection"));
+    d->resetButton->setWhatsThis(i18n("<p>If you press this button, current "
+                                      "dates selection from time-line will be "
+                                      "clear."));
     d->nameEdit    = new KLineEdit(hbox2);
-    QWhatsThis::add(d->nameEdit, i18n("<p>Enter the name of the current dates search to save in the "
-                                      "\"My Date Searches\" view"));
+    d->nameEdit->setWhatsThis(i18n("<p>Enter the name of the current dates search to save in the "
+                                   "\"My Date Searches\" view"));
 
     d->saveButton  = new QPushButton(hbox2);
-    d->saveButton->setPixmap(SmallIcon("filesave"));
+    d->saveButton->setIcon(SmallIcon("filesave"));
     d->saveButton->setEnabled(false);
-    QToolTip::add(d->saveButton, i18n("Save current selection to a new virtual Album"));
-    QWhatsThis::add(d->saveButton, i18n("<p>If you press this button, current "
-                                        "dates selection from time-line will be "
-                                        "saved to a new search virtual Album using name "
-                                        "set on the left side."));
+    d->saveButton->setToolTip(i18n("Save current selection to a new virtual Album"));
+    d->saveButton->setWhatsThis(i18n("<p>If you press this button, current "
+                                     "dates selection from time-line will be "
+                                     "saved to a new search virtual Album using name "
+                                     "set on the left side."));
 
     // ---------------------------------------------------------------
 
@@ -221,7 +213,7 @@ TimeLineView::TimeLineView(QWidget *parent)
     grid->addMultiCellWidget(d->timeLineWidget,   2, 2, 0, 3);
     grid->addMultiCellWidget(d->scrollBar,        3, 3, 0, 3);
     grid->addMultiCellWidget(hbox2,               4, 4, 0, 3);
-    grid->setColStretch(2, 10);
+    grid->setColumnStretch(2, 10);
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
 
@@ -318,28 +310,28 @@ void TimeLineView::slotInit()
 
 void TimeLineView::readConfig()
 {
-    KConfig* config = kapp->config();
-    config->setGroup("TimeLine SideBar");
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(QString("TimeLine SideBar"));
 
-    d->timeUnitCB->setCurrentItem(config->readNumEntry("Histogram TimeUnit", TimeLineWidget::Month));
-    slotTimeUnitChanged(d->timeUnitCB->currentItem());
+    d->timeUnitCB->setCurrentIndex(group.readEntry("Histogram TimeUnit", (int)TimeLineWidget::Month));
+    slotTimeUnitChanged(d->timeUnitCB->currentIndex());
 
-    d->scaleBG->setButton(config->readNumEntry("Histogram Scale", TimeLineWidget::LinScale));
+    d->scaleBG->setButton(group.readEntry("Histogram Scale", (int)TimeLineWidget::LinScale));
     slotScaleChanged(d->scaleBG->selectedId());
 
     QDateTime now = QDateTime::currentDateTime();
-    d->timeLineWidget->setCursorDateTime(config->readDateTimeEntry("Cursor Position", &now));
+    d->timeLineWidget->setCursorDateTime(group.readEntry("Cursor Position", now));
     d->timeLineWidget->setCurrentIndex(d->timeLineWidget->indexForCursorDateTime());
 }
 
 void TimeLineView::writeConfig()
 {
-    KConfig* config = kapp->config();
-    config->setGroup("TimeLine SideBar");
-    config->writeEntry("Histogram TimeUnit", d->timeUnitCB->currentItem());
-    config->writeEntry("Histogram Scale", d->scaleBG->selectedId());
-    config->writeEntry("Cursor Position", d->timeLineWidget->cursorDateTime());
-    config->sync();
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(QString("TimeLine SideBar"));
+    group.writeEntry("Histogram TimeUnit", d->timeUnitCB->currentIndex());
+    group.writeEntry("Histogram Scale", d->scaleBG->selectedId());
+    group.writeEntry("Cursor Position", d->timeLineWidget->cursorDateTime());
+    group.sync();
 }
 
 void TimeLineView::setActive(bool val)
@@ -372,7 +364,7 @@ void TimeLineView::setActive(bool val)
 void TimeLineView::slotRefDateTimeChanged()
 {
     d->scrollBar->blockSignals(true);
-    d->scrollBar->setMaxValue(d->timeLineWidget->totalIndex()-1);
+    d->scrollBar->setMaximum(d->timeLineWidget->totalIndex()-1);
     d->scrollBar->setValue(d->timeLineWidget->indexForRefDateTime()-1);
     d->scrollBar->blockSignals(false);
 }
@@ -402,7 +394,8 @@ void TimeLineView::slotCursorPositionChanged()
 
 void TimeLineView::slotSelectionChanged()
 {
-    d->timer->start(100, true);
+    d->timer->setSingleShot(true);
+    d->timer->start(100);
 }
 
 /** Called from d->timer event.*/
@@ -438,7 +431,7 @@ void TimeLineView::createNewDateSearchAlbum(const QString& name)
 
     // We will make now the Url for digiKam Search KIO-Slave
 
-    KURL url;
+    KUrl url;
     url.setProtocol("digikamsearch");
 
     int grp = list.count();
@@ -500,7 +493,7 @@ void TimeLineView::slotAlbumSelected(SAlbum* salbum)
     //               type=datesearch
 
     // Check if a special url query exist to identify a SAlbum dedicaced to Date Search
-    KURL url = salbum->kurl();
+    KUrl url = salbum->kurl();
     QMap<QString, QString> queries = url.queryItems();
     if (queries.isEmpty()) return;
 
@@ -629,7 +622,7 @@ void TimeLineView::slotRenameAlbum(SAlbum* salbum)
 
     if (!checkName(name)) return;
 
-    KURL url = salbum->kurl();
+    KUrl url = salbum->kurl();
     url.removeQueryItem("name");
     url.addQueryItem("name", name);
     AlbumManager::instance()->updateSAlbum(salbum, url);

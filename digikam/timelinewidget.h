@@ -26,9 +26,10 @@
 
 // Qt includes.
 
+#include <QList>
 #include <QString>
 #include <QWidget>
-#include <QDatetime>
+#include <QDateTime>
 
 // Local includes.
 

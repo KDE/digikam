@@ -27,9 +27,9 @@
 
 // Qt includes.
 
-#include <qpainter.h>
-#include <qpixmap.h>
-#include <qpen.h>
+#include <QPainter>
+#include <QPixmap>
+#include <QPen>
 
 // KDE include.
 
