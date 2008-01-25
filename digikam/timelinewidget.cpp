@@ -225,7 +225,8 @@ void TimeLineWidget::setCursorDateTime(const QDateTime& dateTime)
         {
             // Go to the first day of week.
             int weekYear = 0;
-            dt           = firstDayOfWeek(dt.date().year(), dt.date().weekNumber(&weekYear));
+            int weekNb   = KGlobal::locale()->calendar()->weekNumber(dt.date(), &weekYear);
+            dt           = firstDayOfWeek(weekYear, weekNb);
             break;
         }
         case Month:
@@ -1460,7 +1461,10 @@ void TimeLineWidget::mousePressEvent(QMouseEvent *e)
         }
 
         if (!ref.isNull())
+        {
+            // DDebug() << "Cursor Date: " << ref << endl;
             setCursorDateTime(ref);
+        }
 
         d->validMouseEvent = true;
         updatePixmap();
@@ -1650,9 +1654,10 @@ QDateTime TimeLineWidget::firstDayOfWeek(int year, int weekNumber)
 
     dt = dt.addDays((weekNumber-1)*7);
 
-
-/*    DDebug() << "Year= " << year << " Week= " << weekNumber 
-             << " 1st day= " << dt << endl;*/
+/*
+    DDebug() << "Year= " << year << " Week= " << weekNumber 
+             << " 1st day= " << dt << endl;
+*/
 
     return dt;
 }
