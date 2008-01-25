@@ -949,21 +949,28 @@ void TimeLineWidget::updatePixmap()
     // Draw cursor rectangle over current date-time.
     if (focusRect.isValid())
     {
-        p.setPen(palette().active().shadow());
         focusRect.setTop(d->topMargin);
         QPoint p1(focusRect.left(), height() - d->bottomMargin);
         QPoint p2(focusRect.right(), height() - d->bottomMargin);
+        focusRect.setBottom(focusRect.bottom() + d->bottomMargin/2);
+
+        p.setPen(palette().active().shadow());
         p.drawLine(p1.x(), p1.y()+1, p2.x(), p2.y()+1);
-        focusRect.addCoords(-1,-1, 1, 1 + d->bottomMargin/2);
         p.drawRect(focusRect);
+
         focusRect.addCoords(-1,-1, 1, 1);
         p.setPen(palette().active().background());
         p.drawRect(focusRect);
         p.drawLine(p1.x()-1, p1.y(), p2.x()+1, p2.y());
+
+        focusRect.addCoords(-1,-1, 1, 1);
+        p.drawRect(focusRect);
+        p.drawLine(p1.x()-1, p1.y()-1, p2.x()+1, p2.y()-1);
+
         focusRect.addCoords(-1,-1, 1, 1);
         p.setPen(palette().active().shadow());
         p.drawRect(focusRect);
-        p.drawLine(p1.x(), p1.y()-1, p2.x(), p2.y()-1);
+        p.drawLine(p1.x(), p1.y()-2, p2.x(), p2.y()-2);
     }
     p.end();
 }
