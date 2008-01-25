@@ -23,14 +23,14 @@
 
 // Qt includes.
 
-#include <qfont.h>
-#include <qpainter.h>
-#include <qstyle.h>
-#include <qcursor.h>
+#include <QFont>
+#include <QPainter>
+#include <QStyle>
+#include <QCursor>
 
 // KDe includes.
 
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kiconloader.h>
@@ -53,7 +53,7 @@ class TimeLineFolderItem : public FolderItem
 
 public:
 
-    TimeLineFolderItem(QListView* parent, SAlbum* album)
+    TimeLineFolderItem(Q3ListView* parent, SAlbum* album)
         : FolderItem(parent, album->title()),
           m_album(album)
     {
@@ -65,7 +65,7 @@ public:
         m_album->removeExtraData(listView());
     }
 
-    int compare(QListViewItem* i, int , bool ) const
+    int compare(Q3ListViewItem* i, int , bool ) const
     {
         if (!i)
             return 0;
@@ -93,7 +93,7 @@ TimeLineFolderView::TimeLineFolderView(QWidget* parent)
 {
     m_currentTimeLineSearchName = QString("_Current_Time_Line_Search_");
     addColumn(i18n("My Date Searches"));
-    setResizeMode(QListView::LastColumn);
+    setResizeMode(Q3ListView::LastColumn);
     setRootIsDecorated(false);
 
     connect(AlbumManager::instance(), SIGNAL(signalAlbumAdded(Album*)),
@@ -108,8 +108,8 @@ TimeLineFolderView::TimeLineFolderView(QWidget* parent)
     connect(AlbumManager::instance(), SIGNAL(signalAlbumRenamed(Album*)),
         this, SLOT(slotAlbumRenamed(Album*)));
 
-    connect(this, SIGNAL(contextMenuRequested(QListViewItem*, const QPoint&, int)),
-            this, SLOT(slotContextMenu(QListViewItem*, const QPoint&, int)));
+    connect(this, SIGNAL(contextMenuRequested(Q3ListViewItem*, const QPoint&, int)),
+            this, SLOT(slotContextMenu(Q3ListViewItem*, const QPoint&, int)));
 
     connect(this, SIGNAL(selectionChanged()),
             this, SLOT(slotSelectionChanged()));
@@ -126,7 +126,7 @@ QString TimeLineFolderView::currentTimeLineSearchName() const
 
 void TimeLineFolderView::slotSearchFilterChanged(const QString& filter)
 {
-    QString search = filter.lower();
+    QString search = filter.toLower();
 
     bool atleastOneMatch = false;
 
@@ -136,7 +136,7 @@ void TimeLineFolderView::slotSearchFilterChanged(const QString& filter)
         SAlbum* salbum               = (SAlbum*)(*it);
         TimeLineFolderItem* viewItem = (TimeLineFolderItem*) salbum->extraData(this);
 
-        bool match = salbum->title().lower().contains(search);
+        bool match = salbum->title().toLower().contains(search);
         if (match)
         {
             atleastOneMatch = true;
@@ -164,11 +164,10 @@ void TimeLineFolderView::searchDelete(SAlbum* album)
     // Make sure that a complicated search is not deleted accidentally
     int result = KMessageBox::warningYesNo(this, i18n("Are you sure you want to "
                                                       "delete the selected Date Search "
-                                                      "\"%1\"?")
-                                           .arg(album->title()),
+                                                      "\"%1\"?", album->title()),
                                            i18n("Delete Date Search?"),
-                                           i18n("Delete"),
-                                           KStdGuiItem::cancel());
+                                           KGuiItem(i18n("Delete")),
+                                           KStandardGuiItem::cancel());
 
     if (result != KMessageBox::Yes)
         return;
@@ -185,7 +184,7 @@ void TimeLineFolderView::slotAlbumAdded(Album* a)
     if (!salbum) return;
 
     // Check if a special url query exist to identify a SAlbum dedicaced to Date Search
-    KURL url = salbum->kurl();
+    KUrl url = salbum->kurl();
     QMap<QString, QString> queries = url.queryItems();
     if (queries.isEmpty()) return;
 
@@ -228,9 +227,9 @@ void TimeLineFolderView::slotAlbumRenamed(Album* album)
 
 void TimeLineFolderView::slotSelectionChanged()
 {
-    QListViewItem* selItem = 0;
+    Q3ListViewItem* selItem = 0;
 
-    QListViewItemIterator it( this );
+    Q3ListViewItemIterator it( this );
     while (it.current())
     {
         if (it.current()->isSelected())
@@ -255,31 +254,27 @@ void TimeLineFolderView::slotSelectionChanged()
         emit signalAlbumSelected(searchItem->album());
 }
 
-void TimeLineFolderView::slotContextMenu(QListViewItem* item, const QPoint&, int)
+void TimeLineFolderView::slotContextMenu(Q3ListViewItem* item, const QPoint&, int)
 {
     if (!item) return;
 
     TimeLineFolderItem* sItem = dynamic_cast<TimeLineFolderItem*>(item);
 
-    KPopupMenu popmenu(this);
-    popmenu.insertTitle(SmallIcon("digikam"), i18n("My Date Searches"));
-    popmenu.insertItem(SmallIcon("pencil"), i18n("Rename..."), 10);
-    popmenu.insertItem(SmallIcon("editdelete"), i18n("Delete"), 11);
-
-    switch (popmenu.exec(QCursor::pos()))
+    KMenu popmenu(this);
+    popmenu.addTitle(SmallIcon("digikam"), i18n("My Date Searches"));
+    QAction *renSearch = popmenu.addAction(SmallIcon("pencil"), i18n("Rename..."));
+    QAction *delSearch = popmenu.addAction(SmallIcon("edit-delete"), i18n("Delete"));
+    QAction *choice    = popmenu.exec(QCursor::pos());
+    if (choice)
     {
-        case 10:
+        if (choice == renSearch)
         {
             emit signalRenameAlbum(sItem->album());
-            break;
         }
-        case 11:
+        else if (choice == delSearch)
         {
             searchDelete(sItem->album());
-            break;
         }
-        default:
-            break;
     }
 }
 

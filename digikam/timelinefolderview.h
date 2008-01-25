@@ -28,6 +28,8 @@
 
 #include "folderview.h"
 
+class Q3ListViewItem;
+
 namespace Digikam
 {
 
@@ -62,7 +64,7 @@ private slots:
     void slotAlbumDeleted(Album* album);
     void slotAlbumRenamed(Album* album);
     void slotSelectionChanged();
-    void slotContextMenu(QListViewItem*, const QPoint&, int);
+    void slotContextMenu(Q3ListViewItem*, const QPoint&, int);
 
 protected:
 
