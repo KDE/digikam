@@ -244,7 +244,7 @@ TimeLineView::TimeLineView(QWidget *parent)
     connect(d->timeLineFolderView, SIGNAL(signalSearchFilterMatch(bool)),
             d->searchDateBar, SLOT(slotSearchResult(bool)));
 
-    connect(d->searchDateBar, SIGNAL(signalTextChanged(const QString&)),
+    connect(d->searchDateBar, SIGNAL(textChanged(const QString&)),
             d->timeLineFolderView, SLOT(slotSearchFilterChanged(const QString&)));
 
     connect(d->timeUnitCB, SIGNAL(activated(int)),
