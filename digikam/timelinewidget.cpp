@@ -279,19 +279,19 @@ int TimeLineWidget::cursorInfo(QString& infoDate)
             infoDate = i18n("Week #%1 - %2 %3")
                        .arg(d->calendar->weekNumber(dt.date()))
                        .arg(d->calendar->monthName(dt.date()))
-                       .arg(d->calendar->yearString(dt.date(), false));
+                       .arg(d->calendar->yearString(dt.date()));
             break;
         }
         case Month:
         {
             infoDate = QString("%1 %2")
                        .arg(d->calendar->monthName(dt.date()))
-                       .arg(d->calendar->yearString(dt.date(), false));
+                       .arg(d->calendar->yearString(dt.date()));
             break;
         }
         case Year:
         {
-            infoDate = d->calendar->yearString(dt.date(), false);
+            infoDate = d->calendar->yearString(dt.date());
             break;
         }
     }
@@ -655,9 +655,9 @@ void TimeLineWidget::updatePixmap()
         if (sel == Selected || sel == FuzzySelection)
         {
             selBrush.setColor(palette().active().highlight());
-            selBrush.setStyle(QBrush::SolidPattern);
+            selBrush.setStyle(Qt::SolidPattern);
             if (sel == FuzzySelection)
-                selBrush.setStyle(QBrush::Dense4Pattern);
+                selBrush.setStyle(Qt::Dense4Pattern);
 
             selRect.setTop(height() - d->bottomMargin + 1);
             selRect.setLeft(d->startPos + i*d->barWidth);
@@ -676,7 +676,7 @@ void TimeLineWidget::updatePixmap()
                     fnt.setPointSize(fnt.pointSize()-4);
                     p.setFont(fnt);
                     p.setPen(val ? palette().active().foreground() : palette().active().mid()) ;
-                    QString txt = QString(d->calendar->weekDayName(ref.date(), true)[0]);
+                    QString txt = QString(d->calendar->weekDayName(ref.date(), KCalendarSystem::ShortDayName)[0]);
                     QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt); 
                     p.drawText(barRect.left() + ((barRect.width()-br.width())/2),
                                barRect.bottom()+br.height(), txt);
@@ -688,7 +688,7 @@ void TimeLineWidget::updatePixmap()
                     p.setPen(dateColor);
                     p.drawLine(barRect.left(), barRect.bottom(), 
                                barRect.left(), barRect.bottom()+d->bottomMargin/2);
-                    QString txt = KGlobal::locale()->formatDate(ref.date(), true);
+                    QString txt = KGlobal::locale()->formatDate(ref.date(), KLocale::ShortDate);
                     QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt); 
                     p.drawText(barRect.left()-br.width()/2, barRect.bottom() + d->bottomMargin, txt);
                 }
