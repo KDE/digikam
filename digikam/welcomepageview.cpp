@@ -137,7 +137,7 @@ QString WelcomePageView::infoPage()
     newFeatures << i18n("Full color management support");
     newFeatures << i18n("Native JPEG-2000 support");
     newFeatures << i18n("Makernote and IPTC metadata support");
-    newFeatures << i18n("Photograph geolocalization");
+    newFeatures << i18n("Photograph geolocation");
     newFeatures << i18n("Extensive Sidebars");
     newFeatures << i18n("Advanced RAW image decoding settings");
     newFeatures << i18n("Fast RAW preview");
