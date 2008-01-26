@@ -204,8 +204,8 @@ SET(digikam_bin_SRCS
                      tagfolderview.cpp 
                      tagspopupmenu.cpp 
                      timelinefolderview.cpp
-#                     timelineview.cpp
-#                     timelinewidget.cpp
+                     timelineview.cpp
+                     timelinewidget.cpp
                      welcomepageview.cpp 
     )
 
