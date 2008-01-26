@@ -23,7 +23,7 @@
 
 // Qt includes.
 
-#include <Q3HButtonGroup> 
+#include <QButtonGroup> 
 #include <QTimer>
 #include <QFrame>
 #include <QLayout>
@@ -43,14 +43,8 @@
 #include <kapplication.h>
 #include <ksqueezedtextlabel.h>
 #include <kstandarddirs.h>
-#include <kdeversion.h>
 #include <kmessagebox.h>
-
-#if KDE_IS_VERSION(3,2,0)
 #include <kinputdialog.h>
-#else
-#include <klineeditdlg.h>
-#endif
 
 // Local includes.
 
@@ -92,7 +86,7 @@ public:
 
     QComboBox          *timeUnitCB;
 
-    Q3HButtonGroup      *scaleBG;
+    QButtonGroup       *scaleBG;
 
     QPushButton        *resetButton;
     QPushButton        *saveButton;
@@ -140,33 +134,39 @@ TimeLineView::TimeLineView(QWidget *parent)
     d->timeUnitCB->setWhatsThis(i18n("<p>Select here histogram time unit.<p>"
                                      "You can change the graph decade to zoom in or zoom out over time."));
 
-    d->scaleBG = new Q3HButtonGroup(hbox1);
+    QWidget *scaleBox  = new QWidget(hbox1);
+    QHBoxLayout *hlay2 = new QHBoxLayout(scaleBox);
+    d->scaleBG         = new QButtonGroup(scaleBox);
     d->scaleBG->setExclusive(true);
-    d->scaleBG->setInsideMargin( 0 );
-    d->scaleBG->setWhatsThis(i18n("<p>Select here the histogram scale.<p>"
+    scaleBox->setWhatsThis( i18n("<p>Select here the histogram scale.<p>"
                                   "If the date count's maximal values are small, you can use the linear scale.<p>"
                                   "Logarithmic scale can be used when the maximal values are big; "
                                   "if it is used, all values (small and large) will be visible on the "
                                   "graph."));
 
-    QPushButton *linHistoButton = new QPushButton( d->scaleBG );
-    linHistoButton->setToolTip(i18n("<p>Linear"));
-    d->scaleBG->insert(linHistoButton, TimeLineWidget::LinScale);
+    QPushButton *linHistoButton = new QPushButton(scaleBox);
+    linHistoButton->setToolTip( i18n( "<p>Linear" ) );
     linHistoButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/histogram-lin.png")));
     linHistoButton->setCheckable(true);
+    d->scaleBG->addButton(linHistoButton, TimeLineWidget::LinScale);
 
-    QPushButton *logHistoButton = new QPushButton( d->scaleBG );
-    logHistoButton->setToolTip(i18n("<p>Logarithmic"));
-    d->scaleBG->insert(logHistoButton, TimeLineWidget::LogScale);
-    logHistoButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/histogram-log.png")));;
+    QPushButton *logHistoButton = new QPushButton(scaleBox);
+    logHistoButton->setToolTip( i18n( "<p>Logarithmic" ) );
+    logHistoButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/histogram-log.png")));
     logHistoButton->setCheckable(true);
+    d->scaleBG->addButton(logHistoButton, TimeLineWidget::LogScale);
+
+    hlay2->setMargin(0);
+    hlay2->setSpacing(0);
+    hlay2->addWidget(linHistoButton);
+    hlay2->addWidget(logHistoButton);
 
     hlay->setMargin(0);
     hlay->setSpacing(KDialog::spacingHint());
     hlay->addWidget(label1);
     hlay->addWidget(d->timeUnitCB);
     hlay->addItem(new QSpacerItem(10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum));
-    hlay->addWidget(d->scaleBG);
+    hlay->addWidget(scaleBox);
 
     // ---------------------------------------------------------------
 
@@ -316,8 +316,8 @@ void TimeLineView::readConfig()
     d->timeUnitCB->setCurrentIndex(group.readEntry("Histogram TimeUnit", (int)TimeLineWidget::Month));
     slotTimeUnitChanged(d->timeUnitCB->currentIndex());
 
-    d->scaleBG->setButton(group.readEntry("Histogram Scale", (int)TimeLineWidget::LinScale));
-    slotScaleChanged(d->scaleBG->selectedId());
+    d->scaleBG->button(group.readEntry("Histogram Scale", (int)TimeLineWidget::LinScale))->setChecked(true);
+    slotScaleChanged(d->scaleBG->checkedId());
 
     QDateTime now = QDateTime::currentDateTime();
     d->timeLineWidget->setCursorDateTime(group.readEntry("Cursor Position", now));
@@ -329,7 +329,7 @@ void TimeLineView::writeConfig()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(QString("TimeLine SideBar"));
     group.writeEntry("Histogram TimeUnit", d->timeUnitCB->currentIndex());
-    group.writeEntry("Histogram Scale", d->scaleBG->selectedId());
+    group.writeEntry("Histogram Scale", d->scaleBG->checkedId());
     group.writeEntry("Cursor Position", d->timeLineWidget->cursorDateTime());
     group.sync();
 }
@@ -556,11 +556,7 @@ bool TimeLineView::checkName(QString& name)
         QString label = i18n( "Search name already exists.\n"
                               "Please enter a new name:" );
         bool ok;
-#if KDE_IS_VERSION(3,2,0)
         QString newTitle = KInputDialog::getText(i18n("Name exists"), label, name, &ok, this);
-#else
-        QString newTitle = KLineEditDlg::getText(i18n("Name exists"), label, name, ok, this);
-#endif
         if (!ok) return false;
 
         name    = newTitle;
@@ -608,15 +604,9 @@ void TimeLineView::slotRenameAlbum(SAlbum* salbum)
     QString oldName(salbum->title());
     bool    ok;
 
-#if KDE_IS_VERSION(3,2,0)
     QString name = KInputDialog::getText(i18n("Rename Album (%1)").arg(oldName), 
                                           i18n("Enter new album name:"),
                                           oldName, &ok, this);
-#else
-    QString name = KLineEditDlg::getText(i18n("Rename Album (%1)").arg(oldName), 
-                                          i18n("Enter new album name:"),
-                                          oldName, &ok, this);
-#endif
 
     if (!ok || name == oldName || name.isEmpty()) return;
 
