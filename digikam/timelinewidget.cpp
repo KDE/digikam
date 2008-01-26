@@ -1331,7 +1331,9 @@ TimeLineWidget::SelectionMode TimeLineWidget::checkSelectionForDaysRange(const Q
 
 void TimeLineWidget::paintEvent(QPaintEvent*)
 {
-    bitBlt(this, 0, 0, &d->pixmap);
+    QPainter p(this);
+    p.drawPixmap(0, 0, d->pixmap);
+    p.end();
 }
 
 void TimeLineWidget::resizeEvent(QResizeEvent*)
