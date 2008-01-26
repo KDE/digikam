@@ -347,18 +347,18 @@ void TimeLineWidget::resetSelection()
     QMap<TimeLineWidgetPriv::YearRefPair, TimeLineWidgetPriv::StatPair>::iterator it;
 
     for (it = d->dayStatMap.begin() ; it != d->dayStatMap.end(); ++it)
-        it.data().second = Unselected;
+        it.value().second = Unselected;
 
     for (it = d->weekStatMap.begin() ; it != d->weekStatMap.end(); ++it)
-        it.data().second = Unselected;
+        it.value().second = Unselected;
 
     for (it = d->monthStatMap.begin() ; it != d->monthStatMap.end(); ++it)
-        it.data().second = Unselected;
+        it.value().second = Unselected;
 
     QMap<int, TimeLineWidgetPriv::StatPair>::iterator it2;
 
     for (it2 = d->yearStatMap.begin() ; it2 != d->yearStatMap.end(); ++it2)
-        it2.data().second = Unselected;
+        it2.value().second = Unselected;
 }
 
 void TimeLineWidget::setSelectedDateRange(const DateRangeList& list)
@@ -403,14 +403,14 @@ DateRangeList TimeLineWidget::selectedDateRange(int& totalCount)
 
     for (it3 = d->dayStatMap.begin() ; it3 != d->dayStatMap.end(); ++it3)
     {
-        if (it3.data().second == Selected)
+        if (it3.value().second == Selected)
         {
             date = QDate(it3.key().first, 1, 1);
             date = date.addDays(it3.key().second-1);
             sdt  = QDateTime(date);
             edt  = sdt.addDays(1); 
             list.append(DateRange(sdt, edt));
-            totalCount += it3.data().first;
+            totalCount += it3.value().first;
         }
     }
 
@@ -465,17 +465,17 @@ void TimeLineWidget::slotDatesMap(const QMap<QDateTime, int>& datesStatMap)
 
     QMap<int, TimeLineWidgetPriv::StatPair>::iterator it_iP;
     for ( it_iP = d->yearStatMap.begin() ; it_iP != d->yearStatMap.end(); ++it_iP )
-        it_iP.data().first = 0;
+        it_iP.value().first = 0;
 
     QMap<TimeLineWidgetPriv::YearRefPair, TimeLineWidgetPriv::StatPair>::iterator it_YP;
     for ( it_YP = d->monthStatMap.begin() ; it_YP != d->monthStatMap.end(); ++it_YP )
-        it_YP.data().first = 0;
+        it_YP.value().first = 0;
 
     for ( it_YP = d->weekStatMap.begin() ; it_YP != d->weekStatMap.end(); ++it_YP )
-        it_YP.data().first = 0;
+        it_YP.value().first = 0;
 
     for ( it_YP = d->dayStatMap.begin() ; it_YP != d->dayStatMap.end(); ++it_YP )
-        it_YP.data().first = 0;
+        it_YP.value().first = 0;
 
     // Parse all new Date stamp and store histogram stats relevant in maps.
 
@@ -503,13 +503,13 @@ void TimeLineWidget::slotDatesMap(const QMap<QDateTime, int>& datesStatMap)
         it_iP = d->yearStatMap.find(year);
         if ( it_iP == d->yearStatMap.end() )
         {
-            count = it.data();
+            count = it.value();
             d->yearStatMap.insert( year, TimeLineWidgetPriv::StatPair(count, Unselected) );
         }
         else
         {
-            count = it_iP.data().first + it.data();
-            d->yearStatMap.replace( year, TimeLineWidgetPriv::StatPair(count, it_iP.data().second) );
+            count = it_iP.value().first + it.value();
+            d->yearStatMap.replace( year, TimeLineWidgetPriv::StatPair(count, it_iP.value().second) );
         }
 
         if (d->maxCountByYear < count) 
@@ -520,15 +520,15 @@ void TimeLineWidget::slotDatesMap(const QMap<QDateTime, int>& datesStatMap)
         it_YP = d->monthStatMap.find(TimeLineWidgetPriv::YearRefPair(year, month));
         if ( it_YP == d->monthStatMap.end() )
         {
-            count = it.data();
+            count = it.value();
             d->monthStatMap.insert( TimeLineWidgetPriv::YearRefPair(year, month), 
                                     TimeLineWidgetPriv::StatPair(count, Unselected) );
         }
         else
         {
-            count = it_YP.data().first + it.data();
+            count = it_YP.value().first + it.value();
             d->monthStatMap.replace( TimeLineWidgetPriv::YearRefPair(year, month), 
-                                     TimeLineWidgetPriv::StatPair(count, it_YP.data().second) );
+                                     TimeLineWidgetPriv::StatPair(count, it_YP.value().second) );
         }
 
         if (d->maxCountByMonth < count) 
@@ -539,15 +539,15 @@ void TimeLineWidget::slotDatesMap(const QMap<QDateTime, int>& datesStatMap)
         it_YP = d->weekStatMap.find(TimeLineWidgetPriv::YearRefPair(yearForWeek, week));
         if ( it_YP == d->weekStatMap.end() )
         {
-            count = it.data();
+            count = it.value();
             d->weekStatMap.insert( TimeLineWidgetPriv::YearRefPair(yearForWeek, week), 
                                    TimeLineWidgetPriv::StatPair(count, Unselected) );
         }
         else
         {
-            count = it_YP.data().first + it.data();
+            count = it_YP.value().first + it.value();
             d->weekStatMap.replace( TimeLineWidgetPriv::YearRefPair(yearForWeek, week), 
-                                    TimeLineWidgetPriv::StatPair(count, it_YP.data().second) );
+                                    TimeLineWidgetPriv::StatPair(count, it_YP.value().second) );
         }
 
         if (d->maxCountByWeek < count) 
@@ -558,15 +558,15 @@ void TimeLineWidget::slotDatesMap(const QMap<QDateTime, int>& datesStatMap)
         it_YP = d->dayStatMap.find(TimeLineWidgetPriv::YearRefPair(year, day));
         if ( it_YP == d->dayStatMap.end() )
         {
-            count = it.data();
+            count = it.value();
             d->dayStatMap.insert( TimeLineWidgetPriv::YearRefPair(year, day), 
                                   TimeLineWidgetPriv::StatPair(count, Unselected) );
         }
         else
         {
-            count = it_YP.data().first + it.data();
+            count = it_YP.value().first + it.value();
             d->dayStatMap.replace( TimeLineWidgetPriv::YearRefPair(year, day), 
-                                   TimeLineWidgetPriv::StatPair(count, it_YP.data().second) );
+                                   TimeLineWidgetPriv::StatPair(count, it_YP.value().second) );
         }
 
         if (d->maxCountByDay < count) 
@@ -1087,8 +1087,8 @@ int TimeLineWidget::statForDateTime(const QDateTime& dt, SelectionMode& selected
                 d->dayStatMap.find(TimeLineWidgetPriv::YearRefPair(year, day));
             if ( it != d->dayStatMap.end() )
             {
-                count    = it.data().first;
-                selected = it.data().second;
+                count    = it.value().first;
+                selected = it.value().second;
             }
             break;
         }
@@ -1098,8 +1098,8 @@ int TimeLineWidget::statForDateTime(const QDateTime& dt, SelectionMode& selected
                 d->weekStatMap.find(TimeLineWidgetPriv::YearRefPair(yearForWeek, week));
             if ( it != d->weekStatMap.end() )
             {
-                count    = it.data().first;
-                selected = it.data().second;
+                count    = it.value().first;
+                selected = it.value().second;
             }
             break;
         }
@@ -1109,8 +1109,8 @@ int TimeLineWidget::statForDateTime(const QDateTime& dt, SelectionMode& selected
                 d->monthStatMap.find(TimeLineWidgetPriv::YearRefPair(year, month));
             if ( it != d->monthStatMap.end() )
             {
-                count    = it.data().first;
-                selected = it.data().second;
+                count    = it.value().first;
+                selected = it.value().second;
             }
             break;
         }
@@ -1119,8 +1119,8 @@ int TimeLineWidget::statForDateTime(const QDateTime& dt, SelectionMode& selected
             QMap<int, TimeLineWidgetPriv::StatPair>::iterator it = d->yearStatMap.find(year);
             if ( it != d->yearStatMap.end() )
             {
-                count    = it.data().first;
-                selected = it.data().second;
+                count    = it.value().first;
+                selected = it.value().second;
             }
             break;
         }
@@ -1189,7 +1189,7 @@ void TimeLineWidget::updateWeekSelection(const QDateTime dts, const QDateTime dt
         dteWeek = dtsWeek.addDays(7);
         it  = d->weekStatMap.find(TimeLineWidgetPriv::YearRefPair(yearForWeek, week));
         if ( it != d->weekStatMap.end() )
-            it.data().second = checkSelectionForDaysRange(dtsWeek, dteWeek);
+            it.value().second = checkSelectionForDaysRange(dtsWeek, dteWeek);
 
         dt = dt.addDays(7);
     }
@@ -1211,7 +1211,7 @@ void TimeLineWidget::updateMonthSelection(const QDateTime dts, const QDateTime d
         dteMonth = dtsMonth.addDays(d->calendar->daysInMonth(dtsMonth.date()));
         it  = d->monthStatMap.find(TimeLineWidgetPriv::YearRefPair(year, month));
         if ( it != d->weekStatMap.end() )
-            it.data().second = checkSelectionForDaysRange(dtsMonth, dteMonth);
+            it.value().second = checkSelectionForDaysRange(dtsMonth, dteMonth);
 
         dt = dteMonth;
     }
@@ -1232,7 +1232,7 @@ void TimeLineWidget::updateYearSelection(const QDateTime dts, const QDateTime dt
         dteYear = dtsYear.addDays(d->calendar->daysInYear(dtsYear.date()));
         it = d->yearStatMap.find(year);
         if ( it != d->yearStatMap.end() )
-            it.data().second = checkSelectionForDaysRange(dtsYear, dteYear);
+            it.value().second = checkSelectionForDaysRange(dtsYear, dteYear);
 
         dt = dteYear;
     }
@@ -1247,7 +1247,7 @@ void TimeLineWidget::updateAllSelection()
 
     for (it = d->dayStatMap.begin() ; it != d->dayStatMap.end(); ++it)
     {
-        if (it.data().second == Selected)
+        if (it.value().second == Selected)
         {
             date = QDate(it.key().first, 1, 1);
             date = date.addDays(it.key().second-1);
@@ -1272,7 +1272,7 @@ void TimeLineWidget::setDaysRangeSelection(const QDateTime dts, const QDateTime 
         day  = d->calendar->dayOfYear(dt.date());
         it = d->dayStatMap.find(TimeLineWidgetPriv::YearRefPair(year, day));
         if ( it != d->dayStatMap.end() )
-            it.data().second = selected;
+            it.value().second = selected;
 
         dt = dt.addDays(1);
     }
@@ -1298,9 +1298,9 @@ TimeLineWidget::SelectionMode TimeLineWidget::checkSelectionForDaysRange(const Q
         {
             items++;
 
-            if (it.data().second != Unselected)
+            if (it.value().second != Unselected)
             {
-                if (it.data().second == FuzzySelection)
+                if (it.value().second == FuzzySelection)
                     itemsFuz++;
                 else
                     itemsSel++;
