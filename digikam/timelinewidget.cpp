@@ -1437,7 +1437,7 @@ void TimeLineWidget::wheelEvent(QWheelEvent* e)
 {
     if (e->delta() < 0)
     {
-        if (e->state() & Qt::ShiftButton)
+        if (e->modifiers() & Qt::ShiftModifier)
             slotForward();
         else
             slotNext();
@@ -1445,7 +1445,7 @@ void TimeLineWidget::wheelEvent(QWheelEvent* e)
 
     if (e->delta() > 0)
     {
-        if (e->state() & Qt::ShiftButton)
+        if (e->modifiers() & Qt::ShiftModifier)
             slotBackward();
         else
             slotPrevious();
@@ -1458,7 +1458,7 @@ void TimeLineWidget::mousePressEvent(QMouseEvent *e)
     {
         QPoint pt(e->x(), e->y());
 
-        bool ctrlPressed    = e->state() & Qt::ControlButton;
+        bool ctrlPressed    = e->button() & Qt::ControlButton;
         QDateTime ref       = dateTimeForPoint(pt, d->selMouseEvent);
         d->selStartDateTime = QDateTime();
         if (d->selMouseEvent) 
