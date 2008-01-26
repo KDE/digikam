@@ -27,9 +27,9 @@
 
 // Qt includes.
 
-#include <qpainter.h>
-#include <qpixmap.h>
-#include <qpen.h>
+#include <QPainter>
+#include <QPixmap>
+#include <QPen>
 
 // KDE include.
 
@@ -111,9 +111,10 @@ public:
 };
 
 TimeLineWidget::TimeLineWidget(QWidget *parent)
-              : QWidget(parent, 0, Qt::WDestructiveClose)
+              : QWidget(parent)
 {
     d = new TimeLineWidgetPriv;
+    setAttribute(Qt::WA_DeleteOnClose);
     setBackgroundMode(Qt::NoBackground);
     setMouseTracking(true);
     setMinimumWidth(256);
