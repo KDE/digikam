@@ -115,7 +115,6 @@ TimeLineWidget::TimeLineWidget(QWidget *parent)
 {
     d = new TimeLineWidgetPriv;
     setAttribute(Qt::WA_DeleteOnClose);
-    setBackgroundMode(Qt::NoBackground);
     setMouseTracking(true);
     setMinimumWidth(256);
     setMinimumHeight(192);
