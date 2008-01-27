@@ -187,7 +187,7 @@ TimeLineView::TimeLineView(QWidget *parent)
     hbox2->setSpacing(KDialog::spacingHint());
 
     d->resetButton = new QPushButton(hbox2);
-    d->resetButton->setIcon(SmallIcon("reload_page"));
+    d->resetButton->setIcon(SmallIcon("document-revert"));
     d->resetButton->setToolTip(i18n("Clear current selection"));
     d->resetButton->setWhatsThis(i18n("<p>If you press this button, current "
                                       "dates selection from time-line will be "
