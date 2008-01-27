@@ -590,7 +590,7 @@ void TimeLineWidget::updatePixmap()
 {
     // Drawing background and image.
     d->pixmap = QPixmap(size());
-    d->pixmap.fill(palette().active().background());
+    d->pixmap.fill(palette().color(QPalette::Background));
 
     QPainter p(&d->pixmap);
 
@@ -647,9 +647,9 @@ void TimeLineWidget::updatePixmap()
         if (ref > d->maxDateTime)
             dateColor = palette().active().mid();
         else 
-            dateColor = palette().active().foreground(); 
+            dateColor = palette().color(QPalette::Foreground); 
 
-        p.setPen(palette().active().foreground());
+        p.setPen(palette().color(QPalette::Foreground));
         p.fillRect(barRect, QBrush(Qt::green));
         p.drawRect(barRect);
         p.drawLine(barRect.right(), barRect.bottom(), barRect.right(), barRect.bottom()+3);
@@ -678,7 +678,7 @@ void TimeLineWidget::updatePixmap()
                     QFont fnt = p.font();
                     fnt.setPointSize(fnt.pointSize()-4);
                     p.setFont(fnt);
-                    p.setPen(val ? palette().active().foreground() : palette().active().mid()) ;
+                    p.setPen(val ? palette().color(QPalette::Foreground) : palette().active().mid()) ;
                     QString txt = QString(d->calendar->weekDayName(ref.date(), KCalendarSystem::ShortDayName)[0]);
                     QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt); 
                     p.drawText(barRect.left() + ((barRect.width()-br.width())/2),
@@ -705,7 +705,7 @@ void TimeLineWidget::updatePixmap()
                     QFont fnt = p.font();
                     fnt.setPointSize(fnt.pointSize()-4);
                     p.setFont(fnt);
-                    p.setPen(val ? palette().active().foreground() : palette().active().mid()) ;
+                    p.setPen(val ? palette().color(QPalette::Foreground) : palette().active().mid()) ;
                     QString txt = QString::number(week);
                     QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt); 
                     p.drawText(barRect.left() + ((barRect.width()-br.width())/2),
@@ -737,7 +737,7 @@ void TimeLineWidget::updatePixmap()
                     QFont fnt = p.font();
                     fnt.setPointSize(fnt.pointSize()-4);
                     p.setFont(fnt);
-                    p.setPen(val ? palette().active().foreground() : palette().active().mid()) ;
+                    p.setPen(val ? palette().color(QPalette::Foreground) : palette().active().mid()) ;
                     QString txt = QString(d->calendar->monthName(ref.date(), KCalendarSystem::ShortName)[0]);
                     QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt); 
                     p.drawText(barRect.left() + ((barRect.width()-br.width())/2),
@@ -821,9 +821,9 @@ void TimeLineWidget::updatePixmap()
         if (ref < d->minDateTime)
             dateColor = palette().active().mid();
         else 
-            dateColor = palette().active().foreground(); 
+            dateColor = palette().color(QPalette::Foreground); 
 
-        p.setPen(palette().active().foreground());
+        p.setPen(palette().color(QPalette::Foreground));
         p.fillRect(barRect, QBrush(Qt::green));
         p.drawRect(barRect);
         p.drawLine(barRect.right(), barRect.bottom(), barRect.right(), barRect.bottom()+3);
@@ -852,7 +852,7 @@ void TimeLineWidget::updatePixmap()
                     QFont fnt = p.font();
                     fnt.setPointSize(fnt.pointSize()-4);
                     p.setFont(fnt);
-                    p.setPen(val ? palette().active().foreground() : palette().active().mid()) ;
+                    p.setPen(val ? palette().color(QPalette::Foreground) : palette().active().mid()) ;
                     QString txt = QString(d->calendar->weekDayName(ref.date(), KCalendarSystem::ShortDayName)[0]);
                     QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt); 
                     p.drawText(barRect.left() + ((barRect.width()-br.width())/2),
@@ -879,7 +879,7 @@ void TimeLineWidget::updatePixmap()
                     QFont fnt = p.font();
                     fnt.setPointSize(fnt.pointSize()-4);
                     p.setFont(fnt);
-                    p.setPen(val ? palette().active().foreground() : palette().active().mid()) ;
+                    p.setPen(val ? palette().color(QPalette::Foreground) : palette().active().mid()) ;
                     QString txt = QString::number(week);
                     QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt); 
                     p.drawText(barRect.left() + ((barRect.width()-br.width())/2),
@@ -911,7 +911,7 @@ void TimeLineWidget::updatePixmap()
                     QFont fnt = p.font();
                     fnt.setPointSize(fnt.pointSize()-4);
                     p.setFont(fnt);
-                    p.setPen(val ? palette().active().foreground() : palette().active().mid()) ;
+                    p.setPen(val ? palette().color(QPalette::Foreground) : palette().active().mid()) ;
                     QString txt = QString(d->calendar->monthName(ref.date(), KCalendarSystem::ShortName)[0]);
                     QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt); 
                     p.drawText(barRect.left() + ((barRect.width()-br.width())/2),
@@ -968,16 +968,16 @@ void TimeLineWidget::updatePixmap()
         p.drawLine(p1.x(), p1.y()+1, p2.x(), p2.y()+1);
         p.drawRect(focusRect);
 
-        focusRect.addCoords(-1,-1, 1, 1);
-        p.setPen(palette().active().background());
+        focusRect.adjust(-1,-1, 1, 1);
+        p.setPen(palette().color(QPalette::Background));
         p.drawRect(focusRect);
         p.drawLine(p1.x()-1, p1.y(), p2.x()+1, p2.y());
 
-        focusRect.addCoords(-1,-1, 1, 1);
+        focusRect.adjust(-1,-1, 1, 1);
         p.drawRect(focusRect);
         p.drawLine(p1.x()-1, p1.y()-1, p2.x()+1, p2.y()-1);
 
-        focusRect.addCoords(-1,-1, 1, 1);
+        focusRect.adjust(-1,-1, 1, 1);
         p.setPen(palette().active().shadow());
         p.drawRect(focusRect);
         p.drawLine(p1.x(), p1.y()-2, p2.x(), p2.y()-2);
