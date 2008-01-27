@@ -344,7 +344,7 @@ void TimeLineView::setActive(bool val)
     {
         int totalCount = 0;
         DateRangeList list = d->timeLineWidget->selectedDateRange(totalCount);
-        if (!list.isEmpty())
+        if (list.isEmpty())
         {
             AlbumManager::instance()->setCurrentAlbum(0);
         }
