@@ -197,7 +197,7 @@ TimeLineView::TimeLineView(QWidget *parent)
                                    "\"My Date Searches\" view"));
 
     d->saveButton  = new QPushButton(hbox2);
-    d->saveButton->setIcon(SmallIcon("filesave"));
+    d->saveButton->setIcon(SmallIcon("document-save"));
     d->saveButton->setEnabled(false);
     d->saveButton->setToolTip(i18n("Save current selection to a new virtual Album"));
     d->saveButton->setWhatsThis(i18n("<p>If you press this button, current "
