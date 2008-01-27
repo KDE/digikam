@@ -415,18 +415,18 @@ DateRangeList TimeLineWidget::selectedDateRange(int& totalCount)
 
     DateRangeList::iterator it, it2;
 
-    /*
+    
     for (it = list.begin() ; it != list.end(); ++it)
         DDebug() << (*it).first.date().toString(Qt::ISODate) << " :: " 
                  << (*it).second.date().toString(Qt::ISODate) << endl;
 
     DDebug() << "Total Count of Items = " << totalCount << endl;
-    */
+    
 
     // Group contiguous date ranges to optimize query on database.
 
     DateRangeList list2;
-    QDateTime     first, second;
+    QDateTime     first, second, first2, second2;
 
     for (it = list.begin() ; it != list.end(); ++it)
     { 
@@ -436,13 +436,18 @@ DateRangeList TimeLineWidget::selectedDateRange(int& totalCount)
         do
         {
             ++it2;
-            if ((*it2).first == second)
+            if (it2 != list.end())
             {
-                second = (*it2).second;
-                ++it;
+                first2  = (*it2).first;
+                second2 = (*it2).second;
+                if (first2 == second)
+                {
+                    second = second2;
+                    ++it;
+                }
+                else 
+                    break;
             }
-            else 
-                break;
         }
         while(it2 != list.end());
 
