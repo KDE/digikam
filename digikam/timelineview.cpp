@@ -250,7 +250,7 @@ TimeLineView::TimeLineView(QWidget *parent)
     connect(d->timeUnitCB, SIGNAL(activated(int)),
             this, SLOT(slotTimeUnitChanged(int)));
 
-    connect(d->scaleBG, SIGNAL(released(int)),
+    connect(d->scaleBG, SIGNAL(buttonReleased(int)),
             this, SLOT(slotScaleChanged(int)));
 
     connect(d->timeLineWidget, SIGNAL(signalDateMapChanged()),
