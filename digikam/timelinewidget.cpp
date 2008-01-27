@@ -578,9 +578,9 @@ void TimeLineWidget::slotDatesMap(const QMap<QDateTime, int>& datesStatMap)
             d->maxCountByDay = count;
     }
 
-    d->maxDateTime.setDate(QDate(d->maxDateTime.date().year()+1, 1, 1));
+//    d->maxDateTime.setDate(QDate(d->maxDateTime.date().year()+1, 1, 1));
     d->maxDateTime.setTime(QTime());
-    d->minDateTime.setDate(QDate(d->minDateTime.date().year(), 1, 1));
+//    d->minDateTime.setDate(QDate(d->minDateTime.date().year(), 1, 1));
     d->minDateTime.setTime(QTime());
 
     updatePixmap();
