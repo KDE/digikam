@@ -50,7 +50,8 @@ public:
         ratingFilter = 0;
     }
 
-    SearchTextBar *textFilter;
+    QLineEdit     *textFilter;
+//    SearchTextBar *textFilter;
 
     MimeFilter    *mimeFilter;
 
@@ -62,7 +63,8 @@ AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
 {
     d = new AlbumIconViewFilterPriv;
 
-    d->textFilter = new SearchTextBar(this);
+//    d->textFilter = new SearchTextBar(this);
+    d->textFilter = new QLineEdit(this);
     d->textFilter->setToolTip(i18n("Text quick filter (search)"));
     d->textFilter->setWhatsThis(i18n("Here you can enter search patterns to quickly "
                                      "filter this view on file names, captions "
