@@ -5,6 +5,7 @@ digiKam 0.9.4-beta1 - Release date: 2008-??-??
 
 NEW FEATURES:
 
+General        : Updated internal CImg library to last stable 1.2.7 (released at 2008/01/23).
 General        : Add capability to display count of items in all Album, Date, Tags, and 
                  Tags Filter Folder View.
                  The number of items contained in virtual or physical albums can be 
