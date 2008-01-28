@@ -84,25 +84,77 @@ struct _greycstoration_params {
   bool
     is_running,
     *stop_request;
+#if cimg_OS==1 && defined(_PTHREAD_H)
+  pthread_mutex_t
+    *mutex;
+#elif cimg_OS==2
+  HANDLE mutex;
+#else
+  void *mutex;
+#endif
 
   // Default constructor
   _greycstoration_params():mask(0),amplitude(0),sharpness(0),anisotropy(0),alpha(0),sigma(0),gfact(1),
                            dl(0),da(0),gauss_prec(0),interpolation(0),fast_approx(false),
                            source(0),temporary(0),counter(0),tile(0),tile_border(0),thread(0),threads(0),
-                           is_running(false), stop_request(0) {}
+                           is_running(false), stop_request(0), mutex(0) {}
 };
 
 _greycstoration_params greycstoration_params[16];
 
 //------------------------------------------------------------------------------
-// GREYCstoration threaded function
+// GREYCstoration private functions
 //-------------------------------------------------------------------------------
+
+static void greycstoration_mutex_create(_greycstoration_params &p) {
+  if (p.threads>1) {
+#if cimg_OS==1 && defined(_PTHREAD_H)
+    p.mutex = new pthread_mutex_t;
+    pthread_mutex_init(p.mutex,0);
+#elif cimg_OS==2
+    p.mutex = CreateMutex(0,FALSE,0);
+#endif
+  }
+}
+
+static void greycstoration_mutex_lock(_greycstoration_params &p) {
+  if (p.threads>1) {
+#if cimg_OS==1 && defined(_PTHREAD_H)
+    if (p.mutex) pthread_mutex_lock(p.mutex);
+#elif cimg_OS==2
+    WaitForSingleObject(p.mutex,INFINITE);
+#endif
+  }
+}
+
+static void greycstoration_mutex_unlock(_greycstoration_params &p) {
+  if (p.threads>1) {
+#if cimg_OS==1 && defined(_PTHREAD_H)
+    if (p.mutex) pthread_mutex_unlock(p.mutex);
+#elif cimg_OS==2
+    ReleaseMutex(p.mutex);
+#endif
+  }
+}
+
+static void greycstoration_mutex_destroy(_greycstoration_params &p) {
+  if (p.threads>1) {
+#if cimg_OS==1 && defined(_PTHREAD_H)
+    if (p.mutex) pthread_mutex_destroy(p.mutex);
+#elif cimg_OS==2
+    CloseHandle(p.mutex);
+#endif
+    p.mutex = 0;
+  }
+}
+
 #if cimg_OS==1
 static void* greycstoration_thread(void *arg) {
 #elif cimg_OS==2
   static DWORD WINAPI greycstoration_thread(void *arg) {
 #endif
     _greycstoration_params &p = *(_greycstoration_params*)arg;
+    greycstoration_mutex_lock(p);
     const CImg<unsigned char> &mask = *(p.mask);
     CImg<T> &source = *(p.source);
 
@@ -136,8 +188,10 @@ static void* greycstoration_thread(void *arg) {
                 CImg<T> img = source.get_crop(x-b,y-b,z-b,xe+b,ye+b,ze+b,true);
                 CImg<unsigned char> mask_tile = mask.is_empty()?mask:mask.get_crop(x-b,y-b,z-b,xe+b,ye+b,ze+b,true);
                 img.greycstoration_params[0] = p;
+                greycstoration_mutex_unlock(p);
                 img.blur_anisotropic(mask_tile,p.amplitude,p.sharpness,p.anisotropy,
                                      p.alpha,p.sigma,p.dl,p.da,p.gauss_prec,p.interpolation,p.fast_approx,p.gfact);
+                greycstoration_mutex_lock(p);
                 temporary.draw_image(img.crop(b,b,b,img.width-b,img.height-b,img.depth-b),x,y,z);
               }
       } else {
@@ -151,13 +205,16 @@ static void* greycstoration_thread(void *arg) {
                 ye = y1<source.height?y1:source.height-1;
               CImg<T> img = source.get_crop(x-b,y-b,xe+b,ye+b,true);
               CImg<unsigned char> mask_tile = mask.is_empty()?mask:mask.get_crop(x-b,y-b,xe+b,ye+b,true);
-              img.greycstoration_params[0]=p;
+              img.greycstoration_params[0] = p;
+              greycstoration_mutex_unlock(p);
               img.blur_anisotropic(mask_tile,p.amplitude,p.sharpness,p.anisotropy,
                                    p.alpha,p.sigma,p.dl,p.da,p.gauss_prec,p.interpolation,p.fast_approx,p.gfact);
               temporary.draw_image(img.crop(b,b,img.width-b,img.height-b),x,y);
+              greycstoration_mutex_lock(p);
             }
       }
     }
+    greycstoration_mutex_unlock(p);
 
     if (!p.thread) {
       if (p.threads>1) {
@@ -180,6 +237,7 @@ static void* greycstoration_thread(void *arg) {
       p.counter = 0;
       p.tile = p.tile_border = p.thread = p.threads = 0;
       p.stop_request = false;
+      greycstoration_mutex_destroy(p);
     }
     p.is_running = false;
 
@@ -234,13 +292,13 @@ static void* greycstoration_thread(void *arg) {
   //! Run the threaded GREYCstoration algorithm on the instance image, using a mask.
   CImg& greycstoration_run(const CImg<unsigned char>& mask,
                            const float amplitude=60, const float sharpness=0.7f, const float anisotropy=0.3f,
-                           const float alpha=0.6f,const float sigma=1.1f, const float gfact=1.0f,
-                           const float dl=0.8f,const float da=30.0f,
+                           const float alpha=0.6f, const float sigma=1.1f, const float gfact=1.0f,
+                           const float dl=0.8f, const float da=30.0f,
                            const float gauss_prec=2.0f, const unsigned int interpolation=0, const bool fast_approx=true,
                            const unsigned int tile=0, const unsigned int tile_border=0, const unsigned int threads=1) {
     if (greycstoration_is_running())
-      throw CImgInstanceException("CImg<T>::greycstoration_run() : Another GREYCstoration thread is already running on"
-                                  " instance image (%u,%u,%u,%u,%p).",width,height,depth,dim,data);
+      throw CImgInstanceException("CImg<T>::greycstoration_run() : A GREYCstoration thread is already running on"
+                                  " the instance image (%u,%u,%u,%u,%p).",width,height,depth,dim,data);
 
     else {
       if (!mask.is_empty() && !mask.is_sameXY(*this))
@@ -284,6 +342,8 @@ static void* greycstoration_thread(void *arg) {
         greycstoration_params[k].threads = nthreads;
         greycstoration_params[k].is_running = true;
         greycstoration_params[k].stop_request = stop_request;
+        if (k) greycstoration_params[k].mutex = greycstoration_params[0].mutex;
+        else greycstoration_mutex_create(greycstoration_params[0]);
       }
       if (nthreads) {  // Threaded version
 #if cimg_OS==1
@@ -313,8 +373,8 @@ static void* greycstoration_thread(void *arg) {
 
   //! Run the GREYCstoration algorithm on the instance image.
   CImg& greycstoration_run(const float amplitude=50, const float sharpness=0.7f, const float anisotropy=0.3f,
-                           const float alpha=0.6f,const float sigma=1.1f, const float gfact=1.0f,
-                           const float dl=0.8f,const float da=30.0f,
+                           const float alpha=0.6f, const float sigma=1.1f, const float gfact=1.0f,
+                           const float dl=0.8f, const float da=30.0f,
                            const float gauss_prec=2.0f, const unsigned int interpolation=0, const bool fast_approx=true,
                            const unsigned int tile=0, const unsigned int tile_border=0, const unsigned int threads=1) {
     static const CImg<unsigned char> empty_mask;
