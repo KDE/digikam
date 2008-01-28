@@ -602,8 +602,7 @@ void TimeLineWidget::updatePixmap()
     d->nbItems      = (int)((width() / 2.0) / (float)d->barWidth);
     d->startPos     = (int)((width() / 2.0) - ((float)(d->barWidth) / 2.0));
     int dim         = height() - d->bottomMargin - d->topMargin;
-    QDateTime ref   = d->refDateTime;
-    ref.setTime(QTime());
+    QDateTime     ref;
     double        max, logVal;
     int           val, top;
     SelectionMode sel;
@@ -616,6 +615,14 @@ void TimeLineWidget::updatePixmap()
     // and in second time, all dates on the left.
 
     // Draw all dates on the right of ref. date-time.
+
+    ref = d->refDateTime;
+    ref.setTime(QTime());
+
+    // TODO : sound like a bug in Qt4.3::QDateTime. Why QDateTime = QDateTime do not init properlly 
+    // timestamp as QT3.3 and give an invalid QDateTime?
+    ref = prevDateTime(ref);
+    ref = nextDateTime(ref);
 
     for (int i = 0 ; i < d->nbItems ; i++)
     {
@@ -792,6 +799,7 @@ void TimeLineWidget::updatePixmap()
 
     ref = d->refDateTime;
     ref.setTime(QTime());
+
     ref = prevDateTime(ref);
 
     for (int i = 0 ; i < d->nbItems-1 ; i++)
