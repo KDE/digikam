@@ -654,7 +654,10 @@ void TimeLineWidget::updatePixmap()
 
         p.setPen(palette().color(QPalette::Foreground));
         p.fillRect(barRect, QBrush(Qt::green));
-        p.drawRect(barRect);
+        p.drawLine(barRect.topLeft(), barRect.topRight());
+        p.drawLine(barRect.topRight(), barRect.bottomRight());
+        p.drawLine(barRect.bottomRight(), barRect.bottomLeft());
+        p.drawLine(barRect.bottomLeft(), barRect.topLeft());
         p.drawLine(barRect.right(), barRect.bottom(), barRect.right(), barRect.bottom()+3);
         p.drawLine(barRect.left(),  barRect.bottom(), barRect.left(),  barRect.bottom()+3);
 
@@ -828,7 +831,10 @@ void TimeLineWidget::updatePixmap()
 
         p.setPen(palette().color(QPalette::Foreground));
         p.fillRect(barRect, QBrush(Qt::green));
-        p.drawRect(barRect);
+        p.drawLine(barRect.topLeft(), barRect.topRight());
+        p.drawLine(barRect.topRight(), barRect.bottomRight());
+        p.drawLine(barRect.bottomRight(), barRect.bottomLeft());
+        p.drawLine(barRect.bottomLeft(), barRect.topLeft());
         p.drawLine(barRect.right(), barRect.bottom(), barRect.right(), barRect.bottom()+3);
         p.drawLine(barRect.left(),  barRect.bottom(), barRect.left(),  barRect.bottom()+3);
 
@@ -969,20 +975,32 @@ void TimeLineWidget::updatePixmap()
 
         p.setPen(palette().color(QPalette::Active, QPalette::Shadow));
         p.drawLine(p1.x(), p1.y()+1, p2.x(), p2.y()+1);
-        p.drawRect(focusRect);
+        p.drawLine(focusRect.topLeft(), focusRect.topRight());
+        p.drawLine(focusRect.topRight(), focusRect.bottomRight());
+        p.drawLine(focusRect.bottomRight(), focusRect.bottomLeft());
+        p.drawLine(focusRect.bottomLeft(), focusRect.topLeft());
 
         focusRect.adjust(-1,-1, 1, 1);
         p.setPen(palette().color(QPalette::Background));
-        p.drawRect(focusRect);
+        p.drawLine(focusRect.topLeft(), focusRect.topRight());
+        p.drawLine(focusRect.topRight(), focusRect.bottomRight());
+        p.drawLine(focusRect.bottomRight(), focusRect.bottomLeft());
+        p.drawLine(focusRect.bottomLeft(), focusRect.topLeft());
         p.drawLine(p1.x()-1, p1.y(), p2.x()+1, p2.y());
 
         focusRect.adjust(-1,-1, 1, 1);
-        p.drawRect(focusRect);
+        p.drawLine(focusRect.topLeft(), focusRect.topRight());
+        p.drawLine(focusRect.topRight(), focusRect.bottomRight());
+        p.drawLine(focusRect.bottomRight(), focusRect.bottomLeft());
+        p.drawLine(focusRect.bottomLeft(), focusRect.topLeft());
         p.drawLine(p1.x()-1, p1.y()-1, p2.x()+1, p2.y()-1);
 
         focusRect.adjust(-1,-1, 1, 1);
         p.setPen(palette().color(QPalette::Active, QPalette::Shadow));
-        p.drawRect(focusRect);
+        p.drawLine(focusRect.topLeft(), focusRect.topRight());
+        p.drawLine(focusRect.topRight(), focusRect.bottomRight());
+        p.drawLine(focusRect.bottomRight(), focusRect.bottomLeft());
+        p.drawLine(focusRect.bottomLeft(), focusRect.topLeft());
         p.drawLine(p1.x(), p1.y()-2, p2.x(), p2.y()-2);
     }
     p.end();
