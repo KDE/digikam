@@ -363,10 +363,6 @@ void GreycstorationIface::resize()
     const bool anchor       = true;   // Anchor original pixels.
     const unsigned int init = 5;      // Initial estimate (1=block, 3=linear, 5=bicubic).
 
-    const CImgStats stats(d->img, false);
-    DDebug() << "Resizing image: size " << d->img.width << " x " << d->img.height 
-             << ", value range [" << stats.min << " , " << stats.max << "]" << endl;
-
     int w = m_destImage.width();
     int h = m_destImage.height();
 
