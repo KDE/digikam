@@ -26,7 +26,12 @@
 
 // Qt includes
 
-#include <QAtomic>
+#include <qglobal.h>
+#include <qatomic.h>
+
+#if QT_VERSION < 0x040400
+typedef QAtomic QAtomicInt;
+#endif
 
 // Local includes
 
@@ -44,7 +49,8 @@ class DIGIKAM_EXPORT DSharedData
      * this class.
      */
 public:
-    QAtomic ref;
+
+    QAtomicInt ref;
 
     inline DSharedData() : ref(0) { }
     inline DSharedData(const DSharedData &) : ref(0) { }
@@ -131,7 +137,7 @@ public:
         if (o.d != d) {
             T *x = o.d;
             if (x) x->ref.ref();
-            x = qAtomicSetPtr(&d, x);
+            d = x;
             if (x && !x->ref.deref())
                 return x;
         }
@@ -143,7 +149,7 @@ public:
         if (o != d) {
             T *x = o;
             if (x) x->ref.ref();
-            x = qAtomicSetPtr(&d, x);
+            d = x;
             if (x && !x->ref.deref())
                 return x;
         }
