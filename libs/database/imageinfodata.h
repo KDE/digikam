@@ -29,7 +29,7 @@
 #include <QDateTime>
 #include <QSize>
 #include <QList>
-#include <QAtomic>
+#include <qatomic.h>
 
 // Local includes
 
@@ -45,7 +45,11 @@ public:
 
     ImageInfoData();
 
+#if QT_VERSION < 0x040400
     QAtomic    ref;
+#else
+    QAtomicInt ref;
+#endif
 
     qlonglong  id;
     int        albumId;
