@@ -22,4 +22,5 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 002 ==> 155271 : Configure suggests wrong parameter for libjasper
 003 ==> 155105 : Broken png image present in albums folder causes digikam to crash when starting.
 004 ==> 146760 : Providing a Timeline-View for quickly narrowing down the date of photos.
-005 ==> 
+005 ==> 146635 : Ratio crop doesn't remember orientation
+006 ==> 

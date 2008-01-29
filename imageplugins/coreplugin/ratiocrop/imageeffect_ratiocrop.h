@@ -118,6 +118,8 @@ private:
     KColorButton         *m_guideColorBt;
     
     ImageSelectionWidget *m_imageSelectionWidget;
+
+    bool                  m_originalIsLandscape;
 };
 
 }  // NameSpace DigikamImagesPluginCore
