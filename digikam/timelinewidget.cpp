@@ -499,7 +499,7 @@ void TimeLineWidget::slotDatesMap(const QMap<QDateTime, int>& datesStatMap)
         int year  = it.key().date().year();
         int month = it.key().date().month();
         int day   = d->calendar->dayOfYear(it.key().date());
-        int yearForWeek;  // Used with week shared between 2 years decade (Dec/Jan).
+        int yearForWeek = year;  // Used with week shared between 2 years decade (Dec/Jan).
         int week  = d->calendar->weekNumber(it.key().date(), &yearForWeek);
 
         // Stats Years values.
@@ -512,9 +512,8 @@ void TimeLineWidget::slotDatesMap(const QMap<QDateTime, int>& datesStatMap)
         }
         else
         {
-            count = it_iP.value().first + it.value();
-            d->yearStatMap.remove(year);
-            d->yearStatMap.insert(year, TimeLineWidgetPriv::StatPair(count, it_iP.value().second));
+            it_iP.value().first += it.value();
+            count = it_iP.value().first;
         }
 
         if (d->maxCountByYear < count) 
@@ -526,15 +525,13 @@ void TimeLineWidget::slotDatesMap(const QMap<QDateTime, int>& datesStatMap)
         if ( it_YP == d->monthStatMap.end() )
         {
             count = it.value();
-            d->monthStatMap.insert(TimeLineWidgetPriv::YearRefPair(year, month), 
+            d->monthStatMap.insert(TimeLineWidgetPriv::YearRefPair(year, month),
                                    TimeLineWidgetPriv::StatPair(count, Unselected));
         }
         else
         {
-            count = it_YP.value().first + it.value();
-            d->monthStatMap.remove(TimeLineWidgetPriv::YearRefPair(year, month));
-            d->monthStatMap.insert(TimeLineWidgetPriv::YearRefPair(year, month), 
-                                   TimeLineWidgetPriv::StatPair(count, it_YP.value().second));
+            it_YP.value().first += it.value();
+            count = it_YP.value().first;
         }
 
         if (d->maxCountByMonth < count) 
@@ -546,15 +543,13 @@ void TimeLineWidget::slotDatesMap(const QMap<QDateTime, int>& datesStatMap)
         if ( it_YP == d->weekStatMap.end() )
         {
             count = it.value();
-            d->weekStatMap.insert(TimeLineWidgetPriv::YearRefPair(yearForWeek, week), 
+            d->weekStatMap.insert(TimeLineWidgetPriv::YearRefPair(yearForWeek, week),
                                   TimeLineWidgetPriv::StatPair(count, Unselected));
         }
         else
         {
-            count = it_YP.value().first + it.value();
-            d->weekStatMap.remove(TimeLineWidgetPriv::YearRefPair(yearForWeek, week));
-            d->weekStatMap.insert(TimeLineWidgetPriv::YearRefPair(yearForWeek, week), 
-                                   TimeLineWidgetPriv::StatPair(count, it_YP.value().second));
+            it_YP.value().first += it.value();
+            count = it_YP.value().first;
         }
 
         if (d->maxCountByWeek < count) 
@@ -566,15 +561,13 @@ void TimeLineWidget::slotDatesMap(const QMap<QDateTime, int>& datesStatMap)
         if ( it_YP == d->dayStatMap.end() )
         {
             count = it.value();
-            d->dayStatMap.insert(TimeLineWidgetPriv::YearRefPair(year, day), 
+            d->dayStatMap.insert(TimeLineWidgetPriv::YearRefPair(year, day),
                                  TimeLineWidgetPriv::StatPair(count, Unselected));
         }
         else
         {
-            count = it_YP.value().first + it.value();
-            d->dayStatMap.remove(TimeLineWidgetPriv::YearRefPair(year, day));
-            d->dayStatMap.insert(TimeLineWidgetPriv::YearRefPair(year, day), 
-                                 TimeLineWidgetPriv::StatPair(count, it_YP.value().second));
+            it_YP.value().first += it.value();
+            count = it_YP.value().first;
         }
 
         if (d->maxCountByDay < count) 
