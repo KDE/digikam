@@ -31,6 +31,7 @@ LIST OF BUGZILLA FILES NOT YET BACKPORTED FROM KDE3 BRANCH:
 -----------------------------------------------------------      
       		      
 147426: Search for non-voted pics (http://bugs.kde.org/show_bug.cgi?id=147426)
+144337: There should be no "empty folders" (http://bugs.kde.org/show_bug.cgi?id=144337)
 
 LIST OF DIRECTORIES PORTED BY DEVELOPPERS:
 ------------------------------------------
