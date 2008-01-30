@@ -6,7 +6,8 @@
  * Date        : 2004-12-06
  * Description : digiKam image editor Ratio Crop tool
  *
- * Copyright (C) 2007 by Jaromir Malenko <malenko at email.cz>
+ * Copyright (C) 2007 by Jaromir Malenko <malenko at email dot cz>
+ * Copyright (C) 2008 by Roberto Castagnola <roberto dot castagnola at gmail dot com>
  * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -708,4 +709,3 @@ void ImageEffect_RatioCrop::slotOk()
 }
 
 }  // NameSpace DigikamImagesPluginCore
-
