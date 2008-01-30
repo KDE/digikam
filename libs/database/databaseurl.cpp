@@ -111,13 +111,32 @@ DatabaseUrl DatabaseUrl::fromTagIds(const QList<int> &tagIds,
     return url;
 }
 
-DatabaseUrl DatabaseUrl::fromDate(const QDate &date,
+DatabaseUrl DatabaseUrl::fromDateForMonth(const QDate &date,
+                                   const DatabaseParameters &parameters)
+{
+    QDate firstDayOfMonth(date.year(), date.month(), 1);
+    QDate firstDayOfNextMonth = firstDayOfMonth.addMonths(1);
+
+    return fromDateRange(firstDayOfMonth, firstDayOfNextMonth, parameters);
+}
+
+DatabaseUrl DatabaseUrl::fromDateForYear(const QDate &date,
                                   const DatabaseParameters &parameters)
+{
+    QDate firstDayOfYear(date.year(), 1, 1);
+    QDate firstDayOfNextYear = firstDayOfYear.addYears(1);
+
+    return fromDateRange(firstDayOfYear, firstDayOfNextYear, parameters);
+}
+
+DatabaseUrl DatabaseUrl::fromDateRange(const QDate &startDate,
+                                       const QDate &endDate,
+                                       const DatabaseParameters &parameters)
 {
     DatabaseUrl url;
     url.setProtocol("digikamdates");
 
-    url.setPath(date.toString(Qt::ISODate));
+    url.setPath(startDate.toString(Qt::ISODate) + "/" + endDate.toString(Qt::ISODate));
 
     url.setParameters(parameters);
     return url;
@@ -275,9 +294,22 @@ QList<int> DatabaseUrl::tagIds() const
 
 // --- Date URL ---
 
-QDate DatabaseUrl::date() const
+QDate DatabaseUrl::startDate() const
 {
-    return QDate::fromString(path(), Qt::ISODate);
+    QStringList dates = path().split('/');
+    if (dates.size() >= 1)
+        return QDate::fromString(dates[0], Qt::ISODate);
+    else
+        return QDate();
+}
+
+QDate DatabaseUrl::endDate() const
+{
+    QStringList dates = path().split('/');
+    if (dates.size() >= 2)
+        return QDate::fromString(dates[1], Qt::ISODate);
+    else
+        return QDate();
 }
 
 // --- Search URL ---

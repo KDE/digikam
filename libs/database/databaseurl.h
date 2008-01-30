@@ -102,10 +102,26 @@ public:
                                   const DatabaseParameters &parameters = DatabaseAccess::parameters());
 
     /**
-     * Create a digikamdates:/ url from the given date.
+     * Create a digikamdates:/ url for the month of the given date.
+     * (The whole month of the given date will included in the referenced time span)
      */
-    static DatabaseUrl fromDate(const QDate &date,
-                                const DatabaseParameters &parameters = DatabaseAccess::parameters());
+    static DatabaseUrl fromDateForMonth(const QDate &date,
+                                        const DatabaseParameters &parameters = DatabaseAccess::parameters());
+
+    /**
+     * Create a digikamdates:/ url for the year of the given date.
+     * (The whole year of the given date will included in the referenced time span)
+     */
+    static DatabaseUrl fromDateForYear(const QDate &date,
+                                       const DatabaseParameters &parameters = DatabaseAccess::parameters());
+
+    /**
+     * Create a digikamdates:/ url for a specified time span which begin with the
+     * start date (inclusive) and ends before the end date (exclusive).
+     * To cover the whole year of 1984, you would pass 1/1/1984 and 1/1/1985.
+     */
+    static DatabaseUrl fromDateRange(const QDate &startDate, const QDate &endDate,
+                                     const DatabaseParameters &parameters = DatabaseAccess::parameters());
 
     /**
      * Create a digikamsearch: URL.
@@ -196,9 +212,14 @@ public:
     /// Date URL
 
     /**
-     * Return the referenced date
+     * Return the referenced start date (included in the referenced span)
      */
-    QDate date() const;
+    QDate startDate() const;
+
+    /**
+     * Return the referenced end date (excluded from the referenced span)
+     */
+    QDate endDate() const;
 
     /// Search URL
 
