@@ -161,7 +161,7 @@ DateFolderView::DateFolderView(QWidget* parent)
     d->listview  = new FolderView(this);
     d->monthview = new MonthWidget(this);
 
-    d->listview->addColumn(i18n("My Dates"));
+    d->listview->addColumn(i18n("My Calendar"));
     d->listview->setResizeMode(QListView::LastColumn);
     d->listview->setRootIsDecorated(true);
 
