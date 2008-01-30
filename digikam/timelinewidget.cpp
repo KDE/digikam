@@ -220,7 +220,7 @@ void TimeLineWidget::setCurrentIndex(int index)
 void TimeLineWidget::setCursorDateTime(const QDateTime& dateTime)
 {
     QDateTime dt = dateTime;
-    dt.setTime(QTime());
+    dt.setTime(QTime(0, 0, 0, 0));
 
     switch(d->timeUnit)
     {
@@ -301,7 +301,7 @@ int TimeLineWidget::cursorInfo(QString& infoDate)
 void TimeLineWidget::setRefDateTime(const QDateTime& dateTime)
 {
     QDateTime dt = dateTime;
-    dt.setTime(QTime());
+    dt.setTime(QTime(0, 0, 0, 0));
 
     switch(d->timeUnit)
     {
@@ -578,8 +578,8 @@ void TimeLineWidget::slotDatesMap(const QMap<QDateTime, int>& datesStatMap)
             d->maxCountByDay = count;
     }
 
-    d->maxDateTime.setTime(QTime());
-    d->minDateTime.setTime(QTime());
+    d->maxDateTime.setTime(QTime(0, 0, 0, 0));
+    d->minDateTime.setTime(QTime(0, 0, 0, 0));
 
     updatePixmap();
     update();
@@ -600,7 +600,7 @@ void TimeLineWidget::updatePixmap()
     d->startPos     = (int)((width() / 2.0) - ((float)(d->barWidth) / 2.0));
     int dim         = height() - d->bottomMargin - d->topMargin;
     QDateTime ref   = d->refDateTime;
-    ref.setTime(QTime());
+    ref.setTime(QTime(0, 0, 0, 0));
     double        max, logVal;
     int           val, top;
     SelectionMode sel;
@@ -785,7 +785,7 @@ void TimeLineWidget::updatePixmap()
     // Draw all dates on the left of ref. date-time.
 
     ref = d->refDateTime;
-    ref.setTime(QTime());
+    ref.setTime(QTime(0, 0, 0, 0));
     ref = prevDateTime(ref);
 
     for (int i = 0 ; i < d->nbItems-1 ; i++)
@@ -1568,7 +1568,7 @@ QDateTime TimeLineWidget::dateTimeForPoint(const QPoint& pt, bool &isOnSelection
     // Check on the right of reference date.
 
     QDateTime ref = d->refDateTime;
-    ref.setTime(QTime());
+    ref.setTime(QTime(0, 0, 0, 0));
 
     QRect deskRect = KGlobalSettings::desktopGeometry(this);
     int items = deskRect.width() / d->barWidth;
@@ -1605,7 +1605,7 @@ QDateTime TimeLineWidget::dateTimeForPoint(const QPoint& pt, bool &isOnSelection
     // Check on the left of reference date.
 
     ref = d->refDateTime;
-    ref.setTime(QTime());
+    ref.setTime(QTime(0, 0, 0, 0));
     ref = prevDateTime(ref);
 
     for (int i = 0 ; i < items ; i++)
