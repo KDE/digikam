@@ -6,8 +6,9 @@
  * Date        : 2004-12-06
  * Description : digiKam image editor Ratio Crop tool
  *
- * Copyright (C) 2007 by Jaromir Malenko <malenko at email.cz>
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007 by Jaromir Malenko <malenko at email dot cz>
+ * Copyright (C) 2008 by Roberto Castagnola <roberto dot castagnola at gmail dot com>
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -88,6 +89,9 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
                                                "Hold SHIFT to move the closest corner to the "
                                                "mouse pointer."));
     setPreviewAreaWidget(frame);  
+
+    m_originalIsLandscape = m_imageSelectionWidget->getOriginalImageWidth() >
+                            m_imageSelectionWidget->getOriginalImageHeight();
 
     // -------------------------------------------------------------
 
@@ -355,6 +359,9 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
 
     // -------------------------------------------------------------
 
+    // Sets current region selection
+    slotSelectionChanged(m_imageSelectionWidget->getRegionSelection());
+
     readSettings();
 }
 
@@ -365,10 +372,6 @@ ImageEffect_RatioCrop::~ImageEffect_RatioCrop()
 
 void ImageEffect_RatioCrop::readSettings(void)
 {
-    Digikam::ImageIface iface(0, 0);
-    int w = iface.originalWidth();
-    int h = iface.originalHeight();
-
     QColor defaultGuideColor(250, 250, 255);
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("aspectratiocrop Tool Dialog");
@@ -387,7 +390,7 @@ void ImageEffect_RatioCrop::readSettings(void)
     m_imageSelectionWidget->slotGuideLines(m_guideLinesCB->currentIndex());
     m_imageSelectionWidget->slotChangeGuideColor(m_guideColorBt->color());
 
-    if (w > h)
+    if (m_originalIsLandscape)
     {
         m_xInput->setValue( group.readEntry("Hor.Oriented Custom Aspect Ratio Xpos", 50) );
         m_yInput->setValue( group.readEntry("Hor.Oriented Custom Aspect Ratio Ypos", 50) );
@@ -402,22 +405,14 @@ void ImageEffect_RatioCrop::readSettings(void)
         m_orientCB->setCurrentIndex( group.readEntry("Hor.Oriented Aspect Ratio Orientation",
                                     (int)ImageSelectionWidget::Landscape) );
 
-        if ( m_ratioCB->currentIndex() == ImageSelectionWidget::RATIONONE )
-        {
-            m_widthInput->setValue( group.readEntry("Hor.Oriented Custom Aspect Ratio Width", 800) );
-            m_heightInput->setValue( group.readEntry("Hor.Oriented Custom Aspect Ratio Height", 600) );
-        }
-        else
-        {
-            m_widthInput->setValue( 1 ); // It will be recalculed automatically with the ratio.
-            m_heightInput->setValue( group.readEntry("Hor.Oriented Custom Aspect Ratio Height", 600) );
-        }
-
         m_imageSelectionWidget->setSelectionOrientation(m_orientCB->currentIndex());
+
+        m_widthInput->setValue( group.readEntry("Hor.Oriented Custom Aspect Ratio Width", 800) );
+        m_heightInput->setValue( group.readEntry("Hor.Oriented Custom Aspect Ratio Height", 600) );
     }
     else
     {
-        m_xInput->setValue( group.readEntry("Ver.Oriented  Custom Aspect Ratio Xpos", 50) );
+        m_xInput->setValue( group.readEntry("Ver.Oriented Custom Aspect Ratio Xpos", 50) );
         m_yInput->setValue( group.readEntry("Ver.Oriented Custom Aspect Ratio Ypos", 50) );
 
         m_ratioCB->setCurrentIndex( group.readEntry("Ver.Oriented Aspect Ratio",
@@ -430,18 +425,10 @@ void ImageEffect_RatioCrop::readSettings(void)
         m_orientCB->setCurrentIndex( group.readEntry("Ver.Oriented Aspect Ratio Orientation",
                                     (int)ImageSelectionWidget::Portrait) );
 
-        if ( m_ratioCB->currentIndex() == ImageSelectionWidget::RATIONONE )
-        {
-            m_widthInput->setValue( group.readEntry("Ver.Oriented Custom Aspect Ratio Width", 800) );
-            m_heightInput->setValue( group.readEntry("Ver.Oriented Custom Aspect Ratio Height", 600) );
-        }
-        else
-        {
-            m_widthInput->setValue( 1 ); // It will be recalculed automatically with the ratio.
-            m_heightInput->setValue( group.readEntry("Ver.Oriented Custom Aspect Ratio Height", 600) );
-        }
-
         m_imageSelectionWidget->setSelectionOrientation(m_orientCB->currentIndex());
+
+        m_widthInput->setValue( group.readEntry("Ver.Oriented Custom Aspect Ratio Width", 800) );
+        m_heightInput->setValue( group.readEntry("Ver.Oriented Custom Aspect Ratio Height", 600) );
     }
 
     m_autoOrientation->setChecked( group.readEntry("Auto Orientation", false) );
@@ -450,14 +437,10 @@ void ImageEffect_RatioCrop::readSettings(void)
 
 void ImageEffect_RatioCrop::writeSettings(void)
 {
-    Digikam::ImageIface iface(0, 0);
-    int w = iface.originalWidth();
-    int h = iface.originalHeight();
-
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("aspectratiocrop Tool Dialog");
 
-    if (w > h)
+    if (m_originalIsLandscape)
     {
        group.writeEntry( "Hor.Oriented Aspect Ratio", m_ratioCB->currentIndex() );
        group.writeEntry( "Hor.Oriented Aspect Ratio Orientation", m_orientCB->currentIndex() );
