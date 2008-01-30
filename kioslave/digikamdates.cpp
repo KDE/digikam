@@ -8,6 +8,7 @@
  *               digiKam albums. 
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -174,15 +175,16 @@ void kio_digikamdates::special(const QByteArray& data)
     else
     {
         QStringList subpaths = QStringList::split("/", url, false);
-        if (subpaths.count() == 2)
+        if (subpaths.count() == 4)
         {
+            int yrStart = QString(subpaths[0]).toInt();
+            int moStart = QString(subpaths[1]).toInt();
+            int yrEnd   = QString(subpaths[2]).toInt();
+            int moEnd   = QString(subpaths[3]).toInt();
 
-            int yr = QString(subpaths[0]).toInt();
-            int mo = QString(subpaths[1]).toInt();
-
-            QString moStr1, moStr2;
-            moStr1.sprintf("%.2d", mo);
-            moStr2.sprintf("%.2d", mo+1);
+            QString moStartStr, moEndStr;
+            moStartStr.sprintf("%.2d", moStart);
+            moEndStr.sprintf("%.2d", moEnd);
 
             QStringList values;
 
@@ -193,10 +195,10 @@ void kio_digikamdates::special(const QByteArray& data)
                                  "AND Images.datetime >= '%3-%4-01' \n "
                                  "AND Albums.id=Images.dirid \n "
                                  "ORDER BY Albums.id;")
-                         .arg(yr,4)
-                         .arg(moStr2)
-                         .arg(yr,4)
-                         .arg(moStr1,2),
+                         .arg(yrEnd, 4)
+                         .arg(moEndStr, 2)
+                         .arg(yrStart, 4)
+                         .arg(moStartStr, 2),
                          &values, false);
 
             Q_LLONG     imageid;

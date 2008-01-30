@@ -7,6 +7,7 @@
  * Description : digiKam album types
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -415,12 +416,20 @@ QString TAlbum::icon() const
 
 int DAlbum::m_uniqueID = 0;
 
-DAlbum::DAlbum(const QDate& date, bool root)
-      : Album(Album::DATE, root ? 0 : ++m_uniqueID, root),
-              m_date(date)
+DAlbum::DAlbum(const QDate& date, bool root, Range range)
+      : Album(Album::DATE, root ? 0 : ++m_uniqueID, root)
 {
+    m_date  = date;
+    m_range = range;
+
     // Set the name of the date album
-    QString dateTitle = date.toString("MMMM yyyy");
+    QString dateTitle;
+
+    if (m_range == Month)
+        dateTitle = m_date.toString("MMMM yyyy");
+    else 
+        dateTitle = m_date.toString("yyyy");
+
     setTitle(dateTitle);
 }
 
@@ -433,13 +442,26 @@ QDate DAlbum::date() const
     return m_date;
 }
 
+DAlbum::Range DAlbum::range() const
+{
+    return m_range;
+}
+
 KURL DAlbum::kurl() const
 {
+    QDate endDate;
+    if (m_range == Month)
+        endDate = m_date.addMonths(1);
+    else 
+        endDate = m_date.addYears(1);
+
     KURL u;
     u.setProtocol("digikamdates");
-    u.setPath(QString("/%1/%2")
+    u.setPath(QString("/%1/%2/%3/%4")
               .arg(m_date.year())
-              .arg(m_date.month()));
+              .arg(m_date.month())
+              .arg(endDate.year())
+              .arg(endDate.month()));
 
     return u;
 }

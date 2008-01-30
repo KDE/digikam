@@ -7,6 +7,7 @@
  * Description : digiKam album types
  * 
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -361,16 +362,26 @@ class DAlbum : public Album
 {
 public:
 
-    DAlbum(const QDate& date, bool root=false);
+    enum Range
+    {
+        Month = 0,
+        Year
+    };
+
+    DAlbum(const QDate& sDate, bool root=false, Range range=Month);
     ~DAlbum();
 
     QDate date() const;
+    Range range() const;
     KURL  kurl() const;
 
 private:
 
-    QDate       m_date;
     static int  m_uniqueID;
+
+    Range       m_range;
+
+    QDate       m_date;
 
     friend class AlbumManager;
 };

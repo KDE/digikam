@@ -7,7 +7,7 @@
  * Description : Albums manager interface.
  * 
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -1485,13 +1485,17 @@ void AlbumManager::slotDatesJobData(KIO::Job*, const QByteArray& data)
         return;
 
     // insert all the DAlbums into a qmap for quick access
-    QMap<QDate, DAlbum*> albumMap;
+    QMap<QDate, DAlbum*> mAlbumMap;
+    QMap<int, DAlbum*>   yAlbumMap;
 
     AlbumIterator it(d->rootDAlbum);
     while (it.current())
     {
         DAlbum* a = (DAlbum*)(*it);
-        albumMap.insert(a->date(), a);
+        if (a->range() == DAlbum::Month)
+            mAlbumMap.insert(a->date(), a);
+        else
+            yAlbumMap.insert(a->date().year(), a);
         ++it;
     }
 
@@ -1521,27 +1525,66 @@ void AlbumManager::slotDatesJobData(KIO::Job*, const QByteArray& data)
         year  = it.key().first;
         month = it.key().second;
 
-        QDate date( year, month, 1 );
+        QDate md(year, month, 1);
 
-        // Do we already have this album
-        if (albumMap.contains(date))
+        // Do we already have this Month album
+        if (mAlbumMap.contains(md))
         {
-            // already there. remove from map
-            albumMap.remove(date);
+            // already there. remove Month album from map
+            mAlbumMap.remove(md);
+
+            if (yAlbumMap.contains(year))
+            {
+                // already there. remove from map
+                yAlbumMap.remove(year);
+            }
+
             continue;
         }
 
-        // new album. create one
-        DAlbum* album = new DAlbum(date);
-        album->setParent(d->rootDAlbum);
-        d->albumIntDict.insert(album->globalID(), album);
-        emit signalAlbumAdded(album);
+        // Check if Year Album already exist.
+        DAlbum *yAlbum = 0;
+        AlbumIterator it(d->rootDAlbum);
+        while (it.current())
+        {
+            DAlbum* a = (DAlbum*)(*it);
+            if (a->date() == QDate(year, 1, 1) && a->range() == DAlbum::Year)
+            {
+                yAlbum = a;
+                break;
+            }
+            ++it;
+        }
+
+        // If no, create Year album.
+        if (!yAlbum)
+        {
+            yAlbum = new DAlbum(QDate(year, 1, 1), false, DAlbum::Year);
+            yAlbum->setParent(d->rootDAlbum);
+            d->albumIntDict.insert(yAlbum->globalID(), yAlbum);
+            emit signalAlbumAdded(yAlbum);
+        }
+
+        // Create Month album
+        DAlbum *mAlbum = new DAlbum(md);
+        mAlbum->setParent(yAlbum);
+        d->albumIntDict.insert(mAlbum->globalID(), mAlbum);
+        emit signalAlbumAdded(mAlbum);
     }
 
-    // Now the items contained in the map are the ones which
+    // Now the items contained in the maps are the ones which
     // have been deleted. 
-    for (QMap<QDate, DAlbum*>::iterator it = albumMap.begin();
-         it != albumMap.end(); ++it)
+    for (QMap<QDate, DAlbum*>::iterator it = mAlbumMap.begin();
+         it != mAlbumMap.end(); ++it)
+    {
+        DAlbum* album = it.data();
+        emit signalAlbumDeleted(album);
+        d->albumIntDict.remove(album->globalID());
+        delete album;
+    }
+
+    for (QMap<int, DAlbum*>::iterator it = yAlbumMap.begin();
+         it != yAlbumMap.end(); ++it)
     {
         DAlbum* album = it.data();
         emit signalAlbumDeleted(album);
