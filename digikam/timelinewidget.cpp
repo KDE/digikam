@@ -275,17 +275,19 @@ int TimeLineWidget::cursorInfo(QString& infoDate)
         }
         case Week:
         {
-            infoDate = i18n("Week #%1 - %2 %3")
-                       .arg(d->calendar->weekNumber(dt.date()))
-                       .arg(d->calendar->monthName(dt.date()))
-                       .arg(d->calendar->yearString(dt.date()));
+            infoDate = i18nc("Week #weeknumber - month name - year string",
+                             "Week #%1 - %2 %3",
+                             d->calendar->weekNumber(dt.date()),
+                             d->calendar->monthName(dt.date()),
+                             d->calendar->yearString(dt.date()));
             break;
         }
         case Month:
         {
-            infoDate = QString("%1 %2")
-                       .arg(d->calendar->monthName(dt.date()))
-                       .arg(d->calendar->yearString(dt.date()));
+            infoDate = i18nc("month-name year-string",
+                             "%1 %2",
+                             d->calendar->monthName(dt.date()),
+                             d->calendar->yearString(dt.date()));
             break;
         }
         case Year:
@@ -625,13 +627,13 @@ void TimeLineWidget::updatePixmap()
             if (val <= 0) logVal = 0;
             else          logVal = log(val);
 
-            top = (int)(dim + d->topMargin - ((logVal * dim) / max));
+            top = lround(dim + d->topMargin - ((logVal * dim) / max));
 
             if (top < 0) val = 0;
         }
         else
         {
-            top = dim + d->topMargin - ((val * dim) / max);
+            top = lround(dim + d->topMargin - ((val * dim) / max));
         }
 
         barRect.setTop(top);
@@ -808,7 +810,7 @@ void TimeLineWidget::updatePixmap()
         }
         else
         {
-            top = dim + d->topMargin - ((val * dim) / max);
+            top = lround(dim + d->topMargin - ((val * dim) / max));
         }
 
         barRect.setTop(top);
