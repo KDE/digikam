@@ -217,7 +217,7 @@ DigikamView::DigikamView(QWidget *parent)
     d->timeLineView     = new TimeLineView(this);
 
     d->leftSideBar->appendTab(d->folderBox, SmallIcon("folder-image"), i18n("Albums"));
-    d->leftSideBar->appendTab(d->dateFolderView, SmallIcon("view-calendar-month"), i18n("Dates"));
+    d->leftSideBar->appendTab(d->dateFolderView, SmallIcon("view-calendar-month"), i18n("Calendar"));
     d->leftSideBar->appendTab(d->tagBox, SmallIcon("tag"), i18n("Tags"));
     d->leftSideBar->appendTab(d->timeLineView, SmallIcon("clock"), i18n("Timeline"));
     d->leftSideBar->appendTab(d->searchBox, SmallIcon("edit-find"), i18n("Searches"));
