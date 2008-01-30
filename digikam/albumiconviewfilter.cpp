@@ -67,9 +67,8 @@ AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
 {
     d = new AlbumIconViewFilterPriv;
 
-    int size = fontMetrics().height()+4;
     d->led = new KLed(this);
-    d->led->setMinimumSize(size, size);
+    d->led->setMinimumSize(parent->height(), parent->height());
     d->led->setWhatsThis(i18n("If this light is on, something is active in filter settings"));
 
 //    d->textFilter = new SearchTextBar(this);
