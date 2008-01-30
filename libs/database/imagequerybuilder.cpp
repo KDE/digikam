@@ -46,7 +46,27 @@
 namespace Digikam
 {
 
-QString ImageQueryBuilder::buildQuery(const QString &xml, QList<QVariant> *boundValues) const
+ImageQueryBuilder::ImageQueryBuilder()
+{
+    // build a lookup table for month names
+    const KCalendarSystem* cal = KGlobal::locale()->calendar();
+    for (int i=1; i<=12; ++i)
+    {
+        m_shortMonths[i-1] = cal->monthName(i, 2000, KCalendarSystem::ShortName).toLower();
+        m_longMonths[i-1]  = cal->monthName(i, 2000, KCalendarSystem::LongName).toLower();
+    }
+}
+
+QString ImageQueryBuilder::buildQuery(const QString &q, QList<QVariant> *boundValues) const
+{
+    // Handle legacy query descriptions
+    if (q.startsWith("digikamsearch:"))
+        return buildQueryFromUrl(KUrl(q), boundValues);
+    else
+        return buildQueryFromXml(q, boundValues);
+}
+
+QString ImageQueryBuilder::buildQueryFromXml(const QString &xml, QList<QVariant> *boundValues) const
 {
     SearchXmlReader reader(xml);
     QString sql;
@@ -85,43 +105,149 @@ void ImageQueryBuilder::buildGroup(QString &sql, SearchXmlReader &reader, QList<
     }
 }
 
-inline static QString prepareForLike(const QString &str, SearchXml::Relation relation)
+class FieldQueryBuilder
 {
-    if (relation == SearchXml::Like || relation == SearchXml::NotLike)
-        return "%" + str + "%";
-    else return str;
-}
+public:
+
+    FieldQueryBuilder(QString &sql, SearchXmlReader &reader,
+                      QList<QVariant> *boundValues, SearchXml::Relation relation)
+       : sql(sql), reader(reader), boundValues(boundValues), relation(relation)
+    {
+    }
+
+    QString &sql;
+    SearchXmlReader &reader;
+    QList<QVariant> *boundValues;
+    SearchXml::Relation relation;
+
+    inline QString prepareForLike(const QString &str)
+    {
+        if (relation == SearchXml::Like || relation == SearchXml::NotLike)
+            return "%" + str + "%";
+        else return str;
+    }
+
+    void addIntField(const QString &name)
+    {
+        sql += " (" + name + ' ';
+        ImageQueryBuilder::addSqlRelation(sql, relation);
+        sql += " ?) ";
+        *boundValues << reader.valueToInt();
+    }
+
+    void addDoubleField(const QString &name)
+    {
+        sql += " (" + name + ' ';
+        ImageQueryBuilder::addSqlRelation(sql, relation);
+        sql += " ?) ";
+        *boundValues << reader.valueToDouble();
+    }
+
+    void addStringField(const QString &name)
+    {
+        sql += " (" + name + ' ';
+        ImageQueryBuilder::addSqlRelation(sql, relation);
+        sql += " ?) ";
+        *boundValues << prepareForLike(reader.value());
+    }
+
+    void addDateField(const QString &name)
+    {
+        sql += " (" + name + ' ';
+        ImageQueryBuilder::addSqlRelation(sql, relation);
+        sql += " ?) ";
+        *boundValues << reader.value();
+    }
+
+    void addChoiceIntField(const QString &name)
+    {
+        if (relation == SearchXml::OneOf)
+        {
+            QList<int> values = reader.valueToIntList();
+            bool searchForNull = values.removeAll(-1);
+            sql += " (" + name + " IN (";
+            AlbumDB::addBoundValuePlaceholders(sql, values.size());
+            if (searchForNull)
+                sql += ") OR " + name + " IS NULL";
+            else
+                sql += ") ";
+            foreach (int v, values)
+                *boundValues << v;
+        }
+        else
+        {
+            addIntField(name);
+        }
+    }
+
+    void addIntBitmaskField(const QString &name)
+    {
+        if (relation == SearchXml::OneOf)
+        {
+            QList<int> values = reader.valueToIntList();
+            bool searchForNull = values.removeAll(-1);
+            sql += "( ";
+            bool first = true;
+            for (int i=0; i<values.size(); i++)
+            {
+                if (!first)
+                    sql += "OR ";
+                first = false;
+                sql += name + " & ? ";
+            }
+            if (searchForNull)
+                sql += "OR " + name + " IS NULL ";
+
+            foreach (int v, values)
+                *boundValues << v;
+        }
+        else
+        {
+            if (relation == SearchXml::Equal)
+                sql += " (" + name + " & " + " ?) ";
+            else
+                sql += " (NOT " + name + " & " + " ?) ";
+            *boundValues << reader.valueToDouble();
+        }
+    }
+
+    void addChoiceStringField(const QString &name)
+    {
+        if (relation == SearchXml::OneOf)
+        {
+            QStringList values = reader.valueToStringList();
+            sql += " (" + name + " IN (";
+            AlbumDB::addBoundValuePlaceholders(sql, values.size());
+            sql += ") ";
+            *boundValues << values;
+        }
+        else
+        {
+            addStringField(name);
+        }
+    }
+};
+
 
 void ImageQueryBuilder::buildField(QString &sql, SearchXmlReader &reader, const QString &name, QList<QVariant> *boundValues) const
 {
     SearchXml::Relation relation = reader.fieldRelation();
+    FieldQueryBuilder fieldQuery(sql, reader, boundValues, relation);
     if (name == "albumid")
     {
-        sql += " (Images.id ";
-        addSqlRelation(sql, relation);
-        sql += " ?) ";
-        *boundValues << reader.valueToInt();
+        fieldQuery.addIntField("Images.id");
     }
     else if (name == "albumname")
     {
-        sql += " (Album.relativePath ";
-        addSqlRelation(sql, relation);
-        sql += " ?) ";
-        *boundValues << prepareForLike(reader.value(), relation);
+        fieldQuery.addStringField("Album.relativePath");
     }
     else if (name == "albumcaption")
     {
-        sql += " (Album.caption ";
-        addSqlRelation(sql, relation);
-        sql += " ?) ";
-        *boundValues << prepareForLike(reader.value(), relation);
+        fieldQuery.addStringField("Albums.caption");
     }
     else if (name == "albumcollection")
     {
-        sql += " (Album.collection ";
-        addSqlRelation(sql, relation);
-        sql += " ?) ";
-        *boundValues << prepareForLike(reader.value(), relation);
+        fieldQuery.addStringField("Albums.collection");
     }
     else if (name == "tagid")
     {
@@ -190,286 +316,194 @@ void ImageQueryBuilder::buildField(QString &sql, SearchXmlReader &reader, const 
             *boundValues << tagname << tagname;
         }
     }
+    else if (name == "notag")
+    {
+        sql += " (Images.id NOT IN "
+               "   (SELECT imageid FROM ImageTags)) ";
+    }
     else if (name == "filename")
     {
-        sql += " (Images.name ";
-        addSqlRelation(sql, relation);
-        sql += " ?) ";
-        *boundValues << prepareForLike(reader.value(), relation);
+        fieldQuery.addStringField("Images.name");
     }
     else if (name == "modificationdate")
     {
-        sql += " (Images.modificationDate ";
-        addSqlRelation(sql, relation);
-        sql += " ?) ";
-        *boundValues << reader.value();
+        fieldQuery.addDateField("Images.modificationDate");
     }
     else if (name == "filesize")
     {
-        sql += " (Images.fileSize ";
-        addSqlRelation(sql, relation);
-        sql += " ?) ";
-        *boundValues << reader.valueToInt();
+        fieldQuery.addIntField("Images.fileSize");
     }
+
     else if (name == "rating")
     {
-        sql += " (ImageInformation.rating ";
-        addSqlRelation(sql, relation);
-        sql += " ?) ";
-        *boundValues << reader.valueToInt();
+        fieldQuery.addIntField("ImageInformation.rating");
     }
     else if (name == "creationdate")
     {
-        sql += " (ImageInformation.creationDate ";
-        addSqlRelation(sql, relation);
-        sql += " ?) ";
-        *boundValues << reader.value();
+        fieldQuery.addDateField("ImageInformation.creationDate");
     }
     else if (name == "digitizationdate")
     {
-        sql += " (ImageInformation.digitizationDate ";
-        addSqlRelation(sql, relation);
-        sql += " ?) ";
-        *boundValues << reader.value();
+        fieldQuery.addDateField("ImageInformation.digitizationDate");
     }
     else if (name == "orientation")
     {
-        sql += " (ImageInformation.orientation ";
-        addSqlRelation(sql, relation);
-        sql += " ?) ";
-        *boundValues << reader.valueToInt();
+        fieldQuery.addChoiceIntField("ImageInformation.orientation");
     }
     else if (name == "width")
     {
-        sql += " (ImageInformation.width ";
-        addSqlRelation(sql, relation);
-        sql += " ?) ";
-        *boundValues << reader.valueToInt();
+        fieldQuery.addIntField("ImageInformation.width");
     }
     else if (name == "height")
     {
-        sql += " (ImageInformation.height ";
-        addSqlRelation(sql, relation);
-        sql += " ?) ";
-        *boundValues << reader.valueToInt();
+        fieldQuery.addIntField("ImageInformation.height");
     }
     else if (name == "pixels")
     {
-        sql += " ( (ImageInformation.width * ImageInformation.height) ";
-        addSqlRelation(sql, relation);
-        sql += " ?) ";
-        *boundValues << reader.valueToInt();
+        fieldQuery.addIntField("(ImageInformation.width * ImageInformation.height)");
     }
     else if (name == "format")
     {
-        sql += " (ImageInformation.format ";
-        addSqlRelation(sql, relation);
-        sql += " ?) ";
-        *boundValues << prepareForLike(reader.value(), relation);
+        fieldQuery.addChoiceStringField("ImageInformation.format");
     }
     else if (name == "colordepth")
     {
-        sql += " (ImageInformation.colorDepth ";
-        addSqlRelation(sql, relation);
-        sql += " ?) ";
-        *boundValues << reader.valueToInt();
+        fieldQuery.addIntField("ImageInformation.colorDepth");
     }
     else if (name == "colormodel")
     {
-        sql += " (ImageInformation.colorModel ";
-        addSqlRelation(sql, relation);
-        sql += " ?) ";
-        *boundValues << reader.valueToInt();
+        fieldQuery.addIntField("ImageInformation.colorModel");
     }
+
     else if (name == "make")
     {
-        sql += " (ImageMetadata.make ";
-        addSqlRelation(sql, relation);
-        sql += " ?) ";
-        *boundValues << prepareForLike(reader.value(), relation);
+        fieldQuery.addStringField("ImageMetadata.make");
     }
     else if (name == "model")
     {
-        sql += " (ImageMetadata.model ";
-        addSqlRelation(sql, relation);
-        sql += " ?) ";
-        *boundValues << prepareForLike(reader.value(), relation);
+        fieldQuery.addStringField("ImageMetadata.model");
     }
     else if (name == "aperture")
     {
-        sql += " (ImageMetadata.aperture ";
-        addSqlRelation(sql, relation);
-        sql += " ?) ";
-        *boundValues << reader.valueToDouble();
+        fieldQuery.addDoubleField("ImageMetadata.aperture");
     }
     else if (name == "focallength")
     {
-        sql += " (ImageMetadata.focalLength ";
-        addSqlRelation(sql, relation);
-        sql += " ?) ";
-        *boundValues << reader.valueToDouble();
+        fieldQuery.addDoubleField("ImageMetadata.focalLength");
     }
     else if (name == "focallength35")
     {
-        sql += " (ImageMetadata.focalLength35 ";
-        addSqlRelation(sql, relation);
-        sql += " ?) ";
-        *boundValues << reader.valueToDouble();
+        fieldQuery.addDoubleField("ImageMetadata.focalLength35");
     }
     else if (name == "exposuretime")
     {
-        sql += " (ImageMetadata.exposureTime ";
-        addSqlRelation(sql, relation);
-        sql += " ?) ";
-        *boundValues << reader.valueToDouble();
+        fieldQuery.addDoubleField("ImageMetadata.exposureTime");
     }
     else if (name == "exposureprogram")
     {
-        sql += " (ImageMetadata.exposureProgram ";
-        addSqlRelation(sql, relation);
-        sql += " ?) ";
-        *boundValues << reader.valueToInt();
+        fieldQuery.addChoiceIntField("ImageMetadata.exposureProgram");
     }
     else if (name == "exposuremode")
     {
-        sql += " (ImageMetadata.exposureMode ";
-        addSqlRelation(sql, relation);
-        sql += " ?) ";
-        *boundValues << reader.valueToInt();
+        fieldQuery.addChoiceIntField("ImageMetadata.exposureMode");
     }
     else if (name == "sensitivity")
     {
-        sql += " (ImageMetadata.sensitivity ";
-        addSqlRelation(sql, relation);
-        sql += " ?) ";
-        *boundValues << reader.valueToInt();
+        fieldQuery.addIntField("ImageMetadata.sensitivity");
     }
     else if (name == "flashmode")
     {
-        sql += " (ImageMetadata.flash ";
-        addSqlRelation(sql, relation);
-        sql += " ?) ";
-        *boundValues << reader.valueToInt();
+        fieldQuery.addIntBitmaskField("ImageMetadata.flash");
     }
     else if (name == "whitebalance")
     {
-        sql += " (ImageMetadata.whiteBalance ";
-        addSqlRelation(sql, relation);
-        sql += " ?) ";
-        *boundValues << reader.valueToInt();
+        fieldQuery.addChoiceIntField("ImageMetadata.whiteBalance");
     }
     else if (name == "whitebalancecolortemperature")
     {
-        sql += " (ImageMetadata.whiteBalanceColorTemperature ";
-        addSqlRelation(sql, relation);
-        sql += " ?) ";
-        *boundValues << reader.valueToInt();
+        fieldQuery.addIntField("ImageMetadata.whiteBalanceColorTemperature");
     }
     else if (name == "meteringmode")
     {
-        sql += " (ImageMetadata.meteringMode ";
-        addSqlRelation(sql, relation);
-        sql += " ?) ";
-        *boundValues << reader.valueToInt();
+        fieldQuery.addChoiceIntField("ImageMetadata.meteringMode");
     }
     else if (name == "subjectdistance")
     {
-        sql += " (ImageMetadata.subjectDistance ";
-        addSqlRelation(sql, relation);
-        sql += " ?) ";
-        *boundValues << reader.valueToDouble();
+        fieldQuery.addDoubleField("ImageMetadata.subjectDistance");
     }
     else if (name == "subjectdistancecategory")
     {
-        sql += " (ImageMetadata.subjectDistanceCategory ";
-        addSqlRelation(sql, relation);
-        sql += " ?) ";
-        *boundValues << reader.valueToInt();
+        fieldQuery.addChoiceIntField("ImageMetadata.subjectDistanceCategory");
     }
+
     else if (name == "latitude")
     {
-        sql += " (ImagePositions.latitudeNumber ";
-        addSqlRelation(sql, relation);
-        sql += " ?) ";
-        *boundValues << reader.valueToDouble();
+        fieldQuery.addDoubleField("ImagePositions.latitudeNumber");
     }
     else if (name == "longitude")
     {
-        sql += " (ImagePositions.longitudeNumber ";
-        addSqlRelation(sql, relation);
-        sql += " ?) ";
-        *boundValues << reader.valueToDouble();
+        fieldQuery.addDoubleField("ImagePositions.longitudeNumber");
     }
     else if (name == "altitude")
     {
-        sql += " (ImagePositions.altitude ";
-        addSqlRelation(sql, relation);
-        sql += " ?) ";
-        *boundValues << reader.valueToDouble();
+        fieldQuery.addDoubleField("ImagePositions.altitude");
     }
     else if (name == "positionorientation")
     {
-        sql += " (ImagePositions.orientation ";
-        addSqlRelation(sql, relation);
-        sql += " ?) ";
-        *boundValues << reader.valueToDouble();
+        fieldQuery.addDoubleField("ImagePositions.orientation");
     }
     else if (name == "positiontilt")
     {
-        sql += " (ImagePositions.tilt ";
-        addSqlRelation(sql, relation);
-        sql += " ?) ";
-        *boundValues << reader.valueToDouble();
+        fieldQuery.addDoubleField("ImagePositions.tilt");
     }
     else if (name == "positionroll")
     {
-        sql += " (ImagePositions.roll ";
-        addSqlRelation(sql, relation);
-        sql += " ?) ";
-        *boundValues << reader.valueToDouble();
+        fieldQuery.addDoubleField("ImagePositions.roll");
     }
     else if (name == "positiondescription")
     {
-        sql += " (ImagePositions.description ";
-        addSqlRelation(sql, relation);
-        sql += " ?) ";
-        *boundValues << prepareForLike(reader.value(), relation);
+        fieldQuery.addStringField("ImagePositions.description");
     }
+    else if (name == "nogps")
+    {
+        sql += " (ImagePositions.latitudeNumber IS NULL AND ImagePositions.longitudeNumber IS NULL) ";
+    }
+
     else if (name == "comment")
     {
         sql += " (Images.id IN "
                " (SELECT id FROM ImageComments "
                "  WHERE type=? AND comment ";
-        addSqlRelation(sql, relation);
+        ImageQueryBuilder::addSqlRelation(sql, relation);
         sql += " ?) ";
-        *boundValues << DatabaseComment::Comment << prepareForLike(reader.value(), relation);
+        *boundValues << DatabaseComment::Comment << fieldQuery.prepareForLike(reader.value());
     }
     else if (name == "commentauthor")
     {
         sql += " (Images.id IN "
                " (SELECT id FROM ImageComments "
                "  WHERE type=? AND author ";
-        addSqlRelation(sql, relation);
+        ImageQueryBuilder::addSqlRelation(sql, relation);
         sql += " ?)) ";
-        *boundValues << DatabaseComment::Comment << prepareForLike(reader.value(), relation);
+        *boundValues << DatabaseComment::Comment << fieldQuery.prepareForLike(reader.value());
     }
     else if (name == "headline")
     {
         sql += " (Images.id IN "
                " (SELECT id FROM ImageComments "
                "  WHERE type=? AND comment ";
-        addSqlRelation(sql, relation);
+        ImageQueryBuilder::addSqlRelation(sql, relation);
         sql += " ?)) ";
-        *boundValues << DatabaseComment::Headline << prepareForLike(reader.value(), relation);
+        *boundValues << DatabaseComment::Headline << fieldQuery.prepareForLike(reader.value());
     }
     else if (name == "title")
     {
         sql += " (Images.id IN "
                " (SELECT id FROM ImageComments "
                "  WHERE type=? AND comment ";
-        addSqlRelation(sql, relation);
+        ImageQueryBuilder::addSqlRelation(sql, relation);
         sql += " ?)) ";
-        *boundValues << DatabaseComment::Comment << prepareForLike(reader.value(), relation);
+        *boundValues << DatabaseComment::Comment << fieldQuery.prepareForLike(reader.value());
     }
     else if (name == "keyword")
     {
@@ -483,7 +517,7 @@ void ImageQueryBuilder::buildField(QString &sql, SearchXmlReader &reader, const 
     }
 }
 
-void ImageQueryBuilder::addSqlOperator(QString &sql, SearchXml::Operator op, bool isFirst) const
+void ImageQueryBuilder::addSqlOperator(QString &sql, SearchXml::Operator op, bool isFirst)
 {
     if (isFirst)
     {
@@ -504,7 +538,7 @@ void ImageQueryBuilder::addSqlOperator(QString &sql, SearchXml::Operator op, boo
     }
 }
 
-void ImageQueryBuilder::addSqlRelation(QString &sql, SearchXml::Relation rel) const
+void ImageQueryBuilder::addSqlRelation(QString &sql, SearchXml::Relation rel)
 {
     switch (rel)
     {
@@ -531,18 +565,9 @@ void ImageQueryBuilder::addSqlRelation(QString &sql, SearchXml::Relation rel) co
 }
 
 
-ImageQueryBuilder::ImageQueryBuilder()
-{
-    // build a lookup table for month names
-    const KCalendarSystem* cal = KGlobal::locale()->calendar();
-    for (int i=1; i<=12; ++i)
-    {
-        m_shortMonths[i-1] = cal->monthName(i, 2000, KCalendarSystem::ShortName).toLower();
-        m_longMonths[i-1]  = cal->monthName(i, 2000, KCalendarSystem::LongName).toLower();
-    }
-}
+// ----------- Legacy query description handling -------------- //
 
-QString ImageQueryBuilder::buildQuery(const KUrl& url, QList<QVariant> &boundValues) const
+QString ImageQueryBuilder::buildQueryFromUrl(const KUrl& url, QList<QVariant> *boundValues) const
 {
     int  count = url.queryItem("count").toInt();
     if (count <= 0)
@@ -705,7 +730,7 @@ QString ImageQueryBuilder::buildQuery(const KUrl& url, QList<QVariant> &boundVal
 QString ImageQueryBuilder::subQuery(enum ImageQueryBuilder::SKey key,
                                     enum ImageQueryBuilder::SOperator op,
                                     const QString& passedVal,
-                                    QList<QVariant> &boundValues) const
+                                    QList<QVariant> *boundValues) const
 {
     QString query;
     QString val = passedVal;
@@ -718,28 +743,28 @@ QString ImageQueryBuilder::subQuery(enum ImageQueryBuilder::SKey key,
         case(ALBUM):
         {
             query = " (Images.dirid $$##$$ ?) ";
-            boundValues << val;
+            *boundValues << val;
             break;
         }
         case(ALBUMNAME):
         {
             query = " (Images.dirid IN "
                     "  (SELECT id FROM Albums WHERE url $$##$$ ?)) ";
-            boundValues << val;
+            *boundValues << val;
             break;
         }
         case(ALBUMCAPTION):
         {
             query = " (Images.dirid IN "
                     "  (SELECT id FROM Albums WHERE caption $$##$$ ?)) ";
-            boundValues << val;
+            *boundValues << val;
             break;
         }
         case(ALBUMCOLLECTION):
         {
             query = " (Images.dirid IN "
                     "  (SELECT id FROM Albums WHERE collection $$##$$ ?)) ";
-            boundValues << val;
+            *boundValues << val;
             break;
         }
         case(TAG):
@@ -749,28 +774,28 @@ QString ImageQueryBuilder::subQuery(enum ImageQueryBuilder::SKey key,
                 query = " (Images.id IN "
                         "   (SELECT imageid FROM ImageTags "
                         "    WHERE tagid = ?)) ";
-                boundValues << val.toInt();
+                *boundValues << val.toInt();
             }
             else if (op == NE)
             {
                 query = " (Images.id NOT IN "
                         "   (SELECT imageid FROM ImageTags "
                         "    WHERE tagid = ?)) ";
-                boundValues << val.toInt();
+                *boundValues << val.toInt();
             }
             else if (op == LIKE)
             {
                 query = " (Images.id IN "
                         "   (SELECT ImageTags.imageid FROM ImageTags JOIN TagsTree on ImageTags.tagid = TagsTree.id "
                         "    WHERE TagsTree.pid = ? or ImageTags.tagid = ? )) ";
-                boundValues << val.toInt() << val.toInt();
+                *boundValues << val.toInt() << val.toInt();
             }
             else // op == NLIKE
             {
                 query = " (Images.id NOT IN "
                         "   (SELECT ImageTags.imageid FROM ImageTags JOIN TagsTree on ImageTags.tagid = TagsTree.id "
                         "    WHERE TagsTree.pid = ? or ImageTags.tagid = ? )) ";
-                boundValues << val.toInt() << val.toInt();
+                *boundValues << val.toInt() << val.toInt();
             }
 
     //         query = " (Images.id IN "
@@ -785,25 +810,25 @@ QString ImageQueryBuilder::subQuery(enum ImageQueryBuilder::SKey key,
                     "  (SELECT imageid FROM ImageTags "
                     "   WHERE tagid IN "
                     "   (SELECT id FROM Tags WHERE name $$##$$ ?))) ";
-            boundValues << val;
+            *boundValues << val;
             break;
         }
         case(IMAGENAME):
         {
             query = " (Images.name $$##$$ ?) ";
-            boundValues << val;
+            *boundValues << val;
             break;
         }
         case(IMAGECAPTION):
         {
             query = " (Images.caption $$##$$ ?) ";
-            boundValues << val;
+            *boundValues << val;
             break;
         }
         case(IMAGEDATE):
         {
             query = " (Images.datetime $$##$$ ?) ";
-            boundValues << val;
+            *boundValues << val;
             break;
         }
         case (KEYWORD):
@@ -814,7 +839,7 @@ QString ImageQueryBuilder::subQuery(enum ImageQueryBuilder::SKey key,
         case(RATING):
         {
             query = " (ImageProperties.value $$##$$ ? and ImageProperties.property='Rating') ";
-            boundValues << val;
+            *boundValues << val;
             break;
         }
     }
@@ -875,7 +900,7 @@ QString ImageQueryBuilder::subQuery(enum ImageQueryBuilder::SKey key,
             return query;
 
         query = QString(" (Images.datetime > ? AND Images.datetime < ?) ");
-        boundValues << date.addDays(-1).toString(Qt::ISODate)
+        *boundValues << date.addDays(-1).toString(Qt::ISODate)
                    << date.addDays( 1).toString(Qt::ISODate);
     }
 
