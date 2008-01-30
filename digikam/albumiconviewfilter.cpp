@@ -69,6 +69,7 @@ AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
 
     d->led = new KLed(this);
     d->led->setMinimumSize(parent->height(), parent->height());
+    d->led->installEventFilter(this);
     d->led->setWhatsThis(i18n("If this light is on, something is active in filter settings"));
 
 //    d->textFilter = new SearchTextBar(this);
@@ -151,6 +152,27 @@ void AlbumIconViewFilter::checkForLed()
         ledState = KLed::On;
 
     d->led->setState(ledState);
+}
+
+bool AlbumIconViewFilter::eventFilter(QObject *object, QEvent *e) 
+{
+    QWidget *widget = static_cast<QWidget*>(object);
+
+    if (e->type() == QEvent::MouseButtonRelease)
+    {
+        QMouseEvent* event = static_cast<QMouseEvent*>(e);
+        if ( widget->rect().contains(event->pos()) && d->led->state() == KLed::On) 
+        {
+            // Reset all filters settings.
+            d->textFilter->setText(QString());
+            d->ratingFilter->setRating(0);
+            d->ratingFilter->setRatingFilterCondition(AlbumLister::GreaterEqualCondition);
+            d->mimeFilter->setMimeFilter(MimeFilter::AllFiles);
+            checkForLed();
+        }
+    }
+
+    return false;
 }
 
 }  // namespace Digikam
