@@ -52,6 +52,7 @@
 
 // Local includes
 
+#include "ddebug.h"
 #include "albumdb.h"
 #include "databaseaccess.h"
 #include "databasebackend.h"
@@ -170,7 +171,7 @@ void ImageLister::list(ImageListerReceiver *receiver, const DatabaseUrl &url)
     }
     else if (url.isDateUrl())
     {
-        listMonth(receiver, url.date());
+        listDateRange(receiver, url.startDate(), url.endDate());
     }
 }
 
@@ -306,11 +307,8 @@ void ImageLister::listTag(ImageListerReceiver *receiver, int tagId)
     }
 }
 
-void ImageLister::listMonth(ImageListerReceiver *receiver, const QDate &date)
+void ImageLister::listDateRange(ImageListerReceiver *receiver, const QDate &startDate, const QDate &endDate)
 {
-    QDate firstDayOfMonth(date.year(), date.month(), 1);
-    QDate firstDayOfNextMonth = firstDayOfMonth.addMonths(1);
-
     QList<QVariant> values;
 
     {
@@ -326,8 +324,8 @@ void ImageLister::listMonth(ImageListerReceiver *receiver, const QDate &date)
                                           " WHERE ImageInformation.creationDate < ? "
                                           "   AND ImageInformation.creationDate >= ? "
                                           " ORDER BY Albums.id;"),
-                                  QDateTime(firstDayOfNextMonth).toString(Qt::ISODate),
-                                  QDateTime(firstDayOfMonth).toString(Qt::ISODate),
+                                  QDateTime(endDate).toString(Qt::ISODate),
+                                  QDateTime(startDate).toString(Qt::ISODate),
                                   &values);
     }
 

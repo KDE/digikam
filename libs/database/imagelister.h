@@ -90,9 +90,10 @@ public:
      */
     void listTag(ImageListerReceiver *receiver, int tagId);
     /**
-      * List those images whose date lies in the month specified by the date
+      * List those images whose date lies in the range beginning with startDate (inclusive)
+      * and ending before endDate (exclusive).
       */
-    void listMonth(ImageListerReceiver *receiver, const QDate &date);
+    void listDateRange(ImageListerReceiver *receiver, const QDate &startDate, const QDate &endDate);
 
     /**
      * Execute the search specified by a SQL expression
