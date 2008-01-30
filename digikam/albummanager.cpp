@@ -791,7 +791,7 @@ void AlbumManager::scanDAlbums()
         d->dateListJob = 0;
     }
 
-    DatabaseUrl u = DatabaseUrl::fromDate(QDate());
+    DatabaseUrl u = DatabaseUrl::fromDateRange(QDate(), QDate());
 
     d->dateListJob = ImageLister::startListJob(u);
     d->dateListJob->addMetaData("folders", "true");

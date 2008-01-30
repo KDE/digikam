@@ -451,7 +451,7 @@ QDate DAlbum::date() const
 
 DatabaseUrl DAlbum::kurl() const
 {
-    return DatabaseUrl::fromDate(m_date);
+    return DatabaseUrl::fromDateForMonth(m_date);
 }
 
 // --------------------------------------------------------------------------
