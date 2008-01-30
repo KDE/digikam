@@ -9,18 +9,20 @@ General        : Updated internal CImg library to last stable 1.2.7 (released at
 General        : Add capability to display count of items in all Album, Date, Tags, and 
                  Tags Filter Folder View.
                  The number of items contained in virtual or physical albums can be 
-		 displayed on the right of album name. If a tree branch is collapsed, 
-		 parents album sum-up the number of items from all undisplayed children albums.
+                 displayed on the right of album name. If a tree branch is collapsed, 
+                 parents album sum-up the number of items from all undisplayed children albums.
                  Count of items is performed in background by digiKam KIO-Slaves.
                  A new option from Setup/Album dialog page can toggle on/off this feature.
 
-AlbumGUI       : Add a new tool to perform Date search around whole albums collection : Time-Line.
+AlbumGUI       : Add a new tool to perform Date search around whole albums collection: Time-Line.
+AlbumGUI       : In Calendar View, selecting Year album show all pictures relevant.
 
 digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==>  96388 : Show number of images in the album.
-002 ==> 155271 : Configure suggests wrong parameter for libjasper
+002 ==> 155271 : Configure suggests wrong parameter for libjasper.
 003 ==> 155105 : Broken png image present in albums folder causes digikam to crash when starting.
 004 ==> 146760 : Providing a Timeline-View for quickly narrowing down the date of photos.
-005 ==> 146635 : Ratio crop doesn't remember orientation
-006 ==> 
+005 ==> 146635 : Ratio crop doesn't remember orientation.
+006 ==> 144337 : There should be no "empty folders".
+007 ==> 
