@@ -135,9 +135,15 @@ public:
     inline T *assign(const DSharedDataPointer<T> &o)
     {
         if (o.d != d) {
-            T *x = o.d;
-            if (x) x->ref.ref();
-            d = x;
+            // reference new value
+            if (o.d)
+                o.d->ref.ref();
+            // store old value
+            T *x = d;
+            // assign new value
+            d = o.d;
+            // dereference old value,
+            // return value and ownership if dereferenced
             if (x && !x->ref.deref())
                 return x;
         }
@@ -147,9 +153,15 @@ public:
     inline T *assign(T *o)
     {
         if (o != d) {
-            T *x = o;
-            if (x) x->ref.ref();
-            d = x;
+            // reference new value
+            if (o)
+                o->ref.ref();
+            // store old value
+            T *x = d;
+            // assign new value
+            d = o;
+            // dereference old value,
+            // return value and ownership if dereferenced
             if (x && !x->ref.deref())
                 return x;
         }
