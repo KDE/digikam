@@ -146,6 +146,27 @@ QList<int> SearchXmlReader::valueToIntList()
     return list;
 }
 
+QStringList SearchXmlReader::valueToStringList()
+{
+    QStringList list;
+    QString listitem("listitem");
+    QString field("field");
+
+    while (!atEnd() && !(isEndElement() && name() == field))
+    {
+        readNext();
+        if (isEndElement())
+            continue;
+        if (isStartElement())
+        {
+            if (name() == listitem)
+                list << text().toString();
+        }
+    }
+
+    return list;
+}
+
 SearchXml::Operator SearchXmlReader::readOperator(const QString &attributeName,
                                                   SearchXml::Operator defaultOperator) const
 {
@@ -262,6 +283,15 @@ void SearchXmlWriter::writeValue(const QList<int> valueList)
     foreach(int i, valueList)
     {
         writeTextElement(listitem, QString::number(i));
+    }
+}
+
+void SearchXmlWriter::writeValue(const QStringList valueList)
+{
+    QString listitem("listitem");
+    foreach(QString str, valueList)
+    {
+        writeTextElement(listitem, str);
     }
 }
 

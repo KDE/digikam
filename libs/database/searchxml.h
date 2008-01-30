@@ -30,6 +30,7 @@
 #include <QDateTime>
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
+#include <QStringList>
 
 namespace Digikam
 {
@@ -99,6 +100,7 @@ public:
     double              valueToDouble();
     QDateTime           valueToDateTime();
     QList<int>          valueToIntList();
+    QStringList         valueToStringList();
 
 protected:
 
@@ -143,6 +145,7 @@ public:
     void writeValue(double value);
     void writeValue(const QDateTime &dateTime);
     void writeValue(const QList<int> valueList);
+    void writeValue(const QStringList valueList);
 
     /** Finish writing fields. You shall call this method before continuing with the SearchXmlWriter object.
         You cannot add anymore fields after calling this. */
