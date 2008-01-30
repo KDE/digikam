@@ -33,6 +33,9 @@
 
 #include "albumlister.h"
 
+class QEvent;
+class QObject;
+
 namespace Digikam
 {
 
@@ -59,7 +62,8 @@ private slots:
 private:
 
     void checkForLed();
-
+    bool eventFilter(QObject *object, QEvent *e);
+    
 private:
 
     AlbumIconViewFilterPriv* d;
