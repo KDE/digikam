@@ -72,7 +72,7 @@ void kio_digikamsearch::special(const QByteArray& data)
 
     Digikam::ImageQueryBuilder queryBuilder;
     QList<QVariant> boundValues;
-    QString query = queryBuilder.buildQuery(dbUrl.searchUrl(), boundValues);
+    QString query = queryBuilder.buildQueryFromUrl(dbUrl.searchUrl(), &boundValues);
 
     Digikam::ImageLister lister;
 
