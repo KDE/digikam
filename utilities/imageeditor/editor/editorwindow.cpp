@@ -1451,7 +1451,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("ImageViewer Settings");
     QString ext               = group.readEntry("LastSavedImageTypeMime", "png");
-    QString fileName          = info.baseName(false) + QString(".") + ext;
+    QString fileName          = info.baseName() + QString(".") + ext;
     imageFileSaveDialog.setSelection(fileName);
 
     options->slotImageFileSelected(m_savingContext->srcURL.path());
