@@ -125,6 +125,7 @@ protected:
     void unLoadImagePlugins();
     void loadImagePlugins();
 
+    bool promptForOverWrite();
     bool promptUserSave(const KUrl& url);
     bool waitForSavingToComplete();
     void startingSave(const KUrl& url);
