@@ -145,8 +145,13 @@ void SearchFolderView::slotTextSearchFilterChanged(const QString& filter)
         SAlbum* salbum             = (SAlbum*)(*it);
         SearchFolderItem* viewItem = (SearchFolderItem*) salbum->extraData(this);
 
-        bool match = salbum->title().lower().contains(search);
-        if (match)
+        // Check if a special url query exist to identify a SAlbum dedicaced to Date Search
+        // used with TimeLine.
+        KURL url     = salbum->kurl();
+        QString type = url.queryItem("type");
+
+        if (salbum->title().lower().contains(search) &&
+            type != QString("datesearch"))
         {
             atleastOneMatch = true;
 
