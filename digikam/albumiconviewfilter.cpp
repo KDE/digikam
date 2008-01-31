@@ -75,6 +75,7 @@ AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
     d->led = new KLed(this);
     d->led->setMinimumSize(size, size);
     d->led->installEventFilter(this);
+    d->led->setState(KLed::On);
     QWhatsThis::add(d->led, i18n("If this light is on, something is active in filter settings. "
                                  "Clic over with right mouse button to reset all filters."));
 
@@ -145,18 +146,18 @@ void AlbumIconViewFilter::slotTextFilterChanged(const QString& text)
 
 void AlbumIconViewFilter::checkForLed()
 {
-    KLed::State ledState = KLed::Off;
+    QColor ledColor = Qt::green;
 
     if (!d->textFilter->text().isEmpty())
-        ledState = KLed::On;
+        ledColor = QColor(255, 192, 0);
 
     if (d->mimeFilter->mimeFilter() != MimeFilter::AllFiles)
-        ledState = KLed::On;
+        ledColor = QColor(255, 192, 0);
 
     if (d->ratingFilter->rating() != 0)
-        ledState = KLed::On;
+        ledColor = QColor(255, 192, 0);
 
-    d->led->setState(ledState);
+    d->led->setColor(ledColor);
 }
 
 bool AlbumIconViewFilter::eventFilter(QObject *object, QEvent *e) 
@@ -166,7 +167,7 @@ bool AlbumIconViewFilter::eventFilter(QObject *object, QEvent *e)
     if (e->type() == QEvent::MouseButtonRelease)
     {
         QMouseEvent* event = static_cast<QMouseEvent*>(e);
-        if ( widget->rect().contains(event->pos()) && d->led->state() == KLed::On) 
+        if ( widget->rect().contains(event->pos()) && d->led->color() == QColor(255, 192, 0)) 
         {
             // Reset all filters settings.
             d->textFilter->setText(QString());
