@@ -56,6 +56,14 @@ public:
     void readSettings();
     void saveSettings();
 
+signals:
+
+    void signalResetTagFilters();
+
+public slots:
+
+    void slotTagFiltersChanged(bool);
+
 private slots:
 
     void slotRatingFilterChanged(int, AlbumLister::RatingCondition);

@@ -89,6 +89,7 @@ signals:
     void signalCopyAlbumItemsSelection();
     void signalPasteAlbumItemsSelection();
     void signalCancelButtonPressed();
+    void signalResetTagFilters();
 
 protected:
 

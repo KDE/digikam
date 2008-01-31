@@ -241,11 +241,11 @@ TimeLineView::TimeLineView(QWidget *parent)
     connect(d->timeLineFolderView, SIGNAL(signalRenameAlbum(SAlbum*)),
             this, SLOT(slotRenameAlbum(SAlbum*)));
 
-    connect(d->timeLineFolderView, SIGNAL(signalSearchFilterMatch(bool)),
+    connect(d->timeLineFolderView, SIGNAL(signalTextSearchFilterMatch(bool)),
             d->searchDateBar, SLOT(slotSearchResult(bool)));
 
     connect(d->searchDateBar, SIGNAL(textChanged(const QString&)),
-            d->timeLineFolderView, SLOT(slotSearchFilterChanged(const QString&)));
+            d->timeLineFolderView, SLOT(slotTextSearchFilterChanged(const QString&)));
 
     connect(d->timeUnitCB, SIGNAL(activated(int)),
             this, SLOT(slotTimeUnitChanged(int)));

@@ -124,7 +124,7 @@ QString TimeLineFolderView::currentTimeLineSearchName() const
     return m_currentTimeLineSearchName;
 }
 
-void TimeLineFolderView::slotSearchFilterChanged(const QString& filter)
+void TimeLineFolderView::slotTextSearchFilterChanged(const QString& filter)
 {
     QString search = filter.toLower();
 
@@ -153,7 +153,7 @@ void TimeLineFolderView::slotSearchFilterChanged(const QString& filter)
         }
     }
 
-    emit signalSearchFilterMatch(atleastOneMatch);
+    emit signalTextSearchFilterMatch(atleastOneMatch);
 }
 
 void TimeLineFolderView::searchDelete(SAlbum* album)

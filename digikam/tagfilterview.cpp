@@ -358,7 +358,7 @@ TagFilterView::~TagFilterView()
     delete d;
 }
 
-void TagFilterView::slotTagFilterChanged(const QString& filter)
+void TagFilterView::slotTextTagFilterChanged(const QString& filter)
 {
     QString search = filter.toLower();
 
@@ -423,7 +423,7 @@ void TagFilterView::slotTagFilterChanged(const QString& filter)
         }
     }
 
-    emit signalTagFilterMatch(atleastOneMatch);
+    emit signalTextTagFilterMatch(atleastOneMatch);
 }
 
 void TagFilterView::stateChanged(TagFilterViewItem* item)
@@ -913,6 +913,7 @@ void TagFilterView::slotTimeOut()
     }
 
     AlbumLister::instance()->setTagFilter(filterTags, d->matchingCond, showUnTagged);
+    emit signalTagFiltersChanged(tagFilterIsActive());
 }
 
 void TagFilterView::slotContextMenu(Q3ListViewItem* it, const QPoint&, int)
@@ -1389,6 +1390,34 @@ void TagFilterView::slotRefresh(const QMap<int, int>& tagsStatMap)
     }
 
     refresh();
+}
+
+
+bool TagFilterView::tagFilterIsActive()
+{
+    Q3ListViewItemIterator it(this);
+
+    while (it.current())
+    {
+        TagFilterViewItem* item = dynamic_cast<TagFilterViewItem*>(*it);
+        if (item && item->isOn())
+            return true;
+        ++it;
+    }
+    return false;
+}
+
+void TagFilterView::slotResetTagFilters()
+{
+    Q3ListViewItemIterator it(this);
+
+    while (it.current())
+    {
+        TagFilterViewItem* item = dynamic_cast<TagFilterViewItem*>(*it);
+        if (item && item->isOn())
+            item->setOn(false);
+        ++it;
+    }
 }
 
 }  // namespace Digikam

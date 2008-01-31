@@ -237,7 +237,7 @@ TagFolderView::~TagFolderView()
     delete d;
 }
 
-void TagFolderView::slotTagFilterChanged(const QString& filter)
+void TagFolderView::slotTextTagFilterChanged(const QString& filter)
 {
     QString search = filter.toLower();
 
@@ -302,7 +302,7 @@ void TagFolderView::slotTagFilterChanged(const QString& filter)
         }
     }
 
-    emit signalTagFilterMatch(atleastOneMatch);
+    emit signalTextTagFilterMatch(atleastOneMatch);
 }
 
 void TagFolderView::slotAlbumAdded(Album *album)

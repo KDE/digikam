@@ -50,13 +50,13 @@ public:
 
 signals:
 
-    void signalSearchFilterMatch(bool);
+    void signalTextSearchFilterMatch(bool);
     void signalAlbumSelected(SAlbum*);
     void signalRenameAlbum(SAlbum*);
 
 public slots:
 
-    void slotSearchFilterChanged(const QString&);
+    void slotTextSearchFilterChanged(const QString&);
 
 private slots:
 

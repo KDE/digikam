@@ -303,7 +303,7 @@ AlbumFolderView::~AlbumFolderView()
     delete d;
 }
 
-void AlbumFolderView::slotFolderFilterChanged(const QString& filter)
+void AlbumFolderView::slotTextFolderFilterChanged(const QString& filter)
 {
     QString search = filter.toLower();
 
@@ -368,7 +368,7 @@ void AlbumFolderView::slotFolderFilterChanged(const QString& filter)
         }
     }
 
-    emit signalFolderFilterMatch(atleastOneMatch);
+    emit signalTextFolderFilterMatch(atleastOneMatch);
 }
 
 void AlbumFolderView::slotAlbumAdded(Album *album)

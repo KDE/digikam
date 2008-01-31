@@ -72,11 +72,11 @@ public:
 signals:
 
     void signalAlbumModified();
-    void signalFolderFilterMatch(bool);
+    void signalTextFolderFilterMatch(bool);
 
 public slots:
 
-    void slotFolderFilterChanged(const QString&);
+    void slotTextFolderFilterChanged(const QString&);
 
 private slots:
 
