@@ -1530,7 +1530,7 @@ void AlbumFolderView::slotRefresh(const QMap<int, int>& albumsStatMap)
                 int id = item->id();
                 QMap<int, int>::const_iterator it2 = albumsStatMap.find(id);
                 if ( it2 != albumsStatMap.end() )
-                    item->setCount(it2.data());
+                    item->setCount(it2.value());
             }
         }
         ++it;

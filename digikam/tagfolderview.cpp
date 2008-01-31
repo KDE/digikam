@@ -1005,7 +1005,7 @@ void TagFolderView::slotRefresh(const QMap<int, int>& tagsStatMap)
                 int id = item->id();
                 QMap<int, int>::const_iterator it2 = tagsStatMap.find(id);
                 if ( it2 != tagsStatMap.end() )
-                    item->setCount(it2.data());
+                    item->setCount(it2.value());
             }
         }
         ++it;
