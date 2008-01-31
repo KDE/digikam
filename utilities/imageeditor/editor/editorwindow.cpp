@@ -1164,7 +1164,6 @@ bool EditorWindow::promptUserSave(const KURL& url)
             else if (promptForOverWrite())
                 saving = save();
 
-
             // save and saveAs return false if they were cancelled and did not enter saving at all
             // In this case, do not call enter_loop because exit_loop will not be called.
             if (saving)
