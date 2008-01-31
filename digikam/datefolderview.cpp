@@ -425,7 +425,7 @@ void DateFolderView::slotRefresh(const QMap<YearMonth, int>& yearMonthMap)
             {
                 QMap<YearMonth, int>::const_iterator it2 = yearMonthMap.find(YearMonth(date.year(), date.month()));
                 if ( it2 != yearMonthMap.end() )
-                    item->setCount(it2.data());
+                    item->setCount(it2.value());
             }
             else
             {
@@ -434,7 +434,7 @@ void DateFolderView::slotRefresh(const QMap<YearMonth, int>& yearMonthMap)
                       it2 != yearMonthMap.end(); ++it2 )
                 {
                     if (it2.key().first == date.year())
-                        count += it2.data();
+                        count += it2.value();
                 }
                 item->setCount(count);
             }   
