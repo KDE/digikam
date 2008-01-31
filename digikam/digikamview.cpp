@@ -396,30 +396,36 @@ void DigikamView::setupConnections()
     connect(d->tagFolderView, SIGNAL(signalProgressValue(int)),
             d->parent, SLOT(slotProgressValue(int)));
 
+    connect(d->tagFilterView, SIGNAL(signalTagFiltersChanged(bool)),
+            this, SIGNAL(signalTagFiltersChanged(bool)));
+
+    connect(d->parent, SIGNAL(signalResetTagFilters()),
+            d->tagFilterView, SLOT(slotResetTagFilters()));
+
     // -- Filter Bars Connections ---------------------------------
 
     connect(d->folderSearchBar, SIGNAL(signalTextChanged(const QString&)),
-            d->folderView, SLOT(slotFolderFilterChanged(const QString&)));
+            d->folderView, SLOT(slotTextFolderFilterChanged(const QString&)));
 
     connect(d->tagSearchBar, SIGNAL(signalTextChanged(const QString&)),
-            d->tagFolderView, SLOT(slotTagFilterChanged(const QString&)));
+            d->tagFolderView, SLOT(slotTextTagFilterChanged(const QString&)));
 
     connect(d->searchSearchBar, SIGNAL(signalTextChanged(const QString&)),
-            d->searchFolderView, SLOT(slotSearchFilterChanged(const QString&)));
+            d->searchFolderView, SLOT(slotTextSearchFilterChanged(const QString&)));
 
     connect(d->tagFilterSearchBar, SIGNAL(signalTextChanged(const QString&)),
-            d->tagFilterView, SLOT(slotTagFilterChanged(const QString&)));
+            d->tagFilterView, SLOT(slotTextTagFilterChanged(const QString&)));
 
-    connect(d->folderView, SIGNAL(signalFolderFilterMatch(bool)),
+    connect(d->folderView, SIGNAL(signalTextFolderFilterMatch(bool)),
             d->folderSearchBar, SLOT(slotSearchResult(bool)));
 
-    connect(d->tagFolderView, SIGNAL(signalTagFilterMatch(bool)),
+    connect(d->tagFolderView, SIGNAL(signalTextTagFilterMatch(bool)),
             d->tagSearchBar, SLOT(slotSearchResult(bool)));
 
-    connect(d->searchFolderView, SIGNAL(signalSearchFilterMatch(bool)),
+    connect(d->searchFolderView, SIGNAL(signalTextSearchFilterMatch(bool)),
             d->searchSearchBar, SLOT(slotSearchResult(bool)));
 
-    connect(d->tagFilterView, SIGNAL(signalTagFilterMatch(bool)),
+    connect(d->tagFilterView, SIGNAL(signalTextTagFilterMatch(bool)),
             d->tagFilterSearchBar, SLOT(slotSearchResult(bool)));
 
     // -- Preview image widget Connections ------------------------

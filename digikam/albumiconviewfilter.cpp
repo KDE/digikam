@@ -51,13 +51,16 @@ public:
 
     AlbumIconViewFilterPriv()
     {
-        textFilter      = 0;
-        mimeFilter      = 0;
-        ratingFilter    = 0;
-        led             = 0;
-        activeFilters   = QColor(255, 192, 0);
-        inactiveFilters = Qt::green;
+        tagFiltersActive = false;
+        textFilter       = 0;
+        mimeFilter       = 0;
+        ratingFilter     = 0;
+        led              = 0;
+        activeFilters    = QColor(255, 192, 0);
+        inactiveFilters  = Qt::green;
     }
+
+    bool           tagFiltersActive;
 
     QColor         activeFilters;
     QColor         inactiveFilters;
@@ -81,7 +84,9 @@ AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
     d->led->setMinimumSize(size, size);
     d->led->installEventFilter(this);
     d->led->setState(KLed::On);
-    QWhatsThis::add(d->led, i18n("If this light is orange, something is active in filter settings. "
+    QWhatsThis::add(d->led, i18n("This light indicate if at least one filter is active over icon view. "
+                                 "This include all filters from status bar and all Tag Filters from right sidebar. "
+                                 "If this light is orange, filter is active. "
                                  "If this light is green, nothing is filtered. "
                                  "Click over with right mouse button to reset all filters."));
 
@@ -150,6 +155,12 @@ void AlbumIconViewFilter::slotTextFilterChanged(const QString& text)
     AlbumLister::instance()->setTextFilter(text);
 }
 
+void AlbumIconViewFilter::slotTagFiltersChanged(bool isActive)
+{
+    d->tagFiltersActive = isActive;
+    checkForLed();
+}
+
 void AlbumIconViewFilter::checkForLed()
 {
     QColor ledColor = d->inactiveFilters;
@@ -161,6 +172,9 @@ void AlbumIconViewFilter::checkForLed()
         ledColor = d->activeFilters;
 
     if (d->ratingFilter->rating() != 0)
+        ledColor = d->activeFilters;
+
+    if (d->tagFiltersActive)
         ledColor = d->activeFilters;
 
     d->led->setColor(ledColor);
@@ -180,7 +194,8 @@ bool AlbumIconViewFilter::eventFilter(QObject *object, QEvent *e)
             d->ratingFilter->setRating(0);
             d->ratingFilter->setRatingFilterCondition(AlbumLister::GreaterEqualCondition);
             d->mimeFilter->setMimeFilter(MimeFilter::AllFiles);
-            checkForLed();
+            emit signalResetTagFilters();
+            // No need to call checkForLed() here, it will be done from slotTagFiltersChanged().
         }
     }
 

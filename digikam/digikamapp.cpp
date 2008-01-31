@@ -401,6 +401,12 @@ void DigikamApp::setupStatusBar()
     connect(d->view, SIGNAL(signalTogglePreview(bool)),
             this, SLOT(slotTogglePreview(bool)));
 
+    connect(d->view, SIGNAL(signalTagFiltersChanged(bool)),
+            d->albumIconViewFilter, SLOT(slotTagFiltersChanged(bool)));
+
+    connect(d->albumIconViewFilter, SIGNAL(signalResetTagFilters()),
+            this, SIGNAL(signalResetTagFilters()));
+
     connect(d->statusNavigateBar, SIGNAL(signalFirstItem()),
             d->view, SLOT(slotFirstItem()));
 

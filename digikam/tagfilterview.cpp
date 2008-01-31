@@ -7,7 +7,7 @@
  * Description : tags filter view
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -355,7 +355,7 @@ TagFilterView::~TagFilterView()
     delete d;
 }
 
-void TagFilterView::slotTagFilterChanged(const QString& filter)
+void TagFilterView::slotTextTagFilterChanged(const QString& filter)
 {
     QString search = filter.lower();
 
@@ -420,7 +420,7 @@ void TagFilterView::slotTagFilterChanged(const QString& filter)
         }
     }
 
-    emit signalTagFilterMatch(atleastOneMatch);
+    emit signalTextTagFilterMatch(atleastOneMatch);
 }
 
 void TagFilterView::stateChanged(TagFilterViewItem* item)
@@ -914,6 +914,7 @@ void TagFilterView::slotTimeOut()
     }
 
     AlbumLister::instance()->setTagFilter(filterTags, d->matchingCond, showUnTagged);
+    emit signalTagFiltersChanged(tagFilterIsActive());
 }
 
 void TagFilterView::slotContextMenu(QListViewItem* it, const QPoint&, int)
@@ -1386,6 +1387,33 @@ void TagFilterView::slotRefresh(const QMap<int, int>& tagsStatMap)
     }
 
     refresh();
+}
+
+bool TagFilterView::tagFilterIsActive()
+{
+    QListViewItemIterator it(this);
+
+    while (it.current())
+    {
+        TagFilterViewItem* item = dynamic_cast<TagFilterViewItem*>(*it);
+        if (item && item->isOn())
+            return true;
+        ++it;
+    }
+    return false;
+}
+
+void TagFilterView::slotResetTagFilters()
+{
+    QListViewItemIterator it(this);
+
+    while (it.current())
+    {
+        TagFilterViewItem* item = dynamic_cast<TagFilterViewItem*>(*it);
+        if (item && item->isOn())
+            item->setOn(false);
+        ++it;
+    }
 }
 
 }  // namespace Digikam

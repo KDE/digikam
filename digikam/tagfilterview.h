@@ -7,7 +7,7 @@
  * Description : tags filter view
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -57,16 +57,23 @@ public:
 
     void stateChanged(TagFilterViewItem*);
     void refresh();
-    
+
+    /** Return true if at least one tag filter is active */
+    bool tagFilterIsActive();
+
 signals:
 
     void signalProgressBarMode(int, const QString&);
     void signalProgressValue(int);
-    void signalTagFilterMatch(bool);
+    void signalTextTagFilterMatch(bool);
+    void signalTagFiltersChanged(bool);
 
 public slots:
 
-    void slotTagFilterChanged(const QString&);
+    void slotTextTagFilterChanged(const QString&);
+
+    /** Reset all active tag filters */
+    void slotResetTagFilters();
 
 protected:
 

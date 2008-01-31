@@ -133,7 +133,7 @@ SearchFolderView::~SearchFolderView()
 {
 }
 
-void SearchFolderView::slotSearchFilterChanged(const QString& filter)
+void SearchFolderView::slotTextSearchFilterChanged(const QString& filter)
 {
     QString search = filter.lower();
 
@@ -162,7 +162,7 @@ void SearchFolderView::slotSearchFilterChanged(const QString& filter)
         }
     }
 
-    emit signalSearchFilterMatch(atleastOneMatch);
+    emit signalTextSearchFilterMatch(atleastOneMatch);
 }
 
 void SearchFolderView::quickSearchNew()

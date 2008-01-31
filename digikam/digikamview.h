@@ -7,7 +7,7 @@
  * Description : implementation of album view interface. 
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu> 
- * Copyright (C) 2002-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2002-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -78,7 +78,8 @@ signals:
     void signalGotoDateAndItem(AlbumIconItem *);
     void signalGotoTagAndItem(int tagID);
     void signalChangedTab(QWidget*);
-     
+    void signalTagFiltersChanged(bool);
+
 public slots:
 
     // View Action slots

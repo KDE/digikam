@@ -44,7 +44,7 @@ class AlbumIconViewFilterPriv;
 class AlbumIconViewFilter : public QHBox
 {
     Q_OBJECT
-    
+
 public:
 
     AlbumIconViewFilter(QWidget* parent);
@@ -52,6 +52,14 @@ public:
 
     void readSettings();
     void saveSettings();
+
+signals:
+
+    void signalResetTagFilters();
+
+public slots:
+
+    void slotTagFiltersChanged(bool);
 
 private slots:
 
@@ -63,7 +71,7 @@ private:
 
     void checkForLed();
     bool eventFilter(QObject *object, QEvent *e);
-    
+
 private:
 
     AlbumIconViewFilterPriv* d;
