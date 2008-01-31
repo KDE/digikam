@@ -46,11 +46,16 @@ public:
 
     AlbumIconViewFilterPriv()
     {
-        textFilter   = 0;
-        mimeFilter   = 0;
-        ratingFilter = 0;
-        led          = 0;
+        textFilter      = 0;
+        mimeFilter      = 0;
+        ratingFilter    = 0;
+        led             = 0;
+        activeFilters   = QColor(255, 192, 0);
+        inactiveFilters = Qt::green;
     }
+
+    QColor         activeFilters;
+    QColor         inactiveFilters;
 
     QLineEdit     *textFilter;
 //    SearchTextBar *textFilter;
@@ -70,8 +75,9 @@ AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
     d->led = new KLed(this);
     d->led->setMinimumSize(parent->height()-2, parent->height()-2);
     d->led->installEventFilter(this);
-    d->led->setWhatsThis(i18n("If this light is on, something is active in filter settings. "
-                              "Clic over with right mouse button to reset all filters."));
+    d->led->setWhatsThis(i18n("If this light is orange, something is active in filter settings. "
+                              "If this light is green, nothing is filtered. "
+                              "Click over with right mouse button to reset all filters."));
 
 //    d->textFilter = new SearchTextBar(this);
     d->textFilter = new QLineEdit(this);
@@ -141,18 +147,18 @@ void AlbumIconViewFilter::slotTextFilterChanged(const QString& text)
 
 void AlbumIconViewFilter::checkForLed()
 {
-    KLed::State ledState = KLed::Off;
+    QColor ledColor = d->inactiveFilters;
 
     if (!d->textFilter->text().isEmpty())
-        ledState = KLed::On;
+        ledColor = d->activeFilters;
 
     if (d->mimeFilter->mimeFilter() != MimeFilter::AllFiles)
-        ledState = KLed::On;
+        ledColor = d->activeFilters;
 
     if (d->ratingFilter->rating() != 0)
-        ledState = KLed::On;
+        ledColor = d->activeFilters;
 
-    d->led->setState(ledState);
+    d->led->setColor(ledColor);
 }
 
 bool AlbumIconViewFilter::eventFilter(QObject *object, QEvent *e) 
@@ -162,7 +168,7 @@ bool AlbumIconViewFilter::eventFilter(QObject *object, QEvent *e)
     if (e->type() == QEvent::MouseButtonRelease)
     {
         QMouseEvent* event = static_cast<QMouseEvent*>(e);
-        if ( widget->rect().contains(event->pos()) && d->led->state() == KLed::On) 
+        if ( widget->rect().contains(event->pos()) && d->led->color() == d->activeFilters)
         {
             // Reset all filters settings.
             d->textFilter->setText(QString());
