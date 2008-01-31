@@ -1124,6 +1124,19 @@ void EditorWindow::slotSavingProgress(const QString&, float progress)
     m_nameLabel->setProgressValue((int)(progress*100.0));
 }
 
+bool EditorWindow::promptForOverWrite()
+{
+    QFileInfo fi(m_canvas->currentImageFilePath());
+    QString warnMsg(i18n("About to overwrite file \"%1\"\nAre you sure?")
+                    .arg(fi.fileName()));
+    return (KMessageBox::warningContinueCancel(this, 
+                                           warnMsg, 
+                                           i18n("Warning"), 
+                                           i18n("Overwrite"),
+                                           "editorWindowSaveOverwrite")
+            ==  KMessageBox::Continue);
+}
+
 bool EditorWindow::promptUserSave(const KURL& url)
 {
     if (m_saveAction->isEnabled())
@@ -1144,12 +1157,13 @@ bool EditorWindow::promptUserSave(const KURL& url)
 
         if (result == KMessageBox::Yes)
         {
-            bool saving;
+            bool saving = false;
 
-            if (m_canvas->isReadOnly())
+            if (m_canvas->isReadOnly()) 
                 saving = saveAs();
-            else
+            else if (promptForOverWrite())
                 saving = save();
+
 
             // save and saveAs return false if they were cancelled and did not enter saving at all
             // In this case, do not call enter_loop because exit_loop will not be called.
@@ -1316,25 +1330,11 @@ void EditorWindow::slotNameLabelCancelButtonPressed()
 void EditorWindow::slotSave()
 {
     if (m_canvas->isReadOnly())
-    {
         saveAs();
-    }
-    else
-    {
-        QFileInfo fi(m_canvas->currentImageFilePath());
-        QString warnMsg(i18n("About to overwrite file \"%1\"\nAre you sure?")
-                        .arg(fi.fileName()));
-        if (KMessageBox::warningContinueCancel(this, 
-                                               warnMsg, 
-                                               i18n("Warning"), 
-                                               i18n("Overwrite"),
-                                               "editorWindowSaveOverwrite")
-            ==  KMessageBox::Continue)
-        {
-            save();
-        }
-    }
+    else if (promptForOverWrite())
+        save();
 }
+
 void EditorWindow::slotSavingStarted(const QString& /*filename*/)
 {
     setCursor( KCursor::waitCursor() );
