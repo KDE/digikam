@@ -58,7 +58,6 @@ protected:
 
 private:
 
-    void customEvent(QCustomEvent *event);
     void writeUserSettings();
 
 private slots:
