@@ -76,7 +76,8 @@ AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
     d->led->setMinimumSize(size, size);
     d->led->installEventFilter(this);
     d->led->setState(KLed::On);
-    QWhatsThis::add(d->led, i18n("If this light is on, something is active in filter settings. "
+    QWhatsThis::add(d->led, i18n("If this light is orange, something is active in filter settings. "
+                                 "If this light is green, nothing is filtered. "
                                  "Clic over with right mouse button to reset all filters."));
 
     d->textFilter = new SearchTextBar(this);
