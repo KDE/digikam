@@ -225,7 +225,7 @@ void DateFolderView::slotAlbumAdded(Album* a)
     QString yr             = QString::number(date.year());
     Q3ListViewItem* parent = findRootItemByYear(yr);
 
-    if (!parent)
+    if (parent)
     {
         DateFolderItem* item = new DateFolderItem(parent, album);
         item->setPixmap(0, SmallIcon("go-jump-today", AlbumSettings::instance()->getDefaultTreeIconSize()));
