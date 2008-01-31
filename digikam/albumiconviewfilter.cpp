@@ -111,7 +111,7 @@ AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
 }
 
 AlbumIconViewFilter::~AlbumIconViewFilter()
-{    
+{
     delete d;
 }
 
