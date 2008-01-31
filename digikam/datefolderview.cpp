@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2005-04-27
- * Descritpion : a folder view for date albums.
+ * Description : a folder view for date albums.
  * 
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
