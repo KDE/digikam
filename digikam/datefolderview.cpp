@@ -217,7 +217,7 @@ void DateFolderView::slotAlbumAdded(Album* a)
     if (album->range() == DAlbum::Year)
     {
         DateFolderItem* item = new DateFolderItem(d->listview, album);
-        item->setPixmap(0, SmallIcon("go-jump-today", AlbumSettings::instance()->getDefaultTreeIconSize()));
+        item->setPixmap(0, SmallIcon("view-calendar-list", AlbumSettings::instance()->getDefaultTreeIconSize()));
         album->setExtraData(this, item);
         return;
     }
@@ -228,7 +228,7 @@ void DateFolderView::slotAlbumAdded(Album* a)
     if (parent)
     {
         DateFolderItem* item = new DateFolderItem(parent, album);
-        item->setPixmap(0, SmallIcon("go-jump-today", AlbumSettings::instance()->getDefaultTreeIconSize()));
+        item->setPixmap(0, SmallIcon("view-calendar-month", AlbumSettings::instance()->getDefaultTreeIconSize()));
         album->setExtraData(this, item);
     }
 }
