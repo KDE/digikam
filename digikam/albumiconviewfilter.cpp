@@ -51,18 +51,23 @@ public:
 
     AlbumIconViewFilterPriv()
     {
-        textFilter   = 0;
-        mimeFilter   = 0;
-        ratingFilter = 0;
-        led          = 0;
+        textFilter      = 0;
+        mimeFilter      = 0;
+        ratingFilter    = 0;
+        led             = 0;
+        activeFilters   = QColor(255, 192, 0);
+        inactiveFilters = Qt::green;
     }
-    
+
+    QColor         activeFilters;
+    QColor         inactiveFilters;
+
     KLed          *led;
 
     SearchTextBar *textFilter;
-    
+
     MimeFilter    *mimeFilter;
-    
+
     RatingFilter  *ratingFilter;
 };
 
@@ -70,7 +75,7 @@ AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
                    : QHBox(parent)
 {
     d = new AlbumIconViewFilterPriv;
-    
+
     int size = fontMetrics().height()+4;
     d->led = new KLed(this);
     d->led->setMinimumSize(size, size);
@@ -78,7 +83,7 @@ AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
     d->led->setState(KLed::On);
     QWhatsThis::add(d->led, i18n("If this light is orange, something is active in filter settings. "
                                  "If this light is green, nothing is filtered. "
-                                 "Clic over with right mouse button to reset all filters."));
+                                 "Click over with right mouse button to reset all filters."));
 
     d->textFilter = new SearchTextBar(this);
     QToolTip::add(d->textFilter, i18n("Text quick filter (search)"));
@@ -147,16 +152,16 @@ void AlbumIconViewFilter::slotTextFilterChanged(const QString& text)
 
 void AlbumIconViewFilter::checkForLed()
 {
-    QColor ledColor = Qt::green;
+    QColor ledColor = d->inactiveFilters;
 
     if (!d->textFilter->text().isEmpty())
-        ledColor = QColor(255, 192, 0);
+        ledColor = d->activeFilters;
 
     if (d->mimeFilter->mimeFilter() != MimeFilter::AllFiles)
-        ledColor = QColor(255, 192, 0);
+        ledColor = d->activeFilters;
 
     if (d->ratingFilter->rating() != 0)
-        ledColor = QColor(255, 192, 0);
+        ledColor = d->activeFilters;
 
     d->led->setColor(ledColor);
 }
@@ -168,7 +173,7 @@ bool AlbumIconViewFilter::eventFilter(QObject *object, QEvent *e)
     if (e->type() == QEvent::MouseButtonRelease)
     {
         QMouseEvent* event = static_cast<QMouseEvent*>(e);
-        if ( widget->rect().contains(event->pos()) && d->led->color() == QColor(255, 192, 0)) 
+        if ( widget->rect().contains(event->pos()) && d->led->color() == d->activeFilters) 
         {
             // Reset all filters settings.
             d->textFilter->setText(QString());
