@@ -142,7 +142,8 @@ void TimeLineFolderView::slotTextSearchFilterChanged(const QString& filter)
         QString type = url.queryItem("type");
 
         if (salbum->title().lower().contains(search) &&
-            type == QString("datesearch"))
+            type == QString("datesearch") && 
+            salbum->title() != currentTimeLineSearchName())
         {
             atleastOneMatch = true;
 
