@@ -16,7 +16,7 @@ General        : Add capability to display count of items in all Album, Date, Ta
 
 AlbumGUI       : Add a new tool to perform Date search around whole albums collection: Time-Line.
 AlbumGUI       : In Calendar View, selecting Year album show all pictures relevant.
-AlbumGUI       : Add a new indicator in status about status of album icon view filtering.
+AlbumGUI       : Add a new status-bar indicator to report album icon view filtering status.
 
 digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
