@@ -65,15 +65,11 @@ public:
 
     void refresh();
 
-    /** Return true if at least one tag filter is active */
-    bool tagFilterIsActive();
-
 signals:
 
     void signalProgressBarMode(int, const QString&);
     void signalProgressValue(int);
     void signalTextTagFilterMatch(bool);
-    void signalTagFiltersChanged(bool);
 
 public slots:
 

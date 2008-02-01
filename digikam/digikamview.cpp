@@ -400,9 +400,6 @@ void DigikamView::setupConnections()
     connect(d->tagFolderView, SIGNAL(signalProgressValue(int)),
             d->parent, SLOT(slotProgressValue(int)));
 
-    connect(d->tagFilterView, SIGNAL(signalTagFiltersChanged(bool)),
-            this, SIGNAL(signalTagFiltersChanged(bool)));
-
     connect(d->parent, SIGNAL(signalResetTagFilters()),
             d->tagFilterView, SLOT(slotResetTagFilters()));
 

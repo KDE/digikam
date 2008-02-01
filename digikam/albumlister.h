@@ -126,6 +126,8 @@ public:
       */
     void invalidateItem(const ImageInfo &item);
 
+    bool tagFiltersIsActive();
+
 signals:
 
     void signalNewItems(const ImageInfoList& items);
