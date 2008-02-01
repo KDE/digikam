@@ -7,7 +7,7 @@
  * Description : Albums lister.
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2007 by Arnd Baecker <arnd dot baecker at web dot de>
  *
  * This program is free software; you can redistribute it
@@ -486,8 +486,9 @@ void AlbumLister::slotFilterItems()
 
     QPtrList<ImageInfo> newFilteredItemsList;
     QPtrList<ImageInfo> deleteFilteredItemsList;
-    ImageInfo *item      = 0;
-    bool atleastOneMatch = false;
+    ImageInfo *item   = 0;
+    bool matchForText = false;
+    bool match        = false;
 
     for (ImageInfoListIterator it(d->itemList);
          (item = it.current()); ++it)
@@ -495,6 +496,7 @@ void AlbumLister::slotFilterItems()
         bool foundText = false;
         if (matchesFilter(item, foundText))
         {
+            match = true;
             if (!item->getViewItem())
                 newFilteredItemsList.append(item);
         }
@@ -505,7 +507,7 @@ void AlbumLister::slotFilterItems()
         }
 
         if (foundText)
-            atleastOneMatch = true;
+            matchForText = true;
     }
 
     // This takes linear time - and deleting seems to take longer. Set wait cursor for large numbers.
@@ -513,7 +515,8 @@ void AlbumLister::slotFilterItems()
     if (setCursor)
         kapp->setOverrideCursor(KCursor::waitCursor());
 
-    emit signalItemsTextFilterMatch(atleastOneMatch);
+    emit signalItemsTextFilterMatch(matchForText);
+    emit signalItemsFilterMatch(match);
 
     if (!deleteFilteredItemsList.isEmpty())
     {
@@ -562,7 +565,8 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
     if (data.isEmpty())
         return;
 
-    bool    foundText = false;
+    bool matchForText = false;
+    bool match        = false;
     Q_LLONG imageID;
     int     albumID;
     QString name;
@@ -577,6 +581,8 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
 
     while (!ds.atEnd())
     {
+        bool foundText = false;
+
         ds >> imageID;
         ds >> albumID;
         ds >> name;
@@ -610,11 +616,20 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
                                         size, dims);
 
         if (matchesFilter(info, foundText))
+        {
+            match = true;
             newFilteredItemsList.append(info);
+        }
 
         newItemsList.append(info);
         d->itemList.append(info);
+
+        if (foundText)
+            matchForText = true;
     }
+
+    emit signalItemsTextFilterMatch(matchForText);
+    emit signalItemsFilterMatch(match);
 
     if (!newFilteredItemsList.isEmpty())
         emit signalNewFilteredItems(newFilteredItemsList);

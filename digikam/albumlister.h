@@ -7,7 +7,7 @@
  * Description : Albums lister. 
  * 
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2007 by Arnd Baecker <arnd dot baecker at web dot de>
  *
  * This program is free software; you can redistribute it
@@ -130,6 +130,7 @@ signals:
     void signalClear();
     void signalCompleted();
     void signalItemsTextFilterMatch(bool);
+    void signalItemsFilterMatch(bool);
 
 private slots:
 
