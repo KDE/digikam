@@ -161,20 +161,46 @@ void AlbumIconViewFilter::slotTagFiltersChanged(bool isActive)
 void AlbumIconViewFilter::checkForLed()
 {
     QColor ledColor = d->inactiveFilters;
+    QStringList filtersList;
+    QString     message;
 
     if (!d->textFilter->text().isEmpty())
+    {
         ledColor = d->activeFilters;
+        filtersList.append(i18n("<br><nobr><i>Text</i></nobr>"));
+    }
 
     if (d->mimeFilter->mimeFilter() != MimeFilter::AllFiles)
+    {
         ledColor = d->activeFilters;
+        filtersList.append(i18n("<br><nobr><i>Mime Type</i></nobr>"));
+    }
 
     if (d->ratingFilter->rating() != 0)
+    {
         ledColor = d->activeFilters;
+        filtersList.append(i18n("<br><nobr><i>Rating</i></nobr>"));
+    }
 
     if (d->tagFiltersActive)
+    {
         ledColor = d->activeFilters;
+        filtersList.append(i18n("<br><nobr><i>Tags</i></nobr>"));
+    }
 
     d->led->setColor(ledColor);
+
+    if (filtersList.count() > 1) 
+        message = i18n("<nobr><b>Active filters:</b></nobr>");
+    else
+        message = i18n("<nobr><b>Active filter:</b></nobr>");
+
+    message.append(filtersList.join(QString()));
+
+    if (ledColor == d->inactiveFilters)
+        d->led->setToolTip(i18n("No active filter"));
+    else
+        d->led->setToolTip(message);
 }
 
 bool AlbumIconViewFilter::eventFilter(QObject *object, QEvent *e) 
