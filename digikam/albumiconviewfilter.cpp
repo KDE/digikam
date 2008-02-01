@@ -79,7 +79,7 @@ AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
 {
     d = new AlbumIconViewFilterPriv;
 
-    int size = fontMetrics().height()+4;
+    int size = parent->height()-6;
     d->led = new KLed(this);
     d->led->setMinimumSize(size, size);
     d->led->installEventFilter(this);
