@@ -120,6 +120,8 @@ public:
       * for the next refresh.
       */
     void invalidateItem(const ImageInfo *item);
+
+    bool tagFiltersIsActive();
     
 signals:
 

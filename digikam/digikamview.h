@@ -78,7 +78,6 @@ signals:
     void signalGotoDateAndItem(AlbumIconItem *);
     void signalGotoTagAndItem(int tagID);
     void signalChangedTab(QWidget*);
-    void signalTagFiltersChanged(bool);
 
 public slots:
 

@@ -231,6 +231,14 @@ void AlbumLister::setDayFilter(const QValueList<QDateTime>& days)
     d->filterTimer->start(100, true);
 }
 
+bool AlbumLister::tagFiltersIsActive()
+{
+    if (!d->tagFilter.isEmpty() || d->untaggedFilter)
+        return true;
+
+    return false;
+}
+
 void AlbumLister::setTagFilter(const QValueList<int>& tags, const MatchingCondition& matchingCond,
                                bool showUnTagged)
 {

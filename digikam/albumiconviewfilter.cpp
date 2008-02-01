@@ -51,14 +51,11 @@ public:
 
     AlbumIconViewFilterPriv()
     {
-        tagFiltersActive = false;
         textFilter       = 0;
         mimeFilter       = 0;
         ratingFilter     = 0;
         led              = 0;
     }
-
-    bool           tagFiltersActive;
 
     KLed          *led;
 
@@ -151,11 +148,6 @@ void AlbumIconViewFilter::slotTextFilterChanged(const QString& text)
     AlbumLister::instance()->setTextFilter(text);
 }
 
-void AlbumIconViewFilter::slotTagFiltersChanged(bool isActive)
-{
-    d->tagFiltersActive = isActive;
-}
-
 void AlbumIconViewFilter::slotItemsFilterMatch(bool match)
 {
     QStringList filtersList;
@@ -170,7 +162,7 @@ void AlbumIconViewFilter::slotItemsFilterMatch(bool match)
     if (d->ratingFilter->rating() != 0)
         filtersList.append(i18n("<br><nobr><i>Rating</i></nobr>"));
 
-    if (d->tagFiltersActive)
+    if (AlbumLister::instance()->tagFiltersIsActive())
         filtersList.append(i18n("<br><nobr><i>Tags</i></nobr>"));
 
     if (filtersList.count() > 1)

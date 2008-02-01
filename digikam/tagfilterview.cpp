@@ -914,7 +914,6 @@ void TagFilterView::slotTimeOut()
     }
 
     AlbumLister::instance()->setTagFilter(filterTags, d->matchingCond, showUnTagged);
-    emit signalTagFiltersChanged(tagFilterIsActive());
 }
 
 void TagFilterView::slotContextMenu(QListViewItem* it, const QPoint&, int)
@@ -1387,20 +1386,6 @@ void TagFilterView::slotRefresh(const QMap<int, int>& tagsStatMap)
     }
 
     refresh();
-}
-
-bool TagFilterView::tagFilterIsActive()
-{
-    QListViewItemIterator it(this);
-
-    while (it.current())
-    {
-        TagFilterViewItem* item = dynamic_cast<TagFilterViewItem*>(*it);
-        if (item && item->isOn())
-            return true;
-        ++it;
-    }
-    return false;
 }
 
 void TagFilterView::slotResetTagFilters()
