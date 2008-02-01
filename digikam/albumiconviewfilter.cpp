@@ -85,7 +85,7 @@ AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
                                  "If this light is red, at least one filter is active, and no item match the query. "
                                  "If this light is green, at least one filter is active, and at least one item match the query. "
                                  "If this light is gray, nothing is filtered. "
-                                 "Click over with right mouse button to reset all filters."));
+                                 "Click over with mouse button to reset all filters."));
 
     d->textFilter = new SearchTextBar(this);
     QToolTip::add(d->textFilter, i18n("Text quick filter (search)"));
