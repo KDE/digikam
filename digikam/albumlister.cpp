@@ -477,7 +477,8 @@ void AlbumLister::slotFilterItems()
 
     ImageInfoList newFilteredItemsList;
     ImageInfoList deleteFilteredItemsList;
-    bool          atleastOneMatch = false;
+    bool matchForText = false;
+    bool match        = false;
 
     for (ImageInfoListIterator it = d->itemList.begin();
          it != d->itemList.end(); ++it)
@@ -485,6 +486,7 @@ void AlbumLister::slotFilterItems()
         bool foundText = false;
         if (matchesFilter(*it, foundText))
         {
+            match = true;
             newFilteredItemsList.append(*it);
         }
         else
@@ -493,7 +495,7 @@ void AlbumLister::slotFilterItems()
         }
 
         if (foundText)
-            atleastOneMatch = true;
+            matchForText = true;
     }
 
     // This takes linear time - and deleting seems to take longer. Set wait cursor for large numbers.
@@ -501,7 +503,8 @@ void AlbumLister::slotFilterItems()
     if (setCursor)
         kapp->setOverrideCursor(Qt::WaitCursor);
 
-    emit signalItemsTextFilterMatch(atleastOneMatch);
+    emit signalItemsTextFilterMatch(matchForText);
+    emit signalItemsFilterMatch(match);
 
     if (!deleteFilteredItemsList.isEmpty())
     {
@@ -548,7 +551,8 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
     if (data.isEmpty())
         return;
 
-    bool          foundText = false;
+    bool matchForText = false;
+    bool match        = false;
     ImageInfoList newItemsList;
     ImageInfoList newFilteredItemsList;
 
@@ -557,6 +561,7 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
 
     while (!ds.atEnd())
     {
+        bool foundText = false;
         ImageListerRecord record;
         ds >> record;
 
@@ -584,11 +589,20 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
         ImageInfo info(record);
 
         if (matchesFilter(info, foundText))
+        {
+            match = true;
             newFilteredItemsList.append(info);
+        }
 
         newItemsList.append(info);
         d->itemList.append(info);
+
+        if (foundText)
+            matchForText = true;
     }
+
+    emit signalItemsTextFilterMatch(matchForText);
+    emit signalItemsFilterMatch(match);
 
     if (!newFilteredItemsList.isEmpty())
         emit signalNewFilteredItems(newFilteredItemsList);

@@ -135,6 +135,7 @@ signals:
     void signalClear();
     void signalCompleted();
     void signalItemsTextFilterMatch(bool);
+    void signalItemsFilterMatch(bool);
 
 private slots:
 

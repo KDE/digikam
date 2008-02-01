@@ -69,10 +69,10 @@ private slots:
     void slotRatingFilterChanged(int, AlbumLister::RatingCondition);
     void slotMimeTypeFilterChanged(int);
     void slotTextFilterChanged(const QString&);
+    void slotItemsFilterMatch(bool);
 
 private:
 
-    void checkForLed();
     bool eventFilter(QObject *object, QEvent *e);
 
 private:

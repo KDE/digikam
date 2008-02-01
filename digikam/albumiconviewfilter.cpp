@@ -51,14 +51,9 @@ public:
         mimeFilter       = 0;
         ratingFilter     = 0;
         led              = 0;
-        activeFilters    = QColor(255, 192, 0);
-        inactiveFilters  = Qt::green;
     }
 
     bool           tagFiltersActive;
-
-    QColor         activeFilters;
-    QColor         inactiveFilters;
 
     QLineEdit     *textFilter;
 //    SearchTextBar *textFilter;
@@ -78,12 +73,14 @@ AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
     d->led = new KLed(this);
     d->led->setMinimumSize(parent->height()-2, parent->height()-2);
     d->led->installEventFilter(this);
-    d->led->setState(KLed::On);
-    d->led->setWhatsThis(i18n("This light indicate if at least one filter is active over icon view. "
-                              "This include all filters from status bar and all Tag Filters from right sidebar. "
-                              "If this light is orange, filter is active. "
-                              "If this light is green, nothing is filtered. "
-                              "Click over with right mouse button to reset all filters."));
+    d->led->setColor(Qt::lightGray);
+    d->led->setState(KLed::Off);
+    d->led->setWhatsThis(i18n("This light report icon-view filters status. "
+                              "This include all status-bar filters and all Tag-Filters from right sidebar. "
+                              "If this light is red, at least one filter is active, and no item match the query. "
+                              "If this light is green, at least one filter is active, and at least one item match the query. "
+                              "If this light is gray, nothing is filtered. "
+                              "Click over with mouse button to reset all filters."));
 
 //    d->textFilter = new SearchTextBar(this);
     d->textFilter = new QLineEdit(this);
@@ -109,6 +106,9 @@ AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
 
     connect(AlbumLister::instance(), SIGNAL(signalItemsTextFilterMatch(bool)),
             d->textFilter, SLOT(slotSearchResult(bool)));
+
+    connect(AlbumLister::instance(), SIGNAL(signalItemsFilterMatch(bool)),
+            this, SLOT(slotItemsFilterMatch(bool)));
 }
 
 AlbumIconViewFilter::~AlbumIconViewFilter()
@@ -135,60 +135,40 @@ void AlbumIconViewFilter::saveSettings()
 
 void AlbumIconViewFilter::slotRatingFilterChanged(int rating, AlbumLister::RatingCondition cond)
 {
-    checkForLed();
     AlbumLister::instance()->setRatingFilter(rating, cond);
 }
 
 void AlbumIconViewFilter::slotMimeTypeFilterChanged(int mimeTypeFilter)
 {
-    checkForLed();
     AlbumLister::instance()->setMimeTypeFilter(mimeTypeFilter);
 }
 
 void AlbumIconViewFilter::slotTextFilterChanged(const QString& text)
 {
-    checkForLed();
     AlbumLister::instance()->setTextFilter(text);
 }
-
 
 void AlbumIconViewFilter::slotTagFiltersChanged(bool isActive)
 {
     d->tagFiltersActive = isActive;
-    checkForLed();
 }
 
-void AlbumIconViewFilter::checkForLed()
+void AlbumIconViewFilter::slotItemsFilterMatch(bool match)
 {
-    QColor ledColor = d->inactiveFilters;
     QStringList filtersList;
     QString     message;
 
     if (!d->textFilter->text().isEmpty())
-    {
-        ledColor = d->activeFilters;
         filtersList.append(i18n("<br><nobr><i>Text</i></nobr>"));
-    }
 
     if (d->mimeFilter->mimeFilter() != MimeFilter::AllFiles)
-    {
-        ledColor = d->activeFilters;
         filtersList.append(i18n("<br><nobr><i>Mime Type</i></nobr>"));
-    }
 
     if (d->ratingFilter->rating() != 0)
-    {
-        ledColor = d->activeFilters;
         filtersList.append(i18n("<br><nobr><i>Rating</i></nobr>"));
-    }
 
     if (d->tagFiltersActive)
-    {
-        ledColor = d->activeFilters;
         filtersList.append(i18n("<br><nobr><i>Tags</i></nobr>"));
-    }
-
-    d->led->setColor(ledColor);
 
     if (filtersList.count() > 1) 
         message = i18n("<nobr><b>Active filters:</b></nobr>");
@@ -197,10 +177,18 @@ void AlbumIconViewFilter::checkForLed()
 
     message.append(filtersList.join(QString()));
 
-    if (ledColor == d->inactiveFilters)
+    if (filtersList.isEmpty())
+    {
         d->led->setToolTip(i18n("No active filter"));
+        d->led->setColor(Qt::lightGray);
+        d->led->setState(KLed::Off);
+    }
     else
+    {
         d->led->setToolTip(message);
+        d->led->setColor(match ? Qt::darkGreen : Qt::darkRed);
+        d->led->setState(KLed::On);
+    }
 }
 
 bool AlbumIconViewFilter::eventFilter(QObject *object, QEvent *e) 
@@ -210,7 +198,7 @@ bool AlbumIconViewFilter::eventFilter(QObject *object, QEvent *e)
     if (e->type() == QEvent::MouseButtonRelease)
     {
         QMouseEvent* event = static_cast<QMouseEvent*>(e);
-        if ( widget->rect().contains(event->pos()) && d->led->color() == d->activeFilters)
+        if ( widget->rect().contains(event->pos()) && d->led->state() == KLed::On) 
         {
             // Reset all filters settings.
             d->textFilter->setText(QString());
@@ -218,7 +206,6 @@ bool AlbumIconViewFilter::eventFilter(QObject *object, QEvent *e)
             d->ratingFilter->setRatingFilterCondition(AlbumLister::GreaterEqualCondition);
             d->mimeFilter->setMimeFilter(MimeFilter::AllFiles);
             emit signalResetTagFilters();
-            // No need to call checkForLed() here, it will be done from slotTagFiltersChanged().
         }
     }
 
