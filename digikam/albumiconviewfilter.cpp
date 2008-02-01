@@ -5,7 +5,7 @@
  *
  * Date        : 2007-11-27
  * Description : a bar to filter album contents
- * 
+ *
  * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -13,7 +13,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -75,19 +75,18 @@ AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
     d->led->installEventFilter(this);
     d->led->setColor(Qt::lightGray);
     d->led->setState(KLed::Off);
-    d->led->setWhatsThis(i18n("This light report icon-view filters status. "
-                              "This include all status-bar filters and all Tag-Filters from right sidebar. "
-                              "If this light is red, at least one filter is active, and no item match the query. "
-                              "If this light is green, at least one filter is active, and at least one item match the query. "
-                              "If this light is gray, nothing is filtered. "
-                              "Click over with mouse button to reset all filters."));
+    d->led->setWhatsThis(i18n("This LED indicates the global image filter status, "
+                                 "encompassing all status-bar filters and all tag filters from the right sidebar.\n\n"
+                                 "GRAY: no filter is active, all items are visible.\n"
+                                 "RED: filtering is on, but no items match.\n"
+                                 "GREEN: filter(s) matches at least one item.\n\n"
+                                 "Any mouse button click will reset all filters."));
 
 //    d->textFilter = new SearchTextBar(this);
     d->textFilter = new QLineEdit(this);
     d->textFilter->setToolTip(i18n("Text quick filter (search)"));
-    d->textFilter->setWhatsThis(i18n("Here you can enter search patterns to quickly "
-                                     "filter this view on file names, captions "
-                                     "(comments), and tags"));
+    d->textFilter->setWhatsThis(i18n("Enter search patterns to quickly filter this view on "
+                                     "file names, captions (comments), and tags"));
 
     d->mimeFilter   = new MimeFilter(this);
     d->ratingFilter = new RatingFilter(this);
@@ -170,7 +169,7 @@ void AlbumIconViewFilter::slotItemsFilterMatch(bool match)
     if (d->tagFiltersActive)
         filtersList.append(i18n("<br><nobr><i>Tags</i></nobr>"));
 
-    if (filtersList.count() > 1) 
+    if (filtersList.count() > 1)
         message = i18n("<nobr><b>Active filters:</b></nobr>");
     else
         message = i18n("<nobr><b>Active filter:</b></nobr>");
@@ -191,14 +190,14 @@ void AlbumIconViewFilter::slotItemsFilterMatch(bool match)
     }
 }
 
-bool AlbumIconViewFilter::eventFilter(QObject *object, QEvent *e) 
+bool AlbumIconViewFilter::eventFilter(QObject *object, QEvent *e)
 {
     QWidget *widget = static_cast<QWidget*>(object);
 
     if (e->type() == QEvent::MouseButtonRelease)
     {
         QMouseEvent* event = static_cast<QMouseEvent*>(e);
-        if ( widget->rect().contains(event->pos()) && d->led->state() == KLed::On) 
+        if ( widget->rect().contains(event->pos()) && d->led->state() == KLed::On)
         {
             // Reset all filters settings.
             d->textFilter->setText(QString());
