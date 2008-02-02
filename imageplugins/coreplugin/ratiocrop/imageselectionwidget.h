@@ -7,6 +7,7 @@
  * Description : image selection widget used by ratio crop tool.
  *
  * Copyright (C) 2007 by Jaromir Malenko <malenko at email.cz>
+ * Copyright (C) 2008 by Roberto Castagnola <roberto dot castagnola at gmail dot com>
  * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -49,7 +50,7 @@ Q_OBJECT
 
 public:
 
-    enum RatioAspect           // Contrained Aspect Ratio list.
+    enum RatioAspect           // Constrained Aspect Ratio list.
     {
         RATIOCUSTOM=0,             // Custom aspect ratio.
         RATIO01X01,                // 1:1
@@ -75,7 +76,7 @@ public:
         CenterImage                // Center selection to the center of image.
     };
 
-    // Proportion : Golden Ratio and Rule of Thirds. More information at this url: 
+    // Proportion : Golden Ratio and Rule of Thirds. More information at this url:
     // http://photoinf.com/General/Robert_Berdan/Composition_and_the_Elements_of_Visual_Design.htm
 
     enum GuideLineType
@@ -88,9 +89,10 @@ public:
 
 public:
 
-    ImageSelectionWidget(int width, int height, QWidget *parent=0, 
-                         float aspectRatioValue=1.0, int aspectRatio=RATIO01X01, 
-                         int orient=Landscape, int guideLinesType=GuideNone);
+    ImageSelectionWidget(int width, int height, QWidget *parent=0,
+                         int widthRatioValue=1, int heightRatioValue=1,
+                         int aspectRatio=RATIO01X01, int orient=Landscape,
+                         int guideLinesType=GuideNone);
     ~ImageSelectionWidget();
 
     void  setCenterSelection(int centerType=CenterImage);
@@ -101,7 +103,7 @@ public:
     void  setSelectionOrientation(int orient);
     void  setAutoOrientation(bool orientation);
     void  setSelectionAspectRatioType(int aspectRatioType);
-    void  setSelectionAspectRatioValue(float aspectRatioValue);
+    void  setSelectionAspectRatioValue(int widthRatioValue, int heightRatioValue);
     void  setGoldenGuideTypes(bool drawGoldenSection,  bool drawGoldenSpiralSection,
                               bool drawGoldenSpiral,   bool drawGoldenTriangle,
                               bool flipHorGoldenGuide, bool flipVerGoldenGuide);
@@ -112,6 +114,8 @@ public:
 
     int   getMinWidthRange(void);
     int   getMinHeightRange(void);
+    int   getMaxWidthRange(void);
+    int   getMaxHeightRange(void);
 
     void  resetSelection(void);
     void  maxAspectSelection(void);
@@ -128,8 +132,6 @@ signals:
 
     void signalSelectionMoved( QRect rect );
     void signalSelectionChanged( QRect rect );
-    void signalSelectionWidthChanged( int newWidth );
-    void signalSelectionHeightChanged( int newHeight );
     void signalSelectionOrientationChanged( int newOrientation );
 
 protected:
@@ -140,20 +142,17 @@ protected:
     void mouseMoveEvent ( QMouseEvent * e );
     void resizeEvent(QResizeEvent * e);
 
-protected slots:
-
-    void slotTimerDone(void);
-
 private:
 
     // Recalculate the target selection position and emit 'signalSelectionMoved'.
-    void regionSelectionMoved( bool targetDone );
+    void regionSelectionMoved(void);
 
-    void regionSelectionChanged(bool targetDone);
-    void realToLocalRegion(bool updateSizeOnly=false);
-    void localToRealRegion(void);
+    void regionSelectionChanged(void);
+    QPoint convertPoint(const QPoint pm, bool localToReal=true);
+    QPoint convertPoint(int x, int y, bool localToReal=true);
     void normalizeRegion(void);
-    void applyAspectRatio(bool WOrH, bool repaintWidget=true, bool updateChange=true);
+    void reverseRatioValues(void);
+    void applyAspectRatio(bool WOrH, bool repaintWidget=true);
     void updatePixmap(void);
     QPoint computeAspectRatio(QPoint pm, int coef=1);
     QPoint opposite(void);
