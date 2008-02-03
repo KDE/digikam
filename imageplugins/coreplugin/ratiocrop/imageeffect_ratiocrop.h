@@ -59,13 +59,13 @@ private:
     void readSettings();
     void writeSettings();
 
+    void finalRendering();
     void applyRatioChanges(int a);
 
 private slots:
 
     void slotUser1();
     void slotDefault();
-    void slotOk();
 
     void slotCenterWidth();
     void slotCenterHeight();

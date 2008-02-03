@@ -770,7 +770,7 @@ void ImageEffect_RatioCrop::slotCustomRatioChanged()
     slotDefault();
 }
 
-void ImageEffect_RatioCrop::slotOk()
+void ImageEffect_RatioCrop::finalRendering()
 {
     kapp->setOverrideCursor( Qt::WaitCursor );
 
@@ -793,7 +793,6 @@ void ImageEffect_RatioCrop::slotOk()
     iface->putOriginalImage(i18n("Aspect Ratio Crop"), imOrg.bits(), imOrg.width(), imOrg.height());
 
     kapp->restoreOverrideCursor();
-    writeSettings();
     accept();
 }
 
