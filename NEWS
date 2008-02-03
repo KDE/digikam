@@ -26,4 +26,5 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 004 ==> 146760 : Providing a Timeline-View for quickly narrowing down the date of photos.
 005 ==> 146635 : Ratio crop doesn't remember orientation.
 006 ==> 144337 : There should be no "empty folders".
-007 ==> 
+007 ==> 128293 : Aspect ratio crop does not respect aspect ratio.
+008 ==> 
