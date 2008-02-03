@@ -55,34 +55,34 @@ public:
     ~ImageEffect_RatioCrop();
 
 private:
-    
-    void readSettings(void);
-    void writeSettings(void);
-    
+
+    void readSettings();
+    void writeSettings();
+
     void applyRatioChanges(int a);
-    
+
 private slots:
 
     void slotUser1();
     void slotDefault();
     void slotOk();
 
-    void slotCenterWidth(void);
-    void slotCenterHeight(void);
+    void slotCenterWidth();
+    void slotCenterHeight();
     void slotXChanged(int x);
     void slotYChanged(int y);
     void slotWidthChanged(int w);
     void slotHeightChanged(int h);
-    void slotCustomRatioChanged(void);
+    void slotCustomRatioChanged();
+    void slotCustomNRatioChanged(int a);
+    void slotCustomDRatioChanged(int a);
     void slotOrientChanged(int o);
     void slotAutoOrientChanged(bool a);
     void slotRatioChanged(int a);
     void slotSelectionChanged(QRect rect );
-    void slotSelectionWidthChanged(int newWidth);
-    void slotSelectionHeightChanged(int newHeight);
     void slotSelectionOrientationChanged(int);
     void slotGuideTypeChanged(int t);
-    void slotGoldenGuideTypeChanged(void);
+    void slotGoldenGuideTypeChanged();
 
 private:
 
@@ -92,14 +92,14 @@ private:
     QLabel               *m_customLabel2;
     QLabel               *m_orientLabel;
     QLabel               *m_colorGuideLabel;
-    
+
     QComboBox            *m_ratioCB;
     QComboBox            *m_orientCB;
     QComboBox            *m_guideLinesCB;
-    
+
     QPushButton          *m_centerWidth;
     QPushButton          *m_centerHeight;
-    
+
     QCheckBox            *m_goldenSectionBox;
     QCheckBox            *m_goldenSpiralSectionBox;
     QCheckBox            *m_goldenSpiralBox;
@@ -107,19 +107,19 @@ private:
     QCheckBox            *m_flipHorBox;
     QCheckBox            *m_flipVerBox;
     QCheckBox            *m_autoOrientation;
-    
+
     QSpinBox             *m_guideSize;
-    
+
     KIntNumInput         *m_widthInput;
     KIntNumInput         *m_heightInput;
-    KIntNumInput         *m_xInput;    
-    KIntNumInput         *m_yInput;    
-     
+    KIntNumInput         *m_xInput;
+    KIntNumInput         *m_yInput;
+
     KIntSpinBox          *m_customRatioNInput;
     KIntSpinBox          *m_customRatioDInput;
-    
+
     KColorButton         *m_guideColorBt;
-    
+
     ImageSelectionWidget *m_imageSelectionWidget;
 };
 
