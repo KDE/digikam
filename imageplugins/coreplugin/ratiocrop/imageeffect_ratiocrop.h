@@ -52,11 +52,12 @@ class ImageEffect_RatioCrop : public Digikam::ImageDlgBase
 public:
 
     ImageEffect_RatioCrop(QWidget *parent);
+    ~ImageEffect_RatioCrop();
 
 private:
 
-    void readSettings(void);
-    void writeSettings(void);
+    void readSettings();
+    void writeSettings();
 
     void applyRatioChanges(int a);
 
@@ -66,13 +67,13 @@ private slots:
     void slotDefault();
     void slotOk();
 
-    void slotCenterWidth(void);
-    void slotCenterHeight(void);
+    void slotCenterWidth();
+    void slotCenterHeight();
     void slotXChanged(int x);
     void slotYChanged(int y);
     void slotWidthChanged(int w);
     void slotHeightChanged(int h);
-    void slotCustomRatioChanged(void);
+    void slotCustomRatioChanged();
     void slotCustomNRatioChanged(int a);
     void slotCustomDRatioChanged(int a);
     void slotOrientChanged(int o);
@@ -81,7 +82,7 @@ private slots:
     void slotSelectionChanged(QRect rect );
     void slotSelectionOrientationChanged(int);
     void slotGuideTypeChanged(int t);
-    void slotGoldenGuideTypeChanged(void);
+    void slotGoldenGuideTypeChanged();
 
 private:
 

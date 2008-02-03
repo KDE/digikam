@@ -342,7 +342,11 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     readSettings();
 }
 
-void ImageEffect_RatioCrop::readSettings(void)
+ImageEffect_RatioCrop::~ImageEffect_RatioCrop()
+{
+}
+
+void ImageEffect_RatioCrop::readSettings()
 {
     QColor defaultGuideColor(250, 250, 255);
     KConfig *config = kapp->config();
@@ -415,7 +419,7 @@ void ImageEffect_RatioCrop::readSettings(void)
     slotAutoOrientChanged( m_autoOrientation->isChecked() );
 }
 
-void ImageEffect_RatioCrop::writeSettings(void)
+void ImageEffect_RatioCrop::writeSettings()
 {
     KConfig *config = kapp->config();
     config->setGroup("aspectratiocrop Tool Dialog");
@@ -700,7 +704,7 @@ void ImageEffect_RatioCrop::slotGuideTypeChanged(int t)
     m_imageSelectionWidget->slotGuideLines(t);
 }
 
-void ImageEffect_RatioCrop::slotGoldenGuideTypeChanged(void)
+void ImageEffect_RatioCrop::slotGoldenGuideTypeChanged()
 {
     slotGuideTypeChanged(m_guideLinesCB->currentItem());
 }
@@ -741,7 +745,7 @@ void ImageEffect_RatioCrop::slotCustomDRatioChanged(int a)
     slotCustomRatioChanged();
 }
 
-void ImageEffect_RatioCrop::slotCustomRatioChanged(void)
+void ImageEffect_RatioCrop::slotCustomRatioChanged()
 {
     m_imageSelectionWidget->setSelectionAspectRatioValue(
             m_customRatioNInput->value(), m_customRatioDInput->value() );
