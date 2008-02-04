@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2007 by Jaromir Malenko <malenko at email dot cz>
  * Copyright (C) 2008 by Roberto Castagnola <roberto dot castagnola at gmail dot com>
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -513,32 +513,30 @@ void ImageEffect_RatioCrop::slotSelectionOrientationChanged(int newOrientation)
 {
     // Change text for Aspect ratio ComboBox
 
-    QListBox *list = new QListBox();
     int item = m_ratioCB->currentItem();
-
-    list->insertItem( i18n("Custom") );
-    list->insertItem( "1:1" );
+    m_ratioCB->clear();
+    m_ratioCB->insertItem( i18n("Custom") );
+    m_ratioCB->insertItem( "1:1" );
     if ( newOrientation == ImageSelectionWidget::Landscape )
     {
-        list->insertItem( "3:2" );
-        list->insertItem( "4:3" );
-        list->insertItem( "5:4" );
-        list->insertItem( "7:5" );
-        list->insertItem( "10:7" );
+        m_ratioCB->insertItem( "3:2" );
+        m_ratioCB->insertItem( "4:3" );
+        m_ratioCB->insertItem( "5:4" );
+        m_ratioCB->insertItem( "7:5" );
+        m_ratioCB->insertItem( "10:7" );
     }
     else
     {
-        list->insertItem( "2:3" );
-        list->insertItem( "3:4" );
-        list->insertItem( "4:5" );
-        list->insertItem( "5:7" );
-        list->insertItem( "7:10" );
+        m_ratioCB->insertItem( "2:3" );
+        m_ratioCB->insertItem( "3:4" );
+        m_ratioCB->insertItem( "4:5" );
+        m_ratioCB->insertItem( "5:7" );
+        m_ratioCB->insertItem( "7:10" );
     }
-    list->insertItem( i18n("Golden Ratio") );
-    list->insertItem( i18n("None") );
+    m_ratioCB->insertItem( i18n("Golden Ratio") );
+    m_ratioCB->insertItem( i18n("None") );
 
     m_ratioCB->blockSignals(true);
-    m_ratioCB->setListBox( list );
     m_ratioCB->setCurrentItem( item );
     m_ratioCB->blockSignals(false);
 

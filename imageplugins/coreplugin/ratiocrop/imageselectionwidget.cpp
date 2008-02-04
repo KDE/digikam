@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2007 by Jaromir Malenko <malenko at email.cz>
  * Copyright (C) 2008 by Roberto Castagnola <roberto dot castagnola at gmail dot com>
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -210,32 +210,32 @@ void ImageSelectionWidget::resizeEvent(QResizeEvent *e)
     updatePixmap();
 }
 
-int ImageSelectionWidget::getOriginalImageWidth(void)
+int ImageSelectionWidget::getOriginalImageWidth()
 {
     return d->image.width();
 }
 
-int ImageSelectionWidget::getOriginalImageHeight(void)
+int ImageSelectionWidget::getOriginalImageHeight()
 {
     return d->image.height();
 }
 
-QRect ImageSelectionWidget::getRegionSelection(void)
+QRect ImageSelectionWidget::getRegionSelection()
 {
     return d->regionSelection;
 }
 
-int ImageSelectionWidget::getMinWidthRange(void)
+int ImageSelectionWidget::getMinWidthRange()
 {
     return MINRANGE;
 }
 
-int ImageSelectionWidget::getMinHeightRange(void)
+int ImageSelectionWidget::getMinHeightRange()
 {
     return MINRANGE;
 }
 
-int ImageSelectionWidget::getMaxWidthRange(void)
+int ImageSelectionWidget::getMaxWidthRange()
 {
     int maxW = d->image.width() - d->regionSelection.left();
 
@@ -252,7 +252,7 @@ int ImageSelectionWidget::getMaxWidthRange(void)
     return maxW;
 }
 
-int ImageSelectionWidget::getMaxHeightRange(void)
+int ImageSelectionWidget::getMaxHeightRange()
 {
     int maxH = d->image.height() - d->regionSelection.top();
 
@@ -269,7 +269,7 @@ int ImageSelectionWidget::getMaxHeightRange(void)
     return maxH;
 }
 
-void ImageSelectionWidget::resetSelection(void)
+void ImageSelectionWidget::resetSelection()
 {
     d->regionSelection.setWidth(d->image.width()/2);
     d->regionSelection.setHeight(d->image.height()/2);
@@ -315,7 +315,7 @@ void ImageSelectionWidget::setCenterSelection(int centerType)
     regionSelectionChanged();
 }
 
-void ImageSelectionWidget::maxAspectSelection(void)
+void ImageSelectionWidget::maxAspectSelection()
 {
     if ( d->currentAspectRatioType == RATIONONE )
     {
@@ -463,7 +463,7 @@ void ImageSelectionWidget::setSelectionAspectRatioValue(int widthRatioValue,
     applyAspectRatio(false);
 }
 
-void ImageSelectionWidget::reverseRatioValues(void)
+void ImageSelectionWidget::reverseRatioValues()
 {
     if ( ( d->currentWidthRatioValue > d->currentHeightRatioValue &&
            d->currentOrientation == Portrait ) ||
@@ -629,7 +629,7 @@ QPoint ImageSelectionWidget::computeAspectRatio( QPoint pm , int coef )
     return point;
 }
 
-void ImageSelectionWidget::normalizeRegion(void)
+void ImageSelectionWidget::normalizeRegion()
 {
     // Perform normalization of selection area.
 
@@ -646,7 +646,7 @@ void ImageSelectionWidget::normalizeRegion(void)
         d->regionSelection.moveBottom(d->image.bottom());
 }
 
-void ImageSelectionWidget::regionSelectionMoved(void)
+void ImageSelectionWidget::regionSelectionMoved()
 {
     normalizeRegion();
 
@@ -656,7 +656,7 @@ void ImageSelectionWidget::regionSelectionMoved(void)
     emit signalSelectionMoved( d->regionSelection );
 }
 
-void ImageSelectionWidget::regionSelectionChanged(void)
+void ImageSelectionWidget::regionSelectionChanged()
 {
     if ( d->regionSelection.top() > d->image.bottom()   ||
          d->regionSelection.left() > d->image.right()   ||
@@ -695,7 +695,7 @@ void ImageSelectionWidget::regionSelectionChanged(void)
     emit signalSelectionChanged( d->regionSelection );
 }
 
-void ImageSelectionWidget::updatePixmap(void)
+void ImageSelectionWidget::updatePixmap()
 {
     // Updated local selection region.
 
@@ -1071,7 +1071,7 @@ void ImageSelectionWidget::paintEvent( QPaintEvent * )
     bitBlt(this, 0, 0, d->pixmap);
 }
 
-QPoint ImageSelectionWidget::opposite(void)
+QPoint ImageSelectionWidget::opposite()
 {
     QPoint opp;
 
@@ -1103,7 +1103,7 @@ float ImageSelectionWidget::distance(QPoint a, QPoint b)
     return sqrt(pow(a.x() - b.x(), 2) + pow(a.y() - b.y(), 2));
 }
 
-void ImageSelectionWidget::setCursorResizing(void)
+void ImageSelectionWidget::setCursorResizing()
 {
     switch(d->currentResizing)
     {

@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2007 by Jaromir Malenko <malenko at email.cz>
  * Copyright (C) 2008 by Roberto Castagnola <roberto dot castagnola at gmail dot com>
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,7 +22,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #ifndef IMAGESELECTIONWIDGET_H
 #define IMAGESELECTIONWIDGET_H
@@ -108,17 +107,17 @@ public:
                               bool drawGoldenSpiral,   bool drawGoldenTriangle,
                               bool flipHorGoldenGuide, bool flipVerGoldenGuide);
 
-    int   getOriginalImageWidth(void);
-    int   getOriginalImageHeight(void);
-    QRect getRegionSelection(void);
+    int   getOriginalImageWidth();
+    int   getOriginalImageHeight();
+    QRect getRegionSelection();
 
-    int   getMinWidthRange(void);
-    int   getMinHeightRange(void);
-    int   getMaxWidthRange(void);
-    int   getMaxHeightRange(void);
+    int   getMinWidthRange();
+    int   getMinHeightRange();
+    int   getMaxWidthRange();
+    int   getMaxHeightRange();
 
-    void  resetSelection(void);
-    void  maxAspectSelection(void);
+    void  resetSelection();
+    void  maxAspectSelection();
 
     Digikam::ImageIface* imageIface();
 
@@ -145,20 +144,20 @@ protected:
 private:
 
     // Recalculate the target selection position and emit 'signalSelectionMoved'.
-    void regionSelectionMoved(void);
+    void regionSelectionMoved();
 
-    void regionSelectionChanged(void);
+    void regionSelectionChanged();
     QPoint convertPoint(const QPoint pm, bool localToReal=true);
     QPoint convertPoint(int x, int y, bool localToReal=true);
-    void normalizeRegion(void);
-    void reverseRatioValues(void);
+    void normalizeRegion();
+    void reverseRatioValues();
     void applyAspectRatio(bool WOrH, bool repaintWidget=true);
-    void updatePixmap(void);
+    void updatePixmap();
     QPoint computeAspectRatio(QPoint pm, int coef=1);
-    QPoint opposite(void);
+    QPoint opposite();
     float distance(QPoint a, QPoint b);
     void placeSelection(QPoint pm, bool symetric, QPoint center);
-    void setCursorResizing(void);
+    void setCursorResizing();
 
 private:
 
