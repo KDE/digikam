@@ -32,6 +32,10 @@
 #include <QXmlStreamWriter>
 #include <QStringList>
 
+// Local includes
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
@@ -71,7 +75,7 @@ namespace SearchXml
 
 }
 
-class SearchXmlReader : public QXmlStreamReader
+class DIGIKAM_EXPORT SearchXmlReader : public QXmlStreamReader
 {
 public:
 
@@ -79,9 +83,9 @@ public:
 
     /** Continue parsing the document. Returns the type of the current element */
     SearchXml::Element  readNext();
-    /** Returns if the current element is a group element */
+    /** Returns if the current element is a group element (start or end element) */
     bool                isGroupElement() const;
-    /** Returns if the current element is a field element */
+    /** Returns if the current element is a field element (start or end element)*/
     bool                isFieldElement() const;
 
     /** Returns the group operator. Only valid if the current element is a group. */
@@ -94,7 +98,9 @@ public:
     SearchXml::Operator fieldOperator() const;
     QString             fieldName() const;
     SearchXml::Relation fieldRelation() const;
-    /** Returns the field values. Only valid if the current element is a field. */
+    /** Returns the field values. Only valid if the current element is a field.
+        This reads to the end element of the field, and converts the found
+        text/elements to the desired output. */
     QString             value();
     int                 valueToInt();
     double              valueToDouble();
@@ -110,7 +116,7 @@ protected:
 };
 
 
-class SearchXmlWriter : public QXmlStreamWriter
+class DIGIKAM_EXPORT SearchXmlWriter : public QXmlStreamWriter
 {
 public:
 
@@ -125,8 +131,8 @@ public:
     /** Adds a group. Use the returned group writer to add fields. */
     void writeGroup();
 
-    /** Sets the operator applied to the group as a whole "AND (field1 ... fieldn)".
-        Default value is AND. */
+    /** Sets the operator applied to the group as a whole "OR (field1 ... fieldn)".
+        Default value is OR. */
     void setGroupOperator(SearchXml::Operator op);
     /** Sets an optional caption */
     void setGroupCaption(const QString &caption);
@@ -135,7 +141,10 @@ public:
     void setDefaultFieldOperator(SearchXml::Operator op);
 
     /** Adds a new field with the given name (entity) and relation, "Rating less than ...".
-        Ensure that you closed the previous field with finishField(). */
+        Ensure that you closed the previous field with finishField().
+        For a reference of valid field names, look into ImageQueryBuilder.
+        The general rule is that names are like the database fields, but all lower-case.
+     */
     void writeField(const QString &name, SearchXml::Relation relation);
     /** Adds an optional operator overriding the default field operator of the group. */
     void setFieldOperator(SearchXml::Operator op);
@@ -147,11 +156,14 @@ public:
     void writeValue(const QList<int> valueList);
     void writeValue(const QStringList valueList);
 
-    /** Finish writing fields. You shall call this method before continuing with the SearchXmlWriter object.
-        You cannot add anymore fields after calling this. */
+    /** Finish writing the current field.
+     *  You shall call this method before adding another field, or closing the group.
+     */
     void finishField();
 
-    /** Finish the current group. Note that you will want to call this before
+    /** Finish the current group.
+        You cannot add anymore fields after calling this.
+        Note that you will want to call this before
         writing another group if you want the group on the same level.
         You can as well add nested groups and call this to close the group afterwards. */
     void finishGroup();
@@ -164,6 +176,11 @@ public:
 
     /** Get the created XML. The value is only valid if finish() has been called. */
     QString xml();
+
+    /** Returns ready-made XML for a query of type "keyword" with the specified
+     *  text as keyword.
+     */
+    static QString keywordSearch(const QString &keyword);
 
 protected:
 

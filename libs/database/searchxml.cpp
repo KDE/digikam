@@ -38,7 +38,7 @@ SearchXml::Element SearchXmlReader::readNext()
 {
     while (!atEnd()) {
 
-        readNext();
+        QXmlStreamReader::readNext();
 
         if (isEndElement())
         {
@@ -64,6 +64,11 @@ SearchXml::Element SearchXmlReader::readNext()
             {
                 return SearchXml::Field;
             }
+            else if (name() == "search")
+            {
+                // root element, skip
+                continue;
+            }
         }
     }
 
@@ -82,7 +87,7 @@ bool SearchXmlReader::isFieldElement() const
 
 SearchXml::Operator SearchXmlReader::groupOperator() const
 {
-    return readOperator("operator", SearchXml::And);
+    return readOperator("operator", SearchXml::Or);
 }
 
 QString SearchXmlReader::groupCaption() const
@@ -107,40 +112,37 @@ SearchXml::Relation SearchXmlReader::fieldRelation() const
 
 QString SearchXmlReader::value()
 {
-    return text().toString();
+    return readElementText();
 }
 
 int SearchXmlReader::valueToInt()
 {
-    return text().toString().toInt();
+    return readElementText().toInt();
 }
 
 double SearchXmlReader::valueToDouble()
 {
-    return text().toString().toDouble();
+    return readElementText().toDouble();
 }
 
 QDateTime SearchXmlReader::valueToDateTime()
 {
-    return QDateTime::fromString(text().toString(), Qt::ISODate);
+    return QDateTime::fromString(readElementText(), Qt::ISODate);
 }
 
 QList<int> SearchXmlReader::valueToIntList()
 {
     QList<int> list;
-    QString listitem("listitem");
-    QString field("field");
 
-    while (!atEnd() && !(isEndElement() && name() == field))
+    while (!atEnd())
     {
         readNext();
+
         if (isEndElement())
-            continue;
+            break;
+
         if (isStartElement())
-        {
-            if (name() == listitem)
-                list << text().toString().toInt();
-        }
+            list << readElementText().toInt();
     }
 
     return list;
@@ -149,19 +151,16 @@ QList<int> SearchXmlReader::valueToIntList()
 QStringList SearchXmlReader::valueToStringList()
 {
     QStringList list;
-    QString listitem("listitem");
-    QString field("field");
 
-    while (!atEnd() && !(isEndElement() && name() == field))
+    while (!atEnd())
     {
         readNext();
+
         if (isEndElement())
-            continue;
+            break;
+
         if (isStartElement())
-        {
-            if (name() == listitem)
-                list << text().toString();
-        }
+            list << readElementText();
     }
 
     return list;
@@ -218,6 +217,7 @@ SearchXmlWriter::SearchXmlWriter()
     : QXmlStreamWriter(&m_xml)
 {
     writeStartDocument();
+    writeStartElement("search");
 }
 
 QString SearchXmlWriter::xml()
@@ -317,10 +317,13 @@ void SearchXmlWriter::writeOperator(const QString &attributeName, SearchXml::Ope
         default:
         case SearchXml::And:
             writeAttribute(attributeName, "and");
+            break;
         case SearchXml::Or:
             writeAttribute(attributeName, "or");
+            break;
         case SearchXml::AndNot:
             writeAttribute(attributeName, "andnot");
+            break;
     }
 }
 
@@ -331,27 +334,50 @@ void SearchXmlWriter::writeRelation(const QString &attributeName, SearchXml::Rel
         default:
         case SearchXml::Equal:
             writeAttribute(attributeName, "equal");
+            break;
         case SearchXml::Unequal:
             writeAttribute(attributeName, "unequal");
+            break;
         case SearchXml::Like:
             writeAttribute(attributeName, "like");
+            break;
         case SearchXml::NotLike:
             writeAttribute(attributeName, "notlike");
+            break;
         case SearchXml::LessThan:
             writeAttribute(attributeName, "lessthan");
+            break;
         case SearchXml::GreaterThan:
             writeAttribute(attributeName, "greaterthan");
+            break;
         case SearchXml::LessThanOrEqual:
             writeAttribute(attributeName, "lessthanequal");
+            break;
         case SearchXml::GreaterThanOrEqual:
             writeAttribute(attributeName, "greaterthanequal");
+            break;
         case SearchXml::OneOf:
             writeAttribute(attributeName, "oneof");
+            break;
         case SearchXml::InTree:
             writeAttribute(attributeName, "intree");
+            break;
         case SearchXml::NotInTree:
             writeAttribute(attributeName, "notintree");
+            break;
     }
+}
+
+QString SearchXmlWriter::keywordSearch(const QString &keyword)
+{
+    SearchXmlWriter writer;
+    writer.writeGroup();
+    writer.writeField("keyword", SearchXml::Like);
+    writer.writeValue(keyword);
+    writer.finishField();
+    writer.finishGroup();
+    writer.finish();
+    return writer.xml();
 }
 
 
