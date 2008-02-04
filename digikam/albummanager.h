@@ -41,6 +41,7 @@
 
 // Local includes.
 
+#include "albuminfo.h"
 #include "digikam_export.h"
 
 class QDate;
@@ -367,15 +368,16 @@ public:
      * @param simple indicates whether the Search album is of simple type or
      * extended type
      */
-    SAlbum* createSAlbum(const KUrl& url, bool simple);
+    SAlbum* createSAlbum(const QString &name, DatabaseSearch::Type type, const QString &query);
     
     /**
      * Update the url for a SAlbum
      * @return true if the operation succeeds, false otherwise
      * @param album the album to update
-     * @param newURL the new url of the album
+     * @param query the new query data of the album
+     * @param changedName a new name, or null to keep the current name
      */
-    bool updateSAlbum(SAlbum* album, const KUrl& newURL);
+    bool updateSAlbum(SAlbum* album, const QString &changedQuery, const QString &changedName = QString());
 
     /**
      * Delete a SAlbum from the database

@@ -426,7 +426,7 @@ void AlbumManager::startScan()
     d->rootTAlbum = new TAlbum(i18n("My Tags"), 0, true);
     insertTAlbum(d->rootTAlbum);
 
-    d->rootSAlbum = new SAlbum(0, KUrl(), true, true);
+    d->rootSAlbum = new SAlbum(i18n("My Searches"), 0, true);
 
     d->rootDAlbum = new DAlbum(QDate(), true);
 
@@ -769,10 +769,9 @@ void AlbumManager::scanSAlbums()
         if (sMap.contains(info.id))
             continue;
 
-        bool simple = (info.url.queryItem("1.key") == QString::fromLatin1("keyword"));
-        
         // Its a new album.
-        SAlbum* album = new SAlbum(info.id, info.url, simple, false);
+        SAlbum* album = new SAlbum(info.name, info.id);
+        album->setSearch(info.type, info.query);
         album->setParent(d->rootSAlbum);
         d->allAlbumsIdHash[album->globalID()] = album;
         emit signalAlbumAdded(album);
@@ -791,7 +790,7 @@ void AlbumManager::scanDAlbums()
         d->dateListJob = 0;
     }
 
-    DatabaseUrl u = DatabaseUrl::fromDateRange(QDate(), QDate());
+    DatabaseUrl u = DatabaseUrl::dateUrl();
 
     d->dateListJob = ImageLister::startListJob(u);
     d->dateListJob->addMetaData("folders", "true");
@@ -1418,10 +1417,8 @@ QStringList AlbumManager::tagNames(const QList<int> &tagIDs) const
     return tagNames;
 }
 
-SAlbum* AlbumManager::createSAlbum(const KUrl& url, bool simple)
+SAlbum* AlbumManager::createSAlbum(const QString &name, DatabaseSearch::Type type, const QString &query)
 {
-    QString name = url.queryItem("name");
-
     // first iterate through all the search albums and see if there's an existing
     // SAlbum with same name. (Remember, SAlbums are arranged in a flat list)
     for (Album* album = d->rootSAlbum->firstChild(); album; album = album->next())
@@ -1429,20 +1426,20 @@ SAlbum* AlbumManager::createSAlbum(const KUrl& url, bool simple)
         if (album->title() == name)
         {
             SAlbum* sa = (SAlbum*)album;
-            sa->m_kurl = url;
+            sa->setSearch(type, query);
             DatabaseAccess access;
-            access.db()->updateSearch(sa->id(), url.queryItem("name"), url);
+            access.db()->updateSearch(sa->id(), sa->m_type, name, query);
             return sa;
         }
     }
 
-    int id = DatabaseAccess().db()->addSearch(url.queryItem("name"), url);;
+    int id = DatabaseAccess().db()->addSearch(type, name, query);
 
     if (id == -1)
         return 0;
 
-    SAlbum* album = new SAlbum(id, url, simple, false);
-    album->setTitle(url.queryItem("name"));
+    SAlbum* album = new SAlbum(name, id);
+    album->setSearch(type, query);
     album->setParent(d->rootSAlbum);
 
     d->allAlbumsIdHash.insert(album->globalID(), album);
@@ -1451,17 +1448,19 @@ SAlbum* AlbumManager::createSAlbum(const KUrl& url, bool simple)
     return album;
 }
 
-bool AlbumManager::updateSAlbum(SAlbum* album, const KUrl& newURL)
+bool AlbumManager::updateSAlbum(SAlbum* album, const QString &changedQuery, const QString &changedName)
 {
     if (!album)
         return false;
 
-    DatabaseAccess().db()->updateSearch(album->id(), newURL.queryItem("name"), newURL);
+    QString newName = changedName.isNull() ? changedName : album->title();
+
+    DatabaseAccess().db()->updateSearch(album->id(), album->type(), newName, changedQuery);
 
     QString oldName = album->title();
 
-    album->m_kurl = newURL;
-    album->setTitle(newURL.queryItem("name"));
+    album->setSearch(album->type(), changedQuery);
+    album->setTitle(newName);
     if (oldName != album->title())
         emit signalAlbumRenamed(album);
 

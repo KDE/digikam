@@ -40,6 +40,7 @@
 
 // Local includes
 
+#include "albuminfo.h"
 #include "databaseurl.h"
 
 namespace Digikam
@@ -410,17 +411,22 @@ class SAlbum : public Album
 {
 public:
 
-    SAlbum(int id, const KUrl& url, bool simple, bool root=false);
+    SAlbum(const QString &title, int id, bool root=false);
     ~SAlbum();
 
-    DatabaseUrl kurl() const;
-    KUrl   searchUrl() const;
-    bool    isSimple() const;
+    DatabaseUrl          kurl() const;
+    QString              query() const;
+    DatabaseSearch::Type type() const;
+    bool                 isNormalSearch() const;
+    bool                 isKeywordSearch() const;
+    bool                 isTimelineSearch() const;
 
 private:
 
-    KUrl m_kurl;
-    bool m_simple;
+    void setSearch(DatabaseSearch::Type type, const QString &query);
+
+    QString m_query;
+    DatabaseSearch::Type m_type;
 
     friend class AlbumManager;
 };

@@ -473,30 +473,59 @@ DatabaseUrl DAlbum::kurl() const
 
 // --------------------------------------------------------------------------
 
-SAlbum::SAlbum(int id, const KUrl& url, bool simple, bool root)
+SAlbum::SAlbum(const QString &title, int id, bool root)
       : Album(Album::SEARCH, id, root),
-              m_kurl(url), m_simple(simple)
+        m_type(DatabaseSearch::UndefinedType)
 {
-    setTitle(url.queryItem("name"));
+    setTitle(title);
 }
 
 SAlbum::~SAlbum()
 {
 }
 
+void SAlbum::setSearch(DatabaseSearch::Type type, const QString &query)
+{
+    m_type  = type;
+    m_query = query;
+}
+
 DatabaseUrl SAlbum::kurl() const
 {
-    return DatabaseUrl::fromSearchUrl(m_kurl);
+    return DatabaseUrl::searchUrl(id());
 }
 
-KUrl SAlbum::searchUrl() const
+QString SAlbum::query() const
 {
-    return m_kurl;
+    return m_query;
 }
 
-bool SAlbum::isSimple() const
+DatabaseSearch::Type SAlbum::type() const
 {
-    return m_simple;
+    return m_type;
+}
+
+bool SAlbum::isNormalSearch() const
+{
+    switch (m_type)
+    {
+        case DatabaseSearch::KeywordSearch:
+        case DatabaseSearch::AdvancedSearch:
+        case DatabaseSearch::LegacyUrlSearch:
+            return true;
+        default:
+            return false;
+    }
+}
+
+bool SAlbum::isKeywordSearch() const
+{
+    return m_type == DatabaseSearch::KeywordSearch;
+}
+
+bool SAlbum::isTimelineSearch() const
+{
+    return m_type == DatabaseSearch::TimeLineSearch;
 }
 
 // --------------------------------------------------------------------------
