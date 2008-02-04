@@ -102,6 +102,11 @@ public:
                                   const DatabaseParameters &parameters = DatabaseAccess::parameters());
 
     /**
+     * Create an empty digikamdates:/ url
+     */
+    static DatabaseUrl dateUrl(const DatabaseParameters &parameters = DatabaseAccess::parameters());
+
+    /**
      * Create a digikamdates:/ url for the month of the given date.
      * (The whole month of the given date will included in the referenced time span)
      */
@@ -124,13 +129,10 @@ public:
                                      const DatabaseParameters &parameters = DatabaseAccess::parameters());
 
     /**
-     * Create a digikamsearch: URL.
-     * It is assumed that the URL provided is a digikamsearch: URL
-     * The database parameters will be added to the provided URL.
-     * Populating the query items is out of the scope of this class.
+     * Create a digikamsearch: URL for the search with the given id.
      */
-    static DatabaseUrl fromSearchUrl(const KUrl &searchURL,
-                                     const DatabaseParameters &parameters = DatabaseAccess::parameters());
+    static DatabaseUrl searchUrl(int searchId,
+                                 const DatabaseParameters &parameters = DatabaseAccess::parameters());
     /**
       * Create a DatabaseUrl object from a KUrl, to retrieve the information stored
       */
@@ -224,10 +226,9 @@ public:
     /// Search URL
 
     /**
-     * Return the search URL as provided to fromSearchUrl().
-     * The returned URL has database information removed.
+     * Return the id of the search.
      */
-    KUrl searchUrl() const;
+    int searchId() const;
 
     DatabaseUrl(const DatabaseUrl &url);
 

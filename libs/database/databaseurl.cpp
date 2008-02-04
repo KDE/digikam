@@ -111,6 +111,14 @@ DatabaseUrl DatabaseUrl::fromTagIds(const QList<int> &tagIds,
     return url;
 }
 
+DatabaseUrl DatabaseUrl::dateUrl(const DatabaseParameters &parameters)
+{
+    DatabaseUrl url;
+    url.setProtocol("digikamdates");
+    url.setParameters(parameters);
+    return url;
+}
+
 DatabaseUrl DatabaseUrl::fromDateForMonth(const QDate &date,
                                    const DatabaseParameters &parameters)
 {
@@ -142,10 +150,12 @@ DatabaseUrl DatabaseUrl::fromDateRange(const QDate &startDate,
     return url;
 }
 
-DatabaseUrl DatabaseUrl::fromSearchUrl(const KUrl &searchURL,
-                          const DatabaseParameters &parameters)
+DatabaseUrl DatabaseUrl::searchUrl(int id,
+                                   const DatabaseParameters &parameters)
 {
-    DatabaseUrl url(searchURL);
+    DatabaseUrl url;
+    url.setProtocol("digikamsearch");
+    url.addQueryItem("searchId", QString::number(id));
     url.setParameters(parameters);
     return url;
 }
@@ -314,11 +324,9 @@ QDate DatabaseUrl::endDate() const
 
 // --- Search URL ---
 
-KUrl DatabaseUrl::searchUrl() const
+int DatabaseUrl::searchId() const
 {
-    KUrl url(*this);
-    DatabaseParameters::removeFromUrl(url);
-    return url;
+    return queryItem("searchId").toInt();
 }
 
 }  // namespace Digikam
