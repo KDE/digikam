@@ -52,6 +52,7 @@
 #include "albummanager.h"
 #include "ddebug.h"
 #include "searchtextbar.h"
+#include "searchxml.h"
 #include "timelinefolderview.h"
 #include "timelineview.h"
 #include "timelineview.moc"
@@ -429,46 +430,27 @@ void TimeLineView::createNewDateSearchAlbum(const QString& name)
     d->timeLineFolderView->clearSelection();
     d->timeLineFolderView->blockSignals(false);
 
-    // We will make now the Url for digiKam Search KIO-Slave
+    // Create an XML search query for the list of date ranges
 
-    KUrl url;
-    url.setProtocol("digikamsearch");
+    SearchXmlWriter writer;
 
-    int grp = list.count();
-    QString path("1 AND 2");
-
-    if (grp > 1 )
+    // for each range, write a group with two fields
+    for (int i=0; i<list.size(); i++)
     {
-        for (int i = 1 ; i < grp; i++)
-        {
-            path.append(" OR ");
-            path.append(QString("%1 AND %2").arg(i*2+1).arg(i*2+2));
-        }
+        writer.writeGroup();
+        writer.writeField("creationdate", SearchXml::GreaterThan);
+        writer.writeValue(list[i].first);
+        writer.finishField();
+        writer.writeField("creationdate", SearchXml::LessThan);
+        writer.writeValue(list[i].second);
+        writer.finishField();
+        writer.finishGroup();
     }
-    url.setPath(path);
+    writer.finish();
 
-    int i = 0;
-    DateRangeList::iterator it;
-    for (it = list.begin() ; it != list.end(); ++it)
-    {
-        start = (*it).first;
-        end   = (*it).second;
-        url.addQueryItem(QString("%1.key").arg(i*2+1), QString("imagedate"));
-        url.addQueryItem(QString("%1.op").arg(i*2+1),  QString("GT"));
-        url.addQueryItem(QString("%1.val").arg(i*2+1), start.date().toString(Qt::ISODate));
-        url.addQueryItem(QString("%1.key").arg(i*2+2), QString("imagedate"));
-        url.addQueryItem(QString("%1.op").arg(i*2+2),  QString("LT"));
-        url.addQueryItem(QString("%1.val").arg(i*2+2), end.date().toString(Qt::ISODate));
-        i++;
-    }
+    DDebug() << "Date search XML:\n" << writer.xml();
 
-    url.addQueryItem("name", name);
-    url.addQueryItem("count", QString::number(grp*2));
-    url.addQueryItem("type", QString("datesearch"));
-
-    //DDebug() << url << endl;
-
-    SAlbum* album = AlbumManager::instance()->createSAlbum(url, false);
+    SAlbum* album = AlbumManager::instance()->createSAlbum(name, DatabaseSearch::TimeLineSearch, writer.xml());
     AlbumManager::instance()->setCurrentAlbum(album);
 }
 
@@ -480,61 +462,38 @@ void TimeLineView::slotAlbumSelected(SAlbum* salbum)
         return;
     }
 
-    // Date Search url for KIO-Slave is something like that :
-    // digikamsearch:1 AND 2 OR 3 AND 4 OR 5 AND 6?
-    //               1.key=imagedate&1.op=GT&1.val=2006-02-06&
-    //               2.key=imagedate&2.op=LT&2.val=2006-02-07&
-    //               3.key=imagedate&3.op=GT&3.val=2006-02-10&
-    //               4.key=imagedate&4.op=LT&4.val=2006-02-11&
-    //               5.key=imagedate&5.op=GT&5.val=2006-02-12&
-    //               6.key=imagedate&6.op=LT&6.val=2006-02-13&
-    //               name=TimeLineSelection&
-    //               count=6
-    //               type=datesearch
+    SearchXmlReader reader(salbum->query());
 
-    // Check if a special url query exist to identify a SAlbum dedicaced to Date Search
-    KUrl url = salbum->kurl();
-    QMap<QString, QString> queries = url.queryItems();
-    if (queries.isEmpty()) return;
-
-    QString type = url.queryItem("type");
-    if (type != QString("datesearch")) return;
-
-    bool ok   = false;
-    int count = url.queryItem("count").toInt(&ok);
-    if (!ok || count <= 0) return;
-
-    //DDebug() << url << endl;
-
-    QMap<QString, QString>::iterator it2;
-    QString       key;
-    QDateTime     start, end;
+    // The timeline query consists of groups, with two date time fields each
     DateRangeList list;
-    for (int i = 1 ; i <= count ; i+=2)
+    while (!reader.atEnd())
     {
-        key = QString("%1.val").arg(QString::number(i));
-        it2 = queries.find(key);
-        if (it2 != queries.end())
-            start = QDateTime(QDate::fromString(it2.value(), Qt::ISODate));
+        // read groups
+        if (reader.readNext() == SearchXml::Group)
+        {
+            QDateTime start, end;
+            int numberOfFields = 0;
+            while (!reader.atEnd())
+            {
+                // read fields
+                reader.readNext();
 
-        //DDebug() << key << " :: " << it2.data() << endl;
+                if (reader.isEndElement())
+                    break;
 
-        key = QString("%1.val").arg(QString::number(i+1));
-        it2 = queries.find(key);
-        if (it2 != queries.end())
-            end = QDateTime(QDate::fromString(it2.value(), Qt::ISODate));
-
-        //DDebug() << key << " :: " << it2.data() << endl;
-
-        list.append(DateRange(start, end));
+                if (reader.isFieldElement())
+                {
+                    if (numberOfFields == 0)
+                        start = reader.valueToDateTime();
+                    else if (numberOfFields == 1)
+                        end = reader.valueToDateTime();
+                    numberOfFields++;
+                }
+            }
+            if (numberOfFields)
+                list << DateRange(start, end);
+        }
     }
-
-    /*
-    DateRangeList::iterator it3;
-    for (it3 = list.begin() ; it3 != list.end(); ++it3)
-        DDebug() << (*it3).first.date().toString(Qt::ISODate) << " :: " 
-                 << (*it3).second.date().toString(Qt::ISODate) << endl;
-    */
 
     d->timeLineWidget->setSelectedDateRange(list);
     AlbumManager::instance()->setCurrentAlbum(salbum);
@@ -612,10 +571,7 @@ void TimeLineView::slotRenameAlbum(SAlbum* salbum)
 
     if (!checkName(name)) return;
 
-    KUrl url = salbum->kurl();
-    url.removeQueryItem("name");
-    url.addQueryItem("name", name);
-    AlbumManager::instance()->updateSAlbum(salbum, url);
+    AlbumManager::instance()->updateSAlbum(salbum, salbum->query(), name);
 }
 
 }  // NameSpace Digikam
