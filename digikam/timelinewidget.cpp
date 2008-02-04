@@ -500,7 +500,7 @@ void TimeLineWidget::slotDatesMap(const QMap<QDateTime, int>& datesStatMap)
         int year  = it.key().date().year();
         int month = it.key().date().month();
         int day   = d->calendar->dayOfYear(it.key().date());
-        int yearForWeek;  // Used with week shared between 2 years decade (Dec/Jan).
+        int yearForWeek = year;  // Used with week shared between 2 years decade (Dec/Jan).
         int week  = d->calendar->weekNumber(it.key().date(), &yearForWeek);
 
         // Stats Years values.
@@ -627,13 +627,13 @@ void TimeLineWidget::updatePixmap()
             if (val <= 0) logVal = 0;
             else          logVal = log(val);
 
-            top = (int)(dim + d->topMargin - ((logVal * dim) / max));
+            top = lround(dim + d->topMargin - ((logVal * dim) / max));
 
             if (top < 0) val = 0;
         }
         else
         {
-            top = dim + d->topMargin - ((val * dim) / max);
+            top = lround(dim + d->topMargin - ((val * dim) / max));
         }
 
         barRect.setTop(top);
@@ -801,13 +801,13 @@ void TimeLineWidget::updatePixmap()
             if (val <= 0) logVal = 0;
             else          logVal = log(val);
 
-            top = (int)(dim + d->topMargin - ((logVal * dim) / max));
+            top = lround(dim + d->topMargin - ((logVal * dim) / max));
 
             if (top < 0) val = 0;
         }
         else
         {
-            top = dim + d->topMargin - ((val * dim) / max);
+            top = lround(dim + d->topMargin - ((val * dim) / max));
         }
 
         barRect.setTop(top);
@@ -1186,6 +1186,7 @@ void TimeLineWidget::updateWeekSelection(const QDateTime dts, const QDateTime dt
     dt = dts;
     do
     {
+        yearForWeek = dt.date().year();
         week = d->calendar->weekNumber(dt.date(), &yearForWeek);
 
         dtsWeek = firstDayOfWeek(yearForWeek, week);
@@ -1213,7 +1214,7 @@ void TimeLineWidget::updateMonthSelection(const QDateTime dts, const QDateTime d
         dtsMonth = QDateTime(QDate(year, month, 1));
         dteMonth = dtsMonth.addDays(d->calendar->daysInMonth(dtsMonth.date()));
         it  = d->monthStatMap.find(TimeLineWidgetPriv::YearRefPair(year, month));
-        if ( it != d->weekStatMap.end() )
+        if ( it != d->monthStatMap.end() )
             it.data().second = checkSelectionForDaysRange(dtsMonth, dteMonth);
 
         dt = dteMonth;
