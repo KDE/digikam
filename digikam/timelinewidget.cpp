@@ -1204,6 +1204,7 @@ void TimeLineWidget::updateWeekSelection(const QDateTime dts, const QDateTime dt
     dt = dts;
     do
     {
+        yearForWeek = dt.date().year();
         week = d->calendar->weekNumber(dt.date(), &yearForWeek);
 
         dtsWeek = firstDayOfWeek(yearForWeek, week);
@@ -1231,7 +1232,7 @@ void TimeLineWidget::updateMonthSelection(const QDateTime dts, const QDateTime d
         dtsMonth = QDateTime(QDate(year, month, 1));
         dteMonth = dtsMonth.addDays(d->calendar->daysInMonth(dtsMonth.date()));
         it  = d->monthStatMap.find(TimeLineWidgetPriv::YearRefPair(year, month));
-        if ( it != d->weekStatMap.end() )
+        if ( it != d->monthStatMap.end() )
             it.value().second = checkSelectionForDaysRange(dtsMonth, dteMonth);
 
         dt = dteMonth;
