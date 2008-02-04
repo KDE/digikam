@@ -487,8 +487,16 @@ void TimeLineWidget::slotDatesMap(const QMap<QDateTime, int>& datesStatMap)
 
     int count;
     QMap<QDateTime, int>::const_iterator it;
-    d->minDateTime = datesStatMap.begin().key();
-    d->maxDateTime = datesStatMap.begin().key();
+    if (datesStatMap.isEmpty())
+    {
+        d->minDateTime = QDateTime();
+        d->maxDateTime = QDateTime();
+    }
+    else
+    {
+        d->minDateTime = datesStatMap.begin().key();
+        d->maxDateTime = datesStatMap.begin().key();
+    }
 
     for ( it = datesStatMap.begin(); it != datesStatMap.end(); ++it )
     {
@@ -576,8 +584,11 @@ void TimeLineWidget::slotDatesMap(const QMap<QDateTime, int>& datesStatMap)
             d->maxCountByDay = count;
     }
 
-    d->maxDateTime.setTime(QTime(0, 0, 0, 0));
-    d->minDateTime.setTime(QTime(0, 0, 0, 0));
+    if (!datesStatMap.isEmpty())
+    {
+        d->maxDateTime.setTime(QTime(0, 0, 0, 0));
+        d->minDateTime.setTime(QTime(0, 0, 0, 0));
+    }
 
     updatePixmap();
     update();
