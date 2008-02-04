@@ -38,8 +38,6 @@
 // Local includes.
 
 #include "albumdb.h"
-#include "databaseaccess.h"
-#include "databasebackend.h"
 #include "ddebug.h"
 #include "imagequerybuilder.h"
 
@@ -72,17 +70,20 @@ QString ImageQueryBuilder::buildQueryFromXml(const QString &xml, QList<QVariant>
     QString sql;
     bool firstGroup = true;
 
-    while (reader.readNext() != SearchXml::End)
+    while (!reader.atEnd())
     {
+        reader.readNext();
+
+        if (reader.isEndElement())
+            continue;
+
         if (reader.isGroupElement())
         {
             addSqlOperator(sql, reader.groupOperator(), firstGroup);
             if (firstGroup)
                 firstGroup = false;
 
-            sql += " (";
             buildGroup(sql, reader, boundValues);
-            sql += ") ";
         }
     }
 
@@ -91,9 +92,26 @@ QString ImageQueryBuilder::buildQueryFromXml(const QString &xml, QList<QVariant>
 
 void ImageQueryBuilder::buildGroup(QString &sql, SearchXmlReader &reader, QList<QVariant> *boundValues) const
 {
+    sql += " (";
+
     bool firstField = true;
-    while (reader.readNext() != SearchXml::GroupEnd)
+    while (!reader.atEnd())
     {
+        reader.readNext();
+
+        if (reader.isEndElement())
+            break;
+
+        // subgroup
+        if (reader.isGroupElement())
+        {
+            addSqlOperator(sql, reader.groupOperator(), firstField);
+            if (firstField)
+                firstField = false;
+
+            buildGroup(sql, reader, boundValues);
+        }
+
         if (reader.isFieldElement())
         {
             addSqlOperator(sql, reader.fieldOperator(), firstField);
@@ -103,6 +121,8 @@ void ImageQueryBuilder::buildGroup(QString &sql, SearchXmlReader &reader, QList<
             buildField(sql, reader, reader.fieldName(), boundValues);
         }
     }
+
+    sql += ") ";
 }
 
 class FieldQueryBuilder
@@ -153,10 +173,54 @@ public:
 
     void addDateField(const QString &name)
     {
-        sql += " (" + name + ' ';
-        ImageQueryBuilder::addSqlRelation(sql, relation);
-        sql += " ?) ";
-        *boundValues << reader.value();
+        if (relation == SearchXml::Equal)
+        {
+            // special case: split in < and >
+            QDateTime date = QDateTime::fromString(reader.value(), Qt::ISODate);
+            if (!date.isValid())
+                return;
+            QDateTime startDate, endDate;
+            if (date.time() == QTime(0,0,0,0))
+            {
+                // day precision
+                QDate startDate, endDate;
+                startDate = date.date().addDays(-1);
+                endDate = date.date().addDays(1);
+                *boundValues << startDate.toString(Qt::ISODate)
+                             << endDate.toString(Qt::ISODate);
+            }
+            else
+            {
+                // sub-day precision
+                QDateTime startDate, endDate;
+                int diff;
+                if (date.time().hour() == 0)
+                    diff = 3600;
+                else if (date.time().minute() == 0)
+                    diff = 60;
+                else
+                    diff = 1;
+                // we spare microseconds for the future
+
+                startDate = date.addSecs(-diff);
+                endDate = date.addSecs(diff);
+                *boundValues << startDate.toString(Qt::ISODate)
+                             << endDate.toString(Qt::ISODate);
+            }
+
+            sql += " (" + name + ' ';
+            ImageQueryBuilder::addSqlRelation(sql, SearchXml::GreaterThan);
+            sql += " ? AND " + name + ' ';
+            ImageQueryBuilder::addSqlRelation(sql, SearchXml::LessThan);
+            sql += " ?) ";
+        }
+        else
+        {
+            sql += " (" + name + ' ';
+            ImageQueryBuilder::addSqlRelation(sql, relation);
+            sql += " ?) ";
+            *boundValues << reader.value();
+        }
     }
 
     void addChoiceIntField(const QString &name)
@@ -531,10 +595,13 @@ void ImageQueryBuilder::addSqlOperator(QString &sql, SearchXml::Operator op, boo
         default:
         case SearchXml::And:
             sql += "AND";
+            break;
         case SearchXml::Or:
             sql += "OR";
+            break;
         case SearchXml::AndNot:
             sql += "AND NOT";
+            break;
     }
 }
 
@@ -545,27 +612,214 @@ void ImageQueryBuilder::addSqlRelation(QString &sql, SearchXml::Relation rel)
         default:
         case SearchXml::Equal:
             sql += "=";
+            break;
         case SearchXml::Unequal:
             sql += "<>";
+            break;
         case SearchXml::Like:
             sql += "LIKE";
+            break;
         case SearchXml::NotLike:
             sql += "NOT LIKE";
+            break;
         case SearchXml::LessThan:
             sql += "<";
+            break;
         case SearchXml::GreaterThan:
             sql += ">";
+            break;
         case SearchXml::LessThanOrEqual:
             sql += "<=";
+            break;
         case SearchXml::GreaterThanOrEqual:
             sql += ">=";
+            break;
         case SearchXml::OneOf:
             sql += "IN";
+            break;
     }
 }
 
 
 // ----------- Legacy query description handling -------------- //
+
+class RuleTypeForConversion
+{
+    public:
+
+        RuleTypeForConversion()
+            : op(SearchXml::Equal) {}
+
+        QString             key;
+        SearchXml::Relation op;
+        QString             val;
+};
+
+QString ImageQueryBuilder::convertFromUrlToXml(const KUrl& url) const
+{
+    int  count = url.queryItem("count").toInt();
+    if (count <= 0)
+        return QString();
+
+    QMap<int, RuleTypeForConversion> rulesMap;
+
+    for (int i=1; i<=count; i++)
+    {
+        RuleTypeForConversion rule;
+
+        QString key = url.queryItem(QString::number(i) + ".key").toLower();
+        QString op  = url.queryItem(QString::number(i) + ".op").toLower();
+
+        if (key == "album")
+        {
+            rule.key = "albumid";
+        }
+        else if (key == "imagename")
+        {
+            rule.key = "filename";
+        }
+        else if (key == "imagecaption")
+        {
+            rule.key = "comment";
+        }
+        else if (key == "imagedate")
+        {
+            rule.key = "creationdate";
+        }
+        else if (key == "tag")
+        {
+            rule.key = "tagid";
+        }
+        else
+        {
+            // other field names did not change:
+            // albumname, albumcaption, albumcollection, tagname, keyword, rating
+            rule.key = key;
+        }
+
+        if (op == "eq")
+            rule.op = SearchXml::Equal;
+        else if (op == "ne")
+            rule.op = SearchXml::Unequal;
+        else if (op == "lt")
+            rule.op = SearchXml::LessThan;
+        else if (op == "lte")
+            rule.op = SearchXml::LessThanOrEqual;
+        else if (op == "gt")
+            rule.op = SearchXml::GreaterThan;
+        else if (op == "gte")
+            rule.op = SearchXml::GreaterThanOrEqual;
+        else if (op == "like")
+        {
+            if (key == "tag")
+                rule.op = SearchXml::InTree;
+            else
+                rule.op = SearchXml::Like;
+        }
+        else if (op == "nlike")
+        {
+            if (key == "tag")
+                rule.op = SearchXml::NotInTree;
+            else
+                rule.op = SearchXml::NotLike;
+        }
+
+        rule.val = url.queryItem(QString::number(i) + ".val");
+
+        rulesMap.insert(i, rule);
+    }
+
+    SearchXmlWriter writer;
+
+    writer.writeGroup();
+
+    QStringList strList = url.path().split(' ', QString::SkipEmptyParts);
+    for ( QStringList::Iterator it = strList.begin(); it != strList.end(); ++it )
+    {
+        bool ok;
+        int  num = (*it).toInt(&ok);
+        if (ok)
+        {
+            RuleTypeForConversion rule = rulesMap[num];
+            writer.writeField(rule.key, rule.op);
+            writer.writeValue(rule.val);
+            writer.finishField();
+        }
+        else
+        {
+            QString expr = (*it).trimmed();
+            if (expr == "AND")
+            {
+                // add another field
+            }
+            else if (expr == "OR")
+            {
+                // open a new group
+                writer.finishGroup();
+                writer.writeGroup();
+                writer.setGroupOperator(SearchXml::Or);
+            }
+            else if (expr == "(")
+            {
+                // open a subgroup
+                writer.writeGroup();
+            }
+            else if (expr == ")")
+            {
+                writer.finishGroup();
+            }
+        }
+    }
+    writer.finishGroup();
+    writer.finish();
+
+    return writer.xml();
+}
+
+
+enum SKey
+{
+    ALBUM = 0,
+    ALBUMNAME,
+    ALBUMCAPTION,
+    ALBUMCOLLECTION,
+    TAG,
+    TAGNAME,
+    IMAGENAME,
+    IMAGECAPTION,
+    IMAGEDATE,
+    KEYWORD,
+    RATING
+};
+
+enum SOperator
+{
+    EQ = 0,
+    NE,
+    LT,
+    GT,
+    LIKE,
+    NLIKE,
+    LTE,
+    GTE
+};
+
+class RuleType
+{
+    public:
+
+        SKey      key;
+        SOperator op;
+        QString   val;
+};
+
+class SubQueryBuilder
+{
+public:
+
+    QString build(enum SKey key, enum SOperator op,
+                  const QString& passedVal, QList<QVariant> *boundValues) const;
+};
 
 QString ImageQueryBuilder::buildQueryFromUrl(const KUrl& url, QList<QVariant> *boundValues) const
 {
@@ -662,6 +916,7 @@ QString ImageQueryBuilder::buildQueryFromUrl(const KUrl& url, QList<QVariant> *b
     }
 
     QString sqlQuery;
+    SubQueryBuilder subQuery;
 
     QStringList strList = url.path().split(' ', QString::SkipEmptyParts);
     for ( QStringList::Iterator it = strList.begin(); it != strList.end(); ++it )
@@ -688,7 +943,7 @@ QString ImageQueryBuilder::buildQueryFromUrl(const KUrl& url, QList<QVariant> *b
                         rule.op = LIKE;
                     }
 
-                    sqlQuery += subQuery(rule.key, rule.op, rule.val, boundValues);
+                    sqlQuery += subQuery.build(rule.key, rule.op, rule.val, boundValues);
                 }
                 else
                 {
@@ -705,7 +960,7 @@ QString ImageQueryBuilder::buildQueryFromUrl(const KUrl& url, QList<QVariant> *b
                     QList<SKey>::const_iterator it = todo.constBegin();
                     while ( it != todo.constEnd() )
                     {
-                        sqlQuery += subQuery(*it, rule.op, rule.val, boundValues);
+                        sqlQuery += subQuery.build(*it, rule.op, rule.val, boundValues);
                         ++it;
                         if ( it != todo.end() )
                             sqlQuery += " OR ";
@@ -715,7 +970,7 @@ QString ImageQueryBuilder::buildQueryFromUrl(const KUrl& url, QList<QVariant> *b
             }
             else
             {
-                sqlQuery += subQuery(rule.key, rule.op, rule.val, boundValues);
+                sqlQuery += subQuery.build(rule.key, rule.op, rule.val, boundValues);
             }
         }
         else
@@ -727,10 +982,8 @@ QString ImageQueryBuilder::buildQueryFromUrl(const KUrl& url, QList<QVariant> *b
     return sqlQuery;
 }
 
-QString ImageQueryBuilder::subQuery(enum ImageQueryBuilder::SKey key,
-                                    enum ImageQueryBuilder::SOperator op,
-                                    const QString& passedVal,
-                                    QList<QVariant> *boundValues) const
+QString SubQueryBuilder::build(enum SKey key, enum SOperator op,
+                               const QString& passedVal, QList<QVariant> *boundValues) const
 {
     QString query;
     QString val = passedVal;

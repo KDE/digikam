@@ -26,7 +26,6 @@
 
 // Qt includes.
 
-#include <QString>
 #include <QList>
 #include <QVariant>
 
@@ -42,47 +41,17 @@ class DIGIKAM_EXPORT ImageQueryBuilder
 {
 public:
 
-    enum SKey
-    {
-        ALBUM = 0,
-        ALBUMNAME,
-        ALBUMCAPTION,
-        ALBUMCOLLECTION,
-        TAG,
-        TAGNAME,
-        IMAGENAME,
-        IMAGECAPTION,
-        IMAGEDATE,
-        KEYWORD,
-        RATING
-    };
-
-    enum SOperator
-    {
-        EQ = 0,
-        NE,
-        LT,
-        GT,
-        LIKE,
-        NLIKE,
-        LTE,
-        GTE
-    };
-
     ImageQueryBuilder();
 
     QString buildQuery(const QString &q, QList<QVariant> *boundValues) const;
     QString buildQueryFromUrl(const KUrl& url, QList<QVariant> *boundValues) const;
     QString buildQueryFromXml(const QString &xml, QList<QVariant> *boundValues) const;
+    QString convertFromUrlToXml(const KUrl& url) const;
 
 protected:
 
-    // XML queries
     void buildGroup(QString &sql, SearchXmlReader &reader, QList<QVariant> *boundValues) const;
     void buildField(QString &sql, SearchXmlReader &reader, const QString &name, QList<QVariant> *boundValues) const;
-
-    // URL legacy queries
-    QString subQuery(enum SKey key, enum SOperator op, const QString& val, QList<QVariant> *boundValues) const;
 
     QString possibleDate(const QString& str, bool& exact) const;
 
@@ -92,15 +61,6 @@ public:
     static void addSqlRelation(QString &sql, SearchXml::Relation rel);
 
 protected:
-
-    class RuleType
-    {
-    public:
-
-        SKey      key;
-        SOperator op;
-        QString   val;
-    };
 
     QString  m_longMonths[12];
     QString  m_shortMonths[12];
