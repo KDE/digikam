@@ -508,6 +508,7 @@ DigikamKipiInterface::DigikamKipiInterface( QObject *parent, const char *name)
 
 DigikamKipiInterface::~DigikamKipiInterface()
 {
+    delete m_thumbLoadThread;
 }
 
 KIPI::ImageCollection DigikamKipiInterface::currentAlbum()

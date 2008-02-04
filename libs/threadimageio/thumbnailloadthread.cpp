@@ -72,13 +72,14 @@ ThumbnailLoadThread::ThumbnailLoadThread()
     d = new ThumbnailLoadThreadPriv;
 
     d->creator = new ThumbnailCreator();
-    //d->creator->setOnlyLargeThumbnails(true);
+    d->creator->setOnlyLargeThumbnails(true);
     d->creator->setRemoveAlphaChannel(true);
     setPixmapRequested(true);
 }
 
 ThumbnailLoadThread::~ThumbnailLoadThread()
 {
+    delete d->creator;
     delete d;
 }
 
