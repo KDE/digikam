@@ -89,6 +89,7 @@ SearchResultsView::~SearchResultsView()
 
 void SearchResultsView::openURL(const KUrl& url)
 {
+    /*
     if (d->listJob)
         d->listJob->kill();
     d->listJob = 0;
@@ -107,6 +108,7 @@ void SearchResultsView::openURL(const KUrl& url)
 
     connect(d->listJob, SIGNAL(data(KIO::Job*, const QByteArray&)),
             this, SLOT(slotData(KIO::Job*, const QByteArray&)));
+    */
 }
 
 void SearchResultsView::clear()

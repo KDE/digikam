@@ -178,7 +178,7 @@ void SearchFolderView::quickSearchNew()
     if ( ! checkName( url ) )
         return;
 
-    SAlbum* album = AlbumManager::instance()->createSAlbum(url, true);
+    SAlbum* album = AlbumManager::instance()->createSAlbum(url.queryItem("name"), DatabaseSearch::LegacyUrlSearch, url.url());
 
     if (album)
     {
@@ -205,7 +205,7 @@ void SearchFolderView::extendedSearchNew()
     if ( ! checkName( url ) )
         return;
 
-    SAlbum* album = AlbumManager::instance()->createSAlbum(url, false);
+    SAlbum* album = AlbumManager::instance()->createSAlbum(url.queryItem("name"), DatabaseSearch::LegacyUrlSearch, url.url());
 
     if (album)
     {
@@ -272,7 +272,7 @@ void SearchFolderView::quickSearchEdit(SAlbum* album)
     if (dlg.exec() != KDialog::Accepted)
         return;
 
-    AlbumManager::instance()->updateSAlbum(album, url);
+    AlbumManager::instance()->updateSAlbum(album, url.url());
 
     ((SearchFolderItem*)album->extraData(this))->setText(0, album->title());
 
@@ -291,7 +291,7 @@ void SearchFolderView::extendedSearchEdit(SAlbum* album)
     if (dlg.exec() != KDialog::Accepted)
         return;
 
-    AlbumManager::instance()->updateSAlbum(album, url);
+    AlbumManager::instance()->updateSAlbum(album, url.url());
 
     ((SearchFolderItem*)album->extraData(this))->setText(0, album->title());
 
@@ -325,11 +325,10 @@ void SearchFolderView::slotAlbumAdded(Album* a)
 
     SAlbum* album = (SAlbum*)a;
 
-    // Check if a special url query exist to identify a SAlbum dedicaced to Date Search
+    // Check if this is an SAlbum dedicated to the Date Search View
     // used with TimeLine. In this case, SAlbum is not displayed here, but in TimeLineFolderView.
-    KUrl url     = album->kurl();
-    QString type = url.queryItem("type");
-    if (type == QString("datesearch")) return;
+    if (!album->isNormalSearch())
+        return;
 
     SearchFolderItem* item = new SearchFolderItem(this, album);
     item->setPixmap(0, SmallIcon("find", AlbumSettings::instance()->getDefaultTreeIconSize()));
@@ -410,7 +409,7 @@ void SearchFolderView::slotContextMenu(Q3ListViewItem* item, const QPoint&, int)
         popmenu.addTitle(SmallIcon("digikam"),  i18n("My Searches"));
         QAction *edtsmpSearch = popmenu.addAction(SmallIcon("filefind"), i18n("Edit Search..."));
 
-        if ( sItem->album()->isSimple() )
+        if ( sItem->album()->isKeywordSearch() )
         {
             edtadvSearch = popmenu.addAction(SmallIcon("find"), i18n("Edit as Advanced Search..."));
             popmenu.insertSeparator(edtadvSearch);
@@ -426,7 +425,7 @@ void SearchFolderView::slotContextMenu(Q3ListViewItem* item, const QPoint&, int)
         {
             if (choice == edtsmpSearch)
             {
-                if (sItem->album()->isSimple())
+                if (sItem->album()->isKeywordSearch())
                     quickSearchEdit(sItem->album());
                 else
                     extendedSearchEdit(sItem->album());
@@ -450,7 +449,7 @@ void SearchFolderView::slotDoubleClicked(Q3ListViewItem* item, const QPoint&, in
 
     SearchFolderItem* sItem = dynamic_cast<SearchFolderItem*>(item);
 
-    if (sItem->album()->isSimple())
+    if (sItem->album()->isKeywordSearch())
         quickSearchEdit(sItem->album());
     else
         extendedSearchEdit(sItem->album());

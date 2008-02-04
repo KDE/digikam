@@ -43,6 +43,7 @@
 #include "imagequerybuilder.h"
 #include "databaseaccess.h"
 #include "databaseurl.h"
+#include "albumdb.h"
 #include "digikamsearch.h"
 
 kio_digikamsearch::kio_digikamsearch(const QByteArray &pool_socket,
@@ -70,9 +71,12 @@ void kio_digikamsearch::special(const QByteArray& data)
     Digikam::DatabaseUrl dbUrl(kurl);
     Digikam::DatabaseAccess::setParameters(dbUrl);
 
+    int id = dbUrl.searchId();
+    QString xml = Digikam::DatabaseAccess().db()->getSearchQuery(id);
+
     Digikam::ImageQueryBuilder queryBuilder;
     QList<QVariant> boundValues;
-    QString query = queryBuilder.buildQueryFromUrl(dbUrl.searchUrl(), &boundValues);
+    QString query = queryBuilder.buildQuery(xml, &boundValues);
 
     Digikam::ImageLister lister;
 
