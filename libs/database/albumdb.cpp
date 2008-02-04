@@ -284,17 +284,19 @@ SearchInfo::List AlbumDB::scanSearches()
     SearchInfo::List searchList;
 
     QList<QVariant> values;
-    d->db->execSql( "SELECT id, name, url FROM Searches;", &values);
+    d->db->execSql( "SELECT id, type, name, query FROM Searches;", &values);
 
     for (QList<QVariant>::iterator it = values.begin(); it != values.end();)
     {
         SearchInfo info;
 
-        info.id   = (*it).toInt();
+        info.id    = (*it).toInt();
         ++it;
-        info.name = (*it).toString();
+        info.type  = (DatabaseSearch::Type)(*it).toInt();
         ++it;
-        info.url  = (*it).toString();
+        info.name  = (*it).toString();
+        ++it;
+        info.query = (*it).toString();
         ++it;
 
         searchList.append(info);
@@ -558,12 +560,11 @@ void AlbumDB::setTagParentID(int tagID, int newParentTagID)
     d->db->recordChangeset(TagChangeset(tagID, TagChangeset::Reparented));
 }
 
-int AlbumDB::addSearch(const QString& name, const KUrl& url)
+int AlbumDB::addSearch(DatabaseSearch::Type type, const QString& name, const QString &query)
 {
     QVariant id;
-    if (!d->db->execSql(QString("INSERT INTO Searches (name, url) \n"
-                                "VALUES(?, ?);"),
-                        name, url.url(), 0, &id) )
+    if (!d->db->execSql(QString("INSERT INTO Searches (type, name, query) VALUES(?, ?, ?);"),
+                        type, name, query, 0, &id) )
     {
         return -1;
     }
@@ -572,12 +573,11 @@ int AlbumDB::addSearch(const QString& name, const KUrl& url)
     return id.toInt();
 }
 
-void AlbumDB::updateSearch(int searchID, const QString& name,
-               const KUrl& url)
+void AlbumDB::updateSearch(int searchID, DatabaseSearch::Type type,
+                           const QString& name, const QString &query)
 {
-    d->db->execSql(QString("UPDATE Searches SET name=?, url=? "
-                            "WHERE id=?"),
-                    name, url.url(), searchID);
+    d->db->execSql(QString("UPDATE Searches SET type=?, name=?, query=? WHERE id=?"),
+                   type, name, query, searchID);
     d->db->recordChangeset(SearchChangeset(searchID, SearchChangeset::Changed));
 }
 
@@ -586,6 +586,18 @@ void AlbumDB::deleteSearch(int searchID)
     d->db->execSql( QString("DELETE FROM Searches WHERE id=?"),
                     searchID );
     d->db->recordChangeset(SearchChangeset(searchID, SearchChangeset::Deleted));
+}
+
+QString AlbumDB::getSearchQuery(int searchId)
+{
+    QList<QVariant> values;
+    d->db->execSql( QString("SELECT query FROM Searches WHERE id=?;"),
+                    searchId, &values );
+
+    if (values.isEmpty())
+        return QString();
+    else
+        return values.first().toString();
 }
 
 void AlbumDB::setSetting(const QString& keyword,

@@ -49,6 +49,7 @@
 #include "collectionmanager.h"
 #include "collectionlocation.h"
 #include "collectionscanner.h"
+#include "imagequerybuilder.h"
 #include "initializationobserver.h"
 #include "schemaupdater.h"
 
@@ -251,6 +252,12 @@ bool SchemaUpdater::makeUpdates()
         }
         // add future updates here
     }
+    // REMOVE BEFORE ALPHA VERSION
+    else
+    {
+        preAlpha010Update1();
+    }
+    // END REMOVE
     return true;
 }
 
@@ -489,8 +496,9 @@ bool SchemaUpdater::createTablesV5()
     if ( !m_access->backend()->execSql(
                    QString( "CREATE TABLE IF NOT EXISTS Searches  \n"
                             " (id INTEGER PRIMARY KEY, \n"
-                            "  name TEXT NOT NULL UNIQUE, \n"
-                            "  url  TEXT NOT NULL);" ) ))
+                            "  type INTEGER, \n"
+                            "  name TEXT NOT NULL, \n"
+                            "  query TEXT NOT NULL);" ) ))
     {
         return false;
     }
@@ -749,6 +757,9 @@ bool SchemaUpdater::updateV4toV5()
     if (!m_access->backend()->execSql(QString("ALTER TABLE Images RENAME TO ImagesV3;")))
         return false;
 
+    if (!m_access->backend()->execSql(QString("ALTER TABLE Searches RENAME TO SearchesV3;")))
+        return false;
+
     DDebug() << "Moved tables" << endl;
     // --- Drop some triggers and indices ---
 
@@ -844,6 +855,40 @@ bool SchemaUpdater::updateV4toV5()
 
     DDebug() << "Populated Images" << endl;
 
+    // --- Port searches ---
+
+    if (!m_access->backend()->execSql(QString(
+                    "REPLACE INTO Searches "
+                    " (id, type, name, query) "
+                    "SELECT id, ?, name, url"
+                    " FROM SearchesV3;"),
+                    DatabaseSearch::LegacyUrlSearch)
+       )
+         return false;
+
+    SearchInfo::List sList = m_access->db()->scanSearches();
+
+    for (SearchInfo::List::iterator it = sList.begin(); it != sList.end(); ++it)
+    {
+        KUrl url((*it).query);
+
+        ImageQueryBuilder builder;
+        QString query = builder.convertFromUrlToXml(url);
+
+        if (url.queryItem("type") == QString("datesearch"))
+        {
+            m_access->db()->updateSearch((*it).id, DatabaseSearch::TimeLineSearch, (*it).name, query);
+        }
+        else if (url.queryItem("1.key") == "keyword")
+        {
+            m_access->db()->updateSearch((*it).id, DatabaseSearch::KeywordSearch, (*it).name, query);
+        }
+        else
+        {
+            m_access->db()->updateSearch((*it).id, DatabaseSearch::AdvancedSearch, (*it).name, query);
+        }
+    }
+
     // --- Create triggers ---
 
     if (!createTriggersV5())
@@ -936,6 +981,7 @@ bool SchemaUpdater::updateV4toV5()
 
     m_access->backend()->execSql(QString("DROP TABLE ImagesV3;"));
     m_access->backend()->execSql(QString("DROP TABLE AlbumsV3;"));
+    m_access->backend()->execSql(QString("DROP TABLE SearchesV3;"));
 
     if (m_observer)
         m_observer->schemaUpdateProgress(i18n("Dropped v3 tables"));
@@ -943,6 +989,60 @@ bool SchemaUpdater::updateV4toV5()
     m_currentVersion = 5;
     DDebug() << "Returning true from updating to 5" << endl;
     return true;
+}
+
+void SchemaUpdater::preAlpha010Update1()
+{
+    QString hasUpdate = m_access->db()->getSetting("preAlpha010Update1");
+    if (!hasUpdate.isNull())
+        return;
+
+    if (!m_access->backend()->execSql(QString("ALTER TABLE Searches RENAME TO SearchesV3;")))
+        return;
+
+    if ( !m_access->backend()->execSql(
+                   QString( "CREATE TABLE IF NOT EXISTS Searches  \n"
+                            " (id INTEGER PRIMARY KEY, \n"
+                            "  type INTEGER, \n"
+                            "  name TEXT NOT NULL, \n"
+                            "  query TEXT NOT NULL);" ) ))
+        return;
+
+    if (!m_access->backend()->execSql(QString(
+                    "REPLACE INTO Searches "
+                    " (id, type, name, query) "
+                    "SELECT id, ?, name, url"
+                    " FROM SearchesV3;"),
+                    DatabaseSearch::LegacyUrlSearch)
+       )
+         return;
+
+    SearchInfo::List sList = m_access->db()->scanSearches();
+
+    for (SearchInfo::List::iterator it = sList.begin(); it != sList.end(); ++it)
+    {
+        KUrl url((*it).query);
+
+        ImageQueryBuilder builder;
+        QString query = builder.convertFromUrlToXml(url);
+
+        if (url.queryItem("type") == QString("datesearch"))
+        {
+            m_access->db()->updateSearch((*it).id, DatabaseSearch::TimeLineSearch, (*it).name, query);
+        }
+        else if (url.queryItem("1.key") == "keyword")
+        {
+            m_access->db()->updateSearch((*it).id, DatabaseSearch::KeywordSearch, (*it).name, query);
+        }
+        else
+        {
+            m_access->db()->updateSearch((*it).id, DatabaseSearch::AdvancedSearch, (*it).name, query);
+        }
+    }
+
+    m_access->backend()->execSql(QString("DROP TABLE SearchesV3;"));
+
+    m_access->db()->setSetting("preAlpha010Update1", "true");
 }
 
 

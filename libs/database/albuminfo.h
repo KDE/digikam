@@ -126,6 +126,18 @@ public:
     }
 };
 
+namespace DatabaseSearch
+{
+    enum Type
+    {
+        UndefinedType,
+        KeywordSearch,
+        AdvancedSearch,
+        LegacyUrlSearch,
+        TimeLineSearch
+    };
+}
+
 /**
  * \class SearchInfo
  * A container class for transporting search information
@@ -135,13 +147,14 @@ class SearchInfo
 {
 public:
 
-    SearchInfo() : id(0) {};
+    SearchInfo() : id(0), type(DatabaseSearch::UndefinedType) {};
 
     typedef QList<SearchInfo> List;
 
-    int      id;
-    QString  name;
-    KUrl     url;
+    int                  id;
+    QString              name;
+    DatabaseSearch::Type type;
+    QString              query;
 
     /**
      * needed for sorting

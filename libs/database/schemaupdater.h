@@ -70,6 +70,9 @@ private:
     int                     m_currentVersion;
     InitializationObserver *m_observer;
     bool                    m_setError;
+
+    void preAlpha010Update1();
+
 };
 
 }  // namespace Digikam

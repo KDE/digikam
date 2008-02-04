@@ -421,7 +421,7 @@ public:
      * @param url        url of the search
      * @return the id of the album added or -1 if it failed
      */
-    int addSearch(const QString& name, const KUrl& url);
+    int addSearch(DatabaseSearch::Type type, const QString& name, const QString &query);
 
     /**
      * Updates Search with new attributes
@@ -429,13 +429,19 @@ public:
      * @param name       name of the search
      * @param url        url of the search
      */
-    void updateSearch(int searchID, const QString& name, const KUrl& url);
+    void updateSearch(int searchID, DatabaseSearch::Type type,
+                      const QString& name, const QString &query);
 
     /**
      * Delete a search from the database.
      * @param searchID the id of the search
      */
     void deleteSearch(int searchID);
+
+    /**
+     * Get the query for the search specified by its id
+     */
+    QString getSearchQuery(int searchId);
 
     // ----------- Adding and deleting Items -----------
     /**
