@@ -486,8 +486,16 @@ void TimeLineWidget::slotDatesMap(const QMap<QDateTime, int>& datesStatMap)
 
     int count;
     QMap<QDateTime, int>::const_iterator it;
-    d->minDateTime = datesStatMap.begin().key();
-    d->maxDateTime = datesStatMap.begin().key();
+    if (datesStatMap.isEmpty())
+    {
+        d->minDateTime = QDateTime();
+        d->maxDateTime = QDateTime();
+    }
+    else
+    {
+        d->minDateTime = datesStatMap.begin().key();
+        d->maxDateTime = datesStatMap.begin().key();
+    }
 
     for ( it = datesStatMap.begin(); it != datesStatMap.end(); ++it )
     {
@@ -497,11 +505,11 @@ void TimeLineWidget::slotDatesMap(const QMap<QDateTime, int>& datesStatMap)
         if (it.key() < d->minDateTime)
             d->minDateTime = it.key();
 
-        int year  = it.key().date().year();
-        int month = it.key().date().month();
-        int day   = d->calendar->dayOfYear(it.key().date());
+        int year        = it.key().date().year();
+        int month       = it.key().date().month();
+        int day         = d->calendar->dayOfYear(it.key().date());
         int yearForWeek = year;  // Used with week shared between 2 years decade (Dec/Jan).
-        int week  = d->calendar->weekNumber(it.key().date(), &yearForWeek);
+        int week        = d->calendar->weekNumber(it.key().date(), &yearForWeek);
 
         // Stats Years values.
 
@@ -578,8 +586,16 @@ void TimeLineWidget::slotDatesMap(const QMap<QDateTime, int>& datesStatMap)
             d->maxCountByDay = count;
     }
 
-    d->maxDateTime.setTime(QTime(0, 0, 0, 0));
-    d->minDateTime.setTime(QTime(0, 0, 0, 0));
+    if (!datesStatMap.isEmpty())
+    {
+        d->maxDateTime.setTime(QTime(0, 0, 0, 0));
+        d->minDateTime.setTime(QTime(0, 0, 0, 0));
+    }
+    else
+    {
+        d->maxDateTime = d->refDateTime;
+        d->minDateTime = d->refDateTime;
+    }   
 
     updatePixmap();
     update();
