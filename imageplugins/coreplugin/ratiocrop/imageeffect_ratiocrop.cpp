@@ -100,16 +100,7 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
 
     QLabel *label = new QLabel(i18n("Aspect ratio:"), cropSelection);
     m_ratioCB     = new QComboBox( false, cropSelection );
-    m_ratioCB->insertItem( i18n("Custom") );
-    m_ratioCB->insertItem( "1:1" );
-    m_ratioCB->insertItem( "2:3" );
-    m_ratioCB->insertItem( "3:4" );
-    m_ratioCB->insertItem( "4:5" );
-    m_ratioCB->insertItem( "5:7" );
-    m_ratioCB->insertItem( "7:10" );
-    m_ratioCB->insertItem( i18n("Golden Ratio") );
-    m_ratioCB->insertItem( i18n("None") );
-    m_ratioCB->setCurrentText( "1:1" );
+    setRatioCBText(ImageSelectionWidget::Landscape);
     QWhatsThis::add( m_ratioCB, i18n("<p>Select here your constrained aspect ratio for cropping. "
                                      "Aspect Ratio Crop tool uses a relative ratio. That means it "
                                      "is the same if you use centimeters or inches and it doesn't "
@@ -509,15 +500,15 @@ void ImageEffect_RatioCrop::slotSelectionChanged(QRect rect)
     m_heightInput->blockSignals(false);
 }
 
-void ImageEffect_RatioCrop::slotSelectionOrientationChanged(int newOrientation)
+void ImageEffect_RatioCrop::setRatioCBText(int orientation)
 {
-    // Change text for Aspect ratio ComboBox
-
     int item = m_ratioCB->currentItem();
+
+    m_ratioCB->blockSignals(true);
     m_ratioCB->clear();
     m_ratioCB->insertItem( i18n("Custom") );
     m_ratioCB->insertItem( "1:1" );
-    if ( newOrientation == ImageSelectionWidget::Landscape )
+    if ( orientation == ImageSelectionWidget::Landscape )
     {
         m_ratioCB->insertItem( "3:2" );
         m_ratioCB->insertItem( "4:3" );
@@ -535,10 +526,15 @@ void ImageEffect_RatioCrop::slotSelectionOrientationChanged(int newOrientation)
     }
     m_ratioCB->insertItem( i18n("Golden Ratio") );
     m_ratioCB->insertItem( i18n("None") );
-
-    m_ratioCB->blockSignals(true);
     m_ratioCB->setCurrentItem( item );
     m_ratioCB->blockSignals(false);
+}
+
+void ImageEffect_RatioCrop::slotSelectionOrientationChanged(int newOrientation)
+{
+    // Change text for Aspect ratio ComboBox
+
+    setRatioCBText(newOrientation);
 
     // Change Orientation ComboBox
 
