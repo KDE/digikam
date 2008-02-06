@@ -61,6 +61,7 @@ private:
 
     void finalRendering();
     void applyRatioChanges(int a);
+    void setRatioCBText(int orientation);
 
 private slots:
 

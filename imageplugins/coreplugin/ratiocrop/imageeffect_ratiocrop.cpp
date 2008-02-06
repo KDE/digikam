@@ -112,7 +112,7 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     m_ratioCB->addItem( "7:10" );
     m_ratioCB->addItem( i18n("Golden Ratio") );
     m_ratioCB->addItem( i18n("None") );
-    m_ratioCB->setCurrentIndex( 1 );
+    setRatioCBText(ImageSelectionWidget::Landscape);
     m_ratioCB->setWhatsThis( i18n("<p>Select here your constrained aspect ratio for cropping. "
                                   "Aspect Ratio Crop tool uses a relative ratio. That means it "
                                   "is the same if you use centimeters or inches and it doesn't "
@@ -527,15 +527,14 @@ void ImageEffect_RatioCrop::slotSelectionChanged(QRect rect)
     m_heightInput->blockSignals(false);
 }
 
-void ImageEffect_RatioCrop::slotSelectionOrientationChanged(int newOrientation)
+void ImageEffect_RatioCrop::setRatioCBText(int orientation)
 {
-    // Change text for Aspect ratio ComboBox
-
     int item = m_ratioCB->currentIndex();
+    m_ratioCB->blockSignals(true);
     m_ratioCB->clear();
     m_ratioCB->addItem( i18n("Custom") );
     m_ratioCB->addItem( "1:1" );
-    if ( newOrientation == ImageSelectionWidget::Landscape )
+    if ( orientation == ImageSelectionWidget::Landscape )
     {
         m_ratioCB->addItem( "3:2" );
         m_ratioCB->addItem( "4:3" );
@@ -553,10 +552,15 @@ void ImageEffect_RatioCrop::slotSelectionOrientationChanged(int newOrientation)
     }
     m_ratioCB->addItem( i18n("Golden Ratio") );
     m_ratioCB->addItem( i18n("None") );
-
-    m_ratioCB->blockSignals(true);
     m_ratioCB->setCurrentIndex( item );
     m_ratioCB->blockSignals(false);
+}
+
+void ImageEffect_RatioCrop::slotSelectionOrientationChanged(int newOrientation)
+{
+    // Change text for Aspect ratio ComboBox
+
+    setRatioCBText(newOrientation);
 
     // Change Orientation ComboBox
 
