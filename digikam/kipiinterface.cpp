@@ -249,6 +249,10 @@ void DigikamImageInfo::addAttributes(const QMap<QString, QVariant>& res)
     ImageAttributesWatch::instance()->fileMetadataChanged(_url);
 }
 
+void DigikamImageInfo::delAttributes(const QMap<QString, QVariant>& res)
+{
+}
+
 void DigikamImageInfo::clearAttributes()
 {
     // TODO: implement me.
