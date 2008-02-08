@@ -1172,6 +1172,14 @@ void AlbumDB::changeImagePosition(qlonglong imageId, const QVariantList &infos,
     d->db->recordChangeset(ImageChangeset(imageId, fields));
 }
 
+void AlbumDB::removeImagePosition(qlonglong imageid)
+{
+    d->db->execSql( QString("DELETE FROM ImagePositions WHERE imageid=?;"),
+                    imageid );
+
+    d->db->recordChangeset(ImageChangeset(imageid, DatabaseFields::ImagePositionsAll));
+}
+
 QList<CommentInfo> AlbumDB::getImageComments(qlonglong imageID)
 {
     QList<CommentInfo> list;
@@ -1238,6 +1246,14 @@ void AlbumDB::changeImageComment(int commentId, qlonglong imageID, const QVarian
 
     d->db->execSql( query, boundValues );
     d->db->recordChangeset(ImageChangeset(imageID, fields));
+}
+
+void AlbumDB::removeImageComment(int commentid, qlonglong imageid)
+{
+    d->db->execSql( QString("DELETE FROM ImageComments WHERE id=?;"),
+                    commentid );
+
+    d->db->recordChangeset(ImageChangeset(imageid, DatabaseFields::ImageCommentsAll));
 }
 
 QStringList AlbumDB::imagesFieldList(DatabaseFields::Images fields)

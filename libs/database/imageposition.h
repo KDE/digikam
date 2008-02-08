@@ -135,6 +135,14 @@ public:
      */
     void apply();
 
+    /**
+     * Removes the whole data set for the referenced image
+     * from the database.
+     * This object and any ImagePosition object created later
+     * will be empty.
+     */
+    void remove();
+
 private:
 
     QSharedDataPointer<ImagePositionPriv> d;

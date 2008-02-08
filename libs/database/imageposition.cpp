@@ -55,6 +55,21 @@ public:
         dirtyFields     = DatabaseFields::ImagePositionsNone;
     }
 
+    void resetData()
+    {
+        description     = QString();
+        latitude        = QString();
+        longitude       = QString();
+        latitudeNumber  = 0;
+        longitudeNumber = 0;
+        altitude        = 0;
+        orientation     = 0;
+        tilt            = 0;
+        roll            = 0;
+        empty           = true;
+        dirtyFields     = DatabaseFields::ImagePositionsNone;
+    }
+
     bool                           empty;
 
     double                         latitudeNumber;
@@ -371,6 +386,12 @@ void ImagePosition::apply()
         DatabaseAccess().db()->changeImagePosition(d->imageId, values, d->dirtyFields);
     }
     d->dirtyFields = DatabaseFields::ImagePositionsNone;
+}
+
+void ImagePosition::remove()
+{
+    DatabaseAccess().db()->removeImagePosition(d->imageId);
+    d->resetData();
 }
 
 } // namespace Digikam

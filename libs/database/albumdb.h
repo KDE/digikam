@@ -734,6 +734,11 @@ public:
                                   DatabaseFields::ImagePositions positionFields = DatabaseFields::ImagePositionsAll);
 
     /**
+     * Remove the entry in ImagePositions for the given image
+     */
+    void removeImagePosition(qlonglong imageid);
+
+    /**
      * Retrieves all available comments for the specified item.
      */
     QList<CommentInfo> getImageComments(qlonglong imageID);
@@ -769,6 +774,11 @@ public:
     void changeImageComment(int commentId, qlonglong imageID, const QVariantList &infos,
                             DatabaseFields::ImageComments fields = DatabaseFields::ImageCommentsAll);
 
+
+    /**
+     * Remove the specified entry in ImageComments
+     */
+    void removeImageComment(int commentId, qlonglong imageid);
 
     /**
      * Get the datetime for the item
