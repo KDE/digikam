@@ -40,6 +40,7 @@ class ImagePositionPriv;
 
 class DIGIKAM_EXPORT ImagePosition
 {
+
 public:
 
     /**
@@ -82,7 +83,7 @@ public:
     double longitudeNumber() const;
     /**
      * Returns the latitude/longitude in a user-presentable version,
-     * in the form "30°45'55.123'' East"
+     * in the form "30Â°45'55.123'' East"
      */
     QString latitudeFormatted() const;
     QString longitudeFormatted() const;
@@ -137,13 +138,9 @@ public:
 private:
 
     QSharedDataPointer<ImagePositionPriv> d;
-
 };
 
 
 } // namespace Digikam
 
 #endif // IMAGEPOSITION_H
-
-
-
