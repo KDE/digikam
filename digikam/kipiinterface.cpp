@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2004-2005 by Ralf Holzer <ralf at well.com>
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -168,6 +168,14 @@ QMap<QString, QVariant> DigikamImageInfo::attributes()
         int rating           = m_info.rating();
         res["rating"]        = rating;
 
+        // Get GPS location of picture from database.
+        double lat           = m_info.imagePosition().latitudeNumber();
+        double lng           = m_info.imagePosition().longitudeNumber();
+        double alt           = m_info.imagePosition().altitude();
+        res["latitude"]      = lat;
+        res["longitude"]     = lng;
+        res["altitude"]      = alt;
+
         // TODO: add here a kipi-plugins access to future picture attributes stored by digiKam database
     }
     return res;
@@ -199,6 +207,39 @@ void DigikamImageInfo::addAttributes(const QMap<QString, QVariant>& res)
             if (rating >= RatingMin && rating <= RatingMax)
                 m_info.setRating(rating);
         }
+
+        // GPS location management from plugins.
+
+        ImagePosition position = m_info.imagePosition();
+
+        // Set GPS latitude location of picture into database.
+        if (attributes.contains("latitude"))
+        {
+            double lat = attributes["latitude"].toDouble();
+            if (lat >= -90.0 && lat <= 90.0)
+            {
+                position.setLatitude(lat);
+            }
+        }
+
+        // Set GPS longitude location of picture into database.
+        if (attributes.contains("longitude"))
+        {
+            double lng = attributes["longitude"].toDouble();
+            if (lng >= -180.0 && lng <= 180.0)
+            {
+                position.setLongitude(lng);
+            }
+        }
+
+        // Set GPS altitude location of picture into database.
+        if (attributes.contains("altitude"))
+        {
+            double alt = attributes["altitude"].toDouble();
+            position.setAltitude(alt);
+        }
+
+        position.apply();
 
         // TODO: add here a kipi-plugins access to future picture attributes stored by digiKam database
     }
