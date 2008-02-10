@@ -518,7 +518,7 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------------
 
     d->newAction = new KAction(KIcon("albumfolder-new"), i18n("&New..."), this);
-    d->newAction->setShortcut(KStandardShortcut::New);
+    d->newAction->setShortcut(KStandardShortcut::shortcut(KStandardShortcut::New));
     d->newAction->setWhatsThis(i18n("Creates a new empty Album in the collection."));
     connect(d->newAction, SIGNAL(triggered()), d->view, SLOT(slotNewAlbum()));
     actionCollection()->addAction("album_new", d->newAction);
