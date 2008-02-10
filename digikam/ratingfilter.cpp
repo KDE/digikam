@@ -5,7 +5,7 @@
  *
  * Date        : 2007-10-09
  * Description : a widget to filter album contents by rating
- * 
+ *
  * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2007 by Arnd Baecker <arnd dot baecker at web dot de>
  *
@@ -14,7 +14,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -115,7 +115,7 @@ void RatingFilter::mouseMoveEvent(QMouseEvent* e)
     if ( d->dirty )
     {
         int pos = e->x() / regPixmapWidth() +1;
-    
+
         if (rating() != pos)
             setRating(pos);
 
@@ -125,7 +125,7 @@ void RatingFilter::mouseMoveEvent(QMouseEvent* e)
 
 void RatingFilter::mousePressEvent(QMouseEvent* e)
 {
-    // This method must be re-implemented to handle witch mousse button is pressed 
+    // This method must be re-implemented to handle witch mousse button is pressed
     // and show the rating filter settings pop-up menu with right mouse button.
     // NOTE: Left and Middle Mouse buttons continue to change rating filter value.
 
@@ -135,7 +135,7 @@ void RatingFilter::mousePressEvent(QMouseEvent* e)
     {
         d->dirty   = true;
         int pos = e->x() / regPixmapWidth() +1;
-    
+
         if (rating() == pos)
             setRating(rating()-1);
         else
@@ -182,7 +182,7 @@ void RatingFilter::mousePressEvent(QMouseEvent* e)
             else if (choice == leCondAction)
             {
                 setRatingFilterCondition(AlbumLister::LessEqualCondition);
-            }            
+            }
         }
     }
 }
@@ -200,17 +200,17 @@ void RatingFilter::updateRatingTooltip()
     {
         case AlbumLister::GreaterEqualCondition:
         {
-            d->ratingTracker->setText(i18n("Rating >= %1", rating()));
+            d->ratingTracker->setText(i18n("Rating supperior or equal to %1", rating()));
             break;
         }
         case AlbumLister::EqualCondition:
         {
-            d->ratingTracker->setText(i18n("Rating = %1", rating()));
+            d->ratingTracker->setText(i18n("Rating equal to %1", rating()));
             break;
         }
         case AlbumLister::LessEqualCondition:
         {
-            d->ratingTracker->setText(i18n("Rating <= %1", rating()));
+            d->ratingTracker->setText( i18n("Rating inferior or equal to %1", rating()));
             break;
         }
         default:
