@@ -191,9 +191,11 @@ void BatchThumbsGenerator::rebuildAllThumbs(int size)
         d->thumbJob->kill();
         d->thumbJob = 0;
     }
-
+    if(allPicturesPath.isEmpty()){
+       slotCancel();
+       return;
+    }
     d->thumbJob = new ThumbnailJob(KUrl::List(allPicturesPath), size, true, exifRotate);
-
     connect(d->thumbJob, SIGNAL(signalThumbnail(const KUrl&, const QPixmap&)),
             this, SLOT(slotRebuildThumbDone(const KUrl&, const QPixmap&)));
 
