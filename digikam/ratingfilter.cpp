@@ -77,8 +77,8 @@ RatingFilter::RatingFilter(QWidget* parent)
     setMouseTracking(true);
 
     setWhatsThis(i18n("Select here the rating value used to filter "
-                      "albums contents. Use contextual pop-up menu to "
-                      "set rating filter condition."));
+                      "albums contents. Use the context pop-up menu to "
+                      "set rating filter conditions."));
 
     // To dispatch signal from parent widget with filter condition.
     connect(this, SIGNAL(signalRatingChanged(int)),
@@ -125,7 +125,7 @@ void RatingFilter::mouseMoveEvent(QMouseEvent* e)
 
 void RatingFilter::mousePressEvent(QMouseEvent* e)
 {
-    // This method must be re-implemented to handle witch mousse button is pressed
+    // This method must be re-implemented to handle which mouse button is pressed
     // and show the rating filter settings pop-up menu with right mouse button.
     // NOTE: Left and Middle Mouse buttons continue to change rating filter value.
 
@@ -200,7 +200,7 @@ void RatingFilter::updateRatingTooltip()
     {
         case AlbumLister::GreaterEqualCondition:
         {
-            d->ratingTracker->setText(i18n("Rating supperior or equal to %1", rating()));
+            d->ratingTracker->setText(i18n("Rating greater or equal to %1", rating()));
             break;
         }
         case AlbumLister::EqualCondition:
@@ -210,7 +210,7 @@ void RatingFilter::updateRatingTooltip()
         }
         case AlbumLister::LessEqualCondition:
         {
-            d->ratingTracker->setText( i18n("Rating inferior or equal to %1", rating()));
+            d->ratingTracker->setText( i18n("Rating less or equal to %1", rating()));
             break;
         }
         default:
