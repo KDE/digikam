@@ -104,7 +104,7 @@ ImageInfo::ImageInfo(const KUrl &url)
     DatabaseAccess access;
 
     CollectionLocation location = CollectionManager::instance()->locationForUrl(url);
-    QString album = CollectionManager::instance()->album(url);
+    QString album = CollectionManager::instance()->album(url.directory());
     QString name  = url.fileName();
 
     // if needed, the two SQL calls can be consolidated into one by adding a method to AlbumDB

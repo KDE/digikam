@@ -818,7 +818,12 @@ QString CollectionManager::album(const QString &filePath)
             if (filePath == absolutePath)
                 return "/";
             else
-                return filePath.mid(absolutePath.length());
+            {
+                QString album = filePath.mid(absolutePath.length());
+                if (album.endsWith("/"))
+                    album.chop(1);
+                return album;
+            }
         }
     }
     return QString();
@@ -837,7 +842,12 @@ QString CollectionManager::album(const CollectionLocation &location, const QStri
     if (filePath == absolutePath)
         return "/";
     else
-        return filePath.mid(absolutePath.length());
+    {
+        QString album = filePath.mid(absolutePath.length());
+        if (album.endsWith("/"))
+            album.chop(1);
+        return album;
+    }
 }
 
 KUrl CollectionManager::oneAlbumRoot()

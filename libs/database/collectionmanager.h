@@ -165,6 +165,10 @@ public:
      * is returned. Example: "/media/fotos/Paris 2007" gives "/Paris 2007"
      * Returns a null QString if the file path is not located in an album root.
      * Returns "/" if the file path is an album root.
+     * Note that trailing slashes are removed in the return value, regardless if there was
+     * one or not.
+     * Note that you have to feed a path/url pointing to a directory. File names cannot
+     * be recognized as such by this method, and will be treated as a directory.
      */
     QString album(const KUrl &fileUrl);
     QString album(const QString &filePath);
