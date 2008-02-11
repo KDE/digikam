@@ -6,7 +6,7 @@
  * Date        : 2006-02-22
  * Description : a generic widget to display metadata
  *
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,7 +46,6 @@
 
 // KDE includes.
 
-#include <k3listview.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kfiledialog.h>
@@ -59,6 +58,7 @@
 
 #include "ddebug.h"
 #include "metadatalistview.h"
+#include "metadatalistviewitem.h"
 #include "mdkeylistviewitem.h"
 #include "metadatawidget.h"
 #include "metadatawidget.moc"
@@ -278,28 +278,39 @@ void MetadataWidget::slotModeChanged(int)
 void MetadataWidget::slotCopy2Clipboard(void)
 {
     QString textmetadata = i18n("File name: %1 (%2)",d->fileName,getMetadataTitle());
-    Q3ListViewItemIterator it( d->view );
 
-    while ( it.current() )
+    int i                 = 0;
+    QTreeWidgetItem *item = 0;
+    do
     {
-        if ( !it.current()->isSelectable() )
+        item = d->view->topLevelItem(i);
+        MdKeyListViewItem* lvItem = dynamic_cast<MdKeyListViewItem*>(item);
+        if (lvItem)
         {
-            MdKeyListViewItem *item = dynamic_cast<MdKeyListViewItem *>(it.current());
             textmetadata.append("\n\n>>> ");
-            textmetadata.append(item->getMdKey());
+            textmetadata.append(lvItem->getMdKey());
             textmetadata.append(" <<<\n\n");
-        }
-        else
-        {
-            Q3ListViewItem *item = it.current();
-            textmetadata.append(item->text(0));
-            textmetadata.append(" : ");
-            textmetadata.append(item->text(1));
-            textmetadata.append("\n");
-        }
 
-        ++it;
+            int j                  = 0;
+            QTreeWidgetItem *item2 = 0;
+            do
+            {
+                item2 = lvItem->child(j);
+                MetadataListViewItem* lvItem2 = dynamic_cast<MetadataListViewItem*>(item2);
+                if (lvItem2)
+                {
+                    textmetadata.append(lvItem2->text(0));
+                    textmetadata.append(" : ");
+                    textmetadata.append(lvItem2->text(1));
+                    textmetadata.append("\n");
+                }
+                j++;
+            }
+            while (item2);
+        }
+        i++;
     }
+    while (item);
 
     QMimeData *mimeData = new QMimeData();
     mimeData->setText(textmetadata);
@@ -310,28 +321,39 @@ void MetadataWidget::slotPrintMetadata(void)
 {
     QString textmetadata = i18n("<p><big><big><b>File name: %1 (%2)</b></big></big>",
                                 d->fileName, getMetadataTitle());
-    Q3ListViewItemIterator it( d->view );
 
-    while ( it.current() )
+    int i                 = 0;
+    QTreeWidgetItem *item = 0;
+    do
     {
-        if ( !it.current()->isSelectable() )
+        item = d->view->topLevelItem(i);
+        MdKeyListViewItem* lvItem = dynamic_cast<MdKeyListViewItem*>(item);
+        if (lvItem)
         {
-            MdKeyListViewItem *item = dynamic_cast<MdKeyListViewItem *>(it.current());
             textmetadata.append("<br><br><b>");
-            textmetadata.append(item->getMdKey());
+            textmetadata.append(lvItem->getMdKey());
             textmetadata.append("</b><br><br>");
-        }
-        else
-        {
-            Q3ListViewItem *item = it.current();
-            textmetadata.append(item->text(0));
-            textmetadata.append(" : <i>");
-            textmetadata.append(item->text(1));
-            textmetadata.append("</i><br>");
-        }
 
-        ++it;
+            int j                  = 0;
+            QTreeWidgetItem *item2 = 0;
+            do
+            {
+                item2 = lvItem->child(j);
+                MetadataListViewItem* lvItem2 = dynamic_cast<MetadataListViewItem*>(item2);
+                if (lvItem2)
+                {
+                    textmetadata.append(lvItem2->text(0));
+                    textmetadata.append(" : <i>");
+                    textmetadata.append(lvItem2->text(1));
+                    textmetadata.append("</i><br>");
+                }
+                j++;
+            }
+            while (item2);
+        }
+        i++;
     }
+    while (item);
 
     textmetadata.append("</p>");
 

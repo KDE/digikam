@@ -7,7 +7,7 @@
  * Description : a generic list view item widget to 
  *               display metadata key like a title
  * 
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -40,25 +40,44 @@
 namespace Digikam
 {
 
-MdKeyListViewItem::MdKeyListViewItem(K3ListView *parent, const QString& key)
-                 : K3ListViewItem(parent)
+MdKeyListViewItem::MdKeyListViewItem(QTreeWidget *parent, const QString& key)
+                 : QTreeWidgetItem(parent)
 {
     m_decryptedKey = key;
-    
+
     // Standard Exif key descriptions.
     if      (key == "Iop")       m_decryptedKey = i18n("Interoperability");
     else if (key == "Image")     m_decryptedKey = i18n("Image Information");
     else if (key == "Photo")     m_decryptedKey = i18n("Photograph Information");
     else if (key == "GPSInfo")   m_decryptedKey = i18n("Global Positioning System");
     else if (key == "Thumbnail") m_decryptedKey = i18n("Embedded Thumbnail");
-    
+
     // Standard IPTC key descriptions.
     else if (key == "Envelope")     m_decryptedKey = i18n("IIM Envelope");
     else if (key == "Application2") m_decryptedKey = i18n("IIM Application 2");
 
-    setOpen(true);
     setSelected(false);
-    setSelectable(false);
+    setExpanded(true);
+    setChildIndicatorPolicy(QTreeWidgetItem::DontShowIndicator);
+
+    // item is not selectable.
+    setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled);
+
+    setFirstColumnSpanned(true);
+    setTextAlignment(0, Qt::AlignCenter);
+    setBackground(0, QBrush(Qt::gray));
+    setBackground(1, QBrush(Qt::gray));
+    QFont fn0(font(0));
+    fn0.setBold(true);
+    fn0.setItalic(false);
+    setFont(0, fn0);
+    QFont fn1(font(1));
+    fn1.setBold(true);
+    fn1.setItalic(false);
+    setFont(1, fn1);
+    setForeground(0, QBrush(Qt::white));
+    setForeground(1, QBrush(Qt::white));
+    setText(0, m_decryptedKey);
 }
 
 MdKeyListViewItem::~MdKeyListViewItem()
@@ -68,26 +87,6 @@ MdKeyListViewItem::~MdKeyListViewItem()
 QString MdKeyListViewItem::getMdKey()
 {
     return m_decryptedKey;
-}
-
-void MdKeyListViewItem::paintCell(QPainter* p, const QColorGroup&,
-                                  int column, int, int)
-{
-    p->save();
-    QFont fn(p->font());
-    fn.setBold(true);
-    fn.setItalic(false);
-    p->setFont(fn);
-    p->setPen( Qt::white );
-    int width = listView()->contentsWidth();
-    QRect rect(0, 0, width, fn.weight());
-
-    if (column == 1)
-        rect.moveLeft(-width/2);
-
-    p->fillRect( rect, Qt::gray );
-    p->drawText( rect, Qt::AlignHCenter, m_decryptedKey);
-    p->restore();
 }
 
 }  // namespace Digikam

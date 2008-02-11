@@ -82,8 +82,8 @@ static const char* StandardExifEntryList[] =
 ExifWidget::ExifWidget(QWidget* parent, const char* name)
           : MetadataWidget(parent, name)
 {
-    view()->setSortColumn(-1);
-    
+    view()->setSortingEnabled(false);
+
     for (int i=0 ; QString(StandardExifEntryList[i]) != QString("-1") ; i++)
         m_keysFilter << StandardExifEntryList[i];
 

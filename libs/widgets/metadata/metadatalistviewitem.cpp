@@ -7,7 +7,7 @@
  * Description : a generic list view item widget to 
  *               display metadata
  * 
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -35,16 +35,19 @@
 namespace Digikam
 {
 
-MetadataListViewItem::MetadataListViewItem(K3ListViewItem *parent, const QString& key,
+MetadataListViewItem::MetadataListViewItem(QTreeWidgetItem *parent, const QString& key,
                                            const QString& title, const QString& value)
-                    : K3ListViewItem(parent)
+                    : QTreeWidgetItem(parent)
 {
     m_key = key;
-    
-    setSelectable(true);
+
+    setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | 
+             Qt::ItemIsEnabled    | Qt::ItemIsDragEnabled   | 
+             Qt::ItemIsDropEnabled);
+    setChildIndicatorPolicy(QTreeWidgetItem::DontShowIndicator);
     setText(0, title);
- 
-    QString tagVal = value.simplified();   
+
+    QString tagVal = value.simplified();
     if (tagVal.length() > 128)
     {
         tagVal.truncate(128);
@@ -70,23 +73,6 @@ QString MetadataListViewItem::getTitle()
 QString MetadataListViewItem::getValue()
 {
     return text(1);
-}
-
-void MetadataListViewItem::paintCell(QPainter* p, const QColorGroup& cg,
-                                     int column, int width, int align)
-{
-    if (column == 0)
-    {
-        p->save();
-        QFont fn(p->font());
-        fn.setBold(true);
-        p->setFont(fn);
-    }
-    
-    K3ListViewItem::paintCell(p, cg, column, width, align);
-
-    if (column == 0)
-        p->restore();
 }
 
 }  // namespace Digikam
