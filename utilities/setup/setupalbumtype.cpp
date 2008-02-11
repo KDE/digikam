@@ -84,7 +84,7 @@ SetupAlbumType::SetupAlbumType(QWidget* parent )
     QGridLayout *grid = new QGridLayout(this);
 
     // --------------------------------------------------------
-    
+
     d->collectionEdit = new KLineEdit(this);
     d->collectionEdit->setClearButtonShown(true);
 
@@ -92,9 +92,9 @@ SetupAlbumType::SetupAlbumType(QWidget* parent )
     d->albumCollectionBox->setWhatsThis(i18n("<p>You can add or remove Album "
                                              "collection types here to improve how "
                                              "your Albums are sorted in digiKam."));
-    
+
     d->albumCollectionBox->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-    
+
     d->addCollectionButton = new QPushButton(i18n("&Add..."), this);
     d->delCollectionButton = new QPushButton(i18n("&Delete"), this);
     d->repCollectionButton = new QPushButton(i18n("&Replace"), this);
@@ -106,8 +106,8 @@ SetupAlbumType::SetupAlbumType(QWidget* parent )
     d->repCollectionButton->setEnabled(false);
 
     grid->setAlignment(Qt::AlignTop);
-    grid->addWidget(d->collectionEdit, 0, 0, 1, 1);
-    grid->addWidget(d->albumCollectionBox, 1, 0, 5, 1);
+    grid->addWidget(d->collectionEdit,      0, 0, 1, 1);
+    grid->addWidget(d->albumCollectionBox,  1, 0, 5, 1);
     grid->addWidget(d->addCollectionButton, 1, 1, 1, 1);
     grid->addWidget(d->delCollectionButton, 2, 1, 1, 1);
     grid->addWidget(d->repCollectionButton, 3, 1, 1, 1);
@@ -120,18 +120,18 @@ SetupAlbumType::SetupAlbumType(QWidget* parent )
 
     connect(d->albumCollectionBox, SIGNAL(itemSelectionChanged()),
             this, SLOT(slotCollectionSelectionChanged()));
-    
+
     connect(d->addCollectionButton, SIGNAL(clicked()),
             this, SLOT(slotAddCollection()));
-    
+
     connect(d->delCollectionButton, SIGNAL(clicked()),
             this, SLOT(slotDelCollection()));
-    
+
     connect(d->repCollectionButton, SIGNAL(clicked()),
             this, SLOT(slotRepCollection()));
 
     // --------------------------------------------------------
-    
+
     readSettings();
     adjustSize();
 }
