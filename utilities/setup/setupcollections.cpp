@@ -251,16 +251,16 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
     d->pathEdit = new KUrlRequester(albumPathBox);
     d->pathEdit->setMode(KFile::Directory | KFile::LocalOnly | KFile::ExistingOnly);
 
-    grid->addWidget(albumPathLabel, 0, 0, 1, 3);
-    grid->addWidget(d->listView, 1, 0, 5, 2);
-    grid->addWidget(d->newButton, 1, 2, 1, 1);
-    grid->addWidget(d->addButton, 2, 2, 1, 1);
-    grid->addWidget(d->removeButton, 3, 2, 1, 1);
+    grid->addWidget(albumPathLabel,   0, 0, 1, 3);
+    grid->addWidget(d->listView,      1, 0, 5, 2);
+    grid->addWidget(d->newButton,     1, 2, 1, 1);
+    grid->addWidget(d->addButton,     2, 2, 1, 1);
+    grid->addWidget(d->removeButton,  3, 2, 1, 1);
     grid->addWidget(d->replaceButton, 4, 2, 1, 1);
-    grid->addWidget(d->nameLabel, 6, 0, 1, 1);
-    grid->addWidget(d->nameEdit, 6, 1, 1, 2);
-    grid->addWidget(d->pathLabel, 7, 0, 1, 1);
-    grid->addWidget(d->pathEdit, 7, 1, 1, 2);
+    grid->addWidget(d->nameLabel,     6, 0, 1, 1);
+    grid->addWidget(d->nameEdit,      6, 1, 1, 2);
+    grid->addWidget(d->pathLabel,     7, 0, 1, 1);
+    grid->addWidget(d->pathEdit,      7, 1, 1, 2);
     grid->setColumnStretch(1, 10);
     grid->setRowStretch(5, 10);
     grid->setMargin(KDialog::spacingHint());
@@ -299,7 +299,7 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
 
     // --------------------------------------------------------
 
-    connect(d->listView, SIGNAL(ItemClicked(QTreeWidgetItem*, int)),
+    connect(d->listView, SIGNAL(itemClicked(QTreeWidgetItem*, int)),
             this, SLOT(slotSelectionChanged(QTreeWidgetItem*, int)));
 
     connect(d->newButton, SIGNAL(clicked()),

@@ -134,13 +134,13 @@ SetupCamera::SetupCamera( QWidget* parent )
     grid->setMargin(0);
     grid->setSpacing(KDialog::spacingHint());
     grid->setAlignment(Qt::AlignTop);
-    grid->addWidget(d->listView, 0, 0, 5+1, 1);
-    grid->addWidget(d->addButton, 0, 1, 1, 1);
-    grid->addWidget(d->removeButton, 1, 1, 1, 1);
-    grid->addWidget(d->editButton, 2, 1, 1, 1);
+    grid->addWidget(d->listView,         0, 0, 6, 1);
+    grid->addWidget(d->addButton,        0, 1, 1, 1);
+    grid->addWidget(d->removeButton,     1, 1, 1, 1);
+    grid->addWidget(d->editButton,       2, 1, 1, 1);
     grid->addWidget(d->autoDetectButton, 3, 1, 1, 1);
-    grid->addItem(spacer, 4, 1, 1, 1);
-    grid->addWidget(gphotoLogoLabel, 5, 1, 1, 1);
+    grid->addItem(spacer,                4, 1, 1, 1);
+    grid->addWidget(gphotoLogoLabel,     5, 1, 1, 1);
 
     adjustSize();
 

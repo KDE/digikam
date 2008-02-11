@@ -7,7 +7,7 @@
  * Description : Camera type selection dialog
  * 
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -31,10 +31,10 @@
 #include <QRadioButton>
 #include <QButtonGroup>
 #include <QGridLayout>
+#include <QTreeWidget>
 
 // KDE includes.
 
-#include <k3listview.h>
 #include <kiconloader.h>
 #include <kglobalsettings.h>
 #include <kurlrequester.h>
@@ -84,9 +84,9 @@ public:
 
     QStringList    serialPortList;
 
-    KLineEdit     *titleEdit;
+    QTreeWidget   *listView;
 
-    K3ListView    *listView;
+    KLineEdit     *titleEdit;
 
     KUrlRequester *umsMountURL;
 };
@@ -113,15 +113,19 @@ CameraSelection::CameraSelection( QWidget* parent )
 
     // --------------------------------------------------------------
 
-    d->listView = new K3ListView(mainWidget());
-    d->listView->addColumn( i18n("Camera List") );
-    d->listView->setAllColumnsShowFocus(true);
-    d->listView->setResizeMode(K3ListView::LastColumn);
+    d->listView = new QTreeWidget(mainWidget());
+    d->listView->setRootIsDecorated(false);
+    d->listView->setSelectionMode(QAbstractItemView::SingleSelection);
+    d->listView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     d->listView->setMinimumWidth(350);
-    d->listView->setWhatsThis( i18n("<p>Select here the camera name that you want to use. All "
-                                    "default settings on the right panel "
-                                    "will be set automatically.</p><p>This list has been generated "
-                                    "using the gphoto2 library installed on your computer.</p>"));
+    d->listView->setAllColumnsShowFocus(true);
+    d->listView->setColumnCount(1);
+    d->listView->setHeaderLabels(QStringList() << i18n("Camera List"));
+    d->listView->setWhatsThis(i18n("<p>Select here the camera name that you want to use. All "
+                                   "default settings on the right panel "
+                                   "will be set automatically.</p><p>This list has been generated "
+                                   "using the gphoto2 library installed on your computer.</p>"));
+
 
     // --------------------------------------------------------------
 
@@ -196,7 +200,7 @@ CameraSelection::CameraSelection( QWidget* parent )
     gLayout4->setSpacing(KDialog::spacingHint());
 
     // --------------------------------------------------------------
-    
+
     QWidget* box2         = new QWidget(mainWidget());
     QGridLayout* gLayout5 = new QGridLayout(box2);
 
@@ -225,10 +229,10 @@ CameraSelection::CameraSelection( QWidget* parent )
 
     gLayout5->setMargin(KDialog::spacingHint());
     gLayout5->setSpacing(KDialog::spacingHint());
-    gLayout5->addWidget(logo, 0, 0, 1, 1);
-    gLayout5->addWidget(link, 0, 1, 2, 1);
-    gLayout5->addWidget(link2, 2, 1, 3-2+1, 1);
-    gLayout5->addWidget(explanation, 4, 1, 5-4+1, 1);
+    gLayout5->addWidget(logo,        0, 0, 1, 1);
+    gLayout5->addWidget(link,        0, 1, 2, 1);
+    gLayout5->addWidget(link2,       2, 1, 2, 1);
+    gLayout5->addWidget(explanation, 4, 1, 2, 1);
 
     // --------------------------------------------------------------
 
@@ -236,12 +240,12 @@ CameraSelection::CameraSelection( QWidget* parent )
     mainBoxLayout->setSpacing(KDialog::spacingHint());
     mainBoxLayout->setColumnStretch(0, 10);
     mainBoxLayout->setRowStretch(6, 10);
-    mainBoxLayout->addWidget(d->listView, 0, 0, 6+1, 1);
-    mainBoxLayout->addWidget(titleBox, 0, 1, 1, 1);
-    mainBoxLayout->addWidget(portBox, 1, 1, 1, 1);
+    mainBoxLayout->addWidget(d->listView, 0, 0, 7, 1);
+    mainBoxLayout->addWidget(titleBox,    0, 1, 1, 1);
+    mainBoxLayout->addWidget(portBox,     1, 1, 1, 1);
     mainBoxLayout->addWidget(portPathBox, 2, 1, 1, 1);
     mainBoxLayout->addWidget(umsMountBox, 3, 1, 1, 1);
-    mainBoxLayout->addWidget(box2, 4, 1, 5- 4+1, 1);
+    mainBoxLayout->addWidget(box2,        4, 1, 2, 1);
 
     // Connections --------------------------------------------------
 
@@ -251,8 +255,8 @@ CameraSelection::CameraSelection( QWidget* parent )
     connect(link2, SIGNAL(linkActivated(const QString &)),
             this, SLOT(slotPTPCameraLinkUsed()));
 
-    connect(d->listView, SIGNAL(selectionChanged(Q3ListViewItem *)),
-            this, SLOT(slotSelectionChanged(Q3ListViewItem *)));
+    connect(d->listView, SIGNAL(itemClicked(QTreeWidgetItem*, int)),
+            this, SLOT(slotSelectionChanged(QTreeWidgetItem*, int)));
 
     connect(d->portButtonGroup, SIGNAL(buttonClicked(int)),
             this, SLOT(slotPortChanged()));
@@ -274,21 +278,29 @@ CameraSelection::~CameraSelection()
 
 void CameraSelection::slotUMSCameraLinkUsed()
 {
-    Q3ListViewItem *item = d->listView->findItem(d->UMSCameraNameShown, 0);
-    if (item)
+    QList<QTreeWidgetItem *> list = d->listView->findItems(d->UMSCameraNameShown, Qt::MatchExactly, 0);
+    if (!list.isEmpty())
     {
-        d->listView->setCurrentItem(item);
-        d->listView->ensureItemVisible(item);
+        QTreeWidgetItem *item = list.first();
+        if (item)
+        {
+            d->listView->setCurrentItem(item);
+            d->listView->scrollToItem(item);
+        }
     }
 }
 
 void CameraSelection::slotPTPCameraLinkUsed()
 {
-    Q3ListViewItem *item = d->listView->findItem(d->PTPCameraNameShown, 0);
-    if (item)
+    QList<QTreeWidgetItem *> list = d->listView->findItems(d->PTPCameraNameShown, Qt::MatchExactly, 0);
+    if (!list.isEmpty())
     {
-        d->listView->setCurrentItem(item);
-        d->listView->ensureItemVisible(item);
+        QTreeWidgetItem *item = list.first();
+        if (item)
+        {
+            d->listView->setCurrentItem(item);
+            d->listView->scrollToItem(item);
+        }
     }
 }
 
@@ -300,33 +312,37 @@ void CameraSelection::setCamera(const QString& title, const QString& model,
     if (camModel == d->UMSCameraNameActual)
         camModel = d->UMSCameraNameShown;
 
-    Q3ListViewItem* item = d->listView->findItem(camModel, 0);
-    if (!item) return;
-
-    d->listView->setSelected(item, true);
-    d->listView->ensureItemVisible(item);
-    
-    d->titleEdit->setText(title);
-
-    if (port.contains("usb"))
+    QList<QTreeWidgetItem *> list = d->listView->findItems(camModel, Qt::MatchExactly, 0);
+    if (!list.isEmpty())
     {
-        d->usbButton->setChecked(true);
-    }
-    else if (port.contains("serial")) 
-    {
-        d->serialButton->setChecked(true);
+        QTreeWidgetItem *item = list.first();
+        if (!item) return;
 
-        for (int i=0 ; i < d->portPathComboBox->count() ; i++) 
+        d->listView->setCurrentItem(item);
+        d->listView->scrollToItem(item);
+
+        d->titleEdit->setText(title);
+
+        if (port.contains("usb"))
         {
-            if (port == d->portPathComboBox->itemText(i)) 
+            d->usbButton->setChecked(true);
+        }
+        else if (port.contains("serial")) 
+        {
+            d->serialButton->setChecked(true);
+
+            for (int i=0 ; i < d->portPathComboBox->count() ; i++) 
             {
-                d->portPathComboBox->setCurrentIndex(i);
-                break;
+                if (port == d->portPathComboBox->itemText(i)) 
+                {
+                    d->portPathComboBox->setCurrentIndex(i);
+                    break;
+                }
             }
         }
-    }
 
-    d->umsMountURL->setUrl(path);
+        d->umsMountURL->setUrl(path);
+    }
 }
 
 void CameraSelection::getCameraList()
@@ -334,16 +350,16 @@ void CameraSelection::getCameraList()
     int count = 0;
     QStringList clist;
     QString cname;
-    
+
     GPCamera::getSupportedCameras(count, clist);
-    
+
     for (int i = 0 ; i < count ; i++) 
     {
         cname = clist[i];
         if (cname == d->UMSCameraNameActual)
-            new K3ListViewItem(d->listView, d->UMSCameraNameShown);
+            new QTreeWidgetItem(d->listView, QStringList() << d->UMSCameraNameShown);
         else
-            new K3ListViewItem(d->listView, cname);
+            new QTreeWidgetItem(d->listView, QStringList() << cname);
     }
 }
 
@@ -354,7 +370,7 @@ void CameraSelection::getSerialPortList()
     GPCamera::getSupportedPorts(plist);
 
     d->serialPortList.clear();
-    
+
     for (int i = 0; i < plist.count() ; i++) 
     {
         if ((plist[i]).startsWith("serial:"))
@@ -362,18 +378,18 @@ void CameraSelection::getSerialPortList()
     }
 }
 
-void CameraSelection::slotSelectionChanged(Q3ListViewItem *item)
+void CameraSelection::slotSelectionChanged(QTreeWidgetItem *item, int)
 {
     if (!item) return;
 
     QString model(item->text(0));
-    
+
     if (model == d->UMSCameraNameShown) 
     {
         model = d->UMSCameraNameActual;
 
         d->titleEdit->setText(model);
-        
+
         d->serialButton->setEnabled(true);
         d->serialButton->setChecked(false);
         d->serialButton->setEnabled(false);
@@ -398,7 +414,7 @@ void CameraSelection::slotSelectionChanged(Q3ListViewItem *item)
     }
 
     d->titleEdit->setText(model);
-    
+
     QStringList plist;
     GPCamera::getCameraSupportedPorts(model, plist);
 
@@ -450,12 +466,12 @@ void CameraSelection::slotPortChanged()
 
 QString CameraSelection::currentTitle()
 {
-    return d->titleEdit->text();    
+    return d->titleEdit->text();
 }
 
 QString CameraSelection::currentModel()
 {
-    Q3ListViewItem* item = d->listView->currentItem();
+    QTreeWidgetItem* item = d->listView->currentItem();
     if (!item)
         return QString();
 
