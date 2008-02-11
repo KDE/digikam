@@ -169,12 +169,16 @@ QMap<QString, QVariant> DigikamImageInfo::attributes()
         res["rating"]        = rating;
 
         // Get GPS location of picture from database.
-        double lat           = m_info.imagePosition().latitudeNumber();
-        double lng           = m_info.imagePosition().longitudeNumber();
-        double alt           = m_info.imagePosition().altitude();
-        res["latitude"]      = lat;
-        res["longitude"]     = lng;
-        res["altitude"]      = alt;
+        ImagePosition pos = m_info.imagePosition();
+        if (!pos.isEmpty())
+        {
+            double lat           = pos.latitudeNumber();
+            double lng           = pos.longitudeNumber();
+            double alt           = pos.altitude();
+            res["latitude"]      = lat;
+            res["longitude"]     = lng;
+            res["altitude"]      = alt;
+        }
 
         // TODO: add here a kipi-plugins access to future picture attributes stored by digiKam database
     }
@@ -210,36 +214,41 @@ void DigikamImageInfo::addAttributes(const QMap<QString, QVariant>& res)
 
         // GPS location management from plugins.
 
-        ImagePosition position = m_info.imagePosition();
-
-        // Set GPS latitude location of picture into database.
-        if (attributes.contains("latitude"))
+        if (attributes.contains("latitude") ||
+            attributes.contains("longitude") ||
+            attributes.contains("altitude"))
         {
-            double lat = attributes["latitude"].toDouble();
-            if (lat >= -90.0 && lat <= 90.0)
+            ImagePosition position = m_info.imagePosition();
+
+            // Set GPS latitude location of picture into database.
+            if (attributes.contains("latitude"))
             {
-                position.setLatitude(lat);
+                double lat = attributes["latitude"].toDouble();
+                if (lat >= -90.0 && lat <= 90.0)
+                {
+                    position.setLatitude(lat);
+                }
             }
-        }
 
-        // Set GPS longitude location of picture into database.
-        if (attributes.contains("longitude"))
-        {
-            double lng = attributes["longitude"].toDouble();
-            if (lng >= -180.0 && lng <= 180.0)
+            // Set GPS longitude location of picture into database.
+            if (attributes.contains("longitude"))
             {
-                position.setLongitude(lng);
+                double lng = attributes["longitude"].toDouble();
+                if (lng >= -180.0 && lng <= 180.0)
+                {
+                    position.setLongitude(lng);
+                }
             }
-        }
 
-        // Set GPS altitude location of picture into database.
-        if (attributes.contains("altitude"))
-        {
-            double alt = attributes["altitude"].toDouble();
-            position.setAltitude(alt);
-        }
+            // Set GPS altitude location of picture into database.
+            if (attributes.contains("altitude"))
+            {
+                double alt = attributes["altitude"].toDouble();
+                position.setAltitude(alt);
+            }
 
-        position.apply();
+            position.apply();
+        }
 
         // TODO: add here a kipi-plugins access to future picture attributes stored by digiKam database
     }
