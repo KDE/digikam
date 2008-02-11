@@ -91,7 +91,7 @@ public:
     
     virtual QMap<QString, QVariant> attributes();                    
     virtual void addAttributes(const QMap<QString, QVariant>& res);
-    virtual void delAttributes(const QStringList&& res);
+    virtual void delAttributes(const QStringList& res);
     virtual void clearAttributes();
     
     virtual int  angle();
