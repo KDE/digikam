@@ -194,9 +194,6 @@ bool DatabaseAccess::checkReadyForUse(InitializationObserver *observer)
         }
     }
 
-    // set identifier
-    d->databaseWatch->setDatabaseIdentifier(d->db->databaseUuid());
-
     // update schema
     SchemaUpdater updater(&access);
     updater.setObserver(observer);
