@@ -520,7 +520,7 @@ void TAlbumListView::refresh()
 void TAlbumListView::slotRefresh(const QMap<int, int>& tagsStatMap)
 {
     Q3ListViewItemIterator it(this);
-    
+
     while (it.current())
     {
         TAlbumCheckListItem* item = dynamic_cast<TAlbumCheckListItem*>(*it);
@@ -531,7 +531,7 @@ void TAlbumListView::slotRefresh(const QMap<int, int>& tagsStatMap)
                 int id = item->id();
                 QMap<int, int>::const_iterator it2 = tagsStatMap.find(id);
                 if ( it2 != tagsStatMap.end() )
-                    item->setCount(it2.data());
+                    item->setCount(it2.value());
             }
         }
         ++it;
