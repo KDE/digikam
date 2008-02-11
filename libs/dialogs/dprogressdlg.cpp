@@ -6,7 +6,7 @@
  * Date        : 2006-30-08
  * Description : a progress dialog for digiKam
  * 
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,17 +23,17 @@
 
 // Qt includes.
 
-#include <Q3Header>
+#include <QHeaderView>
 #include <QLabel>
 #include <QImage>
 #include <QPushButton>
 #include <QGridLayout>
 #include <QVBoxLayout>
 #include <QProgressBar>
+#include <QTreeWidget>
 
 // KDE includes.
 
-#include <k3listview.h>
 #include <klocale.h>
 #include <kapplication.h>
 #include <kiconloader.h>
@@ -70,7 +70,7 @@ public:
     QLabel       *title;
     QLabel       *label;
 
-    K3ListView   *actionsList;
+    QTreeWidget  *actionsList;
 
     QProgressBar *progress;
 };
@@ -90,7 +90,7 @@ DProgressDlg::DProgressDlg(QWidget *parent, const QString &caption)
     QGridLayout* grid = new QGridLayout(page);
 
     QVBoxLayout *vlay = new QVBoxLayout();
-    d->actionsList    = new K3ListView(page);
+    d->actionsList    = new QTreeWidget(page);
     d->label          = new QLabel(page);
     d->title          = new QLabel(page);
     d->logo           = new QLabel(page);
@@ -104,13 +104,19 @@ DProgressDlg::DProgressDlg(QWidget *parent, const QString &caption)
 
     d->logo->setPixmap(KIconLoader::global()->loadIcon("digikam", KIconLoader::NoGroup, 128));
 
-    d->actionsList->addColumn("Thumb");   // no i18n here: hiden column
-    d->actionsList->addColumn("Status");  // no i18n here: hiden column
-    d->actionsList->setSorting(-1);
-    d->actionsList->setItemMargin(1);
-    d->actionsList->setSelectionModeExt(K3ListView::NoSelection);
+    d->actionsList->setSortingEnabled(false);
+    d->actionsList->setRootIsDecorated(false);
+    d->actionsList->setSelectionMode(QAbstractItemView::NoSelection);
+    d->actionsList->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    d->actionsList->setAllColumnsShowFocus(true);
+    d->actionsList->setColumnCount(2);
     d->actionsList->header()->hide();
-    d->actionsList->setResizeMode(Q3ListView::LastColumn);
+    d->actionsList->setIconSize(QSize(32, 32));
+
+    QStringList labels;
+    labels.append( "Thumb" );        // no i18n here: hiden header
+    labels.append( "Status" );       // no i18n here: hiden header
+    d->actionsList->setHeaderLabels(labels);
 
     grid->addLayout(vlay, 0, 0, 2, 1);
     grid->addWidget(d->label, 0, 1, 1, 1);
@@ -146,8 +152,7 @@ void DProgressDlg::setButtonText(const QString &text)
 void DProgressDlg::addedAction(const QPixmap& itemPix, const QString &text)
 {
     QPixmap pix = itemPix;
-    K3ListViewItem *item = new K3ListViewItem(d->actionsList,
-                           d->actionsList->lastItem(), QString(), text);
+    QTreeWidgetItem *item = new QTreeWidgetItem(d->actionsList, QStringList() << QString() << text);
 
     if (pix.isNull())
     {
@@ -162,8 +167,8 @@ void DProgressDlg::addedAction(const QPixmap& itemPix, const QString &text)
         pix = pix.scaled(32, 32, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
 
-    item->setPixmap(0, pix);
-    d->actionsList->ensureItemVisible(item);
+    item->setIcon(0, pix);
+    d->actionsList->scrollToItem(item);
 }
 
 void DProgressDlg::reset()
@@ -231,9 +236,9 @@ bool DProgressDlg::wasCancelled() const
 void DProgressDlg::setActionListVSBarVisible(bool visible)
 {
     if (!visible)
-        d->actionsList->setVScrollBarMode(Q3ScrollView::AlwaysOff);
+        d->actionsList->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     else
-        d->actionsList->setVScrollBarMode(Q3ScrollView::Auto);
+        d->actionsList->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 }
 
 }  // NameSpace Digikam
