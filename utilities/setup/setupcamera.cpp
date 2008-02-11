@@ -7,7 +7,7 @@
  * Description : camera setup tab.
  * 
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,10 +30,10 @@
 #include <QGridLayout>
 #include <QPixmap>
 #include <QVBoxLayout>
+#include <QTreeWidget>
 
 // KDE includes.
 
-#include <k3listview.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kurllabel.h>
@@ -73,7 +73,7 @@ public:
     QPushButton *editButton;
     QPushButton *autoDetectButton;
 
-    K3ListView  *listView;
+    QTreeWidget *listView;
 };
 
 SetupCamera::SetupCamera( QWidget* parent )
@@ -83,17 +83,23 @@ SetupCamera::SetupCamera( QWidget* parent )
 
     QGridLayout* grid = new QGridLayout(this);
 
-    d->listView = new K3ListView(this);
-    d->listView->addColumn( i18n("Title") );
-    d->listView->addColumn( i18n("Model") );
-    d->listView->addColumn( i18n("Port") );
-    d->listView->addColumn( i18n("Path") );
-    d->listView->addColumn( "Last Access Date", 0 ); // No i18n here. Hidden column with the last access date.
+    d->listView = new QTreeWidget(this);
+    d->listView->setColumnCount(5);
+    d->listView->setRootIsDecorated(false);
+    d->listView->setSelectionMode(QAbstractItemView::SingleSelection);
+    d->listView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     d->listView->setAllColumnsShowFocus(true);
-    d->listView->setSelectionMode(Q3ListView::Single);
-    d->listView->setFullWidth(true);
     d->listView->setWhatsThis( i18n("<p>Here you can see the digital camera list used by digiKam "
                                     "via the Gphoto interface."));
+
+    QStringList labels;
+    labels.append( i18n("Title") );
+    labels.append( i18n("Model") );
+    labels.append( i18n("Port") );
+    labels.append( i18n("Path") );
+    labels.append( "Last Access Date" );  // No i18n here. Hidden column with the last access date.
+    d->listView->setHeaderLabels(labels);
+    d->listView->hideColumn(4);
 
     // -------------------------------------------------------------
 
@@ -143,7 +149,7 @@ SetupCamera::SetupCamera( QWidget* parent )
     connect(gphotoLogoLabel, SIGNAL(leftClickedUrl(const QString&)),
             this, SLOT(slotProcessGphotoUrl(const QString&)));
 
-    connect(d->listView, SIGNAL(selectionChanged()),
+    connect(d->listView, SIGNAL(itemSelectionChanged()),
             this, SLOT(slotSelectionChanged()));
 
     connect(d->addButton, SIGNAL(clicked()),
@@ -169,9 +175,13 @@ SetupCamera::SetupCamera( QWidget* parent )
         for (CameraType *ctype = cl->first(); ctype;
              ctype = cl->next()) 
         {
-            new K3ListViewItem(d->listView, ctype->title(), ctype->model(),
-                              ctype->port(), ctype->path(), 
-                              ctype->lastAccess().toString(Qt::ISODate));
+            QStringList labels;
+            labels.append(ctype->title());
+            labels.append(ctype->model());
+            labels.append(ctype->port());
+            labels.append(ctype->path());
+            labels.append(ctype->lastAccess().toString(Qt::ISODate));
+            new QTreeWidgetItem(d->listView, labels);
         }
     }
 }
@@ -188,8 +198,7 @@ void SetupCamera::slotProcessGphotoUrl(const QString& url)
 
 void SetupCamera::slotSelectionChanged()
 {
-    Q3ListViewItem *item = d->listView->selectedItem();
-
+    QTreeWidgetItem *item = d->listView->currentItem();
     if (!item) 
     {
         d->removeButton->setEnabled(false);
@@ -215,7 +224,7 @@ void SetupCamera::slotAddCamera()
 
 void SetupCamera::slotRemoveCamera()
 {
-    Q3ListViewItem *item = d->listView->currentItem();
+    QTreeWidgetItem *item = d->listView->currentItem();
     if (!item) return;
 
     delete item;
@@ -223,7 +232,7 @@ void SetupCamera::slotRemoveCamera()
 
 void SetupCamera::slotEditCamera()
 {
-    Q3ListViewItem *item = d->listView->currentItem();
+    QTreeWidgetItem *item = d->listView->currentItem();
     if (!item) return;
 
     CameraSelection *select = new CameraSelection;
@@ -257,29 +266,39 @@ void SetupCamera::slotAutoDetectCamera()
     if (port.startsWith("usb:"))
     port = "usb:";
 
-    if (d->listView->findItem(model, 1))
+    if (!d->listView->findItems(model, Qt::MatchExactly, 1).isEmpty())
     {
         KMessageBox::information(this, i18n("Camera '%1' (%2) is already in list.", model, port));
     }
     else 
     {
         KMessageBox::information(this, i18n("Found camera '%1' (%2) and added it to the list.", model, port));
-        new K3ListViewItem(d->listView, model, model, port, "/", 
-                          QDateTime::currentDateTime().toString(Qt::ISODate));
+        QStringList labels;
+        labels.append(model);
+        labels.append(model);
+        labels.append(port);
+        labels.append("/");
+        labels.append(QDateTime::currentDateTime().toString(Qt::ISODate));
+        new QTreeWidgetItem(d->listView, labels);
     }
 }
 
 void SetupCamera::slotAddedCamera(const QString& title, const QString& model,
                                   const QString& port, const QString& path)
 {
-    new K3ListViewItem(d->listView, title, model, port, path, 
-                      QDateTime::currentDateTime().toString(Qt::ISODate));
+    QStringList labels;
+    labels.append(title);
+    labels.append(model);
+    labels.append(port);
+    labels.append(path);
+    labels.append(QDateTime::currentDateTime().toString(Qt::ISODate));
+    new QTreeWidgetItem(d->listView, labels);
 }
 
 void SetupCamera::slotEditedCamera(const QString& title, const QString& model,
                                    const QString& port, const QString& path)
 {
-    Q3ListViewItem *item = d->listView->currentItem();
+    QTreeWidgetItem *item = d->listView->currentItem();
     if (!item) return;
 
     item->setText(0, title);
@@ -296,20 +315,25 @@ void SetupCamera::applySettings()
     {
         clist->clear();
 
-        Q3ListViewItemIterator it(d->listView);
-
-        for ( ; it.current(); ++it ) 
+        int i                 = 0;
+        QTreeWidgetItem *item = 0;
+        do
         {
-            Q3ListViewItem *item  = it.current();
-            QDateTime lastAccess = QDateTime::currentDateTime();
+            item = d->listView->topLevelItem(i);
+            if (item)
+            {
+                QDateTime lastAccess = QDateTime::currentDateTime();
 
-            if (!item->text(4).isEmpty())
-                lastAccess = QDateTime::fromString(item->text(4), Qt::ISODate);
+                if (!item->text(4).isEmpty())
+                    lastAccess = QDateTime::fromString(item->text(4), Qt::ISODate);
 
-            CameraType *ctype = new CameraType(item->text(0), item->text(1), item->text(2), 
-                                               item->text(3), lastAccess);
-            clist->insert(ctype);
+                CameraType *ctype = new CameraType(item->text(0), item->text(1), item->text(2), 
+                                                   item->text(3), lastAccess);
+                clist->insert(ctype);
+            }
+            i++;
         }
+        while (item);
 
         clist->save();
     }
