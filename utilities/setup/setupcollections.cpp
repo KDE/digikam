@@ -6,7 +6,7 @@
  * Date        : 2005-02-01
  * Description : collections setup tab
  *
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -31,10 +31,10 @@
 #include <QGridLayout>
 #include <QVBoxLayout>
 #include <QPushButton>
+#include <QTreeWidget>
 
 // KDE includes.
 
-#include <k3listview.h>
 #include <klocale.h>
 #include <klineedit.h>
 #include <kpagedialog.h>
@@ -55,13 +55,13 @@
 namespace Digikam
 {
 
-class CollectionListViewItem : public K3ListViewItem
+class CollectionListViewItem : public QTreeWidgetItem
 {
 
 public:
 
-    CollectionListViewItem(K3ListView *view, const QString& name, const CollectionLocation& collection)
-        : K3ListViewItem(view)
+    CollectionListViewItem(QTreeWidget *view, const QString& name, const CollectionLocation& collection)
+        : QTreeWidgetItem(view)
     {
         QPixmap type, status;
         switch (collection.type())
@@ -96,19 +96,19 @@ public:
                 break;
         }
 
-        setPixmap(1, type);
-        setPixmap(2, status);
+        setIcon(1, type);
+        setIcon(2, status);
 
         setName(name);
         setLocation(collection);
         setPathEditable(false);
     }
 
-    CollectionListViewItem(K3ListView *view, const QString& name, const QString& path)
-        : K3ListViewItem(view)
+    CollectionListViewItem(QTreeWidget *view, const QString& name, const QString& path)
+        : QTreeWidgetItem(view)
     {
-        setPixmap(1, QPixmap());
-        setPixmap(2, QPixmap());
+        setIcon(1, QPixmap());
+        setIcon(2, QPixmap());
 
         setName(name);
         setPath(path);
@@ -179,14 +179,14 @@ public:
     QLabel                    *pathLabel;
     QLabel                    *nameLabel;
 
+    QTreeWidget               *listView;
+
     KLineEdit                 *nameEdit;
 
     KUrlRequester             *pathEdit;
     KUrlRequester             *databasePathEdit;
 
     KPageDialog               *mainDialog;
-
-    K3ListView                *listView;
 
     QList<CollectionLocation>  collections;
 };
@@ -211,16 +211,21 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
                                         albumPathBox);
     albumPathLabel->setWordWrap(true);
 
-    d->listView = new K3ListView(albumPathBox);
-    d->listView->addColumn( i18n("Name") );
-    d->listView->addColumn( i18n("Type") );
-    d->listView->addColumn( i18n("Status") );
-    d->listView->addColumn( i18n("Path") );
+    d->listView = new QTreeWidget(albumPathBox);
+    d->listView->setRootIsDecorated(false);
+    d->listView->setSelectionMode(QAbstractItemView::SingleSelection);
+    d->listView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     d->listView->setAllColumnsShowFocus(true);
-    d->listView->setSelectionMode(Q3ListView::Single);
-    d->listView->setFullWidth(true);
+    d->listView->setColumnCount(4);
     d->listView->setWhatsThis(i18n("<p>This shows all root album paths used by digiKam "
                                    "as collections."));
+
+    QStringList labels;
+    labels.append( i18n("Name") );
+    labels.append( i18n("Type") );
+    labels.append( i18n("Status") );
+    labels.append( i18n("Path") );
+    d->listView->setHeaderLabels(labels);
 
     d->newButton     = new QPushButton(albumPathBox);
     d->addButton     = new QPushButton(albumPathBox);
@@ -267,9 +272,11 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
     QGroupBox *dbPathBox = new QGroupBox(i18n("Database File Path"), this);
     QVBoxLayout *vlay    = new QVBoxLayout(dbPathBox);
 
-    QLabel *databasePathLabel = new QLabel(i18n("Here you can enter the location on your computer "                                                "where the digiKam database file will be stored. "
+    QLabel *databasePathLabel = new QLabel(i18n("Here you can enter the location on your computer "
+                                                "where the digiKam database file will be stored. "
                                                 "It is only one DB file common to all album roots.\n "
-                                                "Write access is required to be able to edit image " "properties. \nPlease note that you cannot use a "
+                                                "Write access is required to be able to edit image "
+                                                "properties. \nPlease note that you cannot use a "
                                                 "remote file system here, such as NFS."),
                                            dbPathBox);
     databasePathLabel->setWordWrap(true);
@@ -292,8 +299,8 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
 
     // --------------------------------------------------------
 
-    connect(d->listView, SIGNAL(clicked(Q3ListViewItem*)),
-            this, SLOT(slotSelectionChanged(Q3ListViewItem*)));
+    connect(d->listView, SIGNAL(ItemClicked(QTreeWidgetItem*, int)),
+            this, SLOT(slotSelectionChanged(QTreeWidgetItem*, int)));
 
     connect(d->newButton, SIGNAL(clicked()),
             this, SLOT(slotNewCollectionItem()));
@@ -348,26 +355,33 @@ void SetupCollections::applySettings()
 
     // Check what root path need to be added to DB.
 
-    Q3ListViewItemIterator it(d->listView);
-    for ( ; it.current(); ++it )
+    int i                 = 0;
+    QTreeWidgetItem *item = 0;
+    do
     {
-        CollectionListViewItem* item = dynamic_cast<CollectionListViewItem*>(it.current());
-        QString path(item->path());
-
-        bool exist = false;
-        for (QList<CollectionLocation>::Iterator it2 = d->collections.begin();
-             it2 != d->collections.end(); ++it2)
+        item = d->listView->topLevelItem(i);
+        CollectionListViewItem* lvItem = dynamic_cast<CollectionListViewItem*>(item);
+        if (lvItem)
         {
-            if ((*it2).albumRootPath() == path)
-                exist = true;
-        }
+            QString path(lvItem->path());
 
-        if (!exist)
-        {
-            CollectionLocation location = manager->addLocation(KUrl(path));
-            item->setLocation(location);
+            bool exist = false;
+            for (QList<CollectionLocation>::Iterator it2 = d->collections.begin();
+                it2 != d->collections.end(); ++it2)
+            {
+                if ((*it2).albumRootPath() == path)
+                    exist = true;
+            }
+
+            if (!exist)
+            {
+                CollectionLocation location = manager->addLocation(KUrl(path));
+                lvItem->setLocation(location);
+            }
         }
+        i++;
     }
+    while (item);
 
     d->collections = manager->allLocations();
 
@@ -377,14 +391,20 @@ void SetupCollections::applySettings()
         it2 != d->collections.end(); ++it2)
     {
         bool exist = false;
-        Q3ListViewItemIterator it(d->listView);
-        for ( ; it.current(); ++it )
+        i          = 0;
+        item       = 0;
+        do
         {
-            CollectionListViewItem* item = dynamic_cast<CollectionListViewItem*>(it.current());
-
-            if ((*it2).albumRootPath() == item->path())
-                exist = true;
+            item = d->listView->topLevelItem(i);
+            CollectionListViewItem* lvItem = dynamic_cast<CollectionListViewItem*>(item);
+            if (lvItem)
+            {
+                if ((*it2).albumRootPath() == lvItem->path())
+                    exist = true;
+            }
+            i++;
         }
+        while (item);
 
         if (!exist)
             manager->removeLocation(*it2);
@@ -415,7 +435,7 @@ void SetupCollections::readSettings()
     }
 }
 
-void SetupCollections::slotSelectionChanged(Q3ListViewItem *item)
+void SetupCollections::slotSelectionChanged(QTreeWidgetItem *item, int)
 {
     CollectionListViewItem* colItem = dynamic_cast<CollectionListViewItem*>(item);
     if (!colItem)
@@ -457,7 +477,7 @@ void SetupCollections::slotAddCollectionItem()
 
 void SetupCollections::slotRemoveCollectionItem()
 {
-    Q3ListViewItem *item = d->listView->currentItem();
+    QTreeWidgetItem *item = d->listView->currentItem();
     if (!item) return;
 
     delete item;
@@ -548,7 +568,7 @@ void SetupCollections::slotAlbumPathEdited(const QString& newPath)
 
 void SetupCollections::checkforOkButton()
 {
-    bool albumOk = d->listView->childCount() ? true : false;
+    bool albumOk = d->listView->topLevelItemCount() ? true : false;
 
     bool dbOk = false;
     if (!d->databasePathEdit->url().path().isEmpty())
@@ -576,22 +596,30 @@ void SetupCollections::checkforAddButton()
 
 bool SetupCollections::checkForCollection(const QString& name, const QString& path)
 {
-    Q3ListViewItemIterator it(d->listView);
-    for ( ; it.current(); ++it )
+    int i                 = 0;
+    QTreeWidgetItem *item = 0;
+    do
     {
-        CollectionListViewItem* item = dynamic_cast<CollectionListViewItem*>(it.current());
-        if (item->name() == name)
+        item = d->listView->topLevelItem(i);
+        CollectionListViewItem* lvItem = dynamic_cast<CollectionListViewItem*>(item);
+        if (lvItem)
         {
-            KMessageBox::information(0, i18n("A collection named \"%1\" already exist.", name));
-            return false;
-        }
+            if (lvItem->name() == name)
+            {
+                KMessageBox::information(0, i18n("A collection named \"%1\" already exist.", name));
+                return false;
+            }
 
-        if (item->path() == path)
-        {
-            KMessageBox::information(0, i18n("A collection with the path \"%1\" already exist.", path));
-            return false;
+            if (lvItem->path() == path)
+            {
+                KMessageBox::information(0, i18n("A collection with the path \"%1\" already exist.", path));
+                return false;
+            }
         }
+        i++;
     }
+    while (item);
+
     return true;
 }
 
