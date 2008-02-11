@@ -27,5 +27,6 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 008 ==> 122516 : Album Path cannot be on Network device (Unmounted).
 009 ==> 107871 : Allow multiple album library path.
 010 ==> 105645 : Impossible to not copy images in ~/Pictures.
-011 ==> 
+011 ==> 132697 : Metadata list has no scrollbar.
+012 ==> 
 
