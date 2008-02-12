@@ -7,7 +7,7 @@
  * Description : a digiKam image plugin for fixing dots produced by
  *               hot/stuck/dead pixels from a CCD.
  * 
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2005-2006 by Unai Garro <ugarro at users dot sourceforge dot net>
  * 
  * This program is free software; you can redistribute it
@@ -24,7 +24,7 @@
  * ============================================================ */
 
 // KDE includes.
-  
+
 #include <klocale.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
@@ -45,14 +45,14 @@ K_EXPORT_PLUGIN ( HotPixelsFactory("digikamimageplugin_hotpixels") )
 ImagePlugin_HotPixels::ImagePlugin_HotPixels(QObject *parent, const QVariantList &)
                      : Digikam::ImagePlugin(parent, "ImagePlugin_HotPixels")
 {
-    m_hotpixelsAction  = new KAction(KIcon("hotpixels"), i18n("Curves Adjust..."), this);
+    m_hotpixelsAction  = new KAction(KIcon("hotpixels"), i18n("Hot Pixels..."), this);
     actionCollection()->addAction("imageplugin_hotpixels", m_hotpixelsAction );
 
     connect(m_hotpixelsAction, SIGNAL(triggered(bool) ), 
             this, SLOT(slotHotPixels()));
-    
-    setXMLFile("digikamimageplugin_hotpixels_ui.rc");            
-        
+
+    setXMLFile("digikamimageplugin_hotpixels_ui.rc");
+
     DDebug() << "ImagePlugin_HotPixels plugin loaded" << endl;
 }
 

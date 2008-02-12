@@ -80,8 +80,6 @@ public:
     BlackFrameListViewItem(BlackFrameListView* parent, KUrl url);
     ~BlackFrameListViewItem(){};
 
-    virtual QString text(int column)const;
-
 signals:
 
     void parsed(Q3ValueList<HotPixel>, const KUrl&);

@@ -6,7 +6,7 @@
  * Date        : 2005-07-05
  * Description : a ListView to display black frames
  * 
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2005-2006 by Unai Garro <ugarro at users dot sourceforge dot net>
  * 
  * This program is free software; you can redistribute it
@@ -51,7 +51,6 @@ BlackFrameListView::BlackFrameListView(QWidget* parent)
     QStringList labels;
     labels.append( i18n("Preview") );
     labels.append( i18n("Size") );
-    labels.append( i18n("Port") );
     labels.append( i18nc("This is a column which will contain the amount of HotPixels "
                    "found in the black frame file", "HP") );
     setHeaderLabels(labels);
@@ -79,33 +78,6 @@ void BlackFrameListViewItem::activate()
     emit parsed(m_hotPixels, m_blackFrameURL);
 }
 
-QString BlackFrameListViewItem::text(int column)const
-{
-    switch (column)
-    {
-        case 0:
-        {
-            // First column includes the pixmap
-            break;
-        }
-        case 1:
-        {
-            // The image size.
-            if (!m_imageSize.isEmpty())
-                return (QString("%1x%2").arg(m_imageSize.width()).arg(m_imageSize.height())); 
-            break;
-        }
-        case 2:
-        {
-            // The amount of hot pixels found in the black frame.
-            return (QString::number(m_hotPixels.count())); 
-            break;
-        }
-    }
-
-    return QString();
-}
-
 void BlackFrameListViewItem::slotParsed(Q3ValueList<HotPixel> hotPixels)
 {
     m_hotPixels = hotPixels;
@@ -114,7 +86,12 @@ void BlackFrameListViewItem::slotParsed(Q3ValueList<HotPixel> hotPixels)
     m_thumb     = thumb(QSize(THUMB_WIDTH, THUMB_WIDTH/3*2)).toImage();
     setIcon(0, QPixmap::fromImage(m_thumb));
 
-    m_blackFrameDesc = QString("<p><b>" + m_blackFrameURL.fileName() + "</b>:<p>");    
+    if (!m_imageSize.isEmpty())
+        setText(1, QString("%1x%2").arg(m_imageSize.width()).arg(m_imageSize.height()));
+
+    setText(2, QString::number(m_hotPixels.count()));
+
+    m_blackFrameDesc = QString("<p><b>" + m_blackFrameURL.fileName() + "</b>:<p>");
     Q3ValueList <HotPixel>::Iterator end(m_hotPixels.end());
     for (Q3ValueList <HotPixel>::Iterator it = m_hotPixels.begin() ; it != end ; ++it)
         m_blackFrameDesc.append( QString("[%1,%2] ").arg((*it).x()).arg((*it).y()) );
