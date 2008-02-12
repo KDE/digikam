@@ -53,7 +53,6 @@ public:
     {
         latitude  = 0;
         longitude = 0;
-        latLonPos = 0;
     }
 
     int             xPos;
@@ -63,8 +62,6 @@ public:
 
     double          latitude;
     double          longitude;
-
-    QLabel         *latLonPos;
 };
 
 K_GLOBAL_STATIC(QPixmap, worldMap)
@@ -81,12 +78,6 @@ WorldMapWidget::WorldMapWidget(int w, int h, QWidget *parent)
     setMinimumWidth(w);
     setMinimumHeight(h);
     resizeContents(worldMapPixmap().width(), worldMapPixmap().height());
-
-    d->latLonPos = new QLabel(viewport());
-    d->latLonPos->setMaximumHeight(fontMetrics().height());
-    d->latLonPos->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    d->latLonPos->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-    addChild(d->latLonPos);
 }
 
 WorldMapWidget::~WorldMapWidget()
@@ -114,16 +105,6 @@ double WorldMapWidget::getLongitude(void)
     return d->longitude;
 }
 
-void WorldMapWidget::setEnabled(bool b)
-{
-    if (!b)
-        d->latLonPos->hide();
-    else 
-        d->latLonPos->show();
-
-    Q3ScrollView::setEnabled(b);
-}
-
 void WorldMapWidget::setGPSPosition(double lat, double lng)
 {
     d->latitude  = lat;
@@ -138,20 +119,14 @@ void WorldMapWidget::setGPSPosition(double lat, double lng)
     d->xPos = (int)(longMid + longOffset);
     d->yPos = (int)(latMid  - latOffset);
 
-    repaintContents(false); 
+    viewport()->repaint();
     center(d->xPos, d->yPos);
-
-    QString la, lo;
-    d->latLonPos->setText(QString("(%1, %2)").arg(la.setNum(d->latitude,  'f', 2)) 
-                                             .arg(lo.setNum(d->longitude, 'f', 2)));
-
-    moveChild(d->latLonPos, contentsX()+10, contentsY()+10);
 }
 
 void WorldMapWidget::drawContents(QPainter *p, int x, int y, int w, int h)
 {
     if (isEnabled())
-    {   
+    {
         p->drawPixmap(x, y, worldMapPixmap(), x, y, w, h);
         p->setPen(QPen(Qt::white, 0, Qt::SolidLine));
         p->drawLine(d->xPos, 0, d->xPos, contentsHeight());
@@ -169,9 +144,11 @@ void WorldMapWidget::drawContents(QPainter *p, int x, int y, int w, int h)
     }
 }
 
-void WorldMapWidget::contentsMousePressEvent ( QMouseEvent * e )
+void WorldMapWidget::contentsMousePressEvent(QMouseEvent *e)
 {
-    if ( e->button() == Qt::LeftButton )
+    if (!e) return;
+
+    if (e->button() == Qt::LeftButton)
     {
        d->xMousePos = e->x();
        d->yMousePos = e->y();
@@ -179,20 +156,17 @@ void WorldMapWidget::contentsMousePressEvent ( QMouseEvent * e )
     }
 }
 
-void WorldMapWidget::contentsMouseReleaseEvent ( QMouseEvent *  )
+void WorldMapWidget::contentsMouseMoveEvent(QMouseEvent *e)
 {
-    unsetCursor(); 
-}
+    if (!e) return;
 
-void WorldMapWidget::contentsMouseMoveEvent( QMouseEvent * e )
-{
-    if ( e->button() == Qt::LeftButton )
+    if (e->buttons() & Qt::LeftButton)
     {
        uint newxpos = e->x();
        uint newypos = e->y();
 
        scrollBy (-(newxpos - d->xMousePos), -(newypos - d->yMousePos));
-       repaintContents(false);
+       viewport()->repaint();
 
        d->xMousePos = newxpos - (newxpos-d->xMousePos);
        d->yMousePos = newypos - (newypos-d->yMousePos);
@@ -202,5 +176,9 @@ void WorldMapWidget::contentsMouseMoveEvent( QMouseEvent * e )
     setCursor( Qt::PointingHandCursor );
 }
 
-}  // namespace Digikam
+void WorldMapWidget::contentsMouseReleaseEvent(QMouseEvent*)
+{
+    unsetCursor(); 
+}
 
+}  // namespace Digikam

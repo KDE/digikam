@@ -52,7 +52,6 @@ public:
 
     double getLatitude(void);
     double getLongitude(void);
-    void   setEnabled(bool);
 
 protected:
 

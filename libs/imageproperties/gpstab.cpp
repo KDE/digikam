@@ -35,6 +35,7 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 #include <QGroupBox>
 #include <QGridLayout>
 #include <QFrame>
+#include <QLabel>
 
 // KDE includes.
 
@@ -42,6 +43,7 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 #include <kdialog.h>
 #include <klocale.h>
 #include <ktoolinvocation.h>
+#include <ksqueezedtextlabel.h>
 
 // Local includes.
 
@@ -64,13 +66,31 @@ public:
         detailsButton = 0;
         detailsCombo  = 0;
         map           = 0;
+        altLabel      = 0;
+        latLabel      = 0;
+        lonLabel      = 0;
+        dateLabel     = 0;
+        altitude      = 0;
+        latitude      = 0;
+        longitude     = 0;
+        date          = 0;
     }
 
-    QPushButton    *detailsButton;
+    QLabel             *altLabel;
+    QLabel             *latLabel;
+    QLabel             *lonLabel;
+    QLabel             *dateLabel;
 
-    QComboBox      *detailsCombo;
+    QPushButton        *detailsButton;
 
-    WorldMapWidget *map;
+    QComboBox          *detailsCombo;
+
+    KSqueezedTextLabel *altitude;
+    KSqueezedTextLabel *latitude;
+    KSqueezedTextLabel *longitude;
+    KSqueezedTextLabel *date;
+
+    WorldMapWidget     *map;
 };
 
 GPSTab::GPSTab(QWidget* parent, bool navBar)
@@ -86,6 +106,18 @@ GPSTab::GPSTab(QWidget* parent, bool navBar)
 
     QGridLayout *layout = new QGridLayout(gpsInfo);
     d->map              = new WorldMapWidget(256, 256, gpsInfo);
+    d->altLabel         = new QLabel(i18n("<b>Altitude</b>:"),  gpsInfo);
+    d->latLabel         = new QLabel(i18n("<b>Latitude</b>:"),  gpsInfo);
+    d->lonLabel         = new QLabel(i18n("<b>Longitude</b>:"), gpsInfo);
+    d->dateLabel        = new QLabel(i18n("<b>Date</b>:"),      gpsInfo);
+    d->altitude         = new KSqueezedTextLabel(0, gpsInfo);
+    d->latitude         = new KSqueezedTextLabel(0, gpsInfo);
+    d->longitude        = new KSqueezedTextLabel(0, gpsInfo);
+    d->date             = new KSqueezedTextLabel(0, gpsInfo);
+    d->altitude->setAlignment(Qt::AlignRight);
+    d->latitude->setAlignment(Qt::AlignRight);
+    d->longitude->setAlignment(Qt::AlignRight);
+    d->date->setAlignment(Qt::AlignRight);
 
     // --------------------------------------------------------
 
@@ -99,21 +131,29 @@ GPSTab::GPSTab(QWidget* parent, bool navBar)
     d->detailsCombo->insertItem(MsnMaps,    QString("MSN Maps"));
     d->detailsCombo->insertItem(MultiMap,   QString("MultiMap"));
 
-    box2Layout->addWidget( d->detailsCombo,  0, 0, 1, 1);
+    box2Layout->addWidget(d->detailsCombo,  0, 0, 1, 1);
     box2Layout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
                             QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 
-                                             0, 0, 1, 1);
-    box2Layout->addWidget( d->detailsButton, 0, 2, 1, 1);
+                                            0, 0, 1, 1);
+    box2Layout->addWidget(d->detailsButton, 0, 2, 1, 1);
     box2Layout->setColumnStretch(3, 10);
     box2Layout->setSpacing(0);
     box2Layout->setMargin(0);
 
     // --------------------------------------------------------
 
-    layout->addWidget(d->map, 0, 0, 1, 3);
-    layout->addWidget(box2,   1, 0, 1, 1);
+    layout->addWidget(d->map,       0, 0, 1, 2);
+    layout->addWidget(d->altLabel,  1, 0, 1, 1);
+    layout->addWidget(d->altitude,  1, 1, 1, 1);
+    layout->addWidget(d->latLabel,  2, 0, 1, 1);
+    layout->addWidget(d->latitude,  2, 1, 1, 1);
+    layout->addWidget(d->lonLabel,  3, 0, 1, 1);
+    layout->addWidget(d->longitude, 3, 1, 1, 1);
+    layout->addWidget(d->dateLabel, 4, 0, 1, 1);
+    layout->addWidget(d->date,      4, 1, 1, 1);
+    layout->addWidget(box2,         5, 0, 1, 2);
     layout->setRowStretch(0, 10);
-    layout->setColumnStretch(2, 10);
+    layout->setColumnStretch(1, 10);
     layout->setSpacing(0);
     layout->setMargin(0);
 
@@ -190,6 +230,7 @@ void GPSTab::slotGPSDetails()
         }
     }
 
+    DDebug() << url << endl;
     KToolInvocation::self()->invokeBrowser(url);
 }
 
@@ -212,12 +253,22 @@ void GPSTab::setCurrentURL(const KUrl& url)
 
 void GPSTab::setGPSInfo()
 {
+    d->altitude->setText(QString());
+    d->latitude->setText(QString());
+    d->longitude->setText(QString());
+    d->date->setText(QString());
+
     setNavigateBarFileName();
     setEnabled(false);
 }
 
 void GPSTab::setGPSInfo(double lat, double lon, long alt, const QDateTime dt)
 {
+    d->altitude->setText(QString("%1 m").arg(QString::number(alt)));
+    d->latitude->setText(QString::number(lat));
+    d->longitude->setText(QString::number(lon));
+    d->date->setText(KGlobal::locale()->formatDateTime(dt, KLocale::ShortDate, true));
+
     setEnabled(true);
     d->map->setGPSPosition(lat, lon);
 }
