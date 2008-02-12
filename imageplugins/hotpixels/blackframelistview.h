@@ -6,7 +6,7 @@
  * Date        : 2005-07-05
  * Description : a ListView to display black frames
  * 
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2005-2006 by Unai Garro <ugarro at users dot sourceforge dot net>
  * 
  * This program is free software; you can redistribute it
@@ -33,10 +33,10 @@
 #include <QSize>
 #include <QPoint>
 #include <QPixmap>
+#include <QTreeWidget>
 
 // KDE includes.
 
-#include <k3listview.h>
 #include <kurl.h>
 #include <klocale.h>
 
@@ -48,12 +48,12 @@
 namespace DigikamHotPixelsImagesPlugin
 {
 
-class BlackFrameListView : public K3ListView
+class BlackFrameListView : public QTreeWidget
 {
     Q_OBJECT
 
 public:
-    
+
     BlackFrameListView(QWidget* parent=0);
     ~BlackFrameListView(){};
 
@@ -66,12 +66,12 @@ private slots:
     void slotParsed(Q3ValueList<HotPixel> hotPixels, const KUrl& blackFrameURL)
     {
        emit blackFrameSelected(hotPixels, blackFrameURL);
-    };           
+    };
 };
 
 //-----------------------------------------------------------------------------------
 
-class BlackFrameListViewItem : public QObject, K3ListViewItem
+class BlackFrameListViewItem : public QObject, QTreeWidgetItem
 {
 Q_OBJECT
 
@@ -79,43 +79,41 @@ public:
 
     BlackFrameListViewItem(BlackFrameListView* parent, KUrl url);
     ~BlackFrameListViewItem(){};
-    
+
     virtual QString text(int column)const;
-    virtual void paintCell(QPainter* p, const QColorGroup& cg, int column, int width, int align);
-    virtual int width(const QFontMetrics& fm, const Q3ListView* lv, int c)const;
 
 signals:
 
     void parsed(Q3ValueList<HotPixel>, const KUrl&);
-            
+
 protected:
 
     void activate();
 
-private:    
-        
+private:
+
     QPixmap thumb(const QSize& size);
-    
+
 private slots:
 
-    void slotParsed(Q3ValueList<HotPixel>);        
+    void slotParsed(Q3ValueList<HotPixel>);
 
 private:
 
     // Data contained within each listview item
     QImage                m_thumb;
     QImage                m_image;
-    
+
     QSize                 m_imageSize;
-    
+
     Q3ValueList<HotPixel> m_hotPixels;
-    
+
     QString               m_blackFrameDesc;
-    
+
     KUrl                  m_blackFrameURL;
-    
+
     BlackFrameParser      m_parser;
-    
+
     BlackFrameListView   *m_parent;
 };
 

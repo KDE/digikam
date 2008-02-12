@@ -39,29 +39,36 @@ namespace DigikamHotPixelsImagesPlugin
 {
 
 BlackFrameListView::BlackFrameListView(QWidget* parent)
-                  : K3ListView(parent)
+                  : QTreeWidget(parent)
 {
-    addColumn(i18n("Preview"));
-    addColumn(i18n("Size"));
-    addColumn(i18nc("This is a column which will contain the amount of HotPixels "
-                   "found in the black frame file", "HP"));
+    setColumnCount(3);
+    setRootIsDecorated(false);
+    setSelectionMode(QAbstractItemView::SingleSelection);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setAllColumnsShowFocus(true);
-    setResizeMode(Q3ListView::LastColumn);
-    setSelectionMode(Q3ListView::Single);
+    setIconSize(QSize(THUMB_WIDTH, THUMB_WIDTH));
+
+    QStringList labels;
+    labels.append( i18n("Preview") );
+    labels.append( i18n("Size") );
+    labels.append( i18n("Port") );
+    labels.append( i18nc("This is a column which will contain the amount of HotPixels "
+                   "found in the black frame file", "HP") );
+    setHeaderLabels(labels);
 }
 
 // ----------------------------------------------------------------------------
 
 BlackFrameListViewItem::BlackFrameListViewItem(BlackFrameListView* parent, KUrl url)
-                      : QObject(parent), K3ListViewItem(parent)                        
+                      : QObject(parent), QTreeWidgetItem(parent)
 {
     m_parent        = parent;
     m_blackFrameURL = url;
     m_parser.parseBlackFrame(url);
-    
+
     connect(&m_parser, SIGNAL(parsed(Q3ValueList<HotPixel>)),
             this, SLOT(slotParsed(Q3ValueList<HotPixel>)));
-    
+
     connect(this, SIGNAL(parsed(Q3ValueList<HotPixel>, const KUrl&)),
             parent, SLOT(slotParsed(Q3ValueList<HotPixel>, const KUrl&)));
 }
@@ -95,15 +102,8 @@ QString BlackFrameListViewItem::text(int column)const
             break;
         }
     }
-    
-    return QString();
-}
 
-void BlackFrameListViewItem::paintCell(QPainter* p, const QColorGroup& cg, int column, 
-                                       int width, int align)
-{
-    //Let the normal listview item draw it all for now
-    Q3ListViewItem::paintCell(p, cg, column, width, align);
+    return QString();
 }
 
 void BlackFrameListViewItem::slotParsed(Q3ValueList<HotPixel> hotPixels)
@@ -112,13 +112,13 @@ void BlackFrameListViewItem::slotParsed(Q3ValueList<HotPixel> hotPixels)
     m_image     = m_parser.image();
     m_imageSize = m_image.size();
     m_thumb     = thumb(QSize(THUMB_WIDTH, THUMB_WIDTH/3*2)).toImage();
-    setPixmap(0, QPixmap::fromImage(m_thumb));
-        
+    setIcon(0, QPixmap::fromImage(m_thumb));
+
     m_blackFrameDesc = QString("<p><b>" + m_blackFrameURL.fileName() + "</b>:<p>");    
     Q3ValueList <HotPixel>::Iterator end(m_hotPixels.end());
     for (Q3ValueList <HotPixel>::Iterator it = m_hotPixels.begin() ; it != end ; ++it)
         m_blackFrameDesc.append( QString("[%1,%2] ").arg((*it).x()).arg((*it).y()) );
-    
+
     emit parsed(m_hotPixels, m_blackFrameURL);
 }
 
@@ -126,7 +126,7 @@ QPixmap BlackFrameListViewItem::thumb(const QSize& size)
 {
     //First scale it down to the size
     QPixmap thumb = QPixmap::fromImage(m_image.scaled(size, Qt::ScaleMin, Qt::SmoothTransformation));
-    
+
     //And draw the hot pixel positions on the thumb
     QPainter p(&thumb);
 
@@ -134,19 +134,19 @@ QPixmap BlackFrameListViewItem::thumb(const QSize& size)
     float xRatio, yRatio;
     float hpThumbX, hpThumbY;
     QRect hpRect;
-    
+
     xRatio = (float)size.width()/(float)m_image.width();
     yRatio = (float)size.height()/(float)m_image.height();
-    
+
     //Draw hot pixels one by one
-    Q3ValueList <HotPixel>::Iterator it;    
+    Q3ValueList <HotPixel>::Iterator it;
     Q3ValueList <HotPixel>::Iterator end(m_hotPixels.end()); 
     for (it=m_hotPixels.begin() ; it!=end ; ++it)
     {
         hpRect   = (*it).rect;
         hpThumbX = (hpRect.x()+hpRect.width()/2)*xRatio;
         hpThumbY = (hpRect.y()+hpRect.height()/2)*yRatio;
-        
+
         p.setPen(QPen(Qt::black));
         p.drawLine((int)hpThumbX, (int)hpThumbY-1, (int)hpThumbX, (int)hpThumbY+1);
         p.drawLine((int)hpThumbX-1, (int)hpThumbY, (int)hpThumbX+1, (int)hpThumbY);
@@ -156,14 +156,8 @@ QPixmap BlackFrameListViewItem::thumb(const QSize& size)
         p.drawPoint((int)hpThumbX-1, (int)hpThumbY+1);
         p.drawPoint((int)hpThumbX+1, (int)hpThumbY-1);
     }
-        
-    return thumb;
-}
 
-int BlackFrameListViewItem::width(const QFontMetrics& fm,const Q3ListView* lv,int c)const
-{
-    if (c==0) return THUMB_WIDTH;
-    else return Q3ListViewItem::width(fm,lv,c);
+    return thumb;
 }
 
 }  // NameSpace DigikamHotPixelsImagesPlugin

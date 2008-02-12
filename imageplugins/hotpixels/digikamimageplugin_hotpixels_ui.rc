@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="4" name="digikamimageplugin_hotpixels" >
+<kpartgui version="5" name="digikamimageplugin_hotpixels" >
 
  <MenuBar>
 
@@ -14,7 +14,7 @@
  </ToolBar>
 
  <ActionProperties>
-  <Action shortcut="" name="imageplugin_hotpixels" />
+  <Action name="imageplugin_hotpixels" />
  </ActionProperties>
  
 </kpartgui>
