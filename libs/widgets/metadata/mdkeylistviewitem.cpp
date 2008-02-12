@@ -56,13 +56,13 @@ MdKeyListViewItem::MdKeyListViewItem(QTreeWidget *parent, const QString& key)
     else if (key == "Envelope")     m_decryptedKey = i18n("IIM Envelope");
     else if (key == "Application2") m_decryptedKey = i18n("IIM Application 2");
 
+    setDisabled(false);
     setSelected(false);
+    setFlags(flags() & !Qt::ItemIsSelectable);
     setExpanded(true);
     setChildIndicatorPolicy(QTreeWidgetItem::DontShowIndicator);
 
     // item is not selectable.
-    setFlags(flags() & !Qt::ItemIsSelectable);
-    setDisabled(false);
 
     setFirstColumnSpanned(true);
     setTextAlignment(0, Qt::AlignCenter);
