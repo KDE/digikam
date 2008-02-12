@@ -233,13 +233,15 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
     d->replaceButton = new QPushButton(albumPathBox);
 
     d->newButton->setText( i18n( "&New" ) );
-    d->newButton->setIcon(SmallIcon("folder-new"));
     d->addButton->setText( i18n( "&Add" ) );
-    d->addButton->setIcon(SmallIcon("list-add"));
     d->removeButton->setText( i18n( "&Remove" ) );
-    d->removeButton->setIcon(SmallIcon("list-remove"));
     d->replaceButton->setText( i18n( "&Replace" ) );
+
+    d->newButton->setIcon(SmallIcon("folder-new"));
+    d->addButton->setIcon(SmallIcon("list-add"));
+    d->removeButton->setIcon(SmallIcon("list-remove"));
     d->replaceButton->setIcon(SmallIcon("view-refresh"));
+
     d->removeButton->setEnabled(false);
     d->replaceButton->setEnabled(false);
 

@@ -6,7 +6,7 @@
  * Date        : 2004-01-02
  * Description : album type setup tab.
  * 
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -96,11 +96,11 @@ SetupAlbumType::SetupAlbumType(QWidget* parent )
     d->albumCollectionBox->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 
     d->addCollectionButton = new QPushButton(i18n("&Add..."), this);
-    d->delCollectionButton = new QPushButton(i18n("&Delete"), this);
+    d->delCollectionButton = new QPushButton(i18n("&Remove"), this);
     d->repCollectionButton = new QPushButton(i18n("&Replace"), this);
 
-    d->addCollectionButton->setIcon(SmallIcon("edit-add"));
-    d->delCollectionButton->setIcon(SmallIcon("edit-delete"));
+    d->addCollectionButton->setIcon(SmallIcon("list-add"));
+    d->delCollectionButton->setIcon(SmallIcon("list-remove"));
     d->repCollectionButton->setIcon(SmallIcon("view-refresh"));
     d->delCollectionButton->setEnabled(false);
     d->repCollectionButton->setEnabled(false);
