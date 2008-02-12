@@ -2,8 +2,6 @@ INSTALL( FILES exifwidget.h
                iptcwidget.h 
                mdkeylistviewitem.h  
                metadatalistviewitem.h  
-               worldmapwidget.h
-               gpswidget.h 
                makernotewidget.h  
                metadatalistview.h 
                metadatawidget.h

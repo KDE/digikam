@@ -253,6 +253,8 @@ SET(libimageproperties_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiestab.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiesmetadatatab.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiescolorstab.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/worldmapwidget.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/gpswidget.cpp
    )
 
 SET(libjpegutils_SRCS
@@ -342,11 +344,9 @@ SET(libmetadatawidgets_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/mdkeylistviewitem.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/metadatalistview.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/metadatalistviewitem.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/worldmapwidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/iptcwidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/exifwidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/makernotewidget.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/gpswidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/metadatawidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/xmpwidget.cpp
    )
@@ -434,6 +434,8 @@ SET(libimagepropertiesdigikam_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiessidebardb.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/talbumlistview.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagedescedittab.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/worldmapwidget.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/gpswidget.cpp
    )
 
  SET(libdimgeditor_SRCS 

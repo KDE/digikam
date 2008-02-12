@@ -46,7 +46,6 @@
 #include "exifwidget.h"
 #include "makernotewidget.h"
 #include "iptcwidget.h"
-#include "gpswidget.h"
 #include "xmpwidget.h"
 #include "navigatebarwidget.h"
 #include "imagepropertiesmetadatatab.h"
@@ -64,8 +63,7 @@ public:
         EXIF,
         MAKERNOTE,
         IPTC,
-        GPS,
-	    XMP
+        XMP
     };
 
     ImagePropertiesMetadataTabPriv()
@@ -73,7 +71,6 @@ public:
         exifWidget      = 0;
         makernoteWidget = 0;
         iptcWidget      = 0;
-        gpsWidget       = 0;
         xmpWidget       = 0;
         tab             = 0;
     }
@@ -85,8 +82,6 @@ public:
     MakerNoteWidget *makernoteWidget;
 
     IptcWidget      *iptcWidget;
-
-    GPSWidget       *gpsWidget;
 
     XmpWidget       *xmpWidget;
 };
@@ -116,11 +111,6 @@ ImagePropertiesMetaDataTab::ImagePropertiesMetaDataTab(QWidget* parent, bool nav
     d->iptcWidget = new IptcWidget(d->tab);
     d->tab->insertTab(ImagePropertiesMetadataTabPriv::IPTC, d->iptcWidget, i18n("IPTC"));
 
-    // GPS tab area ----------------------------------------
-
-    d->gpsWidget = new GPSWidget(d->tab);
-    d->tab->insertTab(ImagePropertiesMetadataTabPriv::GPS, d->gpsWidget, i18n("GPS"));
-
     // XMP tab area ----------------------------------------
 
     d->xmpWidget = new XmpWidget(d->tab);
@@ -138,14 +128,11 @@ ImagePropertiesMetaDataTab::ImagePropertiesMetaDataTab(QWidget* parent, bool nav
     d->exifWidget->setMode(group.readEntry("EXIF Level", (int)ExifWidget::SIMPLE));
     d->makernoteWidget->setMode(group.readEntry("MAKERNOTE Level", (int)MakerNoteWidget::SIMPLE));
     d->iptcWidget->setMode(group.readEntry("IPTC Level", (int)IptcWidget::SIMPLE));
-    d->gpsWidget->setMode(group.readEntry("GPS Level", (int)GPSWidget::SIMPLE));
     d->xmpWidget->setMode(group.readEntry("XMP Level", (int)XmpWidget::SIMPLE));
     d->exifWidget->setCurrentItemByKey(group.readEntry("Current EXIF Item", QString()));
     d->makernoteWidget->setCurrentItemByKey(group.readEntry("Current MAKERNOTE Item", QString()));
     d->iptcWidget->setCurrentItemByKey(group.readEntry("Current IPTC Item", QString()));
-    d->gpsWidget->setCurrentItemByKey(group.readEntry("Current GPS Item", QString()));
     d->xmpWidget->setCurrentItemByKey(group.readEntry("Current XMP Item", QString()));
-    d->gpsWidget->setWebGPSLocator(group.readEntry("Current Web GPS Locator", (int)GPSWidget::MapQuest));
 }
 
 ImagePropertiesMetaDataTab::~ImagePropertiesMetaDataTab()
@@ -156,14 +143,11 @@ ImagePropertiesMetaDataTab::~ImagePropertiesMetaDataTab()
     group.writeEntry("EXIF Level", d->exifWidget->getMode());
     group.writeEntry("MAKERNOTE Level", d->makernoteWidget->getMode());
     group.writeEntry("IPTC Level", d->iptcWidget->getMode());
-    group.writeEntry("GPS Level", d->gpsWidget->getMode());
     group.writeEntry("XMP Level", d->xmpWidget->getMode());
     group.writeEntry("Current EXIF Item", d->exifWidget->getCurrentItemKey());
     group.writeEntry("Current MAKERNOTE Item", d->makernoteWidget->getCurrentItemKey());
     group.writeEntry("Current IPTC Item", d->iptcWidget->getCurrentItemKey());
-    group.writeEntry("Current GPS Item", d->gpsWidget->getCurrentItemKey());
     group.writeEntry("Current XMP Item", d->xmpWidget->getCurrentItemKey());
-    group.writeEntry("Current Web GPS Locator", d->gpsWidget->getWebGPSLocator());
     config->sync();
 
     delete d;
@@ -176,7 +160,6 @@ void ImagePropertiesMetaDataTab::setCurrentURL(const KUrl& url)
         d->exifWidget->loadFromURL(url);
         d->makernoteWidget->loadFromURL(url);
         d->iptcWidget->loadFromURL(url);
-        d->gpsWidget->loadFromURL(url);
         d->xmpWidget->loadFromURL(url);
         setEnabled(false);
         return;
@@ -188,7 +171,6 @@ void ImagePropertiesMetaDataTab::setCurrentURL(const KUrl& url)
     d->exifWidget->loadFromData(url.fileName(), metadata);
     d->makernoteWidget->loadFromData(url.fileName(), metadata);
     d->iptcWidget->loadFromData(url.fileName(), metadata);
-    d->gpsWidget->loadFromData(url.fileName(), metadata);
     d->xmpWidget->loadFromData(url.fileName(), metadata);
 }
 
@@ -201,7 +183,6 @@ void ImagePropertiesMetaDataTab::setCurrentData(const DMetadata& metaData, const
         d->exifWidget->loadFromData(filename, data);
         d->makernoteWidget->loadFromData(filename, data);
         d->iptcWidget->loadFromData(filename, data);
-        d->gpsWidget->loadFromData(filename, data);
         d->xmpWidget->loadFromData(filename, data);
         setEnabled(false);
         return;
@@ -212,7 +193,6 @@ void ImagePropertiesMetaDataTab::setCurrentData(const DMetadata& metaData, const
     d->exifWidget->loadFromData(filename, data);
     d->makernoteWidget->loadFromData(filename, data);
     d->iptcWidget->loadFromData(filename, data);
-    d->gpsWidget->loadFromData(filename, data);
     d->xmpWidget->loadFromData(filename, data);
 }
 

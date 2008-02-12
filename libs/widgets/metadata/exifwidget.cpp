@@ -65,6 +65,9 @@ static const char* ExifHumanList[] =
      "LightSource",
      "Flash",
      "FNumber",
+     "GPSLatitude",
+     "GPSLongitude",
+     "GPSAltitude",
      "-1"
 };
 
@@ -76,6 +79,7 @@ static const char* StandardExifEntryList[] =
      "Thumbnail",
      "Image",
      "Photo",
+     "GPSInfo",
      "-1"
 };
 
