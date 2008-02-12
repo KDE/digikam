@@ -7,7 +7,7 @@
  * Description : simple image properties side bar (without support 
  *               of digiKam database).
  *
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -40,10 +40,12 @@
 
 #include "ddebug.h"
 #include "dimg.h"
+#include "gpstab.h"
 #include "imagepropertiestab.h"
 #include "imagepropertiesmetadatatab.h"
 #include "imagepropertiescolorstab.h"
 #include "imagepropertiessidebar.h"
+#include "imagepropertiessidebar.moc"
 
 namespace Digikam
 {
@@ -58,17 +60,20 @@ ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget *parent,
     m_dirtyPropertiesTab = false;
     m_dirtyMetadataTab   = false;
     m_dirtyColorTab      = false;
-    
+    m_dirtyGpsTab        = false;
+
     m_propertiesTab = new ImagePropertiesTab(parent, navBar);
     m_metadataTab   = new ImagePropertiesMetaDataTab(parent, navBar);
     m_colorTab      = new ImagePropertiesColorsTab(parent, navBar);
-    
+    m_gpsTab        = new GPSTab(parent, navBar);
+
     setSplitter(splitter);
-         
+
     appendTab(m_propertiesTab, SmallIcon("document-properties"), i18n("Properties"));
     appendTab(m_metadataTab, SmallIcon("exifinfo"), i18n("Metadata"));
     appendTab(m_colorTab, SmallIcon("format-fill-color"), i18n("Colors"));
-    
+    appendTab(m_gpsTab, SmallIcon("applications-internet"), i18n("Geolocation"));
+
     connect(this, SIGNAL(signalChangedTab(QWidget*)),
             this, SLOT(slotChangedTab(QWidget*)));
 }
@@ -88,11 +93,12 @@ void ImagePropertiesSideBar::itemChanged(const KUrl& url, const QRect &rect, DIm
     m_dirtyPropertiesTab = false;
     m_dirtyMetadataTab   = false;
     m_dirtyColorTab      = false;
+    m_dirtyGpsTab        = false;
 
     slotChangedTab( getActiveTab() );
 }
 
-void ImagePropertiesSideBar::slotNoCurrentItem(void)
+void ImagePropertiesSideBar::slotNoCurrentItem()
 {
     m_currentURL = KUrl();
 
@@ -105,9 +111,13 @@ void ImagePropertiesSideBar::slotNoCurrentItem(void)
     m_colorTab->setData();
     m_colorTab->setNavigateBarFileName();
 
+    m_gpsTab->setCurrentURL();
+    m_gpsTab->setNavigateBarFileName();
+
     m_dirtyPropertiesTab = false;
     m_dirtyMetadataTab   = false;
     m_dirtyColorTab      = false;
+    m_dirtyGpsTab        = false;
 }
 
 void ImagePropertiesSideBar::slotImageSelectionChanged(const QRect &rect)
@@ -124,9 +134,9 @@ void ImagePropertiesSideBar::slotChangedTab(QWidget* tab)
 {
     if (!m_currentURL.isValid())
         return;
-    
+
     setCursor(Qt::WaitCursor);
-    
+
     if (tab == m_propertiesTab && !m_dirtyPropertiesTab)
     {
        m_propertiesTab->setCurrentURL(m_currentURL);
@@ -142,11 +152,13 @@ void ImagePropertiesSideBar::slotChangedTab(QWidget* tab)
        m_colorTab->setData(m_currentURL, m_currentRect, m_image);
        m_dirtyColorTab = true;
     }
-    
+    else if (tab == m_gpsTab && !m_dirtyGpsTab)
+    {
+       m_gpsTab->setCurrentURL(m_currentURL);
+       m_dirtyGpsTab = true;
+    }
+
     unsetCursor();
 }
 
 }  // NameSpace Digikam
-
-#include "imagepropertiessidebar.moc"
-

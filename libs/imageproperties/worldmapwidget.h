@@ -49,14 +49,17 @@ public:
     ~WorldMapWidget();
 
     void   setGPSPosition(double lat, double lng);
-    
+
     double getLatitude(void);
     double getLongitude(void);
     void   setEnabled(bool);
 
-private:
+protected:
 
     void drawContents(QPainter *p, int x, int y, int w, int h);
+
+private:
+
     void contentsMousePressEvent ( QMouseEvent * e );
     void contentsMouseReleaseEvent ( QMouseEvent * e );
     void contentsMouseMoveEvent( QMouseEvent * e );

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2006-02-22
- * Description : a tab widget to display GPS info
+ * Description : a tab to display GPS info
  * 
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,28 +21,28 @@
  * 
  * ============================================================ */
 
-#ifndef GPSWIDGET_H
-#define GPSWIDGET_H
+#ifndef GPSTAB_H
+#define GPSTAB_H
 
 // Qt includes.
 
-#include <QWidget>
+#include <QDateTime>
 #include <QString>
 
 // Local includes
 
-#include "metadatawidget.h"
+#include "navigatebartab.h"
 #include "digikam_export.h"
 
 namespace Digikam
 {
 
-class GPSWidgetPriv;
+class GPSTabPriv;
 
-class DIGIKAM_EXPORT GPSWidget : public MetadataWidget
+class DIGIKAM_EXPORT GPSTab : public NavigateBarTab
 {
     Q_OBJECT
-    
+
 public:
 
     enum WebGPSLocator
@@ -55,39 +55,25 @@ public:
 
 public:
 
-    GPSWidget(QWidget* parent, const char* name=0);
-    ~GPSWidget();
+    GPSTab(QWidget* parent, bool navBar=true);
+    ~GPSTab();
 
-    bool    loadFromURL(const KUrl& url);
-    
-    QString getTagDescription(const QString& key);
-    QString getTagTitle(const QString& key);
+    void setGPSInfo();
+    void setGPSInfo(double lat, double lon, long alt, const QDateTime dt);
+    void setCurrentURL(const KUrl& url=KUrl());
 
-    QString getMetadataTitle(void);
-    
-    int  getWebGPSLocator(void);
+    int  getWebGPSLocator();
     void setWebGPSLocator(int locator);
-
-protected slots:    
-    
-    virtual void slotSaveMetadataToFile(void);
 
 private slots:
 
-    void slotGPSDetails(void);
+    void slotGPSDetails();
 
 private:
 
-    bool decodeMetadata(void);
-    void buildView(void);
-    bool decodeGPSPosition(void);
-    virtual void setMetadataEmpty();
-
-private:
-
-    GPSWidgetPriv *d;
+    GPSTabPriv *d;
 };
 
 }  // namespace Digikam
 
-#endif /* GPSWIDGET_H */
+#endif /* GPSTAB_H */

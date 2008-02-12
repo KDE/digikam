@@ -7,7 +7,7 @@
  * Description : simple image properties side bar (without support 
  *               of digiKam database).
  *
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,6 +42,7 @@ namespace Digikam
 {
 
 class DImg;
+class GPSTab;
 class ImagePropertiesTab;
 class ImagePropertiesMetaDataTab;
 class ImagePropertiesColorsTab;
@@ -53,7 +54,8 @@ class DIGIKAM_EXPORT ImagePropertiesSideBar : public Sidebar
 public:
 
     ImagePropertiesSideBar(QWidget* parent, QSplitter *splitter,
-                           Side side=Sidebar::DockLeft, bool mimimizedDefault=false, bool navBar=false);
+                           Side side=Sidebar::DockLeft, bool mimimizedDefault=false, 
+                           bool navBar=false);
 
     ~ImagePropertiesSideBar();
 
@@ -62,7 +64,7 @@ public:
 public slots:
 
     void slotImageSelectionChanged(const QRect &rect);
-    virtual void slotNoCurrentItem(void);
+    virtual void slotNoCurrentItem();
 
 
 protected slots:
@@ -74,6 +76,7 @@ protected:
     bool                        m_dirtyPropertiesTab;
     bool                        m_dirtyMetadataTab;
     bool                        m_dirtyColorTab;
+    bool                        m_dirtyGpsTab;
 
     QRect                       m_currentRect;
 
@@ -81,6 +84,7 @@ protected:
 
     DImg                       *m_image;
 
+    GPSTab                     *m_gpsTab;
     ImagePropertiesTab         *m_propertiesTab;
     ImagePropertiesMetaDataTab *m_metadataTab;
     ImagePropertiesColorsTab   *m_colorTab;

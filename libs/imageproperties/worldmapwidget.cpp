@@ -79,9 +79,9 @@ WorldMapWidget::WorldMapWidget(int w, int h, QWidget *parent)
     setHScrollBarMode(Q3ScrollView::AlwaysOff);
     viewport()->setMouseTracking(true);
     setMinimumWidth(w);
-    setMaximumHeight(h);
+    setMinimumHeight(h);
     resizeContents(worldMapPixmap().width(), worldMapPixmap().height());
-    
+
     d->latLonPos = new QLabel(viewport());
     d->latLonPos->setMaximumHeight(fontMetrics().height());
     d->latLonPos->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
@@ -119,8 +119,8 @@ void WorldMapWidget::setEnabled(bool b)
     if (!b)
         d->latLonPos->hide();
     else 
-        d->latLonPos->show();        
-    
+        d->latLonPos->show();
+
     Q3ScrollView::setEnabled(b);
 }
 
@@ -128,19 +128,19 @@ void WorldMapWidget::setGPSPosition(double lat, double lng)
 {
     d->latitude  = lat;
     d->longitude = lng;
-    
+
     double latMid  = contentsHeight() / 2.0;
     double longMid = contentsWidth()  / 2.0;
-    
+
     double latOffset  = ( d->latitude  * latMid )  / 90.0;
     double longOffset = ( d->longitude * longMid ) / 180.0;
 
     d->xPos = (int)(longMid + longOffset);
-    d->yPos = (int)(latMid  - latOffset);    
-    
+    d->yPos = (int)(latMid  - latOffset);
+
     repaintContents(false); 
     center(d->xPos, d->yPos);
-    
+
     QString la, lo;
     d->latLonPos->setText(QString("(%1, %2)").arg(la.setNum(d->latitude,  'f', 2)) 
                                              .arg(lo.setNum(d->longitude, 'f', 2)));
@@ -175,7 +175,7 @@ void WorldMapWidget::contentsMousePressEvent ( QMouseEvent * e )
     {
        d->xMousePos = e->x();
        d->yMousePos = e->y();
-       setCursor( Qt::SizeAllCursor );    
+       setCursor( Qt::SizeAllCursor );
     }
 }
 
@@ -190,16 +190,16 @@ void WorldMapWidget::contentsMouseMoveEvent( QMouseEvent * e )
     {
        uint newxpos = e->x();
        uint newypos = e->y();
-       
+
        scrollBy (-(newxpos - d->xMousePos), -(newypos - d->yMousePos));
-       repaintContents(false);    
-       
+       repaintContents(false);
+
        d->xMousePos = newxpos - (newxpos-d->xMousePos);
        d->yMousePos = newypos - (newypos-d->yMousePos);
        return;
     }
 
-    setCursor( Qt::PointingHandCursor );    
+    setCursor( Qt::PointingHandCursor );
 }
 
 }  // namespace Digikam

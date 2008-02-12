@@ -47,43 +47,24 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 
 #include "ddebug.h"
 #include "dmetadata.h"
-#include "metadatalistview.h"
 #include "worldmapwidget.h"
-#include "gpswidget.h"
-#include "gpswidget.moc"
+#include "gpstab.h"
+#include "gpstab.moc"
 
 namespace Digikam
 {
 
-static const char* ExifGPSHumanList[] =
-{
-     "GPSLatitude",
-     "GPSLongitude",
-     "GPSAltitude",
-     "-1"
-};
-
-// Standard Exif Entry list from to less important to the most important for photograph.
-static const char* StandardExifGPSEntryList[] =
-{
-     "GPSInfo",
-     "-1"
-};
-
-class GPSWidgetPriv
+class GPSTabPriv
 {
 
 public:
 
-    GPSWidgetPriv()
+    GPSTabPriv()
     {
         detailsButton = 0;
         detailsCombo  = 0;
         map           = 0;
     }
-
-    QStringList     tagsfilter;
-    QStringList     keysFilter;
 
     QPushButton    *detailsButton;
 
@@ -92,20 +73,17 @@ public:
     WorldMapWidget *map;
 };
 
-GPSWidget::GPSWidget(QWidget* parent, const char* name)
-         : MetadataWidget(parent, name)
+GPSTab::GPSTab(QWidget* parent, bool navBar)
+      : NavigateBarTab(parent)
 {
-    d = new GPSWidgetPriv;
-
-    for (int i=0 ; QString(StandardExifGPSEntryList[i]) != QString("-1") ; i++)
-        d->keysFilter << StandardExifGPSEntryList[i];
-
-    for (int i=0 ; QString(ExifGPSHumanList[i]) != QString("-1") ; i++)
-        d->tagsfilter << ExifGPSHumanList[i];
+    d = new GPSTabPriv;
+    setupNavigateBar(navBar);
 
     // --------------------------------------------------------
 
     QWidget *gpsInfo    = new QWidget(this);
+    m_navigateBarLayout->addWidget(gpsInfo);
+
     QGridLayout *layout = new QGridLayout(gpsInfo);
     d->map              = new WorldMapWidget(256, 256, gpsInfo);
 
@@ -121,9 +99,10 @@ GPSWidget::GPSWidget(QWidget* parent, const char* name)
     d->detailsCombo->insertItem(MsnMaps,    QString("MSN Maps"));
     d->detailsCombo->insertItem(MultiMap,   QString("MultiMap"));
 
-    box2Layout->addWidget( d->detailsCombo, 0, 0, 1, 1);
+    box2Layout->addWidget( d->detailsCombo,  0, 0, 1, 1);
     box2Layout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
-                             QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 0, 0, 1, 1);
+                            QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 
+                                             0, 0, 1, 1);
     box2Layout->addWidget( d->detailsButton, 0, 2, 1, 1);
     box2Layout->setColumnStretch(3, 10);
     box2Layout->setSpacing(0);
@@ -131,10 +110,9 @@ GPSWidget::GPSWidget(QWidget* parent, const char* name)
 
     // --------------------------------------------------------
 
-    layout->addWidget(d->map, 0, 0, 1, 3 );
-    layout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
-                         QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 1, 0, 1, 3);
-    layout->addWidget(box2, 2, 0, 1, 1);
+    layout->addWidget(d->map, 0, 0, 1, 3);
+    layout->addWidget(box2,   1, 0, 1, 1);
+    layout->setRowStretch(0, 10);
     layout->setColumnStretch(2, 10);
     layout->setSpacing(0);
     layout->setMargin(0);
@@ -143,27 +121,24 @@ GPSWidget::GPSWidget(QWidget* parent, const char* name)
 
     connect(d->detailsButton, SIGNAL(clicked()),
             this, SLOT(slotGPSDetails()));
-
-    setUserAreaWidget(gpsInfo);
-    decodeMetadata();
 }
 
-GPSWidget::~GPSWidget()
+GPSTab::~GPSTab()
 {
     delete d;
 }
 
-int GPSWidget::getWebGPSLocator(void)
+int GPSTab::getWebGPSLocator()
 {
     return ( d->detailsCombo->currentIndex() );
 }
 
-void GPSWidget::setWebGPSLocator(int locator)
+void GPSTab::setWebGPSLocator(int locator)
 {
     d->detailsCombo->setCurrentIndex(locator);
 }
 
-void GPSWidget::slotGPSDetails(void)
+void GPSTab::slotGPSDetails()
 {
     QString val, url;
 
@@ -218,121 +193,33 @@ void GPSWidget::slotGPSDetails(void)
     KToolInvocation::self()->invokeBrowser(url);
 }
 
-QString GPSWidget::getMetadataTitle(void)
+void GPSTab::setCurrentURL(const KUrl& url)
 {
-    return i18n("Global Positioning System Information");
-}
-
-bool GPSWidget::loadFromURL(const KUrl& url)
-{
-    setFileName(url.path());
-
     if (url.isEmpty())
     {
-        setMetadata();
-        return false;
+        setGPSInfo();
+        return;
     }
+
+    double alt, lat, lon;
+    DMetadata meta(url.path());
+    QDateTime dt = meta.getImageDateTime();
+    if (meta.getGPSInfo(alt, lat, lon))
+        setGPSInfo(lat, lon, alt, dt);
     else
-    {
-        DMetadata metadata(url.path());
-
-        if (!metadata.hasExif())
-        {
-            setMetadata();
-            return false;
-        }
-        else
-            setMetadata(metadata);
-    }
-
-    return true;
+        setGPSInfo();
 }
 
-bool GPSWidget::decodeMetadata()
+void GPSTab::setGPSInfo()
 {
-    DMetadata data = getMetadata();
-    if (!data.hasExif())
-    {
-        setMetadataEmpty();
-        return false;
-    }
-
-    // Update all metadata contents.
-    setMetadataMap(data.getExifTagsDataList(d->keysFilter));
-
-    bool ret = decodeGPSPosition();
-    if (!ret)
-    {
-        setMetadataEmpty();
-        return false;
-    }
-
-    d->map->setEnabled(true);
-    d->detailsButton->setEnabled(true);
-    d->detailsCombo->setEnabled(true);
-    return true;
+    setNavigateBarFileName();
+    setEnabled(false);
 }
 
-void GPSWidget::setMetadataEmpty()
+void GPSTab::setGPSInfo(double lat, double lon, long alt, const QDateTime dt)
 {
-    MetadataWidget::setMetadataEmpty();
-    d->map->setEnabled(false);
-    d->detailsButton->setEnabled(false);
-    d->detailsCombo->setEnabled(false);
-}
-
-void GPSWidget::buildView(void)
-{
-
-    if (getMode() == SIMPLE)
-    {
-        setIfdList(getMetadataMap(), d->keysFilter, d->tagsfilter);
-    }
-    else
-    {
-        setIfdList(getMetadataMap(), d->keysFilter, QStringList());
-    }
-}
-
-QString GPSWidget::getTagTitle(const QString& key)
-{
-    QString title = DMetadata::getExifTagTitle(key.toAscii());
-
-    if (title.isEmpty())
-        return key.section('.', -1);
-
-    return title;
-}
-
-QString GPSWidget::getTagDescription(const QString& key)
-{
-    QString desc = DMetadata::getExifTagDescription(key.toAscii());
-
-    if (desc.isEmpty())
-        return i18n("No description available");
-
-    return desc;
-}
-
-bool GPSWidget::decodeGPSPosition(void)
-{
-    double latitude=0.0, longitude=0.0, altitude=0.0;
-
-    DMetadata meta = getMetadata();
-
-    if (meta.getGPSInfo(altitude, latitude, longitude))
-        d->map->setGPSPosition(latitude, longitude);
-    else 
-        return false;
-
-    return true;
-}
-
-void GPSWidget::slotSaveMetadataToFile(void)
-{
-    KUrl url = saveMetadataToFile(i18n("EXIF File to Save"),
-                                  QString("*.exif|"+i18n("EXIF binary Files (*.exif)")));
-    storeMetadataToFile(url, getMetadata().getExif());
+    setEnabled(true);
+    d->map->setGPSPosition(lat, lon);
 }
 
 }  // namespace Digikam

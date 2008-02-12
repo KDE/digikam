@@ -7,7 +7,7 @@
  * Description : image properties side bar using data from 
  *               digiKam database.
  *
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -44,6 +44,7 @@
 #include "dimg.h"
 #include "themeengine.h"
 #include "imageinfo.h"
+#include "gpstab.h"
 #include "imagedescedittab.h"
 #include "imageattributeswatch.h"
 #include "imagepropertiestab.h"
@@ -154,8 +155,7 @@ void ImagePropertiesSideBarDB::itemChanged(const ImageInfoList &infos)
     itemChanged(infos, QRect(), 0);
 }
 
-void ImagePropertiesSideBarDB::itemChanged(ImageInfoList infos,
-                                           const QRect &rect, DImg *img)
+void ImagePropertiesSideBarDB::itemChanged(ImageInfoList infos, const QRect &rect, DImg *img)
 {
     m_currentRect = rect;
     m_image       = img;
@@ -164,6 +164,7 @@ void ImagePropertiesSideBarDB::itemChanged(ImageInfoList infos,
     m_dirtyPropertiesTab = false;
     m_dirtyMetadataTab   = false;
     m_dirtyColorTab      = false;
+    m_dirtyGpsTab        = false;
     d->dirtyDesceditTab  = false;
 
     // All tabs that store the ImageInfo list and access it after selection change
@@ -173,7 +174,7 @@ void ImagePropertiesSideBarDB::itemChanged(ImageInfoList infos,
     slotChangedTab( getActiveTab() );
 }
 
-void ImagePropertiesSideBarDB::slotNoCurrentItem(void)
+void ImagePropertiesSideBarDB::slotNoCurrentItem()
 {
     ImagePropertiesSideBar::slotNoCurrentItem();
 
@@ -229,6 +230,11 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
             d->desceditTab->setItem();
             d->dirtyDesceditTab = true;
         }
+        else if (tab == m_gpsTab && !m_dirtyGpsTab)
+        {
+            m_gpsTab->setCurrentURL(m_currentURL);
+            m_dirtyGpsTab = true;
+        }
     }
     else if (d->currentInfos.count() == 1)   // Data from database available...
     {
@@ -263,6 +269,18 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
             d->desceditTab->setItem(d->currentInfos.first());
             d->dirtyDesceditTab = true;
         }
+        else if (tab == m_gpsTab && !m_dirtyGpsTab)
+        {
+            ImagePosition pos = d->currentInfos.first().imagePosition();
+            if (pos.isEmpty())
+                m_gpsTab->setCurrentURL();
+            else
+                m_gpsTab->setGPSInfo(pos.latitudeNumber(), 
+                                     pos.longitudeNumber(), 
+                                     pos.altitude(), 
+                                     d->currentInfos.first().dateTime());
+            m_dirtyGpsTab = true;
+        }
     }
     else  // Data from database available, multiple selection
     {
@@ -288,6 +306,12 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         {
             d->desceditTab->setItems(d->currentInfos);
             d->dirtyDesceditTab = true;
+        }
+        else if (tab == m_gpsTab && !m_dirtyGpsTab)
+        {
+            // FIXME
+            m_gpsTab->setCurrentURL();
+            m_dirtyGpsTab = true;
         }
     }
 
