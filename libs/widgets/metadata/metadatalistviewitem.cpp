@@ -41,9 +41,10 @@ MetadataListViewItem::MetadataListViewItem(QTreeWidgetItem *parent, const QStrin
 {
     m_key = key;
 
-    setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | 
-             Qt::ItemIsEnabled    | Qt::ItemIsDragEnabled   | 
-             Qt::ItemIsDropEnabled);
+    // item is selectable.
+    setFlags(flags() | Qt::ItemIsSelectable);
+    setDisabled(false);
+
     setChildIndicatorPolicy(QTreeWidgetItem::DontShowIndicator);
     setText(0, title);
 

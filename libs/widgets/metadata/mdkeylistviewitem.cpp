@@ -61,7 +61,8 @@ MdKeyListViewItem::MdKeyListViewItem(QTreeWidget *parent, const QString& key)
     setChildIndicatorPolicy(QTreeWidgetItem::DontShowIndicator);
 
     // item is not selectable.
-    setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled);
+    setFlags(flags() & !Qt::ItemIsSelectable);
+    setDisabled(false);
 
     setFirstColumnSpanned(true);
     setTextAlignment(0, Qt::AlignCenter);
