@@ -114,10 +114,10 @@ CameraFolderDialog::~CameraFolderDialog()
 
 QString CameraFolderDialog::selectedFolderPath() const
 {
-    Q3ListViewItem *item = m_folderView->currentItem();
+    QTreeWidgetItem *item = m_folderView->currentItem();
     if (!item) return QString();
 
-    CameraFolderItem *folderItem = static_cast<CameraFolderItem *>(item);
+    CameraFolderItem *folderItem = dynamic_cast<CameraFolderItem *>(item);
     if (folderItem->isVirtualFolder())
         return QString(m_rootPath);
 

@@ -7,7 +7,7 @@
  * Description : A widget to display a list of camera folders.
  * 
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -54,26 +54,29 @@ public:
 };
 
 CameraFolderView::CameraFolderView(QWidget* parent)
-                : K3ListView(parent)
+                : QTreeWidget(parent)
 {
     d = new CameraFolderViewPriv;
-    addColumn(i18n("Camera Folders"));
-    setFullWidth(true);
+
+    setColumnCount(1);
+    setRootIsDecorated(false);
+    setSelectionMode(QAbstractItemView::SingleSelection);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    setAllColumnsShowFocus(true);
     setDragEnabled(false);
-    setDropVisualizer(false);
-    setDropHighlighter(false);
+    setDropIndicatorShown(false);
     setAcceptDrops(true);
-    setSelectionMode(Q3ListView::Single);
+    setHeaderLabels(QStringList() << i18n("Camera Folders"));
 
     d->cameraName    = "Camera";
     d->virtualFolder = 0;
     d->rootFolder    = 0;
 
-    connect(this, SIGNAL(currentChanged(Q3ListViewItem*)),
-            this, SLOT(slotCurrentChanged(Q3ListViewItem*)));
+    connect(this, SIGNAL(itemActivated(QTreeWidgetItem*, int)),
+            this, SLOT(slotCurrentChanged(QTreeWidgetItem*, int)));
 
-    connect(this, SIGNAL(clicked(Q3ListViewItem*)),
-            this, SLOT(slotCurrentChanged(Q3ListViewItem*)));
+    connect(this, SIGNAL(itemClicked(QTreeWidgetItem*, int)),
+            this, SLOT(slotCurrentChanged(QTreeWidgetItem*, int)));
 }
 
 CameraFolderView::~CameraFolderView()
@@ -85,15 +88,17 @@ void CameraFolderView::addVirtualFolder(const QString& name, const QPixmap& pixm
 {
     d->cameraName    = name;
     d->virtualFolder = new CameraFolderItem(this, d->cameraName, pixmap);
-    d->virtualFolder->setOpen(true);
+    d->virtualFolder->setExpanded(true);
     d->virtualFolder->setSelected(false);
-    d->virtualFolder->setSelectable(false);
+    // item is not selectable.
+    d->virtualFolder->setFlags(d->virtualFolder->flags() & !Qt::ItemIsSelectable);
+    d->virtualFolder->setDisabled(false);
 }
 
 void CameraFolderView::addRootFolder(const QString& folder, int nbItems, const QPixmap& pixmap)
 {
     d->rootFolder = new CameraFolderItem(d->virtualFolder, folder, folder, pixmap);
-    d->rootFolder->setOpen(true);
+    d->rootFolder->setExpanded(true);
     d->rootFolder->setCount(nbItems);
 }
 
@@ -103,8 +108,8 @@ CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QStri
     CameraFolderItem *parentItem = findFolder(folder);
 
     DDebug() << "CameraFolderView: Adding Subfolder " << subFolder
-              << " of folder " << folder << endl;
-    
+             << " of folder " << folder << endl;
+
     if (parentItem) 
     {
         QString path(folder);
@@ -114,48 +119,53 @@ CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QStri
 
         path += subFolder;
         CameraFolderItem* item = new CameraFolderItem(parentItem, subFolder, path, pixmap);
-        
+
         DDebug() << "CameraFolderView: Added ViewItem with path "
-                  << item->folderPath() << endl;
+                 << item->folderPath() << endl;
 
         item->setCount(nbItems);
-        item->setOpen(true);
+        item->setExpanded(true);
         return item;
     }
     else 
     {
         DWarning() << "CameraFolderView: Couldn't find parent for subFolder "
-                    << subFolder << " of folder " << folder << endl;
+                   << subFolder << " of folder " << folder << endl;
         return 0;
     }
 }
 
 CameraFolderItem* CameraFolderView::findFolder(const QString& folderPath)
 {
-
-    Q3ListViewItemIterator it(this);
-    for ( ; it.current(); ++it) 
+    int i                 = 0;
+    QTreeWidgetItem *item = 0;
+    do
     {
-        CameraFolderItem* item = static_cast<CameraFolderItem*>(it.current());
-
-        if (item->folderPath() == folderPath)
-            return item;
+        item = topLevelItem(i);
+        if (item)
+        {
+            CameraFolderItem* lvItem = dynamic_cast<CameraFolderItem*>(item);
+            if (lvItem && lvItem->folderPath() == folderPath)
+                return lvItem;
+        }
+        i++;
     }
+    while (item);
 
     return 0;
 }
 
-void CameraFolderView::slotCurrentChanged(Q3ListViewItem* item)
+void CameraFolderView::slotCurrentChanged(QTreeWidgetItem* item, int)
 {
     if (!item) 
         emit signalFolderChanged(0);
     else
-        emit signalFolderChanged(static_cast<CameraFolderItem *>(item));
+        emit signalFolderChanged(dynamic_cast<CameraFolderItem *>(item));
 }
 
 CameraFolderItem* CameraFolderView::virtualFolder()
 {
-    return d->virtualFolder;    
+    return d->virtualFolder;
 }
 
 CameraFolderItem* CameraFolderView::rootFolder()
@@ -165,7 +175,7 @@ CameraFolderItem* CameraFolderView::rootFolder()
 
 void CameraFolderView::clear()
 {
-    K3ListView::clear();
+    QTreeWidget::clear();
     d->virtualFolder = 0;
     d->rootFolder    = 0;
     emit signalCleared();

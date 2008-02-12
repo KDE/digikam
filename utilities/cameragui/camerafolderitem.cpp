@@ -7,7 +7,7 @@
  * Description : A widget to display a camera folder.
  * 
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,26 +47,27 @@ public:
     QString name;
 };
 
-CameraFolderItem::CameraFolderItem(K3ListView* parent, 
-                                   const QString& name, const QPixmap& pixmap)
-                : K3ListViewItem(parent, name)
+CameraFolderItem::CameraFolderItem(QTreeWidget* parent, const QString& name, const QPixmap& pixmap)
+                : QTreeWidgetItem(parent)
 {
     d = new CameraFolderItemPriv;
     d->virtualFolder = true;
     d->name          = name;
-    setPixmap(0, pixmap);
+    setIcon(0, pixmap);
+    setText(0, d->name);
 }
 
-CameraFolderItem::CameraFolderItem(K3ListViewItem* parent, const QString& folderName,
+CameraFolderItem::CameraFolderItem(QTreeWidgetItem* parent, const QString& folderName,
                                    const QString& folderPath, const QPixmap& pixmap)
-                : K3ListViewItem(parent, folderName)
+                : QTreeWidgetItem(parent)
 {
     d = new CameraFolderItemPriv;
     d->folderName    = folderName;
     d->folderPath    = folderPath;
     d->virtualFolder = false;
     d->name          = folderName;
-    setPixmap(0, pixmap);
+    setIcon(0, pixmap);
+    setText(0, d->name);
 }
 
 CameraFolderItem::~CameraFolderItem()
@@ -76,7 +77,7 @@ CameraFolderItem::~CameraFolderItem()
 
 bool CameraFolderItem::isVirtualFolder()
 {
-    return d->virtualFolder;    
+    return d->virtualFolder;
 }
 
 QString CameraFolderItem::folderName()
@@ -92,18 +93,18 @@ QString CameraFolderItem::folderPath()
 void CameraFolderItem::changeCount(int val)
 {
     d->count += val;
-    setText(0, QString("%1 (%2)").arg(d->name).arg(QString::number(d->count)));    
+    setText(0, QString("%1 (%2)").arg(d->name).arg(QString::number(d->count)));
 }
 
 void CameraFolderItem::setCount(int val)
 {
-    d->count = val;    
-    setText(0, QString("%1 (%2)").arg(d->name).arg(QString::number(d->count)));    
+    d->count = val;
+    setText(0, QString("%1 (%2)").arg(d->name).arg(QString::number(d->count)));
 }
 
 int CameraFolderItem::count()
 {
-    return d->count;    
+    return d->count;
 }
 
 } // namespace Digikam

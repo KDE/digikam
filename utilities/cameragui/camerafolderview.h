@@ -7,7 +7,7 @@
  * Description : A widget to display a list of camera folders.
  * 
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,11 +29,7 @@
 
 #include <QString>
 #include <QPixmap>
-
-// KDE includes.
-
-#include <k3listview.h>
-#include <kiconloader.h>
+#include <QTreeWidget>
 
 namespace Digikam
 {
@@ -41,7 +37,7 @@ namespace Digikam
 class CameraFolderItem;
 class CameraFolderViewPriv;
 
-class CameraFolderView : public K3ListView
+class CameraFolderView : public QTreeWidget
 {
     Q_OBJECT
 
@@ -52,7 +48,7 @@ public:
 
     void addVirtualFolder(const QString& name, const QPixmap& pixmap=SmallIcon("camera"));
     void addRootFolder(const QString& folder, int nbItems, const QPixmap& pixmap=SmallIcon("folder"));
-    
+
     CameraFolderItem* addFolder(const QString& folder, const QString& subFolder, int nbItems, 
                                 const QPixmap& pixmap=SmallIcon("folder"));
 
@@ -66,11 +62,11 @@ public:
 signals:
 
     void signalFolderChanged(CameraFolderItem*);
-    void signalCleared();    
-    
+    void signalCleared();
+
 private slots:
 
-    void slotCurrentChanged(Q3ListViewItem*);
+    void slotCurrentChanged(QTreeWidgetItem*, int);
 
 private:
 
