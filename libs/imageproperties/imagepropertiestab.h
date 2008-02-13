@@ -55,7 +55,7 @@ public:
     void setCurrentURL(const KUrl& url=KUrl());
     void colorChanged(const QColor& back, const QColor& fore);
 
-    void setPhotoInfoEnable(bool b);
+    void setPhotoInfoDisable(bool b);
 
     void setFileModifiedDate(const QString& str);
     void setFileSize(const QString& str);

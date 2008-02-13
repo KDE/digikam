@@ -31,6 +31,7 @@
 
 // KDE includes.
 
+#include <kfileitem.h>
 #include <klocale.h>
 #include <kconfig.h>
 #include <kapplication.h>
@@ -294,13 +295,13 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         }
         else if (tab == m_metadataTab && !m_dirtyMetadataTab)
         {
-            // any ideas?
+            // No multiple selection supported.
             m_metadataTab->setCurrentURL();
             m_dirtyMetadataTab = true;
         }
         else if (tab == m_colorTab && !m_dirtyColorTab)
         {
-            // any ideas?
+            // No multiple selection supported.
             m_colorTab->setData();
             m_dirtyColorTab = true;
         }
@@ -311,7 +312,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         }
         else if (tab == m_gpsTab && !m_dirtyGpsTab)
         {
-            // FIXME
+            // No multiple selection supported.
             m_gpsTab->setCurrentURL();
             m_dirtyGpsTab = true;
         }
@@ -384,7 +385,95 @@ void ImagePropertiesSideBarDB::refreshTagsView()
 
 void ImagePropertiesSideBarDB::setImagePropertiesInformations(const KUrl& url)
 {
-    //TODO
+    foreach(ImageInfo info, d->currentInfos)
+    {
+        if (info.fileUrl() == url)
+        {
+            QString str;
+            QString unavailable(i18n("<i>unavailable</i>"));
+            KFileItem fi(KFileItem::Unknown, KFileItem::Unknown, url);
+
+            // -- File system informations -----------------------------------------
+
+            ImageCommonContainer commonInfo  = info.imageCommonContainer();
+            ImageMetadataContainer photoInfo = info.imageMetadataContainer();
+
+            str = KGlobal::locale()->formatDateTime(commonInfo.fileModificationDate, KLocale::ShortDate, true);
+            m_propertiesTab->setFileModifiedDate(str);
+
+            str = QString("%1 (%2)").arg(KIO::convertSize(commonInfo.fileSize))
+                                    .arg(KGlobal::locale()->formatNumber(commonInfo.fileSize, 0));
+            m_propertiesTab->setFileSize(str);
+
+            //  These infos are not stored in DB
+            m_propertiesTab->setFileOwner(QString("%1 - %2").arg(fi.user()).arg(fi.group()));
+            m_propertiesTab->setFilePermissions(fi.permissionsString());
+
+            // -- Image Properties --------------------------------------------------
+
+            if (commonInfo.width == 0 || commonInfo.height == 0)
+                str = i18n("Unknown");
+            else
+            {
+                QString mpixels;
+                mpixels.setNum(commonInfo.width * commonInfo.height / 1000000.0, 'f', 2);
+                str = i18nc("width x height (megapixels Mpx)", "%1x%2 (%3Mpx)",
+                           commonInfo.width, commonInfo.height, mpixels);
+            }
+            m_propertiesTab->setImageDimensions(str);
+            m_propertiesTab->setImageBitDepth(i18n("%1 bpp", commonInfo.colorDepth));
+            m_propertiesTab->setImageColorMode(commonInfo.colorModel.isEmpty() ? unavailable : commonInfo.colorModel);
+            m_propertiesTab->setImageMime(commonInfo.format);
+
+            /* TODO : This info is not stored by DB
+            m_propertiesTab->setImageCompression(compression.isEmpty() ? unavailable : compression);
+            */
+
+            // -- Photograph information ------------------------------------------
+
+            m_propertiesTab->setPhotoInfoDisable(photoInfo.allFieldsNull);
+
+            m_propertiesTab->setPhotoMake(photoInfo.make.isEmpty() ? unavailable : photoInfo.make);
+            m_propertiesTab->setPhotoModel(photoInfo.model.isEmpty() ? unavailable : photoInfo.model);
+
+            if (commonInfo.creationDate.isValid())
+            {
+                str = KGlobal::locale()->formatDateTime(commonInfo.creationDate, KLocale::ShortDate, true);
+                m_propertiesTab->setPhotoDateTime(str);
+            }
+            else
+                m_propertiesTab->setPhotoDateTime(unavailable);
+
+            m_propertiesTab->setPhotoAperture(photoInfo.aperture.isEmpty() ? unavailable : photoInfo.aperture);
+
+            if (photoInfo.focalLength35.isEmpty())
+                m_propertiesTab->setPhotoFocalLength(photoInfo.focalLength.isEmpty() ? unavailable : photoInfo.focalLength);
+            else 
+            {
+                str = i18n("%1 (35mm: %2)", photoInfo.focalLength, photoInfo.focalLength35);
+                m_propertiesTab->setPhotoFocalLength(str);
+            }
+
+            m_propertiesTab->setPhotoExposureTime(photoInfo.exposureTime.isEmpty() ? unavailable : photoInfo.exposureTime);
+            m_propertiesTab->setPhotoSensitivity(photoInfo.sensitivity.isEmpty() ? unavailable : i18n("%1 ISO", photoInfo.sensitivity));
+
+            if (photoInfo.exposureMode.isEmpty() && photoInfo.exposureProgram.isEmpty())
+                m_propertiesTab->setPhotoExposureMode(unavailable);
+            else if (!photoInfo.exposureMode.isEmpty() && photoInfo.exposureProgram.isEmpty())
+                m_propertiesTab->setPhotoExposureMode(photoInfo.exposureMode);
+            else if (photoInfo.exposureMode.isEmpty() && !photoInfo.exposureProgram.isEmpty())
+                m_propertiesTab->setPhotoExposureMode(photoInfo.exposureProgram);
+            else 
+            {
+                str = QString("%1 / %2").arg(photoInfo.exposureMode).arg(photoInfo.exposureProgram);
+                m_propertiesTab->setPhotoExposureMode(str);
+            }
+
+            m_propertiesTab->setPhotoFlash(photoInfo.flashMode.isEmpty() ? unavailable : photoInfo.flashMode);
+            m_propertiesTab->setPhotoWhiteBalance(photoInfo.whiteBalance.isEmpty() ? unavailable : photoInfo.whiteBalance);
+            return;
+        }
+    }
 }
 
 }  // NameSpace Digikam

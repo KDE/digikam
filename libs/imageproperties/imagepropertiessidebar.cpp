@@ -276,7 +276,7 @@ void ImagePropertiesSideBar::setImagePropertiesInformations(const KUrl& url)
 
     PhotoInfoContainer photoInfo = metaData.getPhotographInformations();
 
-    m_propertiesTab->setPhotoInfoEnable(photoInfo.isEmpty());
+    m_propertiesTab->setPhotoInfoDisable(photoInfo.isEmpty());
 
     m_propertiesTab->setPhotoMake(photoInfo.make.isEmpty() ? unavailable : photoInfo.make);
     m_propertiesTab->setPhotoModel(photoInfo.model.isEmpty() ? unavailable : photoInfo.model);

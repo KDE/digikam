@@ -444,7 +444,7 @@ void ImagePropertiesTab::colorChanged(const QColor& back, const QColor& fore)
     d->labelPhotoWhiteBalance->setPalette(plt);
 }
 
-void ImagePropertiesTab::setPhotoInfoEnable(bool b)
+void ImagePropertiesTab::setPhotoInfoDisable(bool b)
 {
     if (b)
     {
