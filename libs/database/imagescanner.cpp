@@ -21,6 +21,10 @@
  *
  * ============================================================ */
 
+// Qt includes
+
+#include <QImageReader>
+
 // KDE includes
 
 #include <kmimetype.h>
@@ -360,6 +364,7 @@ QString ImageScanner::detectFormat()
         {
             QString format = "RAW-";
             format += m_fileInfo.suffix().toUpper();
+            return format;
         }
         case DImg::NONE:
         case DImg::QIMAGE:
@@ -372,6 +377,14 @@ QString ImageScanner::detectFormat()
                 {
                     return name.mid(6).toUpper();
                 }
+            }
+            else
+                DWarning() << "Detecting file format: KMimeType for" << m_fileInfo.path() << "is null";
+
+            QByteArray format = QImageReader::imageFormat(m_fileInfo.fileName());
+            if (!format.isEmpty())
+            {
+                return QString(format).toUpper();
             }
         }
     }
