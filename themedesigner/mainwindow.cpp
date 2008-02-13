@@ -80,7 +80,7 @@ MainWindow::MainWindow()
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
-        
+
     // Actual views ------------------------------------------------
 
     QGridLayout* layout = new QGridLayout(this);
@@ -91,7 +91,7 @@ MainWindow::MainWindow()
 
     m_folderView = new FolderView(splitter);
     m_iconView   = new ThemedIconView(splitter);
-    m_propView   = new ImagePropertiesTab(splitter, false);
+    m_propView   = new ImagePropertiesTab(splitter);
 
     // Property Editor ---------------------------------------------
 
@@ -152,11 +152,11 @@ MainWindow::MainWindow()
     m_bevelCombo->insertItem(FLAT, "Flat");
     m_bevelCombo->insertItem(RAISED, "Raised");
     m_bevelCombo->insertItem(SUNKEN, "Sunken");
-    
+
     m_gradientCombo->insertItem(SOLID, "Solid");
     m_gradientCombo->insertItem(HORIZONTAL, "Horizontal");
     m_gradientCombo->insertItem(VERTICAL, "Vertical");
-    m_gradientCombo->insertItem(DIAGONAL, "Diagonal");    
+    m_gradientCombo->insertItem(DIAGONAL, "Diagonal");
 
     m_bevelMap[FLAT]   = Theme::FLAT;
     m_bevelMap[RAISED] = Theme::RAISED;
@@ -181,9 +181,9 @@ MainWindow::MainWindow()
     m_borderColorBtn->setColor(Qt::black);
 
     // Bottom button bar -------------------------------------------------------
-    
+
     QHBoxLayout* buttonLayout = new QHBoxLayout();
-    
+
     QPushButton* loadButton = new QPushButton(this);
     loadButton->setText("&Load");
 
@@ -201,7 +201,7 @@ MainWindow::MainWindow()
     buttonLayout->addWidget(closeButton);
 
     // ------------------------------------------------------------------------
-    
+
     layout->setMargin(5);
     layout->setSpacing(5);
     layout->addWidget(splitter, 0, 0, 1, 1);
@@ -218,7 +218,7 @@ MainWindow::MainWindow()
 
     connect(m_gradientCombo, SIGNAL(activated(int)),
             this, SLOT(slotUpdateTheme()));
-            
+
     connect(m_begColorBtn, SIGNAL(changed(const QColor&)),
             this, SLOT(slotUpdateTheme()));
 
@@ -246,7 +246,7 @@ MainWindow::MainWindow()
     m_folderView->setResizeMode(Q3ListView::LastColumn);
     m_folderView->setRootIsDecorated(true);
 
-    KIconLoader *iconLoader = KIconLoader::global();    
+    KIconLoader *iconLoader = KIconLoader::global();
     for (int i=0; i<10; i++)
     {
         FolderItem* folderItem = new FolderItem(m_folderView, QString("Album %1").arg(i));
@@ -256,7 +256,7 @@ MainWindow::MainWindow()
             m_folderView->setSelected(folderItem, true);
         }
     }
-    
+
     // ------------------------------------------------------------------------
 
     slotPropertyChanged();
@@ -311,7 +311,7 @@ void MainWindow::slotPropertyChanged()
     m_endColorBtn->blockSignals(true);
     m_addBorderCheck->blockSignals(true);
     m_borderColorBtn->blockSignals(true);
-    
+
     m_bevelCombo->setEnabled(false);
     m_bevelLabel->setEnabled(false);
     m_gradientCombo->setEnabled(false);
@@ -374,16 +374,16 @@ void MainWindow::slotPropertyChanged()
             m_begColorLabel->setEnabled(true);
             m_endColorLabel->setEnabled(true);
             m_borderColorLabel->setEnabled(true);
-    
+
             m_bevelCombo->setCurrentIndex(m_bevelReverseMap[m_theme->bannerBevel]);
             m_gradientCombo->setCurrentIndex(m_gradientReverseMap[m_theme->bannerGrad]);
-            
+
             m_begColorBtn->setColor(m_theme->bannerColor);
             m_endColorBtn->setColor(m_theme->bannerColorTo);
-    
+
             m_addBorderCheck->setChecked(m_theme->bannerBorder);
             m_borderColorBtn->setColor(m_theme->bannerBorderColor);
-            
+
             break;
         }
         case(THUMBNAILREGULAR):
@@ -399,16 +399,16 @@ void MainWindow::slotPropertyChanged()
             m_begColorLabel->setEnabled(true);
             m_endColorLabel->setEnabled(true);
             m_borderColorLabel->setEnabled(true);
-    
+
             m_bevelCombo->setCurrentIndex(m_bevelReverseMap[m_theme->thumbRegBevel]);
             m_gradientCombo->setCurrentIndex(m_gradientReverseMap[m_theme->thumbRegGrad]);
-            
+
             m_begColorBtn->setColor(m_theme->thumbRegColor);
             m_endColorBtn->setColor(m_theme->thumbRegColorTo);
-    
+
             m_addBorderCheck->setChecked(m_theme->thumbRegBorder);
             m_borderColorBtn->setColor(m_theme->thumbRegBorderColor);
-    
+
             break;
         }
         case(THUMBNAILSELECTED):
