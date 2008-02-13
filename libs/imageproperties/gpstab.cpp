@@ -122,21 +122,21 @@ GPSTab::GPSTab(QWidget* parent, bool navBar)
     // --------------------------------------------------------
 
     QWidget* box2           = new QWidget(gpsInfo);
-    QGridLayout* box2Layout = new QGridLayout( box2 );
+    QHBoxLayout* box2Layout = new QHBoxLayout(box2);
 
-    d->detailsCombo  = new QComboBox( box2 );
+    d->detailsCombo  = new QComboBox(box2);
     d->detailsButton = new QPushButton(i18n("More Info..."), box2);
+    d->detailsButton->setMaximumHeight( fontMetrics().height()+4 );
+    d->detailsCombo->setMaximumHeight( fontMetrics().height()+4 );
     d->detailsCombo->insertItem(MapQuest,   QString("MapQuest"));
     d->detailsCombo->insertItem(GoogleMaps, QString("Google Maps"));
     d->detailsCombo->insertItem(MsnMaps,    QString("MSN Maps"));
     d->detailsCombo->insertItem(MultiMap,   QString("MultiMap"));
 
-    box2Layout->addWidget(d->detailsCombo,  0, 0, 1, 1);
-    box2Layout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
-                            QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 
-                                            0, 0, 1, 1);
-    box2Layout->addWidget(d->detailsButton, 0, 2, 1, 1);
-    box2Layout->setColumnStretch(3, 10);
+    box2Layout->addWidget(d->detailsCombo);
+    box2Layout->addStretch(1);
+    box2Layout->addWidget(d->detailsButton);
+    box2Layout->addStretch(100);
     box2Layout->setSpacing(0);
     box2Layout->setMargin(0);
 
