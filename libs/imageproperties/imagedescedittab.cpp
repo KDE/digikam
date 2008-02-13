@@ -65,7 +65,6 @@
 #include "albumthumbnailloader.h"
 #include "databasetransaction.h"
 #include "tagcreatedlg.h"
-#include "navigatebarwidget.h"
 #include "ratingwidget.h"
 #include "talbumlistview.h"
 #include "tagfilterview.h"
@@ -141,37 +140,32 @@ public:
     MetadataHub                    hub;
 };
 
-ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
-                : NavigateBarTab(parent)
+ImageDescEditTab::ImageDescEditTab(QWidget *parent)
+                : QWidget(parent)
 {
     d = new ImageDescEditTabPriv;
 
-    setupNavigateBar(navBar);
-    QWidget *settingsArea = new QWidget(this);
-
-    m_navigateBarLayout->addWidget(settingsArea);
-
-    QGridLayout *settingsLayout = new QGridLayout(settingsArea);
+    QGridLayout *settingsLayout = new QGridLayout(this);
 
     // Comments/Date/Rating view -----------------------------------
 
-    KVBox *commentsBox = new KVBox(settingsArea);
+    KVBox *commentsBox = new KVBox(this);
     new QLabel(i18n("Caption:"), commentsBox);
     d->commentsEdit = new KTextEdit(commentsBox);
     d->commentsEdit->setCheckSpellingEnabled(true);
 
-    KHBox *dateBox  = new KHBox(settingsArea);
+    KHBox *dateBox  = new KHBox(this);
     new QLabel(i18n("Date:"), dateBox);
     d->dateTimeEdit = new KDateTimeEdit(dateBox, "datepicker");
     d->dateTimeEdit->setMaximumHeight( fontMetrics().height()+4 );
 
-    KHBox *ratingBox = new KHBox(settingsArea);
+    KHBox *ratingBox = new KHBox(this);
     new QLabel(i18n("Rating:"), ratingBox);
     d->ratingWidget  = new RatingWidget(ratingBox);
 
     // Tags view ---------------------------------------------------
 
-    KHBox *tagsSearch = new KHBox(settingsArea);
+    KHBox *tagsSearch = new KHBox(this);
     tagsSearch->setSpacing(KDialog::spacingHint());
 
     d->tagsSearchBar   = new SearchTextBar(tagsSearch);
@@ -192,11 +186,11 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     d->recentTagsBtn->setPopupMode(QToolButton::DelayedPopup);
     d->recentTagsMapper = new QSignalMapper(this);
 
-    d->tagsView = new TAlbumListView(settingsArea);
+    d->tagsView = new TAlbumListView(this);
 
     // Buttons -----------------------------------------
 
-    KHBox *buttonsBox = new KHBox(settingsArea);
+    KHBox *buttonsBox = new KHBox(this);
     buttonsBox->setSpacing(KDialog::spacingHint());
 
     d->revertBtn = new QToolButton(buttonsBox);

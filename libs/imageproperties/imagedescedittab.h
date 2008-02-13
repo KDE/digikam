@@ -36,7 +36,6 @@
 
 #include "digikam_export.h"
 #include "imageinfolist.h"
-#include "navigatebartab.h"
 
 class Q3ListViewItem;
 
@@ -48,13 +47,13 @@ class TAlbumCheckListItem;
 class ImageInfo;
 class ImageDescEditTabPriv;
 
-class DIGIKAM_EXPORT ImageDescEditTab : public NavigateBarTab
+class DIGIKAM_EXPORT ImageDescEditTab : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    ImageDescEditTab(QWidget *parent, bool navBar=true);
+    ImageDescEditTab(QWidget *parent);
     ~ImageDescEditTab();
 
     void assignRating(int rating);
@@ -68,6 +67,8 @@ signals:
     void signalProgressBarMode(int, const QString&);
     void signalProgressValue(int);
     void signalTagFilterMatch(bool);
+    void signalPrevItem();
+    void signalNextItem();
 
 protected:
 

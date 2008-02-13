@@ -88,7 +88,7 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, QSplitter *s
     // Navigate bar is disabled by passing false to parent class constructor, and tab constructors
 
     d = new ImagePropertiesSideBarDBPriv;
-    d->desceditTab = new ImageDescEditTab(parent, false);
+    d->desceditTab = new ImageDescEditTab(parent);
 
     appendTab(d->desceditTab, SmallIcon("imagecomment"), i18n("Caption/Tags"));
 
