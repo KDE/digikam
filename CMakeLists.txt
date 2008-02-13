@@ -247,8 +247,6 @@ SET(libhistogram_SRCS
    )
 
 SET(libimageproperties_SRCS
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/navigatebarwidget.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/navigatebartab.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiessidebar.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiestab.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiesmetadatatab.cpp

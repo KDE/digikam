@@ -37,7 +37,6 @@
 // Local includes.
 
 #include "digikam_export.h"
-#include "navigatebartab.h"
 
 namespace Digikam
 {

@@ -52,7 +52,6 @@
 #include "databasetransaction.h"
 #include "imageinfo.h"
 #include "tagcreatedlg.h"
-#include "navigatebarwidget.h"
 #include "dragobjects.h"
 #include "imageattributeswatch.h"
 #include "albumthumbnailloader.h"
@@ -82,7 +81,7 @@ TAlbumCheckListItem::TAlbumCheckListItem(Q3CheckListItem* parent, TAlbum* album)
 void TAlbumCheckListItem::refresh()
 {
     if (!m_album) return;
-    
+
     if (AlbumSettings::instance()->getShowFolderTreeViewItemsCount() &&
         dynamic_cast<TAlbumCheckListItem*>(parent()))
     {
@@ -166,7 +165,7 @@ public:
         dragItem = 0;
     }
 
-    QPoint               dragStartPos;    
+    QPoint               dragStartPos;
 
     TAlbumCheckListItem *dragItem;
 };
@@ -212,7 +211,7 @@ void TAlbumListView::contentsMouseMoveEvent(QMouseEvent *e)
         }
         return;
     }
-    
+
     if(d->dragItem && 
        (d->dragStartPos - e->pos()).manhattanLength() > QApplication::startDragDistance())
     {
@@ -223,7 +222,7 @@ void TAlbumListView::contentsMouseMoveEvent(QMouseEvent *e)
             d->dragItem = 0;
             return;
         }
-    }    
+    }
 }
 
 void TAlbumListView::contentsMousePressEvent(QMouseEvent *e)
@@ -259,13 +258,13 @@ bool TAlbumListView::mouseInItemRect(Q3ListViewItem* item, int x) const
 {
     if (!item)
         return false;
-    
+
     x += contentsX();
 
     int offset = treeStepSize()*(item->depth() + (rootIsDecorated() ? 1 : 0));
     offset    += itemMargin();
     int width  = item->width(fontMetrics(), this, 0);
-    
+
     return (x > offset && x < (offset + width));
 }
 
@@ -288,7 +287,7 @@ void TAlbumListView::startDrag()
 {
     Q3DragObject *o = dragObject();
     if(o)
-        o->drag();        
+        o->drag();
 }
 
 TAlbumCheckListItem* TAlbumListView::dragItem() const
@@ -398,7 +397,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
         TAlbum *srcAlbum;
 
         KUrl::List       urls;
-        KUrl::List       kioURLs;        
+        KUrl::List       kioURLs;
         Q3ValueList<int> albumIDs;
         Q3ValueList<int> imageIDs;
 
@@ -507,7 +506,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
 void TAlbumListView::refresh()
 {
     Q3ListViewItemIterator it(this);
-    
+
     while (it.current())
     {
         TAlbumCheckListItem* item = dynamic_cast<TAlbumCheckListItem*>(*it);
