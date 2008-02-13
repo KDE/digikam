@@ -50,18 +50,18 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 #include "ddebug.h"
 #include "dmetadata.h"
 #include "worldmapwidget.h"
-#include "gpstab.h"
-#include "gpstab.moc"
+#include "imagepropertiesgpstab.h"
+#include "imagepropertiesgpstab.moc"
 
 namespace Digikam
 {
 
-class GPSTabPriv
+class ImagePropertiesGPSTabPriv
 {
 
 public:
 
-    GPSTabPriv()
+    ImagePropertiesGPSTabPriv()
     {
         detailsButton = 0;
         detailsCombo  = 0;
@@ -93,10 +93,10 @@ public:
     WorldMapWidget     *map;
 };
 
-GPSTab::GPSTab(QWidget* parent, bool navBar)
-      : NavigateBarTab(parent)
+ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent, bool navBar)
+                     : NavigateBarTab(parent)
 {
-    d = new GPSTabPriv;
+    d = new ImagePropertiesGPSTabPriv;
     setupNavigateBar(navBar);
 
     // --------------------------------------------------------
@@ -163,22 +163,22 @@ GPSTab::GPSTab(QWidget* parent, bool navBar)
             this, SLOT(slotGPSDetails()));
 }
 
-GPSTab::~GPSTab()
+ImagePropertiesGPSTab::~ImagePropertiesGPSTab()
 {
     delete d;
 }
 
-int GPSTab::getWebGPSLocator()
+int ImagePropertiesGPSTab::getWebGPSLocator()
 {
     return ( d->detailsCombo->currentIndex() );
 }
 
-void GPSTab::setWebGPSLocator(int locator)
+void ImagePropertiesGPSTab::setWebGPSLocator(int locator)
 {
     d->detailsCombo->setCurrentIndex(locator);
 }
 
-void GPSTab::slotGPSDetails()
+void ImagePropertiesGPSTab::slotGPSDetails()
 {
     QString val, url;
 
@@ -234,7 +234,7 @@ void GPSTab::slotGPSDetails()
     KToolInvocation::self()->invokeBrowser(url);
 }
 
-void GPSTab::setCurrentURL(const KUrl& url)
+void ImagePropertiesGPSTab::setCurrentURL(const KUrl& url)
 {
     if (url.isEmpty())
     {
@@ -251,7 +251,7 @@ void GPSTab::setCurrentURL(const KUrl& url)
         setGPSInfo();
 }
 
-void GPSTab::setGPSInfo()
+void ImagePropertiesGPSTab::setGPSInfo()
 {
     d->altitude->setText(QString());
     d->latitude->setText(QString());
@@ -262,7 +262,7 @@ void GPSTab::setGPSInfo()
     setEnabled(false);
 }
 
-void GPSTab::setGPSInfo(double lat, double lon, long alt, const QDateTime dt)
+void ImagePropertiesGPSTab::setGPSInfo(double lat, double lon, long alt, const QDateTime& dt)
 {
     d->altitude->setText(QString("%1 m").arg(QString::number(alt)));
     d->latitude->setText(QString::number(lat));

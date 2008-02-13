@@ -42,7 +42,7 @@ namespace Digikam
 {
 
 class DImg;
-class GPSTab;
+class ImagePropertiesGPSTab;
 class ImagePropertiesTab;
 class ImagePropertiesMetaDataTab;
 class ImagePropertiesColorsTab;
@@ -84,7 +84,7 @@ protected:
 
     DImg                       *m_image;
 
-    GPSTab                     *m_gpsTab;
+    ImagePropertiesGPSTab      *m_gpsTab;
     ImagePropertiesTab         *m_propertiesTab;
     ImagePropertiesMetaDataTab *m_metadataTab;
     ImagePropertiesColorsTab   *m_colorTab;

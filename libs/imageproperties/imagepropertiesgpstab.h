@@ -21,8 +21,8 @@
  * 
  * ============================================================ */
 
-#ifndef GPSTAB_H
-#define GPSTAB_H
+#ifndef IMAGEPROPERTIESGPSTAB_H
+#define IMAGEPROPERTIESGPSTAB_H
 
 // Qt includes.
 
@@ -37,9 +37,9 @@
 namespace Digikam
 {
 
-class GPSTabPriv;
+class ImagePropertiesGPSTabPriv;
 
-class DIGIKAM_EXPORT GPSTab : public NavigateBarTab
+class DIGIKAM_EXPORT ImagePropertiesGPSTab : public NavigateBarTab
 {
     Q_OBJECT
 
@@ -55,11 +55,11 @@ public:
 
 public:
 
-    GPSTab(QWidget* parent, bool navBar=true);
-    ~GPSTab();
+    ImagePropertiesGPSTab(QWidget* parent, bool navBar=true);
+    ~ImagePropertiesGPSTab();
 
     void setGPSInfo();
-    void setGPSInfo(double lat, double lon, long alt, const QDateTime dt);
+    void setGPSInfo(double lat, double lon, long alt, const QDateTime& dt);
     void setCurrentURL(const KUrl& url=KUrl());
 
     int  getWebGPSLocator();
@@ -71,9 +71,9 @@ private slots:
 
 private:
 
-    GPSTabPriv *d;
+    ImagePropertiesGPSTabPriv *d;
 };
 
 }  // namespace Digikam
 
-#endif /* GPSTAB_H */
+#endif /* IMAGEPROPERTIESGPSTAB_H */
