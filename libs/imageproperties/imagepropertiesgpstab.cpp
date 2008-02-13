@@ -92,27 +92,23 @@ public:
     WorldMapWidget     *map;
 };
 
-ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent, bool navBar)
-                     : NavigateBarTab(parent)
+ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
+                     : QWidget(parent)
 {
     d = new ImagePropertiesGPSTabPriv;
-    setupNavigateBar(navBar);
 
     // --------------------------------------------------------
 
-    QWidget *gpsInfo    = new QWidget(this);
-    m_navigateBarLayout->addWidget(gpsInfo);
-
-    QGridLayout *layout = new QGridLayout(gpsInfo);
-    d->map              = new WorldMapWidget(256, 256, gpsInfo);
-    d->altLabel         = new QLabel(i18n("<b>Altitude</b>:"),  gpsInfo);
-    d->latLabel         = new QLabel(i18n("<b>Latitude</b>:"),  gpsInfo);
-    d->lonLabel         = new QLabel(i18n("<b>Longitude</b>:"), gpsInfo);
-    d->dateLabel        = new QLabel(i18n("<b>Date</b>:"),      gpsInfo);
-    d->altitude         = new KSqueezedTextLabel(0, gpsInfo);
-    d->latitude         = new KSqueezedTextLabel(0, gpsInfo);
-    d->longitude        = new KSqueezedTextLabel(0, gpsInfo);
-    d->date             = new KSqueezedTextLabel(0, gpsInfo);
+    QGridLayout *layout = new QGridLayout(this);
+    d->map              = new WorldMapWidget(256, 256, this);
+    d->altLabel         = new QLabel(i18n("<b>Altitude</b>:"),  this);
+    d->latLabel         = new QLabel(i18n("<b>Latitude</b>:"),  this);
+    d->lonLabel         = new QLabel(i18n("<b>Longitude</b>:"), this);
+    d->dateLabel        = new QLabel(i18n("<b>Date</b>:"),      this);
+    d->altitude         = new KSqueezedTextLabel(0, this);
+    d->latitude         = new KSqueezedTextLabel(0, this);
+    d->longitude        = new KSqueezedTextLabel(0, this);
+    d->date             = new KSqueezedTextLabel(0, this);
     d->altitude->setAlignment(Qt::AlignRight);
     d->latitude->setAlignment(Qt::AlignRight);
     d->longitude->setAlignment(Qt::AlignRight);
@@ -120,7 +116,7 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent, bool navBar)
 
     // --------------------------------------------------------
 
-    QWidget* box2           = new QWidget(gpsInfo);
+    QWidget* box2           = new QWidget(this);
     QHBoxLayout* box2Layout = new QHBoxLayout(box2);
 
     d->detailsCombo  = new QComboBox(box2);
@@ -261,8 +257,6 @@ void ImagePropertiesGPSTab::setGPSInfo()
     d->latitude->setText(QString());
     d->longitude->setText(QString());
     d->date->setText(QString());
-
-    setNavigateBarFileName();
     setEnabled(false);
 }
 
@@ -272,7 +266,6 @@ void ImagePropertiesGPSTab::setGPSInfo(double lat, double lon, long alt, const Q
     d->latitude->setText(QString::number(lat));
     d->longitude->setText(QString::number(lon));
     d->date->setText(KGlobal::locale()->formatDateTime(dt, KLocale::ShortDate, true));
-
     setEnabled(true);
     d->map->setGPSPosition(lat, lon);
 }

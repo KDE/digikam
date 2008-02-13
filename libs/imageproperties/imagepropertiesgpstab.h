@@ -28,11 +28,15 @@
 
 #include <QDateTime>
 #include <QString>
+#include <QWidget>
+
+// KDE includes.
+
+#include <kurl.h>
 
 // Local includes
 
 #include "dmetadata.h"
-#include "navigatebartab.h"
 #include "digikam_export.h"
 
 namespace Digikam
@@ -40,7 +44,7 @@ namespace Digikam
 
 class ImagePropertiesGPSTabPriv;
 
-class DIGIKAM_EXPORT ImagePropertiesGPSTab : public NavigateBarTab
+class DIGIKAM_EXPORT ImagePropertiesGPSTab : public QWidget
 {
     Q_OBJECT
 
@@ -56,7 +60,7 @@ public:
 
 public:
 
-    ImagePropertiesGPSTab(QWidget* parent, bool navBar=true);
+    ImagePropertiesGPSTab(QWidget* parent);
     ~ImagePropertiesGPSTab();
 
     void setGPSInfo();
