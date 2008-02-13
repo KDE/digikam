@@ -101,7 +101,7 @@ ImagePropertiesSideBarCamGui::ImagePropertiesSideBarCamGui(QWidget *parent,
     d = new ImagePropertiesSideBarCamGuiPriv;
     d->cameraItemTab = new CameraItemPropertiesTab(parent, false);
     d->metadataTab   = new ImagePropertiesMetaDataTab(parent, false);
-    d->gpsTab        = new ImagePropertiesGPSTab(parent, false);
+    d->gpsTab        = new ImagePropertiesGPSTab(parent);
 
     setSplitter(splitter);
 
@@ -115,7 +115,6 @@ ImagePropertiesSideBarCamGui::ImagePropertiesSideBarCamGui(QWidget *parent,
 
     connectNavigateSignals(d->cameraItemTab);
     connectNavigateSignals(d->metadataTab);
-    connectNavigateSignals(d->gpsTab);
 
     connect(this, SIGNAL(signalChangedTab(QWidget*)),
             this, SLOT(slotChangedTab(QWidget*)));
