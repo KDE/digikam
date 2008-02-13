@@ -31,6 +31,7 @@
 
 // Local includes
 
+#include "dmetadata.h"
 #include "navigatebartab.h"
 #include "digikam_export.h"
 
@@ -61,6 +62,8 @@ public:
     void setGPSInfo();
     void setGPSInfo(double lat, double lon, long alt, const QDateTime& dt);
     void setCurrentURL(const KUrl& url=KUrl());
+
+    void setMetadata(const DMetadata& meta);
 
     int  getWebGPSLocator();
     void setWebGPSLocator(int locator);

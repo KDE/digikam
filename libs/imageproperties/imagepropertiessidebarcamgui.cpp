@@ -44,6 +44,7 @@
 #include "cameraiconview.h"
 #include "cameraiconitem.h"
 #include "cameraitempropertiestab.h"
+#include "imagepropertiesgpstab.h"
 #include "imagepropertiesmetadatatab.h"
 #include "statusnavigatebar.h"
 #include "navigatebarwidget.h"
@@ -61,6 +62,7 @@ public:
     {
         dirtyMetadataTab   = false;
         dirtyCameraItemTab = false;
+        dirtyGpsTab        = false;
         metadataTab        = 0;
         cameraItemTab      = 0;
         itemInfo           = 0;
@@ -72,6 +74,7 @@ public:
 
     bool                        dirtyMetadataTab;
     bool                        dirtyCameraItemTab;
+    bool                        dirtyGpsTab;
 
     KUrl                        currentURL;
 
@@ -80,6 +83,8 @@ public:
     GPItemInfo                 *itemInfo;
 
     ImagePropertiesMetaDataTab *metadataTab;
+
+    ImagePropertiesGPSTab      *gpsTab;
 
     CameraIconView             *cameraView;
 
@@ -96,11 +101,13 @@ ImagePropertiesSideBarCamGui::ImagePropertiesSideBarCamGui(QWidget *parent,
     d = new ImagePropertiesSideBarCamGuiPriv;
     d->cameraItemTab = new CameraItemPropertiesTab(parent, false);
     d->metadataTab   = new ImagePropertiesMetaDataTab(parent, false);
+    d->gpsTab        = new ImagePropertiesGPSTab(parent, false);
 
     setSplitter(splitter);
 
     appendTab(d->cameraItemTab, SmallIcon("document-properties"), i18n("Properties"));
     appendTab(d->metadataTab, SmallIcon("exifinfo"), i18n("Metadata"));
+    appendTab(d->gpsTab, SmallIcon("applications-internet"), i18n("Geolocation"));
 
     slotThemeChanged();
 
@@ -108,6 +115,7 @@ ImagePropertiesSideBarCamGui::ImagePropertiesSideBarCamGui(QWidget *parent,
 
     connectNavigateSignals(d->cameraItemTab);
     connectNavigateSignals(d->metadataTab);
+    connectNavigateSignals(d->gpsTab);
 
     connect(this, SIGNAL(signalChangedTab(QWidget*)),
             this, SLOT(slotChangedTab(QWidget*)));
@@ -148,6 +156,7 @@ void ImagePropertiesSideBarCamGui::itemChanged(GPItemInfo* itemInfo, const KUrl&
     d->currentURL         = url;
     d->dirtyMetadataTab   = false;
     d->dirtyCameraItemTab = false;
+    d->dirtyGpsTab        = false;
     d->cameraView         = view;
     d->cameraItem         = item;
 
@@ -167,9 +176,11 @@ void ImagePropertiesSideBarCamGui::slotNoCurrentItem(void)
     d->currentURL         = KUrl();
     d->dirtyMetadataTab   = false;
     d->dirtyCameraItemTab = false;
+    d->dirtyGpsTab        = false;
 
     d->cameraItemTab->setCurrentItem();
     d->metadataTab->setCurrentURL();
+    d->gpsTab->setCurrentURL();
 }
 
 void ImagePropertiesSideBarCamGui::slotChangedTab(QWidget* tab)
@@ -190,8 +201,12 @@ void ImagePropertiesSideBarCamGui::slotChangedTab(QWidget* tab)
     else if (tab == d->metadataTab && !d->dirtyMetadataTab)
     {
         d->metadataTab->setCurrentData(d->metaData, d->itemInfo->name);
-
         d->dirtyMetadataTab = true;
+    }
+    else if (tab == d->gpsTab && !d->dirtyGpsTab)
+    {
+        d->gpsTab->setMetadata(d->metaData);
+        d->dirtyGpsTab = true;
     }
 
     // setting of NavigateBar, common for all tabs

@@ -48,7 +48,6 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 // Local includes.
 
 #include "ddebug.h"
-#include "dmetadata.h"
 #include "worldmapwidget.h"
 #include "imagepropertiesgpstab.h"
 #include "imagepropertiesgpstab.moc"
@@ -242,8 +241,13 @@ void ImagePropertiesGPSTab::setCurrentURL(const KUrl& url)
         return;
     }
 
-    double alt, lat, lon;
     DMetadata meta(url.path());
+    setMetadata(meta);
+}
+
+void ImagePropertiesGPSTab::setMetadata(const DMetadata& meta)
+{
+    double alt, lat, lon;
     QDateTime dt = meta.getImageDateTime();
     if (meta.getGPSInfo(alt, lat, lon))
         setGPSInfo(lat, lon, alt, dt);
