@@ -63,7 +63,7 @@ ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget *parent,
     m_dirtyGpsTab        = false;
 
     m_propertiesTab = new ImagePropertiesTab(parent, navBar);
-    m_metadataTab   = new ImagePropertiesMetaDataTab(parent, navBar);
+    m_metadataTab   = new ImagePropertiesMetaDataTab(parent);
     m_colorTab      = new ImagePropertiesColorsTab(parent, navBar);
     m_gpsTab        = new ImagePropertiesGPSTab(parent);
 
@@ -106,7 +106,6 @@ void ImagePropertiesSideBar::slotNoCurrentItem()
     m_propertiesTab->setNavigateBarFileName();
 
     m_metadataTab->setCurrentURL();
-    m_metadataTab->setNavigateBarFileName();
 
     m_colorTab->setData();
     m_colorTab->setNavigateBarFileName();

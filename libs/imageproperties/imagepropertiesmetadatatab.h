@@ -6,7 +6,7 @@
  * Date        : 2004-11-17
  * Description : a tab to display metadata information of images
  *
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -31,25 +31,25 @@
 // KDE includes.
 
 #include <kurl.h>
+#include <ktabwidget.h>
 
 // Local includes.
 
 #include "digikam_export.h"
 #include "dmetadata.h"
-#include "navigatebartab.h"
 
 namespace Digikam
 {
 
 class ImagePropertiesMetadataTabPriv;
 
-class DIGIKAM_EXPORT ImagePropertiesMetaDataTab : public NavigateBarTab
+class DIGIKAM_EXPORT ImagePropertiesMetaDataTab : public KTabWidget
 {
     Q_OBJECT
 
 public:
 
-    ImagePropertiesMetaDataTab(QWidget* parent, bool navBar=true);
+    ImagePropertiesMetaDataTab(QWidget* parent);
     ~ImagePropertiesMetaDataTab();
 
     void setCurrentURL(const KUrl& url=KUrl());

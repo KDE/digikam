@@ -6,7 +6,7 @@
  * Date        : 2004-11-17
  * Description : a tab to display metadata information of images
  *
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,18 +36,15 @@
 #include <kconfig.h>
 #include <kdialog.h>
 #include <kfileitem.h>
-#include <ktabwidget.h>
 #include <kglobal.h>
 
 // Local includes.
 
 #include "ddebug.h"
-#include "dmetadata.h"
 #include "exifwidget.h"
 #include "makernotewidget.h"
 #include "iptcwidget.h"
 #include "xmpwidget.h"
-#include "navigatebarwidget.h"
 #include "imagepropertiesmetadatatab.h"
 #include "imagepropertiesmetadatatab.moc"
 
@@ -72,10 +69,7 @@ public:
         makernoteWidget = 0;
         iptcWidget      = 0;
         xmpWidget       = 0;
-        tab             = 0;
     }
-
-    KTabWidget      *tab;
 
     ExifWidget      *exifWidget;
 
@@ -86,36 +80,31 @@ public:
     XmpWidget       *xmpWidget;
 };
 
-ImagePropertiesMetaDataTab::ImagePropertiesMetaDataTab(QWidget* parent, bool navBar)
-                          : NavigateBarTab(parent)
+ImagePropertiesMetaDataTab::ImagePropertiesMetaDataTab(QWidget* parent)
+                          : KTabWidget(parent)
 {
     d = new ImagePropertiesMetadataTabPriv;
 
-    setupNavigateBar(navBar);
-    d->tab = new KTabWidget(this);
-    m_navigateBarLayout->addWidget(d->tab);
-    m_navigateBarLayout->setStretchFactor(d->tab, 10);
-
     // Exif tab area ---------------------------------------
 
-    d->exifWidget = new ExifWidget(d->tab);
-    d->tab->insertTab(ImagePropertiesMetadataTabPriv::EXIF, d->exifWidget, i18n("EXIF"));
+    d->exifWidget = new ExifWidget(this);
+    insertTab(ImagePropertiesMetadataTabPriv::EXIF, d->exifWidget, i18n("EXIF"));
 
     // Makernote tab area ----------------------------------
 
-    d->makernoteWidget = new MakerNoteWidget(d->tab);
-    d->tab->insertTab(ImagePropertiesMetadataTabPriv::MAKERNOTE, d->makernoteWidget, i18n("Makernote"));
+    d->makernoteWidget = new MakerNoteWidget(this);
+    insertTab(ImagePropertiesMetadataTabPriv::MAKERNOTE, d->makernoteWidget, i18n("Makernote"));
 
     // IPTC tab area ---------------------------------------
 
-    d->iptcWidget = new IptcWidget(d->tab);
-    d->tab->insertTab(ImagePropertiesMetadataTabPriv::IPTC, d->iptcWidget, i18n("IPTC"));
+    d->iptcWidget = new IptcWidget(this);
+    insertTab(ImagePropertiesMetadataTabPriv::IPTC, d->iptcWidget, i18n("IPTC"));
 
     // XMP tab area ----------------------------------------
 
-    d->xmpWidget = new XmpWidget(d->tab);
+    d->xmpWidget = new XmpWidget(this);
     if (DMetadata::supportXmp())
-        d->tab->insertTab(ImagePropertiesMetadataTabPriv::XMP, d->xmpWidget, i18n("XMP"));
+        insertTab(ImagePropertiesMetadataTabPriv::XMP, d->xmpWidget, i18n("XMP"));
     else
         d->xmpWidget->hide();
 
@@ -123,8 +112,8 @@ ImagePropertiesMetaDataTab::ImagePropertiesMetaDataTab(QWidget* parent, bool nav
 
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("Image Properties SideBar");
-    d->tab->setCurrentIndex(group.readEntry("ImagePropertiesMetaData Tab",
-                            (int)ImagePropertiesMetadataTabPriv::EXIF));
+    setCurrentIndex(group.readEntry("ImagePropertiesMetaData Tab",
+                    (int)ImagePropertiesMetadataTabPriv::EXIF));
     d->exifWidget->setMode(group.readEntry("EXIF Level", (int)ExifWidget::SIMPLE));
     d->makernoteWidget->setMode(group.readEntry("MAKERNOTE Level", (int)MakerNoteWidget::SIMPLE));
     d->iptcWidget->setMode(group.readEntry("IPTC Level", (int)IptcWidget::SIMPLE));
@@ -139,7 +128,7 @@ ImagePropertiesMetaDataTab::~ImagePropertiesMetaDataTab()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("Image Properties SideBar");
-    group.writeEntry("ImagePropertiesMetaData Tab", d->tab->currentIndex());
+    group.writeEntry("ImagePropertiesMetaData Tab", currentIndex());
     group.writeEntry("EXIF Level", d->exifWidget->getMode());
     group.writeEntry("MAKERNOTE Level", d->makernoteWidget->getMode());
     group.writeEntry("IPTC Level", d->iptcWidget->getMode());
@@ -177,7 +166,7 @@ void ImagePropertiesMetaDataTab::setCurrentURL(const KUrl& url)
 void ImagePropertiesMetaDataTab::setCurrentData(const DMetadata& metaData, const QString& filename)
 {
     DMetadata data = metaData;
-    
+
     if (!data.hasExif() && !data.hasIptc() && !data.hasXmp())
     {
         d->exifWidget->loadFromData(filename, data);
