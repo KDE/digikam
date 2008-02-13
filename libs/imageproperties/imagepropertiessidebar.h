@@ -71,6 +71,10 @@ protected slots:
 
 protected:
 
+    virtual void setImagePropertiesInformations(const KUrl& url);
+
+protected:
+
     bool                        m_dirtyPropertiesTab;
     bool                        m_dirtyMetadataTab;
     bool                        m_dirtyColorTab;

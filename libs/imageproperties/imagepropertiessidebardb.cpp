@@ -201,6 +201,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         if (tab == m_propertiesTab && !m_dirtyPropertiesTab)
         {
             m_propertiesTab->setCurrentURL(m_currentURL);
+            ImagePropertiesSideBar::setImagePropertiesInformations(m_currentURL);
             m_dirtyPropertiesTab = true;
         }
         else if (tab == m_metadataTab && !m_dirtyMetadataTab)
@@ -241,6 +242,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         if (tab == m_propertiesTab && !m_dirtyPropertiesTab)
         {
             m_propertiesTab->setCurrentURL(m_currentURL);
+            setImagePropertiesInformations(m_currentURL);
             m_dirtyPropertiesTab = true;
         }
         else if (tab == m_metadataTab && !m_dirtyMetadataTab)
@@ -286,8 +288,8 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
     {
         if (tab == m_propertiesTab && !m_dirtyPropertiesTab)
         {
-            //TODO
             m_propertiesTab->setCurrentURL(m_currentURL);
+            setImagePropertiesInformations(m_currentURL);
             m_dirtyPropertiesTab = true;
         }
         else if (tab == m_metadataTab && !m_dirtyMetadataTab)
@@ -378,6 +380,11 @@ void ImagePropertiesSideBarDB::slotThemeChanged()
 void ImagePropertiesSideBarDB::refreshTagsView()
 {
     d->desceditTab->refreshTagsView();
+}
+
+void ImagePropertiesSideBarDB::setImagePropertiesInformations(const KUrl& url)
+{
+    //TODO
 }
 
 }  // NameSpace Digikam

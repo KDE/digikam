@@ -55,6 +55,30 @@ public:
     void setCurrentURL(const KUrl& url=KUrl());
     void colorChanged(const QColor& back, const QColor& fore);
 
+    void setPhotoInfoEnable(bool b);
+
+    void setFileModifiedDate(const QString& str);
+    void setFileSize(const QString& str);
+    void setFileOwner(const QString& str);
+    void setFilePermissions(const QString& str);
+
+    void setImageDimensions(const QString& str);
+    void setImageMime(const QString& str);
+    void setImageCompression(const QString& str);
+    void setImageBitDepth(const QString& str);
+    void setImageColorMode(const QString& str);
+
+    void setPhotoMake(const QString& str);
+    void setPhotoModel(const QString& str);
+    void setPhotoDateTime(const QString& str);
+    void setPhotoAperture(const QString& str);
+    void setPhotoFocalLength(const QString& str);
+    void setPhotoExposureTime(const QString& str);
+    void setPhotoSensitivity(const QString& str);
+    void setPhotoExposureMode(const QString& str);
+    void setPhotoFlash(const QString& str);
+    void setPhotoWhiteBalance(const QString& str);
+
 private:
 
     ImagePropertiesTabPriv* d;

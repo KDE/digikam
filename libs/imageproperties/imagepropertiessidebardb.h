@@ -26,8 +26,6 @@
 #ifndef IMAGEPROPERTIESSIDEBARDB_H
 #define IMAGEPROPERTIESSIDEBARDB_H
 
-// Qt includes.
-
 // KDE includes.
 
 #include <kurl.h>
@@ -97,9 +95,9 @@ private slots:
 
 private:
 
-    void itemChanged(const KUrl& url, const ImageInfo &info,
-                     const QRect &rect, DImg *img);
+    void itemChanged(const KUrl& url, const ImageInfo &info, const QRect &rect, DImg *img);
     void itemChanged(const ImageInfoList infos, const QRect &rect, DImg *img);
+    void setImagePropertiesInformations(const KUrl& url);
 
 private:
 

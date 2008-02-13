@@ -28,24 +28,17 @@
 #include <QFile>
 #include <QLabel>
 #include <QPixmap>
-#include <QFileInfo>
 
 // KDE includes.
 
 #include <klocale.h>
 #include <kdialog.h>
-#include <kfileitem.h>
 #include <ksqueezedtextlabel.h>
 #include <kseparator.h>
-
-// LibKDcraw includes.
-
-#include <libkdcraw/dcrawbinary.h>
 
 // Local includes.
 
 #include "ddebug.h"
-#include "dmetadata.h"
 #include "imagepropertiestab.h"
 #include "imagepropertiestab.moc"
 
@@ -384,211 +377,8 @@ void ImagePropertiesTab::setCurrentURL(const KUrl& url)
 
     setEnabled(true);
 
-    QString str;
-    QString unavailable(i18n("<i>unavailable</i>"));
-
-    KFileItem fi(KFileItem::Unknown, KFileItem::Unknown, url);
-    QFileInfo fileInfo(url.path());
-    DMetadata metaData(url.path());
-
-    // -- File system information ------------------------------------------
-
     d->labelFile->setText(url.fileName());
     d->labelFolder->setText(url.directory());
-
-    QDateTime modifiedDate = fileInfo.lastModified();
-    str = KGlobal::locale()->formatDateTime(modifiedDate, KLocale::ShortDate, true);
-    d->labelFileModifiedDate->setText(str);
-
-    str = QString("%1 (%2)").arg(KIO::convertSize(fi.size()))
-                            .arg(KGlobal::locale()->formatNumber(fi.size(), 0));
-    d->labelFileSize->setText(str);
-
-    d->labelFileOwner->setText( QString("%1 - %2").arg(fi.user()).arg(fi.group()) );
-    d->labelFilePermissions->setText( fi.permissionsString() );
-
-    // -- Image Properties --------------------------------------------------
-
-    QSize   dims;
-    QString compression, bitDepth, colorMode;
-    QString rawFilesExt(KDcrawIface::DcrawBinary::instance()->rawFiles());
-    QString ext = fileInfo.suffix().toUpper();
-
-    if (!ext.isEmpty() && rawFilesExt.toUpper().contains(ext))
-    {
-        d->labelImageMime->setText(i18n("RAW Image"));
-        compression = i18n("None");
-        bitDepth    = "48";
-        dims        = metaData.getImageDimensions();
-        colorMode   = i18n("Uncalibrated");
-    }
-    else
-    {
-        d->labelImageMime->setText(fi.mimeComment());
-
-        KFileMetaInfo meta = fi.metaInfo();
-
-        if (meta.isValid())
-        {
-            if (meta.item("Dimensions").isValid())
-                dims = meta.item("Dimensions").value().toSize();
-
-            if (meta.item("JPEG quality").isValid())
-                compression = i18n("JPEG quality %1", meta.item("JPEG quality").value().toString());
-
-            if (meta.item("Compression").isValid())
-                compression =  meta.item("Compression").value().toString();
-
-            if (meta.item("BitDepth").isValid())
-                bitDepth = meta.item("BitDepth").value().toString();
-
-            if (meta.item("ColorMode").isValid())
-                colorMode = meta.item("ColorMode").value().toString();
-        }
-
-/*          TODO: KDE4PORT: KFileMetaInfo API as Changed.
-                            Check if new method to search informations is enough.
-
-        if (meta.isValid())
-        {
-            if (meta.containsGroup("Jpeg EXIF Data"))     // JPEG image ?
-            {
-                dims        = meta.group("Jpeg EXIF Data").item("Dimensions").value().toSize();
-
-                QString quality = meta.group("Jpeg EXIF Data").item("JPEG quality").value().toString();
-                quality.isEmpty() ? compression = unavailable :
-                                    compression = i18n("JPEG quality %1").arg(quality);
-                bitDepth    = meta.group("Jpeg EXIF Data").item("BitDepth").value().toString();
-                colorMode   = meta.group("Jpeg EXIF Data").item("ColorMode").value().toString();
-            }
-
-            if (meta.containsGroup("General"))
-            {
-                if (dims.isEmpty() ) 
-                    dims = meta.group("General").item("Dimensions").value().toSize();
-                if (compression.isEmpty()) 
-                    compression =  meta.group("General").item("Compression").value().toString();
-                if (bitDepth.isEmpty()) 
-                    bitDepth = meta.group("General").item("BitDepth").value().toString();
-                if (colorMode.isEmpty()) 
-                    colorMode = meta.group("General").item("ColorMode").value().toString();
-            }
-
-            if (meta.containsGroup("Technical"))
-            {
-                if (dims.isEmpty()) 
-                    dims = meta.group("Technical").item("Dimensions").value().toSize();
-                if (compression.isEmpty()) 
-                    compression = meta.group("Technical").item("Compression").value().toString();
-                if (bitDepth.isEmpty()) 
-                    bitDepth = meta.group("Technical").item("BitDepth").value().toString();
-                if (colorMode.isEmpty()) 
-                    colorMode =  meta.group("Technical").item("ColorMode").value().toString();
-            }
-        }*/
-    }
-
-    QString mpixels;
-    mpixels.setNum(dims.width()*dims.height()/1000000.0, 'f', 2);
-    str = (!dims.isValid()) ? i18n("Unknown") : i18n("%1x%2 (%3Mpx)",
-           dims.width(), dims.height(), mpixels);
-    d->labelImageDimensions->setText(str);
-    d->labelImageCompression->setText(compression.isEmpty() ? unavailable : compression);
-    d->labelImageBitDepth->setText(bitDepth.isEmpty() ? unavailable : i18n("%1 bpp", bitDepth));
-    d->labelImageColorMode->setText(colorMode.isEmpty() ? unavailable : colorMode);
-
-    // -- Photograph information ------------------------------------------
-    // NOTA: If something is changed here, please updated albumfiletip section too.
-
-    PhotoInfoContainer photoInfo = metaData.getPhotographInformations();
-
-    if (photoInfo.isEmpty())
-    {
-        d->title3->hide();
-        d->make->hide();
-        d->model->hide();
-        d->photoDate->hide();
-        d->aperture->hide();
-        d->focalLength->hide();
-        d->exposureTime->hide();
-        d->sensitivity->hide();
-        d->exposureMode->hide();
-        d->flash->hide();
-        d->whiteBalance->hide();
-        d->labelPhotoMake->hide();
-        d->labelPhotoModel->hide();
-        d->labelPhotoDateTime->hide();
-        d->labelPhotoAperture->hide();
-        d->labelPhotoFocalLenght->hide();
-        d->labelPhotoExposureTime->hide();
-        d->labelPhotoSensitivity->hide();
-        d->labelPhotoExposureMode->hide();
-        d->labelPhotoFlash->hide();
-        d->labelPhotoWhiteBalance->hide();
-    }
-    else
-    {
-        d->title3->show();
-        d->make->show();
-        d->model->show();
-        d->photoDate->show();
-        d->aperture->show();
-        d->focalLength->show();
-        d->exposureTime->show();
-        d->sensitivity->show();
-        d->exposureMode->show();
-        d->flash->show();
-        d->whiteBalance->show();
-        d->labelPhotoMake->show();
-        d->labelPhotoModel->show();
-        d->labelPhotoDateTime->show();
-        d->labelPhotoAperture->show();
-        d->labelPhotoFocalLenght->show();
-        d->labelPhotoExposureTime->show();
-        d->labelPhotoSensitivity->show();
-        d->labelPhotoExposureMode->show();
-        d->labelPhotoFlash->show();
-        d->labelPhotoWhiteBalance->show();
-    }
-
-    d->labelPhotoMake->setText(photoInfo.make.isEmpty() ? unavailable : photoInfo.make);
-    d->labelPhotoModel->setText(photoInfo.model.isEmpty() ? unavailable : photoInfo.model);
-
-    if (photoInfo.dateTime.isValid())
-    {
-        str = KGlobal::locale()->formatDateTime(photoInfo.dateTime, KLocale::ShortDate, true);
-        d->labelPhotoDateTime->setText(str);
-    }
-    else
-        d->labelPhotoDateTime->setText(unavailable);
-
-    d->labelPhotoAperture->setText(photoInfo.aperture.isEmpty() ? unavailable : photoInfo.aperture);
-
-    if (photoInfo.focalLength35mm.isEmpty())
-        d->labelPhotoFocalLenght->setText(photoInfo.focalLength.isEmpty() ? unavailable : photoInfo.focalLength);
-    else 
-    {
-        str = i18n("%1 (35mm: %2)", photoInfo.focalLength, photoInfo.focalLength35mm);
-        d->labelPhotoFocalLenght->setText(str);
-    }
-
-    d->labelPhotoExposureTime->setText(photoInfo.exposureTime.isEmpty() ? unavailable : photoInfo.exposureTime);
-    d->labelPhotoSensitivity->setText(photoInfo.sensitivity.isEmpty() ? unavailable : i18n("%1 ISO", photoInfo.sensitivity));
-
-    if (photoInfo.exposureMode.isEmpty() && photoInfo.exposureProgram.isEmpty())
-        d->labelPhotoExposureMode->setText(unavailable);
-    else if (!photoInfo.exposureMode.isEmpty() && photoInfo.exposureProgram.isEmpty())
-        d->labelPhotoExposureMode->setText(photoInfo.exposureMode);
-    else if (photoInfo.exposureMode.isEmpty() && !photoInfo.exposureProgram.isEmpty())
-        d->labelPhotoExposureMode->setText(photoInfo.exposureProgram);
-    else 
-    {
-        str = QString("%1 / %2").arg(photoInfo.exposureMode).arg(photoInfo.exposureProgram);
-        d->labelPhotoExposureMode->setText(str);
-    }
-
-    d->labelPhotoFlash->setText(photoInfo.flash.isEmpty() ? unavailable : photoInfo.flash);
-    d->labelPhotoWhiteBalance->setText(photoInfo.whiteBalance.isEmpty() ? unavailable : photoInfo.whiteBalance);
 }
 
 void ImagePropertiesTab::colorChanged(const QColor& back, const QColor& fore)
@@ -654,5 +444,151 @@ void ImagePropertiesTab::colorChanged(const QColor& back, const QColor& fore)
     d->labelPhotoWhiteBalance->setPalette(plt);
 }
 
-}  // NameSpace Digikam
+void ImagePropertiesTab::setPhotoInfoEnable(bool b)
+{
+    if (b)
+    {
+        d->title3->hide();
+        d->make->hide();
+        d->model->hide();
+        d->photoDate->hide();
+        d->aperture->hide();
+        d->focalLength->hide();
+        d->exposureTime->hide();
+        d->sensitivity->hide();
+        d->exposureMode->hide();
+        d->flash->hide();
+        d->whiteBalance->hide();
+        d->labelPhotoMake->hide();
+        d->labelPhotoModel->hide();
+        d->labelPhotoDateTime->hide();
+        d->labelPhotoAperture->hide();
+        d->labelPhotoFocalLenght->hide();
+        d->labelPhotoExposureTime->hide();
+        d->labelPhotoSensitivity->hide();
+        d->labelPhotoExposureMode->hide();
+        d->labelPhotoFlash->hide();
+        d->labelPhotoWhiteBalance->hide();
+    }
+    else
+    {
+        d->title3->show();
+        d->make->show();
+        d->model->show();
+        d->photoDate->show();
+        d->aperture->show();
+        d->focalLength->show();
+        d->exposureTime->show();
+        d->sensitivity->show();
+        d->exposureMode->show();
+        d->flash->show();
+        d->whiteBalance->show();
+        d->labelPhotoMake->show();
+        d->labelPhotoModel->show();
+        d->labelPhotoDateTime->show();
+        d->labelPhotoAperture->show();
+        d->labelPhotoFocalLenght->show();
+        d->labelPhotoExposureTime->show();
+        d->labelPhotoSensitivity->show();
+        d->labelPhotoExposureMode->show();
+        d->labelPhotoFlash->show();
+        d->labelPhotoWhiteBalance->show();
+    }
+}
 
+void ImagePropertiesTab::setFileModifiedDate(const QString& str)
+{
+    d->labelFileModifiedDate->setText(str);
+}
+
+void ImagePropertiesTab::setFileSize(const QString& str)
+{
+    d->labelFileSize->setText(str);
+}
+
+void ImagePropertiesTab::setFileOwner(const QString& str)
+{
+    d->labelFileOwner->setText(str);
+}
+
+void ImagePropertiesTab::setFilePermissions(const QString& str)
+{
+    d->labelFilePermissions->setText(str);
+}
+
+void ImagePropertiesTab::setImageMime(const QString& str)
+{
+    d->labelImageMime->setText(str);
+}
+
+void ImagePropertiesTab::setImageDimensions(const QString& str)
+{
+    d->labelImageDimensions->setText(str);
+}
+
+void ImagePropertiesTab::setImageCompression(const QString& str)
+{
+    d->labelImageCompression->setText(str);
+}
+
+void ImagePropertiesTab::setImageBitDepth(const QString& str)
+{
+    d->labelImageBitDepth->setText(str);
+}
+
+void ImagePropertiesTab::setImageColorMode(const QString& str)
+{
+    d->labelImageColorMode->setText(str);
+}
+
+void ImagePropertiesTab::setPhotoMake(const QString& str)
+{
+    d->labelPhotoMake->setText(str);
+}
+
+void ImagePropertiesTab::setPhotoModel(const QString& str)
+{
+    d->labelPhotoModel->setText(str);
+}
+
+void ImagePropertiesTab::setPhotoDateTime(const QString& str)
+{
+    d->labelPhotoDateTime->setText(str);
+}
+
+void ImagePropertiesTab::setPhotoAperture(const QString& str)
+{
+    d->labelPhotoAperture->setText(str);
+}
+
+void ImagePropertiesTab::setPhotoFocalLength(const QString& str)
+{
+    d->labelPhotoFocalLenght->setText(str);
+}
+
+void ImagePropertiesTab::setPhotoExposureTime(const QString& str)
+{
+    d->labelPhotoExposureTime->setText(str);
+}
+
+void ImagePropertiesTab::setPhotoSensitivity(const QString& str)
+{
+    d->labelPhotoSensitivity->setText(str);
+}
+
+void ImagePropertiesTab::setPhotoExposureMode(const QString& str)
+{
+    d->labelPhotoExposureMode->setText(str);
+}
+
+void ImagePropertiesTab::setPhotoFlash(const QString& str)
+{
+    d->labelPhotoFlash->setText(str);
+}
+
+void ImagePropertiesTab::setPhotoWhiteBalance(const QString& str)
+{
+    d->labelPhotoWhiteBalance->setText(str);
+}
+
+}  // NameSpace Digikam
