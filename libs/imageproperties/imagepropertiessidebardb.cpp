@@ -44,7 +44,7 @@
 #include "dimg.h"
 #include "themeengine.h"
 #include "imageinfo.h"
-#include "gpstab.h"
+#include "imagepropertiesgpstab.h"
 #include "imagedescedittab.h"
 #include "imageattributeswatch.h"
 #include "imagepropertiestab.h"
