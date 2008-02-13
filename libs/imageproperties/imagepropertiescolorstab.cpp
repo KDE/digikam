@@ -6,7 +6,7 @@
  * Date        : 2004-11-17
  * Description : a tab to display colors information of images
  *
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,7 +46,6 @@
 #include <kconfig.h>
 #include <kdialog.h>
 #include <kstandarddirs.h>
-#include <ktabwidget.h>
 #include <kglobal.h>
 #include <kvbox.h>
 
@@ -57,7 +56,6 @@
 #include "imagehistogram.h"
 #include "histogramwidget.h"
 #include "colorgradientwidget.h"
-#include "navigatebarwidget.h"
 #include "sharedloadsavethread.h"
 #include "iccprofilewidget.h"
 #include "cietonguewidget.h"
@@ -81,7 +79,6 @@ public:
     {
         regionBox            = 0;
         imageLoaderThread    = 0;
-        tab                  = 0;
         channelCB            = 0;
         colorsCB             = 0;
         renderingCB          = 0;
@@ -133,8 +130,6 @@ public:
 
     QByteArray             embedded_profile;
 
-    KTabWidget            *tab;
-
     DImg                   image;
     DImg                   imageSelection;
 
@@ -144,19 +139,14 @@ public:
     SharedLoadSaveThread  *imageLoaderThread;
 };
 
-ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
-                        : NavigateBarTab(parent)
+ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
+                        : KTabWidget(parent)
 {
     d = new ImagePropertiesColorsTabPriv;
 
-    setupNavigateBar(navBar);
-    d->tab = new KTabWidget(this);
-    m_navigateBarLayout->addWidget(d->tab);
-    m_navigateBarLayout->setStretchFactor(d->tab, 10);
-
     // Histogram tab area -----------------------------------------------------
 
-    QWidget* histogramPage = new QWidget( d->tab );
+    QWidget* histogramPage = new QWidget(this);
     QGridLayout *topLayout = new QGridLayout(histogramPage);
     QLabel *label1         = new QLabel(i18n("Channel:"), histogramPage);
     label1->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
@@ -363,27 +353,27 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
 
     // -------------------------------------------------------------
 
-    topLayout->addWidget(label1, 1, 0, 1, 1);
+    topLayout->addWidget(label1,       1, 0, 1, 1);
     topLayout->addWidget(d->channelCB, 1, 1, 1, 1);
-    topLayout->addWidget(scaleBox, 1, 3, 1, 1);
-    topLayout->addWidget(label10, 2, 0, 1, 1);
-    topLayout->addWidget(d->colorsCB, 2, 1, 1, 1);
+    topLayout->addWidget(scaleBox,     1, 3, 1, 1);
+    topLayout->addWidget(label10,      2, 0, 1, 1);
+    topLayout->addWidget(d->colorsCB,  2, 1, 1, 1);
     topLayout->addWidget(d->regionBox, 2, 3, 1, 1);
-    topLayout->addWidget(histoBox, 3, 0, 4- 3+1, 4 );
-    topLayout->addLayout(hlay3, 5, 0, 1, 4 );
-    topLayout->addWidget(gbox, 6, 0, 1, 4 );
-    topLayout->addWidget(gbox2, 7, 0, 1, 4 );
+    topLayout->addWidget(histoBox,     3, 0, 2, 4);
+    topLayout->addLayout(hlay3,        5, 0, 1, 4);
+    topLayout->addWidget(gbox,         6, 0, 1, 4);
+    topLayout->addWidget(gbox2,        7, 0, 1, 4);
     topLayout->setRowStretch(8, 10);
     topLayout->setColumnStretch(2, 10);
     topLayout->setMargin(KDialog::spacingHint());
     topLayout->setSpacing(KDialog::spacingHint());
 
-    d->tab->insertTab(ImagePropertiesColorsTabPriv::HISTOGRAM, histogramPage, i18n("Histogram"));
+    insertTab(ImagePropertiesColorsTabPriv::HISTOGRAM, histogramPage, i18n("Histogram"));
 
     // ICC Profiles tab area ---------------------------------------
 
-    d->iccProfileWidget = new ICCProfileWidget(d->tab);
-    d->tab->insertTab(ImagePropertiesColorsTabPriv::ICCPROFILE, d->iccProfileWidget, i18n("ICC profile"));
+    d->iccProfileWidget = new ICCProfileWidget(this);
+    insertTab(ImagePropertiesColorsTabPriv::ICCPROFILE, d->iccProfileWidget, i18n("ICC profile"));
 
     // -------------------------------------------------------------
 
@@ -422,8 +412,8 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group(QString("Image Properties SideBar"));
 
-    d->tab->setCurrentIndex(group.readEntry("ImagePropertiesColors Tab",
-                            (int)ImagePropertiesColorsTabPriv::HISTOGRAM));
+    setCurrentIndex(group.readEntry("ImagePropertiesColors Tab",
+                    (int)ImagePropertiesColorsTabPriv::HISTOGRAM));
     d->iccProfileWidget->setMode(group.readEntry("ICC Level", (int)ICCProfileWidget::SIMPLE));
     d->iccProfileWidget->setCurrentItemByKey(group.readEntry("Current ICC Item", QString()));
 
@@ -443,7 +433,7 @@ ImagePropertiesColorsTab::~ImagePropertiesColorsTab()
 
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(QString("Image Properties SideBar"));
-    group.writeEntry("ImagePropertiesColors Tab", d->tab->currentIndex());
+    group.writeEntry("ImagePropertiesColors Tab", currentIndex());
     group.writeEntry("Histogram Channel", d->channelCB->currentIndex());
     group.writeEntry("Histogram Scale", d->scaleBG->checkedId());
     group.writeEntry("Histogram Color", d->colorsCB->currentIndex());
@@ -665,41 +655,41 @@ void ImagePropertiesColorsTab::slotChannelChanged(int channel)
 {
     switch(channel)
     {
-    case RedChannel: 
-        d->histogramWidget->m_channelType = HistogramWidget::RedChannelHistogram;
-        d->hGradient->setColors( QColor( "black" ), QColor( "red" ) );
-        d->colorsCB->setEnabled(false);
-        break;
+        case RedChannel: 
+            d->histogramWidget->m_channelType = HistogramWidget::RedChannelHistogram;
+            d->hGradient->setColors( QColor( "black" ), QColor( "red" ) );
+            d->colorsCB->setEnabled(false);
+            break;
 
-    case GreenChannel:
-        d->histogramWidget->m_channelType = HistogramWidget::GreenChannelHistogram;
-        d->hGradient->setColors( QColor( "black" ), QColor( "green" ) );
-        d->colorsCB->setEnabled(false);
-        break;
+        case GreenChannel:
+            d->histogramWidget->m_channelType = HistogramWidget::GreenChannelHistogram;
+            d->hGradient->setColors( QColor( "black" ), QColor( "green" ) );
+            d->colorsCB->setEnabled(false);
+            break;
 
-    case BlueChannel:
-        d->histogramWidget->m_channelType = HistogramWidget::BlueChannelHistogram;
-        d->hGradient->setColors( QColor( "black" ), QColor( "blue" ) );
-        d->colorsCB->setEnabled(false);
-        break;
+        case BlueChannel:
+            d->histogramWidget->m_channelType = HistogramWidget::BlueChannelHistogram;
+            d->hGradient->setColors( QColor( "black" ), QColor( "blue" ) );
+            d->colorsCB->setEnabled(false);
+            break;
 
-    case AlphaChannel:
-        d->histogramWidget->m_channelType = HistogramWidget::AlphaChannelHistogram;
-        d->hGradient->setColors( QColor( "black" ), QColor( "white" ) );
-        d->colorsCB->setEnabled(false);
-        break;
+        case AlphaChannel:
+            d->histogramWidget->m_channelType = HistogramWidget::AlphaChannelHistogram;
+            d->hGradient->setColors( QColor( "black" ), QColor( "white" ) );
+            d->colorsCB->setEnabled(false);
+            break;
 
-    case ColorChannels:
-        d->histogramWidget->m_channelType = HistogramWidget::ColorChannelsHistogram;
-        d->hGradient->setColors( QColor( "black" ), QColor( "white" ) );
-        d->colorsCB->setEnabled(true);
-        break;
+        case ColorChannels:
+            d->histogramWidget->m_channelType = HistogramWidget::ColorChannelsHistogram;
+            d->hGradient->setColors( QColor( "black" ), QColor( "white" ) );
+            d->colorsCB->setEnabled(true);
+            break;
 
-    default:          // Luminosity.
-        d->histogramWidget->m_channelType = HistogramWidget::ValueHistogram;
-        d->hGradient->setColors( QColor( "black" ), QColor( "white" ) );
-        d->colorsCB->setEnabled(false);
-        break;
+        default:          // Luminosity.
+            d->histogramWidget->m_channelType = HistogramWidget::ValueHistogram;
+            d->hGradient->setColors( QColor( "black" ), QColor( "white" ) );
+            d->colorsCB->setEnabled(false);
+            break;
     }
 
     d->histogramWidget->repaint();
@@ -716,17 +706,17 @@ void ImagePropertiesColorsTab::slotColorsChanged(int color)
 {
     switch(color)
     {
-    case AllColorsGreen:
-        d->histogramWidget->m_colorType = HistogramWidget::GreenColor;
-        break;
+        case AllColorsGreen:
+            d->histogramWidget->m_colorType = HistogramWidget::GreenColor;
+            break;
 
-    case AllColorsBlue:
-        d->histogramWidget->m_colorType = HistogramWidget::BlueColor;
-        break;
+        case AllColorsBlue:
+            d->histogramWidget->m_colorType = HistogramWidget::BlueColor;
+            break;
 
-    default:          // Red.
-        d->histogramWidget->m_colorType = HistogramWidget::RedColor;
-        break;
+        default:          // Red.
+            d->histogramWidget->m_colorType = HistogramWidget::RedColor;
+            break;
     }
 
     d->histogramWidget->repaint();

@@ -6,7 +6,7 @@
  * Date        : 2004-11-17
  * Description : a tab to display colors information of images
  *
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -18,6 +18,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+ *
  * ============================================================ */
 
 #ifndef IMAGEPROPERTIESCOLORSTAB_H
@@ -31,12 +32,12 @@
 // KDE includes.
 
 #include <kurl.h>
+#include <ktabwidget.h>
 
 // Local includes.
 
 #include "dimg.h"
 #include "digikam_export.h"
-#include "navigatebartab.h"
 
 class QRect;
 
@@ -47,13 +48,13 @@ class DImg;
 class LoadingDescription;
 class ImagePropertiesColorsTabPriv;
 
-class DIGIKAM_EXPORT ImagePropertiesColorsTab : public NavigateBarTab
+class DIGIKAM_EXPORT ImagePropertiesColorsTab : public KTabWidget
 {
     Q_OBJECT
 
 public:
 
-    ImagePropertiesColorsTab(QWidget* parent, bool navBar=true);
+    ImagePropertiesColorsTab(QWidget* parent);
     ~ImagePropertiesColorsTab();
 
     void setData(const KUrl& url=KUrl(), const QRect &selectionArea = QRect(),
