@@ -6,7 +6,7 @@
  * Date        : 2006-02-08
  * Description : A tab to display camera item information
  *
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,7 +26,6 @@
 #include <QStyle>
 #include <QFile>
 #include <QLabel>
-#include <QFrame>
 #include <QGridLayout>
 
 // KDE includes.
@@ -45,7 +44,6 @@
 #include "ddebug.h"
 #include "dmetadata.h"
 #include "gpiteminfo.h"
-#include "navigatebarwidget.h"
 #include "cameraitempropertiestab.h"
 #include "cameraitempropertiestab.moc"
 
@@ -69,7 +67,6 @@ public:
         dimensions             = 0;
         newFileName            = 0;
         downloaded             = 0;
-        settingsArea           = 0;
         title2                 = 0;
         make                   = 0;
         model                  = 0;
@@ -127,8 +124,6 @@ public:
     QLabel             *flash;
     QLabel             *whiteBalance;
 
-    QFrame             *settingsArea;
-
     KSqueezedTextLabel *labelFile;
     KSqueezedTextLabel *labelFolder;
     KSqueezedTextLabel *labelFileIsReadable;
@@ -152,66 +147,64 @@ public:
     KSqueezedTextLabel *labelPhotoWhiteBalance;
 };
 
-CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent, bool navBar)
-                       : NavigateBarTab(parent)
+CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent)
+                       : QFrame(parent)
 {
     d = new CameraItemPropertiesTabPriv;
 
-    setupNavigateBar(navBar);
-    d->settingsArea = new QFrame(this);
-    d->settingsArea->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
-    d->settingsArea->setLineWidth( style()->pixelMetric(QStyle::PM_DefaultFrameWidth) );
+    setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
+    setLineWidth( style()->pixelMetric(QStyle::PM_DefaultFrameWidth) );
 
-    QGridLayout *settingsLayout = new QGridLayout(d->settingsArea);
+    QGridLayout *settingsLayout = new QGridLayout(this);
 
     // --------------------------------------------------
 
-    d->title                  = new QLabel(i18n("<big><b>Camera File Properties</b></big>"), d->settingsArea);
-    d->file                   = new QLabel(i18n("<b>File</b>:"), d->settingsArea);
-    d->folder                 = new QLabel(i18n("<b>Folder</b>:"), d->settingsArea);
-    d->date                   = new QLabel(i18n("<b>Date</b>:"), d->settingsArea);
-    d->size                   = new QLabel(i18n("<b>Size</b>:"), d->settingsArea);
-    d->isReadable             = new QLabel(i18n("<b>Readable</b>:"), d->settingsArea);
-    d->isWritable             = new QLabel(i18n("<b>Writable</b>:"), d->settingsArea);
-    d->mime                   = new QLabel(i18n("<b>Type</b>:"), d->settingsArea);
-    d->dimensions             = new QLabel(i18n("<b>Dimensions</b>:"), d->settingsArea);
-    d->newFileName            = new QLabel(i18n("<nobr><b>New Name</b></nobr>:"), d->settingsArea);
-    d->downloaded             = new QLabel(i18n("<b>Downloaded</b>:"), d->settingsArea);
+    d->title                  = new QLabel(i18n("<big><b>Camera File Properties</b></big>"), this);
+    d->file                   = new QLabel(i18n("<b>File</b>:"), this);
+    d->folder                 = new QLabel(i18n("<b>Folder</b>:"), this);
+    d->date                   = new QLabel(i18n("<b>Date</b>:"), this);
+    d->size                   = new QLabel(i18n("<b>Size</b>:"), this);
+    d->isReadable             = new QLabel(i18n("<b>Readable</b>:"), this);
+    d->isWritable             = new QLabel(i18n("<b>Writable</b>:"), this);
+    d->mime                   = new QLabel(i18n("<b>Type</b>:"), this);
+    d->dimensions             = new QLabel(i18n("<b>Dimensions</b>:"), this);
+    d->newFileName            = new QLabel(i18n("<nobr><b>New Name</b></nobr>:"), this);
+    d->downloaded             = new QLabel(i18n("<b>Downloaded</b>:"), this);
 
-    KSeparator *line          = new KSeparator (Qt::Horizontal, d->settingsArea);
-    d->title2                 = new QLabel(i18n("<big><b>Photograph Properties</b></big>"), d->settingsArea);
-    d->make                   = new QLabel(i18n("<b>Make</b>:"), d->settingsArea);
-    d->model                  = new QLabel(i18n("<b>Model</b>:"), d->settingsArea);
-    d->photoDate              = new QLabel(i18n("<b>Created</b>:"), d->settingsArea);
-    d->aperture               = new QLabel(i18n("<b>Aperture</b>:"), d->settingsArea);
-    d->focalLength            = new QLabel(i18n("<b>Focal</b>:"), d->settingsArea);
-    d->exposureTime           = new QLabel(i18n("<b>Exposure</b>:"), d->settingsArea);
-    d->sensitivity            = new QLabel(i18n("<b>Sensitivity</b>:"), d->settingsArea);
-    d->exposureMode           = new QLabel(i18n("<nobr><b>Mode/Program</b></nobr>:"), d->settingsArea);
-    d->flash                  = new QLabel(i18n("<b>Flash</b>:"), d->settingsArea);
-    d->whiteBalance           = new QLabel(i18n("<nobr><b>White balance</b></nobr>:"), d->settingsArea);
+    KSeparator *line          = new KSeparator (Qt::Horizontal, this);
+    d->title2                 = new QLabel(i18n("<big><b>Photograph Properties</b></big>"), this);
+    d->make                   = new QLabel(i18n("<b>Make</b>:"), this);
+    d->model                  = new QLabel(i18n("<b>Model</b>:"), this);
+    d->photoDate              = new QLabel(i18n("<b>Created</b>:"), this);
+    d->aperture               = new QLabel(i18n("<b>Aperture</b>:"), this);
+    d->focalLength            = new QLabel(i18n("<b>Focal</b>:"), this);
+    d->exposureTime           = new QLabel(i18n("<b>Exposure</b>:"), this);
+    d->sensitivity            = new QLabel(i18n("<b>Sensitivity</b>:"), this);
+    d->exposureMode           = new QLabel(i18n("<nobr><b>Mode/Program</b></nobr>:"), this);
+    d->flash                  = new QLabel(i18n("<b>Flash</b>:"), this);
+    d->whiteBalance           = new QLabel(i18n("<nobr><b>White balance</b></nobr>:"), this);
 
-    d->labelFile              = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelFolder            = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelFileDate          = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelFileSize          = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelFileIsReadable    = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelFileIsWritable    = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelImageMime         = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelImageDimensions   = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelNewFileName       = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelAlreadyDownloaded = new KSqueezedTextLabel(0, d->settingsArea);
+    d->labelFile              = new KSqueezedTextLabel(0, this);
+    d->labelFolder            = new KSqueezedTextLabel(0, this);
+    d->labelFileDate          = new KSqueezedTextLabel(0, this);
+    d->labelFileSize          = new KSqueezedTextLabel(0, this);
+    d->labelFileIsReadable    = new KSqueezedTextLabel(0, this);
+    d->labelFileIsWritable    = new KSqueezedTextLabel(0, this);
+    d->labelImageMime         = new KSqueezedTextLabel(0, this);
+    d->labelImageDimensions   = new KSqueezedTextLabel(0, this);
+    d->labelNewFileName       = new KSqueezedTextLabel(0, this);
+    d->labelAlreadyDownloaded = new KSqueezedTextLabel(0, this);
 
-    d->labelPhotoMake         = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelPhotoModel        = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelPhotoDateTime     = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelPhotoAperture     = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelPhotoFocalLenght  = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelPhotoExposureTime = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelPhotoSensitivity  = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelPhotoExposureMode = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelPhotoFlash        = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelPhotoWhiteBalance = new KSqueezedTextLabel(0, d->settingsArea);
+    d->labelPhotoMake         = new KSqueezedTextLabel(0, this);
+    d->labelPhotoModel        = new KSqueezedTextLabel(0, this);
+    d->labelPhotoDateTime     = new KSqueezedTextLabel(0, this);
+    d->labelPhotoAperture     = new KSqueezedTextLabel(0, this);
+    d->labelPhotoFocalLenght  = new KSqueezedTextLabel(0, this);
+    d->labelPhotoExposureTime = new KSqueezedTextLabel(0, this);
+    d->labelPhotoSensitivity  = new KSqueezedTextLabel(0, this);
+    d->labelPhotoExposureMode = new KSqueezedTextLabel(0, this);
+    d->labelPhotoFlash        = new KSqueezedTextLabel(0, this);
+    d->labelPhotoWhiteBalance = new KSqueezedTextLabel(0, this);
 
     int hgt = fontMetrics().height()-2;
     d->title->setAlignment(Qt::AlignCenter);
@@ -318,11 +311,6 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent, bool navBar)
     settingsLayout->setColumnStretch(1, 10);
     settingsLayout->setMargin(KDialog::spacingHint());
     settingsLayout->setSpacing(0);
-
-    // --------------------------------------------------
-
-    m_navigateBarLayout->addWidget(d->settingsArea);
-    m_navigateBarLayout->setStretchFactor(d->settingsArea, 10);
 }
 
 CameraItemPropertiesTab::~CameraItemPropertiesTab()
@@ -562,10 +550,10 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
 void CameraItemPropertiesTab::colorChanged(const QColor& back, const QColor& fore)
 {
     QPalette palette;
-    palette.setColor(d->settingsArea->backgroundRole(), back);
-    palette.setColor(d->settingsArea->foregroundRole(), fore);
+    palette.setColor(backgroundRole(), back);
+    palette.setColor(foregroundRole(), fore);
 
-    d->settingsArea->setPalette(palette);
+    setPalette(palette);
 
     d->title->setPalette(palette);
     d->file->setPalette(palette);
@@ -615,4 +603,3 @@ void CameraItemPropertiesTab::colorChanged(const QColor& back, const QColor& for
 }
 
 }  // NameSpace Digikam
-

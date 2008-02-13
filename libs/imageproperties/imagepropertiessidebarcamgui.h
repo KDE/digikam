@@ -79,7 +79,6 @@ private slots:
 private:
 
     ImagePropertiesSideBarCamGuiPriv* d;
-    void connectNavigateSignals(NavigateBarTab *tab);
 };
 
 }  // NameSpace Digikam

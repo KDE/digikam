@@ -99,7 +99,7 @@ ImagePropertiesSideBarCamGui::ImagePropertiesSideBarCamGui(QWidget *parent,
                             : Sidebar(parent, side, mimimizedDefault)
 {
     d = new ImagePropertiesSideBarCamGuiPriv;
-    d->cameraItemTab = new CameraItemPropertiesTab(parent, false);
+    d->cameraItemTab = new CameraItemPropertiesTab(parent);
     d->metadataTab   = new ImagePropertiesMetaDataTab(parent);
     d->gpsTab        = new ImagePropertiesGPSTab(parent);
 
@@ -113,8 +113,6 @@ ImagePropertiesSideBarCamGui::ImagePropertiesSideBarCamGui(QWidget *parent,
 
     // ----------------------------------------------------------
 
-    connectNavigateSignals(d->cameraItemTab);
-
     connect(this, SIGNAL(signalChangedTab(QWidget*)),
             this, SLOT(slotChangedTab(QWidget*)));
 
@@ -125,21 +123,6 @@ ImagePropertiesSideBarCamGui::ImagePropertiesSideBarCamGui(QWidget *parent,
 ImagePropertiesSideBarCamGui::~ImagePropertiesSideBarCamGui()
 {
     delete d;
-}
-
-void ImagePropertiesSideBarCamGui::connectNavigateSignals(NavigateBarTab *tab)
-{
-    connect(tab, SIGNAL(signalFirstItem()),
-            this, SIGNAL(signalFirstItem()));
-
-    connect(tab, SIGNAL(signalPrevItem()),
-            this, SIGNAL(signalPrevItem()));
-
-    connect(tab, SIGNAL(signalNextItem()),
-            this, SIGNAL(signalNextItem()));
-
-    connect(tab, SIGNAL(signalLastItem()),
-            this, SIGNAL(signalLastItem()));
 }
 
 void ImagePropertiesSideBarCamGui::itemChanged(GPItemInfo* itemInfo, const KUrl& url,
@@ -163,7 +146,7 @@ void ImagePropertiesSideBarCamGui::itemChanged(GPItemInfo* itemInfo, const KUrl&
         d->metaData = DMetadata(d->currentURL.path());
     }
 
-    slotChangedTab( getActiveTab() );
+    slotChangedTab(getActiveTab());
 }
 
 void ImagePropertiesSideBarCamGui::slotNoCurrentItem(void)
@@ -207,19 +190,6 @@ void ImagePropertiesSideBarCamGui::slotChangedTab(QWidget* tab)
         d->dirtyGpsTab = true;
     }
 
-    // setting of NavigateBar, common for all tabs
-    NavigateBarTab *navtab = dynamic_cast<NavigateBarTab *>(tab);
-    if (navtab)
-    {
-        int currentItemType = StatusNavigateBar::ItemCurrent;
-        if (d->cameraView->firstItem() == d->cameraItem)
-            currentItemType = StatusNavigateBar::ItemFirst;
-        else if (d->cameraView->lastItem() == d->cameraItem)
-            currentItemType = StatusNavigateBar::ItemLast;
-
-        navtab->setNavigateBarState(currentItemType);
-        navtab->setNavigateBarFileName();
-    }
     unsetCursor();
 }
 

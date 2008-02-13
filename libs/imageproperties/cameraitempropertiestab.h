@@ -6,7 +6,7 @@
  * Date        : 2006-02-08
  * Description : A tab to display camera item information
  *
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,7 +26,7 @@
 
 // Qt includes.
 
-#include <QWidget>
+#include <QFrame>
 #include <QString>
 
 // KDE includes.
@@ -36,7 +36,6 @@
 // Local includes.
 
 #include "digikam_export.h"
-#include "navigatebartab.h"
 
 namespace Digikam
 {
@@ -44,13 +43,13 @@ namespace Digikam
 class GPItemInfo;
 class CameraItemPropertiesTabPriv;
 
-class DIGIKAM_EXPORT CameraItemPropertiesTab : public NavigateBarTab
+class DIGIKAM_EXPORT CameraItemPropertiesTab : public QFrame
 {
     Q_OBJECT
 
 public:
 
-    CameraItemPropertiesTab(QWidget* parent, bool navBar=true);
+    CameraItemPropertiesTab(QWidget* parent);
     ~CameraItemPropertiesTab();
 
     void setCurrentItem(const GPItemInfo* itemInfo=0,
