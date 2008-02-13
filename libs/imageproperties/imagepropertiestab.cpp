@@ -6,7 +6,7 @@
  * Date        : 2006-04-19
  * Description : A tab to display general image information
  *
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,7 +29,6 @@
 #include <QLabel>
 #include <QPixmap>
 #include <QFileInfo>
-#include <QFrame>
 
 // KDE includes.
 
@@ -47,7 +46,6 @@
 
 #include "ddebug.h"
 #include "dmetadata.h"
-#include "navigatebarwidget.h"
 #include "imagepropertiestab.h"
 #include "imagepropertiestab.moc"
 
@@ -60,7 +58,6 @@ public:
 
     ImagePropertiesTabPriv()
     {
-        settingsArea           = 0;
         title                  = 0;
         file                   = 0;
         folder                 = 0;
@@ -135,8 +132,6 @@ public:
     QLabel             *flash;
     QLabel             *whiteBalance;
 
-    QFrame             *settingsArea;
-
     KSqueezedTextLabel *labelFile;
     KSqueezedTextLabel *labelFolder;
     KSqueezedTextLabel *labelFileModifiedDate;
@@ -162,72 +157,70 @@ public:
     KSqueezedTextLabel *labelPhotoWhiteBalance;
 };
 
-ImagePropertiesTab::ImagePropertiesTab(QWidget* parent, bool navBar)
-                  : NavigateBarTab(parent)
+ImagePropertiesTab::ImagePropertiesTab(QWidget* parent)
+                  : QFrame(parent)
 {
     d = new ImagePropertiesTabPriv;
 
-    setupNavigateBar(navBar);
-    d->settingsArea = new QFrame(this);
-    d->settingsArea->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
-    d->settingsArea->setLineWidth( style()->pixelMetric(QStyle::PM_DefaultFrameWidth) );
+    setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
+    setLineWidth( style()->pixelMetric(QStyle::PM_DefaultFrameWidth) );
 
-    QGridLayout *settingsLayout = new QGridLayout(d->settingsArea);
+    QGridLayout *settingsLayout = new QGridLayout(this);
 
     // --------------------------------------------------
 
-    d->title                    = new QLabel(i18n("<big><b>File Properties</b></big>"), d->settingsArea);
-    d->file                     = new QLabel(i18n("<b>File</b>:"), d->settingsArea);
-    d->folder                   = new QLabel(i18n("<b>Folder</b>:"), d->settingsArea);
-    d->modifiedDate             = new QLabel(i18n("<b>Modified</b>:"), d->settingsArea);
-    d->size                     = new QLabel(i18n("<b>Size</b>:"), d->settingsArea);
-    d->owner                    = new QLabel(i18n("<b>Owner</b>:"), d->settingsArea);
-    d->permissions              = new QLabel(i18n("<b>Permissions</b>:"), d->settingsArea);
+    d->title                    = new QLabel(i18n("<big><b>File Properties</b></big>"), this);
+    d->file                     = new QLabel(i18n("<b>File</b>:"), this);
+    d->folder                   = new QLabel(i18n("<b>Folder</b>:"), this);
+    d->modifiedDate             = new QLabel(i18n("<b>Modified</b>:"), this);
+    d->size                     = new QLabel(i18n("<b>Size</b>:"), this);
+    d->owner                    = new QLabel(i18n("<b>Owner</b>:"), this);
+    d->permissions              = new QLabel(i18n("<b>Permissions</b>:"), this);
 
-    KSeparator *line            = new KSeparator (Qt::Horizontal, d->settingsArea);
-    d->title2                   = new QLabel(i18n("<big><b>Image Properties</b></big>"), d->settingsArea);
-    d->mime                     = new QLabel(i18n("<b>Type</b>:"), d->settingsArea);
-    d->dimensions               = new QLabel(i18n("<b>Dimensions</b>:"), d->settingsArea);
-    d->compression              = new QLabel(i18n("<b>Compression</b>:"), d->settingsArea);
-    d->bitDepth                 = new QLabel(i18n("<nobr><b>Bit depth</b></nobr>:"), d->settingsArea);
-    d->colorMode                = new QLabel(i18n("<nobr><b>Color mode</b></nobr>:"), d->settingsArea);
+    KSeparator *line            = new KSeparator (Qt::Horizontal, this);
+    d->title2                   = new QLabel(i18n("<big><b>Image Properties</b></big>"), this);
+    d->mime                     = new QLabel(i18n("<b>Type</b>:"), this);
+    d->dimensions               = new QLabel(i18n("<b>Dimensions</b>:"), this);
+    d->compression              = new QLabel(i18n("<b>Compression</b>:"), this);
+    d->bitDepth                 = new QLabel(i18n("<nobr><b>Bit depth</b></nobr>:"), this);
+    d->colorMode                = new QLabel(i18n("<nobr><b>Color mode</b></nobr>:"), this);
 
-    KSeparator *line2           = new KSeparator (Qt::Horizontal, d->settingsArea);
-    d->title3                   = new QLabel(i18n("<big><b>Photograph Properties</b></big>"), d->settingsArea);
-    d->make                     = new QLabel(i18n("<b>Make</b>:"), d->settingsArea);
-    d->model                    = new QLabel(i18n("<b>Model</b>:"), d->settingsArea);
-    d->photoDate                = new QLabel(i18n("<b>Created</b>:"), d->settingsArea);
-    d->aperture                 = new QLabel(i18n("<b>Aperture</b>:"), d->settingsArea);
-    d->focalLength              = new QLabel(i18n("<b>Focal</b>:"), d->settingsArea);
-    d->exposureTime             = new QLabel(i18n("<b>Exposure</b>:"), d->settingsArea);
-    d->sensitivity              = new QLabel(i18n("<b>Sensitivity</b>:"), d->settingsArea);
-    d->exposureMode             = new QLabel(i18n("<nobr><b>Mode/Program</b></nobr>:"), d->settingsArea);
-    d->flash                    = new QLabel(i18n("<b>Flash</b>:"), d->settingsArea);
-    d->whiteBalance             = new QLabel(i18n("<nobr><b>White balance</b></nobr>:"), d->settingsArea);
+    KSeparator *line2           = new KSeparator (Qt::Horizontal, this);
+    d->title3                   = new QLabel(i18n("<big><b>Photograph Properties</b></big>"), this);
+    d->make                     = new QLabel(i18n("<b>Make</b>:"), this);
+    d->model                    = new QLabel(i18n("<b>Model</b>:"), this);
+    d->photoDate                = new QLabel(i18n("<b>Created</b>:"), this);
+    d->aperture                 = new QLabel(i18n("<b>Aperture</b>:"), this);
+    d->focalLength              = new QLabel(i18n("<b>Focal</b>:"), this);
+    d->exposureTime             = new QLabel(i18n("<b>Exposure</b>:"), this);
+    d->sensitivity              = new QLabel(i18n("<b>Sensitivity</b>:"), this);
+    d->exposureMode             = new QLabel(i18n("<nobr><b>Mode/Program</b></nobr>:"), this);
+    d->flash                    = new QLabel(i18n("<b>Flash</b>:"), this);
+    d->whiteBalance             = new QLabel(i18n("<nobr><b>White balance</b></nobr>:"), this);
 
-    d->labelFile                = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelFolder              = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelFileModifiedDate    = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelFileSize            = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelFileOwner           = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelFilePermissions     = new KSqueezedTextLabel(0, d->settingsArea);
+    d->labelFile                = new KSqueezedTextLabel(0, this);
+    d->labelFolder              = new KSqueezedTextLabel(0, this);
+    d->labelFileModifiedDate    = new KSqueezedTextLabel(0, this);
+    d->labelFileSize            = new KSqueezedTextLabel(0, this);
+    d->labelFileOwner           = new KSqueezedTextLabel(0, this);
+    d->labelFilePermissions     = new KSqueezedTextLabel(0, this);
 
-    d->labelImageMime           = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelImageDimensions     = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelImageCompression    = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelImageBitDepth       = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelImageColorMode      = new KSqueezedTextLabel(0, d->settingsArea);
+    d->labelImageMime           = new KSqueezedTextLabel(0, this);
+    d->labelImageDimensions     = new KSqueezedTextLabel(0, this);
+    d->labelImageCompression    = new KSqueezedTextLabel(0, this);
+    d->labelImageBitDepth       = new KSqueezedTextLabel(0, this);
+    d->labelImageColorMode      = new KSqueezedTextLabel(0, this);
 
-    d->labelPhotoMake           = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelPhotoModel          = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelPhotoDateTime       = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelPhotoAperture       = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelPhotoFocalLenght    = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelPhotoExposureTime   = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelPhotoSensitivity    = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelPhotoExposureMode   = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelPhotoFlash          = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelPhotoWhiteBalance   = new KSqueezedTextLabel(0, d->settingsArea);
+    d->labelPhotoMake           = new KSqueezedTextLabel(0, this);
+    d->labelPhotoModel          = new KSqueezedTextLabel(0, this);
+    d->labelPhotoDateTime       = new KSqueezedTextLabel(0, this);
+    d->labelPhotoAperture       = new KSqueezedTextLabel(0, this);
+    d->labelPhotoFocalLenght    = new KSqueezedTextLabel(0, this);
+    d->labelPhotoExposureTime   = new KSqueezedTextLabel(0, this);
+    d->labelPhotoSensitivity    = new KSqueezedTextLabel(0, this);
+    d->labelPhotoExposureMode   = new KSqueezedTextLabel(0, this);
+    d->labelPhotoFlash          = new KSqueezedTextLabel(0, this);
+    d->labelPhotoWhiteBalance   = new KSqueezedTextLabel(0, this);
 
     int hgt = fontMetrics().height()-2;
     d->title->setAlignment(Qt::AlignCenter);
@@ -350,11 +343,6 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent, bool navBar)
     settingsLayout->setColumnStretch(1, 10);
     settingsLayout->setMargin(KDialog::spacingHint());
     settingsLayout->setSpacing(0);
-
-    // --------------------------------------------------
-
-    m_navigateBarLayout->addWidget(d->settingsArea);
-    m_navigateBarLayout->setStretchFactor(d->settingsArea, 10);
 }
 
 ImagePropertiesTab::~ImagePropertiesTab()
@@ -366,8 +354,6 @@ void ImagePropertiesTab::setCurrentURL(const KUrl& url)
 {
     if (url.isEmpty())
     {
-        setNavigateBarFileName();
-
         d->labelFile->setText(QString());
         d->labelFolder->setText(QString());
         d->labelFileModifiedDate->setText(QString());
@@ -615,8 +601,6 @@ void ImagePropertiesTab::colorChanged(const QColor& back, const QColor& fore)
     plt.setColor(QPalette::Inactive, QPalette::Text, fore);
 
     setPalette(plt);
-
-    d->settingsArea->setPalette(plt);
 
     d->title->setPalette(plt);
     d->file->setPalette(plt);

@@ -83,7 +83,7 @@ public:
 
 ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, QSplitter *splitter,
                                                    Side side, bool mimimizedDefault)
-                        : ImagePropertiesSideBar(parent, splitter, side, mimimizedDefault, false)
+                        : ImagePropertiesSideBar(parent, splitter, side, mimimizedDefault)
 {
     // Navigate bar is disabled by passing false to parent class constructor, and tab constructors
 

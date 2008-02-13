@@ -47,7 +47,6 @@
 #include "imagepropertiesgpstab.h"
 #include "imagepropertiesmetadatatab.h"
 #include "statusnavigatebar.h"
-#include "navigatebarwidget.h"
 #include "imagepropertiessidebarcamgui.h"
 #include "imagepropertiessidebarcamgui.moc"
 

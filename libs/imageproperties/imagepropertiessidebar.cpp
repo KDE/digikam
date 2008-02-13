@@ -52,7 +52,7 @@ namespace Digikam
 
 ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget *parent,
                                                QSplitter *splitter, Side side, 
-                                               bool mimimizedDefault, bool navBar)
+                                               bool mimimizedDefault)
                       : Sidebar(parent, side, mimimizedDefault)
 {
     m_image              = 0;
@@ -62,7 +62,7 @@ ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget *parent,
     m_dirtyColorTab      = false;
     m_dirtyGpsTab        = false;
 
-    m_propertiesTab = new ImagePropertiesTab(parent, navBar);
+    m_propertiesTab = new ImagePropertiesTab(parent);
     m_metadataTab   = new ImagePropertiesMetaDataTab(parent);
     m_colorTab      = new ImagePropertiesColorsTab(parent);
     m_gpsTab        = new ImagePropertiesGPSTab(parent);
@@ -103,8 +103,6 @@ void ImagePropertiesSideBar::slotNoCurrentItem()
     m_currentURL = KUrl();
 
     m_propertiesTab->setCurrentURL();
-    m_propertiesTab->setNavigateBarFileName();
-
     m_metadataTab->setCurrentURL();
     m_colorTab->setData();
     m_gpsTab->setCurrentURL();
