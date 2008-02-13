@@ -83,6 +83,12 @@ ImageInfo::ImageInfo(const ImageListerRecord &record)
     m_data->modificationDate = record.modificationDate;
     m_data->fileSize         = record.fileSize;
     m_data->imageSize        = record.imageSize;
+
+    m_data->ratingCached            = true;
+    m_data->creationDateCached      = true;
+    m_data->modificationDateCached  = true;
+    m_data->fileSizeCached          = true;
+    m_data->imageSizeCached         = true;
 }
 
 ImageInfo::ImageInfo(qlonglong ID)
