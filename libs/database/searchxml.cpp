@@ -210,6 +210,27 @@ SearchXml::Relation SearchXmlReader::readRelation(const QString &attributeName,
     return defaultRelation;
 }
 
+void SearchXmlReader::readToEndOfElement()
+{
+    int stack = 1;
+    if (isStartElement()) {
+        QString result;
+        forever {
+            switch (readNext()) {
+                case StartElement:
+                    stack++;
+                case EndElement:
+                    if (!--stack)
+                        return;
+                case EndDocument:
+                    return;
+                default:
+                    break;
+            }
+        }
+    }
+}
+
 
 // ---------------------------------------- //
 

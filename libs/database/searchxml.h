@@ -73,6 +73,24 @@ namespace SearchXml
         NotInTree
     };
 
+    template <typename T>
+    bool testRelation(T v1, T v2, Relation rel)
+    {
+        if (rel == Equal)
+            return v1 == v2;
+        else if (rel == Unequal)
+            return v1 != v2;
+        else if (rel == LessThan)
+            return v1 < v2;
+        else if (rel == LessThanOrEqual)
+            return v1 <= v2;
+        else if (rel == GreaterThan)
+            return v1 > v2;
+        else if (rel == GreaterThanOrEqual)
+            return v1 >= v2;
+        return false;
+    }
+
 }
 
 class DIGIKAM_EXPORT SearchXmlReader : public QXmlStreamReader
@@ -107,6 +125,11 @@ public:
     QDateTime           valueToDateTime();
     QList<int>          valueToIntList();
     QStringList         valueToStringList();
+
+    /** General helper method: Reads XML until the end element of the current
+        start element in reached.
+     */
+    void readToEndOfElement();
 
 protected:
 
