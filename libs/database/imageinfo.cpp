@@ -409,6 +409,30 @@ ImageMetadataContainer ImageInfo::imageMetadataContainer() const
     return container;
 }
 
+PhotoInfoContainer ImageInfo::photoInfoContainer() const
+{
+    if (!m_data)
+        return PhotoInfoContainer();
+
+    ImageMetadataContainer meta = imageMetadataContainer();
+    PhotoInfoContainer photoInfo;
+
+    photoInfo.make            = meta.make;
+    photoInfo.model           = meta.model;
+    photoInfo.exposureTime    = meta.exposureTime;
+    photoInfo.exposureMode    = meta.exposureMode;
+    photoInfo.exposureProgram = meta.exposureProgram;
+    photoInfo.aperture        = meta.aperture;
+    photoInfo.focalLength     = meta.focalLength;
+    photoInfo.focalLength35mm = meta.focalLength35;
+    photoInfo.sensitivity     = meta.sensitivity;
+    photoInfo.flash           = meta.flashMode;
+    photoInfo.whiteBalance    = meta.whiteBalance;
+    photoInfo.dateTime        = dateTime();
+
+    return photoInfo;
+}
+
 void ImageInfo::setRating(int value)
 {
     if (!m_data)

@@ -47,6 +47,7 @@
 #include "imageinfolist.h"
 #include "imagecomments.h"
 #include "imageposition.h"
+#include "photoinfocontainer.h"
 #include "databaseinfocontainers.h"
 
 namespace Digikam
@@ -211,6 +212,7 @@ public:
      */
     ImageCommonContainer   imageCommonContainer() const;
     ImageMetadataContainer imageMetadataContainer() const;
+    PhotoInfoContainer     photoInfoContainer() const;
 
     /**
      * Set the date and time (write it to database)
