@@ -392,7 +392,7 @@ ImageInfoList LightTableBar::itemsImageInfoList()
 
 void LightTableBar::setSelectedItem(LightTableBarItem* ltItem)
 {
-    ThumbBarItem *item = static_cast<ThumbBarItem*>(ltItem);
+    ThumbBarItem *item = dynamic_cast<ThumbBarItem*>(ltItem);
     if (item) ThumbBarView::setSelected(item);
 }
 
@@ -401,7 +401,7 @@ void LightTableBar::removeItem(const ImageInfo &info)
     if (info.isNull()) return;
 
     LightTableBarItem* ltItem = findItemByInfo(info);
-    ThumbBarItem *item        = static_cast<ThumbBarItem*>(ltItem);  
+    ThumbBarItem *item        = dynamic_cast<ThumbBarItem*>(ltItem);  
     if (item) ThumbBarView::removeItem(item);
 }
 
