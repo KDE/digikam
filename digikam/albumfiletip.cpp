@@ -10,7 +10,7 @@
  * Copyright (C) 1998-1999 by Torben Weis <weis@kde.org>
  * Copyright (C) 2000-2002 by David Faure <david@mandrakesoft.com>
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com> 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,10 +26,8 @@
  * ============================================================ */
 
 // Qt includes.
- 
-#include <Q3StyleSheet>
+
 #include <QToolTip>
-#include <QFileInfo>
 #include <QLabel>
 #include <QPixmap>
 #include <QDateTime>
@@ -47,10 +45,10 @@
 #include <kglobal.h>
 #include <kdeversion.h>
 
-// LibKDcraw includes. 
- 
+// LibKDcraw includes.
+
 #include <libkdcraw/dcrawbinary.h>
- 
+
 // Local includes.
 
 #include "ddebug.h"
@@ -327,11 +325,9 @@ void AlbumFileTip::updateText()
 
     tip = "<table cellspacing=\"0\" cellpadding=\"0\" width=\"250\" border=\"0\">";
 
-    AlbumSettings* settings = AlbumSettings::instance();
-    const ImageInfo info   = d->iconItem->imageInfo();
-    //KUrl fileUrl(info.fileUrl());
-    //QFileInfo fileInfo(fileUrl.path());
-    ImageCommonContainer commonInfo = info.imageCommonContainer();
+    AlbumSettings* settings          = AlbumSettings::instance();
+    const ImageInfo info             = d->iconItem->imageInfo();
+    ImageCommonContainer commonInfo  = info.imageCommonContainer();
     ImageMetadataContainer photoInfo = info.imageMetadataContainer();
 
     // -- File properties ----------------------------------------------
@@ -360,8 +356,8 @@ void AlbumFileTip::updateText()
         if (settings->getToolTipsShowFileSize())
         {
             tip += cellBeg + i18n("Size:") + cellMid;
-            str = i18n("%1 (%2)",KIO::convertSize(commonInfo.fileSize)
-                                ,KGlobal::locale()->formatNumber(commonInfo.fileSize, 0));
+            str = i18n("%1 (%2)", KIO::convertSize(commonInfo.fileSize),
+                                  KGlobal::locale()->formatNumber(commonInfo.fileSize, 0));
             tip += str + cellEnd;
         }
 
@@ -381,14 +377,13 @@ void AlbumFileTip::updateText()
                 QString mpixels;
                 mpixels.setNum(commonInfo.width*commonInfo.height/1000000.0, 'f', 2);
                 str = i18nc("width x height (megapixels Mpx)", "%1x%2 (%3Mpx)",
-                           commonInfo.width, commonInfo.height, mpixels);
+                            commonInfo.width, commonInfo.height, mpixels);
             }
             tip += cellBeg + i18n("Dimensions:") + cellMid + str + cellEnd;
         }
     }
 
     // -- Photograph Info ----------------------------------------------------
-    // NOTE: If something is changed here, please updated imageproperties section too.
 
     if (settings->getToolTipsShowPhotoMake()  ||
         settings->getToolTipsShowPhotoDate()  ||
