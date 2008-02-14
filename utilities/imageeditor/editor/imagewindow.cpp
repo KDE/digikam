@@ -1052,17 +1052,8 @@ void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
              !m_cancelSlideShow && it != d->imageInfoList.end(); ++it)
         {
             SlidePictureInfo pictInfo;
-            pictInfo.comment = it->comment();
-
-            // Perform optimizations: only read pictures metadata if necessary.
-            if (settings.printApertureFocal || settings.printExpoSensitivity || settings.printMakeModel)
-            {
-                meta.load(it->fileUrl().path());
-                pictInfo.photoInfo = meta.getPhotographInformations();
-            }
-
-            // In case of dateTime extraction from metadata failed 
-            pictInfo.photoInfo.dateTime = it->dateTime();
+            pictInfo.comment   = it->comment();
+            pictInfo.photoInfo = it->photoInfoContainer();
             settings.pictInfoMap.insert(it->fileUrl(), pictInfo);
 
             m_nameLabel->setProgressValue((int)((i++/cnt)*100.0));

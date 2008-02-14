@@ -1256,8 +1256,7 @@ void LightTableWindow::slotToggleSlideShow()
 
 void LightTableWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
 {
-    int       i = 0;
-    DMetadata meta;
+    int              i = 0;
     d->cancelSlideShow = false;
 
     d->statusProgressBar->progressBarMode(StatusProgressBar::CancelProgressBarMode, 
@@ -1269,17 +1268,8 @@ void LightTableWindow::slideShow(bool startWithCurrent, SlideShowSettings& setti
          !d->cancelSlideShow && it != list.constEnd() ; ++it)
     {
         SlidePictureInfo pictInfo;
-        pictInfo.comment = (*it).comment();
-
-        // Perform optimizations: only read pictures metadata if necessary.
-        if (settings.printApertureFocal || settings.printExpoSensitivity || settings.printMakeModel)
-        {
-            meta.load((*it).fileUrl().path());
-            pictInfo.photoInfo = meta.getPhotographInformations();
-        }
-
-        // In case of dateTime extraction from metadata failed 
-        pictInfo.photoInfo.dateTime = (*it).dateTime();
+        pictInfo.comment   = (*it).comment();
+        pictInfo.photoInfo = (*it).photoInfoContainer();
         settings.pictInfoMap.insert((*it).fileUrl(), pictInfo);
         settings.fileList.append((*it).fileUrl());
 

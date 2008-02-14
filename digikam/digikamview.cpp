@@ -1407,7 +1407,6 @@ void DigikamView::slideShow(ImageInfoList &infoList)
     emit signalProgressBarMode(StatusProgressBar::CancelProgressBarMode, 
                                i18n("Preparing slideshow of %1 images. Please wait...", infoList.count()));
 
-    DMetadata         meta;
     SlideShowSettings settings;
     settings.exifRotate           = AlbumSettings::instance()->getExifRotate();
     settings.delay                = group.readEntry("SlideShowDelay", 5) * 1000;
@@ -1426,17 +1425,8 @@ void DigikamView::slideShow(ImageInfoList &infoList)
         ImageInfo info = *it;
         settings.fileList.append(info.fileUrl());
         SlidePictureInfo pictInfo;
-        pictInfo.comment = info.comment();
-
-        // Perform optimizations: only read pictures metadata if necessary.
-        if (settings.printApertureFocal || settings.printExpoSensitivity || settings.printMakeModel)
-        {
-            meta.load(info.fileUrl().path());
-            pictInfo.photoInfo = meta.getPhotographInformations();
-        }
-
-        // In case of dateTime extraction from metadata failed 
-        pictInfo.photoInfo.dateTime = info.dateTime();
+        pictInfo.comment   = info.comment();
+        pictInfo.photoInfo = info.photoInfoContainer();
         settings.pictInfoMap.insert(info.fileUrl(), pictInfo);
 
         emit signalProgressValue((int)((i++/cnt)*100.0));
