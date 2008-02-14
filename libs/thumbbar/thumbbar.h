@@ -7,7 +7,7 @@
  * Description : a bar widget to display image thumbnails
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -72,7 +72,7 @@ public:
         showPhotoFlash = false;
         showPhotoWB    = false;
     };
-   
+
     bool showToolTips;
     bool showFileName;
     bool showFileDate;
@@ -102,7 +102,7 @@ public:
 
     int countItems();
     KUrl::List itemsURLs();
-    
+
     void clear(bool updateView=true);
     void triggerUpdate();
 
@@ -131,14 +131,13 @@ signals:
     void signalItemSelected(ThumbBarItem*);
     void signalURLSelected(const KUrl&);
     void signalItemAdded(void);
-        
+
 protected:
 
     int  getOrientation();
     int  getTileSize();
     int  getMargin();
 
-    bool event(QEvent *event);
     void resizeEvent(QResizeEvent*);
     void contentsMousePressEvent(QMouseEvent*);
     void contentsMouseMoveEvent(QMouseEvent*);
@@ -147,7 +146,9 @@ protected:
     void insertItem(ThumbBarItem* item);
     void rearrangeItems();
     void repaintItem(ThumbBarItem* item);
+    bool event(QEvent*);
 
+    virtual ThumbBarToolTip* toolTip() const;
     virtual void viewportPaintEvent(QPaintEvent*);
     virtual void startDrag();
 
@@ -206,15 +207,15 @@ class DIGIKAM_EXPORT ThumbBarToolTip
 public:
 
     ThumbBarToolTip(ThumbBarView *parent);
-    virtual ~ThumbBarToolTip(){};
+    virtual ~ThumbBarToolTip();
 
     /** Return the thummbar item area if a item is found at 'pos' else an empty QRect.
         tipText will contains the tool tip string to show.*/
     QRect maybeTip(const QPoint& pos, QString &tipText);
 
 protected:
-    
-    const int    m_maxStringLen;
+
+    const int     m_maxStringLen;
 
     QString       m_headBeg;
     QString       m_headEnd;
@@ -229,13 +230,9 @@ protected:
 
 protected:
 
-    QString breakString(const QString& input);
+    QString breakString(const QString& input) const;
 
-    virtual QString tipContentExtraData(ThumbBarItem*){ return QString(); };
-
-private:
-     
-    QString tipContent(ThumbBarItem* item);
+    virtual QString tipContents(ThumbBarItem*) const;
 };
 
 }  // NameSpace Digikam

@@ -7,7 +7,7 @@
  * Description : a bar widget to display image thumbnails
  * 
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -100,7 +100,7 @@ public:
 
         itemDict.setAutoDelete(false);
     }
-    
+
     bool                       clearing;
     bool                       exifRotate;
     bool                       dragging;
@@ -109,7 +109,7 @@ public:
     int                        count;
     int                        tileSize;
     int                        orientation;
-    
+
     QTimer                    *timer;
 
     QPoint                     dragStartPos;
@@ -192,9 +192,9 @@ ThumbBarView::~ThumbBarView()
         d->thumbJob->kill();
         d->thumbJob = 0;
     }
-    
+
     clear(false);
-        
+
     delete d->timer;
     delete d->toolTip;
     delete d;
@@ -233,7 +233,7 @@ void ThumbBarView::setExifRotate(bool exifRotate)
         QString uri = "file://" + QDir::cleanPath(item->url().path(KUrl::RemoveTrailingSlash));
         KMD5 md5(QFile::encodeName(uri));
         uri = md5.hexDigest();
-    
+
         QString smallThumbPath = thumbCacheDir + "normal/" + uri + ".png";
         QString bigThumbPath   = thumbCacheDir + "large/"  + uri + ".png";
 
@@ -242,7 +242,7 @@ void ThumbBarView::setExifRotate(bool exifRotate)
 
         invalidateThumb(item);
     }
-    
+
     triggerUpdate();
 }
 
@@ -309,7 +309,7 @@ void ThumbBarView::clear(bool updateView)
     d->lastItem  = 0;
     d->count     = 0;
     d->currItem  = 0;
-    
+
     if (updateView)
         slotUpdate();
 
@@ -342,12 +342,12 @@ ThumbBarItem* ThumbBarView::lastItem() const
 ThumbBarItem* ThumbBarView::findItem(const QPoint& pos) const
 {
     int itemPos;
-    
+
     if (d->orientation == Qt::Vertical)
         itemPos = pos.y();
     else
         itemPos = pos.x();
-    
+
     for (ThumbBarItem *item = d->firstItem; item; item = item->d->next)
     {
         if (itemPos >= item->d->pos && itemPos <= (item->d->pos+d->tileSize+2*d->margin))
@@ -355,7 +355,7 @@ ThumbBarItem* ThumbBarView::findItem(const QPoint& pos) const
             return item;
         }
     }
-    
+
     return 0;
 }
 
@@ -375,8 +375,8 @@ ThumbBarItem* ThumbBarView::findItemByURL(const KUrl& url) const
 void ThumbBarView::setSelected(ThumbBarItem* item)
 {
     if (!item) return;
-        
-    ensureItemVisible(item);          
+
+    ensureItemVisible(item);
     emit signalURLSelected(item->url());
     emit signalItemSelected(item);
 
@@ -596,9 +596,9 @@ void ThumbBarView::insertItem(ThumbBarItem* item)
         emit signalURLSelected(item->url());
         emit signalItemSelected(item);
     }
-    
+
     d->itemDict.insert(item->url().url(), item);
-    
+
     d->count++;
     triggerUpdate();
     emit signalItemAdded();
@@ -643,7 +643,7 @@ void ThumbBarView::removeItem(ThumbBarItem* item)
     }
 
     d->itemDict.remove(item->url().url());
-    
+
     if (!d->clearing)
     {
         triggerUpdate();
@@ -688,7 +688,7 @@ void ThumbBarView::rearrangeItems()
                 this, SLOT(slotGotThumbnail(const KUrl&, const QPixmap&)));
 
         connect(d->thumbJob, SIGNAL(signalFailed(const KUrl&)),
-                this, SLOT(slotFailedThumbnail(const KUrl&)));     
+                this, SLOT(slotFailedThumbnail(const KUrl&)));
     }
 }
 
@@ -725,7 +725,7 @@ void ThumbBarView::slotGotThumbnail(const KUrl& url, const QPixmap& pix)
 void ThumbBarView::slotFailedThumbnail(const KUrl& url)
 {
     KIO::PreviewJob* job = KIO::filePreview(url, ThumbnailSize::Huge, 0, 0, 70, true, false);
-    
+
     connect(job, SIGNAL(gotPreview(const KFileItem&, const QPixmap &)),
             this, SLOT(slotGotPreview(const KFileItem&, const QPixmap &)));
 
@@ -764,17 +764,20 @@ bool ThumbBarView::event(QEvent *event)
         if (helpEvent)
         {
             QString tipText;
-            QRect rect = d->toolTip->maybeTip(helpEvent->pos(), tipText);
+            QRect rect = toolTip()->maybeTip(helpEvent->pos(), tipText);
             if (!rect.isEmpty())
-            {
                 QToolTip::showText(helpEvent->globalPos(), tipText, this);
-            }
             else
                 QToolTip::hideText();
         }
     }
 
     return QWidget::event(event);
+}
+
+ThumbBarToolTip* ThumbBarView::toolTip() const
+{
+    return d->toolTip;
 }
 
 // -------------------------------------------------------------------------
@@ -852,9 +855,9 @@ void ThumbBarItem::repaint()
 
 // -------------------------------------------------------------------------
 
-ThumbBarToolTip::ThumbBarToolTip(ThumbBarView* parent) :
-    m_maxStringLen(30), m_view(parent)
-{    
+ThumbBarToolTip::ThumbBarToolTip(ThumbBarView* parent) 
+               : m_maxStringLen(30), m_view(parent)
+{
     m_headBeg = QString("<tr bgcolor=\"#73CAE6\"><td colspan=\"2\">"
                         "<nobr><font size=\"-1\" color=\"black\"><b>");
     m_headEnd = QString("</b></font></nobr></td></tr>");
@@ -870,6 +873,10 @@ ThumbBarToolTip::ThumbBarToolTip(ThumbBarView* parent) :
     m_cellSpecEnd = QString("</i></font></nobr></td></tr>");
 }
 
+ThumbBarToolTip::~ThumbBarToolTip()
+{
+}
+
 QRect ThumbBarToolTip::maybeTip(const QPoint& pos, QString& tipText)
 {
     if (!m_view) return QRect();
@@ -879,14 +886,13 @@ QRect ThumbBarToolTip::maybeTip(const QPoint& pos, QString& tipText)
 
     if (!m_view->getToolTipSettings().showToolTips) return QRect();
 
-    tipText = tipContent(item);
-    tipText.append(tipContentExtraData(item));
+    tipText = tipContents(item);
     tipText.append("</table>");
-    
+
     return item->rect();
 }
 
-QString ThumbBarToolTip::tipContent(ThumbBarItem* item)
+QString ThumbBarToolTip::tipContents(ThumbBarItem* item) const
 {
     ThumbBarToolTipSettings settings = m_view->getToolTipSettings();
 
@@ -896,7 +902,6 @@ QString ThumbBarToolTip::tipContent(ThumbBarItem* item)
     tipText = "<table cellspacing=\"0\" cellpadding=\"0\" width=\"250\" border=\"0\">";
 
     QFileInfo fileInfo(item->url().path());
-
     KFileItem fi(KFileItem::Unknown, KFileItem::Unknown, item->url());
     DMetadata metaData(item->url().path());
 
@@ -946,7 +951,7 @@ QString ThumbBarToolTip::tipContent(ThumbBarItem* item)
             str = fi.mimeComment();
 
             KFileMetaInfo meta = fi.metaInfo();
-    
+
 /*          TODO: KDE4PORT: KFileMetaInfo API as Changed.
                             Check if new method to search "Dimensions" information is enough.
 
@@ -982,7 +987,7 @@ QString ThumbBarToolTip::tipContent(ThumbBarItem* item)
     }
 
     // -- Photograph Info ----------------------------------------------------
-    
+
     if (settings.showPhotoMake  ||
         settings.showPhotoDate  ||
         settings.showPhotoFocal ||
@@ -1078,7 +1083,7 @@ QString ThumbBarToolTip::tipContent(ThumbBarItem* item)
     return tipText;
 }
 
-QString ThumbBarToolTip::breakString(const QString& input)
+QString ThumbBarToolTip::breakString(const QString& input) const
 {
     QString str = input.simplified();
     str = Qt::escape(str);
