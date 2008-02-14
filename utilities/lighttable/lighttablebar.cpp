@@ -844,7 +844,7 @@ QString LightTableBarToolTip::tipContents(ThumbBarItem* item) const
     QString unavailable(i18n("unavailable"));
 
     AlbumSettings* settings          = AlbumSettings::instance();
-    const ImageInfo info             = static_cast<LightTableBarItem *>(item)->info();
+    const ImageInfo info             = dynamic_cast<LightTableBarItem *>(item)->info();
     ImageCommonContainer commonInfo  = info.imageCommonContainer();
     ImageMetadataContainer photoInfo = info.imageMetadataContainer();
 
