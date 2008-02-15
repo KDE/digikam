@@ -58,14 +58,13 @@ extern "C"
 #include <kfileitem.h>
 #include <kapplication.h>
 #include <kiconloader.h>
-#include <kio/previewjob.h>
 #include <klocale.h>
 #include <kmimetype.h>
 #include <kfileitem.h>
 #include <kglobal.h>
 
-// LibKDcraw includes. 
- 
+// LibKDcraw includes.
+
 #include <libkdcraw/dcrawbinary.h>
 
 // Local includes.
@@ -321,17 +320,17 @@ void ThumbBarView::clear(bool updateView)
 void ThumbBarView::triggerUpdate()
 {
     d->timer->setSingleShot(true);
-    d->timer->start(0);    
+    d->timer->start(0);
 }
 
 ThumbBarItem* ThumbBarView::currentItem() const
 {
-    return d->currItem;    
+    return d->currItem;
 }
 
 ThumbBarItem* ThumbBarView::firstItem() const
 {
-    return d->firstItem;    
+    return d->firstItem;
 }
 
 ThumbBarItem* ThumbBarView::lastItem() const
@@ -724,28 +723,7 @@ void ThumbBarView::slotGotThumbnail(const KUrl& url, const QPixmap& pix)
 
 void ThumbBarView::slotFailedThumbnail(const KUrl& url)
 {
-    KIO::PreviewJob* job = KIO::filePreview(url, ThumbnailSize::Huge, 0, 0, 70, true, false);
-
-    connect(job, SIGNAL(gotPreview(const KFileItem&, const QPixmap &)),
-            this, SLOT(slotGotPreview(const KFileItem&, const QPixmap &)));
-
-    connect(job, SIGNAL(failed(const KFileItem&)),
-            this, SLOT(slotFailedPreview(const KFileItem&)));
-}
-
-void ThumbBarView::slotGotPreview(const KFileItem &fileItem, const QPixmap& pix)
-{
-    ThumbBarItem* item = d->itemDict.find(fileItem.url().url());
-    if (!item)
-        return;
-
-    item->setPixmap(pix);
-    item->repaint();
-}
-
-void ThumbBarView::slotFailedPreview(const KFileItem &fileItem)
-{
-    ThumbBarItem* item = d->itemDict.find(fileItem.url().url());
+    ThumbBarItem* item = d->itemDict.find(url.url());
     if (!item)
         return;
 

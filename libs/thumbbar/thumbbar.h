@@ -158,8 +158,6 @@ protected slots:
 
 private slots:
 
-    void slotGotPreview(const KFileItem &, const QPixmap &);
-    void slotFailedPreview(const KFileItem &);
     void slotGotThumbnail(const KUrl&, const QPixmap&);
     void slotFailedThumbnail(const KUrl&);
 
