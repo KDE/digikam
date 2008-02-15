@@ -1230,6 +1230,7 @@ void LightTableWindow::slotToggleSlideShow()
     bool startWithCurrent = config->readBoolEntry("SlideShowStartCurrent", false);
 
     SlideShowSettings settings;
+    settings.exifRotate           = AlbumSettings::instance()->getExifRotate();
     settings.delay                = config->readNumEntry("SlideShowDelay", 5) * 1000;
     settings.printName            = config->readBoolEntry("SlideShowPrintName", true);
     settings.printDate            = config->readBoolEntry("SlideShowPrintDate", false);
