@@ -7,7 +7,8 @@ digikampic_DATA = image-full.png image-selection.png \
 	          bothvert.png bothhorz.png curvefree.png curvemooth.png original.png \
 	          duplicatebothvert.png duplicatebothhorz.png togglemouseover.png \
 	          rating.png worldmap.jpg menusidepixmap.png \
-	          zoom10.png zoom20.png zoom30.png
+	          zoom10.png zoom20.png zoom30.png \
+		  indicator-gray.png indicator-green.png indicator-red.png 
 
 iconsdir = $(kde_datadir)/digikam/icons/hicolor/32x32/actions
 icons_DATA = tag.png tag-new.png tag-properties.png tag-delete.png tag-reset.png \
