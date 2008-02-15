@@ -85,7 +85,7 @@ public:
         Unknown,
         Added,
         Removed,
-        RemovedAll,
+        RemovedAll
     };
 
     ImageTagChangeset();
