@@ -7,7 +7,7 @@
  * Description : a bar widget to display image thumbnails
  * 
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -58,8 +58,8 @@ extern "C"
 #include <kfileitem.h>
 #include <kglobal.h>
 
-// LibKDcraw includes. 
- 
+// LibKDcraw includes.
+
 #include <libkdcraw/dcrawbinary.h>
 
 // Local includes.
@@ -82,7 +82,7 @@ public:
     {
         dragging   = false;
         exifRotate = false;
-	clearing   = false;
+        clearing   = false;
         toolTip    = 0;
         firstItem  = 0;
         lastItem   = 0;
@@ -93,7 +93,7 @@ public:
 
         itemDict.setAutoDelete(false);
     }
-    
+
     bool                       clearing;
     bool                       exifRotate;
     bool                       dragging;
@@ -102,7 +102,7 @@ public:
     int                        count;
     int                        tileSize;
     int                        orientation;
-    
+
     QTimer                    *timer;
 
     QPoint                     dragStartPos;
@@ -133,16 +133,16 @@ public:
         prev   = 0;
         view   = 0;
     }
-    
+
     int           pos;
-        
+
     QPixmap      *pixmap;
 
     KURL          url;
-    
+
     ThumbBarItem *next;
     ThumbBarItem *prev;
-    
+
     ThumbBarView *view;
 };
 
@@ -158,7 +158,7 @@ ThumbBarView::ThumbBarView(QWidget* parent, int orientation, bool exifRotate,
     d->toolTipSettings = settings;
     d->toolTip         = new ThumbBarToolTip(this);
     d->timer           = new QTimer(this);
-    
+
     connect(d->timer, SIGNAL(timeout()),
             this, SLOT(slotUpdate()));
 
@@ -186,9 +186,9 @@ ThumbBarView::~ThumbBarView()
         d->thumbJob->kill();
         d->thumbJob = 0;
     }
-    
+
     clear(false);
-        
+
     delete d->timer;
     delete d->toolTip;
     delete d;
@@ -227,7 +227,7 @@ void ThumbBarView::setExifRotate(bool exifRotate)
         QString uri = "file://" + QDir::cleanDirPath(item->url().path(-1));
         KMD5 md5(QFile::encodeName(uri));
         uri = md5.hexDigest();
-    
+
         QString smallThumbPath = thumbCacheDir + "normal/" + uri + ".png";
         QString bigThumbPath   = thumbCacheDir + "large/"  + uri + ".png";
 
@@ -236,7 +236,7 @@ void ThumbBarView::setExifRotate(bool exifRotate)
 
         invalidateThumb(item);
     }
-    
+
     triggerUpdate();
 }
 
@@ -303,7 +303,7 @@ void ThumbBarView::clear(bool updateView)
     d->lastItem  = 0;
     d->count     = 0;
     d->currItem  = 0;
-    
+
     if (updateView)
         slotUpdate();
 
@@ -314,17 +314,17 @@ void ThumbBarView::clear(bool updateView)
 
 void ThumbBarView::triggerUpdate()
 {
-    d->timer->start(0, true);    
+    d->timer->start(0, true);
 }
 
 ThumbBarItem* ThumbBarView::currentItem() const
 {
-    return d->currItem;    
+    return d->currItem;
 }
 
 ThumbBarItem* ThumbBarView::firstItem() const
 {
-    return d->firstItem;    
+    return d->firstItem;
 }
 
 ThumbBarItem* ThumbBarView::lastItem() const
@@ -335,12 +335,12 @@ ThumbBarItem* ThumbBarView::lastItem() const
 ThumbBarItem* ThumbBarView::findItem(const QPoint& pos) const
 {
     int itemPos;
-    
+
     if (d->orientation == Vertical)
         itemPos = pos.y();
     else
         itemPos = pos.x();
-    
+
     for (ThumbBarItem *item = d->firstItem; item; item = item->d->next)
     {
         if (itemPos >= item->d->pos && itemPos <= (item->d->pos+d->tileSize+2*d->margin))
@@ -348,7 +348,7 @@ ThumbBarItem* ThumbBarView::findItem(const QPoint& pos) const
             return item;
         }
     }
-    
+
     return 0;
 }
 
@@ -368,8 +368,8 @@ ThumbBarItem* ThumbBarView::findItemByURL(const KURL& url) const
 void ThumbBarView::setSelected(ThumbBarItem* item)
 {
     if (!item) return;
-        
-    ensureItemVisible(item);          
+
+    ensureItemVisible(item);
     emit signalURLSelected(item->url());
     emit signalItemSelected(item);
 
@@ -424,20 +424,20 @@ void ThumbBarView::invalidateThumb(ThumbBarItem* item)
         delete item->d->pixmap;
         item->d->pixmap = 0;
     }
-    
+
     if (!d->thumbJob.isNull())
     {
        d->thumbJob->kill();
        d->thumbJob = 0;
     }
-       
+
     d->thumbJob = new ThumbnailJob(item->url(), ThumbnailSize::Huge, true, d->exifRotate);
-    
+
     connect(d->thumbJob, SIGNAL(signalThumbnail(const KURL&, const QPixmap&)),
             this, SLOT(slotGotThumbnail(const KURL&, const QPixmap&)));
-   
+
     connect(d->thumbJob, SIGNAL(signalFailed(const KURL&)),
-            this, SLOT(slotFailedThumbnail(const KURL&)));     
+            this, SLOT(slotFailedThumbnail(const KURL&)));
 }
 
 void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
@@ -445,34 +445,34 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
     int cy, cx, ts, y1, y2, x1, x2;
     QPixmap bgPix, tile;
     QRect er(e->rect());
-    
+
     if (d->orientation == Vertical)
     {
        cy = viewportToContents(er.topLeft()).y();
-        
+
        bgPix.resize(contentsRect().width(), er.height());
-    
+
        ts = d->tileSize + 2*d->margin;
        tile.resize(visibleWidth(), ts);
-    
+
        y1 = (cy/ts)*ts;
        y2 = ((y1 + er.height())/ts +1)*ts;
     }
     else
     {
        cx = viewportToContents(er.topLeft()).x();
-        
+
        bgPix.resize(er.width(), contentsRect().height());
-    
+
        ts = d->tileSize + 2*d->margin;
        tile.resize(ts, visibleHeight());
-    
+
        x1 = (cx/ts)*ts;
        x2 = ((x1 + er.width())/ts +1)*ts;
     }
 
     bgPix.fill(colorGroup().background());
-    
+
     for (ThumbBarItem *item = d->firstItem; item; item = item->d->next)
     {
         if (d->orientation == Vertical)
@@ -483,12 +483,12 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
                     tile.fill(colorGroup().highlight());
                 else
                     tile.fill(colorGroup().background());
-    
+
                 QPainter p(&tile);
                 p.setPen(Qt::white);
                 p.drawRect(0, 0, tile.width(), tile.height());
                 p.end();
-                
+
                 if (item->d->pixmap)
                 {
                     QPixmap pix; 
@@ -498,7 +498,7 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
                     int y = (tile.height() - pix.height())/2;
                     bitBlt(&tile, x, y, &pix);
                 }
-                
+
                 bitBlt(&bgPix, 0, item->d->pos - cy, &tile);
             }
         }
@@ -510,12 +510,12 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
                     tile.fill(colorGroup().highlight());
                 else
                     tile.fill(colorGroup().background());
-    
+
                 QPainter p(&tile);
                 p.setPen(Qt::white);
                 p.drawRect(0, 0, tile.width(), tile.height());
                 p.end();
-                
+
                 if (item->d->pixmap)
                 {
                     QPixmap pix; 
@@ -525,7 +525,7 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
                     int y = (tile.height()- pix.height())/2;
                     bitBlt(&tile, x, y, &pix);
                 }
-                
+
                 bitBlt(&bgPix, item->d->pos - cx, 0, &tile);
             }
         }
@@ -613,9 +613,9 @@ void ThumbBarView::insertItem(ThumbBarItem* item)
         emit signalURLSelected(item->url());
         emit signalItemSelected(item);
     }
-    
+
     d->itemDict.insert(item->url().url(), item);
-    
+
     d->count++;
     triggerUpdate();
     emit signalItemAdded();
@@ -660,7 +660,7 @@ void ThumbBarView::removeItem(ThumbBarItem* item)
     }
 
     d->itemDict.remove(item->url().url());
-    
+
     if (!d->clearing)
     {
         triggerUpdate();
@@ -676,7 +676,7 @@ void ThumbBarView::rearrangeItems()
 
     int pos = 0;
     ThumbBarItem *item = d->firstItem;
-    
+
     while (item)
     {
         item->d->pos = pos;
@@ -690,7 +690,7 @@ void ThumbBarView::rearrangeItems()
        resizeContents(width(), d->count*(d->tileSize+2*d->margin));
     else    
        resizeContents(d->count*(d->tileSize+2*d->margin), height());
-       
+
     if (!urlList.isEmpty())
     {
         if (!d->thumbJob.isNull())
@@ -700,12 +700,12 @@ void ThumbBarView::rearrangeItems()
         }
 
         d->thumbJob = new ThumbnailJob(urlList, ThumbnailSize::Huge, true, d->exifRotate);
-        
+
         connect(d->thumbJob, SIGNAL(signalThumbnail(const KURL&, const QPixmap&)),
                 this, SLOT(slotGotThumbnail(const KURL&, const QPixmap&)));
-    
+
         connect(d->thumbJob, SIGNAL(signalFailed(const KURL&)),
-                this, SLOT(slotFailedThumbnail(const KURL&)));     
+                this, SLOT(slotFailedThumbnail(const KURL&)));
     }
 }
 
@@ -733,13 +733,13 @@ void ThumbBarView::slotGotThumbnail(const KURL& url, const QPixmap& pix)
         ThumbBarItem* item = d->itemDict.find(url.url());
         if (!item)
             return;
-    
+
         if (item->d->pixmap)
         {
             delete item->d->pixmap;
             item->d->pixmap = 0;
         }
-        
+
         item->d->pixmap = new QPixmap(pix);
         item->repaint();
     }
@@ -747,34 +747,7 @@ void ThumbBarView::slotGotThumbnail(const KURL& url, const QPixmap& pix)
 
 void ThumbBarView::slotFailedThumbnail(const KURL& url)
 {
-    KIO::PreviewJob* job = KIO::filePreview(url, ThumbnailSize::Huge, 0, 0, 70, true, false);
-    
-    connect(job, SIGNAL(gotPreview(const KFileItem *, const QPixmap &)),
-            this, SLOT(slotGotPreview(const KFileItem *, const QPixmap &)));
-
-    connect(job, SIGNAL(failed(const KFileItem *)),
-            this, SLOT(slotFailedPreview(const KFileItem *)));
-}
-
-void ThumbBarView::slotGotPreview(const KFileItem *fileItem, const QPixmap& pix)
-{
-    ThumbBarItem* item = d->itemDict.find(fileItem->url().url());
-    if (!item)
-        return;
-
-    if (item->d->pixmap)
-    {
-        delete item->d->pixmap;
-        item->d->pixmap = 0;
-    }
-    
-    item->d->pixmap = new QPixmap(pix);
-    item->repaint();
-}
-
-void ThumbBarView::slotFailedPreview(const KFileItem* fileItem)
-{
-    ThumbBarItem* item = d->itemDict.find(fileItem->url().url());
+    ThumbBarItem* item = d->itemDict.find(url.url());
     if (!item)
         return;
 
@@ -786,7 +759,7 @@ void ThumbBarView::slotFailedPreview(const KFileItem* fileItem)
         delete item->d->pixmap;
         item->d->pixmap = 0;
     }
-    
+
     item->d->pixmap = new QPixmap(pix);
     item->repaint();
 }
@@ -892,7 +865,7 @@ void ThumbBarToolTip::maybeTip(const QPoint& pos)
 
     QRect r(item->rect());
     r = QRect( m_view->contentsToViewport(r.topLeft()), r.size() );
-    
+
     tip(r, tipText);
 }
 
@@ -1086,7 +1059,7 @@ QString ThumbBarToolTip::breakString(const QString& input)
 
     QString br;
 
-    uint i = 0;
+    uint i     = 0;
     uint count = 0;
 
     while (i < str.length())
@@ -1109,4 +1082,3 @@ QString ThumbBarToolTip::breakString(const QString& input)
 }
 
 }  // NameSpace Digikam
-

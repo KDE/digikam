@@ -7,7 +7,7 @@
  * Description : a bar widget to display image thumbnails
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,8 +39,6 @@
 
 #include "digikam_export.h"
 
-class KFileItem;
-
 namespace Digikam
 {
 
@@ -69,7 +67,7 @@ public:
         showPhotoFlash = false;
         showPhotoWB    = false;
     };
-   
+
     bool showToolTips;
     bool showFileName;
     bool showFileDate;
@@ -92,11 +90,11 @@ class DIGIKAM_EXPORT ThumbBarView : public QScrollView
     Q_OBJECT
 
 public:
-    
+
     enum Orientation
     {
-        Horizontal=0,      
-        Vertical         
+        Horizontal=0,
+        Vertical
     };
 
 public:
@@ -107,7 +105,7 @@ public:
 
     int countItems();
     KURL::List itemsURLs();
-    
+
     void clear(bool updateView=true);
     void triggerUpdate();
 
@@ -130,13 +128,13 @@ public:
 
     void refreshThumbs(const KURL::List& urls);
     void invalidateThumb(ThumbBarItem* item);
-        
+
 signals:
 
     void signalItemSelected(ThumbBarItem*);
     void signalURLSelected(const KURL&);
-    void signalItemAdded(void);
-    
+    void signalItemAdded();
+
 protected:
 
     int  getOrientation();
@@ -162,11 +160,9 @@ protected slots:
 
 private slots:
 
-    void slotGotPreview(const KFileItem *, const QPixmap &);
-    void slotFailedPreview(const KFileItem *);
     void slotGotThumbnail(const KURL&, const QPixmap&);
     void slotFailedThumbnail(const KURL&);
-    
+
 private:
 
     ThumbBarViewPriv* d;
@@ -211,7 +207,7 @@ public:
     virtual ~ThumbBarToolTip(){};
 
 protected:
-    
+
     const uint    m_maxStringLen;
 
     QString       m_headBeg;
@@ -232,7 +228,7 @@ protected:
     virtual QString tipContentExtraData(ThumbBarItem*){ return QString(); };
 
 private:
-     
+
     void maybeTip(const QPoint& pos);
     QString tipContent(ThumbBarItem* item);
 };
