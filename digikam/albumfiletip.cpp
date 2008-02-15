@@ -91,14 +91,14 @@ public:
 };
 
 AlbumFileTip::AlbumFileTip(AlbumIconView* view)
-            : Q3Frame(0)
+            : QFrame(0)
 {
     d = new AlbumFileTipPriv;
     d->view = view;
     hide();
 
     setPalette(QToolTip::palette());
-    setFrameStyle(Q3Frame::Plain | Q3Frame::Box);
+    setFrameStyle(QFrame::Plain | QFrame::Box);
     setLineWidth(1);
     setWindowFlags(Qt::ToolTip);
 
@@ -266,42 +266,40 @@ bool AlbumFileTip::event(QEvent *e)
             break;
     }
 
-    return Q3Frame::event(e);
+    return QFrame::event(e);
 }
 
 void AlbumFileTip::resizeEvent(QResizeEvent* e)
 {
-    Q3Frame::resizeEvent(e);
+    QFrame::resizeEvent(e);
     reposition();
 }
 
-void AlbumFileTip::drawContents(QPainter *p)
+void AlbumFileTip::paintEvent(QPaintEvent *e)
 {
-    if (d->corner >= 4)
-    {
-        Q3Frame::drawContents( p );
-        return;
-    }
+    QFrame::paintEvent(e);
 
+    if (d->corner >= 4)
+        return;
+
+    QPainter p(this);
     QPixmap &pix = d->corners[d->corner];
 
-    switch ( d->corner )
+    switch (d->corner)
     {
         case 0:
-            p->drawPixmap( 3, 3, pix );
+            p.drawPixmap( 3, 3, pix );
             break;
         case 1:
-            p->drawPixmap( width() - pix.width() - 3, 3, pix );
+            p.drawPixmap( width() - pix.width() - 3, 3, pix );
             break;
         case 2:
-            p->drawPixmap( 3, height() - pix.height() - 3, pix );
+            p.drawPixmap( 3, height() - pix.height() - 3, pix );
             break;
         case 3:
-            p->drawPixmap( width() - pix.width() - 3, height() - pix.height() - 3, pix );
+            p.drawPixmap( width() - pix.width() - 3, height() - pix.height() - 3, pix );
             break;
     }
-
-    Q3Frame::drawContents(p);
 }
 
 void AlbumFileTip::updateText()

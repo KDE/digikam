@@ -30,7 +30,7 @@
 
 // Qt includes.
 
-#include <Q3Frame>
+#include <QFrame>
 #include <QString>
 #include <QEvent>
 #include <QResizeEvent>
@@ -42,7 +42,7 @@ class AlbumIconView;
 class AlbumIconItem;
 class AlbumFileTipPriv;
 
-class AlbumFileTip : public Q3Frame
+class AlbumFileTip : public QFrame
 {
 public:
 
@@ -53,9 +53,9 @@ public:
 
 protected:
 
-    bool event(QEvent *e);
-    void resizeEvent(QResizeEvent* e);
-    void drawContents(QPainter *p);
+    bool event(QEvent*);
+    void resizeEvent(QResizeEvent*);
+    void paintEvent(QPaintEvent*);
 
 private:
 
