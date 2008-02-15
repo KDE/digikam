@@ -25,7 +25,6 @@
 
 #include <klocale.h>
 #include <kdialog.h>
-#include <kled.h>
 
 // Local includes.
 
@@ -34,6 +33,7 @@
 #include "searchtextbar.h"
 #include "ratingfilter.h"
 #include "mimefilter.h"
+#include "statusled.h"
 #include "albumiconviewfilter.h"
 #include "albumiconviewfilter.moc"
 
@@ -55,7 +55,7 @@ public:
     QLineEdit     *textFilter;
 //    SearchTextBar *textFilter;
 
-    KLed          *led;
+    StatusLed     *led;
 
     MimeFilter    *mimeFilter;
 
@@ -67,17 +67,16 @@ AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
 {
     d = new AlbumIconViewFilterPriv;
 
-    d->led = new KLed(this);
-    d->led->setMinimumSize(parent->height()-2, parent->height()-2);
+    d->led = new StatusLed(this);
     d->led->installEventFilter(this);
-    d->led->setColor(Qt::lightGray);
-    d->led->setState(KLed::Off);
+    d->led->setLedColor(StatusLed::Gray);
     d->led->setWhatsThis(i18n("This LED indicates the global image filter status, "
-                                 "encompassing all status-bar filters and all tag filters from the right sidebar.\n\n"
-                                 "GRAY: no filter is active, all items are visible.\n"
-                                 "RED: filtering is on, but no items match.\n"
-                                 "GREEN: filter(s) matches at least one item.\n\n"
-                                 "Any mouse button click will reset all filters."));
+                              "encompassing all status-bar filters and all tag filters "
+                              "from the right sidebar.\n\n"
+                              "GRAY: no filter is active, all items are visible.\n"
+                              "RED: filtering is on, but no items match.\n"
+                              "GREEN: filter(s) matches at least one item.\n\n"
+                              "Any mouse button click will reset all filters."));
 
 //    d->textFilter = new SearchTextBar(this);
     d->textFilter = new QLineEdit(this);
@@ -171,14 +170,12 @@ void AlbumIconViewFilter::slotItemsFilterMatch(bool match)
     if (filtersList.isEmpty())
     {
         d->led->setToolTip(i18n("No active filter"));
-        d->led->setColor(Qt::lightGray);
-        d->led->setState(KLed::Off);
+        d->led->setLedColor(StatusLed::Gray);
     }
     else
     {
         d->led->setToolTip(message);
-        d->led->setColor(match ? Qt::darkGreen : Qt::darkRed);
-        d->led->setState(KLed::On);
+        d->led->setLedColor(match ? StatusLed::Green : StatusLed::Red);
     }
 }
 
@@ -189,7 +186,7 @@ bool AlbumIconViewFilter::eventFilter(QObject *object, QEvent *e)
     if (e->type() == QEvent::MouseButtonRelease)
     {
         QMouseEvent* event = static_cast<QMouseEvent*>(e);
-        if ( widget->rect().contains(event->pos()) && d->led->state() == KLed::On)
+        if ( widget->rect().contains(event->pos()) && d->led->ledColor() != StatusLed::Gray)
         {
             // Reset all filters settings.
             d->textFilter->setText(QString());

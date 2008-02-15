@@ -311,6 +311,7 @@ SET(libcommonwidgets_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/statuszoombar.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/statusprogressbar.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/statusnavigatebar.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/statusled.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/sidebar.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dlogoaction.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dpopupmenu.cpp

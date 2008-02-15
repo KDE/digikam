@@ -8,6 +8,7 @@ INSTALL(FILES histogramwidget.h
               statuszoombar.h 
               statusnavigatebar.h
               statusprogressbar.h 
+	      statusled.h
               dcursortracker.h 
               paniconwidget.h 
               previewwidget.h  
