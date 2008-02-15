@@ -45,6 +45,9 @@ install( FILES image-full.png
 	       togglemouseover.png  		          
 	       worldmap.jpg 
 	       menusidepixmap.png  
+	       indicator-gray.png
+	       indicator-green.png
+	       indicator-red.png
          DESTINATION ${DATA_INSTALL_DIR}/digikam/data 
        )
 
