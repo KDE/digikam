@@ -30,11 +30,11 @@
 
 #include <klocale.h>
 #include <kdialog.h>
-#include <kled.h>
 
 // Local includes.
 
 #include "ddebug.h"
+#include "statusled.h"
 #include "albumsettings.h"
 #include "searchtextbar.h"
 #include "ratingfilter.h"
@@ -57,7 +57,7 @@ public:
         led              = 0;
     }
 
-    KLed          *led;
+    StatusLed     *led;
 
     SearchTextBar *textFilter;
 
@@ -71,12 +71,9 @@ AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
 {
     d = new AlbumIconViewFilterPriv;
 
-    int size = parent->height()-6;
-    d->led   = new KLed(this);
-    d->led->setMinimumSize(size, size);
+    d->led = new StatusLed(this);
     d->led->installEventFilter(this);
-    d->led->setColor(Qt::lightGray);
-    d->led->setState(KLed::Off);
+    d->led->setLedColor(StatusLed::Gray);
     QWhatsThis::add(d->led, i18n("This LED indicates the global image filter status, "
                                  "encompassing all status-bar filters and all tag filters from the right sidebar.\n\n"
                                  "GRAY: no filter is active, all items are visible.\n"
@@ -86,8 +83,8 @@ AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
 
     d->textFilter = new SearchTextBar(this);
     QToolTip::add(d->textFilter, i18n("Text quick filter (search)"));
-    QWhatsThis::add(d->textFilter, i18n("Enter search patterns to quickly filter this view on file names, captions "
-                                        "(comments), and tags"));
+    QWhatsThis::add(d->textFilter, i18n("Enter search patterns to quickly filter this view on file names, "
+                                        "captions (comments), and tags"));
 
     d->mimeFilter   = new MimeFilter(this);
     d->ratingFilter = new RatingFilter(this);
@@ -175,14 +172,12 @@ void AlbumIconViewFilter::slotItemsFilterMatch(bool match)
     if (filtersList.isEmpty())
     {
         QToolTip::add(d->led, i18n("No active filter"));
-        d->led->setColor(Qt::lightGray);
-        d->led->setState(KLed::Off);
+        d->led->setLedColor(StatusLed::Gray);
     }
     else
     {
         QToolTip::add(d->led, message);
-        d->led->setColor(match ? Qt::darkGreen : Qt::darkRed);
-        d->led->setState(KLed::On);
+        d->led->setLedColor(match ? StatusLed::Green : StatusLed::Red);
     }
 }
 
@@ -193,7 +188,7 @@ bool AlbumIconViewFilter::eventFilter(QObject *object, QEvent *e)
     if (e->type() == QEvent::MouseButtonRelease)
     {
         QMouseEvent* event = static_cast<QMouseEvent*>(e);
-        if ( widget->rect().contains(event->pos()) && d->led->state() == KLed::On)
+        if ( widget->rect().contains(event->pos()) && d->led->ledColor() != StatusLed::Gray)
         {
             // Reset all filters settings.
             d->textFilter->setText(QString());
