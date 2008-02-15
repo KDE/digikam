@@ -27,6 +27,8 @@
 // Qt includes.
 
 #include <QMap>
+#include <QColor>
+#include <QString>
 
 // KDE includes.
 
@@ -46,10 +48,16 @@ class DIGIKAM_EXPORT SlidePictureInfo
 
 public:
 
-    SlidePictureInfo(){};
+    SlidePictureInfo()
+    {
+        rating = 0;
+    };
+
     ~SlidePictureInfo(){};
 
 public:
+
+    int                rating;
 
     /** Picture Comment */
     QString            comment; 
@@ -72,6 +80,7 @@ public:
         printName            = true;
         printDate            = false;
         printComment         = false;
+        printRating          = false;
         printApertureFocal   = false;
         printMakeModel       = false;
         printExpoSensitivity = false;
@@ -106,6 +115,9 @@ public:
     /** Print picture comment during slide */
     bool printComment;
 
+    /** Print rating during slide */
+    bool printRating;
+
     /** Slide pictures in loop */
     bool loop;
 
@@ -114,6 +126,8 @@ public:
 
     /** List of pictures URL to slide */ 
     KUrl::List fileList;
+
+    QColor     ratingColor;
 
     /** Map of pictures information to slide */ 
     QMap<KUrl, SlidePictureInfo> pictInfoMap;

@@ -1243,6 +1243,8 @@ void LightTableWindow::slotToggleSlideShow()
     bool startWithCurrent = group.readEntry("SlideShowStartCurrent", false);
 
     SlideShowSettings settings;
+    settings.exifRotate           = AlbumSettings::instance()->getExifRotate();
+    settings.ratingColor          = ThemeEngine::instance()->textSpecialRegColor();
     settings.delay                = group.readEntry("SlideShowDelay", 5) * 1000;
     settings.printName            = group.readEntry("SlideShowPrintName", true);
     settings.printDate            = group.readEntry("SlideShowPrintDate", false);
@@ -1250,6 +1252,7 @@ void LightTableWindow::slotToggleSlideShow()
     settings.printExpoSensitivity = group.readEntry("SlideShowPrintExpoSensitivity", false);
     settings.printMakeModel       = group.readEntry("SlideShowPrintMakeModel", false);
     settings.printComment         = group.readEntry("SlideShowPrintComment", false);
+    settings.printRating          = group.readEntry("SlideShowPrintRating", false);
     settings.loop                 = group.readEntry("SlideShowLoop", false);
     slideShow(startWithCurrent, settings);
 }
@@ -1269,6 +1272,7 @@ void LightTableWindow::slideShow(bool startWithCurrent, SlideShowSettings& setti
     {
         SlidePictureInfo pictInfo;
         pictInfo.comment   = (*it).comment();
+        pictInfo.rating    = (*it).rating();
         pictInfo.photoInfo = (*it).photoInfoContainer();
         settings.pictInfoMap.insert((*it).fileUrl(), pictInfo);
         settings.fileList.append((*it).fileUrl());

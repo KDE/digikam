@@ -79,6 +79,7 @@
 #include "searchfolderview.h"
 #include "statusprogressbar.h"
 #include "tagfilterview.h"
+#include "themeengine.h"
 #include "thumbnailsize.h"
 #include "timelineview.h"
 #include "timelinefolderview.h"
@@ -1399,8 +1400,8 @@ void DigikamView::slotItemsInfoFromAlbums(const ImageInfoList& infoList)
 void DigikamView::slideShow(ImageInfoList &infoList)
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("ImageViewer Settings");
-    bool startWithCurrent = group.readEntry("SlideShowStartCurrent", false);
+    KConfigGroup group        = config->group("ImageViewer Settings");
+    bool startWithCurrent     = group.readEntry("SlideShowStartCurrent", false);
 
     int     i = 0;
     float cnt = (float)infoList.count();
@@ -1409,6 +1410,7 @@ void DigikamView::slideShow(ImageInfoList &infoList)
 
     SlideShowSettings settings;
     settings.exifRotate           = AlbumSettings::instance()->getExifRotate();
+    settings.ratingColor          = ThemeEngine::instance()->textSpecialRegColor();
     settings.delay                = group.readEntry("SlideShowDelay", 5) * 1000;
     settings.printName            = group.readEntry("SlideShowPrintName", true);
     settings.printDate            = group.readEntry("SlideShowPrintDate", false);
@@ -1416,6 +1418,7 @@ void DigikamView::slideShow(ImageInfoList &infoList)
     settings.printExpoSensitivity = group.readEntry("SlideShowPrintExpoSensitivity", false);
     settings.printMakeModel       = group.readEntry("SlideShowPrintMakeModel", false);
     settings.printComment         = group.readEntry("SlideShowPrintComment", false);
+    settings.printRating          = group.readEntry("SlideShowPrintRating", false);
     settings.loop                 = group.readEntry("SlideShowLoop", false);
 
     d->cancelSlideShow = false;
@@ -1426,6 +1429,7 @@ void DigikamView::slideShow(ImageInfoList &infoList)
         settings.fileList.append(info.fileUrl());
         SlidePictureInfo pictInfo;
         pictInfo.comment   = info.comment();
+        pictInfo.rating    = info.rating();
         pictInfo.photoInfo = info.photoInfoContainer();
         settings.pictInfoMap.insert(info.fileUrl(), pictInfo);
 

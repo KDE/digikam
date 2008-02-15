@@ -1034,10 +1034,11 @@ void ImageWindow::slotFilePrint()
 
 void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
 {
-    int       i = 0;
-    float     cnt;
-    DMetadata meta;
-    m_cancelSlideShow = false;
+    float cnt;
+    int i                = 0;
+    m_cancelSlideShow    = false;
+    settings.exifRotate  = AlbumSettings::instance()->getExifRotate();
+    settings.ratingColor = ThemeEngine::instance()->textSpecialRegColor();
 
     if (!d->imageInfoList.isEmpty())
     {
@@ -1053,6 +1054,7 @@ void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
         {
             SlidePictureInfo pictInfo;
             pictInfo.comment   = it->comment();
+            pictInfo.rating    = it->rating();
             pictInfo.photoInfo = it->photoInfoContainer();
             settings.pictInfoMap.insert(it->fileUrl(), pictInfo);
 
@@ -1068,6 +1070,7 @@ void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
                                     i18n("Prepare slideshow. Please wait..."));
 
         cnt = (float)d->urlList.count();
+        DMetadata meta;
 
         for (KUrl::List::Iterator it = d->urlList.begin() ; 
              !m_cancelSlideShow && (it != d->urlList.end()) ; ++it)

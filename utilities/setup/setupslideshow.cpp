@@ -6,7 +6,7 @@
  * Date        : 2005-05-21
  * Description : setup tab for slideshow options.
  * 
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -59,6 +59,7 @@ public:
         printExpoSensitivity = 0;
         printMakeModel       = 0;
         printComment         = 0;
+        printRating          = 0;
     }
 
     QCheckBox    *startWithCurrent;
@@ -69,29 +70,30 @@ public:
     QCheckBox    *printExpoSensitivity;
     QCheckBox    *printMakeModel;
     QCheckBox    *printComment;
-    
+    QCheckBox    *printRating;
+
     KIntNumInput *delayInput;
-};    
-    
+};
+
 SetupSlideShow::SetupSlideShow(QWidget* parent )
               : QWidget(parent)
 {
     d = new SetupSlideShowPriv;
     QVBoxLayout *layout = new QVBoxLayout( this );
-    
+
     d->delayInput = new KIntNumInput(5, this);
     d->delayInput->setRange(1, 3600, 1);
     d->delayInput->setSliderEnabled(true);
     d->delayInput->setLabel( i18n("&Delay between images:"), Qt::AlignLeft|Qt::AlignTop );
     d->delayInput->setWhatsThis( i18n("<p>The delay, in seconds, between images."));
-    
+
     d->startWithCurrent = new QCheckBox(i18n("Start with current image"), this);
     d->startWithCurrent->setWhatsThis( i18n("<p>If this option is enabled, Slideshow will be started "
                                             "with current image selected from the images list."));
-    
+
     d->loopMode = new QCheckBox(i18n("Display in loop"), this);
     d->loopMode->setWhatsThis( i18n("<p>Run the slideshow in a loop."));
-    
+
     d->printName = new QCheckBox(i18n("Print image file name"), this);
     d->printName->setWhatsThis( i18n("<p>Print image file name to the screen bottom."));
 
@@ -109,7 +111,14 @@ SetupSlideShow::SetupSlideShow(QWidget* parent )
 
     d->printComment = new QCheckBox(i18n("Print image caption"), this);
     d->printComment->setWhatsThis( i18n("<p>Print image caption on the screen bottom."));
-    
+
+    d->printRating = new QCheckBox(i18n("Print image rating"), this);
+    d->printRating->setWhatsThis( i18n("<p>Print digiKam image rating on the screen bottom."));
+
+    // Only digiKam support this feature. Showfoto do not support digiKam database informations.
+    if (kapp->applicationName() == "showfoto")
+        d->printRating->hide();
+
     layout->addWidget(d->delayInput);
     layout->addWidget(d->startWithCurrent);
     layout->addWidget(d->loopMode);
@@ -119,8 +128,9 @@ SetupSlideShow::SetupSlideShow(QWidget* parent )
     layout->addWidget(d->printExpoSensitivity);
     layout->addWidget(d->printMakeModel);
     layout->addWidget(d->printComment);
+    layout->addWidget(d->printRating);
     layout->addStretch();
-    
+
     readSettings();
 }
 
@@ -143,6 +153,7 @@ void SetupSlideShow::applySettings()
     group.writeEntry("SlideShowPrintExpoSensitivity", d->printExpoSensitivity->isChecked());
     group.writeEntry("SlideShowPrintMakeModel", d->printMakeModel->isChecked());
     group.writeEntry("SlideShowPrintComment", d->printComment->isChecked());
+    group.writeEntry("SlideShowPrintRating", d->printRating->isChecked());
     config->sync();
 }
 
@@ -160,7 +171,7 @@ void SetupSlideShow::readSettings()
     d->printExpoSensitivity->setChecked(group.readEntry("SlideShowPrintExpoSensitivity", false));
     d->printMakeModel->setChecked(group.readEntry("SlideShowPrintMakeModel", false));
     d->printComment->setChecked(group.readEntry("SlideShowPrintComment", false));
+    d->printRating->setChecked(group.readEntry("SlideShowPrintRating", false));
 }
 
 }   // namespace Digikam
-

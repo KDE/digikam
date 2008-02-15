@@ -6,7 +6,7 @@
  * Date        : 2005-04-21
  * Description : slide show tool using preview of pictures.
  *
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,6 +32,7 @@
 #include <QCursor>
 #include <QPainter>
 #include <QFont>
+#include <QColor>
 #include <QWheelEvent>
 #include <QPaintEvent>
 #include <QMouseEvent>
@@ -47,6 +48,7 @@
 
 // Local includes.
 
+#include "constants.h"
 #include "ddebug.h"
 #include "dimg.h"
 #include "toolbar.h"
@@ -70,6 +72,18 @@ public:
         fileIndex      = -1;
         endOfShow      = false;
         pause          = false;
+
+        // Pre-computed star polygon for a 15x15 pixmap.
+        starPolygon << QPoint(0,  6);
+        starPolygon << QPoint(5,  5);
+        starPolygon << QPoint(7,  0);
+        starPolygon << QPoint(9,  5);
+        starPolygon << QPoint(14, 6);
+        starPolygon << QPoint(10, 9);
+        starPolygon << QPoint(11, 14);
+        starPolygon << QPoint(7,  11);
+        starPolygon << QPoint(3,  14);
+        starPolygon << QPoint(4,  9);
     }
 
     bool               endOfShow;
@@ -85,6 +99,10 @@ public:
     QTimer            *timer;
 
     QPixmap            pixmap;
+    QPixmap            selPixmap;      // Selected rating star.
+    QPixmap            regPixmap;      // Regular rating star.
+
+    QPolygon           starPolygon;
 
     DImg               preview;
 
@@ -121,6 +139,7 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
     QPalette palette;
     palette.setColor(backgroundRole(), Qt::black);
     setPalette(palette);
+    setupRatingPixmap(d->settings.ratingColor);
 
     // ---------------------------------------------------------------
 
@@ -191,6 +210,32 @@ void SlideShow::setCurrent(const KUrl& url)
     }
 }
 
+void SlideShow::setupRatingPixmap(const QColor& ratingColor)
+{
+    QColor color = ratingColor;
+    if (!color.isValid()) 
+        color = palette().color(QPalette::Active, QPalette::HighlightedText);
+
+    d->regPixmap = QPixmap(15, 15);
+    d->regPixmap.fill(Qt::transparent); 
+    d->selPixmap = QPixmap(15, 15);
+    d->selPixmap.fill(Qt::transparent); 
+
+    QPainter p1(&d->regPixmap);
+    p1.setRenderHint(QPainter::Antialiasing, true);
+    p1.setBrush(palette().color(QPalette::Active, QPalette::Background));
+    p1.setPen(palette().color(QPalette::Active, QPalette::Foreground));
+    p1.drawPolygon(d->starPolygon, Qt::WindingFill);
+    p1.end();
+
+    QPainter p2(&d->selPixmap);
+    p2.setRenderHint(QPainter::Antialiasing, true);
+    p2.setBrush(color);
+    p2.setPen(palette().color(QPalette::Active, QPalette::Foreground));
+    p2.drawPolygon(d->starPolygon, Qt::WindingFill);
+    p2.end();
+}
+
 void SlideShow::slotTimeOut()
 {
     loadNextImage();
@@ -228,7 +273,6 @@ void SlideShow::loadNextImage()
         updatePixmap();
         update();
     }
-
 }
 
 void SlideShow::loadPrevImage()
@@ -263,7 +307,6 @@ void SlideShow::loadPrevImage()
         updatePixmap();
         update();
     }
-
 }
 
 void SlideShow::slotGotImagePreview(const LoadingDescription&, const DImg& preview)
@@ -325,7 +368,26 @@ void SlideShow::updatePixmap()
             PhotoInfoContainer photoInfo = d->settings.pictInfoMap[d->currentImage].photoInfo;
             int offset = 0;
 
-            // Display the Comments.
+            // Display Rating.
+            int rating = d->settings.pictInfoMap[d->currentImage].rating;
+
+            if (d->settings.printRating && rating > 0)
+            {
+                int x = 0;
+                for (int i = 0; i < rating; i++)
+                {
+                    p.drawPixmap(10+x, height()-offset-d->selPixmap.height(), d->selPixmap);
+                    x += d->selPixmap.width();
+                }
+
+                for (int i = rating; i < RatingMax; i++)
+                {
+                    p.drawPixmap(10+x, height()-offset-d->regPixmap.height(), d->regPixmap);
+                    x += d->regPixmap.width();
+                }
+            }
+
+            // Display Comments.
 
             if (d->settings.printComment)
             {
@@ -333,7 +395,7 @@ void SlideShow::updatePixmap()
                 printComments(p, offset, str);
             }
 
-            // Display the Make and Model.
+            // Display Make and Model.
 
             if (d->settings.printMakeModel)
             {
@@ -353,7 +415,7 @@ void SlideShow::updatePixmap()
                 printInfoText(p, offset, str);
             }
 
-            // Display the Exposure and Sensitivity.
+            // Display Exposure and Sensitivity.
 
             if (d->settings.printExpoSensitivity)
             {
@@ -373,7 +435,7 @@ void SlideShow::updatePixmap()
                 printInfoText(p, offset, str);
             }
 
-            // Display the Aperture and Focal.
+            // Display Aperture and Focal.
 
             if (d->settings.printApertureFocal)
             {
@@ -396,7 +458,7 @@ void SlideShow::updatePixmap()
                 {
                     if (!photoInfo.aperture.isEmpty())
                             str += QString(" / ");
- 
+
                     if (!photoInfo.focalLength.isEmpty())
                         str += QString("%1 (35mm: %2)").arg(photoInfo.focalLength).arg(photoInfo.focalLength35mm);
                     else
@@ -406,7 +468,7 @@ void SlideShow::updatePixmap()
                 printInfoText(p, offset, str);
             }
 
-            // Display the Creation Date.
+            // Display Creation Date.
 
             if (d->settings.printDate)
             {
@@ -417,7 +479,7 @@ void SlideShow::updatePixmap()
                 }
             }
 
-            // Display the image File Name.
+            // Display image File Name.
 
             if (d->settings.printName)
             {
