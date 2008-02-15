@@ -35,7 +35,7 @@ extern "C"
 
 // Qt includes. 
 
-#include <Q3Dict>
+#include <QHash>
 #include <QToolTip>
 #include <QFrame>
 #include <QResizeEvent>
@@ -96,33 +96,31 @@ public:
         count      = 0;
         thumbJob   = 0;
         tileSize   = ThumbnailSize::Small;
-
-        itemDict.setAutoDelete(false);
     }
 
-    bool                       clearing;
-    bool                       exifRotate;
-    bool                       dragging;
+    bool                          clearing;
+    bool                          exifRotate;
+    bool                          dragging;
 
-    const int                  margin;
-    int                        count;
-    int                        tileSize;
-    int                        orientation;
+    const int                     margin;
+    int                           count;
+    int                           tileSize;
+    int                           orientation;
 
-    QTimer                    *timer;
+    QTimer                       *timer;
 
-    QPoint                     dragStartPos;
+    QPoint                        dragStartPos;
 
-    ThumbBarItem              *firstItem;
-    ThumbBarItem              *lastItem;
-    ThumbBarItem              *currItem;
+    ThumbBarItem                 *firstItem;
+    ThumbBarItem                 *lastItem;
+    ThumbBarItem                 *currItem;
 
-    Q3Dict<ThumbBarItem>       itemDict;
-    QPointer<ThumbnailJob>     thumbJob;
+    QHash<KUrl, ThumbBarItem*>    itemHash;
+    QPointer<ThumbnailJob>        thumbJob;
 
-    ThumbBarToolTipSettings    toolTipSettings;
+    ThumbBarToolTipSettings       toolTipSettings;
 
-    ThumbBarToolTip           *toolTip;
+    ThumbBarToolTip              *toolTip;
 };
 
 // -------------------------------------------------------------------------
@@ -190,6 +188,14 @@ ThumbBarView::~ThumbBarView()
     {
         d->thumbJob->kill();
         d->thumbJob = 0;
+    }
+
+    // Delete all hash items 
+    while (!d->itemHash.isEmpty()) 
+    {
+        ThumbBarItem *value = *d->itemHash.begin();
+        d->itemHash.erase(d->itemHash.begin());
+        delete value;
     }
 
     clear(false);
@@ -290,31 +296,6 @@ KUrl::List ThumbBarView::itemsURLs()
         urlList.append(item->url());
 
     return urlList;
-}
-
-void ThumbBarView::clear(bool updateView)
-{
-    d->clearing = true;
-
-    ThumbBarItem *item = d->firstItem;
-    while (item)
-    {
-        ThumbBarItem *tmp = item->d->next;
-        delete item;
-        item = tmp;
-    }
-
-    d->firstItem = 0;
-    d->lastItem  = 0;
-    d->count     = 0;
-    d->currItem  = 0;
-
-    if (updateView)
-        slotUpdate();
-
-    d->clearing = false;
-
-    emit signalItemSelected(0);
 }
 
 void ThumbBarView::triggerUpdate()
@@ -569,6 +550,31 @@ void ThumbBarView::startDrag()
 {
 }
 
+void ThumbBarView::clear(bool updateView)
+{
+    d->clearing = true;
+
+    ThumbBarItem *item = d->firstItem;
+    while (item)
+    {
+        ThumbBarItem *tmp = item->d->next;
+        delete d->itemHash.take(item->url());
+        item = tmp;
+    }
+
+    d->firstItem = 0;
+    d->lastItem  = 0;
+    d->count     = 0;
+    d->currItem  = 0;
+
+    if (updateView)
+        slotUpdate();
+
+    d->clearing = false;
+
+    emit signalItemSelected(0);
+}
+
 void ThumbBarView::insertItem(ThumbBarItem* item)
 {
     if (!item) return;
@@ -596,7 +602,7 @@ void ThumbBarView::insertItem(ThumbBarItem* item)
         emit signalItemSelected(item);
     }
 
-    d->itemDict.insert(item->url().url(), item);
+    d->itemHash.insert(item->url(), item);
 
     d->count++;
     triggerUpdate();
@@ -641,12 +647,10 @@ void ThumbBarView::removeItem(ThumbBarItem* item)
         }
     }
 
-    d->itemDict.remove(item->url().url());
+    delete d->itemHash.take(item->url());
 
     if (!d->clearing)
-    {
         triggerUpdate();
-    }
 
     if (d->count == 0)
         emit signalItemSelected(0);
@@ -712,24 +716,26 @@ void ThumbBarView::slotGotThumbnail(const KUrl& url, const QPixmap& pix)
 {
     if (!pix.isNull())
     {
-        ThumbBarItem* item = d->itemDict.find(url.url());
-        if (!item)
+        QHash<KUrl, ThumbBarItem*>::const_iterator it = d->itemHash.find(url);
+        if (it == d->itemHash.end())
             return;
 
-        item->d->pixmap = pix;
+        ThumbBarItem* item = *it;
+        item->setPixmap(pix);
         item->repaint();
     }
 }
 
 void ThumbBarView::slotFailedThumbnail(const KUrl& url)
 {
-    ThumbBarItem* item = d->itemDict.find(url.url());
-    if (!item)
+    QHash<KUrl, ThumbBarItem*>::const_iterator it = d->itemHash.find(url);
+    if (it == d->itemHash.end())
         return;
 
     KIconLoader* iconLoader = KIconLoader::global();
     QPixmap pix = iconLoader->loadIcon("image-missing", KIconLoader::NoGroup, ThumbnailSize::Huge);
 
+    ThumbBarItem* item = *it;
     item->setPixmap(pix);
     item->repaint();
 }
