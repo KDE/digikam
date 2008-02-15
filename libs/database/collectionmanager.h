@@ -214,7 +214,7 @@ private:
     CollectionManagerPrivate *d;
     friend class CollectionManagerPrivate;
 
-    Q_PRIVATE_SLOT(d, void slotTriggerUpdateVolumesList());
+    Q_PRIVATE_SLOT(d, void slotTriggerUpdateVolumesList())
 
 signals: // private
 
