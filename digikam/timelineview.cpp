@@ -317,7 +317,9 @@ void TimeLineView::readConfig()
     d->timeUnitCB->setCurrentIndex(group.readEntry("Histogram TimeUnit", (int)TimeLineWidget::Month));
     slotTimeUnitChanged(d->timeUnitCB->currentIndex());
 
-    d->scaleBG->button(group.readEntry("Histogram Scale", (int)TimeLineWidget::LinScale))->setChecked(true);
+    int id = group.readEntry("Histogram Scale", (int)TimeLineWidget::LinScale);
+    if ( id >= 0 )
+       d->scaleBG->button( id )->setChecked(true);
     slotScaleChanged(d->scaleBG->checkedId());
 
     QDateTime now = QDateTime::currentDateTime();
