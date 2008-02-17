@@ -318,7 +318,7 @@ void TimeLineView::readConfig()
     slotTimeUnitChanged(d->timeUnitCB->currentIndex());
 
     int id = group.readEntry("Histogram Scale", (int)TimeLineWidget::LinScale);
-    if ( id >= 0 )
+    if ( d->scaleBG->button( id ) )
        d->scaleBG->button( id )->setChecked(true);
     slotScaleChanged(d->scaleBG->checkedId());
 
