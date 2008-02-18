@@ -45,6 +45,7 @@ namespace Digikam
 
 class DImg;
 class ImageInfo;
+class ImageChangeset;
 class ImagePropertiesSideBarDBPriv;
 
 class DIGIKAM_EXPORT ImagePropertiesSideBarDB : public ImagePropertiesSideBar
@@ -92,6 +93,7 @@ private slots:
     void slotChangedTab(QWidget* tab);
     void slotThemeChanged();
     void slotFileMetadataChanged(const KUrl &url);
+    void slotImageChangeDatabase(const ImageChangeset &changeset);
 
 private:
 

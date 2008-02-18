@@ -45,6 +45,7 @@
 #include "dimg.h"
 #include "themeengine.h"
 #include "imageinfo.h"
+#include "databasewatch.h"
 #include "imagepropertiesgpstab.h"
 #include "imagedescedittab.h"
 #include "imageattributeswatch.h"
@@ -108,6 +109,11 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, QSplitter *s
 
     connect(d->desceditTab, SIGNAL(signalProgressValue(int)),
             this, SIGNAL(signalProgressValue(int)));
+
+    DatabaseWatch *dbwatch = DatabaseAccess::databaseWatch();
+
+    connect(dbwatch, SIGNAL(imageChange(const ImageChangeset &)),
+            this, SLOT(slotImageChangeDatabase(const ImageChangeset &)));
 
     ImageAttributesWatch *watch = ImageAttributesWatch::instance();
 
@@ -332,6 +338,36 @@ void ImagePropertiesSideBarDB::slotFileMetadataChanged(const KUrl &url)
         {
             // update now - reuse code form slotChangedTab
             slotChangedTab( getActiveTab() );
+        }
+    }
+}
+
+void ImagePropertiesSideBarDB::slotImageChangeDatabase(const ImageChangeset &changeset)
+{
+    if (!d->currentInfos.isEmpty())
+    {
+        QWidget *tab = getActiveTab();
+        if (tab == m_propertiesTab || tab == m_gpsTab)
+        {
+            ImageInfo &info = d->currentInfos.first();
+            if (changeset.ids().contains(info.id()))
+            {
+                // trigger an update, if changes touch the tab's information
+                DatabaseFields::Set set = changeset.changes();
+                if ( (set & DatabaseFields::ImagesAll) ||
+                     (set & DatabaseFields::ImageInformationAll) ||
+                     (set & DatabaseFields::ImageMetadataAll) ||
+                     (set & DatabaseFields::ImageCommentsAll) )
+                    m_dirtyPropertiesTab = false;
+                else if (set & DatabaseFields::ImagePositionsAll)
+                    m_dirtyGpsTab = false;
+
+                if ( tab == m_propertiesTab || tab == m_gpsTab)
+                {
+                    // update now - reuse code form slotChangedTab
+                    slotChangedTab(tab);
+                }
+            }
         }
     }
 }
