@@ -249,6 +249,9 @@ bool SchemaUpdater::makeUpdates()
             }
             DDebug() << "Success updating to v5" << endl;
             m_access->backend()->commitTransaction();
+            // REMOVE BEFORE ALPHA VERSION
+            m_access->db()->setSetting("preAlpha010Update1", "true");
+            // END REMOVE
         }
         // add future updates here
     }
@@ -313,6 +316,9 @@ bool SchemaUpdater::createDatabase()
          && createIndicesV5()
          && createTriggersV5())
     {
+        // REMOVE BEFORE ALPHA VERSION
+        m_access->db()->setSetting("preAlpha010Update1", "true");
+        // END REMOVE
         m_currentVersion = 5;
         return true;
     }
