@@ -100,8 +100,8 @@ private:
 
 private slots:
 
-    void slotImageChange(ImageChangeset changeset);
-    void slotImageTagChange(ImageTagChangeset changeset);
+    void slotImageChange(const ImageChangeset &changeset);
+    void slotImageTagChange(const ImageTagChangeset &changeset);
 
 };
 

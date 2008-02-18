@@ -179,7 +179,7 @@ void DatabaseWatch::slotDBusChangeset(const QString &databaseIdentifier,
 
 // --- methods to dispatch changes from database to listeners (local and remote) ---
 
-void DatabaseWatch::sendImageChange(ImageChangeset cset)
+void DatabaseWatch::sendImageChange(const ImageChangeset &cset)
 {
     // send local signal
     emit imageChange(cset);
@@ -188,42 +188,42 @@ void DatabaseWatch::sendImageChange(ImageChangeset cset)
                    QDBusVariant(QVariant::fromValue<ImageChangeset>(cset)));
 }
 
-void DatabaseWatch::sendImageTagChange(ImageTagChangeset cset)
+void DatabaseWatch::sendImageTagChange(const ImageTagChangeset &cset)
 {
     emit imageTagChange(cset);
     emit changeset(d->databaseId, d->applicationId,
                    QDBusVariant(QVariant::fromValue<ImageTagChangeset>(cset)));
 }
 
-void DatabaseWatch::sendCollectionImageChange(CollectionImageChangeset cset)
+void DatabaseWatch::sendCollectionImageChange(const CollectionImageChangeset &cset)
 {
     emit collectionImageChange(cset);
     emit changeset(d->databaseId, d->applicationId,
                      QDBusVariant(QVariant::fromValue<CollectionImageChangeset>(cset)));
 }
 
-void DatabaseWatch::sendAlbumChange(AlbumChangeset cset)
+void DatabaseWatch::sendAlbumChange(const AlbumChangeset &cset)
 {
     emit albumChange(cset);
     emit changeset(d->databaseId, d->applicationId,
                      QDBusVariant(QVariant::fromValue<AlbumChangeset>(cset)));
 }
 
-void DatabaseWatch::sendTagChange(TagChangeset cset)
+void DatabaseWatch::sendTagChange(const TagChangeset &cset)
 {
     emit tagChange(cset);
     emit changeset(d->databaseId, d->applicationId,
                      QDBusVariant(QVariant::fromValue<TagChangeset>(cset)));
 }
 
-void DatabaseWatch::sendAlbumRootChange(AlbumRootChangeset cset)
+void DatabaseWatch::sendAlbumRootChange(const AlbumRootChangeset &cset)
 {
     emit albumRootChange(cset);
     emit changeset(d->databaseId, d->applicationId,
                      QDBusVariant(QVariant::fromValue<AlbumRootChangeset>(cset)));
 }
 
-void DatabaseWatch::sendSearchChange(SearchChangeset cset)
+void DatabaseWatch::sendSearchChange(const SearchChangeset &cset)
 {
     emit searchChange(cset);
     emit changeset(d->databaseId, d->applicationId,

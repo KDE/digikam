@@ -37,11 +37,11 @@ ImageAttributesWatch::ImageAttributesWatch()
 {
     DatabaseWatch *dbwatch = DatabaseAccess::databaseWatch();
 
-    connect(dbwatch, SIGNAL(imageChange(ImageChangeset)),
-            this, SLOT(slotImageChange(ImageChangeset)));
+    connect(dbwatch, SIGNAL(imageChange(const ImageChangeset &)),
+            this, SLOT(slotImageChange(const ImageChangeset &)));
 
-    connect(dbwatch, SIGNAL(imageTagChange(ImageTagChangeset)),
-            this, SLOT(slotImageTagChange(ImageTagChangeset)));
+    connect(dbwatch, SIGNAL(imageTagChange(const ImageTagChangeset &)),
+            this, SLOT(slotImageTagChange(const ImageTagChangeset &)));
 }
 
 ImageAttributesWatch::~ImageAttributesWatch()
@@ -68,7 +68,7 @@ ImageAttributesWatch *ImageAttributesWatch::instance()
     return m_instance;
 }
 
-void ImageAttributesWatch::slotImageChange(ImageChangeset changeset)
+void ImageAttributesWatch::slotImageChange(const ImageChangeset &changeset)
 {
     DatabaseFields::Set set = changeset.changes();
 
@@ -90,7 +90,7 @@ void ImageAttributesWatch::slotImageChange(ImageChangeset changeset)
     }
 }
 
-void ImageAttributesWatch::slotImageTagChange(ImageTagChangeset changeset)
+void ImageAttributesWatch::slotImageTagChange(const ImageTagChangeset &changeset)
 {
     foreach(qlonglong imageId, changeset.ids())
         emit signalImageTagsChanged(imageId);

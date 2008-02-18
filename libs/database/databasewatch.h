@@ -51,13 +51,13 @@ signals:
      * Notifies of changes in the database.
      * Connect to the set of signals that you are interested in.
      */
-    void imageChange(ImageChangeset changeset);
-    void imageTagChange(ImageTagChangeset changeset);
-    void collectionImageChange(CollectionImageChangeset changeset);
-    void albumChange(AlbumChangeset changeset);
-    void tagChange(TagChangeset changeset);
-    void albumRootChange(AlbumRootChangeset changeset);
-    void searchChange(SearchChangeset changeset);
+    void imageChange(const ImageChangeset &changeset);
+    void imageTagChange(const ImageTagChangeset &changeset);
+    void collectionImageChange(const CollectionImageChangeset &changeset);
+    void albumChange(const AlbumChangeset &changeset);
+    void tagChange(const TagChangeset &changeset);
+    void albumRootChange(const AlbumRootChangeset &changeset);
+    void searchChange(const SearchChangeset &changeset);
 
     // --------------- //
 
@@ -97,13 +97,13 @@ public:
 
     // library-internal signal-trigger methods
 
-    void sendImageChange(ImageChangeset changeset);
-    void sendImageTagChange(ImageTagChangeset changeset);
-    void sendCollectionImageChange(CollectionImageChangeset changeset);
-    void sendAlbumChange(AlbumChangeset changeset);
-    void sendTagChange(TagChangeset changeset);
-    void sendAlbumRootChange(AlbumRootChangeset changeset);
-    void sendSearchChange(SearchChangeset changeset);
+    void sendImageChange(const ImageChangeset &changeset);
+    void sendImageTagChange(const ImageTagChangeset &changeset);
+    void sendCollectionImageChange(const CollectionImageChangeset &changeset);
+    void sendAlbumChange(const AlbumChangeset &changeset);
+    void sendTagChange(const TagChangeset &changeset);
+    void sendAlbumRootChange(const AlbumRootChangeset &changeset);
+    void sendSearchChange(const SearchChangeset &changeset);
 
 private:
 

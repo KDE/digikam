@@ -73,8 +73,8 @@ public:
 
 private slots:
 
-    void slotImageChanged(ImageChangeset changeset);
-    void slotImageTagChanged(ImageTagChangeset changeset);
+    void slotImageChanged(const ImageChangeset &changeset);
+    void slotImageTagChanged(const ImageTagChangeset &changeset);
 
 private:
 
