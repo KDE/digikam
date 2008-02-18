@@ -1024,8 +1024,11 @@ QString LightTableBarToolTip::tipContents(ThumbBarItem* item) const
 
         if (settings->getToolTipsShowRating())
         {
-            str.fill( 'X', info.rating() );
-            if (str.isEmpty()) str = QString("---");
+            int rating = info.rating();
+            if (rating <= 0)
+                str = QString("---");
+            else
+                str.fill( 'X', info.rating() );
             tip += m_cellSpecBeg + i18n("Rating:") + m_cellSpecMid + str + m_cellSpecEnd;
         }
     }
