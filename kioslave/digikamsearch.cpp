@@ -516,10 +516,30 @@ QString kio_digikamsearch::subQuery(enum kio_digikamsearch::SKey key,
         }
         case(TAGNAME):
         {
-            query = " (Images.id IN "
-                    "  (SELECT imageid FROM ImageTags "
-                    "   WHERE tagid IN "
-                    "   (SELECT id FROM Tags WHERE name $$##$$ $$@@$$))) ";
+            if (op == EQ)
+                query = " (Images.id IN "
+                        "   (SELECT imageid FROM ImageTags "
+                        "    WHERE tagid IN "
+                        "   (SELECT id FROM Tags WHERE name LIKE $$@@$$))) ";
+            else if (op == NE)
+                query = " (Images.id NOT IN "
+                        "   (SELECT imageid FROM ImageTags "
+                        "    WHERE tagid IN "
+                        "   (SELECT id FROM Tags WHERE name LIKE $$@@$$))) ";
+            else if (op == LIKE)
+                query = " (Images.id IN "
+                        "   (SELECT ImageTags.imageid FROM ImageTags JOIN TagsTree on ImageTags.tagid = TagsTree.id "
+                        "    WHERE TagsTree.pid = (SELECT id FROM Tags WHERE name LIKE $$@@$$) "
+                        "    OR ImageTags.tagid = (SELECT id FROM Tags WHERE name LIKE $$@@$$) )) ";
+            else // op == NLIKE
+                query = " (Images.id NOT IN "
+                        "   (SELECT ImageTags.imageid FROM ImageTags JOIN TagsTree on ImageTags.tagid = TagsTree.id "
+                        "    WHERE TagsTree.pid = (SELECT id FROM Tags WHERE name LIKE $$@@$$) "
+                        "    OR ImageTags.tagid = (SELECT id FROM Tags WHERE name LIKE $$@@$$) )) ";
+
+            query.replace("$$@@$$", QString::fromLatin1("'") + escapeString(val)
+                        + QString::fromLatin1("'"));
+
             break;
         }
         case(IMAGENAME):
