@@ -4,7 +4,7 @@ Name[xx]=xxImagePlugin_LensCorrectionxx
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
-Comment=Automatic correction based on lens database 
+Comment=Automatic correction based on lens database
 
 X-KDE-Library=digikamimageplugin_lenscorrection
 author=Adrian Schroeter <adrian@suse.de>
