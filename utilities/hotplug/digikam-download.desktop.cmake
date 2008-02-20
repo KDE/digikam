@@ -8,6 +8,6 @@ Name[tr]=digiKam ile resimleri göster
 
 [Desktop Entry]
 Encoding=UTF-8
-Actions=digiKam Download
+Actions=digiKam Download;
 Type=Service
 ServiceTypes=KonqPopupMenu/Plugin,media/removable_mounted,media/camera_mounted
