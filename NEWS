@@ -29,4 +29,6 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 007 ==> 128293 : Aspect ratio crop does not respect aspect ratio.
 008 ==> 157149 : digiKam crash at startup.
 009 ==> 141037 : Search using Tag Name does not work
-010 ==> 
+010 ==> 158174 : Precise aspect ratio crop feature
+011 ==> 
+

@@ -100,6 +100,7 @@ public:
     void  setSelectionWidth(int w);
     void  setSelectionHeight(int h);
     void  setSelectionOrientation(int orient);
+    void  setPreciseCrop(bool precise);
     void  setAutoOrientation(bool orientation);
     void  setSelectionAspectRatioType(int aspectRatioType);
     void  setSelectionAspectRatioValue(int widthRatioValue, int heightRatioValue);
@@ -115,6 +116,10 @@ public:
     int   getMinHeightRange();
     int   getMaxWidthRange();
     int   getMaxHeightRange();
+    int   getWidthStep();
+    int   getHeightStep();
+
+    bool  preciseCropAvailable();
 
     void  resetSelection();
     void  maxAspectSelection();
@@ -151,9 +156,9 @@ private:
     QPoint convertPoint(int x, int y, bool localToReal=true);
     void normalizeRegion();
     void reverseRatioValues();
-    void applyAspectRatio(bool WOrH, bool repaintWidget=true);
+    int computePreciseSize(int size, int step);
+    void applyAspectRatio(bool useHeight, bool repaintWidget=true);
     void updatePixmap();
-    QPoint computeAspectRatio(QPoint pm, int coef=1);
     QPoint opposite();
     float distance(QPoint a, QPoint b);
     void placeSelection(QPoint pm, bool symetric, QPoint center);

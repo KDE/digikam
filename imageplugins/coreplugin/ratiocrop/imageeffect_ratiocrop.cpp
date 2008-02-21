@@ -118,6 +118,9 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
                                      "is considered visually harmonious but can be unadapted to print on "
                                      "standard photographic paper."));
 
+    m_preciseCrop = new QCheckBox(i18n("Exact"), cropSelection);
+    QWhatsThis::add( m_preciseCrop, i18n("<p>Enable this option to force exact aspect ratio crop."));
+
     m_orientLabel = new QLabel(i18n("Orientation:"), cropSelection);
     m_orientCB    = new QComboBox( false, cropSelection );
     m_orientCB->insertItem( i18n("Landscape") );
@@ -129,6 +132,7 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
 
     grid->addMultiCellWidget(label, 0, 0, 0, 0);
     grid->addMultiCellWidget(m_ratioCB, 0, 0, 1, 3);
+    grid->addMultiCellWidget(m_preciseCrop, 0, 0, 4, 4);
     grid->addMultiCellWidget(m_orientLabel, 2, 2, 0, 0);
     grid->addMultiCellWidget(m_orientCB, 2, 2, 1, 3);
     grid->addMultiCellWidget(m_autoOrientation, 2, 2, 4, 4);
@@ -160,7 +164,8 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     m_widthInput->setLabel(i18n("Width:"), AlignLeft|AlignVCenter);
     QWhatsThis::add( m_widthInput, i18n("<p>Set here the width selection for cropping."));
     m_widthInput->setRange(m_imageSelectionWidget->getMinWidthRange(),
-                           m_imageSelectionWidget->getMaxWidthRange(), 1, true);
+                           m_imageSelectionWidget->getMaxWidthRange(),
+                           m_imageSelectionWidget->getWidthStep(), true);
 
     m_centerWidth = new QPushButton(cropSelection);
     KGlobal::dirs()->addResourceType("centerwidth", KGlobal::dirs()->kde_default("data") + "digikam/data");
@@ -183,7 +188,8 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     m_heightInput->setLabel(i18n("Height:"), AlignLeft|AlignVCenter);
     QWhatsThis::add( m_heightInput, i18n("<p>Set here the height selection for cropping."));
     m_heightInput->setRange(m_imageSelectionWidget->getMinHeightRange(),
-                            m_imageSelectionWidget->getMaxHeightRange(), 1, true);
+                            m_imageSelectionWidget->getMaxHeightRange(),
+                            m_imageSelectionWidget->getHeightStep(), true);
 
     m_centerHeight = new QPushButton(cropSelection);
     KGlobal::dirs()->addResourceType("centerheight", KGlobal::dirs()->kde_default("data") + "digikam/data");
@@ -258,6 +264,9 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
 
     connect(m_ratioCB, SIGNAL(activated(int)),
             this, SLOT(slotRatioChanged(int)));
+
+    connect(m_preciseCrop, SIGNAL(toggled(bool)),
+            this, SLOT(slotPreciseCropChanged(bool)));
 
     connect(m_orientCB, SIGNAL(activated(int)),
             this, SLOT(slotOrientChanged(int)));
@@ -357,6 +366,9 @@ void ImageEffect_RatioCrop::readSettings()
     m_imageSelectionWidget->slotGuideLines(m_guideLinesCB->currentItem());
     m_imageSelectionWidget->slotChangeGuideColor(m_guideColorBt->color());
 
+    m_preciseCrop->setChecked( config->readBoolEntry("Precise Aspect Ratio Crop", false) );
+    m_imageSelectionWidget->setPreciseCrop( m_preciseCrop->isChecked() );
+
     if (m_originalIsLandscape)
     {
         m_orientCB->setCurrentItem( config->readNumEntry("Hor.Oriented Aspect Ratio Orientation",
@@ -440,6 +452,7 @@ void ImageEffect_RatioCrop::writeSettings()
        config->writeEntry( "Ver.Oriented Custom Aspect Ratio Height", m_heightInput->value() );
     }
 
+    config->writeEntry( "Precise Aspect Ratio Crop", m_preciseCrop->isChecked() );
     config->writeEntry( "Auto Orientation", m_autoOrientation->isChecked() );
     config->writeEntry( "Guide Lines Type", m_guideLinesCB->currentItem() );
     config->writeEntry( "Golden Section", m_goldenSectionBox->isChecked() );
@@ -483,9 +496,11 @@ void ImageEffect_RatioCrop::slotSelectionChanged(QRect rect)
     m_xInput->setRange(0, m_imageSelectionWidget->getOriginalImageWidth() - rect.width(), 1, true);
     m_yInput->setRange(0, m_imageSelectionWidget->getOriginalImageHeight() - rect.height(), 1, true);
     m_widthInput->setRange(m_imageSelectionWidget->getMinWidthRange(),
-                           m_imageSelectionWidget->getMaxWidthRange(), 1, true);
+                           m_imageSelectionWidget->getMaxWidthRange(),
+                           m_imageSelectionWidget->getWidthStep(), true);
     m_heightInput->setRange(m_imageSelectionWidget->getMinHeightRange(),
-                            m_imageSelectionWidget->getMaxHeightRange(), 1, true);
+                            m_imageSelectionWidget->getMaxHeightRange(),
+                            m_imageSelectionWidget->getHeightStep(), true);
 
     m_xInput->setValue(rect.x());
     m_yInput->setValue(rect.y());
@@ -493,6 +508,7 @@ void ImageEffect_RatioCrop::slotSelectionChanged(QRect rect)
     m_heightInput->setValue(rect.height());
 
     enableButtonOK( rect.isValid() );
+    m_preciseCrop->setEnabled(m_imageSelectionWidget->preciseCropAvailable());
 
     m_xInput->blockSignals(false);
     m_yInput->blockSignals(false);
@@ -577,6 +593,11 @@ void ImageEffect_RatioCrop::slotWidthChanged(int w)
 void ImageEffect_RatioCrop::slotHeightChanged(int h)
 {
     m_imageSelectionWidget->setSelectionHeight(h);
+}
+
+void ImageEffect_RatioCrop::slotPreciseCropChanged(bool a)
+{
+    m_imageSelectionWidget->setPreciseCrop(a);
 }
 
 void ImageEffect_RatioCrop::slotOrientChanged(int o)
