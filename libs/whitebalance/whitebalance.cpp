@@ -6,7 +6,8 @@
  * Date        : 2007-16-01
  * Description : white balance color correction.
  * 
- * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008 by Guillaume Castagnino <casta at xwing dot info>
  *
  * Some parts are inspired from RawPhoto implementation copyrighted 
  * 2004-2005 by Pawel T. Jochym <jochym at ifj edu pl>
@@ -39,7 +40,6 @@
 
 #include "ddebug.h"
 #include "imagehistogram.h"
-#include "blackbody.h"
 #include "whitebalance.h"
 
 namespace Digikam
@@ -69,8 +69,8 @@ public:
         exposition  = 0.0;
         gamma       = 1.0;  
         saturation  = 1.0;  
-        green       = 1.2;  
-        temperature = 4.750;
+        green       = 1.0;
+        temperature = 6500.0;
     }
 
     bool   clipSat;
@@ -127,7 +127,7 @@ void WhiteBalance::whiteBalance(uchar *data, int width, int height, bool sixteen
     if (d->clipSat) d->mg = 1.0; 
     setLUTv();
     setRGBmult();
-       
+
     // Apply White balance adjustments.
     adjustWhiteBalance(data, width, height, sixteenBit);
 }
@@ -136,41 +136,33 @@ void WhiteBalance::autoWBAdjustementFromColor(const QColor &tc, double &temperat
 {       
     // Calculate Temperature and Green component from color picked.
             
-    register int l, r, m;
-    double sR, sG, sB, mRB, t;
+    double tmin, tmax, mBR;
+    float mr, mg, mb;
 
-    t   = QMAX( QMAX(tc.red(), tc.green()), tc.blue());
-    sR  = tc.red()   / t;
-    sG  = tc.green() / t;
-    sB  = tc.blue()  / t;
-    mRB = sR / sB;
+    DDebug() << "Sums:  R:" << tc.red() << " G:" << tc.green() << " B:" << tc.blue() << endl;
 
-    DDebug() << "Sums:  R:" << sR << " G:" << sG  << " B:" << sB << endl;
-
-    l = 0;
-    r = sizeof(blackBodyWhiteBalance)/(sizeof(float)*3);
-    m = (r + l) / 2;
-
-    for (l = 0, r = sizeof(blackBodyWhiteBalance)/(sizeof(float)*3), m = (l+r)/2 ; r-l > 1 ; m = (l+r)/2) 
+    /* This is a dichotomic search based on Blue and Red layers ratio
+       to find the matching temperature
+       Adapted from ufraw (0.12.1) RGB_to_Temperature
+    */
+    tmin = 2000.0;
+    tmax = 12000.0;
+    mBR = (double)tc.blue() / (double)tc.red();
+    green = 1.0;
+    for (temperature = (tmin+tmax)/2; tmax-tmin > 10; temperature = (tmin+tmax)/2)
     {
-        if (blackBodyWhiteBalance[m][0]/blackBodyWhiteBalance[m][2] > mRB) 
-            l = m;
+        DDebug() << "Intermediate Temperature (K):" << temperature << endl;
+        setRGBmult(temperature, green, mr, mg, mb);
+        if (mr/mb > mBR)
+            tmax = temperature;
         else
-            r = m;
-
-        DDebug() << "L,M,R:  " << l << " " << m << " " << r 
-                 << " blackBodyWhiteBalance[m]=:" << blackBodyWhiteBalance[m][0]/blackBodyWhiteBalance[m][2]
-                 << endl;
+            tmin = temperature;
     }
-    
-    DDebug() << "Temperature (K):" << m*10.0+2000.0 << endl;
+    // Calculate the green level to neutralize picture
+    green = (mr / mg) / ((double)tc.green() / (double)tc.red());
 
-    t = (blackBodyWhiteBalance[m][1]/blackBodyWhiteBalance[m][0]) / (sG/sR);
-
-    DDebug() << "Green component:" << t << endl;
-
-    temperature = m*10.0+2000.0;
-    green       = t;
+    DDebug() << "Temperature (K):" << temperature << endl;
+    DDebug() << "Green component:" << green << endl;
 }
 
 void WhiteBalance::autoExposureAdjustement(uchar* data, int width, int height, bool sb,
@@ -207,25 +199,73 @@ void WhiteBalance::autoExposureAdjustement(uchar* data, int width, int height, b
     delete histogram;
 }
 
-void WhiteBalance::setRGBmult()
+void WhiteBalance::setRGBmult(double &temperature, double &green, float &mr, float &mg, float &mb)
 {
-    int   t;
     float mi;
+    double xD, yD, X, Y, Z;
 
-    if ( d->temperature > 7.0 ) d->temperature = 7.0;
+    if ( temperature > 12000 ) temperature = 12000.0;
     
-    t     = (int)(d->temperature * 100.0 - 200.0);
-    d->mr  = 1.0 / blackBodyWhiteBalance[t][0];
-    d->mg  = 1.0 / blackBodyWhiteBalance[t][1];
-    d->mb  = 1.0 / blackBodyWhiteBalance[t][2];
-    d->mg *= d->green;
+    /* Here starts the code picked from ufraw (0.12.1)
+       to convert Temperature + green multiplier to RGB multipliers
+    */
+    /* Convert between Temperature and RGB.
+     * Base on information from http://www.brucelindbloom.com/
+     * The fit for D-illuminant between 4000K and 12000K are from CIE
+     * The generalization to 2000K < T < 4000K and the blackbody fits
+     * are my own and should be taken with a grain of salt.
+     */
+    const double XYZ_to_RGB[3][3] = {
+        { 3.24071,  -0.969258,  0.0556352 },
+        {-1.53726,  1.87599,    -0.203996 },
+        {-0.498571, 0.0415557,  1.05707 } };
+    // Fit for CIE Daylight illuminant
+    if (temperature <= 4000)
+    {
+        xD = 0.27475e9/(temperature*temperature*temperature)
+             - 0.98598e6/(temperature*temperature) 
+             + 1.17444e3/temperature + 0.145986;
+    }
+    else if (temperature <= 7000)
+    {
+        xD = -4.6070e9/(temperature*temperature*temperature)
+             + 2.9678e6/(temperature*temperature)
+             + 0.09911e3/temperature + 0.244063;
+    }
+    else
+    {
+        xD = -2.0064e9/(temperature*temperature*temperature)
+             + 1.9018e6/(temperature*temperature)
+             + 0.24748e3/temperature + 0.237040;
+    }
+    yD = -3*xD*xD + 2.87*xD - 0.275;
+
+    X = xD/yD;
+    Y = 1;
+    Z = (1-xD-yD)/yD;
+    mr = X*XYZ_to_RGB[0][0] + Y*XYZ_to_RGB[1][0] + Z*XYZ_to_RGB[2][0];
+    mg = X*XYZ_to_RGB[0][1] + Y*XYZ_to_RGB[1][1] + Z*XYZ_to_RGB[2][1];
+    mb = X*XYZ_to_RGB[0][2] + Y*XYZ_to_RGB[1][2] + Z*XYZ_to_RGB[2][2];
+    /* End of the code picked to ufraw
+    */
+
+    // Apply green multiplier
+    mg = mg / green;
+
+    mr  = 1.0 / mr;
+    mg  = 1.0 / mg;
+    mb  = 1.0 / mb;
     
     // Normalize to at least 1.0, so we are not dimming colors only bumping.
-    mi    = QMIN(d->mr, d->mg);
-    mi    = QMIN(mi, d->mb);
-    d->mr /= mi;
-    d->mg /= mi;
-    d->mb /= mi;
+    mi  = QMIN(mr, QMIN(mg, mb));
+    mr /= mi;
+    mg /= mi;
+    mb /= mi;
+}
+
+void WhiteBalance::setRGBmult()
+{
+    setRGBmult(d->temperature, d->green, d->mr, d->mg, d->mb);
 }
 
 void WhiteBalance::setLUTv()

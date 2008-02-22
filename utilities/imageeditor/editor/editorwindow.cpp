@@ -894,10 +894,12 @@ void EditorWindow::applyStandardSettings()
         m_IOFileSettings->rawDecodingSettings.outputColorSpace = KDcrawIface::RawDecodingSettings::SRGB;
 
     m_IOFileSettings->rawDecodingSettings.sixteenBitsImage        = config->readBoolEntry("SixteenBitsImage", false);
-    m_IOFileSettings->rawDecodingSettings.automaticColorBalance   = config->readBoolEntry("AutomaticColorBalance", true);
-    m_IOFileSettings->rawDecodingSettings.cameraColorBalance      = config->readBoolEntry("CameraColorBalance", true);
+    m_IOFileSettings->rawDecodingSettings.whiteBalance            = (KDcrawIface::RawDecodingSettings::WhiteBalance)config->readNumEntry("WhiteBalance",
+                                                                    KDcrawIface::RawDecodingSettings::CAMERA);
+    m_IOFileSettings->rawDecodingSettings.customWhiteBalance      = config->readNumEntry("CustomWhiteBalance", 6500);
+    m_IOFileSettings->rawDecodingSettings.customWhiteBalanceGreen = config->readDoubleNumEntry("CustomWhiteBalanceGreen", 1.0);
     m_IOFileSettings->rawDecodingSettings.RGBInterpolate4Colors   = config->readBoolEntry("RGBInterpolate4Colors", false);
-    m_IOFileSettings->rawDecodingSettings.DontStretchPixels = config->readBoolEntry("DontStretchPixels", false);
+    m_IOFileSettings->rawDecodingSettings.DontStretchPixels       = config->readBoolEntry("DontStretchPixels", false);
     m_IOFileSettings->rawDecodingSettings.enableNoiseReduction    = config->readBoolEntry("EnableNoiseReduction", false);
     m_IOFileSettings->rawDecodingSettings.unclipColors            = config->readNumEntry("UnclipColors", 0);
     m_IOFileSettings->rawDecodingSettings.RAWQuality              = (KDcrawIface::RawDecodingSettings::DecodingQuality)config->readNumEntry("RAWQuality",

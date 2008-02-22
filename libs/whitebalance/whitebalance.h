@@ -6,7 +6,8 @@
  * Date        : 2007-16-01
  * Description : white balance color correction.
  * 
- * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008 by Guillaume Castagnino <casta at xwing dot info>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -45,7 +46,7 @@ public:
 
     void whiteBalance(uchar *data, int width, int height, bool sixteenBit, 
                       double black=0.0, double exposition=0.0,
-                      double temperature=4.750, double green=1.2, double dark=0.5, 
+                      double temperature=6500.0, double green=1.0, double dark=0.5, 
                       double gamma=1.0, double saturation=1.0);
 
     static void autoExposureAdjustement(uchar* data, int width, int height, bool sb,
@@ -56,6 +57,7 @@ public:
 private:
 
     void setRGBmult();
+    static void setRGBmult(double &temperature, double &green, float &mr, float &mg, float &mb);
     void setLUTv();
     void adjustWhiteBalance(uchar *data, int width, int height, bool sixteenBit);
     inline unsigned short pixelColor(int colorMult, int index, int value);

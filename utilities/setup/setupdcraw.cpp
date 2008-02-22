@@ -6,7 +6,7 @@
  * Date        : 2007-02-06
  * Description : setup RAW decoding settings.
  * 
- * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -89,8 +89,9 @@ void SetupDcraw::applySettings()
     KConfig* config = kapp->config();
     config->setGroup("ImageViewer Settings");
     config->writeEntry("SixteenBitsImage", d->dcrawSettings->sixteenBits());
-    config->writeEntry("CameraColorBalance", d->dcrawSettings->useCameraWB());
-    config->writeEntry("AutomaticColorBalance", d->dcrawSettings->useAutoColorBalance());
+    config->writeEntry("WhiteBalance", d->dcrawSettings->whiteBalance());
+    config->writeEntry("CustomWhiteBalance", d->dcrawSettings->customWhiteBalance());
+    config->writeEntry("CustomWhiteBalanceGreen", d->dcrawSettings->customWhiteBalanceGreen());
     config->writeEntry("RGBInterpolate4Colors", d->dcrawSettings->useFourColor());
     config->writeEntry("DontStretchPixels", d->dcrawSettings->useDontStretchPixels());
     config->writeEntry("EnableNoiseReduction", d->dcrawSettings->useNoiseReduction());
@@ -116,8 +117,11 @@ void SetupDcraw::readSettings()
     d->dcrawSettings->setcaBlueMultiplier(config->readDoubleNumEntry("caBlueMultiplier", 1.0));
     d->dcrawSettings->setDontStretchPixels(config->readBoolEntry("DontStretchPixels", false));
     d->dcrawSettings->setUnclipColor(config->readNumEntry("UnclipColors", 0));
-    d->dcrawSettings->setCameraWB(config->readBoolEntry("CameraColorBalance", true));
-    d->dcrawSettings->setAutoColorBalance(config->readBoolEntry("AutomaticColorBalance", true));
+    d->dcrawSettings->setWhiteBalance((KDcrawIface::RawDecodingSettings::WhiteBalance)
+                                      config->readNumEntry("WhiteBalance",
+                                      KDcrawIface::RawDecodingSettings::CAMERA));
+    d->dcrawSettings->setCustomWhiteBalance(config->readNumEntry("CustomWhiteBalance", 6500));
+    d->dcrawSettings->setCustomWhiteBalanceGreen(config->readDoubleNumEntry("CustomWhiteBalanceGreen", 1.0));
     d->dcrawSettings->setFourColor(config->readBoolEntry("RGBInterpolate4Colors", false));
     d->dcrawSettings->setQuality((KDcrawIface::RawDecodingSettings::DecodingQuality)
                                   config->readNumEntry("RAWQuality",

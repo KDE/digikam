@@ -30,5 +30,6 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 008 ==> 157149 : digiKam crash at startup.
 009 ==> 141037 : Search using Tag Name does not work
 010 ==> 158174 : Precise aspect ratio crop feature
-011 ==> 
+011 ==> 142055 : Which whitebalance is used
+012 ==> 
 
