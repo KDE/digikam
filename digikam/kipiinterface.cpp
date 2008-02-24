@@ -33,6 +33,8 @@ extern "C"
 
 // Qt includes.
 
+#include <Q3Header>
+#include <QHBoxLayout>
 #include <QDir>
 #include <QDateTime>
 #include <QFileInfo>
@@ -41,6 +43,7 @@ extern "C"
 
 // KDE includes.
 
+#include <ktabwidget.h>
 #include <klocale.h>
 #include <kconfig.h>
 #include <kfilemetainfo.h>
@@ -54,10 +57,12 @@ extern "C"
 
 #include "constants.h"
 #include "ddebug.h"
-#include "albummanager.h"
+#include "folderview.h"
+#include "folderitem.h"
 #include "albumitemhandler.h"
 #include "album.h"
 #include "albumdb.h"
+#include "albumthumbnailloader.h"
 #include "albumsettings.h"
 #include "collectionmanager.h"
 #include "databaseaccess.h"
@@ -743,6 +748,166 @@ void DigikamKipiInterface::thumbnails(const KUrl::List& list, int size)
 void DigikamKipiInterface::slotThumbnailLoaded(const LoadingDescription& desc, const QPixmap& pix)
 {
     emit gotThumbnail( KUrl(desc.filePath), pix );
+}
+
+KIPI::ImageCollectionSelector* DigikamKipiInterface::selector(QWidget *parent)
+{
+    return (new DigikamImageCollectionSelector(this, parent));
+}
+
+//-- Image Collection Selector Widget --------------------------------------------
+
+class ImageCollectionSelectorItem : public FolderCheckListItem
+{
+public:
+
+    ImageCollectionSelectorItem(Q3ListView* parent, Album* tag);
+    ImageCollectionSelectorItem(Q3ListViewItem* parent, Album* tag);
+
+    Album* album() const;
+
+private:
+
+    Album *m_album;
+};
+
+ImageCollectionSelectorItem::ImageCollectionSelectorItem(Q3ListView* parent, Album* album)
+                           : FolderCheckListItem(parent, album->title(), Q3CheckListItem::CheckBox)
+{
+    m_album = album;
+    m_album->setExtraData(listView(), this);
+}
+
+ImageCollectionSelectorItem::ImageCollectionSelectorItem(Q3ListViewItem* parent, Album* album)
+                           : FolderCheckListItem(parent, album->title(), Q3CheckListItem::CheckBox)
+{
+    m_album = album;
+    m_album->setExtraData(listView(), this);
+}
+
+Album* ImageCollectionSelectorItem::album() const
+{
+    return m_album;
+}
+
+DigikamImageCollectionSelector::DigikamImageCollectionSelector(DigikamKipiInterface* iface, QWidget *parent)
+                              : KIPI::ImageCollectionSelector(parent)
+{
+    m_iface      = iface;
+    m_tab        = new KTabWidget(this);
+    m_albumsView = new FolderView(m_tab);
+    m_albumsView->addColumn(i18n("My Albums"));
+    m_albumsView->setColumnWidthMode(0, Q3ListView::Maximum);
+    m_albumsView->setResizeMode(Q3ListView::AllColumns);
+    m_albumsView->setRootIsDecorated(true);
+    m_albumsView->header()->hide();
+   
+    m_tagsView = new FolderView(m_tab);
+    m_tagsView->addColumn(i18n("My Tags"));
+    m_tagsView->setColumnWidthMode(0, Q3ListView::Maximum);
+    m_tagsView->setResizeMode(Q3ListView::AllColumns);
+    m_tagsView->setRootIsDecorated(true);
+    m_tagsView->header()->hide();
+
+    m_tab->addTab(m_albumsView, i18n("My Albums"));
+    m_tab->addTab(m_tagsView, i18n("My Tags"));
+
+    QHBoxLayout *hlay = new QHBoxLayout(this);
+    hlay->addWidget(m_tab);
+    hlay->setMargin(0);
+    hlay->setSpacing(0);
+
+    // -- Load all Album views-------------------------------------------------------------
+
+    loadTreeView(AlbumManager::instance()->allPAlbums(), m_albumsView); 
+    loadTreeView(AlbumManager::instance()->allTAlbums(), m_tagsView); 
+}
+
+DigikamImageCollectionSelector::~DigikamImageCollectionSelector() 
+{
+}
+
+void DigikamImageCollectionSelector::loadTreeView(const AlbumList& aList, FolderView *view)
+{
+    for (AlbumList::const_iterator it = aList.begin(); it != aList.end(); ++it)
+    {
+        Album* album = *it;
+
+        ImageCollectionSelectorItem* item = 0;
+        
+        if (album->isRoot())
+        {
+            item = new ImageCollectionSelectorItem(view, album);
+            item->setOpen(true);
+        }
+        else
+        {
+            ImageCollectionSelectorItem* pitem = (ImageCollectionSelectorItem*)(album->parent()->extraData(view));
+            if (!pitem)
+            {
+                DWarning() << "Failed to find parent for Album " << album->title() << endl;
+                continue;
+            }
+
+            item = new ImageCollectionSelectorItem(pitem, album);
+        }
+
+        if (item)
+        {
+            PAlbum* palbum = dynamic_cast<PAlbum*>(album);
+            if (palbum)
+                item->setPixmap(0, AlbumThumbnailLoader::instance()->getStandardAlbumIcon(palbum));
+            else
+            {
+                TAlbum* talbum = dynamic_cast<TAlbum*>(album);
+                if (talbum)
+                    item->setPixmap(0, AlbumThumbnailLoader::instance()->getStandardTagIcon(talbum));
+            }
+
+            album->setExtraData(view, item);
+
+            if (album == AlbumManager::instance()->currentAlbum())
+            {
+                item->setOpen(true);
+                view->setSelected(item, true);
+                view->ensureItemVisible(item);
+            }
+        }
+    }
+}
+
+QList<KIPI::ImageCollection> DigikamImageCollectionSelector::selectedImageCollections() const
+{
+    QString ext = m_iface->fileExtensions();
+    QList<KIPI::ImageCollection> list; 
+ 
+    Q3ListViewItemIterator it(m_albumsView, Q3ListViewItemIterator::Checked);
+    while (it.current())
+    {
+        ImageCollectionSelectorItem* item = dynamic_cast<ImageCollectionSelectorItem*>(*it);
+        if (item)
+        {
+            DigikamImageCollection *col = new DigikamImageCollection(DigikamImageCollection::AllItems, item->album(), ext);
+            list.append(col);
+         }
+         ++it;
+    }
+
+    Q3ListViewItemIterator it2(m_tagsView, Q3ListViewItemIterator::Checked);
+    while (it2.current())
+    {
+        ImageCollectionSelectorItem* item = dynamic_cast<ImageCollectionSelectorItem*>(*it2);
+        if (item)
+        {
+            DigikamImageCollection *col = new DigikamImageCollection(DigikamImageCollection::AllItems, item->album(), ext);
+            list.append(col);
+         }
+         ++it2;
+    }
+
+    DDebug() << list.count() << " collection items selected" << endl;
+
+    return list;
 }
 
 }  // namespace Digikam

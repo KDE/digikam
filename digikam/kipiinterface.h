@@ -42,32 +42,28 @@
 
 #include <libkipi/interface.h>
 #include <libkipi/imagecollection.h>
+#include <libkipi/imagecollectionselector.h>
 #include <libkipi/imageinfo.h>
 #include <libkipi/imageinfoshared.h>
 #include <libkipi/imagecollectionshared.h>
 
 // Local includes
 
+#include "albummanager.h"
 #include "loadingdescription.h"
 #include "imageinfo.h"
 
 class QDateTime;
 
-namespace KIPI
-{
-class Interface;
-class ImageCollection;
-class ImageInfo;
-}
+class KTabWidget;
 
 namespace Digikam
 {
-
 class ThumbnailLoadThread;
-class AlbumManager;
 class Album;
 class PAlbum;
 class TAlbum;
+class FolderView;
 
 /** DigikamImageInfo: class to get/set image information/properties in a digiKam album. */
 
@@ -107,7 +103,7 @@ private:
 };
 
 
-/** DigikamImageCollection: class to get/set image collection information/properties in a digiKam 
+/** DigikamImageCollection: class to get/set image collection informations/properties using digiKam 
     album database. */
 
 class DigikamImageCollection : public KIPI::ImageCollectionShared
@@ -160,7 +156,7 @@ class DigikamKipiInterface : public KIPI::Interface
 
 public:
 
-    DigikamKipiInterface( QObject *parent, const char *name=0);
+    DigikamKipiInterface(QObject *parent, const char *name=0);
     ~DigikamKipiInterface();
 
     KIPI::ImageCollection currentAlbum();
@@ -178,6 +174,8 @@ public:
     void thumbnail( const KUrl& url, int size );
     void thumbnails( const KUrl::List& list, int size );
 
+    KIPI::ImageCollectionSelector* selector(QWidget *parent);
+
 public slots:
 
     void slotSelectionChanged( bool b );
@@ -191,6 +189,32 @@ private:
 
     AlbumManager        *m_albumManager;
     ThumbnailLoadThread *m_thumbLoadThread;
+};
+
+/** DigikamImageCollectionSelector: widget select image collection using digiKam album folder views */
+
+class DigikamImageCollectionSelector : public KIPI::ImageCollectionSelector
+{
+    Q_OBJECT
+
+public:
+
+    DigikamImageCollectionSelector(DigikamKipiInterface *iface, QWidget *parent=0);
+    ~DigikamImageCollectionSelector();
+
+    QList<KIPI::ImageCollection> selectedImageCollections() const;
+
+private:
+
+    void loadTreeView(const AlbumList& aList, FolderView *view);
+
+private:
+
+    KTabWidget           *m_tab;    
+
+    FolderView           *m_albumsView;
+    FolderView           *m_tagsView;
+    DigikamKipiInterface *m_iface; 
 };
 
 }  // namespace Digikam
