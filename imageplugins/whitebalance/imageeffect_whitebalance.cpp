@@ -7,8 +7,9 @@
  * Description : a digiKam image editor plugin to correct 
  *               image white balance 
  * 
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * 
+ * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008 by Guillaume Castagnino <casta at xwing dot info>
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -191,7 +192,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
     m_adjTemperatureLabel = new QLabel(i18n("Adjustment:"), gboxSettings);
     m_temperatureInput    = new KDoubleNumInput(gboxSettings);
     m_temperatureInput->setDecimals(1);
-    m_temperatureInput->setRange(2200.0, 7000.0, 10.0, true);
+    m_temperatureInput->setRange(2000.0, 12000.0, 10.0, true);
     m_temperatureInput->setWhatsThis( i18n("<p>Set here the white balance color temperature in Kelvin."));
     
     m_temperaturePresetLabel = new QLabel(i18n("Preset:"), gboxSettings);
@@ -266,7 +267,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
     m_greenLabel = new QLabel(i18n("Green:"), gboxSettings);
     m_greenInput = new KDoubleNumInput(gboxSettings);
     m_greenInput->setDecimals(2);
-    m_greenInput->setRange(1.0, 2.5, 0.01, true);
+    m_greenInput->setRange(0.2, 2.5, 0.01, true);
     m_greenInput->setWhatsThis( i18n("<p>Set here the green component to set magenta color "
                                      "cast removal level."));
 
@@ -634,7 +635,7 @@ void ImageEffect_WhiteBalance::slotEffect()
 
     m_destinationPreviewData = new uchar[w*h*(sb ? 8 : 4)];
 
-    double temperature  = m_temperatureInput->value()/1000.0;
+    double temperature  = m_temperatureInput->value();
     double dark         = m_darkInput->value();
     double black        = m_blackInput->value();
     double mainExposure = m_mainExposureInput->value();
@@ -667,7 +668,7 @@ void ImageEffect_WhiteBalance::finalRendering()
     int h                      = iface->originalHeight();
     bool sb                    = iface->originalSixteenBit();
 
-    double temperature  = m_temperatureInput->value()/1000.0;
+    double temperature  = m_temperatureInput->value();
     double dark         = m_darkInput->value();
     double black        = m_blackInput->value();
     double mainExposure = m_mainExposureInput->value();
@@ -699,16 +700,16 @@ void ImageEffect_WhiteBalance::resetValues()
     m_greenInput->blockSignals(true);
     m_temperaturePresetCB->blockSignals(true);
     
-    // Neutral color temperature settings.
+    // Neutral color temperature settings is D65.
     m_darkInput->setValue(0.5);
     m_blackInput->setValue(0.0);
     m_mainExposureInput->setValue(0.0);
     m_fineExposureInput->setValue(0.0);
     m_gammaInput->setValue(1.0);  
     m_saturationInput->setValue(1.0);  
-    m_greenInput->setValue(1.2);  
-    m_temperaturePresetCB->setCurrentIndex(Neutral);
-    slotTemperaturePresetChanged(Neutral);
+    m_greenInput->setValue(1.0);
+    m_temperaturePresetCB->setCurrentIndex(DaylightD65);
+    slotTemperaturePresetChanged(DaylightD65);
     
     m_previewWidget->resetSpotPosition();    
     m_channelCB->setCurrentIndex(LuminosityChannel);
@@ -741,8 +742,8 @@ void ImageEffect_WhiteBalance::readUserSettings()
     m_fineExposureInput->setValue(group.readEntry("FineExposure", 0.0));
     m_gammaInput->setValue(group.readEntry("Gamma", 1.0));  
     m_saturationInput->setValue(group.readEntry("Saturation", 1.0));  
-    m_greenInput->setValue(group.readEntry("Green", 1.2));  
-    m_temperatureInput->setValue(group.readEntry("Temperature", 4750.0));
+    m_greenInput->setValue(group.readEntry("Green", 1.0));
+    m_temperatureInput->setValue(group.readEntry("Temperature", 6500.0));
     slotTemperatureChanged(m_temperatureInput->value());
     slotChannelChanged(m_channelCB->currentIndex());
     slotScaleChanged(m_scaleBG->checkedId());
