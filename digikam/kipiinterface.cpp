@@ -750,7 +750,7 @@ void DigikamKipiInterface::slotThumbnailLoaded(const LoadingDescription& desc, c
     emit gotThumbnail( KUrl(desc.filePath), pix );
 }
 
-KIPI::ImageCollectionSelector* DigikamKipiInterface::selector(QWidget *parent)
+KIPI::ImageCollectionSelector* DigikamKipiInterface::imageCollectionSelector(QWidget *parent)
 {
     return (new DigikamImageCollectionSelector(this, parent));
 }

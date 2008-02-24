@@ -174,7 +174,7 @@ public:
     void thumbnail( const KUrl& url, int size );
     void thumbnails( const KUrl::List& list, int size );
 
-    KIPI::ImageCollectionSelector* selector(QWidget *parent);
+    KIPI::ImageCollectionSelector* imageCollectionSelector(QWidget *parent);
 
 public slots:
 
