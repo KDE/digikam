@@ -54,6 +54,7 @@
 #include "imageinfo.h"
 
 class QDateTime;
+class QTreeWidget;
 
 class KTabWidget;
 
@@ -63,7 +64,6 @@ class ThumbnailLoadThread;
 class Album;
 class PAlbum;
 class TAlbum;
-class FolderView;
 
 /** DigikamImageInfo: class to get/set image information/properties in a digiKam album. */
 
@@ -206,14 +206,14 @@ public:
 
 private:
 
-    void loadTreeView(const AlbumList& aList, FolderView *view);
+    void loadTreeView(const AlbumList& aList, QTreeWidget *view);
 
 private:
 
     KTabWidget           *m_tab;    
 
-    FolderView           *m_albumsView;
-    FolderView           *m_tagsView;
+    QTreeWidget          *m_albumsView;
+    QTreeWidget          *m_tagsView;
     DigikamKipiInterface *m_iface; 
 };
 

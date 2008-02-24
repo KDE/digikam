@@ -33,7 +33,10 @@ extern "C"
 
 // Qt includes.
 
-#include <Q3Header>
+#include <QHeaderView>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
+#include <QTreeWidgetItemIterator>
 #include <QHBoxLayout>
 #include <QDir>
 #include <QDateTime>
@@ -57,8 +60,6 @@ extern "C"
 
 #include "constants.h"
 #include "ddebug.h"
-#include "folderview.h"
-#include "folderitem.h"
 #include "albumitemhandler.h"
 #include "album.h"
 #include "albumdb.h"
@@ -757,12 +758,12 @@ KIPI::ImageCollectionSelector* DigikamKipiInterface::imageCollectionSelector(QWi
 
 //-- Image Collection Selector Widget --------------------------------------------
 
-class ImageCollectionSelectorItem : public FolderCheckListItem
+class ImageCollectionSelectorItem : public QTreeWidgetItem
 {
 public:
 
-    ImageCollectionSelectorItem(Q3ListView* parent, Album* tag);
-    ImageCollectionSelectorItem(Q3ListViewItem* parent, Album* tag);
+    ImageCollectionSelectorItem(QTreeWidget* parent, Album* tag);
+    ImageCollectionSelectorItem(QTreeWidgetItem* parent, Album* tag);
 
     Album* album() const;
 
@@ -771,18 +772,20 @@ private:
     Album *m_album;
 };
 
-ImageCollectionSelectorItem::ImageCollectionSelectorItem(Q3ListView* parent, Album* album)
-                           : FolderCheckListItem(parent, album->title(), Q3CheckListItem::CheckBox)
+ImageCollectionSelectorItem::ImageCollectionSelectorItem(QTreeWidget* parent, Album* album)
+                           : QTreeWidgetItem(parent, QStringList() << album->title())
 {
     m_album = album;
-    m_album->setExtraData(listView(), this);
+    m_album->setExtraData(treeWidget(), this);
+    setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled); 
 }
 
-ImageCollectionSelectorItem::ImageCollectionSelectorItem(Q3ListViewItem* parent, Album* album)
-                           : FolderCheckListItem(parent, album->title(), Q3CheckListItem::CheckBox)
+ImageCollectionSelectorItem::ImageCollectionSelectorItem(QTreeWidgetItem* parent, Album* album)
+                           : QTreeWidgetItem(parent, QStringList() << album->title())
 {
     m_album = album;
-    m_album->setExtraData(listView(), this);
+    m_album->setExtraData(treeWidget(), this);
+    setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled); 
 }
 
 Album* ImageCollectionSelectorItem::album() const
@@ -795,18 +798,27 @@ DigikamImageCollectionSelector::DigikamImageCollectionSelector(DigikamKipiInterf
 {
     m_iface      = iface;
     m_tab        = new KTabWidget(this);
-    m_albumsView = new FolderView(m_tab);
-    m_albumsView->addColumn(i18n("My Albums"));
-    m_albumsView->setColumnWidthMode(0, Q3ListView::Maximum);
-    m_albumsView->setResizeMode(Q3ListView::AllColumns);
+
+    m_albumsView = new QTreeWidget(m_tab);
+    m_albumsView->setColumnCount(1);
     m_albumsView->setRootIsDecorated(true);
+    m_albumsView->setSelectionMode(QAbstractItemView::SingleSelection);
+    m_albumsView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    m_albumsView->setAllColumnsShowFocus(true);
+    m_albumsView->setDragEnabled(false);
+    m_albumsView->setDropIndicatorShown(false);
+    m_albumsView->setAcceptDrops(false);
     m_albumsView->header()->hide();
    
-    m_tagsView = new FolderView(m_tab);
-    m_tagsView->addColumn(i18n("My Tags"));
-    m_tagsView->setColumnWidthMode(0, Q3ListView::Maximum);
-    m_tagsView->setResizeMode(Q3ListView::AllColumns);
+    m_tagsView = new QTreeWidget(m_tab);
+    m_tagsView->setColumnCount(1);
     m_tagsView->setRootIsDecorated(true);
+    m_tagsView->setSelectionMode(QAbstractItemView::SingleSelection);
+    m_tagsView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    m_tagsView->setAllColumnsShowFocus(true);
+    m_tagsView->setDragEnabled(false);
+    m_tagsView->setDropIndicatorShown(false);
+    m_tagsView->setAcceptDrops(false);
     m_tagsView->header()->hide();
 
     m_tab->addTab(m_albumsView, i18n("My Albums"));
@@ -827,7 +839,7 @@ DigikamImageCollectionSelector::~DigikamImageCollectionSelector()
 {
 }
 
-void DigikamImageCollectionSelector::loadTreeView(const AlbumList& aList, FolderView *view)
+void DigikamImageCollectionSelector::loadTreeView(const AlbumList& aList, QTreeWidget *view)
 {
     for (AlbumList::const_iterator it = aList.begin(); it != aList.end(); ++it)
     {
@@ -838,7 +850,7 @@ void DigikamImageCollectionSelector::loadTreeView(const AlbumList& aList, Folder
         if (album->isRoot())
         {
             item = new ImageCollectionSelectorItem(view, album);
-            item->setOpen(true);
+            item->setExpanded(true);
         }
         else
         {
@@ -854,23 +866,25 @@ void DigikamImageCollectionSelector::loadTreeView(const AlbumList& aList, Folder
 
         if (item)
         {
+            item->setCheckState(0, Qt::Unchecked);
             PAlbum* palbum = dynamic_cast<PAlbum*>(album);
             if (palbum)
-                item->setPixmap(0, AlbumThumbnailLoader::instance()->getStandardAlbumIcon(palbum));
+                item->setIcon(0, AlbumThumbnailLoader::instance()->getStandardAlbumIcon(palbum));
             else
             {
                 TAlbum* talbum = dynamic_cast<TAlbum*>(album);
                 if (talbum)
-                    item->setPixmap(0, AlbumThumbnailLoader::instance()->getStandardTagIcon(talbum));
+                    item->setIcon(0, AlbumThumbnailLoader::instance()->getStandardTagIcon(talbum));
             }
 
             album->setExtraData(view, item);
 
             if (album == AlbumManager::instance()->currentAlbum())
             {
-                item->setOpen(true);
-                view->setSelected(item, true);
-                view->ensureItemVisible(item);
+                item->setCheckState(0, Qt::Checked);
+                item->setExpanded(true);
+                view->setCurrentItem(item);
+                view->scrollToItem(item);
             }
         }
     }
@@ -880,9 +894,9 @@ QList<KIPI::ImageCollection> DigikamImageCollectionSelector::selectedImageCollec
 {
     QString ext = m_iface->fileExtensions();
     QList<KIPI::ImageCollection> list; 
- 
-    Q3ListViewItemIterator it(m_albumsView, Q3ListViewItemIterator::Checked);
-    while (it.current())
+
+    QTreeWidgetItemIterator it(m_albumsView, QTreeWidgetItemIterator::Checked);
+    while (*it)
     {
         ImageCollectionSelectorItem* item = dynamic_cast<ImageCollectionSelectorItem*>(*it);
         if (item)
@@ -893,8 +907,8 @@ QList<KIPI::ImageCollection> DigikamImageCollectionSelector::selectedImageCollec
          ++it;
     }
 
-    Q3ListViewItemIterator it2(m_tagsView, Q3ListViewItemIterator::Checked);
-    while (it2.current())
+    QTreeWidgetItemIterator it2(m_tagsView, QTreeWidgetItemIterator::Checked);
+    while (*it2)
     {
         ImageCollectionSelectorItem* item = dynamic_cast<ImageCollectionSelectorItem*>(*it2);
         if (item)
