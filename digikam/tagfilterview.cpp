@@ -129,7 +129,7 @@ TagFilterViewItem::TagFilterViewItem(Q3ListViewItem* parent, TAlbum* album)
     setDragEnabled(true);
 
     if (m_album)
-        album->setExtraData(listView(), this);
+        m_album->setExtraData(listView(), this);
 }
 
 void TagFilterViewItem::refresh()
