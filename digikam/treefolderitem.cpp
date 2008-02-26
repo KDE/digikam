@@ -26,27 +26,18 @@
 #include <QTreeWidget>
 #include <QFont>
 
-#include <QFrame>
-#include <QFontMetrics>
-#include <QPainter>
-#include <QPixmap>
-#include <QStyle>
-#include <QStyleOption>
-
 // Local includes.
 
-#include "thumbnailsize.h"
-#include "albumsettings.h"
 #include "treefolderview.h"
 #include "treefolderitem.h"
 
 namespace Digikam
 {
 
-TreeFolderItem::TreeFolderItem(QTreeWidget* parent, const QString& text, bool special)
+TreeFolderItem::TreeFolderItem(QTreeWidget *parent, const QString& text, bool special)
               : QTreeWidgetItem(parent, QStringList() << text)
 {
-    m_focus = false;
+    setFocus(false);
 
     if (special)
     {
@@ -57,10 +48,10 @@ TreeFolderItem::TreeFolderItem(QTreeWidget* parent, const QString& text, bool sp
     }
 }
 
-TreeFolderItem::TreeFolderItem(QTreeWidgetItem* parent, const QString& text, bool special)
+TreeFolderItem::TreeFolderItem(QTreeWidgetItem *parent, const QString& text, bool special)
               : QTreeWidgetItem(parent, QStringList() << text)
 {
-    m_focus = false;
+    setFocus(false);
 
     if (special)
     {
@@ -78,11 +69,24 @@ TreeFolderItem::~TreeFolderItem()
 void TreeFolderItem::setFocus(bool b)
 {
     m_focus = b;
+    if (m_focus)
+    {
+        QFont f = font(0);
+        f.setBold(true);
+        setFont(0, f);
+        setForeground(0, treeWidget()->palette().link());
+    }
+
 }
 
 bool TreeFolderItem::focus() const
 {
     return m_focus;
+}
+
+int TreeFolderItem::id() const
+{
+    return 0;
 }
 
 /*
@@ -162,19 +166,14 @@ void TreeFolderItem::setup()
 }
 */
 
-int TreeFolderItem::id() const
-{
-    return 0;
-}
-
 // ------------------------------------------------------------------------------------
 
-TreeFolderCheckListItem::TreeFolderCheckListItem(QTreeWidget* parent, const QString& text)
+TreeFolderCheckListItem::TreeFolderCheckListItem(QTreeWidget *parent, const QString& text)
                        : QTreeWidgetItem(parent, QStringList() << text)
 {
 }
 
-TreeFolderCheckListItem::TreeFolderCheckListItem(QTreeWidgetItem* parent, const QString& text)
+TreeFolderCheckListItem::TreeFolderCheckListItem(QTreeWidgetItem *parent, const QString& text)
                        : QTreeWidgetItem(parent, QStringList() << text)
 {
 }

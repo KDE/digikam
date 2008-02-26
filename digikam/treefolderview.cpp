@@ -63,11 +63,6 @@ public:
 
     bool             active;
 
-    int              itemHeight;
-
-    QPixmap          itemRegPix;
-    QPixmap          itemSelPix;
-
     QPoint           dragStartPos;
 
     TreeFolderItem  *dragItem;
@@ -77,10 +72,18 @@ public:
 //-----------------------------------------------------------------------------
 
 TreeFolderView::TreeFolderView(QWidget *parent, const char *name)
-              : Q3ListView(parent)
+              : QTreeWidget(parent)
 {
     d = new TreeFolderViewPriv;
     setObjectName(name);
+    setColumnCount(1);
+    setRootIsDecorated(true);
+    setSelectionMode(QAbstractItemView::SingleSelection);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    setAllColumnsShowFocus(true);
+    setDragEnabled(true);
+    setDropIndicatorShown(true);
+    setAcceptDrops(true);
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
@@ -91,7 +94,6 @@ TreeFolderView::TreeFolderView(QWidget *parent, const char *name)
     connect(AlbumThumbnailLoader::instance(), SIGNAL(signalReloadThumbnails()),
             this, SLOT(slotIconSizeChanged()));
 
-    setColumnAlignment(0, Qt::AlignLeft|Qt::AlignVCenter);
     fontChange(font());
 }
 
@@ -114,69 +116,27 @@ bool TreeFolderView::active() const
     return d->active;
 }
 
-int TreeFolderView::itemHeight() const
-{
-    return d->itemHeight;
-}
-
-QRect TreeFolderView::itemRect(Q3ListViewItem *item) const
-{
-    if(!item)
-        return QRect();
-
-    QRect r = Q3ListView::itemRect(item);
-    r.setLeft(r.left()+(item->depth()+(rootIsDecorated() ? 1 : 0))*treeStepSize());
-    return r;
-}
-
-QPixmap TreeFolderView::itemBasePixmapRegular() const
-{
-    return d->itemRegPix;
-}
-
-QPixmap TreeFolderView::itemBasePixmapSelected() const
-{
-    return d->itemSelPix;    
-}
-
-void TreeFolderView::resizeEvent(QResizeEvent* e)
-{
-    Q3ListView::resizeEvent(e);
-
-    int w = frameRect().width();
-    int h = itemHeight();
-    if (d->itemRegPix.width() != w ||
-        d->itemRegPix.height() != h)
-    {
-        slotThemeChanged();
-    }
-}
-
 void TreeFolderView::fontChange(const QFont& oldFont)
 {
-    // this is bad, since the settings value might not always be the _real_ height of the thumbnail.
-    // (e.g. when it is blended, as for the tags)
-    d->itemHeight = qMax(AlbumThumbnailLoader::instance()->thumbnailSize() + 2*itemMargin(), fontMetrics().height());
-    Q3ListView::fontChange(oldFont);
+    QTreeWidget::fontChange(oldFont);
     slotThemeChanged();
 }
 
 void TreeFolderView::slotIconSizeChanged()
 {
-    d->itemHeight = qMax(AlbumThumbnailLoader::instance()->thumbnailSize() + 2*itemMargin(), fontMetrics().height());
     slotThemeChanged();
 }
 
-void TreeFolderView::contentsMouseMoveEvent(QMouseEvent *e)
+void TreeFolderView::mouseMoveEvent(QMouseEvent *e)
 {
-    Q3ListView::contentsMouseMoveEvent(e);
+    QTreeWidget::mouseMoveEvent(e);
 
     if(e->buttons() == Qt::NoButton)
     {
         if(KGlobalSettings::changeCursorOverIcon())
         {
             QPoint vp = contentsToViewport(e->pos());
-            Q3ListViewItem *item = itemAt(vp);
+            QTreeWidgetItem *item = itemAt(vp);
             if (mouseInItemRect(item, vp.x()))
                 setCursor(Qt::PointingHandCursor);
             else
@@ -198,9 +158,9 @@ void TreeFolderView::contentsMouseMoveEvent(QMouseEvent *e)
     }
 }
 
-void TreeFolderView::contentsMousePressEvent(QMouseEvent *e)
+void TreeFolderView::mousePressEvent(QMouseEvent *e)
 {
-    Q3ListView::contentsMousePressEvent(e);
+    QTreeWidget::mousePressEvent(e);
 
     QPoint vp            = contentsToViewport(e->pos());
     TreeFolderItem *item = dynamic_cast<TreeFolderItem*>(itemAt(vp));
@@ -213,18 +173,11 @@ void TreeFolderView::contentsMousePressEvent(QMouseEvent *e)
     }
 }
 
-void TreeFolderView::contentsMouseReleaseEvent(QMouseEvent *e)
+void TreeFolderView::mouseReleaseEvent(QMouseEvent *e)
 {
-    Q3ListView::contentsMouseReleaseEvent(e);
+    QTreeWidget::mouseReleaseEvent(e);
 
     d->dragItem = 0;
-}
-
-void TreeFolderView::startDrag()
-{
-    Q3DragObject *o = dragObject();
-    if(o)
-        o->drag();
 }
 
 TreeFolderItem* TreeFolderView::dragItem() const
@@ -232,16 +185,16 @@ TreeFolderItem* TreeFolderView::dragItem() const
     return d->dragItem;
 }
 
-void TreeFolderView::contentsDragEnterEvent(QDragEnterEvent *e)
+void TreeFolderView::dragEnterEvent(QDragEnterEvent *e)
 {
-    Q3ListView::contentsDragEnterEvent(e);
+    QTreeWidget::dragEnterEvent(e);
 
     e->setAccepted(acceptDrop(e));
 }
 
-void TreeFolderView::contentsDragLeaveEvent(QDragLeaveEvent * e)
+void TreeFolderView::dragLeaveEvent(QDragLeaveEvent * e)
 {
-    Q3ListView::contentsDragLeaveEvent(e);
+    QTreeWidget::dragLeaveEvent(e);
 
     if(d->oldHighlightItem)
     {
@@ -251,9 +204,9 @@ void TreeFolderView::contentsDragLeaveEvent(QDragLeaveEvent * e)
     }
 }
 
-void TreeFolderView::contentsDragMoveEvent(QDragMoveEvent *e)
+void TreeFolderView::dragMoveEvent(QDragMoveEvent *e)
 {
-    Q3ListView::contentsDragMoveEvent(e);
+    QTreeWidget::dragMoveEvent(e);
 
     QPoint vp            = contentsToViewport(e->pos());
     TreeFolderItem *item = dynamic_cast<TreeFolderItem*>(itemAt(vp));
@@ -271,9 +224,9 @@ void TreeFolderView::contentsDragMoveEvent(QDragMoveEvent *e)
     e->setAccepted(acceptDrop(e));
 }
 
-void TreeFolderView::contentsDropEvent(QDropEvent *e)
+void TreeFolderView::dropEvent(QDropEvent *e)
 {
-    Q3ListView::contentsDropEvent(e);
+    QTreeWidget::dropEvent(e);
 
     if(d->oldHighlightItem)
     {
@@ -288,7 +241,7 @@ bool TreeFolderView::acceptDrop(const QDropEvent *) const
     return false;
 }
 
-bool TreeFolderView::mouseInItemRect(Q3ListViewItem* item, int x) const
+bool TreeFolderView::mouseInItemRect(QTreeWidgetItem* item, int x) const
 {
     if (!item)
         return false;
@@ -304,12 +257,7 @@ bool TreeFolderView::mouseInItemRect(Q3ListViewItem* item, int x) const
 
 void TreeFolderView::slotThemeChanged()
 {
-    int w = frameRect().width();
-    int h = itemHeight();
-
-    d->itemRegPix = ThemeEngine::instance()->listRegPixmap(w, h);
-    d->itemSelPix = ThemeEngine::instance()->listSelPixmap(w, h);
-
+/* TODO
     QPalette plt(palette());
     plt.setColor(QPalette::Active, QPalette::Base, 
                  ThemeEngine::instance()->baseColor());
@@ -334,6 +282,7 @@ void TreeFolderView::slotThemeChanged()
     setPalette(plt);
 
     viewport()->update();
+*/
 }
 
 void TreeFolderView::slotAllAlbumsLoaded()
@@ -358,7 +307,7 @@ void TreeFolderView::loadViewState()
 
     TreeFolderItem *item      = 0;
     TreeFolderItem *foundItem = 0;
-    Q3ListViewItemIterator it(this->lastItem());
+    QTreeWidgetItemIterator it(lastItem());
 
     for( ; it.current(); --it)
     {
@@ -401,7 +350,7 @@ void TreeFolderView::saveViewState()
         group.writeEntry("LastSelectedItem", 0);
 
     QList<int> openFolders;
-    Q3ListViewItemIterator it(this);
+    QTreeWidgetItemIterator it(this);
     for( ; it.current(); ++it)
     {
         item = dynamic_cast<TreeFolderItem*>(it.current());
@@ -413,7 +362,7 @@ void TreeFolderView::saveViewState()
 
 void TreeFolderView::slotSelectionChanged()
 {
-    Q3ListView::selectionChanged();
+    QTreeWidget::selectionChanged();
 }
 
 void TreeFolderView::selectItem(int)

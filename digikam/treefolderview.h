@@ -26,7 +26,7 @@
 
 // Qt includes.
 
-#include <Q3ListView>
+#include <QTreeWidget>
 #include <QResizeEvent>
 #include <QMouseEvent>
 #include <QDragMoveEvent>
@@ -45,39 +45,32 @@ namespace Digikam
 class TreeFolderViewPriv;
 class TreeFolderItem;
 
-class DIGIKAM_EXPORT TreeFolderView : public Q3ListView
+class DIGIKAM_EXPORT TreeFolderView : public QTreeWidget
 {
     Q_OBJECT
 
 public:
 
-    TreeFolderView(QWidget *parent, const char *name = "TreeFolderView");
+    TreeFolderView(QWidget *parent, const char *name="TreeFolderView");
     virtual ~TreeFolderView();
 
     void setActive(bool val);
     bool active() const;
 
-    int      itemHeight() const;
-    QRect    itemRect(Q3ListViewItem *item) const;
-    QPixmap  itemBasePixmapRegular() const;
-    QPixmap  itemBasePixmapSelected() const;
-
 protected:
 
-    void contentsMousePressEvent(QMouseEvent *e);
-    void contentsMouseReleaseEvent(QMouseEvent *e);
-    void contentsMouseMoveEvent(QMouseEvent *e);
-    void contentsDragEnterEvent(QDragEnterEvent *e);
-    void contentsDragMoveEvent(QDragMoveEvent *e);
-    void contentsDragLeaveEvent(QDragLeaveEvent * e);
-    void contentsDropEvent(QDropEvent *e);
+    void mousePressEvent(QMouseEvent*);
+    void mouseReleaseEvent(QMouseEvent*);
+    void mouseMoveEvent(QMouseEvent*);
+    void dragEnterEvent(QDragEnterEvent*);
+    void dragMoveEvent(QDragMoveEvent*);
+    void dragLeaveEvent(QDragLeaveEvent*);
+    void dropEvent(QDropEvent*);
 
     virtual bool acceptDrop(const QDropEvent *e) const;
 
-    void startDrag();
     TreeFolderItem* dragItem() const;
 
-    void resizeEvent(QResizeEvent* e);
     void fontChange(const QFont& oldFont);
 
     virtual void selectItem(int id);
@@ -88,7 +81,7 @@ protected:
     /** writes the views state to disk */
     virtual void saveViewState();
 
-    bool mouseInItemRect(Q3ListViewItem* item, int x) const;
+    bool mouseInItemRect(QTreeWidgetItem* item, int x) const;
 
 protected slots:
 
