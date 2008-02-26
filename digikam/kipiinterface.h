@@ -46,6 +46,7 @@
 #include <libkipi/imageinfo.h>
 #include <libkipi/imageinfoshared.h>
 #include <libkipi/imagecollectionshared.h>
+#include <libkipi/uploadwidget.h>
 
 // Local includes
 
@@ -175,6 +176,7 @@ public:
     void thumbnails( const KUrl::List& list, int size );
 
     KIPI::ImageCollectionSelector* imageCollectionSelector(QWidget *parent);
+    KIPI::UploadWidget* uploadWidget(QWidget *parent);
 
 public slots:
 
@@ -191,7 +193,7 @@ private:
     ThumbnailLoadThread *m_thumbLoadThread;
 };
 
-/** DigikamImageCollectionSelector: widget select image collection using digiKam album folder views */
+/** DigikamImageCollectionSelector: a widget to select image collections using digiKam album folder views */
 
 class DigikamImageCollectionSelector : public KIPI::ImageCollectionSelector
 {
@@ -214,6 +216,29 @@ private:
 
     QTreeWidget          *m_albumsView;
     QTreeWidget          *m_tagsView;
+    DigikamKipiInterface *m_iface; 
+};
+
+/** DigikamUploadWidget: widget to select an image collection to upload new items using digiKam album folder views */
+
+class DigikamUploadWidget : public KIPI::UploadWidget
+{
+    Q_OBJECT
+
+public:
+
+    DigikamUploadWidget(DigikamKipiInterface *iface, QWidget *parent=0);
+    ~DigikamUploadWidget();
+
+    KIPI::ImageCollection selectedImageCollection() const;
+
+private:
+
+    void populateTreeView(const AlbumList& aList, QTreeWidget *view);
+
+private:
+
+    QTreeWidget          *m_albumsView;
     DigikamKipiInterface *m_iface; 
 };
 

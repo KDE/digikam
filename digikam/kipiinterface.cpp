@@ -308,7 +308,7 @@ void DigikamImageInfo::setAngle(int /*angle*/)
 
 //-- Image Collection ------------------------------------------------------------
 
-DigikamImageCollection::DigikamImageCollection(Type tp, Album* album, const QString& filter)
+DigikamImageCollection::DigikamImageCollection(Type tp, Album *album, const QString& filter)
 {
     m_tp        = tp;
     m_album     = album;
@@ -756,6 +756,11 @@ KIPI::ImageCollectionSelector* DigikamKipiInterface::imageCollectionSelector(QWi
     return (new DigikamImageCollectionSelector(this, parent));
 }
 
+KIPI::UploadWidget* DigikamKipiInterface::uploadWidget(QWidget *parent)
+{
+    return (new DigikamUploadWidget(this, parent));
+}
+
 //-- Image Collection Selector Widget --------------------------------------------
 
 class ImageCollectionSelectorItem : public QTreeWidgetItem
@@ -930,6 +935,139 @@ QList<KIPI::ImageCollection> DigikamImageCollectionSelector::selectedImageCollec
     DDebug() << list.count() << " collection items selected" << endl;
 
     return list;
+}
+
+//-- Upload Widget --------------------------------------------------
+
+class UploadWidgetItem : public QTreeWidgetItem
+{
+public:
+
+    UploadWidgetItem(QTreeWidget* parent, Album* tag);
+    UploadWidgetItem(QTreeWidgetItem* parent, Album* tag);
+
+    Album* album() const;
+
+private:
+
+    Album *m_album;
+};
+
+UploadWidgetItem::UploadWidgetItem(QTreeWidget* parent, Album* album)
+                : QTreeWidgetItem(parent, QStringList() << album->title())
+{
+    m_album = album;
+    m_album->setExtraData(treeWidget(), this);
+    setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled); 
+}
+
+UploadWidgetItem::UploadWidgetItem(QTreeWidgetItem* parent, Album* album)
+                : QTreeWidgetItem(parent, QStringList() << album->title())
+{
+    m_album = album;
+    m_album->setExtraData(treeWidget(), this);
+    setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled); 
+}
+
+Album* UploadWidgetItem::album() const
+{
+    return m_album;
+}
+
+DigikamUploadWidget::DigikamUploadWidget(DigikamKipiInterface* iface, QWidget *parent)
+                   : KIPI::UploadWidget(parent)
+{
+    m_iface      = iface;
+
+    m_albumsView = new QTreeWidget(this);
+    m_albumsView->setColumnCount(1);
+    m_albumsView->setRootIsDecorated(true);
+    m_albumsView->setSelectionMode(QAbstractItemView::SingleSelection);
+    m_albumsView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    m_albumsView->setAllColumnsShowFocus(true);
+    m_albumsView->setDragEnabled(false);
+    m_albumsView->setDropIndicatorShown(false);
+    m_albumsView->setAcceptDrops(false);
+    m_albumsView->header()->hide();
+
+    QHBoxLayout *hlay = new QHBoxLayout(this);
+    hlay->addWidget(m_albumsView);
+    hlay->setMargin(0);
+    hlay->setSpacing(0);
+
+    // ------------------------------------------------------------------------------------
+
+    populateTreeView(AlbumManager::instance()->allPAlbums(), m_albumsView); 
+
+    // ------------------------------------------------------------------------------------
+
+    connect(m_albumsView, SIGNAL(itemSelectionChanged()),
+            this, SIGNAL(selectionChanged()));
+}
+
+DigikamUploadWidget::~DigikamUploadWidget() 
+{
+}
+
+void DigikamUploadWidget::populateTreeView(const AlbumList& aList, QTreeWidget *view)
+{
+    for (AlbumList::const_iterator it = aList.begin(); it != aList.end(); ++it)
+    {
+        Album* album = *it;
+
+        UploadWidgetItem* item = 0;
+
+        if (album->isRoot())
+        {
+            item = new UploadWidgetItem(view, album);
+            item->setExpanded(true);
+        }
+        else
+        {
+            UploadWidgetItem* pitem = (UploadWidgetItem*)(album->parent()->extraData(view));
+            if (!pitem)
+            {
+                DWarning() << "Failed to find parent for Album " << album->title() << endl;
+                continue;
+            }
+
+            item = new UploadWidgetItem(pitem, album);
+        }
+
+        if (item)
+        {
+            PAlbum* palbum = dynamic_cast<PAlbum*>(album);
+            if (palbum)
+                item->setIcon(0, AlbumThumbnailLoader::instance()->getStandardAlbumIcon(palbum));
+            else
+            {
+                TAlbum* talbum = dynamic_cast<TAlbum*>(album);
+                if (talbum)
+                    item->setIcon(0, AlbumThumbnailLoader::instance()->getStandardTagIcon(talbum));
+            }
+
+            album->setExtraData(view, item);
+
+            if (album == AlbumManager::instance()->currentAlbum())
+            {
+                item->setExpanded(true);
+                view->setCurrentItem(item);
+                view->scrollToItem(item);
+            }
+        }
+    }
+}
+
+KIPI::ImageCollection DigikamUploadWidget::selectedImageCollection() const
+{
+    QString ext = m_iface->fileExtensions();
+    KIPI::ImageCollection collection; 
+
+    ImageCollectionSelectorItem* item = dynamic_cast<ImageCollectionSelectorItem*>(m_albumsView->currentItem());
+    if (item)
+        collection = new DigikamImageCollection(DigikamImageCollection::AllItems, item->album(), ext);
+
+    return collection;
 }
 
 }  // namespace Digikam
