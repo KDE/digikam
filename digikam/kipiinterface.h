@@ -70,10 +70,10 @@ class TAlbum;
 class DigikamImageInfo : public KIPI::ImageInfoShared
 {
 public:
-    
+
     DigikamImageInfo( KIPI::Interface* interface, const KUrl& url );
     ~DigikamImageInfo();
-    
+
     virtual QString title();
     virtual void setTitle( const QString& );
 
@@ -84,15 +84,15 @@ public:
 
     virtual QDateTime time( KIPI::TimeSpec spec );
     virtual void setTime( const QDateTime& time, KIPI::TimeSpec spec = KIPI::FromInfo );
-    
-    virtual QMap<QString, QVariant> attributes();                    
+
+    virtual QMap<QString, QVariant> attributes();
     virtual void addAttributes(const QMap<QString, QVariant>& res);
     virtual void delAttributes(const QStringList& res);
     virtual void clearAttributes();
-    
+
     virtual int  angle();
     virtual void setAngle( int angle );
-    
+
 private:
 
     PAlbum* parentAlbum();
@@ -108,7 +108,7 @@ private:
 
 class DigikamImageCollection : public KIPI::ImageCollectionShared
 {
-    
+
 public:
 
     enum Type 
@@ -121,7 +121,7 @@ public:
 
     DigikamImageCollection( Type tp, Album *album, const QString& filter );
     ~DigikamImageCollection();
-    
+
     virtual QString name();
     virtual QString comment();
     virtual QString category();
@@ -133,12 +133,12 @@ public:
     virtual QString uploadRootName();
     virtual bool isDirectory();
     virtual bool operator==(ImageCollectionShared&);
-    
+
 private:
 
     KUrl::List imagesFromPAlbum(PAlbum* album) const;
     KUrl::List imagesFromTAlbum(TAlbum* album) const;
-    
+
 private:
 
     QString  m_imgFilter;
@@ -206,11 +206,11 @@ public:
 
 private:
 
-    void loadTreeView(const AlbumList& aList, QTreeWidget *view);
+    void populateTreeView(const AlbumList& aList, QTreeWidget *view);
 
 private:
 
-    KTabWidget           *m_tab;    
+    KTabWidget           *m_tab;
 
     QTreeWidget          *m_albumsView;
     QTreeWidget          *m_tagsView;

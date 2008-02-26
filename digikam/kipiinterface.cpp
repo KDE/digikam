@@ -282,7 +282,7 @@ int DigikamImageInfo::angle()
         //TODO: read from DB
         DMetadata metadata(_url.path());
         DMetadata::ImageOrientation orientation = metadata.getImageOrientation();
-        
+
         switch (orientation) 
         {
             case DMetadata::ORIENTATION_ROT_180:
@@ -297,7 +297,7 @@ int DigikamImageInfo::angle()
                 return 0;
         }
     }
-    
+
     return 0;
 }
 
@@ -390,12 +390,12 @@ KUrl::List DigikamImageCollection::images()
                     m_album->type() == Album::SEARCH)
             {
                 AlbumItemHandler* handler = AlbumManager::instance()->getItemHandler();
-    
+
                 if (handler)
                 {
                     return handler->allItems();
                 }
-    
+
                 return KUrl::List();
         }
             else
@@ -403,20 +403,20 @@ KUrl::List DigikamImageCollection::images()
                 DWarning() << "Unknown album type" << endl;
                 return KUrl::List();
             }
-    
+
             break;
         }
         case SelectedItems:
         {
             AlbumItemHandler* handler = AlbumManager::instance()->getItemHandler();
-    
+
             if (handler)
             {
                 return handler->selectedItems();
             }
-    
+
             return KUrl::List();
-    
+
             break;
         }
         default:
@@ -649,7 +649,7 @@ void DigikamKipiInterface::refreshImages( const KUrl::List& urls )
     // Re-scan metadata from pictures. This way will update Metadata sidebar and database.
     for ( KUrl::List::Iterator it = ulist.begin() ; it != ulist.end() ; ++it )
         ImageAttributesWatch::instance()->fileMetadataChanged(*it);
-    
+
     // Refresh preview.
     m_albumManager->refreshItemHandler(urls);
 }
@@ -809,7 +809,7 @@ DigikamImageCollectionSelector::DigikamImageCollectionSelector(DigikamKipiInterf
     m_albumsView->setDropIndicatorShown(false);
     m_albumsView->setAcceptDrops(false);
     m_albumsView->header()->hide();
-   
+
     m_tagsView = new QTreeWidget(m_tab);
     m_tagsView->setColumnCount(1);
     m_tagsView->setRootIsDecorated(true);
@@ -829,24 +829,32 @@ DigikamImageCollectionSelector::DigikamImageCollectionSelector(DigikamKipiInterf
     hlay->setMargin(0);
     hlay->setSpacing(0);
 
-    // -- Load all Album views-------------------------------------------------------------
+    // ------------------------------------------------------------------------------------
 
-    loadTreeView(AlbumManager::instance()->allPAlbums(), m_albumsView); 
-    loadTreeView(AlbumManager::instance()->allTAlbums(), m_tagsView); 
+    populateTreeView(AlbumManager::instance()->allPAlbums(), m_albumsView); 
+    populateTreeView(AlbumManager::instance()->allTAlbums(), m_tagsView); 
+
+    // ------------------------------------------------------------------------------------
+
+    connect(m_albumsView, SIGNAL(itemChanged(QTreeWidgetItem*, int)),
+            this, SIGNAL(selectionChanged()));
+
+    connect(m_tagsView, SIGNAL(itemChanged(QTreeWidgetItem*, int)),
+            this, SIGNAL(selectionChanged()));
 }
 
 DigikamImageCollectionSelector::~DigikamImageCollectionSelector() 
 {
 }
 
-void DigikamImageCollectionSelector::loadTreeView(const AlbumList& aList, QTreeWidget *view)
+void DigikamImageCollectionSelector::populateTreeView(const AlbumList& aList, QTreeWidget *view)
 {
     for (AlbumList::const_iterator it = aList.begin(); it != aList.end(); ++it)
     {
         Album* album = *it;
 
         ImageCollectionSelectorItem* item = 0;
-        
+
         if (album->isRoot())
         {
             item = new ImageCollectionSelectorItem(view, album);
