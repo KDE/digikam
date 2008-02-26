@@ -207,7 +207,7 @@ SET(digikam_bin_SRCS
                      timelineview.cpp
                      timelinewidget.cpp
                      treefolderitem.cpp 
-                     treefolderview.cpp 
+#                     treefolderview.cpp 
                      welcomepageview.cpp 
     )
 

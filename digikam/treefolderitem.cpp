@@ -23,8 +23,10 @@
 
 // Qt includes.
 
-#include <QFrame>
+#include <QTreeWidget>
 #include <QFont>
+
+#include <QFrame>
 #include <QFontMetrics>
 #include <QPainter>
 #include <QPixmap>
@@ -41,18 +43,32 @@
 namespace Digikam
 {
 
-TreeFolderItem::TreeFolderItem(Q3ListView* parent, const QString& text, bool special)
-              : Q3ListViewItem(parent, text)
+TreeFolderItem::TreeFolderItem(QTreeWidget* parent, const QString& text, bool special)
+              : QTreeWidgetItem(parent, QStringList() << text)
 {
-    m_special = special;
     m_focus = false;
+
+    if (special)
+    {
+        QFont f = font(0);
+        f.setItalic(true);
+        setFont(0, f);
+        setForeground(0, treeWidget()->palette().link());
+    }
 }
 
-TreeFolderItem::TreeFolderItem(Q3ListViewItem* parent, const QString& text, bool special)
-              : Q3ListViewItem(parent, text)
+TreeFolderItem::TreeFolderItem(QTreeWidgetItem* parent, const QString& text, bool special)
+              : QTreeWidgetItem(parent, QStringList() << text)
 {
-    m_special = special;
     m_focus = false;
+
+    if (special)
+    {
+        QFont f = font(0);
+        f.setItalic(true);
+        setFont(0, f);
+        setForeground(0, treeWidget()->palette().link());
+    }
 }
 
 TreeFolderItem::~TreeFolderItem()
@@ -69,6 +85,7 @@ bool TreeFolderItem::focus() const
     return m_focus;
 }
 
+/*
 void TreeFolderItem::paintCell(QPainter* p, const QColorGroup & cg, int column,
                            int width, int align)
 {
@@ -143,6 +160,7 @@ void TreeFolderItem::setup()
 
     setHeight(h);
 }
+*/
 
 int TreeFolderItem::id() const
 {
@@ -151,22 +169,20 @@ int TreeFolderItem::id() const
 
 // ------------------------------------------------------------------------------------
 
-TreeFolderCheckListItem::TreeFolderCheckListItem(Q3ListView* parent, const QString& text,
-                                                 Q3CheckListItem::Type tt)
-                       : Q3CheckListItem(parent, text, tt)
+TreeFolderCheckListItem::TreeFolderCheckListItem(QTreeWidget* parent, const QString& text)
+                       : QTreeWidgetItem(parent, QStringList() << text)
 {
 }
 
-TreeFolderCheckListItem::TreeFolderCheckListItem(Q3ListViewItem* parent, const QString& text,
-                                                 Q3CheckListItem::Type tt)
-                       : Q3CheckListItem(parent, text, tt)
+TreeFolderCheckListItem::TreeFolderCheckListItem(QTreeWidgetItem* parent, const QString& text)
+                       : QTreeWidgetItem(parent, QStringList() << text)
 {
 }
 
 TreeFolderCheckListItem::~TreeFolderCheckListItem()
 {
 }
-
+/*
 void TreeFolderCheckListItem::paintCell(QPainter* p, const QColorGroup & cg,
                                         int column, int width, int)
 {
@@ -306,5 +322,6 @@ QStyleOptionQ3ListView TreeFolderCheckListItem::getStyleOption(const TreeFolderV
     }
     return opt;
 }
+*/
 
 }  // namespace Digikam

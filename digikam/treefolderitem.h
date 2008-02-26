@@ -26,24 +26,25 @@
 
 // Qt includes.
 
-#include <Q3ListView>
-#include <QStyleOptionQ3ListView>
+#include <QTreeWidgetItem>
 
 // Local includes
 
 #include "digikam_export.h"
+
+class QTreeWidget;
 
 namespace Digikam
 {
 
 class TreeFolderView;
 
-class DIGIKAM_EXPORT TreeFolderItem : public Q3ListViewItem
+class DIGIKAM_EXPORT TreeFolderItem : public QTreeWidgetItem
 {
 public:
 
-    TreeFolderItem(Q3ListView* parent, const QString& text, bool special=false);
-    TreeFolderItem(Q3ListViewItem* parent, const QString& text, bool special=false);
+    TreeFolderItem(QTreeWidget* parent, const QString& text, bool special=false);
+    TreeFolderItem(QTreeWidgetItem* parent, const QString& text, bool special=false);
 
     virtual ~TreeFolderItem();
 
@@ -54,8 +55,8 @@ public:
 
 protected:
 
-    void paintCell(QPainter* p, const QColorGroup & cg, int column, int width, int align);
-    void setup();
+//    void setup();
+//    void paintCell(QPainter* p, const QColorGroup & cg, int column, int width, int align);
 
 private:
 
@@ -65,21 +66,19 @@ private:
 
 // ------------------------------------------------------------------------------------
 
-class TreeFolderCheckListItem : public Q3CheckListItem
+class TreeFolderCheckListItem : public QTreeWidgetItem
 {
 public:
 
-    TreeFolderCheckListItem(Q3ListView* parent, const QString& text,
-                            Q3CheckListItem::Type tt);
-    TreeFolderCheckListItem(Q3ListViewItem* parent, const QString& text,
-                            Q3CheckListItem::Type tt);
+    TreeFolderCheckListItem(QTreeWidget* parent, const QString& text);
+    TreeFolderCheckListItem(QTreeWidgetItem* parent, const QString& text);
     virtual ~TreeFolderCheckListItem();
 
 protected:
 
-    void paintCell(QPainter* p, const QColorGroup & cg, int column, int width, int align);
-    void setup();
-    QStyleOptionQ3ListView getStyleOption(const TreeFolderView *fv);
+//    void setup();
+//    void paintCell(QPainter* p, const QColorGroup & cg, int column, int width, int align);
+//    QStyleOptionQ3ListView getStyleOption(const TreeFolderView *fv);
 };
 
 }  // namespace Digikam
