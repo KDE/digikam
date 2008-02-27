@@ -36,7 +36,7 @@ class QTreeWidget;
 
 namespace Digikam
 {
-
+class Album;
 class TreeFolderView;
 
 class DIGIKAM_EXPORT TreeFolderItem : public QTreeWidgetItem
@@ -45,18 +45,12 @@ public:
 
     TreeFolderItem(QTreeWidget* parent, const QString& text, bool special=false);
     TreeFolderItem(QTreeWidgetItem* parent, const QString& text, bool special=false);
-
     virtual ~TreeFolderItem();
 
     virtual int id() const;
 
     void setFocus(bool b);
     bool focus() const;
-
-protected:
-
-//    void setup();
-//    void paintCell(QPainter* p, const QColorGroup & cg, int column, int width, int align);
 
 private:
 
@@ -66,19 +60,49 @@ private:
 
 // ------------------------------------------------------------------------------------
 
-class TreeFolderCheckListItem : public QTreeWidgetItem
+class DIGIKAM_EXPORT TreeFolderCheckListItem : public QTreeWidgetItem
 {
+
 public:
 
     TreeFolderCheckListItem(QTreeWidget* parent, const QString& text);
     TreeFolderCheckListItem(QTreeWidgetItem* parent, const QString& text);
     virtual ~TreeFolderCheckListItem();
+};
 
-protected:
+// ------------------------------------------------------------------------------------
 
-//    void setup();
-//    void paintCell(QPainter* p, const QColorGroup & cg, int column, int width, int align);
-//    QStyleOptionQ3ListView getStyleOption(const TreeFolderView *fv);
+class DIGIKAM_EXPORT TreeAlbumItem : public TreeFolderItem
+{
+
+public:
+
+    TreeAlbumItem(QTreeWidget* parent, Album* tag);
+    TreeAlbumItem(QTreeWidgetItem* parent, Album* tag);
+    virtual ~TreeAlbumItem();
+
+    Album* album() const;
+
+private:
+
+    Album *m_album;
+};
+
+// ------------------------------------------------------------------------------------
+
+class TreeAlbumCheckListItem : public TreeFolderCheckListItem
+{
+public:
+
+    TreeAlbumCheckListItem(QTreeWidget* parent, Album* tag);
+    TreeAlbumCheckListItem(QTreeWidgetItem* parent, Album* tag);
+    virtual ~TreeAlbumCheckListItem();
+
+    Album* album() const;
+
+private:
+
+    Album *m_album;
 };
 
 }  // namespace Digikam

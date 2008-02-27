@@ -28,6 +28,7 @@
 
 // Local includes.
 
+#include "album.h"
 #include "treefolderview.h"
 #include "treefolderitem.h"
 
@@ -183,6 +184,7 @@ TreeFolderCheckListItem::TreeFolderCheckListItem(QTreeWidgetItem *parent, const 
 TreeFolderCheckListItem::~TreeFolderCheckListItem()
 {
 }
+
 /*
 void TreeFolderCheckListItem::paintCell(QPainter* p, const QColorGroup & cg,
                                         int column, int width, int)
@@ -324,5 +326,59 @@ QStyleOptionQ3ListView TreeFolderCheckListItem::getStyleOption(const TreeFolderV
     return opt;
 }
 */
+
+// ------------------------------------------------------------------------------------
+
+TreeAlbumItem::TreeAlbumItem(QTreeWidget* parent, Album* album)
+             : TreeFolderItem(parent, album->title())
+{
+    m_album = album;
+    m_album->setExtraData(treeWidget(), this);
+}
+
+TreeAlbumItem::TreeAlbumItem(QTreeWidgetItem* parent, Album* album)
+             : TreeFolderItem(parent, album->title())
+{
+    m_album = album;
+    m_album->setExtraData(treeWidget(), this);
+}
+
+TreeAlbumItem::~TreeAlbumItem()
+{
+    m_album->removeExtraData(treeWidget());
+}
+
+Album* TreeAlbumItem::album() const
+{
+    return m_album;
+}
+
+// ------------------------------------------------------------------------------------
+
+TreeAlbumCheckListItem::TreeAlbumCheckListItem(QTreeWidget* parent, Album* album)
+                      : TreeFolderCheckListItem(parent, album->title())
+{
+    m_album = album;
+    m_album->setExtraData(treeWidget(), this);
+    setCheckState(0, Qt::Unchecked);
+}
+
+TreeAlbumCheckListItem::TreeAlbumCheckListItem(QTreeWidgetItem* parent, Album* album)
+                      : TreeFolderCheckListItem(parent, album->title())
+{
+    m_album = album;
+    m_album->setExtraData(treeWidget(), this);
+    setCheckState(0, Qt::Unchecked);
+}
+
+TreeAlbumCheckListItem::~TreeAlbumCheckListItem()
+{
+    m_album->removeExtraData(treeWidget());
+}
+
+Album* TreeAlbumCheckListItem::album() const
+{
+    return m_album;
+}
 
 }  // namespace Digikam
