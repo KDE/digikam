@@ -1,0 +1,275 @@
+/* ============================================================
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2004-08-02
+ * Description : class to interface digiKam with kipi library.
+ *
+ * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2004-2005 by Ralf Holzer <ralf at well.com>
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * ============================================================ */
+
+// C Ansi includes
+
+extern "C"
+{
+#include <sys/types.h>
+#include <utime.h>
+}
+
+// KDE includes.
+
+#include <klocale.h>
+#include <kconfig.h>
+
+// libKipi Includes.
+
+#include <libkipi/version.h>
+
+// Local includes.
+
+#include "constants.h"
+#include "ddebug.h"
+#include "album.h"
+#include "albumsettings.h"
+#include "collectionmanager.h"
+#include "databaseaccess.h"
+#include "imageattributeswatch.h"
+#include "thumbnailloadthread.h"
+#include "kipiimagecollection.h"
+#include "kipiinterface.h"
+#include "kipiinterface.moc"
+
+namespace Digikam
+{
+
+KipiInterface::KipiInterface(QObject *parent, const char *name)
+             : KIPI::Interface(parent, name)
+{
+    m_thumbLoadThread = new ThumbnailLoadThread();
+
+    // Set cache size to 256 to have the max quality thumb.
+    m_thumbLoadThread->setThumbnailSize(256);
+    m_thumbLoadThread->setSendSurrogatePixmap(true);
+    m_thumbLoadThread->setExifRotate(AlbumSettings::instance()->getExifRotate());
+
+    m_albumManager = AlbumManager::instance();
+
+    connect(m_albumManager, SIGNAL(signalAlbumItemsSelected(bool)),
+            this, SLOT(slotSelectionChanged(bool)));
+
+    connect(m_albumManager, SIGNAL(signalAlbumCurrentChanged(Album*)),
+            this, SLOT(slotCurrentAlbumChanged(Album*)));
+
+    connect(m_thumbLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
+            this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
+}
+
+KipiInterface::~KipiInterface()
+{
+    delete m_thumbLoadThread;
+}
+
+KIPI::ImageCollection KipiInterface::currentAlbum()
+{
+    Album* currAlbum = m_albumManager->currentAlbum();
+    if ( currAlbum )
+    {
+        return KIPI::ImageCollection(new KipiImageCollection(KipiImageCollection::AllItems, 
+                                         currAlbum, fileExtensions()));
+    }
+    else
+    {
+        return KIPI::ImageCollection(0);
+    }
+}
+
+KIPI::ImageCollection KipiInterface::currentSelection()
+{
+    Album* currAlbum = m_albumManager->currentAlbum();
+    if ( currAlbum )
+    {
+        return KIPI::ImageCollection(
+            new KipiImageCollection( KipiImageCollection::SelectedItems,
+                                        currAlbum, fileExtensions() ) );
+    }
+    else
+    {
+        return KIPI::ImageCollection(0);
+    }
+}
+
+QList<KIPI::ImageCollection> KipiInterface::allAlbums()
+{
+    QList<KIPI::ImageCollection> result;
+
+    QString fileFilter(fileExtensions());
+
+    AlbumList palbumList = m_albumManager->allPAlbums();
+    for ( AlbumList::Iterator it = palbumList.begin();
+          it != palbumList.end(); ++it )
+    {
+        // don't add the root album
+        if ((*it)->isRoot())
+            continue;
+
+        KipiImageCollection* col = new KipiImageCollection(KipiImageCollection::AllItems,
+                                                           *it, fileFilter);
+        result.append( KIPI::ImageCollection( col ) );
+    }
+
+    AlbumList talbumList = m_albumManager->allTAlbums();
+    for ( AlbumList::Iterator it = talbumList.begin();
+          it != talbumList.end(); ++it )
+    {
+        // don't add the root album
+        if ((*it)->isRoot())
+            continue;
+
+        KipiImageCollection* col = new KipiImageCollection(KipiImageCollection::AllItems,
+                                                           *it, fileFilter );
+        result.append( KIPI::ImageCollection( col ) );
+    }
+
+    return result;
+}
+
+KIPI::ImageInfo KipiInterface::info( const KUrl& url )
+{
+    return KIPI::ImageInfo( new DigikamImageInfo( this, url ) );
+}
+
+void KipiInterface::refreshImages( const KUrl::List& urls )
+{
+    KUrl::List ulist = urls;
+
+    // Re-scan metadata from pictures. This way will update Metadata sidebar and database.
+    for ( KUrl::List::Iterator it = ulist.begin() ; it != ulist.end() ; ++it )
+        ImageAttributesWatch::instance()->fileMetadataChanged(*it);
+
+    // Refresh preview.
+    m_albumManager->refreshItemHandler(urls);
+}
+
+int KipiInterface::features() const
+{
+    return (
+           KIPI::HostSupportsTags           | KIPI::HostSupportsRating         |
+           KIPI::HostAcceptNewImages        | KIPI::HostSupportsThumbnails     |
+           KIPI::ImagesHasComments          | 
+           KIPI::ImagesHasTime              | KIPI::ImagesHasTitlesWritable    |
+           KIPI::AlbumsHaveComments         | KIPI::AlbumsHaveCategory         |
+           KIPI::AlbumsHaveCreationDate     | KIPI::AlbumsUseFirstImagePreview 
+           );
+}
+
+bool KipiInterface::addImage( const KUrl& url, QString& errmsg )
+{
+    // Nota : All copy/move operations are processed by the plugins.
+
+    if ( url.isValid() == false )
+    {
+        errmsg = i18n("Target URL %1 is not valid.",url.path());
+        return false;
+    }
+
+    PAlbum *targetAlbum = m_albumManager->findPAlbum(url.directory());
+
+    if ( !targetAlbum )
+    {
+        errmsg = i18n("Target album is not in the album library.");
+        return false;
+    }
+
+    m_albumManager->refreshItemHandler( url );
+
+    return true;
+}
+
+void KipiInterface::delImage( const KUrl& url )
+{
+    KUrl rootURL(CollectionManager::instance()->albumRoot(url));
+    if ( !rootURL.isParentOf(url) )
+    {
+        DWarning() << "URL not in the album library" << endl;
+    }
+
+    // Is there a PAlbum for this url
+
+    PAlbum *palbum = m_albumManager->findPAlbum( KUrl(url.directory()) );
+
+    if ( palbum )
+    {
+        // delete the item from the database
+        DatabaseAccess().db()->deleteItem( palbum->id(), url.fileName() );
+    }
+    else
+    {
+        DWarning() << "Cannot find Parent album in album library" << endl;
+    }
+}
+
+void KipiInterface::slotSelectionChanged( bool b )
+{
+    emit selectionChanged( b );
+}
+
+void KipiInterface::slotCurrentAlbumChanged( Album *album )
+{
+    emit currentAlbumChanged( album != 0 );
+}
+
+QString KipiInterface::fileExtensions()
+{
+    // do not save this into a local variable, as this
+    // might change in the main app
+
+    AlbumSettings* s = AlbumSettings::instance();
+    return (s->getImageFileFilter() + ' ' +
+            s->getMovieFileFilter() + ' ' +
+            s->getAudioFileFilter() + ' ' +
+            s->getRawFileFilter());
+}
+
+void KipiInterface::thumbnail(const KUrl& url, int /*size*/)
+{
+    // NOTE: size is not used here. Cache use the max pixmap size to store thumbs (256).
+    m_thumbLoadThread->find(url.path());
+}
+
+void KipiInterface::thumbnails(const KUrl::List& list, int size)
+{
+    for (KUrl::List::const_iterator it = list.begin() ; it != list.end() ; ++it)
+        thumbnail((*it).path(), size);
+}
+
+void KipiInterface::slotThumbnailLoaded(const LoadingDescription& desc, const QPixmap& pix)
+{
+    emit gotThumbnail( KUrl(desc.filePath), pix );
+}
+
+KIPI::ImageCollectionSelector* KipiInterface::imageCollectionSelector(QWidget *parent)
+{
+    return (new DigikamImageCollectionSelector(this, parent));
+}
+
+KIPI::UploadWidget* KipiInterface::uploadWidget(QWidget *parent)
+{
+    return (new DigikamUploadWidget(this, parent));
+}
+
+}  // namespace Digikam

@@ -4,8 +4,8 @@
  * http://www.digikam.org
  *
  * Date        : 2008-26-02
- * Description : a widget to select an image collection 
- *               to upload new items using digiKam album folder views
+ * Description : a widget to select image collections using 
+ *               digiKam album folder views
  *
  * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -22,13 +22,17 @@
  * 
  * ============================================================ */
 
-#ifndef KIPIUPLOADWIDGET_H
-#define KIPIUPLOADWIDGET_H
+#ifndef KIPIIMAGECOLLECTIONSELECTOR_H
+#define KIPIIMAGECOLLECTIONSELECTOR_H
+
+// Qt includes.
+
+#include <QList>
 
 // libKipi Includes.
 
 #include <libkipi/imagecollection.h>
-#include <libkipi/uploadwidget.h>
+#include <libkipi/imagecollectionselector.h>
 
 // Local includes
 
@@ -38,19 +42,21 @@
 class QWidget;
 class QTreeWidget;
 
+class KTabWidget;
+
 namespace Digikam
 {
 
-class KipiUploadWidget : public KIPI::UploadWidget
+class KipiImageCollectionSelector : public KIPI::ImageCollectionSelector
 {
     Q_OBJECT
 
 public:
 
-    KipiUploadWidget(KipiInterface *iface, QWidget *parent=0);
-    ~KipiUploadWidget();
+    KipiImageCollectionSelector(KipiInterface *iface, QWidget *parent=0);
+    ~KipiImageCollectionSelector();
 
-    KIPI::ImageCollection selectedImageCollection() const;
+    QList<KIPI::ImageCollection> selectedImageCollections() const;
 
 private:
 
@@ -58,10 +64,13 @@ private:
 
 private:
 
+    KTabWidget    *m_tab;
+
     QTreeWidget   *m_albumsView;
+    QTreeWidget   *m_tagsView;
     KipiInterface *m_iface; 
 };
 
 }  // namespace Digikam
 
-#endif  // KIPIUPLOADWIDGET_H
+#endif  // KIPIIMAGECOLLECTIONSELECTOR_H

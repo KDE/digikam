@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2008-26-02
- * Description : widget to select an image collection 
+ * Description : a widget to select an image collection 
  *               to upload new items using digiKam album folder views
  *
  * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
