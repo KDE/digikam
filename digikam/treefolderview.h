@@ -37,12 +37,12 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "albummanager.h"
 
 namespace Digikam
 {
-
-class TreeFolderViewPriv;
 class TreeFolderItem;
+class TreeFolderViewPriv;
 
 class DIGIKAM_EXPORT TreeFolderView : public QTreeWidget
 {

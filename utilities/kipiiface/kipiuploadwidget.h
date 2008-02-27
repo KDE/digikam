@@ -35,10 +35,10 @@
 #include "albummanager.h"
 
 class QWidget;
-class QTreeWidget;
 
 namespace Digikam
 {
+class TreeFolderView;
 class KipiInterface;
 
 class KipiUploadWidget : public KIPI::UploadWidget
@@ -54,12 +54,12 @@ public:
 
 private:
 
-    void populateTreeView(const AlbumList& aList, QTreeWidget *view);
+    void populateTreeView(const AlbumList& aList, TreeFolderView *view);
 
 private:
 
-    QTreeWidget   *m_albumsView;
-    KipiInterface *m_iface; 
+    TreeFolderView *m_albumsView;
+    KipiInterface  *m_iface; 
 };
 
 }  // namespace Digikam

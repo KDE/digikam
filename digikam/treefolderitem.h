@@ -77,8 +77,8 @@ class DIGIKAM_EXPORT TreeAlbumItem : public TreeFolderItem
 
 public:
 
-    TreeAlbumItem(QTreeWidget* parent, Album* tag);
-    TreeAlbumItem(QTreeWidgetItem* parent, Album* tag);
+    TreeAlbumItem(QTreeWidget* parent, Album* album);
+    TreeAlbumItem(QTreeWidgetItem* parent, Album* album);
     virtual ~TreeAlbumItem();
 
     Album* album() const;
@@ -90,19 +90,13 @@ private:
 
 // ------------------------------------------------------------------------------------
 
-class TreeAlbumCheckListItem : public TreeFolderCheckListItem
+class DIGIKAM_EXPORT TreeAlbumCheckListItem : public TreeAlbumItem
 {
 public:
 
-    TreeAlbumCheckListItem(QTreeWidget* parent, Album* tag);
-    TreeAlbumCheckListItem(QTreeWidgetItem* parent, Album* tag);
+    TreeAlbumCheckListItem(QTreeWidget* parent, Album* album);
+    TreeAlbumCheckListItem(QTreeWidgetItem* parent, Album* album);
     virtual ~TreeAlbumCheckListItem();
-
-    Album* album() const;
-
-private:
-
-    Album *m_album;
 };
 
 }  // namespace Digikam

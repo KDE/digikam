@@ -356,29 +356,19 @@ Album* TreeAlbumItem::album() const
 // ------------------------------------------------------------------------------------
 
 TreeAlbumCheckListItem::TreeAlbumCheckListItem(QTreeWidget* parent, Album* album)
-                      : TreeFolderCheckListItem(parent, album->title())
+                      : TreeAlbumItem(parent, album)
 {
-    m_album = album;
-    m_album->setExtraData(treeWidget(), this);
     setCheckState(0, Qt::Unchecked);
 }
 
 TreeAlbumCheckListItem::TreeAlbumCheckListItem(QTreeWidgetItem* parent, Album* album)
-                      : TreeFolderCheckListItem(parent, album->title())
+                      : TreeAlbumItem(parent, album)
 {
-    m_album = album;
-    m_album->setExtraData(treeWidget(), this);
     setCheckState(0, Qt::Unchecked);
 }
 
 TreeAlbumCheckListItem::~TreeAlbumCheckListItem()
 {
-    m_album->removeExtraData(treeWidget());
-}
-
-Album* TreeAlbumCheckListItem::album() const
-{
-    return m_album;
 }
 
 }  // namespace Digikam

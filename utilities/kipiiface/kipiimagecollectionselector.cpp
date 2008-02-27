@@ -25,8 +25,6 @@
 // Qt includes.
 
 #include <QHeaderView>
-#include <QTreeWidget>
-#include <QTreeWidgetItem>
 #include <QTreeWidgetItemIterator>
 #include <QHBoxLayout>
 
@@ -41,6 +39,8 @@
 #include "ddebug.h"
 #include "album.h"
 #include "albumthumbnailloader.h"
+#include "treefolderitem.h"
+#include "treefolderview.h"
 #include "kipiinterface.h"
 #include "kipiimagecollection.h"
 #include "kipiimagecollectionselector.h"
@@ -49,66 +49,19 @@
 namespace Digikam
 {
 
-class KipiImageCollectionSelectorItem : public QTreeWidgetItem
-{
-public:
-
-    KipiImageCollectionSelectorItem(QTreeWidget* parent, Album* tag);
-    KipiImageCollectionSelectorItem(QTreeWidgetItem* parent, Album* tag);
-
-    Album* album() const;
-
-private:
-
-    Album *m_album;
-};
-
-KipiImageCollectionSelectorItem::KipiImageCollectionSelectorItem(QTreeWidget* parent, Album* album)
-                               : QTreeWidgetItem(parent, QStringList() << album->title())
-{
-    m_album = album;
-    m_album->setExtraData(treeWidget(), this);
-    setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled); 
-    setCheckState(0, Qt::Unchecked);
-}
-
-KipiImageCollectionSelectorItem::KipiImageCollectionSelectorItem(QTreeWidgetItem* parent, Album* album)
-                               : QTreeWidgetItem(parent, QStringList() << album->title())
-{
-    m_album = album;
-    m_album->setExtraData(treeWidget(), this);
-    setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled); 
-    setCheckState(0, Qt::Unchecked);
-}
-
-Album* KipiImageCollectionSelectorItem::album() const
-{
-    return m_album;
-}
-
 KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface *iface, QWidget *parent)
                            : KIPI::ImageCollectionSelector(parent)
 {
-    m_iface      = iface;
-    m_tab        = new KTabWidget(this);
+    m_iface = iface;
+    m_tab   = new KTabWidget(this);
 
-    m_albumsView = new QTreeWidget(m_tab);
-    m_albumsView->setColumnCount(1);
-    m_albumsView->setRootIsDecorated(true);
-    m_albumsView->setSelectionMode(QAbstractItemView::SingleSelection);
-    m_albumsView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_albumsView->setAllColumnsShowFocus(true);
+    m_albumsView = new TreeFolderView(m_tab);
     m_albumsView->setDragEnabled(false);
     m_albumsView->setDropIndicatorShown(false);
     m_albumsView->setAcceptDrops(false);
     m_albumsView->header()->hide();
 
-    m_tagsView = new QTreeWidget(m_tab);
-    m_tagsView->setColumnCount(1);
-    m_tagsView->setRootIsDecorated(true);
-    m_tagsView->setSelectionMode(QAbstractItemView::SingleSelection);
-    m_tagsView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_tagsView->setAllColumnsShowFocus(true);
+    m_tagsView = new TreeFolderView(m_tab);
     m_tagsView->setDragEnabled(false);
     m_tagsView->setDropIndicatorShown(false);
     m_tagsView->setAcceptDrops(false);
@@ -140,29 +93,28 @@ KipiImageCollectionSelector::~KipiImageCollectionSelector()
 {
 }
 
-void KipiImageCollectionSelector::populateTreeView(const AlbumList& aList, QTreeWidget *view)
+void KipiImageCollectionSelector::populateTreeView(const AlbumList& aList, TreeFolderView *view)
 {
     for (AlbumList::const_iterator it = aList.begin(); it != aList.end(); ++it)
     {
-        Album* album = *it;
-
-        KipiImageCollectionSelectorItem* item = 0;
+        Album *album                 = *it;
+        TreeAlbumCheckListItem *item = 0;
 
         if (album->isRoot())
         {
-            item = new KipiImageCollectionSelectorItem(view, album);
+            item = new TreeAlbumCheckListItem(view, album);
             item->setExpanded(true);
         }
         else
         {
-            KipiImageCollectionSelectorItem* pitem = (KipiImageCollectionSelectorItem*)(album->parent()->extraData(view));
+            TreeAlbumCheckListItem* pitem = (TreeAlbumCheckListItem*)(album->parent()->extraData(view));
             if (!pitem)
             {
                 DWarning() << "Failed to find parent for Album " << album->title() << endl;
                 continue;
             }
 
-            item = new KipiImageCollectionSelectorItem(pitem, album);
+            item = new TreeAlbumCheckListItem(pitem, album);
         }
 
         if (item)
@@ -176,8 +128,6 @@ void KipiImageCollectionSelector::populateTreeView(const AlbumList& aList, QTree
                 if (talbum)
                     item->setIcon(0, AlbumThumbnailLoader::instance()->getStandardTagIcon(talbum));
             }
-
-            album->setExtraData(view, item);
 
             if (album == AlbumManager::instance()->currentAlbum())
             {
@@ -198,7 +148,7 @@ QList<KIPI::ImageCollection> KipiImageCollectionSelector::selectedImageCollectio
     QTreeWidgetItemIterator it(m_albumsView, QTreeWidgetItemIterator::Checked);
     while (*it)
     {
-        KipiImageCollectionSelectorItem* item = dynamic_cast<KipiImageCollectionSelectorItem*>(*it);
+        TreeAlbumCheckListItem* item = dynamic_cast<TreeAlbumCheckListItem*>(*it);
         if (item)
         {
             KipiImageCollection *col = new KipiImageCollection(KipiImageCollection::AllItems, item->album(), ext);
@@ -210,7 +160,7 @@ QList<KIPI::ImageCollection> KipiImageCollectionSelector::selectedImageCollectio
     QTreeWidgetItemIterator it2(m_tagsView, QTreeWidgetItemIterator::Checked);
     while (*it2)
     {
-        KipiImageCollectionSelectorItem* item = dynamic_cast<KipiImageCollectionSelectorItem*>(*it2);
+        TreeAlbumCheckListItem* item = dynamic_cast<TreeAlbumCheckListItem*>(*it2);
         if (item)
         {
             KipiImageCollection *col = new KipiImageCollection(KipiImageCollection::AllItems, item->album(), ext);

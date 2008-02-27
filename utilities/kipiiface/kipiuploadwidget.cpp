@@ -25,9 +25,6 @@
 // Qt includes.
 
 #include <QHeaderView>
-#include <QTreeWidget>
-#include <QTreeWidgetItem>
-#include <QTreeWidgetItemIterator>
 #include <QHBoxLayout>
 
 // KDE includes.
@@ -40,6 +37,8 @@
 #include "ddebug.h"
 #include "album.h"
 #include "albumthumbnailloader.h"
+#include "treefolderitem.h"
+#include "treefolderview.h"
 #include "kipiinterface.h"
 #include "kipiimagecollection.h"
 #include "kipiuploadwidget.h"
@@ -48,52 +47,12 @@
 namespace Digikam
 {
 
-class KipiUploadWidgetItem : public QTreeWidgetItem
-{
-public:
-
-    KipiUploadWidgetItem(QTreeWidget* parent, Album* tag);
-    KipiUploadWidgetItem(QTreeWidgetItem* parent, Album* tag);
-
-    Album* album() const;
-
-private:
-
-    Album *m_album;
-};
-
-KipiUploadWidgetItem::KipiUploadWidgetItem(QTreeWidget* parent, Album* album)
-                    : QTreeWidgetItem(parent, QStringList() << album->title())
-{
-    m_album = album;
-    m_album->setExtraData(treeWidget(), this);
-    setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled); 
-}
-
-KipiUploadWidgetItem::KipiUploadWidgetItem(QTreeWidgetItem* parent, Album* album)
-                    : QTreeWidgetItem(parent, QStringList() << album->title())
-{
-    m_album = album;
-    m_album->setExtraData(treeWidget(), this);
-    setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled); 
-}
-
-Album* KipiUploadWidgetItem::album() const
-{
-    return m_album;
-}
-
 KipiUploadWidget::KipiUploadWidget(KipiInterface* iface, QWidget *parent)
                 : KIPI::UploadWidget(parent)
 {
-    m_iface      = iface;
+    m_iface = iface;
 
-    m_albumsView = new QTreeWidget(this);
-    m_albumsView->setColumnCount(1);
-    m_albumsView->setRootIsDecorated(true);
-    m_albumsView->setSelectionMode(QAbstractItemView::SingleSelection);
-    m_albumsView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_albumsView->setAllColumnsShowFocus(true);
+    m_albumsView = new TreeFolderView(this);
     m_albumsView->setDragEnabled(false);
     m_albumsView->setDropIndicatorShown(false);
     m_albumsView->setAcceptDrops(false);
@@ -118,29 +77,28 @@ KipiUploadWidget::~KipiUploadWidget()
 {
 }
 
-void KipiUploadWidget::populateTreeView(const AlbumList& aList, QTreeWidget *view)
+void KipiUploadWidget::populateTreeView(const AlbumList& aList, TreeFolderView *view)
 {
     for (AlbumList::const_iterator it = aList.begin(); it != aList.end(); ++it)
     {
-        Album* album = *it;
-
-        KipiUploadWidgetItem* item = 0;
+        Album *album        = *it;
+        TreeAlbumItem *item = 0;
 
         if (album->isRoot())
         {
-            item = new KipiUploadWidgetItem(view, album);
+            item = new TreeAlbumItem(view, album);
             item->setExpanded(true);
         }
         else
         {
-            KipiUploadWidgetItem* pitem = (KipiUploadWidgetItem*)(album->parent()->extraData(view));
+            TreeAlbumItem* pitem = (TreeAlbumItem*)(album->parent()->extraData(view));
             if (!pitem)
             {
                 DWarning() << "Failed to find parent for Album " << album->title() << endl;
                 continue;
             }
 
-            item = new KipiUploadWidgetItem(pitem, album);
+            item = new TreeAlbumItem(pitem, album);
         }
 
         if (item)
@@ -154,8 +112,6 @@ void KipiUploadWidget::populateTreeView(const AlbumList& aList, QTreeWidget *vie
                 if (talbum)
                     item->setIcon(0, AlbumThumbnailLoader::instance()->getStandardTagIcon(talbum));
             }
-
-            album->setExtraData(view, item);
 
             if (album == AlbumManager::instance()->currentAlbum())
             {
@@ -172,7 +128,7 @@ KIPI::ImageCollection KipiUploadWidget::selectedImageCollection() const
     QString ext = m_iface->fileExtensions();
     KIPI::ImageCollection collection; 
 
-    KipiUploadWidgetItem* item = dynamic_cast<KipiUploadWidgetItem*>(m_albumsView->currentItem());
+    TreeAlbumItem* item = dynamic_cast<TreeAlbumItem*>(m_albumsView->currentItem());
     if (item)
         collection = new KipiImageCollection(KipiImageCollection::AllItems, item->album(), ext);
 
