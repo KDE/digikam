@@ -83,6 +83,7 @@ TreeFolderView::TreeFolderView(QWidget *parent, const char *name)
     setDragEnabled(true);
     setDropIndicatorShown(true);
     setAcceptDrops(true);
+    viewport()->setAcceptDrops(true);
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
