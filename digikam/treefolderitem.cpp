@@ -355,7 +355,7 @@ Album* TreeAlbumItem::album() const
 
 int TreeAlbumItem::id() const
 {
-    return album()->id();
+    return album() ? album()->id() : 0;
 }
 
 // ------------------------------------------------------------------------------------
