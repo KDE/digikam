@@ -351,7 +351,7 @@ void FolderView::loadViewState()
     
     int selectedItem = group.readEntry("LastSelectedItem", 0);
     
-    Q3ValueList<int> openFolders;
+    QList<int> openFolders;
     if(group.hasKey("OpenFolders"))
     {
         openFolders = group.readEntry("OpenFolders",QList<int>());
