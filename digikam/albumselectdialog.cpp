@@ -8,7 +8,7 @@
  *               pictures from camera
  * 
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,7 +39,6 @@
 
 #include <kmenu.h>
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kapplication.h>
 #include <kaction.h>
 #include <kinputdialog.h>
@@ -53,6 +52,7 @@
 #include "album.h"
 #include "albummanager.h"
 #include "albumsettings.h"
+#include "albumthumbnailloader.h"
 #include "collectionmanager.h"
 #include "albumselectdialog.h"
 #include "albumselectdialog.moc"
@@ -71,13 +71,11 @@ public:
         folderView         = 0;
     }
 
-    bool                           allowRootSelection;
+    bool            allowRootSelection;
 
-    QString                        newAlbumString;
+    QString         newAlbumString;
 
-    QMap<TreeFolderItem*, PAlbum*>  albumMap;
-
-    TreeFolderView                 *folderView;
+    TreeFolderView *folderView;
 };
 
 AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
@@ -86,6 +84,10 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
                                      bool allowRootSelection )
                  : KDialog(parent)
 {
+    d = new AlbumSelectDialogPrivate;
+    d->allowRootSelection = allowRootSelection;
+    d->newAlbumString     = newAlbumString;
+
     setCaption(i18n("Select Album"));
     setButtons(Help|User1|Ok|Cancel);
     setButtonText(User1, i18n("&New Album"));
@@ -94,9 +96,7 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
     setHelp("targetalbumdialog.anchor", "digikam");
     enableButtonOk(false);
 
-    d = new AlbumSelectDialogPrivate;
-    d->allowRootSelection = allowRootSelection;
-    d->newAlbumString     = newAlbumString;
+    // -------------------------------------------------------------
 
     QWidget *page = new QWidget(this);
     setMainWidget(page);
@@ -123,50 +123,9 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
     grid->setMargin(0);
     grid->setSpacing(KDialog::spacingHint());
 
-    QPixmap icon = iconLoader->loadIcon("folder", KIconLoader::NoGroup,
-                                        AlbumSettings::instance()->getDefaultTreeIconSize());
+    // -------------------------------------------------------------
 
-    AlbumList aList = AlbumManager::instance()->allPAlbums();
-
-    for (AlbumList::const_iterator it = aList.begin(); it != aList.end(); ++it)
-    {
-        PAlbum* album = (PAlbum*)(*it);
-
-        TreeFolderItem* viewItem = 0;
-
-        if (album->isRoot())
-        {
-            viewItem = new TreeFolderItem(d->folderView, album->title());
-            viewItem->setExpanded(true);
-        }
-        else
-        {
-            TreeFolderItem* parentItem = (TreeFolderItem*)(album->parent()->extraData(d->folderView));
-
-            if (!parentItem)
-            {
-                DWarning() << "Failed to find parent for Album "
-                           << album->title() << endl;
-                continue;
-            }
-
-            viewItem = new TreeFolderItem(parentItem, album->title());
-        }
-
-        if (viewItem)
-        {
-            viewItem->setIcon(0, icon);
-            album->setExtraData(d->folderView, viewItem);
-            d->albumMap.insert(viewItem, album);
-
-            if (album == albumToSelect)
-            {
-                viewItem->setExpanded(true);
-                d->folderView->setCurrentItem(viewItem);
-                d->folderView->scrollToItem(viewItem);
-            }
-        }
-    }
+    populateTreeView(albumToSelect);
 
     // -------------------------------------------------------------
 
@@ -199,12 +158,54 @@ AlbumSelectDialog::~AlbumSelectDialog()
     delete d;
 }
 
+void AlbumSelectDialog::populateTreeView(PAlbum *albumToSelect)
+{
+    AlbumList aList = AlbumManager::instance()->allPAlbums();
+
+    for (AlbumList::const_iterator it = aList.begin(); it != aList.end(); ++it)
+    {
+        Album *album        = *it;
+        TreeAlbumItem *item = 0;
+
+        if (album->isRoot())
+        {
+            item = new TreeAlbumItem(d->folderView, album);
+            item->setExpanded(true);
+        }
+        else
+        {
+            TreeAlbumItem* pitem = (TreeAlbumItem*)(album->parent()->extraData(d->folderView));
+            if (!pitem)
+            {
+                DWarning() << "Failed to find parent for Album " << album->title() << endl;
+                continue;
+            }
+
+            item = new TreeAlbumItem(pitem, album);
+        }
+
+        if (item)
+        {
+            PAlbum* palbum = dynamic_cast<PAlbum*>(album);
+            if (palbum)
+                item->setIcon(0, AlbumThumbnailLoader::instance()->getStandardAlbumIcon(palbum));
+
+            if (album == albumToSelect)
+            {
+                item->setExpanded(true);
+                d->folderView->setCurrentItem(item);
+                d->folderView->scrollToItem(item);
+            }
+        }
+    }
+}
+
 void AlbumSelectDialog::slotAlbumAdded(Album* album)
 {
     if (!album || album->type() != Album::PHYSICAL)
         return;
 
-    TreeFolderItem* parentItem = (TreeFolderItem*)(album->parent()->extraData(d->folderView));
+    TreeAlbumItem* parentItem = (TreeAlbumItem*)(album->parent()->extraData(d->folderView));
 
     if (!parentItem)
     {
@@ -213,14 +214,10 @@ void AlbumSelectDialog::slotAlbumAdded(Album* album)
         return;
     }
 
-    KIconLoader* iconLoader = KIconLoader::global();
-    QPixmap icon = iconLoader->loadIcon("folder", KIconLoader::NoGroup,
-                                        AlbumSettings::instance()->getDefaultTreeIconSize());
-
-    TreeFolderItem* viewItem = new TreeFolderItem(parentItem, album->title());
-    viewItem->setIcon(0, icon);
-    album->setExtraData(d->folderView, viewItem);
-    d->albumMap.insert(viewItem, (PAlbum*)album);
+    TreeAlbumItem* item = new TreeAlbumItem(parentItem, album);
+    PAlbum* palbum      = dynamic_cast<PAlbum*>(album);
+    if (palbum)
+        item->setIcon(0, AlbumThumbnailLoader::instance()->getStandardAlbumIcon(palbum));
 }
 
 void AlbumSelectDialog::slotAlbumDeleted(Album* album)
@@ -228,14 +225,9 @@ void AlbumSelectDialog::slotAlbumDeleted(Album* album)
     if (!album || album->type() != Album::PHYSICAL)
         return;
 
-    TreeFolderItem* viewItem = (TreeFolderItem*)(album->extraData(d->folderView));
-
-    if (viewItem)
-    {
-        delete viewItem;
-        album->removeExtraData(d->folderView);
-        d->albumMap.remove(viewItem);
-    }
+    TreeAlbumItem *item = (TreeAlbumItem*)(album->extraData(d->folderView));
+    if (item)
+        delete item;
 }
 
 void AlbumSelectDialog::slotAlbumsCleared()
@@ -278,7 +270,11 @@ void AlbumSelectDialog::slotUser1()
     if (!item)
         return;
 
-    PAlbum* album = d->albumMap[(TreeFolderItem*)item];
+    TreeAlbumItem* viewItem = dynamic_cast<TreeAlbumItem*>(item);
+    if (!viewItem)
+        return;
+
+    PAlbum* album = dynamic_cast<PAlbum*>(viewItem->album());
     if (!album)
         return;
 
@@ -330,14 +326,14 @@ PAlbum* AlbumSelectDialog::selectAlbum(QWidget* parent,
     if (dlg.exec() != KDialog::Accepted)
         return 0;
 
-    TreeFolderItem* item = (TreeFolderItem*) dlg.d->folderView->currentItem();
+    TreeAlbumItem* item = (TreeAlbumItem*) dlg.d->folderView->currentItem();
     if (!item || (item == dlg.d->folderView->topLevelItem(0)) &&
         !allowRootSelection)
     {
         return 0;
     }
 
-    return dlg.d->albumMap[item];
+    return (dynamic_cast<PAlbum*>(item->album()));
 }
 
 }  // namespace Digikam
