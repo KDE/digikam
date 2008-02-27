@@ -25,12 +25,10 @@
 
 // Qt includes.
 
-#include <QMap>
 #include <QLabel>
 #include <QFrame>
 #include <QLayout>
 #include <QCursor>
-#include <QDateTime>
 #include <QGridLayout>
 #include <QPixmap>
 #include <QTreeWidgetItemIterator>
@@ -51,7 +49,6 @@
 #include "treefolderitem.h"
 #include "album.h"
 #include "albummanager.h"
-#include "albumsettings.h"
 #include "albumthumbnailloader.h"
 #include "collectionmanager.h"
 #include "albumselectdialog.h"
