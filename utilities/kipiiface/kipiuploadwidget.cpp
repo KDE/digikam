@@ -40,6 +40,8 @@
 #include "ddebug.h"
 #include "album.h"
 #include "albumthumbnailloader.h"
+#include "kipiinterface.h"
+#include "kipiimagecollection.h"
 #include "kipiuploadwidget.h"
 #include "kipiuploadwidget.moc"
 
@@ -170,7 +172,7 @@ KIPI::ImageCollection KipiUploadWidget::selectedImageCollection() const
     QString ext = m_iface->fileExtensions();
     KIPI::ImageCollection collection; 
 
-    ImageCollectionSelectorItem* item = dynamic_cast<ImageCollectionSelectorItem*>(m_albumsView->currentItem());
+    KipiUploadWidgetItem* item = dynamic_cast<KipiUploadWidgetItem*>(m_albumsView->currentItem());
     if (item)
         collection = new KipiImageCollection(KipiImageCollection::AllItems, item->album(), ext);
 

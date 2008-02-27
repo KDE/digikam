@@ -33,13 +33,13 @@
 // Local includes
 
 #include "albummanager.h"
-#include "kipiinterface.h"
 
 class QWidget;
 class QTreeWidget;
 
 namespace Digikam
 {
+class KipiInterface;
 
 class KipiUploadWidget : public KIPI::UploadWidget
 {

@@ -37,7 +37,6 @@
 // Local includes
 
 #include "albummanager.h"
-#include "kipiinterface.h"
 
 class QWidget;
 class QTreeWidget;
@@ -46,6 +45,7 @@ class KTabWidget;
 
 namespace Digikam
 {
+class KipiInterface;
 
 class KipiImageCollectionSelector : public KIPI::ImageCollectionSelector
 {

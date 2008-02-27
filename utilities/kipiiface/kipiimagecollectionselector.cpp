@@ -41,6 +41,8 @@
 #include "ddebug.h"
 #include "album.h"
 #include "albumthumbnailloader.h"
+#include "kipiinterface.h"
+#include "kipiimagecollection.h"
 #include "kipiimagecollectionselector.h"
 #include "kipiimagecollectionselector.moc"
 
@@ -82,7 +84,7 @@ Album* KipiImageCollectionSelectorItem::album() const
     return m_album;
 }
 
-KipiImageCollectionSelector::KipiImageCollectionSelector(DigikamKipiInterface* iface, QWidget *parent)
+KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface *iface, QWidget *parent)
                            : KIPI::ImageCollectionSelector(parent)
 {
     m_iface      = iface;
@@ -195,10 +197,10 @@ QList<KIPI::ImageCollection> KipiImageCollectionSelector::selectedImageCollectio
     QTreeWidgetItemIterator it(m_albumsView, QTreeWidgetItemIterator::Checked);
     while (*it)
     {
-        ImageCollectionSelectorItem* item = dynamic_cast<ImageCollectionSelectorItem*>(*it);
+        KipiImageCollectionSelectorItem* item = dynamic_cast<KipiImageCollectionSelectorItem*>(*it);
         if (item)
         {
-            DigikamImageCollection *col = new DigikamImageCollection(DigikamImageCollection::AllItems, item->album(), ext);
+            KipiImageCollection *col = new KipiImageCollection(KipiImageCollection::AllItems, item->album(), ext);
             list.append(col);
          }
          ++it;
@@ -207,10 +209,10 @@ QList<KIPI::ImageCollection> KipiImageCollectionSelector::selectedImageCollectio
     QTreeWidgetItemIterator it2(m_tagsView, QTreeWidgetItemIterator::Checked);
     while (*it2)
     {
-        ImageCollectionSelectorItem* item = dynamic_cast<ImageCollectionSelectorItem*>(*it2);
+        KipiImageCollectionSelectorItem* item = dynamic_cast<KipiImageCollectionSelectorItem*>(*it2);
         if (item)
         {
-            DigikamImageCollection *col = new DigikamImageCollection(DigikamImageCollection::AllItems, item->album(), ext);
+            KipiImageCollection *col = new KipiImageCollection(KipiImageCollection::AllItems, item->album(), ext);
             list.append(col);
          }
          ++it2;
