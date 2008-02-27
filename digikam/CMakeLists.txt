@@ -41,6 +41,7 @@ INCLUDE_DIRECTORIES(
 
                      # specific libs and utilities
                      ../libs/themeengine
+                     ../utilities/kipiiface
                      ../utilities/cameragui
                      ../utilities/setup
                      ../utilities/slideshow
@@ -144,6 +145,7 @@ SET(digikam_bin_SRCS
                      ${liblighttable_SRCS}
                      ${libbatch_SRCS}
                      ${libthemeengine_SRCS}
+                     ${libkipiiface_SRCS}
 
                      album.cpp 
                      albumiconview.cpp 
@@ -181,7 +183,6 @@ SET(digikam_bin_SRCS
                      kdateedit.cpp 
                      kdatetimeedit.cpp 
                      kdatepickerpopup.cpp 
-                     kipiinterface.cpp 
                      main.cpp
                      mediaplayerview.cpp 
                      metadatahub.cpp 

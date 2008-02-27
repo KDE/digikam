@@ -1957,7 +1957,7 @@ void DigikamApp::loadPlugins()
         d->splashScreen->message(i18n("Loading Kipi Plugins"), Qt::AlignLeft, Qt::white);
 
     QStringList ignores;
-    d->kipiInterface = new DigikamKipiInterface( this, "Digikam_KIPI_interface" );
+    d->kipiInterface = new KipiInterface( this, "Digikam_KIPI_interface" );
 
     ignores.append( "HelloWorld" );
     ignores.append( "KameraKlient" );

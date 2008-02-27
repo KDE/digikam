@@ -270,7 +270,7 @@ public:
     SplashScreen                       *splashScreen;
     DCOPIface                          *dcopIface;
     ImagePluginLoader                  *imagePluginsLoader;
-    DigikamKipiInterface               *kipiInterface;
+    KipiInterface                      *kipiInterface;
     DigikamView                        *view;
     CameraList                         *cameraList;
     StatusZoomBar                      *statusZoomBar;
