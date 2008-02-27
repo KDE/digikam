@@ -171,11 +171,13 @@ void TreeFolderItem::setup()
 TreeFolderCheckListItem::TreeFolderCheckListItem(QTreeWidget *parent, const QString& text)
                        : QTreeWidgetItem(parent, QStringList() << text)
 {
+    setCheckState(0, Qt::Unchecked);
 }
 
 TreeFolderCheckListItem::TreeFolderCheckListItem(QTreeWidgetItem *parent, const QString& text)
                        : QTreeWidgetItem(parent, QStringList() << text)
 {
+    setCheckState(0, Qt::Unchecked);
 }
 
 TreeFolderCheckListItem::~TreeFolderCheckListItem()

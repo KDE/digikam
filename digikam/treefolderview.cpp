@@ -135,9 +135,9 @@ void TreeFolderView::mouseMoveEvent(QMouseEvent *e)
     {
         if(KGlobalSettings::changeCursorOverIcon())
         {
-            QPoint vp = contentsToViewport(e->pos());
+            QPoint vp = viewport()->mapFrom(this, e->pos());
             QTreeWidgetItem *item = itemAt(vp);
-            if (mouseInItemRect(item, vp.x()))
+            if (item)
                 setCursor(Qt::PointingHandCursor);
             else
                 unsetCursor();
@@ -148,7 +148,7 @@ void TreeFolderView::mouseMoveEvent(QMouseEvent *e)
     if(d->dragItem && 
        (d->dragStartPos - e->pos()).manhattanLength() > QApplication::startDragDistance())
     {
-        QPoint vp = contentsToViewport(e->pos());
+        QPoint vp = viewport()->mapFrom(this, e->pos());
         TreeFolderItem *item = dynamic_cast<TreeFolderItem*>(itemAt(vp));
         if(!item)
         {
@@ -162,7 +162,7 @@ void TreeFolderView::mousePressEvent(QMouseEvent *e)
 {
     QTreeWidget::mousePressEvent(e);
 
-    QPoint vp            = contentsToViewport(e->pos());
+    QPoint vp = viewport()->mapFrom(this, e->pos());
     TreeFolderItem *item = dynamic_cast<TreeFolderItem*>(itemAt(vp));
 
     if(item && e->button() == Qt::LeftButton) 
@@ -199,7 +199,7 @@ void TreeFolderView::dragLeaveEvent(QDragLeaveEvent * e)
     if(d->oldHighlightItem)
     {
         d->oldHighlightItem->setFocus(false);
-        d->oldHighlightItem->repaint();
+//        d->oldHighlightItem->repaint();
         d->oldHighlightItem = 0;
     }
 }
@@ -208,18 +208,18 @@ void TreeFolderView::dragMoveEvent(QDragMoveEvent *e)
 {
     QTreeWidget::dragMoveEvent(e);
 
-    QPoint vp            = contentsToViewport(e->pos());
+    QPoint vp = viewport()->mapFrom(this, e->pos());
     TreeFolderItem *item = dynamic_cast<TreeFolderItem*>(itemAt(vp));
     if(item)
     {
         if(d->oldHighlightItem)
         {
             d->oldHighlightItem->setFocus(false);
-            d->oldHighlightItem->repaint();
+//            d->oldHighlightItem->repaint();
         }
         item->setFocus(true);
         d->oldHighlightItem = item;
-        item->repaint();
+//        item->repaint();
     }
     e->setAccepted(acceptDrop(e));
 }
@@ -231,7 +231,7 @@ void TreeFolderView::dropEvent(QDropEvent *e)
     if(d->oldHighlightItem)
     {
         d->oldHighlightItem->setFocus(false);
-        d->oldHighlightItem->repaint();
+//        d->oldHighlightItem->repaint();
         d->oldHighlightItem = 0;
     }
 }
@@ -241,7 +241,7 @@ bool TreeFolderView::acceptDrop(const QDropEvent *) const
     return false;
 }
 
-bool TreeFolderView::mouseInItemRect(QTreeWidgetItem* item, int x) const
+/*bool TreeFolderView::mouseInItemRect(QTreeWidgetItem* item, int x) const
 {
     if (!item)
         return false;
@@ -253,7 +253,7 @@ bool TreeFolderView::mouseInItemRect(QTreeWidgetItem* item, int x) const
     int width  = item->width(fontMetrics(), this, 0);
 
     return (x > offset && x < (offset + width));
-}
+}*/
 
 void TreeFolderView::slotThemeChanged()
 {
@@ -299,26 +299,23 @@ void TreeFolderView::loadViewState()
 
     int selectedItem = group.readEntry("LastSelectedItem", 0);
 
-    Q3ValueList<int> openFolders;
+    QList<int> openFolders;
     if(group.hasKey("OpenFolders"))
-    {
-        openFolders = group.readEntry("OpenFolders",QList<int>());
-    }
+        openFolders = group.readEntry("OpenFolders", QList<int>());
 
     TreeFolderItem *item      = 0;
     TreeFolderItem *foundItem = 0;
-    QTreeWidgetItemIterator it(lastItem());
-
-    for( ; it.current(); --it)
+    QTreeWidgetItemIterator it(this);
+    for( ; *it; ++it)
     {
-        item = dynamic_cast<TreeFolderItem*>(it.current());
+        item = dynamic_cast<TreeFolderItem*>(*it);
         if(!item)
             continue;
         // Start the album root always open
         if(openFolders.contains(item->id()) || item->id() == 0)
-            setOpen(item, true);
+            expandItem(item);
         else
-            setOpen(item, false);
+            collapseItem(item);
 
         if(item->id() == selectedItem)
         {
@@ -327,14 +324,10 @@ void TreeFolderView::loadViewState()
         }
     }
 
-    // Important note: this cannot be done inside the previous loop
-    // because opening folders prevents the visibility.
-    // Fixes bug #144815.
-    // (Looks a bit like a bug in Qt to me ...)
     if (foundItem)
     {
-        setSelected(foundItem, true);
-        ensureItemVisible(foundItem);
+        setCurrentItem(foundItem);
+        scrollToItem(foundItem);
     }
 }
 
@@ -343,7 +336,7 @@ void TreeFolderView::saveViewState()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(objectName());
 
-    TreeFolderItem *item = dynamic_cast<TreeFolderItem*>(selectedItem());
+    TreeFolderItem *item = dynamic_cast<TreeFolderItem*>(currentItem());
     if(item)
         group.writeEntry("LastSelectedItem", item->id());
     else
@@ -351,10 +344,10 @@ void TreeFolderView::saveViewState()
 
     QList<int> openFolders;
     QTreeWidgetItemIterator it(this);
-    for( ; it.current(); ++it)
+    for( ; *it; ++it)
     {
-        item = dynamic_cast<TreeFolderItem*>(it.current());
-        if(item && isOpen(item))
+        item = dynamic_cast<TreeFolderItem*>(*it);
+        if(item && item->isExpanded())
             openFolders.push_back(item->id());
     }
     group.writeEntry("OpenFolders", openFolders);
@@ -362,7 +355,7 @@ void TreeFolderView::saveViewState()
 
 void TreeFolderView::slotSelectionChanged()
 {
-    QTreeWidget::selectionChanged();
+    QTreeWidget::itemSelectionChanged();
 }
 
 void TreeFolderView::selectItem(int)
