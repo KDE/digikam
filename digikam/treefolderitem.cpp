@@ -353,6 +353,11 @@ Album* TreeAlbumItem::album() const
     return m_album;
 }
 
+int TreeAlbumItem::id() const
+{
+    return album()->id();
+}
+
 // ------------------------------------------------------------------------------------
 
 TreeAlbumCheckListItem::TreeAlbumCheckListItem(QTreeWidget* parent, Album* album)

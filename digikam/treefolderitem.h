@@ -82,6 +82,7 @@ public:
     virtual ~TreeAlbumItem();
 
     Album* album() const;
+    int id() const;
 
 private:
 
