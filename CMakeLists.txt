@@ -427,6 +427,14 @@ SET(libsetup_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/cameraselection.cpp 
    )
 
+SET(libkipiiface_SRCS 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipiimageinfo.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipiimagecollection.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipiimagecollectionselector.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipiuploadwidget.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipiinterface.cpp 
+    )
+
 SET(libimagepropertiesdigikam_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiessidebarcamgui.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiesgpstab.cpp
