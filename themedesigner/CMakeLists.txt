@@ -81,6 +81,8 @@ SET(libdigikamtheme_SRCS
     ../digikam/syncjob.cpp 
     ../digikam/tagcreatedlg.cpp 
     ../digikam/tagspopupmenu.cpp 
+    ../digikam/treefolderitem.cpp 
+    ../digikam/treefolderview.cpp 
    )
 
 SET(digikamthemedesigner_SRCS 
