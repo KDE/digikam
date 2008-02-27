@@ -33,7 +33,6 @@
 #include <QDragLeaveEvent>
 #include <QDropEvent>
 #include <QDragEnterEvent>
-#include <QPixmap>
 
 // Local includes
 
@@ -80,8 +79,6 @@ protected:
 
     /** writes the views state to disk */
     virtual void saveViewState();
-
-    //bool mouseInItemRect(QTreeWidgetItem* item, int x) const;
 
 protected slots:
 

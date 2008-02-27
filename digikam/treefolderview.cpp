@@ -24,7 +24,6 @@
 // Qt includes.
 
 #include <QList>
-#include <QPixmap>
 
 // KDE includes.
 
