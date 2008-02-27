@@ -69,6 +69,7 @@ KipiImageCollectionSelectorItem::KipiImageCollectionSelectorItem(QTreeWidget* pa
     m_album = album;
     m_album->setExtraData(treeWidget(), this);
     setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled); 
+    setCheckState(0, Qt::Unchecked);
 }
 
 KipiImageCollectionSelectorItem::KipiImageCollectionSelectorItem(QTreeWidgetItem* parent, Album* album)
@@ -77,6 +78,7 @@ KipiImageCollectionSelectorItem::KipiImageCollectionSelectorItem(QTreeWidgetItem
     m_album = album;
     m_album->setExtraData(treeWidget(), this);
     setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled); 
+    setCheckState(0, Qt::Unchecked);
 }
 
 Album* KipiImageCollectionSelectorItem::album() const
@@ -165,7 +167,6 @@ void KipiImageCollectionSelector::populateTreeView(const AlbumList& aList, QTree
 
         if (item)
         {
-            item->setCheckState(0, Qt::Unchecked);
             PAlbum* palbum = dynamic_cast<PAlbum*>(album);
             if (palbum)
                 item->setIcon(0, AlbumThumbnailLoader::instance()->getStandardAlbumIcon(palbum));
