@@ -26,11 +26,6 @@
 #ifndef ALBUMSELECTDIALOG_H
 #define ALBUMSELECTDIALOG_H
 
-// Qt includes.
-
-#include <Q3ListViewItem>
-#include <QMap>
-
 // KDE includes.
 
 #include <kdialog.h>
@@ -66,7 +61,7 @@ private slots:
     void slotAlbumDeleted(Album* a);
     void slotAlbumsCleared();
     void slotSelectionChanged();
-    void slotContextMenu(Q3ListViewItem *item, const QPoint &, int);
+    void slotContextMenu();
     void slotUser1();
 
 private:
