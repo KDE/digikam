@@ -8,7 +8,7 @@
  *               pictures from camera
  * 
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -31,6 +31,7 @@
 #include <qpopupmenu.h>
 #include <qcursor.h>
 #include <qdatetime.h>
+#include <qmap.h>
 
 // KDE includes.
 
@@ -102,7 +103,7 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
         message->setText(header);
 
     d->folderView = new FolderView(plainPage());
-    d->folderView->addColumn(i18n("digiKam Albums"));
+    d->folderView->addColumn(i18n("My Albums"));
     d->folderView->setColumnWidthMode( 0, QListView::Maximum );
     d->folderView->setResizeMode( QListView::AllColumns );
     d->folderView->setRootIsDecorated(true);
@@ -330,4 +331,3 @@ PAlbum* AlbumSelectDialog::selectAlbum(QWidget* parent,
 }
 
 }  // namespace Digikam
-
