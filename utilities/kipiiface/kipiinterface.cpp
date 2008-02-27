@@ -45,11 +45,13 @@ extern "C"
 #include "constants.h"
 #include "ddebug.h"
 #include "album.h"
+#include "albumdb.h"
 #include "albumsettings.h"
 #include "collectionmanager.h"
 #include "databaseaccess.h"
 #include "imageattributeswatch.h"
 #include "thumbnailloadthread.h"
+#include "kipiimageinfo.h"
 #include "kipiimagecollection.h"
 #include "kipiinterface.h"
 #include "kipiinterface.moc"
@@ -148,12 +150,12 @@ QList<KIPI::ImageCollection> KipiInterface::allAlbums()
     return result;
 }
 
-KIPI::ImageInfo KipiInterface::info( const KUrl& url )
+KIPI::ImageInfo KipiInterface::info(const KUrl& url)
 {
-    return KIPI::ImageInfo( new DigikamImageInfo( this, url ) );
+    return KIPI::ImageInfo(new KipiImageInfo(this, url));
 }
 
-void KipiInterface::refreshImages( const KUrl::List& urls )
+void KipiInterface::refreshImages(const KUrl::List& urls)
 {
     KUrl::List ulist = urls;
 
@@ -264,12 +266,12 @@ void KipiInterface::slotThumbnailLoaded(const LoadingDescription& desc, const QP
 
 KIPI::ImageCollectionSelector* KipiInterface::imageCollectionSelector(QWidget *parent)
 {
-    return (new DigikamImageCollectionSelector(this, parent));
+    return (new KipiImageCollectionSelector(this, parent));
 }
 
 KIPI::UploadWidget* KipiInterface::uploadWidget(QWidget *parent)
 {
-    return (new DigikamUploadWidget(this, parent));
+    return (new KipiUploadWidget(this, parent));
 }
 
 }  // namespace Digikam
