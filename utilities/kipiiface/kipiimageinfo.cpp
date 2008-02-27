@@ -24,15 +24,6 @@
  * 
  * ============================================================ */
 
-// C Ansi includes
-
-/*
-extern "C"
-{
-#include <sys/types.h>
-#include <utime.h>
-}
-*/
 // KDE includes.
 
 #include <klocale.h>
