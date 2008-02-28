@@ -496,7 +496,7 @@ void TagFolderView::slotSelectionChanged()
         return;
     }
 
-    d->albumMan->setCurrentAlbum(tagitem->album());
+    d->albumMan->setCurrentAlbum(tagitem->talbum());
 }
 
 void TagFolderView::slotContextMenu(const QPoint& pt)
@@ -737,7 +737,7 @@ void TagFolderView::dragObject()
         return;
 
     QDrag *drag = new QDrag(this);
-    drag->setMimeData(new DTagDrag(item->album()->id()));
+    drag->setMimeData(new DTagDrag(item->talbum()->id()));
     drag->setPixmap(item->icon(0).pixmap(AlbumThumbnailLoader::instance()->thumbnailSize()));
     drag->exec();
 }
@@ -763,7 +763,7 @@ bool TagFolderView::acceptDrop(const QDropEvent *e) const
             return false;
 
         // Dragging a parent on its child makes no sense
-        if(itemDrag && itemDrag->album()->isAncestorOf(itemDrop->album()))
+        if(itemDrag && itemDrag->talbum()->isAncestorOf(itemDrop->talbum()))
             return false;
 
         return true;
@@ -811,7 +811,7 @@ void TagFolderView::dropEvent(QDropEvent *e)
         if(!talbum)
             return;
 
-        if (talbum == itemDrop->album())
+        if (talbum == itemDrop->talbum())
             return;
 
         KMenu popMenu(this);
@@ -996,7 +996,7 @@ void TagFolderView::slotRefresh(const QMap<int, int>& tagsStatMap)
         TagFolderViewItem* item = dynamic_cast<TagFolderViewItem*>(*it);
         if (item)
         {
-            if (item->album())
+            if (item->talbum())
             {
                 int id = item->id();
                 QMap<int, int>::const_iterator it2 = tagsStatMap.find(id);
