@@ -72,7 +72,9 @@ void TreeFolderItem::setFocus(bool b)
     m_focus = b;
     setForeground(0, m_focus ? treeWidget()->palette().link() 
                              : treeWidget()->palette().text());
-    setBackground(0, m_focus ? QBrush(treeWidget()->palette().color(QPalette::Disabled, QPalette::Highlight))
+    QColor hb = treeWidget()->palette().highlight().color();
+    hb.setAlpha(127);
+    setBackground(0, m_focus ? QBrush(hb)
                              : treeWidget()->palette().base());
 }
 
