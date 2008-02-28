@@ -84,6 +84,8 @@ TreeFolderView::TreeFolderView(QWidget *parent, const char *name)
     setDropIndicatorShown(true);
     setAcceptDrops(true);
     viewport()->setAcceptDrops(true);
+    setItemsExpandable(true);
+    setAutoExpandDelay(300);
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
@@ -164,6 +166,8 @@ void TreeFolderView::mouseMoveEvent(QMouseEvent *e)
             return;
         }
     }
+
+    e->accept();
 }
 
 void TreeFolderView::mousePressEvent(QMouseEvent *e)
@@ -235,7 +239,7 @@ void TreeFolderView::dragMoveEvent(QDragMoveEvent *e)
     e->setAccepted(acceptDrop(e));
 }
 
-void TreeFolderView::dropEvent(QDropEvent *e)
+void TreeFolderView::dropEvent(QDropEvent*)
 {
     if(d->oldHighlightItem)
     {
