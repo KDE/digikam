@@ -338,7 +338,7 @@ void TagFolderView::slotAlbumDeleted(Album *album)
     if(!tag)
         return;
 
-    TagFolderViewItem *item = (TagFolderViewItem*)album->extraData(this);
+    TagFolderViewItem *item = (TagFolderViewItem*)(album->extraData(this));
     if(item)
     {
         TagFolderViewItem *itemParent = dynamic_cast<TagFolderViewItem*>(item->parent());
@@ -362,7 +362,7 @@ void TagFolderView::slotAlbumMoved(TAlbum* tag, TAlbum* newParent)
     if (!tag || !newParent)
         return;
 
-    TagFolderViewItem* item = (TagFolderViewItem*)tag->extraData(this);
+    TagFolderViewItem* item = (TagFolderViewItem*)(tag->extraData(this));
     if (!item)
         return;
 
@@ -376,7 +376,7 @@ void TagFolderView::slotAlbumMoved(TAlbum* tag, TAlbum* newParent)
         removeItemWidget(item, 0);
     }
 
-    TagFolderViewItem* newPItem = (TagFolderViewItem*)newParent->extraData(this);
+    TagFolderViewItem* newPItem = (TagFolderViewItem*)(newParent->extraData(this));
     if (newPItem)
         newPItem->addChild(item);
     else
@@ -433,7 +433,7 @@ void TagFolderView::slotGotThumbnailFromIcon(Album *album, const QPixmap& thumbn
     if(!album || album->type() != Album::TAG)
         return;
 
-    TagFolderViewItem* item = (TagFolderViewItem*)album->extraData(this);
+    TagFolderViewItem* item = (TagFolderViewItem*)(album->extraData(this));
 
     if(!item)
         return;
@@ -754,24 +754,17 @@ bool TagFolderView::acceptDrop(const QDropEvent *e) const
     if(DTagDrag::canDecode(e->mimeData()) ||
        TagDrag::canDecode(e)  || TagListDrag::canDecode(e)) // TODO: remove it when all D&D will ported to Qt4
     {
-        DDebug() << "Enter" << endl;
         // Allow dragging at the root, to move the tag to the root
         if(!itemDrop)
             return true;
-
-        DDebug() << "Stage1" << endl;
 
         // Dragging an item on itself makes no sense
         if(itemDrag == itemDrop)
             return false;
 
-        DDebug() << "Stage2" << endl;
-
         // Dragging a parent on its child makes no sense
         if(itemDrag && itemDrag->album()->isAncestorOf(itemDrop->album()))
             return false;
-
-        DDebug() << "Stage3" << endl;
 
         return true;
     }
@@ -794,9 +787,12 @@ void TagFolderView::dropEvent(QDropEvent *e)
     if(!acceptDrop(e))
         return;
 
+    e->acceptProposedAction();
+
     QPoint vp = viewport()->mapFrom(this, e->pos());
     if (!header()->isHidden())
         vp.setY(vp.y()+header()->height());
+
     TagFolderViewItem *itemDrop = dynamic_cast<TagFolderViewItem*>(itemAt(vp));
 
     if (!itemDrop)

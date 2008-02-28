@@ -81,7 +81,6 @@ TreeFolderView::TreeFolderView(QWidget *parent, const char *name)
     setAllColumnsShowFocus(true);
     setSelectionMode(QAbstractItemView::SingleSelection);
     setDragEnabled(true);
-    setDragDropMode(QAbstractItemView::InternalMove);
     setDropIndicatorShown(true);
     setAcceptDrops(true);
     viewport()->setAcceptDrops(true);
@@ -152,8 +151,7 @@ void TreeFolderView::mouseMoveEvent(QMouseEvent *e)
         return;
     }
 
-    if(d->dragItem && 
-       (d->dragStartPos - e->pos()).manhattanLength() > QApplication::startDragDistance())
+    if(d->dragItem && (d->dragStartPos - e->pos()).manhattanLength() > QApplication::startDragDistance())
     {
         QPoint vp = viewport()->mapFrom(this, e->pos());
         if (!header()->isHidden())
@@ -180,15 +178,17 @@ void TreeFolderView::mousePressEvent(QMouseEvent *e)
 
     if(item && e->button() == Qt::LeftButton) 
     {
-        d->dragItem = item;
+        d->dragStartPos = e->pos();
+        d->dragItem     = item;
         dragObject();
     }
+
+    e->accept();
 }
 
 void TreeFolderView::mouseReleaseEvent(QMouseEvent *e)
 {
     QTreeWidget::mouseReleaseEvent(e);
-
     d->dragItem = 0;
 }
 
@@ -200,8 +200,7 @@ TreeFolderItem* TreeFolderView::dragItem() const
 void TreeFolderView::dragEnterEvent(QDragEnterEvent *e)
 {
     QTreeWidget::dragEnterEvent(e);
-
-    e->setAccepted(acceptDrop(e));
+    e->acceptProposedAction();
 }
 
 void TreeFolderView::dragLeaveEvent(QDragLeaveEvent *e)
@@ -232,13 +231,12 @@ void TreeFolderView::dragMoveEvent(QDragMoveEvent *e)
         item->setFocus(true);
         d->oldHighlightItem = item;
     }
+
     e->setAccepted(acceptDrop(e));
 }
 
 void TreeFolderView::dropEvent(QDropEvent *e)
 {
-    QTreeWidget::dropEvent(e);
-
     if(d->oldHighlightItem)
     {
         d->oldHighlightItem->setFocus(false);
@@ -246,24 +244,10 @@ void TreeFolderView::dropEvent(QDropEvent *e)
     }
 }
 
-bool TreeFolderView::acceptDrop(const QDropEvent *) const
+bool TreeFolderView::acceptDrop(const QDropEvent*) const
 {
     return false;
 }
-
-/*bool TreeFolderView::mouseInItemRect(QTreeWidgetItem* item, int x) const
-{
-    if (!item)
-        return false;
-
-    x += contentsX();
-
-    int offset = treeStepSize()*(item->depth() + (rootIsDecorated() ? 1 : 0));
-    offset    += itemMargin();
-    int width  = item->width(fontMetrics(), this, 0);
-
-    return (x > offset && x < (offset + width));
-}*/
 
 void TreeFolderView::slotThemeChanged()
 {
