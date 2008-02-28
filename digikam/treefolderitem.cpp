@@ -70,20 +70,11 @@ TreeFolderItem::~TreeFolderItem()
 void TreeFolderItem::setFocus(bool b)
 {
     m_focus = b;
-    if (m_focus)
-    {
-        QFont f = font(0);
-        f.setBold(true);
-        setFont(0, f);
-        setForeground(0, treeWidget()->palette().link());
-    }
-    else
-    {
-        QFont f = font(0);
-        f.setBold(false);
-        setFont(0, f);
-        setForeground(0, treeWidget()->palette().text());
-    }
+    QFont f = font(0);
+    f.setBold(m_focus);
+    setFont(0, f);
+    setForeground(0, m_focus ? treeWidget()->palette().link() 
+                             : treeWidget()->palette().text());
 }
 
 bool TreeFolderItem::focus() const
