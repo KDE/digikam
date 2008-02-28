@@ -27,6 +27,7 @@
 #include <Q3ValueList>
 #include <QPainter>
 #include <QCursor>
+#include <QHeaderView>
 
 // KDE includes.
 
@@ -745,6 +746,9 @@ Q3DragObject* TagFolderView::dragObject()
 bool TagFolderView::acceptDrop(const QDropEvent *e) const
 {
     QPoint vp = viewport()->mapFrom((QWidget*)this, e->pos());
+    if (!header()->isHidden())
+        vp.setY(vp.y()+header()->height());
+
     TagFolderViewItem *itemDrop = dynamic_cast<TagFolderViewItem*>(itemAt(vp));
     TagFolderViewItem *itemDrag = dynamic_cast<TagFolderViewItem*>(dragItem());
 
@@ -784,6 +788,8 @@ void TagFolderView::dropEvent(QDropEvent *e)
         return;
 
     QPoint vp = viewport()->mapFrom(this, e->pos());
+    if (!header()->isHidden())
+        vp.setY(vp.y()+header()->height());
     TagFolderViewItem *itemDrop = dynamic_cast<TagFolderViewItem*>(itemAt(vp));
 
     if (!itemDrop)

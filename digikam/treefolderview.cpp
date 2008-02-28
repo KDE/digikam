@@ -23,6 +23,7 @@
 
 // Qt includes.
 
+#include <QHeaderView>
 #include <QList>
 
 // KDE includes.
@@ -136,6 +137,8 @@ void TreeFolderView::mouseMoveEvent(QMouseEvent *e)
         if(KGlobalSettings::changeCursorOverIcon())
         {
             QPoint vp = viewport()->mapFrom(this, e->pos());
+            if (!header()->isHidden())
+                vp.setY(vp.y()+header()->height());
             QTreeWidgetItem *item = itemAt(vp);
             if (item)
                 setCursor(Qt::PointingHandCursor);
@@ -149,6 +152,8 @@ void TreeFolderView::mouseMoveEvent(QMouseEvent *e)
        (d->dragStartPos - e->pos()).manhattanLength() > QApplication::startDragDistance())
     {
         QPoint vp = viewport()->mapFrom(this, e->pos());
+        if (!header()->isHidden())
+            vp.setY(vp.y()+header()->height());
         TreeFolderItem *item = dynamic_cast<TreeFolderItem*>(itemAt(vp));
         if(!item)
         {
@@ -163,6 +168,8 @@ void TreeFolderView::mousePressEvent(QMouseEvent *e)
     QTreeWidget::mousePressEvent(e);
 
     QPoint vp = viewport()->mapFrom(this, e->pos());
+    if (!header()->isHidden())
+        vp.setY(vp.y()+header()->height());
     TreeFolderItem *item = dynamic_cast<TreeFolderItem*>(itemAt(vp));
 
     if(item && e->button() == Qt::LeftButton) 
@@ -199,7 +206,6 @@ void TreeFolderView::dragLeaveEvent(QDragLeaveEvent * e)
     if(d->oldHighlightItem)
     {
         d->oldHighlightItem->setFocus(false);
-//        d->oldHighlightItem->repaint();
         d->oldHighlightItem = 0;
     }
 }
@@ -209,17 +215,16 @@ void TreeFolderView::dragMoveEvent(QDragMoveEvent *e)
     QTreeWidget::dragMoveEvent(e);
 
     QPoint vp = viewport()->mapFrom(this, e->pos());
+    if (!header()->isHidden())
+        vp.setY(vp.y()+header()->height());
     TreeFolderItem *item = dynamic_cast<TreeFolderItem*>(itemAt(vp));
     if(item)
     {
         if(d->oldHighlightItem)
-        {
             d->oldHighlightItem->setFocus(false);
-//            d->oldHighlightItem->repaint();
-        }
+
         item->setFocus(true);
         d->oldHighlightItem = item;
-//        item->repaint();
     }
     e->setAccepted(acceptDrop(e));
 }
