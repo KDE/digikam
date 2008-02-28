@@ -194,11 +194,11 @@ TagFolderView::TagFolderView(QWidget *parent)
 
     AlbumThumbnailLoader *loader = AlbumThumbnailLoader::instance();
 
-    connect(loader, SIGNAL(signalThumbnail(Album *, const QPixmap&)),
-            this, SLOT(slotGotThumbnailFromIcon(Album *, const QPixmap&)));
+    connect(loader, SIGNAL(signalThumbnail(Album*, const QPixmap&)),
+            this, SLOT(slotGotThumbnailFromIcon(Album*, const QPixmap&)));
 
-    connect(loader, SIGNAL(signalFailed(Album *)),
-            this, SLOT(slotThumbnailLost(Album *)));
+    connect(loader, SIGNAL(signalFailed(Album*)),
+            this, SLOT(slotThumbnailLost(Album*)));
 
     connect(loader, SIGNAL(signalReloadThumbnails()),
             this, SLOT(slotReloadThumbnails()));
@@ -272,20 +272,20 @@ void TagFolderView::slotTextTagFilterChanged(const QString& filter)
             }
         }
 
-        TagFolderViewItem* viewItem = (TagFolderViewItem*) talbum->extraData(this);
+        TagFolderViewItem* viewItem = (TagFolderViewItem*)(talbum->extraData(this));
 
         if (match)
         {
             atleastOneMatch = true;
 
             if (viewItem)
-                viewItem->setHidden(true);
+                viewItem->setHidden(false);
         }
         else
         {
             if (viewItem)
             {
-                viewItem->setHidden(false);
+                viewItem->setHidden(true);
             }
         }
     }
@@ -313,7 +313,7 @@ void TagFolderView::slotAlbumAdded(Album *album)
     }
     else
     {
-        TagFolderViewItem *parent = (TagFolderViewItem*)tag->parent()->extraData(this);
+        TagFolderViewItem *parent = (TagFolderViewItem*)(tag->parent()->extraData(this));
 
         if (!parent)
         {
