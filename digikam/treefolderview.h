@@ -69,6 +69,7 @@ protected:
     virtual bool acceptDrop(const QDropEvent *e) const;
 
     TreeFolderItem* dragItem() const;
+    virtual void dragObject(){};
 
     void fontChange(const QFont& oldFont);
 

@@ -42,7 +42,6 @@
 #include "albumsettings.h"
 #include "albumthumbnailloader.h"
 #include "themeengine.h"
-#include "dragobjects.h"
 #include "treefolderitem.h"
 #include "treefolderview.h"
 #include "treefolderview.moc"
@@ -78,10 +77,11 @@ TreeFolderView::TreeFolderView(QWidget *parent, const char *name)
     setObjectName(name);
     setColumnCount(1);
     setRootIsDecorated(true);
-    setSelectionMode(QAbstractItemView::SingleSelection);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setAllColumnsShowFocus(true);
+    setSelectionMode(QAbstractItemView::SingleSelection);
     setDragEnabled(true);
+    setDragDropMode(QAbstractItemView::InternalMove);
     setDropIndicatorShown(true);
     setAcceptDrops(true);
     viewport()->setAcceptDrops(true);
@@ -96,6 +96,7 @@ TreeFolderView::TreeFolderView(QWidget *parent, const char *name)
             this, SLOT(slotIconSizeChanged()));
 
     fontChange(font());
+    slotIconSizeChanged();
 }
 
 TreeFolderView::~TreeFolderView()
@@ -125,6 +126,8 @@ void TreeFolderView::fontChange(const QFont& oldFont)
 
 void TreeFolderView::slotIconSizeChanged()
 {
+    int size = AlbumThumbnailLoader::instance()->thumbnailSize();
+    setIconSize(QSize(size, size));
     slotThemeChanged();
 }
 
@@ -139,6 +142,7 @@ void TreeFolderView::mouseMoveEvent(QMouseEvent *e)
             QPoint vp = viewport()->mapFrom(this, e->pos());
             if (!header()->isHidden())
                 vp.setY(vp.y()+header()->height());
+
             QTreeWidgetItem *item = itemAt(vp);
             if (item)
                 setCursor(Qt::PointingHandCursor);
@@ -154,6 +158,7 @@ void TreeFolderView::mouseMoveEvent(QMouseEvent *e)
         QPoint vp = viewport()->mapFrom(this, e->pos());
         if (!header()->isHidden())
             vp.setY(vp.y()+header()->height());
+
         TreeFolderItem *item = dynamic_cast<TreeFolderItem*>(itemAt(vp));
         if(!item)
         {
@@ -170,13 +175,13 @@ void TreeFolderView::mousePressEvent(QMouseEvent *e)
     QPoint vp = viewport()->mapFrom(this, e->pos());
     if (!header()->isHidden())
         vp.setY(vp.y()+header()->height());
+
     TreeFolderItem *item = dynamic_cast<TreeFolderItem*>(itemAt(vp));
 
     if(item && e->button() == Qt::LeftButton) 
     {
-        d->dragStartPos = e->pos();
-        d->dragItem     = item;
-        return;
+        d->dragItem = item;
+        dragObject();
     }
 }
 
@@ -199,7 +204,7 @@ void TreeFolderView::dragEnterEvent(QDragEnterEvent *e)
     e->setAccepted(acceptDrop(e));
 }
 
-void TreeFolderView::dragLeaveEvent(QDragLeaveEvent * e)
+void TreeFolderView::dragLeaveEvent(QDragLeaveEvent *e)
 {
     QTreeWidget::dragLeaveEvent(e);
 
@@ -217,6 +222,7 @@ void TreeFolderView::dragMoveEvent(QDragMoveEvent *e)
     QPoint vp = viewport()->mapFrom(this, e->pos());
     if (!header()->isHidden())
         vp.setY(vp.y()+header()->height());
+
     TreeFolderItem *item = dynamic_cast<TreeFolderItem*>(itemAt(vp));
     if(item)
     {
@@ -236,7 +242,6 @@ void TreeFolderView::dropEvent(QDropEvent *e)
     if(d->oldHighlightItem)
     {
         d->oldHighlightItem->setFocus(false);
-//        d->oldHighlightItem->repaint();
         d->oldHighlightItem = 0;
     }
 }
@@ -293,7 +298,7 @@ void TreeFolderView::slotThemeChanged()
 void TreeFolderView::slotAllAlbumsLoaded()
 {
     disconnect(AlbumManager::instance(), SIGNAL(signalAllAlbumsLoaded()),
-               this, SLOT(slotAllAlbumsLoaded()));    
+               this, SLOT(slotAllAlbumsLoaded()));
     loadViewState();
 }
 

@@ -77,7 +77,6 @@ public slots:
 protected:
 
     void dropEvent(QDropEvent *e);
-    Q3DragObject* dragObject();
     bool acceptDrop(const QDropEvent *e) const;
 
 private slots:
@@ -104,6 +103,7 @@ private:
     void tagEdit(TagFolderViewItem *item);
     void tagDelete(TagFolderViewItem *item);
     void setTagThumbnail(TAlbum *album);
+    void dragObject();
 
 private:
 

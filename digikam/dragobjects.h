@@ -8,6 +8,7 @@
  * 
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2004-2005 by Joern Ahrens <joern.ahrens@kdemail.net>
+ * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,8 +37,6 @@
 #include <k3urldrag.h>
 
 class QWidget;
-
-/** @file */
 
 namespace Digikam
 {
@@ -74,18 +73,20 @@ protected:
     virtual QByteArray encodedData(const char* mime) const;
 
 private:
-    
+
     KUrl::List      m_kioURLs;
-    Q3ValueList<int> m_albumIDs;    
+    Q3ValueList<int> m_albumIDs;
     Q3ValueList<int> m_imageIDs;
 };
 
+// ------------------------------------------------------------------------
 
 /**
  * Provides a drag object for a tag
  *
  * When a tag is moved through drag'n'drop an object of this class 
  * is created.
+ * This class is obsolete. Do not use it. Use DTagDrag instead.
  */
 class TagDrag : public Q3DragObject
 {
@@ -93,15 +94,17 @@ public:
 
     TagDrag(int albumid, QWidget *dragSource = 0, const char *name = 0);
     static bool     canDecode(const QMimeSource* e);
-    
+
 protected:
 
     QByteArray      encodedData( const char* ) const;
     const char*     format(int i) const;
-    
+
 private:
     int     mAlbumID;
 };
+
+// ------------------------------------------------------------------------
 
 /**
  * Provides a drag object for an album
@@ -121,10 +124,13 @@ protected:
 
     QByteArray      encodedData(const char*) const;
     const char*     format(int i) const;
-    
+
 private:
+
     int     mAlbumID;
 };
+
+// ------------------------------------------------------------------------
 
 /**
  * Provides a drag object for a list of tags
@@ -139,16 +145,18 @@ public:
     TagListDrag(const Q3ValueList<int>& tagIDs, QWidget *dragSource = 0,
                 const char *name = 0);
     static bool canDecode(const QMimeSource* e);
-    
+
 protected:
 
     QByteArray  encodedData( const char* ) const;
     const char* format(int i) const;
-    
+
 private:
 
     Q3ValueList<int> m_tagIDs;
 };
+
+// ------------------------------------------------------------------------
 
 /**
  * Provides a drag object for a list of camera items
@@ -163,15 +171,36 @@ public:
     CameraItemListDrag(const QStringList& cameraItemPaths, QWidget *dragSource = 0,
                        const char *name = 0);
     static bool canDecode(const QMimeSource* e);
-    
+
 protected:
 
     QByteArray  encodedData( const char* ) const;
     const char* format(int i) const;
-    
+
 private:
 
     QStringList m_cameraItemPaths;
+};
+
+// ------------------------------------------------------------------------
+
+/**
+ * Provides a drag object for a tag
+ *
+ * When a tag is moved through drag'n'drop an object of this class 
+ * is created.
+ */
+class DTagDrag : public QMimeData
+{
+public:
+
+    DTagDrag(int albumid, const char *name=0);
+    static bool canDecode(const QMimeData* e);
+
+protected:
+
+    QByteArray  encodedData(const char*) const;
+    const char* format(int i) const;
 };
 
 }  // namespace Digikam

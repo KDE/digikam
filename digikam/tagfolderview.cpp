@@ -714,10 +714,9 @@ void TagFolderView::tagDelete(TagFolderViewItem *item)
     }
     else
     {
-        int result =
-            KMessageBox::warningContinueCancel(0, i18n("Delete '%1' tag?",
-                                               tag->title()), i18n("Delete Tag"),
-                                               KGuiItem(i18n("Delete"), "edit-delete"));
+        int result = KMessageBox::warningContinueCancel(0, i18n("Delete '%1' tag?",
+                                                        tag->title()), i18n("Delete Tag"),
+                                                        KGuiItem(i18n("Delete"), "edit-delete"));
 
         if(result == KMessageBox::Continue)
         {
@@ -728,19 +727,19 @@ void TagFolderView::tagDelete(TagFolderViewItem *item)
     }
 }
 
-Q3DragObject* TagFolderView::dragObject()
+void TagFolderView::dragObject()
 {
     TagFolderViewItem *item = dynamic_cast<TagFolderViewItem*>(dragItem());
-    if(!item)
-        return 0;
+    if(!item) 
+        return;
 
     if(!item->parent())
-        return 0;
+        return;
 
-    TagDrag *t = new TagDrag(item->album()->id(), this);
-    t->setPixmap(item->icon(0).pixmap(32));
-
-    return t;
+    QDrag *drag = new QDrag(this);
+    drag->setMimeData(new DTagDrag(item->album()->id()));
+    drag->setPixmap(item->icon(0).pixmap(AlbumThumbnailLoader::instance()->thumbnailSize()));
+    drag->exec();
 }
 
 bool TagFolderView::acceptDrop(const QDropEvent *e) const
@@ -752,19 +751,27 @@ bool TagFolderView::acceptDrop(const QDropEvent *e) const
     TagFolderViewItem *itemDrop = dynamic_cast<TagFolderViewItem*>(itemAt(vp));
     TagFolderViewItem *itemDrag = dynamic_cast<TagFolderViewItem*>(dragItem());
 
-    if(TagDrag::canDecode(e) || TagListDrag::canDecode(e))
+    if(DTagDrag::canDecode(e->mimeData()) ||
+       TagDrag::canDecode(e)  || TagListDrag::canDecode(e)) // TODO: remove it when all D&D will ported to Qt4
     {
+        DDebug() << "Enter" << endl;
         // Allow dragging at the root, to move the tag to the root
         if(!itemDrop)
             return true;
+
+        DDebug() << "Stage1" << endl;
 
         // Dragging an item on itself makes no sense
         if(itemDrag == itemDrop)
             return false;
 
+        DDebug() << "Stage2" << endl;
+
         // Dragging a parent on its child makes no sense
         if(itemDrag && itemDrag->album()->isAncestorOf(itemDrop->album()))
             return false;
+
+        DDebug() << "Stage3" << endl;
 
         return true;
     }
@@ -795,7 +802,8 @@ void TagFolderView::dropEvent(QDropEvent *e)
     if (!itemDrop)
         return;
 
-    if(TagDrag::canDecode(e))
+    if(DTagDrag::canDecode(e->mimeData()) ||
+       TagDrag::canDecode(e))                   // TODO: remove it when all D&D will ported to Qt4
     {
         QByteArray ba = e->encodedData("digikam/tag-id");
         QDataStream ds(&ba, QIODevice::ReadOnly);
@@ -853,7 +861,7 @@ void TagFolderView::dropEvent(QDropEvent *e)
         TAlbum *srcAlbum;
 
         KUrl::List      urls;
-        KUrl::List      kioURLs;        
+        KUrl::List      kioURLs;
         Q3ValueList<int> albumIDs;
         Q3ValueList<int> imageIDs;
 
@@ -973,7 +981,7 @@ void TagFolderView::selectItem(int id)
 void TagFolderView::refresh()
 {
     QTreeWidgetItemIterator it(this);
-    
+
     while (*it)
     {
         TagFolderViewItem* item = dynamic_cast<TagFolderViewItem*>(*it);
@@ -986,7 +994,7 @@ void TagFolderView::refresh()
 void TagFolderView::slotRefresh(const QMap<int, int>& tagsStatMap)
 {
     QTreeWidgetItemIterator it(this);
-    
+
     while (*it)
     {
         TagFolderViewItem* item = dynamic_cast<TagFolderViewItem*>(*it);
