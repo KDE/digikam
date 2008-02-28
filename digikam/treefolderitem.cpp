@@ -82,7 +82,7 @@ void TreeFolderItem::setFocus(bool b)
         QFont f = font(0);
         f.setBold(false);
         setFont(0, f);
-        setForeground(0, treeWidget()->palette().base());
+        setForeground(0, treeWidget()->palette().text());
     }
 }
 
