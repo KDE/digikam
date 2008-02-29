@@ -5,21 +5,21 @@
  *
  * Date        : 2005-11-24
  * Description : Color management setup tab.
- * 
+ *
  * Copyright (C) 2005-2007 by F.J. Cruz <fj.cruz@supercable.es>
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // QT includes.
@@ -220,7 +220,7 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
 
     d->defaultPathKU = new KUrlRequester(d->defaultPathGB);
     d->defaultPathKU->lineEdit()->setReadOnly(true);
-    d->defaultPathKU->setMode(KFile::Directory | KFile::LocalOnly | KFile::ExistingOnly);    
+    d->defaultPathKU->setMode(KFile::Directory | KFile::LocalOnly | KFile::ExistingOnly);
     d->defaultPathKU->setWhatsThis( i18n("<p>Default path to the color profiles folder. "
                      "You must store all your color profiles in this directory.</p>"));
 
@@ -237,7 +237,7 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
 
     d->managedView = new QCheckBox(d->profilesGB);
     d->managedView->setText(i18n("Use color managed view (warning: slow)"));
-    d->managedView->setWhatsThis( i18n("<p>Turn on this option if " 
+    d->managedView->setWhatsThis( i18n("<p>Turn on this option if "
                      "you want to use your <b>Monitor Color Profile</b> to show your pictures in "
                      "Image Editor window with a color correction adapted to your monitor. "
                      "Warning: this option can take a while to render "
@@ -368,7 +368,7 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     grid3->addWidget(lablel, 1, 0, 1, 1);
     grid3->addWidget(d->renderingIntentKC, 1, 1, 1, 1);
     grid3->setMargin(KDialog::spacingHint());
-    grid3->setSpacing(0);    
+    grid3->setSpacing(0);
 
     layout->addWidget(d->advancedSettingsGB);
     layout->addStretch();
@@ -447,7 +447,7 @@ void SetupICC::applySettings()
 
     if (d->inICCPath.find(d->inProfilesKC->itemHighlighted()) != d->inICCPath.end())
         group.writePathEntry("InProfileFile", *(d->inICCPath.find(d->inProfilesKC->itemHighlighted())));
-    else 
+    else
         group.writePathEntry("InProfileFile", QString());
 
     if (d->workICCPath.find(d->workProfilesKC->itemHighlighted()) != d->workICCPath.end())
@@ -578,8 +578,8 @@ void SetupICC::fillCombos(const QString& path, bool report)
     d->workProfilesKC->insertSqueezedList(d->workICCPath.keys(), 0);
     if (d->workICCPath.keys().isEmpty())
     {
-        // If there is no workspace icc profiles available, 
-        // the CM is broken and cannot be used. 
+        // If there is no workspace icc profiles available,
+        // the CM is broken and cannot be used.
         d->mainDialog->enableButtonOk(false);
         return;
     }
@@ -603,7 +603,7 @@ bool SetupICC::parseProfilesfromDir(const QFileInfoList& files)
             fileInfo = *it;
 
             if (fileInfo.isFile() && fileInfo.isReadable())
-            { 
+            {
                 QString fileName = fileInfo.filePath();
                 tmpProfile       = cmsOpenProfileFromFile(QFile::encodeName(fileName), "r");
 
@@ -642,13 +642,13 @@ bool SetupICC::parseProfilesfromDir(const QFileInfoList& files)
                         else
                             d->inICCPath.insert(QString(cmsTakeProductDesc(tmpProfile)), fileName);
 
-                        DDebug() << "ICC file: " << fileName << " ==> Input device class (" 
+                        DDebug() << "ICC file: " << fileName << " ==> Input device class ("
                                  << cmsGetDeviceClass(tmpProfile) << ")" << endl;
                         findIccFiles = true;
                         break;
                     }
                     case icSigDisplayClass:
-                    {    
+                    {
                         if (QString(cmsTakeProductDesc(tmpProfile)).isEmpty())
                         {
                             d->monitorICCPath.insert(fileName, fileName);
@@ -660,7 +660,7 @@ bool SetupICC::parseProfilesfromDir(const QFileInfoList& files)
                             d->workICCPath.insert(QString(cmsTakeProductDesc(tmpProfile)), fileName);
                         }
 
-                        DDebug() << "ICC file: " << fileName << " ==> Monitor device class (" 
+                        DDebug() << "ICC file: " << fileName << " ==> Monitor device class ("
                                  << cmsGetDeviceClass(tmpProfile) << ")" << endl;
                         findIccFiles = true;
                         break;
@@ -672,7 +672,7 @@ bool SetupICC::parseProfilesfromDir(const QFileInfoList& files)
                         else
                             d->proofICCPath.insert(QString(cmsTakeProductDesc(tmpProfile)), fileName);
 
-                        DDebug() << "ICC file: " << fileName << " ==> Output device class (" 
+                        DDebug() << "ICC file: " << fileName << " ==> Output device class ("
                                  << cmsGetDeviceClass(tmpProfile) << ")" << endl;
                         findIccFiles = true;
                         break;
@@ -690,14 +690,14 @@ bool SetupICC::parseProfilesfromDir(const QFileInfoList& files)
                             d->workICCPath.insert(QString(cmsTakeProductDesc(tmpProfile)), fileName);
                         }
 
-                        DDebug() << "ICC file: " << fileName << " ==> WorkingSpace device class (" 
+                        DDebug() << "ICC file: " << fileName << " ==> WorkingSpace device class ("
                                  << cmsGetDeviceClass(tmpProfile) << ")" << endl;
                         findIccFiles = true;
                         break;
                     }
                     default:
                     {
-                        DDebug() << "ICC file: " << fileName << " ==> UNKNOW device class (" 
+                        DDebug() << "ICC file: " << fileName << " ==> UNKNOW device class ("
                                  << cmsGetDeviceClass(tmpProfile) << ")" << endl;
                         break;
                     }
@@ -713,9 +713,9 @@ bool SetupICC::parseProfilesfromDir(const QFileInfoList& files)
 }
 
 void SetupICC::slotToggledWidgets(bool t)
-{ 
-    d->behaviourGB->setEnabled(t); 
-    d->defaultPathGB->setEnabled(t); 
+{
+    d->behaviourGB->setEnabled(t);
+    d->defaultPathGB->setEnabled(t);
     d->profilesGB->setEnabled(t);
     d->advancedSettingsGB->setEnabled(t);
 
@@ -730,22 +730,26 @@ void SetupICC::slotToggledWidgets(bool t)
 
 void SetupICC::slotClickedWork()
 {
-    profileInfo(*(d->workICCPath.find(d->workProfilesKC->itemHighlighted())));
+    if(!d->workProfilesKC->itemHighlighted().isEmpty())
+       profileInfo(*(d->workICCPath.find(d->workProfilesKC->itemHighlighted())));
 }
 
 void SetupICC::slotClickedIn()
 {
-    profileInfo(*(d->inICCPath.find(d->inProfilesKC->itemHighlighted())));
+    if(!d->inProfilesKC->itemHighlighted().isEmpty())
+       profileInfo(*(d->inICCPath.find(d->inProfilesKC->itemHighlighted())));
 }
 
 void SetupICC::slotClickedMonitor()
 {
-    profileInfo(*(d->monitorICCPath.find(d->monitorProfilesKC->itemHighlighted())));
+    if(!d->monitorProfilesKC->itemHighlighted().isEmpty())
+       profileInfo(*(d->monitorICCPath.find(d->monitorProfilesKC->itemHighlighted())));
 }
 
 void SetupICC::slotClickedProof()
 {
-    profileInfo(*(d->proofICCPath.find(d->proofProfilesKC->itemHighlighted())));
+    if(!d->proofProfilesKC->itemHighlighted().isEmpty())
+       profileInfo(*(d->proofICCPath.find(d->proofProfilesKC->itemHighlighted())));
 }
 
 void SetupICC::profileInfo(const QString& profile)
