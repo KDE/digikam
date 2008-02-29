@@ -76,6 +76,9 @@ TreeFolderView::TreeFolderView(QWidget *parent, const char *name)
     d = new TreeFolderViewPriv;
     setObjectName(name);
     setColumnCount(1);
+    setSortingEnabled(true);
+    sortByColumn(0, Qt::AscendingOrder);
+    header()->setSortIndicatorShown(false);
     setRootIsDecorated(true);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setAllColumnsShowFocus(true);
