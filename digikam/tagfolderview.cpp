@@ -24,7 +24,7 @@
 
 // Qt includes.
 
-#include <Q3ValueList>
+#include <QList>
 #include <QPainter>
 #include <QCursor>
 #include <QHeaderView>
@@ -47,7 +47,7 @@
 #include "databasetransaction.h"
 #include "syncjob.h"
 #include "tagcreatedlg.h"
-#include "dragobjects.h"
+#include "ddragobjects.h"
 #include "dio.h"
 #include "imageattributeswatch.h"
 #include "imageinfo.h"
@@ -751,8 +751,7 @@ bool TagFolderView::acceptDrop(const QDropEvent *e) const
     TagFolderViewItem *itemDrop = dynamic_cast<TagFolderViewItem*>(itemAt(vp));
     TagFolderViewItem *itemDrag = dynamic_cast<TagFolderViewItem*>(dragItem());
 
-    if(DTagDrag::canDecode(e->mimeData()) ||
-       TagDrag::canDecode(e)  || TagListDrag::canDecode(e)) // TODO: remove it when all D&D will ported to Qt4
+    if(DTagDrag::canDecode(e->mimeData()) || DTagListDrag::canDecode(e->mimeData()))
     {
         // Allow dragging at the root, to move the tag to the root
         if(!itemDrop)
@@ -769,7 +768,7 @@ bool TagFolderView::acceptDrop(const QDropEvent *e) const
         return true;
     }
 
-    if (ItemDrag::canDecode(e) && itemDrop && itemDrop->parent())
+    if (DItemDrag::canDecode(e->mimeData()) && itemDrop && itemDrop->parent())
     {
         // Only other possibility is image items being dropped
         // And allow this only if there is a Tag to be dropped
@@ -798,8 +797,7 @@ void TagFolderView::dropEvent(QDropEvent *e)
     if (!itemDrop)
         return;
 
-    if(DTagDrag::canDecode(e->mimeData()) ||
-       TagDrag::canDecode(e))                   // TODO: remove it when all D&D will ported to Qt4
+    if(DTagDrag::canDecode(e->mimeData()))
     {
         QByteArray ba = e->encodedData("digikam/tag-id");
         QDataStream ds(&ba, QIODevice::ReadOnly);
@@ -851,17 +849,17 @@ void TagFolderView::dropEvent(QDropEvent *e)
         return;
     }
 
-    if (ItemDrag::canDecode(e))
+    if (DItemDrag::canDecode(e->mimeData()))
     {
         TAlbum *destAlbum = itemDrop->talbum();
         TAlbum *srcAlbum;
 
-        KUrl::List      urls;
-        KUrl::List      kioURLs;
-        Q3ValueList<int> albumIDs;
-        Q3ValueList<int> imageIDs;
+        KUrl::List urls;
+        KUrl::List kioURLs;
+        QList<int> albumIDs;
+        QList<int> imageIDs;
 
-        if (!ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs))
+        if (!DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs))
             return;
 
         if (urls.isEmpty() || kioURLs.isEmpty() || albumIDs.isEmpty() || imageIDs.isEmpty())
@@ -869,7 +867,7 @@ void TagFolderView::dropEvent(QDropEvent *e)
 
         // all the albumids will be the same
         int albumID = albumIDs.first();
-        srcAlbum = d->albumMan->findTAlbum(albumID);
+        srcAlbum    = d->albumMan->findTAlbum(albumID);
         if (!srcAlbum)
         {
             DWarning() << "Could not find source album of drag"
@@ -938,7 +936,7 @@ void TagFolderView::dropEvent(QDropEvent *e)
             int i=0;
             {
                 DatabaseTransaction transaction;
-                for (Q3ValueList<int>::const_iterator it = imageIDs.begin();
+                for (QList<int>::const_iterator it = imageIDs.begin();
                     it != imageIDs.end(); ++it)
                 {
                     // create temporary ImageInfo object

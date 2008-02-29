@@ -147,10 +147,6 @@ SET(digikam_bin_SRCS
                      ${libthemeengine_SRCS}
                      ${libkipiiface_SRCS}
 
-                     treefolderitem.cpp 
-                     treefolderview.cpp 
-                     tagfolderview.cpp 
-
                      album.cpp 
                      albumiconview.cpp 
                      albumiconviewfilter.cpp 
@@ -175,10 +171,8 @@ SET(digikam_bin_SRCS
                      digikamfirstrun.cpp 
                      digikamview.cpp 
                      dio.cpp 
-                     dragobjects.cpp 
+                     ddragobjects.cpp 
                      firstrun.cpp 
-                     folderitem.cpp 
-                     folderview.cpp 
                      iconview.cpp 
                      icongroupitem.cpp 
                      iconitem.cpp 
@@ -206,11 +200,19 @@ SET(digikam_bin_SRCS
                      syncjob.cpp 
                      tagcreatedlg.cpp 
                      tagfilterview.cpp 
+                     tagfolderview.cpp 
                      tagspopupmenu.cpp 
                      timelinefolderview.cpp
                      timelineview.cpp
                      timelinewidget.cpp
+                     treefolderitem.cpp 
+                     treefolderview.cpp 
                      welcomepageview.cpp 
+
+                     # obsolete QT3 classes
+                     folderitem.cpp 
+                     folderview.cpp 
+                     dragobjects.cpp 
     )
 
 KDE4_ADD_UI_FILES(digikam_bin_SRCS ../libs/dialogs/deletedialogbase.ui)
