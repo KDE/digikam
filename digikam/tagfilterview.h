@@ -33,7 +33,9 @@
 
 // Local includes.
 
-#include "folderview.h"
+#include "treefolderview.h"
+
+class QTreeWidgetItem;
 
 namespace Digikam
 {
@@ -42,7 +44,7 @@ class Album;
 class TagFilterViewItem;
 class TagFilterViewPrivate;
 
-class TagFilterView : public FolderView
+class TagFilterView : public TreeFolderView
 {
     Q_OBJECT
 
@@ -61,8 +63,6 @@ public:
     TagFilterView(QWidget* parent);
     ~TagFilterView();
 
-    void stateChanged(TagFilterViewItem*);
-
     void refresh();
 
 signals:
@@ -80,31 +80,26 @@ public slots:
 
 protected:
 
-    Q3DragObject* dragObject();
-    TagFilterViewItem* dragItem() const;
-
     bool acceptDrop(const QDropEvent *e) const;
-    void contentsDropEvent(QDropEvent *e);
-
-    void contentsMousePressEvent(QMouseEvent *e);
-    void contentsMouseReleaseEvent(QMouseEvent *e);
-    void contentsMouseMoveEvent(QMouseEvent *e);
+    void dropEvent(QDropEvent *e);
 
 private slots:
 
-    void slotTagAdded(Album* album);
-    void slotTagMoved(TAlbum* tag, TAlbum* newParent);
-    void slotTagRenamed(Album* album);
-    void slotTagDeleted(Album* album);
+    void slotTagAdded(Album *album);
+    void slotTagMoved(TAlbum *tag, TAlbum *newParent);
+    void slotTagRenamed(Album *album);
+    void slotTagDeleted(Album *album);
     void slotClear();
-    void slotAlbumIconChanged(Album* album);
+    void slotAlbumIconChanged(Album *album);
     void slotTimeOut();
-    void slotContextMenu(Q3ListViewItem*, const QPoint&, int);
+    void slotContextMenu(const QPoint&);
     void slotABCContextMenu();
     void slotGotThumbnailFromIcon(Album *album, const QPixmap& thumbnail);
     void slotThumbnailLost(Album *album);
     void slotReloadThumbnails();
     void slotRefresh(const QMap<int, int>&);
+    void slotItemExpanded(QTreeWidgetItem*);
+    void slotItemChanged(QTreeWidgetItem*);
 
 private:
 
@@ -116,6 +111,7 @@ private:
     void setTagThumbnail(TAlbum *album);
     void toggleChildTags(TagFilterViewItem* tItem, bool b);
     void toggleParentTags(TagFilterViewItem* tItem, bool b);
+    void makeDragObject();
 
 private:
 
