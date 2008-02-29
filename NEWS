@@ -31,5 +31,7 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 009 ==> 141037 : Search using Tag Name does not work
 010 ==> 158174 : Precise aspect ratio crop feature
 011 ==> 142055 : Which whitebalance is used
-012 ==> 
+012 ==> 158558 : Delete Function in Tag Filters panel needs to make sure that the tag is 
+                 unselected when the tag is deleted.
+013 ==> 
 
