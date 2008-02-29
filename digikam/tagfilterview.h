@@ -109,9 +109,9 @@ private:
     void setTagThumbnail(TAlbum *album);
     void toggleChildTags(TagFilterViewItem* tItem, bool b);
     void toggleParentTags(TagFilterViewItem* tItem, bool b);
-    
+
 private:
-    
+
     TagFilterViewPrivate *d;
 };
 
