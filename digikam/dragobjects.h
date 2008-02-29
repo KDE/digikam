@@ -36,6 +36,7 @@
 
 // KDE includes.
 
+#include <kurl.h>
 #include <k3urldrag.h>
 
 class QWidget;
@@ -58,7 +59,29 @@ public:
 
 protected:
 
-    QByteArray  encodedData(const char*) const;
+    QByteArray  encodedData(const char* mime) const;
+    const char* format(int i) const;
+};
+
+// ------------------------------------------------------------------------
+
+/**
+ * Provides a drag object for an album
+ *
+ * When an album is moved through drag'n'drop an object of this class 
+ * is created.
+ */
+class DAlbumDrag : public QMimeData
+{
+public:
+
+    DAlbumDrag(const KUrl &url, int albumid, const char *name=0);
+    static bool canDecode(const QMimeData* e);
+    static bool decode(const QMimeData* e, KUrl::List &urls, int &albumID);
+
+protected:
+
+    QByteArray  encodedData(const char* mime) const;
     const char* format(int i) const;
 };
 
@@ -79,7 +102,7 @@ public:
 
 protected:
 
-    QByteArray  encodedData(const char*) const;
+    QByteArray  encodedData(const char* mime) const;
     const char* format(int i) const;
 };
 
@@ -100,7 +123,7 @@ public:
 
 protected:
 
-    QByteArray  encodedData(const char*) const;
+    QByteArray  encodedData(const char* mime) const;
     const char* format(int i) const;
 };
 

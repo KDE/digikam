@@ -67,6 +67,75 @@ QByteArray DTagDrag::encodedData(const char* mime) const
 
 // ------------------------------------------------------------------------
 
+DAlbumDrag::DAlbumDrag(const KUrl &url, int albumid, const char *name) 
+          : QMimeData()
+{
+    setObjectName(name);
+    QByteArray ba;
+    QDataStream ds(&ba, QIODevice::WriteOnly);
+    ds << url;
+    setData("text/uri-list", ba);
+
+    QByteArray ba2;
+    QDataStream ds2(&ba2, QIODevice::WriteOnly);
+    ds2 << albumid;
+    setData("digikam/album-id", ba2);
+}
+
+bool DAlbumDrag::canDecode(const QMimeData* e)
+{
+    return e->hasFormat("digikam/album-id");
+}
+
+bool DAlbumDrag::decode(const QMimeData* e, KUrl::List &urls, int &albumID)
+{
+    KUrl url;
+    urls.clear();
+    albumID = -1;
+
+    QByteArray ba = e->data("text/uri-list");
+    if (ba.size())
+    {
+        QDataStream ds(&ba, QIODevice::ReadOnly);
+        if(!ds.atEnd())
+        {
+            ds >> url;
+            urls.append(url);
+        }
+    }
+
+    if(!urls.isEmpty())
+    {
+        QByteArray ba2 = e->data("digikam/album-id");
+        if (ba2.size())
+        {
+            QDataStream ds2(&ba2, QIODevice::ReadOnly);
+            if(!ds2.atEnd())
+            {
+                ds2 >> albumID;
+            }
+            return true;
+        }
+    }
+
+    return false;
+}
+
+const char* DAlbumDrag::format(int i) const
+{
+    if (i == 0 || i == 1)
+        return formats()[i].toAscii().data();
+
+    return 0;
+}
+
+QByteArray DAlbumDrag::encodedData(const char *mime) const
+{
+    return data(mime);
+}
+
+// ------------------------------------------------------------------------
+
 DTagListDrag::DTagListDrag(const QList<int>& tagIDs, const char *name)
             : QMimeData()
 {
