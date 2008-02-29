@@ -87,7 +87,7 @@ private slots:
     void slotAlbumRenamed(Album*);
     void slotAlbumsCleared();
     void slotAlbumIconChanged(Album* album);
-    void slotAlbumMoved(TAlbum* tag, TAlbum* newParent);
+    void slotAlbumMoved(TAlbum *tag, TAlbum *newParent);
     void slotContextMenu(const QPoint&);
     void slotABCContextMenu();
     void slotGotThumbnailFromIcon(Album *album, const QPixmap& thumbnail);
