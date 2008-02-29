@@ -96,13 +96,13 @@ private:
 
     void    stateChange(bool val);
     void    paintCell(QPainter* p, const QColorGroup & cg, int column, int width, int align);
-    
+
 private:
 
     bool    m_untagged;
-    
+
     int     m_count;
-    
+
     TAlbum *m_album;
 };
 
@@ -266,14 +266,14 @@ public:
 
     QTimer                         *timer;
 
-    QPoint                          dragStartPos;    
+    QPoint                          dragStartPos;
 
     QMenu                          *ABCMenu;
 
     TagFilterView::ToggleAutoTags   toggleAutoTags;
 
     AlbumLister::MatchingCondition  matchingCond;
-    
+
     TagFilterViewItem              *dragItem;
 };
 
@@ -404,7 +404,7 @@ void TagFilterView::slotTextTagFilterChanged(const QString& filter)
                 ++it;
             }
         }
-    
+
         TagFilterViewItem* viewItem = (TagFilterViewItem*) talbum->extraData(this);
 
         if (match)
@@ -428,7 +428,7 @@ void TagFilterView::slotTextTagFilterChanged(const QString& filter)
 
 void TagFilterView::stateChanged(TagFilterViewItem* item)
 {
-    ToggleAutoTags oldAutoTags = d->toggleAutoTags;            
+    ToggleAutoTags oldAutoTags = d->toggleAutoTags;
 
     switch(d->toggleAutoTags)
     {
@@ -478,7 +478,7 @@ void TagFilterView::contentsMouseMoveEvent(QMouseEvent *e)
         }
         return;
     }
-    
+
     if(d->dragItem && 
        (d->dragStartPos - e->pos()).manhattanLength() > QApplication::startDragDistance())
     {
@@ -489,7 +489,7 @@ void TagFilterView::contentsMouseMoveEvent(QMouseEvent *e)
             d->dragItem = 0;
             return;
         }
-    }    
+    }
 }
 
 void TagFilterView::contentsMousePressEvent(QMouseEvent *e)
@@ -569,11 +569,11 @@ bool TagFilterView::acceptDrop(const QDropEvent *e) const
     if (ItemDrag::canDecode(e) && itemDrop && !itemDrop->untagged())
     {
         TAlbum *tag = itemDrop->album();
-        
+
         if (tag)
         {
             if (tag->parent())
-            {         
+            {
                 // Only other possibility is image items being dropped
                 // And allow this only if there is a Tag to be dropped
                 // on and also the Tag is not root or "Not Tagged" item.
@@ -813,6 +813,10 @@ void TagFilterView::slotTagDeleted(Album* album)
     TagFilterViewItem* item = (TagFilterViewItem*)(album->extraData(this));
     if (!item)
         return;
+
+    // NOTE: see B.K.O #158558: unselected tag filter and all childrens before to delete it.
+    toggleChildTags(item, false);
+    item->setOn(false);
 
     album->removeExtraData(this);
     delete item;
@@ -1358,7 +1362,7 @@ void TagFilterView::toggleParentTags(TagFilterViewItem* tItem, bool b)
 void TagFilterView::refresh()
 {
     Q3ListViewItemIterator it(this);
-    
+
     while (it.current())
     {
         TagFilterViewItem* item = dynamic_cast<TagFilterViewItem*>(*it);
@@ -1371,7 +1375,7 @@ void TagFilterView::refresh()
 void TagFilterView::slotRefresh(const QMap<int, int>& tagsStatMap)
 {
     Q3ListViewItemIterator it(this);
-    
+
     while (it.current())
     {
         TagFilterViewItem* item = dynamic_cast<TagFilterViewItem*>(*it);
