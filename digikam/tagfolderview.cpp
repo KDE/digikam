@@ -727,7 +727,7 @@ void TagFolderView::tagDelete(TagFolderViewItem *item)
     }
 }
 
-void TagFolderView::dragObject()
+void TagFolderView::makeDragObject()
 {
     TagFolderViewItem *item = dynamic_cast<TagFolderViewItem*>(dragItem());
     if(!item) 

@@ -103,7 +103,7 @@ private:
     void tagEdit(TagFolderViewItem *item);
     void tagDelete(TagFolderViewItem *item);
     void setTagThumbnail(TAlbum *album);
-    void dragObject();
+    void makeDragObject();
 
 private:
 

@@ -85,7 +85,7 @@ TreeFolderView::TreeFolderView(QWidget *parent, const char *name)
     setAcceptDrops(true);
     viewport()->setAcceptDrops(true);
     setItemsExpandable(true);
-    setAutoExpandDelay(300);
+    setAutoExpandDelay(500);
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
@@ -184,7 +184,7 @@ void TreeFolderView::mousePressEvent(QMouseEvent *e)
     {
         d->dragStartPos = e->pos();
         d->dragItem     = item;
-        dragObject();
+        makeDragObject();
     }
 
     e->accept();
@@ -199,6 +199,21 @@ void TreeFolderView::mouseReleaseEvent(QMouseEvent *e)
 TreeFolderItem* TreeFolderView::dragItem() const
 {
     return d->dragItem;
+}
+
+QStringList TreeFolderView::mimeTypes() const
+{
+    QStringList list;
+    list.append("text/uri-list");
+    list.append("digikam/item-ids");
+    list.append("digikam/image-ids");
+    list.append("digikam/album-ids");
+    list.append("digikam/album-id");
+    list.append("digikam/tag-id");
+    list.append("digikam/taglist");
+    list.append("digikam/digikamalbums");
+    list.append("digikam/cameraItemlist");
+    return list;
 }
 
 void TreeFolderView::dragEnterEvent(QDragEnterEvent *e)

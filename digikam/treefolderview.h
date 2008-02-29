@@ -65,11 +65,12 @@ protected:
     void dragMoveEvent(QDragMoveEvent*);
     void dragLeaveEvent(QDragLeaveEvent*);
     void dropEvent(QDropEvent*);
+    QStringList mimeTypes() const;
 
     virtual bool acceptDrop(const QDropEvent *e) const;
 
     TreeFolderItem* dragItem() const;
-    virtual void dragObject(){};
+    virtual void makeDragObject(){};
 
     void fontChange(const QFont& oldFont);
 
