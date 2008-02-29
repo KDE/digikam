@@ -134,16 +134,16 @@ void TreeFolderView::slotIconSizeChanged()
 
 void TreeFolderView::mouseMoveEvent(QMouseEvent *e)
 {
+    QPoint vp = viewport()->mapFrom(this, e->pos());
+    if (!header()->isHidden())
+        vp.setY(vp.y()+header()->height());
+
     QTreeWidget::mouseMoveEvent(e);
 
     if(e->buttons() == Qt::NoButton)
     {
         if(KGlobalSettings::changeCursorOverIcon())
         {
-            QPoint vp = viewport()->mapFrom(this, e->pos());
-            if (!header()->isHidden())
-                vp.setY(vp.y()+header()->height());
-
             QTreeWidgetItem *item = itemAt(vp);
             if (item)
                 setCursor(Qt::PointingHandCursor);
@@ -155,10 +155,6 @@ void TreeFolderView::mouseMoveEvent(QMouseEvent *e)
 
     if(d->dragItem && (d->dragStartPos - e->pos()).manhattanLength() > QApplication::startDragDistance())
     {
-        QPoint vp = viewport()->mapFrom(this, e->pos());
-        if (!header()->isHidden())
-            vp.setY(vp.y()+header()->height());
-
         TreeFolderItem *item = dynamic_cast<TreeFolderItem*>(itemAt(vp));
         if(!item)
         {
@@ -172,13 +168,22 @@ void TreeFolderView::mouseMoveEvent(QMouseEvent *e)
 
 void TreeFolderView::mousePressEvent(QMouseEvent *e)
 {
-    QTreeWidget::mousePressEvent(e);
-
     QPoint vp = viewport()->mapFrom(this, e->pos());
     if (!header()->isHidden())
         vp.setY(vp.y()+header()->height());
 
     TreeFolderItem *item = dynamic_cast<TreeFolderItem*>(itemAt(vp));
+
+    if(item && e->button() == Qt::RightButton) 
+    {
+        Qt::CheckState state = item->checkState(0);
+        QTreeWidget::mousePressEvent(e);
+        // If item is a checkbox, restore the status.
+        item->setCheckState(0, state);
+        return;
+    }
+
+    QTreeWidget::mousePressEvent(e);
 
     if(item && e->button() == Qt::LeftButton) 
     {
