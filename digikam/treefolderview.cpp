@@ -268,36 +268,6 @@ bool TreeFolderView::acceptDrop(const QDropEvent*) const
     return false;
 }
 
-void TreeFolderView::slotThemeChanged()
-{
-/* TODO
-    QPalette plt(palette());
-    plt.setColor(QPalette::Active, QPalette::Base, 
-                 ThemeEngine::instance()->baseColor());
-    plt.setColor(QPalette::Active, QPalette::Text, 
-                 ThemeEngine::instance()->textRegColor());
-    plt.setColor(QPalette::Active, QPalette::HighlightedText, 
-                 ThemeEngine::instance()->textSelColor());
-    plt.setColor(QPalette::Active, QPalette::Link, 
-                 ThemeEngine::instance()->textSpecialRegColor());
-    plt.setColor(QPalette::Active, QPalette::LinkVisited,
-                 ThemeEngine::instance()->textSpecialSelColor());
-    plt.setColor(QPalette::Inactive, QPalette::Base, 
-                 ThemeEngine::instance()->baseColor());
-    plt.setColor(QPalette::Inactive, QPalette::Text, 
-                 ThemeEngine::instance()->textRegColor());
-    plt.setColor(QPalette::Inactive, QPalette::HighlightedText, 
-                 ThemeEngine::instance()->textSelColor());
-    plt.setColor(QPalette::Inactive, QPalette::Link, 
-                 ThemeEngine::instance()->textSpecialRegColor());
-    plt.setColor(QPalette::Inactive, QPalette::LinkVisited,
-                 ThemeEngine::instance()->textSpecialSelColor());
-    setPalette(plt);
-
-    viewport()->update();
-*/
-}
-
 void TreeFolderView::slotAllAlbumsLoaded()
 {
     disconnect(AlbumManager::instance(), SIGNAL(signalAllAlbumsLoaded()),
@@ -373,6 +343,37 @@ void TreeFolderView::slotSelectionChanged()
 
 void TreeFolderView::selectItem(int)
 {
+}
+
+void TreeFolderView::slotThemeChanged()
+{
+/* TODO : Port to Qt4::StyleSheet !
+
+    QPalette plt(palette());
+    plt.setColor(QPalette::Active, QPalette::Base, 
+                 ThemeEngine::instance()->baseColor());
+    plt.setColor(QPalette::Active, QPalette::Text, 
+                 ThemeEngine::instance()->textRegColor());
+    plt.setColor(QPalette::Active, QPalette::HighlightedText, 
+                 ThemeEngine::instance()->textSelColor());
+    plt.setColor(QPalette::Active, QPalette::Link, 
+                 ThemeEngine::instance()->textSpecialRegColor());
+    plt.setColor(QPalette::Active, QPalette::LinkVisited,
+                 ThemeEngine::instance()->textSpecialSelColor());
+    plt.setColor(QPalette::Inactive, QPalette::Base, 
+                 ThemeEngine::instance()->baseColor());
+    plt.setColor(QPalette::Inactive, QPalette::Text, 
+                 ThemeEngine::instance()->textRegColor());
+    plt.setColor(QPalette::Inactive, QPalette::HighlightedText, 
+                 ThemeEngine::instance()->textSelColor());
+    plt.setColor(QPalette::Inactive, QPalette::Link, 
+                 ThemeEngine::instance()->textSpecialRegColor());
+    plt.setColor(QPalette::Inactive, QPalette::LinkVisited,
+                 ThemeEngine::instance()->textSpecialSelColor());
+    setPalette(plt);
+
+    viewport()->update();
+*/
 }
 
 }  // namespace Digikam
