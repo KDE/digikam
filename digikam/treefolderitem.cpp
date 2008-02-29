@@ -39,6 +39,7 @@ TreeFolderItem::TreeFolderItem(QTreeWidget *parent, const QString& text, bool sp
               : QTreeWidgetItem(parent, QStringList() << text)
 {
     setFocus(false);
+    setFlags(flags() ^ Qt::ItemIsUserCheckable);
 
     if (special)
     {
@@ -53,6 +54,7 @@ TreeFolderItem::TreeFolderItem(QTreeWidgetItem *parent, const QString& text, boo
               : QTreeWidgetItem(parent, QStringList() << text)
 {
     setFocus(false);
+    setFlags(flags() ^ Qt::ItemIsUserCheckable);
 
     if (special)
     {
@@ -170,12 +172,14 @@ void TreeFolderItem::setup()
 TreeFolderCheckListItem::TreeFolderCheckListItem(QTreeWidget *parent, const QString& text)
                        : QTreeWidgetItem(parent, QStringList() << text)
 {
+    setFlags(flags() | Qt::ItemIsUserCheckable);
     setCheckState(0, Qt::Unchecked);
 }
 
 TreeFolderCheckListItem::TreeFolderCheckListItem(QTreeWidgetItem *parent, const QString& text)
                        : QTreeWidgetItem(parent, QStringList() << text)
 {
+    setFlags(flags() | Qt::ItemIsUserCheckable);
     setCheckState(0, Qt::Unchecked);
 }
 
@@ -331,19 +335,22 @@ TreeAlbumItem::TreeAlbumItem(QTreeWidget* parent, Album* album)
              : TreeFolderItem(parent, album ? album->title() : QString())
 {
     m_album = album;
-    m_album->setExtraData(treeWidget(), this);
+    if (m_album)
+        m_album->setExtraData(treeWidget(), this);
 }
 
 TreeAlbumItem::TreeAlbumItem(QTreeWidgetItem* parent, Album* album)
              : TreeFolderItem(parent, album ? album->title() : QString())
 {
     m_album = album;
-    m_album->setExtraData(treeWidget(), this);
+    if (m_album)
+        m_album->setExtraData(treeWidget(), this);
 }
 
 TreeAlbumItem::~TreeAlbumItem()
 {
-    m_album->removeExtraData(treeWidget());
+    if (m_album)
+        m_album->removeExtraData(treeWidget());
 }
 
 Album* TreeAlbumItem::album() const
@@ -361,12 +368,14 @@ int TreeAlbumItem::id() const
 TreeAlbumCheckListItem::TreeAlbumCheckListItem(QTreeWidget* parent, Album* album)
                       : TreeAlbumItem(parent, album)
 {
+    setFlags(flags() | Qt::ItemIsUserCheckable);
     setCheckState(0, Qt::Unchecked);
 }
 
 TreeAlbumCheckListItem::TreeAlbumCheckListItem(QTreeWidgetItem* parent, Album* album)
                       : TreeAlbumItem(parent, album)
 {
+    setFlags(flags() | Qt::ItemIsUserCheckable);
     setCheckState(0, Qt::Unchecked);
 }
 
