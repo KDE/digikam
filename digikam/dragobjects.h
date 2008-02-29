@@ -45,6 +45,41 @@ namespace Digikam
 {
 
 /**
+ * Provides a drag object for a list of KURLs with its related database IDs.
+ *
+ * Images can be moved through ItemDrag. It is possible to move them on
+ * another application which understands KURLDrag, like konqueror, to
+ * copy the images. Digikam can use the IDs, if ItemDrag is dropped
+ * on digikam itself.
+ * The kioURLs are internally used with the digikamalbums kioslave.
+ * The "normal" KURLDrag urls are used for external drops (k3b, gimp, ...)
+ */
+class DItemDrag : public QMimeData
+{
+public:
+
+    DItemDrag(const KUrl::List& urls, 
+              const KUrl::List& kioURLs,
+              const QList<int>& albumIDs,
+              const QList<int>& imageIDs,
+              const char* name=0);
+
+    static bool canDecode(const QMimeData* e);
+    static bool decode(const QMimeData* e,
+                       KUrl::List &urls,
+                       KUrl::List &kioURLs,
+                       QList<int>& albumIDs,
+                       QList<int>& imageIDs);
+
+protected:
+
+    virtual const char* format(int i) const;
+    virtual QByteArray encodedData(const char* mime) const;
+};
+
+// ------------------------------------------------------------------------
+
+/**
  * Provides a drag object for a tag
  *
  * When a tag is moved through drag'n'drop an object of this class 
