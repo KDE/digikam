@@ -1205,6 +1205,7 @@ void DigikamApp::slotAlbumSelected(bool val)
 void DigikamApp::slotTagSelected(bool val)
 {
     Album *album = d->albumManager->currentAlbum();
+    if (!album) return;
     
     if(!val)
     {
