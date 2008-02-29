@@ -55,12 +55,14 @@ public:
 
     TreeFolderViewPriv()
     {
+        dragStarted      = false;
         active           = false;
         dragItem         = 0;
         oldHighlightItem = 0;
     }
 
     bool             active;
+    bool             dragStarted;
 
     QPoint           dragStartPos;
 
@@ -141,7 +143,7 @@ void TreeFolderView::mouseMoveEvent(QMouseEvent *e)
     if (!header()->isHidden())
         vp.setY(vp.y()+header()->height());
 
-    QTreeWidget::mouseMoveEvent(e);
+    //QTreeWidget::mouseMoveEvent(e);
 
     if(e->buttons() == Qt::NoButton)
     {
@@ -161,9 +163,16 @@ void TreeFolderView::mouseMoveEvent(QMouseEvent *e)
         TreeFolderItem *item = dynamic_cast<TreeFolderItem*>(itemAt(vp));
         if(!item)
         {
-            d->dragItem = 0;
+            d->dragItem    = 0;
+            d->dragStarted = false;
             return;
         }
+
+        if (!d->dragStarted)
+        {
+            makeDragObject();
+            d->dragStarted = true;
+        }        
     }
 
     e->accept();
@@ -193,7 +202,6 @@ void TreeFolderView::mousePressEvent(QMouseEvent *e)
     {
         d->dragStartPos = e->pos();
         d->dragItem     = item;
-        makeDragObject();
     }
 
     e->accept();
@@ -202,7 +210,8 @@ void TreeFolderView::mousePressEvent(QMouseEvent *e)
 void TreeFolderView::mouseReleaseEvent(QMouseEvent *e)
 {
     QTreeWidget::mouseReleaseEvent(e);
-    d->dragItem = 0;
+    d->dragItem    = 0;
+    d->dragStarted = false;
 }
 
 TreeFolderItem* TreeFolderView::dragItem() const
@@ -245,6 +254,8 @@ void TreeFolderView::dragLeaveEvent(QDragLeaveEvent *e)
 void TreeFolderView::dragMoveEvent(QDragMoveEvent *e)
 {
     QTreeWidget::dragMoveEvent(e);
+    if (acceptDrop(e)) 
+        e->acceptProposedAction();
 
     QPoint vp = viewport()->mapFrom(this, e->pos());
     if (!header()->isHidden())
@@ -259,8 +270,6 @@ void TreeFolderView::dragMoveEvent(QDragMoveEvent *e)
         item->setFocus(true);
         d->oldHighlightItem = item;
     }
-
-    e->setAccepted(acceptDrop(e));
 }
 
 void TreeFolderView::dropEvent(QDropEvent*)
