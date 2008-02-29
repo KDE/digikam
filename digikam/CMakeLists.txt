@@ -147,6 +147,10 @@ SET(digikam_bin_SRCS
                      ${libthemeengine_SRCS}
                      ${libkipiiface_SRCS}
 
+                     treefolderitem.cpp 
+                     treefolderview.cpp 
+                     tagfilterview.cpp 
+
                      album.cpp 
                      albumiconview.cpp 
                      albumiconviewfilter.cpp 
@@ -199,14 +203,11 @@ SET(digikam_bin_SRCS
                      searchwidgets.cpp 
                      syncjob.cpp 
                      tagcreatedlg.cpp 
-                     tagfilterview.cpp 
                      tagfolderview.cpp 
                      tagspopupmenu.cpp 
                      timelinefolderview.cpp
                      timelineview.cpp
                      timelinewidget.cpp
-                     treefolderitem.cpp 
-                     treefolderview.cpp 
                      welcomepageview.cpp 
 
                      # obsolete QT3 classes
