@@ -817,9 +817,9 @@ void TagFolderView::dropEvent(QDropEvent *e)
         KMenu popMenu(this);
         popMenu.addTitle(SmallIcon("digikam"), i18n("My Tags"));
 
-        QAction *gotoAction = popMenu.addAction(SmallIcon("goto"), i18n("&Move Here"));
+        QAction *gotoAction = popMenu.addAction(SmallIcon("go-jump"), i18n("&Move Here"));
         popMenu.addSeparator();
-        popMenu.addAction(SmallIcon("cancel"), i18n("C&ancel"));
+        popMenu.addAction(SmallIcon("dialog-cancel"), i18n("C&ancel"));
         popMenu.setMouseTracking(true);
         QAction *choice = popMenu.exec(QCursor::pos());
 
@@ -893,7 +893,7 @@ void TagFolderView::dropEvent(QDropEvent *e)
                 popMenu.addTitle(SmallIcon("digikam"), i18n("My Tags"));
                 QAction *setAction = popMenu.addAction(i18n("Set as Tag Thumbnail"));
                 popMenu.addSeparator();
-                popMenu.addAction( SmallIcon("cancel"), i18n("C&ancel") );
+                popMenu.addAction( SmallIcon("dialog-cancel"), i18n("C&ancel") );
 
                 popMenu.setMouseTracking(true);
                 QAction *choice = popMenu.exec(QCursor::pos());
@@ -923,7 +923,7 @@ void TagFolderView::dropEvent(QDropEvent *e)
             QAction * assignAction =
                     popMenu.addAction( SmallIcon("tag"), i18n("Assign Tag '%1' to Items", destAlbum->prettyUrl()));
             popMenu.addSeparator();
-            popMenu.addAction( SmallIcon("cancel"), i18n("C&ancel") );
+            popMenu.addAction( SmallIcon("dialog-cancel"), i18n("C&ancel") );
 
             popMenu.setMouseTracking(true);
             QAction *choice = popMenu.exec(QCursor::pos());

@@ -1383,10 +1383,10 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
             KUrl::List srcURLs = KUrl::List::fromMimeData( event->mimeData() );
 
             QMenu popMenu(this);
-            QAction *moveAction = popMenu.addAction( SmallIcon("goto"), i18n("&Move Here"));
-            QAction *copyAction = popMenu.addAction( SmallIcon("editcopy"), i18n("&Copy Here"));
+            QAction *moveAction = popMenu.addAction( SmallIcon("go-jump"), i18n("&Move Here"));
+            QAction *copyAction = popMenu.addAction( SmallIcon("edit-copy"), i18n("&Copy Here"));
             popMenu.addSeparator();
-            popMenu.addAction( SmallIcon("cancel"), i18n("C&ancel") );
+            popMenu.addAction( SmallIcon("dialog-cancel"), i18n("C&ancel") );
 
             popMenu.setMouseTracking(true);
             QAction *choice = popMenu.exec(QCursor::pos());
@@ -1413,10 +1413,10 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
         KUrl::List srcURLs = KUrl::List::fromMimeData( event->mimeData() );
 
         QMenu popMenu(this);
-        QAction *moveAction = popMenu.addAction( SmallIcon("goto"), i18n("&Move Here"));
-        QAction *copyAction = popMenu.addAction( SmallIcon("editcopy"), i18n("&Copy Here"));
+        QAction *moveAction = popMenu.addAction( SmallIcon("go-jump"), i18n("&Move Here"));
+        QAction *copyAction = popMenu.addAction( SmallIcon("edit-copy"), i18n("&Copy Here"));
         popMenu.addSeparator();
-        popMenu.addAction( SmallIcon("cancel"), i18n("C&ancel") );
+        popMenu.addAction( SmallIcon("dialog-cancel"), i18n("C&ancel") );
 
         popMenu.setMouseTracking(true);
         QAction *choice = popMenu.exec(QCursor::pos());
@@ -1477,7 +1477,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                 popMenu.addAction(SmallIcon("tag"), i18n("Assign '%1' to &All Items",talbum->tagPath().mid(1)));
 
             popMenu.addSeparator();
-            popMenu.addAction(SmallIcon("cancel"), i18n("&Cancel"));
+            popMenu.addAction(SmallIcon("dialog-cancel"), i18n("&Cancel"));
 
             popMenu.setMouseTracking(true);
             QAction *choice = popMenu.exec(QCursor::pos());
@@ -1552,7 +1552,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
             popMenu.addAction(SmallIcon("tag"), i18n("Assign Tags to &All Items"));
 
         popMenu.addSeparator();
-        popMenu.addAction(SmallIcon("cancel"), i18n("&Cancel"));
+        popMenu.addAction(SmallIcon("dialog-cancel"), i18n("&Cancel"));
 
         popMenu.setMouseTracking(true);
         QAction *choice = popMenu.exec(QCursor::pos());

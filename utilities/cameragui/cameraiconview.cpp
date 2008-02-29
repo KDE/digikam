@@ -626,7 +626,7 @@ void CameraIconView::uploadItemPopupMenu(const KUrl::List& srcURLs)
     popMenu.addTitle(SmallIcon("digikam"), d->cameraUI->cameraTitle());
     QAction *uploadAction = popMenu.addAction(SmallIcon("file-import"), i18n("&Upload into camera"));
     popMenu.addSeparator();
-    popMenu.addAction( SmallIcon("cancel"), i18n("C&ancel") );
+    popMenu.addAction( SmallIcon("dialog-cancel"), i18n("C&ancel") );
 
     popMenu.setMouseTracking(true);
     QAction *choice = popMenu.exec(QCursor::pos());

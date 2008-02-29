@@ -1010,9 +1010,9 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
             // TODO: Copy?
             KMenu popMenu(this);
             popMenu.addTitle(SmallIcon("digikam"), i18n("My Albums"));
-            QAction *moveAction = popMenu.addAction(SmallIcon("goto"), i18n("&Move Here"));
+            QAction *moveAction = popMenu.addAction(SmallIcon("go-jump"), i18n("&Move Here"));
             popMenu.addSeparator();
-            popMenu.addAction(SmallIcon("cancel"), i18n("C&ancel"));
+            popMenu.addAction(SmallIcon("dialog-cancel"), i18n("C&ancel"));
             popMenu.setMouseTracking(true);
             QAction *choice = popMenu.exec(QCursor::pos());
 
