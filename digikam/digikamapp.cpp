@@ -1118,6 +1118,7 @@ void DigikamApp::slotAlbumSelected(bool val)
 void DigikamApp::slotTagSelected(bool val)
 {
     Album *album = AlbumManager::instance()->currentAlbum();
+    if (!album) return;
 
     if(!val)
     {
