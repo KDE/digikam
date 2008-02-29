@@ -37,6 +37,97 @@
 namespace Digikam
 {
 
+DTagDrag::DTagDrag(int albumid, const char *name)
+        : QMimeData()
+{
+    setObjectName(name);
+    QByteArray ba;
+    QDataStream ds(&ba, QIODevice::WriteOnly);
+    ds << albumid;
+    setData("digikam/tag-id", ba);
+}
+
+bool DTagDrag::canDecode(const QMimeData *e)
+{
+    return e->hasFormat("digikam/tag-id");
+}
+
+const char* DTagDrag::format(int i) const
+{
+    if (i == 0)
+        return formats()[i].toAscii().data();
+
+    return 0;
+}
+
+QByteArray DTagDrag::encodedData(const char* mime) const
+{
+    return data(mime);
+}
+
+// ------------------------------------------------------------------------
+
+DTagListDrag::DTagListDrag(const QList<int>& tagIDs, const char *name)
+            : QMimeData()
+{
+    setObjectName(name);
+    QByteArray ba;
+    QDataStream ds(&ba, QIODevice::WriteOnly);
+    ds << tagIDs;
+    setData("digikam/taglist", ba);
+}
+
+bool DTagListDrag::canDecode(const QMimeData* e)
+{
+    return e->hasFormat("digikam/taglist");
+}
+
+QByteArray DTagListDrag::encodedData(const char* mime) const
+{
+    return data(mime);
+}
+
+const char* DTagListDrag::format(int i) const
+{
+    if (i == 0)
+        return formats()[i].toAscii().data();
+
+    return 0;
+}
+
+// ------------------------------------------------------------------------
+
+DCameraItemListDrag::DCameraItemListDrag(const QStringList& cameraItemPaths, const char *name)
+                   : QMimeData()
+{
+    setObjectName(name);
+    QByteArray ba;
+    QDataStream ds(&ba, QIODevice::WriteOnly);
+    ds << cameraItemPaths;
+    setData("digikam/cameraItemlist", ba);
+}
+
+bool DCameraItemListDrag::canDecode(const QMimeData* e)
+{
+    return e->hasFormat("digikam/cameraItemlist");
+}
+
+QByteArray DCameraItemListDrag::encodedData(const char* mime) const
+{
+    return data(mime);
+}
+
+const char* DCameraItemListDrag::format(int i) const
+{
+    if (i == 0)
+        return formats()[i].toAscii().data();
+
+    return 0;
+}
+
+// ------------------------------------------------------------------------
+// NOTE: OBSOLETE Qt3 classes. Do not use it...
+
 ItemDrag::ItemDrag(const KUrl::List &urls,
                    const KUrl::List &kioURLs,
                    const Q3ValueList<int>& albumIDs,
@@ -322,66 +413,6 @@ const char* CameraItemListDrag::format(int i) const
         return "digikam/cameraItemlist";
 
     return 0;
-}
-
-// ------------------------------------------------------------------------
-
-DCameraItemListDrag::DCameraItemListDrag(const QStringList& cameraItemPaths, const char *name)
-                   : QMimeData()
-{
-    setObjectName(name);
-    QByteArray ba;
-    QDataStream ds(&ba, QIODevice::WriteOnly);
-    ds << cameraItemPaths;
-    setData("digikam/cameraItemlist", ba);
-}
-
-bool DCameraItemListDrag::canDecode(const QMimeData* e)
-{
-    return e->hasFormat("digikam/cameraItemlist");
-}
-
-QByteArray DCameraItemListDrag::encodedData(const char* mime) const
-{
-    return data(mime);
-}
-
-const char* DCameraItemListDrag::format(int i) const
-{
-    if (i == 0)
-        return formats()[i].toAscii().data();
-
-    return 0;
-}
-
-// ------------------------------------------------------------------------
-
-DTagDrag::DTagDrag(int albumid, const char *name)
-        : QMimeData()
-{
-    setObjectName(name);
-    QByteArray ba;
-    QDataStream ds(&ba, QIODevice::WriteOnly);
-    ds << albumid;
-    setData("digikam/tag-id", ba);
-}
-
-bool DTagDrag::canDecode(const QMimeData *e)
-{
-    return e->hasFormat("digikam/tag-id");
-}
-
-const char* DTagDrag::format(int i) const
-{
-    if (i == 0)
-        return formats()[i].toAscii().data();
-
-    return 0;
-}
-
-QByteArray DTagDrag::encodedData(const char* mime) const
-{
-    return data(mime);
 }
 
 }  // namespace Digikam

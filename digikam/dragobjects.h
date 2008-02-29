@@ -30,6 +30,8 @@
 
 #include <Q3DragObject>
 #include <Q3ValueList>
+#include <QMimeData>
+#include <QList>
 #include <QStringList>
 
 // KDE includes.
@@ -40,6 +42,70 @@ class QWidget;
 
 namespace Digikam
 {
+
+/**
+ * Provides a drag object for a tag
+ *
+ * When a tag is moved through drag'n'drop an object of this class 
+ * is created.
+ */
+class DTagDrag : public QMimeData
+{
+public:
+
+    DTagDrag(int albumid, const char *name=0);
+    static bool canDecode(const QMimeData* e);
+
+protected:
+
+    QByteArray  encodedData(const char*) const;
+    const char* format(int i) const;
+};
+
+// ------------------------------------------------------------------------
+
+/**
+ * Provides a drag object for a list of tags
+ *
+ * When a tag is moved through drag'n'drop an object of this class 
+ * is created.
+ */
+class DTagListDrag : public QMimeData
+{
+public:
+
+    DTagListDrag(const QList<int>& tagIDs, const char *name=0);
+    static bool canDecode(const QMimeData* e);
+
+protected:
+
+    QByteArray  encodedData(const char*) const;
+    const char* format(int i) const;
+};
+
+// ------------------------------------------------------------------------
+
+/**
+ * Provides a drag object for a list of camera items
+ *
+ * When a camera item is moved through drag'n'drop an object of this class
+ * is created.
+ */
+class DCameraItemListDrag : public QMimeData
+{
+public:
+
+    DCameraItemListDrag(const QStringList& cameraItemPaths, const char *name=0);
+    static bool canDecode(const QMimeData* e);
+
+protected:
+
+    QByteArray  encodedData(const char*) const;
+    const char* format(int i) const;
+};
+
+// ------------------------------------------------------------------------
+// NOTE: OBSOLETE Qt3 classes. Do not use it...
 
 /**
  * Provides a drag object for a list of KURLs with its related database IDs.
@@ -86,7 +152,6 @@ private:
  *
  * When a tag is moved through drag'n'drop an object of this class 
  * is created.
- * This class is obsolete. Do not use it. Use DTagDrag instead.
  */
 class TagDrag : public Q3DragObject
 {
@@ -180,48 +245,6 @@ protected:
 private:
 
     QStringList m_cameraItemPaths;
-};
-
-// ------------------------------------------------------------------------
-
-/**
- * Provides a drag object for a list of camera items
- *
- * When a camera item is moved through drag'n'drop an object of this class
- * is created.
- */
-class DCameraItemListDrag : public QMimeData
-{
-public:
-
-    DCameraItemListDrag(const QStringList& cameraItemPaths, const char *name=0);
-    static bool canDecode(const QMimeData* e);
-
-protected:
-
-    QByteArray  encodedData(const char*) const;
-    const char* format(int i) const;
-};
-
-// ------------------------------------------------------------------------
-
-/**
- * Provides a drag object for a tag
- *
- * When a tag is moved through drag'n'drop an object of this class 
- * is created.
- */
-class DTagDrag : public QMimeData
-{
-public:
-
-    DTagDrag(int albumid, const char *name=0);
-    static bool canDecode(const QMimeData* e);
-
-protected:
-
-    QByteArray  encodedData(const char*) const;
-    const char* format(int i) const;
 };
 
 }  // namespace Digikam
