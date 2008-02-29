@@ -185,6 +185,27 @@ private:
 // ------------------------------------------------------------------------
 
 /**
+ * Provides a drag object for a list of camera items
+ *
+ * When a camera item is moved through drag'n'drop an object of this class
+ * is created.
+ */
+class DCameraItemListDrag : public QMimeData
+{
+public:
+
+    DCameraItemListDrag(const QStringList& cameraItemPaths, const char *name=0);
+    static bool canDecode(const QMimeData* e);
+
+protected:
+
+    QByteArray  encodedData(const char*) const;
+    const char* format(int i) const;
+};
+
+// ------------------------------------------------------------------------
+
+/**
  * Provides a drag object for a tag
  *
  * When a tag is moved through drag'n'drop an object of this class 

@@ -326,6 +326,36 @@ const char* CameraItemListDrag::format(int i) const
 
 // ------------------------------------------------------------------------
 
+DCameraItemListDrag::DCameraItemListDrag(const QStringList& cameraItemPaths, const char *name)
+                   : QMimeData()
+{
+    setObjectName(name);
+    QByteArray ba;
+    QDataStream ds(&ba, QIODevice::WriteOnly);
+    ds << cameraItemPaths;
+    setData("digikam/cameraItemlist", ba);
+}
+
+bool DCameraItemListDrag::canDecode(const QMimeData* e)
+{
+    return e->hasFormat("digikam/cameraItemlist");
+}
+
+QByteArray DCameraItemListDrag::encodedData(const char* mime) const
+{
+    return data(mime);
+}
+
+const char* DCameraItemListDrag::format(int i) const
+{
+    if (i == 0)
+        return formats()[i].toAscii().data();
+
+    return 0;
+}
+
+// ------------------------------------------------------------------------
+
 DTagDrag::DTagDrag(int albumid, const char *name)
         : QMimeData()
 {
