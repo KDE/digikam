@@ -328,14 +328,14 @@ QStyleOptionQ3ListView TreeFolderCheckListItem::getStyleOption(const TreeFolderV
 // ------------------------------------------------------------------------------------
 
 TreeAlbumItem::TreeAlbumItem(QTreeWidget* parent, Album* album)
-             : TreeFolderItem(parent, album->title())
+             : TreeFolderItem(parent, album ? album->title() : QString())
 {
     m_album = album;
     m_album->setExtraData(treeWidget(), this);
 }
 
 TreeAlbumItem::TreeAlbumItem(QTreeWidgetItem* parent, Album* album)
-             : TreeFolderItem(parent, album->title())
+             : TreeFolderItem(parent, album ? album->title() : QString())
 {
     m_album = album;
     m_album->setExtraData(treeWidget(), this);
