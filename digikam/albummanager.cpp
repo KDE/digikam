@@ -1598,6 +1598,7 @@ void AlbumManager::slotDatesJobData(KIO::Job*, const QByteArray& data)
 
 void AlbumManager::slotDirty(const QString& path)
 {
+    DDebug() << "Noticed file change in directory " << path << endl;
     QString url = QDir::cleanDirPath(path);
     url = QDir::cleanDirPath(url.remove(d->libraryPath));
 
@@ -1607,7 +1608,6 @@ void AlbumManager::slotDirty(const QString& path)
     if (d->dirtyAlbums.contains(url))
         return;
 
-    DDebug() << "Dirty: " << url << endl;
     d->dirtyAlbums.append(url);
 
     if (DIO::running())
