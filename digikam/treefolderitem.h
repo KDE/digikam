@@ -98,6 +98,9 @@ public:
     TreeAlbumCheckListItem(QTreeWidget* parent, Album* album);
     TreeAlbumCheckListItem(QTreeWidgetItem* parent, Album* album);
     virtual ~TreeAlbumCheckListItem();
+
+    bool isOn() const;
+    void setOn(bool b);
 };
 
 }  // namespace Digikam

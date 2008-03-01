@@ -85,10 +85,7 @@ public:
 
     TAlbum* talbum() const;
     bool    untagged() const;
-    bool    isOn() const;
-    void    setOn(bool b);
     void    refresh();
-    void    setOpen(bool o);
     void    setCount(int count);
     int     count();
 
@@ -150,6 +147,27 @@ void TagFilterViewItem::refresh()
     }
 }
 
+TAlbum* TagFilterViewItem::talbum() const
+{
+    return (dynamic_cast<TAlbum*>(album()));
+}
+
+void TagFilterViewItem::setCount(int count)
+{
+    m_count = count;
+    refresh();
+}
+
+int TagFilterViewItem::count()
+{
+    return m_count;
+}
+
+bool TagFilterViewItem::untagged() const
+{
+    return !talbum() ? true : false;
+}
+
 /*
 void TagFilterViewItem::stateChange(bool val)
 {
@@ -188,37 +206,6 @@ int TagFilterViewItem::compare(Q3ListViewItem* i, int column, bool ascending) co
     return Q3ListViewItem::compare(i, column, ascending);
 }
 */
-
-TAlbum* TagFilterViewItem::talbum() const
-{
-    return (dynamic_cast<TAlbum*>(album()));
-}
-
-void TagFilterViewItem::setCount(int count)
-{
-    m_count = count;
-    refresh();
-}
-
-int TagFilterViewItem::count()
-{
-    return m_count;
-}
-
-bool TagFilterViewItem::untagged() const
-{
-    return !talbum() ? true : false;
-}
-
-bool TagFilterViewItem::isOn() const
-{
-    return (checkState(0) == Qt::Checked ? true : false);
-}
-
-void TagFilterViewItem::setOn(bool b)
-{
-    setCheckState(0, b ? Qt::Checked : Qt::Unchecked);
-}
 
 // ---------------------------------------------------------------------
 

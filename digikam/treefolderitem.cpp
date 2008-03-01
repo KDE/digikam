@@ -383,4 +383,14 @@ TreeAlbumCheckListItem::~TreeAlbumCheckListItem()
 {
 }
 
+bool TreeAlbumCheckListItem::isOn() const
+{
+    return (checkState(0) == Qt::Checked ? true : false);
+}
+
+void TreeAlbumCheckListItem::setOn(bool b)
+{
+    setCheckState(0, b ? Qt::Checked : Qt::Unchecked);
+}
+
 }  // namespace Digikam
