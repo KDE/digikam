@@ -123,7 +123,7 @@ void TagFilterViewItem::refresh()
     if (!talbum()) return;
 
     if (AlbumSettings::instance()->getShowFolderTreeViewItemsCount() &&
-        dynamic_cast<TagFilterViewItem*>(parent()))
+        dynamic_cast<TreeAlbumItem*>(parent()))
     {
         if (isExpanded())
             setText(0, QString("%1 (%2)").arg(talbum()->title()).arg(m_count));
@@ -232,7 +232,7 @@ public:
 };
 
 TagFilterView::TagFilterView(QWidget* parent)
-             : TreeFolderView(parent)
+             : TreeFolderView(parent, "TagFilterView")
 {
     d = new TagFilterViewPrivate;
     d->timer = new QTimer(this);
@@ -318,6 +318,105 @@ void TagFilterView::slotItemExpanded(QTreeWidgetItem *item)
     TagFilterViewItem *viewItem = dynamic_cast<TagFilterViewItem*>(item);
     if (viewItem)
         viewItem->refresh();
+}
+
+void TagFilterView::slotTextTagFilterChanged(const QString& filter)
+{
+    QString search = filter.toLower();
+
+    bool atleastOneMatch = false;
+
+    AlbumList tList = AlbumManager::instance()->allTAlbums();
+    for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
+    {
+        TAlbum* talbum  = (TAlbum*)(*it);
+
+        // don't touch the root Album
+        if (talbum->isRoot())
+            continue;
+
+        bool match = talbum->title().toLower().contains(search);
+        if (!match)
+        {
+            // check if any of the parents match the search
+            Album* parent = talbum->parent();
+            while (parent && !parent->isRoot())
+            {
+                if (parent->title().toLower().contains(search))
+                {
+                    match = true;
+                    break;
+                }
+
+                parent = parent->parent();
+            }
+        }
+
+        if (!match)
+        {
+            // check if any of the children match the search
+            AlbumIterator it(talbum);
+            while (it.current())
+            {
+                if ((*it)->title().toLower().contains(search))
+                {
+                    match = true;
+                    break;
+                }
+                ++it;
+            }
+        }
+
+        TagFilterViewItem* viewItem = (TagFilterViewItem*) talbum->extraData(this);
+
+        if (match)
+        {
+            atleastOneMatch = true;
+
+            if (viewItem)
+                viewItem->setHidden(false);
+        }
+        else
+        {
+            if (viewItem)
+            {
+                viewItem->setHidden(true);
+            }
+        }
+    }
+
+    emit signalTextTagFilterMatch(atleastOneMatch);
+}
+
+void TagFilterView::slotTagAdded(Album* album)
+{
+    if (!album)
+        return;
+
+    TAlbum* tag = dynamic_cast<TAlbum*>(album);
+    if (!tag)
+        return;
+
+    if (tag->isRoot())
+    {
+        TreeAlbumItem *item = new TreeAlbumItem(this, tag);
+        // Toplevel tags are all children of root, and should always be visible - set root to open
+        item->setExpanded(true);
+    }
+    else
+    {
+        TagFilterViewItem* parent = (TagFilterViewItem*)(tag->parent()->extraData(this));
+        if (!parent)
+        {
+            DWarning() << " Failed to find parent for Tag "
+                       << tag->tagPath() << endl;
+            return;
+        }
+
+        new TagFilterViewItem(parent, tag);
+    }
+
+    setTagThumbnail(tag);
 }
 
 void TagFilterView::slotItemChanged(QTreeWidgetItem* item)
@@ -584,37 +683,6 @@ void TagFilterView::dropEvent(QDropEvent *e)
                                                        imageIDs.first(), errMsg);
         }
     }
-}
-
-void TagFilterView::slotTagAdded(Album* album)
-{
-    if (!album)
-        return;
-
-    TAlbum* tag = dynamic_cast<TAlbum*>(album);
-    if (!tag)
-        return;
-
-    if (tag->isRoot())
-    {
-        TreeAlbumItem *item = new TreeAlbumItem(this, tag);
-        // Toplevel tags are all children of root, and should always be visible - set root to open
-        item->setExpanded(true);
-    }
-    else
-    {
-        TagFilterViewItem* parent = (TagFilterViewItem*)(tag->parent()->extraData(this));
-        if (!parent)
-        {
-            DWarning() << " Failed to find parent for Tag "
-                       << tag->tagPath() << endl;
-            return;
-        }
-
-        new TagFilterViewItem(parent, tag);
-    }
-
-    setTagThumbnail(tag);
 }
 
 void TagFilterView::slotTagRenamed(Album* album)
@@ -1252,74 +1320,6 @@ void TagFilterView::slotResetTagFilters()
             item->setOn(false);
         ++it;
     }
-}
-
-void TagFilterView::slotTextTagFilterChanged(const QString& filter)
-{
-    QString search = filter.toLower();
-
-    bool atleastOneMatch = false;
-
-    AlbumList tList = AlbumManager::instance()->allTAlbums();
-    for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
-    {
-        TAlbum* talbum  = (TAlbum*)(*it);
-
-        // don't touch the root Album
-        if (talbum->isRoot())
-            continue;
-
-        bool match = talbum->title().toLower().contains(search);
-        if (!match)
-        {
-            // check if any of the parents match the search
-            Album* parent = talbum->parent();
-            while (parent && !parent->isRoot())
-            {
-                if (parent->title().toLower().contains(search))
-                {
-                    match = true;
-                    break;
-                }
-
-                parent = parent->parent();
-            }
-        }
-
-        if (!match)
-        {
-            // check if any of the children match the search
-            AlbumIterator it(talbum);
-            while (it.current())
-            {
-                if ((*it)->title().toLower().contains(search))
-                {
-                    match = true;
-                    break;
-                }
-                ++it;
-            }
-        }
-
-        TagFilterViewItem* viewItem = (TagFilterViewItem*) talbum->extraData(this);
-
-        if (match)
-        {
-            atleastOneMatch = true;
-
-            if (viewItem)
-                viewItem->setHidden(false);
-        }
-        else
-        {
-            if (viewItem)
-            {
-                viewItem->setHidden(true);
-            }
-        }
-    }
-
-    emit signalTextTagFilterMatch(atleastOneMatch);
 }
 
 }  // namespace Digikam
