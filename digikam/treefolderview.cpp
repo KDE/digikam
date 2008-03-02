@@ -185,9 +185,10 @@ void TreeFolderView::mousePressEvent(QMouseEvent *e)
         vp.setY(vp.y()+header()->height());
 
     TreeFolderItem *item = dynamic_cast<TreeFolderItem*>(itemAt(vp));
+    if (!item) return;
 
     // If item is a checkbox, restore the status with right mouse button.
-    if(item && (item->flags() & Qt::ItemIsUserCheckable) && 
+    if((item->flags() & Qt::ItemIsUserCheckable) && 
        e->button() == Qt::RightButton) 
     {
         Qt::CheckState state = item->checkState(0);
@@ -198,7 +199,7 @@ void TreeFolderView::mousePressEvent(QMouseEvent *e)
 
     QTreeWidget::mousePressEvent(e);
 
-    if(item && e->button() == Qt::LeftButton) 
+    if(e->button() == Qt::LeftButton) 
     {
         d->dragStartPos = e->pos();
         d->dragItem     = item;
