@@ -213,6 +213,7 @@ void TreeFolderView::mouseReleaseEvent(QMouseEvent *e)
     QTreeWidget::mouseReleaseEvent(e);
     d->dragItem    = 0;
     d->dragStarted = false;
+    e->accept();
 }
 
 TreeFolderItem* TreeFolderView::dragItem() const

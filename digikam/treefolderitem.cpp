@@ -39,7 +39,7 @@ TreeFolderItem::TreeFolderItem(QTreeWidget *parent, const QString& text, bool sp
               : QTreeWidgetItem(parent, QStringList() << text)
 {
     setFocus(false);
-    setFlags(flags() ^ Qt::ItemIsUserCheckable);
+    setFlags(Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | Qt::ItemIsEnabled);
 
     if (special)
     {
@@ -54,7 +54,7 @@ TreeFolderItem::TreeFolderItem(QTreeWidgetItem *parent, const QString& text, boo
               : QTreeWidgetItem(parent, QStringList() << text)
 {
     setFocus(false);
-    setFlags(flags() ^ Qt::ItemIsUserCheckable);
+    setFlags(Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | Qt::ItemIsEnabled);
 
     if (special)
     {
@@ -172,13 +172,14 @@ void TreeFolderItem::setup()
 TreeFolderCheckListItem::TreeFolderCheckListItem(QTreeWidget *parent, const QString& text)
                        : QTreeWidgetItem(parent, QStringList() << text)
 {
-    setFlags(flags() | Qt::ItemIsUserCheckable);
+    setFlags(Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable);
     setCheckState(0, Qt::Unchecked);
 }
 
 TreeFolderCheckListItem::TreeFolderCheckListItem(QTreeWidgetItem *parent, const QString& text)
                        : QTreeWidgetItem(parent, QStringList() << text)
 {
+    setFlags(Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable);
     setFlags(flags() | Qt::ItemIsUserCheckable);
     setCheckState(0, Qt::Unchecked);
 }
@@ -368,14 +369,14 @@ int TreeAlbumItem::id() const
 TreeAlbumCheckListItem::TreeAlbumCheckListItem(QTreeWidget* parent, Album* album)
                       : TreeAlbumItem(parent, album)
 {
-    setFlags(flags() | Qt::ItemIsUserCheckable);
+    setFlags(Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable);
     setCheckState(0, Qt::Unchecked);
 }
 
 TreeAlbumCheckListItem::TreeAlbumCheckListItem(QTreeWidgetItem* parent, Album* album)
                       : TreeAlbumItem(parent, album)
 {
-    setFlags(flags() | Qt::ItemIsUserCheckable);
+    setFlags(Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable);
     setCheckState(0, Qt::Unchecked);
 }
 

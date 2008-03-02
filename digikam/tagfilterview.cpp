@@ -95,15 +95,14 @@ private:
 };
 
 TagFilterViewItem::TagFilterViewItem(QTreeWidget *parent, TAlbum *album)
-                 : TreeAlbumCheckListItem(parent, album)
+                 : TreeAlbumCheckListItem(parent, dynamic_cast<Album*>(album))
 {
     m_count = 0;
 
     if (!album)
     {
         // Item is the special one to select untagged pictures.
-        setFlags(flags() ^ Qt::ItemIsDragEnabled);
-        setFlags(flags() ^ Qt::ItemIsDropEnabled);
+        setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable);
         QFont f(treeWidget()->font());
         f.setBold(true);
         f.setItalic(true);
@@ -114,7 +113,7 @@ TagFilterViewItem::TagFilterViewItem(QTreeWidget *parent, TAlbum *album)
 }
 
 TagFilterViewItem::TagFilterViewItem(QTreeWidgetItem *parent, TAlbum *album)
-                 : TreeAlbumCheckListItem(parent, album)
+                 : TreeAlbumCheckListItem(parent, dynamic_cast<Album*>(album))
 {
     m_count = 0;
 }
@@ -123,7 +122,8 @@ void TagFilterViewItem::refresh()
 {
     if (!talbum()) return;
 
-    if (AlbumSettings::instance()->getShowFolderTreeViewItemsCount())
+    if (AlbumSettings::instance()->getShowFolderTreeViewItemsCount() &&
+        dynamic_cast<TagFilterViewItem*>(parent()))
     {
         if (isExpanded())
             setText(0, QString("%1 (%2)").arg(talbum()->title()).arg(m_count));
@@ -304,7 +304,7 @@ TagFilterView::TagFilterView(QWidget* parent)
 TagFilterView::~TagFilterView()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("Tag Filters View");
+    KConfigGroup group        = config->group("Tag Filters View");
     group.writeEntry("Matching Condition", (int)(d->matchingCond));
     group.writeEntry("Toggle Auto Tags", (int)(d->toggleAutoTags));
     config->sync();
@@ -367,11 +367,14 @@ void TagFilterView::slotTimeOut()
     QTreeWidgetItemIterator it(this, QTreeWidgetItemIterator::Checked);
     while (*it)
     {
-        TagFilterViewItem* item = (TagFilterViewItem*)(*it);
-        if (item->album())
-            filterTags.append(item->album()->id());
-        else if (item->untagged())
-            showUnTagged = true;
+        TagFilterViewItem* item = dynamic_cast<TagFilterViewItem*>(*it);
+        if (item)
+        {
+            if (item->talbum())
+                filterTags.append(item->talbum()->id());
+            else if (item->untagged())
+                showUnTagged = true;
+        }
         ++it;
     }
 
@@ -453,7 +456,6 @@ void TagFilterView::dropEvent(QDropEvent *e)
         vp.setY(vp.y()+header()->height());
 
     TagFilterViewItem *itemDrop = dynamic_cast<TagFilterViewItem*>(itemAt(vp));
-
     if (!itemDrop || itemDrop->untagged())
         return;
 
@@ -586,16 +588,18 @@ void TagFilterView::dropEvent(QDropEvent *e)
 
 void TagFilterView::slotTagAdded(Album* album)
 {
-    if (!album || album->isRoot())
+    if (!album)
         return;
 
     TAlbum* tag = dynamic_cast<TAlbum*>(album);
     if (!tag)
         return;
 
-    if (tag->parent()->isRoot())
+    if (tag->isRoot())
     {
-        new TagFilterViewItem(this, tag);
+        TreeAlbumItem *item = new TreeAlbumItem(this, tag);
+        // Toplevel tags are all children of root, and should always be visible - set root to open
+        item->setExpanded(true);
     }
     else
     {
@@ -652,7 +656,6 @@ void TagFilterView::slotTagMoved(TAlbum* tag, TAlbum* newParent)
         removeItemWidget(item, 0);
 
         TagFilterViewItem* newPItem = (TagFilterViewItem*)(newParent->extraData(this));
-
         if (newPItem)
             newPItem->addChild(item);
         else
@@ -687,7 +690,6 @@ void TagFilterView::setTagThumbnail(TAlbum *album)
         return;
 
     TagFilterViewItem* item = (TagFilterViewItem*)(album->extraData(this));
-
     if(!item)
         return;
 
@@ -718,7 +720,6 @@ void TagFilterView::slotGotThumbnailFromIcon(Album *album, const QPixmap& thumbn
         return;
 
     TagFilterViewItem* item = (TagFilterViewItem*)album->extraData(this);
-
     if(!item)
         return;
 
@@ -761,7 +762,7 @@ void TagFilterView::slotClear()
 void TagFilterView::slotContextMenu(const QPoint& pt)
 {
     TagFilterViewItem *item = dynamic_cast<TagFilterViewItem*>(itemAt(pt));
-    if (item && item->untagged())
+    if (!item || item->untagged())
         return;
 
     KMenu popmenu(this);
@@ -769,7 +770,7 @@ void TagFilterView::slotContextMenu(const QPoint& pt)
 
     QAction *newAction, *editAction=0, *resetIconAction=0, *deleteAction=0;
 
-    newAction     = popmenu.addAction(SmallIcon("tag-new"), i18n("New Tag..."));
+    newAction = popmenu.addAction(SmallIcon("tag-new"), i18n("New Tag..."));
 
 #ifdef KDEPIMLIBS_FOUND
     d->ABCMenu = new QMenu(this);
@@ -875,10 +876,10 @@ void TagFilterView::slotContextMenu(const QPoint& pt)
             QTreeWidgetItemIterator it(this, QTreeWidgetItemIterator::NotChecked);
             while (*it)
             {
-                TagFilterViewItem* item = (TagFilterViewItem*)(*it);
+                TagFilterViewItem* item = dynamic_cast<TagFilterViewItem*>(*it);
 
                 // Ignore "Not Tagged" tag filter.
-                if (!item->untagged())
+                if (item && !item->untagged())
                     item->setOn(true);
 
                 ++it;
@@ -892,10 +893,10 @@ void TagFilterView::slotContextMenu(const QPoint& pt)
             QTreeWidgetItemIterator it(this, QTreeWidgetItemIterator::Checked);
             while (*it)
             {
-                TagFilterViewItem* item = (TagFilterViewItem*)(*it);
+                TagFilterViewItem* item = dynamic_cast<TagFilterViewItem*>(*it);
 
                 // Ignore "Not Tagged" tag filter.
-                if (!item->untagged())
+                if (item && !item->untagged())
                     item->setOn(false);
 
                 ++it;
@@ -909,10 +910,10 @@ void TagFilterView::slotContextMenu(const QPoint& pt)
             QTreeWidgetItemIterator it(this);
             while (*it)
             {
-                TagFilterViewItem* item = (TagFilterViewItem*)(*it);
+                TagFilterViewItem* item = dynamic_cast<TagFilterViewItem*>(*it);
 
                 // Ignore "Not Tagged" tag filter.
-                if (!item->untagged())
+                if (item && !item->untagged())
                     item->setOn(!item->isOn());
 
                 ++it;
@@ -925,7 +926,8 @@ void TagFilterView::slotContextMenu(const QPoint& pt)
             d->toggleAutoTags = TagFilterView::NoToggleAuto;
             toggleChildTags(item, true);
             TagFilterViewItem *tItem = (TagFilterViewItem*)(item->talbum()->extraData(this));
-            tItem->setOn(true);
+            if (tItem)
+                tItem->setOn(true);
             d->toggleAutoTags = oldAutoTags;
         }
         else if (choice == deselectChildrenAction)   // Deselect Child Tags.
@@ -933,7 +935,8 @@ void TagFilterView::slotContextMenu(const QPoint& pt)
             d->toggleAutoTags = TagFilterView::NoToggleAuto;
             toggleChildTags(item, false);
             TagFilterViewItem *tItem = (TagFilterViewItem*)(item->talbum()->extraData(this));
-            tItem->setOn(false);
+            if (tItem)
+                tItem->setOn(false);
             d->toggleAutoTags = oldAutoTags;
         }
         else if (choice == selectParentsAction)     // Select Parent Tags.
@@ -941,7 +944,8 @@ void TagFilterView::slotContextMenu(const QPoint& pt)
             d->toggleAutoTags = TagFilterView::NoToggleAuto;
             toggleParentTags(item, true);
             TagFilterViewItem *tItem = (TagFilterViewItem*)(item->talbum()->extraData(this));
-            tItem->setOn(true);
+            if (tItem)
+                tItem->setOn(true);
             d->toggleAutoTags = oldAutoTags;
         }
         else if (choice == deselectParentsAction)   // Deselect Parent Tags.
@@ -949,7 +953,8 @@ void TagFilterView::slotContextMenu(const QPoint& pt)
             d->toggleAutoTags = TagFilterView::NoToggleAuto;
             toggleParentTags(item, false);
             TagFilterViewItem *tItem = (TagFilterViewItem*)(item->talbum()->extraData(this));
-            tItem->setOn(false);
+            if (tItem)
+                tItem->setOn(false);
             d->toggleAutoTags = oldAutoTags;
         }
         else if (choice == toggleNoneAction)        // No toggle auto tags.
@@ -1044,12 +1049,12 @@ void TagFilterView::tagNew(TagFilterViewItem* item, const QString& _title, const
     else
     {
         TagFilterViewItem *item = (TagFilterViewItem*)(newAlbum->extraData(this));
-        if ( item )
+        if (item)
         {
             clearSelection();
             item->setSelected(true);
             setCurrentItem(item);
-            scrollToItem( item );
+            scrollToItem(item);
         }
     }
 }
@@ -1069,7 +1074,7 @@ void TagFilterView::tagEdit(TagFilterViewItem* item)
         return;
     }
 
-    AlbumManager* man = AlbumManager::instance();
+    AlbumManager *man = AlbumManager::instance();
 
     if (tag->title() != title)
     {
@@ -1090,7 +1095,7 @@ void TagFilterView::tagEdit(TagFilterViewItem* item)
     }
 }
 
-void TagFilterView::tagDelete(TagFilterViewItem* item)
+void TagFilterView::tagDelete(TagFilterViewItem *item)
 {
     if (!item)
         return;
@@ -1184,7 +1189,7 @@ void TagFilterView::toggleParentTags(TagFilterViewItem* tItem, bool b)
     while (*it)
     {
         TagFilterViewItem* item = dynamic_cast<TagFilterViewItem*>(*it);
-        if (!item->isHidden())
+        if (item && !item->isHidden())
         {
             Album *a = dynamic_cast<Album*>(item->talbum());
             if (a)
