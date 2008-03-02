@@ -1574,7 +1574,7 @@ QStringList AlbumDB::getItemNamesInAlbum(int albumID, bool recurssive)
                                 "WHERE Images.album "
                                 "IN (SELECT DISTINCT id "
                                     "FROM Albums "
-                                    "WHERE albumRoot=? AND (relativePath='?' OR relativePath LIKE '\%?\%'))"), 
+                                    "WHERE albumRoot=? AND (relativePath='?' OR relativePath LIKE '%?%'))"), 
                         boundValues,
                         &values );
     }

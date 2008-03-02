@@ -62,30 +62,8 @@ Ddbgstream::~Ddbgstream()
     _ddebug_mutex_->unlock();
 }
 
-Dndbgstream::Dndbgstream(QDebug /*stream*/)
-           : kndbgstream()
-{
-    // using a static variable here - we can safely assume that kDebug
-    // is called at least once from the main thread before threads start.
-    if (!_ddebug_mutex_)
-    {
-        // leak the mutex object for simplicity
-        _ddebug_mutex_ = new QMutex;
-        //deleter.setObject(mutex, new QMutex);
-        //KGlobal::unregisterStaticDeleter(&deleter);
-    }
-    _ddebug_mutex_->lock();
-}
-
-Dndbgstream::~Dndbgstream()
-{
-    _ddebug_mutex_->unlock();
-}
-
 } // namespace Digikam
 
 Digikam::Ddbgstream DDebug(int area)   { return Digikam::Ddbgstream(kDebug(area));   }
 Digikam::Ddbgstream DError(int area)   { return Digikam::Ddbgstream(kError(area));   }
 Digikam::Ddbgstream DWarning(int area) { return Digikam::Ddbgstream(kWarning(area)); }
-
-Digikam::Dndbgstream DnDebug(int /*area*/) { return Digikam::Dndbgstream(kDebugDevNull()); }

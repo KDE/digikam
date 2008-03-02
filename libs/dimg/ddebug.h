@@ -48,26 +48,11 @@ public:
     ~Ddbgstream();
 };
 
-class DIGIKAM_EXPORT Dndbgstream : public kndbgstream
-{
-
-public:
-
-    Dndbgstream(QDebug stream);
-    ~Dndbgstream();
-};
-
 } // namespace Digikam
 
 DIGIKAM_EXPORT Digikam::Ddbgstream DDebug(int area = 0);
 DIGIKAM_EXPORT Digikam::Ddbgstream DWarning(int area = 0);
 DIGIKAM_EXPORT Digikam::Ddbgstream DError(int area = 0);
-
-DIGIKAM_EXPORT Digikam::Dndbgstream DnDebug(int area = 0);
-
-#ifdef NDEBUG
-#define DDebug DnDebug
-#endif
 
 #endif //  _DDEBUG_H_
 
