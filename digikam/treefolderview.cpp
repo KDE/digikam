@@ -86,7 +86,7 @@ TreeFolderView::TreeFolderView(QWidget *parent, const char *name)
     setAllColumnsShowFocus(true);
     setSelectionMode(QAbstractItemView::SingleSelection);
     setDragEnabled(true);
-    setDropIndicatorShown(true);
+    setDropIndicatorShown(false);
     setAcceptDrops(true);
     viewport()->setAcceptDrops(true);
     setItemsExpandable(true);
@@ -307,10 +307,17 @@ void TreeFolderView::loadViewState()
         item = dynamic_cast<TreeFolderItem*>(*it);
         if(item)
         {
-            if(openFolders.contains(item->id()))
-                expandItem(item);
-            else
-                collapseItem(item);
+            int id = item->id();
+            if (id != 0)
+            {
+                if (openFolders.contains(id))
+                {
+                    DDebug() << objectName() << ": expanded item ID: " << id << endl;
+                    item->setExpanded(true);
+                }
+                else
+                    item->setExpanded(false);
+            }
 
             if(item->id() == selectedItem)
             {
