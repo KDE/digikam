@@ -7,7 +7,7 @@
  * Description : Camera interface dialog
  * 
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -811,35 +811,12 @@ void CameraUI::slotBusy(bool val)
 
 void CameraUI::slotIncreaseThumbSize()
 {
-    ThumbnailSize thumbSize;
+    int thumbSize = d->view->thumbnailSize().size();
+    if (thumbSize >= ThumbnailSize::Huge) return;
 
-    switch(d->view->thumbnailSize().size())
-    {
-        case (ThumbnailSize::Small):
-        {
-            thumbSize = ThumbnailSize(ThumbnailSize::Medium);
-            break;
-        }
-        case (ThumbnailSize::Medium):
-        {
-            thumbSize = ThumbnailSize(ThumbnailSize::Large);
-            break;
-        }
-        case (ThumbnailSize::Large):
-        {
-            thumbSize = ThumbnailSize(ThumbnailSize::Huge);
-            break;
-        }
-        case (ThumbnailSize::Huge):
-        {
-            thumbSize = ThumbnailSize(ThumbnailSize::Huge);
-            break;
-        }
-        default:
-            return;
-    }
+    thumbSize += ThumbnailSize::Step;
 
-    if (thumbSize.size() == ThumbnailSize::Huge)
+    if (thumbSize >= ThumbnailSize::Huge)
     {
         d->imageMenu->setItemEnabled(4, false);
     }
@@ -850,40 +827,17 @@ void CameraUI::slotIncreaseThumbSize()
 
 void CameraUI::slotDecreaseThumbSize()
 {
-    ThumbnailSize thumbSize;
+    int thumbSize = d->view->thumbnailSize().size();
+    if (thumbSize <= ThumbnailSize::Small) return;
 
-    switch(d->view->thumbnailSize().size())
-    {
-        case (ThumbnailSize::Small):
-        {
-            thumbSize = ThumbnailSize(ThumbnailSize::Small);
-            break;
-        }
-        case (ThumbnailSize::Medium):
-        {
-            thumbSize = ThumbnailSize(ThumbnailSize::Small);
-            break;
-        }
-        case (ThumbnailSize::Large):
-        {
-            thumbSize = ThumbnailSize(ThumbnailSize::Medium);
-            break;
-        }
-        case (ThumbnailSize::Huge):
-        {
-            thumbSize = ThumbnailSize(ThumbnailSize::Large);
-            break;
-        }
-        default:
-            return;
-    }
+    thumbSize -= ThumbnailSize::Step;
 
-    if (thumbSize.size() == ThumbnailSize::Small)
+    if (thumbSize <= ThumbnailSize::Small)
     {
         d->imageMenu->setItemEnabled(5, false);
     }
-    d->imageMenu->setItemEnabled(4, true);    
-    
+    d->imageMenu->setItemEnabled(4, true);
+
     d->view->setThumbnailSize(thumbSize);
 }
 
