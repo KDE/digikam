@@ -290,7 +290,7 @@ TagFilterView::TagFilterView(QWidget* parent)
     // ------------------------------------------------------------------------
 
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("Tag Filters View");
+    KConfigGroup group = config->group("TagFilterView");
     d->matchingCond = (AlbumLister::MatchingCondition)(group.readEntry("Matching Condition", 
                                                        (int)AlbumLister::OrCondition));
 
@@ -300,7 +300,7 @@ TagFilterView::TagFilterView(QWidget* parent)
 TagFilterView::~TagFilterView()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("Tag Filters View");
+    KConfigGroup group        = config->group("TagFilterView");
     group.writeEntry("Matching Condition", (int)(d->matchingCond));
     group.writeEntry("Toggle Auto Tags", (int)(d->toggleAutoTags));
     config->sync();
