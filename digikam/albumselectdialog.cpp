@@ -302,7 +302,7 @@ void AlbumSelectDialog::slotUser1()
         return;
     }
 
-    TreeFolderItem* newItem = (TreeFolderItem*)newAlbum->extraData(d->folderView);
+    TreeAlbumItem* newItem = (TreeAlbumItem*)newAlbum->extraData(d->folderView);
     if (newItem)
     {
         d->folderView->scrollToItem(newItem);
