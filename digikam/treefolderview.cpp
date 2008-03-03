@@ -299,12 +299,12 @@ void TreeFolderView::loadViewState()
     if(group.hasKey("OpenFolders"))
         openFolders = group.readEntry("OpenFolders", QList<int>());
 
-    TreeFolderItem *item      = 0;
-    TreeFolderItem *foundItem = 0;
+    TreeAlbumItem *item      = 0;
+    TreeAlbumItem *foundItem = 0;
     QTreeWidgetItemIterator it(this);
     while (*it)
     {
-        item = dynamic_cast<TreeFolderItem*>(*it);
+        item = dynamic_cast<TreeAlbumItem*>(*it);
         if(item)
         {
             int id = item->id();

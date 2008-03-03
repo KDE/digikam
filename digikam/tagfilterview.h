@@ -86,11 +86,11 @@ protected:
 
 private slots:
 
-    void slotTagAdded(Album *album);
-    void slotTagMoved(TAlbum *tag, TAlbum *newParent);
-    void slotTagRenamed(Album *album);
-    void slotTagDeleted(Album *album);
-    void slotClear();
+    void slotAlbumAdded(Album *album);
+    void slotAlbumMoved(TAlbum *tag, TAlbum *newParent);
+    void slotAlbumRenamed(Album *album);
+    void slotAlbumDeleted(Album *album);
+    void slotAlbumsCleared();
     void slotAlbumIconChanged(Album *album);
     void slotTimeOut();
     void slotABCContextMenu();

@@ -40,6 +40,7 @@ TreeFolderItem::TreeFolderItem(QTreeWidget *parent, const QString& text, bool sp
 {
     setFocus(false);
     setFlags(Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | Qt::ItemIsEnabled);
+    setForegroundBrush(treeWidget()->palette().text());
 
     if (special)
     {
@@ -47,6 +48,7 @@ TreeFolderItem::TreeFolderItem(QTreeWidget *parent, const QString& text, bool sp
         f.setItalic(true);
         setFont(0, f);
         setForeground(0, treeWidget()->palette().link());
+        setForegroundBrush(treeWidget()->palette().link());
     }
 }
 
@@ -55,13 +57,14 @@ TreeFolderItem::TreeFolderItem(QTreeWidgetItem *parent, const QString& text, boo
 {
     setFocus(false);
     setFlags(Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | Qt::ItemIsEnabled);
-
+    setForegroundBrush(treeWidget()->palette().text());
     if (special)
     {
         QFont f = font(0);
         f.setItalic(true);
         setFont(0, f);
         setForeground(0, treeWidget()->palette().link());
+        setForegroundBrush(treeWidget()->palette().link());
     }
 }
 
@@ -73,7 +76,7 @@ void TreeFolderItem::setFocus(bool b)
 {
     m_focus = b;
     setForeground(0, m_focus ? treeWidget()->palette().link() 
-                             : treeWidget()->palette().text());
+                             : foregroundBrush());
     QColor hb = treeWidget()->palette().highlight().color();
     hb.setAlpha(127);
     setBackground(0, m_focus ? QBrush(hb)
@@ -88,6 +91,16 @@ bool TreeFolderItem::focus() const
 int TreeFolderItem::id() const
 {
     return 0;
+}
+
+QBrush TreeFolderItem::foregroundBrush() const
+{
+    return m_foregroundBrush;
+}
+
+void TreeFolderItem::setForegroundBrush(const QBrush& brush)
+{
+    m_foregroundBrush = brush;
 }
 
 /*

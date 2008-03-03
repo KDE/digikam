@@ -52,10 +52,17 @@ public:
     void setFocus(bool b);
     bool focus() const;
 
+protected:
+
+    QBrush foregroundBrush() const;
+    void   setForegroundBrush(const QBrush& brush);
+
 private:
 
-    bool m_focus;
-    bool m_special;
+    bool   m_focus;
+    bool   m_special;
+
+    QBrush m_foregroundBrush;
 };
 
 // ------------------------------------------------------------------------------------
