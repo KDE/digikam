@@ -165,7 +165,6 @@ TagFolderView::TagFolderView(QWidget *parent)
     d->albumMan = AlbumManager::instance();
 
     setHeaderLabels(QStringList() << i18n("My Tags"));
-    setContextMenuPolicy(Qt::CustomContextMenu);
 
     // ------------------------------------------------------------------------
 
@@ -202,9 +201,6 @@ TagFolderView::TagFolderView(QWidget *parent)
 
     connect(loader, SIGNAL(signalReloadThumbnails()),
             this, SLOT(slotReloadThumbnails()));
-
-    connect(this, SIGNAL(customContextMenuRequested(const QPoint&)),
-            this, SLOT(slotContextMenu(const QPoint&)));
 
     connect(this, SIGNAL(itemSelectionChanged()),
             this, SLOT(slotSelectionChanged()));
@@ -497,9 +493,9 @@ void TagFolderView::slotSelectionChanged()
     d->albumMan->setCurrentAlbum(tagitem->talbum());
 }
 
-void TagFolderView::slotContextMenu(const QPoint& pt)
+void TagFolderView::contextMenuEvent(QContextMenuEvent *e)
 {
-    TagFolderViewItem *tag = dynamic_cast<TagFolderViewItem*>(itemAt(pt));
+    TagFolderViewItem *tag = dynamic_cast<TagFolderViewItem*>(itemAt(e->pos()));
     if(!tag) return;
 
     KMenu popmenu(this);

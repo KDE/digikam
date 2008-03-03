@@ -80,6 +80,7 @@ public slots:
 
 protected:
 
+    void contextMenuEvent(QContextMenuEvent*);
     bool acceptDrop(const QDropEvent *e) const;
     void dropEvent(QDropEvent *e);
 
@@ -92,7 +93,6 @@ private slots:
     void slotClear();
     void slotAlbumIconChanged(Album *album);
     void slotTimeOut();
-    void slotContextMenu(const QPoint&);
     void slotABCContextMenu();
     void slotGotThumbnailFromIcon(Album *album, const QPixmap& thumbnail);
     void slotThumbnailLost(Album *album);

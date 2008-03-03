@@ -238,7 +238,6 @@ TagFilterView::TagFilterView(QWidget* parent)
     d->timer = new QTimer(this);
 
     setHeaderLabels(QStringList() << i18n("Tag Filters"));
-    setContextMenuPolicy(Qt::CustomContextMenu);
 
     TagFilterViewItem* notTaggedItem = new TagFilterViewItem(this, 0);
     notTaggedItem->setIcon(0, AlbumThumbnailLoader::instance()->getStandardTagIcon());
@@ -278,9 +277,6 @@ TagFilterView::TagFilterView(QWidget* parent)
 
     connect(loader, SIGNAL(signalReloadThumbnails()),
             this, SLOT(slotReloadThumbnails()));
-
-    connect(this, SIGNAL(customContextMenuRequested(const QPoint&)),
-            this, SLOT(slotContextMenu(const QPoint&)));
 
     connect(this, SIGNAL(itemExpanded(QTreeWidgetItem*)),
             this, SLOT(slotItemExpanded(QTreeWidgetItem*)));
@@ -827,9 +823,9 @@ void TagFilterView::slotClear()
     notTaggedItem->setIcon(0, AlbumThumbnailLoader::instance()->getStandardTagIcon());
 }
 
-void TagFilterView::slotContextMenu(const QPoint& pt)
+void TagFilterView::contextMenuEvent(QContextMenuEvent *e)
 {
-    TagFilterViewItem *item = dynamic_cast<TagFilterViewItem*>(itemAt(pt));
+    TagFilterViewItem *item = dynamic_cast<TagFilterViewItem*>(itemAt(e->pos()));
     if (!item || item->untagged())
         return;
 

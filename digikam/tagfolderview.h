@@ -76,6 +76,7 @@ public slots:
 
 protected:
 
+    void contextMenuEvent(QContextMenuEvent*);
     void dropEvent(QDropEvent *e);
     bool acceptDrop(const QDropEvent *e) const;
 
@@ -88,7 +89,6 @@ private slots:
     void slotAlbumsCleared();
     void slotAlbumIconChanged(Album* album);
     void slotAlbumMoved(TAlbum *tag, TAlbum *newParent);
-    void slotContextMenu(const QPoint&);
     void slotABCContextMenu();
     void slotGotThumbnailFromIcon(Album *album, const QPixmap& thumbnail);
     void slotThumbnailLost(Album *album);
