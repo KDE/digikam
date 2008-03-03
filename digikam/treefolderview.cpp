@@ -172,7 +172,7 @@ void TreeFolderView::mouseMoveEvent(QMouseEvent *e)
         {
             makeDragObject();
             d->dragStarted = true;
-        }        
+        }
     }
 
     e->accept();
@@ -354,15 +354,6 @@ void TreeFolderView::saveViewState()
             openFolders.push_back(item->id());
     }
     group.writeEntry("OpenFolders", openFolders);
-}
-
-void TreeFolderView::slotSelectionChanged()
-{
-    QTreeWidget::itemSelectionChanged();
-}
-
-void TreeFolderView::selectItem(int)
-{
 }
 
 void TreeFolderView::slotThemeChanged()

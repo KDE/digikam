@@ -74,7 +74,7 @@ protected:
 
     void fontChange(const QFont& oldFont);
 
-    virtual void selectItem(int id);
+    virtual void selectItem(int){};
 
     /** load the last state from the view from disk */
     virtual void loadViewState();
@@ -84,7 +84,7 @@ protected:
 
 protected slots:
 
-    virtual void slotSelectionChanged();
+    virtual void slotSelectionChanged(){};
     virtual void slotAllAlbumsLoaded();
 
 private slots:
