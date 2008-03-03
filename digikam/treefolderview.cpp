@@ -82,9 +82,11 @@ TreeFolderView::TreeFolderView(QWidget *parent, const char *name)
     sortByColumn(0, Qt::AscendingOrder);
     header()->setSortIndicatorShown(false);
     setRootIsDecorated(true);
+    setUniformRowHeights(true);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setAllColumnsShowFocus(true);
     setSelectionMode(QAbstractItemView::SingleSelection);
+    setEditTriggers(QAbstractItemView::NoEditTriggers);
     setDragEnabled(true);
     setDropIndicatorShown(false);
     setAcceptDrops(true);
@@ -180,9 +182,9 @@ void TreeFolderView::mousePressEvent(QMouseEvent *e)
     TreeFolderItem *item = dynamic_cast<TreeFolderItem*>(itemAt(vp));
     if (!item) return;
 
-    // If item is a checkbox, restore the status with right mouse button.
+    // If item is a checkbox, restore the status with middle mouse button.
     if((item->flags() & Qt::ItemIsUserCheckable) && 
-       e->button() == Qt::RightButton) 
+       e->button() == Qt::MidButton) 
     {
         Qt::CheckState state = item->checkState(0);
         QTreeWidget::mousePressEvent(e);
