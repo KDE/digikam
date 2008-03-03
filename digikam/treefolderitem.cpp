@@ -38,7 +38,6 @@ namespace Digikam
 TreeFolderItem::TreeFolderItem(QTreeWidget *parent, const QString& text, bool special)
               : QTreeWidgetItem(parent, QStringList() << text)
 {
-    setFocus(false);
     setFlags(Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | Qt::ItemIsEnabled);
     setForegroundBrush(treeWidget()->palette().text());
 
@@ -50,14 +49,16 @@ TreeFolderItem::TreeFolderItem(QTreeWidget *parent, const QString& text, bool sp
         setForeground(0, treeWidget()->palette().link());
         setForegroundBrush(treeWidget()->palette().link());
     }
+
+    setFocus(false);
 }
 
 TreeFolderItem::TreeFolderItem(QTreeWidgetItem *parent, const QString& text, bool special)
               : QTreeWidgetItem(parent, QStringList() << text)
 {
-    setFocus(false);
     setFlags(Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | Qt::ItemIsEnabled);
     setForegroundBrush(treeWidget()->palette().text());
+
     if (special)
     {
         QFont f = font(0);
@@ -66,6 +67,8 @@ TreeFolderItem::TreeFolderItem(QTreeWidgetItem *parent, const QString& text, boo
         setForeground(0, treeWidget()->palette().link());
         setForegroundBrush(treeWidget()->palette().link());
     }
+
+    setFocus(false);
 }
 
 TreeFolderItem::~TreeFolderItem()
