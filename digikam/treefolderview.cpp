@@ -106,7 +106,7 @@ TreeFolderView::TreeFolderView(QWidget *parent, const char *name)
 
 TreeFolderView::~TreeFolderView()
 {
-//    saveViewState();
+    saveViewState();
     delete d;
 }
 
