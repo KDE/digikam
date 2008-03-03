@@ -72,8 +72,6 @@ protected:
     TreeFolderItem* dragItem() const;
     virtual void makeDragObject(){};
 
-    void fontChange(const QFont& oldFont);
-
     virtual void selectItem(int){};
 
     /** load the last state from the view from disk */

@@ -101,13 +101,12 @@ TreeFolderView::TreeFolderView(QWidget *parent, const char *name)
     connect(AlbumThumbnailLoader::instance(), SIGNAL(signalReloadThumbnails()),
             this, SLOT(slotIconSizeChanged()));
 
-    fontChange(font());
     slotIconSizeChanged();
 }
 
 TreeFolderView::~TreeFolderView()
 {
-    saveViewState();
+//    saveViewState();
     delete d;
 }
 
@@ -122,12 +121,6 @@ void TreeFolderView::setActive(bool val)
 bool TreeFolderView::active() const
 {
     return d->active;
-}
-
-void TreeFolderView::fontChange(const QFont& oldFont)
-{
-    QTreeWidget::fontChange(oldFont);
-    slotThemeChanged();
 }
 
 void TreeFolderView::slotIconSizeChanged()
@@ -309,22 +302,23 @@ void TreeFolderView::loadViewState()
     TreeFolderItem *item      = 0;
     TreeFolderItem *foundItem = 0;
     QTreeWidgetItemIterator it(this);
-    for( ; *it; ++it)
+    while (*it)
     {
         item = dynamic_cast<TreeFolderItem*>(*it);
-        if(!item)
-            continue;
-        // Start the album root always open
-        if(openFolders.contains(item->id()) || item->id() == 0)
-            expandItem(item);
-        else
-            collapseItem(item);
-
-        if(item->id() == selectedItem)
+        if(item)
         {
-            // Save the found selected item so that it can be made visible.
-            foundItem = item;
+            if(openFolders.contains(item->id()))
+                expandItem(item);
+            else
+                collapseItem(item);
+
+            if(item->id() == selectedItem)
+            {
+                // Save the found selected item so that it can be made visible.
+                foundItem = item;
+            }
         }
+        ++it;
     }
 
     if (foundItem)
@@ -347,11 +341,12 @@ void TreeFolderView::saveViewState()
 
     QList<int> openFolders;
     QTreeWidgetItemIterator it(this);
-    for( ; *it; ++it)
+    while (*it)
     {
         item = dynamic_cast<TreeFolderItem*>(*it);
         if(item && item->isExpanded())
             openFolders.push_back(item->id());
+        ++it;
     }
     group.writeEntry("OpenFolders", openFolders);
 }
