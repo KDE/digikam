@@ -6,7 +6,7 @@
  * Date        : 2006-18-12
  * Description : A list view to display digiKam Tags.
  *
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -59,13 +59,13 @@ public:
     int     count();
 
 private :
-    
+
     void stateChange(bool val);
 
 private :
-    
+
     int     m_count;
-    
+
     TAlbum *m_album;
 };
 
@@ -82,7 +82,7 @@ public:
 
     void emitSignalItemStateChanged(TAlbumCheckListItem *item);
     void refresh();
-    
+
 signals:
 
     void signalProgressBarMode(int, const QString&);
@@ -92,7 +92,7 @@ signals:
 private slots:
 
     void slotRefresh(const QMap<int, int>&);
-    
+
 protected:
 
     void contentsMousePressEvent(QMouseEvent *e);

@@ -6,7 +6,7 @@
  * Date        : 2006-18-12
  * Description : A list view to display digiKam Tags.
  *
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -85,7 +85,7 @@ TAlbumCheckListItem::TAlbumCheckListItem(QCheckListItem* parent, TAlbum* album)
 void TAlbumCheckListItem::refresh()
 {
     if (!m_album) return;
-    
+
     if (AlbumSettings::instance()->getShowFolderTreeViewItemsCount() &&
         dynamic_cast<TAlbumCheckListItem*>(parent()))
     {
@@ -169,7 +169,7 @@ public:
         dragItem = 0;
     }
 
-    QPoint               dragStartPos;    
+    QPoint               dragStartPos;
 
     TAlbumCheckListItem *dragItem;
 };
@@ -215,7 +215,7 @@ void TAlbumListView::contentsMouseMoveEvent(QMouseEvent *e)
         }
         return;
     }
-    
+
     if(d->dragItem && 
        (d->dragStartPos - e->pos()).manhattanLength() > QApplication::startDragDistance())
     {
@@ -226,7 +226,7 @@ void TAlbumListView::contentsMouseMoveEvent(QMouseEvent *e)
             d->dragItem = 0;
             return;
         }
-    }    
+    }
 }
 
 void TAlbumListView::contentsMousePressEvent(QMouseEvent *e)
@@ -262,13 +262,13 @@ bool TAlbumListView::mouseInItemRect(QListViewItem* item, int x) const
 {
     if (!item)
         return false;
-    
+
     x += contentsX();
 
     int offset = treeStepSize()*(item->depth() + (rootIsDecorated() ? 1 : 0));
     offset    += itemMargin();
     int width  = item->width(fontMetrics(), this, 0);
-    
+
     return (x > offset && x < (offset + width));
 }
 
@@ -291,7 +291,7 @@ void TAlbumListView::startDrag()
 {
     QDragObject *o = dragObject();
     if(o)
-        o->drag();        
+        o->drag();
 }
 
 TAlbumCheckListItem* TAlbumListView::dragItem() const
@@ -401,7 +401,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
         TAlbum *srcAlbum;
 
         KURL::List      urls;
-        KURL::List      kioURLs;        
+        KURL::List      kioURLs;
         QValueList<int> albumIDs;
         QValueList<int> imageIDs;
 
@@ -513,7 +513,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
 void TAlbumListView::refresh()
 {
     QListViewItemIterator it(this);
-    
+
     while (it.current())
     {
         TAlbumCheckListItem* item = dynamic_cast<TAlbumCheckListItem*>(*it);
@@ -526,7 +526,7 @@ void TAlbumListView::refresh()
 void TAlbumListView::slotRefresh(const QMap<int, int>& tagsStatMap)
 {
     QListViewItemIterator it(this);
-    
+
     while (it.current())
     {
         TAlbumCheckListItem* item = dynamic_cast<TAlbumCheckListItem*>(*it);
