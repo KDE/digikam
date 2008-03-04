@@ -7,7 +7,7 @@
  * Description : implementation of folder view.
  *
  * Copyright (C) 2005-2006 by Joern Ahrens <joern.ahrens@kdemail.net>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -62,17 +62,17 @@ public:
         oldHighlightItem = 0;
     }
 
-    bool         active;
+    bool            active;
 
-    int          itemHeight;
+    int             itemHeight;
 
-    QPixmap      itemRegPix;
-    QPixmap      itemSelPix;
+    QPixmap         itemRegPix;
+    QPixmap         itemSelPix;
 
-    QPoint       dragStartPos;
+    QPoint          dragStartPos;
 
-    FolderItem  *dragItem;
-    FolderItem  *oldHighlightItem;
+    Q3ListViewItem *dragItem;
+    Q3ListViewItem *oldHighlightItem;
 };
 
 //-----------------------------------------------------------------------------
@@ -185,26 +185,36 @@ void FolderView::contentsMouseMoveEvent(QMouseEvent *e)
         }
         return;
     }
-    
+
     if(d->dragItem && 
        (d->dragStartPos - e->pos()).manhattanLength() > QApplication::startDragDistance())
     {
-        QPoint vp = contentsToViewport(e->pos());
-        FolderItem *item = dynamic_cast<FolderItem*>(itemAt(vp));
+        QPoint vp            = contentsToViewport(e->pos());
+        Q3ListViewItem *item = itemAt(vp);
         if(!item)
         {
             d->dragItem = 0;
             return;
         }
-    }    
+    }
 }
 
 void FolderView::contentsMousePressEvent(QMouseEvent *e)
 {
-    Q3ListView::contentsMousePressEvent(e);
+    QPoint vp            = contentsToViewport(e->pos());
+    Q3ListViewItem *item = itemAt(vp);
 
-    QPoint vp        = contentsToViewport(e->pos());
-    FolderItem *item = dynamic_cast<FolderItem*>(itemAt(vp));
+    FolderCheckListItem *citem = dynamic_cast<FolderCheckListItem*>(itemAt(vp));
+    if(citem && e->button() == Qt::MidButton) 
+    {
+        bool isOn = citem->isOn();
+        Q3ListView::contentsMousePressEvent(e);
+        // Restore the status of checkbox. 
+        citem->setOn(isOn);
+        return;
+    }
+
+    Q3ListView::contentsMousePressEvent(e);
 
     if(item && e->button() == Qt::LeftButton) 
     {
@@ -225,10 +235,10 @@ void FolderView::startDrag()
 {
     Q3DragObject *o = dragObject();
     if(o)
-        o->drag();        
+        o->drag();
 }
 
-FolderItem* FolderView::dragItem() const
+Q3ListViewItem* FolderView::dragItem() const
 {
     return d->dragItem;
 }
@@ -236,36 +246,61 @@ FolderItem* FolderView::dragItem() const
 void FolderView::contentsDragEnterEvent(QDragEnterEvent *e)
 {
     Q3ListView::contentsDragEnterEvent(e);
-    
-    e->setAccepted(acceptDrop(e));
+    e->accept();
 }
 
 void FolderView::contentsDragLeaveEvent(QDragLeaveEvent * e)
 {
     Q3ListView::contentsDragLeaveEvent(e);
-    
+
     if(d->oldHighlightItem)
     {
-        d->oldHighlightItem->setFocus(false);
+        FolderItem *fitem = dynamic_cast<FolderItem*>(d->oldHighlightItem);
+        if (fitem)
+            fitem->setFocus(false);
+        else
+        {
+            FolderCheckListItem *citem = dynamic_cast<FolderCheckListItem*>(d->oldHighlightItem);
+            if (citem)
+                citem->setFocus(false);
+        }
+
         d->oldHighlightItem->repaint();
-        d->oldHighlightItem = 0;        
+        d->oldHighlightItem = 0;
     }
 }
 
 void FolderView::contentsDragMoveEvent(QDragMoveEvent *e)
 {
     Q3ListView::contentsDragMoveEvent(e);
-    
-    QPoint vp        = contentsToViewport(e->pos());
-    FolderItem *item = dynamic_cast<FolderItem*>(itemAt(vp));
+
+    QPoint vp            = contentsToViewport(e->pos());
+    Q3ListViewItem *item = dynamic_cast<Q3ListViewItem*>(itemAt(vp));
     if(item)
     {
         if(d->oldHighlightItem)
         {
-            d->oldHighlightItem->setFocus(false);
+            FolderItem *fitem = dynamic_cast<FolderItem*>(d->oldHighlightItem);
+            if (fitem)
+                fitem->setFocus(false);
+            else
+            {
+                FolderCheckListItem *citem = dynamic_cast<FolderCheckListItem*>(d->oldHighlightItem);
+                if (citem)
+                    citem->setFocus(false);
+            }
             d->oldHighlightItem->repaint();
         }
-        item->setFocus(true);
+
+        FolderItem *fitem = dynamic_cast<FolderItem*>(item);
+        if (fitem)
+            fitem->setFocus(true);
+        else
+        {
+            FolderCheckListItem *citem = dynamic_cast<FolderCheckListItem*>(item);
+            if (citem)
+                citem->setFocus(true);
+        }
         d->oldHighlightItem = item;
         item->repaint();
     }
@@ -275,10 +310,19 @@ void FolderView::contentsDragMoveEvent(QDragMoveEvent *e)
 void FolderView::contentsDropEvent(QDropEvent *e)
 {
     Q3ListView::contentsDropEvent(e);
-    
+
     if(d->oldHighlightItem)
     {
-        d->oldHighlightItem->setFocus(false);
+        FolderItem *fitem = dynamic_cast<FolderItem*>(d->oldHighlightItem);
+        if (fitem)
+            fitem->setFocus(false);
+        else
+        {
+            FolderCheckListItem *citem = dynamic_cast<FolderCheckListItem*>(d->oldHighlightItem);
+            if (citem)
+                citem->setFocus(false);
+        }
+
         d->oldHighlightItem->repaint();
         d->oldHighlightItem = 0;
     }
@@ -293,13 +337,13 @@ bool FolderView::mouseInItemRect(Q3ListViewItem* item, int x) const
 {
     if (!item)
         return false;
-    
+
     x += contentsX();
 
     int offset = treeStepSize()*(item->depth() + (rootIsDecorated() ? 1 : 0));
     offset    += itemMargin();
     int width  = item->width(fontMetrics(), this, 0);
-    
+
     return (x > offset && x < (offset + width));
 }
 
@@ -340,7 +384,7 @@ void FolderView::slotThemeChanged()
 void FolderView::slotAllAlbumsLoaded()
 {
     disconnect(AlbumManager::instance(), SIGNAL(signalAllAlbumsLoaded()),
-               this, SLOT(slotAllAlbumsLoaded()));    
+               this, SLOT(slotAllAlbumsLoaded()));
     loadViewState();
 }
 
@@ -348,16 +392,16 @@ void FolderView::loadViewState()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(objectName());
-    
+
     int selectedItem = group.readEntry("LastSelectedItem", 0);
-    
+
     QList<int> openFolders;
     if(group.hasKey("OpenFolders"))
     {
         openFolders = group.readEntry("OpenFolders",QList<int>());
     }
-    
-    FolderItem *item      = 0;    
+
+    FolderItem *item      = 0;
     FolderItem *foundItem = 0;
     Q3ListViewItemIterator it(this->lastItem());
 
@@ -394,13 +438,13 @@ void FolderView::saveViewState()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(objectName());
-   
+
     FolderItem *item = dynamic_cast<FolderItem*>(selectedItem());
     if(item)
         group.writeEntry("LastSelectedItem", item->id());
     else
         group.writeEntry("LastSelectedItem", 0);
-    
+
     QList<int> openFolders;
     Q3ListViewItemIterator it(this);
     for( ; it.current(); ++it)
@@ -414,7 +458,7 @@ void FolderView::saveViewState()
 
 void FolderView::slotSelectionChanged()
 {
-    Q3ListView::selectionChanged();    
+    Q3ListView::selectionChanged();
 }
 
 void FolderView::selectItem(int)

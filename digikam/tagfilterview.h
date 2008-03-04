@@ -33,9 +33,9 @@
 
 // Local includes.
 
-#include "treefolderview.h"
+#include "folderview.h"
 
-class QTreeWidgetItem;
+class QDrag;
 
 namespace Digikam
 {
@@ -44,7 +44,7 @@ class Album;
 class TagFilterViewItem;
 class TagFilterViewPrivate;
 
-class TagFilterView : public TreeFolderView
+class TagFilterView : public FolderView
 {
     Q_OBJECT
 
@@ -63,6 +63,8 @@ public:
     TagFilterView(QWidget* parent);
     ~TagFilterView();
 
+    void stateChanged(TagFilterViewItem*);
+
     void refresh();
 
 signals:
@@ -80,26 +82,26 @@ public slots:
 
 protected:
 
-    void contextMenuEvent(QContextMenuEvent*);
+
     bool acceptDrop(const QDropEvent *e) const;
-    void dropEvent(QDropEvent *e);
+    void contentsDropEvent(QDropEvent *e);
+    void startDrag();
 
 private slots:
 
-    void slotAlbumAdded(Album *album);
-    void slotAlbumMoved(TAlbum *tag, TAlbum *newParent);
-    void slotAlbumRenamed(Album *album);
-    void slotAlbumDeleted(Album *album);
-    void slotAlbumsCleared();
-    void slotAlbumIconChanged(Album *album);
+    void slotTagAdded(Album* album);
+    void slotTagMoved(TAlbum* tag, TAlbum* newParent);
+    void slotTagRenamed(Album* album);
+    void slotTagDeleted(Album* album);
+    void slotClear();
+    void slotAlbumIconChanged(Album* album);
     void slotTimeOut();
+    void slotContextMenu(Q3ListViewItem*, const QPoint&, int);
     void slotABCContextMenu();
     void slotGotThumbnailFromIcon(Album *album, const QPixmap& thumbnail);
     void slotThumbnailLost(Album *album);
     void slotReloadThumbnails();
     void slotRefresh(const QMap<int, int>&);
-    void slotItemExpanded(QTreeWidgetItem*);
-    void slotItemChanged(QTreeWidgetItem*);
 
 private:
 
@@ -111,7 +113,7 @@ private:
     void setTagThumbnail(TAlbum *album);
     void toggleChildTags(TagFilterViewItem* tItem, bool b);
     void toggleParentTags(TagFilterViewItem* tItem, bool b);
-    void makeDragObject();
+    QDrag* makeDragObject();
 
 private:
 

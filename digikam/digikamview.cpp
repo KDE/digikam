@@ -684,11 +684,11 @@ void DigikamView::changeAlbumFromHistory(Album *album, QWidget *widget)
             }
             else if (v == d->tagBox)
             {
-                QTreeWidgetItem *titem = (QTreeWidgetItem*)album->extraData(d->tagFolderView);
-                if(!titem) return;
+                item = (Q3ListViewItem*)album->extraData(d->tagFolderView);
+                if(!item) return;
 
-                titem->setSelected(true);
-                d->tagFolderView->scrollToItem(titem);
+                d->tagFolderView->setSelected(item, true);
+                d->tagFolderView->ensureItemVisible(item);
             }
             else if (v == d->searchBox)
             {

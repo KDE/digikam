@@ -24,10 +24,10 @@
 
 // Qt includes.
 
+#include <Q3ListView>
 #include <QList>
 #include <QPainter>
 #include <QCursor>
-#include <QHeaderView>
 
 // KDE includes.
 
@@ -44,17 +44,17 @@
 #include "albumdb.h"
 #include "albummanager.h"
 #include "albumsettings.h"
+#include "albumthumbnailloader.h"
 #include "databasetransaction.h"
-#include "syncjob.h"
-#include "tagcreatedlg.h"
 #include "ddragobjects.h"
+#include "folderitem.h"
 #include "dio.h"
 #include "imageattributeswatch.h"
 #include "imageinfo.h"
 #include "metadatahub.h"
-#include "albumthumbnailloader.h"
+#include "syncjob.h"
 #include "statusprogressbar.h"
-#include "treefolderitem.h"
+#include "tagcreatedlg.h"
 #include "tagfolderview.h"
 #include "tagfolderview.moc"
 
@@ -66,67 +66,86 @@
 namespace Digikam
 {
 
-class TagFolderViewItem : public TreeAlbumItem
+class TagFolderViewItem : public FolderItem
 {
 public:
 
-    TagFolderViewItem(QTreeWidget *parent, TAlbum *album);
-    TagFolderViewItem(QTreeWidgetItem *parent, TAlbum *album);
+    TagFolderViewItem(Q3ListView *parent, TAlbum *album);
+    TagFolderViewItem(Q3ListViewItem *parent, TAlbum *album);
 
-    TAlbum* talbum() const;
+    TAlbum* album() const;
+    int     id() const;
     void    refresh();
+    void    setOpen(bool o);
     void    setCount(int count);
     int     count();
 
 private:
 
     int     m_count;
+
+    TAlbum *m_album;
 };
 
-TagFolderViewItem::TagFolderViewItem(QTreeWidget *parent, TAlbum *album)
-                 : TreeAlbumItem(parent, dynamic_cast<Album*>(album))
+TagFolderViewItem::TagFolderViewItem(Q3ListView *parent, TAlbum *album)
+                 : FolderItem(parent, album->title())
 {
+    setDragEnabled(true);
+    m_album = album;
     m_count = 0;
 }
 
-TagFolderViewItem::TagFolderViewItem(QTreeWidgetItem *parent, TAlbum *album)
-                 : TreeAlbumItem(parent, dynamic_cast<Album*>(album))
+TagFolderViewItem::TagFolderViewItem(Q3ListViewItem *parent, TAlbum *album)
+                 : FolderItem(parent, album->title())
 {
+    setDragEnabled(true);
+    m_album = album;
     m_count = 0;
 }
 
 void TagFolderViewItem::refresh()
 {
-    if (!talbum()) return;
+    if (!m_album) return;
 
     if (AlbumSettings::instance()->getShowFolderTreeViewItemsCount() &&
         dynamic_cast<TagFolderViewItem*>(parent()))
     {
-        if (isExpanded())
-            setText(0, QString("%1 (%2)").arg(talbum()->title()).arg(m_count));
+        if (isOpen())
+            setText(0, QString("%1 (%2)").arg(m_album->title()).arg(m_count));
         else
         {
             int countRecursive = m_count;
-            AlbumIterator it(talbum());
+            AlbumIterator it(m_album);
             while ( it.current() )
             {
-                TagFolderViewItem *item = (TagFolderViewItem*)it.current()->extraData(treeWidget());
+                TagFolderViewItem *item = (TagFolderViewItem*)it.current()->extraData(listView());
                 if (item)
                     countRecursive += item->count();
                 ++it;
             }
-            setText(0, QString("%1 (%2)").arg(talbum()->title()).arg(countRecursive));
+            setText(0, QString("%1 (%2)").arg(m_album->title()).arg(countRecursive));
         }
     }
     else
     {
-        setText(0, talbum()->title());
+        setText(0, m_album->title());
     }
 }
 
-TAlbum* TagFolderViewItem::talbum() const
+void TagFolderViewItem::setOpen(bool o)
 {
-    return (dynamic_cast<TAlbum*>(album()));
+    Q3ListViewItem::setOpen(o);
+    refresh();
+}
+
+TAlbum* TagFolderViewItem::album() const
+{
+    return m_album;
+}
+
+int TagFolderViewItem::id() const
+{
+    return m_album ? m_album->id() : 0;
 }
 
 void TagFolderViewItem::setCount(int count)
@@ -159,12 +178,16 @@ public:
 };
 
 TagFolderView::TagFolderView(QWidget *parent)
-             : TreeFolderView(parent, "TagFolderView")
+             : FolderView(parent, "TagFolderView")
 {
     d = new TagFolderViewPriv();
     d->albumMan = AlbumManager::instance();
 
-    setHeaderLabels(QStringList() << i18n("My Tags"));
+    addColumn(i18n("My Tags"));
+    setResizeMode(Q3ListView::LastColumn);
+    setRootIsDecorated(false);
+    setAcceptDrops(true);
+    viewport()->setAcceptDrops(true);
 
     // ------------------------------------------------------------------------
 
@@ -193,32 +216,25 @@ TagFolderView::TagFolderView(QWidget *parent)
 
     AlbumThumbnailLoader *loader = AlbumThumbnailLoader::instance();
 
-    connect(loader, SIGNAL(signalThumbnail(Album*, const QPixmap&)),
-            this, SLOT(slotGotThumbnailFromIcon(Album*, const QPixmap&)));
+    connect(loader, SIGNAL(signalThumbnail(Album *, const QPixmap&)),
+            this, SLOT(slotGotThumbnailFromIcon(Album *, const QPixmap&)));
 
-    connect(loader, SIGNAL(signalFailed(Album*)),
-            this, SLOT(slotThumbnailLost(Album*)));
+    connect(loader, SIGNAL(signalFailed(Album *)),
+            this, SLOT(slotThumbnailLost(Album *)));
 
     connect(loader, SIGNAL(signalReloadThumbnails()),
             this, SLOT(slotReloadThumbnails()));
 
-    connect(this, SIGNAL(itemSelectionChanged()),
-            this, SLOT(slotSelectionChanged()));
+    connect(this, SIGNAL(contextMenuRequested(Q3ListViewItem*, const QPoint&, int)),
+            SLOT(slotContextMenu(Q3ListViewItem*, const QPoint&, int)));
 
-    connect(this, SIGNAL(itemExpanded(QTreeWidgetItem*)),
-            this, SLOT(slotItemExpanded(QTreeWidgetItem*)));
+    connect(this, SIGNAL(selectionChanged()),
+            this, SLOT(slotSelectionChanged()));
 }
 
 TagFolderView::~TagFolderView()
 {
     delete d;
-}
-
-void TagFolderView::slotItemExpanded(QTreeWidgetItem *item)
-{
-    TagFolderViewItem *viewItem = dynamic_cast<TagFolderViewItem*>(item);
-    if (viewItem)
-        viewItem->refresh();
 }
 
 void TagFolderView::slotTextTagFilterChanged(const QString& filter)
@@ -268,20 +284,20 @@ void TagFolderView::slotTextTagFilterChanged(const QString& filter)
             }
         }
 
-        TagFolderViewItem* viewItem = (TagFolderViewItem*)(talbum->extraData(this));
+        TagFolderViewItem* viewItem = (TagFolderViewItem*) talbum->extraData(this);
 
         if (match)
         {
             atleastOneMatch = true;
 
             if (viewItem)
-                viewItem->setHidden(false);
+                viewItem->setVisible(true);
         }
         else
         {
             if (viewItem)
             {
-                viewItem->setHidden(true);
+                viewItem->setVisible(false);
             }
         }
     }
@@ -303,12 +319,13 @@ void TagFolderView::slotAlbumAdded(Album *album)
     if(tag->isRoot())
     {
         item = new TagFolderViewItem(this, tag);
+        tag->setExtraData(this, item);
         // Toplevel tags are all children of root, and should always be visible - set root to open
-        item->setExpanded(true);
+        item->setOpen(true);
     }
     else
     {
-        TagFolderViewItem *parent = (TagFolderViewItem*)(tag->parent()->extraData(this));
+        TagFolderViewItem *parent = (TagFolderViewItem*)tag->parent()->extraData(this);
 
         if (!parent)
         {
@@ -318,6 +335,7 @@ void TagFolderView::slotAlbumAdded(Album *album)
         }
 
         item = new TagFolderViewItem(parent, tag);
+        tag->setExtraData(this, item);
     }
 
     setTagThumbnail(tag);
@@ -332,15 +350,15 @@ void TagFolderView::slotAlbumDeleted(Album *album)
     if(!tag)
         return;
 
-    TagFolderViewItem *item = (TagFolderViewItem*)(album->extraData(this));
+    TagFolderViewItem *item = (TagFolderViewItem*)album->extraData(this);
     if(item)
     {
         TagFolderViewItem *itemParent = dynamic_cast<TagFolderViewItem*>(item->parent());
 
         if(itemParent)
-            itemParent->removeChild(item);
+            itemParent->takeItem(item);
         else
-            removeItemWidget(item, 0);
+            takeItem(item);
 
         delete item;
     }
@@ -356,25 +374,25 @@ void TagFolderView::slotAlbumMoved(TAlbum* tag, TAlbum* newParent)
     if (!tag || !newParent)
         return;
 
-    TagFolderViewItem* item = (TagFolderViewItem*)(tag->extraData(this));
+    TagFolderViewItem* item = (TagFolderViewItem*)tag->extraData(this);
     if (!item)
         return;
 
     if (item->parent())
     {
-        TagFolderViewItem *oldPItem = dynamic_cast<TagFolderViewItem*>(item->parent());
-        oldPItem->removeChild(item);
+        Q3ListViewItem* oldPItem = item->parent();
+        oldPItem->takeItem(item);
     }
     else
     {
-        removeItemWidget(item, 0);
+        takeItem(item);
     }
 
-    TagFolderViewItem* newPItem = (TagFolderViewItem*)(newParent->extraData(this));
+    TagFolderViewItem* newPItem = (TagFolderViewItem*)newParent->extraData(this);
     if (newPItem)
-        newPItem->addChild(item);
+        newPItem->insertItem(item);
     else
-        addTopLevelItem(item);
+        insertItem(item);
 }
 
 void TagFolderView::slotAlbumRenamed(Album* album)
@@ -396,7 +414,7 @@ void TagFolderView::setTagThumbnail(TAlbum *album)
     if(!album)
         return;
 
-    TagFolderViewItem* item = (TagFolderViewItem*)(album->extraData(this));
+    TagFolderViewItem* item = (TagFolderViewItem*) album->extraData(this);
 
     if(!item)
         return;
@@ -407,18 +425,18 @@ void TagFolderView::setTagThumbnail(TAlbum *album)
     {
         if (icon.isNull())
         {
-            item->setIcon(0, loader->getStandardTagIcon(album));
+            item->setPixmap(0, loader->getStandardTagIcon(album));
         }
         else
         {
             QPixmap blendedIcon = loader->blendIcons(loader->getStandardTagIcon(), icon);
-            item->setIcon(0, blendedIcon);
+            item->setPixmap(0, blendedIcon);
         }
     }
     else
     {
         // for the time being, set standard icon
-        item->setIcon(0, loader->getStandardTagIcon(album));
+        item->setPixmap(0, loader->getStandardTagIcon(album));
     }
 }
 
@@ -427,14 +445,14 @@ void TagFolderView::slotGotThumbnailFromIcon(Album *album, const QPixmap& thumbn
     if(!album || album->type() != Album::TAG)
         return;
 
-    TagFolderViewItem* item = (TagFolderViewItem*)(album->extraData(this));
+    TagFolderViewItem* item = (TagFolderViewItem*)album->extraData(this);
 
     if(!item)
         return;
 
     AlbumThumbnailLoader *loader = AlbumThumbnailLoader::instance();
     QPixmap blendedIcon = loader->blendIcons(loader->getStandardTagIcon(), thumbnail);
-    item->setIcon(0, blendedIcon);
+    item->setPixmap(0, blendedIcon);
 }
 
 void TagFolderView::slotThumbnailLost(Album *)
@@ -465,13 +483,13 @@ void TagFolderView::slotSelectionChanged()
     if (!active())
         return;
 
-    QTreeWidgetItem *selItem = 0;
-    QTreeWidgetItemIterator it(this);
-    while (*it)
+    Q3ListViewItem* selItem = 0;
+    Q3ListViewItemIterator it(this);
+    while (it.current())
     {
-        if ((*it)->isSelected())
+        if (it.current()->isSelected())
         {
-            selItem = *it;
+            selItem = it.current();
             break;
         }
         ++it;
@@ -490,13 +508,12 @@ void TagFolderView::slotSelectionChanged()
         return;
     }
 
-    d->albumMan->setCurrentAlbum(tagitem->talbum());
+    d->albumMan->setCurrentAlbum(tagitem->album());
 }
 
-void TagFolderView::contextMenuEvent(QContextMenuEvent *e)
+void TagFolderView::slotContextMenu(Q3ListViewItem *item, const QPoint &, int)
 {
-    TagFolderViewItem *tag = dynamic_cast<TagFolderViewItem*>(itemAt(e->pos()));
-    if(!tag) return;
+    TagFolderViewItem *tag = dynamic_cast<TagFolderViewItem*>(item);
 
     KMenu popmenu(this);
     popmenu.addTitle(SmallIcon("digikam"), i18n("My Tags"));
@@ -542,7 +559,7 @@ void TagFolderView::contextMenuEvent(QContextMenuEvent *e)
         else if (choice == resetIconAction)
         {
             QString errMsg;
-            d->albumMan->updateTAlbumIcon(tag->talbum(), QString("tag"), 0, errMsg);
+            d->albumMan->updateTAlbumIcon(tag->album(), QString("tag"), 0, errMsg);
         }
         else
         {
@@ -584,7 +601,7 @@ void TagFolderView::slotABCContextMenu()
 
 void TagFolderView::tagNew()
 {
-    TagFolderViewItem *item = dynamic_cast<TagFolderViewItem*>(selectedItems()[0]);
+    TagFolderViewItem *item = dynamic_cast<TagFolderViewItem*>(selectedItem());
     tagNew(item);
 }
 
@@ -597,7 +614,7 @@ void TagFolderView::tagNew( TagFolderViewItem *item, const QString& _title, cons
     if(!item)
         parent = d->albumMan->findTAlbum(0);
     else
-        parent = item->talbum();
+        parent = item->album();
 
     if (title.isNull())
     {
@@ -613,14 +630,14 @@ void TagFolderView::tagNew( TagFolderViewItem *item, const QString& _title, cons
     else
     {
         TagFolderViewItem *item = (TagFolderViewItem*)newAlbum->extraData(this);
-        if (item)
-            scrollToItem(item);
+        if ( item )
+            ensureItemVisible( item );
     }
 }
 
 void TagFolderView::tagEdit()
 {
-    TagFolderViewItem *item = dynamic_cast<TagFolderViewItem*>(selectedItems()[0]);
+    TagFolderViewItem *item = dynamic_cast<TagFolderViewItem*>(selectedItem());
     tagEdit(item);
 }
 
@@ -629,7 +646,7 @@ void TagFolderView::tagEdit(TagFolderViewItem *item)
     if(!item)
         return;
 
-    TAlbum *tag = item->talbum();
+    TAlbum *tag = item->album();
     if(!tag)
         return;
 
@@ -660,7 +677,7 @@ void TagFolderView::tagEdit(TagFolderViewItem *item)
 
 void TagFolderView::tagDelete()
 {
-    TagFolderViewItem *item = dynamic_cast<TagFolderViewItem*>(selectedItems()[0]);
+    TagFolderViewItem *item = dynamic_cast<TagFolderViewItem*>(selectedItem());
     tagDelete(item);
 }
 
@@ -669,7 +686,7 @@ void TagFolderView::tagDelete(TagFolderViewItem *item)
     if(!item)
         return;
 
-    TAlbum *tag = item->talbum();
+    TAlbum *tag = item->album();
     if (!tag || tag->isRoot())
         return;
 
@@ -721,27 +738,32 @@ void TagFolderView::tagDelete(TagFolderViewItem *item)
     }
 }
 
-void TagFolderView::makeDragObject()
+QDrag* TagFolderView::makeDragObject()
 {
     TagFolderViewItem *item = dynamic_cast<TagFolderViewItem*>(dragItem());
-    if(!item) 
-        return;
+    if(!item)
+        return 0;
 
     if(!item->parent())
-        return;
+        return 0;
 
     QDrag *drag = new QDrag(this);
-    drag->setMimeData(new DTagDrag(item->talbum()->id()));
-    drag->setPixmap(item->icon(0).pixmap(AlbumThumbnailLoader::instance()->thumbnailSize()));
-    drag->exec();
+    drag->setMimeData(new DTagDrag(item->album()->id()));
+    drag->setPixmap(*item->pixmap(0));
+
+    return drag;
+}
+
+void TagFolderView::startDrag()
+{
+    QDrag *o = makeDragObject();
+    if(o)
+        o->exec();
 }
 
 bool TagFolderView::acceptDrop(const QDropEvent *e) const
 {
-    QPoint vp = viewport()->mapFrom((QWidget*)this, e->pos());
-    if (!header()->isHidden())
-        vp.setY(vp.y()+header()->height());
-
+    QPoint vp = contentsToViewport(e->pos());
     TagFolderViewItem *itemDrop = dynamic_cast<TagFolderViewItem*>(itemAt(vp));
     TagFolderViewItem *itemDrag = dynamic_cast<TagFolderViewItem*>(dragItem());
 
@@ -756,7 +778,7 @@ bool TagFolderView::acceptDrop(const QDropEvent *e) const
             return false;
 
         // Dragging a parent on its child makes no sense
-        if(itemDrag && itemDrag->talbum()->isAncestorOf(itemDrop->talbum()))
+        if(itemDrag && itemDrag->album()->isAncestorOf(itemDrop->album()))
             return false;
 
         return true;
@@ -773,19 +795,14 @@ bool TagFolderView::acceptDrop(const QDropEvent *e) const
     return false;
 }
 
-void TagFolderView::dropEvent(QDropEvent *e)
+void TagFolderView::contentsDropEvent(QDropEvent *e)
 {
-    TreeFolderView::dropEvent(e);
+    FolderView::contentsDropEvent(e);
 
     if(!acceptDrop(e))
         return;
 
-    e->acceptProposedAction();
-
-    QPoint vp = viewport()->mapFrom(this, e->pos());
-    if (!header()->isHidden())
-        vp.setY(vp.y()+header()->height());
-
+    QPoint vp = contentsToViewport(e->pos());
     TagFolderViewItem *itemDrop = dynamic_cast<TagFolderViewItem*>(itemAt(vp));
 
     if (!itemDrop)
@@ -803,7 +820,7 @@ void TagFolderView::dropEvent(QDropEvent *e)
         if(!talbum)
             return;
 
-        if (talbum == itemDrop->talbum())
+        if (talbum == itemDrop->album())
             return;
 
         KMenu popMenu(this);
@@ -827,7 +844,7 @@ void TagFolderView::dropEvent(QDropEvent *e)
             else
             {
                 // move dragItem as child of dropItem
-                newParentTag = itemDrop->talbum();
+                newParentTag = itemDrop->album();
             }
 
             QString errMsg;
@@ -836,8 +853,8 @@ void TagFolderView::dropEvent(QDropEvent *e)
                 KMessageBox::error(this, errMsg);
             }
 
-            if(itemDrop && !itemDrop->isExpanded())
-                itemDrop->setExpanded(true);
+            if(itemDrop && !itemDrop->isOpen())
+                itemDrop->setOpen(true);
         }
 
         return;
@@ -845,7 +862,7 @@ void TagFolderView::dropEvent(QDropEvent *e)
 
     if (DItemDrag::canDecode(e->mimeData()))
     {
-        TAlbum *destAlbum = itemDrop->talbum();
+        TAlbum *destAlbum = itemDrop->album();
         TAlbum *srcAlbum;
 
         KUrl::List urls;
@@ -861,7 +878,7 @@ void TagFolderView::dropEvent(QDropEvent *e)
 
         // all the albumids will be the same
         int albumID = albumIDs.first();
-        srcAlbum    = d->albumMan->findTAlbum(albumID);
+        srcAlbum = d->albumMan->findTAlbum(albumID);
         if (!srcAlbum)
         {
             DWarning() << "Could not find source album of drag"
@@ -912,8 +929,8 @@ void TagFolderView::dropEvent(QDropEvent *e)
         {
             KMenu popMenu(this);
             popMenu.addTitle(SmallIcon("digikam"), i18n("My Tags"));
-            QAction * assignAction =
-                    popMenu.addAction( SmallIcon("tag"), i18n("Assign Tag '%1' to Items", destAlbum->prettyUrl()));
+            QAction * assignAction = popMenu.addAction(SmallIcon("tag"), 
+                                             i18n("Assign Tag '%1' to Items", destAlbum->prettyUrl()));
             popMenu.addSeparator();
             popMenu.addAction( SmallIcon("dialog-cancel"), i18n("C&ancel") );
 
@@ -958,19 +975,19 @@ void TagFolderView::selectItem(int id)
     if(!tag)
         return;
 
-    TagFolderViewItem *item = (TagFolderViewItem*)(tag->extraData(this));
+    TagFolderViewItem *item = (TagFolderViewItem*)tag->extraData(this);
     if(item)
     {
-        item->setSelected(true);
-        scrollToItem(item);
+        setSelected(item, true);
+        ensureItemVisible(item);
     }
 }
 
 void TagFolderView::refresh()
 {
-    QTreeWidgetItemIterator it(this);
+    Q3ListViewItemIterator it(this);
 
-    while (*it)
+    while (it.current())
     {
         TagFolderViewItem* item = dynamic_cast<TagFolderViewItem*>(*it);
         if (item)
@@ -981,14 +998,14 @@ void TagFolderView::refresh()
 
 void TagFolderView::slotRefresh(const QMap<int, int>& tagsStatMap)
 {
-    QTreeWidgetItemIterator it(this);
+    Q3ListViewItemIterator it(this);
 
-    while (*it)
+    while (it.current())
     {
         TagFolderViewItem* item = dynamic_cast<TagFolderViewItem*>(*it);
         if (item)
         {
-            if (item->talbum())
+            if (item->album())
             {
                 int id = item->id();
                 QMap<int, int>::const_iterator it2 = tagsStatMap.find(id);

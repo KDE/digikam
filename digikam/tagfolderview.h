@@ -34,10 +34,10 @@
 
 // Local includes.
 
-#include "treefolderview.h"
+#include "folderview.h"
 
-class QTreeWidgetItem;
 class QDropEvent;
+class QDrag;
 
 namespace Digikam
 {
@@ -47,7 +47,7 @@ class TAlbum;
 class TagFolderViewItem;
 class TagFolderViewPriv;
 
-class TagFolderView : public TreeFolderView
+class TagFolderView : public FolderView
 {
     Q_OBJECT
 
@@ -76,9 +76,9 @@ public slots:
 
 protected:
 
-    void contextMenuEvent(QContextMenuEvent*);
-    void dropEvent(QDropEvent *e);
+    void contentsDropEvent(QDropEvent *e);
     bool acceptDrop(const QDropEvent *e) const;
+    void startDrag();
 
 private slots:
 
@@ -88,13 +88,13 @@ private slots:
     void slotAlbumRenamed(Album*);
     void slotAlbumsCleared();
     void slotAlbumIconChanged(Album* album);
-    void slotAlbumMoved(TAlbum *tag, TAlbum *newParent);
+    void slotAlbumMoved(TAlbum* tag, TAlbum* newParent);
+    void slotContextMenu(Q3ListViewItem*, const QPoint&, int);
     void slotABCContextMenu();
     void slotGotThumbnailFromIcon(Album *album, const QPixmap& thumbnail);
     void slotThumbnailLost(Album *album);
     void slotReloadThumbnails();
     void slotRefresh(const QMap<int, int>&);
-    void slotItemExpanded(QTreeWidgetItem*);
 
 private:
 
@@ -103,7 +103,7 @@ private:
     void tagEdit(TagFolderViewItem *item);
     void tagDelete(TagFolderViewItem *item);
     void setTagThumbnail(TAlbum *album);
-    void makeDragObject();
+    QDrag* makeDragObject();
 
 private:
 
