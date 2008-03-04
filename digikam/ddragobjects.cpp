@@ -28,8 +28,6 @@
 // Local includes.
 
 #include "ddebug.h"
-#include "album.h"
-#include "albummanager.h"
 #include "ddragobjects.h"
 
 namespace Digikam
@@ -314,6 +312,63 @@ const char* DCameraItemListDrag::format(int i) const
         return "digikam/cameraItemlist";
 
     return 0;
+}
+
+// ------------------------------------------------------------------------
+
+DCameraDragObject::DCameraDragObject(const CameraType& ctype, const char *name)
+                 : QMimeData()
+{
+    setObjectName(name);
+    QByteArray ba;
+    QDataStream ds(&ba, QIODevice::WriteOnly);
+    ds << ctype.title();
+    ds << ctype.model();
+    ds << ctype.port();
+    ds << ctype.path();
+    ds << ctype.lastAccess();
+    setData("camera/unknown", ba);
+}
+
+bool DCameraDragObject::canDecode(const QMimeData* e)
+{
+    return e->hasFormat("camera/unknown");
+}
+
+bool DCameraDragObject::decode(const QMimeData* e, CameraType& ctype)
+{
+    QByteArray ba = e->data("camera/unknown");
+    if (ba.size()) 
+    {
+        QString   title, model, port, path;
+        QDateTime lastAccess;
+
+        QDataStream ds(&ba, QIODevice::ReadOnly);
+        ds >> title;
+        ds >> model;
+        ds >> port;
+        ds >> path;
+        ds >> lastAccess;
+
+        ctype = CameraType(title, model, port, path, lastAccess);
+
+        return true;
+    }
+    else
+        return false;
+}
+
+const char* DCameraDragObject::format(int i) const
+{
+    if (i == 0)
+        return "camera/unknown";
+
+    return 0;
+}
+
+QByteArray DCameraDragObject::encodedData(const char* mime) const
+{
+    return data(mime);
 }
 
 }  // namespace Digikam

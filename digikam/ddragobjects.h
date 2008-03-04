@@ -34,6 +34,10 @@
 
 #include <kurl.h>
 
+// Local includes.
+
+#include "cameratype.h"
+
 class QWidget;
 
 namespace Digikam
@@ -150,6 +154,23 @@ public:
 
     DCameraItemListDrag(const QStringList& cameraItemPaths, const char *name=0);
     static bool canDecode(const QMimeData* e);
+
+protected:
+
+    QByteArray  encodedData(const char* mime) const;
+    const char* format(int i) const;
+};
+
+// ------------------------------------------------------------------------
+
+class DCameraDragObject : public QMimeData
+{
+
+public:
+
+    DCameraDragObject(const CameraType& ctype, const char *name=0);
+    static bool canDecode(const QMimeData* e);
+    static bool decode(const QMimeData* e, CameraType& ctype);
 
 protected:
 
