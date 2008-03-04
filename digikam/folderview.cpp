@@ -204,7 +204,7 @@ void FolderView::contentsMousePressEvent(QMouseEvent *e)
     QPoint vp            = contentsToViewport(e->pos());
     Q3ListViewItem *item = itemAt(vp);
 
-    FolderCheckListItem *citem = dynamic_cast<FolderCheckListItem*>(itemAt(vp));
+    FolderCheckListItem *citem = dynamic_cast<FolderCheckListItem*>(item);
     if(citem && e->button() == Qt::MidButton) 
     {
         bool isOn = citem->isOn();

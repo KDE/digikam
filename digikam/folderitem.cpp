@@ -152,14 +152,14 @@ FolderCheckListItem::FolderCheckListItem(Q3ListView* parent, const QString& text
                                          Q3CheckListItem::Type tt)
                    : Q3CheckListItem(parent, text, tt)
 {
-    m_focus   = false;
+    m_focus = false;
 }
 
 FolderCheckListItem::FolderCheckListItem(Q3ListViewItem* parent, const QString& text,
                                          Q3CheckListItem::Type tt)
                    : Q3CheckListItem(parent, text, tt)
 {
-    m_focus   = false;
+    m_focus = false;
 }
 
 FolderCheckListItem::~FolderCheckListItem()
