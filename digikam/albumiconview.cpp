@@ -471,17 +471,17 @@ void AlbumIconView::slotImageListerDeleteItem(const ImageInfo &item)
 
     IconGroupItem* group = firstGroup();
     IconGroupItem* tmp;
-    
+
     while (group)
     {
         tmp = group->nextGroup();
-        
+
         if (group->count() == 0)
         {
             d->albumDict.remove(((AlbumIconGroupItem*)group)->albumID());
             delete group;
         }
-        
+
         group = tmp;
     }
 }
@@ -503,7 +503,7 @@ void AlbumIconView::slotDoubleClicked(IconItem *item)
     }
     else
     {
-	// FIXME: this method has diseapear from kdelibs4
+        // FIXME: this method has diseapear from kdelibs4
         //KIconEffect::visualActivate(viewport(), contentsRectToViewport(item->rect()));
         slotDisplayItem(static_cast<AlbumIconItem *>(item));
     }
@@ -568,7 +568,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     // This is needed both for the goto tags submenu here and also
     // for the "move to trash" and further actions below.
     QList<qlonglong> selectedImageIDs;
-    
+
     for (IconItem *it = firstItem(); it; it=it->nextItem())
     {
         if (it->isSelected())
@@ -577,14 +577,14 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
             selectedImageIDs.append(selItem->imageInfo().id());
         }
     }
- 
+
     // --------------------------------------------------------
     // Provide Goto folder and/or date pop-up menu
     QMenu gotoMenu;
- 
+
     QAction *gotoAlbum = gotoMenu.addAction(SmallIcon("folder-image"),        i18n("Album"));
     QAction *gotoDate  = gotoMenu.addAction(SmallIcon("view-calendar-month"), i18n("Date"));
- 
+
     TagsPopupMenu* gotoTagsPopup = new TagsPopupMenu(selectedImageIDs, TagsPopupMenu::DISPLAY);
     QAction *gotoTag             = gotoMenu.addMenu(gotoTagsPopup);
     gotoTag->setIcon(SmallIcon("tag"));
@@ -596,7 +596,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 
     connect(gotoTagsPopup, SIGNAL(signalTagActivated(int)),
             this, SLOT(slotGotoTag(int)));
- 
+
     if (d->currentAlbum->type() == Album::PHYSICAL ) 
     {
         // If the currently selected album is the same as album to 
@@ -1093,9 +1093,8 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item)
     if ( !imagefilter.contains(currentFileExtension) )
     {
         KMimeType::Ptr mimePtr = KMimeType::findByUrl(item->imageInfo().fileUrl(), 0, true, true);
-        const KService::List offers = KServiceTypeTrader::self()->query(mimePtr->name(), 
-                                                                        "Type == 'Application'");
-        
+        const KService::List offers = KServiceTypeTrader::self()->query(mimePtr->name(), "Type == 'Application'");
+
         if (offers.isEmpty())
             return;
 
@@ -2214,7 +2213,7 @@ void AlbumIconView::slotGotoTag(int tagID)
 {
     // send a signal to the parent widget (digikamview.cpp) to change 
     // to Tag view and the corresponding item
-  
+
     emit signalGotoTagAndItem(tagID);
 }
 

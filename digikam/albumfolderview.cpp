@@ -1130,7 +1130,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
         {
             KMenu popMenu(this);
             popMenu.addTitle(SmallIcon("digikam"), i18n("My Albums"));
-            QAction *moveAction = popMenu.addAction(SmallIcon("footprint"), i18n("&Move Here"));
+            QAction *moveAction = popMenu.addAction(SmallIcon("go-jump"), i18n("&Move Here"));
             QAction *copyAction = popMenu.addAction(SmallIcon("edit-copy"), i18n("&Copy Here"));
             QAction *thumbnailAction = 0;
             if (imageIDs.count() == 1)
@@ -1244,7 +1244,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
         {
             KMenu popMenu(this);
             popMenu.addTitle(SmallIcon("digikam"), i18n("My Albums"));
-            QAction *moveAction = popMenu.addAction( SmallIcon("footprint"), i18n("&Move Here"));
+            QAction *moveAction = popMenu.addAction( SmallIcon("go-jump"), i18n("&Move Here"));
             QAction *copyAction = popMenu.addAction( SmallIcon("edit-copy"), i18n("&Copy Here"));
             popMenu.addSeparator();
             popMenu.addAction( SmallIcon("dialog-cancel"), i18n("C&ancel") );
