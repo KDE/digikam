@@ -24,7 +24,7 @@
 
 // Qt includes.
 
-#include <Q3ValueList>
+#include <QList>
 #include <QList>
 #include <QPixmap>
 #include <QPointer>
@@ -52,23 +52,22 @@
 
 // Local includes.
 
-#include "ddebug.h"
-#include "digikamapp.h"
 #include "albumlister.h"
 #include "albumpropsedit.h"
 #include "album.h"
 #include "albumdb.h"
 #include "albummanager.h"
 #include "albumsettings.h"
-#include "collectionmanager.h"
-#include "thumbnailsize.h"
-#include "albumpropsedit.h"
-#include "folderitem.h"
-#include "cameraui.h"
-#include "dio.h"
-#include "dragobjects.h"
 #include "albumthumbnailloader.h"
+#include "cameraui.h"
+#include "collectionmanager.h"
 #include "deletedialog.h"
+#include "ddebug.h"
+#include "digikamapp.h"
+#include "dio.h"
+#include "ddragobjects.h"
+#include "folderitem.h"
+#include "thumbnailsize.h"
 #include "albumfolderview.h"
 #include "albumfolderview.moc"
 
@@ -102,7 +101,7 @@ private:
     int     m_year;
     int     m_month;
     int     m_count;
- 
+
     PAlbum *m_album;
 };
 
@@ -140,7 +139,7 @@ AlbumFolderViewItem::AlbumFolderViewItem(Q3ListViewItem* parent, const QString& 
 void AlbumFolderViewItem::refresh()
 {
     if (!m_album) return;
-    
+
     if (AlbumSettings::instance()->getShowFolderTreeViewItemsCount() &&
         dynamic_cast<AlbumFolderViewItem*>(parent()))
     {
@@ -244,8 +243,8 @@ public:
         albumMan = 0;
     }
 
-    AlbumManager                      *albumMan;
-    Q3ValueList<AlbumFolderViewItem*>  groupItems;
+    AlbumManager                *albumMan;
+    QList<AlbumFolderViewItem*>  groupItems;
 };
 
 AlbumFolderView::AlbumFolderView(QWidget *parent)
@@ -349,7 +348,7 @@ void AlbumFolderView::slotTextFolderFilterChanged(const QString& filter)
                 ++it;
             }
         }
-    
+
         AlbumFolderViewItem* viewItem = (AlbumFolderViewItem*) palbum->extraData(this);
 
         if (match)
@@ -896,7 +895,7 @@ void AlbumFolderView::albumEdit(AlbumFolderViewItem* item)
     }
 }
 
-Q3DragObject* AlbumFolderView::dragObject()
+QDrag* AlbumFolderView::makeDragObject()
 {
     AlbumFolderViewItem *item = dynamic_cast<AlbumFolderViewItem*>(dragItem());
     if(!item)
@@ -906,12 +905,11 @@ Q3DragObject* AlbumFolderView::dragObject()
     if(album->isRoot())
         return 0;
 
-    AlbumDrag *a = new AlbumDrag(album->kurl(), album->id(), this);
-    if(!a)
-        return 0;
-    a->setPixmap(*item->pixmap(0));
+    QDrag *drag = new QDrag(this);
+    drag->setMimeData(new DAlbumDrag(album->kurl(), album->id()));
+    drag->setPixmap(*item->pixmap(0));
 
-    return a;
+    return drag;
 }
 
 bool AlbumFolderView::acceptDrop(const QDropEvent *e) const
@@ -920,7 +918,7 @@ bool AlbumFolderView::acceptDrop(const QDropEvent *e) const
     AlbumFolderViewItem *itemDrop = dynamic_cast<AlbumFolderViewItem*>(itemAt(vp));
     AlbumFolderViewItem *itemDrag = dynamic_cast<AlbumFolderViewItem*>(dragItem());
 
-    if(AlbumDrag::canDecode(e))
+    if(DAlbumDrag::canDecode(e->mimeData()))
     {
         switch(AlbumSettings::instance()->getAlbumSortOrder())
         {
@@ -929,26 +927,26 @@ bool AlbumFolderView::acceptDrop(const QDropEvent *e) const
                 // Allow dragging at the root, to move the album at the root
                 if(!itemDrop)
                     return true;
-    
+
                 // Dragging an item on itself makes no sense
                 if(itemDrag == itemDrop)
                     return false;
-    
+
                 // Dragging a parent on its child makes no sense
                 if(itemDrag && itemDrag->album()->isAncestorOf(itemDrop->album()))
                     return false;
-    
+
                 return true;
             }
             case (AlbumSettings::ByCollection):
             {
                 if (!itemDrop)
                     return false;
-    
+
                 // Only allow dragging onto Collection
                 if (itemDrop->isGroupItem())
                     return true;
-    
+
                 return false;
             }
             default:
@@ -964,23 +962,23 @@ bool AlbumFolderView::acceptDrop(const QDropEvent *e) const
         return false;
     }
 
-    if (itemDrop && itemDrop->isGroupItem())
+    if(itemDrop && itemDrop->isGroupItem())
     {
         // do not allow drop on a group item
         return false;
     }
 
-    if(ItemDrag::canDecode(e))
+    if(DItemDrag::canDecode(e->mimeData()))
     {
         return true;
     }
 
-    if (CameraItemListDrag::canDecode(e))
+    if(DCameraItemListDrag::canDecode(e->mimeData()))
     {
         return true;
     }
 
-    if(Q3UriDrag::canDecode(e))
+    if(KUrl::List::canDecode(e->mimeData()))
     {
         return true;
     }
@@ -998,14 +996,13 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
     QPoint vp                     = contentsToViewport(e->pos());
     AlbumFolderViewItem *itemDrop = dynamic_cast<AlbumFolderViewItem*>(itemAt(vp));
 
-    if(AlbumDrag::canDecode(e))
+    if(DAlbumDrag::canDecode(e->mimeData()))
     {
         AlbumFolderViewItem *itemDrag = dynamic_cast<AlbumFolderViewItem*>(dragItem());
         if(!itemDrag)
             return;
 
-        if (AlbumSettings::instance()->getAlbumSortOrder()
-            == AlbumSettings::ByFolder)
+        if (AlbumSettings::instance()->getAlbumSortOrder() == AlbumSettings::ByFolder)
         {
             // TODO: Copy?
             KMenu popMenu(this);
@@ -1035,8 +1032,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
                         this, SLOT(slotDIOResult(KJob*)));
             }
         }
-        else if (AlbumSettings::instance()->getAlbumSortOrder()
-                 == AlbumSettings::ByCollection)
+        else if (AlbumSettings::instance()->getAlbumSortOrder() == AlbumSettings::ByCollection)
         {
             if (!itemDrop)
                 return;
@@ -1055,19 +1051,19 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
         return;
     }
 
-    if (ItemDrag::canDecode(e))
+    if (DItemDrag::canDecode(e->mimeData()))
     {
         if (!itemDrop)
             return;
 
         PAlbum *destAlbum = itemDrop->album();
 
-        KUrl::List       urls;
-        KUrl::List       kioURLs;
-        Q3ValueList<int> albumIDs;
-        Q3ValueList<int> imageIDs;
+        KUrl::List urls;
+        KUrl::List kioURLs;
+        QList<int> albumIDs;
+        QList<int> imageIDs;
 
-        if (!ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs))
+        if (!DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs))
             return;
 
         if (urls.isEmpty() || kioURLs.isEmpty() || albumIDs.isEmpty() || imageIDs.isEmpty())
@@ -1077,7 +1073,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
         // This can be the case with reccursive content album mode.
         KUrl::List extUrls;
         ImageInfoList extImgInfList;
-        for (Q3ValueList<int>::iterator it = imageIDs.begin(); it != imageIDs.end(); ++it)
+        for (QList<int>::iterator it = imageIDs.begin(); it != imageIDs.end(); ++it)
         {
             ImageInfo info(*it);
             if (info.albumId() != destAlbum->id())
@@ -1184,11 +1180,11 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
 
     // -- DnD from Camera GUI ------------------------------------------------
 
-    if(CameraItemListDrag::canDecode(e))
+    if(DCameraItemListDrag::canDecode(e->mimeData()))
     {
         Album *album = dynamic_cast<Album*>(itemDrop->album());
         if (!album) return;
-        
+
         CameraUI *ui = dynamic_cast<CameraUI*>(e->source());
         if (ui)
         {
@@ -1214,7 +1210,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
 
     // -- DnD from an external source ----------------------------------------
 
-    if(Q3UriDrag::canDecode(e))               
+    if(KUrl::List::canDecode(e->mimeData()))
     {
         PAlbum* destAlbum = 0;
 
@@ -1229,7 +1225,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
 
         KUrl destURL(destAlbum->kurl());
 
-        KUrl::List srcURLs = KUrl::List::fromMimeData( e->mimeData() );
+        KUrl::List srcURLs = KUrl::List::fromMimeData(e->mimeData());
 
         bool move = false, copy = false;
         // If shift key is pressed while dropping, move the drag object without
@@ -1335,7 +1331,7 @@ AlbumFolderViewItem* AlbumFolderView::findParentByFolder(PAlbum* album, bool& fa
         QStringList albumRoots = CollectionManager::instance()->allAvailableAlbumRootPaths();
         if (albumRoots.count() > 1)
         {
-            for (Q3ValueList<AlbumFolderViewItem*>::iterator it=d->groupItems.begin();
+            for (QList<AlbumFolderViewItem*>::iterator it=d->groupItems.begin();
                  it != d->groupItems.end(); ++it)
             {
                 AlbumFolderViewItem* groupItem = *it;
@@ -1369,7 +1365,7 @@ AlbumFolderViewItem* AlbumFolderView::findParentByCollection(PAlbum* album, bool
 
     AlbumFolderViewItem* parent = 0;
 
-    for (Q3ValueList<AlbumFolderViewItem*>::iterator it=d->groupItems.begin();
+    for (QList<AlbumFolderViewItem*>::iterator it=d->groupItems.begin();
          it != d->groupItems.end(); ++it)
     {
         AlbumFolderViewItem* groupItem = *it;
@@ -1400,7 +1396,7 @@ AlbumFolderViewItem* AlbumFolderView::findParentByDate(PAlbum* album, bool& fail
 
     AlbumFolderViewItem* parent = 0;
 
-    for (Q3ValueList<AlbumFolderViewItem*>::iterator it=d->groupItems.begin();
+    for (QList<AlbumFolderViewItem*>::iterator it=d->groupItems.begin();
          it != d->groupItems.end(); ++it)
     {
         AlbumFolderViewItem* groupItem = *it;
@@ -1482,9 +1478,9 @@ void AlbumFolderView::reparentItem(AlbumFolderViewItem* folderItem)
 
 void AlbumFolderView::clearEmptyGroupItems()
 {
-    Q3ValueList<AlbumFolderViewItem*> deleteItems;
+    QList<AlbumFolderViewItem*> deleteItems;
 
-    for (Q3ValueList<AlbumFolderViewItem*>::iterator it=d->groupItems.begin();
+    for (QList<AlbumFolderViewItem*>::iterator it=d->groupItems.begin();
          it != d->groupItems.end(); ++it)
     {
         AlbumFolderViewItem* groupItem = *it;
@@ -1495,10 +1491,10 @@ void AlbumFolderView::clearEmptyGroupItems()
         }
     }
 
-    for (Q3ValueList<AlbumFolderViewItem*>::iterator it=deleteItems.begin();
+    for (QList<AlbumFolderViewItem*>::iterator it=deleteItems.begin();
          it != deleteItems.end(); ++it)
     {
-        d->groupItems.remove(*it);
+        d->groupItems.erase(it);
         delete *it;
     }
 }
@@ -1506,7 +1502,7 @@ void AlbumFolderView::clearEmptyGroupItems()
 void AlbumFolderView::refresh()
 {
     Q3ListViewItemIterator it(this);
-    
+
     while (it.current())
     {
         AlbumFolderViewItem* item = dynamic_cast<AlbumFolderViewItem*>(*it);

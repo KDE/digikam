@@ -43,7 +43,7 @@
 #include "albumsettings.h"
 #include "albumthumbnailloader.h"
 #include "themeengine.h"
-#include "dragobjects.h"
+//#include "dragobjects.h"
 #include "folderitem.h"
 #include "folderview.h"
 #include "folderview.moc"
@@ -233,9 +233,9 @@ void FolderView::contentsMouseReleaseEvent(QMouseEvent *e)
 
 void FolderView::startDrag()
 {
-    Q3DragObject *o = dragObject();
+    QDrag *o = makeDragObject();
     if(o)
-        o->drag();
+        o->exec();
 }
 
 Q3ListViewItem* FolderView::dragItem() const

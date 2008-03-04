@@ -43,42 +43,10 @@ class DateFolderViewPriv;
 class DAlbum;
 class Album;
 
-class DateFolderItem : public FolderItem
-{
-
-public:
-
-    DateFolderItem(Q3ListView* parent, DAlbum* album);
-    DateFolderItem(Q3ListViewItem* parent, DAlbum* album);
-    
-    ~DateFolderItem();
-    
-    void refresh();
-
-    int     compare(Q3ListViewItem *i, int, bool) const;
-    QString date() const;
-    QString name() const;
-    
-    DAlbum* album() const;
-    
-    int count() const;
-    void setCount(int v);
-
-private:
-
-    int               m_count;
-    
-    QString           m_name;
-
-    DAlbum           *m_album;
-};
-
-// -----------------------------------------------------------------
-
 class DateFolderView : public KVBox
 {
     Q_OBJECT
-    
+
 public:
 
     DateFolderView(QWidget* parent);
@@ -106,14 +74,14 @@ private:
      * load the last view state from disk
      */
     void loadViewState();
-    
+
     /**
      * writes the view state to disk
      */
     void saveViewState();
 
     Q3ListViewItem *findRootItemByYear(const QString& year);
-        
+
 private:
 
     DateFolderViewPriv* d;

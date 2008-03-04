@@ -48,13 +48,43 @@
 #include "album.h"
 #include "albumdb.h"
 #include "albumsettings.h"
-#include "monthwidget.h"
 #include "folderview.h"
+#include "monthwidget.h"
 #include "datefolderview.h"
 #include "datefolderview.moc"
 
 namespace Digikam
 {
+
+class DateFolderItem : public FolderItem
+{
+
+public:
+
+    DateFolderItem(Q3ListView* parent, DAlbum* album);
+    DateFolderItem(Q3ListViewItem* parent, DAlbum* album);
+
+    ~DateFolderItem();
+
+    void refresh();
+
+    int     compare(Q3ListViewItem *i, int, bool) const;
+    QString date() const;
+    QString name() const;
+
+    DAlbum* album() const;
+
+    int count() const;
+    void setCount(int v);
+
+private:
+
+    int               m_count;
+
+    QString           m_name;
+
+    DAlbum           *m_album;
+};
 
 DateFolderItem::DateFolderItem(Q3ListView* parent, DAlbum* album)
               : FolderItem(parent, QString(), true)
@@ -140,11 +170,11 @@ public:
     }
 
     bool         active;
-    
+
     QString      selected;
 
     FolderView  *listview;
-    MonthWidget *monthview;    
+    MonthWidget *monthview;
 };
 
 DateFolderView::DateFolderView(QWidget* parent)
@@ -165,7 +195,7 @@ DateFolderView::DateFolderView(QWidget* parent)
             this, SLOT(slotAlbumDeleted(Album*)));
 
     connect(AlbumManager::instance(), SIGNAL(signalAllDAlbumsLoaded()),
-            this, SLOT(slotAllDAlbumsLoaded()));    
+            this, SLOT(slotAllDAlbumsLoaded()));
 
     connect(AlbumManager::instance(), SIGNAL(signalAlbumsCleared()),
             d->listview, SLOT(clear()));
@@ -187,7 +217,7 @@ void DateFolderView::setActive(bool val)
 {
     if (d->active == val)
         return;
-    
+
     d->active = val;
     if (d->active)
     {
@@ -295,7 +325,7 @@ void DateFolderView::loadViewState()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group(objectName());
-    
+
     QString selected;
     if(group.hasKey("LastSelectedItem"))
     {
@@ -307,22 +337,22 @@ void DateFolderView::loadViewState()
     {
         openFolders = group.readEntry("OpenFolders", QStringList());
     }
-    
+
     DateFolderItem *item;
     QString id;
     Q3ListViewItemIterator it(d->listview);
     for( ; it.current(); ++it)
-    {        
+    {
         item = dynamic_cast<DateFolderItem*>(it.current());
         id = item->date();
         if(openFolders.contains(id))
             d->listview->setOpen(item, true);
         else
             d->listview->setOpen(item, false);
-        
+
         if(id == selected)
             d->listview->setSelected(item, true);
-    }    
+    }
 }
 
 void DateFolderView::gotoDate(const QDate& dt)
@@ -353,11 +383,11 @@ void DateFolderView::saveViewState()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group(objectName());
-   
+
     DateFolderItem *item = dynamic_cast<DateFolderItem*>(d->listview->selectedItem());
     if(item)
         group.writeEntry("LastSelectedItem", item->date());
-    
+
     QStringList openFolders;
     Q3ListViewItemIterator it(d->listview);
     item = dynamic_cast<DateFolderItem*>(d->listview->firstChild());
@@ -375,7 +405,7 @@ void DateFolderView::setSelected(Q3ListViewItem *item)
 {
     if(!item)
         return;
-    
+
     d->listview->setSelected(item, true);
     d->listview->ensureItemVisible(item);
 }
@@ -383,7 +413,7 @@ void DateFolderView::setSelected(Q3ListViewItem *item)
 Q3ListViewItem *DateFolderView::findRootItemByYear(const QString& year)
 {
     Q3ListViewItemIterator it(d->listview);
-    
+
     while (it.current())
     {
         DateFolderItem* item = dynamic_cast<DateFolderItem*>(*it);
@@ -400,7 +430,7 @@ Q3ListViewItem *DateFolderView::findRootItemByYear(const QString& year)
 void DateFolderView::refresh()
 {
     Q3ListViewItemIterator it(d->listview);
-    
+
     while (it.current())
     {
         DateFolderItem* item = dynamic_cast<DateFolderItem*>(*it);
@@ -413,7 +443,7 @@ void DateFolderView::refresh()
 void DateFolderView::slotRefresh(const QMap<YearMonth, int>& yearMonthMap)
 {
     Q3ListViewItemIterator it(d->listview);
-    
+
     while (it.current())
     {
         DateFolderItem* item = dynamic_cast<DateFolderItem*>(*it);
@@ -437,7 +467,7 @@ void DateFolderView::slotRefresh(const QMap<YearMonth, int>& yearMonthMap)
                         count += it2.value();
                 }
                 item->setCount(count);
-            }   
+            }
         }
         ++it;
     }

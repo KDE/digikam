@@ -54,7 +54,6 @@ class FolderItem;
  * \brief Base class for a tree view
  */
 
-
 class DIGIKAM_EXPORT FolderView : public Q3ListView
 {
     Q_OBJECT
@@ -86,6 +85,7 @@ protected:
 
     void startDrag();
     Q3ListViewItem* dragItem() const;
+    virtual QDrag* makeDragObject(){ return 0; };
 
     void resizeEvent(QResizeEvent* e);
     void fontChange(const QFont& oldFont);

@@ -37,6 +37,7 @@
 
 class QDropEvent;
 class QPixmap;
+class QDrag;
 
 class KUrl;
 
@@ -99,7 +100,6 @@ private slots:
 protected:
 
     void contentsDropEvent(QDropEvent *e);
-    Q3DragObject* dragObject();
     bool acceptDrop(const QDropEvent *e) const;
 
     void selectItem(int id);
@@ -120,6 +120,7 @@ private:
 
     void reparentItem(AlbumFolderViewItem* folderItem);
     void clearEmptyGroupItems();
+    QDrag* makeDragObject();
 
 private:
 

@@ -754,13 +754,6 @@ QDrag* TagFolderView::makeDragObject()
     return drag;
 }
 
-void TagFolderView::startDrag()
-{
-    QDrag *o = makeDragObject();
-    if(o)
-        o->exec();
-}
-
 bool TagFolderView::acceptDrop(const QDropEvent *e) const
 {
     QPoint vp = contentsToViewport(e->pos());

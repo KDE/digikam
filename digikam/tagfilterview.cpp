@@ -468,13 +468,6 @@ QDrag* TagFilterView::makeDragObject()
     return drag;
 }
 
-void TagFilterView::startDrag()
-{
-    QDrag *o = makeDragObject();
-    if(o)
-        o->exec();
-}
-
 bool TagFilterView::acceptDrop(const QDropEvent *e) const
 {
     QPoint vp = contentsToViewport(e->pos());

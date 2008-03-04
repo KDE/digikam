@@ -78,7 +78,6 @@ protected:
 
     void contentsDropEvent(QDropEvent *e);
     bool acceptDrop(const QDropEvent *e) const;
-    void startDrag();
 
 private slots:
 
