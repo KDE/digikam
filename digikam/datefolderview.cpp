@@ -46,17 +46,47 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "album.h"
 #include "albumdb.h"
 #include "albumsettings.h"
-#include "monthwidget.h"
+#include "ddebug.h"
 #include "folderview.h"
+#include "monthwidget.h"
 #include "datefolderview.h"
 #include "datefolderview.moc"
 
 namespace Digikam
 {
+
+class DateFolderItem : public FolderItem
+{
+
+public:
+
+    DateFolderItem(QListView* parent, DAlbum* album);
+    DateFolderItem(QListViewItem* parent, DAlbum* album);
+
+    ~DateFolderItem();
+
+    void refresh();
+
+    int     compare(QListViewItem *i, int, bool) const;
+    QString date() const;
+    QString name() const;
+
+    DAlbum* album() const;
+
+    int count() const;
+    void setCount(int v);
+
+private:
+
+    int               m_count;
+
+    QString           m_name;
+
+    DAlbum           *m_album;
+};
 
 DateFolderItem::DateFolderItem(QListView* parent, DAlbum* album)
               : FolderItem(parent, QString(), true)
@@ -194,7 +224,7 @@ void DateFolderView::setActive(bool val)
 {
     if (d->active == val)
         return;
-    
+
     d->active = val;
     if (d->active)
     {
@@ -301,7 +331,7 @@ void DateFolderView::loadViewState()
 {
     KConfig *config = kapp->config();
     config->setGroup(name());
-    
+
     QString selected;
     if(config->hasKey("LastSelectedItem"))
     {
@@ -313,35 +343,35 @@ void DateFolderView::loadViewState()
     {
         openFolders = config->readListEntry("OpenFolders");
     }
-    
+
     DateFolderItem *item;
     QString id;
     QListViewItemIterator it(d->listview);
     for( ; it.current(); ++it)
-    {        
+    {
         item = dynamic_cast<DateFolderItem*>(it.current());
         id = item->date();
         if(openFolders.contains(id))
             d->listview->setOpen(item, true);
         else
             d->listview->setOpen(item, false);
-        
+
         if(id == selected)
             d->listview->setSelected(item, true);
-    }    
+    }
 }
 
 void DateFolderView::gotoDate(const QDate& dt)
 {
     DateFolderItem *item = 0;
     QDate           id;
-    
+
     QDate date = QDate(dt.year(), dt.month(), 1);
 
     // Find that date in the side-bar list.
     QListViewItemIterator it(d->listview);
     for( ; it.current(); ++it)
-    {        
+    {
         item = dynamic_cast<DateFolderItem*>(it.current());
         if (item->album())
         {
@@ -359,11 +389,11 @@ void DateFolderView::saveViewState()
 {
     KConfig *config = kapp->config();
     config->setGroup(name());
-   
+
     DateFolderItem *item = dynamic_cast<DateFolderItem*>(d->listview->selectedItem());
     if(item)
         config->writeEntry("LastSelectedItem", item->date());
-    
+
     QStringList openFolders;
     QListViewItemIterator it(d->listview);
     item = dynamic_cast<DateFolderItem*>(d->listview->firstChild());
@@ -381,7 +411,7 @@ void DateFolderView::setSelected(QListViewItem *item)
 {
     if(!item)
         return;
-    
+
     d->listview->setSelected(item, true);
     d->listview->ensureItemVisible(item);
 }
@@ -389,7 +419,7 @@ void DateFolderView::setSelected(QListViewItem *item)
 QListViewItem *DateFolderView::findRootItemByYear(const QString& year)
 {
     QListViewItemIterator it(d->listview);
-    
+
     while (it.current())
     {
         DateFolderItem* item = dynamic_cast<DateFolderItem*>(*it);
@@ -406,7 +436,7 @@ QListViewItem *DateFolderView::findRootItemByYear(const QString& year)
 void DateFolderView::refresh()
 {
     QListViewItemIterator it(d->listview);
-    
+
     while (it.current())
     {
         DateFolderItem* item = dynamic_cast<DateFolderItem*>(*it);
@@ -419,7 +449,7 @@ void DateFolderView::refresh()
 void DateFolderView::slotRefresh(const QMap<YearMonth, int>& yearMonthMap)
 {
     QListViewItemIterator it(d->listview);
-    
+
     while (it.current())
     {
         DateFolderItem* item = dynamic_cast<DateFolderItem*>(*it);

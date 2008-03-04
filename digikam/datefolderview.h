@@ -42,42 +42,10 @@ namespace Digikam
 class DateFolderViewPriv;
 class DAlbum;
 
-class DateFolderItem : public FolderItem
-{
-
-public:
-
-    DateFolderItem(QListView* parent, DAlbum* album);
-    DateFolderItem(QListViewItem* parent, DAlbum* album);
-    
-    ~DateFolderItem();
-    
-    void refresh();
-
-    int     compare(QListViewItem *i, int, bool) const;
-    QString date() const;
-    QString name() const;
-    
-    DAlbum* album() const;
-    
-    int count() const;
-    void setCount(int v);
-
-private:
-
-    int               m_count;
-    
-    QString           m_name;
-
-    DAlbum           *m_album;
-};
-
-// -----------------------------------------------------------------
-
 class DateFolderView : public QVBox
 {
     Q_OBJECT
-    
+
 public:
 
     DateFolderView(QWidget* parent);
@@ -104,14 +72,14 @@ private:
      * load the last view state from disk
      */
     void loadViewState();
-    
+
     /**
      * writes the view state to disk
      */
     void saveViewState();
 
     QListViewItem *findRootItemByYear(const QString& year);
-    
+
     DateFolderViewPriv* d;
 };
 
