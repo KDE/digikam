@@ -23,7 +23,7 @@
 
 // Qt includes.
 
-#include <Q3ValueList>
+#include <QList>
 #include <QToolTip>
 #include <QPixmap>
 #include <QPainter>
@@ -52,7 +52,7 @@
 #include "albumdb.h"
 #include "albummanager.h"
 #include "albumsettings.h"
-#include "dragobjects.h"
+#include "ddragobjects.h"
 #include "imageattributeswatch.h"
 #include "metadatahub.h"
 #include "ratingpopupmenu.h"
@@ -670,27 +670,23 @@ void LightTableBar::startDrag()
     p.drawPixmap(2, 2, icon);
     p.end();
 
-    Q3DragObject* drag = 0;
-
-    drag = new ItemDrag(urls, kioURLs, albumIDs, imageIDs, this);
-    if (drag)
-    {
-        drag->setPixmap(pix);
-        drag->drag();
-    }
+    QDrag *drag = new QDrag(this);
+    drag->setMimeData(new DItemDrag(urls, kioURLs, albumIDs, imageIDs));
+    drag->setPixmap(pix);
+    drag->exec();
 }
 
 void LightTableBar::contentsDragMoveEvent(QDragMoveEvent *e)
 {
-    int              albumID;
-    Q3ValueList<int> albumIDs;
-    Q3ValueList<int> imageIDs;
-    KUrl::List       urls;
-    KUrl::List       kioURLs;
+    int        albumID;
+    QList<int> albumIDs;
+    QList<int> imageIDs;
+    KUrl::List urls;
+    KUrl::List kioURLs;
 
-    if (ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs) ||
-        AlbumDrag::decode(e, urls, albumID) ||
-        TagDrag::canDecode(e))
+    if (DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs) ||
+        DAlbumDrag::decode(e->mimeData(), urls, albumID) ||
+        DTagDrag::canDecode(e->mimeData()))
     {
         e->accept();
         return;
@@ -701,17 +697,17 @@ void LightTableBar::contentsDragMoveEvent(QDragMoveEvent *e)
 
 void LightTableBar::contentsDropEvent(QDropEvent *e)
 {
-    int              albumID;
-    Q3ValueList<int> albumIDs;
-    Q3ValueList<int> imageIDs;
-    KUrl::List       urls;
-    KUrl::List       kioURLs;
+    int        albumID;
+    QList<int> albumIDs;
+    QList<int> imageIDs;
+    KUrl::List urls;
+    KUrl::List kioURLs;
 
-    if (ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs))
+    if (DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs))
     {
         ImageInfoList imageInfoList;
 
-        for (Q3ValueList<int>::const_iterator it = imageIDs.begin();
+        for (QList<int>::const_iterator it = imageIDs.begin();
              it != imageIDs.end(); ++it)
         {
             ImageInfo info(*it);
@@ -724,12 +720,12 @@ void LightTableBar::contentsDropEvent(QDropEvent *e)
         emit signalDroppedItems(imageInfoList);
         e->accept();
     }
-    else if (AlbumDrag::decode(e, urls, albumID))
+    else if (DAlbumDrag::decode(e->mimeData(), urls, albumID))
     {
-        Q3ValueList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInAlbum(albumID);
+        QList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInAlbum(albumID);
         ImageInfoList imageInfoList;
 
-        for (Q3ValueList<qlonglong>::const_iterator it = itemIDs.begin();
+        for (QList<qlonglong>::const_iterator it = itemIDs.begin();
              it != itemIDs.end(); ++it)
         {
             ImageInfo info(*it);
@@ -742,17 +738,17 @@ void LightTableBar::contentsDropEvent(QDropEvent *e)
         emit signalDroppedItems(imageInfoList);
         e->accept();
     }
-    else if(TagDrag::canDecode(e))
+    else if(DTagDrag::canDecode(e->mimeData()))
     {
         QByteArray  ba = e->encodedData("digikam/tag-id");
         QDataStream ds(ba);
         int tagID;
         ds >> tagID;
 
-        Q3ValueList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInTag(tagID, true);
+        QList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInTag(tagID, true);
         ImageInfoList imageInfoList;
 
-        for (Q3ValueList<qlonglong>::const_iterator it = itemIDs.begin();
+        for (QList<qlonglong>::const_iterator it = itemIDs.begin();
              it != itemIDs.end(); ++it)
         {
             ImageInfo info(*it);

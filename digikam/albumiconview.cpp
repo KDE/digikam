@@ -7,7 +7,7 @@
  * Description : album icon view 
  * 
  * Copyright (C) 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2002-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2002-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -38,8 +38,6 @@ extern "C"
 
 // Qt includes.
 
-#include <Q3DragObject>
-#include <Q3ValueVector>
 #include <Q3IntDict>
 #include <Q3Dict>
 #include <QImage>
@@ -63,7 +61,6 @@ extern "C"
 
 // KDE includes.
 
-#include <k3urldrag.h>
 #include <kurl.h>
 #include <kapplication.h>
 #include <klocale.h>
@@ -113,9 +110,8 @@ extern "C"
 #include "tagspopupmenu.h"
 #include "ratingpopupmenu.h"
 #include "thumbnailloadthread.h"
-#include "cameradragobject.h"
 #include "cameraui.h"
-#include "dragobjects.h"
+#include "ddragobjects.h"
 #include "dmetadata.h"
 #include "albumdb.h"
 #include "imageattributeswatch.h"
@@ -526,13 +522,11 @@ void AlbumIconView::slotRightButtonClicked(const QPoint& pos)
     }
 
     QMenu popmenu(this);
-    KAction *paste    = KStandardAction::paste(this, SLOT(slotPaste()), 0);
-    QMimeSource *data = kapp->clipboard()->data(QClipboard::Clipboard);
+    KAction *paste        = KStandardAction::paste(this, SLOT(slotPaste()), 0);
+    const QMimeData *data = kapp->clipboard()->mimeData(QClipboard::Clipboard);
 
-    if(!data || !Q3UriDrag::canDecode(data))
-    {
+    if(!data || !KUrl::List::canDecode(data))
         paste->setEnabled(false);
-    }
 
     popmenu.addAction(paste);
     popmenu.exec(pos);
@@ -688,14 +682,12 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 
     // --------------------------------------------------------
 
-    KAction *copy     = KStandardAction::copy(this, SLOT(slotCopy()), 0);
-    KAction *paste    = KStandardAction::paste(this, SLOT(slotPaste()), 0);
-    QMimeSource *data = kapp->clipboard()->data(QClipboard::Clipboard);
+    KAction *copy         = KStandardAction::copy(this, SLOT(slotCopy()), 0);
+    KAction *paste        = KStandardAction::paste(this, SLOT(slotPaste()), 0);
+    const QMimeData *data = kapp->clipboard()->mimeData(QClipboard::Clipboard);
 
-    if(!data || !Q3UriDrag::canDecode(data))
-    {
+    if(!data || !KUrl::List::canDecode(data))
         paste->setEnabled(false);
-    }
 
     popmenu.addAction(copy);
     popmenu.addAction(paste);
@@ -817,10 +809,10 @@ void AlbumIconView::slotCopy()
     if (!d->currentAlbum)
         return;
 
-    KUrl::List      urls;
-    KUrl::List      kioURLs;
-    Q3ValueList<int> albumIDs;
-    Q3ValueList<int> imageIDs;
+    KUrl::List urls;
+    KUrl::List kioURLs;
+    QList<int> albumIDs;
+    QList<int> imageIDs;
 
     for (IconItem *it = firstItem(); it; it=it->nextItem())
     {
@@ -838,15 +830,12 @@ void AlbumIconView::slotCopy()
     if (urls.isEmpty())
         return;
 
-    Q3DragObject* drag = 0;
-
-    drag = new ItemDrag(urls, kioURLs, albumIDs, imageIDs, this);
-    kapp->clipboard()->setData(drag);
+    kapp->clipboard()->setMimeData(new DItemDrag(urls, kioURLs, albumIDs, imageIDs));
 }
 
 void AlbumIconView::slotPaste()
 {
-    QMimeSource *data = kapp->clipboard()->data(QClipboard::Clipboard);
+    const QMimeData *data = kapp->clipboard()->mimeData(QClipboard::Clipboard);
     if(!data)
         return;
 
@@ -867,7 +856,7 @@ void AlbumIconView::slotPaste()
     if (!album) 
         album = d->currentAlbum;
 
-    if (d->currentAlbum->type() == Album::PHYSICAL && Q3UriDrag::canDecode(data))
+    if (d->currentAlbum->type() == Album::PHYSICAL && KUrl::List::canDecode(data))
     {
         PAlbum* palbum = (PAlbum*)album;
 
@@ -878,13 +867,13 @@ void AlbumIconView::slotPaste()
         KUrl destURL(palbum->databaseUrl());
 
         KUrl::List srcURLs;
-        K3URLDrag::decode(data, srcURLs);
+        srcURLs.fromMimeData(data);
 
         KIO::Job* job = DIO::copy(srcURLs, destURL);
         connect(job, SIGNAL(result(KJob*)),
                 this, SLOT(slotDIOResult(KJob*)));
     }
-    else if(d->currentAlbum->type() == Album::TAG && ItemDrag::canDecode(data))
+    else if(d->currentAlbum->type() == Album::TAG && DItemDrag::canDecode(data))
     {
         TAlbum* talbum = (TAlbum*)album;
 
@@ -892,19 +881,19 @@ void AlbumIconView::slotPaste()
         if (talbum->isRoot())
             return;
 
-        KUrl::List       urls;
-        KUrl::List       kioURLs;
-        Q3ValueList<int> albumIDs;
-        Q3ValueList<int> imageIDs;
+        KUrl::List urls;
+        KUrl::List kioURLs;
+        QList<int> albumIDs;
+        QList<int> imageIDs;
 
-        if (!ItemDrag::decode(data, urls, kioURLs, albumIDs, imageIDs))
+        if (!DItemDrag::decode(data, urls, kioURLs, albumIDs, imageIDs))
             return;
 
         if (urls.isEmpty() || kioURLs.isEmpty() || albumIDs.isEmpty() || imageIDs.isEmpty())
             return;
 
         ImageInfoList list;
-        for (Q3ValueList<int>::const_iterator it = imageIDs.begin();
+        for (QList<int>::const_iterator it = imageIDs.begin();
              it != imageIDs.end(); ++it)
         {
             ImageInfo info(*it);
@@ -1247,10 +1236,10 @@ void AlbumIconView::startDrag()
     if (!d->currentAlbum)
         return;
 
-    KUrl::List       urls;
-    KUrl::List       kioURLs;
-    Q3ValueList<int> albumIDs;
-    Q3ValueList<int> imageIDs;
+    KUrl::List urls;
+    KUrl::List kioURLs;
+    QList<int> albumIDs;
+    QList<int> imageIDs;
 
     for (IconItem *it = firstItem(); it; it=it->nextItem())
     {
@@ -1291,43 +1280,39 @@ void AlbumIconView::startDrag()
     p.drawText(r, Qt::AlignCenter, text);
     p.end();
 
-    Q3DragObject* drag = 0;
-
-    drag = new ItemDrag(urls, kioURLs, albumIDs, imageIDs, this);
-    if (drag)
-    {
-        drag->setPixmap(pix);
-        drag->drag();
-    }
+    QDrag* drag = new QDrag(this);
+    drag->setMimeData(new DItemDrag(urls, kioURLs, albumIDs, imageIDs));
+    drag->setPixmap(pix);
+    drag->exec();
 }
 
-void AlbumIconView::contentsDragMoveEvent(QDragMoveEvent *event)
+void AlbumIconView::contentsDragMoveEvent(QDragMoveEvent *e)
 {
-    if (!d->currentAlbum || (AlbumDrag::canDecode(event) ||
-                             !Q3UriDrag::canDecode(event) &&
-                             !CameraDragObject::canDecode(event) &&
-                             !TagListDrag::canDecode(event) &&
-                             !TagDrag::canDecode(event) &&
-                             !CameraItemListDrag::canDecode(event) &&
-                             !ItemDrag::canDecode(event)))
+    if (!d->currentAlbum || (DAlbumDrag::canDecode(e->mimeData()) ||
+                             !KUrl::List::canDecode(e->mimeData())          &&
+                             !DCameraDragObject::canDecode(e->mimeData())   &&
+                             !DTagListDrag::canDecode(e->mimeData())        &&
+                             !DTagDrag::canDecode(e->mimeData())            &&
+                             !DCameraItemListDrag::canDecode(e->mimeData()) &&
+                             !DItemDrag::canDecode(e->mimeData())))
     {
-        event->ignore();
+        e->ignore();
         return;
     }
-    event->accept();
+    e->accept();
 }
 
-void AlbumIconView::contentsDropEvent(QDropEvent *event)
+void AlbumIconView::contentsDropEvent(QDropEvent *e)
 {
-    if (!d->currentAlbum || (AlbumDrag::canDecode(event) ||
-                             !Q3UriDrag::canDecode(event) &&
-                             !CameraDragObject::canDecode(event) &&
-                             !TagListDrag::canDecode(event) &&
-                             !TagDrag::canDecode(event) &&
-                             !CameraItemListDrag::canDecode(event) &&
-                             !ItemDrag::canDecode(event)))
+    if (!d->currentAlbum || (DAlbumDrag::canDecode(e->mimeData()) ||
+                             !KUrl::List::canDecode(e->mimeData())          &&
+                             !DCameraDragObject::canDecode(e->mimeData())   &&
+                             !DTagListDrag::canDecode(e->mimeData())        &&
+                             !DTagDrag::canDecode(e->mimeData())            &&
+                             !DCameraItemListDrag::canDecode(e->mimeData()) &&
+                             !DItemDrag::canDecode(e->mimeData())))
     {
-        event->ignore();
+        e->ignore();
         return;
     }
 
@@ -1348,19 +1333,19 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
     if (!album) 
         album = d->currentAlbum;
 
-    KUrl::List       urls;
-    KUrl::List       kioURLs;
-    Q3ValueList<int> albumIDs;
-    Q3ValueList<int> imageIDs;
+    KUrl::List urls;
+    KUrl::List kioURLs;
+    QList<int> albumIDs;
+    QList<int> imageIDs;
 
-    if (ItemDrag::decode(event, urls, kioURLs, albumIDs, imageIDs))
+    if (DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs))
     {
         // Drag & drop inside of digiKam 
 
         // Check if items dropped come from outside current album.
         KUrl::List extUrls;
         ImageInfoList extImgInfList;
-        for (Q3ValueList<int>::iterator it = imageIDs.begin(); it != imageIDs.end(); ++it)
+        for (QList<int>::iterator it = imageIDs.begin(); it != imageIDs.end(); ++it)
         {
             ImageInfo info(*it);
             if (info.albumId() != album->id())
@@ -1372,7 +1357,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
 
         if(extUrls.isEmpty())
         {
-            event->ignore();
+            e->ignore();
             return;
         }
         else if (album->type() == Album::PHYSICAL)
@@ -1380,7 +1365,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
             PAlbum* palbum = (PAlbum*)album;
             KUrl destURL(palbum->databaseUrl());
 
-            KUrl::List srcURLs = KUrl::List::fromMimeData( event->mimeData() );
+            KUrl::List srcURLs = KUrl::List::fromMimeData(e->mimeData());
 
             QMenu popMenu(this);
             QAction *moveAction = popMenu.addAction( SmallIcon("go-jump"), i18n("&Move Here"));
@@ -1404,13 +1389,13 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
             }
         }
     }
-    else if (Q3UriDrag::canDecode(event) && d->currentAlbum->type() == Album::PHYSICAL)
+    else if (KUrl::List::canDecode(e->mimeData()) && d->currentAlbum->type() == Album::PHYSICAL)
     {
         // Drag & drop outside of digiKam 
         PAlbum* palbum = (PAlbum*)album;
         KUrl destURL(palbum->databaseUrl());
 
-        KUrl::List srcURLs = KUrl::List::fromMimeData( event->mimeData() );
+        KUrl::List srcURLs = KUrl::List::fromMimeData(e->mimeData());
 
         QMenu popMenu(this);
         QAction *moveAction = popMenu.addAction( SmallIcon("go-jump"), i18n("&Move Here"));
@@ -1433,9 +1418,9 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                     this, SLOT(slotDIOResult(KJob*)));
         }
     }
-    else if(TagDrag::canDecode(event))
+    else if(DTagDrag::canDecode(e->mimeData()))
     {
-        QByteArray ba = event->encodedData("digikam/tag-id");
+        QByteArray ba = e->encodedData("digikam/tag-id");
         QDataStream ds(&ba, QIODevice::ReadOnly);
         int tagID;
         ds >> tagID;
@@ -1450,7 +1435,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
             bool moreItemsSelected = false;
             bool itemDropped = false;
 
-            AlbumIconItem *albumItem = findItem(event->pos());
+            AlbumIconItem *albumItem = findItem(e->pos());
             if (albumItem)
                 itemDropped = true;
 
@@ -1504,7 +1489,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                 }
                 else if (choice == assignToThisAction)  // Dropped Item only.
                 {
-                    AlbumIconItem *albumItem = findItem(event->pos());
+                    AlbumIconItem *albumItem = findItem(e->pos());
                     if (albumItem)
                     {
                         ImageInfoList infos;
@@ -1515,11 +1500,11 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
             }
         }
     }
-    else if(TagListDrag::canDecode(event))
+    else if(DTagListDrag::canDecode(e->mimeData()))
     {
-        QByteArray ba = event->encodedData("digikam/taglist");
+        QByteArray ba = e->encodedData("digikam/taglist");
         QDataStream ds(&ba, QIODevice::ReadOnly);
-        Q3ValueList<int> tagIDs;
+        QList<int> tagIDs;
         ds >> tagIDs;
 
         QMenu popMenu(this);
@@ -1527,7 +1512,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
         bool moreItemsSelected = false;
         bool itemDropped = false;
 
-        AlbumIconItem *albumItem = findItem(event->pos());
+        AlbumIconItem *albumItem = findItem(e->pos());
         if (albumItem)
             itemDropped = true;
 
@@ -1578,7 +1563,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
             }
             else if (choice == assignToThisAction)    // Dropped item only.
             {
-                AlbumIconItem *albumItem = findItem(event->pos());
+                AlbumIconItem *albumItem = findItem(e->pos());
                 if (albumItem)
                 {
                     ImageInfoList infos;
@@ -1588,9 +1573,9 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
             }
         }
     }
-    else if(CameraItemListDrag::canDecode(event))
+    else if(DCameraItemListDrag::canDecode(e->mimeData()))
     {
-        CameraUI *ui = dynamic_cast<CameraUI*>(event->source());
+        CameraUI *ui = dynamic_cast<CameraUI*>(e->source());
         if (ui)
         {
             KMenu popMenu(this);
@@ -1614,7 +1599,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
     }
     else
     {
-        event->ignore();
+        e->ignore();
     }
 }
 

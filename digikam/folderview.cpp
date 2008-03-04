@@ -38,12 +38,11 @@
 
 // Local includes.
 
-#include "ddebug.h"
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "albumthumbnailloader.h"
+#include "ddebug.h"
 #include "themeengine.h"
-//#include "dragobjects.h"
 #include "folderitem.h"
 #include "folderview.h"
 #include "folderview.moc"

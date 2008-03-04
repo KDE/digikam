@@ -58,11 +58,10 @@ SET(libdigikamtheme_SRCS
     ../digikam/albumsettings.cpp 
     ../digikam/albumselectdialog.cpp 
     ../digikam/albumthumbnailloader.cpp 
-    ../digikam/cameradragobject.cpp 
     ../digikam/cameralist.cpp 
     ../digikam/cameratype.cpp 
     ../digikam/dio.cpp 
-    ../digikam/dragobjects.cpp 
+    ../digikam/ddragobjects.cpp 
     ../digikam/folderitem.cpp 
     ../digikam/folderview.cpp 
     ../digikam/iconview.cpp 

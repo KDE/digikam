@@ -212,7 +212,6 @@ SET(digikam_bin_SRCS
                      # obsolete QT3 classes
                      folderitem.cpp 
                      folderview.cpp 
-                     dragobjects.cpp 
     )
 
 KDE4_ADD_UI_FILES(digikam_bin_SRCS ../libs/dialogs/deletedialogbase.ui)

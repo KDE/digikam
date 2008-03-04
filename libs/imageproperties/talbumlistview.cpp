@@ -23,8 +23,7 @@
 
 // Qt includes.
 
-#include <Q3Header>
-#include <Q3ValueList>
+#include <QList>
 #include <QDropEvent>
 #include <QMouseEvent>
 
@@ -52,7 +51,7 @@
 #include "databasetransaction.h"
 #include "imageinfo.h"
 #include "tagcreatedlg.h"
-#include "dragobjects.h"
+#include "ddragobjects.h"
 #include "imageattributeswatch.h"
 #include "albumthumbnailloader.h"
 #include "statusprogressbar.h"
@@ -268,7 +267,7 @@ bool TAlbumListView::mouseInItemRect(Q3ListViewItem* item, int x) const
     return (x > offset && x < (offset + width));
 }
 
-Q3DragObject* TAlbumListView::dragObject()
+QDrag* TAlbumListView::makeDragObject()
 {
     TAlbumCheckListItem *item = dynamic_cast<TAlbumCheckListItem*>(dragItem());
     if(!item)
@@ -277,17 +276,18 @@ Q3DragObject* TAlbumListView::dragObject()
     if(!item->parent())
         return 0;
 
-    TagDrag *t = new TagDrag(item->id(), this);
-    t->setPixmap(*item->pixmap(0));
+    QDrag *drag = new QDrag(this);
+    drag->setMimeData(new DTagDrag(item->id()));
+    drag->setPixmap(*item->pixmap(0));
 
-    return t;
+    return drag;
 }
 
 void TAlbumListView::startDrag()
 {
-    Q3DragObject *o = dragObject();
+    QDrag *o = makeDragObject();
     if(o)
-        o->drag();
+        o->exec();
 }
 
 TAlbumCheckListItem* TAlbumListView::dragItem() const
@@ -301,7 +301,7 @@ bool TAlbumListView::acceptDrop(const QDropEvent *e) const
     TAlbumCheckListItem *itemDrop = dynamic_cast<TAlbumCheckListItem*>(itemAt(vp));
     TAlbumCheckListItem *itemDrag = dynamic_cast<TAlbumCheckListItem*>(dragItem());
 
-    if(TagDrag::canDecode(e) || TagListDrag::canDecode(e))
+    if(DTagDrag::canDecode(e->mimeData()) || DTagListDrag::canDecode(e->mimeData()))
     {
         // Allow dragging at the root, to move the tag to the root
         if(!itemDrop)
@@ -318,7 +318,7 @@ bool TAlbumListView::acceptDrop(const QDropEvent *e) const
         return true;
     }
 
-    if (ItemDrag::canDecode(e) && itemDrop && itemDrop->album()->parent())
+    if (DItemDrag::canDecode(e->mimeData()) && itemDrop && itemDrop->album()->parent())
     {
         // Only other possibility is image items being dropped
         // And allow this only if there is a Tag to be dropped
@@ -339,7 +339,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
     QPoint vp = contentsToViewport(e->pos());
     TAlbumCheckListItem *itemDrop = dynamic_cast<TAlbumCheckListItem*>(itemAt(vp));
 
-    if(TagDrag::canDecode(e))
+    if(DTagDrag::canDecode(e->mimeData()))
     {
         QByteArray ba = e->encodedData("digikam/tag-id");
         QDataStream ds(&ba, QIODevice::ReadOnly);
@@ -391,17 +391,17 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
         return;
     }
 
-    if (ItemDrag::canDecode(e))
+    if (DItemDrag::canDecode(e->mimeData()))
     {
         TAlbum *destAlbum = itemDrop->album();
         TAlbum *srcAlbum;
 
-        KUrl::List       urls;
-        KUrl::List       kioURLs;
-        Q3ValueList<int> albumIDs;
-        Q3ValueList<int> imageIDs;
+        KUrl::List urls;
+        KUrl::List kioURLs;
+        QList<int> albumIDs;
+        QList<int> imageIDs;
 
-        if (!ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs))
+        if (!DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs))
             return;
 
         if (urls.isEmpty() || kioURLs.isEmpty() || albumIDs.isEmpty() || imageIDs.isEmpty())
@@ -479,7 +479,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
             int i=0;
             {
                 DatabaseTransaction transaction;
-                for (Q3ValueList<int>::const_iterator it = imageIDs.begin();
+                for (QList<int>::const_iterator it = imageIDs.begin();
                     it != imageIDs.end(); ++it)
                 {
                     // create temporary ImageInfo object

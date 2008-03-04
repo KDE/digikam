@@ -7,7 +7,7 @@
  * Description : camera icon view
  * 
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -24,7 +24,6 @@
 
 // Qt includes.
 
-#include <Q3DragObject>
 #include <QFile>
 #include <QFileInfo>
 #include <QTimer>
@@ -39,7 +38,6 @@
 
 // KDE includes.
 
-#include <k3urldrag.h>
 #include <kmenu.h>
 #include <kmimetype.h>
 #include <klocale.h>
@@ -56,9 +54,8 @@
 #include "renamecustomizer.h"
 #include "icongroupitem.h"
 #include "dpopupmenu.h"
-#include "dragobjects.h"
+#include "ddragobjects.h"
 #include "cameraui.h"
-#include "cameradragobject.h"
 #include "cameraiconitem.h"
 #include "cameraiconview.h"
 #include "cameraiconview.moc"
@@ -79,20 +76,20 @@ public:
         thumbSize = ThumbnailSize::Large;
     }
 
-    int                         thumbSize;
+    int                                 thumbSize;
 
-    QHash<QString, CameraIconViewItem *>  itemDict;
+    QHash<QString, CameraIconViewItem*> itemDict;
 
-    QRect                       itemRect;
+    QRect                               itemRect;
 
-    QPixmap                     itemRegPixmap;
-    QPixmap                     itemSelPixmap;
+    QPixmap                             itemRegPixmap;
+    QPixmap                             itemSelPixmap;
 
-    RenameCustomizer           *renamer;
+    RenameCustomizer                   *renamer;
 
-    IconGroupItem              *groupItem;
+    IconGroupItem                      *groupItem;
 
-    CameraUI                   *cameraUI;
+    CameraUI                           *cameraUI;
 };
 
 CameraIconView::CameraIconView(CameraUI* ui, QWidget* parent)
@@ -229,7 +226,7 @@ int CameraIconView::countItemsByFolder(QString folder)
         if (folder == itemFolder)
             count++;
     }
-    
+
     return count;
 }
 
@@ -288,7 +285,7 @@ void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
         useDefault = d->renamer->useDefault();
         startIndex = d->renamer->startIndex() -1;
     }
-    
+
     bool convertLossLessJpeg = d->cameraUI->convertLosslessJpegFiles();
     QString losslessFormat   = d->cameraUI->losslessFormat();
 
@@ -297,7 +294,7 @@ void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
     if (hasSelection)
     {
         // Camera items selection.
-    
+
         for (IconItem* item = firstItem(); item; item = item->nextItem())
         {
             QString downloadName;
@@ -312,7 +309,7 @@ void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
 
                 startIndex++;
             }
-    
+
             if (convertLossLessJpeg && !downloadName.isEmpty())
             {
                 QFileInfo fi(downloadName);
@@ -330,12 +327,12 @@ void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
     else
     {
         // No camera item selection.
-    
+
         for (IconItem* item = firstItem(); item; item = item->nextItem())
         {
             QString downloadName;
             CameraIconViewItem* viewItem = static_cast<CameraIconViewItem*>(item);
-    
+
             if (!useDefault)
                 downloadName = getTemplatedName( viewItem->itemInfo(), startIndex );
             else
@@ -351,7 +348,7 @@ void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
                     downloadName.append(losslessFormat.toLower());
                 }
             }
-    
+
             viewItem->setDownloadName( downloadName );
             startIndex++;
         }
@@ -501,7 +498,7 @@ void CameraIconView::slotDoubleClicked(IconItem* item)
 {
     if (!item)
         return;
-    
+
     if (d->cameraUI->isBusy())
         return;
 
@@ -510,7 +507,7 @@ void CameraIconView::slotDoubleClicked(IconItem* item)
 
 void CameraIconView::slotSelectAll()
 {
-    selectAll();    
+    selectAll();
 }
 
 void CameraIconView::slotSelectNone()
@@ -556,52 +553,51 @@ void CameraIconView::startDrag()
         lst.append(itemPath);
     }
 
-    Q3DragObject * drag = new CameraItemListDrag(lst, d->cameraUI);
-    if (drag)
-    {
-        QPixmap icon(DesktopIcon("image", 48));
-        int w = icon.width();
-        int h = icon.height();
+    QDrag *drag = new QDrag(d->cameraUI);
+    drag->setMimeData(new DCameraItemListDrag(lst));
 
-        QPixmap pix(w+4,h+4);
-        QString text(QString::number(lst.count()));
+    QPixmap icon(DesktopIcon("image", 48));
+    int w = icon.width();
+    int h = icon.height();
 
-        QPainter p(&pix);
-        p.fillRect(0, 0, w+4, h+4, QColor(Qt::white));
-        p.setPen(QPen(Qt::black, 1));
-        p.drawRect(0, 0, w+4, h+4);
-        p.drawPixmap(2, 2, icon);
-        QRect r = p.boundingRect(2,2,w,h,Qt::AlignLeft|Qt::AlignTop,text);
-        r.setWidth(QMAX(r.width(),r.height()));
-        r.setHeight(QMAX(r.width(),r.height()));
-        p.fillRect(r, QColor(0, 80, 0));
-        p.setPen(Qt::white);
-        QFont f(font());
-        f.setBold(true);
-        p.setFont(f);
-        p.drawText(r, Qt::AlignCenter, text);
-        p.end();
+    QPixmap pix(w+4,h+4);
+    QString text(QString::number(lst.count()));
 
-        drag->setPixmap(pix);
-        drag->drag();
-    }
+    QPainter p(&pix);
+    p.fillRect(0, 0, w+4, h+4, QColor(Qt::white));
+    p.setPen(QPen(Qt::black, 1));
+    p.drawRect(0, 0, w+4, h+4);
+    p.drawPixmap(2, 2, icon);
+    QRect r = p.boundingRect(2,2,w,h,Qt::AlignLeft|Qt::AlignTop,text);
+    r.setWidth(QMAX(r.width(),r.height()));
+    r.setHeight(QMAX(r.width(),r.height()));
+    p.fillRect(r, QColor(0, 80, 0));
+    p.setPen(Qt::white);
+    QFont f(font());
+    f.setBold(true);
+    p.setFont(f);
+    p.drawText(r, Qt::AlignCenter, text);
+    p.end();
+
+    drag->setPixmap(pix);
+    drag->exec();
 }
 
-void CameraIconView::contentsDropEvent(QDropEvent *event)
+void CameraIconView::contentsDropEvent(QDropEvent *e)
 {
     // Don't popup context menu if the camera is busy or if camera do not support upload.
     if (d->cameraUI->isBusy() || d->cameraUI->cameraUploadSupport())
         return;
 
-    if ( (!Q3UriDrag::canDecode(event) && !CameraDragObject::canDecode(event) )
-         || event->source() == this)
+    if ( (!KUrl::List::canDecode(e->mimeData()) && !DCameraDragObject::canDecode(e->mimeData()) )
+         || e->source() == this)
     {
-        event->ignore();
+        e->ignore();
         return;
     }
 
     KUrl::List srcURLs;
-    K3URLDrag::decode(event, srcURLs);
+    srcURLs.fromMimeData(e->mimeData());
     uploadItemPopupMenu(srcURLs);
 }
 
@@ -611,12 +607,12 @@ void CameraIconView::slotRightButtonClicked(const QPoint&)
     if (d->cameraUI->isBusy() || d->cameraUI->cameraUploadSupport())
         return;
 
-    QMimeSource *data = kapp->clipboard()->data(QClipboard::Clipboard);
-    if(!data || !Q3UriDrag::canDecode(data))
+    const QMimeData *data = kapp->clipboard()->mimeData(QClipboard::Clipboard);
+    if(!data || !KUrl::List::canDecode(data))
         return;
 
     KUrl::List srcURLs;
-    K3URLDrag::decode(data, srcURLs);
+    srcURLs.fromMimeData(data);
     uploadItemPopupMenu(srcURLs);
 }
 
@@ -743,7 +739,7 @@ void CameraIconView::itemsSelectionSizeInfo(unsigned long& fSize, unsigned long&
         {
             CameraIconViewItem* iconItem = static_cast<CameraIconViewItem*>(item);
             fSize += iconItem->itemInfo()->size;
-            
+
             if (iconItem->itemInfo()->mime == QString("image/jpeg"))
             {
                 if (d->cameraUI->convertLosslessJpegFiles())
@@ -767,7 +763,7 @@ void CameraIconView::itemsSelectionSizeInfo(unsigned long& fSize, unsigned long&
 
         }
     }
-    
+
     fSize /= 1024;
     dSize /= 1024;
 }

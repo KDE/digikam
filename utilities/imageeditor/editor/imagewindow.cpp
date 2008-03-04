@@ -71,7 +71,7 @@
 #include "ddebug.h"
 #include "dlogoaction.h"
 #include "dpopupmenu.h"
-#include "dragobjects.h"
+#include "ddragobjects.h"
 #include "canvas.h"
 #include "dimginterface.h"
 #include "themeengine.h"
@@ -1103,15 +1103,15 @@ void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
 
 void ImageWindow::dragMoveEvent(QDragMoveEvent *e)
 {
-    int             albumID;
-    Q3ValueList<int> albumIDs;
-    Q3ValueList<int> imageIDs;
-    KUrl::List      urls;
-    KUrl::List      kioURLs;        
+    int        albumID;
+    QList<int> albumIDs;
+    QList<int> imageIDs;
+    KUrl::List urls;
+    KUrl::List kioURLs;
 
-    if (ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs) ||
-        AlbumDrag::decode(e, urls, albumID) ||
-        TagDrag::canDecode(e))
+    if (DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs) ||
+        DAlbumDrag::decode(e->mimeData(), urls, albumID) ||
+        DTagDrag::canDecode(e->mimeData()))
     {
         e->accept();
         return;
@@ -1122,17 +1122,17 @@ void ImageWindow::dragMoveEvent(QDragMoveEvent *e)
 
 void ImageWindow::dropEvent(QDropEvent *e)
 {
-    int             albumID;
-    Q3ValueList<int> albumIDs;
-    Q3ValueList<int> imageIDs;
-    KUrl::List      urls;
-    KUrl::List      kioURLs;        
+    int        albumID;
+    QList<int> albumIDs;
+    QList<int> imageIDs;
+    KUrl::List urls;
+    KUrl::List kioURLs;
 
-    if (ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs))
+    if (DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs))
     {
         ImageInfoList imageInfoList;
 
-        for (Q3ValueList<int>::const_iterator it = imageIDs.begin();
+        for (QList<int>::const_iterator it = imageIDs.begin();
              it != imageIDs.end(); ++it)
         {
             ImageInfo info(*it);
@@ -1157,13 +1157,13 @@ void ImageWindow::dropEvent(QDropEvent *e)
                        i18n("Album \"%1\"",ATitle), true);
         e->accept();
     }
-    else if (AlbumDrag::decode(e, urls, albumID))
+    else if (DAlbumDrag::decode(e->mimeData(), urls, albumID))
     {
-        AlbumManager* man           = AlbumManager::instance();
-        Q3ValueList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInAlbum(albumID);
+        AlbumManager* man        = AlbumManager::instance();
+        QList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInAlbum(albumID);
         ImageInfoList imageInfoList;
 
-        for (Q3ValueList<qlonglong>::const_iterator it = itemIDs.begin();
+        for (QList<qlonglong>::const_iterator it = itemIDs.begin();
              it != itemIDs.end(); ++it)
         {
             ImageInfo info(*it);
@@ -1184,18 +1184,18 @@ void ImageWindow::dropEvent(QDropEvent *e)
                        i18n("Album \"%1\"",ATitle), true);
         e->accept();
     }
-    else if(TagDrag::canDecode(e))
+    else if(DTagDrag::canDecode(e->mimeData()))
     {
         QByteArray ba = e->encodedData("digikam/tag-id");
         QDataStream ds(&ba, QIODevice::ReadOnly);
         int tagID;
         ds >> tagID;
 
-        AlbumManager* man           = AlbumManager::instance();
-        Q3ValueList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInTag(tagID, true);
+        AlbumManager* man        = AlbumManager::instance();
+        QList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInTag(tagID, true);
         ImageInfoList imageInfoList;
 
-        for (Q3ValueList<qlonglong>::const_iterator it = itemIDs.begin();
+        for (QList<qlonglong>::const_iterator it = itemIDs.begin();
              it != itemIDs.end(); ++it)
         {
             ImageInfo info(*it);
@@ -1210,12 +1210,12 @@ void ImageWindow::dropEvent(QDropEvent *e)
 
         QString ATitle;
         TAlbum* talbum     = man->findTAlbum(tagID);
-        if (talbum) ATitle = talbum->title();  
+        if (talbum) ATitle = talbum->title();
 
         loadImageInfos(imageInfoList, imageInfoList.first(), 
                        i18n("Album \"%1\"",ATitle), true);
         e->accept();
-    }   
+    }
     else 
     {
         e->ignore();

@@ -26,6 +26,7 @@
 
 // Qt includes.
 
+#include <Q3Header>
 #include <Q3ListView>
 
 // Local includes.
@@ -36,7 +37,7 @@
 class Q3ListViewItem;
 class QDropEvent;
 class QMouseEvent;
-class Q3DragObject;
+class QDrag;
 
 namespace Digikam
 {
@@ -60,13 +61,13 @@ public:
     int     count();
 
 private:
-    
+
     void stateChange(bool val);
 
 private:
 
     int     m_count;
-    
+
     TAlbum *m_album;
 };
 
@@ -99,7 +100,7 @@ protected:
     bool acceptDrop(const QDropEvent *e) const;
     void contentsDropEvent(QDropEvent *e);
 
-    Q3DragObject* dragObject();
+    QDrag* makeDragObject();
     void startDrag();
     TAlbumCheckListItem* dragItem() const;
 

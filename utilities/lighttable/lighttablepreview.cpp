@@ -6,7 +6,7 @@
  * Date        : 2004-02-12
  * Description : digiKam light table preview item.
  *
- * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,8 +23,7 @@
 
 // Qt includes.
 
-#include <Q3ValueList>
-#include <Q3ValueVector>
+#include <QList>
 #include <QPainter>
 #include <QCursor>
 #include <QString>
@@ -58,7 +57,7 @@
 #include "constants.h"
 #include "albummanager.h"
 #include "albumsettings.h"
-#include "dragobjects.h"
+#include "ddragobjects.h"
 #include "dmetadata.h"
 #include "dpopupmenu.h"
 #include "metadatahub.h"
@@ -664,15 +663,15 @@ void LightTablePreview::contentsDragMoveEvent(QDragMoveEvent *e)
 {
     if (d->dragAndDropEnabled)
     {
-        int             albumID;
-        Q3ValueList<int> albumIDs;
-        Q3ValueList<int> imageIDs;
-        KUrl::List      urls;
-        KUrl::List      kioURLs;
+        int        albumID;
+        QList<int> albumIDs;
+        QList<int> imageIDs;
+        KUrl::List urls;
+        KUrl::List kioURLs;
 
-        if (ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs) ||
-            AlbumDrag::decode(e, urls, albumID) ||
-            TagDrag::canDecode(e))
+        if (DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs) ||
+            DAlbumDrag::decode(e->mimeData(), urls, albumID) ||
+            DTagDrag::canDecode(e->mimeData()))
         {
             e->accept();
             return;
@@ -686,16 +685,16 @@ void LightTablePreview::contentsDropEvent(QDropEvent *e)
 {
     if (d->dragAndDropEnabled)
     {
-        int             albumID;
-        Q3ValueList<int> albumIDs;
-        Q3ValueList<int> imageIDs;
-        KUrl::List      urls;
-        KUrl::List      kioURLs;  
-        ImageInfoList   list;
+        int           albumID;
+        QList<int>    albumIDs;
+        QList<int>    imageIDs;
+        KUrl::List    urls;
+        KUrl::List    kioURLs;
+        ImageInfoList list;
 
-        if (ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs))
+        if (DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs))
         {
-            for (Q3ValueList<int>::const_iterator it = imageIDs.begin();
+            for (QList<int>::const_iterator it = imageIDs.begin();
                  it != imageIDs.end(); ++it)
             {
                 list << ImageInfo(*it);
@@ -705,11 +704,11 @@ void LightTablePreview::contentsDropEvent(QDropEvent *e)
             e->accept();
             return;
         }
-        else if (AlbumDrag::decode(e, urls, albumID))
+        else if (DAlbumDrag::decode(e->mimeData(), urls, albumID))
         {
-            Q3ValueList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInAlbum(albumID);
+            QList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInAlbum(albumID);
 
-            for (Q3ValueList<qlonglong>::const_iterator it = itemIDs.begin();
+            for (QList<qlonglong>::const_iterator it = itemIDs.begin();
                 it != itemIDs.end(); ++it)
             {
                 list << ImageInfo(*it);
@@ -719,17 +718,17 @@ void LightTablePreview::contentsDropEvent(QDropEvent *e)
             e->accept();
             return;
         }
-        else if(TagDrag::canDecode(e))
+        else if(DTagDrag::canDecode(e->mimeData()))
         {
             QByteArray  ba = e->encodedData("digikam/tag-id");
             QDataStream ds(ba);
             int tagID;
             ds >> tagID;
 
-            Q3ValueList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInTag(tagID, true);
+            QList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInTag(tagID, true);
             ImageInfoList imageInfoList;
 
-            for (Q3ValueList<qlonglong>::const_iterator it = itemIDs.begin();
+            for (QList<qlonglong>::const_iterator it = itemIDs.begin();
                 it != itemIDs.end(); ++it)
             {
                 list << ImageInfo(*it);
