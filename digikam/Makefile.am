@@ -1,4 +1,4 @@
-METASOURCES = AUTO  
+METASOURCES = AUTO
 
 INCLUDES = -I$(top_srcdir)/digikam/libs/sqlite2 \
 	   -I$(top_srcdir)/digikam/libs/histogram \
@@ -29,7 +29,7 @@ INCLUDES = -I$(top_srcdir)/digikam/libs/sqlite2 \
 
 
 # -- shared digiKam library rules -----------------------------------------------
-       
+
 lib_LTLIBRARIES = libdigikam.la
 
 # NOTE from Gilles (30-11-06): kdateedit.cpp and metadatahub.cpp must be placed on the top 
@@ -55,7 +55,6 @@ libdigikam_la_SOURCES = kdateedit.cpp \
 	                albumsettings.cpp \
 	                albumthumbnailloader.cpp \
 	                albumwidgetstack.cpp \
-	                cameradragobject.cpp \
 	                cameralist.cpp \
 	                cameratype.cpp \
 	                datefolderview.cpp \
@@ -96,9 +95,9 @@ libdigikam_la_SOURCES = kdateedit.cpp \
 	                tagfilterview.cpp \
 	                tagfolderview.cpp \
 	                tagspopupmenu.cpp \
-                        timelinefolderview.cpp \
-                        timelineview.cpp \
-			timelinewidget.cpp \
+	                timelinefolderview.cpp \
+	                timelineview.cpp \
+	                timelinewidget.cpp \
 	                upgradedb_sqlite2tosqlite3.cpp \
 	                welcomepageview.cpp 
 
@@ -107,7 +106,7 @@ libdigikam_la_LIBADD = $(LIB_KIO) \
 	               $(LIB_KABC) \
 	               $(LIB_KHTML) \
 	               $(LIBKIPI_LIBS) \
-		       $(LIBKEXIV2_LIBS) \
+	               $(LIBKEXIV2_LIBS) \
 	               $(LIB_KUTILS) \
 	               $(top_builddir)/digikam/libs/sqlite2/libsqlite2.la \
 	               $(top_builddir)/digikam/libs/thumbbar/libthumbbar.la \

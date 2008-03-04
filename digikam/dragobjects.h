@@ -8,6 +8,7 @@
  * 
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2004-2005 by Joern Ahrens <joern.ahrens@kdemail.net>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -35,9 +36,11 @@
 
 #include <kurldrag.h>
 
-class QWidget;
+// Local includes.
 
-/** @file */
+#include "cameratype.h"
+
+class QWidget;
 
 namespace Digikam
 {
@@ -74,9 +77,9 @@ protected:
     virtual QByteArray encodedData(const char* mime) const;
 
 private:
-    
+
     KURL::List      m_kioURLs;
-    QValueList<int> m_albumIDs;    
+    QValueList<int> m_albumIDs;
     QValueList<int> m_imageIDs;
 };
 
@@ -93,12 +96,12 @@ public:
 
     TagDrag(int albumid, QWidget *dragSource = 0, const char *name = 0);
     static bool     canDecode(const QMimeSource* e);
-    
+
 protected:
 
     QByteArray      encodedData( const char* ) const;
     const char*     format(int i) const;
-    
+
 private:
     int     mAlbumID;
 };
@@ -121,7 +124,7 @@ protected:
 
     QByteArray      encodedData(const char*) const;
     const char*     format(int i) const;
-    
+
 private:
     int     mAlbumID;
 };
@@ -139,12 +142,12 @@ public:
     TagListDrag(const QValueList<int>& tagIDs, QWidget *dragSource = 0,
                 const char *name = 0);
     static bool canDecode(const QMimeSource* e);
-    
+
 protected:
 
     QByteArray  encodedData( const char* ) const;
     const char* format(int i) const;
-    
+
 private:
 
     QValueList<int> m_tagIDs;
@@ -163,15 +166,38 @@ public:
     CameraItemListDrag(const QStringList& cameraItemPaths, QWidget *dragSource = 0,
                        const char *name = 0);
     static bool canDecode(const QMimeSource* e);
-    
+
 protected:
 
     QByteArray  encodedData( const char* ) const;
     const char* format(int i) const;
-    
+
 private:
 
     QStringList m_cameraItemPaths;
+};
+
+/**
+ * Provides a drag object for a camera object
+ *
+ * When a camera object is moved through drag'n'drop an object of this class
+ * is created.
+ */
+class CameraDragObject : public QStoredDrag
+{
+
+public:
+
+    CameraDragObject(const CameraType& ctype, QWidget* dragSource=0);
+    ~CameraDragObject();
+
+    static bool canDecode(const QMimeSource* e);
+    static bool decode(const QMimeSource* e, CameraType& ctype);
+
+private:
+
+    void setCameraType(const CameraType& ctype);
+
 };
 
 }  // namespace Digikam
