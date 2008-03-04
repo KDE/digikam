@@ -163,6 +163,12 @@ protected:
 
 // ------------------------------------------------------------------------
 
+/**
+ * Provides a drag object for a camera object
+ *
+ * When a camera object is moved through drag'n'drop an object of this class
+ * is created.
+ */
 class DCameraDragObject : public QMimeData
 {
 
