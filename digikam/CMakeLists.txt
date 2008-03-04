@@ -167,7 +167,6 @@ SET(digikam_bin_SRCS
                      albumsettings.cpp 
                      albumthumbnailloader.cpp 
                      albumwidgetstack.cpp 
-                     cameradragobject.cpp 
                      cameralist.cpp 
                      cameratype.cpp 
                      datefolderview.cpp 
