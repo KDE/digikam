@@ -73,15 +73,9 @@ public slots:
 
 protected:
 
-    QDragObject* dragObject();
-    TagFilterViewItem* dragItem() const;
-
     bool acceptDrop(const QDropEvent *e) const;
     void contentsDropEvent(QDropEvent *e);
-
-    void contentsMousePressEvent(QMouseEvent *e);
-    void contentsMouseReleaseEvent(QMouseEvent *e);
-    void contentsMouseMoveEvent(QMouseEvent *e);
+    QDragObject* dragObject();
 
 private slots:
 

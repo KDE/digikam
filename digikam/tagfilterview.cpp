@@ -254,7 +254,6 @@ public:
 
     TagFilterViewPrivate()
     {
-        dragItem       = 0;
         ABCMenu        = 0;
         timer          = 0;
         toggleAutoTags = TagFilterView::NoToggleAuto;
@@ -263,17 +262,12 @@ public:
 
     QTimer                         *timer;
 
-    QPoint                          dragStartPos;
-
     QPopupMenu                     *ABCMenu;
 
     TagFilterView::ToggleAutoTags   toggleAutoTags;
 
     AlbumLister::MatchingCondition  matchingCond;
-
-    TagFilterViewItem              *dragItem;
 };
-
 
 TagFilterView::TagFilterView(QWidget* parent)
              : FolderView(parent)
@@ -457,67 +451,6 @@ void TagFilterView::triggerChange()
     d->timer->start(50, true);
 }
 
-void TagFilterView::contentsMouseMoveEvent(QMouseEvent *e)
-{
-    QListView::contentsMouseMoveEvent(e);
-
-    if(e->state() == NoButton)
-    {
-        if(KGlobalSettings::changeCursorOverIcon())
-        {
-            QPoint vp = contentsToViewport(e->pos());
-            QListViewItem *item = itemAt(vp);
-            if (mouseInItemRect(item, vp.x()))
-                setCursor(KCursor::handCursor());
-            else
-                unsetCursor();
-        }
-        return;
-    }
-
-    if(d->dragItem && 
-       (d->dragStartPos - e->pos()).manhattanLength() > QApplication::startDragDistance())
-    {
-        QPoint vp = contentsToViewport(e->pos());
-        TagFilterViewItem *item = dynamic_cast<TagFilterViewItem*>(itemAt(vp));
-        if(!item)
-        {
-            d->dragItem = 0;
-            return;
-        }
-    }
-}
-
-void TagFilterView::contentsMousePressEvent(QMouseEvent *e)
-{
-    QPoint vp = contentsToViewport(e->pos());
-    TagFilterViewItem *item = dynamic_cast<TagFilterViewItem*>(itemAt(vp));
-
-    if(item && e->button() == RightButton) 
-    {
-        bool isOn = item->isOn();
-        QListView::contentsMousePressEvent(e);
-        // Restore the status of checkbox. 
-        item->setOn(isOn);
-        return;
-    }
-
-    QListView::contentsMousePressEvent(e);
-
-    if(item && e->button() == LeftButton) 
-    {
-        d->dragStartPos = e->pos();
-        d->dragItem     = item;
-    }
-}
-
-void TagFilterView::contentsMouseReleaseEvent(QMouseEvent *e)
-{
-    QListView::contentsMouseReleaseEvent(e);
-
-    d->dragItem = 0;
-}
-
 QDragObject* TagFilterView::dragObject()
 {
     TagFilterViewItem *item = dynamic_cast<TagFilterViewItem*>(dragItem());
@@ -528,11 +461,6 @@ QDragObject* TagFilterView::dragObject()
     t->setPixmap(*item->pixmap(0));
 
     return t;
-}
-
-TagFilterViewItem* TagFilterView::dragItem() const
-{
-    return d->dragItem;
 }
 
 bool TagFilterView::acceptDrop(const QDropEvent *e) const

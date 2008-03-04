@@ -7,7 +7,8 @@
  * Description : implementation of item folder 
  * 
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
-
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -43,14 +44,14 @@ FolderItem::FolderItem(QListView* parent, const QString& text, bool special)
           : QListViewItem(parent, text)
 {
     m_special = special;
-    m_focus = false;
+    m_focus   = false;
 }
 
 FolderItem::FolderItem(QListViewItem* parent, const QString& text, bool special)
           : QListViewItem(parent, text)
 {
     m_special = special;
-    m_focus = false;    
+    m_focus   = false;
 }
 
 FolderItem::~FolderItem()
@@ -67,8 +68,7 @@ bool FolderItem::focus() const
     return m_focus;
 }
 
-void FolderItem::paintCell(QPainter* p, const QColorGroup & cg, int column,
-                           int width, int align)
+void FolderItem::paintCell(QPainter* p, const QColorGroup& cg, int column, int width, int)
 {
     FolderView *fv = dynamic_cast<FolderView*>(listView());
     if (!fv)
@@ -76,10 +76,9 @@ void FolderItem::paintCell(QPainter* p, const QColorGroup & cg, int column,
 
     QFontMetrics fm(p->fontMetrics());
 
-    QString t = text(column);
-
-    int margin = fv->itemMargin();
-    int r      = margin;
+    QString t           = text(column);
+    int margin          = fv->itemMargin();
+    int r               = margin;
     const QPixmap* icon = pixmap(column);
 
     if (isSelected())
@@ -110,18 +109,17 @@ void FolderItem::paintCell(QPainter* p, const QColorGroup & cg, int column,
         p->setFont(f);
 
         p->setPen(isSelected() ? cg.color(QColorGroup::LinkVisited) :
-                  cg.color(QColorGroup::Link));        
+                  cg.color(QColorGroup::Link));
     }
 
     QRect br;
-    p->drawText(r, 0, width-margin-r, height(), Qt::AlignLeft|Qt::AlignVCenter,
-                t, -1, &br);
+    p->drawText(r, 0, width-margin-r, height(), Qt::AlignLeft|Qt::AlignVCenter, t, -1, &br);
 
     if (m_special)
     {
         p->drawLine(br.right() + 2, height()/2, fv->width(), height()/2);
     }
-    
+
     if (m_focus)
     {
         p->setPen(cg.link());
@@ -153,31 +151,41 @@ FolderCheckListItem::FolderCheckListItem(QListView* parent, const QString& text,
                                          QCheckListItem::Type tt)
                    : QCheckListItem(parent, text, tt)
 {
+    m_focus = false;
 }
 
 FolderCheckListItem::FolderCheckListItem(QListViewItem* parent, const QString& text,
                                          QCheckListItem::Type tt)
                    : QCheckListItem(parent, text, tt)
 {
+    m_focus = false;
 }
 
 FolderCheckListItem::~FolderCheckListItem()
 {
 }
 
-void FolderCheckListItem::paintCell(QPainter* p, const QColorGroup & cg,
-                                    int column, int width, int)
+void FolderCheckListItem::setFocus(bool b)
+{
+    m_focus = b;
+}
+
+bool FolderCheckListItem::focus() const
+{
+    return m_focus;
+}
+
+void FolderCheckListItem::paintCell(QPainter* p, const QColorGroup& cg, int column, int width, int)
 {
     FolderView *fv = dynamic_cast<FolderView*>(listView());
     if (!fv)
         return;
-    
+
     QFontMetrics fm(p->fontMetrics());
 
-    QString t = text(column);
-
-    int margin = fv->itemMargin();
-    int r      = margin;
+    QString t           = text(column);
+    int margin          = fv->itemMargin();
+    int r               = margin;
     const QPixmap* icon = pixmap(column);
 
     int styleflags = QStyle::Style_Default;
@@ -204,17 +212,17 @@ void FolderCheckListItem::paintCell(QPainter* p, const QColorGroup & cg,
         (type() == QCheckListItem::CheckBoxController))
     {
         int boxsize = fv->style().pixelMetric(QStyle::PM_CheckListButtonSize, fv); 
-        int x = 3;
-        int y = (height() - boxsize)/2 + margin;
+        int x       = 3;
+        int y       = (height() - boxsize)/2 + margin;
         r += boxsize + 4;
 
         p->fillRect(0, 0, r, height(), cg.base());
-        
+
         fv->style().drawPrimitive(QStyle::PE_CheckListIndicator, p,
                                   QRect(x, y, boxsize, height()),
                                   cg, styleflags, QStyleOption(this));
     }
-    
+
     if (isSelected())
     {
         p->drawPixmap(r, 0, fv->itemBasePixmapSelected());
@@ -225,7 +233,7 @@ void FolderCheckListItem::paintCell(QPainter* p, const QColorGroup & cg,
         p->drawPixmap(r, 0, fv->itemBasePixmapRegular());
         p->setPen(cg.text());
     }
-    
+
     if (icon)
     {
         int xo = r;
@@ -237,6 +245,13 @@ void FolderCheckListItem::paintCell(QPainter* p, const QColorGroup & cg,
     }
 
     p->drawText(r, 0, width-margin-r, height(), Qt::AlignLeft|Qt::AlignVCenter, t);
+
+    if (m_focus)
+    {
+        p->setPen(cg.link());
+        QRect r = fv->itemRect(this);
+        p->drawRect(0, 0, r.width(), r.height());
+    }
 }
 
 void FolderCheckListItem::setup()
