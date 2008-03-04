@@ -55,7 +55,6 @@
 #include "dpopupmenu.h"
 #include "dragobjects.h"
 #include "cameraui.h"
-#include "cameradragobject.h"
 #include "cameraiconitem.h"
 #include "cameraiconview.h"
 #include "cameraiconview.moc"

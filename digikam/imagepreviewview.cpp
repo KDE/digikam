@@ -6,7 +6,7 @@
  * Date        : 2006-21-12
  * Description : a embedded view to show the image preview widget.
  * 
- * Copyright (C) 2006-2007 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -60,7 +60,6 @@
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "albumwidgetstack.h"
-#include "fastscale.h"
 #include "imageinfo.h"
 #include "dmetadata.h"
 #include "dpopupmenu.h"
@@ -124,7 +123,7 @@ public:
 
     AlbumWidgetStack  *parent;
 };
-    
+
 ImagePreviewView::ImagePreviewView(AlbumWidgetStack *parent)
                 : PreviewWidget(parent)
 {
@@ -364,7 +363,7 @@ void ImagePreviewView::slotContextMenu()
     if (!d->hasNext) popmenu.setItemEnabled(11, false);
 
     popmenu.insertItem(SmallIcon("folder_image"), i18n("Back to Album"), 15);
-    
+
     //-- Edit actions -----------------------------------------------
 
     popmenu.insertSeparator();
@@ -377,7 +376,7 @@ void ImagePreviewView::slotContextMenu()
 
     KIPI::PluginLoader* kipiPluginLoader      = KIPI::PluginLoader::instance();
     KIPI::PluginLoader::PluginList pluginList = kipiPluginLoader->pluginList();
-    
+
     for (KIPI::PluginLoader::PluginList::const_iterator it = pluginList.begin();
         it != pluginList.end(); ++it)
     {
@@ -388,12 +387,12 @@ void ImagePreviewView::slotContextMenu()
             DDebug() << "Found JPEGLossless plugin" << endl;
 
             KActionPtrList actionList = plugin->actions();
-            
+
             for (KActionPtrList::const_iterator iter = actionList.begin();
                 iter != actionList.end(); ++iter)
             {
                 KAction* action = *iter;
-                
+
                 if (QString::fromLatin1(action->name())
                     == QString::fromLatin1("jpeglossless_rotate"))
                 {
@@ -437,7 +436,7 @@ void ImagePreviewView::slotContextMenu()
     // Assign Star Rating -------------------------------------------
 
     ratingMenu = new RatingPopupMenu();
-    
+
     connect(ratingMenu, SIGNAL(activated(int)),
             this, SLOT(slotAssignRating(int)));
 
@@ -551,7 +550,7 @@ void ImagePreviewView::slotThemeChanged()
 }
 
 void ImagePreviewView::slotCornerButtonPressed()
-{    
+{
     if (d->panIconPopup)
     {
         d->panIconPopup->hide();
@@ -571,10 +570,10 @@ void ImagePreviewView::slotCornerButtonPressed()
 
     connect(pan, SIGNAL(signalSelectionMoved(QRect, bool)),
             this, SLOT(slotPanIconSelectionMoved(QRect, bool)));
-    
+
     connect(pan, SIGNAL(signalHiden()),
             this, SLOT(slotPanIconHiden()));
-    
+
     QPoint g = mapToGlobal(viewport()->pos());
     g.setX(g.x()+ viewport()->size().width());
     g.setY(g.y()+ viewport()->size().height());
@@ -611,7 +610,7 @@ void ImagePreviewView::zoomFactorChanged(double zoom)
     if (horizontalScrollBar()->isVisible() || verticalScrollBar()->isVisible())
         d->cornerButton->show();
     else
-        d->cornerButton->hide();        
+        d->cornerButton->hide();
 
     PreviewWidget::zoomFactorChanged(zoom);
 }
@@ -675,7 +674,7 @@ void ImagePreviewView::resetPreview()
 
 void ImagePreviewView::paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh)
 {
-    DImg img     = d->preview.smoothScaleSection(sx, sy, sw, sh, tileSize(), tileSize());    
+    DImg img     = d->preview.smoothScaleSection(sx, sy, sw, sh, tileSize(), tileSize());
     QPixmap pix2 = img.convertToPixmap();
     bitBlt(pix, 0, 0, &pix2, 0, 0);
 }

@@ -7,7 +7,7 @@
  * Description : Multithreaded loader for previews
  *
  * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,9 +22,9 @@
  *
  * ============================================================ */
 
-// C includes
+// C++ includes
 
-#include <math.h>
+#include <cmath>
 
 // Qt includes
 
@@ -42,7 +42,6 @@
 #include "ddebug.h"
 #include "dmetadata.h"
 #include "jpegutils.h"
-#include "fastscale.h"
 #include "previewloadthread.h"
 #include "previewtask.h"
 
@@ -192,11 +191,7 @@ void PreviewLoadingTask::execute()
     if (needToScale(scaledSize, size))
     {
         scaledSize.scale(size, size, QSize::ScaleMin);
-        //qimage = FastScale::fastScaleQImage(qimage, scaledSize.width(), scaledSize.height());
-        //qimage = qimage.smoothScale(scaledSize);
-        //TODO
         img = img.smoothScale(scaledSize.width(), scaledSize.height());
-        //img = img.fastScale(scaledSize.width(), scaledSize.height());
     }
 
     // Scale if hinted, Store previews rotated in the cache (?)
@@ -261,4 +256,3 @@ bool PreviewLoadingTask::loadImagePreview(QImage& image, const QString& path)
 }
 
 } // namespace Digikam
-
