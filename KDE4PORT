@@ -163,7 +163,6 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
     albumsettings.cpp                   Gilles                 X       DONE
     albumthumbnailloader.cpp            Gilles                 X       DONE
     albumwidgetstack.cpp                Gilles                 X       DONE
-    cameradragobject.cpp                Gilles                 X       DONE
     cameralist.cpp                      Laurent                X       DONE
     cameratype.cpp                      Gilles                 X       DONE
     datefolderview.cpp                  Laurent                X       DONE
@@ -171,7 +170,7 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
     digikamfirstrun.cpp                 Laurent                X       DONE
     digikamview.cpp                     Gilles                 X       DONE
     dio.cpp                             Laurent                X       DONE
-    dragobjects.cpp                     Gilles                 X       DONE
+    ddragobjects.cpp                    Gilles                 X       DONE
     firstrun.cpp                        Gilles                 X       DONE
     folderitem.cpp                      Gilles                 X       DONE
     folderview.cpp                      Gilles                 X       DONE
