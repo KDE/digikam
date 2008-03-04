@@ -63,7 +63,6 @@
 #include "albumsettings.h"
 #include "thumbnailjob.h"
 #include "thumbnailsize.h"
-#include "albumpropsedit.h"
 #include "folderitem.h"
 #include "cameraui.h"
 #include "dio.h"
