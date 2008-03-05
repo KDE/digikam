@@ -352,20 +352,6 @@ void FolderView::slotThemeChanged()
     d->itemRegPix = ThemeEngine::instance()->listRegPixmap(w, h);
     d->itemSelPix = ThemeEngine::instance()->listSelPixmap(w, h);
 
-    QPalette plt(palette());
-
-    QColorGroup cg(plt.active());
-    cg.setColor(QColorGroup::Base, ThemeEngine::instance()->baseColor());
-    cg.setColor(QColorGroup::Text, ThemeEngine::instance()->textRegColor());
-    cg.setColor(QColorGroup::HighlightedText, ThemeEngine::instance()->textSelColor());
-    cg.setColor(QColorGroup::Link, ThemeEngine::instance()->textSpecialRegColor());
-    cg.setColor(QColorGroup::LinkVisited, ThemeEngine::instance()->textSpecialSelColor());
-
-    plt.setActive(cg);
-    plt.setInactive(cg);
-    plt.setDisabled(cg);
-    setPalette(plt);
-
     viewport()->update();
 }
 

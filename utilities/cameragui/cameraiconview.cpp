@@ -7,7 +7,7 @@
  * Description : camera icon view
  * 
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -691,17 +691,7 @@ void CameraIconView::updateItemRectsPixmap()
 
 void CameraIconView::slotThemeChanged()
 {
-    QPalette plt(palette());
-    QColorGroup cg(plt.active());
-    cg.setColor(QColorGroup::Base, ThemeEngine::instance()->baseColor());
-    cg.setColor(QColorGroup::Text, ThemeEngine::instance()->textRegColor());
-    cg.setColor(QColorGroup::HighlightedText, ThemeEngine::instance()->textSelColor());
-    plt.setActive(cg);
-    plt.setInactive(cg);
-    setPalette(plt);
-
     updateItemRectsPixmap();
-
     viewport()->update();
 }
 

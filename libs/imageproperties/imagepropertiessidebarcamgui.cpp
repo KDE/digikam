@@ -7,7 +7,7 @@
  * Description : simple image properties side bar used by 
  *               camera gui.
  *
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,7 +39,6 @@
 
 #include "ddebug.h"
 #include "dmetadata.h"
-#include "themeengine.h"
 #include "gpiteminfo.h"
 #include "cameraiconview.h"
 #include "cameraiconitem.h"
@@ -78,13 +77,13 @@ public:
     KURL                        currentURL;
 
     GPItemInfo                 *itemInfo;
-    
+
     ImagePropertiesMetaDataTab *metadataTab;
-    
+
     CameraIconView             *cameraView;
 
     CameraIconViewItem         *cameraItem;
-    
+
     CameraItemPropertiesTab    *cameraItemTab;
 };
 
@@ -96,13 +95,11 @@ ImagePropertiesSideBarCamGui::ImagePropertiesSideBarCamGui(QWidget *parent, cons
     d = new ImagePropertiesSideBarCamGuiPriv;
     d->cameraItemTab = new CameraItemPropertiesTab(parent, true);
     d->metadataTab   = new ImagePropertiesMetaDataTab(parent, true);
-    
+
     setSplitter(splitter);
-         
+
     appendTab(d->cameraItemTab, SmallIcon("info"), i18n("Properties"));
     appendTab(d->metadataTab, SmallIcon("exifinfo"), i18n("Metadata"));
-
-    slotThemeChanged();
 
     // ----------------------------------------------------------
 
@@ -111,9 +108,6 @@ ImagePropertiesSideBarCamGui::ImagePropertiesSideBarCamGui(QWidget *parent, cons
 
     connect(this, SIGNAL(signalChangedTab(QWidget*)),
             this, SLOT(slotChangedTab(QWidget*)));
-
-    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
-            this, SLOT(slotThemeChanged()));
 }
 
 ImagePropertiesSideBarCamGui::~ImagePropertiesSideBarCamGui()
@@ -212,13 +206,4 @@ void ImagePropertiesSideBarCamGui::slotChangedTab(QWidget* tab)
     unsetCursor();
 }
 
-void ImagePropertiesSideBarCamGui::slotThemeChanged()
-{
-    QColor backgroundColor(ThemeEngine::instance()->baseColor());
-    QColor foregroundColor(ThemeEngine::instance()->textRegColor());
-    d->cameraItemTab->colorChanged(backgroundColor, foregroundColor);
-}
-
 }  // NameSpace Digikam
-
-

@@ -7,7 +7,7 @@
  * Description : main digiKam theme designer window
  * 
  * Copyright (C) 2005 by Renchi Raju <renchi at pooh.tam.uiuc.edu>
- * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -75,9 +75,6 @@ MainWindow::MainWindow()
 
     ThemeEngine::instance()->scanThemes();
     m_theme = new Theme(*(ThemeEngine::instance()->getCurrentTheme()));
-
-    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
-            this, SLOT(slotThemeChanged()));
 
     // Actual views ------------------------------------------------
 
@@ -159,7 +156,7 @@ MainWindow::MainWindow()
     m_gradientCombo->insertItem( "Solid",      SOLID);
     m_gradientCombo->insertItem( "Horizontal", HORIZONTAL);
     m_gradientCombo->insertItem( "Vertical",   VERTICAL );
-    m_gradientCombo->insertItem( "Diagonal",   DIAGONAL );    
+    m_gradientCombo->insertItem( "Diagonal",   DIAGONAL );
 
     m_bevelMap[FLAT]   = Theme::FLAT;
     m_bevelMap[RAISED] = Theme::RAISED;
@@ -218,7 +215,7 @@ MainWindow::MainWindow()
     QPushButton* closeButton = new QPushButton( this );
     closeButton->setText( "&Close" );
     buttonLayout->addWidget( closeButton );
-    
+
     layout->addMultiCellLayout(buttonLayout, 1, 1, 0, 1);
 
     connect(loadButton, SIGNAL(clicked()),
@@ -245,7 +242,7 @@ MainWindow::MainWindow()
             m_folderView->setSelected(folderItem, true);
         }
     }
-    
+
     // ------------------------------------------------------------------------
 
     slotPropertyChanged();
@@ -301,7 +298,7 @@ void MainWindow::slotPropertyChanged()
     m_endColorBtn->blockSignals(true);
     m_addBorderCheck->blockSignals(true);
     m_borderColorBtn->blockSignals(true);
-    
+
     m_bevelCombo->setEnabled(false);
     m_bevelLabel->setEnabled(false);
     m_gradientCombo->setEnabled(false);
@@ -367,13 +364,13 @@ void MainWindow::slotPropertyChanged()
 
         m_bevelCombo->setCurrentItem(m_bevelReverseMap[m_theme->bannerBevel]);
         m_gradientCombo->setCurrentItem(m_gradientReverseMap[m_theme->bannerGrad]);
-        
+
         m_begColorBtn->setColor(m_theme->bannerColor);
         m_endColorBtn->setColor(m_theme->bannerColorTo);
 
         m_addBorderCheck->setChecked(m_theme->bannerBorder);
         m_borderColorBtn->setColor(m_theme->bannerBorderColor);
-        
+
         break;
     }
     case(THUMBNAILREGULAR):
@@ -392,7 +389,7 @@ void MainWindow::slotPropertyChanged()
 
         m_bevelCombo->setCurrentItem(m_bevelReverseMap[m_theme->thumbRegBevel]);
         m_gradientCombo->setCurrentItem(m_gradientReverseMap[m_theme->thumbRegGrad]);
-        
+
         m_begColorBtn->setColor(m_theme->thumbRegColor);
         m_endColorBtn->setColor(m_theme->thumbRegColorTo);
 
@@ -417,7 +414,7 @@ void MainWindow::slotPropertyChanged()
 
         m_bevelCombo->setCurrentItem(m_bevelReverseMap[m_theme->thumbSelBevel]);
         m_gradientCombo->setCurrentItem(m_gradientReverseMap[m_theme->thumbSelGrad]);
-        
+
         m_begColorBtn->setColor(m_theme->thumbSelColor);
         m_endColorBtn->setColor(m_theme->thumbSelColorTo);
 
@@ -442,7 +439,7 @@ void MainWindow::slotPropertyChanged()
 
         m_bevelCombo->setCurrentItem(m_bevelReverseMap[m_theme->listRegBevel]);
         m_gradientCombo->setCurrentItem(m_gradientReverseMap[m_theme->listRegGrad]);
-        
+
         m_begColorBtn->setColor(m_theme->listRegColor);
         m_endColorBtn->setColor(m_theme->listRegColorTo);
 
@@ -519,65 +516,65 @@ void MainWindow::slotUpdateTheme()
         {
             m_theme->bannerBevel = (Theme::Bevel) m_bevelMap[m_bevelCombo->currentItem()];
             m_theme->bannerGrad  = (Theme::Gradient) m_gradientMap[m_gradientCombo->currentItem()];
-    
+
             m_theme->bannerColor   = m_begColorBtn->color();
             m_theme->bannerColorTo = m_endColorBtn->color();
-    
+
             m_theme->bannerBorder  = m_addBorderCheck->isChecked();
             m_theme->bannerBorderColor = m_borderColorBtn->color();
-    
+
             break;
         }
         case(THUMBNAILREGULAR):
         {
             m_theme->thumbRegBevel = (Theme::Bevel) m_bevelMap[m_bevelCombo->currentItem()];
             m_theme->thumbRegGrad  = (Theme::Gradient) m_gradientMap[m_gradientCombo->currentItem()];
-    
+
             m_theme->thumbRegColor   = m_begColorBtn->color();
             m_theme->thumbRegColorTo = m_endColorBtn->color();
-    
+
             m_theme->thumbRegBorder  = m_addBorderCheck->isChecked();
             m_theme->thumbRegBorderColor = m_borderColorBtn->color();
-    
+
             break;
         }
         case(THUMBNAILSELECTED):
         {
             m_theme->thumbSelBevel = (Theme::Bevel) m_bevelMap[m_bevelCombo->currentItem()];
             m_theme->thumbSelGrad  = (Theme::Gradient) m_gradientMap[m_gradientCombo->currentItem()];
-    
+
             m_theme->thumbSelColor   = m_begColorBtn->color();
             m_theme->thumbSelColorTo = m_endColorBtn->color();
-    
+
             m_theme->thumbSelBorder  = m_addBorderCheck->isChecked();
             m_theme->thumbSelBorderColor = m_borderColorBtn->color();
-    
+
             break;
         }
         case(LISTVIEWREGULAR):
         {
             m_theme->listRegBevel = (Theme::Bevel) m_bevelMap[m_bevelCombo->currentItem()];
             m_theme->listRegGrad  = (Theme::Gradient) m_gradientMap[m_gradientCombo->currentItem()];
-    
+
             m_theme->listRegColor   = m_begColorBtn->color();
             m_theme->listRegColorTo = m_endColorBtn->color();
-    
+
             m_theme->listRegBorder  = m_addBorderCheck->isChecked();
             m_theme->listRegBorderColor = m_borderColorBtn->color();
-    
+
             break;
         }
         case(LISTVIEWSELECTED):
         {
             m_theme->listSelBevel = (Theme::Bevel) m_bevelMap[m_bevelCombo->currentItem()];
             m_theme->listSelGrad  = (Theme::Gradient) m_gradientMap[m_gradientCombo->currentItem()];
-    
+
             m_theme->listSelColor   = m_begColorBtn->color();
             m_theme->listSelColorTo = m_endColorBtn->color();
-    
+
             m_theme->listSelBorder  = m_addBorderCheck->isChecked();
             m_theme->listSelBorderColor = m_borderColorBtn->color();
-    
+
             break;
         }
     };
@@ -585,12 +582,4 @@ void MainWindow::slotUpdateTheme()
     ThemeEngine::instance()->setCurrentTheme(*m_theme, "Digikam ThemeEditor Theme");
 }
 
-void MainWindow::slotThemeChanged()
-{
-    QColor backgroundColor(ThemeEngine::instance()->baseColor());
-    QColor foregroundColor(ThemeEngine::instance()->textRegColor());
-    m_propView->colorChanged(backgroundColor, foregroundColor);
-}
-
 }  // NameSpace Digikam
-

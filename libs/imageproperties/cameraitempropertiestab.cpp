@@ -6,7 +6,7 @@
  * Date        : 2006-02-08
  * Description : A tab to display camera item information
  *
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -164,7 +164,7 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent, bool navBar)
     d->settingsArea = new QFrame(this);
     d->settingsArea->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
     d->settingsArea->setLineWidth( style().pixelMetric(QStyle::PM_DefaultFrameWidth, this) );
-    
+
     QGridLayout *settingsLayout = new QGridLayout(d->settingsArea, 27, 1, KDialog::spacingHint(), 0);
 
     // --------------------------------------------------
@@ -546,102 +546,4 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
     d->labelPhotoWhiteBalance->setText(photoInfo.whiteBalance.isEmpty() ? unavailable : photoInfo.whiteBalance);
 }
 
-void CameraItemPropertiesTab::colorChanged(const QColor& back, const QColor& fore)
-{
-    d->settingsArea->setPaletteBackgroundColor(back);
-
-    d->title->setPaletteBackgroundColor(back);
-    d->file->setPaletteBackgroundColor(back);
-    d->folder->setPaletteBackgroundColor(back);
-    d->date->setPaletteBackgroundColor(back);
-    d->size->setPaletteBackgroundColor(back);
-    d->isReadable->setPaletteBackgroundColor(back);
-    d->isWritable->setPaletteBackgroundColor(back);
-    d->mime->setPaletteBackgroundColor(back);
-    d->dimensions->setPaletteBackgroundColor(back);
-    d->newFileName->setPaletteBackgroundColor(back);
-    d->downloaded->setPaletteBackgroundColor(back);
-
-    d->title2->setPaletteBackgroundColor(back);
-    d->make->setPaletteBackgroundColor(back);
-    d->model->setPaletteBackgroundColor(back);
-    d->photoDate->setPaletteBackgroundColor(back);
-    d->aperture->setPaletteBackgroundColor(back);
-    d->focalLength->setPaletteBackgroundColor(back);
-    d->exposureTime->setPaletteBackgroundColor(back);
-    d->sensitivity->setPaletteBackgroundColor(back);
-    d->exposureMode->setPaletteBackgroundColor(back);
-    d->flash->setPaletteBackgroundColor(back);
-    d->whiteBalance->setPaletteBackgroundColor(back);
-
-    d->labelFile->setPaletteBackgroundColor(back);
-    d->labelFolder->setPaletteBackgroundColor(back);
-    d->labelFileIsReadable->setPaletteBackgroundColor(back);
-    d->labelFileIsWritable->setPaletteBackgroundColor(back);
-    d->labelFileDate->setPaletteBackgroundColor(back);
-    d->labelFileSize->setPaletteBackgroundColor(back);
-    d->labelImageMime->setPaletteBackgroundColor(back);
-    d->labelImageDimensions->setPaletteBackgroundColor(back);
-    d->labelNewFileName->setPaletteBackgroundColor(back);
-    d->labelAlreadyDownloaded->setPaletteBackgroundColor(back);
-
-    d->labelPhotoMake->setPaletteBackgroundColor(back);
-    d->labelPhotoModel->setPaletteBackgroundColor(back);
-    d->labelPhotoDateTime->setPaletteBackgroundColor(back);
-    d->labelPhotoAperture->setPaletteBackgroundColor(back);
-    d->labelPhotoFocalLenght->setPaletteBackgroundColor(back);
-    d->labelPhotoExposureTime->setPaletteBackgroundColor(back);
-    d->labelPhotoSensitivity->setPaletteBackgroundColor(back);
-    d->labelPhotoExposureMode->setPaletteBackgroundColor(back);
-    d->labelPhotoFlash->setPaletteBackgroundColor(back);
-    d->labelPhotoWhiteBalance->setPaletteBackgroundColor(back);
-
-    d->title->setPaletteForegroundColor(fore);
-    d->file->setPaletteForegroundColor(fore);
-    d->folder->setPaletteForegroundColor(fore);
-    d->date->setPaletteForegroundColor(fore);
-    d->size->setPaletteForegroundColor(fore);
-    d->isReadable->setPaletteForegroundColor(fore);
-    d->isWritable->setPaletteForegroundColor(fore);
-    d->mime->setPaletteForegroundColor(fore);
-    d->dimensions->setPaletteForegroundColor(fore);
-    d->newFileName->setPaletteForegroundColor(fore);
-    d->downloaded->setPaletteForegroundColor(fore);
-
-    d->title2->setPaletteForegroundColor(fore);
-    d->make->setPaletteForegroundColor(fore);
-    d->model->setPaletteForegroundColor(fore);
-    d->photoDate->setPaletteForegroundColor(fore);
-    d->aperture->setPaletteForegroundColor(fore);
-    d->focalLength->setPaletteForegroundColor(fore);
-    d->exposureTime->setPaletteForegroundColor(fore);
-    d->sensitivity->setPaletteForegroundColor(fore);
-    d->exposureMode->setPaletteForegroundColor(fore);
-    d->flash->setPaletteForegroundColor(fore);
-    d->whiteBalance->setPaletteForegroundColor(fore);
-
-    d->labelFile->setPaletteForegroundColor(fore);
-    d->labelFolder->setPaletteForegroundColor(fore);
-    d->labelFileIsReadable->setPaletteForegroundColor(fore);
-    d->labelFileIsWritable->setPaletteForegroundColor(fore);
-    d->labelFileDate->setPaletteForegroundColor(fore);
-    d->labelFileSize->setPaletteForegroundColor(fore);
-    d->labelImageMime->setPaletteForegroundColor(fore);
-    d->labelImageDimensions->setPaletteForegroundColor(fore);
-    d->labelNewFileName->setPaletteForegroundColor(fore);
-    d->labelAlreadyDownloaded->setPaletteForegroundColor(fore);
-
-    d->labelPhotoMake->setPaletteForegroundColor(fore);
-    d->labelPhotoModel->setPaletteForegroundColor(fore);
-    d->labelPhotoDateTime->setPaletteForegroundColor(fore);
-    d->labelPhotoAperture->setPaletteForegroundColor(fore);
-    d->labelPhotoFocalLenght->setPaletteForegroundColor(fore);
-    d->labelPhotoExposureTime->setPaletteForegroundColor(fore);
-    d->labelPhotoSensitivity->setPaletteForegroundColor(fore);
-    d->labelPhotoExposureMode->setPaletteForegroundColor(fore);
-    d->labelPhotoFlash->setPaletteForegroundColor(fore);
-    d->labelPhotoWhiteBalance->setPaletteForegroundColor(fore);
-}
-
 }  // NameSpace Digikam
-

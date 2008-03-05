@@ -7,7 +7,7 @@
  * Description : image properties side bar using data from 
  *               digiKam database.
  *
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -42,7 +42,6 @@
 
 #include "ddebug.h"
 #include "dimg.h"
-#include "themeengine.h"
 #include "imageinfo.h"
 #include "imagedescedittab.h"
 #include "imageattributeswatch.h"
@@ -91,15 +90,10 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, const char *
 
     appendTab(d->desceditTab, SmallIcon("imagecomment"), i18n("Captions/Tags"));
 
-    slotThemeChanged();
-
     // ----------------------------------------------------------
 
     connect(this, SIGNAL(signalChangedTab(QWidget*)),
             this, SLOT(slotChangedTab(QWidget*)));
-
-    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
-            this, SLOT(slotThemeChanged()));
 
     connect(d->desceditTab, SIGNAL(signalProgressBarMode(int, const QString&)),
             this, SIGNAL(signalProgressBarMode(int, const QString&)));
@@ -364,13 +358,6 @@ void ImagePropertiesSideBarDB::slotAssignRatingFourStar()
 void ImagePropertiesSideBarDB::slotAssignRatingFiveStar()
 {
     d->desceditTab->assignRating(5);
-}
-
-void ImagePropertiesSideBarDB::slotThemeChanged()
-{
-    QColor backgroundColor(ThemeEngine::instance()->baseColor());
-    QColor foregroundColor(ThemeEngine::instance()->textRegColor());
-    m_propertiesTab->colorChanged(backgroundColor, foregroundColor);
 }
 
 void ImagePropertiesSideBarDB::refreshTagsView()

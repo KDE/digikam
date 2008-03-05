@@ -6,7 +6,7 @@
  * Date        : 2006-02-08
  * Description : A tab to display camera item information
  *
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -57,7 +57,6 @@ public:
                         const QString &newFileName=QString(),
                         const QByteArray& exifData=QByteArray(),
                         const KURL &currentURL = KURL());
-    void colorChanged(const QColor& back, const QColor& fore);
 
 private:
 
