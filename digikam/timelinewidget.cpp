@@ -42,6 +42,7 @@
 // Local includes.
 
 #include "ddebug.h"
+#include "themeengine.h"
 #include "timelinewidget.h"
 #include "timelinewidget.moc"
 
@@ -122,6 +123,9 @@ TimeLineWidget::TimeLineWidget(QWidget *parent)
     QDateTime ref = QDateTime::currentDateTime();   
     setCursorDateTime(ref);   
     setRefDateTime(ref);
+
+    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+            this, SLOT(slotThemeChanged()));
 }
 
 TimeLineWidget::~TimeLineWidget()
@@ -619,7 +623,7 @@ void TimeLineWidget::updatePixmap()
     SelectionMode sel;
     QRect         focusRect, selRect, barRect;
     QBrush        selBrush;
-    QColor        dateColor;
+    QColor        dateColor, subDateColor;
 
     // Date histogram drawing is divided in 2 parts. The current date-time 
     // is placed on the center of the view and all dates on right are computed,
@@ -674,6 +678,16 @@ void TimeLineWidget::updatePixmap()
         p.drawLine(barRect.right(), barRect.bottom(), barRect.right(), barRect.bottom()+3);
         p.drawLine(barRect.left(),  barRect.bottom(), barRect.left(),  barRect.bottom()+3);
 
+        if (val) 
+        {
+            if (sel)
+                subDateColor = palette().active().highlightedText();
+            else
+                subDateColor = palette().active().foreground();
+        }        
+        else 
+            subDateColor = palette().active().mid();
+
         if (sel == Selected || sel == FuzzySelection)
         {
             selBrush.setColor(palette().color(QPalette::Active, QPalette::Highlight));
@@ -697,7 +711,7 @@ void TimeLineWidget::updatePixmap()
                     QFont fnt = p.font();
                     fnt.setPointSize(fnt.pointSize()-4);
                     p.setFont(fnt);
-                    p.setPen(val ? palette().color(QPalette::Foreground) : palette().color(QPalette::Active, QPalette::Mid)) ;
+                    p.setPen(subDateColor);
                     QString txt = QString(d->calendar->weekDayName(ref.date(), KCalendarSystem::ShortDayName)[0]);
                     QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt); 
                     p.drawText(barRect.left() + ((barRect.width()-br.width())/2),
@@ -724,7 +738,7 @@ void TimeLineWidget::updatePixmap()
                     QFont fnt = p.font();
                     fnt.setPointSize(fnt.pointSize()-4);
                     p.setFont(fnt);
-                    p.setPen(val ? palette().color(QPalette::Foreground) : palette().color(QPalette::Active, QPalette::Mid)) ;
+                    p.setPen(subDateColor);
                     QString txt = QString::number(week);
                     QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt); 
                     p.drawText(barRect.left() + ((barRect.width()-br.width())/2),
@@ -756,7 +770,7 @@ void TimeLineWidget::updatePixmap()
                     QFont fnt = p.font();
                     fnt.setPointSize(fnt.pointSize()-4);
                     p.setFont(fnt);
-                    p.setPen(val ? palette().color(QPalette::Foreground) : palette().color(QPalette::Active, QPalette::Mid)) ;
+                    p.setPen(subDateColor);
                     QString txt = QString(d->calendar->monthName(ref.date(), KCalendarSystem::ShortName)[0]);
                     QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt); 
                     p.drawText(barRect.left() + ((barRect.width()-br.width())/2),
@@ -851,6 +865,16 @@ void TimeLineWidget::updatePixmap()
         p.drawLine(barRect.right(), barRect.bottom(), barRect.right(), barRect.bottom()+3);
         p.drawLine(barRect.left(),  barRect.bottom(), barRect.left(),  barRect.bottom()+3);
 
+        if (val) 
+        {
+            if (sel)
+                subDateColor = palette().active().highlightedText();
+            else
+                subDateColor = palette().active().foreground();
+        }        
+        else 
+            subDateColor = palette().active().mid();
+
         if (sel == Selected || sel == FuzzySelection)
         {
             selBrush.setColor(palette().color(QPalette::Active, QPalette::Highlight));
@@ -874,7 +898,7 @@ void TimeLineWidget::updatePixmap()
                     QFont fnt = p.font();
                     fnt.setPointSize(fnt.pointSize()-4);
                     p.setFont(fnt);
-                    p.setPen(val ? palette().color(QPalette::Foreground) : palette().color(QPalette::Active, QPalette::Mid)) ;
+                    p.setPen(subDateColor);
                     QString txt = QString(d->calendar->weekDayName(ref.date(), KCalendarSystem::ShortDayName)[0]);
                     QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt); 
                     p.drawText(barRect.left() + ((barRect.width()-br.width())/2),
@@ -901,7 +925,7 @@ void TimeLineWidget::updatePixmap()
                     QFont fnt = p.font();
                     fnt.setPointSize(fnt.pointSize()-4);
                     p.setFont(fnt);
-                    p.setPen(val ? palette().color(QPalette::Foreground) : palette().color(QPalette::Active, QPalette::Mid)) ;
+                    p.setPen(subDateColor);
                     QString txt = QString::number(week);
                     QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt); 
                     p.drawText(barRect.left() + ((barRect.width()-br.width())/2),
@@ -933,7 +957,7 @@ void TimeLineWidget::updatePixmap()
                     QFont fnt = p.font();
                     fnt.setPointSize(fnt.pointSize()-4);
                     p.setFont(fnt);
-                    p.setPen(val ? palette().color(QPalette::Foreground) : palette().color(QPalette::Active, QPalette::Mid)) ;
+                    p.setPen(subDateColor);
                     QString txt = QString(d->calendar->monthName(ref.date(), KCalendarSystem::ShortName)[0]);
                     QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt); 
                     p.drawText(barRect.left() + ((barRect.width()-br.width())/2),
@@ -994,7 +1018,7 @@ void TimeLineWidget::updatePixmap()
         p.drawLine(focusRect.bottomLeft(), focusRect.topLeft());
 
         focusRect.adjust(-1,-1, 1, 1);
-        p.setPen(palette().color(QPalette::Background));
+        p.setPen(ThemeEngine::instance()->thumbSelColor());
         p.drawLine(focusRect.topLeft(), focusRect.topRight());
         p.drawLine(focusRect.topRight(), focusRect.bottomRight());
         p.drawLine(focusRect.bottomRight(), focusRect.bottomLeft());
@@ -1703,6 +1727,12 @@ QDateTime TimeLineWidget::firstDayOfWeek(int year, int weekNumber)
 */
 
     return dt;
+}
+
+void TimeLineWidget::slotThemeChanged()
+{
+    updatePixmap();
+    update();
 }
 
 }  // NameSpace Digikam
