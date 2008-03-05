@@ -85,10 +85,6 @@ signals:
     void signalProgressValue(int);
     void signalItemStateChanged(TAlbumCheckListItem *item);
 
-private slots:
-
-    void slotRefresh(const QMap<int, int>&);
-
 protected:
 
     bool acceptDrop(const QDropEvent *e) const;
@@ -96,6 +92,10 @@ protected:
 
     QDragObject* dragObject();
     void startDrag();
+
+private slots:
+
+    void slotRefresh(const QMap<int, int>&);
 
 private:
 
