@@ -375,6 +375,16 @@ void FolderView::slotThemeChanged()
                  ThemeEngine::instance()->textSpecialRegColor());
     plt.setColor(QPalette::Inactive, QPalette::LinkVisited,
                  ThemeEngine::instance()->textSpecialSelColor());
+    plt.setColor(QPalette::Disabled, QPalette::Base, 
+                 ThemeEngine::instance()->baseColor());
+    plt.setColor(QPalette::Disabled, QPalette::Text, 
+                 ThemeEngine::instance()->textRegColor());
+    plt.setColor(QPalette::Disabled, QPalette::HighlightedText, 
+                 ThemeEngine::instance()->textSelColor());
+    plt.setColor(QPalette::Disabled, QPalette::Link, 
+                 ThemeEngine::instance()->textSpecialRegColor());
+    plt.setColor(QPalette::Disabled, QPalette::LinkVisited,
+                 ThemeEngine::instance()->textSpecialSelColor());
     setPalette(plt);
 
     viewport()->update();
