@@ -708,7 +708,7 @@ void TimeLineWidget::updatePixmap()
                     QFont fnt = p.font();
                     fnt.setPointSize(fnt.pointSize()-4);
                     p.setFont(fnt);
-                    p.setPen(val ? palette().active().foreground() : palette().active().mid()) ;
+                    p.setPen(subDateColor);
                     QString txt = QString(d->calendar->weekDayName(ref.date(), true)[0]);
                     QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt); 
                     p.drawText(barRect.left() + ((barRect.width()-br.width())/2),
@@ -735,7 +735,7 @@ void TimeLineWidget::updatePixmap()
                     QFont fnt = p.font();
                     fnt.setPointSize(fnt.pointSize()-4);
                     p.setFont(fnt);
-                    p.setPen(subDateColor) ;
+                    p.setPen(subDateColor);
                     QString txt = QString::number(week);
                     QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt); 
                     p.drawText(barRect.left() + ((barRect.width()-br.width())/2),
