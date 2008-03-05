@@ -109,6 +109,10 @@ public slots:
     void slotForward();
     void slotResetSelection();
 
+private slots:
+
+    void slotThemeChanged();
+
 private:
 
     QDateTime     prevDateTime(const QDateTime& dt);
