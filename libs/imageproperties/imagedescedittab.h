@@ -22,7 +22,7 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
- 
+
 #ifndef IMAGEDESCEDITTAB_H
 #define IMAGEDESCEDITTAB_H
 
@@ -140,5 +140,5 @@ private:
 };
 
 }  // NameSpace Digikam
- 
+
 #endif  // IMAGEDESCEDITTAB_H

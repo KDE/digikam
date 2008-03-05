@@ -805,7 +805,7 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
     if (!album->isRoot())
     {
         popmenu.insertItem(SmallIcon("tag-properties"), i18n("Edit Tag Properties..."), 11);
-        popmenu.insertItem(SmallIcon("tag-reset"),      i18n("Reset Tag Icon"),         13);        
+        popmenu.insertItem(SmallIcon("tag-reset"),      i18n("Reset Tag Icon"),         13);
         popmenu.insertSeparator(-1);
         popmenu.insertItem(SmallIcon("tag-delete"),     i18n("Delete Tag"),             12);
     }
@@ -1304,12 +1304,11 @@ void ImageDescEditTab::slotGotThumbnailFromIcon(Album *album, const QPixmap& thu
 
     // update item in tags tree
     TAlbumCheckListItem* item = (TAlbumCheckListItem*)album->extraData(d->tagsView);
-
     if(!item)
         return;
 
     AlbumThumbnailLoader *loader = AlbumThumbnailLoader::instance();
-    QPixmap blendedIcon = loader->blendIcons(loader->getStandardTagIcon(), thumbnail);
+    QPixmap blendedIcon          = loader->blendIcons(loader->getStandardTagIcon(), thumbnail);
     item->setPixmap(0, blendedIcon);
 
     // update item in recent tags popup menu, if found there in
