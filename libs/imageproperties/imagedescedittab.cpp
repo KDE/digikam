@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2003-03-09
- * Description : Comments, Tags, and Rating properties editor
+ * Description : Captions, Tags, and Rating properties editor
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2003-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -147,7 +147,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
 
     QGridLayout *settingsLayout = new QGridLayout(this);
 
-    // Comments/Date/Rating view -----------------------------------
+    // Captions/Date/Rating view -----------------------------------
 
     KVBox *commentsBox = new KVBox(this);
     new QLabel(i18n("Caption:"), commentsBox);
@@ -214,11 +214,11 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
     // --------------------------------------------------
 
     settingsLayout->addWidget(commentsBox, 0, 0, 1, 2 );
-    settingsLayout->addWidget(dateBox, 1, 0, 1, 2 );
-    settingsLayout->addWidget(ratingBox, 2, 0, 1, 2 );
+    settingsLayout->addWidget(dateBox,     1, 0, 1, 2 );
+    settingsLayout->addWidget(ratingBox,   2, 0, 1, 2 );
     settingsLayout->addWidget(d->tagsView, 3, 0, 1, 2 );
-    settingsLayout->addWidget(tagsSearch, 4, 0, 1, 2 );
-    settingsLayout->addWidget(buttonsBox, 5, 0, 1, 2 );
+    settingsLayout->addWidget(tagsSearch,  4, 0, 1, 2 );
+    settingsLayout->addWidget(buttonsBox,  5, 0, 1, 2 );
     settingsLayout->setRowStretch(3, 10);
     settingsLayout->setMargin(KDialog::spacingHint());
     settingsLayout->setSpacing(KDialog::spacingHint());
@@ -275,7 +275,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
     d->tagsView->installEventFilter(this);
     updateRecentTags();
 
-    // Connect to album manager -----------------------------
+    // Connect to album manager -------------------------------
 
     AlbumManager* man = AlbumManager::instance();
 
@@ -297,6 +297,8 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
     connect(man, SIGNAL(signalTAlbumMoved(TAlbum*, TAlbum*)),
             this, SLOT(slotAlbumMoved(TAlbum*, TAlbum*)));
 
+    // Connect to thumbnail loader -----------------------------
+
     AlbumThumbnailLoader *loader = AlbumThumbnailLoader::instance();
 
     connect(loader, SIGNAL(signalThumbnail(Album *, const QPixmap&)),
@@ -307,6 +309,8 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
 
     connect(loader, SIGNAL(signalReloadThumbnails()),
             this, SLOT(slotReloadThumbnails()));
+
+    // Connect to attribute watch ------------------------------
 
     ImageAttributesWatch *watch = ImageAttributesWatch::instance();
 
@@ -626,7 +630,7 @@ bool ImageDescEditTab::eventFilter(QObject *, QEvent *e)
 
         return false;
     }
-    
+
     return false;
 }
 
@@ -937,7 +941,7 @@ void ImageDescEditTab::slotRightButtonClicked(Q3ListViewItem *item, const QPoint
         {
             d->toggleAutoTags = TagFilterView::NoToggleAuto;
             toggleChildTags(album, true);
-            TAlbumCheckListItem *item = (TAlbumCheckListItem*)album->extraData(this);
+            TAlbumCheckListItem *item = (TAlbumCheckListItem*)album->extraData(d->tagsView);
             item->setOn(true);
             d->toggleAutoTags = oldAutoTags;
         }
@@ -945,7 +949,7 @@ void ImageDescEditTab::slotRightButtonClicked(Q3ListViewItem *item, const QPoint
         {
             d->toggleAutoTags = TagFilterView::NoToggleAuto;
             toggleChildTags(album, false);
-            TAlbumCheckListItem *item = (TAlbumCheckListItem*)album->extraData(this);
+            TAlbumCheckListItem *item = (TAlbumCheckListItem*)album->extraData(d->tagsView);
             item->setOn(false);
             d->toggleAutoTags = oldAutoTags;
         }
@@ -953,7 +957,7 @@ void ImageDescEditTab::slotRightButtonClicked(Q3ListViewItem *item, const QPoint
         {
             d->toggleAutoTags = TagFilterView::NoToggleAuto;
             toggleParentTags(album, true);
-            TAlbumCheckListItem *item = (TAlbumCheckListItem*)album->extraData(this);
+            TAlbumCheckListItem *item = (TAlbumCheckListItem*)album->extraData(d->tagsView);
             item->setOn(true);
             d->toggleAutoTags = oldAutoTags;
         }
@@ -961,7 +965,7 @@ void ImageDescEditTab::slotRightButtonClicked(Q3ListViewItem *item, const QPoint
         {
             d->toggleAutoTags = TagFilterView::NoToggleAuto;
             toggleParentTags(album, false);
-            TAlbumCheckListItem *item = (TAlbumCheckListItem*)album->extraData(this);
+            TAlbumCheckListItem *item = (TAlbumCheckListItem*)album->extraData(d->tagsView);
             item->setOn(false);
             d->toggleAutoTags = oldAutoTags;
         }
@@ -1068,7 +1072,7 @@ void ImageDescEditTab::tagNew(TAlbum* parAlbum, const QString& _title, const QSt
     }
     else
     {
-        TAlbumCheckListItem* viewItem = (TAlbumCheckListItem*)album->extraData(this);
+        TAlbumCheckListItem* viewItem = (TAlbumCheckListItem*)album->extraData(d->tagsView);
         if (viewItem)
         {
             viewItem->setOn(true);
@@ -1146,7 +1150,9 @@ void ImageDescEditTab::slotAlbumAdded(Album* a)
 
     TAlbumCheckListItem* viewItem = 0;
 
-    TAlbum* tag = (TAlbum*)a;
+    TAlbum* tag = dynamic_cast<TAlbum*>(a);
+    if (!tag)
+        return;
 
     if (tag->isRoot())
     {
@@ -1154,22 +1160,20 @@ void ImageDescEditTab::slotAlbumAdded(Album* a)
     }
     else
     {
-        Q3CheckListItem* parentItem = (Q3CheckListItem*)(tag->parent()->extraData(this));
-
-        if (!parentItem)
+        TAlbumCheckListItem* parent = (TAlbumCheckListItem*)(tag->parent()->extraData(d->tagsView));
+        if (!parent)
         {
             DWarning() << "Failed to find parent for Tag " << tag->title()
                        << endl;
             return;
         }
 
-        viewItem = new TAlbumCheckListItem(parentItem, tag);
+        viewItem = new TAlbumCheckListItem(parent, tag);
     }
 
     if (viewItem)
     {
         viewItem->setOpen(true);
-        tag->setExtraData(this, viewItem);
         setTagThumbnail(tag);
     }
 }
@@ -1181,7 +1185,7 @@ void ImageDescEditTab::slotAlbumDeleted(Album* a)
 
     TAlbum* album = (TAlbum*)a;
 
-    Q3CheckListItem* viewItem = (Q3CheckListItem*)(album->extraData(this));
+    TAlbumCheckListItem* viewItem = (TAlbumCheckListItem*)(album->extraData(d->tagsView));
     delete viewItem;
     album->removeExtraData(this);
     d->hub.setTag(album, false, MetadataHub::MetadataDisjoint);
@@ -1205,7 +1209,7 @@ void ImageDescEditTab::slotAlbumMoved(TAlbum* tag, TAlbum* newParent)
     if (!tag || !newParent)
         return;
 
-    Q3CheckListItem* item = (Q3CheckListItem*)tag->extraData(this);
+    TAlbumCheckListItem* item = (TAlbumCheckListItem*)tag->extraData(d->tagsView);
     if (!item)
         return;
 
@@ -1219,7 +1223,7 @@ void ImageDescEditTab::slotAlbumMoved(TAlbum* tag, TAlbum* newParent)
         d->tagsView->takeItem(item);
     }
 
-    Q3CheckListItem* newPItem = (Q3CheckListItem*)newParent->extraData(this);
+    TAlbumCheckListItem* newPItem = (TAlbumCheckListItem*)newParent->extraData(d->tagsView);
     if (newPItem)
         newPItem->insertItem(item);
     else
@@ -1233,7 +1237,7 @@ void ImageDescEditTab::slotAlbumRenamed(Album* a)
 
     TAlbum* album = (TAlbum*)a;
 
-    Q3CheckListItem* viewItem = (Q3CheckListItem*)(album->extraData(this));
+    TAlbumCheckListItem* viewItem = (TAlbumCheckListItem*)(album->extraData(d->tagsView));
     if (!viewItem)
     {
         DWarning() << "Failed to find view item for Tag "
@@ -1253,7 +1257,7 @@ void ImageDescEditTab::toggleChildTags(TAlbum *album, bool b)
     while ( it.current() )
     {
         TAlbum *ta                = (TAlbum*)it.current();
-        TAlbumCheckListItem *item = (TAlbumCheckListItem*)ta->extraData(this);
+        TAlbumCheckListItem *item = (TAlbumCheckListItem*)ta->extraData(d->tagsView);
         if (item)
             if (item->isVisible())
                 item->setOn(b);
@@ -1289,8 +1293,7 @@ void ImageDescEditTab::setTagThumbnail(TAlbum *album)
     if(!album)
         return;
 
-    Q3CheckListItem* item = (Q3CheckListItem*) album->extraData(this);
-
+    TAlbumCheckListItem* item = (TAlbumCheckListItem*) album->extraData(d->tagsView);
     if(!item)
         return;
 
@@ -1300,11 +1303,12 @@ void ImageDescEditTab::setTagThumbnail(TAlbum *album)
     {
         if (icon.isNull())
         {
-            item->setPixmap(0, loader->getStandardTagIcon(album, AlbumThumbnailLoader::SmallerSize));
+            item->setPixmap(0, loader->getStandardTagIcon(album));
         }
         else
         {
-            item->setPixmap(0, icon);
+            QPixmap blendedIcon = loader->blendIcons(loader->getStandardTagIcon(), icon);
+            item->setPixmap(0, blendedIcon);
         }
     }
 }
@@ -1315,14 +1319,15 @@ void ImageDescEditTab::slotGotThumbnailFromIcon(Album *album, const QPixmap& thu
         return;
 
     // update item in tags tree
-    Q3CheckListItem* item = (Q3CheckListItem*)album->extraData(this);
-
+    TAlbumCheckListItem* item = (TAlbumCheckListItem*)album->extraData(d->tagsView);
     if(!item)
         return;
 
-    item->setPixmap(0, thumbnail);
+    AlbumThumbnailLoader *loader = AlbumThumbnailLoader::instance();
+    QPixmap blendedIcon          = loader->blendIcons(loader->getStandardTagIcon(), thumbnail);
+    item->setPixmap(0, blendedIcon);
 
-    // update item in recent tags popup menu, if found therein
+    // update item in recent tags popup menu, if found there in
     QMenu *menu = dynamic_cast<QMenu *>(d->recentTagsBtn->menu());
     if (menu)
     {
@@ -1465,7 +1470,7 @@ void ImageDescEditTab::slotRecentTagsMenuActivated(int id)
         TAlbum* album = albumMan->findTAlbum(id);
         if (album)
         {
-            TAlbumCheckListItem* viewItem = (TAlbumCheckListItem*)album->extraData(this);
+            TAlbumCheckListItem* viewItem = (TAlbumCheckListItem*)album->extraData(d->tagsView);
             if (viewItem)
             {
                 viewItem->setOn(true);
@@ -1524,7 +1529,7 @@ void ImageDescEditTab::slotTagsSearchChanged(const QString& filter)
             }
         }
 
-        TAlbumCheckListItem* viewItem = (TAlbumCheckListItem*)(tag->extraData(this));
+        TAlbumCheckListItem* viewItem = (TAlbumCheckListItem*)(tag->extraData(d->tagsView));
 
         if (match)
         {
@@ -1545,14 +1550,14 @@ void ImageDescEditTab::slotTagsSearchChanged(const QString& filter)
     if (search.isEmpty())
     {
         TAlbum* root = AlbumManager::instance()->findTAlbum(0);
-        TAlbumCheckListItem* rootItem = (TAlbumCheckListItem*)(root->extraData(this));
+        TAlbumCheckListItem* rootItem = (TAlbumCheckListItem*)(root->extraData(d->tagsView));
         if (rootItem)
             rootItem->setText(0, root->title());
     }
     else
     {
         TAlbum* root = AlbumManager::instance()->findTAlbum(0);
-        TAlbumCheckListItem* rootItem = (TAlbumCheckListItem*)(root->extraData(this));
+        TAlbumCheckListItem* rootItem = (TAlbumCheckListItem*)(root->extraData(d->tagsView));
         if (rootItem)
             rootItem->setText(0, i18n("Found Tags"));
     }
@@ -1584,7 +1589,7 @@ void ImageDescEditTab::slotAssignedTagsToggled(bool t)
                         Album* parent = tag->parent();
                         while (parent && !parent->isRoot())
                         {
-                            Q3CheckListItem *pitem = (Q3CheckListItem*)parent->extraData(this);
+                            TAlbumCheckListItem *pitem = (TAlbumCheckListItem*)parent->extraData(d->tagsView);
                             pitem->setVisible(true);
                             parent = parent->parent();
                         }
@@ -1647,7 +1652,7 @@ void ImageDescEditTab::slotAssignedTagsToggled(bool t)
     }
 
     TAlbum *root                  = AlbumManager::instance()->findTAlbum(0);
-    TAlbumCheckListItem *rootItem = (TAlbumCheckListItem*)(root->extraData(this));
+    TAlbumCheckListItem *rootItem = (TAlbumCheckListItem*)(root->extraData(d->tagsView));
     if (rootItem)
     {
         if (t)

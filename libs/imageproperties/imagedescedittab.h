@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2003-03-09
- * Description : Comments, Tags, and Rating properties editor
+ * Description : Captions, Tags, and Rating properties editor
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2003-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,7 +22,7 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
- 
+
 #ifndef IMAGEDESCEDITTAB_H
 #define IMAGEDESCEDITTAB_H
 
