@@ -7,7 +7,7 @@
  * Description : a generic list view widget to 
  *               display metadata
  * 
- * Copyright (c) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (c) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -57,9 +57,9 @@ MetadataListView::MetadataListView(QWidget* parent)
     // Vertical scroll bar is always disable to give more 
     // free space to metadata content
     setVScrollBarMode(QScrollView::AlwaysOff);
-    
+
     m_parent = dynamic_cast<MetadataWidget *>(parent);
-    
+
     connect(this, SIGNAL(selectionChanged(QListViewItem*)),
             this, SLOT(slotSelectionChanged(QListViewItem*)));
 }
@@ -78,7 +78,7 @@ QString MetadataListView::getCurrentItemKey()
             return item->getKey();
         }
     }
-    
+
     return QString();
 }
 
@@ -93,7 +93,7 @@ void MetadataListView::setCurrentItemByKey(QString itemKey)
         if ( it.current()->isSelectable() )
         {
             MetadataListViewItem *item = dynamic_cast<MetadataListViewItem *>(it.current());
-            
+
             if (item->getKey() == itemKey)
             {
                 setSelected(item, true);
@@ -102,7 +102,7 @@ void MetadataListView::setCurrentItemByKey(QString itemKey)
                 return;
             }
         }
-        
+
         ++it;
     }
 }
@@ -122,7 +122,7 @@ void MetadataListView::slotSelectionChanged(QListViewItem *item)
         tagValue.truncate(128);
         tagValue.append("...");
     }
-    
+
     QWhatsThis::add(this, i18n("<b>Title: </b><p>%1<p>"
                                "<b>Value: </b><p>%2<p>"
                                "<b>Description: </b><p>%3")
@@ -134,7 +134,7 @@ void MetadataListView::slotSelectionChanged(QListViewItem *item)
 void MetadataListView::setIfdList(DMetadata::MetaDataMap ifds, const QStringList& tagsfilter)
 {
     clear();
-    
+
     uint               subItems = 0;
     QString            ifDItemName;
     MdKeyListViewItem *parentifDItem = 0;
@@ -143,7 +143,7 @@ void MetadataListView::setIfdList(DMetadata::MetaDataMap ifds, const QStringList
     {
         // We checking if we have changed of ifDName
         QString currentIfDName = it.key().section('.', 1, 1);
-        
+
         if ( currentIfDName != ifDItemName )
         {
             ifDItemName = currentIfDName;
@@ -173,7 +173,7 @@ void MetadataListView::setIfdList(DMetadata::MetaDataMap ifds, const QStringList
             else
             {
                 // We don't filter the output (Complete Mode)
-            
+
                 QString tagTitle = m_parent->getTagTitle(it.key());
                 new MetadataListViewItem(parentifDItem, it.key(), tagTitle, it.data());
                 subItems++;
@@ -193,7 +193,7 @@ void MetadataListView::setIfdList(DMetadata::MetaDataMap ifds, QStringList keysF
                                   const QStringList& tagsFilter)
 {
     clear();
-    
+
     uint               subItems = 0;
     MdKeyListViewItem *parentifDItem = 0;
 
@@ -203,7 +203,7 @@ void MetadataListView::setIfdList(DMetadata::MetaDataMap ifds, QStringList keysF
     {
         subItems = 0;
         parentifDItem = new MdKeyListViewItem(this, *itKeysFilter);
-        
+
         DMetadata::MetaDataMap::iterator it = ifds.end(); 
 
         while(1)   
@@ -216,7 +216,7 @@ void MetadataListView::setIfdList(DMetadata::MetaDataMap ifds, QStringList keysF
                     if (!tagsFilter.isEmpty())
                     {
                         // We using the filter to make a more user friendly output (Simple Mode)
-        
+
                         if (tagsFilter.contains(it.key().section('.', 2, 2)))
                         {
                             QString tagTitle = m_parent->getTagTitle(it.key());
@@ -227,14 +227,14 @@ void MetadataListView::setIfdList(DMetadata::MetaDataMap ifds, QStringList keysF
                     else
                     {
                         // We don't filter the output (Complete Mode)
-                    
+
                         QString tagTitle = m_parent->getTagTitle(it.key());
                         new MetadataListViewItem(parentifDItem, it.key(), tagTitle, it.data());
                         subItems++;
                     }
                 }
             }
-            
+
             if (it == ifds.begin()) break;
             --it;
         }
@@ -255,4 +255,3 @@ void MetadataListView::viewportResizeEvent(QResizeEvent* e)
 }
 
 }  // namespace Digikam
-
