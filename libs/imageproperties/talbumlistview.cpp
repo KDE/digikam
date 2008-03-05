@@ -67,19 +67,25 @@ namespace Digikam
 {
 
 TAlbumCheckListItem::TAlbumCheckListItem(QListView* parent, TAlbum* album)
-                   : QCheckListItem(parent, album->title())
+                   : FolderCheckListItem(parent, album->title(), QCheckListItem::RadioButtonController)
 {
     setDragEnabled(true);
     m_album = album;
     m_count = 0;
+
+    if (m_album)
+        m_album->setExtraData(listView(), this);
 }
 
 TAlbumCheckListItem::TAlbumCheckListItem(QCheckListItem* parent, TAlbum* album)
-                   : QCheckListItem(parent, album->title(), QCheckListItem::CheckBox)
+                   : FolderCheckListItem(parent, album->title(), QCheckListItem::CheckBox)
 {
     setDragEnabled(true);
     m_album = album;
     m_count = 0;
+
+    if (m_album)
+        m_album->setExtraData(listView(), this);
 }
 
 void TAlbumCheckListItem::refresh()
@@ -111,29 +117,16 @@ void TAlbumCheckListItem::refresh()
     }
 }
 
+void TAlbumCheckListItem::stateChange(bool val)
+{
+    QCheckListItem::stateChange(val);
+    ((TAlbumListView*)listView())->stateChanged(this);
+}
+
 void TAlbumCheckListItem::setOpen(bool o)
 {
     QListViewItem::setOpen(o);
     refresh();
-}
-
-void TAlbumCheckListItem::setStatus(MetadataHub::TagStatus status)
-{
-    if (status == MetadataHub::MetadataDisjoint)
-    {
-        setState(QCheckListItem::NoChange);
-    }
-    else
-    {
-        setOn(status.hasTag);
-    }
-}
-
-void TAlbumCheckListItem::stateChange(bool val)
-{
-    QCheckListItem::stateChange(val);
-    TAlbumListView* view = dynamic_cast<TAlbumListView*>(listView());
-    view->emitSignalItemStateChanged(this);
 }
 
 TAlbum* TAlbumCheckListItem::album() const
@@ -157,30 +150,24 @@ int TAlbumCheckListItem::count()
     return m_count;
 }
 
+void TAlbumCheckListItem::setStatus(MetadataHub::TagStatus status)
+{
+    if (status == MetadataHub::MetadataDisjoint)
+        setState(QCheckListItem::NoChange);
+    else
+        setOn(status.hasTag);
+}
+
 // ------------------------------------------------------------------------
 
-class TAlbumListViewPriv
-{
-
-public:
-
-    TAlbumListViewPriv()
-    {
-        dragItem = 0;
-    }
-
-    QPoint               dragStartPos;
-
-    TAlbumCheckListItem *dragItem;
-};
-
 TAlbumListView::TAlbumListView(QWidget* parent)
-              : QListView(parent)
+              : FolderView(parent)
 {
-    d = new TAlbumListViewPriv;
     addColumn(i18n("Tags"));
     header()->hide();
     setResizeMode(QListView::LastColumn);
+    setRootIsDecorated(true);
+
     setAcceptDrops(true);
     viewport()->setAcceptDrops(true);
 
@@ -190,72 +177,11 @@ TAlbumListView::TAlbumListView(QWidget* parent)
 
 TAlbumListView::~TAlbumListView()
 {
-    delete d;
 }
 
-void TAlbumListView::emitSignalItemStateChanged(TAlbumCheckListItem *item)
+void TAlbumListView::stateChanged(TAlbumCheckListItem *item)
 {
     emit signalItemStateChanged(item);
-}
-
-void TAlbumListView::contentsMouseMoveEvent(QMouseEvent *e)
-{
-    QListView::contentsMouseMoveEvent(e);
-
-    if(e->state() == NoButton)
-    {
-        if(KGlobalSettings::changeCursorOverIcon())
-        {
-            QPoint vp = contentsToViewport(e->pos());
-            QListViewItem *item = itemAt(vp);
-            if (mouseInItemRect(item, vp.x()))
-                setCursor(KCursor::handCursor());
-            else
-                unsetCursor();
-        }
-        return;
-    }
-
-    if(d->dragItem && 
-       (d->dragStartPos - e->pos()).manhattanLength() > QApplication::startDragDistance())
-    {
-        QPoint vp = contentsToViewport(e->pos());
-        TAlbumCheckListItem *item = dynamic_cast<TAlbumCheckListItem*>(itemAt(vp));
-        if(!item)
-        {
-            d->dragItem = 0;
-            return;
-        }
-    }
-}
-
-void TAlbumListView::contentsMousePressEvent(QMouseEvent *e)
-{
-    QPoint vp = contentsToViewport(e->pos());
-    TAlbumCheckListItem *item = dynamic_cast<TAlbumCheckListItem*>(itemAt(vp));
-
-    if(item && e->button() == RightButton) 
-    {
-        bool isOn = item->isOn();
-        QListView::contentsMousePressEvent(e);
-        // Restore the status of checkbox. 
-        item->setOn(isOn);
-        return;
-    }
-
-    if(item && e->button() == LeftButton) 
-    {
-        d->dragStartPos = e->pos();
-        d->dragItem     = item;
-    }
-
-    QListView::contentsMousePressEvent(e);
-}
-
-void TAlbumListView::contentsMouseReleaseEvent(QMouseEvent *e)
-{
-    QListView::contentsMouseReleaseEvent(e);
-    d->dragItem = 0;
 }
 
 bool TAlbumListView::mouseInItemRect(QListViewItem* item, int x) const
@@ -292,11 +218,6 @@ void TAlbumListView::startDrag()
     QDragObject *o = dragObject();
     if(o)
         o->drag();
-}
-
-TAlbumCheckListItem* TAlbumListView::dragItem() const
-{
-    return d->dragItem;
 }
 
 bool TAlbumListView::acceptDrop(const QDropEvent *e) const

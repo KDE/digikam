@@ -24,25 +24,21 @@
 #ifndef TALBUMLISTVIEW_H
 #define TALBUMLISTVIEW_H
 
-// Qt includes.
-
-#include <qlistview.h>
-
 // Local includes.
 
 #include "digikam_export.h"
 #include "metadatahub.h"
+#include "folderitem.h"
+#include "folderview.h"
 
-class QListViewItem;
 class QDropEvent;
 class QMouseEvent;
 
 namespace Digikam
 {
 class TAlbum;
-class TAlbumListViewPriv;
 
-class DIGIKAM_EXPORT TAlbumCheckListItem : public QCheckListItem
+class DIGIKAM_EXPORT TAlbumCheckListItem : public FolderCheckListItem
 {
 public:
 
@@ -60,7 +56,7 @@ public:
 
 private :
 
-    void stateChange(bool val);
+    void    stateChange(bool val);
 
 private :
 
@@ -71,7 +67,7 @@ private :
 
 // ------------------------------------------------------------------------
 
-class DIGIKAM_EXPORT TAlbumListView : public QListView
+class DIGIKAM_EXPORT TAlbumListView : public FolderView
 {
     Q_OBJECT
 
@@ -80,7 +76,7 @@ public:
     TAlbumListView(QWidget* parent);
     ~TAlbumListView();
 
-    void emitSignalItemStateChanged(TAlbumCheckListItem *item);
+    void stateChanged(TAlbumCheckListItem *item);
     void refresh();
 
 signals:
@@ -95,24 +91,15 @@ private slots:
 
 protected:
 
-    void contentsMousePressEvent(QMouseEvent *e);
-    void contentsMouseReleaseEvent(QMouseEvent *e);
-    void contentsMouseMoveEvent(QMouseEvent *e);
-
     bool acceptDrop(const QDropEvent *e) const;
     void contentsDropEvent(QDropEvent *e);
 
     QDragObject* dragObject();
     void startDrag();
-    TAlbumCheckListItem* dragItem() const;
 
 private:
 
     bool mouseInItemRect(QListViewItem* item, int x) const;
-
-private:
-
-    TAlbumListViewPriv *d;
 };
 
 }  // NameSpace Digikam
