@@ -213,13 +213,6 @@ QDragObject* TAlbumListView::dragObject()
     return t;
 }
 
-void TAlbumListView::startDrag()
-{
-    QDragObject *o = dragObject();
-    if(o)
-        o->drag();
-}
-
 bool TAlbumListView::acceptDrop(const QDropEvent *e) const
 {
     QPoint vp = contentsToViewport(e->pos());

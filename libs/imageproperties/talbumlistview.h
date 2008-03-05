@@ -20,7 +20,7 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
- 
+
 #ifndef TALBUMLISTVIEW_H
 #define TALBUMLISTVIEW_H
 
@@ -91,7 +91,6 @@ protected:
     void contentsDropEvent(QDropEvent *e);
 
     QDragObject* dragObject();
-    void startDrag();
 
 private slots:
 
@@ -103,5 +102,5 @@ private:
 };
 
 }  // NameSpace Digikam
- 
+
 #endif  // TALBUMLISTVIEW_H
