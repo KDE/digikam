@@ -43,7 +43,6 @@
 
 #include "ddebug.h"
 #include "dimg.h"
-#include "themeengine.h"
 #include "imageinfo.h"
 #include "databasewatch.h"
 #include "imagepropertiesgpstab.h"
@@ -94,15 +93,10 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, QSplitter *s
 
     appendTab(d->desceditTab, SmallIcon("imagecomment"), i18n("Caption/Tags"));
 
-    slotThemeChanged();
-
     // ----------------------------------------------------------
 
     connect(this, SIGNAL(signalChangedTab(QWidget*)),
             this, SLOT(slotChangedTab(QWidget*)));
-
-    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
-            this, SLOT(slotThemeChanged()));
 
     connect(d->desceditTab, SIGNAL(signalProgressBarMode(int, const QString&)),
             this, SIGNAL(signalProgressBarMode(int, const QString&)));
@@ -405,13 +399,6 @@ void ImagePropertiesSideBarDB::slotAssignRatingFourStar()
 void ImagePropertiesSideBarDB::slotAssignRatingFiveStar()
 {
     d->desceditTab->assignRating(5);
-}
-
-void ImagePropertiesSideBarDB::slotThemeChanged()
-{
-    QColor backgroundColor(ThemeEngine::instance()->baseColor());
-    QColor foregroundColor(ThemeEngine::instance()->textRegColor());
-    m_propertiesTab->colorChanged(backgroundColor, foregroundColor);
 }
 
 void ImagePropertiesSideBarDB::refreshTagsView()

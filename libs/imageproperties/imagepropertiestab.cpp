@@ -381,69 +381,6 @@ void ImagePropertiesTab::setCurrentURL(const KUrl& url)
     d->labelFolder->setText(url.directory());
 }
 
-void ImagePropertiesTab::colorChanged(const QColor& back, const QColor& fore)
-{
-    QPalette plt(palette());
-
-    plt.setColor(QPalette::Active, QPalette::Base, back);
-    plt.setColor(QPalette::Active, QPalette::Text, fore);
-    plt.setColor(QPalette::Inactive, QPalette::Base, back);
-    plt.setColor(QPalette::Inactive, QPalette::Text, fore);
-
-    setPalette(plt);
-
-    d->title->setPalette(plt);
-    d->file->setPalette(plt);
-    d->folder->setPalette(plt);
-    d->modifiedDate->setPalette(plt);
-    d->size->setPalette(plt);
-    d->owner->setPalette(plt);
-    d->permissions->setPalette(plt);
-
-    d->title2->setPalette(plt);
-    d->mime->setPalette(plt);
-    d->dimensions->setPalette(plt);
-    d->compression->setPalette(plt);
-    d->bitDepth->setPalette(plt);
-    d->colorMode->setPalette(plt);
-
-    d->title3->setPalette(plt);
-    d->make->setPalette(plt);
-    d->model->setPalette(plt);
-    d->photoDate->setPalette(plt);
-    d->aperture->setPalette(plt);
-    d->focalLength->setPalette(plt);
-    d->exposureTime->setPalette(plt);
-    d->sensitivity->setPalette(plt);
-    d->exposureMode->setPalette(plt);
-    d->flash->setPalette(plt);
-    d->whiteBalance->setPalette(plt);
-
-    d->labelFile->setPalette(plt);
-    d->labelFolder->setPalette(plt);
-    d->labelFileModifiedDate->setPalette(plt);
-    d->labelFileSize->setPalette(plt);
-    d->labelFileOwner->setPalette(plt);
-    d->labelFilePermissions->setPalette(plt);
-
-    d->labelImageMime->setPalette(plt);
-    d->labelImageDimensions->setPalette(plt);
-    d->labelImageCompression->setPalette(plt);
-    d->labelImageBitDepth->setPalette(plt);
-    d->labelImageColorMode->setPalette(plt);
-
-    d->labelPhotoMake->setPalette(plt);
-    d->labelPhotoModel->setPalette(plt);
-    d->labelPhotoDateTime->setPalette(plt);
-    d->labelPhotoAperture->setPalette(plt);
-    d->labelPhotoFocalLenght->setPalette(plt);
-    d->labelPhotoExposureTime->setPalette(plt);
-    d->labelPhotoSensitivity->setPalette(plt);
-    d->labelPhotoExposureMode->setPalette(plt);
-    d->labelPhotoFlash->setPalette(plt);
-    d->labelPhotoWhiteBalance->setPalette(plt);
-}
-
 void ImagePropertiesTab::setPhotoInfoDisable(bool b)
 {
     if (b)

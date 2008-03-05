@@ -53,7 +53,6 @@ public:
     ~ImagePropertiesTab();
 
     void setCurrentURL(const KUrl& url=KUrl());
-    void colorChanged(const QColor& back, const QColor& fore);
 
     void setPhotoInfoDisable(bool b);
 

@@ -2146,23 +2146,7 @@ void AlbumIconView::updateRectsAndPixmaps()
 
 void AlbumIconView::slotThemeChanged()
 {
-    QPalette plt(palette());
-    plt.setColor(QPalette::Active, QPalette::Base,
-                 ThemeEngine::instance()->baseColor());
-    plt.setColor(QPalette::Active, QPalette::Text, 
-                 ThemeEngine::instance()->textRegColor());
-    plt.setColor(QPalette::Active, QPalette::HighlightedText, 
-                 ThemeEngine::instance()->textSelColor());
-    plt.setColor(QPalette::Inactive, QPalette::Base, 
-                 ThemeEngine::instance()->baseColor());
-    plt.setColor(QPalette::Inactive, QPalette::Text, 
-                 ThemeEngine::instance()->textRegColor());
-    plt.setColor(QPalette::Inactive, QPalette::HighlightedText, 
-                 ThemeEngine::instance()->textSelColor());
-    setPalette(plt);
-
     updateRectsAndPixmaps();
-
     viewport()->update();
 }
 

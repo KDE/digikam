@@ -91,7 +91,6 @@ public slots:
 private slots:
 
     void slotChangedTab(QWidget* tab);
-    void slotThemeChanged();
     void slotFileMetadataChanged(const KUrl &url);
     void slotImageChangeDatabase(const ImageChangeset &changeset);
 

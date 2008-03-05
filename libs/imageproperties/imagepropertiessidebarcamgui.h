@@ -74,7 +74,6 @@ signals:
 private slots:
 
     virtual void slotChangedTab(QWidget* tab);
-    void slotThemeChanged();
 
 private:
 

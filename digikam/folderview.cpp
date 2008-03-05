@@ -354,39 +354,6 @@ void FolderView::slotThemeChanged()
     d->itemRegPix = ThemeEngine::instance()->listRegPixmap(w, h);
     d->itemSelPix = ThemeEngine::instance()->listSelPixmap(w, h);
 
-    QPalette plt(palette());
-    plt.setColor(QPalette::Active, QPalette::Base, 
-                 ThemeEngine::instance()->baseColor());
-    plt.setColor(QPalette::Active, QPalette::Text, 
-                 ThemeEngine::instance()->textRegColor());
-    plt.setColor(QPalette::Active, QPalette::HighlightedText, 
-                 ThemeEngine::instance()->textSelColor());
-    plt.setColor(QPalette::Active, QPalette::Link, 
-                 ThemeEngine::instance()->textSpecialRegColor());
-    plt.setColor(QPalette::Active, QPalette::LinkVisited,
-                 ThemeEngine::instance()->textSpecialSelColor());
-    plt.setColor(QPalette::Inactive, QPalette::Base, 
-                 ThemeEngine::instance()->baseColor());
-    plt.setColor(QPalette::Inactive, QPalette::Text, 
-                 ThemeEngine::instance()->textRegColor());
-    plt.setColor(QPalette::Inactive, QPalette::HighlightedText, 
-                 ThemeEngine::instance()->textSelColor());
-    plt.setColor(QPalette::Inactive, QPalette::Link, 
-                 ThemeEngine::instance()->textSpecialRegColor());
-    plt.setColor(QPalette::Inactive, QPalette::LinkVisited,
-                 ThemeEngine::instance()->textSpecialSelColor());
-    plt.setColor(QPalette::Disabled, QPalette::Base, 
-                 ThemeEngine::instance()->baseColor());
-    plt.setColor(QPalette::Disabled, QPalette::Text, 
-                 ThemeEngine::instance()->textRegColor());
-    plt.setColor(QPalette::Disabled, QPalette::HighlightedText, 
-                 ThemeEngine::instance()->textSelColor());
-    plt.setColor(QPalette::Disabled, QPalette::Link, 
-                 ThemeEngine::instance()->textSpecialRegColor());
-    plt.setColor(QPalette::Disabled, QPalette::LinkVisited,
-                 ThemeEngine::instance()->textSpecialSelColor());
-    setPalette(plt);
-
     viewport()->update();
 }
 

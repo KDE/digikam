@@ -7,7 +7,7 @@
  * Description : theme engine methods 
  * 
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -35,12 +35,15 @@
 #include <QDomDocument>
 #include <QTextStream>
 #include <QDate>
+
 // KDE includes.
 
 #include <kglobal.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kuser.h>
+#include <kapplication.h>
+#include <kglobalsettings.h>
 
 // Local includes.
 
@@ -64,12 +67,12 @@ public:
         themeInitiallySet = false;
     }
 
-    Q3PtrList<Theme> themeList;
-    Q3Dict<Theme>    themeDict;
+    Q3PtrList<Theme>  themeList;
+    Q3Dict<Theme>     themeDict;
     
-    Theme*           currTheme;
-    Theme*           defaultTheme;
-    bool             themeInitiallySet;
+    Theme            *currTheme;
+    Theme            *defaultTheme;
+    bool              themeInitiallySet;
 };
 
 class ThemeEngineCreator { public: ThemeEngine object; };
@@ -238,6 +241,68 @@ void ThemeEngine::setCurrentTheme(const QString& name)
     // the signalThemeChanged is emitted when themes are loaded in DigikamApp
     d->themeInitiallySet = true;
 
+    // Make palette for all widgets.
+
+    int h, s, v;
+    const QColor fg(ThemeEngine::instance()->textRegColor());
+    const QColor bg(ThemeEngine::instance()->baseColor());
+    QPalette plt(kapp->palette());
+
+/*    bg.hsv(&h, &s, &v);
+    v += (v < 128) ? +50 : -50;
+    v &= 255; //ensures 0 <= v < 256
+    d->currTheme->altBase = QColor(h, s, v, QColor::Hsv);
+*/
+    fg.hsv(&h, &s, &v);
+    v += (v < 128) ? +150 : -150;
+    v &= 255; //ensures 0 <= v < 256
+    const QColor highlight(h, s, v, QColor::Hsv);
+
+    plt.setColor(QPalette::Active,   QPalette::Base,            bg);
+    plt.setColor(QPalette::Active,   QPalette::Background,      bg.dark(115));
+    plt.setColor(QPalette::Active,   QPalette::Foreground,      ThemeEngine::instance()->textRegColor());
+    plt.setColor(QPalette::Active,   QPalette::Highlight,       highlight);
+    plt.setColor(QPalette::Active,   QPalette::HighlightedText, ThemeEngine::instance()->textSelColor());
+    plt.setColor(QPalette::Active,   QPalette::Dark,            Qt::darkGray);
+    plt.setColor(QPalette::Active,   QPalette::Button,          bg);
+    plt.setColor(QPalette::Active,   QPalette::ButtonText,      ThemeEngine::instance()->textRegColor());
+    plt.setColor(QPalette::Active,   QPalette::Text,            ThemeEngine::instance()->textRegColor());
+    plt.setColor(QPalette::Active,   QPalette::Link,            ThemeEngine::instance()->textSpecialRegColor());
+    plt.setColor(QPalette::Active,   QPalette::LinkVisited,     ThemeEngine::instance()->textSpecialSelColor());
+
+    plt.setColor(QPalette::Inactive, QPalette::Base,            bg);
+    plt.setColor(QPalette::Inactive, QPalette::Background,      bg.dark(115));
+    plt.setColor(QPalette::Inactive, QPalette::Foreground,      ThemeEngine::instance()->textRegColor());
+    plt.setColor(QPalette::Inactive, QPalette::Highlight,       highlight);
+    plt.setColor(QPalette::Inactive, QPalette::HighlightedText, ThemeEngine::instance()->textSelColor());
+    plt.setColor(QPalette::Inactive, QPalette::Dark,            Qt::darkGray);
+    plt.setColor(QPalette::Inactive, QPalette::Button,          bg);
+    plt.setColor(QPalette::Inactive, QPalette::ButtonText,      ThemeEngine::instance()->textRegColor());
+    plt.setColor(QPalette::Inactive, QPalette::Text,            ThemeEngine::instance()->textRegColor());
+    plt.setColor(QPalette::Inactive, QPalette::Link,            ThemeEngine::instance()->textSpecialRegColor());
+    plt.setColor(QPalette::Inactive, QPalette::LinkVisited,     ThemeEngine::instance()->textSpecialSelColor());
+
+    plt.setColor(QPalette::Disabled, QPalette::Base,            bg);
+    plt.setColor(QPalette::Disabled, QPalette::Background,      bg.dark(115));
+    plt.setColor(QPalette::Disabled, QPalette::Foreground,      ThemeEngine::instance()->textRegColor());
+    plt.setColor(QPalette::Disabled, QPalette::Highlight,       highlight);
+    plt.setColor(QPalette::Disabled, QPalette::HighlightedText, ThemeEngine::instance()->textSelColor());
+    plt.setColor(QPalette::Disabled, QPalette::Dark,            Qt::darkGray);
+    plt.setColor(QPalette::Disabled, QPalette::Button,          bg);
+    plt.setColor(QPalette::Disabled, QPalette::ButtonText,      ThemeEngine::instance()->textRegColor());
+    plt.setColor(QPalette::Disabled, QPalette::Text,            ThemeEngine::instance()->textRegColor());
+    plt.setColor(QPalette::Disabled, QPalette::Link,            ThemeEngine::instance()->textSpecialRegColor());
+    plt.setColor(QPalette::Disabled, QPalette::LinkVisited,     ThemeEngine::instance()->textSpecialSelColor());
+
+/*
+    cg.setColor(QColorGroup::Light,           ThemeEngine::instance()->textRegColor());
+    cg.setColor(QColorGroup::Midlight,        ThemeEngine::instance()->textRegColor());
+    cg.setColor(QColorGroup::Mid,             ThemeEngine::instance()->textRegColor());
+    cg.setColor(QColorGroup::Shadow,          ThemeEngine::instance()->textRegColor());
+*/
+
+    kapp->setPalette(plt, true);
+
     //theme->print();
     QTimer::singleShot(0, this, SIGNAL(signalThemeChanged()));
 }
@@ -272,7 +337,7 @@ void ThemeEngine::buildDefaultTheme()
 {
     Theme* t = d->defaultTheme;
 
-    QPalette pa = QApplication::palette();
+    QPalette pa = kapp->palette();
     
     t->baseColor           = pa.color(QPalette::Base);
     t->textRegColor        = pa.color(QPalette::Text);
