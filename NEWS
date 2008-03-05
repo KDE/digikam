@@ -5,6 +5,7 @@ digiKam 0.9.4-beta1 - Release date: 2008-??-??
 
 NEW FEATURES:
 
+General        : Color theme scheme are now support everywhere in graphical interfaces.
 General        : Updated internal CImg library to last stable 1.2.7 (released at 2008/01/23).
 General        : Add capability to display count of items in all Album, Date, Tags, and 
                  Tags Filter Folder View.
@@ -33,5 +34,6 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 011 ==> 142055 : Which whitebalance is used
 012 ==> 158558 : Delete Function in Tag Filters panel needs to make sure that the tag is 
                  unselected when the tag is deleted.
-013 ==> 
+013 ==> 120309 : Change screen backgroundcolor of image tools.
+014 ==> 
 
