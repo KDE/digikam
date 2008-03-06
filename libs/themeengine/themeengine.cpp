@@ -24,8 +24,7 @@
 
 // Qt includes.
 
-#include <Q3Dict>
-#include <Q3PtrList>
+#include <QHash>
 #include <QFileInfo>
 #include <QFile>
 #include <QApplication>
@@ -67,12 +66,12 @@ public:
         themeInitiallySet = false;
     }
 
-    Q3PtrList<Theme>  themeList;
-    Q3Dict<Theme>     themeDict;
-    
-    Theme            *currTheme;
-    Theme            *defaultTheme;
-    bool              themeInitiallySet;
+    bool                    themeInitiallySet;
+
+    QHash<QString, Theme*>  themeHash;
+
+    Theme                  *currTheme;
+    Theme                  *defaultTheme;
 };
 
 class ThemeEngineCreator { public: ThemeEngine object; };
@@ -89,11 +88,8 @@ ThemeEngine::ThemeEngine()
 
     d = new ThemeEnginePriv;
 
-    d->themeList.setAutoDelete(false);
-    d->themeDict.setAutoDelete(false);
     d->defaultTheme = new Theme(i18n("Default"), QString());
-    d->themeList.append(d->defaultTheme);
-    d->themeDict.insert(i18n("Default"), d->defaultTheme);
+    d->themeHash.insert(i18n("Default"), d->defaultTheme);
     d->currTheme = d->defaultTheme;
 
     buildDefaultTheme();
@@ -101,44 +97,43 @@ ThemeEngine::ThemeEngine()
 
 ThemeEngine::~ThemeEngine()
 {
-    d->themeList.setAutoDelete(true);
-    d->themeList.clear();
+    d->themeHash.clear();
     delete d;
 }
 
 QColor ThemeEngine::baseColor() const
 {
-    return d->currTheme->baseColor;    
+    return d->currTheme->baseColor;
 }
 
 QColor ThemeEngine::thumbSelColor() const
 {
-    return d->currTheme->thumbSelColor;    
+    return d->currTheme->thumbSelColor;
 }
 
 QColor ThemeEngine::thumbRegColor() const
 {
-    return d->currTheme->thumbRegColor;    
+    return d->currTheme->thumbRegColor;
 }
 
 QColor ThemeEngine::textRegColor() const
 {
-    return d->currTheme->textRegColor;    
+    return d->currTheme->textRegColor;
 }
 
 QColor ThemeEngine::textSelColor() const
 {
-    return d->currTheme->textSelColor;    
+    return d->currTheme->textSelColor;
 }
 
 QColor ThemeEngine::textSpecialRegColor() const
 {
-    return d->currTheme->textSpecialRegColor;    
+    return d->currTheme->textSpecialRegColor;
 }
 
 QColor ThemeEngine::textSpecialSelColor() const
 {
-    return d->currTheme->textSpecialSelColor;    
+    return d->currTheme->textSpecialSelColor;
 }
 
 QPixmap ThemeEngine::bannerPixmap(int w, int h)
@@ -183,34 +178,32 @@ QPixmap ThemeEngine::listSelPixmap(int w, int h)
 
 void ThemeEngine::scanThemes()
 {
-    d->themeList.remove(d->defaultTheme);
-    d->themeList.setAutoDelete(true);
-    d->themeList.clear();
-    d->themeDict.clear();
+    d->themeHash.remove(i18n("Default"));
+    d->themeHash.clear();
     d->currTheme = 0;
 
     QStringList themes = KGlobal::dirs()->findAllResources("themes", QString(), 
                                           KStandardDirs::Recursive | KStandardDirs::NoDuplicates);
 
-    for (QStringList::iterator it=themes.begin(); it != themes.end();
-         ++it)
+    for (QStringList::iterator it=themes.begin(); it != themes.end(); ++it)
     {
         QFileInfo fi(*it);
         Theme* theme = new Theme(fi.fileName(), *it);
-        d->themeList.append(theme);
-        d->themeDict.insert(fi.fileName(), theme);
+        d->themeHash.insert(fi.fileName(), theme);
     }
-    
-    d->themeList.append(d->defaultTheme);
-    d->themeDict.insert(i18n("Default"), d->defaultTheme);
+
+    d->themeHash.insert(i18n("Default"), d->defaultTheme);
     d->currTheme = d->defaultTheme;
 }
 
 QStringList ThemeEngine::themeNames() const
 {
     QStringList names;
-    for (Theme *t = d->themeList.first(); t; t = d->themeList.next())
+    QHash<QString, Theme*>::iterator it;
+
+    for (it = d->themeHash.begin(); it != d->themeHash.end(); ++it)
     {
+        Theme *t = it.value();
         names << t->name;
     }
     names.sort();
@@ -219,18 +212,19 @@ QStringList ThemeEngine::themeNames() const
 
 void ThemeEngine::slotChangeTheme(const QString& name)
 {
-    setCurrentTheme(name);    
+    setCurrentTheme(name);
 }
 
 void ThemeEngine::setCurrentTheme(const QString& name)
 {
-    Theme* theme = d->themeDict.find(name);
-    if (!theme)
+    QHash<QString, Theme*>::iterator it = d->themeHash.find(name);
+    if (it == d->themeHash.end())
     {
         d->currTheme = d->defaultTheme;
         return;
     }
 
+    Theme* theme = it.value();
     if (d->currTheme == theme && d->themeInitiallySet)
         return;
 
@@ -309,22 +303,20 @@ void ThemeEngine::setCurrentTheme(const QString& name)
 
 void ThemeEngine::setCurrentTheme(const Theme& theme, const QString& name, bool loadFromDisk)
 {
-    Theme* t = d->themeDict.find(name);
-    if (t)
+    QHash<QString, Theme*>::iterator it = d->themeHash.find(name);
+    if (it != d->themeHash.end())
     {
-        d->themeDict.remove(name);
-        d->themeList.remove(t);
+        d->themeHash.remove(name);
     }
 
-    t = new Theme(theme);
+    Theme *t = new Theme(theme);
     t->filePath = theme.filePath;
-    d->themeDict.insert(name, t);
-    d->themeList.append(t);
+    d->themeHash.insert(name, t);
 
     d->currTheme = t;
     if (loadFromDisk)
         loadTheme();
-    
+
     QTimer::singleShot(0, this, SIGNAL(signalThemeChanged()));
 }
 
@@ -338,7 +330,7 @@ void ThemeEngine::buildDefaultTheme()
     Theme* t = d->defaultTheme;
 
     QPalette pa = kapp->palette();
-    
+
     t->baseColor           = pa.color(QPalette::Base);
     t->textRegColor        = pa.color(QPalette::Text);
     t->textSelColor        = pa.color(QPalette::HighlightedText);
@@ -351,7 +343,7 @@ void ThemeEngine::buildDefaultTheme()
     t->bannerGrad          = Theme::SOLID;
     t->bannerBorder        = false;
     t->bannerBorderColor   = Qt::black;
-    
+
     t->thumbRegColor       = pa.color(QPalette::Base);
     t->thumbRegColorTo     = pa.color(QPalette::Base);
     t->thumbRegBevel       = Theme::FLAT;
@@ -372,7 +364,7 @@ void ThemeEngine::buildDefaultTheme()
     t->listRegGrad         = Theme::SOLID;
     t->listRegBorder       = false;
     t->listRegBorderColor  = Qt::black;
-                        
+
     t->listSelColor        = pa.color(QPalette::Highlight);
     t->listSelColorTo      = pa.color(QPalette::Highlight);
     t->listSelBevel        = Theme::FLAT;
@@ -388,7 +380,7 @@ bool ThemeEngine::loadTheme()
         return false;
 
     Theme *t = d->currTheme;
-    
+
     // use the default theme as base template to build the themes
     *(t) = *(d->defaultTheme);
 
@@ -414,7 +406,7 @@ bool ThemeEngine::loadTheme()
     QString resource;
 
     // -- base ------------------------------------------------------------------------
-    
+
     resource = resourceValue(rootElem, "BaseColor");
     if (!resource.isEmpty())
         t->baseColor = resource;
@@ -422,7 +414,7 @@ bool ThemeEngine::loadTheme()
     resource = resourceValue(rootElem, "TextRegularColor");
     if (!resource.isEmpty())
         t->textRegColor = resource;
-    
+
     resource = resourceValue(rootElem, "TextSelectedColor");
     if (!resource.isEmpty())
         t->textSelColor = resource;
@@ -430,13 +422,13 @@ bool ThemeEngine::loadTheme()
     resource = resourceValue(rootElem, "TextSpecialRegularColor");
     if (!resource.isEmpty())
         t->textSpecialRegColor = resource;
-    
+
     resource = resourceValue(rootElem, "TextSpecialSelectedColor");
     if (!resource.isEmpty())
         t->textSpecialSelColor = resource;
 
     // -- banner ------------------------------------------------------------------------
-    
+
     resource = resourceValue(rootElem, "BannerColor");
     if (!resource.isEmpty())
         t->bannerColor = resource;
@@ -482,7 +474,7 @@ bool ThemeEngine::loadTheme()
     }
 
     // -- thumbnail view ----------------------------------------------------------------
-    
+
     resource = resourceValue(rootElem, "ThumbnailRegularColor");
     if (!resource.isEmpty())
         t->thumbRegColor = resource;
@@ -526,7 +518,7 @@ bool ThemeEngine::loadTheme()
     {
         t->thumbRegBorderColor = resource;
     }
-    
+
     resource = resourceValue(rootElem, "ThumbnailSelectedColor");
     if (!resource.isEmpty())
         t->thumbSelColor = resource;
@@ -558,7 +550,7 @@ bool ThemeEngine::loadTheme()
         else if (resource.contains("diagonal", Qt::CaseInsensitive))
             t->thumbSelGrad = Theme::DIAGONAL;
     }
-    
+
     resource = resourceValue(rootElem, "ThumbnailSelectedBorder");
     if (!resource.isEmpty())
     {
@@ -572,7 +564,7 @@ bool ThemeEngine::loadTheme()
     }
 
     // -- listview view ----------------------------------------------------------------
-    
+
     resource = resourceValue(rootElem, "ListviewRegularColor");
     if (!resource.isEmpty())
         t->listRegColor = resource;
@@ -690,7 +682,7 @@ bool ThemeEngine::saveTheme()
         return false;
 
     Theme *t = d->currTheme;
-    
+
     QFileInfo fi(t->filePath);
 
     QFile themeFile(fi.filePath());
@@ -704,10 +696,10 @@ bool ThemeEngine::saveTheme()
     QString      val;
 
     // header ------------------------------------------------------------------
-    
+
     xmlDoc.appendChild(xmlDoc.createProcessingInstruction(QString::fromLatin1("xml"),
                        QString::fromLatin1("version=\"1.0\" encoding=\"UTF-8\"")));
-    
+
     QString banner = QString("\n/* ============================================================"
                              "\n *"
                              "\n * This file is a part of digiKam project"
@@ -769,7 +761,7 @@ bool ThemeEngine::saveTheme()
     themeElem.appendChild(e);
 
     // banner props ------------------------------------------------------------
-    
+
     e = xmlDoc.createElement(QString::fromLatin1("BannerColor"));
     e.setAttribute(QString::fromLatin1("value"), t->bannerColor.name().toUpper());
     themeElem.appendChild(e);
@@ -842,7 +834,7 @@ bool ThemeEngine::saveTheme()
     e = xmlDoc.createElement(QString::fromLatin1("ThumbnailRegularColor"));
     e.setAttribute(QString::fromLatin1("value"), t->thumbRegColor.name().toUpper());
     themeElem.appendChild(e);
-    
+
     e = xmlDoc.createElement(QString::fromLatin1("ThumbnailRegularColorTo"));
     e.setAttribute(QString::fromLatin1("value"), t->thumbRegColorTo.name().toUpper());
     themeElem.appendChild(e);
@@ -893,7 +885,7 @@ bool ThemeEngine::saveTheme()
             break;
         }
     };
-    
+
     e = xmlDoc.createElement(QString::fromLatin1("ThumbnailRegularGradient"));
     e.setAttribute(QString::fromLatin1("value"), val);
     themeElem.appendChild(e);
@@ -907,7 +899,7 @@ bool ThemeEngine::saveTheme()
     themeElem.appendChild(e);
 
     // thumbnail.selected props -------------------------------------------------
-    
+
     e = xmlDoc.createElement(QString::fromLatin1("ThumbnailSelectedColor"));
     e.setAttribute(QString::fromLatin1("value"), t->thumbSelColor.name().toUpper());
     themeElem.appendChild(e);
@@ -966,7 +958,7 @@ bool ThemeEngine::saveTheme()
     e = xmlDoc.createElement(QString::fromLatin1("ThumbnailSelectedGradient"));
     e.setAttribute(QString::fromLatin1("value"), val);
     themeElem.appendChild(e);
-    
+
     e = xmlDoc.createElement(QString::fromLatin1("ThumbnailSelectedBorder"));
     e.setAttribute(QString::fromLatin1("value"), (t->thumbSelBorder ? "TRUE" : "FALSE"));
     themeElem.appendChild(e);
@@ -976,7 +968,7 @@ bool ThemeEngine::saveTheme()
     themeElem.appendChild(e);
 
     // listview.regular props -------------------------------------------------
-    
+
     e = xmlDoc.createElement(QString::fromLatin1("ListviewRegularColor"));
     e.setAttribute(QString::fromLatin1("value"), t->listRegColor.name().toUpper());
     themeElem.appendChild(e);
@@ -1031,11 +1023,11 @@ bool ThemeEngine::saveTheme()
             break;
         }
     };
-    
+
     e = xmlDoc.createElement(QString::fromLatin1("ListviewRegularGradient"));
     e.setAttribute(QString::fromLatin1("value"), val);
     themeElem.appendChild(e);
-    
+
     e = xmlDoc.createElement(QString::fromLatin1("ListviewRegularBorder"));
     e.setAttribute(QString::fromLatin1("value"), (t->listRegBorder ? "TRUE" : "FALSE"));
     themeElem.appendChild(e);
@@ -1045,7 +1037,7 @@ bool ThemeEngine::saveTheme()
     themeElem.appendChild(e);
 
     // listview.selected props -------------------------------------------------
-    
+
     e = xmlDoc.createElement(QString::fromLatin1("ListviewSelectedColor"));
     e.setAttribute(QString::fromLatin1("value"), t->listSelColor.name().toUpper());
     themeElem.appendChild(e);
@@ -1100,11 +1092,11 @@ bool ThemeEngine::saveTheme()
             break;
         }
     };
-    
+
     e = xmlDoc.createElement(QString::fromLatin1("ListviewSelectedGradient"));
     e.setAttribute(QString::fromLatin1("value"), val);
     themeElem.appendChild(e);
-    
+
     e = xmlDoc.createElement(QString::fromLatin1("ListviewSelectedBorder"));
     e.setAttribute(QString::fromLatin1("value"), (t->listSelBorder ? "TRUE" : "FALSE"));
     themeElem.appendChild(e);

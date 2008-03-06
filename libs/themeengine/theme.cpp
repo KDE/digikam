@@ -40,46 +40,46 @@ Theme::Theme(const Theme& theme)
 {
     if (this != &theme)
     {
-        baseColor       =  theme.baseColor;      
-        textRegColor    =  theme.textRegColor;   
-        textSelColor    =  theme.textSelColor;
+        baseColor           =  theme.baseColor;
+        textRegColor        =  theme.textRegColor;
+        textSelColor        =  theme.textSelColor;
         textSpecialRegColor = theme.textSpecialRegColor;
         textSpecialSelColor = theme.textSpecialSelColor;
 
-        bannerColor     =  theme.bannerColor;    
-        bannerColorTo   =  theme.bannerColorTo;  
-        bannerBevel     =  theme.bannerBevel;    
-        bannerGrad      =  theme.bannerGrad;
-        bannerBorder    =  theme.bannerBorder;
-        bannerBorderColor =  theme.bannerBorderColor;
+        bannerColor         =  theme.bannerColor;
+        bannerColorTo       =  theme.bannerColorTo;
+        bannerBevel         =  theme.bannerBevel;
+        bannerGrad          =  theme.bannerGrad;
+        bannerBorder        =  theme.bannerBorder;
+        bannerBorderColor   =  theme.bannerBorderColor;
 
-        thumbRegColor   =  theme.thumbRegColor;  
-        thumbRegColorTo =  theme.thumbRegColorTo;
-        thumbRegBevel   =  theme.thumbRegBevel;  
-        thumbRegGrad    =  theme.thumbRegGrad;   
-        thumbRegBorder  =  theme.thumbRegBorder;
+        thumbRegColor       =  theme.thumbRegColor;
+        thumbRegColorTo     =  theme.thumbRegColorTo;
+        thumbRegBevel       =  theme.thumbRegBevel;
+        thumbRegGrad        =  theme.thumbRegGrad; 
+        thumbRegBorder      =  theme.thumbRegBorder;
         thumbRegBorderColor =  theme.thumbRegBorderColor;
 
-        thumbSelColor   =  theme.thumbSelColor;  
-        thumbSelColorTo =  theme.thumbSelColorTo;
-        thumbSelBevel   =  theme.thumbSelBevel;  
-        thumbSelGrad    =  theme.thumbSelGrad;   
-        thumbSelBorder  =  theme.thumbSelBorder;
+        thumbSelColor       =  theme.thumbSelColor;
+        thumbSelColorTo     =  theme.thumbSelColorTo;
+        thumbSelBevel       =  theme.thumbSelBevel;
+        thumbSelGrad        =  theme.thumbSelGrad; 
+        thumbSelBorder      =  theme.thumbSelBorder;
         thumbSelBorderColor =  theme.thumbSelBorderColor;
 
-        listRegColor    =  theme.listRegColor;   
-        listRegColorTo  =  theme.listRegColorTo; 
-        listRegBevel    =  theme.listRegBevel;   
-        listRegGrad     =  theme.listRegGrad;    
-        listRegBorder   =  theme.listRegBorder;
-        listRegBorderColor =  theme.listRegBorderColor;
+        listRegColor        =  theme.listRegColor;
+        listRegColorTo      =  theme.listRegColorTo;
+        listRegBevel        =  theme.listRegBevel;
+        listRegGrad         =  theme.listRegGrad;
+        listRegBorder       =  theme.listRegBorder;
+        listRegBorderColor  =  theme.listRegBorderColor;
 
-        listSelColor    =  theme.listSelColor;   
-        listSelColorTo  =  theme.listSelColorTo; 
-        listSelBevel    =  theme.listSelBevel;   
-        listSelGrad     =  theme.listSelGrad;    
-        listSelBorder   =  theme.listSelBorder;
-        listSelBorderColor =  theme.listSelBorderColor;
+        listSelColor        =  theme.listSelColor;
+        listSelColorTo      =  theme.listSelColorTo;
+        listSelBevel        =  theme.listSelBevel;
+        listSelGrad         =  theme.listSelGrad;
+        listSelBorder       =  theme.listSelBorder;
+        listSelBorderColor  =  theme.listSelBorderColor;
     }
 }
 
@@ -87,46 +87,46 @@ Theme& Theme::operator=(const Theme& theme)
 {
     if (this != &theme)
     {
-        baseColor       =  theme.baseColor;      
-        textRegColor    =  theme.textRegColor;   
-        textSelColor    =  theme.textSelColor;   
+        baseColor           = theme.baseColor;
+        textRegColor        = theme.textRegColor;
+        textSelColor        = theme.textSelColor;
         textSpecialRegColor = theme.textSpecialRegColor;
         textSpecialSelColor = theme.textSpecialSelColor;
 
-        bannerColor     =  theme.bannerColor;    
-        bannerColorTo   =  theme.bannerColorTo;  
-        bannerBevel     =  theme.bannerBevel;    
-        bannerGrad      =  theme.bannerGrad;
-        bannerBorder    =  theme.bannerBorder;
-        bannerBorderColor =  theme.bannerBorderColor;
+        bannerColor         = theme.bannerColor;
+        bannerColorTo       = theme.bannerColorTo;
+        bannerBevel         = theme.bannerBevel;
+        bannerGrad          = theme.bannerGrad;
+        bannerBorder        = theme.bannerBorder;
+        bannerBorderColor   = theme.bannerBorderColor;
 
-        thumbRegColor   =  theme.thumbRegColor;  
-        thumbRegColorTo =  theme.thumbRegColorTo;
-        thumbRegBevel   =  theme.thumbRegBevel;  
-        thumbRegGrad    =  theme.thumbRegGrad;   
-        thumbRegBorder  =  theme.thumbRegBorder;
-        thumbRegBorderColor =  theme.thumbRegBorderColor;
+        thumbRegColor       = theme.thumbRegColor;
+        thumbRegColorTo     = theme.thumbRegColorTo;
+        thumbRegBevel       = theme.thumbRegBevel;
+        thumbRegGrad        = theme.thumbRegGrad;
+        thumbRegBorder      = theme.thumbRegBorder;
+        thumbRegBorderColor = theme.thumbRegBorderColor;
 
-        thumbSelColor   =  theme.thumbSelColor;  
-        thumbSelColorTo =  theme.thumbSelColorTo;
-        thumbSelBevel   =  theme.thumbSelBevel;  
-        thumbSelGrad    =  theme.thumbSelGrad;   
-        thumbSelBorder  =  theme.thumbSelBorder;
-        thumbSelBorderColor =  theme.thumbSelBorderColor;
+        thumbSelColor       = theme.thumbSelColor;
+        thumbSelColorTo     = theme.thumbSelColorTo;
+        thumbSelBevel       = theme.thumbSelBevel;
+        thumbSelGrad        = theme.thumbSelGrad;
+        thumbSelBorder      = theme.thumbSelBorder;
+        thumbSelBorderColor = theme.thumbSelBorderColor;
 
-        listRegColor    =  theme.listRegColor;   
-        listRegColorTo  =  theme.listRegColorTo; 
-        listRegBevel    =  theme.listRegBevel;   
-        listRegGrad     =  theme.listRegGrad;    
-        listRegBorder   =  theme.listRegBorder;
-        listRegBorderColor =  theme.listRegBorderColor;
+        listRegColor        = theme.listRegColor;
+        listRegColorTo      = theme.listRegColorTo;
+        listRegBevel        = theme.listRegBevel;
+        listRegGrad         = theme.listRegGrad;
+        listRegBorder       = theme.listRegBorder;
+        listRegBorderColor  = theme.listRegBorderColor;
 
-        listSelColor    =  theme.listSelColor;   
-        listSelColorTo  =  theme.listSelColorTo; 
-        listSelBevel    =  theme.listSelBevel;   
-        listSelGrad     =  theme.listSelGrad;    
-        listSelBorder   =  theme.listSelBorder;
-        listSelBorderColor =  theme.listSelBorderColor;
+        listSelColor        = theme.listSelColor;
+        listSelColorTo      = theme.listSelColorTo;
+        listSelBevel        = theme.listSelBevel;
+        listSelGrad         = theme.listSelGrad;
+        listSelBorder       = theme.listSelBorder;
+        listSelBorderColor  = theme.listSelBorderColor;
     }
     return *this;
 }
@@ -135,7 +135,7 @@ void Theme::print()
 {
     /*
     DDebug() << "Theme :                      " << name << endl;
-    
+
     DDebug() << "Base Color:                  " << baseColor << endl;
     DDebug() << "Text Regular  Color:         " << textRegColor << endl;
     DDebug() << "Text Selected Color:         " << textSelColor << endl;
