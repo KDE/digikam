@@ -147,9 +147,6 @@ SET(digikam_bin_SRCS
                      ${libthemeengine_SRCS}
                      ${libkipiiface_SRCS}
 
-                     treefolderitem.cpp 
-                     treefolderview.cpp 
-                     tagfilterview.cpp 
 
                      album.cpp 
                      albumiconview.cpp 
@@ -203,6 +200,8 @@ SET(digikam_bin_SRCS
                      syncjob.cpp 
                      tagcreatedlg.cpp 
                      tagfolderview.cpp 
+                     tagfilterview.cpp 
+                     treefolderitem.cpp 
                      tagspopupmenu.cpp 
                      timelinefolderview.cpp
                      timelineview.cpp
