@@ -113,7 +113,7 @@
     <run>
       <directoryradio>build</directoryradio>
       <customdirectory>/</customdirectory>
-      <mainprogram>/home/gilles/Documents/Devel/SVN/branches/graphics/digikam/themedesigner/digikamthemedesigner</mainprogram>
+      <mainprogram>/home/gilles/Documents/Devel/SVN/branches/graphics/digikam/digikam/digikam</mainprogram>
       <programargs></programargs>
       <terminal>false</terminal>
       <autocompile>false</autocompile>
