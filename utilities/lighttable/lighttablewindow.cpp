@@ -468,6 +468,10 @@ void LightTableWindow::setupActions()
     connect(d->donateMoneyAction, SIGNAL(triggered()), this, SLOT(slotDonateMoney()));
     actionCollection()->addAction("lighttable_donatemoney", d->donateMoneyAction);
 
+    d->contributeAction = new KAction(i18n("Contribute..."), this);
+    connect(d->contributeAction, SIGNAL(triggered()), this, SLOT(slotContribute()));
+    actionCollection()->addAction("lighttable_contribute", d->contributeAction);
+
     d->rawCameraListAction = new KAction(KIcon("kdcraw"), i18n("RAW camera supported"), this);
     connect(d->rawCameraListAction, SIGNAL(triggered()), this, SLOT(slotRawCameraList()));
     actionCollection()->addAction("lighttable_rawcameralist", d->rawCameraListAction);
@@ -1415,6 +1419,11 @@ void LightTableWindow::hideToolBars()
 void LightTableWindow::slotDonateMoney()
 {
     KToolInvocation::invokeBrowser("http://www.digikam.org/?q=donation");
+}
+
+void LightTableWindow::slotContribute()
+{
+    KToolInvocation::invokeBrowser("http://www.digikam.org/?q=contrib");
 }
 
 void LightTableWindow::slotEditKeys()

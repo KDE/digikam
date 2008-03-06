@@ -27,11 +27,11 @@
 
 class QToolButton;
 class QLabel;
-class KAction;
 class QWidgetAction;
 class QEventLoop;
 class QSignalMapper;
 
+class KAction;
 class KComboBox;
 class KToggleAction;
 
@@ -82,6 +82,7 @@ public:
         undoSignalMapper       = 0;
         redoSignalMapper       = 0;
         rawCameraListAction    = 0;
+        contributeAction       = 0;
     }
 
     ~EditorWindowPriv()
@@ -100,6 +101,7 @@ public:
     QToolButton               *overExposureIndicator; 
 
     KAction                   *donateMoneyAction;
+    KAction                   *contributeAction;
     KAction                   *filePrintAction;
     KAction                   *copyAction;
     KAction                   *resizeAction;

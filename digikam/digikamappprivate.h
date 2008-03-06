@@ -159,6 +159,7 @@ public:
         solidUsmActionGroup                  = 0;
         eventLoop                            = 0;
         albumIconViewFilter                  = 0;
+        contributeAction                     = 0;
     }
 
     bool                                fullScreen;
@@ -250,6 +251,7 @@ public:
     KAction                            *rawCameraListAction;
     KAction                            *kipiHelpAction;
     KAction                            *donateMoneyAction;
+    KAction                            *contributeAction;
     KSelectAction                      *themeMenuAction;
     QAction                            *addCameraSeparatorAction;
     QAction                            *quitAction;

@@ -424,9 +424,13 @@ void CameraUI::setupActions()
 
     // -- Standard 'Help' menu actions ---------------------------------------------
 
-    d->donateMoneyAction = new KAction(i18n("Donate Money..."), this);
+    d->donateMoneyAction = new KAction(i18n("Make a donation..."), this);
     connect(d->donateMoneyAction, SIGNAL(triggered()), this, SLOT(slotDonateMoney()));
     actionCollection()->addAction("cameraui_donatemoney", d->donateMoneyAction);
+
+    d->contributeAction = new KAction(i18n("Contribute..."), this);
+    connect(d->contributeAction, SIGNAL(triggered()), this, SLOT(slotContribute()));
+    actionCollection()->addAction("cameraui_contribute", d->contributeAction);
 
     d->rawCameraListAction = new KAction(KIcon("kdcraw"), i18n("RAW camera supported"), this);
     connect(d->rawCameraListAction, SIGNAL(triggered()), this, SLOT(slotRawCameraList()));
@@ -1752,7 +1756,7 @@ void CameraUI::addFileExtension(const QString& ext)
     emit signalAlbumSettingsChanged();
 }
 
-void CameraUI::slotFirstItem(void)
+void CameraUI::slotFirstItem()
 {
     CameraIconViewItem *currItem = dynamic_cast<CameraIconViewItem*>(d->view->firstItem());
     d->view->clearSelection();
@@ -1761,7 +1765,7 @@ void CameraUI::slotFirstItem(void)
        d->view->setCurrentItem(currItem);
 }
 
-void CameraUI::slotPrevItem(void)
+void CameraUI::slotPrevItem()
 {
     CameraIconViewItem *currItem = dynamic_cast<CameraIconViewItem*>(d->view->currentItem());
     d->view->clearSelection();
@@ -1770,7 +1774,7 @@ void CameraUI::slotPrevItem(void)
        d->view->setCurrentItem(currItem->prevItem());
 }
 
-void CameraUI::slotNextItem(void)
+void CameraUI::slotNextItem()
 {
     CameraIconViewItem *currItem = dynamic_cast<CameraIconViewItem*>(d->view->currentItem());
     d->view->clearSelection();
@@ -1779,7 +1783,7 @@ void CameraUI::slotNextItem(void)
        d->view->setCurrentItem(currItem->nextItem());
 }
 
-void CameraUI::slotLastItem(void)
+void CameraUI::slotLastItem()
 {
     CameraIconViewItem *currItem = dynamic_cast<CameraIconViewItem*>(d->view->lastItem());
     d->view->clearSelection();
@@ -1793,6 +1797,11 @@ void CameraUI::slotDonateMoney()
     KToolInvocation::invokeBrowser("http://www.digikam.org/?q=donation");
 }
 
+void CameraUI::slotContribute()
+{
+    KToolInvocation::invokeBrowser("http://www.digikam.org/?q=contrib");
+}
+
 void CameraUI::slotEditKeys()
 {
     KShortcutsDialog dialog(KShortcutsEditor::AllActions,
@@ -1803,7 +1812,7 @@ void CameraUI::slotEditKeys()
 
 void CameraUI::slotConfToolbars()
 {
-    saveMainWindowSettings(KGlobal::config()->group("LightTable Settings"));
+    saveMainWindowSettings(KGlobal::config()->group("Camera Settings"));
     KEditToolBar dlg(factory(), this);
 
     connect(&dlg, SIGNAL(newToolbarConfig()),
@@ -1814,7 +1823,7 @@ void CameraUI::slotConfToolbars()
 
 void CameraUI::slotNewToolbarConfig()
 {
-    applyMainWindowSettings(KGlobal::config()->group("LightTable Settings"));
+    applyMainWindowSettings(KGlobal::config()->group("Camera Settings"));
 }
 
 void CameraUI::slotSetup()

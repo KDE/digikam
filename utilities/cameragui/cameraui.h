@@ -168,6 +168,7 @@ private slots:
     void slotLastItem();
 
     void slotDonateMoney();
+    void slotContribute();
     void slotEditKeys();
     void slotConfToolbars();
     void slotNewToolbarConfig();

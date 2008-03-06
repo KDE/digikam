@@ -111,6 +111,7 @@ public:
         cameraFreeSpace           = 0;
         rawCameraListAction       = 0;
         themeMenuAction           = 0;
+        contributeAction          = 0;
     }
 
     bool                          busy;
@@ -169,6 +170,7 @@ public:
     KAction                      *selectInvertAction;
     KAction                      *selectNewItemsAction;
     KAction                      *donateMoneyAction;
+    KAction                      *contributeAction;
     KAction                      *cameraCancelAction;
     KAction                      *rawCameraListAction;
 

@@ -116,6 +116,7 @@ private slots:
     void slotShowTip();
     void slotShowKipiHelp();
     void slotDonateMoney();
+    void slotContribute();
     void slotRawCameraList();
 
     void slotRecurseAlbums(bool);

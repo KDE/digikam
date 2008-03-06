@@ -493,6 +493,10 @@ void EditorWindow::setupStandardActions()
     connect(d->donateMoneyAction, SIGNAL(triggered()), this, SLOT(slotDonateMoney()));
     actionCollection()->addAction("editorwindow_donatemoney", d->donateMoneyAction);
 
+    d->contributeAction = new KAction(i18n("Contribute..."), this);
+    connect(d->contributeAction, SIGNAL(triggered()), this, SLOT(slotContribute()));
+    actionCollection()->addAction("editorwindow_contribute", d->contributeAction);
+
     d->rawCameraListAction = new KAction(KIcon("kdcraw"), i18n("RAW camera supported"), this);
     connect(d->rawCameraListAction, SIGNAL(triggered()), this, SLOT(slotRawCameraList()));
     actionCollection()->addAction("editorwindow_rawcameralist", d->rawCameraListAction);
@@ -1722,6 +1726,11 @@ void EditorWindow::setOverExposureToolTip(bool oei)
 void EditorWindow::slotDonateMoney()
 {
     KToolInvocation::invokeBrowser("http://www.digikam.org/?q=donation");
+}
+
+void EditorWindow::slotContribute()
+{
+    KToolInvocation::invokeBrowser("http://www.digikam.org/?q=contrib");
 }
 
 void EditorWindow::slotToggleSlideShow()

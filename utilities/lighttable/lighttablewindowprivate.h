@@ -89,6 +89,7 @@ public:
         navigateByPairAction   = 0;
         rawCameraListAction    = 0;
         themeMenuAction        = 0;
+        contributeAction       = 0;
     }
 
     bool                      autoLoadOnRightPanel;
@@ -108,7 +109,6 @@ public:
     QAction                  *removeItemAction;
     QAction                  *fileDeleteAction;
     QAction                  *slideShowAction;
-    QAction                  *donateMoneyAction;
     QAction                  *zoomPlusAction;
     QAction                  *zoomMinusAction;
     QAction                  *zoomTo100percents;
@@ -127,6 +127,8 @@ public:
     KAction                  *backwardAction;
     KAction                  *firstAction;
     KAction                  *lastAction;
+    KAction                  *donateMoneyAction;
+    KAction                  *contributeAction;
     KAction                  *rawCameraListAction;
 
     KSelectAction            *themeMenuAction;

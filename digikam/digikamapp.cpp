@@ -876,6 +876,10 @@ void DigikamApp::setupActions()
     connect(d->donateMoneyAction, SIGNAL(triggered()), this, SLOT(slotDonateMoney()));
     actionCollection()->addAction("help_donatemoney", d->donateMoneyAction);
 
+    d->contributeAction = new KAction(i18n("Contribute..."), this);
+    connect(d->contributeAction, SIGNAL(triggered()), this, SLOT(slotContribute()));
+    actionCollection()->addAction("help_contribute", d->contributeAction);
+
     // -- Logo on the right of tool bar --------------------------
 
     actionCollection()->addAction("logo_action", new DLogoAction(this));
@@ -2147,6 +2151,11 @@ void DigikamApp::slotSyncAllPicturesMetadataDone()
 void DigikamApp::slotDonateMoney()
 {
     KToolInvocation::invokeBrowser("http://www.digikam.org/?q=donation");
+}
+
+void DigikamApp::slotContribute()
+{
+    KToolInvocation::invokeBrowser("http://www.digikam.org/?q=contrib");
 }
 
 void DigikamApp::slotRecurseAlbums(bool checked)
