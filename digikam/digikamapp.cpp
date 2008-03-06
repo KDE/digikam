@@ -192,7 +192,7 @@ DigikamApp::~DigikamApp()
         ImageWindow::imagewindow()->close(true);
 
     // Close and delete light table instance.
-        
+
     if (LightTableWindow::lightTableWindowCreated())
         LightTableWindow::lightTableWindow()->close(true);
 
@@ -348,7 +348,7 @@ void DigikamApp::setupView()
 
     connect(d->view, SIGNAL(signalAlbumSelected(bool)),
             this, SLOT(slotAlbumSelected(bool)));
-            
+
     connect(d->view, SIGNAL(signalTagSelected(bool)),
             this, SLOT(slotTagSelected(bool)));
 
@@ -368,7 +368,7 @@ void DigikamApp::setupStatusBar()
     d->albumIconViewFilter = new AlbumIconViewFilter(statusBar());
     d->albumIconViewFilter->setMaximumHeight(fontMetrics().height()+4);
     statusBar()->addWidget(d->albumIconViewFilter, 100, true);
-    
+
     //------------------------------------------------------------------------------
 
     d->statusZoomBar = new StatusZoomBar(statusBar());
@@ -397,7 +397,7 @@ void DigikamApp::setupStatusBar()
 
     connect(d->view, SIGNAL(signalZoomChanged(double, int)),
             this, SLOT(slotZoomChanged(double, int)));
-    
+
     connect(d->view, SIGNAL(signalTogglePreview(bool)),
             this, SLOT(slotTogglePreview(bool)));
 
@@ -428,7 +428,7 @@ void DigikamApp::setupAccelerators()
                            i18n("Exit preview mode"),
                            Key_Escape, this, SIGNAL(signalEscapePressed()),
                            false, true);
-    
+
     d->accelerators->insert("Next Image Key_Space", i18n("Next Image"),
                            i18n("Next Image"),
                            Key_Space, this, SIGNAL(signalNextItem()),
@@ -491,6 +491,9 @@ void DigikamApp::setupActions()
     connect(d->themeMenuAction, SIGNAL(activated(const QString&)),
             this, SLOT(slotChangeTheme(const QString&)));
 
+    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+            this, SLOT(slotThemeChanged()));
+
     // -----------------------------------------------------------------
 
     d->backwardActionMenu = new KToolBarPopupAction(i18n("&Back"),
@@ -504,7 +507,7 @@ void DigikamApp::setupActions()
 
     connect(d->backwardActionMenu->popupMenu(), SIGNAL(aboutToShow()),
             this, SLOT(slotAboutToShowBackwardMenu()));
-    
+
     connect(d->backwardActionMenu->popupMenu(), SIGNAL(activated(int)),
             d->view, SLOT(slotAlbumHistoryBack(int)));
 
@@ -516,7 +519,7 @@ void DigikamApp::setupActions()
                                     actionCollection(),
                                     "album_forward");
     d->forwardActionMenu->setEnabled(false);
-    
+
     connect(d->forwardActionMenu->popupMenu(), SIGNAL(aboutToShow()),
             this, SLOT(slotAboutToShowForwardMenu()));
 
@@ -623,8 +626,8 @@ void DigikamApp::setupActions()
                                     actionCollection(),
                                     "album_syncmetadata");
     d->syncAlbumMetadataAction->setWhatsThis(i18n("Updates all image metadata of the current "
-                                                "album with digiKam database contents "
-						"(image metadata will be over-written with data from the database)."));
+                                                  "album with digiKam database contents "
+                                                  "(image metadata will be over-written with data from the database)."));
 
     d->openInKonquiAction = new KAction( i18n("Open in Konqueror"),
                                     "konqueror",
@@ -751,7 +754,7 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------------
 
     QSignalMapper *exifOrientationMapper = new QSignalMapper( d->view );
-    
+
     connect(exifOrientationMapper, SIGNAL(mapped(int) ),
             d->view, SLOT(slotImageExifOrientation(int)));
 
@@ -788,25 +791,25 @@ void DigikamApp::setupActions()
 
     connect(d->imageSetExifOrientation1Action, SIGNAL(activated()),
             exifOrientationMapper, SLOT(map()));
-            
+
     connect(d->imageSetExifOrientation2Action, SIGNAL(activated()),
             exifOrientationMapper, SLOT(map()));
-            
+
     connect(d->imageSetExifOrientation3Action, SIGNAL(activated()),
             exifOrientationMapper, SLOT(map()));
-            
+
     connect(d->imageSetExifOrientation4Action, SIGNAL(activated()),
             exifOrientationMapper, SLOT(map()));
-    
+
     connect(d->imageSetExifOrientation5Action, SIGNAL(activated()),
             exifOrientationMapper, SLOT(map()));
-    
+
     connect(d->imageSetExifOrientation6Action, SIGNAL(activated()),
             exifOrientationMapper, SLOT(map()));
-    
+
     connect(d->imageSetExifOrientation7Action, SIGNAL(activated()),
             exifOrientationMapper, SLOT(map()));
-    
+
     connect(d->imageSetExifOrientation8Action, SIGNAL(activated()),
             exifOrientationMapper, SLOT(map()));
 
@@ -1888,13 +1891,13 @@ void DigikamApp::slotKipiPluginPlug()
 void DigikamApp::loadCameras()
 {
     d->cameraList->load();
-    
+
     d->cameraMenuAction->popupMenu()->insertSeparator();
-    
+
     d->cameraMenuAction->popupMenu()->insertItem(i18n("Browse Media"), d->cameraMediaList);
-    
+
     d->cameraMenuAction->popupMenu()->insertSeparator();
-    
+
     d->cameraMenuAction->insert(new KAction(i18n("Add Camera..."), 0,
                                           this, SLOT(slotSetupCamera()),
                                           actionCollection(),
@@ -1907,15 +1910,8 @@ void DigikamApp::populateThemes()
         d->splashScreen->message(i18n("Loading themes"), AlignLeft, white);
 
     ThemeEngine::instance()->scanThemes();
-    QStringList themes(ThemeEngine::instance()->themeNames());
-
-    d->themeMenuAction->setItems(themes);
-    int index = themes.findIndex(d->albumSettings->getCurrentTheme());
-    
-    if (index == -1)
-        index = themes.findIndex(i18n("Default"));
-        
-    d->themeMenuAction->setCurrentItem(index);
+    d->themeMenuAction->setItems(ThemeEngine::instance()->themeNames());
+    slotThemeChanged();
     ThemeEngine::instance()->slotChangeTheme(d->themeMenuAction->currentText());
 }
 
@@ -1925,13 +1921,23 @@ void DigikamApp::slotChangeTheme(const QString& theme)
     ThemeEngine::instance()->slotChangeTheme(theme);
 }
 
+void DigikamApp::slotThemeChanged()
+{
+    QStringList themes(ThemeEngine::instance()->themeNames());
+    int index = themes.findIndex(d->albumSettings->getCurrentTheme());
+    if (index == -1)
+        index = themes.findIndex(i18n("Default"));
+
+    d->themeMenuAction->setCurrentItem(index);
+}
+
 void DigikamApp::slotDatabaseRescan()
 {
     ScanLib sLib;
     sLib.startScan();
 
     d->view->refreshView();
-    
+
     if (ImageWindow::imagewindowCreated())
         ImageWindow::imagewindow()->refreshView();
 

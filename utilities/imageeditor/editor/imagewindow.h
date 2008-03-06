@@ -133,6 +133,7 @@ private slots:
     void slotFileMetadataChanged(const KURL &);
 
     void slotThemeChanged();
+    void slotChangeTheme(const QString& theme);
 
 private:
 

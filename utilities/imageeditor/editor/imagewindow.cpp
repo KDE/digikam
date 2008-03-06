@@ -118,6 +118,7 @@ public:
         fileTrashDirectlyAction             = 0;
         imageInfoCurrent                    = 0;
         rightSidebar                        = 0;
+        themeMenuAction                     = 0;
     }
 
     // If image editor is launched by camera interface, current
@@ -139,6 +140,8 @@ public:
     KAction                  *fileDeletePermanentlyAction;
     KAction                  *fileDeletePermanentlyDirectlyAction;
     KAction                  *fileTrashDirectlyAction;
+
+    KSelectAction            *themeMenuAction;
 
     ImageInfoList             imageInfoList;
     ImageInfo                *imageInfoCurrent;
@@ -323,6 +326,15 @@ void ImageWindow::setupActions()
     d->star5 = new KAction(i18n("Assign Rating \"Five Stars\""), CTRL+Key_5,
                           d->rightSidebar, SLOT(slotAssignRatingFiveStar()),
                           actionCollection(), "imageview_ratefivestar");
+
+    // -----------------------------------------------------------------------------------------
+
+    d->themeMenuAction = new KSelectAction(i18n("&Themes"), 0, actionCollection(), "theme_menu");
+    connect(d->themeMenuAction, SIGNAL(activated(const QString&)),
+            this, SLOT(slotChangeTheme(const QString&)));
+
+    d->themeMenuAction->setItems(ThemeEngine::instance()->themeNames());
+    slotThemeChanged();
 
     // -- Special Delete actions ---------------------------------------------------------------
 
@@ -742,12 +754,12 @@ void ImageWindow::slotUpdateItemInfo()
 bool ImageWindow::setup(bool iccSetupPage)
 {
     Setup setup(this, 0, iccSetupPage ? Setup::IccProfiles : Setup::LastPageUsed);    
-        
+
     if (setup.exec() != QDialog::Accepted)
         return false;
 
     kapp->config()->sync();
-    
+
     applySettings();
     return true;
 }
@@ -1018,11 +1030,6 @@ void ImageWindow::slotFileMetadataChanged(const KURL &url)
     }
 }
 
-void ImageWindow::slotThemeChanged()
-{
-    m_canvas->setBackgroundColor(ThemeEngine::instance()->baseColor());
-}
-
 void ImageWindow::slotFilePrint()
 {
     printImage(d->urlCurrent); 
@@ -1095,11 +1102,11 @@ void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
     {
         settings.exifRotate = AlbumSettings::instance()->getExifRotate();
         settings.fileList   = d->urlList;
-    
+
         SlideShow *slide = new SlideShow(settings);
         if (startWithCurrent)
             slide->setCurrent(d->urlCurrent);
-    
+
         slide->show();
     }
 }
@@ -1110,7 +1117,7 @@ void ImageWindow::dragMoveEvent(QDragMoveEvent *e)
     QValueList<int> albumIDs;
     QValueList<int> imageIDs;
     KURL::List      urls;
-    KURL::List      kioURLs;        
+    KURL::List      kioURLs;
 
     if (ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs) ||
         AlbumDrag::decode(e, urls, albumID) ||
@@ -1129,7 +1136,7 @@ void ImageWindow::dropEvent(QDropEvent *e)
     QValueList<int> albumIDs;
     QValueList<int> imageIDs;
     KURL::List      urls;
-    KURL::List      kioURLs;        
+    KURL::List      kioURLs;
 
     if (ItemDrag::decode(e, urls, kioURLs, albumIDs, imageIDs))
     {
@@ -1231,6 +1238,24 @@ void ImageWindow::slotRevert()
         return;
 
     m_canvas->slotRestore();
+}
+
+void ImageWindow::slotThemeChanged()
+{
+    QStringList themes(ThemeEngine::instance()->themeNames());
+    int index = themes.findIndex(AlbumSettings::instance()->getCurrentTheme());
+    if (index == -1)
+        index = themes.findIndex(i18n("Default"));
+
+    d->themeMenuAction->setCurrentItem(index);
+
+    m_canvas->setBackgroundColor(ThemeEngine::instance()->baseColor());
+}
+
+void ImageWindow::slotChangeTheme(const QString& theme)
+{
+    AlbumSettings::instance()->setCurrentTheme(theme);
+    ThemeEngine::instance()->slotChangeTheme(theme);
 }
 
 }  // namespace Digikam

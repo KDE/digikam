@@ -69,7 +69,7 @@ public:
     const QPtrList<KAction>& menuImageActions();
     const QPtrList<KAction>& menuBatchActions();
     const QPtrList<KAction>& menuAlbumActions();
-    
+
     const QPtrList<KAction> menuImportActions();
     const QPtrList<KAction> menuExportActions();
 
@@ -79,7 +79,7 @@ public:
     void enableZoomMinusAction(bool val);
     void enableAlbumBackwardHistory(bool enable);
     void enableAlbumForwardHistory(bool enable);
-    
+
 signals:
 
     void signalEscapePressed();
@@ -125,16 +125,16 @@ private slots:
 
     void slotRecurseAlbums(bool);
     void slotRecurseTags(bool);
-    
+
     void slotAboutToShowForwardMenu();
     void slotAboutToShowBackwardMenu();
-            
+
     void slotSetup();
     void slotSetupCamera();
     void slotSetupChanged();
 
     void slotKipiPluginPlug();
-    
+
     QString convertToLocalUrl( const QString& folder );
     void slotDownloadImages( const QString& folder );
     void slotDownloadImages();
@@ -155,8 +155,9 @@ private slots:
     void slotRebuildAllThumbsDone();
     void slotSyncAllPicturesMetadata();
     void slotSyncAllPicturesMetadataDone();
-    
+
     void slotChangeTheme(const QString& theme);
+    void slotThemeChanged();
 
     void slotProgressBarMode(int, const QString&);
     void slotProgressValue(int);
