@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2008-26-02
- * Description : Tree folder item.
+ * Description : Album folder item to use with QTreeWidget.
  *
  * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
