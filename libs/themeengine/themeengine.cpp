@@ -253,10 +253,10 @@ void ThemeEngine::setCurrentTheme(const QString& name)
     v &= 255; //ensures 0 <= v < 256
     d->currTheme->altBase = QColor(h, s, v, QColor::Hsv);
 */
-    fg.hsv(&h, &s, &v);
+    fg.getHsv(&h, &s, &v);
     v += (v < 128) ? +150 : -150;
     v &= 255; //ensures 0 <= v < 256
-    const QColor highlight(h, s, v, QColor::Hsv);
+    const QColor highlight = QColor::fromHsv(h, s, v);
 
     plt.setColor(QPalette::Active,   QPalette::Base,            bg);
     plt.setColor(QPalette::Active,   QPalette::Background,      bg.dark(115));
@@ -301,7 +301,7 @@ void ThemeEngine::setCurrentTheme(const QString& name)
     cg.setColor(QColorGroup::Shadow,          ThemeEngine::instance()->textRegColor());
 */
 
-    kapp->setPalette(plt, true);
+    kapp->setPalette(plt);
 
     //theme->print();
     QTimer::singleShot(0, this, SIGNAL(signalThemeChanged()));
