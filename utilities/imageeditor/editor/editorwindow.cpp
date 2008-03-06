@@ -303,7 +303,6 @@ void EditorWindow::setupStandardActions()
     connect(m_fileDeleteAction, SIGNAL(triggered()), this, SLOT(slotDeleteCurrentItem()));
     actionCollection()->addAction("editorwindow_delete", m_fileDeleteAction);
 
-
     actionCollection()->addAction(KStandardAction::Close, "editorwindow_close", 
                                   this, SLOT(close()));
 
@@ -333,7 +332,6 @@ void EditorWindow::setupStandardActions()
     connect(m_undoAction, SIGNAL(triggered()), d->undoSignalMapper, SLOT(map()));
     d->undoSignalMapper->setMapping(m_undoAction, 1);
 
-
     m_redoAction = new KToolBarPopupAction(KIcon("edit-redo"), i18n("Redo"), this);
     m_redoAction->setShortcut(KStandardShortcut::Redo);
     m_redoAction->setEnabled(false);
@@ -349,7 +347,6 @@ void EditorWindow::setupStandardActions()
 
     connect(m_redoAction, SIGNAL(triggered()), d->redoSignalMapper, SLOT(map()));
     d->redoSignalMapper->setMapping(m_redoAction, 1);
-
 
     d->selectAllAction = new KAction(i18n("Select All"), this);
     d->selectAllAction->setShortcut(Qt::CTRL+Qt::Key_A);
@@ -430,7 +427,6 @@ void EditorWindow::setupStandardActions()
     d->viewUnderExpoAction->setShortcut(Qt::Key_F10); 
     connect(d->viewUnderExpoAction, SIGNAL(triggered()), this, SLOT(slotToggleUnderExposureIndicator()));
     actionCollection()->addAction("editorwindow_underexposure", d->viewUnderExpoAction);
-
 
     d->viewOverExpoAction = new KToggleAction(KIcon("overexposure"), 
                                               i18n("Over-Exposure Indicator"), this);

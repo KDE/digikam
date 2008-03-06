@@ -47,7 +47,7 @@ public:
 
     LightTableWindowPriv()
     {
-        autoLoadOnRightPanel   = true;    
+        autoLoadOnRightPanel   = true;
         autoSyncPreview        = true;
         fullScreenHideToolBar  = false;
         fullScreen             = false;
@@ -88,6 +88,7 @@ public:
         lastAction             = 0;
         navigateByPairAction   = 0;
         rawCameraListAction    = 0;
+        themeMenuAction        = 0;
     }
 
     bool                      autoLoadOnRightPanel;
@@ -99,6 +100,20 @@ public:
 
     QSplitter                *hSplitter;
     QSplitter                *vSplitter;
+
+    QAction                  *setItemLeftAction;
+    QAction                  *setItemRightAction;
+    QAction                  *clearListAction;
+    QAction                  *editItemAction;
+    QAction                  *removeItemAction;
+    QAction                  *fileDeleteAction;
+    QAction                  *slideShowAction;
+    QAction                  *donateMoneyAction;
+    QAction                  *zoomPlusAction;
+    QAction                  *zoomMinusAction;
+    QAction                  *zoomTo100percents;
+    QAction                  *zoomFitToWindowAction;
+    QAction                  *fullScreenAction;
 
     // Rating actions.
     KAction                  *star0;
@@ -114,19 +129,7 @@ public:
     KAction                  *lastAction;
     KAction                  *rawCameraListAction;
 
-    QAction                  *setItemLeftAction;
-    QAction                  *setItemRightAction;
-    QAction                  *clearListAction;
-    QAction                  *editItemAction;
-    QAction                  *removeItemAction;
-    QAction                  *fileDeleteAction;
-    QAction                  *slideShowAction;
-    QAction                  *donateMoneyAction;
-    QAction                  *zoomPlusAction;
-    QAction                  *zoomMinusAction;
-    QAction                  *zoomTo100percents;
-    QAction                  *zoomFitToWindowAction;
-    QAction                  *fullScreenAction;
+    KSelectAction            *themeMenuAction;
 
     KToggleAction            *syncPreviewAction;
     KToggleAction            *navigateByPairAction;

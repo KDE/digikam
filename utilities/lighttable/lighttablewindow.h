@@ -62,7 +62,7 @@ public:
     void applySettings();
     void refreshView();
 
-signals: 
+signals:
 
     void signalFileDeleted(const KUrl&);
 
@@ -140,6 +140,9 @@ private slots:
     void slotNewToolbarConfig();
     void slotSetup();
     void slotRawCameraList();
+
+    void slotThemeChanged();
+    void slotChangeTheme(const QString& theme);
 
 private:
 

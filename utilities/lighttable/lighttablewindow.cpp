@@ -32,6 +32,7 @@
 #include <kshortcutsdialog.h>
 #include <kaction.h>
 #include <kactioncollection.h>
+#include <kselectaction.h>
 #include <kstandardaction.h>
 #include <kstandardshortcut.h>
 #include <kxmlguifactory.h>
@@ -450,6 +451,16 @@ void LightTableWindow::setupActions()
     KStandardAction::keyBindings(this, SLOT(slotEditKeys()),           actionCollection());
     KStandardAction::configureToolbars(this, SLOT(slotConfToolbars()), actionCollection());
     KStandardAction::preferences(this, SLOT(slotSetup()),              actionCollection());
+
+    // ---------------------------------------------------------------------------------
+
+    d->themeMenuAction = new KSelectAction(i18n("&Themes"), this);
+    connect(d->themeMenuAction, SIGNAL(triggered(const QString&)), 
+            this, SLOT(slotChangeTheme(const QString&)));
+    actionCollection()->addAction("theme_menu", d->themeMenuAction);
+
+    d->themeMenuAction->setItems(ThemeEngine::instance()->themeNames());
+    slotThemeChanged();
 
     // -- Standard 'Help' menu actions ---------------------------------------------
 
@@ -1550,6 +1561,25 @@ void LightTableWindow::slotRawCameraList()
                                       "<p>%3 models in the list", 
                                       KDcrawVer, dcrawVer, list.count()),
                                  list, i18n("List of supported RAW camera"));
+}
+
+void LightTableWindow::slotThemeChanged()
+{
+    QStringList themes(ThemeEngine::instance()->themeNames());
+    int index = themes.indexOf(AlbumSettings::instance()->getCurrentTheme());
+    if (index == -1)
+        index = themes.indexOf(i18n("Default"));
+
+    d->themeMenuAction->setCurrentItem(index);
+}
+
+void LightTableWindow::slotChangeTheme(const QString& theme)
+{
+    // Theme menu entry is returned with keyboard accelerator. We remove it.
+    QString name = theme;
+    name.remove(QChar('&'));
+    AlbumSettings::instance()->setCurrentTheme(theme);
+    ThemeEngine::instance()->slotChangeTheme(theme);
 }
 
 }  // namespace Digikam
