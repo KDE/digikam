@@ -40,8 +40,6 @@
 
 // LibKDcraw includes.
 
-// LibKDcraw includes.
-
 #include <libkdcraw/kdcraw.h>
 #include <libkdcraw/dcrawbinary.h>
 
@@ -584,9 +582,9 @@ void LightTableWindow::loadImageInfos(const ImageInfoList &list,
         {
             new LightTableBarItem(d->barView, *it);
         }
-    }   
+    }
     d->barView->blockSignals(false);
-    
+
     // if window is iconified, show it
     if (isMinimized())
     {
@@ -594,7 +592,7 @@ void LightTableWindow::loadImageInfos(const ImageInfoList &list,
     }
 
     refreshStatusBar();
-}   
+}
 
 void LightTableWindow::refreshStatusBar()
 {
@@ -630,7 +628,7 @@ void LightTableWindow::slotItemsUpdated(const KURL::List& urls)
                 d->leftSidebar->itemChanged(d->previewView->leftImageInfo());
             }
         }
-    
+
         if (d->previewView->rightImageInfo())
         {
             if (d->previewView->rightImageInfo()->kurl() == *it)
@@ -665,10 +663,10 @@ void LightTableWindow::slotLeftPreviewLoaded(bool b)
     {
         d->previewView->checkForSelection(d->barView->currentItemImageInfo());
         d->barView->setOnLeftPanel(d->previewView->leftImageInfo());
-    
+
         LightTableBarItem *item = d->barView->findItemByInfo(d->previewView->leftImageInfo());
         if (item) item->setOnLeftPanel(true);
-    
+
         if (d->navigateByPairAction->isChecked() && item)
         {
             LightTableBarItem* next = dynamic_cast<LightTableBarItem*>(item->next());
@@ -693,7 +691,7 @@ void LightTableWindow::slotRightPreviewLoaded(bool b)
     {
         d->previewView->checkForSelection(d->barView->currentItemImageInfo());
         d->barView->setOnRightPanel(d->previewView->rightImageInfo());
-    
+
         LightTableBarItem *item = d->barView->findItemByInfo(d->previewView->rightImageInfo());
         if (item) item->setOnRightPanel(true);
     }
@@ -726,7 +724,7 @@ void LightTableWindow::slotItemSelected(ImageInfo* info)
                 d->backwardAction->setEnabled(false);
                 d->firstAction->setEnabled(false);
             }
-    
+
             if (!curr->next())
             {
                 d->forwardAction->setEnabled(false);
@@ -737,7 +735,7 @@ void LightTableWindow::slotItemSelected(ImageInfo* info)
             {
                 d->setItemLeftAction->setEnabled(false);
                 d->setItemRightAction->setEnabled(false);
-  
+
                 d->barView->setOnLeftPanel(info);
                 slotSetItemOnLeftPanel(info);
             }
@@ -767,7 +765,7 @@ void LightTableWindow::slotItemSelected(ImageInfo* info)
     }
 
     d->previewView->checkForSelection(info);
-}    
+}
 
 // Deal with one (or more) items dropped onto the left panel
 void LightTableWindow::slotLeftDroppedItems(const ImageInfoList& list)
@@ -820,7 +818,7 @@ void LightTableWindow::setLeftRightItems(const ImageInfoList &list)
 
     if (l.count()==0)
         return;
-    
+
 
     ImageInfo *info = l.first();
 
@@ -1215,12 +1213,12 @@ void LightTableWindow::slotEditItem(ImageInfo* info)
     ImageInfoList list = d->barView->itemsImageInfoList();
 
     im->loadImageInfos(list, info, i18n("Light Table"), true);
-    
+
     if (im->isHidden())
         im->show();
     else
         im->raise();
-        
+
     im->setFocus();
 }
 
@@ -1292,11 +1290,11 @@ void LightTableWindow::slideShow(bool startWithCurrent, SlideShowSettings& setti
     if (!d->cancelSlideShow)
     {
         settings.exifRotate = AlbumSettings::instance()->getExifRotate();
-    
+
         SlideShow *slide = new SlideShow(settings);
         if (startWithCurrent)
             slide->setCurrent(d->barView->currentItemImageInfo()->kurl());
-    
+
         slide->show();
     }
 }
@@ -1322,16 +1320,16 @@ void LightTableWindow::slotToggleFullScreen()
         rightDock()->show();
         topDock()->show();
         bottomDock()->show();
-        
+
         QObject* obj = child("ToolBar","KToolBar");
-        
+
         if (obj)
         {
             KToolBar* toolBar = static_cast<KToolBar*>(obj);
-            
+
             if (d->fullScreenAction->isPlugged(toolBar) && d->removeFullScreenButton)
                 d->fullScreenAction->unplug(toolBar);
-                
+
             if (toolBar->isHidden())
                 showToolBars();
         }
@@ -1345,12 +1343,12 @@ void LightTableWindow::slotToggleFullScreen()
             d->leftSidebar->restore();
             d->rightSidebar->restore();
         }
-        else       
+        else
         {
-            d->leftSidebar->backup();        
-            d->rightSidebar->backup();        
+            d->leftSidebar->backup();
+            d->rightSidebar->backup();
         }
-        
+
         d->fullScreen = false;
     }
     else  // go to fullscreen
@@ -1362,19 +1360,19 @@ void LightTableWindow::slotToggleFullScreen()
         leftDock()->hide();
         rightDock()->hide();
         bottomDock()->hide();
-        
+
         QObject* obj = child("ToolBar","KToolBar");
-        
+
         if (obj)
         {
             KToolBar* toolBar = static_cast<KToolBar*>(obj);
-            
+
             if (d->fullScreenHideToolBar)
             {
                 hideToolBars();
             }
             else
-            {   
+            {
                 showToolBars();
 
                 if ( !d->fullScreenAction->isPlugged(toolBar) )
@@ -1402,8 +1400,8 @@ void LightTableWindow::slotToggleFullScreen()
         }
         else
         {
-            d->leftSidebar->backup();        
-            d->rightSidebar->backup();        
+            d->leftSidebar->backup();
+            d->rightSidebar->backup();
         }
 
         showFullScreen();
@@ -1425,7 +1423,7 @@ void LightTableWindow::showToolBars()
     for( ; it.current()!=0L ; ++it)
     {
         bar=it.current();
-        
+
         if (bar->area())
             bar->area()->show();
         else
@@ -1441,7 +1439,7 @@ void LightTableWindow::hideToolBars()
     for( ; it.current()!=0L ; ++it)
     {
         bar=it.current();
-        
+
         if (bar->area()) 
             bar->area()->hide();
         else 
@@ -1497,13 +1495,13 @@ void LightTableWindow::slotNewToolbarConfig()
 
 void LightTableWindow::slotSetup()
 {
-    Setup setup(this, 0);    
-        
+    Setup setup(this, 0);
+
     if (setup.exec() != QDialog::Accepted)
         return;
 
     kapp->config()->sync();
-    
+
     applySettings();
 }
 
