@@ -7,7 +7,7 @@
  * Description : image editor canvas management class
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -155,9 +155,9 @@ public slots:
 
     void slotFlipHoriz();
     void slotFlipVert();
-    
+
     void slotCrop();
-    
+
     void slotRestore();
     void slotUndo(int steps=1);
     void slotRedo(int steps=1);
@@ -168,7 +168,7 @@ public slots:
     void slotSelectNone();
 
 protected:
-    
+
     void resizeEvent(QResizeEvent* e);
     void viewportPaintEvent(QPaintEvent *e);
     void contentsMousePressEvent(QMouseEvent *e);
@@ -199,11 +199,10 @@ private slots:
     void slotPanIconHiden();
 
 private:
-    
+
     CanvasPrivate *d;
 };
-    
+
 }  // namespace Digikam
 
 #endif /* CANVAS_H */
-

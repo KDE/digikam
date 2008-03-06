@@ -7,7 +7,7 @@
  * Description : image editor canvas management class
  * 
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,8 +28,7 @@
 #include <cmath>
 
 // Qt includes.
- 
-#include <Q3DragObject> 
+
 #include <Q3Cache>
 #include <QFile>
 #include <QString>
@@ -158,7 +157,7 @@ Canvas::Canvas(QWidget *parent)
     d->im     = new DImgInterface();
     d->parent = parent;
     d->bgColor.setRgb(0, 0, 0);
-    
+
     d->qcheck = QPixmap(16, 16);
     QPainter p(&d->qcheck);
     p.fillRect(0, 0, 8, 8, QColor(144, 144, 144));
@@ -192,7 +191,7 @@ Canvas::Canvas(QWidget *parent)
 
     connect(d->im, SIGNAL(signalColorManagementTool()),
             this, SIGNAL(signalColorManagementTool()));
-            
+
     connect(d->im, SIGNAL(signalModified()),
             this, SLOT(slotModified()));
 
@@ -210,7 +209,7 @@ Canvas::Canvas(QWidget *parent)
 
     connect(d->im, SIGNAL(signalSavingProgress(const QString&, float)),
             this, SIGNAL(signalSavingProgress(const QString&, float)));
-            
+
     connect(this, SIGNAL(signalSelected(bool)),
             this, SLOT(slotSelected()));
 }
@@ -259,7 +258,7 @@ void Canvas::slotImageLoaded(const QString& filePath, bool success)
 {
     d->zoom = 1.0;
     d->im->zoom(d->zoom);
-    
+
     if (d->autoZoom)
         updateAutoZoom();
 
@@ -423,10 +422,10 @@ void Canvas::updateContentsSize(bool deleteRubber)
         if (d->im->imageValid())
             emit signalSelected(false);
     }
-    
+
     int wZ = d->im->width();
     int hZ = d->im->height();
-    
+
     if (visibleWidth() > wZ || visibleHeight() > hZ)
     {
         // Center the image
@@ -456,8 +455,8 @@ void Canvas::updateContentsSize(bool deleteRubber)
         rubberRect.translate(d->pixmapRect.x(), d->pixmapRect.y());
         d->rubber->setGeometry(rubberRect);
     }
-    
-    d->tileCache.clear();    
+
+    d->tileCache.clear();
     resizeContents(wZ, hZ);
     viewport()->setUpdatesEnabled(true);
 }
@@ -489,7 +488,7 @@ void Canvas::viewportPaintEvent(QPaintEvent *e)
                qMax(er.y() - 1, 0),
                qMin(er.width()  + 2, contentsRect().width()),
                qMin(er.height() + 2, contentsRect().height()));
-    
+
     paintViewport(er, (d->zoom <= 1.0) ? true : false);
 }
 
@@ -577,7 +576,7 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
                                              antialias);
 
                         rr.translate(-i -d->pixmapRect.x(), -j -d->pixmapRect.y());
- 
+
                         QPainter p(pix);
                         p.setPen(QPen(QColor(250, 250, 255), 1));
                         p.drawRect(rr);
@@ -657,7 +656,7 @@ void Canvas::contentsMousePressEvent(QMouseEvent *e)
                 newRect.setBottomRight(r.bottomLeft());
             }
             d->rubber->setGeometry(newRect);
-        
+
             viewport()->setMouseTracking(false);
             d->pressedMoved  = false;
             d->pressedMoving = true;
@@ -713,7 +712,7 @@ void Canvas::contentsMouseMoveEvent(QMouseEvent *e)
     {
         if (!d->rubber->isVisible())
             return;
-        
+
         if (e->buttons() != Qt::LeftButton &&
             !(d->ltActive || d->rtActive ||
               d->lbActive || d->rbActive))
@@ -760,7 +759,7 @@ void Canvas::contentsMouseMoveEvent(QMouseEvent *e)
         d->rtActive = false;
         d->lbActive = false;
         d->rbActive = false;
-        
+
         if (lt.contains(e->x(), e->y()))
         {
             viewport()->setCursor(Qt::SizeFDiagCursor);
@@ -785,14 +784,14 @@ void Canvas::contentsMouseMoveEvent(QMouseEvent *e)
             viewport()->unsetCursor();
     }
 }
-    
+
 void Canvas::contentsMouseReleaseEvent(QMouseEvent *e)
 {
     if (!e)
         return;
 
     d->midButtonPressed = false;
-    
+
     if (d->pressedMoving)
     {
         d->pressedMoving = false;
@@ -928,7 +927,7 @@ void Canvas::fitToSelect()
 {
     int xSel, ySel, wSel, hSel;
     d->im->getSelectedArea(xSel, ySel, wSel, hSel);
-    
+
     if (wSel && hSel )   
     {   
         // If selected area, use center of selection
@@ -940,20 +939,20 @@ void Canvas::fitToSelect()
         double srcHeight = hSel;
         double dstWidth  = contentsRect().width();
         double dstHeight = contentsRect().height();
-    
+
         d->zoom = qMin(dstWidth/srcWidth, dstHeight/srcHeight);
 
         d->autoZoom = false;
         emit signalToggleOffFitToWindow();
         d->im->zoom(d->zoom);
         updateContentsSize(true);
-    
+
         viewport()->setUpdatesEnabled(false);
         center((int)((cpx * d->tileSize) / floor(d->tileSize / d->zoom)), 
                (int)((cpy * d->tileSize) / floor(d->tileSize / d->zoom)));
         viewport()->setUpdatesEnabled(true);
         viewport()->update();
-    
+
         emit signalZoomChanged(d->zoom);
     }
 }
@@ -1026,7 +1025,7 @@ void Canvas::setBackgroundColor(const QColor& color)
 {
     if (d->bgColor == color)
         return;
-    
+
     d->bgColor = color;
     viewport()->update();
 }
@@ -1209,7 +1208,7 @@ void Canvas::slotModified()
 }
 
 void Canvas::slotCornerButtonPressed()
-{    
+{
     if (d->panIconPopup)
     {
         d->panIconPopup->hide();
@@ -1228,10 +1227,10 @@ void Canvas::slotCornerButtonPressed()
 
     connect(pan, SIGNAL(signalSelectionMoved(QRect, bool)),
             this, SLOT(slotPanIconSelectionMoved(QRect, bool)));
-    
+
     connect(pan, SIGNAL(signalHiden()),
             this, SLOT(slotPanIconHiden()));
-    
+
     QPoint g = mapToGlobal(viewport()->pos());
     g.setX(g.x()+ viewport()->size().width());
     g.setY(g.y()+ viewport()->size().height());
@@ -1268,7 +1267,7 @@ void Canvas::slotZoomChanged(double /*zoom*/)
     if (horizontalScrollBar()->isVisible() || verticalScrollBar()->isVisible())
         d->cornerButton->show();
     else
-        d->cornerButton->hide();        
+        d->cornerButton->hide();
 }
 
 void Canvas::slotSelectAll()
@@ -1291,4 +1290,3 @@ void Canvas::slotSelectNone()
 }
 
 }  // namespace Digikam
-
