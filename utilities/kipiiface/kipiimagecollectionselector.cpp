@@ -40,7 +40,6 @@
 #include "album.h"
 #include "albumthumbnailloader.h"
 #include "treefolderitem.h"
-#include "treefolderview.h"
 #include "kipiinterface.h"
 #include "kipiimagecollection.h"
 #include "kipiimagecollectionselector.h"
@@ -55,13 +54,13 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface *iface, Q
     m_iface = iface;
     m_tab   = new KTabWidget(this);
 
-    m_albumsView = new TreeFolderView(m_tab);
+    m_albumsView = new QTreeWidget(m_tab);
     m_albumsView->setDragEnabled(false);
     m_albumsView->setDropIndicatorShown(false);
     m_albumsView->setAcceptDrops(false);
     m_albumsView->header()->hide();
 
-    m_tagsView = new TreeFolderView(m_tab);
+    m_tagsView = new QTreeWidget(m_tab);
     m_tagsView->setDragEnabled(false);
     m_tagsView->setDropIndicatorShown(false);
     m_tagsView->setAcceptDrops(false);
@@ -93,7 +92,7 @@ KipiImageCollectionSelector::~KipiImageCollectionSelector()
 {
 }
 
-void KipiImageCollectionSelector::populateTreeView(const AlbumList& aList, TreeFolderView *view)
+void KipiImageCollectionSelector::populateTreeView(const AlbumList& aList, QTreeWidget *view)
 {
     for (AlbumList::const_iterator it = aList.begin(); it != aList.end(); ++it)
     {
@@ -102,8 +101,17 @@ void KipiImageCollectionSelector::populateTreeView(const AlbumList& aList, TreeF
 
         if (album->isRoot())
         {
-            item = new TreeAlbumCheckListItem(view, album);
-            item->setExpanded(true);
+            TreeAlbumItem *ritem = new TreeAlbumItem(view, album);
+            ritem->setExpanded(true);
+            PAlbum* palbum = dynamic_cast<PAlbum*>(album);
+            if (palbum)
+                ritem->setIcon(0, AlbumThumbnailLoader::instance()->getStandardAlbumIcon(palbum));
+            else
+            {
+                TAlbum* talbum = dynamic_cast<TAlbum*>(album);
+                if (talbum)
+                    ritem->setIcon(0, AlbumThumbnailLoader::instance()->getStandardTagIcon(talbum));
+            }
         }
         else
         {

@@ -39,12 +39,12 @@
 #include "albummanager.h"
 
 class QWidget;
+class QTreeWidget;
 
 class KTabWidget;
 
 namespace Digikam
 {
-class TreeFolderView;
 class KipiInterface;
 
 class KipiImageCollectionSelector : public KIPI::ImageCollectionSelector
@@ -60,15 +60,15 @@ public:
 
 private:
 
-    void populateTreeView(const AlbumList& aList, TreeFolderView *view);
+    void populateTreeView(const AlbumList& aList, QTreeWidget *view);
 
 private:
 
-    KTabWidget     *m_tab;
+    KTabWidget    *m_tab;
 
-    TreeFolderView *m_albumsView;
-    TreeFolderView *m_tagsView;
-    KipiInterface  *m_iface; 
+    QTreeWidget   *m_albumsView;
+    QTreeWidget   *m_tagsView;
+    KipiInterface *m_iface; 
 };
 
 }  // namespace Digikam
