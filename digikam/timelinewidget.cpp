@@ -681,12 +681,12 @@ void TimeLineWidget::updatePixmap()
         if (val) 
         {
             if (sel)
-                subDateColor = palette().active().highlightedText();
+                subDateColor = palette().color(QPalette::Active, QPalette::HighlightedText);
             else
-                subDateColor = palette().active().foreground();
-        }        
+                subDateColor = palette().color(QPalette::Active, QPalette::Foreground);
+        }
         else 
-            subDateColor = palette().active().mid();
+            subDateColor = palette().color(QPalette::Active, QPalette::Mid);
 
         if (sel == Selected || sel == FuzzySelection)
         {
@@ -868,12 +868,12 @@ void TimeLineWidget::updatePixmap()
         if (val) 
         {
             if (sel)
-                subDateColor = palette().active().highlightedText();
+                subDateColor = palette().color(QPalette::Active, QPalette::HighlightedText);
             else
-                subDateColor = palette().active().foreground();
-        }        
+                subDateColor = palette().color(QPalette::Active, QPalette::Foreground);
+        }
         else 
-            subDateColor = palette().active().mid();
+            subDateColor = palette().color(QPalette::Active, QPalette::Mid);
 
         if (sel == Selected || sel == FuzzySelection)
         {
