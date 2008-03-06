@@ -150,6 +150,7 @@ public:
         zoomPlusAction                       = 0;
         zoomMinusAction                      = 0;
         albumIconViewFilter                  = 0;
+        contributeAction                     = 0;
     }
 
     bool                   fullScreen;
@@ -244,6 +245,7 @@ public:
     KAction               *tipAction;
     KAction               *kipiHelpAction;
     KAction               *donateMoneyAction;
+    KAction               *contributeAction;
     KActionMenu           *cameraMenuAction;
     KSelectAction         *themeMenuAction;
 

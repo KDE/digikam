@@ -180,16 +180,16 @@ void EditorWindow::setupStandardConnections()
 
     connect(m_canvas, SIGNAL(signalShowNextImage()),
             this, SLOT(slotForward()));
-            
+
     connect(m_canvas, SIGNAL(signalShowPrevImage()),
             this, SLOT(slotBackward()));
 
     connect(m_canvas, SIGNAL(signalRightButtonClicked()),
             this, SLOT(slotContextMenu()));
-            
+
     connect(m_canvas, SIGNAL(signalZoomChanged(double)),
             this, SLOT(slotZoomChanged(double)));
-            
+
     connect(m_canvas, SIGNAL(signalChanged()),
             this, SLOT(slotChanged()));
 
@@ -198,7 +198,7 @@ void EditorWindow::setupStandardConnections()
 
     connect(m_canvas, SIGNAL(signalSelected(bool)),
             this, SLOT(slotSelected(bool)));
-    
+
     connect(m_canvas, SIGNAL(signalLoadingStarted(const QString &)),
             this, SLOT(slotLoadingStarted(const QString &)));
 
@@ -227,10 +227,10 @@ void EditorWindow::setupStandardConnections()
 
     connect(d->rotateRightAction, SIGNAL(activated()),
             this, SLOT(slotRotatedOrFlipped()));
-            
+
     connect(d->flipHorizAction, SIGNAL(activated()),
             this, SLOT(slotRotatedOrFlipped()));
-            
+
     connect(d->flipVertAction, SIGNAL(activated()),
             this, SLOT(slotRotatedOrFlipped()));
 
@@ -240,13 +240,13 @@ void EditorWindow::setupStandardConnections()
             this, SLOT(slotNameLabelCancelButtonPressed()));
 
     // -- Core plugin connections -------------------------------------
-    
+
     ImagePlugin *corePlugin = m_imagePluginLoader->pluginInstance("digikamimageplugin_core");
     if ( corePlugin )
-    {                        
+    {
         connect(m_canvas, SIGNAL(signalColorManagementTool()),
-                corePlugin, SLOT(slotColorManagement()));    
-    }        
+                corePlugin, SLOT(slotColorManagement()));
+    }
 }
 
 void EditorWindow::setupStandardActions()
@@ -298,7 +298,7 @@ void EditorWindow::setupStandardActions()
 
     d->copyAction = KStdAction::copy(m_canvas, SLOT(slotCopy()),
                                      actionCollection(), "editorwindow_copy");
-    
+
     d->copyAction->setEnabled(false);
 
     m_undoAction = new KToolBarPopupAction(i18n("Undo"), "undo",
@@ -308,7 +308,7 @@ void EditorWindow::setupStandardActions()
 
     connect(m_undoAction->popupMenu(), SIGNAL(aboutToShow()),
             this, SLOT(slotAboutToShowUndoMenu()));
-            
+
     connect(m_undoAction->popupMenu(), SIGNAL(activated(int)),
             m_canvas, SLOT(slotUndo(int)));
 
@@ -321,7 +321,7 @@ void EditorWindow::setupStandardActions()
 
     connect(m_redoAction->popupMenu(), SIGNAL(aboutToShow()),
             this, SLOT(slotAboutToShowRedoMenu()));
-            
+
     connect(m_redoAction->popupMenu(), SIGNAL(activated(int)),
             m_canvas, SLOT(slotRedo(int)));
 
@@ -431,13 +431,13 @@ void EditorWindow::setupStandardActions()
                                 CTRL+Key_X,
                                 m_canvas, SLOT(slotCrop()),
                                 actionCollection(), "editorwindow_crop");
-    
+
     d->cropAction->setEnabled(false);
     d->cropAction->setWhatsThis(i18n("This option can be used to crop the image. "
                                      "Select a region of the image to enable this action."));
 
     // -- Standard 'Flip' menu actions ---------------------------------------------
-    
+
     d->flipHorizAction = new KAction(i18n("Flip Horizontally"), "mirror", CTRL+Key_Asterisk,
                                    m_canvas, SLOT(slotFlipHoriz()),
                                    actionCollection(), "editorwindow_flip_horiz");
@@ -447,7 +447,7 @@ void EditorWindow::setupStandardActions()
                                    m_canvas, SLOT(slotFlipVert()),
                                    actionCollection(), "editorwindow_flip_vert");
     d->flipVertAction->setEnabled(false);
-                                   
+
     // -- Standard 'Rotate' menu actions ----------------------------------------
 
     d->rotateLeftAction = new KAction(i18n("Rotate Left"),
@@ -471,11 +471,17 @@ void EditorWindow::setupStandardActions()
 
     // -- Standard 'Help' menu actions ---------------------------------------------
 
-    d->donateMoneyAction = new KAction(i18n("Donate Money..."),
+    d->donateMoneyAction = new KAction(i18n("Make a donation..."),
                                        0, 0, 
                                        this, SLOT(slotDonateMoney()),
                                        actionCollection(),
                                        "editorwindow_donatemoney");
+
+    d->contributeAction = new KAction(i18n("Contribute..."),
+                                      0, 0, 
+                                      this, SLOT(slotContribute()),
+                                      actionCollection(),
+                                      "editorwindow_contribute");
 
     d->rawCameraListAction = new KAction(i18n("RAW camera supported"), 
                                          "kdcraw", 
@@ -1781,7 +1787,7 @@ void EditorWindow::slotToggleOverExposureIndicator()
     setOverExposureToolTip(oei);
     d->overExposureIndicator->blockSignals(false);
     d->viewOverExpoAction->blockSignals(false);
-}    
+}
 
 void EditorWindow::setOverExposureToolTip(bool oei)
 {
@@ -1794,6 +1800,11 @@ void EditorWindow::setOverExposureToolTip(bool oei)
 void EditorWindow::slotDonateMoney()
 {
     KApplication::kApplication()->invokeBrowser("http://www.digikam.org/?q=donation");
+}
+
+void EditorWindow::slotContribute()
+{
+    KApplication::kApplication()->invokeBrowser("http://www.digikam.org/?q=contrib");
 }
 
 void EditorWindow::slotToggleSlideShow()

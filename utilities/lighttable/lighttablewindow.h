@@ -138,6 +138,7 @@ private slots:
     void slotToggleFullScreen();
     void slotEscapePressed();
     void slotDonateMoney();
+    void slotContribute();
     void slotRawCameraList();
     void slotEditKeys();
     void slotConfToolbars();

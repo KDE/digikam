@@ -91,6 +91,7 @@ public:
         navigateByPairAction   = 0;
         rawCameraListAction    = 0;
         themeMenuAction        = 0;
+        contributeAction       = 0;
     }
 
     bool                      autoLoadOnRightPanel;
@@ -124,6 +125,7 @@ public:
     KAction                  *fileDeleteAction;
     KAction                  *slideShowAction;
     KAction                  *donateMoneyAction;
+    KAction                  *contributeAction;
     KAction                  *zoomPlusAction;
     KAction                  *zoomMinusAction;
     KAction                  *zoomTo100percents;

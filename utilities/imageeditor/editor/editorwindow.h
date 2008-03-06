@@ -206,6 +206,7 @@ private slots:
     void slotRotatedOrFlipped();
     void slotSavingFinished(const QString &filename, bool success);
     void slotDonateMoney();
+    void slotContribute();
     void slotToggleSlideShow();
     void slotZoomTo100Percents();
     void slotZoomSelected();

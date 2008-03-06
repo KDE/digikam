@@ -440,11 +440,17 @@ void LightTableWindow::setupActions()
     // -- Standard 'Help' menu actions ---------------------------------------------
 
 
-    d->donateMoneyAction = new KAction(i18n("Donate Money..."),
+    d->donateMoneyAction = new KAction(i18n("Make a donation..."),
                                        0, 0, 
                                        this, SLOT(slotDonateMoney()),
                                        actionCollection(),
                                        "lighttable_donatemoney");
+
+    d->contributeAction = new KAction(i18n("Contribute..."),
+                                      0, 0, 
+                                      this, SLOT(slotContribute()),
+                                      actionCollection(),
+                                      "lighttable_contribute");
 
     d->rawCameraListAction = new KAction(i18n("RAW camera supported"), 
                                          "kdcraw", 
@@ -1468,6 +1474,11 @@ void LightTableWindow::unplugActionAccel(KAction* action)
 void LightTableWindow::slotDonateMoney()
 {
     KApplication::kApplication()->invokeBrowser("http://www.digikam.org/?q=donation");
+}
+
+void LightTableWindow::slotContribute()
+{
+    KApplication::kApplication()->invokeBrowser("http://www.digikam.org/?q=contrib");
 }
 
 void LightTableWindow::slotEditKeys()

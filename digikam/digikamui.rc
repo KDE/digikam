@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="35" name="digikam" >
+<kpartgui version="36" name="digikam" >
 
  <MenuBar>
 
@@ -113,6 +113,7 @@
     <Action name="help_tipofday"/>
     <Separator/>
     <Action name="help_donatemoney"/>
+    <Action name="help_contribute" />
   </Menu>
 
   <Merge/>

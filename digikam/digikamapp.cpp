@@ -956,6 +956,12 @@ void DigikamApp::setupActions()
                                    actionCollection(),
                                    "help_donatemoney");
 
+    d->contributeAction = new KAction(i18n("Contribute..."),
+                                      0, 0, 
+                                      this, SLOT(slotContribute()),
+                                      actionCollection(),
+                                      "help_contribute");
+
     new DLogoAction(actionCollection(), "logo_action" );
 
     // -- Rating actions ---------------------------------------------------------------
@@ -1974,7 +1980,7 @@ void DigikamApp::slotSyncAllPicturesMetadata()
         return;
 
     BatchAlbumsSyncMetadata *syncMetadata = new BatchAlbumsSyncMetadata(this);
-    
+
     connect(syncMetadata, SIGNAL(signalComplete()),
             this, SLOT(slotSyncAllPicturesMetadataDone()));
 
@@ -1989,6 +1995,11 @@ void DigikamApp::slotSyncAllPicturesMetadataDone()
 void DigikamApp::slotDonateMoney()
 {
     KApplication::kApplication()->invokeBrowser("http://www.digikam.org/?q=donation");
+}
+
+void DigikamApp::slotContribute()
+{
+    KApplication::kApplication()->invokeBrowser("http://www.digikam.org/?q=contrib");
 }
 
 void DigikamApp::slotRecurseAlbums(bool checked)
