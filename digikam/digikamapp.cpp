@@ -475,6 +475,9 @@ void DigikamApp::setupActions()
             this, SLOT(slotChangeTheme(const QString&)));
     actionCollection()->addAction("theme_menu", d->themeMenuAction);
 
+    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+            this, SLOT(slotThemeChanged()));
+
     // -----------------------------------------------------------------
 
     d->backwardActionMenu = new KToolBarPopupAction(KIcon("go-previous"), i18n("&Back"), this);
@@ -2063,15 +2066,8 @@ void DigikamApp::populateThemes()
         d->splashScreen->message(i18n("Loading themes"), Qt::AlignLeft, Qt::white);
 
     ThemeEngine::instance()->scanThemes();
-    QStringList themes(ThemeEngine::instance()->themeNames());
-
-    d->themeMenuAction->setItems(themes);
-    int index = themes.indexOf(AlbumSettings::instance()->getCurrentTheme());
-
-    if (index == -1)
-        index = themes.indexOf(i18n("Default"));
-
-    d->themeMenuAction->setCurrentItem(index);
+    d->themeMenuAction->setItems(ThemeEngine::instance()->themeNames());
+    slotThemeChanged();
     ThemeEngine::instance()->slotChangeTheme(d->themeMenuAction->currentText());
 }
 
@@ -2082,6 +2078,16 @@ void DigikamApp::slotChangeTheme(const QString& theme)
     name.remove(QChar('&'));
     AlbumSettings::instance()->setCurrentTheme(name);
     ThemeEngine::instance()->slotChangeTheme(name);
+}
+
+void DigikamApp::slotThemeChanged()
+{
+    QStringList themes(ThemeEngine::instance()->themeNames());
+    int index = themes.indexOf(AlbumSettings::instance()->getCurrentTheme());
+    if (index == -1)
+        index = themes.indexOf(i18n("Default"));
+
+    d->themeMenuAction->setCurrentItem(index);
 }
 
 void DigikamApp::slotDatabaseRescan()

@@ -152,6 +152,7 @@ private slots:
     void slotSyncAllPicturesMetadataDone();
 
     void slotChangeTheme(const QString& theme);
+    void slotThemeChanged();
 
     void slotProgressBarMode(int, const QString&);
     void slotProgressValue(int);

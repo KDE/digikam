@@ -64,6 +64,7 @@
 #include <kstatusbar.h>
 #include <kwindowsystem.h>
 #include <kglobal.h>
+#include <kselectaction.h>
 
 // Local includes.
 
@@ -124,6 +125,7 @@ public:
         fileDeletePermanentlyDirectlyAction = 0;
         fileTrashDirectlyAction             = 0;
         rightSidebar                        = 0;
+        themeMenuAction                     = 0;
     }
 
     // If image editor is launched by camera interface, current
@@ -145,6 +147,8 @@ public:
     KAction                  *fileDeletePermanentlyAction;
     KAction                  *fileDeletePermanentlyDirectlyAction;
     KAction                  *fileTrashDirectlyAction;
+
+    KSelectAction            *themeMenuAction;
 
     ImageInfoList             imageInfoList;
     ImageInfo                 imageInfoCurrent;
@@ -300,9 +304,6 @@ void ImageWindow::setupUserArea()
     m_splitter->setFrameShape( QFrame::NoFrame );
     m_splitter->setOpaqueResize(false);
     setCentralWidget(widget);
-
-    // the window will be constructed after the initial theme change
-    slotThemeChanged();
 }
 
 void ImageWindow::setupActions()
@@ -347,10 +348,21 @@ void ImageWindow::setupActions()
     connect(d->star5, SIGNAL(triggered()), d->rightSidebar, SLOT(slotAssignRatingFiveStar()));
     actionCollection()->addAction("imageview_ratefivestar", d->star5);
 
+
+    // ---------------------------------------------------------------------------------
+
+    d->themeMenuAction = new KSelectAction(i18n("&Themes"), this);
+    connect(d->themeMenuAction, SIGNAL(triggered(const QString&)), 
+            this, SLOT(slotChangeTheme(const QString&)));
+    actionCollection()->addAction("theme_menu", d->themeMenuAction);
+
+    d->themeMenuAction->setItems(ThemeEngine::instance()->themeNames());
+    slotThemeChanged();
+
     // -- Special Delete actions ---------------------------------------------------------------
 
     // Pop up dialog to ask user whether to permanently delete
-    
+
     d->fileDeletePermanentlyAction = new KAction(KIcon("edit-delete"), i18n("Delete File Permanently"), this);
     d->fileDeletePermanentlyAction->setShortcut(Qt::SHIFT+Qt::Key_Delete);
     connect(d->fileDeletePermanentlyAction, SIGNAL(triggered()), 
@@ -745,12 +757,12 @@ void ImageWindow::slotUpdateItemInfo()
 bool ImageWindow::setup(bool iccSetupPage)
 {
     Setup setup(this, 0, iccSetupPage ? Setup::ICCPage : Setup::LastPageUsed);    
-        
+
     if (setup.exec() != QDialog::Accepted)
         return false;
 
     KGlobal::config()->sync();
-    
+
     applySettings();
     return true;
 }
@@ -1022,11 +1034,6 @@ void ImageWindow::slotFileMetadataChanged(const KUrl &url)
     }
 }
 
-void ImageWindow::slotThemeChanged()
-{
-    m_canvas->setBackgroundColor(ThemeEngine::instance()->baseColor());
-}
-
 void ImageWindow::slotFilePrint()
 {
     printImage(d->urlCurrent); 
@@ -1228,6 +1235,27 @@ void ImageWindow::slotRevert()
         return;
 
     m_canvas->slotRestore();
+}
+
+void ImageWindow::slotThemeChanged()
+{
+    QStringList themes(ThemeEngine::instance()->themeNames());
+    int index = themes.indexOf(AlbumSettings::instance()->getCurrentTheme());
+    if (index == -1)
+        index = themes.indexOf(i18n("Default"));
+
+    d->themeMenuAction->setCurrentItem(index);
+
+    m_canvas->setBackgroundColor(ThemeEngine::instance()->baseColor());
+}
+
+void ImageWindow::slotChangeTheme(const QString& theme)
+{
+    // Theme menu entry is returned with keyboard accelerator. We remove it.
+    QString name = theme;
+    name.remove(QChar('&'));
+    AlbumSettings::instance()->setCurrentTheme(theme);
+    ThemeEngine::instance()->slotChangeTheme(theme);
 }
 
 }  // namespace Digikam

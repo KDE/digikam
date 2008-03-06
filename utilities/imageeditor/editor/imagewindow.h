@@ -84,7 +84,7 @@ private:
 
     void loadCurrentList(const QString& caption, bool allowSaving);
     void closeEvent(QCloseEvent* e);
-    
+
     void dragMoveEvent(QDragMoveEvent *e);
     void dropEvent(QDropEvent *e);
 
@@ -124,6 +124,7 @@ private slots:
     void slotUpdateItemInfo();
 
     void slotContextMenu();
+    void slotRevert();
 
     void slotAssignTag(int tagID);
     void slotRemoveTag(int tagID);
@@ -132,7 +133,7 @@ private slots:
     void slotFileMetadataChanged(const KUrl &);
 
     void slotThemeChanged();
-    void slotRevert();
+    void slotChangeTheme(const QString& theme);
 
 private:
 
