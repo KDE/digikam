@@ -6,6 +6,7 @@ INCLUDES = -I$(top_srcdir)/digikam/digikam \
 	   -I$(top_srcdir)/digikam/libs/dmetadata \
 	   -I$(top_srcdir)/digikam/libs/thumbbar \
 	   -I$(top_srcdir)/digikam/libs/widgets/common \
+	   $(LIBKDCRAW_CFLAGS) \
 	   $(LIBKEXIV2_CFLAGS) \
 	   $(all_includes)
 

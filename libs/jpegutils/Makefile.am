@@ -8,8 +8,10 @@ KDE_OPTIONS = nofinal
 INCLUDES = $(all_includes) \
 	   -I$(top_srcdir)/digikam/libs/dmetadata \
 	   -I$(top_srcdir)/digikam/libs/dimg \
-	   $(LIBKEXIV2_CFLAGS) \
-	   -I$(top_srcdir)/digikam/digikam
+	   -I$(top_srcdir)/digikam/digikam \
+	   $(LIBKDCRAW_CFLAGS) \
+	   $(LIBKEXIV2_CFLAGS) 
+
 
 noinst_LTLIBRARIES = libjpegutils.la
 
