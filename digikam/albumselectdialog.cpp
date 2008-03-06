@@ -31,6 +31,7 @@
 #include <QCursor>
 #include <QGridLayout>
 #include <QPixmap>
+#include <QTreeWidget>
 #include <QTreeWidgetItemIterator>
 
 // KDE includes.
@@ -45,7 +46,6 @@
 // Local includes.
 
 #include "ddebug.h"
-#include "treefolderview.h"
 #include "treefolderitem.h"
 #include "album.h"
 #include "albummanager.h"
@@ -68,11 +68,11 @@ public:
         folderView         = 0;
     }
 
-    bool            allowRootSelection;
+    bool         allowRootSelection;
 
-    QString         newAlbumString;
+    QString      newAlbumString;
 
-    TreeFolderView *folderView;
+    QTreeWidget *folderView;
 };
 
 AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
@@ -108,7 +108,7 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
     if (!header.isEmpty())
         message->setText(header);
 
-    d->folderView = new TreeFolderView(page);
+    d->folderView = new QTreeWidget(page);
     d->folderView->setHeaderLabels(QStringList() << i18n("My Albums"));
     d->folderView->setContextMenuPolicy(Qt::CustomContextMenu);
 
