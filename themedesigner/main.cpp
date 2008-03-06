@@ -7,7 +7,7 @@
  * Description : main program from digiKam theme designer
  * 
  * Copyright (C) 2004-2005 by Renchi Raju <renchi at pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -24,7 +24,6 @@
 
 // Qt includes.
 
-#include <qapplication.h>
 #include <qstring.h>
 
 // KDE includes.
@@ -48,14 +47,14 @@ static KCmdLineOptions options[] =
     KCmdLineLastOption
 };
 
-int main(int argc, char** argv) {
-
+int main(int argc, char** argv)
+{
     KAboutData aboutData("digikamthemedesigner", 
                      I18N_NOOP("digiKam Theme Designer"),
-                     digikam_version,        
+                     digikam_version,
                      description,
                      KAboutData::License_GPL,
-                     I18N_NOOP("(c) 2002-2007, digiKam developers team"),
+                     I18N_NOOP("(c) 2002-2008, digiKam developers team"),
                      0,
                      "http://www.digikam.org");
 
@@ -84,6 +83,6 @@ int main(int argc, char** argv) {
     app.setMainWidget(im);
     im->resize(800, 600);
     im->show();
-    
-    app.exec();
+
+    return app.exec();
 }
