@@ -31,6 +31,7 @@
 #include <QPixmap>
 #include <QVBoxLayout>
 #include <QTreeWidget>
+#include <QTreeWidgetItemIterator>
 
 // KDE includes.
 
@@ -315,11 +316,10 @@ void SetupCamera::applySettings()
     {
         clist->clear();
 
-        int i                 = 0;
-        QTreeWidgetItem *item = 0;
-        do
+        QTreeWidgetItemIterator it(d->listView);
+        while (*it)
         {
-            item = d->listView->topLevelItem(i);
+            QTreeWidgetItem *item = *it;
             if (item)
             {
                 QDateTime lastAccess = QDateTime::currentDateTime();
@@ -331,9 +331,8 @@ void SetupCamera::applySettings()
                                                    item->text(3), lastAccess);
                 clist->insert(ctype);
             }
-            i++;
+            ++it;
         }
-        while (item);
 
         clist->save();
     }

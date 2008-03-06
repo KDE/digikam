@@ -400,7 +400,7 @@ void SetupCollections::applySettings()
                 if ((*it2).albumRootPath() == lvItem->path())
                     exist = true;
             }
-            it++;
+            ++it;
         }
 
         if (!exist)
