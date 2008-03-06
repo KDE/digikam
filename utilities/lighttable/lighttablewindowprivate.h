@@ -48,7 +48,7 @@ public:
 
     LightTableWindowPriv()
     {
-        autoLoadOnRightPanel   = true;    
+        autoLoadOnRightPanel   = true;
         autoSyncPreview        = true;
         fullScreenHideToolBar  = false;
         fullScreen             = false;
@@ -82,14 +82,15 @@ public:
         zoomPlusAction         = 0;
         zoomMinusAction        = 0;
         statusProgressBar      = 0;
-        leftZoomBar            = 0;  
-        rightZoomBar           = 0;  
+        leftZoomBar            = 0;
+        rightZoomBar           = 0;
         forwardAction          = 0;
         backwardAction         = 0;
         firstAction            = 0;
         lastAction             = 0;
         navigateByPairAction   = 0;
         rawCameraListAction    = 0;
+        themeMenuAction        = 0;
     }
 
     bool                      autoLoadOnRightPanel;
@@ -129,6 +130,8 @@ public:
     KAction                  *zoomFitToWindowAction;
     KAction                  *rawCameraListAction;
 
+    KSelectAction            *themeMenuAction;
+
     KToggleAction            *fullScreenAction;
     KToggleAction            *syncPreviewAction;
     KToggleAction            *navigateByPairAction;
@@ -149,4 +152,3 @@ public:
 };
 
 }  // namespace Digikam
-

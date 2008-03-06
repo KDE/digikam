@@ -102,7 +102,7 @@ private slots:
     void slotSetItemOnRightPanel(ImageInfo*);
     void slotLeftDroppedItems(const ImageInfoList&);
     void slotRightDroppedItems(const ImageInfoList&);
-    
+
     void slotLeftPanelLeftButtonClicked();
     void slotRightPanelLeftButtonClicked();
 
@@ -143,6 +143,9 @@ private slots:
     void slotConfToolbars();
     void slotNewToolbarConfig();
     void slotSetup();
+
+    void slotThemeChanged();
+    void slotChangeTheme(const QString& theme);
 
 private:
 

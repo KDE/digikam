@@ -222,9 +222,9 @@ void LightTableWindow::setupStatusBar()
 
     d->statusProgressBar = new StatusProgressBar(statusBar());
     d->statusProgressBar->setAlignment(Qt::AlignCenter);
-    d->statusProgressBar->setMaximumHeight(fontMetrics().height()+2);    
+    d->statusProgressBar->setMaximumHeight(fontMetrics().height()+2);
     statusBar()->addWidget(d->statusProgressBar, 100);
- 
+
     d->rightZoomBar = new StatusZoomBar(statusBar());
     d->rightZoomBar->setMaximumHeight(fontMetrics().height()+2);
     statusBar()->addWidget(d->rightZoomBar, 1);
@@ -235,6 +235,9 @@ void LightTableWindow::setupConnections()
 {
     connect(d->statusProgressBar, SIGNAL(signalCancelButtonPressed()),
            this, SLOT(slotProgressBarCancelButtonPressed()));
+
+    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+            this, SLOT(slotThemeChanged()));
 
     // Thumbs bar connections ---------------------------------------
 
@@ -301,7 +304,7 @@ void LightTableWindow::setupConnections()
 
     connect(d->previewView, SIGNAL(signalRightDroppedItems(const ImageInfoList&)),
            this, SLOT(slotRightDroppedItems(const ImageInfoList&)));
-                                  
+
     connect(d->previewView, SIGNAL(signalToggleOnSyncPreview(bool)),
            this, SLOT(slotToggleOnSyncPreview(bool)));
 
@@ -427,6 +430,15 @@ void LightTableWindow::setupActions()
     KStdAction::configureToolbars(this, SLOT(slotConfToolbars()), actionCollection());
     KStdAction::preferences(this, SLOT(slotSetup()),              actionCollection());
 
+    // -----------------------------------------------------------------------------------------
+
+    d->themeMenuAction = new KSelectAction(i18n("&Themes"), 0, actionCollection(), "theme_menu");
+    connect(d->themeMenuAction, SIGNAL(activated(const QString&)),
+            this, SLOT(slotChangeTheme(const QString&)));
+
+    d->themeMenuAction->setItems(ThemeEngine::instance()->themeNames());
+    slotThemeChanged();
+
     // -- Standard 'Help' menu actions ---------------------------------------------
 
 
@@ -434,7 +446,7 @@ void LightTableWindow::setupActions()
                                        0, 0, 
                                        this, SLOT(slotDonateMoney()),
                                        actionCollection(),
-                                       "lighttable_donatemoney");    
+                                       "lighttable_donatemoney");
 
     d->rawCameraListAction = new KAction(i18n("RAW camera supported"), 
                                          "kdcraw", 
@@ -475,7 +487,7 @@ void LightTableWindow::setupActions()
     // ---------------------------------------------------------------------------------
 
     new DLogoAction(actionCollection(), "logo_action");
-    
+
     createGUI("lighttablewindowui.rc", false);
 }
 
@@ -1603,6 +1615,22 @@ void LightTableWindow::slotRawCameraList()
                                       "<p>%3 models in the list")
                                       .arg(KDcrawVer).arg(dcrawVer).arg(list.count()),
                                  list, i18n("List of supported RAW camera"));
+}
+
+void LightTableWindow::slotThemeChanged()
+{
+    QStringList themes(ThemeEngine::instance()->themeNames());
+    int index = themes.findIndex(AlbumSettings::instance()->getCurrentTheme());
+    if (index == -1)
+        index = themes.findIndex(i18n("Default"));
+
+    d->themeMenuAction->setCurrentItem(index);
+}
+
+void LightTableWindow::slotChangeTheme(const QString& theme)
+{
+    AlbumSettings::instance()->setCurrentTheme(theme);
+    ThemeEngine::instance()->slotChangeTheme(theme);
 }
 
 }  // namespace Digikam
