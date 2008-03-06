@@ -46,7 +46,7 @@ class ThemeEnginePriv;
 class DIGIKAM_EXPORT ThemeEngine : public QObject
 {
     Q_OBJECT
-    
+
 public:
 
     ~ThemeEngine();
@@ -55,7 +55,7 @@ public:
     void        scanThemes();
     QStringList themeNames() const;
     bool        saveTheme();
-    
+
     void    setCurrentTheme(const QString& name);
     void    setCurrentTheme(const Theme& theme, const QString& name,
                             bool loadFromDisk=false);
@@ -75,7 +75,7 @@ public:
     QPixmap thumbSelPixmap(int w, int h);
     QPixmap listRegPixmap(int w, int h);
     QPixmap listSelPixmap(int w, int h);
-    
+
 private:
 
     friend class ThemeEngineCreator;
@@ -83,8 +83,9 @@ private:
 
     void    buildDefaultTheme();
     bool    loadTheme();
+    void    changePalette();
     QString resourceValue(const QDomElement &rootElem, const QString& key);
-    
+
 signals:
 
     void signalThemeChanged();
@@ -94,7 +95,7 @@ public slots:
     void slotChangeTheme(const QString& name);
 
 private:
-    
+
     ThemeEnginePriv* d;
 };
 

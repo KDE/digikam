@@ -7,7 +7,7 @@
  * Description : main program from digiKam theme designer
  * 
  * Copyright (C) 2004-2005 by Renchi Raju <renchi at pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -24,7 +24,6 @@
 
 // Qt includes.
 
-#include <QApplication>
 #include <QString>
 
 // KDE includes.
@@ -42,12 +41,12 @@
 
 int main(int argc, char** argv) 
 {
-    KAboutData aboutData("digikamthemedesigner", 0, 
+    KAboutData aboutData("digikamthemedesigner", 0,
                          ki18n("digiKam Theme Designer"),
-                         digikam_version,        
+                         digikam_version,
                          ki18n("A Color Theme Designer for digiKam"),
                          KAboutData::License_GPL,
-                         ki18n("(c) 2002-2007, digiKam developers team"),
+                         ki18n("(c) 2002-2008, digiKam developers team"),
                          KLocalizedString(),
                          "http://www.digikam.org");
 
@@ -78,6 +77,6 @@ int main(int argc, char** argv)
     app.setTopWidget(im);
     im->resize(800, 600);
     im->show();
-    
+
     app.exec();
 }

@@ -235,6 +235,35 @@ void ThemeEngine::setCurrentTheme(const QString& name)
     // the signalThemeChanged is emitted when themes are loaded in DigikamApp
     d->themeInitiallySet = true;
 
+    changePalette();
+
+    //theme->print();
+    QTimer::singleShot(0, this, SIGNAL(signalThemeChanged()));
+}
+
+void ThemeEngine::setCurrentTheme(const Theme& theme, const QString& name, bool loadFromDisk)
+{
+    QHash<QString, Theme*>::iterator it = d->themeHash.find(name);
+    if (it != d->themeHash.end())
+    {
+        d->themeHash.remove(name);
+    }
+
+    Theme *t = new Theme(theme);
+    t->filePath = theme.filePath;
+    d->themeHash.insert(name, t);
+
+    d->currTheme = t;
+    if (loadFromDisk)
+        loadTheme();
+
+    changePalette();
+
+    QTimer::singleShot(0, this, SIGNAL(signalThemeChanged()));
+}
+
+void ThemeEngine::changePalette()
+{
     // Make palette for all widgets.
 
     int h, s, v;
@@ -296,28 +325,6 @@ void ThemeEngine::setCurrentTheme(const QString& name)
 */
 
     kapp->setPalette(plt);
-
-    //theme->print();
-    QTimer::singleShot(0, this, SIGNAL(signalThemeChanged()));
-}
-
-void ThemeEngine::setCurrentTheme(const Theme& theme, const QString& name, bool loadFromDisk)
-{
-    QHash<QString, Theme*>::iterator it = d->themeHash.find(name);
-    if (it != d->themeHash.end())
-    {
-        d->themeHash.remove(name);
-    }
-
-    Theme *t = new Theme(theme);
-    t->filePath = theme.filePath;
-    d->themeHash.insert(name, t);
-
-    d->currTheme = t;
-    if (loadFromDisk)
-        loadTheme();
-
-    QTimer::singleShot(0, this, SIGNAL(signalThemeChanged()));
 }
 
 Theme* ThemeEngine::getCurrentTheme()
