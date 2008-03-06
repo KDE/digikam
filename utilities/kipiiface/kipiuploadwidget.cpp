@@ -25,6 +25,7 @@
 // Qt includes.
 
 #include <QHeaderView>
+#include <QTreeWidget>
 #include <QHBoxLayout>
 
 // KDE includes.
@@ -38,7 +39,6 @@
 #include "album.h"
 #include "albumthumbnailloader.h"
 #include "treefolderitem.h"
-#include "treefolderview.h"
 #include "kipiinterface.h"
 #include "kipiimagecollection.h"
 #include "kipiuploadwidget.h"
@@ -52,7 +52,7 @@ KipiUploadWidget::KipiUploadWidget(KipiInterface* iface, QWidget *parent)
 {
     m_iface = iface;
 
-    m_albumsView = new TreeFolderView(this);
+    m_albumsView = new QTreeWidget(this);
     m_albumsView->setDragEnabled(false);
     m_albumsView->setDropIndicatorShown(false);
     m_albumsView->setAcceptDrops(false);
@@ -77,7 +77,7 @@ KipiUploadWidget::~KipiUploadWidget()
 {
 }
 
-void KipiUploadWidget::populateTreeView(const AlbumList& aList, TreeFolderView *view)
+void KipiUploadWidget::populateTreeView(const AlbumList& aList, QTreeWidget *view)
 {
     for (AlbumList::const_iterator it = aList.begin(); it != aList.end(); ++it)
     {
