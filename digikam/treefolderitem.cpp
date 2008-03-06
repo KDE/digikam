@@ -29,7 +29,6 @@
 // Local includes.
 
 #include "album.h"
-#include "treefolderview.h"
 #include "treefolderitem.h"
 
 namespace Digikam
