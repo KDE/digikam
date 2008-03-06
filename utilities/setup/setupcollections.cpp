@@ -32,6 +32,7 @@
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QTreeWidget>
+#include <QTreeWidgetItemIterator>
 
 // KDE includes.
 
@@ -204,11 +205,11 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
     QGroupBox *albumPathBox = new QGroupBox(i18n("Roots Album Path"), this);
     QGridLayout* grid       = new QGridLayout(albumPathBox);
 
-    QLabel *albumPathLabel = new QLabel(i18n("Here you can set the paths to the root albums with your "
-                                             "images. Write access is necessary to edit your images.\n"
-                                             "You can use removable media and remote "
-                                             "file systems shared over NFS for example."),
-                                        albumPathBox);
+    QLabel *albumPathLabel  = new QLabel(i18n("Here you can set the paths to the root albums with your "
+                                              "images. Write access is necessary to edit your images.\n"
+                                              "You can use removable media and remote "
+                                              "file systems shared over NFS for example."),
+                                         albumPathBox);
     albumPathLabel->setWordWrap(true);
 
     d->listView = new QTreeWidget(albumPathBox);
@@ -357,12 +358,10 @@ void SetupCollections::applySettings()
 
     // Check what root path need to be added to DB.
 
-    int i                 = 0;
-    QTreeWidgetItem *item = 0;
-    do
+    QTreeWidgetItemIterator it(d->listView);
+    while (*it)
     {
-        item = d->listView->topLevelItem(i);
-        CollectionListViewItem* lvItem = dynamic_cast<CollectionListViewItem*>(item);
+        CollectionListViewItem* lvItem = dynamic_cast<CollectionListViewItem*>(*it);
         if (lvItem)
         {
             QString path(lvItem->path());
@@ -381,9 +380,8 @@ void SetupCollections::applySettings()
                 lvItem->setLocation(location);
             }
         }
-        i++;
+        it++;
     }
-    while (item);
 
     d->collections = manager->allLocations();
 
@@ -393,20 +391,17 @@ void SetupCollections::applySettings()
         it2 != d->collections.end(); ++it2)
     {
         bool exist = false;
-        i          = 0;
-        item       = 0;
-        do
+        QTreeWidgetItemIterator it(d->listView);
+        while (*it)
         {
-            item = d->listView->topLevelItem(i);
-            CollectionListViewItem* lvItem = dynamic_cast<CollectionListViewItem*>(item);
+            CollectionListViewItem* lvItem = dynamic_cast<CollectionListViewItem*>(*it);
             if (lvItem)
             {
                 if ((*it2).albumRootPath() == lvItem->path())
                     exist = true;
             }
-            i++;
+            it++;
         }
-        while (item);
 
         if (!exist)
             manager->removeLocation(*it2);
@@ -598,12 +593,10 @@ void SetupCollections::checkforAddButton()
 
 bool SetupCollections::checkForCollection(const QString& name, const QString& path)
 {
-    int i                 = 0;
-    QTreeWidgetItem *item = 0;
-    do
+    QTreeWidgetItemIterator it(d->listView);
+    while (*it)
     {
-        item = d->listView->topLevelItem(i);
-        CollectionListViewItem* lvItem = dynamic_cast<CollectionListViewItem*>(item);
+        CollectionListViewItem* lvItem = dynamic_cast<CollectionListViewItem*>(*it);
         if (lvItem)
         {
             if (lvItem->name() == name)
@@ -618,9 +611,8 @@ bool SetupCollections::checkForCollection(const QString& name, const QString& pa
                 return false;
             }
         }
-        i++;
+        ++it;
     }
-    while (item);
 
     return true;
 }
