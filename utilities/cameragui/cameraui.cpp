@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-09-16
- * Description : Camera interface dialog
+ * Description : Camera interface
  * 
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -90,6 +90,7 @@
 #include "thumbnailsize.h"
 #include "kdatetimeedit.h"
 #include "sidebar.h"
+#include "themeengine.h"
 #include "setup.h"
 #include "downloadsettingscontainer.h"
 #include "imagepropertiessidebarcamgui.h"
@@ -174,7 +175,7 @@ void CameraUI::setupUserArea()
     d->rightSidebar->setObjectName("CameraGui Sidebar Right");
     d->splitter->setFrameStyle( QFrame::NoFrame );
     d->splitter->setFrameShadow( QFrame::Plain );
-    d->splitter->setFrameShape( QFrame::NoFrame );       
+    d->splitter->setFrameShape( QFrame::NoFrame );
     d->splitter->setOpaqueResize(false);
 
     // -------------------------------------------------------------------------
@@ -410,6 +411,16 @@ void CameraUI::setupActions()
     KStandardAction::keyBindings(this, SLOT(slotEditKeys()),           actionCollection());
     KStandardAction::configureToolbars(this, SLOT(slotConfToolbars()), actionCollection());
     KStandardAction::preferences(this, SLOT(slotSetup()),              actionCollection());
+
+    // ---------------------------------------------------------------------------------
+
+    d->themeMenuAction = new KSelectAction(i18n("&Themes"), this);
+    connect(d->themeMenuAction, SIGNAL(triggered(const QString&)), 
+            this, SLOT(slotChangeTheme(const QString&)));
+    actionCollection()->addAction("theme_menu", d->themeMenuAction);
+
+    d->themeMenuAction->setItems(ThemeEngine::instance()->themeNames());
+    slotThemeChanged();
 
     // -- Standard 'Help' menu actions ---------------------------------------------
 
@@ -1178,7 +1189,7 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
     if (firstItem)
     {
         CameraIconViewItem* iconItem = static_cast<CameraIconViewItem*>(firstItem);
-        
+
         QDateTime dateTime = iconItem->itemInfo()->mtime;
 
         switch(d->folderDateFormat->currentIndex())
@@ -1200,17 +1211,17 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
     if (!album)
     {
         AlbumManager* man = AlbumManager::instance();
-    
+
         album = man->currentAlbum();
         if (album && album->type() != Album::PHYSICAL)
             album = 0;
-    
+
         QString header(i18n("<p>Please select the destination album from the digiKam library to "
                             "import the camera pictures into.</p>"));
-    
+
         album = AlbumSelectDialog::selectAlbum(this, (PAlbum*)album, header, newDirName,
                                                d->autoAlbumDateCheck->isChecked());
-    
+
         if (!album) return;
     }
 
@@ -1221,14 +1232,14 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
 
     KUrl url;
     url.setPath(pAlbum->folderPath());
-    
+
     d->controller->downloadPrep();
 
     DownloadSettingsContainer downloadSettings;
     QString   downloadName;
     QDateTime dateTime;
     int       total = 0;
-    
+
     downloadSettings.autoRotate        = d->autoRotateCheck->isChecked();
     downloadSettings.fixDateTime       = d->fixDateTimeCheck->isChecked();
     downloadSettings.newDateTime       = d->dateTimeEdit->dateTime();
@@ -1236,7 +1247,7 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
     downloadSettings.setCredits        = d->setCredits->isChecked();
     downloadSettings.convertJpeg       = convertLosslessJpegFiles();
     downloadSettings.losslessFormat    = losslessFormat();
-    
+
     AlbumSettings* settings = AlbumSettings::instance();
     if (settings)
     {
@@ -1244,11 +1255,11 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
         downloadSettings.authorTitle = settings->getAuthorTitle();
         downloadSettings.credit      = settings->getCredit();
         downloadSettings.source      = settings->getSource();
-        downloadSettings.copyright   = settings->getCopyright();        
+        downloadSettings.copyright   = settings->getCopyright();
     }
 
     // -- Download camera items -------------------------------
-    
+
     for (IconItem* item = d->view->firstItem(); item;
          item = item->nextItem())
     {
@@ -1367,7 +1378,7 @@ void CameraUI::slotDownloaded(const QString& folder, const QString& file, int st
         //if (iconItem->isSelected())
           //  slotItemsSelected(iconItem, true);
     }
-    
+
     if (status == GPItemInfo::DownloadedYes || status == GPItemInfo::DownloadFailed)
     {
         int curr = d->statusProgressBar->progressValue();
@@ -1397,7 +1408,7 @@ void CameraUI::slotToggleLock()
             QString folder = iconItem->itemInfo()->folder;
             QString file   = iconItem->itemInfo()->name;
             int writePerm  = iconItem->itemInfo()->writePermissions;
-            bool lock      = true;            
+            bool lock      = true;
 
             // If item is currently locked, unlock it.
             if (writePerm == 0) 
@@ -1439,7 +1450,7 @@ void CameraUI::slotDeleteSelected()
     QStringList files;
     QStringList deleteList;
     QStringList lockedList;
-    
+
     for (IconItem* item = d->view->firstItem(); item;
          item = item->nextItem())
     {
@@ -1468,7 +1479,7 @@ void CameraUI::slotDeleteSelected()
                              "These items will not be deleted. If you really want to delete these items, "
                              "please unlock them and try again."));
         KMessageBox::informationList(this, infoMsg, lockedList, i18n("Information"));
-    }    
+    }
 
     if (folders.isEmpty())
         return;
@@ -1492,7 +1503,7 @@ void CameraUI::slotDeleteSelected()
         d->statusProgressBar->setProgressValue(0);
         d->statusProgressBar->setProgressTotalSteps(deleteList.count());
         d->statusProgressBar->progressBarMode(StatusProgressBar::ProgressBarMode);
-    
+
         for ( ; itFolder != folders.end(); ++itFolder, ++itFile)
         {
             d->controller->deleteFile(*itFolder, *itFile);
@@ -1509,7 +1520,7 @@ void CameraUI::slotDeleteAll()
     QStringList files;
     QStringList deleteList;
     QStringList lockedList;
-    
+
     for (IconItem* item = d->view->firstItem(); item;
          item = item->nextItem())
     {
@@ -1533,9 +1544,9 @@ void CameraUI::slotDeleteAll()
     {
         QString infoMsg(i18n("The items listed below are locked by camera (read-only). "
                              "These items will not be deleted. If you really want to delete these items, "
-                             "please unlock them and try again."));        
+                             "please unlock them and try again."));
         KMessageBox::informationList(this, infoMsg, lockedList, i18n("Information"));
-    }    
+    }
 
     if (folders.isEmpty())
         return;
@@ -1559,7 +1570,7 @@ void CameraUI::slotDeleteAll()
         d->statusProgressBar->setProgressValue(0);
         d->statusProgressBar->setProgressTotalSteps(deleteList.count());
         d->statusProgressBar->progressBarMode(StatusProgressBar::ProgressBarMode);
-    
+
         for ( ; itFolder != folders.end(); ++itFolder, ++itFile)
         {
             d->controller->deleteFile(*itFolder, *itFile);
@@ -1619,7 +1630,7 @@ void CameraUI::slotExifFromData(const QByteArray& exifData)
 
     DDebug() << "Size of Exif metadata from camera = " << exifData.size() << endl;
     char exifHeader[] = { 0x45, 0x78, 0x69, 0x66, 0x00, 0x00 };
-    
+
     if (!exifData.isEmpty())
     {
         int i = exifData.indexOf(*exifHeader);
@@ -1915,7 +1926,7 @@ void CameraUI::hideToolBars()
 }
 
 void CameraUI::slotCameraFreeSpaceInfo(unsigned long kBSize, unsigned long kBAvail)
-{    
+{
     d->cameraFreeSpace->setInformations(kBSize, kBSize-kBAvail, kBAvail, QString());
 }
 
@@ -1950,6 +1961,26 @@ void CameraUI::slotRawCameraList()
                                       "<p>%3 models in the list", 
                                       KDcrawVer, dcrawVer, list.count()),
                                  list, i18n("List of supported RAW camera"));
+}
+
+
+void CameraUI::slotThemeChanged()
+{
+    QStringList themes(ThemeEngine::instance()->themeNames());
+    int index = themes.indexOf(AlbumSettings::instance()->getCurrentTheme());
+    if (index == -1)
+        index = themes.indexOf(i18n("Default"));
+
+    d->themeMenuAction->setCurrentItem(index);
+}
+
+void CameraUI::slotChangeTheme(const QString& theme)
+{
+    // Theme menu entry is returned with keyboard accelerator. We remove it.
+    QString name = theme;
+    name.remove(QChar('&'));
+    AlbumSettings::instance()->setCurrentTheme(theme);
+    ThemeEngine::instance()->slotChangeTheme(theme);
 }
 
 }  // namespace Digikam

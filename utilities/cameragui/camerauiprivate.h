@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-09-16
- * Description : Camera interface dialog
+ * Description : Camera interface
  * 
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -31,6 +31,7 @@
 // KDE includes.
 
 #include <kurl.h>
+#include <kselectaction.h>
 
 namespace Digikam
 {
@@ -109,6 +110,7 @@ public:
         albumLibraryFreeSpace     = 0;
         cameraFreeSpace           = 0;
         rawCameraListAction       = 0;
+        themeMenuAction           = 0;
     }
 
     bool                          busy;
@@ -170,6 +172,8 @@ public:
     KAction                      *cameraCancelAction;
     KAction                      *rawCameraListAction;
 
+    KSelectAction                *themeMenuAction;
+
     KUrl                          lastDestURL;
 
     KHelpMenu                    *helpMenu;
@@ -185,7 +189,7 @@ public:
     AnimWidget                   *anim;
 
     ImagePropertiesSideBarCamGui *rightSidebar;
-    
+
     StatusZoomBar                *statusZoomBar;
     StatusProgressBar            *statusProgressBar;
     StatusNavigateBar            *statusNavigateBar;

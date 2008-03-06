@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="16" name="cameraui" >
+<gui version="17" name="cameraui" >
 
 <MenuBar>
 
@@ -57,6 +57,7 @@
         <Merge name="StandardToolBarMenuHandler" />
         <Action name="options_show_statusbar"/>
         <Separator/>
+        <Action name="theme_menu" />
         <Action name="options_configure_keybinding"/>
         <Action name="options_configure_toolbars"/>
         <Action name="options_configure" />        
