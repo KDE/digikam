@@ -471,7 +471,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
 
                 KUrl tempURL(dest);
                 tempURL = tempURL.upUrl();
-                tempURL.addPath(QString(".digikam-camera-tmp1-%1").arg(getpid()));
+                tempURL.addPath(QString(".digikam-camera-tmp1-%1").arg(getpid()).prepend(file));
                 QString temp = tempURL.path();
 
                 bool result = d->camera->downloadItem(folder, file, tempURL.path());
@@ -511,7 +511,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
 
                         KUrl tempURL2(dest);
                         tempURL2 = tempURL2.upUrl();
-                        tempURL2.addPath(QString(".digikam-camera-tmp2-%1").arg(getpid()));
+                        tempURL2.addPath(QString(".digikam-camera-tmp2-%1").arg(getpid()).prepend(file));
                         temp = tempURL2.path();
 
                         if (!jpegConvert(tempURL.path(), tempURL2.path(), file, losslessFormat))
@@ -520,6 +520,11 @@ void CameraController::executeCommand(CameraCommand *cmd)
                             unlink(QFile::encodeName(tempURL.path()));
                             unlink(QFile::encodeName(tempURL2.path()));
                             result = false;
+                        }
+                        else
+                        {
+                            // Else remove only the first temp file.
+                            unlink(QFile::encodeName(tempURL.path()));
                         }
                     }
                 }
