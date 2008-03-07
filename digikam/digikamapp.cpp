@@ -575,7 +575,7 @@ void DigikamApp::setupActions()
     connect(d->recurseTagsAction, SIGNAL(toggled(bool)),
             this, SLOT(slotRecurseTags(bool)));
 
-    d->deleteAction = new KAction(i18n("Delete Album"),
+    d->deleteAction = new KAction(i18n("Delete"),
                                     "editdelete",
                                     0,
                                     d->view,
