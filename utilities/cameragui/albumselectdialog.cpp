@@ -91,7 +91,9 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
 
     d->allowRootSelection = allowRootSelection;
     d->newAlbumString     = newAlbumString;
-    
+
+    // -------------------------------------------------------------
+
     QGridLayout* grid = new QGridLayout(plainPage(), 2, 1, 0, spacingHint());
 
     QLabel *logo = new QLabel(plainPage());
@@ -108,10 +110,7 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
     d->folderView->setResizeMode( QListView::AllColumns );
     d->folderView->setRootIsDecorated(true);
 
-    grid->addMultiCellWidget(logo, 0, 0, 0, 0);
-    grid->addMultiCellWidget(message, 1, 1, 0, 0);
-    grid->addMultiCellWidget(d->folderView, 0, 2, 1, 1);
-    grid->setRowStretch(2, 10);
+    // -------------------------------------------------------------
 
     QPixmap icon = iconLoader->loadIcon("folder", KIcon::NoGroup,
                                         AlbumSettings::instance()->getDefaultTreeIconSize(), KIcon::DefaultState, 0, true);
@@ -123,7 +122,7 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
         PAlbum* album = (PAlbum*)(*it);
 
         FolderItem* viewItem = 0;
-        
+
         if (album->isRoot())
         {
             viewItem = new FolderItem(d->folderView, album->title());
@@ -132,7 +131,7 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
         else
         {
             FolderItem* parentItem = (FolderItem*)(album->parent()->extraData(d->folderView));
-            
+
             if (!parentItem)
             {
                 DWarning() << "Failed to find parent for Album "
@@ -160,6 +159,13 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
 
     // -------------------------------------------------------------
 
+    grid->addMultiCellWidget(logo, 0, 0, 0, 0);
+    grid->addMultiCellWidget(message, 1, 1, 0, 0);
+    grid->addMultiCellWidget(d->folderView, 0, 2, 1, 1);
+    grid->setRowStretch(2, 10);
+
+    // -------------------------------------------------------------
+
     connect(AlbumManager::instance(), SIGNAL(signalAlbumAdded(Album*)),
             this, SLOT(slotAlbumAdded(Album*)));
 
@@ -177,7 +183,7 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
 
     // -------------------------------------------------------------
 
-    resize(500, 500);
+    resize(600, 600);
     slotSelectionChanged();
 }
 
@@ -204,7 +210,7 @@ void AlbumSelectDialog::slotAlbumAdded(Album* album)
     QPixmap icon = iconLoader->loadIcon("folder", KIcon::NoGroup,
                                         AlbumSettings::instance()->getDefaultTreeIconSize(),
                                         KIcon::DefaultState, 0, true);
-    
+
     FolderItem* viewItem = new FolderItem(parentItem, album->title());
     viewItem->setPixmap(0, icon);
     album->setExtraData(d->folderView, viewItem);
@@ -228,14 +234,14 @@ void AlbumSelectDialog::slotAlbumDeleted(Album* album)
 
 void AlbumSelectDialog::slotAlbumsCleared()
 {
-    d->folderView->clear();    
+    d->folderView->clear();
 }
 
 void AlbumSelectDialog::slotSelectionChanged()
 {
     QListViewItem* selItem = 0;
     QListViewItemIterator it(d->folderView);
-    
+
     while (it.current())
     {
         if (it.current()->isSelected())
@@ -326,7 +332,7 @@ PAlbum* AlbumSelectDialog::selectAlbum(QWidget* parent,
     {
         return 0;
     }
-    
+
     return dlg.d->albumMap[item];
 }
 
