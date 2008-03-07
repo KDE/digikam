@@ -911,7 +911,7 @@ void CameraController::customEvent(QCustomEvent* e)
             QString temp   = QDeepCopy<QString>(event->map["temp"].asString());
 
             d->timer->stop();
-            
+
             bool skip      = false;
             bool cancel    = false;
             bool overwrite = false;
@@ -933,10 +933,11 @@ void CameraController::customEvent(QCustomEvent* e)
                     KIO::RenameDlg dlg(d->parent, i18n("Rename File"),
                                        folder + QString("/") + file, dest,
                                        KIO::RenameDlg_Mode(KIO::M_MULTI | KIO::M_OVERWRITE | KIO::M_SKIP));
-    
+
                     int result = dlg.exec();
                     dest       = dlg.newDestURL().path();
-    
+                    info       = QFileInfo(dest);
+
                     switch (result)
                     {
                         case KIO::R_CANCEL:
@@ -969,7 +970,7 @@ void CameraController::customEvent(QCustomEvent* e)
                         default:
                             break;
                     }
-    
+
                     if (cancel || skip || overwrite)
                         break;
                 }
@@ -988,10 +989,10 @@ void CameraController::customEvent(QCustomEvent* e)
                 unlink(QFile::encodeName(temp));
                 d->timer->start(50);
                 emit signalInfoMsg(i18n("Skipped file %1").arg(file));
-                emit signalSkipped(folder, file);        
+                emit signalSkipped(folder, file);
                 return;
             }
-            
+
             // move the file to the destination file
             if (rename(QFile::encodeName(temp), QFile::encodeName(dest)) != 0)
             {
@@ -1011,11 +1012,11 @@ void CameraController::customEvent(QCustomEvent* e)
         {
             QString folder = QDeepCopy<QString>(event->map["folder"].asString());
             QString file   = QDeepCopy<QString>(event->map["file"].asString());
-    
+
             d->timer->stop();
-    
+
             QString msg = i18n("Failed to download file \"%1\".").arg(file);
-            
+
             if (!d->canceled)
             {
                 if (d->cmdQueue.isEmpty())
@@ -1030,7 +1031,7 @@ void CameraController::customEvent(QCustomEvent* e)
                         slotCancel();  
                 }
             }
-    
+
             d->timer->start(50);
             emit signalDownloaded(folder, file, GPItemInfo::DownloadFailed);
             break;
@@ -1052,9 +1053,9 @@ void CameraController::customEvent(QCustomEvent* e)
             QString src    = QDeepCopy<QString>(event->map["src"].asString());
 
             d->timer->stop();
-    
+
             QString msg = i18n("Failed to upload file \"%1\".").arg(file);
-            
+
             if (!d->canceled)
             {
                 if (d->cmdQueue.isEmpty())
@@ -1066,10 +1067,10 @@ void CameraController::customEvent(QCustomEvent* e)
                     msg += i18n(" Do you want to continue?");
                     int result = KMessageBox::warningContinueCancel(d->parent, msg);
                     if (result != KMessageBox::Continue)
-                        slotCancel();    
+                        slotCancel();
                 }
             }
-    
+
             d->timer->start(50);
             break;
         }
@@ -1084,12 +1085,12 @@ void CameraController::customEvent(QCustomEvent* e)
         {
             QString folder = QDeepCopy<QString>(event->map["folder"].asString());
             QString file   = QDeepCopy<QString>(event->map["file"].asString());
-    
+
             d->timer->stop();
             emit signalDeleted(folder, file, false);
 
             QString msg = i18n("Failed to delete file \"%1\".").arg(file);
-            
+
             if (!d->canceled)
             {
                 if (d->cmdQueue.isEmpty())
@@ -1104,7 +1105,7 @@ void CameraController::customEvent(QCustomEvent* e)
                         slotCancel();
                 }
             }
-    
+
             d->timer->start(50);
             break;
         }
@@ -1119,12 +1120,12 @@ void CameraController::customEvent(QCustomEvent* e)
         {
             QString folder = QDeepCopy<QString>(event->map["folder"].asString());
             QString file   = QDeepCopy<QString>(event->map["file"].asString());
-    
+
             d->timer->stop();
             emit signalLocked(folder, file, false);
 
             QString msg = i18n("Failed to toggle lock file \"%1\".").arg(file);
-            
+
             if (!d->canceled)
             {
                 if (d->cmdQueue.isEmpty())
@@ -1139,7 +1140,7 @@ void CameraController::customEvent(QCustomEvent* e)
                         slotCancel();
                 }
             }
-    
+
             d->timer->start(50);
             break;
         }
@@ -1147,19 +1148,19 @@ void CameraController::customEvent(QCustomEvent* e)
         {
             QString file = QDeepCopy<QString>(event->map["file"].asString());
             QString dest = QDeepCopy<QString>(event->map["dest"].asString());
-    
+
             KURL url(dest);
             KURL::List urlList;
             urlList << url;
-    
+
             ImageWindow *im = ImageWindow::imagewindow();
             im->loadURL(urlList, url, i18n("Camera \"%1\"").arg(d->camera->model()), false);
-    
+
             if (im->isHidden())
                 im->show();
             else
                 im->raise();
-                
+
             im->setFocus();
             break;
         }
@@ -1181,7 +1182,7 @@ void CameraController::slotProcessNext()
 
     d->timer->stop();
     emit signalBusy(true);
-    
+
     CameraCommand* cmd = d->cmdQueue.head();
 
     QString folder;
@@ -1200,7 +1201,7 @@ void CameraController::slotProcessNext()
         d->timer->start(50, false);
         return;
     }
-      
+
     if (cmd->action == CameraCommand::gp_download)
     {
         folder = QDeepCopy<QString>(cmd->map["folder"].asString());
@@ -1214,4 +1215,3 @@ void CameraController::slotProcessNext()
 }
 
 }  // namespace Digikam
-
