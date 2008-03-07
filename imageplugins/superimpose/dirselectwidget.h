@@ -23,64 +23,55 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEEFFECT_SUPERIMPOSE_H
-#define IMAGEEFFECT_SUPERIMPOSE_H
+#ifndef DIRSELECTWIDGET_H
+#define DIRSELECTWIDGET_H
 
-// KDE include.
+// Qt includes.
 
+#include <qwidget.h>
+#include <qstring.h>
+
+// KDE includes.
+
+#include <kfiletreeview.h>
 #include <kurl.h>
-
-// Digikam includes.
-
-#include "imagedlgbase.h"
-
-class QPushButton;
-
-namespace Digikam
-{
-class ThumbBarView;
-}
 
 namespace DigikamSuperImposeImagesPlugin
 {
 
-class DirSelectWidget;
-class SuperImposeWidget;
-
-class ImageEffect_SuperImpose : public Digikam::ImageDlgBase
+class DirSelectWidget : public KFileTreeView 
 {
-    Q_OBJECT
+Q_OBJECT
 
 public:
+     
+    DirSelectWidget(QWidget* parent, const char* name=0, QString headerLabel=QString());
 
-    ImageEffect_SuperImpose(QWidget* parent);
-    ~ImageEffect_SuperImpose();
+    DirSelectWidget(KURL rootUrl=KURL("/"), KURL currentUrl=KURL(), 
+                    QWidget* parent=0, const char* name=0, QString headerLabel=QString());
 
-private slots:
+    ~DirSelectWidget();
+     
+    KURL path() const;
+    KURL rootPath(void);
+    void setRootPath(KURL rootUrl, KURL currentUrl=KURL(QString()));
+    void setCurrentPath(KURL currentUrl);
 
-    void slotTemplateDirChanged(const KURL& url);
-    void slotRootTemplateDirChanged(void);
+signals :
+    
+    void folderItemSelected(const KURL &url);
+        
+protected slots:
+
+    void load();
+    void slotFolderSelected(QListViewItem *);
 
 private:
-
-    void readUserSettings();
-    void writeUserSettings();
-    void resetValues();
-    void populateTemplates(void);
-    void finalRendering();    
     
-private:
-    
-    KURL                   m_templatesUrl;
-    KURL                   m_templatesRootUrl;
-
-    Digikam::ThumbBarView *m_thumbnailsBar;
-    
-    SuperImposeWidget     *m_previewWidget;
-    
-    DirSelectWidget       *m_dirSelect;
+    struct Private;
+    Private* d;
 };
 
 }  // NameSpace DigikamSuperImposeImagesPlugin
 
-#endif /* IMAGEEFFECT_SUPERIMPOSE_H */
+#endif /* DIRSELECTWIDGET_H */
