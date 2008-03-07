@@ -6,7 +6,7 @@
  *               template to an image.
  * 
  * Copyright 2005 by Gilles Caulier 
- * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
+ * Copyright 2006-2008 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -83,7 +83,7 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
                                        I18N_NOOP("A digiKam image plugin to superimpose a template onto a photograph."),
                                        KAboutData::License_GPL,
                                        "(c) 2005-2006, Gilles Caulier\n"
-                                       "(c) 2006-2007, Gilles Caulier and Marcel Wiesweg", 
+                                       "(c) 2006-2008, Gilles Caulier and Marcel Wiesweg", 
                                        0,
                                        "http://www.digikam.org");
     

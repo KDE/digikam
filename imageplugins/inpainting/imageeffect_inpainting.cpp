@@ -7,7 +7,7 @@
  * Description : a digiKam image editor plugin to inpaint
  *               a photograph
  * 
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -139,7 +139,7 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
                                        digikam_version,
                                        I18N_NOOP("A digiKam image plugin to inpaint a photograph."),
                                        KAboutData::License_GPL,
-                                       "(c) 2005-2007, Gilles Caulier",
+                                       "(c) 2005-2008, Gilles Caulier",
                                        0,
                                        "http://www.digikam.org");
 

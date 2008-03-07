@@ -6,7 +6,7 @@
  * Date        : 2004-08-24
  * Description : a plugin to reduce CCD noise.
  * 
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -73,7 +73,7 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent)
                                        digikam_version,
                                        I18N_NOOP("A noise reduction image filter plugin for digiKam."),
                                        KAboutData::License_GPL,
-                                       "(c) 2004-2007, Gilles Caulier", 
+                                       "(c) 2004-2008, Gilles Caulier", 
                                        0,
                                        "http://www.digikam.org");
     

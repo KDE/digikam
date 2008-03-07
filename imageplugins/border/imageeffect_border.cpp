@@ -7,8 +7,8 @@
  * Description : a digiKam image plugin to add a border
  *               around an image.
  * 
- * Copyright 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -72,7 +72,7 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
                                        I18N_NOOP("A digiKam image plugin to add a border around an image."),
                                        KAboutData::License_GPL,
                                        "(c) 2005, Gilles Caulier\n"
-                                       "(c) 2006-2007, Gilles Caulier and Marcel Wiesweg",
+                                       "(c) 2006-2008, Gilles Caulier and Marcel Wiesweg",
                                        0,
                                        "http://www.digikam.org");
                                        

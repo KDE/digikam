@@ -6,7 +6,7 @@
  * Date        : 2005-02-26
  * Description : image channels mixer.
  *
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Load and save mixer gains methods inspired from 
  * Gimp 2.2.3 and copyrighted 2002 by Martin Guldahl 
@@ -101,7 +101,7 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent)
                                        digikam_version,
                                        I18N_NOOP("An image color channel mixer plugin for digiKam."),
                                        KAboutData::License_GPL,
-                                       "(c) 2005-2007, Gilles Caulier",
+                                       "(c) 2005-2008, Gilles Caulier",
                                        0,
                                        "http://www.digikam.org");
 

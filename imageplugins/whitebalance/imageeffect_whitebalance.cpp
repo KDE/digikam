@@ -96,7 +96,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
                                        digikam_version,
                                        I18N_NOOP("A digiKam image plugin to correct white color balance."),
                                        KAboutData::License_GPL,
-                                       "(c) 2005-2007, Gilles Caulier", 
+                                       "(c) 2005-2008, Gilles Caulier", 
                                        0,
                                        "http://wwww.digikam.org");
 

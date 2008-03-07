@@ -8,7 +8,7 @@
  *               effect to an image.
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -82,7 +82,7 @@ ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent)
                             digikam_version,
                             I18N_NOOP("A digiKam plugin to apply special color effects on an image."),
                             KAboutData::License_GPL,
-                            "(c) 2004-2005, Renchi Raju\n(c) 2006-2007, Gilles Caulier",
+                            "(c) 2004-2005, Renchi Raju\n(c) 2006-2008, Gilles Caulier",
                             0,
                             "http://www.digikam.org");
 

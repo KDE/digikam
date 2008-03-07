@@ -6,8 +6,8 @@
  * Date        : 2005-02-11
  * Description : a plugin to apply Distortion FX to an image.
  *
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * Original Distortion algorithms copyrighted 2004-2005 by 
  * Pieter Z. Voloshyn <pieter dot voloshyn at gmail dot com>.
@@ -74,7 +74,7 @@ ImageEffect_DistortionFX::ImageEffect_DistortionFX(QWidget* parent)
                                        I18N_NOOP("A digiKam image plugin to apply distortion effects to an image."),
                                        KAboutData::License_GPL,
                                        "(c) 2005, Gilles Caulier\n"
-                                       "(c) 2006-2007, Gilles Caulier and Marcel Wiesweg", 
+                                       "(c) 2006-2008, Gilles Caulier and Marcel Wiesweg", 
                                        0,
                                        "http://www.digikam.org");
                                        
