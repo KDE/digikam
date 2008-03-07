@@ -9,4 +9,5 @@ install( FILES Dreary
 	       Gray 
 	       Blue 
 	       DLR  
+               Rose
          DESTINATION ${DATA_INSTALL_DIR}/digikam/themes )
