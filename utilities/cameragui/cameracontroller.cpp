@@ -5,21 +5,21 @@
  *
  * Date        : 2004-09-17
  * Description : digital camera controller
- * 
+ *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com> 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // C++ includes.
@@ -88,10 +88,10 @@ public:
         gp_exif,
         gp_open
     };
-    
+
     Action                 action;
     QMap<QString,QVariant> map; 
-};    
+};
 
 class CameraEvent : public QCustomEvent
 {
@@ -119,7 +119,7 @@ public:
         gp_infomsg,
         gp_errormsg
     };
-    
+
     CameraEvent(State state) :
         QCustomEvent(QEvent::User+state)
         {}
@@ -128,7 +128,7 @@ public:
     QString                msg;
     QMap<QString,QVariant> map; 
 };
-    
+
 class CameraControllerPriv
 {
 public:
@@ -145,22 +145,22 @@ public:
         camera        = 0;
         thread        = 0; 
     }
-    
+
     bool                    close;
     bool                    overwriteAll;
     bool                    skipAll;
     bool                    canceled;
-    
+
     int                     downloadTotal;
-    
+
     QWidget                *parent;
-    
+
     QTimer                 *timer;
-    
+
     CameraThread           *thread;
-    
+
     DKCamera               *camera;
-    
+
     MTQueue<CameraCommand>  cmdQueue;
 };
 
@@ -174,15 +174,15 @@ public:
     void sendBusy(bool busy);
     void sendError(const QString& msg);
     void sendInfo(const QString& msg);
-    
+
 protected:
 
     void run();
 
 private:
-    
+
     CameraControllerPriv *d;
-    
+
     QObject              *parent;
 };
 
@@ -210,7 +210,7 @@ void CameraThread::run()
             case(CameraCommand::gp_connect):
             {
                 sendInfo(i18n("Connecting to camera..."));
-            
+
                 bool result = d->camera->doConnect();
     
                 CameraEvent* event = new CameraEvent(CameraEvent::gp_connected);
@@ -318,20 +318,20 @@ void CameraThread::run()
             {
                 QString folder = cmd->map["folder"].asString();
                 QString file   = cmd->map["file"].asString();
-    
+
                 sendInfo(i18n("Getting EXIF information for %1/%2...").arg(folder).arg(file));
-    
+
                 char* edata = 0;
                 int   esize = 0;
                 d->camera->getExif(folder, file, &edata, esize);
-    
+
                 if (edata || esize)
                 {
                     QByteArray  ba;
                     QDataStream ds(ba, IO_WriteOnly);
                     ds.writeRawBytes(edata, esize);
                     delete [] edata;
-            
+
                     CameraEvent* event = new CameraEvent(CameraEvent::gp_exif);
                     event->map.insert("folder", QVariant(folder));
                     event->map.insert("file", QVariant(file));
@@ -359,7 +359,7 @@ void CameraThread::run()
                 bool      convertJpeg       = cmd->map["convertJpeg"].asBool();
                 QString   losslessFormat    = cmd->map["losslessFormat"].asString();
                 sendInfo(i18n("Downloading file %1...").arg(file));
-    
+
                 // download to a temp file
 
                 CameraEvent* event = new CameraEvent(CameraEvent::gp_downloadstarted);
@@ -370,11 +370,11 @@ void CameraThread::run()
 
                 KURL tempURL(dest);
                 tempURL = tempURL.upURL();
-                tempURL.addPath( QString(".digikam-camera-tmp1-%1").arg(getpid()));
+                tempURL.addPath( QString(".digikam-camera-tmp1-%1").arg(getpid()).prepend(file));
                 QString temp = tempURL.path();
-    
+
                 bool result = d->camera->downloadItem(folder, file, tempURL.path());
-    
+
                 if (result)
                 {
                     if (autoRotate)
@@ -383,34 +383,34 @@ void CameraThread::run()
                         sendInfo(i18n("EXIF rotating file %1...").arg(file));
                         exifRotate(tempURL.path(), file);
                     }
-    
+
                     if (fixDateTime || setPhotographerId || setCredits)
                     {
                         sendInfo(i18n("Setting Metadata tags to file %1...").arg(file));
                         DMetadata metadata(tempURL.path());
-                        
+
                         if (fixDateTime)
                             metadata.setImageDateTime(newDateTime, true);
-                        
+
                         if (setPhotographerId)
                             metadata.setImagePhotographerId(author, authorTitle);
-    
+
                         if (setCredits)
                             metadata.setImageCredits(credit, source, copyright);
-                                                                    
+
                         metadata.applyChanges();
                     }
-                    
+
                     // Convert Jpeg file to lossless format if necessary, 
                     // and move converted image to destination.
-                    
+
                     if (convertJpeg && isJpegImage(tempURL.path()))
                     {
                         sendInfo(i18n("Converting %1 to lossless file format...").arg(file));
 
                         KURL tempURL2(dest);
                         tempURL2 = tempURL2.upURL();
-                        tempURL2.addPath( QString(".digikam-camera-tmp2-%1").arg(getpid()));
+                        tempURL2.addPath( QString(".digikam-camera-tmp2-%1").arg(getpid()).prepend(file));
                         temp = tempURL2.path();
 
                         if (!jpegConvert(tempURL.path(), tempURL2.path(), file, losslessFormat))
@@ -420,9 +420,14 @@ void CameraThread::run()
                             unlink(QFile::encodeName(tempURL2.path()));
                             result = false;
                         }
+                        else
+                        {
+                            // Else remove only the first temp file.
+                            unlink(QFile::encodeName(tempURL.path()));
+                        }
                     }
                 }
-    
+
                 if (result)
                 {
                     CameraEvent* event = new CameraEvent(CameraEvent::gp_downloaded);
@@ -439,7 +444,7 @@ void CameraThread::run()
                     event->map.insert("file", QVariant(file));
                     event->map.insert("dest", QVariant(dest));
                     QApplication::postEvent(parent, event);
-                }                
+                }
                 break;
             }
             case(CameraCommand::gp_open):
