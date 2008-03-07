@@ -37,5 +37,6 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
                  unselected when the tag is deleted.
 013 ==> 120309 : Change screen backgroundcolor of image tools.
 014 ==> 153775 : Download from camera: Renaming because of already existing file does not work.
-015 ==> 
+015 ==> 154346 : Can't rename in digiKam.
+016 ==> 
 
