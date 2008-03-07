@@ -45,15 +45,12 @@ LATER 0.9.3 TODO LIST
 * Improving metadata support:
    - Writing Metadata into PNG file like JPEG (Exiv2).
    - Writing Metadata into TIFF file like JPEG (Exiv2).
-   - Writing Metadata to DNG format (=TIFF see above)
+   - Writing Metadata to DNG format (=TIFF see DNG sdk from Adobe)
    - Writing Metadata to JPEG 2k files like JPEG (Exiv2).
 
 * Database:
-   - New database interface to suport remote repository and others DB backend than sqlite.
    - Implement versioning of picture based on Image editor 'Action List' feature.
    - New option to set digiKam tags on the fly.
-   - Storing new images meta-information : all major photograph information and GPS.
-   - Allow for multiple root album directories.
 
 * New CD/DVD album folders+database backup/restore tool :
    - Take a look of music database backup in amarok.
@@ -68,4 +65,3 @@ LATER 0.9.3 TODO LIST
    - Post conversion to qlistview: allow selection of multiple albums/tags/dates:
      1/ instead of a "current album" there will a list of "current urls"
      2/ will lead to widesweeping changes all over the core and the kioslaves
-
