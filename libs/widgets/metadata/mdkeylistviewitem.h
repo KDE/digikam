@@ -7,7 +7,7 @@
  * Description : a generic list view item widget to 
  *               display metadata key like a title
  * 
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,10 +28,7 @@
 // Qt includes.
 
 #include <qstring.h>
-
-// KDE includes.
-
-#include <klistview.h>
+#include <qlistview.h>
 
 // Local includes.
 
@@ -42,12 +39,12 @@ class QPainter;
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT MdKeyListViewItem : public KListViewItem
+class DIGIKAM_EXPORT MdKeyListViewItem : public QListViewItem
 {
 
 public:
 
-    MdKeyListViewItem(KListView *parent, const QString& key);
+    MdKeyListViewItem(QListView *parent, const QString& key);
     ~MdKeyListViewItem();
 
     QString getMdKey();

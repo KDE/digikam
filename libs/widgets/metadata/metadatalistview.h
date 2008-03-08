@@ -30,10 +30,7 @@
 #include <qstring.h>
 #include <qptrlist.h>
 #include <qmap.h>
-
-// KDE includes.
-
-#include <klistview.h>
+#include <qlistview.h>
 
 // Local includes.
 
@@ -43,7 +40,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT MetadataListView : public KListView
+class DIGIKAM_EXPORT MetadataListView : public QListView
 {
     Q_OBJECT
 
@@ -69,9 +66,9 @@ private slots:
 
 private:
 
-    MetadataWidget *m_parent;
-
     QString         m_selectedItemKey;
+
+    MetadataWidget *m_parent;
 };
 
 }  // namespace Digikam
