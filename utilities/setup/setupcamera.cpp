@@ -30,10 +30,10 @@
 #include <qwhatsthis.h>
 #include <qtooltip.h>
 #include <qdatetime.h>
+#include <qlistview.h>
 
 // KDE includes.
 
-#include <klistview.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kurllabel.h>
@@ -72,7 +72,7 @@ public:
     QPushButton *editButton;
     QPushButton *autoDetectButton;
     
-    KListView   *listView;
+    QListView   *listView;
 };
 
 SetupCamera::SetupCamera( QWidget* parent )
@@ -83,7 +83,7 @@ SetupCamera::SetupCamera( QWidget* parent )
     QVBoxLayout *mainLayout     = new QVBoxLayout(parent);
     QGridLayout* groupBoxLayout = new QGridLayout( this, 2, 5, 0, KDialog::spacingHint() );
 
-    d->listView = new KListView( this );
+    d->listView = new QListView( this );
     d->listView->addColumn( i18n("Title") );
     d->listView->addColumn( i18n("Model") );
     d->listView->addColumn( i18n("Port") );
@@ -164,7 +164,7 @@ SetupCamera::SetupCamera( QWidget* parent )
         for (CameraType *ctype = cl->first(); ctype;
              ctype = cl->next()) 
         {
-            new KListViewItem(d->listView, ctype->title(), ctype->model(),
+            new QListViewItem(d->listView, ctype->title(), ctype->model(),
                               ctype->port(), ctype->path(), 
                               ctype->lastAccess().toString(Qt::ISODate));
         }
@@ -260,7 +260,7 @@ void SetupCamera::slotAutoDetectCamera()
     {
         KMessageBox::information(this, i18n("Found camera '%1' (%2) and added it to the list.")
                                  .arg(model).arg(port));
-        new KListViewItem(d->listView, model, model, port, "/", 
+        new QListViewItem(d->listView, model, model, port, "/", 
                           QDateTime::currentDateTime().toString(Qt::ISODate));
     }
 }
@@ -268,7 +268,7 @@ void SetupCamera::slotAutoDetectCamera()
 void SetupCamera::slotAddedCamera(const QString& title, const QString& model,
                                   const QString& port, const QString& path)
 {
-    new KListViewItem(d->listView, title, model, port, path, 
+    new QListViewItem(d->listView, title, model, port, path, 
                       QDateTime::currentDateTime().toString(Qt::ISODate));
 }
 

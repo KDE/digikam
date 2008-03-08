@@ -29,6 +29,7 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qradiobutton.h>
+#include <qlistview.h>
 #include <qvbuttongroup.h>
 #include <qlayout.h>
 #include <qwhatsthis.h>
@@ -40,7 +41,6 @@
 #include <kactivelabel.h>
 #include <kurlrequester.h>
 #include <klocale.h>
-#include <klistview.h>
 #include <klineedit.h>
 #include <kcursor.h>
 #include <kapplication.h>
@@ -84,11 +84,11 @@ public:
     QString        PTPCameraNameShown;
 
     QStringList    serialPortList;
+
+    QListView     *listView;
     
     KLineEdit     *titleEdit;
     
-    KListView     *listView;
-
     KURLRequester *umsMountURL;
 };
 
@@ -109,10 +109,10 @@ CameraSelection::CameraSelection( QWidget* parent )
     
     // --------------------------------------------------------------
 
-    d->listView = new KListView( plainPage() );
+    d->listView = new QListView( plainPage() );
     d->listView->addColumn( i18n("Camera List") );
     d->listView->setAllColumnsShowFocus(true);
-    d->listView->setResizeMode(KListView::LastColumn);
+    d->listView->setResizeMode(QListView::LastColumn);
     d->listView->setMinimumWidth(350);
     QWhatsThis::add( d->listView, i18n("<p>Select here the camera name that you want to use. All "
                                        "default settings on the right panel "
@@ -310,9 +310,9 @@ void CameraSelection::getCameraList()
     {
         cname = clist[i];
         if (cname == d->UMSCameraNameActual)
-            new KListViewItem(d->listView, d->UMSCameraNameShown);
+            new QListViewItem(d->listView, d->UMSCameraNameShown);
         else
-            new KListViewItem(d->listView, cname);
+            new QListViewItem(d->listView, cname);
     }
 }
 
