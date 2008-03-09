@@ -1,3 +1,1695 @@
+0.9.4-beta1 2008-03-09
+-------------------------------------------------------------------------
+2008-03-08 08:06  cgilles
+
+	* utilities/setup/cameraselection.cpp,
+	  utilities/setup/setupcamera.cpp: better contrast with dark color
+	  scheme
+
+2008-03-08 07:57  cgilles
+
+	* libs/widgets/metadata/mdkeylistviewitem.cpp,
+	  libs/widgets/metadata/mdkeylistviewitem.h,
+	  libs/widgets/metadata/metadatalistview.cpp,
+	  libs/widgets/metadata/metadatalistview.h,
+	  libs/widgets/metadata/metadatalistviewitem.cpp,
+	  libs/widgets/metadata/metadatalistviewitem.h,
+	  libs/widgets/metadata/metadatawidget.cpp: backport metadata
+	  widget layout from KDE4 : better contrast with dark color scheme
+	  theme
+
+2008-03-07 11:58  cgilles
+
+	* imageplugins/superimpose/dirselectwidget.cpp,
+	  imageplugins/superimpose/dirselectwidget.h,
+	  imageplugins/superimpose/imageeffect_superimpose.cpp,
+	  imageplugins/superimpose/imageeffect_superimpose.h,
+	  imageplugins/superimpose/imageplugin_superimpose.cpp,
+	  imageplugins/superimpose/imageplugin_superimpose.h,
+	  imageplugins/superimpose/superimpose.cpp,
+	  imageplugins/superimpose/superimpose.h,
+	  imageplugins/superimpose/superimposewidget.cpp,
+	  imageplugins/superimpose/superimposewidget.h: fix header
+
+2008-03-07 11:53  cgilles
+
+	* imageplugins/adjustcurves/adjustcurves.cpp,
+	  imageplugins/adjustcurves/adjustcurves.h,
+	  imageplugins/adjustlevels/adjustlevels.cpp,
+	  imageplugins/adjustlevels/adjustlevels.h,
+	  imageplugins/antivignetting/imageeffect_antivignetting.cpp,
+	  imageplugins/antivignetting/imageeffect_antivignetting.h,
+	  imageplugins/blurfx/imageeffect_blurfx.cpp,
+	  imageplugins/blurfx/imageeffect_blurfx.h,
+	  imageplugins/border/imageeffect_border.cpp,
+	  imageplugins/border/imageeffect_border.h,
+	  imageplugins/channelmixer/channelmixer.cpp,
+	  imageplugins/channelmixer/channelmixer.h,
+	  imageplugins/charcoal/imageeffect_charcoal.cpp,
+	  imageplugins/charcoal/imageeffect_charcoal.h,
+	  imageplugins/colorfx/imageeffect_colorfx.cpp,
+	  imageplugins/colorfx/imageeffect_colorfx.h,
+	  imageplugins/distortionfx/imageeffect_distortionfx.cpp,
+	  imageplugins/distortionfx/imageeffect_distortionfx.h,
+	  imageplugins/emboss/imageeffect_emboss.cpp,
+	  imageplugins/emboss/imageeffect_emboss.h,
+	  imageplugins/filmgrain/imageeffect_filmgrain.cpp,
+	  imageplugins/filmgrain/imageeffect_filmgrain.h,
+	  imageplugins/freerotation/imageeffect_freerotation.cpp,
+	  imageplugins/freerotation/imageeffect_freerotation.h,
+	  imageplugins/hotpixels/imageeffect_hotpixels.cpp,
+	  imageplugins/hotpixels/imageeffect_hotpixels.h,
+	  imageplugins/infrared/imageeffect_infrared.cpp,
+	  imageplugins/infrared/imageeffect_infrared.h,
+	  imageplugins/inpainting/imageeffect_inpainting.cpp,
+	  imageplugins/inpainting/imageeffect_inpainting.h,
+	  imageplugins/inserttext/imageeffect_inserttext.cpp,
+	  imageplugins/inserttext/imageeffect_inserttext.h,
+	  imageplugins/lensdistortion/imageeffect_lensdistortion.cpp,
+	  imageplugins/lensdistortion/imageeffect_lensdistortion.h,
+	  imageplugins/noisereduction/imageeffect_noisereduction.cpp,
+	  imageplugins/noisereduction/imageeffect_noisereduction.h,
+	  imageplugins/oilpaint/imageeffect_oilpaint.cpp,
+	  imageplugins/oilpaint/imageeffect_oilpaint.h,
+	  imageplugins/perspective/imageeffect_perspective.cpp,
+	  imageplugins/perspective/imageeffect_perspective.h,
+	  imageplugins/raindrop/imageeffect_raindrop.cpp,
+	  imageplugins/raindrop/imageeffect_raindrop.h,
+	  imageplugins/restoration/imageeffect_restoration.cpp,
+	  imageplugins/restoration/imageeffect_restoration.h,
+	  imageplugins/sheartool/imageeffect_sheartool.cpp,
+	  imageplugins/sheartool/imageeffect_sheartool.h,
+	  imageplugins/superimpose/imageeffect_superimpose.cpp,
+	  imageplugins/superimpose/imageeffect_superimpose.h,
+	  imageplugins/texture/imageeffect_texture.cpp,
+	  imageplugins/texture/imageeffect_texture.h,
+	  imageplugins/whitebalance/imageeffect_whitebalance.cpp: fix (c)
+	  date
+
+2008-03-07 11:40  cgilles
+
+	* digikam/version.h: update
+
+2008-03-07 11:33  cgilles
+
+	* NEWS: update
+
+2008-03-07 11:30  cgilles
+
+	* digikam.lsm: update
+
+2008-03-07 11:28  cgilles
+
+	* TODO: update
+
+2008-03-07 11:26  cgilles
+
+	* NEWS: update
+
+2008-03-07 11:26  cgilles
+
+	* digikam/digikamui.rc: digiKam from KDE3 branch : sync Album Gui
+	  main menu with KDE4. Import and Export option are hosted as main
+	  actions.
+
+2008-03-07 11:12  cgilles
+
+	* digikam/digikamapp.cpp: fix i18n
+
+2008-03-07 10:28  cgilles
+
+	* NEWS: update
+
+2008-03-07 10:27  cgilles
+
+	* utilities/cameragui/albumselectdialog.cpp: digiKam from KDE3
+	  branch : polish album select dialog layout when using large
+	  treeview icons.
+	  Note : KDE4 implementation use a different widget to render
+	  treeview. This problem do not exist.
+	  BUG: 154746
+
+2008-03-07 10:14  cgilles
+
+	* NEWS: update
+
+2008-03-07 10:09  cgilles
+
+	* NEWS: update
+
+2008-03-07 10:04  cgilles
+
+	* NEWS: update
+
+2008-03-07 10:03  cgilles
+
+	* utilities/cameragui/cameracontroller.cpp: digiKam from KDE3
+	  branch : CameraGUI: during download from camera, update properlly
+	  QFileInfo instance used to check if file exist on target album
+	  BUG: 153775
+
+2008-03-07 08:51  cgilles
+
+	* utilities/cameragui/cameracontroller.cpp,
+	  utilities/cameragui/cameracontroller.h: backport commit #783150
+
+2008-03-07 07:04  cgilles
+
+	* data/themes/Rose: update
+
+2008-03-07 06:57  cgilles
+
+	* data/themes/Makefile.am, data/themes/Rose: digiKam from KDE3
+	  branch : add Rose theme color scheme (for women of course (:=)))
+
+2008-03-06 19:26  cgilles
+
+	* libs/dmetadata/Makefile.am, libs/jpegutils/Makefile.am,
+	  utilities/batch/Makefile.am: compile properly with libkdcraw
+
+2008-03-06 12:27  cgilles
+
+	* digikam/digikamapp.cpp, digikam/digikamapp.h,
+	  digikam/digikamappprivate.h, digikam/digikamui.rc,
+	  utilities/imageeditor/editor/digikamimagewindowui.rc,
+	  utilities/imageeditor/editor/editorwindow.cpp,
+	  utilities/imageeditor/editor/editorwindow.h,
+	  utilities/imageeditor/editor/editorwindowprivate.h,
+	  utilities/lighttable/lighttablewindow.cpp,
+	  utilities/lighttable/lighttablewindow.h,
+	  utilities/lighttable/lighttablewindowprivate.h,
+	  utilities/lighttable/lighttablewindowui.rc: new Help/Contribute
+	  menu entry
+
+2008-03-06 11:35  cgilles
+
+	* utilities/lighttable/lighttablewindow.cpp: polish
+
+2008-03-06 11:26  cgilles
+
+	* utilities/lighttable/lighttablewindow.cpp,
+	  utilities/lighttable/lighttablewindow.h,
+	  utilities/lighttable/lighttablewindowprivate.h,
+	  utilities/lighttable/lighttablewindowui.rc: to be able to change
+	  color theme scheme from light table
+
+2008-03-06 11:16  cgilles
+
+	* NEWS: update
+
+2008-03-06 10:46  cgilles
+
+	* digikam/digikamapp.cpp, digikam/digikamapp.h,
+	  utilities/imageeditor/editor/digikamimagewindowui.rc,
+	  utilities/imageeditor/editor/imagewindow.cpp,
+	  utilities/imageeditor/editor/imagewindow.h: to be able to change
+	  color theme scheme from image editor
+
+2008-03-06 10:45  cgilles
+
+	* project/project.kdevelop: update
+
+2008-03-06 10:05  cgilles
+
+	* libs/themeengine/themeengine.cpp, libs/themeengine/themeengine.h,
+	  project/project.kdevelop, themedesigner/main.cpp: make Theme
+	  designer working again
+
+2008-03-05 20:27  cgilles
+
+	* NEWS: update
+
+2008-03-05 20:24  cgilles
+
+	* digikam/albumiconview.cpp, digikam/folderview.cpp,
+	  libs/imageproperties/cameraitempropertiestab.cpp,
+	  libs/imageproperties/cameraitempropertiestab.h,
+	  libs/imageproperties/imagepropertiessidebarcamgui.cpp,
+	  libs/imageproperties/imagepropertiessidebarcamgui.h,
+	  libs/imageproperties/imagepropertiessidebardb.cpp,
+	  libs/imageproperties/imagepropertiessidebardb.h,
+	  libs/imageproperties/imagepropertiestab.cpp,
+	  libs/imageproperties/imagepropertiestab.h,
+	  libs/themeengine/theme.h, libs/themeengine/themeengine.cpp,
+	  libs/themeengine/themeengine.h, themedesigner/mainwindow.cpp,
+	  themedesigner/mainwindow.h, themedesigner/themediconview.cpp,
+	  utilities/cameragui/cameraiconview.cpp: digiKam from KDE3 branch
+	  : full color scheme theme support everywhere in interface "à la
+	  Amarok" (albumgui, lighttable, camera interface, editor, image
+	  plugins and kipi-plugins)
+	  A demo is available here:
+	  http://digikam3rdparty.free.fr/Screenshots/fullcolorschemesupport-desserttheme.png
+	  CCMAIL: digikam-devel@kde.org
+	  BUG: 120309
+	  TODO: KDE4PORT
+
+2008-03-05 20:19  cgilles
+
+	* digikam/timelinewidget.cpp: polish
+
+2008-03-05 20:10  cgilles
+
+	* digikam/timelinewidget.cpp, digikam/timelinewidget.h: handle
+	  properly color scheme themes
+
+2008-03-05 15:51  cgilles
+
+	* libs/widgets/metadata/metadatalistview.cpp,
+	  libs/widgets/metadata/metadatalistview.h: polish
+
+2008-03-05 09:56  cgilles
+
+	* libs/imageproperties/imagedescedittab.cpp,
+	  libs/imageproperties/imagedescedittab.h: polish
+
+2008-03-05 09:38  cgilles
+
+	* libs/imageproperties/talbumlistview.cpp,
+	  libs/imageproperties/talbumlistview.h: factorize
+
+2008-03-05 09:26  cgilles
+
+	* libs/imageproperties/talbumlistview.h: polish
+
+2008-03-05 09:15  cgilles
+
+	* libs/imageproperties/imagedescedittab.cpp,
+	  libs/imageproperties/imagedescedittab.h,
+	  libs/imageproperties/talbumlistview.cpp,
+	  libs/imageproperties/talbumlistview.h: digiKam from KDE3 branch :
+	  important changes here :
+	  - using FolderView and FolderItem class to host tag list view
+	  from Caption & Tags sidebar tab instead to use QListView
+	  directly.
+	  - using Color scheme theme to render listview content.
+	  - factorization and simplification of code.
+
+2008-03-05 09:08  cgilles
+
+	* digikam/folderview.cpp: polish
+
+2008-03-04 14:29  cgilles
+
+	* digikam/folderview.cpp: polish
+
+2008-03-04 14:19  cgilles
+
+	* libs/imageproperties/talbumlistview.cpp,
+	  libs/imageproperties/talbumlistview.h: polish
+
+2008-03-04 14:09  cgilles
+
+	* digikam/imagepreviewview.cpp, digikam/imagepreviewview.h,
+	  libs/dimg/Makefile.am, libs/dimg/fastscale.cpp,
+	  libs/dimg/fastscale.h, libs/threadimageio/previewtask.cpp,
+	  libs/threadimageio/previewtask.h,
+	  utilities/cameragui/cameraiconview.cpp: FastScale class is now
+	  obsolete
+
+2008-03-04 13:50  cgilles
+
+	* digikam/Makefile.am, digikam/albumiconview.cpp,
+	  digikam/cameradragobject.cpp, digikam/cameradragobject.h,
+	  digikam/dragobjects.cpp, digikam/dragobjects.h: factorize code :
+	  CameraDragObject => DragObject
+
+2008-03-04 11:46  cgilles
+
+	* digikam/datefolderview.cpp, digikam/datefolderview.h: polish
+
+2008-03-04 11:06  cgilles
+
+	* digikam/albumfolderview.cpp: polish
+
+2008-03-04 10:34  cgilles
+
+	* digikam/folderitem.cpp, digikam/folderitem.h,
+	  digikam/folderview.cpp, digikam/folderview.h,
+	  digikam/tagfilterview.cpp, digikam/tagfilterview.h: backport
+	  commit #782018 from KDE4
+
+2008-03-03 20:20  cgilles
+
+	* AUTHORS: update
+
+2008-03-03 20:17  cgilles
+
+	* AUTHORS: update
+
+2008-03-03 20:15  cgilles
+
+	* data/pics/digikam-splash.png, data/pics/digikam-splash.xcf: new
+	  digiKam 0.9.4 splashscreen from Michel Pottier
+	  CCMAIL: Michel.Pottier@free.fr
+
+2008-03-03 20:14  cgilles
+
+	* showfoto/pics/showfoto-splash.png,
+	  showfoto/pics/showfoto-splash.xcf: New Showfoto 0.8.0
+	  splashscreen from Frédéric Martinot
+	  CCMAIL: fmartinot@gmail.com
+
+2008-03-03 08:00  cgilles
+
+	* utilities/cameragui/cameraui.cpp, utilities/cameragui/cameraui.h:
+	  fix increase/decrease icon size actions behaviours
+
+2008-03-01 14:32  mwiesweg
+
+	* digikam/albummanager.cpp: Modify debug message in dir watch code
+	  CCBUG: 158565
+
+2008-02-29 15:35  cgilles
+
+	* digikam/digikamapp.cpp: backport commit #780609 from KDE4
+
+2008-02-29 07:07  cgilles
+
+	* NEWS: update
+
+2008-02-29 07:01  cgilles
+
+	* digikam/tagfilterview.cpp, digikam/tagfilterview.h: digiKam from
+	  KDE3 branch : Tags Filter : before to remove a tag from tree
+	  view, unselect it and all childrens to clean up filter over icon
+	  view.
+	  BUG: 158558
+
+2008-02-27 13:00  cgilles
+
+	* utilities/cameragui/albumselectdialog.cpp,
+	  utilities/cameragui/albumselectdialog.h: fix i18n
+
+2008-02-22 17:52  abaecker
+
+	* NEWS, imageplugins/whitebalance/imageeffect_whitebalance.cpp,
+	  imageplugins/whitebalance/imageeffect_whitebalance.h,
+	  libs/whitebalance/whitebalance.cpp,
+	  libs/whitebalance/whitebalance.h,
+	  utilities/imageeditor/editor/editorwindow.cpp,
+	  utilities/setup/setupdcraw.cpp, utilities/setup/setupdcraw.h:
+	  More flexible WB adjustment during raw decoding
+	  (many thanks to Guillaume Castagnino for the patch).
+	  Note that a current libkdcraw is needed as this had to be
+	  changed.
+
+	  CCBUGS: 142055
+	  TODO:KDE4PORT
+
+2008-02-21 19:06  abaecker
+
+	* NEWS,
+	  imageplugins/coreplugin/ratiocrop/imageeffect_ratiocrop.cpp,
+	  imageplugins/coreplugin/ratiocrop/imageeffect_ratiocrop.h,
+	  imageplugins/coreplugin/ratiocrop/imageselectionwidget.cpp,
+	  imageplugins/coreplugin/ratiocrop/imageselectionwidget.h: When
+	  using the aspect ratio crop, it is now possible to ensure that
+	  the
+	  aspect ratio is fulfilled exactly. This is done by only allowing
+	  those combinations of width/heights which lead to the correct
+	  aspect ratio
+	  (thanks to Roberto Castagnola who wrote the patch).
+
+	  CCBUGS: 158174
+	  TODO:KDE4PORT
+
+2008-02-20 05:40  abaecker
+
+	* NEWS: Commit 777086 by Marcel fixes [Bug 141037] ("Search using
+	  Tag Name does not work"); this has been added to the list in
+	  NEWS.
+
+2008-02-19 18:27  mwiesweg
+
+	* kioslave/digikamsearch.cpp: Backport SQL from 0.10 branch, now it
+	  is in analogy to the "TAG" search field above.
+	  I think this fixes 141037.
+
+	  CCBUG: 141037
+
+2008-02-15 20:51  cgilles
+
+	* utilities/imageeditor/editor/imagewindow.cpp,
+	  utilities/imageeditor/editor/imagewindow.h,
+	  utilities/lighttable/lighttablewindow.cpp: missing to use Exif
+	  autorotate settings with slideshow
+
+2008-02-15 13:35  cgilles
+
+	* digikam/albumiconviewfilter.cpp, libs/widgets/common/Makefile.am,
+	  libs/widgets/common/statusled.cpp,
+	  libs/widgets/common/statusled.h, project/project.kdevelop:
+	  digiKAm from KDE3 branch : new led widget for statusbar
+
+2008-02-15 13:30  cgilles
+
+	* data/pics/Makefile.am, data/pics/indicator-gray.png,
+	  data/pics/indicator-green.png, data/pics/indicator-red.png: new
+	  pics for digiKam led
+
+2008-02-15 07:26  cgilles
+
+	* libs/thumbbar/thumbbar.cpp, libs/thumbbar/thumbbar.h: backport
+	  commit #775200 from KDE4
+
+2008-02-12 11:12  cgilles
+
+	* libs/imageproperties/imagepropertiessidebar.cpp,
+	  libs/imageproperties/imagepropertiessidebar.h: polish
+
+2008-02-05 19:17  abaecker
+
+	* imageplugins/coreplugin/ratiocrop/imageeffect_ratiocrop.cpp,
+	  imageplugins/coreplugin/ratiocrop/imageeffect_ratiocrop.h:
+	  Reduction of duplicated code (patch by Roberto Castagnola)
+
+	  TODO:KDE4PORT
+
+2008-02-05 07:24  cgilles
+
+	* NEWS: update
+
+2008-02-04 19:24  cgilles
+
+	* digikam/timelinewidget.cpp: backport commit #157149 from KDE4 by
+	  Marcel to KDE3 branch
+	  157149: This _might_ fix this bug, please test...
+
+	  CCBUG: 157149
+
+2008-02-04 12:57  mwiesweg
+
+	* digikam/timelinewidget.cpp: Backport valgrind fixes, as
+	  applicable, from trunk
+
+2008-02-04 06:43  cgilles
+
+	* imageplugins/coreplugin/ratiocrop/imageeffect_ratiocrop.cpp,
+	  imageplugins/coreplugin/ratiocrop/imageselectionwidget.cpp,
+	  imageplugins/coreplugin/ratiocrop/imageselectionwidget.h: digiKam
+	  from KDE3 branch : Ratio-Crop tool : sync with KDE4.
+
+	  Do not use QListBox to manage ratio comobox content. Just clear
+	  it and re-add new item as well.
+	  Roberto, in KDE4 QComboBox content is not drived by QListBox by
+	  but a genric QAbstractListView class. It's more complicated
+	  to reproduce your QListBox code with QT4. Code from KDE3 and KDE4
+	  must be homogenous when it's possible. It's more easy to
+	  maintain.
+
+	  Note : if you call
+	  ImageEffect_RatioCrop::slotSelectionOrientationChanged() in
+	  contructor just after to have created m_ratioCB instance,
+	  you don't need to have current code at lines
+	  imageffect_ratiocrop.cpp::103-112. This will reduce duplicate
+	  code.
+
+	  What do you think about about?
+
+	  CCMAIL: roberto.castagnola@gmail.com
+	  CCMAIL: arnd.baecker@web.de
+
+2008-02-03 21:52  cgilles
+
+	* NEWS: update
+
+2008-02-03 19:48  cgilles
+
+	* imageplugins/coreplugin/ratiocrop/imageeffect_ratiocrop.cpp,
+	  imageplugins/coreplugin/ratiocrop/imageeffect_ratiocrop.h:
+	  restoring destructor. We need it for portability
+
+2008-02-02 20:30  abaecker
+
+	* imageplugins/coreplugin/ratiocrop/imageeffect_ratiocrop.cpp,
+	  imageplugins/coreplugin/ratiocrop/imageeffect_ratiocrop.h,
+	  imageplugins/coreplugin/ratiocrop/imageselectionwidget.cpp,
+	  imageplugins/coreplugin/ratiocrop/imageselectionwidget.h: When
+	  cropping images, fullfill the given aspect ratio as good as
+	  possible (patch by Roberto Castagnola).
+
+	  CCBUGS: 128293
+	  TODO:KDE4PORT
+
+2008-02-01 17:23  cgilles
+
+	* digikam/albumiconviewfilter.h: compile
+
+2008-02-01 15:28  cgilles
+
+	* digikam/albumiconviewfilter.cpp, digikam/albumlister.cpp,
+	  digikam/albumlister.h, digikam/digikamapp.cpp,
+	  digikam/digikamview.cpp, digikam/digikamview.h,
+	  digikam/tagfilterview.cpp, digikam/tagfilterview.h: digiKam from
+	  KDE3 branch : code simplification. No need to check if something
+	  is set in TagFilters using complex signals/slots propagation,
+	  AlbumLister have already the informations.
+
+2008-02-01 11:53  gkulzer
+
+	* digikam/albumiconviewfilter.cpp: change LED indicator wording
+	  i18n
+
+2008-02-01 11:48  cgilles
+
+	* NEWS: update
+
+2008-02-01 11:16  cgilles
+
+	* digikam/albumiconviewfilter.cpp: fix i18n
+
+2008-02-01 11:13  cgilles
+
+	* digikam/albumiconviewfilter.cpp, digikam/albumiconviewfilter.h,
+	  digikam/albumlister.cpp, digikam/albumlister.h: digiKam from KDE3
+	  branch : color scheme of icon view filters LED report if filters
+	  match the query.
+	  Gray => no active filter.
+	  Green => at least 1 active filter witch match 1 item.
+	  Red => at least 1 active filter witch do not match item.
+
+2008-02-01 09:15  cgilles
+
+	* digikam/albumiconviewfilter.cpp: added tooltip over LED to show
+	  active filters list.
+
+2008-02-01 07:02  cgilles
+
+	* digikam/albumiconviewfilter.cpp: polish
+
+2008-01-31 21:44  cgilles
+
+	* utilities/imageeditor/editor/editorwindow.cpp: polish
+
+2008-01-31 21:27  abaecker
+
+	* utilities/imageeditor/editor/editorwindow.cpp,
+	  utilities/imageeditor/editor/editorwindow.h: When leaving the
+	  image editor without saving, but pressing save in the
+	  following dialogue, ensure that the original image is not
+	  silently overwritten.
+
+	  CCBUGS: 103350
+	  TODO:KDE4PORT
+
+2008-01-31 15:41  cgilles
+
+	* digikam/timelinefolderview.cpp: polish
+
+2008-01-31 15:28  cgilles
+
+	* digikam/searchfolderview.cpp, digikam/timelinefolderview.cpp:
+	  polish
+
+2008-01-31 14:47  cgilles
+
+	* NEWS: update
+
+2008-01-31 10:19  cgilles
+
+	* digikam/albumfolderview.cpp, digikam/albumfolderview.h,
+	  digikam/albumiconviewfilter.cpp, digikam/albumiconviewfilter.h,
+	  digikam/digikamapp.cpp, digikam/digikamapp.h,
+	  digikam/digikamview.cpp, digikam/digikamview.h,
+	  digikam/searchfolderview.cpp, digikam/searchfolderview.h,
+	  digikam/tagfilterview.cpp, digikam/tagfilterview.h,
+	  digikam/tagfolderview.cpp, digikam/tagfolderview.h,
+	  digikam/timelinefolderview.cpp, digikam/timelinefolderview.h,
+	  digikam/timelineview.cpp: digiKam from KDE3 branch : Led from
+	  icon view filter : handle Tag Filters view (status and reset).
+	  CCBUGS: 156847
+
+2008-01-31 08:24  cgilles
+
+	* digikam/albumiconviewfilter.cpp: polish
+
+2008-01-31 08:21  cgilles
+
+	* digikam/albumiconviewfilter.cpp: polish
+
+2008-01-31 07:24  cgilles
+
+	* digikam/albumiconviewfilter.cpp: fix whats-this
+
+2008-01-31 07:17  cgilles
+
+	* digikam/albumiconviewfilter.cpp: digiKam from KDE3 branch : LED
+	  from icon view filter : use light green when filters settings are
+	  inactive, and light orange when filters are active
+
+2008-01-31 06:29  cgilles
+
+	* digikam/datefolderview.cpp, digikam/datefolderview.h: polish
+
+2008-01-31 04:59  cgilles
+
+	* digikam/datefolderview.cpp: polish
+
+2008-01-31 04:42  cgilles
+
+	* digikam/album.h: polish
+
+2008-01-30 21:35  cgilles
+
+	* digikam/albumiconviewfilter.cpp: polish
+
+2008-01-30 21:18  cgilles
+
+	* digikam/albumiconviewfilter.cpp, digikam/albumiconviewfilter.h:
+	  digiKam from KDE3 branch : Icon View Filter : when LED is on,
+	  mouse right clic over reset all filters settings
+
+2008-01-30 15:29  cgilles
+
+	* imageplugins/coreplugin/ratiocrop/imageeffect_ratiocrop.cpp,
+	  imageplugins/coreplugin/ratiocrop/imageeffect_ratiocrop.h: fix
+	  credits
+
+2008-01-30 13:07  cgilles
+
+	* digikam/albumiconviewfilter.cpp, digikam/albumiconviewfilter.h:
+	  digiKam from KDE3 branch: add small light in icon view filter to
+	  ping user if a filter is currently used
+	  CCBUGS: 156847
+
+2008-01-30 07:13  cgilles
+
+	* NEWS: update
+
+2008-01-30 07:08  cgilles
+
+	* digikam/timelinewidget.cpp: sync with KDE4
+
+2008-01-30 07:02  cgilles
+
+	* digikam/datefolderview.cpp, digikam/digikamview.cpp: My Dates ==>
+	  My Calendar
+
+2008-01-30 06:52  cgilles
+
+	* digikam/album.cpp, digikam/album.h, digikam/albummanager.cpp,
+	  digikam/datefolderview.cpp, digikam/datefolderview.h,
+	  kioslave/digikamdates.cpp: digiKam from KDE3 branch : Calendar
+	  View : When selecting Year album now show all pictures
+	  taken during this year.
+
+	  BUG: 144337
+	  CCBUGS: 140743
+	  CCBUGS: 126871
+
+2008-01-29 16:23  abaecker
+
+	* NEWS,
+	  imageplugins/coreplugin/ratiocrop/imageeffect_ratiocrop.cpp,
+	  imageplugins/coreplugin/ratiocrop/imageeffect_ratiocrop.h:
+	  Remember orientation setting of a previously cropped photo (patch
+	  by Roberto Castagnola)
+
+	  CCBUGS: 146635
+	  TODO:KDE4PORT
+
+2008-01-28 10:31  cgilles
+
+	* NEWS: update
+
+2008-01-28 09:50  cgilles
+
+	* libs/greycstoration/CImg.h, libs/greycstoration/greycstoration.h,
+	  libs/greycstoration/greycstorationiface.cpp: digiKam from KDE3
+	  branch : update internal CImg library to 1.2.7
+
+2008-01-27 17:19  cgilles
+
+	* digikam/timelineview.cpp: polish
+
+2008-01-27 10:01  cgilles
+
+	* digikam/timelinewidget.cpp: polish
+
+2008-01-27 09:58  cgilles
+
+	* digikam/timelinewidget.cpp: TimeLine : limit left and right
+	  border with highter/lower dates
+
+2008-01-27 09:53  cgilles
+
+	* digikam/timelinewidget.cpp: sync with KDE4
+
+2008-01-26 17:33  gkulzer
+
+	* digikam.lsm, digikam/welcomepageview.cpp: replacing
+	  geolocalization with geolocation
+
+2008-01-26 08:39  cgilles
+
+	* digikam/timelinewidget.cpp: polish
+
+2008-01-25 15:01  cgilles
+
+	* digikam/timelineview.cpp: polish
+
+2008-01-25 14:58  cgilles
+
+	* digikam/timelineview.cpp: polish
+
+2008-01-25 13:45  cgilles
+
+	* digikam/timelineview.cpp, digikam/timelinewidget.cpp: TimeLine :
+	  refresh cursor info when DateMaps are updated
+
+2008-01-25 13:32  cgilles
+
+	* digikam/timelinewidget.cpp: TimeLine : Another fix about week
+	  selection
+
+2008-01-25 12:07  cgilles
+
+	* digikam/timelinewidget.cpp: TimeLine : Another fix about
+	  computation of first day of week
+
+2008-01-25 11:28  cgilles
+
+	* digikam/timelinewidget.cpp: typo
+
+2008-01-25 11:23  cgilles
+
+	* digikam/timelinewidget.cpp, digikam/timelinewidget.h: TimeLine :
+	  speed up improvement everywhere with selection stuff
+
+2008-01-25 07:08  cgilles
+
+	* digikam/timelinewidget.cpp: TimeLine : better cursor visibility
+
+2008-01-24 22:40  cgilles
+
+	* digikam/timelinewidget.cpp: add selection rectangle
+
+2008-01-24 17:38  cgilles
+
+	* digikam/timelinewidget.cpp: polish
+
+2008-01-24 17:05  cgilles
+
+	* digikam/timelinewidget.cpp: cursor follow selection
+
+2008-01-24 15:28  cgilles
+
+	* digikam/timelineview.cpp: polish
+
+2008-01-22 21:11  cgilles
+
+	* digikam/timelinewidget.cpp: polish
+
+2008-01-22 20:41  cgilles
+
+	* digikam/timelineview.cpp, digikam/timelinewidget.cpp,
+	  digikam/timelinewidget.h: polish
+
+2008-01-22 17:31  cgilles
+
+	* digikam/timelineview.cpp: polish
+
+2008-01-22 17:23  cgilles
+
+	* digikam/timelinewidget.cpp: polish
+
+2008-01-22 12:51  gkulzer
+
+	* utilities/setup/setupidentity.cpp: update of legal information
+	  CCMAIL:jrle1@twcny.rr.com
+
+2008-01-22 11:21  cgilles
+
+	* digikam/timelineview.cpp, digikam/timelinewidget.cpp: TimeLine :
+	  remember cursor position between sessions
+
+2008-01-22 09:09  cgilles
+
+	* digikam/timelinewidget.cpp: TimeLine : Another try to fix first
+	  day of week computation. Week decade sound like better now.
+	  Regressive tests require
+
+2008-01-21 20:44  cgilles
+
+	* digikam/timelinewidget.cpp: polish
+
+2008-01-21 15:13  cgilles
+
+	* digikam/timelinewidget.cpp: polish
+
+2008-01-18 19:59  cgilles
+
+	* digikam/timelinewidget.cpp: Timeline : fix scroolbar <->
+	  histogram behaviours
+
+2008-01-18 12:33  cgilles
+
+	* digikam/timelinewidget.cpp: polish
+
+2008-01-18 12:29  cgilles
+
+	* digikam/timelineview.cpp, digikam/timelinewidget.cpp: polish
+
+2008-01-18 12:08  cgilles
+
+	* digikam/digikamview.cpp, digikam/timelineview.cpp,
+	  digikam/timelineview.h: TimeLine : Fix iconview contents
+	  restoration when user change left sidebar tab focus
+
+2008-01-18 11:22  cgilles
+
+	* digikam/timelineview.cpp, digikam/timelinewidget.cpp: disable
+	  debug messages
+
+2008-01-18 11:16  cgilles
+
+	* digikam/timelineview.cpp, digikam/timelineview.h: TimeLine : Fix
+	  Save selection widget behaviours
+
+2008-01-17 22:18  cgilles
+
+	* digikam/timelineview.cpp, digikam/timelineview.h,
+	  digikam/timelinewidget.cpp, digikam/timelinewidget.h: polish API
+
+2008-01-17 22:02  cgilles
+
+	* digikam/timelineview.cpp, digikam/timelineview.h,
+	  digikam/timelinewidget.cpp, digikam/timelinewidget.h: code
+	  simplification
+
+2008-01-17 21:55  cgilles
+
+	* digikam/timelinewidget.cpp: TimeLine : fix how selection are
+	  dispatched over all Date Stat Maps when Time Unit = Days
+
+2008-01-17 21:43  cgilles
+
+	* digikam/timelineview.cpp, digikam/timelinewidget.cpp: TimeLine :
+	  fix how cursor position is preserved when user change Time Unit
+
+2008-01-17 15:40  cgilles
+
+	* digikam/timelinewidget.cpp: TimeLine : fix count of weeks shared
+	  between 2 years decade (December/january)
+
+2008-01-17 13:24  cgilles
+
+	* digikam/timelinewidget.cpp: code dimplification
+
+2008-01-16 15:43  cgilles
+
+	* digikam/timelineview.cpp: add whats-this
+
+2008-01-16 15:16  cgilles
+
+	* digikam/timelineview.cpp, digikam/timelinewidget.cpp,
+	  digikam/timelinewidget.h: TimeLine : improve cursor information
+	  layout and contents. More readable with a small sidebar size
+
+2008-01-16 11:52  cgilles
+
+	* digikam/timelineview.cpp: remove "Total" count
+
+2008-01-16 11:31  cgilles
+
+	* digikam/welcomepageview.cpp: add Timeline as new major feature
+
+2008-01-16 11:29  cgilles
+
+	* NEWS: update
+
+2008-01-16 11:27  cgilles
+
+	* digikam/digikamview.cpp: digiKam from KDE3 branch : I'm happy to
+	  said than the new Time-Line tool to perform Date Search around
+	  whole albums collection
+	  is now available for testing with digiKam 0.9.4-svn.
+	  A screenshot of this new tool in action can be seen here :
+
+	  http://bugs.kde.org/attachment.cgi?id=23060&action=view
+
+	  Marcel,
+
+	  KDE4 port still todo before to close this file. I will backport
+	  all Time-Line widgets to KDE4 as well.
+	  What about the new digiKam Search framework for KDE4 ?
+
+	  CCBUGS: 146760
+	  TODO : KDE4PORT
+	  CCMAIL: digikam-devel@kde.org
+	  CCMAIL: marcel.wiesweg@gmx.de
+
+2008-01-16 11:20  cgilles
+
+	* digikam/searchfolderview.cpp: polish
+
+2008-01-16 11:11  cgilles
+
+	* digikam/searchfolderview.cpp: polish
+
+2008-01-16 11:05  cgilles
+
+	* digikam/timelineview.cpp: fix i18n
+
+2008-01-16 11:04  cgilles
+
+	* digikam/timelineview.cpp: polish
+
+2008-01-16 10:33  cgilles
+
+	* digikam/timelinewidget.cpp, digikam/timelinewidget.h: TimeLine :
+	  Fix how Year selection Map is updated accordingly with selection
+	  from Day Selection Map
+
+2008-01-16 10:16  cgilles
+
+	* digikam/timelinewidget.cpp, digikam/timelinewidget.h: TimeLine :
+	  Fix how Month selection Map is updated accordingly with selection
+	  from Day Selection Map
+
+2008-01-16 09:59  cgilles
+
+	* digikam/timelinewidget.cpp: polish
+
+2008-01-16 09:29  cgilles
+
+	* digikam/timelinewidget.cpp, digikam/timelinewidget.h: TimeLine :
+	  Fix how Week selection Map is updated accordingly with selection
+	  from Day Selection Map
+
+2008-01-16 07:57  cgilles
+
+	* digikam/timelineview.cpp, digikam/timelineview.h: TimeLine : take
+	  a care before to restore settings. We need to wait tahn TimLine
+	  widget has loaded Date Maps from AlbumManager
+
+2008-01-16 07:38  cgilles
+
+	* digikam/timelinewidget.cpp: polish
+
+2008-01-16 07:11  cgilles
+
+	* digikam/timelineview.cpp: polish
+
+2008-01-16 07:07  cgilles
+
+	* digikam/timelineview.cpp: fix i18n
+
+2008-01-15 13:51  cgilles
+
+	* digikam/timelineview.cpp: TimeLine : add search text bar for Date
+	  Search Album folder view
+
+2008-01-15 13:08  cgilles
+
+	* digikam/timelineview.cpp: optimize layout
+
+2008-01-15 12:03  cgilles
+
+	* digikam/timelinefolderview.cpp, digikam/timelinefolderview.h,
+	  digikam/timelineview.cpp: TimeLine : Dates Search Folder View
+	  ignore current Dates Search album used to perform selection from
+	  TimeLine
+
+2008-01-15 11:45  cgilles
+
+	* digikam/timelinefolderview.cpp: polish
+
+2008-01-15 09:19  cgilles
+
+	* digikam/timelinefolderview.cpp, digikam/timelinefolderview.h,
+	  digikam/timelineview.cpp, digikam/timelineview.h: TimeLine :
+	  rename Search Dates Album work fine now.
+
+2008-01-15 08:48  cgilles
+
+	* digikam/timelineview.cpp, digikam/timelineview.h,
+	  digikam/timelinewidget.h: TimeLine : fix Save button behaviours
+
+2008-01-15 08:35  cgilles
+
+	* digikam/timelinefolderview.cpp, digikam/timelinefolderview.h,
+	  digikam/timelineview.cpp, digikam/timelineview.h: TimeLine : Save
+	  selection to new Date Search Album work fine now
+
+2008-01-15 07:53  cgilles
+
+	* digikam/timelineview.cpp, digikam/timelineview.h: TimeLine : new
+	  button to save current selection as a new Search Date Album. Fix
+	  layout
+
+2008-01-15 07:05  cgilles
+
+	* digikam/timelinefolderview.cpp, digikam/timelineview.cpp,
+	  digikam/timelinewidget.cpp: TimeLine : polish signals and slots
+	  dispatching when a Search Date Album is selected/unselected
+
+2008-01-15 06:57  cgilles
+
+	* digikam/timelineview.cpp: adapt to new url queries size
+
+2008-01-14 21:33  cgilles
+
+	* digikam/timelinefolderview.cpp, digikam/timelinefolderview.h,
+	  digikam/timelineview.cpp, digikam/timelineview.h: TimeLine :
+	  connect time line foder view selection to time line widget
+
+2008-01-14 17:25  cgilles
+
+	* digikam/timelinefolderview.cpp, digikam/timelineview.cpp:
+	  TimeLine : only display Search Dates SAlbum from Database into
+	  time line folder view . A magic KURL query is used to mark SAlbum
+	  url when it's created from TimeLine.
+	  By this way, these SAlbum will not be displayed in Search folder
+	  view. Also, Noting is changed in DB structure and Search KIO
+	  slave.
+
+	  Marcel, we can certainly used this way as well with KDE4 port,
+	  or, if you want adapt the new DB structure from 0.10.0, separate
+	  Search albums
+	  and TimeLine Date Search albums. This will be depand how you will
+	  port digiKam Search framework to KDE4.
+
+	  CCMAIL: marcel.wiesweg@gmx.de
+
+2008-01-14 15:37  cgilles
+
+	* digikam/timelineview.cpp, digikam/timelineview.h: TimeLine :
+	  optimize layout
+
+2008-01-14 12:23  cgilles
+
+	* digikam/timelineview.cpp: fix layout
+
+2008-01-14 12:06  cgilles
+
+	* digikam/Makefile.am, digikam/timelinefolderview.cpp,
+	  digikam/timelinefolderview.h, digikam/timelineview.cpp,
+	  digikam/timelineview.h: TimeLine : introduce Searches Date Folder
+	  view to host results performed by TimeLine tool. Not yet suitable
+	  as well.
+
+2008-01-14 11:25  cgilles
+
+	* digikam/timelineview.cpp, digikam/timelineview.h: polish
+
+2008-01-13 18:01  cgilles
+
+	* digikam/timelinewidget.cpp: polish
+
+2008-01-13 08:56  cgilles
+
+	* digikam/timelineview.cpp: polish
+
+2008-01-13 08:44  cgilles
+
+	* digikam/timelinewidget.cpp: polish
+
+2008-01-13 08:42  cgilles
+
+	* digikam/timelinewidget.cpp: fix API
+
+2008-01-13 08:40  cgilles
+
+	* digikam/timelinewidget.cpp, digikam/timelinewidget.h: fix API
+
+2008-01-13 06:02  cgilles
+
+	* digikam/timelineview.cpp, digikam/timelineview.h: TimeLine :
+	  remember settings
+
+2008-01-13 05:47  cgilles
+
+	* digikam/timelineview.cpp: optimize layout
+
+2008-01-13 05:23  cgilles
+
+	* digikam/timelinewidget.cpp, digikam/timelinewidget.h: polish
+
+2008-01-12 07:00  cgilles
+
+	* digikam/timelineview.cpp, digikam/timelineview.h,
+	  digikam/timelinewidget.cpp: polish
+
+2008-01-11 17:42  cgilles
+
+	* digikam/timelineview.cpp: polish
+
+2008-01-11 17:36  cgilles
+
+	* digikam/timelineview.cpp: fix container
+
+2008-01-11 14:49  cgilles
+
+	* digikam/timelineview.cpp, digikam/timelineview.h: TimeLine new
+	  method to set a list of DateRange from a digiKam Search KIO-Slave
+	  URL
+
+2008-01-11 13:14  cgilles
+
+	* digikam/timelinewidget.cpp: TimeLine: new method to set Date
+	  Range selection
+
+2008-01-11 12:38  cgilles
+
+	* digikam/timelineview.cpp, digikam/timelinewidget.cpp,
+	  digikam/timelinewidget.h: digiKam from KDE3 branch : TimeLine:
+	  Fuzzy Selection is now possible!!!
+
+	  Before this commit, selection been depand of Time Units used with
+	  time line. Each unit have a propers selection.
+	  This first approach been not fine...
+
+	  This commit only make the selection on the less Time Units : Day.
+	  All others Units are updated accordinly.
+	  There is only one Selection possible, not one for each Time
+	  Units.
+
+	  A fuzzy range date become when for a week for ex. you have
+	  selected only 2 days. The week selection is uncomplete (fuzzy).
+	  This is right too between week/Month and Month/Year Time units.
+
+	  On the bottom of the widget, the complete selection is annoted by
+	  a blue color in background.
+	  A fuzzy selection is annoted by a light-blue color using a
+	  drawing pattern.
+
+	  In fact, this is the same concept used in KPhotoalbum for ex.,
+	  excepted a major difference : digiKam can select dyscontiguous
+	  range of dates (:=)))
+
+	  Marcel,
+
+	  i have working hard with algorithms used in this widget. I would
+	  to have your viewpoint to be sure than all is fine with TimeLine
+	  selection.
+
+	  Also, the KUrl passed to digiKam search KIO-Slave can be very
+	  long. I'm not sure if there is a limit somewhere in KUrl or
+	  digiKam Search KIO-Slave.
+	  In theory no (:=)))... If there is one, the DB query will fail,
+	  that all (KUrl truncated).
+
+	  CCMAIL: digikam-devel@kde.org
+	  CCMAIL: marcel.wiesweg@gmx.de
+
+2008-01-11 07:12  cgilles
+
+	* digikam/timelinewidget.cpp, digikam/timelinewidget.h: TimeLine :
+	  Prepare to support fuzzy selection mode
+
+2008-01-10 15:41  cgilles
+
+	* digikam/timelineview.cpp, digikam/timelineview.h,
+	  digikam/timelinewidget.cpp, digikam/timelinewidget.h: TimeLine:
+	  Add scrollbar on bottom of time line to fast naviguate around
+	  date collection.
+
+2008-01-10 11:46  cgilles
+
+	* utilities/imageeditor/editor/editorwindow.cpp: fix text for icons
+	  toolbar
+
+2008-01-10 11:45  cgilles
+
+	* utilities/lighttable/lighttablewindow.cpp: fix text for icons
+	  toolbar
+
+2008-01-10 11:45  cgilles
+
+	* digikam/digikamapp.cpp: fix text for icons toolbar
+
+2008-01-10 09:36  cgilles
+
+	* digikam/timelinewidget.cpp: TimeLine : fix auto scrolling with
+	  Selection (too fast)
+
+2008-01-10 08:41  cgilles
+
+	* digikam/timelinewidget.cpp: TimeLine : Selection Mode :
+	  -Speed-up optimization to render widget contents.
+	  -Auto Scroll widget contents when mouse cursor is ouside widget
+	  area.
+
+2008-01-10 07:09  cgilles
+
+	* digikam/timelinewidget.cpp: polish
+
+2008-01-10 06:50  cgilles
+
+	* digikam/timelineview.cpp, digikam/timelineview.h: polish
+
+2008-01-10 06:42  cgilles
+
+	* digikam/timelineview.cpp, digikam/timelinewidget.cpp,
+	  digikam/timelinewidget.h: polish
+
+2008-01-09 20:49  cgilles
+
+	* digikam/timelineview.cpp, digikam/timelineview.h,
+	  digikam/timelinewidget.cpp: TimeLine : add combobox to set
+	  histogram scale in GUI
+
+2008-01-09 20:39  cgilles
+
+	* digikam/timelinewidget.cpp: TimeLine : widget now support
+	  logarithmic histogram scale
+
+2008-01-09 20:13  cgilles
+
+	* digikam/timelinewidget.cpp, digikam/timelinewidget.h: TimelLine:
+	  prepare to work with a logarithmic histogram scale.
+
+2008-01-09 19:54  cgilles
+
+	* digikam/timelinewidget.cpp: TimeLine : only change cursor
+	  position if date is valid
+
+2008-01-09 19:48  cgilles
+
+	* digikam/timelineview.cpp, digikam/timelineview.h,
+	  digikam/timelinewidget.cpp, digikam/timelinewidget.h: TimeLine:
+	  Only dispatch changes about selection when user release mouse
+	  selection to prevent multiple queries on database
+
+2008-01-09 19:15  cgilles
+
+	* digikam/timelinewidget.cpp: polish
+
+2008-01-09 15:51  cgilles
+
+	* digikam/timelinewidget.cpp, digikam/timelinewidget.h: TimeLine :
+	  fix selection mode in non-contiguous mode
+
+2008-01-09 13:41  cgilles
+
+	* digikam/timelinewidget.cpp: TimeLine : add histogram control over
+	  min and max dateTime from timestamp stats.
+
+2008-01-09 13:00  cgilles
+
+	* TODO: update
+
+2008-01-09 12:58  cgilles
+
+	* digikam/timelineview.cpp, digikam/timelineview.h,
+	  digikam/timelinewidget.cpp, digikam/timelinewidget.h: TimeLine :
+	  - Use separate signals about cursor position changed and current
+	  selection changed.
+	  - Do not query KIOslave if there is no current selection.
+	  - Reset icon view if there is no selection.
+
+2008-01-09 12:47  cgilles
+
+	* digikam/timelinewidget.cpp: add comments
+
+2008-01-09 12:46  cgilles
+
+	* digikam/timelinewidget.cpp: TimeLine : optimize Query to datatabe
+	  to group contiguous date range
+
+2008-01-09 11:14  cgilles
+
+	* digikam/timelinewidget.cpp, digikam/timelinewidget.h: TimeLine :
+	  polish selection mode.
+
+2008-01-09 10:48  cgilles
+
+	* digikam/timelinewidget.cpp, digikam/timelinewidget.h: TimeLine :
+	  selection is now performed to click on the bottom of histogram
+	  bar. To set current position of cursor without select, click on
+	  the middle of histogram bar
+
+2008-01-09 09:54  cgilles
+
+	* digikam/albummanager.cpp: report the method used by KDirWatch on
+	  the console
+
+2008-01-09 08:24  cgilles
+
+	* digikam/timelineview.cpp, digikam/timelineview.h,
+	  digikam/timelinewidget.cpp: digiKam from KDE3 branch: TimeLine :
+	  fix how to update counts datestamp stats to not lost selection
+	  when we update the TimeLineSearch SAlbum url in database.
+	  Now the side effect with KDirWatch and dirty digikam DB file
+	  event as diseapear.
+	  CCMAIL: marcel.wiesweg@gmx.de
+
+2008-01-08 15:51  cgilles
+
+	* NEWS: update
+
+2008-01-08 15:42  cgilles
+
+	* digikam/timelineview.cpp, digikam/timelinewidget.cpp,
+	  digikam/timelinewidget.h: Timeline : add button to reset
+	  selection. Fix layout
+
+2008-01-08 15:04  cgilles
+
+	* digikam/timelinewidget.cpp, digikam/timelinewidget.h: polish
+
+2008-01-08 14:42  cgilles
+
+	* digikam/timelineview.cpp, digikam/timelinewidget.cpp,
+	  digikam/timelinewidget.h: new methods to clear selection
+
+2008-01-08 14:12  cgilles
+
+	* digikam/timelineview.cpp: digiKam from KDE3 branch : Timeline
+	  tool : added support of multiple selection of date range
+	  (contiguous or not!)
+	  TODO: optimize the DB query via kioslave url to regroup
+	  contiguous date rage when it's possible.
+
+	  CCMAIL: digikam-devel@kde.org
+
+2008-01-08 13:13  cgilles
+
+	* digikam/timelinewidget.cpp, digikam/timelinewidget.h: can be
+	  abble to get total count of selected items
+
+2008-01-08 13:06  cgilles
+
+	* digikam/timelinewidget.cpp, digikam/timelinewidget.h: new method
+	  to get a list of date range to query DB
+
+2008-01-08 11:52  abaecker
+
+	* NEWS, configure.in.bot: Correction of the configure script to
+	  suggest the right option for libjasper
+
+	  CCBUGS: 155271
+	  TODO:KDE4PORT
+
+2008-01-08 10:19  cgilles
+
+	* digikam/timelineview.cpp, digikam/timelineview.h: use a timer to
+	  limit signal emitted when selection is changed from
+	  TimeLineWidget
+
+2008-01-08 10:07  cgilles
+
+	* digikam/timelineview.cpp: fix i18n
+
+2008-01-08 10:06  cgilles
+
+	* digikam/timelinewidget.cpp: fix redondant signals emitted
+
+2008-01-08 10:02  cgilles
+
+	* digikam/timelineview.cpp: polish
+
+2008-01-08 10:00  cgilles
+
+	* digikam/timelineview.cpp, digikam/timelineview.h: digiKAm from
+	  KDE3 branch: TimeLineView : add a small wrapper around
+	  AlbumManager::signalDatesMapDirty() signal witch is called when a
+	  new SAlbum is
+	  created or updated in AlbumManager to not loose selection in
+	  TimeLineWidget.
+
+	  Marcel, i don't know why AlbumManager::refresh() is called when a
+	  new SAlbum is added/updated. By this way, the root album
+	  collection path become dirty
+	  and a lots of signal are emits from AlbumManager.
+	  This can be reproduced with Simple or Advance Search dialogs.
+
+	  CCMAIL: marcel.wiesweg@gmx.de
+
+2008-01-07 15:42  cgilles
+
+	* digikam/timelineview.cpp, digikam/timelinewidget.cpp: fix layout
+
+2008-01-07 15:22  cgilles
+
+	* digikam/timelinewidget.cpp: timeline : fix rendering and
+	  selection with Week scaling mode
+
+2008-01-07 14:19  cgilles
+
+	* digikam/timelineview.cpp, digikam/timelinewidget.cpp,
+	  digikam/timelinewidget.h: timeline tool in progress
+
+2008-01-07 12:23  cgilles
+
+	* digikam/timelineview.cpp, digikam/timelineview.h,
+	  digikam/timelinewidget.cpp, digikam/timelinewidget.h: timeline
+	  tool work in progress. not yet complete
+
+2008-01-06 19:55  cgilles
+
+	* digikam/timelinewidget.cpp: polish
+
+2008-01-06 19:38  cgilles
+
+	* digikam/timelinewidget.cpp: polish
+
+2008-01-06 17:50  cgilles
+
+	* digikam/timelineview.cpp, digikam/timelinewidget.cpp: polish
+
+2008-01-06 16:42  cgilles
+
+	* digikam/timelinewidget.cpp: polish
+
+2008-01-06 16:41  cgilles
+
+	* digikam/timelineview.cpp: set ref date time to current date time
+	  at init
+
+2008-01-05 09:40  gkulzer
+
+	* digikam/welcomepageview.cpp: include a statement making clear
+	  that Albums are the physical containers and no virtuals
+
+2008-01-04 14:59  cgilles
+
+	* utilities/imageeditor/editor/editorwindow.cpp: digiKam from KDE3
+	  branch : usability improvement with Save Image dialog from editor
+	  : remember the last file format used in preview session to save
+	  an image.
+	  CCMAIL: digikam-devel@kde.org
+
+2008-01-04 11:00  cgilles
+
+	* project/project.kdevelop, showfoto/showfoto.cpp,
+	  showfoto/showfoto.h,
+	  utilities/imageeditor/editor/editorwindow.cpp,
+	  utilities/imageeditor/editor/editorwindow.h,
+	  utilities/imageeditor/editor/imagewindow.cpp,
+	  utilities/imageeditor/editor/imagewindow.h: digiKam from KDE3
+	  branch : bugfix : if something is changed in current image,
+	  editor must please user when File/Revert option is called
+	  CCMAIL: digikam-devel@kde.org
+
+2008-01-04 10:54  cgilles
+
+	* data/pics/digikam-splash.png, data/pics/digikam-splash.xcf:
+	  update version
+
+2008-01-04 10:52  cgilles
+
+	* showfoto/pics/showfoto-splash.png,
+	  showfoto/pics/showfoto-splash.xcf: update version
+
+2008-01-04 10:45  cgilles
+
+	* data/pics/menusidepixmap.png, data/pics/menusidepixmap.xcf:
+	  update version
+
+2008-01-04 10:43  cgilles
+
+	* showfoto/pics/menusidepixmap.png,
+	  showfoto/pics/menusidepixmap.xcf: update version
+
+2008-01-04 10:34  cgilles
+
+	* AUTHORS: update
+
+2008-01-01 20:23  cgilles
+
+	* digikam/albumfiletip.cpp, digikam/albumsettings.cpp,
+	  kioslave/digikamalbums.cpp, kioslave/digikamthumbnail.cpp,
+	  libs/dimg/dimg.cpp, libs/imageproperties/imagepropertiestab.cpp,
+	  libs/thumbbar/thumbbar.cpp, showfoto/showfoto.cpp,
+	  utilities/cameragui/cameraui.cpp: adapt to new libkdcraw API. Do
+	  not use rawfiles.h anymore
+
+2008-01-01 18:32  cgilles
+
+	* digikam/digikamapp.cpp, digikam/digikamapp.h,
+	  digikam/digikamappprivate.h, showfoto/showfoto.cpp,
+	  showfoto/showfoto.h, showfoto/showfotoui.rc,
+	  utilities/imageeditor/editor/digikamimagewindowui.rc,
+	  utilities/imageeditor/editor/editorwindow.cpp,
+	  utilities/imageeditor/editor/editorwindow.h,
+	  utilities/imageeditor/editor/editorwindowprivate.h,
+	  utilities/lighttable/lighttablewindow.cpp,
+	  utilities/lighttable/lighttablewindow.h,
+	  utilities/lighttable/lighttablewindowprivate.h,
+	  utilities/lighttable/lighttablewindowui.rc: Raw supported camera
+	  list is now available everywhere
+
+2008-01-01 13:53  anaselli
+
+	* AUTHORS, digikam/main.cpp, showfoto/main.cpp,
+	  utilities/imageeditor/tools/imageprint.cpp: SVN_SILENT: updated
+	  mail address
+
+2008-01-01 10:21  cgilles
+
+	* digikam/digikamapp.cpp, digikam/digikamapp.h,
+	  digikam/digikamappprivate.h, digikam/digikamui.rc: digiKam from
+	  KDE3 branch : backport from KDE4 dialog to display list of
+	  supported RAW camera
+
+2008-01-01 10:01  cgilles
+
+	* showfoto/showfoto.cpp, showfoto/showfoto.h,
+	  showfoto/showfotoui.rc: showfoto from KDE3 branch : backport from
+	  KDE4 dialog to display list of supported RAW camera
+
+2008-01-01 08:53  cgilles
+
+	* utilities/cameragui/cameraui.cpp: polish
+
+2007-12-31 15:36  anaselli
+
+	* digikam/Makefile.am: SVN_SILENT: forgot libdigikam
+
+2007-12-31 13:57  anaselli
+
+	* digikam/Makefile.am, showfoto/Makefile.am: digikam and showfoto
+	  now needs libkexiv2 and libkdcraw to show current library
+	  versions
+
+2007-12-31 00:36  cgilles
+
+	* showfoto/main.cpp: use new extragear/libs version() methods
+
+2007-12-31 00:35  cgilles
+
+	* digikam/Makefile.am, digikam/main.cpp: compile timeline code
+
+2007-12-31 00:20  anaselli
+
+	* README, configure.in.bot, configure.in.in: updated to last
+	  version of libkipi, libkexiv2 and libkdcraw that now have a new
+	  method to returm version
+
+2007-12-30 16:39  cgilles
+
+	* digikam/timelineview.cpp, digikam/timelineview.h,
+	  digikam/timelinewidget.cpp, digikam/timelinewidget.h: digiKam
+	  from KDE3 branch : starting to introduce new TimeLine tool. Not
+	  yet suitable.
+
+2007-12-30 09:07  cgilles
+
+	* digikam/welcomepageview.cpp: update
+
+2007-12-30 09:06  cgilles
+
+	* NEWS: update
+
+2007-12-30 09:00  cgilles
+
+	* digikam/albumfolderview.cpp, digikam/albumfolderview.h,
+	  digikam/albumlister.cpp, digikam/albumlister.h,
+	  digikam/albummanager.cpp, digikam/albummanager.h,
+	  digikam/albumsettings.cpp, digikam/albumsettings.h,
+	  digikam/datefolderview.cpp, digikam/datefolderview.h,
+	  digikam/digikamapp.cpp, digikam/digikamview.cpp,
+	  digikam/digikamview.h, digikam/monthwidget.cpp,
+	  digikam/tagfilterview.cpp, digikam/tagfilterview.h,
+	  digikam/tagfolderview.cpp, digikam/tagfolderview.h,
+	  kioslave/digikamalbums.cpp, kioslave/digikamdates.cpp,
+	  kioslave/digikamtags.cpp,
+	  libs/imageproperties/imagedescedittab.cpp,
+	  libs/imageproperties/imagedescedittab.h,
+	  libs/imageproperties/imagepropertiessidebardb.cpp,
+	  libs/imageproperties/imagepropertiessidebardb.h,
+	  libs/imageproperties/talbumlistview.cpp,
+	  libs/imageproperties/talbumlistview.h, project/project.kdevelop,
+	  utilities/imageeditor/editor/imagewindow.cpp,
+	  utilities/imageeditor/editor/imagewindow.h,
+	  utilities/lighttable/lighttablewindow.cpp,
+	  utilities/lighttable/lighttablewindow.h,
+	  utilities/setup/setupgeneral.cpp: digiKam from KDE3 branch :
+	  important changes here : add capability to display count of items
+	  in all Folder View.
+	  The number of items contained in virtual or physical albums is
+	  now displayed on the right of album name.
+	  If a tree branch is collapsed, parents album sum-up the number of
+	  items from all undisplayed children albums.
+	  Count of items is performed in background by digiKam KIO-Slaves.
+	  A new option from Setup/Album dialog page can toggle on/off this
+	  feature.
+
+	  Screenshot of digiKam in action using this new feature can be
+	  seen at this url:
+
+	  http://bugs.kde.org/attachment.cgi?id=22233&action=view
+
+	  Folder view witch supports this feature are :
+
+	  - Physical Albums from left side bar.
+	  - Virtual Date Albums (calendar) from left side bar.
+	  - Virtual Tags Albums from left side bar.
+	  - Virtual Tags Albums from Captions & Tags right side bar tab.
+	  - Virtual Tags Albums Filter from right side bar.
+
+	  Note: for performance reasons, Search folder view do not support
+	  count of items. Search queries on digiKam database
+	  can take a while and slow down digiKam reactivity. See B.K.O
+	  96388 story for details...
+
+	  BUG: 96388
+	  CCMAIL: digikam-devel@kde.org
+	  TODO: KDE4PORT
+
+2007-12-30 07:41  cgilles
+
+	* configure.in.in: update version
+
+2007-12-30 07:40  cgilles
+
+	* digikam/version.h: update version
+
+2007-12-30 07:38  cgilles
+
+	* digikam.lsm: update version
+
+2007-12-30 07:36  cgilles
+
+	* NEWS, NEWS.0.9.3: restore NEWS file
+
+2007-12-30 07:33  cgilles
+
+	* NEWS.0.9.3: 0.9.3 log
+
+2007-12-30 07:32  cgilles
+
+	* NEWS: upate
+
+2007-12-22 17:08  gkulzer
+
+	* ChangeLog: update to 0.9.3 release
+
+2007-12-22 17:07  gkulzer
+
+	* NEWS: update to 0.9.3 release
+
+2007-12-22 16:03  gkulzer
+
+	* digikam.lsm, release_digikam.rb: update to 0.9.3 release
+
+2007-12-22 16:02  gkulzer
+
+	* digikam/version.h: update to 0.9.3 release
+
+
 0.9.3 2007-12-23
 -------------------------------------------------------------------------
 2007-12-21 14:23  cgilles
