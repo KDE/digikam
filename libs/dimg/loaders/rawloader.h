@@ -7,8 +7,8 @@
  * Description : A digital camera RAW files loader for DImg 
  *               framework using an external dcraw instance.
  * 
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com> 
- * Copyright (C) 2005-2007 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2005-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -51,7 +51,7 @@ public:
     bool load(const QString& filePath, DImgLoaderObserver *observer=0);
 
     //RAW files are always Read only.
-    bool save(const QString& /*filePath*/, DImgLoaderObserver */*observer=0*/) { return false; };
+    bool save(const QString& /*filePath*/, DImgLoaderObserver *observer=0) { return false; };
 
     bool hasAlpha()   const { return false;                                  };
     bool isReadOnly() const { return true;                                   };
