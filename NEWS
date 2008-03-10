@@ -5,7 +5,8 @@ NEW FEATURES:
 
 digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-001 ==> 
+001 ==> 146393 : No gamma adjustment when opening RAW file.
+002 ==> 
 
 
 **********************************************************************************************
