@@ -23,13 +23,22 @@
  *
  * ============================================================ */
 
+// C++ includes.
+
+#include <cmath>
+
 // QT includes.
 
 #include <qcstring.h>
 
+// KDE includes.
+
+#include <kstandarddirs.h>
+
 // Local includes.
 
 #include "ddebug.h"
+#include "imagehistogram.h"
 #include "dimg.h"
 #include "dimgloaderobserver.h"
 #include "rawloader.h"
@@ -133,6 +142,63 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
             }
         }
 
+        // ----------------------------------------------------------
+
+        // Special case : if Color Management is not used here, output color space is in sRGB* color space
+        // RAW decoded image is a linear-histogram image with 16 bits color depth. 
+        // No auto white balance and no gamma adjustemnts are performed. Image is a black hole.
+        // We need to reproduce all dcraw 8 bits color depth adjustements here.
+
+        if (m_rawDecodingSettings.outputColorSpace != KDcrawIface::RawDecodingSettings::RAWCOLOR)
+        {
+            ImageHistogram histogram(image, width, height, true);
+    
+            int perc, val, total;
+            float white=0.0, r;
+            unsigned short lut[65536];
+    
+            // Search 99th percentile white level.
+
+            perc = width * height * 0.01;     
+            for (int c = 1 ; c < 4 ; c++)
+            {
+                total = 0;
+                for (val=65535 ; val > 256 ; --val)
+                    if ((total += histogram.getValue(c, val)) > perc) 
+                        break;
+    
+                if (white < val) white = (float)val;
+            }
+    
+            // Compute the Gamma lut accordingly.
+
+            for (int i=0; i < 65536; i++) 
+            {
+                r = i / white;
+                val = 65536 * (r <= 0.00304 ? r*12.92 : pow(r,2.5/6)*1.055-0.055);
+                if (val > 65535) val = 65535;
+                lut[i] = val;
+            }
+    
+            //  Apply Gamma lut to the whole image.
+
+            unsigned short *im = (unsigned short *)image;
+            for (int i = 0; i < width*height; i++)
+            {
+                im[0] = lut[im[0]];      // Blue
+                im[1] = lut[im[1]];      // Green
+                im[2] = lut[im[2]];      // Red
+                im += 4;
+            }
+            
+            // Assigned sRGB color profile to the image
+            KGlobal::dirs()->addResourceType("profiles", KGlobal::dirs()->kde_default("data") + "digikam/profiles");
+            QString directory = KGlobal::dirs()->findResourceDir("profiles", "srgb.icm");
+            m_image->getICCProfilFromFile(directory + "srgb.icm"); 
+        }
+
+        // ----------------------------------------------------------
+
         imageData() = (uchar *)image;
     }
     else        // 8 bits image
@@ -168,6 +234,16 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
                 dst += 4;
                 src += 3;
             }
+        }
+
+        // Special case : if Color Management is not used here, output color space is in sRGB* color space.
+        // Gamma and White balance are previously adjusted by dcraw in this case.
+        // We just assigne sRGB color profile to the image.
+        if (m_rawDecodingSettings.outputColorSpace != KDcrawIface::RawDecodingSettings::RAWCOLOR)
+        {
+            KGlobal::dirs()->addResourceType("profiles", KGlobal::dirs()->kde_default("data") + "digikam/profiles");
+            QString directory = KGlobal::dirs()->findResourceDir("profiles", "srgb.icm");
+            m_image->getICCProfilFromFile(directory + "srgb.icm"); 
         }
 
         imageData() = image;
