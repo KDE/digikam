@@ -68,7 +68,7 @@ public:
 
     bool                    themeInitiallySet;
 
-    QColor                  defaultBackground;
+    QPalette                defaultPalette;
 
     QHash<QString, Theme*>  themeHash;
 
@@ -267,64 +267,69 @@ void ThemeEngine::setCurrentTheme(const Theme& theme, const QString& name, bool 
 void ThemeEngine::changePalette()
 {
     // Make palette for all widgets.
+    QPalette plt;
+    if (d->currTheme == d->defaultTheme)
+        plt = d->defaultPalette;
+    else
+    {
+        plt = kapp->palette();
+        int h, s, v;
+        const QColor fg(ThemeEngine::instance()->textRegColor());
+        const QColor bg(ThemeEngine::instance()->baseColor());
 
-    int h, s, v;
-    const QColor fg(ThemeEngine::instance()->textRegColor());
-    const QColor bg(ThemeEngine::instance()->baseColor());
-    QPalette plt(kapp->palette());
+    /*    bg.hsv(&h, &s, &v);
+        v += (v < 128) ? +50 : -50;
+        v &= 255; //ensures 0 <= v < 256
+        d->currTheme->altBase = QColor(h, s, v, QColor::Hsv);
+    */
+        fg.getHsv(&h, &s, &v);
+        v += (v < 128) ? +150 : -150;
+        v &= 255; //ensures 0 <= v < 256
+        const QColor highlight = QColor::fromHsv(h, s, v);
 
-/*    bg.hsv(&h, &s, &v);
-    v += (v < 128) ? +50 : -50;
-    v &= 255; //ensures 0 <= v < 256
-    d->currTheme->altBase = QColor(h, s, v, QColor::Hsv);
-*/
-    fg.getHsv(&h, &s, &v);
-    v += (v < 128) ? +150 : -150;
-    v &= 255; //ensures 0 <= v < 256
-    const QColor highlight = QColor::fromHsv(h, s, v);
+        plt.setColor(QPalette::Active,   QPalette::Base,            bg);
+        plt.setColor(QPalette::Active,   QPalette::Background,      bg.dark(115));
+        plt.setColor(QPalette::Active,   QPalette::Foreground,      ThemeEngine::instance()->textRegColor());
+        plt.setColor(QPalette::Active,   QPalette::Highlight,       highlight);
+        plt.setColor(QPalette::Active,   QPalette::HighlightedText, ThemeEngine::instance()->textSelColor());
+        plt.setColor(QPalette::Active,   QPalette::Dark,            Qt::darkGray);
+        plt.setColor(QPalette::Active,   QPalette::Button,          bg);
+        plt.setColor(QPalette::Active,   QPalette::ButtonText,      ThemeEngine::instance()->textRegColor());
+        plt.setColor(QPalette::Active,   QPalette::Text,            ThemeEngine::instance()->textRegColor());
+        plt.setColor(QPalette::Active,   QPalette::Link,            ThemeEngine::instance()->textSpecialRegColor());
+        plt.setColor(QPalette::Active,   QPalette::LinkVisited,     ThemeEngine::instance()->textSpecialSelColor());
 
-    plt.setColor(QPalette::Active,   QPalette::Base,            bg);
-    plt.setColor(QPalette::Active,   QPalette::Background,      d->currTheme == d->defaultTheme ? d->defaultBackground : bg.dark(115));
-    plt.setColor(QPalette::Active,   QPalette::Foreground,      ThemeEngine::instance()->textRegColor());
-    plt.setColor(QPalette::Active,   QPalette::Highlight,       highlight);
-    plt.setColor(QPalette::Active,   QPalette::HighlightedText, ThemeEngine::instance()->textSelColor());
-    plt.setColor(QPalette::Active,   QPalette::Dark,            Qt::darkGray);
-    plt.setColor(QPalette::Active,   QPalette::Button,          bg);
-    plt.setColor(QPalette::Active,   QPalette::ButtonText,      ThemeEngine::instance()->textRegColor());
-    plt.setColor(QPalette::Active,   QPalette::Text,            ThemeEngine::instance()->textRegColor());
-    plt.setColor(QPalette::Active,   QPalette::Link,            ThemeEngine::instance()->textSpecialRegColor());
-    plt.setColor(QPalette::Active,   QPalette::LinkVisited,     ThemeEngine::instance()->textSpecialSelColor());
+        plt.setColor(QPalette::Inactive, QPalette::Base,            bg);
+        plt.setColor(QPalette::Inactive, QPalette::Background,      bg.dark(115));
+        plt.setColor(QPalette::Inactive, QPalette::Foreground,      ThemeEngine::instance()->textRegColor());
+        plt.setColor(QPalette::Inactive, QPalette::Highlight,       highlight);
+        plt.setColor(QPalette::Inactive, QPalette::HighlightedText, ThemeEngine::instance()->textSelColor());
+        plt.setColor(QPalette::Inactive, QPalette::Dark,            Qt::darkGray);
+        plt.setColor(QPalette::Inactive, QPalette::Button,          bg);
+        plt.setColor(QPalette::Inactive, QPalette::ButtonText,      ThemeEngine::instance()->textRegColor());
+        plt.setColor(QPalette::Inactive, QPalette::Text,            ThemeEngine::instance()->textRegColor());
+        plt.setColor(QPalette::Inactive, QPalette::Link,            ThemeEngine::instance()->textSpecialRegColor());
+        plt.setColor(QPalette::Inactive, QPalette::LinkVisited,     ThemeEngine::instance()->textSpecialSelColor());
 
-    plt.setColor(QPalette::Inactive, QPalette::Base,            bg);
-    plt.setColor(QPalette::Inactive, QPalette::Background,      d->currTheme == d->defaultTheme ? d->defaultBackground : bg.dark(115));
-    plt.setColor(QPalette::Inactive, QPalette::Foreground,      ThemeEngine::instance()->textRegColor());
-    plt.setColor(QPalette::Inactive, QPalette::Highlight,       highlight);
-    plt.setColor(QPalette::Inactive, QPalette::HighlightedText, ThemeEngine::instance()->textSelColor());
-    plt.setColor(QPalette::Inactive, QPalette::Dark,            Qt::darkGray);
-    plt.setColor(QPalette::Inactive, QPalette::Button,          bg);
-    plt.setColor(QPalette::Inactive, QPalette::ButtonText,      ThemeEngine::instance()->textRegColor());
-    plt.setColor(QPalette::Inactive, QPalette::Text,            ThemeEngine::instance()->textRegColor());
-    plt.setColor(QPalette::Inactive, QPalette::Link,            ThemeEngine::instance()->textSpecialRegColor());
-    plt.setColor(QPalette::Inactive, QPalette::LinkVisited,     ThemeEngine::instance()->textSpecialSelColor());
+        plt.setColor(QPalette::Disabled, QPalette::Base,            bg);
+        plt.setColor(QPalette::Disabled, QPalette::Background,      bg.dark(115));
+        plt.setColor(QPalette::Disabled, QPalette::Foreground,      ThemeEngine::instance()->textRegColor());
+        plt.setColor(QPalette::Disabled, QPalette::Highlight,       highlight);
+        plt.setColor(QPalette::Disabled, QPalette::HighlightedText, ThemeEngine::instance()->textSelColor());
+        plt.setColor(QPalette::Disabled, QPalette::Dark,            Qt::darkGray);
+        plt.setColor(QPalette::Disabled, QPalette::Button,          bg);
+        plt.setColor(QPalette::Disabled, QPalette::ButtonText,      ThemeEngine::instance()->textRegColor());
+        plt.setColor(QPalette::Disabled, QPalette::Text,            ThemeEngine::instance()->textRegColor());
+        plt.setColor(QPalette::Disabled, QPalette::Link,            ThemeEngine::instance()->textSpecialRegColor());
+        plt.setColor(QPalette::Disabled, QPalette::LinkVisited,     ThemeEngine::instance()->textSpecialSelColor());
 
-    plt.setColor(QPalette::Disabled, QPalette::Base,            bg);
-    plt.setColor(QPalette::Disabled, QPalette::Background,      d->currTheme == d->defaultTheme ? d->defaultBackground : bg.dark(115));
-    plt.setColor(QPalette::Disabled, QPalette::Foreground,      ThemeEngine::instance()->textRegColor());
-    plt.setColor(QPalette::Disabled, QPalette::Highlight,       highlight);
-    plt.setColor(QPalette::Disabled, QPalette::HighlightedText, ThemeEngine::instance()->textSelColor());
-    plt.setColor(QPalette::Disabled, QPalette::Dark,            Qt::darkGray);
-    plt.setColor(QPalette::Disabled, QPalette::Button,          bg);
-    plt.setColor(QPalette::Disabled, QPalette::ButtonText,      ThemeEngine::instance()->textRegColor());
-    plt.setColor(QPalette::Disabled, QPalette::Text,            ThemeEngine::instance()->textRegColor());
-    plt.setColor(QPalette::Disabled, QPalette::Link,            ThemeEngine::instance()->textSpecialRegColor());
-    plt.setColor(QPalette::Disabled, QPalette::LinkVisited,     ThemeEngine::instance()->textSpecialSelColor());
-
-/*
-    cg.setColor(QColorGroup::Light,           ThemeEngine::instance()->textRegColor());
-    cg.setColor(QColorGroup::Midlight,        ThemeEngine::instance()->textRegColor());
-    cg.setColor(QColorGroup::Mid,             ThemeEngine::instance()->textRegColor());
-    cg.setColor(QColorGroup::Shadow,          ThemeEngine::instance()->textRegColor());
-*/
+        /*
+        cg.setColor(QColorGroup::Light,           ThemeEngine::instance()->textRegColor());
+        cg.setColor(QColorGroup::Midlight,        ThemeEngine::instance()->textRegColor());
+        cg.setColor(QColorGroup::Mid,             ThemeEngine::instance()->textRegColor());
+        cg.setColor(QColorGroup::Shadow,          ThemeEngine::instance()->textRegColor());
+        */
+    }
 
     kapp->setPalette(plt);
 }
@@ -338,46 +343,44 @@ void ThemeEngine::buildDefaultTheme()
 {
     Theme* t = d->defaultTheme;
 
-    QPalette pa = kapp->palette();
+    d->defaultPalette      = kapp->palette();
 
-    d->defaultBackground   = pa.color(QPalette::Background);
-
-    t->baseColor           = pa.color(QPalette::Base);
-    t->textRegColor        = pa.color(QPalette::Text);
-    t->textSelColor        = pa.color(QPalette::HighlightedText);
+    t->baseColor           = d->defaultPalette.color(QPalette::Base);
+    t->textRegColor        = d->defaultPalette.color(QPalette::Text);
+    t->textSelColor        = d->defaultPalette.color(QPalette::HighlightedText);
     t->textSpecialRegColor = QColor("#0000EF");
-    t->textSpecialSelColor = pa.color(QPalette::HighlightedText);
+    t->textSpecialSelColor = d->defaultPalette.color(QPalette::HighlightedText);
 
-    t->bannerColor         = pa.color(QPalette::Highlight);
-    t->bannerColorTo       = pa.color(QPalette::Highlight).dark(120);
+    t->bannerColor         = d->defaultPalette.color(QPalette::Highlight);
+    t->bannerColorTo       = d->defaultPalette.color(QPalette::Highlight).dark(120);
     t->bannerBevel         = Theme::FLAT;
     t->bannerGrad          = Theme::SOLID;
     t->bannerBorder        = false;
     t->bannerBorderColor   = Qt::black;
 
-    t->thumbRegColor       = pa.color(QPalette::Base);
-    t->thumbRegColorTo     = pa.color(QPalette::Base);
+    t->thumbRegColor       = d->defaultPalette.color(QPalette::Base);
+    t->thumbRegColorTo     = d->defaultPalette.color(QPalette::Base);
     t->thumbRegBevel       = Theme::FLAT;
     t->thumbRegGrad        = Theme::SOLID;
     t->thumbRegBorder      = true;
     t->thumbRegBorderColor = QColor("#E0E0EF");
 
-    t->thumbSelColor       = pa.color(QPalette::Highlight);
-    t->thumbSelColorTo     = pa.color(QPalette::Highlight);
+    t->thumbSelColor       = d->defaultPalette.color(QPalette::Highlight);
+    t->thumbSelColorTo     = d->defaultPalette.color(QPalette::Highlight);
     t->thumbSelBevel       = Theme::FLAT;
     t->thumbSelGrad        = Theme::SOLID;
     t->thumbSelBorder      = true;
     t->thumbSelBorderColor = QColor("#E0E0EF");
 
-    t->listRegColor        = pa.color(QPalette::Base);
-    t->listRegColorTo      = pa.color(QPalette::Base);
+    t->listRegColor        = d->defaultPalette.color(QPalette::Base);
+    t->listRegColorTo      = d->defaultPalette.color(QPalette::Base);
     t->listRegBevel        = Theme::FLAT;
     t->listRegGrad         = Theme::SOLID;
     t->listRegBorder       = false;
     t->listRegBorderColor  = Qt::black;
 
-    t->listSelColor        = pa.color(QPalette::Highlight);
-    t->listSelColorTo      = pa.color(QPalette::Highlight);
+    t->listSelColor        = d->defaultPalette.color(QPalette::Highlight);
+    t->listSelColorTo      = d->defaultPalette.color(QPalette::Highlight);
     t->listSelBevel        = Theme::FLAT;
     t->listSelGrad         = Theme::SOLID;
     t->listSelBorder       = true;
