@@ -51,7 +51,7 @@ public:
     bool load(const QString& filePath, DImgLoaderObserver *observer=0);
 
     //RAW files are always Read only.
-    bool save(const QString& /*filePath*/, DImgLoaderObserver *observer=0) { return false; };
+    bool save(const QString& /*filePath*/, DImgLoaderObserver */*observer=0*/) { return false; };
 
     bool hasAlpha()   const { return false;                                  };
     bool isReadOnly() const { return true;                                   };
