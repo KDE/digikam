@@ -64,6 +64,8 @@ public:
        themeInitiallySet = false;
     }
 
+    QColor           defaultBackground;
+
     QPtrList<Theme>  themeList;
     QDict<Theme>     themeDict;
 
@@ -293,7 +295,7 @@ void ThemeEngine::changePalette()
     const QColor highlight(h, s, v, QColor::Hsv);
 
     cg.setColor(QColorGroup::Base,            bg);
-    cg.setColor(QColorGroup::Background,      bg.dark(115));
+    cg.setColor(QColorGroup::Background,      d->currTheme == d->defaultTheme ? d->defaultBackground : bg.dark(115));
     cg.setColor(QColorGroup::Foreground,      ThemeEngine::instance()->textRegColor());
     cg.setColor(QColorGroup::Highlight,       highlight);
     cg.setColor(QColorGroup::HighlightedText, ThemeEngine::instance()->textSelColor());
@@ -329,6 +331,7 @@ void ThemeEngine::buildDefaultTheme()
     Theme* t = d->defaultTheme;
 
     QColorGroup cg = kapp->palette().active();
+    d->defaultBackground   = cg.background();
 
     t->baseColor           = cg.base();
     t->textRegColor        = cg.text();
