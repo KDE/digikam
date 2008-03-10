@@ -64,7 +64,7 @@ public:
        themeInitiallySet = false;
     }
 
-    QColor           defaultBackground;
+    QPalette         defaultPalette;
 
     QPtrList<Theme>  themeList;
     QDict<Theme>     themeDict;
@@ -277,47 +277,54 @@ void ThemeEngine::setCurrentTheme(const Theme& theme, const QString& name, bool 
 void ThemeEngine::changePalette()
 {
     // Make palette for all widgets.
+    QPalette plt;
 
-    int h, s, v;
-    const QColor fg(ThemeEngine::instance()->textRegColor());
-    const QColor bg(ThemeEngine::instance()->baseColor());
-    QPalette plt(kapp->palette());
-    QColorGroup cg(plt.active());
+    if (d->currTheme == d->defaultTheme)
+        plt = d->defaultPalette;
+    else
+    {
+        plt = kapp->palette();
+        int h, s, v;
+        const QColor fg(ThemeEngine::instance()->textRegColor());
+        const QColor bg(ThemeEngine::instance()->baseColor());
+        QColorGroup cg(plt.active());
 
-/*    bg.hsv(&h, &s, &v);
-    v += (v < 128) ? +50 : -50;
-    v &= 255; //ensures 0 <= v < 256
-    d->currTheme->altBase = QColor(h, s, v, QColor::Hsv);
-*/
-    fg.hsv(&h, &s, &v);
-    v += (v < 128) ? +150 : -150;
-    v &= 255; //ensures 0 <= v < 256
-    const QColor highlight(h, s, v, QColor::Hsv);
+    /*    bg.hsv(&h, &s, &v);
+        v += (v < 128) ? +50 : -50;
+        v &= 255; //ensures 0 <= v < 256
+        d->currTheme->altBase = QColor(h, s, v, QColor::Hsv);
+    */
+        fg.hsv(&h, &s, &v);
+        v += (v < 128) ? +150 : -150;
+        v &= 255; //ensures 0 <= v < 256
+        const QColor highlight(h, s, v, QColor::Hsv);
 
-    cg.setColor(QColorGroup::Base,            bg);
-    cg.setColor(QColorGroup::Background,      d->currTheme == d->defaultTheme ? d->defaultBackground : bg.dark(115));
-    cg.setColor(QColorGroup::Foreground,      ThemeEngine::instance()->textRegColor());
-    cg.setColor(QColorGroup::Highlight,       highlight);
-    cg.setColor(QColorGroup::HighlightedText, ThemeEngine::instance()->textSelColor());
-    cg.setColor(QColorGroup::Dark,            Qt::darkGray);
+        cg.setColor(QColorGroup::Base,            bg);
+        cg.setColor(QColorGroup::Background,      bg.dark(115));
+        cg.setColor(QColorGroup::Foreground,      ThemeEngine::instance()->textRegColor());
+        cg.setColor(QColorGroup::Highlight,       highlight);
+        cg.setColor(QColorGroup::HighlightedText, ThemeEngine::instance()->textSelColor());
+        cg.setColor(QColorGroup::Dark,            Qt::darkGray);
 
-    cg.setColor(QColorGroup::Button,          bg);
-    cg.setColor(QColorGroup::ButtonText,      ThemeEngine::instance()->textRegColor());
+        cg.setColor(QColorGroup::Button,          bg);
+        cg.setColor(QColorGroup::ButtonText,      ThemeEngine::instance()->textRegColor());
 
-    cg.setColor(QColorGroup::Text,            ThemeEngine::instance()->textRegColor());
-    cg.setColor(QColorGroup::Link,            ThemeEngine::instance()->textSpecialRegColor());
-    cg.setColor(QColorGroup::LinkVisited,     ThemeEngine::instance()->textSpecialSelColor());
+        cg.setColor(QColorGroup::Text,            ThemeEngine::instance()->textRegColor());
+        cg.setColor(QColorGroup::Link,            ThemeEngine::instance()->textSpecialRegColor());
+        cg.setColor(QColorGroup::LinkVisited,     ThemeEngine::instance()->textSpecialSelColor());
 
-/*
-    cg.setColor(QColorGroup::Light,           ThemeEngine::instance()->textRegColor());
-    cg.setColor(QColorGroup::Midlight,        ThemeEngine::instance()->textRegColor());
-    cg.setColor(QColorGroup::Mid,             ThemeEngine::instance()->textRegColor());
-    cg.setColor(QColorGroup::Shadow,          ThemeEngine::instance()->textRegColor());
-*/
+        /*
+        cg.setColor(QColorGroup::Light,           ThemeEngine::instance()->textRegColor());
+        cg.setColor(QColorGroup::Midlight,        ThemeEngine::instance()->textRegColor());
+        cg.setColor(QColorGroup::Mid,             ThemeEngine::instance()->textRegColor());
+        cg.setColor(QColorGroup::Shadow,          ThemeEngine::instance()->textRegColor());
+        */
 
-    plt.setActive(cg);
-    plt.setInactive(cg);
-    plt.setDisabled(cg);
+        plt.setActive(cg);
+        plt.setInactive(cg);
+        plt.setDisabled(cg);
+    }
+
     kapp->setPalette(plt, true);
 }
 
@@ -330,8 +337,8 @@ void ThemeEngine::buildDefaultTheme()
 {
     Theme* t = d->defaultTheme;
 
-    QColorGroup cg = kapp->palette().active();
-    d->defaultBackground   = cg.background();
+    d->defaultPalette      = kapp->palette();
+    QColorGroup cg         = d->defaultPalette.active();
 
     t->baseColor           = cg.base();
     t->textRegColor        = cg.text();
