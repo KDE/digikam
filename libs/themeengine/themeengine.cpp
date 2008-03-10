@@ -68,6 +68,8 @@ public:
 
     bool                    themeInitiallySet;
 
+    QColor                  defaultBackground;
+
     QHash<QString, Theme*>  themeHash;
 
     Theme                  *currTheme;
@@ -282,7 +284,7 @@ void ThemeEngine::changePalette()
     const QColor highlight = QColor::fromHsv(h, s, v);
 
     plt.setColor(QPalette::Active,   QPalette::Base,            bg);
-    plt.setColor(QPalette::Active,   QPalette::Background,      bg.dark(115));
+    plt.setColor(QPalette::Active,   QPalette::Background,      d->currTheme == d->defaultTheme ? d->defaultBackground : bg.dark(115));
     plt.setColor(QPalette::Active,   QPalette::Foreground,      ThemeEngine::instance()->textRegColor());
     plt.setColor(QPalette::Active,   QPalette::Highlight,       highlight);
     plt.setColor(QPalette::Active,   QPalette::HighlightedText, ThemeEngine::instance()->textSelColor());
@@ -294,7 +296,7 @@ void ThemeEngine::changePalette()
     plt.setColor(QPalette::Active,   QPalette::LinkVisited,     ThemeEngine::instance()->textSpecialSelColor());
 
     plt.setColor(QPalette::Inactive, QPalette::Base,            bg);
-    plt.setColor(QPalette::Inactive, QPalette::Background,      bg.dark(115));
+    plt.setColor(QPalette::Inactive, QPalette::Background,      d->currTheme == d->defaultTheme ? d->defaultBackground : bg.dark(115));
     plt.setColor(QPalette::Inactive, QPalette::Foreground,      ThemeEngine::instance()->textRegColor());
     plt.setColor(QPalette::Inactive, QPalette::Highlight,       highlight);
     plt.setColor(QPalette::Inactive, QPalette::HighlightedText, ThemeEngine::instance()->textSelColor());
@@ -306,7 +308,7 @@ void ThemeEngine::changePalette()
     plt.setColor(QPalette::Inactive, QPalette::LinkVisited,     ThemeEngine::instance()->textSpecialSelColor());
 
     plt.setColor(QPalette::Disabled, QPalette::Base,            bg);
-    plt.setColor(QPalette::Disabled, QPalette::Background,      bg.dark(115));
+    plt.setColor(QPalette::Disabled, QPalette::Background,      d->currTheme == d->defaultTheme ? d->defaultBackground : bg.dark(115));
     plt.setColor(QPalette::Disabled, QPalette::Foreground,      ThemeEngine::instance()->textRegColor());
     plt.setColor(QPalette::Disabled, QPalette::Highlight,       highlight);
     plt.setColor(QPalette::Disabled, QPalette::HighlightedText, ThemeEngine::instance()->textSelColor());
@@ -337,6 +339,8 @@ void ThemeEngine::buildDefaultTheme()
     Theme* t = d->defaultTheme;
 
     QPalette pa = kapp->palette();
+
+    d->defaultBackground   = pa.color(QPalette::Background);
 
     t->baseColor           = pa.color(QPalette::Base);
     t->textRegColor        = pa.color(QPalette::Text);
