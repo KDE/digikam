@@ -959,7 +959,7 @@ void EditorWindow::slotToggleFullScreen()
 {
     if (m_fullScreen) // out of fullscreen
     {
-        showNormal();
+        setWindowState( windowState() & ~Qt::WindowFullScreen ); // reset
 
         m_canvas->setBackgroundColor(m_bgColor);
 
@@ -1026,7 +1026,7 @@ void EditorWindow::slotToggleFullScreen()
         }
 
         toggleGUI2FullScreen();
-        showFullScreen();
+        setWindowState( windowState() | Qt::WindowFullScreen ); // set
         m_fullScreen = true;
     }
 }

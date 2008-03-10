@@ -1840,7 +1840,7 @@ void CameraUI::slotToggleFullScreen()
 {
     if (d->fullScreen) // out of fullscreen
     {
-        showNormal();
+        setWindowState( windowState() & ~Qt::WindowFullScreen ); // reset
 
         menuBar()->show();
         statusBar()->show();
@@ -1905,7 +1905,7 @@ void CameraUI::slotToggleFullScreen()
 
         d->rightSidebar->backup();
 
-        showFullScreen();
+        setWindowState( windowState() | Qt::WindowFullScreen ); // set
         d->fullScreen = true;
     }
 }

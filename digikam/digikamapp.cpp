@@ -1893,7 +1893,7 @@ void DigikamApp::slotToggleFullScreen()
 {
     if (d->fullScreen)
     {
-        showNormal();
+        setWindowState( windowState() & ~Qt::WindowFullScreen ); // reset
 
         menuBar()->show();
         statusBar()->show();
@@ -1913,7 +1913,7 @@ void DigikamApp::slotToggleFullScreen()
         KConfigGroup group         = d->config->group("ImageViewer Settings");
         bool fullScreenHideToolBar = group.readEntry("FullScreen Hide ToolBar", false);
 
-        showFullScreen();
+        setWindowState( windowState() | Qt::WindowFullScreen ); // set
 
         menuBar()->hide();
         statusBar()->hide();
