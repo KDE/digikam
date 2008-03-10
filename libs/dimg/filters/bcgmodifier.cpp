@@ -7,7 +7,7 @@
  * Description : a Brightness/Contrast/Gamma image filter.
  * 
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com> 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -50,14 +50,14 @@ public:
 
     bool modified;
 
-    int  channel;      
+    int  channel;
     int  map16[65536];
     int  map[256];
 };
 
 BCGModifier::BCGModifier()
 {
-    d = new BCGModifierPriv;    
+    d = new BCGModifierPriv;
     reset();
 }
 
@@ -89,11 +89,19 @@ void BCGModifier::applyBCG(DImg& image)
     if (!d->modified || image.isNull())
         return;
 
-    uint size = image.numPixels();
+    applyBCG(image.bits(), image.width(), image.height(), image.sixteenBit());
+}
 
-    if (!image.sixteenBit())                    // 8 bits image.
+void BCGModifier::applyBCG(uchar *bits, uint width, uint height, bool sixteenBits)
+{
+    if (!d->modified || !bits)
+        return;
+
+    uint size = width*height;
+
+    if (!sixteenBits)                    // 8 bits image.
     {
-        uchar* data = (uchar*) image.bits();
+        uchar* data = bits;
 
         for (uint i=0; i<size; i++)
         {
@@ -123,7 +131,7 @@ void BCGModifier::applyBCG(DImg& image)
     }
     else                                        // 16 bits image.
     {
-        ushort* data = (ushort*) image.bits();
+        ushort* data = (ushort*)bits;
 
         for (uint i=0; i<size; i++)
         {
@@ -167,7 +175,7 @@ void BCGModifier::setGamma(double val)
 
     for (int i=0; i<256; i++)
         d->map[i] = lround(pow(((double)d->map[i] / 255.0), (1.0 / val)) * 255.0);
-    
+
     d->modified = true;
 }
 
@@ -179,10 +187,10 @@ void BCGModifier::setBrightness(double val)
         d->map16[i] = d->map16[i] + val1;
 
     val1 = lround(val * 255);
-    
+
     for (int i = 0; i < 256; i++)
         d->map[i] = d->map[i] + val1;
-    
+
     d->modified = true;
 }
 
@@ -193,7 +201,7 @@ void BCGModifier::setContrast(double val)
 
     for (int i = 0; i < 256; i++)
         d->map[i] = lround((d->map[i] - 127) * val) + 127;
-    
+
     d->modified = true;
 }
 
