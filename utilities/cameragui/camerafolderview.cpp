@@ -45,7 +45,7 @@ public:
     {
         virtualFolder = 0;
         rootFolder    = 0;
-        d->cameraName = QString("Camera");
+        cameraName = QString("Camera");
     }
 
     QString           cameraName;
