@@ -6,7 +6,7 @@
  * Date        : 2005-24-01
  * Description : misc image filters 
  * 
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,7 +43,7 @@ namespace Digikam
 class DIGIKAM_EXPORT DImgImageFilters
 {
 public:
- 
+
     DImgImageFilters(){};
     ~DImgImageFilters(){};
 
@@ -75,7 +75,7 @@ private:    // Private structures used internally.
 private:    // Private methods used internally.
 
     // Methods for Channel Mixer.   
-       
+
     inline double CalculateNorm(float RedGain, float GreenGain, float BlueGain, bool bPreserveLum)
     {
        double lfSum = RedGain + GreenGain + BlueGain;
@@ -93,10 +93,10 @@ private:    // Private methods used internally.
        double lfMix = RedGain * (double)R + GreenGain * (double)G + BlueGain * (double)B;
        lfMix *= Norm;
        int segment = sixteenBit ? 65535 : 255;
-       
+
        return( (unsigned short)CLAMP (lfMix, 0, segment) );
     };
-       
+
     inline int setPositionAdjusted (int Width, int Height, int X, int Y)
     {
        X = (X < 0) ? 0 : (X >= Width ) ? Width  - 1 : X;
@@ -120,10 +120,10 @@ public:   // Public methods.
                         int redMask, int greenMask, int blueMask);
     void gaussianBlurImage(uchar *data, int width, int height, bool sixteenBit, int radius);
     void sharpenImage(uchar *data, int width, int height, bool sixteenBit, int radius);
-    
+
     void pixelAntiAliasing(uchar *data, int Width, int Height, double X, double Y,
                            uchar *A, uchar *R, uchar *G, uchar *B);
-    
+
     void pixelAntiAliasing16(unsigned short *data, int Width, int Height, double X, double Y,
                              unsigned short *A, unsigned short *R, unsigned short *G, unsigned short *B);
 };
