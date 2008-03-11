@@ -192,11 +192,6 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
                 im[2] = lut[im[2]];      // Red
                 im += 4;
             }
-
-            // Assigned sRGB color profile to the image
-            KGlobal::dirs()->addResourceType("profiles", KGlobal::dirs()->kde_default("data") + "digikam/profiles");
-            QString directory = KGlobal::dirs()->findResourceDir("profiles", "srgb.icm");
-            m_image->getICCProfilFromFile(directory + "srgb.icm"); 
         }
 
         // ----------------------------------------------------------
@@ -238,17 +233,45 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
             }
         }
 
-        // Special case : if Color Management is not used here, output color space is in sRGB* color space.
-        // Gamma and White balance are previously adjusted by dcraw in this case.
-        // We just assigne sRGB color profile to the image.
-        if (m_rawDecodingSettings.outputColorSpace != KDcrawIface::RawDecodingSettings::RAWCOLOR)
-        {
-            KGlobal::dirs()->addResourceType("profiles", KGlobal::dirs()->kde_default("data") + "digikam/profiles");
-            QString directory = KGlobal::dirs()->findResourceDir("profiles", "srgb.icm");
-            m_image->getICCProfilFromFile(directory + "srgb.icm"); 
-        }
+        // NOTE: if Color Management is not used here, output color space is in sRGB* color space.
+        // Gamma and White balance are previously adjusted by dcraw in 8 bits color depth.
 
         imageData() = image;
+    }
+
+    //----------------------------------------------------------
+    // Assign the right color-space profile.
+
+    KGlobal::dirs()->addResourceType("profiles", KGlobal::dirs()->kde_default("data") + "digikam/profiles");
+    switch(m_rawDecodingSettings.outputColorSpace)
+    {
+        case KDcrawIface::RawDecodingSettings::SRGB:
+        {
+            QString directory = KGlobal::dirs()->findResourceDir("profiles", "srgb.icm");
+            m_image->getICCProfilFromFile(directory + "srgb.icm"); 
+            break;
+        }
+        case KDcrawIface::RawDecodingSettings::ADOBERGB:
+        {
+            QString directory = KGlobal::dirs()->findResourceDir("profiles", "adobergb.icm");
+            m_image->getICCProfilFromFile(directory + "adobergb.icm"); 
+            break;
+        }
+        case KDcrawIface::RawDecodingSettings::WIDEGAMMUT:
+        {
+            QString directory = KGlobal::dirs()->findResourceDir("profiles", "widegamut.icm");
+            m_image->getICCProfilFromFile(directory + "widegamut.icm"); 
+            break;
+        }
+        case KDcrawIface::RawDecodingSettings::PROPHOTO:
+        {
+            QString directory = KGlobal::dirs()->findResourceDir("profiles", "prophoto.icm");
+            m_image->getICCProfilFromFile(directory + "prophoto.icm"); 
+            break;
+        }
+        default:
+            // No icc color-space profile to assign in RAW color mode.
+            break;
     }
 
     //----------------------------------------------------------
