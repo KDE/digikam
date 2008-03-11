@@ -165,11 +165,12 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
     
             // Search 99th percentile white level.
 
-            perc = width * height * 0.01;     
+            perc = (int)(width * height * 0.01);
+            DDebug() << "White Level: " << perc << endl;
             for (int c = 1 ; c < 4 ; c++)
             {
                 total = 0;
-                for (val=65535 ; val > 256 ; --val)
+                for (val = 65535 ; val > 256 ; --val)
                     if ((total += histogram.getValue(c, val)) > perc) 
                         break;
     
