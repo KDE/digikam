@@ -6,7 +6,7 @@
  * Date        : 2006-21-12
  * Description : a embedded view to show the image preview widget.
  * 
- * Copyright (C) 2006-2007 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,8 +23,6 @@
 
 // Qt includes.
 
-#include <Q3ValueList>
-#include <Q3ValueVector>
 #include <QPainter>
 #include <QCursor>
 #include <QString>
@@ -124,7 +122,7 @@ public:
 
     AlbumWidgetStack  *parent;
 };
-    
+
 ImagePreviewView::ImagePreviewView(AlbumWidgetStack *parent)
                 : PreviewWidget(parent)
 {
@@ -142,7 +140,7 @@ ImagePreviewView::ImagePreviewView(AlbumWidgetStack *parent)
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     d->cornerButton = new QToolButton(this);
-    d->cornerButton->setIcon(SmallIcon("move"));
+    d->cornerButton->setIcon(SmallIcon("transform-move"));
     d->cornerButton->hide();
     d->cornerButton->setToolTip( i18n("Pan the image to a region"));
     setCornerWidget(d->cornerButton);
@@ -557,10 +555,10 @@ void ImagePreviewView::slotCornerButtonPressed()
 
     connect(pan, SIGNAL(signalSelectionMoved(QRect, bool)),
             this, SLOT(slotPanIconSelectionMoved(QRect, bool)));
-    
+
     connect(pan, SIGNAL(signalHiden()),
             this, SLOT(slotPanIconHiden()));
-    
+
     QPoint g = mapToGlobal(viewport()->pos());
     g.setX(g.x()+ viewport()->size().width());
     g.setY(g.y()+ viewport()->size().height());
@@ -597,7 +595,7 @@ void ImagePreviewView::zoomFactorChanged(double zoom)
     if (horizontalScrollBar()->isVisible() || verticalScrollBar()->isVisible())
         d->cornerButton->show();
     else
-        d->cornerButton->hide();        
+        d->cornerButton->hide();
 
     PreviewWidget::zoomFactorChanged(zoom);
 }
@@ -661,7 +659,7 @@ void ImagePreviewView::resetPreview()
 
 void ImagePreviewView::paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh)
 {
-    DImg img     = d->preview.smoothScaleSection(sx, sy, sw, sh, tileSize(), tileSize());    
+    DImg img     = d->preview.smoothScaleSection(sx, sy, sw, sh, tileSize(), tileSize());
     QPixmap pix2 = img.convertToPixmap();
     QPainter p(pix);
     p.drawPixmap(0, 0, pix2);
