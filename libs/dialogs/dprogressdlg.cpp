@@ -6,7 +6,7 @@
  * Date        : 2006-30-08
  * Description : a progress dialog for digiKam
  * 
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,6 +29,7 @@
 #include <qlabel.h>
 #include <qimage.h>
 #include <qpushbutton.h>
+#include <qlistview.h>
 
 // KDE includes.
 
@@ -37,7 +38,6 @@
 #include <kapplication.h>
 #include <kdialogbase.h>
 #include <kiconloader.h>
-#include <klistview.h>
 #include <kstandarddirs.h>
 
 // Local includes
@@ -63,16 +63,16 @@ public:
         allowCancel = true;
         cancelled   = false;
     }
-    
+
     bool       allowCancel;
     bool       cancelled;
 
     QLabel    *logo;
     QLabel    *title;
     QLabel    *label;
-    
-    KListView *actionsList;
-   
+
+    QListView *actionsList;
+
     KProgress *progress;
 };
 
@@ -80,11 +80,11 @@ DProgressDlg::DProgressDlg(QWidget *parent, const QString &caption)
             : KDialogBase(parent, 0, true, caption, Cancel)
 {
     d = new DProgressDlgPriv;
-    
+
     QFrame *page      = makeMainWidget();
     QGridLayout* grid = new QGridLayout(page, 1, 1, 0, spacingHint());
     QVBoxLayout *vlay = new QVBoxLayout();
-    d->actionsList    = new KListView(page);
+    d->actionsList    = new QListView(page);
     d->label          = new QLabel(page);
     d->title          = new QLabel(page);
     d->logo           = new QLabel(page);
@@ -96,12 +96,12 @@ DProgressDlg::DProgressDlg(QWidget *parent, const QString &caption)
 
     KIconLoader* iconLoader = KApplication::kApplication()->iconLoader();
     d->logo->setPixmap(iconLoader->loadIcon("digikam", KIcon::NoGroup, 128, KIcon::DefaultState, 0, true));
-     
+
     d->actionsList->addColumn("Thumb");   // no i18n here: hiden column
     d->actionsList->addColumn("Status");  // no i18n here: hiden column
     d->actionsList->setSorting(-1);
     d->actionsList->setItemMargin(1);
-    d->actionsList->setSelectionModeExt(KListView::NoSelection);
+    d->actionsList->setSelectionMode(QListView::NoSelection);
     d->actionsList->header()->hide();
     d->actionsList->setResizeMode(QListView::LastColumn);
 
@@ -135,7 +135,7 @@ void DProgressDlg::setButtonText(const QString &text)
 void DProgressDlg::addedAction(const QPixmap& pix, const QString &text)
 {
     QImage img;
-    KListViewItem *item = new KListViewItem(d->actionsList,
+    QListViewItem *item = new QListViewItem(d->actionsList,
                           d->actionsList->lastItem(), QString(), text);
 
     if (pix.isNull())
@@ -166,7 +166,7 @@ void DProgressDlg::setTotalSteps(int total)
 {
     d->progress->setTotalSteps(total);
 }
-    
+
 void DProgressDlg::setValue(int value)
 {
     d->progress->setValue(value);
@@ -222,4 +222,3 @@ void DProgressDlg::setActionListVSBarVisible(bool visible)
 }
 
 }  // NameSpace Digikam
-
