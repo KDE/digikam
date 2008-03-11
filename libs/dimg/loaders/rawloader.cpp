@@ -175,7 +175,8 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
     
                 if (white < val) white = (float)val;
             }
-    
+            DDebug() << "White Point: " << white << endl;
+
             // Compute the Gamma lut accordingly.
 
             for (int i=0; i < 65536; i++) 
