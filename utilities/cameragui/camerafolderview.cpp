@@ -45,6 +45,7 @@ public:
     {
         virtualFolder = 0;
         rootFolder    = 0;
+        d->cameraName = QString("Camera");
     }
 
     QString           cameraName;
@@ -65,12 +66,8 @@ CameraFolderView::CameraFolderView(QWidget* parent)
     setAllColumnsShowFocus(true);
     setDragEnabled(false);
     setDropIndicatorShown(false);
-    setAcceptDrops(true);
+    setAcceptDrops(false);
     setHeaderLabels(QStringList() << i18n("Camera Folders"));
-
-    d->cameraName    = "Camera";
-    d->virtualFolder = 0;
-    d->rootFolder    = 0;
 
     connect(this, SIGNAL(itemActivated(QTreeWidgetItem*, int)),
             this, SLOT(slotCurrentChanged(QTreeWidgetItem*, int)));
