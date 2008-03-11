@@ -163,7 +163,7 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
             int perc, val, total;
             float white=0.0, r;
             unsigned short lut[65536];
-    
+
             // Search 99th percentile white level.
 
             perc = (int)(width * height * 0.01);
@@ -174,7 +174,7 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
                 for (val = 65535 ; val > 256 ; --val)
                     if ((total += histogram.getValue(c, val)) > perc) 
                         break;
-    
+
                 if (white < val) white = (float)val;
             }
             DDebug() << "White Point: " << white << endl;
@@ -184,11 +184,11 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
             for (int i=0; i < 65536; i++) 
             {
                 r = i / white;
-                val = 65536 * (r <= 0.00304 ? r*12.92 : pow(r,2.5/6)*1.055-0.055);
+                val = 65536 * (r <= 0.018 ? r*4.5 : pow(r,0.45)*1.099-0.099);
                 if (val > 65535) val = 65535;
                 lut[i] = val;
             }
-    
+
             //  Apply Gamma lut to the whole image.
 
             unsigned short *im = (unsigned short *)image;
@@ -199,7 +199,7 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
                 im[2] = lut[im[2]];      // Red
                 im += 4;
             }
-            
+
             // Assigned sRGB color profile to the image
             QString directory = KStandardDirs::installPath("data") + QString("libkdcraw/profiles/");
             m_image->getICCProfilFromFile(directory + QString("srgb.icm"));
@@ -268,5 +268,3 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
 }
 
 }  // NameSpace Digikam
-
-
