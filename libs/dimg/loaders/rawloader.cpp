@@ -158,7 +158,8 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
         if (m_rawDecodingSettings.outputColorSpace != KDcrawIface::RawDecodingSettings::RAWCOLOR)
         {
             ImageHistogram histogram(image, width, height, true);
-    
+            histogram.calculate();
+
             int perc, val, total;
             float white=0.0, r;
             unsigned short lut[65536];
