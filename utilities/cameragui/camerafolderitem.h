@@ -7,7 +7,7 @@
  * Description : A widget to display a camera folder.
  * 
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,10 +28,10 @@
 // Qt includes.
 
 #include <qstring.h>
+#include <qlistview.h>
 
 // KDE includes.
 
-#include <klistview.h>
 #include <kiconloader.h>
 
 namespace Digikam
@@ -39,15 +39,15 @@ namespace Digikam
 
 class CameraFolderItemPriv;
 
-class CameraFolderItem : public KListViewItem
+class CameraFolderItem : public QListViewItem
 {
 
 public:
 
-    CameraFolderItem(KListView* parent, const QString& name, 
+    CameraFolderItem(QListView* parent, const QString& name, 
                      const QPixmap& pixmap=SmallIcon("folder"));
 
-    CameraFolderItem(KListViewItem* parent, const QString& folderName, const QString& folderPath, 
+    CameraFolderItem(QListViewItem* parent, const QString& folderName, const QString& folderPath, 
                      const QPixmap& pixmap=SmallIcon("folder"));
 
     ~CameraFolderItem();
@@ -58,7 +58,7 @@ public:
     void    changeCount(int val);
     void    setCount(int val);
     int     count();
-    
+
 private:
 
     CameraFolderItemPriv* d;
