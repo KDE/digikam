@@ -163,13 +163,14 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
             for (int c = 1 ; c < 4 ; c++)
             {
                 total = 0;
-                for (val=65535 ; val > 256 ; --val)
+                for (val = 65535 ; val > 256 ; --val)
                     if ((total += histogram.getValue(c, val)) > perc) 
                         break;
     
                 if (white < val) white = (float)val;
             }
-    
+            DDebug() << "White Point: " << white << endl;
+
             // Compute the Gamma lut accordingly.
 
             for (int i=0; i < 65536; i++) 
