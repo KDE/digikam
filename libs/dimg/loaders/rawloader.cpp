@@ -150,7 +150,7 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
 
         // ----------------------------------------------------------
 
-        // Special case : if Color Management is not used here, output color space is in sRGB* color space
+        // Special case: if Color Management is not used here, output color space is in sRGB* color space
         // RAW decoded image is a linear-histogram image with 16 bits color depth. 
         // No auto white balance and no gamma adjustemnts are performed. Image is a black hole.
         // We need to reproduce all dcraw 8 bits color depth adjustements here.
@@ -199,10 +199,6 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
                 im[2] = lut[im[2]];      // Red
                 im += 4;
             }
-
-            // Assigned sRGB color profile to the image
-            QString directory = KStandardDirs::installPath("data") + QString("libkdcraw/profiles/");
-            m_image->getICCProfilFromFile(directory + QString("srgb.icm"));
         }
 
         // ----------------------------------------------------------
@@ -244,16 +240,41 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
             }
         }
 
-        // Special case : if Color Management is not used here, output color space is in sRGB* color space.
-        // Gamma and White balance are previously adjusted by dcraw in this case.
-        // We just assigne sRGB color profile to the image.
-        if (m_rawDecodingSettings.outputColorSpace != KDcrawIface::RawDecodingSettings::RAWCOLOR)
-        {
-            QString directory = KStandardDirs::installPath("data") + QString("libkdcraw/profiles/");
-            m_image->getICCProfilFromFile(directory + QString("srgb.icm"));
-        }
+        // NOTE: if Color Management is not used here, output color space is in sRGB* color space.
+        // Gamma and White balance are previously adjusted by dcraw in 8 bits color depth.
 
         imageData() = image;
+    }
+
+    //----------------------------------------------------------
+    // Assign the right color-space profile.
+
+    QString filePath = KStandardDirs::installPath("data") + QString("libkdcraw/profiles/");
+    switch(m_rawDecodingSettings.outputColorSpace)
+    {
+        case KDcrawIface::RawDecodingSettings::SRGB:
+        {
+            filePath.append("srgb.icm");
+            break;
+        }
+        case KDcrawIface::RawDecodingSettings::ADOBERGB:
+        {
+            filePath.append("adobergb.icm");
+            break;
+        }
+        case KDcrawIface::RawDecodingSettings::WIDEGAMMUT:
+        {
+            filePath.append("widegamut.icm");
+            break;
+        }
+        case KDcrawIface::RawDecodingSettings::PROPHOTO:
+        {
+            filePath.append("prophoto.icm");
+            break;
+        }
+        default:
+            // No icc color-space profile to assign in RAW color mode.
+            break;
     }
 
     //----------------------------------------------------------
