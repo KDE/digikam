@@ -148,9 +148,15 @@ int TAlbumCheckListItem::count()
 void TAlbumCheckListItem::setStatus(MetadataHub::TagStatus status)
 {
     if (status == MetadataHub::MetadataDisjoint)
+    {
+        if (type() != Q3CheckListItem::RadioButtonController) setTristate(true);
         setState(Q3CheckListItem::NoChange);
+    }
     else
+    {
+        if (type() != Q3CheckListItem::RadioButtonController) setTristate(false);
         setOn(status.hasTag);
+    }
 }
 
 // ------------------------------------------------------------------------
