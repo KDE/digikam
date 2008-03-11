@@ -165,7 +165,7 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
             {
                 total = 0;
                 for (val = 65535 ; val > 256 ; --val)
-                    if ((total += histogram.getValue(c, val)) > perc) 
+                    if ((total += (int)histogram.getValue(c, val)) > perc) 
                         break;
 
                 if (white < val) white = (float)val;
@@ -177,7 +177,7 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
             for (int i=0; i < 65536; i++) 
             {
                 r = i / white;
-                val = 65536 * (r <= 0.018 ? r*4.5 : pow(r,0.45)*1.099-0.099);
+                val = (int)(65536.0 * (r <= 0.018 ? r*4.5 : pow(r,0.45)*1.099-0.099));
                 if (val > 65535) val = 65535;
                 lut[i] = val;
             }
