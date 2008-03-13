@@ -255,7 +255,7 @@ ImageDialog::ImageDialog(QWidget* parent, const KUrl url)
 
     DDebug() << "fileformats=" << d->fileformats << endl;
 
-    KFileDialog dlg(url.path(), d->fileformats, parent);
+    KFileDialog dlg(url, d->fileformats, parent);
     ImageDialogPreview *preview = new ImageDialogPreview(&dlg);
     dlg.setPreviewWidget(preview);
     dlg.setOperationMode(KFileDialog::Opening);

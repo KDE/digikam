@@ -602,7 +602,7 @@ void ShowFoto::slotOpenFile()
     if (d->currentItem && !promptUserSave(d->currentItem->url()))
         return;
 
-    KUrl::List urls = ImageDialog::getImageURLs(this, d->lastOpenedDirectory.path());
+    KUrl::List urls = ImageDialog::getImageURLs(this, d->lastOpenedDirectory);
 
     if (!urls.isEmpty())
     {
