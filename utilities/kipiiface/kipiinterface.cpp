@@ -42,6 +42,7 @@
 #include "collectionmanager.h"
 #include "databaseaccess.h"
 #include "imageattributeswatch.h"
+#include "thumbnailsize.h"
 #include "thumbnailloadthread.h"
 #include "kipiimageinfo.h"
 #include "kipiimagecollection.h"
@@ -56,8 +57,8 @@ KipiInterface::KipiInterface(QObject *parent, const char *name)
 {
     m_thumbLoadThread = new ThumbnailLoadThread();
 
-    // Set cache size to 256 to have the max quality thumb.
-    m_thumbLoadThread->setThumbnailSize(256);
+    // Set cache size to Huge to have the max quality thumb.
+    m_thumbLoadThread->setThumbnailSize(ThumbnailSize::Huge);
     m_thumbLoadThread->setSendSurrogatePixmap(true);
     m_thumbLoadThread->setExifRotate(AlbumSettings::instance()->getExifRotate());
 
