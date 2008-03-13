@@ -120,8 +120,8 @@ TimeLineWidget::TimeLineWidget(QWidget *parent)
     setMinimumWidth(256);
     setMinimumHeight(192);
 
-    QDateTime ref = QDateTime::currentDateTime();   
-    setCursorDateTime(ref);   
+    QDateTime ref = QDateTime::currentDateTime();
+    setCursorDateTime(ref);
     setRefDateTime(ref);
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
@@ -421,13 +421,13 @@ DateRangeList TimeLineWidget::selectedDateRange(int& totalCount)
 
     DateRangeList::iterator it, it2;
 
-/*    
+/*
     for (it = list.begin() ; it != list.end(); ++it)
         DDebug() << (*it).first.date().toString(Qt::ISODate) << " :: " 
                  << (*it).second.date().toString(Qt::ISODate) << endl;
 
     DDebug() << "Total Count of Items = " << totalCount << endl;
-*/    
+*/
 
     // Group contiguous date ranges to optimize query on database.
 
@@ -670,7 +670,7 @@ void TimeLineWidget::updatePixmap()
             dateColor = palette().color(QPalette::Foreground); 
 
         p.setPen(palette().color(QPalette::Foreground));
-        p.fillRect(barRect, QBrush(Qt::green));
+        p.fillRect(barRect, QBrush(ThemeEngine::instance()->textSpecialRegColor()));
         p.drawLine(barRect.topLeft(), barRect.topRight());
         p.drawLine(barRect.topRight(), barRect.bottomRight());
         p.drawLine(barRect.bottomRight(), barRect.bottomLeft());
@@ -690,7 +690,7 @@ void TimeLineWidget::updatePixmap()
 
         if (sel == Selected || sel == FuzzySelection)
         {
-            selBrush.setColor(palette().color(QPalette::Active, QPalette::Highlight));
+            selBrush.setColor(ThemeEngine::instance()->thumbSelColor());
             selBrush.setStyle(Qt::SolidPattern);
             if (sel == FuzzySelection)
                 selBrush.setStyle(Qt::Dense4Pattern);
@@ -857,7 +857,7 @@ void TimeLineWidget::updatePixmap()
             dateColor = palette().color(QPalette::Foreground); 
 
         p.setPen(palette().color(QPalette::Foreground));
-        p.fillRect(barRect, QBrush(Qt::green));
+        p.fillRect(barRect, QBrush(ThemeEngine::instance()->textSpecialRegColor()));
         p.drawLine(barRect.topLeft(), barRect.topRight());
         p.drawLine(barRect.topRight(), barRect.bottomRight());
         p.drawLine(barRect.bottomRight(), barRect.bottomLeft());
@@ -877,7 +877,7 @@ void TimeLineWidget::updatePixmap()
 
         if (sel == Selected || sel == FuzzySelection)
         {
-            selBrush.setColor(palette().color(QPalette::Active, QPalette::Highlight));
+            selBrush.setColor(ThemeEngine::instance()->thumbSelColor());
             selBrush.setStyle(Qt::SolidPattern);
             if (sel == FuzzySelection)
                 selBrush.setStyle(Qt::Dense4Pattern);
