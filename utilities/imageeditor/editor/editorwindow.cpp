@@ -441,7 +441,7 @@ void EditorWindow::setupStandardActions()
 
     // -- Standard 'Transform' menu actions ---------------------------------------------
 
-    d->resizeAction = new KAction(KIcon("transform-scale"), i18n("&Resize..."), this);
+    d->resizeAction = new KAction(KIcon("resize_image"), i18n("&Resize..."), this);
     connect(d->resizeAction, SIGNAL(triggered()), this, SLOT(slotResize()));
     actionCollection()->addAction("editorwindow_resize", d->resizeAction);
 
