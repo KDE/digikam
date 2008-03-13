@@ -599,7 +599,7 @@ void TimeLineWidget::slotDatesMap(const QMap<QDateTime, int>& datesStatMap)
     {
         d->maxDateTime = d->refDateTime;
         d->minDateTime = d->refDateTime;
-    }   
+    }
 
     updatePixmap();
     update();
@@ -670,7 +670,7 @@ void TimeLineWidget::updatePixmap()
             dateColor = palette().active().foreground(); 
 
         p.setPen(palette().active().foreground());
-        p.fillRect(barRect, QBrush(Qt::green));
+        p.fillRect(barRect, QBrush(ThemeEngine::instance()->textSpecialRegColor()));
         p.drawRect(barRect);
         p.drawLine(barRect.right(), barRect.bottom(), barRect.right(), barRect.bottom()+3);
         p.drawLine(barRect.left(),  barRect.bottom(), barRect.left(),  barRect.bottom()+3);
@@ -681,13 +681,13 @@ void TimeLineWidget::updatePixmap()
                 subDateColor = palette().active().highlightedText();
             else
                 subDateColor = palette().active().foreground();
-        }        
+        }
         else 
             subDateColor = palette().active().mid();
 
         if (sel == Selected || sel == FuzzySelection)
         {
-            selBrush.setColor(palette().active().highlight());
+            selBrush.setColor(ThemeEngine::instance()->thumbSelColor());
             selBrush.setStyle(QBrush::SolidPattern);
             if (sel == FuzzySelection)
                 selBrush.setStyle(QBrush::Dense4Pattern);
@@ -854,7 +854,7 @@ void TimeLineWidget::updatePixmap()
             dateColor = palette().active().foreground(); 
 
         p.setPen(palette().active().foreground());
-        p.fillRect(barRect, QBrush(Qt::green));
+        p.fillRect(barRect, QBrush(ThemeEngine::instance()->textSpecialRegColor()));
         p.drawRect(barRect);
         p.drawLine(barRect.right(), barRect.bottom(), barRect.right(), barRect.bottom()+3);
         p.drawLine(barRect.left(),  barRect.bottom(), barRect.left(),  barRect.bottom()+3);
@@ -865,13 +865,13 @@ void TimeLineWidget::updatePixmap()
                 subDateColor = palette().active().highlightedText();
             else
                 subDateColor = palette().active().foreground();
-        }        
+        }
         else 
             subDateColor = palette().active().mid();
 
         if (sel == Selected || sel == FuzzySelection)
         {
-            selBrush.setColor(palette().active().highlight());
+            selBrush.setColor(ThemeEngine::instance()->thumbSelColor());
             selBrush.setStyle(QBrush::SolidPattern);
             if (sel == FuzzySelection)
                 selBrush.setStyle(QBrush::Dense4Pattern);
