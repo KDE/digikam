@@ -236,12 +236,16 @@ ImageDialog::ImageDialog(QWidget* parent, const KUrl url)
 {
     d = new ImageDialogPrivate;
 
-    QStringList patternList;
-    QString     allPictures;
+    QStringList patternList = KImageIO::pattern(KImageIO::Reading).split('\n', QString::SkipEmptyParts);
 
+    // All Images from list must been always the first entry given by KDE API
+    QString allPictures = patternList[0];
+
+    // Add other files format witch are missing to All Images" type mime provided by KDE and remplace current.
     if (KDcrawIface::DcrawBinary::instance()->versionIsRight())
     {
         allPictures.insert(allPictures.indexOf("|"), QString(KDcrawIface::DcrawBinary::instance()->rawFiles()) + QString(" *.JPE *.TIF"));
+        patternList.removeAll(patternList[0]);
         patternList.prepend(allPictures);
     }
 
