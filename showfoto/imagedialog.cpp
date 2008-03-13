@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2008-03-13
- * Description : an image files selector dialog.
+ * Description : image files selector dialog.
  * 
  * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com> 
  *
@@ -35,9 +35,7 @@
 
 // LibKDcraw includes.
 
-#include <libkdcraw/kdcraw.h>
 #include <libkdcraw/dcrawbinary.h>
-#include <libkdcraw/dcrawinfocontainer.h>
 
 // Local includes.
 
@@ -67,8 +65,6 @@ public:
     QLabel               *infoLabel;
 
     KUrl                  currentURL;
-
-    KDcrawIface::KDcraw   dcrawIface;
 
     DMetadata             metaIface;
 
@@ -143,11 +139,9 @@ void ImageDialogPreview::showPreview(const KUrl& url)
         d->currentURL = url;
         d->thumbLoadThread->find(d->currentURL.path());
 
-        // Try to use libkdcraw interface to identify image.
-
-        KDcrawIface::DcrawInfoContainer info;
-        d->dcrawIface.rawFileIdentify(info, d->currentURL.path());
-        if (info.isDecodable)
+        d->metaIface.load(d->currentURL.path());
+        PhotoInfoContainer info = d->metaIface.getPhotographInformations();
+        if (!info.isEmpty())
         {
             QString identify = i18n("Make: %1\n", info.make); 
             identify.append(i18n("Model: %1\n", info.model));
@@ -156,42 +150,12 @@ void ImageDialogPreview::showPreview(const KUrl& url)
                 identify.append(i18n("Created: %1\n", KGlobal::locale()->formatDateTime(info.dateTime,
                                                                          KLocale::ShortDate, true)));
 
-            if (info.aperture != -1.0)
-                identify.append(i18n("Aperture: f/%1\n", QString::number(info.aperture)));
-
-            if (info.focalLength != -1.0)
-                identify.append(i18n("Focal: %1 mm\n", info.focalLength));
-
-            if (info.exposureTime != -1.0)
-                identify.append(i18n("Exposure: 1/%1 s\n", info.exposureTime));
-
-            if (info.sensitivity != -1)
-                identify.append(i18n("Sensitivity: %1 ISO", info.sensitivity));
+            identify.append(i18n("Aperture: f/%1\n", info.aperture));
+            identify.append(i18n("Focal: %1 mm\n", info.focalLength));
+            identify.append(i18n("Exposure: 1/%1 s\n", info.exposureTime));
+            identify.append(i18n("Sensitivity: %1 ISO", info.sensitivity));
 
             d->infoLabel->setText(identify);
-        }
-        else
-        {
-            // Try to use libkexiv2 to identify image.
-
-            d->metaIface.load(d->currentURL.path());
-            PhotoInfoContainer info = d->metaIface.getPhotographInformations();
-            if (!info.isEmpty())
-            {
-                QString identify = i18n("Make: %1\n", info.make); 
-                identify.append(i18n("Model: %1\n", info.model));
-
-                if (info.dateTime.isValid())
-                    identify.append(i18n("Created: %1\n", KGlobal::locale()->formatDateTime(info.dateTime,
-                                                                            KLocale::ShortDate, true)));
-
-                identify.append(i18n("Aperture: f/%1\n", info.aperture));
-                identify.append(i18n("Focal: %1 mm\n", info.focalLength));
-                identify.append(i18n("Exposure: 1/%1 s\n", info.exposureTime));
-                identify.append(i18n("Sensitivity: %1 ISO", info.sensitivity));
-
-                d->infoLabel->setText(identify);
-            }
         }
     }
 }
@@ -288,13 +252,9 @@ KUrl::List ImageDialog::getImageURLs(QWidget* parent, const KUrl url)
 {
     ImageDialog dlg(parent, url);
     if (!dlg.urls().isEmpty())
-    {
         return dlg.urls();
-    }
     else
-    {
         return KUrl::List();
-    }
 }
 
 } // namespace ShowFoto
