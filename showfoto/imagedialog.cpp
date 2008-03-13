@@ -96,7 +96,7 @@ ImageDialogPreview::ImageDialogPreview(QWidget *parent)
     vlay->addWidget(d->infoLabel);
 
     setSupportedMimeTypes(KImageIO::mimeTypes());
-    setMinimumWidth(64);
+    setMinimumWidth(128);
 
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
             this, SLOT(slotThumbnail(const LoadingDescription&, const QPixmap&)));
