@@ -6,7 +6,7 @@
  * Date        : 2006-30-08
  * Description : batch thumbnails generator
  *
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,6 +41,7 @@ class KUrl;
 namespace Digikam
 {
 
+class LoadingDescription;
 class BatchThumbsGeneratorPriv;
 
 class BatchThumbsGenerator : public DProgressDlg
@@ -54,13 +55,13 @@ public:
 
 signals:
 
-    void signalRebuildThumbsDone();
     void signalRebuildAllThumbsDone();
 
 private:
 
-    void rebuildAllThumbs(int size);
     void abort();
+    void complete();
+    void processOne();
 
 protected:
 
@@ -72,10 +73,8 @@ protected slots:
 
 private slots:
 
-    void slotRebuildThumbs128();
-    void slotRebuildThumbs256();
-    void slotRebuildThumbDone(const KUrl& url, const QPixmap& pix=QPixmap());
-    void slotRebuildAllThumbComplete();
+    void slotRebuildThumbs();
+    void slotGotThumbnail(const LoadingDescription&, const QPixmap&);
 
 private:
 

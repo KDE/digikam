@@ -6,7 +6,7 @@
  * Date        : 2006-30-08
  * Description : batch thumbnails generator
  *
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,13 +20,6 @@
  * GNU General Public License for more details.
  * 
  * ============================================================ */
-
-// C Ansi includes.
-
-extern "C"
-{
-#include <unistd.h>
-}
 
 // QT includes.
 
@@ -53,7 +46,8 @@ extern "C"
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "databaseaccess.h"
-#include "thumbnailjob.h"
+#include "thumbnailloadthread.h"
+#include "thumbnailsize.h"
 #include "batchthumbsgenerator.h"
 #include "batchthumbsgenerator.moc"
 
@@ -66,77 +60,53 @@ public:
 
     BatchThumbsGeneratorPriv()
     {
-        cancel   = false;
-        thumbJob = 0;
+        cancel          = false;
+        thumbLoadThread = 0;
         duration.start();
     }
 
-    bool                   cancel;
+    bool                 cancel;
 
-    QTime                  duration;
+    QTime                duration;
 
-    QPointer<ThumbnailJob> thumbJob;
+    QStringList          allPicturesPath;
+
+    ThumbnailLoadThread *thumbLoadThread;
 };
 
 BatchThumbsGenerator::BatchThumbsGenerator(QWidget* parent)
                     : DProgressDlg(parent)
 {
     d = new BatchThumbsGeneratorPriv;
+    d->thumbLoadThread = new ThumbnailLoadThread();
+
+    // Set cache size to 256 to have the max quality thumb.
+    d->thumbLoadThread->setThumbnailSize(ThumbnailSize::Huge);
+    d->thumbLoadThread->setSendSurrogatePixmap(true);
+    d->thumbLoadThread->setExifRotate(AlbumSettings::instance()->getExifRotate());
+
+    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
+            this, SLOT(slotGotThumbnail(const LoadingDescription&, const QPixmap&)));
+
     setValue(0);
-    setCaption(i18n("Thumbnails processing"));
+    setCaption(i18n("Rebuild All Thumbnails"));
     setLabel(i18n("<b>Updating thumbnails database in progress. Please wait...</b>"));
     setButtonText(i18n("&Abort"));
-    QTimer::singleShot(500, this, SLOT(slotRebuildThumbs128()));
     resize(600, 300);
+
+    QTimer::singleShot(500, this, SLOT(slotRebuildThumbs()));
 }
 
 BatchThumbsGenerator::~BatchThumbsGenerator()
 {
-    if (!d->thumbJob.isNull())
-    {
-        d->thumbJob->kill();
-        d->thumbJob = 0;
-    }
-
+    delete d->thumbLoadThread;
     delete d;
 }
 
-void BatchThumbsGenerator::slotRebuildThumbs128()
+void BatchThumbsGenerator::slotRebuildThumbs()
 {
-    setTitle(i18n("Processing small thumbs"));
-    rebuildAllThumbs(128);
-
-    connect(this, SIGNAL(signalRebuildThumbsDone()),
-            this, SLOT(slotRebuildThumbs256()));
-}
-
-void BatchThumbsGenerator::slotRebuildThumbs256()
-{
-    setTitle(i18n("Processing large thumbs"));
-    rebuildAllThumbs(256);
-
-    disconnect(this, SIGNAL(signalRebuildThumbsDone()),
-               this, SLOT(slotRebuildThumbs256()));
-
-    connect(this, SIGNAL(signalRebuildThumbsDone()),
-            this, SLOT(slotRebuildAllThumbComplete()));
-}
-
-void BatchThumbsGenerator::slotRebuildAllThumbComplete()
-{
-    QTime t;
-    t = t.addMSecs(d->duration.elapsed());
-    setLabel(i18n("<b>Update of thumbnails database done</b>"));
-    setTitle(i18n("Duration: %1",t.toString()));
-    setButtonText(i18n("&Close"));
-}
-
-void BatchThumbsGenerator::rebuildAllThumbs(int size)
-{
-    QStringList allPicturesPath;
-    QString thumbCacheDir = QDir::homePath() + "/.thumbnails/";
+    setTitle(i18n("Processing..."));
     QString filesFilter   = AlbumSettings::instance()->getAllFileFilter();
-    bool exifRotate       = AlbumSettings::instance()->getExifRotate();
     AlbumList palbumList  = AlbumManager::instance()->allPAlbums();
 
     // Get all digiKam albums collection pictures path.
@@ -163,53 +133,47 @@ void BatchThumbsGenerator::rebuildAllThumbs(int size)
                 pathSorted.append(*it2);
         }
 
-        allPicturesPath += pathSorted;
+        d->allPicturesPath += pathSorted;
     }
 
-    setMaximum(allPicturesPath.count()*2);
+    setMaximum(d->allPicturesPath.count());
 
-    // Remove all current album item thumbs from disk cache.
-
-    for (QStringList::iterator it = allPicturesPath.begin(); 
-         !d->cancel && (it != allPicturesPath.end()); ++it)
+    if(d->allPicturesPath.isEmpty())
     {
-        QString uri = "file://" + QDir::cleanPath(*it);
-        KMD5 md5(QFile::encodeName(uri));
-        uri = md5.hexDigest();
-
-        QString smallThumbPath = thumbCacheDir + "normal/" + uri + ".png";
-        QString bigThumbPath   = thumbCacheDir + "large/"  + uri + ".png";
-
-        if (size <= 128)
-            ::unlink(QFile::encodeName(smallThumbPath));
-        else
-            ::unlink(QFile::encodeName(bigThumbPath));
-    }
-
-    if (!d->thumbJob.isNull())
-    {
-        d->thumbJob->kill();
-        d->thumbJob = 0;
-    }
-    if(allPicturesPath.isEmpty()){
        slotCancel();
        return;
     }
-    d->thumbJob = new ThumbnailJob(KUrl::List(allPicturesPath), size, true, exifRotate);
-    connect(d->thumbJob, SIGNAL(signalThumbnail(const KUrl&, const QPixmap&)),
-            this, SLOT(slotRebuildThumbDone(const KUrl&, const QPixmap&)));
 
-    connect(d->thumbJob, SIGNAL(signalFailed(const KUrl&)),
-            this, SLOT(slotRebuildThumbDone(const KUrl&)));
-
-    connect(d->thumbJob, SIGNAL(signalCompleted()),
-            this, SIGNAL(signalRebuildThumbsDone()));
+    processOne();
 }
 
-void BatchThumbsGenerator::slotRebuildThumbDone(const KUrl& url, const QPixmap& pix)
+void BatchThumbsGenerator::processOne()
 {
-    addedAction(pix, url.path());
+    if (d->cancel) return;
+    QString path = d->allPicturesPath.first();
+    d->thumbLoadThread->deleteThumbnail(path);
+    d->thumbLoadThread->find(path);
+}
+
+void BatchThumbsGenerator::complete()
+{
+    QTime t;
+    t = t.addMSecs(d->duration.elapsed());
+    setLabel(i18n("<b>Update of thumbnails database done</b>"));
+    setTitle(i18n("Duration: %1", t.toString()));
+    setButtonText(i18n("&Close"));
+    emit signalRebuildAllThumbsDone();
+}
+
+void BatchThumbsGenerator::slotGotThumbnail(const LoadingDescription& desc, const QPixmap& pix)
+{
+    addedAction(pix, desc.filePath);
     advance(1);
+    d->allPicturesPath.removeFirst();
+    if (d->allPicturesPath.isEmpty())
+        complete();
+    else
+        processOne();
 }
 
 void BatchThumbsGenerator::slotCancel()
@@ -227,13 +191,6 @@ void BatchThumbsGenerator::closeEvent(QCloseEvent *e)
 void BatchThumbsGenerator::abort()
 {
     d->cancel = true;
-
-    if (!d->thumbJob.isNull())
-    {
-        d->thumbJob->kill();
-        d->thumbJob = 0;
-    }
-
     emit signalRebuildAllThumbsDone();
 }
 
