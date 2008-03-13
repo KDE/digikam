@@ -9,7 +9,7 @@
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2005-2006 by Tom Albers <tomalbers@kde.nl>
  * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -73,9 +73,9 @@ extern "C"
 #include <kio/deletejob.h>
 #include <kprotocolinfo.h>
 #include <kglobalsettings.h>
+#include <kfiledialog.h>
 #include <ktoolbar.h>
 #include <kstatusbar.h>
-#include <kfiledialog.h>
 
 // LibKDcraw includes.
 
@@ -91,6 +91,7 @@ extern "C"
 #include "imagepropertiessidebar.h"
 #include "imageplugin.h"
 #include "imagepluginloader.h"
+#include "imagedialog.h"
 #include "dimginterface.h"
 #include "loadingcache.h"
 #include "splashscreen.h"
@@ -161,7 +162,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
     d = new ShowFotoPriv();
 
     // -- Show splash at start ----------------------------
-    
+
     KGlobal::dirs()->addResourceDir("data", KStandardDirs::installPath("data") + QString("digikam")); 
     KIconLoader::global()->addAppDir("digikam");
 
@@ -601,32 +602,7 @@ void ShowFoto::slotOpenFile()
     if (d->currentItem && !promptUserSave(d->currentItem->url()))
         return;
 
-    QString fileformats;
-   
-    QStringList patternList = KImageIO::pattern(KImageIO::Reading).split('\n', QString::SkipEmptyParts);
-    
-    // All Images from list must been always the first entry given by KDE API
-    QString allPictures = patternList[0];
-    
-    // Add other files format witch are missing to All Images" type mime provided by KDE and remplace current.
-    if (KDcrawIface::DcrawBinary::instance()->versionIsRight())
-    {
-        allPictures.insert(allPictures.indexOf("|"), QString(KDcrawIface::DcrawBinary::instance()->rawFiles()) + QString(" *.JPE *.TIF"));
-        patternList.removeAll(patternList[0]);
-        patternList.prepend(allPictures);
-    }
-    
-    // Added RAW file formats supported by dcraw program like a type mime. 
-    // Nota: we cannot use here "image/x-raw" type mime from KDE because it uncomplete 
-    // or unavailable(dcraw_0)(see file #121242 in B.K.O).
-    if (KDcrawIface::DcrawBinary::instance()->versionIsRight())
-        patternList.append(i18n("\n%1|Camera RAW files",QString(KDcrawIface::DcrawBinary::instance()->rawFiles())));
-    
-    fileformats = patternList.join("\n");
-
-    DDebug() << "fileformats=" << fileformats << endl;   
-    
-    KUrl::List urls =  KFileDialog::getOpenUrls(d->lastOpenedDirectory.path(), fileformats, this, i18n("Open Images"));
+    KUrl::List urls = ImageDialog::getImageURLs(this, d->lastOpenedDirectory.path());
 
     if (!urls.isEmpty())
     {

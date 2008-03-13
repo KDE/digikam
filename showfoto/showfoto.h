@@ -9,7 +9,7 @@
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2005-2006 by Tom Albers <tomalbers@kde.nl> 
  * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com> 
- * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,12 +48,12 @@ class ShowFotoPriv;
 class ShowFoto : public Digikam::EditorWindow
 {
     Q_OBJECT
-    
+
 public:
 
     ShowFoto(const KUrl::List& urlList);
     ~ShowFoto();
-    
+
     virtual void show();
     bool setup(bool iccSetupPage=false);
 
@@ -71,9 +71,9 @@ private:
     void applySettings();
 
     void toggleActions(bool val);
-    
+
     void toggleGUI2FullScreen();
-   
+
     void toggleNavigation(int index);
 
     bool save();
@@ -103,11 +103,11 @@ private slots:
 
     void slotToggleShowBar();
     void slotChangeBCG();
-    
+
     void slotChanged();
     void slotUndoStateChanged(bool, bool, bool);
     void slotUpdateItemInfo();
-        
+
     void slotDeleteCurrentItemResult( KIO::Job * job );
 
     void slotLoadingStarted(const QString &filename);
@@ -118,7 +118,7 @@ private slots:
     void slotRevert();
 
 private:
-    
+
     ShowFotoPriv* d;
 };
 
