@@ -6,7 +6,8 @@
  * Date        : 2007-06-05
  * Description : Thumbnail loading
  *
- * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -89,6 +90,7 @@ public:
      * Default value: 128
      */
     void setThumbnailSize(int size);
+
     /**
      * Specify if the thumbnails shall be rotated by exif.
      * Note: This only applies to newly created thumbnails. The rotation state of thumbnails
@@ -97,6 +99,12 @@ public:
      * Default value: true
      */
     void setExifRotate(int exifRotate);
+
+    /**
+     * Return true is thumbnails shall be rotated by exif.
+     */
+    bool exifRotate() const;
+
     /**
      * If you enable this, the signal thumbnailLoaded(LoadingDescription, QPixmap) will be emitted.
      * If you do not enable this, only the QImage-based signal (see LoadSaveThread) will be emitted.
@@ -107,12 +115,14 @@ public:
      * Default value: Enabled.
      */
     void setPixmapRequested(bool wantPixmap);
+
     /**
      * If you enable this, a highlighting border will be drawn around the pixmap.
      * This option has only an effect if pixmapRequested is true.
      * Default value: Enabled.
      */
     void setHighlightPixmap(bool highlight);
+
     /**
      * If you enable this, the thread will try hard to send a pixmap if thumbnail loading failed.
      * It will use standard system icons to replace the real thumbnail.
