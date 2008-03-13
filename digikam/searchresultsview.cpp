@@ -7,7 +7,7 @@
  * Description : search results view.
  * 
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -24,7 +24,7 @@
 
 // Qt includes.
 
-#include <Q3Dict>
+#include <QHasht>
 #include <QDataStream>
 #include <QPixmap>
 
@@ -36,11 +36,12 @@
 
 // Local includes.
 
-#include "thumbnailjob.h"
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "databaseurl.h"
 #include "imagelister.h"
+#include "thumbnailloadthread.h"
+#include "thumbnailsize.h"
 #include "searchresultsitem.h"
 #include "searchresultsview.h"
 #include "searchresultsview.moc"
@@ -54,17 +55,17 @@ public:
 
     SearchResultsViewPriv()
     {
-        listJob  = 0;
-        thumbJob = 0;
+        listJob         = 0;
+        thumbLoadThread = 0;
     }
 
-    QString                filter;
+    QString                       filter;
 
-    Q3Dict<Q3IconViewItem> itemDict;
+    QHash<KUrl, Q3IconViewItem*>  itemHash;
 
-    QPointer<ThumbnailJob> thumbJob;
+    ThumbnailLoadThread          *thumbLoadThread;
 
-    KIO::TransferJob*      listJob;
+    KIO::TransferJob*             listJob;
 };
 
 SearchResultsView::SearchResultsView(QWidget* parent)
@@ -75,14 +76,30 @@ SearchResultsView::SearchResultsView(QWidget* parent)
 
     setAutoArrange(true);
     setResizeMode(Q3IconView::Adjust);
+
+    d->thumbLoadThread = new ThumbnailLoadThread();
+    d->thumbLoadThread->setThumbnailSize(128);
+    d->thumbLoadThread->setSendSurrogatePixmap(true);
+    d->thumbLoadThread->setExifRotate(true);
+
+    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
+            this, SLOT(slotGotThumbnail(const LoadingDescription&, const QPixmap&)));
 }
 
 SearchResultsView::~SearchResultsView()
 {
-    if (!d->thumbJob.isNull())
-        d->thumbJob->kill();
+    delete d->thumbLoadThread;
+
     if (d->listJob)
         d->listJob->kill();
+
+    // Delete all hash items 
+    while (!d->itemHash.isEmpty()) 
+    {
+        Q3IconViewItem *value = *d->itemHash.begin();
+        d->itemHash.erase(d->itemHash.begin());
+        delete value;
+    }
 
     delete d;
 }
@@ -93,10 +110,6 @@ void SearchResultsView::openURL(const KUrl& url)
     if (d->listJob)
         d->listJob->kill();
     d->listJob = 0;
-
-    if (!d->thumbJob.isNull())
-        d->thumbJob->kill();
-    d->thumbJob = 0;
 
     d->listJob = ImageLister::startListJob(DatabaseUrl::fromSearchUrl(url),
                     //d->filter,
@@ -117,22 +130,25 @@ void SearchResultsView::clear()
         d->listJob->kill();
     d->listJob = 0;
 
-    if (!d->thumbJob.isNull())
-        d->thumbJob->kill();
-    d->thumbJob = 0;
+    // Delete all hash items 
+    while (!d->itemHash.isEmpty()) 
+    {
+        Q3IconViewItem *value = *d->itemHash.begin();
+        d->itemHash.erase(d->itemHash.begin());
+        delete value;
+    }
 
-    d->itemDict.clear();
     Q3IconView::clear();
 }
 
 void SearchResultsView::slotData(KIO::Job*, const QByteArray &data)
 {
     for (Q3IconViewItem* item = firstItem(); item; item = item->nextItem())
-        ((SearchResultsItem*)item)->m_marked = false;
+        (dynamic_cast<SearchResultsItem*>(item))->m_marked = false;
 
     KUrl::List ulist;
 
-    QString path;
+    KUrl url;
     QDataStream ds(data);
     while (!ds.atEnd())
     {
@@ -140,32 +156,32 @@ void SearchResultsView::slotData(KIO::Job*, const QByteArray &data)
         ds >> record;
 
         ImageInfo info(record);
-        path = info.filePath();
+        url = info.fileUrl();
 
-        SearchResultsItem* existingItem = (SearchResultsItem*) d->itemDict.find(path);
+        SearchResultsItem* existingItem = dynamic_cast<SearchResultsItem*>(*d->itemHash.find(url));
         if (existingItem)
         {
             existingItem->m_marked = true;
             continue;
         }
 
-        SearchResultsItem* item = new SearchResultsItem(this, path);
-        d->itemDict.insert(path, item);
+        SearchResultsItem* item = new SearchResultsItem(this, url);
+        d->itemHash.insert(url, item);
 
-        ulist.append(KUrl(path));
+        ulist.append(url);
     }
 
-    SearchResultsItem* item = (SearchResultsItem*)firstItem();
+    SearchResultsItem* item = dynamic_cast<SearchResultsItem*>(firstItem());
     Q3IconViewItem* nextItem;
     while (item)
     {
         nextItem = item->nextItem();
         if (!item->m_marked)
         {
-            d->itemDict.remove(item->m_path);
+            d->itemHash.remove(item->m_url);
             delete item;
         }
-        item = (SearchResultsItem*)nextItem;
+        item = dynamic_cast<SearchResultsItem*>(nextItem);
     }
     arrangeItemsInGrid();
 
@@ -175,13 +191,8 @@ void SearchResultsView::slotData(KIO::Job*, const QByteArray &data)
 
     if (match)
     {
-        d->thumbJob = new ThumbnailJob(ulist, 128, true, true);
-
-        connect(d->thumbJob, SIGNAL(signalThumbnail(const KUrl&, const QPixmap&)),
-                this, SLOT(slotGotThumbnail(const KUrl&, const QPixmap&)));
-
-        connect(d->thumbJob, SIGNAL(signalFailed(const KUrl&)),
-                this, SLOT(slotFailedThumbnail(const KUrl&)));     
+        for (KUrl::List::const_iterator it = ulist.begin() ; it != ulist.end() ; ++it)
+            d->thumbLoadThread->find((*it).path());
     }
 }
 
@@ -196,18 +207,13 @@ void SearchResultsView::slotResult(KJob *kjob)
     d->listJob = 0;
 }
 
-void SearchResultsView::slotGotThumbnail(const KUrl& url, const QPixmap& pix)
+void SearchResultsView::slotGotThumbnail(const LoadingDescription& desc, const QPixmap& pix)
 {
-    Q3IconViewItem* i = d->itemDict.find(url.path());
-    if (i)
-        i->setPixmap(pix);
-    
-    d->thumbJob = 0;
-}
+    QHash<KUrl, Q3IconViewItem*>::const_iterator it = d->itemHash.find(KUrl(desc.filePath));
+    if (it == d->itemHash.end())
+        return;
 
-void SearchResultsView::slotFailedThumbnail(const KUrl&)
-{
-    d->thumbJob = 0;    
+    (*it)->setPixmap(pix);
 }
 
 }  // namespace Digikam

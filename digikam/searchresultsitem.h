@@ -7,6 +7,7 @@
  * Description : search results item.
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,6 +29,10 @@
 #include <Q3IconView>
 #include <QPixmap>
 
+// KDE includes.
+
+#include <kurl.h>
+
 namespace Digikam
 {
 
@@ -37,22 +42,24 @@ class SearchResultsItem : public Q3IconViewItem
 
 public:
 
-    SearchResultsItem(Q3IconView* view, const QString& path);
+    SearchResultsItem(Q3IconView* view, const KUrl& url);
     ~SearchResultsItem();
 
 protected:
 
     void calcRect(const QString& text = QString());
-    void paintItem(QPainter * p, const QColorGroup & cg);
-    void paintFocus(QPainter * p, const QColorGroup & cg);
+    void paintItem(QPainter *p, const QColorGroup& cg);
+    void paintFocus(QPainter *p, const QColorGroup& cg);
 
 private:
 
-    static QPixmap* m_basePixmap;
     bool            m_marked;
-    QString         m_path;
-};    
-    
+
+    KUrl            m_url;
+
+    static QPixmap* m_basePixmap;
+};
+
 }  // namespace Digikam
 
 #endif /* SEARCHRESULTSITEM_H */

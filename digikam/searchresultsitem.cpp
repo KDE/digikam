@@ -7,6 +7,7 @@
  * Description : search results item.
  * 
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -34,8 +35,8 @@ namespace Digikam
 
 QPixmap* SearchResultsItem::m_basePixmap = 0;
 
-SearchResultsItem::SearchResultsItem(Q3IconView* view, const QString& path)
-                 : Q3IconViewItem(view), m_path(path)
+SearchResultsItem::SearchResultsItem(Q3IconView* view, const KUrl& url)
+                 : Q3IconViewItem(view), m_url(url)
 {
     if (!m_basePixmap)
     {
@@ -59,10 +60,10 @@ SearchResultsItem::~SearchResultsItem()
 
 void SearchResultsItem::calcRect(const QString&)
 {
-    QRect r(0,0,0,0);
+    QRect r(0, 0, 0, 0);
     setTextRect(r);
     setPixmapRect(r);
-    setItemRect(QRect(x(),y(),130,130));
+    setItemRect(QRect(x(), y(), 130, 130));
 }
 
 void SearchResultsItem::paintItem(QPainter* p, const QColorGroup&)
