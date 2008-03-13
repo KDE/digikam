@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="28" name="showfoto" >
+<gui version="29" name="showfoto" >
 
 <MenuBar>
 
@@ -78,6 +78,7 @@
     <Menu name="help" ><text>&amp;Help</text>
         <Action name="editorwindow_rawcameralist"/>
         <Action name="editorwindow_donatemoney" />
+        <Action name="editorwindow_contribute" />
     </Menu>
  
     <Merge/>
