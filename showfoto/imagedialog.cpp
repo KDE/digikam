@@ -43,6 +43,7 @@
 
 #include "ddebug.h"
 #include "dmetadata.h"
+#include "thumbnailsize.h"
 #include "thumbnailloadthread.h"
 #include "imagedialog.h"
 #include "imagedialog.moc"
@@ -82,7 +83,7 @@ ImageDialogPreview::ImageDialogPreview(QWidget *parent)
     d->thumbLoadThread = new ThumbnailLoadThread();
 
     // Set cache size to 256 to have the max quality thumb.
-    d->thumbLoadThread->setThumbnailSize(256);
+    d->thumbLoadThread->setThumbnailSize(ThumbnailSize::Huge);
     d->thumbLoadThread->setSendSurrogatePixmap(true);
     d->thumbLoadThread->setExifRotate(true);
 
