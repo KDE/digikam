@@ -47,6 +47,7 @@ class KFileItem;
 namespace Digikam
 {
 
+class LoadingDescription;
 class ThumbBarItem;
 class ThumbBarToolTip;
 class ThumbBarViewPriv;
@@ -158,8 +159,7 @@ protected slots:
 
 private slots:
 
-    void slotGotThumbnail(const KUrl&, const QPixmap&);
-    void slotFailedThumbnail(const KUrl&);
+    void slotGotThumbnail(const LoadingDescription&, const QPixmap&);
 
 private:
 

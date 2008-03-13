@@ -22,13 +22,6 @@
  * 
  * ============================================================ */
 
-// C Ansi includes.
-
-extern "C"
-{
-#include <unistd.h>
-}
-
 // C++ includes.
 
 #include <cmath>
@@ -71,7 +64,7 @@ extern "C"
 
 #include "ddebug.h"
 #include "dmetadata.h"
-#include "thumbnailjob.h"
+#include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
 #include "thumbbar.h"
 #include "thumbbar.moc"
@@ -86,20 +79,18 @@ public:
     ThumbBarViewPriv() :
         margin(5)
     {
-        dragging   = false;
-        exifRotate = false;
-        clearing   = false;
-        toolTip    = 0;
-        firstItem  = 0;
-        lastItem   = 0;
-        currItem   = 0;
-        count      = 0;
-        thumbJob   = 0;
-        tileSize   = ThumbnailSize::Small;
+        dragging        = false;
+        clearing        = false;
+        toolTip         = 0;
+        firstItem       = 0;
+        lastItem        = 0;
+        currItem        = 0;
+        count           = 0;
+        thumbLoadThread = 0;
+        tileSize        = ThumbnailSize::Small;
     }
 
     bool                          clearing;
-    bool                          exifRotate;
     bool                          dragging;
 
     const int                     margin;
@@ -116,7 +107,7 @@ public:
     ThumbBarItem                 *currItem;
 
     QHash<KUrl, ThumbBarItem*>    itemHash;
-    QPointer<ThumbnailJob>        thumbJob;
+    ThumbnailLoadThread          *thumbLoadThread;
 
     ThumbBarToolTipSettings       toolTipSettings;
 
@@ -158,10 +149,18 @@ ThumbBarView::ThumbBarView(QWidget* parent, int orientation, bool exifRotate,
 {
     d = new ThumbBarViewPriv;
     d->orientation     = orientation;
-    d->exifRotate      = exifRotate;
     d->toolTipSettings = settings;
     d->toolTip         = new ThumbBarToolTip(this);
     d->timer           = new QTimer(this);
+    d->thumbLoadThread = new ThumbnailLoadThread();
+
+    // Set cache size to 256 to have the max quality thumb.
+    d->thumbLoadThread->setThumbnailSize(ThumbnailSize::Huge);
+    d->thumbLoadThread->setSendSurrogatePixmap(true);
+    d->thumbLoadThread->setExifRotate(exifRotate);
+
+    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
+            this, SLOT(slotGotThumbnail(const LoadingDescription&, const QPixmap&)));
 
     connect(d->timer, SIGNAL(timeout()),
             this, SLOT(slotUpdate()));
@@ -173,22 +172,14 @@ ThumbBarView::ThumbBarView(QWidget* parent, int orientation, bool exifRotate,
     setAcceptDrops(true); 
 
     if (d->orientation == Qt::Vertical)
-    {
         setHScrollBarMode(Q3ScrollView::AlwaysOff);
-    }
     else
-    {
         setVScrollBarMode(Q3ScrollView::AlwaysOff);
-    }
 }
 
 ThumbBarView::~ThumbBarView()
 {
-    if (!d->thumbJob.isNull())
-    {
-        d->thumbJob->kill();
-        d->thumbJob = 0;
-    }
+    delete d->thumbLoadThread;
 
     // Delete all hash items 
     while (!d->itemHash.isEmpty()) 
@@ -228,32 +219,17 @@ void ThumbBarView::resizeEvent(QResizeEvent* e)
 
 void ThumbBarView::setExifRotate(bool exifRotate)
 {
-    d->exifRotate = exifRotate;
-    QString thumbCacheDir = QDir::homePath() + "/.thumbnails/";
+    d->thumbLoadThread->setExifRotate(exifRotate);
 
     for (ThumbBarItem *item = d->firstItem; item; item = item->d->next)
-    {
-        // Remove all current album item thumbs from disk cache.
-
-        QString uri = "file://" + QDir::cleanPath(item->url().path(KUrl::RemoveTrailingSlash));
-        KMD5 md5(QFile::encodeName(uri));
-        uri = md5.hexDigest();
-
-        QString smallThumbPath = thumbCacheDir + "normal/" + uri + ".png";
-        QString bigThumbPath   = thumbCacheDir + "large/"  + uri + ".png";
-
-        ::unlink(QFile::encodeName(smallThumbPath));
-        ::unlink(QFile::encodeName(bigThumbPath));
-
         invalidateThumb(item);
-    }
 
     triggerUpdate();
 }
 
 bool ThumbBarView::getExifRotate()
 {
-    return d->exifRotate;
+    return d->thumbLoadThread->exifRotate();
 }
 
 int ThumbBarView::getOrientation()
@@ -407,20 +383,8 @@ void ThumbBarView::invalidateThumb(ThumbBarItem* item)
     if (!item) return;
 
     item->d->pixmap = QPixmap();
-
-    if (!d->thumbJob.isNull())
-    {
-       d->thumbJob->kill();
-       d->thumbJob = 0;
-    }
-
-    d->thumbJob = new ThumbnailJob(item->url(), ThumbnailSize::Huge, true, d->exifRotate);
-
-    connect(d->thumbJob, SIGNAL(signalThumbnail(const KUrl&, const QPixmap&)),
-            this, SLOT(slotGotThumbnail(const KUrl&, const QPixmap&)));
-
-    connect(d->thumbJob, SIGNAL(signalFailed(const KUrl&)),
-            this, SLOT(slotFailedThumbnail(const KUrl&)));
+    d->thumbLoadThread->deleteThumbnail(item->url().path());
+    d->thumbLoadThread->find(item->url().path());
 }
 
 void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
@@ -679,19 +643,8 @@ void ThumbBarView::rearrangeItems()
 
     if (!urlList.isEmpty())
     {
-        if (!d->thumbJob.isNull())
-        {
-           d->thumbJob->kill();
-           d->thumbJob = 0;
-        }
-
-        d->thumbJob = new ThumbnailJob(urlList, ThumbnailSize::Huge, true, d->exifRotate);
-
-        connect(d->thumbJob, SIGNAL(signalThumbnail(const KUrl&, const QPixmap&)),
-                this, SLOT(slotGotThumbnail(const KUrl&, const QPixmap&)));
-
-        connect(d->thumbJob, SIGNAL(signalFailed(const KUrl&)),
-                this, SLOT(slotFailedThumbnail(const KUrl&)));
+        for (KUrl::List::const_iterator it = urlList.begin() ; it != urlList.end() ; ++it)
+            d->thumbLoadThread->find((*it).path());
     }
 }
 
@@ -712,11 +665,11 @@ void ThumbBarView::slotUpdate()
     viewport()->update();
 }
 
-void ThumbBarView::slotGotThumbnail(const KUrl& url, const QPixmap& pix)
+void ThumbBarView::slotGotThumbnail(const LoadingDescription& desc, const QPixmap& pix)
 {
     if (!pix.isNull())
     {
-        QHash<KUrl, ThumbBarItem*>::const_iterator it = d->itemHash.find(url);
+        QHash<KUrl, ThumbBarItem*>::const_iterator it = d->itemHash.find(KUrl(desc.filePath));
         if (it == d->itemHash.end())
             return;
 
@@ -724,20 +677,6 @@ void ThumbBarView::slotGotThumbnail(const KUrl& url, const QPixmap& pix)
         item->setPixmap(pix);
         item->repaint();
     }
-}
-
-void ThumbBarView::slotFailedThumbnail(const KUrl& url)
-{
-    QHash<KUrl, ThumbBarItem*>::const_iterator it = d->itemHash.find(url);
-    if (it == d->itemHash.end())
-        return;
-
-    KIconLoader* iconLoader = KIconLoader::global();
-    QPixmap pix = iconLoader->loadIcon("image-missing", KIconLoader::NoGroup, ThumbnailSize::Huge);
-
-    ThumbBarItem* item = *it;
-    item->setPixmap(pix);
-    item->repaint();
 }
 
 bool ThumbBarView::event(QEvent *event)
