@@ -174,9 +174,8 @@ void ImageDialogPreview::showPreview(const KUrl& url)
         {
             // Try to use libkexiv2 to identify image.
 
-            PhotoInfoContainer info;
             d->metaIface.load(d->currentURL.path());
-            d->metaIface.getPhotographInformations();
+            PhotoInfoContainer info = d->metaIface.getPhotographInformations();
             if (!info.isEmpty())
             {
                 QString identify = i18n("Make: %1\n", info.make); 
