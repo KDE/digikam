@@ -24,7 +24,7 @@
 
 // Qt includes.
 
-#include <QHasht>
+#include <QHash>
 #include <QDataStream>
 #include <QPixmap>
 
