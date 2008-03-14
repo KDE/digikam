@@ -192,8 +192,6 @@ ImageWindow::ImageWindow()
     readSettings();
     applySettings();
     setAutoSaveSettings("ImageViewer Settings");
-    m_themeMenuAction->setItems(ThemeEngine::instance()->themeNames());
-    slotThemeChanged();
 
     //-------------------------------------------------------------
 
@@ -364,9 +362,6 @@ void ImageWindow::setupActions()
 void ImageWindow::applySettings()
 {
     applyStandardSettings();
-
-    KConfig* config = kapp->config();
-    config->setGroup("ImageViewer Settings");
 
     AlbumSettings *settings = AlbumSettings::instance();
     m_canvas->setExifOrient(settings->getExifRotate());
