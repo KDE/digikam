@@ -334,6 +334,9 @@ void LightTableWindow::setupConnections()
 
     connect(d->previewView, SIGNAL(signalRightPanelLeftButtonClicked()),
             this, SLOT(slotRightPanelLeftButtonClicked()));
+
+    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+            this, SLOT(slotThemeChanged()));
 }
 
 void LightTableWindow::setupActions()
