@@ -34,6 +34,7 @@
 
 // Local includes.
 
+#include "themeengine.h"
 #include "ddebug.h"
 #include "mdkeylistviewitem.h"
 
@@ -44,14 +45,14 @@ MdKeyListViewItem::MdKeyListViewItem(QListView *parent, const QString& key)
                  : QListViewItem(parent)
 {
     m_decryptedKey = key;
-    
+
     // Standard Exif key descriptions.
     if      (key == "Iop")       m_decryptedKey = i18n("Interoperability");
     else if (key == "Image")     m_decryptedKey = i18n("Image Information");
     else if (key == "Photo")     m_decryptedKey = i18n("Photograph Information");
     else if (key == "GPSInfo")   m_decryptedKey = i18n("Global Positioning System");
     else if (key == "Thumbnail") m_decryptedKey = i18n("Embedded Thumbnail");
-    
+
     // Standard IPTC key descriptions.
     else if (key == "Envelope")     m_decryptedKey = i18n("IIM Envelope");
     else if (key == "Application2") m_decryptedKey = i18n("IIM Application 2");
@@ -63,7 +64,7 @@ MdKeyListViewItem::MdKeyListViewItem(QListView *parent, const QString& key)
 
 MdKeyListViewItem::~MdKeyListViewItem()
 {
-} 
+}
 
 QString MdKeyListViewItem::getMdKey()
 {
@@ -78,15 +79,15 @@ void MdKeyListViewItem::paintCell(QPainter* p, const QColorGroup&,
     fn.setBold(true);
     fn.setItalic(false);
     p->setFont(fn);
-    p->setPen( Qt::white );
+    p->setPen(ThemeEngine::instance()->textRegColor());
     int width = listView()->contentsWidth();
     QRect rect(0, 0, width, fn.weight());
 
     if (column == 1)
         rect.moveLeft(-width/2);
 
-    p->fillRect( rect, Qt::gray );
-    p->drawText( rect, Qt::AlignHCenter, m_decryptedKey);
+    p->fillRect(rect, ThemeEngine::instance()->thumbSelColor());
+    p->drawText(rect, Qt::AlignHCenter, m_decryptedKey);
     p->restore();
 }
 
