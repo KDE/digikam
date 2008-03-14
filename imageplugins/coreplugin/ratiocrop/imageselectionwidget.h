@@ -157,7 +157,7 @@ private:
     void normalizeRegion();
     void reverseRatioValues();
     int computePreciseSize(int size, int step);
-    void applyAspectRatio(bool useHeight, bool repaintWidget=true);
+    void applyAspectRatio(bool WOrH, bool repaintWidget=true);
     void updatePixmap();
     QPoint opposite();
     float distance(QPoint a, QPoint b);

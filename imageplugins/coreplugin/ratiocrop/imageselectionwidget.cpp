@@ -584,12 +584,12 @@ int ImageSelectionWidget::computePreciseSize(int size, int step)
     return size;
 }
 
-void ImageSelectionWidget::applyAspectRatio(bool useHeight, bool repaintWidget)
+void ImageSelectionWidget::applyAspectRatio(bool WOrH, bool repaintWidget)
 {
     // Save selection area for re-adjustment after changing width and height.
     QRect oldRegionSelection = d->regionSelection;
 
-    if ( !useHeight )  // Width changed.
+    if ( !WOrH )  // Width changed.
     {
         int w = computePreciseSize(d->regionSelection.width(),
                                    d->currentWidthRatioValue);
