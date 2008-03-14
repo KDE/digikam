@@ -31,7 +31,7 @@
 
  <BaseColor                    value="#727272"    />
 
- <TextRegularColor             value="#505050"    />
+ <TextRegularColor             value="#303030"    />
  <TextSelectedColor            value="#C4C4C4"    />
  <TextSpecialRegularColor      value="#C4C4C4"    />
  <TextSpecialSelectedColor     value="#C7C7C7"    />
