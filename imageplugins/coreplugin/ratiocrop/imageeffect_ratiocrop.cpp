@@ -248,7 +248,7 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
 
     grid->addWidget(label, 0, 0, 1, 1);
     grid->addWidget(m_ratioCB, 0, 1, 1, 3);
-    grid->addWidget(m_preciseCrop, 0, 1, 1, 1);
+    grid->addWidget(m_preciseCrop, 0, 4, 1, 1);
     grid->addWidget(m_orientLabel, 2, 0, 1, 1);
     grid->addWidget(m_orientCB, 2, 1, 1, 3);
     grid->addWidget(m_autoOrientation, 2, 4, 1, 1);
