@@ -131,8 +131,6 @@ private slots:
     void slotAssignRating(int rating);
 
     void slotFileMetadataChanged(const KURL &);
-
-    void slotThemeChanged();
     void slotChangeTheme(const QString& theme);
 
 private:

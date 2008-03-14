@@ -102,6 +102,7 @@ extern "C"
 #include "savingcontextcontainer.h"
 #include "loadingcacheinterface.h"
 #include "slideshowsettings.h"
+#include "themeengine.h"
 #include "editorwindowprivate.h"
 #include "editorwindow.h"
 #include "editorwindow.moc"
@@ -117,6 +118,7 @@ EditorWindow::EditorWindow(const char *name)
 {
     d = new EditorWindowPriv;
 
+    m_themeMenuAction        = 0;
     m_contextMenu            = 0;
     m_canvas                 = 0;
     m_imagePluginLoader      = 0;
@@ -468,6 +470,17 @@ void EditorWindow::setupStandardActions()
     KStdAction::keyBindings(this, SLOT(slotEditKeys()),           actionCollection());
     KStdAction::configureToolbars(this, SLOT(slotConfToolbars()), actionCollection());
     KStdAction::preferences(this, SLOT(slotSetup()),              actionCollection());
+
+    // -----------------------------------------------------------------------------------------
+
+    m_themeMenuAction = new KSelectAction(i18n("&Themes"), 0, actionCollection(), "theme_menu");
+    m_themeMenuAction->setItems(ThemeEngine::instance()->themeNames());
+
+    connect(m_themeMenuAction, SIGNAL(activated(const QString&)),
+            this, SLOT(slotChangeTheme(const QString&)));
+
+    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+            this, SLOT(slotThemeChanged()));
 
     // -- Standard 'Help' menu actions ---------------------------------------------
 
@@ -925,6 +938,8 @@ void EditorWindow::applyStandardSettings()
         m_canvas->setSizePolicy(rightSzPolicy);
     
     d->fullScreenHideToolBar = config->readBoolEntry("FullScreen Hide ToolBar", false);
+
+    slotThemeChanged();
 
     // -- Exposure Indicators Settings --------------------------------------- 
 
@@ -1842,6 +1857,31 @@ void EditorWindow::slotRawCameraList()
                                       "<p>%3 models in the list")
                                       .arg(KDcrawVer).arg(dcrawVer).arg(list.count()),
                                  list, i18n("List of supported RAW camera"));
+}
+
+void EditorWindow::slotThemeChanged()
+{
+    QStringList themes(ThemeEngine::instance()->themeNames());
+    int index = themes.findIndex(ThemeEngine::instance()->getCurrentThemeName());
+    if (index == -1)
+        index = themes.findIndex(i18n("Default"));
+
+    m_themeMenuAction->setCurrentItem(index);
+
+    KConfig* config = kapp->config();
+    config->setGroup("ImageViewer Settings");
+
+    if (!config->readBoolEntry("UseThemeBackgroundColor", true))
+        m_bgColor = config->readColorEntry("BackgroundColor", &Qt::black);
+    else
+        m_bgColor = ThemeEngine::instance()->baseColor();
+
+    m_canvas->setBackgroundColor(m_bgColor);
+}
+
+void EditorWindow::slotChangeTheme(const QString& theme)
+{
+    ThemeEngine::instance()->slotChangeTheme(theme);
 }
 
 }  // namespace Digikam

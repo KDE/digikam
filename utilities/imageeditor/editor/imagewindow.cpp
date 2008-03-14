@@ -68,7 +68,6 @@
 #include "dragobjects.h"
 #include "canvas.h"
 #include "dimginterface.h"
-#include "themeengine.h"
 #include "dimg.h"
 #include "dmetadata.h"
 #include "imageplugin.h"
@@ -93,6 +92,7 @@
 #include "imageattributeswatch.h"
 #include "deletedialog.h"
 #include "metadatahub.h"
+#include "themeengine.h"
 #include "imagewindow.h"
 #include "imagewindow.moc"
 
@@ -118,7 +118,6 @@ public:
         fileTrashDirectlyAction             = 0;
         imageInfoCurrent                    = 0;
         rightSidebar                        = 0;
-        themeMenuAction                     = 0;
     }
 
     // If image editor is launched by camera interface, current
@@ -140,8 +139,6 @@ public:
     KAction                  *fileDeletePermanentlyAction;
     KAction                  *fileDeletePermanentlyDirectlyAction;
     KAction                  *fileTrashDirectlyAction;
-
-    KSelectAction            *themeMenuAction;
 
     ImageInfoList             imageInfoList;
     ImageInfo                *imageInfoCurrent;
@@ -195,6 +192,8 @@ ImageWindow::ImageWindow()
     readSettings();
     applySettings();
     setAutoSaveSettings("ImageViewer Settings");
+    m_themeMenuAction->setItems(ThemeEngine::instance()->themeNames());
+    slotThemeChanged();
 
     //-------------------------------------------------------------
 
@@ -266,9 +265,6 @@ void ImageWindow::setupConnections()
 
     connect(watch, SIGNAL(signalFileMetadataChanged(const KURL &)),
             this, SLOT(slotFileMetadataChanged(const KURL &)));
-
-    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
-            this, SLOT(slotThemeChanged()));
 }
 
 void ImageWindow::setupUserArea()
@@ -327,15 +323,6 @@ void ImageWindow::setupActions()
                           d->rightSidebar, SLOT(slotAssignRatingFiveStar()),
                           actionCollection(), "imageview_ratefivestar");
 
-    // -----------------------------------------------------------------------------------------
-
-    d->themeMenuAction = new KSelectAction(i18n("&Themes"), 0, actionCollection(), "theme_menu");
-    connect(d->themeMenuAction, SIGNAL(activated(const QString&)),
-            this, SLOT(slotChangeTheme(const QString&)));
-
-    d->themeMenuAction->setItems(ThemeEngine::instance()->themeNames());
-    slotThemeChanged();
-
     // -- Special Delete actions ---------------------------------------------------------------
 
     // Pop up dialog to ask user whether to permanently delete
@@ -380,13 +367,6 @@ void ImageWindow::applySettings()
 
     KConfig* config = kapp->config();
     config->setGroup("ImageViewer Settings");
-
-    if (!config->readBoolEntry("UseThemeBackgroundColor", true))
-        m_bgColor = config->readColorEntry("BackgroundColor", &Qt::black);
-    else
-        m_bgColor = ThemeEngine::instance()->baseColor();
-
-    m_canvas->setBackgroundColor(m_bgColor);
 
     AlbumSettings *settings = AlbumSettings::instance();
     m_canvas->setExifOrient(settings->getExifRotate());
@@ -1238,18 +1218,6 @@ void ImageWindow::slotRevert()
         return;
 
     m_canvas->slotRestore();
-}
-
-void ImageWindow::slotThemeChanged()
-{
-    QStringList themes(ThemeEngine::instance()->themeNames());
-    int index = themes.findIndex(AlbumSettings::instance()->getCurrentTheme());
-    if (index == -1)
-        index = themes.findIndex(i18n("Default"));
-
-    d->themeMenuAction->setCurrentItem(index);
-
-    m_canvas->setBackgroundColor(ThemeEngine::instance()->baseColor());
 }
 
 void ImageWindow::slotChangeTheme(const QString& theme)

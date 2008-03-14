@@ -9,7 +9,7 @@
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2005-2006 by Tom Albers <tomalbers@kde.nl>
  * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -94,6 +94,7 @@ extern "C"
 #include "iofilesettingscontainer.h"
 #include "loadingcacheinterface.h"
 #include "savingcontextcontainer.h"
+#include "themeengine.h"
 #include "showfoto.h"
 #include "showfoto.moc"
 
@@ -177,6 +178,13 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
         d->splash->message(i18n("Checking dcraw version"), AlignLeft, white);
 
     KDcrawIface::DcrawBinary::instance()->checkSystem();
+
+    // Populate Themes
+
+    if(d->splash)
+        d->splash->message(i18n("Loading themes"), AlignLeft, white);
+
+    Digikam::ThemeEngine::instance()->scanThemes();
 
     // -- Build the GUI -----------------------------------
 
@@ -490,7 +498,9 @@ void ShowFoto::readSettings()
     if(config->hasKey("Vertical Splitter Sizes") && d->vSplitter)
         d->vSplitter->setSizes(config->readIntListEntry("Vertical Splitter Sizes"));
     else 
-        m_canvas->setSizePolicy(szPolicy);    
+        m_canvas->setSizePolicy(szPolicy);
+
+    Digikam::ThemeEngine::instance()->setCurrentTheme(config->readEntry("Theme", i18n("Default")));
 }
 
 void ShowFoto::saveSettings()
@@ -506,6 +516,8 @@ void ShowFoto::saveSettings()
     if (d->vSplitter)
         config->writeEntry("Vertical Splitter Sizes", d->vSplitter->sizes());
 
+    config->writeEntry("Theme", Digikam::ThemeEngine::instance()->getCurrentThemeName());
+
     config->sync();    
 }
 
@@ -515,9 +527,6 @@ void ShowFoto::applySettings()
 
     KConfig* config = kapp->config();
     config->setGroup("ImageViewer Settings");
-
-    m_bgColor = config->readColorEntry("BackgroundColor", &Qt::black);
-    m_canvas->setBackgroundColor(m_bgColor);
 
     // Current image deleted go to trash ?
     d->deleteItem2Trash = config->readBoolEntry("DeleteItem2Trash", true);

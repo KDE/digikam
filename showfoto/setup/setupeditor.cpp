@@ -6,7 +6,7 @@
  * Date        : 2005-04-02
  * Description : setup showfoto tab.
  * 
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -64,7 +64,11 @@ public:
         exifSetOrientationBox = 0;
         overExposureColor     = 0;
         underExposureColor    = 0;
+        themebackgroundColor  = 0;
+        colorBox              = 0;
     }
+
+    QHBox        *colorBox;
 
     QCheckBox    *hideToolBar;
     QCheckBox    *hideThumbBar;
@@ -73,6 +77,7 @@ public:
     QCheckBox    *useTrash;
     QCheckBox    *exifRotateBox;
     QCheckBox    *exifSetOrientationBox;
+    QCheckBox    *themebackgroundColor;
     
     KColorButton *backgroundColor;
     KColorButton *underExposureColor;
@@ -89,9 +94,15 @@ SetupEditor::SetupEditor(QWidget* parent )
     
     QVGroupBox *interfaceOptionsGroup = new QVGroupBox(i18n("Interface Options"), parent);
     
-    QHBox* colorBox              = new QHBox(interfaceOptionsGroup);    
-    QLabel *backgroundColorlabel = new QLabel( i18n("&Background color:"), colorBox );
-    d->backgroundColor           = new KColorButton(colorBox);
+    d->themebackgroundColor = new QCheckBox(i18n("&Use theme background color"),
+                                            interfaceOptionsGroup);
+
+    QWhatsThis::add( d->themebackgroundColor, i18n("<p>Enable this option to use the background theme "
+                                              "color in the image editor area") );
+
+    d->colorBox                  = new QHBox(interfaceOptionsGroup);    
+    QLabel *backgroundColorlabel = new QLabel( i18n("&Background color:"), d->colorBox);
+    d->backgroundColor           = new KColorButton(d->colorBox);
     backgroundColorlabel->setBuddy(d->backgroundColor);
     QWhatsThis::add( d->backgroundColor, i18n("<p>Select the background color to use "
                                               "for the image editor area.") );
@@ -139,6 +150,9 @@ SetupEditor::SetupEditor(QWidget* parent )
     
     // --------------------------------------------------------
     
+    connect(d->themebackgroundColor, SIGNAL(toggled(bool)),
+            this, SLOT(slotThemeBackgroundColor(bool)));
+
     readSettings();
 }
 
@@ -147,12 +161,18 @@ SetupEditor::~SetupEditor()
     delete d;
 }
 
+void SetupEditor::slotThemeBackgroundColor(bool e)
+{
+    d->colorBox->setEnabled(!e);
+}
+
 void SetupEditor::readSettings()
 {
     KConfig* config = kapp->config();
     QColor Black(Qt::black);
     QColor White(Qt::white);
     config->setGroup("ImageViewer Settings");
+    d->themebackgroundColor->setChecked(config->readBoolEntry("UseThemeBackgroundColor", true));
     d->backgroundColor->setColor( config->readColorEntry("BackgroundColor", &Black ) );
     d->hideToolBar->setChecked(config->readBoolEntry("FullScreen Hide ToolBar", false));
     d->hideThumbBar->setChecked(config->readBoolEntry("FullScreenHideThumbBar", true));
@@ -169,6 +189,7 @@ void SetupEditor::applySettings()
 {
     KConfig* config = kapp->config();
     config->setGroup("ImageViewer Settings");
+    config->writeEntry("UseThemeBackgroundColor", d->themebackgroundColor->isChecked());
     config->writeEntry("BackgroundColor", d->backgroundColor->color());
     config->writeEntry("FullScreen Hide ToolBar", d->hideToolBar->isChecked());
     config->writeEntry("FullScreenHideThumbBar", d->hideThumbBar->isChecked());
