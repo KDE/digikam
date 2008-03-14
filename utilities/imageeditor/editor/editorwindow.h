@@ -44,6 +44,7 @@ class QLabel;
 
 class KToolBarPopupAction;
 class KAction;
+class KSelectAction;
 
 namespace Digikam
 {
@@ -97,6 +98,8 @@ protected:
 
     KAction                 *m_lastAction;
     KAction                 *m_firstAction;
+
+    KSelectAction           *m_themeMenuAction;
 
     KToolBarPopupAction     *m_undoAction;
     KToolBarPopupAction     *m_redoAction;
@@ -175,11 +178,14 @@ protected slots:
 
     void slotNameLabelCancelButtonPressed();
 
+    void slotThemeChanged();
+
     virtual void slotLoadingStarted(const QString& filename);
     virtual void slotLoadingFinished(const QString &filename, bool success);
     virtual void slotSavingStarted(const QString &filename);
 
     virtual void slotSetup(){ setup(); };
+    virtual void slotChangeTheme(const QString& theme);
 
     virtual void slotFilePrint()=0;
     virtual void slotDeleteCurrentItem()=0;

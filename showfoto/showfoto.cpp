@@ -103,6 +103,7 @@ extern "C"
 #include "iofilesettingscontainer.h"
 #include "loadingcacheinterface.h"
 #include "savingcontextcontainer.h"
+#include "themeengine.h"
 #include "showfoto.h"
 #include "showfoto.moc"
 
@@ -194,6 +195,13 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
         d->splash->message(i18n("Checking dcraw version"), Qt::AlignLeft, Qt::white);
 
     KDcrawIface::DcrawBinary::instance()->checkSystem();
+
+    // Populate Themes
+
+    if(d->splash)
+        d->splash->message(i18n("Loading themes"), Qt::AlignLeft, Qt::white);
+
+    Digikam::ThemeEngine::instance()->scanThemes();
 
     // -- Build the GUI -----------------------------------
 
@@ -531,6 +539,8 @@ void ShowFoto::readSettings()
     }
     else
         m_canvas->setSizePolicy(szPolicy);
+
+    Digikam::ThemeEngine::instance()->setCurrentTheme(group.readEntry("Theme", i18n("Default")));
 }
 
 void ShowFoto::saveSettings()
@@ -539,14 +549,16 @@ void ShowFoto::saveSettings()
 
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("ImageViewer Settings");
-    
+
     group.writeEntry("Last Opened Directory", d->lastOpenedDirectory.path() );
     group.writeEntry("Show Thumbnails", d->showBarAction->isChecked());
 
     if (d->vSplitter)
         group.writeEntry("Vertical Splitter State", d->vSplitter->saveState().toBase64());
 
-    group.sync();    
+    group.writeEntry("Theme", Digikam::ThemeEngine::instance()->getCurrentThemeName());
+
+    group.sync();
 }
 
 void ShowFoto::applySettings()
@@ -555,9 +567,6 @@ void ShowFoto::applySettings()
 
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("ImageViewer Settings");
-
-    m_bgColor = group.readEntry("BackgroundColor", QColor(Qt::black));
-    m_canvas->setBackgroundColor(m_bgColor);
 
     // Current image deleted go to trash ?
     d->deleteItem2Trash = group.readEntry("DeleteItem2Trash", true);
@@ -577,7 +586,7 @@ void ShowFoto::applySettings()
     d->thumbBar->setExifRotate(exifRotate);
 
     m_setExifOrientationTag   = group.readEntry("EXIF Set Orientation", true);
-    
+
     d->fullScreenHideThumbBar = group.readEntry("FullScreenHideThumbBar", true);
 
     Digikam::ThumbBarToolTipSettings settings;

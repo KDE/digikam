@@ -48,6 +48,7 @@
 #include <kxmlguifactory.h>
 #include <ktoolinvocation.h>
 #include <kaction.h>
+#include <kselectaction.h>
 #include <kactioncollection.h>
 #include <kapplication.h>
 #include <kconfig.h>
@@ -103,6 +104,7 @@
 #include "savingcontextcontainer.h"
 #include "loadingcacheinterface.h"
 #include "slideshowsettings.h"
+#include "themeengine.h"
 #include "editorwindowprivate.h"
 #include "editorwindow.h"
 #include "editorwindow.moc"
@@ -118,6 +120,7 @@ EditorWindow::EditorWindow(const char *name)
     setObjectName(name);
     setWindowFlags(Qt::Window);
 
+    m_themeMenuAction        = 0;
     m_contextMenu            = 0;
     m_canvas                 = 0;
     m_imagePluginLoader      = 0;
@@ -486,6 +489,17 @@ void EditorWindow::setupStandardActions()
     KStandardAction::keyBindings(this, SLOT(slotEditKeys()),           actionCollection());
     KStandardAction::configureToolbars(this, SLOT(slotConfToolbars()), actionCollection());
     KStandardAction::preferences(this, SLOT(slotSetup()),              actionCollection());
+
+    // ---------------------------------------------------------------------------------
+
+    m_themeMenuAction = new KSelectAction(i18n("&Themes"), this);
+    m_themeMenuAction->setItems(ThemeEngine::instance()->themeNames());
+    connect(m_themeMenuAction, SIGNAL(triggered(const QString&)), 
+            this, SLOT(slotChangeTheme(const QString&)));
+    actionCollection()->addAction("theme_menu", m_themeMenuAction);
+
+    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+            this, SLOT(slotThemeChanged()));
 
     // -- Standard 'Help' menu actions ---------------------------------------------
 
@@ -880,6 +894,8 @@ void EditorWindow::applyStandardSettings()
         m_canvas->setSizePolicy(rightSzPolicy);
 
     d->fullScreenHideToolBar = group.readEntry("FullScreen Hide ToolBar", false);
+
+    slotThemeChanged();
 
     // -- Exposure Indicators Settings --------------------------------------- 
 
@@ -1769,6 +1785,31 @@ void EditorWindow::slotRawCameraList()
                                       "<p>%3 models in the list", 
                                       KDcrawVer, dcrawVer, list.count()),
                                  list, i18n("List of supported RAW camera"));
+}
+
+void EditorWindow::slotThemeChanged()
+{
+    QStringList themes(ThemeEngine::instance()->themeNames());
+    int index = themes.indexOf(ThemeEngine::instance()->getCurrentThemeName());
+    if (index == -1)
+        index = themes.indexOf(i18n("Default"));
+
+    m_themeMenuAction->setCurrentItem(index);
+
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group("ImageViewer Settings");
+
+    if (!group.readEntry("UseThemeBackgroundColor", true))
+        m_bgColor = group.readEntry("BackgroundColor", QColor(Qt::black));
+    else
+        m_bgColor = ThemeEngine::instance()->baseColor();
+
+    m_canvas->setBackgroundColor(m_bgColor);
+}
+
+void EditorWindow::slotChangeTheme(const QString& theme)
+{
+    ThemeEngine::instance()->slotChangeTheme(theme);
 }
 
 }  // namespace Digikam

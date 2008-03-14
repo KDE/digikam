@@ -72,6 +72,7 @@ SET(digikam_LIB_SRCS
                         ${libjpegutils_SRCS}
                         ${libgreycstoration_SRCS}
                         ${libthreadimageio_SRCS}
+                        ${libthemeengine_SRCS}
 
                         # widgets and dialogs
                         ${libcommonwidgets_SRCS}
