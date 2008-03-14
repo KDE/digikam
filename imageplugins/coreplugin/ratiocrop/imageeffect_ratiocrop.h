@@ -77,6 +77,7 @@ private slots:
     void slotCustomRatioChanged();
     void slotCustomNRatioChanged(int a);
     void slotCustomDRatioChanged(int a);
+    void slotPreciseCropChanged(bool a);
     void slotOrientChanged(int o);
     void slotAutoOrientChanged(bool a);
     void slotRatioChanged(int a);
@@ -108,6 +109,7 @@ private:
     QCheckBox            *m_flipHorBox;
     QCheckBox            *m_flipVerBox;
     QCheckBox            *m_autoOrientation;
+    QCheckBox            *m_preciseCrop;
 
     QSpinBox             *m_guideSize;
 
