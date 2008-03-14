@@ -6,6 +6,7 @@ ImageEditor    : Raw files can be decoded in 16 bits color depth without to use 
                  An auto-gamma and auto-white balance is processed using the same method than dcraw
 		 with 8 bits color depth RAW image decoding. This usefull to to have a speed-up RAW 
 		 workflow with suitable images.
+Showfoto       : Added support of color theme schemes.
 
 digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
