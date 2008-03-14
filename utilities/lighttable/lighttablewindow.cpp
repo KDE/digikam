@@ -254,6 +254,9 @@ void LightTableWindow::setupConnections()
     connect(d->statusProgressBar, SIGNAL(signalCancelButtonPressed()),
            this, SLOT(slotProgressBarCancelButtonPressed()));
 
+    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+            this, SLOT(slotThemeChanged()));
+
     // Thumbs bar connections ---------------------------------------
 
     connect(d->barView, SIGNAL(signalSetItemOnLeftPanel(const ImageInfo &)),
@@ -334,9 +337,6 @@ void LightTableWindow::setupConnections()
 
     connect(d->previewView, SIGNAL(signalRightPanelLeftButtonClicked()),
             this, SLOT(slotRightPanelLeftButtonClicked()));
-
-    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
-            this, SLOT(slotThemeChanged()));
 }
 
 void LightTableWindow::setupActions()
