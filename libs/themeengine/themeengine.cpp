@@ -328,9 +328,14 @@ void ThemeEngine::changePalette()
     kapp->setPalette(plt, true);
 }
 
-Theme* ThemeEngine::getCurrentTheme()
+Theme* ThemeEngine::getCurrentTheme() const
 {
     return d->currTheme;
+}
+
+QString ThemeEngine::getCurrentThemeName() const
+{
+    return d->currTheme->name;
 }
 
 void ThemeEngine::buildDefaultTheme()
