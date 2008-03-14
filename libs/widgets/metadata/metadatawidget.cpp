@@ -295,7 +295,7 @@ void MetadataWidget::slotCopy2Clipboard(void)
             QTreeWidgetItem *item2 = 0;
             do
             {
-                item2 = lvItem->child(j);
+                item2 = dynamic_cast<QTreeWidgetItem*>(lvItem)->child(j);
                 MetadataListViewItem* lvItem2 = dynamic_cast<MetadataListViewItem*>(item2);
                 if (lvItem2)
                 {
@@ -338,7 +338,7 @@ void MetadataWidget::slotPrintMetadata(void)
             QTreeWidgetItem *item2 = 0;
             do
             {
-                item2 = lvItem->child(j);
+                item2 = dynamic_cast<QTreeWidgetItem*>(lvItem)->child(j);
                 MetadataListViewItem* lvItem2 = dynamic_cast<MetadataListViewItem*>(item2);
                 if (lvItem2)
                 {

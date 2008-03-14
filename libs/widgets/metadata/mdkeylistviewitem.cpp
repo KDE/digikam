@@ -37,12 +37,13 @@
 #include "themeengine.h"
 #include "ddebug.h"
 #include "mdkeylistviewitem.h"
+#include "mdkeylistviewitem.moc"
 
 namespace Digikam
 {
 
 MdKeyListViewItem::MdKeyListViewItem(QTreeWidget *parent, const QString& key)
-                 : QTreeWidgetItem(parent)
+                 : QObject(parent), QTreeWidgetItem(parent)
 {
     m_decryptedKey = key;
 
@@ -67,8 +68,6 @@ MdKeyListViewItem::MdKeyListViewItem(QTreeWidget *parent, const QString& key)
 
     setFirstColumnSpanned(true);
     setTextAlignment(0, Qt::AlignCenter);
-    setBackground(0, QBrush(ThemeEngine::instance()->thumbSelColor()));
-    setBackground(1, QBrush(ThemeEngine::instance()->thumbSelColor()));
     QFont fn0(font(0));
     fn0.setBold(true);
     fn0.setItalic(false);
@@ -77,9 +76,11 @@ MdKeyListViewItem::MdKeyListViewItem(QTreeWidget *parent, const QString& key)
     fn1.setBold(true);
     fn1.setItalic(false);
     setFont(1, fn1);
-    setForeground(0, QBrush(ThemeEngine::instance()->textRegColor()));
-    setForeground(1, QBrush(ThemeEngine::instance()->textRegColor()));
     setText(0, m_decryptedKey);
+    slotThemeChanged();
+
+    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+            this, SLOT(slotThemeChanged()));
 }
 
 MdKeyListViewItem::~MdKeyListViewItem()
@@ -89,6 +90,14 @@ MdKeyListViewItem::~MdKeyListViewItem()
 QString MdKeyListViewItem::getMdKey()
 {
     return m_decryptedKey;
+}
+
+void MdKeyListViewItem::slotThemeChanged()
+{
+    setBackground(0, QBrush(ThemeEngine::instance()->thumbSelColor()));
+    setBackground(1, QBrush(ThemeEngine::instance()->thumbSelColor()));
+    setForeground(0, QBrush(ThemeEngine::instance()->textRegColor()));
+    setForeground(1, QBrush(ThemeEngine::instance()->textRegColor()));
 }
 
 }  // namespace Digikam

@@ -27,6 +27,7 @@
 
 // Qt includes.
 
+#include <QObject>
 #include <QString>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
@@ -38,8 +39,9 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT MdKeyListViewItem : public QTreeWidgetItem
+class DIGIKAM_EXPORT MdKeyListViewItem : public QObject, public QTreeWidgetItem
 {
+    Q_OBJECT
 
 public:
 
@@ -47,6 +49,10 @@ public:
     ~MdKeyListViewItem();
 
     QString getMdKey();
+
+public slots:
+
+    void slotThemeChanged();
 
 private:
 
