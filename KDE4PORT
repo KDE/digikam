@@ -132,6 +132,7 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
     lighttableview.cpp                  Gilles                 X       DONE
     lighttablebar.cpp                   Gilles                 X       DONE
     lighttablewindow.cpp                Gilles                 X       DONE
+|---kipiiface                           Gilles                 X       DONE        DONE
 |---scripts                             Gilles                         DONE        -
 |---setup                               Gilles          X      X       DONE
 |---slideshow                           Laurent         X      X       DONE        DONE
@@ -182,7 +183,6 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
     kdateedit.cpp                       Gilles                 X       DONE
     kdatepickerpopup.cpp                Gilles                 X       DONE
     kdatetimeedit.cpp                   Gilles                 X       DONE
-    kipiinterface.cpp                   Gilles                 X       DONE
     main.cpp                            Gilles                 X       DONE
     mediaplayerview.cpp                 Gilles                 X       DONE                 Must be ported to Phonon API.
     metadatahub.cpp                     Gilles                 X       DONE
