@@ -59,7 +59,9 @@ public:
     void    setCurrentTheme(const QString& name);
     void    setCurrentTheme(const Theme& theme, const QString& name,
                             bool loadFromDisk=false);
-    Theme*  getCurrentTheme();
+
+    Theme*  getCurrentTheme() const;
+    QString getCurrentThemeName() const;
 
     QColor  baseColor()     const;
     QColor  thumbSelColor() const;
