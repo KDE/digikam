@@ -99,8 +99,8 @@ AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
     connect(d->textFilter, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotTextFilterChanged(const QString&)));
 
-    connect(AlbumLister::instance(), SIGNAL(signalItemsTextFilterMatch(bool)),
-            d->textFilter, SLOT(slotSearchResult(bool)));
+    //connect(AlbumLister::instance(), SIGNAL(signalItemsTextFilterMatch(bool)),
+    //        d->textFilter, SLOT(slotSearchResult(bool)));
 
     connect(AlbumLister::instance(), SIGNAL(signalItemsFilterMatch(bool)),
             this, SLOT(slotItemsFilterMatch(bool)));
