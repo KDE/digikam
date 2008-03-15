@@ -40,6 +40,7 @@
 // Libkexiv2 includes.
 
 #include <libkexiv2/kexiv2.h>
+#include <libkexiv2/version.h>
 
 // Libkdcraw includes.
 
@@ -69,7 +70,15 @@ int main(int argc, char *argv[])
 
     QString Exiv2Ver    = KExiv2Iface::KExiv2::Exiv2Version();
 
-    QString libInfo     = QString(I18N_NOOP("Using KExiv2 library version %1")).arg(KExiv2Iface::KExiv2::version()) +
+    QString Kexiv2Ver;
+    
+#if KEXIV2_VERSION <= 0x000106
+    Kexiv2Ver = QString(kexiv2_version);
+#else
+    Kexiv2Ver = KExiv2Iface::KExiv2::version();
+#endif
+
+    QString libInfo     = QString(I18N_NOOP("Using KExiv2 library version %1")).arg(Kexiv2Ver) +
                           QString("\n") +                           
                           QString(I18N_NOOP("Using Exiv2 library version %1")).arg(Exiv2Ver) +
                           QString("\n") +                           
