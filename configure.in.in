@@ -169,7 +169,7 @@ CXXFLAGS="$CXXFLAGS -DQT_CLEAN_NAMESPACE"
 if test "$PKGCONFIGFOUND" = "yes" ; then
    have_libkipi=no
 
-   KDE_PKG_CHECK_MODULES(LIBKIPI, libkipi >= 0.1.6,
+   KDE_PKG_CHECK_MODULES(LIBKIPI, libkipi >= 0.1.5,
 	 	         have_libkipi=yes, have_libkipi=no)
 
    if test "x$have_libkipi" = "xno"; then
@@ -200,7 +200,7 @@ fi
 if test "$PKGCONFIGFOUND" = "yes" ; then
    have_libkexiv2=no
 
-   KDE_PKG_CHECK_MODULES(LIBKEXIV2, libkexiv2 >= 0.1.7,
+   KDE_PKG_CHECK_MODULES(LIBKEXIV2, libkexiv2 >= 0.1.6,
                          have_libkexiv2=yes, have_libkexiv2=no)
 
    if test "x$have_libkexiv2" = "xno"; then
