@@ -88,15 +88,12 @@ private:
     bool trashPriv(const KUrl::List& urls);
 
     QPixmap getTagThumbnailPriv(TAlbum *album);
-    QPixmap getTagThumbnailPriv(const QString &name, int size);
 
 private slots:
 
     void slotResult( KIO::Job * job );
     void slotGotThumbnailFromIcon(Album *album, const QPixmap& pix);
     void slotLoadThumbnailFailed(Album *album);
-    void slotGotThumbnailFromIcon(const KUrl& url, const QPixmap& pix);
-    void slotLoadThumbnailFailed();
 
 private:
 

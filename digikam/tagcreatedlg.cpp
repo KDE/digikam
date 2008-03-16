@@ -161,10 +161,13 @@ TagCreateDlg::TagCreateDlg(QWidget *parent, TAlbum* album)
 
     // by default assign the icon of the parent (if not root)
     // to this new tag
-    if (!album->isRoot())
+    if (album->isRoot())
+        d->iconButton->setIcon(KIconLoader::global()->loadIcon(d->icon, KIconLoader::NoGroup, 20));
+    else
+    {
         d->icon = album->icon();
-    
-    d->iconButton->setIcon(SyncJob::getTagThumbnail(d->icon, 20));
+        d->iconButton->setIcon(SyncJob::getTagThumbnail(album));
+    }
 
     enableButtonOk(!d->titleEdit->text().isEmpty());
     adjustSize();
@@ -195,7 +198,7 @@ void TagCreateDlg::slotIconChange()
         return;
 
     d->icon = icon;
-    d->iconButton->setIcon(SyncJob::getTagThumbnail(d->icon, 20));
+    d->iconButton->setIcon(KIconLoader::global()->loadIcon(d->icon, KIconLoader::NoGroup, 20));
 }
 
 void TagCreateDlg::slotTitleChanged(const QString& newtitle)
@@ -336,7 +339,7 @@ TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album)
     // --------------------------------------------------------
 
     d->icon = album->icon();
-    d->iconButton->setIcon(SyncJob::getTagThumbnail(d->icon, 20));
+    d->iconButton->setIcon(SyncJob::getTagThumbnail(album));
 
     enableButtonOk(!d->titleEdit->text().isEmpty());
     adjustSize();
@@ -360,9 +363,9 @@ QString TagEditDlg::icon() const
 void TagEditDlg::slotIconResetClicked()
 {
     d->icon = QString("tag");
-    d->iconButton->setIcon(SyncJob::getTagThumbnail(d->icon, 20));
+    d->iconButton->setIcon(KIconLoader::global()->loadIcon(d->icon, KIconLoader::NoGroup, 20));
 }
-    
+
 void TagEditDlg::slotIconChange()
 {
     KIconDialog dlg(this);
@@ -373,7 +376,7 @@ void TagEditDlg::slotIconChange()
         return;
 
     d->icon = icon;
-    d->iconButton->setIcon(SyncJob::getTagThumbnail(d->icon, 20));
+    d->iconButton->setIcon(KIconLoader::global()->loadIcon(d->icon, KIconLoader::NoGroup, 20));
 }
 
 void TagEditDlg::slotTitleChanged(const QString& newtitle)

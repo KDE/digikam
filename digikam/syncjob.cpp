@@ -113,12 +113,6 @@ QPixmap SyncJob::getTagThumbnail(TAlbum *album)
     return sj.getTagThumbnailPriv(album);
 }
 
-QPixmap SyncJob::getTagThumbnail(const QString &name, int size)
-{
-    SyncJob sj;
-    return sj.getTagThumbnailPriv(name, size);
-}
-
 bool SyncJob::delPriv(const KUrl::List& urls)
 {
     KIO::Job* job = KIO::del( urls );
@@ -198,70 +192,6 @@ void SyncJob::slotGotThumbnailFromIcon(Album *album, const QPixmap& pix)
         *d->thumbnail = pix;
         quitWaitingLoop();
     }
-}
-
-QPixmap SyncJob::getTagThumbnailPriv(const QString &name, int size)
-{
-    d->thumbnailSize = size;
-
-    if (d->thumbnail)
-        delete d->thumbnail;
-
-    d->thumbnail = new QPixmap;
-
-    if(name.startsWith("/"))
-    {
-        ThumbnailJob *job = new ThumbnailJob(name,
-                                             ThumbnailSize::Tiny,
-                                             false,
-                                             AlbumSettings::instance()->getExifRotate());
-
-        connect(job, SIGNAL(signalThumbnail(const KUrl&, const QPixmap&)),
-                this, SLOT(slotGotThumbnailFromIcon(const KUrl&, const QPixmap&)));
-
-        connect(job, SIGNAL(signalFailed(const KUrl&)),
-                this, SLOT(slotLoadThumbnailFailed()));
-
-        enterWaitingLoop();
-        job->kill();
-    }
-    else
-    {
-        KIconLoader *iconLoader = KIconLoader::global();
-        *d->thumbnail = iconLoader->loadIcon(name, KIconLoader::NoGroup, d->thumbnailSize);
-    }
-    return *d->thumbnail;
-}
-
-void SyncJob::slotLoadThumbnailFailed()
-{
-    // TODO: setting _lastError*
-    quitWaitingLoop();
-}
-
-void SyncJob::slotGotThumbnailFromIcon(const KUrl&, const QPixmap& pix)
-{
-    if(!pix.isNull() && (d->thumbnailSize < ThumbnailSize::Tiny))
-    {
-        int w1 = pix.width();
-        int w2 = d->thumbnailSize;
-        int h1 = pix.height();
-        int h2 = d->thumbnailSize;
-
-        if (d->thumbnail)
-            delete d->thumbnail;
-
-        d->thumbnail = new QPixmap(w2, h2);
-        QPainter p(d->thumbnail);
-        p.drawPixmap(0, 0, pix, (w1-w2)/2, (h1-h2)/2, w2, h2);
-        p.end();
-    }
-    else
-    {
-        *d->thumbnail = pix;
-    }
-
-    quitWaitingLoop();
 }
 
 void SyncJob::enterWaitingLoop()
