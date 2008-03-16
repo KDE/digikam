@@ -2,10 +2,6 @@
 INCLUDE_DIRECTORIES( ../digikam
                      ../libs/dmetadata 
                      ../libs/dimg 
-                     ../libs/widgets/metadata
-                     ../libs/histogram
-                     ../libs/levels
-                     ../libs/lprof/
                      ../libs/threadimageio
                      ../libs/database 
                      ../libs/database/sqlite2
