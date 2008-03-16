@@ -50,8 +50,8 @@ public:
 
 protected:
 
-    void buildGroup(QString &sql, SearchXmlReader &reader, QList<QVariant> *boundValues) const;
-    void buildField(QString &sql, SearchXmlReader &reader, const QString &name, QList<QVariant> *boundValues) const;
+    void buildGroup(QString &sql, SearchXmlCachingReader &reader, QList<QVariant> *boundValues) const;
+    void buildField(QString &sql, SearchXmlCachingReader &reader, const QString &name, QList<QVariant> *boundValues) const;
 
     QString possibleDate(const QString& str, bool& exact) const;
 

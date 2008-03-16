@@ -66,7 +66,7 @@ QString ImageQueryBuilder::buildQuery(const QString &q, QList<QVariant> *boundVa
 
 QString ImageQueryBuilder::buildQueryFromXml(const QString &xml, QList<QVariant> *boundValues) const
 {
-    SearchXmlReader reader(xml);
+    SearchXmlCachingReader reader(xml);
     QString sql;
     bool firstGroup = true;
 
@@ -90,11 +90,12 @@ QString ImageQueryBuilder::buildQueryFromXml(const QString &xml, QList<QVariant>
     return sql;
 }
 
-void ImageQueryBuilder::buildGroup(QString &sql, SearchXmlReader &reader, QList<QVariant> *boundValues) const
+void ImageQueryBuilder::buildGroup(QString &sql, SearchXmlCachingReader &reader, QList<QVariant> *boundValues) const
 {
     sql += " (";
 
     bool firstField = true;
+    bool hasContent = false;
     while (!reader.atEnd())
     {
         reader.readNext();
@@ -105,6 +106,7 @@ void ImageQueryBuilder::buildGroup(QString &sql, SearchXmlReader &reader, QList<
         // subgroup
         if (reader.isGroupElement())
         {
+            hasContent = true;
             addSqlOperator(sql, reader.groupOperator(), firstField);
             if (firstField)
                 firstField = false;
@@ -114,6 +116,7 @@ void ImageQueryBuilder::buildGroup(QString &sql, SearchXmlReader &reader, QList<
 
         if (reader.isFieldElement())
         {
+            hasContent = true;
             addSqlOperator(sql, reader.fieldOperator(), firstField);
             if (firstField)
                 firstField = false;
@@ -122,6 +125,9 @@ void ImageQueryBuilder::buildGroup(QString &sql, SearchXmlReader &reader, QList<
         }
     }
 
+    if (!hasContent)
+        sql += " 0 ";
+
     sql += ") ";
 }
 
@@ -129,14 +135,14 @@ class FieldQueryBuilder
 {
 public:
 
-    FieldQueryBuilder(QString &sql, SearchXmlReader &reader,
+    FieldQueryBuilder(QString &sql, SearchXmlCachingReader &reader,
                       QList<QVariant> *boundValues, SearchXml::Relation relation)
        : sql(sql), reader(reader), boundValues(boundValues), relation(relation)
     {
     }
 
     QString &sql;
-    SearchXmlReader &reader;
+    SearchXmlCachingReader &reader;
     QList<QVariant> *boundValues;
     SearchXml::Relation relation;
 
@@ -293,7 +299,7 @@ public:
 };
 
 
-void ImageQueryBuilder::buildField(QString &sql, SearchXmlReader &reader, const QString &name, QList<QVariant> *boundValues) const
+void ImageQueryBuilder::buildField(QString &sql, SearchXmlCachingReader &reader, const QString &name, QList<QVariant> *boundValues) const
 {
     SearchXml::Relation relation = reader.fieldRelation();
     FieldQueryBuilder fieldQuery(sql, reader, boundValues, relation);
@@ -303,7 +309,7 @@ void ImageQueryBuilder::buildField(QString &sql, SearchXmlReader &reader, const 
     }
     else if (name == "albumname")
     {
-        fieldQuery.addStringField("Album.relativePath");
+        fieldQuery.addStringField("Albums.relativePath");
     }
     else if (name == "albumcaption")
     {
@@ -347,7 +353,7 @@ void ImageQueryBuilder::buildField(QString &sql, SearchXmlReader &reader, const 
     else if (name == "tagname")
     {
         QString tagname = "%" + reader.value() + "%";
-        if (relation == SearchXml::Equal)
+        if (relation == SearchXml::Equal || relation == SearchXml::Like)
         {
             sql += " (Images.id IN "
                    "   (SELECT imageid FROM ImageTags "
@@ -355,7 +361,7 @@ void ImageQueryBuilder::buildField(QString &sql, SearchXmlReader &reader, const 
                    "   (SELECT id FROM Tags WHERE name LIKE ?))) ";
             *boundValues << tagname;
         }
-        else if (relation == SearchXml::Unequal)
+        else if (relation == SearchXml::Unequal || relation == SearchXml::NotLike)
         {
             sql += " (Images.id NOT IN "
                    "   (SELECT imageid FROM ImageTags "
@@ -539,7 +545,7 @@ void ImageQueryBuilder::buildField(QString &sql, SearchXmlReader &reader, const 
                " (SELECT id FROM ImageComments "
                "  WHERE type=? AND comment ";
         ImageQueryBuilder::addSqlRelation(sql, relation);
-        sql += " ?) ";
+        sql += " ?)) ";
         *boundValues << DatabaseComment::Comment << fieldQuery.prepareForLike(reader.value());
     }
     else if (name == "commentauthor")
@@ -572,11 +578,23 @@ void ImageQueryBuilder::buildField(QString &sql, SearchXmlReader &reader, const 
     else if (name == "keyword")
     {
         // keyword is the common search in the text fields
+
+        addSqlOperator(sql, SearchXml::Or, true);
         buildField(sql, reader, "albumname", boundValues);
+
+        addSqlOperator(sql, SearchXml::Or, false);
         buildField(sql, reader, "filename", boundValues);
+
+        addSqlOperator(sql, SearchXml::Or, false);
         buildField(sql, reader, "tagname", boundValues);
+
+        addSqlOperator(sql, SearchXml::Or, false);
         buildField(sql, reader, "albumcaption", boundValues);
+
+        addSqlOperator(sql, SearchXml::Or, false);
         buildField(sql, reader, "albumcollection", boundValues);
+
+        addSqlOperator(sql, SearchXml::Or, false);
         buildField(sql, reader, "comment", boundValues);
     }
 }
