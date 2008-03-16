@@ -402,5 +402,78 @@ QString SearchXmlWriter::keywordSearch(const QString &keyword)
 }
 
 
+
+KeywordSearchReader::KeywordSearchReader(const QString &xml)
+    : SearchXmlReader(xml)
+{
+}
+
+QStringList KeywordSearchReader::keywords()
+{
+    QStringList list;
+
+    SearchXml::Element element;
+    while (!atEnd())
+    {
+        element = readNext();
+
+        if (element == SearchXml::Group)
+        {
+            readGroup(list);
+        }
+    }
+
+    return list;
+}
+
+void KeywordSearchReader::readGroup(QStringList &list)
+{
+    SearchXml::Element element;
+    while (!atEnd())
+    {
+        element = readNext();
+
+        if (element == SearchXml::Field)
+        {
+            QString value = readField();
+            if (!value.isEmpty())
+                list << value;
+        }
+
+        if (element == SearchXml::GroupEnd)
+            return;
+    }
+}
+
+QString KeywordSearchReader::readField()
+{
+    if (fieldName() == "keyword")
+        return value();
+    return QString();
+}
+
+
+KeywordSearchWriter::KeywordSearchWriter()
+    : SearchXmlWriter()
+{
+}
+
+QString KeywordSearchWriter::xml(const QStringList &keywordList)
+{
+    writeGroup();
+    foreach (QString keyword, keywordList)
+    {
+        writeField("keyword", SearchXml::Like);
+        writeValue(keyword);
+        finishField();
+    }
+    finishGroup();
+    finish();
+
+    return SearchXmlWriter::xml();
+}
+
+
+
 }
 

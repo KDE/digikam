@@ -213,6 +213,29 @@ protected:
     QString m_xml;
 };
 
+class KeywordSearchReader : public SearchXmlReader
+{
+public:
+
+    KeywordSearchReader(const QString &xml);
+
+    QStringList keywords();
+
+private:
+
+    void readGroup(QStringList &list);
+    QString readField();
+};
+
+class KeywordSearchWriter : public SearchXmlWriter
+{
+public:
+
+    KeywordSearchWriter();
+
+    QString xml(const QStringList &keywordList);
+};
+
 }
 
 #endif
