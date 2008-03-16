@@ -67,7 +67,6 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
 |---lprof                               Gilles          X      X       DONE        -
 |---themeengine                         Gilles                 X       DONE        DONE
 |---threadimageio                       Marcel          X      X       DONE
-|---thumbbar                            Gilles          X      X       DONE
 |---whitebalance                        Gilles          X      X       DONE
 |---widgets
 |-----common
