@@ -203,6 +203,7 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
     timelinefolderview.cpp              Gilles                 X       DONE
     timelineview.cpp                    Gilles                 X       DONE                 Port is not yet adapted to new DB schema. Search tools are temporally broken.
     timelinewidget.cpp                  Gilles                 X       DONE
+    treefolderitem.cpp                  Gilles                 X       DONE       DONE
     welcomepageview.cpp                 Laurent                X       DONE
 
 |-imageplugins
