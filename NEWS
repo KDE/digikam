@@ -3,6 +3,7 @@ digiKam 0.10.0 - Release date: 2008-xx-xx
 NEW FEATURES:
 
 General        : Ported to CMake/Qt4/KDE4.
+General        : Thumbs KIO-Slave removed. digiKam now use multi-threading to generate thumnails.
 General        : Removed all X11 library dependencies. Code is now portable under MACOS-X and Win32.
 General        : Support of XMP metadata (require Exiv2 0.16).
 General        : Hardware handling using KDE4 Solid interface.
