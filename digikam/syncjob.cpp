@@ -7,6 +7,8 @@
  * Description : sync IO jobs.
  *
  * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Concept copied from kdelibs/kio/kio/netaccess.h/cpp
  *   This file is part of the KDE libraries
@@ -47,7 +49,6 @@
 
 #include "ddebug.h"
 #include "albumsettings.h"
-#include "thumbnailjob.h"
 #include "thumbnailsize.h"
 #include "albumthumbnailloader.h"
 #include "album.h"
