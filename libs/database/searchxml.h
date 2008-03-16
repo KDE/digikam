@@ -31,6 +31,7 @@
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
 #include <QStringList>
+#include <QVariant>
 
 // Local includes
 
@@ -110,6 +111,8 @@ public:
     SearchXml::Operator groupOperator() const;
     /** Returns the (optional) group caption. Only valid if the current element is a group. */
     QString             groupCaption() const;
+    /** Returns the default field operator. This operator can be overridden by a specific fieldOperator(). */
+    SearchXml::Operator defaultFieldOperator() const;
 
     /** Returns the field attributes. Only valid if the current element is a field.
         fieldOperator returns the default operator if the field has not specified any. */
@@ -137,7 +140,6 @@ protected:
     SearchXml::Relation readRelation(const QString &, SearchXml::Relation) const;
     SearchXml::Operator m_defaultFieldOperator;
 };
-
 
 class DIGIKAM_EXPORT SearchXmlWriter : public QXmlStreamWriter
 {
@@ -213,7 +215,7 @@ protected:
     QString m_xml;
 };
 
-class KeywordSearchReader : public SearchXmlReader
+class DIGIKAM_EXPORT KeywordSearchReader : public SearchXmlReader
 {
 public:
 
@@ -227,7 +229,7 @@ private:
     QString readField();
 };
 
-class KeywordSearchWriter : public SearchXmlWriter
+class DIGIKAM_EXPORT KeywordSearchWriter : public SearchXmlWriter
 {
 public:
 
@@ -235,6 +237,49 @@ public:
 
     QString xml(const QStringList &keywordList);
 };
+
+
+class DIGIKAM_EXPORT SearchXmlCachingReader : public SearchXmlReader
+{
+public:
+
+    /**
+        This class has the same semantics as SearchXmlReader,
+        but performs some caching and is thus much more relaxed than SearchXmlReader
+        about the calling order of methods:
+        With this class, you can access properties of a group until the next group
+        is read, access properties and the value of a field until the next field is read,
+        with all calls possible multiple times.
+    */
+
+    SearchXmlCachingReader(const QString &xml);
+    SearchXml::Element  readNext();
+
+    SearchXml::Operator groupOperator() const;
+    QString             groupCaption() const;
+
+    SearchXml::Operator fieldOperator() const;
+    QString             fieldName() const;
+    SearchXml::Relation fieldRelation() const;
+    QString             value();
+    int                 valueToInt();
+    double              valueToDouble();
+    QDateTime           valueToDateTime();
+    QList<int>          valueToIntList();
+    QStringList         valueToStringList();
+
+protected:
+
+    SearchXml::Operator m_groupOperator;
+    QString             m_groupCaption;
+    SearchXml::Operator m_fieldOperator;
+    QString             m_fieldName;
+    SearchXml::Relation m_fieldRelation;
+    QVariant            m_value;
+    bool                m_readValue;
+};
+
+
 
 }
 

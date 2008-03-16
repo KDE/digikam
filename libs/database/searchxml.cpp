@@ -95,6 +95,11 @@ QString SearchXmlReader::groupCaption() const
     return attributes().value("caption").toString();
 }
 
+SearchXml::Operator SearchXmlReader::defaultFieldOperator() const
+{
+    return m_defaultFieldOperator;
+}
+
 SearchXml::Operator SearchXmlReader::fieldOperator() const
 {
     return readOperator("operator", m_defaultFieldOperator);
@@ -472,6 +477,118 @@ QString KeywordSearchWriter::xml(const QStringList &keywordList)
 
     return SearchXmlWriter::xml();
 }
+
+SearchXmlCachingReader::SearchXmlCachingReader(const QString &xml)
+    : SearchXmlReader(xml),
+      m_groupOperator(SearchXml::And), m_fieldOperator(SearchXml::And),
+      m_fieldRelation(SearchXml::Equal), m_readValue(false)
+{
+}
+
+SearchXml::Element SearchXmlCachingReader::readNext()
+{
+    SearchXml::Element element = SearchXmlReader::readNext();
+    if (element == SearchXml::Group)
+    {
+        m_groupOperator = SearchXmlReader::groupOperator();
+        m_groupCaption  = SearchXmlReader::groupCaption();
+    }
+    else if (element == SearchXml::Field)
+    {
+        m_fieldOperator = SearchXmlReader::fieldOperator();
+        m_fieldName     = SearchXmlReader::fieldName();
+        m_fieldRelation = SearchXmlReader::fieldRelation();
+        m_readValue     = false;
+    }
+    return element;
+}
+
+SearchXml::Operator SearchXmlCachingReader::groupOperator() const
+{
+    return m_groupOperator;
+}
+
+QString SearchXmlCachingReader::groupCaption() const
+{
+    return m_groupCaption;
+}
+
+SearchXml::Operator SearchXmlCachingReader::fieldOperator() const
+{
+    return m_fieldOperator;
+}
+
+QString SearchXmlCachingReader::fieldName() const
+{
+    return m_fieldName;
+}
+
+SearchXml::Relation SearchXmlCachingReader::fieldRelation() const
+{
+    return m_fieldRelation;
+}
+
+QString SearchXmlCachingReader::value()
+{
+    if (!m_readValue)
+    {
+        m_value = SearchXmlReader::value();
+        m_readValue = true;
+    }
+    return m_value.toString();
+}
+
+int SearchXmlCachingReader::valueToInt()
+{
+    if (!m_readValue)
+    {
+        m_value = SearchXmlReader::valueToInt();
+        m_readValue = true;
+    }
+    return m_value.toInt();
+}
+
+double SearchXmlCachingReader::valueToDouble()
+{
+    if (!m_readValue)
+    {
+        m_value = SearchXmlReader::valueToDouble();
+        m_readValue = true;
+    }
+    return m_value.toDouble();
+}
+
+QDateTime SearchXmlCachingReader::valueToDateTime()
+{
+    if (!m_readValue)
+    {
+        m_value = SearchXmlReader::valueToDateTime();
+        m_readValue = true;
+    }
+    return m_value.toDateTime();
+}
+
+QList<int> SearchXmlCachingReader::valueToIntList()
+{
+    // with no QVariant support for QList<int>,
+    // we convert here from string list (equivalent result)
+    QStringList list = valueToStringList();
+    QList<int> intList;
+    foreach (QString s, list)
+        intList << s.toInt();
+    return intList;
+}
+
+QStringList SearchXmlCachingReader::valueToStringList()
+{
+    if (!m_readValue)
+    {
+        m_value = SearchXmlReader::valueToStringList();
+        m_readValue = true;
+    }
+    return m_value.toStringList();
+}
+
 
 
 
