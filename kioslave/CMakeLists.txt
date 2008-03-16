@@ -1,20 +1,14 @@
 
-INCLUDE_DIRECTORIES( ../digikam
-                     ../libs/dmetadata 
-                     ../libs/dimg 
-                     ../libs/threadimageio
-                     ../libs/database 
-                     ../libs/database/sqlite2
-                     ${JPEG_INCLUDE_DIR}
-                     ${TIFF_INCLUDE_DIR}
-                     ${PNG_INCLUDE_DIR}
-                     ${JASPER_INCLUDE_DIR}
+INCLUDE_DIRECTORIES(../digikam
+                    ../libs/dmetadata 
+                    ../libs/dimg 
+                    ../libs/database 
+                    ../libs/database/sqlite2
                    )
 
 # # digiKam Tags kio slave ###########################################################
 
 SET(kio_digikamtags_PART_SRCS digikamtags.cpp )
-
 
 KDE4_ADD_PLUGIN(kio_digikamtags ${kio_digikamtags_PART_SRCS})
 
@@ -22,7 +16,6 @@ TARGET_LINK_LIBRARIES(kio_digikamtags
                       digikam
                       digikamdatabase
                      )
-
 
 # # digiKam Albums kio slave #########################################################
 
@@ -39,14 +32,12 @@ TARGET_LINK_LIBRARIES(kio_digikamalbums
 
 SET(kio_digikamdates_PART_SRCS digikamdates.cpp)
 
-
 KDE4_ADD_PLUGIN(kio_digikamdates ${kio_digikamdates_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kio_digikamdates
                       digikam
                       digikamdatabase
                      )
-
 
 # # digiKam Search kio slave #########################################################
 
@@ -59,7 +50,6 @@ TARGET_LINK_LIBRARIES(kio_digikamsearch
                       digikam
                       digikamdatabase
                      )
-
 
 # Files to install #################################################################
 
