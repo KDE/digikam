@@ -946,6 +946,16 @@ TAlbum* AlbumManager::findTAlbum(const QString &tagPath) const
 
 }
 
+SAlbum* AlbumManager::findSAlbum(const QString &name) const
+{
+    for (Album* album = d->rootSAlbum->firstChild(); album; album = album->next())
+    {
+        if (album->title() == name)
+            return (SAlbum*)album;
+    }
+    return 0;
+}
+
 PAlbum* AlbumManager::createPAlbum(PAlbum* parent,
                                    const QString& albumRoot,
                                    const QString& name,
@@ -1421,16 +1431,13 @@ SAlbum* AlbumManager::createSAlbum(const QString &name, DatabaseSearch::Type typ
 {
     // first iterate through all the search albums and see if there's an existing
     // SAlbum with same name. (Remember, SAlbums are arranged in a flat list)
-    for (Album* album = d->rootSAlbum->firstChild(); album; album = album->next())
+    SAlbum *album = findSAlbum(name);
+    if (album)
     {
-        if (album->title() == name)
-        {
-            SAlbum* sa = (SAlbum*)album;
-            sa->setSearch(type, query);
-            DatabaseAccess access;
-            access.db()->updateSearch(sa->id(), sa->m_type, name, query);
-            return sa;
-        }
+        album->setSearch(type, query);
+        DatabaseAccess access;
+        access.db()->updateSearch(album->id(), album->m_type, name, query);
+        return album;
     }
 
     int id = DatabaseAccess().db()->addSearch(type, name, query);
@@ -1438,7 +1445,7 @@ SAlbum* AlbumManager::createSAlbum(const QString &name, DatabaseSearch::Type typ
     if (id == -1)
         return 0;
 
-    SAlbum* album = new SAlbum(name, id);
+    album = new SAlbum(name, id);
     album->setSearch(type, query);
     album->setParent(d->rootSAlbum);
 
@@ -1448,14 +1455,16 @@ SAlbum* AlbumManager::createSAlbum(const QString &name, DatabaseSearch::Type typ
     return album;
 }
 
-bool AlbumManager::updateSAlbum(SAlbum* album, const QString &changedQuery, const QString &changedName)
+bool AlbumManager::updateSAlbum(SAlbum* album, const QString &changedQuery,
+                                const QString &changedName, DatabaseSearch::Type type)
 {
     if (!album)
         return false;
 
-    QString newName = changedName.isNull() ? changedName : album->title();
+    QString newName = changedName.isNull() ? album->title() : changedName;
+    DatabaseSearch::Type newType = (type == DatabaseSearch::UndefinedType) ? album->type() : type;
 
-    DatabaseAccess().db()->updateSearch(album->id(), album->type(), newName, changedQuery);
+    DatabaseAccess().db()->updateSearch(album->id(), newType, newName, changedQuery);
 
     QString oldName = album->title();
 

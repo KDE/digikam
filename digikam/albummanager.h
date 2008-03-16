@@ -204,6 +204,12 @@ public:
      * @param tagPath the tag path ("People/Friend/John")
      */
     TAlbum*   findTAlbum(const QString &tagPath) const;
+
+    /**
+     * @return a SAlbum with given name, or 0 if not found
+     * @param tagPath the name of the search
+     */
+    SAlbum*   findSAlbum(const QString &name) const;
     //@}
 
     /** @name Operations on PAlbum
@@ -376,8 +382,10 @@ public:
      * @param album the album to update
      * @param query the new query data of the album
      * @param changedName a new name, or null to keep the current name
+     * @param type a new type, or UndefinedType to keep the current type
      */
-    bool updateSAlbum(SAlbum* album, const QString &changedQuery, const QString &changedName = QString());
+    bool updateSAlbum(SAlbum* album, const QString &changedQuery,
+                      const QString &changedName = QString(), DatabaseSearch::Type type = DatabaseSearch::UndefinedType);
 
     /**
      * Delete a SAlbum from the database
