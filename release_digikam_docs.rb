@@ -20,6 +20,7 @@ svnbase    = "https://ach@svn.kde.org/home/kde"
 svnbase    = "svn+ssh://gkulzer@svn.kde.org/home/kde"
 
 svnroot    = "#{svnbase}/branches/extragear/kde3/"
+#svnroot    = "#{svnbase}/trunk/"
 adminroot  = "#{svnbase}/branches/KDE/3.5"
 
 addDocs    = ["showfoto"]
@@ -62,7 +63,8 @@ puts "\n"
 puts "Fetching l10n docs for #{egmodule}/#{name}...\n"
 puts "\n"
 
-i18nlangs = `svn cat #{svnroot}/l10n/subdirs`
+#i18nlangs = `svn cat #{svnroot}/l10n/subdirs`
+i18nlangs = `svn cat #{svnbase}/trunk/l10n-kde3/subdirs`
 i18nlangsCleaned = []
 for lang in i18nlangs
   l = lang.chomp
@@ -82,9 +84,11 @@ for lang in i18nlangs
   for dg in addDocs
     dg.chomp!
     `rm -rf #{dg}`
-    docdirname = "l10n/#{lang}/docs/extragear-#{egmodule}/#{dg}"
+#    docdirname = "l10n/#{lang}/docs/extragear-#{egmodule}/#{dg}"
+#    docdirname = "l10n-kde3/#{lang}/docs/extragear-#{egmodule}/#{dg}"
+    docdirname = "trunk/l10n-kde3/#{lang}/docs/extragear-#{egmodule}/#{dg}"
     if ( docs != "no")
-        `svn co -q #{svnroot}/#{docdirname} > /dev/null 2>&1`
+        `svn co -q #{svnbase}/#{docdirname} > /dev/null 2>&1`
     end
     next unless FileTest.exists?( dg )
     print "Copying #{lang}'s #{dg} documentation over...  "
