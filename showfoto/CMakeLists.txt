@@ -6,7 +6,6 @@ ADD_SUBDIRECTORY(icons)
 ADD_SUBDIRECTORY(setup)
 
 INCLUDE_DIRECTORIES( ../showfoto/setup 
-                     ../libs/thumbbar 
                      ../libs/widgets/common 
                      ../libs/widgets/imageplugins 
                      ../libs/widgets/metadata 

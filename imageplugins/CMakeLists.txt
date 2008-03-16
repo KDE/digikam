@@ -6,7 +6,6 @@ INCLUDE_DIRECTORIES(../utilities/imageeditor/editor
                     ../libs/curves 
                     ../libs/greycstoration
                     ../libs/whitebalance
-                    ../libs/thumbbar 
                     ../libs/widgets/common
                     ../libs/widgets/iccprofiles
                     ../libs/widgets/imageplugins

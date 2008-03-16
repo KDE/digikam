@@ -26,7 +26,6 @@ INCLUDE_DIRECTORIES(
                      ../libs/database/sqlite2
 
                      # shared utilities
-                     ../libs/thumbbar
                      ../utilities/slideshow
                      ../utilities/imageeditor/editor
                      ../utilities/imageeditor/canvas
@@ -85,7 +84,6 @@ SET(libdigikamtheme_SRCS
 SET(digikamthemedesigner_SRCS 
     ${libdigikamtheme_SRCS}
     ${libthemeengine_SRCS}
-    ${libthumbbar_SRCS}
     ${libdeletedialog_SRCS}
     ${liblighttable_SRCS}
     ${libdimgimagewindow_SRCS}

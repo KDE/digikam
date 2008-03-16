@@ -33,7 +33,6 @@ INCLUDE_DIRECTORIES(
                      ../libs/database/sqlite2
 
                      # shared utilities
-                     ../libs/thumbbar
                      ../utilities/slideshow
                      ../utilities/imageeditor/editor
                      ../utilities/imageeditor/canvas
@@ -84,7 +83,6 @@ SET(digikam_LIB_SRCS
 
                         # utitilies
                         ${libslideshow_SRCS}
-                        ${libthumbbar_SRCS}
                         ${libdimgcanvas_SRCS}
                         ${libdimgeditortools_SRCS}
                         ${libdimgeditor_SRCS}
