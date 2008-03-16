@@ -141,7 +141,6 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
     digikamdates.cpp                    Marcel                 X       DONE
     digikamsearch.cpp                   Marcel                 X       DONE                 Port is not yet adapted to new DB schema. Search tools are temporally broken.
     digikamtags.cpp                     Marcel                 X       DONE
-    digikamthumbnail.cpp                Gilles          X      X       DONE
 
 |-showfoto                              Gilles          X              DONE
 |---icons                               Gilles                         DONE        -
