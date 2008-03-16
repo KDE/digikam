@@ -72,7 +72,6 @@ SET(libdigikamtheme_SRCS
     ../digikam/kdatetimeedit.cpp 
     ../digikam/kdatepickerpopup.cpp 
     ../digikam/metadatahub.cpp 
-    ../digikam/pixmapmanager.cpp 
     ../digikam/ratingpopupmenu.cpp 
     ../digikam/ratingwidget.cpp 
     ../digikam/scancontroller.cpp
