@@ -16,7 +16,6 @@ include_directories( dimg
                      widgets/iccprofiles 
                      imageproperties
                      dialogs
-                     thumbbar
                      ${JPEG_INCLUDE_DIR}
                      ${TIFF_INCLUDE_DIR}
                      ${PNG_INCLUDE_DIR}
