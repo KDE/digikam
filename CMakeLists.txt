@@ -297,7 +297,6 @@ SET(libthreadimageio_SRCS
 
 SET(libthumbbar_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/thumbbar/thumbbar.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/thumbbar/thumbnailjob.cpp
    )
 
 SET(libwhitebalance_SRCS
