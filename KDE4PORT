@@ -85,6 +85,7 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
     statusnavigatebar.cpp               Gilles          X      X       DONE        DONE
     statusprogressbar.cpp               Gilles          X      X       DONE        DONE
     statuszoombar.cpp	                Gilles          X      X       DONE        DONE
+    thummbar.cpp                        Gilles          X      X       DONE        DONE
 |-----iccprofiles
     cietonguewidget.cpp                 Gilles          X      X       DONE                 Tongue color is a black hole!
     iccpreviewwidget.cpp                Gilles          X      X       DONE        DONE
