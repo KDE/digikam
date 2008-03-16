@@ -1,18 +1,14 @@
 
 INCLUDE_DIRECTORIES( ../digikam
-                     ../libs/jpegutils 
-                     ../libs/dimg 
                      ../libs/dmetadata 
-                     ../libs/database 
-                     ../libs/database/sqlite2
-                     ../libs/dimg/loaders
-                     ../libs/dimg/filters
-                     ../libs/dmetadata
+                     ../libs/dimg 
                      ../libs/widgets/metadata
                      ../libs/histogram
                      ../libs/levels
                      ../libs/lprof/
                      ../libs/threadimageio
+                     ../libs/database 
+                     ../libs/database/sqlite2
                      ${JPEG_INCLUDE_DIR}
                      ${TIFF_INCLUDE_DIR}
                      ${PNG_INCLUDE_DIR}
