@@ -1,10 +1,10 @@
 
-INCLUDE_DIRECTORIES( ../libs/jpegutils 
+INCLUDE_DIRECTORIES( ../digikam
+                     ../libs/jpegutils 
                      ../libs/dimg 
                      ../libs/dmetadata 
                      ../libs/database 
                      ../libs/database/sqlite2
-                     ../digikam
                      ../libs/dimg/loaders
                      ../libs/dimg/filters
                      ../libs/dmetadata
@@ -18,19 +18,6 @@ INCLUDE_DIRECTORIES( ../libs/jpegutils
                      ${PNG_INCLUDE_DIR}
                      ${JASPER_INCLUDE_DIR}
                    )
-
-
-# digiKam Thumbnails kio slave #####################################################
-
-SET(kio_digikamthumbnail_PART_SRCS digikamthumbnail.cpp  )
-
-
-KDE4_ADD_PLUGIN(kio_digikamthumbnail ${kio_digikamthumbnail_PART_SRCS})
-
-TARGET_LINK_LIBRARIES(kio_digikamthumbnail
-                      digikam
-                     )
-
 
 # # digiKam Tags kio slave ###########################################################
 
@@ -84,17 +71,14 @@ TARGET_LINK_LIBRARIES(kio_digikamsearch
 
 # Files to install #################################################################
 
-INSTALL( TARGETS kio_digikamthumbnail DESTINATION ${PLUGIN_INSTALL_DIR} )
 INSTALL( TARGETS kio_digikamtags DESTINATION ${PLUGIN_INSTALL_DIR} )
 INSTALL( TARGETS kio_digikamdates DESTINATION ${PLUGIN_INSTALL_DIR} )
 INSTALL( TARGETS kio_digikamsearch DESTINATION ${PLUGIN_INSTALL_DIR} )
 INSTALL( TARGETS kio_digikamalbums DESTINATION ${PLUGIN_INSTALL_DIR} )
 
-INSTALL( FILES digikamthumbnail.protocol
-               digikamtags.protocol
+INSTALL( FILES digikamtags.protocol
                digikamalbums.protocol
                digikamdates.protocol
                digikamsearch.protocol
          DESTINATION ${SERVICES_INSTALL_DIR}
        )
-
