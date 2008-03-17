@@ -50,7 +50,7 @@ class DIGIKAM_EXPORT LightTableBar : public ThumbBarView
 public:
 
     LightTableBar(QWidget* parent, int orientation=Qt::Vertical, 
-                  bool exifRotate=false);
+                  bool exifRotate=true);
     ~LightTableBar();
 
     ImageInfo     currentItemImageInfo() const;
