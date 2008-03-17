@@ -180,7 +180,7 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
     connect(bGroup, SIGNAL(released(int)),
             m_previewWidget, SLOT(slotEditModeChanged(int)));
     
-    connect(m_thumbnailsBar, SIGNAL(signalURLSelected(const KUrl&)),
+    connect(m_thumbnailsBar, SIGNAL(signalUrlSelected(const KUrl&)),
             m_previewWidget, SLOT(slotSetCurrentTemplate(const KUrl&)));            
 
     connect(m_dirSelect, SIGNAL(folderItemSelected(const KUrl &)),
