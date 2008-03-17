@@ -631,9 +631,9 @@ void ThumbBarView::rearrangeItems()
     }
 
     if (d->orientation == Qt::Vertical)
-        resizeContents(width(), d->count*(d->tileSize+2*d->margin));
+        resizeContents(visibleWidth(), d->count*(d->tileSize+2*d->margin));
     else
-        resizeContents(d->count*(d->tileSize+2*d->margin), height());
+        resizeContents(d->count*(d->tileSize+2*d->margin), visibleHeight());
 
     if (!urlList.isEmpty())
     {
