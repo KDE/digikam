@@ -76,12 +76,7 @@ ImageDialogPreview::ImageDialogPreview(QWidget *parent)
 {
     d = new ImageDialogPreviewPrivate;
 
-    d->thumbLoadThread = new ThumbnailLoadThread();
-
-    // Set cache size to 256 to have the max quality thumb.
-    d->thumbLoadThread->setThumbnailSize(ThumbnailSize::Huge);
-    d->thumbLoadThread->setSendSurrogatePixmap(true);
-    d->thumbLoadThread->setExifRotate(true);
+    d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
 
     QVBoxLayout *vlay = new QVBoxLayout(this);
     d->imageLabel     = new QLabel(this);
@@ -104,7 +99,6 @@ ImageDialogPreview::ImageDialogPreview(QWidget *parent)
 
 ImageDialogPreview::~ImageDialogPreview() 
 {
-    delete d->thumbLoadThread;
     delete d;
 }
 
