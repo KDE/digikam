@@ -109,6 +109,7 @@ bool upgradeDB_Sqlite2ToSqlite3(const QString& _libraryPath)
     if (!db3.isValid())
     {
     DWarning() << "Failed to open new Album Database" << endl;
+    DWarning() << "The directory <" << libraryPath << "> may not exist or is write-protected" << endl;
     return false;
     }
 

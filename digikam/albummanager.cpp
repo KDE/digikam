@@ -311,7 +311,10 @@ void AlbumManager::setLibraryPath(const QString& path)
 
     if (!upgradeDB_Sqlite2ToSqlite3(d->libraryPath))
     {
-        KMessageBox::error(0, i18n("Failed to update old Database to new Database format"));
+        KMessageBox::error(0, i18n("Failed to update the old Database to the new Database format\n"
+                                   "This error can happen if the Album Path '%1' does not exist or is write-protected.\n"
+                                   "If you have moved your photo collection, you need to adjust the 'Album Path' in digikam's configuration file.")
+                                   .arg(d->libraryPath));
         exit(0);
     }
     
