@@ -13,7 +13,8 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 001 ==> 146393 : No gamma adjustment when opening RAW file.
 002 ==> 158377 : digiKam duplicates downloaded images while overwriting existing ones.
 003 ==> 151122 : Opening Albums Has Become Very Slow.
-004 ==> 
+004 ==> 145252 : Umask settings used for album directory, not for image files
+005 ==>  
 
 
 **********************************************************************************************

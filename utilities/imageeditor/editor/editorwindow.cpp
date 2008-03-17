@@ -1693,8 +1693,16 @@ bool EditorWindow::moveFile()
 {
     QCString dstFileName = QFile::encodeName(m_savingContext->destinationURL.path());
 
-    // store old permissions
-    mode_t filePermissions = S_IREAD | S_IWRITE;
+    // Store old permissions:
+    // Just get the current umask.
+    mode_t curr_umask = umask(S_IREAD | S_IWRITE);
+    // Restore the umask.
+    umask(curr_umask);
+
+    // For new files respect the umask setting.
+    mode_t filePermissions = (S_IREAD | S_IWRITE | S_IROTH | S_IWOTH | S_IRGRP | S_IWGRP) & ~curr_umask;
+    
+    // For existing files, use the mode of the original file.
     if (m_savingContext->destinationExisted)
     {
         struct stat stbuf;
@@ -1713,12 +1721,9 @@ bool EditorWindow::moveFile()
     }
 
     // restore permissions
-    if (m_savingContext->destinationExisted)
+    if (::chmod(dstFileName, filePermissions) != 0)
     {
-        if (::chmod(dstFileName, filePermissions) != 0)
-        {
-            DWarning() << "Failed to restore file permissions for file " << dstFileName << endl;
-        }
+        DWarning() << "Failed to restore file permissions for file " << dstFileName << endl;
     }
 
     return true;
