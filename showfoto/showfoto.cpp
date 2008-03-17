@@ -104,6 +104,8 @@ extern "C"
 #include "loadingcacheinterface.h"
 #include "savingcontextcontainer.h"
 #include "themeengine.h"
+#include "thumbnailloadthread.h"
+#include "thumbnailsize.h"
 #include "showfoto.h"
 #include "showfoto.moc"
 
@@ -116,6 +118,7 @@ public:
 
     ShowFotoPriv()
     {
+        thumbLoadThread         = 0;
         currentItem             = 0;
         itemsNb                 = 0;
         splash                  = 0;
@@ -151,6 +154,7 @@ public:
 
     KActionMenu                     *BCGAction;
 
+    Digikam::ThumbnailLoadThread    *thumbLoadThread;
     Digikam::ThumbBarView           *thumbBar;
     Digikam::ThumbBarItem           *currentItem;
     Digikam::ImagePropertiesSideBar *rightSidebar;
@@ -176,9 +180,13 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
         d->splash->show();
     }
 
-    // Setup loading cache
+    // Setup loading cache and thumbnails interface.
 
     Digikam::LoadingCacheInterface::initialize();
+
+    d->thumbLoadThread = new Digikam::ThumbnailLoadThread();
+    d->thumbLoadThread->setThumbnailSize(ThumbnailSize::Huge);
+    d->thumbLoadThread->setSendSurrogatePixmap(true);
 
     // Check ICC profiles repository availability
 
@@ -266,7 +274,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
     }
 
     // Create context menu.
-    
+
     setupContextMenu();
 
     // Make signals/slots connections
@@ -328,6 +336,7 @@ ShowFoto::~ShowFoto()
     delete m_imagePluginLoader;
     delete d->thumbBar;
     delete d->rightSidebar;
+    delete d->thumbLoadThread;
     delete d;
 }
 

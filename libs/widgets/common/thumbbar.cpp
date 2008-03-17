@@ -152,11 +152,7 @@ ThumbBarView::ThumbBarView(QWidget* parent, int orientation, bool exifRotate,
     d->toolTipSettings = settings;
     d->toolTip         = new ThumbBarToolTip(this);
     d->timer           = new QTimer(this);
-    d->thumbLoadThread = new ThumbnailLoadThread();
-
-    // Set cache size to 256 to have the max quality thumb.
-    d->thumbLoadThread->setThumbnailSize(ThumbnailSize::Huge);
-    d->thumbLoadThread->setSendSurrogatePixmap(true);
+    d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
     d->thumbLoadThread->setExifRotate(exifRotate);
 
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
@@ -179,8 +175,6 @@ ThumbBarView::ThumbBarView(QWidget* parent, int orientation, bool exifRotate,
 
 ThumbBarView::~ThumbBarView()
 {
-    delete d->thumbLoadThread;
-
     // Delete all hash items 
     while (!d->itemHash.isEmpty()) 
     {
