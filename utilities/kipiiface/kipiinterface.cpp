@@ -55,14 +55,8 @@ namespace Digikam
 KipiInterface::KipiInterface(QObject *parent, const char *name)
              : KIPI::Interface(parent, name)
 {
-    m_thumbLoadThread = new ThumbnailLoadThread();
-
-    // Set cache size to Huge to have the max quality thumb.
-    m_thumbLoadThread->setThumbnailSize(ThumbnailSize::Huge);
-    m_thumbLoadThread->setSendSurrogatePixmap(true);
-    m_thumbLoadThread->setExifRotate(AlbumSettings::instance()->getExifRotate());
-
-    m_albumManager = AlbumManager::instance();
+    m_thumbLoadThread = ThumbnailLoadThread::defaultThread();
+    m_albumManager    = AlbumManager::instance();
 
     connect(m_albumManager, SIGNAL(signalAlbumItemsSelected(bool)),
             this, SLOT(slotSelectionChanged(bool)));
@@ -76,7 +70,6 @@ KipiInterface::KipiInterface(QObject *parent, const char *name)
 
 KipiInterface::~KipiInterface()
 {
-    delete m_thumbLoadThread;
 }
 
 KIPI::ImageCollection KipiInterface::currentAlbum()
