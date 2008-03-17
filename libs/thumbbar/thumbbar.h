@@ -99,7 +99,7 @@ public:
 
 public:
 
-    ThumbBarView(QWidget* parent, int orientation=Vertical, bool exifRotate=false,
+    ThumbBarView(QWidget* parent, int orientation=Vertical, bool exifRotate=true,
                  ThumbBarToolTipSettings settings=ThumbBarToolTipSettings());
     virtual ~ThumbBarView();
 
