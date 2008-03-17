@@ -409,8 +409,8 @@ void ShowFoto::setupConnections()
 {
     setupStandardConnections();
 
-    connect(d->thumbBar, SIGNAL(signalURLSelected(const KUrl&)),
-            this, SLOT(slotOpenURL(const KUrl&)));
+    connect(d->thumbBar, SIGNAL(signalUrlSelected(const KUrl&)),
+            this, SLOT(slotOpenUrl(const KUrl&)));
 
     connect(d->thumbBar, SIGNAL(signalItemAdded()),
             this, SLOT(slotUpdateItemInfo()));
@@ -638,7 +638,7 @@ void ShowFoto::slotOpenFile()
     }
 }
 
-void ShowFoto::slotOpenURL(const KUrl& url)
+void ShowFoto::slotOpenUrl(const KUrl& url)
 {
     if(d->currentItem && !promptUserSave(d->currentItem->url()))
     {
@@ -1051,7 +1051,7 @@ void ShowFoto::saveAsIsComplete()
     if (!foundItem)
         foundItem = new Digikam::ThumbBarItem(d->thumbBar, m_savingContext->destinationURL);
 
-    // shortcut slotOpenURL
+    // shortcut slotOpenUrl
     d->thumbBar->blockSignals(true);
     d->thumbBar->setSelected(foundItem);
     d->thumbBar->blockSignals(false);
@@ -1161,7 +1161,7 @@ void ShowFoto::slotDeleteCurrentItemResult( KIO::Job * job )
             d->thumbBar->setSelected(nextItem);
 
         d->currentItem = d->thumbBar->currentItem();
-        slotOpenURL(d->currentItem->url());
+        slotOpenUrl(d->currentItem->url());
     }
 }
 
@@ -1176,7 +1176,7 @@ void ShowFoto::slideShow(bool startWithCurrent, Digikam::SlideShowSettings& sett
     KConfigGroup group = config->group("ImageViewer Settings");
 
     settings.exifRotate = group.readEntry("EXIF Rotate", true);
-    settings.fileList   = d->thumbBar->itemsURLs();
+    settings.fileList   = d->thumbBar->itemsUrls();
 
     int   i           = 0;
     float cnt         = settings.fileList.count();

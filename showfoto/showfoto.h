@@ -96,7 +96,7 @@ private slots:
     void slotFilePrint();
 
     void slotOpenFile();
-    void slotOpenURL(const KUrl& url);
+    void slotOpenUrl(const KUrl& url);
     void slotOpenFolder(const KUrl& url);
     void slotOpenFilesInFolder();
     void slotDeleteCurrentItem();
