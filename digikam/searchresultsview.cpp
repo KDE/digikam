@@ -77,10 +77,7 @@ SearchResultsView::SearchResultsView(QWidget* parent)
     setAutoArrange(true);
     setResizeMode(Q3IconView::Adjust);
 
-    d->thumbLoadThread = new ThumbnailLoadThread();
-    d->thumbLoadThread->setThumbnailSize(128);
-    d->thumbLoadThread->setSendSurrogatePixmap(true);
-    d->thumbLoadThread->setExifRotate(true);
+    d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
 
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
             this, SLOT(slotGotThumbnail(const LoadingDescription&, const QPixmap&)));
@@ -88,8 +85,6 @@ SearchResultsView::SearchResultsView(QWidget* parent)
 
 SearchResultsView::~SearchResultsView()
 {
-    delete d->thumbLoadThread;
-
     if (d->listJob)
         d->listJob->kill();
 
