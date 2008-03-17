@@ -78,12 +78,7 @@ BatchThumbsGenerator::BatchThumbsGenerator(QWidget* parent)
                     : DProgressDlg(parent)
 {
     d = new BatchThumbsGeneratorPriv;
-    d->thumbLoadThread = new ThumbnailLoadThread();
-
-    // Set cache size to 256 to have the max quality thumb.
-    d->thumbLoadThread->setThumbnailSize(ThumbnailSize::Huge);
-    d->thumbLoadThread->setSendSurrogatePixmap(true);
-    d->thumbLoadThread->setExifRotate(AlbumSettings::instance()->getExifRotate());
+    d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
 
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
             this, SLOT(slotGotThumbnail(const LoadingDescription&, const QPixmap&)));
@@ -99,7 +94,6 @@ BatchThumbsGenerator::BatchThumbsGenerator(QWidget* parent)
 
 BatchThumbsGenerator::~BatchThumbsGenerator()
 {
-    delete d->thumbLoadThread;
     delete d;
 }
 
