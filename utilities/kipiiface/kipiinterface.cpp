@@ -155,14 +155,15 @@ void KipiInterface::refreshImages(const KUrl::List& urls)
 
 int KipiInterface::features() const
 {
-    return (
-           KIPI::HostSupportsTags           | KIPI::HostSupportsRating         |
-           KIPI::HostAcceptNewImages        | KIPI::HostSupportsThumbnails     |
-           KIPI::ImagesHasComments          | 
-           KIPI::ImagesHasTime              | KIPI::ImagesHasTitlesWritable    |
-           KIPI::AlbumsHaveComments         | KIPI::AlbumsHaveCategory         |
-           KIPI::AlbumsHaveCreationDate     | KIPI::AlbumsUseFirstImagePreview 
-           );
+    return(
+           KIPI::HostSupportsTags            | KIPI::HostSupportsRating      |
+           KIPI::HostAcceptNewImages         | KIPI::HostSupportsThumbnails  |
+           KIPI::HostSupportsProgressBar     |
+           KIPI::ImagesHasComments           | KIPI::ImagesHasTitlesWritable |
+           KIPI::ImagesHasTime               |
+           KIPI::CollectionsHaveComments     | KIPI::CollectionsHaveCategory |
+           KIPI::CollectionsHaveCreationDate
+          );
 }
 
 bool KipiInterface::addImage( const KUrl& url, QString& errmsg )
