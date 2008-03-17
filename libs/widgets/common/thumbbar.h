@@ -102,7 +102,7 @@ public:
     virtual ~ThumbBarView();
 
     int countItems();
-    KUrl::List itemsURLs();
+    KUrl::List itemsUrls();
 
     void clear(bool updateView=true);
     void triggerUpdate();
@@ -130,7 +130,7 @@ public:
 signals:
 
     void signalItemSelected(ThumbBarItem*);
-    void signalURLSelected(const KUrl&);
+    void signalUrlSelected(const KUrl&);
     void signalItemAdded(void);
 
 protected:

@@ -256,7 +256,7 @@ int ThumbBarView::countItems()
     return d->count;
 }
 
-KUrl::List ThumbBarView::itemsURLs()
+KUrl::List ThumbBarView::itemsUrls()
 {
     KUrl::List urlList;
     if (!countItems())
@@ -327,7 +327,7 @@ void ThumbBarView::setSelected(ThumbBarItem* item)
     if (!item) return;
 
     ensureItemVisible(item);
-    emit signalURLSelected(item->url());
+    emit signalUrlSelected(item->url());
     emit signalItemSelected(item);
 
     if (d->currItem == item) return;
@@ -499,7 +499,7 @@ void ThumbBarView::contentsMouseReleaseEvent(QMouseEvent* e)
     ThumbBarItem *item = findItem(e->pos());
     if (item) 
     {
-        emit signalURLSelected(item->url());
+        emit signalUrlSelected(item->url());
         emit signalItemSelected(item);
     }
 }
@@ -556,7 +556,7 @@ void ThumbBarView::insertItem(ThumbBarItem* item)
     if (!d->currItem)
     {
         d->currItem = item;
-        emit signalURLSelected(item->url());
+        emit signalUrlSelected(item->url());
         emit signalItemSelected(item);
     }
 
