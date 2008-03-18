@@ -15,12 +15,13 @@ CameraGUI      : New design for camera interface.
 CameraGUI      : New Capture tool.
 CameraGUI      : New bargraph to display camera media free-space.
 
+AlbumGUI       : Added Thumbbar with Preview mode to easy navigate between pictures.
 
 digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 146864 : Lesser XMP support in digiKam.
 002 ==> 145096 : Request: acquire mass storage from printer as from camera. Change menu "Camera" to "Acquire".
-003 ==> 134206 : rethink about: Iptc.Application2.Urgency <==> digiKam Rating.
+003 ==> 134206 : Rethink about: Iptc.Application2.Urgency <==> digiKam Rating.
 004 ==> 149966 : Alternative IPTC Keyword Separator (dot notation).
 005 ==> 129437 : Album could point to network path. Now it's impossible to view photos from shared network drive.
 006 ==> 137694 : Allow album pictures to be stored on network devices.
@@ -30,5 +31,6 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 010 ==> 105645 : Impossible to not copy images in ~/Pictures.
 011 ==> 132697 : Metadata list has no scrollbar.
 012 ==> 148502 : Show rating in embedded preview / slideshow.
-013 ==> 
+013 ==> 155408 : Thumbbar in the album view.
+014 ==> 
 
