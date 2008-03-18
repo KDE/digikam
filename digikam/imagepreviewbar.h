@@ -51,10 +51,10 @@ public:
                     bool exifRotate=true);
     ~ImagePreviewBar();
 
+    void setSelectedItem(ImagePreviewBarItem* ltItem);
+
     ImageInfo     currentItemImageInfo() const;
     ImageInfoList itemsImageInfoList();
-
-    void setSelectedItem(ImagePreviewBarItem* ltItem);
 
     ImagePreviewBarItem* findItemByInfo(const ImageInfo &info) const;
     ImagePreviewBarItem* findItemByPos(const QPoint& pos) const;
@@ -62,9 +62,11 @@ public:
     /** Read tool tip settings from Album Settings instance */
     void readToolTipSettings();
 
-private:
+protected:
 
-    void viewportPaintEvent(QPaintEvent*);
+    QPixmap ratingPixmap() const;
+
+    virtual void viewportPaintEvent(QPaintEvent*);
 
     ThumbBarToolTip* toolTip() const;
 

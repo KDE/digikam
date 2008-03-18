@@ -135,6 +135,17 @@ ImagePreviewBar::~ImagePreviewBar()
     delete d;
 }
 
+QPixmap ImagePreviewBar::ratingPixmap() const
+{
+    return d->ratingPixmap;
+}
+
+void ImagePreviewBar::setSelectedItem(ImagePreviewBarItem* ltItem)
+{
+    ThumbBarItem *item = dynamic_cast<ThumbBarItem*>(ltItem);
+    if (item) ThumbBarView::setSelected(item);
+}
+
 void ImagePreviewBar::slotImageRatingChanged(qlonglong imageId)
 {
     for (ThumbBarItem *item = firstItem(); item; item = item->next())
@@ -173,12 +184,6 @@ ImageInfoList ImagePreviewBar::itemsImageInfoList()
     }
 
     return list;
-}
-
-void ImagePreviewBar::setSelectedItem(ImagePreviewBarItem* ltItem)
-{
-    ThumbBarItem *item = dynamic_cast<ThumbBarItem*>(ltItem);
-    if (item) ThumbBarView::setSelected(item);
 }
 
 ImagePreviewBarItem* ImagePreviewBar::findItemByInfo(const ImageInfo &info) const
