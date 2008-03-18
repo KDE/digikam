@@ -540,8 +540,6 @@ void ThumbBarView::contentsWheelEvent(QWheelEvent *e)
                 scrollBy((-1)*horizontalScrollBar()->singleStep(), 0);
         }
     }
-
-    Q3ScrollView::contentsWheelEvent(e);
 }
 
 void ThumbBarView::startDrag()
