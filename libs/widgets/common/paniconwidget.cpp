@@ -7,7 +7,7 @@
  * Description : a generic widget to display a panel to choose
  *               a rectangular image area.
  *
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -199,7 +199,6 @@ void PanIconWidget::updatePixmap()
     m_pixmap->fill(palette().color(QPalette::Background));
     QPainter p(m_pixmap);
     p.drawPixmap(m_rect.x(), m_rect.y(), QPixmap::fromImage(d->image));
-    p.end();
 
     // Drawing selection border
 
@@ -328,4 +327,3 @@ void PanIconWidget::timerEvent(QTimerEvent * e)
 }
 
 }  // NameSpace Digikam
-
