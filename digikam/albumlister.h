@@ -141,7 +141,6 @@ signals:
 
 private slots:
 
-    void slotClear();
     void slotFilterItems();
 
     void slotResult(KJob* job);

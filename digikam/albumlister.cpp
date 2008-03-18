@@ -469,11 +469,6 @@ void AlbumLister::invalidateItem(const ImageInfo &item)
     d->invalidatedItems << item.id();
 }
 
-void AlbumLister::slotClear()
-{
-    emit signalClear();
-}
-
 void AlbumLister::slotFilterItems()
 {
     if (d->job)
