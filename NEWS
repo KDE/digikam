@@ -20,7 +20,8 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 008 ==> 157309 : digiKam mouse scroll direction on lighttable.
 009 ==> 158398 : Olympus raw images shown with wrong orientation.
 010 ==> 152257 : Crash on saving images after editing.
-011 ==> 
+011 ==> 153730 : Too many file format options when saving raw image from editor in digiKam.
+012 ==> 
 
 
 **********************************************************************************************
