@@ -622,6 +622,8 @@ void ThumbBarView::contentsWheelEvent(QWheelEvent *e)
                 scrollBy((-1)*horizontalScrollBar()->lineStep(), 0);
         }
     }
+
+    QScrollView::contentsWheelEvent(e);
 }
 
 void ThumbBarView::startDrag()
