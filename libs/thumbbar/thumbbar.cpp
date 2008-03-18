@@ -572,7 +572,7 @@ void ThumbBarView::contentsMouseMoveEvent(QMouseEvent *e)
     }
 }
 
-void ThumbBarView::contentsMouseReleaseEvent(QMouseEvent* e)
+void ThumbBarView::contentsMouseReleaseEvent(QMouseEvent *e)
 {
     d->dragging = false;
     ThumbBarItem *item = findItem(e->pos());
@@ -580,6 +580,47 @@ void ThumbBarView::contentsMouseReleaseEvent(QMouseEvent* e)
     {
         emit signalURLSelected(item->url());
         emit signalItemSelected(item);
+    }
+}
+
+void ThumbBarView::contentsWheelEvent(QWheelEvent *e)
+{
+    e->accept();
+
+    if (e->delta() < 0)
+    {
+        if (e->state() & Qt::ShiftButton)
+        {
+            if (d->orientation == Vertical)
+                scrollBy(0, verticalScrollBar()->pageStep());
+            else
+                scrollBy(horizontalScrollBar()->pageStep(), 0);
+        }
+        else
+        {
+            if (d->orientation == Vertical)
+                scrollBy(0, verticalScrollBar()->lineStep());
+            else
+                scrollBy(horizontalScrollBar()->lineStep(), 0);
+        }
+    }
+
+    if (e->delta() > 0)
+    {
+        if (e->state() & Qt::ShiftButton)
+        {
+            if (d->orientation == Vertical)
+                scrollBy(0, (-1)*verticalScrollBar()->pageStep());
+            else
+                scrollBy((-1)*horizontalScrollBar()->pageStep(), 0);
+        }
+        else
+        {
+            if (d->orientation == Vertical)
+                scrollBy(0, (-1)*verticalScrollBar()->lineStep());
+            else
+                scrollBy((-1)*horizontalScrollBar()->lineStep(), 0);
+        }
     }
 }
 
