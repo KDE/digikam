@@ -1045,7 +1045,7 @@ void ShowFoto::saveAsIsComplete()
     Digikam::LoadingCacheInterface::putImage(m_savingContext->destinationURL.path(), m_canvas->currentImage());
 
     // Add the file to the list of thumbbar images if it's not there already
-    Digikam::ThumbBarItem* foundItem = d->thumbBar->findItemByURL(m_savingContext->destinationURL);
+    Digikam::ThumbBarItem* foundItem = d->thumbBar->findItemByUrl(m_savingContext->destinationURL);
     d->thumbBar->invalidateThumb(foundItem);
 
     if (!foundItem)
