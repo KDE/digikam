@@ -18,7 +18,9 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 006 ==> 159467 : Misleading error message with path change in digikamrc file.
 007 ==> 157237 : Connect the data when using the left tabs.
 008 ==> 157309 : digiKam mouse scroll direction on lighttable.
-009 ==> 
+009 ==> 158398 : Olympus raw images shown with wrong orientation.
+010 ==> 152257 : Crash on saving images after editing.
+011 ==> 
 
 
 **********************************************************************************************
@@ -62,5 +64,3 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 015 ==> 154346 : Can't rename in digiKam.
 016 ==> 154625 : Image-files are not renamed before they are saved to disk.
 017 ==> 154746 : Album selection window's size is wrong.
-018 ==> 
-
