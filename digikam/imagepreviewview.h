@@ -53,7 +53,7 @@ Q_OBJECT
 
 public:
 
-    ImagePreviewView(AlbumWidgetStack *parent=0);
+    ImagePreviewView(QWidget *parent, AlbumWidgetStack *stack);
     ~ImagePreviewView();
 
     void setLoadFullImageSize(bool b);

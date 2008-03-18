@@ -7,7 +7,7 @@
  * Description : A widget stack to embedded album content view
  *               or the current image preview.
  *
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -25,17 +25,24 @@
 // Qt includes.
 
 #include <QFileInfo>
+#include <QSplitter>
+#include <QWidget>
 
 // KDE includes.
 
 #include <kurl.h>
+#include <kconfiggroup.h>
+#include <kconfig.h>
 #include <khtmlview.h>
+#include <kglobal.h>
+#include <kapplication.h>
 
 // Local includes.
 
 #include "albumsettings.h"
 #include "albumiconview.h"
 #include "imagepreviewview.h"
+#include "imagepreviewbar.h"
 #include "welcomepageview.h"
 #include "mediaplayerview.h"
 #include "albumwidgetstack.h"
@@ -55,7 +62,13 @@ public:
         imagePreviewView = 0;
         welcomePageView  = 0;
         mediaPlayerView  = 0;
+        splitter         = 0;
+        thumbBar         = 0;
     }
+
+    QSplitter        *splitter;
+
+    ImagePreviewBar  *thumbBar;
 
     AlbumIconView    *albumIconView;
 
@@ -72,17 +85,32 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
     d = new AlbumWidgetStackPriv;
 
     d->albumIconView    = new AlbumIconView(this);
-    d->imagePreviewView = new ImagePreviewView(this);
+
+    d->splitter         = new QSplitter(Qt::Vertical, this);
+    d->imagePreviewView = new ImagePreviewView(d->splitter, this);
+    d->thumbBar         = new ImagePreviewBar(d->splitter, Qt::Horizontal);
+
+    // To prevent flicker effect with content when user change icon view filter 
+    // if scrollbar appears or disapears.
+    d->thumbBar->setHScrollBarMode(Q3ScrollView::AlwaysOn);
+
+    d->splitter->setFrameStyle( QFrame::NoFrame );
+    d->splitter->setFrameShadow( QFrame::Plain );
+    d->splitter->setFrameShape( QFrame::NoFrame );
+    d->splitter->setOpaqueResize(false);
+
     d->welcomePageView  = new WelcomePageView(this);
     d->mediaPlayerView  = new MediaPlayerView(this);
 
     insertWidget(PreviewAlbumMode, d->albumIconView);
-    insertWidget(PreviewImageMode, d->imagePreviewView);
+    insertWidget(PreviewImageMode, d->splitter);
     insertWidget(WelcomePageMode,  d->welcomePageView->view());
     insertWidget(MediaPlayerMode,  d->mediaPlayerView);
 
     setPreviewMode(PreviewAlbumMode);
     setAttribute(Qt::WA_DeleteOnClose);
+
+    readSettings();
 
     // -----------------------------------------------------------------
 
@@ -109,11 +137,38 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
 
     connect(d->imagePreviewView, SIGNAL(signalInsert2LightTable()),
             this, SIGNAL(signalInsert2LightTable()));
+
+    connect(d->albumIconView, SIGNAL(signalItemsAdded()),
+            this, SLOT(slotItemsAdded()));
+
+    connect(d->thumbBar, SIGNAL(signalUrlSelected(const KUrl&)),
+            this, SIGNAL(signalUrlSelected(const KUrl&)));
 }
 
 AlbumWidgetStack::~AlbumWidgetStack()
 {
+    saveSettings();
     delete d;
+}
+
+void AlbumWidgetStack::readSettings()
+{
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group("PreviewView");
+    if (group.hasKey("SplitterState")) 
+    {
+        QByteArray state;
+        state = group.readEntry("SplitterState", state);
+        d->splitter->restoreState(QByteArray::fromBase64(state));
+    }
+}
+
+void AlbumWidgetStack::saveSettings()
+{
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group("PreviewView");
+    group.writeEntry("SplitterState", d->splitter->saveState().toBase64());
+    config->sync();
 }
 
 void AlbumWidgetStack::slotEscapePreview()
@@ -142,6 +197,11 @@ void AlbumWidgetStack::setPreviewItem(const ImageInfo & info, const ImageInfo &p
         {
             d->imagePreviewView->setImageInfo();
         }
+
+        // Special case to cleanup thumbbar if Image Lister do not query item accordingly to 
+        // IconView Filters.
+        if (d->albumIconView->allImageInfos().isEmpty())
+            d->thumbBar->clear();
     }
     else
     {
@@ -168,6 +228,11 @@ void AlbumWidgetStack::setPreviewItem(const ImageInfo & info, const ImageInfo &p
             // because we will receive a signal for that when the image preview will be loaded.
             // This will prevent a flicker effect with the old image preview loaded in stack.
         }
+
+        ThumbBarItem* item = d->thumbBar->findItemByUrl(info.fileUrl());
+        d->thumbBar->blockSignals(true);
+        d->thumbBar->setSelected(item);
+        d->thumbBar->blockSignals(false);
     }
 }
 
@@ -184,7 +249,7 @@ void AlbumWidgetStack::setPreviewMode(int mode)
 
     if (mode == PreviewAlbumMode || mode == WelcomePageMode)
     {
-        d->albumIconView->setFocus();   
+        d->albumIconView->setFocus();
         setPreviewItem();
         setCurrentIndex(mode);
         emit signalToggledToPreviewMode(false);
@@ -206,7 +271,7 @@ void AlbumWidgetStack::slotZoomFactorChanged(double z)
         emit signalZoomFactorChanged(z);
 }
 
-void AlbumWidgetStack::slotItemsUpdated(const KUrl::List& list)
+void AlbumWidgetStack::slotItemsUpdated(const KUrl::List& urls)
 {
     // If item are updated from Icon View, and if we are in Preview Mode,
     // We will check if the current item preview need to be reloaded.
@@ -216,8 +281,27 @@ void AlbumWidgetStack::slotItemsUpdated(const KUrl::List& list)
         previewMode() == AlbumWidgetStack::MediaPlayerMode)    // What we can do with media player ?
         return;
 
-    if (list.contains(imagePreviewView()->getImageInfo().fileUrl()))
+    if (urls.contains(imagePreviewView()->getImageInfo().fileUrl()))
         d->imagePreviewView->reload();
+
+    for (KUrl::List::const_iterator it = urls.begin();
+         it != urls.end(); ++it)
+    {
+        ThumbBarItem* foundItem = d->thumbBar->findItemByUrl(*it);
+        d->thumbBar->invalidateThumb(foundItem);
+    }
+}
+
+void AlbumWidgetStack::slotItemsAdded()
+{
+    d->thumbBar->clear();
+
+    ImageInfoList list = d->albumIconView->allImageInfos(false);
+    for (ImageInfoList::const_iterator it = list.begin();
+         it != list.end(); ++it)
+    {
+        new ImagePreviewBarItem(d->thumbBar, *it);
+    }
 }
 
 void AlbumWidgetStack::increaseZoom()

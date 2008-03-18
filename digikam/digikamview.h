@@ -173,10 +173,11 @@ private slots:
 
     void slotLeftSidebarChangedTab(QWidget* w);
 
-    void slotFirstItem(void);
-    void slotPrevItem(void);
-    void slotNextItem(void);
-    void slotLastItem(void);
+    void slotFirstItem();
+    void slotPrevItem();
+    void slotNextItem();
+    void slotLastItem();
+    void slotSelectItemByUrl(const KUrl&);
 
     void slotToggledToPreviewMode(bool);
     void slotEscapePreview();

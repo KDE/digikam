@@ -459,6 +459,10 @@ void DigikamView::setupConnections()
     connect(d->albumWidgetStack, SIGNAL(signalInsert2LightTable()),
             this, SLOT(slotImageLightTable()));
 
+    connect(d->albumWidgetStack, SIGNAL(signalUrlSelected(const KUrl&)),
+            this, SLOT(slotSelectItemByUrl(const KUrl&)));
+
+
     // -- Selection timer ---------------
 
     connect(d->selectionTimer, SIGNAL(timeout()),
@@ -510,7 +514,7 @@ void DigikamView::hideSideBars()
     d->rightSideBar->backup();
 }
 
-void DigikamView::slotFirstItem(void)
+void DigikamView::slotFirstItem()
 {
     AlbumIconItem *currItem = dynamic_cast<AlbumIconItem*>(d->iconView->firstItem());
     d->iconView->clearSelection();
@@ -519,7 +523,7 @@ void DigikamView::slotFirstItem(void)
        d->iconView->setCurrentItem(currItem);
 }
 
-void DigikamView::slotPrevItem(void)
+void DigikamView::slotPrevItem()
 {
     AlbumIconItem *currItem = dynamic_cast<AlbumIconItem*>(d->iconView->currentItem());
     if (currItem)
@@ -533,7 +537,7 @@ void DigikamView::slotPrevItem(void)
     }
 }
 
-void DigikamView::slotNextItem(void)
+void DigikamView::slotNextItem()
 {
     AlbumIconItem *currItem = dynamic_cast<AlbumIconItem*>(d->iconView->currentItem());
     if (currItem)
@@ -547,9 +551,18 @@ void DigikamView::slotNextItem(void)
     }
 }
 
-void DigikamView::slotLastItem(void)
+void DigikamView::slotLastItem()
 {
     AlbumIconItem *currItem = dynamic_cast<AlbumIconItem*>(d->iconView->lastItem());
+    d->iconView->clearSelection();
+    d->iconView->updateContents();
+    if (currItem)
+       d->iconView->setCurrentItem(currItem);
+}
+
+void DigikamView::slotSelectItemByUrl(const KUrl& url)
+{
+    AlbumIconItem *currItem = dynamic_cast<AlbumIconItem*>(d->iconView->findItem(url.url()));
     d->iconView->clearSelection();
     d->iconView->updateContents();
     if (currItem)

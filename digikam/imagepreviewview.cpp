@@ -87,7 +87,7 @@ public:
         cornerButton         = 0;
         previewThread        = 0;
         previewPreloadThread = 0;
-        parent               = 0;
+        stack                = 0;
         hasPrev              = false;
         hasNext              = false;
         loadFullImageSize    = false;
@@ -120,14 +120,14 @@ public:
     PreviewLoadThread *previewThread;
     PreviewLoadThread *previewPreloadThread;
 
-    AlbumWidgetStack  *parent;
+    AlbumWidgetStack  *stack;
 };
 
-ImagePreviewView::ImagePreviewView(AlbumWidgetStack *parent)
+ImagePreviewView::ImagePreviewView(QWidget *parent, AlbumWidgetStack *stack)
                 : PreviewWidget(parent)
 {
     d = new ImagePreviewViewPriv;
-    d->parent = parent;
+    d->stack = stack;
 
     // get preview size from screen size, but limit from VGA to WQXGA
     d->previewSize = qMax(KApplication::desktop()->height(),
@@ -251,7 +251,7 @@ void ImagePreviewView::slotGotImagePreview(const LoadingDescription &description
 
     if (preview.isNull())
     {
-        d->parent->setPreviewMode(AlbumWidgetStack::PreviewImageMode);
+        d->stack->setPreviewMode(AlbumWidgetStack::PreviewImageMode);
         QPixmap pix(visibleWidth(), visibleHeight());
         pix.fill(ThemeEngine::instance()->baseColor());
         QPainter p(&pix);
@@ -264,7 +264,7 @@ void ImagePreviewView::slotGotImagePreview(const LoadingDescription &description
         p.end();
         // three copies - but the image is small
         setImage(DImg(pix.toImage()));
-        d->parent->previewLoaded();
+        d->stack->previewLoaded();
         emit signalPreviewLoaded(false);
     }
     else
@@ -272,9 +272,9 @@ void ImagePreviewView::slotGotImagePreview(const LoadingDescription &description
         DImg img(preview);
         if (AlbumSettings::instance()->getExifRotate())
             d->previewThread->exifRotate(img, description.filePath);
-        d->parent->setPreviewMode(AlbumWidgetStack::PreviewImageMode);
+        d->stack->setPreviewMode(AlbumWidgetStack::PreviewImageMode);
         setImage(img);
-        d->parent->previewLoaded();
+        d->stack->previewLoaded();
         emit signalPreviewLoaded(true);
     }
 

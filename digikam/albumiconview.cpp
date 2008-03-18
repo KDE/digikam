@@ -8,7 +8,7 @@
  * 
  * Copyright (C) 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2002-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -1686,17 +1686,15 @@ KUrl::List AlbumIconView::selectedItems()
     return itemList;
 }
 
-ImageInfoList AlbumIconView::allImageInfos() const
+ImageInfoList AlbumIconView::allImageInfos(bool currentInFirst) const
 {
-    // Returns the list of ImageInfos of all items,
-    // with the extra feature that the currentItem is the first in the list.
     ImageInfoList list;
     for (IconItem *it = firstItem(); it; it = it->nextItem())
     {
         AlbumIconItem *iconItem = static_cast<AlbumIconItem *>(it);
         ImageInfo info = iconItem->imageInfo();
 
-        if (iconItem == currentItem())
+        if (iconItem == currentItem() && currentInFirst)
             list.prepend(info);
         else
             list.append(info);
