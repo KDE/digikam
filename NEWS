@@ -17,7 +17,8 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 005 ==> 144253 : Failed to update old Database to new Database format.
 006 ==> 159467 : Misleading error message with path change in digikamrc file.
 007 ==> 157237 : Connect the data when using the left tabs.
-008 ==> 
+008 ==> 157309 : digiKam mouse scroll direction on lighttable.
+009 ==> 
 
 
 **********************************************************************************************
