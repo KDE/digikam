@@ -646,10 +646,10 @@ void LightTableBar::startDrag()
 {
     if (!currentItem()) return;
 
-    KUrl::List       urls;
-    KUrl::List       kioURLs;
-    Q3ValueList<int> albumIDs;
-    Q3ValueList<int> imageIDs;
+    KUrl::List urls;
+    KUrl::List kioURLs;
+    QList<int> albumIDs;
+    QList<int> imageIDs;
 
     LightTableBarItem *item = dynamic_cast<LightTableBarItem*>(currentItem());
 
