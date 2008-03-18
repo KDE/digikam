@@ -784,7 +784,7 @@ LightTableBarItem::~LightTableBarItem()
     delete d;
 }
 
-ImageInfo* LightTableBarItem::info()
+ImageInfo* LightTableBarItem::info() const
 {
     return d->info;
 }
@@ -811,12 +811,12 @@ bool LightTableBarItem::isOnRightPanel() const
 
 // -------------------------------------------------------------------------
 
-LightTableBarToolTip::LightTableBarToolTip(ThumbBarView* parent)
+LightTableBarToolTip::LightTableBarToolTip(ThumbBarView *parent)
                     : ThumbBarToolTip(parent)
 {
 }
 
-QString LightTableBarToolTip::tipContentExtraData(ThumbBarItem* item)
+QString LightTableBarToolTip::tipContentExtraData(ThumbBarItem *item)
 {
     QString tip, str;
     AlbumSettings* settings = AlbumSettings::instance();

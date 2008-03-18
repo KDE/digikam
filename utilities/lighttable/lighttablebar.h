@@ -117,10 +117,10 @@ class DIGIKAM_EXPORT LightTableBarItem : public ThumbBarItem
 {
 public:
 
-    LightTableBarItem(LightTableBar* view, ImageInfo* item);
+    LightTableBarItem(LightTableBar *view, ImageInfo *info);
     ~LightTableBarItem();
 
-    ImageInfo* info();
+    ImageInfo* info() const;
 
     void setOnLeftPanel(bool on);
     void setOnRightPanel(bool on);
@@ -144,7 +144,7 @@ public:
 
 private:
 
-    QString tipContentExtraData(ThumbBarItem* item);
+    QString tipContentExtraData(ThumbBarItem *item);
 };
 
 }  // NameSpace Digikam
