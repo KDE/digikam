@@ -33,6 +33,7 @@
 #include <QResizeEvent>
 #include <QMouseEvent>
 #include <QPaintEvent>
+#include <QWheelEvent>
 
 // KDE includes.
 
@@ -143,6 +144,7 @@ protected:
     void contentsMousePressEvent(QMouseEvent*);
     void contentsMouseMoveEvent(QMouseEvent*);
     void contentsMouseReleaseEvent(QMouseEvent*);
+    void contentsWheelEvent(QWheelEvent*);
 
     void insertItem(ThumbBarItem* item);
     void rearrangeItems();

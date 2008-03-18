@@ -31,9 +31,6 @@
 #include <QHash>
 #include <QToolTip>
 #include <QFrame>
-#include <QResizeEvent>
-#include <QMouseEvent>
-#include <QPaintEvent>
 #include <QDir>
 #include <QPixmap>
 #include <QImage>
@@ -493,7 +490,7 @@ void ThumbBarView::contentsMouseMoveEvent(QMouseEvent *e)
     }
 }
 
-void ThumbBarView::contentsMouseReleaseEvent(QMouseEvent* e)
+void ThumbBarView::contentsMouseReleaseEvent(QMouseEvent *e)
 {
     d->dragging = false;
     ThumbBarItem *item = findItem(e->pos());
@@ -502,6 +499,49 @@ void ThumbBarView::contentsMouseReleaseEvent(QMouseEvent* e)
         emit signalUrlSelected(item->url());
         emit signalItemSelected(item);
     }
+}
+
+void ThumbBarView::contentsWheelEvent(QWheelEvent *e)
+{
+    e->accept();
+
+    if (e->delta() < 0)
+    {
+        if (e->modifiers() & Qt::ShiftModifier)
+        {
+            if (d->orientation == Qt::Vertical)
+                scrollBy(0, verticalScrollBar()->pageStep());
+            else
+                scrollBy(horizontalScrollBar()->pageStep(), 0);
+        }
+        else
+        {
+            if (d->orientation == Qt::Vertical)
+                scrollBy(0, verticalScrollBar()->singleStep());
+            else
+                scrollBy(horizontalScrollBar()->singleStep(), 0);
+        }
+    }
+
+    if (e->delta() > 0)
+    {
+        if (e->modifiers() & Qt::ShiftModifier)
+        {
+            if (d->orientation == Qt::Vertical)
+                scrollBy(0, (-1)*verticalScrollBar()->pageStep());
+            else
+                scrollBy((-1)*horizontalScrollBar()->pageStep(), 0);
+        }
+        else
+        {
+            if (d->orientation == Qt::Vertical)
+                scrollBy(0, (-1)*verticalScrollBar()->singleStep());
+            else
+                scrollBy((-1)*horizontalScrollBar()->singleStep(), 0);
+        }
+    }
+
+    Q3ScrollView::contentsWheelEvent(e);
 }
 
 void ThumbBarView::startDrag()
