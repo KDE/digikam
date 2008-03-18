@@ -16,7 +16,8 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 004 ==> 145252 : Umask settings used for album directory, not for image files
 005 ==> 144253 : Failed to update old Database to new Database format.
 006 ==> 159467 : Misleading error message with path change in digikamrc file.
-007 ==> 
+007 ==> 157237 : Connect the data when using the left tabs.
+008 ==> 
 
 
 **********************************************************************************************
