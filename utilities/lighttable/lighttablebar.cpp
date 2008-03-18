@@ -72,28 +72,9 @@ public:
     LightTableBarPriv()
     {
         navigateByPair = false;
-        toolTip        = 0;
-
-        // Pre-computed star polygon for a 15x15 pixmap.
-        starPolygon << QPoint(0,  6);
-        starPolygon << QPoint(5,  5);
-        starPolygon << QPoint(7,  0);
-        starPolygon << QPoint(9,  5);
-        starPolygon << QPoint(14, 6);
-        starPolygon << QPoint(10, 9);
-        starPolygon << QPoint(11, 14);
-        starPolygon << QPoint(7,  11);
-        starPolygon << QPoint(3,  14);
-        starPolygon << QPoint(4,  9);
     }
 
-    bool                  navigateByPair;
-
-    QPolygon              starPolygon;
-
-    QPixmap               ratingPixmap;
-
-    LightTableBarToolTip *toolTip;
+    bool navigateByPair;
 };
 
 class LightTableBarItemPriv
@@ -107,46 +88,16 @@ public:
         onRightPanel = false;
     }
 
-    bool       onLeftPanel;
-    bool       onRightPanel;
-
-    ImageInfo  info;
+    bool onLeftPanel;
+    bool onRightPanel;
 };
 
 LightTableBar::LightTableBar(QWidget* parent, int orientation, bool exifRotate)
-             : ThumbBarView(parent, orientation, exifRotate)
+             : ImagePreviewBar(parent, orientation, exifRotate)
 {
     d = new LightTableBarPriv;
-    setMouseTracking(true);
-    readToolTipSettings();
-    d->toolTip = new LightTableBarToolTip(this);
-
-    // -- Load rating Pixmap ------------------------------------------
-
-    d->ratingPixmap = QPixmap(15, 15);
-    d->ratingPixmap.fill(Qt::transparent); 
-
-    QPainter painter(&d->ratingPixmap);
-    painter.setRenderHint(QPainter::Antialiasing, true);
-    painter.setBrush(ThemeEngine::instance()->textSpecialRegColor());
-    painter.setPen(ThemeEngine::instance()->textRegColor());
-    painter.drawPolygon(d->starPolygon, Qt::WindingFill);
-    painter.end();
-
-    if (orientation == Qt::Vertical)
-        setMinimumWidth(d->ratingPixmap.width()*5 + 6 + 2*getMargin());
-    else
-        setMinimumHeight(d->ratingPixmap.width()*5 + 6 + 2*getMargin());
 
     // ----------------------------------------------------------------
-
-    ImageAttributesWatch *watch = ImageAttributesWatch::instance();
-
-    connect(watch, SIGNAL(signalImageRatingChanged(qlonglong)),
-            this, SLOT(slotImageRatingChanged(qlonglong)));
-
-    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
-            this, SLOT(slotThemeChanged()));
 
     connect(this, SIGNAL(signalItemSelected(ThumbBarItem*)),
             this, SLOT(slotItemSelected(ThumbBarItem*)));
@@ -154,26 +105,12 @@ LightTableBar::LightTableBar(QWidget* parent, int orientation, bool exifRotate)
 
 LightTableBar::~LightTableBar()
 {
-    delete d->toolTip;
     delete d;
 }
 
 void LightTableBar::setNavigateByPair(bool b)
 {
     d->navigateByPair = b;
-}
-
-void LightTableBar::slotImageRatingChanged(qlonglong imageId)
-{
-    for (ThumbBarItem *item = firstItem(); item; item = item->next())
-    {
-        LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(item);
-        if (ltItem->info().id() == imageId)
-        {
-            triggerUpdate();
-            return;
-        }
-    }
 }
 
 void LightTableBar::contentsMouseReleaseEvent(QMouseEvent *e)
@@ -183,7 +120,7 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent *e)
     ThumbBarView::contentsMouseReleaseEvent(e);
 
     QPoint pos = QCursor::pos();
-    LightTableBarItem *item = findItemByPos(e->pos());
+    LightTableBarItem *item = dynamic_cast<LightTableBarItem*>(findItemByPos(e->pos()));
     if (!item) return;
 
     RatingPopupMenu *ratingMenu = 0;
@@ -363,97 +300,13 @@ void LightTableBar::slotItemSelected(ThumbBarItem* item)
     emit signalLightTableBarItemSelected(ImageInfo());
 }
 
-ImageInfo LightTableBar::currentItemImageInfo() const
-{
-    if (currentItem())
-    {
-        LightTableBarItem *item = dynamic_cast<LightTableBarItem*>(currentItem());
-        return item->info();
-    }
-
-    return ImageInfo();
-}
-
-ImageInfoList LightTableBar::itemsImageInfoList()
-{
-    ImageInfoList list;
-
-    for (ThumbBarItem *item = firstItem(); item; item = item->next())
-    {
-        LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(item);
-        if (ltItem) 
-        {
-            list << ltItem->info();
-        }
-    }
-
-    return list;
-}
-
-void LightTableBar::setSelectedItem(LightTableBarItem* ltItem)
-{
-    ThumbBarItem *item = dynamic_cast<ThumbBarItem*>(ltItem);
-    if (item) ThumbBarView::setSelected(item);
-}
-
 void LightTableBar::removeItem(const ImageInfo &info)
 {
     if (info.isNull()) return;
 
-    LightTableBarItem* ltItem = findItemByInfo(info);
-    ThumbBarItem *item        = dynamic_cast<ThumbBarItem*>(ltItem);  
+    ImagePreviewBarItem* ltItem = findItemByInfo(info);
+    ThumbBarItem *item          = dynamic_cast<ThumbBarItem*>(ltItem);  
     if (item) ThumbBarView::removeItem(item);
-}
-
-LightTableBarItem* LightTableBar::findItemByInfo(const ImageInfo &info) const
-{
-    if (!info.isNull())
-    {
-        for (ThumbBarItem *item = firstItem(); item; item = item->next())
-        {
-            LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(item);
-            if (ltItem)
-            {
-                if (ltItem->info() == info)
-                    return ltItem;
-            }
-        }
-    }
-    return 0;
-}
-
-LightTableBarItem* LightTableBar::findItemByPos(const QPoint& pos) const
-{
-    ThumbBarItem *item = findItem(pos);
-    if (item)
-    {
-        LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(item);
-        return ltItem;
-    }
-
-    return 0;
-}
-
-void LightTableBar::readToolTipSettings()
-{
-    AlbumSettings* albumSettings = AlbumSettings::instance();
-    if (!albumSettings) return;
-
-    Digikam::ThumbBarToolTipSettings settings;
-    settings.showToolTips   = albumSettings->getShowToolTips();
-    settings.showFileName   = albumSettings->getToolTipsShowFileName();
-    settings.showFileDate   = albumSettings->getToolTipsShowFileDate();
-    settings.showFileSize   = albumSettings->getToolTipsShowFileSize();
-    settings.showImageType  = albumSettings->getToolTipsShowImageType();
-    settings.showImageDim   = albumSettings->getToolTipsShowImageDim();
-    settings.showPhotoMake  = albumSettings->getToolTipsShowPhotoMake();
-    settings.showPhotoDate  = albumSettings->getToolTipsShowPhotoDate();
-    settings.showPhotoFocal = albumSettings->getToolTipsShowPhotoFocal();
-    settings.showPhotoExpo  = albumSettings->getToolTipsShowPhotoExpo();
-    settings.showPhotoMode  = albumSettings->getToolTipsShowPhotoMode();
-    settings.showPhotoFlash = albumSettings->getToolTipsShowPhotoFlash();
-    settings.showPhotoWB    = albumSettings->getToolTipsShowPhotoWB();
-    setToolTipSettings(settings);
 }
 
 void LightTableBar::viewportPaintEvent(QPaintEvent* e)
@@ -540,12 +393,12 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
                             p.drawPixmap(tile.width() - getMargin() - rPix.width(), getMargin(), rPix);
                         }
 
-                        QRect r(0, tile.height()-getMargin()-d->ratingPixmap.height(), 
-                                tile.width(), d->ratingPixmap.height());
+                        QRect r(0, tile.height()-getMargin()-ratingPixmap().height(), 
+                                tile.width(), ratingPixmap().height());
                         int rating = ltItem->info().rating();
-                        int xr     = (r.width() - rating * d->ratingPixmap.width())/2;
-                        int wr     = rating * d->ratingPixmap.width();
-                        p.drawTiledPixmap(xr, r.y(), wr, r.height(), d->ratingPixmap);
+                        int xr     = (r.width() - rating * ratingPixmap().width())/2;
+                        int wr     = rating * ratingPixmap().width();
+                        p.drawTiledPixmap(xr, r.y(), wr, r.height(), ratingPixmap());
                     }
 
                     p.end();
@@ -598,12 +451,12 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
                             p.drawPixmap(tile.width() - getMargin() - rPix.width(), getMargin(), rPix);
                         }
 
-                        QRect r(0, tile.height()-getMargin()-d->ratingPixmap.height(), 
-                                tile.width(), d->ratingPixmap.height());
+                        QRect r(0, tile.height()-getMargin()-ratingPixmap().height(), 
+                                tile.width(), ratingPixmap().height());
                         int rating = ltItem->info().rating();
-                        int xr     = (r.width() - rating * d->ratingPixmap.width())/2;
-                        int wr     = rating * d->ratingPixmap.width();
-                        p.drawTiledPixmap(xr, r.y(), wr, r.height(), d->ratingPixmap);
+                        int xr     = (r.width() - rating * ratingPixmap().width())/2;
+                        int wr     = rating * ratingPixmap().width();
+                        p.drawTiledPixmap(xr, r.y(), wr, r.height(), ratingPixmap());
                     }
 
                     p.end();
@@ -767,40 +620,17 @@ void LightTableBar::contentsDropEvent(QDropEvent *e)
     }
 }
 
-void LightTableBar::slotThemeChanged()
-{
-    QPainter painter(&d->ratingPixmap);
-    painter.setRenderHint(QPainter::Antialiasing, true);
-    painter.setBrush(ThemeEngine::instance()->textSpecialRegColor());
-    painter.setPen(ThemeEngine::instance()->textRegColor());
-    painter.drawPolygon(d->starPolygon, Qt::WindingFill);
-    painter.end();
-
-    slotUpdate();
-}
-
-ThumbBarToolTip* LightTableBar::toolTip() const
-{
-    return (dynamic_cast<ThumbBarToolTip*>(d->toolTip));
-}
-
 // -------------------------------------------------------------------------
 
 LightTableBarItem::LightTableBarItem(LightTableBar *view, const ImageInfo &info)
-                 : ThumbBarItem(view, info.fileUrl())
+                 : ImagePreviewBarItem(view, info.fileUrl())
 {
     d = new LightTableBarItemPriv;
-    d->info = info;
 }
 
 LightTableBarItem::~LightTableBarItem()
 {
     delete d;
-}
-
-ImageInfo LightTableBarItem::info()
-{
-    return d->info;
 }
 
 void LightTableBarItem::setOnLeftPanel(bool on)
@@ -821,215 +651,6 @@ bool LightTableBarItem::isOnLeftPanel() const
 bool LightTableBarItem::isOnRightPanel() const
 {
     return d->onRightPanel;
-}
-
-// -------------------------------------------------------------------------
-
-LightTableBarToolTip::LightTableBarToolTip(ThumbBarView* parent)
-                    : ThumbBarToolTip(parent)
-{
-}
-
-LightTableBarToolTip::~LightTableBarToolTip()
-{
-}
-
-QString LightTableBarToolTip::tipContents(ThumbBarItem* item) const
-{
-    QString tip, str;
-    QString unavailable(i18n("unavailable"));
-
-    AlbumSettings* settings          = AlbumSettings::instance();
-    const ImageInfo info             = dynamic_cast<LightTableBarItem *>(item)->info();
-    ImageCommonContainer commonInfo  = info.imageCommonContainer();
-    ImageMetadataContainer photoInfo = info.imageMetadataContainer();
-
-    // -- File properties ----------------------------------------------
-
-    if (settings->getToolTipsShowFileName()  ||
-        settings->getToolTipsShowFileDate()  ||
-        settings->getToolTipsShowFileSize()  ||
-        settings->getToolTipsShowImageType() ||
-        settings->getToolTipsShowImageDim())
-    {
-        tip += m_headBeg + i18n("File Properties") + m_headEnd;
-
-        if (settings->getToolTipsShowFileName())
-        {
-            tip += m_cellBeg + i18n("Name:") + m_cellMid;
-            tip += commonInfo.fileName + m_cellEnd;
-        }
-
-        if (settings->getToolTipsShowFileDate())
-        {
-            QDateTime modifiedDate = commonInfo.fileModificationDate;
-            str = KGlobal::locale()->formatDateTime(modifiedDate, KLocale::ShortDate, true);
-            tip += m_cellBeg + i18n("Modified:") + m_cellMid + str + m_cellEnd;
-        }
-
-        if (settings->getToolTipsShowFileSize())
-        {
-            tip += m_cellBeg + i18n("Size:") + m_cellMid;
-            str = i18n("%1 (%2)", KIO::convertSize(commonInfo.fileSize),
-                                  KGlobal::locale()->formatNumber(commonInfo.fileSize, 0));
-            tip += str + m_cellEnd;
-        }
-
-        QSize   dims;
-
-        if (settings->getToolTipsShowImageType())
-        {
-            tip += m_cellBeg + i18n("Type:") + m_cellMid + commonInfo.format + m_cellEnd;
-        }
-
-        if (settings->getToolTipsShowImageDim())
-        {
-            if (commonInfo.width == 0 || commonInfo.height == 0)
-                str = i18n("Unknown");
-            else
-            {
-                QString mpixels;
-                mpixels.setNum(commonInfo.width*commonInfo.height/1000000.0, 'f', 2);
-                str = i18nc("width x height (megapixels Mpx)", "%1x%2 (%3Mpx)",
-                            commonInfo.width, commonInfo.height, mpixels);
-            }
-            tip += m_cellBeg + i18n("Dimensions:") + m_cellMid + str + m_cellEnd;
-        }
-    }
-
-    // -- Photograph Info ----------------------------------------------------
-
-    if (settings->getToolTipsShowPhotoMake()  ||
-        settings->getToolTipsShowPhotoDate()  ||
-        settings->getToolTipsShowPhotoFocal() ||
-        settings->getToolTipsShowPhotoExpo()  ||
-        settings->getToolTipsShowPhotoMode()  ||
-        settings->getToolTipsShowPhotoFlash() ||
-        settings->getToolTipsShowPhotoWB())
-    {
-        if (!photoInfo.allFieldsNull)
-        {
-            QString metaStr;
-            tip += m_headBeg + i18n("Photograph Properties") + m_headEnd;
-
-            if (settings->getToolTipsShowPhotoMake())
-            {
-                str = QString("%1 / %2").arg(photoInfo.make.isEmpty() ? unavailable : photoInfo.make)
-                                        .arg(photoInfo.model.isEmpty() ? unavailable : photoInfo.model);
-                if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
-                metaStr += m_cellBeg + i18n("Make/Model:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
-            }
-
-            if (settings->getToolTipsShowPhotoDate())
-            {
-                if (commonInfo.creationDate.isValid())
-                {
-                    str = KGlobal::locale()->formatDateTime(commonInfo.creationDate, KLocale::ShortDate, true);
-                    if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
-                    metaStr += m_cellBeg + i18n("Created:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
-                }
-                else
-                    metaStr += m_cellBeg + i18n("Created:") + m_cellMid + Qt::escape( unavailable ) + m_cellEnd;
-            }
-
-            if (settings->getToolTipsShowPhotoFocal())
-            {
-                str = photoInfo.aperture.isEmpty() ? unavailable : photoInfo.aperture;
-
-                if (photoInfo.focalLength35.isEmpty())
-                    str += QString(" / %1").arg(photoInfo.focalLength.isEmpty() ? unavailable : photoInfo.focalLength);
-                else 
-                    str += QString(" / %1").arg(i18n("%1 (35mm: %2)",photoInfo.focalLength,photoInfo.focalLength35));
-
-                if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
-                metaStr += m_cellBeg + i18n("Aperture/Focal:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
-            }
-
-            if (settings->getToolTipsShowPhotoExpo())
-            {
-                str = QString("%1 / %2").arg(photoInfo.exposureTime.isEmpty() ? unavailable : photoInfo.exposureTime)
-                                        .arg(photoInfo.sensitivity.isEmpty() ? unavailable : i18n("%1 ISO",photoInfo.sensitivity));
-                if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
-                metaStr += m_cellBeg + i18n("Exposure/Sensitivity:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
-            }
-
-            if (settings->getToolTipsShowPhotoMode())
-            {
-
-                if (photoInfo.exposureMode.isEmpty() && photoInfo.exposureProgram.isEmpty())
-                    str = unavailable;
-                else if (!photoInfo.exposureMode.isEmpty() && photoInfo.exposureProgram.isEmpty())
-                    str = photoInfo.exposureMode;
-                else if (photoInfo.exposureMode.isEmpty() && !photoInfo.exposureProgram.isEmpty())
-                    str = photoInfo.exposureProgram;
-                else 
-                    str = QString("%1 / %2").arg(photoInfo.exposureMode).arg(photoInfo.exposureProgram);
-                if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
-                metaStr += m_cellBeg + i18n("Mode/Program:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
-            }
-
-            if (settings->getToolTipsShowPhotoFlash())
-            {
-                str = photoInfo.flashMode.isEmpty() ? unavailable : photoInfo.flashMode;
-                if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
-                metaStr += m_cellBeg + i18n("Flash:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
-            }
-
-            if (settings->getToolTipsShowPhotoWB())
-            {
-                str = photoInfo.whiteBalance.isEmpty() ? unavailable : photoInfo.whiteBalance;
-                if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
-                metaStr += m_cellBeg + i18n("White Balance:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
-            }
-
-            tip += metaStr;
-        }
-    }
-
-    if (settings->getToolTipsShowAlbumName() ||
-        settings->getToolTipsShowComments()  ||
-        settings->getToolTipsShowTags()      ||
-        settings->getToolTipsShowRating())
-    {
-        tip += m_headBeg + i18n("digiKam Properties") + m_headEnd;
-
-        if (settings->getToolTipsShowAlbumName())
-        {
-            PAlbum* album = AlbumManager::instance()->findPAlbum(info.albumId());
-            if (album)
-                tip += m_cellSpecBeg + i18n("Album:") + m_cellSpecMid + 
-                        album->albumPath().remove(0, 1) + m_cellSpecEnd;
-        }
-
-        if (settings->getToolTipsShowComments())
-        {
-            str = info.comment();
-            if (str.isEmpty()) str = QString("---");
-            tip += m_cellSpecBeg + i18n("Caption:") + m_cellSpecMid + breakString(str) + m_cellSpecEnd;
-        }
-
-        if (settings->getToolTipsShowTags())
-        {
-            QStringList tagPaths = AlbumManager::instance()->tagPaths(info.tagIds(), false);
-
-            str = tagPaths.join(", ");
-            if (str.isEmpty()) str = QString("---");
-            if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
-            tip += m_cellSpecBeg + i18n("Tags:") + m_cellSpecMid + str + m_cellSpecEnd;
-        }
-
-        if (settings->getToolTipsShowRating())
-        {
-            int rating = info.rating();
-            if (rating <= 0)
-                str = QString("---");
-            else
-                str.fill( 'X', info.rating() );
-            tip += m_cellSpecBeg + i18n("Rating:") + m_cellSpecMid + str + m_cellSpecEnd;
-        }
-    }
-
-    return tip;
 }
 
 }  // NameSpace Digikam

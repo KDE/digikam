@@ -26,15 +26,7 @@
 
 // Local includes.
 
-#include "thumbbar.h"
-#include "imageinfo.h"
-#include "digikam_export.h"
-
-class QDragMoveEvent;
-class QDropEvent;
-class QMouseEvent;
-class QPaintEvent;
-
+#include "imagepreviewbar.h"
 
 namespace Digikam
 {
@@ -43,7 +35,7 @@ class LightTableBarItem;
 class LightTableBarItemPriv;
 class LightTableBarPriv;
 
-class DIGIKAM_EXPORT LightTableBar : public ThumbBarView
+class DIGIKAM_EXPORT LightTableBar : public ImagePreviewBar
 {
     Q_OBJECT
 
@@ -52,17 +44,6 @@ public:
     LightTableBar(QWidget* parent, int orientation=Qt::Vertical, 
                   bool exifRotate=true);
     ~LightTableBar();
-
-    ImageInfo     currentItemImageInfo() const;
-    ImageInfoList itemsImageInfoList();
-
-    void setSelectedItem(LightTableBarItem* ltItem);
-
-    LightTableBarItem* findItemByInfo(const ImageInfo &info) const;
-    LightTableBarItem* findItemByPos(const QPoint& pos) const;
-
-    /** Read tool tip settings from Album Settings instance */
-    void readToolTipSettings();
 
     void setOnLeftPanel(const ImageInfo &info);
     void setOnRightPanel(const ImageInfo &info);
@@ -89,11 +70,8 @@ private:
     void contentsDragMoveEvent(QDragMoveEvent*);
     void contentsDropEvent(QDropEvent*);
 
-    ThumbBarToolTip* toolTip() const;
-
 private slots:
 
-    void slotImageRatingChanged(qlonglong);
     void slotItemSelected(ThumbBarItem*);
 
     void slotAssignRatingNoStar();
@@ -104,8 +82,6 @@ private slots:
     void slotAssignRatingFiveStar();
     void slotAssignRating(int);
 
-    void slotThemeChanged();
-
 private:
 
     LightTableBarPriv *d;
@@ -115,14 +91,12 @@ private:
 
 // -------------------------------------------------------------------------
 
-class DIGIKAM_EXPORT LightTableBarItem : public ThumbBarItem
+class DIGIKAM_EXPORT LightTableBarItem : public ImagePreviewBarItem
 {
 public:
 
     LightTableBarItem(LightTableBar *view, const ImageInfo &info);
     ~LightTableBarItem();
-
-    ImageInfo info();
 
     void setOnLeftPanel(bool on);
     void setOnRightPanel(bool on);
@@ -134,21 +108,6 @@ private:
     LightTableBarItemPriv *d;
 
     friend class LightTableBar;
-};
-
-// -------------------------------------------------------------------------
-
-class DIGIKAM_EXPORT LightTableBarToolTip : public ThumbBarToolTip
-{
-
-public:
-
-    LightTableBarToolTip(ThumbBarView *parent);
-    ~LightTableBarToolTip();
-
-protected:
-
-    virtual QString tipContents(ThumbBarItem*) const;
 };
 
 }  // NameSpace Digikam
