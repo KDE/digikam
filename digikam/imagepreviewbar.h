@@ -39,7 +39,6 @@ namespace Digikam
 {
 
 class ImagePreviewBarItem;
-class ImagePreviewBarItemPriv;
 class ImagePreviewBarPriv;
 
 class DIGIKAM_EXPORT ImagePreviewBar : public ThumbBarView
@@ -98,8 +97,6 @@ protected:
     ImageInfo m_info;
 
 private:
-
-    ImagePreviewBarItemPriv *d;
 
     friend class ImagePreviewBar;
 };
