@@ -67,6 +67,7 @@ SET(libdigikamtheme_SRCS
     ../digikam/icongroupitem.cpp 
     ../digikam/iconitem.cpp 
     ../digikam/imageattributeswatch.cpp 
+    ../digikam/imagepreviewbar.cpp 
     ../digikam/kdateedit.cpp 
     ../digikam/kdatetimeedit.cpp 
     ../digikam/kdatepickerpopup.cpp 
