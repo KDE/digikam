@@ -119,7 +119,7 @@ class DIGIKAM_EXPORT LightTableBarItem : public ThumbBarItem
 {
 public:
 
-    LightTableBarItem(LightTableBar* view, const ImageInfo &item);
+    LightTableBarItem(LightTableBar *view, const ImageInfo &info);
     ~LightTableBarItem();
 
     ImageInfo info();
