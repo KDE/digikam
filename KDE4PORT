@@ -177,6 +177,7 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
     iconitem.cpp                        Gilles                 X       DONE
     iconview.cpp                        Gilles                 X       DONE
     imageattributeswatch.cpp            Gilles                 X       DONE
+    imagepreviewbar.cpp                 Gilles                 X       DONE
     imagepreviewview.cpp                Gilles                 X       DONE
     kdateedit.cpp                       Gilles                 X       DONE
     kdatepickerpopup.cpp                Gilles                 X       DONE
