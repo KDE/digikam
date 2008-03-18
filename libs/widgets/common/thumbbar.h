@@ -122,7 +122,7 @@ public:
     ThumbBarItem* firstItem() const;
     ThumbBarItem* lastItem()  const;
     ThumbBarItem* findItem(const QPoint& pos) const;
-    ThumbBarItem* findItemByURL(const KUrl& url) const;
+    ThumbBarItem* findItemByUrl(const KUrl& url) const;
 
     void refreshThumbs(const KUrl::List& urls);
     void invalidateThumb(ThumbBarItem* item);

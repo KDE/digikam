@@ -309,7 +309,7 @@ ThumbBarItem* ThumbBarView::findItem(const QPoint& pos) const
     return 0;
 }
 
-ThumbBarItem* ThumbBarView::findItemByURL(const KUrl& url) const
+ThumbBarItem* ThumbBarView::findItemByUrl(const KUrl& url) const
 {
     for (ThumbBarItem *item = d->firstItem; item; item = item->d->next)
     {
@@ -364,7 +364,7 @@ void ThumbBarView::refreshThumbs(const KUrl::List& urls)
 {
     for (KUrl::List::const_iterator it = urls.begin() ; it != urls.end() ; ++it)
     {
-        ThumbBarItem *item = findItemByURL(*it);
+        ThumbBarItem *item = findItemByUrl(*it);
         if (item)
         {
             invalidateThumb(item);
