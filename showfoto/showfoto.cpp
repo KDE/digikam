@@ -568,7 +568,7 @@ void ShowFoto::saveSettings()
 
     group.writeEntry("Theme", Digikam::ThemeEngine::instance()->getCurrentThemeName());
 
-    group.sync();
+    config->sync();
 }
 
 void ShowFoto::applySettings()
