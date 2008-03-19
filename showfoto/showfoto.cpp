@@ -10,6 +10,7 @@
  * Copyright (C) 2005-2006 by Tom Albers <tomalbers@kde.nl>
  * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2008 by Arnd Baecker <arnd dot baecker at web dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -824,7 +825,7 @@ void ShowFoto::slotUpdateItemInfo()
     
     toggleNavigation( index );
 }
-    
+
 void ShowFoto::slotOpenFolder(const KUrl& url)
 {
     if (d->currentItem && !promptUserSave(d->currentItem->url()))
@@ -850,12 +851,12 @@ void ShowFoto::openFolder(const KUrl& url)
     QString filter;
 
     for (QStringList::ConstIterator it = mimeTypes.begin() ; it != mimeTypes.end() ; ++it)
-    {    
+    {
         QString format = KImageIO::typeForMime(*it)[0].toUpper();
         filter.append ("*.");
         filter.append (format);
         filter.append (" ");
-    }    
+    }
 
     // Because KImageIO return only *.JPEG and *.TIFF mime types.
     if ( filter.contains("*.TIFF") )
@@ -870,25 +871,49 @@ void ShowFoto::openFolder(const KUrl& url)
     // Added RAW files estentions supported by dcraw program and 
     // defines to digikam/libs/dcraw/rawfiles.h
     filter.append (" ");
-    filter.append ( QString(KDcrawIface::DcrawBinary::instance()->rawFiles()) );  
+    filter.append ( QString(KDcrawIface::DcrawBinary::instance()->rawFiles()) );
     filter.append (" ");
 
     QString patterns = filter.toLower();
     patterns.append (" ");
     patterns.append (filter.toUpper());
 
-    DDebug() << "patterns=" << patterns << endl;    
+    DDebug() << "patterns=" << patterns << endl;
 
     // Get all image files from directory.
 
     QDir dir(url.path(), patterns);
-    
+    dir.setFilter ( QDir::Files | QDir::NoSymLinks );
+
     if (!dir.exists())
        return;
-    
-    // Directory items sorting. Perhaps we need to add any settings in config dialog.
-    dir.setFilter ( QDir::Files | QDir::NoSymLinks );
-    dir.setSorting ( QDir::Time );
+
+    // Determine sort ordering for the entries from configuration setting:
+
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group("ImageViewer Settings");
+    QDir::SortFlags flag;
+
+    switch(group.readEntry("SortOrder", 0))
+    {
+        case 1:
+            flag = QDir::Name;  // Ordering by file name.
+            break;
+        case 2:
+            flag = QDir::Size;  // Ordering by file size.
+            break;
+        default:
+            flag = QDir::Time;  // Ordering by file date.
+            break;
+    }
+
+    // Disabled reverse in the settings leads e.g. to increasing dates
+    // Note, that this is just the opposite to the sort order for QDir.
+
+    if (!group.readEntry("ReverseSort", false))
+        flag = flag | QDir::Reversed;
+
+    dir.setSorting(flag);
 
     QFileInfoList fileinfolist = dir.entryInfoList();
 
@@ -897,7 +922,7 @@ void ShowFoto::openFolder(const KUrl& url)
         KMessageBox::sorry(this, i18n("There are no images in this folder."));
         return;
     }
-    
+
     QFileInfoList::const_iterator fi;
 
     // And open all items in image editor.
@@ -907,7 +932,7 @@ void ShowFoto::openFolder(const KUrl& url)
         new Digikam::ThumbBarItem( d->thumbBar, KUrl(fi->filePath()) );
     }
 }
-    
+
 void ShowFoto::slotOpenFilesInFolder()
 {
     if (d->currentItem && !promptUserSave(d->currentItem->url()))

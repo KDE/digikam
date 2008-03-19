@@ -7,6 +7,7 @@
  * Description : setup showfoto tab.
  * 
  * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008 by Arnd Baecker <arnd dot baecker at web dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,6 +29,7 @@
 #include <QLabel>
 #include <QCheckBox>
 #include <QVBoxLayout>
+#include <QComboBox>
 
 // KDE includes.
 
@@ -66,10 +68,13 @@ public:
         underExposureColor    = 0;
         themebackgroundColor  = 0;
         colorBox              = 0;
+        sortOrderComboBox     = 0;
+        sortReverse           = 0;
     }
 
     KHBox        *colorBox;
 
+    QCheckBox    *sortReverse;
     QCheckBox    *hideToolBar;
     QCheckBox    *hideThumbBar;
     QCheckBox    *horizontalThumbBar;
@@ -78,6 +83,8 @@ public:
     QCheckBox    *exifRotateBox;
     QCheckBox    *exifSetOrientationBox;
     QCheckBox    *themebackgroundColor;
+
+    QComboBox    *sortOrderComboBox;
 
     KColorButton *backgroundColor;
     KColorButton *underExposureColor;
@@ -165,9 +172,34 @@ SetupEditor::SetupEditor(QWidget* parent )
     gLayout3->addWidget(d->exifSetOrientationBox);
     ExifGroupOptions->setLayout(gLayout3);
 
+    // --------------------------------------------------------
+
+    QGroupBox *sortOptionsGroup = new QGroupBox(i18n("Sort order for images"), this);
+    QVBoxLayout *gLayout4       = new QVBoxLayout();
+
+    KHBox* sortBox       = new KHBox(sortOptionsGroup);
+    new QLabel(i18n("Sort images by:"), sortBox);
+    d->sortOrderComboBox = new QComboBox(sortBox);
+    d->sortOrderComboBox->insertItem(0, i18n("File Date"));
+    d->sortOrderComboBox->insertItem(1, i18n("File Name"));
+    d->sortOrderComboBox->insertItem(2, i18n("File size"));
+    d->sortOrderComboBox->setWhatsThis(i18n("<p>Here, select whether newly-loaded "
+                                            "images are sorted by file-date, file-name, or file-size."));
+
+    d->sortReverse = new QCheckBox(i18n("Reverse ordering"), sortOptionsGroup);
+    d->sortReverse->setWhatsThis(i18n("<p>If this option is enabled, newly-loaded "
+                                      "images will be sorted in descending order."));
+
+    gLayout4->addWidget(sortBox);
+    gLayout4->addWidget(d->sortReverse);
+    sortOptionsGroup->setLayout(gLayout4);
+
+    // --------------------------------------------------------
+
     layout->addWidget(interfaceOptionsGroup);
     layout->addWidget(exposureOptionsGroup);
     layout->addWidget(ExifGroupOptions);
+    layout->addWidget(sortOptionsGroup);
     layout->addStretch();
 
     // --------------------------------------------------------
@@ -205,6 +237,8 @@ void SetupEditor::readSettings()
     d->exifSetOrientationBox->setChecked(group.readEntry("EXIF Set Orientation", true));
     d->underExposureColor->setColor(group.readEntry("UnderExposureColor", White));
     d->overExposureColor->setColor(group.readEntry("OverExposureColor", Black));
+    d->sortOrderComboBox->setCurrentIndex(group.readEntry("SortOrder", 0));
+    d->sortReverse->setChecked(group.readEntry("ReverseSort", false));
 }
 
 void SetupEditor::applySettings()
@@ -222,6 +256,8 @@ void SetupEditor::applySettings()
     group.writeEntry("EXIF Set Orientation", d->exifSetOrientationBox->isChecked());
     group.writeEntry("UnderExposureColor", d->underExposureColor->color());
     group.writeEntry("OverExposureColor", d->overExposureColor->color());
+    group.writeEntry("SortOrder", d->sortOrderComboBox->currentIndex());
+    group.writeEntry("ReverseSort", d->sortReverse->isChecked());
     config->sync();
 }
 
