@@ -127,18 +127,18 @@ public:
     bool                             fullScreenHideThumbBar;
     bool                             deleteItem2Trash;
     bool                             validIccPath;
-    
+
     int                              itemsNb;
 
     QSplitter                       *vSplitter;
 
     KURL                             lastOpenedDirectory;
-    
+
     KToggleAction                   *showBarAction;
 
     KAction                         *openFilesInFolderAction;
     KAction                         *fileOpenAction;
-    
+
     KActionMenu                     *BCGAction;
 
     Digikam::ThumbBarView           *thumbBar;
@@ -153,12 +153,12 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     d = new ShowFotoPriv();
 
     // -- Show splash at start ----------------------------
-    
+
     KConfig* config = kapp->config();
     config->setGroup("ImageViewer Settings");
     KGlobal::dirs()->addResourceType("data", KGlobal::dirs()->kde_default("data") + "digikam");
     KGlobal::iconLoader()->addAppDir("digikam");
-    
+
     if(config->readBoolEntry("ShowSplash", true) && !kapp->isRestored())
     {
         d->splash = new Digikam::SplashScreen("showfoto-splash.png");
@@ -191,19 +191,19 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     setupUserArea();
     setupStatusBar();
     setupActions();
-    
+
     // Load image plugins to GUI
 
     m_imagePluginLoader = new Digikam::ImagePluginLoader(this, d->splash);
     loadImagePlugins();
 
     // If plugin core is not available, plug BCG actions to collection instead.
-    
+
     if ( !m_imagePluginLoader->pluginLibraryIsLoaded("digikamimageplugin_core") )
     {
         d->BCGAction = new KActionMenu(i18n("Brightness/Contrast/Gamma"), 0, 0, "showfoto_bcg");
         d->BCGAction->setDelayed(false);
-    
+
         KAction *incGammaAction = new KAction(i18n("Increase Gamma"), 0, ALT+Key_G,
                                             this, SLOT(slotChangeBCG()),
                                             actionCollection(), "gamma_plus");
@@ -222,7 +222,7 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
         KAction *decContrastAction = new KAction(i18n("Decrease Contrast"), 0, ALT+SHIFT+Key_C,
                                             this, SLOT(slotChangeBCG()),
                                             actionCollection(), "contrast_minus");
-    
+
         d->BCGAction->insert(incBrightAction);
         d->BCGAction->insert(decBrightAction);
         d->BCGAction->insert(incContrastAction);
@@ -237,15 +237,15 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     }
 
     // Create context menu.
-    
+
     setupContextMenu();
 
     // Make signals/slots connections
-    
+
     setupConnections();
-    
+
     // -- Read settings --------------------------------
-        
+
     readSettings();
     applySettings();
     setAutoSaveSettings("ImageViewer Settings");
@@ -262,7 +262,7 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
             if (fi.isDir())
             {
                 // Local Dir
-                openFolder(url);                 
+                openFolder(url);
             }
             else
             {
@@ -803,12 +803,12 @@ void ShowFoto::slotUpdateItemInfo(void)
         text = "";
         setCaption("");
     }
-    
+
     m_nameLabel->setText(text);
-    
+
     toggleNavigation( index );
 }
-    
+
 void ShowFoto::slotOpenFolder(const KURL& url)
 {
     if (d->currentItem && !promptUserSave(d->currentItem->url()))
@@ -834,12 +834,12 @@ void ShowFoto::openFolder(const KURL& url)
     QString filter;
 
     for (QStringList::ConstIterator it = mimeTypes.begin() ; it != mimeTypes.end() ; ++it)
-    {    
+    {
         QString format = KImageIO::typeForMime(*it);
         filter.append ("*.");
         filter.append (format);
         filter.append (" ");
-    }    
+    }
 
     // Because KImageIO return only *.JPEG and *.TIFF mime types.
     if ( filter.contains("*.TIFF") )
@@ -860,15 +860,15 @@ void ShowFoto::openFolder(const KURL& url)
     patterns.append (" ");
     patterns.append (filter.upper());
 
-    DDebug() << "patterns=" << patterns << endl;    
+    DDebug() << "patterns=" << patterns << endl;
 
     // Get all image files from directory.
 
     QDir dir(url.path(), patterns);
-    
+
     if (!dir.exists())
        return;
-    
+
     // Directory items sorting. Perhaps we need to add any settings in config dialog.
     dir.setFilter ( QDir::Files | QDir::NoSymLinks );
     dir.setSorting ( QDir::Time );
@@ -879,7 +879,7 @@ void ShowFoto::openFolder(const KURL& url)
         KMessageBox::sorry(this, i18n("There are no images in this folder."));
         return;
     }
-    
+
     QFileInfoListIterator it(*fileinfolist);
     QFileInfo* fi;
 
@@ -891,7 +891,7 @@ void ShowFoto::openFolder(const KURL& url)
         ++it;
     }
 }
-    
+
 void ShowFoto::slotOpenFilesInFolder()
 {
     if (d->currentItem && !promptUserSave(d->currentItem->url()))
