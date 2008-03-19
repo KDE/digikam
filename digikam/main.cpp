@@ -67,7 +67,6 @@ extern "C"
 // Local includes.
 
 #include "version.h"
-#include "albumdb.h"
 #include "albummanager.h"
 #include "databaseaccess.h"
 #include "databaseparameters.h"
@@ -278,7 +277,6 @@ int main(int argc, char *argv[])
 
     // version 0.6 was the version when the new Albums Library
     // storage was implemented
-    
     if (version.startsWith("0.5") ||
         !dirInfo.exists() || 
         !dirInfo.isDir())
@@ -299,14 +297,6 @@ int main(int argc, char *argv[])
     if (Digikam::CollectionManager::instance()->allLocations().isEmpty())
     {
         Digikam::CollectionManager::instance()->addLocation(albumPath);
-    }
-
-    // collection scan
-    group = config->group("General Settings");
-    if (group.readEntry("Scan At Start", true) ||
-        Digikam::DatabaseAccess().db()->getSetting("Scanned").isEmpty())
-    {
-        Digikam::ScanController::instance()->completeCollectionScan();
     }
 
     Digikam::DigikamApp *digikam = new Digikam::DigikamApp();

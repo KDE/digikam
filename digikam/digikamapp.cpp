@@ -82,6 +82,7 @@
 
 #include "ddebug.h"
 #include "album.h"
+#include "albumdb.h"
 #include "albumthumbnailloader.h"
 #include "albumiconviewfilter.h"
 #include "albumselectdialog.h"
@@ -125,9 +126,6 @@ DigikamApp::DigikamApp()
     m_instance = this;
     d->config  = KGlobal::config();
 
-    new DigikamAdaptor(this);
-    QDBusConnection::sessionBus().registerObject("/Digikam", this);
-
     setObjectName("Digikam");
 
     if(d->config->group("General Settings").readEntry("Show Splash", true) &&
@@ -136,6 +134,22 @@ DigikamApp::DigikamApp()
         d->splashScreen = new SplashScreen("digikam-splash.png");
         d->splashScreen->show();
     }
+
+    if(d->splashScreen)
+        d->splashScreen->message(i18n("Scan Albums"), Qt::AlignLeft, Qt::white);
+
+    // collection scan
+    if (d->config->group("General Settings").readEntry("Scan At Start", true) ||
+        Digikam::DatabaseAccess().db()->getSetting("Scanned").isEmpty())
+    {
+        Digikam::ScanController::instance()->completeCollectionScan();
+    }
+
+    if(d->splashScreen)
+        d->splashScreen->message(i18n("Initializing..."), Qt::AlignLeft, Qt::white);
+
+    new DigikamAdaptor(this);
+    QDBusConnection::sessionBus().registerObject("/Digikam", this);
 
     // ensure creation
     AlbumSettings::instance();
