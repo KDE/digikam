@@ -27,7 +27,8 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 014 ==> 139657 : Blueish tint in low saturation images converted to CMYK.
 015 ==> 147600 : Showfoto Open folder - files shown in reverse order.
 016 ==> 149851 : Showfoto asks if you want to save changes when deleting photo, if changes have been made.
-017 ==> 
+017 ==> 138378 : Showfoto opens file browser window to last the folder used upon startup.
+018 ==> 
 
 
 **********************************************************************************************
