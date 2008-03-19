@@ -134,7 +134,7 @@ public:
     QRubberBand         *rubber;
     QRect                pixmapRect;
 
-    Q3Cache<QPixmap>      tileCache;
+    Q3Cache<QPixmap>     tileCache;
 
     QPixmap*             tileTmpPix;
     QPixmap              qcheck;
@@ -1212,7 +1212,7 @@ void Canvas::slotCornerButtonPressed()
     if (d->panIconPopup)
     {
         d->panIconPopup->hide();
-        delete d->panIconPopup;
+        d->panIconPopup->deleteLater();
         d->panIconPopup = 0;
     }
 
@@ -1254,7 +1254,7 @@ void Canvas::slotPanIconSelectionMoved(QRect r, bool b)
     if (b)
     {
         d->panIconPopup->hide();
-        delete d->panIconPopup;
+        d->panIconPopup->deleteLater();
         d->panIconPopup = 0;
         slotPanIconHiden();
     }
