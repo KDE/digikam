@@ -25,8 +25,9 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 012 ==> 151157 : Right and left keys goes to first picture and last picture without shortcuts.
 013 ==> 151451 : Application crashed using edit.
 014 ==> 139657 : Blueish tint in low saturation images converted to CMYK.
-015 ==> 147600 : Open folder - files shown in reverse order.
-016 ==> 
+015 ==> 147600 : Showfoto Open folder - files shown in reverse order.
+016 ==> 149851 : Showfoto asks if you want to save changes when deleting photo, if changes have been made.
+017 ==> 
 
 
 **********************************************************************************************
