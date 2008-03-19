@@ -35,7 +35,8 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 022 ==> 147619 : Crash when viewing video.
 023 ==> 136583 : Album icon does not show preview-image after selecting given image as preview.
 024 ==> 129357 : Thumbnails not rotated for (D200)-NEF.
-025 ==> 
+025 ==> 132047 : Faster display of images and/or prefetch wished for.
+026 ==>
 
 
 **********************************************************************************************
