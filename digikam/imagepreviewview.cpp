@@ -299,8 +299,12 @@ void ImagePreviewView::slotNextPreload()
     else
         return;
 
-    d->previewPreloadThread->load(LoadingDescription(loadPath, d->previewSize,
-                                  AlbumSettings::instance()->getExifRotate()));
+    if (d->loadFullImageSize)
+        d->previewThread->loadHighQuality(LoadingDescription(loadPath, 0,
+                                          AlbumSettings::instance()->getExifRotate()));
+    else
+        d->previewPreloadThread->load(LoadingDescription(loadPath, d->previewSize,
+                                      AlbumSettings::instance()->getExifRotate()));
 }
 
 void ImagePreviewView::setImageInfo(ImageInfo* info, ImageInfo *previous, ImageInfo *next)
