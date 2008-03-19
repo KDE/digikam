@@ -32,7 +32,8 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 019 ==> 146938 : Themes Don't Apply To All Panels.
 020 ==> 135378 : Single-click on picture open it in editor.
 021 ==> 142469 : Splash screen to be the very first thing.
-022 ==> 
+022 ==> 147619 : Crash when viewing video.
+023 ==> 
 
 
 **********************************************************************************************
