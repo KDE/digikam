@@ -5,8 +5,9 @@
  *
  * Date        : 2005-04-02
  * Description : setup showfoto tab.
- * 
+ *
  * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008 by Arnd Baecker <arnd dot baecker at web dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,6 +31,7 @@
 #include <qlabel.h>
 #include <qwhatsthis.h>
 #include <qcheckbox.h>
+#include <qcombobox.h>
 
 // KDE includes.
 
@@ -66,10 +68,13 @@ public:
         underExposureColor    = 0;
         themebackgroundColor  = 0;
         colorBox              = 0;
+        sortOrderComboBox     = 0;
+        sortReverse           = 0;
     }
 
     QHBox        *colorBox;
 
+    QCheckBox    *sortReverse;
     QCheckBox    *hideToolBar;
     QCheckBox    *hideThumbBar;
     QCheckBox    *horizontalThumbBar;
@@ -78,7 +83,9 @@ public:
     QCheckBox    *exifRotateBox;
     QCheckBox    *exifSetOrientationBox;
     QCheckBox    *themebackgroundColor;
-    
+
+    QComboBox    *sortOrderComboBox;
+
     KColorButton *backgroundColor;
     KColorButton *underExposureColor;
     KColorButton *overExposureColor;
@@ -89,11 +96,11 @@ SetupEditor::SetupEditor(QWidget* parent )
 {
     d = new SetupEditorPriv;
     QVBoxLayout *layout = new QVBoxLayout( parent, 0, KDialog::spacingHint() );
-    
+
     // --------------------------------------------------------
-    
+
     QVGroupBox *interfaceOptionsGroup = new QVGroupBox(i18n("Interface Options"), parent);
-    
+
     d->themebackgroundColor = new QCheckBox(i18n("&Use theme background color"),
                                             interfaceOptionsGroup);
 
@@ -106,7 +113,7 @@ SetupEditor::SetupEditor(QWidget* parent )
     backgroundColorlabel->setBuddy(d->backgroundColor);
     QWhatsThis::add( d->backgroundColor, i18n("<p>Select the background color to use "
                                               "for the image editor area.") );
-    
+
     d->hideToolBar        = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"), interfaceOptionsGroup);
     d->hideThumbBar       = new QCheckBox(i18n("Hide &thumbbar in fullscreen mode"), interfaceOptionsGroup);
     d->horizontalThumbBar = new QCheckBox(i18n("Use &horizontal thumbbar (need to restart showFoto)"), interfaceOptionsGroup);
@@ -114,7 +121,7 @@ SetupEditor::SetupEditor(QWidget* parent )
                                                  "image area. You need to restart showFoto for this option take effect.<p>"));
     d->useTrash   = new QCheckBox(i18n("&Deleting items should move them to trash"), interfaceOptionsGroup);
     d->showSplash = new QCheckBox(i18n("&Show splash screen at startup"), interfaceOptionsGroup);
-    
+
     // --------------------------------------------------------
 
     QVGroupBox *exposureOptionsGroup = new QVGroupBox(i18n("Exposure Indicators"), parent);
@@ -134,22 +141,42 @@ SetupEditor::SetupEditor(QWidget* parent )
                                                 "the over-exposed pixels.") );
 
     // --------------------------------------------------------
-    
+
     QVGroupBox *ExifGroupOptions = new QVGroupBox(i18n("EXIF Actions"), parent);
-    
+
     d->exifRotateBox = new QCheckBox(ExifGroupOptions);
     d->exifRotateBox->setText(i18n("Show images/thumbs &rotated according to orientation tag"));
-  
+
     d->exifSetOrientationBox = new QCheckBox(ExifGroupOptions);
     d->exifSetOrientationBox->setText(i18n("Set orientation tag to normal after rotate/flip"));
-        
+
+     // --------------------------------------------------------
+
+    QVGroupBox *sortOptionsGroup = new QVGroupBox(i18n("Sort order for images"), parent);
+
+    QHBox* sortBox       = new QHBox(sortOptionsGroup);
+    new QLabel(i18n("Sort images by:"), sortBox);
+    d->sortOrderComboBox = new QComboBox(false, sortBox);
+    d->sortOrderComboBox->insertItem(i18n("File Date"), 0);
+    d->sortOrderComboBox->insertItem(i18n("File Name"), 1);
+    d->sortOrderComboBox->insertItem(i18n("File size"), 2);
+    QWhatsThis::add(d->sortOrderComboBox, i18n("<p>Here, select whether newly-loaded "
+                                               "images are sorted by file-date, file-name, or file-size."));
+
+    d->sortReverse = new QCheckBox(i18n("Reverse ordering"), sortOptionsGroup);
+    QWhatsThis::add(d->sortReverse, i18n("<p>If this option is enabled, newly-loaded "
+                                         "images will be sorted in descending order."));
+
+    // --------------------------------------------------------
+
     layout->addWidget(interfaceOptionsGroup);
     layout->addWidget(exposureOptionsGroup);
     layout->addWidget(ExifGroupOptions);
-    layout->addStretch();    
-    
+    layout->addWidget(sortOptionsGroup);
+    layout->addStretch();
+
     // --------------------------------------------------------
-    
+
     connect(d->themebackgroundColor, SIGNAL(toggled(bool)),
             this, SLOT(slotThemeBackgroundColor(bool)));
 
@@ -183,6 +210,8 @@ void SetupEditor::readSettings()
     d->exifSetOrientationBox->setChecked(config->readBoolEntry("EXIF Set Orientation", true));
     d->underExposureColor->setColor(config->readColorEntry("UnderExposureColor", &White));
     d->overExposureColor->setColor(config->readColorEntry("OverExposureColor", &Black));
+    d->sortOrderComboBox->setCurrentItem(config->readNumEntry("SortOrder", 0));
+    d->sortReverse->setChecked(config->readBoolEntry("ReverseSort", false));
 }
 
 void SetupEditor::applySettings()
@@ -200,8 +229,9 @@ void SetupEditor::applySettings()
     config->writeEntry("EXIF Set Orientation", d->exifSetOrientationBox->isChecked());
     config->writeEntry("UnderExposureColor", d->underExposureColor->color());
     config->writeEntry("OverExposureColor", d->overExposureColor->color());
+    config->writeEntry("SortOrder", d->sortOrderComboBox->currentItem());
+    config->writeEntry("ReverseSort", d->sortReverse->isChecked());
     config->sync();
 }
 
 }   // namespace ShowFoto
-

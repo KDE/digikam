@@ -10,6 +10,7 @@
  * Copyright (C) 2005-2006 by Tom Albers <tomalbers@kde.nl>
  * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2008 by Arnd Baecker <arnd dot baecker at web dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -865,13 +866,37 @@ void ShowFoto::openFolder(const KURL& url)
     // Get all image files from directory.
 
     QDir dir(url.path(), patterns);
+    dir.setFilter ( QDir::Files | QDir::NoSymLinks );
 
     if (!dir.exists())
        return;
 
-    // Directory items sorting. Perhaps we need to add any settings in config dialog.
-    dir.setFilter ( QDir::Files | QDir::NoSymLinks );
-    dir.setSorting ( QDir::Time );
+    // Determine sort ordering for the entries from configuration setting:
+
+    KConfig* config = kapp->config();
+    config->setGroup("ImageViewer Settings");
+    int flag;
+
+    switch(config->readNumEntry("SortOrder", 0))
+    {
+        case 1:
+            flag = QDir::Name;  // Ordering by file name.
+            break;
+        case 2:
+            flag = QDir::Size;  // Ordering by file size.
+            break;
+        default:
+            flag = QDir::Time;  // Ordering by file date.
+            break;
+    }
+
+    // Disabled reverse in the settings leads e.g. to increasing dates
+    // Note, that this is just the opposite to the sort order for QDir.
+
+    if (!config->readBoolEntry("ReverseSort", false))
+        flag = flag | QDir::Reversed;
+
+    dir.setSorting(flag);
 
     const QFileInfoList* fileinfolist = dir.entryInfoList();
     if (!fileinfolist || fileinfolist->isEmpty())
