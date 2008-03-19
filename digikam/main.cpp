@@ -7,7 +7,7 @@
  * Description : main program from digiKam
  * 
  * Copyright (C) 2002-2006 by Renchi Raju <renchi at pooh.tam.uiuc.edu>
- * Copyright (C) 2002-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2002-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -91,7 +91,7 @@ int main(int argc, char *argv[])
     QString Gphoto2Ver  = QString(gp_library_version(GP_VERSION_SHORT)[0]);
 
     QString KipiVer, Kexiv2Ver;
-    
+
 #if KIPI_VERSION <= 0x000105
     KipiVer = QString(kipi_version);
 #else
@@ -107,22 +107,22 @@ int main(int argc, char *argv[])
     QString libInfo     = QString(I18N_NOOP("Using Kipi library version %1")).arg(KipiVer) + 
                           QString("\n") + 
                           QString(I18N_NOOP("Using KExiv2 library version %1")).arg(Kexiv2Ver) +
-                          QString("\n") +                           
+                          QString("\n") +
                           QString(I18N_NOOP("Using Exiv2 library version %1")).arg(Exiv2Ver) +
-                          QString("\n") +                           
+                          QString("\n") +
                           QString(I18N_NOOP("Using KDcraw library version %1")).arg(KDcrawIface::KDcraw::version()) +
-                          QString("\n") +                           
+                          QString("\n") +
                           QString(I18N_NOOP("Using Dcraw program version %1")).arg(DcrawVer) +
-                          QString("\n") +                           
+                          QString("\n") +
                           QString(I18N_NOOP("Using PNG library version %1")).arg(PNG_LIBPNG_VER_STRING) +
-                          QString("\n") + 
+                          QString("\n") +
                           QString(I18N_NOOP("Using Gphoto2 library version %1")).arg(Gphoto2Ver);
 
     QString description = QString(I18N_NOOP("A Photo-Management Application for KDE"));
-    
-    KAboutData aboutData( "digikam", 
+
+    KAboutData aboutData( "digikam",
                           I18N_NOOP("digiKam"),
-                          digikam_version,        
+                          digikam_version,
                           description.latin1(),
                           KAboutData::License_GPL,
                           I18N_NOOP("(c) 2002-2008, digiKam developers team"),
@@ -260,7 +260,7 @@ int main(int argc, char *argv[])
                           I18N_NOOP("Plugin contributor and beta tester"),
                           "Richard dot Groult at jalix dot org",
                           0);
-                                                    
+
     aboutData.addCredit ( "Richard Taylor",
                           I18N_NOOP("Feedback and patches. Handbook writer"),
                           "rjt-digicam at thegrindstone dot me dot uk",
@@ -270,7 +270,7 @@ int main(int argc, char *argv[])
                           I18N_NOOP("digiKam website banner and application icons"),
                           "karlsson dot h at home dot se",
                           0);
-    
+
     aboutData.addCredit ( "Aaron Seigo",
                           I18N_NOOP("Various usability fixes and general application polishing"),
                           "aseigo at kde.org",
@@ -317,7 +317,7 @@ int main(int argc, char *argv[])
 
     app.setMainWidget(digikam);
     digikam->show();
-    
+
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
     if (args && args->isSet("detect-camera"))
         digikam->autoDetect();
@@ -328,7 +328,7 @@ int main(int argc, char *argv[])
     QStringList tipsFiles;
     tipsFiles.append("digikam/tips");
     tipsFiles.append("kipi/tips");
-    
+
     KGlobal::locale()->insertCatalogue("kipiplugins");
 
     KTipDialog::showMultiTip(0, tipsFiles, false);
