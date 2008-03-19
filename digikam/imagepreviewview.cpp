@@ -539,7 +539,7 @@ void ImagePreviewView::slotCornerButtonPressed()
     if (d->panIconPopup)
     {
         d->panIconPopup->hide();
-        delete d->panIconPopup;
+        d->panIconPopup->deleteLater();
         d->panIconPopup = 0;
     }
 
@@ -582,7 +582,7 @@ void ImagePreviewView::slotPanIconSelectionMoved(QRect r, bool b)
     if (b)
     {
         d->panIconPopup->hide();
-        delete d->panIconPopup;
+        d->panIconPopup->deleteLater();
         d->panIconPopup = 0;
         slotPanIconHiden();
     }
