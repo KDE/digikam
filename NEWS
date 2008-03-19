@@ -22,7 +22,9 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 010 ==> 152257 : Crash on saving images after editing.
 011 ==> 153730 : Too many file format options when saving raw image from editor in digiKam.
 012 ==> 151157 : Right and left keys goes to first picture and last picture without shortcuts.
-013 ==> 
+013 ==> 151451 : Application crashed using edit.
+014 ==> 139657 : Blueish tint in low saturation images converted to CMYK.
+015 ==> 
 
 
 **********************************************************************************************
