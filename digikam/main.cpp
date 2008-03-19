@@ -41,7 +41,6 @@
 #include <klocale.h>
 #include <kconfig.h>
 #include <kglobal.h>
-#include <kimageio.h>
 #include <ktip.h>
 #include <kdeversion.h>
 #include <kmessagebox.h>
@@ -73,7 +72,6 @@ extern "C"
 
 #include "version.h"
 #include "albumdb.h"
-#include "albummanager.h"
 #include "digikamapp.h"
 #include "digikamfirstrun.h"
 
@@ -303,7 +301,7 @@ int main(int argc, char *argv[])
 
     // version 0.6 was the version when the new Albums Library
     // storage was implemented
-    
+
     if (version.startsWith("0.5") ||
         !dirInfo.exists() || 
         !dirInfo.isDir())
@@ -314,12 +312,6 @@ int main(int argc, char *argv[])
         firstRun->show();
         return app.exec();
     }
-
-    Digikam::AlbumManager* man = new Digikam::AlbumManager();
-    man->setLibraryPath(albumPath);
-
-    // Register image formats (especially for TIFF )
-    KImageIO::registerFormats();
 
     Digikam::DigikamApp *digikam = new Digikam::DigikamApp();
 

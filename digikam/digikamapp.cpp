@@ -53,6 +53,7 @@
 #include <kfiledialog.h>
 #include <kmessagebox.h>
 #include <kwin.h>
+#include <kimageio.h>
 #include <dcopref.h>
 
 // libKipi includes.
@@ -116,10 +117,16 @@ DigikamApp::DigikamApp()
         d->splashScreen->show();
     }
 
+    d->splashScreen->message(i18n("Initializing..."), AlignLeft, white);
+
+    // Register image formats (especially for TIFF )
+    KImageIO::registerFormats();
+
     d->albumSettings = new AlbumSettings();
     d->albumSettings->readSettings();
 
-    d->albumManager = AlbumManager::instance();
+    d->albumManager = new Digikam::AlbumManager();
+
     AlbumLister::instance();
 
     d->cameraMediaList = new KPopupMenu;
@@ -156,7 +163,9 @@ DigikamApp::DigikamApp()
 
     KDcrawIface::DcrawBinary::instance()->checkSystem();
 
-    // Actual file scanning is done in main() - is this necessary here?
+    if(d->splashScreen)
+        d->splashScreen->message(i18n("Scan Albums"), AlignLeft, white);
+
     d->albumManager->setLibraryPath(d->albumSettings->getAlbumLibraryPath());
 
     // Read albums from database
