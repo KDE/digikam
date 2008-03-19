@@ -29,7 +29,8 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 016 ==> 149851 : Showfoto asks if you want to save changes when deleting photo, if changes have been made.
 017 ==> 138378 : Showfoto opens file browser window to last the folder used upon startup.
 018 ==> 148964 : images are blur only inside shofoto.
-019 ==> 
+019 ==> 146938 : Themes Don't Apply To All Panels.
+020 ==> 
 
 
 **********************************************************************************************
