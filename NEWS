@@ -34,7 +34,8 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 021 ==> 142469 : Splash screen to be the very first thing.
 022 ==> 147619 : Crash when viewing video.
 023 ==> 136583 : Album icon does not show preview-image after selecting given image as preview.
-024 ==> 
+024 ==> 129357 : Thumbnails not rotated for (D200)-NEF.
+025 ==> 
 
 
 **********************************************************************************************
