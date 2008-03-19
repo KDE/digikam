@@ -31,7 +31,8 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 018 ==> 148964 : images are blur only inside shofoto.
 019 ==> 146938 : Themes Don't Apply To All Panels.
 020 ==> 135378 : Single-click on picture open it in editor.
-021 ==> 
+021 ==> 142469 : Splash screen to be the very first thing.
+022 ==> 
 
 
 **********************************************************************************************
