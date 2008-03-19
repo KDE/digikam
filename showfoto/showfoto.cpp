@@ -1163,10 +1163,11 @@ void ShowFoto::slotDeleteCurrentItemResult( KIO::Job * job )
             // Find item next to the current item
             nextItem = item->next();
             d->thumbBar->removeItem(item);
+            d->currentItem = 0;
             break;
         }
     }
-    
+
     d->itemsNb = d->thumbBar->countItems();
 
     // Disable menu actions and SideBar if no current image.
@@ -1177,7 +1178,6 @@ void ShowFoto::slotDeleteCurrentItemResult( KIO::Job * job )
         slotUpdateItemInfo();
         toggleActions(false);
         m_canvas->load(QString(), m_IOFileSettings);
-        d->currentItem = 0;
     }
     else
     {
