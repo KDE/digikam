@@ -28,7 +28,8 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 015 ==> 147600 : Showfoto Open folder - files shown in reverse order.
 016 ==> 149851 : Showfoto asks if you want to save changes when deleting photo, if changes have been made.
 017 ==> 138378 : Showfoto opens file browser window to last the folder used upon startup.
-018 ==> 
+018 ==> 148964 : images are blur only inside shofoto.
+019 ==> 
 
 
 **********************************************************************************************
