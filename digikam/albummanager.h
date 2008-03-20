@@ -60,6 +60,7 @@ class DAlbum;
 class SAlbum;
 class AlbumDB;
 class AlbumItemHandler;
+class SplashScreen;
 class AlbumManagerPriv;
 
 typedef QValueList<Album*> AlbumList;
@@ -120,7 +121,7 @@ public:
     * @param path the new libraryPath
     * @see startScan
     */
-    void       setLibraryPath(const QString& path);
+    void       setLibraryPath(const QString& path, SplashScreen *splash=0);
 
     /**
     * @return the current libraryPath

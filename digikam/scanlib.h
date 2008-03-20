@@ -7,7 +7,8 @@
  * Description : scan pictures interface.
  * 
  * Copyright (C) 2005-2006 by Tom Albers <tomalbers@kde.nl>
-
+ * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -43,6 +44,7 @@ namespace Digikam
 {
 
 class DProgressDlg;
+class SplashScreen;
 
 /** 
  * Class which is responsible for keeping the database in sync
@@ -60,7 +62,7 @@ public:
     /** 
     * Constructor
     */
-    ScanLib();
+    ScanLib(SplashScreen *splash=0);
 
     /**
      * Destructor
@@ -150,7 +152,9 @@ private:
     /**
      * Member variable so we can update the progress bar everywhere
      */
-    DProgressDlg     *m_progressBar;
+    DProgressDlg *m_progressBar;
+
+    SplashScreen *m_splash;
 
     /**
      * Member to store stale filesystem

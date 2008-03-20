@@ -109,6 +109,7 @@ DigikamApp::DigikamApp()
     d = new DigikamAppPriv;
     m_instance = this;
     d->config  = kapp->config();
+    d->config->setGroup("General Settings");
 
     if(d->config->readBoolEntry("Show Splash", true) &&
        !kapp->isRestored())
@@ -117,7 +118,8 @@ DigikamApp::DigikamApp()
         d->splashScreen->show();
     }
 
-    d->splashScreen->message(i18n("Initializing..."), AlignLeft, white);
+    if(d->splashScreen)
+        d->splashScreen->message(i18n("Initializing..."), AlignLeft, white);
 
     // Register image formats (especially for TIFF )
     KImageIO::registerFormats();
@@ -166,7 +168,7 @@ DigikamApp::DigikamApp()
     if(d->splashScreen)
         d->splashScreen->message(i18n("Scan Albums"), AlignLeft, white);
 
-    d->albumManager->setLibraryPath(d->albumSettings->getAlbumLibraryPath());
+    d->albumManager->setLibraryPath(d->albumSettings->getAlbumLibraryPath(), d->splashScreen);
 
     // Read albums from database
     if(d->splashScreen)

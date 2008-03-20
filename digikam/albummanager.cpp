@@ -71,6 +71,7 @@ extern "C"
 #include "dio.h"
 #include "albumsettings.h"
 #include "scanlib.h"
+#include "splashscreen.h"
 #include "upgradedb_sqlite2tosqlite3.h"
 #include "albummanager.h"
 #include "albummanager.moc"
@@ -179,7 +180,7 @@ AlbumDB* AlbumManager::albumDB()
     return d->db;    
 }
 
-void AlbumManager::setLibraryPath(const QString& path)
+void AlbumManager::setLibraryPath(const QString& path, SplashScreen *splash)
 {
     QString cleanPath = QDir::cleanDirPath(path);
     
@@ -325,7 +326,7 @@ void AlbumManager::setLibraryPath(const QString& path)
     if (config->readBoolEntry("Scan At Start", true) ||
         d->db->getSetting("Scanned").isEmpty())
     {
-        ScanLib sLib;
+        ScanLib sLib(splash);
         sLib.startScan();
     }
 }
