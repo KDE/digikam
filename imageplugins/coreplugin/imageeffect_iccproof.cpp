@@ -317,7 +317,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     QGroupBox *pictureInfo = new QGroupBox(i18n("Camera information"), inProfiles);
     QGridLayout *infoGrid  = new QGridLayout(pictureInfo);
 
-    QLabel *make1              = new QLabel(i18n("Brand:"), pictureInfo);
+    QLabel *make1              = new QLabel(i18n("Make:"), pictureInfo);
     KSqueezedTextLabel *make2  = new KSqueezedTextLabel(0, pictureInfo);
     QLabel *model1             = new QLabel(i18n("Model:"), pictureInfo);
     KSqueezedTextLabel *model2 = new KSqueezedTextLabel(0, pictureInfo);
