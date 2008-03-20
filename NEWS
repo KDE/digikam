@@ -17,6 +17,9 @@ CameraGUI      : New bargraph to display camera media free-space.
 
 AlbumGUI       : Added Thumbbar with Preview mode to easy navigate between pictures.
 
+ImageEditor    : Added Thumbbar to easy navigate between pictures.
+
+
 digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 146864 : Lesser XMP support in digiKam.
