@@ -8,7 +8,7 @@
  *               colors using an ICC color profile
  *
  * Copyright (C) 2005-2006 by F.J. Cruz <fj.cruz@supercable.es>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,7 +22,6 @@
  * GNU General Public License for more details.
  * 
  * ============================================================ */
-
 
 #ifndef IMAGEEFFECT_ICCPROOF_H
 #define IMAGEEFFECT_ICCPROOF_H
@@ -63,7 +62,7 @@ class ImageEffect_ICCProof : public Digikam::ImageDlgBase
     Q_OBJECT
 
 public:
-    
+
     ImageEffect_ICCProof(QWidget* parent);
     ~ImageEffect_ICCProof();
 
@@ -127,7 +126,7 @@ private:
         GreenChannel,
         BlueChannel
     };
-    
+
     enum ICCSettingsTab
     {
         GENERALPAGE=0,
@@ -139,7 +138,7 @@ private:
 
     bool                            m_cmEnabled;
     bool                            m_hasICC;
-    
+
     uchar                          *m_destinationPreviewData;
 
     QComboBox                      *m_channelCB;
@@ -171,7 +170,7 @@ private:
     QHButtonGroup                  *m_scaleBG;
     QVButtonGroup                  *m_renderingIntentBG;
     QVButtonGroup                  *m_profilesBG;
-    
+
     QByteArray                      m_embeddedICC;
 
     QToolBox                       *m_toolBoxWidgets;
@@ -181,7 +180,7 @@ private:
     KURLRequester                  *m_inProfilesPath;
     KURLRequester                  *m_spaceProfilePath;
     KURLRequester                  *m_proofProfilePath;
-        
+
     Digikam::DImg                  *m_originalImage;
 
     Digikam::CurvesWidget          *m_curvesWidget;
