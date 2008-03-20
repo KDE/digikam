@@ -37,6 +37,7 @@
 
 // KDE includes.
 
+#include <kjob.h>
 #include <kio/job.h>
 #include <kio/deletejob.h>
 #include <kio/copyjob.h>
@@ -117,8 +118,8 @@ QPixmap SyncJob::getTagThumbnail(TAlbum *album)
 bool SyncJob::delPriv(const KUrl::List& urls)
 {
     KIO::Job* job = KIO::del( urls );
-    connect( job, SIGNAL(result( KIO::Job* )),
-             this, SLOT(slotResult( KIO::Job*)) );
+    connect( job, SIGNAL(result( KJob* )),
+             this, SLOT(slotResult( KJob* )) );
 
     enterWaitingLoop();
     return d->result;
@@ -127,14 +128,14 @@ bool SyncJob::delPriv(const KUrl::List& urls)
 bool SyncJob::trashPriv(const KUrl::List& urls)
 {
     KIO::Job* job = KIO::trash( urls );
-    connect( job, SIGNAL(result( KIO::Job* )),
-             this, SLOT(slotResult( KIO::Job*)) );
+    connect( job, SIGNAL(result( KJob* )),
+             this, SLOT(slotResult( KJob* )) );
 
     enterWaitingLoop();
     return d->result;
 }
 
-void SyncJob::slotResult( KIO::Job * job )
+void SyncJob::slotResult( KJob *job )
 {
     d->result.success = !(job->error());
     if ( !d->result )

@@ -43,6 +43,8 @@
 
 class QString;
 
+class KJob;
+
 namespace KIO
 {
 class Job;
@@ -93,13 +95,13 @@ private:
 
 private slots:
 
-    void slotResult( KIO::Job * job );
+    void slotResult( KJob *job );
     void slotGotThumbnailFromIcon(Album *album, const QPixmap& pix);
     void slotLoadThumbnailFailed(Album *album);
 
 private:
 
-    SyncJobPriv     *d;
+    SyncJobPriv *d;
 };
 
 }  // namespace Digikam
