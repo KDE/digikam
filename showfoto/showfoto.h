@@ -40,6 +40,11 @@ namespace KIO
 class Job;
 }
 
+namespace Digikam
+{
+class ThumbBarView;
+}
+
 namespace ShowFoto
 {
 
@@ -87,6 +92,8 @@ private:
 
     void openFolder(const KUrl& url);
 
+    Digikam::ThumbBarView *thumbBar() const;
+
 private slots:
 
     void slotForward();
@@ -101,7 +108,6 @@ private slots:
     void slotOpenFilesInFolder();
     void slotDeleteCurrentItem();
 
-    void slotToggleShowBar();
     void slotChangeBCG();
 
     void slotChanged();

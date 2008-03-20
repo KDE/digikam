@@ -129,7 +129,6 @@ public:
         rightSidebar                        = 0;
         thumbBar                            = 0;
         vSplitter                           = 0;
-        showBarAction                       = 0;
     }
 
     // If image editor is launched by camera interface, current
@@ -153,8 +152,6 @@ public:
     KAction                  *fileDeletePermanentlyAction;
     KAction                  *fileDeletePermanentlyDirectlyAction;
     KAction                  *fileTrashDirectlyAction;
-
-    KToggleAction            *showBarAction;
 
     ImageInfoList             imageInfoList;
     ImageInfo                 imageInfoCurrent;
@@ -424,13 +421,6 @@ void ImageWindow::setupActions()
             this, SLOT(slotTrashCurrentItemDirectly()));
     actionCollection()->addAction("image_trash_directly", d->fileTrashDirectlyAction);
 
-    // Extra 'View' menu actions ---------------------------------------------
-
-    d->showBarAction = new KToggleAction(KIcon("view-choose"), i18n("Show Thumbnails"), this);
-    d->showBarAction->setShortcut(Qt::CTRL+Qt::Key_T);
-    connect(d->showBarAction, SIGNAL(triggered()), this, SLOT(slotToggleShowBar()));
-    actionCollection()->addAction("imageview_showthumbs", d->showBarAction);
-
     // ---------------------------------------------------------------------------------
 
     actionCollection()->addAction("logo_action", new DLogoAction(this));
@@ -444,9 +434,6 @@ void ImageWindow::readSettings()
 
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("ImageViewer Settings");
-
-    d->showBarAction->setChecked(group.readEntry("Show Thumbnails", true));
-    slotToggleShowBar();
 
     QSizePolicy szPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
     szPolicy.setHorizontalStretch(2);
@@ -468,8 +455,6 @@ void ImageWindow::saveSettings()
 
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("ImageViewer Settings");
-
-    group.writeEntry("Show Thumbnails", d->showBarAction->isChecked());
 
     if (d->vSplitter)
         group.writeEntry("Vertical Splitter State", d->vSplitter->saveState().toBase64());
@@ -877,7 +862,7 @@ void ImageWindow::toggleGUI2FullScreen()
         d->rightSidebar->restore();
 
         // If Hide Thumbbar option is checked, restore it.
-        if (!d->showBarAction->isChecked())
+        if (!m_showBarAction->isChecked())
             d->thumbBar->show();
     }
     else
@@ -885,7 +870,7 @@ void ImageWindow::toggleGUI2FullScreen()
         d->rightSidebar->backup();
 
         // If Hide Thumbbar option is checked, catch it if necessary.
-        if (d->showBarAction->isChecked())
+        if (m_showBarAction->isChecked())
         {
             if (m_fullScreenHideThumbBar)
                 d->thumbBar->hide();
@@ -1233,11 +1218,11 @@ void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
     {
         settings.exifRotate = AlbumSettings::instance()->getExifRotate();
         settings.fileList   = d->urlList;
-    
+
         SlideShow *slide = new SlideShow(settings);
         if (startWithCurrent)
             slide->setCurrent(d->urlCurrent);
-    
+
         slide->show();
     }
 }
@@ -1380,12 +1365,9 @@ void ImageWindow::slotChangeTheme(const QString& theme)
     ThemeEngine::instance()->slotChangeTheme(theme);
 }
 
-void ImageWindow::slotToggleShowBar()
+ThumbBarView *ImageWindow::thumbBar() const
 {
-    if (d->showBarAction->isChecked())
-        d->thumbBar->show();
-    else
-        d->thumbBar->hide();
+    return (dynamic_cast<ThumbBarView*>(d->thumbBar));
 }
 
 }  // namespace Digikam

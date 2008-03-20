@@ -106,6 +106,8 @@ private:
 
     void slideShow(bool startWithCurrent, SlideShowSettings& settings);
 
+    ThumbBarView *thumbBar() const;
+
     ImageWindow();
 
 private slots:
@@ -136,7 +138,6 @@ private slots:
 
     void slotFileMetadataChanged(const KUrl &);
 
-    void slotToggleShowBar();
     void slotChangeTheme(const QString& theme);
 
 private:

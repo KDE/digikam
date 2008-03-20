@@ -45,6 +45,7 @@ class QLabel;
 class KToolBarPopupAction;
 class KAction;
 class KSelectAction;
+class KToggleAction;
 
 namespace Digikam
 {
@@ -56,6 +57,7 @@ class IOFileSettingsContainer;
 class SavingContextContainer;
 class StatusProgressBar;
 class SlideShowSettings;
+class ThumbBarView;
 class EditorWindowPriv;
 
 class DIGIKAM_EXPORT EditorWindow : public KXmlGuiWindow
@@ -102,6 +104,8 @@ protected:
 
     KSelectAction           *m_themeMenuAction;
 
+    KToggleAction           *m_showBarAction;
+
     KToolBarPopupAction     *m_undoAction;
     KToolBarPopupAction     *m_redoAction;
 
@@ -143,6 +147,8 @@ protected:
     virtual void saveSettings()               { saveStandardSettings();     };
     virtual void toggleActions(bool val)      { toggleStandardActions(val); };
     virtual void toggleGUI2FullScreen()       {};
+
+    virtual ThumbBarView *thumbBar() const=0;
 
     virtual void slideShow(bool startWithCurrent, SlideShowSettings& settings)=0;
 
@@ -220,6 +226,7 @@ private slots:
     void slotIncreaseZoom();
     void slotDecreaseZoom();
     void slotRawCameraList();
+    void slotToggleShowBar();
 
 private:
 

@@ -124,7 +124,6 @@ public:
         itemsNb                 = 0;
         splash                  = 0;
         BCGAction               = 0;
-        showBarAction           = 0;
         openFilesInFolderAction = 0;
         fileOpenAction          = 0;
         thumbBar                = 0;
@@ -146,8 +145,6 @@ public:
     QAction                         *fileOpenAction;
 
     KUrl                             lastOpenedDirectory;
-
-    KToggleAction                   *showBarAction;
 
     KAction                         *openFilesInFolderAction;
 
@@ -510,13 +507,6 @@ void ShowFoto::setupActions()
 
     actionCollection()->addAction(KStandardAction::Quit, "showfoto_quit", this, SLOT(close()));
 
-    // Extra 'View' menu actions ---------------------------------------------
-
-    d->showBarAction = new KToggleAction(KIcon("view-choose"), i18n("Show Thumbnails"), this);
-    d->showBarAction->setShortcut(Qt::CTRL+Qt::Key_T);
-    connect(d->showBarAction, SIGNAL(triggered()), this, SLOT(slotToggleShowBar()));
-    actionCollection()->addAction("shofoto_showthumbs", d->showBarAction);
-
     // --- Create the gui ----------------------------------------------------
 
     createGUI("showfotoui.rc");
@@ -528,9 +518,6 @@ void ShowFoto::readSettings()
 
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("ImageViewer Settings");
-
-    d->showBarAction->setChecked(group.readEntry("Show Thumbnails", true));
-    slotToggleShowBar();
 
     d->lastOpenedDirectory.setPath( group.readEntry("Last Opened Directory",
                                     KGlobalSettings::documentPath()) );
@@ -559,7 +546,6 @@ void ShowFoto::saveSettings()
     KConfigGroup group = config->group("ImageViewer Settings");
 
     group.writeEntry("Last Opened Directory", d->lastOpenedDirectory.path() );
-    group.writeEntry("Show Thumbnails", d->showBarAction->isChecked());
 
     if (d->vSplitter)
         group.writeEntry("Vertical Splitter State", d->vSplitter->saveState().toBase64());
@@ -664,7 +650,7 @@ void ShowFoto::toggleGUI2FullScreen()
         d->rightSidebar->restore();
 
         // If Hide Thumbbar option is checked, restore it.
-        if (!d->showBarAction->isChecked())
+        if (!m_showBarAction->isChecked())
             d->thumbBar->show();
     }
     else
@@ -672,7 +658,7 @@ void ShowFoto::toggleGUI2FullScreen()
         d->rightSidebar->backup();
 
         // If Hide Thumbbar option is checked, catch it if necessary.
-        if (d->showBarAction->isChecked())
+        if (m_showBarAction->isChecked())
         {
             if (m_fullScreenHideThumbBar)
                 d->thumbBar->hide();
@@ -680,12 +666,9 @@ void ShowFoto::toggleGUI2FullScreen()
     }
 }
 
-void ShowFoto::slotToggleShowBar()
+Digikam::ThumbBarView *ShowFoto::thumbBar() const
 {
-    if (d->showBarAction->isChecked())
-        d->thumbBar->show();
-    else
-        d->thumbBar->hide();
+    return d->thumbBar;
 }
 
 void ShowFoto::slotChangeBCG()
@@ -1227,7 +1210,7 @@ void ShowFoto::slideShow(bool startWithCurrent, Digikam::SlideShowSettings& sett
         Digikam::SlideShow *slide = new Digikam::SlideShow(settings);
         if (startWithCurrent)
             slide->setCurrent(d->currentItem->url());
-    
+
         slide->show();
     }
 }

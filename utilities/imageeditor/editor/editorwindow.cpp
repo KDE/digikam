@@ -105,6 +105,7 @@
 #include "loadingcacheinterface.h"
 #include "slideshowsettings.h"
 #include "themeengine.h"
+#include "thumbbar.h"
 #include "editorwindowprivate.h"
 #include "editorwindow.h"
 #include "editorwindow.moc"
@@ -137,6 +138,7 @@ EditorWindow::EditorWindow(const char *name)
     m_lastAction             = 0;
     m_undoAction             = 0;
     m_redoAction             = 0;
+    m_showBarAction          = 0;
     m_fullScreen             = false;
     m_rotatedOrFlipped       = false;
     m_setExifOrientationTag  = true;
@@ -442,6 +444,11 @@ void EditorWindow::setupStandardActions()
     d->viewCMViewAction->setShortcut(Qt::Key_F12); 
     connect(d->viewCMViewAction, SIGNAL(triggered()), this, SLOT(slotToggleColorManagedView()));
     actionCollection()->addAction("editorwindow_cmview", d->viewCMViewAction);
+
+    m_showBarAction = new KToggleAction(KIcon("view-choose"), i18n("Show Thumbnails"), this);
+    m_showBarAction->setShortcut(Qt::CTRL+Qt::Key_T);
+    connect(m_showBarAction, SIGNAL(triggered()), this, SLOT(slotToggleShowBar()));
+    actionCollection()->addAction("editorwindow_showthumbs", m_showBarAction);
 
     // -- Standard 'Transform' menu actions ---------------------------------------------
 
@@ -798,6 +805,9 @@ void EditorWindow::readStandardSettings()
     bool autoZoom = group.readEntry("AutoZoom", true);
     if (autoZoom)
         d->zoomFitToWindowAction->activate(QAction::Trigger);
+
+    m_showBarAction->setChecked(group.readEntry("Show Thumbnails", true));
+    slotToggleShowBar();
 }
 
 void EditorWindow::applyStandardSettings()
@@ -925,6 +935,7 @@ void EditorWindow::saveStandardSettings()
     group.writeEntry("AutoZoom", d->zoomFitToWindowAction->isChecked());
     group.writeEntry("Splitter State", m_splitter->saveState().toBase64());
 
+    group.writeEntry("Show Thumbnails", m_showBarAction->isChecked());
     group.writeEntry("FullScreen", m_fullScreenAction->isChecked());
     group.writeEntry("UnderExposureIndicator", d->exposureSettings->underExposureIndicator);
     group.writeEntry("OverExposureIndicator", d->exposureSettings->overExposureIndicator);
@@ -1817,6 +1828,14 @@ void EditorWindow::slotThemeChanged()
 void EditorWindow::slotChangeTheme(const QString& theme)
 {
     ThemeEngine::instance()->slotChangeTheme(theme);
+}
+
+void EditorWindow::slotToggleShowBar()
+{
+    if (m_showBarAction->isChecked())
+        thumbBar()->show();
+    else
+        thumbBar()->hide();
 }
 
 }  // namespace Digikam
