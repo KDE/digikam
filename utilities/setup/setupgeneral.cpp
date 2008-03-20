@@ -137,8 +137,8 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
     d->iconShowSizeBox = new QCheckBox(i18n("Show file si&ze"), iconTextGroup);
     QWhatsThis::add( d->iconShowSizeBox, i18n("<p>Set this option to show file size below image thumbnail."));
 
-    d->iconShowDateBox = new QCheckBox(i18n("Show file creation &date"), iconTextGroup);
-    QWhatsThis::add( d->iconShowDateBox, i18n("<p>Set this option to show file creation date "
+    d->iconShowDateBox = new QCheckBox(i18n("Show camera creation &date"), iconTextGroup);
+    QWhatsThis::add( d->iconShowDateBox, i18n("<p>Set this option to show camera creation date "
                                               "below image thumbnail."));
 
     d->iconShowModDateBox = new QCheckBox(i18n("Show file &modification date"), iconTextGroup);
