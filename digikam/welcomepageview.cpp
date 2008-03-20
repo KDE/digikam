@@ -109,6 +109,7 @@ QString WelcomePageView::infoPage()
     newFeatures << i18n("A new tool to capture photographs from Camera");
     newFeatures << i18n("Database file can be stored on a customized place to support remote album library path");
     newFeatures << i18n("Supports of multiple roots album paths");
+    newFeatures << i18n("Thumbnails-bar integration with preview mode and in editor to easy naviguate between images");
     newFeatures << i18n("Supports the latest camera RAW files");
 
     QString featureItems;
