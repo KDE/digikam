@@ -7,7 +7,7 @@
  * Description : a widget to display CIE tongue from
  * an ICC profile.
  * 
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Any source code are inspired from lprof project and
  * Copyright (C) 1998-2001 Marti Maria
@@ -86,21 +86,22 @@ protected:
 
 private:
 
-    void drawColorantTriangle(void);
-    void drawWhitePoint(void);
-    void drawPatches(void);
+    void drawColorantTriangle();
+    void drawWhitePoint();
+    void drawPatches();
+    void updatePixmap();
 
     void mapPoint(int& icx, int& icy, LPcmsCIExyY xyY);
     void biasedLine(int x1, int y1, int x2, int y2);
     void biasedText(int x, int y, QString Txt);
 
-    void sweep_sRGB(void);
+    void sweep_sRGB();
 
     void setProfile(cmsHPROFILE hProfile);
 
 private slots:
 
-    void slotBlinkTimerDone(void);
+    void slotBlinkTimerDone();
 
 private :
 

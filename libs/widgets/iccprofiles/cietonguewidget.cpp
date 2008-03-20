@@ -7,7 +7,7 @@
  * Description : a widget to display CIE tongue from
  *               an ICC profile.
  *
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Any source code are inspired from lprof project and
  * Copyright (C) 1998-2001 Marti Maria
@@ -204,7 +204,7 @@ CIETongueWidget::CIETongueWidget(int w, int h, QWidget *parent, cmsHPROFILE hMon
     d->blinkTimer = new QTimer( this );
     setMinimumSize(w, h);
     setAttribute(Qt::WA_DeleteOnClose);
-    cmsErrorAction(LCMS_ERROR_SHOW);    
+    cmsErrorAction(LCMS_ERROR_SHOW);
 
     if (hMonitor)
         d->hMonitorProfile = hMonitor;
@@ -240,7 +240,7 @@ int CIETongueWidget::grids(double val) const
 }
 
 bool CIETongueWidget::setProfileData(const QByteArray &profileData)
-{    
+{
     if (!profileData.isEmpty())
     {
         cmsHPROFILE hProfile = cmsOpenProfileFromMem((void*)profileData.data(),
@@ -266,8 +266,9 @@ bool CIETongueWidget::setProfileData(const QByteArray &profileData)
     }
 
     d->loadingImageMode = false;
-    
+
     d->blinkTimer->stop();
+    updatePixmap();
     repaint();
     return (d->profileDataAvailable);
 }
@@ -298,6 +299,7 @@ bool CIETongueWidget::setProfileFromFile(const KUrl& file)
     }
 
     d->blinkTimer->stop();
+    updatePixmap();
     repaint();
     return (d->profileDataAvailable);
 }
@@ -502,7 +504,7 @@ void CIETongueWidget::drawTongueAxis()
         biasedText(xstart - grids(11), d->pxrows + grids(15), s);
 
         s.sprintf("0.%d", 10 - y);
-        biasedLine(0, ystart, grids(3), ystart);    
+        biasedLine(0, ystart, grids(3), ystart);
         biasedText(grids(-25), ystart + grids(5), s);
     }
 }
@@ -578,7 +580,7 @@ void CIETongueWidget::drawSmallElipse(LPcmsCIExyY xyY, BYTE r, BYTE g, BYTE b, i
     d->painter.drawEllipse(icx + d->xBias- sz/2, icy-sz/2, sz, sz);
 }
 
-void CIETongueWidget::drawPatches(void)
+void CIETongueWidget::drawPatches()
 {
     for (int i=0; i < d->Measurement.nPatches; i++)
     {
@@ -587,7 +589,7 @@ void CIETongueWidget::drawPatches(void)
         if (d->Measurement.Allowed[i])
         {
             LPcmsCIEXYZ XYZ = &p ->XYZ;
-            cmsCIExyY xyY;              
+            cmsCIExyY xyY;
             cmsXYZ2xyY(&xyY, XYZ);
 
             drawSmallElipse(&xyY,  0, 0, 0, 4);
@@ -617,7 +619,7 @@ void CIETongueWidget::drawPatches(void)
     }
 }
 
-void CIETongueWidget::drawColorantTriangle(void)
+void CIETongueWidget::drawColorantTriangle()
 {
     drawSmallElipse(&(d->Primaries.Red),   255, 128, 128, 6);
     drawSmallElipse(&(d->Primaries.Green), 128, 255, 128, 6);
@@ -636,12 +638,12 @@ void CIETongueWidget::drawColorantTriangle(void)
     biasedLine(x3, y3, x1, y1);
 }
 
-void CIETongueWidget::sweep_sRGB(void)
+void CIETongueWidget::sweep_sRGB()
 {
     int r, g, b;
     cmsHPROFILE hXYZ, hsRGB;
 
-    hXYZ = cmsCreateXYZProfile();
+    hXYZ  = cmsCreateXYZProfile();
     hsRGB = cmsCreate_sRGBProfile();
 
     cmsHTRANSFORM xform = cmsCreateTransform(hsRGB, TYPE_RGB_16, hXYZ, TYPE_XYZ_16,
@@ -675,7 +677,7 @@ void CIETongueWidget::sweep_sRGB(void)
     cmsCloseProfile(hsRGB);
 }
 
-void CIETongueWidget::drawWhitePoint(void)
+void CIETongueWidget::drawWhitePoint()
 {
     cmsCIExyY Whitem_pntxyY;
     cmsXYZ2xyY(&Whitem_pntxyY, &(d->MediaWhite));
@@ -686,6 +688,7 @@ void CIETongueWidget::loadingStarted()
 {
     d->loadingImageMode   = true;
     d->loadingImageSucess = false;
+    updatePixmap();
     repaint();
     d->blinkTimer->start(200);
 }
@@ -695,10 +698,11 @@ void CIETongueWidget::loadingFailed()
     d->blinkTimer->stop();
     d->loadingImageMode   = false;
     d->loadingImageSucess = false;
+    updatePixmap();
     repaint();
 }
 
-void CIETongueWidget::paintEvent( QPaintEvent * )
+void CIETongueWidget::updatePixmap()
 {
     d->pixmap = QPixmap(size());
 
@@ -799,8 +803,11 @@ void CIETongueWidget::paintEvent( QPaintEvent * )
     d->painter.setPen(qRgb(255, 255, 255));
 
     outlineTongue();
+    d->painter.end();
+
     fillTongue();
 
+    d->painter.begin(&d->pixmap);
     drawTongueAxis();
     drawLabels();
     drawTongueGrid();
@@ -815,15 +822,19 @@ void CIETongueWidget::paintEvent( QPaintEvent * )
         drawPatches();
 
     d->painter.end();
+}
 
+void CIETongueWidget::paintEvent(QPaintEvent*)
+{
     QPainter p2(this);
     p2.drawPixmap(0, 0, d->pixmap);
     p2.end();
 }
 
-void CIETongueWidget::slotBlinkTimerDone(void)
+void CIETongueWidget::slotBlinkTimerDone()
 {
-    repaint();     
+    updatePixmap();
+    repaint();
     d->blinkFlag = !d->blinkFlag;
     d->blinkTimer->start( 200 );
 }
