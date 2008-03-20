@@ -202,13 +202,15 @@ void ThumbBarView::resizeEvent(QResizeEvent* e)
 
     if (d->orientation == Vertical)
     {
-       d->tileSize = width() - 2*d->margin
-                     - verticalScrollBar()->sizeHint().width();
+        d->tileSize = width() - 2*d->margin - verticalScrollBar()->sizeHint().width();
+        verticalScrollBar()->setLineStep(d->tileSize);
+        verticalScrollBar()->setPageStep(2*d->tileSize);
     }
     else
     {
-       d->tileSize = height() - 2*d->margin
-                     - horizontalScrollBar()->sizeHint().height();
+        d->tileSize = height() - 2*d->margin - horizontalScrollBar()->sizeHint().height();
+        horizontalScrollBar()->setLineStep(d->tileSize);
+        horizontalScrollBar()->setPageStep(2*d->tileSize);
     }
 
     rearrangeItems();
