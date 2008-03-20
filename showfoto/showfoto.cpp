@@ -451,19 +451,19 @@ void ShowFoto::setupUserArea()
         m_splitter        = new QSplitter(Qt::Horizontal, widget);
         QWidget* widget2  = new QWidget(m_splitter);
         QVBoxLayout *vlay = new QVBoxLayout(widget2);
-        d->vSplitter      = new QSplitter(Qt::Vertical, widget2);
-        m_canvas          = new Digikam::Canvas(d->vSplitter);
-        d->thumbBar       = new Digikam::ThumbBarView(d->vSplitter, Qt::Horizontal);
+        m_vSplitter       = new QSplitter(Qt::Vertical, widget2);
+        m_canvas          = new Digikam::Canvas(m_vSplitter);
+        d->thumbBar       = new Digikam::ThumbBarView(m_vSplitter, Qt::Horizontal);
 
         m_canvas->setSizePolicy(rightSzPolicy);
         m_canvas->makeDefaultEditingCanvas();
 
-        d->vSplitter->setFrameStyle( QFrame::NoFrame );
-        d->vSplitter->setFrameShadow( QFrame::Plain );
-        d->vSplitter->setFrameShape( QFrame::NoFrame );
-        d->vSplitter->setOpaqueResize(false);
+        m_vSplitter->setFrameStyle( QFrame::NoFrame );
+        m_vSplitter->setFrameShadow( QFrame::Plain );
+        m_vSplitter->setFrameShape( QFrame::NoFrame );
+        m_vSplitter->setOpaqueResize(false);
 
-        vlay->addWidget(d->vSplitter);
+        vlay->addWidget(m_vSplitter);
         vlay->setSpacing(0);
         vlay->setMargin(0);
 
@@ -522,19 +522,6 @@ void ShowFoto::readSettings()
     d->lastOpenedDirectory.setPath( group.readEntry("Last Opened Directory",
                                     KGlobalSettings::documentPath()) );
 
-    QSizePolicy szPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
-    szPolicy.setHorizontalStretch(2);
-    szPolicy.setVerticalStretch(1);
-    QList<int> list;
-    if(group.hasKey("Vertical Splitter Sizes") && d->vSplitter)
-    {
-        QByteArray state;
-        state = group.readEntry("Vertical Splitter State", state);
-        d->vSplitter->restoreState(QByteArray::fromBase64(state));
-    }
-    else
-        m_canvas->setSizePolicy(szPolicy);
-
     Digikam::ThemeEngine::instance()->setCurrentTheme(group.readEntry("Theme", i18n("Default")));
 }
 
@@ -546,10 +533,6 @@ void ShowFoto::saveSettings()
     KConfigGroup group = config->group("ImageViewer Settings");
 
     group.writeEntry("Last Opened Directory", d->lastOpenedDirectory.path() );
-
-    if (d->vSplitter)
-        group.writeEntry("Vertical Splitter State", d->vSplitter->saveState().toBase64());
-
     group.writeEntry("Theme", Digikam::ThemeEngine::instance()->getCurrentThemeName());
 
     config->sync();

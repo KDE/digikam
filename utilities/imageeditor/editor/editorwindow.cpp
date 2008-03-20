@@ -139,6 +139,8 @@ EditorWindow::EditorWindow(const char *name)
     m_undoAction             = 0;
     m_redoAction             = 0;
     m_showBarAction          = 0;
+    m_splitter               = 0;
+    m_vSplitter              = 0;
     m_fullScreen             = false;
     m_rotatedOrFlipped       = false;
     m_setExifOrientationTag  = true;
@@ -793,15 +795,28 @@ void EditorWindow::readStandardSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("ImageViewer Settings");
 
-    // Restore full screen Mode ?
+    // Restore Canvas layout
+    QSizePolicy szPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+    szPolicy.setHorizontalStretch(2);
+    szPolicy.setVerticalStretch(1);
+    QList<int> list;
+    if(group.hasKey("Vertical Splitter Sizes") && m_vSplitter)
+    {
+        QByteArray state;
+        state = group.readEntry("Vertical Splitter State", state);
+        m_vSplitter->restoreState(QByteArray::fromBase64(state));
+    }
+    else
+        m_canvas->setSizePolicy(szPolicy);
 
+    // Restore full screen Mode
     if (group.readEntry("FullScreen", false))
     {
         m_fullScreenAction->activate(QAction::Trigger);
         m_fullScreen = true;
     }
 
-    // Restore Auto zoom action ?
+    // Restore Auto zoom action
     bool autoZoom = group.readEntry("AutoZoom", true);
     if (autoZoom)
         d->zoomFitToWindowAction->activate(QAction::Trigger);
@@ -934,6 +949,8 @@ void EditorWindow::saveStandardSettings()
 
     group.writeEntry("AutoZoom", d->zoomFitToWindowAction->isChecked());
     group.writeEntry("Splitter State", m_splitter->saveState().toBase64());
+    if (m_vSplitter)
+        group.writeEntry("Vertical Splitter State", m_vSplitter->saveState().toBase64());
 
     group.writeEntry("Show Thumbnails", m_showBarAction->isChecked());
     group.writeEntry("FullScreen", m_fullScreenAction->isChecked());

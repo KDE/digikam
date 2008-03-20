@@ -82,9 +82,6 @@ signals:
 
 private:
 
-    void readSettings();
-    void saveSettings();
-
     void loadCurrentList(const QString& caption, bool allowSaving);
     void closeEvent(QCloseEvent* e);
 

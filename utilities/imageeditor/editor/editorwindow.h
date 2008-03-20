@@ -90,6 +90,7 @@ protected:
     QColor                   m_bgColor;
 
     QSplitter               *m_splitter;
+    QSplitter               *m_vSplitter;
 
     KAction                 *m_saveAction;
     KAction                 *m_saveAsAction;

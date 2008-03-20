@@ -128,14 +128,11 @@ public:
         fileTrashDirectlyAction             = 0;
         rightSidebar                        = 0;
         thumbBar                            = 0;
-        vSplitter                           = 0;
     }
 
     // If image editor is launched by camera interface, current
     // image cannot be saved.
     bool                      allowSaving;
-
-    QSplitter                *vSplitter;
 
     KUrl::List                urlList;
     KUrl                      urlCurrent;
@@ -320,19 +317,19 @@ void ImageWindow::setupUserArea()
         m_splitter        = new QSplitter(Qt::Horizontal, widget);
         QWidget* widget2  = new QWidget(m_splitter);
         QVBoxLayout *vlay = new QVBoxLayout(widget2);
-        d->vSplitter      = new QSplitter(Qt::Vertical, widget2);
-        m_canvas          = new Canvas(d->vSplitter);
-        d->thumbBar       = new ImagePreviewBar(d->vSplitter, Qt::Horizontal);
+        m_vSplitter       = new QSplitter(Qt::Vertical, widget2);
+        m_canvas          = new Canvas(m_vSplitter);
+        d->thumbBar       = new ImagePreviewBar(m_vSplitter, Qt::Horizontal);
 
         m_canvas->setSizePolicy(rightSzPolicy);
         m_canvas->makeDefaultEditingCanvas();
 
-        d->vSplitter->setFrameStyle( QFrame::NoFrame );
-        d->vSplitter->setFrameShadow( QFrame::Plain );
-        d->vSplitter->setFrameShape( QFrame::NoFrame );
-        d->vSplitter->setOpaqueResize(false);
+        m_vSplitter->setFrameStyle( QFrame::NoFrame );
+        m_vSplitter->setFrameShadow( QFrame::Plain );
+        m_vSplitter->setFrameShape( QFrame::NoFrame );
+        m_vSplitter->setOpaqueResize(false);
 
-        vlay->addWidget(d->vSplitter);
+        vlay->addWidget(m_vSplitter);
         vlay->setSpacing(0);
         vlay->setMargin(0);
 
@@ -426,40 +423,6 @@ void ImageWindow::setupActions()
     actionCollection()->addAction("logo_action", new DLogoAction(this));
 
     createGUI("digikamimagewindowui.rc");
-}
-
-void ImageWindow::readSettings()
-{
-    readStandardSettings();
-
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("ImageViewer Settings");
-
-    QSizePolicy szPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
-    szPolicy.setHorizontalStretch(2);
-    szPolicy.setVerticalStretch(1);
-    QList<int> list;
-    if(group.hasKey("Vertical Splitter Sizes") && d->vSplitter)
-    {
-        QByteArray state;
-        state = group.readEntry("Vertical Splitter State", state);
-        d->vSplitter->restoreState(QByteArray::fromBase64(state));
-    }
-    else
-        m_canvas->setSizePolicy(szPolicy);
-}
-
-void ImageWindow::saveSettings()
-{
-    saveStandardSettings();
-
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("ImageViewer Settings");
-
-    if (d->vSplitter)
-        group.writeEntry("Vertical Splitter State", d->vSplitter->saveState().toBase64());
-
-    config->sync();
 }
 
 void ImageWindow::applySettings()
