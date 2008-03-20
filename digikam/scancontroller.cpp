@@ -7,8 +7,8 @@
  * Description : scan pictures interface.
  * 
  * Copyright (C) 2005-2006 by Tom Albers <tomalbers@kde.nl>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2007      by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -54,6 +54,7 @@
 #include "albumsettings.h"
 #include "albumdb.h"
 #include "albummanager.h"
+#include "splashscreen.h"
 #include "scancontroller.h"
 #include "scancontroller.moc"
 
@@ -66,6 +67,7 @@ public:
 
     ScanControllerPriv()
     {
+        splash              = 0;
         progressDialog      = 0;
         running             = false;
         needsInitialization = false;
@@ -75,11 +77,10 @@ public:
         advice              = ScanController::Success;
     }
 
-    DProgressDlg        *progressDialog;
-
     bool                 running;
     bool                 needsInitialization;
     bool                 needsCompleteScan;
+
     QStringList          scanTasks;
 
     QMutex               mutex;
@@ -93,6 +94,10 @@ public:
     QPixmap              rootPix;
     QPixmap              actionPix;
     QPixmap              errorPix;
+
+    DProgressDlg        *progressDialog;
+
+    SplashScreen        *splash;
 
     ScanController::Advice advice;
 
@@ -211,7 +216,7 @@ void ScanController::slotTriggerShowProgressDialog()
 
 void ScanController::slotShowProgressDialog()
 {
-    if (d->progressDialog)
+    if (d->progressDialog && !d->splash)
         d->progressDialog->show();
 }
 
@@ -233,8 +238,9 @@ ScanController::Advice ScanController::databaseInitialization()
     return d->advice;
 }
 
-void ScanController::completeCollectionScan()
+void ScanController::completeCollectionScan(SplashScreen *splash)
 {
+    d->splash = splash;
     createProgressDialog();
     {
         QMutexLocker lock(&d->mutex);
@@ -246,6 +252,8 @@ void ScanController::completeCollectionScan()
 
     delete d->progressDialog;
     d->progressDialog = 0;
+    // We do not delete Splashscreen here.
+    d->splash         = 0;
 }
 
 void ScanController::scheduleCollectionScan(const QString &path)
@@ -353,12 +361,16 @@ void ScanController::slotStartScanningAlbumRoot(const QString &albumRoot)
 
 void ScanController::slotStartScanningForStaleAlbums()
 {
-    d->progressDialog->addedAction(d->actionPixmap(), i18n("Scanning for removed albums"));
+    QString message = i18n("Scanning for removed albums");
+    if (d->splash) d->splash->message(message, Qt::AlignLeft, Qt::white);
+    else d->progressDialog->addedAction(d->actionPixmap(), message);
 }
 
 void ScanController::slotStartScanningAlbumRoots()
 {
-    d->progressDialog->addedAction(d->actionPixmap(), i18n("Scanning images in individual albums"));
+    QString message = i18n("Scanning images in individual albums");
+    if (d->splash) d->splash->message(message, Qt::AlignLeft, Qt::white);
+    else d->progressDialog->addedAction(d->actionPixmap(), message);
 }
 
 void ScanController::moreSchemaUpdateSteps(int numberOfSteps)
@@ -374,10 +386,13 @@ void ScanController::schemaUpdateProgress(const QString &message, int numberOfSt
     emit progressFromInitialization(message, numberOfSteps);
 }
 
-void ScanController::slotProgressFromInitialization(const QString &message, int numberOfSteps)
+void ScanController::slotProgressFromInitialization(const QString& message, int numberOfSteps)
 {
     // main thread
-    d->progressDialog->addedAction(d->actionPixmap(), message);
+
+    if (d->splash) d->splash->message(message, Qt::AlignLeft, Qt::white);
+    else d->progressDialog->addedAction(d->actionPixmap(), message);
+
     d->progressDialog->advance(numberOfSteps);
 }
 
@@ -407,7 +422,10 @@ void ScanController::error(const QString &errorMessage)
 void ScanController::slotErrorFromInitialization(const QString &errorMessage)
 {
     // main thread
-    d->progressDialog->addedAction(d->errorPixmap(), i18n("Error"));
+    QString message = i18n("Error");
+    if (d->splash) d->splash->message(message, Qt::AlignLeft, Qt::white);
+    else d->progressDialog->addedAction(d->errorPixmap(), message);
+
     KMessageBox::error(d->progressDialog, errorMessage);
 }
 

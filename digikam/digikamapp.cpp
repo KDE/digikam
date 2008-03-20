@@ -142,7 +142,7 @@ DigikamApp::DigikamApp()
     if (d->config->group("General Settings").readEntry("Scan At Start", true) ||
         Digikam::DatabaseAccess().db()->getSetting("Scanned").isEmpty())
     {
-        Digikam::ScanController::instance()->completeCollectionScan();
+        Digikam::ScanController::instance()->completeCollectionScan(d->splashScreen);
     }
 
     if(d->splashScreen)
