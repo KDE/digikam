@@ -87,28 +87,28 @@ public:
         tileSize        = ThumbnailSize::Small;
     }
 
-    bool                          clearing;
-    bool                          dragging;
+    bool                        clearing;
+    bool                        dragging;
 
-    const int                     margin;
-    int                           count;
-    int                           tileSize;
-    int                           orientation;
+    const int                   margin;
+    int                         count;
+    int                         tileSize;
+    int                         orientation;
 
-    QTimer                       *timer;
+    QTimer                     *timer;
 
-    QPoint                        dragStartPos;
+    QPoint                      dragStartPos;
 
-    ThumbBarItem                 *firstItem;
-    ThumbBarItem                 *lastItem;
-    ThumbBarItem                 *currItem;
+    ThumbBarItem               *firstItem;
+    ThumbBarItem               *lastItem;
+    ThumbBarItem               *currItem;
 
-    QHash<KUrl, ThumbBarItem*>    itemHash;
-    ThumbnailLoadThread          *thumbLoadThread;
+    QHash<KUrl, ThumbBarItem*>  itemHash;
+    ThumbnailLoadThread        *thumbLoadThread;
 
-    ThumbBarToolTipSettings       toolTipSettings;
+    ThumbBarToolTipSettings     toolTipSettings;
 
-    ThumbBarToolTip              *toolTip;
+    ThumbBarToolTip            *toolTip;
 };
 
 // -------------------------------------------------------------------------
@@ -195,13 +195,15 @@ void ThumbBarView::resizeEvent(QResizeEvent* e)
 
     if (d->orientation == Qt::Vertical)
     {
-       d->tileSize = width() - 2*d->margin
-                     - verticalScrollBar()->sizeHint().width();
+        d->tileSize = width() - 2*d->margin - verticalScrollBar()->sizeHint().width();
+        verticalScrollBar()->setSingleStep(d->tileSize);
+        verticalScrollBar()->setPageStep(2*d->tileSize);
     }
     else
     {
-       d->tileSize = height() - 2*d->margin
-                     - horizontalScrollBar()->sizeHint().height();
+        d->tileSize = height() - 2*d->margin - horizontalScrollBar()->sizeHint().height();
+        horizontalScrollBar()->setSingleStep(d->tileSize);
+        horizontalScrollBar()->setPageStep(2*d->tileSize);
     }
 
     rearrangeItems();
