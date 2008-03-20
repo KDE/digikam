@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="24" name="digikamimagewindow" >
+<gui version="25" name="digikamimagewindow" >
 
 <MenuBar>
 
@@ -40,6 +40,8 @@
         <Action name="editorwindow_zoomto100percents" />
         <Action name="editorwindow_zoomfit2window" />
         <Action name="editorwindow_zoomfit2select" />
+        <Separator/>
+        <Action name="imageview_showthumbs" /> 
         <Separator/>
         <Action name="editorwindow_underexposure" />        
         <Action name="editorwindow_overexposure" />        

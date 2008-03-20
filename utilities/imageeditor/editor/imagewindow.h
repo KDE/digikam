@@ -82,6 +82,9 @@ signals:
 
 private:
 
+    void readSettings();
+    void saveSettings();
+
     void loadCurrentList(const QString& caption, bool allowSaving);
     void closeEvent(QCloseEvent* e);
 
@@ -113,6 +116,7 @@ private slots:
     void slotLast();
     void slotFilePrint();
 
+    void slotThumbBarItemSelected(const KUrl&);
     void slotLoadCurrent();
     void slotDeleteCurrentItem();
     void slotDeleteCurrentItemPermanently();
@@ -132,6 +136,7 @@ private slots:
 
     void slotFileMetadataChanged(const KUrl &);
 
+    void slotToggleShowBar();
     void slotChangeTheme(const QString& theme);
 
 private:

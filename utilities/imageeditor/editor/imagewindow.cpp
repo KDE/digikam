@@ -56,6 +56,7 @@
 #include <kmenubar.h>
 #include <ktoolbar.h>
 #include <kaction.h>
+#include <ktoggleaction.h>
 #include <kactioncollection.h>
 #include <kstdaccel.h>
 #include <kstandardaction.h>
@@ -80,6 +81,7 @@
 #include "imageplugin.h"
 #include "imagepluginloader.h"
 #include "imageprint.h"
+#include "imagepreviewbar.h"
 #include "albummanager.h"
 #include "album.h"
 #include "albumdb.h"
@@ -125,11 +127,18 @@ public:
         fileDeletePermanentlyDirectlyAction = 0;
         fileTrashDirectlyAction             = 0;
         rightSidebar                        = 0;
+        thumbBar                            = 0;
+        vSplitter                           = 0;
+        showBarAction                       = 0;
+        fullScreenHideThumbBar              = true;
     }
 
     // If image editor is launched by camera interface, current
     // image cannot be saved.
     bool                      allowSaving;
+    bool                      fullScreenHideThumbBar;
+
+    QSplitter                *vSplitter;
 
     KUrl::List                urlList;
     KUrl                      urlCurrent;
@@ -147,8 +156,12 @@ public:
     KAction                  *fileDeletePermanentlyDirectlyAction;
     KAction                  *fileTrashDirectlyAction;
 
+    KToggleAction            *showBarAction;
+
     ImageInfoList             imageInfoList;
     ImageInfo                 imageInfoCurrent;
+
+    ImagePreviewBar          *thumbBar;
 
     ImagePropertiesSideBarDB *rightSidebar;
 };
@@ -215,6 +228,7 @@ ImageWindow::~ImageWindow()
     // No need to delete m_imagePluginLoader instance here, it will be done by main interface.
 
     delete d->rightSidebar;
+    delete d->thumbBar;
     delete d;
 }
 
@@ -273,28 +287,69 @@ void ImageWindow::setupConnections()
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
+
+    connect(d->thumbBar, SIGNAL(signalUrlSelected(const KUrl&)),
+            this, SLOT(slotThumbBarItemSelected(const KUrl&)));
 }
 
 void ImageWindow::setupUserArea()
 {
-    QWidget* widget  = new QWidget(this);
-    QHBoxLayout *lay = new QHBoxLayout(widget);
-    m_splitter       = new QSplitter(widget);
-    m_canvas         = new Canvas(m_splitter);
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group("ImageViewer Settings");
 
-    m_canvas->makeDefaultEditingCanvas();
-
+    QWidget* widget = new QWidget(this);
     QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
     rightSzPolicy.setHorizontalStretch(2);
     rightSzPolicy.setVerticalStretch(1);
 
-    d->rightSidebar  = new ImagePropertiesSideBarDB(widget, m_splitter,
-                                                    Sidebar::DockRight, true);
-    d->rightSidebar->setObjectName("ImageEditor Right Sidebar");
-    lay->addWidget(m_splitter);
-    lay->addWidget(d->rightSidebar);
-    lay->setSpacing(0);
-    lay->setMargin(0);
+    if(!group.readEntry("HorizontalThumbbar", false)) // Vertical thumbbar layout
+    {
+        QHBoxLayout *hlay = new QHBoxLayout(widget);
+        m_splitter        = new QSplitter(widget);
+        d->thumbBar       = new ImagePreviewBar(m_splitter, Qt::Vertical);
+        m_canvas          = new Canvas(m_splitter);
+
+        m_canvas->setSizePolicy(rightSzPolicy);
+        m_canvas->makeDefaultEditingCanvas();
+
+        d->rightSidebar  = new ImagePropertiesSideBarDB(widget, m_splitter, Sidebar::DockRight, true);
+        d->rightSidebar->setObjectName("ImageEditor Right Sidebar");
+
+        hlay->addWidget(m_splitter);
+        hlay->addWidget(d->rightSidebar);
+        hlay->setSpacing(0);
+        hlay->setMargin(0);
+    }
+    else                                                     // Horizontal thumbbar layout
+    {
+        m_splitter        = new QSplitter(Qt::Horizontal, widget);
+        QWidget* widget2  = new QWidget(m_splitter);
+        QVBoxLayout *vlay = new QVBoxLayout(widget2);
+        d->vSplitter      = new QSplitter(Qt::Vertical, widget2);
+        m_canvas          = new Canvas(d->vSplitter);
+        d->thumbBar       = new ImagePreviewBar(d->vSplitter, Qt::Horizontal);
+
+        m_canvas->setSizePolicy(rightSzPolicy);
+        m_canvas->makeDefaultEditingCanvas();
+
+        d->vSplitter->setFrameStyle( QFrame::NoFrame );
+        d->vSplitter->setFrameShadow( QFrame::Plain );
+        d->vSplitter->setFrameShape( QFrame::NoFrame );
+        d->vSplitter->setOpaqueResize(false);
+
+        vlay->addWidget(d->vSplitter);
+        vlay->setSpacing(0);
+        vlay->setMargin(0);
+
+        QHBoxLayout *hlay = new QHBoxLayout(widget);
+        d->rightSidebar   = new ImagePropertiesSideBarDB(widget, m_splitter, Sidebar::DockRight, true);
+        d->rightSidebar->setObjectName("ImageEditor Right Sidebar");
+
+        hlay->addWidget(m_splitter);
+        hlay->addWidget(d->rightSidebar);
+        hlay->setSpacing(0);
+        hlay->setMargin(0);
+    }
 
     m_splitter->setFrameStyle( QFrame::NoFrame );
     m_splitter->setFrameShadow( QFrame::Plain );
@@ -371,11 +426,57 @@ void ImageWindow::setupActions()
             this, SLOT(slotTrashCurrentItemDirectly()));
     actionCollection()->addAction("image_trash_directly", d->fileTrashDirectlyAction);
 
+    // Extra 'View' menu actions ---------------------------------------------
+
+    d->showBarAction = new KToggleAction(KIcon("view-choose"), i18n("Show Thumbnails"), this);
+    d->showBarAction->setShortcut(Qt::CTRL+Qt::Key_T);
+    connect(d->showBarAction, SIGNAL(triggered()), this, SLOT(slotToggleShowBar()));
+    actionCollection()->addAction("imageview_showthumbs", d->showBarAction);
+
     // ---------------------------------------------------------------------------------
 
     actionCollection()->addAction("logo_action", new DLogoAction(this));
 
     createGUI("digikamimagewindowui.rc");
+}
+
+void ImageWindow::readSettings()
+{
+    readStandardSettings();
+
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group = config->group("ImageViewer Settings");
+
+    d->showBarAction->setChecked(group.readEntry("Show Thumbnails", true));
+    slotToggleShowBar();
+
+    QSizePolicy szPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+    szPolicy.setHorizontalStretch(2);
+    szPolicy.setVerticalStretch(1);
+    QList<int> list;
+    if(group.hasKey("Vertical Splitter Sizes") && d->vSplitter)
+    {
+        QByteArray state;
+        state = group.readEntry("Vertical Splitter State", state);
+        d->vSplitter->restoreState(QByteArray::fromBase64(state));
+    }
+    else
+        m_canvas->setSizePolicy(szPolicy);
+}
+
+void ImageWindow::saveSettings()
+{
+    saveStandardSettings();
+
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group = config->group("ImageViewer Settings");
+
+    group.writeEntry("Show Thumbnails", d->showBarAction->isChecked());
+
+    if (d->vSplitter)
+        group.writeEntry("Vertical Splitter State", d->vSplitter->saveState().toBase64());
+
+    config->sync();
 }
 
 void ImageWindow::applySettings()
@@ -384,13 +485,37 @@ void ImageWindow::applySettings()
 
     AlbumSettings *settings = AlbumSettings::instance();
     m_canvas->setExifOrient(settings->getExifRotate());
+    d->thumbBar->setExifRotate(settings->getExifRotate());
     m_setExifOrientationTag = settings->getExifSetOrientation();
+
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group("ImageViewer Settings");
+    d->fullScreenHideThumbBar = group.readEntry("FullScreenHideThumbBar", true);
+
     refreshView();
 }
 
 void ImageWindow::refreshView()
 {
     d->rightSidebar->refreshTagsView();
+}
+
+void ImageWindow::slotThumbBarItemSelected(const KUrl& url)
+{
+    if (d->urlCurrent == url)
+        return;
+
+    if (!promptUserSave(d->urlCurrent))
+        return;
+
+    d->urlCurrent = url;
+
+    m_saveAction->setEnabled(false);
+    m_revertAction->setEnabled(false);
+    m_undoAction->setEnabled(false);
+    m_redoAction->setEnabled(false);
+
+    QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));
 }
 
 void ImageWindow::loadURL(const KUrl::List& urlList, const KUrl& urlCurrent,
@@ -423,13 +548,17 @@ void ImageWindow::loadImageInfos(const ImageInfoList &imageInfoList, const Image
 
     // create URL list
     d->urlList = KUrl::List();
+    d->thumbBar->clear();
 
     for (ImageInfoList::iterator it = d->imageInfoList.begin(); it != d->imageInfoList.end(); ++it)
     {
         d->urlList.append(it->fileUrl());
+        ImagePreviewBarItem *item = new ImagePreviewBarItem(d->thumbBar, *it);
+        if (imageInfoCurrent == *it)
+            d->thumbBar->setSelectedItem(item);
     }
 
-    d->urlCurrent  = d->imageInfoCurrent.fileUrl();
+    d->urlCurrent = d->imageInfoCurrent.fileUrl();
 
     loadCurrentList(caption, allowSaving);
 }
@@ -470,6 +599,10 @@ void ImageWindow::slotLoadCurrent()
         if (++index != d->urlList.size())
             m_canvas->preload(d->urlList[index].path());
     }
+
+    d->thumbBar->blockSignals(true);
+    d->thumbBar->setSelected(d->thumbBar->findItemByUrl(d->urlCurrent));
+    d->thumbBar->blockSignals(false);
 
     // Do this _after_ the canvas->load(), so that the main view histogram does not load
     // a smaller version if a raw image, and after that the DImgInterface loads the full version.
@@ -746,9 +879,24 @@ bool ImageWindow::setup(bool iccSetupPage)
 void ImageWindow::toggleGUI2FullScreen()
 {
     if (m_fullScreen)
+    {
         d->rightSidebar->restore();
+
+        // If Hide Thumbbar option is checked, restore it.
+        if (!d->showBarAction->isChecked())
+            d->thumbBar->show();
+    }
     else
+    {
         d->rightSidebar->backup();
+
+        // If Hide Thumbbar option is checked, catch it if necessary.
+        if (d->showBarAction->isChecked())
+        {
+            if (d->fullScreenHideThumbBar)
+                d->thumbBar->hide();
+        }
+    }
 }
 
 void ImageWindow::saveIsComplete()
@@ -759,6 +907,7 @@ void ImageWindow::saveIsComplete()
 
     // put image in cache, the LoadingCacheInterface cares for the details
     LoadingCacheInterface::putImage(m_savingContext->destinationURL.path(), m_canvas->currentImage());
+    d->thumbBar->refreshThumbs(KUrl::List() << d->urlCurrent);
 
     // notify main app that file changed
     emit signalFileModified(m_savingContext->destinationURL);
@@ -843,6 +992,17 @@ void ImageWindow::saveAsIsComplete()
             if (++index != d->urlList.count())
                 m_canvas->preload(d->urlList[index].path());
         }
+
+        // Add the file to the list of thumbbar images if it's not there already
+        ImagePreviewBarItem *foundItem = d->thumbBar->findItemByInfo(d->imageInfoCurrent);
+        d->thumbBar->invalidateThumb(foundItem);
+
+        if (!foundItem)
+            foundItem = new ImagePreviewBarItem(d->thumbBar, d->imageInfoCurrent);
+
+        d->thumbBar->blockSignals(true);
+        d->thumbBar->setSelected(foundItem);
+        d->thumbBar->blockSignals(false);
     }
     else
     {
@@ -961,7 +1121,11 @@ void ImageWindow::deleteCurrentItem(bool ask, bool permanently)
 
     emit signalFileDeleted(d->urlCurrent);
 
-    KUrl CurrentToRemove = d->urlCurrent;
+    // Remove item from Thumbbar.
+    d->thumbBar->blockSignals(true);
+    d->thumbBar->removeItem(d->thumbBar->findItemByUrl(d->urlCurrent));
+    d->thumbBar->blockSignals(false);
+
     int index = d->urlList.indexOf(d->urlCurrent);
 
     if (index != -1)
@@ -971,7 +1135,7 @@ void ImageWindow::deleteCurrentItem(bool ask, bool permanently)
             // Try to get the next image in the current Album...
 
             ++index;
-            d->urlCurrent = d->urlList[index];
+            d->urlCurrent       = d->urlList[index];
             d->imageInfoCurrent = d->imageInfoList[index];
             d->urlList.removeAt(index);
             d->imageInfoList.removeAt(index);
@@ -983,7 +1147,7 @@ void ImageWindow::deleteCurrentItem(bool ask, bool permanently)
             // Try to get the previous image in the current Album.
 
             --index;
-            d->urlCurrent = d->urlList[index];
+            d->urlCurrent       = d->urlList[index];
             d->imageInfoCurrent = d->imageInfoList[index];
             d->urlList.removeAt(index);
             d->imageInfoList.removeAt(index);
@@ -1220,6 +1384,14 @@ void ImageWindow::slotChangeTheme(const QString& theme)
     name.remove(QChar('&'));
     AlbumSettings::instance()->setCurrentTheme(theme);
     ThemeEngine::instance()->slotChangeTheme(theme);
+}
+
+void ImageWindow::slotToggleShowBar()
+{
+    if (d->showBarAction->isChecked())
+        d->thumbBar->show();
+    else
+        d->thumbBar->hide();
 }
 
 }  // namespace Digikam
