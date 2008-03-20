@@ -133,11 +133,9 @@ public:
         itemsNb                 = 0;
         vSplitter               = 0;
         deleteItem2Trash        = true;
-        fullScreenHideThumbBar  = true;
         validIccPath            = true;
     }
 
-    bool                             fullScreenHideThumbBar;
     bool                             deleteItem2Trash;
     bool                             validIccPath;
 
@@ -597,8 +595,6 @@ void ShowFoto::applySettings()
 
     m_setExifOrientationTag   = group.readEntry("EXIF Set Orientation", true);
 
-    d->fullScreenHideThumbBar = group.readEntry("FullScreenHideThumbBar", true);
-
     Digikam::ThumbBarToolTipSettings settings;
     settings.showToolTips   = group.readEntry("Show ToolTips", true);
     settings.showFileName   = group.readEntry("ToolTips Show File Name", true);
@@ -655,7 +651,7 @@ void ShowFoto::slotOpenUrl(const KUrl& url)
 
     QString localFile;
     KIO::NetAccess::download(url, localFile, this);
-    
+
     m_canvas->load(localFile, m_IOFileSettings);
 
     // TODO : add preload here like in ImageWindow::slotLoadCurrent() ???
@@ -678,7 +674,7 @@ void ShowFoto::toggleGUI2FullScreen()
         // If Hide Thumbbar option is checked, catch it if necessary.
         if (d->showBarAction->isChecked())
         {
-            if (d->fullScreenHideThumbBar)
+            if (m_fullScreenHideThumbBar)
                 d->thumbBar->hide();
         }
     }

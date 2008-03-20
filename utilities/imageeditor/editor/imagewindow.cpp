@@ -130,13 +130,11 @@ public:
         thumbBar                            = 0;
         vSplitter                           = 0;
         showBarAction                       = 0;
-        fullScreenHideThumbBar              = true;
     }
 
     // If image editor is launched by camera interface, current
     // image cannot be saved.
     bool                      allowSaving;
-    bool                      fullScreenHideThumbBar;
 
     QSplitter                *vSplitter;
 
@@ -487,10 +485,6 @@ void ImageWindow::applySettings()
     m_canvas->setExifOrient(settings->getExifRotate());
     d->thumbBar->setExifRotate(settings->getExifRotate());
     m_setExifOrientationTag = settings->getExifSetOrientation();
-
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("ImageViewer Settings");
-    d->fullScreenHideThumbBar = group.readEntry("FullScreenHideThumbBar", true);
 
     refreshView();
 }
@@ -893,7 +887,7 @@ void ImageWindow::toggleGUI2FullScreen()
         // If Hide Thumbbar option is checked, catch it if necessary.
         if (d->showBarAction->isChecked())
         {
-            if (d->fullScreenHideThumbBar)
+            if (m_fullScreenHideThumbBar)
                 d->thumbBar->hide();
         }
     }

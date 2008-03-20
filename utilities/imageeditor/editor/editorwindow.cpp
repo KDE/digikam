@@ -141,6 +141,7 @@ EditorWindow::EditorWindow(const char *name)
     m_rotatedOrFlipped       = false;
     m_setExifOrientationTag  = true;
     m_cancelSlideShow        = false;
+    m_fullScreenHideThumbBar = true;
 
     // Settings containers instance.
 
@@ -894,6 +895,7 @@ void EditorWindow::applyStandardSettings()
         m_canvas->setSizePolicy(rightSzPolicy);
 
     d->fullScreenHideToolBar = group.readEntry("FullScreen Hide ToolBar", false);
+    m_fullScreenHideThumbBar = group.readEntry("FullScreenHideThumbBar", true);
 
     slotThemeChanged();
 

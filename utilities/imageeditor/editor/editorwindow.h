@@ -77,6 +77,7 @@ signals:
 
 protected:
 
+    bool                     m_fullScreenHideThumbBar;
     bool                     m_cancelSlideShow;
     bool                     m_fullScreen;
     bool                     m_rotatedOrFlipped;
