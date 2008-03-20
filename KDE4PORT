@@ -40,34 +40,33 @@ LIST OF DIRECTORIES PORTED BY DEVELOPPERS:
 DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT      TESTS      REMARKS
 
 |-libs
-|---curves                              Gilles          X      X       DONE
+|---curves                              Gilles          X      X       DONE        DONE
 |---database                            Marcel                 X       DONE
 |-----sqlite2                           Gilles                 X       DONE        -
 |---dialogs                             Gilles          X      X       DONE
-|---dimg                                Gilles          X      X       DONE
-|-----filters                           Gilles          X      X       DONE
-|-----loaders                           Gilles          X      X       DONE
+|---dimg                                Gilles          X      X       DONE        DONE
+|-----filters                           Gilles          X      X       DONE        DONE
+|-----loaders                           Gilles          X      X       DONE        DONE
 |---dmetadata                           Gilles          X      X       DONE        DONE
 |---greycstoration                      Gilles          X      X       DONE        DONE
 |---histogram                           Gilles          X      X       DONE        DONE
 |---imageproperties
-    navigatebartab.cpp                  Gilles          X      X       DONE        
-    imagepropertiessidebar.cpp          Gilles          X      X       DONE
-    navigatebarwidget.cpp               Gilles          X      X       DONE
-    imagepropertiescolorstab.cpp        Gilles          X      X       DONE
-    imagepropertiesmetadatatab.cpp      Gilles          X      X       DONE
-    imagepropertiestab.cpp              Gilles          X      X       DONE
-    cameraitempropertiestab.cpp         Gilles                 X       DONE
-    imagepropertiessidebarcamgui.cpp    Gilles                 X       DONE
-    imagepropertiessidebardb.cpp        Gilles                 X       DONE
-    imagedescedittab.cpp                Gilles                 X       DONE
-    talbumlistview.cpp                  Gilles                 X       DONE
-|---jpegutils                           Gilles                 X       DONE
-|---levels                              Gilles          X      X       DONE
-|---lprof                               Gilles          X      X       DONE        -
+    worldmapwidget.cpp                  Gilles          X      X       DONE                 Must be ported to Marble.
+    imagepropertiessidebar.cpp          Gilles          X      X       DONE        DONE
+    imagepropertiescolorstab.cpp        Gilles          X      X       DONE        DONE
+    imagepropertiesmetadatatab.cpp      Gilles          X      X       DONE        DONE
+    imagepropertiestab.cpp              Gilles          X      X       DONE        DONE
+    cameraitempropertiestab.cpp         Gilles                 X       DONE        DONE
+    imagepropertiessidebarcamgui.cpp    Gilles                 X       DONE        DONE
+    imagepropertiessidebardb.cpp        Gilles                 X       DONE        DONE
+    imagedescedittab.cpp                Gilles                 X       DONE        DONE
+    talbumlistview.cpp                  Gilles                 X       DONE        DONE
+|---jpegutils                           Gilles                 X       DONE        
+|---levels                              Gilles          X      X       DONE        DONE
+|---lprof                               Gilles          X      X       DONE        DONE
 |---themeengine                         Gilles                 X       DONE        DONE
 |---threadimageio                       Marcel          X      X       DONE
-|---whitebalance                        Gilles          X      X       DONE
+|---whitebalance                        Gilles          X      X       DONE        DONE
 |---widgets
 |-----common
     colorgradientwidget.cpp             Gilles          X      X       DONE        DONE
@@ -84,7 +83,8 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
     statusnavigatebar.cpp               Gilles          X      X       DONE        DONE
     statusprogressbar.cpp               Gilles          X      X       DONE        DONE
     statuszoombar.cpp	                Gilles          X      X       DONE        DONE
-    thummbar.cpp                        Gilles          X      X       DONE        DONE
+    statusled.cpp                       Gilles                 X       DONE        DONE
+    thumbbar.cpp                        Gilles          X      X       DONE        DONE
 |-----iccprofiles
     cietonguewidget.cpp                 Gilles          X      X       DONE        DONE
     iccpreviewwidget.cpp                Gilles          X      X       DONE        DONE
@@ -133,7 +133,7 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
     lighttablewindow.cpp                Gilles                 X       DONE
 |---kipiiface                           Gilles                 X       DONE        DONE
 |---scripts                             Gilles                         DONE        -
-|---setup                               Gilles          X      X       DONE
+|---setup                               Gilles          X      X       DONE        DONE
 |---slideshow                           Laurent         X      X       DONE        DONE
 
 |-kioslave
