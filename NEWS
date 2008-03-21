@@ -41,7 +41,8 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 028 ==> 141703 : Show file creation date in tooltip.
 029 ==> 128377 : Adjust levels: histograms don't match, bad "auto level" function.
 030 ==> 141755 : Sidebar: Hide unused tabs, Add tooltips. 
-031 ==> 
+031 ==> 146068 : Mixer does not work for green and blue selected as main channel and monochrome mode.
+032 ==> 
 
 
 **********************************************************************************************
