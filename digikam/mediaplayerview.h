@@ -4,9 +4,9 @@
  * http://www.digikam.org
  *
  * Date        : 2006-20-12
- * Description : a view to embed a KPart media player.
+ * Description : a view to embed Phonon media player.
  * 
- * Copyright (C) 2006-2007 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,14 +48,15 @@ Q_OBJECT
 public:
 
     MediaPlayerView(QWidget *parent=0);
-    ~MediaPlayerView();    
+    ~MediaPlayerView();
 
     void setMediaPlayerFromUrl(const KUrl& url);
     void escapePreview();
-           
+
 private slots:
 
     void slotThemeChanged();
+    void slotPlayerFinished();
 
 private:
 
@@ -64,7 +65,7 @@ private:
 
 private:
 
-    MediaPlayerViewPriv* d;        
+    MediaPlayerViewPriv *d;
 };
 
 }  // NameSpace Digikam

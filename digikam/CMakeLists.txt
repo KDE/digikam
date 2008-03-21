@@ -218,6 +218,7 @@ KDE4_ADD_EXECUTABLE(digikam_bin ${digikam_bin_SRCS})
 TARGET_LINK_LIBRARIES(digikam_bin
                       ${KDE4_KPARTS_LIBS}
                       ${KDE4_KABC_LIBS}
+                      ${KDE4_PHONON_LIBS}
                       ${STRIGI_LIBRARIES} 
                       ${GPHOTO2_LIBRARIES}
                       digikam

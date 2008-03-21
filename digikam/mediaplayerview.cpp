@@ -4,9 +4,9 @@
  * http://www.digikam.org
  *
  * Date        : 2006-20-12
- * Description : a view to embed a KPart media player.
+ * Description : a view to embed Phonon media player.
  * 
- * Copyright (C) 2006-2007 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,6 +36,10 @@
 #include <kservice.h>
 #include <kdialog.h>
 #include <klocale.h>
+#include <Phonon/SeekSlider>
+#include <Phonon/MediaObject>
+#include <Phonon/VideoPlayer>
+#include <Phonon/VideoWidget>
 
 // Local includes.
 
@@ -62,26 +66,28 @@ public:
 
     MediaPlayerViewPriv()
     {
-        mediaPlayerPart   = 0;
-        grid              = 0;
-        errorView         = 0;
-        mediaPlayerView   = 0;
+        player          = 0;
+        grid            = 0;
+        errorView       = 0;
+        mediaPlayerView = 0;
+        slider          = 0;
     }
 
-    QFrame               *errorView;
+    QFrame              *errorView;
 
-    QFrame               *mediaPlayerView;
+    QFrame              *mediaPlayerView;
 
-    QGridLayout          *grid;
+    QGridLayout         *grid;
 
-    KParts::ReadOnlyPart *mediaPlayerPart;
+    Phonon::VideoPlayer *player;
+    Phonon::SeekSlider  *slider;
 };
-    
+
 MediaPlayerView::MediaPlayerView(QWidget *parent)
                : QStackedWidget(parent)
 {
     d = new MediaPlayerViewPriv;
-    
+
     setAttribute(Qt::WA_DeleteOnClose);
 
     // --------------------------------------------------------------------------
@@ -108,10 +114,17 @@ MediaPlayerView::MediaPlayerView(QWidget *parent)
 
     d->mediaPlayerView = new QFrame(this);
     d->grid            = new QGridLayout(d->mediaPlayerView);
+    d->player          = new Phonon::VideoPlayer(Phonon::VideoCategory, d->mediaPlayerView);
+    d->slider          = new Phonon::SeekSlider(d->mediaPlayerView);
+    d->slider->setMediaObject(d->player->mediaObject());
+    d->player->mediaObject()->setTickInterval(100);
+    d->player->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     d->mediaPlayerView->setFrameStyle(QFrame::GroupBoxPanel|QFrame::Plain);
     d->mediaPlayerView->setLineWidth(1);
 
+    d->grid->addWidget(d->player->videoWidget(), 0, 0, 1, 3);
+    d->grid->addWidget(d->slider, 1, 0, 1, 3);
     d->grid->setColumnStretch(0, 10),
     d->grid->setColumnStretch(2, 10),
     d->grid->setRowStretch(0, 10),
@@ -124,18 +137,13 @@ MediaPlayerView::MediaPlayerView(QWidget *parent)
     // --------------------------------------------------------------------------
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
-            this, SLOT(slotThemeChanged()));  
+            this, SLOT(slotThemeChanged()));
 }
 
 MediaPlayerView::~MediaPlayerView()
 {
-    if (d->mediaPlayerPart)
-    {
-        d->mediaPlayerPart->closeUrl();
-        delete d->mediaPlayerPart;
-        d->mediaPlayerPart = 0;
-    }
-
+    d->player->stop();
+    delete d->player;
     delete d;
 }
 
@@ -143,94 +151,25 @@ void MediaPlayerView::setMediaPlayerFromUrl(const KUrl& url)
 {
     if (url.isEmpty())
     {
-        if (d->mediaPlayerPart)
-        {
-            d->mediaPlayerPart->closeUrl();
-            delete d->mediaPlayerPart;
-            d->mediaPlayerPart = 0;
-        }
+        d->player->stop();
         return;
     }
 
-    KMimeType::Ptr mimePtr = KMimeType::findByUrl(url, 0, true, true);
+    d->player->play(url);
 
-    const KService::List services = KMimeTypeTrader::self()->query(mimePtr->name(),
-                                    QString::fromLatin1("KParts/ReadOnlyPart"));
-
-    DDebug() << "Search a KPart to preview " << url.fileName() << " (" << mimePtr->name() << ") " << endl;
-
-    if (d->mediaPlayerPart)
-    {
-        d->mediaPlayerPart->closeUrl();
-        delete d->mediaPlayerPart;
-        d->mediaPlayerPart = 0;
-    }
-
-    QWidget *mediaPlayerWidget = 0;
-
-    for( KService::List::ConstIterator it = services.begin() ; it != services.end() ; ++it ) 
-    {
-        // Ask for a part for this mime type
-        KService::Ptr service = *it;
-
-        if (!service.data()) 
-        {
-            DWarning() << "Couldn't find a KPart for media" << endl;
-            continue;
-        }
-
-        QString library = service->library();
-        if ( library.isNull() ) 
-        {
-            DWarning() << "The library returned from the service was null, "
-                       << "indicating we could not play media." 
-                       << endl;
-            continue;
-        }
-
-        DDebug() << "Find KPart library " << library << endl;
-        int error = 0;
-        d->mediaPlayerPart = KParts::ComponentFactory::createPartInstanceFromService
-                             <KParts::ReadOnlyPart>(service, d->mediaPlayerView, d->mediaPlayerView,
-                                                    QStringList(), &error);
-        if (!d->mediaPlayerPart) 
-        {
-            DWarning() << "Failed to instantiate KPart from library " << library 
-                       << " error=" << error << endl;
-            continue;
-        }
-
-        mediaPlayerWidget = d->mediaPlayerPart->widget(); 
-        if ( !mediaPlayerWidget ) 
-        {
-            DWarning() << "Failed to get KPart widget from library " << library << endl;
-            continue;
-        }
-
-        mediaPlayerWidget->show();
-        break;
-    }
-
-    if (!mediaPlayerWidget)
+/* TODO : handle error from Phonon if format is not supported.
     { 
         setPreviewMode(MediaPlayerViewPriv::ErrorView);
         return;
     }
+*/
 
-    d->grid->addWidget(mediaPlayerWidget, 0, 0, 1, 3 );
-    mediaPlayerWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    d->mediaPlayerPart->openUrl(url);
     setPreviewMode(MediaPlayerViewPriv::PlayerView);
 }
 
 void MediaPlayerView::escapePreview()
 {
-    if (d->mediaPlayerPart)
-    {
-        d->mediaPlayerPart->closeUrl();
-        delete d->mediaPlayerPart;
-        d->mediaPlayerPart = 0;
-    }
+    d->player->stop();
 }
 
 void MediaPlayerView::slotThemeChanged()
@@ -255,6 +194,10 @@ void MediaPlayerView::setPreviewMode(int mode)
         return;
 
     setCurrentIndex(mode);
+}
+
+void MediaPlayerView::slotPlayerFinished()
+{
 }
 
 }  // NameSpace Digikam
