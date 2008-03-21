@@ -7,6 +7,7 @@ General        : Thumbs KIO-Slave removed. digiKam now use multi-threading to ge
 General        : Removed all X11 library dependencies. Code is now portable under MACOS-X and Win32.
 General        : Support of XMP metadata (require Exiv2 0.16).
 General        : Hardware handling using KDE4 Solid interface.
+General        : Preview of Video and Audio files using KDE4 Phonon interface.
 General        : Database file can be stored on a customized place to support remote album library path.
 General        : Support of multiple roots album paths.
 General        : New option in Help menu to list all RAW file formats supported.
