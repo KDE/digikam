@@ -309,6 +309,8 @@ void ImagePreviewView::slotNextPreload()
 void ImagePreviewView::setImageInfo(const ImageInfo & info, const ImageInfo &previous, const ImageInfo &next)
 {
     d->imageInfo = info;
+    d->hasPrev   = previous.isNull() ? false : true;
+    d->hasNext   = next.isNull()     ? false : true;
 
     if (!d->imageInfo.isNull())
         setImagePath(info.filePath());
@@ -359,12 +361,10 @@ void ImagePreviewView::slotContextMenu()
 
     DPopupMenu popmenu(this);
     QAction *backAction        = popmenu.addAction(SmallIcon("go-previous"), i18n("Back"));
-    if (!d->hasPrev)
-        backAction->setEnabled(false);
+    backAction->setEnabled(d->hasPrev);
 
     QAction *forwardAction     = popmenu.addAction(SmallIcon("go-next"), i18n("Forward"));
-    if (!d->hasNext)
-        forwardAction->setEnabled(false);
+    forwardAction->setEnabled(d->hasNext);
 
     QAction *backToAlbumAction = popmenu.addAction(SmallIcon("folder-image"), i18n("Back to Album"));
 
