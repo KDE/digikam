@@ -166,7 +166,7 @@ QStringList LoadingDescription::possibleThumbnailCacheKeys(const QString &filePa
     // there are 256 possible keys...
     QString path = filePath + "-thumbnail-";
     for (int i=1; i<=256; i++)
-        keys << filePath + QString::number(i);
+        keys << path + QString::number(i);
     return keys;
 }
 
