@@ -33,7 +33,6 @@
 #include <kdialog.h>
 #include <klocale.h>
 #include <Phonon/SeekSlider>
-#include <Phonon/MediaObject>
 #include <Phonon/VideoPlayer>
 #include <Phonon/VideoWidget>
 
@@ -70,7 +69,6 @@ public:
     }
 
     QFrame              *errorView;
-
     QFrame              *mediaPlayerView;
 
     QGridLayout         *grid;
@@ -89,7 +87,7 @@ MediaPlayerView::MediaPlayerView(QWidget *parent)
     // --------------------------------------------------------------------------
 
     d->errorView      = new QFrame(this);
-    QLabel *errorMsg  = new QLabel(i18n("No media player available..."), d->errorView);
+    QLabel *errorMsg  = new QLabel(i18n("An error is occured with media player..."), d->errorView);
     QGridLayout *grid = new QGridLayout(d->errorView);
 
     errorMsg->setAlignment(Qt::AlignCenter);
@@ -131,6 +129,11 @@ MediaPlayerView::MediaPlayerView(QWidget *parent)
     setPreviewMode(MediaPlayerViewPriv::PlayerView);
 
     // --------------------------------------------------------------------------
+    connect(d->player->mediaObject(), SIGNAL(finished()),
+            this, SLOT(slotPlayerFinished()));
+
+    connect(d->player->mediaObject(), SIGNAL(stateChanged(Phonon::State, Phonon::State)),
+            this, SLOT(slotPlayerstateChanged(Phonon::State, Phonon::State)));
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
@@ -152,15 +155,19 @@ void MediaPlayerView::setMediaPlayerFromUrl(const KUrl& url)
     }
 
     d->player->play(url);
-
-/* TODO : handle error from Phonon if format is not supported.
-    { 
-        setPreviewMode(MediaPlayerViewPriv::ErrorView);
-        return;
-    }
-*/
-
     setPreviewMode(MediaPlayerViewPriv::PlayerView);
+}
+
+void MediaPlayerView::slotPlayerFinished()
+{
+    if (d->player->mediaObject()->errorType() == Phonon::FatalError)
+        setPreviewMode(MediaPlayerViewPriv::ErrorView);
+}
+
+void MediaPlayerView::slotPlayerstateChanged(Phonon::State newState, Phonon::State /*oldState*/)
+{
+    if (newState == Phonon::ErrorState)
+        setPreviewMode(MediaPlayerViewPriv::ErrorView);
 }
 
 void MediaPlayerView::escapePreview()
@@ -190,10 +197,6 @@ void MediaPlayerView::setPreviewMode(int mode)
         return;
 
     setCurrentIndex(mode);
-}
-
-void MediaPlayerView::slotPlayerFinished()
-{
 }
 
 }  // NameSpace Digikam

@@ -31,6 +31,7 @@
 // KDE includes.
 
 #include <kurl.h>
+#include <Phonon/MediaObject>
 
 // Local includes
 
@@ -57,6 +58,7 @@ private slots:
 
     void slotThemeChanged();
     void slotPlayerFinished();
+    void slotPlayerstateChanged(Phonon::State newState, Phonon::State oldState);
 
 private:
 
