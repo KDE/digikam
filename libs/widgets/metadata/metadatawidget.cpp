@@ -117,6 +117,7 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
     simpleLevel->setIcon( iconLoader->loadIcon( "user-identity", (KIconLoader::Group)KIconLoader::Toolbar ) );
     simpleLevel->setCheckable(true);
     simpleLevel->setWhatsThis( i18n( "Toggle tags view to a simple human-readable list" ) );
+    simpleLevel->setToolTip(i18n( "Simple list" ));
     d->levelButtons->addButton(simpleLevel, SIMPLE);
     hlay1->addWidget(simpleLevel);
 
@@ -124,6 +125,7 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
     fullLevel->setIcon( iconLoader->loadIcon( "view-media-playlist", (KIconLoader::Group)KIconLoader::Toolbar ) );
     fullLevel->setCheckable(true);
     fullLevel->setWhatsThis( i18n( "Toggle tags view to a full list" ) );
+    fullLevel->setToolTip(i18n( "Full list" ));
     d->levelButtons->addButton(fullLevel, FULL);
 
     hlay1->addWidget(fullLevel);
@@ -138,17 +140,20 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
 
     QPushButton *saveMetadata = new QPushButton( d->toolsGBox );
     saveMetadata->setIcon( iconLoader->loadIcon( "document-save", (KIconLoader::Group)KIconLoader::Toolbar ) );
-    saveMetadata->setWhatsThis( i18n( "Save meta-data to a binary file" ) );
+    saveMetadata->setWhatsThis( i18n( "Save metadata to a binary file" ) );
+    saveMetadata->setToolTip( i18n( "Save metadata" ));
     d->toolButtons->addButton(saveMetadata);
 
     QPushButton *printMetadata = new QPushButton( d->toolsGBox );
     printMetadata->setIcon( iconLoader->loadIcon( "document-print", (KIconLoader::Group)KIconLoader::Toolbar ) );
-    printMetadata->setWhatsThis( i18n( "Print meta-data to printer" ) );
+    printMetadata->setWhatsThis( i18n( "Print metadata to printer" ) );
+    printMetadata->setToolTip(i18n( "Print metadata" ));
     d->toolButtons->addButton(printMetadata);
 
     QPushButton *copy2ClipBoard = new QPushButton( d->toolsGBox );
     copy2ClipBoard->setIcon( iconLoader->loadIcon( "edit-copy", (KIconLoader::Group)KIconLoader::Toolbar ) );
-    copy2ClipBoard->setWhatsThis( i18n( "Copy meta-data to clipboard" ) );
+    copy2ClipBoard->setWhatsThis( i18n( "Copy metadata to clipboard" ) );
+    copy2ClipBoard->setToolTip(i18n( "Copy metadata to clipboard" ));
     d->toolButtons->addButton(copy2ClipBoard);
 
     hlay2->addWidget(saveMetadata);
