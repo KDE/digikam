@@ -102,10 +102,10 @@ SetupEditor::SetupEditor(QWidget* parent )
     d->backgroundColor->setWhatsThis( i18n("<p>Customize the background color to use "
                                            "in the image editor area.") );
 
-    d->horizontalThumbBar = new QCheckBox(i18n("Use &horizontal thumbbar (need to restart digiKam)"),
+    d->horizontalThumbBar = new QCheckBox(i18n("Use &horizontal thumbbar (need to restart editor)"),
                                           interfaceOptionsGroup);
     d->horizontalThumbBar->setWhatsThis( i18n("<p>If this option is enabled, thumbnails bar will be displayed "
-                                              "horizontally behind image area. You need to restart digiKam "
+                                              "horizontally behind image area. You need to restart editor "
                                               "for this option take effect.<p>"));
 
     d->hideThumbBar = new QCheckBox(i18n("Hide &thumbbar in fullscreen mode"), interfaceOptionsGroup);
