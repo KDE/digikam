@@ -800,7 +800,7 @@ void CameraUI::finishDialog()
 
     // When a directory is created, a watch is put on it to spot new files
     // but it can occur that the file is copied there before the watch is
-    // completely setup. That is why as an extra safeguard run scanlib
+    // completely setup. That is why as an extra safeguard run CollectionScanner
     // over the folders we used. Bug: 119201
 
     d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode,
