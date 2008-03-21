@@ -104,11 +104,11 @@ public slots:
 
     void slotEscapePreview();
     void slotItemsUpdated(const KUrl::List&);
+    void slotItemsAdded();
 
 private slots: 
 
     void slotZoomFactorChanged(double);
-    void slotItemsAdded();
 
 private:
 

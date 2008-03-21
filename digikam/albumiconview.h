@@ -91,10 +91,10 @@ public:
     KUrl::List allItems();
     KUrl::List selectedItems();
 
-    /** Returns the list of ImageInfos of all items,
-    with the extra feature that the currentItem is the first in the list
-    if 'currentInFirst' is true. */
-    ImageInfoList allImageInfos(bool currentInFirst=true) const;
+    /** Returns the list of ImageInfos of all items. 
+        Current selected item ImageInfo will be copied into 'current'.
+     */
+    ImageInfoList allImageInfos(ImageInfo& current) const;
     ImageInfoList selectedImageInfos() const;
 
     void refresh();

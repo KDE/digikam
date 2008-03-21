@@ -1104,22 +1104,22 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item)
         return;
     }
 
-    // Run Digikam ImageEditor with all image files in the current Album.
+    // Run digiKam ImageEditor with all image from current Album.
 
-    ImageInfoList imageInfoList;
-    ImageInfo currentImageInfo;
+    ImageInfoList list;
+    ImageInfo     current;
 
     for (IconItem *it = firstItem() ; it ; it = it->nextItem())
     {
-        AlbumIconItem *iconItem = static_cast<AlbumIconItem *>(it);
-        QString fileExtension = iconItem->imageInfo().fileUrl().fileName().section( '.', -1 );
+        AlbumIconItem *iconItem = static_cast<AlbumIconItem*>(it);
+        ImageInfo info          = iconItem->imageInfo();
+        QString fileExtension   = info.fileUrl().fileName().section( '.', -1 );
 
         if ( imagefilter.indexOf(fileExtension) != -1 )
         {
-            ImageInfo info = iconItem->imageInfo();
-            imageInfoList << info;
+            list << info;
             if (iconItem == item)
-                currentImageInfo = info;
+                current = info;
         }
     }
 
@@ -1139,8 +1139,7 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item)
     connect(imview, SIGNAL(signalURLChanged(const KUrl&)),
             this, SLOT(slotImageWindowURLChanged(const KUrl &)));
 
-    imview->loadImageInfos(imageInfoList,
-                           currentImageInfo,
+    imview->loadImageInfos(list, current,
                            d->currentAlbum ? i18n("Album \"%1\"",d->currentAlbum->title()) : QString(),
                            true);
 
@@ -1481,8 +1480,8 @@ void AlbumIconView::contentsDropEvent(QDropEvent *e)
                 {
                     emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
                                                i18n("Assigning image tags. Please wait..."));
-
-                    changeTagOnImageInfos(allImageInfos(), QList<int>() << tagID, true, true);
+                    ImageInfo current;
+                    changeTagOnImageInfos(allImageInfos(current), QList<int>() << tagID, true, true);
 
                     emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
                 }
@@ -1555,8 +1554,8 @@ void AlbumIconView::contentsDropEvent(QDropEvent *e)
             {
                 emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
                                             i18n("Assigning image tags. Please wait..."));
-
-                changeTagOnImageInfos(allImageInfos(), tagIDs, true, true);
+                ImageInfo current;
+                changeTagOnImageInfos(allImageInfos(current), tagIDs, true, true);
 
                 emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
             }
@@ -1686,19 +1685,27 @@ KUrl::List AlbumIconView::selectedItems()
     return itemList;
 }
 
-ImageInfoList AlbumIconView::allImageInfos(bool currentInFirst) const
+ImageInfoList AlbumIconView::allImageInfos(ImageInfo& current) const
 {
+    current = ImageInfo();
     ImageInfoList list;
-    for (IconItem *it = firstItem(); it; it = it->nextItem())
+    for (IconItem *it = firstItem() ; it ; it = it->nextItem())
     {
-        AlbumIconItem *iconItem = static_cast<AlbumIconItem *>(it);
-        ImageInfo info = iconItem->imageInfo();
+        AlbumIconItem *iconItem = static_cast<AlbumIconItem*>(it);
+        ImageInfo info          = iconItem->imageInfo();
 
-        if (iconItem == currentItem() && currentInFirst)
-            list.prepend(info);
-        else
-            list.append(info);
+        list << info;
+
+        // By default copy the first item info as current in 
+        // case of no selection is done.
+        if (current.isNull())
+            current = info;
+
+        // Copy the selected item info in other case.
+        if (iconItem == currentItem())
+            current = info;
     }
+
     return list;
 }
 

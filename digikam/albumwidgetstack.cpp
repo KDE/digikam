@@ -141,6 +141,9 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
     connect(d->albumIconView, SIGNAL(signalItemsAdded()),
             this, SLOT(slotItemsAdded()));
 
+    connect(d->albumIconView, SIGNAL(signalItemsRearranged()),
+            this, SLOT(slotItemsAdded()));
+
     connect(d->thumbBar, SIGNAL(signalUrlSelected(const KUrl&)),
             this, SIGNAL(signalUrlSelected(const KUrl&)));
 }
@@ -200,7 +203,8 @@ void AlbumWidgetStack::setPreviewItem(const ImageInfo & info, const ImageInfo &p
 
         // Special case to cleanup thumbbar if Image Lister do not query item accordingly to 
         // IconView Filters.
-        if (d->albumIconView->allImageInfos().isEmpty())
+        ImageInfo current;
+        if (d->albumIconView->allImageInfos(current).isEmpty())
             d->thumbBar->clear();
     }
     else
@@ -296,9 +300,9 @@ void AlbumWidgetStack::slotItemsAdded()
 {
     d->thumbBar->clear();
 
-    ImageInfoList list = d->albumIconView->allImageInfos(false);
-    for (ImageInfoList::const_iterator it = list.begin();
-         it != list.end(); ++it)
+    ImageInfo current;
+    ImageInfoList list = d->albumIconView->allImageInfos(current);
+    for (ImageInfoList::iterator it = list.begin(); it != list.end(); ++it)
     {
         new ImagePreviewBarItem(d->thumbBar, *it);
     }

@@ -7,7 +7,7 @@
  * Description : icon view.
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -67,7 +67,7 @@ public:
     IconItem* lastItem() const;
     IconItem* currentItem() const;
     IconItem* findItem(const QPoint& pos);
-    
+
     void setCurrentItem(IconItem* item);
 
     int  count() const;
@@ -80,7 +80,7 @@ public:
     void clearSelection();
     void selectAll();
     void invertSelection();
-    
+
     void selectItem(IconItem* item, bool select);
 
     /** Define the item which is visible after changing an album 
@@ -88,7 +88,7 @@ public:
     void setStoredVisibleItem(IconItem *item);
 
     void triggerRearrangement();
-    
+
     void insertGroup(IconGroupItem* group);
     void takeGroup(IconGroupItem* group);
 
@@ -144,16 +144,17 @@ private:
     void startRearrangeTimer();
 
     static int cmpItems(const void *n1, const void *n2);
-    
+
 signals:
 
     void signalSelectionChanged();
+    void signalItemsRearranged();
     void signalRightButtonClicked(IconItem* item, const QPoint& pos);
     void signalRightButtonClicked(const QPoint& pos);
     void signalDoubleClicked(IconItem* item);
     void signalReturnPressed(IconItem* item);
     void signalShowToolTip(IconItem* item);
-    
+
 public slots:
 
     void slotRearrange();
@@ -168,5 +169,5 @@ private:
 };
 
 }  // namespace Digikam
-    
+
 #endif /* ICONVIEW_H */
