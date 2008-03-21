@@ -183,13 +183,13 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
     kdatepickerpopup.cpp                Gilles                 X       DONE
     kdatetimeedit.cpp                   Gilles                 X       DONE
     main.cpp                            Gilles                 X       DONE
-    mediaplayerview.cpp                 Gilles                 X       DONE                 Must be ported to Phonon API.
+    mediaplayerview.cpp                 Gilles                 X       DONE                 
     metadatahub.cpp                     Gilles                 X       DONE
     monthwidget.cpp                     Gilles                 X       DONE
     ratingpopupmenu.cpp                 Gilles                 X       DONE
     ratingwidget.cpp                    Gilles                 X       DONE
     searchadvanceddialog.cpp            Gilles                 X       DONE       
-    searchfolderview.cpp                Gilles                 X       DONE            Port is not yet adapted to new DB schema. Virtual Search Folders are temporally broken.
+    searchfolderview.cpp                Gilles                 X       DONE                Port is not yet adapted to new DB schema. Virtual Search Folders are temporally broken.
     searchquickdialog.cpp               Laurent                X       DONE
     searchresultsitem.cpp               Gilles                 X       DONE
     searchresultsview.cpp               Gilles                 X       DONE
