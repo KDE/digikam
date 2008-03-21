@@ -30,10 +30,6 @@
 
 // KDE includes.
 
-#include <kparts/componentfactory.h>
-#include <kmimetype.h>
-#include <kmimetypetrader.h>
-#include <kservice.h>
 #include <kdialog.h>
 #include <klocale.h>
 #include <Phonon/SeekSlider>
