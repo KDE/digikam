@@ -40,7 +40,8 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 027 ==> 150674 : Turn of live update of preview when moving points in curves dialog or in histogram.
 028 ==> 141703 : Show file creation date in tooltip.
 029 ==> 128377 : Adjust levels: histograms don't match, bad "auto level" function.
-030 ==> 
+030 ==> 141755 : Sidebar: Hide unused tabs, Add tooltips. 
+031 ==> 
 
 
 **********************************************************************************************
