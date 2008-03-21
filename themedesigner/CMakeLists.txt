@@ -75,7 +75,6 @@ SET(libdigikamtheme_SRCS
     ../digikam/ratingpopupmenu.cpp 
     ../digikam/ratingwidget.cpp 
     ../digikam/scancontroller.cpp
-    ../digikam/scanlib.cpp 
     ../digikam/syncjob.cpp 
     ../digikam/tagcreatedlg.cpp 
     ../digikam/tagspopupmenu.cpp 
