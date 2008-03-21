@@ -516,7 +516,7 @@ public:
     /**
      * Returns all items for a given albumid. This is used to
      * verify if all items on disk are consistent with the database
-     * in the scanlib class.
+     * in the CollectionScanner class.
      * @param albumID The albumID for which you want all items.
      * @param recursive perform a recursive folder hierarchy parsing
      * @return It returns a QStringList with the filenames.
