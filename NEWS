@@ -42,7 +42,8 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 029 ==> 128377 : Adjust levels: histograms don't match, bad "auto level" function.
 030 ==> 141755 : Sidebar: Hide unused tabs, Add tooltips. 
 031 ==> 146068 : Mixer does not work for green and blue selected as main channel and monochrome mode.
-032 ==> 
+032 ==> 135931 : Reorganise Batch Processing tools from 'Image' and 'Tools' menus.
+033 ==> 
 
 
 **********************************************************************************************
