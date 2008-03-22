@@ -7,7 +7,7 @@
  * Description : setup Metadata tab.
  * 
  * Copyright (C) 2003-2004 by Ralf Holzer <ralf at well.com>
- * Copyright (C) 2003-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -179,7 +179,7 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     if (KExiv2Iface::KExiv2::supportXmp())
         txt.append(i18n("<p><b><a href='http://en.wikipedia.org/wiki/Extensible_Metadata_Platform'>"
                         "XMP</a></b> is a new standard used in digital photography dedicaced to "
-                        "remplace IPTC.</p>"));
+                        "replace IPTC.</p>"));
 
     explanation->setText(txt);
 
