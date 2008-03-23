@@ -1,3 +1,553 @@
+0.9.4-beta2 2008-03-23
+-------------------------------------------------------------------------
+2008-03-22 15:46  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-03-22 15:45  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-03-21 20:47  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-03-21 05:12  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-03-21 05:11  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/widgets/metadata/metadatawidget.cpp:
+          patch from Mik to add QToolTips over metadata widget buttons
+          BUG: 141755
+
+2008-03-20 21:23  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/digikam/albummanager.cpp,
+          /branches/extragear/kde3/graphics/digikam/digikam/albummanager.h,
+          /branches/extragear/kde3/graphics/digikam/digikam/digikamapp.cpp,
+          /branches/extragear/kde3/graphics/digikam/digikam/scanlib.cpp,
+          /branches/extragear/kde3/graphics/digikam/digikam/scanlib.h:
+          digiKam from KDE3 branch :
+          - if Splashscreen is enable at startup, do not show Scan dialog
+          and post progress to Splash
+          - If Splashscreen is disable, use Scan dialog.
+          CCBUGS: 142469
+
+2008-03-20 20:51  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-03-20 18:44  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-03-20 18:42  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/utilities/setup/setupgeneral.cpp:
+          fix typo
+
+2008-03-20 17:39  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-03-20 13:49  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/imageplugins/coreplugin/imageeffect_iccproof.cpp,
+          /branches/extragear/kde3/graphics/digikam/imageplugins/coreplugin/imageeffect_iccproof.h:
+          typo
+
+2008-03-20 12:37  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/thumbbar/thumbbar.cpp:
+          backport commit #788013
+
+2008-03-20 08:57  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/showfoto/showfoto.cpp:
+          Bug fix : really toogle thumbbar with full screen mode
+          accordingly with settings
+
+2008-03-20 07:02  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-03-19 22:03  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-03-19 21:59  mwiesweg
+
+        * /branches/extragear/kde3/graphics/digikam/digikam/imagepreviewview.cpp:
+          Load high quality version also when preloading the preview.
+          Seems to fix the bug.
+          
+          CCBUG: 132047
+
+2008-03-19 20:04  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-03-19 19:27  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-03-19 18:31  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-03-19 15:33  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-03-19 15:32  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/digikam/main.cpp:
+          polish
+
+2008-03-19 15:26  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/digikam/digikamapp.cpp,
+          /branches/extragear/kde3/graphics/digikam/digikam/main.cpp:
+          digiKAm from KDE3 branch : show splashcreen just before to scan
+          whole albums to imediatly give to users program activity.
+          BUG: 142469
+
+2008-03-19 14:40  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-03-19 12:19  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-03-19 11:42  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-03-19 11:18  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-03-19 11:05  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-03-19 11:05  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/showfoto/showfoto.cpp:
+          digiKam from KDE3 branch : Showfoto : handle properlly the
+          curentItem instance when user move to trash the current image
+          loaded in editor
+          BUG: 149851
+
+2008-03-19 08:21  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-03-19 08:17  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/showfoto/setup/setupeditor.cpp,
+          /branches/extragear/kde3/graphics/digikam/showfoto/showfoto.cpp:
+          digiKam from KDE3 branch: Showfoto: apply patch from Arnd to a
+          added 2 new options to set ordering of images when File/Open
+          Folder action is used.
+          BUG: 147136
+
+2008-03-19 08:00  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/showfoto/showfoto.cpp:
+          polish
+
+2008-03-19 05:13  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-03-18 22:19  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-03-18 18:10  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-03-18 17:39  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-03-18 13:13  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-03-18 12:05  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-03-18 09:21  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/digikam/albumlister.cpp,
+          /branches/extragear/kde3/graphics/digikam/digikam/albumlister.h:
+          clean up : private slotClear() is unsused
+
+2008-03-18 09:14  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/thumbbar/thumbbar.cpp:
+          backport commit #786927 from KDE4
+
+2008-03-18 09:04  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/thumbbar/thumbbar.cpp:
+          polish
+
+2008-03-18 08:53  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/thumbbar/thumbbar.cpp,
+          /branches/extragear/kde3/graphics/digikam/libs/thumbbar/thumbbar.h:
+          digiKam from KDE3 branch : use mouse wheel to move thumbbar
+          content.
+
+2008-03-18 08:14  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/utilities/lighttable/lighttablebar.cpp,
+          /branches/extragear/kde3/graphics/digikam/utilities/lighttable/lighttablebar.h:
+          polish
+
+2008-03-17 20:38  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-03-17 19:52  abaecker
+
+        * /branches/extragear/kde3/graphics/digikam/digikam/albummanager.cpp,
+          /branches/extragear/kde3/graphics/digikam/digikam/upgradedb_sqlite2tosqlite3.cpp:
+          When upgradeDB_Sqlite2ToSqlite3 fails, this could also mean that
+          the directory
+          with the Album Path is write-protected or does not exist
+          (eg moved by the user). A more verbose error message is given
+          now.
+          
+          BUG: 159467
+          BUG: 144253
+
+2008-03-17 19:08  abaecker
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS,
+          /branches/extragear/kde3/graphics/digikam/utilities/imageeditor/editor/editorwindow.cpp:
+          Ensure that the umask setting is respected for both newly created
+          files
+          and when overwriting files.
+          
+          CCBUGS: 145252
+          TODO:KDE4PORT
+
+2008-03-17 13:50  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/thumbbar/thumbbar.cpp:
+          backport commit #786621 from KDE4
+
+2008-03-17 10:01  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/utilities/lighttable/lighttablebar.cpp,
+          /branches/extragear/kde3/graphics/digikam/utilities/lighttable/lighttablebar.h:
+          polish
+
+2008-03-17 10:01  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/thumbbar/thumbbar.h:
+          polish
+
+2008-03-16 17:12  gkulzer
+
+        * /branches/extragear/kde3/graphics/digikam/release_digikam_docs.rb:
+          update to 0.9.4 release
+          documentation has changed its place!
+
+2008-03-15 08:36  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/configure.in.bot,
+          /branches/extragear/kde3/graphics/digikam/configure.in.in:
+          compile with old libkexiv2 0.1.6 and old libkipi 0.1.5
+
+2008-03-15 08:34  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/README: update
+
+2008-03-15 08:33  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/showfoto/main.cpp:
+          compile with old libkexiv2 0.1.6
+
+2008-03-15 08:31  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/digikam/main.cpp:
+          compile with old libkexiv2 0.1.6 and old libkipi 0.1.5
+
+2008-03-14 14:52  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/data/themes/Gray: more
+          readable color
+
+2008-03-14 13:20  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-03-14 12:56  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/widgets/metadata/Makefile.am,
+          /branches/extragear/kde3/graphics/digikam/libs/widgets/metadata/mdkeylistviewitem.cpp:
+          better support of color theme scheme
+
+2008-03-14 11:22  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/imageplugins/coreplugin/ratiocrop/imageselectionwidget.cpp,
+          /branches/extragear/kde3/graphics/digikam/imageplugins/coreplugin/ratiocrop/imageselectionwidget.h:
+          polish
+
+2008-03-14 10:27  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/imageplugins/coreplugin/ratiocrop/imageselectionwidget.cpp,
+          /branches/extragear/kde3/graphics/digikam/imageplugins/coreplugin/ratiocrop/imageselectionwidget.h:
+          polish
+
+2008-03-14 10:02  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/utilities/imageeditor/editor/imagewindow.cpp:
+          polish
+
+2008-03-14 09:21  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-03-14 09:20  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/showfoto/Makefile.am,
+          /branches/extragear/kde3/graphics/digikam/showfoto/setup/setupeditor.cpp,
+          /branches/extragear/kde3/graphics/digikam/showfoto/setup/setupeditor.h,
+          /branches/extragear/kde3/graphics/digikam/showfoto/showfoto.cpp,
+          /branches/extragear/kde3/graphics/digikam/showfoto/showfotoui.rc,
+          /branches/extragear/kde3/graphics/digikam/utilities/imageeditor/editor/editorwindow.cpp,
+          /branches/extragear/kde3/graphics/digikam/utilities/imageeditor/editor/editorwindow.h,
+          /branches/extragear/kde3/graphics/digikam/utilities/imageeditor/editor/imagewindow.cpp,
+          /branches/extragear/kde3/graphics/digikam/utilities/imageeditor/editor/imagewindow.h:
+          digiKam from KDE3 branch : Showfoto now support Color Theme
+          scheme as digiKam core
+          
+          CCBUGS: 120309
+          CCMAIL: digikam-devel@kde.org
+
+2008-03-14 08:55  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/showfoto/showfoto.h:
+          polish
+
+2008-03-14 07:02  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/themeengine/themeengine.cpp,
+          /branches/extragear/kde3/graphics/digikam/libs/themeengine/themeengine.h:
+          new method to get theme name
+
+2008-03-13 13:29  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/showfoto/icons/cr128-action-crop.png,
+          /branches/extragear/kde3/graphics/digikam/showfoto/icons/cr128-action-rotate_cw.png,
+          /branches/extragear/kde3/graphics/digikam/showfoto/icons/cr16-action-crop.png,
+          /branches/extragear/kde3/graphics/digikam/showfoto/icons/cr16-action-rotate_cw.png,
+          /branches/extragear/kde3/graphics/digikam/showfoto/icons/cr22-action-crop.png,
+          /branches/extragear/kde3/graphics/digikam/showfoto/icons/cr22-action-rotate_cw.png,
+          /branches/extragear/kde3/graphics/digikam/showfoto/icons/cr32-action-crop.png,
+          /branches/extragear/kde3/graphics/digikam/showfoto/icons/cr32-action-rotate_cw.png,
+          /branches/extragear/kde3/graphics/digikam/showfoto/icons/cr48-action-crop.png,
+          /branches/extragear/kde3/graphics/digikam/showfoto/icons/cr48-action-rotate_cw.png,
+          /branches/extragear/kde3/graphics/digikam/showfoto/icons/cr64-action-crop.png,
+          /branches/extragear/kde3/graphics/digikam/showfoto/icons/cr64-action-rotate_cw.png,
+          /branches/extragear/kde3/graphics/digikam/showfoto/icons/crsc-action-crop.svgz,
+          /branches/extragear/kde3/graphics/digikam/showfoto/icons/crsc-action-rotate_cw.svgz,
+          /branches/extragear/kde3/graphics/digikam/showfoto/icons/hi128-action-flip.png,
+          /branches/extragear/kde3/graphics/digikam/showfoto/icons/hi128-action-histogram.png,
+          /branches/extragear/kde3/graphics/digikam/showfoto/icons/hi128-action-resize_image.png,
+          /branches/extragear/kde3/graphics/digikam/showfoto/icons/hi128-action-slideshow.png,
+          /branches/extragear/kde3/graphics/digikam/showfoto/icons/hi16-action-flip.png,
+          /branches/extragear/kde3/graphics/digikam/showfoto/icons/hi16-action-histogram.png,
+          /branches/extragear/kde3/graphics/digikam/showfoto/icons/hi16-action-resize_image.png,
+          /branches/extragear/kde3/graphics/digikam/showfoto/icons/hi16-action-slideshow.png,
+          /branches/extragear/kde3/graphics/digikam/showfoto/icons/hi22-action-flip.png,
+          /branches/extragear/kde3/graphics/digikam/showfoto/icons/hi22-action-histogram.png,
+          /branches/extragear/kde3/graphics/digikam/showfoto/icons/hi22-action-resize_image.png,
+          /branches/extragear/kde3/graphics/digikam/showfoto/icons/hi22-action-slideshow.png,
+          /branches/extragear/kde3/graphics/digikam/showfoto/icons/hi32-action-flip.png,
+          /branches/extragear/kde3/graphics/digikam/showfoto/icons/hi32-action-histogram.png,
+          /branches/extragear/kde3/graphics/digikam/showfoto/icons/hi32-action-resize_image.png,
+          /branches/extragear/kde3/graphics/digikam/showfoto/icons/hi32-action-slideshow.png,
+          /branches/extragear/kde3/graphics/digikam/showfoto/icons/hi48-action-flip.png,
+          /branches/extragear/kde3/graphics/digikam/showfoto/icons/hi48-action-histogram.png,
+          /branches/extragear/kde3/graphics/digikam/showfoto/icons/hi48-action-resize_image.png,
+          /branches/extragear/kde3/graphics/digikam/showfoto/icons/hi48-action-slideshow.png,
+          /branches/extragear/kde3/graphics/digikam/showfoto/icons/hi64-action-flip.png,
+          /branches/extragear/kde3/graphics/digikam/showfoto/icons/hi64-action-histogram.png,
+          /branches/extragear/kde3/graphics/digikam/showfoto/icons/hi64-action-resize_image.png,
+          /branches/extragear/kde3/graphics/digikam/showfoto/icons/hi64-action-slideshow.png,
+          /branches/extragear/kde3/graphics/digikam/showfoto/icons/hisc-action-flip.svgz,
+          /branches/extragear/kde3/graphics/digikam/showfoto/icons/hisc-action-histogram.svgz,
+          /branches/extragear/kde3/graphics/digikam/showfoto/icons/hisc-action-resize_image.svgz,
+          /branches/extragear/kde3/graphics/digikam/showfoto/icons/hisc-action-slideshow.svgz:
+          all showfoto action icons are duplicate than data/icons
+
+2008-03-13 13:20  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/showfoto/showfotoui.rc:
+          missing contribute option
+
+2008-03-13 07:22  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/digikam/timelinewidget.cpp:
+          better support of color scheme theme
+
+2008-03-11 22:43  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/imageproperties/talbumlistview.cpp:
+          regression tests. handle properlly 3 states when necessary since
+          we use FolderItem here
+
+2008-03-11 19:39  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/dimg/loaders/rawloader.cpp:
+          fix warnings
+
+2008-03-11 18:08  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-03-11 18:05  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-03-11 14:54  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/imageplugins/hotpixels/blackframelistview.cpp,
+          /branches/extragear/kde3/graphics/digikam/imageplugins/hotpixels/blackframelistview.h:
+          better support of Dark color theme
+
+2008-03-11 14:49  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/utilities/cameragui/camerafolderitem.cpp,
+          /branches/extragear/kde3/graphics/digikam/utilities/cameragui/camerafolderitem.h,
+          /branches/extragear/kde3/graphics/digikam/utilities/cameragui/camerafolderview.cpp,
+          /branches/extragear/kde3/graphics/digikam/utilities/cameragui/camerafolderview.h:
+          better support of Dark color theme
+
+2008-03-11 14:36  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/dialogs/dprogressdlg.cpp,
+          /branches/extragear/kde3/graphics/digikam/libs/dialogs/dprogressdlg.h:
+          better rendering with dark color theme scheme
+
+2008-03-11 10:25  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/dimg/loaders/rawloader.cpp:
+          backport commit #784433 from KDE4
+
+2008-03-11 08:55  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/dimg/loaders/rawloader.cpp:
+          use same transfert function to compute auto-gamma lut than
+          default one used into dcraw
+
+2008-03-11 05:15  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/dimg/loaders/rawloader.cpp:
+          polish
+
+2008-03-11 04:55  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/dimg/loaders/rawloader.cpp:
+          added debug info
+
+2008-03-10 21:17  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-03-10 21:16  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/dimg/loaders/Makefile.am,
+          /branches/extragear/kde3/graphics/digikam/libs/dimg/loaders/rawloader.cpp:
+          digiKam from KDE3 branch : RAW image loader : backport 8 bits
+          color depth auto-gamma and auto-white balance adjustements from
+          dcraw with 16 bits color depth.
+          These auto adjustements are performed only if Color Management is
+          not used with image editor.
+          
+          The color rendering in 16 bits is exactly the same than in 8
+          bits.
+          
+          This is want mean than you can process speedly your RAW exactly
+          as JPEG. Just set your usual settings in RAW dedoding and open
+          your RAW pictures as well in editor.
+          
+          This is the same way used by LightZone pro software to process
+          RAW file without color management !
+          
+          This way simplify the task in Raw workflow... and will be
+          suitable in 90% of case. Color Management must be used in others
+          cases...
+          
+          BUG: 146393
+          CCBUGS: 124814
+          CCBUGS: 150457
+          CCBUGS: 155074
+
+2008-03-10 13:39  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/dimg/filters/bcgmodifier.cpp,
+          /branches/extragear/kde3/graphics/digikam/libs/dimg/filters/bcgmodifier.h:
+          new method to handle image data directly without to use a DImg
+          object
+
+2008-03-10 06:49  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/themeengine/themeengine.cpp:
+          backup full default palette is better
+
+2008-03-10 06:49  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/digikam/version.h:
+          update
+
+2008-03-10 06:47  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/digikam.lsm: update
+
+2008-03-10 06:47  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-03-10 06:46  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/dimg/loaders/rawloader.h:
+          fix warnings
+
+2008-03-10 05:19  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/themeengine/themeengine.cpp:
+          preserve KDE background color with Default theme
+
+2008-03-09 15:22  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/dimg/loaders/rawloader.cpp,
+          /branches/extragear/kde3/graphics/digikam/libs/dimg/loaders/rawloader.h:
+          polish
+
+2008-03-09 10:03  gkulzer
+
+        * /branches/extragear/kde3/graphics/digikam/ChangeLog: update to
+          0.9.4-beta1 relase
+
+2008-03-09 09:45  gkulzer
+
+        * /branches/extragear/kde3/graphics/digikam/release_digikam.rb,
+          /branches/extragear/kde3/graphics/digikam/release_digikam_docs.rb:
+          update to 0.9.4-beta1 release
+
 0.9.4-beta1 2008-03-09
 -------------------------------------------------------------------------
 2008-03-08 08:06  cgilles
