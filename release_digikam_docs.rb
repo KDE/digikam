@@ -18,6 +18,7 @@ svnbase    = "https://mwiesweg@svn.kde.org/home/kde"
 svnbase    = "https://fjcruz@svn.kde.org/home/kde"
 svnbase    = "https://ach@svn.kde.org/home/kde"
 svnbase    = "svn+ssh://gkulzer@svn.kde.org/home/kde"
+svnbase    = "https://cgilles@svn.kde.org/home/kde"
 
 svnroot    = "#{svnbase}/branches/extragear/kde3/"
 #svnroot    = "#{svnbase}/trunk/"
