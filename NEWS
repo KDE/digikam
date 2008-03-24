@@ -1,3 +1,13 @@
+digiKam 0.9.4-beta3 - Release date: 2008-04-??
+
+NEW FEATURES:
+
+digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+
+001 ==> 
+
+**********************************************************************************************
+
 digiKam 0.9.4-beta2 - Release date: 2008-03-23
 
 NEW FEATURES:
@@ -44,7 +54,6 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 031 ==> 146068 : Mixer does not work for green and blue selected as main channel and monochrome mode.
 032 ==> 135931 : Reorganise Batch Processing tools from 'Image' and 'Tools' menus.
 033 ==> 159664 : Background color of live/quick filter not updated on folder/date change.
-
 
 **********************************************************************************************
 
