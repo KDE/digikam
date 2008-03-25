@@ -29,15 +29,14 @@
 #include <kurl.h>
 #include <kpreviewwidgetbase.h>
 
-
 // Local includes.
 
-#include "loadingdescription.h"
 #include "digikam_export.h"
 
 namespace Digikam
 {
 
+class LoadingDescription;
 class ImageDialogPrivate;
 class ImageDialogPreviewPrivate;
 

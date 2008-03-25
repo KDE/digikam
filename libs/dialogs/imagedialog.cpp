@@ -41,6 +41,7 @@
 
 #include "ddebug.h"
 #include "dmetadata.h"
+#include "loadingdescription.h"
 #include "thumbnailsize.h"
 #include "thumbnailloadthread.h"
 #include "imagedialog.h"
