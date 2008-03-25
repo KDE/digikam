@@ -137,28 +137,47 @@ void ImageDialogPreview::showPreview(const KUrl& url)
         if (!info.isEmpty())
         {
             QString identify;
+            QString make, model, dateTime, aperture, focalLength, exposureTime, sensitivity;
+            QString unaviable(i18n("<i>unaviable</i>"));
             QString cellBeg("<tr><td><nobr><font size=-1>");
             QString cellMid("</font></nobr></td><td><nobr><font size=-1>");
             QString cellEnd("</font></nobr></td></tr>");
+
+            if (info.make.isEmpty()) make = unaviable;
+            else make = info.make;
+
+            if (info.model.isEmpty()) model = unaviable;
+            else model = info.model;
+
+            if (info.dateTime.isValid()) dateTime = unaviable;
+            else dateTime = KGlobal::locale()->formatDateTime(info.dateTime, KLocale::ShortDate, true);
+
+            if (info.aperture.isEmpty()) aperture = unaviable; 
+            else aperture = i18n("f/%1", info.aperture);
+
+            if (info.focalLength.isEmpty()) focalLength = unaviable; 
+            else focalLength = i18n("%1 mm", info.focalLength);
+
+            if (info.exposureTime.isEmpty()) exposureTime = unaviable; 
+            else exposureTime = i18n("1/%1 s", info.exposureTime);
+
+            if (info.sensitivity.isEmpty()) sensitivity = unaviable; 
+            else sensitivity = i18n("%1 ISO", info.sensitivity);
+
             identify = "<table cellspacing=0 cellpadding=0>";
-
-            identify += cellBeg + i18n("Make:") + cellMid + info.make + cellEnd;
-            identify += cellBeg + i18n("Model:") + cellMid + info.model + cellEnd;
-
-            if (info.dateTime.isValid())
-                identify += cellBeg + i18n("Created:") + cellMid +
-                            KGlobal::locale()->formatDateTime(info.dateTime, KLocale::ShortDate, true) +
-                            cellEnd;
-
-            identify += cellBeg + i18n("Aperture:") + cellMid + i18n("f/%1", info.aperture) + cellEnd;
-            identify += cellBeg + i18n("Focal:") + cellMid + i18n("%1 mm", info.focalLength) + cellEnd;
-            identify += cellBeg + i18n("Exposure:") + cellMid + i18n("1/%1 s", info.exposureTime) + cellEnd;
-            identify += cellBeg + i18n("Sensitivity:") + cellMid + i18n("%1 ISO", info.sensitivity) + cellEnd;
-
+            identify += cellBeg + i18n("Make:")        + cellMid + make         + cellEnd;
+            identify += cellBeg + i18n("Model:")       + cellMid + model        + cellEnd;
+            identify += cellBeg + i18n("Created:")     + cellMid + dateTime     + cellEnd;
+            identify += cellBeg + i18n("Aperture:")    + cellMid + aperture     + cellEnd;
+            identify += cellBeg + i18n("Focal:")       + cellMid + focalLength  + cellEnd;
+            identify += cellBeg + i18n("Exposure:")    + cellMid + exposureTime + cellEnd;
+            identify += cellBeg + i18n("Sensitivity:") + cellMid + sensitivity  + cellEnd;
             identify += "</table>";
 
             d->infoLabel->setText(identify);
         }
+        else
+            d->infoLabel->clear();
     }
 }
 
@@ -181,6 +200,7 @@ void ImageDialogPreview::slotThumbnail(const LoadingDescription& desc, const QPi
 void ImageDialogPreview::clearPreview()
 {
     d->imageLabel->clear();
+    d->infoLabel->clear();
     d->currentURL = KUrl();
 }
 
