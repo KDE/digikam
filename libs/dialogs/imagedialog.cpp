@@ -331,7 +331,7 @@ KURL::List ImageDialog::urls() const
 
 KURL::List ImageDialog::getImageURLs(QWidget* parent, const KURL& url, const QString& caption)
 {
-    ImageDialog dlg(parent, url);
+    ImageDialog dlg(parent, url, false, caption);
     if (!dlg.urls().isEmpty())
         return dlg.urls();
     else
@@ -340,7 +340,7 @@ KURL::List ImageDialog::getImageURLs(QWidget* parent, const KURL& url, const QSt
 
 KURL ImageDialog::getImageURL(QWidget* parent, const KURL& url, const QString& caption)
 {
-    ImageDialog dlg(parent, url, true);
+    ImageDialog dlg(parent, url, true, caption);
     if (!dlg.urls().isEmpty())
         return dlg.urls().first();
     else
