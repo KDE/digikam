@@ -96,6 +96,7 @@
 #include "imagepluginloader.h"
 #include "imageresize.h"
 #include "imageprint.h"
+#include "imagedialog.h"
 #include "filesaveoptionsbox.h"
 #include "statusprogressbar.h"
 #include "iccsettingscontainer.h"
@@ -1489,6 +1490,8 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     connect(&imageFileSaveDialog, SIGNAL(fileSelected(const QString &)),
             options, SLOT(slotImageFileSelected(const QString &)));
 
+    ImageDialogPreview *preview = new ImageDialogPreview(&imageFileSaveDialog);
+    imageFileSaveDialog.setPreviewWidget(preview);
     imageFileSaveDialog.setModal(false);
     imageFileSaveDialog.setOperationMode(KFileDialog::Saving);
     imageFileSaveDialog.setMode(KFile::File);
