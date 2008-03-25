@@ -181,7 +181,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
     Digikam::LoadingCacheInterface::initialize();
 
     d->thumbLoadThread = new Digikam::ThumbnailLoadThread();
-    d->thumbLoadThread->setThumbnailSize(ThumbnailSize::Huge);
+    d->thumbLoadThread->setThumbnailSize(Digikam::ThumbnailSize::Huge);
     d->thumbLoadThread->setSendSurrogatePixmap(true);
 
     // Check ICC profiles repository availability
@@ -586,7 +586,7 @@ void ShowFoto::slotOpenFile()
     if (d->currentItem && !promptUserSave(d->currentItem->url()))
         return;
 
-    KUrl::List urls = ImageDialog::getImageURLs(this, d->lastOpenedDirectory);
+    KUrl::List urls = Digikam::ImageDialog::getImageURLs(this, d->lastOpenedDirectory);
 
     if (!urls.isEmpty())
     {

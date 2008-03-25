@@ -43,7 +43,6 @@ SET(showfoto_SRCS
 
     main.cpp
     showfoto.cpp 
-    imagedialog.cpp
    )
 
 

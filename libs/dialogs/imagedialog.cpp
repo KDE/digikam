@@ -46,7 +46,7 @@
 #include "imagedialog.h"
 #include "imagedialog.moc"
 
-namespace ShowFoto
+namespace Digikam
 {
 
 class ImageDialogPreviewPrivate 
@@ -251,4 +251,4 @@ KUrl::List ImageDialog::getImageURLs(QWidget* parent, const KUrl url)
         return KUrl::List();
 }
 
-} // namespace ShowFoto
+} // namespace Digikam

@@ -33,9 +33,7 @@
 
 #include "loadingdescription.h"
 
-using namespace Digikam;
-
-namespace ShowFoto
+namespace Digikam
 {
 
 class ImageDialogPrivate;
@@ -89,6 +87,6 @@ private:
     ImageDialogPrivate* d;
 };
 
-} // namespace ShowFoto
+} // namespace Digikam
 
 #endif /* IMAGEDIALOG_H */
