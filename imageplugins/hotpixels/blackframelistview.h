@@ -86,6 +86,8 @@ public:
 signals:
 
     void parsed(QValueList<HotPixel>, const KURL&);
+    void signalLoadingProgress(float);
+    void signalLoadingComplete();
 
 protected:
 
@@ -113,7 +115,7 @@ private:
 
     KURL                  m_blackFrameURL;
 
-    BlackFrameParser      m_parser;
+    BlackFrameParser     *m_parser;
 
     BlackFrameListView   *m_parent;
 };

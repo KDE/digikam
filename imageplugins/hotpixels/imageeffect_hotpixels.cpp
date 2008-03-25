@@ -41,6 +41,7 @@
 #include <kapplication.h>
 #include <kstandarddirs.h>
 #include <kfiledialog.h>
+#include <kprogress.h>
 
 // Local includes.
 
@@ -64,7 +65,7 @@ ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent)
 {
     // No need Abort button action.
     showButton(User1, false); 
-    
+
     QString whatsThis;
 
     KAboutData* about = new KAboutData("digikam",
@@ -73,23 +74,23 @@ ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent)
                                        I18N_NOOP("A digiKam image plugin for fixing dots produced by "
                                                  "hot/stuck/dead pixels from a CCD."),
                                        KAboutData::License_GPL,
-                                       "(c) 2005-2008, Unai Garro and Gilles Caulier", 
+                                       "(c) 2005-2006, Unai Garro\n(c) 2005-2008, Gilles Caulier", 
                                        0,
                                        "http://www.digikam.org");
-                
+
     about->addAuthor("Unai Garro", I18N_NOOP("Author and maintainer"),
                      "ugarro at sourceforge dot net");
-    
+
     about->addAuthor("Gilles Caulier", I18N_NOOP("Developer"),
                      "caulier dot gilles at gmail dot com");
-        
+
     setAboutData(about);
-    
+
     // -------------------------------------------------------------
-    
+
     QWidget *gboxSettings     = new QWidget(m_imagePreviewWidget);
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 2, 2, 0, spacingHint());
-    
+    QGridLayout* gridSettings = new QGridLayout(gboxSettings, 3, 2, 0, spacingHint());
+
     QLabel *filterMethodLabel = new QLabel(i18n("Filter:"), gboxSettings);
     m_filterMethodCombo       = new QComboBox(gboxSettings);
     m_filterMethodCombo->insertItem(i18n("Average"));
@@ -101,23 +102,27 @@ ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent)
     setButtonWhatsThis( Apply, i18n("<p>Use this button to add a new black frame file which will "
                                     "be used by the hot pixels removal filter.") );  
 
-    gridSettings->addMultiCellWidget(filterMethodLabel, 0, 0, 0, 0);
-    gridSettings->addMultiCellWidget(m_filterMethodCombo, 0, 0, 1, 1);
-    gridSettings->addMultiCellWidget(m_blackFrameButton, 0, 0, 2, 2);    
-    
     m_blackFrameListView = new BlackFrameListView(gboxSettings);
+    m_progressBar        = new KProgress(100, gboxSettings);
+    m_progressBar->setValue(0);
+    m_progressBar->hide();
+
+    gridSettings->addMultiCellWidget(filterMethodLabel,    0, 0, 0, 0);
+    gridSettings->addMultiCellWidget(m_filterMethodCombo,  0, 0, 1, 1);
+    gridSettings->addMultiCellWidget(m_blackFrameButton,   0, 0, 2, 2);
     gridSettings->addMultiCellWidget(m_blackFrameListView, 1, 2, 0, 2);
-    
+    gridSettings->addMultiCellWidget(m_progressBar,        3, 3, 0, 2);
+
     m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
 
     // -------------------------------------------------------------
-    
+
     connect(m_filterMethodCombo, SIGNAL(activated(int)),
             this, SLOT(slotEffect()));
 
     connect(m_blackFrameButton, SIGNAL(clicked()),
             this, SLOT(slotAddBlackFrame()));
-                                                  
+
     connect(m_blackFrameListView, SIGNAL(blackFrameSelected(QValueList<HotPixel>, const KURL&)),
             this, SLOT(slotBlackFrame(QValueList<HotPixel>, const KURL&))); 
 }
@@ -126,19 +131,19 @@ ImageEffect_HotPixels::~ImageEffect_HotPixels()
 {
 }
 
-void ImageEffect_HotPixels::readUserSettings(void)
+void ImageEffect_HotPixels::readUserSettings()
 {
     KConfig *config = kapp->config();
     config->setGroup("hotpixels Tool Dialog");
     m_blackFrameURL = KURL(config->readEntry("Last Black Frame File", QString()));
     m_filterMethodCombo->setCurrentItem(config->readNumEntry("Filter Method",
                                         HotPixelFixer::QUADRATIC_INTERPOLATION));
-    
+
     if (m_blackFrameURL.isValid())
         new BlackFrameListViewItem(m_blackFrameListView, m_blackFrameURL);
 }
 
-void ImageEffect_HotPixels::writeUserSettings(void)
+void ImageEffect_HotPixels::writeUserSettings()
 {
     KConfig *config = kapp->config();
     config->setGroup("hotpixels Tool Dialog");
@@ -161,15 +166,32 @@ void ImageEffect_HotPixels::slotAddBlackFrame()
 
     if (!url.isEmpty())
     {
-       // Load the selected file and insert into the list.
+        // Load the selected file and insert into the list.
 
-       m_blackFrameURL = url;
-       m_blackFrameListView->clear();
-       new BlackFrameListViewItem(m_blackFrameListView, m_blackFrameURL);
+        m_blackFrameURL = url;
+        m_blackFrameListView->clear();
+        BlackFrameListViewItem *item = new BlackFrameListViewItem(m_blackFrameListView, m_blackFrameURL);
+
+        connect(item, SIGNAL(signalLoadingProgress(float)),
+                this, SLOT(slotLoadingProgress(float)));
+
+        connect(item, SIGNAL(signalLoadingComplete()),
+                this, SLOT(slotLoadingComplete()));
     }
 }
 
-void ImageEffect_HotPixels::renderingFinished(void)
+void ImageEffect_HotPixels::slotLoadingProgress(float v)
+{
+    m_progressBar->show();
+    m_progressBar->setValue((int)(v*100));
+}
+
+void ImageEffect_HotPixels::slotLoadingComplete()
+{
+    m_progressBar->hide();
+}
+
+void ImageEffect_HotPixels::renderingFinished()
 {
     m_filterMethodCombo->setEnabled(true);
     m_blackFrameListView->setEnabled(true);

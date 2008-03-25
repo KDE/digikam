@@ -56,13 +56,20 @@ BlackFrameListViewItem::BlackFrameListViewItem(BlackFrameListView* parent, const
 {
     m_parent        = parent;
     m_blackFrameURL = url;
-    m_parser.parseBlackFrame(url);
+    m_parser        = new BlackFrameParser(parent);
+    m_parser->parseBlackFrame(url);
 
-    connect(&m_parser, SIGNAL(parsed(QValueList<HotPixel>)),
+    connect(m_parser, SIGNAL(parsed(QValueList<HotPixel>)),
             this, SLOT(slotParsed(QValueList<HotPixel>)));
 
     connect(this, SIGNAL(parsed(QValueList<HotPixel>, const KURL&)),
             parent, SLOT(slotParsed(QValueList<HotPixel>, const KURL&)));
+
+    connect(m_parser, SIGNAL(signalLoadingProgress(float)),
+            this, SIGNAL(signalLoadingProgress(float)));
+
+    connect(m_parser, SIGNAL(signalLoadingComplete()),
+            this, SIGNAL(signalLoadingComplete()));
 }
 
 void BlackFrameListViewItem::activate()
@@ -107,7 +114,7 @@ void BlackFrameListViewItem::paintCell(QPainter* p, const QColorGroup& cg, int c
 void BlackFrameListViewItem::slotParsed(QValueList<HotPixel> hotPixels)
 {
     m_hotPixels = hotPixels;
-    m_image     = m_parser.image();
+    m_image     = m_parser->image();
     m_imageSize = m_image.size();
     m_thumb     = thumb(QSize(THUMB_WIDTH, THUMB_WIDTH/3*2));
     setPixmap(0, m_thumb);

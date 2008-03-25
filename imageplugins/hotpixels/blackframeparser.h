@@ -42,13 +42,15 @@
 
 // KDE includes.
 
-#include <kio/scheduler.h>  //KIO::get
-#include <kio/jobclasses.h> //KIO::TransferJob
 #include <kurl.h>
 
 // Local includes.
 
+#include "dimg.h"
+#include "loadsavethread.h"
 #include "hotpixel.h"
+
+using namespace Digikam;
 
 namespace DigikamHotPixelsImagesPlugin
 {
@@ -56,37 +58,42 @@ namespace DigikamHotPixelsImagesPlugin
 class BlackFrameParser: public QObject
 {
     Q_OBJECT
-    
+
 public:
-    
-    BlackFrameParser();
+
+    BlackFrameParser(QObject *parent);
     ~BlackFrameParser();
-        
+
     void parseHotPixels(const QString &file);
     void parseBlackFrame(const KURL &url);
     void parseBlackFrame(QImage& img);
-    QImage image(){return mImage;}
+    QImage image(){return m_Image;}
 
 signals:
 
     void parsed(QValueList<HotPixel>);
-    
+    void signalLoadingProgress(float);
+    void signalLoadingComplete();
+
 private slots:
-        
-    void blackFrameDataArrived(KIO::Job*, const QByteArray& data);
-    void slotResult(KIO::Job*);
 
-private:
-
-    QString mOutputString;
-    void blackFrameParsing(bool useData=false);
-    void consolidatePixels (QValueList<HotPixel>& list);
-    void validateAndConsolidate(HotPixel *a, HotPixel *b);
-        
-private:
+    void slotLoadingProgress(const LoadingDescription&, float);
+    void slotLoadImageFromUrlComplete(const LoadingDescription&, const DImg&);
     
-    QByteArray mData;
-    QImage     mImage;
+private:
+
+    void blackFrameParsing();
+    void consolidatePixels(QValueList<HotPixel>& list);
+    void validateAndConsolidate(HotPixel *a, HotPixel *b);
+
+private:
+
+    QString         m_OutputString;
+    QString         m_localFile;
+
+    QImage          m_Image;
+
+    LoadSaveThread *m_imageLoaderThread;
 };
 
 }  // NameSpace DigikamHotPixelsImagesPlugin
