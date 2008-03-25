@@ -137,17 +137,26 @@ void ImageDialogPreview::showPreview(const KUrl& url)
         PhotoInfoContainer info = d->metaIface.getPhotographInformations();
         if (!info.isEmpty())
         {
-            QString identify = i18n("Make: %1\n", info.make); 
-            identify.append(i18n("Model: %1\n", info.model));
+            QString identify;
+            QString cellBeg("<tr><td><nobr><font size=-1>");
+            QString cellMid("</font></nobr></td><td><nobr><font size=-1>");
+            QString cellEnd("</font></nobr></td></tr>");
+            identify = "<table cellspacing=0 cellpadding=0>";
+
+            identify += cellBeg + i18n("Make:") + cellMid + info.make + cellEnd;
+            identify += cellBeg + i18n("Model:") + cellMid + info.model + cellEnd;
 
             if (info.dateTime.isValid())
-                identify.append(i18n("Created: %1\n", KGlobal::locale()->formatDateTime(info.dateTime,
-                                                                         KLocale::ShortDate, true)));
+                identify += cellBeg + i18n("Created:") + cellMid +
+                            KGlobal::locale()->formatDateTime(info.dateTime, KLocale::ShortDate, true) +
+                            cellEnd;
 
-            identify.append(i18n("Aperture: f/%1\n", info.aperture));
-            identify.append(i18n("Focal: %1 mm\n", info.focalLength));
-            identify.append(i18n("Exposure: 1/%1 s\n", info.exposureTime));
-            identify.append(i18n("Sensitivity: %1 ISO", info.sensitivity));
+            identify += cellBeg + i18n("Aperture:") + cellMid + i18n("f/%1", info.aperture) + cellEnd;
+            identify += cellBeg + i18n("Focal:") + cellMid + i18n("%1 mm", info.focalLength) + cellEnd;
+            identify += cellBeg + i18n("Exposure:") + cellMid + i18n("1/%1 s", info.exposureTime) + cellEnd;
+            identify += cellBeg + i18n("Sensitivity:") + cellMid + i18n("%1 ISO", info.sensitivity) + cellEnd;
+
+            identify += "</table>";
 
             d->infoLabel->setText(identify);
         }
