@@ -85,6 +85,7 @@ extern "C"
 #include "imagepropertiessidebar.h"
 #include "imageplugin.h"
 #include "imagepluginloader.h"
+#include "imagedialog.h"
 #include "dimginterface.h"
 #include "splashscreen.h"
 #include "slideshow.h"
@@ -572,34 +573,7 @@ void ShowFoto::slotOpenFile()
     if (d->currentItem && !promptUserSave(d->currentItem->url()))
         return;
 
-    QString fileformats;
-   
-    QStringList patternList = QStringList::split('\n', KImageIO::pattern(KImageIO::Reading));
-    
-    // All Images from list must been always the first entry given by KDE API
-    QString allPictures = patternList[0];
-    
-    // Add other files format witch are missing to All Images" type mime provided by KDE and remplace current.
-    if (KDcrawIface::DcrawBinary::instance()->versionIsRight())
-    {
-        allPictures.insert(allPictures.find("|"), QString(KDcrawIface::DcrawBinary::instance()->rawFiles()) + QString(" *.JPE *.TIF"));
-        patternList.remove(patternList[0]);
-        patternList.prepend(allPictures);
-    }
-    
-    // Added RAW file formats supported by dcraw program like a type mime. 
-    // Nota: we cannot use here "image/x-raw" type mime from KDE because it uncomplete 
-    // or unavailable(dcraw_0)(see file #121242 in B.K.O).
-    if (KDcrawIface::DcrawBinary::instance()->versionIsRight())
-    {
-        patternList.append(i18n("\n%1|Camera RAW files").arg(QString(KDcrawIface::DcrawBinary::instance()->rawFiles())));
-    }
-    
-    fileformats = patternList.join("\n");
-
-    DDebug() << "fileformats=" << fileformats << endl;   
-    
-    KURL::List urls =  KFileDialog::getOpenURLs(d->lastOpenedDirectory.path(), fileformats, this, i18n("Open Images"));
+    KURL::List urls = Digikam::ImageDialog::getImageURLs(this, d->lastOpenedDirectory);
 
     if (!urls.isEmpty())
     {

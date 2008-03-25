@@ -52,7 +52,6 @@ extern "C"
 #include <kfileitem.h>
 #include <kapplication.h>
 #include <kiconloader.h>
-#include <kio/previewjob.h>
 #include <klocale.h>
 #include <kmimetype.h>
 #include <kfileitem.h>

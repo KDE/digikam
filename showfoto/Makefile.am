@@ -14,6 +14,7 @@ INCLUDES = -I$(top_srcdir)/digikam/showfoto/setup \
 	   -I$(top_srcdir)/digikam/libs/dmetadata \
 	   -I$(top_srcdir)/digikam/libs/threadimageio \
 	   -I$(top_srcdir)/digikam/libs/themeengine \
+	   -I$(top_srcdir)/digikam/libs/dialogs \
 	   -I$(top_srcdir)/digikam/digikam \
 	   -I$(top_srcdir)/digikam/utilities/slideshow \
 	   -I$(top_srcdir)/digikam/utilities/imageeditor/canvas \
