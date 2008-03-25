@@ -29,9 +29,11 @@
 #include <kurl.h>
 #include <kpreviewwidgetbase.h>
 
+
 // Local includes.
 
 #include "loadingdescription.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
@@ -39,7 +41,7 @@ namespace Digikam
 class ImageDialogPrivate;
 class ImageDialogPreviewPrivate;
 
-class ImageDialogPreview : public KPreviewWidgetBase
+class DIGIKAM_EXPORT ImageDialogPreview : public KPreviewWidgetBase
 {
     Q_OBJECT
 
@@ -68,7 +70,7 @@ private:
 
 // ------------------------------------------------------------------------
 
-class ImageDialog
+class DIGIKAM_EXPORT ImageDialog
 {
 
 public:
