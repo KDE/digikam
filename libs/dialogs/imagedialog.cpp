@@ -324,6 +324,11 @@ QString ImageDialog::fileformats() const
     return d->fileformats;
 }
 
+KURL ImageDialog::url() const
+{
+    return d->url;
+}
+
 KURL::List ImageDialog::urls() const
 {
     return d->urls;
@@ -341,8 +346,8 @@ KURL::List ImageDialog::getImageURLs(QWidget* parent, const KURL& url, const QSt
 KURL ImageDialog::getImageURL(QWidget* parent, const KURL& url, const QString& caption)
 {
     ImageDialog dlg(parent, url, true, caption);
-    if (!dlg.urls().isEmpty())
-        return dlg.urls().first();
+    if (dlg.url() != KURL())
+        return dlg.url();
     else
         return KURL();
 }
