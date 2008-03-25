@@ -7,8 +7,8 @@
  * Description :database album interface.
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -1225,8 +1225,8 @@ int AlbumDB::setImageComment(qlonglong imageID, const QString &comment, Database
                             " VALUES (?,?,?,?,?,?);"),
                     boundValues, 0, &id);
 
-    return id.toInt();
     d->db->recordChangeset(ImageChangeset(imageID, DatabaseFields::ImageCommentsAll));
+    return id.toInt();
 }
 
 void AlbumDB::changeImageComment(int commentId, qlonglong imageID, const QVariantList &infos, DatabaseFields::ImageComments fields)
