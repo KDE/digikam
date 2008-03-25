@@ -2,6 +2,10 @@ digiKam 0.9.4-beta3 - Release date: 2008-04-??
 
 NEW FEATURES:
 
+Showfoto       : new open image file dialog with photo thumbnail/informations.
+
+ImageEditor    : new saveas image file dialog with photo thumbnail/informations.
+
 digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 159806 : cannot display nikon d3 raw files.
