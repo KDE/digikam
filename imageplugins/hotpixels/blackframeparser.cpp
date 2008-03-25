@@ -6,6 +6,7 @@
  * Date        : 2005-03-27
  * Description : black frames parser
  * 
+ * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2005-2006 by Unai Garro <ugarro at users dot sourceforge dot net>
  * 
  * Part of the algorithm for finding the hot pixels was based on
@@ -57,7 +58,7 @@ BlackFrameParser::~BlackFrameParser()
 {
 }
 
-void BlackFrameParser::parseHotPixels(QString file)
+void BlackFrameParser::parseHotPixels(const QString& file)
 {
     parseBlackFrame(file);
     
@@ -75,7 +76,7 @@ void BlackFrameParser::parseHotPixels(QString file)
     */
 }
 
-void BlackFrameParser::parseBlackFrame(KUrl url)
+void BlackFrameParser::parseBlackFrame(const KUrl& url)
 {
     //Initialize the data buffer
     mData.resize(0);

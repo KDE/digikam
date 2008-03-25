@@ -7,7 +7,7 @@
  * Description : a digiKam image plugin for fixing dots produced by
  *               hot/stuck/dead pixels from a CCD.
  * 
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2005-2006 by Unai Garro <ugarro at users dot sourceforge dot net>
  * 
  * This program is free software; you can redistribute it
@@ -50,6 +50,7 @@
 #include "dimg.h"
 #include "imageiface.h"
 #include "imagewidget.h"
+#include "imagedialog.h"
 #include "blackframelistview.h"
 #include "imageeffect_hotpixels.h"
 #include "imageeffect_hotpixels.moc"
@@ -73,7 +74,7 @@ ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent)
                                        ki18n("A digiKam image plugin for fixing dots produced by "
                                              "hot/stuck/dead pixels from a CCD."),
                                        KAboutData::License_GPL,
-                                       ki18n("(c) 2005-2007, Unai Garro and Gilles Caulier"), 
+                                       ki18n("(c) 2005-2008, Unai Garro and Gilles Caulier"), 
                                        KLocalizedString(),
                                        "http://www.digikam.org");
                 
@@ -160,18 +161,14 @@ void ImageEffect_HotPixels::resetValues(void)
 
 void ImageEffect_HotPixels::slotAddBlackFrame()
 {
-    KFileDialog fileSelectDialog(KUrl(), QString(), this);
-    fileSelectDialog.setOperationMode(KFileDialog::Opening);
-    fileSelectDialog.setMode(KFile::File);
-    fileSelectDialog.setCaption(i18n("Select Black Frame Image"));
-    fileSelectDialog.setFilter(KImageIO::pattern());
-    fileSelectDialog.setUrl(m_blackFrameURL.path());     
+    KUrl url = Digikam::ImageDialog::getImageURL(this, m_blackFrameURL,
+                                                 i18n("Select Black Frame Image"));
 
-    if (fileSelectDialog.exec() != KFileDialog::Rejected)
+    if (!url.isEmpty())
     {
-       //Load the selected file and insert into the list
-        
-       m_blackFrameURL = fileSelectDialog.selectedUrl();
+       // Load the selected file and insert into the list.
+
+       m_blackFrameURL = url;
        m_blackFrameListView->clear();
        new BlackFrameListViewItem(m_blackFrameListView, m_blackFrameURL);
     }
