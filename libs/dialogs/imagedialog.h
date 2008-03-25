@@ -74,14 +74,17 @@ class DIGIKAM_EXPORT ImageDialog
 
 public:
 
-    ImageDialog(QWidget* parent, const KURL url);
+    ImageDialog(QWidget* parent, const KURL &url, bool singleSelect=false, const QString& caption=QString());
     ~ImageDialog();
 
+    KURL       url() const;
     KURL::List urls() const;
 
+    bool    singleSelect() const;
     QString fileformats() const;
 
-    static KURL::List getImageURLs(QWidget* parent, const KURL url);
+    static KURL::List getImageURLs(QWidget* parent, const KURL& url, const QString& caption=QString());
+    static KURL getImageURL(QWidget* parent, const KURL& url, const QString& caption=QString());
 
 private:
 

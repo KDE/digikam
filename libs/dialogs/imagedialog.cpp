@@ -243,16 +243,23 @@ class ImageDialogPrivate
 
 public:
 
-    ImageDialogPrivate(){}
+    ImageDialogPrivate()
+    {
+        singleSelect = false;
+    }
+
+    bool       singleSelect;
 
     QString    fileformats;
 
+    KURL       url;
     KURL::List urls;
 };
 
-ImageDialog::ImageDialog(QWidget* parent, const KURL url)
+ImageDialog::ImageDialog(QWidget* parent, const KURL &url, bool singleSelect, const QString& caption)
 {
     d = new ImageDialogPrivate;
+    d->singleSelect = singleSelect;
 
     QStringList patternList = QStringList::split('\n', KImageIO::pattern(KImageIO::Reading));
 
@@ -283,15 +290,33 @@ ImageDialog::ImageDialog(QWidget* parent, const KURL url)
     ImageDialogPreview *preview = new ImageDialogPreview(&dlg);
     dlg.setPreviewWidget(preview);
     dlg.setOperationMode(KFileDialog::Opening);
-    dlg.setMode(KFile::Files);
-    dlg.setCaption(i18n("Open Images"));
-    dlg.exec();
-    d->urls = dlg.selectedURLs();
+
+    if (d->singleSelect)
+    {
+        dlg.setMode(KFile::File);
+        if (caption.isEmpty()) dlg.setCaption(i18n("Select an Image"));
+        else dlg.setCaption(caption);
+        dlg.exec();
+        d->url = dlg.selectedURL();
+    }
+    else
+    {
+        dlg.setMode(KFile::Files);
+        if (caption.isEmpty()) dlg.setCaption(i18n("Select Images"));
+        else dlg.setCaption(caption);
+        dlg.exec();
+        d->urls = dlg.selectedURLs();
+    }
 }
 
 ImageDialog::~ImageDialog() 
 {
     delete d;
+}
+
+bool ImageDialog::singleSelect() const 
+{
+    return d->singleSelect;
 }
 
 QString ImageDialog::fileformats() const 
@@ -304,13 +329,22 @@ KURL::List ImageDialog::urls() const
     return d->urls;
 }
 
-KURL::List ImageDialog::getImageURLs(QWidget* parent, const KURL url)
+KURL::List ImageDialog::getImageURLs(QWidget* parent, const KURL& url, const QString& caption)
 {
     ImageDialog dlg(parent, url);
     if (!dlg.urls().isEmpty())
         return dlg.urls();
     else
         return KURL::List();
+}
+
+KURL ImageDialog::getImageURL(QWidget* parent, const KURL& url, const QString& caption)
+{
+    ImageDialog dlg(parent, url, true);
+    if (!dlg.urls().isEmpty())
+        return dlg.urls().first();
+    else
+        return KURL();
 }
 
 } // namespace Digikam
