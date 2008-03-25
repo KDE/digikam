@@ -90,6 +90,7 @@ extern "C"
 #include "dpopupmenu.h"
 #include "canvas.h"
 #include "dimginterface.h"
+#include "imagedialog.h"
 #include "imageplugin.h"
 #include "imagepluginloader.h"
 #include "imageresize.h"
@@ -1510,7 +1511,7 @@ bool EditorWindow::startingSaveAs(const KURL& url)
 
     QString mimetypes = KImageIO::mimeTypes(KImageIO::Writing).join(" ");
     mimetypes.append(" image/tiff");
-    DDebug () << "mimetypes=" << mimetypes << endl;    
+    DDebug () << "mimetypes=" << mimetypes << endl;
 
     m_savingContext->srcURL = url;
 
@@ -1529,6 +1530,8 @@ bool EditorWindow::startingSaveAs(const KURL& url)
     connect(&imageFileSaveDialog, SIGNAL(fileSelected(const QString &)),
             options, SLOT(slotImageFileSelected(const QString &)));
 
+    ImageDialogPreview *preview = new ImageDialogPreview(&imageFileSaveDialog);
+    imageFileSaveDialog.setPreviewWidget(preview);
     imageFileSaveDialog.setOperationMode(KFileDialog::Saving);
     imageFileSaveDialog.setMode(KFile::File);
     imageFileSaveDialog.setCaption(i18n("New Image File Name"));
