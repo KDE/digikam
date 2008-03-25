@@ -78,7 +78,7 @@ SET(digikam_LIB_SRCS
                         ${libimagepluginswidgets_SRCS}
                         ${libiccprofileswidgets_SRCS}
                         ${libmetadatawidgets_SRCS}
-                        ${libdialog_SRCS}
+                        ${libdialogs_SRCS}
                         ${libimageproperties_SRCS}
 
                         # utitilies
