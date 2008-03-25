@@ -76,7 +76,7 @@ Q_OBJECT
 
 public:
 
-    BlackFrameListViewItem(BlackFrameListView* parent, KURL url);
+    BlackFrameListViewItem(BlackFrameListView* parent, const KURL &url);
     ~BlackFrameListViewItem(){};
 
     virtual QString text(int column)const;

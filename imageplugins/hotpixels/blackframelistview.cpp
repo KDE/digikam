@@ -51,7 +51,7 @@ BlackFrameListView::BlackFrameListView(QWidget* parent)
 
 // --------------------------------------------------------------------------
 
-BlackFrameListViewItem::BlackFrameListViewItem(BlackFrameListView* parent, KURL url)
+BlackFrameListViewItem::BlackFrameListViewItem(BlackFrameListView* parent, const KURL &url)
                       : QObject(parent), QListViewItem(parent)
 {
     m_parent        = parent;
