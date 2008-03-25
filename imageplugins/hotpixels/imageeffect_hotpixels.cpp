@@ -140,7 +140,15 @@ void ImageEffect_HotPixels::readUserSettings()
                                         HotPixelFixer::QUADRATIC_INTERPOLATION));
 
     if (m_blackFrameURL.isValid())
-        new BlackFrameListViewItem(m_blackFrameListView, m_blackFrameURL);
+    {
+        BlackFrameListViewItem *item = new BlackFrameListViewItem(m_blackFrameListView, m_blackFrameURL);
+
+        connect(item, SIGNAL(signalLoadingProgress(float)),
+                this, SLOT(slotLoadingProgress(float)));
+
+        connect(item, SIGNAL(signalLoadingComplete()),
+                this, SLOT(slotLoadingComplete()));
+    }
 }
 
 void ImageEffect_HotPixels::writeUserSettings()
@@ -152,7 +160,7 @@ void ImageEffect_HotPixels::writeUserSettings()
     config->sync();
 }
 
-void ImageEffect_HotPixels::resetValues(void)
+void ImageEffect_HotPixels::resetValues()
 {
     m_filterMethodCombo->blockSignals(true);
     m_filterMethodCombo->setCurrentItem(HotPixelFixer::QUADRATIC_INTERPOLATION);
@@ -239,12 +247,12 @@ void ImageEffect_HotPixels::prepareFinal()
                        new HotPixelFixer(iface.getOriginalImg(), this,m_hotPixelsList,interpolationMethod));
 }
 
-void ImageEffect_HotPixels::putPreviewData(void)
+void ImageEffect_HotPixels::putPreviewData()
 {
     m_imagePreviewWidget->setPreviewImage(m_threadedFilter->getTargetImage());
 }
 
-void ImageEffect_HotPixels::putFinalData(void)
+void ImageEffect_HotPixels::putFinalData()
 {
     Digikam::ImageIface iface(0, 0);
     iface.putOriginalImage(i18n("Hot Pixels Correction"), m_threadedFilter->getTargetImage().bits());
