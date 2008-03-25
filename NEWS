@@ -9,7 +9,8 @@ ImageEditor    : new saveas image file dialog with photo thumbnail/informations.
 digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 159806 : cannot display nikon d3 raw files.
-002 ==> 
+002 ==> 148935 : digiKam hot pixel plugin can not read canon raw files.
+003 ==> 
 
 **********************************************************************************************
 
