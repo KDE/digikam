@@ -82,7 +82,7 @@ void BlackFrameParser::parseBlackFrame(const KURL &url)
 
     if (!m_imageLoaderThread)
     {
-        m_imageLoaderThread = new Digikam::LoadSaveThread();
+        m_imageLoaderThread = new LoadSaveThread();
 
         connect(m_imageLoaderThread, SIGNAL(signalLoadingProgress(const LoadingDescription&, float)),
                 this, SLOT(slotLoadingProgress(const LoadingDescription&, float)));
@@ -91,7 +91,7 @@ void BlackFrameParser::parseBlackFrame(const KURL &url)
                 this, SLOT(slotLoadImageFromUrlComplete(const LoadingDescription&, const DImg&)));
     }
 
-    Digikam::LoadingDescription desc = Digikam::LoadingDescription(m_localFile, KDcrawIface::RawDecodingSettings());
+    LoadingDescription desc = LoadingDescription(m_localFile, KDcrawIface::RawDecodingSettings());
     m_imageLoaderThread->load(desc);
 }
 
@@ -126,7 +126,7 @@ void BlackFrameParser::blackFrameParsing()
         for (int x=0 ; x < m_Image.width() ; ++x)
         {
             //Get each point in the image
-            QRgb pixrgb=m_Image.pixel(x,y);
+            QRgb pixrgb = m_Image.pixel(x,y);
             QColor color; color.setRgb(pixrgb);
 
             // Find maximum component value.
@@ -194,7 +194,7 @@ void BlackFrameParser::consolidatePixels (QValueList<HotPixel>& list)
                                     point_below.x() + point_below.width()) - point.x());
                 point.rect.setHeight(MAX(point.y() + point.height(),
                                      point_below.y() + point_below.height()) - point.y());
-                *it=point;
+                *it = point;
                 list.remove (point_below_it); //TODO: Check! this could remove it++?
             }
             else
