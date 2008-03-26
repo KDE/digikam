@@ -114,6 +114,7 @@ private:
 
     void readSettings();
     void saveSettings();
+    void updateThumbbar();
 
 private:
 

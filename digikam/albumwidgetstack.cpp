@@ -41,6 +41,7 @@
 
 #include "albumsettings.h"
 #include "albumiconview.h"
+#include "albumiconitem.h"
 #include "imagepreviewview.h"
 #include "imagepreviewbar.h"
 #include "welcomepageview.h"
@@ -226,6 +227,9 @@ void AlbumWidgetStack::setPreviewItem(const ImageInfo & info, const ImageInfo &p
             if (previewMode() == MediaPlayerMode)
                 setPreviewItem();
 
+            if (previewMode() != PreviewImageMode)
+                updateThumbbar();
+
             d->imagePreviewView->setImageInfo(info, previous, next);
 
             // NOTE: No need to toggle imediatly in PreviewImageMode here, 
@@ -234,9 +238,7 @@ void AlbumWidgetStack::setPreviewItem(const ImageInfo & info, const ImageInfo &p
         }
 
         ThumbBarItem* item = d->thumbBar->findItemByUrl(info.fileUrl());
-        d->thumbBar->blockSignals(true);
         d->thumbBar->setSelected(item);
-        d->thumbBar->blockSignals(false);
     }
 }
 
@@ -299,14 +301,31 @@ void AlbumWidgetStack::slotItemsUpdated(const KUrl::List& urls)
 
 void AlbumWidgetStack::slotItemsAdded()
 {
+    if (previewMode() != PreviewImageMode)
+        return;
+
+    updateThumbbar();
+
+    AlbumIconItem *iconItem = dynamic_cast<AlbumIconItem*>(d->albumIconView->currentItem());
+    if (iconItem)
+    {
+        ThumbBarItem* item = d->thumbBar->findItemByUrl(iconItem->imageInfo().fileUrl());
+        d->thumbBar->setSelected(item);
+    }
+}
+
+void AlbumWidgetStack::updateThumbbar()
+{
     d->thumbBar->clear();
 
     ImageInfo current;
     ImageInfoList list = d->albumIconView->allImageInfos(current);
+    d->thumbBar->blockSignals(true);
     for (ImageInfoList::iterator it = list.begin(); it != list.end(); ++it)
     {
         new ImagePreviewBarItem(d->thumbBar, *it);
     }
+    d->thumbBar->blockSignals(false);
 }
 
 void AlbumWidgetStack::increaseZoom()
