@@ -127,8 +127,8 @@ ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent)
     connect(m_blackFrameButton, SIGNAL(clicked()),
             this, SLOT(slotAddBlackFrame()));
                                                   
-    connect(m_blackFrameListView, SIGNAL(blackFrameSelected(Q3ValueList<HotPixel>, const KUrl&)),
-            this, SLOT(slotBlackFrame(Q3ValueList<HotPixel>, const KUrl&))); 
+    connect(m_blackFrameListView, SIGNAL(blackFrameSelected(QList<HotPixel>, const KUrl&)),
+            this, SLOT(slotBlackFrame(QList<HotPixel>, const KUrl&))); 
 }
 
 ImageEffect_HotPixels::~ImageEffect_HotPixels()
@@ -219,11 +219,11 @@ void ImageEffect_HotPixels::prepareEffect()
     Digikam::DImg image     = m_imagePreviewWidget->getOriginalRegionImage();
     int interpolationMethod = m_filterMethodCombo->currentIndex();
 
-    Q3ValueList<HotPixel> hotPixelsRegion;
+    QList<HotPixel> hotPixelsRegion;
     QRect area = m_imagePreviewWidget->getOriginalImageRegionToRender();
-    Q3ValueList<HotPixel>::Iterator end(m_hotPixelsList.end()); 
+    QList<HotPixel>::Iterator end(m_hotPixelsList.end()); 
     
-    for (Q3ValueList<HotPixel>::Iterator it = m_hotPixelsList.begin() ; it != end ; ++it )
+    for (QList<HotPixel>::Iterator it = m_hotPixelsList.begin() ; it != end ; ++it )
     {
         HotPixel hp = (*it);
         
@@ -262,15 +262,15 @@ void ImageEffect_HotPixels::putFinalData()
     iface.putOriginalImage(i18n("Hot Pixels Correction"), m_threadedFilter->getTargetImage().bits());
 }
 
-void ImageEffect_HotPixels::slotBlackFrame(Q3ValueList<HotPixel> hpList, const KUrl& blackFrameURL)
+void ImageEffect_HotPixels::slotBlackFrame(QList<HotPixel> hpList, const KUrl& blackFrameURL)
 {
     m_blackFrameURL = blackFrameURL;
     m_hotPixelsList = hpList;
     
     Q3PointArray pointList(m_hotPixelsList.size());
-    Q3ValueList <HotPixel>::Iterator it;
+    QList <HotPixel>::Iterator it;
     int i = 0;
-    Q3ValueList <HotPixel>::Iterator end(m_hotPixelsList.end());
+    QList <HotPixel>::Iterator end(m_hotPixelsList.end());
     
     for (it = m_hotPixelsList.begin() ; it != end ; ++it, i++)
        pointList.setPoint(i, (*it).rect.center());

@@ -26,7 +26,7 @@
 
 // Qt includes.
 
-#include <Q3ValueList>
+#include <QList>
 #include <QPainter>
 #include <QPixmap>
 
@@ -66,11 +66,11 @@ BlackFrameListViewItem::BlackFrameListViewItem(BlackFrameListView* parent, const
     m_parser        = new BlackFrameParser(parent);
     m_parser->parseBlackFrame(url);
 
-    connect(m_parser, SIGNAL(parsed(Q3ValueList<HotPixel>)),
-            this, SLOT(slotParsed(Q3ValueList<HotPixel>)));
+    connect(m_parser, SIGNAL(parsed(QList<HotPixel>)),
+            this, SLOT(slotParsed(QList<HotPixel>)));
 
-    connect(this, SIGNAL(parsed(Q3ValueList<HotPixel>, const KUrl&)),
-            parent, SLOT(slotParsed(Q3ValueList<HotPixel>, const KUrl&)));
+    connect(this, SIGNAL(parsed(QList<HotPixel>, const KUrl&)),
+            parent, SLOT(slotParsed(QList<HotPixel>, const KUrl&)));
 
     connect(m_parser, SIGNAL(signalLoadingProgress(float)),
             this, SIGNAL(signalLoadingProgress(float)));
@@ -85,7 +85,7 @@ void BlackFrameListViewItem::activate()
     emit parsed(m_hotPixels, m_blackFrameURL);
 }
 
-void BlackFrameListViewItem::slotParsed(Q3ValueList<HotPixel> hotPixels)
+void BlackFrameListViewItem::slotParsed(QList<HotPixel> hotPixels)
 {
     m_hotPixels = hotPixels;
     m_image     = m_parser->image();
@@ -99,8 +99,8 @@ void BlackFrameListViewItem::slotParsed(Q3ValueList<HotPixel> hotPixels)
     setText(2, QString::number(m_hotPixels.count()));
 
     m_blackFrameDesc = QString("<p><b>" + m_blackFrameURL.fileName() + "</b>:<p>");
-    Q3ValueList <HotPixel>::Iterator end(m_hotPixels.end());
-    for (Q3ValueList <HotPixel>::Iterator it = m_hotPixels.begin() ; it != end ; ++it)
+    QList <HotPixel>::Iterator end(m_hotPixels.end());
+    for (QList <HotPixel>::Iterator it = m_hotPixels.begin() ; it != end ; ++it)
         m_blackFrameDesc.append( QString("[%1,%2] ").arg((*it).x()).arg((*it).y()) );
 
     emit parsed(m_hotPixels, m_blackFrameURL);
@@ -123,8 +123,8 @@ QPixmap BlackFrameListViewItem::thumb(const QSize& size)
     yRatio = (float)size.height()/(float)m_image.height();
 
     //Draw hot pixels one by one
-    Q3ValueList <HotPixel>::Iterator it;
-    Q3ValueList <HotPixel>::Iterator end(m_hotPixels.end()); 
+    QList <HotPixel>::Iterator it;
+    QList <HotPixel>::Iterator end(m_hotPixels.end()); 
     for (it=m_hotPixels.begin() ; it!=end ; ++it)
     {
         hpRect   = (*it).rect;

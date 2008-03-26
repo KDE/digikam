@@ -29,7 +29,7 @@
 
 // Qt includes.
 
-#include <Q3ValueList>
+#include <QList>
 #include <QColor>
 #include <QRegExp>
 #include <QStringList>
@@ -56,7 +56,7 @@
 namespace DigikamHotPixelsImagesPlugin
 {
 
-HotPixelFixer::HotPixelFixer(Digikam::DImg *orgImage, QObject *parent, const Q3ValueList<HotPixel>& hpList, 
+HotPixelFixer::HotPixelFixer(Digikam::DImg *orgImage, QObject *parent, const QList<HotPixel>& hpList, 
                              int interpolationMethod)
              : Digikam::DImgThreadedFilter(orgImage, parent, "HotPixels")
 {
@@ -73,8 +73,8 @@ HotPixelFixer::~HotPixelFixer()
 
 void HotPixelFixer::filterImage(void)
 {
-    Q3ValueList <HotPixel>::ConstIterator it;
-    Q3ValueList <HotPixel>::ConstIterator end(m_hpList.end()); 
+    QList <HotPixel>::ConstIterator it;
+    QList <HotPixel>::ConstIterator end(m_hpList.end()); 
     for (it = m_hpList.begin() ; it != end ; ++it)
     {
         HotPixel hp = *it;
@@ -102,7 +102,7 @@ void HotPixelFixer::interpolate (Digikam::DImg &img, HotPixel &hp, int method)
             //case twodim:
             // {
             int sum_weight = 0;
-            double vr=0.0,vg=0.0,vb=0.0;
+            double vr = 0.0, vg = 0.0, vb = 0.0;
             int x, y;
             Digikam::DColor col;
         
@@ -157,8 +157,8 @@ void HotPixelFixer::interpolate (Digikam::DImg &img, HotPixel &hp, int method)
                 for (y = 0; y < hp.height(); ++y)
                 if (validPoint(img,QPoint(xPos+x,yPos+y)))
                 {
-                    int alpha=sixtBits ? 65535 : 255;
-                    int ir=(int )round(vr),ig=(int) round(vg),ib=(int) round(vb);
+                    int alpha = sixtBits ? 65535 : 255;
+                    int ir = (int )round(vr), ig = (int) round(vg), ib = (int) round(vb);
                     img.setPixelColor(xPos+x,yPos+y,Digikam::DColor(ir,ig,ib,alpha,sixtBits));
                 }
             }

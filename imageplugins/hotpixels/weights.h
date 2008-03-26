@@ -7,6 +7,7 @@
  * Description : a class to calculate filter weights
  * 
  * Copyright (C) 2005-2006 by Unai Garro <ugarro at users dot sourceforge dot net>
+ * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,7 +27,7 @@
 
 // Qt includes.
 
-#include <Q3ValueList>
+#include <QList>
 #include <QRect>
 
 namespace DigikamHotPixelsImagesPlugin
@@ -43,33 +44,33 @@ public:
     ~Weights()
     {    
         if (!mWeightMatrices) return;
-        for (int i=0 ; i < mPositions.count() ; i++)
-            {
-                for (unsigned int j=0; j<mHeight; j++) 
-                    delete[] mWeightMatrices[i][j];
-            }
+        for (int i = 0 ; i < mPositions.count() ; i++)
+        {
+            for (unsigned int j = 0; j < mHeight; j++) 
+                delete[] mWeightMatrices[i][j];
         }
+    }
     
-    unsigned int height(void)        const   { return mHeight; }
-    unsigned int polynomeOrder(void) const   { return mPolynomeOrder; }
-    bool         twoDim(void)        const   { return mTwoDim; }
-    unsigned int width(void)         const   { return mWidth; }
+    unsigned int height()        const   { return mHeight;         };
+    unsigned int polynomeOrder() const   { return mPolynomeOrder;  };
+    bool         twoDim()        const   { return mTwoDim;         };
+    unsigned int width()         const   { return mWidth;          };
     
-    void     setHeight(int h)            { mHeight=h; };
-    void     setPolynomeOrder(int order) { mPolynomeOrder=order; }
-    void     setTwoDim(bool td)          { mTwoDim=td; }
-    void     setWidth(int w)             { mWidth=w; }
+    void     setHeight(int h)            { mHeight = h;            };
+    void     setPolynomeOrder(int order) { mPolynomeOrder = order; };
+    void     setTwoDim(bool td)          { mTwoDim = td;           };
+    void     setWidth(int w)             { mWidth = w;             };
     
     void     calculateWeights();
     bool     operator==(const Weights& ws) const;
-    double** operator[](int n) const             { return mWeightMatrices[n]; }
-    const Q3ValueList <QPoint> positions() const { return mPositions; }
+    double** operator[](int n) const       { return mWeightMatrices[n]; };
+    const QList <QPoint> positions() const { return mPositions;         };
 
 protected:
 
-    int       coefficientNumber() const { return mCoefficientNumber; }
+    int       coefficientNumber() const { return mCoefficientNumber; };
     
-    double*** weightMatrices() const    { return mWeightMatrices; }
+    double*** weightMatrices() const    { return mWeightMatrices;    };
 
 private:
     
@@ -78,12 +79,12 @@ private:
     
 private:
 
-    unsigned int        mHeight,mWidth;
-    unsigned int        mCoefficientNumber;
-    bool                mTwoDim;
-    unsigned int        mPolynomeOrder;
-    double ***          mWeightMatrices; //Stores a list of weight matrices
-    Q3ValueList <QPoint> mPositions;
+    unsigned int   mHeight,mWidth;
+    unsigned int   mCoefficientNumber;
+    bool           mTwoDim;
+    unsigned int   mPolynomeOrder;
+    double ***     mWeightMatrices;    //Stores a list of weight matrices
+    QList <QPoint> mPositions;
 };
 
 }  // NameSpace DigikamHotPixelsImagesPlugin

@@ -39,10 +39,10 @@ public:
         
     QRect rect;
     int luminosity;
-    int y() const     {return rect.y();     }
-    int x() const     {return rect.x();     }
-    int width()const  {return rect.width(); }
-    int height()const {return rect.height();}
+    int y() const     {return rect.y();     };
+    int x() const     {return rect.x();     };
+    int width()const  {return rect.width(); };
+    int height()const {return rect.height();};
     
     bool operator==(const HotPixel p) const
     {

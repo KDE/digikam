@@ -31,7 +31,7 @@
 
 // Qt includes.
 
-#include <Q3ValueList>
+#include <QList>
 #include <QImage>
 #include <QObject>
 #include <QString>
@@ -68,7 +68,7 @@ public:
 
 signals:
 
-    void parsed(Q3ValueList<HotPixel>);
+    void parsed(QList<HotPixel>);
     void signalLoadingProgress(float);
     void signalLoadingComplete();
 
@@ -80,7 +80,7 @@ private slots:
 private:
 
     void blackFrameParsing();
-    void consolidatePixels (Q3ValueList<HotPixel>& list);
+    void consolidatePixels (QList<HotPixel>& list);
     void validateAndConsolidate(HotPixel *a, HotPixel *b);
         
 private:

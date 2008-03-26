@@ -30,7 +30,7 @@
 
 // Qt includes.
 
-#include <Q3ValueList>
+#include <QList>
 
 // KDE includes.
 
@@ -67,7 +67,7 @@ private slots:
     void slotLoadingProgress(float v);
     void slotLoadingComplete();
 
-    void slotBlackFrame(Q3ValueList<HotPixel> hpList, const KUrl& blackFrameURL);
+    void slotBlackFrame(QList<HotPixel> hpList, const KUrl& blackFrameURL);
     void slotAddBlackFrame();
     void readUserSettings();
 
@@ -90,7 +90,7 @@ private:
 
     QProgressBar          *m_progressBar;
     
-    Q3ValueList<HotPixel>  m_hotPixelsList;
+    QList<HotPixel>  m_hotPixelsList;
     
     KUrl                   m_blackFrameURL;
     

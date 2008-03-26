@@ -27,7 +27,7 @@
 
 // Qt includes.
 
-#include <Q3ValueList>
+#include <QList>
 #include <QImage>
 #include <QString>
 #include <QSize>
@@ -59,11 +59,11 @@ public:
 
 signals:
 
-    void blackFrameSelected(Q3ValueList<HotPixel>, const KUrl&);
+    void blackFrameSelected(QList<HotPixel>, const KUrl&);
 
 private slots:
 
-    void slotParsed(Q3ValueList<HotPixel> hotPixels, const KUrl& blackFrameURL)
+    void slotParsed(QList<HotPixel> hotPixels, const KUrl& blackFrameURL)
     {
        emit blackFrameSelected(hotPixels, blackFrameURL);
     };
@@ -82,7 +82,7 @@ public:
 
 signals:
 
-    void parsed(Q3ValueList<HotPixel>, const KUrl&);
+    void parsed(QList<HotPixel>, const KUrl&);
     void signalLoadingProgress(float);
     void signalLoadingComplete();
 
@@ -96,7 +96,7 @@ private:
 
 private slots:
 
-    void slotParsed(Q3ValueList<HotPixel>);
+    void slotParsed(QList<HotPixel>);
 
 private:
 
@@ -106,7 +106,7 @@ private:
 
     QSize                 m_imageSize;
 
-    Q3ValueList<HotPixel> m_hotPixels;
+    QList<HotPixel> m_hotPixels;
 
     QString               m_blackFrameDesc;
 

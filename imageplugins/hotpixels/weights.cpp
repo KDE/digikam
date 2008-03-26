@@ -7,6 +7,7 @@
  * Description : a class to calculate filter weights
  * 
  * Copyright (C) 2005-2006 by Unai Garro <ugarro at users dot sourceforge dot net>
+ * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,6 +22,10 @@
  * 
  * ============================================================ */
 
+// C++ includes.
+
+#include <cstring>
+
 // Local includes.
 
 #include "weights.h"
@@ -32,6 +37,7 @@ Weights::Weights(const Weights &w)
 {
     (*this) = w;    
 }
+
 void Weights::operator=(const Weights &w)
 {
     mHeight            = w.height();
@@ -72,9 +78,8 @@ void Weights::operator=(const Weights &w)
     
 void Weights::calculateWeights()
 {
-    mCoefficientNumber = (mTwoDim
-                              ? ((size_t)mPolynomeOrder + 1) * ((size_t)mPolynomeOrder + 1)
-                              : (size_t)mPolynomeOrder + 1);
+    mCoefficientNumber = (mTwoDim ? ((size_t)mPolynomeOrder + 1) * ((size_t)mPolynomeOrder + 1)
+                                  : (size_t)mPolynomeOrder + 1);
     double *matrix;  /* num_coeff * num_coeff */
     double *vector0; /* mPositions.count()   * num_coeff */
     double *vector1; /* mPositions.count()   * num_coeff */
@@ -87,8 +92,8 @@ void Weights::calculateWeights()
     {
 
 	int iPolynomeOrder = (int) mPolynomeOrder; //lets avoid signed/unsigned comparison warnings
-	int iHeight        = (int) height();       //"
-	int iWidth         = (int) width();        //"
+	int iHeight        = (int) height(); 
+	int iWidth         = (int) width();  
 	
         for (y = -iPolynomeOrder; y < iHeight + iPolynomeOrder; ++y)
         {
@@ -126,7 +131,7 @@ void Weights::calculateWeights()
 
     // Allocate memory.
     
-    matrix  = new double[mCoefficientNumber*mCoefficientNumber];
+    matrix  = new double[mCoefficientNumber * mCoefficientNumber];
     vector0 = new double[mPositions.count() * mCoefficientNumber];
     vector1 = new double[mPositions.count() * mCoefficientNumber];
     

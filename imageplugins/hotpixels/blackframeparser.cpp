@@ -115,7 +115,7 @@ void BlackFrameParser::parseBlackFrame(QImage& img)
 void BlackFrameParser::blackFrameParsing()
 {
     // Now find the hot pixels and store them in a list
-    Q3ValueList<HotPixel> hpList;
+    QList<HotPixel> hpList;
     
     for (int y=0 ; y < m_Image.height() ; ++y)
     {
@@ -155,14 +155,14 @@ void BlackFrameParser::blackFrameParsing()
 
 // Consolidate adjacent points into larger points.
 
-void BlackFrameParser::consolidatePixels (Q3ValueList<HotPixel>& list)
+void BlackFrameParser::consolidatePixels (QList<HotPixel>& list)
 {
     if (list.isEmpty()) 
         return;
 
     /* Consolidate horizontally.  */
     
-    Q3ValueList<HotPixel>::iterator it, prevPointIt;
+    QList<HotPixel>::iterator it, prevPointIt;
 
     prevPointIt = list.begin();
     it          = list.begin();
@@ -171,7 +171,7 @@ void BlackFrameParser::consolidatePixels (Q3ValueList<HotPixel>& list)
     HotPixel tmp;
     HotPixel point;
     HotPixel point_below;
-    Q3ValueList<HotPixel>::iterator end(list.end()); 
+    QList<HotPixel>::iterator end(list.end()); 
     for (; it != end; ++it )
     {
         while (1)
@@ -179,7 +179,7 @@ void BlackFrameParser::consolidatePixels (Q3ValueList<HotPixel>& list)
             point = (*it);
             tmp   = point;
     
-            Q3ValueList<HotPixel>::Iterator point_below_it;
+            QList<HotPixel>::Iterator point_below_it;
             
             //find any intersecting hotpixels below tmp
             point_below_it = list.find (tmp); 
