@@ -182,7 +182,9 @@ void BlackFrameParser::consolidatePixels (QList<HotPixel>& list)
             QList<HotPixel>::Iterator point_below_it;
             
             //find any intersecting hotpixels below tmp
-            point_below_it = list.find (tmp); 
+            int i = list.indexOf(tmp);
+            if (i == -1) point_below_it = list.end();
+            else point_below_it = list.begin() + i; 
 
             if (point_below_it != list.end())
             {
@@ -195,7 +197,7 @@ void BlackFrameParser::consolidatePixels (QList<HotPixel>& list)
                 point.rect.setHeight(qMax(point.y() + point.height(),
                                      point_below.y() + point_below.height()) - point.y());
                 *it = point;
-                list.remove (point_below_it); //TODO: Check! this could remove it++?
+                list.erase(point_below_it); //TODO: Check! this could remove it++?
             }
             else    
                 break;
