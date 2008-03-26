@@ -7,7 +7,7 @@
  * Description : a widget to display an image preview with some 
  *               modes to compare effect results.
  * 
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -296,7 +296,7 @@ void ImageWidget::resetSpotPosition()
     d->previewWidget->resetSpotPosition();
 }
 
-QPoint ImageWidget::getSpotPosition(void)
+QPoint ImageWidget::getSpotPosition()
 {
     return ( d->previewWidget->getSpotPosition() );
 }
@@ -333,7 +333,7 @@ void ImageWidget::slotUpdateSpotInfo(const Digikam::DColor &col, const QPoint &p
                               color.blue(), color.alpha()));
 }
 
-void ImageWidget::readSettings(void)
+void ImageWidget::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group(d->settingsSection);
@@ -347,7 +347,7 @@ void ImageWidget::readSettings(void)
     setRenderingPreviewMode(mode);
 }
     
-void ImageWidget::writeSettings(void)
+void ImageWidget::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group(d->settingsSection);
@@ -358,4 +358,3 @@ void ImageWidget::writeSettings(void)
 }
 
 }  // namespace Digikam
-

@@ -6,7 +6,7 @@
  * Date        : 2004-08-17
  * Description : a widget to draw an image clip region.
  * 
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,7 +26,7 @@
 
 // Qt includes.
 
-#include <Q3PointArray>
+#include <QPolygon>
 #include <QRect>
 #include <QPixmap>
 #include <QResizeEvent>
@@ -81,7 +81,7 @@ public:
     void   backupPixmapRegion();
     void   restorePixmapRegion();
     
-    void   setHighLightPoints(Q3PointArray pointsList);
+    void   setHighLightPoints(const QPolygon& pointsList);
     void   drawSeparateView();
              
 public slots:
@@ -103,10 +103,10 @@ private:
     bool  previewIsNull();
     void  resetPreview();
     void  setContentsSize();
-    void  resizeEvent(QResizeEvent *);
-    void  contentsWheelEvent(QWheelEvent *);
+    void  resizeEvent(QResizeEvent*);
+    void  contentsWheelEvent(QWheelEvent*);
 
-    inline void paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh);
+    inline void paintPreview(QPixmap* pix, int sx, int sy, int sw, int sh);
 
 private:
     

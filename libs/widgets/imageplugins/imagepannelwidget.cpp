@@ -6,7 +6,7 @@
  * Date        : 2005-07-01
  * Description : a widget to draw a control pannel image tool.
  * 
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,7 +30,6 @@
 #include <QTimer>
 #include <QButtonGroup> 
 #include <QPushButton>
-#include <QPixmap>
 #include <QResizeEvent>
 #include <QGridLayout>
 #include <QProgressBar>
@@ -401,7 +400,7 @@ void ImagePannelWidget::slotInitGui()
     slotOriginalImageRegionChanged(true);
 }
 
-void ImagePannelWidget::setPanIconHighLightPoints(Q3PointArray pt) 
+void ImagePannelWidget::setPanIconHighLightPoints(const QPolygon& pt) 
 {
     d->imageRegionWidget->setHighLightPoints(pt);
     d->imagePanIconWidget->setHighLightPoints(pt);
@@ -439,7 +438,7 @@ void ImagePannelWidget::setProgressVisible(bool b)
     else d->progressBar->hide();
 }
 
-void ImagePannelWidget::setProgressWhatsThis(QString desc)
+void ImagePannelWidget::setProgressWhatsThis(const QString& desc)
 {
     d->progressBar->setWhatsThis( desc);
 }
@@ -477,17 +476,16 @@ void ImagePannelWidget::setCenterImageRegionPosition()
     d->imageRegionWidget->setCenterContentsPosition();
 }
 
-void ImagePannelWidget::slotSetImageRegionPosition(QRect rect, bool targetDone)
+void ImagePannelWidget::slotSetImageRegionPosition(const QRect& rect, bool targetDone)
 {
     d->imageRegionWidget->setContentsPosition(rect.x(), rect.y(), targetDone);
 }
 
-void ImagePannelWidget::updateSelectionInfo(QRect rect)
+void ImagePannelWidget::updateSelectionInfo(const QRect& rect)
 {
-    d->imagePanIconWidget->setToolTip(
-                   i18n("<nobr>(%1,%2)(%3x%4)</nobr>"
-                        ,rect.left(),rect.top()
-                        ,rect.width(),rect.height()));
+    d->imagePanIconWidget->setToolTip(i18n("<nobr>(%1,%2)(%3x%4)</nobr>", 
+                                           rect.left(), rect.top(),
+                                           rect.width(), rect.height()));
 }
 
 }  // NameSpace Digikam

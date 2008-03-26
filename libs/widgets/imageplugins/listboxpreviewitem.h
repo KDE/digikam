@@ -8,7 +8,7 @@
  *               as a thumbnail and a customized qwhatsthis class 
  *               for listbox items
  * 
- * Copyright (C) 2006 by Guillaume Laurent <glaurent@telegraph-road.org>
+ * Copyright (C) 2006-2007 by Guillaume Laurent <glaurent@telegraph-road.org>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

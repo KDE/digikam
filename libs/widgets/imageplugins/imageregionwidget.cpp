@@ -6,7 +6,7 @@
  * Date        : 2004-08-17
  * Description : a widget to draw an image clip region.
  * 
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,19 +27,13 @@
 
 // Qt includes.
 
-#include <qpainter.h>
-#include <qpixmap.h>
-#include <qtimer.h>
-#include <qpainter.h>
-#include <qpen.h>
-#include <qimage.h>
-#include <qbrush.h>
-#include <qfont.h> 
-#include <qfontmetrics.h> 
-#include <q3pointarray.h>
-//Added by qt3to4:
-#include <QWheelEvent>
-#include <QResizeEvent>
+#include <QTimer>
+#include <QPainter>
+#include <QPen>
+#include <QImage>
+#include <QBrush>
+#include <QFont> 
+#include <QFontMetrics> 
 
 // KDE includes.
 
@@ -66,21 +60,21 @@ public:
 
     ImageRegionWidgetPriv()
     {
-        iface            = 0;
-        separateView     = ImageRegionWidget::SeparateViewVertical;
+        iface        = 0;
+        separateView = ImageRegionWidget::SeparateViewVertical;
     }
 
-    int          separateView;
-    int          xpos;
-    int          ypos;
+    int         separateView;
+    int         xpos;
+    int         ypos;
 
-    QPixmap      pixmapRegion;          // Pixmap of current region to render.
+    QPixmap     pixmapRegion;          // Pixmap of current region to render.
     
-    Q3PointArray hightlightPoints;
+    QPolygon    hightlightPoints;
     
-    DImg         image;                 // Entire content image to render pixmap.
+    DImg        image;                 // Entire content image to render pixmap.
     
-    ImageIface  *iface;
+    ImageIface *iface;
 };
 
 ImageRegionWidget::ImageRegionWidget(int wp, int hp, QWidget *parent, bool scrollBar)
@@ -156,7 +150,7 @@ void ImageRegionWidget::paintPreview(QPixmap *pix, int sx, int sy, int sw, int s
     p.end();
 }
 
-void ImageRegionWidget::setHighLightPoints(Q3PointArray pointsList)
+void ImageRegionWidget::setHighLightPoints(const QPolygon& pointsList)
 {
     d->hightlightPoints = pointsList;
     repaintContents(false);   
@@ -476,4 +470,3 @@ void ImageRegionWidget::contentsWheelEvent(QWheelEvent *e)
 }
 
 }  // NameSpace Digikam
-

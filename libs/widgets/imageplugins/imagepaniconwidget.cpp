@@ -7,7 +7,7 @@
  * Description : a widget to display a panel to choose
  *               a rectangular image area.
  *
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -55,13 +55,13 @@ public:
         separateView = ImageRegionWidget::SeparateViewNone;
     }
 
-    uchar        *data;
+    uchar      *data;
 
-    int           separateView;
+    int         separateView;
     
-    Q3PointArray  hightlightPoints;
+    QPolygon    hightlightPoints;
     
-    ImageIface   *iface;
+    ImageIface *iface;
 };
 
 ImagePanIconWidget::ImagePanIconWidget(int w, int h, QWidget *parent, 
@@ -94,7 +94,7 @@ ImagePanIconWidget::~ImagePanIconWidget()
     delete d;
 }
 
-void ImagePanIconWidget::setHighLightPoints(Q3PointArray pointsList)
+void ImagePanIconWidget::setHighLightPoints(const QPolygon& pointsList)
 {
     d->hightlightPoints = pointsList;
     updatePixmap();
@@ -197,4 +197,3 @@ void ImagePanIconWidget::slotSeparateViewToggled(int t)
 }
 
 }  // NameSpace Digikam
-
