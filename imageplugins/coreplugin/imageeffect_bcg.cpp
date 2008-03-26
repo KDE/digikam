@@ -149,13 +149,15 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
 
     QLabel *label2 = new QLabel(i18n("Brightness:"), gboxSettings);
     m_bInput       = new KIntNumInput(gboxSettings);
-    m_bInput->setRange(-100, 100, 1, true);
+    m_bInput->setRange(-100, 100, 1);
+    m_bInput->setSliderEnabled(true);
     m_bInput->setValue(0);
     m_bInput->setWhatsThis( i18n("<p>Set here the brightness adjustment of the image."));
 
     QLabel *label3 = new QLabel(i18n("Contrast:"), gboxSettings);
     m_cInput       = new KIntNumInput(gboxSettings);
-    m_cInput->setRange(-100, 100, 1, true);
+    m_cInput->setRange(-100, 100, 1);
+    m_cInput->setSliderEnabled(true);
     m_cInput->setValue(0);
     m_cInput->setWhatsThis( i18n("<p>Set here the contrast adjustment of the image."));
 
