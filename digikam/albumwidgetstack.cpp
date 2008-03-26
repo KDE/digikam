@@ -7,7 +7,7 @@
  * Description : A widget stack to embedded album content view
  *               or the current image preview.
  *
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -152,7 +152,7 @@ void AlbumWidgetStack::setPreviewItem(ImageInfo* info, ImageInfo *previous, Imag
                                        settings->getAudioFileFilter().upper();
         if (mediaplayerfilter.contains(currentFileExtension) )
         {
-            setPreviewMode(AlbumWidgetStack::MediaPlayerMode);
+            setPreviewMode(MediaPlayerMode);
             d->mediaPlayerView->setMediaPlayerFromUrl(info->kurl());
         }
         else
@@ -201,7 +201,7 @@ void AlbumWidgetStack::previewLoaded()
 
 void AlbumWidgetStack::slotZoomFactorChanged(double z)
 {
-    if (previewMode() == AlbumWidgetStack::PreviewImageMode)
+    if (previewMode() == PreviewImageMode)
         emit signalZoomFactorChanged(z);
 }
 
@@ -210,9 +210,9 @@ void AlbumWidgetStack::slotItemsUpdated(const KURL::List& list)
     // If item are updated from Icon View, and if we are in Preview Mode,
     // We will check if the current item preview need to be reloaded.
 
-    if (previewMode() == AlbumWidgetStack::PreviewAlbumMode ||
-        previewMode() == AlbumWidgetStack::WelcomePageMode  ||
-        previewMode() == AlbumWidgetStack::MediaPlayerMode)    // What we can do with media player ?
+    if (previewMode() == PreviewAlbumMode ||
+        previewMode() == WelcomePageMode  ||
+        previewMode() == MediaPlayerMode)    // What we can do with media player ?
         return;
 
     if (list.contains(imagePreviewView()->getImageInfo()->kurl()))
