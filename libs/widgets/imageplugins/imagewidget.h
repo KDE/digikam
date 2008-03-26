@@ -7,7 +7,7 @@
  * Description : a widget to display an image preview with some 
  *               modes to compare effect results.
  * 
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -66,7 +66,7 @@ public:
 
     ImageIface* imageIface();
 
-    QPoint getSpotPosition(void);
+    QPoint getSpotPosition();
     DColor getSpotColor(int getColorFrom);
     void   setSpotVisible(bool spotVisible, bool blink=false);    
     int    getRenderingPreviewMode();
@@ -84,7 +84,7 @@ signals:
 
     void spotPositionChangedFromOriginal( const Digikam::DColor &color, const QPoint &position );
     void spotPositionChangedFromTarget( const Digikam::DColor &color, const QPoint &position );    
-    void signalResized(void);
+    void signalResized();
     
 private slots:
     
@@ -92,8 +92,8 @@ private slots:
 
 private:
 
-    void readSettings(void);
-    void writeSettings(void);
+    void readSettings();
+    void writeSettings();
 
 private:
 

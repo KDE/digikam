@@ -7,7 +7,7 @@
  * Description : a widget to display a panel to choose
  *               a rectangular image area.
  * 
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,7 +47,7 @@ public:
     ImagePanIconWidget(int width, int height, QWidget *parent=0, WFlags flags=Qt::WDestructiveClose);
     ~ImagePanIconWidget();
 
-    void  setHighLightPoints(QPointArray pointsList);
+    void  setHighLightPoints(const QPointArray& pointsList);
        
 public slots:
 
@@ -59,7 +59,7 @@ private:
 
 private:
 
-    ImagePanIconWidgetPriv* d;        
+    ImagePanIconWidgetPriv *d;        
 };
 
 }  // NameSpace Digikam

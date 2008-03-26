@@ -6,7 +6,7 @@
  * Date        : 2004-08-17
  * Description : a widget to draw an image clip region.
  * 
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -62,8 +62,8 @@ public:
 
     ImageRegionWidgetPriv()
     {
-        iface            = 0;
-        separateView     = ImageRegionWidget::SeparateViewVertical;
+        iface        = 0;
+        separateView = ImageRegionWidget::SeparateViewVertical;
     }
 
     int          separateView;
@@ -151,7 +151,7 @@ void ImageRegionWidget::paintPreview(QPixmap *pix, int sx, int sy, int sw, int s
     bitBlt(pix, 0, 0, &pix2, 0, 0);
 }
 
-void ImageRegionWidget::setHighLightPoints(QPointArray pointsList)
+void ImageRegionWidget::setHighLightPoints(const QPointArray& pointsList)
 {
     d->hightlightPoints = pointsList;
     repaintContents(false);   
@@ -471,4 +471,3 @@ void ImageRegionWidget::contentsWheelEvent(QWheelEvent *e)
 }
 
 }  // NameSpace Digikam
-

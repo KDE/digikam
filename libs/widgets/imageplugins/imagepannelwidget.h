@@ -6,7 +6,7 @@
  * Date        : 2005-07-01
  * Description : a widget to draw a control pannel image tool.
  * 
- * Copyright (C) 2005-2007 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2008 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -74,11 +74,11 @@ public:
     
     void   setProgress(int val);
     void   setProgressVisible(bool b);
-    void   setProgressWhatsThis(QString desc);
+    void   setProgressWhatsThis(const QString& desc);
 
     void   setUserAreaWidget(QWidget *w);
     
-    void   setPanIconHighLightPoints(QPointArray pt);
+    void   setPanIconHighLightPoints(const QPointArray& pt);
     
     KProgress *progressBar();
 
@@ -90,7 +90,7 @@ signals:
 public slots:
 
     // Set the top/Left conner clip position.
-    void slotSetImageRegionPosition(QRect rect, bool targetDone);
+    void slotSetImageRegionPosition(const QRect& rect, bool targetDone);
     
     // Slot used when the original image clip focus is changed by the user.
     void slotOriginalImageRegionChanged(bool target);
@@ -108,7 +108,7 @@ private slots:
 
 private:
         
-    void updateSelectionInfo(QRect rect);
+    void updateSelectionInfo(const QRect& rect);
     void readSettings();
     void writeSettings();
 
