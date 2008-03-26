@@ -25,7 +25,7 @@
 
 // Qt includes. 
 
-#include <Q3PointArray>
+#include <QPolygon>
 #include <QProgressBar>
 #include <QComboBox>
 #include <QLabel>
@@ -267,7 +267,7 @@ void ImageEffect_HotPixels::slotBlackFrame(QList<HotPixel> hpList, const KUrl& b
     m_blackFrameURL = blackFrameURL;
     m_hotPixelsList = hpList;
     
-    Q3PointArray pointList(m_hotPixelsList.size());
+    QPolygon pointList(m_hotPixelsList.size());
     QList <HotPixel>::Iterator it;
     int i = 0;
     QList <HotPixel>::Iterator end(m_hotPixelsList.end());
