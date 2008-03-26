@@ -63,13 +63,20 @@ BlackFrameListViewItem::BlackFrameListViewItem(BlackFrameListView* parent, const
 {
     m_parent        = parent;
     m_blackFrameURL = url;
-    m_parser.parseBlackFrame(url);
+    m_parser        = new BlackFrameParser(parent);
+    m_parser->parseBlackFrame(url);
 
-    connect(&m_parser, SIGNAL(parsed(Q3ValueList<HotPixel>)),
+    connect(m_parser, SIGNAL(parsed(Q3ValueList<HotPixel>)),
             this, SLOT(slotParsed(Q3ValueList<HotPixel>)));
 
     connect(this, SIGNAL(parsed(Q3ValueList<HotPixel>, const KUrl&)),
             parent, SLOT(slotParsed(Q3ValueList<HotPixel>, const KUrl&)));
+
+    connect(m_parser, SIGNAL(signalLoadingProgress(float)),
+            this, SIGNAL(signalLoadingProgress(float)));
+
+    connect(m_parser, SIGNAL(signalLoadingComplete()),
+            this, SIGNAL(signalLoadingComplete()));
 }
 
 void BlackFrameListViewItem::activate()
@@ -81,7 +88,7 @@ void BlackFrameListViewItem::activate()
 void BlackFrameListViewItem::slotParsed(Q3ValueList<HotPixel> hotPixels)
 {
     m_hotPixels = hotPixels;
-    m_image     = m_parser.image();
+    m_image     = m_parser->image();
     m_imageSize = m_image.size();
     m_thumb     = thumb(QSize(THUMB_WIDTH, THUMB_WIDTH/3*2)).toImage();
     setIcon(0, QPixmap::fromImage(m_thumb));

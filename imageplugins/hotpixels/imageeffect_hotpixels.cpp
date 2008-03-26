@@ -25,8 +25,8 @@
 
 // Qt includes. 
 
-#include <Q3ValueList>
 #include <Q3PointArray>
+#include <QProgressBar>
 #include <QComboBox>
 #include <QLabel>
 #include <QPushButton>
@@ -74,7 +74,7 @@ ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent)
                                        ki18n("A digiKam image plugin for fixing dots produced by "
                                              "hot/stuck/dead pixels from a CCD."),
                                        KAboutData::License_GPL,
-                                       ki18n("(c) 2005-2008, Unai Garro and Gilles Caulier"), 
+                                       ki18n("(c) 2005-2006, Unai Garro\n(c) 2005-2008, Gilles Caulier"), 
                                        KLocalizedString(),
                                        "http://www.digikam.org");
                 
@@ -103,13 +103,17 @@ ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent)
                                     "be used by the hot pixels removal filter.") );  
 
     m_blackFrameListView = new BlackFrameListView(gboxSettings);
+    m_progressBar        = new QProgressBar(gboxSettings);
+    m_progressBar->setRange(0, 100);
+    m_progressBar->hide();
 
     // -------------------------------------------------------------
 
-    gridSettings->addWidget(filterMethodLabel, 0, 0, 1, 1);
-    gridSettings->addWidget(m_filterMethodCombo, 0, 1, 1, 1);
-    gridSettings->addWidget(m_blackFrameButton, 0, 2, 1, 1);    
-    gridSettings->addWidget(m_blackFrameListView, 1, 0, 2, 3 );
+    gridSettings->addWidget(filterMethodLabel,    0, 0, 1, 1);
+    gridSettings->addWidget(m_filterMethodCombo,  0, 1, 1, 1);
+    gridSettings->addWidget(m_blackFrameButton,   0, 2, 1, 1);    
+    gridSettings->addWidget(m_blackFrameListView, 1, 0, 2, 3);
+    gridSettings->addWidget(m_progressBar,        3, 0, 1, 3);
     gridSettings->setMargin(0);
     gridSettings->setSpacing(spacingHint());
     
@@ -131,7 +135,7 @@ ImageEffect_HotPixels::~ImageEffect_HotPixels()
 {
 }
 
-void ImageEffect_HotPixels::readUserSettings(void)
+void ImageEffect_HotPixels::readUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("hotpixels Tool Dialog");
@@ -140,10 +144,18 @@ void ImageEffect_HotPixels::readUserSettings(void)
                                          (int)HotPixelFixer::QUADRATIC_INTERPOLATION));
     
     if (m_blackFrameURL.isValid())
-        new BlackFrameListViewItem(m_blackFrameListView, m_blackFrameURL);
+    {
+        BlackFrameListViewItem *item = new BlackFrameListViewItem(m_blackFrameListView, m_blackFrameURL);
+
+        connect(item, SIGNAL(signalLoadingProgress(float)),
+                this, SLOT(slotLoadingProgress(float)));
+
+        connect(item, SIGNAL(signalLoadingComplete()),
+                this, SLOT(slotLoadingComplete()));
+    }
 }
 
-void ImageEffect_HotPixels::writeUserSettings(void)
+void ImageEffect_HotPixels::writeUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("hotpixels Tool Dialog");
@@ -152,7 +164,7 @@ void ImageEffect_HotPixels::writeUserSettings(void)
     group.sync();
 }
 
-void ImageEffect_HotPixels::resetValues(void)
+void ImageEffect_HotPixels::resetValues()
 {
     m_filterMethodCombo->blockSignals(true);
     m_filterMethodCombo->setCurrentIndex(HotPixelFixer::QUADRATIC_INTERPOLATION);
@@ -166,15 +178,32 @@ void ImageEffect_HotPixels::slotAddBlackFrame()
 
     if (!url.isEmpty())
     {
-       // Load the selected file and insert into the list.
+        // Load the selected file and insert into the list.
 
-       m_blackFrameURL = url;
-       m_blackFrameListView->clear();
-       new BlackFrameListViewItem(m_blackFrameListView, m_blackFrameURL);
+        m_blackFrameURL = url;
+        m_blackFrameListView->clear();
+        BlackFrameListViewItem *item = new BlackFrameListViewItem(m_blackFrameListView, m_blackFrameURL);
+
+        connect(item, SIGNAL(signalLoadingProgress(float)),
+                this, SLOT(slotLoadingProgress(float)));
+
+        connect(item, SIGNAL(signalLoadingComplete()),
+                this, SLOT(slotLoadingComplete()));
     }
 }
 
-void ImageEffect_HotPixels::renderingFinished(void)
+void ImageEffect_HotPixels::slotLoadingProgress(float v)
+{
+    m_progressBar->show();
+    m_progressBar->setValue((int)(v*100));
+}
+
+void ImageEffect_HotPixels::slotLoadingComplete()
+{
+    m_progressBar->hide();
+}
+
+void ImageEffect_HotPixels::renderingFinished()
 {
     m_filterMethodCombo->setEnabled(true);
     m_blackFrameListView->setEnabled(true);
@@ -222,12 +251,12 @@ void ImageEffect_HotPixels::prepareFinal()
                        new HotPixelFixer(iface.getOriginalImg(), this,m_hotPixelsList,interpolationMethod));
 }
 
-void ImageEffect_HotPixels::putPreviewData(void)
+void ImageEffect_HotPixels::putPreviewData()
 {
     m_imagePreviewWidget->setPreviewImage(m_threadedFilter->getTargetImage());
 }
 
-void ImageEffect_HotPixels::putFinalData(void)
+void ImageEffect_HotPixels::putFinalData()
 {
     Digikam::ImageIface iface(0, 0);
     iface.putOriginalImage(i18n("Hot Pixels Correction"), m_threadedFilter->getTargetImage().bits());

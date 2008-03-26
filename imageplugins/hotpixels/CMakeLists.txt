@@ -7,7 +7,6 @@ SET(digikamimageplugin_hotpixels_PART_SRCS blackframeparser.cpp
                                            imageeffect_hotpixels.cpp 
    )
 
-
 KDE4_ADD_PLUGIN(digikamimageplugin_hotpixels ${digikamimageplugin_hotpixels_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(digikamimageplugin_hotpixels digikam)

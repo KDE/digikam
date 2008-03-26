@@ -46,6 +46,7 @@
 
 class QComboBox;
 class QPushButton;
+class QProgressBar;
 
 namespace DigikamHotPixelsImagesPlugin
 {
@@ -63,6 +64,9 @@ public:
 
 private slots:
         
+    void slotLoadingProgress(float v);
+    void slotLoadingComplete();
+
     void slotBlackFrame(Q3ValueList<HotPixel> hpList, const KUrl& blackFrameURL);
     void slotAddBlackFrame();
     void readUserSettings();
@@ -83,6 +87,8 @@ private:
     QComboBox             *m_filterMethodCombo;
     
     QPushButton           *m_blackFrameButton;
+
+    QProgressBar          *m_progressBar;
     
     Q3ValueList<HotPixel>  m_hotPixelsList;
     
