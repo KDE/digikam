@@ -21,6 +21,10 @@
  * 
  * ============================================================ */
 
+// C++ includes.
+
+#include <cstring>
+
 // Local includes.
 
 #include "weights.h"
@@ -32,6 +36,7 @@ Weights::Weights(const Weights &w)
 {
     (*this) = w;    
 }
+
 void Weights::operator=(const Weights &w)
 {
     mHeight=w.height();

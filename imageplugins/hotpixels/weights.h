@@ -36,7 +36,7 @@ class Weights
 {
 public:
 
-    Weights(){}
+    Weights(){};
     Weights(const Weights &w);
     void operator=(const Weights &w);
     
@@ -44,31 +44,31 @@ public:
     {    
         if (!mWeightMatrices) return;
         for (unsigned int i=0; i<mPositions.count(); i++)
-            {
-                for (unsigned int j=0; j<mHeight; j++) delete[] mWeightMatrices[i][j];
-            }
+        {
+            for (unsigned int j=0; j<mHeight; j++) delete[] mWeightMatrices[i][j];
         }
+    }
     
-    unsigned int      height(void)        const   { return mHeight; }
-    unsigned int      polynomeOrder(void) const   { return mPolynomeOrder; }
-    bool              twoDim(void)        const   { return mTwoDim; }
-    unsigned int      width(void)         const   { return mWidth; }
+    unsigned int height()        const   { return mHeight;        };
+    unsigned int polynomeOrder() const   { return mPolynomeOrder; };
+    bool         twoDim()        const   { return mTwoDim;        };
+    unsigned int width()         const   { return mWidth;         };
     
-    void     setHeight(int h)            { mHeight=h; };
-    void     setPolynomeOrder(int order) { mPolynomeOrder=order; }
-    void     setTwoDim(bool td)          { mTwoDim=td; }
-    void     setWidth(int w)             { mWidth=w; }
+    void     setHeight(int h)            { mHeight=h;             };
+    void     setPolynomeOrder(int order) { mPolynomeOrder=order;  };
+    void     setTwoDim(bool td)          { mTwoDim=td;            };
+    void     setWidth(int w)             { mWidth=w;              };
     
     void     calculateWeights();
     bool     operator==(const Weights& ws) const;
-    double** operator[](int n) const            { return mWeightMatrices[n]; }
-    const QValueList <QPoint> positions() const { return mPositions; }
+    double** operator[](int n) const            { return mWeightMatrices[n]; };
+    const QValueList <QPoint> positions() const { return mPositions;         };
 
 protected:
 
-    int       coefficientNumber() const { return mCoefficientNumber; }
+    int       coefficientNumber() const { return mCoefficientNumber; };
     
-    double*** weightMatrices() const    { return mWeightMatrices; }
+    double*** weightMatrices() const    { return mWeightMatrices;    };
 
 private:
     
