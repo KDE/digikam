@@ -167,10 +167,10 @@ void DPopupMenu::paintEvent(QPaintEvent* e)
     r.setTop(r.bottom()-_dpopupmenu_sidePixmap_.height()+1);
     if ( r.intersects( e->rect() ) )
     {
-        QRect drawRect = r.intersect( e->rect() ).intersect( sideImageRect() );
+        QRect drawRect = r.intersect(e->rect()).intersect(sideImageRect());
         QRect pixRect  = drawRect;
-        pixRect.moveBy( -r.left(), -r.top() );
-        p.drawImage( drawRect.topLeft(), _dpopupmenu_sidePixmap_, pixRect );
+        pixRect.moveBy(-r.left(), -r.top());
+        p.drawImage(drawRect.topLeft(), _dpopupmenu_sidePixmap_, pixRect);
     }
 
     p.setClipRegion(e->region());
