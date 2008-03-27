@@ -12,7 +12,8 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 002 ==> 148935 : digiKam hot pixel plugin can not read canon RAW files.
 003 ==> 158776 : Confirm tag delete if tag assigned to photos.
 004 ==> 148520 : Change of rating causes high CPU load.
-005 ==> 
+005 ==> 140227 : Remove or modify D&D tags menu from icon view area.
+006 ==> 
 
 **********************************************************************************************
 
