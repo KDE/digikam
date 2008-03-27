@@ -9,7 +9,7 @@
  * 
  * Copyright (C) 1996-2000 the kicker authors.
  * Copyright (C) 2005 Mark Kretschmann <markey@web.de>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,13 +36,11 @@
 // KDE includes.
 
 #include <kapplication.h>
-#include <kconfig.h>
 #include <kiconeffect.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kaboutdata.h>
 #include <kcomponentdata.h>
-#include <kconfiggroup.h>
 
 // Local includes.
 
@@ -55,7 +53,7 @@ namespace Digikam
 QImage DPopupMenu::s_dpopupmenu_sidePixmap;
 QColor DPopupMenu::s_dpopupmenu_sidePixmapColor;
 
-DPopupMenu::DPopupMenu( QWidget* parent )
+DPopupMenu::DPopupMenu(QWidget* parent)
           : KMenu(parent)
 {
     // Must be initialized so that we know the size on first invocation
@@ -67,7 +65,7 @@ void DPopupMenu::generateSidePixmap()
 {
     const QColor newColor = calcPixmapColor();
 
-    if ( newColor != s_dpopupmenu_sidePixmapColor ) 
+    if (newColor != s_dpopupmenu_sidePixmapColor) 
     {
         s_dpopupmenu_sidePixmapColor = newColor;
 
@@ -76,7 +74,7 @@ void DPopupMenu::generateSidePixmap()
         else
             s_dpopupmenu_sidePixmap.load(KStandardDirs::locate("data","showfoto/menusidepixmap.png"));
 
-        KIconEffect::colorize( s_dpopupmenu_sidePixmap, newColor, 1.0 );
+        KIconEffect::colorize(s_dpopupmenu_sidePixmap, newColor, 1.0);
     }
 }
 
@@ -85,17 +83,15 @@ QRect DPopupMenu::sideImageRect() const
     int frameWidth = style()->pixelMetric(QStyle::PM_MenuPanelWidth, 0, this);
     return QStyle::visualRect(layoutDirection(), rect(), 
                               QRect(frameWidth, frameWidth,
-                                    s_dpopupmenu_sidePixmap.width(), height() - 2*frameWidth));
+                                    s_dpopupmenu_sidePixmap.width(), 
+                                    height() - 2*frameWidth));
 }
 
 QColor DPopupMenu::calcPixmapColor()
 {
-    KConfigGroup cg = KGlobal::config()->group("WM");
-    QColor color    = QApplication::palette().color(QPalette::Active, QPalette::Highlight);
-//     QColor activeTitle = QApplication::palette().color(QPalette::Active, QPalette::Background);
-//     QColor inactiveTitle = QApplication::palette().color(QPalette::Inactive, QPalette::Background);
-    QColor activeTitle   = cg.readEntry("activeBackground", color);
-    QColor inactiveTitle = cg.readEntry("inactiveBackground", color);
+    QColor color;
+    QColor activeTitle   = QApplication::palette().color(QPalette::Active, QPalette::Background);
+    QColor inactiveTitle = QApplication::palette().color(QPalette::Inactive, QPalette::Background);
 
     // figure out which color is most suitable for recoloring to
     int h1, s1, v1, h2, s2, v2, h3, s3, v3;
@@ -161,7 +157,7 @@ void DPopupMenu::resizeEvent(QResizeEvent * e)
 }
 
 //Workaround Qt3.3.x sizing bug, by ensuring we're always wide enough.
-void DPopupMenu::resize( int width, int height )
+void DPopupMenu::resize(int width, int height)
 {
     width = qMax(width, maximumSize().width());
     KMenu::resize(width, height);
@@ -171,28 +167,28 @@ void DPopupMenu::paintEvent( QPaintEvent* e )
 {
     generateSidePixmap();
 
-    QPainter p( this );
+    QPainter p(this);
     p.setClipRegion(e->region());
 
     QStyleOptionFrame frOpt;
     frOpt.init(this);
-    frOpt.lineWidth = style()->pixelMetric(QStyle::PM_MenuPanelWidth, 0, this);
+    frOpt.lineWidth    = style()->pixelMetric(QStyle::PM_MenuPanelWidth, 0, this);
     frOpt.midLineWidth = 0;
-    style()->drawPrimitive( QStyle::PE_FrameMenu, &frOpt, &p, this);
+    style()->drawPrimitive(QStyle::PE_FrameMenu, &frOpt, &p, this);
 
     QRect r = sideImageRect();
-    r.setBottom( r.bottom() - s_dpopupmenu_sidePixmap.height() );
-    if ( r.intersects( e->rect() ) )
+    r.setTop(r.bottom()-s_dpopupmenu_sidePixmap.height()+1);
+    if (r.intersects( e->rect()))
     {
-        QRect drawRect = r.intersect( e->rect() ).intersect( sideImageRect() );
-        QRect pixRect = drawRect;
-        pixRect.translate( -r.left(), -r.top() );
-        p.drawImage( drawRect.topLeft(), s_dpopupmenu_sidePixmap, pixRect );
+        QRect drawRect = r.intersect(e->rect()).intersect( sideImageRect());
+        QRect pixRect  = drawRect;
+        pixRect.translate(-r.left(), -r.top());
+        p.drawImage(drawRect.topLeft(), s_dpopupmenu_sidePixmap, pixRect);
     }
 
-    KMenu::paintEvent( e );
+    KMenu::paintEvent(e);
 
-    p.setClipRegion( e->region() );
+    p.setClipRegion(e->region());
 }
 
 }  // namespace Digikam

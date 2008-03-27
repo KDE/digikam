@@ -9,7 +9,7 @@
  * 
  * Copyright (C) 1996-2000 the kicker authors.
  * Copyright (C) 2005 Mark Kretschmann <markey@web.de>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -55,7 +55,7 @@ class DIGIKAM_EXPORT DPopupMenu : public KMenu
 
 public:
 
-    DPopupMenu(QWidget *parent = 0);
+    DPopupMenu(QWidget *parent=0);
 
     int sidePixmapWidth() const { return s_dpopupmenu_sidePixmap.width(); }
 
@@ -70,15 +70,15 @@ private:
     /** Calculates a color that matches the current colorscheme */
     QColor calcPixmapColor();
 
-    void setMinimumSize( const QSize& s );
-    void setMaximumSize( const QSize& s );
-    void setMinimumSize( int w, int h );
-    void setMaximumSize( int w, int h );
+    void setMinimumSize(const QSize& s);
+    void setMaximumSize(const QSize& s);
+    void setMinimumSize(int w, int h);
+    void setMaximumSize(int w, int h);
 
-    void resizeEvent( QResizeEvent* e );
-    void resize( int width, int height );
+    void resizeEvent(QResizeEvent* e);
+    void resize(int width, int height);
 
-    void paintEvent( QPaintEvent* e );
+    void paintEvent(QPaintEvent* e);
 
 private:
 
