@@ -1211,30 +1211,37 @@ void TagFilterView::tagDelete(TagFilterViewItem* item)
                            "Deleting this will also delete "
                            "the subtags. "
                            "Do you want to continue?",
-                           children, tag->title()),
-                     i18n("Delete Tag"),
-                     KGuiItem(i18n("Delete"),
-                     "edit-delete"));
+                           children, tag->title()));
 
-        if(result == KMessageBox::Continue)
-        {
-            QString errMsg;
-            if (!man->deleteTAlbum(tag, errMsg))
-                KMessageBox::error(0, errMsg);
-        }
+        if(result != KMessageBox::Continue)
+            return;
+    }
+
+    QString message;
+    QList<qlonglong> assignedItems = DatabaseAccess().db()->getItemIDsInTag(tag->id());
+    if (!assignedItems.isEmpty())
+    {
+        message = i18np("Tag '%2' is assigned to one item. "
+                        "Do you want to continue?",
+                        "Tag '%2' is assigned to %1 items. "
+                        "Do you want to continue?",
+                        assignedItems.count(), tag->title());
     }
     else
     {
-        int result = KMessageBox::warningContinueCancel(0, i18n("Delete '%1' tag?", tag->title()),
-                                                        i18n("Delete Tag"),
-                                                        KGuiItem(i18n("Delete"), "edit-delete"));
+        message = i18n("Delete '%1' tag?", tag->title());
+    }
 
-        if (result == KMessageBox::Continue)
-        {
-            QString errMsg;
-            if (!man->deleteTAlbum(tag, errMsg))
-                KMessageBox::error(0, errMsg);
-        }
+    int result = KMessageBox::warningContinueCancel(0, message,
+                                                    i18n("Delete Tag"),
+                                                    KGuiItem(i18n("Delete"), 
+                                                    "edit-delete"));
+
+    if (result == KMessageBox::Continue)
+    {
+        QString errMsg;
+        if (!man->deleteTAlbum(tag, errMsg))
+            KMessageBox::error(0, errMsg);
     }
 }
 

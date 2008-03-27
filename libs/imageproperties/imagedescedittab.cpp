@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2003-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -1120,30 +1120,37 @@ void ImageDescEditTab::tagDelete(TAlbum *album)
                              "the subtags. "
                              "Do you want to continue?",
                              children, 
-                             album->title()),
-                       i18n("Delete Tag"), 
-                       KGuiItem(i18n("Delete"),
-                       "edit-delete"));
+                             album->title()));
 
-        if(result == KMessageBox::Continue)
-        {
-            QString errMsg;
-            if (!albumMan->deleteTAlbum(album, errMsg))
-                KMessageBox::error(this, errMsg);
-        }
+        if(result != KMessageBox::Continue)
+            return;
+    }
+
+    QString message;
+    QList<qlonglong> assignedItems = DatabaseAccess().db()->getItemIDsInTag(album->id());
+    if (!assignedItems.isEmpty())
+    {
+        message = i18np("Tag '%2' is assigned to one item. "
+                        "Do you want to continue?",
+                        "Tag '%2' is assigned to %1 items. "
+                        "Do you want to continue?",
+                        assignedItems.count(), album->title());
     }
     else
     {
-        int result = KMessageBox::warningContinueCancel(this, i18n("Delete '%1' tag?", album->title()),
-                                                        i18n("Delete Tag"),
-                                                        KGuiItem(i18n("Delete"), "edit-delete"));
+        message = i18n("Delete '%1' tag?", album->title());
+    }
 
-        if (result == KMessageBox::Continue)
-        {
-            QString errMsg;
-            if (!albumMan->deleteTAlbum(album, errMsg))
-                KMessageBox::error(this, errMsg);
-        }
+    int result = KMessageBox::warningContinueCancel(this, message,
+                                                    i18n("Delete Tag"),
+                                                    KGuiItem(i18n("Delete"), 
+                                                    "edit-delete"));
+
+    if (result == KMessageBox::Continue)
+    {
+        QString errMsg;
+        if (!albumMan->deleteTAlbum(album, errMsg))
+            KMessageBox::error(this, errMsg);
     }
 }
 
