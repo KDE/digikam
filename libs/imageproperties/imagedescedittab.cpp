@@ -1088,15 +1088,49 @@ void ImageDescEditTab::tagDelete(TAlbum *album)
         return;
     }
 
-    int result = KMessageBox::warningContinueCancel(this, i18n("Delete '%1' tag?")
-                                                    .arg(album->title()),i18n("Delete Tag"),
-                                                    KGuiItem(i18n("Delete"), "editdelete"));
-
-    if (result == KMessageBox::Continue)
+    // find number of subtags
+    int children = 0;
+    AlbumIterator iter(album);
+    while(iter.current())
     {
-        QString errMsg;
-        if (!albumMan->deleteTAlbum(album, errMsg))
-            KMessageBox::error(this, errMsg);
+        children++;
+        ++iter;
+    }
+
+    if(children)
+    {
+        int result = KMessageBox::warningContinueCancel(this,
+                       i18n("Tag '%1' has one subtag. "
+                            "Deleting this will also delete "
+                            "the subtag. "
+                            "Do you want to continue?",
+                            "Tag '%1' has %n subtags. "
+                            "Deleting this will also delete "
+                            "the subtags. "
+                            "Do you want to continue?",
+                            children).arg(album->title()),
+                            i18n("Delete Tag"), KGuiItem(i18n("Delete"),
+                            "editdelete"));
+
+        if(result == KMessageBox::Continue)
+        {
+            QString errMsg;
+            if (!albumMan->deleteTAlbum(album, errMsg))
+                KMessageBox::error(this, errMsg);
+        }
+    }
+    else
+    {
+        int result = KMessageBox::warningContinueCancel(this, i18n("Delete '%1' tag?")
+                                                        .arg(album->title()),i18n("Delete Tag"),
+                                                        KGuiItem(i18n("Delete"), "editdelete"));
+
+        if (result == KMessageBox::Continue)
+        {
+            QString errMsg;
+            if (!albumMan->deleteTAlbum(album, errMsg))
+                KMessageBox::error(this, errMsg);
+        }
     }
 }
 
