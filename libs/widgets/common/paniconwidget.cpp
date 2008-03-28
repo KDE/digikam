@@ -127,7 +127,7 @@ void PanIconWidget::slotZoomFactorChanged(double factor)
     repaint();
 }
 
-void PanIconWidget::setRegionSelection(QRect regionSelection)
+void PanIconWidget::setRegionSelection(const QRect& regionSelection)
 {
     d->regionSelection = regionSelection;
     m_localRegionSelection.setX( m_rect.x() + (int)((float)d->regionSelection.x() *
@@ -146,12 +146,12 @@ void PanIconWidget::setRegionSelection(QRect regionSelection)
     repaint();
 }
 
-QRect PanIconWidget::getRegionSelection(void)
+QRect PanIconWidget::getRegionSelection()
 {
     return (d->regionSelection);
 }
 
-void PanIconWidget::setCursorToLocalRegionSelectionCenter(void)
+void PanIconWidget::setCursorToLocalRegionSelectionCenter()
 {
     QCursor::setPos(mapToGlobal(m_localRegionSelection.center()));
 }
@@ -221,7 +221,7 @@ void PanIconWidget::updatePixmap()
     p.end();
 }
 
-void PanIconWidget::paintEvent( QPaintEvent * )
+void PanIconWidget::paintEvent(QPaintEvent*)
 {
     QPainter p(this);
     p.drawPixmap(0, 0, *m_pixmap);

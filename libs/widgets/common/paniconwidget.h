@@ -58,39 +58,39 @@ public:
     void setImage(int previewWidth, int previewHeight, const QImage& image);
     void setImage(int previewWidth, int previewHeight, const DImg& image);
 
-    void  setRegionSelection(QRect regionSelection);
-    QRect getRegionSelection(void);
-    void  setCenterSelection(void);
+    void  setRegionSelection(const QRect& regionSelection);
+    QRect getRegionSelection();
+    void  setCenterSelection();
 
-    void  setCursorToLocalRegionSelectionCenter(void);
-    void  setMouseFocus(void);
+    void  setCursorToLocalRegionSelectionCenter();
+    void  setMouseFocus();
 
 signals:
 
     // Used with ImagePreview widget. 
     // Emit when selection have been moved with mouse. 'targetDone' booleen 
     // value is used for indicate if the mouse have been released.
-    void signalSelectionMoved( QRect rect, bool targetDone );
+    void signalSelectionMoved(const QRect& rect, bool targetDone);
 
-    void signalSelectionTakeFocus(void);
+    void signalSelectionTakeFocus();
 
-    void signalHiden(void);
+    void signalHiden();
 
 public slots:
 
-    void slotZoomFactorChanged( double );
+    void slotZoomFactorChanged(double);
 
 protected:
 
-    void hideEvent(QHideEvent *);
-    void paintEvent(QPaintEvent *);
-    void mousePressEvent(QMouseEvent *);
-    void mouseReleaseEvent(QMouseEvent *);
-    void mouseMoveEvent(QMouseEvent *);
-    void timerEvent(QTimerEvent *);
+    void hideEvent(QHideEvent*);
+    void paintEvent(QPaintEvent*);
+    void mousePressEvent(QMouseEvent*);
+    void mouseReleaseEvent(QMouseEvent*);
+    void mouseMoveEvent(QMouseEvent*);
+    void timerEvent(QTimerEvent*);
 
     /** Recalculate the target selection position and emit 'signalSelectionMoved'.*/
-    void regionSelectionMoved( bool targetDone );
+    void regionSelectionMoved(bool targetDone);
 
     virtual void updatePixmap();
 
