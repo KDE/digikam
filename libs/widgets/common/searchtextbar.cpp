@@ -35,9 +35,22 @@
 namespace Digikam
 {
 
+class SearchTextBarPriv
+{
+public:
+
+    SearchTextBarPriv()
+    {
+        textQueryCompletion = false;
+    }
+
+    bool textQueryCompletion;
+};
+
 SearchTextBar::SearchTextBar(QWidget *parent, const QString& msg)
              : KLineEdit(parent)
 {
+    d = new SearchTextBarPriv;
     setAttribute(Qt::WA_DeleteOnClose);
     setClearButtonShown(true);
     setClickMessage(msg);
@@ -54,6 +67,17 @@ SearchTextBar::SearchTextBar(QWidget *parent, const QString& msg)
 
 SearchTextBar::~SearchTextBar()
 {
+    delete d;
+}
+
+void SearchTextBar::setEnableTextQueryCompletion(bool b)
+{
+    d->textQueryCompletion = b;
+}
+
+bool SearchTextBar::textQueryCompletion() const
+{
+    return d->textQueryCompletion;
 }
 
 void SearchTextBar::slotTextChanged(const QString& text)
@@ -75,6 +99,11 @@ void SearchTextBar::slotSearchResult(bool match)
                  match ? QColor(200, 255, 200) :
                  QColor(255, 200, 200));
     setPalette(pal);
+
+    // If search result match the text query, we put the text 
+    // in auto-completion history.
+    if (d->textQueryCompletion && match)
+        completionObject()->addItem(text());
 }
 
 }  // namespace Digikam

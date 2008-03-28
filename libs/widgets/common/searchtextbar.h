@@ -35,6 +35,7 @@
 
 namespace Digikam
 {
+class SearchTextBarPriv;
 
 class DIGIKAM_EXPORT SearchTextBar : public KLineEdit
 {
@@ -45,6 +46,9 @@ public:
     SearchTextBar(QWidget *parent=0, const QString& msg=i18n("Search..."));
     ~SearchTextBar();
 
+    void setEnableTextQueryCompletion(bool b);
+    bool textQueryCompletion() const;
+
 public slots:
 
     void slotSearchResult(bool);
@@ -52,6 +56,10 @@ public slots:
 private slots:
 
     void slotTextChanged(const QString&);
+
+private :
+
+    SearchTextBarPriv* d;
 };
 
 }  // namespace Digikam
