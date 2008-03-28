@@ -152,7 +152,7 @@ public:
     AlbumManager             *albumManager;
     AlbumHistory             *albumHistory;
     AlbumWidgetStack         *albumWidgetStack;
-    
+
     Sidebar                  *leftSideBar;
     ImagePropertiesSideBarDB *rightSideBar;
 
@@ -256,7 +256,7 @@ void DigikamView::applySettings()
     d->albumWidgetStack->imagePreviewView()->setLoadFullImageSize(settings->getPreviewLoadFullImageSize());
     refreshView();
 }
-    
+
 void DigikamView::refreshView()
 {
     d->folderView->refresh();
@@ -308,20 +308,23 @@ void DigikamView::setupConnections()
     connect(d->albumManager, SIGNAL(signalAlbumCurrentChanged(Album*)),
             this, SLOT(slotAlbumSelected(Album*)));
 
-    connect(d->albumManager, SIGNAL(signalAlbumsCleared()),
-            this, SLOT(slotAlbumsCleared()));
-
-    connect(d->albumManager, SIGNAL(signalAlbumDeleted(Album*)),
-            this, SLOT(slotAlbumDeleted(Album*)));
-
     connect(d->albumManager, SIGNAL(signalAllAlbumsLoaded()),
             this, SLOT(slotAllAlbumsLoaded()));
 
     connect(d->albumManager, SIGNAL(signalAlbumItemsSelected(bool) ),
             this, SLOT(slotImageSelected()));
 
+    connect(d->albumManager, SIGNAL(signalAlbumAdded(Album*)),
+            this, SLOT(slotAlbumAdded(Album*)));
+
+    connect(d->albumManager, SIGNAL(signalAlbumDeleted(Album*)),
+            this, SLOT(slotAlbumDeleted(Album*)));
+
     connect(d->albumManager, SIGNAL(signalAlbumRenamed(Album*)),
             this, SLOT(slotAlbumRenamed(Album*)));
+
+    connect(d->albumManager, SIGNAL(signalAlbumsCleared()),
+            this, SLOT(slotAlbumsCleared()));
 
     // -- IconView Connections -------------------------------------
 
@@ -609,22 +612,83 @@ void DigikamView::slotNewAdvancedSearch()
     d->searchFolderView->extendedSearchNew();
 }
 
-void DigikamView::slotAlbumDeleted(Album *delalbum)
+void DigikamView::slotAlbumAdded(Album *album)
 {
-    d->albumHistory->deleteAlbum(delalbum);
+    if (!album->isRoot())
+    {
+        switch (album->type())
+        {
+            case Album::PHYSICAL:
+            {
+                d->folderSearchBar->lineEdit()->completionObject()->addItem(album->title());
+                break;
+            }
+            case Album::TAG:
+            {
+                d->tagSearchBar->lineEdit()->completionObject()->addItem(album->title());
+                d->tagFilterSearchBar->lineEdit()->completionObject()->addItem(album->title());
+                break;
+            }
+            case Album::SEARCH:
+            {
+                d->searchSearchBar->lineEdit()->completionObject()->addItem(album->title());
+                d->timeLineView->searchBar()->lineEdit()->completionObject()->addItem(album->title());
+                break;
+            }
+            default:
+            {
+                // Nothing to do with Album::DATE
+                break;
+            }
+        }
+    }
+}
+
+void DigikamView::slotAlbumDeleted(Album *album)
+{
+    d->albumHistory->deleteAlbum(album);
 
     // display changed tags
-    if (delalbum->type() == Album::TAG)
+    if (album->type() == Album::TAG)
         d->iconView->updateContents();
 
     /*
     // For what is this needed?
-    Album *album;
+    Album *a;
     QWidget *widget;
-    d->albumHistory->getCurrentAlbum(&album, &widget);
+    d->albumHistory->getCurrentAlbum(&a, &widget);
 
-    changeAlbumFromHistory(album, widget);
+    changeAlbumFromHistory(a, widget);
     */
+
+    if (!album->isRoot())
+    {
+        switch (album->type())
+        {
+            case Album::PHYSICAL:
+            {
+                d->folderSearchBar->lineEdit()->completionObject()->removeItem(album->title());
+                break;
+            }
+            case Album::TAG:
+            {
+                d->tagSearchBar->lineEdit()->completionObject()->removeItem(album->title());
+                d->tagFilterSearchBar->lineEdit()->completionObject()->removeItem(album->title());
+                break;
+            }
+            case Album::SEARCH:
+            {
+                d->searchSearchBar->lineEdit()->completionObject()->removeItem(album->title());
+                d->timeLineView->searchBar()->lineEdit()->completionObject()->removeItem(album->title());
+                break;
+            }
+            default:
+            {
+                // Nothing to do with Album::DATE
+                break;
+            }
+        }
+    }
 }
 
 void DigikamView::slotAlbumRenamed(Album *album)
@@ -633,6 +697,56 @@ void DigikamView::slotAlbumRenamed(Album *album)
 
     if (album == d->albumManager->currentAlbum())
         d->iconView->updateContents();
+
+    if (!album->isRoot())
+    {
+        switch (album->type())
+        {
+            case Album::PHYSICAL:
+            {
+                d->folderSearchBar->lineEdit()->completionObject()->addItem(album->title());
+                d->folderView->slotTextFolderFilterChanged(d->folderSearchBar->lineEdit()->text());
+                break;
+            }
+            case Album::TAG:
+            {
+                d->tagSearchBar->lineEdit()->completionObject()->addItem(album->title());
+                d->tagFolderView->slotTextTagFilterChanged(d->tagSearchBar->lineEdit()->text());
+
+                d->tagFilterSearchBar->lineEdit()->completionObject()->addItem(album->title());
+                d->tagFilterView->slotTextTagFilterChanged(d->tagFilterSearchBar->lineEdit()->text());
+                break;
+            }
+            case Album::SEARCH:
+            {
+                d->searchSearchBar->lineEdit()->completionObject()->addItem(album->title());
+                d->searchFolderView->slotTextSearchFilterChanged(d->searchSearchBar->lineEdit()->text());
+
+                d->timeLineView->searchBar()->lineEdit()->completionObject()->addItem(album->title());
+                d->timeLineView->folderView()->slotTextSearchFilterChanged(d->timeLineView->searchBar()->lineEdit()->text());
+                break;
+            }
+            default:
+            {
+                // Nothing to do with Album::DATE
+                break;
+            }
+        }
+    }
+}
+
+void DigikamView::slotAlbumsCleared()
+{
+    d->iconView->clear();
+    emit signalAlbumSelected(false);
+
+    d->folderSearchBar->lineEdit()->completionObject()->clear();
+
+    d->tagSearchBar->lineEdit()->completionObject()->clear();
+    d->tagFilterSearchBar->lineEdit()->completionObject()->clear();
+
+    d->searchSearchBar->lineEdit()->completionObject()->clear();
+    d->timeLineView->searchBar()->lineEdit()->completionObject()->clear();
 }
 
 void DigikamView::slotAlbumHistoryBack(int steps)
@@ -910,12 +1024,6 @@ void DigikamView::slotDispatchImageSelected()
 
         d->needDispatchSelection = false;
     }
-}
-
-void DigikamView::slotAlbumsCleared()
-{
-    d->iconView->clear();
-    emit signalAlbumSelected(false);
 }
 
 void DigikamView::setThumbSize(int size)

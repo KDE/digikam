@@ -101,6 +101,7 @@ public slots:
     void slotAlbumImportFolder();
     void slotAlbumHistoryBack(int steps=1);
     void slotAlbumHistoryForward(int steps=1);
+    void slotAlbumAdded(Album *album);
     void slotAlbumDeleted(Album *album);
     void slotAlbumRenamed(Album *album);
     void slotAlbumSyncPicturesMetadata();
@@ -109,7 +110,7 @@ public slots:
     void slotGotoAlbumAndItem(AlbumIconItem* iconItem);
     void slotGotoDateAndItem(AlbumIconItem* iconItem);
     void slotGotoTagAndItem(int tagID);
-   
+
     // Tag action slots
     void slotNewTag();
     void slotDeleteTag();
