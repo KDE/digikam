@@ -6,7 +6,7 @@
  * Date        : 2007-11-25
  * Description : a bar used to search a string.
  * 
- * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -54,7 +54,7 @@ public:
     }
 
     bool    drawMsg;
-    
+
     QString message;
 };
 
@@ -145,7 +145,7 @@ public:
 
     QToolButton *clearButton;
 
-    KLineEdit   *searchEdit;
+    DLineEdit   *searchEdit;
 };
 
 SearchTextBar::SearchTextBar(QWidget *parent, const QString &msg)
@@ -192,13 +192,18 @@ QString SearchTextBar::text() const
     return d->searchEdit->text();
 }
 
+DLineEdit *SearchTextBar::lineEdit() const
+{
+    return d->searchEdit;
+}
+
 void SearchTextBar::slotTextChanged(const QString& text)
 {
     if (d->searchEdit->text().isEmpty())
         d->searchEdit->unsetPalette();
 
     d->clearButton->setEnabled(text.isEmpty() ? false : true);
-        
+
     emit signalTextChanged(text);
 }
 
