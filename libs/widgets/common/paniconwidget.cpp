@@ -7,7 +7,7 @@
  * Description : a generic widget to display a panel to choose
  *               a rectangular image area.
  *
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -123,7 +123,7 @@ void PanIconWidget::slotZoomFactorChanged(double factor)
     repaint(false);
 }
 
-void PanIconWidget::setRegionSelection(QRect regionSelection)
+void PanIconWidget::setRegionSelection(const QRect& regionSelection)
 {
     d->regionSelection = regionSelection;
     m_localRegionSelection.setX( m_rect.x() + (int)((float)d->regionSelection.x() *
@@ -142,12 +142,12 @@ void PanIconWidget::setRegionSelection(QRect regionSelection)
     repaint(false);
 }
 
-QRect PanIconWidget::getRegionSelection(void)
+QRect PanIconWidget::getRegionSelection()
 {
     return (d->regionSelection);
 }
 
-void PanIconWidget::setCursorToLocalRegionSelectionCenter(void)
+void PanIconWidget::setCursorToLocalRegionSelectionCenter()
 {
     QCursor::setPos(mapToGlobal(m_localRegionSelection.center()));
 }
@@ -218,7 +218,7 @@ void PanIconWidget::updatePixmap()
     p.end();
 }
 
-void PanIconWidget::paintEvent( QPaintEvent * )
+void PanIconWidget::paintEvent(QPaintEvent*)
 {
     bitBlt(this, 0, 0, m_pixmap);
 }
@@ -322,4 +322,3 @@ void PanIconWidget::timerEvent(QTimerEvent * e)
 }
 
 }  // NameSpace Digikam
-
