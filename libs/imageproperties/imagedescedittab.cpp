@@ -1760,7 +1760,7 @@ void ImageDescEditTab::slotCreateNewTag()
                 {    
                     QString tag = *it2;
                     if (!tag.isEmpty())
-                        root = tagNew(root,tag, QString("tag"));
+                        root = tagNew(root, tag, QString("tag"));
 
                     // Sanity check if tag creation failed.
                     if (!root) break;        
