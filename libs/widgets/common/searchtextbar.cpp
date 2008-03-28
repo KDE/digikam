@@ -162,7 +162,12 @@ SearchTextBar::SearchTextBar(QWidget *parent, const QString &msg)
     d->clearButton->setIconSet(kapp->iconLoader()->loadIcon("clear_left",
                                KIcon::Toolbar, KIcon::SizeSmall));
 
-    d->searchEdit  = new DLineEdit(msg, this);
+    d->searchEdit     = new DLineEdit(msg, this);
+    KCompletion *kcom = new KCompletion;
+    kcom->setOrder(KCompletion::Sorted);
+    d->searchEdit->setCompletionObject(kcom, true);
+    d->searchEdit->setAutoDeleteCompletionObject(true);
+    d->searchEdit->setCompletionMode(KGlobalSettings::CompletionAuto);
     d->searchEdit->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum));
 
     hlay->setSpacing(0);
@@ -217,7 +222,7 @@ void SearchTextBar::slotSearchResult(bool match)
 
     QPalette pal = d->searchEdit->palette();
     pal.setColor(QPalette::Active, QColorGroup::Base,
-                 match ?  QColor(200, 255, 200) :
+                 match ? QColor(200, 255, 200) :
                  QColor(255, 200, 200));
     d->searchEdit->setPalette(pal);
 }
