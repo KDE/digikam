@@ -78,7 +78,14 @@ AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
                               "GREEN: filter(s) matches at least one item.\n\n"
                               "Any mouse button click will reset all filters."));
 
-//    d->textFilter = new SearchTextBar(this);
+/* FIXME : There is a problem with Qt4.3 if statusbar host a KLineEdit: 
+           digiKam crash. Text Filter bar is temporaly replaced 
+           by a simple QLineEdit.
+
+    d->textFilter = new SearchTextBar(this);
+    d->textFilter->setEnableTextQueryCompletion(true);
+*/
+
     d->textFilter = new QLineEdit(this);
     d->textFilter->setToolTip(i18n("Text quick filter (search)"));
     d->textFilter->setWhatsThis(i18n("Enter search patterns to quickly filter this view on "
