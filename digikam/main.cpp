@@ -7,7 +7,7 @@
  * Description : main program from digiKam
  * 
  * Copyright (C) 2002-2006 by Renchi Raju <renchi at pooh.tam.uiuc.edu>
- * Copyright (C) 2002-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2002-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -85,22 +85,23 @@ int main(int argc, char *argv[])
     QString Gphoto2Ver  = QString(gp_library_version(GP_VERSION_SHORT)[0]);
 
     QString XmpSupport  = KExiv2Iface::KExiv2::supportXmp() ? I18N_NOOP("yes") : I18N_NOOP("no");
-
-    QString libInfo     = QString(I18N_NOOP("Using Kipi library version %1")).arg(KIPI::Interface::version()) +
-                          QString("\n") + 
-                          QString(I18N_NOOP("Using KDcraw library version %1")).arg(KDcrawIface::KDcraw::version()) +
-                          QString("\n") +                           
-                          QString(I18N_NOOP("Using Dcraw program version %1")).arg(DcrawVer) +
-                          QString("\n") +                           
-                          QString(I18N_NOOP("Using PNG library version %1")).arg(PNG_LIBPNG_VER_STRING) +
-                          QString("\n") + 
-                          QString(I18N_NOOP("Using Gphoto2 library version %1")).arg(Gphoto2Ver) +
-                          QString("\n") +                           
-                          QString(I18N_NOOP("Using KExiv2 library version %1")).arg(KExiv2Iface::KExiv2::version()) +
-                          QString("\n") +                           
-                          QString(I18N_NOOP("Using Exiv2 library version %1")).arg(Exiv2Ver) +
-                          QString("\n") +                           
-                          QString(I18N_NOOP("XMP support available: %1")).arg(XmpSupport);
+    
+    KLocalizedString libInfo = ki18n("Using Kipi library version %1\n"
+                                     "Using KDcraw library version %2\n"
+                                     "Using Dcraw program version %3\n"
+                                     "Using PNG library version %4\n"
+                                     "Using Gphoto2 library version %5\n"
+                                     "Using KExiv2 library version %6\n"
+                                     "Using Exiv2 library version %7\n"
+                                     "XMP support available: %8")
+                               .subs(KIPI::Interface::version())
+                               .subs(KDcrawIface::KDcraw::version())
+                               .subs(DcrawVer)
+                               .subs(PNG_LIBPNG_VER_STRING)
+                               .subs(Gphoto2Ver)
+                               .subs(KExiv2Iface::KExiv2::version())
+                               .subs(Exiv2Ver)
+                               .subs(XmpSupport);
 
     KAboutData aboutData( "digikam", 0, 
                           ki18n("digiKam"),
@@ -111,7 +112,7 @@ int main(int argc, char *argv[])
                           KLocalizedString(),
                           "http://www.digikam.org");
 
-    aboutData.setOtherText(ki18n(libInfo.toLatin1()));
+    aboutData.setOtherText(libInfo);
 
     aboutData.addAuthor ( ki18n("Caulier Gilles"),
                           ki18n("Main developer and coordinator"),
