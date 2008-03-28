@@ -299,6 +299,11 @@ TimeLineFolderView* TimeLineView::folderView() const
     return d->timeLineFolderView;
 }
 
+SearchTextBar* TimeLineView::searchBar() const
+{
+    return d->searchDateBar;
+}
+
 void TimeLineView::slotInit()
 {
     // Date Maps are loaded from AlbumManager to TimeLineWidget after than GUI is initialized.

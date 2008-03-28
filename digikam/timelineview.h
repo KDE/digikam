@@ -38,6 +38,7 @@ namespace Digikam
 {
 
 class SAlbum;
+class SearchTextBar;
 class TimeLineFolderView;
 class TimeLineViewPriv;
 
@@ -51,6 +52,7 @@ public:
     ~TimeLineView();
 
     TimeLineFolderView *folderView() const;
+    SearchTextBar* searchBar() const;
 
     void setActive(bool val);
 
