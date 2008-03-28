@@ -82,6 +82,7 @@ AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
                                  "Any mouse button click will reset all filters."));
 
     d->textFilter = new SearchTextBar(this);
+    d->textFilter->setEnableTextQueryCompletion(true);
     QToolTip::add(d->textFilter, i18n("Text quick filter (search)"));
     QWhatsThis::add(d->textFilter, i18n("Enter search patterns to quickly filter this view on file names, "
                                         "captions (comments), and tags"));
