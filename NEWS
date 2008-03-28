@@ -13,7 +13,8 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 003 ==> 158776 : Confirm tag delete if tag assigned to photos.
 004 ==> 148520 : Change of rating causes high CPU load.
 005 ==> 140227 : Remove or modify D&D tags menu from icon view area.
-006 ==> 
+006 ==> 154421 : Live search doesn't search filenames.
+007 ==> 
 
 **********************************************************************************************
 
