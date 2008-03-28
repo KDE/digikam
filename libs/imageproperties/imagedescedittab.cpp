@@ -1283,6 +1283,7 @@ void ImageDescEditTab::slotAlbumRenamed(Album* a)
 
     TAlbum* album = (TAlbum*)a;
     d->tagsSearchBar->completionObject()->addItem(album->title());
+    slotTagsSearchChanged(d->tagsSearchBar->text());
     TAlbumCheckListItem* viewItem = (TAlbumCheckListItem*)(album->extraData(d->tagsView));
     if (!viewItem)
     {
