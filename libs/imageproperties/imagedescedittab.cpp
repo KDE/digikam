@@ -97,6 +97,7 @@ public:
         applyBtn                   = 0;
         revertBtn                  = 0;
         createTagsBtn              = 0;
+        newTagEdit                 = 0;
         toggleAutoTags             = TagFilterView::NoToggleAuto;
     }
 
@@ -169,7 +170,8 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
 
     d->newTagEdit    = new SearchTextBar(tagsCreate, i18n("Enter new tag here..."));
     QWhatsThis::add(d->newTagEdit, i18n("Enter here the text used to create new tags. "
-                                        "'/' can be used here to create a hierarchy of tags."));
+                                        "'/' can be used here to create a hierarchy of tags. "
+                                        "',' can be used here to create more than one hierarchy at the same time."));
     d->createTagsBtn = new QToolButton(tagsCreate);
     QToolTip::add(d->createTagsBtn, i18n("Create new tag"));
     d->createTagsBtn->setIconSet(kapp->iconLoader()->loadIcon("tag-new",
@@ -1058,7 +1060,7 @@ void ImageDescEditTab::slotMoreMenu()
     }
 }
 
-TAlbum* ImageDescEditTab::tagNew(TAlbum* parAlbum, const QString& _title, const QString& _icon)
+TAlbum* ImageDescEditTab::tagNew(TAlbum* parAlbum, const QString& _title, const QString& _icon) const
 {
     if (!parAlbum)
         return 0;
@@ -1077,7 +1079,7 @@ TAlbum* ImageDescEditTab::tagNew(TAlbum* parAlbum, const QString& _title, const 
     TAlbum* album = albumMan_->createTAlbum(parAlbum, title, icon, errMsg);
     if (!album)
     {
-        KMessageBox::error(this, errMsg);
+        KMessageBox::error(0, errMsg);
         return 0;
     }
     else
