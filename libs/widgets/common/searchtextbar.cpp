@@ -139,9 +139,12 @@ public:
 
     SearchTextBarPriv()
     {
-        searchEdit  = 0;
-        clearButton = 0;
+        textQueryCompletion = false;
+        searchEdit          = 0;
+        clearButton         = 0;
     }
+
+    bool         textQueryCompletion;
 
     QToolButton *clearButton;
 
@@ -187,6 +190,16 @@ SearchTextBar::~SearchTextBar()
     delete d;
 }
 
+void SearchTextBar::setEnableTextQueryCompletion(bool b)
+{
+    d->textQueryCompletion = b;
+}
+
+bool SearchTextBar::textQueryCompletion() const
+{
+    return d->textQueryCompletion;
+}
+
 void SearchTextBar::setText(const QString& text)
 {
     d->searchEdit->setText(text);
@@ -225,6 +238,11 @@ void SearchTextBar::slotSearchResult(bool match)
                  match ? QColor(200, 255, 200) :
                  QColor(255, 200, 200));
     d->searchEdit->setPalette(pal);
+
+    // If search result match the text query, we put the text 
+    // in auto-completion history.
+    if (d->textQueryCompletion && match)
+        d->searchEdit->completionObject()->addItem(d->searchEdit->text());
 }
 
 }  // namespace Digikam

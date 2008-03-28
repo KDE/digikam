@@ -82,6 +82,9 @@ public:
     void setText(const QString& text);
     QString text() const;
 
+    void setEnableTextQueryCompletion(bool b);
+    bool textQueryCompletion() const;
+
     DLineEdit *lineEdit() const;
 
 signals:
