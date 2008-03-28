@@ -96,12 +96,14 @@ public:
         assignedTagsBtn            = 0;
         applyBtn                   = 0;
         revertBtn                  = 0;
+        createTagsBtn              = 0;
         toggleAutoTags             = TagFilterView::NoToggleAuto;
     }
 
     bool                           modified;
     bool                           ignoreImageAttributesWatch;
 
+    QToolButton                   *createTagsBtn;
     QToolButton                   *recentTagsBtn;
     QToolButton                   *assignedTagsBtn;
     QToolButton                   *revertBtn;
@@ -118,6 +120,7 @@ public:
     KDateTimeEdit                 *dateTimeEdit;
 
     SearchTextBar                 *tagsSearchBar;
+    SearchTextBar                 *newTagEdit;
 
     QPtrList<ImageInfo>            currInfos;
 
@@ -140,7 +143,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
 
     m_navigateBarLayout->addWidget(settingsArea);
 
-    QGridLayout *settingsLayout = new QGridLayout(settingsArea, 5, 1, 
+    QGridLayout *settingsLayout = new QGridLayout(settingsArea, 6, 1, 
                                       KDialog::spacingHint(), KDialog::spacingHint());
 
     // Captions/Date/Rating view -----------------------------------
@@ -160,6 +163,20 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     d->ratingWidget  = new RatingWidget(ratingBox);
 
     // Tags view ---------------------------------------------------
+
+    QHBox *tagsCreate  = new QHBox(settingsArea);
+    tagsCreate->setSpacing(KDialog::spacingHint());
+
+    d->newTagEdit    = new SearchTextBar(tagsCreate, i18n("Enter new tag here..."));
+    QWhatsThis::add(d->newTagEdit, i18n("Enter here the text used to create new tags. "
+                                        "'/' can be used here to create a hierarchy of tags."));
+    d->createTagsBtn = new QToolButton(tagsCreate);
+    QToolTip::add(d->createTagsBtn, i18n("Create new tag"));
+    d->createTagsBtn->setIconSet(kapp->iconLoader()->loadIcon("tag-new",
+                                 KIcon::NoGroup, KIcon::SizeSmall, 
+                                 KIcon::DefaultState, 0, true));
+
+    d->tagsView = new TAlbumListView(settingsArea);
 
     QHBox *tagsSearch  = new QHBox(settingsArea);
     tagsSearch->setSpacing(KDialog::spacingHint());
@@ -182,8 +199,6 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     d->recentTagsBtn->setUsesBigPixmap(false);
     d->recentTagsBtn->setPopup(popupMenu);
     d->recentTagsBtn->setPopupDelay(1);
-
-    d->tagsView = new TAlbumListView(settingsArea);
 
     // Buttons -----------------------------------------
 
@@ -210,10 +225,11 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     settingsLayout->addMultiCellWidget(commentsBox, 0, 0, 0, 1);
     settingsLayout->addMultiCellWidget(dateBox,     1, 1, 0, 1);
     settingsLayout->addMultiCellWidget(ratingBox,   2, 2, 0, 1);
-    settingsLayout->addMultiCellWidget(d->tagsView, 3, 3, 0, 1);
-    settingsLayout->addMultiCellWidget(tagsSearch,  4, 4, 0, 1);
-    settingsLayout->addMultiCellWidget(buttonsBox,  5, 5, 0, 1);
-    settingsLayout->setRowStretch(3, 10);
+    settingsLayout->addMultiCellWidget(tagsCreate,  3, 3, 0, 1);
+    settingsLayout->addMultiCellWidget(d->tagsView, 4, 4, 0, 1);
+    settingsLayout->addMultiCellWidget(tagsSearch,  5, 5, 0, 1);
+    settingsLayout->addMultiCellWidget(buttonsBox,  6, 6, 0, 1);
+    settingsLayout->setRowStretch(4, 10);
 
     // --------------------------------------------------
 
@@ -249,6 +265,12 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
 
     connect(d->assignedTagsBtn, SIGNAL(toggled(bool)),
             this, SLOT(slotAssignedTagsToggled(bool)));
+
+    connect(d->newTagEdit->lineEdit(), SIGNAL(returnPressed(const QString&)),
+            this, SLOT(slotCreateNewTag()));
+
+    connect(d->createTagsBtn, SIGNAL(clicked()),
+            this, SLOT(slotCreateNewTag()));
 
     connect(d->applyBtn, SIGNAL(clicked()),
             this, SLOT(slotApplyAllChanges()));
@@ -1036,10 +1058,10 @@ void ImageDescEditTab::slotMoreMenu()
     }
 }
 
-void ImageDescEditTab::tagNew(TAlbum* parAlbum, const QString& _title, const QString& _icon)
+TAlbum* ImageDescEditTab::tagNew(TAlbum* parAlbum, const QString& _title, const QString& _icon)
 {
     if (!parAlbum)
-        return;
+        return 0;
 
     QString title           = _title;
     QString icon            = _icon;
@@ -1048,15 +1070,15 @@ void ImageDescEditTab::tagNew(TAlbum* parAlbum, const QString& _title, const QSt
     if (title.isNull())
     {
         if (!TagCreateDlg::tagCreate(kapp->activeWindow(), parAlbum, title, icon))
-            return;
+            return 0;
     }
 
     QString errMsg;
     TAlbum* album = albumMan_->createTAlbum(parAlbum, title, icon, errMsg);
-
     if (!album)
     {
         KMessageBox::error(this, errMsg);
+        return 0;
     }
     else
     {
@@ -1068,6 +1090,8 @@ void ImageDescEditTab::tagNew(TAlbum* parAlbum, const QString& _title, const QSt
             d->tagsView->ensureItemVisible(viewItem);
         }
     }
+
+    return album;
 }
 
 void ImageDescEditTab::tagDelete(TAlbum *album)
@@ -1691,6 +1715,59 @@ void ImageDescEditTab::slotAssignedTagsToggled(bool t)
 void ImageDescEditTab::refreshTagsView()
 {
     d->tagsView->refresh();
+}
+
+void ImageDescEditTab::slotCreateNewTag()
+{
+    QString tagStr = d->newTagEdit->text();
+    if (tagStr.isEmpty()) return;
+
+    // Check root album to use as parent of new tag.
+    TAlbum *mainRoot          = 0;
+    TAlbumCheckListItem* item = dynamic_cast<TAlbumCheckListItem*>(d->tagsView->currentItem());
+
+    if (tagStr.startsWith("/") || !item)
+        mainRoot = AlbumManager::instance()->findTAlbum(0);
+    else
+        mainRoot = item->album();
+
+    // Check if new tags are include in a list of tags hierarchy separated by ','.
+    // Ex: /Country/France/people,/City/France/Paris
+
+    QStringList tagsHierarchies = QStringList::split(",", tagStr);
+    if (tagsHierarchies.isEmpty()) return;
+
+    for (QStringList::iterator it = tagsHierarchies.begin(); it != tagsHierarchies.end(); ++it)
+    {    
+        QString hierarchy = *it;
+        if (!hierarchy.isEmpty())
+        {
+            // Check if new tags is a hierarchy of tags separated by '/'.
+
+            TAlbum *root = 0;
+ 
+            if (hierarchy.startsWith("/") || !item)
+                root = AlbumManager::instance()->findTAlbum(0);
+            else
+                root = item->album();
+       
+            QStringList tagsList = QStringList::split("/", hierarchy);
+            if (!tagsList.isEmpty())
+            {
+                for (QStringList::iterator it2 = tagsList.begin(); it2 != tagsList.end(); ++it2)
+                {    
+                    QString tag = *it2;
+                    if (!tag.isEmpty())
+                        root = tagNew(root,tag, QString("tag"));
+
+                    // Sanity check if tag creation failed.
+                    if (!root) break;        
+                }
+            }
+        }
+    }
+
+    d->newTagEdit->lineEdit()->clear();
 }
 
 }  // NameSpace Digikam

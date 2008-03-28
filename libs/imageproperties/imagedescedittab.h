@@ -83,7 +83,7 @@ private:
     void updateDate();
     void updateRecentTags();
 
-    void tagNew(TAlbum* parAlbum, const QString& _title=QString(), const QString& _icon=QString());
+    TAlbum* tagNew(TAlbum* parAlbum, const QString& _title=QString(), const QString& _icon=QString());
     void tagEdit(TAlbum* album);
     void tagDelete(TAlbum *album);
 
@@ -99,6 +99,7 @@ private:
 private slots:
 
     void slotApplyAllChanges();
+    void slotCreateNewTag();
     void slotRevertAllChanges();
     void slotChangingItems();
     void slotItemStateChanged(TAlbumCheckListItem *);
