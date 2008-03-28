@@ -1212,6 +1212,7 @@ void ImageDescEditTab::slotAlbumAdded(Album* a)
         }
 
         viewItem = new TAlbumCheckListItem(parent, tag);
+        d->tagsSearchBar->completionObject()->addItem(tag->title());
     }
 
     if (viewItem)
@@ -1228,6 +1229,7 @@ void ImageDescEditTab::slotAlbumDeleted(Album* a)
 
     TAlbum* album = (TAlbum*)a;
 
+    d->tagsSearchBar->completionObject()->removeItem(album->title());
     TAlbumCheckListItem* viewItem = (TAlbumCheckListItem*)(album->extraData(d->tagsView));
     delete viewItem;
     album->removeExtraData(this);
@@ -1237,6 +1239,7 @@ void ImageDescEditTab::slotAlbumDeleted(Album* a)
 void ImageDescEditTab::slotAlbumsCleared()
 {
     d->tagsView->clear();
+    d->tagsSearchBar->completionObject()->clear();
 }
 
 void ImageDescEditTab::slotAlbumIconChanged(Album* a)
