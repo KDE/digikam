@@ -275,8 +275,8 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
     connect(d->imageRegionWidget, SIGNAL(signalContentsMovedEvent(bool)),
             this, SLOT(slotOriginalImageRegionChanged(bool)));
 
-    connect(d->imagePanIconWidget, SIGNAL(signalSelectionMoved(QRect, bool)),
-            this, SLOT(slotSetImageRegionPosition(QRect, bool)));
+    connect(d->imagePanIconWidget, SIGNAL(signalSelectionMoved(const QRect&, bool)),
+            this, SLOT(slotSetImageRegionPosition(const QRect&, bool)));
 
     connect(d->imagePanIconWidget, SIGNAL(signalSelectionTakeFocus()),
             this, SLOT(slotPanIconTakeFocus()));
