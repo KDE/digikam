@@ -61,12 +61,12 @@ int main(int argc, char *argv[])
 
     QString XmpSupport  = KExiv2Iface::KExiv2::supportXmp() ? I18N_NOOP("yes") : I18N_NOOP("no");
 
-    KLocalizedString libInfo = ki18n("Using KDcraw library version %2\n"
-                                     "Using Dcraw program version %3\n"
-                                     "Using PNG library version %4\n"
-                                     "Using KExiv2 library version %6\n"
-                                     "Using Exiv2 library version %7\n"
-                                     "XMP support available: %8")
+    KLocalizedString libInfo = ki18n("Using KDcraw library version %1\n"
+                                     "Using Dcraw program version %2\n"
+                                     "Using PNG library version %3\n"
+                                     "Using KExiv2 library version %4\n"
+                                     "Using Exiv2 library version %5\n"
+                                     "XMP support available: %6")
                                .subs(KDcrawIface::KDcraw::version())
                                .subs(DcrawVer)
                                .subs(PNG_LIBPNG_VER_STRING)
