@@ -261,7 +261,7 @@ void DigikamView::applySettings()
     d->albumWidgetStack->imagePreviewView()->setLoadFullImageSize(settings->getPreviewLoadFullImageSize());
     refreshView();
 }
-    
+
 void DigikamView::refreshView()
 {
     d->folderView->refresh();
@@ -313,20 +313,23 @@ void DigikamView::setupConnections()
     connect(d->albumManager, SIGNAL(signalAlbumCurrentChanged(Album*)),
             this, SLOT(slotAlbumSelected(Album*)));
 
-    connect(d->albumManager, SIGNAL(signalAlbumsCleared()),
-            this, SLOT(slotAlbumsCleared()));
-
-    connect(d->albumManager, SIGNAL(signalAlbumDeleted(Album*)),
-            this, SLOT(slotAlbumDeleted(Album*)));
-
     connect(d->albumManager, SIGNAL(signalAllAlbumsLoaded()),
             this, SLOT(slotAllAlbumsLoaded()));
 
     connect(d->albumManager, SIGNAL(signalAlbumItemsSelected(bool) ),
             this, SLOT(slotImageSelected()));
 
+    connect(d->albumManager, SIGNAL(signalAlbumAdded(Album*)),
+            this, SLOT(slotAlbumAdded(Album*)));
+
+    connect(d->albumManager, SIGNAL(signalAlbumDeleted(Album*)),
+            this, SLOT(slotAlbumDeleted(Album*)));
+
     connect(d->albumManager, SIGNAL(signalAlbumRenamed(Album*)),
             this, SLOT(slotAlbumRenamed(Album*)));
+
+    connect(d->albumManager, SIGNAL(signalAlbumsCleared()),
+            this, SLOT(slotAlbumsCleared()));
 
     // -- IconView Connections -------------------------------------
 
@@ -632,22 +635,83 @@ void DigikamView::slotNewAdvancedSearch()
     d->searchFolderView->extendedSearchNew();
 }
 
-void DigikamView::slotAlbumDeleted(Album *delalbum)
+void DigikamView::slotAlbumAdded(Album *album)
 {
-    d->albumHistory->deleteAlbum(delalbum);
+    if (!album->isRoot())
+    {
+        switch (album->type())
+        {
+            case Album::PHYSICAL:
+            {
+                d->folderSearchBar->completionObject()->addItem(album->title());
+                break;
+            }
+            case Album::TAG:
+            {
+                d->tagSearchBar->completionObject()->addItem(album->title());
+                d->tagFilterSearchBar->completionObject()->addItem(album->title());
+                break;
+            }
+            case Album::SEARCH:
+            {
+                d->searchSearchBar->completionObject()->addItem(album->title());
+                d->timeLineView->searchBar()->completionObject()->addItem(album->title());
+                break;
+            }
+            default:
+            {
+                // Nothing to do with Album::DATE
+                break;
+            }
+        }
+    }
+}
+
+void DigikamView::slotAlbumDeleted(Album *album)
+{
+    d->albumHistory->deleteAlbum(album);
 
     // display changed tags
-    if (delalbum->type() == Album::TAG)
+    if (album->type() == Album::TAG)
         d->iconView->updateContents();
 
     /*
     // For what is this needed?
-    Album *album;
+    Album *a;
     QWidget *widget;
-    d->albumHistory->getCurrentAlbum(&album, &widget);
+    d->albumHistory->getCurrentAlbum(&a, &widget);
 
-    changeAlbumFromHistory(album, widget);
+    changeAlbumFromHistory(a, widget);
     */
+
+    if (!album->isRoot())
+    {
+        switch (album->type())
+        {
+            case Album::PHYSICAL:
+            {
+                d->folderSearchBar->completionObject()->removeItem(album->title());
+                break;
+            }
+            case Album::TAG:
+            {
+                d->tagSearchBar->completionObject()->removeItem(album->title());
+                d->tagFilterSearchBar->completionObject()->removeItem(album->title());
+                break;
+            }
+            case Album::SEARCH:
+            {
+                d->searchSearchBar->completionObject()->removeItem(album->title());
+                d->timeLineView->searchBar()->completionObject()->removeItem(album->title());
+                break;
+            }
+            default:
+            {
+                // Nothing to do with Album::DATE
+                break;
+            }
+        }
+    }
 }
 
 void DigikamView::slotAlbumRenamed(Album *album)
@@ -656,6 +720,56 @@ void DigikamView::slotAlbumRenamed(Album *album)
 
     if (album == d->albumManager->currentAlbum())
         d->iconView->updateContents();
+
+    if (!album->isRoot())
+    {
+        switch (album->type())
+        {
+            case Album::PHYSICAL:
+            {
+                d->folderSearchBar->completionObject()->addItem(album->title());
+                d->folderView->slotTextFolderFilterChanged(d->folderSearchBar->text());
+                break;
+            }
+            case Album::TAG:
+            {
+                d->tagSearchBar->completionObject()->addItem(album->title());
+                d->tagFolderView->slotTextTagFilterChanged(d->tagSearchBar->text());
+
+                d->tagFilterSearchBar->completionObject()->addItem(album->title());
+                d->tagFilterView->slotTextTagFilterChanged(d->tagFilterSearchBar->text());
+                break;
+            }
+            case Album::SEARCH:
+            {
+                d->searchSearchBar->completionObject()->addItem(album->title());
+                d->searchFolderView->slotTextSearchFilterChanged(d->searchSearchBar->text());
+
+                d->timeLineView->searchBar()->completionObject()->addItem(album->title());
+                d->timeLineView->folderView()->slotTextSearchFilterChanged(d->timeLineView->searchBar()->text());
+                break;
+            }
+            default:
+            {
+                // Nothing to do with Album::DATE
+                break;
+            }
+        }
+    }
+}
+
+void DigikamView::slotAlbumsCleared()
+{
+    d->iconView->clear();
+    emit signalAlbumSelected(false);
+
+    d->folderSearchBar->completionObject()->clear();
+
+    d->tagSearchBar->completionObject()->clear();
+    d->tagFilterSearchBar->completionObject()->clear();
+
+    d->searchSearchBar->completionObject()->clear();
+    d->timeLineView->searchBar()->completionObject()->clear();
 }
 
 void DigikamView::slotAlbumHistoryBack(int steps)
@@ -903,7 +1017,7 @@ void DigikamView::slotDispatchImageSelected()
     {
         // the list of copies of ImageInfos of currently selected items, currentItem first
         ImageInfoList list = d->iconView->selectedImageInfos();
-        
+
         // no copy needed for this one, as this list is just used for counting
         // the total number of images
         KUrl::List listAll = d->iconView->allItems();
@@ -933,12 +1047,6 @@ void DigikamView::slotDispatchImageSelected()
 
         d->needDispatchSelection = false;
     }
-}
-
-void DigikamView::slotAlbumsCleared()
-{
-    d->iconView->clear();
-    emit signalAlbumSelected(false);
 }
 
 void DigikamView::setThumbSize(int size)
