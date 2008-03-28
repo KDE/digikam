@@ -14,7 +14,8 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 004 ==> 148520 : Change of rating causes high CPU load.
 005 ==> 140227 : Remove or modify D&D tags menu from icon view area.
 006 ==> 154421 : Live search doesn't search filenames.
-007 ==> 
+007 ==> 118209 : digiKam hotplug script kde user detection problem.
+008 ==> 
 
 **********************************************************************************************
 
