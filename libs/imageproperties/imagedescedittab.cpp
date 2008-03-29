@@ -104,7 +104,6 @@ public:
         applyBtn                   = 0;
         revertBtn                  = 0;
         recentTagsMapper           = 0;
-        createTagsBtn              = 0;
         newTagEdit                 = 0;
         toggleAutoTags             = TagFilterView::NoToggleAuto;
     }
@@ -112,7 +111,6 @@ public:
     bool                           modified;
     bool                           ignoreImageAttributesWatch;
 
-    QToolButton                   *createTagsBtn;
     QToolButton                   *recentTagsBtn;
     QToolButton                   *assignedTagsBtn;
     QToolButton                   *revertBtn;
@@ -169,17 +167,10 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
 
     // Tags view ---------------------------------------------------
 
-    KHBox *tagsCreate  = new KHBox(this);
-    tagsCreate->setSpacing(KDialog::spacingHint());
-
-    d->newTagEdit    = new SearchTextBar(tagsCreate, i18n("Enter new tag here..."));
+    d->newTagEdit    = new SearchTextBar(this, i18n("Enter new tag here..."));
     d->newTagEdit->setWhatsThis(i18n("Enter here the text used to create new tags. "
                                      "'/' can be used here to create a hierarchy of tags. "
                                      "',' can be used here to create more than one hierarchy at the same time."));
-    d->createTagsBtn = new QToolButton(tagsCreate);
-    d->createTagsBtn->setToolTip(i18n("Create new tag"));
-    d->createTagsBtn->setIcon(KIconLoader::global()->loadIcon("tag-new",
-                              KIconLoader::NoGroup, KIconLoader::SizeSmall));
 
     d->tagsView = new TAlbumListView(this);
 
@@ -229,13 +220,13 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
 
     // --------------------------------------------------
 
-    settingsLayout->addWidget(commentsBox, 0, 0, 1, 2);
-    settingsLayout->addWidget(dateBox,     1, 0, 1, 2);
-    settingsLayout->addWidget(ratingBox,   2, 0, 1, 2);
-    settingsLayout->addWidget(tagsCreate,  3, 0, 1, 2);
-    settingsLayout->addWidget(d->tagsView, 4, 0, 1, 2);
-    settingsLayout->addWidget(tagsSearch,  5, 0, 1, 2);
-    settingsLayout->addWidget(buttonsBox,  6, 0, 1, 2);
+    settingsLayout->addWidget(commentsBox,    0, 0, 1, 2);
+    settingsLayout->addWidget(dateBox,        1, 0, 1, 2);
+    settingsLayout->addWidget(ratingBox,      2, 0, 1, 2);
+    settingsLayout->addWidget(d->newTagEdit,  3, 0, 1, 2);
+    settingsLayout->addWidget(d->tagsView,    4, 0, 1, 2);
+    settingsLayout->addWidget(tagsSearch,     5, 0, 1, 2);
+    settingsLayout->addWidget(buttonsBox,     6, 0, 1, 2);
     settingsLayout->setRowStretch(4, 10);
     settingsLayout->setMargin(KDialog::spacingHint());
     settingsLayout->setSpacing(KDialog::spacingHint());
@@ -273,9 +264,6 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
             this, SLOT(slotAssignedTagsToggled(bool)));
 
     connect(d->newTagEdit, SIGNAL(returnPressed(const QString&)),
-            this, SLOT(slotCreateNewTag()));
-
-    connect(d->createTagsBtn, SIGNAL(clicked()),
             this, SLOT(slotCreateNewTag()));
 
     connect(d->applyBtn, SIGNAL(clicked()),
