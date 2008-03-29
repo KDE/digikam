@@ -14998,7 +14998,7 @@ v0.9.0-rc1 - 21-Nov-2006
 	* digikam/digikam/digikamview.cpp, digikam/NEWS,
 	  digikam/utilities/cameragui/cameraui.cpp,
 	  digikam/showfoto/showfoto.cpp: digikam from trunk : RAW file
-	  formats mime type still unavialable with KDE version >= 3.52. We
+	  formats mime type still unavailable with KDE version >= 3.52. We
 	  need to use an internal method instead. BUG: 136643
 
 2006-11-09 08:30 +0000 [r603488]  cgilles
