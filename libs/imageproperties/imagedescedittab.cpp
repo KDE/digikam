@@ -1100,8 +1100,8 @@ TAlbum* ImageDescEditTab::tagNew(TAlbum* parAlbum, const QString& _title, const 
         TAlbumCheckListItem* viewItem = (TAlbumCheckListItem*)album->extraData(d->tagsView);
         if (viewItem)
         {
-            viewItem->setOn(true);
-            d->tagsView->setSelected(viewItem, true);
+            viewItem->setOn(setOn);
+            d->tagsView->setSelected(viewItem, giveFocus);
             d->tagsView->ensureItemVisible(viewItem);
         }
     }
