@@ -139,30 +139,30 @@ void ImageDialogPreview::showPreview(const KUrl& url)
         {
             QString identify;
             QString make, model, dateTime, aperture, focalLength, exposureTime, sensitivity;
-            QString unaviable(i18n("<i>unaviable</i>"));
+            QString unavailable(i18n("<i>unavailable</i>"));
             QString cellBeg("<tr><td><nobr><font size=-1>");
             QString cellMid("</font></nobr></td><td><nobr><font size=-1>");
             QString cellEnd("</font></nobr></td></tr>");
 
-            if (info.make.isEmpty()) make = unaviable;
+            if (info.make.isEmpty()) make = unavailable;
             else make = info.make;
 
-            if (info.model.isEmpty()) model = unaviable;
+            if (info.model.isEmpty()) model = unavailable;
             else model = info.model;
 
-            if (info.dateTime.isValid()) dateTime = unaviable;
+            if (info.dateTime.isValid()) dateTime = unavailable;
             else dateTime = KGlobal::locale()->formatDateTime(info.dateTime, KLocale::ShortDate, true);
 
-            if (info.aperture.isEmpty()) aperture = unaviable; 
+            if (info.aperture.isEmpty()) aperture = unavailable; 
             else aperture = i18n("f/%1", info.aperture);
 
-            if (info.focalLength.isEmpty()) focalLength = unaviable; 
+            if (info.focalLength.isEmpty()) focalLength = unavailable; 
             else focalLength = i18n("%1 mm", info.focalLength);
 
-            if (info.exposureTime.isEmpty()) exposureTime = unaviable; 
+            if (info.exposureTime.isEmpty()) exposureTime = unavailable; 
             else exposureTime = i18n("1/%1 s", info.exposureTime);
 
-            if (info.sensitivity.isEmpty()) sensitivity = unaviable; 
+            if (info.sensitivity.isEmpty()) sensitivity = unavailable; 
             else sensitivity = i18n("%1 ISO", info.sensitivity);
 
             identify = "<table cellspacing=0 cellpadding=0>";
