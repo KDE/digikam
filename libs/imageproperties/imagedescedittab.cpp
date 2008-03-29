@@ -1228,6 +1228,7 @@ void ImageDescEditTab::slotAlbumAdded(Album* a)
 
         viewItem = new TAlbumCheckListItem(parent, tag);
         d->tagsSearchBar->lineEdit()->completionObject()->addItem(tag->title());
+        d->newTagEdit->lineEdit()->completionObject()->addItem(tag->title());
     }
 
     if (viewItem)
@@ -1245,6 +1246,7 @@ void ImageDescEditTab::slotAlbumDeleted(Album* a)
     TAlbum* album = (TAlbum*)a;
 
     d->tagsSearchBar->lineEdit()->completionObject()->removeItem(album->title());
+    d->newTagEdit->lineEdit()->completionObject()->removeItem(album->title());
     TAlbumCheckListItem* viewItem = (TAlbumCheckListItem*)album->extraData(d->tagsView);
     delete viewItem;
     album->removeExtraData(this);
@@ -1255,6 +1257,7 @@ void ImageDescEditTab::slotAlbumsCleared()
 {
     d->tagsView->clear();
     d->tagsSearchBar->lineEdit()->completionObject()->clear();
+    d->newTagEdit->lineEdit()->completionObject()->clear();
 }
 
 void ImageDescEditTab::slotAlbumIconChanged(Album* a)
@@ -1298,6 +1301,7 @@ void ImageDescEditTab::slotAlbumRenamed(Album* album)
 
     TAlbum* tag = (TAlbum*)album;
     d->tagsSearchBar->lineEdit()->completionObject()->addItem(tag->title());
+    d->newTagEdit->lineEdit()->completionObject()->addItem(tag->title());
     slotTagsSearchChanged(d->tagsSearchBar->lineEdit()->text());
     TAlbumCheckListItem* item = (TAlbumCheckListItem*)(tag->extraData(d->tagsView));
     if (item)
