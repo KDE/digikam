@@ -37347,7 +37347,7 @@ v0.9.0-beta1 - 20/07/2006
 
 	* trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/dimginterface.cpp:
 	  oups... hardcoded ICC profil transformations to test. This
-	  crash IE if profils file are unaviable. Fixed !!!
+	  crash IE if profils file are unavailable. Fixed !!!
 
 2005-11-24 11:51  cgilles
 
