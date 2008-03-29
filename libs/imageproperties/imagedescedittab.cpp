@@ -96,7 +96,6 @@ public:
         assignedTagsBtn            = 0;
         applyBtn                   = 0;
         revertBtn                  = 0;
-        createTagsBtn              = 0;
         newTagEdit                 = 0;
         toggleAutoTags             = TagFilterView::NoToggleAuto;
     }
@@ -104,7 +103,6 @@ public:
     bool                           modified;
     bool                           ignoreImageAttributesWatch;
 
-    QToolButton                   *createTagsBtn;
     QToolButton                   *recentTagsBtn;
     QToolButton                   *assignedTagsBtn;
     QToolButton                   *revertBtn;
@@ -165,18 +163,10 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
 
     // Tags view ---------------------------------------------------
 
-    QHBox *tagsCreate  = new QHBox(settingsArea);
-    tagsCreate->setSpacing(KDialog::spacingHint());
-
-    d->newTagEdit    = new SearchTextBar(tagsCreate, i18n("Enter new tag here..."));
+    d->newTagEdit    = new SearchTextBar(settingsArea, i18n("Enter new tag here..."));
     QWhatsThis::add(d->newTagEdit, i18n("Enter here the text used to create new tags. "
                                         "'/' can be used here to create a hierarchy of tags. "
                                         "',' can be used here to create more than one hierarchy at the same time."));
-    d->createTagsBtn = new QToolButton(tagsCreate);
-    QToolTip::add(d->createTagsBtn, i18n("Create new tag"));
-    d->createTagsBtn->setIconSet(kapp->iconLoader()->loadIcon("tag-new",
-                                 KIcon::NoGroup, KIcon::SizeSmall, 
-                                 KIcon::DefaultState, 0, true));
 
     d->tagsView = new TAlbumListView(settingsArea);
 
@@ -224,13 +214,13 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
 
     // --------------------------------------------------
 
-    settingsLayout->addMultiCellWidget(commentsBox, 0, 0, 0, 1);
-    settingsLayout->addMultiCellWidget(dateBox,     1, 1, 0, 1);
-    settingsLayout->addMultiCellWidget(ratingBox,   2, 2, 0, 1);
-    settingsLayout->addMultiCellWidget(tagsCreate,  3, 3, 0, 1);
-    settingsLayout->addMultiCellWidget(d->tagsView, 4, 4, 0, 1);
-    settingsLayout->addMultiCellWidget(tagsSearch,  5, 5, 0, 1);
-    settingsLayout->addMultiCellWidget(buttonsBox,  6, 6, 0, 1);
+    settingsLayout->addMultiCellWidget(commentsBox,    0, 0, 0, 1);
+    settingsLayout->addMultiCellWidget(dateBox,        1, 1, 0, 1);
+    settingsLayout->addMultiCellWidget(ratingBox,      2, 2, 0, 1);
+    settingsLayout->addMultiCellWidget(d->newTagEdit,  3, 3, 0, 1);
+    settingsLayout->addMultiCellWidget(d->tagsView,    4, 4, 0, 1);
+    settingsLayout->addMultiCellWidget(tagsSearch,     5, 5, 0, 1);
+    settingsLayout->addMultiCellWidget(buttonsBox,     6, 6, 0, 1);
     settingsLayout->setRowStretch(4, 10);
 
     // --------------------------------------------------
@@ -269,9 +259,6 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
             this, SLOT(slotAssignedTagsToggled(bool)));
 
     connect(d->newTagEdit->lineEdit(), SIGNAL(returnPressed(const QString&)),
-            this, SLOT(slotCreateNewTag()));
-
-    connect(d->createTagsBtn, SIGNAL(clicked()),
             this, SLOT(slotCreateNewTag()));
 
     connect(d->applyBtn, SIGNAL(clicked()),
