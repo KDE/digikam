@@ -1060,7 +1060,8 @@ void ImageDescEditTab::slotMoreMenu()
     }
 }
 
-TAlbum* ImageDescEditTab::tagNew(TAlbum* parAlbum, const QString& _title, const QString& _icon) const
+TAlbum* ImageDescEditTab::tagNew(TAlbum* parAlbum, const QString& _title, const QString& _icon,
+                                 bool setOn, bool giveFocus) const
 {
     if (!parAlbum)
         return 0;
@@ -1087,8 +1088,8 @@ TAlbum* ImageDescEditTab::tagNew(TAlbum* parAlbum, const QString& _title, const 
         TAlbumCheckListItem* viewItem = (TAlbumCheckListItem*)album->extraData(d->tagsView);
         if (viewItem)
         {
-            viewItem->setOn(true);
-            d->tagsView->setSelected(viewItem, true);
+            viewItem->setOn(setOn);
+            d->tagsView->setSelected(viewItem, giveFocus);
             d->tagsView->ensureItemVisible(viewItem);
         }
     }
@@ -1760,7 +1761,7 @@ void ImageDescEditTab::slotCreateNewTag()
                 {    
                     QString tag = (*it2).stripWhiteSpace();
                     if (!tag.isEmpty())
-                        root = tagNew(root, tag, QString("tag"));
+                        root = tagNew(root, tag, QString("tag"), true, false);
 
                     // Sanity check if tag creation failed.
                     if (!root) break;        

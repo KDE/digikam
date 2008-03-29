@@ -83,7 +83,8 @@ private:
     void updateDate();
     void updateRecentTags();
 
-    TAlbum* tagNew(TAlbum* parAlbum, const QString& _title=QString(), const QString& _icon=QString()) const;
+    TAlbum* tagNew(TAlbum* parAlbum, const QString& _title=QString(), const QString& _icon=QString(), 
+                   bool setOn=true, bool giveFocus=true) const;
     void tagEdit(TAlbum* album);
     void tagDelete(TAlbum *album);
 
