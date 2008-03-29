@@ -1228,7 +1228,8 @@ void ImageDescEditTab::slotAlbumAdded(Album* a)
 
         viewItem = new TAlbumCheckListItem(parent, tag);
         d->tagsSearchBar->lineEdit()->completionObject()->addItem(tag->title());
-        d->newTagEdit->lineEdit()->completionObject()->addItem(tag->title());
+        d->newTagEdit->lineEdit()->completionObject()->addItem(tag->tagPath());
+        d->newTagEdit->lineEdit()->completionObject()->addItem(tag->tagPath().remove(0, 1)); // without root "/"
     }
 
     if (viewItem)
@@ -1246,7 +1247,8 @@ void ImageDescEditTab::slotAlbumDeleted(Album* a)
     TAlbum* album = (TAlbum*)a;
 
     d->tagsSearchBar->lineEdit()->completionObject()->removeItem(album->title());
-    d->newTagEdit->lineEdit()->completionObject()->removeItem(album->title());
+    d->newTagEdit->lineEdit()->completionObject()->removeItem(album->tagPath());
+    d->newTagEdit->lineEdit()->completionObject()->removeItem(album->tagPath().remove(0, 1)); // without root "/"
     TAlbumCheckListItem* viewItem = (TAlbumCheckListItem*)album->extraData(d->tagsView);
     delete viewItem;
     album->removeExtraData(this);
@@ -1301,7 +1303,8 @@ void ImageDescEditTab::slotAlbumRenamed(Album* album)
 
     TAlbum* tag = (TAlbum*)album;
     d->tagsSearchBar->lineEdit()->completionObject()->addItem(tag->title());
-    d->newTagEdit->lineEdit()->completionObject()->addItem(tag->title());
+    d->newTagEdit->lineEdit()->completionObject()->addItem(tag->tagPath());
+    d->newTagEdit->lineEdit()->completionObject()->addItem(tag->tagPath().remove(0, 1)); // without root "/"
     slotTagsSearchChanged(d->tagsSearchBar->lineEdit()->text());
     TAlbumCheckListItem* item = (TAlbumCheckListItem*)(tag->extraData(d->tagsView));
     if (item)
@@ -1744,6 +1747,7 @@ void ImageDescEditTab::slotCreateNewTag()
     QStringList tagsHierarchies = QStringList::split(",", tagStr);
     if (tagsHierarchies.isEmpty()) return;
 
+    QString errMsg;
     for (QStringList::iterator it = tagsHierarchies.begin(); it != tagsHierarchies.end(); ++it)
     {    
         QString hierarchy = *it;
@@ -1765,7 +1769,24 @@ void ImageDescEditTab::slotCreateNewTag()
                 {    
                     QString tag = (*it2).stripWhiteSpace();
                     if (!tag.isEmpty())
-                        root = tagNew(root, tag, QString("tag"), true, false);
+                    {
+                        // Tag already exist ?
+                        TAlbum* album = AlbumManager::instance()->findTAlbum(tag);
+                        if (!album)
+                            root = AlbumManager::instance()->createTAlbum(root, tag, QString("tag"), errMsg);
+                        else
+                            root = album;
+
+                        if (root)
+                        {
+                            TAlbumCheckListItem* viewItem = (TAlbumCheckListItem*)root->extraData(d->tagsView);
+                            if (viewItem)
+                            {
+                                viewItem->setOn(true);
+                                d->tagsView->ensureItemVisible(viewItem);
+                            }
+                        }
+                    }
 
                     // Sanity check if tag creation failed.
                     if (!root) break;        
