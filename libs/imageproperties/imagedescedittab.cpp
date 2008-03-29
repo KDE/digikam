@@ -1727,7 +1727,7 @@ void ImageDescEditTab::slotCreateNewTag()
 
     // Check root album to use as parent of new tag.
     TAlbum *mainRoot          = 0;
-    TAlbumCheckListItem* item = dynamic_cast<TAlbumCheckListItem*>(d->tagsView->currentItem());
+    TAlbumCheckListItem* item = dynamic_cast<TAlbumCheckListItem*>(d->tagsView->selectedItem());
 
     if (tagStr.startsWith("/") || !item)
         mainRoot = AlbumManager::instance()->findTAlbum(0);
