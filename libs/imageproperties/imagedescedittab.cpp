@@ -1779,7 +1779,7 @@ void ImageDescEditTab::slotCreateNewTag()
             {
                 for (QStringList::iterator it2 = tagsList.begin(); it2 != tagsList.end(); ++it2)
                 {    
-                    QString tag = *it2;
+                    QString tag = (*it2).trimmed();
                     if (!tag.isEmpty())
                         root = tagNew(root,tag, QString("tag"));
 
