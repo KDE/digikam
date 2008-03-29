@@ -1240,7 +1240,8 @@ void ImageDescEditTab::slotAlbumAdded(Album* a)
 
         viewItem = new TAlbumCheckListItem(parent, tag);
         d->tagsSearchBar->completionObject()->addItem(tag->title());
-        d->newTagEdit->completionObject()->addItem(tag->title());
+        d->newTagEdit->completionObject()->addItem(tag->tagPath());
+        d->newTagEdit->completionObject()->addItem(tag->tagPath().remove(0, 1)); // without root "/"
     }
 
     if (viewItem)
@@ -1258,7 +1259,8 @@ void ImageDescEditTab::slotAlbumDeleted(Album* a)
     TAlbum* album = (TAlbum*)a;
 
     d->tagsSearchBar->completionObject()->removeItem(album->title());
-    d->newTagEdit->completionObject()->removeItem(album->title());
+    d->newTagEdit->completionObject()->removeItem(album->tagPath());
+    d->newTagEdit->completionObject()->removeItem(album->tagPath().remove(0, 1)); // without root "/"
     TAlbumCheckListItem* viewItem = (TAlbumCheckListItem*)(album->extraData(d->tagsView));
     delete viewItem;
     album->removeExtraData(this);
@@ -1313,7 +1315,8 @@ void ImageDescEditTab::slotAlbumRenamed(Album* a)
 
     TAlbum* album = (TAlbum*)a;
     d->tagsSearchBar->completionObject()->addItem(album->title());
-    d->newTagEdit->completionObject()->addItem(album->title());
+    d->newTagEdit->completionObject()->addItem(album->tagPath());
+    d->newTagEdit->completionObject()->addItem(album->tagPath().remove(0, 1)); // without root "/"
     slotTagsSearchChanged(d->tagsSearchBar->text());
     TAlbumCheckListItem* viewItem = (TAlbumCheckListItem*)(album->extraData(d->tagsView));
     if (!viewItem)
@@ -1765,6 +1768,7 @@ void ImageDescEditTab::slotCreateNewTag()
     QStringList tagsHierarchies = tagStr.split(",", QString::SkipEmptyParts);
     if (tagsHierarchies.isEmpty()) return;
 
+    QString errMsg;
     for (QStringList::iterator it = tagsHierarchies.begin(); it != tagsHierarchies.end(); ++it)
     {    
         QString hierarchy = *it;
@@ -1786,7 +1790,24 @@ void ImageDescEditTab::slotCreateNewTag()
                 {    
                     QString tag = (*it2).trimmed();
                     if (!tag.isEmpty())
-                        root = tagNew(root,tag, QString("tag"), true, false);
+                    {
+                        // Tag already exist ?
+                        TAlbum* album = AlbumManager::instance()->findTAlbum(tag);
+                        if (!album)
+                            root = AlbumManager::instance()->createTAlbum(root, tag, QString("tag"), errMsg);
+                        else
+                            root = album;
+
+                        if (root)
+                        {
+                            TAlbumCheckListItem* viewItem = (TAlbumCheckListItem*)root->extraData(d->tagsView);
+                            if (viewItem)
+                            {
+                                viewItem->setOn(true);
+                                d->tagsView->ensureItemVisible(viewItem);
+                            }
+                        }
+                    }
 
                     // Sanity check if tag creation failed.
                     if (!root) break;        
