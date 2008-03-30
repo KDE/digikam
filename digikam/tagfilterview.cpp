@@ -1117,7 +1117,7 @@ void TagFilterView::tagNew(TagFilterViewItem* item, const QString& _title, const
 
     if (title.isNull())
     {
-        if (!TagCreateDlg::tagCreate(kapp->activeWindow(), parent, title, icon))
+        if (!TagEditDlg::tagCreate(kapp->activeWindow(), parent, title, icon))
             return;
     }
 

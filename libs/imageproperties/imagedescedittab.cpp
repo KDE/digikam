@@ -1059,7 +1059,7 @@ TAlbum* ImageDescEditTab::tagNew(TAlbum* parAlbum, const QString& _title, const 
 
     if (title.isNull())
     {
-        if (!TagCreateDlg::tagCreate(kapp->activeWindow(), parAlbum, title, icon))
+        if (!TagEditDlg::tagCreate(kapp->activeWindow(), parAlbum, title, icon))
             return 0;
     }
 

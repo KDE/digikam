@@ -7,7 +7,7 @@
  * Description : dialog to edit and create digiKam Tags
  * 
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -33,42 +33,10 @@
 
 #include <kdialogbase.h>
 
-class QComboBox;
-class QLineEdit;
-class QPushButton;
-class QWidget;
-
 namespace Digikam
 {
-
-class TagCreateDlgPriv;
+class TAlbum;
 class TagEditDlgPriv;
-
-class TagCreateDlg : public KDialogBase
-{
-    Q_OBJECT
-
-public:
-
-    TagCreateDlg(QWidget *parent, TAlbum* album);
-    ~TagCreateDlg();
-
-    QString title() const;
-    QString icon() const;
-
-    static bool tagCreate(QWidget *parent, TAlbum* album, QString& title, QString& icon);
-
-private slots:
-
-    void slotIconChange();
-    void slotTitleChanged(const QString& newtitle);
-    
-private:
-
-    TagCreateDlgPriv *d;
-};
-
-// -------------------------------------------------------------------------------------
 
 class TagEditDlg : public KDialogBase
 {
@@ -76,13 +44,14 @@ class TagEditDlg : public KDialogBase
 
 public:
 
-    TagEditDlg(QWidget *parent, TAlbum* album);
+    TagEditDlg(QWidget *parent, TAlbum* album, bool create=false);
     ~TagEditDlg();
 
     QString title() const;
     QString icon() const;
 
     static bool tagEdit(QWidget *parent, TAlbum* album, QString& title, QString& icon);
+    static bool tagCreate(QWidget *parent, TAlbum* album, QString& title, QString& icon);
 
 private slots:
 
