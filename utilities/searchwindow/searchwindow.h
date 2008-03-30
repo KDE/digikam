@@ -1,0 +1,85 @@
+/* ============================================================
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2008-01-20
+ * Description : User interface for searches
+ * 
+ * Copyright (C) 2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * ============================================================ */
+
+#ifndef SEARCHWINDOW_H
+#define SEARCHWINDOW_H
+
+// Qt includes
+
+#include <QWidget>
+
+// Local includes
+
+#include "digikam_export.h"
+
+namespace Digikam
+{
+
+class SearchWindowPriv;
+
+class DIGIKAM_EXPORT SearchWindow : public QWidget
+{
+    Q_OBJECT
+
+public:
+
+    /**
+     * Create a new SearchWindow with an empty advanced search
+     */
+    SearchWindow();
+
+    ~SearchWindow();
+
+    /**
+     * Read the given search into the search widgets
+     */
+    void readSearch(int id, const QString &query);
+
+    /**
+     * Reset the search widget to an empty search
+     */
+    void reset();
+
+    /**
+     * Returns the currently produced search string
+     */
+    QString search();
+
+signals:
+
+    /**
+     * Signals that the user has finished editing the search.
+     * The given query is the same as search().
+     */
+    void searchEdited(int id, const QString &query);
+
+private:
+
+    SearchWindowPriv *d;
+};
+
+}
+
+#endif
+
+
