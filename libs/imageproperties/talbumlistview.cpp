@@ -50,7 +50,6 @@
 #include "albumsettings.h"
 #include "databasetransaction.h"
 #include "imageinfo.h"
-#include "tagcreatedlg.h"
 #include "ddragobjects.h"
 #include "imageattributeswatch.h"
 #include "albumthumbnailloader.h"

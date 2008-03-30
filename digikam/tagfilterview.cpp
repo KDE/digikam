@@ -62,7 +62,7 @@
 #include "metadatahub.h"
 #include "statusprogressbar.h"
 #include "syncjob.h"
-#include "tagcreatedlg.h"
+#include "tageditdlg.h"
 #include "tagfilterview.h"
 #include "tagfilterview.moc"
 

@@ -56,7 +56,7 @@
 #include "albumthumbnailloader.h"
 #include "albumdb.h"
 #include "album.h"
-#include "tagcreatedlg.h"
+#include "tageditdlg.h"
 #include "tagspopupmenu.h"
 #include "tagspopupmenu.moc"
 

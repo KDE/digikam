@@ -76,7 +76,7 @@ SET(libdigikamtheme_SRCS
     ../digikam/ratingwidget.cpp 
     ../digikam/scancontroller.cpp
     ../digikam/syncjob.cpp 
-    ../digikam/tagcreatedlg.cpp 
+    ../digikam/tageditdlg.cpp 
     ../digikam/tagspopupmenu.cpp 
     ../digikam/treefolderitem.cpp 
    )

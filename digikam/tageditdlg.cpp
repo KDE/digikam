@@ -44,8 +44,8 @@
 
 #include "album.h"
 #include "syncjob.h"
-#include "tagcreatedlg.h"
-#include "tagcreatedlg.moc"
+#include "tageditdlg.h"
+#include "tageditdlg.moc"
 
 namespace Digikam
 {

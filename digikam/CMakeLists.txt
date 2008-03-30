@@ -198,7 +198,7 @@ SET(digikam_bin_SRCS
                      searchresultsitem.cpp 
                      searchwidgets.cpp 
                      syncjob.cpp 
-                     tagcreatedlg.cpp 
+                     tageditdlg.cpp 
                      tagfolderview.cpp 
                      tagfilterview.cpp 
                      treefolderitem.cpp 

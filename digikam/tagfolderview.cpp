@@ -53,7 +53,7 @@
 #include "metadatahub.h"
 #include "syncjob.h"
 #include "statusprogressbar.h"
-#include "tagcreatedlg.h"
+#include "tageditdlg.h"
 #include "tagfolderview.h"
 #include "tagfolderview.moc"
 

@@ -22,8 +22,8 @@
  * 
  * ============================================================ */
 
-#ifndef TAGCREATEDLG_H
-#define TAGCREATEDLG_H
+#ifndef TAGEDITDLG_H
+#define TAGEDITDLG_H
 
 // Qt includes.
 
@@ -67,4 +67,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* TAGCREATEDLG_H */
+#endif /* TAGEDITDLG_H */

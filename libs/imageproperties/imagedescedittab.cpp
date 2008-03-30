@@ -64,7 +64,7 @@
 #include "albumsettings.h"
 #include "albumthumbnailloader.h"
 #include "databasetransaction.h"
-#include "tagcreatedlg.h"
+#include "tageditdlg.h"
 #include "ratingwidget.h"
 #include "talbumlistview.h"
 #include "tagfilterview.h"
