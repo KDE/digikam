@@ -156,7 +156,7 @@ TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album, bool create)
     grid->addWidget(d->topLabel,        0, 1, 1, 4);
     grid->addWidget(line,               1, 1, 1, 4);
     grid->addWidget(titleLabel,         2, 1, 1, 1);
-    grid->addWidget(d->titleEdit,       2, 2, 1, 4- 2+1);
+    grid->addWidget(d->titleEdit,       2, 2, 1, 3);
     grid->addWidget(iconTextLabel,      3, 1, 1, 1);
     grid->addWidget(d->iconButton,      3, 2, 1, 1);
     grid->addWidget(d->resetIconButton, 3, 3, 1, 1);
@@ -221,8 +221,8 @@ void TagEditDlg::slotTitleChanged(const QString& newtitle)
     QString tagName = d->mainRootAlbum->tagPath();
     if (tagName.endsWith("/")) tagName.truncate(tagName.length()-1);
 
-    if (d->create) d->topLabel->setText(i18n("<qt><b>Create New Tag in<br><i>\"%1\"</i></b></qt>").arg(tagName));
-    else           d->topLabel->setText(i18n("<qt><b>Properties of Tag<br><i>\"%1\"</i></b></qt>").arg(tagName));
+    if (d->create) d->topLabel->setText(i18n("<qt><b>Create New Tag in<br><i>\"%1\"</i></b></qt>", tagName));
+    else           d->topLabel->setText(i18n("<qt><b>Properties of Tag<br><i>\"%1\"</i></b></qt>", tagName));
 
     enableButtonOk(!newtitle.isEmpty());
 }
