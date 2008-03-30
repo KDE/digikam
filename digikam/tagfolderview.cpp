@@ -24,7 +24,6 @@
 
 // Qt includes.
 
-#include <Q3ListView>
 #include <QList>
 #include <QPainter>
 #include <QCursor>
@@ -618,7 +617,7 @@ void TagFolderView::tagNew( TagFolderViewItem *item, const QString& _title, cons
 
     if (title.isNull())
     {
-        if(!TagCreateDlg::tagCreate(kapp->activeWindow(), parent, title, icon))
+        if(!TagEditDlg::tagCreate(kapp->activeWindow(), parent, title, icon))
             return;
     }
 
