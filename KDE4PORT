@@ -133,6 +133,7 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
     lighttablewindow.cpp                Gilles                 X       DONE
 |---kipiiface                           Gilles                 X       DONE        DONE
 |---scripts                             Gilles                         DONE        -
+|---searchwindow                        Marcel                 X       DONE        DONE
 |---setup                               Gilles          X      X       DONE        DONE
 |---slideshow                           Laurent         X      X       DONE        DONE
 
@@ -195,7 +196,7 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
     searchresultsview.cpp               Gilles                 X       DONE
     searchwidgets.cpp                   Gilles                 X       DONE            
     syncjob.cpp                         Gilles                 X       DONE
-    tagcreatedlg.cpp                    Gilles                 X       DONE
+    tageditdlg.cpp                      Gilles                 X       DONE
     tagfilterview.cpp                   Gilles                 X       DONE
     tagfolderview.cpp                   Gilles                 X       DONE
     tagspopupmenu.cpp                   Gilles                 X       DONE
