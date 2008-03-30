@@ -55,7 +55,7 @@ namespace Digikam
 {
 
 typedef QMap<QString, QList<int> > PathAlbumMap;
-typedef QMap<int, QPixmap> TagThumbnailMap;
+typedef QMap<int, QPixmap> AlbumThumbnailMap;
 
 class AlbumThumbnailLoaderPrivate
 {
@@ -76,7 +76,7 @@ public:
 
     PathAlbumMap            pathAlbumMap;
 
-    TagThumbnailMap         tagThumbnailMap;
+    AlbumThumbnailMap       thumbnailMap;
 };
 
 class AlbumThumbnailLoaderCreator { public: AlbumThumbnailLoader object; };
@@ -205,6 +205,37 @@ bool AlbumThumbnailLoader::getTagThumbnail(TAlbum *album, QPixmap &icon)
     }
 }
 
+QPixmap AlbumThumbnailLoader::getTagThumbnailDirectly(TAlbum *album, bool blendIcon)
+{
+    int size = computeIconSize(SmallerSize);
+
+    if(!album->icon().isEmpty())
+    {
+        // icon cached?
+        AlbumThumbnailMap::iterator it = d->thumbnailMap.find(album->globalID());
+        if (it != d->thumbnailMap.end())
+        {
+            if (blendIcon)
+                return blendIcons(getStandardTagIcon(), *it);
+            else
+                return *it;
+        }
+
+        if(album->icon().startsWith("/"))
+        {
+            KUrl iconKURL;
+            iconKURL.setPath(album->icon());
+            addUrl(album, iconKURL);
+        }
+        else
+        {
+            return loadIcon(album->icon(), size);
+        }
+    }
+
+    return getStandardTagIcon(album);
+}
+
 bool AlbumThumbnailLoader::getAlbumThumbnail(PAlbum *album)
 {
     if(!album->icon().isEmpty() && d->iconSize > d->minBlendSize)
@@ -219,6 +250,22 @@ bool AlbumThumbnailLoader::getAlbumThumbnail(PAlbum *album)
     return true;
 }
 
+QPixmap AlbumThumbnailLoader::getAlbumThumbnailDirectly(PAlbum *album)
+{
+    if(!album->icon().isEmpty() && d->iconSize > d->minBlendSize)
+    {
+        // icon cached?
+        AlbumThumbnailMap::iterator it = d->thumbnailMap.find(album->globalID());
+        if (it != d->thumbnailMap.end())
+            return *it;
+
+        // schedule for loading
+        addUrl(album, album->iconKURL());
+    }
+
+    return getStandardAlbumIcon(album);
+}
+
 void AlbumThumbnailLoader::addUrl(Album *album, const KUrl &url)
 {
     /*
@@ -231,8 +278,8 @@ void AlbumThumbnailLoader::addUrl(Album *album, const KUrl &url)
     // We use a private cache which is actually a map to be sure to cache _all_ album thumbnails.
     // At startup, this is not relevant, as the views will add their requests in a row.
     // This is to speed up context menu and IE imagedescedit
-    TagThumbnailMap::iterator ttit = d->tagThumbnailMap.find(album->globalID());
-    if (ttit != d->tagThumbnailMap.end())
+    AlbumThumbnailMap::iterator ttit = d->thumbnailMap.find(album->globalID());
+    if (ttit != d->thumbnailMap.end())
     {
         // It is not necessary to return cached icon asynchronously - they could be
         // returned by getTagThumbnail already - but this would make the API
@@ -305,7 +352,7 @@ void AlbumThumbnailLoader::setThumbnailSize(int size)
     // clear task list
     d->pathAlbumMap.clear();
     // clear cached thumbnails
-    d->tagThumbnailMap.clear();
+    d->thumbnailMap.clear();
 
     if (d->iconAlbumThumbThread)
     {
@@ -363,13 +410,14 @@ void AlbumThumbnailLoader::slotGotThumbnailFromIcon(const LoadingDescription &lo
                         if (tagThumbnail.isNull())
                         {
                             tagThumbnail = createTagThumbnail(thumbnail);
-                            d->tagThumbnailMap.insert(album->globalID(), tagThumbnail);
+                            d->thumbnailMap.insert(album->globalID(), tagThumbnail);
                         }
 
                         emit signalThumbnail(album, tagThumbnail);
                     }
                     else
                     {
+                        d->thumbnailMap.insert(album->globalID(), thumbnail);
                         emit signalThumbnail(album, thumbnail);
                     }
                 }
@@ -400,7 +448,7 @@ void AlbumThumbnailLoader::slotIconChanged(Album* album)
     if(!album || album->type() != Album::TAG)
         return;
 
-    d->tagThumbnailMap.remove(album->globalID());
+    d->thumbnailMap.remove(album->globalID());
 }
 
 QPixmap AlbumThumbnailLoader::createTagThumbnail(const QPixmap &albumThumbnail)
