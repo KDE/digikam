@@ -421,10 +421,10 @@ void AlbumManager::startScan()
 
     // create root albums
     d->rootPAlbum = new PAlbum(i18n("My Albums"));
-    insertPAlbum(d->rootPAlbum);
+    insertPAlbum(d->rootPAlbum, 0);
 
     d->rootTAlbum = new TAlbum(i18n("My Tags"), 0, true);
-    insertTAlbum(d->rootTAlbum);
+    insertTAlbum(d->rootTAlbum, 0);
 
     d->rootSAlbum = new SAlbum(i18n("My Searches"), 0, true);
 
@@ -520,7 +520,6 @@ void AlbumManager::scanPAlbums()
         // doesn't delete albums and looks like child Albums don't get deleted.
         // But when the parent album gets deleted, the children are also deleted.
         removePAlbum(album);
-        delete album;
     }
 
     qSort(newAlbums);
@@ -558,9 +557,7 @@ void AlbumManager::scanPAlbums()
         if (!albumRootPath.isNull())
             album->m_icon = albumRootPath + info.iconRelativePath;
 
-        album->setParent(parent);
-
-        insertPAlbum(album);
+        insertPAlbum(album, parent);
     }
 
     getAlbumItemsCount();
@@ -708,8 +705,7 @@ void AlbumManager::scanTAlbums()
         // Create the new TAlbum
         TAlbum* album = new TAlbum(info.name, info.id, false);
         album->m_icon = info.icon;
-        album->setParent(parent);
-        insertTAlbum(album);
+        insertTAlbum(album, parent);
 
         // also insert it in the map we are doing lookup of parent tags
         tmap.insert(info.id, album);
@@ -771,6 +767,7 @@ void AlbumManager::scanSAlbums()
 
         // Its a new album.
         SAlbum* album = new SAlbum(info.name, info.id);
+        emit signalAlbumAboutToBeAdded(album, d->rootSAlbum, d->rootSAlbum->lastChild());
         album->setSearch(info.type, info.query);
         album->setParent(d->rootSAlbum);
         d->allAlbumsIdHash[album->globalID()] = album;
@@ -1049,9 +1046,7 @@ PAlbum* AlbumManager::createPAlbum(PAlbum* parent,
     album->m_collection = collection;
     album->m_date       = date;
 
-    album->setParent(parent);
-
-    insertPAlbum(album);
+    insertPAlbum(album, parent);
 
     return album;
 }
@@ -1216,9 +1211,8 @@ TAlbum* AlbumManager::createTAlbum(TAlbum* parent, const QString& name,
     
     TAlbum *album = new TAlbum(name, id, false);
     album->m_icon = iconkde;
-    album->setParent(parent);
 
-    insertTAlbum(album);
+    insertTAlbum(album, parent);
     
     return album;
 }
@@ -1270,9 +1264,6 @@ bool AlbumManager::deleteTAlbum(TAlbum* album, QString& errMsg)
 
     removeTAlbum(album);
 
-    d->allAlbumsIdHash.remove(album->globalID());
-    delete album;
-    
     return true;
 }
 
@@ -1446,6 +1437,7 @@ SAlbum* AlbumManager::createSAlbum(const QString &name, DatabaseSearch::Type typ
         return 0;
 
     album = new SAlbum(name, id);
+    emit signalAlbumAboutToBeAdded(album, d->rootSAlbum, d->rootSAlbum->lastChild());
     album->setSearch(type, query);
     album->setParent(d->rootSAlbum);
 
@@ -1481,20 +1473,27 @@ bool AlbumManager::deleteSAlbum(SAlbum* album)
     if (!album)
         return false;
 
-    emit signalAlbumDeleted(album);
+    emit signalAlbumAboutToBeDeleted(album);
 
     DatabaseAccess().db()->deleteSearch(album->id());
 
     d->allAlbumsIdHash.remove(album->globalID());
+    emit signalAlbumDeleted(album);
     delete album;
+    emit signalAlbumHasBeenDeleted(album);
 
     return true;
 }
 
-void AlbumManager::insertPAlbum(PAlbum *album)
+void AlbumManager::insertPAlbum(PAlbum *album, PAlbum *parent)
 {
     if (!album)
         return;
+
+    emit signalAlbumAboutToBeAdded(album, parent, parent ? parent->lastChild() : 0);
+
+    if (parent)
+        album->setParent(parent);
 
     d->albumPathHash[album]  = album;
     d->allAlbumsIdHash[album->globalID()] = album;
@@ -1516,6 +1515,7 @@ void AlbumManager::removePAlbum(PAlbum *album)
         child = next;
     }
 
+    emit signalAlbumAboutToBeDeleted(album);
     d->albumPathHash.remove(album);
     d->allAlbumsIdHash.remove(album->globalID());
 
@@ -1528,12 +1528,19 @@ void AlbumManager::removePAlbum(PAlbum *album)
     }
     
     emit signalAlbumDeleted(album);
+    delete album;
+    emit signalAlbumHasBeenDeleted(album);
 }
 
-void AlbumManager::insertTAlbum(TAlbum *album)
+void AlbumManager::insertTAlbum(TAlbum *album, TAlbum *parent)
 {
     if (!album)
         return;
+
+    emit signalAlbumAboutToBeAdded(album, parent, parent ? parent->lastChild() : 0);
+
+    if (parent)
+        album->setParent(parent);
 
     d->allAlbumsIdHash.insert(album->globalID(), album);
 
@@ -1553,7 +1560,8 @@ void AlbumManager::removeTAlbum(TAlbum *album)
         removeTAlbum((TAlbum*)child);
         child = next;
     }
-    
+
+    emit signalAlbumAboutToBeDeleted(album);
     d->allAlbumsIdHash.remove(album->globalID());
 
     if (album == d->currentAlbum)
@@ -1561,8 +1569,10 @@ void AlbumManager::removeTAlbum(TAlbum *album)
         d->currentAlbum = 0;
         emit signalAlbumCurrentChanged(0);
     }
-    
+
     emit signalAlbumDeleted(album);
+    delete album;
+    emit signalAlbumHasBeenDeleted(album);
 }
 
 void AlbumManager::emitAlbumItemsSelected(bool val)
@@ -1733,6 +1743,7 @@ void AlbumManager::slotDatesJobData(KIO::Job*, const QByteArray& data)
         if (!yAlbum)
         {
             yAlbum = new DAlbum(QDate(year, 1, 1), false, DAlbum::Year);
+            emit signalAlbumAboutToBeAdded(yAlbum, d->rootDAlbum, d->rootDAlbum->lastChild());
             yAlbum->setParent(d->rootDAlbum);
             d->allAlbumsIdHash.insert(yAlbum->globalID(), yAlbum);
             emit signalAlbumAdded(yAlbum);
@@ -1740,6 +1751,7 @@ void AlbumManager::slotDatesJobData(KIO::Job*, const QByteArray& data)
 
         // Create Month album
         DAlbum *mAlbum = new DAlbum(md);
+        emit signalAlbumAboutToBeAdded(mAlbum, yAlbum, yAlbum->lastChild());
         mAlbum->setParent(yAlbum);
         d->allAlbumsIdHash.insert(mAlbum->globalID(), mAlbum);
         emit signalAlbumAdded(mAlbum);
@@ -1751,18 +1763,22 @@ void AlbumManager::slotDatesJobData(KIO::Job*, const QByteArray& data)
          it != mAlbumMap.end(); ++it)
     {
         DAlbum* album = it.value();
-        emit signalAlbumDeleted(album);
+        emit signalAlbumAboutToBeDeleted(album);
         d->allAlbumsIdHash.remove(album->globalID());
+        emit signalAlbumDeleted(album);
         delete album;
+        emit signalAlbumHasBeenDeleted(album);
     }
 
     for (QMap<int, DAlbum*>::iterator it = yAlbumMap.begin();
          it != yAlbumMap.end(); ++it)
     {
         DAlbum* album = it.value();
-        emit signalAlbumDeleted(album);
+        emit signalAlbumAboutToBeDeleted(album);
         d->allAlbumsIdHash.remove(album->globalID());
+        emit signalAlbumDeleted(album);
         delete album;
+        emit signalAlbumHasBeenDeleted(album);
     }
 
     emit signalDAlbumsDirty(yearMonthMap);

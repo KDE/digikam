@@ -404,8 +404,18 @@ public:
 
 signals:
 
+    /// An album is about to be added to the given parent (0 if album is root)
+    /// after the item given by prev (prev is 0 if parent has no children yet)
+    void signalAlbumAboutToBeAdded(Album *album, Album *parent, Album *prev);
+    /// The album has been added
     void signalAlbumAdded(Album* album);
+    /// The album is about to be deleted, but is still fully valid
+    void signalAlbumAboutToBeDeleted(Album *album);
+    /// The album is deleted, but the object can still be accessed
     void signalAlbumDeleted(Album* album);
+    /// The album is deleted, the object can no longer be accessed.
+    /// For identification purposes, the former album pointer is passed.
+    void signalAlbumHasBeenDeleted(void *);
     void signalAlbumItemsSelected(bool selected);
     void signalAlbumsCleared();
     void signalAlbumCurrentChanged(Album* album);
@@ -437,9 +447,9 @@ private:
     AlbumManager();
     ~AlbumManager();
 
-    void insertPAlbum(PAlbum *album);
+    void insertPAlbum(PAlbum *album, PAlbum *parent);
     void removePAlbum(PAlbum *album);
-    void insertTAlbum(TAlbum *album);
+    void insertTAlbum(TAlbum *album, TAlbum *parent);
     void removeTAlbum(TAlbum *album);
 
     /**
