@@ -57,7 +57,7 @@
 #include "imageattributeswatch.h"
 #include "imageinfo.h"
 #include "metadatahub.h"
-#include "tagcreatedlg.h"
+#include "tageditdlg.h"
 #include "statusprogressbar.h"
 #include "tagfilterview.h"
 #include "tagfilterview.moc"

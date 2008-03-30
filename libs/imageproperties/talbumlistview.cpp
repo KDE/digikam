@@ -47,7 +47,6 @@
 #include "album.h"
 #include "albumsettings.h"
 #include "imageinfo.h"
-#include "tagcreatedlg.h"
 #include "navigatebarwidget.h"
 #include "dragobjects.h"
 #include "imageattributeswatch.h"

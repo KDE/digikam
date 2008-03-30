@@ -51,7 +51,7 @@
 #include "albumdb.h"
 #include "album.h"
 #include "syncjob.h"
-#include "tagcreatedlg.h"
+#include "tageditdlg.h"
 #include "tagspopupmenu.h"
 #include "tagspopupmenu.moc"
 

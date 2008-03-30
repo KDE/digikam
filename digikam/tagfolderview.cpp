@@ -45,7 +45,7 @@
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "syncjob.h"
-#include "tagcreatedlg.h"
+#include "tageditdlg.h"
 #include "dragobjects.h"
 #include "folderitem.h"
 #include "dio.h"

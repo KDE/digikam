@@ -91,7 +91,7 @@ libdigikam_la_SOURCES = kdateedit.cpp \
 	                searchresultsitem.cpp \
 	                searchwidgets.cpp \
 	                syncjob.cpp \
-	                tagcreatedlg.cpp \
+	                tageditdlg.cpp \
 	                tagfilterview.cpp \
 	                tagfolderview.cpp \
 	                tagspopupmenu.cpp \
