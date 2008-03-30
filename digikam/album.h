@@ -418,6 +418,7 @@ public:
     QString              query() const;
     DatabaseSearch::Type type() const;
     bool                 isNormalSearch() const;
+    bool                 isAdvancedSearch() const;
     bool                 isKeywordSearch() const;
     bool                 isTimelineSearch() const;
 

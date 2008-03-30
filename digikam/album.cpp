@@ -518,6 +518,11 @@ bool SAlbum::isNormalSearch() const
     }
 }
 
+bool SAlbum::isAdvancedSearch() const
+{
+    return m_type == DatabaseSearch::AdvancedSearch;
+}
+
 bool SAlbum::isKeywordSearch() const
 {
     return m_type == DatabaseSearch::KeywordSearch;
