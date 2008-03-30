@@ -76,7 +76,7 @@ TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album, bool create)
     else        setCaption(i18n("Edit Tag"));
 
     QGridLayout* grid = new QGridLayout(plainPage(), 1, 1, 0, spacingHint());
-    QLabel *logo = new QLabel(plainPage());
+    QLabel *logo      = new QLabel(plainPage());
     KIconLoader* iconLoader = KApplication::kApplication()->iconLoader();
     logo->setPixmap(iconLoader->loadIcon("digikam", KIcon::NoGroup, 96, KIcon::DefaultState, 0, true));    
 
@@ -88,6 +88,7 @@ TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album, bool create)
 
     if (create) topLabel->setText( i18n("<qt><b>Create New Tag in <i>\"%1\"</i></b></qt>").arg(tagName));
     else        topLabel->setText( i18n("<qt><b>Tag <i>\"%1\"</i> Properties </b></qt>").arg(tagName));
+
     topLabel->setAlignment(Qt::AlignAuto | Qt::AlignVCenter | Qt::SingleLine);
     topLayout->addWidget(topLabel);
 
@@ -122,14 +123,14 @@ TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album, bool create)
 
     QSpacerItem* spacer = new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
     
-    gl->addWidget(titleLabel, 0, 0);
+    gl->addWidget(titleLabel,            0, 0);
     gl->addMultiCellWidget(d->titleEdit, 0, 0, 1, 3);
-    gl->addWidget(iconTextLabel, 1, 0);
-    gl->addWidget(d->iconButton, 1, 1);
-    gl->addWidget(d->resetIconButton, 1, 2);
+    gl->addWidget(iconTextLabel,         1, 0);
+    gl->addWidget(d->iconButton,         1, 1);
+    gl->addWidget(d->resetIconButton,    1, 2);
     gl->addItem(spacer, 1, 3);
     
-    grid->addMultiCellWidget(logo, 0, 0, 0, 0);
+    grid->addMultiCellWidget(logo,      0, 0, 0, 0);
     grid->addMultiCellLayout(topLayout, 0, 1, 1, 1);
     grid->setRowStretch(1, 10);
 
