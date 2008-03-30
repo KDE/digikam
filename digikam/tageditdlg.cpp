@@ -24,12 +24,9 @@
 
 // Qt includes.
 
-#include <QComboBox>
 #include <QLabel>
-#include <QFrame>
 #include <QLayout>
 #include <QGridLayout>
-#include <QVBoxLayout>
 
 // KDE includes.
 
@@ -39,11 +36,14 @@
 #include <kapplication.h>
 #include <kdeversion.h>
 #include <kiconloader.h>
+#include <kseparator.h>
 
 // Local includes.
 
 #include "album.h"
+#include "albummanager.h"
 #include "syncjob.h"
+#include "searchtextbar.h"
 #include "tageditdlg.h"
 #include "tageditdlg.moc"
 
@@ -59,14 +59,22 @@ public:
         titleEdit       = 0;
         iconButton      = 0;
         resetIconButton = 0;
+        mainRootAlbum   = 0;
+        topLabel        = 0;
+        create          = false;
     }
 
-    QString      icon;
+    bool           create;
 
-    QPushButton *iconButton;
-    QPushButton *resetIconButton;
+    QLabel        *topLabel;
 
-    KLineEdit   *titleEdit;
+    QString        icon;
+
+    QPushButton   *iconButton;
+    QPushButton   *resetIconButton;
+
+    TAlbum        *mainRootAlbum;
+    SearchTextBar *titleEdit;
 };
 
 TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album, bool create)
@@ -81,81 +89,79 @@ TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album, bool create)
     else        setCaption(i18n("Edit Tag"));
 
     d = new TagEditDlgPriv;
+    d->mainRootAlbum = album;
+    d->create        = create;
 
-    QWidget *widget = new QWidget(this);
-    setMainWidget(widget);
+    QWidget *page = new QWidget(this);
+    setMainWidget(page);
 
     // --------------------------------------------------------
 
-    QGridLayout* grid = new QGridLayout(widget);
+    QGridLayout* grid = new QGridLayout(page);
 
-    QLabel *logo            = new QLabel(widget);
+    QLabel *logo            = new QLabel(page);
     KIconLoader* iconLoader = KIconLoader::global();
     logo->setPixmap(iconLoader->loadIcon("digikam", KIconLoader::NoGroup, 96));    
 
-    QVBoxLayout *topLayout = new QVBoxLayout();
+    d->topLabel = new QLabel(page);
+    d->topLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    d->topLabel->setWordWrap(false);
 
-    QLabel *topLabel = new QLabel(widget);
-    QString tagName  = album->prettyUrl();
-    if (tagName.endsWith("/")) tagName.truncate(tagName.length()-1);
-
-    if (create) topLabel->setText( i18n("<qt><b>Create New Tag in <i>\"%1\"</i></b></qt>").arg(tagName));
-    else        topLabel->setText( i18n("<qt><b>Tag <i>\"%1\"</i> Properties </b></qt>").arg(tagName));
-
-    topLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    topLabel->setWordWrap(false);
+    KSeparator *line = new KSeparator(Qt::Horizontal, page);
 
     // --------------------------------------------------------
 
-    QFrame *topLine = new QFrame(widget);
-    topLine->setFrameShape(QFrame::HLine);
-    topLine->setFrameShadow(QFrame::Sunken);
-
-    topLayout->addWidget(topLabel);
-    topLayout->addWidget(topLine);
-    topLayout->setMargin(KDialog::spacingHint());
-    topLayout->setSpacing(0);
-
-    // --------------------------------------------------------
-
-    QGridLayout *gl = new QGridLayout();
-    topLayout->addLayout(gl);
-
-    QLabel *titleLabel = new QLabel(widget);
+    QLabel *titleLabel = new QLabel(page);
     titleLabel->setText(i18n("&Title:"));
 
-    d->titleEdit = new KLineEdit(widget);
-    d->titleEdit->setClearButtonShown(true);
-    d->titleEdit->setText(album->title());
+    d->titleEdit = new SearchTextBar(page, i18n("Enter tag name here..."));
     titleLabel->setBuddy(d->titleEdit);
     setFocusProxy(d->titleEdit);
 
-    QLabel *iconTextLabel = new QLabel(widget);
+    if (d->create) 
+    {
+        AlbumList tList = AlbumManager::instance()->allTAlbums();
+        for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
+        {   
+            TAlbum *tag = dynamic_cast<TAlbum*>(*it);
+            d->titleEdit->completionObject()->addItem(tag->tagPath());
+        }
+    }
+    else
+    {
+        d->titleEdit->setText(d->mainRootAlbum->title());
+    }
+
+    QLabel *iconTextLabel = new QLabel(page);
     iconTextLabel->setText(i18n("&Icon:"));
 
-    d->iconButton = new QPushButton(widget);
+    d->iconButton = new QPushButton(page);
     d->iconButton->setFixedSize(40, 40);
     iconTextLabel->setBuddy(d->iconButton);
-    
-    d->resetIconButton = new QPushButton(KIcon("view-refresh"), i18n("Reset"), widget);
-    if (create) d->resetIconButton->hide();
 
-    QSpacerItem* spacer = new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    // In create mode, by default assign the icon of the parent (if not root) to this new tag.
+    if (create && !album->isRoot())
+        d->icon = album->icon();
+    else
+        d->icon = album->icon();
+
+    d->iconButton->setIcon(SyncJob::getTagThumbnail(album));
+    
+    d->resetIconButton = new QPushButton(KIcon("view-refresh"), i18n("Reset"), page);
+    if (create) d->resetIconButton->hide();
 
     // --------------------------------------------------------
     
-    gl->addWidget(titleLabel,         0, 0, 1, 1);
-    gl->addWidget(d->titleEdit,       0, 1, 1, 3);
-    gl->addWidget(iconTextLabel,      1, 0, 1, 1);
-    gl->addWidget(d->iconButton,      1, 1, 1, 1);
-    gl->addWidget(d->resetIconButton, 1, 2, 1, 1);
-    gl->addItem(spacer,               1, 3, 1, 1);
-    gl->setMargin(KDialog::spacingHint());
-    gl->setSpacing(KDialog::spacingHint());
-    
-    grid->addWidget(logo,      0, 0, 1, 1);
-    grid->addLayout(topLayout, 0, 1, 2, 1);
-    grid->setRowStretch(1, 10);
+    grid->addWidget(logo,               0, 0, 4, 1);
+    grid->addWidget(d->topLabel,        0, 1, 1, 4);
+    grid->addWidget(line,               1, 1, 1, 4);
+    grid->addWidget(titleLabel,         2, 1, 1, 1);
+    grid->addWidget(d->titleEdit,       2, 2, 1, 4- 2+1);
+    grid->addWidget(iconTextLabel,      3, 1, 1, 1);
+    grid->addWidget(d->iconButton,      3, 2, 1, 1);
+    grid->addWidget(d->resetIconButton, 3, 3, 1, 1);
+    grid->setColumnStretch(4, 10);
+    grid->setRowStretch(4, 10);
     grid->setMargin(0);
     grid->setSpacing(KDialog::spacingHint());
 
@@ -172,16 +178,8 @@ TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album, bool create)
 
     // --------------------------------------------------------
 
-    // In create mode, by default assign the icon of the parent (if not root) to this new tag.
-    if (create && !album->isRoot())
-        d->icon = album->icon();
-    else
-        d->icon = album->icon();
-
-    d->iconButton->setIcon(SyncJob::getTagThumbnail(album));
-
-    enableButtonOk(!d->titleEdit->text().isEmpty());
-    adjustSize();
+    resize(400, 200);
+    slotTitleChanged(d->titleEdit->text());
 }
 
 TagEditDlg::~TagEditDlg()
@@ -220,6 +218,12 @@ void TagEditDlg::slotIconChange()
 
 void TagEditDlg::slotTitleChanged(const QString& newtitle)
 {
+    QString tagName = d->mainRootAlbum->tagPath();
+    if (tagName.endsWith("/")) tagName.truncate(tagName.length()-1);
+
+    if (d->create) d->topLabel->setText(i18n("<qt><b>Create New Tag in<br><i>\"%1\"</i></b></qt>").arg(tagName));
+    else           d->topLabel->setText(i18n("<qt><b>Properties of Tag<br><i>\"%1\"</i></b></qt>").arg(tagName));
+
     enableButtonOk(!newtitle.isEmpty());
 }
 
