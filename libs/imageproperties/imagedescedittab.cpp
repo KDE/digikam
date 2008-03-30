@@ -1750,15 +1750,24 @@ void ImageDescEditTab::slotCreateNewTag()
                 root = item->album();
        
             QStringList tagsList = QStringList::split("/", hierarchy);
+            DDebug() << tagsList << endl;
+
             if (!tagsList.isEmpty())
             {
                 for (QStringList::iterator it2 = tagsList.begin(); it2 != tagsList.end(); ++it2)
-                {    
+                {   
+                    QString tagPath;
                     QString tag = (*it2).stripWhiteSpace();
+                    if (root->isRoot())
+                        tagPath = QString("/%1").arg(tag);
+                    else
+                        tagPath = QString("%1/%2").arg(root->tagPath()).arg(tag);
+                    DDebug() << tag << " :: " << tagPath << endl;
+
                     if (!tag.isEmpty())
                     {
                         // Tag already exist ?
-                        TAlbum* album = AlbumManager::instance()->findTAlbum(tag);
+                        TAlbum* album = AlbumManager::instance()->findTAlbum(tagPath);
                         if (!album)
                             root = AlbumManager::instance()->createTAlbum(root, tag, QString("tag"), errMsg);
                         else
