@@ -1742,13 +1742,10 @@ void ImageDescEditTab::slotCreateNewTag()
     if (tagStr.isEmpty()) return;
 
     // Check root album to use as parent of new tag.
-    TAlbum *mainRoot          = 0;
+    TAlbum *mainRootAlbum = 0;
     TAlbumCheckListItem* item = dynamic_cast<TAlbumCheckListItem*>(d->tagsView->selectedItem());
-
-    if (tagStr.startsWith("/") || !item)
-        mainRoot = AlbumManager::instance()->findTAlbum(0);
-    else
-        mainRoot = item->album();
+    if (item) 
+        mainRootAlbum = item->album();
 
     // Check if new tags are include in a list of tags hierarchy separated by ','.
     // Ex: /Country/France/people,/City/France/Paris
@@ -1769,7 +1766,7 @@ void ImageDescEditTab::slotCreateNewTag()
             if (hierarchy.startsWith("/") || !item)
                 root = AlbumManager::instance()->findTAlbum(0);
             else
-                root = item->album();
+                root = mainRootAlbum;
        
             QStringList tagsList = hierarchy.split("/", QString::SkipEmptyParts);
             DDebug() << tagsList << endl;
