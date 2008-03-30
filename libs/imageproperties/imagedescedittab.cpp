@@ -1719,7 +1719,7 @@ void ImageDescEditTab::slotCreateNewTag()
     QString tagStr = d->newTagEdit->text();
     if (tagStr.isEmpty()) return;
 
-    TAlbum mainRootAlbum = 0;
+    TAlbum *mainRootAlbum = 0;
     TAlbumCheckListItem* item = dynamic_cast<TAlbumCheckListItem*>(d->tagsView->selectedItem());
     if (item) 
         mainRootAlbum = item->album();
