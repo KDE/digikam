@@ -175,7 +175,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     d->tagsSearchBar   = new SearchTextBar(tagsSearch);
 
     d->assignedTagsBtn = new QToolButton(tagsSearch);
-    QToolTip::add(d->assignedTagsBtn, i18n("Already assigned tags"));
+    QToolTip::add(d->assignedTagsBtn, i18n("Tags already assigned"));
     d->assignedTagsBtn->setIconSet(kapp->iconLoader()->loadIcon("tag-assigned",
                                    KIcon::NoGroup, KIcon::SizeSmall, 
                                    KIcon::DefaultState, 0, true));
@@ -420,13 +420,13 @@ void ImageDescEditTab::slotChangingItems()
                         d->currInfos.count());
 
             if (d->hub.commentChanged())
-                text += i18n("<li>the comment</li>");
+                text += i18n("<li>comment</li>");
             if (d->hub.dateTimeChanged())
-                text += i18n("<li>the date</li>");
+                text += i18n("<li>date</li>");
             if (d->hub.ratingChanged())
-                text += i18n("<li>the rating</li>");
+                text += i18n("<li>rating</li>");
             if (d->hub.tagsChanged())
-                text += i18n("<li>the tags</li>");
+                text += i18n("<li>tags</li>");
 
             text += "</ul><p>";
 
