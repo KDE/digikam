@@ -2,6 +2,9 @@ digiKam 0.9.4-beta3 - Release date: 2008-04-??
 
 NEW FEATURES:
 
+General        : Creation of tags simplified everywhere. Multiple Tags hierarchy can be 
+                 created at the same time. Tags creation dialog re-designed.
+		 
 Showfoto       : new open image file dialog with photo thumbnail/informations.
 
 ImageEditor    : new saveas image file dialog with photo thumbnail/informations.
@@ -17,7 +20,8 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 007 ==> 118209 : digiKam hotplug script kde user detection problem.
 008 ==> 138766 : JPEG Rotations: Give a warning when doing Lossy rotations (and offer to do lossless when applicable).
 009 ==> 156007 : Canon Raw+Jpg Locks up download image window during thumbnail retrieval.
-010 ==> 
+010 ==> 114465 : Simpler entry of tags.
+011 ==> 
 
 **********************************************************************************************
 
