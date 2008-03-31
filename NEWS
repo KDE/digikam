@@ -2,12 +2,14 @@ digiKam 0.9.4-beta3 - Release date: 2008-04-??
 
 NEW FEATURES:
 
+AlbumGUI       : Auto-completion in all search text filter.
+
 General        : Creation of tags simplified everywhere. Multiple Tags hierarchy can be 
                  created at the same time. Tags creation dialog re-designed.
 		 
-Showfoto       : new open image file dialog with photo thumbnail/informations.
+Showfoto       : New open image file dialog with photo thumbnail/informations.
 
-ImageEditor    : new saveas image file dialog with photo thumbnail/informations.
+ImageEditor    : New saveas image file dialog with photo thumbnail/informations.
 
 digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
