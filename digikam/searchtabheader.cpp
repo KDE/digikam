@@ -1,0 +1,492 @@
+/* ============================================================
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2008-02-26
+ * Description : Upper widget in the search sidebar
+ * 
+ * Copyright (C) 2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * ============================================================ */
+
+// Qt includes
+
+#include <QGroupBox>
+#include <QStackedLayout>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QPushButton>
+#include <QTimer>
+#include <QLabel>
+
+// KDE includes
+
+#include <klineedit.h>
+#include <kurllabel.h>
+#include <klocale.h>
+#include <kdialog.h>
+#include <kiconloader.h>
+#include <kinputdialog.h>
+#include <ksqueezedtextlabel.h>
+
+// Local includes
+
+#include "ddebug.h"
+#include "album.h"
+#include "albummanager.h"
+#include "searchwindow.h"
+#include "searchfolderview.h"
+#include "searchxml.h"
+#include "searchtabheader.h"
+#include "searchtabheader.moc"
+
+namespace Digikam
+{
+
+
+class SearchTabHeaderPriv
+{
+public:
+
+    SearchTabHeaderPriv()
+    {
+        newSearchWidget         = 0;
+        saveAsWidget            = 0;
+        editSimpleWidget        = 0;
+        editAdvancedWidget      = 0;
+        lowerArea               = 0;
+        keywordEdit             = 0;
+        advancedEditLabel       = 0;
+        saveNameEdit            = 0;
+        saveButton              = 0;
+        storedKeywordEditName   = 0;
+        storedKeywordEdit       = 0;
+        storedAdvancedEditName  = 0;
+        storedAdvancedEditLabel = 0;
+        keywordEditTimer        = 0;
+        storedKeywordEditTimer  = 0;
+        searchWindow            = 0;
+        currentAlbum            = 0;
+    }
+
+    QGroupBox          *newSearchWidget;
+    QGroupBox          *saveAsWidget;
+    QGroupBox          *editSimpleWidget;
+    QGroupBox          *editAdvancedWidget;
+
+    QStackedLayout     *lowerArea;
+
+    KLineEdit          *keywordEdit;
+    QPushButton        *advancedEditLabel;
+
+    KLineEdit          *saveNameEdit;
+    QPushButton        *saveButton;
+
+    KSqueezedTextLabel *storedKeywordEditName;
+    KLineEdit          *storedKeywordEdit;
+    KSqueezedTextLabel *storedAdvancedEditName;
+    QPushButton        *storedAdvancedEditLabel;
+
+    QTimer             *keywordEditTimer;
+    QTimer             *storedKeywordEditTimer;
+
+    SearchWindow       *searchWindow;
+
+    SAlbum             *currentAlbum;
+
+    QString             oldKeywordContent;
+    QString             oldStoredKeywordContent;
+
+};
+
+SearchTabHeader::SearchTabHeader(QWidget *parent)
+    : QWidget(parent)
+{
+    d = new SearchTabHeaderPriv;
+
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+
+    // upper part
+    d->newSearchWidget = new QGroupBox;
+    mainLayout->addWidget(d->newSearchWidget);
+
+    // lower part
+    d->lowerArea = new QStackedLayout;
+    mainLayout->addLayout(d->lowerArea);
+
+    d->saveAsWidget       = new QGroupBox;
+    d->editSimpleWidget   = new QGroupBox;
+    d->editAdvancedWidget = new QGroupBox;
+    d->lowerArea->addWidget(d->saveAsWidget);
+    d->lowerArea->addWidget(d->editSimpleWidget);
+    d->lowerArea->addWidget(d->editAdvancedWidget);
+
+    // ------------------- //
+
+    // upper part
+
+    d->newSearchWidget->setTitle(i18n("New Search"));
+    QGridLayout *grid1 = new QGridLayout;
+
+    QLabel *searchLabel = new QLabel(i18n("Search:"));
+    d->keywordEdit = new KLineEdit;
+    d->keywordEdit->setClearButtonShown(true);
+
+    d->advancedEditLabel = new QPushButton(i18n("Advanced Search..."));
+
+    grid1->addWidget(searchLabel, 0, 0);
+    grid1->addWidget(d->keywordEdit, 0, 1);
+    grid1->addWidget(d->advancedEditLabel, 1, 1);
+
+    d->newSearchWidget->setLayout(grid1);
+
+    // ------------------- //
+
+    // lower part, variant 1
+
+    d->saveAsWidget->setTitle(i18n("Save Current Search"));
+
+    QHBoxLayout *hbox1 = new QHBoxLayout;
+    hbox1->setMargin(0);
+    hbox1->setSpacing(KDialog::spacingHint());
+
+    d->saveNameEdit    = new KLineEdit;
+    d->saveNameEdit->setWhatsThis(i18n("<p>Enter a name for the current search to save it in the "
+                                       "\"Searches\" view"));
+
+    d->saveButton  = new QPushButton(QString());
+    d->saveButton->setIcon(SmallIcon("document-save"));
+    d->saveButton->setToolTip(i18n("Save current search to a new virtual Album"));
+    d->saveButton->setWhatsThis(i18n("<p>If you press this button, the current search "
+                                     "will be saved to a new virtual Search Album using the name "
+                                     "set on the left side."));
+
+    hbox1->addWidget(d->saveNameEdit);
+    hbox1->addWidget(d->saveButton);
+    d->saveAsWidget->setLayout(hbox1);
+
+    // ------------------- //
+
+    // lower part, variant 2
+    d->editSimpleWidget->setTitle(i18n("Edit Stored Search"));
+
+    QVBoxLayout *vbox1 = new QVBoxLayout;
+
+    d->storedKeywordEditName = new KSqueezedTextLabel;
+    d->storedKeywordEditName->setTextElideMode(Qt::ElideRight);
+    d->storedKeywordEdit = new KLineEdit;
+
+    vbox1->addWidget(d->storedKeywordEditName);
+    vbox1->addWidget(d->storedKeywordEdit);
+    d->editSimpleWidget->setLayout(vbox1);
+
+    // ------------------- //
+
+    // lower part, variant 3
+    d->editAdvancedWidget->setTitle(i18n("Edit Stored Search"));
+
+    QVBoxLayout *vbox2 = new QVBoxLayout;
+
+    d->storedAdvancedEditName = new KSqueezedTextLabel;
+    d->storedAdvancedEditName->setTextElideMode(Qt::ElideRight);
+    d->storedAdvancedEditLabel = new QPushButton(i18n("Edit..."));
+
+    vbox2->addWidget(d->storedAdvancedEditName);
+    vbox2->addWidget(d->storedAdvancedEditLabel);
+    d->editAdvancedWidget->setLayout(vbox2);
+
+    // ------------------- //
+
+    // main layout
+    setLayout(mainLayout);
+
+    // ------------------- //
+
+    // timers
+    d->keywordEditTimer = new QTimer(this);
+    d->keywordEditTimer->setSingleShot(true);
+    d->keywordEditTimer->setInterval(800);
+
+    d->storedKeywordEditTimer = new QTimer(this);
+    d->storedKeywordEditTimer->setSingleShot(true);
+    d->storedKeywordEditTimer->setInterval(800);
+
+    // ------------------- //
+
+    connect(d->keywordEdit, SIGNAL(textEdited(const QString &)),
+            d->keywordEditTimer, SLOT(start()));
+
+    connect(d->keywordEditTimer, SIGNAL(timeout()),
+            this, SLOT(keywordChanged()));
+
+    connect(d->keywordEdit, SIGNAL(editingFinished()),
+            this, SLOT(keywordChanged()));
+
+    connect(d->advancedEditLabel, SIGNAL(clicked()),
+            this, SLOT(editCurrentAdvancedSearch()));
+
+    connect(d->saveNameEdit, SIGNAL(returnPressed()),
+            this, SLOT(saveSearch()));
+
+    connect(d->saveButton, SIGNAL(clicked()),
+            this, SLOT(saveSearch()));
+
+    connect(d->storedKeywordEditTimer, SIGNAL(timeout()),
+            this, SLOT(storedKeywordChanged()));
+
+    connect(d->storedKeywordEdit, SIGNAL(editingFinished()),
+            this, SLOT(storedKeywordChanged()));
+
+    connect(d->storedAdvancedEditLabel, SIGNAL(clicked()),
+            this, SLOT(editStoredAdvancedSearch()));
+
+}
+
+SearchTabHeader::~SearchTabHeader()
+{
+    delete d->searchWindow;
+    delete d;
+}
+
+SearchWindow *SearchTabHeader::searchWindow()
+{
+    if (!d->searchWindow)
+    {
+        DDebug() << "Creating search window";
+        // Create the advanced search edit window, deferred from contructor
+        d->searchWindow = new SearchWindow;
+
+        connect(d->searchWindow, SIGNAL(searchEdited(int, const QString &)),
+                this, SLOT(advancedSearchEdited(int, const QString &)));
+    }
+    return d->searchWindow;
+}
+
+void SearchTabHeader::selectedSearchChanged(SAlbum *album)
+{
+    // Signal from SearchFolderView that a search has been selected.
+
+    if (d->currentAlbum == album)
+        return;
+
+    d->currentAlbum = album;
+
+    if (!album)
+    {
+        d->lowerArea->setCurrentWidget(d->saveAsWidget);
+        d->lowerArea->setEnabled(false);
+    }
+    else
+    {
+        d->lowerArea->setEnabled(true);
+
+        if (album->title() == SearchFolderView::currentSearchViewSearchName())
+        {
+            d->lowerArea->setCurrentWidget(d->saveAsWidget);
+            if (album->isKeywordSearch())
+                d->keywordEdit->setText(keywordsFromQuery(album->query()));
+        }
+        else if (album->isKeywordSearch())
+        {
+            d->lowerArea->setCurrentWidget(d->editSimpleWidget);
+            d->storedKeywordEditName->setText(album->title());
+            d->storedKeywordEdit->setText(keywordsFromQuery(album->query()));
+        }
+        else
+        {
+            d->lowerArea->setCurrentWidget(d->editAdvancedWidget);
+            d->storedAdvancedEditName->setText(album->title());
+        }
+    }
+}
+
+void SearchTabHeader::editSearch(SAlbum *album)
+{
+    if (!album)
+        return;
+
+    if (album->isAdvancedSearch())
+    {
+        SearchWindow *window = searchWindow();
+        window->readSearch(album->id(), album->query());
+        window->show();
+    }
+    else if (album->isKeywordSearch())
+    {
+        d->storedKeywordEdit->selectAll();
+    }
+}
+
+void SearchTabHeader::newKeywordSearch()
+{
+    d->keywordEdit->setText(QString());
+    d->keywordEdit->setFocus();
+}
+
+void SearchTabHeader::newAdvancedSearch()
+{
+    SearchWindow *window = searchWindow();
+    window->reset();
+    window->show();
+}
+
+void SearchTabHeader::keywordChanged()
+{
+    QString keywords = d->keywordEdit->text();
+    if (d->oldKeywordContent == keywords)
+        return;
+    else
+        d->oldKeywordContent = keywords;
+
+    SAlbum *album = AlbumManager::instance()->findSAlbum(SearchFolderView::currentSearchViewSearchName());
+    if (album)
+    {
+        AlbumManager::instance()->updateSAlbum(album, queryFromKeywords(keywords),
+                                               SearchFolderView::currentSearchViewSearchName(),
+                                               DatabaseSearch::KeywordSearch);
+    }
+    else
+    {
+        album = AlbumManager::instance()->createSAlbum(SearchFolderView::currentSearchViewSearchName(),
+                                                       DatabaseSearch::KeywordSearch, queryFromKeywords(keywords));
+    }
+
+    emit searchShallBeSelected(album);
+}
+
+void SearchTabHeader::editCurrentAdvancedSearch()
+{
+    SAlbum *album = AlbumManager::instance()->findSAlbum(SearchFolderView::currentSearchViewSearchName());
+    SearchWindow *window = searchWindow();
+    if (album)
+        window->readSearch(album->id(), album->query());
+    else
+        window->reset();
+    window->show();
+}
+
+void SearchTabHeader::saveSearch()
+{
+    // Only applicable if current album is Search View Current Album
+    // Save this album as a user names search album
+
+    QString name = d->saveNameEdit->text();
+
+    if (name.isEmpty())
+    {
+        // passive popup
+        return;
+    }
+
+    SAlbum *oldAlbum = AlbumManager::instance()->findSAlbum(name);
+    while (oldAlbum)
+    {
+        QString label = i18n( "Search name already exists."
+                              "\nPlease enter a new name:" );
+        bool ok;
+        QString newTitle = KInputDialog::getText( i18n("Name exists"), label,
+                                                  name, &ok, this );
+        if (!ok)
+            return;
+
+        name  = newTitle;
+        oldAlbum = AlbumManager::instance()->findSAlbum(name);
+    }
+
+    SAlbum *newAlbum = AlbumManager::instance()->createSAlbum(name, d->currentAlbum->type(), d->currentAlbum->query());
+    emit searchShallBeSelected(newAlbum);
+}
+
+void SearchTabHeader::storedKeywordChanged()
+{
+    QString keywords = d->storedKeywordEdit->text();
+    if (d->oldStoredKeywordContent == keywords)
+        return;
+    else
+        d->oldStoredKeywordContent = keywords;
+
+    if (d->currentAlbum)
+    {
+        AlbumManager::instance()->updateSAlbum(d->currentAlbum, queryFromKeywords(keywords));
+        emit searchShallBeSelected(d->currentAlbum);
+    }
+}
+
+void SearchTabHeader::editStoredAdvancedSearch()
+{
+    if (d->currentAlbum)
+    {
+        SearchWindow *window = searchWindow();
+        window->readSearch(d->currentAlbum->id(), d->currentAlbum->query());
+        window->show();
+    }
+}
+
+void SearchTabHeader::advancedSearchEdited(int id, const QString &query)
+{
+    SAlbum *album = AlbumManager::instance()->findSAlbum(id);
+    if (album)
+    {
+        AlbumManager::instance()->updateSAlbum(album, query, album->title(), DatabaseSearch::AdvancedSearch);
+        emit searchShallBeSelected(album);
+    }
+}
+
+QString SearchTabHeader::queryFromKeywords(const QString &keywords)
+{
+    // get groups with quotation marks
+    QStringList quotationMarkList = keywords.split('"', QString::KeepEmptyParts);
+
+    // split down to single words
+    QStringList keywordList;
+    int quotationMarkCount = (keywords.startsWith('"') ? 1 : 0);
+    foreach (QString group, quotationMarkList)
+    {
+        if (quotationMarkCount % 2)
+        {
+            // inside marks: leave as is
+            if (!group.isEmpty())
+                keywordList << group;
+        }
+        else
+        {
+            // not in quotation marks: split by whitespace
+            keywordList << group.split(QRegExp("\\s+"), QString::SkipEmptyParts);
+        }
+
+        quotationMarkCount++;
+    }
+
+    // create xml
+    KeywordSearchWriter writer;
+    return writer.xml(keywordList);
+}
+
+QString SearchTabHeader::keywordsFromQuery(const QString &query)
+{
+    KeywordSearchReader reader(query);
+    QStringList keywordList = reader.keywords();
+    // group keyword with spaces in quotation marks
+    for (QStringList::iterator it = keywordList.begin(); it != keywordList.end(); ++it)
+    {
+        if ((*it).contains(' '))
+            *it = (*it).prepend('"').append('"');
+    }
+    // join in a string
+    return keywordList.join(" ");
+}
+
+}
+
