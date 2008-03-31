@@ -42,7 +42,6 @@ class QListViewItem;
 
 namespace Digikam
 {
-class AlbumIconItem;
 class TAlbumCheckListItem;
 class ImageInfo;
 class ImageDescEditTabPriv;
