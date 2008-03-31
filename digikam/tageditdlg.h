@@ -27,16 +27,19 @@
 
 // Qt includes.
 
+#include <QMap>
 #include <QString>
 
 // KDE includes.
 
 #include <kdialog.h>
 
+// Local includes.
+
+#include "albummanager.h"
+
 namespace Digikam
 {
-
-class TAlbum;
 class TagEditDlgPriv;
 
 class TagEditDlg : public KDialog
@@ -53,6 +56,18 @@ public:
 
     static bool tagEdit(QWidget *parent, TAlbum* album, QString& title, QString& icon);
     static bool tagCreate(QWidget *parent, TAlbum* album, QString& title, QString& icon);
+
+    /** Create a list of new Tag album using a list of tags hierarchies separated by ",".
+        A hierarchy of tags is a string path of tags name separated by "/".
+        If a hierarchy start by "/" or if mainRootAlbum is null, it will be created from 
+        root tag album, else it will be created from mainRootAlbum as parent album.
+        'errMap' is Map of TAlbum path and error message if tag creation failed.
+        Return the list of created Albums.
+    */
+    static AlbumList createTAlbum(TAlbum *mainRootAlbum, const QString& tagStr, const QString& icon,
+                                  QMap<QString, QString>& errMap);
+
+    static void showtagsListCreationError(QWidget* parent, const QMap<QString, QString>& errMap);
 
 private slots:
 

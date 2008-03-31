@@ -36,13 +36,12 @@
 
 #include "digikam_export.h"
 #include "imageinfolist.h"
+#include "albummanager.h"
 
 class Q3ListViewItem;
 
 namespace Digikam
 {
-class Album;
-class TAlbum;
 class TAlbumCheckListItem;
 class ImageInfo;
 class ImageDescEditTabPriv;
@@ -84,8 +83,7 @@ private:
     void updateDate();
     void updateRecentTags();
 
-    TAlbum* tagNew(TAlbum* parAlbum, const QString& _title=QString(), const QString& _icon=QString(), 
-                   bool setOn=true, bool giveFocus=true) const;
+    void tagNew(TAlbum* parAlbum, const QString& _title=QString(), const QString& _icon=QString()) const;
     void tagEdit(TAlbum* album);
     void tagDelete(TAlbum *album);
 

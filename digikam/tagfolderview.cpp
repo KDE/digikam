@@ -621,16 +621,15 @@ void TagFolderView::tagNew( TagFolderViewItem *item, const QString& _title, cons
             return;
     }
 
-    QString errMsg;
-    TAlbum* newAlbum = d->albumMan->createTAlbum(parent, title, icon, errMsg);
+    QMap<QString, QString> errMap;
+    AlbumList tList = TagEditDlg::createTAlbum(parent, title, icon, errMap);
+    TagEditDlg::showtagsListCreationError(kapp->activeWindow(), errMap);
 
-    if( !newAlbum )
-        KMessageBox::error(0, errMsg);
-    else
+    for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
     {
-        TagFolderViewItem *item = (TagFolderViewItem*)newAlbum->extraData(this);
-        if ( item )
-            ensureItemVisible( item );
+        TagFolderViewItem* item = (TagFolderViewItem*)(*it)->extraData(this);
+        if (item)
+            ensureItemVisible(item);
     }
 }
 

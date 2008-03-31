@@ -604,16 +604,12 @@ void TagsPopupMenu::slotAddTag(QAction *action)
     if (!TagEditDlg::tagCreate(kapp->activeWindow(), parent, title, icon))
         return;
 
-    QString errMsg;
-    TAlbum* newAlbum = man->createTAlbum(parent, title, icon, errMsg);
+    QMap<QString, QString> errMap;
+    AlbumList tList = TagEditDlg::createTAlbum(parent, title, icon, errMap);
+    TagEditDlg::showtagsListCreationError(kapp->activeWindow(), errMap);
 
-    if( !newAlbum )
-    {
-        KMessageBox::error(this, errMsg);
-        return;
-    }
-
-    emit signalTagActivated(newAlbum->id());
+    for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
+        emit signalTagActivated((*it)->id());
 }
 
 void TagsPopupMenu::slotTagThumbnail(Album *album, const QPixmap& pix)
