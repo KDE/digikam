@@ -44,21 +44,29 @@ public:
     SearchFolderView(QWidget* parent);
     ~SearchFolderView();
 
+    /*
     void quickSearchNew();
     void extendedSearchNew();
 
     void quickSearchEdit(SAlbum* album);
     void extendedSearchEdit(SAlbum* album);
+    */
 
     void searchDelete(SAlbum* album);
 
+    static QString currentSearchViewSearchName();
+
 signals:
+
+    void editSearch(SAlbum *album);
+    void selectedSearchChanged(SAlbum *album);
 
     void signalTextSearchFilterMatch(bool);
 
 public slots:
 
     void slotTextSearchFilterChanged(const QString&);
+    void slotSelectSearch(SAlbum *album);
 
 private slots:
 
@@ -67,11 +75,11 @@ private slots:
     void slotSelectionChanged();
     void slotContextMenu(Q3ListViewItem*, const QPoint&, int);
     void slotDoubleClicked(Q3ListViewItem*, const QPoint&, int);
-    
+
 protected:
-    
-    void selectItem(int id);    
-    
+
+    void selectItem(int id);
+
 private:
 
     bool checkName(KUrl& url);
@@ -80,8 +88,9 @@ private:
 private:
 
     SearchFolderItem* m_lastAddedItem;
+    SearchFolderItem* m_currentSearchViewSearchItem;
 };
-    
+
 }  // namespace Digikam
 
 #endif /* SEARCHFOLDERVIEW_H */

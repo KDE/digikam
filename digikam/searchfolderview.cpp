@@ -44,6 +44,7 @@
 #include "album.h"
 #include "albummanager.h"
 #include "albumsettings.h"
+#include "ddebug.h"
 #include "searchquickdialog.h"
 #include "searchadvanceddialog.h"
 #include "folderitem.h"
@@ -75,8 +76,13 @@ public:
         if (!i)
             return 0;
 
-        if (text(0) == i18n("Last Search"))
+        SearchFolderItem *item = static_cast<SearchFolderItem*>(i);
+
+        if (m_album->title() == SearchFolderView::currentSearchViewSearchName())
             return -1;
+
+        if (item->m_album->title() == SearchFolderView::currentSearchViewSearchName())
+            return 1;
 
         return text(0).localeAwareCompare(i->text(0));
     }
@@ -89,6 +95,14 @@ public:
     SAlbum* album() const
     {
         return m_album;
+    }
+
+    void setCurrentSearchViewSearchTitle()
+    {
+        if (isSelected())
+            setText(0, i18n("Current Search"));
+        else
+            setText(0, i18n("Last Search"));
     }
 
 private:
@@ -104,6 +118,7 @@ SearchFolderView::SearchFolderView(QWidget* parent)
     setRootIsDecorated(false);
 
     m_lastAddedItem = 0;
+    m_currentSearchViewSearchItem = 0;
 
     connect(AlbumManager::instance(), SIGNAL(signalAlbumAdded(Album*)),
             this, SLOT(slotAlbumAdded(Album*)));
@@ -138,15 +153,16 @@ void SearchFolderView::slotTextSearchFilterChanged(const QString& filter)
     for (AlbumList::iterator it = sList.begin(); it != sList.end(); ++it)
     {
         SAlbum* salbum             = (SAlbum*)(*it);
+        if (!salbum->isNormalSearch())
+            continue;
+
         SearchFolderItem* viewItem = (SearchFolderItem*) salbum->extraData(this);
 
         // Check if a special url query exist to identify a SAlbum dedicaced to Date Search
         // used with TimeLine.
         KUrl url     = salbum->kurl();
-        QString type = url.queryItem("type");
 
-        if (salbum->title().toLower().contains(search) &&
-            type != QString("datesearch"))
+        if (salbum->title().toLower().contains(search))
         {
             atleastOneMatch = true;
 
@@ -165,6 +181,27 @@ void SearchFolderView::slotTextSearchFilterChanged(const QString& filter)
     emit signalTextSearchFilterMatch(atleastOneMatch);
 }
 
+void SearchFolderView::slotSelectSearch(SAlbum *salbum)
+{
+    if (!salbum)
+    {
+        clearSelection();
+        return;
+    }
+
+    SearchFolderItem* viewItem = (SearchFolderItem*) salbum->extraData(this);
+    if (viewItem)
+    {
+/*        if (viewItem->isSelected())
+            slotSelectionChanged();
+        else
+            setSelected(viewItem, true);*/
+        clearSelection();
+        setSelected(viewItem, true);
+    }
+}
+
+/*
 void SearchFolderView::quickSearchNew()
 {
     KUrl url;
@@ -298,6 +335,7 @@ void SearchFolderView::extendedSearchEdit(SAlbum* album)
     clearSelection();
     setSelected((SearchFolderItem*)(album->extraData(this)), true);
 }
+*/
 
 void SearchFolderView::searchDelete(SAlbum* album)
 {
@@ -318,6 +356,11 @@ void SearchFolderView::searchDelete(SAlbum* album)
     AlbumManager::instance()->deleteSAlbum(album);
 }
 
+QString SearchFolderView::currentSearchViewSearchName()
+{
+    return "_Current_Search_View_Search_";
+}
+
 void SearchFolderView::slotAlbumAdded(Album* a)
 {
     if (!a || a->type() != Album::SEARCH)
@@ -333,6 +376,12 @@ void SearchFolderView::slotAlbumAdded(Album* a)
     SearchFolderItem* item = new SearchFolderItem(this, album);
     item->setPixmap(0, SmallIcon("find", AlbumSettings::instance()->getDefaultTreeIconSize()));
     m_lastAddedItem = item;
+
+    if (album->title() == currentSearchViewSearchName())
+    {
+        m_currentSearchViewSearchItem = item;
+        item->setCurrentSearchViewSearchTitle();
+    }
 }
 
 void SearchFolderView::slotAlbumDeleted(Album* a)
@@ -374,13 +423,23 @@ void SearchFolderView::slotSelectionChanged()
     SearchFolderItem* searchItem = dynamic_cast<SearchFolderItem*>(selItem);
 
     if (!searchItem || !searchItem->album())
+    {
         AlbumManager::instance()->setCurrentAlbum(0);
+        emit selectedSearchChanged(0);
+    }
     else
+    {
         AlbumManager::instance()->setCurrentAlbum(searchItem->album());
+        emit selectedSearchChanged(searchItem->album());
+    }
+
+    if (m_currentSearchViewSearchItem)
+        m_currentSearchViewSearchItem->setCurrentSearchViewSearchTitle();
 }
 
 void SearchFolderView::slotContextMenu(Q3ListViewItem* item, const QPoint&, int)
 {
+    /*
     if (!item)
     {
         KMenu popmenu(this);
@@ -401,14 +460,17 @@ void SearchFolderView::slotContextMenu(Q3ListViewItem* item, const QPoint&, int)
         }
     }
     else
+    */
+    if (item)
     {
         SearchFolderItem* sItem = dynamic_cast<SearchFolderItem*>(item);
-        QAction *edtadvSearch   = 0;
+        // QAction *edtadvSearch   = 0;
 
         KMenu popmenu(this);
         popmenu.addTitle(SmallIcon("digikam"),  i18n("My Searches"));
-        QAction *edtsmpSearch = popmenu.addAction(SmallIcon("filefind"), i18n("Edit Search..."));
+        QAction *edtSearch = popmenu.addAction(SmallIcon("filefind"), i18n("Edit Search..."));
 
+        /*
         if ( sItem->album()->isKeywordSearch() )
         {
             edtadvSearch = popmenu.addAction(SmallIcon("find"), i18n("Edit as Advanced Search..."));
@@ -418,11 +480,15 @@ void SearchFolderView::slotContextMenu(Q3ListViewItem* item, const QPoint&, int)
         {
             popmenu.insertSeparator(edtsmpSearch);
         }
+        */
 
         QAction *delSearch = popmenu.addAction(SmallIcon("edit-delete"), i18n("Delete Search"));
+        if (item == m_currentSearchViewSearchItem)
+            delSearch->setEnabled(false);
         QAction *choice    = popmenu.exec(QCursor::pos());
         if (choice)
         {
+            /*
             if (choice == edtsmpSearch)
             {
                 if (sItem->album()->isKeywordSearch())
@@ -433,6 +499,11 @@ void SearchFolderView::slotContextMenu(Q3ListViewItem* item, const QPoint&, int)
             else if (choice == edtadvSearch)
             {
                 extendedSearchEdit(sItem->album());
+            }
+            */
+            if (choice == edtSearch)
+            {
+                emit editSearch(sItem->album());
             }
             else if (choice == delSearch)
             {
@@ -448,11 +519,14 @@ void SearchFolderView::slotDoubleClicked(Q3ListViewItem* item, const QPoint&, in
         return;
 
     SearchFolderItem* sItem = dynamic_cast<SearchFolderItem*>(item);
+    emit editSearch(sItem->album());
 
+    /*
     if (sItem->album()->isKeywordSearch())
         quickSearchEdit(sItem->album());
     else
         extendedSearchEdit(sItem->album());
+    */
 }
 
 void SearchFolderView::selectItem(int id)
