@@ -214,10 +214,15 @@ void TagEditDlg::slotIconChanged()
 void TagEditDlg::slotTitleChanged(const QString& newtitle)
 {
     QString tagName = d->mainRootAlbum->tagPath();
-    if (tagName.endsWith("/")) tagName.truncate(tagName.length()-1);
+    if (tagName.endsWith("/") && !d->mainRootAlbum->isRoot()) 
+        tagName.truncate(tagName.length()-1);
 
-    if (d->create) d->topLabel->setText(i18n("<qt><b>Create New Tag in<br><i>\"%1\"</i></b></qt>").arg(tagName));
-    else           d->topLabel->setText(i18n("<qt><b>Properties of Tag<br><i>\"%1\"</i></b></qt>").arg(tagName));
+    if (d->create) 
+        d->topLabel->setText(i18n("<qt><b>Create New Tag in<br>"
+                                  "<i>\"%1\"</i></b></qt>").arg(tagName));
+    else
+        d->topLabel->setText(i18n("<qt><b>Properties of Tag<br>"
+                                  "<i>\"%1\"</i></b></qt>").arg(tagName));
 
     enableButtonOK(!newtitle.isEmpty());
 }
