@@ -1046,11 +1046,10 @@ void ImageDescEditTab::slotMoreMenu()
     }
 }
 
-AlbumList ImageDescEditTab::tagNew(TAlbum* parAlbum, const QString& _title, const QString& _icon) const
+void ImageDescEditTab::tagNew(TAlbum* parAlbum, const QString& _title, const QString& _icon) const
 {
-    AlbumList tList;
     if (!parAlbum)
-        return tList;
+        return;
 
     QString title = _title;
     QString icon  = _icon;
@@ -1058,11 +1057,11 @@ AlbumList ImageDescEditTab::tagNew(TAlbum* parAlbum, const QString& _title, cons
     if (title.isNull())
     {
         if (!TagEditDlg::tagCreate(kapp->activeWindow(), parAlbum, title, icon))
-            return tList;
+            return;
     }
 
     QMap<QString, QString> errMap;
-    tList = TagEditDlg::createTAlbum(parAlbum, title, icon, errMap);
+    AlbumList tList = TagEditDlg::createTAlbum(parAlbum, title, icon, errMap);
     TagEditDlg::showtagsListCreationError(kapp->activeWindow(), errMap);
 
     for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
@@ -1075,8 +1074,6 @@ AlbumList ImageDescEditTab::tagNew(TAlbum* parAlbum, const QString& _title, cons
             d->tagsView->ensureItemVisible(item);
         }
     }
-
-    return tList;
 }
 
 void ImageDescEditTab::tagDelete(TAlbum *album)
