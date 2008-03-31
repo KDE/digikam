@@ -77,6 +77,7 @@
 #include "datefolderview.h"
 #include "tagfolderview.h"
 #include "searchfolderview.h"
+#include "searchtabheader.h"
 #include "statusprogressbar.h"
 #include "tagfilterview.h"
 #include "themeengine.h"
@@ -87,6 +88,8 @@
 #include "digikamapp.h"
 #include "digikamview.h"
 #include "digikamview.moc"
+#include "albummodel.h"
+#include <QTreeView>
 
 namespace Digikam
 {
@@ -162,6 +165,7 @@ public:
     TimeLineView             *timeLineView;
     TagFolderView            *tagFolderView;
     SearchFolderView         *searchFolderView;
+    SearchTabHeader          *searchTabHeader;
     TagFilterView            *tagFilterView;
 };
 
@@ -209,8 +213,10 @@ DigikamView::DigikamView(QWidget *parent)
 
     // Search sidebar tab contents.
     d->searchBox        = new KVBox(this);
+    d->searchTabHeader  = new SearchTabHeader(d->searchBox);
     d->searchFolderView = new SearchFolderView(d->searchBox);
     d->searchSearchBar  = new SearchTextBar(d->searchBox);
+    d->searchBox->setStretchFactor(d->searchFolderView, 1);
     d->searchBox->setSpacing(KDialog::spacingHint());
     d->searchBox->setMargin(0);
 
@@ -430,6 +436,15 @@ void DigikamView::setupConnections()
     connect(d->searchFolderView, SIGNAL(signalTextSearchFilterMatch(bool)),
             d->searchSearchBar, SLOT(slotSearchResult(bool)));
 
+    connect(d->searchFolderView, SIGNAL(editSearch(SAlbum *)),
+            d->searchTabHeader, SLOT(editSearch(SAlbum *)));
+
+    connect(d->searchFolderView, SIGNAL(selectedSearchChanged(SAlbum *)),
+            d->searchTabHeader, SLOT(selectedSearchChanged(SAlbum *)));
+
+    connect(d->searchTabHeader, SIGNAL(searchShallBeSelected(SAlbum *)),
+            d->searchFolderView, SLOT(slotSelectSearch(SAlbum *)));
+
     connect(d->tagFilterView, SIGNAL(signalTextTagFilterMatch(bool)),
             d->tagFilterSearchBar, SLOT(slotSearchResult(bool)));
 
@@ -621,18 +636,18 @@ void DigikamView::slotEditTag()
     d->tagFolderView->tagEdit();
 }
 
-void DigikamView::slotNewQuickSearch()
+void DigikamView::slotNewKeywordSearch()
 {
     if (d->leftSideBar->getActiveTab() != d->searchBox)
         d->leftSideBar->setActiveTab(d->searchBox);
-    d->searchFolderView->quickSearchNew();
+    d->searchTabHeader->newKeywordSearch();
 }
 
 void DigikamView::slotNewAdvancedSearch()
 {
     if (d->leftSideBar->getActiveTab() != d->searchBox)
         d->leftSideBar->setActiveTab(d->searchBox);
-    d->searchFolderView->extendedSearchNew();
+    d->searchTabHeader->newAdvancedSearch();
 }
 
 void DigikamView::slotAlbumAdded(Album *album)

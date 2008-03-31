@@ -119,7 +119,7 @@ public slots:
     void slotEditTag();
 
     // Search action slots
-    void slotNewQuickSearch();
+    void slotNewKeywordSearch();
     void slotNewAdvancedSearch();
 
     // Image action slots
