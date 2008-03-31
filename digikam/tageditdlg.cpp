@@ -204,7 +204,7 @@ TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album, bool create)
     // --------------------------------------------------------
 
     slotTitleChanged(d->titleEdit->text());
-    setFocusProxy(d->titleEdit);
+    d->titleEdit->setFocus();
     adjustSize();
 }
 
