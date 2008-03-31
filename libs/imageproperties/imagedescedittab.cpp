@@ -179,7 +179,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
     d->tagsSearchBar   = new SearchTextBar(tagsSearch);
 
     d->assignedTagsBtn = new QToolButton(tagsSearch);
-    d->assignedTagsBtn->setToolTip( i18n("Already assigned tags"));
+    d->assignedTagsBtn->setToolTip( i18n("Tags already assigned"));
     d->assignedTagsBtn->setIcon(KIconLoader::global()->loadIcon("tag-assigned",
                                 KIconLoader::NoGroup, KIconLoader::SizeSmall));
     d->assignedTagsBtn->setCheckable(true);
