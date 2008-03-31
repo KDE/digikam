@@ -132,6 +132,7 @@ TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album, bool create)
 
     QLabel *tipLabel = new QLabel(page);
     tipLabel->setTextFormat(Qt::RichText);
+    tipLabel->setWordWrap(true);
     tipLabel->setText(i18n("<qt><p>To create new tags, you can use the following rules:</p>"
                            "<p><ul><li>'/' can be used to create a tags hierarchy.<br>"
                            "Ex.: <i>\"Country/City/Paris\"</i></li>"
