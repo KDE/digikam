@@ -90,10 +90,10 @@ TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album, bool create)
     QGridLayout* grid = new QGridLayout(page, 4, 4, 0, spacingHint());
 
     // --------------------------------------------------------
-  
+
     QLabel *logo            = new QLabel(page);
     KIconLoader* iconLoader = KApplication::kApplication()->iconLoader();
-    logo->setPixmap(iconLoader->loadIcon("digikam", KIcon::NoGroup, 96, KIcon::DefaultState, 0, true));    
+    logo->setPixmap(iconLoader->loadIcon("digikam", KIcon::NoGroup, 96, KIcon::DefaultState, 0, true));
 
     d->topLabel = new QLabel(page);
     d->topLabel->setAlignment(Qt::AlignAuto | Qt::AlignVCenter | Qt::SingleLine);
@@ -113,7 +113,7 @@ TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album, bool create)
     {
         AlbumList tList = AlbumManager::instance()->allTAlbums();
         for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
-        {   
+        {
             TAlbum *tag = dynamic_cast<TAlbum*>(*it);
             d->titleEdit->lineEdit()->completionObject()->addItem(tag->tagPath());
         }
@@ -137,12 +137,12 @@ TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album, bool create)
         d->icon = d->mainRootAlbum->icon();
 
     d->iconButton->setIconSet(SyncJob::getTagThumbnail(d->icon, 20));
-    
-    d->resetIconButton = new QPushButton(i18n("Reset"), page);
+
+    d->resetIconButton = new QPushButton(SmallIcon("reload_page"), i18n("Reset"), page);
     if (d->create) d->resetIconButton->hide();
 
     // --------------------------------------------------------
-    
+
     grid->addMultiCellWidget(logo,               0, 3, 0, 0);
     grid->addMultiCellWidget(d->topLabel,        0, 0, 1, 4);
     grid->addMultiCellWidget(line,               1, 1, 1, 4);
@@ -157,11 +157,11 @@ TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album, bool create)
     // --------------------------------------------------------
 
     connect(d->iconButton, SIGNAL(clicked()),
-            this, SLOT(slotIconChange()));
+            this, SLOT(slotIconChanged()));
 
     connect(d->resetIconButton, SIGNAL(clicked()),
             this, SLOT(slotIconResetClicked()));
-            
+
     connect(d->titleEdit->lineEdit(), SIGNAL(textChanged(const QString&)),
             this, SLOT(slotTitleChanged(const QString&)));
 
@@ -191,8 +191,8 @@ void TagEditDlg::slotIconResetClicked()
     d->icon = QString("tag");
     d->iconButton->setIconSet(SyncJob::getTagThumbnail(d->icon, 20));
 }
-    
-void TagEditDlg::slotIconChange()
+
+void TagEditDlg::slotIconChanged()
 {
 #if KDE_IS_VERSION(3,3,0)
     KIconDialog dlg(this);
@@ -203,7 +203,7 @@ void TagEditDlg::slotIconChange()
     if (icon.startsWith("/"))
         return;
 #endif
-    
+
     if (icon.isEmpty() || icon == d->icon)
         return;
 
