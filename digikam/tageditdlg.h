@@ -56,10 +56,10 @@ public:
 
 private slots:
 
-    void slotIconChange();
+    void slotIconChanged();
     void slotIconResetClicked();
     void slotTitleChanged(const QString& newtitle);
-    
+
 private:
 
     TagEditDlgPriv *d;

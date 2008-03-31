@@ -101,7 +101,7 @@ TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album, bool create)
 
     QLabel *logo            = new QLabel(page);
     KIconLoader* iconLoader = KIconLoader::global();
-    logo->setPixmap(iconLoader->loadIcon("digikam", KIconLoader::NoGroup, 96));    
+    logo->setPixmap(iconLoader->loadIcon("digikam", KIconLoader::NoGroup, 96));
 
     d->topLabel = new QLabel(page);
     d->topLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
@@ -122,7 +122,7 @@ TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album, bool create)
     {
         AlbumList tList = AlbumManager::instance()->allTAlbums();
         for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
-        {   
+        {
             TAlbum *tag = dynamic_cast<TAlbum*>(*it);
             d->titleEdit->completionObject()->addItem(tag->tagPath());
         }
@@ -146,12 +146,12 @@ TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album, bool create)
         d->icon = album->icon();
 
     d->iconButton->setIcon(SyncJob::getTagThumbnail(album));
-    
+
     d->resetIconButton = new QPushButton(KIcon("view-refresh"), i18n("Reset"), page);
     if (create) d->resetIconButton->hide();
 
     // --------------------------------------------------------
-    
+
     grid->addWidget(logo,               0, 0, 4, 1);
     grid->addWidget(d->topLabel,        0, 1, 1, 4);
     grid->addWidget(line,               1, 1, 1, 4);
@@ -168,11 +168,11 @@ TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album, bool create)
     // --------------------------------------------------------
 
     connect(d->iconButton, SIGNAL(clicked()),
-            this, SLOT(slotIconChange()));
+            this, SLOT(slotIconChanged()));
 
     connect(d->resetIconButton, SIGNAL(clicked()),
             this, SLOT(slotIconResetClicked()));
-            
+
     connect(d->titleEdit, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotTitleChanged(const QString&)));
 
@@ -203,12 +203,12 @@ void TagEditDlg::slotIconResetClicked()
     d->iconButton->setIcon(KIconLoader::global()->loadIcon(d->icon, KIconLoader::NoGroup, 20));
 }
 
-void TagEditDlg::slotIconChange()
+void TagEditDlg::slotIconChanged()
 {
     KIconDialog dlg(this);
     dlg.setup(KIconLoader::NoGroup, KIconLoader::Application, false, 20, false, false, false);
     QString icon = dlg.openDialog();
-    
+
     if (icon.isEmpty() || icon == d->icon)
         return;
 
