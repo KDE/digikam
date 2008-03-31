@@ -1121,22 +1121,19 @@ void TagFilterView::tagNew(TagFilterViewItem* item, const QString& _title, const
             return;
     }
 
-    QString errMsg;
-    TAlbum* newAlbum = man->createTAlbum(parent, title, icon, errMsg);
+    QMap<QString, QString> errMap;
+    AlbumList tList = TagEditDlg::createTAlbum(parent, title, icon, errMap);
+    TagEditDlg::showtagsListCreationError(kapp->activeWindow(), errMap);
 
-    if( !newAlbum )
+    for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
     {
-        KMessageBox::error(0, errMsg);
-    }
-    else
-    {
-        TagFilterViewItem *item = (TagFilterViewItem*)newAlbum->extraData(this);
-        if ( item )
+        TagFilterViewItem* item = (TagFilterViewItem*)(*it)->extraData(this);
+        if (item)
         {
             clearSelection();
             setSelected(item, true);
             setCurrentItem(item);
-            ensureItemVisible( item );
+            ensureItemVisible(item);
         }
     }
 }

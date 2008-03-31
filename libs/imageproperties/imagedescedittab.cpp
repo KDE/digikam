@@ -56,7 +56,6 @@
 #include "dmetadata.h"
 #include "kdatetimeedit.h"
 #include "albumiconitem.h"
-#include "albummanager.h"
 #include "albumdb.h"
 #include "album.h"
 #include "albumsettings.h"
@@ -1047,41 +1046,37 @@ void ImageDescEditTab::slotMoreMenu()
     }
 }
 
-TAlbum* ImageDescEditTab::tagNew(TAlbum* parAlbum, const QString& _title, const QString& _icon,
-                                 bool setOn, bool giveFocus) const
+AlbumList ImageDescEditTab::tagNew(TAlbum* parAlbum, const QString& _title, const QString& _icon) const
 {
+    AlbumList tList;
     if (!parAlbum)
-        return 0;
+        return tList;
 
-    QString title           = _title;
-    QString icon            = _icon;
-    AlbumManager *albumMan_ = AlbumManager::instance();
+    QString title = _title;
+    QString icon  = _icon;
 
     if (title.isNull())
     {
         if (!TagEditDlg::tagCreate(kapp->activeWindow(), parAlbum, title, icon))
-            return 0;
+            return tList;
     }
 
-    QString errMsg;
-    TAlbum* album = albumMan_->createTAlbum(parAlbum, title, icon, errMsg);
-    if (!album)
+    QMap<QString, QString> errMap;
+    tList = TagEditDlg::createTAlbum(parAlbum, title, icon, errMap);
+    TagEditDlg::showtagsListCreationError(kapp->activeWindow(), errMap);
+
+    for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
     {
-        KMessageBox::error(0, errMsg);
-        return 0;
-    }
-    else
-    {
-        TAlbumCheckListItem* viewItem = (TAlbumCheckListItem*)album->extraData(d->tagsView);
-        if (viewItem)
+        TAlbumCheckListItem* item = (TAlbumCheckListItem*)(*it)->extraData(d->tagsView);
+        if (item)
         {
-            viewItem->setOn(setOn);
-            d->tagsView->setSelected(viewItem, giveFocus);
-            d->tagsView->ensureItemVisible(viewItem);
+            item->setOn(true);
+            d->tagsView->setSelected(item, true);
+            d->tagsView->ensureItemVisible(item);
         }
     }
 
-    return album;
+    return tList;
 }
 
 void ImageDescEditTab::tagDelete(TAlbum *album)
@@ -1724,66 +1719,16 @@ void ImageDescEditTab::slotCreateNewTag()
     if (item) 
         mainRootAlbum = item->album();
 
-    // Check if new tags are include in a list of tags hierarchy separated by ','.
-    // Ex: /Country/France/people,/City/France/Paris
+    QMap<QString, QString> errMap;
+    AlbumList tList = TagEditDlg::createTAlbum(mainRootAlbum, tagStr, QString("tag"), errMap);
 
-    QStringList tagsHierarchies = QStringList::split(",", tagStr);
-    if (tagsHierarchies.isEmpty()) return;
-
-    QString errMsg;
-    for (QStringList::iterator it = tagsHierarchies.begin(); it != tagsHierarchies.end(); ++it)
-    {    
-        QString hierarchy = *it;
-        if (!hierarchy.isEmpty())
+    for (AlbumList::iterator it3 = tList.begin(); it3 != tList.end(); ++it3)
+    {
+        TAlbumCheckListItem* item = (TAlbumCheckListItem*)(*it3)->extraData(d->tagsView);
+        if (item)
         {
-            // Check if new tags is a hierarchy of tags separated by '/'.
-
-            TAlbum *root = 0;
- 
-            if (hierarchy.startsWith("/") || !mainRootAlbum)
-                root = AlbumManager::instance()->findTAlbum(0);
-            else
-                root = mainRootAlbum;
-       
-            QStringList tagsList = QStringList::split("/", hierarchy);
-            DDebug() << tagsList << endl;
-
-            if (!tagsList.isEmpty())
-            {
-                for (QStringList::iterator it2 = tagsList.begin(); it2 != tagsList.end(); ++it2)
-                {   
-                    QString tagPath;
-                    QString tag = (*it2).stripWhiteSpace();
-                    if (root->isRoot())
-                        tagPath = QString("/%1").arg(tag);
-                    else
-                        tagPath = QString("%1/%2").arg(root->tagPath()).arg(tag);
-                    DDebug() << tag << " :: " << tagPath << endl;
-
-                    if (!tag.isEmpty())
-                    {
-                        // Tag already exist ?
-                        TAlbum* album = AlbumManager::instance()->findTAlbum(tagPath);
-                        if (!album)
-                            root = AlbumManager::instance()->createTAlbum(root, tag, QString("tag"), errMsg);
-                        else
-                            root = album;
-
-                        if (root)
-                        {
-                            TAlbumCheckListItem* viewItem = (TAlbumCheckListItem*)root->extraData(d->tagsView);
-                            if (viewItem)
-                            {
-                                viewItem->setOn(true);
-                                d->tagsView->ensureItemVisible(viewItem);
-                            }
-                        }
-                    }
-
-                    // Sanity check if tag creation failed.
-                    if (!root) break;        
-                }
-            }
+            item->setOn(true);
+            d->tagsView->ensureItemVisible(item);
         }
     }
 
