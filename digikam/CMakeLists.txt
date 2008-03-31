@@ -46,6 +46,7 @@ INCLUDE_DIRECTORIES(
                      ../utilities/slideshow
                      ../utilities/batch
                      ../utilities/lighttable
+                     ../utilities/searchwindow
                      ../digikam
 
                      # external library paths
@@ -145,6 +146,7 @@ SET(digikam_bin_SRCS
                      ${libbatch_SRCS}
                      ${libthemeengine_SRCS}
                      ${libkipiiface_SRCS}
+                     ${libsearchwindow_SRCS}
 
                      album.cpp 
                      albumiconview.cpp 
@@ -157,6 +159,7 @@ SET(digikam_bin_SRCS
                      albumhistory.cpp 
                      albumlister.cpp 
                      albummanager.cpp 
+                     albummodel.cpp
                      albumpropsedit.cpp 
                      albumselectdialog.cpp
                      albumsettings.cpp 
@@ -193,6 +196,7 @@ SET(digikam_bin_SRCS
                      scancontroller.cpp
                      searchadvanceddialog.cpp 
                      searchfolderview.cpp 
+                     searchtabheader.cpp
                      searchquickdialog.cpp 
                      searchresultsview.cpp 
                      searchresultsitem.cpp 

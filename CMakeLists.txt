@@ -529,6 +529,7 @@ SET(liblighttable_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttablebar.cpp 
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttablewindow.cpp 
    )
+
 SET(libcameragui_SRCS 
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/dkcamera.cpp 
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/umscamera.cpp 
@@ -548,6 +549,16 @@ SET(libcameragui_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/capturewidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/capturedlg.cpp
    )
+
+SET(libsearchwindow_SRCS
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow/searchwindow.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow/searchview.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow/searchgroup.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow/searchfieldgroup.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow/searchfields.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow/searchutilities.cpp
+   )
+
 ADD_SUBDIRECTORY( data )
 ADD_SUBDIRECTORY( libs )
 ADD_SUBDIRECTORY( utilities )
