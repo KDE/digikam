@@ -71,7 +71,7 @@ JP2KSettings::JP2KSettings(QWidget *parent)
     d = new JP2KSettingsPriv;
 
     d->JPEG2000Grid     = new QGridLayout(this, 1, 1, KDialog::spacingHint());
-    d->JPEG2000LossLess = new QCheckBox(i18n("LossLess JPEG 2000 files"), this);
+    d->JPEG2000LossLess = new QCheckBox(i18n("Lossless JPEG 2000 files"), this);
 
     QWhatsThis::add(d->JPEG2000LossLess, i18n("<p>Toggle lossless compression for JPEG 2000 images.<p>"
                                               "If you enable this option, you will use a lossless method "
