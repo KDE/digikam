@@ -97,14 +97,11 @@ public:
 
     /**
      * Execute the search specified by a SQL expression
-     * @param sqlConditionalExpression SQL code for the WHERE part of the query
-     * @param boundValues SQL bound values used in the sql conditional expression
-     * @param getSize stat the file size. If false, size will be 0
+     * @param xml SearchXml describing the query
      * @param limit limit the count of the result set. If limit = 0, then no limit is set.
      */
     void listSearch(ImageListerReceiver *receiver,
-                    const QString &sqlConditionalExpression,
-                    const QList<QVariant> &boundValues,
+                    const QString &xml,
                     int limit = 0);
 
     /**

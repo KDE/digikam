@@ -56,6 +56,7 @@
 #include "albumdb.h"
 #include "databaseaccess.h"
 #include "databasebackend.h"
+#include "imagequerybuilder.h"
 #include "dmetadata.h"
 #include "imagelister.h"
 
@@ -362,10 +363,13 @@ void ImageLister::listDateRange(ImageListerReceiver *receiver, const QDate &star
 }
 
 void ImageLister::listSearch(ImageListerReceiver *receiver,
-                             const QString &sqlConditionalExpression,
-                             const QList<QVariant> &boundValues,
+                             const QString &xml,
                              int limit)
 {
+    if (xml.isEmpty())
+        return;
+
+    QList<QVariant> boundValues;
     QList<QVariant> values;
     QString sqlQuery;
     QString errMsg;
@@ -378,14 +382,15 @@ void ImageLister::listSearch(ImageListerReceiver *receiver,
                "       ImageInformation.width, ImageInformation.height "
                " FROM Images "
                "       LEFT OUTER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
-               "       LEFT OUTER JOIN Albums ON Albums.id=Images.album "
-               "WHERE ( ";
+               "       LEFT OUTER JOIN ImageMetadata    ON Images.id=ImageMetadata.imageid "
+               "       LEFT OUTER JOIN ImagePositions   ON Images.id=ImagePositions.imageid "
+               "       LEFT OUTER JOIN Albums           ON Albums.id=Images.album "
+               "WHERE ";
 
-    // query body   
-    sqlQuery += sqlConditionalExpression;
-
-    // query tail
-    sqlQuery += " ) ";
+    // query body
+    ImageQueryBuilder builder;
+    sqlQuery += builder.buildQuery(xml, &boundValues);
+    DDebug() << "Search query:\n" << sqlQuery;
 
     if (limit > 0)
         sqlQuery += QString(" LIMIT %1; ").arg(limit);
@@ -405,6 +410,7 @@ void ImageLister::listSearch(ImageListerReceiver *receiver,
         receiver->error(errMsg);
         return;
     }
+    DDebug() << "Search result:" << values.size();
 
     int width, height;
     for (QList<QVariant>::iterator it = values.begin(); it != values.end();)

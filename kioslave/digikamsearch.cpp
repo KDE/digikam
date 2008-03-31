@@ -40,7 +40,6 @@
 
 #include "digikam_export.h"
 #include "imagelister.h"
-#include "imagequerybuilder.h"
 #include "databaseaccess.h"
 #include "databaseurl.h"
 #include "albumdb.h"
@@ -74,17 +73,13 @@ void kio_digikamsearch::special(const QByteArray& data)
     int id = dbUrl.searchId();
     QString xml = Digikam::DatabaseAccess().db()->getSearchQuery(id);
 
-    Digikam::ImageQueryBuilder queryBuilder;
-    QList<QVariant> boundValues;
-    QString query = queryBuilder.buildQuery(xml, &boundValues);
-
     Digikam::ImageLister lister;
 
     if (listingType == 0)
     {
         // send data every 200 images to be more responsive
         Digikam::ImageListerSlaveBasePartsSendingReceiver receiver(this, 200);
-        lister.listSearch(&receiver, query, boundValues);
+        lister.listSearch(&receiver, xml);
         if (!receiver.hasError)
             receiver.sendData();
     }
@@ -92,10 +87,9 @@ void kio_digikamsearch::special(const QByteArray& data)
     {
         Digikam::ImageListerSlaveBaseReceiver receiver(this);
         // fast mode: do not get size, dimension, limit results to 500
-        lister.listSearch(&receiver, query, boundValues, 500);
+        lister.listSearch(&receiver, xml, 500);
         if (!receiver.hasError)
             receiver.sendData();
-        //        ds << m_libraryPath + *it;
     }
 
     finished();
