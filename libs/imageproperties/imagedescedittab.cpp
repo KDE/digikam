@@ -1711,7 +1711,7 @@ void ImageDescEditTab::slotCreateNewTag()
     QString tagStr = d->newTagEdit->text();
     if (tagStr.isEmpty()) return;
 
-    TAlbum *mainRootAlbum = 0;
+    TAlbum *mainRootAlbum     = 0;
     TAlbumCheckListItem* item = dynamic_cast<TAlbumCheckListItem*>(d->tagsView->selectedItem());
     if (item) 
         mainRootAlbum = item->album();
@@ -1719,9 +1719,9 @@ void ImageDescEditTab::slotCreateNewTag()
     QMap<QString, QString> errMap;
     AlbumList tList = TagEditDlg::createTAlbum(mainRootAlbum, tagStr, QString("tag"), errMap);
 
-    for (AlbumList::iterator it3 = tList.begin(); it3 != tList.end(); ++it3)
+    for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
     {
-        TAlbumCheckListItem* item = (TAlbumCheckListItem*)(*it3)->extraData(d->tagsView);
+        TAlbumCheckListItem* item = (TAlbumCheckListItem*)(*it)->extraData(d->tagsView);
         if (item)
         {
             item->setOn(true);
