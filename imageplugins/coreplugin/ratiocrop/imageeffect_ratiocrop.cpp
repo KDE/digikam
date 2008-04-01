@@ -113,7 +113,7 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     m_ratioCB->addItem( i18n("Golden Ratio") );
     m_ratioCB->addItem( i18n("None") );
     setRatioCBText(ImageSelectionWidget::Landscape);
-    m_ratioCB->setWhatsThis( i18n("<p>Select here your constrained aspect ratio for cropping. "
+    m_ratioCB->setWhatsThis( i18n("<p>Select your constrained aspect ratio for cropping. "
                                   "Aspect Ratio Crop tool uses a relative ratio. That means it "
                                   "is the same if you use centimeters or inches and it doesn't "
                                   "specify the physical size.<p>"
@@ -137,7 +137,7 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     m_orientCB    = new QComboBox( cropSelection );
     m_orientCB->addItem( i18n("Landscape") );
     m_orientCB->addItem( i18n("Portrait") );
-    m_orientCB->setWhatsThis( i18n("<p>Select here constrained aspect ratio orientation."));
+    m_orientCB->setWhatsThis( i18n("<p>Select constrained aspect ratio orientation."));
 
     m_autoOrientation = new QCheckBox(i18n("Auto"), cropSelection);
     m_autoOrientation->setWhatsThis( i18n("<p>Enable this option to automatically set the orientation."));
