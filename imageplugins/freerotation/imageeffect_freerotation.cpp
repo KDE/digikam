@@ -136,8 +136,8 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
     m_autoCropCB->addItem( i18n("None") );
     m_autoCropCB->addItem( i18n("Widest Area") );
     m_autoCropCB->addItem( i18n("Largest Area") );
-    m_autoCropCB->setWhatsThis( i18n("<p>Select here the method to process image auto-cropping "
-                                     "to remove black frames around a rotated image."));
+    m_autoCropCB->setWhatsThis( i18n("<p>Select the method to process image auto-cropping "
+                                     "to remove black frames around a rotated image here."));
 
     // -------------------------------------------------------------
 

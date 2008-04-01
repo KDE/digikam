@@ -121,7 +121,7 @@ CameraSelection::CameraSelection( QWidget* parent )
     d->listView->setAllColumnsShowFocus(true);
     d->listView->setColumnCount(1);
     d->listView->setHeaderLabels(QStringList() << i18n("Camera List"));
-    d->listView->setWhatsThis(i18n("<p>Select here the camera name that you want to use. All "
+    d->listView->setWhatsThis(i18n("<p>Select the camera name that you want to use here. All "
                                    "default settings on the right panel "
                                    "will be set automatically.</p><p>This list has been generated "
                                    "using the gphoto2 library installed on your computer.</p>"));
@@ -172,7 +172,7 @@ CameraSelection::CameraSelection( QWidget* parent )
 
     d->portPathComboBox = new QComboBox( portPathBox );
     d->portPathComboBox->setDuplicatesEnabled( false );
-    d->portPathComboBox->setWhatsThis( i18n("<p>Select here the serial port to use on your computer. "
+    d->portPathComboBox->setWhatsThis( i18n("<p>Select the serial port to use on your computer here. "
                      "This option is only required if you use a serial camera.</p>"));
 
     gLayout3->addWidget(d->portPathLabel);

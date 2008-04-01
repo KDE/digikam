@@ -158,7 +158,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
     d->channelCB->insertItem( BlueChannel,       i18n("Blue") );
     d->channelCB->insertItem( AlphaChannel,      i18n("Alpha") );
     d->channelCB->insertItem( ColorChannels,     i18n("Colors") );
-    d->channelCB->setWhatsThis( i18n("<p>Select here the histogram channel to display:<p>"
+    d->channelCB->setWhatsThis( i18n("<p>Select the histogram channel to displayhere:<p>"
                                      "<b>Luminosity</b>: Display luminosity (perceived brightness) values.<p>"
                                      "<b>Red</b>: Display the red image channel.<p>"
                                      "<b>Green</b>: Display the green image channel.<p>"
@@ -174,7 +174,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
     QHBoxLayout *hlay1 = new QHBoxLayout(scaleBox);
     d->scaleBG         = new QButtonGroup(scaleBox);
     d->scaleBG->setExclusive(true);
-    scaleBox->setWhatsThis( i18n("<p>Select here the histogram scale.<p>"
+    scaleBox->setWhatsThis( i18n("<p>Select the histogram scale here.<p>"
                                  "If the image's maximal values are small, you can use the linear scale.<p>"
                                  "Logarithmic scale can be used when the maximal values are big; "
                                  "if it is used, all values (small and large) will be visible on the "
@@ -206,7 +206,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
     d->colorsCB->insertItem( AllColorsGreen, i18n("Green") );
     d->colorsCB->insertItem( AllColorsBlue,  i18n("Blue") );
     d->colorsCB->setEnabled( false );
-    d->colorsCB->setWhatsThis( i18n("<p>Select here the main color displayed with Colors Channel mode:<p>"
+    d->colorsCB->setWhatsThis( i18n("<p>Select the main color displayed with Colors Channel mode here:<p>"
                                     "<b>Red</b>: Draw the red image channel in the foreground.<p>"
                                     "<b>Green</b>: Draw the green image channel in the foreground.<p>"
                                     "<b>Blue</b>: Draw the blue image channel in the foreground.<p>"));
@@ -218,7 +218,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
     d->regionBG        = new QButtonGroup(d->regionBox);
     d->regionBG->setExclusive(true);
     d->regionBox->hide();
-    d->regionBox->setWhatsThis( i18n("<p>Select here from which region the histogram will be computed:<p>"
+    d->regionBox->setWhatsThis( i18n("<p>Select from which region the histogram will be computed here:<p>"
                                      "<b>Full Image</b>: Compute histogram using the full image.<p>"
                                      "<b>Selection</b>: Compute histogram using the current image "
                                      "selection."));
@@ -262,14 +262,14 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
     d->minInterv->setRange(0, 255);
     d->minInterv->setSingleStep(1);
     d->minInterv->setValue(0);
-    d->minInterv->setWhatsThis( i18n("<p>Select here the minimal intensity "
-                                     "value of the histogram selection."));
+    d->minInterv->setWhatsThis( i18n("<p>Select the minimal intensity "
+                                     "value of the histogram selection here."));
     d->maxInterv = new QSpinBox(histogramPage);
     d->minInterv->setRange(0, 255);
     d->minInterv->setSingleStep(1);
     d->maxInterv->setValue(255);
-    d->minInterv->setWhatsThis( i18n("<p>Select here the maximal intensity value "
-                                     "of the histogram selection."));
+    d->minInterv->setWhatsThis( i18n("<p>Select the maximal intensity value "
+                                     "of the histogram selection here."));
     hlay3->addWidget(label3);
     hlay3->addWidget(d->minInterv);
     hlay3->addWidget(d->maxInterv);
