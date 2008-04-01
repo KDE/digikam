@@ -121,7 +121,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     m_channelCB->insertItem(i18n("Red"));
     m_channelCB->insertItem(i18n("Green"));
     m_channelCB->insertItem(i18n("Blue"));
-    QWhatsThis::add( m_channelCB, i18n("<p>Select here the histogram channel to display:<p>"
+    QWhatsThis::add( m_channelCB, i18n("<p>Select the histogram channel to display here:<p>"
                                        "<b>Luminosity</b>: display the image's luminosity values.<p>"
                                        "<b>Red</b>: display the red channel values.<p>"
                                        "<b>Green</b>: display the green channel values.<p>"
@@ -131,7 +131,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     m_scaleBG->setExclusive(true);
     m_scaleBG->setFrameShape(QFrame::NoFrame);
     m_scaleBG->setInsideMargin( 0 );
-    QWhatsThis::add( m_scaleBG, i18n("<p>Select here the histogram scale.<p>"
+    QWhatsThis::add( m_scaleBG, i18n("<p>Select the histogram scale here.<p>"
                                      "If the image's maximal values are small, you can use the linear scale.<p>"
                                      "Logarithmic scale can be used when the maximal values are big; "
                                      "if it is used, all values (small and large) will be visible on the "
