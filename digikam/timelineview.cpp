@@ -132,14 +132,14 @@ TimeLineView::TimeLineView(QWidget *parent)
     d->timeUnitCB->addItem(i18n("Year"),  TimeLineWidget::Year);
     d->timeUnitCB->setCurrentIndex((int)TimeLineWidget::Month);
     d->timeUnitCB->setFocusPolicy(Qt::NoFocus);
-    d->timeUnitCB->setWhatsThis(i18n("<p>Select here histogram time unit.<p>"
+    d->timeUnitCB->setWhatsThis(i18n("<p>Select the histogram time unit.<p>"
                                      "You can change the graph decade to zoom in or zoom out over time."));
 
     QWidget *scaleBox  = new QWidget(hbox1);
     QHBoxLayout *hlay2 = new QHBoxLayout(scaleBox);
     d->scaleBG         = new QButtonGroup(scaleBox);
     d->scaleBG->setExclusive(true);
-    scaleBox->setWhatsThis( i18n("<p>Select here the histogram scale.<p>"
+    scaleBox->setWhatsThis( i18n("<p>Select the histogram scale.<p>"
                                   "If the date count's maximal values are small, you can use the linear scale.<p>"
                                   "Logarithmic scale can be used when the maximal values are big; "
                                   "if it is used, all values (small and large) will be visible on the "
