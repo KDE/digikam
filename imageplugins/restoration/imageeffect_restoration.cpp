@@ -111,7 +111,7 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
     m_restorationTypeCB->insertItem( i18n("Reduce Uniform Noise") );
     m_restorationTypeCB->insertItem( i18n("Reduce JPEG Artefacts") );
     m_restorationTypeCB->insertItem( i18n("Reduce Texturing") );
-    QWhatsThis::add( m_restorationTypeCB, i18n("<p>Select here the filter preset to use for photograph restoration:<p>"
+    QWhatsThis::add( m_restorationTypeCB, i18n("<p>Select the filter preset to use for photograph restoration:<p>"
                                                "<b>None</b>: Most common values. Puts settings to default.<p>"
                                                "<b>Reduce Uniform Noise</b>: reduce small image artifacts like sensor noise.<p>"
                                                "<b>Reduce JPEG Artefacts</b>: reduce large image artifacts like JPEG compression mosaic.<p>"

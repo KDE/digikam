@@ -164,7 +164,7 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
     m_textRotation->insertItem( i18n("90 Degrees") );
     m_textRotation->insertItem( i18n("180 Degrees") );
     m_textRotation->insertItem( i18n("270 Degrees") );
-    QWhatsThis::add( m_textRotation, i18n("<p>Select here the text rotation to use."));
+    QWhatsThis::add( m_textRotation, i18n("<p>Select the text rotation to use."));
     gridBox2->addMultiCellWidget(label1, 5, 5, 0, 0);
     gridBox2->addMultiCellWidget(m_textRotation, 5, 5, 1, 1);
 
@@ -172,7 +172,7 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
         
     QLabel *label2    = new QLabel(i18n("Color:"), gbox2);
     m_fontColorButton = new KColorButton( Qt::black, gbox2 );
-    QWhatsThis::add( m_fontColorButton, i18n("<p>Set here the font color to use."));
+    QWhatsThis::add( m_fontColorButton, i18n("<p>Select the font color to use."));
     gridBox2->addMultiCellWidget(label2, 6, 6, 0, 0);
     gridBox2->addMultiCellWidget(m_fontColorButton, 6, 6, 1, 1);
 

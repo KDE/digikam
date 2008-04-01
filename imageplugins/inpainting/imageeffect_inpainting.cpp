@@ -179,7 +179,7 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
     m_inpaintingTypeCB->insertItem( i18n("Remove Small Artefact") );
     m_inpaintingTypeCB->insertItem( i18n("Remove Medium Artefact") );
     m_inpaintingTypeCB->insertItem( i18n("Remove Large Artefact") );
-    QWhatsThis::add( m_inpaintingTypeCB, i18n("<p>Select here the filter preset to use for photograph restoration:<p>"
+    QWhatsThis::add( m_inpaintingTypeCB, i18n("<p>Select the filter preset to use for photograph restoration:<p>"
                                                "<b>None</b>: Most common values. Puts settings to default.<p>"
                                                "<b>Remove Small Artefact</b>: inpaint small image artefact like image glitch.<p>"
                                                "<b>Remove Medium Artefact</b>: inpaint medium image artefact.<p>"

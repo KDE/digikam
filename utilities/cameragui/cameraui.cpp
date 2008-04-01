@@ -285,7 +285,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     QWhatsThis::add( d->autoAlbumDateCheck, i18n("<p>Toggle on this option if you want to "
                      "download your pictures into automatically created file date-based sub-albums "
                      "of the destination album."));
-    QWhatsThis::add( d->folderDateFormat, i18n("<p>Select here your preferred date format used to "
+    QWhatsThis::add( d->folderDateFormat, i18n("<p>Select your preferred date format used to "
                      "create new albums. The options available are:<p>"
                      "<b>ISO</b>: the date format is in accordance with ISO 8601 "
                      "(YYYY-MM-DD). E.g.: <i>2006-08-24</i><p>"
