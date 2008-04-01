@@ -189,7 +189,7 @@ DeleteDialog::DeleteDialog(QWidget *parent, const char *name)
                          ),
               m_saveShouldDeleteUserPreference(true),
               m_saveDoNotShowAgain(false),
-              m_trashGuiItem(i18n("&Send to Trash"), "trashcan_full")
+              m_trashGuiItem(i18n("&Move to Trash"), "trashcan_full")
 {
     m_widget = new DeleteWidget(this, "delete_dialog_widget");
     setMainWidget(m_widget);
