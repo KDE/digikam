@@ -180,7 +180,7 @@ DeleteDialog::DeleteDialog(QWidget *parent)
             : KDialog(parent),
              m_saveShouldDeleteUserPreference(true),
              m_saveDoNotShowAgain(false),
-             m_trashGuiItem(i18n("&Send to Trash"), "trashcan_full")
+             m_trashGuiItem(i18n("&Move to Trash"), "trashcan_full")
 {
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
