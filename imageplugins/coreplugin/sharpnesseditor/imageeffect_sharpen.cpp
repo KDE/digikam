@@ -79,7 +79,7 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
     m_sharpMethod->insertItem( i18n("Simple sharp") );
     m_sharpMethod->insertItem( i18n("Unsharp mask") );
     m_sharpMethod->insertItem( i18n("Refocus") );
-    QWhatsThis::add( m_sharpMethod, i18n("<p>Select here the sharping method to apply on image."));
+    QWhatsThis::add( m_sharpMethod, i18n("<p>Select the sharping method to apply on image."));
     
     m_stack = new QWidgetStack(gboxSettings);
 

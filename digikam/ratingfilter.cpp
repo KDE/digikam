@@ -77,7 +77,7 @@ RatingFilter::RatingFilter(QWidget* parent)
     updateRatingTooltip();
     setMouseTracking(true);
 
-    QWhatsThis::add(this, i18n("Select here the rating value used to filter "
+    QWhatsThis::add(this, i18n("Select the rating value used to filter "
                                "albums contents. Use contextual pop-up menu to "
                                "set rating filter condition."));
 

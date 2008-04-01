@@ -116,7 +116,7 @@ ImageEffect_DistortionFX::ImageEffect_DistortionFX(QWidget* parent)
     m_effectType->insertItem( i18n("Polar Coordinates") );    
     m_effectType->insertItem( i18n("Unpolar Coordinates") );    
     m_effectType->insertItem( i18n("Tile") );    
-    QWhatsThis::add( m_effectType, i18n("<p>Select here the effect type to apply on image.<p>"
+    QWhatsThis::add( m_effectType, i18n("<p>Select the effect type to apply on image.<p>"
                                         "<b>Fish Eyes</b>: warps the photograph around a 3D spherical shape to "
                                         "reproduce the common photograph 'Fish Eyes' effect.<p>"
                                         "<b>Twirl</b>: spins the photograph to produce a Twirl pattern.<p>"

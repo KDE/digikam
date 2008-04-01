@@ -191,7 +191,7 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
     d->rightClickActionComboBox = new QComboBox(false, interfaceOptionsGroup);
     d->rightClickActionComboBox->insertItem(i18n("Show embedded preview"), AlbumSettings::ShowPreview);
     d->rightClickActionComboBox->insertItem(i18n("Start image editor"), AlbumSettings::StartEditor);
-    QToolTip::add( d->rightClickActionComboBox, i18n("<p>Select here the right action to do when you "
+    QToolTip::add( d->rightClickActionComboBox, i18n("<p>Select the right action to do when you "
                                                      "right click with mouse button on thumbnail."));
     ifaceSettingsLayout->addMultiCellWidget(rightClickLabel, 2 ,2, 0, 0);
     ifaceSettingsLayout->addMultiCellWidget(d->rightClickActionComboBox, 2, 2, 1, 4);

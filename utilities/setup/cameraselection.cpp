@@ -114,7 +114,7 @@ CameraSelection::CameraSelection( QWidget* parent )
     d->listView->setAllColumnsShowFocus(true);
     d->listView->setResizeMode(QListView::LastColumn);
     d->listView->setMinimumWidth(350);
-    QWhatsThis::add( d->listView, i18n("<p>Select here the camera name that you want to use. All "
+    QWhatsThis::add( d->listView, i18n("<p>Select the camera name that you want to use. All "
                                        "default settings on the right panel "
                                        "will be set automatically.</p><p>This list has been generated "
                                        "using the gphoto2 library installed on your computer.</p>"));
@@ -149,7 +149,7 @@ CameraSelection::CameraSelection( QWidget* parent )
 
     d->portPathComboBox = new QComboBox( false, portPathBox );
     d->portPathComboBox->setDuplicatesEnabled( false );
-    QWhatsThis::add( d->portPathComboBox, i18n("<p>Select here the serial port to use on your computer. "
+    QWhatsThis::add( d->portPathComboBox, i18n("<p>Select the serial port to use on your computer. "
                      "This option is only required if you use a serial camera.</p>"));
 
     // --------------------------------------------------------------

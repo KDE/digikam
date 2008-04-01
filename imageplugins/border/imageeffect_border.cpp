@@ -112,7 +112,7 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     m_borderType->insertItem( i18n("Decorative Granite") );
     m_borderType->insertItem( i18n("Decorative Rock") );
     m_borderType->insertItem( i18n("Decorative Wall") );
-    QWhatsThis::add( m_borderType, i18n("<p>Select here the border type to add around the image."));
+    QWhatsThis::add( m_borderType, i18n("<p>Select the border type to add around the image."));
 
     KSeparator *line1 = new KSeparator(Horizontal, gboxSettings);
 

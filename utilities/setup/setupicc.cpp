@@ -237,7 +237,7 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     d->monitorProfiles   = new QLabel(i18n("Monitor:"), d->profilesGB);
     d->monitorProfilesKC = new SqueezedComboBox(d->profilesGB);
     d->monitorProfiles->setBuddy(d->monitorProfilesKC);
-    QWhatsThis::add( d->monitorProfilesKC, i18n("<p>Select here the color profile for your monitor. "
+    QWhatsThis::add( d->monitorProfilesKC, i18n("<p>Select the color profile for your monitor. "
                      "You need to toggle on <b>Use color managed view</b> option to use this profile.</p>"));
     d->infoMonitorProfiles = new QPushButton(i18n("Info..."), d->profilesGB);
     QWhatsThis::add( d->infoMonitorProfiles, i18n("<p>You can use this button to get more detailed "
