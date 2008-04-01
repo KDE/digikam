@@ -106,7 +106,7 @@ public:
 
 protected:
 
-    KLineEdit *m_edit;
+    QLineEdit *m_edit;
 };
 
 class SearchFieldRangeInt : public SearchField

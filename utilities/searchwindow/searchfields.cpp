@@ -474,7 +474,7 @@ SearchFieldText::SearchFieldText(QObject *parent)
 
 void SearchFieldText::setupValueWidgets(QGridLayout *layout, int row, int column)
 {
-    m_edit = new KLineEdit;
+    m_edit = new QLineEdit;
     layout->addWidget(m_edit, row, column, 1, 3);
 }
 
