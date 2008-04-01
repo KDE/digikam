@@ -129,7 +129,7 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent)
     m_channelCB->addItem( i18n("Green") );
     m_channelCB->addItem( i18n("Blue") );
     m_channelCB->setCurrentIndex( 0 );
-    m_channelCB->setWhatsThis( i18n("<p>Select here the color channel to mix:<p>"
+    m_channelCB->setWhatsThis( i18n("<p>Select the color channel to mix here:<p>"
                                     "<b>Red</b>: display the red image-channel values.<p>"
                                     "<b>Green</b>: display the green image-channel values.<p>"
                                     "<b>Blue</b>: display the blue image-channel values.<p>"));
@@ -139,7 +139,7 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent)
     QWidget *scaleBox = new QWidget(gboxSettings);
     QHBoxLayout *hlay = new QHBoxLayout(scaleBox);
     m_scaleBG         = new QButtonGroup(scaleBox);
-    scaleBox->setWhatsThis(i18n("<p>Select here the histogram scale.<p>"
+    scaleBox->setWhatsThis(i18n("<p>Select the histogram scale here.<p>"
                                 "If the image's maximal counts are small, you can use the linear scale.<p>"
                                 "Logarithmic scale can be used when the maximal counts are big; "
                                 "if it is used, all values (small and large) will be visible on the graph."));
@@ -188,22 +188,22 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent)
     m_redGain = new KDoubleNumInput(gboxSettings);
     m_redGain->setDecimals(0);
     m_redGain->setRange(-200.0, 200.0, 1, true);
-    m_redGain->setWhatsThis( i18n("<p>Select here the red color gain in percent for "
-                                  "the current channel."));
+    m_redGain->setWhatsThis( i18n("<p>Select the red color gain in percent for "
+                                  "the current channel here."));
     
     QLabel *blueLabel = new QLabel(i18n("Blue:"), gboxSettings);
     m_greenGain = new KDoubleNumInput(gboxSettings);
     m_greenGain->setDecimals(0);
     m_greenGain->setRange(-200.0, 200.0, 1, true);
-    m_greenGain->setWhatsThis( i18n("<p>Select here the green color gain in percent "
-                                    "for the current channel."));
+    m_greenGain->setWhatsThis( i18n("<p>Select the green color gain in percent "
+                                    "for the current channel here."));
     
     QLabel *greenLabel = new QLabel(i18n("Green:"), gboxSettings);
     m_blueGain = new KDoubleNumInput(gboxSettings);
     m_blueGain->setDecimals(0);
     m_blueGain->setRange(-200.0, 200.0, 1, true);
-    m_blueGain->setWhatsThis( i18n("<p>Select here the blue color gain in percent for "
-                                   "the current channel."));
+    m_blueGain->setWhatsThis( i18n("<p>Select the blue color gain in percent for "
+                                   "the current channel here."));
 
     m_resetButton = new QPushButton(i18n("&Reset"), gboxSettings);
     m_resetButton->setIcon(KIconLoader::global()->loadIcon("document-revert", KIconLoader::Toolbar));     

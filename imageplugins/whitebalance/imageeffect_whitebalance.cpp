@@ -129,7 +129,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
     m_channelCB->addItem( i18n("Red") );
     m_channelCB->addItem( i18n("Green") );
     m_channelCB->addItem( i18n("Blue") );
-    m_channelCB->setWhatsThis( i18n("<p>Select here the histogram channel to display:<p>"
+    m_channelCB->setWhatsThis( i18n("<p>Select the histogram channel to display here:<p>"
                                     "<b>Luminosity</b>: display the image's luminosity values.<p>"
                                     "<b>Red</b>: display the red image-channel values.<p>"
                                     "<b>Green</b>: display the green image-channel values.<p>"
@@ -139,7 +139,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
     QHBoxLayout *hlay1 = new QHBoxLayout(scaleBox);
     m_scaleBG          = new QButtonGroup(scaleBox);
     m_scaleBG->setExclusive(true);
-    scaleBox->setWhatsThis( i18n("<p>Select here the histogram scale.<p>"
+    scaleBox->setWhatsThis( i18n("<p>Select the histogram scale here.<p>"
                                  "If the image's maximal counts are small, you can use the linear scale.<p>"
                                  "Logarithmic scale can be used when the maximal counts are big; "
                                  "if it is used, all values (small and large) will be visible on the "
@@ -211,8 +211,8 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
     m_temperaturePresetCB->addItem( i18n("Xenon Lamp") );
     m_temperaturePresetCB->addItem( i18n("Daylight D65") );
     m_temperaturePresetCB->addItem( i18n("None") );
-    m_temperaturePresetCB->setWhatsThis( i18n("<p>Select here the white balance color temperature "
-                                              "preset to use:<p>"
+    m_temperaturePresetCB->setWhatsThis( i18n("<p>Select the white balance color temperature "
+                                              "preset to use here:<p>"
                                               "<b>Candle</b>: candle light (1850K).<p>"
                                               "<b>40W Lamp</b>: 40 Watt incandescent lamp (2680K).<p>"
                                               "<b>100W Lamp</b>: 100 Watt incandescent lamp (2800K).<p>"

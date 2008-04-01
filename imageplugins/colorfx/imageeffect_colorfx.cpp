@@ -113,7 +113,7 @@ ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent)
     m_channelCB->addItem( i18n("Red") );
     m_channelCB->addItem( i18n("Green") );
     m_channelCB->addItem( i18n("Blue") );
-    m_channelCB->setWhatsThis( i18n("<p>Select here the histogram channel to display:<p>"
+    m_channelCB->setWhatsThis( i18n("<p>Select the histogram channel to display here:<p>"
                                     "<b>Luminosity</b>: display the image's luminosity values.<p>"
                                     "<b>Red</b>: display the red image-channel values.<p>"
                                     "<b>Green</b>: display the green image-channel values.<p>"
@@ -122,7 +122,7 @@ ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent)
     QWidget *scaleBox = new QWidget(gboxSettings);
     QHBoxLayout *hlay = new QHBoxLayout(scaleBox);
     m_scaleBG         = new QButtonGroup(scaleBox);
-    scaleBox->setWhatsThis( i18n("<p>Select here the histogram scale.<p>"
+    scaleBox->setWhatsThis( i18n("<p>Select the histogram scale here.<p>"
                                  "If the image's maximal counts are small, you can use the linear scale.<p>"
                                  "Logarithmic scale can be used when the maximal counts are big; "
                                  "if it is used, all values (small and large) will be visible on the graph."));
@@ -174,7 +174,7 @@ ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent)
     m_effectType->addItem( i18n("Vivid") );
     m_effectType->addItem( i18n("Neon") );    
     m_effectType->addItem( i18n("Find Edges") );    
-    m_effectType->setWhatsThis( i18n("<p>Select here the effect type to apply on the image.<p>"
+    m_effectType->setWhatsThis( i18n("<p>Select the effect type to apply on the image here.<p>"
                                      "<b>Solarize</b>: simulates solarization of photograph.<p>"
                                      "<b>Vivid</b>: simulates the Velvia(tm) slide film colors.<p>"
                                      "<b>Neon</b>: coloring the edges in a photograph to "
