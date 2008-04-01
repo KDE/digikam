@@ -171,7 +171,7 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
     m_textRotation->addItem( i18n("90 Degrees") );
     m_textRotation->addItem( i18n("180 Degrees") );
     m_textRotation->addItem( i18n("270 Degrees") );
-    m_textRotation->setWhatsThis( i18n("<p>Select here the text rotation to use."));
+    m_textRotation->setWhatsThis( i18n("<p>Select the text rotation to use here."));
 
     // -------------------------------------------------------------
         

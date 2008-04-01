@@ -131,7 +131,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     m_channelCB->addItem( i18n("Blue") );
     m_channelCB->addItem( i18n("Alpha") );
     m_channelCB->setCurrentIndex( 0 );
-    m_channelCB->setWhatsThis( i18n("<p>Select here the histogram channel to display:<p>"
+    m_channelCB->setWhatsThis( i18n("<p>Select the histogram channel to display here:<p>"
                                     "<b>Luminosity</b>: display the image's luminosity values.<p>"
                                     "<b>Red</b>: display the red image-channel values.<p>"
                                     "<b>Green</b>: display the green image-channel values.<p>"
@@ -145,7 +145,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     QWidget *scaleBox = new QWidget(gboxSettings);
     QHBoxLayout *hlay = new QHBoxLayout(scaleBox);
     m_scaleBG         = new QButtonGroup(scaleBox);
-    scaleBox->setWhatsThis(i18n("<p>Select here the histogram scale.<p>"
+    scaleBox->setWhatsThis(i18n("<p>Select the histogram scale here.<p>"
                                 "If the image's maximal counts are small, you can use the linear scale.<p>"
                                 "Logarithmic scale can be used when the maximal counts are big; "
                                 "if it is used, all values (small and large) will be visible on the graph."));
@@ -196,8 +196,8 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     m_hGradientMinInput->setFixedHeight( 16 );
     m_hGradientMinInput->setMinimum(0);
     m_hGradientMinInput->setMaximum(m_histoSegments);
-    m_hGradientMinInput->setWhatsThis( i18n("<p>Select here the minimal intensity "
-                                            "input value of the histogram."));
+    m_hGradientMinInput->setWhatsThis( i18n("<p>Select the minimal intensity "
+                                            "input value of the histogram here."));
     m_hGradientMinInput->setToolTip( i18n( "Minimal intensity input." ) );
     m_hGradientMinInput->setColors( QColor( "black" ), QColor( "white" ) );
     m_hGradientMinInput->installEventFilter(this);
@@ -207,8 +207,8 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     m_hGradientMaxInput->setFixedHeight( 16 );
     m_hGradientMaxInput->setMinimum(0);
     m_hGradientMaxInput->setMaximum(m_histoSegments);
-    m_hGradientMaxInput->setWhatsThis( i18n("<p>Select here the maximal intensity input "
-                                            "value of the histogram."));
+    m_hGradientMaxInput->setWhatsThis( i18n("<p>Select the maximal intensity input "
+                                            "value of the histogram here."));
     m_hGradientMaxInput->setToolTip( i18n( "Maximal intensity input." ) );
     m_hGradientMaxInput->setColors( QColor( "black" ), QColor( "white" ) );
     m_hGradientMaxInput->installEventFilter(this);
@@ -217,8 +217,8 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     m_minInput->setRange(0, m_histoSegments);
     m_minInput->setSingleStep(1);
     m_minInput->setValue(0);
-    m_minInput->setWhatsThis( i18n("<p>Select here the minimal intensity input "
-                                   "value of the histogram."));
+    m_minInput->setWhatsThis( i18n("<p>Select the minimal intensity input "
+                                   "value of the histogram here."));
     m_minInput->setToolTip( i18n( "Minimal intensity input." ) );
 
     m_gammaInput = new KDoubleNumInput(gboxSettings);
@@ -226,20 +226,20 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     m_gammaInput->setRange(0.1, 3.0, 0.01);
     m_gammaInput->setValue(1.0);
     m_gammaInput->setToolTip( i18n( "Gamma input value." ) );
-    m_gammaInput->setWhatsThis( i18n("<p>Select here the gamma input value."));
+    m_gammaInput->setWhatsThis( i18n("<p>Select the gamma input value here."));
 
     m_maxInput = new QSpinBox(gboxSettings);
     m_maxInput->setRange(0, m_histoSegments);
     m_maxInput->setSingleStep(1);
     m_maxInput->setValue(m_histoSegments);
     m_maxInput->setToolTip( i18n( "Maximal intensity input." ) );
-    m_maxInput->setWhatsThis( i18n("<p>Select here the maximal intensity input "
-                                   "value of the histogram."));
+    m_maxInput->setWhatsThis( i18n("<p>Select the maximal intensity input "
+                                   "value of the histogram here."));
 
     m_hGradientMinOutput = new KGradientSelector( Qt::Horizontal, gboxSettings );
     m_hGradientMinOutput->setColors( QColor( "black" ), QColor( "white" ) );
-    m_hGradientMinOutput->setWhatsThis(i18n("<p>Select here the minimal intensity output "
-                                             "value of the histogram."));    
+    m_hGradientMinOutput->setWhatsThis(i18n("<p>Select the minimal intensity output "
+                                             "value of the histogram here."));    
     m_hGradientMinOutput->setToolTip( i18n( "Minimal intensity output." ) );
     m_hGradientMinOutput->setIndent(false);
     m_hGradientMinOutput->setFixedHeight( 16 );
@@ -249,8 +249,8 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
 
     m_hGradientMaxOutput = new KGradientSelector( Qt::Horizontal, gboxSettings );
     m_hGradientMaxOutput->setColors( QColor( "black" ), QColor( "white" ) );
-    m_hGradientMaxOutput->setWhatsThis(i18n("<p>Select here the maximal intensity output "
-                                            "value of the histogram."));
+    m_hGradientMaxOutput->setWhatsThis(i18n("<p>Select the maximal intensity output "
+                                            "value of the histogram here."));
     m_hGradientMaxOutput->setToolTip( i18n( "Maximal intensity output." ) );
     m_hGradientMaxOutput->setIndent(false);
     m_hGradientMaxOutput->setFixedHeight( 16 );
@@ -263,16 +263,16 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
     m_minOutput->setSingleStep(1);
     m_minOutput->setValue(0);
     m_minOutput->setToolTip( i18n( "Minimal intensity output." ) );
-    m_minOutput->setWhatsThis( i18n("<p>Select here the minimal intensity output "
-                                    "value of the histogram."));
+    m_minOutput->setWhatsThis( i18n("<p>Select the minimal intensity output "
+                                    "value of the histogram here."));
 
     m_maxOutput = new QSpinBox(gboxSettings);
     m_maxOutput->setRange(0, m_histoSegments);
     m_maxOutput->setSingleStep(1);
     m_maxOutput->setValue(m_histoSegments);
     m_maxOutput->setToolTip( i18n( "Maximal intensity output." ) );
-    m_maxOutput->setWhatsThis( i18n("<p>Select here the maximal intensity output "
-                                    "value of the histogram."));
+    m_maxOutput->setWhatsThis( i18n("<p>Select the maximal intensity output "
+                                    "value of the histogram here."));
 
     // -------------------------------------------------------------
 
