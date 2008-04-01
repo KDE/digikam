@@ -119,7 +119,7 @@ void DeleteWidget::updateText()
         }
         else
         {
-            ddDeleteText->setText(i18n("<qt>These items will be moved to the Trash Bin.</qt>"));
+            ddDeleteText->setText(i18n("<qt>These items will be moved to Trash.</qt>"));
             ddWarningIcon->setPixmap(KGlobal::iconLoader()->loadIcon("trashcan_full",
                 KIcon::Desktop, KIcon::SizeLarge));
         }
@@ -139,7 +139,7 @@ void DeleteWidget::updateText()
         }
         else
         {
-            ddDeleteText->setText(i18n("<qt>These albums will be moved to the Trash Bin.</qt>"));
+            ddDeleteText->setText(i18n("<qt>These albums will be moved to Trash.</qt>"));
             ddWarningIcon->setPixmap(KGlobal::iconLoader()->loadIcon("trashcan_full",
                                      KIcon::Desktop, KIcon::SizeLarge));
         }
@@ -162,10 +162,10 @@ void DeleteWidget::updateText()
         }
         else
         {
-            ddDeleteText->setText(i18n("<qt>These albums will be moved to the Trash Bin.<br>"
+            ddDeleteText->setText(i18n("<qt>These albums will be moved to Trash.<br>"
                                        "Note that <b>all subalbums</b> "
                                        "are included in this list and will "
-                                       "be moved to the Trash Bin as well.</qt>"));
+                                       "be moved to Trash as well.</qt>"));
             ddWarningIcon->setPixmap(KGlobal::iconLoader()->loadIcon("trashcan_full",
                                      KIcon::Desktop, KIcon::SizeLarge));
         }
