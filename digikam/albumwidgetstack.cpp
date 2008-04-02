@@ -378,4 +378,12 @@ double AlbumWidgetStack::zoomMax()
     return d->imagePreviewView->zoomMax();
 }
 
+void AlbumWidgetStack::toggleShowBar(bool b)
+{
+    if (b)
+        d->thumbBar->show();
+    else
+        d->thumbBar->hide();
+}
+
 }  // namespace Digikam

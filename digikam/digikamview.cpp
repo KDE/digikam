@@ -1594,4 +1594,9 @@ void DigikamView::slotCancelSlideShow()
     d->cancelSlideShow = true;
 }
 
+void DigikamView::toggleShowBar(bool b)
+{
+    d->albumWidgetStack->toggleShowBar(b);
+}
+
 }  // namespace Digikam

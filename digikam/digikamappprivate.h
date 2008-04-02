@@ -160,6 +160,7 @@ public:
         eventLoop                            = 0;
         albumIconViewFilter                  = 0;
         contributeAction                     = 0;
+        showBarAction                        = 0;
     }
 
     bool                                fullScreen;
@@ -239,6 +240,7 @@ public:
     KSelectAction                      *albumSortAction;
     KToggleAction                      *recurseAlbumsAction;
     KToggleAction                      *recurseTagsAction;
+    KToggleAction                      *showBarAction;
 
     KAction                            *rating0Star;
     KAction                            *rating1Star;

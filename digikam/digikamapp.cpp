@@ -230,6 +230,7 @@ DigikamApp::~DigikamApp()
     d->albumIconViewFilter->saveSettings();
     AlbumSettings::instance()->setRecurseAlbums(d->recurseAlbumsAction->isChecked());
     AlbumSettings::instance()->setRecurseTags(d->recurseTagsAction->isChecked());
+    AlbumSettings::instance()->setShowThumbbar(d->showBarAction->isChecked());
     AlbumSettings::instance()->saveSettings();
 
     AlbumLister::cleanUp();
@@ -864,6 +865,13 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
+    d->showBarAction = new KToggleAction(KIcon("view-choose"), i18n("Show Thumbnails"), this);
+    d->showBarAction->setShortcut(Qt::CTRL+Qt::Key_T);
+    connect(d->showBarAction, SIGNAL(triggered()), this, SLOT(slotToggleShowBar()));
+    actionCollection()->addAction("showthumbs", d->showBarAction);
+
+    // -----------------------------------------------------------
+
     d->quitAction = actionCollection()->addAction(KStandardAction::Quit, "app_exit",
                                                   this, SLOT(slotExit()));
 
@@ -1007,6 +1015,7 @@ void DigikamApp::setupActions()
     d->imageSortAction->setCurrentItem((int)AlbumSettings::instance()->getImageSortOrder());
     d->recurseAlbumsAction->setChecked(AlbumSettings::instance()->getRecurseAlbums());
     d->recurseTagsAction->setChecked(AlbumSettings::instance()->getRecurseTags());
+    d->showBarAction->setChecked(AlbumSettings::instance()->getShowThumbbar());
 
     // Setting the filter condition also updates the tooltip.
     // (So `setRating` is called first, as otherwise the filter value is not respected).
@@ -2219,6 +2228,7 @@ void DigikamApp::slotTogglePreview(bool t)
     d->imageSortAction->setEnabled(!t);
     d->zoomTo100percents->setEnabled(t);
     d->zoomFitToWindowAction->setEnabled(t);
+    d->showBarAction->setEnabled(t);
 }
 
 void DigikamApp::slotImportAddImages()
@@ -2274,6 +2284,11 @@ void DigikamApp::slotDIOResult(KJob* kjob)
         job->ui()->setWindow(this);
         job->ui()->showErrorMessage();
     }
+}
+
+void DigikamApp::slotToggleShowBar()
+{
+    d->view->toggleShowBar(d->showBarAction->isChecked());
 }
 
 }  // namespace Digikam

@@ -87,6 +87,8 @@ public:
     double zoomMin();
     double zoomMax();
 
+    void toggleShowBar(bool b);
+
 signals:
 
     void signalNextItem();

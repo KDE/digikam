@@ -265,6 +265,9 @@ public:
     void setRecurseTags(bool val);
     bool getRecurseTags() const;
 
+    void setShowThumbbar(bool val);
+    bool getShowThumbbar() const;
+
     static AlbumSettings *instance();
 
 private:

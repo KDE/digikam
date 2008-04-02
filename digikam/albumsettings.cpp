@@ -104,6 +104,7 @@ public:
 
     // preview settings
     bool                                previewLoadFullImageSize;      
+    bool                                showThumbbar;
 
     bool                                showFolderTreeViewItemsCount;
 
@@ -256,6 +257,7 @@ void AlbumSettings::init()
     d->saveRating                   = false;
 
     d->previewLoadFullImageSize     = false;
+    d->showThumbbar                 = true;
 
     d->recursiveAlbums              = false;
     d->recursiveTags                = true;
@@ -336,6 +338,7 @@ void AlbumSettings::readSettings()
     d->tooltipShowRating            = group.readEntry("ToolTips Show Rating", true);
 
     d->previewLoadFullImageSize     = group.readEntry("Preview Load Full Image Size", false);
+    d->showThumbbar                 = group.readEntry("Show Thumbbar", true);
 
     d->showFolderTreeViewItemsCount = group.readEntry("Show Folder Tree View Items Count", false);
 
@@ -428,6 +431,7 @@ void AlbumSettings::saveSettings()
     group.writeEntry("ToolTips Show Rating", d->tooltipShowRating);
 
     group.writeEntry("Preview Load Full Image Size", d->previewLoadFullImageSize);
+    group.writeEntry("Show Thumbbar", d->showThumbbar);
 
     group.writeEntry("Show Folder Tree View Items Count", d->showFolderTreeViewItemsCount);
 
@@ -1158,6 +1162,16 @@ void AlbumSettings::setShowFolderTreeViewItemsCount(bool val)
 bool AlbumSettings::getShowFolderTreeViewItemsCount() const
 {
     return d->showFolderTreeViewItemsCount;
+}
+
+void AlbumSettings::setShowThumbbar(bool val)
+{
+    d->showThumbbar = val;
+}
+
+bool AlbumSettings::getShowThumbbar() const
+{
+    return d->showThumbbar;
 }
 
 }  // namespace Digikam

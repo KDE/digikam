@@ -63,6 +63,7 @@ public:
     void showSideBars();
     void hideSideBars();
     void setThumbSize(int size);
+    void toggleShowBar(bool);
 
 signals:
 
