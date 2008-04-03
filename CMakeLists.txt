@@ -26,6 +26,7 @@ SET(DIGIKAM_VERSION_STRING "${DIGIKAM_MAJOR_VERSION}.${DIGIKAM_MINOR_VERSION}.${
 # Depencies
 
 macro_optional_find_package(KdepimLibs)
+macro_optional_find_package(KdepimLibs)
 macro_optional_find_package(LCMS)
 macro_optional_find_package(JPEG)
 macro_optional_find_package(PNG)
@@ -36,6 +37,10 @@ macro_optional_find_package(Sqlite)
 macro_optional_find_package(Kdcraw)
 macro_optional_find_package(Kexiv2)
 macro_optional_find_package(Kipi)
+
+# Add here marblewidget auto-detection when it will available.
+# Dixit discusion on #kde-edu IRC channel with Torsten Rahn at 04/03/08
+#macro_optional_find_package(findmarblewidget)
 
 message("")
 message("-- digiKam dependencies results -------------------")
