@@ -37,5 +37,5 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 011 ==> 132697 : Metadata list has no scrollbar.
 012 ==> 148502 : Show rating in embedded preview / slideshow.
 013 ==> 155408 : Thumbbar in the album view.
-014 ==> 
-
+014 ==> 138290 : GPSSync plugin integration in the side bar.
+015 ==> 
