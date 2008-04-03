@@ -23,7 +23,8 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 008 ==> 138766 : JPEG Rotations: Give a warning when doing Lossy rotations (and offer to do lossless when applicable).
 009 ==> 156007 : Canon Raw+Jpg Locks up download image window during thumbnail retrieval.
 010 ==> 114465 : Simpler entry of tags.
-011 ==> 
+011 ==> 159236 : Corrupted file when downloading from CF card via digikam.
+012 ==> 
 
 **********************************************************************************************
 
