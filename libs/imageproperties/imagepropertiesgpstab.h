@@ -64,10 +64,10 @@ public:
     ~ImagePropertiesGPSTab();
 
     void setGPSInfo();
-    void setGPSInfo(double lat, double lon, long alt, const QDateTime& dt);
+    void setGPSInfo(double lat, double lon, long alt, const QDateTime& dt, const KUrl& url);
     void setCurrentURL(const KUrl& url=KUrl());
 
-    void setMetadata(const DMetadata& meta);
+    void setMetadata(const DMetadata& meta, const KUrl& url);
 
     int  getWebGPSLocator();
     void setWebGPSLocator(int locator);

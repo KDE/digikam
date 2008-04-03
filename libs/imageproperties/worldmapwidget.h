@@ -26,9 +26,13 @@
 
 // Qt includes.
 
-#include <Q3ScrollView>
-#include <QPixmap>
-#include <QMouseEvent>
+#include <QFrame>
+#include <QDateTime>
+#include <QDomDocument>
+
+// KDE includes.
+
+#include <kurl.h>
 
 // Local includes
 
@@ -39,7 +43,7 @@ namespace Digikam
 
 class WorldMapWidgetPriv;
 
-class DIGIKAM_EXPORT WorldMapWidget : public Q3ScrollView
+class DIGIKAM_EXPORT WorldMapWidget : public QFrame
 {
 Q_OBJECT
 
@@ -48,22 +52,15 @@ public:
     WorldMapWidget(int w, int h, QWidget *parent);
     ~WorldMapWidget();
 
-    void   setGPSPosition(double lat, double lng);
+    void   setGPSPosition(double lat, double lng, double alt, const QDateTime& dt, const KUrl& url);
 
-    double getLatitude(void);
-    double getLongitude(void);
-
-protected:
-
-    void drawContents(QPainter *p, int x, int y, int w, int h);
+    double getLatitude();
+    double getLongitude();
 
 private:
 
-    void contentsMousePressEvent ( QMouseEvent * e );
-    void contentsMouseReleaseEvent ( QMouseEvent * e );
-    void contentsMouseMoveEvent( QMouseEvent * e );
-
-    QPixmap &worldMapPixmap();
+    QDomElement addKmlElement(QDomDocument &kmlDocument, QDomElement &target, const QString& tag);
+    QDomElement addKmlTextElement(QDomDocument &kmlDocument, QDomElement &target, const QString& tag, const QString& text);
 
 private:
 

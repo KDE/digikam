@@ -23,17 +23,16 @@
 
 // Qt includes.
 
-#include <QPainter>
-#include <QString>
-#include <QPixmap>
-#include <QLabel>
-#include <QFrame>
+#include <QVBoxLayout>
+#include <QStyle>
+#include <QDomDocument>
+#include <QTextStream>
+#include <QFile>
 
 // KDE includes.
 
-#include <kstandarddirs.h>
-#include <kcursor.h>
-#include <klocale.h>
+#include <ktemporaryfile.h>
+#include <marble/MarbleWidget.h>
 
 // Local includes.
 
@@ -51,33 +50,39 @@ public:
 
     WorldMapWidgetPriv()
     {
-        latitude  = 0;
-        longitude = 0;
+        latitude     = 0;
+        longitude    = 0;
+        altitude     = 0;
+        marbleWidget = 0;
     }
 
-    int             xPos;
-    int             yPos;
-    int             xMousePos;
-    int             yMousePos;
+    double        latitude;
+    double        longitude;
+    double        altitude;
 
-    double          latitude;
-    double          longitude;
+    QDateTime     dt;
+
+    KUrl          url;
+
+    MarbleWidget *marbleWidget;
 };
 
-K_GLOBAL_STATIC(QPixmap, worldMap)
-
 WorldMapWidget::WorldMapWidget(int w, int h, QWidget *parent)
-              : Q3ScrollView(parent)
+              : QFrame(parent)
 {
-    d = new WorldMapWidgetPriv;
-
     setAttribute(Qt::WA_DeleteOnClose);
-    setVScrollBarMode(Q3ScrollView::AlwaysOff);
-    setHScrollBarMode(Q3ScrollView::AlwaysOff);
-    viewport()->setMouseTracking(true);
     setMinimumWidth(w);
     setMinimumHeight(h);
-    resizeContents(worldMapPixmap().width(), worldMapPixmap().height());
+    setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+    setLineWidth(style()->pixelMetric(QStyle::PM_DefaultFrameWidth));
+
+    d = new WorldMapWidgetPriv;
+    d->marbleWidget = new MarbleWidget(this);
+
+    QVBoxLayout *vlay = new QVBoxLayout(this);    
+    vlay->addWidget(d->marbleWidget);
+    vlay->setMargin(0);
+    vlay->setSpacing(0);
 }
 
 WorldMapWidget::~WorldMapWidget()
@@ -85,100 +90,79 @@ WorldMapWidget::~WorldMapWidget()
     delete d;
 }
 
-QPixmap &WorldMapWidget::worldMapPixmap()
-{
-    if (worldMap->isNull())
-    {
-        QString mapPath = KStandardDirs::locate("data", "digikam/data/worldmap.jpg");
-        *worldMap = QPixmap(mapPath);
-    }
-    return *worldMap;
-}
-
-double WorldMapWidget::getLatitude(void)
+double WorldMapWidget::getLatitude()
 {
     return d->latitude;
 }
 
-double WorldMapWidget::getLongitude(void)
+double WorldMapWidget::getLongitude()
 {
     return d->longitude;
 }
 
-void WorldMapWidget::setGPSPosition(double lat, double lng)
+void WorldMapWidget::setGPSPosition(double lat, double lng, double alt, const QDateTime& dt, const KUrl& url)
 {
     d->latitude  = lat;
     d->longitude = lng;
+    d->altitude  = alt;
+    d->dt        = dt;
+    d->url       = url;
 
-    double latMid  = contentsHeight() / 2.0;
-    double longMid = contentsWidth()  / 2.0;
+    d->marbleWidget->setHome(lng, lat);
+    d->marbleWidget->centerOn(lng, lat);
 
-    double latOffset  = ( d->latitude  * latMid )  / 90.0;
-    double longOffset = ( d->longitude * longMid ) / 180.0;
+    // NOTE: There is no method currently to place a mark over the map in Marble 0.5.1.
+    // The only way is to use a temporary KML file with all informations that 
+    // we need.
 
-    d->xPos = (int)(longMid + longOffset);
-    d->yPos = (int)(latMid  - latOffset);
+    QDomDocument       kmlDocument;
+    QDomImplementation impl;
+    QDomProcessingInstruction instr = kmlDocument.createProcessingInstruction("xml","version=\"1.0\" encoding=\"UTF-8\"");
+    kmlDocument.appendChild(instr);
+    QDomElement kmlRoot = kmlDocument.createElementNS( "http://earth.google.com/kml/2.1","kml");
+    kmlDocument.appendChild(kmlRoot);
 
-    viewport()->repaint();
-    center(d->xPos, d->yPos);
+    QDomElement kmlAlbum     = addKmlElement(kmlDocument, kmlRoot, "Document");
+    QDomElement kmlName      = addKmlTextElement(kmlDocument, kmlAlbum, "name", "Geolocation");
+    QDomElement kmlPlacemark = addKmlElement(kmlDocument, kmlAlbum, "Placemark");
+    addKmlTextElement(kmlDocument, kmlPlacemark, "name", d->url.fileName());
+
+    QDomElement kmlGeometry  = addKmlElement(kmlDocument, kmlPlacemark, "Point");
+    addKmlTextElement(kmlDocument, kmlGeometry, "coordinates", QString("%1,%2").arg(lng).arg(lat));
+    addKmlTextElement(kmlDocument, kmlGeometry, "altitudeMode", "clampToGround");
+    addKmlTextElement(kmlDocument, kmlGeometry, "extrude", "1");
+
+    QDomElement kmlTimeStamp = addKmlElement(kmlDocument, kmlPlacemark, "TimeStamp");
+    addKmlTextElement(kmlDocument, kmlTimeStamp, "when", d->dt.toString("yyyy-MM-ddThh:mm:ssZ"));
+
+    KTemporaryFile KMLFile;
+    KMLFile.setSuffix(".kml");
+    KMLFile.setAutoRemove(true);
+    KMLFile.open();
+    QFile file(KMLFile.fileName());
+    file.open(QIODevice::WriteOnly);
+    QTextStream stream(&file); 
+    stream << kmlDocument.toString();
+    file.close();
+
+    DDebug() << KMLFile.fileName() << endl;
+    d->marbleWidget->addPlaceMarkFile(KMLFile.fileName());
 }
 
-void WorldMapWidget::drawContents(QPainter *p, int x, int y, int w, int h)
+QDomElement WorldMapWidget::addKmlElement(QDomDocument &kmlDocument, QDomElement &target, const QString& tag)
 {
-    if (isEnabled())
-    {
-        p->drawPixmap(x, y, worldMapPixmap(), x, y, w, h);
-        p->setPen(QPen(Qt::white, 0, Qt::SolidLine));
-        p->drawLine(d->xPos, 0, d->xPos, contentsHeight());
-        p->drawLine(0, d->yPos, contentsWidth(), d->yPos);
-        p->setPen(QPen(Qt::red, 0, Qt::DotLine));
-        p->drawLine(d->xPos, 0, d->xPos, contentsHeight());
-        p->drawLine(0, d->yPos, contentsWidth(), d->yPos);
-        p->setPen( Qt::red );
-        p->setBrush( Qt::red );
-        p->drawEllipse( d->xPos-2, d->yPos-2, 4, 4 );
-    }
-    else
-    {
-        p->fillRect(x, y, w, h, palette().color(QPalette::Disabled, QPalette::Background));
-    }
+    QDomElement kmlElement = kmlDocument.createElement(tag);
+    target.appendChild(kmlElement);
+    return kmlElement;
 }
 
-void WorldMapWidget::contentsMousePressEvent(QMouseEvent *e)
+QDomElement WorldMapWidget::addKmlTextElement(QDomDocument &kmlDocument, QDomElement &target, const QString& tag, const QString& text)
 {
-    if (!e) return;
-
-    if (e->button() == Qt::LeftButton)
-    {
-       d->xMousePos = e->x();
-       d->yMousePos = e->y();
-       setCursor( Qt::SizeAllCursor );
-    }
-}
-
-void WorldMapWidget::contentsMouseMoveEvent(QMouseEvent *e)
-{
-    if (!e) return;
-
-    if (e->buttons() & Qt::LeftButton)
-    {
-       uint newxpos = e->x();
-       uint newypos = e->y();
-
-       scrollBy (-(newxpos - d->xMousePos), -(newypos - d->yMousePos));
-       viewport()->repaint();
-
-       d->xMousePos = newxpos - (newxpos-d->xMousePos);
-       d->yMousePos = newypos - (newypos-d->yMousePos);
-       return;
-    }
-
-    setCursor( Qt::PointingHandCursor );
-}
-
-void WorldMapWidget::contentsMouseReleaseEvent(QMouseEvent*)
-{
-    unsetCursor(); 
+    QDomElement kmlElement  = kmlDocument.createElement(tag);
+    target.appendChild(kmlElement);
+    QDomText kmlTextElement = kmlDocument.createTextNode(text);
+    kmlElement.appendChild(kmlTextElement);
+    return kmlElement;
 }
 
 }  // namespace Digikam

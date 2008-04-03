@@ -281,7 +281,8 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
                 m_gpsTab->setGPSInfo(pos.latitudeNumber(), 
                                      pos.longitudeNumber(), 
                                      pos.altitude(), 
-                                     d->currentInfos.first().dateTime());
+                                     d->currentInfos.first().dateTime(),
+                                     d->currentInfos.first().fileUrl());
             m_dirtyGpsTab = true;
         }
     }

@@ -238,15 +238,15 @@ void ImagePropertiesGPSTab::setCurrentURL(const KUrl& url)
     }
 
     DMetadata meta(url.path());
-    setMetadata(meta);
+    setMetadata(meta, url);
 }
 
-void ImagePropertiesGPSTab::setMetadata(const DMetadata& meta)
+void ImagePropertiesGPSTab::setMetadata(const DMetadata& meta, const KUrl& url)
 {
     double alt, lat, lon;
     QDateTime dt = meta.getImageDateTime();
     if (meta.getGPSInfo(alt, lat, lon))
-        setGPSInfo(lat, lon, alt, dt);
+        setGPSInfo(lat, lon, alt, dt, url);
     else
         setGPSInfo();
 }
@@ -260,14 +260,14 @@ void ImagePropertiesGPSTab::setGPSInfo()
     setEnabled(false);
 }
 
-void ImagePropertiesGPSTab::setGPSInfo(double lat, double lon, long alt, const QDateTime& dt)
+void ImagePropertiesGPSTab::setGPSInfo(double lat, double lon, long alt, const QDateTime& dt, const KUrl& url)
 {
     d->altitude->setText(QString("%1 m").arg(QString::number(alt)));
     d->latitude->setText(QString::number(lat));
     d->longitude->setText(QString::number(lon));
     d->date->setText(KGlobal::locale()->formatDateTime(dt, KLocale::ShortDate, true));
     setEnabled(true);
-    d->map->setGPSPosition(lat, lon);
+    d->map->setGPSPosition(lat, lon, alt, dt, url);
 }
 
 }  // namespace Digikam

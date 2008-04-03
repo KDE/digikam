@@ -179,7 +179,7 @@ void ImagePropertiesSideBarCamGui::slotChangedTab(QWidget* tab)
     }
     else if (tab == d->gpsTab && !d->dirtyGpsTab)
     {
-        d->gpsTab->setMetadata(d->metaData);
+        d->gpsTab->setMetadata(d->metaData, d->currentURL);
         d->dirtyGpsTab = true;
     }
 
