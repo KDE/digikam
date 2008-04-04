@@ -39,6 +39,8 @@ INCLUDE_DIRECTORIES(
                      ../utilities/batch
                      ../utilities/lighttable
                      ../digikam
+                     ../
+
                      ${CMAKE_BINARY_DIR}/digikam/digikam
 
                      # external paths
