@@ -43,7 +43,6 @@ install( FILES image-full.png
 	       duplicatebothvert.png 
 	       duplicatebothhorz.png 
 	       togglemouseover.png  		          
-	       worldmap.jpg 
 	       menusidepixmap.png  
 	       indicator-gray.png
 	       indicator-green.png
