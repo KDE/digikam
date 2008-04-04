@@ -51,7 +51,7 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
 |---greycstoration                      Gilles          X      X       DONE        DONE
 |---histogram                           Gilles          X      X       DONE        DONE
 |---imageproperties
-    worldmapwidget.cpp                  Gilles          X      X       DONE                 Must be ported to Marble.
+    worldmapwidget.cpp                  Gilles          X      X       DONE        DONE
     imagepropertiessidebar.cpp          Gilles          X      X       DONE        DONE
     imagepropertiescolorstab.cpp        Gilles          X      X       DONE        DONE
     imagepropertiesmetadatatab.cpp      Gilles          X      X       DONE        DONE
@@ -125,7 +125,7 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
     editorwindow.cpp                    Gilles          X      X       DONE        DONE
     imageiface.cpp                      Gilles          X      X       DONE        DONE
     imagewindow.cpp                     Gilles                 X       DONE        DONE
-|-----tools                             Laurent         X      X       DONE
+|-----tools                             Laurent         X      X       DONE        DONE
 |---lighttable
     lighttablepreview.cpp               Gilles                 X       DONE
     lighttableview.cpp                  Gilles                 X       DONE
