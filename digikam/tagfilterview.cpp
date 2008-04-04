@@ -66,10 +66,10 @@
 #include "tagfilterview.h"
 #include "tagfilterview.moc"
 
-#include "config.h"
-#ifdef KDEPIMLIBS_FOUND
+#include "config-digikam.h"
+#ifdef HAVE_KDEPIMLIBS
 #include <kabc/stdaddressbook.h>
-#endif
+#endif // HAVE_KDEPIMLIBS
 
 namespace Digikam
 {
@@ -861,7 +861,7 @@ void TagFilterView::slotContextMenu(Q3ListViewItem* it, const QPoint&, int)
 
     newAction     = popmenu.addAction(SmallIcon("tag-new"), i18n("New Tag..."));
 
-#ifdef KDEPIMLIBS_FOUND
+#ifdef HAVE_KDEPIMLIBS
     d->ABCMenu = new QMenu(this);
 
     connect( d->ABCMenu, SIGNAL( aboutToShow() ),
@@ -870,7 +870,7 @@ void TagFilterView::slotContextMenu(Q3ListViewItem* it, const QPoint&, int)
     popmenu.addMenu(d->ABCMenu);
     d->ABCMenu->menuAction()->setIcon(SmallIcon("tag-addressbook"));
     d->ABCMenu->menuAction()->setText(i18n("Create Tag From AddressBook"));
-#endif
+#endif // HAVE_KDEPIMLIBS
 
     if (item)
     {
@@ -1080,7 +1080,7 @@ void TagFilterView::slotContextMenu(Q3ListViewItem* it, const QPoint&, int)
 
 void TagFilterView::slotABCContextMenu()
 {
-#ifdef KDEPIMLIBS_FOUND
+#ifdef HAVE_KDEPIMLIBS
     d->ABCMenu->clear();
 
     KABC::AddressBook* ab = KABC::StdAddressBook::self();
@@ -1103,7 +1103,7 @@ void TagFilterView::slotABCContextMenu()
         QAction *nothingFound = d->ABCMenu->addAction(i18n("No AddressBook entries found"));
         nothingFound->setEnabled(false);
     }
-#endif
+#endif // HAVE_KDEPIMLIBS
 }
 
 void TagFilterView::tagNew(TagFilterViewItem* item, const QString& _title, const QString& _icon)

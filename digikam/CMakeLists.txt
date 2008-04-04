@@ -48,6 +48,7 @@ INCLUDE_DIRECTORIES(
                      ../utilities/lighttable
                      ../utilities/searchwindow
                      ../digikam
+		     ../
 
                      # external library paths
                      ${JPEG_INCLUDE_DIS}
