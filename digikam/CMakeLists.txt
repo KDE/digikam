@@ -109,9 +109,10 @@ TARGET_LINK_LIBRARIES(digikam
                       ${KDCRAW_LIBRARIES}
                       ${KEXIV2_LIBRARIES}
                       ${KIPI_LIBRARIES}
-
-                      ${LIBMARBLEWIDGET_LIBRARY}
               )
+if(MARBLEWIDGET_FOUND)
+  target_link_libraries(digikam ${LIBMARBLEWIDGET_LIBRARY})
+endif(MARBLEWIDGET_FOUND)
 
 SET_TARGET_PROPERTIES(digikam PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 INSTALL(TARGETS digikam DESTINATION ${LIB_INSTALL_DIR} )

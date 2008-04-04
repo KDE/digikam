@@ -196,8 +196,10 @@ INCLUDE_DIRECTORIES(${KIPI_INCLUDE_DIR}
                     ${KDE4_INCLUDE_DIR}
                     ${QT_INCLUDES}
                     ${GPHOTO2_INCLUDE_DIR}
-                    ${LIBMARBLEWIDGET_INCLUDE_DIR}
                    )
+if(MARBLEWIDGET_FOUND)
+    include_directories(${LIBMARBLEWIDGET_INCLUDE_DIR})
+endif(MARBLEWIDGET_FOUND)
 
 ADD_DEFINITIONS(-DQT3_SUPPORT 
                 -DQT3_SUPPORT_WARNINGS
