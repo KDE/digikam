@@ -110,7 +110,7 @@ TARGET_LINK_LIBRARIES(digikam
                       ${KEXIV2_LIBRARIES}
                       ${KIPI_LIBRARIES}
 
-                      marblewidget
+                      ${LIBMARBLEWIDGET_LIBRARY}
               )
 
 SET_TARGET_PROPERTIES(digikam PROPERTIES VERSION 1.0.0 SOVERSION 1 )
