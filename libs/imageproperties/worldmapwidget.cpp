@@ -28,11 +28,17 @@
 #include <QDomDocument>
 #include <QTextStream>
 #include <QFile>
+#include <QLabel>
 
 // KDE includes.
 
+#include <klocale.h>
 #include <ktemporaryfile.h>
+
+#include "config.h"
+#ifdef MARBLEWIDGET_FOUND
 #include <marble/MarbleWidget.h>
+#endif // MARBLEWIDGET_FOUND
 
 // Local includes.
 
@@ -64,7 +70,11 @@ public:
 
     KUrl          url;
 
+#ifdef MARBLEWIDGET_FOUND
     MarbleWidget *marbleWidget;
+#else
+    QLabel       *marbleWidget;
+#endif // MARBLEWIDGET_FOUND
 };
 
 WorldMapWidget::WorldMapWidget(int w, int h, QWidget *parent)
@@ -77,7 +87,13 @@ WorldMapWidget::WorldMapWidget(int w, int h, QWidget *parent)
     setLineWidth(style()->pixelMetric(QStyle::PM_DefaultFrameWidth));
 
     d = new WorldMapWidgetPriv;
+#ifdef MARBLEWIDGET_FOUND
     d->marbleWidget = new MarbleWidget(this);
+#else
+    d->marbleWidget = new QLabel(this);
+    d->marbleWidget->setText(i18n("Geolocation using Marble not available"));
+    d->marbleWidget->setWordWrap(true);
+#endif // MARBLEWIDGET_FOUND
 
     QVBoxLayout *vlay = new QVBoxLayout(this);    
     vlay->addWidget(d->marbleWidget);
@@ -107,9 +123,6 @@ void WorldMapWidget::setGPSPosition(double lat, double lng, double alt, const QD
     d->altitude  = alt;
     d->dt        = dt;
     d->url       = url;
-
-    d->marbleWidget->setHome(lng, lat);
-    d->marbleWidget->centerOn(lng, lat);
 
     // NOTE: There is no method currently to place a mark over the map in Marble 0.5.1.
     // The only way is to use a temporary KML file with all informations that 
@@ -145,8 +158,11 @@ void WorldMapWidget::setGPSPosition(double lat, double lng, double alt, const QD
     stream << kmlDocument.toString();
     file.close();
 
-    DDebug() << KMLFile.fileName() << endl;
+#ifdef MARBLEWIDGET_FOUND
+    d->marbleWidget->setHome(lng, lat);
+    d->marbleWidget->centerOn(lng, lat);
     d->marbleWidget->addPlaceMarkFile(KMLFile.fileName());
+#endif // MARBLEWIDGET_FOUND
 }
 
 QDomElement WorldMapWidget::addKmlElement(QDomDocument &kmlDocument, QDomElement &target, const QString& tag)
