@@ -35,10 +35,10 @@
 #include <klocale.h>
 #include <ktemporaryfile.h>
 
-#include "config.h"
-#ifdef MARBLEWIDGET_FOUND
+#include "config-digikam.h"
+#ifdef HAVE_MARBLEWIDGET
 #include <marble/MarbleWidget.h>
-#endif // MARBLEWIDGET_FOUND
+#endif // HAVE_MARBLEWIDGET
 
 // Local includes.
 
@@ -70,11 +70,11 @@ public:
 
     KUrl          url;
 
-#ifdef MARBLEWIDGET_FOUND
+#ifdef HAVE_MARBLEWIDGET
     MarbleWidget *marbleWidget;
 #else
     QLabel       *marbleWidget;
-#endif // MARBLEWIDGET_FOUND
+#endif // HAVE_MARBLEWIDGET
 };
 
 WorldMapWidget::WorldMapWidget(int w, int h, QWidget *parent)
@@ -87,13 +87,13 @@ WorldMapWidget::WorldMapWidget(int w, int h, QWidget *parent)
     setLineWidth(style()->pixelMetric(QStyle::PM_DefaultFrameWidth));
 
     d = new WorldMapWidgetPriv;
-#ifdef MARBLEWIDGET_FOUND
+#ifdef HAVE_MARBLEWIDGET
     d->marbleWidget = new MarbleWidget(this);
 #else
     d->marbleWidget = new QLabel(this);
     d->marbleWidget->setText(i18n("Geolocation using Marble not available"));
     d->marbleWidget->setWordWrap(true);
-#endif // MARBLEWIDGET_FOUND
+#endif // HAVE_MARBLEWIDGET
 
     QVBoxLayout *vlay = new QVBoxLayout(this);    
     vlay->addWidget(d->marbleWidget);
@@ -158,11 +158,11 @@ void WorldMapWidget::setGPSPosition(double lat, double lng, double alt, const QD
     stream << kmlDocument.toString();
     file.close();
 
-#ifdef MARBLEWIDGET_FOUND
+#ifdef HAVE_MARBLEWIDGET
     d->marbleWidget->setHome(lng, lat);
     d->marbleWidget->centerOn(lng, lat);
     d->marbleWidget->addPlaceMarkFile(KMLFile.fileName());
-#endif // MARBLEWIDGET_FOUND
+#endif // HAVE_MARBLEWIDGET
 }
 
 QDomElement WorldMapWidget::addKmlElement(QDomDocument &kmlDocument, QDomElement &target, const QString& tag)

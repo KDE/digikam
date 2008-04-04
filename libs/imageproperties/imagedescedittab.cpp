@@ -75,10 +75,10 @@
 #include "imagedescedittab.h"
 #include "imagedescedittab.moc"
 
-#include "config.h"
-#ifdef KDEPIMLIBS_FOUND
+#include "config-digikam.h"
+#ifdef HAVE_KDEPIMLIBS
 #include <kabc/stdaddressbook.h>
-#endif
+#endif // HAVE_KDEPIMLIBS
 
 namespace Digikam
 {
@@ -818,7 +818,7 @@ void ImageDescEditTab::slotRightButtonClicked(Q3ListViewItem *item, const QPoint
     popmenu.addTitle(SmallIcon("digikam"), i18n("Tags"));
     QAction *newAction = popmenu.addAction(SmallIcon("tag-new"),  i18n("New Tag..."));
 
-#ifdef KDEPIMLIBS_FOUND
+#ifdef HAVE_KDEPIMLIBS
     d->ABCMenu = new KMenu;
 
     connect(d->ABCMenu, SIGNAL( aboutToShow() ),
@@ -827,7 +827,7 @@ void ImageDescEditTab::slotRightButtonClicked(Q3ListViewItem *item, const QPoint
     popmenu.addMenu(d->ABCMenu);
     d->ABCMenu->menuAction()->setIcon(SmallIcon("tag-addressbook"));
     d->ABCMenu->menuAction()->setText(i18n("Create Tag From AddressBook"));
-#endif
+#endif // HAVE_KDEPIMLIBS
 
     QAction *editAction=0, *resetIconAction=0, *deleteAction=0;
     if (!album->isRoot())
@@ -1007,7 +1007,7 @@ void ImageDescEditTab::slotRightButtonClicked(Q3ListViewItem *item, const QPoint
 
 void ImageDescEditTab::slotABCContextMenu()
 {
-#ifdef KDEPIMLIBS_FOUND
+#ifdef HAVE_KDEPIMLIBS
     d->ABCMenu->clear();
 
     KABC::AddressBook* ab = KABC::StdAddressBook::self();
@@ -1030,7 +1030,7 @@ void ImageDescEditTab::slotABCContextMenu()
         QAction *nothingFound = d->ABCMenu->addAction(i18n("No AddressBook entries found"));
         nothingFound->setEnabled(false);
     }
-#endif
+#endif // HAVE_KDEPIMLIBS
 }
 
 void ImageDescEditTab::slotMoreMenu()
