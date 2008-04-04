@@ -25,7 +25,6 @@ SET(DIGIKAM_VERSION_STRING "${DIGIKAM_MAJOR_VERSION}.${DIGIKAM_MINOR_VERSION}.${
 # =======================================================
 # Depencies
 
-macro_optional_find_package(KdepimLibs)
 macro_optional_find_package(LCMS)
 macro_optional_find_package(JPEG)
 macro_optional_find_package(PNG)
@@ -36,7 +35,18 @@ macro_optional_find_package(Sqlite)
 macro_optional_find_package(Kdcraw)
 macro_optional_find_package(Kexiv2)
 macro_optional_find_package(Kipi)
+
+# Optional depencies
+
+macro_optional_find_package(KdepimLibs)
 macro_optional_find_package(MarbleWidget)
+
+macro_bool_to_01(KDEPIMLIBS_FOUND HAVE_KDEPIMLIBS)
+macro_bool_to_01(MARBLEWIDGET_FOUND HAVE_MARBLEWIDGET)
+
+configure_file(config-digikam.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-digikam.h)
+
+# Log messages
 
 message("")
 message("-- digiKam dependencies results -------------------")
@@ -588,4 +598,3 @@ IF(NOT WIN32)
 ENDIF(NOT WIN32)
 
 endif(DIGIKAM_CAN_BE_COMPILE)
-
