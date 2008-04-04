@@ -26,7 +26,6 @@ SET(DIGIKAM_VERSION_STRING "${DIGIKAM_MAJOR_VERSION}.${DIGIKAM_MINOR_VERSION}.${
 # Depencies
 
 macro_optional_find_package(KdepimLibs)
-macro_optional_find_package(KdepimLibs)
 macro_optional_find_package(LCMS)
 macro_optional_find_package(JPEG)
 macro_optional_find_package(PNG)
@@ -37,10 +36,7 @@ macro_optional_find_package(Sqlite)
 macro_optional_find_package(Kdcraw)
 macro_optional_find_package(Kexiv2)
 macro_optional_find_package(Kipi)
-
-# Add here marblewidget auto-detection when it will available.
-# Dixit discusion on #kde-edu IRC channel with Torsten Rahn at 04/03/08
-#macro_optional_find_package(findmarblewidget)
+macro_optional_find_package(MarbleWidget)
 
 message("")
 message("-- digiKam dependencies results -------------------")
@@ -164,6 +160,16 @@ else(KDEPIMLIBS_FOUND)
   message("")
 endif(KDEPIMLIBS_FOUND)
 
+if(MARBLEWIDGET_FOUND)
+  message("-- libmarblewiget library found.... YES")
+else(MARBLEWIDGET_FOUND)
+  message("-- libmarblewiget library found.... NO")
+  message("")
+  message("digiKam needs libmarblewiget library >= 0.5.1. You need to install libmarblewiget first")
+  message("libmarblewiget website is at http://edu.kde.org/marble")
+  message("")
+endif(MARBLEWIDGET_FOUND)
+
 if(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND GPHOTO2_FOUND AND JASPER_FOUND AND SQLITE_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KIPI_FOUND)
   message("-- digiKam will be compiled...")
   set(DIGIKAM_CAN_BE_COMPILE true)
@@ -191,6 +197,7 @@ INCLUDE_DIRECTORIES(${KIPI_INCLUDE_DIR}
                     ${KDE4_INCLUDE_DIR}
                     ${QT_INCLUDES}
                     ${GPHOTO2_INCLUDE_DIR}
+                    ${LIBMARBLEWIDGET_INCLUDE_DIR}
                    )
 
 ADD_DEFINITIONS(-DQT3_SUPPORT 
