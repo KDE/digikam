@@ -109,9 +109,12 @@ TARGET_LINK_LIBRARIES(digikamthemedesigner
                       digikam 
                       digikamdatabase 
                       ${KDE4_KUTILS_LIBS}
-                      ${KDE4_KABC_LIBS}
                       ${GPHOTO2_LIBRARIES}
                      )
+
+IF(KDEPIMLIBS_FOUND)
+  TARGET_LINK_LIBRARIES(digikamthemedesigner ${KDE4_KABC_LIBS})
+ENDIF(KDEPIMLIBS_FOUND)
 
 INSTALL(TARGETS digikamthemedesigner DESTINATION ${BIN_INSTALL_DIR})
 
