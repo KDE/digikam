@@ -111,9 +111,10 @@ TARGET_LINK_LIBRARIES(digikam
                       ${KEXIV2_LIBRARIES}
                       ${KIPI_LIBRARIES}
               )
-if(MARBLEWIDGET_FOUND)
-  target_link_libraries(digikam ${LIBMARBLEWIDGET_LIBRARY})
-endif(MARBLEWIDGET_FOUND)
+
+IF(MARBLEWIDGET_FOUND)
+  TARGET_LINK_LIBRARIES(digikam ${LIBMARBLEWIDGET_LIBRARY})
+ENDIF(MARBLEWIDGET_FOUND)
 
 SET_TARGET_PROPERTIES(digikam PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 INSTALL(TARGETS digikam DESTINATION ${LIB_INSTALL_DIR} )
@@ -225,13 +226,16 @@ KDE4_ADD_EXECUTABLE(digikam_bin ${digikam_bin_SRCS})
 
 TARGET_LINK_LIBRARIES(digikam_bin
                       ${KDE4_KPARTS_LIBS}
-                      ${KDE4_KABC_LIBS}
                       ${KDE4_PHONON_LIBS}
                       ${STRIGI_LIBRARIES} 
                       ${GPHOTO2_LIBRARIES}
                       digikam
                       digikamdatabase
                      )
+
+IF(KDEPIMLIBS_FOUND)
+  TARGET_LINK_LIBRARIES(digikam_bin ${KDE4_KABC_LIBS})
+ENDIF(KDEPIMLIBS_FOUND)
 
 SET_TARGET_PROPERTIES(digikam_bin PROPERTIES OUTPUT_NAME digikam)
 
