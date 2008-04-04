@@ -7,7 +7,7 @@
  * Description : a widget to display a welcome page
  *               on root album.
  *
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -111,6 +111,7 @@ QString WelcomePageView::infoPage()
     newFeatures << i18n("Supports of multiple roots album paths");
     newFeatures << i18n("Thumbnails-bar integration with preview mode and in editor to easy naviguate between images");
     newFeatures << i18n("Supports the latest camera RAW files");
+    newFeatures << i18n("Geolocation performed using KDE4 Marble interface");
 
     QString featureItems;
     for ( int i = 0 ; i < newFeatures.count() ; i++ )
