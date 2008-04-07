@@ -42,6 +42,8 @@ INCLUDE_DIRECTORIES(
                      ../
 
                      ${CMAKE_BINARY_DIR}/digikam/digikam
+                     # config-digikam.h
+                     ${CMAKE_CURRENT_BINARY_DIR}/../
 
                      # external paths
                      ${LCMS_INCLUDE_DIR}
