@@ -58,6 +58,7 @@
 #include "setup.h"
 #include "syncjob.h"
 #include "thumbnailsize.h"
+#include "rawcameradlg.h"
 #include "lighttablepreview.h"
 #include "lighttablewindowprivate.h"
 #include "lighttablewindow.h"
@@ -1615,15 +1616,8 @@ void LightTableWindow::slotToggleNavigateByPair()
 
 void LightTableWindow::slotRawCameraList()
 {
-    QStringList list      = KDcrawIface::DcrawBinary::instance()->supportedCamera();
-    QString     dcrawVer  = KDcrawIface::DcrawBinary::instance()->internalVersion();
-    QString     KDcrawVer = KDcrawIface::KDcraw::version();
-    KMessageBox::informationList(this, 
-                                 i18n("<p>Using KDcraw library version %1"
-                                      "<p>Using Dcraw program version %2"
-                                      "<p>%3 models in the list")
-                                      .arg(KDcrawVer).arg(dcrawVer).arg(list.count()),
-                                 list, i18n("List of supported RAW camera"));
+    RawCameraDlg dlg(this);
+    dlg.exec();
 }
 
 void LightTableWindow::slotThemeChanged()

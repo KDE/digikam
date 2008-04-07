@@ -4,13 +4,13 @@ noinst_LTLIBRARIES = libdialog.la libdialogshowfoto.la
 
 # Dialogs collection used by Showfoto.
 
-libdialogshowfoto_la_SOURCES = iccprofileinfodlg.cpp imagedialog.cpp 
+libdialogshowfoto_la_SOURCES = iccprofileinfodlg.cpp imagedialog.cpp rawcameradlg.cpp
 
 libdialogshowfoto_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
 # Dialogs collection used by digiKam.
 
-libdialog_la_SOURCES = deletedialogbase.ui imagedialog.cpp \
+libdialog_la_SOURCES = deletedialogbase.ui imagedialog.cpp rawcameradlg.cpp \
 	                   ctrlpaneldlg.cpp imagedlgbase.cpp imageguidedlg.cpp \
 	                   iccprofileinfodlg.cpp deletedialog.cpp dprogressdlg.cpp 
 
@@ -31,6 +31,5 @@ INCLUDES = -I$(top_srcdir)/digikam/digikam \
 	       $(all_includes)
 
 digikaminclude_HEADERS = ctrlpaneldlg.h imagedlgbase.h imageguidedlg.h \
-	                     iccprofileinfodlg.h dprogressdlg.h imagedialog.h 
+	                     iccprofileinfodlg.h dprogressdlg.h imagedialog.h rawcameradlg.h 
 digikamincludedir = $(includedir)/digikam
-
