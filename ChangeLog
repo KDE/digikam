@@ -1,3 +1,531 @@
+0.9.4-beta3 2008-04-07
+-------------------------------------------------------------------------
+2008-04-03 13:40  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-04-01 19:33  doerr
+
+        * /branches/extragear/kde3/graphics/digikam/libs/dialogs/deletedialog.cpp:
+          CCBUGS: 147597
+
+2008-04-01 19:28  doerr
+
+        * /branches/extragear/kde3/graphics/digikam/libs/dialogs/deletedialog.cpp:
+          CCBUGS: 147597
+
+2008-04-01 19:24  doerr
+
+        * /branches/extragear/kde3/graphics/digikam/digikam/ratingfilter.cpp,
+          /branches/extragear/kde3/graphics/digikam/imageplugins/blurfx/imageeffect_blurfx.cpp,
+          /branches/extragear/kde3/graphics/digikam/imageplugins/border/imageeffect_border.cpp,
+          /branches/extragear/kde3/graphics/digikam/imageplugins/coreplugin/ratiocrop/imageeffect_ratiocrop.cpp,
+          /branches/extragear/kde3/graphics/digikam/imageplugins/coreplugin/sharpnesseditor/imageeffect_sharpen.cpp,
+          /branches/extragear/kde3/graphics/digikam/imageplugins/distortionfx/imageeffect_distortionfx.cpp,
+          /branches/extragear/kde3/graphics/digikam/utilities/setup/cameraselection.cpp,
+          /branches/extragear/kde3/graphics/digikam/utilities/setup/setupgeneral.cpp,
+          /branches/extragear/kde3/graphics/digikam/utilities/setup/setupicc.cpp:
+          CCBUGS: 147597
+
+2008-04-01 19:19  doerr
+
+        * /branches/extragear/kde3/graphics/digikam/imageplugins/adjustlevels/adjustlevels.cpp,
+          /branches/extragear/kde3/graphics/digikam/imageplugins/freerotation/imageeffect_freerotation.cpp,
+          /branches/extragear/kde3/graphics/digikam/imageplugins/inpainting/imageeffect_inpainting.cpp,
+          /branches/extragear/kde3/graphics/digikam/imageplugins/inserttext/imageeffect_inserttext.cpp,
+          /branches/extragear/kde3/graphics/digikam/imageplugins/restoration/imageeffect_restoration.cpp,
+          /branches/extragear/kde3/graphics/digikam/utilities/cameragui/cameraui.cpp:
+          CCBUGS: 147597
+
+2008-04-01 18:47  doerr
+
+        * /branches/extragear/kde3/graphics/digikam/libs/imageproperties/imagepropertiescolorstab.cpp:
+          CCBUGS: 147597
+
+2008-04-01 18:45  doerr
+
+        * /branches/extragear/kde3/graphics/digikam/imageplugins/adjustcurves/adjustcurves.cpp,
+          /branches/extragear/kde3/graphics/digikam/imageplugins/channelmixer/channelmixer.cpp,
+          /branches/extragear/kde3/graphics/digikam/imageplugins/colorfx/imageeffect_colorfx.cpp,
+          /branches/extragear/kde3/graphics/digikam/imageplugins/whitebalance/imageeffect_whitebalance.cpp:
+          CCBUGS: 147597
+
+2008-04-01 18:39  doerr
+
+        * /branches/extragear/kde3/graphics/digikam/imageplugins/coreplugin/imageeffect_autocorrection.cpp,
+          /branches/extragear/kde3/graphics/digikam/imageplugins/coreplugin/imageeffect_bcg.cpp,
+          /branches/extragear/kde3/graphics/digikam/imageplugins/coreplugin/imageeffect_bwsepia.cpp,
+          /branches/extragear/kde3/graphics/digikam/imageplugins/coreplugin/imageeffect_iccproof.cpp,
+          /branches/extragear/kde3/graphics/digikam/imageplugins/coreplugin/imageeffect_redeye.cpp,
+          /branches/extragear/kde3/graphics/digikam/imageplugins/coreplugin/imageeffect_rgb.cpp:
+          CCBUGS: 147597
+
+2008-04-01 18:34  doerr
+
+        * /branches/extragear/kde3/graphics/digikam/imageplugins/coreplugin/hsl/imageeffect_hsl.cpp:
+          CCBUGS: 147597
+
+2008-04-01 18:30  doerr
+
+        * /branches/extragear/kde3/graphics/digikam/digikam/timelineview.cpp:
+          CCBUGS: 147597
+
+2008-03-31 21:07  doerr
+
+        * /branches/extragear/kde3/graphics/digikam/libs/imageproperties/imagedescedittab.cpp:
+          Fixed bug 147597
+
+2008-03-31 20:53  doerr
+
+        * /branches/extragear/kde3/graphics/digikam/libs/dimg/loaders/jp2ksettings.cpp:
+          Fix for bug 147597
+
+2008-03-31 20:46  doerr
+
+        * /branches/extragear/kde3/graphics/digikam/libs/dialogs/imagedialog.cpp:
+          fixed typo unaviable -> unavailable
+
+2008-03-31 15:59  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-03-31 12:02  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/digikam/tageditdlg.cpp:
+          polish
+
+2008-03-31 11:41  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-03-31 11:29  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/imageproperties/imagedescedittab.cpp:
+          polish
+
+2008-03-31 11:25  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/imageproperties/imagedescedittab.h:
+          polish
+
+2008-03-31 11:23  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/imageproperties/imagedescedittab.cpp,
+          /branches/extragear/kde3/graphics/digikam/libs/imageproperties/imagedescedittab.h:
+          polish
+
+2008-03-31 10:47  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/digikam/tageditdlg.cpp,
+          /branches/extragear/kde3/graphics/digikam/digikam/tageditdlg.h,
+          /branches/extragear/kde3/graphics/digikam/digikam/tagfilterview.cpp,
+          /branches/extragear/kde3/graphics/digikam/digikam/tagfolderview.cpp,
+          /branches/extragear/kde3/graphics/digikam/digikam/tagspopupmenu.cpp,
+          /branches/extragear/kde3/graphics/digikam/libs/imageproperties/imagedescedittab.cpp,
+          /branches/extragear/kde3/graphics/digikam/libs/imageproperties/imagedescedittab.h:
+          digiKam from KDE3 branch : Tag Edit Dialog is now the common
+          implementation for simpler and fast Tags hierarchies entry.
+          - Dialog is now redesigned. There is new text to guide user for
+          fast tagging creation.
+          - In this dialog, the rules are the same than Caption & Tags
+          create new tags field.
+          - Dialog includes several static methods to create TAlbums and
+          show errors if creation fail.
+          - Tags Folder View, Tags Filter View and Tags pop-up menu use
+          these new static methods.
+          CCBUGS: 114465
+
+2008-03-31 06:04  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/digikam/tageditdlg.cpp:
+          polish
+
+2008-03-31 06:01  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/digikam/tageditdlg.cpp,
+          /branches/extragear/kde3/graphics/digikam/digikam/tageditdlg.h:
+          polish
+
+2008-03-30 19:33  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/digikam/tageditdlg.cpp:
+          digiKam from KDE3 branch : start to rewritting Tag edit dialog to
+          support simpler entry of tag. Not yet complete
+
+2008-03-30 17:05  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-03-30 15:05  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/digikam/Makefile.am,
+          /branches/extragear/kde3/graphics/digikam/digikam/tagcreatedlg.cpp,
+          /branches/extragear/kde3/graphics/digikam/digikam/tagcreatedlg.h,
+          /branches/extragear/kde3/graphics/digikam/digikam/tageditdlg.cpp,
+          /branches/extragear/kde3/graphics/digikam/digikam/tageditdlg.h,
+          /branches/extragear/kde3/graphics/digikam/digikam/tagfilterview.cpp,
+          /branches/extragear/kde3/graphics/digikam/digikam/tagfolderview.cpp,
+          /branches/extragear/kde3/graphics/digikam/digikam/tagspopupmenu.cpp,
+          /branches/extragear/kde3/graphics/digikam/libs/imageproperties/imagedescedittab.cpp,
+          /branches/extragear/kde3/graphics/digikam/libs/imageproperties/talbumlistview.cpp:
+          tagcreatedlg => tageditdlg
+
+2008-03-30 15:00  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/digikam/tagcreatedlg.cpp:
+          polish
+
+2008-03-30 14:37  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/digikam/tagcreatedlg.cpp,
+          /branches/extragear/kde3/graphics/digikam/digikam/tagcreatedlg.h,
+          /branches/extragear/kde3/graphics/digikam/digikam/tagfilterview.cpp,
+          /branches/extragear/kde3/graphics/digikam/digikam/tagfolderview.cpp,
+          /branches/extragear/kde3/graphics/digikam/digikam/tagspopupmenu.cpp,
+          /branches/extragear/kde3/graphics/digikam/libs/imageproperties/imagedescedittab.cpp:
+          digiKam from KDE3 branch : Tag Edit dialog : code factoring : no
+          need 2 dialog to edit or create tag.
+
+2008-03-30 13:51  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/imageproperties/imagedescedittab.cpp:
+          compile
+
+2008-03-30 13:50  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/imageproperties/imagedescedittab.cpp:
+          polish
+
+2008-03-30 10:02  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/imageproperties/imagedescedittab.cpp:
+          handle properlly root tag path to create child tags from a
+          hierarchy
+
+2008-03-29 21:39  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/imageproperties/imagedescedittab.cpp:
+          remove Tag Create button.
+
+2008-03-29 21:04  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/imageproperties/imagedescedittab.cpp:
+          digiKam from KDE3 branch : Caption & Tags: Create New Tags text
+          field :
+          - support tags path as with autocompletion (not only tags name)
+          - new rule in tag hiearchy parser to do not show an error message
+          if tag already exist.
+          CCBUGS: 114465
+
+2008-03-29 20:20  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/imageproperties/imagedescedittab.cpp:
+          digiKam from KDE3 branch : Captions & Tags: Create New Tags line
+          edit now support auto-completion.
+          CCBUGS: 114465
+
+2008-03-29 14:11  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/imageproperties/imagedescedittab.cpp:
+          polish
+
+2008-03-29 11:34  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/imageproperties/imagedescedittab.cpp,
+          /branches/extragear/kde3/graphics/digikam/libs/imageproperties/imagedescedittab.h:
+          do not give focus to new tag just created
+
+2008-03-29 09:50  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/imageproperties/imagedescedittab.cpp:
+          strip white-space at bigen/end of tag
+          CCBUGS:114465
+
+2008-03-28 22:25  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/imageproperties/imagedescedittab.cpp:
+          polish
+
+2008-03-28 22:20  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/imageproperties/imagedescedittab.cpp,
+          /branches/extragear/kde3/graphics/digikam/libs/imageproperties/imagedescedittab.h:
+          polish
+
+2008-03-28 22:04  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/imageproperties/imagedescedittab.cpp,
+          /branches/extragear/kde3/graphics/digikam/libs/imageproperties/imagedescedittab.h:
+          digiKam from KDE3 branch : Caption & Tags sidebar tab : add new
+          text edit field to create new tags in database
+          CCBUGS: 114465
+          TODO: KDE4PORT
+
+2008-03-28 21:52  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/widgets/common/paniconwidget.cpp,
+          /branches/extragear/kde3/graphics/digikam/libs/widgets/common/paniconwidget.h:
+          fix broken signals/slots
+
+2008-03-28 21:44  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/widgets/imageplugins/imagepannelwidget.cpp:
+          fix broken signal/slot connection
+
+2008-03-28 20:12  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-03-28 19:38  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-03-28 12:17  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/digikam/albumiconviewfilter.cpp:
+          digiKam from KDE3 branch : Search Text from Status Bar : add
+          auto-completion if search text query over icon view is true
+
+2008-03-28 12:09  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/widgets/common/searchtextbar.cpp,
+          /branches/extragear/kde3/graphics/digikam/libs/widgets/common/searchtextbar.h:
+          digiKAm from KDE3 branch : add auto-completion if search text
+          query is true
+
+2008-03-28 11:01  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/digikam/digikamview.cpp,
+          /branches/extragear/kde3/graphics/digikam/digikam/digikamview.h:
+          digiKam from KDE3 branch : Support auto-completion with Search
+          text bars from all folder views.
+
+2008-03-28 10:56  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/digikam/timelineview.cpp,
+          /branches/extragear/kde3/graphics/digikam/digikam/timelineview.h:
+          digiKam from KDE3 branch : new method to access on search text
+          bar
+
+2008-03-28 10:51  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-03-28 09:59  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/imageproperties/imagedescedittab.cpp:
+          polish
+
+2008-03-28 09:48  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/imageproperties/imagedescedittab.cpp:
+          polish
+
+2008-03-28 09:40  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/imageproperties/imagedescedittab.cpp:
+          digiKam from KDE3 branch : add completion support with Search
+          Tags name
+
+2008-03-28 09:36  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/widgets/common/searchtextbar.cpp:
+          digiKam from KDE3 branch: Added autocompletion support with
+          Search Text Bar.
+
+2008-03-28 07:03  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/widgets/common/searchtextbar.cpp,
+          /branches/extragear/kde3/graphics/digikam/libs/widgets/common/searchtextbar.h:
+          internal line edit widget is a Dline Edit not a KlineEdit
+
+2008-03-27 17:19  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-03-27 16:44  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-03-27 11:45  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-03-27 11:44  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/digikam/tagfilterview.cpp,
+          /branches/extragear/kde3/graphics/digikam/digikam/tagfolderview.cpp,
+          /branches/extragear/kde3/graphics/digikam/libs/imageproperties/imagedescedittab.cpp,
+          /branches/extragear/kde3/graphics/digikam/libs/imageproperties/imagedescedittab.h:
+          digiKam from KDE3 branch : Tag folder views : Delete Tag : check
+          if tag is already assigned to items and report to user before to
+          delete it really.
+          BUG: 158776
+          TODO: KDE4PORT
+
+2008-03-27 10:58  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/imageproperties/imagedescedittab.cpp:
+          digiKam from KDE3 branch : missing to check if tag to remove has
+          childs.
+
+2008-03-27 07:59  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/widgets/common/dpopupmenu.cpp:
+          polish
+
+2008-03-27 07:49  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/widgets/common/dpopupmenu.cpp,
+          /branches/extragear/kde3/graphics/digikam/libs/widgets/common/dpopupmenu.h:
+          digiKam from KDE3 branch: DPopupMenu follow color theme scheme.
+          Fix few pixmap glitch on left frame
+
+2008-03-26 19:25  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/digikam/albumwidgetstack.cpp,
+          /branches/extragear/kde3/graphics/digikam/digikam/albumwidgetstack.h:
+          backport commit #790476 from KDE4
+
+2008-03-26 09:36  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/widgets/imageplugins/imageguidewidget.cpp,
+          /branches/extragear/kde3/graphics/digikam/libs/widgets/imageplugins/imageguidewidget.h,
+          /branches/extragear/kde3/graphics/digikam/libs/widgets/imageplugins/imagepaniconwidget.cpp,
+          /branches/extragear/kde3/graphics/digikam/libs/widgets/imageplugins/imagepaniconwidget.h,
+          /branches/extragear/kde3/graphics/digikam/libs/widgets/imageplugins/imagepannelwidget.cpp,
+          /branches/extragear/kde3/graphics/digikam/libs/widgets/imageplugins/imagepannelwidget.h,
+          /branches/extragear/kde3/graphics/digikam/libs/widgets/imageplugins/imageregionwidget.cpp,
+          /branches/extragear/kde3/graphics/digikam/libs/widgets/imageplugins/imageregionwidget.h,
+          /branches/extragear/kde3/graphics/digikam/libs/widgets/imageplugins/imagewidget.cpp,
+          /branches/extragear/kde3/graphics/digikam/libs/widgets/imageplugins/imagewidget.h,
+          /branches/extragear/kde3/graphics/digikam/libs/widgets/imageplugins/listboxpreviewitem.h:
+          use const references
+
+2008-03-26 08:03  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/imageplugins/hotpixels/weights.cpp,
+          /branches/extragear/kde3/graphics/digikam/imageplugins/hotpixels/weights.h:
+          polish
+
+2008-03-26 07:49  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/imageplugins/hotpixels/hotpixel.h:
+          polish
+
+2008-03-26 07:16  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/imageplugins/hotpixels/blackframeparser.cpp:
+          polish
+
+2008-03-25 22:42  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/imageplugins/hotpixels/imageeffect_hotpixels.cpp:
+          polish
+
+2008-03-25 22:22  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-03-25 22:21  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/imageplugins/hotpixels/Makefile.am,
+          /branches/extragear/kde3/graphics/digikam/imageplugins/hotpixels/blackframelistview.cpp,
+          /branches/extragear/kde3/graphics/digikam/imageplugins/hotpixels/blackframelistview.h,
+          /branches/extragear/kde3/graphics/digikam/imageplugins/hotpixels/blackframeparser.cpp,
+          /branches/extragear/kde3/graphics/digikam/imageplugins/hotpixels/blackframeparser.h,
+          /branches/extragear/kde3/graphics/digikam/imageplugins/hotpixels/imageeffect_hotpixels.cpp,
+          /branches/extragear/kde3/graphics/digikam/imageplugins/hotpixels/imageeffect_hotpixels.h:
+          digiKam from KDE3 branch : HotPixels Tool : support of RAW
+          pictures as reference black frames.
+          BUG: 148935
+          TODO: KDE4PORT
+
+2008-03-25 11:48  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/dialogs/imagedialog.cpp:
+          polish
+
+2008-03-25 11:42  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/dialogs/imagedialog.cpp:
+          polish
+
+2008-03-25 11:41  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/imageplugins/hotpixels/blackframelistview.cpp,
+          /branches/extragear/kde3/graphics/digikam/imageplugins/hotpixels/blackframelistview.h,
+          /branches/extragear/kde3/graphics/digikam/imageplugins/hotpixels/blackframeparser.cpp,
+          /branches/extragear/kde3/graphics/digikam/imageplugins/hotpixels/blackframeparser.h,
+          /branches/extragear/kde3/graphics/digikam/imageplugins/hotpixels/imageeffect_hotpixels.cpp:
+          HotPixel tool now use ImageDialog
+
+2008-03-25 11:40  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/dialogs/imagedialog.cpp,
+          /branches/extragear/kde3/graphics/digikam/libs/dialogs/imagedialog.h:
+          new method to handle only one url
+
+2008-03-25 10:41  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-03-25 10:38  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/utilities/imageeditor/editor/editorwindow.cpp:
+          backport commit #789799 from KDE4
+
+2008-03-25 10:33  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/dialogs/Makefile.am,
+          /branches/extragear/kde3/graphics/digikam/libs/dialogs/imagedialog.cpp,
+          /branches/extragear/kde3/graphics/digikam/libs/dialogs/imagedialog.h,
+          /branches/extragear/kde3/graphics/digikam/libs/thumbbar/thumbbar.cpp,
+          /branches/extragear/kde3/graphics/digikam/project/project.kdevelop,
+          /branches/extragear/kde3/graphics/digikam/showfoto/Makefile.am,
+          /branches/extragear/kde3/graphics/digikam/showfoto/showfoto.cpp:
+          backport ImageDialog from KDE4. Used into Showfoto to open image
+          files
+
+2008-03-25 04:34  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-03-24 09:41  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/PACKAGING: update
+
+2008-03-24 09:40  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-03-24 09:38  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/digikam/version.h:
+          update
+
+2008-03-24 09:38  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/digikam.lsm: update
+
+2008-03-23 21:27  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/ChangeLog: update
+
+2008-03-23 20:23  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-03-23 20:18  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/release_digikam.rb,
+          /branches/extragear/kde3/graphics/digikam/release_digikam_docs.rb:
+          prepare 0.9.4-beta2
+
+2008-03-23 20:13  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/digikam.lsm: update
+
 0.9.4-beta2 2008-03-23
 -------------------------------------------------------------------------
 2008-03-22 15:46  cgilles
