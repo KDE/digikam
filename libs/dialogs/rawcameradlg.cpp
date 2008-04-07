@@ -117,10 +117,10 @@ RawCameraDlg::RawCameraDlg(QWidget *parent)
 
     // --------------------------------------------------------
 
-    grid->addMultiCellWidget(logo,         0, 2, 0, 0);
-    grid->addMultiCellWidget(header,       0, 0, 1, 2);
-    grid->addMultiCellWidget(d->searchBar, 1, 1, 1, 2);
-    grid->addMultiCellWidget(d->listView,  2, 2, 1, 2);
+    grid->addWidget(logo,         0, 0, 3, 1);
+    grid->addWidget(header,       0, 1, 1, 2);
+    grid->addWidget(d->searchBar, 1, 1, 1, 2);
+    grid->addWidget(d->listView,  2, 1, 1, 2);
     grid->setColumnStretch(1, 10);
     grid->setRowStretch(2, 10);
     grid->setMargin(0);
