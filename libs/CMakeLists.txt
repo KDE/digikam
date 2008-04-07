@@ -21,8 +21,6 @@ include_directories( dimg
                      ${PNG_INCLUDE_DIR}
                      ${JASPER_INCLUDE_DIR}
                    )
-MESSAGE(STATUS "--------------------${CMAKE_CURRENT_BINARY_DIR}/../" )
-
 add_subdirectory( lprof )
 add_subdirectory( curves )
 add_subdirectory( levels )
