@@ -81,11 +81,6 @@
 #include <kservicetypetrader.h>
 #include <ktogglefullscreenaction.h>
 
-// LibKDcraw includes.
-
-#include <libkdcraw/kdcraw.h>
-#include <libkdcraw/dcrawbinary.h>
-
 // Local includes.
 
 #include "ddebug.h"
@@ -107,6 +102,7 @@
 #include "slideshowsettings.h"
 #include "themeengine.h"
 #include "thumbbar.h"
+#include "rawcameradlg.h"
 #include "editorwindowprivate.h"
 #include "editorwindow.h"
 #include "editorwindow.moc"
@@ -1814,15 +1810,8 @@ void EditorWindow::slotSelectionChanged(const QRect& sel)
 
 void EditorWindow::slotRawCameraList()
 {
-    QStringList list      = KDcrawIface::DcrawBinary::instance()->supportedCamera();
-    QString     dcrawVer  = KDcrawIface::DcrawBinary::instance()->internalVersion();
-    QString     KDcrawVer = KDcrawIface::KDcraw::version();
-    KMessageBox::informationList(this, 
-                                 i18n("<p>Using KDcraw library version %1"
-                                      "<p>Using Dcraw program version %2"
-                                      "<p>%3 models in the list", 
-                                      KDcrawVer, dcrawVer, list.count()),
-                                 list, i18n("List of supported RAW camera"));
+    RawCameraDlg dlg(this);
+    dlg.exec();
 }
 
 void EditorWindow::slotThemeChanged()

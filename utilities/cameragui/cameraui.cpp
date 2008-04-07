@@ -77,7 +77,6 @@
 
 // LibKDcraw includes.
 
-#include <libkdcraw/kdcraw.h>
 #include <libkdcraw/dcrawbinary.h>
 
 // Local includes.
@@ -103,6 +102,7 @@
 #include "freespacewidget.h"
 #include "collectionscanner.h"
 #include "collectionmanager.h"
+#include "rawcameradlg.h"
 #include "capturedlg.h"
 #include "camerafolderdialog.h"
 #include "camerainfodialog.h"
@@ -1961,17 +1961,9 @@ bool CameraUI::cameraDelDirSupport()
 
 void CameraUI::slotRawCameraList()
 {
-    QStringList list      = KDcrawIface::DcrawBinary::instance()->supportedCamera();
-    QString     dcrawVer  = KDcrawIface::DcrawBinary::instance()->internalVersion();
-    QString     KDcrawVer = KDcrawIface::KDcraw::version();
-    KMessageBox::informationList(this, 
-                                 i18n("<p>Using KDcraw library version %1"
-                                      "<p>Using Dcraw program version %2"
-                                      "<p>%3 models in the list", 
-                                      KDcrawVer, dcrawVer, list.count()),
-                                 list, i18n("List of supported RAW camera"));
+    RawCameraDlg dlg(this);
+    dlg.exec();
 }
-
 
 void CameraUI::slotThemeChanged()
 {
