@@ -40,7 +40,6 @@
 
 // LibKDcraw includes.
 
-#include <libkdcraw/kdcraw.h>
 #include <libkdcraw/dcrawbinary.h>
 
 // Local includes.

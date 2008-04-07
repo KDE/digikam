@@ -79,11 +79,6 @@ extern "C"
 #include <kwin.h>
 #include <kcombobox.h>
 
-// LibKDcraw includes.
-
-#include <libkdcraw/kdcraw.h>
-#include <libkdcraw/dcrawbinary.h>
-
 // Local includes.
 
 #include "ddebug.h"
