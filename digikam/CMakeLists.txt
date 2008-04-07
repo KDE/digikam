@@ -49,7 +49,8 @@ INCLUDE_DIRECTORIES(
                      ../utilities/searchwindow
                      ../digikam
 		     ../
-
+                     # config-digikam.h
+                     ${CMAKE_CURRENT_BINARY_DIR}/../
                      # external library paths
                      ${JPEG_INCLUDE_DIS}
                      ${PNG_PNG_INCLUDE_DIR}
