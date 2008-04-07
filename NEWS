@@ -1,4 +1,17 @@
-digiKam 0.9.4-beta3 - Release date: 2008-04-??
+digiKam 0.9.4-RC1 - Release date: 2008-04-??
+
+NEW FEATURES:
+
+General        : New dialog to list all RAW camera supported. A search camera model tool is 
+                 available to find easy a camera from list.
+
+digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+
+001 ==> 
+
+**********************************************************************************************
+
+digiKam 0.9.4-beta3 - Release date: 2008-04-07
 
 NEW FEATURES:
 
@@ -24,7 +37,6 @@ digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 009 ==> 156007 : Canon Raw+Jpg Locks up download image window during thumbnail retrieval.
 010 ==> 114465 : Simpler entry of tags.
 011 ==> 159236 : Corrupted file when downloading from CF card via digikam.
-012 ==> 
 
 **********************************************************************************************
 
