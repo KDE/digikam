@@ -98,7 +98,7 @@ RawCameraDlg::RawCameraDlg(QWidget *parent)
 
     d->searchBar = new SearchTextBar(page);
     d->listView  = new QListView(page);
-    d->listView->addColumn("Camera Model");       // Hearder is hiden. No i18n here.
+    d->listView->addColumn("Camera Model");       // Header is hiden. No i18n here.
     d->listView->setSorting(1);
     d->listView->header()->hide();
     d->listView->setResizeMode(QListView::LastColumn);
