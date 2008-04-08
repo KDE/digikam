@@ -7,7 +7,9 @@ General        : New dialog to list all RAW camera supported. A search camera mo
 
 digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-001 ==> 
+001 ==> 121309 : Camera list sorted by brand.
+002 ==> 137836 : Usability: Configure camera gui add and auto-detect camera.
+003 ==> 
 
 **********************************************************************************************
 
