@@ -130,7 +130,7 @@ CameraSelection::CameraSelection( QWidget* parent )
                                    "will be set automatically.</p><p>This list has been generated "
                                    "using the gphoto2 library installed on your computer.</p>"));
 
-    d->searchBar = new SearchTextBar(plainPage());
+    d->searchBar = new SearchTextBar(mainWidget());
 
     // --------------------------------------------------------------
 
@@ -241,16 +241,17 @@ CameraSelection::CameraSelection( QWidget* parent )
 
     // --------------------------------------------------------------
 
-    mainBoxLayout->setMargin(0);
-    mainBoxLayout->setSpacing(KDialog::spacingHint());
+    mainBoxLayout->addWidget(d->listView,  0, 0, 6, 1);
+    mainBoxLayout->addWidget(d->searchBar, 0, 0, 7, 1);
+    mainBoxLayout->addWidget(titleBox,     0, 1, 1, 1);
+    mainBoxLayout->addWidget(portBox,      1, 1, 1, 1);
+    mainBoxLayout->addWidget(portPathBox,  2, 1, 1, 1);
+    mainBoxLayout->addWidget(umsMountBox,  3, 1, 1, 1);
+    mainBoxLayout->addWidget(box2,         4, 1, 2, 1);
     mainBoxLayout->setColumnStretch(0, 10);
     mainBoxLayout->setRowStretch(6, 10);
-    mainBoxLayout->addWidget(d->listView, 0, 0, 7, 1);
-    mainBoxLayout->addWidget(titleBox,    0, 1, 1, 1);
-    mainBoxLayout->addWidget(portBox,     1, 1, 1, 1);
-    mainBoxLayout->addWidget(portPathBox, 2, 1, 1, 1);
-    mainBoxLayout->addWidget(umsMountBox, 3, 1, 1, 1);
-    mainBoxLayout->addWidget(box2,        4, 1, 2, 1);
+    mainBoxLayout->setSpacing(KDialog::spacingHint());
+    mainBoxLayout->setMargin(0);
 
     // Connections --------------------------------------------------
 
