@@ -195,7 +195,7 @@ SearchTextBar::~SearchTextBar()
 {
     KConfig *config = kapp->config();
     config->setGroup(name() + QString(" Search Text Tool"));
-    config->writeEntry("AutoCompletionMode", d->searchEdit->completionMode());
+    config->writeEntry("AutoCompletionMode", (int)d->searchEdit->completionMode());
     config->sync();
 
     delete d;
