@@ -242,7 +242,7 @@ CameraSelection::CameraSelection( QWidget* parent )
     // --------------------------------------------------------------
 
     mainBoxLayout->addWidget(d->listView,  0, 0, 6, 1);
-    mainBoxLayout->addWidget(d->searchBar, 0, 0, 7, 1);
+    mainBoxLayout->addWidget(d->searchBar, 7, 0, 1, 1);
     mainBoxLayout->addWidget(titleBox,     0, 1, 1, 1);
     mainBoxLayout->addWidget(portBox,      1, 1, 1, 1);
     mainBoxLayout->addWidget(portPathBox,  2, 1, 1, 1);
