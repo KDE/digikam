@@ -237,6 +237,7 @@ void SearchTextBar::slotSearchResult(bool match)
     pal.setColor(QPalette::Active, QColorGroup::Base,
                  match ? QColor(200, 255, 200) :
                  QColor(255, 200, 200));
+    pal.setColor(QPalette::Active, QColorGroup::Text, Qt::black);
     d->searchEdit->setPalette(pal);
 
     // If search result match the text query, we put the text 
