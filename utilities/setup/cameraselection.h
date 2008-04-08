@@ -58,6 +58,11 @@ public:
     QString currentPortPath();
     QString currentCameraPath();
 
+signals:
+
+    void signalOkClicked(const QString& title, const QString& model,
+                         const QString& port,  const QString& path);
+
 private:
 
     void getCameraList();
@@ -70,15 +75,11 @@ private slots:
     void slotSelectionChanged(QTreeWidgetItem*, int);
     void slotPortChanged();
     void slotOkClicked();
-
-signals:
-
-    void signalOkClicked(const QString& title, const QString& model,
-                         const QString& port,  const QString& path);
+    void slotSearchTextChanged(const QString&);
 
 private:
 
-    CameraSelectionPriv* d;
+    CameraSelectionPriv *d;
 };
 
 }  // namespace Digikam

@@ -46,6 +46,7 @@
 
 // Local includes.
 
+#include "searchtextbar.h"
 #include "gpcamera.h"
 #include "cameraselection.h"
 #include "cameraselection.moc"
@@ -67,6 +68,7 @@ public:
         portPathLabel    = 0;
         portPathComboBox = 0;
         umsMountURL      = 0;
+        searchBar        = 0;
     }
 
     QButtonGroup  *portButtonGroup;
@@ -89,6 +91,8 @@ public:
     KLineEdit     *titleEdit;
 
     KUrlRequester *umsMountURL;
+
+    SearchTextBar *searchBar;
 };
 
 CameraSelection::CameraSelection( QWidget* parent )
@@ -126,14 +130,15 @@ CameraSelection::CameraSelection( QWidget* parent )
                                    "will be set automatically.</p><p>This list has been generated "
                                    "using the gphoto2 library installed on your computer.</p>"));
 
+    d->searchBar = new SearchTextBar(plainPage());
 
     // --------------------------------------------------------------
 
     QGroupBox* titleBox   = new QGroupBox(i18n("Camera Title"), mainWidget());
     QVBoxLayout *gLayout1 = new QVBoxLayout(titleBox);
     d->titleEdit          = new KLineEdit(titleBox);
-    d->titleEdit->setWhatsThis( i18n("<p>Set here the name used in digiKam interface to "
-                                     "identify this camera.</p>"));
+    d->titleEdit->setWhatsThis(i18n("<p>Set here the name used in digiKam interface to "
+                                    "identify this camera.</p>"));
 
     gLayout1->addWidget(d->titleEdit);
     gLayout1->setMargin(KDialog::spacingHint());
@@ -146,13 +151,13 @@ CameraSelection::CameraSelection( QWidget* parent )
     d->portButtonGroup    = new QButtonGroup( portBox );
     d->portButtonGroup->setExclusive( true );
 
-    d->usbButton = new QRadioButton( i18n("USB"), portBox );
-    d->usbButton->setWhatsThis( i18n("<p>Select this option if your camera is connected to your "
-                                     "computer using an USB cable.</p>"));
+    d->usbButton = new QRadioButton(i18n("USB"), portBox);
+    d->usbButton->setWhatsThis(i18n("<p>Select this option if your camera is connected to your "
+                                    "computer using an USB cable.</p>"));
 
     d->serialButton = new QRadioButton( i18n("Serial"), portBox );
-    d->serialButton->setWhatsThis( i18n("<p>Select this option if your camera is connected to your "
-                                        "computer using a serial cable.</p>"));
+    d->serialButton->setWhatsThis(i18n("<p>Select this option if your camera is connected to your "
+                                       "computer using a serial cable.</p>"));
 
     d->portButtonGroup->addButton(d->usbButton);
     d->portButtonGroup->addButton(d->serialButton);
@@ -168,7 +173,7 @@ CameraSelection::CameraSelection( QWidget* parent )
     QVBoxLayout *gLayout3  = new QVBoxLayout(portPathBox);
 
     d->portPathLabel = new QLabel( portPathBox);
-    d->portPathLabel->setText( i18n( "Note: only for serial port camera" ) );
+    d->portPathLabel->setText(i18n("Note: only for serial port camera"));
 
     d->portPathComboBox = new QComboBox( portPathBox );
     d->portPathComboBox->setDuplicatesEnabled( false );
@@ -186,13 +191,13 @@ CameraSelection::CameraSelection( QWidget* parent )
     QVBoxLayout *gLayout4  = new QVBoxLayout(umsMountBox);
 
     QLabel* umsMountLabel = new QLabel( umsMountBox );
-    umsMountLabel->setText( i18n( "Note: only for USB/IEEE mass storage camera" ) );
+    umsMountLabel->setText(i18n("Note: only for USB/IEEE mass storage camera"));
 
     d->umsMountURL = new KUrlRequester( QString("/mnt/camera"), umsMountBox);
     d->umsMountURL->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly);
-    d->umsMountURL->setWhatsThis( i18n("<p>Set here the mount path to use on your computer. This "
-                                       "option is only required if you use an <b>USB Mass Storage</b> "
-                                       "camera.</p>"));
+    d->umsMountURL->setWhatsThis(i18n("<p>Set here the mount path to use on your computer. This "
+                                      "option is only required if you use an <b>USB Mass Storage</b> "
+                                      "camera.</p>"));
 
     gLayout4->addWidget(umsMountLabel);
     gLayout4->addWidget(d->umsMountURL);
@@ -263,6 +268,9 @@ CameraSelection::CameraSelection( QWidget* parent )
 
     connect(this, SIGNAL(okClicked()),
             this, SLOT(slotOkClicked()));
+
+    connect(d->searchBar, SIGNAL(textChanged(const QString&)),
+            this, SLOT(slotSearchTextChanged(const QString&)));
 
     // Initialize  --------------------------------------------------
 
@@ -496,6 +504,32 @@ void CameraSelection::slotOkClicked()
 {
     emit signalOkClicked(currentTitle(),    currentModel(),
                          currentPortPath(), currentCameraPath());
+}
+
+void CameraSelection::slotSearchTextChanged(const QString& filter)
+{
+    bool query     = false;
+    QString search = filter.toLower();
+
+    QTreeWidgetItemIterator it(d->listView);
+    while (*it)
+    {
+        QTreeWidgetItem *item  = *it;
+
+        if (item->text(0).toLower().contains(search))
+        {
+            query = true;
+            item->setHidden(false);
+        }
+        else
+        {
+            item->setHidden(true);
+        }
+
+        ++it;
+    }
+
+    d->searchBar->slotSearchResult(query);
 }
 
 }  // namespace Digikam
