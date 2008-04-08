@@ -111,10 +111,10 @@ RawCameraDlg::RawCameraDlg(QWidget *parent)
     
     grid->addMultiCellWidget(logo,         0, 2, 0, 0);
     grid->addMultiCellWidget(header,       0, 0, 1, 2);
-    grid->addMultiCellWidget(d->searchBar, 1, 1, 1, 2);
-    grid->addMultiCellWidget(d->listView,  2, 2, 1, 2);
+    grid->addMultiCellWidget(d->listView,  1, 1, 1, 2);
+    grid->addMultiCellWidget(d->searchBar, 2, 2, 1, 2);
     grid->setColStretch(1, 10);
-    grid->setRowStretch(2, 10);
+    grid->setRowStretch(1, 10);
 
     // --------------------------------------------------------
 
@@ -131,6 +131,7 @@ RawCameraDlg::~RawCameraDlg()
 
 void RawCameraDlg::slotSearchTextChanged(const QString& filter)
 {
+    bool query     = false;
     QString search = filter.lower();
 
     QListViewItemIterator it(d->listView);
@@ -140,10 +141,17 @@ void RawCameraDlg::slotSearchTextChanged(const QString& filter)
         QListViewItem *item  = it.current();
 
         if (item->text(0).lower().contains(search))
+        {
+            query = true;
             item->setVisible(true);
+        }
         else
+        {
             item->setVisible(false);
+        }
     }
+
+    d->searchBar->slotSearchResult(query);
 }
 
 }  // NameSpace Digikam
