@@ -162,7 +162,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
 
     // Tags view ---------------------------------------------------
 
-    d->newTagEdit    = new SearchTextBar(settingsArea, i18n("Enter new tag here..."));
+    d->newTagEdit    = new SearchTextBar(settingsArea, "ImageDescEditTabNewTagEdit", i18n("Enter new tag here..."));
     QWhatsThis::add(d->newTagEdit, i18n("Enter here the text used to create new tags. "
                                         "'/' can be used here to create a hierarchy of tags. "
                                         "',' can be used here to create more than one hierarchy at the same time."));
@@ -172,7 +172,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     QHBox *tagsSearch  = new QHBox(settingsArea);
     tagsSearch->setSpacing(KDialog::spacingHint());
 
-    d->tagsSearchBar   = new SearchTextBar(tagsSearch);
+    d->tagsSearchBar   = new SearchTextBar(tagsSearch, "ImageDescEditTabTagsSearchBar");
 
     d->assignedTagsBtn = new QToolButton(tagsSearch);
     QToolTip::add(d->assignedTagsBtn, i18n("Tags already assigned"));

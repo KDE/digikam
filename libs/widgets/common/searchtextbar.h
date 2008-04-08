@@ -76,7 +76,7 @@ Q_OBJECT
 
 public:
 
-    SearchTextBar(QWidget *parent=0, const QString &msg=i18n("Search..."));
+    SearchTextBar(QWidget *parent, const char* name, const QString &msg=i18n("Search..."));
     ~SearchTextBar();
 
     void setText(const QString& text);

@@ -35,6 +35,7 @@
 #include <kapplication.h>
 #include <kiconloader.h>
 #include <kdialogbase.h>
+#include <kconfig.h>
 
 // Local includes
 
@@ -151,11 +152,12 @@ public:
     DLineEdit   *searchEdit;
 };
 
-SearchTextBar::SearchTextBar(QWidget *parent, const QString &msg)
+SearchTextBar::SearchTextBar(QWidget *parent, const char* name, const QString &msg)
              : QWidget(parent, 0, Qt::WDestructiveClose)
 {
     d = new SearchTextBarPriv;
     setFocusPolicy(QWidget::NoFocus);
+    setName(name);
 
     QHBoxLayout *hlay = new QHBoxLayout(this);
 
@@ -170,7 +172,6 @@ SearchTextBar::SearchTextBar(QWidget *parent, const QString &msg)
     kcom->setOrder(KCompletion::Sorted);
     d->searchEdit->setCompletionObject(kcom, true);
     d->searchEdit->setAutoDeleteCompletionObject(true);
-    d->searchEdit->setCompletionMode(KGlobalSettings::CompletionAuto);
     d->searchEdit->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum));
 
     hlay->setSpacing(0);
@@ -183,10 +184,20 @@ SearchTextBar::SearchTextBar(QWidget *parent, const QString &msg)
 
     connect(d->searchEdit, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotTextChanged(const QString&)));
+
+    KConfig *config = kapp->config();
+    config->setGroup(name + QString(" Search Text Tool"));
+    d->searchEdit->setCompletionMode((KGlobalSettings::Completion)config->readNumEntry("AutoCompletionMode", 
+                                      (int)KGlobalSettings::CompletionAuto));
 }
 
 SearchTextBar::~SearchTextBar()
 {
+    KConfig *config = kapp->config();
+    config->setGroup(name() + QString(" Search Text Tool"));
+    config->writeEntry("AutoCompletionMode", d->searchEdit->completionMode());
+    config->sync();
+
     delete d;
 }
 

@@ -96,7 +96,7 @@ RawCameraDlg::RawCameraDlg(QWidget *parent)
 
     // --------------------------------------------------------
 
-    d->searchBar = new SearchTextBar(page);
+    d->searchBar = new SearchTextBar(page, "RawCameraDlgSearchBar");
     d->listView  = new QListView(page);
     d->listView->addColumn("Camera Model");       // Header is hiden. No i18n here.
     d->listView->setSorting(1);

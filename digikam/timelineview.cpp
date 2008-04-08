@@ -226,7 +226,7 @@ TimeLineView::TimeLineView(QWidget *parent)
     // ---------------------------------------------------------------
 
     d->timeLineFolderView = new TimeLineFolderView(this);
-    d->searchDateBar      = new SearchTextBar(this);
+    d->searchDateBar      = new SearchTextBar(this, "TimeLineViewSearchDateBar");
 
     vlay->addWidget(panel);
     vlay->addWidget(d->timeLineFolderView);

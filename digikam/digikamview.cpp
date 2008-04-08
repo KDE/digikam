@@ -191,21 +191,21 @@ DigikamView::DigikamView(QWidget *parent)
     // Folders sidebar tab contents.
     d->folderBox       = new QVBox(this);
     d->folderView      = new AlbumFolderView(d->folderBox);
-    d->folderSearchBar = new SearchTextBar(d->folderBox);
+    d->folderSearchBar = new SearchTextBar(d->folderBox, "DigikamViewFolderSearchBar");
     d->folderBox->setSpacing(KDialog::spacingHint());
     d->folderBox->setMargin(0);
 
     // Tags sidebar tab contents.
     d->tagBox           = new QVBox(this);
     d->tagFolderView    = new TagFolderView(d->tagBox);
-    d->tagSearchBar     = new SearchTextBar(d->tagBox);
+    d->tagSearchBar     = new SearchTextBar(d->tagBox, "DigikamViewTagSearchBar");
     d->tagBox->setSpacing(KDialog::spacingHint());
     d->tagBox->setMargin(0);
 
     // Search sidebar tab contents.
     d->searchBox        = new QVBox(this);
     d->searchFolderView = new SearchFolderView(d->searchBox);
-    d->searchSearchBar  = new SearchTextBar(d->searchBox);
+    d->searchSearchBar  = new SearchTextBar(d->searchBox, "DigikamViewSearchSearchBar");
     d->searchBox->setSpacing(KDialog::spacingHint());
     d->searchBox->setMargin(0);
 
@@ -223,7 +223,7 @@ DigikamView::DigikamView(QWidget *parent)
     // Tags Filter sidebar tab contents.
     d->tagFilterBox       = new QVBox(this);
     d->tagFilterView      = new TagFilterView(d->tagFilterBox);
-    d->tagFilterSearchBar = new SearchTextBar(d->tagFilterBox);
+    d->tagFilterSearchBar = new SearchTextBar(d->tagFilterBox, "DigikamViewTagFilterSearchBar");
     d->tagFilterBox->setSpacing(KDialog::spacingHint());
     d->tagFilterBox->setMargin(0);
 
