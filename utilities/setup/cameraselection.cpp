@@ -101,15 +101,16 @@ CameraSelection::CameraSelection( QWidget* parent )
                              Help|Ok|Cancel, Ok, parent, 0, true, true)
 {
     d = new CameraSelectionPriv;
-    kapp->setOverrideCursor( KCursor::waitCursor() );
+
+    kapp->setOverrideCursor(KCursor::waitCursor());
     setHelp("cameraselection.anchor", "digikam");
     d->UMSCameraNameActual = QString("Directory Browse");   // Don't be i18n!
     d->UMSCameraNameShown  = i18n("Mounted Camera");
     d->PTPCameraNameShown  = QString("USB PTP Class Camera");
 
-    QGridLayout* mainBoxLayout = new QGridLayout( plainPage(), 6, 1, 0, KDialog::spacingHint() );
-    mainBoxLayout->setColStretch( 0, 10 );
-    mainBoxLayout->setRowStretch( 6, 10 );
+    QGridLayout* mainBoxLayout = new QGridLayout(plainPage(), 6, 1, 0, KDialog::spacingHint());
+    mainBoxLayout->setColStretch(0, 10);
+    mainBoxLayout->setRowStretch(6, 10);
     
     // --------------------------------------------------------------
 
@@ -118,10 +119,10 @@ CameraSelection::CameraSelection( QWidget* parent )
     d->listView->setAllColumnsShowFocus(true);
     d->listView->setResizeMode(QListView::LastColumn);
     d->listView->setMinimumWidth(350);
-    QWhatsThis::add( d->listView, i18n("<p>Select the camera name that you want to use. All "
-                                       "default settings on the right panel "
-                                       "will be set automatically.</p><p>This list has been generated "
-                                       "using the gphoto2 library installed on your computer.</p>"));
+    QWhatsThis::add(d->listView, i18n("<p>Select the camera name that you want to use. All "
+                                      "default settings on the right panel "
+                                      "will be set automatically.</p><p>This list has been generated "
+                                      "using the gphoto2 library installed on your computer.</p>"));
 
     d->searchBar = new SearchTextBar(plainPage());
     
@@ -129,8 +130,8 @@ CameraSelection::CameraSelection( QWidget* parent )
 
     QVGroupBox* titleBox = new QVGroupBox( i18n("Camera Title"), plainPage() );
     d->titleEdit = new KLineEdit( titleBox );
-    QWhatsThis::add( d->titleEdit, i18n("<p>Set here the name used in digiKam interface to "
-                                        "identify this camera.</p>"));
+    QWhatsThis::add(d->titleEdit, i18n("<p>Set here the name used in digiKam interface to "
+                                       "identify this camera.</p>"));
     
     // --------------------------------------------------------------
     
@@ -139,13 +140,13 @@ CameraSelection::CameraSelection( QWidget* parent )
 
     d->usbButton = new QRadioButton( d->portButtonGroup );
     d->usbButton->setText( i18n( "USB" ) );
-    QWhatsThis::add( d->usbButton, i18n("<p>Select this option if your camera is connected to your "
-                     "computer using an USB cable.</p>"));
+    QWhatsThis::add(d->usbButton, i18n("<p>Select this option if your camera is connected to your "
+                    "computer using an USB cable.</p>"));
 
     d->serialButton = new QRadioButton( d->portButtonGroup );
     d->serialButton->setText( i18n( "Serial" ) );
-    QWhatsThis::add( d->serialButton, i18n("<p>Select this option if your camera is connected to your "
-                     "computer using a serial cable.</p>"));
+    QWhatsThis::add(d->serialButton, i18n("<p>Select this option if your camera is connected to your "
+                    "computer using a serial cable.</p>"));
 
     // --------------------------------------------------------------
     
@@ -155,21 +156,21 @@ CameraSelection::CameraSelection( QWidget* parent )
 
     d->portPathComboBox = new QComboBox( false, portPathBox );
     d->portPathComboBox->setDuplicatesEnabled( false );
-    QWhatsThis::add( d->portPathComboBox, i18n("<p>Select the serial port to use on your computer. "
-                     "This option is only required if you use a serial camera.</p>"));
+    QWhatsThis::add(d->portPathComboBox, i18n("<p>Select the serial port to use on your computer. "
+                    "This option is only required if you use a serial camera.</p>"));
 
     // --------------------------------------------------------------
 
-    QVGroupBox* umsMountBox = new QVGroupBox( i18n( "Camera Mount Path"), plainPage() );
+    QVGroupBox* umsMountBox = new QVGroupBox(i18n("Camera Mount Path"), plainPage());
 
     QLabel* umsMountLabel = new QLabel( umsMountBox );
-    umsMountLabel->setText( i18n( "Note: only for USB/IEEE mass storage camera" ) );
+    umsMountLabel->setText(i18n("Note: only for USB/IEEE mass storage camera"));
 
     d->umsMountURL = new KURLRequester( QString("/mnt/camera"), umsMountBox);
     d->umsMountURL->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly);
-    QWhatsThis::add( d->umsMountURL, i18n("<p>Set here the mount path to use on your computer. This "
-                                          "option is only required if you use an <b>USB Mass Storage</b> "
-                                          "camera.</p>"));
+    QWhatsThis::add(d->umsMountURL, i18n("<p>Set here the mount path to use on your computer. This "
+                                         "option is only required if you use an <b>USB Mass Storage</b> "
+                                         "camera.</p>"));
     
     // --------------------------------------------------------------
     

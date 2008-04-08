@@ -34,6 +34,8 @@
 
 #include <kdialogbase.h>
 
+class QListViewItem;
+
 namespace Digikam
 {
 
