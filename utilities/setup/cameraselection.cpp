@@ -7,7 +7,7 @@
  * Description : Camera type selection dialog
  * 
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,6 +47,7 @@
 
 // Local includes.
 
+#include "searchtextbar.h"
 #include "gpcamera.h"
 #include "cameraselection.h"
 #include "cameraselection.moc"
@@ -68,6 +69,7 @@ public:
         portPathLabel    = 0;
         portPathComboBox = 0;
         umsMountURL      = 0;
+        searchBar        = 0;
     }
 
     QVButtonGroup *portButtonGroup;
@@ -88,8 +90,10 @@ public:
     QListView     *listView;
     
     KLineEdit     *titleEdit;
-    
+
     KURLRequester *umsMountURL;
+
+    SearchTextBar *searchBar;
 };
 
 CameraSelection::CameraSelection( QWidget* parent )
@@ -109,8 +113,8 @@ CameraSelection::CameraSelection( QWidget* parent )
     
     // --------------------------------------------------------------
 
-    d->listView = new QListView( plainPage() );
-    d->listView->addColumn( i18n("Camera List") );
+    d->listView = new QListView(plainPage());
+    d->listView->addColumn(i18n("Camera List"));
     d->listView->setAllColumnsShowFocus(true);
     d->listView->setResizeMode(QListView::LastColumn);
     d->listView->setMinimumWidth(350);
@@ -118,6 +122,8 @@ CameraSelection::CameraSelection( QWidget* parent )
                                        "default settings on the right panel "
                                        "will be set automatically.</p><p>This list has been generated "
                                        "using the gphoto2 library installed on your computer.</p>"));
+
+    d->searchBar = new SearchTextBar(plainPage());
     
     // --------------------------------------------------------------
 
@@ -194,19 +200,20 @@ CameraSelection::CameraSelection( QWidget* parent )
                               "available at <a href='http://www.teaser.fr/~hfiguiere/linux/digicam.html'>"
                               "this url</a>.</p>"));
 
-    box2Layout->addMultiCellWidget( logo, 0, 0, 0, 0 );
-    box2Layout->addMultiCellWidget( link, 0, 1, 1, 1 );
-    box2Layout->addMultiCellWidget( link2, 2, 3, 1, 1 );
-    box2Layout->addMultiCellWidget( explanation, 4, 5, 1, 1 );
+    box2Layout->addMultiCellWidget(logo,        0, 0, 0, 0);
+    box2Layout->addMultiCellWidget(link,        0, 1, 1, 1);
+    box2Layout->addMultiCellWidget(link2,       2, 3, 1, 1);
+    box2Layout->addMultiCellWidget(explanation, 4, 5, 1, 1);
 
     // --------------------------------------------------------------
     
-    mainBoxLayout->addMultiCellWidget( d->listView, 0, 6, 0, 0 );
-    mainBoxLayout->addMultiCellWidget( titleBox, 0, 0, 1, 1 );
-    mainBoxLayout->addMultiCellWidget( d->portButtonGroup, 1, 1, 1, 1 );
-    mainBoxLayout->addMultiCellWidget( portPathBox, 2, 2, 1, 1 );
-    mainBoxLayout->addMultiCellWidget( umsMountBox, 3, 3, 1, 1 );
-    mainBoxLayout->addMultiCellWidget( box2, 4, 5, 1, 1 );
+    mainBoxLayout->addMultiCellWidget(d->listView,        0, 5, 0, 0);
+    mainBoxLayout->addMultiCellWidget(d->searchBar,       6, 6, 0, 0);
+    mainBoxLayout->addMultiCellWidget(titleBox,           0, 0, 1, 1);
+    mainBoxLayout->addMultiCellWidget(d->portButtonGroup, 1, 1, 1, 1);
+    mainBoxLayout->addMultiCellWidget(portPathBox,        2, 2, 1, 1);
+    mainBoxLayout->addMultiCellWidget(umsMountBox,        3, 3, 1, 1);
+    mainBoxLayout->addMultiCellWidget(box2,               4, 5, 1, 1);
 
     // Connections --------------------------------------------------
 
@@ -230,6 +237,9 @@ CameraSelection::CameraSelection( QWidget* parent )
 
     connect(this, SIGNAL(okClicked()),
             this, SLOT(slotOkClicked()));
+
+    connect(d->searchBar, SIGNAL(signalTextChanged(const QString&)),
+            this, SLOT(slotSearchTextChanged(const QString&)));
     
     // Initialize  --------------------------------------------------
     
@@ -451,5 +461,29 @@ void CameraSelection::slotOkClicked()
                          currentPortPath(), currentCameraPath());
 }
 
-}  // namespace Digikam
+void CameraSelection::slotSearchTextChanged(const QString& filter)
+{
+    bool query     = false;
+    QString search = filter.lower();
 
+    QListViewItemIterator it(d->listView);
+
+    for ( ; it.current(); ++it ) 
+    {
+        QListViewItem *item  = it.current();
+
+        if (item->text(0).lower().contains(search))
+        {
+            query = true;
+            item->setVisible(true);
+        }
+        else
+        {
+            item->setVisible(false);
+        }
+    }
+
+    d->searchBar->slotSearchResult(query);
+}
+
+}  // namespace Digikam
