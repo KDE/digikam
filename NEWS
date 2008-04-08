@@ -5,7 +5,7 @@ NEW FEATURES:
 General        : New dialog to list all RAW camera supported. A search camera model tool is 
                  available to find easy a camera from list.
 
-digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 121309 : Camera list sorted by brand.
 002 ==> 137836 : Usability: Configure camera gui add and auto-detect camera.
@@ -26,7 +26,7 @@ Showfoto       : New open image file dialog with photo thumbnail/informations.
 
 ImageEditor    : New saveas image file dialog with photo thumbnail/informations.
 
-digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 159806 : Cannot display nikon d3 raw files.
 002 ==> 148935 : digiKam hot pixel plugin can not read canon RAW files.
@@ -53,7 +53,7 @@ ImageEditor    : Raw files can be decoded in 16 bits color depth without to use 
 Showfoto       : Added support of color theme schemes.
 Showfoto       : Added 2 options to setup images ordering with "File/Open Folder" action.
 
-digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 146393 : No gamma adjustment when opening RAW file.
 002 ==> 158377 : digiKam duplicates downloaded images while overwriting existing ones.
@@ -110,7 +110,7 @@ AlbumGUI       : Add a new tool to perform Date search around whole albums colle
 AlbumGUI       : In Calendar View, selecting Year album show all pictures relevant.
 AlbumGUI       : Add a new status-bar indicator to report album icon view filtering status.
 
-digiKam BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==>  96388 : Show number of images in the album.
 002 ==> 155271 : Configure suggests wrong parameter for libjasper.
