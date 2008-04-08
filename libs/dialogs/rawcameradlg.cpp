@@ -101,7 +101,7 @@ RawCameraDlg::RawCameraDlg(QWidget *parent)
 
     // --------------------------------------------------------
 
-    d->searchBar = new SearchTextBar(page);
+    d->searchBar = new SearchTextBar(page, "RawCameraDlgSearchBar");
     d->listView  = new QTreeWidget(page);
 
     d->listView->setRootIsDecorated(false);

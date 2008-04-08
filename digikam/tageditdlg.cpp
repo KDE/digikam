@@ -127,7 +127,7 @@ TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album, bool create)
     QLabel *titleLabel = new QLabel(page);
     titleLabel->setText(i18n("&Title:"));
 
-    d->titleEdit = new SearchTextBar(page, i18n("Enter tag name here..."));
+    d->titleEdit = new SearchTextBar(page, "TagEditDlgTitleEdit", i18n("Enter tag name here..."));
     titleLabel->setBuddy(d->titleEdit);
 
     QLabel *tipLabel = new QLabel(page);

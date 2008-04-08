@@ -27,6 +27,12 @@
 #include <QPalette>
 #include <QString>
 
+// KDE includes.
+
+#include <kconfiggroup.h>
+#include <kglobal.h>
+#include <kconfig.h>
+
 // Local includes
 
 #include "searchtextbar.h"
@@ -47,26 +53,37 @@ public:
     bool textQueryCompletion;
 };
 
-SearchTextBar::SearchTextBar(QWidget *parent, const QString& msg)
+SearchTextBar::SearchTextBar(QWidget *parent, const char* name, const QString& msg)
              : KLineEdit(parent)
 {
     d = new SearchTextBarPriv;
     setAttribute(Qt::WA_DeleteOnClose);
     setClearButtonShown(true);
     setClickMessage(msg);
+    setObjectName(name);
+
     KCompletion *kcom = new KCompletion;
     kcom->setOrder(KCompletion::Sorted);
     setCompletionObject(kcom, true);
     setAutoDeleteCompletionObject(true);
-    setCompletionMode(KGlobalSettings::CompletionAuto);
     setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum));
 
     connect(this, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotTextChanged(const QString&)));
+
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(name + QString(" Search Text Tool"));
+    setCompletionMode((KGlobalSettings::Completion)group.readEntry("AutoCompletionMode", 
+                      (int)KGlobalSettings::CompletionAuto));
 }
 
 SearchTextBar::~SearchTextBar()
 {
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(objectName() + QString(" Search Text Tool"));
+    group.writeEntry("AutoCompletionMode", (int)completionMode());
+    group.sync();
+
     delete d;
 }
 

@@ -91,7 +91,7 @@ SearchQuickDialog::SearchQuickDialog(QWidget* parent, KUrl& url)
     // -------------------------------------------------------------
     
     QLabel *label1 = new QLabel("<b>" + i18n("Search:") + "</b>", w);
-    d->searchEdit  = new SearchTextBar(w, i18n("Enter your search criteria"));
+    d->searchEdit  = new SearchTextBar(w, "SearchQuickDialogSearchEdit", i18n("Enter your search criteria"));
     d->searchEdit->setWhatsThis(i18n("<p>Enter your search criteria to find items in the album library"));
     
     d->resultsView = new SearchResultsView(w);
