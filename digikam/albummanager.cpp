@@ -1006,7 +1006,7 @@ bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName,
 
     QString oldURL = album->url();
     
-    KURL u = KURL(album->folderPath()).upURL();
+    KURL u = KURL::fromPathOrURL(album->folderPath()).upURL();
     u.addPath(newName);
     u.cleanPath();
 

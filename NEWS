@@ -9,7 +9,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 121309 : Camera list sorted by brand.
 002 ==> 137836 : Usability: Configure camera gui add and auto-detect camera.
-003 ==> 
+003 ==> 160323 : Changing the album name from sth to #sth and then to zsth causes the album to be deleted along with the files
+004 ==> 
 
 **********************************************************************************************
 
