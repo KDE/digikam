@@ -16,7 +16,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 007 ==> 147466 : digiKam crashes on termination if an audio file played.
 008 ==> 146973 : Crashes when clicking on preview image.
 009 ==> 148976 : digiKam Deleted 2.3 g of Pictures.
-010 ==> 
+010 ==> 145252 : Umask settings used for album directory, not for image files.
+011 ==> 
 
 **********************************************************************************************
 
