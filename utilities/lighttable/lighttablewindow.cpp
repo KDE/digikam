@@ -509,6 +509,11 @@ void LightTableWindow::setupAccelerators()
                     Key_Space, this, SLOT(slotForward()),
                     false, true);
 
+    d->accelerators->insert("Previous Image SHIFT+Key_Space", i18n("Previous Image"),
+                    i18n("Load Previous Image"),
+                    SHIFT+Key_Space, this, SLOT(slotBackward()),
+                    false, true);
+
     d->accelerators->insert("Previous Image Key_Backspace", i18n("Previous Image"),
                     i18n("Load Previous Image"),
                     Key_Backspace, this, SLOT(slotBackward()),
