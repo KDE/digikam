@@ -14,7 +14,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 005 ==> 158696 : Digikam image viewer crashes when "Save As" is clicked.
 006 ==> 156564 : Light table crashes when choosing channel.
 007 ==> 147466 : digiKam crashes on termination if an audio file played.
-008 ==> 
+008 ==> 146973 : Crashes when clicking on preview image.
+009 ==> 
 
 **********************************************************************************************
 
