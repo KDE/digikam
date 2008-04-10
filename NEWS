@@ -15,7 +15,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 006 ==> 156564 : Light table crashes when choosing channel.
 007 ==> 147466 : digiKam crashes on termination if an audio file played.
 008 ==> 146973 : Crashes when clicking on preview image.
-009 ==> 
+009 ==> 148976 : digiKam Deleted 2.3 g of Pictures.
+010 ==> 
 
 **********************************************************************************************
 
