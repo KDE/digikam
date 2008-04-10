@@ -11,7 +11,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 002 ==> 137836 : Usability: Configure camera gui add and auto-detect camera.
 003 ==> 160323 : Changing the album name from sth to #sth and then to zsth causes the album to be deleted along with the files
 004 ==> 145083 : Space and Shift-Space isn't used for navigation between images
-005 ==> 
+005 ==> 158696 : Digikam image viewer crashes when "Save As" is clicked.
+006 ==> 
 
 **********************************************************************************************
 
