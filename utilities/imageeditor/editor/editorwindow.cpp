@@ -516,9 +516,9 @@ void EditorWindow::setupStandardAccelerators()
                     Key_Space, this, SLOT(slotForward()),
                     false, true);
 
-    d->accelerators->insert("Next Image SHIFT+Key_Space", i18n("Next Image"),
-                    i18n("Load Next Image"),
-                    SHIFT+Key_Space, this, SLOT(slotForward()),
+    d->accelerators->insert("Previous Image SHIFT+Key_Space", i18n("Previous Image"),
+                    i18n("Load Previous Image"),
+                    SHIFT+Key_Space, this, SLOT(slotBackward()),
                     false, true);
 
     d->accelerators->insert("Previous Image Key_Backspace", i18n("Previous Image"),
