@@ -1225,8 +1225,8 @@ void Canvas::slotCornerButtonPressed()
     pan->setRegionSelection(r);
     pan->setMouseFocus();
 
-    connect(pan, SIGNAL(signalSelectionMoved(QRect, bool)),
-            this, SLOT(slotPanIconSelectionMoved(QRect, bool)));
+    connect(pan, SIGNAL(signalSelectionMoved(const QRect&, bool)),
+            this, SLOT(slotPanIconSelectionMoved(const QRect&, bool)));
 
     connect(pan, SIGNAL(signalHiden()),
             this, SLOT(slotPanIconHiden()));
