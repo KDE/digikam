@@ -50,6 +50,7 @@
 #include "album.h"
 #include "albummanager.h"
 #include "albumsettings.h"
+#include "searchtextbar.h"
 #include "albumselectdialog.h"
 #include "albumselectdialog.moc"
 
@@ -65,6 +66,7 @@ public:
     {
         allowRootSelection = false;
         folderView         = 0;
+        searchBar          = 0;
     }
 
     bool                        allowRootSelection;
@@ -74,6 +76,8 @@ public:
     QMap<FolderItem*, PAlbum*>  albumMap;
 
     FolderView                 *folderView;
+
+    SearchTextBar              *searchBar;
 };
 
 AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
@@ -109,6 +113,8 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
     d->folderView->setColumnWidthMode( 0, QListView::Maximum );
     d->folderView->setResizeMode( QListView::AllColumns );
     d->folderView->setRootIsDecorated(true);
+
+    d->searchBar = new SearchTextBar(plainPage(), "AlbumSelectDialogSearchBar");
 
     // -------------------------------------------------------------
 
@@ -159,9 +165,10 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
 
     // -------------------------------------------------------------
 
-    grid->addMultiCellWidget(logo, 0, 0, 0, 0);
-    grid->addMultiCellWidget(message, 1, 1, 0, 0);
+    grid->addMultiCellWidget(logo,          0, 0, 0, 0);
+    grid->addMultiCellWidget(message,       1, 1, 0, 0);
     grid->addMultiCellWidget(d->folderView, 0, 2, 1, 1);
+    grid->addMultiCellWidget(d->searchBar,  3, 3, 1, 1);
     grid->setRowStretch(2, 10);
 
     // -------------------------------------------------------------
@@ -180,6 +187,9 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
 
     connect(d->folderView, SIGNAL(contextMenuRequested(QListViewItem*, const QPoint&, int)),
             this, SLOT(slotContextMenu(QListViewItem*, const QPoint&, int)));
+
+    connect(d->searchBar, SIGNAL(signalTextChanged(const QString&)),
+            this, SLOT(slotSearchTextChanged(const QString&)));
 
     // -------------------------------------------------------------
 
@@ -334,6 +344,74 @@ PAlbum* AlbumSelectDialog::selectAlbum(QWidget* parent,
     }
 
     return dlg.d->albumMap[item];
+}
+
+void AlbumSelectDialog::slotSearchTextChanged(const QString& filter)
+{
+    QString search = filter.lower();
+
+    bool atleastOneMatch = false;
+
+    AlbumList pList = AlbumManager::instance()->allPAlbums();
+    for (AlbumList::iterator it = pList.begin(); it != pList.end(); ++it)
+    {
+        PAlbum* palbum  = (PAlbum*)(*it);
+
+        // don't touch the root Album
+        if (palbum->isRoot())
+            continue;
+
+        bool match = palbum->title().lower().contains(search);
+        if (!match)
+        {
+            // check if any of the parents match the search
+            Album* parent = palbum->parent();
+            while (parent && !parent->isRoot())
+            {
+                if (parent->title().lower().contains(search))
+                {
+                    match = true;
+                    break;
+                }
+
+                parent = parent->parent();
+            }
+        }
+
+        if (!match)
+        {
+            // check if any of the children match the search
+            AlbumIterator it(palbum);
+            while (it.current())
+            {
+                if ((*it)->title().lower().contains(search))
+                {
+                    match = true;
+                    break;
+                }
+                ++it;
+            }
+        }
+
+        FolderItem* viewItem = (FolderItem*) palbum->extraData(d->folderView);
+
+        if (match)
+        {
+            atleastOneMatch = true;
+
+            if (viewItem)
+                viewItem->setVisible(true);
+        }
+        else
+        {
+            if (viewItem)
+            {
+                viewItem->setVisible(false);
+            }
+        }
+    }
+
+    d->searchBar->slotSearchResult(atleastOneMatch);
 }
 
 }  // namespace Digikam
