@@ -26,6 +26,10 @@
 #ifndef ALBUMSELECTDIALOG_H
 #define ALBUMSELECTDIALOG_H
 
+// Qt includes.
+
+#include <qstring.h>
+
 // KDE includes.
 
 #include <kdialogbase.h>
@@ -63,6 +67,7 @@ private slots:
     void slotSelectionChanged();
     void slotContextMenu(QListViewItem *item, const QPoint&, int);
     void slotUser1();
+    void slotSearchTextChanged(const QString&);
 
 private:
 
