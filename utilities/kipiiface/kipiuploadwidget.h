@@ -40,6 +40,7 @@ class QTreeWidget;
 namespace Digikam
 {
 class KipiInterface;
+class KipiUploadWidgetPriv;
 
 class KipiUploadWidget : public KIPI::UploadWidget
 {
@@ -58,8 +59,7 @@ private:
 
 private:
 
-    QTreeWidget   *m_albumsView;
-    KipiInterface *m_iface; 
+    KipiUploadWidgetPriv *d;
 };
 
 }  // namespace Digikam

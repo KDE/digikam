@@ -47,34 +47,51 @@
 namespace Digikam
 {
 
+class KipiUploadWidgetPriv
+{
+public:
+
+    KipiUploadWidgetPriv()
+    {
+        albumsView = 0;
+        iface      = 0;
+    }
+
+    QTreeWidget   *albumsView;
+
+    KipiInterface *iface; 
+};
+
 KipiUploadWidget::KipiUploadWidget(KipiInterface* iface, QWidget *parent)
                 : KIPI::UploadWidget(parent)
 {
-    m_iface = iface;
+    d = new KipiUploadWidgetPriv();
+    d->iface = iface;
 
-    m_albumsView = new QTreeWidget(this);
-    m_albumsView->setDragEnabled(false);
-    m_albumsView->setDropIndicatorShown(false);
-    m_albumsView->setAcceptDrops(false);
-    m_albumsView->header()->hide();
+    d->albumsView = new QTreeWidget(this);
+    d->albumsView->setDragEnabled(false);
+    d->albumsView->setDropIndicatorShown(false);
+    d->albumsView->setAcceptDrops(false);
+    d->albumsView->header()->hide();
 
     QHBoxLayout *hlay = new QHBoxLayout(this);
-    hlay->addWidget(m_albumsView);
+    hlay->addWidget(d->albumsView);
     hlay->setMargin(0);
     hlay->setSpacing(0);
 
     // ------------------------------------------------------------------------------------
 
-    populateTreeView(AlbumManager::instance()->allPAlbums(), m_albumsView); 
+    populateTreeView(AlbumManager::instance()->allPAlbums(), d->albumsView); 
 
     // ------------------------------------------------------------------------------------
 
-    connect(m_albumsView, SIGNAL(itemSelectionChanged()),
+    connect(d->albumsView, SIGNAL(itemSelectionChanged()),
             this, SIGNAL(selectionChanged()));
 }
 
 KipiUploadWidget::~KipiUploadWidget() 
 {
+    delete d;
 }
 
 void KipiUploadWidget::populateTreeView(const AlbumList& aList, QTreeWidget *view)
@@ -125,10 +142,10 @@ void KipiUploadWidget::populateTreeView(const AlbumList& aList, QTreeWidget *vie
 
 KIPI::ImageCollection KipiUploadWidget::selectedImageCollection() const
 {
-    QString ext = m_iface->fileExtensions();
+    QString ext = d->iface->fileExtensions();
     KIPI::ImageCollection collection; 
 
-    TreeAlbumItem* item = dynamic_cast<TreeAlbumItem*>(m_albumsView->currentItem());
+    TreeAlbumItem* item = dynamic_cast<TreeAlbumItem*>(d->albumsView->currentItem());
     if (item)
         collection = new KipiImageCollection(KipiImageCollection::AllItems, item->album(), ext);
 

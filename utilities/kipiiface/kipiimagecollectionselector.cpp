@@ -52,7 +52,6 @@
 namespace Digikam
 {
 
-
 class KipiImageCollectionSelectorPriv
 {
 public:
