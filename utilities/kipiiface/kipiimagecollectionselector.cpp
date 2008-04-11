@@ -86,8 +86,6 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface *iface, Q
     d->tab   = new KTabWidget(this);
 
     KVBox *vbox1  = new KVBox(d->tab);
-    vbox1->setMargin(0);
-    vbox1->setSpacing(KDialog::spacingHint());
     d->albumsView = new QTreeWidget(vbox1);
     d->albumsView->setDragEnabled(false);
     d->albumsView->setDropIndicatorShown(false);
@@ -96,11 +94,13 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface *iface, Q
 
     d->albumSearchBar = new SearchTextBar(vbox1, "KipiImageCollectionSelectorAlbumSearchBar");
 
+    vbox1->setMargin(0);
+    vbox1->setSpacing(KDialog::spacingHint());
+    vbox1->setStretchFactor(d->albumsView, 10);
+
     // -------------------------------------------------------------------------------
 
     KVBox *vbox2 = new KVBox(d->tab);
-    vbox2->setMargin(0);
-    vbox2->setSpacing(KDialog::spacingHint());
     d->tagsView  = new QTreeWidget(vbox2);
     d->tagsView->setDragEnabled(false);
     d->tagsView->setDropIndicatorShown(false);
@@ -108,6 +108,10 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface *iface, Q
     d->tagsView->header()->hide();
 
     d->tagSearchBar = new SearchTextBar(vbox2, "KipiImageCollectionSelectorTagSearchBar");
+
+    vbox2->setMargin(0);
+    vbox2->setSpacing(KDialog::spacingHint());
+    vbox2->setStretchFactor(d->tagsView, 10);
 
     // -------------------------------------------------------------------------------
 
