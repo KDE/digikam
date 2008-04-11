@@ -38,6 +38,7 @@
 #include "constants.h"
 #include "ddebug.h"
 #include "album.h"
+#include "albummanager.h"
 #include "albumthumbnailloader.h"
 #include "treefolderitem.h"
 #include "searchtextbar.h"
