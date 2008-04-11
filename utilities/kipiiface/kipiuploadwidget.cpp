@@ -31,6 +31,7 @@
 // KDE includes.
 
 #include <klocale.h>
+#include <kdialog.h>
 
 // Local includes.
 
@@ -39,6 +40,7 @@
 #include "album.h"
 #include "albumthumbnailloader.h"
 #include "treefolderitem.h"
+#include "searchtextbar.h"
 #include "kipiinterface.h"
 #include "kipiimagecollection.h"
 #include "kipiuploadwidget.h"
@@ -55,11 +57,14 @@ public:
     {
         albumsView = 0;
         iface      = 0;
+        searchBar  = 0;
     }
 
     QTreeWidget   *albumsView;
 
     KipiInterface *iface; 
+
+    SearchTextBar *searchBar;
 };
 
 KipiUploadWidget::KipiUploadWidget(KipiInterface* iface, QWidget *parent)
@@ -74,10 +79,13 @@ KipiUploadWidget::KipiUploadWidget(KipiInterface* iface, QWidget *parent)
     d->albumsView->setAcceptDrops(false);
     d->albumsView->header()->hide();
 
-    QHBoxLayout *hlay = new QHBoxLayout(this);
-    hlay->addWidget(d->albumsView);
-    hlay->setMargin(0);
-    hlay->setSpacing(0);
+    d->searchBar = new SearchTextBar(this, "KipiUploadWidgetSearchBar");
+
+    QVBoxLayout *vlay = new QVBoxLayout(this);
+    vlay->addWidget(d->albumsView, 10);
+    vlay->addWidget(d->searchBar);
+    vlay->setMargin(0);
+    vlay->setSpacing(KDialog::spacingHint());
 
     // ------------------------------------------------------------------------------------
 
@@ -87,6 +95,9 @@ KipiUploadWidget::KipiUploadWidget(KipiInterface* iface, QWidget *parent)
 
     connect(d->albumsView, SIGNAL(itemSelectionChanged()),
             this, SIGNAL(selectionChanged()));
+
+    connect(d->searchBar, SIGNAL(textChanged(const QString&)),
+            this, SLOT(slotSearchTextChanged(const QString&)));
 }
 
 KipiUploadWidget::~KipiUploadWidget() 
@@ -150,6 +161,74 @@ KIPI::ImageCollection KipiUploadWidget::selectedImageCollection() const
         collection = new KipiImageCollection(KipiImageCollection::AllItems, item->album(), ext);
 
     return collection;
+}
+
+void KipiUploadWidget::slotSearchTextChanged(const QString& filter)
+{
+    QString search = filter.toLower();
+
+    bool atleastOneMatch = false;
+
+    AlbumList pList = AlbumManager::instance()->allPAlbums();
+    for (AlbumList::iterator it = pList.begin(); it != pList.end(); ++it)
+    {
+        PAlbum* palbum  = (PAlbum*)(*it);
+
+        // don't touch the root Album
+        if (palbum->isRoot())
+            continue;
+
+        bool match = palbum->title().toLower().contains(search);
+        if (!match)
+        {
+            // check if any of the parents match the search
+            Album* parent = palbum->parent();
+            while (parent && !parent->isRoot())
+            {
+                if (parent->title().toLower().contains(search))
+                {
+                    match = true;
+                    break;
+                }
+
+                parent = parent->parent();
+            }
+        }
+
+        if (!match)
+        {
+            // check if any of the children match the search
+            AlbumIterator it(palbum);
+            while (it.current())
+            {
+                if ((*it)->title().toLower().contains(search))
+                {
+                    match = true;
+                    break;
+                }
+                ++it;
+            }
+        }
+
+        TreeAlbumCheckListItem* viewItem = (TreeAlbumCheckListItem*) palbum->extraData(d->albumsView);
+
+        if (match)
+        {
+            atleastOneMatch = true;
+
+            if (viewItem)
+                viewItem->setHidden(false);
+        }
+        else
+        {
+            if (viewItem)
+            {
+                viewItem->setHidden(true);
+            }
+        }
+    }
+
+    d->searchBar->slotSearchResult(atleastOneMatch);
 }
 
 }  // namespace Digikam

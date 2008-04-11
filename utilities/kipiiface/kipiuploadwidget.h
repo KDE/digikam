@@ -57,6 +57,10 @@ private:
 
     void populateTreeView(const AlbumList& aList, QTreeWidget *view);
 
+private slots: 
+
+    void slotSearchTextChanged(const QString&);
+
 private:
 
     KipiUploadWidgetPriv *d;
