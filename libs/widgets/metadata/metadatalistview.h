@@ -56,6 +56,14 @@ public:
     void    setIfdList(DMetadata::MetaDataMap ifds, QStringList keysFilter,
                        const QStringList& tagsFilter);
 
+signals:
+
+    void signalTextFilterMatch(bool);
+
+public slots:
+
+    void slotSearchTextChanged(const QString&);
+
 private slots:
 
     void slotSelectionChanged(QTreeWidgetItem*, int);

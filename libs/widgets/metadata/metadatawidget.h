@@ -61,7 +61,7 @@ public:
     MetadataWidget(QWidget* parent, const char* name=0);
     ~MetadataWidget();
 
-    int     getMode(void);
+    int     getMode();
     void    setMode(int mode);
 
     QString getCurrentItemKey() const;
@@ -78,18 +78,18 @@ public:
 private slots:
 
     void slotModeChanged(int);
-    void slotCopy2Clipboard(void);
-    void slotPrintMetadata(void);
+    void slotCopy2Clipboard();
+    void slotPrintMetadata();
     
 protected slots:    
     
-    virtual void slotSaveMetadataToFile(void)=0;
+    virtual void slotSaveMetadataToFile()=0;
     
 protected:
 
     void   enabledToolButtons(bool);
-    void   setFileName(QString fileName);
-    MetadataListView* view(void);
+    void   setFileName(const QString& fileName);
+    MetadataListView* view();
 
     bool   setMetadata(const DMetadata& data=DMetadata());
     const  DMetadata& getMetadata();
@@ -104,9 +104,9 @@ protected:
     KUrl   saveMetadataToFile(const QString& caption, const QString& fileFilter);
     bool   storeMetadataToFile(const KUrl& url, const QByteArray& metaData);
     
-    virtual bool decodeMetadata(void)=0;
-    virtual void buildView(void)=0;
-    virtual QString getMetadataTitle(void)=0;
+    virtual bool decodeMetadata()=0;
+    virtual void buildView()=0;
+    virtual QString getMetadataTitle()=0;
     virtual void setMetadataEmpty();
 
 private:

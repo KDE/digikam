@@ -248,4 +248,32 @@ void MetadataListView::setIfdList(DMetadata::MetaDataMap ifds, QStringList keysF
     update();
 }
 
+void MetadataListView::slotSearchTextChanged(const QString& filter)
+{
+    bool query     = false;
+    QString search = filter.toLower();
+
+    QTreeWidgetItemIterator it(this);
+    while (*it)
+    {
+        MetadataListViewItem *item = dynamic_cast<MetadataListViewItem*>(*it);
+        if (item)
+        {
+            if (item->text(0).toLower().contains(search) ||
+                item->text(1).toLower().contains(search))
+            {
+                query = true;
+                item->setHidden(false);
+            }
+            else
+            {
+                item->setHidden(true);
+            }
+        }
+        ++it;
+    }
+
+    emit signalTextFilterMatch(query);
+}
+
 }  // namespace Digikam

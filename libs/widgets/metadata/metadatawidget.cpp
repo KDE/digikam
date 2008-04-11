@@ -60,6 +60,7 @@
 #include "metadatalistview.h"
 #include "metadatalistviewitem.h"
 #include "mdkeylistviewitem.h"
+#include "searchtextbar.h"
 #include "metadatawidget.h"
 #include "metadatawidget.moc"
 
@@ -79,6 +80,7 @@ public:
         mainLayout   = 0;
         toolsGBox    = 0;
         levelGBox    = 0;
+        searchBar    = 0;
     }
 
     QWidget                *levelGBox;
@@ -92,6 +94,8 @@ public:
     QString                 fileName;
 
     MetadataListView       *view;
+
+    SearchTextBar          *searchBar;
 
     DMetadata               metadata;
     DMetadata::MetaDataMap  metaDataMap;
@@ -162,14 +166,19 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
     hlay2->setSpacing(0);
     hlay1->setMargin(KDialog::spacingHint());
 
-    d->view = new MetadataListView(this);
+    d->view         = new MetadataListView(this);
+    QString barName = QString(name) + "SearchBar";
+    d->searchBar    = new SearchTextBar(this, barName.toAscii());
 
     // -----------------------------------------------------------------
 
-    d->mainLayout->addWidget(d->levelGBox, 0, 0, 1, 2 );
-    d->mainLayout->setColumnStretch(3, 10);
+    d->mainLayout->addWidget(d->levelGBox, 0, 0, 1, 2);
     d->mainLayout->addWidget(d->toolsGBox, 0, 4, 1, 1);
-    d->mainLayout->addWidget(d->view, 1, 0, 1, 5 );
+    d->mainLayout->addWidget(d->view,      1, 0, 1, 5);
+    d->mainLayout->addWidget(d->searchBar, 3, 0, 1, 5);
+    d->mainLayout->setColumnStretch(3, 10);
+    d->mainLayout->setRowStretch(1, 10);
+    d->mainLayout->setRowMinimumHeight(2, KDialog::spacingHint());
     d->mainLayout->setSpacing(0);
     d->mainLayout->setMargin(0);
 
@@ -186,6 +195,12 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
 
     connect(saveMetadata, SIGNAL(clicked()),
             this, SLOT(slotSaveMetadataToFile()));
+
+    connect(d->searchBar, SIGNAL(textChanged(const QString&)),
+            d->view, SLOT(slotSearchTextChanged(const QString&)));
+
+    connect(d->view, SIGNAL(signalTextFilterMatch(bool)),
+            d->searchBar, SLOT(slotSearchResult(bool)));
 }
 
 MetadataWidget::~MetadataWidget()
@@ -193,7 +208,7 @@ MetadataWidget::~MetadataWidget()
     delete d;
 }
 
-MetadataListView* MetadataWidget::view(void)
+MetadataListView* MetadataWidget::view()
 {
     return d->view;
 }
@@ -280,7 +295,7 @@ void MetadataWidget::slotModeChanged(int)
     buildView();
 }
 
-void MetadataWidget::slotCopy2Clipboard(void)
+void MetadataWidget::slotCopy2Clipboard()
 {
     QString textmetadata = i18n("File name: %1 (%2)",d->fileName,getMetadataTitle());
 
@@ -322,7 +337,7 @@ void MetadataWidget::slotCopy2Clipboard(void)
     QApplication::clipboard()->setMimeData(mimeData, QClipboard::Clipboard);
 }
 
-void MetadataWidget::slotPrintMetadata(void)
+void MetadataWidget::slotPrintMetadata()
 {
     QString textmetadata = i18n("<p><big><big><b>File name: %1 (%2)</b></big></big>",
                                 d->fileName, getMetadataTitle());
@@ -463,7 +478,7 @@ QString MetadataWidget::getTagDescription(const QString&)
     return QString();
 }
 
-void MetadataWidget::setFileName(QString fileName)
+void MetadataWidget::setFileName(const QString& fileName)
 {
     d->fileName = fileName;
 }
