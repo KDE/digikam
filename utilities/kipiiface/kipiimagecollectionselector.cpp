@@ -48,48 +48,71 @@
 namespace Digikam
 {
 
+
+class KipiImageCollectionSelectorPriv
+{
+public:
+
+    KipiImageCollectionSelectorPriv()
+    {
+        tab        = 0;
+        albumsView = 0;
+        tagsView   = 0;
+        iface      = 0;
+    }
+
+    QTreeWidget   *albumsView;
+    QTreeWidget   *tagsView;
+
+    KTabWidget    *tab;
+
+    KipiInterface *iface; 
+};
+
 KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface *iface, QWidget *parent)
                            : KIPI::ImageCollectionSelector(parent)
 {
-    m_iface = iface;
-    m_tab   = new KTabWidget(this);
+    d = new KipiImageCollectionSelectorPriv();
+    d->iface = iface;
+    d->tab   = new KTabWidget(this);
 
-    m_albumsView = new QTreeWidget(m_tab);
-    m_albumsView->setDragEnabled(false);
-    m_albumsView->setDropIndicatorShown(false);
-    m_albumsView->setAcceptDrops(false);
-    m_albumsView->header()->hide();
+    d->albumsView = new QTreeWidget(d->tab);
+    d->albumsView->setDragEnabled(false);
+    d->albumsView->setDropIndicatorShown(false);
+    d->albumsView->setAcceptDrops(false);
+    d->albumsView->header()->hide();
 
-    m_tagsView = new QTreeWidget(m_tab);
-    m_tagsView->setDragEnabled(false);
-    m_tagsView->setDropIndicatorShown(false);
-    m_tagsView->setAcceptDrops(false);
-    m_tagsView->header()->hide();
+    d->tagsView = new QTreeWidget(d->tab);
+    d->tagsView->setDragEnabled(false);
+    d->tagsView->setDropIndicatorShown(false);
+    d->tagsView->setAcceptDrops(false);
+    d->tagsView->header()->hide();
 
-    m_tab->addTab(m_albumsView, i18n("My Albums"));
-    m_tab->addTab(m_tagsView, i18n("My Tags"));
+    d->tab->addTab(d->albumsView, i18n("My Albums"));
+    d->tab->addTab(d->tagsView, i18n("My Tags"));
 
     QHBoxLayout *hlay = new QHBoxLayout(this);
-    hlay->addWidget(m_tab);
+    hlay->addWidget(d->tab);
     hlay->setMargin(0);
     hlay->setSpacing(0);
 
     // ------------------------------------------------------------------------------------
 
-    populateTreeView(AlbumManager::instance()->allPAlbums(), m_albumsView); 
-    populateTreeView(AlbumManager::instance()->allTAlbums(), m_tagsView); 
+    populateTreeView(AlbumManager::instance()->allPAlbums(), d->albumsView); 
+    populateTreeView(AlbumManager::instance()->allTAlbums(), d->tagsView); 
 
     // ------------------------------------------------------------------------------------
 
-    connect(m_albumsView, SIGNAL(itemChanged(QTreeWidgetItem*, int)),
+    connect(d->albumsView, SIGNAL(itemChanged(QTreeWidgetItem*, int)),
             this, SIGNAL(selectionChanged()));
 
-    connect(m_tagsView, SIGNAL(itemChanged(QTreeWidgetItem*, int)),
+    connect(d->tagsView, SIGNAL(itemChanged(QTreeWidgetItem*, int)),
             this, SIGNAL(selectionChanged()));
 }
 
 KipiImageCollectionSelector::~KipiImageCollectionSelector() 
 {
+    delete d;
 }
 
 void KipiImageCollectionSelector::populateTreeView(const AlbumList& aList, QTreeWidget *view)
@@ -150,10 +173,10 @@ void KipiImageCollectionSelector::populateTreeView(const AlbumList& aList, QTree
 
 QList<KIPI::ImageCollection> KipiImageCollectionSelector::selectedImageCollections() const
 {
-    QString ext = m_iface->fileExtensions();
+    QString ext = d->iface->fileExtensions();
     QList<KIPI::ImageCollection> list; 
 
-    QTreeWidgetItemIterator it(m_albumsView, QTreeWidgetItemIterator::Checked);
+    QTreeWidgetItemIterator it(d->albumsView, QTreeWidgetItemIterator::Checked);
     while (*it)
     {
         TreeAlbumCheckListItem* item = dynamic_cast<TreeAlbumCheckListItem*>(*it);
@@ -165,7 +188,7 @@ QList<KIPI::ImageCollection> KipiImageCollectionSelector::selectedImageCollectio
          ++it;
     }
 
-    QTreeWidgetItemIterator it2(m_tagsView, QTreeWidgetItemIterator::Checked);
+    QTreeWidgetItemIterator it2(d->tagsView, QTreeWidgetItemIterator::Checked);
     while (*it2)
     {
         TreeAlbumCheckListItem* item = dynamic_cast<TreeAlbumCheckListItem*>(*it2);

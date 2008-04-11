@@ -46,6 +46,7 @@ class KTabWidget;
 namespace Digikam
 {
 class KipiInterface;
+class KipiImageCollectionSelectorPriv;
 
 class KipiImageCollectionSelector : public KIPI::ImageCollectionSelector
 {
@@ -64,11 +65,7 @@ private:
 
 private:
 
-    KTabWidget    *m_tab;
-
-    QTreeWidget   *m_albumsView;
-    QTreeWidget   *m_tagsView;
-    KipiInterface *m_iface; 
+    KipiImageCollectionSelectorPriv *d;
 };
 
 }  // namespace Digikam
