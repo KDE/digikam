@@ -75,7 +75,8 @@ public:
      * Pass the root album if it is already available.
      * Do not use this class directly, but one of the subclasses.
      */
-    AbstractAlbumModel(Album::Type albumType, Album *rootAlbum, RootAlbumBehavior rootBehavior = IncludeRootAlbum);
+    AbstractAlbumModel(Album::Type albumType, Album *rootAlbum, RootAlbumBehavior rootBehavior = IncludeRootAlbum,
+                       QObject *parent = 0);
     ~AbstractAlbumModel();
 
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
@@ -128,7 +129,8 @@ public:
 
     /// Abstract base class, do not instantiate.
     AbstractSpecificAlbumModel(Album::Type albumType, Album *rootAlbum,
-                               RootAlbumBehavior rootBehavior = IncludeRootAlbum);
+                               RootAlbumBehavior rootBehavior = IncludeRootAlbum,
+                               QObject *parent = 0);
 
 protected:
 
@@ -158,7 +160,8 @@ public:
     /// Call setCheckable(true) to enable checkable albums.
 
     AbstractCheckableAlbumModel(Album::Type albumType, Album *rootAlbum,
-                                RootAlbumBehavior rootBehavior = IncludeRootAlbum);
+                                RootAlbumBehavior rootBehavior = IncludeRootAlbum,
+                                QObject *parent = 0);
 
     /// Triggers if the albums in this model are checkable
     void setCheckable(bool isCheckable);
@@ -207,7 +210,7 @@ class AlbumModel : public AbstractCheckableAlbumModel
 public:
 
     /// Create a model containing all physical albums
-    AlbumModel(RootAlbumBehavior rootBehavior = IncludeRootAlbum);
+    AlbumModel(RootAlbumBehavior rootBehavior = IncludeRootAlbum, QObject *parent = 0);
 
 protected:
 
@@ -219,7 +222,7 @@ class TagModel : public AbstractCheckableAlbumModel
 public:
 
     /// Create a model containing all tags
-    TagModel(RootAlbumBehavior rootBehavior = IncludeRootAlbum);
+    TagModel(RootAlbumBehavior rootBehavior = IncludeRootAlbum, QObject *parent = 0);
 
 protected:
 

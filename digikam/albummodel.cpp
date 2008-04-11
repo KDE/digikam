@@ -106,7 +106,9 @@ public:
     }
 };
 
-AbstractAlbumModel::AbstractAlbumModel(Album::Type albumType, Album *rootAlbum, RootAlbumBehavior rootBehavior)
+AbstractAlbumModel::AbstractAlbumModel(Album::Type albumType, Album *rootAlbum, RootAlbumBehavior rootBehavior,
+                                       QObject *parent)
+    : QAbstractItemModel(parent)
 {
     d = new AlbumModelPriv;
 
@@ -185,6 +187,9 @@ int AbstractAlbumModel::rowCount(const QModelIndex &parent) const
     }
     else
     {
+        if (!d->rootAlbum)
+            return 0;
+
         if (d->rootBehavior == IncludeRootAlbum)
             return 1;
         else
@@ -192,9 +197,9 @@ int AbstractAlbumModel::rowCount(const QModelIndex &parent) const
     }
 }
 
-int AbstractAlbumModel::columnCount(const QModelIndex &parent) const
+int AbstractAlbumModel::columnCount(const QModelIndex &/*parent*/) const
 {
-    return parent.isValid() ? 0 : 1;
+    return 1;
 }
 
 Qt::ItemFlags AbstractAlbumModel::flags(const QModelIndex &index) const
@@ -215,6 +220,9 @@ bool AbstractAlbumModel::hasChildren(const QModelIndex &parent) const
     }
     else
     {
+        if (!d->rootAlbum)
+            return false;
+
         if (d->rootBehavior == IncludeRootAlbum)
             return 1;
         else
@@ -236,6 +244,9 @@ QModelIndex AbstractAlbumModel::index(int row, int column, const QModelIndex &pa
     }
     else
     {
+        if (!d->rootAlbum)
+            return QModelIndex();
+
         if (d->rootBehavior == IncludeRootAlbum)
         {
             if (row == 0)
@@ -415,8 +426,9 @@ void AbstractAlbumModel::slotAlbumRenamed(Album *album)
 
 AbstractSpecificAlbumModel::AbstractSpecificAlbumModel(Album::Type albumType,
                                                        Album *rootAlbum,
-                                                       RootAlbumBehavior rootBehavior)
-    : AbstractAlbumModel(albumType, rootAlbum, rootBehavior)
+                                                       RootAlbumBehavior rootBehavior,
+                                                       QObject *parent)
+    : AbstractAlbumModel(albumType, rootAlbum, rootBehavior, parent)
 {
     AlbumThumbnailLoader *loader = AlbumThumbnailLoader::instance();
 
@@ -476,8 +488,9 @@ void AbstractSpecificAlbumModel::emitDataChangedForChildren(Album *album)
 // ----------------------------------- //
 
 AbstractCheckableAlbumModel::AbstractCheckableAlbumModel(Album::Type albumType, Album *rootAlbum,
-                                                         RootAlbumBehavior rootBehavior)
-    : AbstractSpecificAlbumModel(albumType, rootAlbum, rootBehavior)
+                                                         RootAlbumBehavior rootBehavior,
+                                                         QObject *parent)
+    : AbstractSpecificAlbumModel(albumType, rootAlbum, rootBehavior, parent)
 {
     m_extraFlags = 0;
 }
@@ -573,7 +586,6 @@ bool AbstractCheckableAlbumModel::setData(const QModelIndex &index, const QVaria
 {
     if (role == Qt::CheckStateRole)
     {
-        DDebug() << "Set album to checked";
         Qt::CheckState state = (Qt::CheckState)value.toInt();
         Album *album = albumForIndex(index);
         if (!album)
@@ -589,10 +601,10 @@ bool AbstractCheckableAlbumModel::setData(const QModelIndex &index, const QVaria
 
 // ----------------------------------- //
 
-AlbumModel::AlbumModel(RootAlbumBehavior rootBehavior)
+AlbumModel::AlbumModel(RootAlbumBehavior rootBehavior, QObject *parent)
     : AbstractCheckableAlbumModel(Album::PHYSICAL,
                                  AlbumManager::instance()->findPAlbum(0),
-                                 rootBehavior)
+                                 rootBehavior, parent)
 {
     m_columnHeader = i18n("My Albums");
 }
@@ -605,10 +617,10 @@ QVariant AlbumModel::decorationRole(Album *album) const
 
 // ----------------------------------- //
 
-TagModel::TagModel(RootAlbumBehavior rootBehavior)
+TagModel::TagModel(RootAlbumBehavior rootBehavior, QObject *parent)
     : AbstractCheckableAlbumModel(Album::TAG,
                                  AlbumManager::instance()->findTAlbum(0),
-                                 rootBehavior)
+                                 rootBehavior, parent)
 {
     m_columnHeader = i18n("My Tags");
 }
