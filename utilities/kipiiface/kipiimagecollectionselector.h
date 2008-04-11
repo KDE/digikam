@@ -28,6 +28,7 @@
 // Qt includes.
 
 #include <QList>
+#include <QString>
 
 // libKipi Includes.
 
@@ -62,6 +63,11 @@ public:
 private:
 
     void populateTreeView(const AlbumList& aList, QTreeWidget *view);
+
+private slots: 
+
+    void slotAlbumSearchTextChanged(const QString&);
+    void slotTagSearchTextChanged(const QString&);
 
 private:
 
