@@ -51,6 +51,7 @@
 #include "albummanager.h"
 #include "albumthumbnailloader.h"
 #include "collectionmanager.h"
+#include "searchtextbar.h"
 #include "albumselectdialog.h"
 #include "albumselectdialog.moc"
 
@@ -66,19 +67,22 @@ public:
     {
         allowRootSelection = false;
         folderView         = 0;
+        searchBar          = 0;
     }
 
-    bool         allowRootSelection;
+    bool           allowRootSelection;
 
-    QString      newAlbumString;
+    QString        newAlbumString;
 
-    QTreeWidget *folderView;
+    QTreeWidget   *folderView;
+
+    SearchTextBar *searchBar;
 };
 
 AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
                                      const QString& header,
                                      const QString& newAlbumString,
-                                     bool allowRootSelection )
+                                     bool allowRootSelection)
                  : KDialog(parent)
 {
     d = new AlbumSelectDialogPrivate;
@@ -112,9 +116,12 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
     d->folderView->setHeaderLabels(QStringList() << i18n("My Albums"));
     d->folderView->setContextMenuPolicy(Qt::CustomContextMenu);
 
+    d->searchBar = new SearchTextBar(page, "AlbumSelectDialogSearchBar");
+
     grid->addWidget(logo,          0, 0, 1, 1);
     grid->addWidget(message,       1, 0, 1, 1);
     grid->addWidget(d->folderView, 0, 1, 3, 1);
+    grid->addWidget(d->searchBar,  3, 1, 1, 1);
     grid->setColumnStretch(1, 10);
     grid->setRowStretch(2, 10);
     grid->setMargin(0);
@@ -143,6 +150,9 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
 
     connect(this, SIGNAL(user1Clicked()),
             this, SLOT(slotUser1()));
+
+    connect(d->searchBar, SIGNAL(textChanged(const QString&)),
+            this, SLOT(slotSearchTextChanged(const QString&)));
 
     // -------------------------------------------------------------
 
@@ -331,6 +341,74 @@ PAlbum* AlbumSelectDialog::selectAlbum(QWidget* parent,
     }
 
     return (dynamic_cast<PAlbum*>(item->album()));
+}
+
+void AlbumSelectDialog::slotSearchTextChanged(const QString& filter)
+{
+    QString search = filter.toLower();
+
+    bool atleastOneMatch = false;
+
+    AlbumList pList = AlbumManager::instance()->allPAlbums();
+    for (AlbumList::iterator it = pList.begin(); it != pList.end(); ++it)
+    {
+        PAlbum* palbum  = (PAlbum*)(*it);
+
+        // don't touch the root Album
+        if (palbum->isRoot())
+            continue;
+
+        bool match = palbum->title().toLower().contains(search);
+        if (!match)
+        {
+            // check if any of the parents match the search
+            Album* parent = palbum->parent();
+            while (parent && !parent->isRoot())
+            {
+                if (parent->title().toLower().contains(search))
+                {
+                    match = true;
+                    break;
+                }
+
+                parent = parent->parent();
+            }
+        }
+
+        if (!match)
+        {
+            // check if any of the children match the search
+            AlbumIterator it(palbum);
+            while (it.current())
+            {
+                if ((*it)->title().toLower().contains(search))
+                {
+                    match = true;
+                    break;
+                }
+                ++it;
+            }
+        }
+
+        TreeAlbumCheckListItem* viewItem = (TreeAlbumCheckListItem*) palbum->extraData(d->folderView);
+
+        if (match)
+        {
+            atleastOneMatch = true;
+
+            if (viewItem)
+                viewItem->setHidden(false);
+        }
+        else
+        {
+            if (viewItem)
+            {
+                viewItem->setHidden(true);
+            }
+        }
+    }
+
+    d->searchBar->slotSearchResult(atleastOneMatch);
 }
 
 }  // namespace Digikam

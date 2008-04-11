@@ -63,6 +63,7 @@ private slots:
     void slotSelectionChanged();
     void slotContextMenu();
     void slotUser1();
+    void slotSearchTextChanged(const QString&);
 
 private:
 
