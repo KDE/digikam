@@ -42,8 +42,6 @@
 class QWidget;
 class QTreeWidget;
 
-class KTabWidget;
-
 namespace Digikam
 {
 class KipiInterface;
