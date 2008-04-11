@@ -528,6 +528,11 @@ void EditorWindow::setupStandardActions()
     actionCollection()->addAction("editorwindow_exitfullscreen", exitFullscreenAction);
     exitFullscreenAction->setShortcut( QKeySequence(Qt::Key_Escape) );
     connect(exitFullscreenAction, SIGNAL(triggered()), this, SLOT(slotEscapePressed()));
+
+    KAction *altBackwardAction = new KAction(i18n("Previous Image"), this);
+    actionCollection()->addAction("editorwindow_backward_shift_space", altBackwardAction);
+    altBackwardAction->setShortcut( KShortcut(Qt::SHIFT+Qt::Key_Space) );
+    connect(altBackwardAction, SIGNAL(triggered()), this, SLOT(slotBackward()));
 }
 
 void EditorWindow::setupStatusBar()
