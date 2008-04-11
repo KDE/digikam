@@ -33,8 +33,6 @@
 namespace Digikam
 {
 
-class FolderView;
-class FolderItem;
 class PAlbum;
 class AlbumSelectDialogPrivate;
 
@@ -59,16 +57,16 @@ public:
 
 private slots:
 
-    void slotAlbumAdded(Album* a);
-    void slotAlbumDeleted(Album* a);
+    void slotAlbumAdded(Album*);
+    void slotAlbumDeleted(Album*);
     void slotAlbumsCleared();
     void slotSelectionChanged();
-    void slotContextMenu(QListViewItem *item, const QPoint &, int);
+    void slotContextMenu(QListViewItem *item, const QPoint&, int);
     void slotUser1();
 
 private:
 
-    AlbumSelectDialogPrivate * d;
+    AlbumSelectDialogPrivate *d;
 };
 
 }  // namespace Digikam
