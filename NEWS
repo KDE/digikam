@@ -18,7 +18,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 009 ==> 148976 : digiKam Deleted 2.3 g of Pictures.
 010 ==> 145252 : Umask settings used for album directory, not for image files.
 011 ==> 125775 : digiKam way to save and delete "Searches".
-012 ==> 
+012 ==> 150908 : Canon g3 not recognised works version 0.9.1.
+013 ==> 
 
 **********************************************************************************************
 
