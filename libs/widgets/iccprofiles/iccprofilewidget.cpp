@@ -468,7 +468,7 @@ void ICCProfileWidget::slotSaveMetadataToFile()
 {
     KUrl url = saveMetadataToFile(i18n("ICC color profile File to Save"), 
                                   QString("*.icc *.icm|"+i18n("ICC Files (*.icc; *.icm)")));
-//FIXME    storeMetadataToFile(url);
+    storeMetadataToFile(url, d->profileData);
 }
 
 QString ICCProfileWidget::getTagDescription(const QString& key)
