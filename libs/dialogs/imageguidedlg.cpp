@@ -246,7 +246,7 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
     d->progressBar = new QProgressBar(hbox);
     d->progressBar->setMaximum(100);
     d->progressBar->setMaximumHeight( fontMetrics().height() );
-    d->progressBar->setWhatsThis(i18n("<p>This is the current percentage of the task completed."));
+    d->progressBar->setWhatsThis(i18n("<p>This is the percentage of the task which has completed up to this point."));
     d->progressBar->setValue(0);
     setProgressVisible(false);
 
