@@ -106,14 +106,14 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
     QPushButton *simpleLevel = new QPushButton( d->levelButtons );
     simpleLevel->setPixmap( iconLoader->loadIcon( "ascii", (KIcon::Group)KIcon::Toolbar ) );
     simpleLevel->setToggleButton(true);
-    QWhatsThis::add( simpleLevel, i18n( "Toggle tags view to a simple human-readable list" ) );
+    QWhatsThis::add( simpleLevel, i18n( "Switch the tags view to a simple human-readable list" ) );
     QToolTip::add( simpleLevel, i18n( "Simple list" ));
     d->levelButtons->insert(simpleLevel, SIMPLE);
 
     QPushButton *fullLevel = new QPushButton( d->levelButtons );
     fullLevel->setPixmap( iconLoader->loadIcon( "document", (KIcon::Group)KIcon::Toolbar ) );
     fullLevel->setToggleButton(true);
-    QWhatsThis::add( fullLevel, i18n( "Toggle tags view to a full list" ) );
+    QWhatsThis::add( fullLevel, i18n( "Switch the tags view to a full list" ) );
     QToolTip::add( fullLevel, i18n( "Full list" ));
     d->levelButtons->insert(fullLevel, FULL);
 

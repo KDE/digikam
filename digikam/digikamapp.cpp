@@ -907,7 +907,7 @@ void DigikamApp::setupActions()
                                    SLOT(slotToggleFullScreen()),
                                    actionCollection(),
                                    "full_screen");
-    d->fullScreenAction->setWhatsThis(i18n("Toggle the window to full screen mode"));
+    d->fullScreenAction->setWhatsThis(i18n("Switch the window to full screen mode"));
 
     d->slideShowAction = new KActionMenu(i18n("Slide"), "slideshow",
                                          actionCollection(), "slideshow");
