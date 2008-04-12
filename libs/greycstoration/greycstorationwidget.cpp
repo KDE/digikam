@@ -232,11 +232,11 @@ GreycstorationWidget::GreycstorationWidget(QTabWidget *parent)
     d->interpolationBox->insertItem( GreycstorationSettings::NearestNeighbor, i18n("Nearest Neighbor") );
     d->interpolationBox->insertItem( GreycstorationSettings::Linear,          i18n("Linear")           );
     d->interpolationBox->insertItem( GreycstorationSettings::RungeKutta,      i18n("Runge-Kutta")      );
-    d->interpolationBox->setWhatsThis( i18n("<p>Select the right interpolation method to set "
-                                            "the image quality."));
+    d->interpolationBox->setWhatsThis( i18n("<p>Select the right interpolation method for the "
+                                            "desired image quality."));
 
     d->fastApproxCBox = new QCheckBox(i18n("Fast approximation"), d->advancedPage);
-    d->fastApproxCBox->setWhatsThis( i18n("<p>Enable fast approximation to render image."));
+    d->fastApproxCBox->setWhatsThis( i18n("<p>Enable fast approximation when rendering images."));
 
     grid2->addWidget(d->daLabel, 0, 0, 1, 1);
     grid2->addWidget(d->daInput, 0, 1, 1, 1);
