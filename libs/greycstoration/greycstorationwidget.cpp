@@ -236,13 +236,13 @@ GreycstorationWidget::GreycstorationWidget(QTabWidget *parent)
     d->interpolationBox->insertItem( i18n("Nearest Neighbor"), GreycstorationSettings::NearestNeighbor );
     d->interpolationBox->insertItem( i18n("Linear"),           GreycstorationSettings::Linear );
     d->interpolationBox->insertItem( i18n("Runge-Kutta"),      GreycstorationSettings::RungeKutta);
-    QWhatsThis::add( d->interpolationBox, i18n("<p>Select the right interpolation method to set "
-                                               "the image quality."));
+    QWhatsThis::add( d->interpolationBox, i18n("<p>Select the right interpolation method for the "
+                                               "desired image quality."));
     grid2->addMultiCellWidget(d->interpolationLabel, 5, 5, 0, 0);
     grid2->addMultiCellWidget(d->interpolationBox, 5, 5, 1, 1);
     
     d->fastApproxCBox = new QCheckBox(i18n("Fast approximation"), d->advancedPage);
-    QWhatsThis::add( d->fastApproxCBox, i18n("<p>Enable fast approximation to render image."));
+    QWhatsThis::add( d->fastApproxCBox, i18n("<p>Enable fast approximation when rendering images."));
     grid2->addMultiCellWidget(d->fastApproxCBox, 6, 6, 0, 1);
 }
 
