@@ -3,10 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2004-02-12
+ * Date        : 2006-21-12
  * Description : digiKam light table preview item.
  *
- * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -562,7 +562,7 @@ void LightTablePreview::slotPanIconHiden()
     d->cornerButton->blockSignals(false);
 }
 
-void LightTablePreview::slotPanIconSelectionMoved(QRect r, bool b)
+void LightTablePreview::slotPanIconSelectionMoved(const QRect& r, bool b)
 {
     setContentsPos((int)(r.x()*zoomFactor()), (int)(r.y()*zoomFactor()));
 

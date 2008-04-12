@@ -102,7 +102,7 @@ private slots:
     void slotAssignRating(int rating);
     void slotThemeChanged();
     void slotCornerButtonPressed();
-    void slotPanIconSelectionMoved(QRect, bool);
+    void slotPanIconSelectionMoved(const QRect&, bool);
     void slotPanIconHiden();
 
 private:
