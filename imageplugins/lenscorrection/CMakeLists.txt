@@ -3,8 +3,6 @@ set(CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules
 )
 
-FIND_PACKAGE(lensfun)
-
 IF(LENSFUN_LIBRARY)
    SET(digikamimageplugin_lenscorrection_PART_SRCS imageplugin_lenscorrection.cpp
    					imageeffect_lenscorrection.cpp

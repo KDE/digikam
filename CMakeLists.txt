@@ -45,6 +45,9 @@ SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 macro_optional_find_package(MarbleWidget)
 macro_bool_to_01(MARBLEWIDGET_FOUND HAVE_MARBLEWIDGET)
 
+macro_optional_find_package(LensFun)
+macro_bool_to_01(LENSFUN_FOUND HAVE_LENSFUN)
+
 # Set config file depending of optional depencies
 
 configure_file(config-digikam.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-digikam.h)
