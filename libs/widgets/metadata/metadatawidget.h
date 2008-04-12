@@ -72,7 +72,7 @@ public:
     virtual QString getTagTitle(const QString& key);
     virtual QString getTagDescription(const QString& key);
 
-    virtual bool loadFromData(QString fileName, const DMetadata& data=DMetadata());
+    virtual bool loadFromData(const QString& fileName, const DMetadata& data=DMetadata());
     virtual bool loadFromURL(const KUrl& url)=0;
 
 private slots:

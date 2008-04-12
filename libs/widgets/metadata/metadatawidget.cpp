@@ -462,7 +462,7 @@ void MetadataWidget::setCurrentItemByKey(const QString& itemKey)
     d->view->setCurrentItemByKey(itemKey);
 }
 
-bool MetadataWidget::loadFromData(QString fileName, const DMetadata& data)
+bool MetadataWidget::loadFromData(const QString& fileName, const DMetadata& data)
 {
     setFileName(fileName);
     return(setMetadata(data));

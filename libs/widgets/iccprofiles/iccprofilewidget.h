@@ -49,7 +49,7 @@ public:
     ~ICCProfileWidget();
 
     bool    loadFromURL(const KUrl& url);
-    bool    loadFromData(QString fileName, const QByteArray& data=QByteArray());
+    bool    loadFromData(const QString& fileName, const QByteArray& data=QByteArray());
     
     QString getTagDescription(const QString& key);
     QString getTagTitle(const QString& key);
