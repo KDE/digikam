@@ -1247,7 +1247,7 @@ void Canvas::slotPanIconHiden()
     d->cornerButton->blockSignals(false);
 }
 
-void Canvas::slotPanIconSelectionMoved(QRect r, bool b)
+void Canvas::slotPanIconSelectionMoved(const QRect& r, bool b)
 {
     setContentsPos((int)(r.x()*d->zoom), (int)(r.y()*d->zoom));
 
