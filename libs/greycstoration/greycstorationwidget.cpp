@@ -153,9 +153,9 @@ GreycstorationWidget::GreycstorationWidget(QTabWidget *parent)
     d->amplitudeInput = new KDoubleNumInput(d->generalPage);
     d->amplitudeInput->setPrecision(2);
     d->amplitudeInput->setRange(0.01, 500.0, 0.1, true);
-    QWhatsThis::add( d->amplitudeInput, i18n("<p>Total smoothing power: if Detail Factor sets the relative "
-                                             "smoothing and Anisotropy Factor the direction, "
-                                             "Smoothing Factor sets the overall effect."));
+    QWhatsThis::add( d->amplitudeInput, i18n("<p>Total smoothing power: if the Detail Factor sets the relative "
+                                             "smoothing and the Anisotropy Factor the direction, "
+                                             "the Smoothing Factor sets the overall effect."));
     grid1->addMultiCellWidget(d->amplitudeLabel, 2, 2, 0, 0);
     grid1->addMultiCellWidget(d->amplitudeInput, 2, 2, 1, 1);
 
@@ -220,14 +220,14 @@ GreycstorationWidget::GreycstorationWidget(QTabWidget *parent)
     d->tileLabel = new QLabel(i18n("Tile size:"), d->advancedPage);
     d->tileInput = new KIntNumInput(d->advancedPage);
     d->tileInput->setRange(0, 2000, 1, true);
-    QWhatsThis::add( d->tileInput, i18n("<p>Sets the size of tile."));
+    QWhatsThis::add( d->tileInput, i18n("<p>Sets the tile size."));
     grid2->addMultiCellWidget(d->tileLabel, 3, 3, 0, 0);
     grid2->addMultiCellWidget(d->tileInput, 3, 3, 1, 1);
 
     d->btileLabel = new QLabel(i18n("Tile border:"), d->advancedPage);
     d->btileInput = new KIntNumInput(d->advancedPage);
     d->btileInput->setRange(1, 20, 1, true);
-    QWhatsThis::add( d->btileInput, i18n("<p>Sets the size of tile borders."));
+    QWhatsThis::add( d->btileInput, i18n("<p>Sets the size of each tile borders."));
     grid2->addMultiCellWidget(d->btileLabel, 4, 4, 0, 0);
     grid2->addMultiCellWidget(d->btileInput, 4, 4, 1, 1);
     
