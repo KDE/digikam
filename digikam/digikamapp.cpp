@@ -445,9 +445,9 @@ void DigikamApp::setupAccelerators()
                            Key_Space, this, SIGNAL(signalNextItem()),
                            false, true);
 
-    d->accelerators->insert("Next Image SHIFT+Key_Space", i18n("Next Image"),
-                           i18n("Next Image"),
-                           SHIFT+Key_Space, this, SIGNAL(signalNextItem()),
+    d->accelerators->insert("Previous Image SHIFT+Key_Space", i18n("Previous Image"),
+                           i18n("Previous Image"),
+                           SHIFT+Key_Space, this, SIGNAL(signalPrevItem()),
                            false, true);
 
     d->accelerators->insert("Previous Image Key_Backspace", i18n("Previous Image"),
