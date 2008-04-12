@@ -7,7 +7,7 @@
  * Description : a widget to display non standard Exif metadata
  *               used by camera makers
  *
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -120,7 +120,7 @@ MakerNoteWidget::~MakerNoteWidget()
 {
 }
 
-QString MakerNoteWidget::getMetadataTitle(void)
+QString MakerNoteWidget::getMetadataTitle()
 {
     return i18n("MakerNote EXIF Tags");
 }
@@ -162,7 +162,7 @@ bool MakerNoteWidget::decodeMetadata()
     return true;
 }
 
-void MakerNoteWidget::buildView(void)
+void MakerNoteWidget::buildView()
 {
     if (getMode() == SIMPLE)
     {
@@ -172,6 +172,8 @@ void MakerNoteWidget::buildView(void)
     {
         setIfdList(getMetadataMap());
     }
+
+    MetadataWidget::buildView();
 }
 
 QString MakerNoteWidget::getTagTitle(const QString& key)
@@ -194,7 +196,7 @@ QString MakerNoteWidget::getTagDescription(const QString& key)
     return desc;
 }
 
-void MakerNoteWidget::slotSaveMetadataToFile(void)
+void MakerNoteWidget::slotSaveMetadataToFile()
 {
     KURL url = saveMetadataToFile(i18n("EXIF File to Save"),
                                   QString("*.exif|"+i18n("EXIF binary Files (*.exif)")));

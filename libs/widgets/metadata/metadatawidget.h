@@ -6,7 +6,7 @@
  * Date        : 2006-02-22
  * Description : a generic widget to display metadata
  *
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -61,7 +61,7 @@ public:
     MetadataWidget(QWidget* parent, const char* name=0);
     ~MetadataWidget();
 
-    int     getMode(void);
+    int     getMode();
     void    setMode(int mode);
 
     QString getCurrentItemKey() const;
@@ -72,24 +72,24 @@ public:
     virtual QString getTagTitle(const QString& key);
     virtual QString getTagDescription(const QString& key);
 
-    virtual bool loadFromData(QString fileName, const QByteArray& data=QByteArray());
+    virtual bool loadFromData(const QString &fileName, const QByteArray& data=QByteArray());
     virtual bool loadFromURL(const KURL& url)=0;
 
 private slots:
 
     void slotModeChanged(int);
-    void slotCopy2Clipboard(void);
-    void slotPrintMetadata(void);
+    void slotCopy2Clipboard();
+    void slotPrintMetadata();
     
 protected slots:    
     
-    virtual void slotSaveMetadataToFile(void)=0;
+    virtual void slotSaveMetadataToFile()=0;
     
 protected:
 
     void   enabledToolButtons(bool);
-    void   setFileName(QString fileName);
-    MetadataListView* view(void);
+    void   setFileName(const QString& fileName);
+    MetadataListView* view();
 
     bool   setMetadata(const QByteArray& data=QByteArray());
     const  QByteArray& getMetadata();
@@ -103,10 +103,10 @@ protected:
 
     KURL   saveMetadataToFile(const QString& caption, const QString& fileFilter);
     bool   storeMetadataToFile(const KURL& url);
-    
-    virtual bool decodeMetadata(void)=0;
-    virtual void buildView(void)=0;
-    virtual QString getMetadataTitle(void)=0;
+
+    virtual void buildView();
+    virtual bool decodeMetadata()=0;
+    virtual QString getMetadataTitle()=0;
     virtual void setMetadataEmpty();
 
 private:

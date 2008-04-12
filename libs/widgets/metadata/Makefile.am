@@ -11,6 +11,7 @@ libmetadatawidgets_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 INCLUDES = -I$(top_srcdir)/digikam/libs/dmetadata \
 	       -I$(top_srcdir)/digikam/libs/dimg \
 	       -I$(top_srcdir)/digikam/libs/themeengine \
+	       -I$(top_srcdir)/digikam/libs/widgets/common \
 	       -I$(top_srcdir)/digikam/digikam \
 	       $(LIBKEXIV2_CFLAGS) \
 	       $(all_includes)

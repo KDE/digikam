@@ -6,7 +6,7 @@
  * Date        : 2006-02-20
  * Description : a widget to display Standard Exif metadata
  * 
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -95,7 +95,7 @@ ExifWidget::~ExifWidget()
 {
 }
 
-QString ExifWidget::getMetadataTitle(void)
+QString ExifWidget::getMetadataTitle()
 {
     return i18n("Standard EXIF Tags");
 }
@@ -137,9 +137,8 @@ bool ExifWidget::decodeMetadata()
     return true;
 }
 
-void ExifWidget::buildView(void)
+void ExifWidget::buildView()
 {
-    
     if (getMode() == SIMPLE)
     {
         setIfdList(getMetadataMap(), m_keysFilter, m_tagsfilter);
@@ -148,6 +147,8 @@ void ExifWidget::buildView(void)
     {
         setIfdList(getMetadataMap(), m_keysFilter, QStringList());
     }
+
+    MetadataWidget::buildView();
 }
 
 QString ExifWidget::getTagTitle(const QString& key)
@@ -170,7 +171,7 @@ QString ExifWidget::getTagDescription(const QString& key)
     return desc;
 }
 
-void ExifWidget::slotSaveMetadataToFile(void)
+void ExifWidget::slotSaveMetadataToFile()
 {
     KURL url = saveMetadataToFile(i18n("EXIF File to Save"),
                                   QString("*.exif|"+i18n("EXIF binary Files (*.exif)")));

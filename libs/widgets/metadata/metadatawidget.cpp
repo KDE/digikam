@@ -57,6 +57,7 @@
 #include "ddebug.h"
 #include "metadatalistview.h"
 #include "mdkeylistviewitem.h"
+#include "searchtextbar.h"
 #include "metadatawidget.h"
 #include "metadatawidget.moc"
 
@@ -74,6 +75,7 @@ public:
         levelButtons = 0;
         view         = 0;
         mainLayout   = 0;
+        searchBar    = 0;
     }
 
     QGridLayout            *mainLayout;
@@ -86,6 +88,8 @@ public:
     QString                 fileName;
 
     MetadataListView       *view;
+
+    SearchTextBar          *searchBar;
 
     DMetadata::MetaDataMap  metaDataMap;
 };
@@ -139,12 +143,18 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
     QToolTip::add( copy2ClipBoard, i18n( "Copy metadata to clipboard" ));
     d->toolButtons->insert(copy2ClipBoard);
 
-    d->mainLayout->addMultiCellWidget(d->levelButtons, 0, 0, 0, 1);
-    d->mainLayout->setColStretch(3, 10);
-    d->mainLayout->addMultiCellWidget(d->toolButtons, 0, 0, 4, 4);
+    d->view         = new MetadataListView(this);
+    QString barName = QString(name) + "SearchBar";
+    d->searchBar    = new SearchTextBar(this, barName.ascii());
 
-    d->view = new MetadataListView(this);
-    d->mainLayout->addMultiCellWidget(d->view, 1, 1, 0, 4);
+    // -----------------------------------------------------------------
+
+    d->mainLayout->addMultiCellWidget(d->levelButtons, 0, 0, 0, 1);
+    d->mainLayout->addMultiCellWidget(d->toolButtons,  0, 0, 4, 4);
+    d->mainLayout->addMultiCellWidget(d->view,         1, 1, 0, 4);
+    d->mainLayout->addMultiCellWidget(d->searchBar,    2, 2, 0, 4);
+    d->mainLayout->setRowStretch(1, 10);
+    d->mainLayout->setColStretch(3, 10);
 
     // -----------------------------------------------------------------
     
@@ -158,7 +168,13 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
             this, SLOT(slotPrintMetadata()));
 
     connect(saveMetadata, SIGNAL(clicked()),
-            this, SLOT(slotSaveMetadataToFile()));                        
+            this, SLOT(slotSaveMetadataToFile()));     
+
+    connect(d->searchBar, SIGNAL(signalTextChanged(const QString&)),
+            d->view, SLOT(slotSearchTextChanged(const QString&)));
+
+    connect(d->view, SIGNAL(signalTextFilterMatch(bool)),
+            d->searchBar, SLOT(slotSearchResult(bool)));                   
 }
 
 MetadataWidget::~MetadataWidget()
@@ -166,7 +182,7 @@ MetadataWidget::~MetadataWidget()
     delete d;
 }
 
-MetadataListView* MetadataWidget::view(void)
+MetadataListView* MetadataWidget::view()
 {
     return d->view;
 }
@@ -253,7 +269,7 @@ void MetadataWidget::slotModeChanged(int)
     buildView();
 }
 
-void MetadataWidget::slotCopy2Clipboard(void)
+void MetadataWidget::slotCopy2Clipboard()
 {
     QString textmetadata = i18n("File name: %1 (%2)").arg(d->fileName).arg(getMetadataTitle());
     QListViewItemIterator it( d->view );
@@ -282,7 +298,7 @@ void MetadataWidget::slotCopy2Clipboard(void)
     QApplication::clipboard()->setData(new QTextDrag(textmetadata), QClipboard::Clipboard);
 }
 
-void MetadataWidget::slotPrintMetadata(void)
+void MetadataWidget::slotPrintMetadata()
 {
     QString textmetadata = i18n("<p><big><big><b>File name: %1 (%2)</b></big></big>")
                            .arg(d->fileName)
@@ -385,7 +401,7 @@ void MetadataWidget::setMode(int mode)
     buildView();
 }
 
-int MetadataWidget::getMode(void)
+int MetadataWidget::getMode()
 {
     int level = d->levelButtons->selectedId();
     return level;
@@ -401,7 +417,7 @@ void MetadataWidget::setCurrentItemByKey(const QString& itemKey)
     d->view->setCurrentItemByKey(itemKey);
 }
 
-bool MetadataWidget::loadFromData(QString fileName, const QByteArray& data)
+bool MetadataWidget::loadFromData(const QString& fileName, const QByteArray& data)
 {
     setFileName(fileName);
     return(setMetadata(data));
@@ -417,7 +433,7 @@ QString MetadataWidget::getTagDescription(const QString&)
     return QString();
 }
 
-void MetadataWidget::setFileName(QString fileName)
+void MetadataWidget::setFileName(const QString& fileName)
 {
     d->fileName = fileName;
 }
@@ -430,5 +446,9 @@ void MetadataWidget::setUserAreaWidget(QWidget *w)
     d->mainLayout->addMultiCellLayout(vLayout, 2, 2, 0, 4);
 }
 
-}  // namespace Digikam
+void MetadataWidget::buildView()
+{
+    d->view->slotSearchTextChanged(d->searchBar->text());
+}
 
+}  // namespace Digikam

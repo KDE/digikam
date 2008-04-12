@@ -6,7 +6,7 @@
  * Date        : 2006-02-22
  * Description : a tab widget to display GPS info
  * 
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -64,24 +64,24 @@ public:
     QString getTagDescription(const QString& key);
     QString getTagTitle(const QString& key);
 
-    QString getMetadataTitle(void);
+    QString getMetadataTitle();
     
-    int  getWebGPSLocator(void);
+    int  getWebGPSLocator();
     void setWebGPSLocator(int locator);
 
 protected slots:    
     
-    virtual void slotSaveMetadataToFile(void);
+    virtual void slotSaveMetadataToFile();
 
 private slots:
 
-    void slotGPSDetails(void);
+    void slotGPSDetails();
 
 private:
 
-    bool decodeMetadata(void);
-    void buildView(void);
-    bool decodeGPSPosition(void);
+    bool decodeMetadata();
+    void buildView();
+    bool decodeGPSPosition();
     virtual void setMetadataEmpty();
 
 private:

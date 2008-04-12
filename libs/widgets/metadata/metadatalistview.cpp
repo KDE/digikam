@@ -253,4 +253,31 @@ void MetadataListView::viewportResizeEvent(QResizeEvent* e)
     QTimer::singleShot( 0, this, SLOT( triggerUpdate() ) );
 }
 
+void MetadataListView::slotSearchTextChanged(const QString& filter)
+{
+    bool query     = false;
+    QString search = filter.lower();
+
+    QListViewItemIterator it(this);
+    for ( ; it.current(); ++it ) 
+    {
+        MetadataListViewItem *item = dynamic_cast<MetadataListViewItem*>(it.current());
+        if (item)
+       {
+            if (item->text(0).lower().contains(search) ||
+                item->text(1).lower().contains(search))
+            {
+                query = true;
+                item->setVisible(true);
+            }
+            else
+            {
+                item->setVisible(false);
+            }
+        }
+    }
+
+    emit signalTextFilterMatch(query);
+}
+
 }  // namespace Digikam

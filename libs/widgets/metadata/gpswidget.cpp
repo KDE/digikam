@@ -6,7 +6,7 @@
  * Date        : 2006-02-22
  * Description : a tab widget to display GPS info
  *
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -150,7 +150,7 @@ GPSWidget::~GPSWidget()
     delete d;
 }
 
-int GPSWidget::getWebGPSLocator(void)
+int GPSWidget::getWebGPSLocator()
 {
     return ( d->detailsCombo->currentItem() );
 }
@@ -160,7 +160,7 @@ void GPSWidget::setWebGPSLocator(int locator)
     d->detailsCombo->setCurrentItem(locator);
 }
     
-void GPSWidget::slotGPSDetails(void)
+void GPSWidget::slotGPSDetails()
 {
     QString val, url;
 
@@ -215,7 +215,7 @@ void GPSWidget::slotGPSDetails(void)
     KApplication::kApplication()->invokeBrowser(url);
 }
 
-QString GPSWidget::getMetadataTitle(void)
+QString GPSWidget::getMetadataTitle()
 {
     return i18n("Global Positioning System Information");
 }
@@ -279,9 +279,8 @@ void GPSWidget::setMetadataEmpty()
     d->detailsCombo->setEnabled(false);
 }
 
-void GPSWidget::buildView(void)
-{
-    
+void GPSWidget::buildView()
+{    
     if (getMode() == SIMPLE)
     {
         setIfdList(getMetadataMap(), d->keysFilter, d->tagsfilter);
@@ -290,6 +289,8 @@ void GPSWidget::buildView(void)
     {
         setIfdList(getMetadataMap(), d->keysFilter, QStringList());
     }
+
+    MetadataWidget::buildView();
 }
 
 QString GPSWidget::getTagTitle(const QString& key)
@@ -312,7 +313,7 @@ QString GPSWidget::getTagDescription(const QString& key)
     return desc;
 }
 
-bool GPSWidget::decodeGPSPosition(void)
+bool GPSWidget::decodeGPSPosition()
 {
     double latitude=0.0, longitude=0.0, altitude=0.0;
     
@@ -327,7 +328,7 @@ bool GPSWidget::decodeGPSPosition(void)
     return true;
 }
 
-void GPSWidget::slotSaveMetadataToFile(void)
+void GPSWidget::slotSaveMetadataToFile()
 {
     KURL url = saveMetadataToFile(i18n("EXIF File to Save"),
                                   QString("*.exif|"+i18n("EXIF binary Files (*.exif)")));
