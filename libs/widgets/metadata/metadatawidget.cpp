@@ -120,7 +120,7 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
     QPushButton *simpleLevel = new QPushButton( d->levelGBox );
     simpleLevel->setIcon( iconLoader->loadIcon( "user-identity", (KIconLoader::Group)KIconLoader::Toolbar ) );
     simpleLevel->setCheckable(true);
-    simpleLevel->setWhatsThis( i18n( "Toggle tags view to a simple human-readable list" ) );
+    simpleLevel->setWhatsThis( i18n( "Switch the tags view to a simple human-readable list" ) );
     simpleLevel->setToolTip(i18n( "Simple list" ));
     d->levelButtons->addButton(simpleLevel, SIMPLE);
     hlay1->addWidget(simpleLevel);
@@ -128,7 +128,7 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
     QPushButton *fullLevel = new QPushButton( d->levelGBox );
     fullLevel->setIcon( iconLoader->loadIcon( "view-media-playlist", (KIconLoader::Group)KIconLoader::Toolbar ) );
     fullLevel->setCheckable(true);
-    fullLevel->setWhatsThis( i18n( "Toggle tags view to a full list" ) );
+    fullLevel->setWhatsThis( i18n( "Switch the tags view to a full list" ) );
     fullLevel->setToolTip(i18n( "Full list" ));
     d->levelButtons->addButton(fullLevel, FULL);
 
