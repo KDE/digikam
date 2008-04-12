@@ -448,6 +448,11 @@ void DigikamApp::setupAccelerators()
     previousImageAction->setShortcut(KShortcut(Qt::Key_Backspace, Qt::Key_Prior));
     connect(previousImageAction, SIGNAL(triggered()), this, SIGNAL(signalPrevItem()));
 
+    KAction *altpreviousImageAction = new KAction(i18n("Previous Image"), this);
+    actionCollection()->addAction("alt_previous_image_shift_space", altpreviousImageAction);
+    altpreviousImageAction->setShortcut( KShortcut(Qt::SHIFT+Qt::Key_Space) );
+    connect(altpreviousImageAction, SIGNAL(triggered()), this, SIGNAL(signalPrevItem()));
+
     KAction *firstImageAction = new KAction(i18n("First Image"), this);
     actionCollection()->addAction("first_image", firstImageAction);
     firstImageAction->setShortcut( QKeySequence(Qt::Key_Home) );
