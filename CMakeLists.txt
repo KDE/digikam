@@ -39,15 +39,13 @@ macro_optional_find_package(Kipi)
 # Optional depencies
 
 macro_optional_find_package(KdepimLibs)
-macro_optional_find_package(MarbleWidget)
-
 macro_bool_to_01(KDEPIMLIBS_FOUND HAVE_KDEPIMLIBS)
-# Laurent: remove it when marble will install all include and correct include
-# For the moment it's not possible to compile it with marble support
-# missing installed include from marble, and missing declaration
-set(HAVE_MARBLEWIDGET 0)
-#macro_bool_to_01(MARBLEWIDGET_FOUND HAVE_MARBLEWIDGET)
 
+SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
+macro_optional_find_package(MarbleWidget)
+macro_bool_to_01(MARBLEWIDGET_FOUND HAVE_MARBLEWIDGET)
+
+# Set config file depending of optional depencies
 
 configure_file(config-digikam.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-digikam.h)
 
