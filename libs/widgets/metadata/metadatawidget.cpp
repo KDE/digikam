@@ -99,7 +99,7 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
 {
     d = new MetadataWidgetPriv;
 
-    d->mainLayout = new QGridLayout(this, 2, 4, KDialog::spacingHint(), KDialog::spacingHint());
+    d->mainLayout = new QGridLayout(this, 3, 4, KDialog::spacingHint(), KDialog::spacingHint());
     KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
 
     d->levelButtons = new QHButtonGroup(this);
@@ -443,7 +443,7 @@ void MetadataWidget::setUserAreaWidget(QWidget *w)
     QVBoxLayout *vLayout = new QVBoxLayout( KDialog::spacingHint() ); 
     vLayout->addWidget(w);
     vLayout->addStretch();
-    d->mainLayout->addMultiCellLayout(vLayout, 2, 2, 0, 4);
+    d->mainLayout->addMultiCellLayout(vLayout, 3, 3, 0, 4);
 }
 
 void MetadataWidget::buildView()
