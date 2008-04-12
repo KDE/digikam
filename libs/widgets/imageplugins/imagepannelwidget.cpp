@@ -211,7 +211,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
     // -------------------------------------------------------------
     
     d->progressBar = new KProgress(100, d->previewWidget);
-    QWhatsThis::add(d->progressBar ,i18n("<p>This is the current percentage of the task completed."));
+    QWhatsThis::add(d->progressBar ,i18n("<p>This is the percentage of the task which has been completed up to this point."));
     d->progressBar->setProgress(0);
     d->progressBar->setMaximumHeight( fontMetrics().height() );
 
