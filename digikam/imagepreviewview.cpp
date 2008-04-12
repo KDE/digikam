@@ -579,7 +579,7 @@ void ImagePreviewView::slotPanIconHiden()
     d->cornerButton->blockSignals(false);
 }
 
-void ImagePreviewView::slotPanIconSelectionMoved(QRect r, bool b)
+void ImagePreviewView::slotPanIconSelectionMoved(const QRect& r, bool b)
 {
     setContentsPos((int)(r.x()*zoomFactor()), (int)(r.y()*zoomFactor()));
 
