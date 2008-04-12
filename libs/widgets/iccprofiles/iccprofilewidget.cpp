@@ -6,7 +6,7 @@
  * Date        : 2006-06-23
  * Description : a tab widget to display ICC profile infos
  * 
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -223,7 +223,7 @@ void ICCProfileWidget::setLoadingFailed()
     d->cieTongue->loadingFailed();
 }
 
-QString ICCProfileWidget::getMetadataTitle(void)
+QString ICCProfileWidget::getMetadataTitle()
 {
     return i18n("ICC Color Profile Information");
 }
@@ -441,7 +441,7 @@ bool ICCProfileWidget::decodeMetadata()
     return true;
 }
 
-void ICCProfileWidget::buildView(void)
+void ICCProfileWidget::buildView()
 {
     if (getMode() == SIMPLE)
     {
@@ -451,6 +451,8 @@ void ICCProfileWidget::buildView(void)
     {
         setIfdList(getMetadataMap(), d->keysFilter, QStringList());
     }
+
+    MetadataWidget::buildView();
 }
 
 QString ICCProfileWidget::getTagTitle(const QString& key)
@@ -462,7 +464,7 @@ QString ICCProfileWidget::getTagTitle(const QString& key)
     return key.section('.', 2, 2);
 }
 
-void ICCProfileWidget::slotSaveMetadataToFile(void)
+void ICCProfileWidget::slotSaveMetadataToFile()
 {
     KUrl url = saveMetadataToFile(i18n("ICC color profile File to Save"), 
                                   QString("*.icc *.icm|"+i18n("ICC Files (*.icc; *.icm)")));
@@ -479,4 +481,3 @@ QString ICCProfileWidget::getTagDescription(const QString& key)
 }
 
 }  // namespace Digikam
-

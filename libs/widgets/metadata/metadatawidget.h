@@ -103,9 +103,9 @@ protected:
 
     KUrl   saveMetadataToFile(const QString& caption, const QString& fileFilter);
     bool   storeMetadataToFile(const KUrl& url, const QByteArray& metaData);
-    
+
+    virtual void buildView();
     virtual bool decodeMetadata()=0;
-    virtual void buildView()=0;
     virtual QString getMetadataTitle()=0;
     virtual void setMetadataEmpty();
 

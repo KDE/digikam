@@ -92,7 +92,7 @@ XmpWidget::~XmpWidget()
 {
 }
 
-QString XmpWidget::getMetadataTitle(void)
+QString XmpWidget::getMetadataTitle()
 {
     return i18n("XMP Schema");
 }
@@ -133,7 +133,7 @@ bool XmpWidget::decodeMetadata()
     return true;
 }
 
-void XmpWidget::buildView(void)
+void XmpWidget::buildView()
 {
     if (getMode() == SIMPLE)
     {
@@ -143,6 +143,8 @@ void XmpWidget::buildView(void)
     {
         setIfdList(getMetadataMap());
     }
+
+    MetadataWidget::buildView();
 }
 
 QString XmpWidget::getTagTitle(const QString& key)
@@ -165,7 +167,7 @@ QString XmpWidget::getTagDescription(const QString& key)
     return desc;
 }
 
-void XmpWidget::slotSaveMetadataToFile(void)
+void XmpWidget::slotSaveMetadataToFile()
 {
     KUrl url = saveMetadataToFile(i18n("XMP File to Save"),
                                   QString("*.xmp|"+i18n("XMP text Files (*.xmp)")));

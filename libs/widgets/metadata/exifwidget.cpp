@@ -99,7 +99,7 @@ ExifWidget::~ExifWidget()
 {
 }
 
-QString ExifWidget::getMetadataTitle(void)
+QString ExifWidget::getMetadataTitle()
 {
     return i18n("Standard EXIF Tags");
 }
@@ -140,9 +140,8 @@ bool ExifWidget::decodeMetadata()
     return true;
 }
 
-void ExifWidget::buildView(void)
-{
-    
+void ExifWidget::buildView()
+{    
     if (getMode() == SIMPLE)
     {
         setIfdList(getMetadataMap(), m_keysFilter, m_tagsfilter);
@@ -151,6 +150,8 @@ void ExifWidget::buildView(void)
     {
         setIfdList(getMetadataMap(), m_keysFilter, QStringList());
     }
+
+    MetadataWidget::buildView();
 }
 
 QString ExifWidget::getTagTitle(const QString& key)
@@ -173,7 +174,7 @@ QString ExifWidget::getTagDescription(const QString& key)
     return desc;
 }
 
-void ExifWidget::slotSaveMetadataToFile(void)
+void ExifWidget::slotSaveMetadataToFile()
 {
     KUrl url = saveMetadataToFile(i18n("EXIF File to Save"),
                                   QString("*.exif|"+i18n("EXIF binary Files (*.exif)")));

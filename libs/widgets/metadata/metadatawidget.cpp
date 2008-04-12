@@ -446,7 +446,7 @@ void MetadataWidget::setMode(int mode)
     buildView();
 }
 
-int MetadataWidget::getMode(void)
+int MetadataWidget::getMode()
 {
     int level = d->levelButtons->checkedId();
     return level;
@@ -490,6 +490,11 @@ void MetadataWidget::setUserAreaWidget(QWidget *w)
     vLayout->addWidget(w);
     vLayout->addStretch();
     d->mainLayout->addLayout(vLayout, 2, 0, 1, 5 );
+}
+
+void MetadataWidget::buildView()
+{
+    d->view->slotSearchTextChanged(d->searchBar->text());
 }
 
 }  // namespace Digikam

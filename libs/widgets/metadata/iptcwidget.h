@@ -46,16 +46,16 @@ public:
     QString getTagDescription(const QString& key);
     QString getTagTitle(const QString& key);
 
-    QString getMetadataTitle(void);
+    QString getMetadataTitle();
 
 protected slots:    
     
-    virtual void slotSaveMetadataToFile(void);
+    virtual void slotSaveMetadataToFile();
 
 private:
 
-    bool decodeMetadata(void);
-    void buildView(void);
+    bool decodeMetadata();
+    void buildView();
 
 private:
     

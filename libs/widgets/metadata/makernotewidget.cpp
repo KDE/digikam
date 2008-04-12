@@ -120,7 +120,7 @@ MakerNoteWidget::~MakerNoteWidget()
 {
 }
 
-QString MakerNoteWidget::getMetadataTitle(void)
+QString MakerNoteWidget::getMetadataTitle()
 {
     return i18n("MakerNote EXIF Tags");
 }
@@ -161,7 +161,7 @@ bool MakerNoteWidget::decodeMetadata()
     return true;
 }
 
-void MakerNoteWidget::buildView(void)
+void MakerNoteWidget::buildView()
 {
     if (getMode() == SIMPLE)
     {
@@ -171,6 +171,8 @@ void MakerNoteWidget::buildView(void)
     {
         setIfdList(getMetadataMap());
     }
+
+    MetadataWidget::buildView();
 }
 
 QString MakerNoteWidget::getTagTitle(const QString& key)
@@ -193,7 +195,7 @@ QString MakerNoteWidget::getTagDescription(const QString& key)
     return desc;
 }
 
-void MakerNoteWidget::slotSaveMetadataToFile(void)
+void MakerNoteWidget::slotSaveMetadataToFile()
 {
     KUrl url = saveMetadataToFile(i18n("EXIF File to Save"),
                                   QString("*.exif|"+i18n("EXIF binary Files (*.exif)")));
