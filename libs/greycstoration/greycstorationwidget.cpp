@@ -149,9 +149,9 @@ GreycstorationWidget::GreycstorationWidget(QTabWidget *parent)
     d->amplitudeInput = new KDoubleNumInput(d->generalPage);
     d->amplitudeInput->setDecimals(2);
     d->amplitudeInput->setRange(0.01, 500.0, 0.1, true);
-    d->amplitudeInput->setWhatsThis( i18n("<p>Total smoothing power: if Detail Factor sets the relative "
-                                             "smoothing and Anisotropy Factor the direction, "
-                                             "Smoothing Factor sets the overall effect."));
+    d->amplitudeInput->setWhatsThis( i18n("<p>Total smoothing power: if the Detail Factor sets the relative "
+                                             "smoothing and the Anisotropy Factor the direction, "
+                                             "the Smoothing Factor sets the overall effect."));
 
     d->sigmaLabel = new QLabel(i18n("Regularity:"), d->generalPage);
     d->sigmaInput = new KDoubleNumInput(d->generalPage);
@@ -165,7 +165,7 @@ GreycstorationWidget::GreycstorationWidget(QTabWidget *parent)
     d->iterationInput = new KIntNumInput(d->generalPage);
     d->iterationInput->setRange(1, 5000, 1);
     d->iterationInput->setSliderEnabled(true);
-    d->iterationInput->setWhatsThis( i18n("<p>Sets the number of times the filter is applied over "
+    d->iterationInput->setWhatsThis( i18n("<p>Sets the number of times the filter is applied to the "
                                              "the image."));
 
     d->alphaLabel = new QLabel(i18n("Noise:"), d->generalPage);
@@ -200,8 +200,8 @@ GreycstorationWidget::GreycstorationWidget(QTabWidget *parent)
     d->daInput = new KDoubleNumInput(d->advancedPage);
     d->daInput->setDecimals(2);
     d->daInput->setRange(0.0, 90.0, 1.0, true);
-    d->daInput->setWhatsThis( i18n("<p>Set here the angular integration step in degrees "
-                                   "in analogy to anisotropy."));
+    d->daInput->setWhatsThis( i18n("<p>Set here the angular integration step (in degrees) "
+                                   "analogous to anisotropy."));
 
     d->dlLabel = new QLabel(i18n("Integral step:"), d->advancedPage);
     d->dlInput = new KDoubleNumInput(d->advancedPage);
@@ -219,13 +219,13 @@ GreycstorationWidget::GreycstorationWidget(QTabWidget *parent)
     d->tileInput = new KIntNumInput(d->advancedPage);
     d->tileInput->setRange(0, 2000, 1);
     d->tileInput->setSliderEnabled(true);
-    d->tileInput->setWhatsThis( i18n("<p>Sets the size of tile."));
+    d->tileInput->setWhatsThis( i18n("<p>Sets the tile size."));
 
     d->btileLabel = new QLabel(i18n("Tile border:"), d->advancedPage);
     d->btileInput = new KIntNumInput(d->advancedPage);
     d->btileInput->setRange(1, 20, 1);
     d->btileInput->setSliderEnabled(true);
-    d->btileInput->setWhatsThis( i18n("<p>Sets the size of tile borders."));
+    d->btileInput->setWhatsThis( i18n("<p>Sets the size of each tile border."));
 
     d->interpolationLabel = new QLabel(i18n("Interpolation:"), d->advancedPage);
     d->interpolationBox   = new QComboBox(d->advancedPage);
