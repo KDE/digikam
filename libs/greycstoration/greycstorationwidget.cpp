@@ -172,7 +172,7 @@ GreycstorationWidget::GreycstorationWidget(QTabWidget *parent)
     d->iterationLabel = new QLabel(i18n("Iterations:"), d->generalPage);
     d->iterationInput = new KIntNumInput(d->generalPage);
     d->iterationInput->setRange(1, 5000, 1, true);
-    QWhatsThis::add( d->iterationInput, i18n("<p>Sets the number of times the filter is applied over "
+    QWhatsThis::add( d->iterationInput, i18n("<p>Sets the number of times the filter is applied to "
                                              "the image."));
     grid1->addMultiCellWidget(d->iterationLabel, 4, 4, 0, 0);
     grid1->addMultiCellWidget(d->iterationInput, 4, 4, 1, 1);
@@ -196,8 +196,8 @@ GreycstorationWidget::GreycstorationWidget(QTabWidget *parent)
     d->daInput = new KDoubleNumInput(d->advancedPage);
     d->daInput->setPrecision(2);
     d->daInput->setRange(0.0, 90.0, 1.0, true);
-    QWhatsThis::add( d->daInput, i18n("<p>Set here the angular integration step in degrees "
-                                      "in analogy to anisotropy."));
+    QWhatsThis::add( d->daInput, i18n("<p>Set here the angular integration step (in degrees) "
+                                      "analogous to anisotropy."));
     grid2->addMultiCellWidget(d->daLabel, 0, 0, 0, 0);
     grid2->addMultiCellWidget(d->daInput, 0, 0, 1, 1);
 
@@ -227,7 +227,7 @@ GreycstorationWidget::GreycstorationWidget(QTabWidget *parent)
     d->btileLabel = new QLabel(i18n("Tile border:"), d->advancedPage);
     d->btileInput = new KIntNumInput(d->advancedPage);
     d->btileInput->setRange(1, 20, 1, true);
-    QWhatsThis::add( d->btileInput, i18n("<p>Sets the size of each tile borders."));
+    QWhatsThis::add( d->btileInput, i18n("<p>Sets the size of each tile border."));
     grid2->addMultiCellWidget(d->btileLabel, 4, 4, 0, 0);
     grid2->addMultiCellWidget(d->btileInput, 4, 4, 1, 1);
     
