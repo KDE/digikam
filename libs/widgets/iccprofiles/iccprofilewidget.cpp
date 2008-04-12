@@ -129,13 +129,13 @@ ICCProfileWidget::ICCProfileWidget(QWidget* parent, int w, int h)
     d->iccTagsDescription["Icc.Header.Description"]     = ICCTagInfo(i18n("Description"),  
                                                           i18n("The ICC profile product description"));
     d->iccTagsDescription["Icc.Header.Information"]     = ICCTagInfo(i18n("Information"),  
-                                                          i18n("The additional ICC profile information"));
+                                                          i18n("Additional ICC profile information"));
     d->iccTagsDescription["Icc.Header.Manufacturer"]    = ICCTagInfo(i18n("Manufacturer"), 
-                                                          i18n("The raw information about ICC profile manufacturer"));
+                                                          i18n("Raw information about ICC profile manufacturer"));
     d->iccTagsDescription["Icc.Header.Model"]           = ICCTagInfo(i18n("Model"), 
-                                                          i18n("The raw information about ICC profile model"));
+                                                          i18n("Raw information about ICC profile model"));
     d->iccTagsDescription["Icc.Header.Copyright"]       = ICCTagInfo(i18n("Copyright"), 
-                                                          i18n("The raw information about ICC profile copyright"));
+                                                          i18n("Raw information about ICC profile copyright"));
     d->iccTagsDescription["Icc.Header.ProfileID"]       = ICCTagInfo(i18n("Profile ID"), 
                                                           i18n("The ICC profile ID number"));
     d->iccTagsDescription["Icc.Header.ColorSpace"]      = ICCTagInfo(i18n("Color Space"), 
