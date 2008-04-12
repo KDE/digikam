@@ -175,11 +175,10 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
     d->mainLayout->addWidget(d->levelGBox, 0, 0, 1, 2);
     d->mainLayout->addWidget(d->toolsGBox, 0, 4, 1, 1);
     d->mainLayout->addWidget(d->view,      1, 0, 1, 5);
-    d->mainLayout->addWidget(d->searchBar, 3, 0, 1, 5);
+    d->mainLayout->addWidget(d->searchBar, 2, 0, 1, 5);
     d->mainLayout->setColumnStretch(3, 10);
     d->mainLayout->setRowStretch(1, 10);
-    d->mainLayout->setRowMinimumHeight(2, KDialog::spacingHint());
-    d->mainLayout->setSpacing(0);
+    d->mainLayout->setSpacing(KDialog::spacingHint());
     d->mainLayout->setMargin(0);
 
     // -----------------------------------------------------------------
@@ -489,7 +488,7 @@ void MetadataWidget::setUserAreaWidget(QWidget *w)
     vLayout->setSpacing( KDialog::spacingHint() );
     vLayout->addWidget(w);
     vLayout->addStretch();
-    d->mainLayout->addLayout(vLayout, 2, 0, 1, 5 );
+    d->mainLayout->addLayout(vLayout, 3, 0, 1, 5);
 }
 
 void MetadataWidget::buildView()
