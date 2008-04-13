@@ -25,11 +25,6 @@ SET(DIGIKAM_VERSION_STRING "${DIGIKAM_MAJOR_VERSION}.${DIGIKAM_MINOR_VERSION}.${
 # =======================================================
 # Depencies
 
-find_package(KDE4 REQUIRED)
-include (KDE4Defaults)
-include (MacroLibrary)
-include(MacroOptionalAddSubdirectory)
-
 macro_optional_find_package(LCMS)
 macro_optional_find_package(JPEG)
 macro_optional_find_package(PNG)
