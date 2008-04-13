@@ -185,8 +185,8 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
     hlay2->addWidget(d->underExposureButton);
     d->underExposureButton->setIcon(SmallIcon("underexposure"));
     d->underExposureButton->setCheckable(true);
-    d->underExposureButton->setWhatsThis( i18n("<p>Set this option on to display pure black "
-                                               "over-colored on preview. This will help you to avoid "
+    d->underExposureButton->setWhatsThis( i18n("<p>Set this option to display black "
+                                               "overlaid on the preview. This will help you to avoid "
                                                "under-exposing the image." ) );
 
     d->overExposureButton = new QPushButton(d->expoBBox);
@@ -194,8 +194,8 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
     hlay2->addWidget(d->overExposureButton);
     d->overExposureButton->setIcon(SmallIcon("overexposure"));
     d->overExposureButton->setCheckable(true);
-    d->overExposureButton->setWhatsThis( i18n("<p>Set this option on to display pure white "
-                                              "over-colored on preview. This will help you to avoid "
+    d->overExposureButton->setWhatsThis( i18n("<p>Set this option to display white "
+                                              "overlaid on the preview. This will help you to avoid "
                                               "over-exposing the image." ) );
 
     // -------------------------------------------------------------
