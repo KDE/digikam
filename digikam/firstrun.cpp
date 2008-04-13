@@ -92,8 +92,8 @@ void FirstRunWidget::languageChange()
     m_pixLabel->setText( QString() );
     m_textLabel1->setText( i18n( "<p>digiKam will store the photo albums which you create in a "
                                  "common <b>Albums Library Folder</b>. "
-                                 "Please select which folder you would like digiKam "
-                                 "to use as the common Albums Library Folder below.</p>" 
+                                 "Below, please select which folder you would like "
+                                 "digiKam to use as the common Albums Library Folder.</p>" 
                                  "<p><b>Do not use a mount path hosted by a remote computer.</b></p>") );
 }
 
