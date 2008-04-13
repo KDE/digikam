@@ -180,16 +180,16 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
     exposureButtons->insert(d->underExposureButton, UnderExposure);
     d->underExposureButton->setPixmap(SmallIcon("underexposure"));
     d->underExposureButton->setToggleButton(true);
-    QWhatsThis::add(d->underExposureButton, i18n("<p>Set this option on to display pure black "
-                                                 "over-colored on preview. This will help you to avoid "
+    QWhatsThis::add(d->underExposureButton, i18n("<p>Set this option to display black "
+                                                 "overlaid on the preview. This will help you to avoid "
                                                  "under-exposing the image." ) );
 
     d->overExposureButton = new QPushButton(exposureButtons);
     exposureButtons->insert(d->overExposureButton, OverExposure);
     d->overExposureButton->setPixmap(SmallIcon("overexposure"));
     d->overExposureButton->setToggleButton(true);
-    QWhatsThis::add(d->overExposureButton, i18n("<p>Set this option on to display pure white "
-                                                "over-colored on preview. This will help you to avoid "
+    QWhatsThis::add(d->overExposureButton, i18n("<p>Set this option on display white "
+                                                "overlaid on the preview. This will help you to avoid "
                                                 "over-exposing the image." ) );
 
     // -------------------------------------------------------------
