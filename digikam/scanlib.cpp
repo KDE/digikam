@@ -77,7 +77,7 @@ ScanLib::ScanLib(SplashScreen *splash)
     m_progressBar->setActionListVSBarVisible(false);
     QWhatsThis::add( m_progressBar, i18n("This shows the progress of the "
         "scan. During the scan, all files on disk are registered in a "
-        "database. This is required for sorting on exif-date and speeds up "
+        "database. This is required for sorting by exif-date, and also speeds up "
         "the overall performance of digiKam.") );
 
     // these two lines prevent the dialog to be shown in
@@ -97,7 +97,7 @@ void ScanLib::startScan()
     QPixmap pix = KApplication::kApplication()->iconLoader()->loadIcon(
                   "run", KIcon::NoGroup, 32);
 
-    QString message = i18n("Finding non-existing Albums");
+    QString message = i18n("Finding non-existent Albums");
     if (m_splash) m_splash->message(message, Qt::AlignLeft, Qt::white);
     else m_progressBar->addedAction(pix, message);
     gettimeofday(&tv1, 0);
