@@ -218,20 +218,21 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
     d->progressBar->setWhatsThis(i18n("<p>This is the percentage of the task which has been completed up to this point."));
     d->progressBar->setValue(0);
     d->progressBar->setMaximum(100);
-    d->progressBar->setMaximumHeight( fontMetrics().height() );
+    d->progressBar->setMaximumHeight( fontMetrics().height()+4 );
     
     QLabel *space = new QLabel(d->previewWidget);
     space->setFixedWidth(KDialog::spacingHint());
 
     // -------------------------------------------------------------
         
-    d->mainLayout->addWidget(preview, 0, 0, 2, 5 );
-    d->mainLayout->addWidget(d->zoomBar, 2, 0, 1, 1);
+    d->mainLayout->addWidget(preview,        0, 0, 2, 5 );
+    d->mainLayout->addWidget(d->zoomBar,     2, 0, 1, 1);
     d->mainLayout->addWidget(d->progressBar, 2, 2, 1, 1);
-    d->mainLayout->addWidget(space, 2, 3, 1, 1);
-    d->mainLayout->addWidget(d->sepaBBox, 2, 4, 1, 1);
+    d->mainLayout->addWidget(space,          2, 3, 1, 1);
+    d->mainLayout->addWidget(d->sepaBBox,    2, 4, 1, 1);
     d->mainLayout->setRowStretch(1, 10);
     d->mainLayout->setColumnStretch(1, 10);
+    d->mainLayout->setColumnStretch(2, 5);
     d->mainLayout->setSpacing(0);
     d->mainLayout->setMargin(0);
 
