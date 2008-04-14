@@ -365,8 +365,8 @@ bool AlbumManager::setDatabase(const QString &dbPath, bool priority)
         // buttons that denote the actions directly, i.e.:  ["Ignore and Continue"]  ["Adjust locale"]
         int result =
             KMessageBox::warningYesNo(0,
-                                      i18n("Your locale has changed from the previous time "
-                                           "this album was opened.\n"
+                                      i18n("Your locale has changed since this "
+                                           "album was last opened.\n"
                                            "Old Locale : %1, New Locale : %2\n"
                                            "If you changed your locale lately, this is all right.\n"
                                            "Please notice that if you switched to a locale "
