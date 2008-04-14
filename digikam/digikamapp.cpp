@@ -637,7 +637,7 @@ void DigikamApp::setupActions()
                                     actionCollection(),
                                     "album_syncmetadata");
     d->syncAlbumMetadataAction->setWhatsThis(i18n("Updates all image metadata of the current "
-                                                  "album with digiKam database contents "
+                                                  "album with the contents of the digiKam database "
                                                   "(image metadata will be over-written with data from the database)."));
 
     d->openInKonquiAction = new KAction( i18n("Open in Konqueror"),
