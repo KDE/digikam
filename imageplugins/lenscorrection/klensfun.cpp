@@ -112,7 +112,8 @@ KLensFun::correctionData KLensFun::getCorrectionData()
 
 // -------------------------------------------------------------------
 
-KLFDeviceSelector::KLFDeviceSelector( QWidget *parent ) : QWidget(parent)
+KLFDeviceSelector::KLFDeviceSelector(QWidget *parent) 
+                 : QWidget(parent)
 {
     m_klf = new KLensFun();
 
@@ -141,7 +142,7 @@ KLFDeviceSelector::KLFDeviceSelector( QWidget *parent ) : QWidget(parent)
             this, SLOT(updateCombos()));
 
     connect(m_Model, SIGNAL(currentIndexChanged(int)), 
-            this, SLOT(updateLensCombo(int)));
+            this, SLOT(updateLensCombo()));
 
     connect(m_Lens, SIGNAL(currentIndexChanged(int)), 
             this, SLOT(selectLens()));
@@ -224,10 +225,11 @@ void KLFDeviceSelector::findFromExif()
     DDebug() << "  >>>>>>search for Lens:" << Maker << " " << Lens 
              << "< and found: >" << m_Lens->itemText(0) + "<";
 
-    QString temp = m_ExivMeta.getExifTagString("Exif.Photo.FocalLength");
-    m_klf->m_focalLength = temp.mid(0, temp.length() -3 ).toFloat(); // HACK: strip the " mm" at the end ... 
-    m_klf->m_aperature = m_ExivMeta.getExifTagString("Exif.Photo.ApertureValue").mid(1).toFloat();
+    QString temp             = m_ExivMeta.getExifTagString("Exif.Photo.FocalLength");
+    m_klf->m_focalLength     = temp.mid(0, temp.length() -3 ).toFloat(); // HACK: strip the " mm" at the end ... 
+    m_klf->m_aperature       = m_ExivMeta.getExifTagString("Exif.Photo.ApertureValue").mid(1).toFloat();
     m_klf->m_subjectDistance = m_ExivMeta.getExifTagString("Exif.CanonSi.SubjectDistance").toFloat();
+
     DDebug() << "  >>>>>>focalLength" << temp << "|" << m_klf->m_focalLength 
              << "Aperatur" << m_klf->m_aperature << "Distance" 
              << m_klf->m_subjectDistance;
