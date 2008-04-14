@@ -267,7 +267,7 @@ void DigikamApp::show()
 
     if(!d->validIccPath)
     {
-        QString message = i18n("<qt><p>ICC profiles path seems to be invalid.</p>"
+        QString message = i18n("<qt><p>The ICC profiles path seems to be invalid.</p>"
                                "<p>If you want to set it now, select \"Yes\", otherwise "
                                "select \"No\". In this case, \"Color Management\" feature "
                                "will be disabled until you solve this issue</p></qt>");
@@ -571,7 +571,7 @@ void DigikamApp::setupActions()
 
     d->syncAlbumMetadataAction = new KAction(KIcon("view-refresh"), i18n("Synchronize images with database"), this);
     d->syncAlbumMetadataAction->setWhatsThis(i18n("Updates all image metadata of the current "
-                                                  "album with digiKam database contents "
+                                                  "album with the contents of digiKam database "
                                                   "(image metadata will be over-written with data from "
                                                   "the database)."));
     connect(d->syncAlbumMetadataAction, SIGNAL(triggered()), d->view, SLOT(slotAlbumSyncPicturesMetadata()));
