@@ -4,6 +4,7 @@
  * Description : A plugin for autocorrect pictues based on lens database
  * 
  * Copyright (C) 2008 Adrian Schroeter <adrian@suse.de>
+ * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -31,7 +32,7 @@ class KAction;
 class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_LensCorrection : public Digikam::ImagePlugin
 {
     Q_OBJECT
-    
+
 public:
 
     ImagePlugin_LensCorrection(QObject *parent, const QVariantList &args);
@@ -47,5 +48,5 @@ private:
 
     KAction *m_lensCorrectionAction;
 };
-    
+
 #endif /* IMAGEPLUGIN_LENSCORRECTION_H */

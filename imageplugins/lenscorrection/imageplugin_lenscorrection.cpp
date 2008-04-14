@@ -4,6 +4,7 @@
  * Description : a plugin fix lens errors
  * 
  * Copyright (C) 2008 Adrian Schroeter <adrian@suse.de>
+ * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -19,7 +20,7 @@
  * ============================================================ */
 
 // KDE includes.
-  
+
 #include <klocale.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
@@ -45,9 +46,9 @@ ImagePlugin_LensCorrection::ImagePlugin_LensCorrection(QObject *parent, const QV
 
     connect(m_lensCorrectionAction, SIGNAL(triggered(bool)), 
             this, SLOT(slotLensCorrection()));
- 
-    setXMLFile("digikamimageplugin_lenscorrection_ui.rc");            
-        
+
+    setXMLFile("digikamimageplugin_lenscorrection_ui.rc");
+
     DDebug() << "ImagePlugin_LensCorrection plugin loaded" << endl;
 }
 

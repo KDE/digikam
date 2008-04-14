@@ -4,6 +4,7 @@
  * Description : a plugin to fix lens errors
  * 
  * Copyright (C) 2008 Adrian Schroeter <adrian@suse.de>
+ * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,7 +22,7 @@
 #ifndef IMAGEEFFECT_LENSCORRECTION_H
 #define IMAGEEFFECT_LENSCORRECTION_H
 
-#include <QImage>
+// local includes.
 
 #include "dimg.h"
 #include "ctrlpaneldlg.h"
@@ -29,6 +30,7 @@
 class QCheckBox;
 class QLabel;
 class QTabWidget;
+
 class KLFDeviceSelector;
 
 namespace DigikamLensCorrectionImagesPlugin
@@ -37,7 +39,7 @@ namespace DigikamLensCorrectionImagesPlugin
 class ImageEffect_LensCorrection : public Digikam::CtrlPanelDlg
 {
     Q_OBJECT
-    
+
 public:
 
     ImageEffect_LensCorrection(QWidget *parent);
@@ -52,7 +54,7 @@ private slots:
 private:
 
     void writeUserSettings();
-    void resetValues();     
+    void resetValues();
     void prepareEffect();
     void prepareFinal();
     void putPreviewData();
@@ -62,20 +64,24 @@ private:
 private:
 
     QLabel            *m_maskPreviewLabel;
+
     QTabWidget        *m_mainTab;
-    KLFDeviceSelector *m_cameraSelector;
+
     QCheckBox         *m_filterCCA;
     QCheckBox         *m_filterVig;
     QCheckBox         *m_filterCCI;
     QCheckBox         *m_filterDist;
     QCheckBox         *m_filterGeom;
 
+    KLFDeviceSelector *m_cameraSelector;
+
 //    double focalDistance;
 //    double aperature;
 
-    Digikam::DImg    m_previewRasterImage;
+    Digikam::DImg      m_previewRasterImage;
 
 private slots:
+
 //    virtual void slotDefault(){};
 //    virtual void slotCancel(){};
 //    virtual void slotUser1(){};
