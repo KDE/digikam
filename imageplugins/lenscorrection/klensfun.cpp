@@ -408,9 +408,9 @@ void KLensFunFilter::filterImage()
 
     // The real correction work
 
-    int ok;
-    int lwidth = m_orgImage.width() * 2 * 3;
-    float *pos = new float [lwidth];
+    bool ok;
+    int  lwidth = m_orgImage.width() * 2 * 3;
+    float *pos  = new float [lwidth];
 
     // Stage 1: TCA correction 
 
@@ -443,8 +443,7 @@ void KLensFunFilter::filterImage()
             }
             else
             {
-                DError() << "ERROR: Failed to call ApplySubpixelDistortion in lensfun lib ! (" 
-                         << ok << ")" << endl;
+                DError() << "ERROR: Failed to call ApplySubpixelDistortion in LensFun lib!" << endl;
                 break;
             }
         }
@@ -483,8 +482,7 @@ void KLensFunFilter::filterImage()
             }
             else
             {
-                DError() << "ERROR: Failed to call ApplyColorModification in lensfun lib ! (" 
-                         << ok << ")" << endl;
+                DError() << "ERROR: Failed to call ApplyColorModification in LensFun lib!" << endl;
                 break;
             }
         }
@@ -521,8 +519,7 @@ void KLensFunFilter::filterImage()
             }
             else
             {
-                DError() << "ERROR: Failed to call ApplyGeometryDistortion  in lensfun lib ! (" 
-                         << ok << ")" << endl;
+                DError() << "ERROR: Failed to call ApplyGeometryDistortion in LensFun lib!" << endl;
                 break;
             }
         }
