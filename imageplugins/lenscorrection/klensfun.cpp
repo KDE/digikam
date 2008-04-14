@@ -274,7 +274,7 @@ void KLFDeviceSelector::updateCombos()
        {
            // Maker DB does not change, so we fill it only once.
            if ( (*it)->Maker ) 
-            {
+           {
                 QString t( (*it)->Maker );
                 if ( m_Maker->findText( t, Qt::MatchExactly ) < 0 )
                     m_Maker->addItem( t );
@@ -376,14 +376,11 @@ void KLensFunFilter::filterImage()
     lfPixelFormat colorDepth = LF_PF_U8;
     switch( m_orgImage.bytesDepth() )
     {
-        case 1:
+        case 4:
             colorDepth = LF_PF_U8;
             break;
-        case 2:
+        case 8:
             colorDepth = LF_PF_U16;
-            break;
-        case 4:
-            colorDepth = LF_PF_U32;
             break;
         default:
             DError() << "ERROR: can not handle bytes depth.";
