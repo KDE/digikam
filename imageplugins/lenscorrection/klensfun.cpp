@@ -54,17 +54,16 @@ KLensFun::~KLensFun()
 {
     if ( m_init )
     {
-    };
+    }
 };
 
 bool KLensFun::init()
 {
     m_lfDb = lf_db_new();
     m_lfDb->Load();
-    m_lfCameras = m_lfDb->GetCameras();
-    m_init      = true;
-    m_usedLens  = NULL;
-
+    m_lfCameras  = m_lfDb->GetCameras();
+    m_init       = true;
+    m_usedLens   = NULL;
     m_filterCCA  = true;
     m_filterVig  = true;
     m_filterDist = true;
@@ -136,16 +135,16 @@ KLFDeviceSelector::KLFDeviceSelector( QWidget *parent ) : QWidget(parent)
     gridSettings->addWidget( m_Lens );
 
     connect(m_ExifUsage, SIGNAL(stateChanged(int)), 
-            this, SLOT(exifUsageSlot(int)) );
+            this, SLOT(exifUsageSlot(int)));
 
     connect(m_Maker, SIGNAL(currentIndexChanged(int)), 
-            this, SLOT(updateCombos()) );
+            this, SLOT(updateCombos()));
 
     connect(m_Model, SIGNAL(currentIndexChanged(int)), 
-            this, SLOT(updateLensCombo(int)) );
+            this, SLOT(updateLensCombo(int)));
 
     connect(m_Lens, SIGNAL(currentIndexChanged(int)), 
-            this, SLOT(selectLens()) );
+            this, SLOT(selectLens()));
 
     KLFDeviceSelector::Device firstDevice; // empty strings
 //    setDevice( firstDevice );

@@ -87,9 +87,6 @@ ImageEffect_LensCorrection::ImageEffect_LensCorrection(QWidget* parent)
     about->addAuthor(ki18n("Gilles Caulier"), ki18n("provided base classes"),
                      "caulier dot gilles at gmail dot com");
 
-    about->addAuthor(ki18n("Marcel Wiesweg"), ki18n("provided base classes"),
-                     "marcel dot wiesweg at gmx dot de");
-
     setAboutData(about);
 
     // -------------------------------------------------------------
@@ -171,11 +168,11 @@ void ImageEffect_LensCorrection::slotInit()
 
 void ImageEffect_LensCorrection::slotLensChanged()
 {
-    m_filterCCA->setEnabled(  m_cameraSelector->getKLFObject()->supportsCCA() );
-    m_filterVig->setEnabled(  m_cameraSelector->getKLFObject()->supportsVig() );
-    m_filterCCI->setEnabled(  m_cameraSelector->getKLFObject()->supportsVig() );
-    m_filterDist->setEnabled( m_cameraSelector->getKLFObject()->supportsDistortion() );
-    m_filterGeom->setEnabled( m_cameraSelector->getKLFObject()->supportsDistortion() );
+    m_filterCCA->setEnabled(m_cameraSelector->getKLFObject()->supportsCCA());
+    m_filterVig->setEnabled(m_cameraSelector->getKLFObject()->supportsVig());
+    m_filterCCI->setEnabled(m_cameraSelector->getKLFObject()->supportsVig());
+    m_filterDist->setEnabled(m_cameraSelector->getKLFObject()->supportsDistortion());
+    m_filterGeom->setEnabled(m_cameraSelector->getKLFObject()->supportsDistortion());
     setFilters();
 };
 

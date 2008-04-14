@@ -121,7 +121,6 @@ private:
 
 class KLFDeviceSelector : public QWidget
 {
-
     Q_OBJECT
 
 public:
