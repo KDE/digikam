@@ -417,7 +417,7 @@ void KLensFunFilter::filterImage()
 
     if ( m_klf->m_filterCCA ) 
     {
-        for (unsigned int y=0; y < m_orgImage.height(); y++, loop++)
+        for (unsigned int y=0; y < m_orgImage.height(); y++)
         {
             if (m_lfModifier->ApplySubpixelDistortion(0.0, y, m_orgImage.width(), 1, pos))
             {
@@ -433,6 +433,7 @@ void KLensFunFilter::filterImage()
                     m_destImage.setPixelColor(x, y, destPixel);
                     src += 2 * 3;
                 }
+                loop++;
             }
 
             // Update progress bar in dialog.
@@ -461,12 +462,13 @@ void KLensFunFilter::filterImage()
         else if (steps == 2 && m_klf->m_filterCCA)
             offset = 50.0;
 
-        for (unsigned int y=0; y < m_destImage.height(); y++, loop++)
+        for (unsigned int y=0; y < m_destImage.height(); y++)
         {
             if (m_lfModifier->ApplyColorModification(data, 0.0, y, m_destImage.width(), 
                                                      1, m_destImage.bytesDepth(), 0))
             {
                 data += m_destImage.height() * m_destImage.bytesDepth();
+                loop++;
             }
 
             // Update progress bar in dialog.
@@ -487,16 +489,16 @@ void KLensFunFilter::filterImage()
         // we need a deep copy first 
         Digikam::DImg tempImage = m_destImage;
 
-        for (unsigned long y=0; y < tempImage.height(); y++, loop++)
+        for (unsigned long y=0; y < tempImage.height(); y++)
         {
             if (m_lfModifier->ApplyGeometryDistortion(0.0, y, tempImage.width(), 1, pos))
             {
                 float *src = pos;
-                for (unsigned long x = 0; x < tempImage.width(); x++)
+                for (unsigned long x = 0; x < tempImage.width(); x++, loop++)
                 {
-                    //qDebug (" ZZ %f %f %i %i", src[0], src[1], src[0], src[1]);
+                    //qDebug (" ZZ %f %f %i %i", src[0], src[1], (int)src[0], (int)src[1]);
 
-                    m_destImage.setPixelColor(x, y, tempImage.getPixelColor(src[0], src[1]));
+                    m_destImage.setPixelColor(x, y, tempImage.getPixelColor((int)src[0], (int)src[1]));
                     src += 2;
                 }
             }
