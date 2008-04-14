@@ -294,8 +294,9 @@ void KLFDeviceSelector::updateLensCombo()
 
     QVariant v    = m_Model->itemData( m_Model->currentIndex() );
     DevicePtr dev = v.value<KLFDeviceSelector::DevicePtr>();
-    lenses        = m_klf->m_lfDb->FindLenses( dev, NULL, NULL );
+    if (!dev) return;
 
+    lenses              = m_klf->m_lfDb->FindLenses( dev, NULL, NULL );
     m_klf->m_cropFactor = dev->CropFactor;
 
     while ( lenses && *lenses ) 
