@@ -373,25 +373,39 @@ void KLensFunFilter::filterImage()
             return;
     }
 
-    m_lfModifier = lfModifier::Create( m_klf->m_usedLens, m_klf->m_cropFactor, m_orgImage.width(), m_orgImage.height() );
-    /*int modflags =*/ m_lfModifier->Initialize ( m_klf->m_usedLens, colorDepth, 
-            m_klf->m_focalLength, m_klf->m_aperature, m_klf->m_subjectDistance,
-            m_klf->m_cropFactor, LF_RECTILINEAR, modifyFlags, 0/*no inverse*/);
+    m_lfModifier = lfModifier::Create(m_klf->m_usedLens, 
+                                      m_klf->m_cropFactor,
+                                      m_orgImage.width(), 
+                                      m_orgImage.height());
+
+    int modflags = m_lfModifier->Initialize(m_klf->m_usedLens, 
+                                            colorDepth, 
+                                            m_klf->m_focalLength, 
+                                            m_klf->m_aperature, 
+                                            m_klf->m_subjectDistance,
+                                            m_klf->m_cropFactor, 
+                                            LF_RECTILINEAR, 
+                                            modifyFlags, 
+                                            0/*no inverse*/);
 
     // calc necessary steps for progress bar
-    int steps = m_klf->m_filterCCA?1:0 + ( m_klf->m_filterVig || m_klf->m_filterCCI )?1:0
-                + ( m_klf->m_filterDist || m_klf->m_filterGeom )?1:0;
+    int steps = m_klf->m_filterCCA                             ? 1 : 0 + 
+                ( m_klf->m_filterVig || m_klf->m_filterCCI )   ? 1 : 0 +
+                ( m_klf->m_filterDist || m_klf->m_filterGeom ) ? 1 : 0;
+
+    DDebug() << "Modifier Flags: " << modflags << "  Steps:" << steps << endl;
+
     if ( steps < 1 )
        return;
 
-    /*
-     * The real correction work
-     */
+    // The real correction work
+
     int ok;
     int lwidth = m_orgImage.width() * 2 * 3;
     float *pos = new float [lwidth];
 
-    // 1: TCA correction 
+    // Stage 1: TCA correction 
+
     if ( m_klf->m_filterCCA ) 
     {
         DDebug() << "Applying TCA correction..." << endl;
@@ -431,7 +445,8 @@ void KLensFunFilter::filterImage()
         m_destImage.bitBltImage(&m_orgImage, 0, 0);
     }
 
-    // 2: Color Correction: Vignetting and CCI
+    // Stage 2: Color Correction: Vignetting and CCI
+
     uchar *data = m_destImage.bits();
     if ( m_klf->m_filterVig || m_klf->m_filterCCI ) 
     {
@@ -465,7 +480,8 @@ void KLensFunFilter::filterImage()
         }
     }
 
-    // 3: Distortion and Geometry
+    // Stage 3: Distortion and Geometry
+
     if ( m_klf->m_filterDist || m_klf->m_filterGeom ) 
     {
         DDebug() << "Applying Distortion and Geometry Correction..." << endl;
@@ -499,7 +515,8 @@ void KLensFunFilter::filterImage()
                          << ok << ")" << endl;
             }
         }
-        //qDebug (" for %f %f %i %i", tempImage.height(), tempImage.width(), tempImage.height(), tempImage.width());
+        /*qDebug (" for %f %f %i %i", tempImage.height(), tempImage.width(), 
+                                      tempImage.height(), tempImage.width());*/
     }
 
     // clean up
