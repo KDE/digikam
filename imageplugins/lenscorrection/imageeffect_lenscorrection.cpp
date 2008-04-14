@@ -113,7 +113,7 @@ ImageEffect_LensCorrection::ImageEffect_LensCorrection(QWidget* parent)
     m_cameraSelector = new KLFDeviceSelector(m_mainTab);
 
     connect(m_cameraSelector, SIGNAL(lensSelected()),
-            this, SLOT(slotLensChanged()));            
+            this, SLOT(slotLensChanged()));
 
 //    firstPageLayout->addWidget(m_maskPreviewLabel, 0, 0, 1, 2 );
     firstPageLayout->addWidget(m_cameraSelector, 0, 0, 1, 2 );
@@ -128,11 +128,11 @@ ImageEffect_LensCorrection::ImageEffect_LensCorrection(QWidget* parent)
     m_filterDist = new QCheckBox(i18n("Distortion"), m_mainTab);
     m_filterGeom = new QCheckBox(i18n("Geometry"), m_mainTab);
 
-    secondPageLayout->addWidget(m_filterCCA,  0, 0, 1, 2 );
-    secondPageLayout->addWidget(m_filterVig,  1, 0, 1, 2 );
-    secondPageLayout->addWidget(m_filterCCI,  2, 0, 1, 2 );
-    secondPageLayout->addWidget(m_filterDist, 3, 0, 1, 2 );
-    secondPageLayout->addWidget(m_filterGeom, 4, 0, 1, 2 );
+    secondPageLayout->addWidget(m_filterCCA,  0, 0, 1, 2);
+    secondPageLayout->addWidget(m_filterVig,  1, 0, 1, 2);
+    secondPageLayout->addWidget(m_filterCCI,  2, 0, 1, 2);
+    secondPageLayout->addWidget(m_filterDist, 3, 0, 1, 2);
+    secondPageLayout->addWidget(m_filterGeom, 4, 0, 1, 2);
     secondPageLayout->setMargin(spacingHint());
     secondPageLayout->setSpacing(spacingHint());
 

@@ -26,9 +26,11 @@
 #include <QString>
 #include <QCheckBox>
 #include <QWidget>
+#include <QLabel>
 
 // KDE includes.
 
+#include <kdialog.h>
 #include <klocale.h>
 #include <kcombobox.h>
 
@@ -119,10 +121,13 @@ KLFDeviceSelector::KLFDeviceSelector(QWidget *parent)
 
     QGridLayout* gridSettings = new QGridLayout(this);
 
-    m_ExifUsage = new QCheckBox(i18n("Use Exif Data"), parent);
-    m_Maker     = new KComboBox(parent);
-    m_Model     = new KComboBox(parent);
-    m_Lens      = new KComboBox(parent);
+    m_ExifUsage        = new QCheckBox(i18n("Use Exif Data"), parent);
+    m_Maker            = new KComboBox(parent);
+    m_Model            = new KComboBox(parent);
+    m_Lens             = new KComboBox(parent);
+    QLabel *makeLabel  = new QLabel(i18n("Make:"), parent);
+    QLabel *modelLabel = new QLabel(i18n("Model:"), parent);
+    QLabel *lensLabel  = new QLabel(i18n("Lens:"), parent);
 
     m_ExifUsage->setEnabled(false);
     m_ExifUsage->setCheckState(Qt::Unchecked);
@@ -131,9 +136,14 @@ KLFDeviceSelector::KLFDeviceSelector(QWidget *parent)
     m_Lens->setInsertPolicy(QComboBox::InsertAlphabetically);
 
     gridSettings->addWidget(m_ExifUsage);
+    gridSettings->addWidget(makeLabel);
     gridSettings->addWidget(m_Maker);
+    gridSettings->addWidget(modelLabel);
     gridSettings->addWidget(m_Model);
+    gridSettings->addWidget(lensLabel);
     gridSettings->addWidget(m_Lens);
+    gridSettings->setMargin(0);
+    gridSettings->setSpacing(KDialog::spacingHint());
 
     connect(m_ExifUsage, SIGNAL(stateChanged(int)), 
             this, SLOT(exifUsageSlot(int)));
