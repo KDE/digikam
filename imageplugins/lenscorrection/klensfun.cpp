@@ -290,19 +290,18 @@ void KLFDeviceSelector::updateCombos()
 void KLFDeviceSelector::updateLensCombo()
 {
     m_Lens->clear();
-    const lfLens **lenses;
 
     QVariant v    = m_Model->itemData( m_Model->currentIndex() );
     DevicePtr dev = v.value<KLFDeviceSelector::DevicePtr>();
     if (!dev) return;
 
-    lenses              = m_klf->m_lfDb->FindLenses( dev, NULL, NULL );
-    m_klf->m_cropFactor = dev->CropFactor;
+    const lfLens **lenses = m_klf->m_lfDb->FindLenses( dev, NULL, NULL );
+    m_klf->m_cropFactor   = dev->CropFactor;
 
     while ( lenses && *lenses ) 
     {
-        KLFDeviceSelector::LensPtr = *lenses;
-        QVariant b                 = qVariantFromValue(lens);
+        KLFDeviceSelector::LensPtr lens = *lenses;
+        QVariant b                      = qVariantFromValue(lens);
         m_Lens->addItem( (*lenses)->Model, b );
         lenses++;
     }
