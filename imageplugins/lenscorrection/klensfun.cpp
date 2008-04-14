@@ -361,15 +361,15 @@ void KLensFunFilter::filterImage()
 
     int modifyFlags = 0;
     if ( m_klf->m_filterDist )
-       modifyFlags &= LF_MODIFY_DISTORTION;
+       modifyFlags |= LF_MODIFY_DISTORTION;
     if ( m_klf->m_filterGeom )
-       modifyFlags &= LF_MODIFY_GEOMETRY;
+       modifyFlags |= LF_MODIFY_GEOMETRY;
     if ( m_klf->m_filterCCA )
-       modifyFlags &= LF_MODIFY_TCA;
+       modifyFlags |= LF_MODIFY_TCA;
     if ( m_klf->m_filterVig )
-       modifyFlags &= LF_MODIFY_VIGNETTING;
+       modifyFlags |= LF_MODIFY_VIGNETTING;
     if ( m_klf->m_filterCCI )
-       modifyFlags &= LF_MODIFY_CCI;
+       modifyFlags |= LF_MODIFY_CCI;
 
     // Init lensfun lib, we are working on the full image.
 
