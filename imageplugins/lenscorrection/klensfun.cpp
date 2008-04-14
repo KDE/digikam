@@ -301,9 +301,8 @@ void KLFDeviceSelector::updateLensCombo()
 
     while ( lenses && *lenses ) 
     {
-        KLFDeviceSelector::LensPtr lens;
-        lens       = *lenses;
-        QVariant b = qVariantFromValue(lens);
+        KLFDeviceSelector::LensPtr = *lenses;
+        QVariant b                 = qVariantFromValue(lens);
         m_Lens->addItem( (*lenses)->Model, b );
         lenses++;
     }
