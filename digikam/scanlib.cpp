@@ -113,7 +113,7 @@ void ScanLib::startScan()
     gettimeofday(&tv2, 0);
     timing(message, tv1, tv2);
 
-    message = i18n("Updating items without date");
+    message = i18n("Updating items without a date");
     if (m_splash) m_splash->message(message, Qt::AlignLeft, Qt::white);
     else m_progressBar->addedAction(pix, message);
     gettimeofday(&tv1, 0);

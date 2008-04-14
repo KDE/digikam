@@ -292,8 +292,8 @@ void AlbumManager::setLibraryPath(const QString& path, SplashScreen *splash)
         // buttons that denote the actions directly, i.e.:  ["Ignore and Continue"]  ["Adjust locale"]
         int result =
             KMessageBox::warningYesNo(0,
-                                      i18n("Your locale has changed from the previous time "
-                                           "this album was opened.\n"
+                                      i18n("Your locale has changed since this album "
+                                           "was last opened.\n"
                                            "Old Locale : %1, New Locale : %2\n"
                                            "This can cause unexpected problems. "
                                            "If you are sure that you want to "

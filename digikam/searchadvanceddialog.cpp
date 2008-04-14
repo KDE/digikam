@@ -120,7 +120,7 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KURL& url)
     // Box for all the rules
 
     d->rulesBox = new QVGroupBox(i18n("Search Rules"), page);
-    QWhatsThis::add(d->rulesBox, i18n("<p>Here you can review the search rules used to filter images "
+    QWhatsThis::add(d->rulesBox, i18n("<p>Here you can review the search rules used to filter image-"
                                       "searching in album library."));
     d->rulesBox->layout()->setSpacing( spacingHint() );
     d->rulesBox->layout()->setMargin( spacingHint() );
