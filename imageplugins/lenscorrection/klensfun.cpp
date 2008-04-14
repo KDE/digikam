@@ -357,6 +357,7 @@ void KLensFunFilter::filterImage()
        modifyFlags &= LF_MODIFY_CCI;
 
     // Init lensfun lib, we are working on the full image.
+
     lfPixelFormat colorDepth = LF_PF_U8;
     switch( m_orgImage.bytesDepth() )
     {
@@ -406,22 +407,19 @@ void KLensFunFilter::filterImage()
     if ( steps < 1 )
        return;
 
-    // The real correction work
+    // The real correction to do
 
-    bool ok;
-    int  lwidth = m_orgImage.width() * 2 * 3;
-    float *pos  = new float [lwidth];
+    int loop   = 0;
+    int lwidth = m_orgImage.width() * 2 * 3;
+    float *pos = new float[lwidth];
 
     // Stage 1: TCA correction 
 
     if ( m_klf->m_filterCCA ) 
     {
-        DDebug() << "Applying TCA correction..." << endl;
-
-        for ( unsigned int y=0; y < m_orgImage.height(); y++ )
+        for (unsigned int y=0; y < m_orgImage.height(); y++, loop++)
         {
-            ok = m_lfModifier->ApplySubpixelDistortion (0.0, y, m_orgImage.width(), 1, pos);
-            if (ok)
+            if (m_lfModifier->ApplySubpixelDistortion (0.0, y, m_orgImage.width(), 1, pos))
             {
                 float *src = pos;
                 for (unsigned x = 0; x < m_destImage.width(); x++)
@@ -434,19 +432,16 @@ void KLensFunFilter::filterImage()
 
                     m_destImage.setPixelColor(x, y, destPixel);
                     src += 2 * 3;
-
-                    // Update progress bar in dialog.
-                    int progress = (int) (((double)y * 100.0) / m_orgImage.height() );
-                    if (m_parent && progress%5 == 0)
-                        postProgress(progress/steps);
                 }
             }
-            else
-            {
-                DError() << "ERROR: Failed to call ApplySubpixelDistortion in LensFun lib!" << endl;
-                break;
-            }
+
+            // Update progress bar in dialog.
+            int progress = (int) (((double)y * 100.0) / m_orgImage.height());
+            if (m_parent && progress%5 == 0)
+                postProgress(progress/steps);
         }
+
+        DDebug() << "Applying TCA correction... (loop: " << loop << ")" << endl;
     } 
     else
     {
@@ -458,50 +453,44 @@ void KLensFunFilter::filterImage()
     uchar *data = m_destImage.bits();
     if ( m_klf->m_filterVig || m_klf->m_filterCCI ) 
     {
-        DDebug() << "Applying Color Correction: Vignetting and CCI..." << endl;
-
+        loop         = 0;
         float offset = 0.0;
+
         if ( steps == 3 )
             offset = 33.3;
-
-        else if ( steps == 2 && m_klf->m_filterCCA == true )
+        else if (steps == 2 && m_klf->m_filterCCA)
             offset = 50.0;
 
-        for ( unsigned int y=0; y < m_destImage.height(); y++ )
+        for (unsigned int y=0; y < m_destImage.height(); y++, loop++)
         {
-            ok = m_lfModifier->ApplyColorModification(data, 0.0, y, m_destImage.width(), 
-                                                      1, m_destImage.bytesDepth(), 0);
-            if (ok)
+            if (m_lfModifier->ApplyColorModification(data, 0.0, y, m_destImage.width(), 
+                                                     1, m_destImage.bytesDepth(), 0))
             {
                 data += m_destImage.height() * m_destImage.bytesDepth();
+            }
 
-                // Update progress bar in dialog.
-                int progress = (int) (((double)y * 100.0) / m_destImage.height() );
-                if (m_parent && progress%5 == 0)
-                    postProgress(progress/steps + offset);
-            }
-            else
-            {
-                DError() << "ERROR: Failed to call ApplyColorModification in LensFun lib!" << endl;
-                break;
-            }
+            // Update progress bar in dialog.
+            int progress = (int) (((double)y * 100.0) / m_destImage.height());
+            if (m_parent && progress%5 == 0)
+                postProgress(progress/steps + offset);
         }
+
+        DDebug() << "Applying Color Correction: Vignetting and CCI. (loop: " << loop << ")" << endl;
     }
 
     // Stage 3: Distortion and Geometry
 
     if ( m_klf->m_filterDist || m_klf->m_filterGeom ) 
     {
-        DDebug() << "Applying Distortion and Geometry Correction..." << endl;
+        loop = 0;
 
         // we need a deep copy first 
         Digikam::DImg tempImage;
         tempImage = m_destImage;
 
-        for ( unsigned long y=0; y < tempImage.height(); y++ )
+        for (unsigned long y=0; y < tempImage.height(); y++, loop++)
         {
-            ok = m_lfModifier->ApplyGeometryDistortion (0.0, y, tempImage.width(), 1, pos);
-            if (ok)
+            if (m_lfModifier->ApplyGeometryDistortion (0.0, y, tempImage.width(), 1, pos))
             {
                 float *src = pos;
                 for (unsigned long x = 0; x < tempImage.width(); x++)
@@ -511,20 +500,17 @@ void KLensFunFilter::filterImage()
                     m_destImage.setPixelColor(x, y, tempImage.getPixelColor( src[0], src[1]) );
                     src += 2;
                 }
+            }
 
-                // Update progress bar in dialog.
-                int progress = (int) (((double)y * 100.0) / tempImage.height() );
-                if (m_parent && progress%5 == 0)
-                    postProgress(progress/steps + 33.3*(steps-1));
-            }
-            else
-            {
-                DError() << "ERROR: Failed to call ApplyGeometryDistortion in LensFun lib!" << endl;
-                break;
-            }
+            // Update progress bar in dialog.
+            int progress = (int) (((double)y * 100.0) / tempImage.height());
+            if (m_parent && progress%5 == 0)
+                postProgress(progress/steps + 33.3*(steps-1));
         }
+
         /*qDebug (" for %f %f %i %i", tempImage.height(), tempImage.width(), 
                                       tempImage.height(), tempImage.width());*/
+        DDebug() << "Applying Distortion and Geometry Correction. (loop: " << loop << ")" << endl;
     }
 
     // clean up
