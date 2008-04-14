@@ -419,16 +419,16 @@ void KLensFunFilter::filterImage()
     {
         for (unsigned int y=0; y < m_orgImage.height(); y++, loop++)
         {
-            if (m_lfModifier->ApplySubpixelDistortion (0.0, y, m_orgImage.width(), 1, pos))
+            if (m_lfModifier->ApplySubpixelDistortion(0.0, y, m_orgImage.width(), 1, pos))
             {
                 float *src = pos;
                 for (unsigned x = 0; x < m_destImage.width(); x++)
                 {
                     Digikam::DColor destPixel;
 
-                    destPixel.setRed  ( m_orgImage.getPixelColor(src[0], src[1]).red() );
-                    destPixel.setGreen( m_orgImage.getPixelColor(src[2], src[3]).green() );
-                    destPixel.setBlue ( m_orgImage.getPixelColor(src[4], src[5]).blue() );
+                    destPixel.setRed  (m_orgImage.getPixelColor(src[0], src[1]).red()   );
+                    destPixel.setGreen(m_orgImage.getPixelColor(src[2], src[3]).green() );
+                    destPixel.setBlue (m_orgImage.getPixelColor(src[4], src[5]).blue()  );
 
                     m_destImage.setPixelColor(x, y, destPixel);
                     src += 2 * 3;
@@ -436,7 +436,7 @@ void KLensFunFilter::filterImage()
             }
 
             // Update progress bar in dialog.
-            int progress = (int) (((double)y * 100.0) / m_orgImage.height());
+            int progress = (int)(((double)y * 100.0) / m_orgImage.height());
             if (m_parent && progress%5 == 0)
                 postProgress(progress/steps);
         }
@@ -470,7 +470,7 @@ void KLensFunFilter::filterImage()
             }
 
             // Update progress bar in dialog.
-            int progress = (int) (((double)y * 100.0) / m_destImage.height());
+            int progress = (int)(((double)y * 100.0) / m_destImage.height());
             if (m_parent && progress%5 == 0)
                 postProgress(progress/steps + offset);
         }
@@ -490,20 +490,20 @@ void KLensFunFilter::filterImage()
 
         for (unsigned long y=0; y < tempImage.height(); y++, loop++)
         {
-            if (m_lfModifier->ApplyGeometryDistortion (0.0, y, tempImage.width(), 1, pos))
+            if (m_lfModifier->ApplyGeometryDistortion(0.0, y, tempImage.width(), 1, pos))
             {
                 float *src = pos;
                 for (unsigned long x = 0; x < tempImage.width(); x++)
                 {
                     //qDebug (" ZZ %f %f %i %i", src[0], src[1], src[0], src[1]);
 
-                    m_destImage.setPixelColor(x, y, tempImage.getPixelColor( src[0], src[1]) );
+                    m_destImage.setPixelColor(x, y, tempImage.getPixelColor(src[0], src[1]));
                     src += 2;
                 }
             }
 
             // Update progress bar in dialog.
-            int progress = (int) (((double)y * 100.0) / tempImage.height());
+            int progress = (int)(((double)y * 100.0) / tempImage.height());
             if (m_parent && progress%5 == 0)
                 postProgress(progress/steps + 33.3*(steps-1));
         }
@@ -514,6 +514,8 @@ void KLensFunFilter::filterImage()
     }
 
     // clean up
+
+    delete [] pos;
     m_lfModifier->Destroy();
 }
 
