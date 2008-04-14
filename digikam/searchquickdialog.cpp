@@ -87,7 +87,7 @@ SearchQuickDialog::SearchQuickDialog(QWidget* parent, KURL& url)
     
     d->resultsView = new SearchResultsView(plainPage());
     d->resultsView->setMinimumSize(320, 200);
-    QWhatsThis::add( d->resultsView, i18n("<p>Here you can see the items found in album library "
+    QWhatsThis::add( d->resultsView, i18n("<p>Here you can see the items found in album library, "
                                           "using the current search criteria"));
     
     QLabel *label2 = new QLabel(i18n("Save search as:"), plainPage());

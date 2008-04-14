@@ -302,7 +302,7 @@ void ImageWindow::setupActions()
 
     // -- Rating actions ---------------------------------------------------------------
 
-    d->star0 = new KAction(i18n("Assign Rating \"No Star\""), CTRL+Key_0,
+    d->star0 = new KAction(i18n("Assign Rating \"No Stars\""), CTRL+Key_0,
                           d->rightSidebar, SLOT(slotAssignRatingNoStar()),
                           actionCollection(), "imageview_ratenostar");
     d->star1 = new KAction(i18n("Assign Rating \"One Star\""), CTRL+Key_1,

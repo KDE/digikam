@@ -117,8 +117,8 @@ SetupEditor::SetupEditor(QWidget* parent )
     d->hideToolBar        = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"), interfaceOptionsGroup);
     d->hideThumbBar       = new QCheckBox(i18n("Hide &thumbbar in fullscreen mode"), interfaceOptionsGroup);
     d->horizontalThumbBar = new QCheckBox(i18n("Use &horizontal thumbbar (need to restart showFoto)"), interfaceOptionsGroup);
-    QWhatsThis::add( d->horizontalThumbBar, i18n("<p>If this option is enabled, thumbnails bar will be displayed horizontally behind "
-                                                 "image area. You need to restart showFoto for this option take effect.<p>"));
+    QWhatsThis::add( d->horizontalThumbBar, i18n("<p>If this option is enabled, the thumbnails bar will be displayed horizontally behind "
+                                                 "the image area. You need to restart showFoto for this option take effect.<p>"));
     d->useTrash   = new QCheckBox(i18n("&Deleting items should move them to trash"), interfaceOptionsGroup);
     d->showSplash = new QCheckBox(i18n("&Show splash screen at startup"), interfaceOptionsGroup);
 

@@ -688,7 +688,7 @@ void DigikamApp::setupActions()
                                     SLOT(slotImageLightTable()),
                                     actionCollection(),
                                     "image_lighttable");
-    d->imageLightTableAction->setWhatsThis(i18n("Put the selected items into the light table thumbbar."));
+    d->imageLightTableAction->setWhatsThis(i18n("Put the selected items on the light table thumbbar."));
 
     d->imageAddLightTableAction = new KAction(i18n("Add to Light Table"),
                                     "lighttableadd",
@@ -706,7 +706,7 @@ void DigikamApp::setupActions()
                                     SLOT(slotImageRename()),
                                     actionCollection(),
                                     "image_rename");
-    d->imageRenameAction->setWhatsThis(i18n("Rename the filename of the currently selected item."));
+    d->imageRenameAction->setWhatsThis(i18n("Change the filename of the currently selected item."));
 
     // Pop up dialog to ask user whether to move to trash
     d->imageDeleteAction            = new KAction(i18n("Delete"),
@@ -959,7 +959,7 @@ void DigikamApp::setupActions()
                                    actionCollection(),
                                    "help_tipofday");
 
-    d->donateMoneyAction = new KAction(i18n("Make a donation..."),
+    d->donateMoneyAction = new KAction(i18n("Donate..."),
                                    0,
                                    0,
                                    this,
@@ -977,7 +977,7 @@ void DigikamApp::setupActions()
 
     // -- Rating actions ---------------------------------------------------------------
 
-    d->rating0Star = new KAction(i18n("Assign Rating \"No Star\""), CTRL+Key_0,
+    d->rating0Star = new KAction(i18n("Assign Rating \"No Stars\""), CTRL+Key_0,
                           d->view, SLOT(slotAssignRatingNoStar()),
                           actionCollection(), "ratenostar");
     d->rating1Star = new KAction(i18n("Assign Rating \"One Star\""), CTRL+Key_1,

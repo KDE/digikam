@@ -440,7 +440,7 @@ void LightTableWindow::setupActions()
     // -- Standard 'Help' menu actions ---------------------------------------------
 
 
-    d->donateMoneyAction = new KAction(i18n("Make a donation..."),
+    d->donateMoneyAction = new KAction(i18n("Donate..."),
                                        0, 0, 
                                        this, SLOT(slotDonateMoney()),
                                        actionCollection(),
@@ -469,7 +469,7 @@ void LightTableWindow::setupActions()
 
     // -- Rating actions ---------------------------------------------------------------
 
-    d->star0 = new KAction(i18n("Assign Rating \"No Star\""), CTRL+Key_0,
+    d->star0 = new KAction(i18n("Assign Rating \"No Stars\""), CTRL+Key_0,
                           d->barView, SLOT(slotAssignRatingNoStar()),
                           actionCollection(), "lighttable_ratenostar");
     d->star1 = new KAction(i18n("Assign Rating \"One Star\""), CTRL+Key_1,

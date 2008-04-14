@@ -481,7 +481,7 @@ void EditorWindow::setupStandardActions()
 
     // -- Standard 'Help' menu actions ---------------------------------------------
 
-    d->donateMoneyAction = new KAction(i18n("Make a donation..."),
+    d->donateMoneyAction = new KAction(i18n("Donate..."),
                                        0, 0, 
                                        this, SLOT(slotDonateMoney()),
                                        actionCollection(),
