@@ -48,14 +48,14 @@ KLensFun::KLensFun()
 {
     m_init = false;
     init();
-};
+}
 
 KLensFun::~KLensFun()
 {
     if ( m_init )
     {
     }
-};
+}
 
 bool KLensFun::init()
 {
@@ -69,7 +69,7 @@ bool KLensFun::init()
     m_filterDist = true;
 
     return true;
-};
+}
 
 void KLensFun::setCorrection( bool CCA, bool Vig, bool CCI, bool Dist, bool Geom )
 {
@@ -78,7 +78,7 @@ void KLensFun::setCorrection( bool CCA, bool Vig, bool CCI, bool Dist, bool Geom
     m_filterCCI  = CCI;
     m_filterDist = Dist;
     m_filterGeom = Geom;
-};
+}
 
 bool KLensFun::supportsDistortion()
 {
@@ -86,7 +86,7 @@ bool KLensFun::supportsDistortion()
 
     lfLensCalibDistortion res;
     return m_usedLens->InterpolateDistortion( m_focalLength, res );
-};
+}
 
 bool KLensFun::supportsCCA()
 {
@@ -94,7 +94,7 @@ bool KLensFun::supportsCCA()
 
     lfLensCalibTCA res;
     return m_usedLens->InterpolateTCA( m_focalLength, res );
-};
+}
 
 bool KLensFun::supportsVig()
 {
@@ -102,12 +102,12 @@ bool KLensFun::supportsVig()
 
     lfLensCalibVignetting res;
     return m_usedLens->InterpolateVignetting( m_focalLength, m_aperature, m_subjectDistance, res );
-};
+}
 
 #if 0
 KLensFun::correctionData KLensFun::getCorrectionData()
 {
-};
+}
 #endif
 
 // -------------------------------------------------------------------
@@ -116,23 +116,23 @@ KLFDeviceSelector::KLFDeviceSelector( QWidget *parent ) : QWidget(parent)
 {
     m_klf = new KLensFun();
 
-    QGridLayout* gridSettings = new QGridLayout( this );
+    QGridLayout* gridSettings = new QGridLayout(this);
 
-    m_ExifUsage = new QCheckBox( i18n("Use Exif Data"), parent);
+    m_ExifUsage = new QCheckBox(i18n("Use Exif Data"), parent);
     m_Maker     = new KComboBox(parent);
     m_Model     = new KComboBox(parent);
     m_Lens      = new KComboBox(parent);
 
-    m_ExifUsage->setEnabled( false );
-    m_ExifUsage->setCheckState( Qt::Unchecked );
+    m_ExifUsage->setEnabled(false);
+    m_ExifUsage->setCheckState(Qt::Unchecked);
     m_Maker->setInsertPolicy(QComboBox::InsertAlphabetically);
     m_Model->setInsertPolicy(QComboBox::InsertAlphabetically);
     m_Lens->setInsertPolicy(QComboBox::InsertAlphabetically);
 
-    gridSettings->addWidget( m_ExifUsage );
-    gridSettings->addWidget( m_Maker );
-    gridSettings->addWidget( m_Model );
-    gridSettings->addWidget( m_Lens );
+    gridSettings->addWidget(m_ExifUsage);
+    gridSettings->addWidget(m_Maker);
+    gridSettings->addWidget(m_Model);
+    gridSettings->addWidget(m_Lens);
 
     connect(m_ExifUsage, SIGNAL(stateChanged(int)), 
             this, SLOT(exifUsageSlot(int)));
@@ -148,24 +148,24 @@ KLFDeviceSelector::KLFDeviceSelector( QWidget *parent ) : QWidget(parent)
 
     KLFDeviceSelector::Device firstDevice; // empty strings
 //    setDevice( firstDevice );
-};
+}
 
 KLFDeviceSelector::~KLFDeviceSelector()
 {
     delete m_klf;
-};
+}
 
 #if 0
 KLFDeviceSelector::Device KLFDeviceSelector::getDevice()
 {
-};
+}
 #endif
 
-void KLFDeviceSelector::findFromExif( KExiv2Iface::KExiv2 &meta )
+void KLFDeviceSelector::findFromExif(KExiv2Iface::KExiv2 &meta)
 {
     m_ExivMeta = meta;
     KLFDeviceSelector::findFromExif();
-};
+}
 
 void KLFDeviceSelector::findFromExif()
 {
@@ -189,7 +189,7 @@ void KLFDeviceSelector::findFromExif()
     {
         m_Maker->setCurrentIndex( makerIdx );
         m_Maker->setEnabled( false );
-    };
+    }
 
     updateCombos();
     int modelIdx = m_Model->findText( Model );
@@ -198,7 +198,7 @@ void KLFDeviceSelector::findFromExif()
         m_Model->setCurrentIndex( modelIdx );
         m_Model->setEnabled( false );
         updateLensCombo();
-    };
+    }
 
     // The LensFun DB has the Maker in front of the Lens model name.
     // We use here the Camera Maker, because the Lens Maker seems not to be
@@ -219,7 +219,7 @@ void KLFDeviceSelector::findFromExif()
         // Lens not found, try to reduce the list according to the values we have
         // FIXME: Implement removal of not matching lenses ...
         m_Lens->setEnabled( true );
-    };
+    }
 
     DDebug() << "  >>>>>>search for Lens:" << Maker << " " << Lens 
              << "< and found: >" << m_Lens->itemText(0) + "<";
@@ -231,7 +231,7 @@ void KLFDeviceSelector::findFromExif()
     DDebug() << "  >>>>>>focalLength" << temp << "|" << m_klf->m_focalLength 
              << "Aperatur" << m_klf->m_aperature << "Distance" 
              << m_klf->m_subjectDistance;
-};
+}
 
 void KLFDeviceSelector::exifUsageSlot(int mode)
 {
@@ -242,8 +242,8 @@ void KLFDeviceSelector::exifUsageSlot(int mode)
         m_Maker->setEnabled( true );
         m_Model->setEnabled( true );
         m_Lens->setEnabled( true );
-    };
-};
+    }
+}
 
 void KLFDeviceSelector::updateCombos()
 {
@@ -266,8 +266,9 @@ void KLFDeviceSelector::updateCombos()
                 QString t( (*it)->Maker );
                 if ( m_Maker->findText( t, Qt::MatchExactly ) < 0 )
                     m_Maker->addItem( t );
-           };
-       };
+           }
+       }
+
        // Fill models for current selected maker
        if ( (*it)->Model && (*it)->Maker == m_Maker->currentText() ) 
        {
@@ -275,13 +276,14 @@ void KLFDeviceSelector::updateCombos()
             dev        = *it;
             QVariant b = qVariantFromValue(dev);
             m_Model->addItem( (*it)->Model, b );
-       };
+       }
+
        it++;
-    };
+    }
 
     // Fill Lens list for current Maker & Model
     updateLensCombo();
-};
+}
 
 void KLFDeviceSelector::updateLensCombo()
 {
@@ -301,10 +303,10 @@ void KLFDeviceSelector::updateLensCombo()
         QVariant b = qVariantFromValue(lens);
         m_Lens->addItem( (*lenses)->Model, b );
         lenses++;
-    };
+    }
 
     emit( lensSelected() );
-};
+}
 
 void KLFDeviceSelector::selectLens()
 {
@@ -318,7 +320,7 @@ void KLFDeviceSelector::selectLens()
 void KLFDeviceSelector::setDevice( Device &/*d*/ )
 {
     updateCombos();
-};
+}
 
 // -------------------------------------------------------------------
 
@@ -387,7 +389,14 @@ void KLensFunFilter::filterImage()
                                             modifyFlags, 
                                             0/*no inverse*/);
 
-    // calc necessary steps for progress bar
+    if (!m_lfModifier)
+    {
+        DError() << "ERROR: cannot initialize LensFun Modifier.";
+        return;
+    }
+
+    // Calc necessary steps for progress bar
+
     int steps = m_klf->m_filterCCA                             ? 1 : 0 + 
                 ( m_klf->m_filterVig || m_klf->m_filterCCI )   ? 1 : 0 +
                 ( m_klf->m_filterDist || m_klf->m_filterGeom ) ? 1 : 0;
@@ -436,6 +445,7 @@ void KLensFunFilter::filterImage()
             {
                 DError() << "ERROR: Failed to call ApplySubpixelDistortion in lensfun lib ! (" 
                          << ok << ")" << endl;
+                break;
             }
         }
     } 
@@ -475,6 +485,7 @@ void KLensFunFilter::filterImage()
             {
                 DError() << "ERROR: Failed to call ApplyColorModification in lensfun lib ! (" 
                          << ok << ")" << endl;
+                break;
             }
         }
     }
@@ -512,6 +523,7 @@ void KLensFunFilter::filterImage()
             {
                 DError() << "ERROR: Failed to call ApplyGeometryDistortion  in lensfun lib ! (" 
                          << ok << ")" << endl;
+                break;
             }
         }
         /*qDebug (" for %f %f %i %i", tempImage.height(), tempImage.width(), 
