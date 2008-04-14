@@ -688,7 +688,7 @@ void DigikamApp::setupActions()
                                     SLOT(slotImageLightTable()),
                                     actionCollection(),
                                     "image_lighttable");
-    d->imageLightTableAction->setWhatsThis(i18n("Put the selected items on the light table thumbbar."));
+    d->imageLightTableAction->setWhatsThis(i18n("Place the selected items on the light table thumbbar."));
 
     d->imageAddLightTableAction = new KAction(i18n("Add to Light Table"),
                                     "lighttableadd",
