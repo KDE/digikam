@@ -104,8 +104,8 @@ SetupEditor::SetupEditor(QWidget* parent )
 
     d->horizontalThumbBar = new QCheckBox(i18n("Use &horizontal thumbbar (need to restart editor)"),
                                           interfaceOptionsGroup);
-    d->horizontalThumbBar->setWhatsThis( i18n("<p>If this option is enabled, thumbnails bar will be displayed "
-                                              "horizontally behind image area. You need to restart editor "
+    d->horizontalThumbBar->setWhatsThis( i18n("<p>If this option is enabled, the thumbnails bar will be displayed "
+                                              "horizontally behind the image area. You need to restart editor "
                                               "for this option take effect.<p>"));
 
     d->hideThumbBar = new QCheckBox(i18n("Hide &thumbbar in fullscreen mode"), interfaceOptionsGroup);

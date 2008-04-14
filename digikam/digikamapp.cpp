@@ -620,7 +620,7 @@ void DigikamApp::setupActions()
 
     d->imageLightTableAction = new KAction(KIcon("lighttable"), i18n("Place onto Light Table"), this);
     d->imageLightTableAction->setShortcut(Qt::Key_F6);
-    d->imageLightTableAction->setWhatsThis(i18n("Put the selected items into the light table thumbbar."));
+    d->imageLightTableAction->setWhatsThis(i18n("Place the selected items on the light table thumbbar."));
     connect(d->imageLightTableAction, SIGNAL(triggered()), d->view, SLOT(slotImageLightTable()));
     actionCollection()->addAction("image_lighttable", d->imageLightTableAction);
 
@@ -636,7 +636,7 @@ void DigikamApp::setupActions()
 
     d->imageRenameAction = new KAction(KIcon("edit-rename"), i18n("Rename..."), this);
     d->imageRenameAction->setShortcut(Qt::Key_F2);
-    d->imageRenameAction->setWhatsThis(i18n("Rename the filename of the currently selected item."));
+    d->imageRenameAction->setWhatsThis(i18n("Change the filename of the currently selected item."));
     connect(d->imageRenameAction, SIGNAL(triggered()), d->view, SLOT(slotImageRename()));
     actionCollection()->addAction("image_rename", d->imageRenameAction);
 
@@ -899,7 +899,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->donateMoneyAction = new KAction(i18n("Make a donation..."), this);
+    d->donateMoneyAction = new KAction(i18n("Donate..."), this);
     connect(d->donateMoneyAction, SIGNAL(triggered()), this, SLOT(slotDonateMoney()));
     actionCollection()->addAction("help_donatemoney", d->donateMoneyAction);
 
@@ -913,7 +913,7 @@ void DigikamApp::setupActions()
 
     // -- Rating actions ---------------------------------------------------------------
 
-    d->rating0Star = new KAction(i18n("Assign Rating \"No Star\""), this);
+    d->rating0Star = new KAction(i18n("Assign Rating \"No Stars\""), this);
     d->rating0Star->setShortcut(Qt::CTRL+Qt::Key_0);
     connect(d->rating0Star, SIGNAL(triggered()), d->view, SLOT(slotAssignRatingNoStar()));
     actionCollection()->addAction("ratenostar", d->rating0Star);

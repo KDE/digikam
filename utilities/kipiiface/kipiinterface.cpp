@@ -208,7 +208,7 @@ void KipiInterface::delImage( const KUrl& url )
     }
     else
     {
-        DWarning() << "Cannot find Parent album in album library" << endl;
+        DWarning() << "Cannot find Parent album in the album library" << endl;
     }
 }
 

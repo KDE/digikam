@@ -133,7 +133,7 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KUrl& url)
 
     d->rulesBox = new QGroupBox( i18n("Search Rules"), page);
     d->rulesBox->setWhatsThis( i18n("<p>Here you can review the search rules used to filter image-"
-                                    "searching in album library."));
+                                    "searching in the album library."));
     d->rulesBox->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
 
     d->vlayRulesBox = new QVBoxLayout(d->rulesBox);

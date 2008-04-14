@@ -487,7 +487,7 @@ void LightTableWindow::setupActions()
 
     // -- Rating actions ---------------------------------------------------------------
 
-    d->star0 = new KAction(i18n("Assign Rating \"No Star\""), this);
+    d->star0 = new KAction(i18n("Assign Rating \"No Stars\""), this);
     d->star0->setShortcut(Qt::CTRL+Qt::Key_0);
     connect(d->star0, SIGNAL(triggered()), d->barView, SLOT(slotAssignRatingNoStar()));
     actionCollection()->addAction("lighttable_ratenostar", d->star0);

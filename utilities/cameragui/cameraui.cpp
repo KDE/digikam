@@ -424,7 +424,7 @@ void CameraUI::setupActions()
 
     // -- Standard 'Help' menu actions ---------------------------------------------
 
-    d->donateMoneyAction = new KAction(i18n("Make a donation..."), this);
+    d->donateMoneyAction = new KAction(i18n("Donate..."), this);
     connect(d->donateMoneyAction, SIGNAL(triggered()), this, SLOT(slotDonateMoney()));
     actionCollection()->addAction("cameraui_donatemoney", d->donateMoneyAction);
 
