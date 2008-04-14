@@ -293,7 +293,11 @@ void KLFDeviceSelector::updateLensCombo()
 
     QVariant v    = m_Model->itemData( m_Model->currentIndex() );
     DevicePtr dev = v.value<KLFDeviceSelector::DevicePtr>();
-    if (!dev) return;
+    if (!dev)
+    {
+        DDebug() << "updateLensCombo() => Device is null!" << endl;
+        return;
+    }
 
     const lfLens **lenses = m_klf->m_lfDb->FindLenses( dev, NULL, NULL );
     m_klf->m_cropFactor   = dev->CropFactor;
