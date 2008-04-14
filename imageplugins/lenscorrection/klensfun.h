@@ -45,6 +45,9 @@ extern "C"
 class QCheckBox;
 class KComboBox;
 
+namespace DigikamLensCorrectionImagesPlugin
+{
+
 class KLENSFUN_EXPORT KLensFun
 {
     friend class KLFDeviceSelector;
@@ -165,5 +168,7 @@ private:
     KComboBox           *m_Model;
     KComboBox           *m_Lens;
 };
+
+}  // NameSpace DigikamLensCorrectionImagesPlugin
 
 #endif /* KLENSFUN_H */

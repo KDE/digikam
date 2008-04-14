@@ -1,7 +1,7 @@
 /* ============================================================
  *
  * Date        : 2008-02-10
- * Description : a plugin fix lens errors
+ * Description : A plugin for autocorrect pictues based on lens database
  * 
  * Copyright (C) 2008 Adrian Schroeter <adrian@suse.de>
  * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>

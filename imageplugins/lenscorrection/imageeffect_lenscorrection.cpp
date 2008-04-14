@@ -3,7 +3,7 @@
  * Date        : 2008-02-10
  * Description : a plugin to fix lens errors
  * 
- * Copyright (C) 2008 Adrian Schroeter 
+ * Copyright (C) 2008 Adrian Schroeter <adrian@suse.de>
  * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * 
  * This program is free software; you can redistribute it
@@ -19,7 +19,7 @@
  * 
  * ============================================================ */
 
-// C++ include.
+// C++ includes.
 
 #include <cstring>
 #include <cmath>
@@ -77,9 +77,9 @@ ImageEffect_LensCorrection::ImageEffect_LensCorrection(QWidget* parent)
                                        ki18n("A digiKam image plugin to fix errors caused by lens."),
                                        KAboutData::License_GPL,
                                        ki18n("(c) 2008, Adrian Schroeter\n"
-                                       "(c) 2006-2007, Gilles Caulier and Marcel Wiesweg"), 
+                                       "(c) 2008, Gilles Caulier"), 
                                        KLocalizedString(),
-                                       "http://en.opensuse.org/Users:adrianSuSE");
+                                       "http://www.digikam.org");
 
     about->addAuthor(ki18n("Adrian Schroeter"), ki18n("Author and maintainer"),
                      "adrian@suse.de");
@@ -97,8 +97,8 @@ ImageEffect_LensCorrection::ImageEffect_LensCorrection(QWidget* parent)
     m_mainTab = new QTabWidget( m_imagePreviewWidget );
     m_imagePreviewWidget->setUserAreaWidget(m_mainTab);
 
-    QWidget *firstPage           = new QWidget(m_mainTab);
-    QGridLayout *firstPageLayout = new QGridLayout( firstPage );
+    QWidget *firstPage            = new QWidget(m_mainTab);
+    QGridLayout *firstPageLayout  = new QGridLayout( firstPage );
     m_mainTab->addTab( firstPage, i18n("Camera and Lens") );
     QWidget *secondPage           = new QWidget(m_mainTab);
     QGridLayout *secondPageLayout = new QGridLayout( secondPage );
@@ -109,14 +109,15 @@ ImageEffect_LensCorrection::ImageEffect_LensCorrection(QWidget* parent)
     m_maskPreviewLabel->setAlignment ( Qt::AlignHCenter | Qt::AlignVCenter );
     m_maskPreviewLabel->setWhatsThis( i18n("<p>You can see here a thumbnail preview of the "
                                            "correction applied to a cross pattern.") );
-#endif        
+#endif
+
     // -------------------------------------------------------------
-    
+
     m_cameraSelector = new KLFDeviceSelector(m_mainTab);
 
     connect(m_cameraSelector, SIGNAL(lensSelected()),
             this, SLOT(slotLensChanged()));            
-            
+
 //    firstPageLayout->addWidget(m_maskPreviewLabel, 0, 0, 1, 2 );
     firstPageLayout->addWidget(m_cameraSelector, 0, 0, 1, 2 );
     firstPageLayout->setMargin(spacingHint());
@@ -129,11 +130,7 @@ ImageEffect_LensCorrection::ImageEffect_LensCorrection(QWidget* parent)
     m_filterCCI  = new QCheckBox(i18n("Color Correction"), m_mainTab);
     m_filterDist = new QCheckBox(i18n("Distortion"), m_mainTab);
     m_filterGeom = new QCheckBox(i18n("Geometry"), m_mainTab);
-    connect(m_filterCCA,  SIGNAL(stateChanged (int)), this, SLOT(setFilters()));            
-    connect(m_filterVig,  SIGNAL(stateChanged (int)), this, SLOT(setFilters()));            
-    connect(m_filterCCI,  SIGNAL(stateChanged (int)), this, SLOT(setFilters()));            
-    connect(m_filterDist, SIGNAL(stateChanged (int)), this, SLOT(setFilters()));            
-    connect(m_filterGeom, SIGNAL(stateChanged (int)), this, SLOT(setFilters()));            
+
     secondPageLayout->addWidget(m_filterCCA,  0, 0, 1, 2 );
     secondPageLayout->addWidget(m_filterVig,  1, 0, 1, 2 );
     secondPageLayout->addWidget(m_filterCCI,  2, 0, 1, 2 );
@@ -141,6 +138,21 @@ ImageEffect_LensCorrection::ImageEffect_LensCorrection(QWidget* parent)
     secondPageLayout->addWidget(m_filterGeom, 4, 0, 1, 2 );
     secondPageLayout->setMargin(spacingHint());
     secondPageLayout->setSpacing(spacingHint());
+
+    connect(m_filterCCA,  SIGNAL(stateChanged (int)), 
+            this, SLOT(setFilters()));
+
+    connect(m_filterVig,  SIGNAL(stateChanged (int)), 
+            this, SLOT(setFilters()));
+
+    connect(m_filterCCI,  SIGNAL(stateChanged (int)), 
+            this, SLOT(setFilters()));
+
+    connect(m_filterDist, SIGNAL(stateChanged (int)), 
+            this, SLOT(setFilters()));
+
+    connect(m_filterGeom, SIGNAL(stateChanged (int)), 
+            this, SLOT(setFilters()));
 
     // -------------------------------------------------------------
 
@@ -173,12 +185,12 @@ void ImageEffect_LensCorrection::readUserSettings(void)
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("Lens Correction Tool Dialog");
 
-    m_filterCCA->setCheckState(group.readEntry("CCA", true) ? Qt::Checked : Qt::Unchecked );
-    m_filterVig->setCheckState(group.readEntry("Vignetting", true) ? Qt::Checked : Qt::Unchecked );
-    m_filterCCI->setCheckState(group.readEntry("CCI", true) ? Qt::Checked : Qt::Unchecked );
-    m_filterDist->setCheckState(group.readEntry("Distortion", true) ? Qt::Checked : Qt::Unchecked );
-    m_filterGeom->setCheckState(group.readEntry("Geometry", true) ? Qt::Checked : Qt::Unchecked );
-    
+    m_filterCCA->setCheckState(group.readEntry("CCA", true)         ? Qt::Checked : Qt::Unchecked);
+    m_filterVig->setCheckState(group.readEntry("Vignetting", true)  ? Qt::Checked : Qt::Unchecked);
+    m_filterCCI->setCheckState(group.readEntry("CCI", true)         ? Qt::Checked : Qt::Unchecked);
+    m_filterDist->setCheckState(group.readEntry("Distortion", true) ? Qt::Checked : Qt::Unchecked);
+    m_filterGeom->setCheckState(group.readEntry("Geometry", true)   ? Qt::Checked : Qt::Unchecked);
+
     setFilters();
     slotEffect();
     m_mainTab->blockSignals(false);
@@ -189,24 +201,24 @@ void ImageEffect_LensCorrection::writeUserSettings(void)
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("Lens Correction Tool Dialog");
     if ( m_filterCCA->isEnabled() )
-      group.writeEntry("CCA", (m_filterCCA->checkState() == Qt::Checked) ? true : false);
+        group.writeEntry("CCA", (m_filterCCA->checkState() == Qt::Checked) ? true : false);
     if ( m_filterVig->isEnabled() )
-      group.writeEntry("Vignetting", (m_filterVig->checkState() == Qt::Checked) ? true : false);
+        group.writeEntry("Vignetting", (m_filterVig->checkState() == Qt::Checked) ? true : false);
     if ( m_filterCCI->isEnabled() )
-      group.writeEntry("CCI", (m_filterCCI->checkState() == Qt::Checked) ? true : false);
+        group.writeEntry("CCI", (m_filterCCI->checkState() == Qt::Checked) ? true : false);
     if ( m_filterDist->isEnabled() )
-      group.writeEntry("Distortion", (m_filterDist->checkState() == Qt::Checked) ? true : false);
+        group.writeEntry("Distortion", (m_filterDist->checkState() == Qt::Checked) ? true : false);
     if ( m_filterGeom->isEnabled() )
-      group.writeEntry("Geometry", (m_filterGeom->checkState() == Qt::Checked) ? true : false);
+        group.writeEntry("Geometry", (m_filterGeom->checkState() == Qt::Checked) ? true : false);
     group.sync();
 }
 
 void ImageEffect_LensCorrection::setFilters()
 {
     m_cameraSelector->getKLFObject()->setCorrection(
-        (m_filterCCA->checkState() == Qt::Checked && m_filterCCA->isEnabled()) ? true : false,
-        (m_filterVig->checkState() == Qt::Checked && m_filterVig->isEnabled()) ? true : false,
-        (m_filterCCI->checkState() == Qt::Checked && m_filterCCI->isEnabled()) ? true : false,
+        (m_filterCCA->checkState()  == Qt::Checked && m_filterCCA->isEnabled())  ? true : false,
+        (m_filterVig->checkState()  == Qt::Checked && m_filterVig->isEnabled())  ? true : false,
+        (m_filterCCI->checkState()  == Qt::Checked && m_filterCCI->isEnabled())  ? true : false,
         (m_filterDist->checkState() == Qt::Checked && m_filterDist->isEnabled()) ? true : false,
         (m_filterGeom->checkState() == Qt::Checked && m_filterGeom->isEnabled()) ? true : false
      );
@@ -215,14 +227,15 @@ void ImageEffect_LensCorrection::setFilters()
 void ImageEffect_LensCorrection::resetValues()
 {
     m_mainTab->blockSignals(true);
-    
+
     // read from Exif data ...
     Digikam::ImageIface iface(0, 0);
     Digikam::DImg *i = iface.getOriginalImg();
-    if ( i ) {
-       KExiv2Iface::KExiv2 meta;
-       meta.setExif( i->getExif() );
-       m_cameraSelector->findFromExif( meta );
+    if ( i ) 
+    {
+        KExiv2Iface::KExiv2 meta;
+        meta.setExif( i->getExif() );
+        m_cameraSelector->findFromExif( meta );
     }
 
     m_mainTab->blockSignals(false);
@@ -235,8 +248,7 @@ void ImageEffect_LensCorrection::prepareEffect()
     Digikam::DImg image = m_imagePreviewWidget->getOriginalRegionImage();
 
     m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>
-                        (new KLensFunFilter(&image,
-                                       this, m_cameraSelector->getKLFObject() ));
+                       (new KLensFunFilter(&image, this, m_cameraSelector->getKLFObject()));
 
 }
 
@@ -249,25 +261,23 @@ void ImageEffect_LensCorrection::prepareFinal()
     Digikam::DImg originalImage(iface.originalWidth(), iface.originalHeight(),
                                 iface.originalSixteenBit(), iface.originalHasAlpha(), data);
 
-    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
-                       new KLensFunFilter( &originalImage, this,
-                                           m_cameraSelector->getKLFObject()) );
+    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>
+                       (new KLensFunFilter( &originalImage, this, m_cameraSelector->getKLFObject()));
 
     delete [] data;
 }
 
-void ImageEffect_LensCorrection::putPreviewData(void)
+void ImageEffect_LensCorrection::putPreviewData()
 {
     Digikam::DImg imDest = m_threadedFilter->getTargetImage();
     m_imagePreviewWidget->setPreviewImage(imDest);
 }
 
-void ImageEffect_LensCorrection::putFinalData(void)
+void ImageEffect_LensCorrection::putFinalData()
 {
     Digikam::ImageIface iface(0, 0);
 
-    iface.putOriginalImage(i18n("Lens Correction"),
-                           m_threadedFilter->getTargetImage().bits());
+    iface.putOriginalImage(i18n("Lens Correction"), m_threadedFilter->getTargetImage().bits());
 }
 
 void ImageEffect_LensCorrection::renderingFinished()
