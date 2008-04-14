@@ -1,4 +1,4 @@
-digiKam 0.9.4-RC1 - Release date: 2008-04-??
+digiKam 0.9.4-beta4 - Release date: 2008-04-??
 
 NEW FEATURES:
 
@@ -13,7 +13,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 002 ==> 137836 : Usability: Configure camera gui add and auto-detect camera.
 003 ==> 160323 : Changing the album name from sth to #sth and then to zsth causes the album to be deleted along with the files
 004 ==> 145083 : Space and Shift-Space isn't used for navigation between images
-005 ==> 158696 : Digikam image viewer crashes when "Save As" is clicked.
+005 ==> 158696 : digiKam image viewer crashes when "Save As" is clicked.
 006 ==> 156564 : Light table crashes when choosing channel.
 007 ==> 147466 : digiKam crashes on termination if an audio file played.
 008 ==> 146973 : Crashes when clicking on preview image.
