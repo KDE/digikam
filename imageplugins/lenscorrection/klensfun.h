@@ -40,7 +40,6 @@ extern "C"
 // Local includes.
 
 #include "dimgthreadedfilter.h"
-#include "klensfun_export.h"
 
 class QCheckBox;
 class KComboBox;
@@ -48,7 +47,7 @@ class KComboBox;
 namespace DigikamLensCorrectionImagesPlugin
 {
 
-class KLENSFUN_EXPORT KLensFun
+class KLensFun
 {
     friend class KLFDeviceSelector;
     friend class KLensFunFilter;
@@ -120,7 +119,7 @@ private:
 
 // -------------------------------------------------------------------
 
-class KLENSFUN_EXPORT KLFDeviceSelector : public QWidget
+class KLFDeviceSelector : public QWidget
 {
 
     Q_OBJECT
