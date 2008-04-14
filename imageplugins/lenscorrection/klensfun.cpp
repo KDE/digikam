@@ -487,7 +487,7 @@ void KLensFunFilter::filterImage()
         loop = 0;
 
         // we need a deep copy first 
-        Digikam::DImg tempImage = m_destImage;
+        Digikam::DImg tempImage(m_destImage.width(), m_destImage.height(), m_destImage.sixteenBit(), m_destImage.hasAlpha());
 
         for (unsigned long y=0; y < tempImage.height(); y++)
         {
@@ -498,7 +498,7 @@ void KLensFunFilter::filterImage()
                 {
                     //qDebug (" ZZ %f %f %i %i", src[0], src[1], (int)src[0], (int)src[1]);
 
-                    m_destImage.setPixelColor(x, y, tempImage.getPixelColor((int)src[0], (int)src[1]));
+                    tempImage.setPixelColor(x, y, m_destImage.getPixelColor((int)src[0], (int)src[1]));
                     src += 2;
                 }
             }
@@ -512,6 +512,8 @@ void KLensFunFilter::filterImage()
         /*qDebug (" for %f %f %i %i", tempImage.height(), tempImage.width(), 
                                       tempImage.height(), tempImage.width());*/
         DDebug() << "Applying Distortion and Geometry Correction. (loop: " << loop << ")" << endl;
+
+        m_destImage = tempImage;
     }
 
     // clean up
