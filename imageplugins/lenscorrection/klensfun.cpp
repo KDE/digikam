@@ -485,8 +485,7 @@ void KLensFunFilter::filterImage()
         loop = 0;
 
         // we need a deep copy first 
-        Digikam::DImg tempImage;
-        tempImage = m_destImage;
+        Digikam::DImg tempImage = m_destImage;
 
         for (unsigned long y=0; y < tempImage.height(); y++, loop++)
         {
