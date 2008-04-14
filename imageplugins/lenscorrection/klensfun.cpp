@@ -369,9 +369,9 @@ void KLensFunFilter::filterImage()
             colorDepth = LF_PF_U32;
             break;
         default:
-            DError() << "ERROR: can not handle bit depth.";
+            DError() << "ERROR: can not handle bytes depth.";
             return;
-    };
+    }
 
     m_lfModifier = lfModifier::Create( m_klf->m_usedLens, m_klf->m_cropFactor, m_orgImage.width(), m_orgImage.height() );
     /*int modflags =*/ m_lfModifier->Initialize ( m_klf->m_usedLens, colorDepth, 
@@ -394,6 +394,8 @@ void KLensFunFilter::filterImage()
     // 1: TCA correction 
     if ( m_klf->m_filterCCA ) 
     {
+        DDebug() << "Applying TCA correction..." << endl;
+
         for ( unsigned int y=0; y < m_orgImage.height(); y++ )
         {
             ok = m_lfModifier->ApplySubpixelDistortion (0.0, y, m_orgImage.width(), 1, pos);
@@ -419,7 +421,8 @@ void KLensFunFilter::filterImage()
             }
             else
             {
-                DError() << "ERROR: Failed to call ApplySubpixelDistortion in lensfun lib !";
+                DError() << "ERROR: Failed to call ApplySubpixelDistortion in lensfun lib ! (" 
+                         << ok << ")" << endl;
             }
         }
     } 
@@ -432,6 +435,8 @@ void KLensFunFilter::filterImage()
     uchar *data = m_destImage.bits();
     if ( m_klf->m_filterVig || m_klf->m_filterCCI ) 
     {
+        DDebug() << "Applying Color Correction: Vignetting and CCI..." << endl;
+
         float offset = 0.0;
         if ( steps == 3 )
             offset = 33.3;
@@ -441,21 +446,30 @@ void KLensFunFilter::filterImage()
 
         for ( unsigned int y=0; y < m_destImage.height(); y++ )
         {
-            if (!m_lfModifier->ApplyColorModification(data, 0.0, y, m_destImage.width(), 1, m_destImage.bytesDepth(), 0))
-                DError() << "ERROR: Failed to call ApplyColorModification in lensfun lib !";
+            ok = m_lfModifier->ApplyColorModification(data, 0.0, y, m_destImage.width(), 
+                                                      1, m_destImage.bytesDepth(), 0);
+            if (ok)
+            {
+                data += m_destImage.height() * m_destImage.bytesDepth();
 
-            data += m_destImage.height() * m_destImage.bytesDepth();
-
-            // Update progress bar in dialog.
-            int progress = (int) (((double)y * 100.0) / m_destImage.height() );
-            if (m_parent && progress%5 == 0)
-                postProgress(progress/steps + offset);
-        };
-    };
+                // Update progress bar in dialog.
+                int progress = (int) (((double)y * 100.0) / m_destImage.height() );
+                if (m_parent && progress%5 == 0)
+                    postProgress(progress/steps + offset);
+            }
+            else
+            {
+                DError() << "ERROR: Failed to call ApplyColorModification in lensfun lib ! (" 
+                         << ok << ")" << endl;
+            }
+        }
+    }
 
     // 3: Distortion and Geometry
     if ( m_klf->m_filterDist || m_klf->m_filterGeom ) 
     {
+        DDebug() << "Applying Distortion and Geometry Correction..." << endl;
+
         // we need a deep copy first 
         Digikam::DImg tempImage;
         tempImage = m_destImage;
@@ -465,23 +479,24 @@ void KLensFunFilter::filterImage()
             ok = m_lfModifier->ApplyGeometryDistortion (0.0, y, tempImage.width(), 1, pos);
             if (ok)
             {
-            float *src = pos;
-            for (unsigned long x = 0; x < tempImage.width(); x++)
-            {
-                //qDebug (" ZZ %f %f %i %i", src[0], src[1], src[0], src[1]);
+                float *src = pos;
+                for (unsigned long x = 0; x < tempImage.width(); x++)
+                {
+                    //qDebug (" ZZ %f %f %i %i", src[0], src[1], src[0], src[1]);
 
-                m_destImage.setPixelColor(x, y, tempImage.getPixelColor( src[0], src[1]) );
-                src += 2;
+                    m_destImage.setPixelColor(x, y, tempImage.getPixelColor( src[0], src[1]) );
+                    src += 2;
+                }
+
+                // Update progress bar in dialog.
+                int progress = (int) (((double)y * 100.0) / tempImage.height() );
+                if (m_parent && progress%5 == 0)
+                    postProgress(progress/steps + 33.3*(steps-1));
             }
-
-            // Update progress bar in dialog.
-            int progress = (int) (((double)y * 100.0) / tempImage.height() );
-            if (m_parent && progress%5 == 0)
-                postProgress(progress/steps + 33.3*(steps-1));
-            } 
             else
             {
-                DError() << "ERROR: Failed to call ApplyGeometryDistortion  in lensfun lib !";
+                DError() << "ERROR: Failed to call ApplyGeometryDistortion  in lensfun lib ! (" 
+                         << ok << ")" << endl;
             }
         }
         //qDebug (" for %f %f %i %i", tempImage.height(), tempImage.width(), tempImage.height(), tempImage.width());
