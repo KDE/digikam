@@ -373,19 +373,7 @@ void KLensFunFilter::filterImage()
 
     // Init lensfun lib, we are working on the full image.
 
-    lfPixelFormat colorDepth = LF_PF_U8;
-    switch( m_orgImage.bytesDepth() )
-    {
-        case 4:
-            colorDepth = LF_PF_U8;
-            break;
-        case 8:
-            colorDepth = LF_PF_U16;
-            break;
-        default:
-            DError() << "ERROR: can not handle bytes depth.";
-            return;
-    }
+    lfPixelFormat colorDepth = m_orgImage.bytesDepth() == 4 ? LF_PF_U8 : LF_PF_U16;
 
     m_lfModifier = lfModifier::Create(m_klf->m_usedLens, 
                                       m_klf->m_cropFactor,
