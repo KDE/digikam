@@ -208,7 +208,7 @@ void kio_digikamalbums::special(const QByteArray& data)
             // would be found in addition to "Paris/*".
             urlWithTrailingSlash = kurl.path(1);
     
-            m_sqlDB.execSql(QString("SELECT DISTINCT id, url FROM Albums WHERE  url='%1' OR url LIKE '\%%2\%';")
+            m_sqlDB.execSql(QString("SELECT DISTINCT id, url FROM Albums WHERE  url='%1' OR url LIKE '%2\%';")
                             .arg(escapeString(url)).arg(escapeString(urlWithTrailingSlash)), &albumvalues);
         }
         else
