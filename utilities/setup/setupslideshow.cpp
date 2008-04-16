@@ -95,7 +95,7 @@ SetupSlideShow::SetupSlideShow(QWidget* parent )
     d->loopMode->setWhatsThis( i18n("<p>Run the slideshow in a loop."));
 
     d->printName = new QCheckBox(i18n("Print image file name"), this);
-    d->printName->setWhatsThis( i18n("<p>Print image file name to the screen bottom."));
+    d->printName->setWhatsThis( i18n("<p>Print the image file name to the screen bottom."));
 
     d->printDate = new QCheckBox(i18n("Print image creation date"), this);
     d->printDate->setWhatsThis( i18n("<p>Print image creation to the screen bottom."));

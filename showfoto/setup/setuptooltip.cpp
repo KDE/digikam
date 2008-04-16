@@ -98,7 +98,7 @@ SetupToolTip::SetupToolTip(QWidget* parent)
 
     d->showToolTipsBox = new QCheckBox(i18n("Show Thumbbar items toolti&ps"), this);
     d->showToolTipsBox->setWhatsThis( i18n("<p>Set this option to display image information when "
-                                           "the mouse is hovered over a thumbbar item."));
+                                           "the mouse hovers over a thumbbar item."));
 
     layout->addWidget(d->showToolTipsBox);
 

@@ -192,7 +192,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
 
     d->iofilesPage  = new SetupIOFiles();
     d->page_iofiles = addPage( d->iofilesPage, i18n("Save Images") );
-    d->page_iofiles->setHeader( i18n("Image Editor Save Images Files Settings") );
+    d->page_iofiles->setHeader( i18n("Image Editor: Settings for Saving Image Files") );
     d->page_iofiles->setIcon( KIcon("document-save-all") );
 
     d->dcrawPage = new SetupDcraw();
@@ -202,7 +202,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
 
     d->iccPage  = new SetupICC(0, this);
     d->page_icc = addPage( d->iccPage, i18n("Color Management") );
-    d->page_icc->setHeader( i18n("Image Editor Color Management Settings") );
+    d->page_icc->setHeader( i18n("Image Editor: Settings for Color Management") );
     d->page_icc->setIcon( KIcon("colormanagement") );
 
     d->pluginsPage  = new SetupPlugins();

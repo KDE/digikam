@@ -92,7 +92,7 @@ SetupMime::SetupMime(QWidget* parent)
     
     KHBox *hbox1 = new KHBox(imageFileFilterBox);    
     d->imageFileFilterEdit = new QLineEdit(hbox1);
-    d->imageFileFilterEdit->setWhatsThis( i18n("<p>Here you can set the extensions of image files "
+    d->imageFileFilterEdit->setWhatsThis( i18n("<p>Here you can set the extensions of the image files "
                                                "to be displayed in Albums (such as JPEG or TIFF); "
                                                "when these files are clicked on "
                                                "they will be opened with the digiKam Image Editor."));
@@ -185,7 +185,7 @@ SetupMime::SetupMime(QWidget* parent)
     
     KHBox *hbox4 = new KHBox(rawFileFilterBox);  
     d->rawFileFilterEdit = new QLineEdit(hbox4);
-    d->rawFileFilterEdit->setWhatsThis( i18n("<p>Here you can set the extensions of RAW image files "
+    d->rawFileFilterEdit->setWhatsThis( i18n("<p>Here you can set the extensions of the RAW image files "
                                              "to be displayed in Albums (such as CRW, for Canon cameras, "
                                              "or NEF, for Nikon cameras)."));
     rawFileFilterLabel->setBuddy(d->rawFileFilterEdit);

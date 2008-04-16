@@ -108,7 +108,7 @@ SetupToolTip::SetupToolTip(QWidget* parent)
 
     d->showToolTipsBox = new QCheckBox(i18n("Show album items toolti&ps"), this);
     d->showToolTipsBox->setWhatsThis( i18n("<p>Set this option to display image information when "
-                                           "the mouse is hovered over an album item."));
+                                           "the mouse hovers over an album item."));
 
     // --------------------------------------------------------
 
@@ -116,19 +116,19 @@ SetupToolTip::SetupToolTip(QWidget* parent)
     QVBoxLayout *gLayout1 = new QVBoxLayout(d->fileSettingBox);
 
     d->showFileNameBox = new QCheckBox(i18n("Show file name"), d->fileSettingBox);
-    d->showFileNameBox->setWhatsThis( i18n("<p>Set this option to display image file name."));
+    d->showFileNameBox->setWhatsThis( i18n("<p>Set this option to display the image file name."));
 
     d->showFileDateBox = new QCheckBox(i18n("Show file date"), d->fileSettingBox);
-    d->showFileDateBox->setWhatsThis( i18n("<p>Set this option to display image file date."));
+    d->showFileDateBox->setWhatsThis( i18n("<p>Set this option to display the image file date."));
 
     d->showFileSizeBox = new QCheckBox(i18n("Show file size"), d->fileSettingBox);
-    d->showFileSizeBox->setWhatsThis( i18n("<p>Set this option to display image file size."));
+    d->showFileSizeBox->setWhatsThis( i18n("<p>Set this option to display the image file size."));
 
     d->showImageTypeBox = new QCheckBox(i18n("Show image type"), d->fileSettingBox);
-    d->showImageTypeBox->setWhatsThis( i18n("<p>Set this option to display image type."));
+    d->showImageTypeBox->setWhatsThis( i18n("<p>Set this option to display the image type."));
 
     d->showImageDimBox = new QCheckBox(i18n("Show image dimensions"), d->fileSettingBox);
-    d->showImageDimBox->setWhatsThis( i18n("<p>Set this option to display image dimensions in pixels."));
+    d->showImageDimBox->setWhatsThis( i18n("<p>Set this option to display the image dimensions in pixels."));
 
     gLayout1->addWidget(d->showFileNameBox);
     gLayout1->addWidget(d->showFileDateBox);
@@ -151,23 +151,23 @@ SetupToolTip::SetupToolTip(QWidget* parent)
     d->showPhotoDateBox->setWhatsThis( i18n("<p>Set this option to display the date when the image was taken."));
 
     d->showPhotoFocalBox = new QCheckBox(i18n("Show camera aperture and focal"), d->photoSettingBox);
-    d->showPhotoFocalBox->setWhatsThis( i18n("<p>Set this option to display camera aperture and focal settings "
+    d->showPhotoFocalBox->setWhatsThis( i18n("<p>Set this option to display the camera aperture and focal settings "
                      "used to take the image."));
 
     d->showPhotoExpoBox = new QCheckBox(i18n("Show camera exposure and sensitivity"), d->photoSettingBox);
-    d->showPhotoExpoBox->setWhatsThis( i18n("<p>Set this option to display camera exposure and sensitivity "
+    d->showPhotoExpoBox->setWhatsThis( i18n("<p>Set this option to display the camera exposure and sensitivity "
                      "used to take the image."));
 
     d->showPhotoModeBox = new QCheckBox(i18n("Show camera mode and program"), d->photoSettingBox);
-    d->showPhotoModeBox->setWhatsThis( i18n("<p>Set this option to display camera mode and program "
+    d->showPhotoModeBox->setWhatsThis( i18n("<p>Set this option to display the camera mode and program "
                      "used to take the image."));
 
     d->showPhotoFlashBox = new QCheckBox(i18n("Show camera flash settings"), d->photoSettingBox);
-    d->showPhotoFlashBox->setWhatsThis( i18n("<p>Set this option to display camera flash settings "
+    d->showPhotoFlashBox->setWhatsThis( i18n("<p>Set this option to display the camera flash settings "
                      "used to take the image."));
 
     d->showPhotoWbBox = new QCheckBox(i18n("Show camera white balance settings"), d->photoSettingBox);
-    d->showPhotoWbBox->setWhatsThis( i18n("<p>Set this option to display camera white balance settings "
+    d->showPhotoWbBox->setWhatsThis( i18n("<p>Set this option to display the camera white balance settings "
                      "used to take the image."));
 
     gLayout2->addWidget(d->showPhotoMakeBox);
@@ -189,10 +189,10 @@ SetupToolTip::SetupToolTip(QWidget* parent)
     d->showAlbumNameBox->setWhatsThis( i18n("<p>Set this option to display the album name."));
 
     d->showCommentsBox = new QCheckBox(i18n("Show image caption"), d->digikamSettingBox);
-    d->showCommentsBox->setWhatsThis( i18n("<p>Set this option to display image captions."));
+    d->showCommentsBox->setWhatsThis( i18n("<p>Set this option to display the image captions."));
 
     d->showTagsBox = new QCheckBox(i18n("Show image tags"), d->digikamSettingBox);
-    d->showTagsBox->setWhatsThis( i18n("<p>Set this option to display image tags."));
+    d->showTagsBox->setWhatsThis( i18n("<p>Set this option to display the image tags."));
 
     d->showRatingBox = new QCheckBox(i18n("Show image rating"), d->digikamSettingBox);
     d->showRatingBox->setWhatsThis( i18n("<p>Set this option to display the image rating."));
