@@ -23,7 +23,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 012 ==> 150908 : Canon g3 not recognised works version 0.9.1.
 013 ==> 152092 : Showfoto crashes ( signal 11 ) on exit.
 014 ==> 160840 : Wrong filtering on Album-Subtree-View
-015 ==> 
+015 ==> 160846 : Blurred preview of pics.
+016 ==> 
 
 **********************************************************************************************
 
