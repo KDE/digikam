@@ -138,8 +138,8 @@ SetupToolTip::SetupToolTip(QWidget* parent)
     d->photoSettingBox = new QVGroupBox(i18n("Photograph Information"), parent);
 
     d->showPhotoMakeBox = new QCheckBox(i18n("Show camera make and model"), d->photoSettingBox);
-    QWhatsThis::add( d->showPhotoMakeBox, i18n("<p>Set this option to display the camera make and model "
-                                               "with which the image has been taken."));
+    QWhatsThis::add( d->showPhotoMakeBox, i18n("<p>Set this option to display the make and model of the "
+                                               "camera with which the image has been taken."));
 
     d->showPhotoDateBox = new QCheckBox(i18n("Show camera date"), d->photoSettingBox);
     QWhatsThis::add( d->showPhotoDateBox, i18n("<p>Set this option to display the date when the image was taken."));
