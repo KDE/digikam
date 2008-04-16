@@ -107,14 +107,14 @@ SetupEditor::SetupEditor(QWidget* parent )
     QLabel *underExpoColorlabel = new QLabel( i18n("&Under-exposure color:"), underExpoBox);
     d->underExposureColor       = new KColorButton(underExpoBox);
     underExpoColorlabel->setBuddy(d->underExposureColor);
-    QWhatsThis::add( d->underExposureColor, i18n("<p>Customize the color used in image editor to identify "
+    QWhatsThis::add( d->underExposureColor, i18n("<p>Customize the color used in the image editor to identify "
                                                  "the under-exposed pixels.") );
 
     QHBox *overExpoBox         = new QHBox(exposureOptionsGroup);
     QLabel *overExpoColorlabel = new QLabel( i18n("&Over-exposure color:"), overExpoBox);
     d->overExposureColor       = new KColorButton(overExpoBox);
     overExpoColorlabel->setBuddy(d->overExposureColor);
-    QWhatsThis::add( d->overExposureColor, i18n("<p>Customize the color used in image editor to identify "
+    QWhatsThis::add( d->overExposureColor, i18n("<p>Customize the color used in the image editor to identify "
                                                 "the over-exposed pixels.") );
 
     layout->addWidget(interfaceOptionsGroup);

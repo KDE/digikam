@@ -97,7 +97,7 @@ SetupToolTip::SetupToolTip(QWidget* parent)
 
     d->showToolTipsBox = new QCheckBox(i18n("Show Thumbbar items toolti&ps"), parent);
     QWhatsThis::add( d->showToolTipsBox, i18n("<p>Set this option to display image information when "
-                                              "the mouse is hovered over a thumbbar item."));
+                                              "the mouse hovers over a thumbbar item."));
 
     layout->addWidget(d->showToolTipsBox);
 
@@ -106,7 +106,7 @@ SetupToolTip::SetupToolTip(QWidget* parent)
     d->fileSettingBox = new QVGroupBox(i18n("File/Image Information"), parent);
 
     d->showFileNameBox = new QCheckBox(i18n("Show file name"), d->fileSettingBox);
-    QWhatsThis::add( d->showFileNameBox, i18n("<p>Set this option to display image file name."));
+    QWhatsThis::add( d->showFileNameBox, i18n("<p>Set this option to display the image file name."));
 
     d->showFileDateBox = new QCheckBox(i18n("Show file date"), d->fileSettingBox);
     QWhatsThis::add( d->showFileDateBox, i18n("<p>Set this option to display image file date."));

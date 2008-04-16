@@ -171,7 +171,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
                              BarIcon("image", KIcon::SizeMedium));
     d->editorPage = new SetupEditor(d->page_editor);
 
-    d->page_iofiles = addPage(i18n("Save Images"), i18n("Image Editor Save Images Files Settings"),
+    d->page_iofiles = addPage(i18n("Save Images"), i18n("Image Editor: Settings for Saving Images Files"),
                               BarIcon("filesave", KIcon::SizeMedium));
     d->iofilesPage = new SetupIOFiles(d->page_iofiles);
 

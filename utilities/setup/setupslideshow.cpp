@@ -92,22 +92,22 @@ SetupSlideShow::SetupSlideShow(QWidget* parent )
     QWhatsThis::add( d->loopMode, i18n("<p>Run the slideshow in endless repetition."));
     
     d->printName = new QCheckBox(i18n("Print image file name"), parent);
-    QWhatsThis::add( d->printName, i18n("<p>Print image file name to the screen bottom."));
+    QWhatsThis::add( d->printName, i18n("<p>Print the image file name to the screen bottom."));
 
     d->printDate = new QCheckBox(i18n("Print image creation date"), parent);
-    QWhatsThis::add( d->printDate, i18n("<p>Print image creation to the screen bottom."));
+    QWhatsThis::add( d->printDate, i18n("<p>Print the image creation to the screen bottom."));
 
     d->printApertureFocal = new QCheckBox(i18n("Print camera aperture and focal length"), parent);
-    QWhatsThis::add( d->printApertureFocal, i18n("<p>Print camera aperture and focal length to the screen bottom."));
+    QWhatsThis::add( d->printApertureFocal, i18n("<p>Print the camera aperture and focal length to the screen bottom."));
 
     d->printExpoSensitivity = new QCheckBox(i18n("Print camera exposure and sensitivity"), parent);
-    QWhatsThis::add( d->printExpoSensitivity, i18n("<p>Print camera exposure and sensitivity to the screen bottom."));
+    QWhatsThis::add( d->printExpoSensitivity, i18n("<p>Print the camera exposure and sensitivity to the screen bottom."));
 
     d->printMakeModel = new QCheckBox(i18n("Print camera make and model"), parent);
-    QWhatsThis::add( d->printMakeModel, i18n("<p>Print camera make and model to the screen bottom."));
+    QWhatsThis::add( d->printMakeModel, i18n("<p>Print the camera make and model to the screen bottom."));
 
     d->printComment = new QCheckBox(i18n("Print image caption"), parent);
-    QWhatsThis::add( d->printComment, i18n("<p>Print image caption to bottom of the screen."));
+    QWhatsThis::add( d->printComment, i18n("<p>Print the image caption to bottom of the screen."));
     
     layout->addWidget(d->delayInput);
     layout->addWidget(d->startWithCurrent);
