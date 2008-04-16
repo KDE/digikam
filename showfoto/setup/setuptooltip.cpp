@@ -139,30 +139,30 @@ SetupToolTip::SetupToolTip(QWidget* parent)
     gLayout2->setSpacing( KDialog::spacingHint() );
 
     d->showPhotoMakeBox = new QCheckBox(i18n("Show camera make and model"), d->photoSettingBox);
-    d->showPhotoMakeBox->setWhatsThis( i18n("<p>Set this option to display the camera make and model "
-                                               "with which the image has been taken."));
+    d->showPhotoMakeBox->setWhatsThis( i18n("<p>Set this option to display the make and model of the "
+                                               "camera with which the image has been taken."));
 
     d->showPhotoDateBox = new QCheckBox(i18n("Show camera date"), d->photoSettingBox);
     d->showPhotoDateBox->setWhatsThis( i18n("<p>Set this option to display the date when the image was taken."));
 
-    d->showPhotoFocalBox = new QCheckBox(i18n("Show camera aperture and focal"), d->photoSettingBox);
-    d->showPhotoFocalBox->setWhatsThis( i18n("<p>Set this option to display camera aperture and focal settings "
+    d->showPhotoFocalBox = new QCheckBox(i18n("Show camera aperture and focal length"), d->photoSettingBox);
+    d->showPhotoFocalBox->setWhatsThis( i18n("<p>Set this option to display the camera aperture and focal settings "
                      "used to take the image."));
 
     d->showPhotoExpoBox = new QCheckBox(i18n("Show camera exposure and sensitivity"), d->photoSettingBox);
-    d->showPhotoExpoBox->setWhatsThis( i18n("<p>Set this option to display camera exposure and sensitivity "
+    d->showPhotoExpoBox->setWhatsThis( i18n("<p>Set this option to display the camera exposure and sensitivity "
                      "used to take the image."));
 
     d->showPhotoModeBox = new QCheckBox(i18n("Show camera mode and program"), d->photoSettingBox);
-    d->showPhotoModeBox->setWhatsThis( i18n("<p>Set this option to display camera mode and program "
+    d->showPhotoModeBox->setWhatsThis( i18n("<p>Set this option to display the camera mode and program "
                      "used to take the image."));
 
     d->showPhotoFlashBox = new QCheckBox(i18n("Show camera flash settings"), d->photoSettingBox);
-    d->showPhotoFlashBox->setWhatsThis( i18n("<p>Set this option to display camera flash settings "
+    d->showPhotoFlashBox->setWhatsThis( i18n("<p>Set this option to display the camera flash settings "
                      "used to take the image."));
 
     d->showPhotoWbBox = new QCheckBox(i18n("Show camera white balance settings"), d->photoSettingBox);
-    d->showPhotoWbBox->setWhatsThis( i18n("<p>Set this option to display camera white balance settings "
+    d->showPhotoWbBox->setWhatsThis( i18n("<p>Set this option to display the camera white balance settings "
                      "used to take the image."));
 
     gLayout2->addWidget(d->showPhotoMakeBox);

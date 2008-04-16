@@ -144,13 +144,13 @@ SetupToolTip::SetupToolTip(QWidget* parent)
     QVBoxLayout *gLayout2 = new QVBoxLayout(d->photoSettingBox);
 
     d->showPhotoMakeBox = new QCheckBox(i18n("Show camera make and model"), d->photoSettingBox);
-    d->showPhotoMakeBox->setWhatsThis( i18n("<p>Set this option to display the camera make and model "
-                                            "with which the image has been taken."));
+    d->showPhotoMakeBox->setWhatsThis( i18n("<p>Set this option to display the make and model of the "
+                                            "camera with which the image has been taken."));
 
     d->showPhotoDateBox = new QCheckBox(i18n("Show camera date"), d->photoSettingBox);
     d->showPhotoDateBox->setWhatsThis( i18n("<p>Set this option to display the date when the image was taken."));
 
-    d->showPhotoFocalBox = new QCheckBox(i18n("Show camera aperture and focal"), d->photoSettingBox);
+    d->showPhotoFocalBox = new QCheckBox(i18n("Show camera aperture and focal length"), d->photoSettingBox);
     d->showPhotoFocalBox->setWhatsThis( i18n("<p>Set this option to display the camera aperture and focal settings "
                      "used to take the image."));
 
