@@ -29,6 +29,7 @@
 #include <QObject>
 #include <QWidget>
 #include <QLabel>
+#include <QLineEdit>
 #include <QString>
 #include <QComboBox>
 
@@ -38,8 +39,10 @@
 
 // Local includes
 
+#include "comboboxutilities.h"
 
 class QTreeView;
+class QVBoxLayout;
 
 namespace Digikam
 {
@@ -135,14 +138,7 @@ public:
 
     ArrowClickLabel(QWidget *parent = 0);
 
-    enum Direction
-    {
-        Right,
-        Up,
-        Down
-    };
-
-    void setDirection(Direction dir);
+    void setArrowType(Qt::ArrowType arrowType);
     virtual QSize sizeHint () const;
 
 signals:
@@ -154,11 +150,12 @@ protected:
     virtual void mouseReleaseEvent(QMouseEvent* event);
     virtual void paintEvent(QPaintEvent* event);
 
-    Direction m_direction;
-    int       m_size;
+    Qt::ArrowType m_arrowType;
+    int           m_size;
+    int           m_margin;
 };
 
-class TreeViewComboBox : public QComboBox
+class TreeViewComboBox : public StayPoppedUpComboBox
 {
     Q_OBJECT
 
@@ -175,18 +172,21 @@ public:
      */
     TreeViewComboBox(QWidget *parent = 0);
 
-    /** Replace the standard combo box list view with a QTreeView. */
+    /** Replace the standard combo box list view with a QTreeView.
+     *  Call this after installing an appropriate model. */
     void installView();
 
     /** Set the text of the line edit (the text that is visible
         if the popup is not opened) */
     void setLineEditText(const QString &text);
 
+    /** Returns the QTreeView of this class. Valid after installView() has been called */
+    QTreeView *view() const;
+
 protected:
 
-    virtual bool eventFilter(QObject *watched, QEvent *event);
+    virtual void sendViewportEventToView(QEvent *e);
 
-    QTreeView           *m_view;
     QLineEdit           *m_comboLineEdit;
 };
 

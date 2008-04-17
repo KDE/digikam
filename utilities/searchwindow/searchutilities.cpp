@@ -23,19 +23,30 @@
 
 // Qt includes
 
+#include <QAbstractListModel>
+#include <QItemDelegate>
+#include <QLinearGradient>
 #include <QLineEdit>
+#include <QListView>
 #include <QMouseEvent>
 #include <QPainter>
+#include <QPen>
 #include <QStyle>
 #include <QStyleOption>
 #include <QTreeView>
+#include <QVBoxLayout>
 
 // KDE includes
+
+#include <klocale.h>
 
 // Local includes
 
 #include "ddebug.h"
+#include "constants.h"
 #include "albummodel.h"
+#include "ratingwidget.h"
+#include "themeengine.h"
 #include "searchutilities.h"
 #include "searchutilities.moc"
 
@@ -241,15 +252,16 @@ void SearchSqueezedClickLabel::mouseReleaseEvent(QMouseEvent* event)
 
 ArrowClickLabel::ArrowClickLabel(QWidget *parent)
     : QWidget(parent),
-      m_direction(Right)
+      m_arrowType(Qt::RightArrow)
 {
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_size = 8;
+    m_margin = 2;
 }
 
-void ArrowClickLabel::setDirection(Direction dir)
+void ArrowClickLabel::setArrowType(Qt::ArrowType type)
 {
-    m_direction = dir;
+    m_arrowType = type;
     update();
 }
 
@@ -263,35 +275,78 @@ void ArrowClickLabel::mouseReleaseEvent(QMouseEvent* event)
 
 void ArrowClickLabel::paintEvent(QPaintEvent*)
 {
-    QStyle::PrimitiveElement e;
-    QRect r(0, 0, m_size, m_size);
-
-    switch (m_direction)
-    {
-        case Up:
-            e = QStyle::PE_IndicatorArrowUp;
-            break;
-        case Down:
-            e = QStyle::PE_IndicatorArrowDown;
-            //r.translate(0, height() - 8);
-            break;
-        default:
-        case Right:
-            e = QStyle::PE_IndicatorArrowRight;
-            //r.translate(width() - 8 , 0);
-            break;
-    }
-    QStyleOption opt;
-    opt.initFrom(this);
-    opt.rect = r;
+    // Inspired by karrowbutton.cpp,
+    //  Copyright (C) 2001 Frerich Raabe <raabe@kde.org>
 
     QPainter p(this);
-    style()->drawPrimitive(e, &opt, &p, this);
+
+    QStyleOptionFrame opt;
+    opt.init(this);
+    opt.lineWidth    = 2;
+    opt.midLineWidth = 0;
+
+    /*
+    p.fillRect( rect(), palette().brush( QPalette::Background ) );
+    style()->drawPrimitive( QStyle::PE_Frame, &opt, &p, this);
+    */
+
+    if (m_arrowType == Qt::NoArrow)
+        return;
+
+    if (width() < m_size + m_margin ||
+        height() < m_size + m_margin)
+        return; // don't draw arrows if we are too small
+
+    unsigned int x = 0, y = 0;
+    if (m_arrowType == Qt::DownArrow) {
+        x = (width() - m_size) / 2;
+        y = height() - (m_size + m_margin);
+    } else if (m_arrowType == Qt::UpArrow) {
+        x = (width() - m_size) / 2;
+        y = m_margin;
+    } else if (m_arrowType == Qt::RightArrow) {
+        x = width() - (m_size + m_margin);
+        y = (height() - m_size) / 2;
+    } else { // arrowType == LeftArrow
+        x = m_margin;
+        y = (height() - m_size) / 2;
+    }
+
+    /*
+    if (isDown()) {
+        x++;
+        y++;
+    }
+    */
+
+    QStyle::PrimitiveElement e = QStyle::PE_IndicatorArrowLeft;
+    switch (m_arrowType)
+    {
+        case Qt::LeftArrow:
+            e = QStyle::PE_IndicatorArrowLeft;
+            break;
+        case Qt::RightArrow:
+            e = QStyle::PE_IndicatorArrowRight;
+            break;
+        case Qt::UpArrow:
+            e = QStyle::PE_IndicatorArrowUp;
+            break;
+        case Qt::DownArrow:
+            e = QStyle::PE_IndicatorArrowDown;
+            break;
+        case Qt::NoArrow:
+            break;
+    }
+
+    opt.state |= QStyle::State_Enabled;
+    opt.rect   = QRect( x, y, m_size, m_size);
+
+    style()->drawPrimitive( e, &opt, &p, this );
 }
 
 QSize ArrowClickLabel::sizeHint() const
 {
-    return QSize(m_size, m_size);
+    return QSize(m_size + 2*m_margin, m_size + 2*m_margin);
 }
 
 // ----------------------------------- //
@@ -334,29 +389,24 @@ public:
 };
 
 TreeViewComboBox::TreeViewComboBox(QWidget *parent)
-    : QComboBox(parent)
+    : StayPoppedUpComboBox(parent),
+      m_comboLineEdit(0)
 {
 }
 
 void TreeViewComboBox::installView()
 {
-    // Create tree view
-    m_view = new TreeViewComboBoxTreeView;
+    // parent does the heavy work
+    StayPoppedUpComboBox::installView(new TreeViewComboBoxTreeView);
 
-    // set on combo box
-    setView(m_view);
-
-    // Removing these event filters works just as the eventFilter() solution below,
-    // but is much more dependent on Qt internals and not guaranteed to work in the future.
-    //m_view->removeEventFilter(m_view->parent());
-    //m_view->viewport()->removeEventFilter(m_view->parent());
-
-    // Install event filters, _after_ setView() is called
-    m_view->installEventFilter(this);
-    m_view->viewport()->installEventFilter(this);
-
+    // replace line edit
     m_comboLineEdit = new TreeViewComboBoxLineEdit(this);
     setLineEdit(m_comboLineEdit);
+}
+
+void TreeViewComboBox::sendViewportEventToView(QEvent *e)
+{
+    static_cast<TreeViewComboBoxTreeView*>(m_view)->viewportEvent(e);
 }
 
 void TreeViewComboBox::setLineEditText(const QString &text)
@@ -364,34 +414,11 @@ void TreeViewComboBox::setLineEditText(const QString &text)
     m_comboLineEdit->setText(text);
 }
 
-bool TreeViewComboBox::eventFilter(QObject *o, QEvent *e)
+QTreeView *TreeViewComboBox::view() const
 {
-    // The combo box has installed an event filter on the view.
-    // If it catches a valid mouse button release there, it will hide the popup.
-    // Here we prevent this by eating the event ourselves,
-    // and then dispatching it to its destination.
-    if (o == m_view || o == m_view->viewport())
-    {
-        switch (e->type()) {
-            case QEvent::MouseButtonRelease: {
-                QMouseEvent *m = static_cast<QMouseEvent *>(e);
-                if (m_view->isVisible() && m_view->rect().contains(m->pos()))
-                {
-                    if (o == m_view)
-                        o->event(e);
-                    else
-                        // Viewport: Calling event() does not work, viewportEvent() is needed.
-                        // This is the event that gets redirected to the QTreeView finally!
-                        static_cast<TreeViewComboBoxTreeView*>(m_view)->viewportEvent(e);
-                    return true;
-                }
-            }
-            default:
-                break;
-        }
-    }
-    return QComboBox::eventFilter(o, e);
+    return static_cast<QTreeView *>(m_view);
 }
+
 
 }
 
