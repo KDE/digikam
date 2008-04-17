@@ -56,7 +56,7 @@ public:
     void setup();
     void setChainSearchGroup();
 
-    void read(SearchXmlReader &reader);
+    void read(SearchXmlCachingReader &reader);
     void write(SearchXmlWriter &writer);
     void reset();
 
@@ -81,7 +81,7 @@ class SearchGroupLabel : public QWidget
 
 public:
 
-    SearchGroupLabel(QWidget *parent, SearchViewThemedPartsCache *cache);
+    SearchGroupLabel(SearchViewThemedPartsCache *cache, QWidget *parent = 0);
     void addGroupOperatorOption();
 
     void setGroupOperator(SearchXml::Operator op);

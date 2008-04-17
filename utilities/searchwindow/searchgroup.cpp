@@ -57,7 +57,7 @@ void SearchGroup::setup()
     m_layout->setContentsMargins(0, 0, 0, 0);
     m_layout->setSpacing(0);
 
-    m_label = new SearchGroupLabel(this, m_view);
+    m_label = new SearchGroupLabel(m_view, this);
     m_layout->addWidget(m_label);
 
     SearchFieldGroup *group;
@@ -187,7 +187,7 @@ void SearchGroup::setChainSearchGroup()
     m_label->addGroupOperatorOption();
 }
 
-void SearchGroup::read(SearchXmlReader &reader)
+void SearchGroup::read(SearchXmlCachingReader &reader)
 {
     reset();
 
@@ -254,7 +254,7 @@ void SearchGroup::reset()
 // ----------------------------------- //
 
 
-SearchGroupLabel::SearchGroupLabel(QWidget *parent, SearchViewThemedPartsCache *cache)
+SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache *cache, QWidget *parent)
     : QWidget(parent), m_groupOpBox(0), m_themeCache(cache)
 {
     QVBoxLayout  *m_layout = new QVBoxLayout;
