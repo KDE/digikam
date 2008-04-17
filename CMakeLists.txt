@@ -43,7 +43,8 @@ macro_bool_to_01(KDEPIMLIBS_FOUND HAVE_KDEPIMLIBS)
 
 SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 macro_optional_find_package(MarbleWidget)
-macro_bool_to_01(MARBLEWIDGET_FOUND HAVE_MARBLEWIDGET)
+set(HAVE_MARBLEWIDGET 0)
+#macro_bool_to_01(MARBLEWIDGET_FOUND HAVE_MARBLEWIDGET)
 
 macro_optional_find_package(LensFun)
 macro_bool_to_01(LENSFUN_FOUND HAVE_LENSFUN)
@@ -596,6 +597,8 @@ SET(libsearchwindow_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow/searchfieldgroup.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow/searchfields.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow/searchutilities.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow/comboboxutilities.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow/ratingsearchutilities.cpp
    )
 
 ADD_SUBDIRECTORY( data )
