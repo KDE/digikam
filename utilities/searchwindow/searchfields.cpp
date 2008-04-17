@@ -23,14 +23,15 @@
 
 // Qt includes
 
-#include <QLabel>
+#include <QCheckBox>
+#include <QDoubleSpinBox>
 #include <QGridLayout>
 #include <QGroupBox>
-#include <QSpinBox>
-#include <QDoubleSpinBox>
+#include <QLabel>
 #include <QLineEdit>
+#include <QSortFilterProxyModel>
+#include <QSpinBox>
 #include <QTimeEdit>
-#include <QCheckBox>
 #include <QTreeView>
 
 // KDE includes
@@ -131,6 +132,11 @@ SearchField *SearchField::createField(const QString &name, SearchFieldGroup *par
 
     else if (name == "rating")
     {
+        SearchFieldRating *field = new SearchFieldRating(parent);
+        field->setFieldName(name);
+        field->setText(i18n("Rating"), i18n("Return pictures rated at least"));
+        field->setBetweenText(i18nc("Return pictures rated at least...at most...", "at most"));
+        return field;
     }
     else if (name == "creationdate")
     {
@@ -478,7 +484,7 @@ void SearchFieldText::setupValueWidgets(QGridLayout *layout, int row, int column
     layout->addWidget(m_edit, row, column, 1, 3);
 }
 
-void SearchFieldText::read(SearchXmlReader &reader)
+void SearchFieldText::read(SearchXmlCachingReader &reader)
 {
     QString value = reader.value();
     m_edit->setText(value);
@@ -566,7 +572,7 @@ void SearchFieldRangeDate::setBetweenText(const QString &between)
     m_betweenLabel->setText(between);
 }
 
-void SearchFieldRangeDate::read(SearchXmlReader &reader)
+void SearchFieldRangeDate::read(SearchXmlCachingReader &reader)
 {
     SearchXml::Relation relation = reader.fieldRelation();
     QDateTime dt = reader.valueToDateTime();
@@ -705,13 +711,30 @@ void SearchFieldRangeInt::setupValueWidgets(QGridLayout *layout, int row, int co
             this, SLOT(valueChanged()));
 }
 
-void SearchFieldRangeInt::read(SearchXmlReader &reader)
+void SearchFieldRangeInt::read(SearchXmlCachingReader &reader)
 {
     SearchXml::Relation relation = reader.fieldRelation();
-    if (relation == SearchXml::GreaterThanOrEqual || relation == SearchXml::GreaterThan)
-        m_firstBox->setValue(reader.valueToInt());
-    if (relation == SearchXml::LessThanOrEqual || relation == SearchXml::LessThan)
-        m_secondBox->setValue(reader.valueToInt());
+    switch (relation)
+    {
+        case SearchXml::GreaterThanOrEqual:
+            m_firstBox->setValue(reader.valueToInt());
+            break;
+        case SearchXml::GreaterThan:
+            m_firstBox->setValue(reader.valueToInt() - 1);
+            break;
+        case SearchXml::LessThanOrEqual:
+            m_secondBox->setValue(reader.valueToInt());
+            break;
+        case SearchXml::LessThan:
+            m_secondBox->setValue(reader.valueToInt() + 1);
+            break;
+        case SearchXml::Equal:
+            m_firstBox->setValue(reader.valueToInt());
+            m_secondBox->setValue(reader.valueToInt());
+            break;
+        default:
+            break;
+    }
 }
 
 void SearchFieldRangeInt::write(SearchXmlWriter &writer)
@@ -733,7 +756,7 @@ void SearchFieldRangeInt::write(SearchXmlWriter &writer)
         }
         if (m_secondBox->value() != m_secondBox->minimum())
         {
-            writer.writeField(m_name, SearchXml::GreaterThanOrEqual);
+            writer.writeField(m_name, SearchXml::LessThanOrEqual);
             writer.writeValue(m_firstBox->value());
             writer.finishField();
         }
@@ -822,7 +845,7 @@ void SearchFieldRangeDouble::setupValueWidgets(QGridLayout *layout, int row, int
             this, SLOT(valueChanged()));
 }
 
-void SearchFieldRangeDouble::read(SearchXmlReader &reader)
+void SearchFieldRangeDouble::read(SearchXmlCachingReader &reader)
 {
     SearchXml::Relation relation = reader.fieldRelation();
     if (relation == SearchXml::GreaterThanOrEqual || relation == SearchXml::GreaterThan)
@@ -850,7 +873,7 @@ void SearchFieldRangeDouble::write(SearchXmlWriter &writer)
         }
         if (m_secondBox->value() != m_secondBox->minimum())
         {
-            writer.writeField(m_name, SearchXml::GreaterThanOrEqual);
+            writer.writeField(m_name, SearchXml::LessThanOrEqual);
             writer.writeValue(m_firstBox->value() * m_factor);
             writer.finishField();
         }
@@ -1009,7 +1032,7 @@ QString SearchFieldChoice::valueText() const
     }
 }
 
-void SearchFieldChoice::read(SearchXmlReader &reader)
+void SearchFieldChoice::read(SearchXmlCachingReader &reader)
 {
     SearchXml::Relation relation = reader.fieldRelation();
     QList<int> values;
@@ -1099,12 +1122,12 @@ void SearchFieldAlbum::setupValueWidgets(QGridLayout *layout, int row, int colum
 
     if (m_type == TypeAlbum)
     {
-        m_model = new AlbumModel(AlbumModel::IgnoreRootAlbum);
+        m_model = new AlbumModel(AlbumModel::IgnoreRootAlbum, this);
         m_anyText = i18n("Any Album");
     }
     else if (m_type == TypeTag)
     {
-        m_model = new TagModel(AlbumModel::IgnoreRootAlbum);
+        m_model = new TagModel(AlbumModel::IgnoreRootAlbum, this);
         m_anyText = i18n("Any Tag");
     }
 
@@ -1112,8 +1135,14 @@ void SearchFieldAlbum::setupValueWidgets(QGridLayout *layout, int row, int colum
     connect(m_model, SIGNAL(checkStateChanged(Album*, int)),
             this, SLOT(checkStateChanged(Album*, int)));
 
-    m_comboBox->setModel(m_model);
+    QSortFilterProxyModel *sortModel = new QSortFilterProxyModel(this);
+    sortModel->setDynamicSortFilter(true);
+    sortModel->setSourceModel(m_model);
+
+    m_comboBox->setModel(sortModel);
     m_comboBox->installView();
+    m_comboBox->view()->setSortingEnabled(true);
+    m_comboBox->view()->sortByColumn(0, Qt::AscendingOrder);
     updateComboText();
 
     layout->addWidget(m_comboBox, row, column, 1, 3);
@@ -1144,7 +1173,7 @@ void SearchFieldAlbum::updateComboText()
     }
 }
 
-void SearchFieldAlbum::read(SearchXmlReader &reader)
+void SearchFieldAlbum::read(SearchXmlCachingReader &reader)
 {
     int id = reader.valueToInt();
     Album *a = 0;
@@ -1182,6 +1211,144 @@ void SearchFieldAlbum::setValueWidgetsVisible(bool visible)
 
 // ----------------------------------- //
 
+SearchFieldRating::SearchFieldRating(QObject *parent)
+    : SearchField(parent)
+{
+    m_betweenLabel = new QLabel;
+    m_firstBox  = new RatingComboBox;
+    m_secondBox = new RatingComboBox;
+}
+
+void SearchFieldRating::setupValueWidgets(QGridLayout *layout, int row, int column)
+{
+    layout->addWidget(m_firstBox, row, column);
+    layout->addWidget(m_betweenLabel, row, column+1, Qt::AlignHCenter);
+    layout->addWidget(m_secondBox, row, column+2);
+
+    connect(m_firstBox, SIGNAL(ratingValueChanged(int)),
+            this, SLOT(firstValueChanged()));
+
+    connect(m_secondBox, SIGNAL(ratingValueChanged(int)),
+            this, SLOT(secondValueChanged()));
+}
+
+void SearchFieldRating::read(SearchXmlCachingReader &reader)
+{
+    SearchXml::Relation relation = reader.fieldRelation();
+    switch (relation)
+    {
+        case SearchXml::GreaterThanOrEqual:
+            m_firstBox->setRatingValue((RatingComboBox::RatingValue)reader.valueToInt());
+            break;
+        case SearchXml::GreaterThan:
+            m_firstBox->setRatingValue((RatingComboBox::RatingValue)(reader.valueToInt() - 1));
+            break;
+        case SearchXml::LessThanOrEqual:
+            m_secondBox->setRatingValue((RatingComboBox::RatingValue)reader.valueToInt());
+            break;
+        case SearchXml::LessThan:
+            m_secondBox->setRatingValue((RatingComboBox::RatingValue)(reader.valueToInt() + 1));
+            break;
+        case SearchXml::Equal:
+            m_firstBox->setRatingValue((RatingComboBox::RatingValue)reader.valueToInt());
+            m_secondBox->setRatingValue((RatingComboBox::RatingValue)reader.valueToInt());
+            break;
+        default:
+            break;
+    }
+}
+
+void SearchFieldRating::write(SearchXmlWriter &writer)
+{
+    RatingComboBox::RatingValue first = m_firstBox->ratingValue();
+    RatingComboBox::RatingValue second = m_secondBox->ratingValue();
+
+    if (first == RatingComboBox::NoRating)
+    {
+        writer.writeField(m_name, SearchXml::Equal);
+        writer.writeValue(-1);
+        writer.finishField();
+    }
+    else if (first != RatingComboBox::Null
+             && first == second)
+    {
+        writer.writeField(m_name, SearchXml::Equal);
+        writer.writeValue(first);
+        writer.finishField();
+    }
+    else
+    {
+        if (first != RatingComboBox::Null)
+        {
+            writer.writeField(m_name, SearchXml::GreaterThanOrEqual);
+            writer.writeValue(first);
+            writer.finishField();
+        }
+        if (second != RatingComboBox::Null)
+        {
+            writer.writeField(m_name, SearchXml::LessThanOrEqual);
+            writer.writeValue(second);
+            writer.finishField();
+        }
+    }
+}
+
+void SearchFieldRating::setBetweenText(const QString &text)
+{
+    m_betweenLabel->setText(text);
+}
+
+void SearchFieldRating::firstValueChanged()
+{
+    RatingComboBox::RatingValue first = m_firstBox->ratingValue();
+    RatingComboBox::RatingValue second = m_secondBox->ratingValue();
+
+    if (first == RatingComboBox::NoRating)
+    {
+        m_secondBox->setRatingValue(RatingComboBox::Null);
+        m_secondBox->setEnabled(false);
+    }
+    else
+    {
+        m_secondBox->setEnabled(true);
+    }
+
+    if (first >= RatingComboBox::Rating0 && first <= RatingComboBox::Rating5)
+    {
+        if (first > second)
+            m_secondBox->setRatingValue(RatingComboBox::Null);
+    }
+}
+
+void SearchFieldRating::secondValueChanged()
+{
+    RatingComboBox::RatingValue first = m_firstBox->ratingValue();
+    RatingComboBox::RatingValue second = m_secondBox->ratingValue();
+
+    // NoRating is not possible for the second box
+
+    if (second >= RatingComboBox::Rating0 && second <= RatingComboBox::Rating5)
+    {
+        if (first > second)
+            m_firstBox->setRatingValue(second);
+    }
+}
+
+void SearchFieldRating::reset()
+{
+    m_firstBox->setRatingValue(RatingComboBox::Null);
+    m_secondBox->setRatingValue(RatingComboBox::Null);
+}
+
+void SearchFieldRating::setValueWidgetsVisible(bool visible)
+{
+    m_firstBox->setVisible(visible);
+    m_secondBox->setVisible(visible);
+    m_betweenLabel->setVisible(visible);
+}
+
+// ----------------------------------- //
+
 SearchFieldColorDepth::SearchFieldColorDepth(QObject *parent)
     : SearchField(parent),
       m_comboBox(0)
@@ -1201,7 +1368,7 @@ void SearchFieldColorDepth::setupValueWidgets(QGridLayout *layout, int row, int 
     m_comboBox->setCurrentIndex(0);
 }
 
-void SearchFieldColorDepth::read(SearchXmlReader &reader)
+void SearchFieldColorDepth::read(SearchXmlCachingReader &reader)
 {
     SearchXml::Relation relation = reader.fieldRelation();
     if (relation == SearchXml::Equal)

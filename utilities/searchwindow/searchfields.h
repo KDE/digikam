@@ -35,6 +35,7 @@
 
 #include "searchxml.h"
 #include "searchutilities.h"
+#include "ratingsearchutilities.h"
 
 class QLabel;
 class QCheckBox;
@@ -70,7 +71,7 @@ public:
     virtual void setText(const QString &label, const QString &detailLabel);
 
     virtual bool supportsField(const QString &fieldName);
-    virtual void read(SearchXmlReader &reader) = 0;
+    virtual void read(SearchXmlCachingReader &reader) = 0;
     virtual void write(SearchXmlWriter &writer) = 0;
     virtual void reset() = 0;
 
@@ -99,7 +100,7 @@ public:
     SearchFieldText(QObject *parent);
 
     virtual void setupValueWidgets(QGridLayout *layout, int row, int column);
-    virtual void read(SearchXmlReader &reader);
+    virtual void read(SearchXmlCachingReader &reader);
     virtual void write(SearchXmlWriter &writer);
     virtual void setValueWidgetsVisible(bool visible);
     virtual void reset();
@@ -118,7 +119,7 @@ public:
     SearchFieldRangeInt(QObject *parent);
 
     virtual void setupValueWidgets(QGridLayout *layout, int row, int column);
-    virtual void read(SearchXmlReader &reader);
+    virtual void read(SearchXmlCachingReader &reader);
     virtual void write(SearchXmlWriter &writer);
     virtual void reset();
     virtual void setValueWidgetsVisible(bool visible);
@@ -150,7 +151,7 @@ public:
     SearchFieldRangeDouble(QObject *parent);
 
     virtual void setupValueWidgets(QGridLayout *layout, int row, int column);
-    virtual void read(SearchXmlReader &reader);
+    virtual void read(SearchXmlCachingReader &reader);
     virtual void write(SearchXmlWriter &writer);
     virtual void reset();
     virtual void setValueWidgetsVisible(bool visible);
@@ -188,7 +189,7 @@ public:
     SearchFieldRangeDate(QObject *parent, Type type);
 
     virtual void setupValueWidgets(QGridLayout *layout, int row, int column);
-    virtual void read(SearchXmlReader &reader);
+    virtual void read(SearchXmlCachingReader &reader);
     virtual void write(SearchXmlWriter &writer);
     virtual void reset();
     virtual void setValueWidgetsVisible(bool visible);
@@ -215,7 +216,7 @@ public:
 
     SearchFieldChoice(SearchFieldGroup *parent);
 
-    virtual void read(SearchXmlReader &reader);
+    virtual void read(SearchXmlCachingReader &reader);
     virtual void write(SearchXmlWriter &writer);
     virtual void reset();
 
@@ -267,7 +268,7 @@ public:
     SearchFieldAlbum(QObject *parent, Type type);
 
     virtual void setupValueWidgets(QGridLayout *layout, int row, int column);
-    virtual void read(SearchXmlReader &reader);
+    virtual void read(SearchXmlCachingReader &reader);
     virtual void write(SearchXmlWriter &writer);
     virtual void reset();
     virtual void setValueWidgetsVisible(bool visible);
@@ -287,6 +288,34 @@ protected:
     AbstractCheckableAlbumModel *m_model;
 };
 
+class SearchFieldRating : public SearchField
+{
+    Q_OBJECT
+
+public:
+
+    SearchFieldRating(QObject *parent);
+
+    virtual void setupValueWidgets(QGridLayout *layout, int row, int column);
+    virtual void read(SearchXmlCachingReader &reader);
+    virtual void write(SearchXmlWriter &writer);
+    virtual void reset();
+    virtual void setValueWidgetsVisible(bool visible);
+
+    void setBetweenText(const QString &text);
+
+protected slots:
+
+    void firstValueChanged();
+    void secondValueChanged();
+
+protected:
+
+    RatingComboBox *m_firstBox;
+    RatingComboBox *m_secondBox;
+    QLabel         *m_betweenLabel;
+};
+
 class SearchFieldColorDepth : public SearchField
 {
 public:
@@ -294,7 +323,7 @@ public:
     SearchFieldColorDepth(QObject *parent);
 
     virtual void setupValueWidgets(QGridLayout *layout, int row, int column);
-    virtual void read(SearchXmlReader &reader);
+    virtual void read(SearchXmlCachingReader &reader);
     virtual void write(SearchXmlWriter &writer);
     virtual void reset();
     virtual void setValueWidgetsVisible(bool visible);
