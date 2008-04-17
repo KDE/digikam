@@ -105,7 +105,6 @@ ImageEffect_LensCorrection::ImageEffect_LensCorrection(QWidget* parent)
     firstPageLayout->addWidget(m_cameraSelector, 0, 0, 1, 2);
     firstPageLayout->setMargin(spacingHint());
     firstPageLayout->setSpacing(spacingHint());
-    firstPageLayout->setRowStretch(1, 10);
 
     // -------------------------------------------------------------
 
@@ -126,7 +125,6 @@ ImageEffect_LensCorrection::ImageEffect_LensCorrection(QWidget* parent)
     secondPageLayout->addWidget(m_filterGeom, 4, 0, 1, 2);
     secondPageLayout->setMargin(spacingHint());
     secondPageLayout->setSpacing(spacingHint());
-    secondPageLayout->setRowStretch(5, 10);
 
     // -------------------------------------------------------------
 
