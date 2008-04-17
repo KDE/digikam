@@ -20,6 +20,8 @@ CameraGUI      : New bargraph to display camera media free-space.
 AlbumGUI       : Added Thumbbar with Preview mode to easy navigate between pictures.
 
 ImageEditor    : Added Thumbbar to easy navigate between pictures.
+ImageEditor    : new plugin based on LensFun library (http://lensfun.berlios.de) to correct lens chromatic 
+                 and distorsion aberrations automatically.
 
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
@@ -38,4 +40,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 012 ==> 148502 : Show rating in embedded preview / slideshow.
 013 ==> 155408 : Thumbbar in the album view.
 014 ==> 138290 : GPSSync plugin integration in the side bar.
-015 ==> 
+015 ==> 098651 : Image Plugin filter based on clens.
+016 ==> 
