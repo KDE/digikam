@@ -114,7 +114,7 @@
                 <property name="whatsThis" stdset="0">
                     <string>&lt;qt&gt;&lt;p&gt;If this box is checked, files will be &lt;b&gt;permanently removed&lt;/b&gt; instead of being placed in the Trash Bin.&lt;/p&gt;
     
-    &lt;p&gt;&lt;em&gt;Use this option with caution&lt;/em&gt;: Most filesystems are unable to reliably undelete deleted files.&lt;/p&gt;&lt;/qt&gt;</string>
+    &lt;p&gt;&lt;em&gt;Use this option with caution&lt;/em&gt;: most filesystems are unable to undelete deleted files reliably.&lt;/p&gt;&lt;/qt&gt;</string>
                 </property>
             </widget>
             <widget class="QCheckBox">

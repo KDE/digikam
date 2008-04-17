@@ -109,16 +109,16 @@ SetupToolTip::SetupToolTip(QWidget* parent)
     QWhatsThis::add( d->showFileNameBox, i18n("<p>Set this option to display the image file name."));
 
     d->showFileDateBox = new QCheckBox(i18n("Show file date"), d->fileSettingBox);
-    QWhatsThis::add( d->showFileDateBox, i18n("<p>Set this option to display image file date."));
+    QWhatsThis::add( d->showFileDateBox, i18n("<p>Set this option to display the image file date."));
 
     d->showFileSizeBox = new QCheckBox(i18n("Show file size"), d->fileSettingBox);
-    QWhatsThis::add( d->showFileSizeBox, i18n("<p>Set this option to display image file size."));
+    QWhatsThis::add( d->showFileSizeBox, i18n("<p>Set this option to display the image file size."));
 
     d->showImageTypeBox = new QCheckBox(i18n("Show image type"), d->fileSettingBox);
-    QWhatsThis::add( d->showImageTypeBox, i18n("<p>Set this option to display image type."));
+    QWhatsThis::add( d->showImageTypeBox, i18n("<p>Set this option to display the image type."));
 
     d->showImageDimBox = new QCheckBox(i18n("Show image dimensions"), d->fileSettingBox);
-    QWhatsThis::add( d->showImageDimBox, i18n("<p>Set this option to display image dimensions in pixels."));
+    QWhatsThis::add( d->showImageDimBox, i18n("<p>Set this option to display the image dimensions in pixels."));
 
     layout->addWidget(d->fileSettingBox);
 
