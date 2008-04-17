@@ -60,6 +60,12 @@ protected:
     virtual void mouseMoveEvent(QMouseEvent*);
     virtual void paintEvent(QPaintEvent*);
 
+    QPixmap starPixmap() const;
+    QPixmap starPixmapFilled() const;
+    QPixmap starPixmapDisabled() const;
+
+    void regeneratePixmaps();
+
 private slots:
 
     void slotThemeChanged();

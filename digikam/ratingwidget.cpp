@@ -176,6 +176,26 @@ void RatingWidget::paintEvent(QPaintEvent*)
     p.end();
 }
 
+QPixmap RatingWidget::starPixmapDisabled() const
+{
+    return d->disPixmap;
+}
+
+QPixmap RatingWidget::starPixmapFilled() const
+{
+    return d->selPixmap;
+}
+
+QPixmap RatingWidget::starPixmap() const
+{
+    return d->regPixmap;
+}
+
+void RatingWidget::regeneratePixmaps()
+{
+    slotThemeChanged();
+}
+
 void RatingWidget::slotThemeChanged()
 {
     d->regPixmap = QPixmap(15, 15);
@@ -187,22 +207,22 @@ void RatingWidget::slotThemeChanged()
 
     QPainter p1(&d->regPixmap);
     p1.setRenderHint(QPainter::Antialiasing, true);
-    p1.setBrush(palette().color(QPalette::Active, QPalette::Background));
-    p1.setPen(palette().color(QPalette::Active, QPalette::Foreground));
+    p1.setBrush(palette().color(QPalette::Active, backgroundRole()));
+    p1.setPen(palette().color(QPalette::Active, foregroundRole()));
     p1.drawPolygon(d->starPolygon, Qt::WindingFill);
     p1.end();
 
     QPainter p2(&d->selPixmap);
     p2.setRenderHint(QPainter::Antialiasing, true);
     p2.setBrush(ThemeEngine::instance()->textSpecialRegColor());
-    p2.setPen(palette().color(QPalette::Active, QPalette::Foreground));
+    p2.setPen(palette().color(QPalette::Active, foregroundRole()));
     p2.drawPolygon(d->starPolygon, Qt::WindingFill);
     p2.end();
 
     QPainter p3(&d->disPixmap);
     p3.setRenderHint(QPainter::Antialiasing, true);
-    p3.setBrush(palette().color(QPalette::Disabled, QPalette::Background));
-    p3.setPen(palette().color(QPalette::Disabled, QPalette::Foreground));
+    p3.setBrush(palette().color(QPalette::Disabled, backgroundRole()));
+    p3.setPen(palette().color(QPalette::Disabled, foregroundRole()));
     p3.drawPolygon(d->starPolygon, Qt::WindingFill);
     p3.end();
 
