@@ -108,7 +108,7 @@
       <property name="whatsThis" >
        <string>&lt;qt>&lt;p>If this box is checked, files will be &lt;b>permanently removed&lt;/b> instead of being placed in the Trash Bin.&lt;/p>
     
-    &lt;p>&lt;em>Use this option with caution&lt;/em>: Most filesystems are unable to reliably undelete deleted files.&lt;/p>&lt;/qt></string>
+    &lt;p>&lt;em>Use this option with caution&lt;/em>: most filesystems are unable to undelete deleted files reliably.&lt;/p>&lt;/qt></string>
       </property>
       <property name="text" >
        <string>&amp;Delete files instead of moving them to the trash</string>

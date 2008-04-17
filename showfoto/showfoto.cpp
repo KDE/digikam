@@ -1171,7 +1171,7 @@ void ShowFoto::slideShow(bool startWithCurrent, Digikam::SlideShowSettings& sett
     Digikam::DMetadata meta;
 
     m_nameLabel->progressBarMode(Digikam::StatusProgressBar::CancelProgressBarMode, 
-                                 i18n("Prepare slideshow. Please wait..."));
+                                 i18n("Preparing slideshow. Please wait..."));
 
     for (KUrl::List::Iterator it = settings.fileList.begin() ; 
          !m_cancelSlideShow && (it != settings.fileList.end()) ; ++it)

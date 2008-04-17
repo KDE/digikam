@@ -97,7 +97,7 @@ SetupToolTip::SetupToolTip(QWidget* parent)
     layout->setSpacing( KDialog::spacingHint() );
 
     d->showToolTipsBox = new QCheckBox(i18n("Show Thumbbar items toolti&ps"), this);
-    d->showToolTipsBox->setWhatsThis( i18n("<p>Set this option to display image information when "
+    d->showToolTipsBox->setWhatsThis( i18n("<p>Set this option to display the image information when "
                                            "the mouse hovers over a thumbbar item."));
 
     layout->addWidget(d->showToolTipsBox);
@@ -109,19 +109,19 @@ SetupToolTip::SetupToolTip(QWidget* parent)
     gLayout1->setSpacing( KDialog::spacingHint() );
 
     d->showFileNameBox = new QCheckBox(i18n("Show file name"), d->fileSettingBox);
-    d->showFileNameBox->setWhatsThis( i18n("<p>Set this option to display image file name."));
+    d->showFileNameBox->setWhatsThis( i18n("<p>Set this option to display the image file name."));
 
     d->showFileDateBox = new QCheckBox(i18n("Show file date"), d->fileSettingBox);
-    d->showFileDateBox->setWhatsThis( i18n("<p>Set this option to display image file date."));
+    d->showFileDateBox->setWhatsThis( i18n("<p>Set this option to display the image file date."));
 
     d->showFileSizeBox = new QCheckBox(i18n("Show file size"), d->fileSettingBox);
-    d->showFileSizeBox->setWhatsThis( i18n("<p>Set this option to display image file size."));
+    d->showFileSizeBox->setWhatsThis( i18n("<p>Set this option to display the image file size."));
 
     d->showImageTypeBox = new QCheckBox(i18n("Show image type"), d->fileSettingBox);
-    d->showImageTypeBox->setWhatsThis( i18n("<p>Set this option to display image type."));
+    d->showImageTypeBox->setWhatsThis( i18n("<p>Set this option to display the image type."));
 
     d->showImageDimBox = new QCheckBox(i18n("Show image dimensions"), d->fileSettingBox);
-    d->showImageDimBox->setWhatsThis( i18n("<p>Set this option to display image dimensions in pixels."));
+    d->showImageDimBox->setWhatsThis( i18n("<p>Set this option to display the image dimensions in pixels."));
 
     gLayout1->addWidget(d->showFileNameBox);
     gLayout1->addWidget(d->showFileDateBox);
