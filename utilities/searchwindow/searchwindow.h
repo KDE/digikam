@@ -51,12 +51,14 @@ public:
     ~SearchWindow();
 
     /**
-     * Read the given search into the search widgets
+     * Read the given search into the search widgets.
+     * The id will be emitted with the searchEdited signal.
      */
     void readSearch(int id, const QString &query);
 
     /**
-     * Reset the search widget to an empty search
+     * Reset the search widget to an empty search.
+     * Current id is -1.
      */
     void reset();
 
@@ -72,6 +74,12 @@ signals:
      * The given query is the same as search().
      */
     void searchEdited(int id, const QString &query);
+
+protected slots:
+
+    void searchOk();
+    void searchCancel();
+    void searchTryout();
 
 private:
 

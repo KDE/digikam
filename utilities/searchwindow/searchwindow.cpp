@@ -47,14 +47,17 @@ public:
 
     SearchWindowPriv()
     {
-        scrollArea = 0;
-        searchView = 0;
-        currentId  = -1;
+        scrollArea      = 0;
+        searchView      = 0;
+        currentId       = -1;
+        hasTouchedXml   = false;
     }
 
     QScrollArea *scrollArea;
     SearchView  *searchView;
     int          currentId;
+    bool         hasTouchedXml;
+    QString      oldXml;
 };
 
 SearchWindow::SearchWindow()
@@ -66,6 +69,7 @@ SearchWindow::SearchWindow()
 
     d->scrollArea = new QScrollArea(this);
     d->scrollArea->setWidgetResizable(true);
+    d->scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 
     d->searchView = new SearchView;
     d->searchView->setup();
@@ -81,6 +85,15 @@ SearchWindow::SearchWindow()
     setVisible(false);
     setWindowTitle(i18n("Advanced Search"));
     resize(800, 600);
+
+    connect(d->searchView, SIGNAL(searchOk()),
+            this, SLOT(searchOk()));
+
+    connect(d->searchView, SIGNAL(searchCancel()),
+            this, SLOT(searchCancel()));
+
+    connect(d->searchView, SIGNAL(searchTryout()),
+            this, SLOT(searchTryout()));
 }
 
 SearchWindow::~SearchWindow()
@@ -91,11 +104,16 @@ SearchWindow::~SearchWindow()
 void SearchWindow::readSearch(int id, const QString &xml)
 {
     d->currentId = id;
+    d->hasTouchedXml = false;
+    d->oldXml = xml;
     d->searchView->read(xml);
 }
 
 void SearchWindow::reset()
 {
+    d->currentId = -1;
+    d->hasTouchedXml = false;
+    d->oldXml = QString();
     d->searchView->read(QString());
 }
 
@@ -103,6 +121,31 @@ QString SearchWindow::search()
 {
     return d->searchView->write();
 }
+
+void SearchWindow::searchOk()
+{
+    d->hasTouchedXml = true;
+    emit searchEdited(d->currentId, search());
+    hide();
+}
+
+void SearchWindow::searchCancel()
+{
+    // redo changes by tryout
+    if (d->hasTouchedXml)
+    {
+        emit searchEdited(d->currentId, d->oldXml);
+        d->hasTouchedXml = false;
+    }
+    hide();
+}
+
+void SearchWindow::searchTryout()
+{
+    d->hasTouchedXml = true;
+    emit searchEdited(d->currentId, search());
+}
+
 
 }
 
