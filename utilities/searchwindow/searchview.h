@@ -28,6 +28,7 @@
 
 #include <QWidget>
 #include <QList>
+#include <QCache>
 
 // KDE includes
 
@@ -35,11 +36,15 @@
 
 
 class QVBoxLayout;
+class KDialogButtonBox;
+class KPushButton;
 
 namespace Digikam
 {
 
 class SearchGroup;
+class SearchViewBottomBar;
+class SearchClickLabel;
 
 class SearchViewThemedPartsCache
 {
@@ -47,6 +52,7 @@ public:
 
     virtual ~SearchViewThemedPartsCache() {}
     virtual QPixmap groupLabelPixmap(int w, int h) = 0;
+    virtual QPixmap bottomBarPixmap(int w, int h) = 0;
 };
 
 class SearchView : public QWidget, public SearchViewThemedPartsCache
@@ -67,19 +73,55 @@ public slots:
 
     SearchGroup *addSearchGroup();
 
+signals:
+
+    void searchOk();
+    void searchTryout();
+    void searchCancel();
+
 protected slots:
 
     void setTheme();
+    void slotAddGroupButton();
 
 public:
 
     QPixmap groupLabelPixmap(int w, int h);
+    QPixmap bottomBarPixmap(int w, int h);
 
 protected:
 
+    QPixmap cachedBannerPixmap(int w, int h);
+
     QVBoxLayout         *m_layout;
     QList<SearchGroup *> m_groups;
-    QPixmap              m_cachedGroupLabelPixmap;
+    SearchViewBottomBar *m_bar;
+    QCache<QString, QPixmap> m_pixmapCache;
+};
+
+class SearchViewBottomBar : public QWidget
+{
+    Q_OBJECT
+
+public:
+
+    SearchViewBottomBar(SearchViewThemedPartsCache * cache, QWidget *parent = 0);
+
+signals:
+
+    void okPressed();
+    void cancelPressed();
+    void tryoutPressed();
+    void addGroupPressed();
+
+protected:
+
+    virtual void paintEvent(QPaintEvent *);
+
+    SearchViewThemedPartsCache *m_themeCache;
+    QHBoxLayout                *m_mainLayout;
+    KDialogButtonBox           *m_buttonBox;
+    KPushButton                *m_addGroupsButton;
 };
 
 }

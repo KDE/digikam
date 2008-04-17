@@ -23,11 +23,15 @@
 
 // Qt includes
 
+#include <QPainter>
 #include <QVBoxLayout>
 
 // KDE includes
 
+#include <kdialogbuttonbox.h>
 #include <klocale.h>
+#include <kpushbutton.h>
+#include <kstandardguiitem.h>
 
 // Local includes
 
@@ -36,6 +40,7 @@
 #include "themeengine.h"
 #include "searchwindow.h"
 #include "searchgroup.h"
+#include "searchutilities.h"
 #include "searchview.h"
 #include "searchview.moc"
 
@@ -45,6 +50,7 @@ namespace Digikam
 
 SearchView::SearchView()
 {
+    m_pixmapCache.setMaxCost(4);
 }
 
 void SearchView::setup()
@@ -57,15 +63,33 @@ void SearchView::setup()
     m_layout->setContentsMargins(0, 0, 0, 0);
     m_layout->setSpacing(0);
 
+    m_bar = new SearchViewBottomBar(this);
+    // add stretch at bottom
+    m_layout->addStretch(1);
+    // add bottom bar
+    m_layout->addWidget(m_bar);
+
     // create initial group
     addSearchGroup();
 
     setLayout(m_layout);
+
+    connect(m_bar, SIGNAL(okPressed()),
+            this, SIGNAL(searchOk()));
+
+    connect(m_bar, SIGNAL(cancelPressed()),
+            this, SIGNAL(searchCancel()));
+
+    connect(m_bar, SIGNAL(tryoutPressed()),
+            this, SIGNAL(searchTryout()));
+
+    connect(m_bar, SIGNAL(addGroupPressed()),
+            this, SLOT(slotAddGroupButton()));
 }
 
 void SearchView::read(const QString &xml)
 {
-    SearchXmlReader reader(xml);
+    SearchXmlCachingReader reader(xml);
 
     int groupIndex = 0;
     SearchXml::Element element;
@@ -99,12 +123,18 @@ SearchGroup *SearchView::addSearchGroup()
 {
     SearchGroup *group = new SearchGroup(this);
     group->setup();
-    m_layout->addWidget(group);
+    // insert at last-but-two position; leave bottom bar and stretch and the bottom
+    m_layout->insertWidget(m_layout->count()-2, group);
     m_groups << group;
     if (m_groups.size() > 1)
         group->setChainSearchGroup();
     //group->setBackgroundRole(QPalette::Background);
     return group;
+}
+
+void SearchView::slotAddGroupButton()
+{
+    addSearchGroup();
 }
 
 QString SearchView::write()
@@ -134,7 +164,8 @@ void SearchView::setTheme()
     }
 
     QString sheet =
-//             ".SearchView { background-color: " + ThemeEngine::instance()->baseColor().name() + "; } "
+            // ".SearchView { background-color: " + ThemeEngine::instance()->baseColor().name() + "; } "
+            //"#SearchViewBottomBar "
             "#SearchGroupLabel_MainLabel "
             " { font-weight: bold; font-size: "
               + fontSizeLarger + ";"
@@ -161,15 +192,69 @@ void SearchView::setTheme()
     QWidget::setStyleSheet(sheet);
 }
 
+QPixmap SearchView::cachedBannerPixmap(int w, int h)
+{
+    QString key = "BannerPixmap-" + QString::number(w) + "-" + QString::number(h);
+    QPixmap *pix = m_pixmapCache.object(key);
+    if (!pix)
+    {
+        QPixmap pixmap = ThemeEngine::instance()->bannerPixmap(w, h);
+        m_pixmapCache.insert(key, new QPixmap(pixmap));
+        return pixmap;
+    }
+    else
+    {
+        return *pix;
+    }
+}
+
 QPixmap SearchView::groupLabelPixmap(int w, int h)
 {
-    if (m_cachedGroupLabelPixmap.isNull()
-        || m_cachedGroupLabelPixmap.width() != w
-        || m_cachedGroupLabelPixmap.height() != h)
-    {
-        m_cachedGroupLabelPixmap = ThemeEngine::instance()->bannerPixmap(w, h);
-    }
-    return m_cachedGroupLabelPixmap;
+    return cachedBannerPixmap(w, h);
+}
+
+QPixmap SearchView::bottomBarPixmap(int w, int h)
+{
+    return cachedBannerPixmap(w, h);
+}
+
+// ------------------------------------- //
+
+SearchViewBottomBar::SearchViewBottomBar(SearchViewThemedPartsCache * cache, QWidget *parent)
+    : QWidget(parent),
+      m_themeCache(cache)
+{
+    m_mainLayout = new QHBoxLayout;
+
+    m_addGroupsButton = new KPushButton(KStandardGuiItem::add());
+    m_addGroupsButton->setText(i18n("Add Search Group"));
+    connect(m_addGroupsButton, SIGNAL(leftClicked()),
+            this, SIGNAL(addGroupPressed()));
+    m_mainLayout->addWidget(m_addGroupsButton, 0, Qt::AlignLeft);
+
+    m_buttonBox = new KDialogButtonBox(this);
+    m_buttonBox->addButton(KStandardGuiItem::ok(),
+                           QDialogButtonBox::AcceptRole,
+                           this,
+                           SIGNAL(okPressed()));
+    m_buttonBox->addButton(KStandardGuiItem::cancel(),
+                           QDialogButtonBox::RejectRole,
+                           this,
+                           SIGNAL(cancelPressed()));
+    m_buttonBox->addButton(KStandardGuiItem::test(),
+                           QDialogButtonBox::ApplyRole,
+                           this,
+                           SIGNAL(tryoutPressed()));
+    m_mainLayout->addWidget(m_buttonBox, 0, Qt::AlignRight);
+
+    setLayout(m_mainLayout);
+}
+
+void SearchViewBottomBar::paintEvent(QPaintEvent *)
+{
+    // paint themed background
+    QPainter p(this);
+    p.drawPixmap(0, 0, m_themeCache->bottomBarPixmap(width(), height()));
 }
 
 }
