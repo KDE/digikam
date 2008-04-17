@@ -125,10 +125,10 @@
                     <string>Do not &amp;ask again</string>
                 </property>
                 <property name="toolTip" stdset="0">
-                    <string>If checked, this dialog will no longer be shown and files will be directly moved to the Trash Bin</string>
+                    <string>If checked, this dialog will no longer be shown, and files will be directly moved to the Trash Bin</string>
                 </property>
                 <property name="whatsThis" stdset="0">
-                    <string>&lt;qt&gt;&lt;p&gt;If this box is checked, this dialog will not be shown again in the future, files will be directly moved to the Trash Bin&lt;/p&gt;</string>
+                    <string>&lt;qt&gt;&lt;p&gt;If this box is checked, this dialog will no longer be shown, and files will be directly moved to the Trash Bin&lt;/p&gt;</string>
                 </property>
             </widget>
         </widget>

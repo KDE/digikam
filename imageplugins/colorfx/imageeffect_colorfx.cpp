@@ -80,7 +80,7 @@ ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent)
     KAboutData *about = new KAboutData("digikam",
                             I18N_NOOP("Color Effects"),
                             digikam_version,
-                            I18N_NOOP("A digiKam plugin to apply special color effects on an image."),
+                            I18N_NOOP("A digiKam plugin to apply special color effects to an image."),
                             KAboutData::License_GPL,
                             "(c) 2004-2005, Renchi Raju\n(c) 2006-2008, Gilles Caulier",
                             0,
@@ -175,7 +175,7 @@ ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent)
     m_effectType->insertItem( i18n("Vivid") );
     m_effectType->insertItem( i18n("Neon") );    
     m_effectType->insertItem( i18n("Find Edges") );    
-    QWhatsThis::add( m_effectType, i18n("<p>Select the effect type to apply on the image here.<p>"
+    QWhatsThis::add( m_effectType, i18n("<p>Select the effect type to apply to the image here.<p>"
                                         "<b>Solarize</b>: simulates solarization of photograph.<p>"
                                         "<b>Vivid</b>: simulates the Velvia(tm) slide film colors.<p>"
                                         "<b>Neon</b>: coloring the edges in a photograph to "
@@ -198,7 +198,7 @@ ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent)
     m_iterationInput = new KIntNumInput(gboxSettings);
     m_iterationInput->setRange(0, 100, 1, true);
     QWhatsThis::add( m_iterationInput, i18n("<p>This value controls the number of iterations "
-                                            "to use with Neon and Find Edges effects."));
+                                            "to use with the Neon and Find Edges effects."));
     
     gridSettings->addMultiCellWidget(m_iterationLabel, 7, 7, 0, 4);
     gridSettings->addMultiCellWidget(m_iterationInput, 8, 8, 0, 4);

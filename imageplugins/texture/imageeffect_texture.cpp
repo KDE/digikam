@@ -103,7 +103,7 @@ ImageEffect_Texture::ImageEffect_Texture(QWidget* parent)
     m_textureType->insertItem( i18n("Wall") );
     m_textureType->insertItem( i18n("Moss") );
     m_textureType->insertItem( i18n("Stone") );
-    QWhatsThis::add( m_textureType, i18n("<p>Set here the texture type to apply on image."));
+    QWhatsThis::add( m_textureType, i18n("<p>Set here the texture type to apply to the image."));
     
     gridSettings->addMultiCellWidget(label1, 0, 0, 0, 0);
     gridSettings->addMultiCellWidget(m_textureType, 0, 0, 1, 1);
