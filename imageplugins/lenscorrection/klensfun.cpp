@@ -182,8 +182,17 @@ void KLFDeviceSelector::findFromExif()
 {
 //    KLFDeviceSelector::Device firstDevice; // empty strings
 //    setDevice( firstDevice );
-    m_ExifUsage->setCheckState( Qt::Checked );
-    m_ExifUsage->setEnabled( true );
+
+    if (m_ExivMeta.isEmpty())
+    {
+        m_ExifUsage->setCheckState(Qt::Unchecked);
+        m_ExifUsage->setEnabled(false);
+    }
+    else
+    {
+        m_ExifUsage->setCheckState(Qt::Checked);
+        m_ExifUsage->setEnabled(true);
+    }
 
     QString Lens, Maker, Model;
     Maker = m_ExivMeta.getExifTagString("Exif.Image.Make");
@@ -240,9 +249,10 @@ void KLFDeviceSelector::findFromExif()
     m_klf->m_aperature       = m_ExivMeta.getExifTagString("Exif.Photo.ApertureValue").mid(1).toFloat();
     m_klf->m_subjectDistance = m_ExivMeta.getExifTagString("Exif.CanonSi.SubjectDistance").toFloat();
 
-    DDebug() << "Focal Length: " << temp << "|" << m_klf->m_focalLength 
-             << "Aperture: " << m_klf->m_aperature << "Distance: " 
-             << m_klf->m_subjectDistance;
+    DDebug() << "Focal Length: "     << m_klf->m_focalLength 
+             << "Aperture: "         << m_klf->m_aperature 
+             << "Subject Distance: " << m_klf->m_subjectDistance
+             << endl;
 }
 
 void KLFDeviceSelector::slotUseExif(int mode)
