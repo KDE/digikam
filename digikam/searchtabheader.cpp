@@ -52,6 +52,7 @@
 #include "searchtabheader.h"
 #include "searchtabheader.moc"
 
+
 namespace Digikam
 {
 
@@ -251,7 +252,6 @@ SearchTabHeader::SearchTabHeader(QWidget *parent)
 
     connect(d->storedAdvancedEditLabel, SIGNAL(clicked()),
             this, SLOT(editStoredAdvancedSearch()));
-
 }
 
 SearchTabHeader::~SearchTabHeader()
@@ -350,20 +350,7 @@ void SearchTabHeader::keywordChanged()
     else
         d->oldKeywordContent = keywords;
 
-    SAlbum *album = AlbumManager::instance()->findSAlbum(SearchFolderView::currentSearchViewSearchName());
-    if (album)
-    {
-        AlbumManager::instance()->updateSAlbum(album, queryFromKeywords(keywords),
-                                               SearchFolderView::currentSearchViewSearchName(),
-                                               DatabaseSearch::KeywordSearch);
-    }
-    else
-    {
-        album = AlbumManager::instance()->createSAlbum(SearchFolderView::currentSearchViewSearchName(),
-                                                       DatabaseSearch::KeywordSearch, queryFromKeywords(keywords));
-    }
-
-    emit searchShallBeSelected(album);
+    setCurrentSearch(DatabaseSearch::KeywordSearch, queryFromKeywords(keywords));
 }
 
 void SearchTabHeader::editCurrentAdvancedSearch()
@@ -436,12 +423,37 @@ void SearchTabHeader::editStoredAdvancedSearch()
 
 void SearchTabHeader::advancedSearchEdited(int id, const QString &query)
 {
-    SAlbum *album = AlbumManager::instance()->findSAlbum(id);
+    if (id == -1)
+    {
+        setCurrentSearch(DatabaseSearch::AdvancedSearch, query);
+    }
+    else
+    {
+        SAlbum *album = AlbumManager::instance()->findSAlbum(id);
+        if (album)
+        {
+            AlbumManager::instance()->updateSAlbum(album, query, album->title(), DatabaseSearch::AdvancedSearch);
+            emit searchShallBeSelected(album);
+        }
+    }
+}
+
+void SearchTabHeader::setCurrentSearch(DatabaseSearch::Type type, const QString &query, bool selectCurrentAlbum)
+{
+    SAlbum *album = AlbumManager::instance()->findSAlbum(SearchFolderView::currentSearchViewSearchName());
     if (album)
     {
-        AlbumManager::instance()->updateSAlbum(album, query, album->title(), DatabaseSearch::AdvancedSearch);
-        emit searchShallBeSelected(album);
+        AlbumManager::instance()->updateSAlbum(album, query,
+                                               SearchFolderView::currentSearchViewSearchName(),
+                                               type);
     }
+    else
+    {
+        album = AlbumManager::instance()->createSAlbum(SearchFolderView::currentSearchViewSearchName(),
+                                                       type, query);
+    }
+    if (selectCurrentAlbum)
+        emit searchShallBeSelected(album);
 }
 
 QString SearchTabHeader::queryFromKeywords(const QString &keywords)

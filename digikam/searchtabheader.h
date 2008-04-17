@@ -30,6 +30,8 @@
 
 // Local includes
 
+#include "albuminfo.h"
+
 namespace Digikam
 {
 
@@ -68,6 +70,7 @@ private slots:
 
 private:
 
+    void setCurrentSearch(DatabaseSearch::Type type, const QString &query, bool selectCurrentAlbum = true);
     QString queryFromKeywords(const QString &keywords);
     QString keywordsFromQuery(const QString &query);
     SearchWindow *searchWindow();
