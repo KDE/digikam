@@ -91,7 +91,7 @@ private:
     const lfLens *m_usedLens;
     float         m_cropFactor;
     float         m_focalLength;
-    float         m_aperature;
+    float         m_aperture;
     float         m_subjectDistance;
 };
 
@@ -159,14 +159,14 @@ signals:
 
 private:
 
-    QCheckBox           *m_ExifUsage;
+    QCheckBox           *m_exifUsage;
 
-    KComboBox           *m_Maker;
-    KComboBox           *m_Model;
-    KComboBox           *m_Lens;
+    KComboBox           *m_maker;
+    KComboBox           *m_model;
+    KComboBox           *m_lens;
 
     KLensFun            *m_klf;
-    KExiv2Iface::KExiv2  m_ExivMeta;
+    KExiv2Iface::KExiv2  m_metadata;
 };
 
 }  // NameSpace DigikamLensCorrectionImagesPlugin

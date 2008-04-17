@@ -103,7 +103,7 @@ bool KLensFun::supportsVig()
     if (m_usedLens == NULL) return false;
 
     lfLensCalibVignetting res;
-    return m_usedLens->InterpolateVignetting( m_focalLength, m_aperature, m_subjectDistance, res );
+    return m_usedLens->InterpolateVignetting( m_focalLength, m_aperture, m_subjectDistance, res );
 }
 
 #if 0
@@ -121,40 +121,40 @@ KLFDeviceSelector::KLFDeviceSelector(QWidget *parent)
 
     QGridLayout* gridSettings = new QGridLayout(this);
 
-    m_ExifUsage        = new QCheckBox(i18n("Use Exif Data"), parent);
-    m_Maker            = new KComboBox(parent);
-    m_Model            = new KComboBox(parent);
-    m_Lens             = new KComboBox(parent);
+    m_exifUsage        = new QCheckBox(i18n("Use Exif Data"), parent);
+    m_maker            = new KComboBox(parent);
+    m_model            = new KComboBox(parent);
+    m_lens             = new KComboBox(parent);
     QLabel *makeLabel  = new QLabel(i18n("Make:"), parent);
     QLabel *modelLabel = new QLabel(i18n("Model:"), parent);
     QLabel *lensLabel  = new QLabel(i18n("Lens:"), parent);
 
-    m_ExifUsage->setEnabled(false);
-    m_ExifUsage->setCheckState(Qt::Unchecked);
-    m_Maker->setInsertPolicy(QComboBox::InsertAlphabetically);
-    m_Model->setInsertPolicy(QComboBox::InsertAlphabetically);
-    m_Lens->setInsertPolicy(QComboBox::InsertAlphabetically);
+    m_exifUsage->setEnabled(false);
+    m_exifUsage->setCheckState(Qt::Unchecked);
+    m_maker->setInsertPolicy(QComboBox::InsertAlphabetically);
+    m_model->setInsertPolicy(QComboBox::InsertAlphabetically);
+    m_lens->setInsertPolicy(QComboBox::InsertAlphabetically);
 
-    gridSettings->addWidget(m_ExifUsage);
+    gridSettings->addWidget(m_exifUsage);
     gridSettings->addWidget(makeLabel);
-    gridSettings->addWidget(m_Maker);
+    gridSettings->addWidget(m_maker);
     gridSettings->addWidget(modelLabel);
-    gridSettings->addWidget(m_Model);
+    gridSettings->addWidget(m_model);
     gridSettings->addWidget(lensLabel);
-    gridSettings->addWidget(m_Lens);
+    gridSettings->addWidget(m_lens);
     gridSettings->setMargin(0);
     gridSettings->setSpacing(KDialog::spacingHint());
 
-    connect(m_ExifUsage, SIGNAL(stateChanged(int)), 
+    connect(m_exifUsage, SIGNAL(stateChanged(int)), 
             this, SLOT(slotUseExif(int)));
 
-    connect(m_Maker, SIGNAL(currentIndexChanged(int)), 
+    connect(m_maker, SIGNAL(currentIndexChanged(int)), 
             this, SLOT(slotUpdateCombos()));
 
-    connect(m_Model, SIGNAL(currentIndexChanged(int)), 
+    connect(m_model, SIGNAL(currentIndexChanged(int)), 
             this, SLOT(slotUpdateLensCombo()));
 
-    connect(m_Lens, SIGNAL(currentIndexChanged(int)), 
+    connect(m_lens, SIGNAL(currentIndexChanged(int)), 
             this, SLOT(slotLensSelected()));
 
     KLFDeviceSelector::Device firstDevice; // empty strings
@@ -174,7 +174,7 @@ KLFDeviceSelector::Device KLFDeviceSelector::getDevice()
 
 void KLFDeviceSelector::findFromExif(KExiv2Iface::KExiv2 &meta)
 {
-    m_ExivMeta = meta;
+    m_metadata = meta;
     findFromExif();
 }
 
@@ -183,40 +183,40 @@ void KLFDeviceSelector::findFromExif()
 //    KLFDeviceSelector::Device firstDevice; // empty strings
 //    setDevice( firstDevice );
 
-    if (m_ExivMeta.isEmpty())
+    if (m_metadata.isEmpty())
     {
-        m_ExifUsage->setCheckState(Qt::Unchecked);
-        m_ExifUsage->setEnabled(false);
+        m_exifUsage->setCheckState(Qt::Unchecked);
+        m_exifUsage->setEnabled(false);
     }
     else
     {
-        m_ExifUsage->setCheckState(Qt::Checked);
-        m_ExifUsage->setEnabled(true);
+        m_exifUsage->setCheckState(Qt::Checked);
+        m_exifUsage->setEnabled(true);
     }
 
     QString Lens, Maker, Model;
-    Maker = m_ExivMeta.getExifTagString("Exif.Image.Make");
-    Model = m_ExivMeta.getExifTagString("Exif.Image.Model");
+    Maker = m_metadata.getExifTagString("Exif.Image.Make");
+    Model = m_metadata.getExifTagString("Exif.Image.Model");
 
     // Not standarized, maybe such a thing should go to libexiv2 instead
     // please run "exiv2 -p t some_image_file.jpeg" and send me the data
     // of your camera, if this does not work for you, thanks. adrian@suse.de
     if (Maker.toUpper() == "CANON")
-        Lens = m_ExivMeta.getExifTagString("Exif.Canon.0x0095");
+        Lens = m_metadata.getExifTagString("Exif.Canon.0x0095");
 
-    int makerIdx = m_Maker->findText(Maker);
+    int makerIdx = m_maker->findText(Maker);
     if (makerIdx >= 0) 
     {
-        m_Maker->setCurrentIndex(makerIdx);
-        m_Maker->setEnabled(false);
+        m_maker->setCurrentIndex(makerIdx);
+        m_maker->setEnabled(false);
     }
 
     slotUpdateCombos();
-    int modelIdx = m_Model->findText(Model);
+    int modelIdx = m_model->findText(Model);
     if (modelIdx >= 0) 
     {
-        m_Model->setCurrentIndex(modelIdx);
-        m_Model->setEnabled(false);
+        m_model->setCurrentIndex(modelIdx);
+        m_model->setEnabled(false);
         slotUpdateLensCombo();
     }
 
@@ -224,33 +224,33 @@ void KLFDeviceSelector::findFromExif()
     // We use here the Camera Maker, because the Lens Maker seems not to be
     // part of the Exif data. This is of course bad for 3rd party lenses, but
     // they seem anyway not to have Exif entrys ususally :/
-    int lensIdx = m_Lens->findText(Lens); 
+    int lensIdx = m_lens->findText(Lens); 
     if (lensIdx < 0)
-       lensIdx = m_Lens->findText(Maker + " " + Lens); 
+       lensIdx = m_lens->findText(Maker + " " + Lens); 
 
     if (lensIdx >= 0) 
     {
         // found lens model directly, best case :)
-        m_Lens->setCurrentIndex(lensIdx);
-        m_Lens->setEnabled(false);
+        m_lens->setCurrentIndex(lensIdx);
+        m_lens->setEnabled(false);
     } 
     else 
     {
         // Lens not found, try to reduce the list according to the values we have
         // FIXME: Implement removal of not matching lenses ...
-        m_Lens->setEnabled(true);
+        m_lens->setEnabled(true);
     }
 
     DDebug() << "Search for Lens: " << Maker << " :: " << Lens 
-             << "< and found: >" << m_Lens->itemText(0) + "<";
+             << "< and found: >" << m_lens->itemText(0) + "<";
 
-    QString temp             = m_ExivMeta.getExifTagString("Exif.Photo.FocalLength");
+    QString temp             = m_metadata.getExifTagString("Exif.Photo.FocalLength");
     m_klf->m_focalLength     = temp.mid(0, temp.length() -3 ).toFloat(); // HACK: strip the " mm" at the end ... 
-    m_klf->m_aperature       = m_ExivMeta.getExifTagString("Exif.Photo.ApertureValue").mid(1).toFloat();
-    m_klf->m_subjectDistance = m_ExivMeta.getExifTagString("Exif.CanonSi.SubjectDistance").toFloat();
+    m_klf->m_aperture       = m_metadata.getExifTagString("Exif.Photo.ApertureValue").mid(1).toFloat();
+    m_klf->m_subjectDistance = m_metadata.getExifTagString("Exif.CanonSi.SubjectDistance").toFloat();
 
     DDebug() << "Focal Length: "     << m_klf->m_focalLength 
-             << "Aperture: "         << m_klf->m_aperature 
+             << "Aperture: "         << m_klf->m_aperture 
              << "Subject Distance: " << m_klf->m_subjectDistance
              << endl;
 }
@@ -261,9 +261,9 @@ void KLFDeviceSelector::slotUseExif(int mode)
         findFromExif();
     else 
     {
-        m_Maker->setEnabled(true);
-        m_Model->setEnabled(true);
-        m_Lens->setEnabled(true);
+        m_maker->setEnabled(true);
+        m_model->setEnabled(true);
+        m_lens->setEnabled(true);
     }
 }
 
@@ -272,10 +272,10 @@ void KLFDeviceSelector::slotUpdateCombos()
     const lfCamera* const *it = m_klf->m_lfCameras;
 
     // reset box
-    m_Model->clear();
+    m_model->clear();
 
     bool firstRun = false;
-    if ( m_Maker->count() == 0 )
+    if ( m_maker->count() == 0 )
        firstRun = true;
 
     while ( *it ) 
@@ -286,18 +286,18 @@ void KLFDeviceSelector::slotUpdateCombos()
            if ( (*it)->Maker ) 
            {
                 QString t( (*it)->Maker );
-                if ( m_Maker->findText( t, Qt::MatchExactly ) < 0 )
-                    m_Maker->addItem( t );
+                if ( m_maker->findText( t, Qt::MatchExactly ) < 0 )
+                    m_maker->addItem( t );
            }
        }
 
        // Fill models for current selected maker
-       if ( (*it)->Model && (*it)->Maker == m_Maker->currentText() ) 
+       if ( (*it)->Model && (*it)->Maker == m_maker->currentText() ) 
        {
             KLFDeviceSelector::DevicePtr dev;
             dev        = *it;
             QVariant b = qVariantFromValue(dev);
-            m_Model->addItem( (*it)->Model, b );
+            m_model->addItem( (*it)->Model, b );
        }
 
        it++;
@@ -309,9 +309,9 @@ void KLFDeviceSelector::slotUpdateCombos()
 
 void KLFDeviceSelector::slotUpdateLensCombo()
 {
-    m_Lens->clear();
+    m_lens->clear();
 
-    QVariant v    = m_Model->itemData( m_Model->currentIndex() );
+    QVariant v    = m_model->itemData( m_model->currentIndex() );
     DevicePtr dev = v.value<KLFDeviceSelector::DevicePtr>();
     if (!dev)
     {
@@ -326,7 +326,7 @@ void KLFDeviceSelector::slotUpdateLensCombo()
     {
         KLFDeviceSelector::LensPtr lens = *lenses;
         QVariant b                      = qVariantFromValue(lens);
-        m_Lens->addItem( (*lenses)->Model, b );
+        m_lens->addItem( (*lenses)->Model, b );
         lenses++;
     }
 
@@ -335,7 +335,7 @@ void KLFDeviceSelector::slotUpdateLensCombo()
 
 void KLFDeviceSelector::slotLensSelected()
 {
-    QVariant v        = m_Lens->itemData( m_Lens->currentIndex() );
+    QVariant v        = m_lens->itemData( m_lens->currentIndex() );
     m_klf->m_usedLens = v.value<KLFDeviceSelector::LensPtr>();
 
     if ( m_klf->m_cropFactor <= 0.0 ) // this should not happend
@@ -395,7 +395,7 @@ void KLensFunFilter::filterImage()
     int modflags = m_lfModifier->Initialize(m_klf->m_usedLens, 
                                             colorDepth, 
                                             m_klf->m_focalLength, 
-                                            m_klf->m_aperature, 
+                                            m_klf->m_aperture, 
                                             m_klf->m_subjectDistance,
                                             m_klf->m_cropFactor, 
                                             LF_RECTILINEAR, 
