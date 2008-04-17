@@ -7,7 +7,7 @@
  * Description : A threaded filter plugin dialog with a preview
  *               image guide widget and a settings user area
  *
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -218,15 +218,15 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
 
     QLabel *label5  = new QLabel(i18n("Guide color:"), gboxGuideSettings);
     d->guideColorBt = new KColorButton( QColor( Qt::red ), gboxGuideSettings );
-    d->guideColorBt->setWhatsThis( i18n("<p>Set here the color used to draw guides dashed-lines."));
+    d->guideColorBt->setWhatsThis(i18n("<p>Set here the color used to draw guides dashed-lines."));
 
     QLabel *label6 = new QLabel(i18n("Guide width:"), gboxGuideSettings);
     d->guideSize   = new QSpinBox(gboxGuideSettings);
     d->guideSize->setRange(1, 5);
     d->guideSize->setSingleStep(1);
-    d->guideSize->setWhatsThis( i18n("<p>Set here the width in pixels used to draw guides dashed-lines."));
+    d->guideSize->setWhatsThis(i18n("<p>Set here the width in pixels used to draw guides dashed-lines."));
 
-    grid->addWidget(line, 0, 0, 1, 3 );
+    grid->addWidget(line, 0, 0, 1, 3);
     grid->addWidget(label5, 1, 0, 1, 1);
     grid->addWidget(d->guideColorBt, 1, 2, 1, 1);
     grid->addWidget(label6, 2, 0, 1, 1);
@@ -243,9 +243,10 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
     KHBox *hbox    = new KHBox(d->settings);
     QLabel *space1 = new QLabel(hbox);
     space1->setFixedWidth(spacingHint());
+
     d->progressBar = new QProgressBar(hbox);
     d->progressBar->setMaximum(100);
-    d->progressBar->setMaximumHeight( fontMetrics().height() );
+    d->progressBar->setMaximumHeight(fontMetrics().height() +4);
     d->progressBar->setWhatsThis(i18n("<p>This is the percentage of the task which has completed up to this point."));
     d->progressBar->setValue(0);
     setProgressVisible(false);
@@ -264,6 +265,7 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
     d->settingsLayout->addLayout(vLayout, 1, 0, 1, 1);
     d->settingsLayout->setMargin(spacingHint());
     d->settingsLayout->setSpacing(spacingHint());
+    d->settingsLayout->setRowStretch(2, 10);
 
     d->settingsSideBar->appendTab(d->settings, SmallIcon("configure"), i18n("Settings"));
     d->settingsSideBar->loadViewState();
@@ -273,7 +275,8 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
     QList<int> list;
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group(d->name + QString(" Tool Dialog"));
-    if (group.hasKey("SplitterState")) {
+    if (group.hasKey("SplitterState")) 
+    {
         QByteArray state;
         state = group.readEntry("SplitterState", state);
         d->splitter->restoreState(QByteArray::fromBase64(state));
@@ -317,7 +320,7 @@ ImageGuideDlg::~ImageGuideDlg()
     delete d;
 }
 
-void ImageGuideDlg::readSettings(void)
+void ImageGuideDlg::readSettings()
 {
     QColor defaultGuideColor(Qt::red);
     KSharedConfig::Ptr config = KGlobal::config();
@@ -328,7 +331,7 @@ void ImageGuideDlg::readSettings(void)
     m_imagePreviewWidget->slotChangeGuideColor(d->guideColorBt->color());
 }
 
-void ImageGuideDlg::writeSettings(void)
+void ImageGuideDlg::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group(d->name + QString(" Tool Dialog"));
@@ -421,7 +424,7 @@ void ImageGuideDlg::slotTry()
     slotEffect();
 }
 
-void ImageGuideDlg::slotResized(void)
+void ImageGuideDlg::slotResized()
 {
     if (d->currentRenderingMode == ImageGuideDlgPriv::FinalRendering)
     {
