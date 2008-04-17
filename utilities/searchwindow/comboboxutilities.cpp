@@ -1,0 +1,249 @@
+/* ============================================================
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2008-03-14
+ * Description : User interface for searches
+ * 
+ * Copyright (C) 2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * ============================================================ */
+
+// Qt includes
+
+#include <QAbstractItemView>
+#include <QAbstractListModel>
+#include <QMouseEvent>
+#include <QPainter>
+#include <QPen>
+#include <QStyle>
+#include <QStyleOption>
+#include <QVBoxLayout>
+
+// KDE includes
+
+#include <klocale.h>
+
+// Local includes
+
+#include "ddebug.h"
+#include "comboboxutilities.h"
+#include "comboboxutilities.moc"
+
+namespace Digikam
+{
+
+
+ProxyLineEdit::ProxyLineEdit(QWidget *parent)
+    : QLineEdit(parent),
+      m_widget(0)
+{
+    m_layout = new QVBoxLayout;
+    m_layout->setSpacing(0);
+    m_layout->setMargin(0);
+    setLayout(m_layout);
+
+    // unset text edit cursor
+    unsetCursor();
+}
+
+void ProxyLineEdit::setWidget(QWidget *widget)
+{
+    if (m_widget)
+        delete m_widget;
+    m_widget = widget;
+    m_widget->setParent(this);
+    m_layout->addWidget(m_widget);
+}
+
+/**
+ * We just reimplement all relevant QWidget event handlers and call
+ * the QWidget implementation, not the QLineEdit one.
+ */
+
+void ProxyLineEdit::ProxyLineEdit::mousePressEvent(QMouseEvent *event)
+{
+    QWidget::mousePressEvent(event);
+}
+
+void ProxyLineEdit::mouseMoveEvent(QMouseEvent *event)
+{
+    QWidget::mouseMoveEvent(event);
+}
+
+void ProxyLineEdit::mouseReleaseEvent(QMouseEvent *event)
+{
+    QWidget::mouseReleaseEvent(event);
+}
+
+void ProxyLineEdit::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    QWidget::mouseDoubleClickEvent(event);
+}
+
+void ProxyLineEdit::keyPressEvent(QKeyEvent *event)
+{
+    QWidget::keyPressEvent(event);
+}
+
+void ProxyLineEdit::focusInEvent(QFocusEvent *event)
+{
+    QWidget::focusInEvent(event);
+}
+
+void ProxyLineEdit::focusOutEvent(QFocusEvent *event)
+{
+    QWidget::focusOutEvent(event);
+}
+
+void ProxyLineEdit::paintEvent(QPaintEvent *event)
+{
+    QWidget::paintEvent(event);
+}
+
+void ProxyLineEdit::dragEnterEvent(QDragEnterEvent *event)
+{
+    QWidget::dragEnterEvent(event);
+}
+
+void ProxyLineEdit::dragMoveEvent(QDragMoveEvent *event)
+{
+    QWidget::dragMoveEvent(event);
+}
+
+void ProxyLineEdit::dragLeaveEvent(QDragLeaveEvent *event)
+{
+    QWidget::dragLeaveEvent(event);
+}
+
+void ProxyLineEdit::dropEvent(QDropEvent *event)
+{
+    QWidget::dropEvent(event);
+}
+
+void ProxyLineEdit::changeEvent(QEvent *event)
+{
+    QWidget::changeEvent(event);
+}
+
+void ProxyLineEdit::contextMenuEvent(QContextMenuEvent *event)
+{
+    QWidget::contextMenuEvent(event);
+}
+
+void ProxyLineEdit::inputMethodEvent(QInputMethodEvent *event)
+{
+    QWidget::inputMethodEvent(event);
+}
+
+QSize ProxyLineEdit::minimumSizeHint() const
+{
+    return QWidget::minimumSizeHint();
+}
+
+QSize ProxyLineEdit::sizeHint() const
+{
+    return QWidget::sizeHint();
+}
+
+// ----------------------------------- //
+
+ModelIndexBasedComboBox::ModelIndexBasedComboBox(QWidget *parent)
+    : QComboBox(parent)
+{
+}
+
+void ModelIndexBasedComboBox::hidePopup()
+{
+    m_currentIndex = view()->selectionModel()->currentIndex();
+    QComboBox::hidePopup();
+}
+
+void ModelIndexBasedComboBox::showPopup()
+{
+    QComboBox::showPopup();
+    if (m_currentIndex.isValid())
+        view()->selectionModel()->setCurrentIndex(m_currentIndex, QItemSelectionModel::ClearAndSelect);
+}
+
+QModelIndex ModelIndexBasedComboBox::currentIndex() const
+{
+    return m_currentIndex;
+}
+
+void ModelIndexBasedComboBox::setCurrentIndex(const QModelIndex &index)
+{
+    m_currentIndex = index;
+    view()->selectionModel()->setCurrentIndex(m_currentIndex, QItemSelectionModel::ClearAndSelect);
+}
+
+// ----------------------------------- //
+
+StayPoppedUpComboBox::StayPoppedUpComboBox(QWidget *parent)
+    : ModelIndexBasedComboBox(parent)
+{
+}
+
+void StayPoppedUpComboBox::installView(QAbstractItemView *view)
+{
+    // Create view
+    m_view = view;
+
+    // set on combo box
+    setView(m_view);
+
+    // Removing these event filters works just as the eventFilter() solution below,
+    // but is much more dependent on Qt internals and not guaranteed to work in the future.
+    //m_view->removeEventFilter(m_view->parent());
+    //m_view->viewport()->removeEventFilter(m_view->parent());
+
+    // Install event filters, _after_ setView() is called
+    m_view->installEventFilter(this);
+    m_view->viewport()->installEventFilter(this);
+}
+
+bool StayPoppedUpComboBox::eventFilter(QObject *o, QEvent *e)
+{
+    // The combo box has installed an event filter on the view.
+    // If it catches a valid mouse button release there, it will hide the popup.
+    // Here we prevent this by eating the event ourselves,
+    // and then dispatching it to its destination.
+    if (o == m_view || o == m_view->viewport())
+    {
+        switch (e->type()) {
+            case QEvent::MouseButtonRelease: {
+                QMouseEvent *m = static_cast<QMouseEvent *>(e);
+                if (m_view->isVisible() && m_view->rect().contains(m->pos()))
+                {
+                    if (o == m_view)
+                        o->event(e);
+                    else
+                        // Viewport: Calling event() does not work, viewportEvent() is needed.
+                        // This is the event that gets redirected to the QTreeView finally!
+                        sendViewportEventToView(e);
+                    // we have dispatched the event privately; we filter it out from the main dispatching
+                    return true;
+                }
+            }
+            default:
+                break;
+        }
+    }
+    return QComboBox::eventFilter(o, e);
+}
+
+
+}
+
