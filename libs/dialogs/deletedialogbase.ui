@@ -124,10 +124,10 @@
        </rect>
       </property>
       <property name="toolTip" >
-       <string>If checked, this dialog will no longer be shown and files will be directly moved to the Trash Bin</string>
+       <string>If checked, this dialog will no longer be shown, and files will be directly moved to the Trash Bin</string>
       </property>
       <property name="whatsThis" >
-       <string>&lt;qt>&lt;p>If this box is checked, this dialog will not be shown again in the future, files will be directly moved to the Trash Bin&lt;/p></string>
+       <string>&lt;qt>&lt;p>If this box is checked, this dialog will no longer be shown, and files will be directly moved to the Trash Bin&lt;/p></string>
       </property>
       <property name="text" >
        <string>Do not &amp;ask again</string>

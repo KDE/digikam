@@ -104,7 +104,7 @@ ImageEffect_Texture::ImageEffect_Texture(QWidget* parent)
     m_textureType->addItem( i18n("Wall") );
     m_textureType->addItem( i18n("Moss") );
     m_textureType->addItem( i18n("Stone") );
-    m_textureType->setWhatsThis( i18n("<p>Set here the texture type to apply on image."));
+    m_textureType->setWhatsThis( i18n("<p>Set here the texture type to apply to image."));
     
     // -------------------------------------------------------------
     

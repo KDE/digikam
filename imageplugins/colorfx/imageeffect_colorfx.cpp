@@ -80,7 +80,7 @@ ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent)
     KAboutData *about = new KAboutData("digikam", 0,
                             ki18n("Color Effects"),
                             digikam_version,
-                            ki18n("A digiKam plugin to apply special color effects on an image."),
+                            ki18n("A digiKam plugin to apply special color effects to an image."),
                             KAboutData::License_GPL,
                             ki18n("(c) 2004-2005, Renchi Raju\n(c) 2006-2007, Gilles Caulier"),
                             KLocalizedString(),
@@ -174,7 +174,7 @@ ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent)
     m_effectType->addItem( i18n("Vivid") );
     m_effectType->addItem( i18n("Neon") );    
     m_effectType->addItem( i18n("Find Edges") );    
-    m_effectType->setWhatsThis( i18n("<p>Select the effect type to apply on the image here.<p>"
+    m_effectType->setWhatsThis( i18n("<p>Select the effect type to apply to the image here.<p>"
                                      "<b>Solarize</b>: simulates solarization of photograph.<p>"
                                      "<b>Vivid</b>: simulates the Velvia(tm) slide film colors.<p>"
                                      "<b>Neon</b>: coloring the edges in a photograph to "
@@ -193,7 +193,7 @@ ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent)
     m_iterationInput->setRange(0, 100, 1);
     m_iterationInput->setSliderEnabled(true); 
     m_iterationInput->setWhatsThis( i18n("<p>This value controls the number of iterations "
-                                         "to use with Neon and Find Edges effects."));
+                                         "to use with the Neon and Find Edges effects."));
     
     gridSettings->addLayout(l1, 0, 0, 1, 5 );
     gridSettings->addWidget(histoBox, 1, 0, 2, 5 );

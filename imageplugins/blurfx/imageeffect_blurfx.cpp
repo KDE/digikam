@@ -100,7 +100,7 @@ ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent)
     m_effectType->addItem( i18n("Smart Blur") );
     m_effectType->addItem( i18n("Frost Glass") );
     m_effectType->addItem( i18n("Mosaic") );
-    m_effectType->setWhatsThis( i18n("<p>Select the blurring effect to apply on image.<p>"
+    m_effectType->setWhatsThis( i18n("<p>Select the blurring effect to apply to image.<p>"
                                      "<b>Zoom Blur</b>:  blurs the image along radial lines starting from "
                                      "a specified center point. This simulates the blur of a zooming camera.<p>"
                                      "<b>Radial Blur</b>: blurs the image by rotating the pixels around "

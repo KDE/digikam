@@ -200,7 +200,7 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent)
     m_lumToleranceInput->setDecimals(1);
     m_lumToleranceInput->setRange(0.0, 1.0, 0.1, true);
     m_lumToleranceInput->setWhatsThis( i18n("<p><b>Luminance</b>: this control sets the luminance tolerance of the image."
-                "We recommend to use either the <b>Color</b> or the <b>Luminance</b> tolerance settings "
+                "We recommend using either the <b>Color</b> or the <b>Luminance</b> tolerance settings "
                 "to make an image correction, not both at the same time. These settings "
                 "do not influence the main smoothing process controlled by the <b>Details</b> "
                 "settings."));
@@ -213,7 +213,7 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent)
     m_csmoothInput->setDecimals(1);
     m_csmoothInput->setRange(0.0, 1.0, 0.1, true);
     m_csmoothInput->setWhatsThis( i18n("<p><b>Color</b>: this control sets the color tolerance of the image. It is "
-                "recommended to use either the <b>Color</b> or the <b>Luminance</b> tolerance "
+                "recommended using either the <b>Color</b> or the <b>Luminance</b> tolerance "
                 "to make image correction, not both at the same time. These settings "
                 "do not influence the main smoothing process controlled by the <b>Details</b> "
                 "settings."));
