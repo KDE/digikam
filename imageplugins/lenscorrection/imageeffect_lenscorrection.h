@@ -25,7 +25,7 @@
 // local includes.
 
 #include "dimg.h"
-#include "ctrlpaneldlg.h"
+#include "imageguidedlg.h"
 
 class QCheckBox;
 class QLabel;
@@ -36,7 +36,7 @@ class KLFDeviceSelector;
 namespace DigikamLensCorrectionImagesPlugin
 {
 
-class ImageEffect_LensCorrection : public Digikam::CtrlPanelDlg
+class ImageEffect_LensCorrection : public Digikam::ImageGuideDlg
 {
     Q_OBJECT
 

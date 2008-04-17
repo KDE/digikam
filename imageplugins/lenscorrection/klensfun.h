@@ -101,7 +101,8 @@ class KLensFunFilter : public Digikam::DImgThreadedFilter
 {
 
 public:
-    KLensFunFilter(Digikam::DImg *origImage, QObject *parent, KLensFun *);
+
+    KLensFunFilter(Digikam::DImg *origImage, QObject *parent, KLensFun*);
     ~KLensFunFilter(){};
 
 private:
@@ -139,14 +140,14 @@ public:
 
 public slots:
 
-    void findFromExif( KExiv2Iface::KExiv2& );
+    void findFromExif(KExiv2Iface::KExiv2&);
 
 protected slots:
 
-    void updateCombos();
-    void updateLensCombo();
-    void exifUsageSlot(int);
-    void selectLens();
+    void slotUpdateCombos();
+    void slotUpdateLensCombo();
+    void slotUseExif(int);
+    void slotLensSelected();
 
 protected:
 
@@ -154,17 +155,18 @@ protected:
 
 signals:
 
-    void lensSelected();
+    void signalLensSelected();
 
 private:
 
-    KLensFun            *m_klf;
-    KExiv2Iface::KExiv2  m_ExivMeta;
-
     QCheckBox           *m_ExifUsage;
+
     KComboBox           *m_Maker;
     KComboBox           *m_Model;
     KComboBox           *m_Lens;
+
+    KLensFun            *m_klf;
+    KExiv2Iface::KExiv2  m_ExivMeta;
 };
 
 }  // NameSpace DigikamLensCorrectionImagesPlugin
