@@ -102,7 +102,7 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
 
     QGridLayout* gridFrame = new QGridLayout( frame );
     m_previewWidget        = new SuperImposeWidget(400, 300, frame);
-    m_previewWidget->setWhatsThis( i18n("<p>This is the preview of the template "
+    m_previewWidget->setWhatsThis( i18n("<p>This previews the template "
                                         "superimposed onto the image.") );
 
     // -------------------------------------------------------------

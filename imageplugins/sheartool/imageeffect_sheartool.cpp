@@ -137,7 +137,7 @@ ImageEffect_ShearTool::ImageEffect_ShearTool(QWidget* parent)
                                           "angle value to set fine adjustments."));
                                              
     m_antialiasInput = new QCheckBox(i18n("Anti-Aliasing"), gboxSettings);
-    m_antialiasInput->setWhatsThis( i18n("<p>Enable this option to process anti-aliasing filter "
+    m_antialiasInput->setWhatsThis( i18n("<p>Enable this option to apply the anti-aliasing filter "
                                          "to the sheared image. "
                                          "To smooth the target image, it will be blurred a little."));
 

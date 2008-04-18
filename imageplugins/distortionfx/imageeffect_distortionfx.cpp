@@ -88,7 +88,7 @@ ImageEffect_DistortionFX::ImageEffect_DistortionFX(QWidget* parent)
 
     setAboutData(about);
         
-    m_imagePreviewWidget->setWhatsThis( i18n("<p>This is the preview of the distortion effect "
+    m_imagePreviewWidget->setWhatsThis( i18n("<p>This previews the distortion effect "
                                              "applied to the photograph.") );
                                            
     // -------------------------------------------------------------
@@ -115,7 +115,7 @@ ImageEffect_DistortionFX::ImageEffect_DistortionFX(QWidget* parent)
     m_effectType->addItem( i18n("Polar Coordinates") );    
     m_effectType->addItem( i18n("Unpolar Coordinates") );    
     m_effectType->addItem( i18n("Tile") );    
-    m_effectType->setWhatsThis( i18n("<p>Select the effect type to apply to image.<p>"
+    m_effectType->setWhatsThis( i18n("<p>Here, select the type of effect to apply to an image.<p>"
                                      "<b>Fish Eyes</b>: warps the photograph around a 3D spherical shape to "
                                      "reproduce the common photograph 'Fish Eyes' effect.<p>"
                                      "<b>Twirl</b>: spins the photograph to produce a Twirl pattern.<p>"
@@ -126,17 +126,17 @@ ImageEffect_DistortionFX::ImageEffect_DistortionFX(QWidget* parent)
                                      "<b>Caricature</b>: distorts the photograph with the 'Fish Eyes' effect inverted.<p>"
                                      "<b>Multiple Corners</b>: splits the photograph like a multiple corners pattern.<p>"
                                      "<b>Waves Horizontal</b>: distorts the photograph with horizontal waves.<p>"
-                                     "<b>Waves Vertical</b>: distorts the photograph with verticals waves.<p>"
+                                     "<b>Waves Vertical</b>: distorts the photograph with vertical waves.<p>"
                                      "<b>Block Waves 1</b>: divides the image into cells and makes it look as "
                                      "if it is being viewed through glass blocks.<p>"
                                      "<b>Block Waves 2</b>: like Block Waves 1 but with another version "
                                      "of glass blocks distortion.<p>"
                                      "<b>Circular Waves 1</b>: distorts the photograph with circular waves.<p>"
-                                     "<b>Circular Waves 2</b>: another variation of Circular Waves effect.<p>"
+                                     "<b>Circular Waves 2</b>: another variation of the Circular Waves effect.<p>"
                                      "<b>Polar Coordinates</b>: converts the photograph from rectangular "
                                      "to polar coordinates.<p>"
-                                     "<b>Unpolar Coordinates</b>: Polar Coordinate effect inverted.<p>"
-                                     "<b>Tile</b>: splits the photograph into square blocks and move "
+                                     "<b>Unpolar Coordinates</b>: the Polar Coordinate effect inverted.<p>"
+                                     "<b>Tile</b>: splits the photograph into square blocks and moves "
                                      "them randomly inside the image.<p>"
                                      ));
                                                   

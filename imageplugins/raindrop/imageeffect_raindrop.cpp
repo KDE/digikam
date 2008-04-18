@@ -81,7 +81,7 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent)
 
     setAboutData(about);
 
-    m_imagePreviewWidget->setWhatsThis( i18n("<p>This is the preview of the Raindrop effect."
+    m_imagePreviewWidget->setWhatsThis( i18n("<p>This previews the Raindrop effect."
                                            "<p>Note: if you have previously selected an area in the editor, "
                                            "this will be unaffected by the filter. You can use this method to "
                                            "disable the Raindrops effect on a human face, for example.") );

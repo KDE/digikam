@@ -104,7 +104,7 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
     l->addWidget(m_previewWidget);
     l->setMargin(5);
     l->setSpacing(0);
-    m_previewWidget->setWhatsThis( i18n("<p>This is the preview of the text inserted to the image. "
+    m_previewWidget->setWhatsThis( i18n("<p>This previews the text inserted in the image. "
                                            "You can use the mouse to move the text to the right location."));
     setPreviewAreaWidget(frame);                                           
     
