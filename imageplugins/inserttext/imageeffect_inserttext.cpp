@@ -102,7 +102,7 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
     QVBoxLayout* l  = new QVBoxLayout(frame, 5, 0);
     m_previewWidget = new InsertTextWidget(480, 320, frame);
     l->addWidget(m_previewWidget);
-    QWhatsThis::add( m_previewWidget, i18n("<p>This is the preview of the text inserted to the image. "
+    QWhatsThis::add( m_previewWidget, i18n("<p>This is the preview of the text inserted in the image. "
                                            "You can use the mouse to move the text to the right location."));
     setPreviewAreaWidget(frame);                                           
     

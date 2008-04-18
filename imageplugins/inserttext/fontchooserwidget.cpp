@@ -236,8 +236,8 @@ FontChooserWidget::FontChooserWidget(QWidget *parent, const char *name,
         QString sizeIsRelativeCBToolTipText =
         i18n("Font size<br><i>fixed</i> or <i>relative</i><br>to environment");
         QString sizeIsRelativeCBWhatsThisText =
-        i18n("Here you can switch between fixed font size and font size "
-             "to be calculated dynamically and adjusted to changing "
+        i18n("Here you can switch between fixed a font size and a font size "
+             "to be calculated dynamically and adjusted to any changing "
              "environment (e.g. widget dimensions, paper size)." );
         sizeIsRelativeCheckBox = new QCheckBox( sizeIsRelativeCBText,
                                                 page,

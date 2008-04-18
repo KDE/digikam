@@ -120,15 +120,15 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
     
     m_preserveAspectRatio = new QCheckBox(gboxSettings);
     m_preserveAspectRatio->setText(i18n("Preserve Aspect Ratio"));
-    QWhatsThis::add(m_preserveAspectRatio, i18n("Enable this option if you want to preserve aspect "
-                                                "ratio of image. If enabled, the border width will be "
-                                                "in percent of image size, else the border width will "
+    QWhatsThis::add(m_preserveAspectRatio, i18n("Enable this option if you want to preserve the aspect "
+                                                "ratio of the image. If enabled, the border width will be "
+                                                "in percent of the image size, else the border width will "
                                                 "in pixels."));
 
     m_labelBorderPercent  = new QLabel(i18n("Width (%):"), gboxSettings);
     m_borderPercent       = new KIntNumInput(gboxSettings);
     m_borderPercent->setRange(1, 50, 1, true); 
-    QWhatsThis::add(m_borderPercent, i18n("<p>Set here the border width in percents of image size."));
+    QWhatsThis::add(m_borderPercent, i18n("<p>Set here the border width in percent of the image size."));
             
     m_labelBorderWidth = new QLabel(i18n("Width (pixels):"), gboxSettings);
     m_borderWidth      = new KIntNumInput(gboxSettings);

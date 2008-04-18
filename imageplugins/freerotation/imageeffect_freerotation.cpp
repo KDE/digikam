@@ -137,7 +137,7 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
     gridSettings->addMultiCellWidget(m_fineAngleInput, 6, 6, 0, 2);
 
     m_antialiasInput = new QCheckBox(i18n("Anti-Aliasing"), gboxSettings);
-    QWhatsThis::add( m_antialiasInput, i18n("<p>Enable this option to process anti-aliasing filter "
+    QWhatsThis::add( m_antialiasInput, i18n("<p>Enable this option to apply the anti-aliasing filter "
                                             "to the rotated image. "
                                             "In order to smooth the target image, it will be blurred a little."));
     gridSettings->addMultiCellWidget(m_antialiasInput, 7, 7, 0, 2);
