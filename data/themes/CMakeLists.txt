@@ -6,7 +6,7 @@ install( FILES Dreary
 	       Dark 
 	       Dessert 
 	       Digikasa 
-	       Gray 
+	       NeutralGray 
 	       Blue 
 	       DLR  
                Rose
