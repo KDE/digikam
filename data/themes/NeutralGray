@@ -24,7 +24,7 @@
  * ============================================================ */
 -->
 <digikamtheme>
- <name value="gray-127" />
+ <name value="Neutral Gray" />
  <BaseColor value="#7F7F7F" />
  <TextRegularColor value="#000000" />
  <TextSelectedColor value="#FFFFFF" />
