@@ -244,6 +244,89 @@ bool StayPoppedUpComboBox::eventFilter(QObject *o, QEvent *e)
     return QComboBox::eventFilter(o, e);
 }
 
+// ----------------------------------- //
+
+class TreeViewComboBoxTreeView : public QTreeView
+{
+public:
+
+    // Needed to make viewportEvent() public
+
+    TreeViewComboBoxTreeView() : QTreeView() {}
+
+    virtual bool viewportEvent(QEvent *event)
+    {
+        return QTreeView::viewportEvent(event);
+    }
+};
+
+TreeViewComboBox::TreeViewComboBox(QWidget *parent)
+    : StayPoppedUpComboBox(parent)
+{
+}
+
+void TreeViewComboBox::installView()
+{
+    // parent does the heavy work
+    StayPoppedUpComboBox::installView(new TreeViewComboBoxTreeView);
+}
+
+void TreeViewComboBox::sendViewportEventToView(QEvent *e)
+{
+    static_cast<TreeViewComboBoxTreeView*>(m_view)->viewportEvent(e);
+}
+
+QTreeView *TreeViewComboBox::view() const
+{
+    return static_cast<QTreeView *>(m_view);
+}
+
+// ----------------------------------- //
+
+class TreeViewComboBoxLineEdit : public QLineEdit
+{
+public:
+
+    // This line edit works like a weblink:
+    // Readonly; A mouse press shows the popup; Cursor is the pointing hand.
+
+    TreeViewComboBoxLineEdit(QComboBox *box) : QLineEdit()
+    {
+        m_box = box;
+        setReadOnly(true);
+        setCursor(Qt::PointingHandCursor);
+    }
+
+    virtual void mouseReleaseEvent(QMouseEvent *event)
+    {
+        QLineEdit::mouseReleaseEvent(event);
+        m_box->showPopup();
+    }
+
+    QComboBox *m_box;
+};
+
+TreeViewLineEditComboBox::TreeViewLineEditComboBox(QWidget *parent)
+    : TreeViewComboBox(parent),
+      m_comboLineEdit(0)
+{
+}
+
+void TreeViewLineEditComboBox::setLineEditText(const QString &text)
+{
+    m_comboLineEdit->setText(text);
+}
+
+void TreeViewLineEditComboBox::installView()
+{
+    // parent does the heavy work
+    TreeViewComboBox::installView();
+
+    // replace line edit
+    m_comboLineEdit = new TreeViewComboBoxLineEdit(this);
+    setLineEdit(m_comboLineEdit);
+}
+
 
 }
 

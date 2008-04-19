@@ -155,41 +155,6 @@ protected:
     int           m_margin;
 };
 
-class TreeViewComboBox : public StayPoppedUpComboBox
-{
-    Q_OBJECT
-
-public:
-
-    /** This class provides a QComboBox with a QTreeView
-     *  instead of the usual QListView.
-     *  The text in the line edit can be adjusted. The combo box will
-     *  open on a click on the line edit.
-     *  You need three steps:
-     *  Contruct the object, call setModel() with an appropriate
-     *  QAbstractItemModel, then call installView() to replace
-     *  the standard combo box view with a QTreeView.
-     */
-    TreeViewComboBox(QWidget *parent = 0);
-
-    /** Replace the standard combo box list view with a QTreeView.
-     *  Call this after installing an appropriate model. */
-    void installView();
-
-    /** Set the text of the line edit (the text that is visible
-        if the popup is not opened) */
-    void setLineEditText(const QString &text);
-
-    /** Returns the QTreeView of this class. Valid after installView() has been called */
-    QTreeView *view() const;
-
-protected:
-
-    virtual void sendViewportEventToView(QEvent *e);
-
-    QLineEdit           *m_comboLineEdit;
-};
-
 }
 
 #endif
