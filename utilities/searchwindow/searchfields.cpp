@@ -1117,7 +1117,7 @@ SearchFieldAlbum::SearchFieldAlbum(QObject *parent, Type type)
 
 void SearchFieldAlbum::setupValueWidgets(QGridLayout *layout, int row, int column)
 {
-    m_comboBox = new TreeViewComboBox;
+    m_comboBox = new TreeViewLineEditComboBox;
     m_comboBox->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
 
     if (m_type == TypeAlbum)

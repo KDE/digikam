@@ -281,7 +281,7 @@ protected:
 
     void updateComboText();
 
-    TreeViewComboBox            *m_comboBox;
+    TreeViewLineEditComboBox    *m_comboBox;
     QLineEdit                   *m_comboLineEdit;
     Type                         m_type;
     QString                      m_anyText;

@@ -26,6 +26,8 @@
 
 // Qt includes
 
+#include <QAbstractListModel>
+#include <QItemDelegate>
 #include <QLabel>
 #include <QComboBox>
 
@@ -93,6 +95,7 @@ private:
 
 };
 
+// -- Internal classes --
 
 class RatingStarDrawer
 {
@@ -136,6 +139,44 @@ protected:
     virtual void paintEvent(QPaintEvent *);
 
     RatingComboBox::RatingValue m_value;
+};
+
+class RatingComboBoxModel : public QAbstractListModel
+{
+public:
+
+    enum CustomRoles
+    {
+        RatingRole = Qt::UserRole
+    };
+
+    RatingComboBoxModel(QObject *parent = 0);
+
+    virtual int rowCount(const QModelIndex & parent) const;
+    virtual QVariant data(const QModelIndex &index, int role) const;
+    virtual QModelIndex index(int row, int column = 0, const QModelIndex &parent = QModelIndex()) const;
+
+    QModelIndex indexForRatingValue(RatingComboBox::RatingValue value) const;
+
+protected:
+
+    QVariant ratingValueToDisplay(RatingComboBox::RatingValue value) const;
+
+    QList<RatingComboBox::RatingValue> m_entries;
+};
+
+class RatingComboBoxDelegate : public QItemDelegate, public RatingStarDrawer
+{
+public:
+
+    RatingComboBoxDelegate(QObject *parent = 0);
+
+    virtual QSize sizeHint ( const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+    virtual void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+
+protected:
+
+    void drawRating(QPainter *painter, const QRect &rect, int rating, bool selectable) const;
 };
 
 

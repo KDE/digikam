@@ -88,20 +88,6 @@ QRect RatingStarDrawer::drawStarPolygons(QPainter *painter, int numberOfStars) c
 
 // --------- //
 
-class RatingComboBoxDelegate : public QItemDelegate, public RatingStarDrawer
-{
-public:
-
-    RatingComboBoxDelegate(QObject *parent);
-
-    virtual QSize sizeHint ( const QStyleOptionViewItem & option, const QModelIndex & index ) const;
-    virtual void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
-
-protected:
-
-    void drawRating(QPainter *painter, const QRect &rect, int rating, bool selectable) const;
-};
-
 RatingComboBoxDelegate::RatingComboBoxDelegate(QObject *parent) : QItemDelegate(parent)
 {
 }
@@ -161,30 +147,6 @@ void RatingComboBoxDelegate::drawRating(QPainter *painter, const QRect &rect, in
 }
 
 // --------- //
-
-class RatingComboBoxModel : public QAbstractListModel
-{
-public:
-
-    enum CustomRoles
-    {
-        RatingRole = Qt::UserRole
-    };
-
-    RatingComboBoxModel(QObject *parent);
-
-    virtual int rowCount(const QModelIndex & parent) const;
-    virtual QVariant data(const QModelIndex &index, int role) const;
-    QModelIndex index(int row, int column = 0, const QModelIndex &parent = QModelIndex()) const;
-
-    QModelIndex indexForRatingValue(RatingComboBox::RatingValue value) const;
-
-protected:
-
-    QVariant ratingValueToDisplay(RatingComboBox::RatingValue value) const;
-
-    QList<RatingComboBox::RatingValue> m_entries;
-};
 
 RatingComboBoxModel::RatingComboBoxModel(QObject *parent) : QAbstractListModel(parent)
 {
