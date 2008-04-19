@@ -30,6 +30,7 @@
 #include <QPen>
 #include <QStyle>
 #include <QStyleOption>
+#include <QTreeView>
 #include <QVBoxLayout>
 
 // KDE includes
@@ -165,7 +166,7 @@ ProxyClickLineEdit::ProxyClickLineEdit(QWidget *parent)
 {
 }
 
-void mousePressEvent(QMouseEvent *event)
+void ProxyClickLineEdit::mousePressEvent(QMouseEvent *event)
 {
     ProxyLineEdit::mouseReleaseEvent(event);
 

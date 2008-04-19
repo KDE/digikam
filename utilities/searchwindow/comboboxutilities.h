@@ -29,7 +29,7 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QComboBox>
-#include <QPersistenModelIndex>
+#include <QPersistentModelIndex>
 
 // KDE includes
 
@@ -37,6 +37,7 @@
 
 
 class QVBoxLayout;
+class QTreeView;
 
 namespace Digikam
 {
@@ -85,7 +86,7 @@ protected:
     QVBoxLayout *m_layout;
 };
 
-class ProxyClickLineEdit : public QLineEdit
+class ProxyClickLineEdit : public ProxyLineEdit
 {
     Q_OBJECT
 
