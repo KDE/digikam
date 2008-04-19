@@ -29,6 +29,7 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QComboBox>
+#include <QPersistenModelIndex>
 
 // KDE includes
 
@@ -105,7 +106,7 @@ public:
 
 protected:
 
-    QModelIndex m_currentIndex;
+    QPersistentModelIndex m_currentIndex;
 };
 
 class StayPoppedUpComboBox : public ModelIndexBasedComboBox
