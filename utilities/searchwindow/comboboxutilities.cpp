@@ -160,6 +160,24 @@ QSize ProxyLineEdit::sizeHint() const
 
 // ----------------------------------- //
 
+ProxyClickLineEdit::ProxyClickLineEdit(QWidget *parent)
+    : ProxyLineEdit(parent)
+{
+}
+
+void mousePressEvent(QMouseEvent *event)
+{
+    ProxyLineEdit::mouseReleaseEvent(event);
+
+    if (event->button() == Qt::LeftButton)
+    {
+        emit leftClicked();
+        event->accept();
+    }
+}
+
+// ----------------------------------- //
+
 ModelIndexBasedComboBox::ModelIndexBasedComboBox(QWidget *parent)
     : QComboBox(parent)
 {

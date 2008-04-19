@@ -85,6 +85,30 @@ protected:
     QVBoxLayout *m_layout;
 };
 
+class ProxyClickLineEdit : public QLineEdit
+{
+    Q_OBJECT
+
+public:
+
+    /**
+     * A ProxyLineEdit that emits leftClicked() on
+     * mouse press event.
+     * Press on the held widget will result in the signal
+     * if the widget does not accept() them.
+     */
+
+    ProxyClickLineEdit(QWidget *parent = 0);
+
+signals:
+
+    void leftClicked();
+
+protected:
+
+    void mousePressEvent(QMouseEvent *event);
+};
+
 class ModelIndexBasedComboBox : public QComboBox
 {
 public:

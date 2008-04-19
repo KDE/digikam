@@ -33,7 +33,6 @@
 #include <QPen>
 #include <QStyle>
 #include <QStyleOption>
-#include <QTreeView>
 #include <QVBoxLayout>
 
 // KDE includes
@@ -221,6 +220,7 @@ void SearchClickLabel::mouseReleaseEvent(QMouseEvent* event)
     if (event->button() == Qt::LeftButton)
     {
         emit leftClicked();
+        event->accept();
     }
 }
 
@@ -245,6 +245,7 @@ void SearchSqueezedClickLabel::mouseReleaseEvent(QMouseEvent* event)
     if (event->button() == Qt::LeftButton)
     {
         emit leftClicked();
+        event->accept();
     }
 }
 

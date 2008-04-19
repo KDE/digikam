@@ -41,7 +41,6 @@
 
 #include "comboboxutilities.h"
 
-class QTreeView;
 class QVBoxLayout;
 
 namespace Digikam
