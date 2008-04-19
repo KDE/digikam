@@ -24,6 +24,7 @@
 // Qt includes
 
 #include <QVBoxLayout>
+#include <QGridLayout>
 #include <QComboBox>
 #include <QRadioButton>
 #include <QLabel>
@@ -32,6 +33,7 @@
 // KDE includes
 
 #include <klocale.h>
+#include <kiconloader.h>
 
 // Local includes
 
@@ -257,21 +259,34 @@ void SearchGroup::reset()
 SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache *cache, QWidget *parent)
     : QWidget(parent), m_groupOpBox(0), m_themeCache(cache)
 {
-    QVBoxLayout  *m_layout = new QVBoxLayout;
+    QVBoxLayout *m_layout = new QVBoxLayout;
 
     // leave styling to style sheet (by object name)
 
+    QWidget *header   = new QWidget(this);
+    QGridLayout *grid = new QGridLayout(header);
+
     QLabel *mainLabel = new QLabel(i18n("Find Pictures"));
     mainLabel->setObjectName("SearchGroupLabel_MainLabel");
-    m_layout->addWidget(mainLabel);
 
     m_allBox = new QRadioButton(i18n("Match All of the following conditions"));
     m_allBox->setObjectName("SearchGroupLabel_CheckBox");
-    m_layout->addWidget(m_allBox);
 
     m_anyBox = new QRadioButton(i18n("Match Any of the following conditions"));
     m_anyBox->setObjectName("SearchGroupLabel_CheckBox");
-    m_layout->addWidget(m_anyBox);
+
+    QLabel *logo = new QLabel(header);
+    logo->setPixmap(KIconLoader::global()->loadIcon("digikam", KIconLoader::NoGroup, 96));
+
+    grid->addWidget(mainLabel, 0, 0, 1, 1);
+    grid->addWidget(m_allBox,  1, 0, 1, 1);
+    grid->addWidget(m_anyBox,  2, 0, 1, 1);
+    grid->addWidget(logo,      0, 2, 3, 1);
+    grid->setColumnStretch(1, 10);
+    grid->setSpacing(0);
+    grid->setMargin(0);
+
+    m_layout->addWidget(header);
 
     setLayout(m_layout);
 }
