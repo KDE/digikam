@@ -43,14 +43,18 @@
 // Local includes
 
 #include "ddebug.h"
+#include "dimg.h"
 #include "albummanager.h"
 #include "album.h"
 #include "albummodel.h"
 #include "kdateedit.h"
 #include "squeezedcombobox.h"
 #include "dmetadata.h"
+#include "imagescanner.h"
 #include "searchwindow.h"
 #include "searchfieldgroup.h"
+#include "ratingsearchutilities.h"
+#include "choicesearchutilities.h"
 #include "searchfields.h"
 #include "searchfields.moc"
 
@@ -61,7 +65,6 @@ SearchField *SearchField::createField(const QString &name, SearchFieldGroup *par
 {
     if (name == "albumid")
     {
-        //TODO: allow multiple selection
         SearchFieldAlbum *field = new SearchFieldAlbum(parent, SearchFieldAlbum::TypeAlbum);
         field->setFieldName(name);
         field->setText(i18n("Album"), i18n("Search pictures located in"));
@@ -90,7 +93,6 @@ SearchField *SearchField::createField(const QString &name, SearchFieldGroup *par
     }
     else if (name == "tagid")
     {
-        //TODO: allow multiple selection
         SearchFieldAlbum *field = new SearchFieldAlbum(parent, SearchFieldAlbum::TypeTag);
         field->setFieldName(name);
         field->setText(i18n("Tags"), i18n("Return pictures with tag"));
@@ -169,19 +171,17 @@ SearchField *SearchField::createField(const QString &name, SearchFieldGroup *par
     }
     else if (name == "format")
     {//choice
-        /*
-        SearchFieldImageFormat *field = new SearchFieldImageFormat(parent);
+        SearchFieldChoice *field = new SearchFieldChoice(parent);
         field->setFieldName(name);
         field->setText(i18n("File Format"), i18n("Return pictures with the image file format"));
-        QMap<QString, QString> map;
-        map.insert("JPG", "JPEG");
-        map.insert("PNG", "PNG");
-        map.insert("TIFF", "TIFF");
-        map.insert("PPM", "PPM");
-        map.insert("JP2K", "JPEG 2000");
-        field->setChoice(map);
+        QStringList formats;
+        formats << "JPG" << "JPEG";
+        formats << "PNG" << "PNG";
+        formats << "TIFF" << "TIFF";
+        formats << "PPM" << "PPM";
+        formats << "JP2K" << "JPEG 2000";
+        field->setChoice(formats);
         return field;
-        */
     }
     else if (name == "colordepth")
     {//choice
@@ -196,6 +196,15 @@ SearchField *SearchField::createField(const QString &name, SearchFieldGroup *par
         field->setFieldName(name);
         field->setText(i18n("Color Model"), i18n("Find pictures with the color model"));
         QMap<int, QString> map;
+        map.insert(DImg::COLORMODELUNKNOWN, ImageScanner::colorModelToString(DImg::COLORMODELUNKNOWN));
+        map.insert(DImg::RGB, ImageScanner::colorModelToString(DImg::RGB));
+        map.insert(DImg::GRAYSCALE, ImageScanner::colorModelToString(DImg::GRAYSCALE));
+        map.insert(DImg::MONOCHROME, ImageScanner::colorModelToString(DImg::MONOCHROME));
+        map.insert(DImg::INDEXED, ImageScanner::colorModelToString(DImg::INDEXED));
+        map.insert(DImg::YCBCR, ImageScanner::colorModelToString(DImg::YCBCR));
+        map.insert(DImg::CMYK, ImageScanner::colorModelToString(DImg::CMYK));
+        map.insert(DImg::CIELAB, ImageScanner::colorModelToString(DImg::CIELAB));
+        map.insert(DImg::COLORMODELRAW, ImageScanner::colorModelToString(DImg::COLORMODELRAW));
         field->setChoice(map);
         return field;
     }
@@ -943,6 +952,191 @@ void SearchFieldRangeDouble::setValueWidgetsVisible(bool visible)
 
 // ----------------------------------- //
 
+SearchFieldChoice::SearchFieldChoice(QObject *parent)
+    : SearchField(parent),
+      m_comboBox(0), m_type(QVariant::Invalid)
+{
+    m_model = new ChoiceSearchModel(this);
+    m_anyText = i18n("Any");
+}
+
+void SearchFieldChoice::setupValueWidgets(QGridLayout *layout, int row, int column)
+{
+    m_comboBox = new ChoiceSearchComboBox;
+    m_comboBox->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
+
+    connect(m_model, SIGNAL(checkStateChanged(QVariant, bool)),
+            this, SLOT(checkStateChanged()));
+
+    m_comboBox->setModel(m_model);
+    // set object name for style sheet
+    m_comboBox->setObjectName("SearchFieldChoice_ComboBox");
+    // label is created only after setting the model
+    m_comboBox->label()->setObjectName("SearchFieldChoice_ClickLabel");
+    updateComboText();
+
+    layout->addWidget(m_comboBox, row, column, 1, 3);
+}
+
+void SearchFieldChoice::setChoice(const QMap<int, QString> &map)
+{
+    m_type = QVariant::Int;
+    m_model->setChoice(map);
+}
+
+void SearchFieldChoice::setChoice(const QStringList &choice)
+{
+    m_type = QVariant::String;
+    m_model->setChoice(choice);
+}
+
+void SearchFieldChoice::setAnyText(const QString &anyText)
+{
+    m_anyText = anyText;
+}
+
+void SearchFieldChoice::checkStateChanged()
+{
+    updateComboText();
+}
+
+void SearchFieldChoice::updateComboText()
+{
+    QStringList checkedChoices = m_model->checkedDisplayTexts();
+    if (checkedChoices.isEmpty())
+    {
+        m_comboBox->setLabelText(m_anyText);
+    }
+    else if (checkedChoices.count() == 1)
+    {
+        m_comboBox->setLabelText(checkedChoices.first());
+    }
+    else
+    {
+        m_comboBox->setLabelText(i18n("Any of: %1", checkedChoices.join(", ")));
+    }
+}
+
+void SearchFieldChoice::read(SearchXmlCachingReader &reader)
+{
+    SearchXml::Relation relation = reader.fieldRelation();
+    QList<int> values;
+    if (relation == SearchXml::OneOf)
+    {
+        if (m_type == QVariant::Int)
+            m_model->setChecked(reader.valueToIntList());
+        else if (m_type == QVariant::String)
+            m_model->setChecked(reader.valueToStringList());
+    }
+    else
+    {
+        if (m_type == QVariant::Int)
+        {
+            m_model->setChecked(reader.valueToInt(), relation);
+        }
+        else if (m_type == QVariant::String)
+        {
+            m_model->setChecked(reader.value(), relation);
+        }
+    }
+}
+
+void SearchFieldChoice::write(SearchXmlWriter &writer)
+{
+    if (m_type == QVariant::Int)
+    {
+        QList<int> v = m_model->checkedKeys<int>();
+        if (!v.isEmpty())
+        {
+            if (v.size() == 1)
+            {
+                writer.writeField(m_name, SearchXml::Equal);
+                writer.writeValue(v.first());
+                writer.finishField();
+            }
+            else
+            {
+                writer.writeField(m_name, SearchXml::OneOf);
+                writer.writeValue(v);
+                writer.finishField();
+            }
+        }
+    }
+    else if (m_type == QVariant::String)
+    {
+        QList<QString> v = m_model->checkedKeys<QString>();
+        if (!v.isEmpty())
+        {
+            if (v.size() == 1)
+            {
+                writer.writeField(m_name, SearchXml::Equal);
+                writer.writeValue(v.first());
+                writer.finishField();
+            }
+            else
+            {
+                writer.writeField(m_name, SearchXml::OneOf);
+                writer.writeValue(v);
+                writer.finishField();
+            }
+        }
+    }
+}
+
+void SearchFieldChoice::reset()
+{
+    m_model->resetChecked();
+}
+
+void SearchFieldChoice::setValueWidgetsVisible(bool visible)
+{
+    m_comboBox->setVisible(visible);
+}
+
+/*
+class SearchFieldChoice : public SearchField
+{
+    Q_OBJ ECT
+
+public:
+
+    SearchFieldChoice(SearchFieldGroup *parent);
+
+    virtual void read(SearchXmlCachingReader &reader);
+    virtual void write(SearchXmlWriter &writer);
+    virtual void reset();
+
+    void setChoice(const QMap<int, QString> &map);
+    void setAnyText(const QString &string);
+
+    virtual void setupValueWidgets(QGridLayout *layout, int row, int column);
+    virtual void setValueWidgetsVisible(bool visible);
+
+protected slots:
+
+    void slotClicked();
+    void slotUpdateLabel();
+
+protected:
+
+    void setValues(const QList<int> &values);
+    void setValues(int value, SearchXml::Relation relation);
+
+    QList<int> values() const;
+    QString valueText() const;
+
+    virtual void setupChoiceWidgets();
+
+protected:
+
+    QString                    m_anyText;
+    SearchSqueezedClickLabel  *m_label;
+    QVBoxLayout               *m_vbox;
+    QMap<int, QString>         m_choiceMap;
+    QMap<QCheckBox*, int>      m_widgetMap;
+    VisibilityController      *m_controller;
+};
+
 SearchFieldChoice::SearchFieldChoice(SearchFieldGroup *parent)
     : SearchField(parent), m_vbox(0)
 {
@@ -1105,7 +1299,7 @@ QList<int> SearchFieldChoice::values() const
     }
     return list;
 }
-
+*/
 
 // ----------------------------------- //
 

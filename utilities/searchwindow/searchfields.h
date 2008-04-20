@@ -35,7 +35,6 @@
 
 #include "searchxml.h"
 #include "searchutilities.h"
-#include "ratingsearchutilities.h"
 
 class QLabel;
 class QCheckBox;
@@ -56,6 +55,9 @@ class SearchFieldGroup;
 class SqueezedComboBox;
 class SearchSqueezedClickLabel;
 class KDateEdit;
+class ChoiceSearchModel;
+class ChoiceSearchComboBox;
+class RatingComboBox;
 
 class SearchField : public QObject, public VisibilityObject
 {
@@ -214,41 +216,30 @@ class SearchFieldChoice : public SearchField
 
 public:
 
-    SearchFieldChoice(SearchFieldGroup *parent);
+    SearchFieldChoice(QObject *parent);
 
+    void setChoice(const QMap<int, QString> &map);
+    void setChoice(const QStringList &choice);
+    void setAnyText(const QString &anyText);
+
+    virtual void setupValueWidgets(QGridLayout *layout, int row, int column);
     virtual void read(SearchXmlCachingReader &reader);
     virtual void write(SearchXmlWriter &writer);
     virtual void reset();
-
-    void setChoice(const QMap<int, QString> &map);
-    void setAnyText(const QString &string);
-
-    virtual void setupValueWidgets(QGridLayout *layout, int row, int column);
     virtual void setValueWidgetsVisible(bool visible);
 
 protected slots:
 
-    void slotClicked();
-    void slotUpdateLabel();
+    void checkStateChanged();
 
 protected:
 
-    void setValues(const QList<int> &values);
-    void setValues(int value, SearchXml::Relation relation);
+    void updateComboText();
 
-    QList<int> values() const;
-    QString valueText() const;
-
-    virtual void setupChoiceWidgets();
-
-protected:
-
-    QString                    m_anyText;
-    SearchSqueezedClickLabel  *m_label;
-    QVBoxLayout               *m_vbox;
-    QMap<int, QString>         m_choiceMap;
-    QMap<QCheckBox*, int>      m_widgetMap;
-    VisibilityController      *m_controller;
+    ChoiceSearchComboBox        *m_comboBox;
+    QVariant::Type               m_type;
+    QString                      m_anyText;
+    ChoiceSearchModel           *m_model;
 };
 
 class Album;
@@ -282,7 +273,6 @@ protected:
     void updateComboText();
 
     TreeViewLineEditComboBox    *m_comboBox;
-    QLineEdit                   *m_comboLineEdit;
     Type                         m_type;
     QString                      m_anyText;
     AbstractCheckableAlbumModel *m_model;
