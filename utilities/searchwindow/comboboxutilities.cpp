@@ -166,7 +166,7 @@ ProxyClickLineEdit::ProxyClickLineEdit(QWidget *parent)
 {
 }
 
-void ProxyClickLineEdit::mousePressEvent(QMouseEvent *event)
+void ProxyClickLineEdit::mouseReleaseEvent(QMouseEvent *event)
 {
     ProxyLineEdit::mouseReleaseEvent(event);
 
@@ -298,6 +298,43 @@ void TreeViewComboBox::sendViewportEventToView(QEvent *e)
 QTreeView *TreeViewComboBox::view() const
 {
     return static_cast<QTreeView *>(m_view);
+}
+
+// ----------------------------------- //
+
+class ListViewComboBoxListView : public QListView
+{
+public:
+
+    // Needed to make viewportEvent() public
+
+    ListViewComboBoxListView() : QListView() {}
+
+    virtual bool viewportEvent(QEvent *event)
+    {
+        return QListView::viewportEvent(event);
+    }
+};
+
+ListViewComboBox::ListViewComboBox(QWidget *parent)
+    : StayPoppedUpComboBox(parent)
+{
+}
+
+void ListViewComboBox::installView()
+{
+    // parent does the heavy work
+    StayPoppedUpComboBox::installView(new ListViewComboBoxListView);
+}
+
+void ListViewComboBox::sendViewportEventToView(QEvent *e)
+{
+    static_cast<ListViewComboBoxListView*>(m_view)->viewportEvent(e);
+}
+
+QListView *ListViewComboBox::view() const
+{
+    return static_cast<QListView *>(m_view);
 }
 
 // ----------------------------------- //

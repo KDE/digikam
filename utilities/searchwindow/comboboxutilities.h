@@ -28,6 +28,7 @@
 
 #include <QLabel>
 #include <QLineEdit>
+#include <QListView>
 #include <QComboBox>
 #include <QPersistentModelIndex>
 
@@ -107,7 +108,7 @@ signals:
 
 protected:
 
-    void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
 };
 
 class ModelIndexBasedComboBox : public QComboBox
@@ -178,8 +179,6 @@ public:
 
     /** This class provides a QComboBox with a QTreeView
      *  instead of the usual QListView.
-     *  The text in the line edit can be adjusted. The combo box will
-     *  open on a click on the line edit.
      *  You need three steps:
      *  Contruct the object, call setModel() with an appropriate
      *  QAbstractItemModel, then call installView() to replace
@@ -193,6 +192,33 @@ public:
 
     /** Returns the QTreeView of this class. Valid after installView() has been called */
     QTreeView *view() const;
+
+protected:
+
+    virtual void sendViewportEventToView(QEvent *e);
+};
+
+class ListViewComboBox : public StayPoppedUpComboBox
+{
+    Q_OBJECT
+
+public:
+
+    /** This class provides an implementation of a StayPoppedUpComboBox
+     *  with a QListView. This is the standard view of a QComboBox,
+     *  but in conjunction with StayPoppedUpComboBox some extra steps are needed.
+     *  You need three steps:
+     *  Contruct the object, call setModel() with an appropriate
+     *  QAbstractItemModel, then call installView().
+     */
+    ListViewComboBox(QWidget *parent = 0);
+
+    /** Replace the standard combo box list view with a QTreeView.
+     *  Call this after installing an appropriate model. */
+    virtual void installView();
+
+    /** Returns the QTreeView of this class. Valid after installView() has been called */
+    QListView *view() const;
 
 protected:
 
