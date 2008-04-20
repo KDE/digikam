@@ -599,6 +599,7 @@ SET(libsearchwindow_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow/searchutilities.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow/comboboxutilities.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow/ratingsearchutilities.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow/choicesearchutilities.cpp
    )
 
 ADD_SUBDIRECTORY( data )
