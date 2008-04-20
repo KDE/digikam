@@ -165,7 +165,6 @@ void SearchView::setTheme()
 
     QString sheet =
             // ".SearchView { background-color: " + ThemeEngine::instance()->baseColor().name() + "; } "
-            //"#SearchViewBottomBar "
             "#SearchGroupLabel_MainLabel "
             " { font-weight: bold; font-size: "
               + fontSizeLarger + ";"
@@ -188,7 +187,15 @@ void SearchView::setTheme()
               + ThemeEngine::instance()->textSpecialRegColor().name() + ";"
             "   font-style: italic; "
             "   text-decoration: underline; "
+            " } "
+            "QComboBox#SearchFieldChoice_ComboBox"
+            " {  border-width: 0px; border-style: solid; padding-left: 5px; "
+            " } "
+            "QComboBox::drop-down#SearchFieldChoice_ComboBox"
+            " {  subcontrol-origin: padding; subcontrol-position: right top; "
+            "    border: 0px; background: rgba(0,0,0,0); width: 0px; height: 0px; "
             " } ";
+
     QWidget::setStyleSheet(sheet);
 }
 
@@ -228,7 +235,7 @@ SearchViewBottomBar::SearchViewBottomBar(SearchViewThemedPartsCache * cache, QWi
 
     m_addGroupsButton = new KPushButton(KStandardGuiItem::add());
     m_addGroupsButton->setText(i18n("Add Search Group"));
-    connect(m_addGroupsButton, SIGNAL(leftClicked()),
+    connect(m_addGroupsButton, SIGNAL(clicked()),
             this, SIGNAL(addGroupPressed()));
     m_mainLayout->addWidget(m_addGroupsButton, 0, Qt::AlignLeft);
 

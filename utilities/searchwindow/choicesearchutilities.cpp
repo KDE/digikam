@@ -233,6 +233,7 @@ void ChoiceSearchComboBox::installView()
     ListViewComboBox::installView();
 
     //view()->setHeaderHidden(true);
+    view()->setAlternatingRowColors(true);
 
     // create the label
     m_label = new SearchSqueezedClickLabel;
