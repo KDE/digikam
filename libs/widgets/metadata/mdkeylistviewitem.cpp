@@ -79,7 +79,7 @@ void MdKeyListViewItem::paintCell(QPainter* p, const QColorGroup&,
     fn.setBold(true);
     fn.setItalic(false);
     p->setFont(fn);
-    p->setPen(ThemeEngine::instance()->textRegColor());
+    p->setPen(ThemeEngine::instance()->textSelColor());
     int width = listView()->contentsWidth();
     QRect rect(0, 0, width, fn.weight());
 
