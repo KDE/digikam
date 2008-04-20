@@ -1124,7 +1124,7 @@ QMap<int, QString> DMetadata::possibleValuesForEnumField(MetadataInfo::Field fie
             return map;
     }
 
-    for (int i = min; i < max; i++)
+    for (int i = min; i <= max; i++)
     {
         map[i] = valueToString(i, field);
     }
