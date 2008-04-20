@@ -95,8 +95,8 @@ void MdKeyListViewItem::slotThemeChanged()
 {
     setBackground(0, QBrush(ThemeEngine::instance()->thumbSelColor()));
     setBackground(1, QBrush(ThemeEngine::instance()->thumbSelColor()));
-    setForeground(0, QBrush(ThemeEngine::instance()->textRegColor()));
-    setForeground(1, QBrush(ThemeEngine::instance()->textRegColor()));
+    setForeground(0, QBrush(ThemeEngine::instance()->textSelColor()));
+    setForeground(1, QBrush(ThemeEngine::instance()->textSelColor()));
 }
 
 }  // namespace Digikam
