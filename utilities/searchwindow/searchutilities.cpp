@@ -33,11 +33,14 @@
 #include <QPen>
 #include <QStyle>
 #include <QStyleOption>
+#include <QTextEdit>
 #include <QVBoxLayout>
 
 // KDE includes
 
 #include <klocale.h>
+#include <kstandardguiitem.h>
+#include <kpushbutton.h>
 
 // Local includes
 
@@ -348,6 +351,36 @@ void ArrowClickLabel::paintEvent(QPaintEvent*)
 QSize ArrowClickLabel::sizeHint() const
 {
     return QSize(m_size + 2*m_margin, m_size + 2*m_margin);
+}
+
+// ----------------------------------- //
+
+StyleSheetDebugger::StyleSheetDebugger(QWidget *object)
+    : QWidget(0), m_widget(object)
+{
+    setAttribute(Qt::WA_DeleteOnClose);
+
+    QVBoxLayout *vbox = new QVBoxLayout;
+
+    m_edit = new QTextEdit;
+    vbox->addWidget(m_edit, 1);
+    m_okButton = new KPushButton(KStandardGuiItem::ok());
+    vbox->addWidget(m_okButton, 0, Qt::AlignRight);
+
+    setLayout(vbox);
+
+    connect(m_okButton, SIGNAL(clicked()),
+            this, SLOT(buttonClicked()));
+
+    m_edit->setPlainText(m_widget->styleSheet());
+
+    resize(400, 300);
+    show();
+}
+
+void StyleSheetDebugger::buttonClicked()
+{
+    m_widget->setStyleSheet(m_edit->toPlainText());
 }
 
 

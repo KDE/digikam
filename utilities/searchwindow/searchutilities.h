@@ -42,6 +42,8 @@
 #include "comboboxutilities.h"
 
 class QVBoxLayout;
+class QTextEdit;
+class KPushButton;
 
 namespace Digikam
 {
@@ -152,6 +154,33 @@ protected:
     Qt::ArrowType m_arrowType;
     int           m_size;
     int           m_margin;
+};
+
+class StyleSheetDebugger : public QWidget
+{
+    Q_OBJECT
+
+public:
+
+    /** This widget is for development purpose only:
+     *  It allows the developer to change the style sheet
+     *  on a widget dynamically.
+     *  If you want to develop or debug the stylesheet on your widget,
+     *  add temporary code:
+     *  new StyleSheetDebugger(myWidget);
+     *  That's all. Change the style sheet by editing it and pressing Ok. */
+
+    StyleSheetDebugger(QWidget *object);
+
+protected slots:
+
+    void buttonClicked();
+
+protected:
+
+    QTextEdit      *m_edit;
+    KPushButton    *m_okButton;
+    QWidget        *m_widget;
 };
 
 }
