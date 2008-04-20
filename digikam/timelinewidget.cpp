@@ -1018,7 +1018,7 @@ void TimeLineWidget::updatePixmap()
         p.drawLine(focusRect.bottomLeft(), focusRect.topLeft());
 
         focusRect.adjust(-1,-1, 1, 1);
-        p.setPen(ThemeEngine::instance()->thumbSelColor());
+        p.setPen(ThemeEngine::instance()->textSelColor());
         p.drawLine(focusRect.topLeft(), focusRect.topRight());
         p.drawLine(focusRect.topRight(), focusRect.bottomRight());
         p.drawLine(focusRect.bottomRight(), focusRect.bottomLeft());
