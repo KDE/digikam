@@ -29,7 +29,7 @@
 
 class QCheckBox;
 class QLabel;
-class QTabWidget;
+class QWidget;
 
 class KLFDeviceSelector;
 
@@ -65,7 +65,7 @@ private:
 
     QLabel            *m_maskPreviewLabel;
 
-    QTabWidget        *m_mainTab;
+    QWidget           *m_settingsWidget;
 
     QCheckBox         *m_filterCCA;
     QCheckBox         *m_filterVig;

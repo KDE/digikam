@@ -33,6 +33,7 @@
 // KDE includes.
 
 #include <klocale.h>
+#include <kseparator.h>
 #include <kconfig.h>
 #include <kaboutdata.h>
 #include <kiconloader.h>
@@ -85,12 +86,9 @@ ImageEffect_LensCorrection::ImageEffect_LensCorrection(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    m_mainTab = new QTabWidget(mainWidget());
-    setUserAreaWidget(m_mainTab);
-
-    QWidget *firstPage            = new QWidget(m_mainTab);
-    QGridLayout *firstPageLayout  = new QGridLayout( firstPage );
-    m_mainTab->addTab(firstPage, i18n("Camera and Lens"));
+    m_settingsWidget  = new QWidget(mainWidget());
+    QGridLayout *grid = new QGridLayout(m_settingsWidget);
+//    m_mainTab->addTab(firstPage, i18n("Camera and Lens"));
 
 #if 0
     m_maskPreviewLabel = new QLabel(firstPage);
@@ -99,32 +97,31 @@ ImageEffect_LensCorrection::ImageEffect_LensCorrection(QWidget* parent)
                                           "correction applied to a cross pattern."));
 #endif
 
-    m_cameraSelector = new KLFDeviceSelector(firstPage);
-
-//    firstPageLayout->addWidget(m_maskPreviewLabel, 0, 0, 1, 2);
-    firstPageLayout->addWidget(m_cameraSelector, 0, 0, 1, 2);
-    firstPageLayout->setMargin(spacingHint());
-    firstPageLayout->setSpacing(spacingHint());
+    m_cameraSelector = new KLFDeviceSelector(m_settingsWidget);
+    KSeparator *line = new KSeparator(Qt::Horizontal, m_settingsWidget);
 
     // -------------------------------------------------------------
 
-    QWidget *secondPage           = new QWidget(m_mainTab);
-    QGridLayout *secondPageLayout = new QGridLayout( secondPage );
-    m_mainTab->addTab(secondPage, i18n("Use Filters"));
+//    m_mainTab->addTab(secondPage, i18n("Use Filters"));
 
-    m_filterCCA  = new QCheckBox(i18n("Chromatic Aberration"), secondPage);
-    m_filterVig  = new QCheckBox(i18n("Vignetting"), secondPage);
-    m_filterCCI  = new QCheckBox(i18n("Color Correction"), secondPage);
-    m_filterDist = new QCheckBox(i18n("Distortion"), secondPage);
-    m_filterGeom = new QCheckBox(i18n("Geometry"), secondPage);
+    m_filterCCA  = new QCheckBox(i18n("Chromatic Aberration"), m_settingsWidget);
+    m_filterVig  = new QCheckBox(i18n("Vignetting"), m_settingsWidget);
+    m_filterCCI  = new QCheckBox(i18n("Color Correction"), m_settingsWidget);
+    m_filterDist = new QCheckBox(i18n("Distortion"), m_settingsWidget);
+    m_filterGeom = new QCheckBox(i18n("Geometry"), m_settingsWidget);
 
-    secondPageLayout->addWidget(m_filterCCA,  0, 0, 1, 2);
-    secondPageLayout->addWidget(m_filterVig,  1, 0, 1, 2);
-    secondPageLayout->addWidget(m_filterCCI,  2, 0, 1, 2);
-    secondPageLayout->addWidget(m_filterDist, 3, 0, 1, 2);
-    secondPageLayout->addWidget(m_filterGeom, 4, 0, 1, 2);
-    secondPageLayout->setMargin(spacingHint());
-    secondPageLayout->setSpacing(spacingHint());
+//    grid->addWidget(m_maskPreviewLabel, 0, 0, 1, 2);
+    grid->addWidget(m_cameraSelector, 0, 0, 1, 2);
+    grid->addWidget(line       ,      1, 0, 1, 2);
+    grid->addWidget(m_filterCCA,      2, 0, 1, 2);
+    grid->addWidget(m_filterVig,      3, 0, 1, 2);
+    grid->addWidget(m_filterCCI,      4, 0, 1, 2);
+    grid->addWidget(m_filterDist,     5, 0, 1, 2);
+    grid->addWidget(m_filterGeom,     6, 0, 1, 2);
+    grid->setMargin(spacingHint());
+    grid->setSpacing(spacingHint());
+
+    setUserAreaWidget(m_settingsWidget);
 
     // -------------------------------------------------------------
 
@@ -169,9 +166,9 @@ void ImageEffect_LensCorrection::slotLensChanged()
 
 void ImageEffect_LensCorrection::readUserSettings()
 {
-    m_mainTab->blockSignals(true);
+    m_settingsWidget->blockSignals(true);
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("Lens Correction Tool Dialog");
+    KConfigGroup group        = config->group("Lens Correction Tool Dialog");
 
     m_filterCCA->setCheckState(group.readEntry("CCA", true)         ? Qt::Checked : Qt::Unchecked);
     m_filterVig->setCheckState(group.readEntry("Vignetting", true)  ? Qt::Checked : Qt::Unchecked);
@@ -179,14 +176,14 @@ void ImageEffect_LensCorrection::readUserSettings()
     m_filterDist->setCheckState(group.readEntry("Distortion", true) ? Qt::Checked : Qt::Unchecked);
     m_filterGeom->setCheckState(group.readEntry("Geometry", true)   ? Qt::Checked : Qt::Unchecked);
 
-    m_mainTab->blockSignals(false);
+    m_settingsWidget->blockSignals(false);
     setFilters();
 }
 
 void ImageEffect_LensCorrection::writeUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("Lens Correction Tool Dialog");
+    KConfigGroup group        = config->group("Lens Correction Tool Dialog");
     if ( m_filterCCA->isEnabled() )
         group.writeEntry("CCA", (m_filterCCA->checkState() == Qt::Checked) ? true : false);
     if ( m_filterVig->isEnabled() )
@@ -215,7 +212,7 @@ void ImageEffect_LensCorrection::setFilters()
 
 void ImageEffect_LensCorrection::resetValues()
 {
-    m_mainTab->blockSignals(true);
+    m_settingsWidget->blockSignals(true);
 
     // Read Exif informations ...
     Digikam::DImg *i = m_imagePreviewWidget->imageIface()->getOriginalImg();
@@ -223,12 +220,12 @@ void ImageEffect_LensCorrection::resetValues()
     meta.setExif(i->getExif());
     m_cameraSelector->findFromExif(meta);
 
-    m_mainTab->blockSignals(false);
+    m_settingsWidget->blockSignals(false);
 } 
 
 void ImageEffect_LensCorrection::prepareEffect()
 {
-    m_mainTab->setEnabled(false);
+    m_settingsWidget->setEnabled(false);
 
     Digikam::ImageIface* iface = m_imagePreviewWidget->imageIface();
     uchar *data                = iface->getPreviewImage();
@@ -245,7 +242,7 @@ void ImageEffect_LensCorrection::prepareEffect()
 
 void ImageEffect_LensCorrection::prepareFinal()
 {
-    m_mainTab->setEnabled(false);
+    m_settingsWidget->setEnabled(false);
 
     Digikam::ImageIface iface(0, 0);
     uchar *data = iface.getOriginalImage();
@@ -268,13 +265,12 @@ void ImageEffect_LensCorrection::putPreviewData()
 void ImageEffect_LensCorrection::putFinalData()
 {
     Digikam::ImageIface iface(0, 0);
-
     iface.putOriginalImage(i18n("Lens Correction"), m_threadedFilter->getTargetImage().bits());
 }
 
 void ImageEffect_LensCorrection::renderingFinished()
 {
-    m_mainTab->setEnabled(true);
+    m_settingsWidget->setEnabled(true);
 }
 
 }  // NameSpace DigikamLensCorrectionImagesPlugin

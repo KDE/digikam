@@ -73,7 +73,7 @@ bool KLensFun::init()
     return true;
 }
 
-void KLensFun::setCorrection( bool CCA, bool Vig, bool CCI, bool Dist, bool Geom )
+void KLensFun::setCorrection(bool CCA, bool Vig, bool CCI, bool Dist, bool Geom)
 {
     m_filterCCA  = CCA;
     m_filterVig  = Vig;
