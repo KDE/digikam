@@ -45,6 +45,11 @@ class LoadingCachePriv
 {
 public:
 
+    LoadingCachePriv() : mutex(QMutex::Recursive)
+    {
+        watch = 0;
+    }
+
     QCache<QString, DImg> imageCache;
     QCache<QString, QImage>  thumbnailImageCache;
     QCache<QString, QPixmap> thumbnailPixmapCache;
