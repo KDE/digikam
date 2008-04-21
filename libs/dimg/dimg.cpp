@@ -827,7 +827,7 @@ DColor DImg::getPixelColor(uint x, uint y) const
 {
     if (isNull() || x > width() || y > height())
     {
-        DDebug() << " : wrong pixel position!" << endl;
+        DDebug() << "DImg::getPixelColor() : wrong pixel position!" << endl;
         return DColor();
     }
 
@@ -840,13 +840,13 @@ void DImg::setPixelColor(uint x, uint y, DColor color)
 {
     if (isNull() || x > width() || y > height())
     {
-        DDebug() << " : wrong pixel position!" << endl;
+        DDebug() << "DImg::setPixelColor() : wrong pixel position!" << endl;
         return;
     }
 
     if (color.sixteenBit() != sixteenBit())
     {
-        DDebug() << " : wrong color depth!" << endl;
+        DDebug() << "DImg::setPixelColor() : wrong color depth!" << endl;
         return;
     }
 
