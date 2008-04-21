@@ -197,6 +197,8 @@ void SearchView::setTheme()
             " } ";
 
     QWidget::setStyleSheet(sheet);
+
+    m_pixmapCache.clear();
 }
 
 QPixmap SearchView::cachedBannerPixmap(int w, int h)
