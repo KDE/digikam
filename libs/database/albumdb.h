@@ -781,6 +781,16 @@ public:
     void removeImageComment(int commentId, qlonglong imageid);
 
     /**
+     * Returns the property with theh specified name for the specified image
+     */
+    QString getImageProperty(qlonglong imageID, const QString &property);
+
+    /**
+     * Sets the property with the given name for the given image to the specified value
+     */
+    void setImageProperty(qlonglong imageID, const QString &property, const QString &value);
+
+    /**
      * Get the datetime for the item
      * @param imageID the ID of the item
      * @return the datetime for the item
@@ -965,6 +975,11 @@ public:
      */
     int copyItem(int srcAlbumID, const QString& srcName,
                  int dstAlbumID, const QString& dstName);
+
+    /**
+     * Copies all image-specific information, in all tables, from image srcId to destId.
+     */
+    void copyImageAttributes(qlonglong srcId, qlonglong destId);
 
 
     // ----------- Download history methods -----------

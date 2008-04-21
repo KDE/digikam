@@ -1255,6 +1255,30 @@ void AlbumDB::removeImageComment(int commentid, qlonglong imageid)
     d->db->recordChangeset(ImageChangeset(imageid, DatabaseFields::ImageCommentsAll));
 }
 
+QString AlbumDB::getImageProperty(qlonglong imageID, const QString &property)
+{
+    QList<QVariant> values;
+
+    d->db->execSql( QString("SELECT value FROM ImageProperties "
+                            "WHERE imageid=? and property=?;"),
+                    imageID, property,
+                    &values);
+
+    if (!values.isEmpty())
+        return values.first().toString();
+    else
+        return QString();
+}
+
+void AlbumDB::setImageProperty(qlonglong imageID, const QString &property, const QString &value)
+{
+    d->db->execSql( QString ("REPLACE INTO ImageProperties "
+                             "(imageid, property, value) "
+                             "VALUES(?, ?, ?);"),
+                    imageID, property, value);
+}
+
+
 QStringList AlbumDB::imagesFieldList(DatabaseFields::Images fields)
 {
     // adds no spaces at beginning or end
@@ -2480,7 +2504,7 @@ void AlbumDB::setTagName(int tagID, const QString& name)
 void AlbumDB::moveItem(int srcAlbumID, const QString& srcName,
                        int dstAlbumID, const QString& dstName)
 {
-    // find id of moved image
+    // find id of src image
     qlonglong imageId = getImageId(srcAlbumID, srcName);
 
     if (imageId == -1)
@@ -2499,50 +2523,109 @@ void AlbumDB::moveItem(int srcAlbumID, const QString& srcName,
 int AlbumDB::copyItem(int srcAlbumID, const QString& srcName,
                       int dstAlbumID, const QString& dstName)
 {
+    // find id of src image
+    qlonglong srcId = getImageId(srcAlbumID, srcName);
+
+    if (srcId == -1 || dstAlbumID == -1 || dstName.isEmpty())
+        return -1;
+
     // check for src == dest
     if (srcAlbumID == dstAlbumID && srcName == dstName)
-        return -1;
-
-    // find id of src image
-    QList<QVariant> values;
-    d->db->execSql( QString("SELECT id FROM Images "
-                            "WHERE album=? AND name=?;"),
-                    srcAlbumID, srcName,
-                    &values );
-
-    if (values.isEmpty())
-        return -1;
-
-    int srcId = values.first().toInt();
+        return srcId;
 
     // first delete any stale database entries if any
     deleteItem(dstAlbumID, dstName);
 
     // copy entry in Images table
     QVariant id;
-    d->db->execSql( QString("INSERT INTO Images (album, name, caption, datetime) "
-                            "SELECT ?, ?, caption, datetime FROM Images "
-                            "WHERE id=?;"),
-                    dstAlbumID, dstName, srcId, 0, &id );
+    d->db->execSql ( QString ("INSERT INTO Images "
+                              " ( album, name, status, category, modificationDate, fileSize, uniqueHash ) "
+                              " SELECT ?, ?, status, category, modificationDate, fileSize, uniqueHash "
+                              "  FROM Images WHERE id=?;"),
+                     dstAlbumID, dstName, srcId,
+                     0, &id);
 
-    int dstId = id.toInt();
+    if (id.isNull())
+        return -1;
 
-    // copy tags
-    d->db->execSql( QString("INSERT INTO ImageTags (imageid, tagid) "
-                            "SELECT ?, tagid FROM ImageTags "
-                            "WHERE imageid=?;"),
+    d->db->recordChangeset(ImageChangeset(id.toLongLong(), DatabaseFields::ImagesAll));
+    d->db->recordChangeset(CollectionImageChangeset(id.toLongLong(), dstAlbumID, CollectionImageChangeset::Added));
+
+    // copy all other tables
+    copyImageAttributes(srcId, id.toLongLong());
+
+    return id.toLongLong();
+}
+
+void AlbumDB::copyImageAttributes(qlonglong srcId, qlonglong dstId)
+{
+    // Go through all image-specific tables and copy the entries
+
+    DatabaseFields::Set fields;
+
+    d->db->execSql( QString("INSERT INTO ImageHaarMatrix "
+                            " (imageid, modificationDate, uniqueHash, matrix) "
+                            "SELECT ?, modificationDate, uniqueHash, matrix "
+                            "FROM ImageHaarMatrix WHERE imageid=?;"),
                     dstId, srcId );
 
-    // copy properties (rating)
-    d->db->execSql( QString("INSERT INTO ImageProperties (imageid, property, value) "
-                            "SELECT ?, property, value FROM ImageProperties "
-                            "WHERE imageid=?;"),
+    d->db->execSql( QString("INSERT INTO ImageInformation "
+                            " (imageid, rating, creationDate, digitizationDate, orientation, "
+                            "  width, height, format, colorDepth, colorModel) "
+                            "SELECT ?, rating, creationDate, digitizationDate, orientation, "
+                            "  width, height, format, colorDepth, colorModel "
+                            "FROM ImageInformation WHERE imageid=?;"),
+                    dstId, srcId );
+    fields |= DatabaseFields::ImageInformationAll;
+
+    d->db->execSql( QString("INSERT INTO ImageMetadata "
+                            " (imageid, make, model, aperture, focalLength, focalLength35, "
+                            "  exposureTime, exposureProgram, exposureMode, sensitivity, flash, whiteBalance, "
+                            "  whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory) "
+                            "SELECT ?, make, model, aperture, focalLength, focalLength35, "
+                            "  exposureTime, exposureProgram, exposureMode, sensitivity, flash, whiteBalance, "
+                            "  whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory "
+                            "FROM ImageMetadata WHERE imageid=?;"),
+                    dstId, srcId );
+    fields |= DatabaseFields::ImageMetadataAll;
+
+    d->db->execSql( QString("INSERT INTO ImagePositions "
+                            " (imageid, latitude, latitudeNumber, longitude, longitudeNumber, "
+                            "  altitude, orientation, tilt, roll, description) "
+                            "SELECT ?, latitude, latitudeNumber, longitude, longitudeNumber, "
+                            "  altitude, orientation, tilt, roll, description "
+                            "FROM ImagePositions WHERE imageid=?;"),
+                    dstId, srcId );
+    fields |= DatabaseFields::ImagePositionsAll;
+
+    d->db->execSql( QString("INSERT INTO ImageComments "
+                            " (imageid, type, language, author, date, comment) "
+                            "SELECT ?, type, language, author, date, comment "
+                            "FROM ImageComments WHERE imageid=?;"),
+                    dstId, srcId );
+    fields |= DatabaseFields::ImageCommentsAll;
+
+    d->db->execSql( QString("INSERT INTO ImageCopyright "
+                            " (imageid, property, value, extraValue) "
+                            "SELECT ?, property, value, extraValue "
+                            "FROM ImageCopyright WHERE imageid=?;"),
                     dstId, srcId );
 
-#warning copyItem: Make me complete, proper changeset
-    DWarning() << "AlbumDB::copyItem: Not completely implemented!";
+    d->db->recordChangeset(ImageChangeset(dstId, fields));
 
-    return dstId;
+    d->db->execSql( QString("INSERT INTO ImageTags "
+                            " (imageid, tagid) "
+                            "SELECT ?, tagid "
+                            "FROM ImageTags WHERE imageid=?;"),
+                    dstId, srcId );
+    // leave empty tag list for now
+    d->db->recordChangeset(ImageTagChangeset(dstId, QList<int>(), ImageTagChangeset::Added));
+
+    d->db->execSql( QString("INSERT INTO ImageProperties "
+                            " (imageid, property, value) "
+                            "SELECT ?, property, value "
+                            "FROM ImageProperties WHERE imageid=?;"),
+                    dstId, srcId );
 }
 
 bool AlbumDB::copyAlbumProperties(int srcAlbumID, int dstAlbumID)

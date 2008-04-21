@@ -489,11 +489,10 @@ void ImageInfo::addTagPaths(const QStringList &tagPaths)
 ImageInfo ImageInfo::copyItem(int dstAlbumID, const QString &dstFileName)
 {
     DatabaseAccess access;
-#warning TODO: copyItem method
     //DDebug() << "ImageInfo::copyItem " << m_data->albumId << " " << m_data->name << " to " << dstAlbumID << " " << dstFileName << endl;
 
-    // if (dstAlbumID == m_data->albumId && dstFileName == m_data->url.name())
-       //  return (*this);
+    if (dstAlbumID == m_data->albumId && dstFileName == m_data->name)
+        return (*this);
 
     int id = access.db()->copyItem(m_data->albumId, m_data->name, dstAlbumID, dstFileName);
 
