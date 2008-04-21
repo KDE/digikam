@@ -6,7 +6,7 @@
  * Date        : 2007-27-08
  * Description : an tool bar action object to display logo
  * 
- * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -63,7 +63,7 @@ QWidget* DLogoAction::createWidget( QWidget * parent )
     m_pixmapLogo->setScaledContents(false);
     m_pixmapLogo->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
     m_pixmapLogo->setToolTip(i18n("Visit digiKam project website"));
-    m_pixmapLogo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png")));
+    m_pixmapLogo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/banner-digikam.png")));
     m_pixmapLogo->setFocusPolicy(Qt::NoFocus);
 
     layout->setMargin(0);
