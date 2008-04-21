@@ -33,6 +33,7 @@
 #include <kdialog.h>
 #include <klocale.h>
 #include <kcombobox.h>
+#include <knuminput.h>
 
 // Local includes.
 
@@ -117,17 +118,15 @@ KLensFun::correctionData KLensFun::getCorrectionData()
 KLFDeviceSelector::KLFDeviceSelector(QWidget *parent) 
                  : QWidget(parent)
 {
-    m_klf = new KLensFun();
-
-    QGridLayout* gridSettings = new QGridLayout(this);
-
-    m_exifUsage        = new QCheckBox(i18n("Use Exif Data"), parent);
-    m_maker            = new KComboBox(parent);
-    m_model            = new KComboBox(parent);
-    m_lens             = new KComboBox(parent);
-    QLabel *makeLabel  = new QLabel(i18n("Make:"), parent);
-    QLabel *modelLabel = new QLabel(i18n("Model:"), parent);
-    QLabel *lensLabel  = new QLabel(i18n("Lens:"), parent);
+    m_klf              = new KLensFun();
+    QGridLayout* grid  = new QGridLayout(this);
+    m_exifUsage        = new QCheckBox(i18n("Use Exif Data"), this);
+    m_maker            = new KComboBox(this);
+    m_model            = new KComboBox(this);
+    m_lens             = new KComboBox(this);
+    QLabel *makeLabel  = new QLabel(i18n("Make:"), this);
+    QLabel *modelLabel = new QLabel(i18n("Model:"), this);
+    QLabel *lensLabel  = new QLabel(i18n("Lens:"), this);
 
     m_exifUsage->setEnabled(false);
     m_exifUsage->setCheckState(Qt::Unchecked);
@@ -135,15 +134,37 @@ KLFDeviceSelector::KLFDeviceSelector(QWidget *parent)
     m_model->setInsertPolicy(QComboBox::InsertAlphabetically);
     m_lens->setInsertPolicy(QComboBox::InsertAlphabetically);
 
-    gridSettings->addWidget(m_exifUsage);
-    gridSettings->addWidget(makeLabel);
-    gridSettings->addWidget(m_maker);
-    gridSettings->addWidget(modelLabel);
-    gridSettings->addWidget(m_model);
-    gridSettings->addWidget(lensLabel);
-    gridSettings->addWidget(m_lens);
-    gridSettings->setMargin(0);
-    gridSettings->setSpacing(KDialog::spacingHint());
+    QLabel *focalLabel = new QLabel(i18n("Focal Length:"), this);
+    QLabel *aperLabel  = new QLabel(i18n("Aperture:"), this);
+    QLabel *distLabel  = new QLabel(i18n("Subject Distance:"), this);
+
+    m_focal = new KDoubleNumInput(this);
+    m_focal->setDecimals(1);
+    m_focal->setRange(1.0, 1000.0, 0.01, true);
+
+    m_aperture = new KDoubleNumInput(this);
+    m_aperture->setDecimals(1);
+    m_aperture->setRange(1.1, 64.0, 0.1, true);
+
+    m_distance = new KDoubleNumInput(this);
+    m_distance->setDecimals(1);
+    m_distance->setRange(0.0, 100.0, 0.1, true);
+
+    grid->addWidget(m_exifUsage, 0, 0, 1, 3);
+    grid->addWidget(makeLabel,   1, 0, 1, 3);
+    grid->addWidget(m_maker,     2, 0, 1, 3);
+    grid->addWidget(modelLabel,  3, 0, 1, 3);
+    grid->addWidget(m_model,     4, 0, 1, 3);
+    grid->addWidget(lensLabel,   5, 0, 1, 3);
+    grid->addWidget(m_lens,      6, 0, 1, 3);
+    grid->addWidget(focalLabel,  7, 0, 1, 1);
+    grid->addWidget(m_focal,     7, 1, 1, 2);
+    grid->addWidget(aperLabel,   8, 0, 1, 1);
+    grid->addWidget(m_aperture,  8, 1, 1, 2);
+    grid->addWidget(distLabel,   9, 0, 1, 1);
+    grid->addWidget(m_distance,  9, 1, 1, 2);
+    grid->setMargin(0);
+    grid->setSpacing(KDialog::spacingHint());
 
     connect(m_exifUsage, SIGNAL(stateChanged(int)), 
             this, SLOT(slotUseExif(int)));
@@ -156,6 +177,15 @@ KLFDeviceSelector::KLFDeviceSelector(QWidget *parent)
 
     connect(m_lens, SIGNAL(currentIndexChanged(int)), 
             this, SLOT(slotLensSelected()));
+
+    connect(m_focal, SIGNAL(valueChanged(double)),
+            this, SLOT(slotFocalChanged(double)));
+
+    connect(m_aperture, SIGNAL(valueChanged(double)),
+            this, SLOT(slotApertureChanged()));
+
+    connect(m_distance, SIGNAL(valueChanged(double)),
+            this, SLOT(slotDistanceChanged()));
 
     KLFDeviceSelector::Device firstDevice; // empty strings
 //    setDevice( firstDevice );
@@ -244,15 +274,50 @@ void KLFDeviceSelector::findFromExif()
     DDebug() << "Search for Lens: " << Maker << " :: " << Lens 
              << "< and found: >" << m_lens->itemText(0) + "<";
 
-    QString temp             = m_metadata.getExifTagString("Exif.Photo.FocalLength");
-    m_klf->m_focalLength     = temp.mid(0, temp.length() -3 ).toFloat(); // HACK: strip the " mm" at the end ... 
-    m_klf->m_aperture       = m_metadata.getExifTagString("Exif.Photo.ApertureValue").mid(1).toFloat();
-    m_klf->m_subjectDistance = m_metadata.getExifTagString("Exif.CanonSi.SubjectDistance").toFloat();
+    QString temp = m_metadata.getExifTagString("Exif.Photo.FocalLength");
+    if (!temp.isEmpty())
+    {
+        double focal = temp.mid(0, temp.length() -3).toDouble(); // HACK: strip the " mm" at the end ...
+        DDebug() << "Focal Length: " << focal << endl; 
+        m_focal->setValue(focal);
+        m_focal->setEnabled(false);
+    }
 
-    DDebug() << "Focal Length: "     << m_klf->m_focalLength 
-             << "Aperture: "         << m_klf->m_aperture 
-             << "Subject Distance: " << m_klf->m_subjectDistance
-             << endl;
+    temp = m_metadata.getExifTagString("Exif.Photo.ApertureValue");
+    if (!temp.isEmpty())
+    {
+        double aperture = temp.mid(1).toDouble();
+        DDebug() << "Aperture: " << aperture << endl; 
+        m_aperture->setValue(aperture);
+        m_aperture->setEnabled(false);
+    }
+
+    temp = m_metadata.getExifTagString("Exif.CanonSi.SubjectDistance");
+    if (!temp.isEmpty())
+    {
+        double distance = temp.toDouble();
+        DDebug() << "Subject Distance: " << distance << endl; 
+        m_distance->setValue(distance);
+        m_distance->setEnabled(false);
+    }
+}
+
+void KLFDeviceSelector::slotFocalChanged(double f)
+{
+    m_klf->m_focalLength = f;
+    emit(signalLensSettingsChanged());
+}
+
+void KLFDeviceSelector::slotApertureChanged(double a)
+{
+    m_klf->m_aperture = a;
+    emit(signalLensSettingsChanged());
+}
+
+void KLFDeviceSelector::slotDistanceChanged(double d)
+{
+    m_klf->m_subjectDistance = d;
+    emit(signalLensSettingsChanged());
 }
 
 void KLFDeviceSelector::slotUseExif(int mode)
@@ -264,6 +329,9 @@ void KLFDeviceSelector::slotUseExif(int mode)
         m_maker->setEnabled(true);
         m_model->setEnabled(true);
         m_lens->setEnabled(true);
+        m_focal->setEnabled(true);
+        m_aperture->setEnabled(true);
+        m_distance->setEnabled(true);
     }
 }
 
@@ -322,15 +390,15 @@ void KLFDeviceSelector::slotUpdateLensCombo()
     const lfLens **lenses = m_klf->m_lfDb->FindLenses( dev, NULL, NULL );
     m_klf->m_cropFactor   = dev->CropFactor;
 
-    while ( lenses && *lenses ) 
+    while (lenses && *lenses) 
     {
         KLFDeviceSelector::LensPtr lens = *lenses;
         QVariant b                      = qVariantFromValue(lens);
-        m_lens->addItem( (*lenses)->Model, b );
+        m_lens->addItem((*lenses)->Model, b);
         lenses++;
     }
 
-    emit(signalLensSelected());
+    emit(signalLensSettingsChanged());
 }
 
 void KLFDeviceSelector::slotLensSelected()
@@ -341,7 +409,7 @@ void KLFDeviceSelector::slotLensSelected()
     if ( m_klf->m_cropFactor <= 0.0 ) // this should not happend
         m_klf->m_cropFactor = m_klf->m_usedLens->CropFactor;
 
-    emit(signalLensSelected());
+    emit(signalLensSettingsChanged());
 }
 
 void KLFDeviceSelector::setDevice( Device &/*d*/ )

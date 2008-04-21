@@ -43,6 +43,7 @@ extern "C"
 
 class QCheckBox;
 class KComboBox;
+class KDoubleNumInput;
 
 namespace DigikamLensCorrectionImagesPlugin
 {
@@ -148,6 +149,9 @@ protected slots:
     void slotUpdateLensCombo();
     void slotUseExif(int);
     void slotLensSelected();
+    void slotFocalChanged(double);
+    void slotApertureChanged(double);
+    void slotDistanceChanged(double);
 
 protected:
 
@@ -155,7 +159,7 @@ protected:
 
 signals:
 
-    void signalLensSelected();
+    void signalLensSettingsChanged();
 
 private:
 
@@ -164,6 +168,10 @@ private:
     KComboBox           *m_maker;
     KComboBox           *m_model;
     KComboBox           *m_lens;
+
+    KDoubleNumInput     *m_focal;
+    KDoubleNumInput     *m_aperture;
+    KDoubleNumInput     *m_distance;
 
     KLensFun            *m_klf;
     KExiv2Iface::KExiv2  m_metadata;

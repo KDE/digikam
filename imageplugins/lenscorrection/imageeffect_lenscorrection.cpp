@@ -125,7 +125,7 @@ ImageEffect_LensCorrection::ImageEffect_LensCorrection(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    connect(m_cameraSelector, SIGNAL(signalLensSelected()),
+    connect(m_cameraSelector, SIGNAL(signalLensSettingsChanged()),
             this, SLOT(slotLensChanged()));
 
     connect(m_filterCCA,  SIGNAL(stateChanged(int)), 
