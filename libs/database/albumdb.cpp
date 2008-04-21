@@ -2400,7 +2400,7 @@ void AlbumDB::removeItems(QList<qlonglong> itemIDs, QList<int> albumIDs)
     query.addBindValue(imageIds);
     d->db->execBatch(query);
 
-    d->db->recordChangeset(CollectionImageChangeset(itemIDs, albumIDs, CollectionImageChangeset::RemovedAll));
+    d->db->recordChangeset(CollectionImageChangeset(itemIDs, albumIDs, CollectionImageChangeset::Removed));
 }
 
 void AlbumDB::deleteRemovedItems()
@@ -2480,14 +2480,20 @@ void AlbumDB::setTagName(int tagID, const QString& name)
 void AlbumDB::moveItem(int srcAlbumID, const QString& srcName,
                        int dstAlbumID, const QString& dstName)
 {
+    // find id of moved image
+    qlonglong imageId = getImageId(srcAlbumID, srcName);
 
-    // first delete any stale database entries if any
+    if (imageId == -1)
+        return;
+
+    // first delete any stale database entries (for destination) if any
     deleteItem(dstAlbumID, dstName);
 
     d->db->execSql( QString("UPDATE Images SET album=?, name=? "
-                            "WHERE album=? AND name=?;"),
-                    dstAlbumID, dstName, srcAlbumID, srcName );
-#warning moveItem: Proper changeset
+                            "WHERE id=?;"),
+                    dstAlbumID, dstName, imageId );
+    d->db->recordChangeset(CollectionImageChangeset(imageId, srcAlbumID, CollectionImageChangeset::Removed));
+    d->db->recordChangeset(CollectionImageChangeset(imageId, dstAlbumID, CollectionImageChangeset::Added));
 }
 
 int AlbumDB::copyItem(int srcAlbumID, const QString& srcName,
