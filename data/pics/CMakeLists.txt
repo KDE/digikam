@@ -28,7 +28,6 @@ install( FILES image-full.png
 	       color-picker-grey.png 
 	       color-picker-white.png  	              
 	       banner-digikam.png 
-	       logo-digikam.png 
 	       logo-gphoto.png 
 	       logo-lcms.png 
 	       logo-exiv2.png 
