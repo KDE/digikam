@@ -36,6 +36,7 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kapplication.h>
+#include <kstandarddirs.h>
 
 // LibKDcraw includes.
 
@@ -87,9 +88,9 @@ RawCameraDlg::RawCameraDlg(QWidget *parent)
 
     // --------------------------------------------------------
 
-    QLabel *logo            = new QLabel(page);
-    KIconLoader* iconLoader = KIconLoader::global();
-    logo->setPixmap(iconLoader->loadIcon("digikam", KIconLoader::NoGroup, 96));
+    QLabel *logo = new QLabel(page);
+    logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
+                            .scaled(96, 96, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     // --------------------------------------------------------
 

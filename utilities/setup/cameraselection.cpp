@@ -43,6 +43,7 @@
 #include <kcursor.h>
 #include <kvbox.h>
 #include <kapplication.h>
+#include <kstandarddirs.h>
 
 // Local includes.
 
@@ -210,9 +211,8 @@ CameraSelection::CameraSelection( QWidget* parent )
     QGridLayout* gLayout5 = new QGridLayout(box2);
 
     QLabel* logo = new QLabel(box2);
-
-    KIconLoader* iconLoader = KIconLoader::global();
-    logo->setPixmap(iconLoader->loadIcon("digikam", KIconLoader::NoGroup, 64));
+    logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
+                            .scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     QLabel* link = new QLabel(box2);
     link->setText(i18n("<p>To set an <b>USB Mass Storage</b> camera<br>"

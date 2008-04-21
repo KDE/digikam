@@ -39,6 +39,7 @@
 #include <kiconloader.h>
 #include <kapplication.h>
 #include <kseparator.h>
+#include <kstandarddirs.h>
 
 // Local includes.
 
@@ -121,8 +122,8 @@ ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
 
     previewOriginal->setPixmap(preview->convertToPixmap());
     previewTarget->setPixmap(preview->convertToPixmap(m_iccTrans));
-    KIconLoader* iconLoader = KIconLoader::global();
-    logo->setPixmap(iconLoader->loadIcon("digikam", KIconLoader::NoGroup, 128));    
+    logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
+                            .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     
     QHBoxLayout *hlay1 = new QHBoxLayout();
     hlay1->setSpacing( KDialog::spacingHint() );

@@ -102,7 +102,8 @@ DProgressDlg::DProgressDlg(QWidget *parent, const QString &caption)
     vlay->addWidget(d->title);
     vlay->addStretch();
 
-    d->logo->setPixmap(KIconLoader::global()->loadIcon("digikam", KIconLoader::NoGroup, 128));
+    d->logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
+                       .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     d->actionsList->setSortingEnabled(false);
     d->actionsList->setRootIsDecorated(false);

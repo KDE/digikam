@@ -32,6 +32,7 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kapplication.h>
+#include <kstandarddirs.h>
 
 // Local includes.
 
@@ -67,8 +68,8 @@ CameraFolderDialog::CameraFolderDialog(QWidget *parent, CameraIconView *cameraVi
     QLabel *logo      = new QLabel(page);
     QLabel *message   = new QLabel(page);
 
-    KIconLoader* iconLoader = KIconLoader::global();
-    logo->setPixmap(iconLoader->loadIcon("digikam", KIconLoader::NoGroup, 128));
+    logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
+                            .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     message->setText(i18n("<p>Please select the camera folder "
                           "where you want to upload the images.</p>"));

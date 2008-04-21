@@ -45,6 +45,7 @@
 #include <klocale.h>
 #include <kdeversion.h>
 #include <kglobalsettings.h>
+#include <kstandarddirs.h>
 
 // Local includes.
 
@@ -505,7 +506,8 @@ void SlideShow::updatePixmap()
     {
         // End of Slide Show.
 
-        QPixmap logo = KIconLoader::global()->loadIcon("digikam", KIconLoader::NoGroup, 128);
+        QPixmap logo = QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
+                               .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
         QFont fn(font());
         fn.setPointSize(fn.pointSize()+10);

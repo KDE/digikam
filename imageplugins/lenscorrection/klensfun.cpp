@@ -302,6 +302,21 @@ void KLFDeviceSelector::findFromMetadata()
     }
 }
 
+QString KLFDeviceSelector::getFocalLength()
+{
+    return QString();
+}
+
+QString KLFDeviceSelector::getAperture()
+{
+    return QString();
+}
+
+QString KLFDeviceSelector::getSubjectDistance()
+{
+    return QString();
+}
+
 void KLFDeviceSelector::slotFocalChanged(double f)
 {
     m_klf->m_focalLength = f;

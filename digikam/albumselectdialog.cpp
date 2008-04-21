@@ -42,6 +42,7 @@
 #include <kaction.h>
 #include <kinputdialog.h>
 #include <kmessagebox.h>
+#include <kstandarddirs.h>
 
 // Local includes.
 
@@ -104,8 +105,8 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
 
     QGridLayout* grid       = new QGridLayout(page);
     QLabel *logo            = new QLabel(page);
-    KIconLoader* iconLoader = KIconLoader::global();
-    logo->setPixmap(iconLoader->loadIcon("digikam", KIconLoader::NoGroup, 128));
+    logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
+                            .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     QLabel *message = new QLabel(page);
     message->setWordWrap(true);

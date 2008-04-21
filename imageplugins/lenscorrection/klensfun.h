@@ -156,9 +156,12 @@ protected slots:
     void slotApertureChanged(double);
     void slotDistanceChanged(double);
 
-protected:
+private:
 
     void findFromMetadata();
+    QString getFocalLength();
+    QString getAperture();
+    QString getSubjectDistance();
 
 private:
 

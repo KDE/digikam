@@ -34,6 +34,7 @@
 
 #include <klocale.h>
 #include <kiconloader.h>
+#include <kstandarddirs.h>
 
 // Local includes
 
@@ -276,7 +277,8 @@ SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache *cache, QWidget *p
     m_anyBox->setObjectName("SearchGroupLabel_CheckBox");
 
     QLabel *logo = new QLabel(header);
-    logo->setPixmap(KIconLoader::global()->loadIcon("digikam", KIconLoader::NoGroup, 96));
+    logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
+                            .scaled(96, 96, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     grid->addWidget(mainLabel, 0, 0, 1, 1);
     grid->addWidget(m_allBox,  1, 0, 1, 1);
