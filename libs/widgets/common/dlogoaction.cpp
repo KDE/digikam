@@ -6,7 +6,7 @@
  * Date        : 2007-27-08
  * Description : an tool bar action object to display logo
  * 
- * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -63,9 +63,9 @@ int DLogoAction::plug(QWidget *widget, int index)
         pixmapLogo->setScaledContents(false);
         pixmapLogo->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
         QToolTip::add(pixmapLogo, i18n("Visit digiKam project website"));
-        KGlobal::dirs()->addResourceType("logo-digikam", KGlobal::dirs()->kde_default("data") + "digikam/data");
-        QString directory = KGlobal::dirs()->findResourceDir("logo-digikam", "logo-digikam.png");
-        pixmapLogo->setPixmap(QPixmap( directory + "logo-digikam.png" ));
+        KGlobal::dirs()->addResourceType("banner-digikam", KGlobal::dirs()->kde_default("data") + "digikam/data");
+        QString directory = KGlobal::dirs()->findResourceDir("banner-digikam", "banner-digikam.png");
+        pixmapLogo->setPixmap(QPixmap( directory + "banner-digikam.png" ));
         pixmapLogo->setFocusPolicy(QWidget::NoFocus);
 	
         bar->insertWidget(id, pixmapLogo->width(), pixmapLogo);
