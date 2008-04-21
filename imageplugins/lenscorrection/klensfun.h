@@ -33,12 +33,9 @@ extern "C"
 
 #include <QWidget>
 
-// Lib KExiv2 includes.
-
-#include <libkexiv2/kexiv2.h>
-
 // Local includes.
 
+#include "dmetadata.h"
 #include "dimgthreadedfilter.h"
 
 class QCheckBox;
@@ -131,6 +128,8 @@ public:
     typedef const lfCamera        *DevicePtr;
     typedef const lfLens          *LensPtr;
 
+public:
+
     KLFDeviceSelector(QWidget *parent);
     virtual ~KLFDeviceSelector();
 
@@ -141,7 +140,11 @@ public:
 
 public slots:
 
-    void findFromExif(KExiv2Iface::KExiv2&);
+    void findFromMetadata(const Digikam::DMetadata&);
+
+signals:
+
+    void signalLensSettingsChanged();
 
 protected slots:
 
@@ -155,17 +158,13 @@ protected slots:
 
 protected:
 
-    void findFromExif();
-
-signals:
-
-    void signalLensSettingsChanged();
+    void findFromMetadata();
 
 private:
 
     QCheckBox           *m_exifUsage;
 
-    KComboBox           *m_maker;
+    KComboBox           *m_make;
     KComboBox           *m_model;
     KComboBox           *m_lens;
 
@@ -173,8 +172,9 @@ private:
     KDoubleNumInput     *m_aperture;
     KDoubleNumInput     *m_distance;
 
+    Digikam::DMetadata   m_metadata;
+
     KLensFun            *m_klf;
-    KExiv2Iface::KExiv2  m_metadata;
 };
 
 }  // NameSpace DigikamLensCorrectionImagesPlugin

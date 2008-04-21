@@ -42,14 +42,11 @@
 #include <kcombobox.h>
 #include <kglobal.h>
 
-// LibKExiv2 includes.
-
-#include <libkexiv2/kexiv2.h>
-
 // Local includes.
 
 #include "version.h"
 #include "ddebug.h"
+#include "dmetadata.h"
 #include "imageiface.h"
 #include "klensfun.h"
 #include "imageeffect_lenscorrection.h"
@@ -215,10 +212,12 @@ void ImageEffect_LensCorrection::resetValues()
     m_settingsWidget->blockSignals(true);
 
     // Read Exif informations ...
-    Digikam::DImg *i = m_imagePreviewWidget->imageIface()->getOriginalImg();
-    KExiv2Iface::KExiv2 meta;
-    meta.setExif(i->getExif());
-    m_cameraSelector->findFromExif(meta);
+    Digikam::DImg      *img = m_imagePreviewWidget->imageIface()->getOriginalImg();
+    Digikam::DMetadata  meta;
+    meta.setExif(img->getExif());
+    meta.setIptc(img->getIptc());
+    meta.setXmp(img->getXmp());
+    m_cameraSelector->findFromMetadata(meta);
 
     m_settingsWidget->blockSignals(false);
 } 

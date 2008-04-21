@@ -88,7 +88,7 @@ bool KLensFun::supportsDistortion()
     if (m_usedLens == NULL) return false;
 
     lfLensCalibDistortion res;
-    return m_usedLens->InterpolateDistortion( m_focalLength, res );
+    return m_usedLens->InterpolateDistortion(m_focalLength, res);
 }
 
 bool KLensFun::supportsCCA()
@@ -96,7 +96,7 @@ bool KLensFun::supportsCCA()
     if (m_usedLens == NULL) return false;
 
     lfLensCalibTCA res;
-    return m_usedLens->InterpolateTCA( m_focalLength, res );
+    return m_usedLens->InterpolateTCA(m_focalLength, res);
 }
 
 bool KLensFun::supportsVig()
@@ -104,7 +104,7 @@ bool KLensFun::supportsVig()
     if (m_usedLens == NULL) return false;
 
     lfLensCalibVignetting res;
-    return m_usedLens->InterpolateVignetting( m_focalLength, m_aperture, m_subjectDistance, res );
+    return m_usedLens->InterpolateVignetting(m_focalLength, m_aperture, m_subjectDistance, res);
 }
 
 #if 0
@@ -121,7 +121,7 @@ KLFDeviceSelector::KLFDeviceSelector(QWidget *parent)
     m_klf              = new KLensFun();
     QGridLayout* grid  = new QGridLayout(this);
     m_exifUsage        = new QCheckBox(i18n("Use Exif Data"), this);
-    m_maker            = new KComboBox(this);
+    m_make             = new KComboBox(this);
     m_model            = new KComboBox(this);
     m_lens             = new KComboBox(this);
     QLabel *makeLabel  = new QLabel(i18n("Make:"), this);
@@ -130,7 +130,7 @@ KLFDeviceSelector::KLFDeviceSelector(QWidget *parent)
 
     m_exifUsage->setEnabled(false);
     m_exifUsage->setCheckState(Qt::Unchecked);
-    m_maker->setInsertPolicy(QComboBox::InsertAlphabetically);
+    m_make->setInsertPolicy(QComboBox::InsertAlphabetically);
     m_model->setInsertPolicy(QComboBox::InsertAlphabetically);
     m_lens->setInsertPolicy(QComboBox::InsertAlphabetically);
 
@@ -152,7 +152,7 @@ KLFDeviceSelector::KLFDeviceSelector(QWidget *parent)
 
     grid->addWidget(m_exifUsage, 0, 0, 1, 3);
     grid->addWidget(makeLabel,   1, 0, 1, 3);
-    grid->addWidget(m_maker,     2, 0, 1, 3);
+    grid->addWidget(m_make,      2, 0, 1, 3);
     grid->addWidget(modelLabel,  3, 0, 1, 3);
     grid->addWidget(m_model,     4, 0, 1, 3);
     grid->addWidget(lensLabel,   5, 0, 1, 3);
@@ -169,7 +169,7 @@ KLFDeviceSelector::KLFDeviceSelector(QWidget *parent)
     connect(m_exifUsage, SIGNAL(stateChanged(int)), 
             this, SLOT(slotUseExif(int)));
 
-    connect(m_maker, SIGNAL(currentIndexChanged(int)), 
+    connect(m_make, SIGNAL(currentIndexChanged(int)), 
             this, SLOT(slotUpdateCombos()));
 
     connect(m_model, SIGNAL(currentIndexChanged(int)), 
@@ -202,13 +202,13 @@ KLFDeviceSelector::Device KLFDeviceSelector::getDevice()
 }
 #endif
 
-void KLFDeviceSelector::findFromExif(KExiv2Iface::KExiv2 &meta)
+void KLFDeviceSelector::findFromMetadata(const Digikam::DMetadata& meta)
 {
     m_metadata = meta;
-    findFromExif();
+    findFromMetadata();
 }
 
-void KLFDeviceSelector::findFromExif()
+void KLFDeviceSelector::findFromMetadata()
 {
 //    KLFDeviceSelector::Device firstDevice; // empty strings
 //    setDevice( firstDevice );
@@ -224,21 +224,21 @@ void KLFDeviceSelector::findFromExif()
         m_exifUsage->setEnabled(true);
     }
 
-    QString Lens, Maker, Model;
-    Maker = m_metadata.getExifTagString("Exif.Image.Make");
+    QString Lens, Make, Model;
+    Make  = m_metadata.getExifTagString("Exif.Image.Make");
     Model = m_metadata.getExifTagString("Exif.Image.Model");
 
     // Not standarized, maybe such a thing should go to libexiv2 instead
     // please run "exiv2 -p t some_image_file.jpeg" and send me the data
     // of your camera, if this does not work for you, thanks. adrian@suse.de
-    if (Maker.toUpper() == "CANON")
+    if (Make.toUpper() == "CANON")
         Lens = m_metadata.getExifTagString("Exif.Canon.0x0095");
 
-    int makerIdx = m_maker->findText(Maker);
+    int makerIdx = m_make->findText(Make);
     if (makerIdx >= 0) 
     {
-        m_maker->setCurrentIndex(makerIdx);
-        m_maker->setEnabled(false);
+        m_make->setCurrentIndex(makerIdx);
+        m_make->setEnabled(false);
     }
 
     slotUpdateCombos();
@@ -256,7 +256,7 @@ void KLFDeviceSelector::findFromExif()
     // they seem anyway not to have Exif entrys ususally :/
     int lensIdx = m_lens->findText(Lens); 
     if (lensIdx < 0)
-       lensIdx = m_lens->findText(Maker + " " + Lens); 
+       lensIdx = m_lens->findText(Make + " " + Lens); 
 
     if (lensIdx >= 0) 
     {
@@ -271,7 +271,7 @@ void KLFDeviceSelector::findFromExif()
         m_lens->setEnabled(true);
     }
 
-    DDebug() << "Search for Lens: " << Maker << " :: " << Lens 
+    DDebug() << "Search for Lens: " << Make << " :: " << Lens 
              << "< and found: >" << m_lens->itemText(0) + "<";
 
     QString temp = m_metadata.getExifTagString("Exif.Photo.FocalLength");
@@ -323,10 +323,12 @@ void KLFDeviceSelector::slotDistanceChanged(double d)
 void KLFDeviceSelector::slotUseExif(int mode)
 {
     if (mode == Qt::Checked)
-        findFromExif();
+    {
+        findFromMetadata();
+    }
     else 
     {
-        m_maker->setEnabled(true);
+        m_make->setEnabled(true);
         m_model->setEnabled(true);
         m_lens->setEnabled(true);
         m_focal->setEnabled(true);
@@ -343,7 +345,7 @@ void KLFDeviceSelector::slotUpdateCombos()
     m_model->clear();
 
     bool firstRun = false;
-    if ( m_maker->count() == 0 )
+    if ( m_make->count() == 0 )
        firstRun = true;
 
     while ( *it ) 
@@ -354,13 +356,13 @@ void KLFDeviceSelector::slotUpdateCombos()
            if ( (*it)->Maker ) 
            {
                 QString t( (*it)->Maker );
-                if ( m_maker->findText( t, Qt::MatchExactly ) < 0 )
-                    m_maker->addItem( t );
+                if ( m_make->findText( t, Qt::MatchExactly ) < 0 )
+                    m_make->addItem( t );
            }
        }
 
        // Fill models for current selected maker
-       if ( (*it)->Model && (*it)->Maker == m_maker->currentText() ) 
+       if ( (*it)->Model && (*it)->Maker == m_make->currentText() ) 
        {
             KLFDeviceSelector::DevicePtr dev;
             dev        = *it;
