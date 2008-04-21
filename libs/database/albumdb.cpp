@@ -887,7 +887,6 @@ bool AlbumDB::hasTags(const QList<qlonglong>& imageIDList)
     {
         sql += QString(" OR imageid=? ");
         boundValues << (*it);
-        ++it;
     }
 
     sql += QString(";");
