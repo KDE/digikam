@@ -20,8 +20,7 @@ CameraGUI      : New bargraph to display camera media free-space.
 AlbumGUI       : Added Thumbbar with Preview mode to easy navigate between pictures.
 
 ImageEditor    : Added Thumbbar to easy navigate between pictures.
-ImageEditor    : new plugin based on LensFun library (http://lensfun.berlios.de) to correct lens chromatic 
-                 and distorsion aberrations automatically.
+ImageEditor    : new plugin based on LensFun library (http://lensfun.berlios.de) to correct automaticaly lens aberrations.
 
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
