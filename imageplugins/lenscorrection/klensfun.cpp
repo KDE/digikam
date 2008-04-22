@@ -182,10 +182,10 @@ KLFDeviceSelector::KLFDeviceSelector(QWidget *parent)
             this, SLOT(slotFocalChanged(double)));
 
     connect(m_aperture, SIGNAL(valueChanged(double)),
-            this, SLOT(slotApertureChanged()));
+            this, SLOT(slotApertureChanged(double)));
 
     connect(m_distance, SIGNAL(valueChanged(double)),
-            this, SLOT(slotDistanceChanged()));
+            this, SLOT(slotDistanceChanged(double)));
 
     KLFDeviceSelector::Device firstDevice; // empty strings
 //    setDevice( firstDevice );
