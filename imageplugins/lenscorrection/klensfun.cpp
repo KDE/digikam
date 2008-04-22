@@ -368,19 +368,19 @@ void KLFDeviceSelector::findFromMetadata()
 void KLFDeviceSelector::slotFocalChanged(double f)
 {
     m_klf->m_focalLength = f;
-    emit(signalLensSettingsChanged());
+    emit signalLensSettingsChanged();
 }
 
 void KLFDeviceSelector::slotApertureChanged(double a)
 {
     m_klf->m_aperture = a;
-    emit(signalLensSettingsChanged());
+    emit signalLensSettingsChanged();
 }
 
 void KLFDeviceSelector::slotDistanceChanged(double d)
 {
     m_klf->m_subjectDistance = d;
-    emit(signalLensSettingsChanged());
+    emit signalLensSettingsChanged();
 }
 
 void KLFDeviceSelector::slotUseExif(int mode)

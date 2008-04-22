@@ -66,7 +66,7 @@ ImageEffect_LensCorrection::ImageEffect_LensCorrection(QWidget* parent)
     KAboutData* about = new KAboutData("digikam", 0,
                                        ki18n("Lens Error Correction"), 
                                        digikam_version,
-                                       ki18n("A digiKam image plugin to fix errors caused by lens."),
+                                       ki18n("A digiKam image plugin to fix errors caused by lens using LensFun library."),
                                        KAboutData::License_GPL,
                                        ki18n("(c) 2008, Adrian Schroeter\n"
                                        "(c) 2008, Gilles Caulier"), 
@@ -85,7 +85,6 @@ ImageEffect_LensCorrection::ImageEffect_LensCorrection(QWidget* parent)
 
     m_settingsWidget  = new QWidget(mainWidget());
     QGridLayout *grid = new QGridLayout(m_settingsWidget);
-//    m_mainTab->addTab(firstPage, i18n("Camera and Lens"));
 
 #if 0
     m_maskPreviewLabel = new QLabel(firstPage);
@@ -99,24 +98,25 @@ ImageEffect_LensCorrection::ImageEffect_LensCorrection(QWidget* parent)
 
     // -------------------------------------------------------------
 
-//    m_mainTab->addTab(secondPage, i18n("Use Filters"));
-
     m_filterCCA  = new QCheckBox(i18n("Chromatic Aberration"), m_settingsWidget);
-    m_filterCCA->setWhatsThis( i18n("Chromatic aberration is easily recognised as color fringes towards the image corners. "
-			            "CA is due to a variing lens focus for different colors."));
+    m_filterCCA->setWhatsThis(i18n("Chromatic aberration is easily recognised as color fringes "
+                                   "towards the image corners. CA is due to a variing lens focus "
+                                   "for different colors."));
     m_filterVig  = new QCheckBox(i18n("Vignetting"), m_settingsWidget);
-    m_filterVig->setWhatsThis( i18n("Vignetting refers to an image darkening in the corners. Optical and natural "    
-		                    "vignetting can be cancelled out with this option, whereas mechanical vignetting "
-				    "will not be cured"));
+    m_filterVig->setWhatsThis(i18n("Vignetting refers to an image darkening in the corners. "
+                                   "Optical and natural vignetting can be cancelled out with this option, "
+                                   "whereas mechanical vignetting will not be cured."));
     m_filterCCI  = new QCheckBox(i18n("Color Correction"), m_settingsWidget);
-    m_filterCCI->setWhatsThis( i18n("Lenses all have a slight color tinge to them, mostly due to the anti-reflective coating. "
-			            "The tinge can be taken away when the respective data is know for the lens."));
+    m_filterCCI->setWhatsThis(i18n("Lenses all have a slight color tinge to them, "
+                                   "mostly due to the anti-reflective coating. "
+                                   "The tinge can be taken away when the respective data is know for the lens."));
     m_filterDist = new QCheckBox(i18n("Distortion"), m_settingsWidget);
-    m_filterDist->setWhatsThis( i18n("Distortion refers to an image deformation, which is most pronounced towards the "
-			              "corners. These Seidel aberrations are known as pincushion and barrel distorsions."));
+    m_filterDist->setWhatsThis(i18n("Distortion refers to an image deformation, which is most pronounced "
+                                    "towards the corners. These Seidel aberrations are known as pincushion "
+                                    "and barrel distorsions."));
     m_filterGeom = new QCheckBox(i18n("Geometry"), m_settingsWidget);
-    m_filterGeom->setWhatsThis( i18n("Four geometries are handeled here: Rectilinear (99% of all lenses), Fisheye, "
-			             "Cylindrical, Equirectangular. "));
+    m_filterGeom->setWhatsThis(i18n("Four geometries are handeled here: Rectilinear (99% of all lenses), "
+                                    "Fisheye, Cylindrical, Equirectangular."));
 
 //    grid->addWidget(m_maskPreviewLabel, 0, 0, 1, 2);
     grid->addWidget(m_cameraSelector, 0, 0, 1, 2);
