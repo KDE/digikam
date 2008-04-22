@@ -224,17 +224,63 @@ void KLFDeviceSelector::findFromMetadata()
         m_exifUsage->setEnabled(true);
     }
 
-    QString Lens, Make, Model;
-    Make  = m_metadata.getExifTagString("Exif.Image.Make");
-    Model = m_metadata.getExifTagString("Exif.Image.Model");
+    Digikam::PhotoInfoContainer photoInfo = m_metadata.getPhotographInformations();
 
-    // Not standarized, maybe such a thing should go to libexiv2 instead
-    // please run "exiv2 -p t some_image_file.jpeg" and send me the data
-    // of your camera, if this does not work for you, thanks. adrian@suse.de
-    if (Make.toUpper() == "CANON")
-        Lens = m_metadata.getExifTagString("Exif.Canon.0x0095");
+    QString make  = photoInfo.make;
+    QString model = photoInfo.model;
 
-    int makerIdx = m_make->findText(Make);
+    // ------------------------------------------------------------------------------------------------
+    // Try to get Lens Data informations from makernote.
+    // NOTE: Marcel, it's a non-standarized way, maybe such a thing should go to DMetadata instead
+    // to share code with digiKam database interface to host Lens informations.
+
+    // Canon Cameras.
+    QString lens = m_metadata.getExifTagString("Exif.Canon.0x0095");
+    if (lens.isEmpty())
+    {
+        // Nikon Cameras.
+        lens = m_metadata.getExifTagString("Exif.Nikon3.LensData");
+        if (lens.isEmpty())
+        {
+            // Minolta Cameras.
+            lens = m_metadata.getExifTagString("Exif.Minolta.LensID");
+            if (lens.isEmpty())
+            {
+                // Pentax Cameras.
+                lens = m_metadata.getExifTagString("Exif.Pentax.LensType");
+                if (lens.isEmpty())
+                {
+                    // Panasonic Cameras.
+                    lens = m_metadata.getExifTagString("Exif.Panasonic.0x0310");
+                    if (lens.isEmpty())
+                    {
+                        // Sigma Cameras.
+                        lens = m_metadata.getExifTagString("Exif.Sigma.LensRange");
+                        if (lens.isEmpty())
+                        {
+                            // TODO : add Fuji, Olympus, Sony Cameras before XMP parsing.
+
+                            // XMP aux tags.
+                            lens = m_metadata.getXmpTagString("Xmp.aux.Lens");
+                            if (lens.isEmpty())
+                            {
+                                // XMP M$ tags (Lens Maker + Lens Model to be compatible with LensFun Database).
+                                lens = m_metadata.getXmpTagString("Xmp.MicrosoftPhoto.LensManufacturer");
+                                if (!lens.isEmpty())
+                                    lens.append(" ");
+
+                                lens.append(m_metadata.getXmpTagString("Xmp.MicrosoftPhoto.LensModel"));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // ------------------------------------------------------------------------------------------------
+
+    int makerIdx = m_make->findText(make);
     if (makerIdx >= 0) 
     {
         m_make->setCurrentIndex(makerIdx);
@@ -242,7 +288,7 @@ void KLFDeviceSelector::findFromMetadata()
     }
 
     slotUpdateCombos();
-    int modelIdx = m_model->findText(Model);
+    int modelIdx = m_model->findText(model);
     if (modelIdx >= 0) 
     {
         m_model->setCurrentIndex(modelIdx);
@@ -254,9 +300,9 @@ void KLFDeviceSelector::findFromMetadata()
     // We use here the Camera Maker, because the Lens Maker seems not to be
     // part of the Exif data. This is of course bad for 3rd party lenses, but
     // they seem anyway not to have Exif entrys ususally :/
-    int lensIdx = m_lens->findText(Lens); 
+    int lensIdx = m_lens->findText(lens); 
     if (lensIdx < 0)
-       lensIdx = m_lens->findText(Make + " " + Lens); 
+       lensIdx = m_lens->findText(make + " " + lens); 
 
     if (lensIdx >= 0) 
     {
@@ -271,10 +317,10 @@ void KLFDeviceSelector::findFromMetadata()
         m_lens->setEnabled(true);
     }
 
-    DDebug() << "Search for Lens: " << Make << " :: " << Lens 
+    DDebug() << "Search for Lens: " << make << " :: " << lens 
              << "< and found: >" << m_lens->itemText(0) + "<";
 
-    QString temp = m_metadata.getExifTagString("Exif.Photo.FocalLength");
+    QString temp = photoInfo.focalLength;
     if (!temp.isEmpty())
     {
         double focal = temp.mid(0, temp.length() -3).toDouble(); // HACK: strip the " mm" at the end ...
@@ -283,7 +329,7 @@ void KLFDeviceSelector::findFromMetadata()
         m_focal->setEnabled(false);
     }
 
-    temp = m_metadata.getExifTagString("Exif.Photo.ApertureValue");
+    temp = photoInfo.aperture;
     if (!temp.isEmpty())
     {
         double aperture = temp.mid(1).toDouble();
@@ -292,7 +338,24 @@ void KLFDeviceSelector::findFromMetadata()
         m_aperture->setEnabled(false);
     }
 
-    temp = m_metadata.getExifTagString("Exif.CanonSi.SubjectDistance");
+    // ------------------------------------------------------------------------------------------------
+    // Try to get subject distance value.
+
+    // From standard Exif.
+    temp = m_metadata.getExifTagString("Exif.Photo.SubjectDistance");
+    if (temp.isEmpty())
+    {
+        // From standard Xmp.
+        temp = m_metadata.getExifTagString("Xmp.exif.SubjectDistance");
+        if (temp.isEmpty())
+        {
+            // From Canon Makernote.
+            temp = m_metadata.getExifTagString("Exif.CanonSi.SubjectDistance");
+
+            // TODO: Add here others Makernotes tags.
+        }
+    }
+
     if (!temp.isEmpty())
     {
         double distance = temp.toDouble();
@@ -300,21 +363,6 @@ void KLFDeviceSelector::findFromMetadata()
         m_distance->setValue(distance);
         m_distance->setEnabled(false);
     }
-}
-
-QString KLFDeviceSelector::getFocalLength()
-{
-    return QString();
-}
-
-QString KLFDeviceSelector::getAperture()
-{
-    return QString();
-}
-
-QString KLFDeviceSelector::getSubjectDistance()
-{
-    return QString();
 }
 
 void KLFDeviceSelector::slotFocalChanged(double f)
