@@ -137,19 +137,19 @@ ImageEffect_LensCorrection::ImageEffect_LensCorrection(QWidget* parent)
             this, SLOT(slotLensChanged()));
 
     connect(m_filterCCA,  SIGNAL(stateChanged(int)), 
-            this, SLOT(setFilters()));
+            this, SLOT(slotSetFilters()));
 
     connect(m_filterVig,  SIGNAL(stateChanged(int)), 
-            this, SLOT(setFilters()));
+            this, SLOT(slotSetFilters()));
 
     connect(m_filterCCI,  SIGNAL(stateChanged(int)), 
-            this, SLOT(setFilters()));
+            this, SLOT(slotSetFilters()));
 
     connect(m_filterDist, SIGNAL(stateChanged(int)), 
-            this, SLOT(setFilters()));
+            this, SLOT(slotSetFilters()));
 
     connect(m_filterGeom, SIGNAL(stateChanged(int)), 
-            this, SLOT(setFilters()));
+            this, SLOT(slotSetFilters()));
 }
 
 ImageEffect_LensCorrection::~ImageEffect_LensCorrection()
@@ -169,7 +169,7 @@ void ImageEffect_LensCorrection::slotLensChanged()
     m_filterCCI->setEnabled(m_cameraSelector->getKLFObject()->supportsVig());
     m_filterDist->setEnabled(m_cameraSelector->getKLFObject()->supportsDistortion());
     m_filterGeom->setEnabled(m_cameraSelector->getKLFObject()->supportsDistortion());
-    setFilters();
+    slotSetFilters();
 }
 
 void ImageEffect_LensCorrection::readUserSettings()
@@ -185,7 +185,7 @@ void ImageEffect_LensCorrection::readUserSettings()
     m_filterGeom->setCheckState(group.readEntry("Geometry", true)   ? Qt::Checked : Qt::Unchecked);
 
     m_settingsWidget->blockSignals(false);
-    setFilters();
+    slotSetFilters();
 }
 
 void ImageEffect_LensCorrection::writeUserSettings()
@@ -205,7 +205,7 @@ void ImageEffect_LensCorrection::writeUserSettings()
     group.sync();
 }
 
-void ImageEffect_LensCorrection::setFilters()
+void ImageEffect_LensCorrection::slotSetFilters()
 {
     m_cameraSelector->getKLFObject()->setCorrection(
         (m_filterCCA->checkState()  == Qt::Checked && m_filterCCA->isEnabled())  ? true : false,

@@ -48,7 +48,7 @@ public:
 private slots:
 
     void readUserSettings();
-    void setFilters();
+    void slotSetFilters();
     void slotLensChanged();
 
 private:
