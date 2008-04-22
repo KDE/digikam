@@ -172,6 +172,19 @@ void ImageEffect_LensCorrection::slotLensChanged()
     slotSetFilters();
 }
 
+void ImageEffect_LensCorrection::slotSetFilters()
+{
+    m_cameraSelector->getKLFObject()->setCorrection(
+        (m_filterCCA->checkState()  == Qt::Checked && m_filterCCA->isEnabled())  ? true : false,
+        (m_filterVig->checkState()  == Qt::Checked && m_filterVig->isEnabled())  ? true : false,
+        (m_filterCCI->checkState()  == Qt::Checked && m_filterCCI->isEnabled())  ? true : false,
+        (m_filterDist->checkState() == Qt::Checked && m_filterDist->isEnabled()) ? true : false,
+        (m_filterGeom->checkState() == Qt::Checked && m_filterGeom->isEnabled()) ? true : false
+     );
+
+    slotTimer();
+}
+
 void ImageEffect_LensCorrection::readUserSettings()
 {
     m_settingsWidget->blockSignals(true);
@@ -203,19 +216,6 @@ void ImageEffect_LensCorrection::writeUserSettings()
     if ( m_filterGeom->isEnabled() )
         group.writeEntry("Geometry", (m_filterGeom->checkState() == Qt::Checked) ? true : false);
     group.sync();
-}
-
-void ImageEffect_LensCorrection::slotSetFilters()
-{
-    m_cameraSelector->getKLFObject()->setCorrection(
-        (m_filterCCA->checkState()  == Qt::Checked && m_filterCCA->isEnabled())  ? true : false,
-        (m_filterVig->checkState()  == Qt::Checked && m_filterVig->isEnabled())  ? true : false,
-        (m_filterCCI->checkState()  == Qt::Checked && m_filterCCI->isEnabled())  ? true : false,
-        (m_filterDist->checkState() == Qt::Checked && m_filterDist->isEnabled()) ? true : false,
-        (m_filterGeom->checkState() == Qt::Checked && m_filterGeom->isEnabled()) ? true : false
-     );
-
-    slotEffect();
 }
 
 void ImageEffect_LensCorrection::resetValues()
