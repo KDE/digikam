@@ -25,7 +25,8 @@ AlbumGUI       : New advanced Search tools. Re-design of Search backend, based o
 		 Searches based on metadata and image properties are now possible.
 
 ImageEditor    : Added Thumbbar to easy navigate between pictures.
-ImageEditor    : new plugin based on LensFun library (http://lensfun.berlios.de) to correct automaticaly lens aberrations.
+ImageEditor    : New plugin based on LensFun library (http://lensfun.berlios.de) to correct automaticaly lens aberrations.
+ImageEditor    : LensDistortion and AntiVignetting are now merged with LensFun plugin 
 
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
