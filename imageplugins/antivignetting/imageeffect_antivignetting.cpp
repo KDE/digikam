@@ -21,9 +21,9 @@
  * GNU General Public License for more details.
  * 
  * ============================================================ */
- 
+
 // Qt includes. 
- 
+
 #include <QLabel>
 #include <QImage>
 #include <QPixmap>
@@ -61,8 +61,8 @@ namespace DigikamAntiVignettingImagesPlugin
 
 ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
                           : Digikam::ImageGuideDlg(parent, i18n("Vignetting Correction"),
-                            "antivignettings", false, true, false,
-                            Digikam::ImageGuideWidget::HVGuideMode, 0, true)
+                                                   "antivignettings", false, true, false,
+                                                   Digikam::ImageGuideWidget::HVGuideMode)
 {
     QString whatsThis;
 
@@ -88,11 +88,11 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
     QWidget *gboxSettings     = new QWidget(mainWidget());
     QGridLayout* gridSettings = new QGridLayout(gboxSettings);
 
-    m_maskPreviewLabel = new QLabel( gboxSettings );
-    m_maskPreviewLabel->setAlignment ( Qt::AlignHCenter | Qt::AlignVCenter );
-    m_maskPreviewLabel->setPixmap( QPixmap(120, 120) );
-    m_maskPreviewLabel->setWhatsThis( i18n("<p>You can see here a thumbnail preview of the anti-vignetting "
-                                           "mask applied to the image.") );
+    m_maskPreviewLabel = new QLabel(gboxSettings);
+    m_maskPreviewLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    m_maskPreviewLabel->setPixmap(QPixmap(120, 120));
+    m_maskPreviewLabel->setWhatsThis(i18n("<p>You can see here a thumbnail preview of the anti-vignetting "
+                                          "mask applied to the image."));
 
     // -------------------------------------------------------------
 
@@ -101,8 +101,8 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
     m_densityInput = new KDoubleNumInput(gboxSettings);
     m_densityInput->setDecimals(1);
     m_densityInput->setRange(1.0, 20.0, 0.1, true);
-    m_densityInput->setWhatsThis( i18n("<p>This value controls the degree of intensity attenuation "
-                                       "by the filter at its point of maximum density."));
+    m_densityInput->setWhatsThis(i18n("<p>This value controls the degree of intensity attenuation "
+                                      "by the filter at its point of maximum density."));
 
     // -------------------------------------------------------------
 
@@ -111,8 +111,8 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
     m_powerInput = new KDoubleNumInput(gboxSettings);
     m_powerInput->setDecimals(1);
     m_powerInput->setRange(0.1, 2.0, 0.1, true);
-    m_powerInput->setWhatsThis( i18n("<p>This value is used as the exponent controlling the "
-                                     "fall-off in density from the center of the filter to the periphery."));
+    m_powerInput->setWhatsThis(i18n("<p>This value is used as the exponent controlling the "
+                                    "fall-off in density from the center of the filter to the periphery."));
 
     // -------------------------------------------------------------
 
@@ -121,9 +121,9 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
     m_radiusInput = new KDoubleNumInput(gboxSettings);
     m_radiusInput->setDecimals(1);
     m_radiusInput->setRange(-100.0, 100.0, 0.1, true);
-    m_radiusInput->setWhatsThis( i18n("<p>This value is the radius of the center filter. It is a "
-                                      "multiple of the half-diagonal measure of the image, at which "
-                                      "the density of the filter falls to zero."));
+    m_radiusInput->setWhatsThis(i18n("<p>This value is the radius of the center filter. It is a "
+                                     "multiple of the half-diagonal measure of the image, at which "
+                                     "the density of the filter falls to zero."));
 
     KSeparator *line = new KSeparator (Qt::Horizontal, gboxSettings);
 
@@ -134,7 +134,7 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
     m_brightnessInput = new KIntNumInput(gboxSettings);
     m_brightnessInput->setRange(0, 100, 1);  
     m_brightnessInput->setSliderEnabled(true);
-    m_brightnessInput->setWhatsThis( i18n("<p>Set here the brightness re-adjustment of the target image."));
+    m_brightnessInput->setWhatsThis(i18n("<p>Set here the brightness re-adjustment of the target image."));
 
     // -------------------------------------------------------------
 
@@ -143,7 +143,7 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
     m_contrastInput = new KIntNumInput(gboxSettings);
     m_contrastInput->setRange(0, 100, 1);
     m_contrastInput->setSliderEnabled(true);  
-    m_contrastInput->setWhatsThis( i18n("<p>Set here the contrast re-adjustment of the target image."));
+    m_contrastInput->setWhatsThis(i18n("<p>Set here the contrast re-adjustment of the target image."));
 
     // -------------------------------------------------------------
 
@@ -153,7 +153,7 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
     m_gammaInput->setDecimals(2);
     m_gammaInput->setRange(0.1, 3.0, 0.01, true);
     m_gammaInput->setValue(1.0);
-    m_gammaInput->setWhatsThis( i18n("<p>Set here the gamma re-adjustment of the target image."));
+    m_gammaInput->setWhatsThis(i18n("<p>Set here the gamma re-adjustment of the target image."));
 
     // -------------------------------------------------------------
 
@@ -291,9 +291,8 @@ void ImageEffect_AntiVignetting::prepareEffect()
     double r = m_radiusInput->value();
 
     Digikam::ImageIface* iface = m_imagePreviewWidget->imageIface();
-    uchar *data   = iface->getOriginalImage();
-    int orgWidth  = iface->originalWidth();
-    int orgHeight = iface->originalHeight();
+    int orgWidth               = iface->originalWidth();
+    int orgHeight              = iface->originalHeight();
     QSize ps(orgWidth, orgHeight);
     ps.scale(QSize(120, 120), Qt::ScaleMin);
 
@@ -307,14 +306,10 @@ void ImageEffect_AntiVignetting::prepareEffect()
     pt.setPen(QPen(Qt::black, 1)); 
     pt.drawRect(0, 0, pix.width(), pix.height());
     pt.end();
-    m_maskPreviewLabel->setPixmap( pix );
-
-    Digikam::DImg orgImage(orgWidth, orgHeight, iface->originalSixteenBit(),
-                           iface->originalHasAlpha(), data);
-    delete [] data;
+    m_maskPreviewLabel->setPixmap(pix);
 
     m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
-                       new AntiVignetting(&orgImage, this, d, p, r, 0, 0, true));
+                       new AntiVignetting(iface->getOriginalImg(), this, d, p, r, 0, 0, true));
 }
 
 void ImageEffect_AntiVignetting::prepareFinal()
@@ -332,20 +327,14 @@ void ImageEffect_AntiVignetting::prepareFinal()
 
     Digikam::ImageIface iface(0, 0);
 
-    uchar *data = iface.getOriginalImage();
-    Digikam::DImg orgImage(iface.originalWidth(), iface.originalHeight(), iface.originalSixteenBit(),
-                           iface.originalHasAlpha(), data);
-    delete [] data;
-
     m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
-                       new AntiVignetting(&orgImage, this, d, p, r, 0, 0, true));
+                       new AntiVignetting(iface.getOriginalImg(), this, d, p, r, 0, 0, true));
 }
 
 void ImageEffect_AntiVignetting::putPreviewData()
 {
     Digikam::ImageIface* iface = m_imagePreviewWidget->imageIface();
-
-    Digikam::DImg imDest = m_threadedFilter->getTargetImage();
+    Digikam::DImg imDest       = m_threadedFilter->getTargetImage();
 
     // Adjust Image BCG.
 
@@ -359,8 +348,7 @@ void ImageEffect_AntiVignetting::putPreviewData()
     cmod.setContrast(c);
     cmod.applyBCG(imDest);
 
-    iface->putPreviewImage((imDest.smoothScale(iface->previewWidth(),
-                                               iface->previewHeight())).bits());
+    iface->putPreviewImage((imDest.smoothScale(iface->previewWidth(), iface->previewHeight())).bits());
     m_imagePreviewWidget->updatePreview();
 }
 
