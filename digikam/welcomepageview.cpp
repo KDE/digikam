@@ -107,12 +107,12 @@ QString WelcomePageView::infoPage()
     newFeatures << i18n("XMP metadata support");
     newFeatures << i18n("A new camera interface");
     newFeatures << i18n("A new tool to capture photographs from Camera");
-    newFeatures << i18n("Database file can be stored on a customized place to support remote album library path");
-    newFeatures << i18n("Supports of multiple roots album paths");
-    newFeatures << i18n("Thumbnails-bar integration with preview mode and in editor to easy naviguate between images");
+    newFeatures << i18n("The database file can be stored on a customized place to support remote album library paths");
+    newFeatures << i18n("Support of multiple roots album paths");
+    newFeatures << i18n("Thumbnails-bar integration with preview mode and in editor for easy navigation between images");
     newFeatures << i18n("Supports the latest camera RAW files");
     newFeatures << i18n("Geolocation performed using KDE4 Marble interface");
-    newFeatures << i18n("New tool based on LensFun libary to fix lens aberrations automaticaly");
+    newFeatures << i18n("New tool based on LensFun libary to fix lens defaults automatically");
 
     QString featureItems;
     for ( int i = 0 ; i < newFeatures.count() ; i++ )
@@ -133,7 +133,7 @@ QString WelcomePageView::infoPage()
         "Welcome to digiKam %1"
         "</h2><p>"
         "digiKam is a photo management program for the K Desktop Environment. "
-        "It is designed to import, organize, and export your digital photographs on your computer.</p>"
+        "It is designed to import, organize, enhance and export your digital photographs on your computer.</p>"
         "<p>You are currently in the Album view mode of digiKam. The Albums are the real "
         "containers where your files are stored, they are identical with the folders "
         "on disk.</p>\n<ul><li>"
@@ -148,7 +148,7 @@ QString WelcomePageView::infoPage()
         "%6\n"
         "<p>We hope that you will enjoy digiKam.</p>\n"
         "<p>Thank you,</p>\n"
-        "<p style='margin-bottom: 0px'>&nbsp; &nbsp; The digiKam Team</p>",
+        "<p style='margin-bottom: 0px'>&nbsp; &nbsp; The digiKam team</p>",
 
     QString(digikam_version),            // %1 : current digiKam version
     "help:/digikam/index.html",          // %2 : digiKam help:// Url
