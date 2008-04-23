@@ -1,7 +1,7 @@
 /* ============================================================
  *
  * Date        : 2008-02-10
- * Description : a plugin to fix lens errors
+ * Description : a plugin to fix automaticaly camera lens aberrations
  * 
  * Copyright (C) 2008 Adrian Schroeter <adrian@suse.de>
  * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -49,13 +49,13 @@
 #include "dmetadata.h"
 #include "imageiface.h"
 #include "klensfun.h"
-#include "imageeffect_lenscorrection.h"
-#include "imageeffect_lenscorrection.moc"
+#include "imageeffect_autocorrection.h"
+#include "imageeffect_autocorrection.moc"
 
-namespace DigikamLensCorrectionImagesPlugin
+namespace DigikamAutoCorrectionImagesPlugin
 {
 
-ImageEffect_LensCorrection::ImageEffect_LensCorrection(QWidget* parent)
+ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
                           : Digikam::ImageGuideDlg(parent, i18n("Lens Error Correction"),
                                                    "lensfx", false, true, true,
                                                    Digikam::ImageGuideWidget::HVGuideMode,
@@ -64,7 +64,7 @@ ImageEffect_LensCorrection::ImageEffect_LensCorrection(QWidget* parent)
     QString whatsThis;
 
     KAboutData* about = new KAboutData("digikam", 0,
-                                       ki18n("Lens Error Correction"), 
+                                       ki18n("Lens Auto-Correction"), 
                                        digikam_version,
                                        ki18n("A digiKam image plugin to fix automaticaly camera "
                                              "lens aberrations using LensFun library."),
@@ -156,17 +156,17 @@ ImageEffect_LensCorrection::ImageEffect_LensCorrection(QWidget* parent)
             this, SLOT(slotSetFilters()));
 }
 
-ImageEffect_LensCorrection::~ImageEffect_LensCorrection()
+ImageEffect_AutoCorrection::~ImageEffect_AutoCorrection()
 {
 }
 
-void ImageEffect_LensCorrection::slotInit()
+void ImageEffect_AutoCorrection::slotInit()
 {
     resetValues(); // for checking Exif data
     readUserSettings(); 
 }
 
-void ImageEffect_LensCorrection::slotLensChanged()
+void ImageEffect_AutoCorrection::slotLensChanged()
 {
     m_filterCCA->setEnabled(m_cameraSelector->getKLFObject()->supportsCCA());
     m_filterVig->setEnabled(m_cameraSelector->getKLFObject()->supportsVig());
@@ -176,7 +176,7 @@ void ImageEffect_LensCorrection::slotLensChanged()
     slotSetFilters();
 }
 
-void ImageEffect_LensCorrection::slotSetFilters()
+void ImageEffect_AutoCorrection::slotSetFilters()
 {
     m_cameraSelector->getKLFObject()->setCorrection(
         (m_filterCCA->checkState()  == Qt::Checked && m_filterCCA->isEnabled())  ? true : false,
@@ -189,7 +189,7 @@ void ImageEffect_LensCorrection::slotSetFilters()
     slotTimer();
 }
 
-void ImageEffect_LensCorrection::readUserSettings()
+void ImageEffect_AutoCorrection::readUserSettings()
 {
     m_settingsWidget->blockSignals(true);
     KSharedConfig::Ptr config = KGlobal::config();
@@ -205,7 +205,7 @@ void ImageEffect_LensCorrection::readUserSettings()
     slotSetFilters();
 }
 
-void ImageEffect_LensCorrection::writeUserSettings()
+void ImageEffect_AutoCorrection::writeUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("Lens Correction Tool Dialog");
@@ -222,7 +222,7 @@ void ImageEffect_LensCorrection::writeUserSettings()
     group.sync();
 }
 
-void ImageEffect_LensCorrection::resetValues()
+void ImageEffect_AutoCorrection::resetValues()
 {
     m_settingsWidget->blockSignals(true);
 
@@ -237,7 +237,7 @@ void ImageEffect_LensCorrection::resetValues()
     m_settingsWidget->blockSignals(false);
 } 
 
-void ImageEffect_LensCorrection::prepareEffect()
+void ImageEffect_AutoCorrection::prepareEffect()
 {
     m_settingsWidget->setEnabled(false);
 
@@ -254,7 +254,7 @@ void ImageEffect_LensCorrection::prepareEffect()
 
 }
 
-void ImageEffect_LensCorrection::prepareFinal()
+void ImageEffect_AutoCorrection::prepareFinal()
 {
     m_settingsWidget->setEnabled(false);
 
@@ -269,22 +269,22 @@ void ImageEffect_LensCorrection::prepareFinal()
     delete [] data;
 }
 
-void ImageEffect_LensCorrection::putPreviewData()
+void ImageEffect_AutoCorrection::putPreviewData()
 {
     Digikam::DImg imDest = m_threadedFilter->getTargetImage();
     m_imagePreviewWidget->imageIface()->putPreviewImage(imDest.bits());
     m_imagePreviewWidget->updatePreview();
 }
 
-void ImageEffect_LensCorrection::putFinalData()
+void ImageEffect_AutoCorrection::putFinalData()
 {
     Digikam::ImageIface iface(0, 0);
     iface.putOriginalImage(i18n("Lens Correction"), m_threadedFilter->getTargetImage().bits());
 }
 
-void ImageEffect_LensCorrection::renderingFinished()
+void ImageEffect_AutoCorrection::renderingFinished()
 {
     m_settingsWidget->setEnabled(true);
 }
 
-}  // NameSpace DigikamLensCorrectionImagesPlugin
+}  // NameSpace DigikamAutoCorrectionImagesPlugin

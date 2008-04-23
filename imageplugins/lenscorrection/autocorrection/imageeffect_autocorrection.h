@@ -1,7 +1,7 @@
 /* ============================================================
  *
  * Date        : 2008-02-10
- * Description : a plugin to fix lens errors
+ * Description : a plugin to fix automaticaly camera lens aberrations
  * 
  * Copyright (C) 2008 Adrian Schroeter <adrian@suse.de>
  * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -19,8 +19,8 @@
  * 
  * ============================================================ */
 
-#ifndef IMAGEEFFECT_LENSCORRECTION_H
-#define IMAGEEFFECT_LENSCORRECTION_H
+#ifndef IMAGEEFFECT_AUTOCORRECTION_H
+#define IMAGEEFFECT_AUTOCORRECTION_H
 
 // local includes.
 
@@ -33,17 +33,17 @@ class QWidget;
 
 class KLFDeviceSelector;
 
-namespace DigikamLensCorrectionImagesPlugin
+namespace DigikamAutoCorrectionImagesPlugin
 {
 
-class ImageEffect_LensCorrection : public Digikam::ImageGuideDlg
+class ImageEffect_AutoCorrection : public Digikam::ImageGuideDlg
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_LensCorrection(QWidget *parent);
-    ~ImageEffect_LensCorrection();
+    ImageEffect_AutoCorrection(QWidget *parent);
+    ~ImageEffect_AutoCorrection();
 
 private slots:
 
@@ -90,6 +90,6 @@ private slots:
 
 };
 
-}  // NameSpace DigikamLensCorrectionImagesPlugin
+}  // NameSpace DigikamAutoCorrectionImagesPlugin
 
-#endif /* IMAGEEFFECT_LENSCORRECTION_H */
+#endif /* IMAGEEFFECT_AUTOCORRECTION_H */

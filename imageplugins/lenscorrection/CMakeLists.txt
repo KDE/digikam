@@ -3,7 +3,7 @@ INCLUDE_DIRECTORIES(autocorrection
                     vignetting
                    )
 
-SET(autocorrection_SRCS autocorrection/imageeffect_lenscorrection.cpp 
+SET(autocorrection_SRCS autocorrection/imageeffect_autocorrection.cpp 
                         autocorrection/klensfun.cpp
    )
 

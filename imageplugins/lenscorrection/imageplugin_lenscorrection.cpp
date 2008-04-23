@@ -32,7 +32,7 @@
 
 #include "config-digikam.h"
 #ifdef HAVE_LENSFUN
-#include "imageeffect_lenscorrection.h"
+#include "imageeffect_autocorrection.h"
 #endif // HAVE_LENSFUN
 
 #include "ddebug.h"
@@ -86,7 +86,7 @@ void ImagePlugin_LensCorrection::setEnabledActions(bool enable)
 void ImagePlugin_LensCorrection::slotAutoCorrection()
 {
 #ifdef HAVE_LENSFUN
-    DigikamLensCorrectionImagesPlugin::ImageEffect_LensCorrection dlg(parentWidget());
+    DigikamAutoCorrectionImagesPlugin::ImageEffect_AutoCorrection dlg(parentWidget());
     dlg.exec();
 #endif // HAVE_LENSFUN
 }
