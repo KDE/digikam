@@ -6,8 +6,8 @@
  * Date        : 2004-12-27
  * Description : a plugin to reduce lens distorsions to an image.
  * 
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -24,12 +24,10 @@
 
 // C++ include.
 
-#include <cstring>
 #include <cmath>
-#include <cstdlib>
- 
+
 // Qt includes. 
- 
+
 #include <QLabel>
 #include <QPixmap>
 #include <QPainter>
@@ -71,11 +69,10 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
     KAboutData* about = new KAboutData("digikam", 0,
                                        ki18n("Lens Distortion Correction"), 
                                        digikam_version,
-                                       ki18n("A digiKam image plugin to reduce spherical aberration caused "
-                                                 "by a lens to an image."),
+                                       ki18n("A tool to reduce camera lens spherical aberrations."),
                                        KAboutData::License_GPL,
                                        ki18n("(c) 2004-2006, Gilles Caulier\n"
-                                       "(c) 2006-2007, Gilles Caulier and Marcel Wiesweg"), 
+                                       "(c) 2006-2008, Gilles Caulier and Marcel Wiesweg"), 
                                        KLocalizedString(),
                                        "http://www.digikam.org");
 
@@ -94,16 +91,16 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
 
     QWidget *gboxSettings     = new QWidget(mainWidget());
     QGridLayout* gridSettings = new QGridLayout( gboxSettings );
-    
+
     m_maskPreviewLabel = new QLabel( gboxSettings );
     m_maskPreviewLabel->setAlignment ( Qt::AlignHCenter | Qt::AlignVCenter );
     m_maskPreviewLabel->setWhatsThis( i18n("<p>You can see here a thumbnail preview of the "
                                            "distortion correction applied to a cross pattern.") );
-        
+
     // -------------------------------------------------------------
-    
+
     QLabel *label1 = new QLabel(i18n("Main:"), gboxSettings);
-    
+
     m_mainInput = new KDoubleNumInput(gboxSettings);
     m_mainInput->setDecimals(1);
     m_mainInput->setRange(-100.0, 100.0, 0.1, true);
@@ -112,9 +109,9 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
                                     "pincushion distortion."));
 
     // -------------------------------------------------------------
-    
+
     QLabel *label2 = new QLabel(i18n("Edge:"), gboxSettings);
-    
+
     m_edgeInput = new KDoubleNumInput(gboxSettings);
     m_edgeInput->setDecimals(1);
     m_edgeInput->setRange(-100.0, 100.0, 0.1, true);
@@ -122,18 +119,18 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
                                     "but has more effect at the edges of the image than at the center."));
 
     // -------------------------------------------------------------
-    
+
     QLabel *label3 = new QLabel(i18n("Zoom:"), gboxSettings);
-    
+
     m_rescaleInput = new KDoubleNumInput(gboxSettings);
     m_rescaleInput->setDecimals(1);
     m_rescaleInput->setRange(-100.0, 100.0, 0.1, true);
     m_rescaleInput->setWhatsThis( i18n("<p>This value rescales the overall image size."));
-    
+
     // -------------------------------------------------------------
-    
+
     QLabel *label4 = new QLabel(i18n("Brighten:"), gboxSettings);
-    
+
     m_brightenInput = new KDoubleNumInput(gboxSettings);
     m_brightenInput->setDecimals(1);
     m_brightenInput->setRange(-100.0, 100.0, 0.1, true);
@@ -141,33 +138,33 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    gridSettings->addWidget(m_maskPreviewLabel, 0, 0, 1, 2 );
-    gridSettings->addWidget(label1, 1, 0, 1, 2 );
-    gridSettings->addWidget(m_mainInput, 2, 0, 1, 2 );
-    gridSettings->addWidget(label2, 3, 0, 1, 2 );
-    gridSettings->addWidget(m_edgeInput, 4, 0, 1, 2 );
-    gridSettings->addWidget(label3, 5, 0, 1, 2 );
-    gridSettings->addWidget(m_rescaleInput, 6, 0, 1, 2 );
-    gridSettings->addWidget(label4, 7, 0, 1, 2 );
-    gridSettings->addWidget(m_brightenInput, 8, 0, 1, 2 );
+    gridSettings->addWidget(m_maskPreviewLabel, 0, 0, 1, 2);
+    gridSettings->addWidget(label1,             1, 0, 1, 2);
+    gridSettings->addWidget(m_mainInput,        2, 0, 1, 2);
+    gridSettings->addWidget(label2,             3, 0, 1, 2);
+    gridSettings->addWidget(m_edgeInput,        4, 0, 1, 2);
+    gridSettings->addWidget(label3,             5, 0, 1, 2);
+    gridSettings->addWidget(m_rescaleInput,     6, 0, 1, 2);
+    gridSettings->addWidget(label4,             7, 0, 1, 2);
+    gridSettings->addWidget(m_brightenInput,    8, 0, 1, 2);
     gridSettings->setMargin(spacingHint());
     gridSettings->setSpacing(spacingHint());
 
     setUserAreaWidget(gboxSettings);
-    
+
     // -------------------------------------------------------------
-    
+
     connect(m_mainInput, SIGNAL(valueChanged (double)),
-            this, SLOT(slotTimer()));            
-            
+            this, SLOT(slotTimer()));
+
     connect(m_edgeInput, SIGNAL(valueChanged (double)),
-            this, SLOT(slotTimer()));            
+            this, SLOT(slotTimer()));
 
     connect(m_rescaleInput, SIGNAL(valueChanged (double)),
-            this, SLOT(slotTimer()));            
+            this, SLOT(slotTimer()));
 
     connect(m_brightenInput, SIGNAL(valueChanged (double)),
-            this, SLOT(slotTimer()));           
+            this, SLOT(slotTimer()));
 
     // -------------------------------------------------------------
 
@@ -181,37 +178,36 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
        Longing for Qt4 where we can paint directly on the QImage...
     */
 
-    QImage preview(120, 120, QImage::Format_ARGB32);
-    memset(preview.bits(), 255, preview.numBytes());
-    QPixmap pix = QPixmap::fromImage(preview);
+    QPixmap pix(120, 120);
+    pix.fill(Qt::white);
     QPainter pt(&pix);
-    pt.setPen( QPen(Qt::black, 1) ); 
-    pt.fillRect( 0, 0, pix.width(), pix.height(), QBrush(Qt::black, Qt::CrossPattern) );
-    pt.drawRect( 0, 0, pix.width(), pix.height() );
+    pt.setPen(QPen(Qt::black, 1)); 
+    pt.fillRect(0, 0, pix.width(), pix.height(), QBrush(Qt::black, Qt::CrossPattern));
+    pt.drawRect(0, 0, pix.width(), pix.height());
     pt.end();
-    QImage preview2 = pix.toImage();
-    m_previewRasterImage = Digikam::DImg(preview2.width(), preview2.height(), false, false, preview2.bits());
+    QImage preview       = pix.toImage();
+    m_previewRasterImage = Digikam::DImg(preview.width(), preview.height(), false, false, preview.bits());
 }
 
 ImageEffect_LensDistortion::~ImageEffect_LensDistortion()
 {
 }
 
-void ImageEffect_LensDistortion::readUserSettings(void)
+void ImageEffect_LensDistortion::readUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("lensdistortion Tool Dialog");
+    KConfigGroup group        = config->group("lensdistortion Tool Dialog");
 
     m_mainInput->blockSignals(true);
     m_edgeInput->blockSignals(true);
     m_rescaleInput->blockSignals(true);
     m_brightenInput->blockSignals(true);
-    
+
     m_mainInput->setValue(group.readEntry("2nd Order Distortion", 0.0));
     m_edgeInput->setValue(group.readEntry("4th Order Distortion",0.0));
     m_rescaleInput->setValue(group.readEntry("Zoom Factor", 0.0));
     m_brightenInput->setValue(group.readEntry("Brighten", 0.0));
-    
+
     m_mainInput->blockSignals(false);
     m_edgeInput->blockSignals(false);
     m_rescaleInput->blockSignals(false);
@@ -220,10 +216,10 @@ void ImageEffect_LensDistortion::readUserSettings(void)
     slotEffect();
 }
 
-void ImageEffect_LensDistortion::writeUserSettings(void)
+void ImageEffect_LensDistortion::writeUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("lensdistortion Tool Dialog");
+    KConfigGroup group        = config->group("lensdistortion Tool Dialog");
     group.writeEntry("2nd Order Distortion", m_mainInput->value());
     group.writeEntry("4th Order Distortion", m_edgeInput->value());
     group.writeEntry("Zoom Factor", m_rescaleInput->value());
@@ -237,12 +233,12 @@ void ImageEffect_LensDistortion::resetValues()
     m_edgeInput->blockSignals(true);
     m_rescaleInput->blockSignals(true);
     m_brightenInput->blockSignals(true);
-    
+
     m_mainInput->setValue(0.0);
     m_edgeInput->setValue(0.0);
     m_rescaleInput->setValue(0.0);
     m_brightenInput->setValue(0.0);
-    
+
     m_mainInput->blockSignals(false);
     m_edgeInput->blockSignals(false);
     m_rescaleInput->blockSignals(false);
@@ -261,8 +257,9 @@ void ImageEffect_LensDistortion::prepareEffect()
     double r = m_rescaleInput->value();
     double b = m_brightenInput->value();
 
-    LensDistortion transformPreview(&m_previewRasterImage, 0L, m, e, r, b, 0, 0);
-    m_maskPreviewLabel->setPixmap(QPixmap::QPixmap(transformPreview.getTargetImage().convertToPixmap()));
+    LensDistortion transformPreview(&m_previewRasterImage, 0, m, e, r, b, 0, 0);
+    transformPreview.startFilterDirectly();       // Run filter without to use multithreading.
+    m_maskPreviewLabel->setPixmap(transformPreview.getTargetImage().convertToPixmap());
 
     Digikam::ImageIface* iface = m_imagePreviewWidget->imageIface();
 
@@ -288,7 +285,7 @@ void ImageEffect_LensDistortion::prepareFinal()
                        new LensDistortion(iface.getOriginalImg(), this, m, e, r, b, 0, 0));
 }
 
-void ImageEffect_LensDistortion::putPreviewData(void)
+void ImageEffect_LensDistortion::putPreviewData()
 {
     Digikam::ImageIface* iface = m_imagePreviewWidget->imageIface();
 
@@ -299,7 +296,7 @@ void ImageEffect_LensDistortion::putPreviewData(void)
     m_imagePreviewWidget->updatePreview();
 }
 
-void ImageEffect_LensDistortion::putFinalData(void)
+void ImageEffect_LensDistortion::putFinalData()
 {
     Digikam::ImageIface iface(0, 0);
 
