@@ -189,18 +189,18 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
     monthwidget.cpp                     Gilles                 X       DONE
     ratingpopupmenu.cpp                 Gilles                 X       DONE
     ratingwidget.cpp                    Gilles                 X       DONE
-    searchadvanceddialog.cpp            Gilles                 X       DONE       
-    searchfolderview.cpp                Gilles                 X       DONE                Will become obsolete duing new advanced search tools from Marcel.
-    searchquickdialog.cpp               Laurent                X       DONE
-    searchresultsitem.cpp               Gilles                 X       DONE
+    searchadvanceddialog.cpp            Gilles                 X       DONE                Will become obsolete duing new advanced search tools from Marcel.
+    searchfolderview.cpp                Gilles                 X       DONE                
+    searchquickdialog.cpp               Laurent                X       DONE                Will become obsolete duing new advanced search tools from Marcel.
+    searchresultsitem.cpp               Gilles                 X       DONE                Will become obsolete duing new advanced search tools from Marcel.
     searchresultsview.cpp               Gilles                 X       DONE
-    searchwidgets.cpp                   Gilles                 X       DONE            
+    searchwidgets.cpp                   Gilles                 X       DONE                Will become obsolete duing new advanced search tools from Marcel.
     syncjob.cpp                         Gilles                 X       DONE
     tageditdlg.cpp                      Gilles                 X       DONE
     tagfilterview.cpp                   Gilles                 X       DONE
     tagfolderview.cpp                   Gilles                 X       DONE
     tagspopupmenu.cpp                   Gilles                 X       DONE
-    timelinefolderview.cpp              Gilles                 X       DONE                Port is not yet adapted to new DB schema. Virtual Search Folders are temporally broken.
+    timelinefolderview.cpp              Gilles                 X       DONE                
     timelineview.cpp                    Gilles                 X       DONE
     timelinewidget.cpp                  Gilles                 X       DONE
     treefolderitem.cpp                  Gilles                 X       DONE       DONE
