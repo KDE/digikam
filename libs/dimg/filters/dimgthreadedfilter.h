@@ -6,7 +6,8 @@
  * Date        : 2005-05-25
  * Description : threaded image filter class.
  * 
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -52,13 +53,14 @@ public:
 
     /** Constructs a filter.
         You need to call startFilter() to start the threaded computation.
+        To run filter without to use multithreading, call startFilterDirectly().
     */
     DImgThreadedFilter(DImg *orgImage, QObject *parent,
                        const QString& name = QString());
 
     ~DImgThreadedFilter();
 
-    DImg getTargetImage(void) { return m_destImage; };
+    DImg getTargetImage()       { return m_destImage; };
     const QString &filterName() { return m_name; };
 
     /** Start the threaded computation */
@@ -83,18 +85,18 @@ signals:
 protected:
 
     /** Start filter operation before threaded method. Must be called by your constructor. */
-    virtual void initFilter(void);
+    virtual void initFilter();
 
     /** List of threaded operations by filter. */
     virtual void run();
 
     /** Main image filter method. Override in subclass. */
-    virtual void filterImage(void) = 0;
+    virtual void filterImage() = 0;
 
     /** Clean up filter data if necessary, called by stopComputation() method.
         Override in subclass.
      */
-    virtual void cleanupFilter(void) {};
+    virtual void cleanupFilter() {};
 
     /** Emit progress info */
     void postProgress(int progress);
