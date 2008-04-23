@@ -6,7 +6,7 @@
  * Date        : 2005-05-25
  * Description : Antivignetting threaded image filter.
  * 
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Original AntiVignetting algorithm copyrighted 2003 by 
  * John Walker from 'pnmctrfilt' implementation. See 
@@ -50,19 +50,19 @@ AntiVignetting::AntiVignetting(Digikam::DImg *orgImage, QObject *parent, double 
     m_xshift    = xshift;
     m_yshift    = yshift;
     m_normalize = normalize;
-    
+
     initFilter();
 }
 
 // This method is inspired from John Walker 'pnmctrfilt' algorithm code.
 
-void AntiVignetting::filterImage(void)
+void AntiVignetting::filterImage()
 {
     int     progress;
     int     col, row, xd, td, yd, p;
     int     i, xsize, ysize, diagonal, erad, xctr, yctr;
     double *ldens;
-    
+
     uchar* NewBits = m_destImage.bits();
     uchar* data    = m_orgImage.bits();
 
@@ -74,11 +74,11 @@ void AntiVignetting::filterImage(void)
 
     // Determine the radius of the filter.  This is the half diagonal
     // measure of the image multiplied by the command line radius factor. 
-    
+
     xsize = (Height + 1) / 2;
     ysize = (Width + 1) / 2;
     erad = (int)((sqrt((xsize * xsize) + (ysize * ysize)) + 0.5) * m_radius);    
-        
+
     // Build the in-memory table which maps distance from the
     // center of the image (as adjusted by the X and Y offset,
     // if any) to the density of the filter at this remove.  This
@@ -89,9 +89,9 @@ void AntiVignetting::filterImage(void)
     xsize    = ((Height + 1) / 2) + abs(m_xshift);
     ysize    = ((Width + 1)  / 2) + abs(m_yshift);
     diagonal = ((int) (sqrt((xsize * xsize) + (ysize * ysize)) + 0.5)) +  1;
-    
+
     ldens = new double[diagonal];
-    
+
     for (i = 0 ; !m_cancel && (i < diagonal) ; i++)
     {
         if ( i >= erad )
@@ -102,14 +102,14 @@ void AntiVignetting::filterImage(void)
 
     xctr = ((Height + 1) / 2) + m_xshift;
     yctr = ((Width + 1) / 2) + m_yshift;
-    
+
     for (row = 0 ; !m_cancel && (row < Width) ; row++) 
     {
         yd = abs(yctr - row);
 
         for (col = 0 ; !m_cancel && (col < Height) ; col++) 
         {
-            p = (col * Width + row)*4;         
+            p = (col * Width + row)*4;
 
             xd = abs(xctr - col);
             td = (int) (sqrt((xd * xd) + (yd * yd)) + 0.5);
@@ -129,21 +129,21 @@ void AntiVignetting::filterImage(void)
                 NewBits16[p+3] = data16[p+3];
             }
         }
-        
+
         // Update the progress bar in dialog.
         progress = (int)(((double)row * 100.0) / Width);
         if (progress%5 == 0)
             postProgress( progress );
     }
 
-    // Normalize colors for a best rendering.   
+    // Normalize colors for a best rendering.
     if (m_normalize)
     {
        Digikam::DImgImageFilters filters;
        filters.normalizeImage(m_destImage.bits(), Width, Height, m_destImage.sixteenBit());
     }
-        
-    delete [] ldens;        
+
+    delete [] ldens;
 }
 
 }  // NameSpace DigikamAntiVignettingImagesPlugin
