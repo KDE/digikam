@@ -13,11 +13,16 @@ General        : Support of multiple roots album paths.
 General        : New option in Help menu to list all RAW file formats supported.
 General        : Geolocation of picture on right side-bar is now delegate to KDE4 Marble widget.
 
+
 CameraGUI      : New design for camera interface.
 CameraGUI      : New Capture tool.
 CameraGUI      : New bargraph to display camera media free-space.
 
 AlbumGUI       : Added Thumbbar with Preview mode to easy navigate between pictures.
+AlbumGUI       : Integration of Simple Text Search tool to left sidebar as Amarok.
+AlbumGUI       : New advanced Search tools. Re-design of Search backend, based on XML.
+                 Re-design of search dialog for a better usability. 
+		 Searches based on metadata and image properties are now possible.
 
 ImageEditor    : Added Thumbbar to easy navigate between pictures.
 ImageEditor    : new plugin based on LensFun library (http://lensfun.berlios.de) to correct automaticaly lens aberrations.
