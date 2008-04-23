@@ -209,7 +209,6 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
 |-imageplugins
 |---adjustcurves                        Laurent                        DONE       DONE
 |---adjustlevels                        Laurent                        DONE       DONE
-|---antivignetting                      Laurent                        DONE       DONE
 |---blurfx                              Laurent                        DONE       DONE
 |---border                              Laurent                        DONE       DONE
 |-----patterns                          Laurent                        DONE        -
@@ -229,8 +228,7 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
 |---infrared                            Laurent                        DONE       DONE
 |---inpainting                          Gilles                         DONE       DONE
 |---inserttext                          Laurent                        DONE       DONE
-|---lenscorrection                      Gilles                         DONE       DONE      New plugin
-|---lensdistortion                      Laurent                        DONE       DONE
+|---lenscorrection                      Gilles                         DONE       DONE
 |---noisereduction                      Laurent                        DONE       DONE
 |---oilpaint                            Laurent                        DONE       DONE
 |---perspective                         Laurent                        DONE       DONE
