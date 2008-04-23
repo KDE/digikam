@@ -16,6 +16,7 @@ INCLUDE_DIRECTORIES(../utilities/imageeditor/editor
                     ../libs/threadimageio
                     ../libs/dmetadata 
                     ../digikam 
+                    ../
                     ${CMAKE_BINARY_DIR}/digikam/digikam
                    )
 

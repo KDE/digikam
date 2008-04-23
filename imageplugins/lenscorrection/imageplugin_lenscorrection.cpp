@@ -30,8 +30,14 @@
 
 // Local includes.
 
-#include "ddebug.h"
+#include "config-digikam.h"
+#ifdef HAVE_LENSFUN
 #include "imageeffect_lenscorrection.h"
+#endif // HAVE_LENSFUN
+
+#include "ddebug.h"
+#include "imageeffect_antivignetting.h"
+#include "imageeffect_lensdistortion.h"
 #include "imageplugin_lenscorrection.h"
 #include "imageplugin_lenscorrection.moc"
 
@@ -41,11 +47,27 @@ K_EXPORT_PLUGIN ( LensCorrectionFactory("digikamimageplugin_lenscorrection") )
 ImagePlugin_LensCorrection::ImagePlugin_LensCorrection(QObject *parent, const QVariantList &)
                           : Digikam::ImagePlugin(parent, "ImagePlugin_LensCorrection")
 {
-    m_lensCorrectionAction  = new KAction(KIcon("embosstool"), i18n("Lens Correction..."), this);
-    actionCollection()->addAction("imageplugin_lenscorrection", m_lensCorrectionAction );
+#ifdef HAVE_LENSFUN
 
-    connect(m_lensCorrectionAction, SIGNAL(triggered(bool)), 
-            this, SLOT(slotLensCorrection()));
+    m_autoCorrectionAction  = new KAction(KIcon("lensdistortion"), i18n("Auto-Correction..."), this);
+    actionCollection()->addAction("imageplugin_autocorrection", m_lensCorrectionAction );
+
+    connect(m_autoCorrectionAction, SIGNAL(triggered(bool)), 
+            this, SLOT(slotAutoCorrection()));
+
+#endif // HAVE_LENSFUN
+
+    m_lensdistortionAction  = new KAction(KIcon("lensdistortion"), i18n("Distortion..."), this);
+    actionCollection()->addAction("imageplugin_lensdistortion", m_lensdistortionAction );
+
+    connect(m_lensdistortionAction, SIGNAL(triggered(bool)), 
+            this, SLOT(slotLensDistortion()));
+
+    m_antivignettingAction  = new KAction(KIcon("antivignetting"), i18n("Vignetting..."), this);
+    actionCollection()->addAction("imageplugin_antivignetting", m_antivignettingAction );
+
+    connect(m_antivignettingAction, SIGNAL(triggered(bool)), 
+            this, SLOT(slotAntiVignetting()));
 
     setXMLFile("digikamimageplugin_lenscorrection_ui.rc");
 
@@ -58,11 +80,25 @@ ImagePlugin_LensCorrection::~ImagePlugin_LensCorrection()
 
 void ImagePlugin_LensCorrection::setEnabledActions(bool enable)
 {
-    m_lensCorrectionAction->setEnabled(enable);
+    m_autoCorrectionAction->setEnabled(enable);
 }
 
-void ImagePlugin_LensCorrection::slotLensCorrection()
+void ImagePlugin_LensCorrection::slotAutoCorrection()
 {
+#ifdef HAVE_LENSFUN
     DigikamLensCorrectionImagesPlugin::ImageEffect_LensCorrection dlg(parentWidget());
+    dlg.exec();
+#endif // HAVE_LENSFUN
+}
+
+void ImagePlugin_LensCorrection::slotLensDistortion()
+{
+    DigikamLensDistortionImagesPlugin::ImageEffect_LensDistortion dlg(parentWidget());
+    dlg.exec();
+}
+
+void ImagePlugin_LensCorrection::slotAntiVignetting()
+{
+    DigikamAntiVignettingImagesPlugin::ImageEffect_AntiVignetting dlg(parentWidget());
     dlg.exec();
 }

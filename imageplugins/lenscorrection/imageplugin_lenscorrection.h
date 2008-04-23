@@ -42,11 +42,15 @@ public:
 
 private slots:
 
-    void slotLensCorrection();
+    void slotAutoCorrection();
+    void slotLensDistortion();
+    void slotAntiVignetting();
 
 private:
 
-    KAction *m_lensCorrectionAction;
+    KAction *m_autoCorrectionAction;
+    KAction *m_lensdistortionAction;
+    KAction *m_antivignettingAction;
 };
 
 #endif /* IMAGEPLUGIN_LENSCORRECTION_H */
