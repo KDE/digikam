@@ -1,10 +1,10 @@
-INCLUDE_DIRECTORIES(lensfuniface
+INCLUDE_DIRECTORIES(autocorrection
                     distortion
                     vignetting
                    )
 
-SET(lensfuniface_SRCS lensfuniface/imageeffect_lenscorrection.cpp 
-                      lensfuniface/klensfun.cpp
+SET(autocorrection_SRCS autocorrection/imageeffect_lenscorrection.cpp 
+                        autocorrection/klensfun.cpp
    )
 
 SET(distortion_SRCS distortion/imageeffect_lensdistortion.cpp
@@ -19,7 +19,7 @@ IF(LENSFUN_LIBRARY)
    SET(digikamimageplugin_lenscorrection_PART_SRCS imageplugin_lenscorrection.cpp
                                                    ${distortion_SRCS}
                                                    ${vignetting_SRCS}
-                                                   ${lensfuniface_SRCS})
+                                                   ${autocorrection_SRCS})
 ELSEIF(LENSFUN_LIBRARY)
    SET(digikamimageplugin_lenscorrection_PART_SRCS imageplugin_lenscorrection.cpp
                                                    ${distortion_SRCS}
