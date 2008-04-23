@@ -42,4 +42,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 015 ==> 098651 : Image Plugin filter based on clens.
 016 ==> 147426 : Search for non-voted pics
 017 ==> 149555 : Always present search box instead of search by right-clicking and selecting simple or advanced search.
-018 ==> 
+018 ==> 139283 : IPTC Caption comment in search function.
+019 ==> 
