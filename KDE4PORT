@@ -230,7 +230,7 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
 |---inpainting                          Gilles                         DONE       DONE
 |---inserttext                          Laurent                        DONE       DONE
 |---lenscorrection                      Gilles                         DONE       DONE      New plugin
-|---lensdistortion                      Laurent                        DONE                 Final render failed, lens distorsion grid preview don't work
+|---lensdistortion                      Laurent                        DONE       DONE
 |---noisereduction                      Laurent                        DONE       DONE
 |---oilpaint                            Laurent                        DONE       DONE
 |---perspective                         Laurent                        DONE       DONE
