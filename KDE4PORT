@@ -138,15 +138,15 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
 |---slideshow                           Laurent         X      X       DONE        DONE
 
 |-kioslave
-    digikamalbums.cpp                   Marcel                 X       DONE
-    digikamdates.cpp                    Marcel                 X       DONE
-    digikamsearch.cpp                   Marcel                 X       DONE                 Port is not yet adapted to new DB schema. Search tools are temporally broken.
-    digikamtags.cpp                     Marcel                 X       DONE
+    digikamalbums.cpp                   Marcel                 X       DONE        DONE
+    digikamdates.cpp                    Marcel                 X       DONE        DONE
+    digikamsearch.cpp                   Marcel                 X       DONE        DONE
+    digikamtags.cpp                     Marcel                 X       DONE        DONE
 
-|-showfoto                              Gilles          X              DONE
+|-showfoto                              Gilles          X              DONE        DONE
 |---icons                               Gilles                         DONE        -
 |---pics                                Gilles                         DONE        -
-|---setup                               Gilles          X              DONE
+|---setup                               Gilles          X              DONE        DONE
 
 |-digikam
     album.cpp                           Laurent                X       DONE
@@ -190,7 +190,7 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
     ratingpopupmenu.cpp                 Gilles                 X       DONE
     ratingwidget.cpp                    Gilles                 X       DONE
     searchadvanceddialog.cpp            Gilles                 X       DONE       
-    searchfolderview.cpp                Gilles                 X       DONE                Port is not yet adapted to new DB schema. Virtual Search Folders are temporally broken.
+    searchfolderview.cpp                Gilles                 X       DONE                Will become obsolete duing new advanced search tools from Marcel.
     searchquickdialog.cpp               Laurent                X       DONE
     searchresultsitem.cpp               Gilles                 X       DONE
     searchresultsview.cpp               Gilles                 X       DONE
