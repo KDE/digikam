@@ -44,4 +44,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 017 ==> 149555 : Always present search box instead of search by right-clicking and selecting simple or advanced search.
 018 ==> 139283 : IPTC Caption comment in search function.
 019 ==> 150265 : Avanced search filter is missing search in comment / description.
-020 ==> 
+020 ==> 155735 : Make it possible to seach on IPTC-text.
+021 ==> 
