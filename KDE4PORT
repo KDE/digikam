@@ -209,7 +209,7 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
 |-imageplugins
 |---adjustcurves                        Laurent                        DONE       DONE
 |---adjustlevels                        Laurent                        DONE       DONE
-|---antivignetting                      Laurent                        DONE                 Do not work yet.
+|---antivignetting                      Laurent                        DONE       DONE
 |---blurfx                              Laurent                        DONE       DONE
 |---border                              Laurent                        DONE       DONE
 |-----patterns                          Laurent                        DONE        -
