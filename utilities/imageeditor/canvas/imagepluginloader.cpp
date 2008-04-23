@@ -7,7 +7,7 @@
  * Description : image plugins loader for image editor.
  * 
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,11 +48,13 @@ namespace Digikam
 
 static const char* ObsoleteImagePluginsList[] =
 {
-     "digikamimageplugin_blowup",    // Merged with "Resize" tool since 0.9.2.  
-     "digikamimageplugin_solarize",  // Renamed "ColorFx" since 0.9.2.  
-     "digikamimageplugin_unsharp",   // Merged with "Sharpen" tool since 0.9.2.
-     "digikamimageplugin_refocus",   // Merged with "Sharpen" tool since 0.9.2.
-     "digikamimageplugin_despeckle", // Renamed "Noise Reduction" since 0.9.2.
+     "digikamimageplugin_blowup",         // Merged with "Resize" tool since 0.9.2.  
+     "digikamimageplugin_solarize",       // Renamed "ColorFx" since 0.9.2.  
+     "digikamimageplugin_unsharp",        // Merged with "Sharpen" tool since 0.9.2.
+     "digikamimageplugin_refocus",        // Merged with "Sharpen" tool since 0.9.2.
+     "digikamimageplugin_despeckle",      // Renamed "Noise Reduction" since 0.9.2.
+     "digikamimageplugin_antivignetting", // Merged with "Lens Correction" since 0.10.0.
+     "digikamimageplugin_lensdistortion", // Merged with "Lens Correction" since 0.10.0.
      "-1"
 };
 
