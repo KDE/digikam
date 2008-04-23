@@ -113,7 +113,7 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
 |---hotplug                             Laurent                        DONE        -
 |---imageeditor
 |-----canvas  
-    canvas.cpp                          Gilles          X      X       DONE        DONE         
+    canvas.cpp                          Gilles          X      X       DONE        DONE
     colorcorrectiondlg.cpp              Gilles          X      X       DONE        DONE
     dimginterface.cpp                   Gilles          X      X       DONE        DONE 
     imageplugin.cpp                     Gilles          X      X       DONE        DONE
@@ -184,13 +184,13 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
     kdatepickerpopup.cpp                Gilles                 X       DONE
     kdatetimeedit.cpp                   Gilles                 X       DONE
     main.cpp                            Gilles                 X       DONE
-    mediaplayerview.cpp                 Gilles                 X       DONE                 
+    mediaplayerview.cpp                 Gilles                 X       DONE
     metadatahub.cpp                     Gilles                 X       DONE
     monthwidget.cpp                     Gilles                 X       DONE
     ratingpopupmenu.cpp                 Gilles                 X       DONE
     ratingwidget.cpp                    Gilles                 X       DONE
     searchadvanceddialog.cpp            Gilles                 X       DONE                Will become obsolete duing new advanced search tools from Marcel.
-    searchfolderview.cpp                Gilles                 X       DONE                
+    searchfolderview.cpp                Gilles                 X       DONE
     searchquickdialog.cpp               Laurent                X       DONE                Will become obsolete duing new advanced search tools from Marcel.
     searchresultsitem.cpp               Gilles                 X       DONE                Will become obsolete duing new advanced search tools from Marcel.
     searchresultsview.cpp               Gilles                 X       DONE
@@ -200,7 +200,7 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
     tagfilterview.cpp                   Gilles                 X       DONE
     tagfolderview.cpp                   Gilles                 X       DONE
     tagspopupmenu.cpp                   Gilles                 X       DONE
-    timelinefolderview.cpp              Gilles                 X       DONE                
+    timelinefolderview.cpp              Gilles                 X       DONE
     timelineview.cpp                    Gilles                 X       DONE
     timelinewidget.cpp                  Gilles                 X       DONE
     treefolderitem.cpp                  Gilles                 X       DONE       DONE
@@ -213,9 +213,9 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
 |---border                              Laurent                        DONE       DONE
 |-----patterns                          Laurent                        DONE        -
 |---channelmixer                        Laurent                        DONE       DONE
-|---charcoal                            Laurent                        DONE                 Render is broken.
+|---charcoal                            Laurent                        DONE       DONE
 |---colorfx                             Laurent                        DONE       DONE
-|---coreplugin                          Gilles                         DONE       DONE          
+|---coreplugin                          Gilles                         DONE       DONE
 |-----hsl                               Gilles                         DONE       DONE
 |-----ratiocrop                         Gilles                         DONE       DONE
 |-----sharpnesseditor                   Gilles                         DONE       DONE
