@@ -52,4 +52,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 020 ==> 155735 : Make it possible to seach on IPTC-text.
 021 ==> 147636 : GUI error in advaced searches: lots of free space.
 022 ==> 158866 : Advanced Search on Tags a mess.
-023 ==> 
+023 ==> 149026 : Search including sub-albums.
+024 ==> 
