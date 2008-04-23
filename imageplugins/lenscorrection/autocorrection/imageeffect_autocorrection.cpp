@@ -3,7 +3,7 @@
  * Date        : 2008-02-10
  * Description : a plugin to fix automaticaly camera lens aberrations
  * 
- * Copyright (C) 2008 Adrian Schroeter <adrian@suse.de>
+ * Copyright (C) 2008 by Adrian Schroeter <adrian at suse dot de>
  * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * 
  * This program is free software; you can redistribute it
@@ -56,8 +56,8 @@ namespace DigikamAutoCorrectionImagesPlugin
 {
 
 ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
-                          : Digikam::ImageGuideDlg(parent, i18n("Lens Error Correction"),
-                                                   "lensfx", false, true, true,
+                          : Digikam::ImageGuideDlg(parent, i18n("Lens Auto-Correction"),
+                                                   "lensautocorrection", false, true, true,
                                                    Digikam::ImageGuideWidget::HVGuideMode,
                                                    true)
 {
@@ -193,7 +193,7 @@ void ImageEffect_AutoCorrection::readUserSettings()
 {
     m_settingsWidget->blockSignals(true);
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("Lens Correction Tool Dialog");
+    KConfigGroup group        = config->group("Lens Auto-Correction Tool Dialog");
 
     m_filterCCA->setCheckState(group.readEntry("CCA", true)         ? Qt::Checked : Qt::Unchecked);
     m_filterVig->setCheckState(group.readEntry("Vignetting", true)  ? Qt::Checked : Qt::Unchecked);
@@ -208,7 +208,7 @@ void ImageEffect_AutoCorrection::readUserSettings()
 void ImageEffect_AutoCorrection::writeUserSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("Lens Correction Tool Dialog");
+    KConfigGroup group        = config->group("Lens Auto-Correction Tool Dialog");
     if ( m_filterCCA->isEnabled() )
         group.writeEntry("CCA", (m_filterCCA->checkState() == Qt::Checked) ? true : false);
     if ( m_filterVig->isEnabled() )
@@ -279,7 +279,7 @@ void ImageEffect_AutoCorrection::putPreviewData()
 void ImageEffect_AutoCorrection::putFinalData()
 {
     Digikam::ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("Lens Correction"), m_threadedFilter->getTargetImage().bits());
+    iface.putOriginalImage(i18n("Lens Auto-Correction"), m_threadedFilter->getTargetImage().bits());
 }
 
 void ImageEffect_AutoCorrection::renderingFinished()
