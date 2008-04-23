@@ -25,7 +25,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 013 ==> 152092 : Showfoto crashes ( signal 11 ) on exit.
 014 ==> 160840 : Wrong filtering on Album-Subtree-View
 015 ==> 160846 : Blurred preview of pics.
-016 ==> 
+016 ==> 157314 : Zoom-slider has no steps
+017 ==>
 
 **********************************************************************************************
 

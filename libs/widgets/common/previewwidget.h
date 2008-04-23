@@ -51,6 +51,7 @@ public:
     ~PreviewWidget();
 
     void   setZoomFactor(double z);
+    void   setZoomFactorSnapped(double z);
     void   setBackgroundColor(const QColor& color);
     void   fitToWindow();
     bool   isFitToWindow();
@@ -60,6 +61,8 @@ public:
     int    zoomHeight();
     bool   maxZoom();
     bool   minZoom();
+    double snapZoom(double zoom);
+    
     double zoomFactor();
     double zoomMax();
     double zoomMin();

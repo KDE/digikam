@@ -277,7 +277,7 @@ void LightTableView::slotLeftZoomSliderChanged(int size)
     double a    = (zmax-b)/h;
     double z    = a*size+b; 
 
-    d->leftPreview->setZoomFactor(z);
+    d->leftPreview->setZoomFactorSnapped(z);
 }
 
 void LightTableView::slotRightZoomSliderChanged(int size)
@@ -290,7 +290,7 @@ void LightTableView::slotRightZoomSliderChanged(int size)
     double a    = (zmax-b)/h;
     double z    = a*size+b; 
 
-    d->rightPreview->setZoomFactor(z);
+    d->rightPreview->setZoomFactorSnapped(z);
 }
 
 void LightTableView::leftReload()

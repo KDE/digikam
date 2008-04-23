@@ -1037,7 +1037,7 @@ void DigikamView::setThumbSize(int size)
         double b    = (zmin-(zmax*s/h))/(1-s/h);
         double a    = (zmax-b)/h;
         double z    = a*size+b; 
-        d->albumWidgetStack->setZoomFactor(z);   
+        d->albumWidgetStack->setZoomFactorSnapped(z);   
     }
     else if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
     {

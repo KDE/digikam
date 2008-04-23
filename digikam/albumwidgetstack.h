@@ -79,6 +79,7 @@ public:
     bool   maxZoom();
     bool   minZoom();
     void   setZoomFactor(double z);
+    void   setZoomFactorSnapped(double z);
     double zoomFactor();
     double zoomMin();
     double zoomMax();
