@@ -66,7 +66,8 @@ ImageEffect_LensCorrection::ImageEffect_LensCorrection(QWidget* parent)
     KAboutData* about = new KAboutData("digikam", 0,
                                        ki18n("Lens Error Correction"), 
                                        digikam_version,
-                                       ki18n("A digiKam image plugin to fix errors caused by lens using LensFun library."),
+                                       ki18n("A digiKam image plugin to fix automaticaly camera "
+                                             "lens aberrations using LensFun library."),
                                        KAboutData::License_GPL,
                                        ki18n("(c) 2008, Adrian Schroeter\n"
                                        "(c) 2008, Gilles Caulier"), 
@@ -74,10 +75,13 @@ ImageEffect_LensCorrection::ImageEffect_LensCorrection(QWidget* parent)
                                        "http://www.digikam.org");
 
     about->addAuthor(ki18n("Adrian Schroeter"), ki18n("Author and maintainer"),
-                     "adrian@suse.de");
+                     "adrian at suse dot de");
 
     about->addAuthor(ki18n("Gilles Caulier"), ki18n("Developer"),
                      "caulier dot gilles at gmail dot com");
+
+    about->addAuthor(ki18n("Andrew Zabolotny"), ki18n("LensFun library author."),
+                     "zap at homelink dot ru");
 
     setAboutData(about);
 
