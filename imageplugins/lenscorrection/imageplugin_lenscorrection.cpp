@@ -50,7 +50,7 @@ ImagePlugin_LensCorrection::ImagePlugin_LensCorrection(QObject *parent, const QV
 #ifdef HAVE_LENSFUN
 
     m_autoCorrectionAction  = new KAction(KIcon("lensdistortion"), i18n("Auto-Correction..."), this);
-    actionCollection()->addAction("imageplugin_autocorrection", m_lensCorrectionAction );
+    actionCollection()->addAction("imageplugin_autocorrection", m_autoCorrectionAction );
 
     connect(m_autoCorrectionAction, SIGNAL(triggered(bool)), 
             this, SLOT(slotAutoCorrection()));
