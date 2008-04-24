@@ -920,8 +920,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
     imageSetAttribute("savedformat", "TIFF");
         
-    // TODO : enable this line when Exiv2 will support TIFF in writing mode.
-    //saveMetadata(filePath);
+    saveMetadata(filePath);
     
     return true;
 }
