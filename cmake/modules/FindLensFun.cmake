@@ -20,19 +20,19 @@ if (LENSFUN_LIBRARIES AND LENSFUN_INCLUDE_DIRS)
 else (LENSFUN_LIBRARIES AND LENSFUN_INCLUDE_DIRS)
   # use pkg-config to get the directories and then use these values
   # in the FIND_PATH() and FIND_LIBRARY() calls
-  include(UsePkgConfig)
+  IF (NOT WIN32)
+    include(UsePkgConfig)
 
-  pkgconfig(lensfun _lensfunIncDir _lensfunLinkDir _lensfunLinkFlags _lensfunCflags)
-
-  set(LENSFUN_DEFINITIONS ${_lensfunCflags})
+    pkgconfig(lensfun _lensfunIncDir _lensfunLinkDir _lensfunLinkFlags _lensfunCflags)
+  
+    set(LENSFUN_DEFINITIONS ${_lensfunCflags})
+  ENDIF (NOT WIN32)
 
   find_path(LENSFUN_INCLUDE_DIR
     NAMES
       lensfun.h
     PATHS
       ${_lensfunIncDir}
-      /usr/include
-      /usr/local/include
       /opt/local/include
       /sw/include
   )
@@ -42,8 +42,6 @@ else (LENSFUN_LIBRARIES AND LENSFUN_INCLUDE_DIRS)
       lensfun
     PATHS
       ${_lensfunLinkDir}
-      /usr/lib
-      /usr/local/lib
       /opt/local/lib
       /sw/lib
   )
@@ -63,19 +61,9 @@ else (LENSFUN_LIBRARIES AND LENSFUN_INCLUDE_DIRS)
     )
   endif (LENSFUN_FOUND)
 
-  if (LENSFUN_INCLUDE_DIRS AND LENSFUN_LIBRARIES)
-     set(LENSFUN_FOUND TRUE)
-  endif (LENSFUN_INCLUDE_DIRS AND LENSFUN_LIBRARIES)
 
-  if (LENSFUN_FOUND)
-    if (NOT lensfun_FIND_QUIETLY)
-      message(STATUS "Found lensfun: ${LENSFUN_LIBRARIES}")
-    endif (NOT lensfun_FIND_QUIETLY)
-  else (LENSFUN_FOUND)
-    if (lensfun_FIND_REQUIRED)
-      message(FATAL_ERROR "Could not find lensfun")
-    endif (lensfun_FIND_REQUIRED)
-  endif (LENSFUN_FOUND)
+  include(FindPackageHandleStandardArgs)
+  FIND_PACKAGE_HANDLE_STANDARD_ARGS(LensFun DEFAULT_MSG LENSFUN_INCLUDE_DIRS LENSFUN_LIBRARIES )
 
   # show the LENSFUN_INCLUDE_DIRS and LENSFUN_LIBRARIES variables only in the advanced view
   mark_as_advanced(LENSFUN_INCLUDE_DIRS LENSFUN_LIBRARIES)
