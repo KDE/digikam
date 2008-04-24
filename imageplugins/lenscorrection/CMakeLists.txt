@@ -1,7 +1,9 @@
 INCLUDE_DIRECTORIES(autocorrection
                     distortion
                     vignetting
+                    ${CMAKE_CURRENT_BINARY_DIR}/../../
                    )
+
 
 SET(autocorrection_SRCS autocorrection/imageeffect_autocorrection.cpp 
                         autocorrection/klensfun.cpp
