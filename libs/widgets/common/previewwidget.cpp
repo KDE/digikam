@@ -203,7 +203,7 @@ double PreviewWidget::snapZoom(double zoom)
 
     if (d->zoom < zoom) 
     {
-        for(it = snapValues.begin(); it != snapValues.end(); ++it)
+        for(it = snapValues.constBegin(); it != snapValues.constEnd(); ++it)
         {
             double z = *it;
             if ((d->zoom < z) && (zoom > z))
@@ -215,7 +215,7 @@ double PreviewWidget::snapZoom(double zoom)
     } 
     else
     {
-        for(it = snapValues.end(); it != snapValues.begin(); --it)
+        for(it = snapValues.constEnd(); it != snapValues.constBegin(); --it)
         {
             double z = *it;
             if ((d->zoom > z) && (zoom < z))
