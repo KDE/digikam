@@ -1075,7 +1075,7 @@ void DigikamView::setThumbSize(int size)
         double b    = (zmin-(zmax*s/h))/(1-s/h);
         double a    = (zmax-b)/h;
         double z    = a*size+b; 
-        d->albumWidgetStack->setZoomFactor(z);   
+        d->albumWidgetStack->setZoomFactorSnapped(z);
     }
     else if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
     {
@@ -1093,7 +1093,7 @@ void DigikamView::setThumbSize(int size)
             d->thumbSizeTimer->stop();
             delete d->thumbSizeTimer;
         }
-    
+
         d->thumbSizeTimer = new QTimer( this );
         connect(d->thumbSizeTimer, SIGNAL(timeout()),
                 this, SLOT(slotThumbSizeEffect()) );
@@ -1121,21 +1121,21 @@ void DigikamView::toggleZoomActions()
     {
         d->parent->enableZoomMinusAction(true);
         d->parent->enableZoomPlusAction(true);
-    
+
         if (d->albumWidgetStack->maxZoom())
             d->parent->enableZoomPlusAction(false);
-    
+
         if (d->albumWidgetStack->minZoom())
             d->parent->enableZoomMinusAction(false);
-    }  
+    }
     else if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
     {
         d->parent->enableZoomMinusAction(true);
         d->parent->enableZoomPlusAction(true);
-    
+
         if (d->thumbSize >= ThumbnailSize::Huge)
             d->parent->enableZoomPlusAction(false);
-    
+
         if (d->thumbSize <= ThumbnailSize::Small)
             d->parent->enableZoomMinusAction(false);
     }

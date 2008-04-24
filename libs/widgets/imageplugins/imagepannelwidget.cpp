@@ -381,7 +381,7 @@ void ImagePannelWidget::slotZoomSliderChanged(int size)
     double a    = (zmax-b)/h;
     double z    = a*size+b; 
 
-    d->imageRegionWidget->setZoomFactor(z);
+    d->imageRegionWidget->setZoomFactorSnapped(z);
 }
 
 QProgressBar *ImagePannelWidget::progressBar()

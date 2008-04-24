@@ -6,7 +6,7 @@
  * Date        : 2006-06-13
  * Description : a widget to display an image preview
  *
- * Copyright (C) 2006-2007 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -182,16 +182,76 @@ bool PreviewWidget::minZoom()
     return (d->zoom <= d->minZoom);
 }
 
+double PreviewWidget::snapZoom(double zoom)
+{
+    // If the zoom value gets changed from d->zoom to zoom
+    // across 50%, 100% or fit-to-window, then return the
+    // the corresponding special value. Otherwise zoom is returned unchanged.
+    double fit = calcAutoZoomFactor(ZoomInOrOut);
+    QList<double>::iterator it;
+    QList<double> snapValues;
+    snapValues.append(0.5);
+    snapValues.append(1.0);
+    snapValues.append(fit);
+    qSort(snapValues);
+
+    if (d->zoom < zoom) 
+    {
+        for(it=snapValues.begin(); it!=snapValues.end(); it++)
+        {
+            if ( ( d->zoom<(*it)) and (zoom>(*it)) )
+            {
+                 zoom = *it;
+                 break;
+            }
+        }
+    } 
+    else
+    {
+        for(it=snapValues.end(); it!=snapValues.begin(); it--)
+        {
+            if ( (d->zoom>(*it)) and (zoom<(*it)) )
+            {
+                 zoom = (*it);
+                 break;
+            }
+        }
+    }
+
+    return zoom;
+}
+
 void PreviewWidget::slotIncreaseZoom()
 {
     double zoom = d->zoom * d->zoomMultiplier;
-    setZoomFactor(zoom > zoomMax() ? zoomMax() : zoom);
+    zoom = snapZoom(zoom > zoomMax() ? zoomMax() : zoom);
+    setZoomFactor(zoom);
 }
 
 void PreviewWidget::slotDecreaseZoom()
 {
     double zoom = d->zoom / d->zoomMultiplier;
-    setZoomFactor(zoom < zoomMin() ? zoomMin() : zoom);
+    zoom = snapZoom(zoom < zoomMin() ? zoomMin() : zoom);
+    setZoomFactor(zoom);
+}
+
+void PreviewWidget::setZoomFactorSnapped(double zoom)
+{
+    double fit = calcAutoZoomFactor(ZoomInOrOut);
+    if (fabs(zoom-1.0) < 0.05) 
+    {
+        zoom = 1.0;
+    }
+    if (fabs(zoom-0.5) < 0.05) 
+    {
+        zoom = 0.5;
+    }
+    if (fabs(zoom-fit) < 0.05) 
+    {
+        zoom = fit;
+    }
+
+    setZoomFactor(zoom);
 }
 
 void PreviewWidget::setZoomFactor(double zoom)

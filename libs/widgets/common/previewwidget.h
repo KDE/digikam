@@ -6,7 +6,7 @@
  * Date        : 2006-06-13
  * Description : a widget to display an image preview
  *
- * Copyright (C) 2006-2007 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -55,6 +55,7 @@ public:
     ~PreviewWidget();
 
     void   setZoomFactor(double z);
+    void   setZoomFactorSnapped(double z);
     void   fitToWindow();
     bool   isFitToWindow();
     void   toggleFitToWindow();
@@ -63,6 +64,8 @@ public:
     int    zoomHeight();
     bool   maxZoom();
     bool   minZoom();
+    double snapZoom(double zoom);
+
     double zoomFactor();
     double zoomMax();
     double zoomMin();

@@ -7,7 +7,7 @@
  * Description : a widget to display 2 preview image on 
  *               lightable to compare pictures.
  *
- * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -278,7 +278,7 @@ void LightTableView::slotLeftZoomSliderChanged(int size)
     double a    = (zmax-b)/h;
     double z    = a*size+b; 
 
-    d->leftPreview->setZoomFactor(z);
+    d->leftPreview->setZoomFactorSnapped(z);
 }
 
 void LightTableView::slotRightZoomSliderChanged(int size)
@@ -291,7 +291,7 @@ void LightTableView::slotRightZoomSliderChanged(int size)
     double a    = (zmax-b)/h;
     double z    = a*size+b; 
 
-    d->rightPreview->setZoomFactor(z);
+    d->rightPreview->setZoomFactorSnapped(z);
 }
 
 void LightTableView::leftReload()

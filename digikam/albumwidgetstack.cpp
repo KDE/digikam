@@ -363,6 +363,11 @@ void AlbumWidgetStack::setZoomFactor(double z)
     d->imagePreviewView->setZoomFactor(z);
 }
 
+void AlbumWidgetStack::setZoomFactorSnapped(double z)
+{
+    d->imagePreviewView->setZoomFactorSnapped(z);
+}
+
 double AlbumWidgetStack::zoomFactor()
 {
     return d->imagePreviewView->zoomFactor();
