@@ -20,7 +20,7 @@ IF(LENSFUN_LIBRARY)
                                                    ${distortion_SRCS}
                                                    ${vignetting_SRCS}
                                                    ${autocorrection_SRCS})
-ELSEIF(LENSFUN_LIBRARY)
+ELSE(LENSFUN_LIBRARY)
    SET(digikamimageplugin_lenscorrection_PART_SRCS imageplugin_lenscorrection.cpp
                                                    ${distortion_SRCS}
                                                    ${vignetting_SRCS})
