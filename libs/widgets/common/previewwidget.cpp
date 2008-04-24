@@ -188,33 +188,23 @@ double PreviewWidget::snapZoom(double zoom)
     // across 50%, 100% or fit-to-window, then return the
     // the corresponding special value. Otherwise zoom is returned unchanged.
     double fit = calcAutoZoomFactor(ZoomInOrOut);
-    QList<double>::iterator it;
     QList<double> snapValues;
     snapValues.append(0.5);
     snapValues.append(1.0);
     snapValues.append(fit);
-    qSort(snapValues);
 
     if (d->zoom < zoom) 
-    {
-        for(it=snapValues.begin(); it!=snapValues.end(); ++it)
-        {
-            if ( ( d->zoom<(*it)) and (zoom>(*it)) )
-            {
-                 zoom = *it;
-                 break;
-            }
-        }
-    } 
+        qStableSort(snapValues);
     else
+        qStableSort(snapValues.begin(), snapValues.end(), qGreater<double>());
+
+    for(QList<double>::const_iterator it = snapValues.constBegin(); it != snapValues.constEnd(); ++it)
     {
-        for(it=snapValues.end(); it!=snapValues.begin(); --it)
+        double z = *it;
+        if ((d->zoom < z) && (zoom > z))
         {
-            if ( (d->zoom>(*it)) and (zoom<(*it)) )
-            {
-                 zoom = (*it);
-                 break;
-            }
+            zoom = z;
+            break;
         }
     }
 
