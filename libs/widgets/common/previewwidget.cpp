@@ -80,7 +80,7 @@ public:
     int             midButtonY;
     int             zoomWidth;
     int             zoomHeight;
-    
+
     double          zoom;
     double          minZoom;
     double          maxZoom;
@@ -89,7 +89,7 @@ public:
     QPoint          centerZoomPoint;
 
     QRect           pixmapRect;
-    
+
     QCache<QPixmap> tileCache;
 
     QPixmap*        tileTmpPix;
@@ -103,7 +103,7 @@ PreviewWidget::PreviewWidget(QWidget *parent)
     d = new PreviewWidgetPriv;
     d->bgColor.setRgb(0, 0, 0);
     m_movingInProgress = false;
-    
+
     viewport()->setBackgroundMode(Qt::NoBackground);
     viewport()->setMouseTracking(false);
 
@@ -127,7 +127,7 @@ void PreviewWidget::setBackgroundColor(const QColor& color)
 {
     if (d->bgColor == color)
         return;
-    
+
     d->bgColor = color;
     viewport()->update();
 }
@@ -203,9 +203,9 @@ double PreviewWidget::snapZoom(double zoom)
 
     if (d->zoom < zoom) 
     {
-        for(it=snapValues.begin(); it!=snapValues.end(); ++it)
+        for(it = snapValues.begin(); it != snapValues.end(); ++it)
         {
-            if ( ( d->zoom<(*it)) and (zoom>(*it)) )
+            if ((d->zoom < (*it)) && (zoom > (*it)))
             {
                  zoom = *it;
                  break;
@@ -214,9 +214,9 @@ double PreviewWidget::snapZoom(double zoom)
     } 
     else
     {
-        for(it=snapValues.end(); it!=snapValues.begin(); --it)
+        for(it = snapValues.end(); it != snapValues.begin(); --it)
         {
-            if ( (d->zoom>(*it)) and (zoom<(*it)) )
+            if ((d->zoom > (*it)) && (zoom < (*it)))
             {
                  zoom = (*it);
                  break;
