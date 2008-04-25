@@ -219,8 +219,6 @@ SET(digikam_bin_SRCS
                      welcomepageview.cpp 
     )
 
-KDE4_ADD_UI_FILES(digikam_bin_SRCS ../libs/dialogs/deletedialogbase.ui)
-
 QT4_ADD_DBUS_ADAPTOR(digikam_bin_SRCS org.kde.digikam.xml digikamapp.h Digikam::DigikamApp)
 
 KDE4_ADD_EXECUTABLE(digikam_bin ${digikam_bin_SRCS})

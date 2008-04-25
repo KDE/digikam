@@ -28,8 +28,7 @@
 
 // Qt includes.
 
-#include <QCheckBox>
-#include <QLabel>
+#include <QWidget>
 
 // KDE includes.
 
@@ -39,21 +38,15 @@
 // Local includes.
 
 #include "digikam_export.h"
-#include "ui_deletedialogbase.h"
 
-class KGuiItem;
+class Q3WidgetStack;
 class QLabel;
+class QVBoxLayout;
+class QHBoxLayout;
+class QCheckBox;
 
-class DeleteDialogBase : public QWidget, public Ui::DeleteDialogBase
-{
-
-public:
-
-    DeleteDialogBase( QWidget *parent ) : QWidget( parent ) 
-    {
-        setupUi( this );
-    }
-};
+class K3ListBox;
+class KGuiItem;
 
 namespace Digikam
 {
@@ -77,7 +70,9 @@ namespace DeleteDialogMode
     };
 }
 
-class DeleteWidget : public DeleteDialogBase
+// -----------------------------------------------------------
+
+class DeleteWidget : public QWidget
 {
     Q_OBJECT
 
@@ -100,8 +95,26 @@ protected:
 
 protected:
 
-    DeleteDialogMode::ListMode   m_listMode;
-    DeleteDialogMode::DeleteMode m_deleteMode;
+    Q3WidgetStack                *ddCheckBoxStack;
+
+    QVBoxLayout                  *vboxLayout;
+    QVBoxLayout                  *vboxLayout1;
+
+    QHBoxLayout                  *hboxLayout;
+
+    QLabel                       *ddWarningIcon;
+    QLabel                       *ddDeleteText;
+    QLabel                       *ddNumFiles;
+
+    QCheckBox                    *ddShouldDelete;
+    QCheckBox                    *ddDoNotShowAgain;
+
+    K3ListBox                    *ddFileList;
+
+    DeleteDialogMode::ListMode    m_listMode;
+    DeleteDialogMode::DeleteMode  m_deleteMode;
+
+    friend class DeleteDialog;
 };
 
 // -----------------------------------------------------------
@@ -127,7 +140,7 @@ public:
     bool confirmDeleteList(const KUrl::List &condemnedURLs,
                            DeleteDialogMode::ListMode listMode,
                            DeleteDialogMode::DeleteMode deleteMode);
-    bool shouldDelete() const { return m_widget->ddShouldDelete->isChecked(); }
+    bool shouldDelete() const;
 
     void setURLs(const KUrl::List &files);
     void presetDeleteMode(DeleteDialogMode::DeleteMode mode);
