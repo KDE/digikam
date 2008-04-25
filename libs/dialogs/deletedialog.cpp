@@ -125,11 +125,11 @@ DeleteWidget::DeleteWidget(QWidget *parent)
     ddDoNotShowAgain->setText(i18n("Do not &ask again"));
 
     QVBoxLayout *vbox = new QVBoxLayout(this);
-    vbox->setSpacing(6);
-    vbox->setMargin(11);
+    vbox->setSpacing(KDialog::spacingHint());
+    vbox->setMargin(KDialog::spacingHint());
     vbox->setContentsMargins(0, 0, 0, 0);
     vbox->addLayout(hbox);
-    vbox->addWidget(ddFileList);
+    vbox->addWidget(ddFileList, 10);
     vbox->addWidget(ddNumFiles);
     vbox->addWidget(ddCheckBoxStack);
 
