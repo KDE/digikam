@@ -517,7 +517,8 @@ void IconView::takeItem(IconItem* item)
 
     // Remove from selected item list
     d->selectedItems.remove(item);
-    if (item->isSelected())
+    // See bug 161084
+    if (d->selectedItems.count() || item->isSelected())
         d->needEmitSelectionChanged = true;
 
     if (d->toolTipItem == item)
