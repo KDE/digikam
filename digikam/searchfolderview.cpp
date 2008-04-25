@@ -7,6 +7,7 @@
  * Description : Searches folder view 
  * 
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -374,7 +375,7 @@ void SearchFolderView::slotAlbumAdded(Album* a)
         return;
 
     SearchFolderItem* item = new SearchFolderItem(this, album);
-    item->setPixmap(0, SmallIcon("find", AlbumSettings::instance()->getDefaultTreeIconSize()));
+    item->setPixmap(0, SmallIcon("edit-find", AlbumSettings::instance()->getDefaultTreeIconSize()));
     m_lastAddedItem = item;
 
     if (album->title() == currentSearchViewSearchName())
@@ -468,7 +469,7 @@ void SearchFolderView::slotContextMenu(Q3ListViewItem* item, const QPoint&, int)
 
         KMenu popmenu(this);
         popmenu.addTitle(SmallIcon("digikam"),  i18n("My Searches"));
-        QAction *edtSearch = popmenu.addAction(SmallIcon("filefind"), i18n("Edit Search..."));
+        QAction *edtSearch = popmenu.addAction(SmallIcon("edit-find"), i18n("Edit Search..."));
 
         /*
         if ( sItem->album()->isKeywordSearch() )
