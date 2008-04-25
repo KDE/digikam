@@ -59,92 +59,92 @@ DeleteWidget::DeleteWidget(QWidget *parent)
     resize(540, 370);
     setMinimumSize(QSize(420, 320));
 
-    ddCheckBoxStack = new QStackedWidget(this);
+    m_checkBoxStack = new QStackedWidget(this);
 
-    ddWarningIcon = new QLabel(this);
-    ddWarningIcon->setWordWrap(false);
+    m_warningIcon = new QLabel(this);
+    m_warningIcon->setWordWrap(false);
 
     QSizePolicy sizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
-    sizePolicy.setHeightForWidth(ddWarningIcon->sizePolicy().hasHeightForWidth());
+    sizePolicy.setHeightForWidth(m_warningIcon->sizePolicy().hasHeightForWidth());
     sizePolicy.setHorizontalStretch(0);
     sizePolicy.setVerticalStretch(0);
-    ddWarningIcon->setSizePolicy(sizePolicy);
+    m_warningIcon->setSizePolicy(sizePolicy);
 
-    ddDeleteText = new QLabel(this);
-    ddDeleteText->setAlignment(Qt::AlignCenter);
-    ddDeleteText->setWordWrap(true);
+    m_deleteText = new QLabel(this);
+    m_deleteText->setAlignment(Qt::AlignCenter);
+    m_deleteText->setWordWrap(true);
 
     QVBoxLayout *vbox2 = new QVBoxLayout();
     vbox2->setSpacing(KDialog::spacingHint());
-    vbox2->addWidget(ddDeleteText);
+    vbox2->addWidget(m_deleteText);
 
     QHBoxLayout *hbox = new QHBoxLayout();
     hbox->setSpacing(KDialog::spacingHint());
-    hbox->addWidget(ddWarningIcon);
+    hbox->addWidget(m_warningIcon);
     hbox->addLayout(vbox2);
 
-    ddFileList = new KListWidget(this);
-    ddFileList->setSelectionMode(QAbstractItemView::SingleSelection);
-    ddFileList->setToolTip(i18n("List of files that are about to be deleted."));
-    ddFileList->setWhatsThis(i18n("This is the list of items that are about to be deleted."));
+    m_fileList = new KListWidget(this);
+    m_fileList->setSelectionMode(QAbstractItemView::SingleSelection);
+    m_fileList->setToolTip(i18n("List of files that are about to be deleted."));
+    m_fileList->setWhatsThis(i18n("This is the list of items that are about to be deleted."));
 
-    ddNumFiles = new QLabel(this);
-    ddNumFiles->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
-    ddNumFiles->setWordWrap(false);
+    m_numFiles = new QLabel(this);
+    m_numFiles->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+    m_numFiles->setWordWrap(false);
 
-    ddShouldDelete = new QCheckBox(ddCheckBoxStack);
-    ddShouldDelete->setGeometry(QRect(0, 0, 542, 32));
-    ddShouldDelete->setToolTip(i18n("If checked, files will be permanently removed instead of being placed "
+    m_shouldDelete = new QCheckBox(m_checkBoxStack);
+    m_shouldDelete->setGeometry(QRect(0, 0, 542, 32));
+    m_shouldDelete->setToolTip(i18n("If checked, files will be permanently removed instead of being placed "
                                     "in the Trash Bin"));
-    ddShouldDelete->setWhatsThis(i18n("<qt><p>If this box is checked, files will be "
+    m_shouldDelete->setWhatsThis(i18n("<qt><p>If this box is checked, files will be "
                                       "<b>permanently removed</b> instead of "
                                       "being placed in the Trash Bin.</p>\n"
                                       "    \n"
                                       "    <p><em>Use this option with caution</em>: most filesystems "
                                       "are unable to "
                                       "undelete deleted files reliably.</p></qt>"));
-    ddShouldDelete->setText(i18n("&Delete files instead of moving them to the trash"));
+    m_shouldDelete->setText(i18n("&Delete files instead of moving them to the trash"));
 
-    connect(ddShouldDelete, SIGNAL(toggled(bool)), 
+    connect(m_shouldDelete, SIGNAL(toggled(bool)), 
             this, SLOT(slotShouldDelete(bool)));
 
-    ddDoNotShowAgain = new QCheckBox(ddCheckBoxStack);
-    ddDoNotShowAgain->setGeometry(QRect(0, 0, 100, 30));
-    ddDoNotShowAgain->setToolTip(i18n("If checked, this dialog will no longer be shown, and files will "
+    m_doNotShowAgain = new QCheckBox(m_checkBoxStack);
+    m_doNotShowAgain->setGeometry(QRect(0, 0, 100, 30));
+    m_doNotShowAgain->setToolTip(i18n("If checked, this dialog will no longer be shown, and files will "
                                       "be directly moved to the Trash Bin"));
-    ddDoNotShowAgain->setWhatsThis(i18n("<qt><p>If this box is checked, this dialog will no longer be shown, "
+    m_doNotShowAgain->setWhatsThis(i18n("<qt><p>If this box is checked, this dialog will no longer be shown, "
                                         "and files will be directly moved to the Trash Bin</p>"));
-    ddDoNotShowAgain->setText(i18n("Do not &ask again"));
+    m_doNotShowAgain->setText(i18n("Do not &ask again"));
 
     QVBoxLayout *vbox = new QVBoxLayout(this);
     vbox->setSpacing(KDialog::spacingHint());
     vbox->setMargin(KDialog::spacingHint());
     vbox->setContentsMargins(0, 0, 0, 0);
     vbox->addLayout(hbox);
-    vbox->addWidget(ddFileList, 10);
-    vbox->addWidget(ddNumFiles);
-    vbox->addWidget(ddCheckBoxStack);
+    vbox->addWidget(m_fileList, 10);
+    vbox->addWidget(m_numFiles);
+    vbox->addWidget(m_checkBoxStack);
 
-    ddCheckBoxStack->addWidget(ddShouldDelete);
-    ddCheckBoxStack->addWidget(ddDoNotShowAgain);
-    ddCheckBoxStack->setCurrentWidget(ddShouldDelete);
+    m_checkBoxStack->addWidget(m_shouldDelete);
+    m_checkBoxStack->addWidget(m_doNotShowAgain);
+    m_checkBoxStack->setCurrentWidget(m_shouldDelete);
 
     bool deleteInstead = !AlbumSettings::instance()->getUseTrash();
     slotShouldDelete(deleteInstead);
-    ddShouldDelete->setChecked(deleteInstead);
+    m_shouldDelete->setChecked(deleteInstead);
 }
 
 void DeleteWidget::setFiles(const KUrl::List &files)
 {
-    ddFileList->clear();
+    m_fileList->clear();
     for( KUrl::List::ConstIterator it = files.begin(); it != files.end(); it++)
     {
         if( (*it).isLocalFile() ) //path is nil for non-local
-            ddFileList->addItem( (*it).path() );
+            m_fileList->addItem( (*it).path() );
         else if ( (*it).protocol() == "digikamalbums")
-            ddFileList->addItem( (*it).path() );
+            m_fileList->addItem( (*it).path() );
         else
-            ddFileList->addItem( (*it).prettyUrl() );
+            m_fileList->addItem( (*it).prettyUrl() );
     }
     updateText();
 }
@@ -176,19 +176,19 @@ void DeleteWidget::updateText()
 
             if (m_deleteMode == DeleteDialogMode::DeletePermanently)
             {
-                ddDeleteText->setText(i18n("<qt>These items will be <b>permanently "
+                m_deleteText->setText(i18n("<qt>These items will be <b>permanently "
                                            "deleted</b> from your hard disk.</qt>"));
-                ddWarningIcon->setPixmap(KIconLoader::global()->loadIcon("dialog-warning",
+                m_warningIcon->setPixmap(KIconLoader::global()->loadIcon("dialog-warning",
                                          KIconLoader::Desktop, KIconLoader::SizeLarge));
             }
             else
             {
-                ddDeleteText->setText(i18n("<qt>These items will be moved to Trash.</qt>"));
-                ddWarningIcon->setPixmap(KIconLoader::global()->loadIcon("user-trash-full",
+                m_deleteText->setText(i18n("<qt>These items will be moved to Trash.</qt>"));
+                m_warningIcon->setPixmap(KIconLoader::global()->loadIcon("user-trash-full",
                                          KIconLoader::Desktop, KIconLoader::SizeLarge));
             }
-            ddNumFiles->setText(i18np("<b>1</b> file selected.", "<b>%1</b> files selected.",
-                                      ddFileList->count()));
+            m_numFiles->setText(i18np("<b>1</b> file selected.", "<b>%1</b> files selected.",
+                                      m_fileList->count()));
             break;
         }
         case DeleteDialogMode::Albums:
@@ -197,19 +197,19 @@ void DeleteWidget::updateText()
 
             if (m_deleteMode == DeleteDialogMode::DeletePermanently)
             {
-                ddDeleteText->setText(i18n("<qt>These albums will be <b>permanently "
+                m_deleteText->setText(i18n("<qt>These albums will be <b>permanently "
                                            "deleted</b> from your hard disk.</qt>"));
-                ddWarningIcon->setPixmap(KIconLoader::global()->loadIcon("dialog-warning",
+                m_warningIcon->setPixmap(KIconLoader::global()->loadIcon("dialog-warning",
                                          KIconLoader::Desktop, KIconLoader::SizeLarge));
             }
             else
             {
-                ddDeleteText->setText(i18n("<qt>These albums will be moved to Trash.</qt>"));
-                ddWarningIcon->setPixmap(KIconLoader::global()->loadIcon("user-trash-full",
+                m_deleteText->setText(i18n("<qt>These albums will be moved to Trash.</qt>"));
+                m_warningIcon->setPixmap(KIconLoader::global()->loadIcon("user-trash-full",
                                          KIconLoader::Desktop, KIconLoader::SizeLarge));
             }
-            ddNumFiles->setText(i18np("<b>1</b> album selected.", "<b>%1</b> albums selected.",
-                                ddFileList->count()));
+            m_numFiles->setText(i18np("<b>1</b> album selected.", "<b>%1</b> albums selected.",
+                                m_fileList->count()));
             break;
         }
         case DeleteDialogMode::Subalbums:
@@ -218,25 +218,25 @@ void DeleteWidget::updateText()
 
             if (m_deleteMode == DeleteDialogMode::DeletePermanently)
             {
-                ddDeleteText->setText(i18n("<qt>These albums will be <b>permanently "
+                m_deleteText->setText(i18n("<qt>These albums will be <b>permanently "
                                            "deleted</b> from your hard disk.<br>"
                                            "Note that <b>all subalbums</b> "
                                            "are included in this list and will "
                                            "be deleted permanently as well.</qt>"));
-                ddWarningIcon->setPixmap(KIconLoader::global()->loadIcon("dialog-warning",
+                m_warningIcon->setPixmap(KIconLoader::global()->loadIcon("dialog-warning",
                                          KIconLoader::Desktop, KIconLoader::SizeLarge));
             }
             else
             {
-                ddDeleteText->setText(i18n("<qt>These albums will be moved to Trash.<br>"
+                m_deleteText->setText(i18n("<qt>These albums will be moved to Trash.<br>"
                                            "Note that <b>all subalbums</b> "
                                            "are included in this list and will "
                                            "be moved to Trash as well.</qt>"));
-                ddWarningIcon->setPixmap(KIconLoader::global()->loadIcon("user-trash-full",
+                m_warningIcon->setPixmap(KIconLoader::global()->loadIcon("user-trash-full",
                                          KIconLoader::Desktop, KIconLoader::SizeLarge));
             }
-            ddNumFiles->setText(i18np("<b>1</b> album selected.", "<b>%1</b> albums selected.",
-                                ddFileList->count()));
+            m_numFiles->setText(i18np("<b>1</b> album selected.", "<b>%1</b> albums selected.",
+                                m_fileList->count()));
             break;
         }
     }
@@ -262,7 +262,7 @@ DeleteDialog::DeleteDialog(QWidget *parent)
 
     slotShouldDelete(shouldDelete());
 
-    connect(m_widget->ddShouldDelete, SIGNAL(toggled(bool)), 
+    connect(m_widget->m_shouldDelete, SIGNAL(toggled(bool)), 
             this, SLOT(slotShouldDelete(bool)));
 }
 
@@ -298,8 +298,8 @@ void DeleteDialog::accept()
     }
     if (m_saveDoNotShowAgain)
     {
-        DDebug() << "setShowTrashDeleteDialog " << !m_widget->ddDoNotShowAgain->isChecked() << endl;
-        settings->setShowTrashDeleteDialog(!m_widget->ddDoNotShowAgain->isChecked());
+        DDebug() << "setShowTrashDeleteDialog " << !m_widget->m_doNotShowAgain->isChecked() << endl;
+        settings->setShowTrashDeleteDialog(!m_widget->m_doNotShowAgain->isChecked());
     }
 
     settings->saveSettings();
@@ -309,7 +309,7 @@ void DeleteDialog::accept()
 
 bool DeleteDialog::shouldDelete() const 
 { 
-    return m_widget->ddShouldDelete->isChecked(); 
+    return m_widget->m_shouldDelete->isChecked(); 
 }
 
 void DeleteDialog::slotShouldDelete(bool shouldDelete)
@@ -327,15 +327,15 @@ void DeleteDialog::presetDeleteMode(DeleteDialogMode::DeleteMode mode)
         case DeleteDialogMode::NoChoiceTrash:
         {
             // access the widget directly, signals will be fired to DeleteDialog and DeleteWidget
-            m_widget->ddShouldDelete->setChecked(false);
-            m_widget->ddCheckBoxStack->setCurrentWidget(m_widget->ddDoNotShowAgain);
+            m_widget->m_shouldDelete->setChecked(false);
+            m_widget->m_checkBoxStack->setCurrentWidget(m_widget->m_doNotShowAgain);
             m_saveDoNotShowAgain = true;
             break;
         }
         case DeleteDialogMode::NoChoiceDeletePermanently:
         {
-            m_widget->ddShouldDelete->setChecked(true);
-            m_widget->ddCheckBoxStack->hide();
+            m_widget->m_shouldDelete->setChecked(true);
+            m_widget->m_checkBoxStack->hide();
             break;
         }
         case DeleteDialogMode::UserPreference:
@@ -346,7 +346,7 @@ void DeleteDialog::presetDeleteMode(DeleteDialogMode::DeleteMode mode)
         case DeleteDialogMode::DeletePermanently:
         {
             // toggles signals which do the rest
-            m_widget->ddShouldDelete->setChecked(mode == DeleteDialogMode::DeletePermanently);
+            m_widget->m_shouldDelete->setChecked(mode == DeleteDialogMode::DeletePermanently);
 
             // the preference set by this preset method will be ignored
             // for the next DeleteDialog instance and not stored as user preference.

@@ -94,16 +94,16 @@ protected:
 
 protected:
 
-    QStackedWidget               *ddCheckBoxStack;
+    QStackedWidget               *m_checkBoxStack;
 
-    QLabel                       *ddWarningIcon;
-    QLabel                       *ddDeleteText;
-    QLabel                       *ddNumFiles;
+    QLabel                       *m_warningIcon;
+    QLabel                       *m_deleteText;
+    QLabel                       *m_numFiles;
 
-    QCheckBox                    *ddShouldDelete;
-    QCheckBox                    *ddDoNotShowAgain;
+    QCheckBox                    *m_shouldDelete;
+    QCheckBox                    *m_doNotShowAgain;
 
-    KListWidget                  *ddFileList;
+    KListWidget                  *m_fileList;
 
     DeleteDialogMode::ListMode    m_listMode;
     DeleteDialogMode::DeleteMode  m_deleteMode;
