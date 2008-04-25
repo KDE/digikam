@@ -8,7 +8,8 @@
  * 
  * Copyright (C) 2004 by Michael Pyne <michael.pyne@kdemail.net>
  * Copyright (C) 2006 by Ian Monroe <ian@monroe.nu>
- * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -25,7 +26,7 @@
 
 // Qt includes.
 
-#include <Q3WidgetStack>
+#include <QStackedWidget>
 #include <QStringList>
 #include <QLayout>
 #include <QLabel>
@@ -61,17 +62,14 @@ DeleteWidget::DeleteWidget(QWidget *parent)
               m_listMode(DeleteDialogMode::Files),
               m_deleteMode(DeleteDialogMode::UseTrash)
 {
-    if (objectName().isEmpty())
-        setObjectName("DeleteDialogBase");
+    setObjectName("DeleteDialogBase");
 
-    resize(542, 374);
+    resize(540, 370);
     setMinimumSize(QSize(420, 320));
 
-    ddCheckBoxStack = new Q3WidgetStack(this);
-    ddCheckBoxStack->setObjectName("ddCheckBoxStack");
+    ddCheckBoxStack = new QStackedWidget(this);
 
     ddWarningIcon = new QLabel(this);
-    ddWarningIcon->setObjectName("ddWarningIcon");
     ddWarningIcon->setWordWrap(false);
 
     QSizePolicy sizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
@@ -81,40 +79,37 @@ DeleteWidget::DeleteWidget(QWidget *parent)
     ddWarningIcon->setSizePolicy(sizePolicy);
 
     ddDeleteText = new QLabel(this);
-    ddDeleteText->setObjectName("ddDeleteText");
     ddDeleteText->setAlignment(Qt::AlignCenter);
     ddDeleteText->setWordWrap(true);
 
-    vboxLayout1 = new QVBoxLayout();
-    vboxLayout1->setSpacing(6);
-    vboxLayout1->setObjectName("vboxLayout1");
-    vboxLayout1->addWidget(ddDeleteText);
+    QVBoxLayout *vbox2 = new QVBoxLayout();
+    vbox2->setSpacing(KDialog::spacingHint());
+    vbox2->addWidget(ddDeleteText);
 
-    hboxLayout = new QHBoxLayout();
-    hboxLayout->setSpacing(6);
-    hboxLayout->setObjectName("hboxLayout");
-    hboxLayout->addWidget(ddWarningIcon);
-    hboxLayout->addLayout(vboxLayout1);
+    QHBoxLayout *hbox = new QHBoxLayout();
+    hbox->setSpacing(KDialog::spacingHint());
+    hbox->addWidget(ddWarningIcon);
+    hbox->addLayout(vbox2);
 
     ddFileList = new K3ListBox(this);
-    ddFileList->setObjectName("ddFileList");
     ddFileList->setSelectionMode(Q3ListBox::Single);
     ddFileList->setToolTip(i18n("List of files that are about to be deleted."));
     ddFileList->setWhatsThis(i18n("This is the list of items that are about to be deleted."));
 
     ddNumFiles = new QLabel(this);
-    ddNumFiles->setObjectName("ddNumFiles");
     ddNumFiles->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
     ddNumFiles->setWordWrap(false);
 
     ddShouldDelete = new QCheckBox(ddCheckBoxStack);
-    ddShouldDelete->setObjectName("ddShouldDelete");
     ddShouldDelete->setGeometry(QRect(0, 0, 542, 32));
-    ddShouldDelete->setToolTip(i18n("If checked, files will be permanently removed instead of being placed in the Trash Bin"));
-    ddShouldDelete->setWhatsThis(i18n("<qt><p>If this box is checked, files will be <b>permanently removed</b> instead of "
+    ddShouldDelete->setToolTip(i18n("If checked, files will be permanently removed instead of being placed "
+                                    "in the Trash Bin"));
+    ddShouldDelete->setWhatsThis(i18n("<qt><p>If this box is checked, files will be "
+                                      "<b>permanently removed</b> instead of "
                                       "being placed in the Trash Bin.</p>\n"
                                       "    \n"
-                                      "    <p><em>Use this option with caution</em>: most filesystems are unable to "
+                                      "    <p><em>Use this option with caution</em>: most filesystems "
+                                      "are unable to "
                                       "undelete deleted files reliably.</p></qt>"));
     ddShouldDelete->setText(i18n("&Delete files instead of moving them to the trash"));
 
@@ -122,7 +117,6 @@ DeleteWidget::DeleteWidget(QWidget *parent)
             this, SLOT(slotShouldDelete(bool)));
 
     ddDoNotShowAgain = new QCheckBox(ddCheckBoxStack);
-    ddDoNotShowAgain->setObjectName("ddDoNotShowAgain");
     ddDoNotShowAgain->setGeometry(QRect(0, 0, 100, 30));
     ddDoNotShowAgain->setToolTip(i18n("If checked, this dialog will no longer be shown, and files will "
                                       "be directly moved to the Trash Bin"));
@@ -130,19 +124,18 @@ DeleteWidget::DeleteWidget(QWidget *parent)
                                         "and files will be directly moved to the Trash Bin</p>"));
     ddDoNotShowAgain->setText(i18n("Do not &ask again"));
 
-    vboxLayout = new QVBoxLayout(this);
-    vboxLayout->setSpacing(6);
-    vboxLayout->setMargin(11);
-    vboxLayout->setObjectName("vboxLayout");
-    vboxLayout->setContentsMargins(0, 0, 0, 0);
-    vboxLayout->addLayout(hboxLayout);
-    vboxLayout->addWidget(ddFileList);
-    vboxLayout->addWidget(ddNumFiles);
-    vboxLayout->addWidget(ddCheckBoxStack);
+    QVBoxLayout *vbox = new QVBoxLayout(this);
+    vbox->setSpacing(6);
+    vbox->setMargin(11);
+    vbox->setContentsMargins(0, 0, 0, 0);
+    vbox->addLayout(hbox);
+    vbox->addWidget(ddFileList);
+    vbox->addWidget(ddNumFiles);
+    vbox->addWidget(ddCheckBoxStack);
 
-    ddCheckBoxStack->addWidget(ddShouldDelete, -1);
-    ddCheckBoxStack->addWidget(ddDoNotShowAgain, -1);
-    ddCheckBoxStack->raiseWidget(ddShouldDelete);
+    ddCheckBoxStack->addWidget(ddShouldDelete);
+    ddCheckBoxStack->addWidget(ddDoNotShowAgain);
+    ddCheckBoxStack->setCurrentWidget(ddShouldDelete);
 
     bool deleteInstead = !AlbumSettings::instance()->getUseTrash();
     slotShouldDelete(deleteInstead);
@@ -343,7 +336,7 @@ void DeleteDialog::presetDeleteMode(DeleteDialogMode::DeleteMode mode)
         {
             // access the widget directly, signals will be fired to DeleteDialog and DeleteWidget
             m_widget->ddShouldDelete->setChecked(false);
-            m_widget->ddCheckBoxStack->raiseWidget(m_widget->ddDoNotShowAgain);
+            m_widget->ddCheckBoxStack->setCurrentWidget(m_widget->ddDoNotShowAgain);
             m_saveDoNotShowAgain = true;
             break;
         }
