@@ -36,6 +36,7 @@
 
 #include <klistwidget.h>
 #include <kiconloader.h>
+#include <kstandarddirs.h>
 #include <klocale.h>
 #include <kstdguiitem.h>
 
@@ -61,6 +62,10 @@ DeleteWidget::DeleteWidget(QWidget *parent)
 
     m_checkBoxStack = new QStackedWidget(this);
 
+    QLabel *logo = new QLabel(this);
+    logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
+                            .scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+
     m_warningIcon = new QLabel(this);
     m_warningIcon->setWordWrap(false);
 
@@ -74,14 +79,11 @@ DeleteWidget::DeleteWidget(QWidget *parent)
     m_deleteText->setAlignment(Qt::AlignCenter);
     m_deleteText->setWordWrap(true);
 
-    QVBoxLayout *vbox2 = new QVBoxLayout();
-    vbox2->setSpacing(KDialog::spacingHint());
-    vbox2->addWidget(m_deleteText);
-
     QHBoxLayout *hbox = new QHBoxLayout();
     hbox->setSpacing(KDialog::spacingHint());
+    hbox->addWidget(logo);
+    hbox->addWidget(m_deleteText, 10);
     hbox->addWidget(m_warningIcon);
-    hbox->addLayout(vbox2);
 
     m_fileList = new KListWidget(this);
     m_fileList->setSelectionMode(QAbstractItemView::SingleSelection);
