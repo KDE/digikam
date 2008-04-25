@@ -27,23 +27,15 @@
 // Qt includes.
 
 #include <QStackedWidget>
-#include <QStringList>
 #include <QLayout>
 #include <QLabel>
-#include <QPushButton>
 #include <QTimer>
-#include <QCheckBox>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
 #include <QCheckBox>
 
 // KDE includes.
 
-#include "k3listbox.h"
-#include <kconfig.h>
-#include <kglobal.h>
+#include <klistwidget.h>
 #include <kiconloader.h>
-#include <kio/job.h>
 #include <klocale.h>
 #include <kstdguiitem.h>
 
@@ -91,8 +83,8 @@ DeleteWidget::DeleteWidget(QWidget *parent)
     hbox->addWidget(ddWarningIcon);
     hbox->addLayout(vbox2);
 
-    ddFileList = new K3ListBox(this);
-    ddFileList->setSelectionMode(Q3ListBox::Single);
+    ddFileList = new KListWidget(this);
+    ddFileList->setSelectionMode(QAbstractItemView::SingleSelection);
     ddFileList->setToolTip(i18n("List of files that are about to be deleted."));
     ddFileList->setWhatsThis(i18n("This is the list of items that are about to be deleted."));
 
@@ -148,11 +140,11 @@ void DeleteWidget::setFiles(const KUrl::List &files)
     for( KUrl::List::ConstIterator it = files.begin(); it != files.end(); it++)
     {
         if( (*it).isLocalFile() ) //path is nil for non-local
-            ddFileList->insertItem( (*it).path() );
+            ddFileList->addItem( (*it).path() );
         else if ( (*it).protocol() == "digikamalbums")
-            ddFileList->insertItem( (*it).path() );
+            ddFileList->addItem( (*it).path() );
         else
-            ddFileList->insertItem( (*it).prettyUrl() );
+            ddFileList->addItem( (*it).prettyUrl() );
     }
     updateText();
 }

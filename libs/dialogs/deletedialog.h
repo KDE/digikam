@@ -44,7 +44,7 @@ class QStackedWidget;
 class QLabel;
 class QCheckBox;
 
-class K3ListBox;
+class KListWidget;
 class KGuiItem;
 
 namespace Digikam
@@ -103,7 +103,7 @@ protected:
     QCheckBox                    *ddShouldDelete;
     QCheckBox                    *ddDoNotShowAgain;
 
-    K3ListBox                    *ddFileList;
+    KListWidget                  *ddFileList;
 
     DeleteDialogMode::ListMode    m_listMode;
     DeleteDialogMode::DeleteMode  m_deleteMode;
