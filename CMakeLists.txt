@@ -25,6 +25,8 @@ SET(DIGIKAM_VERSION_STRING "${DIGIKAM_MAJOR_VERSION}.${DIGIKAM_MINOR_VERSION}.${
 # =======================================================
 # Depencies
 
+include(FindPackageHandleStandardArgs)
+
 macro_optional_find_package(LCMS)
 macro_optional_find_package(JPEG)
 macro_optional_find_package(PNG)

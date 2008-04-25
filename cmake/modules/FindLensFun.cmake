@@ -13,7 +13,6 @@
 #  For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
 
-
 if (LENSFUN_LIBRARIES AND LENSFUN_INCLUDE_DIRS)
   # in cache already
   set(LENSFUN_FOUND TRUE)
@@ -61,8 +60,6 @@ else (LENSFUN_LIBRARIES AND LENSFUN_INCLUDE_DIRS)
     )
   endif (LENSFUN_FOUND)
 
-
-  include(FindPackageHandleStandardArgs)
   FIND_PACKAGE_HANDLE_STANDARD_ARGS(LensFun DEFAULT_MSG LENSFUN_INCLUDE_DIRS LENSFUN_LIBRARIES )
 
   # show the LENSFUN_INCLUDE_DIRS and LENSFUN_LIBRARIES variables only in the advanced view
