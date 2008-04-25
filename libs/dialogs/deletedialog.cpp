@@ -25,7 +25,6 @@
 
 // Qt includes.
 
-#include <Q3WidgetStack>
 #include <QStringList>
 #include <QLayout>
 #include <QLabel>
@@ -104,71 +103,74 @@ void DeleteWidget::updateText()
     switch (m_listMode)
     {
         case DeleteDialogMode::Files:
-
-        // Delete files
-
-        if (m_deleteMode == DeleteDialogMode::DeletePermanently)
         {
-            ddDeleteText->setText(i18n("<qt>These items will be <b>permanently "
-                                       "deleted</b> from your hard disk.</qt>"));
-            ddWarningIcon->setPixmap(KIconLoader::global()->loadIcon("messagebox_warning",
-                KIconLoader::Desktop, KIconLoader::SizeLarge));
-        }
-        else
-        {
-            ddDeleteText->setText(i18n("<qt>These items will be moved to Trash.</qt>"));
-            ddWarningIcon->setPixmap(KIconLoader::global()->loadIcon("trashcan_full",
-                KIconLoader::Desktop, KIconLoader::SizeLarge));
-        }
-        ddNumFiles->setText(i18np("<b>1</b> file selected.", "<b>%1</b> files selected.", ddFileList->count()));
-        break;
+            // Delete files
 
+            if (m_deleteMode == DeleteDialogMode::DeletePermanently)
+            {
+                ddDeleteText->setText(i18n("<qt>These items will be <b>permanently "
+                                           "deleted</b> from your hard disk.</qt>"));
+                ddWarningIcon->setPixmap(KIconLoader::global()->loadIcon("dialog-warning",
+                                         KIconLoader::Desktop, KIconLoader::SizeLarge));
+            }
+            else
+            {
+                ddDeleteText->setText(i18n("<qt>These items will be moved to Trash.</qt>"));
+                ddWarningIcon->setPixmap(KIconLoader::global()->loadIcon("user-trash-full",
+                                         KIconLoader::Desktop, KIconLoader::SizeLarge));
+            }
+            ddNumFiles->setText(i18np("<b>1</b> file selected.", "<b>%1</b> files selected.",
+                                      ddFileList->count()));
+            break;
+        }
         case DeleteDialogMode::Albums:
-
-        // Delete albums = folders
-
-        if (m_deleteMode == DeleteDialogMode::DeletePermanently)
         {
-            ddDeleteText->setText(i18n("<qt>These albums will be <b>permanently "
-                                       "deleted</b> from your hard disk.</qt>"));
-            ddWarningIcon->setPixmap(KIconLoader::global()->loadIcon("messagebox_warning",
-                                     KIconLoader::Desktop, KIconLoader::SizeLarge));
-        }
-        else
-        {
-            ddDeleteText->setText(i18n("<qt>These albums will be moved to Trash.</qt>"));
-            ddWarningIcon->setPixmap(KIconLoader::global()->loadIcon("trashcan_full",
-                                     KIconLoader::Desktop, KIconLoader::SizeLarge));
-        }
-        ddNumFiles->setText(i18np("<b>1</b> album selected.", "<b>%1</b> albums selected.", ddFileList->count()));
-        break;
+            // Delete albums = folders
 
+            if (m_deleteMode == DeleteDialogMode::DeletePermanently)
+            {
+                ddDeleteText->setText(i18n("<qt>These albums will be <b>permanently "
+                                           "deleted</b> from your hard disk.</qt>"));
+                ddWarningIcon->setPixmap(KIconLoader::global()->loadIcon("dialog-warning",
+                                         KIconLoader::Desktop, KIconLoader::SizeLarge));
+            }
+            else
+            {
+                ddDeleteText->setText(i18n("<qt>These albums will be moved to Trash.</qt>"));
+                ddWarningIcon->setPixmap(KIconLoader::global()->loadIcon("user-trash-full",
+                                         KIconLoader::Desktop, KIconLoader::SizeLarge));
+            }
+            ddNumFiles->setText(i18np("<b>1</b> album selected.", "<b>%1</b> albums selected.",
+                                ddFileList->count()));
+            break;
+        }
         case DeleteDialogMode::Subalbums:
-
-        // As above, but display additional warning
-
-        if (m_deleteMode == DeleteDialogMode::DeletePermanently)
         {
-            ddDeleteText->setText(i18n("<qt>These albums will be <b>permanently "
-                                       "deleted</b> from your hard disk.<br>"
-                                       "Note that <b>all subalbums</b> "
-                                       "are included in this list and will "
-                                       "be deleted permanently as well.</qt>"));
-            ddWarningIcon->setPixmap(KIconLoader::global()->loadIcon("messagebox_warning",
-                                     KIconLoader::Desktop, KIconLoader::SizeLarge));
-        }
-        else
-        {
-            ddDeleteText->setText(i18n("<qt>These albums will be moved to Trash.<br>"
-                                       "Note that <b>all subalbums</b> "
-                                       "are included in this list and will "
-                                       "be moved to Trash as well.</qt>"));
-            ddWarningIcon->setPixmap(KIconLoader::global()->loadIcon("trashcan_full",
-                                     KIconLoader::Desktop, KIconLoader::SizeLarge));
-        }
-        ddNumFiles->setText(i18np("<b>1</b> album selected.", "<b>%1</b> albums selected.", ddFileList->count()));
-        break;
+            // As above, but display additional warning
 
+            if (m_deleteMode == DeleteDialogMode::DeletePermanently)
+            {
+                ddDeleteText->setText(i18n("<qt>These albums will be <b>permanently "
+                                           "deleted</b> from your hard disk.<br>"
+                                           "Note that <b>all subalbums</b> "
+                                           "are included in this list and will "
+                                           "be deleted permanently as well.</qt>"));
+                ddWarningIcon->setPixmap(KIconLoader::global()->loadIcon("dialog-warning",
+                                         KIconLoader::Desktop, KIconLoader::SizeLarge));
+            }
+            else
+            {
+                ddDeleteText->setText(i18n("<qt>These albums will be moved to Trash.<br>"
+                                           "Note that <b>all subalbums</b> "
+                                           "are included in this list and will "
+                                           "be moved to Trash as well.</qt>"));
+                ddWarningIcon->setPixmap(KIconLoader::global()->loadIcon("user-trash-full",
+                                         KIconLoader::Desktop, KIconLoader::SizeLarge));
+            }
+            ddNumFiles->setText(i18np("<b>1</b> album selected.", "<b>%1</b> albums selected.",
+                                ddFileList->count()));
+            break;
+        }
     }
 }
 
@@ -178,9 +180,9 @@ void DeleteWidget::updateText()
 
 DeleteDialog::DeleteDialog(QWidget *parent) 
             : KDialog(parent),
-             m_saveShouldDeleteUserPreference(true),
-             m_saveDoNotShowAgain(false),
-             m_trashGuiItem(i18n("&Move to Trash"), "trashcan_full")
+              m_saveShouldDeleteUserPreference(true),
+              m_saveDoNotShowAgain(false),
+              m_trashGuiItem(i18n("&Move to Trash"), "user-trash-full")
 {
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
