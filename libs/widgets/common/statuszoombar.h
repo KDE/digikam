@@ -24,6 +24,11 @@
 #ifndef STATUSSTATUSBAR_H
 #define STATUSSTATUSBAR_H
 
+// Qt includes.
+
+#include <qslider.h>
+#include <qevent.h>
+
 // KDE includes.
 
 #include <qhbox.h>
@@ -37,6 +42,22 @@ namespace Digikam
 {
 
 class StatusZoomBarPriv;
+
+
+class DIGIKAM_EXPORT QSliderReverseWheel : public QSlider
+{
+
+public:
+
+    QSliderReverseWheel(QWidget *parent=0);
+    ~QSliderReverseWheel();
+
+private:
+
+    void wheelEvent(QWheelEvent *e);
+};
+
+// ----------------------------------------------------------------------
 
 class DIGIKAM_EXPORT StatusZoomBar : public QHBox
 {

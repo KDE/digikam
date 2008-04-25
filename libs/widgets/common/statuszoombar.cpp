@@ -27,6 +27,7 @@
 #include <qtimer.h>
 #include <qslider.h>
 #include <qtooltip.h>
+#include <qevent.h>
 
 // KDE includes.
 
@@ -42,6 +43,38 @@
 
 namespace Digikam
 {
+
+QSliderReverseWheel::QSliderReverseWheel(QWidget *parent) 
+                   : QSlider(parent)
+{
+    // empty, we just need to re-implement wheelEvent to reverse the wheel
+}
+
+QSliderReverseWheel::~QSliderReverseWheel()
+{
+}
+
+void QSliderReverseWheel::wheelEvent(QWheelEvent * e)
+{
+    if ( e->orientation() != orientation() && !rect().contains(e->pos()) )
+        return;
+
+    static float offset = 0;
+    static QSlider* offset_owner = 0;
+    if (offset_owner != this){
+        offset_owner = this;
+        offset = 0;
+    }
+    // note: different sign in front of e->delta vs. original implementation
+    offset += e->delta()*QMAX(pageStep(),lineStep())/120;
+    if (QABS(offset)<1)
+        return;
+    setValue( value() + int(offset) );
+    offset -= int(offset);
+    e->accept();
+}
+
+// ----------------------------------------------------------------------
 
 class StatusZoomBarPriv
 {
@@ -79,9 +112,12 @@ StatusZoomBar::StatusZoomBar(QWidget *parent)
     d->zoomMinusButton->setIconSet(SmallIconSet("viewmag-"));
     QToolTip::add(d->zoomMinusButton, i18n("Zoom Out"));
 
-    d->zoomSlider = new QSlider(ThumbnailSize::Small, ThumbnailSize::Huge,
-                                ThumbnailSize::Step, ThumbnailSize::Medium, 
-                                Qt::Horizontal, this);
+    d->zoomSlider = new QSliderReverseWheel(this);
+    d->zoomSlider->setMinValue(ThumbnailSize::Small);
+    d->zoomSlider->setMaxValue(ThumbnailSize::Huge);
+    d->zoomSlider->setPageStep(ThumbnailSize::Step);
+    d->zoomSlider->setValue(ThumbnailSize::Medium);
+    d->zoomSlider->setOrientation(Qt::Horizontal);
     d->zoomSlider->setLineStep(ThumbnailSize::Step);
     d->zoomSlider->setMaximumHeight(fontMetrics().height()+2);    
     d->zoomSlider->setFixedWidth(120);

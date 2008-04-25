@@ -27,7 +27,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 015 ==> 160846 : Blurred preview of pics.
 016 ==> 157314 : Zoom-slider has no steps
 017 ==> 161047 : Shift and wheel mouse doesn't work.
-018 ==> 
+018 ==> 161087 : conflicting directions of mouse scroll when zooming
+019 ==> 
 
 **********************************************************************************************
 
