@@ -43,7 +43,7 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
 |---curves                              Gilles          X      X       DONE        DONE
 |---database                            Marcel                 X       DONE
 |-----sqlite2                           Gilles                 X       DONE        -
-|---dialogs                             Gilles          X      X       DONE
+|---dialogs                             Gilles          X      X       DONE        DONE
 |---dimg                                Gilles          X      X       DONE        DONE
 |-----filters                           Gilles          X      X       DONE        DONE
 |-----loaders                           Gilles          X      X       DONE        DONE
@@ -89,13 +89,13 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
     cietonguewidget.cpp                 Gilles          X      X       DONE        DONE
     iccpreviewwidget.cpp                Gilles          X      X       DONE        DONE
     iccprofilewidget.cpp                Gilles          X      X       DONE        DONE
-|-----imageplugins                      Gilles          X      X       DONE
+|-----imageplugins                      Gilles          X      X       DONE        
 |-----metadata                          Gilles          X      X       DONE        DONE
 
 |-utilities
 |---batch                               Gilles                 X       DONE
 |---cameragui
-    albumselectdialog.cpp               Gilles                 X       DONE
+    albumselectdialog.cpp               Gilles                 X       DONE        
     animwidget.cpp                      Gilles                 X       DONE
     cameracontroller.cpp                Gilles                 X       DONE
     camerafolderdialog.cpp              Gilles                 X       DONE
@@ -149,7 +149,7 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
 |---setup                               Gilles          X              DONE        DONE
 
 |-digikam
-    album.cpp                           Laurent                X       DONE
+    album.cpp                           Laurent                X       DONE        DONE
     albumfiletip.cpp                    Gilles                 X       DONE
     albumfolderview.cpp                 Gilles                 X       DONE
     albumhistory.cpp                    Laurent                X       DONE
@@ -170,25 +170,25 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
     digikamfirstrun.cpp                 Laurent                X       DONE
     digikamview.cpp                     Gilles                 X       DONE
     dio.cpp                             Laurent                X       DONE
-    ddragobjects.cpp                    Gilles                 X       DONE
-    firstrun.cpp                        Gilles                 X       DONE
+    ddragobjects.cpp                    Gilles                 X       DONE       DONE
+    firstrun.cpp                        Gilles                 X       DONE       DONE
     folderitem.cpp                      Gilles                 X       DONE
     folderview.cpp                      Gilles                 X       DONE
     icongroupitem.cpp                   Gilles                 X       DONE
     iconitem.cpp                        Gilles                 X       DONE
     iconview.cpp                        Gilles                 X       DONE
     imageattributeswatch.cpp            Gilles                 X       DONE
-    imagepreviewbar.cpp                 Gilles                 X       DONE
-    imagepreviewview.cpp                Gilles                 X       DONE
+    imagepreviewbar.cpp                 Gilles                 X       DONE       DONE
+    imagepreviewview.cpp                Gilles                 X       DONE       DONE
     kdateedit.cpp                       Gilles                 X       DONE
     kdatepickerpopup.cpp                Gilles                 X       DONE
     kdatetimeedit.cpp                   Gilles                 X       DONE
-    main.cpp                            Gilles                 X       DONE
+    main.cpp                            Gilles                 X       DONE       DONE
     mediaplayerview.cpp                 Gilles                 X       DONE
     metadatahub.cpp                     Gilles                 X       DONE
     monthwidget.cpp                     Gilles                 X       DONE
-    ratingpopupmenu.cpp                 Gilles                 X       DONE
-    ratingwidget.cpp                    Gilles                 X       DONE
+    ratingpopupmenu.cpp                 Gilles                 X       DONE       DONE
+    ratingwidget.cpp                    Gilles                 X       DONE       DONE
     searchadvanceddialog.cpp            Gilles                 X       DONE                Will become obsolete duing new advanced search tools from Marcel.
     searchfolderview.cpp                Gilles                 X       DONE
     searchquickdialog.cpp               Laurent                X       DONE                Will become obsolete duing new advanced search tools from Marcel.
@@ -196,15 +196,15 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
     searchresultsview.cpp               Gilles                 X       DONE
     searchwidgets.cpp                   Gilles                 X       DONE                Will become obsolete duing new advanced search tools from Marcel.
     syncjob.cpp                         Gilles                 X       DONE
-    tageditdlg.cpp                      Gilles                 X       DONE
+    tageditdlg.cpp                      Gilles                 X       DONE       DONE
     tagfilterview.cpp                   Gilles                 X       DONE
     tagfolderview.cpp                   Gilles                 X       DONE
-    tagspopupmenu.cpp                   Gilles                 X       DONE
-    timelinefolderview.cpp              Gilles                 X       DONE
-    timelineview.cpp                    Gilles                 X       DONE
-    timelinewidget.cpp                  Gilles                 X       DONE
+    tagspopupmenu.cpp                   Gilles                 X       DONE       DONE
+    timelinefolderview.cpp              Gilles                 X       DONE       DONE
+    timelineview.cpp                    Gilles                 X       DONE       DONE
+    timelinewidget.cpp                  Gilles                 X       DONE       DONE
     treefolderitem.cpp                  Gilles                 X       DONE       DONE
-    welcomepageview.cpp                 Laurent                X       DONE
+    welcomepageview.cpp                 Laurent                X       DONE       DONE
 
 |-imageplugins
 |---adjustcurves                        Laurent                        DONE       DONE
