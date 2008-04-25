@@ -81,6 +81,7 @@ DeleteWidget::DeleteWidget(QWidget *parent)
 
     QHBoxLayout *hbox = new QHBoxLayout();
     hbox->setSpacing(KDialog::spacingHint());
+    hbox->setMargin(0);
     hbox->addWidget(logo);
     hbox->addWidget(m_deleteText, 10);
     hbox->addWidget(m_warningIcon);
