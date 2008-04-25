@@ -88,6 +88,7 @@ StatusZoomBar::StatusZoomBar(QWidget *parent)
     d->zoomSlider->setMaximumHeight(fontMetrics().height()+2);
     d->zoomSlider->setFixedWidth(120);
     d->zoomSlider->setFocusPolicy(Qt::NoFocus);
+    d->zoomSlider->setInvertedControls(true);       // See B.K.O #161087
 
     d->zoomPlusButton = new QToolButton(this);
     d->zoomPlusButton->setAutoRaise(true);
