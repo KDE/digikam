@@ -1,4 +1,4 @@
-digiKam 0.9.4-beta4 - Release date: 2008-04-??
+digiKam 0.9.4-beta4 - Release date: 2008-04-27
 
 NEW FEATURES:
 
@@ -29,7 +29,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 017 ==> 161047 : Shift and wheel mouse doesn't work.
 018 ==> 161087 : Conflicting directions of mouse scroll when zooming.
 019 ==> 161084 : Not properly updates status bar info.
-20 ==> 
 
 **********************************************************************************************
 
