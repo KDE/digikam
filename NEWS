@@ -12,8 +12,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 121309 : Camera list sorted by brand.
 002 ==> 137836 : Usability: Configure camera gui add and auto-detect camera.
-003 ==> 160323 : Changing the album name from sth to #sth and then to zsth causes the album to be deleted along with the files
-004 ==> 145083 : Space and Shift-Space isn't used for navigation between images
+003 ==> 160323 : Changing the album name from sth to #sth and then to zsth causes the album to be deleted along with the files.
+004 ==> 145083 : Space and Shift-Space isn't used for navigation between images.
 005 ==> 158696 : digiKam image viewer crashes when "Save As" is clicked.
 006 ==> 156564 : Light table crashes when choosing channel.
 007 ==> 147466 : digiKam crashes on termination if an audio file played.
@@ -23,12 +23,13 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 011 ==> 125775 : digiKam way to save and delete "Searches".
 012 ==> 150908 : Canon g3 not recognised works version 0.9.1.
 013 ==> 152092 : Showfoto crashes ( signal 11 ) on exit.
-014 ==> 160840 : Wrong filtering on Album-Subtree-View
+014 ==> 160840 : Wrong filtering on Album-Subtree-View.
 015 ==> 160846 : Blurred preview of pics.
-016 ==> 157314 : Zoom-slider has no steps
+016 ==> 157314 : Zoom-slider has no steps.
 017 ==> 161047 : Shift and wheel mouse doesn't work.
-018 ==> 161087 : conflicting directions of mouse scroll when zooming
-019 ==> 
+018 ==> 161087 : Conflicting directions of mouse scroll when zooming.
+019 ==> 161084 : Not properly updates status bar info.
+20 ==> 
 
 **********************************************************************************************
 
