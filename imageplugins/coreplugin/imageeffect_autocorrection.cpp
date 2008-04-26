@@ -6,7 +6,7 @@
  * Date        : 2005-05-31
  * Description : Auto-Color correction tool.
  *
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,7 +23,7 @@
 
  // Qt includes.
  
-#include <Q3ListBox>
+#include <QListWidget>
 #include <QColor>
 #include <QGroupBox>
 #include <QButtonGroup> 
@@ -57,7 +57,6 @@
 #include "dimgimagefilters.h"
 #include "whitebalance.h"
 #include "dimg.h"
-#include "listboxpreviewitem.h"
 
 // Local includes.
 
@@ -152,69 +151,66 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    m_correctionTools = new Q3ListBox(gboxSettings);
-    m_correctionTools->setColumnMode(1);
-    m_correctionTools->setVariableWidth(false);
-    m_correctionTools->setVariableHeight(false);
-    Digikam::ListBoxWhatsThis* whatsThis = new Digikam::ListBoxWhatsThis(m_correctionTools);
+    m_correctionTools = new QListWidget(gboxSettings);
+    m_correctionTools->setIconSize(QSize(128, 128));
 
     QPixmap pix = getThumbnailForEffect(AutoLevelsCorrection);
-    Digikam::ListBoxPreviewItem *item = new Digikam::ListBoxPreviewItem(pix, i18n("Auto Levels"));
-    whatsThis->add( item, i18n("<b>Auto Levels</b>:"
-                               "<p>This option maximizes the tonal range in the Red, "
-                               "Green, and Blue channels. It searches the image shadow and highlight "
-                               "limit values and adjusts the Red, Green, and Blue channels "
-                               "to a full histogram range.</p>"));
-    m_correctionTools->insertItem(item, AutoLevelsCorrection);
+    QListWidgetItem *item = new QListWidgetItem(QIcon(pix), i18n("Auto Levels"));
+    item->setWhatsThis(i18n("<b>Auto Levels</b>:"
+                            "<p>This option maximizes the tonal range in the Red, "
+                            "Green, and Blue channels. It searches the image shadow and highlight "
+                            "limit values and adjusts the Red, Green, and Blue channels "
+                            "to a full histogram range.</p>"));
+    m_correctionTools->insertItem(AutoLevelsCorrection, item);
 
     pix = getThumbnailForEffect(NormalizeCorrection);
-    item = new Digikam::ListBoxPreviewItem(pix, i18n("Normalize"));
-    whatsThis->add( item, i18n("<b>Normalize</b>:"
-                               "<p>This option scales brightness values across the active "
-                               "image so that the darkest point becomes black, and the "
-                               "brightest point becomes as bright as possible without "
-                               "altering its hue. This is often a \"magic fix\" for "
-                               "images that are dim or washed out.</p>"));
-    m_correctionTools->insertItem(item, NormalizeCorrection);
+    item = new QListWidgetItem(QIcon(pix), i18n("Normalize"));
+    item->setWhatsThis(i18n("<b>Normalize</b>:"
+                            "<p>This option scales brightness values across the active "
+                            "image so that the darkest point becomes black, and the "
+                            "brightest point becomes as bright as possible without "
+                            "altering its hue. This is often a \"magic fix\" for "
+                            "images that are dim or washed out.</p>"));
+    m_correctionTools->insertItem(NormalizeCorrection, item);
 
     pix = getThumbnailForEffect(EqualizeCorrection);
-    item = new Digikam::ListBoxPreviewItem(pix, i18n("Equalize"));
-    whatsThis->add( item, i18n("<b>Equalize</b>:"
-                               "<p>This option adjusts the brightness of colors across the "
-                               "active image so that the histogram for the value channel "
-                               "is as nearly as possible flat, that is, so that each possible "
-                               "brightness value appears at about the same number of pixels "
-                               "as each other value. Sometimes Equalize works wonderfully at "
-                               "enhancing the contrasts in an image. Other times it gives "
-                               "garbage. It is a very powerful operation, which can either work "
-                               "miracles on an image or destroy it.</p>"));
-    m_correctionTools->insertItem(item, EqualizeCorrection);
+    item = new QListWidgetItem(QIcon(pix), i18n("Equalize"));
+    item->setWhatsThis(i18n("<b>Equalize</b>:"
+                            "<p>This option adjusts the brightness of colors across the "
+                            "active image so that the histogram for the value channel "
+                            "is as nearly as possible flat, that is, so that each possible "
+                            "brightness value appears at about the same number of pixels "
+                            "as each other value. Sometimes Equalize works wonderfully at "
+                            "enhancing the contrasts in an image. Other times it gives "
+                            "garbage. It is a very powerful operation, which can either work "
+                            "miracles on an image or destroy it.</p>"));
+    m_correctionTools->insertItem(EqualizeCorrection, item);
 
     pix = getThumbnailForEffect(StretchContrastCorrection);
-    item = new Digikam::ListBoxPreviewItem(pix, i18n("Stretch Contrast"));
-    whatsThis->add( item, i18n("<b>Stretch Contrast</b>:"
-                               "<p>This option enhances the contrast and brightness "
-                               "of the RGB values of an image by stretching the lowest "
-                               "and highest values to their fullest range, adjusting "
-                               "everything in between.</p>"));
-    m_correctionTools->insertItem(item, StretchContrastCorrection);
+    item = new QListWidgetItem(QIcon(pix), i18n("Stretch Contrast"));
+    item->setWhatsThis(i18n("<b>Stretch Contrast</b>:"
+                            "<p>This option enhances the contrast and brightness "
+                            "of the RGB values of an image by stretching the lowest "
+                            "and highest values to their fullest range, adjusting "
+                            "everything in between.</p>"));
+    m_correctionTools->insertItem(StretchContrastCorrection, item);
 
     pix = getThumbnailForEffect(AutoExposureCorrection);
-    item = new Digikam::ListBoxPreviewItem(pix, i18n("Auto Exposure"));
-    whatsThis->add( item, i18n("<b>Auto Exposure</b>:"
-                               "<p>This option enhances the contrast and brightness "
-                               "of the RGB values of an image to calculate optimal "
-                               "exposition and black level using image histogram "
-                               "properties.</p>"));
-    m_correctionTools->insertItem(item, AutoExposureCorrection);
+    item = new QListWidgetItem(QIcon(pix), i18n("Auto Exposure"));
+    item->setWhatsThis(i18n("<b>Auto Exposure</b>:"
+                            "<p>This option enhances the contrast and brightness "
+                            "of the RGB values of an image to calculate optimal "
+                            "exposition and black level using image histogram "
+                            "properties.</p>"));
+    m_correctionTools->insertItem(AutoExposureCorrection, item);
 
     // -------------------------------------------------------------
     
     m_correctionTools->setFocus();
 
-    gridSettings->addLayout(l1, 0, 0, 1, 5 );
-    gridSettings->addWidget(histoBox, 1, 0, 2, 5 );   
-    gridSettings->addWidget(m_correctionTools, 3, 0, 1, 5 );
+    gridSettings->addLayout(l1,                0, 0, 1, 5);
+    gridSettings->addWidget(histoBox,          1, 0, 2, 5);   
+    gridSettings->addWidget(m_correctionTools, 3, 0, 1, 5);
     gridSettings->setRowStretch(3, 10);
     gridSettings->setMargin(spacingHint());
     gridSettings->setSpacing(spacingHint());
@@ -232,7 +228,7 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
     connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
             this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
 
-    connect(m_correctionTools, SIGNAL(highlighted(int)),
+    connect(m_correctionTools, SIGNAL(itemSelectionChanged()),
             this, SLOT(slotEffect()));
     
     connect(m_previewWidget, SIGNAL(signalResized()),
@@ -298,7 +294,7 @@ void ImageEffect_AutoCorrection::readUserSettings()
     m_scaleBG->button(group.readEntry("Histogram Scale", 
                       (int)Digikam::HistogramWidget::LogScaleHistogram))->setChecked(true);
 
-    m_correctionTools->setCurrentItem(group.readEntry("Auto Correction Filter", (int)AutoLevelsCorrection));
+    m_correctionTools->setCurrentRow(group.readEntry("Auto Correction Filter", (int)AutoLevelsCorrection));
     slotChannelChanged(m_channelCB->currentIndex());
     slotScaleChanged(m_scaleBG->checkedId());
 }
@@ -309,14 +305,14 @@ void ImageEffect_AutoCorrection::writeUserSettings()
     KConfigGroup group        = config->group("autocorrection Tool Dialog");
     group.writeEntry("Histogram Channel", m_channelCB->currentIndex());
     group.writeEntry("Histogram Scale", m_scaleBG->checkedId());
-    group.writeEntry("Auto Correction Filter", m_correctionTools->currentItem());
+    group.writeEntry("Auto Correction Filter", m_correctionTools->currentRow());
     config->sync();
 }
 
 void ImageEffect_AutoCorrection::resetValues()
 {
     m_correctionTools->blockSignals(true);
-    m_correctionTools->setCurrentItem(AutoLevelsCorrection);
+    m_correctionTools->setCurrentRow(AutoLevelsCorrection);
     m_correctionTools->blockSignals(false);
 }
 
@@ -335,7 +331,7 @@ void ImageEffect_AutoCorrection::slotEffect()
     int h                           = iface->previewHeight();
     bool sb                         = iface->previewSixteenBit();
 
-    autoCorrection(m_destinationPreviewData, w, h, sb, m_correctionTools->currentItem());
+    autoCorrection(m_destinationPreviewData, w, h, sb, m_correctionTools->currentRow());
 
     iface->putPreviewImage(m_destinationPreviewData);
     m_previewWidget->updatePreview();
@@ -366,7 +362,7 @@ void ImageEffect_AutoCorrection::finalRendering()
 
     if (data)
     {
-       int type = m_correctionTools->currentItem();
+       int type = m_correctionTools->currentRow();
        autoCorrection(data, w, h, sb, type);
        QString name;
        
