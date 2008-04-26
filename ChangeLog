@@ -1,3 +1,556 @@
+0.9.4-beta4 2008-04-27
+-------------------------------------------------------------------------
+
+2008-04-26 07:44  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-04-25 11:03  abaecker
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS,
+          /branches/extragear/kde3/graphics/digikam/libs/widgets/common/statuszoombar.cpp,
+          /branches/extragear/kde3/graphics/digikam/libs/widgets/common/statuszoombar.h:
+          Enforce consistent behaviour when using the mouse wheel over the
+          zoom slider.
+
+          CCBUGS: 161087
+          TODO:KDE4PORT
+
+2008-04-25 10:18  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/digikam/iconview.cpp:
+          patch from Marcel to force updating of status bar with selection
+          CCBUGS: 161084
+
+2008-04-24 11:24  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-04-24 08:42  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/widgets/common/previewwidget.cpp:
+          polish
+
+2008-04-24 07:45  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/widgets/common/previewwidget.cpp:
+          use const iterator
+
+2008-04-24 07:35  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/widgets/common/previewwidget.cpp:
+          polish
+
+2008-04-24 07:27  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/widgets/common/previewwidget.cpp:
+          always use ++it or --it with Qt iterator, not it++ and it--.
+          see http://doc.trolltech.com/3.3/qt-template-lib.html into
+          Iterator section.
+          CCMAIL: arnd.baecker@web.de
+
+2008-04-24 06:09  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/dimg/loaders/tiffloader.cpp:
+          Enable by default TIFF metadata support with DIMG loader.
+          Exiv2 tiff writting mode is experimental in a dedicated branches
+          of svn.
+          If you use another Exiv2 version, nothing happens.
+
+2008-04-23 18:21  abaecker
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS,
+          /branches/extragear/kde3/graphics/digikam/digikam/albumwidgetstack.cpp,
+          /branches/extragear/kde3/graphics/digikam/digikam/albumwidgetstack.h,
+          /branches/extragear/kde3/graphics/digikam/digikam/digikamview.cpp,
+          /branches/extragear/kde3/graphics/digikam/libs/widgets/common/previewwidget.cpp,
+          /branches/extragear/kde3/graphics/digikam/libs/widgets/common/previewwidget.h,
+          /branches/extragear/kde3/graphics/digikam/libs/widgets/imageplugins/imagepannelwidget.cpp,
+          /branches/extragear/kde3/graphics/digikam/utilities/lighttable/lighttableview.cpp:
+          Make the zoom values of the slider snap to specific values
+          (fit-to-window, 50% view, and 100% view).
+          
+          CCBUGS: 157314
+          TODO:KDE4PORT
+
+2008-04-23 13:58  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-04-23 13:57  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/greycstoration/CImg.h,
+          /branches/extragear/kde3/graphics/digikam/libs/greycstoration/greycstoration.h:
+          digiKam from KDE3 branch : updated internal CImg library to 1.2.8
+
+2008-04-21 08:47  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/widgets/common/dlogoaction.cpp,
+          /branches/extragear/kde3/graphics/digikam/libs/widgets/common/dlogoaction.h:
+          logo -> banner
+
+2008-04-21 08:46  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/data/pics/Makefile.am,
+          /branches/extragear/kde3/graphics/digikam/data/pics/banner-digikam.png,
+          /branches/extragear/kde3/graphics/digikam/data/pics/logo-digikam.png:
+          logo => banner
+
+2008-04-20 13:26  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/digikam/timelinewidget.cpp:
+          fix color from theme
+
+2008-04-20 08:17  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/data/themes/Gray,
+          /branches/extragear/kde3/graphics/digikam/data/themes/Makefile.am,
+          /branches/extragear/kde3/graphics/digikam/data/themes/NeutralGray:
+          Neutral gray => gray
+
+2008-04-20 07:32  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/widgets/metadata/mdkeylistviewitem.cpp:
+          improve colors contrast with theme
+
+2008-04-18 19:39  doerr
+
+        * /branches/extragear/kde3/graphics/digikam/imageplugins/inserttext/imageeffect_inserttext.cpp:
+          CCBUGS: 147597 Fixed 60-part2
+
+2008-04-18 19:36  doerr
+
+        * /branches/extragear/kde3/graphics/digikam/imageplugins/border/imageeffect_border.cpp,
+          /branches/extragear/kde3/graphics/digikam/imageplugins/distortionfx/imageeffect_distortionfx.cpp,
+          /branches/extragear/kde3/graphics/digikam/imageplugins/freerotation/imageeffect_freerotation.cpp,
+          /branches/extragear/kde3/graphics/digikam/imageplugins/inserttext/fontchooserwidget.cpp,
+          /branches/extragear/kde3/graphics/digikam/imageplugins/inserttext/imageeffect_inserttext.cpp,
+          /branches/extragear/kde3/graphics/digikam/imageplugins/sheartool/imageeffect_sheartool.cpp:
+          CCBUGS: 147597 Fixed 60-66
+
+2008-04-18 18:03  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/data/themes/Gray,
+          /branches/extragear/kde3/graphics/digikam/data/themes/Makefile.am,
+          /branches/extragear/kde3/graphics/digikam/data/themes/NeutralGray:
+          Gray => Neutral Gray
+
+2008-04-18 18:01  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/data/themes/Gray:
+          update gray color theme from Risto Saukonpaa
+
+2008-04-17 19:39  doerr
+
+        * /branches/extragear/kde3/graphics/digikam/imageplugins/blurfx/imageeffect_blurfx.cpp,
+          /branches/extragear/kde3/graphics/digikam/imageplugins/colorfx/imageeffect_colorfx.cpp,
+          /branches/extragear/kde3/graphics/digikam/imageplugins/coreplugin/sharpnesseditor/imageeffect_sharpen.cpp,
+          /branches/extragear/kde3/graphics/digikam/imageplugins/distortionfx/imageeffect_distortionfx.cpp,
+          /branches/extragear/kde3/graphics/digikam/imageplugins/noisereduction/imageeffect_noisereduction.cpp,
+          /branches/extragear/kde3/graphics/digikam/imageplugins/texture/imageeffect_texture.cpp,
+          /branches/extragear/kde3/graphics/digikam/libs/dialogs/deletedialogbase.ui:
+          CCBUGS: 147597 Fixed 55-59
+
+2008-04-17 19:13  doerr
+
+        * /branches/extragear/kde3/graphics/digikam/libs/dialogs/deletedialogbase.ui,
+          /branches/extragear/kde3/graphics/digikam/showfoto/setup/setuptooltip.cpp,
+          /branches/extragear/kde3/graphics/digikam/showfoto/showfoto.cpp,
+          /branches/extragear/kde3/graphics/digikam/utilities/imageeditor/editor/imagewindow.cpp:
+          CCBUGS: 147597 Fixed 51-54
+
+2008-04-16 21:45  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-04-16 20:07  doerr
+
+        * /branches/extragear/kde3/graphics/digikam/showfoto/setup/setuptooltip.cpp,
+          /branches/extragear/kde3/graphics/digikam/utilities/setup/setuptooltip.cpp:
+          CCBUGS: 147597 Fixed 47-50
+
+2008-04-16 19:37  doerr
+
+        * /branches/extragear/kde3/graphics/digikam/showfoto/setup/setupeditor.cpp,
+          /branches/extragear/kde3/graphics/digikam/showfoto/setup/setuptooltip.cpp,
+          /branches/extragear/kde3/graphics/digikam/utilities/setup/setup.cpp,
+          /branches/extragear/kde3/graphics/digikam/utilities/setup/setupeditor.cpp,
+          /branches/extragear/kde3/graphics/digikam/utilities/setup/setupslideshow.cpp,
+          /branches/extragear/kde3/graphics/digikam/utilities/setup/setuptooltip.cpp:
+          CCBUGS: 147597 Fixed 43-46
+
+2008-04-15 10:04  abaecker
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS,
+          /branches/extragear/kde3/graphics/digikam/kioslave/digikamalbums.cpp:
+          Only show folders below a given folder in recursive view mode.
+          For this the whole path of a folder has to be matched from the
+          beginning.
+          
+          CCBUGS: 160840
+          TODO:KDE4PORT
+
+2008-04-14 20:02  doerr
+
+        * /branches/extragear/kde3/graphics/digikam/digikam/digikamapp.cpp:
+          CCBUGS: 147597 Fixed 37-part2
+
+2008-04-14 20:00  doerr
+
+        * /branches/extragear/kde3/graphics/digikam/digikam/digikamapp.cpp,
+          /branches/extragear/kde3/graphics/digikam/digikam/searchquickdialog.cpp,
+          /branches/extragear/kde3/graphics/digikam/showfoto/setup/setupeditor.cpp,
+          /branches/extragear/kde3/graphics/digikam/utilities/imageeditor/editor/editorwindow.cpp,
+          /branches/extragear/kde3/graphics/digikam/utilities/imageeditor/editor/imagewindow.cpp,
+          /branches/extragear/kde3/graphics/digikam/utilities/lighttable/lighttablewindow.cpp:
+          CCBUGS: 147597 Fixed 37-42
+
+2008-04-14 19:46  doerr
+
+        * /branches/extragear/kde3/graphics/digikam/digikam/digikamapp.cpp,
+          /branches/extragear/kde3/graphics/digikam/imageplugins/coreplugin/imageeffect_iccproof.cpp,
+          /branches/extragear/kde3/graphics/digikam/utilities/imageeditor/canvas/dimginterface.cpp:
+          CCBUGS: 147597 Fixed 35+36
+
+2008-04-14 19:35  doerr
+
+        * /branches/extragear/kde3/graphics/digikam/digikam/albummanager.cpp,
+          /branches/extragear/kde3/graphics/digikam/digikam/scanlib.cpp,
+          /branches/extragear/kde3/graphics/digikam/digikam/searchadvanceddialog.cpp:
+          CCBUGS: 147597 Fixed 31, 33,34, 30+32 not found
+
+2008-04-14 05:37  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-04-13 17:01  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-04-13 06:22  doerr
+
+        * /branches/extragear/kde3/graphics/digikam/digikam/firstrun.cpp:
+          CCBUGS: 147597 Fixed 28
+
+2008-04-13 06:17  doerr
+
+        * /branches/extragear/kde3/graphics/digikam/digikam/scanlib.cpp:
+          CCBUGS: 147597 Fixed 27-29
+
+2008-04-13 06:09  doerr
+
+        * /branches/extragear/kde3/graphics/digikam/libs/widgets/imageplugins/imagewidget.cpp:
+          CCBUGS: 147597 Fixed 26
+
+2008-04-12 19:59  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-04-12 19:54  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/widgets/metadata/metadatawidget.cpp:
+          fix layout
+
+2008-04-12 18:25  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/widgets/iccprofiles/iccprofilewidget.cpp,
+          /branches/extragear/kde3/graphics/digikam/libs/widgets/iccprofiles/iccprofilewidget.h,
+          /branches/extragear/kde3/graphics/digikam/libs/widgets/metadata/Makefile.am,
+          /branches/extragear/kde3/graphics/digikam/libs/widgets/metadata/exifwidget.cpp,
+          /branches/extragear/kde3/graphics/digikam/libs/widgets/metadata/exifwidget.h,
+          /branches/extragear/kde3/graphics/digikam/libs/widgets/metadata/gpswidget.cpp,
+          /branches/extragear/kde3/graphics/digikam/libs/widgets/metadata/gpswidget.h,
+          /branches/extragear/kde3/graphics/digikam/libs/widgets/metadata/iptcwidget.cpp,
+          /branches/extragear/kde3/graphics/digikam/libs/widgets/metadata/iptcwidget.h,
+          /branches/extragear/kde3/graphics/digikam/libs/widgets/metadata/makernotewidget.cpp,
+          /branches/extragear/kde3/graphics/digikam/libs/widgets/metadata/makernotewidget.h,
+          /branches/extragear/kde3/graphics/digikam/libs/widgets/metadata/metadatalistview.cpp,
+          /branches/extragear/kde3/graphics/digikam/libs/widgets/metadata/metadatalistview.h,
+          /branches/extragear/kde3/graphics/digikam/libs/widgets/metadata/metadatawidget.cpp,
+          /branches/extragear/kde3/graphics/digikam/libs/widgets/metadata/metadatawidget.h,
+          /branches/extragear/kde3/graphics/digikam/libs/widgets/metadata/worldmapwidget.cpp,
+          /branches/extragear/kde3/graphics/digikam/libs/widgets/metadata/worldmapwidget.h:
+          backport commits #795989 and #795898 from trunk
+
+2008-04-12 13:31  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/utilities/lighttable/lighttablepreview.cpp,
+          /branches/extragear/kde3/graphics/digikam/utilities/lighttable/lighttablepreview.h:
+          use const ref
+
+2008-04-12 13:27  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/utilities/imageeditor/canvas/canvas.cpp,
+          /branches/extragear/kde3/graphics/digikam/utilities/imageeditor/canvas/canvas.h:
+          use const ref
+
+2008-04-12 13:23  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/digikam/imagepreviewview.cpp,
+          /branches/extragear/kde3/graphics/digikam/digikam/imagepreviewview.h:
+          use const ref
+
+2008-04-12 12:22  abaecker
+
+        * /branches/extragear/kde3/graphics/digikam/digikam/digikamapp.cpp:
+          Use SHIFT+Space to go to the previous image in the icon view.
+
+          CCBUGS: 145083
+          TODO:KDE4PORT
+
+2008-04-12 08:14  doerr
+
+        * /branches/extragear/kde3/graphics/digikam/libs/widgets/imageplugins/imagewidget.cpp:
+          CCBUGS: 147597 Fixed 25
+
+2008-04-12 07:17  doerr
+
+        * /branches/extragear/kde3/graphics/digikam/libs/widgets/iccprofiles/iccprofilewidget.cpp:
+          CCBUGS: 147597 Fixed 21+22
+
+2008-04-12 06:08  doerr
+
+        * /branches/extragear/kde3/graphics/digikam/digikam/digikamapp.cpp,
+          /branches/extragear/kde3/graphics/digikam/libs/widgets/metadata/metadatawidget.cpp:
+          CCBUGS: 147597 Fixed 20
+
+2008-04-12 06:01  doerr
+
+        * /branches/extragear/kde3/graphics/digikam/libs/greycstoration/greycstorationwidget.cpp:
+          CCBUGS: 147597 Fixed 19
+
+2008-04-12 05:54  doerr
+
+        * /branches/extragear/kde3/graphics/digikam/libs/greycstoration/greycstorationwidget.cpp:
+          CCBUGS: 147597 Fixed 16 and 17
+
+2008-04-12 05:48  doerr
+
+        * /branches/extragear/kde3/graphics/digikam/libs/greycstoration/greycstorationwidget.cpp:
+          CCBUGS: 147597 Fixed 15 and 18, could not find 16+17
+
+2008-04-12 05:38  doerr
+
+        * /branches/extragear/kde3/graphics/digikam/libs/dialogs/imageguidedlg.cpp,
+          /branches/extragear/kde3/graphics/digikam/libs/widgets/imageplugins/imagepannelwidget.cpp:
+          CCBUGS: 147597 Fixed 14
+
+2008-04-11 12:17  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/utilities/cameragui/albumselectdialog.cpp:
+          backport commit #795761 from trunk
+
+2008-04-11 12:04  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/utilities/cameragui/albumselectdialog.h:
+          polish
+
+2008-04-11 12:01  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/utilities/cameragui/albumselectdialog.h:
+          polish
+
+2008-04-11 09:37  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/digikam/imagepreviewview.cpp:
+          fix broken signal
+
+2008-04-11 09:33  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/utilities/imageeditor/canvas/canvas.cpp:
+          fix broken signal
+
+2008-04-11 09:30  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/utilities/lighttable/lighttablepreview.cpp:
+          fix broken signal
+
+2008-04-11 07:32  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-04-11 07:31  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-04-10 11:24  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-04-10 11:22  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-04-10 11:21  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-04-10 11:20  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-04-10 11:18  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-04-10 11:10  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-04-10 08:57  abaecker
+
+        * /branches/extragear/kde3/graphics/digikam/utilities/lighttable/lighttablewindow.cpp:
+          Use SHIFT+Space to go to the previous image in the light-table.
+          
+          CCBUGS: 145083
+          TODO:KDE4PORT
+
+2008-04-10 08:07  abaecker
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS,
+          /branches/extragear/kde3/graphics/digikam/utilities/imageeditor/editor/editorwindow.cpp:
+          Use SHIFT+Space to go to the previous image in the image editor.
+          
+          CCBUGS: 145083
+          TODO:KDE4PORT
+
+2008-04-09 19:00  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/data/pics/menusidepixmap.png:
+          fix
+
+2008-04-09 10:52  abaecker
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS,
+          /branches/extragear/kde3/graphics/digikam/digikam/albummanager.cpp:
+          By using KURL::fromPathOrURL instead of just KURL to construct
+          the path when moving a directory proper escaping of # is ensured.
+          
+          CCBUGS: 160323
+          TODO:KDE4PORT
+
+2008-04-09 10:24  scripty
+
+        * /branches/extragear/kde3/graphics/digikam/imageplugins/hotpixels/digikamimageplugin_hotpixels.desktop,
+          /branches/extragear/kde3/graphics/digikam/imageplugins/infrared/digikamimageplugin_infrared.desktop:
+          SVN_SILENT made messages (.desktop file)
+
+2008-04-08 22:35  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/widgets/common/searchtextbar.cpp:
+          polish
+
+2008-04-08 22:03  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/digikam/albumiconviewfilter.cpp,
+          /branches/extragear/kde3/graphics/digikam/digikam/digikamview.cpp,
+          /branches/extragear/kde3/graphics/digikam/digikam/searchquickdialog.cpp,
+          /branches/extragear/kde3/graphics/digikam/digikam/searchquickdialog.h,
+          /branches/extragear/kde3/graphics/digikam/digikam/tageditdlg.cpp,
+          /branches/extragear/kde3/graphics/digikam/digikam/timelineview.cpp,
+          /branches/extragear/kde3/graphics/digikam/libs/dialogs/rawcameradlg.cpp,
+          /branches/extragear/kde3/graphics/digikam/libs/imageproperties/imagedescedittab.cpp,
+          /branches/extragear/kde3/graphics/digikam/libs/widgets/common/searchtextbar.cpp,
+          /branches/extragear/kde3/graphics/digikam/libs/widgets/common/searchtextbar.h,
+          /branches/extragear/kde3/graphics/digikam/utilities/setup/cameraselection.cpp:
+          digiKam from KDE3 branch : Save and Restore auto-completion
+          settings with all Search text widget between program sessions.
+
+2008-04-08 15:18  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/digikam/version.h:
+          update
+
+2008-04-08 15:18  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/digikam.lsm: update
+
+2008-04-08 11:34  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-04-08 10:47  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/utilities/setup/cameraselection.cpp,
+          /branches/extragear/kde3/graphics/digikam/utilities/setup/cameraselection.h:
+          polish
+
+2008-04-08 10:39  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-04-08 10:37  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/utilities/setup/cameraselection.cpp,
+          /branches/extragear/kde3/graphics/digikam/utilities/setup/cameraselection.h:
+          digiKam from KDE3 branch : added search text bar to easy find a
+          camera make/model from the huge list provided by libgphoto2.
+          There is no way with libgphoto2 to separate camera make/model.
+          These infomations are merged to a common string and it's
+          impossible
+          to short camera list by brand.
+          
+          BUG: 137836
+          BUG: 121309
+
+2008-04-08 07:07  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/widgets/common/searchtextbar.cpp:
+          better color contrast
+
+2008-04-08 06:21  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/dialogs/rawcameradlg.cpp:
+          fix layout
+
+2008-04-07 21:17  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/dialogs/rawcameradlg.cpp:
+          polish
+
+2008-04-07 21:13  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/dialogs/rawcameradlg.cpp:
+          revert
+
+2008-04-07 21:08  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/libs/dialogs/rawcameradlg.cpp,
+          /branches/extragear/kde3/graphics/digikam/utilities/imageeditor/editor/editorwindow.cpp,
+          /branches/extragear/kde3/graphics/digikam/utilities/lighttable/lighttablewindow.cpp:
+          polish
+
+2008-04-07 16:26  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/NEWS: update
+
+2008-04-07 16:14  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/digikam/digikamapp.cpp,
+          /branches/extragear/kde3/graphics/digikam/libs/dialogs/Makefile.am,
+          /branches/extragear/kde3/graphics/digikam/libs/dialogs/rawcameradlg.cpp,
+          /branches/extragear/kde3/graphics/digikam/libs/dialogs/rawcameradlg.h,
+          /branches/extragear/kde3/graphics/digikam/project/project.kdevelop,
+          /branches/extragear/kde3/graphics/digikam/showfoto/Makefile.am,
+          /branches/extragear/kde3/graphics/digikam/utilities/imageeditor/editor/Makefile.am,
+          /branches/extragear/kde3/graphics/digikam/utilities/imageeditor/editor/editorwindow.cpp,
+          /branches/extragear/kde3/graphics/digikam/utilities/lighttable/lighttablewindow.cpp:
+          digiKam from KDE3 branch : new RAW camera list dialog with search
+          camera model tool.
+
+2008-04-07 07:19  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/ChangeLog: update
+
+2008-04-07 06:40  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/release_digikam.rb:
+          update
+
+2008-04-07 06:37  cgilles
+
+        * /branches/extragear/kde3/graphics/digikam/digikam.lsm: update
+
 0.9.4-beta3 2008-04-07
 -------------------------------------------------------------------------
 2008-04-03 13:40  cgilles
