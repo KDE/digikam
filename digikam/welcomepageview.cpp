@@ -112,7 +112,7 @@ QString WelcomePageView::infoPage()
     newFeatures << i18n("Thumbnails-bar integration with preview mode and in editor for easy navigation between images");
     newFeatures << i18n("Supports the latest camera RAW files");
     newFeatures << i18n("Geolocation performed using KDE4 Marble interface");
-    newFeatures << i18n("New tool based on LensFun libary to fix lens defaults automatically");
+    newFeatures << i18n("New tool based on LensFun library to fix lens defaults automatically");
 
     QString featureItems;
     for ( int i = 0 ; i < newFeatures.count() ; i++ )
