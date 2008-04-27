@@ -663,23 +663,24 @@ public:
     /**
      * Add (or replace) the ImageMetadata of the specified item.
      * If there is already an entry, it will be discarded.
-     * The QVariantList shall at most 15 entries, of types as defined
+     * The QVariantList shall have at most 16 entries, of types as defined
      * in the DBSCHEMA and in metadatainfo.h, in this order:
      *  0) String    make
      *  1) String    model
-     *  2) Double    aperture
-     *  3) Double    focalLength
-     *  4) Double    focalLength35
-     *  5) Double    exposureTime
-     *  6) Int       exposureProgram
-     *  7) Int       exposureMode
-     *  8) Int       sensitivity
-     *  9) Int       flash
-     * 10) Int       WhiteBalance
-     * 11) Int       WhiteBalanceColorTemperature
-     * 12) Int       meteringMode
-     * 13) Double    subjectDistance
-     * 14) Double    subjectDistanceCategory
+     *  2) String    lens
+     *  3) Double    aperture
+     *  4) Double    focalLength
+     *  5) Double    focalLength35
+     *  6) Double    exposureTime
+     *  7) Int       exposureProgram
+     *  8) Int       exposureMode
+     *  9) Int       sensitivity
+     * 10) Int       flash
+     * 11) Int       WhiteBalance
+     * 12) Int       WhiteBalanceColorTemperature
+     * 13) Int       meteringMode
+     * 14) Double    subjectDistance
+     * 15) Double    subjectDistanceCategory  
      * You can leave out entries from this list. Indicate the values that you have
      * passed in the ImageMetadata flag in the third parameters.
      */
@@ -703,7 +704,7 @@ public:
     /**
      * Add (or replace) the ImagePosition of the specified item.
      * If there is already an entry, it will be discarded.
-     * The QVariantList shall have at most 9 entries, of types in this order:
+     * The QVariantList shall have at most 10 entries, of types in this order:
      * 0) String    Latitude
      * 1) Double    LatitudeNumber
      * 2) String    Longitude
@@ -712,7 +713,8 @@ public:
      * 5) Double    Orientation
      * 6) Double    Tilt
      * 7) Double    Roll
-     * 8) String    Description
+     * 8) Double    Accuracy
+     * 9) String    Description
      * You can leave out entries from this list. Indicate the values that you have
      * passed in the ImageInfo flag in the third parameters.
      */

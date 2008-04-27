@@ -1335,6 +1335,8 @@ QStringList AlbumDB::imageMetadataFieldList(DatabaseFields::ImageMetadata fields
         list << "make";
     if (fields & DatabaseFields::Model)
         list << "model";
+    if (fields & DatabaseFields::Lens)
+        list << "lens";
     if (fields & DatabaseFields::Aperture)
         list << "aperture";
     if (fields & DatabaseFields::FocalLength)
@@ -1385,6 +1387,8 @@ QStringList AlbumDB::imagePositionsFieldList(DatabaseFields::ImagePositions fiel
         list << "tilt";
     if (fields & DatabaseFields::PositionRoll)
         list << "roll";
+    if (fields & DatabaseFields::PositionAccuracy)
+        list << "accuracy";
     if (fields & DatabaseFields::PositionDescription)
         list << "description";
 
@@ -2579,10 +2583,10 @@ void AlbumDB::copyImageAttributes(qlonglong srcId, qlonglong dstId)
     fields |= DatabaseFields::ImageInformationAll;
 
     d->db->execSql( QString("INSERT INTO ImageMetadata "
-                            " (imageid, make, model, aperture, focalLength, focalLength35, "
+                            " (imageid, make, model, lens, aperture, focalLength, focalLength35, "
                             "  exposureTime, exposureProgram, exposureMode, sensitivity, flash, whiteBalance, "
                             "  whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory) "
-                            "SELECT ?, make, model, aperture, focalLength, focalLength35, "
+                            "SELECT ?, make, model, lens, aperture, focalLength, focalLength35, "
                             "  exposureTime, exposureProgram, exposureMode, sensitivity, flash, whiteBalance, "
                             "  whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory "
                             "FROM ImageMetadata WHERE imageid=?;"),
@@ -2591,9 +2595,9 @@ void AlbumDB::copyImageAttributes(qlonglong srcId, qlonglong dstId)
 
     d->db->execSql( QString("INSERT INTO ImagePositions "
                             " (imageid, latitude, latitudeNumber, longitude, longitudeNumber, "
-                            "  altitude, orientation, tilt, roll, description) "
+                            "  altitude, orientation, tilt, roll, accuracy, description) "
                             "SELECT ?, latitude, latitudeNumber, longitude, longitudeNumber, "
-                            "  altitude, orientation, tilt, roll, description "
+                            "  altitude, orientation, tilt, roll, accuracy, description "
                             "FROM ImagePositions WHERE imageid=?;"),
                     dstId, srcId );
     fields |= DatabaseFields::ImagePositionsAll;

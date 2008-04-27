@@ -512,21 +512,22 @@ void ImageScanner::fillMetadataContainer(qlonglong imageid, ImageMetadataContain
     // associate with hard-coded variables
     container->make             = strings[0];
     container->model            = strings[1];
-    container->aperture         = strings[2];
-    container->focalLength      = strings[3];
-    container->focalLength35    = strings[4];
-    container->exposureTime     = strings[5];
-    container->exposureProgram  = strings[6];
-    container->exposureMode     = strings[7];
-    container->sensitivity      = strings[8];
-    container->flashMode        = strings[9];
-    container->whiteBalance     = strings[10];
+    container->lens             = strings[2];
+    container->aperture         = strings[3];
+    container->focalLength      = strings[4];
+    container->focalLength35    = strings[5];
+    container->exposureTime     = strings[6];
+    container->exposureProgram  = strings[7];
+    container->exposureMode     = strings[8];
+    container->sensitivity      = strings[9];
+    container->flashMode        = strings[10];
+    container->whiteBalance     = strings[11];
     container->whiteBalanceColorTemperature
-                               = strings[11];
-    container->meteringMode     = strings[12];
-    container->subjectDistance  = strings[13];
+                               = strings[12];
+    container->meteringMode     = strings[13];
+    container->subjectDistance  = strings[14];
     container->subjectDistanceCategory
-                               = strings[14];
+                               = strings[15];
 }
 
 

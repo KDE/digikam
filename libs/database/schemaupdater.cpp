@@ -1086,7 +1086,7 @@ void SchemaUpdater::preAlpha010Update2()
                     " (imageid, latitude, latitudeNumber, longitude, longitudeNumber, "
                     "  altitude, orientation, tilt, roll, accuracy, description) "
                     "SELECT imageid, latitude, latitudeNumber, longitude, longitudeNumber, "
-                    "  altitude, orientation, tilt, roll, description "
+                    "  altitude, orientation, tilt, roll, 0, description "
                     " FROM ImagePositionsTemp;"));
 
     m_access->backend()->execSql(
