@@ -33,6 +33,7 @@
 
 // Local includes
 
+#include "ddebug.h"
 #include "albumdb.h"
 #include "imagecomments.h"
 
@@ -387,6 +388,7 @@ void ImageComments::apply(DatabaseAccess &access)
         DatabaseAccess access;
         info.id = access.db()->setImageComment(d->id, info.comment, info.type, info.language, info.author, info.date);
     }
+    d->dirtyIndices.subtract(d->newIndices);
     d->newIndices.clear();
 
     foreach(int index, d->dirtyIndices)

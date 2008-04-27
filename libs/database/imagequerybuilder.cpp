@@ -542,7 +542,7 @@ void ImageQueryBuilder::buildField(QString &sql, SearchXmlCachingReader &reader,
     else if (name == "comment")
     {
         sql += " (Images.id IN "
-               " (SELECT id FROM ImageComments "
+               " (SELECT imageid FROM ImageComments "
                "  WHERE type=? AND comment ";
         ImageQueryBuilder::addSqlRelation(sql, relation);
         sql += " ?)) ";
@@ -551,7 +551,7 @@ void ImageQueryBuilder::buildField(QString &sql, SearchXmlCachingReader &reader,
     else if (name == "commentauthor")
     {
         sql += " (Images.id IN "
-               " (SELECT id FROM ImageComments "
+               " (SELECT imageid FROM ImageComments "
                "  WHERE type=? AND author ";
         ImageQueryBuilder::addSqlRelation(sql, relation);
         sql += " ?)) ";
@@ -560,7 +560,7 @@ void ImageQueryBuilder::buildField(QString &sql, SearchXmlCachingReader &reader,
     else if (name == "headline")
     {
         sql += " (Images.id IN "
-               " (SELECT id FROM ImageComments "
+               " (SELECT imageid FROM ImageComments "
                "  WHERE type=? AND comment ";
         ImageQueryBuilder::addSqlRelation(sql, relation);
         sql += " ?)) ";
@@ -569,7 +569,7 @@ void ImageQueryBuilder::buildField(QString &sql, SearchXmlCachingReader &reader,
     else if (name == "title")
     {
         sql += " (Images.id IN "
-               " (SELECT id FROM ImageComments "
+               " (SELECT imageid FROM ImageComments "
                "  WHERE type=? AND comment ";
         ImageQueryBuilder::addSqlRelation(sql, relation);
         sql += " ?)) ";
