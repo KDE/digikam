@@ -122,14 +122,29 @@ void SearchView::read(const QString &xml)
 SearchGroup *SearchView::addSearchGroup()
 {
     SearchGroup *group = new SearchGroup(this);
-    group->setup();
+    m_groups << group;
+    group->setup(m_groups.size() == 1 ? SearchGroup::FirstGroup : SearchGroup::ChainGroup);
     // insert at last-but-two position; leave bottom bar and stretch and the bottom
     m_layout->insertWidget(m_layout->count()-2, group);
-    m_groups << group;
-    if (m_groups.size() > 1)
-        group->setChainSearchGroup();
-    //group->setBackgroundRole(QPalette::Background);
+    connect(group, SIGNAL(removeRequested()),
+            this, SLOT(removeSendingSearchGroup()));
     return group;
+}
+
+void SearchView::removeSearchGroup(SearchGroup *group)
+{
+    if (group->groupType() == SearchGroup::FirstGroup)
+    {
+        DWarning() << "Attempt to delete the primary search group";
+        return;
+    }
+    m_groups.removeAll(group);
+    delete group;
+}
+
+void SearchView::removeSendingSearchGroup()
+{
+    removeSearchGroup(static_cast<SearchGroup *>(sender()));
 }
 
 void SearchView::slotAddGroupButton()
@@ -172,6 +187,10 @@ void SearchView::setTheme()
               + ThemeEngine::instance()->textSelColor().name() + ";"
             " } "
             "#SearchGroupLabel_CheckBox "
+            " { color: "
+              + ThemeEngine::instance()->textSelColor().name() + ";"
+            " } "
+            "#SearchGroupLabel_RemoveLabel "
             " { color: "
               + ThemeEngine::instance()->textSelColor().name() + ";"
             " } "

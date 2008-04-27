@@ -72,6 +72,7 @@ public:
 public slots:
 
     SearchGroup *addSearchGroup();
+    void removeSearchGroup(SearchGroup *group);
 
 signals:
 
@@ -83,6 +84,7 @@ protected slots:
 
     void setTheme();
     void slotAddGroupButton();
+    void removeSendingSearchGroup();
 
 public:
 
