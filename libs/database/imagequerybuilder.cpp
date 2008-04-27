@@ -749,6 +749,9 @@ QString ImageQueryBuilder::convertFromUrlToXml(const KUrl& url) const
 
     SearchXmlWriter writer;
 
+    // set an attribute marking this search as converted from 0.9 style search
+    writer.writeAttribute("convertedFrom09Url", "true");
+
     writer.writeGroup();
 
     QStringList strList = url.path().split(' ', QString::SkipEmptyParts);
