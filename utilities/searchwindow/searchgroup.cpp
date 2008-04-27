@@ -42,6 +42,7 @@
 #include "searchview.h"
 #include "searchfields.h"
 #include "searchfieldgroup.h"
+#include "searchutilities.h"
 #include "searchgroup.h"
 #include "searchgroup.moc"
 
@@ -50,18 +51,23 @@ namespace Digikam
 
 
 SearchGroup::SearchGroup(SearchView *parent)
-    : QWidget(parent), m_view(parent), m_layout(0), m_label(0), m_isFirstGroup(true)
+    : QWidget(parent), m_view(parent), m_layout(0), m_label(0), m_groupType(FirstGroup)
 {
 }
 
-void SearchGroup::setup()
+void SearchGroup::setup(Type type)
 {
+    m_groupType = type;
+
     m_layout = new QVBoxLayout;
     m_layout->setContentsMargins(0, 0, 0, 0);
     m_layout->setSpacing(0);
 
-    m_label = new SearchGroupLabel(m_view, this);
+    m_label = new SearchGroupLabel(m_view, m_groupType, this);
     m_layout->addWidget(m_label);
+
+    connect(m_label, SIGNAL(removeClicked()),
+            this, SIGNAL(removeRequested()));
 
     SearchFieldGroup *group;
     SearchFieldGroupLabel *label;
@@ -184,12 +190,6 @@ void SearchGroup::setup()
     setLayout(m_layout);
 }
 
-void SearchGroup::setChainSearchGroup()
-{
-    m_isFirstGroup = false;
-    m_label->addGroupOperatorOption();
-}
-
 void SearchGroup::read(SearchXmlCachingReader &reader)
 {
     reset();
@@ -252,20 +252,25 @@ void SearchGroup::reset()
     {
         fieldGroup->reset();
     }
+
+    m_label->setGroupOperator(SearchXml::standardGroupOperator());
+    m_label->setDefaultFieldOperator(SearchXml::standardFieldOperator());
+}
+
+SearchGroup::Type SearchGroup::groupType() const
+{
+    return m_groupType;
 }
 
 // ----------------------------------- //
 
 
-SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache *cache, QWidget *parent)
+SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache *cache, SearchGroup::Type type, QWidget *parent)
     : QWidget(parent), m_groupOpBox(0), m_themeCache(cache)
 {
-    QVBoxLayout *m_layout = new QVBoxLayout;
+    QGridLayout *m_layout = new QGridLayout;
 
     // leave styling to style sheet (by object name)
-
-    QWidget *header   = new QWidget(this);
-    QGridLayout *grid = new QGridLayout(header);
 
     QLabel *mainLabel = new QLabel(i18n("Find Pictures"));
     mainLabel->setObjectName("SearchGroupLabel_MainLabel");
@@ -276,30 +281,38 @@ SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache *cache, QWidget *p
     m_anyBox = new QRadioButton(i18n("Match Any of the following conditions"));
     m_anyBox->setObjectName("SearchGroupLabel_CheckBox");
 
-    QLabel *logo = new QLabel(header);
-    logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
-                            .scaled(96, 96, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    if (type == SearchGroup::FirstGroup)
+    {
+        QLabel *logo = new QLabel;
+        logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
+                .scaled(96, 96, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
-    grid->addWidget(mainLabel, 0, 0, 1, 1);
-    grid->addWidget(m_allBox,  1, 0, 1, 1);
-    grid->addWidget(m_anyBox,  2, 0, 1, 1);
-    grid->addWidget(logo,      0, 2, 3, 1);
-    grid->setColumnStretch(1, 10);
-    grid->setSpacing(0);
-    grid->setMargin(0);
+        m_layout->addWidget(mainLabel, 0, 0, 1, 1);
+        m_layout->addWidget(m_allBox,  1, 0, 1, 1);
+        m_layout->addWidget(m_anyBox,  2, 0, 1, 1);
+        m_layout->addWidget(logo,      0, 2, 3, 1);
+        m_layout->setColumnStretch(1, 10);
+    }
+    else
+    {
+        m_groupOpBox = new QComboBox;
+        m_groupOpBox->addItem("- OR -", SearchXml::Or);
+        m_groupOpBox->addItem("- AND -", SearchXml::And);
+        m_groupOpBox->addItem("- AND NOT -", SearchXml::AndNot);
 
-    m_layout->addWidget(header);
+        m_removeLabel = new SearchClickLabel(i18n("Remove Group"));
+        m_removeLabel->setObjectName("SearchGroupLabel_RemoveLabel");
+        connect(m_removeLabel, SIGNAL(leftClicked()),
+                this, SIGNAL(removeClicked()));
+
+        m_layout->addWidget(m_groupOpBox, 0, 0, 1, 1);
+        m_layout->addWidget(m_allBox,  1, 0, 1, 1);
+        m_layout->addWidget(m_anyBox,  2, 0, 1, 1);
+        m_layout->setColumnStretch(1, 10);
+        m_layout->addWidget(m_removeLabel, 0, 2, 1, 1); //, Qt::AlignRight | Qt::AlignTop);
+    }
 
     setLayout(m_layout);
-}
-
-void SearchGroupLabel::addGroupOperatorOption()
-{
-    m_groupOpBox = new QComboBox;
-    m_groupOpBox->addItem("- OR -", SearchXml::Or);
-    m_groupOpBox->addItem("- AND -", SearchXml::And);
-    m_groupOpBox->addItem("- AND NOT -", SearchXml::AndNot);
-    m_layout->insertWidget(0, m_groupOpBox, 0, Qt::AlignHCenter);
 }
 
 void SearchGroupLabel::setGroupOperator(SearchXml::Operator op)

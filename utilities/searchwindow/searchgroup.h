@@ -46,19 +46,33 @@ namespace Digikam
 class SearchGroupLabel;
 class SearchFieldGroup;
 class SearchFieldGroupLabel;
+class SearchClickLabel;
 
 class SearchGroup : public QWidget
 {
+    Q_OBJECT
+
 public:
+
+    enum Type
+    {
+        FirstGroup,
+        ChainGroup
+    };
 
     SearchGroup(SearchView *parent);
 
-    void setup();
-    void setChainSearchGroup();
+    void setup(Type type = FirstGroup);
 
     void read(SearchXmlCachingReader &reader);
     void write(SearchXmlWriter &writer);
     void reset();
+
+    Type groupType() const;
+
+signals:
+
+    void removeRequested();
 
 protected:
 
@@ -70,7 +84,7 @@ protected:
     QVBoxLayout                  *m_layout;
     SearchGroupLabel             *m_label;
 
-    bool                          m_isFirstGroup;
+    Type                          m_groupType;
 };
 
 // ----------------------------------- //
@@ -81,8 +95,7 @@ class SearchGroupLabel : public QWidget
 
 public:
 
-    SearchGroupLabel(SearchViewThemedPartsCache *cache, QWidget *parent = 0);
-    void addGroupOperatorOption();
+    SearchGroupLabel(SearchViewThemedPartsCache *cache, SearchGroup::Type type, QWidget *parent = 0);
 
     void setGroupOperator(SearchXml::Operator op);
     void setDefaultFieldOperator(SearchXml::Operator op);
@@ -90,17 +103,22 @@ public:
     SearchXml::Operator groupOperator() const;
     SearchXml::Operator defaultFieldOperator() const;
 
+signals:
+
+    void removeClicked();
+
 protected:
 
     virtual void paintEvent(QPaintEvent *ev);
 
 private:
 
-    QVBoxLayout                *m_layout;
-    QComboBox                  *m_groupOpBox;
+    QGridLayout                   *m_layout;
+    QComboBox                     *m_groupOpBox;
     QRadioButton                  *m_allBox;
     QRadioButton                  *m_anyBox;
-    SearchViewThemedPartsCache *m_themeCache;
+    SearchClickLabel              *m_removeLabel;
+    SearchViewThemedPartsCache    *m_themeCache;
 };
 
 }
