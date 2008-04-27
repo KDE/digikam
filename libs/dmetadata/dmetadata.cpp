@@ -385,6 +385,8 @@ PhotoInfoContainer DMetadata::getPhotographInformations() const
         if (photoInfo.model.isEmpty())
             photoInfo.model = getXmpTagString("Xmp.tiff.Model");
 
+        photoInfo.lens     = getLensDescription();
+
         photoInfo.aperture = getExifTagString("Exif.Photo.FNumber");
         if (photoInfo.aperture.isEmpty())
         {
@@ -973,6 +975,9 @@ QString DMetadata::valueToString (const QVariant &value, MetadataInfo::Field fie
             return createExifUserStringFromValue("Exif.Image.Make", value);
         case MetadataInfo::Model:
             return createExifUserStringFromValue("Exif.Image.Model", value);
+        case MetadataInfo::Lens:
+            // heterogenous source, non-standardized string
+            return value.toString();
         case MetadataInfo::Aperture:
             return createExifUserStringFromValue("Exif.Photo.FNumber", value);
         case MetadataInfo::FocalLength:

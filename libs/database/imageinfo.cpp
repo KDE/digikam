@@ -419,6 +419,7 @@ PhotoInfoContainer ImageInfo::photoInfoContainer() const
 
     photoInfo.make            = meta.make;
     photoInfo.model           = meta.model;
+    photoInfo.lens            = meta.lens;
     photoInfo.exposureTime    = meta.exposureTime;
     photoInfo.exposureMode    = meta.exposureMode;
     photoInfo.exposureProgram = meta.exposureProgram;

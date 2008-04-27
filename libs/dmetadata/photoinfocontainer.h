@@ -47,6 +47,7 @@ public:
     {
         if ( make.isEmpty()            && 
              model.isEmpty()           && 
+             lens.isEmpty()            && 
              exposureTime.isEmpty()    && 
              exposureMode.isEmpty()    && 
              exposureProgram.isEmpty() && 
@@ -64,6 +65,7 @@ public:
     
     QString   make;
     QString   model;
+    QString   lens;
     QString   exposureTime;
     QString   exposureMode;
     QString   exposureProgram;
