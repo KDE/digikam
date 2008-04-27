@@ -78,21 +78,22 @@ enum ImageMetadataField
     ImageMetadataNone            = 0,
     Make                         = 1 << 0,
     Model                        = 1 << 1,
-    Aperture                     = 1 << 2,
-    FocalLength                  = 1 << 3,
-    FocalLength35                = 1 << 4,
-    ExposureTime                 = 1 << 5,
-    ExposureProgram              = 1 << 6,
-    ExposureMode                 = 1 << 7,
-    Sensitivity                  = 1 << 8,
-    FlashMode                    = 1 << 9,
-    WhiteBalance                 = 1 << 10,
-    WhiteBalanceColorTemperature = 1 << 11,
-    MeteringMode                 = 1 << 12,
-    SubjectDistance              = 1 << 13,
-    SubjectDistanceCategory      = 1 << 14,
+    Lens                         = 1 << 2,
+    Aperture                     = 1 << 3,
+    FocalLength                  = 1 << 4,
+    FocalLength35                = 1 << 5,
+    ExposureTime                 = 1 << 6,
+    ExposureProgram              = 1 << 7,
+    ExposureMode                 = 1 << 8,
+    Sensitivity                  = 1 << 9,
+    FlashMode                    = 1 << 10,
+    WhiteBalance                 = 1 << 11,
+    WhiteBalanceColorTemperature = 1 << 12,
+    MeteringMode                 = 1 << 13,
+    SubjectDistance              = 1 << 14,
+    SubjectDistanceCategory      = 1 << 15,
     ImageMetadataAll             =
-            Make | Model | Aperture | FocalLength | FocalLength35 |
+            Make | Model | Lens | Aperture | FocalLength | FocalLength35 |
             ExposureTime | ExposureProgram | ExposureMode | Sensitivity |
             FlashMode | WhiteBalance | WhiteBalanceColorTemperature |
             MeteringMode | SubjectDistance | SubjectDistanceCategory,
@@ -111,10 +112,11 @@ enum ImagePositionsField
     PositionOrientation = 1 << 5,
     PositionTilt        = 1 << 6,
     PositionRoll        = 1 << 7,
-    PositionDescription = 1 << 8,
+    PositionAccuracy    = 1 << 8,
+    PositionDescription = 1 << 9,
     ImagePositionsAll   =
             Latitude | LatitudeNumber | Longitude | LongitudeNumber | Altitude |
-            PositionOrientation | PositionRoll | PositionTilt | PositionDescription,
+            PositionOrientation | PositionRoll | PositionTilt | PositionAccuracy | PositionDescription,
     ImagePositionsFirst = Latitude,
     ImagePositionsLast  = PositionDescription
 };

@@ -73,6 +73,7 @@ public:
 
     QString make;
     QString model;
+    QString lens;
     QString aperture;
     QString focalLength;
     QString focalLength35;
