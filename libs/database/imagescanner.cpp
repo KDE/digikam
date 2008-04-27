@@ -204,9 +204,11 @@ void ImageScanner::updateImageInformation()
 
 static MetadataFields allImageMetadataFields()
 {
+    // This list must reflect the order required by AlbumDB::addImageMetadata
     MetadataFields fields;
     fields << MetadataInfo::Make
            << MetadataInfo::Model
+           << MetadataInfo::Lens
            << MetadataInfo::Aperture
            << MetadataInfo::FocalLength
            << MetadataInfo::FocalLengthIn35mm
@@ -233,6 +235,7 @@ void ImageScanner::scanImageMetadata()
 
 void ImageScanner::scanImagePosition()
 {
+    // This list must reflect the order required by AlbumDB::addImagePosition
     MetadataFields fields;
     fields << MetadataInfo::Latitude
            << MetadataInfo::LatitudeNumber

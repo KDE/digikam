@@ -50,6 +50,7 @@ enum Field
 
     Make,                             /// String
     Model,                            /// String
+    Lens,                             /// String
     Aperture,                         /// Double, FNumber
     FocalLength,                      /// Double, mm
     FocalLengthIn35mm,                /// Double, mm
