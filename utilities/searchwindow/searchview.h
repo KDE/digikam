@@ -45,6 +45,8 @@ namespace Digikam
 class SearchGroup;
 class SearchViewBottomBar;
 class SearchClickLabel;
+class SearchXmlCachingReader;
+class SearchXmlWriter;
 
 class SearchViewThemedPartsCache
 {
@@ -55,7 +57,50 @@ public:
     virtual QPixmap bottomBarPixmap(int w, int h) = 0;
 };
 
-class SearchView : public QWidget, public SearchViewThemedPartsCache
+class AbstractSearchGroupContainer : public QWidget
+{
+
+    Q_OBJECT
+
+public:
+
+    /// Abstract base class for classes that contain SearchGroups
+    // To contain common code of SearchView and SearchGroup,
+    // as SearchGroups can have subgroups.
+
+    AbstractSearchGroupContainer(QWidget *parent = 0);
+
+public slots:
+
+    SearchGroup *addSearchGroup();
+    void removeSearchGroup(SearchGroup *group);
+
+protected:
+
+    /// Call before reading the XML part that could contain group elements
+    void startReadingGroups(SearchXmlCachingReader &reader);
+    /// Call when a group element is the current element
+    void readGroup(SearchXmlCachingReader &reader);
+    /// Call when the XML part is finished
+    void finishReadingGroups();
+    /// Write contained groups to writer
+    void writeGroups(SearchXmlWriter &writer);
+    /// Reimplement: create and setup a search group
+    virtual SearchGroup *createSearchGroup() = 0;
+    /// Reimplement: Adds a newly created group to the layout structures
+    virtual void addGroupToLayout(SearchGroup *group) = 0;
+
+protected slots:
+
+    void removeSendingSearchGroup();
+
+protected:
+
+    int m_groupIndex;
+    QList<SearchGroup *> m_groups;
+};
+
+class SearchView : public AbstractSearchGroupContainer, public SearchViewThemedPartsCache
 {
 
     Q_OBJECT
@@ -69,11 +114,6 @@ public:
     void read(const QString &search);
     QString write();
 
-public slots:
-
-    SearchGroup *addSearchGroup();
-    void removeSearchGroup(SearchGroup *group);
-
 signals:
 
     void searchOk();
@@ -84,7 +124,6 @@ protected slots:
 
     void setTheme();
     void slotAddGroupButton();
-    void removeSendingSearchGroup();
 
 public:
 
@@ -93,10 +132,11 @@ public:
 
 protected:
 
+    virtual SearchGroup *createSearchGroup();
+    virtual void addGroupToLayout(SearchGroup *group);
     QPixmap cachedBannerPixmap(int w, int h);
 
     QVBoxLayout         *m_layout;
-    QList<SearchGroup *> m_groups;
     SearchViewBottomBar *m_bar;
     QCache<QString, QPixmap> m_pixmapCache;
 };

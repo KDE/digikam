@@ -47,11 +47,78 @@
 namespace Digikam
 {
 
+AbstractSearchGroupContainer::AbstractSearchGroupContainer(QWidget *parent)
+    : QWidget(parent), m_groupIndex(0)
+{
+}
+
+SearchGroup *AbstractSearchGroupContainer::addSearchGroup()
+{
+    SearchGroup *group = createSearchGroup();
+    m_groups << group;
+    addGroupToLayout(group);
+    connect(group, SIGNAL(removeRequested()),
+            this, SLOT(removeSendingSearchGroup()));
+    return group;
+}
+
+void AbstractSearchGroupContainer::removeSearchGroup(SearchGroup *group)
+{
+    if (group->groupType() == SearchGroup::FirstGroup)
+    {
+        DWarning() << "Attempt to delete the primary search group";
+        return;
+    }
+    m_groups.removeAll(group);
+    delete group;
+}
+
+void AbstractSearchGroupContainer::startReadingGroups(SearchXmlCachingReader &)
+{
+    m_groupIndex = 0;
+}
+
+void AbstractSearchGroupContainer::readGroup(SearchXmlCachingReader &reader)
+{
+    SearchGroup *group = 0;
+    if (m_groupIndex >= m_groups.size())
+        group = addSearchGroup();
+    else
+        group = m_groups[m_groupIndex];
+
+    group->read(reader);
+
+    m_groupIndex++;
+}
+
+void AbstractSearchGroupContainer::finishReadingGroups()
+{
+    // remove superfluous groups
+    while (m_groups.size() > (m_groupIndex+1))
+        delete m_groups.takeLast();
+
+    // for empty searches, and we have an initial search group, reset the remaining search group
+    if (!m_groupIndex && !m_groups.isEmpty())
+        m_groups.first()->reset();
+}
+
+void AbstractSearchGroupContainer::writeGroups(SearchXmlWriter &writer)
+{
+    foreach (SearchGroup *group, m_groups)
+        group->write(writer);
+}
+
+void AbstractSearchGroupContainer::removeSendingSearchGroup()
+{
+    removeSearchGroup(static_cast<SearchGroup *>(sender()));
+}
 
 SearchView::SearchView()
 {
     m_pixmapCache.setMaxCost(4);
 }
+
+// ------------------------------------- //
 
 void SearchView::setup()
 {
@@ -91,60 +158,29 @@ void SearchView::read(const QString &xml)
 {
     SearchXmlCachingReader reader(xml);
 
-    int groupIndex = 0;
+    startReadingGroups(reader);
     SearchXml::Element element;
     while (!reader.atEnd())
     {
         element = reader.readNext();
         if (element == SearchXml::Group)
-        {
-            SearchGroup *group = 0;
-            if (groupIndex >= m_groups.size())
-                group = addSearchGroup();
-            else
-                group = m_groups[groupIndex];
-
-            group->read(reader);
-
-            groupIndex++;
-        }
+            readGroup(reader);
     }
 
-    // remove superfluous groups
-    while (m_groups.size() > (groupIndex+1))
-        delete m_groups.takeLast();
-
-    // for empty searches, reset the remaining search group
-    if (!groupIndex)
-        m_groups.first()->reset();
+    finishReadingGroups();
 }
 
-SearchGroup *SearchView::addSearchGroup()
+void SearchView::addGroupToLayout(SearchGroup *group)
 {
-    SearchGroup *group = new SearchGroup(this);
-    m_groups << group;
-    group->setup(m_groups.size() == 1 ? SearchGroup::FirstGroup : SearchGroup::ChainGroup);
     // insert at last-but-two position; leave bottom bar and stretch and the bottom
     m_layout->insertWidget(m_layout->count()-2, group);
-    connect(group, SIGNAL(removeRequested()),
-            this, SLOT(removeSendingSearchGroup()));
+}
+
+SearchGroup *SearchView::createSearchGroup()
+{
+    SearchGroup *group = new SearchGroup(this);
+    group->setup(m_groups.isEmpty() ? SearchGroup::FirstGroup : SearchGroup::ChainGroup);
     return group;
-}
-
-void SearchView::removeSearchGroup(SearchGroup *group)
-{
-    if (group->groupType() == SearchGroup::FirstGroup)
-    {
-        DWarning() << "Attempt to delete the primary search group";
-        return;
-    }
-    m_groups.removeAll(group);
-    delete group;
-}
-
-void SearchView::removeSendingSearchGroup()
-{
-    removeSearchGroup(static_cast<SearchGroup *>(sender()));
 }
 
 void SearchView::slotAddGroupButton()
@@ -155,8 +191,7 @@ void SearchView::slotAddGroupButton()
 QString SearchView::write()
 {
     SearchXmlWriter writer;
-    foreach (SearchGroup *group, m_groups)
-        group->write(writer);
+    writeGroups(writer);
     writer.finish();
     return writer.xml();
 }
