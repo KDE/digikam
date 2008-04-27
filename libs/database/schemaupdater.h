@@ -72,6 +72,7 @@ private:
     bool                    m_setError;
 
     void preAlpha010Update1();
+    void preAlpha010Update2();
 
 };
 

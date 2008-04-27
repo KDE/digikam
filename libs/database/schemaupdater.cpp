@@ -251,6 +251,7 @@ bool SchemaUpdater::makeUpdates()
             m_access->backend()->commitTransaction();
             // REMOVE BEFORE ALPHA VERSION
             m_access->db()->setSetting("preAlpha010Update1", "true");
+            m_access->db()->setSetting("preAlpha010Update2", "true");
             // END REMOVE
         }
         // add future updates here
@@ -259,6 +260,7 @@ bool SchemaUpdater::makeUpdates()
     else
     {
         preAlpha010Update1();
+        preAlpha010Update2();
     }
     // END REMOVE
     return true;
@@ -318,6 +320,7 @@ bool SchemaUpdater::createDatabase()
     {
         // REMOVE BEFORE ALPHA VERSION
         m_access->db()->setSetting("preAlpha010Update1", "true");
+        m_access->db()->setSetting("preAlpha010Update2", "true");
         // END REMOVE
         m_currentVersion = 5;
         return true;
@@ -402,6 +405,7 @@ bool SchemaUpdater::createTablesV5()
                             " (imageid INTEGER PRIMARY KEY,\n"
                             "  make TEXT,\n"
                             "  model TEXT,\n"
+                            "  lens TEXT,\n"
                             "  aperture REAL,\n"
                             "  focalLength REAL,\n"
                             "  focalLength35 REAL,\n"
@@ -430,6 +434,7 @@ bool SchemaUpdater::createTablesV5()
                             "  orientation REAL,\n"
                             "  tilt REAL,\n"
                             "  roll REAL,\n"
+                            "  accuracy REAL,\n"
                             "  description TEXT);") ))
     {
         return false;
@@ -1049,6 +1054,74 @@ void SchemaUpdater::preAlpha010Update1()
     m_access->backend()->execSql(QString("DROP TABLE SearchesV3;"));
 
     m_access->db()->setSetting("preAlpha010Update1", "true");
+}
+
+void SchemaUpdater::preAlpha010Update2()
+{
+    QString hasUpdate = m_access->db()->getSetting("preAlpha010Update2");
+    if (!hasUpdate.isNull())
+        return;
+
+    if (!m_access->backend()->execSql(QString("ALTER TABLE ImagePositions RENAME TO ImagePositionsTemp;")))
+        return;
+    if (!m_access->backend()->execSql(QString("ALTER TABLE ImageMetadata RENAME TO ImageMetadataTemp;")))
+        return;
+
+    m_access->backend()->execSql(
+                    QString("CREATE TABLE ImagePositions\n"
+                            " (imageid INTEGER PRIMARY KEY,\n"
+                            "  latitude TEXT,\n"
+                            "  latitudeNumber REAL,\n"
+                            "  longitude TEXT,\n"
+                            "  longitudeNumber REAL,\n"
+                            "  altitude REAL,\n"
+                            "  orientation REAL,\n"
+                            "  tilt REAL,\n"
+                            "  roll REAL,\n"
+                            "  accuracy REAL,\n"
+                            "  description TEXT);") );
+
+    m_access->backend()->execSql(QString(
+                    "REPLACE INTO ImagePositions "
+                    " (imageid, latitude, latitudeNumber, longitude, longitudeNumber, "
+                    "  altitude, orientation, tilt, roll, accuracy, description) "
+                    "SELECT imageid, latitude, latitudeNumber, longitude, longitudeNumber, "
+                    "  altitude, orientation, tilt, roll, description "
+                    " FROM ImagePositionsTemp;"));
+
+    m_access->backend()->execSql(
+                    QString("CREATE TABLE ImageMetadata\n"
+                            " (imageid INTEGER PRIMARY KEY,\n"
+                            "  make TEXT,\n"
+                            "  model TEXT,\n"
+                            "  lens TEXT,\n"
+                            "  aperture REAL,\n"
+                            "  focalLength REAL,\n"
+                            "  focalLength35 REAL,\n"
+                            "  exposureTime REAL,\n"
+                            "  exposureProgram INTEGER,\n"
+                            "  exposureMode INTEGER,\n"
+                            "  sensitivity INTEGER,\n"
+                            "  flash INTEGER,\n"
+                            "  whiteBalance INTEGER,\n"
+                            "  whiteBalanceColorTemperature INTEGER,\n"
+                            "  meteringMode INTEGER,\n"
+                            "  subjectDistance REAL,\n"
+                            "  subjectDistanceCategory INTEGER);") );
+
+    m_access->backend()->execSql( QString("INSERT INTO ImageMetadata "
+                            " (imageid, make, model, lens, aperture, focalLength, focalLength35, "
+                            "  exposureTime, exposureProgram, exposureMode, sensitivity, flash, whiteBalance, "
+                            "  whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory) "
+                            "SELECT imageid, make, model, NULL, aperture, focalLength, focalLength35, "
+                            "  exposureTime, exposureProgram, exposureMode, sensitivity, flash, whiteBalance, "
+                            "  whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory "
+                            "FROM ImageMetadataTemp;"));
+
+    m_access->backend()->execSql(QString("DROP TABLE ImagePositionsTemp;"));
+    m_access->backend()->execSql(QString("DROP TABLE ImageMetadataTemp;"));
+
+    m_access->db()->setSetting("preAlpha010Update2", "true");
 }
 
 
