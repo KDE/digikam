@@ -105,6 +105,7 @@ public:
     double orientation() const;
     double tilt() const;
     double roll() const;
+    double accuracy() const;
     QString description() const;
 
     /**
@@ -127,6 +128,7 @@ public:
     void setOrientation(double orientation);
     void setTilt(double tilt);
     void setRoll(double roll);
+    void setAccuracy(double accuracy);
     void setDescription(const QString &description);
 
     /**

@@ -51,6 +51,7 @@ public:
         orientation     = 0;
         tilt            = 0;
         roll            = 0;
+        accuracy        = 0;
         empty           = true;
         dirtyFields     = DatabaseFields::ImagePositionsNone;
     }
@@ -78,6 +79,7 @@ public:
     double                         orientation;
     double                         tilt;
     double                         roll;
+    double                         accuracy;
 
     qlonglong                      imageId;
 
@@ -111,7 +113,8 @@ ImagePosition::ImagePosition(qlonglong imageId)
         d->orientation     = values[5].toDouble();
         d->tilt            = values[6].toDouble();
         d->roll            = values[7].toDouble();
-        d->description     = values[8].toString();
+        d->accuracy        = values[8].toDouble();
+        d->description     = values[9].toString();
     }
 }
 
@@ -239,6 +242,14 @@ double ImagePosition::roll() const
     return d->roll;
 }
 
+double ImagePosition::accuracy() const
+{
+    if (!d)
+        return 0;
+
+    return d->accuracy;
+}
+
 QString ImagePosition::description() const
 {
     if (!d)
@@ -337,6 +348,15 @@ void ImagePosition::setRoll(double roll)
 
     d->roll = roll;
     d->dirtyFields |= DatabaseFields::PositionRoll;
+}
+
+void ImagePosition::setAccuracy(double accuracy)
+{
+    if (!d)
+        return;
+
+    d->accuracy = accuracy;
+    d->dirtyFields |= DatabaseFields::PositionAccuracy;
 }
 
 void ImagePosition::setDescription(const QString &description)
