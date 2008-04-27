@@ -51,7 +51,7 @@ namespace Digikam
 
 
 SearchGroup::SearchGroup(SearchView *parent)
-    : QWidget(parent), m_view(parent), m_layout(0), m_label(0), m_groupType(FirstGroup)
+    : AbstractSearchGroupContainer(parent), m_view(parent), m_layout(0), m_label(0), m_groupType(FirstGroup)
 {
 }
 
@@ -186,6 +186,27 @@ void SearchGroup::setup(Type type)
 
     // ----- //
 
+    // prepare subgroup layout
+    QHBoxLayout *indentLayout = new QHBoxLayout;
+    indentLayout->setContentsMargins(0, 0, 0, 0);
+    indentLayout->setSpacing(0);
+
+    QStyleOption option;
+    option.initFrom(this);
+    int indent = 5 * style()->pixelMetric(QStyle::PM_LayoutLeftMargin, &option, this);
+    indent = qMax(indent, 20);
+    indentLayout->addSpacing(indent);
+
+    m_subgroupLayout = new QVBoxLayout;
+    m_subgroupLayout->setContentsMargins(0, 0, 0, 0);
+    m_subgroupLayout->setSpacing(0);
+
+    indentLayout->addLayout(m_subgroupLayout);
+
+    m_layout->addLayout(indentLayout);
+
+    // ----- //
+
     m_layout->addStretch(1);
     setLayout(m_layout);
 }
@@ -197,6 +218,7 @@ void SearchGroup::read(SearchXmlCachingReader &reader)
     m_label->setGroupOperator(reader.groupOperator());
     m_label->setDefaultFieldOperator(reader.defaultFieldOperator());
 
+    startReadingGroups(reader);
     while (!reader.atEnd())
     {
         reader.readNext();
@@ -207,7 +229,7 @@ void SearchGroup::read(SearchXmlCachingReader &reader)
         // subgroup
         if (reader.isGroupElement())
         {
-            // TODO
+            readGroup(reader);
         }
 
         if (reader.isFieldElement())
@@ -230,6 +252,22 @@ void SearchGroup::read(SearchXmlCachingReader &reader)
             }
         }
     }
+    finishReadingGroups();
+    addSearchGroup();
+}
+
+SearchGroup *SearchGroup::createSearchGroup()
+{
+    // create a sub group - view is the same
+    SearchGroup *group = new SearchGroup(m_view);
+    group->setup(SearchGroup::ChainGroup);
+    return group;
+}
+
+void SearchGroup::addGroupToLayout(SearchGroup *group)
+{
+    // insert in front of the stretch
+    m_subgroupLayout->addWidget(group);
 }
 
 void SearchGroup::write(SearchXmlWriter &writer)
@@ -242,6 +280,9 @@ void SearchGroup::write(SearchXmlWriter &writer)
     {
         fieldGroup->write(writer);
     }
+
+    // take care for subgroups
+    writeGroups(writer);
 
     writer.finishGroup();
 }

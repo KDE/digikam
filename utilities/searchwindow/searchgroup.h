@@ -48,7 +48,7 @@ class SearchFieldGroup;
 class SearchFieldGroupLabel;
 class SearchClickLabel;
 
-class SearchGroup : public QWidget
+class SearchGroup : public AbstractSearchGroupContainer
 {
     Q_OBJECT
 
@@ -76,6 +76,9 @@ signals:
 
 protected:
 
+    virtual SearchGroup *createSearchGroup();
+    virtual void addGroupToLayout(SearchGroup *group);
+
     SearchView                   *m_view;
 
     QList<SearchFieldGroup*>      m_fieldGroups;
@@ -83,6 +86,7 @@ protected:
 
     QVBoxLayout                  *m_layout;
     SearchGroupLabel             *m_label;
+    QVBoxLayout                  *m_subgroupLayout;
 
     Type                          m_groupType;
 };
