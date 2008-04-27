@@ -480,6 +480,23 @@ bool SearchField::isVisible()
     return m_detailLabel->isVisible();
 }
 
+void SearchField::setCategoryLabelVisible(bool visible)
+{
+    if (m_categoryLabelVisible == visible)
+        return;
+    m_categoryLabelVisible = visible;
+    // update status: compare setVisible() and isVisible()
+    m_label->setVisible(m_detailLabel->isVisible() && m_categoryLabelVisible);
+}
+
+void SearchField::setCategoryLabelVisibleFromPreviousField(SearchField *previousField)
+{
+    if (previousField->m_label->text() == m_label->text())
+        setCategoryLabelVisible(false);
+    else
+        setCategoryLabelVisible(true);
+}
+
 // ----------------------------------- //
 
 SearchFieldText::SearchFieldText(QObject *parent)

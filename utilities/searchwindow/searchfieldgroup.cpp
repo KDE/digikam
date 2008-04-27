@@ -52,11 +52,17 @@ SearchFieldGroup::SearchFieldGroup(SearchGroup *parent)
 
 void SearchFieldGroup::addField(SearchField *field)
 {
-    //FIXME: Workaround, REMOVE
+    //FIXME: When all fields added in searchgroup.cpp are implemented, remove
     if (!field) return;
 
+    // initialize widgets in field
     field->setup(m_layout);
+    // take care that category labels are not duplicated in two subsequent rows
+    if (!m_fields.isEmpty())
+        field->setCategoryLabelVisibleFromPreviousField(m_fields.last());
+    // add to our list
     m_fields << field;
+    // add to visibility controller
     m_controller->addObject(field);
 }
 

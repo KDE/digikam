@@ -80,6 +80,9 @@ public:
     virtual void setVisible(bool visible);
     virtual bool isVisible();
 
+    void setCategoryLabelVisible(bool visible);
+    void setCategoryLabelVisibleFromPreviousField(SearchField *previousField);
+
 protected:
 
     virtual void setupValueWidgets(QGridLayout *layout, int row, int column) = 0;

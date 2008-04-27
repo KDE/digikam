@@ -253,7 +253,6 @@ void SearchGroup::read(SearchXmlCachingReader &reader)
         }
     }
     finishReadingGroups();
-    addSearchGroup();
 }
 
 SearchGroup *SearchGroup::createSearchGroup()
