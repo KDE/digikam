@@ -52,6 +52,7 @@ namespace SearchXml
 
     enum Element
     {
+        Search,
         Group,
         GroupEnd,
         Field,
@@ -92,6 +93,10 @@ namespace SearchXml
         return false;
     }
 
+    /** General default values for groupOperator() and defaultFieldOperator() */
+    inline SearchXml::Operator standardGroupOperator() { return SearchXml::Or; }
+    inline SearchXml::Operator standardFieldOperator() { return SearchXml::And; }
+    inline SearchXml::Relation standardFieldRelation() { return SearchXml::Equal; }
 }
 
 class DIGIKAM_EXPORT SearchXmlReader : public QXmlStreamReader

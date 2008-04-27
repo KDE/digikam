@@ -32,6 +32,9 @@ SearchXmlReader::SearchXmlReader(const QString &xml)
     : QXmlStreamReader(xml)
 {
     m_defaultFieldOperator = SearchXml::And;
+
+    // read in root element "search"
+    readNext();
 }
 
 SearchXml::Element SearchXmlReader::readNext()
@@ -57,7 +60,7 @@ SearchXml::Element SearchXmlReader::readNext()
             if (isGroupElement())
             {
                 // get possible default operator
-                m_defaultFieldOperator = readOperator("fieldoperator", SearchXml::And);
+                m_defaultFieldOperator = readOperator("fieldoperator", SearchXml::standardFieldOperator());
                 return SearchXml::Group;
             }
             else if (isFieldElement())
@@ -66,8 +69,8 @@ SearchXml::Element SearchXmlReader::readNext()
             }
             else if (name() == "search")
             {
-                // root element, skip
-                continue;
+                // root element
+                return SearchXml::Search;
             }
         }
     }
@@ -87,7 +90,7 @@ bool SearchXmlReader::isFieldElement() const
 
 SearchXml::Operator SearchXmlReader::groupOperator() const
 {
-    return readOperator("operator", SearchXml::Or);
+    return readOperator("operator", SearchXml::standardGroupOperator());
 }
 
 QString SearchXmlReader::groupCaption() const
@@ -112,7 +115,7 @@ QString SearchXmlReader::fieldName() const
 
 SearchXml::Relation SearchXmlReader::fieldRelation() const
 {
-    return readRelation("relation", SearchXml::Equal);
+    return readRelation("relation", SearchXml::standardFieldRelation());
 }
 
 QString SearchXmlReader::value()
@@ -258,17 +261,20 @@ void SearchXmlWriter::writeGroup()
 
 void SearchXmlWriter::setGroupOperator(SearchXml::Operator op)
 {
-    writeOperator("operator", op);
+    if (op != SearchXml::Or)
+        writeOperator("operator", op);
 }
 
 void SearchXmlWriter::setGroupCaption(const QString &caption)
 {
-    writeAttribute("caption", caption);
+    if (!caption.isNull())
+        writeAttribute("caption", caption);
 }
 
 void SearchXmlWriter::setDefaultFieldOperator(SearchXml::Operator op)
 {
-    writeOperator("fieldoperator", op);
+    if (op != SearchXml::And)
+        writeOperator("fieldoperator", op);
 }
 
 void SearchXmlWriter::writeField(const QString &name, SearchXml::Relation relation)
