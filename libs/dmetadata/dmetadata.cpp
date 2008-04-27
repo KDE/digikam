@@ -565,6 +565,57 @@ bool DMetadata::setImageCredits(const QString& credit, const QString& source, co
     return true;
 }
 
+QString DMetadata::getLensDescription() const
+{
+    // Try to get Lens Data informations from makernote.
+
+    // Canon Cameras.
+    QString lens = getExifTagString("Exif.Canon.0x0095");
+    if (lens.isEmpty())
+    {
+        // Nikon Cameras.
+        lens = getExifTagString("Exif.Nikon3.LensData");
+        if (lens.isEmpty())
+        {
+            // Minolta Cameras.
+            lens = getExifTagString("Exif.Minolta.LensID");
+            if (lens.isEmpty())
+            {
+                // Pentax Cameras.
+                lens = getExifTagString("Exif.Pentax.LensType");
+                if (lens.isEmpty())
+                {
+                    // Panasonic Cameras.
+                    lens = getExifTagString("Exif.Panasonic.0x0310");
+                    if (lens.isEmpty())
+                    {
+                        // Sigma Cameras.
+                        lens = getExifTagString("Exif.Sigma.LensRange");
+                        if (lens.isEmpty())
+                        {
+                            // TODO : add Fuji, Olympus, Sony Cameras before XMP parsing.
+
+                            // XMP aux tags.
+                            lens = getXmpTagString("Xmp.aux.Lens");
+                            if (lens.isEmpty())
+                            {
+                                // XMP M$ tags (Lens Maker + Lens Model to be compatible with LensFun Database).
+                                lens = getXmpTagString("Xmp.MicrosoftPhoto.LensManufacturer");
+                                if (!lens.isEmpty())
+                                    lens.append(" ");
+
+                                lens.append(getXmpTagString("Xmp.MicrosoftPhoto.LensModel"));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return lens;
+}
+
 bool DMetadata::setIptcTag(const QString& text, int maxLength,
                            const char* debugLabel, const char* tagKey)  const
 {
@@ -711,6 +762,8 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field)
             return fromExifOrXmp("Exif.Image.Make", "Xmp.tiff.Make");
         case MetadataInfo::Model:
             return fromExifOrXmp("Exif.Image.Model", "Xmp.tiff.Model");
+        case MetadataInfo::Lens:
+            return getLensDescription();
         case MetadataInfo::Aperture:
         {
             QVariant var = fromExifOrXmp("Exif.Photo.FNumber", "Xmp.exif.FNumber");

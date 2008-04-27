@@ -72,6 +72,8 @@ public:
     bool setImagePhotographerId(const QString& author, const QString& authorTitle) const;
     bool setImageCredits(const QString& credit, const QString& source, const QString& copyright) const;
 
+    QString getLensDescription() const;
+
     PhotoInfoContainer getPhotographInformations() const;
 
     /** Returns the requested metadata field as a QVariant. See metadatainfo.h for a specification
