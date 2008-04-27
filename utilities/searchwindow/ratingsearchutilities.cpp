@@ -285,7 +285,6 @@ void RatingComboBoxWidget::paintEvent(QPaintEvent *e)
         QPainter p(this);
         if (underMouse() && isEnabled())
         {
-            p.setOpacity(.5);
             QPixmap pix = starPixmap();
             int x = 0;
             for (int i = 0; i < RatingMax; i++)
