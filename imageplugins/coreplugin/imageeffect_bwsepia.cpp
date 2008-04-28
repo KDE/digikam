@@ -24,7 +24,7 @@
 
  // Qt includes.
 
-#include <Q3IntDict>
+#include <QHash>
 #include <QListWidget>
 #include <QColor>
 #include <QGroupBox>
@@ -93,7 +93,7 @@ private:
 
 private:
 
-    Q3IntDict<QPixmap>   m_previewPixmapMap;
+    QHash<int, QPixmap*> m_previewPixmapMap;
     QSize                m_previewSize;
     ImageEffect_BWSepia *m_bwSepia;
 };
@@ -101,14 +101,13 @@ private:
 PreviewPixmapFactory::PreviewPixmapFactory(ImageEffect_BWSepia* bwSepia, const QSize& previewSize)
                     : QObject(bwSepia)
 {
-    m_previewPixmapMap.setAutoDelete(true);
     m_bwSepia     = bwSepia;
     m_previewSize = previewSize;
 }
 
 const QPixmap* PreviewPixmapFactory::pixmap(int id)
 {
-    if (m_previewPixmapMap.find(id) == 0) 
+    if (m_previewPixmapMap.find(id) == m_previewPixmapMap.end()) 
     {
         QPixmap pix = makePixmap(id);
         m_previewPixmapMap.insert(id, new QPixmap(pix));
