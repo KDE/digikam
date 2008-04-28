@@ -7,7 +7,7 @@
  * Description : Black and White conversion tool.
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,9 +23,9 @@
  * ============================================================ */
 
  // Qt includes.
- 
-#include <Q3ListBox>
+
 #include <Q3IntDict>
+#include <QListWidget>
 #include <QColor>
 #include <QGroupBox>
 #include <QButtonGroup> 
@@ -67,7 +67,6 @@
 #include "colorgradientwidget.h"
 #include "dimg.h"
 #include "bcgmodifier.h"
-#include "listboxpreviewitem.h"
 
 // Local includes.
 
@@ -81,24 +80,30 @@ class PreviewPixmapFactory : public QObject
 {
 public:
 
-    PreviewPixmapFactory(ImageEffect_BWSepia* bwSepia);
+    PreviewPixmapFactory(ImageEffect_BWSepia* bwSepia, const QSize& previewSize);
 
     void invalidate() { m_previewPixmapMap.clear(); }
 
+    const QSize previewSize() { return m_previewSize; };
     const QPixmap* pixmap(int id);
 
 private:
 
     QPixmap makePixmap(int id);
 
+private:
+
     Q3IntDict<QPixmap>   m_previewPixmapMap;
+    QSize                m_previewSize;
     ImageEffect_BWSepia *m_bwSepia;
 };
 
-PreviewPixmapFactory::PreviewPixmapFactory(ImageEffect_BWSepia* bwSepia)
-                    : QObject(bwSepia), m_bwSepia(bwSepia)
+PreviewPixmapFactory::PreviewPixmapFactory(ImageEffect_BWSepia* bwSepia, const QSize& previewSize)
+                    : QObject(bwSepia)
 {
     m_previewPixmapMap.setAutoDelete(true);
+    m_bwSepia     = bwSepia;
+    m_previewSize = previewSize;
 }
 
 const QPixmap* PreviewPixmapFactory::pixmap(int id)
@@ -121,31 +126,29 @@ QPixmap PreviewPixmapFactory::makePixmap(int id)
 
 // -----------------------------------------------------------------------------------
 
-class ListBoxBWPreviewItem : public Digikam::ListBoxPreviewItem
+class ListWidgetBWPreviewItem : public QListWidgetItem
 {
 
 public:
 
-    ListBoxBWPreviewItem(Q3ListBox *listbox, const QString &text,
-                         PreviewPixmapFactory* factory, int id)
-        : ListBoxPreviewItem(listbox, QPixmap(), text)
+    ListWidgetBWPreviewItem(QListWidget *parent, const QString& text,
+                            PreviewPixmapFactory* factory, int id)
+        : QListWidgetItem(QIcon(QPixmap(factory->previewSize())), text, parent)
     {
           m_previewPixmapFactory = factory;
           m_id                   = id;
     };
 
-    virtual const QPixmap* pixmap() const;
+    void updatePreview()
+    {
+          setIcon(QIcon(*m_previewPixmapFactory->pixmap(m_id)));
+    }
 
 private:
 
     int                   m_id;
     PreviewPixmapFactory* m_previewPixmapFactory;
 };
-
-const QPixmap* ListBoxBWPreviewItem::pixmap() const
-{
-    return m_previewPixmapFactory->pixmap(m_id);
-}
 
 // -----------------------------------------------------------------------------------
 
@@ -182,7 +185,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     setPreviewAreaWidget(m_previewWidget);
 
     // -------------------------------------------------------------
-        
+
     QWidget *gboxSettings     = new QWidget(mainWidget());
     QGridLayout* gridSettings = new QGridLayout( gboxSettings );
 
@@ -208,19 +211,19 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
                                 "If the image's maximal counts are small, you can use the linear scale.<p>"
                                 "Logarithmic scale can be used when the maximal counts are big; "
                                 "if it is used, all values (small and large) will be visible on the graph."));
-    
+
     QPushButton *linHistoButton = new QPushButton( scaleBox );
     linHistoButton->setToolTip( i18n( "<p>Linear" ) );
     linHistoButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/histogram-lin.png")));
     linHistoButton->setCheckable(true);
     m_scaleBG->addButton(linHistoButton, Digikam::HistogramWidget::LinScaleHistogram);
-    
+
     QPushButton *logHistoButton = new QPushButton( scaleBox );
     logHistoButton->setToolTip( i18n( "<p>Logarithmic" ) );
     logHistoButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/histogram-log.png")));
     logHistoButton->setCheckable(true);
     m_scaleBG->addButton(logHistoButton, Digikam::HistogramWidget::LogScaleHistogram);
-    
+
     hlay->setMargin(0);
     hlay->setSpacing(0);
     hlay->addWidget(linHistoButton);
@@ -234,7 +237,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     l1->addWidget(m_channelCB);
     l1->addStretch(10);
     l1->addWidget(scaleBox);
-    
+
     // -------------------------------------------------------------
 
     KVBox *histoBox   = new KVBox(gboxSettings);
@@ -243,214 +246,204 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
                                           "of the selected image channel. This one is re-computed at any "
                                           "settings changes."));
     QLabel *space = new QLabel(histoBox);
-    space->setFixedHeight(1);    
-    m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, histoBox );
+    space->setFixedHeight(1);
+    m_hGradient = new Digikam::ColorGradientWidget(Digikam::ColorGradientWidget::Horizontal, 10, histoBox);
     m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
-    
+
     // -------------------------------------------------------------
 
     m_tab = new KTabWidget(gboxSettings);
 
-    m_bwFilm = new Q3ListBox(m_tab);
-    m_bwFilm->setColumnMode(1);
-    m_bwFilm->setVariableWidth(false);
-    m_bwFilm->setVariableHeight(false);
-    Digikam::ListBoxWhatsThis* whatsThis2 = new Digikam::ListBoxWhatsThis(m_bwFilm);
-    m_previewPixmapFactory                = new PreviewPixmapFactory(this);
+    m_bwFilm = new QListWidget(m_tab);
+    m_bwFilm->setIconSize(m_thumbnailImage.size());
+    m_previewPixmapFactory = new PreviewPixmapFactory(this, m_thumbnailImage.size());
 
     int type = BWGeneric;
 
-    ListBoxBWPreviewItem *item = new ListBoxBWPreviewItem(m_bwFilm, i18n("Generic"), m_previewPixmapFactory, type);
-    whatsThis2->add( item, i18n("<b>Generic</b>:"
-                                "<p>Simulate a generic black and white film</p>"));
+    ListWidgetBWPreviewItem *item = new ListWidgetBWPreviewItem(m_bwFilm, i18n("Generic"), m_previewPixmapFactory, type);
+    item->setWhatsThis(i18n("<b>Generic</b>:"
+                            "<p>Simulate a generic black and white film</p>"));
 
     ++type;
-    item = new ListBoxBWPreviewItem(m_bwFilm, i18n("Agfa 200X"), m_previewPixmapFactory, type);
-    whatsThis2->add( item, i18n("<b>Agfa 200X</b>:"
-                                "<p>Simulate the Agfa 200X black and white film at 200 ISO</p>"));
+    item = new ListWidgetBWPreviewItem(m_bwFilm, i18n("Agfa 200X"), m_previewPixmapFactory, type);
+    item->setWhatsThis(i18n("<b>Agfa 200X</b>:"
+                            "<p>Simulate the Agfa 200X black and white film at 200 ISO</p>"));
 
     ++type;
-    item = new ListBoxBWPreviewItem(m_bwFilm, i18n("Agfa Pan 25"), m_previewPixmapFactory, type);
-    whatsThis2->add( item, i18n("<b>Agfa Pan 25</b>:"
-                                "<p>Simulate the Agfa Pan black and white film at 25 ISO</p>"));
+    item = new ListWidgetBWPreviewItem(m_bwFilm, i18n("Agfa Pan 25"), m_previewPixmapFactory, type);
+    item->setWhatsThis(i18n("<b>Agfa Pan 25</b>:"
+                            "<p>Simulate the Agfa Pan black and white film at 25 ISO</p>"));
 
     ++type;
-    item = new ListBoxBWPreviewItem(m_bwFilm, i18n("Agfa Pan 100"), m_previewPixmapFactory, type);
-    whatsThis2->add( item, i18n("<b>Agfa Pan 100</b>:"
-                                "<p>Simulate the Agfa Pan black and white film at 100 ISO</p>"));
+    item = new ListWidgetBWPreviewItem(m_bwFilm, i18n("Agfa Pan 100"), m_previewPixmapFactory, type);
+    item->setWhatsThis(i18n("<b>Agfa Pan 100</b>:"
+                            "<p>Simulate the Agfa Pan black and white film at 100 ISO</p>"));
 
     ++type;
-    item = new ListBoxBWPreviewItem(m_bwFilm, i18n("Agfa Pan 400"), m_previewPixmapFactory, type);
-    whatsThis2->add( item, i18n("<b>Agfa Pan 400</b>:"
-                                "<p>Simulate the Agfa Pan black and white film at 400 ISO</p>"));
+    item = new ListWidgetBWPreviewItem(m_bwFilm, i18n("Agfa Pan 400"), m_previewPixmapFactory, type);
+    item->setWhatsThis(i18n("<b>Agfa Pan 400</b>:"
+                            "<p>Simulate the Agfa Pan black and white film at 400 ISO</p>"));
 
     ++type;
-    item = new ListBoxBWPreviewItem(m_bwFilm, i18n("Ilford Delta 100"), m_previewPixmapFactory, type);
-    whatsThis2->add( item, i18n("<b>Ilford Delta 100</b>:"
-                                "<p>Simulate the Ilford Delta black and white film at 100 ISO</p>"));
+    item = new ListWidgetBWPreviewItem(m_bwFilm, i18n("Ilford Delta 100"), m_previewPixmapFactory, type);
+    item->setWhatsThis(i18n("<b>Ilford Delta 100</b>:"
+                            "<p>Simulate the Ilford Delta black and white film at 100 ISO</p>"));
 
     ++type;
-    item = new ListBoxBWPreviewItem(m_bwFilm, i18n("Ilford Delta 400"), m_previewPixmapFactory, type);
-    whatsThis2->add( item, i18n("<b>Ilford Delta 400</b>:"
-                                "<p>Simulate the Ilford Delta black and white film at 400 ISO</p>"));
+    item = new ListWidgetBWPreviewItem(m_bwFilm, i18n("Ilford Delta 400"), m_previewPixmapFactory, type);
+    item->setWhatsThis(i18n("<b>Ilford Delta 400</b>:"
+                            "<p>Simulate the Ilford Delta black and white film at 400 ISO</p>"));
 
     ++type;
-    item = new ListBoxBWPreviewItem(m_bwFilm, i18n("Ilford Delta 400 Pro 3200"), m_previewPixmapFactory, type);
-    whatsThis2->add( item, i18n("<b>Ilford Delta 400 Pro 3200</b>:"
-                                "<p>Simulate the Ilford Delta 400 Pro black and white film at 3200 ISO</p>"));
+    item = new ListWidgetBWPreviewItem(m_bwFilm, i18n("Ilford Delta 400 Pro 3200"), m_previewPixmapFactory, type);
+    item->setWhatsThis(i18n("<b>Ilford Delta 400 Pro 3200</b>:"
+                            "<p>Simulate the Ilford Delta 400 Pro black and white film at 3200 ISO</p>"));
 
     ++type;
-    item = new ListBoxBWPreviewItem(m_bwFilm, i18n("Ilford FP4 Plus"), m_previewPixmapFactory, type);
-    whatsThis2->add( item, i18n("<b>Ilford FP4 Plus</b>:"
-                                "<p>Simulate the Ilford FP4 Plus black and white film at 125 ISO</p>"));
+    item = new ListWidgetBWPreviewItem(m_bwFilm, i18n("Ilford FP4 Plus"), m_previewPixmapFactory, type);
+    item->setWhatsThis(i18n("<b>Ilford FP4 Plus</b>:"
+                            "<p>Simulate the Ilford FP4 Plus black and white film at 125 ISO</p>"));
 
     ++type;
-    item = new ListBoxBWPreviewItem(m_bwFilm, i18n("Ilford HP5 Plus"), m_previewPixmapFactory, type);
-    whatsThis2->add( item, i18n("<b>Ilford HP5 Plus</b>:"
-                                "<p>Simulate the Ilford HP5 Plus black and white film at 400 ISO</p>"));
+    item = new ListWidgetBWPreviewItem(m_bwFilm, i18n("Ilford HP5 Plus"), m_previewPixmapFactory, type);
+    item->setWhatsThis(i18n("<b>Ilford HP5 Plus</b>:"
+                            "<p>Simulate the Ilford HP5 Plus black and white film at 400 ISO</p>"));
 
     ++type;
-    item = new ListBoxBWPreviewItem(m_bwFilm, i18n("Ilford PanF Plus"), m_previewPixmapFactory, type);
-    whatsThis2->add( item, i18n("<b>Ilford PanF Plus</b>:"
-                                "<p>Simulate the Ilford PanF Plus black and white film at 50 ISO</p>"));
+    item = new ListWidgetBWPreviewItem(m_bwFilm, i18n("Ilford PanF Plus"), m_previewPixmapFactory, type);
+    item->setWhatsThis(i18n("<b>Ilford PanF Plus</b>:"
+                            "<p>Simulate the Ilford PanF Plus black and white film at 50 ISO</p>"));
 
     ++type;
-    item = new ListBoxBWPreviewItem(m_bwFilm, i18n("Ilford XP2 Super"), m_previewPixmapFactory, type);
-    whatsThis2->add( item, i18n("<b>Ilford XP2 Super</b>:"
-                                "<p>Simulate the Ilford XP2 Super black and white film at 400 ISO</p>"));
+    item = new ListWidgetBWPreviewItem(m_bwFilm, i18n("Ilford XP2 Super"), m_previewPixmapFactory, type);
+    item->setWhatsThis(i18n("<b>Ilford XP2 Super</b>:"
+                            "<p>Simulate the Ilford XP2 Super black and white film at 400 ISO</p>"));
 
     ++type;
-    item = new ListBoxBWPreviewItem(m_bwFilm, i18n("Kodak Tmax 100"), m_previewPixmapFactory, type);
-    whatsThis2->add( item, i18n("<b>Kodak Tmax 100</b>:"
-                                "<p>Simulate the Kodak Tmax black and white film at 100 ISO</p>"));
+    item = new ListWidgetBWPreviewItem(m_bwFilm, i18n("Kodak Tmax 100"), m_previewPixmapFactory, type);
+    item->setWhatsThis(i18n("<b>Kodak Tmax 100</b>:"
+                            "<p>Simulate the Kodak Tmax black and white film at 100 ISO</p>"));
 
     ++type;
-    item = new ListBoxBWPreviewItem(m_bwFilm, i18n("Kodak Tmax 400"), m_previewPixmapFactory, type);
-    whatsThis2->add( item, i18n("<b>Kodak Tmax 400</b>:"
-                                "<p>Simulate the Kodak Tmax black and white film at 400 ISO</p>"));
+    item = new ListWidgetBWPreviewItem(m_bwFilm, i18n("Kodak Tmax 400"), m_previewPixmapFactory, type);
+    item->setWhatsThis(i18n("<b>Kodak Tmax 400</b>:"
+                            "<p>Simulate the Kodak Tmax black and white film at 400 ISO</p>"));
 
     ++type;
-    item = new ListBoxBWPreviewItem(m_bwFilm, i18n("Kodak TriX"), m_previewPixmapFactory, type);
-    whatsThis2->add( item, i18n("<b>Kodak TriX</b>:"
-                                "<p>Simulate the Kodak TriX black and white film at 400 ISO</p>"));
+    item = new ListWidgetBWPreviewItem(m_bwFilm, i18n("Kodak TriX"), m_previewPixmapFactory, type);
+    item->setWhatsThis(i18n("<b>Kodak TriX</b>:"
+                            "<p>Simulate the Kodak TriX black and white film at 400 ISO</p>"));
 
     // -------------------------------------------------------------
 
     KVBox *vbox = new KVBox(m_tab);
     vbox->setSpacing(spacingHint());
 
-    m_bwFilters = new Q3ListBox(vbox);
-    m_bwFilters->setColumnMode(1);
-    m_bwFilters->setVariableWidth(false);
-    m_bwFilters->setVariableHeight(false);
-    Digikam::ListBoxWhatsThis* whatsThis = new Digikam::ListBoxWhatsThis(m_bwFilters);
+    m_bwFilters = new QListWidget(vbox);
+    m_bwFilters->setIconSize(m_thumbnailImage.size());
 
     type = BWNoFilter;
 
-    item = new ListBoxBWPreviewItem(m_bwFilters, 
-                                     i18n("No Lens Filter"), m_previewPixmapFactory, type);
-    whatsThis->add( item, i18n("<b>No Lens Filter</b>:"
-                               "<p>Do not apply a lens filter to render the image.</p>"));
-    
-    ++type;
-    item = new ListBoxBWPreviewItem(m_bwFilters, i18n("Green Filter"), m_previewPixmapFactory, type);
-    whatsThis->add( item, i18n("<b>Black & White with Green Filter</b>:"
-                               "<p>Simulate black and white film exposure using green filter. "
-                               "This provides a universal asset for all scenic shooting, especially suited "
-                               "for portraits photographed against sky.</p>"));
+    item = new ListWidgetBWPreviewItem(m_bwFilters, i18n("No Lens Filter"), m_previewPixmapFactory, type);
+    item->setWhatsThis(i18n("<b>No Lens Filter</b>:"
+                            "<p>Do not apply a lens filter to render the image.</p>"));
 
     ++type;
-    item = new ListBoxBWPreviewItem(m_bwFilters, i18n("Orange Filter"), m_previewPixmapFactory, type);
-    whatsThis->add( item, i18n("<b>Black & White with Orange Filter</b>:"
-                               "<p>Simulate black and white film exposure using orange filter. "
-                               "This will enhances landscapes, marine scenes and aerial "
-                               "photography.</p>"));
+    item = new ListWidgetBWPreviewItem(m_bwFilters, i18n("Green Filter"), m_previewPixmapFactory, type);
+    item->setWhatsThis(i18n("<b>Black & White with Green Filter</b>:"
+                            "<p>Simulate black and white film exposure using green filter. "
+                            "This provides a universal asset for all scenic shooting, especially suited "
+                            "for portraits photographed against sky.</p>"));
 
     ++type;
-    item = new ListBoxBWPreviewItem(m_bwFilters, i18n("Red Filter"), m_previewPixmapFactory, type);
-    whatsThis->add( item, i18n("<b>Black & White with Red Filter</b>:"
-                               "<p>Simulate black and white film exposure using red filter. "
-                               "Using this one creates dramatic sky effects and simulates moonlight scenes "
-                               "in daytime.</p>"));
+    item = new ListWidgetBWPreviewItem(m_bwFilters, i18n("Orange Filter"), m_previewPixmapFactory, type);
+    item->setWhatsThis(i18n("<b>Black & White with Orange Filter</b>:"
+                            "<p>Simulate black and white film exposure using orange filter. "
+                            "This will enhances landscapes, marine scenes and aerial "
+                            "photography.</p>"));
 
     ++type;
-    item = new ListBoxBWPreviewItem(m_bwFilters, i18n("Yellow Filter"), m_previewPixmapFactory, type);
-    whatsThis->add( item, i18n("<b>Black & White with Yellow Filter</b>:"
-                               "<p>Simulate black and white film exposure using yellow filter. "
-                               "Most natural tonal correction and improves contrast. Ideal for "
-                               "landscapes.</p>"));
-    
+    item = new ListWidgetBWPreviewItem(m_bwFilters, i18n("Red Filter"), m_previewPixmapFactory, type);
+    item->setWhatsThis(i18n("<b>Black & White with Red Filter</b>:"
+                            "<p>Simulate black and white film exposure using red filter. "
+                            "Using this one creates dramatic sky effects and simulates moonlight scenes "
+                            "in daytime.</p>"));
+
+    ++type;
+    item = new ListWidgetBWPreviewItem(m_bwFilters, i18n("Yellow Filter"), m_previewPixmapFactory, type);
+    item->setWhatsThis(i18n("<b>Black & White with Yellow Filter</b>:"
+                            "<p>Simulate black and white film exposure using yellow filter. "
+                            "Most natural tonal correction and improves contrast. Ideal for "
+                            "landscapes.</p>"));
+
     m_strengthInput = new KIntNumInput(vbox);
     m_strengthInput->setLabel(i18n("Strength:"), Qt::AlignLeft | Qt::AlignVCenter);
     m_strengthInput->setRange(1, 5, 1);
     m_strengthInput->setSliderEnabled(true);
     m_strengthInput->setValue(1);
-    m_strengthInput->setWhatsThis( i18n("<p>Set here the strength adjustment of lens filter."));
+    m_strengthInput->setWhatsThis(i18n("<p>Set here the strength adjustment of lens filter."));
 
     // -------------------------------------------------------------
 
-    m_bwTone = new Q3ListBox(m_tab);
-    m_bwTone->setColumnMode(1);
-    m_bwTone->setVariableWidth(false);
-    m_bwTone->setVariableHeight(false);
-    Digikam::ListBoxWhatsThis* whatsThis3 = new Digikam::ListBoxWhatsThis(m_bwTone);
+    m_bwTone = new QListWidget(m_tab);
+    m_bwTone->setIconSize(m_thumbnailImage.size());
 
     type = BWNoTone;
 
-    item = new ListBoxBWPreviewItem(m_bwTone, i18n("No Tone Filter"), m_previewPixmapFactory, type);
-    whatsThis3->add( item, i18n("<b>No Tone Filter</b>:"
-                                "<p>Do not apply a tone filter to the image.</p>"));
+    item = new ListWidgetBWPreviewItem(m_bwTone, i18n("No Tone Filter"), m_previewPixmapFactory, type);
+    item->setWhatsThis(i18n("<b>No Tone Filter</b>:"
+                            "<p>Do not apply a tone filter to the image.</p>"));
 
     ++type;
-    item = new ListBoxBWPreviewItem(m_bwTone, i18n("Sepia Tone"), m_previewPixmapFactory, type);
-    whatsThis3->add( item, i18n("<b>Black & White with Sepia Tone</b>:"
-                                "<p>Gives a warm highlight and mid-tone while adding a bit of coolness to "
-                                "the shadows-very similar to the process of bleaching a print and "
-                                "re-developing in a sepia toner.</p>"));
+    item = new ListWidgetBWPreviewItem(m_bwTone, i18n("Sepia Tone"), m_previewPixmapFactory, type);
+    item->setWhatsThis(i18n("<b>Black & White with Sepia Tone</b>:"
+                            "<p>Gives a warm highlight and mid-tone while adding a bit of coolness to "
+                            "the shadows-very similar to the process of bleaching a print and "
+                            "re-developing in a sepia toner.</p>"));
 
     ++type;
-    item = new ListBoxBWPreviewItem(m_bwTone, i18n("Brown Tone"), m_previewPixmapFactory, type);
-    whatsThis3->add( item, i18n("<b>Black & White with Brown Tone</b>:"
-                                "<p>This filter is more neutral than Sepia Tone "
-                                "filter.</p>"));
+    item = new ListWidgetBWPreviewItem(m_bwTone, i18n("Brown Tone"), m_previewPixmapFactory, type);
+    item->setWhatsThis(i18n("<b>Black & White with Brown Tone</b>:"
+                            "<p>This filter is more neutral than Sepia Tone "
+                            "filter.</p>"));
 
     ++type;
-    item = new ListBoxBWPreviewItem(m_bwTone, i18n("Cold Tone"), m_previewPixmapFactory, type);
-    whatsThis3->add( item, i18n("<b>Black & White with Cold Tone</b>:"
-                                "<p>Start subtle and replicate printing on a cold tone black and white "
-                                "paper such as a bromide enlarging "
-                                "paper.</p>"));
+    item = new ListWidgetBWPreviewItem(m_bwTone, i18n("Cold Tone"), m_previewPixmapFactory, type);
+    item->setWhatsThis(i18n("<b>Black & White with Cold Tone</b>:"
+                            "<p>Start subtle and replicate printing on a cold tone black and white "
+                            "paper such as a bromide enlarging "
+                            "paper.</p>"));
 
     ++type;
-    item = new ListBoxBWPreviewItem(m_bwTone, i18n("Selenium Tone"), m_previewPixmapFactory, type);
-    whatsThis3->add( item, i18n("<b>Black & White with Selenium Tone</b>:"
-                                "<p>This effect replicate traditional selenium chemical toning done "
-                                "in the darkroom.</p>"));
+    item = new ListWidgetBWPreviewItem(m_bwTone, i18n("Selenium Tone"), m_previewPixmapFactory, type);
+    item->setWhatsThis(i18n("<b>Black & White with Selenium Tone</b>:"
+                            "<p>This effect replicate traditional selenium chemical toning done "
+                            "in the darkroom.</p>"));
 
     ++type;
-    item = new ListBoxBWPreviewItem(m_bwTone, i18n("Platinum Tone"), m_previewPixmapFactory, type);
-    whatsThis3->add( item, i18n("<b>Black & White with Platinum Tone</b>:"
-                                "<p>This effect replicate traditional platinum chemical toning done "
-                                "in the darkroom.</p>"));
-    
+    item = new ListWidgetBWPreviewItem(m_bwTone, i18n("Platinum Tone"), m_previewPixmapFactory, type);
+    item->setWhatsThis(i18n("<b>Black & White with Platinum Tone</b>:"
+                            "<p>This effect replicate traditional platinum chemical toning done "
+                            "in the darkroom.</p>"));
+
     ++type;
-    item = new ListBoxBWPreviewItem(m_bwTone, i18n("Green Tone"), m_previewPixmapFactory, type);
-    whatsThis3->add( item, i18n("<b>Black & White with greenish tint</b>:"
-                                "<p>This effect is also known as Verdante.</p>"));
+    item = new ListWidgetBWPreviewItem(m_bwTone, i18n("Green Tone"), m_previewPixmapFactory, type);
+    item->setWhatsThis(i18n("<b>Black & White with greenish tint</b>:"
+                            "<p>This effect is also known as Verdante.</p>"));
 
     // -------------------------------------------------------------
-    
+
     QWidget *curveBox     = new QWidget( m_tab );
     QGridLayout *gridTab2 = new QGridLayout(curveBox);
 
     Digikam::ColorGradientWidget* vGradient = new Digikam::ColorGradientWidget(
                                                   Digikam::ColorGradientWidget::Vertical,
-                                                  10, curveBox );
+                                                  10, curveBox);
     vGradient->setColors( QColor( "white" ), QColor( "black" ) );
 
     QLabel *spacev = new QLabel(curveBox);
     spacev->setFixedWidth(1);
-    
+
     m_curvesWidget = new Digikam::CurvesWidget(256, 256, m_originalImage->bits(), m_originalImage->width(),
                                                m_originalImage->height(), m_originalImage->sixteenBit(),
                                                m_curves, curveBox);
@@ -463,7 +456,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
                                                   Digikam::ColorGradientWidget::Horizontal,
                                                   10, curveBox );
     hGradient->setColors( QColor( "black" ), QColor( "white" ) );
-    
+
     m_cInput = new KIntNumInput(curveBox);
     m_cInput->setLabel(i18n("Contrast:"), Qt::AlignLeft | Qt::AlignVCenter);
     m_cInput->setRange(-100, 100, 1);
@@ -471,17 +464,17 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     m_cInput->setValue(0);
     m_cInput->setWhatsThis( i18n("<p>Set here the contrast adjustment of the image."));
 
-    gridTab2->addWidget(vGradient, 0, 0, 1, 1);
-    gridTab2->addWidget(spacev, 0, 1, 1, 1);
+    gridTab2->addWidget(vGradient,      0, 0, 1, 1);
+    gridTab2->addWidget(spacev,         0, 1, 1, 1);
     gridTab2->addWidget(m_curvesWidget, 0, 2, 1, 1);
-    gridTab2->addWidget(spaceh, 1, 2, 1, 1);
-    gridTab2->addWidget(hGradient, 2, 2, 1, 1);
-    gridTab2->addWidget(m_cInput, 4, 0, 1, 3 );
+    gridTab2->addWidget(spaceh,         1, 2, 1, 1);
+    gridTab2->addWidget(hGradient,      2, 2, 1, 1);
+    gridTab2->addWidget(m_cInput,       4, 0, 1, 3 );
     gridTab2->setRowMinimumHeight(3, spacingHint());
     gridTab2->setRowStretch(5, 10);
     gridTab2->setMargin(spacingHint());
     gridTab2->setSpacing(0);
-    
+
     // -------------------------------------------------------------
 
     m_tab->insertTab(FilmTab,       m_bwFilm, i18n("Film"));
@@ -489,15 +482,16 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     m_tab->insertTab(ToneTab,       m_bwTone, i18n("Tone"));
     m_tab->insertTab(LuminosityTab, curveBox, i18n("Lightness"));
 
-    gridSettings->addLayout(l1, 0, 0, 1, 5 );
+    gridSettings->addLayout(l1,       0, 0, 1, 5 );
     gridSettings->addWidget(histoBox, 1, 0, 2, 5 );
-    gridSettings->addWidget(m_tab, 3, 0, 1, 5 );
+    gridSettings->addWidget(m_tab,    3, 0, 1, 5 );
     gridSettings->setRowStretch(3, 10);
     gridSettings->setMargin(spacingHint());
     gridSettings->setSpacing(spacingHint());
 
     setUserAreaWidget(gboxSettings);
-    
+    updatePreviews();
+
     // -------------------------------------------------------------
 
     connect(m_channelCB, SIGNAL(activated(int)),
@@ -508,28 +502,28 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
 
     connect(m_previewWidget, SIGNAL(spotPositionChangedFromOriginal(const Digikam::DColor&, const QPoint&)),
             this, SLOT(slotSpotColorChanged(const Digikam::DColor&)));
-    
-    connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
-            this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
 
-    connect(m_bwFilters, SIGNAL(highlighted(int)),
-            this, SLOT(slotFilterSelected(int)));
+    connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint& )),
+            this, SLOT(slotColorSelectedFromTarget(const Digikam::DColor&)));
+
+    connect(m_bwFilters, SIGNAL(itemSelectionChanged()),
+            this, SLOT(slotFilterSelected()));
 
     connect(m_strengthInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
 
-    connect(m_bwFilm, SIGNAL(highlighted(int)),
+    connect(m_bwFilm, SIGNAL(itemSelectionChanged()),
             this, SLOT(slotEffect()));
 
-    connect(m_bwTone, SIGNAL(highlighted(int)),
+    connect(m_bwTone, SIGNAL(itemSelectionChanged()),
             this, SLOT(slotEffect()));
 
     connect(m_curvesWidget, SIGNAL(signalCurvesChanged()),
             this, SLOT(slotTimer()));
-    
+
     connect(m_cInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
-                     
+
     connect(m_previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));
 }
@@ -539,15 +533,37 @@ ImageEffect_BWSepia::~ImageEffect_BWSepia()
     m_histogramWidget->stopHistogramComputation();
 
     delete [] m_destinationPreviewData;
-       
+
     delete m_histogramWidget;
     delete m_previewWidget;
     delete m_curvesWidget;
     delete m_curves;
 }
 
-void ImageEffect_BWSepia::slotFilterSelected(int filter)
+void ImageEffect_BWSepia::updatePreviews()
 {
+    for (int i = 0 ; i < m_bwFilters->count(); i++)
+    {
+        ListWidgetBWPreviewItem* item = dynamic_cast<ListWidgetBWPreviewItem*>(m_bwFilters->item(i));
+        item->updatePreview();
+    }
+
+    for (int i = 0 ; i < m_bwFilm->count(); i++)
+    {
+        ListWidgetBWPreviewItem* item = dynamic_cast<ListWidgetBWPreviewItem*>(m_bwFilm->item(i));
+        item->updatePreview();
+    }
+
+    for (int i = 0 ; i < m_bwTone->count(); i++)
+    {
+        ListWidgetBWPreviewItem* item = dynamic_cast<ListWidgetBWPreviewItem*>(m_bwTone->item(i));
+        item->updatePreview();
+    }
+}
+
+void ImageEffect_BWSepia::slotFilterSelected()
+{
+    int filter = m_bwFilters->currentRow();
     if (filter == BWNoFilter)
         m_strengthInput->setEnabled(false);
     else
@@ -559,10 +575,10 @@ void ImageEffect_BWSepia::slotFilterSelected(int filter)
 QPixmap ImageEffect_BWSepia::getThumbnailForEffect(int type) 
 {
     Digikam::DImg thumb = m_thumbnailImage.copy();
-    int w   = thumb.width();
-    int h   = thumb.height();
-    bool sb = thumb.sixteenBit();
-    bool a  = thumb.hasAlpha();
+    int w               = thumb.width();
+    int h               = thumb.height();
+    bool sb             = thumb.sixteenBit();
+    bool a              = thumb.hasAlpha();
 
     if (type < BWGeneric)
     {
@@ -602,18 +618,18 @@ void ImageEffect_BWSepia::slotChannelChanged(int channel)
             m_histogramWidget->m_channelType = Digikam::HistogramWidget::ValueHistogram;
             m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
             break;
-    
+
         case RedChannel:
             m_histogramWidget->m_channelType = Digikam::HistogramWidget::RedChannelHistogram;
             m_hGradient->setColors( QColor( "black" ), QColor( "red" ) );
             break;
-    
-        case GreenChannel:         
+
+        case GreenChannel:
             m_histogramWidget->m_channelType = Digikam::HistogramWidget::GreenChannelHistogram;
             m_hGradient->setColors( QColor( "black" ), QColor( "green" ) );
             break;
-    
-        case BlueChannel:         
+
+        case BlueChannel:
             m_histogramWidget->m_channelType = Digikam::HistogramWidget::BlueChannelHistogram;
             m_hGradient->setColors( QColor( "black" ), QColor( "blue" ) );
             break;
@@ -650,9 +666,9 @@ void ImageEffect_BWSepia::readUserSettings()
     m_scaleBG->button(group.readEntry("Histogram Scale", 
                       (int)Digikam::HistogramWidget::LogScaleHistogram))->setChecked(true);
 
-    m_bwFilters->setCurrentItem(group.readEntry("BW Filter", 0));
-    m_bwFilm->setCurrentItem(group.readEntry("BW Film", 0));
-    m_bwTone->setCurrentItem(group.readEntry("BW Tone", 0));
+    m_bwFilters->setCurrentRow(group.readEntry("BW Filter", 0));
+    m_bwFilm->setCurrentRow(group.readEntry("BW Film", 0));
+    m_bwTone->setCurrentRow(group.readEntry("BW Tone", 0));
     m_cInput->setValue(group.readEntry("ContrastAjustment", 0));
     m_strengthInput->setValue(group.readEntry("StrengthAjustment", 1));
 
@@ -681,7 +697,7 @@ void ImageEffect_BWSepia::readUserSettings()
 
     slotChannelChanged(m_channelCB->currentIndex());
     slotScaleChanged(m_scaleBG->checkedId());
-    slotFilterSelected(m_bwFilters->currentItem());
+    slotFilterSelected();
 }
 
 void ImageEffect_BWSepia::writeUserSettings()
@@ -691,9 +707,9 @@ void ImageEffect_BWSepia::writeUserSettings()
     group.writeEntry("Settings Tab", m_tab->currentIndex());
     group.writeEntry("Histogram Channel", m_channelCB->currentIndex());
     group.writeEntry("Histogram Scale", m_scaleBG->checkedId());
-    group.writeEntry("BW Filter", m_bwFilters->currentItem());
-    group.writeEntry("BW Film", m_bwFilm->currentItem());
-    group.writeEntry("BW Tone", m_bwTone->currentItem());
+    group.writeEntry("BW Filter", m_bwFilters->currentRow());
+    group.writeEntry("BW Film", m_bwFilm->currentRow());
+    group.writeEntry("BW Tone", m_bwTone->currentRow());
     group.writeEntry("ContrastAjustment", m_cInput->value());
     group.writeEntry("StrengthAjustment", m_strengthInput->value());
 
@@ -720,19 +736,16 @@ void ImageEffect_BWSepia::resetValues()
     m_cInput->blockSignals(true);
     m_strengthInput->blockSignals(true);
 
-    m_bwFilters->setCurrentItem(0);
-    m_bwFilters->setSelected(0, true);
-
-    m_bwTone->setCurrentItem(0);
-    m_bwTone->setSelected(0, true);
+    m_bwFilters->setCurrentRow(0);
+    m_bwTone->setCurrentRow(0);
 
     m_cInput->setValue(0);
-    
+
     for (int channel = 0 ; channel < 5 ; channel++)
        m_curves->curvesChannelReset(channel);
 
     m_curvesWidget->reset();
-    
+
     m_cInput->blockSignals(false);
     m_bwTone->blockSignals(false);
     m_bwFilters->blockSignals(false);
@@ -740,14 +753,15 @@ void ImageEffect_BWSepia::resetValues()
 
     m_histogramWidget->reset();
     m_previewPixmapFactory->invalidate();
-    m_bwFilters->triggerUpdate(false);
-    m_bwTone->triggerUpdate(false);
+    updatePreviews();
+    m_bwFilters->update();
+    m_bwTone->update();
 }
 
 void ImageEffect_BWSepia::slotEffect()
 {
     kapp->setOverrideCursor( Qt::WaitCursor );
-    
+
     m_histogramWidget->stopHistogramComputation();
 
     delete [] m_destinationPreviewData;
@@ -761,24 +775,24 @@ void ImageEffect_BWSepia::slotEffect()
 
     // Apply black and white filter.
 
-    blackAndWhiteConversion(m_destinationPreviewData, w, h, sb, m_bwFilters->currentItem());
+    blackAndWhiteConversion(m_destinationPreviewData, w, h, sb, m_bwFilters->currentRow());
 
     // Apply black and white film type.
 
-    blackAndWhiteConversion(m_destinationPreviewData, w, h, sb, m_bwFilm->currentItem() + BWGeneric);
+    blackAndWhiteConversion(m_destinationPreviewData, w, h, sb, m_bwFilm->currentRow() + BWGeneric);
 
     // Apply color tone filter.
 
-    blackAndWhiteConversion(m_destinationPreviewData, w, h, sb, m_bwTone->currentItem() + BWNoTone);
+    blackAndWhiteConversion(m_destinationPreviewData, w, h, sb, m_bwTone->currentRow() + BWNoTone);
 
     // Calculate and apply the curve on image.
-    
+
     uchar *targetData = new uchar[w*h*(sb ? 8 : 4)];
     m_curves->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel);
     m_curves->curvesLutProcess(m_destinationPreviewData, targetData, w, h);
 
     // Adjust contrast.
-    
+
     Digikam::DImg preview(w, h, sb, a, targetData);
     Digikam::BCGModifier cmod;
     cmod.setContrast((double)(m_cInput->value()/100.0) + 1.00);
@@ -788,11 +802,11 @@ void ImageEffect_BWSepia::slotEffect()
     m_previewWidget->updatePreview();
 
     // Update histogram.
-    
+
     memcpy(m_destinationPreviewData, preview.bits(), preview.numBytes());
     m_histogramWidget->updateData(m_destinationPreviewData, w, h, sb, 0, 0, 0, false);
     delete [] targetData;
-    
+
     kapp->restoreOverrideCursor();
 }
 
@@ -802,8 +816,9 @@ void ImageEffect_BWSepia::slotTimer()
     if (m_previewPixmapFactory && m_bwFilters && m_bwTone) 
     {
         m_previewPixmapFactory->invalidate();
-        m_bwFilters->triggerUpdate(false);
-        m_bwTone->triggerUpdate(false);
+        updatePreviews();
+        m_bwFilters->update();
+        m_bwTone->update();
     }
 }
 
@@ -816,29 +831,29 @@ void ImageEffect_BWSepia::finalRendering()
     int h                      = iface->originalHeight();
     bool a                     = iface->originalHasAlpha();
     bool sb                    = iface->originalSixteenBit();
-    
+
     if (data) 
     {
         // Apply black and white filter.
-    
-        blackAndWhiteConversion(data, w, h, sb, m_bwFilters->currentItem());
+
+        blackAndWhiteConversion(data, w, h, sb, m_bwFilters->currentRow());
 
         // Apply black and white film type.
-    
-        blackAndWhiteConversion(data, w, h, sb, m_bwFilm->currentItem() + BWGeneric);
+
+        blackAndWhiteConversion(data, w, h, sb, m_bwFilm->currentRow() + BWGeneric);
 
         // Apply color tone filter.
-    
-        blackAndWhiteConversion(data, w, h, sb, m_bwTone->currentItem() + BWNoTone);
+
+        blackAndWhiteConversion(data, w, h, sb, m_bwTone->currentRow() + BWNoTone);
 
         // Calculate and apply the curve on image.
-    
+
         uchar *targetData = new uchar[w*h*(sb ? 8 : 4)];
         m_curves->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel);
         m_curves->curvesLutProcess(data, targetData, w, h);
-        
+
         // Adjust contrast.
-            
+
         Digikam::DImg img(w, h, sb, a, targetData);
         Digikam::BCGModifier cmod;
         cmod.setContrast((double)(m_cInput->value()/100.0) + 1.00);
@@ -874,19 +889,19 @@ void ImageEffect_BWSepia::blackAndWhiteConversion(uchar *data, int w, int h, boo
           m_greenAttn = +0.11 * strength;
           m_blueAttn  = +0.09 * strength; 
           break;
-       
+
        case BWOrangeFilter:
           m_redAttn   = +0.48 * strength;
           m_greenAttn = -0.37 * strength;
           m_blueAttn  = -0.11 * strength; 
           break;
-       
+
        case BWRedFilter:
           m_redAttn   = +0.60 * strength;
           m_greenAttn = -0.49 * strength;
           m_blueAttn  = -0.11 * strength; 
           break;
-       
+
        case BWYellowFilter:
           m_redAttn   = +0.30 * strength;
           m_greenAttn = -0.31 * strength;
@@ -1051,19 +1066,19 @@ void ImageEffect_BWSepia::blackAndWhiteConversion(uchar *data, int w, int h, boo
        case BWSepiaTone:
           filter.changeTonality(data, w, h, sb, 162*mul, 132*mul, 101*mul);
           break;
-       
+
        case BWBrownTone:
           filter.changeTonality(data, w, h, sb, 129*mul, 115*mul, 104*mul);
           break;
-       
+
        case BWColdTone:
           filter.changeTonality(data, w, h, sb, 102*mul, 109*mul, 128*mul);
           break;
-       
+
        case BWSeleniumTone:
           filter.changeTonality(data, w, h, sb, 122*mul, 115*mul, 122*mul);
           break;
-       
+
        case BWPlatinumTone:
           filter.changeTonality(data, w, h, sb, 115*mul, 110*mul, 106*mul);
           break;
@@ -1085,8 +1100,8 @@ void ImageEffect_BWSepia::slotUser3()
        return;
 
     QFile file(loadFile.path());
-    
-    if ( file.open(QIODevice::ReadOnly) )   
+
+    if ( file.open(QIODevice::ReadOnly) )
     {
         QTextStream stream( &file );
 
@@ -1095,16 +1110,16 @@ void ImageEffect_BWSepia::slotUser3()
            KMessageBox::error(this, 
                         i18n("\"%1\" is not a Black & White settings text file.",
                              loadFile.fileName()));
-           file.close();            
+           file.close();
            return;
         }
-        
+
         m_bwFilters->blockSignals(true);
         m_bwTone->blockSignals(true);
         m_cInput->blockSignals(true);
 
-        m_bwFilters->setCurrentItem(stream.readLine().toInt());
-        m_bwTone->setCurrentItem(stream.readLine().toInt());
+        m_bwFilters->setCurrentRow(stream.readLine().toInt());
+        m_bwTone->setCurrentRow(stream.readLine().toInt());
         m_cInput->setValue(stream.readLine().toInt());
 
         for (int i = 0 ; i < 5 ; i++)
@@ -1119,13 +1134,13 @@ void ImageEffect_BWSepia::slotUser3()
             QPoint p;
             p.setX( stream.readLine().toInt() );
             p.setY( stream.readLine().toInt() );
-    
+
             if (m_originalImage->sixteenBit() && p != disable)
             {
                 p.setX(p.x()*255);
                 p.setY(p.y()*255);
             }
-    
+
             m_curves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, j, p);
         }
 
@@ -1138,10 +1153,11 @@ void ImageEffect_BWSepia::slotUser3()
 
         m_histogramWidget->reset();
         m_previewPixmapFactory->invalidate();
-        m_bwFilters->triggerUpdate(false);
-        m_bwTone->triggerUpdate(false);     
+        updatePreviews();
+        m_bwFilters->update();
+        m_bwTone->update();
 
-        slotEffect();  
+        slotEffect();
     }
     else
         KMessageBox::error(this, i18n("Cannot load settings from the Black & White text file."));
@@ -1160,14 +1176,14 @@ void ImageEffect_BWSepia::slotUser2()
        return;
 
     QFile file(saveFile.path());
-    
-    if ( file.open(QIODevice::WriteOnly) )   
+
+    if ( file.open(QIODevice::WriteOnly) )
     {
-        QTextStream stream( &file );        
+        QTextStream stream( &file );
         stream << "# Black & White Configuration File\n";
-        stream << m_bwFilters->currentItem() << "\n";    
-        stream << m_bwTone->currentItem() << "\n";    
-        stream << m_cInput->value() << "\n";    
+        stream << m_bwFilters->currentItem() << "\n";
+        stream << m_bwTone->currentItem() << "\n";
+        stream << m_cInput->value() << "\n";
 
         for (int j = 0 ; j < 17 ; j++)
         {
@@ -1183,10 +1199,8 @@ void ImageEffect_BWSepia::slotUser2()
     }
     else
         KMessageBox::error(this, i18n("Cannot save settings to the Black & White text file."));
-    
-    file.close();        
+
+    file.close();
 }
 
 }  // NameSpace DigikamImagesPluginCore
-
-

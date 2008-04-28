@@ -7,7 +7,7 @@
  * Description : Black and White conversion tool.
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,7 +22,6 @@
  * 
  * ============================================================ */
 
-
 #ifndef IMAGEEFFECT_BWSEPIA_H
 #define IMAGEEFFECT_BWSEPIA_H
 
@@ -34,7 +33,7 @@
 
 #include "imagedlgbase.h"
 
-class Q3ListBox;
+class QListWidget;
 class QButtonGroup;
 class QComboBox;
 
@@ -67,7 +66,7 @@ public:
     ~ImageEffect_BWSepia();
 
     friend class PreviewPixmapFactory;
-    
+
 protected:
 
     QPixmap getThumbnailForEffect(int type);
@@ -83,7 +82,8 @@ private:
     void writeUserSettings();
     void resetValues();
     void blackAndWhiteConversion(uchar *data, int w, int h, bool sb, int type);
-    
+    void updatePreviews();
+
 private slots:
 
     void slotUser2();
@@ -91,9 +91,9 @@ private slots:
     void slotEffect();
     void slotChannelChanged(int channel);
     void slotScaleChanged(int scale);
-    void slotSpotColorChanged(const Digikam::DColor &color);    
-    void slotColorSelectedFromTarget( const Digikam::DColor &color );
-    void slotFilterSelected(int filter);
+    void slotSpotColorChanged(const Digikam::DColor &color);
+    void slotColorSelectedFromTarget(const Digikam::DColor& color);
+    void slotFilterSelected();
 
 private:
 
@@ -106,7 +106,7 @@ private:
         BWYellowFilter,
 
         BWGeneric,            // B&W film simulation.
-        BWAgfa200X,    
+        BWAgfa200X,
         BWAgfapan25,
         BWAgfapan100,
         BWAgfapan400,
@@ -122,7 +122,7 @@ private:
         BWKodakTriX,
 
         BWNoTone,             // Chemical color tone filter.
-        BWSepiaTone,        
+        BWSepiaTone,
         BWBrownTone,
         BWColdTone,
         BWSeleniumTone,
@@ -159,30 +159,30 @@ private:
     double m_redMult, m_greenMult, m_blueMult; 
 
     uchar                        *m_destinationPreviewData;
-    
+
     QComboBox                    *m_channelCB;
-    
+
     QButtonGroup                 *m_scaleBG;
-    
-    Q3ListBox                    *m_bwFilters;
-    Q3ListBox                    *m_bwFilm;
-    Q3ListBox                    *m_bwTone;
+
+    QListWidget                  *m_bwFilters;
+    QListWidget                  *m_bwFilm;
+    QListWidget                  *m_bwTone;
 
     KIntNumInput                 *m_cInput;
     KIntNumInput                 *m_strengthInput;
-    
+
     KTabWidget                   *m_tab;
-    
+
     Digikam::ImageWidget         *m_previewWidget;
 
     Digikam::ColorGradientWidget *m_hGradient;
-    
+
     Digikam::HistogramWidget     *m_histogramWidget;
 
     Digikam::CurvesWidget        *m_curvesWidget;
 
     Digikam::ImageCurves         *m_curves;
-    
+
     Digikam::DImg                *m_originalImage;
     Digikam::DImg                 m_thumbnailImage;
 
