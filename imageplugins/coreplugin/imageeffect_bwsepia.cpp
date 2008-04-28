@@ -81,6 +81,7 @@ class PreviewPixmapFactory : public QObject
 public:
 
     PreviewPixmapFactory(ImageEffect_BWSepia* bwSepia, const QSize& previewSize);
+    ~PreviewPixmapFactory();
 
     void invalidate() { m_previewPixmapMap.clear(); }
 
@@ -103,6 +104,17 @@ PreviewPixmapFactory::PreviewPixmapFactory(ImageEffect_BWSepia* bwSepia, const Q
 {
     m_bwSepia     = bwSepia;
     m_previewSize = previewSize;
+}
+
+PreviewPixmapFactory::~PreviewPixmapFactory()
+{
+    // Delete all hash items 
+    while (!m_previewPixmapMap.isEmpty()) 
+    {
+        QPixmap *value = *m_previewPixmapMap.begin();
+        m_previewPixmapMap.erase(m_previewPixmapMap.begin());
+        delete value;
+    }
 }
 
 const QPixmap* PreviewPixmapFactory::pixmap(int id)
