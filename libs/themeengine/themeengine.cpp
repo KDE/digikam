@@ -99,7 +99,14 @@ ThemeEngine::ThemeEngine()
 
 ThemeEngine::~ThemeEngine()
 {
-    d->themeHash.clear();
+    // Delete all hash items 
+    while (!d->themeHash.isEmpty()) 
+    {
+        Theme *value = *d->themeHash.begin();
+        d->themeHash.erase(d->themeHash.begin());
+        delete value;
+    }
+
     delete d;
 }
 
