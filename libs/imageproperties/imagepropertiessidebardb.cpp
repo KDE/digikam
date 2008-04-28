@@ -468,6 +468,7 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformations(const KUrl& url)
             else
                 m_propertiesTab->setPhotoDateTime(unavailable);
 
+            m_propertiesTab->setPhotoLens(photoInfo.lens.isEmpty() ? unavailable : photoInfo.lens);
             m_propertiesTab->setPhotoAperture(photoInfo.aperture.isEmpty() ? unavailable : photoInfo.aperture);
 
             if (photoInfo.focalLength35.isEmpty())

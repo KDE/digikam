@@ -70,6 +70,7 @@ public:
     void setPhotoMake(const QString& str);
     void setPhotoModel(const QString& str);
     void setPhotoDateTime(const QString& str);
+    void setPhotoLens(const QString& str);
     void setPhotoAperture(const QString& str);
     void setPhotoFocalLength(const QString& str);
     void setPhotoExposureTime(const QString& str);

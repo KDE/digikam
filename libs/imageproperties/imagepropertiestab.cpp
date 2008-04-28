@@ -68,6 +68,7 @@ public:
         make                   = 0;
         model                  = 0;
         photoDate              = 0;
+        lens                   = 0;
         aperture               = 0;
         focalLength            = 0;
         exposureTime           = 0;
@@ -89,6 +90,7 @@ public:
         labelPhotoMake         = 0;
         labelPhotoModel        = 0;
         labelPhotoDateTime     = 0;
+        labelPhotoLens         = 0;
         labelPhotoAperture     = 0;
         labelPhotoFocalLenght  = 0;
         labelPhotoExposureTime = 0;
@@ -117,6 +119,7 @@ public:
     QLabel             *make;
     QLabel             *model;
     QLabel             *photoDate;
+    QLabel             *lens;
     QLabel             *aperture;
     QLabel             *focalLength;
     QLabel             *exposureTime;
@@ -141,6 +144,7 @@ public:
     KSqueezedTextLabel *labelPhotoMake;
     KSqueezedTextLabel *labelPhotoModel;
     KSqueezedTextLabel *labelPhotoDateTime;
+    KSqueezedTextLabel *labelPhotoLens;
     KSqueezedTextLabel *labelPhotoAperture;
     KSqueezedTextLabel *labelPhotoFocalLenght;
     KSqueezedTextLabel *labelPhotoExposureTime;
@@ -183,6 +187,7 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent)
     d->make                     = new QLabel(i18n("<b>Make</b>:"), this);
     d->model                    = new QLabel(i18n("<b>Model</b>:"), this);
     d->photoDate                = new QLabel(i18n("<b>Created</b>:"), this);
+    d->lens                     = new QLabel(i18n("<b>Lens</b>:"), this);
     d->aperture                 = new QLabel(i18n("<b>Aperture</b>:"), this);
     d->focalLength              = new QLabel(i18n("<b>Focal</b>:"), this);
     d->exposureTime             = new QLabel(i18n("<b>Exposure</b>:"), this);
@@ -207,6 +212,7 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent)
     d->labelPhotoMake           = new KSqueezedTextLabel(0, this);
     d->labelPhotoModel          = new KSqueezedTextLabel(0, this);
     d->labelPhotoDateTime       = new KSqueezedTextLabel(0, this);
+    d->labelPhotoLens           = new KSqueezedTextLabel(0, this);
     d->labelPhotoAperture       = new KSqueezedTextLabel(0, this);
     d->labelPhotoFocalLenght    = new KSqueezedTextLabel(0, this);
     d->labelPhotoExposureTime   = new KSqueezedTextLabel(0, this);
@@ -246,6 +252,7 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent)
     d->make->setMaximumHeight(hgt);
     d->model->setMaximumHeight(hgt);
     d->photoDate->setMaximumHeight(hgt);
+    d->lens->setMaximumHeight(hgt);
     d->aperture->setMaximumHeight(hgt);
     d->focalLength->setMaximumHeight(hgt);
     d->exposureTime->setMaximumHeight(hgt);
@@ -256,6 +263,7 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent)
     d->labelPhotoMake->setMaximumHeight(hgt);
     d->labelPhotoModel->setMaximumHeight(hgt);
     d->labelPhotoDateTime->setMaximumHeight(hgt);
+    d->labelPhotoLens->setMaximumHeight(hgt);
     d->labelPhotoAperture->setMaximumHeight(hgt);
     d->labelPhotoFocalLenght->setMaximumHeight(hgt);
     d->labelPhotoExposureTime->setMaximumHeight(hgt);
@@ -266,73 +274,82 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent)
 
     // --------------------------------------------------
 
-    settingsLayout->addWidget(d->title, 0, 0, 1, 2 );
+    settingsLayout->addWidget(d->title,                  0, 0, 1, 2);
     settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
-                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 1, 0, 1, 2);
-    settingsLayout->addWidget(d->file, 2, 0, 1, 1);
-    settingsLayout->addWidget(d->labelFile, 2, 1, 1, 1);
-    settingsLayout->addWidget(d->folder, 3, 0, 1, 1);
-    settingsLayout->addWidget(d->labelFolder, 3, 1, 1, 1);
-    settingsLayout->addWidget(d->modifiedDate, 4, 0, 1, 1);
-    settingsLayout->addWidget(d->labelFileModifiedDate, 4, 1, 1, 1);
-    settingsLayout->addWidget(d->size, 5, 0, 1, 1);
-    settingsLayout->addWidget(d->labelFileSize, 5, 1, 1, 1);
-    settingsLayout->addWidget(d->owner, 6, 0, 1, 1);
-    settingsLayout->addWidget(d->labelFileOwner, 6, 1, 1, 1);
-    settingsLayout->addWidget(d->permissions, 7, 0, 1, 1);
-    settingsLayout->addWidget(d->labelFilePermissions, 7, 1, 1, 1);
+                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 
+                                                         1, 0, 1, 2);
+    settingsLayout->addWidget(d->file,                   2, 0, 1, 1);
+    settingsLayout->addWidget(d->labelFile,              2, 1, 1, 1);
+    settingsLayout->addWidget(d->folder,                 3, 0, 1, 1);
+    settingsLayout->addWidget(d->labelFolder,            3, 1, 1, 1);
+    settingsLayout->addWidget(d->modifiedDate,           4, 0, 1, 1);
+    settingsLayout->addWidget(d->labelFileModifiedDate,  4, 1, 1, 1);
+    settingsLayout->addWidget(d->size,                   5, 0, 1, 1);
+    settingsLayout->addWidget(d->labelFileSize,          5, 1, 1, 1);
+    settingsLayout->addWidget(d->owner,                  6, 0, 1, 1);
+    settingsLayout->addWidget(d->labelFileOwner,         6, 1, 1, 1);
+    settingsLayout->addWidget(d->permissions,            7, 0, 1, 1);
+    settingsLayout->addWidget(d->labelFilePermissions,   7, 1, 1, 1);
 
     settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
-                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 8, 0, 1, 2);
-    settingsLayout->addWidget(line, 9, 0, 1, 2 );
+                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 
+                                                         8, 0, 1, 2);
+    settingsLayout->addWidget(line,                      9, 0, 1, 2);
     settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
-                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 10, 0, 1, 2);
+                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 
+                                                         10, 0, 1, 2);
 
-    settingsLayout->addWidget(d->title2, 11, 0, 1, 2 );
+    settingsLayout->addWidget(d->title2,                 11, 0, 1, 2);
     settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
-                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 12, 0, 1, 2);
-    settingsLayout->addWidget(d->mime, 13, 0, 1, 1);
-    settingsLayout->addWidget(d->labelImageMime, 13, 1, 1, 1);
-    settingsLayout->addWidget(d->dimensions, 14, 0, 1, 1);
-    settingsLayout->addWidget(d->labelImageDimensions, 14, 1, 1, 1);
-    settingsLayout->addWidget(d->compression, 15, 0, 1, 1);
-    settingsLayout->addWidget(d->labelImageCompression, 15, 1, 1, 1);
-    settingsLayout->addWidget(d->bitDepth, 16, 0, 1, 1);
-    settingsLayout->addWidget(d->labelImageBitDepth, 16, 1, 1, 1);
-    settingsLayout->addWidget(d->colorMode, 17, 0, 1, 1);
-    settingsLayout->addWidget(d->labelImageColorMode, 17, 1, 1, 1);
+                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 
+                                                         12, 0, 1, 2);
+    settingsLayout->addWidget(d->mime,                   13, 0, 1, 1);
+    settingsLayout->addWidget(d->labelImageMime,         13, 1, 1, 1);
+    settingsLayout->addWidget(d->dimensions,             14, 0, 1, 1);
+    settingsLayout->addWidget(d->labelImageDimensions,   14, 1, 1, 1);
+    settingsLayout->addWidget(d->compression,            15, 0, 1, 1);
+    settingsLayout->addWidget(d->labelImageCompression,  15, 1, 1, 1);
+    settingsLayout->addWidget(d->bitDepth,               16, 0, 1, 1);
+    settingsLayout->addWidget(d->labelImageBitDepth,     16, 1, 1, 1);
+    settingsLayout->addWidget(d->colorMode,              17, 0, 1, 1);
+    settingsLayout->addWidget(d->labelImageColorMode,    17, 1, 1, 1);
 
     settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
-                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 18, 0, 1, 2);
-    settingsLayout->addWidget(line2, 19, 0, 1, 2 );
+                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 
+                                                         18, 0, 1, 2);
+    settingsLayout->addWidget(line2,                     19, 0, 1, 2);
     settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
-                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 20, 0, 1, 2);
+                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 
+                                                         20, 0, 1, 2);
 
-    settingsLayout->addWidget(d->title3, 21, 0, 1, 2 );
+    settingsLayout->addWidget(d->title3,                 21, 0, 1, 2);
     settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
-                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 22, 0, 1, 2);
-    settingsLayout->addWidget(d->make, 23, 0, 1, 1);
-    settingsLayout->addWidget(d->labelPhotoMake, 23, 1, 1, 1);
-    settingsLayout->addWidget(d->model, 24, 0, 1, 1);
-    settingsLayout->addWidget(d->labelPhotoModel, 24, 1, 1, 1);
-    settingsLayout->addWidget(d->photoDate, 25, 0, 1, 1);
-    settingsLayout->addWidget(d->labelPhotoDateTime, 25, 1, 1, 1);
-    settingsLayout->addWidget(d->aperture, 26, 0, 1, 1);
-    settingsLayout->addWidget(d->labelPhotoAperture, 26, 1, 1, 1);
-    settingsLayout->addWidget(d->focalLength, 27, 0, 1, 1);
-    settingsLayout->addWidget(d->labelPhotoFocalLenght, 27, 1, 1, 1);
-    settingsLayout->addWidget(d->exposureTime, 28, 0, 1, 1);
-    settingsLayout->addWidget(d->labelPhotoExposureTime, 28, 1, 1, 1);
-    settingsLayout->addWidget(d->sensitivity, 29, 0, 1, 1);
-    settingsLayout->addWidget(d->labelPhotoSensitivity, 29, 1, 1, 1);
-    settingsLayout->addWidget(d->exposureMode, 30, 0, 1, 1);
-    settingsLayout->addWidget(d->labelPhotoExposureMode, 30, 1, 1, 1);
-    settingsLayout->addWidget(d->flash, 31, 0, 1, 1);
-    settingsLayout->addWidget(d->labelPhotoFlash, 31, 1, 1, 1);
-    settingsLayout->addWidget(d->whiteBalance, 32, 0, 1, 1);
-    settingsLayout->addWidget(d->labelPhotoWhiteBalance, 32, 1, 1, 1);
+                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 
+                                                         22, 0, 1, 2);
+    settingsLayout->addWidget(d->make,                   23, 0, 1, 1);
+    settingsLayout->addWidget(d->labelPhotoMake,         23, 1, 1, 1);
+    settingsLayout->addWidget(d->model,                  24, 0, 1, 1);
+    settingsLayout->addWidget(d->labelPhotoModel,        24, 1, 1, 1);
+    settingsLayout->addWidget(d->photoDate,              25, 0, 1, 1);
+    settingsLayout->addWidget(d->labelPhotoDateTime,     25, 1, 1, 1);
+    settingsLayout->addWidget(d->lens,                   26, 0, 1, 1);
+    settingsLayout->addWidget(d->labelPhotoLens,         26, 1, 1, 1);
+    settingsLayout->addWidget(d->aperture,               27, 0, 1, 1);
+    settingsLayout->addWidget(d->labelPhotoAperture,     27, 1, 1, 1);
+    settingsLayout->addWidget(d->focalLength,            28, 0, 1, 1);
+    settingsLayout->addWidget(d->labelPhotoFocalLenght,  28, 1, 1, 1);
+    settingsLayout->addWidget(d->exposureTime,           29, 0, 1, 1);
+    settingsLayout->addWidget(d->labelPhotoExposureTime, 29, 1, 1, 1);
+    settingsLayout->addWidget(d->sensitivity,            30, 0, 1, 1);
+    settingsLayout->addWidget(d->labelPhotoSensitivity,  30, 1, 1, 1);
+    settingsLayout->addWidget(d->exposureMode,           31, 0, 1, 1);
+    settingsLayout->addWidget(d->labelPhotoExposureMode, 31, 1, 1, 1);
+    settingsLayout->addWidget(d->flash,                  32, 0, 1, 1);
+    settingsLayout->addWidget(d->labelPhotoFlash,        32, 1, 1, 1);
+    settingsLayout->addWidget(d->whiteBalance,           33, 0, 1, 1);
+    settingsLayout->addWidget(d->labelPhotoWhiteBalance, 33, 1, 1, 1);
 
-    settingsLayout->setRowStretch(33, 10);
+    settingsLayout->setRowStretch(34, 10);
     settingsLayout->setColumnStretch(1, 10);
     settingsLayout->setMargin(KDialog::spacingHint());
     settingsLayout->setSpacing(0);
@@ -363,6 +380,7 @@ void ImagePropertiesTab::setCurrentURL(const KUrl& url)
         d->labelPhotoMake->setText(QString());
         d->labelPhotoModel->setText(QString());
         d->labelPhotoDateTime->setText(QString());
+        d->labelPhotoLens->setText(QString());
         d->labelPhotoAperture->setText(QString());
         d->labelPhotoFocalLenght->setText(QString());
         d->labelPhotoExposureTime->setText(QString());
@@ -389,6 +407,7 @@ void ImagePropertiesTab::setPhotoInfoDisable(bool b)
         d->make->hide();
         d->model->hide();
         d->photoDate->hide();
+        d->lens->hide();
         d->aperture->hide();
         d->focalLength->hide();
         d->exposureTime->hide();
@@ -399,6 +418,7 @@ void ImagePropertiesTab::setPhotoInfoDisable(bool b)
         d->labelPhotoMake->hide();
         d->labelPhotoModel->hide();
         d->labelPhotoDateTime->hide();
+        d->labelPhotoLens->hide();
         d->labelPhotoAperture->hide();
         d->labelPhotoFocalLenght->hide();
         d->labelPhotoExposureTime->hide();
@@ -413,6 +433,7 @@ void ImagePropertiesTab::setPhotoInfoDisable(bool b)
         d->make->show();
         d->model->show();
         d->photoDate->show();
+        d->lens->show();
         d->aperture->show();
         d->focalLength->show();
         d->exposureTime->show();
@@ -423,6 +444,7 @@ void ImagePropertiesTab::setPhotoInfoDisable(bool b)
         d->labelPhotoMake->show();
         d->labelPhotoModel->show();
         d->labelPhotoDateTime->show();
+        d->labelPhotoLens->show();
         d->labelPhotoAperture->show();
         d->labelPhotoFocalLenght->show();
         d->labelPhotoExposureTime->show();
@@ -491,6 +513,11 @@ void ImagePropertiesTab::setPhotoModel(const QString& str)
 void ImagePropertiesTab::setPhotoDateTime(const QString& str)
 {
     d->labelPhotoDateTime->setText(str);
+}
+
+void ImagePropertiesTab::setPhotoLens(const QString& str)
+{
+    d->labelPhotoLens->setText(str);
 }
 
 void ImagePropertiesTab::setPhotoAperture(const QString& str)
