@@ -130,7 +130,7 @@ void MetadataListView::slotSelectionChanged(QListViewItem *item)
                           .arg(tagDesc));
 }
 
-void MetadataListView::setIfdList(DMetadata::MetaDataMap ifds, const QStringList& tagsfilter)
+void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStringList& tagsfilter)
 {
     clear();
 
@@ -138,7 +138,7 @@ void MetadataListView::setIfdList(DMetadata::MetaDataMap ifds, const QStringList
     QString            ifDItemName;
     MdKeyListViewItem *parentifDItem = 0;
 
-    for (DMetadata::MetaDataMap::iterator it = ifds.begin(); it != ifds.end(); ++it)
+    for (DMetadata::MetaDataMap::const_iterator it = ifds.begin(); it != ifds.end(); ++it)
     {
         // We checking if we have changed of ifDName
         QString currentIfDName = it.key().section('.', 1, 1);
@@ -188,7 +188,7 @@ void MetadataListView::setIfdList(DMetadata::MetaDataMap ifds, const QStringList
     QTimer::singleShot( 0, this, SLOT( triggerUpdate() ) );
 }
 
-void MetadataListView::setIfdList(DMetadata::MetaDataMap ifds, QStringList keysFilter,
+void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStringList& keysFilter,
                                   const QStringList& tagsFilter)
 {
     clear();
@@ -196,14 +196,14 @@ void MetadataListView::setIfdList(DMetadata::MetaDataMap ifds, QStringList keysF
     uint               subItems = 0;
     MdKeyListViewItem *parentifDItem = 0;
 
-    for (QStringList::iterator itKeysFilter = keysFilter.begin();
+    for (QStringList::const_iterator itKeysFilter = keysFilter.begin();
          itKeysFilter != keysFilter.end();
          ++itKeysFilter)
     {
         subItems = 0;
         parentifDItem = new MdKeyListViewItem(this, *itKeysFilter);
 
-        DMetadata::MetaDataMap::iterator it = ifds.end(); 
+        DMetadata::MetaDataMap::const_iterator it = ifds.end(); 
 
         while(1)   
         {
