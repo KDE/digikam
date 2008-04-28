@@ -368,7 +368,6 @@ SET(libiccprofileswidgets_SRCS
    )
 
 SET(libimagepluginswidgets_SRCS
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/imageplugins/listboxpreviewitem.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/imageplugins/imagepaniconwidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/imageplugins/imageregionwidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/imageplugins/imageguidewidget.cpp
