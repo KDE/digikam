@@ -89,7 +89,7 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
     cietonguewidget.cpp                 Gilles          X      X       DONE        DONE
     iccpreviewwidget.cpp                Gilles          X      X       DONE        DONE
     iccprofilewidget.cpp                Gilles          X      X       DONE        DONE
-|-----imageplugins                      Gilles          X      X       DONE        
+|-----imageplugins                      Gilles          X      X       DONE        DONE
 |-----metadata                          Gilles          X      X       DONE        DONE
 
 |-utilities
