@@ -99,7 +99,7 @@ public:
 
 ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent,
                                    bool spotVisible, int guideMode, 
-                                   QColor guideColor, int guideSize, 
+                                   const QColor& guideColor, int guideSize, 
                                    bool blink, bool useImageSelection)
                 : QWidget(parent, 0, Qt::WDestructiveClose)
 {
