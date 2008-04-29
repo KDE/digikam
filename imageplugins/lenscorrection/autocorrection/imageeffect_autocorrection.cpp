@@ -119,7 +119,7 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
                                     "towards the corners. These Seidel aberrations are known as pincushion "
                                     "and barrel distorsions."));
     m_filterGeom = new QCheckBox(i18n("Geometry"), m_settingsWidget);
-    m_filterGeom->setWhatsThis(i18n("Four geometries are handeled here: Rectilinear (99 percents of all lenses), "
+    m_filterGeom->setWhatsThis(i18n("Four geometries are handeled here: Rectilinear (99 percent of all lenses), "
                                     "Fisheye, Cylindrical, Equirectangular."));
 
 //    grid->addWidget(m_maskPreviewLabel, 0, 0, 1, 2);
