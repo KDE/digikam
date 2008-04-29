@@ -603,7 +603,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->imagePreviewAction = new KToggleAction(KIcon("view-preview"), i18n("View..."), this);
+    d->imagePreviewAction = new KToggleAction(KIcon("viewimage"), i18n("View..."), this);
     d->imagePreviewAction->setShortcut(Qt::Key_F3);
     connect(d->imagePreviewAction, SIGNAL(triggered()), d->view, SLOT(slotImagePreview()));
     actionCollection()->addAction("image_view", d->imagePreviewAction);
