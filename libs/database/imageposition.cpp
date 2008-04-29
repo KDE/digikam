@@ -393,6 +393,8 @@ void ImagePosition::apply()
         values << d->tilt;
     if (d->dirtyFields & DatabaseFields::PositionRoll)
         values << d->roll;
+    if (d->dirtyFields & DatabaseFields::PositionAccuracy)
+        values << d->accuracy;
     if (d->dirtyFields & DatabaseFields::PositionDescription)
         values << d->description;
 

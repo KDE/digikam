@@ -70,9 +70,10 @@ enum Field
     Longitude,                        /// String (as XMP GPSCoordinate)
     LongitudeNumber,                  /// double, degrees
     Altitude,                         /// double, m
-    PositionOrientation,              /// ?
-    PositionTilt,                     /// ?
-    PositionRoll,                     /// ?
+    PositionOrientation,              /// double, ?
+    PositionTilt,                     /// double, ?
+    PositionRoll,                     /// double, ?
+    PositionAccuracy,                 /// double, m
     PositionDescription,              /// String
 
     IptcCoreCopyrightNotice,          /// Map language -> String

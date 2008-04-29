@@ -245,6 +245,7 @@ void ImageScanner::scanImagePosition()
            << MetadataInfo::PositionOrientation
            << MetadataInfo::PositionTilt
            << MetadataInfo::PositionRoll
+           << MetadataInfo::PositionAccuracy
            << MetadataInfo::PositionDescription;
 
     QVariantList metadataInfos = m_metadata.getMetadataFields(fields);

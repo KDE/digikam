@@ -849,6 +849,9 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field)
         case MetadataInfo::PositionOrientation:
         case MetadataInfo::PositionTilt:
         case MetadataInfo::PositionRoll:
+        case MetadataInfo::PositionAccuracy:
+            // TODO or unsupported?
+            return QVariant(QVariant::Double);
         case MetadataInfo::PositionDescription:
             // TODO or unsupported?
             return QVariant(QVariant::String);
@@ -1057,6 +1060,7 @@ QString DMetadata::valueToString (const QVariant &value, MetadataInfo::Field fie
         case MetadataInfo::PositionOrientation:
         case MetadataInfo::PositionTilt:
         case MetadataInfo::PositionRoll:
+        case MetadataInfo::PositionAccuracy:
             //TODO
             return value.toString();
         case MetadataInfo::PositionDescription:
