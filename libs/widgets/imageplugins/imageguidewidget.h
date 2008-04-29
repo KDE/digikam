@@ -6,7 +6,7 @@
  * Date        : 2004-08-20
  * Description : a widget to display an image with guides
  * 
- * Copyright (C) 2004-2007 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2008 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -85,18 +85,18 @@ public:
 
     ImageGuideWidget(int w, int h, QWidget *parent=0, 
                      bool spotVisible=true, int guideMode=HVGuideMode,
-                     QColor guideColor=Qt::red, int guideSize=1, 
+                     const QColor& guideColor=Qt::red, int guideSize=1, 
                      bool blink=false, bool useImageSelection=false);
     ~ImageGuideWidget();
         
     ImageIface* imageIface();
     
-    QPoint getSpotPosition(void);
+    QPoint getSpotPosition();
     DColor getSpotColor(int getColorFrom);
     void   setSpotVisible(bool spotVisible, bool blink=false);
-    int    getRenderingPreviewMode(void);
-    void   resetSpotPosition(void);
-    void   updatePreview(void);
+    int    getRenderingPreviewMode();
+    void   resetSpotPosition();
+    void   updatePreview();
 
 public slots:
         
@@ -110,7 +110,7 @@ signals:
 
     void spotPositionChangedFromOriginal(const Digikam::DColor &color, const QPoint &position);
     void spotPositionChangedFromTarget(const Digikam::DColor &color, const QPoint &position);
-    void signalResized(void);
+    void signalResized();
 
 protected:
     
@@ -125,7 +125,7 @@ protected:
     
 private:
 
-    void updatePixmap( void );
+    void updatePixmap();
 
 private:
 

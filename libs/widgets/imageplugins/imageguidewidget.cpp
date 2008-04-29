@@ -6,7 +6,7 @@
  * Date        : 2004-11-16
  * Description : a widget to display an image with guides
  *
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -103,7 +103,7 @@ public:
 
 ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent,
                                    bool spotVisible, int guideMode, 
-                                   QColor guideColor, int guideSize, 
+                                   const QColor& guideColor, int guideSize, 
                                    bool blink, bool useImageSelection)
                 : QWidget(parent)
 {
@@ -165,7 +165,7 @@ void ImageGuideWidget::slotToggleOverExposure(bool o)
     updatePreview();
 }    
 
-void ImageGuideWidget::resetSpotPosition(void)
+void ImageGuideWidget::resetSpotPosition()
 {
     d->spot.setX( d->width  / 2 );
     d->spot.setY( d->height / 2 );
@@ -178,12 +178,12 @@ void ImageGuideWidget::slotChangeRenderingPreviewMode(int mode)
     updatePreview();
 }
 
-int ImageGuideWidget::getRenderingPreviewMode(void)
+int ImageGuideWidget::getRenderingPreviewMode()
 {
     return (d->renderingPreviewMode);
 }
 
-QPoint ImageGuideWidget::getSpotPosition(void)
+QPoint ImageGuideWidget::getSpotPosition()
 {
     return (QPoint( (int)((float)d->spot.x() * (float)d->iface->originalWidth()  / (float)d->width),
                     (int)((float)d->spot.y() * (float)d->iface->originalHeight() / (float)d->height)));
@@ -230,7 +230,7 @@ void ImageGuideWidget::slotChangeGuideSize(int size)
     updatePreview();
 }
 
-void ImageGuideWidget::updatePixmap( void )
+void ImageGuideWidget::updatePixmap()
 {
     QPainter p(d->pixmap);
     QString text;
@@ -445,20 +445,20 @@ void ImageGuideWidget::updatePixmap( void )
     p.end();
 }
 
-void ImageGuideWidget::paintEvent( QPaintEvent * )
+void ImageGuideWidget::paintEvent(QPaintEvent*)
 {
     QPainter p(this);
     p.drawPixmap(0, 0, *d->pixmap);
     p.end();
 }
 
-void ImageGuideWidget::updatePreview( void )
+void ImageGuideWidget::updatePreview()
 {
     updatePixmap();
     repaint();
 }
 
-void ImageGuideWidget::timerEvent(QTimerEvent * e)
+void ImageGuideWidget::timerEvent(QTimerEvent *e)
 {
     if (e->timerId() == d->timerID)
     {
@@ -470,7 +470,7 @@ void ImageGuideWidget::timerEvent(QTimerEvent * e)
        QWidget::timerEvent(e);
 }
 
-void ImageGuideWidget::resizeEvent(QResizeEvent * e)
+void ImageGuideWidget::resizeEvent(QResizeEvent *e)
 {
     blockSignals(true);
     delete d->pixmap;
@@ -498,7 +498,7 @@ void ImageGuideWidget::resizeEvent(QResizeEvent * e)
     emit signalResized();
 }
 
-void ImageGuideWidget::mousePressEvent ( QMouseEvent * e )
+void ImageGuideWidget::mousePressEvent(QMouseEvent *e)
 {
     if ( !d->focus && e->button() == Qt::LeftButton &&
          d->rect.contains( e->x(), e->y() ) && d->spotVisible )
@@ -510,7 +510,7 @@ void ImageGuideWidget::mousePressEvent ( QMouseEvent * e )
     }
 }
 
-void ImageGuideWidget::mouseReleaseEvent ( QMouseEvent *e )
+void ImageGuideWidget::mouseReleaseEvent(QMouseEvent *e)
 {
     if ( d->rect.contains( e->x(), e->y() ) && d->focus && d->spotVisible)
     {
@@ -589,7 +589,7 @@ void ImageGuideWidget::mouseReleaseEvent ( QMouseEvent *e )
     }
 }
 
-void ImageGuideWidget::mouseMoveEvent ( QMouseEvent * e )
+void ImageGuideWidget::mouseMoveEvent(QMouseEvent *e)
 {
     if ( d->rect.contains( e->x(), e->y() ) && !d->focus && d->spotVisible )
     {
@@ -606,7 +606,7 @@ void ImageGuideWidget::mouseMoveEvent ( QMouseEvent * e )
     }
 }
 
-void ImageGuideWidget::enterEvent( QEvent * )
+void ImageGuideWidget::enterEvent(QEvent*)
 {
     if ( !d->focus && d->renderingPreviewMode == PreviewToggleOnMouseOver )
     {
@@ -616,7 +616,7 @@ void ImageGuideWidget::enterEvent( QEvent * )
     }
 }
 
-void ImageGuideWidget::leaveEvent( QEvent * )
+void ImageGuideWidget::leaveEvent(QEvent*)
 {
     if ( !d->focus && d->renderingPreviewMode == PreviewToggleOnMouseOver )
     {
@@ -627,4 +627,3 @@ void ImageGuideWidget::leaveEvent( QEvent * )
 }
 
 }  // NameSpace Digikam
-
