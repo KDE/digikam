@@ -7,7 +7,7 @@
  * Description : a widget to display CIE tongue from
  *               an ICC profile.
  *
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Any source code are inspired from lprof project and
  * Copyright (C) 1998-2001 Marti Maria
@@ -575,7 +575,7 @@ void CIETongueWidget::drawSmallElipse(LPcmsCIExyY xyY, BYTE r, BYTE g, BYTE b, i
     d->painter.drawEllipse(icx + d->xBias- sz/2, icy-sz/2, sz, sz);
 }
 
-void CIETongueWidget::drawPatches(void)
+void CIETongueWidget::drawPatches()
 {
     for (int i=0; i < d->Measurement.nPatches; i++)
     {
@@ -614,7 +614,7 @@ void CIETongueWidget::drawPatches(void)
     }
 }
 
-void CIETongueWidget::drawColorantTriangle(void)
+void CIETongueWidget::drawColorantTriangle()
 {
     drawSmallElipse(&(d->Primaries.Red),   255, 128, 128, 6);
     drawSmallElipse(&(d->Primaries.Green), 128, 255, 128, 6);
@@ -633,7 +633,7 @@ void CIETongueWidget::drawColorantTriangle(void)
     biasedLine(x3, y3, x1, y1);
 }
 
-void CIETongueWidget::sweep_sRGB(void)
+void CIETongueWidget::sweep_sRGB()
 {
     int r, g, b;
     cmsHPROFILE hXYZ, hsRGB;
@@ -672,7 +672,7 @@ void CIETongueWidget::sweep_sRGB(void)
     cmsCloseProfile(hsRGB);
 }
 
-void CIETongueWidget::drawWhitePoint(void)
+void CIETongueWidget::drawWhitePoint()
 {
     cmsCIExyY Whitem_pntxyY;
     cmsXYZ2xyY(&Whitem_pntxyY, &(d->MediaWhite));
@@ -790,7 +790,7 @@ void CIETongueWidget::paintEvent( QPaintEvent * )
     bitBlt(this, 0, 0, &d->pixmap);
 }
 
-void CIETongueWidget::slotBlinkTimerDone(void)
+void CIETongueWidget::slotBlinkTimerDone()
 {
     repaint(false);     
     d->blinkFlag = !d->blinkFlag;
@@ -798,5 +798,3 @@ void CIETongueWidget::slotBlinkTimerDone(void)
 }
 
 }  // namespace Digikam
-
-
