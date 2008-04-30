@@ -288,7 +288,7 @@ int DMetadata::getImageRating() const
     if (hasIptc())
     {
         QString IptcUrgency(getIptcTagData("Iptc.Application2.Urgency"));
-        
+
         if (!IptcUrgency.isEmpty())
         {
             if (IptcUrgency == QString("1"))
@@ -476,7 +476,7 @@ bool DMetadata::getImageTagsPath(QStringList& tagsPath) const
     tagsPath = getIptcKeywords();
     if (!tagsPath.isEmpty())
         return true;
-        
+
     return false;
 }
 
@@ -512,7 +512,7 @@ bool DMetadata::setImagePhotographerId(const QString& author, const QString& aut
     QStringList oldAuthors = getXmpTagStringSeq("Xmp.dc.creator", false);
     QStringList newAuthors(author);
 
-    for (QStringList::Iterator it = oldAuthors.begin(); it != oldAuthors.end(); ++it )
+    for (QStringList::Iterator it = oldAuthors.begin(); it != oldAuthors.end(); ++it)
     {
         if (!newAuthors.contains(*it))
             newAuthors.append(*it);
@@ -569,67 +569,40 @@ bool DMetadata::setImageCredits(const QString& credit, const QString& source, co
 
 QString DMetadata::getLensDescription() const
 {
-    // -------------------------------------------------------------------
-    // NOTE: Try to get Lens Data informations from Makernotes.
+    QString lens;
+    QStringList lensExifTags;
+    lensExifTags.append("Exif.CanonCs.Lens");        // Canon Cameras Makernote.
+    lensExifTags.append("Exif.Canon.0x0095");        // Alternative Canon Cameras Makernote.
+    lensExifTags.append("Exif.Nikon3.LensData");     // Nikon Cameras Makernote.
+    lensExifTags.append("Exif.Minolta.LensID");      // Minolta Cameras Makernote.
+    lensExifTags.append("Exif.Pentax.LensType");     // Pentax Cameras Makernote.
+    lensExifTags.append("Exif.Panasonic.0x0310");    // Panasonic Cameras Makernote.
+    lensExifTags.append("Exif.Sigma.LensRange");     // Sigma Cameras Makernote.
+    lensExifTags.append("Exif.Photo.0xFDEA");        // Unstandard Exif tag set by Camera Raw.
+    // TODO : add Fuji, Olympus, Sony Cameras Makernotes.
 
-    // Canon Cameras.
-    QString lens = getExifTagString("Exif.CanonCs.Lens");
+    // -------------------------------------------------------------------
+    // Try to get Lens Data informations from Exif.
+
+    for (QStringList::Iterator it = lensExifTags.begin(); it != lensExifTags.end(); ++it)
+    {
+        lens = getExifTagString((*it).toAscii());
+        if (!lens.isEmpty())
+            return lens;
+    }
+
+    // -------------------------------------------------------------------
+    // Try to get Lens Data informations from XMP.
+    // XMP aux tags.
+    lens = getXmpTagString("Xmp.aux.Lens");
     if (lens.isEmpty())
     {
-        // Alternative Canon Cameras.
-        lens = getExifTagString("Exif.Canon.0x0095");
-        if (lens.isEmpty())
-        {
-            // Nikon Cameras.
-            lens = getExifTagString("Exif.Nikon3.LensData");
-            if (lens.isEmpty())
-            {
-                // Minolta Cameras.
-                lens = getExifTagString("Exif.Minolta.LensID");
-                if (lens.isEmpty())
-                {
-                    // Pentax Cameras.
-                    lens = getExifTagString("Exif.Pentax.LensType");
-                    if (lens.isEmpty())
-                    {
-                        // Panasonic Cameras.
-                        lens = getExifTagString("Exif.Panasonic.0x0310");
-                        if (lens.isEmpty())
-                        {
-                            // Sigma Cameras.
-                            lens = getExifTagString("Exif.Sigma.LensRange");
-                            if (lens.isEmpty())
-                            {
-                                // TODO : add Fuji, Olympus, Sony Cameras Makernotes before XMP parsing.
+        // XMP M$ tags (Lens Maker + Lens Model).
+        lens = getXmpTagString("Xmp.MicrosoftPhoto.LensManufacturer");
+        if (!lens.isEmpty())
+            lens.append(" ");
 
-                                // -------------------------------------------------------------------
-                                // NOTE: Try to get Lens Data informations from XMP.
-                                // XMP aux tags.
-                                lens = getXmpTagString("Xmp.aux.Lens");
-                                if (lens.isEmpty())
-                                {
-                                    // XMP M$ tags (Lens Maker + Lens Model).
-                                    lens = getXmpTagString("Xmp.MicrosoftPhoto.LensManufacturer");
-                                    if (!lens.isEmpty())
-                                        lens.append(" ");
-
-                                    lens.append(getXmpTagString("Xmp.MicrosoftPhoto.LensModel"));
-
-                                    // -------------------------------------------------------------------
-                                    // NOTE: Try to get Lens Data informations from Unstandard Exif tags.
-
-                                    // Camera Raw tags.
-                                    if (lens.isEmpty())
-                                    {
-                                        lens = getExifTagString("Exif.Photo.0xFDEA");
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        lens.append(getXmpTagString("Xmp.MicrosoftPhoto.LensModel"));
     }
 
     return lens;
