@@ -12,10 +12,10 @@
     </keywords>
     <projectdirectory>./</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
-    <description/>
+    <description></description>
     <ignoreparts/>
     <projectname/>
-    <defaultencoding/>
+    <defaultencoding></defaultencoding>
     <projectname>project</projectname>
     <projectname>project</projectname>
     <projectname>project</projectname>
@@ -514,6 +514,50 @@
     <projectname>project</projectname>
     <projectname>project</projectname>
     <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
   </general>
   <kdevfileview>
     <groups>
@@ -571,15 +615,16 @@
   </kdevdoctreeview>
   <kdevdebugger>
     <general>
-      <dbgshell/>
+      <dbgshell></dbgshell>
       <programargs/>
-      <gdbpath/>
-      <configGdbScript/>
-      <runShellScript/>
-      <runGdbScript/>
+      <gdbpath></gdbpath>
+      <configGdbScript></configGdbScript>
+      <runShellScript></runShellScript>
+      <runGdbScript></runGdbScript>
       <breakonloadinglibs>true</breakonloadinglibs>
       <separatetty>false</separatetty>
       <floatingtoolbar>false</floatingtoolbar>
+      <raiseGDBOnStart>false</raiseGDBOnStart>
     </general>
     <display>
       <staticmembers>false</staticmembers>
@@ -612,12 +657,22 @@
       <directoryradio>build</directoryradio>
       <customdirectory>/</customdirectory>
       <mainprogram>/home/gilles/Documents/devel/SVN/trunk/graphics/digikam/digikam/digikam</mainprogram>
-      <programargs/>
+      <programargs></programargs>
       <terminal>false</terminal>
       <autocompile>false</autocompile>
-      <envvars/>
-      <globaldebugarguments/>
-      <globalcwd/>
+      <envvars>
+        <envvar value="/opt/kde4" name="DBUSDIR" />
+        <envvar value="/opt/kde4" name="KDEDIR" />
+        <envvar value="/opt/kde4" name="KDEDIRS" />
+        <envvar value="/home/gilles/.kde4" name="KDEHOME" />
+        <envvar value="/home/gilles/tmp/gilles-kde4" name="KDETMP" />
+        <envvar value="/var/tmp/gilles-kde4" name="KDEVARTMP" />
+        <envvar value="/opt/kde4/lib:" name="LD_LIBRARY_PATH" />
+        <envvar value="/usr/lib/qt4" name="QTDIR" />
+        <envvar value="/opt/kde4/lib/kde4/plugins" name="QT_PLUGIN_PATH" />
+      </envvars>
+      <globaldebugarguments></globaldebugarguments>
+      <globalcwd>/mnt/data/devel/SVN/trunk/graphics/digikam/project/../..</globalcwd>
       <useglobalprogram>true</useglobalprogram>
       <autoinstall>false</autoinstall>
       <autokdesu>false</autokdesu>
@@ -692,7 +747,7 @@
       <resolveIncludePathsUsingMakeExperimental>false</resolveIncludePathsUsingMakeExperimental>
     </codecompletion>
     <creategettersetter>
-      <prefixGet/>
+      <prefixGet></prefixGet>
       <prefixSet>set</prefixSet>
       <prefixVariable>m_,_</prefixVariable>
       <parameterName>theValue</parameterName>
