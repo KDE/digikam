@@ -227,55 +227,7 @@ void KLFDeviceSelector::findFromMetadata()
 
     QString make  = photoInfo.make;
     QString model = photoInfo.model;
-
-    // ------------------------------------------------------------------------------------------------
-    // Try to get Lens Data informations from makernote.
-    // NOTE: Marcel, it's a non-standarized way, maybe such a thing should go to DMetadata instead
-    // to share code with digiKam database interface to host Lens informations.
-
-    // Canon Cameras.
-    QString lens = m_metadata.getExifTagString("Exif.Canon.0x0095");
-    if (lens.isEmpty())
-    {
-        // Nikon Cameras.
-        lens = m_metadata.getExifTagString("Exif.Nikon3.LensData");
-        if (lens.isEmpty())
-        {
-            // Minolta Cameras.
-            lens = m_metadata.getExifTagString("Exif.Minolta.LensID");
-            if (lens.isEmpty())
-            {
-                // Pentax Cameras.
-                lens = m_metadata.getExifTagString("Exif.Pentax.LensType");
-                if (lens.isEmpty())
-                {
-                    // Panasonic Cameras.
-                    lens = m_metadata.getExifTagString("Exif.Panasonic.0x0310");
-                    if (lens.isEmpty())
-                    {
-                        // Sigma Cameras.
-                        lens = m_metadata.getExifTagString("Exif.Sigma.LensRange");
-                        if (lens.isEmpty())
-                        {
-                            // TODO : add Fuji, Olympus, Sony Cameras before XMP parsing.
-
-                            // XMP aux tags.
-                            lens = m_metadata.getXmpTagString("Xmp.aux.Lens");
-                            if (lens.isEmpty())
-                            {
-                                // XMP M$ tags (Lens Maker + Lens Model to be compatible with LensFun Database).
-                                lens = m_metadata.getXmpTagString("Xmp.MicrosoftPhoto.LensManufacturer");
-                                if (!lens.isEmpty())
-                                    lens.append(" ");
-
-                                lens.append(m_metadata.getXmpTagString("Xmp.MicrosoftPhoto.LensModel"));
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+    QString lens  = photoInfo.lens;
 
     // ------------------------------------------------------------------------------------------------
 
