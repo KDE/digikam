@@ -29,7 +29,7 @@
 
 // Qt includes.
 
-#include <Q3ValueList>
+#include <QList>
 #include <QString>
 #include <QDateTime>
 #include <QMap>
@@ -273,19 +273,21 @@ private:
 
 private:
 
-    Type                       m_type;
-    int                        m_id;
-    bool                       m_root;
-    QString                    m_title;
+    bool                     m_root;
+    bool                     m_clearing;
 
-    Album*                     m_parent;
-    Album*                     m_firstChild;
-    Album*                     m_lastChild;
-    Album*                     m_next;
-    Album*                     m_prev;
-    bool                       m_clearing;
+    int                      m_id;
 
-    QMap<const void*, void*>   m_extraMap;
+    QString                  m_title;
+    QMap<const void*, void*> m_extraMap;
+
+    Type                     m_type;
+
+    Album*                   m_parent;
+    Album*                   m_firstChild;
+    Album*                   m_lastChild;
+    Album*                   m_next;
+    Album*                   m_prev;
 
     friend class AlbumManager;
 };
@@ -308,29 +310,32 @@ public:
     void setCollection(const QString& collection);
     void setDate(const QDate& date);
 
-    QString    albumRootPath() const;
-    int        albumRootId() const;
-    QString    caption() const;
-    QString    collection() const;
-    QDate      date() const;
-    KDE_DEPRECATED QString    url() const;
-    QString    albumPath() const;
-    QString    prettyUrl() const;
-    QString    folderPath() const;
+    QString     albumRootPath() const;
+    int         albumRootId() const;
+    QString     caption() const;
+    QString     collection() const;
+    QDate       date() const;
+    QString     albumPath() const;
+    QString     prettyUrl() const;
+    QString     folderPath() const;
     DatabaseUrl databaseUrl() const;
+    KUrl        fileUrl() const;
+    QString     icon() const;
+    KUrl        iconKURL() const;
+
+    KDE_DEPRECATED QString     url() const;
     KDE_DEPRECATED DatabaseUrl kurl() const;
-    KUrl       fileUrl() const;
-    QString    icon() const;
-    KUrl       iconKURL() const;
 
 private:
 
     int        m_albumRootId;
+
     QString    m_parentPath;
     QString    m_collection;
     QString    m_caption;
-    QDate      m_date;
     QString    m_icon;
+
+    QDate      m_date;
 
     friend class AlbumManager;
 };
@@ -353,16 +358,17 @@ public:
                "People/Friend/John" if leadingSlash if false.
      *         The root TAlbum returns "/" resp. "".
      */
-    QString tagPath(bool leadingSlash = true) const;
+    QString     tagPath(bool leadingSlash = true) const;
     DatabaseUrl kurl() const;
-    QString prettyUrl() const;
-    QString icon() const;
-    Q3ValueList<int> tagIDs() const;
+    QString     prettyUrl() const;
+    QString     icon() const;
+    QList<int>  tagIDs() const;
 
 private:
 
-    QString m_icon;
     int     m_pid;
+
+    QString m_icon;
 
     friend class AlbumManager;
 };
@@ -426,7 +432,9 @@ private:
 
     void setSearch(DatabaseSearch::Type type, const QString &query);
 
-    QString m_query;
+private:
+
+    QString              m_query;
     DatabaseSearch::Type m_type;
 
     friend class AlbumManager;
@@ -467,6 +475,8 @@ private:
     AlbumIterator() {}
     AlbumIterator(const AlbumIterator&) {}
     AlbumIterator& operator=(const AlbumIterator&){ return *this; }
+
+private:
 
     Album* m_current;
     Album* m_root;

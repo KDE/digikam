@@ -407,11 +407,11 @@ DatabaseUrl TAlbum::kurl() const
     return DatabaseUrl::fromTagIds(tagIDs());
 }
 
-Q3ValueList<int> TAlbum::tagIDs() const
+QList<int> TAlbum::tagIDs() const
 {
     if (isRoot())
     {
-        return Q3ValueList<int>();
+        return QList<int>();
     }
     else if (parent())
     {
@@ -419,7 +419,7 @@ Q3ValueList<int> TAlbum::tagIDs() const
     }
     else
     {
-        return Q3ValueList<int>() << id();
+        return QList<int>() << id();
     }
 }
 
