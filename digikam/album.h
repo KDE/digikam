@@ -29,10 +29,10 @@
 
 // Qt includes.
 
+#include <Q3ValueList>
 #include <QString>
 #include <QDateTime>
 #include <QMap>
-#include <Q3ValueList>
 
 // KDE includes.
 
