@@ -6,8 +6,8 @@
  * Date        : 2006-02-23
  * Description : image metadata interface
  *
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -57,7 +57,7 @@ public:
 
     /** Try to extract metadata using dcraw identify method */
     bool loadUsingDcraw(const QString& filePath) const;
-    
+
     /** Metadata manipulation methods */
 
     QString getImageComment() const;
@@ -72,6 +72,12 @@ public:
     bool setImagePhotographerId(const QString& author, const QString& authorTitle) const;
     bool setImageCredits(const QString& credit, const QString& source, const QString& copyright) const;
 
+    /** Return a string with Lens mounted on the front of camera.
+        There no standard Exif tag for Lens informations.
+        Camera makernotes and Xmp tags are parsed. 
+        Take a care : lens informations are not standardized and string content is not homogenous between 
+        camera model/maker.
+     */
     QString getLensDescription() const;
 
     PhotoInfoContainer getPhotographInformations() const;

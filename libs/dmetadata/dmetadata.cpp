@@ -6,8 +6,8 @@
  * Date        : 2006-02-23
  * Description : image metadata interface
  *
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -569,44 +569,61 @@ bool DMetadata::setImageCredits(const QString& credit, const QString& source, co
 
 QString DMetadata::getLensDescription() const
 {
-    // Try to get Lens Data informations from makernote.
+    // -------------------------------------------------------------------
+    // NOTE: Try to get Lens Data informations from Makernotes.
 
     // Canon Cameras.
-    QString lens = getExifTagString("Exif.Canon.0x0095");
+    QString lens = getExifTagString("Exif.CanonCs.Lens");
     if (lens.isEmpty())
     {
-        // Nikon Cameras.
-        lens = getExifTagString("Exif.Nikon3.LensData");
+        // Alternative Canon Cameras.
+        lens = getExifTagString("Exif.Canon.0x0095");
         if (lens.isEmpty())
         {
-            // Minolta Cameras.
-            lens = getExifTagString("Exif.Minolta.LensID");
+            // Nikon Cameras.
+            lens = getExifTagString("Exif.Nikon3.LensData");
             if (lens.isEmpty())
             {
-                // Pentax Cameras.
-                lens = getExifTagString("Exif.Pentax.LensType");
+                // Minolta Cameras.
+                lens = getExifTagString("Exif.Minolta.LensID");
                 if (lens.isEmpty())
                 {
-                    // Panasonic Cameras.
-                    lens = getExifTagString("Exif.Panasonic.0x0310");
+                    // Pentax Cameras.
+                    lens = getExifTagString("Exif.Pentax.LensType");
                     if (lens.isEmpty())
                     {
-                        // Sigma Cameras.
-                        lens = getExifTagString("Exif.Sigma.LensRange");
+                        // Panasonic Cameras.
+                        lens = getExifTagString("Exif.Panasonic.0x0310");
                         if (lens.isEmpty())
                         {
-                            // TODO : add Fuji, Olympus, Sony Cameras before XMP parsing.
-
-                            // XMP aux tags.
-                            lens = getXmpTagString("Xmp.aux.Lens");
+                            // Sigma Cameras.
+                            lens = getExifTagString("Exif.Sigma.LensRange");
                             if (lens.isEmpty())
                             {
-                                // XMP M$ tags (Lens Maker + Lens Model to be compatible with LensFun Database).
-                                lens = getXmpTagString("Xmp.MicrosoftPhoto.LensManufacturer");
-                                if (!lens.isEmpty())
-                                    lens.append(" ");
+                                // TODO : add Fuji, Olympus, Sony Cameras Makernotes before XMP parsing.
 
-                                lens.append(getXmpTagString("Xmp.MicrosoftPhoto.LensModel"));
+                                // -------------------------------------------------------------------
+                                // NOTE: Try to get Lens Data informations from XMP.
+                                // XMP aux tags.
+                                lens = getXmpTagString("Xmp.aux.Lens");
+                                if (lens.isEmpty())
+                                {
+                                    // XMP M$ tags (Lens Maker + Lens Model).
+                                    lens = getXmpTagString("Xmp.MicrosoftPhoto.LensManufacturer");
+                                    if (!lens.isEmpty())
+                                        lens.append(" ");
+
+                                    lens.append(getXmpTagString("Xmp.MicrosoftPhoto.LensModel"));
+
+                                    // -------------------------------------------------------------------
+                                    // NOTE: Try to get Lens Data informations from Unstandard Exif tags.
+
+                                    // Camera Raw tags.
+                                    if (lens.isEmpty())
+                                    {
+                                        lens = getExifTagString("Exif.Photo.0xFDEA");
+                                    }
+                                }
                             }
                         }
                     }
