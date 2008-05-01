@@ -70,6 +70,8 @@ public:
 
     Type groupType() const;
 
+    QList<QRect> startupAnimationArea() const;
+
 signals:
 
     void removeRequested();

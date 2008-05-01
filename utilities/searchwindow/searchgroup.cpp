@@ -79,6 +79,9 @@ void SearchGroup::setup(Type type)
     m_fieldGroups << group;
     m_layout->addWidget(group);
 
+    // this group has no label. Need to show, else it is hidden forever
+    group->setFieldsVisible(true);
+
     // ----- //
 
     label = new SearchFieldGroupLabel(this);
@@ -237,14 +240,19 @@ void SearchGroup::read(SearchXmlCachingReader &reader)
             QString name = reader.fieldName();
 
             SearchField *field = 0;
-            foreach (SearchFieldGroup *fieldGroup, m_fieldGroups)
+            SearchFieldGroup *fieldGroup = 0;
+            foreach (fieldGroup, m_fieldGroups)
             {
                 if ( (field = fieldGroup->fieldForName(name)) )
                     break;
             }
 
             if (field)
+            {
                 field->read(reader);
+                fieldGroup->markField(field);
+                fieldGroup->setFieldsVisible(true);
+            }
             else
             {
                 DWarning() << "Unhandled search field in XML with field name" << name;
@@ -300,6 +308,20 @@ void SearchGroup::reset()
 SearchGroup::Type SearchGroup::groupType() const
 {
     return m_groupType;
+}
+
+QList<QRect> SearchGroup::startupAnimationArea() const
+{
+    QList<QRect> rects;
+    // from subgroups;
+    rects += startupAnimationAreaOfGroups();
+    // field groups
+    foreach (SearchFieldGroup *fieldGroup, m_fieldGroups)
+        rects += fieldGroup->areaOfMarkedFields();
+    // adjust position relative to parent
+    for (QList<QRect>::iterator it = rects.begin(); it != rects.end(); ++it)
+        (*it).translate(pos());
+    return rects;
 }
 
 // ----------------------------------- //
