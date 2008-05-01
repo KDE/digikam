@@ -8,6 +8,7 @@
  * 
  * Copyright (C) 2005-2006 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2005-2006 Joern Ahrens <joern.ahrens@kdemail.net>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,7 +30,7 @@
 
 // Qt includes.
 
-#include <Q3ValueList>
+#include <QList>
 
 // Local includes.
 
@@ -54,13 +55,13 @@ public:
         origin    = 0;
     }
 
-    Q3ValueList<UndoAction*>  undoActions;
-    Q3ValueList<UndoAction*>  redoActions;
-    int                       origin;
+    QList<UndoAction*>  undoActions;
+    QList<UndoAction*>  redoActions;
+    int                 origin;
     
-    UndoCache                *undoCache;
+    UndoCache          *undoCache;
     
-    DImgInterface            *dimgiface;
+    DImgInterface      *dimgiface;
 };
 
 UndoManager::UndoManager(DImgInterface* iface)
@@ -183,7 +184,7 @@ void UndoManager::clear(bool clearCache)
 void UndoManager::clearUndoActions()
 {
     UndoAction *action;
-    Q3ValueList<UndoAction*>::iterator it;
+    QList<UndoAction*>::iterator it;
     
     for(it = d->undoActions.begin(); it != d->undoActions.end(); ++it)
     {
@@ -199,7 +200,7 @@ void UndoManager::clearRedoActions()
         return;
 
     UndoAction *action;
-    Q3ValueList<UndoAction*>::iterator it;
+    QList<UndoAction*>::iterator it;
 
     // get the level of the first redo action
     int level = d->undoActions.size() + 1;
@@ -226,7 +227,7 @@ bool UndoManager::anyMoreRedo()
 
 void UndoManager::getUndoHistory(QStringList &titles)
 {
-    Q3ValueList<UndoAction*>::iterator it;
+    QList<UndoAction*>::iterator it;
 
     for(it = d->undoActions.begin(); it != d->undoActions.end(); ++it)
     {
@@ -236,7 +237,7 @@ void UndoManager::getUndoHistory(QStringList &titles)
 
 void UndoManager::getRedoHistory(QStringList &titles)
 {
-    Q3ValueList<UndoAction*>::iterator it;
+    QList<UndoAction*>::iterator it;
 
     for(it = d->redoActions.begin(); it != d->redoActions.end(); ++it)
     {
