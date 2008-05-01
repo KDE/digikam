@@ -202,9 +202,6 @@ SET(digikam_bin_SRCS
                      scancontroller.cpp
                      searchfolderview.cpp 
                      searchtabheader.cpp
-                     searchresultsview.cpp 
-                     searchresultsitem.cpp 
-                     searchwidgets.cpp 
                      syncjob.cpp 
                      tageditdlg.cpp 
                      tagfolderview.cpp 
