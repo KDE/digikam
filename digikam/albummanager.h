@@ -30,7 +30,7 @@
 
 // Qt includes.
 
-#include <Q3ValueList>
+#include <QList>
 #include <QObject>
 #include <QString>
 #include <QMap>
@@ -64,7 +64,7 @@ class SAlbum;
 class AlbumItemHandler;
 class AlbumManagerPriv;
 
-typedef Q3ValueList<Album*> AlbumList;
+typedef QList<Album*> AlbumList;
 typedef QPair<int, int> YearMonth;
 
 /**
@@ -349,7 +349,7 @@ public:
      * @return A list with the tagPaths for a list of tag IDs.
      * @param tagIDs list of tag album IDs
      */
-    QStringList tagPaths(const Q3ValueList<int> &tagIDs, bool leadingSlash = true) const;
+    QStringList tagPaths(const QList<int> &tagIDs, bool leadingSlash=true) const;
 
     /**
      * @return A list with the tagPaths for a list of tag IDs.

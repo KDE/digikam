@@ -30,18 +30,17 @@ extern "C"
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include <locale.h>
 }
 
 // C++ includes.
 
+#include <clocale>
 #include <cstdlib>
 #include <cstdio>
 #include <cerrno> 
 
 // Qt includes.
 
-#include <Q3Dict>
 #include <Q3IntDict>
 #include <QList>
 #include <QFile>
@@ -624,14 +623,14 @@ void AlbumManager::scanTAlbums()
             {
                 // album image icon
                 QString albumRootPath = CollectionManager::instance()->albumRootPath(info.iconAlbumRootId);
-                album->m_icon = albumRootPath + info.iconRelativePath;
+                album->m_icon         = albumRootPath + info.iconRelativePath;
             }
             else
             {
                 // system icon
                 album->m_icon = info.icon;
             }
-            album->m_pid  = info.pid;
+            album->m_pid = info.pid;
             tagDict.insert(info.id, album);
         }
         tList.clear();
@@ -656,9 +655,9 @@ void AlbumManager::scanTAlbums()
             else
             {
                 DWarning() << "Failed to find parent tag for tag "
-                            << iter.current()->m_title
-                            << " with pid "
-                            << iter.current()->m_pid << endl;
+                           << iter.current()->m_title
+                           << " with pid "
+                           << iter.current()->m_pid << endl;
             }
         }
 
@@ -1385,11 +1384,11 @@ AlbumList AlbumManager::getRecentlyAssignedTags() const
     return resultList;
 }
 
-QStringList AlbumManager::tagPaths(const Q3ValueList<int> &tagIDs, bool leadingSlash) const
+QStringList AlbumManager::tagPaths(const QList<int> &tagIDs, bool leadingSlash) const
 {
     QStringList tagPaths;
 
-    for (Q3ValueList<int>::const_iterator it = tagIDs.begin(); it != tagIDs.end(); ++it)
+    for (QList<int>::const_iterator it = tagIDs.begin(); it != tagIDs.end(); ++it)
     {
         TAlbum *album = findTAlbum(*it);
         if (album)
