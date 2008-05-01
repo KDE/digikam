@@ -447,8 +447,8 @@ void SearchField::setupLabels(QGridLayout *layout, int line)
 {
     m_label->setObjectName("SearchField_MainLabel");
     m_detailLabel->setObjectName("SearchField_DetailLabel");
-    layout->addWidget(m_label, line, 1, Qt::Alignment(Qt::AlignTop | Qt::AlignLeft));
-    layout->addWidget(m_detailLabel, line, 2, Qt::Alignment(Qt::AlignTop | Qt::AlignLeft));
+    layout->addWidget(m_label, line, 1);
+    layout->addWidget(m_detailLabel, line, 2);
 }
 
 void SearchField::setFieldName(const QString &fieldName)
@@ -497,6 +497,18 @@ void SearchField::setCategoryLabelVisibleFromPreviousField(SearchField *previous
         setCategoryLabelVisible(true);
 }
 
+QList<QRect> SearchField::widgetRects(WidgetRectType type) const
+{
+    QList<QRect> rects;
+    if (type == LabelAndValueWidgetRects)
+    {
+        rects << m_label->geometry();
+        rects << m_detailLabel->geometry();
+    }
+    rects += valueWidgetRects();
+    return rects;
+}
+
 // ----------------------------------- //
 
 SearchFieldText::SearchFieldText(QObject *parent)
@@ -535,6 +547,13 @@ void SearchFieldText::reset()
 void SearchFieldText::setValueWidgetsVisible(bool visible)
 {
     m_edit->setVisible(visible);
+}
+
+QList<QRect> SearchFieldText::valueWidgetRects() const
+{
+    QList<QRect> rects;
+    rects << m_edit->geometry();
+    return rects;
 }
 
 // ----------------------------------- //
@@ -703,6 +722,18 @@ void SearchFieldRangeDate::setValueWidgetsVisible(bool visible)
     m_betweenLabel->setVisible(visible);
 }
 
+QList<QRect> SearchFieldRangeDate::valueWidgetRects() const
+{
+    QList<QRect> rects;
+    rects << m_firstDateEdit->geometry();
+    if (m_firstTimeEdit)
+        rects << m_firstTimeEdit->geometry();
+    rects << m_secondDateEdit->geometry();
+    if (m_secondTimeEdit)
+        rects << m_secondTimeEdit->geometry();
+    return rects;
+}
+
 // ----------------------------------- //
 
 SearchFieldRangeInt::SearchFieldRangeInt(QObject *parent)
@@ -837,6 +868,14 @@ void SearchFieldRangeInt::setValueWidgetsVisible(bool visible)
     m_betweenLabel->setVisible(visible);
 }
 
+QList<QRect> SearchFieldRangeInt::valueWidgetRects() const
+{
+    QList<QRect> rects;
+    rects << m_firstBox->geometry();
+    rects << m_secondBox->geometry();
+    return rects;
+}
+
 // ----------------------------------- //
 
 SearchFieldRangeDouble::SearchFieldRangeDouble(QObject *parent)
@@ -965,6 +1004,14 @@ void SearchFieldRangeDouble::setValueWidgetsVisible(bool visible)
     m_firstBox->setVisible(visible);
     m_secondBox->setVisible(visible);
     m_betweenLabel->setVisible(visible);
+}
+
+QList<QRect> SearchFieldRangeDouble::valueWidgetRects() const
+{
+    QList<QRect> rects;
+    rects << m_firstBox->geometry();
+    rects << m_secondBox->geometry();
+    return rects;
 }
 
 // ----------------------------------- //
@@ -1108,6 +1155,13 @@ void SearchFieldChoice::reset()
 void SearchFieldChoice::setValueWidgetsVisible(bool visible)
 {
     m_comboBox->setVisible(visible);
+}
+
+QList<QRect> SearchFieldChoice::valueWidgetRects() const
+{
+    QList<QRect> rects;
+    rects << m_comboBox->geometry();
+    return rects;
 }
 
 /*
@@ -1420,6 +1474,13 @@ void SearchFieldAlbum::setValueWidgetsVisible(bool visible)
     m_comboBox->setVisible(visible);
 }
 
+QList<QRect> SearchFieldAlbum::valueWidgetRects() const
+{
+    QList<QRect> rects;
+    rects << m_comboBox->geometry();
+    return rects;
+}
+
 // ----------------------------------- //
 
 SearchFieldRating::SearchFieldRating(QObject *parent)
@@ -1558,6 +1619,14 @@ void SearchFieldRating::setValueWidgetsVisible(bool visible)
     m_betweenLabel->setVisible(visible);
 }
 
+QList<QRect> SearchFieldRating::valueWidgetRects() const
+{
+    QList<QRect> rects;
+    rects << m_firstBox->geometry();
+    rects << m_secondBox->geometry();
+    return rects;
+}
+
 // ----------------------------------- //
 
 SearchFieldColorDepth::SearchFieldColorDepth(QObject *parent)
@@ -1617,6 +1686,12 @@ void SearchFieldColorDepth::reset()
     m_comboBox->setCurrentIndex(0);
 }
 
+QList<QRect> SearchFieldColorDepth::valueWidgetRects() const
+{
+    QList<QRect> rects;
+    rects << m_comboBox->geometry();
+    return rects;
+}
 
 }
 

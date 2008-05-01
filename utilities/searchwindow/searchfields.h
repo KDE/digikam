@@ -83,12 +83,16 @@ public:
     void setCategoryLabelVisible(bool visible);
     void setCategoryLabelVisibleFromPreviousField(SearchField *previousField);
 
+    enum WidgetRectType { LabelAndValueWidgetRects, ValueWidgetRectsOnly };
+    QList<QRect> widgetRects(WidgetRectType = ValueWidgetRectsOnly) const;
+
 protected:
 
     virtual void setupValueWidgets(QGridLayout *layout, int row, int column) = 0;
     virtual void setupLabels(QGridLayout *layout, int line);
 
     virtual void setValueWidgetsVisible(bool visible) = 0;
+    virtual QList<QRect> valueWidgetRects() const = 0;
 
     QString m_name;
 
@@ -109,6 +113,7 @@ public:
     virtual void write(SearchXmlWriter &writer);
     virtual void setValueWidgetsVisible(bool visible);
     virtual void reset();
+    virtual QList<QRect> valueWidgetRects() const;
 
 protected:
 
@@ -128,6 +133,7 @@ public:
     virtual void write(SearchXmlWriter &writer);
     virtual void reset();
     virtual void setValueWidgetsVisible(bool visible);
+    virtual QList<QRect> valueWidgetRects() const;
 
     void setBetweenText(const QString &text);
     void setNoValueText(const QString &text);
@@ -160,6 +166,7 @@ public:
     virtual void write(SearchXmlWriter &writer);
     virtual void reset();
     virtual void setValueWidgetsVisible(bool visible);
+    virtual QList<QRect> valueWidgetRects() const;
 
     void setBetweenText(const QString &text);
     void setNoValueText(const QString &text);
@@ -198,6 +205,7 @@ public:
     virtual void write(SearchXmlWriter &writer);
     virtual void reset();
     virtual void setValueWidgetsVisible(bool visible);
+    virtual QList<QRect> valueWidgetRects() const;
 
     void setBetweenText(const QString &between);
     void setBoundary(QDateTime min, QDateTime max);
@@ -230,6 +238,7 @@ public:
     virtual void write(SearchXmlWriter &writer);
     virtual void reset();
     virtual void setValueWidgetsVisible(bool visible);
+    virtual QList<QRect> valueWidgetRects() const;
 
 protected slots:
 
@@ -266,6 +275,7 @@ public:
     virtual void write(SearchXmlWriter &writer);
     virtual void reset();
     virtual void setValueWidgetsVisible(bool visible);
+    virtual QList<QRect> valueWidgetRects() const;
 
 protected slots:
 
@@ -294,6 +304,7 @@ public:
     virtual void write(SearchXmlWriter &writer);
     virtual void reset();
     virtual void setValueWidgetsVisible(bool visible);
+    virtual QList<QRect> valueWidgetRects() const;
 
     void setBetweenText(const QString &text);
 
@@ -320,6 +331,7 @@ public:
     virtual void write(SearchXmlWriter &writer);
     virtual void reset();
     virtual void setValueWidgetsVisible(bool visible);
+    virtual QList<QRect> valueWidgetRects() const;
 
 protected:
 
