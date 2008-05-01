@@ -190,9 +190,6 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
     ratingpopupmenu.cpp                 Gilles                 X       DONE       DONE
     ratingwidget.cpp                    Gilles                 X       DONE       DONE
     searchfolderview.cpp                Gilles                 X       DONE       DONE
-    searchresultsitem.cpp               Gilles                 X       DONE                Will become obsolete duing new advanced search tools from Marcel.
-    searchresultsview.cpp               Gilles                 X       DONE       DONE
-    searchwidgets.cpp                   Gilles                 X       DONE                Will become obsolete duing new advanced search tools from Marcel.
     syncjob.cpp                         Gilles                 X       DONE       DONE
     tageditdlg.cpp                      Gilles                 X       DONE       DONE
     tagfilterview.cpp                   Gilles                 X       DONE       DONE
