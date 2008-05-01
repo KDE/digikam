@@ -31,11 +31,11 @@ extern "C"
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include <locale.h>
 }
 
 // C++ includes.
 
+#include <clocale>
 #include <cstdlib>
 #include <cstdio>
 #include <cerrno> 
