@@ -413,6 +413,58 @@ QString SearchXmlWriter::keywordSearch(const QString &keyword)
 }
 
 
+// ---------------------------------------- //
+
+QStringList KeywordSearch::split(const QString &keywords)
+{
+    // get groups with quotation marks
+    QStringList quotationMarkList = keywords.split('"', QString::KeepEmptyParts);
+
+    // split down to single words
+    QStringList keywordList;
+    int quotationMarkCount = (keywords.startsWith('"') ? 1 : 0);
+    foreach (QString group, quotationMarkList)
+    {
+        if (quotationMarkCount % 2)
+        {
+            // inside marks: leave as is
+            if (!group.isEmpty())
+                keywordList << group;
+        }
+        else
+        {
+            // not in quotation marks: split by whitespace
+            keywordList << group.split(QRegExp("\\s+"), QString::SkipEmptyParts);
+        }
+
+        quotationMarkCount++;
+    }
+    return keywordList;
+}
+
+QString KeywordSearch::merge(const QStringList &keywordList)
+{
+    QStringList list(keywordList);
+    // group keyword with spaces in quotation marks
+    for (QStringList::iterator it = list.begin(); it != list.end(); ++it)
+    {
+        if ((*it).contains(' '))
+            *it = (*it).prepend('"').append('"');
+    }
+    // join in a string
+    return list.join(" ");
+}
+
+QString KeywordSearch::merge(const QString &previousContent, const QString &newEntry)
+{
+    QString ne(newEntry);
+    QString pc(previousContent);
+    if (ne.contains(' '))
+        ne = ne.prepend('"').append('"');
+    return pc.append(' ').append(ne);
+}
+
+// ---------------------------------------- //
 
 KeywordSearchReader::KeywordSearchReader(const QString &xml)
     : SearchXmlReader(xml)
@@ -464,6 +516,8 @@ QString KeywordSearchReader::readField()
 }
 
 
+// ---------------------------------------- //
+
 KeywordSearchWriter::KeywordSearchWriter()
     : SearchXmlWriter()
 {
@@ -483,6 +537,8 @@ QString KeywordSearchWriter::xml(const QStringList &keywordList)
 
     return SearchXmlWriter::xml();
 }
+
+// ---------------------------------------- //
 
 SearchXmlCachingReader::SearchXmlCachingReader(const QString &xml)
     : SearchXmlReader(xml),

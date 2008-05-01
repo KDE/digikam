@@ -220,6 +220,25 @@ protected:
     QString m_xml;
 };
 
+namespace KeywordSearch
+{
+
+    /** Splits a given string to a list of keywords.
+        Splits at whitespace, but recognizes quotation marks
+        to group words in a single keyword */
+    DIGIKAM_EXPORT QStringList split(const QString &string);
+
+    /** Reverse of split().
+        From a list of keywords, gives a single string for a text entry field. */
+    DIGIKAM_EXPORT QString merge(const QStringList &keywordList);
+
+    /** Assuming previousContent is a string
+        as accepted by split and returned by merge,
+        adds newEntry as another (single) keyword to the string,
+        returning the combined result. */
+    DIGIKAM_EXPORT QString merge(const QString &previousContent, const QString &newEntry);
+};
+
 class DIGIKAM_EXPORT KeywordSearchReader : public SearchXmlReader
 {
 public:

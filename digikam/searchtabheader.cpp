@@ -269,7 +269,8 @@ SearchWindow *SearchTabHeader::searchWindow()
         d->searchWindow = new SearchWindow;
 
         connect(d->searchWindow, SIGNAL(searchEdited(int, const QString &)),
-                this, SLOT(advancedSearchEdited(int, const QString &)));
+                this, SLOT(advancedSearchEdited(int, const QString &)),
+                Qt::QueuedConnection);
     }
     return d->searchWindow;
 }
@@ -458,29 +459,7 @@ void SearchTabHeader::setCurrentSearch(DatabaseSearch::Type type, const QString 
 
 QString SearchTabHeader::queryFromKeywords(const QString &keywords)
 {
-    // get groups with quotation marks
-    QStringList quotationMarkList = keywords.split('"', QString::KeepEmptyParts);
-
-    // split down to single words
-    QStringList keywordList;
-    int quotationMarkCount = (keywords.startsWith('"') ? 1 : 0);
-    foreach (QString group, quotationMarkList)
-    {
-        if (quotationMarkCount % 2)
-        {
-            // inside marks: leave as is
-            if (!group.isEmpty())
-                keywordList << group;
-        }
-        else
-        {
-            // not in quotation marks: split by whitespace
-            keywordList << group.split(QRegExp("\\s+"), QString::SkipEmptyParts);
-        }
-
-        quotationMarkCount++;
-    }
-
+    QStringList keywordList = KeywordSearch::split(keywords);
     // create xml
     KeywordSearchWriter writer;
     return writer.xml(keywordList);
@@ -490,14 +469,7 @@ QString SearchTabHeader::keywordsFromQuery(const QString &query)
 {
     KeywordSearchReader reader(query);
     QStringList keywordList = reader.keywords();
-    // group keyword with spaces in quotation marks
-    for (QStringList::iterator it = keywordList.begin(); it != keywordList.end(); ++it)
-    {
-        if ((*it).contains(' '))
-            *it = (*it).prepend('"').append('"');
-    }
-    // join in a string
-    return keywordList.join(" ");
+    return KeywordSearch::merge(keywordList);
 }
 
 }
