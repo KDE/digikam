@@ -32,6 +32,7 @@
 // Local includes
 
 #include "ddebug.h"
+#include "themeengine.h"
 #include "searchgroup.h"
 #include "searchfields.h"
 #include "searchutilities.h"
@@ -93,16 +94,49 @@ void SearchFieldGroup::write(SearchXmlWriter &writer)
 
 void SearchFieldGroup::reset()
 {
+    clearMarkedFields();
     foreach(SearchField *field, m_fields)
     {
         field->reset();
     }
 }
 
+void SearchFieldGroup::setFieldsVisible(bool visible)
+{
+    m_controller->setVisible(visible);
+}
+
 void SearchFieldGroup::slotLabelClicked()
 {
-    DDebug() << "slotLabelClicked";
     m_controller->triggerVisibility();
+}
+
+void SearchFieldGroup::markField(SearchField *field)
+{
+    m_markedFields << field;
+}
+
+void SearchFieldGroup::clearMarkedFields()
+{
+    m_markedFields.clear();
+}
+
+QList<QRect> SearchFieldGroup::areaOfMarkedFields() const
+{
+    QList<QRect> rects;
+    if (!m_controller->isVisible())
+        return rects;
+    foreach(SearchField *field, m_markedFields)
+    {
+        if (field->isVisible())
+        {
+            rects += field->widgetRects(SearchField::ValueWidgetRectsOnly);
+        }
+    }
+    // adjust position relative to parent
+    for (QList<QRect>::iterator it = rects.begin(); it != rects.end(); ++it)
+        (*it).translate(pos());
+    return rects;
 }
 
 // ----------------------------------- //

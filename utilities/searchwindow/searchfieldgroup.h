@@ -64,6 +64,14 @@ public:
 
     void reset();
 
+    void markField(SearchField *field);
+    void clearMarkedFields();
+    QList<QRect> areaOfMarkedFields() const;
+
+public slots:
+
+    void setFieldsVisible(bool visible);
+
 protected slots:
 
     void slotLabelClicked();
@@ -74,6 +82,8 @@ protected:
     QGridLayout           *m_layout;
     SearchFieldGroupLabel *m_label;
     VisibilityController  *m_controller;
+
+    QSet<SearchField*>     m_markedFields;
 };
 
 class SearchFieldGroupLabel : public QWidget
