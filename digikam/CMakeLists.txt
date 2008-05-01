@@ -200,10 +200,8 @@ SET(digikam_bin_SRCS
                      ratingpopupmenu.cpp 
                      ratingwidget.cpp 
                      scancontroller.cpp
-                     searchadvanceddialog.cpp 
                      searchfolderview.cpp 
                      searchtabheader.cpp
-                     searchquickdialog.cpp 
                      searchresultsview.cpp 
                      searchresultsitem.cpp 
                      searchwidgets.cpp 
