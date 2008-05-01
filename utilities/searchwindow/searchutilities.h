@@ -68,6 +68,8 @@ public:
     void addObject(VisibilityObject *object);
     void addWidget(QWidget *widget);
 
+    bool isVisible() const;
+
 public slots:
 
     void setVisible(bool visible);

@@ -149,6 +149,14 @@ void VisibilityController::triggerVisibility()
         setVisible(true);
 }
 
+bool VisibilityController::isVisible() const
+{
+    if (m_status == Shown || m_status == Showing)
+        return true;
+    else
+        return false;
+}
+
 void VisibilityController::beginStatusChange()
 {
     allSteps();
