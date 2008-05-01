@@ -7,6 +7,7 @@
  * Description : albums history manager.
  * 
  * Copyright (C) 2004 by Joern Ahrens <joern.ahrens@kdemail.net>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -68,8 +69,8 @@ public:
 AlbumHistory::AlbumHistory()
 {
     m_backwardStack = new AlbumStack;
-    m_forwardStack = new AlbumStack;
-    m_moving = false;
+    m_forwardStack  = new AlbumStack;
+    m_moving        = false;
 }
 
 AlbumHistory::~AlbumHistory()
@@ -83,15 +84,19 @@ AlbumHistory::~AlbumHistory()
 void AlbumHistory::clearHistory()
 {
     AlbumStack::iterator iter = m_backwardStack->begin();
-    AlbumStack::iterator end = m_backwardStack->end();
+    AlbumStack::iterator end  = m_backwardStack->end();
+
     for(; iter != end; ++iter)
         delete *iter;
+
     m_backwardStack->clear();
 
     iter = m_forwardStack->begin();
     end = m_forwardStack->end();
+
     for(; iter != end; ++iter)
         delete *iter;
+
     m_forwardStack->clear();
 
     m_moving = false;
@@ -121,10 +126,10 @@ void AlbumHistory::addAlbum(Album *album, QWidget *widget)
     if(!m_forwardStack->isEmpty())
     {
         AlbumStack::iterator iter = m_forwardStack->begin();
+
         for(; iter != m_forwardStack->end(); ++iter)
-        {
             delete *iter;
-        }
+
         m_forwardStack->clear();
     }
 }
@@ -142,7 +147,7 @@ void AlbumHistory::deleteAlbum(Album *album)
         if((*iter)->album == album)
         {
             delete *iter;
-            iter = m_backwardStack->remove(iter);            
+            iter = m_backwardStack->erase(iter);            
         }
         else
         {
@@ -150,13 +155,13 @@ void AlbumHistory::deleteAlbum(Album *album)
         }
     }
     iter = m_forwardStack->begin();
-    end = m_forwardStack->end();
+    end  = m_forwardStack->end();
     while(iter != end)
     {
         if((*iter)->album == album)
         {
             delete *iter;
-            iter = m_forwardStack->remove(iter);
+            iter = m_forwardStack->erase(iter);
         }
         else
         {
@@ -181,7 +186,7 @@ void AlbumHistory::deleteAlbum(Album *album)
     {
         if(*lhs == *rhs)
         {
-            rhs = m_backwardStack->remove(rhs);
+            rhs = m_backwardStack->erase(rhs);
         }
         else
         {
@@ -196,11 +201,11 @@ void AlbumHistory::deleteAlbum(Album *album)
     {
         if(*lhs == *rhs)
         {
-            rhs = m_forwardStack->remove(rhs);
+            rhs = m_forwardStack->erase(rhs);
         }
         else
         {
-            if(lhs == m_backwardStack->fromLast())
+            if(lhs == (m_backwardStack->isEmpty() ? m_backwardStack->end() : --m_backwardStack->end()))
             {
                 lhs = m_forwardStack->begin();
             }
@@ -223,7 +228,7 @@ void AlbumHistory::getBackwardHistory(QStringList &list) const
         return;
     
     AlbumStack::const_iterator iter = m_backwardStack->begin();
-    for(; iter != m_backwardStack->fromLast(); ++iter)
+    for(; iter != (m_backwardStack->isEmpty() ? m_backwardStack->end() : --m_backwardStack->end()); ++iter)
     {
         list.push_front((*iter)->album->title());
     }
@@ -243,7 +248,7 @@ void AlbumHistory::getForwardHistory(QStringList &list) const
 
 void AlbumHistory::back(Album **album, QWidget **widget, unsigned int steps)
 {
-    *album = 0;
+    *album  = 0;
     *widget = 0;
     
     if(m_backwardStack->count() <= 1 || (int)steps > m_backwardStack->count())
@@ -252,7 +257,7 @@ void AlbumHistory::back(Album **album, QWidget **widget, unsigned int steps)
     while(steps)
     {
         m_forwardStack->push_front(m_backwardStack->last());
-        m_backwardStack->erase(m_backwardStack->fromLast());
+        m_backwardStack->erase((m_backwardStack->isEmpty() ? m_backwardStack->end() : --m_backwardStack->end()));
         --steps;
     }
     m_moving = true;    
@@ -260,14 +265,14 @@ void AlbumHistory::back(Album **album, QWidget **widget, unsigned int steps)
     HistoryItem *item = getCurrentAlbum();
     if(item)
     {
-        *album = item->album;
+        *album  = item->album;
         *widget = item->widget;
     }
 }
 
 void AlbumHistory::forward(Album **album, QWidget **widget, unsigned int steps)
 {
-    *album = 0;
+    *album  = 0;
     *widget = 0;
 
     if(m_forwardStack->isEmpty() || (int)steps > m_forwardStack->count())
@@ -278,7 +283,7 @@ void AlbumHistory::forward(Album **album, QWidget **widget, unsigned int steps)
     HistoryItem *item = getCurrentAlbum();
     if(item)
     {
-        *album = item->album;
+        *album  = item->album;
         *widget = item->widget;
     }
 }
@@ -307,7 +312,7 @@ HistoryItem* AlbumHistory::getCurrentAlbum() const
 
 void AlbumHistory::getCurrentAlbum(Album **album, QWidget **widget) const
 {
-    *album = 0;
+    *album  = 0;
     *widget = 0;
     
     if(m_backwardStack->isEmpty())
@@ -316,7 +321,7 @@ void AlbumHistory::getCurrentAlbum(Album **album, QWidget **widget) const
     HistoryItem *item = m_backwardStack->last();
     if(item)
     {
-        *album = item->album;
+        *album  = item->album;
         *widget = item->widget;
     }
 }

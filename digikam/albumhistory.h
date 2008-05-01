@@ -7,6 +7,7 @@
  * Description : Albums history manager. 
  * 
  * Copyright (C) 2004 by Joern Ahrens <joern.ahrens@kdemail.net>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,7 +29,7 @@
 
 // Qt includes.
 
-#include <Q3ValueList>
+#include <QList>
 #include <QObject>
 #include <QStringList>
 
@@ -70,12 +71,15 @@ private:
     
     HistoryItem*    getCurrentAlbum() const;
     void            forward(unsigned int steps=1);
+
+private:
     
-    typedef Q3ValueList<HistoryItem*> AlbumStack;
+    typedef QList<HistoryItem*> AlbumStack;
     
+    bool             m_moving;
+
     AlbumStack      *m_backwardStack;
     AlbumStack      *m_forwardStack;
-    bool             m_moving;
 };
 
 }  // namespace Digikam
