@@ -27,7 +27,7 @@
 
 // Qt includes.
 
-#include <Q3Cache>
+#include <QCache>
 #include <QString>
 #include <QPainter>
 #include <QImage>
@@ -74,30 +74,29 @@ public:
         tileTmpPix = new QPixmap(tileSize, tileSize);
 
         tileCache.setMaxCost((10*1024*1024)/(tileSize*tileSize*4));
-        tileCache.setAutoDelete(true);
     }
 
-    bool             autoZoom;
-    bool             fullScreen;
+    bool                     autoZoom;
+    bool                     fullScreen;
 
-    const int        tileSize;
-    int              midButtonX;
-    int              midButtonY;
-    int              zoomWidth;
-    int              zoomHeight;
+    const int                tileSize;
+    int                      midButtonX;
+    int                      midButtonY;
+    int                      zoomWidth;
+    int                      zoomHeight;
 
-    double           zoom;
-    double           minZoom;
-    double           maxZoom;
-    const double     zoomMultiplier;
+    double                   zoom;
+    double                   minZoom;
+    double                   maxZoom;
+    const double             zoomMultiplier;
 
-    QPoint           centerZoomPoint;
+    QPoint                   centerZoomPoint;
 
-    QRect            pixmapRect;
+    QRect                    pixmapRect;
 
-    Q3Cache<QPixmap> tileCache;
+    QCache<QString, QPixmap> tileCache;
 
-    QPixmap*         tileTmpPix;
+    QPixmap*                 tileTmpPix;
 };
 
 PreviewWidget::PreviewWidget(QWidget *parent)
@@ -110,10 +109,10 @@ PreviewWidget::PreviewWidget(QWidget *parent)
 
     viewport()->setMouseTracking(false);
 
-    horizontalScrollBar()->setSingleStep( 1 );
-    horizontalScrollBar()->setPageStep( 1 );
-    verticalScrollBar()->setSingleStep( 1 );
-    verticalScrollBar()->setPageStep( 1 );
+    horizontalScrollBar()->setSingleStep(1);
+    horizontalScrollBar()->setPageStep(1);
+    verticalScrollBar()->setSingleStep(1);
+    verticalScrollBar()->setPageStep(1);
 
     setFrameStyle(QFrame::StyledPanel|QFrame::Plain); 
     setMargin(0);
@@ -456,7 +455,7 @@ void PreviewWidget::viewportPaintEvent(QPaintEvent *e)
             for (int i = x1 ; i < x2 ; i += d->tileSize)
             {
                 QString key  = QString("%1,%2").arg(i).arg(j);
-                QPixmap *pix = d->tileCache.find(key);
+                QPixmap *pix = d->tileCache.object(key);
 
                 if (!pix)
                 {
