@@ -23,7 +23,10 @@
 
 // Qt includes
 
+#include <QGradient>
+#include <QPaintEvent>
 #include <QPainter>
+#include <QTimeLine>
 #include <QVBoxLayout>
 
 // KDE includes
@@ -113,12 +116,45 @@ void AbstractSearchGroupContainer::removeSendingSearchGroup()
     removeSearchGroup(static_cast<SearchGroup *>(sender()));
 }
 
-SearchView::SearchView()
+QList<QRect> AbstractSearchGroupContainer::startupAnimationAreaOfGroups() const
 {
-    m_pixmapCache.setMaxCost(4);
+    QList<QRect> list;
+    foreach (SearchGroup *group, m_groups)
+        list += group->startupAnimationArea();
+    return list;
 }
 
 // ------------------------------------- //
+
+class SearchViewPrivate
+{
+public:
+
+    SearchViewPrivate()
+    {
+        layout        = 0;
+        bar           = 0;
+        timeline      = 0;
+        needAnimationForReadIn = false;
+    }
+
+    QVBoxLayout         *layout;
+    SearchViewBottomBar *bar;
+    QCache<QString, QPixmap> pixmapCache;
+    QTimeLine           *timeline;
+    bool                 needAnimationForReadIn;
+};
+
+SearchView::SearchView()
+{
+    d = new SearchViewPrivate;
+    d->pixmapCache.setMaxCost(4);
+}
+
+SearchView::~SearchView()
+{
+    delete d;
+}
 
 void SearchView::setup()
 {
@@ -126,32 +162,42 @@ void SearchView::setup()
             this, SLOT(setTheme()));
     setTheme();
 
-    m_layout = new QVBoxLayout;
-    m_layout->setContentsMargins(0, 0, 0, 0);
-    m_layout->setSpacing(0);
+    d->layout = new QVBoxLayout;
+    d->layout->setContentsMargins(0, 0, 0, 0);
+    d->layout->setSpacing(0);
 
-    m_bar = new SearchViewBottomBar(this);
+    d->bar = new SearchViewBottomBar(this);
     // add stretch at bottom
-    m_layout->addStretch(1);
+    d->layout->addStretch(1);
     // add bottom bar
-    m_layout->addWidget(m_bar);
+    d->layout->addWidget(d->bar);
 
     // create initial group
     addSearchGroup();
 
-    setLayout(m_layout);
+    setLayout(d->layout);
 
-    connect(m_bar, SIGNAL(okPressed()),
+    // prepare animation
+    d->timeline = new QTimeLine(500, this);
+    d->timeline->setFrameRange(0, 100);
+
+    connect(d->bar, SIGNAL(okPressed()),
             this, SIGNAL(searchOk()));
 
-    connect(m_bar, SIGNAL(cancelPressed()),
+    connect(d->bar, SIGNAL(cancelPressed()),
             this, SIGNAL(searchCancel()));
 
-    connect(m_bar, SIGNAL(tryoutPressed()),
+    connect(d->bar, SIGNAL(tryoutPressed()),
             this, SIGNAL(searchTryout()));
 
-    connect(m_bar, SIGNAL(addGroupPressed()),
+    connect(d->bar, SIGNAL(addGroupPressed()),
             this, SLOT(slotAddGroupButton()));
+
+    connect(d->timeline, SIGNAL(finished()),
+            this, SLOT(timeLineFinished()));
+
+    connect(d->timeline, SIGNAL(frameChanged(int)),
+            this, SLOT(animationFrame(int)));
 }
 
 void SearchView::read(const QString &xml)
@@ -168,12 +214,17 @@ void SearchView::read(const QString &xml)
     }
 
     finishReadingGroups();
+
+    if (isVisible())
+        startAnimation();
+    else
+        d->needAnimationForReadIn = true;
 }
 
 void SearchView::addGroupToLayout(SearchGroup *group)
 {
     // insert at last-but-two position; leave bottom bar and stretch and the bottom
-    m_layout->insertWidget(m_layout->count()-2, group);
+    d->layout->insertWidget(d->layout->count()-2, group);
 }
 
 SearchGroup *SearchView::createSearchGroup()
@@ -194,6 +245,78 @@ QString SearchView::write()
     writeGroups(writer);
     writer.finish();
     return writer.xml();
+}
+
+void SearchView::startAnimation()
+{
+    d->timeline->setCurveShape(QTimeLine::EaseInCurve);
+    d->timeline->setDuration(500);
+    d->timeline->setDirection(QTimeLine::Forward);
+#if QT_VERSION >= 0x040400
+    d->timeline->start();
+#endif
+}
+
+void SearchView::animationFrame(int)
+{
+    update();
+}
+
+void SearchView::timeLineFinished()
+{
+    if (d->timeline->direction() == QTimeLine::Forward)
+    {
+        d->timeline->setDirection(QTimeLine::Backward);
+        d->timeline->start();
+    }
+    else
+    {
+        update();
+    }
+}
+
+void SearchView::showEvent(QShowEvent *)
+{
+    if (d->needAnimationForReadIn)
+    {
+        d->needAnimationForReadIn = false;
+        startAnimation();
+    }
+}
+
+void SearchView::paintEvent(QPaintEvent *)
+{
+#if QT_VERSION >= 0x040400
+    if (d->timeline->state() == QTimeLine::Running)
+    {
+        QList<QRect> rects = startupAnimationAreaOfGroups();
+        if (rects.isEmpty())
+            return;
+
+        int animationStep = d->timeline->currentFrame();
+        const int margin = 2;
+
+        QRadialGradient grad(0.5, 0.5, 1, 0.5, 0.3);
+        grad.setCoordinateMode(QGradient::ObjectBoundingMode);
+        QColor color = ThemeEngine::instance()->textSpecialRegColor();
+        QColor colorStart(color), colorEnd(color);
+        colorStart.setAlphaF(0);
+        colorEnd.setAlphaF(color.alphaF()  * animationStep / 100.0);
+        grad.setColorAt(0, colorEnd);
+        grad.setColorAt(1, colorStart);
+
+        QPainter p(this);
+        p.setRenderHint(QPainter::Antialiasing, true);
+        p.setPen(QPen(Qt::NoPen));
+        p.setBrush(grad);
+
+        foreach(QRect rect, rects)
+        {
+            rect.adjust(-margin, -margin, margin, margin);
+            p.drawRoundedRect(rect, 4, 4);
+        }
+    }
+#endif
 }
 
 void SearchView::setTheme()
@@ -252,17 +375,17 @@ void SearchView::setTheme()
 
     QWidget::setStyleSheet(sheet);
 
-    m_pixmapCache.clear();
+    d->pixmapCache.clear();
 }
 
 QPixmap SearchView::cachedBannerPixmap(int w, int h)
 {
     QString key = "BannerPixmap-" + QString::number(w) + "-" + QString::number(h);
-    QPixmap *pix = m_pixmapCache.object(key);
+    QPixmap *pix = d->pixmapCache.object(key);
     if (!pix)
     {
         QPixmap pixmap = ThemeEngine::instance()->bannerPixmap(w, h);
-        m_pixmapCache.insert(key, new QPixmap(pixmap));
+        d->pixmapCache.insert(key, new QPixmap(pixmap));
         return pixmap;
     }
     else

@@ -26,9 +26,10 @@
 
 // Qt includes
 
-#include <QWidget>
-#include <QList>
 #include <QCache>
+#include <QList>
+#include <QRect>
+#include <QWidget>
 
 // KDE includes
 
@@ -36,6 +37,7 @@
 
 
 class QVBoxLayout;
+class QTimeLine;
 class KDialogButtonBox;
 class KPushButton;
 
@@ -85,6 +87,8 @@ protected:
     void finishReadingGroups();
     /// Write contained groups to writer
     void writeGroups(SearchXmlWriter &writer);
+    /// Collects the data from the same method of all contained groups (position relative to this widget)
+    QList<QRect> startupAnimationAreaOfGroups() const;
     /// Reimplement: create and setup a search group
     virtual SearchGroup *createSearchGroup() = 0;
     /// Reimplement: Adds a newly created group to the layout structures
@@ -100,6 +104,7 @@ protected:
     QList<SearchGroup *> m_groups;
 };
 
+class SearchViewPrivate;
 class SearchView : public AbstractSearchGroupContainer, public SearchViewThemedPartsCache
 {
 
@@ -108,6 +113,7 @@ class SearchView : public AbstractSearchGroupContainer, public SearchViewThemedP
 public:
 
     SearchView();
+    ~SearchView();
 
     void setup();
 
@@ -124,6 +130,9 @@ protected slots:
 
     void setTheme();
     void slotAddGroupButton();
+    void startAnimation();
+    void animationFrame(int);
+    void timeLineFinished();
 
 public:
 
@@ -132,13 +141,16 @@ public:
 
 protected:
 
+    virtual void paintEvent(QPaintEvent *e);
+    virtual void showEvent(QShowEvent *event);
+
     virtual SearchGroup *createSearchGroup();
     virtual void addGroupToLayout(SearchGroup *group);
     QPixmap cachedBannerPixmap(int w, int h);
 
-    QVBoxLayout         *m_layout;
-    SearchViewBottomBar *m_bar;
-    QCache<QString, QPixmap> m_pixmapCache;
+private:
+
+    SearchViewPrivate   *d;
 };
 
 class SearchViewBottomBar : public QWidget
