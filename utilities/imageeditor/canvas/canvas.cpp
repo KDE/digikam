@@ -29,7 +29,7 @@
 
 // Qt includes.
 
-#include <Q3Cache>
+#include <QCache>
 #include <QFile>
 #include <QString>
 #include <QEvent>
@@ -107,47 +107,46 @@ public:
         tileTmpPix       = new QPixmap(tileSize, tileSize);
 
         tileCache.setMaxCost((10*1024*1024)/(tileSize*tileSize*4));
-        tileCache.setAutoDelete(true);
     }
 
-    bool                 autoZoom;
-    bool                 fullScreen;
-    bool                 pressedMoved;
-    bool                 pressedMoving;
-    bool                 ltActive;
-    bool                 rtActive;
-    bool                 lbActive;
-    bool                 rbActive;
-    bool                 midButtonPressed;
+    bool                     autoZoom;
+    bool                     fullScreen;
+    bool                     pressedMoved;
+    bool                     pressedMoving;
+    bool                     ltActive;
+    bool                     rtActive;
+    bool                     lbActive;
+    bool                     rbActive;
+    bool                     midButtonPressed;
 
-    const int            tileSize;
-    int                  midButtonX;
-    int                  midButtonY;
+    const int                tileSize;
+    int                      midButtonX;
+    int                      midButtonY;
 
-    double               zoom;
-    const double         minZoom;
-    const double         maxZoom;
-    const double         zoomMultiplier;
+    double                   zoom;
+    const double             minZoom;
+    const double             maxZoom;
+    const double             zoomMultiplier;
 
-    QToolButton         *cornerButton;
+    QToolButton             *cornerButton;
 
-    QRubberBand         *rubber;
-    QRect                pixmapRect;
+    QRubberBand             *rubber;
+    QRect                    pixmapRect;
 
-    Q3Cache<QPixmap>     tileCache;
+    QCache<QString, QPixmap> tileCache;
 
-    QPixmap*             tileTmpPix;
-    QPixmap              qcheck;
+    QPixmap*                 tileTmpPix;
+    QPixmap                  qcheck;
 
-    QColor               bgColor;
+    QColor                   bgColor;
 
-    QWidget             *parent;
+    QWidget                 *parent;
 
-    KPopupFrame         *panIconPopup;
+    KPopupFrame             *panIconPopup;
 
-    DImgInterface       *im;
+    DImgInterface           *im;
 
-    ImagePanIconWidget  *panIconWidget;
+    ImagePanIconWidget      *panIconWidget;
 };
 
 Canvas::Canvas(QWidget *parent)
@@ -524,7 +523,7 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
             for (int i = x1 ; i < x2 ; i += d->tileSize)
             {
                 QString key  = QString("%1,%2").arg(i).arg(j);
-                QPixmap *pix = d->tileCache.find(key);
+                QPixmap *pix = d->tileCache.object(key);
 
                 if (!pix)
                 {
