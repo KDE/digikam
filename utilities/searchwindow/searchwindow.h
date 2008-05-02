@@ -81,6 +81,10 @@ protected slots:
     void searchCancel();
     void searchTryout();
 
+protected:
+
+    virtual void keyPressEvent(QKeyEvent *);
+
 private:
 
     SearchWindowPriv *d;

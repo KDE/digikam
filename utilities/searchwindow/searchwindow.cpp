@@ -25,6 +25,7 @@
 
 #include <QScrollArea>
 #include <QHBoxLayout>
+#include <QKeyEvent>
 
 // KDE includes
 
@@ -32,6 +33,7 @@
 
 // Local includes
 
+#include "ddebug.h"
 #include "themeengine.h"
 #include "searchview.h"
 #include "searchwindow.h"
@@ -49,15 +51,17 @@ public:
     {
         scrollArea      = 0;
         searchView      = 0;
+        bottomBar       = 0;
         currentId       = -1;
         hasTouchedXml   = false;
     }
 
-    QScrollArea *scrollArea;
-    SearchView  *searchView;
-    int          currentId;
-    bool         hasTouchedXml;
-    QString      oldXml;
+    QScrollArea         *scrollArea;
+    SearchView          *searchView;
+    SearchViewBottomBar *bottomBar;
+    int                  currentId;
+    bool                 hasTouchedXml;
+    QString              oldXml;
 };
 
 SearchWindow::SearchWindow()
@@ -65,7 +69,7 @@ SearchWindow::SearchWindow()
 {
     d = new SearchWindowPriv;
 
-    QHBoxLayout *layout = new QHBoxLayout;
+    QVBoxLayout *layout = new QVBoxLayout;
 
     d->scrollArea = new QScrollArea(this);
     d->scrollArea->setWidgetResizable(true);
@@ -74,10 +78,14 @@ SearchWindow::SearchWindow()
     d->searchView = new SearchView;
     d->searchView->setup();
 
+    d->bottomBar = new SearchViewBottomBar(d->searchView);
+    d->searchView->setBottomBar(d->bottomBar);
+
     d->scrollArea->setWidget(d->searchView);
     d->scrollArea->setFrameStyle(QFrame::NoFrame);
 
     layout->addWidget(d->scrollArea);
+    layout->addWidget(d->bottomBar);
     layout->setMargin(0);
     layout->setSpacing(0);
     setLayout(layout);
@@ -144,6 +152,29 @@ void SearchWindow::searchTryout()
 {
     d->hasTouchedXml = true;
     emit searchEdited(d->currentId, search());
+}
+
+void SearchWindow::keyPressEvent(QKeyEvent *e)
+{
+    // Implement keys like in a dialog
+    if (!e->modifiers() || (e->modifiers() & Qt::KeypadModifier && e->key() == Qt::Key_Enter))
+    {
+        switch(e->key())
+        {
+            case Qt::Key_Enter:
+            case Qt::Key_Return:
+            case Qt::Key_Select:
+                searchOk();
+                break;
+            case Qt::Key_F4:
+            case Qt::Key_Escape:
+            case Qt::Key_Back:
+                searchCancel();
+                break;
+            default:
+                break;
+        }
+    }
 }
 
 

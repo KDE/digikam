@@ -166,11 +166,8 @@ void SearchView::setup()
     d->layout->setContentsMargins(0, 0, 0, 0);
     d->layout->setSpacing(0);
 
-    d->bar = new SearchViewBottomBar(this);
     // add stretch at bottom
     d->layout->addStretch(1);
-    // add bottom bar
-    d->layout->addWidget(d->bar);
 
     // create initial group
     addSearchGroup();
@@ -180,6 +177,17 @@ void SearchView::setup()
     // prepare animation
     d->timeline = new QTimeLine(500, this);
     d->timeline->setFrameRange(0, 100);
+
+    connect(d->timeline, SIGNAL(finished()),
+            this, SLOT(timeLineFinished()));
+
+    connect(d->timeline, SIGNAL(frameChanged(int)),
+            this, SLOT(animationFrame(int)));
+}
+
+void SearchView::setBottomBar(SearchViewBottomBar *bar)
+{
+    d->bar = bar;
 
     connect(d->bar, SIGNAL(okPressed()),
             this, SIGNAL(searchOk()));
@@ -192,12 +200,6 @@ void SearchView::setup()
 
     connect(d->bar, SIGNAL(addGroupPressed()),
             this, SLOT(slotAddGroupButton()));
-
-    connect(d->timeline, SIGNAL(finished()),
-            this, SLOT(timeLineFinished()));
-
-    connect(d->timeline, SIGNAL(frameChanged(int)),
-            this, SLOT(animationFrame(int)));
 }
 
 void SearchView::read(const QString &xml)
@@ -223,8 +225,8 @@ void SearchView::read(const QString &xml)
 
 void SearchView::addGroupToLayout(SearchGroup *group)
 {
-    // insert at last-but-two position; leave bottom bar and stretch and the bottom
-    d->layout->insertWidget(d->layout->count()-2, group);
+    // insert at last-but-one position; leave stretch at the bottom
+    d->layout->insertWidget(d->layout->count()-1, group);
 }
 
 SearchGroup *SearchView::createSearchGroup()

@@ -116,6 +116,7 @@ public:
     ~SearchView();
 
     void setup();
+    void setBottomBar(SearchViewBottomBar *bar);
 
     void read(const QString &search);
     QString write();
