@@ -305,7 +305,7 @@ void ImageQueryBuilder::buildField(QString &sql, SearchXmlCachingReader &reader,
     FieldQueryBuilder fieldQuery(sql, reader, boundValues, relation);
     if (name == "albumid")
     {
-        fieldQuery.addIntField("Images.id");
+        fieldQuery.addIntField("Images.album");
     }
     else if (name == "albumname")
     {
@@ -579,6 +579,8 @@ void ImageQueryBuilder::buildField(QString &sql, SearchXmlCachingReader &reader,
     {
         // keyword is the common search in the text fields
 
+        sql += " ( ";
+
         addSqlOperator(sql, SearchXml::Or, true);
         buildField(sql, reader, "albumname", boundValues);
 
@@ -596,6 +598,8 @@ void ImageQueryBuilder::buildField(QString &sql, SearchXmlCachingReader &reader,
 
         addSqlOperator(sql, SearchXml::Or, false);
         buildField(sql, reader, "comment", boundValues);
+
+        sql += " ) ";
     }
 }
 
