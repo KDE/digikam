@@ -120,6 +120,16 @@ protected:
     QLineEdit *m_edit;
 };
 
+class SearchFieldKeyword : public SearchFieldText
+{
+public:
+
+    SearchFieldKeyword(QObject *parent);
+
+    virtual void read(SearchXmlCachingReader &reader);
+    virtual void write(SearchXmlWriter &writer);
+};
+
 class SearchFieldRangeInt : public SearchField
 {
     Q_OBJECT

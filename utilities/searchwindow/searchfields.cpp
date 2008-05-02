@@ -405,9 +405,9 @@ SearchField *SearchField::createField(const QString &name, SearchFieldGroup *par
     }
     else if (name == "keyword")
     {
-        SearchFieldText *field = new SearchFieldText(parent);
+        SearchFieldText *field = new SearchFieldKeyword(parent);
         field->setFieldName(name);
-        field->setText(i18n("Find results"), i18n("Find pictures with all of the words"));
+        field->setText(QString(), i18n("Find pictures that have associated all these words:"));
         return field;
     }
     else
@@ -554,6 +554,33 @@ QList<QRect> SearchFieldText::valueWidgetRects() const
     QList<QRect> rects;
     rects << m_edit->geometry();
     return rects;
+}
+
+// ----------------------------------- //
+
+SearchFieldKeyword::SearchFieldKeyword(QObject *parent)
+    : SearchFieldText(parent)
+{
+}
+
+void SearchFieldKeyword::read(SearchXmlCachingReader &reader)
+{
+    QString keyword = reader.value();
+    m_edit->setText(KeywordSearch::merge(m_edit->text(), keyword));
+}
+
+void SearchFieldKeyword::write(SearchXmlWriter &writer)
+{
+    QStringList keywordList = KeywordSearch::split(m_edit->text());
+    foreach (const QString &keyword, keywordList)
+    {
+        if (!keyword.isEmpty())
+        {
+            writer.writeField(m_name, SearchXml::Like);
+            writer.writeValue(keyword);
+            writer.finishField();
+        }
+    }
 }
 
 // ----------------------------------- //
