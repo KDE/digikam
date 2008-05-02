@@ -1458,7 +1458,7 @@ bool AlbumManager::updateSAlbum(SAlbum* album, const QString &changedQuery,
 
     QString oldName = album->title();
 
-    album->setSearch(album->type(), changedQuery);
+    album->setSearch(newType, changedQuery);
     album->setTitle(newName);
     if (oldName != album->title())
         emit signalAlbumRenamed(album);
