@@ -56,6 +56,60 @@
 namespace Digikam
 {
 
+class KeywordLineEdit : public KLineEdit
+{
+public:
+
+    KeywordLineEdit(QWidget *parent = 0) : KLineEdit(parent)
+    {
+        m_hasAdvanced = false;
+    }
+
+    void showAdvancedSearch(bool hasAdvanced)
+    {
+        if (m_hasAdvanced == hasAdvanced)
+            return;
+        m_hasAdvanced = hasAdvanced;
+        adjustStatus(m_hasAdvanced);
+    }
+
+    void focusInEvent(QFocusEvent *e)
+    {
+        if (m_hasAdvanced)
+            adjustStatus(false);
+        KLineEdit::focusInEvent(e);
+    }
+
+    void focusOutEvent(QFocusEvent *e)
+    {
+        KLineEdit::focusOutEvent(e);
+        if (m_hasAdvanced)
+            adjustStatus(true);
+    }
+
+    void adjustStatus(bool adv)
+    {
+        if (adv)
+        {
+            QPalette p = palette();
+            p.setColor(QColorGroup::Text, p.color(QPalette::Disabled, QColorGroup::Text));
+            setPalette(p);
+
+            setText(i18n("(Advanced Search)"));
+        }
+        else
+        {
+            setPalette(QPalette());
+            if (text() == i18n("(Advanced Search)"))
+                setText(QString());
+        }
+    }
+
+protected:
+
+    bool m_hasAdvanced;
+};
+
 
 class SearchTabHeaderPriv
 {
@@ -89,7 +143,7 @@ public:
 
     QStackedLayout     *lowerArea;
 
-    KLineEdit          *keywordEdit;
+    KeywordLineEdit    *keywordEdit;
     QPushButton        *advancedEditLabel;
 
     KLineEdit          *saveNameEdit;
@@ -142,7 +196,7 @@ SearchTabHeader::SearchTabHeader(QWidget *parent)
     QGridLayout *grid1 = new QGridLayout;
 
     QLabel *searchLabel = new QLabel(i18n("Search:"));
-    d->keywordEdit = new KLineEdit;
+    d->keywordEdit = new KeywordLineEdit;
     d->keywordEdit->setClearButtonShown(true);
 
     d->advancedEditLabel = new QPushButton(i18n("Advanced Search..."));
@@ -279,8 +333,7 @@ void SearchTabHeader::selectedSearchChanged(SAlbum *album)
 {
     // Signal from SearchFolderView that a search has been selected.
 
-    if (d->currentAlbum == album)
-        return;
+    // Dont check on d->currentAlbum == album, rather update status (which may have changed on same album)
 
     d->currentAlbum = album;
 
@@ -297,18 +350,27 @@ void SearchTabHeader::selectedSearchChanged(SAlbum *album)
         {
             d->lowerArea->setCurrentWidget(d->saveAsWidget);
             if (album->isKeywordSearch())
+            {
                 d->keywordEdit->setText(keywordsFromQuery(album->query()));
+                d->keywordEdit->showAdvancedSearch(false);
+            }
+            else
+            {
+                d->keywordEdit->showAdvancedSearch(true);
+            }
         }
         else if (album->isKeywordSearch())
         {
             d->lowerArea->setCurrentWidget(d->editSimpleWidget);
             d->storedKeywordEditName->setText(album->title());
             d->storedKeywordEdit->setText(keywordsFromQuery(album->query()));
+            d->keywordEdit->showAdvancedSearch(false);
         }
         else
         {
             d->lowerArea->setCurrentWidget(d->editAdvancedWidget);
             d->storedAdvancedEditName->setText(album->title());
+            d->keywordEdit->showAdvancedSearch(false);
         }
     }
 }
@@ -323,6 +385,7 @@ void SearchTabHeader::editSearch(SAlbum *album)
         SearchWindow *window = searchWindow();
         window->readSearch(album->id(), album->query());
         window->show();
+        window->raise();
     }
     else if (album->isKeywordSearch())
     {
@@ -341,6 +404,7 @@ void SearchTabHeader::newAdvancedSearch()
     SearchWindow *window = searchWindow();
     window->reset();
     window->show();
+    window->raise();
 }
 
 void SearchTabHeader::keywordChanged()
@@ -363,6 +427,7 @@ void SearchTabHeader::editCurrentAdvancedSearch()
     else
         window->reset();
     window->show();
+    window->raise();
 }
 
 void SearchTabHeader::saveSearch()
@@ -419,21 +484,28 @@ void SearchTabHeader::editStoredAdvancedSearch()
         SearchWindow *window = searchWindow();
         window->readSearch(d->currentAlbum->id(), d->currentAlbum->query());
         window->show();
+        window->raise();
     }
 }
 
 void SearchTabHeader::advancedSearchEdited(int id, const QString &query)
 {
+    // if the user just pressed the button, but did not change anything in the window,
+    // the search is effectively still a keyword search.
+    // We go the hard way and check this case.
+    KeywordSearchReader check(query);
+    DatabaseSearch::Type type = check.isSimpleKeywordSearch() ? DatabaseSearch::KeywordSearch : DatabaseSearch::AdvancedSearch;
+
     if (id == -1)
     {
-        setCurrentSearch(DatabaseSearch::AdvancedSearch, query);
+        setCurrentSearch(type, query);
     }
     else
     {
         SAlbum *album = AlbumManager::instance()->findSAlbum(id);
         if (album)
         {
-            AlbumManager::instance()->updateSAlbum(album, query, album->title(), DatabaseSearch::AdvancedSearch);
+            AlbumManager::instance()->updateSAlbum(album, query, album->title(), type);
             emit searchShallBeSelected(album);
         }
     }
