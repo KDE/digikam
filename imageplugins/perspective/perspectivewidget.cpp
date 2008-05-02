@@ -6,8 +6,8 @@
  * Date  : 2005-01-18
  * Description : a widget class to edit perspective.
  * 
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * 
  * Matrix3 implementation inspired from gimp 2.0
  * Copyright (C) 1995 Spencer Kimball and Peter Mattis
@@ -86,7 +86,7 @@ PerspectiveWidget::PerspectiveWidget(int w, int h, QWidget *parent)
     m_pixmap = new QPixmap(w, h);
 
     m_rect = QRect(w/2-m_w/2, h/2-m_h/2, m_w, m_h);
-    m_grid = Q3PointArray(60);
+    m_grid = QPolygon(60);
 
     reset();
 }
@@ -102,68 +102,68 @@ Digikam::ImageIface* PerspectiveWidget::imageIface()
     return m_iface;
 }
 
-QPoint PerspectiveWidget::getTopLeftCorner(void)
+QPoint PerspectiveWidget::getTopLeftCorner()
 {
     return QPoint( lroundf((float)(m_topLeftPoint.x()*m_origW) / (float)m_w),
                    lroundf((float)(m_topLeftPoint.y()*m_origH) / (float)m_h));
 }
 
-QPoint PerspectiveWidget::getTopRightCorner(void)
+QPoint PerspectiveWidget::getTopRightCorner()
 {
     return QPoint( lroundf((float)(m_topRightPoint.x()*m_origW) / (float)m_w),
                    lroundf((float)(m_topRightPoint.y()*m_origH) / (float)m_h));
 }
 
-QPoint PerspectiveWidget::getBottomLeftCorner(void)
+QPoint PerspectiveWidget::getBottomLeftCorner()
 {
     return QPoint( lroundf((float)(m_bottomLeftPoint.x()*m_origW) / (float)m_w),
                    lroundf((float)(m_bottomLeftPoint.y()*m_origH) / (float)m_h));
 }
 
-QPoint PerspectiveWidget::getBottomRightCorner(void)
+QPoint PerspectiveWidget::getBottomRightCorner()
 {
     return QPoint( lroundf((float)(m_bottomRightPoint.x()*m_origW) / (float)m_w),
                    lroundf((float)(m_bottomRightPoint.y()*m_origH) / (float)m_h));
 }
 
-QRect PerspectiveWidget::getTargetSize(void)
+QRect PerspectiveWidget::getTargetSize()
 {
-    Q3PointArray perspectiveArea;
+    QPolygon perspectiveArea;
 
-    perspectiveArea.putPoints( 0, 4,
-                               getTopLeftCorner().x(), getTopLeftCorner().y(),
-                               getTopRightCorner().x(), getTopRightCorner().y(),
-                               getBottomRightCorner().x(), getBottomRightCorner().y(),
-                               getBottomLeftCorner().x(), getBottomLeftCorner().y() );
+    perspectiveArea.putPoints(0, 4,
+                              getTopLeftCorner().x(), getTopLeftCorner().y(),
+                              getTopRightCorner().x(), getTopRightCorner().y(),
+                              getBottomRightCorner().x(), getBottomRightCorner().y(),
+                              getBottomLeftCorner().x(), getBottomLeftCorner().y());
 
     return perspectiveArea.boundingRect();
 }
 
-float PerspectiveWidget::getAngleTopLeft(void)
+float PerspectiveWidget::getAngleTopLeft()
 {
     Triangle topLeft(getTopLeftCorner(), getTopRightCorner(), getBottomLeftCorner());
     return topLeft.angleBAC();
 }
 
-float PerspectiveWidget::getAngleTopRight(void)
+float PerspectiveWidget::getAngleTopRight()
 {
     Triangle topLeft(getTopRightCorner(), getBottomRightCorner(), getTopLeftCorner());
     return topLeft.angleBAC();
 }
 
-float PerspectiveWidget::getAngleBottomLeft(void)
+float PerspectiveWidget::getAngleBottomLeft()
 {
     Triangle topLeft(getBottomLeftCorner(), getTopLeftCorner(), getBottomRightCorner());
     return topLeft.angleBAC();
 }
 
-float PerspectiveWidget::getAngleBottomRight(void)
+float PerspectiveWidget::getAngleBottomRight()
 {
     Triangle topLeft(getBottomRightCorner(), getBottomLeftCorner(), getTopRightCorner());
     return topLeft.angleBAC();
 }
 
-void PerspectiveWidget::reset(void)
+void PerspectiveWidget::reset()
 {
     m_topLeftPoint.setX(0);
     m_topLeftPoint.setY(0);
@@ -185,7 +185,7 @@ void PerspectiveWidget::reset(void)
     repaint();
 }
 
-void PerspectiveWidget::applyPerspectiveAdjustment(void)
+void PerspectiveWidget::applyPerspectiveAdjustment()
 {
     Digikam::DImg *orgImage = m_iface->getOriginalImg();
     Digikam::DImg destImage(orgImage->width(), orgImage->height(), orgImage->sixteenBit(), orgImage->hasAlpha());
@@ -241,7 +241,7 @@ void PerspectiveWidget::slotChangeGuideSize(int size)
     repaint();
 }
 
-void PerspectiveWidget::updatePixmap(void)
+void PerspectiveWidget::updatePixmap()
 {
     m_topLeftCorner.setRect(m_topLeftPoint.x() + m_rect.topLeft().x(),
                             m_topLeftPoint.y() + m_rect.topLeft().y(), 8, 8);
@@ -727,7 +727,7 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
     {
         if ( m_currentResizing != ResizingNone )
         {
-            Q3PointArray unsablePoints;
+            QPolygon unsablePoints;
             QPoint pm(e->x(), e->y());
 
             if (!m_rect.contains( pm ))
