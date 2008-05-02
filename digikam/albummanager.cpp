@@ -41,7 +41,7 @@ extern "C"
 
 // Qt includes.
 
-#include <Q3IntDict>
+#include <QHash>
 #include <QList>
 #include <QFile>
 #include <QDir>
@@ -60,6 +60,7 @@ extern "C"
 #include <kio/job.h>
 #include <kdirwatch.h>
 #include <kconfiggroup.h>
+
 // Local includes.
 
 #include "ddebug.h"
@@ -611,13 +612,12 @@ void AlbumManager::scanTAlbums()
     // for a new TAlbum
 
     {
-        Q3IntDict<TAlbum> tagDict;
-        tagDict.setAutoDelete(false);
+        QHash<int, TAlbum*> tagHash;
 
         // insert items into a dict for quick lookup
         for (TagInfo::List::iterator it = tList.begin(); it != tList.end(); ++it)
         {
-            TagInfo info = *it;
+            TagInfo info  = *it;
             TAlbum* album = new TAlbum(info.name, info.id);
             if (info.icon.isNull())
             {
@@ -631,23 +631,22 @@ void AlbumManager::scanTAlbums()
                 album->m_icon = info.icon;
             }
             album->m_pid = info.pid;
-            tagDict.insert(info.id, album);
+            tagHash.insert(info.id, album);
         }
         tList.clear();
 
         // also add root tag
         TAlbum* rootTag = new TAlbum("root", 0, true);
-        tagDict.insert(0, rootTag);
+        tagHash.insert(0, rootTag);
 
         // build tree
-        Q3IntDictIterator<TAlbum> iter(tagDict);
-        for ( ; iter.current(); ++iter )
+        for (QHash<int, TAlbum*>::iterator iter = tagHash.begin() ; iter != tagHash.end(); ++iter )
         {
-            TAlbum* album = iter.current();
+            TAlbum* album = *iter;
             if (album->m_id == 0)
                 continue;
             
-            TAlbum* parent = tagDict.find(album->m_pid);
+            TAlbum* parent = *tagHash.find(album->m_pid);
             if (parent)
             {
                 album->setParent(parent);
@@ -655,9 +654,9 @@ void AlbumManager::scanTAlbums()
             else
             {
                 DWarning() << "Failed to find parent tag for tag "
-                           << iter.current()->m_title
+                           << album->m_title
                            << " with pid "
-                           << iter.current()->m_pid << endl;
+                           << album->m_pid << endl;
             }
         }
 
