@@ -515,6 +515,66 @@ QString KeywordSearchReader::readField()
     return QString();
 }
 
+bool KeywordSearchReader::isSimpleKeywordSearch()
+{
+    // Find out if this XML conforms to a simple keyword search,
+    // as created with KeywordSearchWriter
+    SearchXml::Element element;
+    int groupCount = 0;
+    while (!atEnd())
+    {
+        element = readNext();
+
+        if (element == SearchXml::Group)
+        {
+            // only one group please
+            if (++groupCount > 1)
+                return false;
+            if (!isSimpleKeywordSearchGroup())
+                return false;
+        }
+    }
+    return true;
+}
+
+bool KeywordSearchReader::isSimpleKeywordSearchGroup()
+{
+    // Find out if the current group conforms to a simple keyword search,
+    // as created with KeywordSearchWriter
+
+    if (groupOperator() != SearchXml::standardGroupOperator())
+        return false;
+    if (defaultFieldOperator() != SearchXml::standardFieldOperator())
+        return false;
+
+    SearchXml::Element element;
+    while (!atEnd())
+    {
+        element = readNext();
+
+        // subgroups not allowed
+        if (element == SearchXml::Group)
+        {
+            return false;
+        }
+
+        // only "keyword" fields allowed
+        if (element == SearchXml::Field)
+        {
+            if (fieldName() != "keyword")
+                return false;
+            if (fieldRelation() != SearchXml::Like)
+                return false;
+            if (fieldOperator() != SearchXml::standardFieldOperator())
+                return false;
+        }
+
+        if (element == SearchXml::GroupEnd)
+            return true;
+    }
+    return true;
+}
+
 
 // ---------------------------------------- //
 

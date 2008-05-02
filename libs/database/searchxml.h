@@ -245,11 +245,15 @@ public:
 
     KeywordSearchReader(const QString &xml);
 
+    /// Returns the keywords from this search, merged in a list
     QStringList keywords();
+    /// Checks if the XML is a simple keyword search, compatible with keywords()
+    bool isSimpleKeywordSearch();
 
 private:
 
     void readGroup(QStringList &list);
+    bool isSimpleKeywordSearchGroup();
     QString readField();
 };
 
