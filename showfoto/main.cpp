@@ -123,6 +123,10 @@ int main(int argc, char *argv[])
                           ki18n("Developer (2004)"),
                           "kde at ralfhoelzer dot com");
 
+    aboutData.addCredit ( ki18n("Risto Saukonpaa"),
+                          ki18n("Design, icons, logo, banner, mocup, beta tester"),
+                          "paristo at gmail dot com");
+
     aboutData.addCredit ( ki18n("Achim Bohnet"),
                           ki18n("Bug reports and patches"),
                           "ach at mpe dot mpg dot de");
