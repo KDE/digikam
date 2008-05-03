@@ -24,11 +24,11 @@
 
 // Qt includes.
 
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qdir.h>
-#include <qfileinfo.h>
-#include <qfile.h>
+#include <QString>
+#include <QStringList>
+#include <QDir>
+#include <QFileInfo>
+#include <QFile>
 
 // KDE includes
  
@@ -151,6 +151,10 @@ int main(int argc, char *argv[])
     aboutData.addAuthor ( ki18n("Ralf Holzer"),
                           ki18n("Developer (2004)"),
                           "kde at ralfhoelzer dot com");
+
+    aboutData.addCredit ( ki18n("Risto Saukonpaa"),
+                          ki18n("Design, icons, logo, banner, mocup, beta tester"),
+                          "paristo at gmail dot com");
 
     aboutData.addCredit ( ki18n("Mikolaj Machowski"),
                           ki18n("Bug reports and patches"),
