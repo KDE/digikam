@@ -51,4 +51,8 @@ install( FILES image-full.png
          DESTINATION ${DATA_INSTALL_DIR}/digikam/data 
        )
 
+install( FILES logo-showfoto.png 
+         DESTINATION ${DATA_INSTALL_DIR}/showfoto/data 
+       )
+
 install( FILES digikam-splash.png DESTINATION ${DATA_INSTALL_DIR}/digikam )
