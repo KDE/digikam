@@ -89,8 +89,12 @@ RawCameraDlg::RawCameraDlg(QWidget *parent)
     // --------------------------------------------------------
 
     QLabel *logo = new QLabel(page);
-    logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
-                            .scaled(96, 96, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    if (KGlobal::mainComponent().aboutData()->appName() == QString("digikam"))
+        logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
+                                .scaled(96, 96, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    else
+        logo->setPixmap(QPixmap(KStandardDirs::locate("data", "showfoto/data/logo-showfoto.png"))
+                                .scaled(96, 96, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     // --------------------------------------------------------
 
