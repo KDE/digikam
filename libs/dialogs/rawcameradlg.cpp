@@ -35,6 +35,7 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kapplication.h>
+#include <kaboutdata.h>
 
 // LibKDcraw includes.
 
@@ -84,7 +85,11 @@ RawCameraDlg::RawCameraDlg(QWidget *parent)
 
     QLabel *logo            = new QLabel(page);
     KIconLoader* iconLoader = KApplication::kApplication()->iconLoader();
-    logo->setPixmap(iconLoader->loadIcon("digikam", KIcon::NoGroup, 96, KIcon::DefaultState, 0, true));
+
+    if (KApplication::kApplication()->aboutData()->appName() == QString("digikam"))
+        logo->setPixmap(iconLoader->loadIcon("digikam", KIcon::NoGroup, 96, KIcon::DefaultState, 0, true));
+    else
+        logo->setPixmap(iconLoader->loadIcon("showfoto", KIcon::NoGroup, 96, KIcon::DefaultState, 0, true));
 
     // --------------------------------------------------------
 
