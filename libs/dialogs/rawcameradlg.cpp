@@ -37,6 +37,7 @@
 #include <kiconloader.h>
 #include <kapplication.h>
 #include <kstandarddirs.h>
+#include <kaboutdata.h>
 
 // LibKDcraw includes.
 
