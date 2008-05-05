@@ -77,9 +77,10 @@ int main(int argc, char *argv[])
     KAboutData aboutData( "showfoto", 0,
                           ki18n("showFoto"),
                           "0.10.0",
-                          ki18n("KDE Photo Viewer and Editor"),
+                          ki18n("Manage your photographs like a professional "
+                                "with the power of open source"),
                           KAboutData::License_GPL,
-                          ki18n("(c) 2004-2008, digiKam developers team"),
+                          ki18n("(c) 2002-2008, digiKam developers team"),
                           KLocalizedString(),
                           "http://www.digikam.org");
 
