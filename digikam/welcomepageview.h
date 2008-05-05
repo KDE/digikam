@@ -38,6 +38,8 @@
 
 #include "digikam_export.h"
 
+class KTemporaryFile;
+
 namespace Digikam
 {
 
@@ -54,10 +56,18 @@ private:
 
     QByteArray fileToString(const QString &aFileName);
     QString    infoPage();
+    QString    digikamCssFilePath();
+    QString    infoPageCssFilePath();
 
 private slots:
 
-    void slotUrlOpen(const KUrl &);
+    void slotUrlOpen(const KUrl&);
+    void slotThemeChanged();
+
+private :
+
+    KTemporaryFile *m_digikamCssFile;
+    KTemporaryFile *m_infoPageCssFile;
 };
 
 }  // namespace Digikam
