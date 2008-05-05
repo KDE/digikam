@@ -60,7 +60,7 @@ public:
         listView  = 0;
         searchBar = 0;
     }
-    
+
     QListView     *listView;
 
     SearchTextBar *searchBar;
@@ -113,11 +113,11 @@ RawCameraDlg::RawCameraDlg(QWidget *parent)
 
     // --------------------------------------------------------
 
-    
-    grid->addMultiCellWidget(logo,         0, 2, 0, 0);
+
+    grid->addMultiCellWidget(logo,         0, 0, 0, 0);
     grid->addMultiCellWidget(header,       0, 0, 1, 2);
-    grid->addMultiCellWidget(d->listView,  1, 1, 1, 2);
-    grid->addMultiCellWidget(d->searchBar, 2, 2, 1, 2);
+    grid->addMultiCellWidget(d->listView,  1, 1, 0, 2);
+    grid->addMultiCellWidget(d->searchBar, 2, 2, 0, 2);
     grid->setColStretch(1, 10);
     grid->setRowStretch(1, 10);
 
