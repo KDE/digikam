@@ -1265,8 +1265,10 @@ void LightTableWindow::slotToggleSlideShow()
 
 void LightTableWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
 {
-    int       i = 0;
+    if (!d->barView->countItems()) return;
+
     DMetadata meta;
+    int              i = 0;
     d->cancelSlideShow = false;
 
     d->statusProgressBar->progressBarMode(StatusProgressBar::CancelProgressBarMode, 
