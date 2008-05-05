@@ -72,7 +72,7 @@ void DPopupMenu::generateSidePixmap()
         if (KGlobal::mainComponent().aboutData()->appName() == QString("digikam"))
             s_dpopupmenu_sidePixmap.load(KStandardDirs::locate("data","digikam/data/menusidepixmap.png"));
         else
-            s_dpopupmenu_sidePixmap.load(KStandardDirs::locate("data","showfoto/menusidepixmap.png"));
+            s_dpopupmenu_sidePixmap.load(KStandardDirs::locate("data","showfoto/data/menusidepixmap.png"));
 
         KIconEffect::colorize(s_dpopupmenu_sidePixmap, newColor, 1.0);
     }
