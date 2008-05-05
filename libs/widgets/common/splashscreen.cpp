@@ -7,7 +7,7 @@
  * Description : a widget to display spash with progress bar
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com> 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -34,6 +34,8 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kglobalsettings.h>
+#include <kaboutdata.h>
+#include <kcomponentdata.h>
 
 // Local includes.
 
@@ -63,10 +65,15 @@ public:
     QColor  color;
 };
 
-SplashScreen::SplashScreen(const QString& splash, Qt::WFlags f)
-            : KSplashScreen(QPixmap(KStandardDirs::locate("appdata", splash)), f)
+SplashScreen::SplashScreen()
+            : KSplashScreen(QPixmap())
 {
     d = new SplashScreenPriv;
+
+    if (KGlobal::mainComponent().aboutData()->appName() == QString("digikam"))
+        setPixmap(KStandardDirs::locate("data","digikam/data/splash-digikam.png"));
+    else
+        setPixmap(KStandardDirs::locate("data","showfoto/data/splash-showfoto.png"));
 
     QTimer *timer = new QTimer( this );
 
