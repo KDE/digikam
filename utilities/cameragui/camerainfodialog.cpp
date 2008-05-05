@@ -78,7 +78,7 @@ CameraInfoDialog::CameraInfoDialog(QWidget *parent, const QString& summary, cons
 
     KPageWidgetItem *p3 = addPage(aboutView, i18n("About"));
     p3->setHeader( i18n("About Driver") );
-    p3->setIcon( KIcon("digikam") );
+    p3->setIcon( KIcon("camera-photo") );
 }
 
 CameraInfoDialog::~CameraInfoDialog()
