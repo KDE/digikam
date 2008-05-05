@@ -12213,8 +12213,8 @@
      height="400px"
      inkscape:window-width="1029"
      inkscape:window-height="742"
-     inkscape:window-x="151"
-     inkscape:window-y="0"
+     inkscape:window-x="0"
+     inkscape:window-y="207"
      showguides="true"
      inkscape:guide-bbox="false"
      inkscape:grid-bbox="false"
@@ -12254,10 +12254,10 @@
      style="display:inline">
     <image
        y="-27.374769"
-       x="-2.5984242"
+       x="-22.397413"
        id="image5149"
        height="1011.6509"
-       width="1558.0033"
+       width="1597.6012"
        sodipodi:absref="/home/gilles/splash-digikam.png"
        xlink:href="/home/gilles/splash-digikam.png" />
   </g>
@@ -12584,9 +12584,9 @@
        width="1544.4233"
        id="rect5422"
        style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:10.16877937;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline"
-       inkscape:export-filename="/home/gilles/splash-digikam2.png"
-       inkscape:export-xdpi="28.950001"
-       inkscape:export-ydpi="28.950001" />
+       inkscape:export-filename="/home/gilles/Documents/Devel/SVN/trunk/graphics/digikam/data/pics/splash-digikam.png"
+       inkscape:export-xdpi="28.930706"
+       inkscape:export-ydpi="28.930706" />
     <path
        style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dashoffset:0;stroke-opacity:1;display:inline"
        d="M -5701.5257,-413.33387 L -4163.5372,-413.33387 L -4163.5372,-255.03615 L -5701.7645,-255.03615 L -5701.5257,-413.33387 z "
