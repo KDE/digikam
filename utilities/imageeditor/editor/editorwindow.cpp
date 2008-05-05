@@ -975,6 +975,7 @@ void EditorWindow::toggleStandardActions(bool val)
     m_saveAsAction->setEnabled(val);
     d->selectAllAction->setEnabled(val);
     d->selectNoneAction->setEnabled(val);
+    d->slideShowAction->setEnabled(val);
 
     // these actions are special: They are turned off if val is false,
     // but if val is true, they may be turned on or off.
