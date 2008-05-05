@@ -1282,6 +1282,8 @@ void LightTableWindow::slotToggleSlideShow()
 
 void LightTableWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
 {
+    if (!d->barView->countItems()) return;
+
     int              i = 0;
     d->cancelSlideShow = false;
 
