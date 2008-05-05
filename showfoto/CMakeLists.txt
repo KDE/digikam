@@ -1,7 +1,6 @@
 #Require by Greycstoration algorithm (CImg.h)
 ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
 
-ADD_SUBDIRECTORY(pics)
 ADD_SUBDIRECTORY(setup)
 
 INCLUDE_DIRECTORIES( ../showfoto/setup 
