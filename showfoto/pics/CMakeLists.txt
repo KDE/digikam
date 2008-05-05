@@ -1,4 +1,3 @@
 
-install( FILES showfoto-splash.png 
-               menusidepixmap.png  
+install( FILES menusidepixmap.png  
          DESTINATION ${DATA_INSTALL_DIR}/showfoto )
