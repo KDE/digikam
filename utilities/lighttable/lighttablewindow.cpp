@@ -726,6 +726,7 @@ void LightTableWindow::slotItemSelected(ImageInfo* info)
         d->zoomPlusAction->setEnabled(true);
         d->zoomMinusAction->setEnabled(true);
         d->navigateByPairAction->setEnabled(true);
+        d->slideShowAction->setEnabled(true);
 
         LightTableBarItem* curr = d->barView->findItemByInfo(info);
         if (curr)
@@ -773,6 +774,7 @@ void LightTableWindow::slotItemSelected(ImageInfo* info)
         d->zoomMinusAction->setEnabled(false);
         d->syncPreviewAction->setEnabled(false);
         d->navigateByPairAction->setEnabled(false);
+        d->slideShowAction->setEnabled(false);
     }
 
     d->previewView->checkForSelection(info);
