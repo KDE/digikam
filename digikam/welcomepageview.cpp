@@ -64,7 +64,8 @@ WelcomePageView::WelcomePageView(QWidget* parent)
     QString fontSize         = QString::number(12);
     QString appTitle         = i18n("digiKam");
     QString catchPhrase      = QString();      // Not enough space for a catch phrase at default window size.
-    QString quickDescription = i18n("A Photo-Management Application for KDE");
+    QString quickDescription = i18n("Manage your photographs like a professional "
+                                    "with the power of open source");
     QString locationHtml     = KStandardDirs::locate("data", "digikam/about/main.html");
     QString locationCss      = KStandardDirs::locate("data", "digikam/about/kde_infopage.css");
     QString locationRtl      = KStandardDirs::locate("data", "digikam/about/kde_infopage_rtl.css" );
