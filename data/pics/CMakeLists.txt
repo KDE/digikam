@@ -22,39 +22,40 @@ INSTALL(FILES tag.png
        )
 
 INSTALL(FILES image-full.png
-               image-selection.png
-               histogram-lin.png
-               histogram-log.png
-               color-picker-black.png
-               color-picker-grey.png
-               color-picker-white.png
-               banner-digikam.png
-               logo-digikam.png
-               logo-gphoto.png
-               logo-lcms.png
-               logo-exiv2.png
-               logo-cimg.png
-               centerwidth.png
-               centerheight.png
-               target.png
-               bothvert.png
-               bothhorz.png
-               curvefree.png
-               curvemooth.png
-               original.png
-               duplicatebothvert.png
-               duplicatebothhorz.png
-               togglemouseover.png
-               menusidepixmap.png
-               indicator-gray.png
-               indicator-green.png
-               indicator-red.png
-               splash-digikam.png
+              image-selection.png
+              histogram-lin.png
+              histogram-log.png
+              color-picker-black.png
+              color-picker-grey.png
+              color-picker-white.png
+              banner-digikam.png
+              logo-digikam.png
+              logo-gphoto.png
+              logo-lcms.png
+              logo-exiv2.png
+              logo-cimg.png
+              centerwidth.png
+              centerheight.png
+              target.png
+              bothvert.png
+              bothhorz.png
+              curvefree.png
+              curvemooth.png
+              original.png
+              duplicatebothvert.png
+              duplicatebothhorz.png
+              togglemouseover.png
+              indicator-gray.png
+              indicator-green.png
+              indicator-red.png
+              menusidepix-digikam.png
+              splash-digikam.png
          DESTINATION ${DATA_INSTALL_DIR}/digikam/data 
        )
 
 # Showfoto files ######################################################
 
 INSTALL(FILES logo-showfoto.png 
+              menusidepix-showfoto.png
               splash-showfoto.png 
         DESTINATION ${DATA_INSTALL_DIR}/showfoto/data)
