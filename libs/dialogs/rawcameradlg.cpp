@@ -62,7 +62,7 @@ public:
         listView  = 0;
         searchBar = 0;
     }
-    
+
     QTreeWidget   *listView;
 
     SearchTextBar *searchBar;
@@ -123,10 +123,10 @@ RawCameraDlg::RawCameraDlg(QWidget *parent)
 
     // --------------------------------------------------------
 
-    grid->addWidget(logo,         0, 0, 3, 1);
+    grid->addWidget(logo,         0, 0, 1, 1);
     grid->addWidget(header,       0, 1, 1, 2);
-    grid->addWidget(d->listView,  1, 1, 1, 2);
-    grid->addWidget(d->searchBar, 2, 1, 1, 2);
+    grid->addWidget(d->listView,  1, 0, 1, 2);
+    grid->addWidget(d->searchBar, 2, 0, 1, 2);
     grid->setColumnStretch(1, 10);
     grid->setRowStretch(1, 10);
     grid->setMargin(0);
