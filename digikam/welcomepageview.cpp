@@ -67,8 +67,8 @@ WelcomePageView::WelcomePageView(QWidget* parent)
     QString quickDescription = i18n("Manage your photographs like a professional "
                                     "with the power of open source");
     QString locationHtml     = KStandardDirs::locate("data", "digikam/about/main.html");
-    QString locationCss      = KStandardDirs::locate("data", "kdeui/about/kde_infopage.css");
-    QString locationRtl      = KStandardDirs::locate("data", "kdeui/about/kde_infopage_rtl.css" );
+    QString locationCss      = KStandardDirs::locate("data", "digikam/about/infopage.css");
+    QString locationRtl      = KStandardDirs::locate("data", "digikam/about/infopage_rtl.css" );
     QString rtl              = kapp->isRightToLeft() ? QString("@import \"%1\";" ).arg(locationRtl)
                                                      : QString();
 
