@@ -1,3 +1,4 @@
+# digiKam files ######################################################
 
 install( FILES tag.png 
                tag-new.png 
@@ -51,8 +52,8 @@ install( FILES image-full.png
          DESTINATION ${DATA_INSTALL_DIR}/digikam/data 
        )
 
-install( FILES logo-showfoto.png 
-         DESTINATION ${DATA_INSTALL_DIR}/showfoto/data 
-       )
+install(FILES splash-digikam.png DESTINATION ${DATA_INSTALL_DIR}/digikam)
 
-install( FILES digikam-splash.png DESTINATION ${DATA_INSTALL_DIR}/digikam )
+# Showfoto files ######################################################
+
+install(FILES logo-showfoto.png  DESTINATION ${DATA_INSTALL_DIR}/showfoto/data)
