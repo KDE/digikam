@@ -172,7 +172,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
 
     if(group.readEntry("ShowSplash", true) && !kapp->isSessionRestored())
     {
-        d->splash = new Digikam::SplashScreen("showfoto-splash.png");
+        d->splash = new Digikam::SplashScreen("splash-showfoto.png");
         d->splash->show();
     }
 
