@@ -1,26 +1,19 @@
-
-#headerR {
-  position: absolute;
-  right: 0px;
-  width: 430px;
-  height: 131px;
-  background-image: url(top-right-digikam.png);
-}
-
-#title {
-  right: 125px;
-}
-
-#tagline {
-  right: 125px;
+#headerL {
+  background-image: url(top-left.png);
 }
 
 #boxCenter {
-  background-image: url(box-center-digikam.png);
-  background-repeat: no-repeat;
-  background-color: #dfe7f3;
-  background-position: bottom right;
+  padding: 1em;
 }
 
-/* vim:set sw=2 et nocindent smartindent: */
+.sepTable {
+  border: 1px solid #BDBDBD;
+}
 
+.specTableTitle {
+  background-color: #909090;
+}
+
+.specTableSubTitle {
+  background-color: #444444;
+}
