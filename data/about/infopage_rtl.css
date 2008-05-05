@@ -1,0 +1,11 @@
+body {direction: rtl}
+
+#boxCenter {
+  text-align: right;
+}
+
+#nextlink {
+    text-align: left;
+}
+
+/* vim:set sw=2 et nocindent smartindent: */
