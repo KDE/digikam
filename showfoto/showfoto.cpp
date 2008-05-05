@@ -1162,6 +1162,8 @@ void ShowFoto::slotContextMenu()
 
 void ShowFoto::slideShow(bool startWithCurrent, Digikam::SlideShowSettings& settings)
 {
+    if (!d->thumbBar->countItems()) return;
+
     KConfig* config = kapp->config();
     config->setGroup("ImageViewer Settings");
 
