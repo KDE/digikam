@@ -131,7 +131,7 @@ DigikamApp::DigikamApp()
     if(d->config->group("General Settings").readEntry("Show Splash", true) &&
        !kapp->isSessionRestored())
     {
-        d->splashScreen = new SplashScreen("digikam-splash.png");
+        d->splashScreen = new SplashScreen("splash-digikam.png");
         d->splashScreen->show();
     }
 
