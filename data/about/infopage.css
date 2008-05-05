@@ -4,7 +4,7 @@
  */
 
 img {margin: 0px; padding: 0px}
-body {margin: 0px; padding: 0px; background-color: #E8E8E8; color: #FFFFFF; height="100%"; width="100%"}
+body {margin: 0px; padding: 0px; background-color: %1; color: #FFFFFF; height="100%"; width="100%"}
 a { color: #6193CF; text-decoration: none; font-weight: bold; }
 a:hover {
   color: #6193CF;
@@ -30,14 +30,14 @@ a:hover {
  */
 
 #header {
-  background-image: url(top-middle.png);
+  background-image: url(%2);
   width: 100%;
   height: 131px;
 }
 
 #headerL {
   position: absolute;
-  background-image: url(top-left.png);
+  background-image: url(%3);
   left: 0px;
   height: 131px;
   width: 147px;
@@ -124,7 +124,7 @@ a:hover {
 }
 
 #barCenter li:not(:first-child):before { /* Aren't css3 selectors great? */
-  content: " · ";
+  content: " ï¿½ ";
 }
 
 /*
@@ -148,26 +148,26 @@ a:hover {
   width: 55px;
   height: 49px;
   float: left;
-  background-image: url(box-top-left.png);
+  background-image: url(%4);
 }
 
 #boxTR {
   width: 55px;
   height: 49px;
   float: right;
-  background-image: url(box-top-right.png);
+  background-image: url(%5);
 }
 
 #boxTC {
   height: 49px;
   margin-left: 55px;
   margin-right: 55px;
-  background-image: url(box-top-middle.png);
+  background-image: url(%6);
   background-repeat: repeat-x;
 }
 
 #boxL {
-  background-image: url(box-middle-left.png);
+  background-image: url(%7);
   background-repeat: repeat-y;
   background-position: left;
   padding-left: 55px;
@@ -180,7 +180,7 @@ a:hover {
 }
 
 #boxR {
-  background-image: url(box-middle-right.png);
+  background-image: url(%8);
   background-repeat: repeat-y;
   background-position: right;
   padding-right: 55px;
@@ -195,21 +195,21 @@ a:hover {
   width: 55px;
   height: 49px;
   float: left;
-  background-image: url(box-bottom-left.png);
+  background-image: url(%9);
 }
 
 #boxBR {
   width: 55px;
   height: 49px;
   float: right;
-  background-image: url(box-bottom-right.png);
+  background-image: url(%10);
 }
 
 #boxBC {
   height: 49px;
   margin-left: 55px;
   margin-right: 55px;
-  background-image: url(box-bottom-middle.png);
+  background-image: url(%11);
   background-repeat: repeat-x;
 }
 
@@ -219,7 +219,7 @@ a:hover {
 
 #footer {
   position: fixed;
-  background-image: url(bottom-middle.png);
+  background-image: url(%12);
   width: 100%;
   height: 100px;
   z-index: -2;
@@ -228,7 +228,7 @@ a:hover {
 
 #footerL {
   position: fixed;
-  background-image: url(bottom-left.png);
+  background-image: url(%13);
   left: 0px;
   width: 155px;
   height: 100px;
@@ -237,7 +237,7 @@ a:hover {
 
 #footerR {
   position: fixed;
-  background-image: url(bottom-right.png);
+  background-image: url(%14);
   right: 0px;
   width: 429px;
   height: 100px;

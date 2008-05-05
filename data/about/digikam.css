@@ -1,5 +1,5 @@
 #headerL {
-  background-image: url(top-left-digikam.png);
+  background-image: url(%1);
 }
 
 #boxCenter {
@@ -11,9 +11,9 @@
 }
 
 .specTableTitle {
-  background-color: #909090;
+  background-color: %2;
 }
 
 .specTableSubTitle {
-  background-color: #444444;
+  background-color: %3;
 }
