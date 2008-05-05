@@ -31,7 +31,7 @@
 #include <QFile>
 
 // KDE includes
- 
+
 #include <kcmdlineargs.h>
 #include <kapplication.h>
 #include <kaboutdata.h>
@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
     QString Gphoto2Ver  = QString(gp_library_version(GP_VERSION_SHORT)[0]);
 
     QString XmpSupport  = KExiv2Iface::KExiv2::supportXmp() ? I18N_NOOP("yes") : I18N_NOOP("no");
-    
+
     KLocalizedString libInfo = ki18n("Using Kipi library version %1\n"
                                      "Using KDcraw library version %2\n"
                                      "Using Dcraw program version %3\n"
@@ -105,8 +105,9 @@ int main(int argc, char *argv[])
 
     KAboutData aboutData( "digikam", 0, 
                           ki18n("digiKam"),
-                          digikam_version,        
-                          ki18n("A Photo-Management Application for KDE"),
+                          digikam_version,
+                          ki18n("Manage your photographs like a professional "
+                                "with the power of open source"),
                           KAboutData::License_GPL,
                           ki18n("(c) 2002-2008, digiKam developers team"),
                           KLocalizedString(),
@@ -227,7 +228,7 @@ int main(int argc, char *argv[])
     aboutData.addCredit ( ki18n("Richard Groult"),
                           ki18n("Plugin contributor and beta tester"),
                           "Richard dot Groult at jalix dot org");
-                                                    
+
     aboutData.addCredit ( ki18n("Richard Taylor"),
                           ki18n("Feedback and patches. Handbook writer"),
                           "rjt-digicam at thegrindstone dot me dot uk");
@@ -235,7 +236,7 @@ int main(int argc, char *argv[])
     aboutData.addCredit ( ki18n("Hans Karlsson"),
                           ki18n("digiKam website banner and application icons"),
                           "karlsson dot h at home dot se");
-    
+
     aboutData.addCredit ( ki18n("Aaron Seigo"),
                           ki18n("Various usability fixes and general application polishing"),
                           "aseigo at kde.org");
