@@ -26,6 +26,7 @@ URL
     need to be consulted while porting:
       http://doc.trolltech.com/4.0/porting4.html
       http://websvn.kde.org/*checkout*/trunk/KDE/kdelibs/KDE4PORTING.html
+      http://techbase.kde.org/Projects/KDEPrint/KDE4
 				
 LIST OF BUGZILLA FILES NOT YET BACKPORTED FROM KDE3 BRANCH:
 -----------------------------------------------------------      
