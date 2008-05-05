@@ -27,6 +27,7 @@
 #include <QWidget>
 #include <QFile>
 #include <QFileInfo>
+#include <QTextStream>
 
 // KDE includes.
 
@@ -37,13 +38,15 @@
 #include <kapplication.h>
 #include <kurl.h>
 #include <kstandarddirs.h>
-#include <KToolInvocation>
+#include <ktoolinvocation.h>
 #include <kglobalsettings.h>
+#include <ktemporaryfile.h>
 
 // Local includes.
 
 #include "ddebug.h"
 #include "version.h"
+#include "themeengine.h"
 #include "welcomepageview.h"
 #include "welcomepageview.moc"
 
@@ -61,38 +64,31 @@ WelcomePageView::WelcomePageView(QWidget* parent)
     setMetaRefreshEnabled(false);
     setURLCursor(Qt::PointingHandCursor);
 
-    QString fontSize         = QString::number(12);
-    QString appTitle         = i18n("digiKam");
-    QString catchPhrase      = QString();      // Not enough space for a catch phrase at default window size.
-    QString quickDescription = i18n("Manage your photographs like a professional "
-                                    "with the power of open source");
-    QString locationHtml     = KStandardDirs::locate("data", "digikam/about/main.html");
-    QString locationCss      = KStandardDirs::locate("data", "digikam/about/infopage.css");
-    QString locationRtl      = KStandardDirs::locate("data", "digikam/about/infopage_rtl.css" );
-    QString rtl              = kapp->isRightToLeft() ? QString("@import \"%1\";" ).arg(locationRtl)
-                                                     : QString();
+    m_digikamCssFile = new KTemporaryFile;
+    m_digikamCssFile->setSuffix(".css");
+    m_digikamCssFile->setAutoRemove(false);
+    m_digikamCssFile->open();
 
-    begin(KUrl(locationHtml));
+    m_infoPageCssFile = new KTemporaryFile;
+    m_infoPageCssFile->setSuffix(".css");
+    m_infoPageCssFile->setAutoRemove(false);
+    m_infoPageCssFile->open();
 
-    QString content = fileToString(locationHtml);
-    content         = content.arg(locationCss)        // %1
-                             .arg(rtl)                // %2
-                             .arg(fontSize)           // %3
-                             .arg(appTitle)           // %4
-                             .arg(catchPhrase)        // %5
-                             .arg(quickDescription)   // %6
-                             .arg(infoPage());        // %7
+    slotThemeChanged();
 
-    write(content);
-    end();
-    show();
+    // ------------------------------------------------------------
 
     connect(browserExtension(), SIGNAL(openUrlRequest(const KUrl&, const KParts::OpenUrlArguments&, const KParts::BrowserArguments&)),
             this, SLOT(slotUrlOpen(const KUrl&)));
+
+    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+            this, SLOT(slotThemeChanged()));
 }
 
 WelcomePageView::~WelcomePageView()
 {
+    m_digikamCssFile->remove();
+    m_infoPageCssFile->remove();
 }
 
 void WelcomePageView::slotUrlOpen(const KUrl &url)
@@ -188,6 +184,85 @@ QByteArray WelcomePageView::fileToString(const QString &aFileName)
         return QByteArray();
 
     return result;
+}
+
+QString WelcomePageView::digikamCssFilePath()
+{
+    QColor background = ThemeEngine::instance()->baseColor();
+
+    QString locationLogo = KStandardDirs::locate("data", "digikam/about/top-left-digikam.png");
+    QString digikamCss   = fileToString(KStandardDirs::locate("data", "digikam/about/digikam.css"));
+    digikamCss           = digikamCss.arg(locationLogo)             // %1
+                                     .arg(background.name())        // %2
+                                     .arg(background.name());       // %3
+
+    QFile file(m_digikamCssFile->fileName());
+    file.open(QIODevice::WriteOnly);
+    QTextStream stream(&file); 
+    stream << digikamCss;
+    file.close();
+
+    return m_digikamCssFile->fileName();
+}
+
+QString WelcomePageView::infoPageCssFilePath()
+{
+    QColor background = ThemeEngine::instance()->baseColor();
+
+    QString infoPageCss  = fileToString(KStandardDirs::locate("data", "digikam/about/infopage.css"));
+    infoPageCss          = infoPageCss.arg(background.name())                                                    // %1
+                                      .arg(KStandardDirs::locate("data", "digikam/about/top-middle.png"))        // %2
+                                      .arg(KStandardDirs::locate("data", "digikam/about/top-left.png"))          // %3
+                                      .arg(KStandardDirs::locate("data", "digikam/about/box-top-left.png"))      // %4
+                                      .arg(KStandardDirs::locate("data", "digikam/about/box-top-right.png"))     // %5
+                                      .arg(KStandardDirs::locate("data", "digikam/about/box-top-middle.png"))    // %6
+                                      .arg(KStandardDirs::locate("data", "digikam/about/box-middle-left.png"))   // %7
+                                      .arg(KStandardDirs::locate("data", "digikam/about/box-middle-right.png"))  // %8
+                                      .arg(KStandardDirs::locate("data", "digikam/about/box-bottom-left.png"))   // %9
+                                      .arg(KStandardDirs::locate("data", "digikam/about/box-bottom-right.png"))  // %10
+                                      .arg(KStandardDirs::locate("data", "digikam/about/box-bottom-middle.png")) // %11
+                                      .arg(KStandardDirs::locate("data", "digikam/about/bottom-middle.png"))     // %12
+                                      .arg(KStandardDirs::locate("data", "digikam/about/bottom-left.png"))       // %13
+                                      .arg(KStandardDirs::locate("data", "digikam/about/bottom-right.png"));     // %14
+
+    QFile file(m_infoPageCssFile->fileName());
+    file.open(QIODevice::WriteOnly);
+    QTextStream stream(&file); 
+    stream << infoPageCss;
+    file.close();
+
+    return m_infoPageCssFile->fileName();
+}
+
+void WelcomePageView::slotThemeChanged()
+{
+    QString fontSize         = QString::number(12);
+    QString appTitle         = i18n("digiKam");
+    QString catchPhrase      = QString();      // Not enough space for a catch phrase at default window size.
+    QString quickDescription = i18n("Manage your photographs like a professional "
+                                    "with the power of open source");
+    QString locationHtml     = KStandardDirs::locate("data", "digikam/about/main.html");
+    QString locationCss      = infoPageCssFilePath();
+    QString locationRtl      = KStandardDirs::locate("data", "digikam/about/infopage_rtl.css" );
+    QString rtl              = kapp->isRightToLeft() ? QString("@import \"%1\";" ).arg(locationRtl)
+                                                     : QString();
+    QString digikamCss       = digikamCssFilePath();
+
+    begin(KUrl(locationHtml));
+
+    QString content = fileToString(locationHtml);
+    content         = content.arg(locationCss)        // %1
+                             .arg(rtl)                // %2
+                             .arg(digikamCss)         // %3
+                             .arg(fontSize)           // %4
+                             .arg(appTitle)           // %5
+                             .arg(catchPhrase)        // %6
+                             .arg(quickDescription)   // %7
+                             .arg(infoPage());        // %8
+
+    write(content);
+    end();
+    show();
 }
 
 }  // namespace Digikam
