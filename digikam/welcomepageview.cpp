@@ -67,8 +67,8 @@ WelcomePageView::WelcomePageView(QWidget* parent)
     QString quickDescription = i18n("Manage your photographs like a professional "
                                     "with the power of open source");
     QString locationHtml     = KStandardDirs::locate("data", "digikam/about/main.html");
-    QString locationCss      = KStandardDirs::locate("data", "digikam/about/kde_infopage.css");
-    QString locationRtl      = KStandardDirs::locate("data", "digikam/about/kde_infopage_rtl.css" );
+    QString locationCss      = KStandardDirs::locate("data", "kdeui/about/kde_infopage.css");
+    QString locationRtl      = KStandardDirs::locate("data", "kdeui/about/kde_infopage_rtl.css" );
     QString rtl              = kapp->isRightToLeft() ? QString("@import \"%1\";" ).arg(locationRtl)
                                                      : QString();
 
@@ -87,8 +87,8 @@ WelcomePageView::WelcomePageView(QWidget* parent)
     end();
     show();
 
-    connect(browserExtension(), SIGNAL(openUrlRequest(const KUrl &, const KParts::OpenUrlArguments&, const KParts::BrowserArguments&)),
-            this, SLOT(slotUrlOpen(const KUrl &)));
+    connect(browserExtension(), SIGNAL(openUrlRequest(const KUrl&, const KParts::OpenUrlArguments&, const KParts::BrowserArguments&)),
+            this, SLOT(slotUrlOpen(const KUrl&)));
 }
 
 WelcomePageView::~WelcomePageView()
@@ -133,8 +133,8 @@ QString WelcomePageView::infoPage()
         "<h2 style='margin-top: 0px;'>"
         "Welcome to digiKam %1"
         "</h2><p>"
-        "digiKam is a photo management program for the K Desktop Environment. "
-        "It is designed to import, organize, enhance and export your digital photographs on your computer.</p>"
+        "digiKam is an open source photo management program. "
+        "It is designed to import, organize, enhance, search and export your digital photographs on your computer.</p>"
         "<p>You are currently in the Album view mode of digiKam. The Albums are the real "
         "containers where your files are stored, they are identical with the folders "
         "on disk.</p>\n<ul><li>"
