@@ -33,8 +33,8 @@
 
  <TextRegularColor             value="#BABABA"    />
  <TextSelectedColor            value="#FFB02F"    />
- <TextSpecialRegularColor      value="#8F8F7F"    />
- <TextSpecialSelectedColor     value="#B9B9B9"    />
+ <TextSpecialRegularColor      value="#3276CD"    />
+ <TextSpecialSelectedColor     value="#7AB4FF"    />
 
  <BannerColor                  value="#5B666B"    />
  <BannerColorTo                value="#3D4548"    />
