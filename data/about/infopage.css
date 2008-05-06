@@ -79,56 +79,6 @@ a:hover {
 }
 
 /*
- * the nav bar
- */
-
-#bar {
-  width: 100%;
-}
-
-#barCenter {
-  text-align: center;
-  background-color: %4;
-  color: %5;
-  padding-top: 0.5ex;
-  padding-bottom: 0.5ex;
-  font-weight: bold;
-  font-size: small;
-}
-
-#barCenter a.selected, #barCenter a.selected:hover {
-  color: #282828;
-  text-decoration: none;
-  text-shadow: #CDE1FF 0px 0px 5px;
-}
-
-
-#barCenter li a:link, #barCenter li a:visited, #barCenter li a:active {
-  color: #282828;
-  text-decoration: none;
-  text-shadow: none;
-}
-
-#barCenter li a:hover {
-  color: #282828;
-  text-decoration: none;
-  text-shadow: #CDE1FF 0px 0px 6px;
-}
-
-#barCenter ul {
-  margin: 0;
-  padding: 0;
-}
-
-#barCenter li {
-  display: inline;
-}
-
-#barCenter li:not(:first-child):before { /* Aren't css3 selectors great? */
-  content: " � ";
-}
-
-/*
  * the main box
  */
 
@@ -149,26 +99,26 @@ a:hover {
   width: 55px;
   height: 49px;
   float: left;
-  background-image: url(%6);
+  background-image: url(%4);
 }
 
 #boxTR {
   width: 55px;
   height: 49px;
   float: right;
-  background-image: url(%7);
+  background-image: url(%5);
 }
 
 #boxTC {
   height: 49px;
   margin-left: 55px;
   margin-right: 55px;
-  background-image: url(%8);
+  background-image: url(%6);
   background-repeat: repeat-x;
 }
 
 #boxL {
-  background-image: url(%9);
+  background-image: url(%7);
   background-repeat: repeat-y;
   background-position: left;
   padding-left: 55px;
@@ -181,7 +131,7 @@ a:hover {
 }
 
 #boxR {
-  background-image: url(%10);
+  background-image: url(%8);
   background-repeat: repeat-y;
   background-position: right;
   padding-right: 55px;
@@ -196,21 +146,21 @@ a:hover {
   width: 55px;
   height: 49px;
   float: left;
-  background-image: url(%11);
+  background-image: url(%9);
 }
 
 #boxBR {
   width: 55px;
   height: 49px;
   float: right;
-  background-image: url(%12);
+  background-image: url(%10);
 }
 
 #boxBC {
   height: 49px;
   margin-left: 55px;
   margin-right: 55px;
-  background-image: url(%13);
+  background-image: url(%11);
   background-repeat: repeat-x;
 }
 
@@ -220,7 +170,7 @@ a:hover {
 
 #footer {
   position: fixed;
-  background-image: url(%14);
+  background-image: url(%12);
   width: 100%;
   height: 100px;
   z-index: -2;
@@ -229,7 +179,7 @@ a:hover {
 
 #footerL {
   position: fixed;
-  background-image: url(%15);
+  background-image: url(%13);
   left: 0px;
   width: 155px;
   height: 100px;
@@ -238,11 +188,9 @@ a:hover {
 
 #footerR {
   position: fixed;
-  background-image: url(%16);
+  background-image: url(%14);
   right: 0px;
   width: 429px;
   height: 100px;
   z-index: -1;
 }
-
-/* vim:set sw=2 et nocindent smartindent: */
