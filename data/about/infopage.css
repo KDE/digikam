@@ -87,8 +87,8 @@ a:hover {
 
 #barCenter {
   text-align: center;
-  background-color: #F5F5F4;
-  color: #282828;
+  background-color: %4;
+  color: %5;
   padding-top: 0.5ex;
   padding-bottom: 0.5ex;
   font-weight: bold;
@@ -148,26 +148,26 @@ a:hover {
   width: 55px;
   height: 49px;
   float: left;
-  background-image: url(%4);
+  background-image: url(%6);
 }
 
 #boxTR {
   width: 55px;
   height: 49px;
   float: right;
-  background-image: url(%5);
+  background-image: url(%7);
 }
 
 #boxTC {
   height: 49px;
   margin-left: 55px;
   margin-right: 55px;
-  background-image: url(%6);
+  background-image: url(%8);
   background-repeat: repeat-x;
 }
 
 #boxL {
-  background-image: url(%7);
+  background-image: url(%9);
   background-repeat: repeat-y;
   background-position: left;
   padding-left: 55px;
@@ -180,7 +180,7 @@ a:hover {
 }
 
 #boxR {
-  background-image: url(%8);
+  background-image: url(%10);
   background-repeat: repeat-y;
   background-position: right;
   padding-right: 55px;
@@ -195,21 +195,21 @@ a:hover {
   width: 55px;
   height: 49px;
   float: left;
-  background-image: url(%9);
+  background-image: url(%11);
 }
 
 #boxBR {
   width: 55px;
   height: 49px;
   float: right;
-  background-image: url(%10);
+  background-image: url(%12);
 }
 
 #boxBC {
   height: 49px;
   margin-left: 55px;
   margin-right: 55px;
-  background-image: url(%11);
+  background-image: url(%13);
   background-repeat: repeat-x;
 }
 
@@ -219,7 +219,7 @@ a:hover {
 
 #footer {
   position: fixed;
-  background-image: url(%12);
+  background-image: url(%14);
   width: 100%;
   height: 100px;
   z-index: -2;
@@ -228,7 +228,7 @@ a:hover {
 
 #footerL {
   position: fixed;
-  background-image: url(%13);
+  background-image: url(%15);
   left: 0px;
   width: 155px;
   height: 100px;
@@ -237,7 +237,7 @@ a:hover {
 
 #footerR {
   position: fixed;
-  background-image: url(%14);
+  background-image: url(%16);
   right: 0px;
   width: 429px;
   height: 100px;
