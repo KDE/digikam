@@ -188,9 +188,8 @@ void WelcomePageView::updatedigikamCss()
 
     QString locationLogo = KStandardDirs::locate("data", "digikam/about/top-left-digikam.png");
     QString digikamCss   = fileToString(KStandardDirs::locate("data", "digikam/about/digikam.css"));
-    digikamCss           = digikamCss.arg(locationLogo)             // %1
-                                     .arg(background.name())        // %2
-                                     .arg(background.name());       // %3
+    digikamCss           = digikamCss.arg(background.name())        // %1
+                                     .arg(background.name());       // %2
 
     m_digikamCssFile->open();
     QFile file(m_digikamCssFile->fileName());
@@ -208,7 +207,7 @@ void WelcomePageView::updateInfoPageCss()
     infoPageCss          = infoPageCss
                            .arg(background.name())                                                     // %1
                            .arg(KStandardDirs::locate("data", "digikam/about/top-middle.png"))         // %2
-                           .arg(KStandardDirs::locate("data", "digikam/about/top-left.png"))           // %3
+                           .arg(KStandardDirs::locate("data", "digikam/about/top-left-digikam.png"))   // %3
                            .arg(KStandardDirs::locate("data", "digikam/about/box-top-left.png"))       // %4
                            .arg(KStandardDirs::locate("data", "digikam/about/box-top-right.png"))      // %5
                            .arg(KStandardDirs::locate("data", "digikam/about/box-top-middle.png"))     // %6
