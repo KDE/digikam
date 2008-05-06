@@ -50,7 +50,7 @@ a:hover {
 #headerL {
   position: absolute;
   background-image: url(%6);
-  margin-left: 5%;
+  margin-left: 2%;
   left: 0px;
   height: 131px;
   width: 147px;
@@ -68,7 +68,7 @@ a:hover {
   top: 63px;
   right: 0px;
   margin-top: -1em;
-  margin-right: 5%;
+  margin-right: 2%;
   text-align: right;
   font-size: xx-large;
   font-weight: bold;
@@ -81,7 +81,7 @@ a:hover {
   position: absolute;
   top: 70px;
   right: 0px;
-  margin-right: 5%;
+  margin-right: 2%;
   margin-left: 200px;
   text-align: right;
   font-size: large;
@@ -96,9 +96,9 @@ a:hover {
  */
 
 #box {
-  width: 90%;
-  margin-left: 5%;
-  margin-right: 5%;
+  width: 96%;
+  margin-left: 2%;
+  margin-right: 2%;
   margin-top: 10px;
   margin-bottom: 10px;
 }
