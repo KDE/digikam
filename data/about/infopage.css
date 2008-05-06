@@ -50,6 +50,7 @@ a:hover {
 #headerL {
   position: absolute;
   background-image: url(%6);
+  margin-left: 5%;
   left: 0px;
   height: 131px;
   width: 147px;
