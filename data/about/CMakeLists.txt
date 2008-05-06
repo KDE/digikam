@@ -2,6 +2,7 @@
 INSTALL(FILES main.html 
               digikam.css
               top-left-digikam.png
+              top-middle.png
 
               infopage_rtl.css
               infopage.css
@@ -14,9 +15,5 @@ INSTALL(FILES main.html
               box-top-right.png
               box-middle-left.png
               box-middle-right.png
-
-              top-left-digikam.png
-              top-middle.png
-              top-left.png
 
         DESTINATION ${DATA_INSTALL_DIR}/digikam/about )

@@ -1,6 +1,3 @@
-#headerL {
-  background-image: url(%1);
-}
 
 #boxCenter {
   padding: 1em;
@@ -11,9 +8,9 @@
 }
 
 .specTableTitle {
-  background-color: %2;
+  background-color: %1;
 }
 
 .specTableSubTitle {
-  background-color: %3;
+  background-color: %2;
 }
