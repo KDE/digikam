@@ -182,24 +182,28 @@ void WelcomePageView::updateInfoPageCss()
 {
     QColor background = ThemeEngine::instance()->baseColor();
     QColor text       = ThemeEngine::instance()->textRegColor();
+    QColor highlight  = ThemeEngine::instance()->textSpecialRegColor();
 
     QString infoPageCss  = fileToString(KStandardDirs::locate("data", "digikam/about/infopage.css"));
     infoPageCss          = infoPageCss
                            .arg(background.name())                                                     // %1
                            .arg(text.name())                                                           // %2
-                           .arg(background.name())                                                     // %3
-                           .arg(background.name())                                                     // %4
-                           .arg(KStandardDirs::locate("data", "digikam/about/top-middle.png"))         // %5
-                           .arg(KStandardDirs::locate("data", "digikam/about/top-left-digikam.png"))   // %6
-                           .arg(KStandardDirs::locate("data", "digikam/about/box-top-left.png"))       // %7
-                           .arg(KStandardDirs::locate("data", "digikam/about/box-top-right.png"))      // %8
-                           .arg(KStandardDirs::locate("data", "digikam/about/box-top-middle.png"))     // %9
-                           .arg(KStandardDirs::locate("data", "digikam/about/box-middle-left.png"))    // %10
-                           .arg(background.name())                                                     // %11
-                           .arg(KStandardDirs::locate("data", "digikam/about/box-middle-right.png"))   // %12
-                           .arg(KStandardDirs::locate("data", "digikam/about/box-bottom-left.png"))    // %13
-                           .arg(KStandardDirs::locate("data", "digikam/about/box-bottom-right.png"))   // %14
-                           .arg(KStandardDirs::locate("data", "digikam/about/box-bottom-middle.png")); // %15
+                           .arg(highlight.name())                                                      // %3
+                           .arg(highlight.name())                                                      // %4
+                           .arg(highlight.name())                                                      // %5
+                           .arg(background.name())                                                     // %6
+                           .arg(background.name())                                                     // %7
+                           .arg(KStandardDirs::locate("data", "digikam/about/top-middle.png"))         // %8
+                           .arg(KStandardDirs::locate("data", "digikam/about/top-left-digikam.png"))   // %9
+                           .arg(KStandardDirs::locate("data", "digikam/about/box-top-left.png"))       // %10
+                           .arg(KStandardDirs::locate("data", "digikam/about/box-top-right.png"))      // %11
+                           .arg(KStandardDirs::locate("data", "digikam/about/box-top-middle.png"))     // %12
+                           .arg(KStandardDirs::locate("data", "digikam/about/box-middle-left.png"))    // %13
+                           .arg(background.name())                                                     // %14
+                           .arg(KStandardDirs::locate("data", "digikam/about/box-middle-right.png"))   // %15
+                           .arg(KStandardDirs::locate("data", "digikam/about/box-bottom-left.png"))    // %16
+                           .arg(KStandardDirs::locate("data", "digikam/about/box-bottom-right.png"))   // %17
+                           .arg(KStandardDirs::locate("data", "digikam/about/box-bottom-middle.png")); // %18
 
     m_infoPageCssFile->open();
     QFile file(m_infoPageCssFile->fileName());
