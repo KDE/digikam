@@ -56,7 +56,6 @@ namespace Digikam
 WelcomePageView::WelcomePageView(QWidget* parent)
                : KHTMLPart(parent)
 {
-    m_digikamCssFile  = 0;
     m_infoPageCssFile = 0;
 
     widget()->setFocusPolicy(Qt::WheelFocus);
@@ -80,9 +79,6 @@ WelcomePageView::WelcomePageView(QWidget* parent)
 
 WelcomePageView::~WelcomePageView()
 {
-    if (m_digikamCssFile)
-        m_digikamCssFile->remove();
-
     if (m_infoPageCssFile)
         m_infoPageCssFile->remove();
 }
@@ -182,23 +178,6 @@ QByteArray WelcomePageView::fileToString(const QString &aFileName)
     return result;
 }
 
-void WelcomePageView::updatedigikamCss()
-{
-    QColor background = ThemeEngine::instance()->baseColor();
-
-    QString locationLogo = KStandardDirs::locate("data", "digikam/about/top-left-digikam.png");
-    QString digikamCss   = fileToString(KStandardDirs::locate("data", "digikam/about/digikam.css"));
-    digikamCss           = digikamCss.arg(background.name())        // %1
-                                     .arg(background.name());       // %2
-
-    m_digikamCssFile->open();
-    QFile file(m_digikamCssFile->fileName());
-    file.open(QIODevice::WriteOnly);
-    QTextStream stream(&file); 
-    stream << digikamCss;
-    file.close();
-}
-
 void WelcomePageView::updateInfoPageCss()
 {
     QColor background = ThemeEngine::instance()->baseColor();
@@ -206,16 +185,18 @@ void WelcomePageView::updateInfoPageCss()
     QString infoPageCss  = fileToString(KStandardDirs::locate("data", "digikam/about/infopage.css"));
     infoPageCss          = infoPageCss
                            .arg(background.name())                                                     // %1
-                           .arg(KStandardDirs::locate("data", "digikam/about/top-middle.png"))         // %2
-                           .arg(KStandardDirs::locate("data", "digikam/about/top-left-digikam.png"))   // %3
-                           .arg(KStandardDirs::locate("data", "digikam/about/box-top-left.png"))       // %4
-                           .arg(KStandardDirs::locate("data", "digikam/about/box-top-right.png"))      // %5
-                           .arg(KStandardDirs::locate("data", "digikam/about/box-top-middle.png"))     // %6
-                           .arg(KStandardDirs::locate("data", "digikam/about/box-middle-left.png"))    // %7
-                           .arg(KStandardDirs::locate("data", "digikam/about/box-middle-right.png"))   // %8
-                           .arg(KStandardDirs::locate("data", "digikam/about/box-bottom-left.png"))    // %9
-                           .arg(KStandardDirs::locate("data", "digikam/about/box-bottom-right.png"))   // %10
-                           .arg(KStandardDirs::locate("data", "digikam/about/box-bottom-middle.png")); // %11
+                           .arg(background.name())                                                     // %2
+                           .arg(background.name())                                                     // %3
+                           .arg(KStandardDirs::locate("data", "digikam/about/top-middle.png"))         // %4
+                           .arg(KStandardDirs::locate("data", "digikam/about/top-left-digikam.png"))   // %5
+                           .arg(KStandardDirs::locate("data", "digikam/about/box-top-left.png"))       // %6
+                           .arg(KStandardDirs::locate("data", "digikam/about/box-top-right.png"))      // %7
+                           .arg(KStandardDirs::locate("data", "digikam/about/box-top-middle.png"))     // %8
+                           .arg(KStandardDirs::locate("data", "digikam/about/box-middle-left.png"))    // %9
+                           .arg(KStandardDirs::locate("data", "digikam/about/box-middle-right.png"))   // %10
+                           .arg(KStandardDirs::locate("data", "digikam/about/box-bottom-left.png"))    // %11
+                           .arg(KStandardDirs::locate("data", "digikam/about/box-bottom-right.png"))   // %12
+                           .arg(KStandardDirs::locate("data", "digikam/about/box-bottom-middle.png")); // %13
 
     m_infoPageCssFile->open();
     QFile file(m_infoPageCssFile->fileName());
@@ -227,22 +208,14 @@ void WelcomePageView::updateInfoPageCss()
 
 void WelcomePageView::slotThemeChanged()
 {
-    if (m_digikamCssFile)
-        m_digikamCssFile->remove();
-
     if (m_infoPageCssFile)
         m_infoPageCssFile->remove();
-
-    m_digikamCssFile = new KTemporaryFile;
-    m_digikamCssFile->setSuffix(".css");
-    m_digikamCssFile->setAutoRemove(false);
 
     m_infoPageCssFile = new KTemporaryFile;
     m_infoPageCssFile->setSuffix(".css");
     m_infoPageCssFile->setAutoRemove(false);
 
     updateInfoPageCss();
-    updatedigikamCss();
 
     QString fontSize         = QString::number(12);
     QString appTitle         = i18n("digiKam");
@@ -253,18 +226,16 @@ void WelcomePageView::slotThemeChanged()
     QString rtl              = kapp->isRightToLeft() ? QString("@import \"%1\";" ).arg(locationRtl)
                                                      : QString();
     QString locationCss      = m_infoPageCssFile->fileName();
-    QString digikamCss       = m_digikamCssFile->fileName();
 
     begin(KUrl(locationHtml));
 
     QString content = fileToString(locationHtml);
     content         = content.arg(locationCss)        // %1
                              .arg(rtl)                // %2
-                             .arg(digikamCss)         // %3
-                             .arg(fontSize)           // %4
-                             .arg(appTitle)           // %5
-                             .arg(slogan)             // %6
-                             .arg(infoPage());        // %7
+                             .arg(fontSize)           // %3
+                             .arg(appTitle)           // %4
+                             .arg(slogan)             // %5
+                             .arg(infoPage());        // %6
 
     write(content);
     end();

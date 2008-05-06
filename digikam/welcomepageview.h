@@ -57,7 +57,6 @@ private:
     QByteArray fileToString(const QString &aFileName);
     QString    infoPage();
     void       updateInfoPageCss();
-    void       updatedigikamCss();
 
 private slots:
 
@@ -66,7 +65,6 @@ private slots:
 
 private:
 
-    KTemporaryFile *m_digikamCssFile;
     KTemporaryFile *m_infoPageCssFile;
 };
 
