@@ -112,26 +112,26 @@ a:hover {
   width: 55px;
   height: 49px;
   float: left;
-  background-image: url(%7);
+  background-image: url(%7);     /* box-top-left.png */
 }
 
 #boxTR {
   width: 55px;
   height: 49px;
   float: right;
-  background-image: url(%8);
+  background-image: url(%8);     /* box-top-right.png */
 }
 
 #boxTC {
   height: 49px;
   margin-left: 55px;
   margin-right: 55px;
-  background-image: url(%9);
+  background-image: url(%9);     /* box-top-middle.png */
   background-repeat: repeat-x;
 }
 
 #boxL {
-  background-image: url(%10);
+  background-image: url(%10);    /* box-middle-left.png */
   background-repeat: repeat-y;
   background-position: left;
   padding-left: 55px;
@@ -145,7 +145,7 @@ a:hover {
 }
 
 #boxR {
-  background-image: url(%12);
+  background-image: url(%12);    /* box-middle-right.png */
   background-repeat: repeat-y;
   background-position: right;
   padding-right: 55px;
@@ -160,20 +160,20 @@ a:hover {
   width: 55px;
   height: 49px;
   float: left;
-  background-image: url(%13);
+  background-image: url(%13);    /* box-bottom-left.png */
 }
 
 #boxBR {
   width: 55px;
   height: 49px;
   float: right;
-  background-image: url(%14);
+  background-image: url(%14);    /* box-bottom-right.png */
 }
 
 #boxBC {
   height: 49px;
   margin-left: 55px;
   margin-right: 55px;
-  background-image: url(%15);
+  background-image: url(%15);    /* box-bottom-middle.png */
   background-repeat: repeat-x;
 }
