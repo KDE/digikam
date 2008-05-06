@@ -56,15 +56,15 @@ private:
 
     QByteArray fileToString(const QString &aFileName);
     QString    infoPage();
-    QString    digikamCssFilePath();
-    QString    infoPageCssFilePath();
+    void       updateInfoPageCss();
+    void       updatedigikamCss();
 
 private slots:
 
     void slotUrlOpen(const KUrl&);
     void slotThemeChanged();
 
-private :
+private:
 
     KTemporaryFile *m_digikamCssFile;
     KTemporaryFile *m_infoPageCssFile;

@@ -56,6 +56,9 @@ namespace Digikam
 WelcomePageView::WelcomePageView(QWidget* parent)
                : KHTMLPart(parent)
 {
+    m_digikamCssFile  = 0;
+    m_infoPageCssFile = 0;
+
     widget()->setFocusPolicy(Qt::WheelFocus);
     // Let's better be paranoid and disable plugins (it defaults to enabled):
     setPluginsEnabled(false);
@@ -63,16 +66,6 @@ WelcomePageView::WelcomePageView(QWidget* parent)
     setJavaEnabled(false);    // just make this explicit.
     setMetaRefreshEnabled(false);
     setURLCursor(Qt::PointingHandCursor);
-
-    m_digikamCssFile = new KTemporaryFile;
-    m_digikamCssFile->setSuffix(".css");
-    m_digikamCssFile->setAutoRemove(false);
-    m_digikamCssFile->open();
-
-    m_infoPageCssFile = new KTemporaryFile;
-    m_infoPageCssFile->setSuffix(".css");
-    m_infoPageCssFile->setAutoRemove(false);
-    m_infoPageCssFile->open();
 
     slotThemeChanged();
 
@@ -87,8 +80,11 @@ WelcomePageView::WelcomePageView(QWidget* parent)
 
 WelcomePageView::~WelcomePageView()
 {
-    m_digikamCssFile->remove();
-    m_infoPageCssFile->remove();
+    if (m_digikamCssFile)
+        m_digikamCssFile->remove();
+
+    if (m_infoPageCssFile)
+        m_infoPageCssFile->remove();
 }
 
 void WelcomePageView::slotUrlOpen(const KUrl &url)
@@ -186,7 +182,7 @@ QByteArray WelcomePageView::fileToString(const QString &aFileName)
     return result;
 }
 
-QString WelcomePageView::digikamCssFilePath()
+void WelcomePageView::updatedigikamCss()
 {
     QColor background = ThemeEngine::instance()->baseColor();
 
@@ -196,16 +192,15 @@ QString WelcomePageView::digikamCssFilePath()
                                      .arg(background.name())        // %2
                                      .arg(background.name());       // %3
 
+    m_digikamCssFile->open();
     QFile file(m_digikamCssFile->fileName());
     file.open(QIODevice::WriteOnly);
     QTextStream stream(&file); 
     stream << digikamCss;
     file.close();
-
-    return m_digikamCssFile->fileName();
 }
 
-QString WelcomePageView::infoPageCssFilePath()
+void WelcomePageView::updateInfoPageCss()
 {
     QColor background = ThemeEngine::instance()->baseColor();
     QColor text       = ThemeEngine::instance()->textRegColor();
@@ -228,28 +223,47 @@ QString WelcomePageView::infoPageCssFilePath()
                                       .arg(KStandardDirs::locate("data", "digikam/about/bottom-left.png"))       // %15
                                       .arg(KStandardDirs::locate("data", "digikam/about/bottom-right.png"));     // %16
 
+    m_infoPageCssFile->open();
     QFile file(m_infoPageCssFile->fileName());
     file.open(QIODevice::WriteOnly);
     QTextStream stream(&file); 
     stream << infoPageCss;
     file.close();
-
-    return m_infoPageCssFile->fileName();
 }
 
 void WelcomePageView::slotThemeChanged()
 {
+    if (m_digikamCssFile)
+        m_digikamCssFile->remove();
+
+    if (m_infoPageCssFile)
+        m_infoPageCssFile->remove();
+
+    m_digikamCssFile = new KTemporaryFile;
+    m_digikamCssFile->setSuffix(".css");
+    m_digikamCssFile->setAutoRemove(false);
+
+    m_infoPageCssFile = new KTemporaryFile;
+    m_infoPageCssFile->setSuffix(".css");
+    m_infoPageCssFile->setAutoRemove(false);
+
+    updateInfoPageCss();
+    updatedigikamCss();
+
     QString fontSize         = QString::number(12);
     QString appTitle         = i18n("digiKam");
     QString catchPhrase      = QString();      // Not enough space for a catch phrase at default window size.
     QString quickDescription = i18n("Manage your photographs like a professional "
                                     "with the power of open source");
     QString locationHtml     = KStandardDirs::locate("data", "digikam/about/main.html");
-    QString locationCss      = infoPageCssFilePath();
     QString locationRtl      = KStandardDirs::locate("data", "digikam/about/infopage_rtl.css" );
     QString rtl              = kapp->isRightToLeft() ? QString("@import \"%1\";" ).arg(locationRtl)
                                                      : QString();
-    QString digikamCss       = digikamCssFilePath();
+    QString locationCss      = m_infoPageCssFile->fileName();
+    QString digikamCss       = m_digikamCssFile->fileName();
+
+    DDebug() << "locationCss: " << locationCss << endl;
+    DDebug() << "digikamCss: "  << digikamCss  << endl;
 
     begin(KUrl(locationHtml));
 
