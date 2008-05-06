@@ -4,7 +4,7 @@
  */
 
 img {margin: 0px; padding: 0px}
-body {margin: 0px; padding: 0px; background-color: %1; color: #FFFFFF; height="100%"; width="100%"}
+body {margin: 0px; padding: 0px; background-color: %1; color: %2; height="100%"; width="100%"}
 a { color: #6193CF; text-decoration: none; font-weight: bold; }
 a:hover {
   color: #6193CF;
@@ -30,11 +30,11 @@ a:hover {
 }
 
 .specTableTitle {
-  background-color: %2;
+  background-color: %3;
 }
 
 .specTableSubTitle {
-  background-color: %3;
+  background-color: %4;
 }
 
 /*
@@ -42,14 +42,14 @@ a:hover {
  */
 
 #header {
-  background-image: url(%4);
+  background-image: url(%5);
   width: 100%;
   height: 131px;
 }
 
 #headerL {
   position: absolute;
-  background-image: url(%5);
+  background-image: url(%6);
   left: 0px;
   height: 131px;
   width: 147px;
@@ -111,40 +111,40 @@ a:hover {
   width: 55px;
   height: 49px;
   float: left;
-  background-image: url(%6);
+  background-image: url(%7);
 }
 
 #boxTR {
   width: 55px;
   height: 49px;
   float: right;
-  background-image: url(%7);
+  background-image: url(%8);
 }
 
 #boxTC {
   height: 49px;
   margin-left: 55px;
   margin-right: 55px;
-  background-image: url(%8);
+  background-image: url(%9);
   background-repeat: repeat-x;
 }
 
 #boxL {
-  background-image: url(%9);
+  background-image: url(%10);
   background-repeat: repeat-y;
   background-position: left;
   padding-left: 55px;
 }
 
 #boxCenter {
-  background-color: #010101;
+  background-color: %11;
   background-position: center;
   text-align: left;
   padding: 1em;
 }
 
 #boxR {
-  background-image: url(%10);
+  background-image: url(%12);
   background-repeat: repeat-y;
   background-position: right;
   padding-right: 55px;
@@ -159,20 +159,20 @@ a:hover {
   width: 55px;
   height: 49px;
   float: left;
-  background-image: url(%11);
+  background-image: url(%13);
 }
 
 #boxBR {
   width: 55px;
   height: 49px;
   float: right;
-  background-image: url(%12);
+  background-image: url(%14);
 }
 
 #boxBC {
   height: 49px;
   margin-left: 55px;
   margin-right: 55px;
-  background-image: url(%13);
+  background-image: url(%15);
   background-repeat: repeat-x;
 }
