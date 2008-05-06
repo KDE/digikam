@@ -1,6 +1,5 @@
 
 INSTALL(FILES main.html 
-              digikam.css
               top-left-digikam.png
               top-middle.png
 
