@@ -252,18 +252,15 @@ void WelcomePageView::slotThemeChanged()
 
     QString fontSize         = QString::number(12);
     QString appTitle         = i18n("digiKam");
-    QString catchPhrase      = QString();      // Not enough space for a catch phrase at default window size.
-    QString quickDescription = i18n("Manage your photographs like a professional "
+    QString catchPhrase      = i18n("Manage your photographs like a professional "
                                     "with the power of open source");
+    QString quickDescription = QString();      // Not used.
     QString locationHtml     = KStandardDirs::locate("data", "digikam/about/main.html");
     QString locationRtl      = KStandardDirs::locate("data", "digikam/about/infopage_rtl.css" );
     QString rtl              = kapp->isRightToLeft() ? QString("@import \"%1\";" ).arg(locationRtl)
                                                      : QString();
     QString locationCss      = m_infoPageCssFile->fileName();
     QString digikamCss       = m_digikamCssFile->fileName();
-
-    DDebug() << "locationCss: " << locationCss << endl;
-    DDebug() << "digikamCss: "  << digikamCss  << endl;
 
     begin(KUrl(locationHtml));
 
