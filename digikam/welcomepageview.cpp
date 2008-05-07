@@ -93,6 +93,8 @@ QString WelcomePageView::infoPage()
     QStringList newFeatures;
     newFeatures << i18n("Designed for KDE4");
     newFeatures << i18n("Hardware handling using KDE4 Solid interface");
+    newFeatures << i18n("Multimedia files handling using KDE4 Phonon interface");
+    newFeatures << i18n("Geolocation performed using KDE4 Marble interface");
     newFeatures << i18n("XMP metadata support");
     newFeatures << i18n("A new camera interface");
     newFeatures << i18n("A new tool to capture photographs from Camera");
@@ -100,7 +102,6 @@ QString WelcomePageView::infoPage()
     newFeatures << i18n("Support of multiple roots album paths");
     newFeatures << i18n("Thumbnails-bar integration with preview mode and in editor for easy navigation between images");
     newFeatures << i18n("Supports the latest camera RAW files");
-    newFeatures << i18n("Geolocation performed using KDE4 Marble interface");
     newFeatures << i18n("New tool based on LensFun library to fix lens defaults automatically");
 
     QString featureItems;
