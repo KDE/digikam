@@ -44,10 +44,12 @@ macro_optional_find_package(KdepimLibs)
 macro_bool_to_01(KDEPIMLIBS_FOUND HAVE_KDEPIMLIBS)
 
 SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
-macro_optional_find_package(MarbleWidget)
-set(HAVE_MARBLEWIDGET 0)
-#macro_bool_to_01(MARBLEWIDGET_FOUND HAVE_MARBLEWIDGET)
 
+# Check MarbleWidget library for geolocation.
+macro_optional_find_package(MarbleWidget)
+macro_bool_to_01(MARBLEWIDGET_FOUND HAVE_MARBLEWIDGET)
+
+# Check LensFun library for lens correction tool.
 macro_optional_find_package(LensFun)
 macro_bool_to_01(LENSFUN_FOUND HAVE_LENSFUN)
 
