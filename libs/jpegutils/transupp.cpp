@@ -27,6 +27,9 @@ extern "C"
 #include "jerror.h"
 #endif
 }
+
+// Local includes.
+
 #include "transupp.h"		/* My own external interface */
 
 namespace Digikam
