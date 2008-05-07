@@ -17,6 +17,8 @@
  */
 #define JPEG_INTERNALS
 
+// LibJPEG includes.
+
 extern "C"
 {
 #include "jinclude.h"
@@ -27,6 +29,9 @@ extern "C"
 #include "jerror.h"
 #endif
 }
+
+// Local includes.
+
 #include "transupp.h"		/* My own external interface */
 
 namespace Digikam
