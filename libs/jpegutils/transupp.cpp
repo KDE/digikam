@@ -17,6 +17,8 @@
  */
 #define JPEG_INTERNALS
 
+// LibJPEG includes.
+
 extern "C"
 {
 #include "jinclude.h"
