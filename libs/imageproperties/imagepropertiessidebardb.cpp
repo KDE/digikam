@@ -276,7 +276,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         {
             ImagePosition pos = d->currentInfos.first().imagePosition();
             if (pos.isEmpty())
-                m_gpsTab->setCurrentURL();
+                m_gpsTab->setCurrentURL(m_currentURL);
             else
                 m_gpsTab->setGPSInfo(pos.latitudeNumber(), 
                                      pos.longitudeNumber(), 
