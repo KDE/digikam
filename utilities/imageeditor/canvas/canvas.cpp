@@ -85,7 +85,6 @@ public:
     CanvasPrivate() : 
         tileSize(128), minZoom(0.1), maxZoom(12.0), zoomMultiplier(1.2) 
     {
-        rubber           = 0;
         pressedMoved     = false;
         pressedMoving    = false;
         ltActive         = false;
