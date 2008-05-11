@@ -7,7 +7,7 @@
  * Description : image data interface for image plugins
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com> 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -107,7 +107,7 @@ public:
     /** Embed the Color Profile we have used in ICC plugin when this option is 
         selected
     */
-    void   setEmbeddedICCToOriginalImage(QString profilePath);
+    void   setEmbeddedICCToOriginalImage(const QString& profilePath);
 
     /** Replace the data of the current original image selection with the given data.
         The characteristics of the data must match the characteristics of the current
@@ -132,9 +132,9 @@ public:
         or target preview (set by putPreviewImage) image.
     */
 
-    DColor getColorInfoFromOriginalImage(QPoint point);
-    DColor getColorInfoFromPreviewImage(QPoint point);
-    DColor getColorInfoFromTargetPreviewImage(QPoint point);
+    DColor getColorInfoFromOriginalImage(const QPoint& point);
+    DColor getColorInfoFromPreviewImage(const QPoint& point);
+    DColor getColorInfoFromTargetPreviewImage(const QPoint& point);
 
     /** Original image information.*/
     int  originalWidth();

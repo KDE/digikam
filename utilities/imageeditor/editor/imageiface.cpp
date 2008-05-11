@@ -7,7 +7,7 @@
  * Description : image data interface for image plugins
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com> 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -113,7 +113,7 @@ bool ImageIface::previewType()
     return d->usePreviewSelection;
 }
 
-DColor ImageIface::getColorInfoFromOriginalImage(QPoint point)
+DColor ImageIface::getColorInfoFromOriginalImage(const QPoint& point)
 {
     if ( !DImgInterface::defaultInterface()->getImage() || point.x() > originalWidth() || point.y() > originalHeight() )
     {
@@ -124,7 +124,7 @@ DColor ImageIface::getColorInfoFromOriginalImage(QPoint point)
     return DImgInterface::defaultInterface()->getImg()->getPixelColor(point.x(), point.y());
 }
 
-DColor ImageIface::getColorInfoFromPreviewImage(QPoint point)
+DColor ImageIface::getColorInfoFromPreviewImage(const QPoint& point)
 {
     if ( d->previewImage.isNull() || point.x() > previewWidth() || point.y() > previewHeight() )
     {
@@ -135,7 +135,7 @@ DColor ImageIface::getColorInfoFromPreviewImage(QPoint point)
     return d->previewImage.getPixelColor(point.x(), point.y());
 }
 
-DColor ImageIface::getColorInfoFromTargetPreviewImage(QPoint point)
+DColor ImageIface::getColorInfoFromTargetPreviewImage(const QPoint& point)
 {
     if ( d->targetPreviewImage.isNull() || point.x() > previewWidth() || point.y() > previewHeight() )
     {
@@ -243,7 +243,7 @@ void ImageIface::putOriginalImage(const QString &caller, uchar* data, int w, int
     DImgInterface::defaultInterface()->putImage(caller, data, w, h);
 }
 
-void ImageIface::setEmbeddedICCToOriginalImage( QString profilePath)
+void ImageIface::setEmbeddedICCToOriginalImage(const QString& profilePath)
 {
     DImgInterface::defaultInterface()->setEmbeddedICCToOriginalImage( profilePath );
 }
