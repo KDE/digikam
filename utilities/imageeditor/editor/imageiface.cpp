@@ -375,6 +375,7 @@ PhotoInfoContainer ImageIface::getPhotographInformations() const
     DMetadata meta;
     meta.setExif(DImgInterface::defaultInterface()->getExif());
     meta.setIptc(DImgInterface::defaultInterface()->getIptc());
+    meta.setXmp(DImgInterface::defaultInterface()->getXmp());
     return meta.getPhotographInformations();
 }
 

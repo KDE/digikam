@@ -581,6 +581,7 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iof
     DMetadata meta;
     meta.setExif(d->image.getExif());
     meta.setIptc(d->image.getIptc());
+    meta.setXmp(d->image.getXmp());
 
     // Update Iptc preview.
     // NOTE: see B.K.O #130525. a JPEG segment is limited to 64K. If the IPTC byte array is
@@ -618,9 +619,10 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iof
     if( setExifOrientationTag )
         meta.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
 
-    // Store new Exif/Iptc data into image.
+    // Store new Exif/Iptc/Xmp data into image.
     d->image.setExif(meta.getExif());
     d->image.setIptc(meta.getIptc());
+    d->image.setXmp(meta.getXmp());
 
     d->thread->save(d->image, fileName, mimeType);
 }
@@ -680,6 +682,8 @@ void DImgInterface::readMetadataFromFile(const QString &file)
         d->image.setExif(meta.getExif());
     if (!meta.getIptc().isNull())
         d->image.setIptc(meta.getIptc());
+    if (!meta.getXmp().isNull())
+        d->image.setXmp(meta.getXmp());
 }
 
 void DImgInterface::clearUndoManager()
