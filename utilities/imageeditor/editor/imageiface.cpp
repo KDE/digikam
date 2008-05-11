@@ -113,7 +113,7 @@ bool ImageIface::previewType()
     return d->usePreviewSelection;
 }
 
-DColor ImageIface::getColorInfoFromOriginalImage(QPoint point)
+DColor ImageIface::getColorInfoFromOriginalImage(const QPoint& point)
 {
     if ( !DImgInterface::defaultInterface()->getImage() || point.x() > originalWidth() || point.y() > originalHeight() )
     {
@@ -124,7 +124,7 @@ DColor ImageIface::getColorInfoFromOriginalImage(QPoint point)
     return DImgInterface::defaultInterface()->getImg()->getPixelColor(point.x(), point.y());
 }
 
-DColor ImageIface::getColorInfoFromPreviewImage(QPoint point)
+DColor ImageIface::getColorInfoFromPreviewImage(const QPoint& point)
 {
     if ( d->previewImage.isNull() || point.x() > previewWidth() || point.y() > previewHeight() )
     {
@@ -135,7 +135,7 @@ DColor ImageIface::getColorInfoFromPreviewImage(QPoint point)
     return d->previewImage.getPixelColor(point.x(), point.y());
 }
 
-DColor ImageIface::getColorInfoFromTargetPreviewImage(QPoint point)
+DColor ImageIface::getColorInfoFromTargetPreviewImage(const QPoint& point)
 {
     if ( d->targetPreviewImage.isNull() || point.x() > previewWidth() || point.y() > previewHeight() )
     {
@@ -243,7 +243,7 @@ void ImageIface::putOriginalImage(const QString &caller, uchar* data, int w, int
     DImgInterface::defaultInterface()->putImage(caller, data, w, h);
 }
 
-void ImageIface::setEmbeddedICCToOriginalImage( QString profilePath)
+void ImageIface::setEmbeddedICCToOriginalImage(const QString& profilePath)
 {
     DImgInterface::defaultInterface()->setEmbeddedICCToOriginalImage( profilePath );
 }
