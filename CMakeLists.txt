@@ -278,6 +278,7 @@ SET(libdimgfilters_SRCS
 
 SET(libdmetadata_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/dmetadata.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/geodetictools.cpp
    )
 
 SET(libgreycstoration_SRCS
