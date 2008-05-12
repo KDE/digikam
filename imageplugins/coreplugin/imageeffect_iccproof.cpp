@@ -208,7 +208,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     m_embeddProfileBox->setChecked(true);
     m_embeddProfileBox->setText(i18n("Assign profile"));
     QWhatsThis::add(m_embeddProfileBox, i18n("<p>You can use this option to embed "
-                                             "the selected work-space color profile into the image.</p>"));
+                                             "the selected workspace color profile into the image.</p>"));
 
     m_BPCBox = new QCheckBox(generalOptions);
     m_BPCBox->setText(i18n("Use BPC"));
@@ -322,8 +322,8 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     //---------- "Workspace" Page Setup ---------------------------------
 
     m_toolBoxWidgets->insertItem(WORKSPACEPAGE, spaceProfiles, 
-                                 SmallIconSet("tablet"), i18n("Work-space Profile"));
-    QWhatsThis::add(spaceProfiles, i18n("<p>Set here all parameters relevant of Color Work-space "
+                                 SmallIconSet("tablet"), i18n("Workspace Profile"));
+    QWhatsThis::add(spaceProfiles, i18n("<p>Set here all parameters relevant to Color Workspace "
                     "Profiles.</p>"));
 
     QGridLayout *secondPageLayout = new QGridLayout(spaceProfiles, 3, 2, spacingHint());
@@ -392,7 +392,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     m_toolBoxWidgets->insertItem(LIGHTNESSPAGE, lightnessadjust, 
                                  SmallIconSet("blend"), i18n("Lightness Adjustments"));
-    QWhatsThis::add(lightnessadjust, i18n("<p>Set here all lightness adjustments of target image.</p>"));
+    QWhatsThis::add(lightnessadjust, i18n("<p>Set here all lightness adjustments to the target image.</p>"));
 
     QGridLayout *fourPageLayout = new QGridLayout( lightnessadjust, 5, 2, spacingHint(), 0);
 
@@ -550,8 +550,8 @@ void ImageEffect_ICCProof::readUserSettings()
         }
         else
         {
-            QString message = i18n("The ICC profiles path seems to be invalid. You'll not be able to use \"Default profile\"\
-                                    options.<p>Please solve it in digiKam ICC setup.");
+            QString message = i18n("The ICC profiles path seems to be invalid. You won't be able to use the \"Default profile\"\
+                                    options.<p>Please fix this in the digiKam ICC setup.");
             slotToggledWidgets( false );
             KMessageBox::information(this, message);
         }
@@ -738,7 +738,7 @@ void ImageEffect_ICCProof::slotEffect()
         QFileInfo info(tmpInPath);
         if (!info.exists() || !info.isReadable() || !info.isFile() )
         {
-            KMessageBox::information(this, i18n("<p>Selected ICC input profile path seems to be invalid.<p>"
+            KMessageBox::information(this, i18n("<p>The selected ICC input profile path seems to be invalid.<p>"
                                                 "Please check it."));
             return;
         }
@@ -756,7 +756,7 @@ void ImageEffect_ICCProof::slotEffect()
         QFileInfo info(tmpProofPath);
         if (!info.exists() || !info.isReadable() || !info.isFile() )
         {
-            KMessageBox::information(this, i18n("<p>Selected ICC proof profile path seems to be invalid.<p>"
+            KMessageBox::information(this, i18n("<p>The selected ICC proof profile path seems to be invalid.<p>"
                                                 "Please check it."));
             return;
         }
@@ -915,7 +915,7 @@ void ImageEffect_ICCProof::finalRendering()
                 QFileInfo info(tmpProofPath);
                 if (!info.exists() || !info.isReadable() || !info.isFile() )
                 {
-                    KMessageBox::information(this, i18n("<p>Selected ICC proof profile path seems "
+                    KMessageBox::information(this, i18n("<p>The selected ICC proof profile path seems "
                                                         "to be invalid.<p>Please check it."));
                     return;
                 }
@@ -1093,7 +1093,7 @@ void ImageEffect_ICCProof::slotCMDisabledWarning()
 {
     if (!m_cmEnabled)
     {
-        QString message = i18n("<p>You do not have enabled Color Management in digiKam preferences.</p>");
+        QString message = i18n("<p>You have not enabled Color Management in the digiKam preferences.</p>");
         message.append( i18n("<p>\"Use of default profile\" options will be disabled now.</p>"));
         KMessageBox::information(this, message);
         slotToggledWidgets(false);
