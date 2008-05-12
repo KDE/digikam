@@ -216,9 +216,9 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
                                    "with Relative Colorimetric Intent. Perceptual intent should make no "
                                    "difference, since BPC is always on, and in Absolute Colorimetric "
                    "Intent it is always turned off.</p>"
-                                   "<p>BPC does compensate a lack of ICC profiles in the dark tone rendering."
+                                   "<p>BPC does compensate for a lack of ICC profiles in the dark tone rendering. "
                                    "With BPC the dark tones are optimally mapped (no clipping) from original media "
-                                   "to the destination media can render, e.g. the combination paper/ink.</p>"));
+                                   "to the destination rendering media, e.g. the combination of paper and ink.</p>"));
 
     QLabel *intent = new QLabel(i18n("Rendering Intent:"), generalOptions);
     m_renderingIntentsCB = new QComboBox(false, generalOptions);
@@ -231,12 +231,12 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
                 "so that gray balance is preserved but colorimetric accuracy may not be preserved.<br>"
                 "In other words, if certain colors in an image fall outside of the range of colors that "
                 "the output device can render, the image intent will cause all the colors in the image "
-                "to be adjusted so that the every color in the image falls within the range that can be "
+                "to be adjusted so that every color in the image falls within the range that can be "
                 "rendered and so that the relationship between colors is preserved as much as possible.<br>"
                 "This intent is most suitable for display of photographs and images, and is the default "
                 "intent.</li>"
                 "<li> Absolute Colorimetric intent causes any colors that fall outside the range that the "
-                "output device can render are adjusted to the closest color that can be rendered, while all "
+                "output device can render to be adjusted to the closest color that can be rendered, while all "
                 "other colors are left unchanged.<br>"
                 "This intent preserves the white point and is most suitable for spot colors (Pantone, "
                 "TruMatch, logo colors, ...).</li>"
