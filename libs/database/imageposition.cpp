@@ -102,7 +102,7 @@ ImagePosition::ImagePosition(qlonglong imageId)
     d->imageId = imageId;
 
     QVariantList values = DatabaseAccess().db()->getImagePosition(imageId);
-    if (values.size() == 9)
+    if (values.size() == 10)
     {
         d->empty           = false;
         d->latitude        = values[0].toString();
