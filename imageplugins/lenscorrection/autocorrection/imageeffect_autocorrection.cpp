@@ -29,6 +29,7 @@
 #include <QPen>
 #include <QGridLayout>
 #include <QTabWidget>
+#include <QBitmap>
 
 // KDE includes.
 
@@ -89,18 +90,14 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
 
     m_settingsWidget  = new QWidget(mainWidget());
     QGridLayout *grid = new QGridLayout(m_settingsWidget);
-
-#if 0
-    m_maskPreviewLabel = new QLabel(firstPage);
-    m_maskPreviewLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    m_maskPreviewLabel->setWhatsThis(i18n("<p>You can see here a thumbnail preview of the "
-                                          "correction applied to a cross pattern."));
-#endif
-
-    m_cameraSelector = new KLFDeviceSelector(m_settingsWidget);
-    KSeparator *line = new KSeparator(Qt::Horizontal, m_settingsWidget);
+    m_cameraSelector  = new KLFDeviceSelector(m_settingsWidget);
+    KSeparator *line  = new KSeparator(Qt::Horizontal, m_settingsWidget);
 
     // -------------------------------------------------------------
+
+    m_useGrid    = new QCheckBox(i18n("Use grid"), m_settingsWidget);
+    m_useGrid->setWhatsThis(i18n("Set on this option to show a grid over preview to vizualize "
+                                 "lens distortion correction applied."));
 
     m_filterCCA  = new QCheckBox(i18n("Chromatic Aberration"), m_settingsWidget);
     m_filterCCA->setWhatsThis(i18n("Chromatic aberration is easily recognised as color fringes "
@@ -122,14 +119,14 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
     m_filterGeom->setWhatsThis(i18n("Four geometries are handeled here: Rectilinear (99 percent of all lenses), "
                                     "Fisheye, Cylindrical, Equirectangular."));
 
-//    grid->addWidget(m_maskPreviewLabel, 0, 0, 1, 2);
-    grid->addWidget(m_cameraSelector, 0, 0, 1, 2);
-    grid->addWidget(line       ,      1, 0, 1, 2);
-    grid->addWidget(m_filterCCA,      2, 0, 1, 2);
-    grid->addWidget(m_filterVig,      3, 0, 1, 2);
-    grid->addWidget(m_filterCCI,      4, 0, 1, 2);
-    grid->addWidget(m_filterDist,     5, 0, 1, 2);
-    grid->addWidget(m_filterGeom,     6, 0, 1, 2);
+    grid->addWidget(m_useGrid,        0, 0, 1, 2);
+    grid->addWidget(m_cameraSelector, 1, 0, 1, 2);
+    grid->addWidget(line,             2, 0, 1, 2);
+    grid->addWidget(m_filterCCA,      3, 0, 1, 2);
+    grid->addWidget(m_filterVig,      4, 0, 1, 2);
+    grid->addWidget(m_filterCCI,      5, 0, 1, 2);
+    grid->addWidget(m_filterDist,     6, 0, 1, 2);
+    grid->addWidget(m_filterGeom,     7, 0, 1, 2);
     grid->setMargin(spacingHint());
     grid->setSpacing(spacingHint());
 
@@ -140,13 +137,16 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
     connect(m_cameraSelector, SIGNAL(signalLensSettingsChanged()),
             this, SLOT(slotLensChanged()));
 
-    connect(m_filterCCA,  SIGNAL(stateChanged(int)), 
+    connect(m_useGrid, SIGNAL(stateChanged(int)), 
             this, SLOT(slotSetFilters()));
 
-    connect(m_filterVig,  SIGNAL(stateChanged(int)), 
+    connect(m_filterCCA, SIGNAL(stateChanged(int)), 
             this, SLOT(slotSetFilters()));
 
-    connect(m_filterCCI,  SIGNAL(stateChanged(int)), 
+    connect(m_filterVig, SIGNAL(stateChanged(int)), 
+            this, SLOT(slotSetFilters()));
+
+    connect(m_filterCCI, SIGNAL(stateChanged(int)), 
             this, SLOT(slotSetFilters()));
 
     connect(m_filterDist, SIGNAL(stateChanged(int)), 
@@ -248,6 +248,31 @@ void ImageEffect_AutoCorrection::prepareEffect()
     bool sb                    = iface->previewSixteenBit();
 
     Digikam::DImg image(w, h, sb, false, data);
+
+    if (m_useGrid->isChecked())
+    {
+        QBitmap pattern(9, 9);
+        pattern.clear();
+        QPainter p1(&pattern);
+        p1.setPen(QPen(Qt::black, 1)); 
+        p1.drawLine(5, 0, 5, 9);
+        p1.drawLine(0, 5, 9, 5);
+        p1.end();
+    
+        QPixmap pix(w, h);
+        pix.fill(Qt::transparent);
+        QPainter p2(&pix);
+        p2.setPen(QPen(Qt::gray, 1)); 
+        p2.fillRect(0, 0, pix.width(), pix.height(), QBrush(pattern));
+        p2.end();
+        Digikam::DImg grid(pix.toImage());
+    
+        Digikam::DColorComposer *composer = Digikam::DColorComposer::getComposer(Digikam::DColorComposer::PorterDuffNone);
+        Digikam::DColorComposer::MultiplicationFlags flags = Digikam::DColorComposer::NoMultiplication;
+        
+        // Do alpha blending of template on dest image
+        image.bitBlendImage(composer, &grid, 0, 0, w, h, 0, 0, flags);
+    }
 
     m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>
                        (new KLensFunFilter(&image, this, m_cameraSelector->getKLFObject()));

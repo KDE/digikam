@@ -67,6 +67,7 @@ private:
 
     QWidget           *m_settingsWidget;
 
+    QCheckBox         *m_useGrid;
     QCheckBox         *m_filterCCA;
     QCheckBox         *m_filterVig;
     QCheckBox         *m_filterCCI;
@@ -74,11 +75,6 @@ private:
     QCheckBox         *m_filterGeom;
 
     KLFDeviceSelector *m_cameraSelector;
-
-//    double focalDistance;
-//    double aperature;
-
-    Digikam::DImg      m_previewRasterImage;
 
 private slots:
 
