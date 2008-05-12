@@ -21,11 +21,16 @@
  * GNU General Public License for more details.
  * ============================================================ */
 
+// C++ includes
+
+#include <cmath>
+
 // Qt includes.
 
 #include <QFile>
 #include <QDir>
 #include <QMap>
+#include <QRectF>
 
 // KDE includes.
 
@@ -37,12 +42,42 @@
 
 // Local includes.
 
-#include "albumdb.h"
 #include "ddebug.h"
+#include "albumdb.h"
+#include "geodetictools.h"
 #include "imagequerybuilder.h"
 
 namespace Digikam
 {
+
+class ImageQueryPostHook
+{
+public:
+
+    // This is the single hook, ImageQueryPostHookS is the container
+    virtual ~ImageQueryPostHook() {};
+    virtual bool checkPosition(double /*latitudeNumber*/, double /*longitudeNumber*/) { return true; };
+};
+
+ImageQueryPostHooks::~ImageQueryPostHooks()
+{
+    foreach(ImageQueryPostHook *hook, m_postHooks)
+        delete hook;
+}
+
+void ImageQueryPostHooks::addHook(ImageQueryPostHook* hook)
+{
+    m_postHooks << hook;
+}
+
+bool ImageQueryPostHooks::checkPosition(double latitudeNumber, double longitudeNumber)
+{
+    foreach(ImageQueryPostHook *hook, m_postHooks)
+        if (!hook->checkPosition(latitudeNumber, longitudeNumber))
+            return false;
+    return true;
+}
+
 
 ImageQueryBuilder::ImageQueryBuilder()
 {
@@ -55,16 +90,16 @@ ImageQueryBuilder::ImageQueryBuilder()
     }
 }
 
-QString ImageQueryBuilder::buildQuery(const QString &q, QList<QVariant> *boundValues) const
+QString ImageQueryBuilder::buildQuery(const QString &q, QList<QVariant> *boundValues, ImageQueryPostHooks *hooks) const
 {
     // Handle legacy query descriptions
     if (q.startsWith("digikamsearch:"))
         return buildQueryFromUrl(KUrl(q), boundValues);
     else
-        return buildQueryFromXml(q, boundValues);
+        return buildQueryFromXml(q, boundValues, hooks);
 }
 
-QString ImageQueryBuilder::buildQueryFromXml(const QString &xml, QList<QVariant> *boundValues) const
+QString ImageQueryBuilder::buildQueryFromXml(const QString &xml, QList<QVariant> *boundValues, ImageQueryPostHooks *hooks) const
 {
     SearchXmlCachingReader reader(xml);
     QString sql;
@@ -83,14 +118,15 @@ QString ImageQueryBuilder::buildQueryFromXml(const QString &xml, QList<QVariant>
             if (firstGroup)
                 firstGroup = false;
 
-            buildGroup(sql, reader, boundValues);
+            buildGroup(sql, reader, boundValues, hooks);
         }
     }
 
     return sql;
 }
 
-void ImageQueryBuilder::buildGroup(QString &sql, SearchXmlCachingReader &reader, QList<QVariant> *boundValues) const
+void ImageQueryBuilder::buildGroup(QString &sql, SearchXmlCachingReader &reader,
+                                   QList<QVariant> *boundValues, ImageQueryPostHooks *hooks) const
 {
     sql += " (";
 
@@ -111,7 +147,7 @@ void ImageQueryBuilder::buildGroup(QString &sql, SearchXmlCachingReader &reader,
             if (firstField)
                 firstField = false;
 
-            buildGroup(sql, reader, boundValues);
+            buildGroup(sql, reader, boundValues, hooks);
         }
 
         if (reader.isFieldElement())
@@ -121,7 +157,7 @@ void ImageQueryBuilder::buildGroup(QString &sql, SearchXmlCachingReader &reader,
             if (firstField)
                 firstField = false;
 
-            buildField(sql, reader, reader.fieldName(), boundValues);
+            buildField(sql, reader, reader.fieldName(), boundValues, hooks);
         }
     }
 
@@ -136,14 +172,15 @@ class FieldQueryBuilder
 public:
 
     FieldQueryBuilder(QString &sql, SearchXmlCachingReader &reader,
-                      QList<QVariant> *boundValues, SearchXml::Relation relation)
-       : sql(sql), reader(reader), boundValues(boundValues), relation(relation)
+                      QList<QVariant> *boundValues, ImageQueryPostHooks *hooks, SearchXml::Relation relation)
+       : sql(sql), reader(reader), boundValues(boundValues), hooks(hooks), relation(relation)
     {
     }
 
     QString &sql;
     SearchXmlCachingReader &reader;
     QList<QVariant> *boundValues;
+    ImageQueryPostHooks *hooks;
     SearchXml::Relation relation;
 
     inline QString prepareForLike(const QString &str)
@@ -243,6 +280,7 @@ public:
                 sql += ") ";
             foreach (int v, values)
                 *boundValues << v;
+            sql += " ) ";
         }
         else
         {
@@ -270,6 +308,7 @@ public:
 
             foreach (int v, values)
                 *boundValues << v;
+            sql += " ) ";
         }
         else
         {
@@ -296,13 +335,132 @@ public:
             addStringField(name);
         }
     }
+
+    void addPosition()
+    {
+        if (relation == SearchXml::Near)
+        {
+            // First read attributes
+            QStringRef type = reader.attributes().value("type");
+            QStringRef distanceString = reader.attributes().value("distance");
+            // Distance in meters
+            double distance = 100;
+            if (!distanceString.isEmpty())
+                distance = distanceString.toString().toDouble();
+            // Search type, "radius" or "rectangle"
+            bool radiusSearch = true;
+            if (type == "radius")
+                radiusSearch = true;
+            else if (type == "rectangle")
+                radiusSearch = false;
+
+            // Get a list of doubles:
+            // Longitude and Latitude in (decimal) degrees
+            QList<double> list = reader.valueToDoubleList();
+            if (list.size() < 2)
+                return;
+            double lon = list[0];
+            double lat = list[1];
+
+            sql += " ( ";
+
+            // Part 1: Rectangle search.
+            // Get the coordinates of the (spherical) rectangle enclosing
+            // the (spherical) circle given by our coordinates and the distance.
+            // For this one-time computation we use the advanced code
+            // which assumes the earth is a ellipsoid.
+
+            // From the point (lon,lat) we go East, North, West, South,
+            // and get the coordinates in degrees of a rectangle
+            // of width and height 2*distance enclosing (lon,lat)
+            QRectF rect;
+            GeodeticCalculator calc;
+            calc.setStartingGeographicPoint(lon, lat);
+            calc.setDirection(-90, distance);
+            DDebug() << "Due West" << calc.destinationGeographicPoint();
+            rect.setLeft(calc.destinationGeographicPoint().x());
+            calc.setDirection(0, distance);
+            DDebug() << "Due North" << calc.destinationGeographicPoint();
+            rect.setTop(calc.destinationGeographicPoint().y());
+            calc.setDirection(90, distance);
+            DDebug() << "Due East" << calc.destinationGeographicPoint();
+            rect.setRight(calc.destinationGeographicPoint().x());
+            calc.setDirection(180, distance);
+            rect.setBottom(calc.destinationGeographicPoint().y());
+            DDebug() << "Due South" << calc.destinationGeographicPoint();
+
+            DDebug() << "Part 1 search: " << lon << lat << rect.topLeft() << rect.bottomRight();
+
+            sql += " ImagePositions.LongitudeNumber > ? AND ImagePositions.LatitudeNumber < ? "
+                   " AND ImagePositions.LongitudeNumber < ? AND ImagePositions.LatitudeNumber > ? ";
+            *boundValues << rect.x() << rect.y() << rect.right() << rect.bottom();
+
+            if (radiusSearch)
+            {
+                // Part 2: Use the Haversine formula to filter out from
+                // the matching pictures those that lie inside the
+                // actual (spherical) circle.
+                // This code only assumes that the earth is a sphere.
+                // But this needs to be computed n times, so it's expensive.
+                // We refrain from putting this into SQL, but use a post hook.
+
+                /*
+                Reference: http://www.usenet-replayer.com/faq/comp.infosystems.gis.html
+                Pseudo code of the formula:
+                    Position 1 (lon1, lat1), position 2 (lon2, lat2), in Radians
+                    d: distance; R: radius of earth. Same unit (assume: meters)
+                dlon = lon2 - lon1;
+                dlat = lat2 - lat1;
+                a = (sin(dlat/2))^2 + cos(lat1) * cos(lat2) * (sin(dlon/2))^2;
+                c = 2 * arcsin(min(1,sqrt(a)));
+                d = R * c;
+                // We precompute c.
+                */
+
+                class HaversinePostHook : public ImageQueryPostHook
+                {
+                public:
+
+                    HaversinePostHook(double lat1Deg, double lon1Deg, double radiusOfCurvature, double distance)
+                    {
+                        lat1 = Coordinates::toRadians(lat1Deg);
+                        lon1 = Coordinates::toRadians(lon1Deg);
+                        distanceInRadians = distance / radiusOfCurvature;
+                        cosLat1 = cos(lat1);
+                    }
+
+                    virtual bool checkPosition(double lat2Deg, double lon2Deg)
+                    {
+                        double lat2 = Coordinates::toRadians(lat2Deg);
+                        double lon2 = Coordinates::toRadians(lon2Deg);
+                        double dlon = lon2 - lon1;
+                        double dlat = lat2 - lat1;
+                        double a = pow(sin(dlat/2), 2) + cosLat1 * cos(lat2) * pow(sin(dlon/2),2);
+                        double c = 2 * asin(qMin(1.0, sqrt(a)));
+                        return c < distanceInRadians;
+                    }
+
+                    double lat1, lon1;
+                    double distanceInRadians;
+                    double cosLat1;
+                };
+
+                // get radius (of the ellipsoid) in dependence of the latitude.
+                double R = calc.ellipsoid().radiusOfCurvature(lat);
+                hooks->addHook(new HaversinePostHook(lat, lon, R, distance));
+            }
+
+            sql += " ) ";
+        }
+    }
 };
 
 
-void ImageQueryBuilder::buildField(QString &sql, SearchXmlCachingReader &reader, const QString &name, QList<QVariant> *boundValues) const
+void ImageQueryBuilder::buildField(QString &sql, SearchXmlCachingReader &reader, const QString &name,
+                                   QList<QVariant> *boundValues, ImageQueryPostHooks *hooks) const
 {
     SearchXml::Relation relation = reader.fieldRelation();
-    FieldQueryBuilder fieldQuery(sql, reader, boundValues, relation);
+    FieldQueryBuilder fieldQuery(sql, reader, boundValues, hooks, relation);
     if (name == "albumid")
     {
         fieldQuery.addIntField("Images.album");
@@ -506,6 +664,10 @@ void ImageQueryBuilder::buildField(QString &sql, SearchXmlCachingReader &reader,
         fieldQuery.addChoiceIntField("ImageMetadata.subjectDistanceCategory");
     }
 
+    else if (name == "position")
+    {
+        fieldQuery.addPosition();
+    }
     else if (name == "latitude")
     {
         fieldQuery.addDoubleField("ImagePositions.latitudeNumber");
@@ -582,22 +744,22 @@ void ImageQueryBuilder::buildField(QString &sql, SearchXmlCachingReader &reader,
         sql += " ( ";
 
         addSqlOperator(sql, SearchXml::Or, true);
-        buildField(sql, reader, "albumname", boundValues);
+        buildField(sql, reader, "albumname", boundValues, hooks);
 
         addSqlOperator(sql, SearchXml::Or, false);
-        buildField(sql, reader, "filename", boundValues);
+        buildField(sql, reader, "filename", boundValues, hooks);
 
         addSqlOperator(sql, SearchXml::Or, false);
-        buildField(sql, reader, "tagname", boundValues);
+        buildField(sql, reader, "tagname", boundValues, hooks);
 
         addSqlOperator(sql, SearchXml::Or, false);
-        buildField(sql, reader, "albumcaption", boundValues);
+        buildField(sql, reader, "albumcaption", boundValues, hooks);
 
         addSqlOperator(sql, SearchXml::Or, false);
-        buildField(sql, reader, "albumcollection", boundValues);
+        buildField(sql, reader, "albumcollection", boundValues, hooks);
 
         addSqlOperator(sql, SearchXml::Or, false);
-        buildField(sql, reader, "comment", boundValues);
+        buildField(sql, reader, "comment", boundValues, hooks);
 
         sql += " ) ";
     }
