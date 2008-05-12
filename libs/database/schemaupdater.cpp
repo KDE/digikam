@@ -343,7 +343,6 @@ bool SchemaUpdater::createTablesV5()
     {
         return false;
     }
-    DDebug() << "Created table AlbumRoots" << endl;
 
     if (!m_access->backend()->execSql(
                     QString("CREATE TABLE Albums\n"
