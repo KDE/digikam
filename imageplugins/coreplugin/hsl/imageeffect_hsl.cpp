@@ -154,7 +154,7 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
     m_HSSelector->setMinimumSize(256, 142);
 
     m_HSPreview = new HSPreviewWidget(gboxSettings, spacingHint());
-    m_HSPreview->setWhatsThis( i18n("<p>You can see here the color preview of hue and "
+    m_HSPreview->setWhatsThis( i18n("<p>You can see here a colour preview of the hue and "
                                     "saturation adjustments."));
     m_HSPreview->setMinimumSize(256, 15);
 

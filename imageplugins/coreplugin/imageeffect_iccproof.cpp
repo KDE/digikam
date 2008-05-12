@@ -196,8 +196,8 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     m_doSoftProofBox = new QCheckBox(generalOptions);
     m_doSoftProofBox->setText(i18n("Soft-proofing"));
     m_doSoftProofBox->setWhatsThis( i18n("<p>Rendering emulation of the device described "
-                                         "by the \"Proofing\" profile. Useful to preview final "
-                                         "result without rendering to physical medium.</p>"));
+                                         "by the \"Proofing\" profile. Useful to preview the final "
+                                         "result without rendering to a physical medium.</p>"));
 
     m_checkGamutBox = new QCheckBox(generalOptions);
     m_checkGamutBox->setText(i18n("Check gamut"));
