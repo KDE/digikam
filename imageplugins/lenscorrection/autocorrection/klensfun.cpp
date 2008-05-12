@@ -26,6 +26,7 @@
 #include <QCheckBox>
 #include <QWidget>
 #include <QLabel>
+#include <QWhatsThis>
 
 // KDE includes.
 
@@ -119,7 +120,7 @@ KLFDeviceSelector::KLFDeviceSelector(QWidget *parent)
 {
     m_klf              = new KLensFun();
     QGridLayout* grid  = new QGridLayout(this);
-    m_exifUsage        = new QCheckBox(i18n("Use Exif Data"), this);
+    m_exifUsage        = new QCheckBox(i18n("Use Metadata"), this);
     m_make             = new KComboBox(this);
     m_model            = new KComboBox(this);
     m_lens             = new KComboBox(this);
@@ -129,6 +130,8 @@ KLFDeviceSelector::KLFDeviceSelector(QWidget *parent)
 
     m_exifUsage->setEnabled(false);
     m_exifUsage->setCheckState(Qt::Unchecked);
+    m_exifUsage->setWhatsThis(i18n("Set on this option to lets tool find the right camera/lens settings "
+                                   "used to take the picture from image metadata (as Exif or Xmp)."));
     m_make->setInsertPolicy(QComboBox::InsertAlphabetically);
     m_model->setInsertPolicy(QComboBox::InsertAlphabetically);
     m_lens->setInsertPolicy(QComboBox::InsertAlphabetically);
