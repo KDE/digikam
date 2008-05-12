@@ -154,7 +154,7 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
     gridSettings->addMultiCellWidget(m_HSSelector, 3, 3, 0, 4);
 
     m_HSPreview = new HSPreviewWidget(gboxSettings, spacingHint());
-    QWhatsThis::add( m_HSPreview, i18n("<p>You can see here the color preview of hue and "
+    QWhatsThis::add( m_HSPreview, i18n("<p>You can see here a color preview of the hue and "
                                        "saturation adjustments."));
     m_HSPreview->setMinimumSize(256, 15);
     gridSettings->addMultiCellWidget(m_HSPreview, 4, 4, 0, 4);

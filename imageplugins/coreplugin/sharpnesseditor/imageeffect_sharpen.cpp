@@ -79,7 +79,7 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
     m_sharpMethod->insertItem( i18n("Simple sharp") );
     m_sharpMethod->insertItem( i18n("Unsharp mask") );
     m_sharpMethod->insertItem( i18n("Refocus") );
-    QWhatsThis::add( m_sharpMethod, i18n("<p>Select the sharping method to apply to the image."));
+    QWhatsThis::add( m_sharpMethod, i18n("<p>Select the sharpening method to apply to the image."));
     
     m_stack = new QWidgetStack(gboxSettings);
 
@@ -150,7 +150,7 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
     m_radius->setPrecision(2);
     m_radius->setRange(0.0, 5.0, 0.01, true);
     QWhatsThis::add( m_radius, i18n("<p>This is the radius of the circular convolution. It is the most important "
-                                    "parameter for using the plugin. For most images the default value of 1.0 "
+                                    "parameter for using this plugin. For most images the default value of 1.0 "
                                     "should give good results. Select a higher value when your image is very blurred."));
     
     QLabel *label6 = new QLabel(i18n("Correlation:"), refocusSettings);
@@ -177,8 +177,8 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
     m_gauss->setPrecision(2);
     m_gauss->setRange(0.0, 1.0, 0.01, true);
     QWhatsThis::add( m_gauss, i18n("<p>This is the sharpness for the gaussian convolution. Use this parameter when your "
-                                   "blurring is of gaussian type. In most cases you should set this parameter to 0, because "
-                                   "it causes nasty artifacts. When you use non-zero values you will probably have to "
+                                   "blurring is of a Gaussian type. In most cases you should set this parameter to 0, because "
+                                   "it causes nasty artifacts. When you use non-zero values, you will probably have to "
                                    "increase the correlation and/or noise filter parameters too."));
 
     QLabel *label9 = new QLabel(i18n("Matrix size:"), refocusSettings);
