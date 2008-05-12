@@ -379,7 +379,8 @@ void ImageLister::listSearch(ImageListerReceiver *receiver,
                "       Albums.albumRoot, "
                "       ImageInformation.rating, ImageInformation.creationDate, "
                "       Images.modificationDate, Images.fileSize, "
-               "       ImageInformation.width, ImageInformation.height "
+               "       ImageInformation.width, ImageInformation.height, "
+               "       ImagePositions.latitudeNumber, ImagePositions.longitudeNumber "
                " FROM Images "
                "       LEFT OUTER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
                "       LEFT OUTER JOIN ImageMetadata    ON Images.id=ImageMetadata.imageid "
@@ -389,7 +390,8 @@ void ImageLister::listSearch(ImageListerReceiver *receiver,
 
     // query body
     ImageQueryBuilder builder;
-    sqlQuery += builder.buildQuery(xml, &boundValues);
+    ImageQueryPostHooks hooks;
+    sqlQuery += builder.buildQuery(xml, &boundValues, &hooks);
     DDebug() << "Search query:\n" << sqlQuery;
 
     if (limit > 0)
@@ -413,6 +415,7 @@ void ImageLister::listSearch(ImageListerReceiver *receiver,
     DDebug() << "Search result:" << values.size();
 
     int width, height;
+    double lat,lon;
     for (QList<QVariant>::iterator it = values.begin(); it != values.end();)
     {
         ImageListerRecord record;
@@ -437,6 +440,13 @@ void ImageLister::listSearch(ImageListerReceiver *receiver,
         ++it;
         height                   = (*it).toInt();
         ++it;
+        lat                      = (*it).toDouble();
+        ++it;
+        lon                      = (*it).toDouble();
+        ++it;
+
+        if (!hooks.checkPosition(lat, lon))
+            continue;
 
         record.imageSize         = QSize(width, height);
 
