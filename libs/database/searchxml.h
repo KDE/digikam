@@ -72,7 +72,8 @@ namespace SearchXml
         GreaterThanOrEqual,
         OneOf,
         InTree,
-        NotInTree
+        NotInTree,
+        Near
     };
 
     template <typename T>
@@ -132,6 +133,7 @@ public:
     double              valueToDouble();
     QDateTime           valueToDateTime();
     QList<int>          valueToIntList();
+    QList<double>       valueToDoubleList();
     QStringList         valueToStringList();
 
     /** General helper method: Reads XML until the end element of the current
@@ -181,9 +183,10 @@ public:
     /** Adds the value, "4" in the case of "Rating less than 4" */
     void writeValue(const QString &value);
     void writeValue(int value);
-    void writeValue(double value);
+    void writeValue(double value, int precision = 8);
     void writeValue(const QDateTime &dateTime);
     void writeValue(const QList<int> valueList);
+    void writeValue(const QList<double> valueList, int precision = 8);
     void writeValue(const QStringList valueList);
 
     /** Finish writing the current field.
@@ -294,6 +297,7 @@ public:
     double              valueToDouble();
     QDateTime           valueToDateTime();
     QList<int>          valueToIntList();
+    QList<double>       valueToDoubleList();
     QStringList         valueToStringList();
 
 protected:

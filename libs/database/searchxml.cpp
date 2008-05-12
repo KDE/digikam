@@ -144,13 +144,31 @@ QList<int> SearchXmlReader::valueToIntList()
 
     while (!atEnd())
     {
-        readNext();
+        QXmlStreamReader::readNext();
 
-        if (isEndElement())
+        if (name() != "listitem")
             break;
 
         if (isStartElement())
             list << readElementText().toInt();
+    }
+
+    return list;
+}
+
+QList<double> SearchXmlReader::valueToDoubleList()
+{
+    QList<double> list;
+
+    while (!atEnd())
+    {
+        QXmlStreamReader::readNext();
+
+        if (name() != "listitem")
+            break;
+
+        if (isStartElement())
+            list << readElementText().toDouble();
     }
 
     return list;
@@ -162,9 +180,9 @@ QStringList SearchXmlReader::valueToStringList()
 
     while (!atEnd())
     {
-        readNext();
+        QXmlStreamReader::readNext();
 
-        if (isEndElement())
+        if (name() != "listitem")
             break;
 
         if (isStartElement())
@@ -214,6 +232,8 @@ SearchXml::Relation SearchXmlReader::readRelation(const QString &attributeName,
         return SearchXml::InTree;
     else if (relation == "notintree")
         return SearchXml::NotInTree;
+    else if (relation == "near")
+        return SearchXml::Near;
 
     return defaultRelation;
 }
@@ -299,9 +319,9 @@ void SearchXmlWriter::writeValue(int value)
     writeCharacters(QString::number(value));
 }
 
-void SearchXmlWriter::writeValue(double value)
+void SearchXmlWriter::writeValue(double value, int precision)
 {
-    writeCharacters(QString::number(value));
+    writeCharacters(QString::number(value, 'g', precision));
 }
 
 void SearchXmlWriter::writeValue(const QDateTime &dateTime)
@@ -315,6 +335,15 @@ void SearchXmlWriter::writeValue(const QList<int> valueList)
     foreach(int i, valueList)
     {
         writeTextElement(listitem, QString::number(i));
+    }
+}
+
+void SearchXmlWriter::writeValue(const QList<double> valueList, int precision)
+{
+    QString listitem("listitem");
+    foreach(double i, valueList)
+    {
+        writeTextElement(listitem, QString::number(i, 'g', precision));
     }
 }
 
@@ -396,6 +425,9 @@ void SearchXmlWriter::writeRelation(const QString &attributeName, SearchXml::Rel
             break;
         case SearchXml::NotInTree:
             writeAttribute(attributeName, "notintree");
+            break;
+        case SearchXml::Near:
+            writeAttribute(attributeName, "near");
             break;
     }
 }
@@ -699,6 +731,17 @@ QList<int> SearchXmlCachingReader::valueToIntList()
     foreach (QString s, list)
         intList << s.toInt();
     return intList;
+}
+
+QList<double> SearchXmlCachingReader::valueToDoubleList()
+{
+    // with no QVariant support for QList<double>,
+    // we convert here from string list (equivalent result)
+    QStringList list = valueToStringList();
+    QList<double> doubleList;
+    foreach (QString s, list)
+        doubleList << s.toDouble();
+    return doubleList;
 }
 
 QStringList SearchXmlCachingReader::valueToStringList()
