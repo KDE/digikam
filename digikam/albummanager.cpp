@@ -478,14 +478,14 @@ void AlbumManager::scanPAlbums()
     // cache location status
     QList<CollectionLocation> allLocations = CollectionManager::instance()->allLocations();
     QHash<int, CollectionLocation::Status> statusHash;
-    foreach (CollectionLocation location, allLocations)
+    foreach (const CollectionLocation &location, allLocations)
         statusHash[location->id()] = location.status();
     */
 
     QList<AlbumInfo> newAlbums;
 
     // go through all the Albums and see which ones are already present
-    foreach (AlbumInfo info, currentAlbums)
+    foreach (const AlbumInfo &info, currentAlbums)
     {
         // check that location of album is available
         if (CollectionManager::instance()->locationForAlbumRootId(info.albumRootId).isAvailable())
@@ -523,7 +523,7 @@ void AlbumManager::scanPAlbums()
 
     qSort(newAlbums);
 
-    foreach (AlbumInfo info, newAlbums)
+    foreach (const AlbumInfo &info, newAlbums)
     {
         if (info.relativePath.isEmpty() || info.relativePath == "/")
             continue;
@@ -1801,7 +1801,7 @@ void AlbumManager::slotDirty(const QString& path)
             QFileInfoList fileInfoList = dir.entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
 
             // build list
-            foreach (QFileInfo info, fileInfoList)
+            foreach (const QFileInfo &info, fileInfoList)
             {
                 modList << info.lastModified();
             }

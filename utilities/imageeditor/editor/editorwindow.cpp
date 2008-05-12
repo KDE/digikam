@@ -1464,8 +1464,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     QString originalFormat = m_canvas->currentImageFileFormat().toLower();
     // inspired by kimageio.cpp, typeForMime(). This here is "mimeForType".
     KService::List services = KServiceTypeTrader::self()->query("QImageIOPlugins");
-    KService::Ptr service;
-    foreach(service, services) 
+    foreach(const KService::Ptr &service, services) 
     {
         if (service->property("X-KDE-ImageFormat").toStringList().contains(originalFormat))
         {

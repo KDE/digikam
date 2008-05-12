@@ -628,7 +628,7 @@ static QStringList joinMainAndUserFilterString(const QString &filter, const QStr
 
     filterSet = filter.split(';', QString::SkipEmptyParts).toSet();
     userFilterList = userFilter.split(';', QString::SkipEmptyParts);
-    foreach (QString userFormat, userFilterList)
+    foreach (const QString &userFormat, userFilterList)
     {
         if (userFormat.startsWith('-'))
             filterSet.remove(userFormat.mid(1));
@@ -684,7 +684,7 @@ static QStringList cleanUserFilterString(const QString &filterString)
         sep = QChar( ' ' );
 
     QStringList sepList = filterString.split(sep, QString::SkipEmptyParts);
-    foreach (QString f, sepList)
+    foreach (const QString &f, sepList)
     {
         if (f.startsWith(wildcard))
             filterList << f.mid(2).trimmed().toLower();
@@ -1036,7 +1036,7 @@ void AlbumDB::addImageInformation(qlonglong imageID, const QVariantList &infos, 
     // Take care for datetime values
     if (fields & DatabaseFields::CreationDate || fields & DatabaseFields::DigitizationDate)
     {
-        foreach (QVariant value, infos)
+        foreach (const QVariant &value, infos)
         {
             if (value.type() == QVariant::DateTime || value.type() == QVariant::Date)
                 boundValues << value.toDateTime().toString(Qt::ISODate);
@@ -1069,7 +1069,7 @@ void AlbumDB::changeImageInformation(qlonglong imageId, const QVariantList &info
     // Take care for datetime values
     if (fields & DatabaseFields::CreationDate || fields & DatabaseFields::DigitizationDate)
     {
-        foreach (QVariant value, infos)
+        foreach (const QVariant &value, infos)
         {
             if (value.type() == QVariant::DateTime || value.type() == QVariant::Date)
                 boundValues << value.toDateTime().toString(Qt::ISODate);
@@ -1645,7 +1645,7 @@ QList<QDateTime> AlbumDB::getAllCreationDates()
     d->db->execSql( "SELECT creationDate FROM ImageInformation;", &values );
 
     QList<QDateTime> list;
-    foreach (QVariant value, values)
+    foreach (const QVariant &value, values)
     {
         if (!value.isNull())
             list << QDateTime::fromString(value.toString(), Qt::ISODate);
@@ -1659,7 +1659,7 @@ QMap<QDateTime, int> AlbumDB::getAllCreationDatesAndNumberOfImages()
     d->db->execSql( "SELECT creationDate FROM ImageInformation;", &values );
 
     QMap<QDateTime, int> datesStatMap;
-    foreach (QVariant value, values)
+    foreach (const QVariant &value, values)
     {
         if (!value.isNull())
         {

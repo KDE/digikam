@@ -741,7 +741,7 @@ static QStringList cleanUserFilterString(const QString &filterString)
         sep = QChar(' ');
 
     QStringList sepList = filterString.split(sep, QString::SkipEmptyParts);
-    foreach (QString f, sepList)
+    foreach (const QString &f, sepList)
     {
         if (f.startsWith(wildcard))
             filterList << f.mid(2).trimmed().toLower();

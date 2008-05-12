@@ -1608,7 +1608,7 @@ void AlbumIconView::changeTagOnImageInfos(const ImageInfoList &list, const QList
 
     {
         DatabaseTransaction transaction;
-        foreach(ImageInfo info, list)
+        foreach(const ImageInfo &info, list)
         {
             MetadataHub hub;
 

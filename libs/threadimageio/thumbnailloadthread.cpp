@@ -317,7 +317,7 @@ void ThumbnailLoadThread::deleteThumbnail(const QString &filePath)
         LoadingCache::CacheLock lock(cache);
 
         QStringList possibleKeys = LoadingDescription::possibleThumbnailCacheKeys(filePath);
-        foreach(QString cacheKey, possibleKeys)
+        foreach(const QString &cacheKey, possibleKeys)
             cache->removeThumbnail(cacheKey);
     }
 

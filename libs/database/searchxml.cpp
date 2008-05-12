@@ -350,7 +350,7 @@ void SearchXmlWriter::writeValue(const QList<double> valueList, int precision)
 void SearchXmlWriter::writeValue(const QStringList valueList)
 {
     QString listitem("listitem");
-    foreach(QString str, valueList)
+    foreach(const QString &str, valueList)
     {
         writeTextElement(listitem, str);
     }
@@ -455,7 +455,7 @@ QStringList KeywordSearch::split(const QString &keywords)
     // split down to single words
     QStringList keywordList;
     int quotationMarkCount = (keywords.startsWith('"') ? 1 : 0);
-    foreach (QString group, quotationMarkList)
+    foreach (const QString &group, quotationMarkList)
     {
         if (quotationMarkCount % 2)
         {
@@ -618,7 +618,7 @@ KeywordSearchWriter::KeywordSearchWriter()
 QString KeywordSearchWriter::xml(const QStringList &keywordList)
 {
     writeGroup();
-    foreach (QString keyword, keywordList)
+    foreach (const QString &keyword, keywordList)
     {
         writeField("keyword", SearchXml::Like);
         writeValue(keyword);
@@ -728,7 +728,7 @@ QList<int> SearchXmlCachingReader::valueToIntList()
     // we convert here from string list (equivalent result)
     QStringList list = valueToStringList();
     QList<int> intList;
-    foreach (QString s, list)
+    foreach (const QString &s, list)
         intList << s.toInt();
     return intList;
 }
@@ -739,7 +739,7 @@ QList<double> SearchXmlCachingReader::valueToDoubleList()
     // we convert here from string list (equivalent result)
     QStringList list = valueToStringList();
     QList<double> doubleList;
-    foreach (QString s, list)
+    foreach (const QString &s, list)
         doubleList << s.toDouble();
     return doubleList;
 }

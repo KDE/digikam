@@ -511,7 +511,7 @@ void AlbumLister::slotFilterItems()
 
     if (!deleteFilteredItemsList.isEmpty())
     {
-        foreach(ImageInfo info, deleteFilteredItemsList)
+        foreach(const ImageInfo &info, deleteFilteredItemsList)
             emit signalDeleteFilteredItem(info);
     }
     if (!newFilteredItemsList.isEmpty())

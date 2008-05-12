@@ -238,13 +238,13 @@ QList<SolidVolumeInfo> CollectionManagerPrivate::actuallyListVolumes()
     QList<Solid::Device> devices = Solid::Device::listFromType(Solid::DeviceInterface::StorageAccess);
     DDebug() << "got listFromType" << endl;
 
-    foreach(Solid::Device accessDevice, devices)
+    foreach(const Solid::Device &accessDevice, devices)
     {
         // check for StorageAccess
         if (!accessDevice.is<Solid::StorageAccess>())
             continue;
 
-        Solid::StorageAccess *access = accessDevice.as<Solid::StorageAccess>();
+        const Solid::StorageAccess *access = accessDevice.as<Solid::StorageAccess>();
 
         if (!access->isAccessible())
             continue;
@@ -347,7 +347,7 @@ QString CollectionManagerPrivate::directoryHash(const QString &path)
     {
         QStringList entries = dir.entryList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
         KMD5 hash;
-        foreach (QString entry, entries)
+        foreach (const QString &entry, entries)
         {
             hash.update(entry.toUtf8());
         }
@@ -366,7 +366,7 @@ SolidVolumeInfo CollectionManagerPrivate::findVolumeForLocation(const AlbumRootL
 
     if (!(queryItem = url.queryItem("uuid")).isNull())
     {
-        foreach (SolidVolumeInfo volume, volumes)
+        foreach (const SolidVolumeInfo &volume, volumes)
         {
             if (volume.uuid == queryItem)
                 return volume;
@@ -380,7 +380,7 @@ SolidVolumeInfo CollectionManagerPrivate::findVolumeForLocation(const AlbumRootL
 
         // find all available volumes with the given label (usually one)
         QList<SolidVolumeInfo> candidateVolumes;
-        foreach (SolidVolumeInfo volume, volumes)
+        foreach (const SolidVolumeInfo &volume, volumes)
         {
             if (volume.label == queryItem)
                 candidateVolumes << volume;
@@ -422,7 +422,7 @@ SolidVolumeInfo CollectionManagerPrivate::findVolumeForLocation(const AlbumRootL
             }
 
             // match against directory hash
-            foreach (SolidVolumeInfo volume, candidateVolumes)
+            foreach (const SolidVolumeInfo &volume, candidateVolumes)
             {
                 QString volumeDirHash = directoryHash(volume.path);
                 if (volumeDirHash == dirHash)
@@ -433,7 +433,7 @@ SolidVolumeInfo CollectionManagerPrivate::findVolumeForLocation(const AlbumRootL
     }
     else if (!(queryItem = url.queryItem("mountpath")).isNull())
     {
-        foreach (SolidVolumeInfo volume, volumes)
+        foreach (const SolidVolumeInfo &volume, volumes)
         {
             if (volume.path == queryItem)
                 return volume;
@@ -452,7 +452,7 @@ SolidVolumeInfo CollectionManagerPrivate::findVolumeForUrl(const KUrl &url, cons
 
     //FIXME: Network shares! Here we get only the volume of the mount path...
     // This is probably not really clean. But Solid does not help us.
-    foreach (SolidVolumeInfo v, volumes)
+    foreach (const SolidVolumeInfo &v, volumes)
     {
         if (path.startsWith(v.path))
         {
@@ -887,7 +887,7 @@ void CollectionManager::updateLocations()
         // synchronize map with database
         QMap<int, AlbumRootLocation *> locs = d->locations;
         d->locations.clear();
-        foreach (AlbumRootInfo info, infos)
+        foreach (const AlbumRootInfo &info, infos)
         {
             if (locs.contains(info.id))
             {

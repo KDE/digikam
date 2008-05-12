@@ -487,7 +487,7 @@ void ImageDescEditTab::slotApplyAllChanges()
     int i=0;
     {
         DatabaseTransaction transaction;
-        foreach(ImageInfo info, d->currInfos)
+        foreach(const ImageInfo &info, d->currInfos)
         {
             // apply to database
             d->hub.write(info);
@@ -557,7 +557,7 @@ void ImageDescEditTab::setInfos(const ImageInfoList &infos)
     d->applyBtn->setEnabled(false);
     d->revertBtn->setEnabled(false);
 
-    foreach(ImageInfo info, d->currInfos)
+    foreach(const ImageInfo &info, d->currInfos)
     {
         d->hub.load(info);
     }
@@ -577,7 +577,7 @@ void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
     int i=0;
     {
         DatabaseTransaction transaction;
-        foreach(ImageInfo info, d->currInfos)
+        foreach(const ImageInfo &info, d->currInfos)
         {
             // A batch operation: a hub for each single file, not the common hub
             MetadataHub fileHub(MetadataHub::NewTagsImport);
@@ -605,7 +605,7 @@ void ImageDescEditTab::slotWriteToFileMetadataFromDatabase()
     MetadataWriteSettings writeSettings = MetadataHub::defaultWriteSettings();
 
     int i=0;
-    foreach(ImageInfo info, d->currInfos)
+    foreach(const ImageInfo &info, d->currInfos)
     {
         MetadataHub fileHub;
         // read in from database
@@ -1471,7 +1471,7 @@ void ImageDescEditTab::reloadForMetadataChange(qlonglong imageId)
     else
     {
         // if image id is in our list, update
-        foreach(ImageInfo info, d->currInfos)
+        foreach(const ImageInfo &info, d->currInfos)
         {
             if (info.id() == imageId)
             {

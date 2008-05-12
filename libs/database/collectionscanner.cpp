@@ -93,11 +93,11 @@ void CollectionScanner::loadNameFilters()
     DatabaseAccess().db()->getFilterSettings(imageFilter, audioFilter, videoFilter);
 
     // one list for filtering when listing a dir, with wildcard globbing
-    foreach (QString suffix, imageFilter)
+    foreach (const QString &suffix, imageFilter)
         d->nameFilters << "*." + suffix;
-    foreach (QString suffix, audioFilter)
+    foreach (const QString &suffix, audioFilter)
         d->nameFilters << "*." + suffix;
-    foreach (QString suffix, videoFilter)
+    foreach (const QString &suffix, videoFilter)
         d->nameFilters << "*." + suffix;
 
     // three sets to find category of a file
@@ -119,7 +119,7 @@ void CollectionScanner::completeScan()
     {
         // count for progress info
         int count = 0;
-        foreach (CollectionLocation location, allLocations)
+        foreach (const CollectionLocation &location, allLocations)
             count += countItemsInFolder(location.albumRootPath());
 
         emit totalFilesToScan(count);
@@ -130,7 +130,7 @@ void CollectionScanner::completeScan()
     if (d->wantSignals)
         emit startScanningAlbumRoots();
 
-    foreach (CollectionLocation location, allLocations)
+    foreach (const CollectionLocation &location, allLocations)
         scanAlbumRoot(location);
 
     // Definitely delete items which are marked as removed.
@@ -228,7 +228,7 @@ void CollectionScanner::scanForStaleAlbums(QList<CollectionLocation> locations)
     QList<int> toBeDeleted;
 
     QHash<int, CollectionLocation> albumRoots;
-    foreach (CollectionLocation location, locations)
+    foreach (const CollectionLocation &location, locations)
         albumRoots[location.id()] = location;
 
     QList<AlbumShortInfo>::const_iterator it;
@@ -526,7 +526,7 @@ void CollectionScanner::scanAlbums()
         QStringList fileList(dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot));
 
         DatabaseTransaction transaction;
-        foreach (QString dir, fileList)
+        foreach (const QString &dir, fileList)
         {
             scanAlbum(*it, '/' + dir);
         }

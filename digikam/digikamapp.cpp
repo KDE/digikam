@@ -1580,13 +1580,13 @@ void DigikamApp::fillSolidMenus()
 
     QList<Solid::Device> cameraDevices = Solid::Device::listFromType(Solid::DeviceInterface::Camera);
 
-    foreach(Solid::Device cameraDevice, cameraDevices)
+    foreach(const Solid::Device &cameraDevice, cameraDevices)
     {
         // USM camera: will be handled below
         if (cameraDevice.is<Solid::StorageAccess>())
             continue;
 
-        Solid::Camera *camera = cameraDevice.as<Solid::Camera>();
+        const Solid::Camera *camera = cameraDevice.as<Solid::Camera>();
 
         QStringList drivers = camera->supportedDrivers();
 
@@ -1628,7 +1628,7 @@ void DigikamApp::fillSolidMenus()
 
     QList<Solid::Device> storageDevices = Solid::Device::listFromType(Solid::DeviceInterface::StorageAccess);
 
-    foreach(Solid::Device accessDevice, storageDevices)
+    foreach(const Solid::Device &accessDevice, storageDevices)
     {
         // check for StorageAccess
         if (!accessDevice.is<Solid::StorageAccess>())
@@ -1647,7 +1647,7 @@ void DigikamApp::fillSolidMenus()
         if (!driveDevice.isValid())
             continue;
 
-        Solid::StorageDrive *drive = driveDevice.as<Solid::StorageDrive>();
+        const Solid::StorageDrive *drive = driveDevice.as<Solid::StorageDrive>();
         QString driveType;
         bool isHarddisk = false;
         switch (drive->driveType())
@@ -1705,8 +1705,8 @@ void DigikamApp::fillSolidMenus()
 
         bool isCamera = accessDevice.is<Solid::Camera>();
 
-        Solid::StorageAccess *access = accessDevice.as<Solid::StorageAccess>();
-        Solid::StorageVolume *volume = volumeDevice.as<Solid::StorageVolume>();
+        const Solid::StorageAccess *access = accessDevice.as<Solid::StorageAccess>();
+        const Solid::StorageVolume *volume = volumeDevice.as<Solid::StorageVolume>();
 
         QString label;
 

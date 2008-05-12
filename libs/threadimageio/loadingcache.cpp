@@ -151,7 +151,7 @@ void LoadingCache::slotFileDirty(const QString &path)
     CacheLock lock(this);
     //DDebug() << "LoadingCache slotFileDirty " << path << endl;
     QList<QString> keys = d->imageCache.keys();
-    foreach(QString cacheKey, keys)
+    foreach(const QString &cacheKey, keys)
     {
         if (d->imageCache[cacheKey]->attribute("loadingCacheFilePath").toString() == path)
         {
@@ -173,7 +173,7 @@ void LoadingCache::slotUpdateDirWatch()
     QStringList toBeRemoved = d->watchedFiles;
 
     QList<QString> keys = d->imageCache.keys();
-    foreach(QString cacheKey, keys)
+    foreach(const QString &cacheKey, keys)
     {
         QString watchPath = d->imageCache[cacheKey]->attribute("loadingCacheFilePath").toString();
         if (!watchPath.isEmpty())

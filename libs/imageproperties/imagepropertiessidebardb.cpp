@@ -409,7 +409,7 @@ void ImagePropertiesSideBarDB::refreshTagsView()
 
 void ImagePropertiesSideBarDB::setImagePropertiesInformations(const KUrl& url)
 {
-    foreach(ImageInfo info, d->currentInfos)
+    foreach(const ImageInfo &info, d->currentInfos)
     {
         if (info.fileUrl() == url)
         {
