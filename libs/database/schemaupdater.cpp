@@ -252,6 +252,7 @@ bool SchemaUpdater::makeUpdates()
             // REMOVE BEFORE ALPHA VERSION
             m_access->db()->setSetting("preAlpha010Update1", "true");
             m_access->db()->setSetting("preAlpha010Update2", "true");
+            m_access->db()->setSetting("preAlpha010Update3", "true");
             // END REMOVE
         }
         // add future updates here
@@ -261,6 +262,7 @@ bool SchemaUpdater::makeUpdates()
     {
         preAlpha010Update1();
         preAlpha010Update2();
+        preAlpha010Update3();
     }
     // END REMOVE
     return true;
@@ -321,6 +323,7 @@ bool SchemaUpdater::createDatabase()
         // REMOVE BEFORE ALPHA VERSION
         m_access->db()->setSetting("preAlpha010Update1", "true");
         m_access->db()->setSetting("preAlpha010Update2", "true");
+        m_access->db()->setSetting("preAlpha010Update3", "true");
         // END REMOVE
         m_currentVersion = 5;
         return true;
@@ -455,10 +458,12 @@ bool SchemaUpdater::createTablesV5()
 
     if (!m_access->backend()->execSql(
                     QString("CREATE TABLE ImageCopyright\n"
-                            " (imageid INTEGER,\n"
+                            " (id INTEGER PRIMARY KEY,\n"
+                            "  imageid INTEGER,\n"
                             "  property TEXT,\n"
                             "  value TEXT,\n"
-                            "  extraValue TEXT);") ))
+                            "  extraValue TEXT,\n"
+                            "  UNIQUE(imageid, property, value, extraValue));") ))
     {
         return false;
     }
@@ -1121,6 +1126,25 @@ void SchemaUpdater::preAlpha010Update2()
     m_access->backend()->execSql(QString("DROP TABLE ImageMetadataTemp;"));
 
     m_access->db()->setSetting("preAlpha010Update2", "true");
+}
+
+void SchemaUpdater::preAlpha010Update3()
+{
+    QString hasUpdate = m_access->db()->getSetting("preAlpha010Update3");
+    if (!hasUpdate.isNull())
+        return;
+
+    m_access->backend()->execSql(QString("DROP TABLE ImageCopyright;"));
+    m_access->backend()->execSql(
+                    QString("CREATE TABLE ImageCopyright\n"
+                            " (imageid INTEGER,\n"
+                            "  property TEXT,\n"
+                            "  value TEXT,\n"
+                            "  extraValue TEXT,\n"
+                            "  UNIQUE(imageid, property, value, extraValue));")
+                                );
+
+    m_access->db()->setSetting("preAlpha010Update3", "true");
 }
 
 
