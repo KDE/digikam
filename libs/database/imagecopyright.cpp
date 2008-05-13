@@ -85,14 +85,14 @@ void ImageCopyright::setCopyrightNotice(const QString &notice, const QString &la
     setLanguageProperty("copyrightNotice", notice, languageCode, mode);
 }
 
-QString ImageCopyright::rightsUsageTerm(const QString &languageCode)
+QString ImageCopyright::rightsUsageTerms(const QString &languageCode)
 {
-    return readLanguageProperty("rightsUsageTerm", languageCode);
+    return readLanguageProperty("rightsUsageTerms", languageCode);
 }
 
-void ImageCopyright::setRightsUsageTerm(const QString &term, const QString &languageCode, ReplaceMode mode)
+void ImageCopyright::setRightsUsageTerms(const QString &term, const QString &languageCode, ReplaceMode mode)
 {
-    setLanguageProperty("rightsUsageTerm", term, languageCode, mode);
+    setLanguageProperty("rightsUsageTerms", term, languageCode, mode);
 }
 
 QString ImageCopyright::source()

@@ -122,15 +122,15 @@ public:
                     ReplaceMode mode = ReplaceLanguageEntry)
         { setCopyrightNotice(notice, languageCode, mode); }
 
-    /** Returns the right usage term.
+    /** Returns the right usage terms.
      *  This has no equivalent in Photoshop, IPTC, or DC.
      *  This is xmpRights:UsageTerms in XMP.
      *  Language matching is done as with copyrightNotice().
      *  "Free text instructions on how this news object can be legally used."
      */
-    QString rightsUsageTerm(const QString &languageCode = QString());
+    QString rightsUsageTerms(const QString &languageCode = QString());
 
-    void setRightsUsageTerm(const QString &term, const QString &languageCode = QString(),
+    void setRightsUsageTerms(const QString &term, const QString &languageCode = QString(),
                             ReplaceMode mode = ReplaceLanguageEntry);
 
     /** Returns the source.
