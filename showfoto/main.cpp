@@ -51,6 +51,7 @@ extern "C"
 
 // Local includes.
 
+#include "version.h"
 #include "svnversion.h"
 #include "showfoto.h"
 
@@ -80,7 +81,7 @@ int main(int argc, char *argv[])
 
     KAboutData aboutData( "showfoto", 0,
                           ki18n("showFoto"),
-                          digiKamVer,               
+                          digiKamVer.toAscii(),               
                           ki18n("Manage your photographs like a professional "
                                 "with the power of open source"),
                           KAboutData::License_GPL,
