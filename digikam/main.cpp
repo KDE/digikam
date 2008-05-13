@@ -66,6 +66,7 @@ extern "C"
 
 // Local includes.
 
+#include "svnversion.h"
 #include "version.h"
 #include "albummanager.h"
 #include "databaseaccess.h"
@@ -86,6 +87,8 @@ int main(int argc, char *argv[])
 
     QString XmpSupport  = KExiv2Iface::KExiv2::supportXmp() ? I18N_NOOP("yes") : I18N_NOOP("no");
 
+    QString digiKamVer  = QString("%1 (%2)").arg(digikam_version).arg(SVNVERSION);
+    
     KLocalizedString libInfo = ki18n("Using Kipi library version %1\n"
                                      "Using KDcraw library version %2\n"
                                      "Using Dcraw program version %3\n"
@@ -105,7 +108,7 @@ int main(int argc, char *argv[])
 
     KAboutData aboutData( "digikam", 0, 
                           ki18n("digiKam"),
-                          digikam_version,
+                          digiKamVer.toAscii(),
                           ki18n("Manage your photographs like a professional "
                                 "with the power of open source"),
                           KAboutData::License_GPL,
