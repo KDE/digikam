@@ -212,6 +212,42 @@ message("")
 
 if(DIGIKAM_CAN_BE_COMPILE)
 
+
+# =======================================================
+# Create svnversion.h
+# see http://public.kitware.com/pipermail/cmake/2006-July/010299.html
+# We only do this if we are in a .svn dir
+
+FIND_FILE(SVN_MARKER entries PATHS ${CMAKE_SOURCE_DIR}/.svn)
+
+IF (NOT SVN_MARKER)
+  SET (SVN_MARKER ${CMAKE_SOURCE_DIR}/CMakeLists.txt)  # Dummy file
+ENDIF (NOT SVN_MARKER)
+
+# Add a custom command to drive the svn script whenever the svn entries
+# file changes.
+CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/svnscript.cmake.in_cmake"
+               "${CMAKE_CURRENT_BINARY_DIR}/svnscript.cmake"
+               @ONLY)
+
+ADD_CUSTOM_COMMAND(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/svnversion.h"
+                   DEPENDS ${SVN_MARKER}
+                   COMMAND ${CMAKE_COMMAND} -P "${CMAKE_CURRENT_BINARY_DIR}/svnscript.cmake")
+
+# Add a custom target to drive the custom command.
+ADD_CUSTOM_TARGET(svnversion
+                  ALL DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/svnversion.h")
+
+# =======================================================
+# Uninstall stuff
+
+CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/cmake_uninstall.in_cmake"
+               "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
+               IMMEDIATE @ONLY)
+
+ADD_CUSTOM_TARGET(uninstall
+                  "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
+
 # =======================================================
 
 ADD_DEFINITIONS(${QT_DEFINITIONS}
@@ -227,6 +263,7 @@ INCLUDE_DIRECTORIES(${KIPI_INCLUDE_DIR}
                     ${QT_INCLUDES}
                     ${GPHOTO2_INCLUDE_DIR}
                    )
+
 if(MARBLEWIDGET_FOUND)
     include_directories(${LIBMARBLEWIDGET_INCLUDE_DIR})
 endif(MARBLEWIDGET_FOUND)
