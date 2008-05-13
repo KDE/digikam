@@ -89,7 +89,9 @@ WorldMapWidget::WorldMapWidget(int w, int h, QWidget *parent)
     d = new WorldMapWidgetPriv;
 #ifdef HAVE_MARBLEWIDGET
     d->marbleWidget = new MarbleWidget(this);
+#ifdef MARBLE_VERSION
     d->marbleWidget->setMapThemeId("earth/srtm/srtm.dgml");
+#endif // MARBLE_VERSION
 #else
     d->marbleWidget = new QLabel(this);
     d->marbleWidget->setText(i18n("Geolocation using Marble not available"));
