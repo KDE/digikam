@@ -59,6 +59,7 @@ public:
     void languageMatch(const QString &fullCode, const QString &langCode,
                        int &fullCodeMatch, int &langCodeMatch, int &defaultCodeMatch, int &firstMatch) const
     {
+        // if you change the algorithm, please take a look at ImageCopyright as well
         fullCodeMatch = -1;
         langCodeMatch = -1;
         defaultCodeMatch = -1;
@@ -76,7 +77,7 @@ public:
         // Third for the default code
         // Fourth we return the first comment
 
-        QString defaultCode("x-default");
+        QLatin1String defaultCode("x-default");
 
         for (int i=0; i<infos.size(); i++)
         {
