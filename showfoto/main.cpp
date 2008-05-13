@@ -51,6 +51,7 @@ extern "C"
 
 // Local includes.
 
+#include "svnversion.h"
 #include "showfoto.h"
 
 int main(int argc, char *argv[])
@@ -60,6 +61,9 @@ int main(int argc, char *argv[])
     QString Exiv2Ver    = KExiv2Iface::KExiv2::Exiv2Version();
 
     QString XmpSupport  = KExiv2Iface::KExiv2::supportXmp() ? I18N_NOOP("yes") : I18N_NOOP("no");
+
+    // NOTE: showfoto version = digiKam version
+    QString digiKamVer  = QString("%1 (rev.: %2)").arg(digikam_version).arg(SVNVERSION);
 
     KLocalizedString libInfo = ki18n("Using KDcraw library version %1\n"
                                      "Using Dcraw program version %2\n"
@@ -76,7 +80,7 @@ int main(int argc, char *argv[])
 
     KAboutData aboutData( "showfoto", 0,
                           ki18n("showFoto"),
-                          "0.10.0",
+                          digiKamVer,               
                           ki18n("Manage your photographs like a professional "
                                 "with the power of open source"),
                           KAboutData::License_GPL,
