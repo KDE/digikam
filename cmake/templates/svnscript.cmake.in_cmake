@@ -14,4 +14,4 @@ ENDIF (SVNVERSION)
 
 # Configure the svnversion.h
 CONFIGURE_FILE("@CMAKE_CURRENT_SOURCE_DIR@/cmake/templates/svnversion.h.in_cmake"
-               "@CMAKE_CURRENT_BINARY_DIR@/svnversion.h")
+               "@CMAKE_CURRENT_BINARY_DIR@/digikam/svnversion.h")
