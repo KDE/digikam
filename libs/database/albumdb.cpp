@@ -1278,6 +1278,65 @@ void AlbumDB::setImageProperty(qlonglong imageID, const QString &property, const
                     imageID, property, value);
 }
 
+QList<CopyrightInfo> AlbumDB::getImageCopyright(qlonglong imageID, const QString &property)
+{
+    QList<CopyrightInfo> list;
+
+    QList<QVariant> values;
+    if (property.isNull())
+    {
+        d->db->execSql( QString("SELECT property, value, extraValue FROM ImageCopyright "
+                                "WHERE imageid=?;"),
+                        imageID, &values);
+    }
+    else
+    {
+        d->db->execSql( QString("SELECT property, value, extraValue FROM ImageCopyright "
+                                "WHERE imageid=? and property=?;"),
+                        imageID, property, &values);
+    }
+
+    for (QList<QVariant>::iterator it = values.begin(); it != values.end();)
+    {
+        CopyrightInfo info;
+        info.id = imageID;
+
+        info.property   = (*it).toString();
+        ++it;
+        info.value      = (*it).toString();
+        ++it;
+        info.extraValue = (*it).toString();
+        ++it;
+
+        list << info;
+    }
+
+    return list;
+}
+
+void AlbumDB::setImageCopyrightProperty(qlonglong imageID, const QString &property,
+                                        const QString &value, const QString &extraValue,
+                                        CopyrightPropertyUnique uniqueness)
+{
+    if (uniqueness == PropertyUnique)
+    {
+        d->db->execSql( QString("DELETE FROM ImageCopyright "
+                                "WHERE imageid=? AND property=?;"),
+                        imageID, property );
+    }
+    else if (uniqueness == PropertyExtraValueUnique)
+    {
+        d->db->execSql( QString("DELETE FROM ImageCopyright "
+                                "WHERE imageid=? AND property=? AND extraValue=?;"),
+                        imageID, property, extraValue );
+    }
+
+    d->db->execSql( QString("REPLACE INTO ImageCopyright "
+                            "(imageid, property, value, extraValue) "
+                            "VALUES(?, ?, ?, ?);"),
+                    imageID, property, value, extraValue);
+}
+
 
 QStringList AlbumDB::imagesFieldList(DatabaseFields::Images fields)
 {

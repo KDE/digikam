@@ -783,7 +783,7 @@ public:
     void removeImageComment(int commentId, qlonglong imageid);
 
     /**
-     * Returns the property with theh specified name for the specified image
+     * Returns the property with the specified name for the specified image
      */
     QString getImageProperty(qlonglong imageID, const QString &property);
 
@@ -791,6 +791,25 @@ public:
      * Sets the property with the given name for the given image to the specified value
      */
     void setImageProperty(qlonglong imageID, const QString &property, const QString &value);
+
+    /**
+     * Returns the copyright properties of the specified image.
+     * If property is not null, only the given property is returned.
+     */
+    QList<CopyrightInfo> getImageCopyright(qlonglong imageID, const QString &property = QString());
+
+    /**
+     * Sets the property with the given name for the given image to the specified value and extraValue
+     */
+    enum CopyrightPropertyUnique
+    {
+        PropertyUnique,
+        PropertyExtraValueUnique,
+        PropertyNoConstraint
+    };
+    void setImageCopyrightProperty(qlonglong imageID, const QString &property,
+                                   const QString &value, const QString &extraValue = QString(),
+                                   CopyrightPropertyUnique uniqueness = PropertyUnique);
 
     /**
      * Get the datetime for the item

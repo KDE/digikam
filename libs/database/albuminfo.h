@@ -267,6 +267,18 @@ public:
     QString                 comment;
 };
 
+class CopyrightInfo
+{
+public:
+
+    CopyrightInfo() : id(-1) {};
+
+    qlonglong id;
+    QString   property;
+    QString   value;
+    QString   extraValue;
+};
+
 }  // namespace Digikam
 
 #endif /* ALBUMINFO_H */
