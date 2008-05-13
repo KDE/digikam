@@ -87,7 +87,7 @@ int main(int argc, char *argv[])
 
     QString XmpSupport  = KExiv2Iface::KExiv2::supportXmp() ? I18N_NOOP("yes") : I18N_NOOP("no");
 
-    QString digiKamVer  = QString("%1 (%2)").arg(digikam_version).arg(SVNVERSION);
+    QString digiKamVer  = QString("%1 (rev.: %2)").arg(digikam_version).arg(SVNVERSION);
     
     KLocalizedString libInfo = ki18n("Using Kipi library version %1\n"
                                      "Using KDcraw library version %2\n"
