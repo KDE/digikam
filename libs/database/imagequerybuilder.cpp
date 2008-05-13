@@ -376,20 +376,18 @@ public:
             QRectF rect;
             GeodeticCalculator calc;
             calc.setStartingGeographicPoint(lon, lat);
+            // go west
             calc.setDirection(-90, distance);
-            DDebug() << "Due West" << calc.destinationGeographicPoint();
             rect.setLeft(calc.destinationGeographicPoint().x());
+            // go north (from first starting point!)
             calc.setDirection(0, distance);
-            DDebug() << "Due North" << calc.destinationGeographicPoint();
             rect.setTop(calc.destinationGeographicPoint().y());
+            // go east
             calc.setDirection(90, distance);
-            DDebug() << "Due East" << calc.destinationGeographicPoint();
             rect.setRight(calc.destinationGeographicPoint().x());
+            // go south
             calc.setDirection(180, distance);
             rect.setBottom(calc.destinationGeographicPoint().y());
-            DDebug() << "Due South" << calc.destinationGeographicPoint();
-
-            DDebug() << "Part 1 search: " << lon << lat << rect.topLeft() << rect.bottomRight();
 
             sql += " ImagePositions.LongitudeNumber > ? AND ImagePositions.LatitudeNumber < ? "
                    " AND ImagePositions.LongitudeNumber < ? AND ImagePositions.LatitudeNumber > ? ";
