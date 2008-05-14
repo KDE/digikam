@@ -5,7 +5,7 @@
  *
  * Date        : 2002-07-28
  * Description : main program from digiKam
- * 
+ *
  * Copyright (C) 2002-2006 by Renchi Raju <renchi at pooh.tam.uiuc.edu>
  * Copyright (C) 2002-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -14,12 +14,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -87,8 +87,13 @@ int main(int argc, char *argv[])
 
     QString XmpSupport  = KExiv2Iface::KExiv2::supportXmp() ? I18N_NOOP("yes") : I18N_NOOP("no");
 
-    QString digiKamVer  = QString("%1 (rev.: %2)").arg(digikam_version).arg(SVNVERSION);
-    
+    // We only take the mixed revision
+    QString svnVer      = QString(SVNVERSION).section(":", 0, 0);
+
+    QString digiKamVer  = QString(digikam_version);
+    if (!svnVer.isEmpty() && !svnVer.startsWith("unknow") && !svnVer.startsWith("export"))
+        digiKamVer.append(QString(" (rev.: %1)").arg(svnVer));
+
     KLocalizedString libInfo = ki18n("Using Kipi library version %1\n"
                                      "Using KDcraw library version %2\n"
                                      "Using Dcraw program version %3\n"
@@ -106,7 +111,7 @@ int main(int argc, char *argv[])
                                .subs(Exiv2Ver)
                                .subs(XmpSupport);
 
-    KAboutData aboutData( "digikam", 0, 
+    KAboutData aboutData( "digikam", 0,
                           ki18n("digiKam"),
                           digiKamVer.toAscii(),
                           ki18n("Manage your photographs like a professional "
@@ -258,7 +263,7 @@ int main(int argc, char *argv[])
     options.add("detect-camera", ki18n("Automatically detect and open camera"));
     options.add("download-from <path>", ki18n("Open camera dialog at <path>"));
     options.add("album-root <path>", ki18n("Start digikam with the album root <path>"));
-    KCmdLineArgs::addCmdLineOptions( options ); 
+    KCmdLineArgs::addCmdLineOptions( options );
 
     KApplication app;
 
@@ -287,7 +292,7 @@ int main(int argc, char *argv[])
     // version 0.6 was the version when the new Albums Library
     // storage was implemented
     if (version.startsWith("0.5") ||
-        !dirInfo.exists() || 
+        !dirInfo.exists() ||
         !dirInfo.isDir())
     {
         // Run the first run
