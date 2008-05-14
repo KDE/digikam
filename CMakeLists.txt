@@ -1,6 +1,6 @@
 PROJECT(digikam)
 
-# =======================================================
+# ==================================================================================================
 # Informations to update before to release this package.
 
 # digiKam version
@@ -17,46 +17,50 @@ SET(DIGIKAM_PATCH_VERSION "0")
 # ""       : final relase. Can be used in production.
 SET(DIGIKAM_SUFFIX_VERSION "-svn")
 
-# =======================================================
+# ==================================================================================================
 # Set env. variables accordinly.
 
-SET(DIGIKAM_VERSION_STRING "${DIGIKAM_MAJOR_VERSION}.${DIGIKAM_MINOR_VERSION}.${DIGIKAM_PATCH_VERSION}${DIGIKAM_SUFFIX_VERSION}")
+SET(DIGIKAM_VERSION_STRING 
+    "${DIGIKAM_MAJOR_VERSION}.${DIGIKAM_MINOR_VERSION}.${DIGIKAM_PATCH_VERSION}${DIGIKAM_SUFFIX_VERSION}"
+   )
 
-# =======================================================
+# ==================================================================================================
 # Depencies
 
-include(FindPackageHandleStandardArgs)
+INCLUDE(FindPackageHandleStandardArgs)
 
-macro_optional_find_package(LCMS)
-macro_optional_find_package(JPEG)
-macro_optional_find_package(PNG)
-macro_optional_find_package(TIFF)
-macro_optional_find_package(Gphoto2)
-macro_optional_find_package(Jasper)
-macro_optional_find_package(Sqlite)
-macro_optional_find_package(Kdcraw)
-macro_optional_find_package(Kexiv2)
-macro_optional_find_package(Kipi)
+MACRO_OPTIONAL_FIND_PACKAGE(LCMS)
+MACRO_OPTIONAL_FIND_PACKAGE(JPEG)
+MACRO_OPTIONAL_FIND_PACKAGE(PNG)
+MACRO_OPTIONAL_FIND_PACKAGE(TIFF)
+MACRO_OPTIONAL_FIND_PACKAGE(Gphoto2)
+MACRO_OPTIONAL_FIND_PACKAGE(Jasper)
+MACRO_OPTIONAL_FIND_PACKAGE(Sqlite)
+MACRO_OPTIONAL_FIND_PACKAGE(Kdcraw)
+MACRO_OPTIONAL_FIND_PACKAGE(Kexiv2)
+MACRO_OPTIONAL_FIND_PACKAGE(Kipi)
 
+# ==================================================================================================
 # Optional depencies
 
-macro_optional_find_package(KdepimLibs)
-macro_bool_to_01(KDEPIMLIBS_FOUND HAVE_KDEPIMLIBS)
+MACRO_OPTIONAL_FIND_PACKAGE(KdepimLibs)
+MACRO_BOOL_TO_01(KDEPIMLIBS_FOUND HAVE_KDEPIMLIBS)
 
 SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 
 # Check MarbleWidget library for geolocation.
-macro_optional_find_package(MarbleWidget)
-macro_bool_to_01(MARBLEWIDGET_FOUND HAVE_MARBLEWIDGET)
+MACRO_OPTIONAL_FIND_PACKAGE(MarbleWidget)
+MACRO_BOOL_TO_01(MARBLEWIDGET_FOUND HAVE_MARBLEWIDGET)
 
 # Check LensFun library for lens correction tool.
-macro_optional_find_package(LensFun)
-macro_bool_to_01(LENSFUN_FOUND HAVE_LENSFUN)
+MACRO_OPTIONAL_FIND_PACKAGE(LensFun)
+MACRO_BOOL_TO_01(LENSFUN_FOUND HAVE_LENSFUN)
 
 # Set config file depending of optional depencies
 
-configure_file(config-digikam.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-digikam.h)
+CONFIGURE_FILE(config-digikam.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-digikam.h)
 
+# ==================================================================================================
 # Log messages
 
 message("")
@@ -210,12 +214,12 @@ endif(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND GPHOTO2_FOUND A
 message("------------------------------------------------")
 message("")
 
-if(DIGIKAM_CAN_BE_COMPILE)
+IF(DIGIKAM_CAN_BE_COMPILE)
 
+# ==================================================================================================
+# Create svn version header
 
-# =======================================================
-# Create svnversion.h
-# see http://public.kitware.com/pipermail/cmake/2006-July/010299.html
+# See http://public.kitware.com/pipermail/cmake/2006-July/010299.html
 # We only do this if we are in a .svn dir
 
 FIND_FILE(SVN_MARKER entries PATHS ${CMAKE_SOURCE_DIR}/.svn)
@@ -238,8 +242,8 @@ ADD_CUSTOM_COMMAND(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/digikam/svnversion.h"
 ADD_CUSTOM_TARGET(svnversion
                   ALL DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/digikam/svnversion.h")
 
-# =======================================================
-# Uninstall stuff
+# ==================================================================================================
+# Uninstall rules
 
 CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/cmake_uninstall.in_cmake"
                "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
@@ -248,12 +252,18 @@ CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/cmake_uninstall.in_c
 ADD_CUSTOM_TARGET(uninstall
                   "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
 
-# =======================================================
+# ==================================================================================================
+# Definitions and includes rules
 
 ADD_DEFINITIONS(${QT_DEFINITIONS}
                 ${KDE4_DEFINITIONS} 
                 ${KDCRAW_DEFINITIONS} 
                 ${KEXIV2_DEFINITIONS}
+               )
+
+# QT3 support rules
+ADD_DEFINITIONS(-DQT3_SUPPORT 
+                -DQT3_SUPPORT_WARNINGS
                )
 
 INCLUDE_DIRECTORIES(${KIPI_INCLUDE_DIR}
@@ -264,15 +274,12 @@ INCLUDE_DIRECTORIES(${KIPI_INCLUDE_DIR}
                     ${GPHOTO2_INCLUDE_DIR}
                    )
 
-if(MARBLEWIDGET_FOUND)
-    include_directories(${LIBMARBLEWIDGET_INCLUDE_DIR})
-endif(MARBLEWIDGET_FOUND)
+IF(MARBLEWIDGET_FOUND)
+    INCLUDE_DIRECTORIES(${LIBMARBLEWIDGET_INCLUDE_DIR})
+ENDIF(MARBLEWIDGET_FOUND)
 
-ADD_DEFINITIONS(-DQT3_SUPPORT 
-                -DQT3_SUPPORT_WARNINGS
-               )
-
-# Common targets parts ##########################################################
+# ==================================================================================================
+# Common targets parts
 
 SET(libcurves_SRCS 
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/curves/imagecurves.cpp 
@@ -454,7 +461,8 @@ SET(libdimgeditortools_SRCS
      ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/tools/imageresize.cpp
    )
 
-# Showfoto target parts ##########################################################
+# ==================================================================================================
+# Showfoto target parts
 
 SET(libshowfotosetup_SRCS 
     ${CMAKE_CURRENT_SOURCE_DIR}/showfoto/setup/setuptooltip.cpp
@@ -462,7 +470,8 @@ SET(libshowfotosetup_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/showfoto/setup/setup.cpp 
    )
 
-# digiKam target parts ##########################################################
+# ==================================================================================================
+# digiKam target parts
 
 SET(libdialogs_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/iccprofileinfodlg.cpp
@@ -658,4 +667,4 @@ IF(NOT WIN32)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/digikam.lsm.cmake ${CMAKE_CURRENT_BINARY_DIR}/digikam.lsm)
 ENDIF(NOT WIN32)
 
-endif(DIGIKAM_CAN_BE_COMPILE)
+ENDIF(DIGIKAM_CAN_BE_COMPILE)
