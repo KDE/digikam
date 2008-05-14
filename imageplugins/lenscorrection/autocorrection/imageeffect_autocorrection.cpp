@@ -66,7 +66,7 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
 
     KAboutData* about = new KAboutData("digikam", 0,
                                        ki18n("Lens Auto-Correction"),
-                                       digikam_version,
+                                       digiKamVersion().toAscii(),
                                        ki18n("A digiKam image plugin to fix automaticaly camera "
                                              "lens aberrations using LensFun library."),
                                        KAboutData::License_GPL,

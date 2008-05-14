@@ -5,28 +5,28 @@
  *
  * Date        : 2004-12-27
  * Description : a plugin to reduce lens distorsions to an image.
- * 
+ *
  * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * 
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // C++ include.
 
 #include <cmath>
 
-// Qt includes. 
+// Qt includes.
 
 #include <QLabel>
 #include <QPixmap>
@@ -67,12 +67,12 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
     QString whatsThis;
 
     KAboutData* about = new KAboutData("digikam", 0,
-                                       ki18n("Lens Distortion Correction"), 
-                                       digikam_version,
+                                       ki18n("Lens Distortion Correction"),
+                                       digiKamVersion().toAscii(),
                                        ki18n("A tool to reduce camera lens spherical aberrations."),
                                        KAboutData::License_GPL,
                                        ki18n("(c) 2004-2006, Gilles Caulier\n"
-                                       "(c) 2006-2008, Gilles Caulier and Marcel Wiesweg"), 
+                                       "(c) 2006-2008, Gilles Caulier and Marcel Wiesweg"),
                                        KLocalizedString(),
                                        "http://www.digikam.org");
 
@@ -181,7 +181,7 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
     QPixmap pix(120, 120);
     pix.fill(Qt::white);
     QPainter pt(&pix);
-    pt.setPen(QPen(Qt::black, 1)); 
+    pt.setPen(QPen(Qt::black, 1));
     pt.fillRect(0, 0, pix.width(), pix.height(), QBrush(Qt::black, Qt::CrossPattern));
     pt.drawRect(0, 0, pix.width(), pix.height());
     pt.end();
@@ -243,7 +243,7 @@ void ImageEffect_LensDistortion::resetValues()
     m_edgeInput->blockSignals(false);
     m_rescaleInput->blockSignals(false);
     m_brightenInput->blockSignals(false);
-} 
+}
 
 void ImageEffect_LensDistortion::prepareEffect()
 {

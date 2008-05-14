@@ -36,7 +36,7 @@
 #include <QPushButton>
 #include <QFrame>
 #include <QTimer>
-#include <QButtonGroup> 
+#include <QButtonGroup>
 #include <QPixmap>
 #include <QHBoxLayout>
 #include <QGridLayout>
@@ -98,10 +98,10 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
 
     KAboutData* about = new KAboutData("digikam", 0,
                                        ki18n("Adjust Color Curves"),
-                                       digikam_version,
+                                       digiKamVersion().toAscii(),
                                        ki18n("An image-histogram-curves adjustment plugin for digiKam."),
                                        KAboutData::License_GPL,
-                                       ki18n("(c) 2004-2007, Gilles Caulier"),
+                                       ki18n("(c) 2004-2008, Gilles Caulier"),
                                        KLocalizedString(),
                                        "http://www.digikam.org");
 
@@ -109,14 +109,14 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
                      "caulier dot gilles at gmail dot com");
 
     setAboutData(about);
-    
+
     // -------------------------------------------------------------
 
     m_previewWidget = new Digikam::ImageWidget("adjustcurves Tool Dialog", mainWidget(),
                                                i18n("<p>This is the image's curve-adjustments preview. "
                                                     "You can pick a spot on the image "
                                                     "to see the corresponding level in the histogram."));
-    setPreviewAreaWidget(m_previewWidget); 
+    setPreviewAreaWidget(m_previewWidget);
 
     // -------------------------------------------------------------
 
@@ -150,19 +150,19 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
                                 "If the image's maximal counts are small, you can use the linear scale.<p>"
                                 "Logarithmic scale can be used when the maximal counts are big; "
                                 "if it is used, all values (small and large) will be visible on the graph."));
-    
+
     QPushButton *linHistoButton = new QPushButton( scaleBox );
     linHistoButton->setToolTip( i18n( "<p>Linear" ) );
     linHistoButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/histogram-lin.png")));
     linHistoButton->setCheckable(true);
     m_scaleBG->addButton(linHistoButton, Digikam::CurvesWidget::LinScaleHistogram);
-    
+
     QPushButton *logHistoButton = new QPushButton( scaleBox );
     logHistoButton->setToolTip( i18n( "<p>Logarithmic" ) );
     logHistoButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/histogram-log.png")));
     logHistoButton->setCheckable(true);
     m_scaleBG->addButton(logHistoButton, Digikam::CurvesWidget::LogScaleHistogram);
-    
+
     hlay->setMargin(0);
     hlay->setSpacing(0);
     hlay->addWidget(linHistoButton);
@@ -176,7 +176,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     QHBoxLayout* l1 = new QHBoxLayout();
     l1->addStretch(10);
     l1->addWidget(scaleBox);
-    
+
     // -------------------------------------------------------------
 
     QWidget *curveBox = new QWidget(gboxSettings);
@@ -186,7 +186,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     m_histogramWidget->setWhatsThis( i18n("<p>Here you can see the target preview image histogram drawing "
                                           "of the selected image channel. This one is re-computed at any "
                                           "curves settings changes."));
-    
+
     m_vGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Vertical, 10, curveBox );
     m_vGradient->setColors( QColor( "white" ), QColor( "black" ) );
 
@@ -198,7 +198,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
                                                m_curves, curveBox);
     m_curvesWidget->setWhatsThis( i18n("<p>This is the curve drawing of the selected channel from "
                                        "original image"));
-    
+
     QLabel *spaceh = new QLabel(curveBox);
     spaceh->setFixedHeight(1);
 
@@ -216,7 +216,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     gl->setSpacing(0);
 
     // -------------------------------------------------------------
-    
+
     QWidget *typeBox   = new QWidget(gboxSettings);
     QHBoxLayout *hlay2 = new QHBoxLayout(typeBox);
     m_curveType        = new QButtonGroup(typeBox);
@@ -244,9 +244,9 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
 
     m_curveType->setExclusive(true);
     m_curveSmooth->setChecked(true);
-    
+
     // -------------------------------------------------------------
-    
+
     m_pickerBox              = new QWidget(gboxSettings);
     QHBoxLayout *hlay3       = new QHBoxLayout(m_pickerBox);
     m_pickerColorButtonGroup = new QButtonGroup(m_pickerBox);
@@ -285,7 +285,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     hlay3->addWidget(m_pickWhite);
 
     m_pickerColorButtonGroup->setExclusive(true);
-    
+
     // -------------------------------------------------------------
 
     m_resetButton = new QPushButton(i18n("&Reset"), gboxSettings);
@@ -302,7 +302,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     l3->addStretch(10);
 
     // -------------------------------------------------------------
-            
+
     grid->setMargin(spacingHint());
     grid->setSpacing(spacingHint());
     grid->addWidget(label1, 0, 1, 1, 1);
@@ -315,19 +315,19 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     setUserAreaWidget(gboxSettings);
 
     // -------------------------------------------------------------
-    
+
     connect(m_curvesWidget, SIGNAL(signalCurvesChanged()),
             this, SLOT(slotTimer()));
-    
+
     connect(m_previewWidget, SIGNAL(spotPositionChangedFromOriginal( const Digikam::DColor &, const QPoint & )),
             this, SLOT(slotSpotColorChanged( const Digikam::DColor & )));
 
     connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
             this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
-            
+
     connect(m_previewWidget, SIGNAL(signalResized()),
-            this, SLOT(slotEffect()));                                                            
-            
+            this, SLOT(slotEffect()));
+
     // -------------------------------------------------------------
     // ComboBox slots.
 
@@ -336,10 +336,10 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
 
     connect(m_scaleBG, SIGNAL(buttonReleased(int)),
             this, SLOT(slotScaleChanged(int)));
-            
+
     connect(m_curveType, SIGNAL(buttonClicked(int)),
             this, SLOT(slotCurveTypeChanged(int)));
-    
+
     // -------------------------------------------------------------
     // Bouttons slots.
 
@@ -354,9 +354,9 @@ AdjustCurveDialog::~AdjustCurveDialog()
 {
     m_histogramWidget->stopHistogramComputation();
 
-    if (m_destinationPreviewData) 
+    if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
-       
+
     delete m_histogramWidget;
     delete m_curvesWidget;
     delete m_previewWidget;
@@ -377,7 +377,7 @@ void AdjustCurveDialog::slotSpotColorChanged(const Digikam::DColor &color)
     if ( m_pickBlack->isChecked() )
     {
        // Black tonal curves point.
-       m_curves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 1, 
+       m_curves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 1,
                                QPoint(qMax(qMax(sc.red(), sc.green()), sc.blue()), 42*m_histoSegments/256));
        m_curves->setCurvePoint(Digikam::ImageHistogram::RedChannel, 1, QPoint(sc.red(), 42*m_histoSegments/256));
        m_curves->setCurvePoint(Digikam::ImageHistogram::GreenChannel, 1, QPoint(sc.green(), 42*m_histoSegments/256));
@@ -387,7 +387,7 @@ void AdjustCurveDialog::slotSpotColorChanged(const Digikam::DColor &color)
     else if ( m_pickGray->isChecked() )
     {
        // Gray tonal curves point.
-       m_curves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 8, 
+       m_curves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 8,
                                QPoint(qMax(qMax(sc.red(), sc.green()), sc.blue()), 128*m_histoSegments/256));
        m_curves->setCurvePoint(Digikam::ImageHistogram::RedChannel, 8, QPoint(sc.red(), 128*m_histoSegments/256));
        m_curves->setCurvePoint(Digikam::ImageHistogram::GreenChannel, 8, QPoint(sc.green(), 128*m_histoSegments/256));
@@ -411,16 +411,16 @@ void AdjustCurveDialog::slotSpotColorChanged(const Digikam::DColor &color)
     }
 
     // Calculate Red, green, blue curves.
-    
+
     for (int i = Digikam::ImageHistogram::ValueChannel ; i <= Digikam::ImageHistogram::BlueChannel ; i++)
        m_curves->curvesCalculateCurve(i);
-    
+
     m_curvesWidget->repaint();
-    
+
     // restore previous rendering mode.
     m_previewWidget->setRenderingPreviewMode(m_currentPreviewMode);
-       
-    slotEffect();  
+
+    slotEffect();
 }
 
 void AdjustCurveDialog::slotColorSelectedFromTarget( const Digikam::DColor &color )
@@ -448,9 +448,9 @@ void AdjustCurveDialog::slotEffect()
     // Create the new empty destination image data space.
     m_histogramWidget->stopHistogramComputation();
 
-    if (m_destinationPreviewData) 
+    if (m_destinationPreviewData)
        delete [] m_destinationPreviewData;
-    
+
     m_destinationPreviewData = new uchar[w*h*(sb ? 8 : 4)];
 
     // Calculate the LUT to apply on the image.
@@ -475,7 +475,7 @@ void AdjustCurveDialog::finalRendering()
     int w                      = iface->originalWidth();
     int h                      = iface->originalHeight();
     bool sb                    = iface->originalSixteenBit();
-    
+
     // Create the new empty destination image data space.
     uchar* desData = new uchar[w*h*(sb ? 8 : 4)];
 
@@ -503,7 +503,7 @@ void AdjustCurveDialog::slotChannelChanged(int channel)
           m_curvesWidget->m_channelType = Digikam::CurvesWidget::ValueHistogram;
           m_vGradient->setColors( QColor( "white" ), QColor( "black" ) );
           break;
-       
+
         case RedChannel:
           m_histogramWidget->m_channelType = Digikam::HistogramWidget::RedChannelHistogram;
           m_hGradient->setColors( QColor( "black" ), QColor( "red" ) );
@@ -532,9 +532,9 @@ void AdjustCurveDialog::slotChannelChanged(int channel)
           m_vGradient->setColors( QColor( "white" ), QColor( "black" ) );
           break;
     }
-    
+
     m_curveType->button(m_curves->getCurveType(channel))->setChecked(true);
-                
+
     m_curvesWidget->repaint();
     m_histogramWidget->repaint();
 }
@@ -551,21 +551,21 @@ void AdjustCurveDialog::slotCurveTypeChanged(int type)
 {
     switch(type)
     {
-       case SmoothDrawing:          
+       case SmoothDrawing:
        {
           m_curves->setCurveType(m_curvesWidget->m_channelType, Digikam::ImageCurves::CURVE_SMOOTH);
           m_pickerBox->setEnabled(true);
           break;
        }
-       
-       case FreeDrawing:          
+
+       case FreeDrawing:
        {
           m_curves->setCurveType(m_curvesWidget->m_channelType, Digikam::ImageCurves::CURVE_FREE);
           m_pickerBox->setEnabled(false);
           break;
        }
     }
-    
+
     m_curvesWidget->curveTypeChanged();
 }
 
@@ -575,7 +575,7 @@ void AdjustCurveDialog::readUserSettings()
     KConfigGroup group = config->group("adjustcurves Tool Dialog");
 
     m_channelCB->setCurrentIndex(group.readEntry("Histogram Channel", 0));    // Luminosity.
-    m_scaleBG->button(group.readEntry("Histogram Scale", 
+    m_scaleBG->button(group.readEntry("Histogram Scale",
                       (int)Digikam::CurvesWidget::LogScaleHistogram))->setChecked(true);
 
     m_curvesWidget->reset();
@@ -591,16 +591,16 @@ void AdjustCurveDialog::readUserSettings()
         {
             QPoint disable(-1, -1);
             QPoint p = group.readEntry(QString("CurveAjustmentChannel%1Point%2").arg(i).arg(j), disable);
-    
+
             if (m_originalImage.sixteenBit() && p.x() != -1)
             {
                 p.setX(p.x()*255);
                 p.setY(p.y()*255);
             }
-    
+
             m_curves->setCurvePoint(i, j, p);
         }
- 
+
         m_curves->curvesCalculateCurve(i);
     }
 
@@ -618,17 +618,17 @@ void AdjustCurveDialog::writeUserSettings()
     for (int i = 0 ; i < 5 ; i++)
     {
         group.writeEntry(QString("CurveTypeChannel%1").arg(i), m_curves->getCurveType(i));
-        
+
         for (int j = 0 ; j < 17 ; j++)
         {
             QPoint p = m_curves->getCurvePoint(i, j);
-    
+
             if (m_originalImage.sixteenBit() && p.x() != -1)
             {
                 p.setX(p.x()/255);
                 p.setY(p.y()/255);
             }
-    
+
             group.writeEntry(QString("CurveAjustmentChannel%1Point%2").arg(i).arg(j), p);
         }
     }

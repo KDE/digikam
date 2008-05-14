@@ -4,9 +4,9 @@
  * http://www.digikam.org
  *
  * Date        : 2004-12-25
- * Description : a digiKam image plugin to reduce 
+ * Description : a digiKam image plugin to reduce
  *               vignetting on an image.
- * 
+ *
  * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -14,15 +14,15 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
-// Qt includes. 
+// Qt includes.
 
 #include <QLabel>
 #include <QImage>
@@ -67,8 +67,8 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
     QString whatsThis;
 
     KAboutData* about = new KAboutData("digikam", 0,
-                                       ki18n("Vignetting Correction"), 
-                                       digikam_version,
+                                       ki18n("Vignetting Correction"),
+                                       digiKamVersion().toAscii(),
                                        ki18n("A digiKam image plugin to reduce image vignetting."),
                                        KAboutData::License_GPL,
                                        ki18n("(c) 2004-2008, Gilles Caulier"),
@@ -79,7 +79,7 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
                      "caulier dot gilles at gmail dot com");
 
     about->addAuthor(ki18n("John Walker"), ki18n("Anti Vignetting algorithm"), 0,
-                     "http://www.fourmilab.ch/netpbm/pnmctrfilt"); 
+                     "http://www.fourmilab.ch/netpbm/pnmctrfilt");
 
     setAboutData(about);
 
@@ -132,7 +132,7 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
     QLabel *label4 = new QLabel(i18n("Brightness:"), gboxSettings);
 
     m_brightnessInput = new KIntNumInput(gboxSettings);
-    m_brightnessInput->setRange(0, 100, 1);  
+    m_brightnessInput->setRange(0, 100, 1);
     m_brightnessInput->setSliderEnabled(true);
     m_brightnessInput->setWhatsThis(i18n("<p>Set here the brightness re-adjustment of the target image."));
 
@@ -142,7 +142,7 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
 
     m_contrastInput = new KIntNumInput(gboxSettings);
     m_contrastInput->setRange(0, 100, 1);
-    m_contrastInput->setSliderEnabled(true);  
+    m_contrastInput->setSliderEnabled(true);
     m_contrastInput->setWhatsThis(i18n("<p>Set here the contrast re-adjustment of the target image."));
 
     // -------------------------------------------------------------
@@ -275,7 +275,7 @@ void ImageEffect_AntiVignetting::resetValues()
     m_brightnessInput->blockSignals(false);
     m_contrastInput->blockSignals(false);
     m_gammaInput->blockSignals(false);
-} 
+}
 
 void ImageEffect_AntiVignetting::prepareEffect()
 {
@@ -303,7 +303,7 @@ void ImageEffect_AntiVignetting::prepareEffect()
     maskPreview.startFilterDirectly();       // Run filter without to use multithreading.
     QPixmap pix = maskPreview.getTargetImage().convertToPixmap();
     QPainter pt(&pix);
-    pt.setPen(QPen(Qt::black, 1)); 
+    pt.setPen(QPen(Qt::black, 1));
     pt.drawRect(0, 0, pix.width(), pix.height());
     pt.end();
     m_maskPreviewLabel->setPixmap(pix);

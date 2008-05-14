@@ -5,7 +5,7 @@
  *
  * Date        : 2004-02-12
  * Description : main program from digiKam theme designer
- * 
+ *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi at pooh.tam.uiuc.edu>
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -14,12 +14,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -39,11 +39,11 @@
 #include "version.h"
 #include "mainwindow.h"
 
-int main(int argc, char** argv) 
+int main(int argc, char** argv)
 {
     KAboutData aboutData("digikamthemedesigner", 0,
                          ki18n("digiKam Theme Designer"),
-                         digikam_version,
+                         digiKamVersion().toAscii(),
                          ki18n("A Color Theme Designer for digiKam"),
                          KAboutData::License_GPL,
                          ki18n("(c) 2002-2008, digiKam developers team"),
@@ -72,7 +72,7 @@ int main(int argc, char** argv)
 
     KGlobal::locale()->setMainCatalog( "digikam" );
 
-    KApplication app; 
+    KApplication app;
     Digikam::MainWindow *im = new Digikam::MainWindow();
     app.setTopWidget(im);
     im->resize(800, 600);

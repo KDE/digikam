@@ -5,26 +5,26 @@
  *
  * Date        : 2005-11-01
  * Description : a PNG image loader for DImg framework.
- * 
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ *
+ * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // This line must be commented to prevent any latency time
 // when we use threaded image loader interface for each image
 // files io. Uncomment this line only for debugging.
-//#define ENABLE_DEBUG_MESSAGES 
+//#define ENABLE_DEBUG_MESSAGES
 
 #define PNG_BYTES_TO_CHECK 4
 
@@ -78,7 +78,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     // -------------------------------------------------------------------
     // Open the file
-    
+
     f = fopen(QFile::encodeName(filePath), "rb");
     if ( !f )
     {
@@ -99,7 +99,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     // -------------------------------------------------------------------
     // Initialize the internal structures
-    
+
     png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
     if (!png_ptr)
     {
@@ -120,7 +120,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     // -------------------------------------------------------------------
     // PNG error handling. If an error occurs during reading, libpng
     // will jump here
-    
+
     if (setjmp(png_ptr->jmpbuf))
     {
         DDebug() << "Internal libPNG error during reading file. Process aborted!" << endl;
@@ -130,12 +130,12 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     }
 
     png_init_io(png_ptr, f);
-    
+
     // -------------------------------------------------------------------
     // Read all PNG info up to image data
-    
+
     png_read_info(png_ptr, info_ptr);
-    
+
     png_get_IHDR(png_ptr, info_ptr, (png_uint_32 *) (&w32),
                  (png_uint_32 *) (&h32), &bit_depth, &color_type,
                  &interlace_type, NULL, NULL);
@@ -426,7 +426,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
         png_get_iCCP(png_ptr, info_ptr, &profile_name, &compression_type, &profile_data, &profile_size);
 
-        if (profile_data != NULL) 
+        if (profile_data != NULL)
         {
             QByteArray profile_rawdata;
             profile_rawdata.resize(profile_size);
@@ -477,7 +477,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                 imageSetEmbbededText(text_ptr[i].key, text_ptr[i].text);
 
     #ifdef ENABLE_DEBUG_MESSAGES
-                DDebug() << "Reading PNG Embedded text: key=" << text_ptr[i].key 
+                DDebug() << "Reading PNG Embedded text: key=" << text_ptr[i].key
                         << " text=" << text_ptr[i].text << endl;
     #endif
             }
@@ -579,8 +579,8 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     }
     else
     {
-        png_set_IHDR(png_ptr, info_ptr, imageWidth(), imageHeight(), imageBitsDepth(), 
-                     PNG_COLOR_TYPE_RGB,        PNG_INTERLACE_NONE, 
+        png_set_IHDR(png_ptr, info_ptr, imageWidth(), imageHeight(), imageBitsDepth(),
+                     PNG_COLOR_TYPE_RGB,        PNG_INTERLACE_NONE,
                      PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
 
         if (imageSixteenBit())
@@ -596,7 +596,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     png_set_sBIT(png_ptr, info_ptr, &sig_bit);
 
     // -------------------------------------------------------------------
-    // Quality to convert to compression 
+    // Quality to convert to compression
 
     QVariant qualityAttr = imageGetAttribute("quality");
     quality = qualityAttr.isValid() ? qualityAttr.toInt() : 90;
@@ -649,7 +649,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
     // Update 'Software' text tag.
     QString software("digiKam ");
-    software.append(digikam_version);
+    software.append(digiKamVersion());
     QString libpngver(PNG_HEADER_VERSION_STRING);
     libpngver.replace('\n', ' ');
     software.append(QString(" (%1)").arg(libpngver));
@@ -697,11 +697,11 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
             case(DImg::EXIF):
             {
                 const uchar ExifHeader[] = {0x45, 0x78, 0x69, 0x66, 0x00, 0x00};
-                QByteArray profile; 
+                QByteArray profile;
 
-                // If bytes array do not start with ImageMagick header, Exif metadata have been created from 
+                // If bytes array do not start with ImageMagick header, Exif metadata have been created from
                 // scratch using Exiv2. In this case, we need to add Exif header from start.
-                if (memcmp(ba.data(), "exif",    4) != 0 && 
+                if (memcmp(ba.data(), "exif",    4) != 0 &&
                     memcmp(ba.data(), "iptc",    4) != 0 &&
                     memcmp(ba.data(), "xmp",     3) != 0 &&
                     memcmp(ba.data(), "profile", 7) != 0)
@@ -774,18 +774,18 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
                     data[j++] = ptr[x+1];  // Blue
                     data[j++] = ptr[ x ];
                     data[j++] = ptr[x+3];  // Green
-                    data[j++] = ptr[x+2];  
+                    data[j++] = ptr[x+2];
                     data[j++] = ptr[x+5];  // Red
                     data[j++] = ptr[x+4];
                     data[j++] = ptr[x+7];  // Alpha
                     data[j++] = ptr[x+6];
                 }
                 else
-                {    
+                {
                     data[j++] = ptr[x+1];  // Blue
                     data[j++] = ptr[ x ];
                     data[j++] = ptr[x+3];  // Green
-                    data[j++] = ptr[x+2];  
+                    data[j++] = ptr[x+2];
                     data[j++] = ptr[x+5];  // Red
                     data[j++] = ptr[x+4];
                 }
@@ -800,7 +800,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
                     data[j++] = ptr[x+3];  // Alpha
                 }
                 else
-                {    
+                {
                     data[j++] = ptr[ x ];  // Blue
                     data[j++] = ptr[x+1];  // Green
                     data[j++] = ptr[x+2];  // Red
@@ -841,54 +841,54 @@ bool PNGLoader::sixteenBit() const
     return m_sixteenBit;
 }
 
-void PNGLoader::writeRawProfile(png_struct *ping, png_info *ping_info, char *profile_type, 
+void PNGLoader::writeRawProfile(png_struct *ping, png_info *ping_info, char *profile_type,
                                 char *profile_data, png_uint_32 length)
 {
     png_textp      text;
-    
+
     register long  i;
-    
+
     uchar         *sp;
-    
+
     png_charp      dp;
-    
+
     png_uint_32    allocated_length, description_length;
 
     const uchar hex[16] = {'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
-    
+
     DDebug() << "Writing Raw profile: type=" << profile_type << ", length=" << length << endl;
-    
+
     text               = (png_textp) png_malloc(ping, (png_uint_32) sizeof(png_text));
     description_length = strlen((const char *) profile_type);
     allocated_length   = (png_uint_32) (length*2 + (length >> 5) + 20 + description_length);
-    
+
     text[0].text   = (png_charp) png_malloc(ping, allocated_length);
     text[0].key    = (png_charp) png_malloc(ping, (png_uint_32) 80);
     text[0].key[0] = '\0';
-    
+
     concatenateString(text[0].key, "Raw profile type ", 4096);
     concatenateString(text[0].key, (const char *) profile_type, 62);
-    
+
     sp = (uchar*)profile_data;
     dp = text[0].text;
     *dp++='\n';
-    
+
     copyString(dp, (const char *) profile_type, allocated_length);
-    
+
     dp += description_length;
     *dp++='\n';
-    
+
     formatString(dp, allocated_length-strlen(text[0].text), "%8lu ", length);
-    
+
     dp += 8;
-    
+
     for (i=0; i < (long) length; i++)
     {
         if (i%36 == 0)
             *dp++='\n';
 
         *(dp++)=(char) hex[((*sp >> 4) & 0x0f)];
-        *(dp++)=(char) hex[((*sp++ ) & 0x0f)]; 
+        *(dp++)=(char) hex[((*sp++ ) & 0x0f)];
     }
 
     *dp++='\n';
@@ -907,13 +907,13 @@ void PNGLoader::writeRawProfile(png_struct *ping, png_info *ping_info, char *pro
 size_t PNGLoader::concatenateString(char *destination, const char *source, const size_t length)
 {
     register char       *q;
-    
+
     register const char *p;
-    
+
     register size_t      i;
-    
+
     size_t               count;
-  
+
     if ( !destination || !source || length == 0 )
         return 0;
 
@@ -941,18 +941,18 @@ size_t PNGLoader::concatenateString(char *destination, const char *source, const
     }
 
     *q='\0';
-    
+
     return(count+(p-source));
 }
 
 size_t PNGLoader::copyString(char *destination, const char *source, const size_t length)
 {
     register char       *q;
-    
+
     register const char *p;
-    
+
     register size_t      i;
-        
+
     if ( !destination || !source || length == 0 )
         return 0;
 
@@ -966,7 +966,7 @@ size_t PNGLoader::copyString(char *destination, const char *source, const size_t
         {
             if ((*q++=(*p++)) == '\0')
                 break;
-        } 
+        }
         while (--i != 0);
     }
 
@@ -974,19 +974,19 @@ size_t PNGLoader::copyString(char *destination, const char *source, const size_t
     {
         if (length != 0)
             *q='\0';
-  
+
         while (*p++ != '\0');
     }
-    
+
     return((size_t) (p-source-1));
 }
 
 long PNGLoader::formatString(char *string, const size_t length, const char *format,...)
 {
     long n;
-    
+
     va_list operands;
-    
+
     va_start(operands,format);
     n = (long) formatStringList(string, length, format, operands);
     va_end(operands);
@@ -996,10 +996,10 @@ long PNGLoader::formatString(char *string, const size_t length, const char *form
 long PNGLoader::formatStringList(char *string, const size_t length, const char *format, va_list operands)
 {
     int n = vsnprintf(string, length, format, operands);
-    
+
     if (n < 0)
         string[length-1] = '\0';
-    
+
     return((long) n);
 }
 

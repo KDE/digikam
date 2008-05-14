@@ -5,25 +5,25 @@
  *
  * Date        : 2005-02-17
  * Description : a plugin to change image perspective .
- * 
+ *
  * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * 
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
-// Qt includes. 
- 
+// Qt includes.
+
 #include <QGroupBox>
 #include <QLabel>
 #include <QSpinBox>
@@ -62,16 +62,16 @@ namespace DigikamPerspectiveImagesPlugin
 {
 
 ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
-                       : Digikam::ImageDlgBase(parent, i18n("Adjust Photograph Perspective"), 
+                       : Digikam::ImageDlgBase(parent, i18n("Adjust Photograph Perspective"),
                                                "perspective", false, false)
 {
     QString whatsThis;
-    
+
     // About data and help button.
-    
+
     KAboutData* about = new KAboutData("digikam", 0,
-                                       ki18n("Perspective"), 
-                                       digikam_version,
+                                       ki18n("Perspective"),
+                                       digiKamVersion().toAscii(),
                                        ki18n("A digiKam image plugin to process image perspective adjustment."),
                                        KAboutData::License_GPL,
                                        ki18n("(c) 2005-2006, Gilles Caulier\n"
@@ -86,9 +86,9 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
                      "marcel dot wiesweg at gmx dot de");
 
     setAboutData(about);
-    
+
     // -------------------------------------------------------------
-   
+
     QFrame *frame = new QFrame(mainWidget());
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l  = new QVBoxLayout(frame);
@@ -100,8 +100,8 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
     l->setMargin(5);
     l->setSpacing(0);
     l->addWidget(m_previewWidget);
-    setPreviewAreaWidget(frame); 
-    
+    setPreviewAreaWidget(frame);
+
     // -------------------------------------------------------------
 
     QString temp;
@@ -117,11 +117,11 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
     QLabel *label2   = new QLabel(i18n("New height:"), gbox2);
     m_newHeightLabel = new QLabel(temp.setNum( iface.originalHeight()) + i18n(" px"), gbox2);
     m_newHeightLabel->setAlignment( Qt::AlignBottom | Qt::AlignRight );
-    
+
     // -------------------------------------------------------------
-    
+
     KSeparator *line = new KSeparator (Qt::Horizontal, gbox2);
-    
+
     QLabel *angleLabel = new QLabel(i18n("Angles (in degrees):"), gbox2);
     QLabel *label3 = new QLabel(i18n("  Top left:"), gbox2);
     m_topLeftAngleLabel = new QLabel(gbox2);
@@ -131,7 +131,7 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
     m_bottomLeftAngleLabel = new QLabel(gbox2);
     QLabel *label6 = new QLabel(i18n("  Bottom right:"), gbox2);
     m_bottomRightAngleLabel = new QLabel(gbox2);
-    
+
     // -------------------------------------------------------------
 
     KSeparator *line2         = new KSeparator (Qt::Horizontal, gbox2);
@@ -185,7 +185,7 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
     // -------------------------------------------------------------
 
     connect(m_previewWidget, SIGNAL(signalPerspectiveChanged(QRect, float, float, float, float)),
-            this, SLOT(slotUpdateInfo(QRect, float, float, float, float)));  
+            this, SLOT(slotUpdateInfo(QRect, float, float, float, float)));
 
     connect(m_drawWhileMovingCheckBox, SIGNAL(toggled(bool)),
             m_previewWidget, SLOT(slotToggleDrawWhileMoving(bool)));
@@ -239,8 +239,8 @@ void ImageEffect_Perspective::finalRendering()
 {
     kapp->setOverrideCursor( Qt::WaitCursor );
     m_previewWidget->applyPerspectiveAdjustment();
-    accept();   
-    kapp->restoreOverrideCursor();       
+    accept();
+    kapp->restoreOverrideCursor();
 }
 
 void ImageEffect_Perspective::slotUpdateInfo(QRect newSize, float topLeftAngle, float topRightAngle,
@@ -249,7 +249,7 @@ void ImageEffect_Perspective::slotUpdateInfo(QRect newSize, float topLeftAngle, 
     QString temp;
     m_newWidthLabel->setText(temp.setNum( newSize.width())   + i18n(" px") );
     m_newHeightLabel->setText(temp.setNum( newSize.height()) + i18n(" px") );
-    
+
     m_topLeftAngleLabel->setText(temp.setNum( topLeftAngle, 'f', 1 ));
     m_topRightAngleLabel->setText(temp.setNum( topRightAngle, 'f', 1 ));
     m_bottomLeftAngleLabel->setText(temp.setNum( bottomLeftAngle, 'f', 1 ));

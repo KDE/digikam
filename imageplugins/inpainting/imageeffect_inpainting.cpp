@@ -6,20 +6,20 @@
  * Date        : 2005-03-30
  * Description : a digiKam image editor plugin to inpaint
  *               a photograph
- * 
+ *
  * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * 
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // C++ include.
@@ -117,7 +117,7 @@ void ImageEffect_InPainting::inPainting(QWidget* parent)
     }
 
     // -- run the dlg ----------------------------------------------
-    
+
     ImageEffect_InPainting_Dialog dlg(parent);
     dlg.exec();
 }
@@ -125,9 +125,9 @@ void ImageEffect_InPainting::inPainting(QWidget* parent)
 //------------------------------------------------------------------------------------------
 
 ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
-                             : Digikam::ImageGuideDlg(parent, i18n("Photograph Inpainting"), 
-                                                      "inpainting", true, true, false, 
-                                                      Digikam::ImageGuideWidget::HVGuideMode, 
+                             : Digikam::ImageGuideDlg(parent, i18n("Photograph Inpainting"),
+                                                      "inpainting", true, true, false,
+                                                      Digikam::ImageGuideWidget::HVGuideMode,
                                                       true, true, true)
 {
     m_isComputed = false;
@@ -135,10 +135,10 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
 
     KAboutData* about = new KAboutData("digikam", 0,
                                        ki18n("Photograph Inpainting"),
-                                       digikam_version,
+                                       digiKamVersion().toAscii(),
                                        ki18n("A digiKam image plugin to inpaint a photograph."),
                                        KAboutData::License_GPL,
-                                       ki18n("(c) 2005-2007, Gilles Caulier"),
+                                       ki18n("(c) 2005-2008, Gilles Caulier"),
                                        KLocalizedString(),
                                        "http://www.digikam.org");
 
@@ -244,7 +244,7 @@ void ImageEffect_InPainting_Dialog::readUserSettings()
     m_inpaintingTypeCB->setCurrentIndex(p);
     if (p == NoPreset)
         m_settingsWidget->setEnabled(true);
-    else        
+    else
         m_settingsWidget->setEnabled(false);
 }
 
@@ -274,7 +274,7 @@ void ImageEffect_InPainting_Dialog::slotResetValues(int i)
 {
     if (i == NoPreset)
         m_settingsWidget->setEnabled(true);
-    else        
+    else
         m_settingsWidget->setEnabled(false);
 
     resetValues();
@@ -283,14 +283,14 @@ void ImageEffect_InPainting_Dialog::slotResetValues(int i)
 void ImageEffect_InPainting_Dialog::resetValues()
 {
     Digikam::GreycstorationSettings settings;
-    settings.setInpaintingDefaultSettings();    
+    settings.setInpaintingDefaultSettings();
 
     switch(m_inpaintingTypeCB->currentIndex())
     {
         case RemoveSmallArtefact:
             // We use default settings here.
             break;
-        
+
         case RemoveMediumArtefact:
         {
             settings.amplitude = 50.0;
@@ -333,7 +333,7 @@ void ImageEffect_InPainting_Dialog::prepareEffect()
     // Mask size is computed like this :
     //
     // (image_size_x + 2*amplitude , image_size_y + 2*amplitude)
-    
+
 
     QRect selectionRect = QRect(iface.selectedXOrg(), iface.selectedYOrg(),
                                 iface.selectedWidth(), iface.selectedHeight());
@@ -367,7 +367,7 @@ void ImageEffect_InPainting_Dialog::prepareEffect()
                        new Digikam::GreycstorationIface(
                                     &m_cropImage,
                                     settings,
-                                    Digikam::GreycstorationIface::InPainting, 
+                                    Digikam::GreycstorationIface::InPainting,
                                     0, 0,
                                     m_maskImage, this));
 }
@@ -393,7 +393,7 @@ void ImageEffect_InPainting_Dialog::putPreviewData()
     Digikam::GreycstorationSettings settings = m_settingsWidget->getSettings();
 
     m_cropImage = m_threadedFilter->getTargetImage();
-    QRect cropSel((int)(2*settings.amplitude), (int)(2*settings.amplitude), 
+    QRect cropSel((int)(2*settings.amplitude), (int)(2*settings.amplitude),
                   iface->selectedWidth(), iface->selectedHeight());
     Digikam::DImg imDest = m_cropImage.copy(cropSel);
 
@@ -406,7 +406,7 @@ void ImageEffect_InPainting_Dialog::putPreviewData()
 void ImageEffect_InPainting_Dialog::putFinalData(void)
 {
     Digikam::ImageIface iface(0, 0);
-    
+
     if (!m_isComputed)
         m_cropImage = m_threadedFilter->getTargetImage();
 
@@ -443,7 +443,7 @@ void ImageEffect_InPainting_Dialog::slotUser3()
     m_inpaintingTypeCB->blockSignals(true);
     m_inpaintingTypeCB->setCurrentIndex(NoPreset);
     m_inpaintingTypeCB->blockSignals(false);
-    m_settingsWidget->setEnabled(true);             
+    m_settingsWidget->setEnabled(true);
 }
 
 void ImageEffect_InPainting_Dialog::slotUser2()

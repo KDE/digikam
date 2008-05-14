@@ -140,7 +140,7 @@ QString WelcomePageView::infoPage()
         "<p>Thank you,</p>\n"
         "<p style='margin-bottom: 0px'>&nbsp; &nbsp; The digiKam team</p>",
 
-    QString(digikam_version),            // %1 : current digiKam version
+    digiKamVersion(),                    // %1 : current digiKam version
     "help:/digikam/index.html",          // %2 : digiKam help:// Url
     "http://www.digikam.org",            // %3 : digiKam homepage Url
     "0.9.3",                             // %4 : prior digiKam version
@@ -209,7 +209,7 @@ void WelcomePageView::updateInfoPageCss()
     m_infoPageCssFile->open();
     QFile file(m_infoPageCssFile->fileName());
     file.open(QIODevice::WriteOnly);
-    QTextStream stream(&file); 
+    QTextStream stream(&file);
     stream << infoPageCss;
     file.close();
 }

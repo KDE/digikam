@@ -5,21 +5,21 @@
  *
  * Date        : 2004-08-25
  * Description : a plugin to simulate Oil Painting
- * 
+ *
  * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * 
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -55,26 +55,26 @@ namespace DigikamOilPaintImagesPlugin
 {
 
 ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
-                    : Digikam::CtrlPanelDlg(parent, i18n("Apply Oil Paint Effect"), 
+                    : Digikam::CtrlPanelDlg(parent, i18n("Apply Oil Paint Effect"),
                                             "oilpaint", false, false, true,
                                             Digikam::ImagePannelWidget::SeparateViewAll)
 {
     QString whatsThis;
 
     KAboutData* about = new KAboutData("digikam", 0,
-                                       ki18n("Oil Paint"), 
-                                       digikam_version,
+                                       ki18n("Oil Paint"),
+                                       digiKamVersion().toAscii(),
                                        ki18n("An oil painting image effect plugin for digiKam."),
                                        KAboutData::License_GPL,
                                        ki18n("(c) 2004-2005, Gilles Caulier\n"
-                                       "(c) 2006-2007, Gilles Caulier and Marcel Wiesweg"), 
+                                       "(c) 2006-2008, Gilles Caulier and Marcel Wiesweg"),
                                        KLocalizedString(),
                                        "http://wwww.digikam.org");
 
     about->addAuthor(ki18n("Gilles Caulier"), ki18n("Author and maintainer"),
                      "caulier dot gilles at gmail dot com");
 
-    about->addAuthor(ki18n("Pieter Z. Voloshyn"), ki18n("Oil paint algorithm"), 
+    about->addAuthor(ki18n("Pieter Z. Voloshyn"), ki18n("Oil paint algorithm"),
                      "pieter dot voloshyn at gmail dot com");
 
     about->addAuthor(ki18n("Marcel Wiesweg"), ki18n("Developer"),
@@ -160,7 +160,7 @@ void ImageEffect_OilPaint::resetValues()
     m_smoothInput->setValue(30);
     m_brushSizeInput->blockSignals(false);
     m_smoothInput->blockSignals(false);
-} 
+}
 
 void ImageEffect_OilPaint::prepareEffect()
 {
@@ -196,7 +196,7 @@ void ImageEffect_OilPaint::putFinalData(void)
 {
     Digikam::ImageIface iface(0, 0);
 
-    iface.putOriginalImage(i18n("Oil Paint"), 
+    iface.putOriginalImage(i18n("Oil Paint"),
                         m_threadedFilter->getTargetImage().bits());
 }
 

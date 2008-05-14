@@ -6,24 +6,24 @@
  * Date        : 2005-03-27
  * Description : a digiKam image plugin for fixing dots produced by
  *               hot/stuck/dead pixels from a CCD.
- * 
+ *
  * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2005-2006 by Unai Garro <ugarro at users dot sourceforge dot net>
- * 
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
-// Qt includes. 
+// Qt includes.
 
 #include <QPolygon>
 #include <QProgressBar>
@@ -59,38 +59,38 @@ namespace DigikamHotPixelsImagesPlugin
 {
 
 ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent)
-                     : CtrlPanelDlg(parent, i18n("Hot Pixels Correction"), 
-                                    "hotpixels", false, false, false, 
+                     : CtrlPanelDlg(parent, i18n("Hot Pixels Correction"),
+                                    "hotpixels", false, false, false,
                                     Digikam::ImagePannelWidget::SeparateViewDuplicate)
 {
     // No need Abort button action.
-    showButton(User1, false); 
-    
+    showButton(User1, false);
+
     QString whatsThis;
 
     KAboutData* about = new KAboutData("digikam", 0,
-                                       ki18n("Hot Pixels Correction"), 
-                                       digikam_version,
+                                       ki18n("Hot Pixels Correction"),
+                                       digiKamVersion().toAscii(),
                                        ki18n("A digiKam image plugin for fixing dots produced by "
                                              "hot/stuck/dead pixels from a CCD."),
                                        KAboutData::License_GPL,
-                                       ki18n("(c) 2005-2006, Unai Garro\n(c) 2005-2008, Gilles Caulier"), 
+                                       ki18n("(c) 2005-2006, Unai Garro\n(c) 2005-2008, Gilles Caulier"),
                                        KLocalizedString(),
                                        "http://www.digikam.org");
-                
+
     about->addAuthor(ki18n("Unai Garro"), ki18n("Author and maintainer"),
                      "ugarro at sourceforge dot net");
-    
+
     about->addAuthor(ki18n("Gilles Caulier"), ki18n("Developer"),
                      "caulier dot gilles at gmail dot com");
-        
+
     setAboutData(about);
-    
+
     // -------------------------------------------------------------
-    
+
     QWidget *gboxSettings     = new QWidget(m_imagePreviewWidget);
     QGridLayout* gridSettings = new QGridLayout( gboxSettings );
-    
+
     QLabel *filterMethodLabel = new QLabel(i18n("Filter:"), gboxSettings);
     m_filterMethodCombo       = new QComboBox(gboxSettings);
     m_filterMethodCombo->addItem(i18n("Average"));
@@ -98,9 +98,9 @@ ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent)
     m_filterMethodCombo->addItem(i18n("Quadratic"));
     m_filterMethodCombo->addItem(i18n("Cubic"));
 
-    m_blackFrameButton = new QPushButton(i18n("Black Frame..."), gboxSettings);    
+    m_blackFrameButton = new QPushButton(i18n("Black Frame..."), gboxSettings);
     setButtonWhatsThis( Apply, i18n("<p>Use this button to add a new black frame file which will "
-                                    "be used by the hot pixels removal filter.") );  
+                                    "be used by the hot pixels removal filter.") );
 
     m_blackFrameListView = new BlackFrameListView(gboxSettings);
     m_progressBar        = new QProgressBar(gboxSettings);
@@ -111,24 +111,24 @@ ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent)
 
     gridSettings->addWidget(filterMethodLabel,    0, 0, 1, 1);
     gridSettings->addWidget(m_filterMethodCombo,  0, 1, 1, 1);
-    gridSettings->addWidget(m_blackFrameButton,   0, 2, 1, 1);    
+    gridSettings->addWidget(m_blackFrameButton,   0, 2, 1, 1);
     gridSettings->addWidget(m_blackFrameListView, 1, 0, 2, 3);
     gridSettings->addWidget(m_progressBar,        3, 0, 1, 3);
     gridSettings->setMargin(0);
     gridSettings->setSpacing(spacingHint());
-    
+
     m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
 
     // -------------------------------------------------------------
-    
+
     connect(m_filterMethodCombo, SIGNAL(activated(int)),
             this, SLOT(slotEffect()));
 
     connect(m_blackFrameButton, SIGNAL(clicked()),
             this, SLOT(slotAddBlackFrame()));
-                                                  
+
     connect(m_blackFrameListView, SIGNAL(blackFrameSelected(QList<HotPixel>, const KUrl&)),
-            this, SLOT(slotBlackFrame(QList<HotPixel>, const KUrl&))); 
+            this, SLOT(slotBlackFrame(QList<HotPixel>, const KUrl&)));
 }
 
 ImageEffect_HotPixels::~ImageEffect_HotPixels()
@@ -142,7 +142,7 @@ void ImageEffect_HotPixels::readUserSettings()
     m_blackFrameURL = KUrl(group.readEntry("Last Black Frame File", QString()));
     m_filterMethodCombo->setCurrentIndex(group.readEntry("Filter Method",
                                          (int)HotPixelFixer::QUADRATIC_INTERPOLATION));
-    
+
     if (m_blackFrameURL.isValid())
     {
         BlackFrameListViewItem *item = new BlackFrameListViewItem(m_blackFrameListView, m_blackFrameURL);
@@ -169,7 +169,7 @@ void ImageEffect_HotPixels::resetValues()
     m_filterMethodCombo->blockSignals(true);
     m_filterMethodCombo->setCurrentIndex(HotPixelFixer::QUADRATIC_INTERPOLATION);
     m_filterMethodCombo->blockSignals(false);
-} 
+}
 
 void ImageEffect_HotPixels::slotAddBlackFrame()
 {
@@ -207,26 +207,26 @@ void ImageEffect_HotPixels::renderingFinished()
 {
     m_filterMethodCombo->setEnabled(true);
     m_blackFrameListView->setEnabled(true);
-    enableButton(Apply, true);     
+    enableButton(Apply, true);
 }
 
 void ImageEffect_HotPixels::prepareEffect()
 {
     m_filterMethodCombo->setEnabled(false);
     m_blackFrameListView->setEnabled(false);
-    enableButton(Apply, false);     
+    enableButton(Apply, false);
 
     Digikam::DImg image     = m_imagePreviewWidget->getOriginalRegionImage();
     int interpolationMethod = m_filterMethodCombo->currentIndex();
 
     QList<HotPixel> hotPixelsRegion;
     QRect area = m_imagePreviewWidget->getOriginalImageRegionToRender();
-    QList<HotPixel>::Iterator end(m_hotPixelsList.end()); 
-    
+    QList<HotPixel>::Iterator end(m_hotPixelsList.end());
+
     for (QList<HotPixel>::Iterator it = m_hotPixelsList.begin() ; it != end ; ++it )
     {
         HotPixel hp = (*it);
-        
+
         if ( area.contains( hp.rect ) )
         {
            hp.rect.moveTopLeft(QPoint( hp.rect.x()-area.x(), hp.rect.y()-area.y() ));
@@ -242,8 +242,8 @@ void ImageEffect_HotPixels::prepareFinal()
 {
     m_filterMethodCombo->setEnabled(false);
     m_blackFrameListView->setEnabled(false);
-    enableButton(Apply, false);     
-        
+    enableButton(Apply, false);
+
     int interpolationMethod = m_filterMethodCombo->currentIndex();
 
     Digikam::ImageIface iface(0, 0);
@@ -266,17 +266,17 @@ void ImageEffect_HotPixels::slotBlackFrame(QList<HotPixel> hpList, const KUrl& b
 {
     m_blackFrameURL = blackFrameURL;
     m_hotPixelsList = hpList;
-    
+
     QPolygon pointList(m_hotPixelsList.size());
     QList <HotPixel>::Iterator it;
     int i = 0;
     QList <HotPixel>::Iterator end(m_hotPixelsList.end());
-    
+
     for (it = m_hotPixelsList.begin() ; it != end ; ++it, i++)
        pointList.setPoint(i, (*it).rect.center());
-        
+
     m_imagePreviewWidget->setPanIconHighLightPoints(pointList);
-    
+
     slotEffect();
 }
 

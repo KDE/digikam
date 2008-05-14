@@ -5,21 +5,21 @@
  *
  * Date        : 2005-03-10
  * Description : a plugin to apply texture over an image
- * 
+ *
  * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * 
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -55,20 +55,20 @@ namespace DigikamTextureImagesPlugin
 {
 
 ImageEffect_Texture::ImageEffect_Texture(QWidget* parent)
-                   : Digikam::CtrlPanelDlg(parent, i18n("Apply Texture"), 
-                                           "texture", false, false, true, 
+                   : Digikam::CtrlPanelDlg(parent, i18n("Apply Texture"),
+                                           "texture", false, false, true,
                                            Digikam::ImagePannelWidget::SeparateViewAll)
 {
     QString whatsThis;
 
     KAboutData* about = new KAboutData("digikam", 0,
-                                       ki18n("Apply Texture"), 
-                                       digikam_version,
+                                       ki18n("Apply Texture"),
+                                       digiKamVersion().toAscii(),
                                        ki18n("A digiKam image plugin to apply a decorative "
                                        "texture to an image."),
                                        KAboutData::License_GPL,
                                        ki18n("(c) 2005, Gilles Caulier\n"
-                                       "(c) 2006-2007, Gilles Caulier and Marcel Wiesweg"),
+                                       "(c) 2006-2008, Gilles Caulier and Marcel Wiesweg"),
                                        KLocalizedString(),
                                        "http://www.digikam.org");
 
@@ -105,13 +105,13 @@ ImageEffect_Texture::ImageEffect_Texture(QWidget* parent)
     m_textureType->addItem( i18n("Moss") );
     m_textureType->addItem( i18n("Stone") );
     m_textureType->setWhatsThis( i18n("<p>Set here the texture type to apply to image."));
-    
+
     // -------------------------------------------------------------
-    
+
     QLabel *label2 = new QLabel(i18n("Relief:"), gboxSettings);
-    
+
     m_blendGain    = new KIntNumInput(gboxSettings);
-    m_blendGain->setRange(1, 255, 1);  
+    m_blendGain->setRange(1, 255, 1);
     m_blendGain->setSliderEnabled(true);
     m_blendGain->setValue(200);
     m_blendGain->setWhatsThis( i18n("<p>Set here the relief gain used to merge "
@@ -125,16 +125,16 @@ ImageEffect_Texture::ImageEffect_Texture(QWidget* parent)
     gridSettings->addWidget(m_textureType, 0, 1, 1, 1);
     gridSettings->addWidget(label2, 1, 0, 1, 2 );
     gridSettings->addWidget(m_blendGain, 2, 0, 1, 2 );
-    
+
     m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
-    
+
     // -------------------------------------------------------------
-        
+
     connect(m_textureType, SIGNAL(activated(int)),
             this, SLOT(slotEffect()));
-            
+
     connect(m_blendGain, SIGNAL(valueChanged(int)),
-            this, SLOT(slotTimer()));                        
+            this, SLOT(slotTimer()));
 }
 
 ImageEffect_Texture::~ImageEffect_Texture()
@@ -172,11 +172,11 @@ void ImageEffect_Texture::resetValues()
 {
     m_textureType->blockSignals(true);
     m_blendGain->blockSignals(true);
-    m_textureType->setCurrentIndex(PaperTexture);    
+    m_textureType->setCurrentIndex(PaperTexture);
     m_blendGain->setValue(200);
     m_textureType->blockSignals(false);
     m_blendGain->blockSignals(false);
-} 
+}
 
 void ImageEffect_Texture::prepareEffect()
 {
@@ -220,21 +220,21 @@ void ImageEffect_Texture::putFinalData()
 QString ImageEffect_Texture::getTexturePath(int texture)
 {
     QString pattern;
-    
+
     switch (texture)
     {
-       case PaperTexture: 
+       case PaperTexture:
           pattern = "paper-texture";
           break;
-          
-       case Paper2Texture: 
+
+       case Paper2Texture:
           pattern = "paper2-texture";
           break;
 
-       case FabricTexture: 
+       case FabricTexture:
           pattern = "fabric-texture";
           break;
-       
+
        case BurlapTexture:
           pattern = "burlap-texture";
           break;
@@ -246,15 +246,15 @@ QString ImageEffect_Texture::getTexturePath(int texture)
        case Bricks2Texture:
           pattern = "bricks2-texture";
           break;
-                           
+
        case CanvasTexture:
           pattern = "canvas-texture";
           break;
-                           
+
        case MarbleTexture:
           pattern = "marble-texture";
           break;
-                           
+
        case Marble2Texture:
           pattern = "marble2-texture";
           break;
@@ -262,19 +262,19 @@ QString ImageEffect_Texture::getTexturePath(int texture)
        case BlueJeanTexture:
           pattern = "bluejean-texture";
           break;
-                                     
+
        case CellWoodTexture:
           pattern = "cellwood-texture";
           break;
-       
+
        case MetalWireTexture:
           pattern = "metalwire-texture";
           break;
-       
+
        case ModernTexture:
           pattern = "modern-texture";
           break;
-       
+
        case WallTexture:
           pattern = "wall-texture";
           break;
@@ -282,13 +282,13 @@ QString ImageEffect_Texture::getTexturePath(int texture)
        case MossTexture:
           pattern = "moss-texture";
           break;
-                    
+
        case StoneTexture:
           pattern = "stone-texture";
           break;
     }
-    
+
     return (KStandardDirs::locate("data", QString("digikam/data/") + pattern + QString(".png")));
 }
-    
+
 }  // NameSpace DigikamTextureImagesPlugin
