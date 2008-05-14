@@ -30,6 +30,8 @@ INCLUDE_DIRECTORIES( ../showfoto/setup
                      ../utilities/slideshow 
                      ../digikam 
 
+                     # version.h
+                     ${CMAKE_CURRENT_BINARY_DIR}/../digikam
                      # external library paths
                      ${LCMS_INCLUDE_DIR}
                    )
