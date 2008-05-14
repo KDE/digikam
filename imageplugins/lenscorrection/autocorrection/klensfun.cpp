@@ -115,7 +115,7 @@ KLensFun::correctionData KLensFun::getCorrectionData()
 
 // -------------------------------------------------------------------
 
-KLFDeviceSelector::KLFDeviceSelector(QWidget *parent) 
+KLFDeviceSelector::KLFDeviceSelector(QWidget *parent)
                  : QWidget(parent)
 {
     m_klf              = new KLensFun();
@@ -168,16 +168,16 @@ KLFDeviceSelector::KLFDeviceSelector(QWidget *parent)
     grid->setMargin(0);
     grid->setSpacing(KDialog::spacingHint());
 
-    connect(m_exifUsage, SIGNAL(stateChanged(int)), 
+    connect(m_exifUsage, SIGNAL(stateChanged(int)),
             this, SLOT(slotUseExif(int)));
 
-    connect(m_make, SIGNAL(currentIndexChanged(int)), 
+    connect(m_make, SIGNAL(currentIndexChanged(int)),
             this, SLOT(slotUpdateCombos()));
 
-    connect(m_model, SIGNAL(currentIndexChanged(int)), 
+    connect(m_model, SIGNAL(currentIndexChanged(int)),
             this, SLOT(slotUpdateLensCombo()));
 
-    connect(m_lens, SIGNAL(currentIndexChanged(int)), 
+    connect(m_lens, SIGNAL(currentIndexChanged(int)),
             this, SLOT(slotLensSelected()));
 
     connect(m_focal, SIGNAL(valueChanged(double)),
@@ -235,7 +235,7 @@ void KLFDeviceSelector::findFromMetadata()
     // ------------------------------------------------------------------------------------------------
 
     int makerIdx = m_make->findText(make);
-    if (makerIdx >= 0) 
+    if (makerIdx >= 0)
     {
         m_make->setCurrentIndex(makerIdx);
         m_make->setEnabled(false);
@@ -243,7 +243,7 @@ void KLFDeviceSelector::findFromMetadata()
 
     slotUpdateCombos();
     int modelIdx = m_model->findText(model);
-    if (modelIdx >= 0) 
+    if (modelIdx >= 0)
     {
         m_model->setCurrentIndex(modelIdx);
         m_model->setEnabled(false);
@@ -254,31 +254,31 @@ void KLFDeviceSelector::findFromMetadata()
     // We use here the Camera Maker, because the Lens Maker seems not to be
     // part of the Exif data. This is of course bad for 3rd party lenses, but
     // they seem anyway not to have Exif entrys ususally :/
-    int lensIdx = m_lens->findText(lens); 
+    int lensIdx = m_lens->findText(lens);
     if (lensIdx < 0)
-       lensIdx = m_lens->findText(make + " " + lens); 
+       lensIdx = m_lens->findText(make + " " + lens);
 
-    if (lensIdx >= 0) 
+    if (lensIdx >= 0)
     {
         // found lens model directly, best case :)
         m_lens->setCurrentIndex(lensIdx);
         m_lens->setEnabled(false);
-    } 
-    else 
+    }
+    else
     {
         // Lens not found, try to reduce the list according to the values we have
         // FIXME: Implement removal of not matching lenses ...
         m_lens->setEnabled(true);
     }
 
-    DDebug() << "Search for Lens: " << make << " :: " << lens 
+    DDebug() << "Search for Lens: " << make << " :: " << lens
              << "< and found: >" << m_lens->itemText(0) + "<";
 
     QString temp = photoInfo.focalLength;
     if (!temp.isEmpty())
     {
         double focal = temp.mid(0, temp.length() -3).toDouble(); // HACK: strip the " mm" at the end ...
-        DDebug() << "Focal Length: " << focal << endl; 
+        DDebug() << "Focal Length: " << focal << endl;
         m_focal->setValue(focal);
         m_focal->setEnabled(false);
     }
@@ -287,7 +287,7 @@ void KLFDeviceSelector::findFromMetadata()
     if (!temp.isEmpty())
     {
         double aperture = temp.mid(1).toDouble();
-        DDebug() << "Aperture: " << aperture << endl; 
+        DDebug() << "Aperture: " << aperture << endl;
         m_aperture->setValue(aperture);
         m_aperture->setEnabled(false);
     }
@@ -313,7 +313,7 @@ void KLFDeviceSelector::findFromMetadata()
     if (!temp.isEmpty())
     {
         double distance = temp.toDouble();
-        DDebug() << "Subject Distance: " << distance << endl; 
+        DDebug() << "Subject Distance: " << distance << endl;
         m_distance->setValue(distance);
         m_distance->setEnabled(false);
     }
@@ -343,7 +343,7 @@ void KLFDeviceSelector::slotUseExif(int mode)
     {
         findFromMetadata();
     }
-    else 
+    else
     {
         m_make->setEnabled(true);
         m_model->setEnabled(true);
@@ -365,12 +365,12 @@ void KLFDeviceSelector::slotUpdateCombos()
     if ( m_make->count() == 0 )
        firstRun = true;
 
-    while ( *it ) 
+    while ( *it )
     {
        if ( firstRun )
        {
            // Maker DB does not change, so we fill it only once.
-           if ( (*it)->Maker ) 
+           if ( (*it)->Maker )
            {
                 QString t( (*it)->Maker );
                 if ( m_make->findText( t, Qt::MatchExactly ) < 0 )
@@ -379,7 +379,7 @@ void KLFDeviceSelector::slotUpdateCombos()
        }
 
        // Fill models for current selected maker
-       if ( (*it)->Model && (*it)->Maker == m_make->currentText() ) 
+       if ( (*it)->Model && (*it)->Maker == m_make->currentText() )
        {
             KLFDeviceSelector::DevicePtr dev;
             dev        = *it;
@@ -409,7 +409,7 @@ void KLFDeviceSelector::slotUpdateLensCombo()
     const lfLens **lenses = m_klf->m_lfDb->FindLenses( dev, NULL, NULL );
     m_klf->m_cropFactor   = dev->CropFactor;
 
-    while (lenses && *lenses) 
+    while (lenses && *lenses)
     {
         KLFDeviceSelector::LensPtr lens = *lenses;
         QVariant b                      = qVariantFromValue(lens);
@@ -474,19 +474,19 @@ void KLensFunFilter::filterImage()
 
     lfPixelFormat colorDepth = m_orgImage.bytesDepth() == 4 ? LF_PF_U8 : LF_PF_U16;
 
-    m_lfModifier = lfModifier::Create(m_klf->m_usedLens, 
+    m_lfModifier = lfModifier::Create(m_klf->m_usedLens,
                                       m_klf->m_cropFactor,
-                                      m_orgImage.width(), 
+                                      m_orgImage.width(),
                                       m_orgImage.height());
 
-    int modflags = m_lfModifier->Initialize(m_klf->m_usedLens, 
-                                            colorDepth, 
-                                            m_klf->m_focalLength, 
-                                            m_klf->m_aperture, 
+    int modflags = m_lfModifier->Initialize(m_klf->m_usedLens,
+                                            colorDepth,
+                                            m_klf->m_focalLength,
+                                            m_klf->m_aperture,
                                             m_klf->m_subjectDistance,
-                                            m_klf->m_cropFactor, 
-                                            LF_RECTILINEAR, 
-                                            modifyFlags, 
+                                            m_klf->m_cropFactor,
+                                            LF_RECTILINEAR,
+                                            modifyFlags,
                                             0/*no inverse*/);
 
     if (!m_lfModifier)
@@ -497,11 +497,11 @@ void KLensFunFilter::filterImage()
 
     // Calc necessary steps for progress bar
 
-    int steps = m_klf->m_filterCCA                             ? 1 : 0 + 
+    int steps = m_klf->m_filterCCA                             ? 1 : 0 +
                 ( m_klf->m_filterVig || m_klf->m_filterCCI )   ? 1 : 0 +
                 ( m_klf->m_filterDist || m_klf->m_filterGeom ) ? 1 : 0;
 
-    DDebug() << "Modifier Flags: " << modflags << "  Steps:" << steps << endl;
+    DDebug() << "LensFun Modifier Flags: " << modflags << "  Steps:" << steps << endl;
 
     if ( steps < 1 )
        return;
@@ -512,9 +512,9 @@ void KLensFunFilter::filterImage()
     int lwidth = m_orgImage.width() * 2 * 3;
     float *pos = new float[lwidth];
 
-    // Stage 1: TCA correction 
+    // Stage 1: TCA correction
 
-    if ( m_klf->m_filterCCA ) 
+    if ( m_klf->m_filterCCA )
     {
         for (unsigned int y=0; !m_cancel && (y < m_orgImage.height()); y++)
         {
@@ -542,7 +542,7 @@ void KLensFunFilter::filterImage()
         }
 
         DDebug() << "Applying TCA correction... (loop: " << loop << ")" << endl;
-    } 
+    }
     else
     {
         m_destImage.bitBltImage(&m_orgImage, 0, 0);
@@ -551,7 +551,7 @@ void KLensFunFilter::filterImage()
     // Stage 2: Color Correction: Vignetting and CCI
 
     uchar *data = m_destImage.bits();
-    if ( m_klf->m_filterVig || m_klf->m_filterCCI ) 
+    if ( m_klf->m_filterVig || m_klf->m_filterCCI )
     {
         loop         = 0;
         float offset = 0.0;
@@ -563,7 +563,7 @@ void KLensFunFilter::filterImage()
 
         for (unsigned int y=0; !m_cancel && (y < m_destImage.height()); y++)
         {
-            if (m_lfModifier->ApplyColorModification(data, 0.0, y, m_destImage.width(), 
+            if (m_lfModifier->ApplyColorModification(data, 0.0, y, m_destImage.width(),
                                                      1, m_destImage.bytesDepth(), 0))
             {
                 data += m_destImage.height() * m_destImage.bytesDepth();
@@ -581,11 +581,11 @@ void KLensFunFilter::filterImage()
 
     // Stage 3: Distortion and Geometry
 
-    if ( m_klf->m_filterDist || m_klf->m_filterGeom ) 
+    if ( m_klf->m_filterDist || m_klf->m_filterGeom )
     {
         loop = 0;
 
-        // we need a deep copy first 
+        // we need a deep copy first
         Digikam::DImg tempImage(m_destImage.width(), m_destImage.height(), m_destImage.sixteenBit(), m_destImage.hasAlpha());
 
         for (unsigned long y=0; !m_cancel && (y < tempImage.height()); y++)
@@ -608,7 +608,7 @@ void KLensFunFilter::filterImage()
                 postProgress(progress/steps + 33.3*(steps-1));
         }
 
-        /*qDebug (" for %f %f %i %i", tempImage.height(), tempImage.width(), 
+        /*qDebug (" for %f %f %i %i", tempImage.height(), tempImage.width(),
                                       tempImage.height(), tempImage.width());*/
         DDebug() << "Applying Distortion and Geometry Correction. (loop: " << loop << ")" << endl;
 

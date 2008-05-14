@@ -119,7 +119,7 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
     m_filterGeom->setWhatsThis(i18n("Four geometries are handeled here: Rectilinear (99 percent of all lenses), "
                                     "Fisheye, Cylindrical, Equirectangular."));
 
-    grid->addWidget(m_showGrid,        0, 0, 1, 2);
+    grid->addWidget(m_showGrid,       0, 0, 1, 2);
     grid->addWidget(m_cameraSelector, 1, 0, 1, 2);
     grid->addWidget(line,             2, 0, 1, 2);
     grid->addWidget(m_filterCCA,      3, 0, 1, 2);
@@ -210,15 +210,15 @@ void ImageEffect_AutoCorrection::writeUserSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("Lens Auto-Correction Tool Dialog");
     if ( m_filterCCA->isEnabled() )
-        group.writeEntry("CCA", (m_filterCCA->checkState() == Qt::Checked) ? true : false);
+        group.writeEntry("CCA",        (m_filterCCA->checkState() == Qt::Checked)  ? true : false);
     if ( m_filterVig->isEnabled() )
-        group.writeEntry("Vignetting", (m_filterVig->checkState() == Qt::Checked) ? true : false);
+        group.writeEntry("Vignetting", (m_filterVig->checkState() == Qt::Checked)  ? true : false);
     if ( m_filterCCI->isEnabled() )
-        group.writeEntry("CCI", (m_filterCCI->checkState() == Qt::Checked) ? true : false);
+        group.writeEntry("CCI",        (m_filterCCI->checkState() == Qt::Checked)  ? true : false);
     if ( m_filterDist->isEnabled() )
         group.writeEntry("Distortion", (m_filterDist->checkState() == Qt::Checked) ? true : false);
     if ( m_filterGeom->isEnabled() )
-        group.writeEntry("Geometry", (m_filterGeom->checkState() == Qt::Checked) ? true : false);
+        group.writeEntry("Geometry",   (m_filterGeom->checkState() == Qt::Checked) ? true : false);
     group.sync();
 }
 
