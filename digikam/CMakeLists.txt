@@ -126,6 +126,7 @@ INSTALL(TARGETS digikam DESTINATION ${LIB_INSTALL_DIR} )
 SET(digikamdatabase_LIB_SRCS
                       ${libdatabase_SRCS}
                       ${libsqlite2_SRCS}
+                      ${libhaar_SRCS}
    )
 
 KDE4_ADD_LIBRARY(digikamdatabase SHARED ${digikamdatabase_LIB_SRCS})
