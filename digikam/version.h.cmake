@@ -28,6 +28,10 @@
 
 #include <QString>
 
+// KDE includes.
+
+#include <klocale.h>
+
 // Local includes.
 
 #include "svnversion.h"
@@ -41,7 +45,7 @@ static inline const QString digiKamVersion()
 
     QString digiKamVer  = QString(digikam_version);
     if (!svnVer.isEmpty() && !svnVer.startsWith("unknow") && !svnVer.startsWith("export"))
-        digiKamVer.append(QString(" (rev.: %1)").arg(svnVer));
+        digiKamVer.append(i18nc("%1 is the svn revision", " (rev.: %1)").arg(svnVer));
 
     return digiKamVer;
 }
