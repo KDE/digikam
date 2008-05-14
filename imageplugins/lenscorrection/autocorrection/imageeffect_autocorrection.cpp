@@ -2,21 +2,21 @@
  *
  * Date        : 2008-02-10
  * Description : a plugin to fix automaticaly camera lens aberrations
- * 
+ *
  * Copyright (C) 2008 by Adrian Schroeter <adrian at suse dot de>
  * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * 
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -65,13 +65,13 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
     QString whatsThis;
 
     KAboutData* about = new KAboutData("digikam", 0,
-                                       ki18n("Lens Auto-Correction"), 
+                                       ki18n("Lens Auto-Correction"),
                                        digikam_version,
                                        ki18n("A digiKam image plugin to fix automaticaly camera "
                                              "lens aberrations using LensFun library."),
                                        KAboutData::License_GPL,
                                        ki18n("(c) 2008, Adrian Schroeter\n"
-                                       "(c) 2008, Gilles Caulier"), 
+                                       "(c) 2008, Gilles Caulier"),
                                        KLocalizedString(),
                                        "http://www.digikam.org");
 
@@ -95,8 +95,8 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    m_useGrid    = new QCheckBox(i18n("Use grid"), m_settingsWidget);
-    m_useGrid->setWhatsThis(i18n("Set on this option to show a grid over preview to vizualize "
+    m_showGrid   = new QCheckBox(i18n("Show grid"), m_settingsWidget);
+    m_showGrid->setWhatsThis(i18n("Set on this option to show a grid over preview to vizualize "
                                  "lens distortion correction applied."));
 
     m_filterCCA  = new QCheckBox(i18n("Chromatic Aberration"), m_settingsWidget);
@@ -119,7 +119,7 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
     m_filterGeom->setWhatsThis(i18n("Four geometries are handeled here: Rectilinear (99 percent of all lenses), "
                                     "Fisheye, Cylindrical, Equirectangular."));
 
-    grid->addWidget(m_useGrid,        0, 0, 1, 2);
+    grid->addWidget(m_showGrid,        0, 0, 1, 2);
     grid->addWidget(m_cameraSelector, 1, 0, 1, 2);
     grid->addWidget(line,             2, 0, 1, 2);
     grid->addWidget(m_filterCCA,      3, 0, 1, 2);
@@ -137,22 +137,22 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
     connect(m_cameraSelector, SIGNAL(signalLensSettingsChanged()),
             this, SLOT(slotLensChanged()));
 
-    connect(m_useGrid, SIGNAL(stateChanged(int)), 
+    connect(m_showGrid, SIGNAL(stateChanged(int)),
             this, SLOT(slotSetFilters()));
 
-    connect(m_filterCCA, SIGNAL(stateChanged(int)), 
+    connect(m_filterCCA, SIGNAL(stateChanged(int)),
             this, SLOT(slotSetFilters()));
 
-    connect(m_filterVig, SIGNAL(stateChanged(int)), 
+    connect(m_filterVig, SIGNAL(stateChanged(int)),
             this, SLOT(slotSetFilters()));
 
-    connect(m_filterCCI, SIGNAL(stateChanged(int)), 
+    connect(m_filterCCI, SIGNAL(stateChanged(int)),
             this, SLOT(slotSetFilters()));
 
-    connect(m_filterDist, SIGNAL(stateChanged(int)), 
+    connect(m_filterDist, SIGNAL(stateChanged(int)),
             this, SLOT(slotSetFilters()));
 
-    connect(m_filterGeom, SIGNAL(stateChanged(int)), 
+    connect(m_filterGeom, SIGNAL(stateChanged(int)),
             this, SLOT(slotSetFilters()));
 }
 
@@ -163,7 +163,7 @@ ImageEffect_AutoCorrection::~ImageEffect_AutoCorrection()
 void ImageEffect_AutoCorrection::slotInit()
 {
     resetValues(); // for checking Exif data
-    readUserSettings(); 
+    readUserSettings();
 }
 
 void ImageEffect_AutoCorrection::slotLensChanged()
@@ -235,7 +235,7 @@ void ImageEffect_AutoCorrection::resetValues()
     m_cameraSelector->findFromMetadata(meta);
 
     m_settingsWidget->blockSignals(false);
-} 
+}
 
 void ImageEffect_AutoCorrection::prepareEffect()
 {
@@ -249,27 +249,27 @@ void ImageEffect_AutoCorrection::prepareEffect()
 
     Digikam::DImg image(w, h, sb, false, data);
 
-    if (m_useGrid->isChecked())
+    if (m_showGrid->isChecked())
     {
         QBitmap pattern(9, 9);
         pattern.clear();
         QPainter p1(&pattern);
-        p1.setPen(QPen(Qt::black, 1)); 
+        p1.setPen(QPen(Qt::black, 1));
         p1.drawLine(5, 0, 5, 9);
         p1.drawLine(0, 5, 9, 5);
         p1.end();
-    
+
         QPixmap pix(w, h);
         pix.fill(Qt::transparent);
         QPainter p2(&pix);
-        p2.setPen(QPen(Qt::gray, 1)); 
+        p2.setPen(QPen(Qt::gray, 1));
         p2.fillRect(0, 0, pix.width(), pix.height(), QBrush(pattern));
         p2.end();
         Digikam::DImg grid(pix.toImage());
-    
+
         Digikam::DColorComposer *composer = Digikam::DColorComposer::getComposer(Digikam::DColorComposer::PorterDuffNone);
         Digikam::DColorComposer::MultiplicationFlags flags = Digikam::DColorComposer::NoMultiplication;
-        
+
         // Do alpha blending of template on dest image
         image.bitBlendImage(composer, &grid, 0, 0, w, h, 0, 0, flags);
     }
