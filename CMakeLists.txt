@@ -20,7 +20,7 @@ SET(DIGIKAM_SUFFIX_VERSION "-svn")
 # ==================================================================================================
 # Set env. variables accordinly.
 
-SET(DIGIKAM_VERSION_STRING 
+SET(DIGIKAM_VERSION_STRING
     "${DIGIKAM_MAJOR_VERSION}.${DIGIKAM_MINOR_VERSION}.${DIGIKAM_PATCH_VERSION}${DIGIKAM_SUFFIX_VERSION}"
    )
 
@@ -246,18 +246,18 @@ ADD_CUSTOM_TARGET(svnversion
 # Definitions and includes rules
 
 ADD_DEFINITIONS(${QT_DEFINITIONS}
-                ${KDE4_DEFINITIONS} 
-                ${KDCRAW_DEFINITIONS} 
+                ${KDE4_DEFINITIONS}
+                ${KDCRAW_DEFINITIONS}
                 ${KEXIV2_DEFINITIONS}
                )
 
 # QT3 support rules
-ADD_DEFINITIONS(-DQT3_SUPPORT 
+ADD_DEFINITIONS(-DQT3_SUPPORT
                 -DQT3_SUPPORT_WARNINGS
                )
 
 INCLUDE_DIRECTORIES(${KIPI_INCLUDE_DIR}
-                    ${KEXIV2_INCLUDE_DIR} 
+                    ${KEXIV2_INCLUDE_DIR}
                     ${KDCRAW_INCLUDE_DIR}
                     ${KDE4_INCLUDE_DIR}
                     ${QT_INCLUDES}
@@ -271,8 +271,8 @@ ENDIF(MARBLEWIDGET_FOUND)
 # ==================================================================================================
 # Common targets parts
 
-SET(libcurves_SRCS 
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/curves/imagecurves.cpp 
+SET(libcurves_SRCS
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/curves/imagecurves.cpp
    )
 
 SET(libdimg_SRCS
@@ -283,7 +283,7 @@ SET(libdimg_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/ddebug.cpp
    )
 
-SET(libdimgloaders_SRCS 
+SET(libdimgloaders_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/dimgloader.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/pngloader.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/jpegloader.cpp
@@ -299,7 +299,7 @@ SET(libdimgloaders_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/jp2ksettings.cpp
    )
 
-SET(libdimgfilters_SRCS 
+SET(libdimgfilters_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/bcgmodifier.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/hslmodifier.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icctransform.cpp
@@ -316,7 +316,7 @@ SET(libdmetadata_SRCS
    )
 
 SET(libgreycstoration_SRCS
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/greycstoration/greycstorationiface.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/greycstoration/greycstorationiface.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/greycstoration/greycstorationwidget.cpp
    )
 
@@ -357,7 +357,7 @@ SET(liblprof_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/lprof/cmssheet.cpp
    )
 
-SET(libthreadimageio_SRCS 
+SET(libthreadimageio_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/loadsavethread.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/managedloadsavethread.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/sharedloadsavethread.cpp
@@ -428,25 +428,25 @@ SET(libslideshow_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/slideshow.cpp
    )
 
-SET(libsetupshowfoto_SRCS 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupiofiles.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupdcraw.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupicc.cpp 
+SET(libsetupshowfoto_SRCS
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupiofiles.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupdcraw.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupicc.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupslideshow.cpp
    )
 
-SET(libdimgcanvas_SRCS 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/imageplugin.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/imagepluginloader.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/undocache.cpp 
+SET(libdimgcanvas_SRCS
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/imageplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/imagepluginloader.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/undocache.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/undoaction.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/undomanager.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/colorcorrectiondlg.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/dimginterface.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/canvas.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/undomanager.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/colorcorrectiondlg.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/dimginterface.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/canvas.cpp
    )
 
-SET(libdimgeditortools_SRCS 
+SET(libdimgeditortools_SRCS
      ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/tools/imageprint.cpp
      ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/tools/imageresize.cpp
    )
@@ -454,10 +454,10 @@ SET(libdimgeditortools_SRCS
 # ==================================================================================================
 # Showfoto target parts
 
-SET(libshowfotosetup_SRCS 
+SET(libshowfotosetup_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/showfoto/setup/setuptooltip.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/showfoto/setup/setupeditor.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/showfoto/setup/setup.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/showfoto/setup/setup.cpp
    )
 
 # ==================================================================================================
@@ -477,39 +477,39 @@ SET(libdeletedialog_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/deletedialog.cpp
    )
 
-SET(libthemeengine_SRCS 
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/themeengine/theme.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/themeengine/texture.cpp 
+SET(libthemeengine_SRCS
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/themeengine/theme.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/themeengine/texture.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/themeengine/themeengine.cpp
    )
 
-SET(libsetup_SRCS 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupicc.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupcollections.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupalbumtype.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupalbumview.cpp 
+SET(libsetup_SRCS
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupicc.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupcollections.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupalbumtype.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupalbumview.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setup.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setuptooltip.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupidentity.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupmime.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupslideshow.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupmetadata.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setuptooltip.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupidentity.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupmime.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupslideshow.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupmetadata.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupeditor.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupmisc.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupmisc.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setuplighttable.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupiofiles.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupplugins.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupdcraw.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupcamera.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/cameraselection.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupiofiles.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupplugins.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupdcraw.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupcamera.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/cameraselection.cpp
    )
 
-SET(libkipiiface_SRCS 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipiimageinfo.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipiimagecollection.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipiimagecollectionselector.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipiuploadwidget.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipiinterface.cpp 
+SET(libkipiiface_SRCS
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipiimageinfo.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipiimagecollection.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipiimagecollectionselector.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipiuploadwidget.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipiinterface.cpp
     )
 
 SET(libimagepropertiesdigikam_SRCS
@@ -522,20 +522,20 @@ SET(libimagepropertiesdigikam_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/worldmapwidget.cpp
    )
 
- SET(libdimgeditor_SRCS 
-     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editorwindow.cpp 
-     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/imageiface.cpp 
+ SET(libdimgeditor_SRCS
+     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editorwindow.cpp
+     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/imageiface.cpp
     )
 
  SET(libdimgimagewindow_SRCS
      ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/imagewindow.cpp
     )
 
-SET(libbatch_SRCS 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/imageinfojob.cpp 
+SET(libbatch_SRCS
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/imageinfojob.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/imageinfoalbumsjob.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/batchthumbsgenerator.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/batchalbumssyncmetadata.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/batchthumbsgenerator.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/batchalbumssyncmetadata.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/batchsyncmetadata.cpp
    )
 
@@ -603,27 +603,32 @@ SET(libsqlite2_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/where.c
    )
 
-SET(liblighttable_SRCS 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttablepreview.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttableview.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttablebar.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttablewindow.cpp 
+SET(libhaar_SRCS
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/haar/haar.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/haar/imgdb.cpp
    )
 
-SET(libcameragui_SRCS 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/dkcamera.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/umscamera.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/gpcamera.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/gpiteminfo.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/animwidget.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/renamecustomizer.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/camerainfodialog.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/camerafolderdialog.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/camerafolderitem.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/camerafolderview.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameraiconitem.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameraiconview.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameracontroller.cpp 
+SET(liblighttable_SRCS
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttablepreview.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttableview.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttablebar.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttablewindow.cpp
+   )
+
+SET(libcameragui_SRCS
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/dkcamera.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/umscamera.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/gpcamera.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/gpiteminfo.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/animwidget.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/renamecustomizer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/camerainfodialog.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/camerafolderdialog.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/camerafolderitem.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/camerafolderview.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameraiconitem.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameraiconview.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameracontroller.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameraui.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/freespacewidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/capturewidget.cpp
