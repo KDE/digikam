@@ -48,9 +48,10 @@ using namespace std;
 namespace Digikam
 {
 
+/** setup initial fixed weights that each coefficient represents 
+*/
 void initImgBin()
 {
-    /* setup initial fixed weights that each coefficient represents */
     int i,j;
 
     /*
@@ -71,13 +72,13 @@ void initImgBin()
     /* Except for the 5 by 5 upper-left quadrant: */
     for (i = 0; i < 5; i++)
         for (j = 0; j < 5; j++)
-            imgBin[i*128+j] = max(i,j);
+            imgBin[i*128+j] = qMax(i,j);
             // Note: imgBin[0] == 0
 }
 
 void initDbase()
 {
-    /* should be called before adding images */
+    // should be called before adding images
     printf("Image database initialized.\n");
     initImgBin();
 }
@@ -90,7 +91,7 @@ void free_sigs()
 
 void closeDbase()
 {
-    /* should be called before exiting app */
+    // should be called before exiting app
     free_sigs();
     printf("Image database closed.\n");
 }
@@ -109,14 +110,14 @@ int getImageHeight(long int id)
     return sigs[id]->height;
 }
 
+/** id is a unique image identifier
+    filename is the image location
+    thname is the thumbnail location for this image
+    doThumb should be set to 1 if you want to save the thumbnail on thname
+    Images with a dimension smaller than ignDim are ignored
+*/
 int addImage(const long int id, char* filename, char* thname, int doThumb, int ignDim=0)
 {
-    /* id is a unique image identifier
-        filename is the image location
-        thname is the thumbnail location for this image
-        doThumb should be set to 1 if you want to save the thumbnail on thname
-        Images with a dimension smaller than ignDim are ignored
-    */
     int cn;
 
     // Made static for speed; only used locally
@@ -624,10 +625,10 @@ int queryImgFile(char* filename,int numres,int sketch)
     return 1;
 }
 
+/** remove image with this id from dbase
+*/
 void removeID(long int id)
 {
-    /*remove image with this id from dbase
-    */
     if (!sigs.count(id))
     {
         // don't remove something which isn't even on db.

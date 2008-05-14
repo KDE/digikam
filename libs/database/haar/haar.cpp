@@ -32,7 +32,7 @@
 #include <cstdio>
 #include <cstdlib>
 
-// Local includes */
+// Local includes
 
 #include "haar.h"
 
@@ -86,23 +86,26 @@ static void haar2D(Unit a[])
     */
 
     // Decompose rows:
-    for (i = 0; i < NUM_PIXELS_SQUARED; i += NUM_PIXELS) {
+    for (i = 0; i < NUM_PIXELS_SQUARED; i += NUM_PIXELS) 
+    {
         int h, h1;
         Unit C = 1;
 
-        for (h = NUM_PIXELS; h > 1; h = h1) {
-        int j1, j2, k;
-
-        h1 = h >> 1;		// h = 2*h1
-        C *= 0.7071;		// 1/sqrt(2)
-        for (k = 0, j1 = j2 = i; k < h1; k++, j1++, j2 += 2) {
-            int j21 = j2+1;
-
-            t[k]  = (a[j2] - a[j21]) * C;
-            a[j1] = (a[j2] + a[j21]);
-        }
-        // Write back subtraction results:
-        memcpy(a+i+h1, t, h1*sizeof(a[0]));
+        for (h = NUM_PIXELS; h > 1; h = h1) 
+        {
+            int j1, j2, k;
+    
+            h1 = h >> 1;		// h = 2*h1
+            C *= 0.7071;		// 1/sqrt(2)
+            for (k = 0, j1 = j2 = i; k < h1; k++, j1++, j2 += 2) 
+            {
+                int j21 = j2+1;
+    
+                t[k]  = (a[j2] - a[j21]) * C;
+                a[j1] = (a[j2] + a[j21]);
+            }
+            // Write back subtraction results:
+            memcpy(a+i+h1, t, h1*sizeof(a[0]));
         }
         // Fix first element of each row:
         a[i] *= C;	// C = 1/sqrt(NUM_PIXELS)
@@ -115,25 +118,28 @@ static void haar2D(Unit a[])
     */
 
     // Decompose columns:
-    for (i = 0; i < NUM_PIXELS; i++) {
+    for (i = 0; i < NUM_PIXELS; i++) 
+    {
         Unit C = 1;
         int h, h1;
 
-        for (h = NUM_PIXELS; h > 1; h = h1) {
-        int j1, j2, k;
+        for (h = NUM_PIXELS; h > 1; h = h1) 
+        {
+            int j1, j2, k;
+    
+            h1 = h >> 1;
+            C *= 0.7071;		// 1/sqrt(2) = 0.7071
+            for (k = 0, j1 = j2 = i; k < h1; k++, j1 += NUM_PIXELS, j2 += 2*NUM_PIXELS) 
+            {
+                int j21 = j2+NUM_PIXELS;
+    
+                t[k]  = (a[j2] - a[j21]) * C;
+                a[j1] = (a[j2] + a[j21]);
+            }
 
-        h1 = h >> 1;
-        C *= 0.7071;		// 1/sqrt(2) = 0.7071
-        for (k = 0, j1 = j2 = i; k < h1;
-        k++, j1 += NUM_PIXELS, j2 += 2*NUM_PIXELS) {
-            int j21 = j2+NUM_PIXELS;
-
-            t[k]  = (a[j2] - a[j21]) * C;
-            a[j1] = (a[j2] + a[j21]);
-        }
-        // Write back subtraction results:
-        for (k = 0, j1 = i+h1*NUM_PIXELS; k < h1; k++, j1 += NUM_PIXELS)
-            a[j1]=t[k];
+            // Write back subtraction results:
+            for (k = 0, j1 = i+h1*NUM_PIXELS; k < h1; k++, j1 += NUM_PIXELS)
+                a[j1]=t[k];
         }
         // Fix first element of each column:
         a[i] *= C;
@@ -222,7 +228,7 @@ inline static void get_m_largests(Unit *cdata, Idx *sig)
         int t;
 
         val = vq.top();
-        t = (cdata[val.i] <= 0);	/* t = 0 if pos else 1 */
+        t   = (cdata[val.i] <= 0);	// t = 0 if pos else 1 
         /* i - 0 ^ 0 = i; i - 1 ^ 0b111..1111 = 2-compl(i) = -i */
         sig[cnt++] = (val.i - t) ^ -t; // never 0
         vq.pop();
