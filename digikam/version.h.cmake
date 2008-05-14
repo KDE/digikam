@@ -45,7 +45,7 @@ static inline const QString digiKamVersion()
 
     QString digiKamVer  = QString(digikam_version);
     if (!svnVer.isEmpty() && !svnVer.startsWith("unknow") && !svnVer.startsWith("export"))
-        digiKamVer.append(i18nc("%1 is the svn revision", " (rev.: %1)", svnVer));
+        digiKamVer = i18nc("%1 is digiKam version, %2 is the svn revision", "%1 (rev.: %1)", digikam_version, svnVer));
 
     return digiKamVer;
 }
