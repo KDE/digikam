@@ -243,16 +243,6 @@ ADD_CUSTOM_TARGET(svnversion
                   ALL DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/digikam/svnversion.h")
 
 # ==================================================================================================
-# Uninstall rules
-
-CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/cmake_uninstall.in_cmake"
-               "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
-               IMMEDIATE @ONLY)
-
-ADD_CUSTOM_TARGET(uninstall
-                  "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
-
-# ==================================================================================================
 # Definitions and includes rules
 
 ADD_DEFINITIONS(${QT_DEFINITIONS}
