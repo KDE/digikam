@@ -7,7 +7,7 @@
  * Description : perform lossless rotation/flip to JPEG file
  * 
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Parts of the loading code is taken from qjpeghandler.cpp, copyright follows:
  * Copyright (C) 1992-2007 Trolltech ASA. All rights reserved.
@@ -406,10 +406,10 @@ bool exifRotate(const QString& file, const QString& documentName)
         jpeg_destroy_compress(&dstinfo);
         (void) jpeg_finish_decompress(&srcinfo);
         jpeg_destroy_decompress(&srcinfo);
-    
+
         fclose(input_file);
         fclose(output_file);
-    
+
         // -- Metadata operations ------------------------------------------------------
 
         // Reset the Exif orientation tag of the temp image to normal
@@ -418,24 +418,14 @@ bool exifRotate(const QString& file, const QString& documentName)
         metaData.load(temp);
         metaData.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
         QImage img(temp);
-        
+
         // Get the new image dimension of the temp image. Using a dummy QImage objet here 
         // has a sense because the Exif dimension information can be missing from original image.
         // Get new dimensions with QImage will always work...
         metaData.setImageDimensions(img.size());
 
-        // Update the image preview.
-        QImage preview = img.scaled(800, 600, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-        
-        // TODO: see B.K.O #130525. The a JPEG segment is limited to 64K. If IPTC byte array 
-        // bigger than 64K duing of image preview tag size, the target JPEG image will be 
-        // broken. Note that IPTC image preview tag is limited to 256K!!! 
-        // Temp. solution to disable IPTC preview record in JPEG file until a right solution 
-        // will be found into Exiv2. 
-        // metaData.setImagePreview(preview);
-
         // Update the image thumbnail.
-        QImage thumb = preview.scaled(160, 120, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        QImage thumb = img.scaled(160, 120, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         metaData.setExifThumbnail(thumb);
 
         // Update Exif Document Name tag (the orinal file name from camera for example).
@@ -443,13 +433,13 @@ bool exifRotate(const QString& file, const QString& documentName)
 
         // We update all new metadata now...
         metaData.applyChanges();
-    
+
         // -----------------------------------------------------------------------------
         // set the file modification time of the temp file to that
         // of the original file
         struct stat st;
         stat(in, &st);
-    
+
         struct utimbuf ut;
         ut.modtime = st.st_mtime;
         ut.actime  = st.st_atime;
@@ -493,7 +483,7 @@ bool jpegConvert(const QString& src, const QString& dest, const QString& documen
         meta.setIptc(image.getIptc());
     
         // Update Iptc preview.
-        QImage preview = image.smoothScale(800, 600, Qt::KeepAspectRatio).copyQImage();
+        QImage preview = image.smoothScale(1280, 1024, Qt::KeepAspectRatio).copyQImage();
     
         // TODO: see B.K.O #130525. a JPEG segment is limited to 64K. If the IPTC byte array is
         // bigger than 64K duing of image preview tag size, the target JPEG image will be
@@ -501,33 +491,33 @@ bool jpegConvert(const QString& src, const QString& dest, const QString& documen
         // Temp. solution to disable IPTC preview record in JPEG file until a right solution 
         // will be found into Exiv2.
         // Note : There is no limitation with TIFF and PNG about IPTC byte array size.
-    
+
         if (format.toUpper() != QString("JPG") && format.toUpper() != QString("JPEG") && 
             format.toUpper() != QString("JPE")) 
             meta.setImagePreview(preview);
-    
+
         // Update Exif thumbnail.
         QImage thumb = preview.scaled(160, 120, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         meta.setExifThumbnail(thumb);
-    
+
         // Update Exif Document Name tag (the orinal file name from camera for example).
         meta.setExifTagString("Exif.Image.DocumentName", documentName);
-    
+
         // Store new Exif/Iptc data into image.
         image.setExif(meta.getExif());
         image.setIptc(meta.getIptc());
-    
+
         // And now save the image to a new file format.
 
         if ( format.toUpper() == QString("PNG") ) 
             image.setAttribute("quality", 9);
-    
+
         if ( format.toUpper() == QString("TIFF") || format.toUpper() == QString("TIF") ) 
             image.setAttribute("compress", true);
 
         return (image.save(dest, format));
     }
-    
+
     return false;
 }
 

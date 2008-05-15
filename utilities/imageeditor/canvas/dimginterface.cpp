@@ -307,7 +307,7 @@ void DImgInterface::slotImageLoaded(const LoadingDescription &loadingDescription
                     {
                         // To repaint image in canvas before to ask about to apply ICC profile.
                         emit signalImageLoaded(d->filename, valRet);
-    
+
                         DImg preview = d->image.smoothScale(240, 180, Qt::KeepAspectRatio);
                         trans.setProfiles(QFile::encodeName(d->cmSettings->inputSetting),
                                           QFile::encodeName(d->cmSettings->workspaceSetting));
@@ -317,7 +317,7 @@ void DImgInterface::slotImageLoaded(const LoadingDescription &loadingDescription
                         {
                             case QDialog::Accepted:
                                 if (d->parent) d->parent->setCursor( Qt::WaitCursor );
-        
+
                                 // NOTE: If Input color profile do not exist, using built-in sRGB intead.
                                 trans.apply(d->image, fakeProfile, d->cmSettings->renderingSetting,
                                             d->cmSettings->BPCSetting, false, 
@@ -355,16 +355,16 @@ void DImgInterface::slotImageLoaded(const LoadingDescription &loadingDescription
                             != trans.getProfileDescription( d->cmSettings->workspaceSetting ))
                         {
                             // Embedded profile and default workspace profile are different: ask to user!
-                        
+
                             DDebug() << "Embedded profile: " << trans.getEmbeddedProfileDescriptor() << endl;
-    
+
                             // To repaint image in canvas before to ask about to apply ICC profile.
                             emit signalImageLoaded(d->filename, valRet);
-    
+
                             DImg preview = d->image.smoothScale(240, 180, Qt::KeepAspectRatio);
                             trans.setProfiles(QFile::encodeName(d->cmSettings->workspaceSetting));
                             ColorCorrectionDlg dlg(d->parent, &preview, &trans, fileName);
-    
+
                             switch (dlg.exec())
                             {
                                 case QDialog::Accepted:
@@ -589,7 +589,7 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iof
     // broken. Note that IPTC image preview tag is limited to 256K!!!
     // There is no limitation with TIFF and PNG about IPTC byte array size.
 
-    QImage preview = d->image.smoothScale(800, 600, Qt::KeepAspectRatio).copyQImage();
+    QImage preview = d->image.smoothScale(1280, 1024, Qt::KeepAspectRatio).copyQImage();
 
     if ( mimeType.toUpper() != QString("JPG") && mimeType.toUpper() != QString("JPEG") && 
          mimeType.toUpper() != QString("JPE")) 
