@@ -586,7 +586,7 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iof
     // broken. Note that IPTC image preview tag is limited to 256K!!!
     // There is no limitation with TIFF and PNG about IPTC byte array size.
 
-    QImage preview = d->image.smoothScale(800, 600, QSize::ScaleMin).copyQImage();
+    QImage preview = d->image.smoothScale(1280, 1024, QSize::ScaleMin).copyQImage();
 
     if ( mimeType.upper() != QString("JPG") && mimeType.upper() != QString("JPEG") &&
          mimeType.upper() != QString("JPE"))

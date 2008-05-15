@@ -420,18 +420,8 @@ bool exifRotate(const QString& file, const QString& documentName)
         // Get new dimensions with QImage will always work...
         metaData.setImageDimensions(img.size());
 
-        // Update the image preview.
-        QImage preview = img.scale(800, 600, QImage::ScaleMin);
-        
-        // TODO: see B.K.O #130525. The a JPEG segment is limited to 64K. If IPTC byte array 
-        // bigger than 64K duing of image preview tag size, the target JPEG image will be 
-        // broken. Note that IPTC image preview tag is limited to 256K!!! 
-        // Temp. solution to disable IPTC preview record in JPEG file until a right solution 
-        // will be found into Exiv2. 
-        // metaData.setImagePreview(preview);
-
         // Update the image thumbnail.
-        QImage thumb = preview.scale(160, 120, QImage::ScaleMin);
+        QImage thumb = img.scale(160, 120, QImage::ScaleMin);
         metaData.setExifThumbnail(thumb);
 
         // Update Exif Document Name tag (the orinal file name from camera for example).
@@ -489,7 +479,7 @@ bool jpegConvert(const QString& src, const QString& dest, const QString& documen
         meta.setIptc(image.getIptc());
     
         // Update Iptc preview.
-        QImage preview = image.smoothScale(800, 600, QSize::ScaleMin).copyQImage();
+        QImage preview = image.smoothScale(1280, 1024, QSize::ScaleMin).copyQImage();
     
         // TODO: see B.K.O #130525. a JPEG segment is limited to 64K. If the IPTC byte array is
         // bigger than 64K duing of image preview tag size, the target JPEG image will be
