@@ -6,7 +6,8 @@ NEW FEATURES:
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-001 ==> 
+001 ==> 162132 : Crash while saving tiff (possibly caused by present alpha channel).
+002 ==> 
 
 **********************************************************************************************
 
