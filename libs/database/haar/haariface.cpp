@@ -62,14 +62,14 @@ void HaarIface::initImgBin()
     */
 
     /* Every position has value 5, */
-    memset(imgBin, 5, NUM_PIXELS_SQUARED);
+    memset(m_imgBin, 5, NUM_PIXELS_SQUARED);
 
     /* Except for the 5 by 5 upper-left quadrant: */
     for (i = 0; i < 5; i++)
     {
         for (j = 0; j < 5; j++)
         {
-            imgBin[i*128+j] = qMax(i,j);
+            m_imgBin[i*128+j] = qMax(i,j);
             // NOTE: imgBin[0] == 0
         }
     }
@@ -251,7 +251,7 @@ void HaarIface::queryImgData(Haar::Idx* sig1, Haar::Idx* sig2, Haar::Idx* sig3,
             long_listIterator end = m_imgbuckets[c][pn][idx].end();
             for (long_listIterator uit = m_imgbuckets[c][pn][idx].begin(); uit != end; uit++)
             {
-                m_sigs[(*uit)]->score -= weights[sketch][imgBin[idx]][c];
+                m_sigs[(*uit)]->score -= weights[sketch][m_imgBin[idx]][c];
             }
         }
     }
@@ -324,7 +324,7 @@ HaarIface::long_list HaarIface::queryImgDataForThres(sigMap* tsigs, Haar::Idx* s
             for (long_listIterator uit = m_imgbuckets[c][pn][idx].begin(); uit != end; uit++)
             {
                 if ((*tsigs).count((*uit)))
-                    (*tsigs)[(*uit)]->score -= weights[sketch][imgBin[idx]][c];
+                    (*tsigs)[(*uit)]->score -= weights[sketch][m_imgBin[idx]][c];
             }
         }
     }
@@ -559,7 +559,7 @@ double HaarIface::calcDiff(long int id1, long int id2)
             {
                 if (sig2[c][b2] == sig1[c][b])
                 {
-                    diff -= weights[0][imgBin[abs(sig1[c][b])]][c];
+                    diff -= weights[0][m_imgBin[abs(sig1[c][b])]][c];
                 }
             }
         }

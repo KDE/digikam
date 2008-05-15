@@ -102,12 +102,6 @@ private:
         }
     };
 
-    /** Fixed weight mask for pixel positions (i,j).
-        Each entry x = i*NUM_PIXELS + j, gets value max(i,j) saturated at 5.
-        To be treated as a constant.
-    */
-    unsigned char imgBin[16384];
-
     typedef std::map<const long int, sigStruct*, cmpf>::iterator sigIterator;
     typedef std::list<long int>                                  long_list;
     typedef long_list::iterator                                  long_listIterator;
@@ -115,24 +109,30 @@ private:
     typedef std::list<long_list>                                 long_list_2;       // a list of lists
     typedef std::map<const long int, sigStruct*, cmpf>           sigMap;
 
-    sigMap    m_sigs;
+    sigMap        m_sigs;
+
+    /** Fixed weight mask for pixel positions (i,j).
+        Each entry x = i*NUM_PIXELS + j, gets value max(i,j) saturated at 5.
+        To be treated as a constant.
+    */
+    unsigned char m_imgBin[16384];
 
     /** Lists of picture ids, indexed by [color-channel][sign][position], i.e.,
         R=0/G=1/B=2, pos=0/neg=1, (i*NUM_PIXELS+j)
     */
-    long_list m_imgbuckets[3][2][16384];
+    long_list     m_imgbuckets[3][2][16384];
 
     /** results priority queue; largest at top 
     */
-    priqueue  m_pqResults;
+    priqueue      m_pqResults;
 
     /** current result waiting to be returned 
     */
-    sigStruct m_curResult;
+    sigStruct     m_curResult;
 
     /** number of results found 
     */
-    int       m_numres;
+    int           m_numres;
 
 private:
 
