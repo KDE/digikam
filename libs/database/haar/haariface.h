@@ -68,8 +68,8 @@ class HaarIface
 
 public:
 
-    HaarIface(){};
-    ~HaarIface(){};
+    HaarIface();
+    ~HaarIface();
 
 private:
 

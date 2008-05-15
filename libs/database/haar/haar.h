@@ -58,8 +58,8 @@ public:
 
 public:
 
-    Haar(){};
-    ~Haar(){};
+    Haar();
+    ~Haar();
 
     void    transform(Unit* a, Unit* b, Unit* c);
 
@@ -81,10 +81,12 @@ private:
     {
         Unit d;         // [f]abs(a[i])
         int  i;         // index i of a[i]
+
         bool operator< (const valStruct_ &right) const
         {
             return d > right.d;
         }
+
     } valStruct;
 
     typedef std::priority_queue<valStruct> valqueue;

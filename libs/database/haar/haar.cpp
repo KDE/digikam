@@ -37,13 +37,21 @@
 namespace Digikam
 {
 
+Haar::Haar()
+{
+}
+
+Haar::~Haar()
+{
+}
+
 /** Do the Haar tensorial 2d transform itself.
     Here input is RGB data [0..255] in Unit arrays
     Computation is (almost) in-situ.
 */
 void Haar::haar2D(Unit a[])
 {
-    int i;
+    int  i;
     Unit t[NUM_PIXELS >> 1];
 
     // scale by 1/sqrt(128) = 0.08838834764831843:
@@ -124,21 +132,17 @@ void Haar::transform(Unit* a, Unit* b, Unit* c)
     // RGB -> YIQ colorspace conversion; Y luminance, I,Q chrominance.
     // If RGB in [0..255] then Y in [0..255] and I,Q in [-127..127].
 
-    do 
+    for (int i = 0; i < NUM_PIXELS_SQUARED; i++) 
     {
-        for (int i = 0; i < NUM_PIXELS_SQUARED; i++) 
-        {
-            Unit Y, I, Q;
+        Unit Y, I, Q;
 
-            Y    = 0.299 * a[i] + 0.587 * b[i] + 0.114 * c[i];
-            I    = 0.596 * a[i] - 0.275 * b[i] - 0.321 * c[i];
-            Q    = 0.212 * a[i] - 0.523 * b[i] + 0.311 * c[i];
-            a[i] = Y;
-            b[i] = I;
-            c[i] = Q;
-        }
+        Y    = 0.299 * a[i] + 0.587 * b[i] + 0.114 * c[i];
+        I    = 0.596 * a[i] - 0.275 * b[i] - 0.321 * c[i];
+        Q    = 0.212 * a[i] - 0.523 * b[i] + 0.311 * c[i];
+        a[i] = Y;
+        b[i] = I;
+        c[i] = Q;
     }
-    while(0);     // FIXME: Marcel, I don't understand... we will have an eternal loop here ???
 
     haar2D(a);
     haar2D(b);
@@ -193,7 +197,7 @@ void Haar::get_m_largests(Unit *cdata, Idx *sig)
 
         val = vq.top();
         t   = (cdata[val.i] <= 0);       // t = 0 if pos else 1 
-        /* i - 0 ^ 0 = i; i - 1 ^ 0b111..1111 = 2-compl(i) = -i */
+        // i - 0 ^ 0 = i; i - 1 ^ 0b111..1111 = 2-compl(i) = -i
         sig[cnt++] = (val.i - t) ^ -t;   // never 0
         vq.pop();
     }

@@ -43,6 +43,14 @@ using namespace std;
 namespace Digikam
 {
 
+HaarIface::HaarIface()
+{
+}
+
+HaarIface::~HaarIface()
+{
+}
+
 /** setup initial fixed haar weights that each coefficient represents
 */
 void HaarIface::initImgBin()
