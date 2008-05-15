@@ -33,48 +33,37 @@
 
 #include <queue>
 
-// Number of pixels on one side of image; required to be a power of 2.
+/** Number of pixels on one side of image; required to be a power of 2.
+*/
 #define NUM_PIXELS 128
 
-// Totals pixels in a square image.
+/** Totals pixels in a square image.
+*/
 #define NUM_PIXELS_SQUARED (NUM_PIXELS * NUM_PIXELS)
 
-// Number of Haar coeffients we retain as signature for an image.
+/** Number of Haar coeffients we retain as signature for an image.
+*/
 #define NUM_COEFS 40
-
-#define UNIT_IS_DOUBLE
 
 namespace Digikam
 {
 
-#undef ABS
-#ifdef UNIT_IS_DOUBLE
+typedef double Unit;
+typedef int    Idx;
 
-#define ABS(x)	fabs(x)
-typedef double	Unit;
-
-#else
-
-#define UNIT_IS_INT
-#define ABS(x)	abs(x)
-typedef int	Unit;
-
-#endif // UNIT_IS_DOUBLE
-
-typedef int Idx;
-
-// signature structure
+/** Signature structure
+*/
 typedef struct valStruct_
 {
     Unit d;         // [f]abs(a[i])
-    int i;          // index i of a[i]
+    int  i;         // index i of a[i]
     bool operator< (const valStruct_ &right) const
     {
         return d > right.d;
     }
 } valStruct;
 
-typedef std::priority_queue < valStruct > valqueue;
+typedef std::priority_queue<valStruct> valqueue;
 
 void initImgBin();
 
@@ -86,7 +75,7 @@ void transformChar(unsigned char* c1, unsigned char* c2, unsigned char* c3,
 int calcHaar(Unit* cdata1, Unit* cdata2, Unit* cdata3,
              Idx* sig1, Idx* sig2, Idx* sig3, double * avgl);
 
-double *new_darray(int size) ;
+double *new_darray(int size);
 
 int *new_iarray(int size);
 

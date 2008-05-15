@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2003-01-17
- * Description : Haar DB interface from imgseek project
+ * Description : Haar Database interface
  *
  * Copyright (C) 2003 by Ricardo Niederberger Cabral <nieder at mail dot ru>
  * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -41,7 +41,7 @@ const float weights[2][6][3]=
      { 0.52,  0.53,  0.14},  // 3    1.19      7
      { 0.47,  0.28,  0.18},  // 4    0.93      9
      { 0.30,  0.14,  0.27}}, // 5    0.71      16384-25=16359
-    
+
     // For handdrawn/painted sketch (sketch=1):
     //    Y      I      Q
     {{ 4.04, 15.14, 22.62},
@@ -56,17 +56,17 @@ const float weights[2][6][3]=
 */
 typedef struct sigStruct_
 {
-    long int id;			    // picture id
+    long int id;                // picture id
     Idx      sig1[NUM_COEFS];   // Y positions with largest magnitude
     Idx      sig2[NUM_COEFS];   // I positions with largest magnitude
     Idx      sig3[NUM_COEFS];   // Q positions with largest magnitude
     double   avgl[3];           // YIQ for position [0,0]
     double   score;             // used when doing queries
-    
+
     // image properties extracted when opened for the first time
     int width;                  // in pixels
     int height;                 // in pixels
-    
+
     bool operator< (const sigStruct_ & right) const 
     {
         return score < (right.score);
@@ -91,7 +91,7 @@ typedef std::map<const long int, sigStruct*, cmpf>::iterator sigIterator;
 typedef std::list<long int>                                  long_list;
 typedef long_list::iterator                                  long_listIterator;
 typedef std::priority_queue <sigStruct>                      priqueue;
-typedef std::list<long_list>                                 long_list_2; // a list of lists
+typedef std::list<long_list>                                 long_list_2;       // a list of lists
 typedef std::map<const long int, sigStruct*, cmpf>           sigMap;
 
 sigMap sigs;
@@ -103,7 +103,7 @@ long_list imgbuckets[3][2][16384];
 
 /** results priority queue; largest at top 
 */
-priqueue  pqResults;            
+priqueue  pqResults;
 
 /** current result waiting to be returned 
 */
@@ -111,7 +111,7 @@ sigStruct curResult;
 
 /** number of results found 
 */
-int       numres;               
+int       numres;
 
 }  // namespace Digikam
 

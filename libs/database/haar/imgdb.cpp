@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2003-01-17
- * Description : Haar DB interface from imgseek project
+ * Description : Haar Database interface
  *
  * Copyright (C) 2003 by Ricardo Niederberger Cabral <nieder at mail dot ru>
  * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -71,9 +71,13 @@ void initImgBin()
 
     /* Except for the 5 by 5 upper-left quadrant: */
     for (i = 0; i < 5; i++)
+    {
         for (j = 0; j < 5; j++)
+        {
             imgBin[i*128+j] = qMax(i,j);
-            // Note: imgBin[0] == 0
+            // NOTE: imgBin[0] == 0
+        }
+    }
 }
 
 void initDbase()
@@ -215,7 +219,7 @@ int addImage(const long int id, char* filename, char* thname, int doThumb, int i
         // sig[i] never 0
 
         x = nsig->sig1[i];
-        t = (x < 0);		/* t = 1 if x neg else 1 */
+        t = (x < 0);         // t = 1 if x neg else 1
         /* x - 0 ^ 0 = x; i - 1 ^ 0b111..1111 = 2-compl(x) = -x */
         x = (x - t) ^ -t;
         imgbuckets[0][t][x].push_back(id);
@@ -243,7 +247,9 @@ int loaddb(char* filename)
 
     // read buckets
     for (int c = 0; c < 3; c++)
+    {
         for (int pn = 0; pn < 2; pn++)
+        {
             for (int i = 0; i < 16384; i++)
             {
                 f.read((char*)&(sz), sizeof(int));
@@ -253,6 +259,8 @@ int loaddb(char* filename)
                     imgbuckets[c][pn][i].push_back(id);
                 }
             }
+        }
+    }
 
     // read sigs
     f.read((char*)&(sz), sizeof(int));
@@ -296,7 +304,9 @@ int savedb(char* filename)
 
     // save buckets
     for (int c = 0; c < 3; c++)
+    {
         for (int pn = 0; pn < 2; pn++)
+        {
             for (int i = 0; i < 16384; i++)
             {
                 sz = imgbuckets[c][pn][i].size();
@@ -307,6 +317,8 @@ int savedb(char* filename)
                     f.write((char*)&((*it)), sizeof(long int));
                 }
             }
+        }
+    }
 
     // save sigs
     sz = sigs.size();
@@ -400,8 +412,8 @@ void queryImgData(Idx* sig1, Idx* sig2, Idx* sig3,
 long_list queryImgDataForThres(sigMap* tsigs, Idx* sig1, Idx* sig2, Idx* sig3,
                                double * avgl, float thresd, int sketch)
 {
-    int idx,c;
-    int pn;
+    int       idx, c;
+    int       pn;
     long_list res;
     Idx * sig[3] = {sig1,sig2,sig3};
 
@@ -410,7 +422,9 @@ long_list queryImgDataForThres(sigMap* tsigs, Idx* sig1, Idx* sig2, Idx* sig3,
         // TODO: do I really need to score every single sig on db?
         (*sit).second->score = 0;
         for ( c = 0;c<3;c++)
+        {
             (*sit).second->score += weights[sketch][0][c] * fabs((*sit).second->avgl[c]-avgl[c]);
+        }
     }
 
     for (int b = 0; b<NUM_COEFS; b++)
@@ -451,7 +465,9 @@ long_list queryImgDataForThresFast(sigMap* tsigs, double * avgl, float thresd, i
     {
         (*sit).second->score = 0;
         for (int c = 0;c<3;c++)
+        {
             (*sit).second->score += weights[sketch][0][c] * fabs((*sit).second->avgl[c]-avgl[c]);
+        }
 
         if ((*sit).second->score < thresd)
         {
@@ -466,9 +482,14 @@ long_list queryImgDataForThresFast(sigMap* tsigs, double * avgl, float thresd, i
 */
 long_list_2 clusterSim(float thresd, int fast = 0)
 {
-    long_list_2 res;              // will hold a list of lists. ie. a list of clusters
-    sigMap wSigs(sigs);           // temporary map of sigs, as soon as an image becomes part of a cluster, it's removed from this map
-    sigMap wSigsTrack(sigs);           // temporary map of sigs, as soon as an image becomes part of a cluster, it's removed from this map
+    // will hold a list of lists. ie. a list of clusters
+    long_list_2 res;
+
+    // temporary map of sigs, as soon as an image becomes part of a cluster, it's removed from this map
+    sigMap wSigs(sigs);
+
+    // temporary map of sigs, as soon as an image becomes part of a cluster, it's removed from this map
+    sigMap wSigsTrack(sigs);
 
     for (sigIterator sit = wSigs.begin(); sit != wSigs.end(); sit++)
     {
@@ -640,9 +661,15 @@ void removeID(long int id)
 
     // remove id from each bucket it could be in
     for (int c = 0;c<3;c++)
+    {
         for (int pn=0;pn<2;pn++)
+        {
             for (int i = 0;i<16384;i++)
+            {
                 imgbuckets[c][pn][i].remove(id);
+            }
+        }
+    }
 }
 
 /** return the average luminance difference
@@ -669,10 +696,18 @@ double calcDiff(long int id1, long int id2)
     Idx *sig2[3] = {sigs[id2]->sig1,sigs[id2]->sig2,sigs[id2]->sig3};
 
     for (int b = 0; b < NUM_COEFS; b++)
+    {
         for (int c = 0; c < 3; c++)
+        {
             for (int b2 = 0; b2 < NUM_COEFS; b2++)
+            {
                 if (sig2[c][b2] == sig1[c][b])
+                {
                     diff -= weights[0][imgBin[abs(sig1[c][b])]][c];
+                }
+            }
+        }
+    }
 
   return diff;
 }
@@ -682,9 +717,15 @@ double calcDiff(long int id1, long int id2)
 int resetdb()
 {
     for (int c = 0; c < 3; c++)
+    {
         for (int pn = 0; pn < 2; pn++)
+        {
             for (int i = 0; i < 16384; i++)
+            {
                 imgbuckets[c][pn][i].clear();
+            }
+        }
+    }
 
     // delete sigs
     free_sigs();
