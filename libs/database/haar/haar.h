@@ -4,9 +4,9 @@
  * http://www.digikam.org
  *
  * Date        : 2003-01-17
- * Description : Haar 2d transform from imgseek project
+ * Description : Haar 2d transform 
  *               Wavelet algorithms, metric and query ideas based on the paper
- *               Fast Multiresolution Image Querying
+ *               "Fast Multiresolution Image Querying"
  *               by Charles E. Jacobs, Adam Finkelstein and David H. Salesin.
  *               http://www.cs.washington.edu/homes/salesin/abstracts.html
  *

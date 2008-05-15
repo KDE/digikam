@@ -28,8 +28,10 @@
 namespace Digikam
 {
 
-/** Weights for the Haar coefficients.
-    Straight from the referenced paper
+/** Weights for the Haar coefficients. Straight from the referenced paper
+    "Fast Multiresolution Image Querying"
+    by Charles E. Jacobs, Adam Finkelstein and David H. Salesin.
+    http://www.cs.washington.edu/homes/salesin/abstracts.html
 */
 const float weights[2][6][3]=
 {
