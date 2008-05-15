@@ -30,6 +30,10 @@
 #include <map>
 #include <list>
 
+// Local includes.
+
+#include "haar.h"
+
 namespace Digikam
 {
 
@@ -63,6 +67,11 @@ class HaarIface
 {
 
 public:
+
+    HaarIface(){};
+    ~HaarIface(){};
+
+private:
 
     /** signature structure 
     */
@@ -124,11 +133,6 @@ public:
     /** number of results found 
     */
     int       numres;
-
-public:
-
-    HaarIface(){};
-    ~HaarIface(){};
 
 private:
 

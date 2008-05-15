@@ -36,7 +36,6 @@
 
 #include "ddebug.h"
 #include "jpegutils.h"
-#include "haar.h"
 #include "haariface.h"
 
 using namespace std;
