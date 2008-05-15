@@ -29,8 +29,6 @@
 // C++ includes
 
 #include <cmath>
-//#include <cstdio>
-//#include <cstdlib>
 
 // Local includes
 
@@ -38,26 +36,6 @@
 
 namespace Digikam
 {
-
-/** RGB -> YIQ colorspace conversion; Y luminance, I,Q chrominance.
-    If RGB in [0..255] then Y in [0..255] and I,Q in [-127..127].
-*/
-#define RGB_2_YIQ(a, b, c) \
-    do { \
-        int i; \
-        \
-        for (i = 0; i < NUM_PIXELS_SQUARED; i++) { \
-        Unit Y, I, Q; \
-        \
-        Y = 0.299 * a[i] + 0.587 * b[i] + 0.114 * c[i]; \
-        I = 0.596 * a[i] - 0.275 * b[i] - 0.321 * c[i]; \
-        Q = 0.212 * a[i] - 0.523 * b[i] + 0.311 * c[i]; \
-        a[i] = Y; \
-        b[i] = I; \
-        c[i] = Q; \
-        } \
-    } while(0)
-
 // python array wrapper. Creates a new double array
 double* Haar::new_darray(int size)
 {
@@ -156,7 +134,24 @@ void Haar::haar2D(Unit a[])
 */
 void Haar::transform(Unit* a, Unit* b, Unit* c)
 {
-    RGB_2_YIQ(a, b, c);
+    // RGB -> YIQ colorspace conversion; Y luminance, I,Q chrominance.
+    // If RGB in [0..255] then Y in [0..255] and I,Q in [-127..127].
+
+    do 
+    {
+        for (int i = 0; i < NUM_PIXELS_SQUARED; i++) 
+        {
+            Unit Y, I, Q;
+
+            Y    = 0.299 * a[i] + 0.587 * b[i] + 0.114 * c[i];
+            I    = 0.596 * a[i] - 0.275 * b[i] - 0.321 * c[i];
+            Q    = 0.212 * a[i] - 0.523 * b[i] + 0.311 * c[i];
+            a[i] = Y;
+            b[i] = I;
+            c[i] = Q;
+        }
+    }
+    while(0);     // FIXME: Marcel, I don't understand... we will have an eternal loop here ???
 
     haar2D(a);
     haar2D(b);
