@@ -77,22 +77,22 @@ void HaarIface::initImgBin()
 
 void HaarIface::free_sigs()
 {
-    for (sigIterator it = sigs.begin(); it != sigs.end(); it++)
+    for (sigIterator it = m_sigs.begin(); it != m_sigs.end(); it++)
         delete (*it).second;
 }
 
 int HaarIface::getImageWidth(long int id)
 {
-    if (!sigs.count(id))
+    if (!m_sigs.count(id))
         return 0;
-    return sigs[id]->width;
+    return m_sigs[id]->width;
 }
 
 int HaarIface::getImageHeight(long int id)
 {
-    if (!sigs.count(id))
+    if (!m_sigs.count(id))
         return 0;
-    return sigs[id]->height;
+    return m_sigs[id]->height;
 }
 
 /** id is a unique image identifier
@@ -180,13 +180,13 @@ int HaarIface::addImage(const long int id, char* filename, char* thname, int doT
     nsig->width     = width;
     nsig->height    = height;
 
-    if (sigs.count(id))
+    if (m_sigs.count(id))
     {
         DDebug() << "ID already in DB: %ld\n" << endl;
-        delete sigs[id];
-        sigs.erase(id);
+        delete m_sigs[id];
+        m_sigs.erase(id);
     }
-    sigs[id] = nsig;
+    m_sigs[id] = nsig;
 
     haar.calcHaar(cdata1, cdata2, cdata3,
                   nsig->sig1, nsig->sig2, nsig->sig3, nsig->avgl);
@@ -202,17 +202,17 @@ int HaarIface::addImage(const long int id, char* filename, char* thname, int doT
         t = (x < 0);         // t = 1 if x neg else 1
         /* x - 0 ^ 0 = x; i - 1 ^ 0b111..1111 = 2-compl(x) = -x */
         x = (x - t) ^ -t;
-        imgbuckets[0][t][x].push_back(id);
+        m_imgbuckets[0][t][x].push_back(id);
 
         x = nsig->sig2[i];
         t = (x < 0);
         x = (x - t) ^ -t;
-        imgbuckets[1][t][x].push_back(id);
+        m_imgbuckets[1][t][x].push_back(id);
 
         x = nsig->sig3[i];
         t = (x < 0);
         x = (x - t) ^ -t;
-        imgbuckets[2][t][x].push_back(id);
+        m_imgbuckets[2][t][x].push_back(id);
     }
     return 1;
 }
@@ -229,7 +229,7 @@ void HaarIface::queryImgData(Haar::Idx* sig1, Haar::Idx* sig2, Haar::Idx* sig3,
     int        pn;
     Haar::Idx *sig[3] = {sig1, sig2, sig3};
 
-    for (sigIterator sit = sigs.begin(); sit!=sigs.end(); sit++)
+    for (sigIterator sit = m_sigs.begin(); sit!=m_sigs.end(); sit++)
     {
         //#TODO3: do I really need to score every single sig on db?
         (*sit).second->score = 0;
@@ -248,40 +248,40 @@ void HaarIface::queryImgData(Haar::Idx* sig1, Haar::Idx* sig2, Haar::Idx* sig3,
             idx = (sig[c][b] - pn) ^ -pn;
 
             // update the score of every image which has this coef
-            long_listIterator end = imgbuckets[c][pn][idx].end();
-            for (long_listIterator uit = imgbuckets[c][pn][idx].begin(); uit != end; uit++)
+            long_listIterator end = m_imgbuckets[c][pn][idx].end();
+            for (long_listIterator uit = m_imgbuckets[c][pn][idx].begin(); uit != end; uit++)
             {
-                sigs[(*uit)]->score -= weights[sketch][imgBin[idx]][c];
+                m_sigs[(*uit)]->score -= weights[sketch][imgBin[idx]][c];
             }
         }
     }
 
     // make sure pqResults is empty.
     // TODO: any faster way to empty it ? didn't find any on STL refs.
-    while(!pqResults.empty())
-        pqResults.pop();
+    while(!m_pqResults.empty())
+        m_pqResults.pop();
 
-    sigIterator sit = sigs.begin();
+    sigIterator sit = m_sigs.begin();
 
     // Fill up the numres-bounded priority queue (largest at top):
     for (int cnt = 0; cnt < numres; cnt++)
     {
         // No more images; cannot get requested numres, alas.
-        if (sit == sigs.end())
+        if (sit == m_sigs.end())
             return;
 
-        pqResults.push(*(*sit).second);
+        m_pqResults.push(*(*sit).second);
         sit++;
     }
 
-    for (; sit != sigs.end(); sit++)
+    for (; sit != m_sigs.end(); sit++)
     {
-        if ((*sit).second->score < pqResults.top().score)
+        if ((*sit).second->score < m_pqResults.top().score)
         {
             // Make room by dropping largest entry:
-            pqResults.pop();
+            m_pqResults.pop();
             // Insert new entry:
-            pqResults.push(*(*sit).second);
+            m_pqResults.push(*(*sit).second);
         }
     }
 }
@@ -320,8 +320,8 @@ HaarIface::long_list HaarIface::queryImgDataForThres(sigMap* tsigs, Haar::Idx* s
             idx = (sig[c][b] - pn) ^ -pn;
 
             // update the score of every image which has this coef
-            long_listIterator end = imgbuckets[c][pn][idx].end();
-            for (long_listIterator uit = imgbuckets[c][pn][idx].begin(); uit != end; uit++)
+            long_listIterator end = m_imgbuckets[c][pn][idx].end();
+            for (long_listIterator uit = m_imgbuckets[c][pn][idx].begin(); uit != end; uit++)
             {
                 if ((*tsigs).count((*uit)))
                     (*tsigs)[(*uit)]->score -= weights[sketch][imgBin[idx]][c];
@@ -370,10 +370,10 @@ HaarIface::long_list_2 HaarIface::clusterSim(float thresd, int fast)
     long_list_2 res;
 
     // temporary map of sigs, as soon as an image becomes part of a cluster, it's removed from this map
-    sigMap wSigs(sigs);
+    sigMap wSigs(m_sigs);
 
     // temporary map of sigs, as soon as an image becomes part of a cluster, it's removed from this map
-    sigMap wSigsTrack(sigs);
+    sigMap wSigsTrack(m_sigs);
 
     for (sigIterator sit = wSigs.begin(); sit != wSigs.end(); sit++)
     {
@@ -416,7 +416,7 @@ HaarIface::long_list_2 HaarIface::clusterSim(float thresd, int fast)
 */
 int HaarIface::getNumResults()
 {
-    return pqResults.size();
+    return m_pqResults.size();
 }
 
 /** get the id of the current query result, removing it from the result list
@@ -424,16 +424,16 @@ int HaarIface::getNumResults()
 */
 long int HaarIface::getResultID()
 {
-    curResult = pqResults.top();
-    pqResults.pop();
-    return curResult.id;
+    m_curResult = m_pqResults.top();
+    m_pqResults.pop();
+    return m_curResult.id;
 }
 
 /** get the score for the current query result
 */
 double HaarIface::getResultScore()
 {
-    return curResult.score;
+    return m_curResult.score;
 }
 
 /** query for images similar to the one that has this id
@@ -441,16 +441,16 @@ double HaarIface::getResultScore()
 */
 void HaarIface::queryImgID(long int id, int numres)
 {
-    while(!pqResults.empty())
-        pqResults.pop();
+    while(!m_pqResults.empty())
+        m_pqResults.pop();
 
-    if (!sigs.count(id))
+    if (!m_sigs.count(id))
     {
         DDebug() << "ID not found." << endl;
         return;
     }
-    queryImgData(sigs[id]->sig1, sigs[id]->sig2, sigs[id]->sig3,
-                 sigs[id]->avgl, numres, 0);
+    queryImgData(m_sigs[id]->sig1, m_sigs[id]->sig2, m_sigs[id]->sig3,
+                 m_sigs[id]->avgl, numres, 0);
 }
 
 /** query for images similar to the one on filename
@@ -459,8 +459,8 @@ void HaarIface::queryImgID(long int id, int numres)
 */
 int HaarIface::queryImgFile(char* filename,int numres,int sketch)
 {
-    while(!pqResults.empty())
-        pqResults.pop();
+    while(!m_pqResults.empty())
+        m_pqResults.pop();
 
     double     avgl[3];
     int        cn = 0;
@@ -506,14 +506,14 @@ int HaarIface::queryImgFile(char* filename,int numres,int sketch)
 */
 void HaarIface::removeID(long int id)
 {
-    if (!sigs.count(id))
+    if (!m_sigs.count(id))
     {
         // don't remove something which isn't even on db.
         DDebug() << "Attempt to remove invalid id: " << id << endl;
         return;
     }
-    delete sigs[id];
-    sigs.erase(id);
+    delete m_sigs[id];
+    m_sigs.erase(id);
 
     // remove id from each bucket it could be in
     for (int c = 0;c<3;c++)
@@ -522,7 +522,7 @@ void HaarIface::removeID(long int id)
         {
             for (int i = 0;i<16384;i++)
             {
-                imgbuckets[c][pn][i].remove(id);
+                m_imgbuckets[c][pn][i].remove(id);
             }
         }
     }
@@ -532,15 +532,15 @@ void HaarIface::removeID(long int id)
 */
 double HaarIface::calcAvglDiff(long int id1, long int id2)
 {
-    if (!sigs.count(id1))
+    if (!m_sigs.count(id1))
         return 0;
 
-    if (!sigs.count(id2))
+    if (!m_sigs.count(id2))
         return 0;
 
-    return fabs(sigs[id1]->avgl[0] - sigs[id2]->avgl[0]) +
-           fabs(sigs[id1]->avgl[1] - sigs[id2]->avgl[1]) +
-           fabs(sigs[id1]->avgl[2] - sigs[id2]->avgl[2]);
+    return fabs(m_sigs[id1]->avgl[0] - m_sigs[id2]->avgl[0]) +
+           fabs(m_sigs[id1]->avgl[1] - m_sigs[id2]->avgl[1]) +
+           fabs(m_sigs[id1]->avgl[2] - m_sigs[id2]->avgl[2]);
 }
 
 /** use it to tell the content-based difference between two images
@@ -548,8 +548,8 @@ double HaarIface::calcAvglDiff(long int id1, long int id2)
 double HaarIface::calcDiff(long int id1, long int id2)
 {
     double diff        = calcAvglDiff(id1, id2);
-    Haar::Idx *sig1[3] = {sigs[id1]->sig1, sigs[id1]->sig2, sigs[id1]->sig3};
-    Haar::Idx *sig2[3] = {sigs[id2]->sig1, sigs[id2]->sig2, sigs[id2]->sig3};
+    Haar::Idx *sig1[3] = {m_sigs[id1]->sig1, m_sigs[id1]->sig2, m_sigs[id1]->sig3};
+    Haar::Idx *sig2[3] = {m_sigs[id2]->sig1, m_sigs[id2]->sig2, m_sigs[id2]->sig3};
 
     for (int b = 0; b < NUM_COEFS; b++)
     {
@@ -604,7 +604,7 @@ int HaarIface::loaddb(char* filename)
                 for (int k = 0; k < sz; k++)
                 {
                     f.read((char*)&(id), sizeof(long int));
-                    imgbuckets[c][pn][i].push_back(id);
+                    m_imgbuckets[c][pn][i].push_back(id);
                 }
             }
         }
@@ -615,8 +615,8 @@ int HaarIface::loaddb(char* filename)
     for (int k = 0; k < sz; k++)
     {
         f.read((char*)&(id), sizeof(long int));
-        sigs[id] = new sigStruct();
-        f.read((char*)sigs[id], sizeof(sigStruct));
+        m_sigs[id] = new sigStruct();
+        f.read((char*)m_sigs[id], sizeof(sigStruct));
     }
     f.close();
     return 1;
@@ -657,10 +657,10 @@ int HaarIface::savedb(char* filename)
         {
             for (int i = 0; i < 16384; i++)
             {
-                sz = imgbuckets[c][pn][i].size();
+                sz = m_imgbuckets[c][pn][i].size();
                 f.write((char*)&(sz), sizeof(int) );
-                long_listIterator end = imgbuckets[c][pn][i].end();
-                for (long_listIterator it = imgbuckets[c][pn][i].begin(); it != end; it++)
+                long_listIterator end = m_imgbuckets[c][pn][i].end();
+                for (long_listIterator it = m_imgbuckets[c][pn][i].begin(); it != end; it++)
                 {
                     f.write((char*)&((*it)), sizeof(long int));
                 }
@@ -669,9 +669,9 @@ int HaarIface::savedb(char* filename)
     }
 
     // save sigs
-    sz = sigs.size();
+    sz = m_sigs.size();
     f.write((char*)&(sz), sizeof(int));
-    for (sigIterator it = sigs.begin(); it != sigs.end(); it++)
+    for (sigIterator it = m_sigs.begin(); it != m_sigs.end(); it++)
     {
         id = (*it).first;
         f.write((char*)&(id), sizeof(long int));
@@ -691,14 +691,14 @@ int HaarIface::resetdb()
         {
             for (int i = 0; i < 16384; i++)
             {
-                imgbuckets[c][pn][i].clear();
+                m_imgbuckets[c][pn][i].clear();
             }
         }
     }
 
     // delete sigs
     free_sigs();
-    sigs.clear();
+    m_sigs.clear();
     return 1;
 }
 
