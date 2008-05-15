@@ -24,9 +24,7 @@
 
 // C++ Includes
 
-#include <queue>
 #include <fstream>
-#include <iostream>
 #include <cmath>
 
 // QT Includes
@@ -48,9 +46,9 @@ namespace Digikam
 
 /** setup initial fixed weights that each coefficient represents
 */
-void initImgBin()
+void HaarIface::initImgBin()
 {
-    int i,j;
+    int i, j;
 
     /*
     0 1 2 3 4 5 6 i
@@ -78,34 +76,34 @@ void initImgBin()
     }
 }
 
-void initDbase()
+void HaarIface::initDbase()
 {
     // should be called before adding images
     DDebug() << "Image database initialized." << endl;
     initImgBin();
 }
 
-void free_sigs()
+void HaarIface::free_sigs()
 {
     for (sigIterator it = sigs.begin(); it != sigs.end(); it++)
         delete (*it).second;
 }
 
-void closeDbase()
+void HaarIface::closeDbase()
 {
     // should be called before exiting app
     free_sigs();
     DDebug() << "Image database closed." << endl;
 }
 
-int getImageWidth(long int id)
+int HaarIface::getImageWidth(long int id)
 {
     if (!sigs.count(id))
         return 0;
     return sigs[id]->width;
 }
 
-int getImageHeight(long int id)
+int HaarIface::getImageHeight(long int id)
 {
     if (!sigs.count(id))
         return 0;
@@ -118,18 +116,17 @@ int getImageHeight(long int id)
     doThumb should be set to 1 if you want to save the thumbnail on thname
     Images with a dimension smaller than ignDim are ignored
 */
-int addImage(const long int id, char* filename, char* thname, int doThumb, int ignDim=0)
+int HaarIface::addImage(const long int id, char* filename, char* thname, int doThumb, int ignDim)
 {
     int cn;
 
     // Made static for speed; only used locally
-    static Unit cdata1[16384];
-    static Unit cdata2[16384];
-    static Unit cdata3[16384];
+    static Haar::Unit cdata1[16384];
+    static Haar::Unit cdata2[16384];
+    static Haar::Unit cdata3[16384];
 
-    int i;
-    int width, height;
-
+    int    i;
+    int    width, height;
     QImage image;
 
     // TODO: Marcel, all can be optimized here using DImg.
@@ -190,7 +187,8 @@ int addImage(const long int id, char* filename, char* thname, int doThumb, int i
         }
     }
 
-    transform(cdata1, cdata2, cdata3);
+    Haar haar;
+    haar.transform(cdata1, cdata2, cdata3);
 
     sigStruct* nsig = new sigStruct();
     nsig->id        = id;
@@ -205,8 +203,8 @@ int addImage(const long int id, char* filename, char* thname, int doThumb, int i
     }
     sigs[id] = nsig;
 
-    calcHaar(cdata1,cdata2,cdata3,
-             nsig->sig1, nsig->sig2, nsig->sig3, nsig->avgl);
+    haar.calcHaar(cdata1, cdata2, cdata3,
+                  nsig->sig1, nsig->sig2, nsig->sig3, nsig->avgl);
 
     // populate buckets
     for (i = 0; i < NUM_COEFS; i++)
@@ -234,7 +232,7 @@ int addImage(const long int id, char* filename, char* thname, int doThumb, int i
     return 1;
 }
 
-int loaddb(char* filename)
+int HaarIface::loaddb(char* filename)
 {
     std::ifstream f(filename, ios::binary);
     if (!f.is_open()) return 0;
@@ -271,7 +269,7 @@ int loaddb(char* filename)
     return 1;
 }
 
-int savedb(char* filename)
+int HaarIface::savedb(char* filename)
 {
     /*
     Serialization order:
@@ -335,12 +333,12 @@ int savedb(char* filename)
     numres is the max number of results
     sketch (0 or 1) tells which set of weights to use
 */
-void queryImgData(Idx* sig1, Idx* sig2, Idx* sig3,
-                  double * avgl, int numres, int sketch)
+void HaarIface::queryImgData(Haar::Idx* sig1, Haar::Idx* sig2, Haar::Idx* sig3,
+                             double* avgl, int numres, int sketch)
 {
-    int  idx, c;
-    int  pn;
-    Idx *sig[3] = {sig1,sig2,sig3};
+    int        idx, c;
+    int        pn;
+    Haar::Idx *sig[3] = {sig1, sig2, sig3};
 
     for (sigIterator sit = sigs.begin(); sit!=sigs.end(); sit++)
     {
@@ -406,13 +404,13 @@ void queryImgData(Idx* sig1, Idx* sig2, Idx* sig3,
     sigs is the source to query on (map of signatures)
     every search result is removed from sigs. (right now this functn is only used by clusterSim)
 */
-long_list queryImgDataForThres(sigMap* tsigs, Idx* sig1, Idx* sig2, Idx* sig3,
-                               double * avgl, float thresd, int sketch)
+HaarIface::long_list HaarIface::queryImgDataForThres(sigMap* tsigs, Haar::Idx* sig1, Haar::Idx* sig2, Haar::Idx* sig3,
+                                                     double * avgl, float thresd, int sketch)
 {
     int        idx, c;
     int        pn;
     long_list  res;
-    Idx       *sig[3] = {sig1,sig2,sig3};
+    Haar::Idx *sig[3] = {sig1, sig2, sig3};
 
     for (sigIterator sit = (*tsigs).begin(); sit!=(*tsigs).end(); sit++)
     {
@@ -453,7 +451,7 @@ long_list queryImgDataForThres(sigMap* tsigs, Idx* sig1, Idx* sig2, Idx* sig3,
     return res;
 }
 
-long_list queryImgDataForThresFast(sigMap* tsigs, double * avgl, float thresd, int sketch)
+HaarIface::long_list HaarIface::queryImgDataForThresFast(sigMap* tsigs, double * avgl, float thresd, int sketch)
 {
     // will only look for average luminance
     long_list res;
@@ -477,7 +475,7 @@ long_list queryImgDataForThresFast(sigMap* tsigs, double * avgl, float thresd, i
 
 /** Cluster by similarity. Returns list of list of long ints (img ids)
 */
-long_list_2 clusterSim(float thresd, int fast = 0)
+HaarIface::long_list_2 HaarIface::clusterSim(float thresd, int fast)
 {
     // will hold a list of lists. ie. a list of clusters
     long_list_2 res;
@@ -531,24 +529,24 @@ long_list_2 clusterSim(float thresd, int fast = 0)
 // grr. I've already figured out how to wrap it properly, but forgot where. Maybe on imgSeekLite ? or imgseeknet ?
 //////
 
-int getLongListSize(long_list& li)
+int HaarIface::getLongListSize(long_list& li)
 {
     return li.size();
 }
 
-long int popLongList(long_list& li)
+long int HaarIface::popLongList(long_list& li)
 {
     long int a = li.front();
     li.pop_front();
     return a;
 }
 
-int getLongList2Size(long_list_2& li)
+int HaarIface::getLongList2Size(long_list_2& li)
 {
     return li.size();
 }
 
-long_list popLong2List(long_list_2& li)
+HaarIface::long_list HaarIface::popLong2List(long_list_2& li)
 {
     long_list a = li.front();
     li.pop_front();
@@ -557,7 +555,7 @@ long_list popLong2List(long_list_2& li)
 
 /** get the number of results the last query yielded
 */
-int getNumResults()
+int HaarIface::getNumResults()
 {
     return pqResults.size();
 }
@@ -565,7 +563,7 @@ int getNumResults()
 /** get the id of the current query result, removing it from the result list
     (you should always call getResultID *before* getResultScore)
 */
-long int getResultID()
+long int HaarIface::getResultID()
 {
     curResult = pqResults.top();
     pqResults.pop();
@@ -574,7 +572,7 @@ long int getResultID()
 
 /** get the score for the current query result
 */
-double getResultScore()
+double HaarIface::getResultScore()
 {
     return curResult.score;
 }
@@ -582,7 +580,7 @@ double getResultScore()
 /** query for images similar to the one that has this id
     numres is the maximum number of results
 */
-void queryImgID(long int id, int numres)
+void HaarIface::queryImgID(long int id, int numres)
 {
     while(!pqResults.empty())
         pqResults.pop();
@@ -600,21 +598,21 @@ void queryImgID(long int id, int numres)
     numres is the maximum number of results
     sketch should be 1 if this image is a drawing
 */
-int queryImgFile(char* filename,int numres,int sketch)
+int HaarIface::queryImgFile(char* filename,int numres,int sketch)
 {
     while(!pqResults.empty())
         pqResults.pop();
 
-    double avgl[3];
-    Idx    sig1[NUM_COEFS];
-    Idx    sig2[NUM_COEFS];
-    Idx    sig3[NUM_COEFS];
-    int    cn = 0;
-    Unit   cdata1[16384];
-    Unit   cdata2[16384];
-    Unit   cdata3[16384];
+    double     avgl[3];
+    int        cn = 0;
+    QImage     image;
+    Haar::Idx  sig1[NUM_COEFS];
+    Haar::Idx  sig2[NUM_COEFS];
+    Haar::Idx  sig3[NUM_COEFS];
+    Haar::Unit cdata1[16384];
+    Haar::Unit cdata2[16384];
+    Haar::Unit cdata3[16384];
 
-    QImage image;
     if (!image.load(filename))
         return 0;
 
@@ -636,9 +634,10 @@ int queryImgFile(char* filename,int numres,int sketch)
             cn++;
         }
     }
-    transform(cdata1,cdata2,cdata3);
 
-    calcHaar(cdata1, cdata2, cdata3, sig1, sig2, sig3, avgl);
+    Haar haar;
+    haar.transform(cdata1, cdata2, cdata3);
+    haar.calcHaar(cdata1, cdata2, cdata3, sig1, sig2, sig3, avgl);
     queryImgData(sig1, sig2, sig3, avgl, numres, sketch);
 
     return 1;
@@ -646,7 +645,7 @@ int queryImgFile(char* filename,int numres,int sketch)
 
 /** remove image with this id from dbase
 */
-void removeID(long int id)
+void HaarIface::removeID(long int id)
 {
     if (!sigs.count(id))
     {
@@ -672,7 +671,7 @@ void removeID(long int id)
 
 /** return the average luminance difference
 */
-double calcAvglDiff(long int id1, long int id2)
+double HaarIface::calcAvglDiff(long int id1, long int id2)
 {
     if (!sigs.count(id1))
         return 0;
@@ -687,11 +686,11 @@ double calcAvglDiff(long int id1, long int id2)
 
 /** use it to tell the content-based difference between two images
 */
-double calcDiff(long int id1, long int id2)
+double HaarIface::calcDiff(long int id1, long int id2)
 {
-    double diff = calcAvglDiff(id1,id2);
-    Idx *sig1[3] = {sigs[id1]->sig1, sigs[id1]->sig2, sigs[id1]->sig3};
-    Idx *sig2[3] = {sigs[id2]->sig1, sigs[id2]->sig2, sigs[id2]->sig3};
+    double diff        = calcAvglDiff(id1, id2);
+    Haar::Idx *sig1[3] = {sigs[id1]->sig1, sigs[id1]->sig2, sigs[id1]->sig3};
+    Haar::Idx *sig2[3] = {sigs[id2]->sig1, sigs[id2]->sig2, sigs[id2]->sig3};
 
     for (int b = 0; b < NUM_COEFS; b++)
     {
@@ -712,7 +711,7 @@ double calcDiff(long int id1, long int id2)
 
 /** call it to reset all buckets and signatures
 */
-int resetdb()
+int HaarIface::resetdb()
 {
     for (int c = 0; c < 3; c++)
     {
@@ -731,14 +730,9 @@ int resetdb()
     return 1;
 }
 
-int convert(char* /*f1*/, char* /*f2*/)
+int HaarIface::magickThumb(char* f1, char* f2)
 {
-    return 0;
-}
-
-int magickThumb(char* f1, char* f2)
-{
-    QImage image = QImage();
+    QImage image;
 
     if (isJpegImage(f1))
     {

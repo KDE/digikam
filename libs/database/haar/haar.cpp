@@ -29,8 +29,8 @@
 // C++ includes
 
 #include <cmath>
-#include <cstdio>
-#include <cstdlib>
+//#include <cstdio>
+//#include <cstdlib>
 
 // Local includes
 
@@ -38,18 +38,6 @@
 
 namespace Digikam
 {
-
-// python array wrapper. Creates a new double array
-double *new_darray(int size)
-{
-    return (double*) malloc(size*sizeof(double));
-}
-
-// python array wrapper. Creates a new int array
-int *new_iarray(int size)
-{
-    return (int*) malloc(size*sizeof(int));
-}
 
 /** RGB -> YIQ colorspace conversion; Y luminance, I,Q chrominance.
     If RGB in [0..255] then Y in [0..255] and I,Q in [-127..127].
@@ -70,11 +58,23 @@ int *new_iarray(int size)
         } \
     } while(0)
 
+// python array wrapper. Creates a new double array
+double* Haar::new_darray(int size)
+{
+    return (double*) malloc(size*sizeof(double));
+}
+
+// python array wrapper. Creates a new int array
+int* Haar::new_iarray(int size)
+{
+    return (int*) malloc(size*sizeof(int));
+}
+
 /** Do the Haar tensorial 2d transform itself.
     Here input is RGB data [0..255] in Unit arrays
     Computation is (almost) in-situ.
 */
-static void haar2D(Unit a[])
+void Haar::haar2D(Unit a[])
 {
     int i;
     Unit t[NUM_PIXELS >> 1];
@@ -154,7 +154,7 @@ static void haar2D(Unit a[])
     Fully inplace calculation; order of result is interleaved though,
     but we don't care about that.
 */
-void transform(Unit* a, Unit* b, Unit* c)
+void Haar::transform(Unit* a, Unit* b, Unit* c)
 {
     RGB_2_YIQ(a, b, c);
 
@@ -172,15 +172,14 @@ void transform(Unit* a, Unit* b, Unit* c)
     Here input RGB data is in unsigned char arrays ([0..255])
     Results are available in a, b, and c.
 */
-void transformChar(unsigned char* c1, unsigned char* c2, unsigned char* c3,
-                   Unit* a, Unit* b, Unit* c)
+void Haar::transformChar(unsigned char* c1, unsigned char* c2, unsigned char* c3,
+                         Unit* a, Unit* b, Unit* c)
 {
-    int i;
     Unit *p = a;
     Unit *q = b;
     Unit *r = c;
 
-    for (i = 0; i < NUM_PIXELS_SQUARED; i++)
+    for (int i = 0; i < NUM_PIXELS_SQUARED; i++)
     {
         *p++ = *c1++;
         *q++ = *c2++;
@@ -192,7 +191,7 @@ void transformChar(unsigned char* c1, unsigned char* c2, unsigned char* c3,
 /** Find the NUM_COEFS largest numbers in cdata[] (in magnitude that is)
     and store their indices in sig[].
 */
-inline static void get_m_largests(Unit *cdata, Idx *sig)
+void Haar::get_m_largests(Unit *cdata, Idx *sig)
 {
     int       cnt, i;
     valStruct val;
@@ -247,23 +246,23 @@ inline static void get_m_largests(Unit *cdata, Idx *sig)
     The order of occurrence of the coordinates in sig doesn't matter.
     Complexity is 3 x NUM_PIXELS^2 x 2log(NUM_COEFS).
 */
-int calcHaar(Unit *cdata1, Unit *cdata2, Unit *cdata3,
-             Idx *sig1, Idx *sig2, Idx *sig3, double *avgl)
+int Haar::calcHaar(Unit *cdata1, Unit *cdata2, Unit *cdata3,
+                   Idx *sig1, Idx *sig2, Idx *sig3, double *avgl)
 {
-  avgl[0]=cdata1[0];
-  avgl[1]=cdata2[0];
-  avgl[2]=cdata3[0];
+    avgl[0]=cdata1[0];
+    avgl[1]=cdata2[0];
+    avgl[2]=cdata3[0];
 
-  // Color channel 1:
-  get_m_largests(cdata1, sig1);
+    // Color channel 1:
+    get_m_largests(cdata1, sig1);
 
-  // Color channel 2:
-  get_m_largests(cdata2, sig2);
+    // Color channel 2:
+    get_m_largests(cdata2, sig2);
 
-  // Color channel 3:
-  get_m_largests(cdata3, sig3);
+    // Color channel 3:
+    get_m_largests(cdata3, sig3);
 
-  return 1;
+    return 1;
 }
 
 }  // namespace Digikam

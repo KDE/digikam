@@ -48,36 +48,50 @@
 namespace Digikam
 {
 
-typedef double Unit;
-typedef int    Idx;
-
-/** Signature structure
-*/
-typedef struct valStruct_
+class Haar
 {
-    Unit d;         // [f]abs(a[i])
-    int  i;         // index i of a[i]
-    bool operator< (const valStruct_ &right) const
+
+public:
+
+    typedef double Unit;
+    typedef int    Idx;
+
+    /** Signature structure
+    */
+    typedef struct valStruct_
     {
-        return d > right.d;
-    }
-} valStruct;
+        Unit d;         // [f]abs(a[i])
+        int  i;         // index i of a[i]
+        bool operator< (const valStruct_ &right) const
+        {
+            return d > right.d;
+        }
+    } valStruct;
 
-typedef std::priority_queue<valStruct> valqueue;
+    typedef std::priority_queue<valStruct> valqueue;
 
-void initImgBin();
+public:
 
-void transform(Unit* a, Unit* b, Unit* c);
+    Haar(){};
+    ~Haar(){};
 
-void transformChar(unsigned char* c1, unsigned char* c2, unsigned char* c3,
-                   Unit* a, Unit* b, Unit* c);
+    void    transform(Unit* a, Unit* b, Unit* c);
 
-int calcHaar(Unit* cdata1, Unit* cdata2, Unit* cdata3,
-             Idx* sig1, Idx* sig2, Idx* sig3, double * avgl);
+    void    transformChar(unsigned char* c1, unsigned char* c2, unsigned char* c3,
+                          Unit* a, Unit* b, Unit* c);
 
-double *new_darray(int size);
+    int     calcHaar(Unit* cdata1, Unit* cdata2, Unit* cdata3,
+                     Idx* sig1, Idx* sig2, Idx* sig3, double * avgl);
 
-int *new_iarray(int size);
+    double* new_darray(int size);
+
+    int*    new_iarray(int size);
+
+private:
+
+    void        haar2D(Unit a[]);
+    inline void get_m_largests(Unit *cdata, Idx *sig);
+};
 
 }  // namespace Digikam
 
