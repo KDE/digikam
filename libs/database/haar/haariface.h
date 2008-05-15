@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef IMGDBASE_H
-#define IMGDBASE_H
+#ifndef HAARIFACE_H
+#define HAARIFACE_H
 
 namespace Digikam
 {
@@ -115,4 +115,4 @@ int       numres;
 
 }  // namespace Digikam
 
-#endif // IMGDBASE_H
+#endif // HAARIFACE_H

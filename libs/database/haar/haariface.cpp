@@ -39,9 +39,9 @@
 
 // Local includes.
 
-#include "haar.h"
-#include "imgdb.h"
 #include "jpegutils.h"
+#include "haar.h"
+#include "haariface.h"
 
 using namespace std;
 
