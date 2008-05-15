@@ -606,7 +606,7 @@ SET(libsqlite2_SRCS
 
 SET(libhaar_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/haar/haar.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/haar/imgdb.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/haar/haariface.cpp
    )
 
 SET(liblighttable_SRCS
