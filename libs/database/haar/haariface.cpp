@@ -24,13 +24,10 @@
 
 // C++ Includes
 
-#include <map>
 #include <queue>
-#include <list>
 #include <fstream>
 #include <iostream>
 #include <cmath>
-#include <cstdio>
 
 // QT Includes
 
@@ -39,6 +36,7 @@
 
 // Local includes.
 
+#include "ddebug.h"
 #include "jpegutils.h"
 #include "haar.h"
 #include "haariface.h"
@@ -48,7 +46,7 @@ using namespace std;
 namespace Digikam
 {
 
-/** setup initial fixed weights that each coefficient represents 
+/** setup initial fixed weights that each coefficient represents
 */
 void initImgBin()
 {
@@ -83,7 +81,7 @@ void initImgBin()
 void initDbase()
 {
     // should be called before adding images
-    printf("Image database initialized.\n");
+    DDebug() << "Image database initialized." << endl;
     initImgBin();
 }
 
@@ -97,7 +95,7 @@ void closeDbase()
 {
     // should be called before exiting app
     free_sigs();
-    printf("Image database closed.\n");
+    DDebug() << "Image database closed." << endl;
 }
 
 int getImageWidth(long int id)
@@ -132,12 +130,11 @@ int addImage(const long int id, char* filename, char* thname, int doThumb, int i
     int i;
     int width, height;
 
-    QImage image   = QImage();
-    QString format = QString(QImageReader::imageFormat(filename)).toUpper();
+    QImage image;
 
     // TODO: Marcel, all can be optimized here using DImg.
 
-    if (format == "JPEG")
+    if (isJpegImage(filename))
     {
         // use fast jpeg loading
         if (!loadJPEGScaled(image, filename, 128))
@@ -156,7 +153,7 @@ int addImage(const long int id, char* filename, char* thname, int doThumb, int i
             // fast jpeg succeeded
             width  = image.width();
             height = image.height();
-            if (ignDim && (width  <= ignDim || height <= ignDim))
+            if (ignDim && (width <= ignDim || height <= ignDim))
                 return 2;
         }
     }
@@ -168,7 +165,7 @@ int addImage(const long int id, char* filename, char* thname, int doThumb, int i
 
         width  = image.width();
         height = image.height();
-        if (ignDim && (width <= ignDim || height<= ignDim))
+        if (ignDim && (width <= ignDim || height <= ignDim))
             return 2;
     }
 
@@ -202,7 +199,7 @@ int addImage(const long int id, char* filename, char* thname, int doThumb, int i
 
     if (sigs.count(id))
     {
-        printf("ID already in DB: %ld\n",id);
+        DDebug() << "ID already in DB: %ld\n" << endl;
         delete sigs[id];
         sigs.erase(id);
     }
@@ -242,7 +239,7 @@ int loaddb(char* filename)
     std::ifstream f(filename, ios::binary);
     if (!f.is_open()) return 0;
 
-    int sz;
+    int      sz;
     long int id;
 
     // read buckets
@@ -299,7 +296,7 @@ int savedb(char* filename)
     std::ofstream f(filename, ios::binary);
     if (!f.is_open()) return 0;
 
-    int sz;
+    int      sz;
     long int id;
 
     // save buckets
@@ -341,8 +338,8 @@ int savedb(char* filename)
 void queryImgData(Idx* sig1, Idx* sig2, Idx* sig3,
                   double * avgl, int numres, int sketch)
 {
-    int idx,c;
-    int pn;
+    int  idx, c;
+    int  pn;
     Idx *sig[3] = {sig1,sig2,sig3};
 
     for (sigIterator sit = sigs.begin(); sit!=sigs.end(); sit++)
@@ -412,10 +409,10 @@ void queryImgData(Idx* sig1, Idx* sig2, Idx* sig3,
 long_list queryImgDataForThres(sigMap* tsigs, Idx* sig1, Idx* sig2, Idx* sig3,
                                double * avgl, float thresd, int sketch)
 {
-    int       idx, c;
-    int       pn;
-    long_list res;
-    Idx * sig[3] = {sig1,sig2,sig3};
+    int        idx, c;
+    int        pn;
+    long_list  res;
+    Idx       *sig[3] = {sig1,sig2,sig3};
 
     for (sigIterator sit = (*tsigs).begin(); sit!=(*tsigs).end(); sit++)
     {
@@ -498,12 +495,13 @@ long_list_2 clusterSim(float thresd, int fast = 0)
 
         if (fast)
         {
-            res2 = queryImgDataForThresFast(&wSigs,(*sit).second->avgl,thresd,1);
+            res2 = queryImgDataForThresFast(&wSigs, (*sit).second->avgl, thresd, 1);
         }
         else
         {
-            res2 = queryImgDataForThres(&wSigs, (*sit).second->sig1,(*sit).second->sig2,
-                                        (*sit).second->sig3, (*sit).second->avgl, thresd, 1);
+            res2 = queryImgDataForThres(&wSigs, 
+                                        (*sit).second->sig1, (*sit).second->sig2, (*sit).second->sig3,
+                                        (*sit).second->avgl, thresd, 1);
         }
         //    continue;
         long int hid = (*sit).second->id;
@@ -591,10 +589,10 @@ void queryImgID(long int id, int numres)
 
     if (!sigs.count(id))
     {
-        printf("ID not found.\n");
+        DDebug() << "ID not found." << endl;
         return;
     }
-    queryImgData(sigs[id]->sig1,sigs[id]->sig2,sigs[id]->sig3,
+    queryImgData(sigs[id]->sig1, sigs[id]->sig2, sigs[id]->sig3,
                  sigs[id]->avgl, numres, 0);
 }
 
@@ -608,15 +606,15 @@ int queryImgFile(char* filename,int numres,int sketch)
         pqResults.pop();
 
     double avgl[3];
-    Idx sig1[NUM_COEFS];
-    Idx sig2[NUM_COEFS];
-    Idx sig3[NUM_COEFS];
-    int cn = 0;
-    Unit cdata1[16384];
-    Unit cdata2[16384];
-    Unit cdata3[16384];
+    Idx    sig1[NUM_COEFS];
+    Idx    sig2[NUM_COEFS];
+    Idx    sig3[NUM_COEFS];
+    int    cn = 0;
+    Unit   cdata1[16384];
+    Unit   cdata2[16384];
+    Unit   cdata3[16384];
 
-    QImage image = QImage();
+    QImage image;
     if (!image.load(filename))
         return 0;
 
@@ -640,8 +638,8 @@ int queryImgFile(char* filename,int numres,int sketch)
     }
     transform(cdata1,cdata2,cdata3);
 
-    calcHaar(cdata1,cdata2,cdata3,sig1,sig2,sig3,avgl);
-    queryImgData(sig1,sig2,sig3,avgl, numres, sketch);
+    calcHaar(cdata1, cdata2, cdata3, sig1, sig2, sig3, avgl);
+    queryImgData(sig1, sig2, sig3, avgl, numres, sketch);
 
     return 1;
 }
@@ -653,7 +651,7 @@ void removeID(long int id)
     if (!sigs.count(id))
     {
         // don't remove something which isn't even on db.
-        cout << "Attempt to remove invalid id: " << id << endl;
+        DDebug() << "Attempt to remove invalid id: " << id << endl;
         return;
     }
     delete sigs[id];
@@ -692,8 +690,8 @@ double calcAvglDiff(long int id1, long int id2)
 double calcDiff(long int id1, long int id2)
 {
     double diff = calcAvglDiff(id1,id2);
-    Idx *sig1[3] = {sigs[id1]->sig1,sigs[id1]->sig2,sigs[id1]->sig3};
-    Idx *sig2[3] = {sigs[id2]->sig1,sigs[id2]->sig2,sigs[id2]->sig3};
+    Idx *sig1[3] = {sigs[id1]->sig1, sigs[id1]->sig2, sigs[id1]->sig3};
+    Idx *sig2[3] = {sigs[id2]->sig1, sigs[id2]->sig2, sigs[id2]->sig3};
 
     for (int b = 0; b < NUM_COEFS; b++)
     {
@@ -742,8 +740,7 @@ int magickThumb(char* f1, char* f2)
 {
     QImage image = QImage();
 
-    QString format = QString(QImageReader::imageFormat(f1)).toUpper();
-    if (format == "JPEG")
+    if (isJpegImage(f1))
     {
         if (!loadJPEGScaled(image, f1, 128))
         {

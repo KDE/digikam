@@ -25,6 +25,11 @@
 #ifndef HAARIFACE_H
 #define HAARIFACE_H
 
+// C++ Includes
+
+#include <map>
+#include <list>
+
 namespace Digikam
 {
 
