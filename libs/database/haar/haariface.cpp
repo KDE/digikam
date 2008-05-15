@@ -43,7 +43,7 @@ using namespace std;
 namespace Digikam
 {
 
-/** setup initial fixed weights that each coefficient represents
+/** setup initial fixed haar weights that each coefficient represents
 */
 void HaarIface::initImgBin()
 {
@@ -220,7 +220,7 @@ int HaarIface::addImage(const long int id, char* filename, char* thname, int doT
 /** sig1,2,3 are int arrays of length NUM_COEFS
     avgl is the average luminance
     numres is the max number of results
-    sketch (0 or 1) tells which set of weights to use
+    sketch (0 or 1) tells which set of haar weights to use
 */
 void HaarIface::queryImgData(Haar::Idx* sig1, Haar::Idx* sig2, Haar::Idx* sig3,
                              double* avgl, int numres, int sketch)
@@ -235,7 +235,7 @@ void HaarIface::queryImgData(Haar::Idx* sig1, Haar::Idx* sig2, Haar::Idx* sig3,
         (*sit).second->score = 0;
         for (c = 0; c < 3; c++)
         {
-            (*sit).second->score += weights[sketch][0][c] * fabs((*sit).second->avgl[c] - avgl[c]);
+            (*sit).second->score += s_haar_weights[sketch][0][c] * fabs((*sit).second->avgl[c] - avgl[c]);
         }
     }
 
@@ -251,7 +251,7 @@ void HaarIface::queryImgData(Haar::Idx* sig1, Haar::Idx* sig2, Haar::Idx* sig3,
             long_listIterator end = m_imgbuckets[c][pn][idx].end();
             for (long_listIterator uit = m_imgbuckets[c][pn][idx].begin(); uit != end; uit++)
             {
-                m_sigs[(*uit)]->score -= weights[sketch][m_imgBin[idx]][c];
+                m_sigs[(*uit)]->score -= s_haar_weights[sketch][m_imgBin[idx]][c];
             }
         }
     }
@@ -289,7 +289,7 @@ void HaarIface::queryImgData(Haar::Idx* sig1, Haar::Idx* sig2, Haar::Idx* sig3,
 /** sig1,2,3 are int arrays of lenght NUM_COEFS
     avgl is the average luminance
     thresd is the limit similarity threshold. Only images with score > thresd will be a result
-    `sketch' tells which set of weights to use
+    `sketch' tells which set of haar weights to use
     sigs is the source to query on (map of signatures)
     every search result is removed from sigs. (right now this functn is only used by clusterSim)
 */
@@ -307,7 +307,7 @@ HaarIface::long_list HaarIface::queryImgDataForThres(sigMap* tsigs, Haar::Idx* s
         (*sit).second->score = 0;
         for ( c = 0;c<3;c++)
         {
-            (*sit).second->score += weights[sketch][0][c] * fabs((*sit).second->avgl[c]-avgl[c]);
+            (*sit).second->score += s_haar_weights[sketch][0][c] * fabs((*sit).second->avgl[c]-avgl[c]);
         }
     }
 
@@ -324,7 +324,7 @@ HaarIface::long_list HaarIface::queryImgDataForThres(sigMap* tsigs, Haar::Idx* s
             for (long_listIterator uit = m_imgbuckets[c][pn][idx].begin(); uit != end; uit++)
             {
                 if ((*tsigs).count((*uit)))
-                    (*tsigs)[(*uit)]->score -= weights[sketch][m_imgBin[idx]][c];
+                    (*tsigs)[(*uit)]->score -= s_haar_weights[sketch][m_imgBin[idx]][c];
             }
         }
     }
@@ -350,7 +350,7 @@ HaarIface::long_list HaarIface::queryImgDataForThresFast(sigMap* tsigs, double *
         (*sit).second->score = 0;
         for (int c = 0;c<3;c++)
         {
-            (*sit).second->score += weights[sketch][0][c] * fabs((*sit).second->avgl[c]-avgl[c]);
+            (*sit).second->score += s_haar_weights[sketch][0][c] * fabs((*sit).second->avgl[c]-avgl[c]);
         }
 
         if ((*sit).second->score < thresd)
@@ -559,7 +559,7 @@ double HaarIface::calcDiff(long int id1, long int id2)
             {
                 if (sig2[c][b2] == sig1[c][b])
                 {
-                    diff -= weights[0][m_imgBin[abs(sig1[c][b])]][c];
+                    diff -= s_haar_weights[0][m_imgBin[abs(sig1[c][b])]][c];
                 }
             }
         }

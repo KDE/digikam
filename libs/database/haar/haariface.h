@@ -42,7 +42,7 @@ namespace Digikam
         by Charles E. Jacobs, Adam Finkelstein and David H. Salesin.
         http://www.cs.washington.edu/homes/salesin/abstracts.html
     */
-    const float weights[2][6][3] =
+    static const float s_haar_weights[2][6][3] =
     {
         // For scanned picture (sketch=0):
         //   Y      I      Q        idx  total occurs
@@ -105,7 +105,7 @@ private:
     typedef std::map<const long int, sigStruct*, cmpf>::iterator sigIterator;
     typedef std::list<long int>                                  long_list;
     typedef long_list::iterator                                  long_listIterator;
-    typedef std::priority_queue <sigStruct>                      priqueue;
+    typedef std::priority_queue<sigStruct>                       priqueue;
     typedef std::list<long_list>                                 long_list_2;       // a list of lists
     typedef std::map<const long int, sigStruct*, cmpf>           sigMap;
 
