@@ -85,8 +85,8 @@ private:
         double    score;            // used when doing queries
 
         // image properties extracted when opened for the first time
-        int width;                  // in pixels
-        int height;                 // in pixels
+        int       width;            // in pixels
+        int       height;           // in pixels
 
         bool operator< (const sigStruct_ & right) const 
         {

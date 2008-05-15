@@ -167,7 +167,7 @@ int HaarIface::addImage(const long int id, char* filename, char* thname, int doT
     for (i = 0, cn = 0; i < 128; i++)
     {
         // Get a scanline:
-        QRgb *line = (QRgb *) image.scanLine(i);
+        QRgb *line = (QRgb*)image.scanLine(i);
 
         for (int j = 0; j < 128; j++)
         {
@@ -208,7 +208,7 @@ int HaarIface::addImage(const long int id, char* filename, char* thname, int doT
 
         x = nsig->sig1[i];
         t = (x < 0);         // t = 1 if x neg else 1
-        /* x - 0 ^ 0 = x; i - 1 ^ 0b111..1111 = 2-compl(x) = -x */
+        // x - 0 ^ 0 = x; i - 1 ^ 0b111..1111 = 2-compl(x) = -x
         x = (x - t) ^ -t;
         m_imgbuckets[0][t][x].push_back(id);
 
@@ -239,7 +239,7 @@ void HaarIface::queryImgData(Haar::Idx* sig1, Haar::Idx* sig2, Haar::Idx* sig3,
 
     for (sigIterator sit = m_sigs.begin(); sit!=m_sigs.end(); sit++)
     {
-        //#TODO3: do I really need to score every single sig on db?
+        //TODO: do I really need to score every single sig on db?
         (*sit).second->score = 0;
         for (c = 0; c < 3; c++)
         {
@@ -319,10 +319,10 @@ HaarIface::long_list HaarIface::queryImgDataForThres(sigMap* tsigs, Haar::Idx* s
         }
     }
 
-    for (int b = 0; b<NUM_COEFS; b++)
+    for (int b = 0; b < NUM_COEFS; b++)
     {
         // for every coef on a sig
-        for ( c = 0;c<3;c++)
+        for ( c = 0; c < 3; c++)
         {
             pn  = sig[c][b] <= 0;
             idx = (sig[c][b] - pn) ^ -pn;
@@ -337,7 +337,7 @@ HaarIface::long_list HaarIface::queryImgDataForThres(sigMap* tsigs, Haar::Idx* s
         }
     }
 
-    for (sigIterator sit = (*tsigs).begin(); sit!=(*tsigs).end(); sit++)
+    for (sigIterator sit = (*tsigs).begin(); sit != (*tsigs).end(); sit++)
     {
         if ((*sit).second->score < thresd)
         {
@@ -353,10 +353,10 @@ HaarIface::long_list HaarIface::queryImgDataForThresFast(sigMap* tsigs, double *
     // will only look for average luminance
     long_list res;
 
-    for (sigIterator sit = (*tsigs).begin(); sit!=(*tsigs).end(); sit++)
+    for (sigIterator sit = (*tsigs).begin(); sit != (*tsigs).end(); sit++)
     {
         (*sit).second->score = 0;
-        for (int c = 0;c<3;c++)
+        for (int c = 0; c < 3; c++)
         {
             (*sit).second->score += s_haar_weights[sketch][0][c] * fabs((*sit).second->avgl[c]-avgl[c]);
         }
@@ -524,11 +524,11 @@ void HaarIface::removeID(long int id)
     m_sigs.erase(id);
 
     // remove id from each bucket it could be in
-    for (int c = 0;c<3;c++)
+    for (int c = 0; c < 3; c++)
     {
-        for (int pn=0;pn<2;pn++)
+        for (int pn=0; pn < 2; pn++)
         {
-            for (int i = 0;i<16384;i++)
+            for (int i = 0; i < 16384; i++)
             {
                 m_imgbuckets[c][pn][i].remove(id);
             }
