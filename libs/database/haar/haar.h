@@ -56,20 +56,6 @@ public:
     typedef double Unit;
     typedef int    Idx;
 
-    /** Signature structure
-    */
-    typedef struct valStruct_
-    {
-        Unit d;         // [f]abs(a[i])
-        int  i;         // index i of a[i]
-        bool operator< (const valStruct_ &right) const
-        {
-            return d > right.d;
-        }
-    } valStruct;
-
-    typedef std::priority_queue<valStruct> valqueue;
-
 public:
 
     Haar(){};
@@ -86,6 +72,22 @@ public:
                           Unit* a, Unit* b, Unit* c);
     double* new_darray(int size);
     int*    new_iarray(int size);
+
+private:
+
+    /** Signature structure
+    */
+    typedef struct valStruct_
+    {
+        Unit d;         // [f]abs(a[i])
+        int  i;         // index i of a[i]
+        bool operator< (const valStruct_ &right) const
+        {
+            return d > right.d;
+        }
+    } valStruct;
+
+    typedef std::priority_queue<valStruct> valqueue;
 
 private:
 
