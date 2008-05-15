@@ -77,14 +77,14 @@ public:
 
     void    transform(Unit* a, Unit* b, Unit* c);
 
-    void    transformChar(unsigned char* c1, unsigned char* c2, unsigned char* c3,
-                          Unit* a, Unit* b, Unit* c);
-
     int     calcHaar(Unit* cdata1, Unit* cdata2, Unit* cdata3,
                      Idx* sig1, Idx* sig2, Idx* sig3, double * avgl);
 
-    double* new_darray(int size);
 
+    // TODO: Marcel, these public methods can be removed.
+    void    transformChar(unsigned char* c1, unsigned char* c2, unsigned char* c3,
+                          Unit* a, Unit* b, Unit* c);
+    double* new_darray(int size);
     int*    new_iarray(int size);
 
 private:

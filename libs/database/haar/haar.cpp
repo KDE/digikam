@@ -36,17 +36,6 @@
 
 namespace Digikam
 {
-// python array wrapper. Creates a new double array
-double* Haar::new_darray(int size)
-{
-    return (double*) malloc(size*sizeof(double));
-}
-
-// python array wrapper. Creates a new int array
-int* Haar::new_iarray(int size)
-{
-    return (int*) malloc(size*sizeof(int));
-}
 
 /** Do the Haar tensorial 2d transform itself.
     Here input is RGB data [0..255] in Unit arrays
@@ -78,9 +67,8 @@ void Haar::haar2D(Unit a[])
             for (k = 0, j1 = j2 = i; k < h1; k++, j1++, j2 += 2) 
             {
                 int j21 = j2+1;
-
-                t[k]  = (a[j2] - a[j21]) * C;
-                a[j1] = (a[j2] + a[j21]);
+                t[k]    = (a[j2] - a[j21]) * C;
+                a[j1]   = (a[j2] + a[j21]);
             }
             // Write back subtraction results:
             memcpy(a+i+h1, t, h1*sizeof(a[0]));
@@ -98,8 +86,8 @@ void Haar::haar2D(Unit a[])
     // Decompose columns:
     for (i = 0; i < NUM_PIXELS; i++) 
     {
-        Unit C = 1;
-        int h, h1;
+        Unit C=1;
+        int  h, h1;
 
         for (h = NUM_PIXELS; h > 1; h = h1) 
         {
@@ -110,9 +98,8 @@ void Haar::haar2D(Unit a[])
             for (k = 0, j1 = j2 = i; k < h1; k++, j1 += NUM_PIXELS, j2 += 2*NUM_PIXELS) 
             {
                 int j21 = j2+NUM_PIXELS;
-
-                t[k]  = (a[j2] - a[j21]) * C;
-                a[j1] = (a[j2] + a[j21]);
+                t[k]    = (a[j2] - a[j21]) * C;
+                a[j1]   = (a[j2] + a[j21]);
             }
 
             // Write back subtraction results:
@@ -157,30 +144,10 @@ void Haar::transform(Unit* a, Unit* b, Unit* c)
     haar2D(b);
     haar2D(c);
 
-    /* Reintroduce the skipped scaling factors: */
+    // Reintroduce the skipped scaling factors
     a[0] /= 256 * 128;
     b[0] /= 256 * 128;
     c[0] /= 256 * 128;
-}
-
-/** Do the Haar tensorial 2d transform itself.
-    Here input RGB data is in unsigned char arrays ([0..255])
-    Results are available in a, b, and c.
-*/
-void Haar::transformChar(unsigned char* c1, unsigned char* c2, unsigned char* c3,
-                         Unit* a, Unit* b, Unit* c)
-{
-    Unit *p = a;
-    Unit *q = b;
-    Unit *r = c;
-
-    for (int i = 0; i < NUM_PIXELS_SQUARED; i++)
-    {
-        *p++ = *c1++;
-        *q++ = *c2++;
-        *r++ = *c3++;
-    }
-    transform(a, b, c);
 }
 
 /** Find the NUM_COEFS largest numbers in cdata[] (in magnitude that is)
@@ -258,6 +225,41 @@ int Haar::calcHaar(Unit *cdata1, Unit *cdata2, Unit *cdata3,
     get_m_largests(cdata3, sig3);
 
     return 1;
+}
+
+// ----------------------------------------------------------------------------
+// TODO: Marcel, these public methods can be removed.
+
+// python array wrapper. Creates a new double array
+double* Haar::new_darray(int size)
+{
+    return (double*) malloc(size*sizeof(double));
+}
+
+// python array wrapper. Creates a new int array
+int* Haar::new_iarray(int size)
+{
+    return (int*) malloc(size*sizeof(int));
+}
+
+/** Do the Haar tensorial 2d transform itself.
+    Here input RGB data is in unsigned char arrays ([0..255])
+    Results are available in a, b, and c.
+*/
+void Haar::transformChar(unsigned char* c1, unsigned char* c2, unsigned char* c3,
+                         Unit* a, Unit* b, Unit* c)
+{
+    Unit *p = a;
+    Unit *q = b;
+    Unit *r = c;
+
+    for (int i = 0; i < NUM_PIXELS_SQUARED; i++)
+    {
+        *p++ = *c1++;
+        *q++ = *c2++;
+        *r++ = *c3++;
+    }
+    transform(a, b, c);
 }
 
 }  // namespace Digikam

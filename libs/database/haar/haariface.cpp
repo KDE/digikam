@@ -76,24 +76,10 @@ void HaarIface::initImgBin()
     }
 }
 
-void HaarIface::initDbase()
-{
-    // should be called before adding images
-    DDebug() << "Image database initialized." << endl;
-    initImgBin();
-}
-
 void HaarIface::free_sigs()
 {
     for (sigIterator it = sigs.begin(); it != sigs.end(); it++)
         delete (*it).second;
-}
-
-void HaarIface::closeDbase()
-{
-    // should be called before exiting app
-    free_sigs();
-    DDebug() << "Image database closed." << endl;
 }
 
 int HaarIface::getImageWidth(long int id)
@@ -229,102 +215,6 @@ int HaarIface::addImage(const long int id, char* filename, char* thname, int doT
         x = (x - t) ^ -t;
         imgbuckets[2][t][x].push_back(id);
     }
-    return 1;
-}
-
-int HaarIface::loaddb(char* filename)
-{
-    std::ifstream f(filename, ios::binary);
-    if (!f.is_open()) return 0;
-
-    int      sz;
-    long int id;
-
-    // read buckets
-    for (int c = 0; c < 3; c++)
-    {
-        for (int pn = 0; pn < 2; pn++)
-        {
-            for (int i = 0; i < 16384; i++)
-            {
-                f.read((char*)&(sz), sizeof(int));
-                for (int k = 0; k < sz; k++)
-                {
-                    f.read((char*)&(id), sizeof(long int));
-                    imgbuckets[c][pn][i].push_back(id);
-                }
-            }
-        }
-    }
-
-    // read sigs
-    f.read((char*)&(sz), sizeof(int));
-    for (int k = 0; k < sz; k++)
-    {
-        f.read((char*)&(id), sizeof(long int));
-        sigs[id] = new sigStruct();
-        f.read((char*)sigs[id], sizeof(sigStruct));
-    }
-    f.close();
-    return 1;
-}
-
-int HaarIface::savedb(char* filename)
-{
-    /*
-    Serialization order:
-    for each color {0,1,2}:
-        for {positive,negative}:
-            for each 128x128 coefficient {0-16384}:
-                [int] bucket size (size of list of ids)
-                for each id:
-                    [long int] image id
-    [int] number of images (signatures)
-    for each image:
-        [long id] image id
-        for each sig coef {0-39}:  (the NUM_COEFS greatest coefs)
-            for each color {0,1,2}:
-                [int] coef index (signed)
-        for each color {0,1,2}:
-            [double] average luminance
-        [int] image width
-        [int] image height
-
-    */
-    std::ofstream f(filename, ios::binary);
-    if (!f.is_open()) return 0;
-
-    int      sz;
-    long int id;
-
-    // save buckets
-    for (int c = 0; c < 3; c++)
-    {
-        for (int pn = 0; pn < 2; pn++)
-        {
-            for (int i = 0; i < 16384; i++)
-            {
-                sz = imgbuckets[c][pn][i].size();
-                f.write((char*)&(sz), sizeof(int) );
-                long_listIterator end = imgbuckets[c][pn][i].end();
-                for (long_listIterator it = imgbuckets[c][pn][i].begin(); it != end; it++)
-                {
-                    f.write((char*)&((*it)), sizeof(long int));
-                }
-            }
-        }
-    }
-
-    // save sigs
-    sz = sigs.size();
-    f.write((char*)&(sz), sizeof(int));
-    for (sigIterator it = sigs.begin(); it != sigs.end(); it++)
-    {
-        id = (*it).first;
-        f.write((char*)&(id), sizeof(long int));
-        f.write((char *)(it->second), sizeof(sigStruct));
-    }
-    f.close();
     return 1;
 }
 
@@ -523,36 +413,6 @@ HaarIface::long_list_2 HaarIface::clusterSim(float thresd, int fast)
     return res;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// Python Wrappers/Helpers:
-// TODO1: learn how to properly wrap STL lists and such using SWIG. These helpers functs should work meanwhile...
-// grr. I've already figured out how to wrap it properly, but forgot where. Maybe on imgSeekLite ? or imgseeknet ?
-//////
-
-int HaarIface::getLongListSize(long_list& li)
-{
-    return li.size();
-}
-
-long int HaarIface::popLongList(long_list& li)
-{
-    long int a = li.front();
-    li.pop_front();
-    return a;
-}
-
-int HaarIface::getLongList2Size(long_list_2& li)
-{
-    return li.size();
-}
-
-HaarIface::long_list HaarIface::popLong2List(long_list_2& li)
-{
-    long_list a = li.front();
-    li.pop_front();
-    return a;
-}
-
 /** get the number of results the last query yielded
 */
 int HaarIface::getNumResults()
@@ -709,6 +569,119 @@ double HaarIface::calcDiff(long int id1, long int id2)
   return diff;
 }
 
+// ----------------------------------------------------------------------------
+// TODO: Marcel, these methods can be removed.
+
+void HaarIface::initDbase()
+{
+    // should be called before adding images
+    DDebug() << "Image database initialized." << endl;
+    initImgBin();
+}
+
+void HaarIface::closeDbase()
+{
+    // should be called before exiting app
+    free_sigs();
+    DDebug() << "Image database closed." << endl;
+}
+
+int HaarIface::loaddb(char* filename)
+{
+    std::ifstream f(filename, ios::binary);
+    if (!f.is_open()) return 0;
+
+    int      sz;
+    long int id;
+
+    // read buckets
+    for (int c = 0; c < 3; c++)
+    {
+        for (int pn = 0; pn < 2; pn++)
+        {
+            for (int i = 0; i < 16384; i++)
+            {
+                f.read((char*)&(sz), sizeof(int));
+                for (int k = 0; k < sz; k++)
+                {
+                    f.read((char*)&(id), sizeof(long int));
+                    imgbuckets[c][pn][i].push_back(id);
+                }
+            }
+        }
+    }
+
+    // read sigs
+    f.read((char*)&(sz), sizeof(int));
+    for (int k = 0; k < sz; k++)
+    {
+        f.read((char*)&(id), sizeof(long int));
+        sigs[id] = new sigStruct();
+        f.read((char*)sigs[id], sizeof(sigStruct));
+    }
+    f.close();
+    return 1;
+}
+
+int HaarIface::savedb(char* filename)
+{
+    /*
+    Serialization order:
+    for each color {0,1,2}:
+        for {positive,negative}:
+            for each 128x128 coefficient {0-16384}:
+                [int] bucket size (size of list of ids)
+                for each id:
+                    [long int] image id
+    [int] number of images (signatures)
+    for each image:
+        [long id] image id
+        for each sig coef {0-39}:  (the NUM_COEFS greatest coefs)
+            for each color {0,1,2}:
+                [int] coef index (signed)
+        for each color {0,1,2}:
+            [double] average luminance
+        [int] image width
+        [int] image height
+
+    */
+    std::ofstream f(filename, ios::binary);
+    if (!f.is_open()) return 0;
+
+    int      sz;
+    long int id;
+
+    // save buckets
+    for (int c = 0; c < 3; c++)
+    {
+        for (int pn = 0; pn < 2; pn++)
+        {
+            for (int i = 0; i < 16384; i++)
+            {
+                sz = imgbuckets[c][pn][i].size();
+                f.write((char*)&(sz), sizeof(int) );
+                long_listIterator end = imgbuckets[c][pn][i].end();
+                for (long_listIterator it = imgbuckets[c][pn][i].begin(); it != end; it++)
+                {
+                    f.write((char*)&((*it)), sizeof(long int));
+                }
+            }
+        }
+    }
+
+    // save sigs
+    sz = sigs.size();
+    f.write((char*)&(sz), sizeof(int));
+    for (sigIterator it = sigs.begin(); it != sigs.end(); it++)
+    {
+        id = (*it).first;
+        f.write((char*)&(id), sizeof(long int));
+        f.write((char *)(it->second), sizeof(sigStruct));
+    }
+    f.close();
+    return 1;
+}
+
 /** call it to reset all buckets and signatures
 */
 int HaarIface::resetdb()
@@ -757,6 +730,32 @@ int HaarIface::magickThumb(char* f1, char* f2)
 
     image.scaled(128, 128, Qt::KeepAspectRatio).save(f2, "PNG");
     return 1;
+}
+
+/** Python Wrappers/Helpers
+*/
+int HaarIface::getLongListSize(long_list& li)
+{
+    return li.size();
+}
+
+long int HaarIface::popLongList(long_list& li)
+{
+    long int a = li.front();
+    li.pop_front();
+    return a;
+}
+
+int HaarIface::getLongList2Size(long_list_2& li)
+{
+    return li.size();
+}
+
+HaarIface::long_list HaarIface::popLong2List(long_list_2& li)
+{
+    long_list a = li.front();
+    li.pop_front();
+    return a;
 }
 
 }  // namespace Digikam

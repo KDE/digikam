@@ -137,12 +137,6 @@ private:
     int         getImageWidth(long int id);
     int         getImageHeight(long int id);
 
-    void        initDbase();
-    void        closeDbase();
-    int         loaddb(char* filename);
-    int         savedb(char* filename);
-    int         resetdb();
-
     int         addImage(const long int id, char* filename, char* thname, int doThumb, int ignDim=0);
     void        queryImgData(Haar::Idx* sig1, Haar::Idx* sig2, Haar::Idx* sig3,
                              double* avgl, int numres, int sketch);
@@ -151,10 +145,6 @@ private:
     long_list   queryImgDataForThresFast(sigMap* tsigs, double * avgl, float thresd, int sketch);
 
     long_list_2 clusterSim(float thresd, int fast=0);
-    int         getLongListSize(long_list& li);
-    long int    popLongList(long_list& li);
-    int         getLongList2Size(long_list_2& li);
-    long_list   popLong2List(long_list_2& li);
     int         getNumResults();
     long int    getResultID();
     double      getResultScore();
@@ -165,7 +155,17 @@ private:
     double      calcAvglDiff(long int id1, long int id2);
     double      calcDiff(long int id1, long int id2);
 
+    // TODO: Marcel, these methods can be removed.
+    void        initDbase();
+    void        closeDbase();
+    int         loaddb(char* filename);
+    int         savedb(char* filename);
+    int         resetdb();
     int         magickThumb(char* f1, char* f2);
+    int         getLongListSize(long_list& li);
+    long int    popLongList(long_list& li);
+    int         getLongList2Size(long_list_2& li);
+    long_list   popLong2List(long_list_2& li);
 };
 
 }  // namespace Digikam
