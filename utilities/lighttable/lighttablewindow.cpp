@@ -169,11 +169,10 @@ void LightTableWindow::writeSettings()
 void LightTableWindow::applySettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("LightTable Settings");
-
-    d->autoLoadOnRightPanel  = group.readEntry("Auto Load Right Panel",   true);
-    d->autoSyncPreview       = group.readEntry("Auto Sync Preview",       true);
-    d->fullScreenHideToolBar = group.readEntry("FullScreen Hide ToolBar", false);
+    KConfigGroup group        = config->group("LightTable Settings");
+    d->autoLoadOnRightPanel   = group.readEntry("Auto Load Right Panel",   true);
+    d->autoSyncPreview        = group.readEntry("Auto Sync Preview",       true);
+    d->fullScreenHideToolBar  = group.readEntry("FullScreen Hide ToolBar", false);
     d->previewView->setLoadFullImageSize(group.readEntry("Load Full Image size", false));
     refreshView();
  }
@@ -1252,8 +1251,7 @@ void LightTableWindow::slotEditItem(const ImageInfo &info)
 
 void LightTableWindow::slotZoomTo100Percents()
 {
-    d->previewView->setLeftZoomFactor(1.0);
-    d->previewView->setRightZoomFactor(1.0);
+    d->previewView->toggleFitToWindowOr100();
 }
 
 void LightTableWindow::slotFitToWindow()
@@ -1264,8 +1262,8 @@ void LightTableWindow::slotFitToWindow()
 void LightTableWindow::slotToggleSlideShow()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("ImageViewer Settings");
-    bool startWithCurrent = group.readEntry("SlideShowStartCurrent", false);
+    KConfigGroup group        = config->group("ImageViewer Settings");
+    bool startWithCurrent     = group.readEntry("SlideShowStartCurrent", false);
 
     SlideShowSettings settings;
     settings.exifRotate           = AlbumSettings::instance()->getExifRotate();

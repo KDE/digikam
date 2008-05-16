@@ -1173,7 +1173,7 @@ void DigikamView::slotZoomTo100Percents()
 {
     if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewImageMode)
     {
-        d->albumWidgetStack->zoomTo100Percents();
+        d->albumWidgetStack->toggleFitToWindowOr100();
     }
 }
 

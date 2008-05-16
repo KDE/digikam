@@ -718,7 +718,15 @@ void EditorWindow::slotZoomTo100Percents()
     d->zoomPlusAction->setEnabled(true);
     d->zoomComboAction->setEnabled(true);
     d->zoomMinusAction->setEnabled(true);
-    m_canvas->setZoomFactor(1.0);
+
+    if (m_canvas->zoomFactor()==1.0)
+    {
+        m_canvas->toggleFitToWindow();
+    }
+    else
+    {
+        m_canvas->setZoomFactor(1.0);
+    }
 }
 
 void EditorWindow::slotZoomSelected()

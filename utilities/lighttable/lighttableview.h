@@ -82,6 +82,7 @@ public:
     void   rightReload();
 
     void   fitToWindow();
+    void   toggleFitToWindowOr100();
 
 signals:
 

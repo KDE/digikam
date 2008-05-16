@@ -88,14 +88,15 @@ public:
     DImgInterface *interface() const;
     void makeDefaultEditingCanvas();
 
-    void  setZoomFactor(double z);
-    bool  fitToWindow();
-    bool  maxZoom();
-    bool  minZoom();
-    bool  exifRotated();
-    int   imageWidth();
-    int   imageHeight();
-    QRect getSelectedArea();
+    double zoomFactor();
+    void   setZoomFactor(double z);
+    bool   fitToWindow();
+    bool   maxZoom();
+    bool   minZoom();
+    bool   exifRotated();
+    int    imageWidth();
+    int    imageHeight();
+    QRect  getSelectedArea();
 
     // If current image file format is only available in read only,
     // typicially all RAW image file formats.

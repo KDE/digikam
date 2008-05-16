@@ -55,10 +55,12 @@ public:
     ~PreviewWidget();
 
     void   setZoomFactor(double z);
+    void   setZoomFactor(double z, bool centerView);
     void   setZoomFactorSnapped(double z);
     void   fitToWindow();
     bool   isFitToWindow();
     void   toggleFitToWindow();
+    void   toggleFitToWindowOr100();
 
     int    zoomWidth();
     int    zoomHeight();

@@ -348,6 +348,11 @@ void AlbumWidgetStack::fitToWindow()
     d->imagePreviewView->fitToWindow();
 }
 
+void AlbumWidgetStack::toggleFitToWindowOr100()
+{
+    d->imagePreviewView->toggleFitToWindowOr100();
+}
+
 bool AlbumWidgetStack::maxZoom()
 {
     return d->imagePreviewView->maxZoom();
