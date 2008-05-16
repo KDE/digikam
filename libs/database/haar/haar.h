@@ -61,17 +61,12 @@ public:
     Haar();
     ~Haar();
 
-    void    transform(Unit* a, Unit* b, Unit* c);
-
     int     calcHaar(Unit* cdata1, Unit* cdata2, Unit* cdata3,
-                     Idx* sig1, Idx* sig2, Idx* sig3, double * avgl);
+                     Idx* sig1, Idx* sig2, Idx* sig3, double* avgl);
 
-
-    // TODO: Marcel, these public methods can be removed.
+    void    transform(Unit* a, Unit* b, Unit* c);
     void    transformChar(unsigned char* c1, unsigned char* c2, unsigned char* c3,
                           Unit* a, Unit* b, Unit* c);
-    double* new_darray(int size);
-    int*    new_iarray(int size);
 
 private:
 
@@ -82,7 +77,7 @@ private:
         Unit d;         // [f]abs(a[i])
         int  i;         // index i of a[i]
 
-        bool operator< (const valStruct_ &right) const
+        bool operator< (const valStruct_& right) const
         {
             return d > right.d;
         }
@@ -94,7 +89,7 @@ private:
 private:
 
     void        haar2D(Unit a[]);
-    inline void get_m_largests(Unit *cdata, Idx *sig);
+    inline void getmLargests(Unit *cdata, Idx *sig);
 };
 
 }  // namespace Digikam

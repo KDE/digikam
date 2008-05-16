@@ -124,6 +124,26 @@ void Haar::haar2D(Unit a[])
 }
 
 /** Do the Haar tensorial 2d transform itself.
+    Here input RGB data is in unsigned char arrays ([0..255])
+    Results are available in a, b, and c.
+*/
+void Haar::transformChar(unsigned char* c1, unsigned char* c2, unsigned char* c3,
+                         Unit* a, Unit* b, Unit* c)
+{
+    Unit *p = a;
+    Unit *q = b;
+    Unit *r = c;
+
+    for (int i = 0; i < NUM_PIXELS_SQUARED; i++)
+    {
+        *p++ = *c1++;
+        *q++ = *c2++;
+        *r++ = *c3++;
+    }
+    transform(a, b, c);
+}
+
+/** Do the Haar tensorial 2d transform itself.
     Here input is RGB data [0..255] in Unit arrays.
     Results are available in a, b, and c.
     Fully inplace calculation; order of result is interleaved though,
@@ -159,7 +179,7 @@ void Haar::transform(Unit* a, Unit* b, Unit* c)
 /** Find the NUM_COEFS largest numbers in cdata[] (in magnitude that is)
     and store their indices in sig[].
 */
-void Haar::get_m_largests(Unit *cdata, Idx *sig)
+void Haar::getmLargests(Unit *cdata, Idx *sig)
 {
     int       cnt, i;
     valStruct val;
@@ -222,50 +242,15 @@ int Haar::calcHaar(Unit *cdata1, Unit *cdata2, Unit *cdata3,
     avgl[2]=cdata3[0];
 
     // Color channel 1:
-    get_m_largests(cdata1, sig1);
+    getmLargests(cdata1, sig1);
 
     // Color channel 2:
-    get_m_largests(cdata2, sig2);
+    getmLargests(cdata2, sig2);
 
     // Color channel 3:
-    get_m_largests(cdata3, sig3);
+    getmLargests(cdata3, sig3);
 
     return 1;
-}
-
-// ----------------------------------------------------------------------------
-// TODO: Marcel, these public methods can be removed.
-
-// python array wrapper. Creates a new double array
-double* Haar::new_darray(int size)
-{
-    return (double*) malloc(size*sizeof(double));
-}
-
-// python array wrapper. Creates a new int array
-int* Haar::new_iarray(int size)
-{
-    return (int*) malloc(size*sizeof(int));
-}
-
-/** Do the Haar tensorial 2d transform itself.
-    Here input RGB data is in unsigned char arrays ([0..255])
-    Results are available in a, b, and c.
-*/
-void Haar::transformChar(unsigned char* c1, unsigned char* c2, unsigned char* c3,
-                         Unit* a, Unit* b, Unit* c)
-{
-    Unit *p = a;
-    Unit *q = b;
-    Unit *r = c;
-
-    for (int i = 0; i < NUM_PIXELS_SQUARED; i++)
-    {
-        *p++ = *c1++;
-        *q++ = *c2++;
-        *r++ = *c3++;
-    }
-    transform(a, b, c);
 }
 
 }  // namespace Digikam
