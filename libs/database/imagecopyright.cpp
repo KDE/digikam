@@ -33,6 +33,7 @@
 #include "ddebug.h"
 #include "albumdb.h"
 #include "databaseaccess.h"
+#include "imagescanner.h"
 #include "imagecopyright.h"
 
 namespace Digikam
@@ -45,7 +46,8 @@ ImageCopyright::ImageCopyright(qlonglong imageid)
 
 QStringList ImageCopyright::creator()
 {
-    QList<CopyrightInfo> infos = DatabaseAccess().db()->getImageCopyright(m_id, "creator");
+    QList<CopyrightInfo> infos =
+            DatabaseAccess().db()->getImageCopyright(m_id, ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCreator));
     QStringList list;
     foreach(const CopyrightInfo &info, infos)
     {
@@ -62,67 +64,68 @@ void ImageCopyright::setCreator(const QString &creator, ReplaceMode mode)
     else
         uniqueness = AlbumDB::PropertyNoConstraint;
 
-    DatabaseAccess().db()->setImageCopyrightProperty(m_id, "creator", creator, QString(), uniqueness);
+    DatabaseAccess().db()->setImageCopyrightProperty(m_id, ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCreator),
+                                                     creator, QString(), uniqueness);
 }
 
 QString ImageCopyright::provider()
 {
-    return readSimpleProperty("provider");
+    return readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreProvider));
 }
 
 void ImageCopyright::setProvider(const QString &provider)
 {
-    setSimpleProperty("provider", provider);
+    setSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreProvider), provider);
 }
 
 QString ImageCopyright::copyrightNotice(const QString &languageCode)
 {
-    return readLanguageProperty("copyrightNotice", languageCode);
+    return readLanguageProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCopyrightNotice), languageCode);
 }
 
 void ImageCopyright::setCopyrightNotice(const QString &notice, const QString &languageCode, ReplaceMode mode)
 {
-    setLanguageProperty("copyrightNotice", notice, languageCode, mode);
+    setLanguageProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCopyrightNotice), notice, languageCode, mode);
 }
 
 QString ImageCopyright::rightsUsageTerms(const QString &languageCode)
 {
-    return readLanguageProperty("rightsUsageTerms", languageCode);
+    return readLanguageProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreRightsUsageTerms), languageCode);
 }
 
 void ImageCopyright::setRightsUsageTerms(const QString &term, const QString &languageCode, ReplaceMode mode)
 {
-    setLanguageProperty("rightsUsageTerms", term, languageCode, mode);
+    setLanguageProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreRightsUsageTerms), term, languageCode, mode);
 }
 
 QString ImageCopyright::source()
 {
-    return readSimpleProperty("source");
+    return readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreSource));
 }
 
 void ImageCopyright::setSource(const QString &source)
 {
-    setSimpleProperty("source", source);
+    setSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreSource), source);
 }
 
 QString ImageCopyright::creatorJobTitle()
 {
-    return readSimpleProperty("creatorJobTitle");
+    return readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCreatorJobTitle));
 }
 
 void ImageCopyright::setCreatorJobTitle(const QString &title)
 {
-    setSimpleProperty("creatorJobTitle", title);
+    setSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCreatorJobTitle), title);
 }
 
 QString ImageCopyright::instructions()
 {
-    return readSimpleProperty("instructions");
+    return readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreInstructions));
 }
 
 void ImageCopyright::setInstructions(const QString &instructions)
 {
-    setSimpleProperty("instructions", instructions);
+    setSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreInstructions), instructions);
 }
 
 
