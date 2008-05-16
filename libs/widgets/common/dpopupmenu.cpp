@@ -45,13 +45,12 @@
 // Local includes.
 
 #include "dpopupmenu.h"
-#include "dpopupmenu.moc"
 
 namespace Digikam
 {
 
-QImage DPopupMenu::s_dpopupmenu_sidePixmap;
-QColor DPopupMenu::s_dpopupmenu_sidePixmapColor;
+static QImage s_dpopupmenu_sidePixmap;
+static QColor s_dpopupmenu_sidePixmapColor;
 
 DPopupMenu::DPopupMenu(QWidget* parent)
           : KMenu(parent)
@@ -59,6 +58,15 @@ DPopupMenu::DPopupMenu(QWidget* parent)
     // Must be initialized so that we know the size on first invocation
     if ( s_dpopupmenu_sidePixmap.isNull() )
         generateSidePixmap();
+}
+
+DPopupMenu::~DPopupMenu()
+{
+}
+
+int DPopupMenu::sidePixmapWidth() const 
+{ 
+    return s_dpopupmenu_sidePixmap.width(); 
 }
 
 void DPopupMenu::generateSidePixmap()
