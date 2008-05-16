@@ -109,19 +109,14 @@ int HaarIface::getImageHeight(long int id)
 
 /** id is a unique image identifier
     filename is the image location
-    thname is the thumbnail location for this image
-    doThumb should be set to 1 if you want to save the thumbnail on thname
     Images with a dimension smaller than ignDim are ignored
+    return: 0 if image cannot be loaded 
+            1 if image have been add.
+            2 if image is larger than ignDim
 */
-int HaarIface::addImage(const long int id, const QString& filename, char* thname, int doThumb, int ignDim)
+int HaarIface::addImage(const long int id, const QString& filename, int ignDim)
 {
-    int cn;
-
-    // Made static for speed; only used locally
-    static Haar::Unit cdata1[16384];
-    static Haar::Unit cdata2[16384];
-    static Haar::Unit cdata3[16384];
-
+    int    cn;
     int    i;
     int    width, height;
     QImage image;
@@ -163,9 +158,6 @@ int HaarIface::addImage(const long int id, const QString& filename, char* thname
             return 2;
     }
 
-    if (doThumb)
-        image.scaled(128, 128, Qt::KeepAspectRatio).save(thname, "PNG");
-
     image = image.scaled(128, 128);
 
     for (i = 0, cn = 0; i < 128; i++)
@@ -175,17 +167,16 @@ int HaarIface::addImage(const long int id, const QString& filename, char* thname
 
         for (int j = 0; j < 128; j++)
         {
-            QRgb pixel = line[j];
-
-            cdata1[cn] = qRed  (pixel);
-            cdata2[cn] = qGreen(pixel);
-            cdata3[cn] = qBlue (pixel);
+            QRgb pixel   = line[j];
+            m_cdata1[cn] = qRed  (pixel);
+            m_cdata2[cn] = qGreen(pixel);
+            m_cdata3[cn] = qBlue (pixel);
             cn++;
         }
     }
 
     Haar haar;
-    haar.transform(cdata1, cdata2, cdata3);
+    haar.transform(m_cdata1, m_cdata2, m_cdata3);
 
     sigStruct* nsig = new sigStruct();
     nsig->id        = id;
@@ -200,7 +191,7 @@ int HaarIface::addImage(const long int id, const QString& filename, char* thname
     }
     m_sigs[id] = nsig;
 
-    haar.calcHaar(cdata1, cdata2, cdata3,
+    haar.calcHaar(m_cdata1, m_cdata2, m_cdata3,
                   nsig->sig1, nsig->sig2, nsig->sig3, nsig->avgl);
 
     // populate buckets

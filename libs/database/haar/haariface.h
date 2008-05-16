@@ -138,6 +138,12 @@ private:
     */
     int           m_numres;
 
+    /** Used by addImage() method to store RGB thumb image components.
+    */
+    Haar::Unit    m_cdata1[16384];
+    Haar::Unit    m_cdata2[16384];
+    Haar::Unit    m_cdata3[16384];
+
 private:
 
     void        initImgBin();
@@ -146,7 +152,7 @@ private:
     int         getImageWidth(long int id);
     int         getImageHeight(long int id);
 
-    int         addImage(const long int id, const QString& filename, char* thname, int doThumb, int ignDim=0);
+    int         addImage(const long int id, const QString& filename, int ignDim=0);
     void        queryImgData(Haar::Idx* sig1, Haar::Idx* sig2, Haar::Idx* sig3,
                              double* avgl, int numres, int sketch);
     long_list   queryImgDataForThres(sigMap* tsigs, Haar::Idx* sig1, Haar::Idx* sig2, Haar::Idx* sig3,
