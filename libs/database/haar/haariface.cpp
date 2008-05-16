@@ -113,7 +113,7 @@ int HaarIface::getImageHeight(long int id)
     doThumb should be set to 1 if you want to save the thumbnail on thname
     Images with a dimension smaller than ignDim are ignored
 */
-int HaarIface::addImage(const long int id, char* filename, char* thname, int doThumb, int ignDim)
+int HaarIface::addImage(const long int id, const QString& filename, char* thname, int doThumb, int ignDim)
 {
     int cn;
 
@@ -241,7 +241,7 @@ void HaarIface::queryImgData(Haar::Idx* sig1, Haar::Idx* sig2, Haar::Idx* sig3,
     int        pn;
     Haar::Idx *sig[3] = {sig1, sig2, sig3};
 
-    for (sigIterator sit = m_sigs.begin(); sit!=m_sigs.end(); sit++)
+    for (sigIterator sit = m_sigs.begin(); sit != m_sigs.end(); sit++)
     {
         //TODO: do I really need to score every single sig on db?
         (*sit).second->score = 0;
@@ -469,7 +469,7 @@ void HaarIface::queryImgID(long int id, int numres)
     numres is the maximum number of results
     sketch should be 1 if this image is a drawing
 */
-int HaarIface::queryImgFile(char* filename,int numres,int sketch)
+bool HaarIface::queryImgFile(const QString& filename, int numres, int sketch)
 {
     while(!m_pqResults.empty())
         m_pqResults.pop();
@@ -485,10 +485,10 @@ int HaarIface::queryImgFile(char* filename,int numres,int sketch)
     Haar::Unit cdata3[16384];
 
     if (!image.load(filename))
-        return 0;
+        return false;
 
     if (image.width() != 128 || image.height() != 128)
-        image = image.scaled(128,128);
+        image = image.scaled(128, 128);
 
     for (int i = 0; i < 128; i++)
     {
@@ -511,7 +511,7 @@ int HaarIface::queryImgFile(char* filename,int numres,int sketch)
     haar.calcHaar(cdata1, cdata2, cdata3, sig1, sig2, sig3, avgl);
     queryImgData(sig1, sig2, sig3, avgl, numres, sketch);
 
-    return 1;
+    return true;
 }
 
 /** return the average luminance difference
