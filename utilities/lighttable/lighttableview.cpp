@@ -7,7 +7,7 @@
  * Description : a widget to display 2 preview image on 
  *               lightable to compare pictures.
  *
- * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -232,8 +232,9 @@ void LightTableView::toggleFitToWindowOr100()
 {
     //  If we are currently precisely at 100%, then fit to window,
     //  otherwise zoom to a centered 100% view.
-    if ((d->leftPreview->zoomFactor()==1.0) and 
-        (d->rightPreview->zoomFactor()==1.0)) {
+    if ((d->leftPreview->zoomFactor()==1.0) && 
+        (d->rightPreview->zoomFactor()==1.0)) 
+    {
         fitToWindow();
     }
     else
