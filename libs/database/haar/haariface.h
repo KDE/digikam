@@ -41,32 +41,6 @@
 namespace Digikam
 {
 
-    /** Weights for the Haar coefficients. Straight from the referenced paper
-        "Fast Multiresolution Image Querying"
-        by Charles E. Jacobs, Adam Finkelstein and David H. Salesin.
-        http://www.cs.washington.edu/homes/salesin/abstracts.html
-    */
-    static const float s_haar_weights[2][6][3] =
-    {
-        // For scanned picture (sketch=0):
-        //   Y      I      Q        idx  total occurs
-        {{ 5.00, 19.21, 34.37 },   // 0   58.58       1 (`DC' component)
-         { 0.83,  1.26,  0.36 },   // 1    2.45       3
-         { 1.01,  0.44,  0.45 },   // 2    1.90       5
-         { 0.52,  0.53,  0.14 },   // 3    1.19       7
-         { 0.47,  0.28,  0.18 },   // 4    0.93       9
-         { 0.30,  0.14,  0.27 }},  // 5    0.71       16384-25=16359
-
-        // For handdrawn/painted sketch (sketch=1):
-        //   Y      I      Q
-        {{ 4.04, 15.14, 22.62 },
-         { 0.78,  0.92,  0.40 },
-         { 0.46,  0.53,  0.63 },
-         { 0.42,  0.26,  0.25 },
-         { 0.41,  0.14,  0.15 },
-         { 0.32,  0.07,  0.38 }}
-    };
-
 class HaarIface
 {
 
@@ -115,10 +89,6 @@ private:
 
     sigMap        m_sigs;
 
-    /** Fixed weight mask for pixel positions (i,j).
-        Each entry x = i*NUM_PIXELS + j, gets value max(i,j) saturated at 5.
-        To be treated as a constant.
-    */
     unsigned char m_imgBin[16384];
 
     /** Lists of picture ids, indexed by [color-channel][sign][position], i.e.,
@@ -138,23 +108,24 @@ private:
     */
     int           m_numres;
 
-    /** Used by addImage() method to store RGB thumb image components.
-    */
-    Haar::Unit    m_cdata1[16384];
-    Haar::Unit    m_cdata2[16384];
-    Haar::Unit    m_cdata3[16384];
-
 private:
 
-    void        initImgBin();
-    void        freeSigs();
+    Haar::ImageData *m_data;
+    Haar::WeightBin *m_bin;
 
-    int         getImageWidth(long int id);
-    int         getImageHeight(long int id);
+    //void        initImgBin();
+    //void        freeSigs();
 
-    int         addImage(const long int id, const QString& filename, int ignDim=0);
+    //int         getImageWidth(long int id);
+    //int         getImageHeight(long int id);
+
+    QImage      loadQImage(const QString &filename);
+    void        fillPixelData(const QImage &image, Haar::ImageData *data);
+    bool        addImage(const QString& filename);
     void        queryImgData(Haar::Idx* sig1, Haar::Idx* sig2, Haar::Idx* sig3,
                              double* avgl, int numres, int sketch);
+    bool        queryImgFile(const QString& filename, int numres, int sketch);
+    /*
     long_list   queryImgDataForThres(sigMap* tsigs, Haar::Idx* sig1, Haar::Idx* sig2, Haar::Idx* sig3,
                                      double* avgl, float thresd, int sketch);
     long_list   queryImgDataForThresFast(sigMap* tsigs, double* avgl, float thresd, int sketch);
@@ -165,11 +136,12 @@ private:
     double      getResultScore();
 
     void        queryImgID(long int id, int numres);
-    bool        queryImgFile(const QString& filename, int numres, int sketch);
-    double      calcAvglDiff(long int id1, long int id2);
-    double      calcDiff(long int id1, long int id2);
+    */
+    //double      calcAvglDiff(long int id1, long int id2);
+    //double      calcDiff(long int id1, long int id2);
 
     // TODO: Marcel, these methods can be removed.
+#if 0
     int         loadDB(char* filename);
     int         saveDB(char* filename);
     int         resetDB();
@@ -179,6 +151,7 @@ private:
     long int    popLongList(long_list& li);
     int         getLongList2Size(long_list_2& li);
     long_list   popLong2List(long_list_2& li);
+#endif
 };
 
 }  // namespace Digikam

@@ -32,12 +32,48 @@
 #include <cstdlib>
 #include <cmath>
 
+// Qt includes
+
+#include <QString>
+
 // Local includes
 
 #include "haar.h"
 
 namespace Digikam
 {
+
+/** Setup initial fixed Haar weights that each coefficient represents
+*/
+Haar::WeightBin::WeightBin()
+{
+    int i, j;
+
+    /*
+    0 1 2 3 4 5 6 i
+    0 0 1 2 3 4 5 5
+    1 1 1 2 3 4 5 5
+    2 2 2 2 3 4 5 5
+    3 3 3 3 3 4 5 5
+    4 4 4 4 4 4 5 5
+    5 5 5 5 5 5 5 5
+    5 5 5 5 5 5 5 5
+    j
+    */
+
+    // Every position has value 5
+    memset(m_bin, 5, NUM_PIXELS_SQUARED);
+
+    // Except for the 5 by 5 upper-left quadrant
+    for (i = 0; i < 5; i++)
+    {
+        for (j = 0; j < 5; j++)
+        {
+            m_bin[i*128+j] = qMax(i, j);
+            // NOTE: imgBin[0] == 0
+        }
+    }
+}
 
 Haar::Haar()
 {
@@ -127,6 +163,7 @@ void Haar::haar2D(Unit a[])
     Here input RGB data is in unsigned char arrays ([0..255])
     Results are available in a, b, and c.
 */
+/*
 void Haar::transformChar(unsigned char* c1, unsigned char* c2, unsigned char* c3,
                          Unit* a, Unit* b, Unit* c)
 {
@@ -142,6 +179,7 @@ void Haar::transformChar(unsigned char* c1, unsigned char* c2, unsigned char* c3
     }
     transform(a, b, c);
 }
+*/
 
 /** Do the Haar tensorial 2d transform itself.
     Here input is RGB data [0..255] in Unit arrays.
@@ -149,10 +187,13 @@ void Haar::transformChar(unsigned char* c1, unsigned char* c2, unsigned char* c3
     Fully inplace calculation; order of result is interleaved though,
     but we don't care about that.
 */
-void Haar::transform(Unit* a, Unit* b, Unit* c)
+void Haar::transform(ImageData *data)
 {
     // RGB -> YIQ colorspace conversion; Y luminance, I,Q chrominance.
     // If RGB in [0..255] then Y in [0..255] and I,Q in [-127..127].
+    Unit* a = data->data1;
+    Unit* b = data->data2;
+    Unit* c = data->data3;
 
     for (int i = 0; i < NUM_PIXELS_SQUARED; i++) 
     {
@@ -234,21 +275,21 @@ void Haar::getmLargests(Unit *cdata, Idx *sig)
     The order of occurrence of the coordinates in sig doesn't matter.
     Complexity is 3 x NUM_PIXELS^2 x 2log(NUM_COEFS).
 */
-int Haar::calcHaar(Unit *cdata1, Unit *cdata2, Unit *cdata3,
+int Haar::calcHaar(ImageData *data,
                    Idx *sig1, Idx *sig2, Idx *sig3, double *avgl)
 {
-    avgl[0]=cdata1[0];
-    avgl[1]=cdata2[0];
-    avgl[2]=cdata3[0];
+    avgl[0]=data->data1[0];
+    avgl[1]=data->data2[0];
+    avgl[2]=data->data3[0];
 
     // Color channel 1:
-    getmLargests(cdata1, sig1);
+    getmLargests(data->data1, sig1);
 
     // Color channel 2:
-    getmLargests(cdata2, sig2);
+    getmLargests(data->data2, sig2);
 
     // Color channel 3:
-    getmLargests(cdata3, sig3);
+    getmLargests(data->data3, sig3);
 
     return 1;
 }

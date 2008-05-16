@@ -43,50 +43,48 @@ using namespace std;
 namespace Digikam
 {
 
+/** Weights for the Haar coefficients. Straight from the referenced paper
+    "Fast Multiresolution Image Querying"
+    by Charles E. Jacobs, Adam Finkelstein and David H. Salesin.
+    http://www.cs.washington.edu/homes/salesin/abstracts.html
+*/
+static const float s_haar_weights[2][6][3] =
+{
+    // For scanned picture (sketch=0):
+    //   Y      I      Q        idx  total occurs
+    {{ 5.00, 19.21, 34.37 },   // 0   58.58       1 (`DC' component)
+        { 0.83,  1.26,  0.36 },   // 1    2.45       3
+        { 1.01,  0.44,  0.45 },   // 2    1.90       5
+        { 0.52,  0.53,  0.14 },   // 3    1.19       7
+        { 0.47,  0.28,  0.18 },   // 4    0.93       9
+        { 0.30,  0.14,  0.27 }},  // 5    0.71       16384-25=16359
+
+    // For handdrawn/painted sketch (sketch=1):
+    //   Y      I      Q
+    {{ 4.04, 15.14, 22.62 },
+        { 0.78,  0.92,  0.40 },
+        { 0.46,  0.53,  0.63 },
+        { 0.42,  0.26,  0.25 },
+        { 0.41,  0.14,  0.15 },
+        { 0.32,  0.07,  0.38 }}
+};
+
+
+
 HaarIface::HaarIface()
 {
-    initImgBin();
+    m_data = new Haar::ImageData();
+    m_bin = new Haar::WeightBin();
 }
 
 HaarIface::~HaarIface()
 {
-    freeSigs();
-}
-
-/** Setup initial fixed Haar weights that each coefficient represents
-*/
-void HaarIface::initImgBin()
-{
-    int i, j;
-
-    /*
-    0 1 2 3 4 5 6 i
-    0 0 1 2 3 4 5 5
-    1 1 1 2 3 4 5 5
-    2 2 2 2 3 4 5 5
-    3 3 3 3 3 4 5 5
-    4 4 4 4 4 4 5 5
-    5 5 5 5 5 5 5 5
-    5 5 5 5 5 5 5 5
-    j
-    */
-
-    // Every position has value 5
-    memset(m_imgBin, 5, NUM_PIXELS_SQUARED);
-
-    // Except for the 5 by 5 upper-left quadrant
-    for (i = 0; i < 5; i++)
-    {
-        for (j = 0; j < 5; j++)
-        {
-            m_imgBin[i*128+j] = qMax(i, j);
-            // NOTE: imgBin[0] == 0
-        }
-    }
+    //freeSigs();
 }
 
 /** Clean-up fixed Haar weights
 */
+/*
 void HaarIface::freeSigs()
 {
     for (sigIterator it = m_sigs.begin(); it != m_sigs.end(); it++)
@@ -106,96 +104,69 @@ int HaarIface::getImageHeight(long int id)
         return 0;
     return m_sigs[id]->height;
 }
-
-/** id is a unique image identifier
-    filename is the image location
-    Images with a dimension smaller than ignDim are ignored
-    return: 0 if image cannot be loaded 
-            1 if image have been add.
-            2 if image is larger than ignDim
 */
-int HaarIface::addImage(const long int id, const QString& filename, int ignDim)
-{
-    int    cn;
-    int    i;
-    int    width, height;
-    QImage image;
 
+QImage HaarIface::loadQImage(const QString &filename)
+{
     // TODO: Marcel, all can be optimized here using DImg.
 
+    QImage image;
     if (isJpegImage(filename))
     {
         // use fast jpeg loading
-        if (!loadJPEGScaled(image, filename, 128))
+        if (!loadJPEGScaled(image, filename, NUM_PIXELS))
         {
             // try QT now.
             if (!image.load(filename))
-                return 0;
-
-            width  = image.width();
-            height = image.height();
-            if (ignDim && (width <= ignDim || height <= ignDim))
-                return 2;
-        }
-        else
-        {
-            // fast jpeg succeeded
-            width  = image.width();
-            height = image.height();
-            if (ignDim && (width <= ignDim || height <= ignDim))
-                return 2;
+                return QImage();
         }
     }
     else
     {
         // use default QT image loading
         if (!image.load(filename))
-            return 0;
-
-        width  = image.width();
-        height = image.height();
-        if (ignDim && (width <= ignDim || height <= ignDim))
-            return 2;
+            return QImage();
     }
 
-    image = image.scaled(128, 128);
+    image = image.scaled(NUM_PIXELS, NUM_PIXELS);
+    return image;
+}
 
-    for (i = 0, cn = 0; i < 128; i++)
+void HaarIface::fillPixelData(const QImage &image, Haar::ImageData *data)
+{
+    for (int i = 0, cn = 0; i < NUM_PIXELS; i++)
     {
         // Get a scanline:
         QRgb *line = (QRgb*)image.scanLine(i);
 
-        for (int j = 0; j < 128; j++)
+        for (int j = 0; j < NUM_PIXELS; j++)
         {
             QRgb pixel   = line[j];
-            m_cdata1[cn] = qRed  (pixel);
-            m_cdata2[cn] = qGreen(pixel);
-            m_cdata3[cn] = qBlue (pixel);
+            data->data1[cn] = qRed  (pixel);
+            data->data2[cn] = qGreen(pixel);
+            data->data3[cn] = qBlue (pixel);
             cn++;
         }
     }
+}
+
+bool HaarIface::addImage(const QString& filename)
+{
+    QImage image = loadQImage(filename);
+    if (image.isNull())
+        return false;
+
+    fillPixelData(image, m_data);
 
     Haar haar;
-    haar.transform(m_cdata1, m_cdata2, m_cdata3);
+    haar.transform(m_data);
 
     sigStruct* nsig = new sigStruct();
-    nsig->id        = id;
-    nsig->width     = width;
-    nsig->height    = height;
 
-    if (m_sigs.count(id))
-    {
-        DDebug() << "ID already in DB: %ld\n" << endl;
-        delete m_sigs[id];
-        m_sigs.erase(id);
-    }
-    m_sigs[id] = nsig;
-
-    haar.calcHaar(m_cdata1, m_cdata2, m_cdata3,
-                  nsig->sig1, nsig->sig2, nsig->sig3, nsig->avgl);
+    haar.calcHaar(m_data, nsig->sig1, nsig->sig2, nsig->sig3, nsig->avgl);
 
     // populate buckets
-    for (i = 0; i < NUM_COEFS; i++)
+    for (int i = 0; i < NUM_COEFS; i++)
     {
         int x, t;
 
@@ -205,17 +176,17 @@ int HaarIface::addImage(const long int id, const QString& filename, int ignDim)
         t = (x < 0);         // t = 1 if x neg else 1
         // x - 0 ^ 0 = x; i - 1 ^ 0b111..1111 = 2-compl(x) = -x
         x = (x - t) ^ -t;
-        m_imgbuckets[0][t][x].push_back(id);
+        m_imgbuckets[0][t][x].push_back(nsig->id);
 
         x = nsig->sig2[i];
         t = (x < 0);
         x = (x - t) ^ -t;
-        m_imgbuckets[1][t][x].push_back(id);
+        m_imgbuckets[1][t][x].push_back(nsig->id);
 
         x = nsig->sig3[i];
         t = (x < 0);
         x = (x - t) ^ -t;
-        m_imgbuckets[2][t][x].push_back(id);
+        m_imgbuckets[2][t][x].push_back(nsig->id);
     }
     return 1;
 }
@@ -289,6 +260,7 @@ void HaarIface::queryImgData(Haar::Idx* sig1, Haar::Idx* sig2, Haar::Idx* sig3,
     }
 }
 
+#if 0
 /** sig1,2,3 are int arrays of lenght NUM_COEFS
     avgl is the average luminance
     thresd is the limit similarity threshold. Only images with score > thresd will be a result
@@ -455,7 +427,7 @@ void HaarIface::queryImgID(long int id, int numres)
     queryImgData(m_sigs[id]->sig1, m_sigs[id]->sig2, m_sigs[id]->sig3,
                  m_sigs[id]->avgl, numres, 0);
 }
-
+#endif
 /** query for images similar to the one on filename
     numres is the maximum number of results
     sketch should be 1 if this image is a drawing
@@ -498,13 +470,14 @@ bool HaarIface::queryImgFile(const QString& filename, int numres, int sketch)
     }
 
     Haar haar;
-    haar.transform(cdata1, cdata2, cdata3);
-    haar.calcHaar(cdata1, cdata2, cdata3, sig1, sig2, sig3, avgl);
+    haar.transform(m_data);
+    haar.calcHaar(m_data, sig1, sig2, sig3, avgl);
     queryImgData(sig1, sig2, sig3, avgl, numres, sketch);
 
     return true;
 }
 
+#if 0
 /** return the average luminance difference
 */
 double HaarIface::calcAvglDiff(long int id1, long int id2)
@@ -544,7 +517,9 @@ double HaarIface::calcDiff(long int id1, long int id2)
 
   return diff;
 }
+#endif
 
+#if 0
 // ----------------------------------------------------------------------------
 // TODO: Marcel, these methods can be removed.
 
@@ -717,5 +692,6 @@ HaarIface::long_list HaarIface::popLong2List(long_list_2& li)
     li.pop_front();
     return a;
 }
+#endif
 
 }  // namespace Digikam

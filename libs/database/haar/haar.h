@@ -56,17 +56,40 @@ public:
     typedef double Unit;
     typedef int    Idx;
 
+    class ImageData
+    {
+        public:
+        Unit data1[16384];
+        Unit data2[16384];
+        Unit data3[16384];
+    };
+
+    class WeightBin
+    {
+    public:
+
+        WeightBin();
+
+        /** Fixed weight mask for pixel positions (i,j).
+            Each entry x = i*NUM_PIXELS + j, gets value max(i,j) saturated at 5.
+            To be treated as a constant.
+        */
+        unsigned char m_bin[16384];
+
+        unsigned char operator[](int index) { return m_bin[index]; }
+    };
+
 public:
 
     Haar();
     ~Haar();
 
-    int     calcHaar(Unit* cdata1, Unit* cdata2, Unit* cdata3,
+    int     calcHaar(ImageData *data,
                      Idx* sig1, Idx* sig2, Idx* sig3, double* avgl);
 
-    void    transform(Unit* a, Unit* b, Unit* c);
-    void    transformChar(unsigned char* c1, unsigned char* c2, unsigned char* c3,
-                          Unit* a, Unit* b, Unit* c);
+    void    transform(ImageData *data);
+    //void    transformChar(unsigned char* c1, unsigned char* c2, unsigned char* c3,
+      //                    Unit* a, Unit* b, Unit* c);
 
 private:
 
