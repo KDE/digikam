@@ -264,10 +264,16 @@ void PreviewWidget::setZoomFactorSnapped(double zoom)
 
 void PreviewWidget::setZoomFactor(double zoom)
 {
+    setZoomFactor(zoom, false);
+}
+
+void PreviewWidget::setZoomFactor(double zoom, bool centerView)
+{
     // Zoom using center of canvas and given zoom factor.
 
     double oldZoom = d->zoom;
     double cpx, cpy;
+
     if (d->centerZoomPoint.isNull())
     {
         // center on current center
@@ -305,6 +311,12 @@ void PreviewWidget::setZoomFactor(double zoom)
     {
         cpx = ( cpx * d->tileSize ) / floor(d->tileSize / d->zoom);
         cpy = ( cpy * d->tileSize ) / floor(d->tileSize / d->zoom);
+
+        if (centerView)
+        {
+            cpx = d->zoomWidth/2.0;
+            cpy = d->zoomHeight/2.0;
+        }
 
         center((int)cpx, (int)(cpy));
     }
@@ -344,7 +356,9 @@ void PreviewWidget::toggleFitToWindow()
     d->autoZoom = !d->autoZoom;
 
     if (d->autoZoom)
+    {
         updateAutoZoom();
+    }
     else
     {
         d->zoom = 1.0;
@@ -353,6 +367,19 @@ void PreviewWidget::toggleFitToWindow()
 
     updateContentsSize();
     viewport()->update();
+}
+
+void PreviewWidget::toggleFitToWindowOr100()
+{
+    // If the current zoom is 100%, then fit to window.
+    if (d->zoom == 1.0) 
+    {
+        fitToWindow();
+    }
+    else
+    {
+        setZoomFactor(1.0, true);
+    }
 }
 
 void PreviewWidget::updateAutoZoom(AutoZoomMode mode)
@@ -387,7 +414,7 @@ double PreviewWidget::calcAutoZoomFactor(AutoZoomMode mode)
 void PreviewWidget::updateContentsSize()
 {
     viewport()->setUpdatesEnabled(false);
-    
+
     if (visibleWidth() > d->zoomWidth || visibleHeight() > d->zoomHeight)
     {
         // Center the image
@@ -592,6 +619,7 @@ void PreviewWidget::contentsWheelEvent(QWheelEvent *e)
     }
     else if (e->state() & Qt::ControlButton)
     {
+        // When zooming with the mouse-wheel, the image center is kept fixed.
         d->centerZoomPoint = e->pos();
         if (e->delta() < 0 && !minZoom())
             slotDecreaseZoom();

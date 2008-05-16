@@ -82,6 +82,7 @@ public:
     DImgInterface *interface() const;
     void makeDefaultEditingCanvas();
 
+    double zoomFactor();
     void  setZoomFactor(double z);
     bool  fitToWindow();
     bool  maxZoom();

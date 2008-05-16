@@ -63,7 +63,7 @@ public:
 
     void   setLeftZoomFactor(double z);
     void   setRightZoomFactor(double z);
-
+    
     void   checkForSelection(ImageInfo* info);
 
     double leftZoomMax();
@@ -82,6 +82,7 @@ public:
     void   rightReload();
 
     void   fitToWindow();
+    void   toggleFitToWindowOr100();
 
 signals:
 

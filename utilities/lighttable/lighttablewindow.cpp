@@ -1237,8 +1237,7 @@ void LightTableWindow::slotEditItem(ImageInfo* info)
 
 void LightTableWindow::slotZoomTo100Percents()
 {
-    d->previewView->setLeftZoomFactor(1.0);
-    d->previewView->setRightZoomFactor(1.0);
+    d->previewView->toggleFitToWindowOr100();
 }
 
 void LightTableWindow::slotFitToWindow()

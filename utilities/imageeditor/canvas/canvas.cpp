@@ -930,6 +930,11 @@ void Canvas::slotDecreaseZoom()
     setZoomFactor(d->zoom / d->zoomMultiplier);
 }
 
+double Canvas::zoomFactor()
+{
+    return d->zoom;
+}
+
 void Canvas::setZoomFactor(double zoom)
 {
     if (d->autoZoom)

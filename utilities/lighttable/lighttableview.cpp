@@ -32,6 +32,7 @@
 
 // Local includes
 
+#include "ddebug.h"
 #include "thumbnailsize.h"
 #include "lighttablepreview.h"
 #include "lighttableview.h"
@@ -225,6 +226,21 @@ void LightTableView::fitToWindow()
 {
     d->leftPreview->fitToWindow(); 
     d->rightPreview->fitToWindow(); 
+}
+
+void LightTableView::toggleFitToWindowOr100()
+{
+    //  If we are currently precisely at 100%, then fit to window,
+    //  otherwise zoom to a centered 100% view.
+    if ((d->leftPreview->zoomFactor()==1.0) and 
+        (d->rightPreview->zoomFactor()==1.0)) {
+        fitToWindow();
+    }
+    else
+    {
+        d->leftPreview->setZoomFactor(1.0, true);
+        d->rightPreview->setZoomFactor(1.0, true);
+    }
 }
 
 double LightTableView::leftZoomMax()
