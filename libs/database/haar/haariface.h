@@ -88,7 +88,7 @@ private:
         int       width;            // in pixels
         int       height;           // in pixels
 
-        bool operator< (const sigStruct_ & right) const 
+        bool operator< (const sigStruct_& right) const 
         {
             return score < (right.score);
         }
@@ -145,8 +145,8 @@ private:
     void        queryImgData(Haar::Idx* sig1, Haar::Idx* sig2, Haar::Idx* sig3,
                              double* avgl, int numres, int sketch);
     long_list   queryImgDataForThres(sigMap* tsigs, Haar::Idx* sig1, Haar::Idx* sig2, Haar::Idx* sig3,
-                                     double * avgl, float thresd, int sketch);
-    long_list   queryImgDataForThresFast(sigMap* tsigs, double * avgl, float thresd, int sketch);
+                                     double* avgl, float thresd, int sketch);
+    long_list   queryImgDataForThresFast(sigMap* tsigs, double* avgl, float thresd, int sketch);
 
     long_list_2 clusterSim(float thresd, int fast=0);
     int         getNumResults();
@@ -154,7 +154,7 @@ private:
     double      getResultScore();
 
     void        queryImgID(long int id, int numres);
-    int         queryImgFile(char* filename,int numres,int sketch);
+    int         queryImgFile(char* filename, int numres, int sketch);
     void        removeID(long int id);
     double      calcAvglDiff(long int id1, long int id2);
     double      calcDiff(long int id1, long int id2);

@@ -69,15 +69,15 @@ void HaarIface::initImgBin()
     j
     */
 
-    /* Every position has value 5, */
+    // Every position has value 5
     memset(m_imgBin, 5, NUM_PIXELS_SQUARED);
 
-    /* Except for the 5 by 5 upper-left quadrant: */
+    // Except for the 5 by 5 upper-left quadrant
     for (i = 0; i < 5; i++)
     {
         for (j = 0; j < 5; j++)
         {
-            m_imgBin[i*128+j] = qMax(i,j);
+            m_imgBin[i*128+j] = qMax(i, j);
             // NOTE: imgBin[0] == 0
         }
     }
@@ -302,7 +302,7 @@ void HaarIface::queryImgData(Haar::Idx* sig1, Haar::Idx* sig2, Haar::Idx* sig3,
     every search result is removed from sigs. (right now this functn is only used by clusterSim)
 */
 HaarIface::long_list HaarIface::queryImgDataForThres(sigMap* tsigs, Haar::Idx* sig1, Haar::Idx* sig2, Haar::Idx* sig3,
-                                                     double * avgl, float thresd, int sketch)
+                                                     double* avgl, float thresd, int sketch)
 {
     int        idx, c;
     int        pn;
@@ -348,7 +348,7 @@ HaarIface::long_list HaarIface::queryImgDataForThres(sigMap* tsigs, Haar::Idx* s
     return res;
 }
 
-HaarIface::long_list HaarIface::queryImgDataForThresFast(sigMap* tsigs, double * avgl, float thresd, int sketch)
+HaarIface::long_list HaarIface::queryImgDataForThresFast(sigMap* tsigs, double* avgl, float thresd, int sketch)
 {
     // will only look for average luminance
     long_list res;
