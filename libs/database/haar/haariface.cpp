@@ -514,32 +514,6 @@ int HaarIface::queryImgFile(char* filename,int numres,int sketch)
     return 1;
 }
 
-/** remove image with this id from dbase
-*/
-void HaarIface::removeID(long int id)
-{
-    if (!m_sigs.count(id))
-    {
-        // don't remove something which isn't even on db.
-        DDebug() << "Attempt to remove invalid id: " << id << endl;
-        return;
-    }
-    delete m_sigs[id];
-    m_sigs.erase(id);
-
-    // remove id from each bucket it could be in
-    for (int c = 0; c < 3; c++)
-    {
-        for (int pn=0; pn < 2; pn++)
-        {
-            for (int i = 0; i < 16384; i++)
-            {
-                m_imgbuckets[c][pn][i].remove(id);
-            }
-        }
-    }
-}
-
 /** return the average luminance difference
 */
 double HaarIface::calcAvglDiff(long int id1, long int id2)
@@ -584,7 +558,7 @@ double HaarIface::calcDiff(long int id1, long int id2)
 // TODO: Marcel, these methods can be removed.
 
 
-int HaarIface::loaddb(char* filename)
+int HaarIface::loadDB(char* filename)
 {
     std::ifstream f(filename, ios::binary);
     if (!f.is_open()) return 0;
@@ -621,7 +595,7 @@ int HaarIface::loaddb(char* filename)
     return 1;
 }
 
-int HaarIface::savedb(char* filename)
+int HaarIface::saveDB(char* filename)
 {
     /*
     Serialization order:
@@ -682,7 +656,7 @@ int HaarIface::savedb(char* filename)
 
 /** call it to reset all buckets and signatures
 */
-int HaarIface::resetdb()
+int HaarIface::resetDB()
 {
     for (int c = 0; c < 3; c++)
     {
@@ -699,6 +673,32 @@ int HaarIface::resetdb()
     freeSigs();
     m_sigs.clear();
     return 1;
+}
+
+/** remove image with this id from dbase
+*/
+void HaarIface::removeIDFromDB(long int id)
+{
+    if (!m_sigs.count(id))
+    {
+        // don't remove something which isn't even on db.
+        DDebug() << "Attempt to remove invalid id: " << id << endl;
+        return;
+    }
+    delete m_sigs[id];
+    m_sigs.erase(id);
+
+    // remove id from each bucket it could be in
+    for (int c = 0; c < 3; c++)
+    {
+        for (int pn=0; pn < 2; pn++)
+        {
+            for (int i = 0; i < 16384; i++)
+            {
+                m_imgbuckets[c][pn][i].remove(id);
+            }
+        }
+    }
 }
 
 /** Python Wrappers/Helpers

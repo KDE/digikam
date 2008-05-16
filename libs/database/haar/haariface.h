@@ -156,14 +156,14 @@ private:
 
     void        queryImgID(long int id, int numres);
     int         queryImgFile(char* filename, int numres, int sketch);
-    void        removeID(long int id);
     double      calcAvglDiff(long int id1, long int id2);
     double      calcDiff(long int id1, long int id2);
 
     // TODO: Marcel, these methods can be removed.
-    int         loaddb(char* filename);
-    int         savedb(char* filename);
-    int         resetdb();
+    int         loadDB(char* filename);
+    int         saveDB(char* filename);
+    int         resetDB();
+    void        removeIDFromDB(long int id);
 
     int         getLongListSize(long_list& li);
     long int    popLongList(long_list& li);
