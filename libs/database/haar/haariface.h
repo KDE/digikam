@@ -137,7 +137,8 @@ private:
 private:
 
     void        initImgBin();
-    void        free_sigs();
+    void        freeSigs();
+
     int         getImageWidth(long int id);
     int         getImageHeight(long int id);
 
@@ -160,12 +161,10 @@ private:
     double      calcDiff(long int id1, long int id2);
 
     // TODO: Marcel, these methods can be removed.
-    void        initDbase();
-    void        closeDbase();
     int         loaddb(char* filename);
     int         savedb(char* filename);
     int         resetdb();
-    int         magickThumb(char* f1, char* f2);
+
     int         getLongListSize(long_list& li);
     long int    popLongList(long_list& li);
     int         getLongList2Size(long_list_2& li);

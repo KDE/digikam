@@ -45,13 +45,15 @@ namespace Digikam
 
 HaarIface::HaarIface()
 {
+    initImgBin();
 }
 
 HaarIface::~HaarIface()
 {
+    freeSigs();
 }
 
-/** setup initial fixed haar weights that each coefficient represents
+/** Setup initial fixed Haar weights that each coefficient represents
 */
 void HaarIface::initImgBin()
 {
@@ -83,7 +85,9 @@ void HaarIface::initImgBin()
     }
 }
 
-void HaarIface::free_sigs()
+/** Clean-up fixed Haar weights
+*/
+void HaarIface::freeSigs()
 {
     for (sigIterator it = m_sigs.begin(); it != m_sigs.end(); it++)
         delete (*it).second;
@@ -579,19 +583,6 @@ double HaarIface::calcDiff(long int id1, long int id2)
 // ----------------------------------------------------------------------------
 // TODO: Marcel, these methods can be removed.
 
-void HaarIface::initDbase()
-{
-    // should be called before adding images
-    DDebug() << "Image database initialized." << endl;
-    initImgBin();
-}
-
-void HaarIface::closeDbase()
-{
-    // should be called before exiting app
-    free_sigs();
-    DDebug() << "Image database closed." << endl;
-}
 
 int HaarIface::loaddb(char* filename)
 {
@@ -705,37 +696,8 @@ int HaarIface::resetdb()
     }
 
     // delete sigs
-    free_sigs();
+    freeSigs();
     m_sigs.clear();
-    return 1;
-}
-
-int HaarIface::magickThumb(char* f1, char* f2)
-{
-    QImage image;
-
-    if (isJpegImage(f1))
-    {
-        if (!loadJPEGScaled(image, f1, 128))
-        {
-            // error loading image
-            // try QT now.
-            if (!image.load(f1))
-            {
-                return 0;
-            }
-        }
-        else
-        {
-            // use default QT image loading
-            if (!image.load(f1))
-            {
-                return 0;
-            }
-        }
-    }
-
-    image.scaled(128, 128, Qt::KeepAspectRatio).save(f2, "PNG");
     return 1;
 }
 
