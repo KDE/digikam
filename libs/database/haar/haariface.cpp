@@ -309,11 +309,11 @@ HaarIface::long_list HaarIface::queryImgDataForThres(sigMap* tsigs, Haar::Idx* s
     long_list  res;
     Haar::Idx *sig[3] = {sig1, sig2, sig3};
 
-    for (sigIterator sit = (*tsigs).begin(); sit!=(*tsigs).end(); sit++)
+    for (sigIterator sit = (*tsigs).begin(); sit != (*tsigs).end(); sit++)
     {
         // TODO: do I really need to score every single sig on db?
         (*sit).second->score = 0;
-        for ( c = 0;c<3;c++)
+        for (c = 0; c < 3; c++)
         {
             (*sit).second->score += s_haar_weights[sketch][0][c] * fabs((*sit).second->avgl[c]-avgl[c]);
         }
@@ -489,7 +489,7 @@ int HaarIface::queryImgFile(char* filename,int numres,int sketch)
     for (int i = 0; i < 128; i++)
     {
         // Get a scanline:
-        QRgb *line = (QRgb *) image.scanLine(i);
+        QRgb *line = (QRgb *)image.scanLine(i);
 
         for (int j = 0; j < 128; j++)
         {
