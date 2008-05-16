@@ -28,6 +28,8 @@
 
 // C++ includes
 
+#include <cstring>
+#include <cstdlib>
 #include <cmath>
 
 // Local includes
