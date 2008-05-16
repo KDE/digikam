@@ -876,7 +876,7 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field)
         }
         case MetadataInfo::IptcCoreProvider:
             return fromIptcOrXmp("Iptc.Application2.Credit", "Xmp.photoshop.Credit");
-        case MetadataInfo::IptcCoreRightUsageTerms:
+        case MetadataInfo::IptcCoreRightsUsageTerms:
             return fromXmpLangAlt("Xmp.xmpRights.UsageTerms");
         case MetadataInfo::IptcCoreSource:
             return fromIptcOrXmp("Iptc.Application2.Source", "Xmp.photoshop.Source");
@@ -1058,7 +1058,7 @@ QString DMetadata::valueToString (const QVariant &value, MetadataInfo::Field fie
 
         // Lang Alt
         case MetadataInfo::IptcCoreCopyrightNotice:
-        case MetadataInfo::IptcCoreRightUsageTerms:
+        case MetadataInfo::IptcCoreRightsUsageTerms:
         case MetadataInfo::Description:
         case MetadataInfo::Title:
         {
