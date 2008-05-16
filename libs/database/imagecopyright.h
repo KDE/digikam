@@ -21,8 +21,8 @@
  * 
  * ============================================================ */
 
-#ifndef IMAGECOMMENTS_H
-#define IMAGECOMMENTS_H
+#ifndef IMAGECOPYRIGHT_H
+#define IMAGECOPYRIGHT_H
 
 // Qt includes
 
