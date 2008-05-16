@@ -376,7 +376,7 @@ HaarIface::long_list HaarIface::queryImgDataForThresFast(sigMap* tsigs, double* 
 
 /** Cluster by similarity. Returns list of list of long ints (img ids)
 */
-HaarIface::long_list_2 HaarIface::clusterSim(float thresd, int fast)
+HaarIface::long_list_2 HaarIface::clusterSim(float thresd, bool fast)
 {
     // will hold a list of lists. ie. a list of clusters
     long_list_2 res;

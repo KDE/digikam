@@ -149,7 +149,7 @@ private:
                                      double* avgl, float thresd, int sketch);
     long_list   queryImgDataForThresFast(sigMap* tsigs, double* avgl, float thresd, int sketch);
 
-    long_list_2 clusterSim(float thresd, int fast=0);
+    long_list_2 clusterSim(float thresd, bool fast=false);
     int         getNumResults();
     long int    getResultID();
     double      getResultScore();
