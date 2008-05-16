@@ -41,43 +41,51 @@
 // Local includes.
 
 #include "dpopupmenu.h"
-#include "dpopupmenu.moc"
 
 namespace Digikam
 {
 
-QImage DPopupMenu::_dpopupmenu_sidePixmap_;
-QColor DPopupMenu::_dpopupmenu_sidePixmapColor_;
+static QImage s_dpopupmenu_sidePixmap;
+static QColor s_dpopupmenu_sidePixmapColor;
 
 DPopupMenu::DPopupMenu(QWidget* parent, const char* name)
           : KPopupMenu(parent, name)
 {
     // Must be initialized so that we know the size on first invocation
-    if ( _dpopupmenu_sidePixmap_.isNull() )
+    if ( s_dpopupmenu_sidePixmap.isNull() )
         generateSidePixmap();
+}
+
+DPopupMenu::~DPopupMenu()
+{
 }
 
 void DPopupMenu::generateSidePixmap()
 {
     const QColor newColor = calcPixmapColor();
 
-    if ( newColor != _dpopupmenu_sidePixmapColor_ ) 
+    if ( newColor != s_dpopupmenu_sidePixmapColor ) 
     {
-        _dpopupmenu_sidePixmapColor_ = newColor;
+        s_dpopupmenu_sidePixmapColor = newColor;
 
         if (KApplication::kApplication()->aboutData()->appName() == QString("digikam"))
-            _dpopupmenu_sidePixmap_.load( locate( "data","digikam/data/menusidepixmap.png" ) );
+            s_dpopupmenu_sidePixmap.load( locate( "data","digikam/data/menusidepixmap.png" ) );
         else
-            _dpopupmenu_sidePixmap_.load( locate( "data","showfoto/menusidepixmap.png" ) );
+            s_dpopupmenu_sidePixmap.load( locate( "data","showfoto/menusidepixmap.png" ) );
 
-        KIconEffect::colorize(_dpopupmenu_sidePixmap_, newColor, 1.0);
+        KIconEffect::colorize(s_dpopupmenu_sidePixmap, newColor, 1.0);
     }
+}
+
+int DPopupMenu::sidePixmapWidth() const
+{
+    return s_dpopupmenu_sidePixmap.width();
 }
 
 QRect DPopupMenu::sideImageRect() const
 {
     return QStyle::visualRect(QRect(frameWidth(), frameWidth(),
-                                    _dpopupmenu_sidePixmap_.width(),
+                                    s_dpopupmenu_sidePixmap.width(),
                                     height() - 2*frameWidth()),
                               this);
 }
@@ -123,30 +131,30 @@ QColor DPopupMenu::calcPixmapColor()
 
 void DPopupMenu::setMinimumSize(const QSize & s)
 {
-    KPopupMenu::setMinimumSize(s.width() + _dpopupmenu_sidePixmap_.width(), s.height());
+    KPopupMenu::setMinimumSize(s.width() + s_dpopupmenu_sidePixmap.width(), s.height());
 }
 
 void DPopupMenu::setMaximumSize(const QSize & s)
 {
-    KPopupMenu::setMaximumSize(s.width() + _dpopupmenu_sidePixmap_.width(), s.height());
+    KPopupMenu::setMaximumSize(s.width() + s_dpopupmenu_sidePixmap.width(), s.height());
 }
 
 void DPopupMenu::setMinimumSize(int w, int h)
 {
-    KPopupMenu::setMinimumSize(w + _dpopupmenu_sidePixmap_.width(), h);
+    KPopupMenu::setMinimumSize(w + s_dpopupmenu_sidePixmap.width(), h);
 }
 
 void DPopupMenu::setMaximumSize(int w, int h)
 {
-  KPopupMenu::setMaximumSize(w + _dpopupmenu_sidePixmap_.width(), h);
+  KPopupMenu::setMaximumSize(w + s_dpopupmenu_sidePixmap.width(), h);
 }
 
 void DPopupMenu::resizeEvent(QResizeEvent * e)
 {
     KPopupMenu::resizeEvent(e);
 
-    setFrameRect(QStyle::visualRect(QRect(_dpopupmenu_sidePixmap_.width(), 0,
-                                          width() - _dpopupmenu_sidePixmap_.width(), height()), 
+    setFrameRect(QStyle::visualRect(QRect(s_dpopupmenu_sidePixmap.width(), 0,
+                                          width() - s_dpopupmenu_sidePixmap.width(), height()), 
                  this ) );
 }
 
@@ -164,13 +172,13 @@ void DPopupMenu::paintEvent(QPaintEvent* e)
     QPainter p( this );
 
     QRect r = sideImageRect();
-    r.setTop(r.bottom()-_dpopupmenu_sidePixmap_.height()+1);
+    r.setTop(r.bottom()-s_dpopupmenu_sidePixmap.height()+1);
     if ( r.intersects( e->rect() ) )
     {
         QRect drawRect = r.intersect(e->rect()).intersect(sideImageRect());
         QRect pixRect  = drawRect;
         pixRect.moveBy(-r.left(), -r.top());
-        p.drawImage(drawRect.topLeft(), _dpopupmenu_sidePixmap_, pixRect);
+        p.drawImage(drawRect.topLeft(), s_dpopupmenu_sidePixmap, pixRect);
     }
 
     p.setClipRegion(e->region());

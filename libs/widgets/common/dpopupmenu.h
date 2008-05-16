@@ -48,13 +48,13 @@ namespace Digikam
 
 class DIGIKAM_EXPORT DPopupMenu : public KPopupMenu
 {
-    Q_OBJECT
 
 public:
 
     DPopupMenu(QWidget *parent=0, const char *name=0);
+    ~DPopupMenu();
 
-    int sidePixmapWidth() const { return _dpopupmenu_sidePixmap_.width(); }
+    int sidePixmapWidth() const;
 
 private:
 
@@ -76,11 +76,6 @@ private:
     void resize(int width, int height);
 
     void paintEvent(QPaintEvent* e);
-
-private:
-
-    static QImage _dpopupmenu_sidePixmap_;
-    static QColor _dpopupmenu_sidePixmapColor_;
 };
 
 }  // namespace Digikam
