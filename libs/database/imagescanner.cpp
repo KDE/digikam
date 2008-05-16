@@ -39,6 +39,7 @@
 #include "collectionlocation.h"
 #include "collectionmanager.h"
 #include "imagecomments.h"
+#include "imagecopyright.h"
 #include "imagescanner.h"
 
 namespace Digikam
@@ -265,6 +266,7 @@ void ImageScanner::scanImageComments()
 
     QVariantList metadataInfos = m_metadata.getMetadataFields(fields);
 
+    // note that this cannot be replaced with hasValidField, as the last is skipped
     bool noComment = (metadataInfos[0].isNull() && metadataInfos[1].isNull()
                       && metadataInfos[2].isNull() && metadataInfos[3].isNull());
     if (noComment)
@@ -314,12 +316,110 @@ void ImageScanner::scanImageComments()
 
 void ImageScanner::scanImageCopyright()
 {
-    // TODO
+    MetadataFields fields;
+    fields << MetadataInfo::IptcCoreCopyrightNotice
+           << MetadataInfo::IptcCoreCreator
+           << MetadataInfo::IptcCoreProvider
+           << MetadataInfo::IptcCoreRightsUsageTerms
+           << MetadataInfo::IptcCoreSource
+           << MetadataInfo::IptcCoreCreatorJobTitle
+           << MetadataInfo::IptcCoreSource;
+
+    QVariantList metadataInfos = m_metadata.getMetadataFields(fields);
+
+    if (!hasValidField(metadataInfos))
+        return;
+
+    ImageCopyright copyright(m_scanInfo.id);
+
+    if (!metadataInfos[0].isNull())
+    {
+        QMap<QString, QVariant> map = metadataInfos[0].toMap();
+        // replace all entries for the first time, after that, add entries
+        ImageCopyright::ReplaceMode mode = ImageCopyright::ReplaceAllEntries;
+        for (QMap<QString, QVariant>::iterator it = map.begin(); it != map.end(); ++it)
+        {
+            copyright.setCopyrightNotice(it.value().toString(), it.key(), mode);
+            mode = ImageCopyright::ReplaceLanguageEntry;
+        }
+    }
+    if (!metadataInfos[1].isNull())
+    {
+        QList<QVariant> list = metadataInfos[1].toList();
+        ImageCopyright::ReplaceMode mode = ImageCopyright::ReplaceAllEntries;
+        foreach(const QVariant &var, list)
+        {
+            copyright.setCreator(var.toString(), mode);
+            mode = ImageCopyright::AddEntryToExisting;
+        }
+    }
+    if (!metadataInfos[2].isNull())
+    {
+        copyright.setProvider(metadataInfos[2].toString());
+    }
+    if (!metadataInfos[3].isNull())
+    {
+        QMap<QString, QVariant> map = metadataInfos[0].toMap();
+        ImageCopyright::ReplaceMode mode = ImageCopyright::ReplaceAllEntries;
+        for (QMap<QString, QVariant>::iterator it = map.begin(); it != map.end(); ++it)
+        {
+            copyright.setRightsUsageTerms(it.value().toString(), it.key(), mode);
+            mode = ImageCopyright::ReplaceLanguageEntry;
+        }
+    }
+    if (!metadataInfos[4].isNull())
+    {
+        copyright.setSource(metadataInfos[4].toString());
+    }
+    if (!metadataInfos[5].isNull())
+    {
+        copyright.setCreatorJobTitle(metadataInfos[5].toString());
+    }
+    if (!metadataInfos[6].isNull())
+    {
+        copyright.setInstructions(metadataInfos[6].toString());
+    }
 }
 
 void ImageScanner::scanIPTCCore()
 {
-    // TODO or remove
+    MetadataFields fields;
+    fields << MetadataInfo::IptcCoreCountryCode
+           << MetadataInfo::IptcCoreCountry
+           << MetadataInfo::IptcCoreCity
+           << MetadataInfo::IptcCoreLocation
+           << MetadataInfo::IptcCoreProvinceState
+           << MetadataInfo::IptcCoreIntellectualGenre
+           << MetadataInfo::IptcCoreJobID
+           << MetadataInfo::IptcCoreScene
+           << MetadataInfo::IptcCoreSubjectCode;
+
+    QVariantList metadataInfos = m_metadata.getMetadataFields(fields);
+
+    if (!hasValidField(metadataInfos))
+        return;
+
+    DatabaseAccess access;
+    for (int i=0; i<metadataInfos.size(); i++)
+    {
+        const QVariant &var = metadataInfos[i];
+
+        if (var.isNull())
+            continue;
+
+        // Data is of type String or StringList (Scene and SubjectCode)
+        if (var.type() == QVariant::String)
+        {
+            access.db()->setImageProperty(m_scanInfo.id, iptcCorePropertyName(fields[i]), var.toString());
+        }
+        else if (var.type() == QVariant::StringList)
+        {
+            QStringList list = var.toStringList();
+            QString property = iptcCorePropertyName(fields[i]);
+            foreach(const QString &str, list)
+                access.db()->setImageProperty(m_scanInfo.id, property, str);
+        }
+    }
 }
 
 void ImageScanner::scanTags()
@@ -450,6 +550,51 @@ QString ImageScanner::colorModelToString(DImg::COLORMODEL colorModel)
         case DImg::COLORMODELUNKNOWN:
         default:
             return i18nc("Color Model: Unknown", "Unknown");
+    }
+}
+
+QString ImageScanner::iptcCorePropertyName(MetadataInfo::Field field)
+{
+    // These strings are specified in DBSCHEMA.ods
+    switch (field)
+    {
+        // copyright table
+        case MetadataInfo::IptcCoreCopyrightNotice:
+            return "copyrightNotice";
+        case MetadataInfo::IptcCoreCreator:
+            return "creator";
+        case MetadataInfo::IptcCoreProvider:
+            return "provider";
+        case MetadataInfo::IptcCoreRightsUsageTerms:
+            return "rightsUsageTerms";
+        case MetadataInfo::IptcCoreSource:
+            return "source";
+        case MetadataInfo::IptcCoreCreatorJobTitle:
+            return "creatorJobTitle";
+        case MetadataInfo::IptcCoreInstructions:
+            return "instructions";
+
+        // ImageProperties table
+        case MetadataInfo::IptcCoreCountryCode:
+            return "countryCode";
+        case MetadataInfo::IptcCoreCountry:
+            return "country";
+        case MetadataInfo::IptcCoreCity:
+            return "city";
+        case MetadataInfo::IptcCoreLocation:
+            return "location";
+        case MetadataInfo::IptcCoreProvinceState:
+            return "provinceState";
+        case MetadataInfo::IptcCoreIntellectualGenre:
+            return "intellectualGenre";
+        case MetadataInfo::IptcCoreJobID:
+            return "jobId";
+        case MetadataInfo::IptcCoreScene:
+            return "scene";
+        case MetadataInfo::IptcCoreSubjectCode:
+            return "subjectCode";
+        default:
+            return QString();
     }
 }
 

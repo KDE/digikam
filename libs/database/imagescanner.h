@@ -103,6 +103,13 @@ public:
     static QString formatToString(const QString &format);
     static QString colorModelToString(DImg::COLORMODEL colorModel);
 
+    /**
+     * Helper method to return official property name by which
+     * IPTC core properties are stored in the database (ImageCopyright and ImageProperties table).
+     * Allowed arguments: All MetadataInfo::Fields starting with "IptcCore..."
+     */
+    static QString iptcCorePropertyName(MetadataInfo::Field field);
+
 protected:
 
     void scanFile();
