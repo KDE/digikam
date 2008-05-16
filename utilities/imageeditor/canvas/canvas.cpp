@@ -914,12 +914,61 @@ bool Canvas::exifRotated()
     return d->im->exifRotated();
 }
 
+double Canvas::snapZoom(double zoom)
+{
+    // If the zoom value gets changed from d->zoom to zoom
+    // across 50%, 100% or fit-to-window, then return the
+    // the corresponding special value. Otherwise zoom is returned unchanged.
+    double fit = calcAutoZoomFactor();
+    QValueList<double> snapValues;
+    snapValues.append(0.5);
+    snapValues.append(1.0);
+    snapValues.append(fit);
+
+    qHeapSort(snapValues);
+    QValueList<double>::const_iterator it;
+
+    if (d->zoom < zoom) 
+    {
+        for(it = snapValues.constBegin(); it != snapValues.constEnd(); ++it)
+        {
+            double z = *it;
+            if ((d->zoom < z) && (zoom > z))
+            {
+                 zoom = z;
+                 break;
+            }
+        }
+    } 
+    else
+    { 
+        // We need to go through the list in reverse order,
+        // however, qCopyBackward does not seem to work here, so 
+        // a simple for loop over integers is used instead.
+        for(int i=snapValues.size()-1; i>=0; i--) 
+        {
+            double z = snapValues[i];
+            if ((d->zoom > z) && (zoom < z))
+            {
+                 zoom = z;
+                 break;
+            }
+        }
+    }
+
+    return zoom;
+}
+
+
+
 void Canvas::slotIncreaseZoom()
 {
     if (maxZoom())
         return;
 
-    setZoomFactor(d->zoom * d->zoomMultiplier);
+    double zoom = d->zoom * d->zoomMultiplier;
+    zoom = snapZoom(zoom);
+    setZoomFactor(zoom);
 }
 
 void Canvas::slotDecreaseZoom()
@@ -927,8 +976,45 @@ void Canvas::slotDecreaseZoom()
     if (minZoom())
         return;
 
-    setZoomFactor(d->zoom / d->zoomMultiplier);
+    double zoom = d->zoom / d->zoomMultiplier;
+    zoom = snapZoom(zoom);
+    setZoomFactor(zoom);
 }
+
+void Canvas::setZoomFactorSnapped(double zoom)
+{
+    double fit = calcAutoZoomFactor();
+
+    if (fabs(zoom-fit) < 0.05) 
+    {
+        // If 1.0 or 0.5 are even closer to zoom than fit, then choose these.
+        if  (fabs(zoom-fit) > fabs(zoom-1.0) )
+        {
+            zoom = 1.0;
+        }
+        else if  (fabs(zoom-fit) > fabs(zoom-0.5) )
+        {
+            zoom = 0.5;
+        }
+        else
+        {  
+            zoom = fit;
+        }
+    }
+    else
+    {
+        if (fabs(zoom-1.0) < 0.05) 
+        {
+            zoom = 1.0;
+        }
+        if (fabs(zoom-0.5) < 0.05) 
+        {
+            zoom = 0.5;
+        }
+    }
+    setZoomFactor(zoom);
+}
+
 
 double Canvas::zoomFactor()
 {
