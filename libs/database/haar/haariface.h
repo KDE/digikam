@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2003 by Ricardo Niederberger Cabral <nieder at mail dot ru>
  * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,6 +49,9 @@ public:
 
     HaarIface();
     ~HaarIface();
+
+    bool addImage(const QString& filename);
+    bool addImage(const QImage& image);
 
 private:
 
@@ -121,9 +125,6 @@ private:
 
     QImage      loadQImage(const QString &filename);
     void        fillPixelData(const QImage &image, Haar::ImageData *data);
-
-    bool        addImage(const QString& filename);
-    bool        addImage(const QImage& image);
 
     void        queryImgData(Haar::Idx* sig1, Haar::Idx* sig2, Haar::Idx* sig3,
                              double* avgl, int numres, int sketch);
