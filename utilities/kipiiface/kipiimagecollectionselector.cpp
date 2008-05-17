@@ -44,6 +44,8 @@
 #include "albumthumbnailloader.h"
 #include "searchtextbar.h"
 #include "treefolderitem.h"
+#include "searchfolderview.h"
+#include "timelinefolderview.h"
 #include "kipiinterface.h"
 #include "kipiimagecollection.h"
 #include "kipiimagecollectionselector.h"
@@ -58,23 +60,27 @@ public:
 
     KipiImageCollectionSelectorPriv()
     {
-        tab            = 0;
-        albumsView     = 0;
-        tagsView       = 0;
-        iface          = 0;
-        albumSearchBar = 0;
-        tagSearchBar   = 0;
+        tab               = 0;
+        albumsView        = 0;
+        tagsView          = 0;
+        searchesView      = 0;
+        iface             = 0;
+        albumsSearchBar   = 0;
+        tagsSearchBar     = 0;
+        searchesSearchBar = 0;
     }
 
     QTreeWidget   *albumsView;
     QTreeWidget   *tagsView;
+    QTreeWidget   *searchesView;
 
     KTabWidget    *tab;
 
     KipiInterface *iface; 
 
-    SearchTextBar *albumSearchBar;
-    SearchTextBar *tagSearchBar;
+    SearchTextBar *albumsSearchBar;
+    SearchTextBar *tagsSearchBar;
+    SearchTextBar *searchesSearchBar;
 };
 
 KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface *iface, QWidget *parent)
@@ -91,7 +97,7 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface *iface, Q
     d->albumsView->setAcceptDrops(false);
     d->albumsView->header()->hide();
 
-    d->albumSearchBar = new SearchTextBar(vbox1, "KipiImageCollectionSelectorAlbumSearchBar");
+    d->albumsSearchBar = new SearchTextBar(vbox1, "KipiImageCollectionSelectorAlbumSearchBar");
 
     vbox1->setMargin(0);
     vbox1->setSpacing(KDialog::spacingHint());
@@ -106,7 +112,7 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface *iface, Q
     d->tagsView->setAcceptDrops(false);
     d->tagsView->header()->hide();
 
-    d->tagSearchBar = new SearchTextBar(vbox2, "KipiImageCollectionSelectorTagSearchBar");
+    d->tagsSearchBar = new SearchTextBar(vbox2, "KipiImageCollectionSelectorTagSearchBar");
 
     vbox2->setMargin(0);
     vbox2->setSpacing(KDialog::spacingHint());
@@ -114,8 +120,24 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface *iface, Q
 
     // -------------------------------------------------------------------------------
 
+    KVBox *vbox3    = new KVBox(d->tab);
+    d->searchesView = new QTreeWidget(vbox3);
+    d->searchesView->setDragEnabled(false);
+    d->searchesView->setDropIndicatorShown(false);
+    d->searchesView->setAcceptDrops(false);
+    d->searchesView->header()->hide();
+
+    d->searchesSearchBar = new SearchTextBar(vbox3, "KipiImageCollectionSelectorTagSearchBar");
+
+    vbox3->setMargin(0);
+    vbox3->setSpacing(KDialog::spacingHint());
+    vbox3->setStretchFactor(d->searchesView, 10);
+
+    // -------------------------------------------------------------------------------
+
     d->tab->addTab(vbox1, i18n("My Albums"));
     d->tab->addTab(vbox2, i18n("My Tags"));
+    d->tab->addTab(vbox3, i18n("My Searches"));
 
     QHBoxLayout *hlay = new QHBoxLayout(this);
     hlay->addWidget(d->tab);
@@ -126,6 +148,7 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface *iface, Q
 
     populateTreeView(AlbumManager::instance()->allPAlbums(), d->albumsView); 
     populateTreeView(AlbumManager::instance()->allTAlbums(), d->tagsView); 
+    populateTreeView(AlbumManager::instance()->allSAlbums(), d->searchesView); 
 
     // ------------------------------------------------------------------------------------
 
@@ -135,11 +158,17 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface *iface, Q
     connect(d->tagsView, SIGNAL(itemChanged(QTreeWidgetItem*, int)),
             this, SIGNAL(selectionChanged()));
 
-    connect(d->albumSearchBar, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotAlbumSearchTextChanged(const QString&)));
+    connect(d->searchesView, SIGNAL(itemChanged(QTreeWidgetItem*, int)),
+            this, SIGNAL(selectionChanged()));
 
-    connect(d->tagSearchBar, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotTagSearchTextChanged(const QString&)));
+    connect(d->albumsSearchBar, SIGNAL(textChanged(const QString&)),
+            this, SLOT(slotAlbumsSearchTextChanged(const QString&)));
+
+    connect(d->tagsSearchBar, SIGNAL(textChanged(const QString&)),
+            this, SLOT(slotTagsSearchTextChanged(const QString&)));
+               
+    connect(d->searchesSearchBar, SIGNAL(textChanged(const QString&)),
+            this, SLOT(slotSearchesSearchTextChanged(const QString&)));
 }
 
 KipiImageCollectionSelector::~KipiImageCollectionSelector() 
@@ -166,6 +195,12 @@ void KipiImageCollectionSelector::populateTreeView(const AlbumList& aList, QTree
                 TAlbum* talbum = dynamic_cast<TAlbum*>(album);
                 if (talbum)
                     ritem->setIcon(0, AlbumThumbnailLoader::instance()->getStandardTagIcon(talbum));
+                else
+                {
+                    SAlbum* salbum = dynamic_cast<SAlbum*>(album);
+                    if (salbum)
+                        ritem->setIcon(0, KIcon("edit-find"));
+                }
             }
         }
         else
@@ -177,6 +212,12 @@ void KipiImageCollectionSelector::populateTreeView(const AlbumList& aList, QTree
                 continue;
             }
 
+            SAlbum* salbum = dynamic_cast<SAlbum*>(album);
+            if (salbum && 
+                (salbum->title() == SearchFolderView::currentSearchViewSearchName() ||
+                 salbum->title() == TimeLineFolderView::currentTimeLineSearchName()))
+                continue;
+            
             item = new TreeAlbumCheckListItem(pitem, album);
         }
 
@@ -190,6 +231,12 @@ void KipiImageCollectionSelector::populateTreeView(const AlbumList& aList, QTree
                 TAlbum* talbum = dynamic_cast<TAlbum*>(album);
                 if (talbum)
                     item->setIcon(0, AlbumThumbnailLoader::instance()->getStandardTagIcon(talbum));
+                else
+                {
+                    SAlbum* salbum = dynamic_cast<SAlbum*>(album);
+                    if (salbum)
+                        item->setIcon(0, KIcon("edit-find"));
+                }
             }
 
             if (album == AlbumManager::instance()->currentAlbum())
@@ -232,12 +279,24 @@ QList<KIPI::ImageCollection> KipiImageCollectionSelector::selectedImageCollectio
          ++it2;
     }
 
+    QTreeWidgetItemIterator it3(d->searchesView, QTreeWidgetItemIterator::Checked);
+    while (*it3)
+    {
+        TreeAlbumCheckListItem* item = dynamic_cast<TreeAlbumCheckListItem*>(*it3);
+        if (item)
+        {
+            KipiImageCollection *col = new KipiImageCollection(KipiImageCollection::AllItems, item->album(), ext);
+            list.append(col);
+         }
+         ++it3;
+    }
+
     DDebug() << list.count() << " collection items selected" << endl;
 
     return list;
 }
 
-void KipiImageCollectionSelector::slotAlbumSearchTextChanged(const QString& filter)
+void KipiImageCollectionSelector::slotAlbumsSearchTextChanged(const QString& filter)
 {
     QString search = filter.toLower();
 
@@ -302,10 +361,10 @@ void KipiImageCollectionSelector::slotAlbumSearchTextChanged(const QString& filt
         }
     }
 
-    d->albumSearchBar->slotSearchResult(atleastOneMatch);
+    d->albumsSearchBar->slotSearchResult(atleastOneMatch);
 }
 
-void KipiImageCollectionSelector::slotTagSearchTextChanged(const QString& filter)
+void KipiImageCollectionSelector::slotTagsSearchTextChanged(const QString& filter)
 {
     QString search = filter.toLower();
 
@@ -370,7 +429,75 @@ void KipiImageCollectionSelector::slotTagSearchTextChanged(const QString& filter
         }
     }
 
-    d->tagSearchBar->slotSearchResult(atleastOneMatch);
+    d->tagsSearchBar->slotSearchResult(atleastOneMatch);
+}
+
+void KipiImageCollectionSelector::slotSearchesSearchTextChanged(const QString& filter)
+{
+    QString search = filter.toLower();
+
+    bool atleastOneMatch = false;
+
+    AlbumList tList = AlbumManager::instance()->allSAlbums();
+    for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
+    {
+        SAlbum* salbum  = (SAlbum*)(*it);
+
+        // don't touch the root Album
+        if (salbum->isRoot())
+            continue;
+
+        bool match = salbum->title().toLower().contains(search);
+        if (!match)
+        {
+            // check if any of the parents match the search
+            Album* parent = salbum->parent();
+            while (parent && !parent->isRoot())
+            {
+                if (parent->title().toLower().contains(search))
+                {
+                    match = true;
+                    break;
+                }
+
+                parent = parent->parent();
+            }
+        }
+
+        if (!match)
+        {
+            // check if any of the children match the search
+            AlbumIterator it(salbum);
+            while (it.current())
+            {
+                if ((*it)->title().toLower().contains(search))
+                {
+                    match = true;
+                    break;
+                }
+                ++it;
+            }
+        }
+
+        TreeAlbumCheckListItem* viewItem = (TreeAlbumCheckListItem*) salbum->extraData(d->tagsView);
+
+        if (match)
+        {
+            atleastOneMatch = true;
+
+            if (viewItem)
+                viewItem->setHidden(false);
+        }
+        else
+        {
+            if (viewItem)
+            {
+                viewItem->setHidden(true);
+            }
+        }
+    }
+
+    d->searchesSearchBar->slotSearchResult(atleastOneMatch);
 }
 
 }  // namespace Digikam

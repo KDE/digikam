@@ -64,8 +64,9 @@ private:
 
 private slots: 
 
-    void slotAlbumSearchTextChanged(const QString&);
-    void slotTagSearchTextChanged(const QString&);
+    void slotAlbumsSearchTextChanged(const QString&);
+    void slotTagsSearchTextChanged(const QString&);
+    void slotSearchesSearchTextChanged(const QString&);
 
 private:
 
