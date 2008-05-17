@@ -31,6 +31,7 @@ INCLUDE_DIRECTORIES(
                      # database libs
                      ../libs/database
                      ../libs/database/sqlite2
+                     ../libs/database/haar
 
                      # shared utilities
                      ../utilities/slideshow
