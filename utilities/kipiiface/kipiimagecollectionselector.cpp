@@ -479,7 +479,7 @@ void KipiImageCollectionSelector::slotSearchesSearchTextChanged(const QString& f
             }
         }
 
-        TreeAlbumCheckListItem* viewItem = (TreeAlbumCheckListItem*) salbum->extraData(d->tagsView);
+        TreeAlbumCheckListItem* viewItem = (TreeAlbumCheckListItem*) salbum->extraData(d->searchesView);
 
         if (match)
         {
