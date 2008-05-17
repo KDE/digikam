@@ -113,7 +113,7 @@ QImage HaarIface::loadQImage(const QString &filename)
     if (isJpegImage(filename))
     {
         // use fast jpeg loading
-        if (!loadJPEGScaled(image, filename, NUM_PIXELS))
+        if (!loadJPEGScaled(image, filename, HAAR_NUM_PIXELS))
         {
             // try QT now.
             if (!image.load(filename))
@@ -127,20 +127,20 @@ QImage HaarIface::loadQImage(const QString &filename)
             return QImage();
     }
 
-    image = image.scaled(NUM_PIXELS, NUM_PIXELS);
+    image = image.scaled(HAAR_NUM_PIXELS, HAAR_NUM_PIXELS);
     return image;
 }
 
 void HaarIface::fillPixelData(const QImage &image, Haar::ImageData *data)
 {
-    for (int i = 0, cn = 0; i < NUM_PIXELS; i++)
+    for (int i = 0, cn = 0; i < HAAR_NUM_PIXELS; i++)
     {
         // Get a scanline:
         QRgb *line = (QRgb*)image.scanLine(i);
 
-        for (int j = 0; j < NUM_PIXELS; j++)
+        for (int j = 0; j < HAAR_NUM_PIXELS; j++)
         {
-            QRgb pixel   = line[j];
+            QRgb pixel      = line[j];
             data->data1[cn] = qRed  (pixel);
             data->data2[cn] = qGreen(pixel);
             data->data3[cn] = qBlue (pixel);
@@ -170,7 +170,7 @@ bool HaarIface::addImage(const QImage& image)
     haar.calcHaar(m_data, nsig->sig1, nsig->sig2, nsig->sig3, nsig->avgl);
 
     // populate buckets
-    for (int i = 0; i < NUM_COEFS; i++)
+    for (int i = 0; i < HAAR_NUM_COEFS; i++)
     {
         int x, t;
 
@@ -195,7 +195,7 @@ bool HaarIface::addImage(const QImage& image)
     return 1;
 }
 
-/** sig1,2,3 are int arrays of length NUM_COEFS
+/** sig1,2,3 are int arrays of length HAAR_NUM_COEFS
     avgl is the average luminance
     numres is the max number of results
     sketch (0 or 1) tells which set of haar weights to use
@@ -217,7 +217,7 @@ void HaarIface::queryImgData(Haar::Idx* sig1, Haar::Idx* sig2, Haar::Idx* sig3,
         }
     }
 
-    for (int b = 0; b < NUM_COEFS; b++)
+    for (int b = 0; b < HAAR_NUM_COEFS; b++)
     {
         // for every coef on a sig
         for (c = 0; c < 3; c++)
@@ -444,9 +444,9 @@ bool HaarIface::queryImgFile(const QString& filename, int numres, int sketch)
     double     avgl[3];
     int        cn = 0;
     QImage     image;
-    Haar::Idx  sig1[NUM_COEFS];
-    Haar::Idx  sig2[NUM_COEFS];
-    Haar::Idx  sig3[NUM_COEFS];
+    Haar::Idx  sig1[HAAR_NUM_COEFS];
+    Haar::Idx  sig2[HAAR_NUM_COEFS];
+    Haar::Idx  sig3[HAAR_NUM_COEFS];
     Haar::Unit cdata1[16384];
     Haar::Unit cdata2[16384];
     Haar::Unit cdata3[16384];

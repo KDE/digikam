@@ -60,9 +60,9 @@ private:
     typedef struct sigStruct_
     {
         long int  id;               // picture id
-        Haar::Idx sig1[NUM_COEFS];  // Y positions with largest magnitude
-        Haar::Idx sig2[NUM_COEFS];  // I positions with largest magnitude
-        Haar::Idx sig3[NUM_COEFS];  // Q positions with largest magnitude
+        Haar::Idx sig1[HAAR_NUM_COEFS];  // Y positions with largest magnitude
+        Haar::Idx sig2[HAAR_NUM_COEFS];  // I positions with largest magnitude
+        Haar::Idx sig3[HAAR_NUM_COEFS];  // Q positions with largest magnitude
         double    avgl[3];          // YIQ for position [0,0]
         double    score;            // used when doing queries
 
@@ -96,7 +96,7 @@ private:
     unsigned char m_imgBin[16384];
 
     /** Lists of picture ids, indexed by [color-channel][sign][position], i.e.,
-        R=0/G=1/B=2, pos=0/neg=1, (i*NUM_PIXELS+j)
+        R=0/G=1/B=2, pos=0/neg=1, (i*HAAR_NUM_PIXELS+j)
     */
     long_list     m_imgbuckets[3][2][16384];
 

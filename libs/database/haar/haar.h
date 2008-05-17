@@ -36,15 +36,15 @@
 
 /** Number of pixels on one side of image; required to be a power of 2.
 */
-#define NUM_PIXELS 128
+#define HAAR_NUM_PIXELS 128
 
 /** Totals pixels in a square image.
 */
-#define NUM_PIXELS_SQUARED (NUM_PIXELS * NUM_PIXELS)
+#define HAAR_NUM_PIXELS_SQUARED (HAAR_NUM_PIXELS * HAAR_NUM_PIXELS)
 
 /** Number of Haar coeffients we retain as signature for an image.
 */
-#define NUM_COEFS 40
+#define HAAR_NUM_COEFS 40
 
 namespace Digikam
 {
