@@ -939,9 +939,9 @@ double Canvas::snapZoom(double zoom)
                  break;
             }
         }
-    } 
+    }
     else
-    { 
+    {
         // We need to go through the list in reverse order,
         // however, qCopyBackward does not seem to work here, so 
         // a simple for loop over integers is used instead.
@@ -959,15 +959,13 @@ double Canvas::snapZoom(double zoom)
     return zoom;
 }
 
-
-
 void Canvas::slotIncreaseZoom()
 {
     if (maxZoom())
         return;
 
     double zoom = d->zoom * d->zoomMultiplier;
-    zoom = snapZoom(zoom);
+    zoom        = snapZoom(zoom);
     setZoomFactor(zoom);
 }
 
@@ -977,7 +975,7 @@ void Canvas::slotDecreaseZoom()
         return;
 
     double zoom = d->zoom / d->zoomMultiplier;
-    zoom = snapZoom(zoom);
+    zoom        = snapZoom(zoom);
     setZoomFactor(zoom);
 }
 
@@ -985,7 +983,7 @@ void Canvas::setZoomFactorSnapped(double zoom)
 {
     double fit = calcAutoZoomFactor();
 
-    if (fabs(zoom-fit) < 0.05) 
+    if (fabs(zoom-fit) < 0.05)
     {
         // If 1.0 or 0.5 are even closer to zoom than fit, then choose these.
         if  (fabs(zoom-fit) > fabs(zoom-1.0) )
@@ -997,24 +995,23 @@ void Canvas::setZoomFactorSnapped(double zoom)
             zoom = 0.5;
         }
         else
-        {  
+        {
             zoom = fit;
         }
     }
     else
     {
-        if (fabs(zoom-1.0) < 0.05) 
+        if (fabs(zoom-1.0) < 0.05)
         {
             zoom = 1.0;
         }
-        if (fabs(zoom-0.5) < 0.05) 
+        if (fabs(zoom-0.5) < 0.05)
         {
             zoom = 0.5;
         }
     }
     setZoomFactor(zoom);
 }
-
 
 double Canvas::zoomFactor()
 {
