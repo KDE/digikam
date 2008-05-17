@@ -96,6 +96,7 @@ SET(digikamthemedesigner_SRCS
     ${libcameragui_SRCS}
     ${libsetup_SRCS}
     ${libbatch_SRCS}
+    ${libhaar_SRCS}
 
     main.cpp 
     mainwindow.cpp 
