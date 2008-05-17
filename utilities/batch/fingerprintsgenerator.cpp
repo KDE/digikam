@@ -165,7 +165,7 @@ void FingerPrintsGenerator::slotGotImagePreview(const LoadingDescription& desc, 
     QImage image = DImg(img).copyQImage();
 
     // TODO: compute Haar fingerprint here.
-    d->haarIface.addImage(image);
+    d->haarIface.addImage(image.scaled(HAAR_NUM_PIXELS, HAAR_NUM_PIXELS));
 
     addedAction(QPixmap::fromImage(image), desc.filePath);
     advance(1);
