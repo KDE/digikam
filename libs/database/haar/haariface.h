@@ -121,10 +121,14 @@ private:
 
     QImage      loadQImage(const QString &filename);
     void        fillPixelData(const QImage &image, Haar::ImageData *data);
+
     bool        addImage(const QString& filename);
+    bool        addImage(const QImage& image);
+
     void        queryImgData(Haar::Idx* sig1, Haar::Idx* sig2, Haar::Idx* sig3,
                              double* avgl, int numres, int sketch);
     bool        queryImgFile(const QString& filename, int numres, int sketch);
+
     /*
     long_list   queryImgDataForThres(sigMap* tsigs, Haar::Idx* sig1, Haar::Idx* sig2, Haar::Idx* sig3,
                                      double* avgl, float thresd, int sketch);

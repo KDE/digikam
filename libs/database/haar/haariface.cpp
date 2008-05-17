@@ -153,6 +153,11 @@ void HaarIface::fillPixelData(const QImage &image, Haar::ImageData *data)
 bool HaarIface::addImage(const QString& filename)
 {
     QImage image = loadQImage(filename);
+    return (addImage(image));
+}
+
+bool HaarIface::addImage(const QImage& image)
+{
     if (image.isNull())
         return false;
 
