@@ -41,6 +41,8 @@
 
 #include "haar.h"
 
+using namespace std;
+
 namespace Digikam
 {
 
