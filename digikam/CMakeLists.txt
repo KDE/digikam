@@ -49,7 +49,7 @@ INCLUDE_DIRECTORIES(
                      ../utilities/lighttable
                      ../utilities/searchwindow
                      ../digikam
-		     ../
+                     ../
                      # config-digikam.h
                      ${CMAKE_CURRENT_BINARY_DIR}/../
                      # external library paths
@@ -127,7 +127,6 @@ INSTALL(TARGETS digikam DESTINATION ${LIB_INSTALL_DIR} )
 SET(digikamdatabase_LIB_SRCS
                       ${libdatabase_SRCS}
                       ${libsqlite2_SRCS}
-                      ${libhaar_SRCS}
    )
 
 KDE4_ADD_LIBRARY(digikamdatabase SHARED ${digikamdatabase_LIB_SRCS})
@@ -151,6 +150,7 @@ SET(digikam_bin_SRCS
                      ${libsetup_SRCS}
                      ${libcameragui_SRCS}
                      ${liblighttable_SRCS}
+                     ${libhaar_SRCS}
                      ${libbatch_SRCS}
                      ${libthemeengine_SRCS}
                      ${libkipiiface_SRCS}
