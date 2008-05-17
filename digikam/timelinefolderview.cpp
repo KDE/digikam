@@ -91,7 +91,6 @@ private:
 TimeLineFolderView::TimeLineFolderView(QWidget* parent)
                   : FolderView(parent, "TimeLineFolderView")
 {
-    m_currentTimeLineSearchName = QString("_Current_Time_Line_Search_");
     addColumn(i18n("My Date Searches"));
     setResizeMode(Q3ListView::LastColumn);
     setRootIsDecorated(false);
@@ -119,9 +118,9 @@ TimeLineFolderView::~TimeLineFolderView()
 {
 }
 
-QString TimeLineFolderView::currentTimeLineSearchName() const
+QString TimeLineFolderView::currentTimeLineSearchName()
 {
-    return m_currentTimeLineSearchName;
+    return QString("_Current_Time_Line_Search_");
 }
 
 void TimeLineFolderView::slotTextSearchFilterChanged(const QString& filter)

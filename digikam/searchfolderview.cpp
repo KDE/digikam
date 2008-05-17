@@ -221,7 +221,7 @@ void SearchFolderView::searchDelete(SAlbum* album)
 
 QString SearchFolderView::currentSearchViewSearchName()
 {
-    return "_Current_Search_View_Search_";
+    return QString("_Current_Search_View_Search_");
 }
 
 void SearchFolderView::slotAlbumAdded(Album* a)
