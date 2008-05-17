@@ -151,6 +151,8 @@ private slots:
     void slotRebuildAllThumbsDone();
     void slotSyncAllPicturesMetadata();
     void slotSyncAllPicturesMetadataDone();
+    void slotRebuildAllFingerPrints();
+    void slotRebuildAllFingerPrintsDone();
 
     void slotChangeTheme(const QString& theme);
     void slotThemeChanged();

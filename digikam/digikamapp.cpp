@@ -102,6 +102,7 @@
 #include "imageattributeswatch.h"
 #include "batchthumbsgenerator.h"
 #include "batchalbumssyncmetadata.h"
+#include "fingerprintsgenerator.h"
 #include "rawcameradlg.h"
 #include "dlogoaction.h"
 #include "dio.h"
@@ -975,6 +976,12 @@ void DigikamApp::setupActions()
     KAction *rebuildThumbsAction = new KAction(KIcon("run-build"), i18n("Rebuild all Thumbnails..."), this);
     connect(rebuildThumbsAction, SIGNAL(triggered()), this, SLOT(slotRebuildAllThumbs()));
     actionCollection()->addAction("thumbs_rebuild", rebuildThumbsAction);
+
+    // -----------------------------------------------------------
+
+    KAction *rebuildFingerPrintsAction = new KAction(KIcon("run-build"), i18n("Rebuild all FingerPrints..."), this);
+    connect(rebuildFingerPrintsAction, SIGNAL(triggered()), this, SLOT(slotRebuildAllFingerPrints()));
+    actionCollection()->addAction("fingerprints_rebuild", rebuildFingerPrintsAction);
 
     // -----------------------------------------------------------
 
@@ -2167,6 +2174,27 @@ void DigikamApp::slotSyncAllPicturesMetadata()
 void DigikamApp::slotSyncAllPicturesMetadataDone()
 {
     d->view->applySettings();
+}
+
+void DigikamApp::slotRebuildAllFingerPrints()
+{
+    QString msg = i18n("Rebuilding all image finger-prints can take some time.\n"
+                       "Do you want to continue?");
+    int result = KMessageBox::warningContinueCancel(this, msg);
+    if (result != KMessageBox::Continue)
+        return;
+
+    FingerPrintsGenerator *fingerprintsGenerator = new FingerPrintsGenerator(this);
+
+    connect(fingerprintsGenerator, SIGNAL(signalRebuildAllFingerPrintsDone()),
+            this, SLOT(slotRebuildAllFingerPrintsDone()));
+
+    fingerprintsGenerator->exec();
+}
+
+void DigikamApp::slotRebuildAllFingerPrintsDone()
+{
+    // TODO : do something here...
 }
 
 void DigikamApp::slotDonateMoney()
