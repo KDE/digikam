@@ -324,9 +324,9 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     QWhatsThis::add( d->autoRotateCheck, i18n("<p>Toggle on this option if you want images automatically "
                      "rotated or flipped using EXIF information provided by the camera."));
     QWhatsThis::add( d->setPhotographerId, i18n("<p>Toggle on this option to store the default "
-                     "photographer identity into IPTC tags using digiKam's metadata settings."));
+                     "photographer identity in the IPTC tags using digiKam's metadata settings."));
     QWhatsThis::add( d->setCredits, i18n("<p>Toggle on this option to store the default credit "
-                     "and copyright information into IPTC tags using digiKam's metadata settings."));
+                     "and copyright information in the IPTC tags using digiKam's metadata settings."));
     QWhatsThis::add( d->fixDateTimeCheck, i18n("<p>Toggle on this option to set date and time metadata "
                      "tags to the right values if your camera does not set "
                      "these tags correctly when pictures are taken. The values will "

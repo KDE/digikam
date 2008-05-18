@@ -162,7 +162,7 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
     m_smoothLevel = new KIntNumInput(gboxSettings);
     m_smoothLevel->setRange(0, 5, 1, true);
     m_smoothLevel->setValue(1);
-    QWhatsThis::add(m_smoothLevel, i18n("<p>Sets the smoothness value to blur the border "
+    QWhatsThis::add(m_smoothLevel, i18n("<p>Sets the smoothness value when blurring the border "
                                         "of the changed pixels. "
                                         "This leads to a more naturally looking pupil."));
     gridSettings->addMultiCellWidget(m_smoothLabel, 5, 5, 0, 4);
