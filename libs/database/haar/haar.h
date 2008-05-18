@@ -81,6 +81,7 @@ public:
     enum { NumberOfCoefficients = 40 };
 
     typedef double Unit;
+    // Keep this definition constant at qint32 (guaranteed binary size!)
     typedef qint32 Idx;
 
     class ImageData
@@ -112,6 +113,7 @@ public:
             unsigned char m_bin[16384];
 
             unsigned char bin(int index) { return m_bin[index]; }
+            unsigned char binAbs(int index) { return (index > 0) ? m_bin[index] : m_bin[-index]; }
     };
 
     class Weights
