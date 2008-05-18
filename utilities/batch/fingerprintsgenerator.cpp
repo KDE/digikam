@@ -147,7 +147,8 @@ void FingerPrintsGenerator::processOne()
 {
     if (d->cancel) return;
     QString path = d->allPicturesPath.first();
-    d->previewLoadThread->load(LoadingDescription(path, 128, false));
+    d->previewLoadThread->load(LoadingDescription(path, HaarIface::preferredSize(),
+                               AlbumSettings::instance()->getExifRotate()));
 }
 
 void FingerPrintsGenerator::complete()
@@ -161,13 +162,12 @@ void FingerPrintsGenerator::complete()
 }
 
 void FingerPrintsGenerator::slotGotImagePreview(const LoadingDescription& desc, const DImg& img)
-{    
-    QImage image = DImg(img).copyQImage();
+{
+    // compute Haar fingerprint
+    d->haarIface.indexImage(desc.filePath, img);
 
-    // TODO: compute Haar fingerprint here.
-    d->haarIface.addImage(image.scaled(HAAR_NUM_PIXELS, HAAR_NUM_PIXELS));
-
-    addedAction(QPixmap::fromImage(image), desc.filePath);
+    QPixmap pix = DImg(img).smoothScale(128, 128, Qt::KeepAspectRatio).convertToPixmap();
+    addedAction(pix, desc.filePath);
     advance(1);
     d->allPicturesPath.removeFirst();
     if (d->allPicturesPath.isEmpty())
