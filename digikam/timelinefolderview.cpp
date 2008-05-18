@@ -135,13 +135,8 @@ void TimeLineFolderView::slotTextSearchFilterChanged(const QString& filter)
         SAlbum* salbum               = (SAlbum*)(*it);
         TimeLineFolderItem* viewItem = (TimeLineFolderItem*) salbum->extraData(this);
 
-       // Check if a special url query exist to identify a SAlbum dedicaced to Date Search
-        // used with TimeLine.
-        KUrl url     = salbum->kurl();
-        QString type = url.queryItem("type");
-
         if (salbum->title().toLower().contains(search) &&
-            type == QString("datesearch") && 
+            !salbum->isNormalSearch() && 
             salbum->title() != currentTimeLineSearchName())
         {
             atleastOneMatch = true;
@@ -188,20 +183,15 @@ void TimeLineFolderView::slotAlbumAdded(Album* a)
     SAlbum *salbum  = dynamic_cast<SAlbum*>(a);
     if (!salbum) return;
 
-    // Check if a special url query exist to identify a SAlbum dedicaced to Date Search
-    KUrl url = salbum->kurl();
-    QMap<QString, QString> queries = url.queryItems();
-    if (queries.isEmpty()) return;
-
-    QString type = url.queryItem("type");
-    if (type != QString("datesearch")) return;
+    if (salbum->isNormalSearch())
+        return;
 
     // We will ignore the internal Dates Search Album used to perform selection from timeline.
-    QString name = url.queryItem("name");
-    if (name == currentTimeLineSearchName()) return;
+    if (salbum->title() == currentTimeLineSearchName()) 
+        return;
 
     TimeLineFolderItem* item = new TimeLineFolderItem(this, salbum);
-    item->setPixmap(0, SmallIcon("find", AlbumSettings::instance()->getDefaultTreeIconSize()));
+    item->setPixmap(0, SmallIcon("clock", AlbumSettings::instance()->getDefaultTreeIconSize()));
 }
 
 void TimeLineFolderView::slotAlbumDeleted(Album* a)
