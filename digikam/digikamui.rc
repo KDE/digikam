@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="46" name="digikam" >
+<gui version="47" name="digikam" >
 
  <MenuBar>
 
@@ -69,6 +69,9 @@
   </Menu>
 
   <Menu name="Tools"><text>&amp;Tools</text>
+        <Action name="search_quick" />
+        <Action name="search_advanced" />
+      <Separator/>
         <Action name="light_table" />
       <Separator/>
         <Action name="database_rescan" />

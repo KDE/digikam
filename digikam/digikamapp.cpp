@@ -950,6 +950,7 @@ void DigikamApp::setupActions()
                                                         d->view, SLOT(slotNewKeywordSearch()));
     findAction->setText(i18n("Search..."));
     findAction->setIcon(BarIcon("system-search"));
+    findAction->setShortcut(Qt::CTRL+Qt::Key_F);
 
     // -----------------------------------------------------------
 
