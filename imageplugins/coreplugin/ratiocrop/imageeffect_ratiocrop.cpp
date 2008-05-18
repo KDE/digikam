@@ -79,10 +79,10 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     QVBoxLayout* l         = new QVBoxLayout(frame);
     m_imageSelectionWidget = new ImageSelectionWidget(480, 320, frame);
     m_imageSelectionWidget->setWhatsThis(i18n("<p>Here you can see the aspect ratio selection preview "
-                                              "used for cropping. You can use the mouse for moving and "
-                                              "resizing the crop area. "
-                                              "Hold CTRL to move the opposite corner too. "
-                                              "Hold SHIFT to move the closest corner to the "
+                                              "used for cropping. You can use the mouse to move and "
+                                              "resize the crop area. "
+                                              "Press and hold the CTRL key to move the opposite corner too. "
+                                              "Press and hold the SHIFT key to move the closest corner to the "
                                               "mouse pointer."));
     l->setMargin(5);
     l->setSpacing(0);

@@ -357,34 +357,34 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
 
     item = new ListWidgetBWPreviewItem(m_bwFilters, i18n("No Lens Filter"), m_previewPixmapFactory, type);
     item->setWhatsThis(i18n("<b>No Lens Filter</b>:"
-                            "<p>Do not apply a lens filter to render the image.</p>"));
+                            "<p>Do not apply a lens filter when rendering the image.</p>"));
 
     ++type;
     item = new ListWidgetBWPreviewItem(m_bwFilters, i18n("Green Filter"), m_previewPixmapFactory, type);
     item->setWhatsThis(i18n("<b>Black & White with Green Filter</b>:"
-                            "<p>Simulate black and white film exposure using green filter. "
-                            "This provides a universal asset for all scenic shooting, especially suited "
-                            "for portraits photographed against sky.</p>"));
+                            "<p>Simulate black and white film exposure using a green filter. "
+                            "This is useful for all scenic shoots, especially "
+                            "portraits photographed against the sky.</p>"));
 
     ++type;
     item = new ListWidgetBWPreviewItem(m_bwFilters, i18n("Orange Filter"), m_previewPixmapFactory, type);
     item->setWhatsThis(i18n("<b>Black & White with Orange Filter</b>:"
-                            "<p>Simulate black and white film exposure using orange filter. "
-                            "This will enhances landscapes, marine scenes and aerial "
+                            "<p>Simulate black and white film exposure using an orange filter. "
+                            "This will enhance landscapes, marine scenes and aerial "
                             "photography.</p>"));
 
     ++type;
     item = new ListWidgetBWPreviewItem(m_bwFilters, i18n("Red Filter"), m_previewPixmapFactory, type);
     item->setWhatsThis(i18n("<b>Black & White with Red Filter</b>:"
-                            "<p>Simulate black and white film exposure using red filter. "
-                            "Using this one creates dramatic sky effects and simulates moonlight scenes "
-                            "in daytime.</p>"));
+                            "<p>Simulate black and white film exposure using a red filter. "
+                            "This creates dramatic sky effects, and simulates moonlight scenes "
+                            "in the daytime.</p>"));
 
     ++type;
     item = new ListWidgetBWPreviewItem(m_bwFilters, i18n("Yellow Filter"), m_previewPixmapFactory, type);
     item->setWhatsThis(i18n("<b>Black & White with Yellow Filter</b>:"
-                            "<p>Simulate black and white film exposure using yellow filter. "
-                            "Most natural tonal correction and improves contrast. Ideal for "
+                            "<p>Simulate black and white film exposure using a yellow filter. "
+                            "This has the most natural tonal correction, and improves contrast. Ideal for "
                             "landscapes.</p>"));
 
     m_strengthInput = new KIntNumInput(vbox);
@@ -392,7 +392,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     m_strengthInput->setRange(1, 5, 1);
     m_strengthInput->setSliderEnabled(true);
     m_strengthInput->setValue(1);
-    m_strengthInput->setWhatsThis(i18n("<p>Set here the strength adjustment of lens filter."));
+    m_strengthInput->setWhatsThis(i18n("<p>Here, set the strength adjustment of the lens filter."));
 
     // -------------------------------------------------------------
 
@@ -409,32 +409,32 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     item = new ListWidgetBWPreviewItem(m_bwTone, i18n("Sepia Tone"), m_previewPixmapFactory, type);
     item->setWhatsThis(i18n("<b>Black & White with Sepia Tone</b>:"
                             "<p>Gives a warm highlight and mid-tone while adding a bit of coolness to "
-                            "the shadows-very similar to the process of bleaching a print and "
+                            "the shadows - very similar to the process of bleaching a print and "
                             "re-developing in a sepia toner.</p>"));
 
     ++type;
     item = new ListWidgetBWPreviewItem(m_bwTone, i18n("Brown Tone"), m_previewPixmapFactory, type);
     item->setWhatsThis(i18n("<b>Black & White with Brown Tone</b>:"
-                            "<p>This filter is more neutral than Sepia Tone "
+                            "<p>This filter is more neutral than the Sepia Tone "
                             "filter.</p>"));
 
     ++type;
     item = new ListWidgetBWPreviewItem(m_bwTone, i18n("Cold Tone"), m_previewPixmapFactory, type);
     item->setWhatsThis(i18n("<b>Black & White with Cold Tone</b>:"
-                            "<p>Start subtle and replicate printing on a cold tone black and white "
+                            "<p>Start subtly and replicate printing on a cold tone black and white "
                             "paper such as a bromide enlarging "
                             "paper.</p>"));
 
     ++type;
     item = new ListWidgetBWPreviewItem(m_bwTone, i18n("Selenium Tone"), m_previewPixmapFactory, type);
     item->setWhatsThis(i18n("<b>Black & White with Selenium Tone</b>:"
-                            "<p>This effect replicate traditional selenium chemical toning done "
+                            "<p>This effect replicates traditional selenium chemical toning done "
                             "in the darkroom.</p>"));
 
     ++type;
     item = new ListWidgetBWPreviewItem(m_bwTone, i18n("Platinum Tone"), m_previewPixmapFactory, type);
     item->setWhatsThis(i18n("<b>Black & White with Platinum Tone</b>:"
-                            "<p>This effect replicate traditional platinum chemical toning done "
+                            "<p>This effect replicates traditional platinum chemical toning done "
                             "in the darkroom.</p>"));
 
     ++type;
