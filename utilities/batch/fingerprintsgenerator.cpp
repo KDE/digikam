@@ -102,7 +102,6 @@ FingerPrintsGenerator::~FingerPrintsGenerator()
 void FingerPrintsGenerator::slotRebuildFingerPrints()
 {
     setTitle(i18n("Processing..."));
-    QString filesFilter  = AlbumSettings::instance()->getAllFileFilter();
     AlbumList palbumList = AlbumManager::instance()->allPAlbums();
 
     // Get all digiKam albums collection pictures path.
@@ -120,16 +119,7 @@ void FingerPrintsGenerator::slotRebuildFingerPrints()
             albumItemsPath = access.db()->getItemURLsInAlbum((*it)->id());
         }
 
-        QStringList pathSorted;
-        for (QStringList::iterator it2 = albumItemsPath.begin();
-             !d->cancel && (it2 != albumItemsPath.end()); ++it2)
-        {
-            QFileInfo fi(*it2);
-            if (filesFilter.contains(fi.suffix()))
-                pathSorted.append(*it2);
-        }
-
-        d->allPicturesPath += pathSorted;
+        d->allPicturesPath += albumItemsPath;
     }
 
     setMaximum(d->allPicturesPath.count());
@@ -163,9 +153,11 @@ void FingerPrintsGenerator::complete()
 
 void FingerPrintsGenerator::slotGotImagePreview(const LoadingDescription& desc, const DImg& img)
 {
-    // compute Haar fingerprint
-    d->haarIface.indexImage(desc.filePath, img);
-
+    if (!img.isNull())
+    {
+        // compute Haar fingerprint
+        d->haarIface.indexImage(desc.filePath, img);
+    }
     QPixmap pix = DImg(img).smoothScale(128, 128, Qt::KeepAspectRatio).convertToPixmap();
     addedAction(pix, desc.filePath);
     advance(1);
