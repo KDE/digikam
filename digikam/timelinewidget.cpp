@@ -1516,7 +1516,7 @@ void TimeLineWidget::mousePressEvent(QMouseEvent *e)
     {
         QPoint pt(e->x(), e->y());
 
-        bool ctrlPressed    = e->button() & Qt::ControlButton;
+        bool ctrlPressed    = e->modifiers() & Qt::ControlButton;
         QDateTime ref       = dateTimeForPoint(pt, d->selMouseEvent);
         d->selStartDateTime = QDateTime();
         if (d->selMouseEvent) 
