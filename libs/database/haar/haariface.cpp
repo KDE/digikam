@@ -27,16 +27,29 @@
 
 #include <fstream>
 #include <cmath>
+#include <cstring>
 
 // QT Includes
 
+#include <QByteArray>
+#include <QDataStream>
 #include <QImage>
 #include <QImageReader>
+#include <QMap>
+
+// KDE includes
+
+#include <kurl.h>
 
 // Local includes.
 
 #include "ddebug.h"
 #include "jpegutils.h"
+#include "dimg.h"
+#include "imageinfo.h"
+#include "databaseaccess.h"
+#include "albumdb.h"
+#include "databasebackend.h"
 #include "haariface.h"
 
 using namespace std;
@@ -44,76 +57,337 @@ using namespace std;
 namespace Digikam
 {
 
-/** Weights for the Haar coefficients. Straight from the referenced paper
-    "Fast Multiresolution Image Querying"
-    by Charles E. Jacobs, Adam Finkelstein and David H. Salesin.
-    http://www.cs.washington.edu/homes/salesin/abstracts.html
-*/
-static const float s_haar_weights[2][6][3] =
+class DatabaseBlob
 {
-    // For scanned picture (sketch=0):
-    //   Y      I      Q        idx  total occurs
-    {{ 5.00, 19.21, 34.37 },   // 0   58.58       1 (`DC' component)
-        { 0.83,  1.26,  0.36 },   // 1    2.45       3
-        { 1.01,  0.44,  0.45 },   // 2    1.90       5
-        { 0.52,  0.53,  0.14 },   // 3    1.19       7
-        { 0.47,  0.28,  0.18 },   // 4    0.93       9
-        { 0.30,  0.14,  0.27 }},  // 5    0.71       16384-25=16359
+    /** This class encapsulates the Haar signature in a QByteArray
+     *  that can be stored as a BLOB in the database.
+     */
+    /*  Reading and writing is done in a platform-independent manner, which
+     *  induces a certain overhead, but which is necessary IMO. */
+public:
 
-    // For handdrawn/painted sketch (sketch=1):
-    //   Y      I      Q
-    {{ 4.04, 15.14, 22.62 },
-        { 0.78,  0.92,  0.40 },
-        { 0.46,  0.53,  0.63 },
-        { 0.42,  0.26,  0.25 },
-        { 0.41,  0.14,  0.15 },
-        { 0.32,  0.07,  0.38 }}
+    enum { Version = 1 };
+
+    DatabaseBlob()
+    {
+    }
+
+    /** Read the QByteArray into the Haar::SignatureData. */
+    void read(const QByteArray &array, Haar::SignatureData *data)
+    {
+        QDataStream stream(array);
+
+        // check version
+        qint32 version;
+        stream >> version;
+        if (version != Version)
+        {
+            DError() << "Unsupported binary version of Haar Blob in database";
+            return;
+        }
+
+        // read averages
+        for (int i=0; i<3; i++)
+            stream >> data->avg[i];
+
+        // read coefficients
+        for (int i=0; i<3; i++)
+            stream.readRawData((char*)data->sig[i], sizeof(qint32[Haar::NumberOfCoefficients]));
+    }
+
+    QByteArray write(Haar::SignatureData *data)
+    {
+        QByteArray array;
+        array.reserve(sizeof(qint32) + 3*sizeof(double) + sizeof(qint32)*Haar::NumberOfCoefficients);
+        QDataStream stream(&array, QIODevice::WriteOnly);
+
+        // write version
+        stream << (qint32)Version;
+
+        // write averages
+        for (int i=0; i<3; i++)
+            stream << data->avg[i];
+
+        // write coefficients
+        for (int i=0; i<3; i++)
+            stream.writeRawData((char*)data->sig[i], sizeof(qint32[Haar::NumberOfCoefficients]));
+
+        return array;
+    }
+};
+
+class HaarIfacePriv
+{
+public:
+
+    HaarIfacePriv()
+    {
+        data = 0;
+        bin  = 0;
+    }
+
+    ~HaarIfacePriv()
+    {
+        delete data;
+        delete bin;
+    }
+
+    void createLoadingBuffer()
+    {
+        if (!data)
+            data = new Haar::ImageData;
+    }
+
+    void createWeightBin()
+    {
+        if (!bin)
+            bin = new Haar::WeightBin;
+    }
+
+    Haar::ImageData *data;
+    Haar::WeightBin *bin;
 };
 
 HaarIface::HaarIface()
 {
-    m_data = new Haar::ImageData();
-    m_bin  = new Haar::WeightBin();
+    d = new HaarIfacePriv();
 }
 
 HaarIface::~HaarIface()
 {
-    //freeSigs();
+    delete d;
 }
 
-/** Clean-up fixed Haar weights
-*/
-/*
-void HaarIface::freeSigs()
+int HaarIface::preferredSize()
 {
-    for (sigIterator it = m_sigs.begin(); it != m_sigs.end(); it++)
-        delete (*it).second;
+    return Haar::NumberOfPixels;
 }
 
-int HaarIface::getImageWidth(long int id)
+bool HaarIface::indexImage(const QString& filename)
 {
-    if (!m_sigs.count(id))
-        return 0;
-    return m_sigs[id]->width;
+    QImage image = loadQImage(filename);
+    if (image.isNull())
+        return false;
+    return indexImage(filename, image);
 }
 
-int HaarIface::getImageHeight(long int id)
+bool HaarIface::indexImage(const QString& filename, const QImage &image)
 {
-    if (!m_sigs.count(id))
-        return 0;
-    return m_sigs[id]->height;
+    ImageInfo info(KUrl::fromPath(filename));
+    if (info.isNull())
+        return false;
+    return indexImage(info.id(), image);
 }
-*/
+
+bool HaarIface::indexImage(const QString& filename, const DImg &image)
+{
+    ImageInfo info(KUrl::fromPath(filename));
+    if (info.isNull())
+        return false;
+    return indexImage(info.id(), image);
+}
+
+bool HaarIface::indexImage(qlonglong imageid, const QImage& image)
+{
+    if (image.isNull())
+        return false;
+
+    d->createLoadingBuffer();
+    d->data->fillPixelData(image);
+
+    return indexImage(imageid);
+}
+
+bool HaarIface::indexImage(qlonglong imageid, const DImg& image)
+{
+    if (image.isNull())
+        return false;
+
+    d->createLoadingBuffer();
+    d->data->fillPixelData(image);
+
+    return indexImage(imageid);
+}
+
+// private method: d->data has been filled
+bool HaarIface::indexImage(qlonglong imageid)
+{
+    Haar::Calculator haar;
+    haar.transform(d->data);
+
+    Haar::SignatureData sig;
+    haar.calcHaar(d->data, &sig);
+
+    DatabaseAccess access;
+
+    // Store main entry
+    {
+        // prepare blob
+        DatabaseBlob blob;
+        QByteArray array = blob.write(&sig);
+
+        access.backend()->execSql(QString("REPLACE INTO ImageHaarMatrix "
+                                          " (imageid, modificationDate, uniqueHash, matrix) "
+                                          " SELECT id, modificationDate, uniqueHash, ? "
+                                          "  FROM Images WHERE id=?; "),
+                                  array, imageid);
+    }
+
+    return true;
+}
+
+QList<qlonglong> HaarIface::bestMatchesForFile(const QString& filename, int numberOfResults, SketchType type)
+{
+    QImage image = loadQImage(filename);
+    if (image.isNull())
+        return QList<qlonglong>();
+
+    d->createLoadingBuffer();
+    d->data->fillPixelData(image);
+
+    Haar::Calculator haar;
+    haar.transform(d->data);
+    Haar::SignatureData sig;
+    haar.calcHaar(d->data, &sig);
+
+    return bestMatches(&sig, numberOfResults, type);
+}
+
+QList<qlonglong> HaarIface::bestMatchesForImage(qlonglong imageid, int numberOfResults, SketchType type)
+{
+    QList<QVariant> values;
+    DatabaseAccess().backend()->execSql(QString("SELECT matrix FROM ImageHaarMatrix WHERE imageid=?"),
+                                        imageid, &values);
+
+    if (values.isEmpty())
+        return QList<qlonglong>();
+
+    DatabaseBlob blob;
+    Haar::SignatureData sig;
+
+    blob.read(values.first().toByteArray(), &sig);
+
+    return bestMatches(&sig, numberOfResults, type);
+}
+
+
+QList<qlonglong> HaarIface::bestMatches(Haar::SignatureData *querySig, int numberOfResults, SketchType type)
+{
+    d->createWeightBin();
+    // The table of constant weight factors applied to each channel and bin
+    Haar::Weights weights((Haar::Weights::SketchType)type);
+
+    // layout the query signature for fast lookup
+    Haar::SignatureMap queryMapY, queryMapI, queryMapQ;
+    queryMapY.fill(querySig->sig[0]);
+    queryMapI.fill(querySig->sig[1]);
+    queryMapQ.fill(querySig->sig[2]);
+    Haar::SignatureMap *queryMaps[3] = { &queryMapY, &queryMapI, &queryMapQ };
+
+    // Map imageid -> score. Lowest score is best.
+    // any newly inserted value will be initialized with a score of 0, as required
+    QMap<qlonglong, float> scores;
+
+    // Variables for data read from DB
+    DatabaseBlob blob;
+    qlonglong imageid;
+    Haar::SignatureData targetSig;
+
+    DatabaseAccess access;
+    QSqlQuery query;
+    query = access.backend()->prepareQuery(QString("SELECT imageid, matrix FROM ImageHaarMatrix"));
+    if (!access.backend()->exec(query))
+        return QList<qlonglong>();
+
+    // We don't use DatabaseBackend's convenience calls, as the result set is large
+    // and we try to avoid copying in a temporary QList<QVariant>
+    while (query.next())
+    {
+        imageid = query.value(0).toLongLong();
+        blob.read(query.value(1).toByteArray(), &targetSig);
+
+        // this is a reference
+        float &score = scores[imageid];
+
+        // Step 1: Initialize scores with average intensity values of all three channels
+        for (int channel=0; channel<3; channel++)
+        {
+            score += weights.weightForAverage(channel) * fabs( querySig->avg[channel] - targetSig.avg[channel] );
+        }
+
+        // Step 2: Decrease the score if query and target have significant coefficients in common
+        for (int channel=0; channel<3; channel++)
+        {
+            Haar::Idx *sig = targetSig.sig[channel];
+            Haar::SignatureMap *queryMap = queryMaps[channel];
+            int x;
+            for (int coef = 0; coef < Haar::NumberOfCoefficients; coef++)
+            {
+                // x is a pixel index, either positive or negative, 0..16384
+                x = sig[coef];
+                // If x is a significant coefficient with the same sign in the query signature as well,
+                // descrease the score (lower is better)
+                // Note: both method calls called with x accept positive or negative values
+                if ((*queryMap)[x])
+                    score -= weights.weight(d->bin->binAbs(x), channel);
+            }
+        }
+    }
+
+    // Find out the best matches, those with the lowest score
+    // We make use of the feature that QMap keys are sorted in ascending order
+    // Of course, images can have the same score, so we need a multi map
+    QMultiMap<float, qlonglong> bestMatches;
+    bool initialFill = false;
+    float score, worstScore, bestScore;
+    qlonglong id;
+    for (QMap<qlonglong, float>::iterator it = scores.begin(); it != scores.end(); ++it)
+    {
+        score = it.value();
+        id    = it.key();
+
+        if (!initialFill)
+        {
+            // as long as the maximum number of results is not reached, just fill up the map
+            bestMatches.insert(score, id);
+            initialFill = (bestMatches.size() >= numberOfResults);
+        }
+        else
+        {
+            // find the last entry, the one with the highest (=worst) score
+            QMap<float, qlonglong>::iterator last = bestMatches.end();
+            --last;
+            worstScore = last.key();
+            // if the new entry has a higher score, put it in the list and remove that last one
+            if (score < worstScore)
+            {
+                bestMatches.erase(last);
+                bestMatches.insert(score, id);
+            }
+            else if (score == worstScore)
+            {
+                bestScore = bestMatches.begin().key();
+                // if the score is identical for all entries, increase the maximum result number
+                if (score == bestScore)
+                    bestMatches.insert(score, id);
+            }
+        }
+    }
+    for (QMap<float, qlonglong>::iterator it = bestMatches.begin(); it != bestMatches.end(); ++it)
+        DDebug() << it.key() << it.value();
+
+    return bestMatches.values();
+}
 
 QImage HaarIface::loadQImage(const QString &filename)
 {
-    // TODO: Marcel, all can be optimized here using DImg.
+    // TODO: Can be optimized using DImg.
 
     QImage image;
     if (isJpegImage(filename))
     {
         // use fast jpeg loading
-        if (!loadJPEGScaled(image, filename, HAAR_NUM_PIXELS))
+        if (!loadJPEGScaled(image, filename, Haar::NumberOfPixels))
         {
             // try QT now.
             if (!image.load(filename))
@@ -127,151 +401,17 @@ QImage HaarIface::loadQImage(const QString &filename)
             return QImage();
     }
 
-    image = image.scaled(HAAR_NUM_PIXELS, HAAR_NUM_PIXELS);
     return image;
 }
 
-void HaarIface::fillPixelData(const QImage &image, Haar::ImageData *data)
-{
-    for (int i = 0, cn = 0; i < HAAR_NUM_PIXELS; i++)
-    {
-        // Get a scanline:
-        QRgb *line = (QRgb*)image.scanLine(i);
-
-        for (int j = 0; j < HAAR_NUM_PIXELS; j++)
-        {
-            QRgb pixel      = line[j];
-            data->data1[cn] = qRed  (pixel);
-            data->data2[cn] = qGreen(pixel);
-            data->data3[cn] = qBlue (pixel);
-            cn++;
-        }
-    }
-}
-
-bool HaarIface::addImage(const QString& filename)
-{
-    QImage image = loadQImage(filename);
-    return (addImage(image));
-}
-
-bool HaarIface::addImage(const QImage& image)
-{
-    if (image.isNull())
-        return false;
-
-    fillPixelData(image, m_data);
-
-    Haar haar;
-    haar.transform(m_data);
-
-    sigStruct* nsig = new sigStruct();
-
-    haar.calcHaar(m_data, nsig->sig1, nsig->sig2, nsig->sig3, nsig->avgl);
-
-    // populate buckets
-    for (int i = 0; i < HAAR_NUM_COEFS; i++)
-    {
-        int x, t;
-
-        // sig[i] never 0
-
-        x = nsig->sig1[i];
-        t = (x < 0);         // t = 1 if x neg else 1
-        // x - 0 ^ 0 = x; i - 1 ^ 0b111..1111 = 2-compl(x) = -x
-        x = (x - t) ^ -t;
-        m_imgbuckets[0][t][x].push_back(nsig->id);
-
-        x = nsig->sig2[i];
-        t = (x < 0);
-        x = (x - t) ^ -t;
-        m_imgbuckets[1][t][x].push_back(nsig->id);
-
-        x = nsig->sig3[i];
-        t = (x < 0);
-        x = (x - t) ^ -t;
-        m_imgbuckets[2][t][x].push_back(nsig->id);
-    }
-    return 1;
-}
-
-/** sig1,2,3 are int arrays of length HAAR_NUM_COEFS
-    avgl is the average luminance
-    numres is the max number of results
-    sketch (0 or 1) tells which set of haar weights to use
-*/
-void HaarIface::queryImgData(Haar::Idx* sig1, Haar::Idx* sig2, Haar::Idx* sig3,
-                             double* avgl, int numres, int sketch)
-{
-    int        idx, c;
-    int        pn;
-    Haar::Idx *sig[3] = {sig1, sig2, sig3};
-
-    for (sigIterator sit = m_sigs.begin(); sit != m_sigs.end(); sit++)
-    {
-        //TODO: do I really need to score every single sig on db?
-        (*sit).second->score = 0;
-        for (c = 0; c < 3; c++)
-        {
-            (*sit).second->score += s_haar_weights[sketch][0][c] * fabs((*sit).second->avgl[c] - avgl[c]);
-        }
-    }
-
-    for (int b = 0; b < HAAR_NUM_COEFS; b++)
-    {
-        // for every coef on a sig
-        for (c = 0; c < 3; c++)
-        {
-            pn  = sig[c][b] <= 0;
-            idx = (sig[c][b] - pn) ^ -pn;
-
-            // update the score of every image which has this coef
-            long_listIterator end = m_imgbuckets[c][pn][idx].end();
-            for (long_listIterator uit = m_imgbuckets[c][pn][idx].begin(); uit != end; uit++)
-            {
-                m_sigs[(*uit)]->score -= s_haar_weights[sketch][m_imgBin[idx]][c];
-            }
-        }
-    }
-
-    // make sure pqResults is empty.
-    // TODO: any faster way to empty it ? didn't find any on STL refs.
-    while(!m_pqResults.empty())
-        m_pqResults.pop();
-
-    sigIterator sit = m_sigs.begin();
-
-    // Fill up the numres-bounded priority queue (largest at top):
-    for (int cnt = 0; cnt < numres; cnt++)
-    {
-        // No more images; cannot get requested numres, alas.
-        if (sit == m_sigs.end())
-            return;
-
-        m_pqResults.push(*(*sit).second);
-        sit++;
-    }
-
-    for (; sit != m_sigs.end(); sit++)
-    {
-        if ((*sit).second->score < m_pqResults.top().score)
-        {
-            // Make room by dropping largest entry:
-            m_pqResults.pop();
-            // Insert new entry:
-            m_pqResults.push(*(*sit).second);
-        }
-    }
-}
-
-#if 0
-/** sig1,2,3 are int arrays of lenght NUM_COEFS
+/*
+/ ** sig1,2,3 are int arrays of lenght NUM_COEFS
     avgl is the average luminance
     thresd is the limit similarity threshold. Only images with score > thresd will be a result
     `sketch' tells which set of haar weights to use
     sigs is the source to query on (map of signatures)
     every search result is removed from sigs. (right now this functn is only used by clusterSim)
-*/
+* /
 HaarIface::long_list HaarIface::queryImgDataForThres(sigMap* tsigs, Haar::Idx* sig1, Haar::Idx* sig2, Haar::Idx* sig3,
                                                      double* avgl, float thresd, int sketch)
 {
@@ -341,8 +481,8 @@ HaarIface::long_list HaarIface::queryImgDataForThresFast(sigMap* tsigs, double* 
     return res;
 }
 
-/** Cluster by similarity. Returns list of list of long ints (img ids)
-*/
+/ ** Cluster by similarity. Returns list of list of long ints (img ids)
+* /
 HaarIface::long_list_2 HaarIface::clusterSim(float thresd, bool fast)
 {
     // will hold a list of lists. ie. a list of clusters
@@ -391,99 +531,8 @@ HaarIface::long_list_2 HaarIface::clusterSim(float thresd, bool fast)
     return res;
 }
 
-/** get the number of results the last query yielded
-*/
-int HaarIface::getNumResults()
-{
-    return m_pqResults.size();
-}
-
-/** get the id of the current query result, removing it from the result list
-    (you should always call getResultID *before* getResultScore)
-*/
-long int HaarIface::getResultID()
-{
-    m_curResult = m_pqResults.top();
-    m_pqResults.pop();
-    return m_curResult.id;
-}
-
-/** get the score for the current query result
-*/
-double HaarIface::getResultScore()
-{
-    return m_curResult.score;
-}
-
-/** query for images similar to the one that has this id
-    numres is the maximum number of results
-*/
-void HaarIface::queryImgID(long int id, int numres)
-{
-    while(!m_pqResults.empty())
-        m_pqResults.pop();
-
-    if (!m_sigs.count(id))
-    {
-        DDebug() << "ID not found." << endl;
-        return;
-    }
-    queryImgData(m_sigs[id]->sig1, m_sigs[id]->sig2, m_sigs[id]->sig3,
-                 m_sigs[id]->avgl, numres, 0);
-}
-#endif
-/** query for images similar to the one on filename
-    numres is the maximum number of results
-    sketch should be 1 if this image is a drawing
-*/
-bool HaarIface::queryImgFile(const QString& filename, int numres, int sketch)
-{
-    while(!m_pqResults.empty())
-        m_pqResults.pop();
-
-    double     avgl[3];
-    int        cn = 0;
-    QImage     image;
-    Haar::Idx  sig1[HAAR_NUM_COEFS];
-    Haar::Idx  sig2[HAAR_NUM_COEFS];
-    Haar::Idx  sig3[HAAR_NUM_COEFS];
-    Haar::Unit cdata1[16384];
-    Haar::Unit cdata2[16384];
-    Haar::Unit cdata3[16384];
-
-    if (!image.load(filename))
-        return false;
-
-    if (image.width() != 128 || image.height() != 128)
-        image = image.scaled(128, 128);
-
-    for (int i = 0; i < 128; i++)
-    {
-        // Get a scanline:
-        QRgb *line = (QRgb *)image.scanLine(i);
-
-        for (int j = 0; j < 128; j++)
-        {
-            QRgb pixel = line[j];
-
-            cdata1[cn] = qRed  (pixel);
-            cdata2[cn] = qGreen(pixel);
-            cdata3[cn] = qBlue (pixel);
-            cn++;
-        }
-    }
-
-    Haar haar;
-    haar.transform(m_data);
-    haar.calcHaar(m_data, sig1, sig2, sig3, avgl);
-    queryImgData(sig1, sig2, sig3, avgl, numres, sketch);
-
-    return true;
-}
-
-#if 0
-/** return the average luminance difference
-*/
+/ ** return the average luminance difference
+* /
 double HaarIface::calcAvglDiff(long int id1, long int id2)
 {
     if (!m_sigs.count(id1))
@@ -497,8 +546,8 @@ double HaarIface::calcAvglDiff(long int id1, long int id2)
            fabs(m_sigs[id1]->avgl[2] - m_sigs[id2]->avgl[2]);
 }
 
-/** use it to tell the content-based difference between two images
-*/
+/ ** use it to tell the content-based difference between two images
+* /
 double HaarIface::calcDiff(long int id1, long int id2)
 {
     double diff        = calcAvglDiff(id1, id2);
@@ -521,181 +570,6 @@ double HaarIface::calcDiff(long int id1, long int id2)
 
   return diff;
 }
-#endif
-
-#if 0
-// ----------------------------------------------------------------------------
-// TODO: Marcel, these methods can be removed.
-
-
-int HaarIface::loadDB(char* filename)
-{
-    std::ifstream f(filename, ios::binary);
-    if (!f.is_open()) return 0;
-
-    int      sz;
-    long int id;
-
-    // read buckets
-    for (int c = 0; c < 3; c++)
-    {
-        for (int pn = 0; pn < 2; pn++)
-        {
-            for (int i = 0; i < 16384; i++)
-            {
-                f.read((char*)&(sz), sizeof(int));
-                for (int k = 0; k < sz; k++)
-                {
-                    f.read((char*)&(id), sizeof(long int));
-                    m_imgbuckets[c][pn][i].push_back(id);
-                }
-            }
-        }
-    }
-
-    // read sigs
-    f.read((char*)&(sz), sizeof(int));
-    for (int k = 0; k < sz; k++)
-    {
-        f.read((char*)&(id), sizeof(long int));
-        m_sigs[id] = new sigStruct();
-        f.read((char*)m_sigs[id], sizeof(sigStruct));
-    }
-    f.close();
-    return 1;
-}
-
-int HaarIface::saveDB(char* filename)
-{
-    /*
-    Serialization order:
-    for each color {0,1,2}:
-        for {positive,negative}:
-            for each 128x128 coefficient {0-16384}:
-                [int] bucket size (size of list of ids)
-                for each id:
-                    [long int] image id
-    [int] number of images (signatures)
-    for each image:
-        [long id] image id
-        for each sig coef {0-39}:  (the NUM_COEFS greatest coefs)
-            for each color {0,1,2}:
-                [int] coef index (signed)
-        for each color {0,1,2}:
-            [double] average luminance
-        [int] image width
-        [int] image height
-
-    */
-    std::ofstream f(filename, ios::binary);
-    if (!f.is_open()) return 0;
-
-    int      sz;
-    long int id;
-
-    // save buckets
-    for (int c = 0; c < 3; c++)
-    {
-        for (int pn = 0; pn < 2; pn++)
-        {
-            for (int i = 0; i < 16384; i++)
-            {
-                sz = m_imgbuckets[c][pn][i].size();
-                f.write((char*)&(sz), sizeof(int) );
-                long_listIterator end = m_imgbuckets[c][pn][i].end();
-                for (long_listIterator it = m_imgbuckets[c][pn][i].begin(); it != end; it++)
-                {
-                    f.write((char*)&((*it)), sizeof(long int));
-                }
-            }
-        }
-    }
-
-    // save sigs
-    sz = m_sigs.size();
-    f.write((char*)&(sz), sizeof(int));
-    for (sigIterator it = m_sigs.begin(); it != m_sigs.end(); it++)
-    {
-        id = (*it).first;
-        f.write((char*)&(id), sizeof(long int));
-        f.write((char *)(it->second), sizeof(sigStruct));
-    }
-    f.close();
-    return 1;
-}
-
-/** call it to reset all buckets and signatures
 */
-int HaarIface::resetDB()
-{
-    for (int c = 0; c < 3; c++)
-    {
-        for (int pn = 0; pn < 2; pn++)
-        {
-            for (int i = 0; i < 16384; i++)
-            {
-                m_imgbuckets[c][pn][i].clear();
-            }
-        }
-    }
-
-    // delete sigs
-    freeSigs();
-    m_sigs.clear();
-    return 1;
-}
-
-/** remove image with this id from dbase
-*/
-void HaarIface::removeIDFromDB(long int id)
-{
-    if (!m_sigs.count(id))
-    {
-        // don't remove something which isn't even on db.
-        DDebug() << "Attempt to remove invalid id: " << id << endl;
-        return;
-    }
-    delete m_sigs[id];
-    m_sigs.erase(id);
-
-    // remove id from each bucket it could be in
-    for (int c = 0; c < 3; c++)
-    {
-        for (int pn=0; pn < 2; pn++)
-        {
-            for (int i = 0; i < 16384; i++)
-            {
-                m_imgbuckets[c][pn][i].remove(id);
-            }
-        }
-    }
-}
-
-/** Python Wrappers/Helpers
-*/
-int HaarIface::getLongListSize(long_list& li)
-{
-    return li.size();
-}
-
-long int HaarIface::popLongList(long_list& li)
-{
-    long int a = li.front();
-    li.pop_front();
-    return a;
-}
-
-int HaarIface::getLongList2Size(long_list_2& li)
-{
-    return li.size();
-}
-
-HaarIface::long_list HaarIface::popLong2List(long_list_2& li)
-{
-    long_list a = li.front();
-    li.pop_front();
-    return a;
-}
-#endif
 
 }  // namespace Digikam
