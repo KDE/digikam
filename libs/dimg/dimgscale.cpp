@@ -102,11 +102,14 @@ using namespace DImgScale;
 
 DImg DImg::smoothScale(int dw, int dh, Qt::AspectRatioMode aspectRatioMode)
 {
-    if (dw <= 0 || dh <= 0)
+    if (dw <= 0 || dh <= 0 || isNull())
         return DImg();
 
     uint w = width();
     uint h = height();
+
+    if (w <= 0 || h <= 0)
+        return DImg();
 
     QSize newSize(w, h);
     newSize.scale( QSize(dw, dh), aspectRatioMode );
