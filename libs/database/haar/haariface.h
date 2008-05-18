@@ -44,10 +44,10 @@ class QImage;
 namespace Digikam
 {
 
-class DImage;
+class DImg;
 
+namespace Haar { class SignatureData; }
 class HaarIfacePriv;
-class SignatureData;
 class HaarIface
 {
 
@@ -67,48 +67,21 @@ public:
     enum SketchType
     {
         ScannedSketch = 0,
-        PaintedSketch = 1
+        HanddrawnSketch = 1
     };
+
+    QList<qlonglong> bestMatchesForImage(qlonglong imageid, int numberOfResults = 20, SketchType type = ScannedSketch);
+    QList<qlonglong> bestMatchesForFile(const QString& filename, int numberOfResults = 20, SketchType type = ScannedSketch);
 
 private:
 
     HaarIfacePriv *d;
 
     QImage      loadQImage(const QString &filename);
-    void        fillPixelData(const QImage &image);
-    void        fillPixelData(const DImg &image);
 
     bool indexImage(qlonglong imageid);
-    QList<qlonglong> bestMatches(SignatureData *data, int numberOfResults, SketchType type);
-    QList<qlonglong> bestMatchesForFile(const QString& filename, int numberOfResults, SketchType type);
+    QList<qlonglong> bestMatches(Haar::SignatureData *data, int numberOfResults, SketchType type);
 
-#if 0
-    /*
-    long_list   queryImgDataForThres(sigMap* tsigs, Haar::Idx* sig1, Haar::Idx* sig2, Haar::Idx* sig3,
-                                     double* avgl, float thresd, int sketch);
-    long_list   queryImgDataForThresFast(sigMap* tsigs, double* avgl, float thresd, int sketch);
-
-    long_list_2 clusterSim(float thresd, bool fast=false);
-    int         getNumResults();
-    long int    getResultID();
-    double      getResultScore();
-
-    void        queryImgID(long int id, int numres);
-    */
-    //double      calcAvglDiff(long int id1, long int id2);
-    //double      calcDiff(long int id1, long int id2);
-
-    // TODO: Marcel, these methods can be removed.
-    int         loadDB(char* filename);
-    int         saveDB(char* filename);
-    int         resetDB();
-    void        removeIDFromDB(long int id);
-
-    int         getLongListSize(long_list& li);
-    long int    popLongList(long_list& li);
-    int         getLongList2Size(long_list_2& li);
-    long_list   popLong2List(long_list_2& li);
-#endif
 };
 
 }  // namespace Digikam
