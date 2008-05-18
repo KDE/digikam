@@ -46,8 +46,25 @@ using namespace std;
 namespace Digikam
 {
 
-/** Setup initial fixed Haar weights that each coefficient represents
-*/
+
+/** Signature structure   */
+class valStruct
+{
+public:
+    Haar::Unit d;   // [f]abs(a[i])
+    int  i;         // index i of a[i]
+
+    bool operator< (const valStruct &right) const
+    {
+        return d > right.d;
+    }
+};
+
+typedef std::priority_queue<valStruct> valqueue;
+
+// ------------------------- //
+
+/** Setup initial fixed Haar weights that each coefficient represents */
 Haar::WeightBin::WeightBin()
 {
     int i, j;
@@ -65,7 +82,7 @@ Haar::WeightBin::WeightBin()
     */
 
     // Every position has value 5
-    memset(m_bin, 5, HAAR_NUM_PIXELS_SQUARED);
+    memset(m_bin, 5, NumberOfPixelsSquared);
 
     // Except for the 5 by 5 upper-left quadrant
     for (i = 0; i < 5; i++)
@@ -77,6 +94,8 @@ Haar::WeightBin::WeightBin()
         }
     }
 }
+
+// ------------------------- //
 
 Haar::Haar()
 {
@@ -93,7 +112,7 @@ Haar::~Haar()
 void Haar::haar2D(Unit a[])
 {
     int  i;
-    Unit t[HAAR_NUM_PIXELS >> 1];
+    Unit t[NumberOfPixels >> 1];
 
     // scale by 1/sqrt(128) = 0.08838834764831843:
     /*
@@ -102,12 +121,12 @@ void Haar::haar2D(Unit a[])
     */
 
     // Decompose rows:
-    for (i = 0; i < HAAR_NUM_PIXELS_SQUARED; i += HAAR_NUM_PIXELS) 
+    for (i = 0; i < NumberOfPixelsSquared; i += NumberOfPixels)
     {
         int h, h1;
         Unit C = 1;
 
-        for (h = HAAR_NUM_PIXELS; h > 1; h = h1) 
+        for (h = NumberOfPixels; h > 1; h = h1)
         {
             int j1, j2, k;
 
@@ -133,26 +152,26 @@ void Haar::haar2D(Unit a[])
     */
 
     // Decompose columns:
-    for (i = 0; i < HAAR_NUM_PIXELS; i++) 
+    for (i = 0; i < NumberOfPixels; i++)
     {
         Unit C=1;
         int  h, h1;
 
-        for (h = HAAR_NUM_PIXELS; h > 1; h = h1) 
+        for (h = NumberOfPixels; h > 1; h = h1)
         {
             int j1, j2, k;
 
             h1 = h >> 1;
             C *= 0.7071;       // 1/sqrt(2) = 0.7071
-            for (k = 0, j1 = j2 = i; k < h1; k++, j1 += HAAR_NUM_PIXELS, j2 += 2*HAAR_NUM_PIXELS) 
+            for (k = 0, j1 = j2 = i; k < h1; k++, j1 += NumberOfPixels, j2 += 2*NumberOfPixels)
             {
-                int j21 = j2+HAAR_NUM_PIXELS;
+                int j21 = j2+NumberOfPixels;
                 t[k]    = (a[j2] - a[j21]) * C;
                 a[j1]   = (a[j2] + a[j21]);
             }
 
             // Write back subtraction results:
-            for (k = 0, j1 = i+h1*HAAR_NUM_PIXELS; k < h1; k++, j1 += HAAR_NUM_PIXELS)
+            for (k = 0, j1 = i+h1*NumberOfPixels; k < h1; k++, j1 += NumberOfPixels)
             {
                 a[j1]=t[k];
             }
@@ -174,7 +193,7 @@ void Haar::transformChar(unsigned char* c1, unsigned char* c2, unsigned char* c3
     Unit *q = b;
     Unit *r = c;
 
-    for (int i = 0; i < HAAR_NUM_PIXELS_SQUARED; i++)
+    for (int i = 0; i < NumberOfPixelsSquared; i++)
     {
         *p++ = *c1++;
         *q++ = *c2++;
@@ -198,7 +217,7 @@ void Haar::transform(ImageData *data)
     Unit* b = data->data2;
     Unit* c = data->data3;
 
-    for (int i = 0; i < HAAR_NUM_PIXELS_SQUARED; i++) 
+    for (int i = 0; i < NumberOfPixelsSquared; i++)
     {
         Unit Y, I, Q;
 
@@ -220,8 +239,9 @@ void Haar::transform(ImageData *data)
     c[0] /= 256 * 128;
 }
 
-/** Find the NUM_COEFS largest numbers in cdata[] (in magnitude that is)
+/** Find the m=NUM_COEFS largest numbers in cdata[] (in magnitude that is)
     and store their indices in sig[].
+    Skips entry 0.
 */
 void Haar::getmLargests(Unit *cdata, Idx *sig)
 {
@@ -232,7 +252,7 @@ void Haar::getmLargests(Unit *cdata, Idx *sig)
     // Could skip i=0: goes into separate avgl
 
     // Fill up the bounded queue. (Assuming NUM_PIXELS_SQUARED > NUM_COEFS)
-    for (i = 1; i < HAAR_NUM_COEFS+1; i++)
+    for (i = 1; i < NumberOfCoefficients+1; i++)
     {
         val.i = i;
         val.d = fabs(cdata[i]);
@@ -240,7 +260,7 @@ void Haar::getmLargests(Unit *cdata, Idx *sig)
     }
     // Queue is full (size is NUM_COEFS)
 
-    for (/*i = NUM_COEFS+1*/; i < HAAR_NUM_PIXELS_SQUARED; i++)
+    for (/*i = NUM_COEFS+1*/; i < NumberOfPixelsSquared; i++)
     {
         val.d = fabs(cdata[i]);
 
