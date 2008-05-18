@@ -77,8 +77,8 @@ BatchAlbumsSyncMetadata::BatchAlbumsSyncMetadata(QWidget* parent)
     d = new BatchAlbumsSyncMetadataPriv;
     d->imageInfoJob = new ImageInfoJob();
     setValue(0);
-    setCaption(i18n("Sync All Images Metadata"));
-    setLabel(i18n("<b>Sync all images metadata with digiKam database. Please wait...</b>"));
+    setCaption(i18n("Sync All Images' Metadata"));
+    setLabel(i18n("<b>Syncing the metadata of all images with the digiKam database. Please wait...</b>"));
     setButtonText(i18n("&Abort"));
     resize(600, 300);
     QTimer::singleShot(500, this, SLOT(slotStart()));
@@ -110,7 +110,7 @@ void BatchAlbumsSyncMetadata::parseAlbum()
     {
         QTime t;
         t = t.addMSecs(d->duration.elapsed());
-        setLabel(i18n("<b>Sync all images metadata with digiKam database done</b>"));
+        setLabel(i18n("<b>The metadata of all images has been synchronized with the digiKam database.</b>"));
         setTitle(i18n("Duration: %1",t.toString()));
         setButtonText(i18n("&Close"));
         advance(1);

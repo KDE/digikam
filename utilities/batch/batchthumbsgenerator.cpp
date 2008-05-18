@@ -85,7 +85,7 @@ BatchThumbsGenerator::BatchThumbsGenerator(QWidget* parent)
 
     setValue(0);
     setCaption(i18n("Rebuild All Thumbnails"));
-    setLabel(i18n("<b>Updating thumbnails database in progress. Please wait...</b>"));
+    setLabel(i18n("<b>Updating thumbnails database. Please wait...</b>"));
     setButtonText(i18n("&Abort"));
     resize(600, 300);
 
@@ -153,7 +153,7 @@ void BatchThumbsGenerator::complete()
 {
     QTime t;
     t = t.addMSecs(d->duration.elapsed());
-    setLabel(i18n("<b>Update of thumbnails database done</b>"));
+    setLabel(i18n("<b>The thumbnails database has been updated.</b>"));
     setTitle(i18n("Duration: %1", t.toString()));
     setButtonText(i18n("&Close"));
     emit signalRebuildAllThumbsDone();

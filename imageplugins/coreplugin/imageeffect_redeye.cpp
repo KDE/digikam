@@ -163,14 +163,14 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
     m_smoothLevel->setRange(0, 5, 1);
     m_smoothLevel->setSliderEnabled(true);
     m_smoothLevel->setValue(1);
-    m_smoothLevel->setWhatsThis(i18n("<p>Sets the smoothness value to blur the border "
+    m_smoothLevel->setWhatsThis(i18n("<p>Sets the smoothness value when blurring the border "
                                      "of the changed pixels. "
                                      "This leads to a more naturally looking pupil."));
 
     QLabel *label3 = new QLabel(i18n("Coloring Tint:"), gboxSettings);
     m_HSSelector   = new KHueSaturationSelector(gboxSettings);
     m_VSelector    = new KColorValueSelector(gboxSettings);
-    m_HSSelector->setWhatsThis(i18n("<p>Sets a custom color to re-colorize the eyes."));
+    m_HSSelector->setWhatsThis(i18n("<p>Sets a custom color when re-colorizing the eyes."));
     m_HSSelector->setMinimumSize(200, 142);
     m_VSelector->setMinimumSize(26, 142);
 

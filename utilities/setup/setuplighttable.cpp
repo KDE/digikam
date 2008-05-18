@@ -84,8 +84,8 @@ SetupLightTable::SetupLightTable(QWidget* parent )
                      "into the right panel when the corresponding item is selected on the thumbbar."));
 
     d->loadFullImageSize = new QCheckBox(i18n("Load full image size"), interfaceOptionsGroup);
-    d->loadFullImageSize->setWhatsThis( i18n("<p>Set this option to load full image size "
-                     "in preview panel instead a reduced one. Because this option will take more time "
+    d->loadFullImageSize->setWhatsThis( i18n("<p>Set this option to load the full image size "
+                     "into the preview panel instead of a reduced size. Because this option will take more time "
                      "to load image, use it only if you have a fast computer."));
 
     d->hideToolBar = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"), interfaceOptionsGroup);
