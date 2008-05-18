@@ -52,7 +52,6 @@
 #include "searchtabheader.h"
 #include "searchtabheader.moc"
 
-
 namespace Digikam
 {
 
@@ -110,6 +109,7 @@ protected:
     bool m_hasAdvanced;
 };
 
+// ------------------------------------------------------------
 
 class SearchTabHeaderPriv
 {
@@ -163,11 +163,10 @@ public:
 
     QString             oldKeywordContent;
     QString             oldStoredKeywordContent;
-
 };
 
 SearchTabHeader::SearchTabHeader(QWidget *parent)
-    : QWidget(parent)
+               : QWidget(parent)
 {
     d = new SearchTabHeaderPriv;
 
@@ -193,17 +192,18 @@ SearchTabHeader::SearchTabHeader(QWidget *parent)
     // upper part
 
     d->newSearchWidget->setTitle(i18n("New Search"));
-    QGridLayout *grid1 = new QGridLayout;
-
-    QLabel *searchLabel = new QLabel(i18n("Search:"));
-    d->keywordEdit = new KeywordLineEdit;
+    QGridLayout *grid1   = new QGridLayout;
+    QLabel *searchLabel  = new QLabel(i18n("Search:"));
+    d->keywordEdit       = new KeywordLineEdit;
     d->keywordEdit->setClearButtonShown(true);
 
     d->advancedEditLabel = new QPushButton(i18n("Advanced Search..."));
 
-    grid1->addWidget(searchLabel, 0, 0);
-    grid1->addWidget(d->keywordEdit, 0, 1);
+    grid1->addWidget(searchLabel,          0, 0);
+    grid1->addWidget(d->keywordEdit,       0, 1);
     grid1->addWidget(d->advancedEditLabel, 1, 1);
+    grid1->setMargin(KDialog::spacingHint());
+    grid1->setSpacing(KDialog::spacingHint());
 
     d->newSearchWidget->setLayout(grid1);
 
@@ -214,14 +214,11 @@ SearchTabHeader::SearchTabHeader(QWidget *parent)
     d->saveAsWidget->setTitle(i18n("Save Current Search"));
 
     QHBoxLayout *hbox1 = new QHBoxLayout;
-    hbox1->setMargin(0);
-    hbox1->setSpacing(KDialog::spacingHint());
-
     d->saveNameEdit    = new KLineEdit;
     d->saveNameEdit->setWhatsThis(i18n("<p>Enter a name for the current search to save it in the "
                                        "\"Searches\" view"));
 
-    d->saveButton  = new QPushButton(QString());
+    d->saveButton      = new QPushButton(QString());
     d->saveButton->setIcon(SmallIcon("document-save"));
     d->saveButton->setToolTip(i18n("Save current search to a new virtual Album"));
     d->saveButton->setWhatsThis(i18n("<p>If you press this button, the current search "
@@ -230,6 +227,9 @@ SearchTabHeader::SearchTabHeader(QWidget *parent)
 
     hbox1->addWidget(d->saveNameEdit);
     hbox1->addWidget(d->saveButton);
+    hbox1->setMargin(KDialog::spacingHint());
+    hbox1->setSpacing(KDialog::spacingHint());
+
     d->saveAsWidget->setLayout(hbox1);
 
     // ------------------- //
@@ -237,14 +237,16 @@ SearchTabHeader::SearchTabHeader(QWidget *parent)
     // lower part, variant 2
     d->editSimpleWidget->setTitle(i18n("Edit Stored Search"));
 
-    QVBoxLayout *vbox1 = new QVBoxLayout;
-
+    QVBoxLayout *vbox1       = new QVBoxLayout;
     d->storedKeywordEditName = new KSqueezedTextLabel;
     d->storedKeywordEditName->setTextElideMode(Qt::ElideRight);
-    d->storedKeywordEdit = new KLineEdit;
+    d->storedKeywordEdit     = new KLineEdit;
 
     vbox1->addWidget(d->storedKeywordEditName);
     vbox1->addWidget(d->storedKeywordEdit);
+    vbox1->setMargin(KDialog::spacingHint());
+    vbox1->setSpacing(KDialog::spacingHint());
+
     d->editSimpleWidget->setLayout(vbox1);
 
     // ------------------- //
@@ -544,5 +546,4 @@ QString SearchTabHeader::keywordsFromQuery(const QString &query)
     return KeywordSearch::merge(keywordList);
 }
 
-}
-
+} // namespace Digikam
