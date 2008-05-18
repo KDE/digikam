@@ -35,10 +35,12 @@
 
 // Qt includes
 
+#include <QImage>
 #include <QString>
 
 // Local includes
 
+#include "dimg.h"
 #include "haar.h"
 
 using namespace std;
@@ -46,12 +48,15 @@ using namespace std;
 namespace Digikam
 {
 
+namespace Haar
+{
+
 
 /** Signature structure   */
 class valStruct
 {
 public:
-    Haar::Unit d;   // [f]abs(a[i])
+    Unit d;   // [f]abs(a[i])
     int  i;         // index i of a[i]
 
     bool operator< (const valStruct &right) const
@@ -64,8 +69,53 @@ typedef std::priority_queue<valStruct> valqueue;
 
 // ------------------------- //
 
+void ImageData::fillPixelData(const QImage &im)
+{
+    // Write pixels of a QImage in three arrays (one per color channel, pixels linearly)
+    QImage image = im.scaled(Haar::NumberOfPixels, Haar::NumberOfPixels, Qt::IgnoreAspectRatio);
+    int cn = 0;
+    for (int h = 0; h < Haar::NumberOfPixels; h++)
+    {
+        // Get a scanline:
+        QRgb *line = (QRgb*)image.scanLine(h);
+
+        for (int w = 0; w < Haar::NumberOfPixels; w++)
+        {
+            QRgb pixel      = line[w];
+            data1[cn] = qRed  (pixel);
+            data2[cn] = qGreen(pixel);
+            data3[cn] = qBlue (pixel);
+            cn++;
+        }
+    }
+}
+
+void ImageData::fillPixelData(const DImg &im)
+{
+    // Write pixels of a DImg in three arrays (one per color channel, pixels linearly)
+    DImg image(im);
+    image.convertToEightBit();
+    image = image.smoothScale(Haar::NumberOfPixels, Haar::NumberOfPixels, Qt::IgnoreAspectRatio);
+
+    uchar* ptr = image.bits();
+    int cn = 0;
+    for (int h = 0; h < Haar::NumberOfPixels; h++)
+    {
+        for (int w = 0; w < Haar::NumberOfPixels; w++)
+        {
+            data1[cn] = ptr[2];
+            data2[cn] = ptr[1];
+            data3[cn] = ptr[0];
+            ptr += 4;
+            cn++;
+        }
+    }
+}
+
+// ------------------------- //
+
 /** Setup initial fixed Haar weights that each coefficient represents */
-Haar::WeightBin::WeightBin()
+WeightBin::WeightBin()
 {
     int i, j;
 
@@ -97,11 +147,11 @@ Haar::WeightBin::WeightBin()
 
 // ------------------------- //
 
-Haar::Haar()
+Calculator::Calculator()
 {
 }
 
-Haar::~Haar()
+Calculator::~Calculator()
 {
 }
 
@@ -109,7 +159,7 @@ Haar::~Haar()
     Here input is RGB data [0..255] in Unit arrays
     Computation is (almost) in-situ.
 */
-void Haar::haar2D(Unit a[])
+void Calculator::haar2D(Unit a[])
 {
     int  i;
     Unit t[NumberOfPixels >> 1];
@@ -186,7 +236,7 @@ void Haar::haar2D(Unit a[])
     Results are available in a, b, and c.
 */
 /*
-void Haar::transformChar(unsigned char* c1, unsigned char* c2, unsigned char* c3,
+void Calculator::transformChar(unsigned char* c1, unsigned char* c2, unsigned char* c3,
                          Unit* a, Unit* b, Unit* c)
 {
     Unit *p = a;
@@ -209,7 +259,7 @@ void Haar::transformChar(unsigned char* c1, unsigned char* c2, unsigned char* c3
     Fully inplace calculation; order of result is interleaved though,
     but we don't care about that.
 */
-void Haar::transform(ImageData *data)
+void Calculator::transform(ImageData *data)
 {
     // RGB -> YIQ colorspace conversion; Y luminance, I,Q chrominance.
     // If RGB in [0..255] then Y in [0..255] and I,Q in [-127..127].
@@ -243,7 +293,7 @@ void Haar::transform(ImageData *data)
     and store their indices in sig[].
     Skips entry 0.
 */
-void Haar::getmLargests(Unit *cdata, Idx *sig)
+void Calculator::getmLargests(Unit *cdata, Idx *sig)
 {
     int       cnt, i;
     valStruct val;
@@ -298,23 +348,24 @@ void Haar::getmLargests(Unit *cdata, Idx *sig)
     The order of occurrence of the coordinates in sig doesn't matter.
     Complexity is 3 x NUM_PIXELS^2 x 2log(NUM_COEFS).
 */
-int Haar::calcHaar(ImageData *data,
-                   Idx *sig1, Idx *sig2, Idx *sig3, double *avgl)
+int Calculator::calcHaar(ImageData *data, SignatureData *sigData)
 {
-    avgl[0]=data->data1[0];
-    avgl[1]=data->data2[0];
-    avgl[2]=data->data3[0];
+    sigData->avg[0]=data->data1[0];
+    sigData->avg[1]=data->data2[0];
+    sigData->avg[2]=data->data3[0];
 
     // Color channel 1:
-    getmLargests(data->data1, sig1);
+    getmLargests(data->data1, sigData->sig[0]);
 
     // Color channel 2:
-    getmLargests(data->data2, sig2);
+    getmLargests(data->data2, sigData->sig[1]);
 
     // Color channel 3:
-    getmLargests(data->data3, sig3);
+    getmLargests(data->data3, sigData->sig[2]);
 
     return 1;
 }
+
+} // namespace Haar
 
 }  // namespace Digikam

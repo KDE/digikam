@@ -38,7 +38,14 @@
 
 #include <QtGlobal>
 
+class QImage;
+
 namespace Digikam
+{
+
+class DImg;
+
+namespace Haar
 {
 
  /** Weights for the Haar coefficients. Straight from the referenced paper
@@ -46,8 +53,8 @@ namespace Digikam
      by Charles E. Jacobs, Adam Finkelstein and David H. Salesin.
      http://www.cs.washington.edu/homes/salesin/abstracts.html
  */
- static const float s_haar_weights[2][6][3] =
- {
+static const float s_haar_weights[2][6][3] =
+{
      // For scanned picture (sketch=0):
      //   Y      I      Q        idx  total occurs
         {{ 5.00, 19.21, 34.37 },   // 0   58.58       1 (`DC' component)
@@ -67,94 +74,139 @@ namespace Digikam
          { 0.32,  0.07,  0.38 }}
 };
 
-class Haar
+/** Number of pixels on one side of image; required to be a power of 2. */
+enum { NumberOfPixels = 128 };
+
+/** Total pixels in a square image. */
+enum { NumberOfPixelsSquared = NumberOfPixels * NumberOfPixels };
+
+/** Number of Haar coeffients we retain as signature for an image. */
+enum { NumberOfCoefficients = 40 };
+
+typedef double Unit;
+// Keep this definition constant at qint32 (guaranteed binary size!)
+typedef qint32 Idx;
+
+class ImageData
 {
 public:
+    Unit data1[NumberOfPixelsSquared];
+    Unit data2[NumberOfPixelsSquared];
+    Unit data3[NumberOfPixelsSquared];
 
-    /** Number of pixels on one side of image; required to be a power of 2. */
-    enum { NumberOfPixels = 128 };
+    void fillPixelData(const QImage &image);
+    void fillPixelData(const DImg &image);
+};
 
-    /** Total pixels in a square image. */
-    enum { NumberOfPixelsSquared = NumberOfPixels * NumberOfPixels };
+class SignatureData
+{
+public:
+    Haar::Idx sig[3][Haar::NumberOfCoefficients];  // Y/I/Q positions with largest magnitude
+    double    avg[3];                              // YIQ for position [0,0]
+};
 
-    /** Number of Haar coeffients we retain as signature for an image. */
-    enum { NumberOfCoefficients = 40 };
+class SignatureMap
+{
+    /** This class provides very fast lookup if a certain pixel
+     *  is set (positive or negative) in the loaded coefficient set.
+     */
+public:
 
-    typedef double Unit;
-    // Keep this definition constant at qint32 (guaranteed binary size!)
-    typedef qint32 Idx;
+    typedef bool MapIndexType;
 
-    class ImageData
+    SignatureMap()
     {
-        public:
-            Unit data1[NumberOfPixelsSquared];
-            Unit data2[NumberOfPixelsSquared];
-            Unit data3[NumberOfPixelsSquared];
-    };
+        indexList = new MapIndexType[2 * Haar::NumberOfPixelsSquared];
+    }
 
-    class SigData
+    ~SignatureMap()
     {
-        public:
-            Idx  sig1[NumberOfCoefficients];
-            Idx  sig2[NumberOfCoefficients];
-            Idx  sig3[NumberOfCoefficients];
-    };
+        delete indexList;
+    }
 
-    class WeightBin
+    /// Load a set of coefficients
+    void fill(Haar::Idx *coefs)
     {
-        public:
+        // For maximum performance, we use a flat array.
+        // First 16k for negative values, second 16k for positive values.
+        // All values or false, only 2*40 are true.
+        memset(indexList, 0, sizeof(MapIndexType[2 * Haar::NumberOfPixelsSquared]));
+        int x;
+        for (int i=0; i<Haar::NumberOfCoefficients; i++)
+        {
+            x = coefs[i] + Haar::NumberOfPixelsSquared;
+            indexList[x] = true;
+        }
+    }
 
-            WeightBin();
-
-            /** Fixed weight mask for pixel positions (i,j).
-                Each entry x = i*NUM_PIXELS + j, gets value max(i,j) saturated at 5.
-                To be treated as a constant.
-            */
-            unsigned char m_bin[16384];
-
-            unsigned char bin(int index) { return m_bin[index]; }
-            unsigned char binAbs(int index) { return (index > 0) ? m_bin[index] : m_bin[-index]; }
-    };
-
-    class Weights
+    /// Query if the given index is set.
+    /// Index must be in the range -16383..16383.
+    bool operator[](Haar::Idx index)
     {
-        public:
-            enum SketchType
-            {
-                ScannedSketch = 0,
-                PaintedSketch = 1
-            };
+        return indexList[index + Haar::NumberOfPixelsSquared];
+    }
 
-            Weights(SketchType type = ScannedSketch)
-            : m_type(type)
-            {
-            }
+    MapIndexType *indexList;
+};
 
-            float weight(int weight, int channel) { return s_haar_weights[(int)m_type][weight][channel]; }
-            float weightForAverage(int channel) { return s_haar_weights[(int)m_type][0][channel]; }
+class WeightBin
+{
+    public:
 
-        private:
+        WeightBin();
 
-            SketchType m_type;
-    };
+        /** Fixed weight mask for pixel positions (i,j).
+            Each entry x = i*NUM_PIXELS + j, gets value max(i,j) saturated at 5.
+            To be treated as a constant.
+        */
+        unsigned char m_bin[16384];
+
+        unsigned char bin(int index) { return m_bin[index]; }
+        unsigned char binAbs(int index) { return (index > 0) ? m_bin[index] : m_bin[-index]; }
+};
+
+class Weights
+{
+    public:
+        enum SketchType
+        {
+            ScannedSketch = 0,
+            PaintedSketch = 1
+        };
+
+        Weights(SketchType type = ScannedSketch)
+        : m_type(type)
+        {
+        }
+
+        float weight(int weight, int channel) { return s_haar_weights[(int)m_type][weight][channel]; }
+        float weightForAverage(int channel) { return s_haar_weights[(int)m_type][0][channel]; }
+
+    private:
+
+        SketchType m_type;
+};
+
+class Calculator
+{
 
 public:
 
-    Haar();
-    ~Haar();
+    Calculator();
+    ~Calculator();
 
-    int     calcHaar(ImageData *data,
-                     Idx* sig1, Idx* sig2, Idx* sig3, double* avgl);
+    int     calcHaar(ImageData *imageData, SignatureData *sigData);
 
     void    transform(ImageData *data);
-    //void    transformChar(unsigned char* c1, unsigned char* c2, unsigned char* c3,
-      //                    Unit* a, Unit* b, Unit* c);
+    //void transformChar(unsigned char* c1, unsigned char* c2, unsigned char* c3, Unit* a, Unit* b, Unit* c);
 
 private:
 
     void        haar2D(Unit a[]);
     inline void getmLargests(Unit *cdata, Idx *sig);
 };
+
+}  // namespace Haar
 
 }  // namespace Digikam
 
