@@ -235,7 +235,12 @@ void KipiImageCollectionSelector::populateTreeView(const AlbumList& aList, QTree
                 {
                     SAlbum* salbum = dynamic_cast<SAlbum*>(album);
                     if (salbum)
-                        item->setIcon(0, KIcon("edit-find"));
+                    {
+                        if (salbum->isNormalSearch())
+                            item->setIcon(0, KIcon("edit-find"));
+                        else
+                            item->setIcon(0, KIcon("clock"));
+                    }
                 }
             }
 
