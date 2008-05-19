@@ -54,6 +54,7 @@
 #include "searchtextbar.h"
 #include "searchxml.h"
 #include "timelinefolderview.h"
+#include "timelinewidget.h"
 #include "timelineview.h"
 #include "timelineview.moc"
 

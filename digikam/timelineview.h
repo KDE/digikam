@@ -30,10 +30,6 @@
 #include <QWidget>
 #include <QString>
 
-// Local includes.
-
-#include "timelinewidget.h"
-
 namespace Digikam
 {
 
