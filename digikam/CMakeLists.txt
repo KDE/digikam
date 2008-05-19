@@ -184,6 +184,7 @@ SET(digikam_bin_SRCS
                      firstrun.cpp 
                      folderitem.cpp 
                      folderview.cpp 
+                     fuzzysearchview.cpp
                      iconview.cpp 
                      icongroupitem.cpp 
                      iconitem.cpp 
@@ -204,6 +205,7 @@ SET(digikam_bin_SRCS
                      scancontroller.cpp
                      searchfolderview.cpp 
                      searchtabheader.cpp
+                     sketchwidget.cpp
                      syncjob.cpp 
                      tageditdlg.cpp 
                      tagfolderview.cpp 
