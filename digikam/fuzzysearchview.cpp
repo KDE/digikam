@@ -137,6 +137,11 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
 
     connect(d->sketchWidget, SIGNAL(signalSketchChanged(const QImage&)),
             this, SLOT(slotSketchChanged(const QImage&)));
+
+    // ---------------------------------------------------------------
+
+    slotVChanged();
+    d->sketchWidget->setPenWidth(d->penSize->value());
 }
 
 FuzzySearchView::~FuzzySearchView()
