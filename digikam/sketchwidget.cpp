@@ -66,6 +66,7 @@ SketchWidget::SketchWidget(QWidget *parent)
 
     setAttribute(Qt::WA_StaticContents);
     setFixedSize(256, 256);
+    clearSketch();
 }
 
 SketchWidget::~SketchWidget()
