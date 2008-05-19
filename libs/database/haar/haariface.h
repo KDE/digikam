@@ -46,10 +46,22 @@ namespace Digikam
 
 class DImg;
 
-namespace Haar { class SignatureData; }
+namespace Haar
+{
+    class SignatureData; 
+}
+
 class HaarIfacePriv;
 class HaarIface
 {
+
+public:
+
+    enum SketchType
+    {
+        ScannedSketch   = 0,
+        HanddrawnSketch = 1
+    };
 
 public:
 
@@ -64,24 +76,21 @@ public:
     bool indexImage(qlonglong imageid, const QImage &image);
     bool indexImage(qlonglong imageid, const DImg &image);
 
-    enum SketchType
-    {
-        ScannedSketch = 0,
-        HanddrawnSketch = 1
-    };
+    QList<qlonglong> bestMatchesForImage(qlonglong imageid, int numberOfResults=20, SketchType type=ScannedSketch);
+    QList<qlonglong> bestMatchesForImage(const QImage& image, int numberOfResults=20, SketchType type=ScannedSketch);
+    QList<qlonglong> bestMatchesForFile(const QString& filename, int numberOfResults=20, SketchType type=ScannedSketch);
 
-    QList<qlonglong> bestMatchesForImage(qlonglong imageid, int numberOfResults = 20, SketchType type = ScannedSketch);
-    QList<qlonglong> bestMatchesForFile(const QString& filename, int numberOfResults = 20, SketchType type = ScannedSketch);
+private:
+
+    QImage loadQImage(const QString &filename);
+
+    bool   indexImage(qlonglong imageid);
+
+    QList<qlonglong> bestMatches(Haar::SignatureData *data, int numberOfResults, SketchType type);
 
 private:
 
     HaarIfacePriv *d;
-
-    QImage      loadQImage(const QString &filename);
-
-    bool indexImage(qlonglong imageid);
-    QList<qlonglong> bestMatches(Haar::SignatureData *data, int numberOfResults, SketchType type);
-
 };
 
 }  // namespace Digikam

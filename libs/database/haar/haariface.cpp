@@ -236,12 +236,8 @@ bool HaarIface::indexImage(qlonglong imageid)
     return true;
 }
 
-QList<qlonglong> HaarIface::bestMatchesForFile(const QString& filename, int numberOfResults, SketchType type)
+QList<qlonglong> HaarIface::bestMatchesForImage(const Image& image, int numberOfResults, SketchType type)
 {
-    QImage image = loadQImage(filename);
-    if (image.isNull())
-        return QList<qlonglong>();
-
     d->createLoadingBuffer();
     d->data->fillPixelData(image);
 
@@ -270,6 +266,14 @@ QList<qlonglong> HaarIface::bestMatchesForImage(qlonglong imageid, int numberOfR
     return bestMatches(&sig, numberOfResults, type);
 }
 
+QList<qlonglong> HaarIface::bestMatchesForFile(const QString& filename, int numberOfResults, SketchType type)
+{
+    QImage image = loadQImage(filename);
+    if (image.isNull())
+        return QList<qlonglong>();
+
+    return bestMatchesForImage(image, numberOfResults, type);
+}
 
 QList<qlonglong> HaarIface::bestMatches(Haar::SignatureData *querySig, int numberOfResults, SketchType type)
 {
