@@ -90,8 +90,18 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     QGridLayout *grid = new QGridLayout(this);
 
     // ---------------------------------------------------------------
+    
+    QFrame *drawingBox = new QFrame(this);
+    drawingBox->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+    drawingBox->setLineWidth(1);
+    QVBoxLayout *vlay  = new QVBoxLayout(drawingBox);
+    d->sketchWidget    = new SketchWidget(drawingBox);
+    vlay->addWidget(d->sketchWidget);
+    vlay->setMargin(0);
+    vlay->setSpacing(0);
 
-    d->sketchWidget = new SketchWidget(this);
+    // ---------------------------------------------------------------
+
     d->hsSelector   = new KHueSaturationSelector(this);
     d->vSelector    = new KColorValueSelector(this);
     d->hsSelector->setMinimumSize(200, 142);
@@ -112,11 +122,11 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    grid->addWidget(d->sketchWidget, 0, 0, 1, 2);
-    grid->addWidget(d->hsSelector,   1, 0, 1, 1);
-    grid->addWidget(d->vSelector,    1, 1, 1, 1);
-    grid->addWidget(d->penSize,      2, 0, 1, 2);
-    grid->addWidget(d->clearButton,  3, 0, 1, 2);
+    grid->addWidget(drawingBox,     0, 0, 1, 2);
+    grid->addWidget(d->hsSelector,  1, 0, 1, 1);
+    grid->addWidget(d->vSelector,   1, 1, 1, 1);
+    grid->addWidget(d->penSize,     2, 0, 1, 2);
+    grid->addWidget(d->clearButton, 3, 0, 1, 2);
     grid->setRowStretch(4, 10);
     grid->setColumnStretch(0, 10);
     grid->setMargin(KDialog::spacingHint());
