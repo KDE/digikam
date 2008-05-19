@@ -24,6 +24,7 @@
 
 // Qt includes.
 
+#include <QTimer>
 #include <QWidget>
 #include <QFile>
 #include <QFileInfo>
@@ -66,8 +67,6 @@ WelcomePageView::WelcomePageView(QWidget* parent)
     setMetaRefreshEnabled(false);
     setURLCursor(Qt::PointingHandCursor);
 
-    slotThemeChanged();
-
     // ------------------------------------------------------------
 
     connect(browserExtension(), SIGNAL(openUrlRequest(const KUrl&, const KParts::OpenUrlArguments&, const KParts::BrowserArguments&)),
@@ -75,6 +74,8 @@ WelcomePageView::WelcomePageView(QWidget* parent)
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
+
+    QTimer::singleShot(0, this, SLOT(slotThemeChanged()));
 }
 
 WelcomePageView::~WelcomePageView()
