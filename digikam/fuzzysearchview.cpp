@@ -23,6 +23,7 @@
 
 // Qt includes.
 
+#include <QLabel>
 #include <QFrame>
 #include <QLayout>
 #include <QPushButton>
@@ -40,6 +41,7 @@
 #include <khuesaturationselect.h>
 #include <kcolorvalueselector.h>
 #include <knuminput.h>
+#include <khbox.h>
 
 // Local includes.
 
@@ -90,30 +92,43 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     QGridLayout *grid = new QGridLayout(this);
 
     // ---------------------------------------------------------------
-    
-    QFrame *drawingBox = new QFrame(this);
+        
+    QWidget *box      = new QWidget(this);
+    QVBoxLayout *vlay = new QVBoxLayout(box);
+    KHBox *drawingBox = new KHBox(box);
+    d->sketchWidget   = new SketchWidget(drawingBox);
     drawingBox->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     drawingBox->setLineWidth(1);
-    QVBoxLayout *vlay  = new QVBoxLayout(drawingBox);
-    d->sketchWidget    = new SketchWidget(drawingBox);
-    vlay->addWidget(d->sketchWidget);
+
+    vlay->addStretch(10);
+    vlay->addWidget(drawingBox, 0, Qt::AlignCenter);
+    vlay->addStretch(10);
     vlay->setMargin(0);
     vlay->setSpacing(0);
 
     // ---------------------------------------------------------------
 
-    d->hsSelector   = new KHueSaturationSelector(this);
-    d->vSelector    = new KColorValueSelector(this);
+    d->hsSelector = new KHueSaturationSelector(this);
+    d->vSelector  = new KColorValueSelector(this);
     d->hsSelector->setMinimumSize(200, 142);
     d->vSelector->setMinimumSize(26, 142);
 
+    QString tips(i18n("<p>Set here the brush color used to draw sketch."));
+    d->hsSelector->setWhatsThis(tips);
+    d->vSelector->setWhatsThis(tips);
+
     // ---------------------------------------------------------------
 
-    d->penSize = new KIntNumInput(this);
+    KHBox *hbox        = new KHBox(this);
+    QLabel *brushLabel = new QLabel(i18n("Brush size:"), hbox);
+    d->penSize         = new KIntNumInput(hbox);
     d->penSize->setRange(1, 40, 1);
-    d->penSize->setSliderEnabled(true);
+    d->penSize->setSliderEnabled(false);
     d->penSize->setValue(10);
     d->penSize->setWhatsThis(i18n("<p>Set here the brush size in pixels used to draw sketch."));
+    hbox->setStretchFactor(brushLabel, 10);
+    hbox->setMargin(0);
+    hbox->setSpacing(KDialog::spacingHint());
 
     // ---------------------------------------------------------------
 
@@ -122,13 +137,13 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    grid->addWidget(drawingBox,     0, 0, 1, 2);
-    grid->addWidget(d->hsSelector,  1, 0, 1, 1);
-    grid->addWidget(d->vSelector,   1, 1, 1, 1);
-    grid->addWidget(d->penSize,     2, 0, 1, 2);
-    grid->addWidget(d->clearButton, 3, 0, 1, 2);
+    grid->addWidget(box,            0, 0, 1, 3);
+    grid->addWidget(d->hsSelector,  1, 0, 1, 2);
+    grid->addWidget(d->vSelector,   1, 2, 1, 1);
+    grid->addWidget(hbox,           2, 0, 1, 3);
+    grid->addWidget(d->clearButton, 3, 0, 1, 3);
     grid->setRowStretch(4, 10);
-    grid->setColumnStretch(0, 10);
+    grid->setColumnStretch(1, 10);
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
 
