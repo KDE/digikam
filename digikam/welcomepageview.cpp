@@ -66,6 +66,7 @@ WelcomePageView::WelcomePageView(QWidget* parent)
     setJavaEnabled(false);    // just make this explicit.
     setMetaRefreshEnabled(false);
     setURLCursor(Qt::PointingHandCursor);
+    view()->adjustSize();
 
     // ------------------------------------------------------------
 
