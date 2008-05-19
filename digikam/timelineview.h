@@ -30,10 +30,6 @@
 #include <qwidget.h>
 #include <qstring.h>
 
-// Local includes.
-
-#include "timelinewidget.h"
-
 namespace Digikam
 {
 

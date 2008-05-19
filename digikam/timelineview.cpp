@@ -61,6 +61,7 @@
 #include "ddebug.h"
 #include "searchtextbar.h"
 #include "timelinefolderview.h"
+#include "timelinewidget.h"
 #include "timelineview.h"
 #include "timelineview.moc"
 
