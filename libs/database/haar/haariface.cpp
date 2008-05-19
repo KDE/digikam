@@ -236,7 +236,7 @@ bool HaarIface::indexImage(qlonglong imageid)
     return true;
 }
 
-QList<qlonglong> HaarIface::bestMatchesForImage(const Image& image, int numberOfResults, SketchType type)
+QList<qlonglong> HaarIface::bestMatchesForImage(const QImage& image, int numberOfResults, SketchType type)
 {
     d->createLoadingBuffer();
     d->data->fillPixelData(image);
