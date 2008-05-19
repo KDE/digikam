@@ -26,9 +26,8 @@
 
 // Qt includes.
 
-#include <QDateTime>
 #include <QFrame>
-#include <QString>
+#include <QImage>
 
 namespace Digikam
 {
@@ -51,9 +50,15 @@ private:
     void readConfig();
     void writeConfig();
 
+private slots:
+
+    void slotHSChanged(int h, int s);
+    void slotVChanged();
+    void slotSketchChanged(const QImage&);
+
 private:
 
-    FuzzySearchViewPriv* d;
+    FuzzySearchViewPriv *d;
 };
 
 }  // NameSpace Digikam

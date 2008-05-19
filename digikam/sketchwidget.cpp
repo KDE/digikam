@@ -66,7 +66,7 @@ SketchWidget::SketchWidget(QWidget *parent)
 
     setAttribute(Qt::WA_StaticContents);
     setFixedSize(256, 256);
-    clearSketch();
+    slotClear();
 }
 
 SketchWidget::~SketchWidget()
@@ -84,6 +84,11 @@ int SketchWidget::penWidth() const
     return d->penWidth;
 }
 
+QImage SketchWidget::sketchImage() const
+{ 
+    return d->pixmap.toImage();
+}
+
 void SketchWidget::setPenColor(const QColor &newColor)
 {
     d->penColor = newColor;
@@ -94,7 +99,7 @@ void SketchWidget::setPenWidth(int newWidth)
     d->penWidth = newWidth;
 }
 
-void SketchWidget::clearSketch()
+void SketchWidget::slotClear()
 {
     d->pixmap.fill(qRgb(255, 255, 255));
     update();
@@ -121,6 +126,7 @@ void SketchWidget::mouseReleaseEvent(QMouseEvent *event)
     {
         drawLineTo(event->pos());
         d->drawing = false;
+        emit signalSketchChanged(sketchImage());
     }
 }
 

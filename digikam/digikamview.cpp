@@ -78,6 +78,7 @@
 #include "imagepreviewview.h"
 #include "datefolderview.h"
 #include "tagfolderview.h"
+#include "fuzzysearchview.h"
 #include "searchfolderview.h"
 #include "searchtabheader.h"
 #include "statusprogressbar.h"
@@ -124,6 +125,7 @@ public:
         albumWidgetStack      = 0;
         selectionTimer        = 0;
         thumbSizeTimer        = 0;
+        fuzzySearchView       = 0;
         needDispatchSelection = false;
         cancelSlideShow       = false;
         thumbSize             = ThumbnailSize::Medium;
@@ -167,6 +169,7 @@ public:
     SearchFolderView         *searchFolderView;
     SearchTabHeader          *searchTabHeader;
     TagFilterView            *tagFilterView;
+    FuzzySearchView          *fuzzySearchView;
 };
 
 DigikamView::DigikamView(QWidget *parent)
@@ -222,12 +225,14 @@ DigikamView::DigikamView(QWidget *parent)
 
     d->dateFolderView   = new DateFolderView(this);
     d->timeLineView     = new TimeLineView(this);
+    d->fuzzySearchView  = new FuzzySearchView(this);
 
     d->leftSideBar->appendTab(d->folderBox, SmallIcon("folder-image"), i18n("Albums"));
     d->leftSideBar->appendTab(d->dateFolderView, SmallIcon("view-calendar-list"), i18n("Calendar"));
     d->leftSideBar->appendTab(d->tagBox, SmallIcon("tag"), i18n("Tags"));
     d->leftSideBar->appendTab(d->timeLineView, SmallIcon("clock"), i18n("Timeline"));
     d->leftSideBar->appendTab(d->searchBox, SmallIcon("edit-find"), i18n("Searches"));
+    d->leftSideBar->appendTab(d->fuzzySearchView, SmallIcon("tools-wizard"), i18n("Fuzzy Searches"));
 
     // To the right.
 

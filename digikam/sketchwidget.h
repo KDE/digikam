@@ -42,15 +42,20 @@ public:
     SketchWidget(QWidget *parent=0);
     ~SketchWidget();
 
-    void   setPenColor(const QColor& newColor);
     QColor penColor() const;
-
-    void   setPenWidth(int newWidth);
     int    penWidth() const;
+
+    QImage sketchImage() const;
+
+signals:
+
+    void signalSketchChanged(const QImage&);
 
 public slots:
 
-    void clearSketch();
+    void setPenColor(const QColor& newColor);
+    void setPenWidth(int newWidth);
+    void slotClear();
 
 protected:
 

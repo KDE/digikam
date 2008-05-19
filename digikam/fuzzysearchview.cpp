@@ -37,6 +37,9 @@
 #include <kapplication.h>
 #include <kstandarddirs.h>
 #include <kmessagebox.h>
+#include <khuesaturationselect.h>
+#include <kcolorvalueselector.h>
+#include <knuminput.h>
 
 // Local includes.
 
@@ -58,9 +61,21 @@ public:
     FuzzySearchViewPriv()
     {
         sketchWidget = 0;
+        hsSelector   = 0;
+        vSelector    = 0;
+        penSize      = 0;
+        clearButton  = 0;
     }
 
-    SketchWidget *sketchWidget;
+    QPushButton            *clearButton;
+
+    KIntNumInput           *penSize;
+
+    KHueSaturationSelector *hsSelector;
+
+    KColorValueSelector    *vSelector;
+
+    SketchWidget           *sketchWidget;
 };
 
 FuzzySearchView::FuzzySearchView(QWidget *parent)
@@ -76,19 +91,84 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     // ---------------------------------------------------------------
 
     d->sketchWidget = new SketchWidget(this);
+    d->hsSelector   = new KHueSaturationSelector(this);
+    d->vSelector    = new KColorValueSelector(this);
+    d->hsSelector->setMinimumSize(200, 142);
+    d->vSelector->setMinimumSize(26, 142);
+
+    // ---------------------------------------------------------------
+
+    d->penSize = new KIntNumInput(this);
+    d->penSize->setRange(1, 40, 1);
+    d->penSize->setSliderEnabled(true);
+    d->penSize->setValue(10);
+    d->penSize->setWhatsThis(i18n("<p>Set here the brush size in pixels used to draw sketch."));
+
+    // ---------------------------------------------------------------
+
+    d->clearButton = new QPushButton(i18n("Clear"), this);
+    d->clearButton->setWhatsThis(i18n("<p>Use this button to clear sketch contents."));
 
     // ---------------------------------------------------------------
 
     grid->addWidget(d->sketchWidget, 0, 0, 1, 2);
-    grid->setRowStretch(1, 10);
+    grid->addWidget(d->hsSelector,   1, 0, 1, 1);
+    grid->addWidget(d->vSelector,    1, 1, 1, 1);
+    grid->addWidget(d->penSize,      2, 0, 1, 2);
+    grid->addWidget(d->clearButton,  3, 0, 1, 2);
+    grid->setRowStretch(4, 10);
+    grid->setColumnStretch(0, 10);
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
+
+    // ---------------------------------------------------------------
+
+    connect(d->hsSelector, SIGNAL(valueChanged(int, int)),
+            this, SLOT(slotHSChanged(int, int)));
+
+    connect(d->vSelector, SIGNAL(valueChanged(int)),
+            this, SLOT(slotVChanged()));
+
+    connect(d->penSize, SIGNAL(valueChanged(int)),
+            d->sketchWidget, SLOT(setPenWidth(int)));
+
+    connect(d->clearButton, SIGNAL(clicked()),
+            d->sketchWidget, SLOT(slotClear()));
+
+    connect(d->sketchWidget, SIGNAL(signalSketchChanged(const QImage&)),
+            this, SLOT(slotSketchChanged(const QImage&)));
 }
 
 FuzzySearchView::~FuzzySearchView()
 {
     writeConfig();
     delete d;
+}
+
+void FuzzySearchView::slotHSChanged(int h, int s)
+{
+    d->vSelector->blockSignals(true);
+    d->vSelector->setHue(h);
+    d->vSelector->setSaturation(s);
+    d->vSelector->updateContents();
+    d->vSelector->repaint();
+    d->vSelector->blockSignals(false);
+    slotVChanged();
+}
+
+void FuzzySearchView::slotVChanged()
+{
+    int hue      = d->hsSelector->xValue();
+    int sat      = d->hsSelector->yValue();
+    int val      = d->vSelector->value();
+    QColor color = QColor::fromHsv(hue, sat, val);
+
+    d->sketchWidget->setPenColor(color);
+}
+
+void FuzzySearchView::slotSketchChanged(const QImage& /*img*/)
+{
+    // TODO: query database here !
 }
 
 void FuzzySearchView::readConfig()
