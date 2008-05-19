@@ -105,27 +105,27 @@ a:hover {
 
 #boxT {
   width: 100%;
-  height: 49px;
+  height: 30px;
 }
 
 #boxTL {
-  width: 55px;
-  height: 49px;
+  width: 31px;
+  height: 30px;
   float: left;
   background-image: url(%10);     /* box-top-left.png */
 }
 
 #boxTR {
-  width: 55px;
-  height: 49px;
+  width: 32px;
+  height: 30px;
   float: right;
   background-image: url(%11);     /* box-top-right.png */
 }
 
 #boxTC {
-  height: 49px;
-  margin-left: 55px;
-  margin-right: 55px;
+  height: 30px;
+  margin-left: 31px;
+  margin-right: 32px;
   background-image: url(%12);     /* box-top-middle.png */
   background-repeat: repeat-x;
 }
@@ -134,7 +134,7 @@ a:hover {
   background-image: url(%13);    /* box-middle-left.png */
   background-repeat: repeat-y;
   background-position: left;
-  padding-left: 55px;
+  padding-left: 31px;
 }
 
 #boxCenter {
@@ -148,32 +148,32 @@ a:hover {
   background-image: url(%15);    /* box-middle-right.png */
   background-repeat: repeat-y;
   background-position: right;
-  padding-right: 55px;
+  padding-right: 32px;
 }
 
 #boxB {
   width: 100%;
-  height: 49px;
+  height: 30px;
 }
 
 #boxBL {
-  width: 55px;
-  height: 49px;
+  width: 32px;
+  height: 30px;
   float: left;
   background-image: url(%16);    /* box-bottom-left.png */
 }
 
 #boxBR {
-  width: 55px;
-  height: 49px;
+  width: 32px;
+  height: 30px;
   float: right;
   background-image: url(%17);    /* box-bottom-right.png */
 }
 
 #boxBC {
-  height: 49px;
-  margin-left: 55px;
-  margin-right: 55px;
+  height: 30px;
+  margin-left: 31px;
+  margin-right: 32px;
   background-image: url(%18);    /* box-bottom-middle.png */
   background-repeat: repeat-x;
 }
