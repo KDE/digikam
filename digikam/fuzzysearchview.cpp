@@ -46,6 +46,7 @@
 #include "album.h"
 #include "albummanager.h"
 #include "ddebug.h"
+#include "haariface.h"
 #include "sketchwidget.h"
 #include "fuzzysearchview.h"
 #include "fuzzysearchview.moc"
@@ -171,9 +172,14 @@ void FuzzySearchView::slotVChanged()
     d->sketchWidget->setPenColor(color);
 }
 
-void FuzzySearchView::slotSketchChanged(const QImage& /*img*/)
+void FuzzySearchView::slotSketchChanged(const QImage& img)
 {
-    // TODO: query database here !
+    // We query database here
+
+    HaarIface haarIface;
+    QList<qlonglong> list = haarIface.bestMatchesForImage(img, 10, HaarIface::HanddrawnSketch);
+
+    DDebug() << "Sketch Fuzzy Search Results: " << list << endl;
 }
 
 void FuzzySearchView::readConfig()
