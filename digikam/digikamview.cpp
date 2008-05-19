@@ -35,6 +35,7 @@
 #include <QTimer>
 #include <QLabel>
 #include <QListView>
+#include <QTreeView>
 
 // KDE includes.
 
@@ -60,6 +61,7 @@
 #include "dmetadata.h"
 #include "albummanager.h"
 #include "album.h"
+#include "albummodel.h"
 #include "albumwidgetstack.h"
 #include "albumfolderview.h"
 #include "albumiconview.h"
@@ -88,8 +90,6 @@
 #include "digikamapp.h"
 #include "digikamview.h"
 #include "digikamview.moc"
-#include "albummodel.h"
-#include <QTreeView>
 
 namespace Digikam
 {
@@ -455,7 +455,7 @@ void DigikamView::setupConnections()
 
     connect(d->albumWidgetStack, SIGNAL(signalPrevItem()),
             this, SLOT(slotPrevItem()));
-    
+
     connect(d->albumWidgetStack, SIGNAL(signalEditItem()),
             this, SLOT(slotImageEdit()));
 
@@ -939,7 +939,7 @@ void DigikamView::slotGotoDateAndItem(AlbumIconItem* iconItem)
 
     // Set the activate item url to find in the Album View after  
     // all items have be reloaded.
-    d->iconView->setAlbumItemToFind(url);  
+    d->iconView->setAlbumItemToFind(url);
 
     // Change the year and month of the iconItem (day is unused).
     d->dateFolderView->gotoDate(date); 
@@ -1098,7 +1098,7 @@ void DigikamView::setThumbSize(int size)
         connect(d->thumbSizeTimer, SIGNAL(timeout()),
                 this, SLOT(slotThumbSizeEffect()) );
         d->thumbSizeTimer->setSingleShot(true);
-        d->thumbSizeTimer->start(300);    
+        d->thumbSizeTimer->start(300);
     }
 }
 
@@ -1212,7 +1212,7 @@ void DigikamView::slotAlbumSyncPicturesMetadata()
         return;
 
     BatchSyncMetadata *syncMetadata = new BatchSyncMetadata(this, album);
-    
+
     connect(syncMetadata, SIGNAL(signalProgressBarMode(int, const QString&)),
             d->parent, SLOT(slotProgressBarMode(int, const QString&)));
 
@@ -1523,7 +1523,7 @@ void DigikamView::slotSlideShowRecursive()
         ImageInfoAlbumsJob *job = new ImageInfoAlbumsJob;
         connect(job, SIGNAL(signalCompleted(const ImageInfoList&)),
                 this, SLOT(slotItemsInfoFromAlbums(const ImageInfoList&)));
-        job->allItemsFromAlbums(albumList);       
+        job->allItemsFromAlbums(albumList);
     }
 }
 
