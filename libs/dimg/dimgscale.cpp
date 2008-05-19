@@ -10,7 +10,8 @@
  *               section of a image. Added 16bit image support
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * Ported to C++/QImage by Daniel M. Duley
  * Following modification are (C) Daniel M. Duley
@@ -102,11 +103,14 @@ using namespace DImgScale;
 
 DImg DImg::smoothScale(int dw, int dh, QSize::ScaleMode scaleMode)
 {
-    if (dw < 0 || dh < 0)
+    if (dw < 0 || dh < 0 || isNull())
         return DImg();
 
     uint w = width();
     uint h = height();
+
+    if (w <= 0 || h <= 0)
+        return DImg();
 
     QSize newSize(w, h);
     newSize.scale( QSize(dw, dh), scaleMode );
@@ -2121,4 +2125,3 @@ int sow);             // src scanline width
 */
 
 }  // NameSpace Digikam
-
