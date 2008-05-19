@@ -54,6 +54,7 @@ private slots:
 
     void slotHSChanged(int h, int s);
     void slotVChanged();
+    void slotResultsChanged();
     void slotSketchChanged(const QImage&);
 
 private:

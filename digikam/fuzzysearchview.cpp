@@ -67,12 +67,14 @@ public:
         hsSelector   = 0;
         vSelector    = 0;
         penSize      = 0;
+        results      = 0;
         clearButton  = 0;
     }
 
     QPushButton            *clearButton;
 
     KIntNumInput           *penSize;
+    KIntNumInput           *results;
 
     KHueSaturationSelector *hsSelector;
 
@@ -137,12 +139,26 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
 
     // ---------------------------------------------------------------
 
+    KHBox *hbox2         = new KHBox(this);
+    QLabel *resultsLabel = new QLabel(i18n("Results:"), hbox2);
+    d->results           = new KIntNumInput(hbox2);
+    d->results->setRange(1, 50, 1);
+    d->results->setSliderEnabled(false);
+    d->results->setValue(10);
+    d->results->setWhatsThis(i18n("<p>Set here the number of items to find."));
+    hbox2->setStretchFactor(resultsLabel, 10);
+    hbox2->setMargin(0);
+    hbox2->setSpacing(KDialog::spacingHint());
+
+    // ---------------------------------------------------------------
+
     grid->addWidget(box,            0, 0, 1, 3);
     grid->addWidget(d->hsSelector,  1, 0, 1, 2);
     grid->addWidget(d->vSelector,   1, 2, 1, 1);
     grid->addWidget(hbox,           2, 0, 1, 3);
     grid->addWidget(d->clearButton, 3, 0, 1, 3);
-    grid->setRowStretch(4, 10);
+    grid->addWidget(hbox2,          4, 0, 1, 3);
+    grid->setRowStretch(5, 10);
     grid->setColumnStretch(1, 10);
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
@@ -157,6 +173,9 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
 
     connect(d->penSize, SIGNAL(valueChanged(int)),
             d->sketchWidget, SLOT(setPenWidth(int)));
+
+    connect(d->results, SIGNAL(valueChanged(int)),
+            this, SLOT(slotResultsChanged()));
 
     connect(d->clearButton, SIGNAL(clicked()),
             d->sketchWidget, SLOT(slotClear()));
@@ -197,12 +216,17 @@ void FuzzySearchView::slotVChanged()
     d->sketchWidget->setPenColor(color);
 }
 
+void FuzzySearchView::slotResultsChanged()
+{
+    slotSketchChanged(d->sketchWidget->sketchImage());
+}
+
 void FuzzySearchView::slotSketchChanged(const QImage& img)
 {
     // We query database here
 
     HaarIface haarIface;
-    QList<qlonglong> list = haarIface.bestMatchesForImage(img, 10, HaarIface::HanddrawnSketch);
+    QList<qlonglong> list = haarIface.bestMatchesForImage(img, d->results->value(), HaarIface::HanddrawnSketch);
 
     DDebug() << "Sketch Fuzzy Search Results: " << list << endl;
 }
