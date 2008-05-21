@@ -134,7 +134,8 @@ namespace DatabaseSearch
         KeywordSearch,
         AdvancedSearch,
         LegacyUrlSearch,
-        TimeLineSearch
+        TimeLineSearch,
+        HaarSearch
     };
 }
 

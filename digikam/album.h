@@ -427,6 +427,7 @@ public:
     bool                 isAdvancedSearch() const;
     bool                 isKeywordSearch() const;
     bool                 isTimelineSearch() const;
+    bool                 isHaarSearch() const;
 
 private:
 

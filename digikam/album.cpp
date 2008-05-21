@@ -533,6 +533,11 @@ bool SAlbum::isTimelineSearch() const
     return m_type == DatabaseSearch::TimeLineSearch;
 }
 
+bool SAlbum::isHaarSearch() const
+{
+    return m_type == DatabaseSearch::HaarSearch;
+}
+
 // --------------------------------------------------------------------------
 
 AlbumIterator::AlbumIterator(Album *album)
