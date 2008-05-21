@@ -128,6 +128,11 @@ int SearchXmlReader::valueToInt()
     return readElementText().toInt();
 }
 
+qlonglong SearchXmlReader::valueToLongLong()
+{
+    return readElementText().toLongLong();
+}
+
 double SearchXmlReader::valueToDouble()
 {
     return readElementText().toDouble();
@@ -244,7 +249,7 @@ void SearchXmlReader::readToEndOfElement()
     if (isStartElement()) {
         QString result;
         forever {
-            switch (readNext()) {
+            switch (QXmlStreamReader::readNext()) {
                 case StartElement:
                     stack++;
                 case EndElement:
@@ -255,6 +260,25 @@ void SearchXmlReader::readToEndOfElement()
                 default:
                     break;
             }
+        }
+    }
+}
+
+void SearchXmlReader::readToFirstField()
+{
+    SearchXml::Element element;
+    bool hasGroup = false;
+    while (!atEnd())
+    {
+        element = readNext();
+
+        if (element == SearchXml::Group)
+        {
+            hasGroup = true;
+        }
+        else if (hasGroup && element == SearchXml::Field)
+        {
+            return;
         }
     }
 }
@@ -315,6 +339,11 @@ void SearchXmlWriter::writeValue(const QString &value)
 }
 
 void SearchXmlWriter::writeValue(int value)
+{
+    writeCharacters(QString::number(value));
+}
+
+void SearchXmlWriter::writeValue(qlonglong value)
 {
     writeCharacters(QString::number(value));
 }
@@ -700,6 +729,16 @@ int SearchXmlCachingReader::valueToInt()
         m_readValue = true;
     }
     return m_value.toInt();
+}
+
+qlonglong SearchXmlCachingReader::valueToLongLong()
+{
+    if (!m_readValue)
+    {
+        m_value = SearchXmlReader::valueToLongLong();
+        m_readValue = true;
+    }
+    return m_value.toLongLong();
 }
 
 double SearchXmlCachingReader::valueToDouble()

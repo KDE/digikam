@@ -130,6 +130,7 @@ public:
         text/elements to the desired output. */
     QString             value();
     int                 valueToInt();
+    qlonglong           valueToLongLong();
     double              valueToDouble();
     QDateTime           valueToDateTime();
     QList<int>          valueToIntList();
@@ -140,6 +141,10 @@ public:
         start element in reached.
      */
     void readToEndOfElement();
+    /** General helper method: Reads XML until the first field
+     *  of the next or first found group is reached.
+     */
+    void readToFirstField();
 
 protected:
 
@@ -183,6 +188,7 @@ public:
     /** Adds the value, "4" in the case of "Rating less than 4" */
     void writeValue(const QString &value);
     void writeValue(int value);
+    void writeValue(qlonglong value);
     void writeValue(double value, int precision = 8);
     void writeValue(const QDateTime &dateTime);
     void writeValue(const QList<int> valueList);
@@ -294,6 +300,7 @@ public:
     SearchXml::Relation fieldRelation() const;
     QString             value();
     int                 valueToInt();
+    qlonglong           valueToLongLong();
     double              valueToDouble();
     QDateTime           valueToDateTime();
     QList<int>          valueToIntList();
