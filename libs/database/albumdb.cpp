@@ -600,6 +600,30 @@ QString AlbumDB::getSearchQuery(int searchId)
         return values.first().toString();
 }
 
+SearchInfo AlbumDB::getSearchInfo(int searchId)
+{
+    SearchInfo info;
+
+    QList<QVariant> values;
+    d->db->execSql( "SELECT id, type, name, query FROM Searches WHERE id=?;",
+                    searchId, &values);
+
+    if (values.size() == 4)
+    {
+        QList<QVariant>::iterator it = values.begin();
+        info.id    = (*it).toInt();
+        ++it;
+        info.type  = (DatabaseSearch::Type)(*it).toInt();
+        ++it;
+        info.name  = (*it).toString();
+        ++it;
+        info.query = (*it).toString();
+        ++it;
+    }
+
+    return info;
+}
+
 void AlbumDB::setSetting(const QString& keyword,
                          const QString& value )
 {

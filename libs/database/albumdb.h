@@ -439,6 +439,11 @@ public:
     void deleteSearch(int searchID);
 
     /**
+     * Get information about the specified search
+     */
+    SearchInfo getSearchInfo(int searchId);
+
+    /**
      * Get the query for the search specified by its id
      */
     QString getSearchQuery(int searchId);
