@@ -96,7 +96,7 @@ public:
     void listDateRange(ImageListerReceiver *receiver, const QDate &startDate, const QDate &endDate);
 
     /**
-     * Execute the search specified by a SQL expression
+     * Execute the search specified by search XML
      * @param xml SearchXml describing the query
      * @param limit limit the count of the result set. If limit = 0, then no limit is set.
      */
@@ -105,11 +105,21 @@ public:
                     int limit = 0);
 
     /**
+     * Execute the search specified by search XML describing a Haar search
+     * @param xml SearchXml describing the query
+     * @param limit limit the count of the result set. If limit = 0, then no limit is set.
+     */
+    void listHaarSearch(ImageListerReceiver *receiver,
+                        const QString &xml);
+
+    /**
      * Tool method to retrieve the dimension from a file. Not a database query, slow!
      */
     static QSize retrieveDimension(const QString &filePath);
 
 private:
+
+    void listFromIdList(ImageListerReceiver *receiver, QList<qlonglong> imageIds);
 
     bool m_recursive;
 };

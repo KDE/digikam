@@ -58,6 +58,7 @@
 #include "databasebackend.h"
 #include "imagequerybuilder.h"
 #include "dmetadata.h"
+#include "haariface.h"
 #include "imagelister.h"
 
 namespace Digikam
@@ -453,5 +454,138 @@ void ImageLister::listSearch(ImageListerReceiver *receiver,
         receiver->receive(record);
     }
 }
+
+void ImageLister::listHaarSearch(ImageListerReceiver *receiver, const QString &xml)
+{
+    SearchXmlReader reader(xml);
+    reader.readToFirstField();
+
+    if (reader.fieldName() != "similarity")
+    {
+        receiver->error("Unsupported field name \"" + reader.fieldName() + "\" in Haar search");
+        return;
+    }
+
+    QStringRef type = reader.attributes().value("type");
+    QStringRef numResultsString = reader.attributes().value("numberofresults");
+    QStringRef sketchTypeString = reader.attributes().value("sketchtype");
+
+    int numberOfResults = 20;
+    HaarIface::SketchType sketchType = HaarIface::ScannedSketch;
+
+    if (!numResultsString.isNull())
+        numberOfResults = qMax(numResultsString.toString().toInt(), 1);
+    if (sketchTypeString == "handdrawn")
+        sketchType = HaarIface::HanddrawnSketch;
+
+    QList<qlonglong> list;
+    if (type == "signature")
+    {
+        QString sig = reader.value();
+        HaarIface iface;
+        list = iface.bestMatchesForSignature(sig, numberOfResults, sketchType);
+    }
+    else if (type == "imageid")
+    {
+        int id = reader.valueToLongLong();
+        HaarIface iface;
+        list = iface.bestMatchesForImage(id, numberOfResults, sketchType);
+    }
+
+    listFromIdList(receiver, list);
+}
+
+void ImageLister::listFromIdList(ImageListerReceiver *receiver, QList<qlonglong> imageIds)
+{
+    QList<QVariant> values;
+    QString errMsg;
+    bool executionSuccess = true;
+
+    {
+        /*
+        // Unfortunately, we need to convert to QVariant
+        QList<QVariant> variantIdList;
+        foreach(qlonglong id, imageIds)
+            variantIdList << id;
+
+        DatabaseAccess access;
+        QSqlQuery query = access.backend()->prepareQuery(QString(
+                    "SELECT DISTINCT Images.id, Images.name, Images.album, "
+                    "       ImageInformation.rating, ImageInformation.creationDate, "
+                    "       Images.modificationDate, Images.fileSize, "
+                    "       ImageInformation.width, ImageInformation.height "
+                    " FROM Images "
+                    "       LEFT OUTER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
+                    " WHERE Images.id = ?;"
+                                                                ));
+
+        query.addBindValue(variantIdList);
+        executionSuccess = query.execBatch
+        */
+        DatabaseAccess access;
+        QSqlQuery query = access.backend()->prepareQuery(QString(
+                             "SELECT DISTINCT Images.id, Images.name, Images.album, "
+                             "       Albums.albumRoot, "
+                             "       ImageInformation.rating, ImageInformation.creationDate, "
+                             "       Images.modificationDate, Images.fileSize, "
+                             "       ImageInformation.width, ImageInformation.height "
+                             " FROM Images "
+                             "       LEFT OUTER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
+                             "       LEFT OUTER JOIN Albums ON Albums.id=Images.album "
+                             " WHERE Images.id = ?;"
+                                                                ));
+
+        foreach(qlonglong id, imageIds)
+        {
+            query.bindValue(0, id);
+            executionSuccess = access.backend()->exec(query);
+            if (!executionSuccess)
+            {
+                errMsg = access.backend()->lastError();
+                break;
+            }
+            // append results to list
+            values << access.backend()->readToList(query);
+        }
+
+    }
+    if (!executionSuccess)
+    {
+        receiver->error(errMsg);
+        return;
+    }
+
+    int width, height;
+    for (QList<QVariant>::iterator it = values.begin(); it != values.end();)
+    {
+        ImageListerRecord record;
+
+        record.imageID           = (*it).toLongLong();
+        ++it;
+        record.name              = (*it).toString();
+        ++it;
+        record.albumID           = (*it).toInt();
+        ++it;
+        record.albumRootID       = (*it).toInt();
+        ++it;
+        record.rating            = (*it).toInt();
+        ++it;
+        record.creationDate      = QDateTime::fromString((*it).toString(), Qt::ISODate);
+        ++it;
+        record.modificationDate  = QDateTime::fromString((*it).toString(), Qt::ISODate);
+        ++it;
+        record.fileSize          = (*it).toInt();
+        ++it;
+        width                    = (*it).toInt();
+        ++it;
+        height                   = (*it).toInt();
+        ++it;
+
+        record.imageSize         = QSize(width, height);
+
+        receiver->receive(record);
+    }
+}
+
 
 }  // namespace Digikam
