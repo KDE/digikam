@@ -71,7 +71,7 @@ void kio_digikamsearch::special(const QByteArray& data)
     Digikam::DatabaseAccess::setParameters(dbUrl);
 
     int id = dbUrl.searchId();
-    QString xml = Digikam::DatabaseAccess().db()->getSearchQuery(id);
+    Digikam::SearchInfo info = Digikam::DatabaseAccess().db()->getSearchInfo(id);
 
     Digikam::ImageLister lister;
 
@@ -79,15 +79,18 @@ void kio_digikamsearch::special(const QByteArray& data)
     {
         // send data every 200 images to be more responsive
         Digikam::ImageListerSlaveBasePartsSendingReceiver receiver(this, 200);
-        lister.listSearch(&receiver, xml);
+        if (info.type == Digikam::DatabaseSearch::HaarSearch)
+            lister.listHaarSearch(&receiver, info.query);
+        else
+            lister.listSearch(&receiver, info.query);
         if (!receiver.hasError)
             receiver.sendData();
     }
     else
     {
         Digikam::ImageListerSlaveBaseReceiver receiver(this);
-        // fast mode: do not get size, dimension, limit results to 500
-        lister.listSearch(&receiver, xml, 500);
+        // fast mode: limit results to 500
+        lister.listSearch(&receiver, info.query, 500);
         if (!receiver.hasError)
             receiver.sendData();
     }
