@@ -50,6 +50,7 @@
 #include "databaseaccess.h"
 #include "albumdb.h"
 #include "databasebackend.h"
+#include "haar.h"
 #include "haariface.h"
 
 using namespace std;
@@ -98,7 +99,7 @@ public:
     QByteArray write(Haar::SignatureData *data)
     {
         QByteArray array;
-        array.reserve(sizeof(qint32) + 3*sizeof(double) + sizeof(qint32)*Haar::NumberOfCoefficients);
+        array.reserve(sizeof(qint32) + 3*sizeof(double) + 3*sizeof(qint32)*Haar::NumberOfCoefficients);
         QDataStream stream(&array, QIODevice::WriteOnly);
 
         // write version
@@ -236,6 +237,22 @@ bool HaarIface::indexImage(qlonglong imageid)
     return true;
 }
 
+QString HaarIface::signatureAsText(const QImage &image)
+{
+    d->createLoadingBuffer();
+    d->data->fillPixelData(image);
+
+    Haar::Calculator haar;
+    haar.transform(d->data);
+    Haar::SignatureData sig;
+    haar.calcHaar(d->data, &sig);
+
+    DatabaseBlob blob;
+    QByteArray array = blob.write(&sig);
+
+    return array.toBase64();
+}
+
 QList<qlonglong> HaarIface::bestMatchesForImage(const QImage& image, int numberOfResults, SketchType type)
 {
     d->createLoadingBuffer();
@@ -273,6 +290,17 @@ QList<qlonglong> HaarIface::bestMatchesForFile(const QString& filename, int numb
         return QList<qlonglong>();
 
     return bestMatchesForImage(image, numberOfResults, type);
+}
+
+QList<qlonglong> HaarIface::bestMatchesForSignature(const QString& signature, int numberOfResults, SketchType type)
+{
+    QByteArray bytes = QByteArray::fromBase64(signature.toAscii());
+
+    DatabaseBlob blobReader;
+    Haar::SignatureData sig;
+    blobReader.read(bytes, &sig);
+
+    return bestMatches(&sig, numberOfResults, type);
 }
 
 QList<qlonglong> HaarIface::bestMatches(Haar::SignatureData *querySig, int numberOfResults, SketchType type)

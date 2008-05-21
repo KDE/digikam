@@ -26,18 +26,13 @@
 #ifndef HAARIFACE_H
 #define HAARIFACE_H
 
-// C++ Includes
-
-#include <map>
-#include <list>
-
 // Qt includes.
 
 #include <QString>
 
 // Local includes.
 
-#include "haar.h"
+#include "digikam_export.h"
 
 class QImage;
 
@@ -52,7 +47,7 @@ namespace Haar
 }
 
 class HaarIfacePriv;
-class HaarIface
+class DIGIKAM_EXPORT HaarIface
 {
 
 public:
@@ -70,15 +65,22 @@ public:
 
     static int preferredSize();
 
+    /** Adds an image to the index in the database. */
     bool indexImage(const QString& filename);
     bool indexImage(const QString& filename, const QImage &image);
     bool indexImage(const QString& filename, const DImg &image);
     bool indexImage(qlonglong imageid, const QImage &image);
     bool indexImage(qlonglong imageid, const DImg &image);
 
+    /** Searches the database for the best matches for the specified query image. */
     QList<qlonglong> bestMatchesForImage(qlonglong imageid, int numberOfResults=20, SketchType type=ScannedSketch);
     QList<qlonglong> bestMatchesForImage(const QImage& image, int numberOfResults=20, SketchType type=ScannedSketch);
     QList<qlonglong> bestMatchesForFile(const QString& filename, int numberOfResults=20, SketchType type=ScannedSketch);
+    QList<qlonglong> bestMatchesForSignature(const QString& signature, int numberOfResults=20, SketchType type=ScannedSketch);
+
+    /** Calculates the Haar signature, bring it in a form as stored in the DB,
+     *  and encode it to Ascii data. Can be used for bestMatchesForSignature. */
+    QString signatureAsText(const QImage &image);
 
 private:
 
