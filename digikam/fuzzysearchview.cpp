@@ -49,6 +49,7 @@
 #include "albummanager.h"
 #include "ddebug.h"
 #include "haariface.h"
+#include "searchxml.h"
 #include "sketchwidget.h"
 #include "fuzzysearchview.h"
 #include "fuzzysearchview.moc"
@@ -195,6 +196,11 @@ FuzzySearchView::~FuzzySearchView()
     delete d;
 }
 
+QString FuzzySearchView::currentHaarSearchName()
+{
+    return QString("_Current_Haar_Search_");
+}
+
 void FuzzySearchView::slotHSChanged(int h, int s)
 {
     d->vSelector->blockSignals(true);
@@ -226,9 +232,22 @@ void FuzzySearchView::slotSketchChanged(const QImage& img)
     // We query database here
 
     HaarIface haarIface;
-    QList<qlonglong> list = haarIface.bestMatchesForImage(img, d->results->value(), HaarIface::HanddrawnSketch);
+    //QList<qlonglong> list = haarIface.bestMatchesForImage(img, d->results->value(), HaarIface::HanddrawnSketch);
+    //DDebug() << "Sketch Fuzzy Search Results: " << list << endl;
 
-    DDebug() << "Sketch Fuzzy Search Results: " << list << endl;
+    SearchXmlWriter writer;
+
+    writer.writeGroup();
+    writer.writeField("similarity", SearchXml::Like);
+    writer.writeAttribute("type", "signature"); // we pass a signature
+    writer.writeAttribute("numberofresults", QString::number(d->results->value()));
+    writer.writeAttribute("sketchtype", "handdrawn");
+    writer.writeValue(haarIface.signatureAsText(img));
+    writer.finishField();
+    writer.finishGroup();
+
+    SAlbum* album = AlbumManager::instance()->createSAlbum(currentHaarSearchName(), DatabaseSearch::HaarSearch, writer.xml());
+    AlbumManager::instance()->setCurrentAlbum(album);
 }
 
 void FuzzySearchView::readConfig()

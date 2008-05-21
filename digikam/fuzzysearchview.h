@@ -45,6 +45,8 @@ public:
 
     void setActive(bool val);
 
+    QString currentHaarSearchName();
+
 private: 
 
     void readConfig();
