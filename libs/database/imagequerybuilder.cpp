@@ -761,6 +761,10 @@ void ImageQueryBuilder::buildField(QString &sql, SearchXmlCachingReader &reader,
 
         sql += " ) ";
     }
+    else if (name == "similarity")
+    {
+        DWarning() << "Search field \"similarity\" is not supported by ImageQueryBuilder";
+    }
 }
 
 void ImageQueryBuilder::addSqlOperator(QString &sql, SearchXml::Operator op, bool isFirst)
