@@ -198,13 +198,13 @@ ImageResize::ImageResize(QWidget* parent)
     d->wpInput     = new KDoubleNumInput(firstPage);
     d->wpInput->setRange(1.0, 999.0, 1.0, true);
     d->wpInput->setObjectName("d->wpInput");
-    d->wpInput->setWhatsThis( i18n("<p>Set here the new image width in percents."));
+    d->wpInput->setWhatsThis( i18n("<p>Set here the new image width in percent."));
 
     QLabel *label4 = new QLabel(i18n("Height (%):"), firstPage);
     d->hpInput     = new KDoubleNumInput(firstPage);
     d->hpInput->setRange(1.0, 999.0, 1.0, true);
     d->hpInput->setObjectName("d->hpInput");
-    d->hpInput->setWhatsThis( i18n("<p>Set here the new image height in percents."));
+    d->hpInput->setWhatsThis( i18n("<p>Set here the new image height in percent."));
 
     d->preserveRatioBox = new QCheckBox(i18n("Maintain aspect ratio"), firstPage);
     d->preserveRatioBox->setWhatsThis( i18n("<p>Enable this option to maintain aspect "
@@ -228,7 +228,7 @@ ImageResize::ImageResize(QWidget* parent)
     d->progressBar = new QProgressBar(firstPage);
     d->progressBar->setValue(0);
     d->progressBar->setMaximum(100);
-    d->progressBar->setWhatsThis( i18n("<p>This is the current progress when you use Restoration mode."));
+    d->progressBar->setWhatsThis( i18n("<p>This shows the current progress when you use the Restoration mode."));
 
     grid->addWidget(d->preserveRatioBox, 0, 0, 1, 3);
     grid->addWidget(label1, 1, 0, 1, 1);

@@ -161,7 +161,7 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
     d->rightClickActionComboBox->addItem(i18n("Show embedded preview"), AlbumSettings::ShowPreview);
     d->rightClickActionComboBox->addItem(i18n("Start image editor"), AlbumSettings::StartEditor);
     d->rightClickActionComboBox->setToolTip(i18n("<p>Here, choose what should happen when you "
-                                                 "right-click on a thumbnail."));
+                                                 "click on a thumbnail."));
 
     d->previewLoadFullImageSize = new QCheckBox(i18n("Embedded preview loads full image size"), interfaceOptionsGroup);
     d->previewLoadFullImageSize->setWhatsThis( i18n("<p>Set this option to load the full image size "

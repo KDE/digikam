@@ -416,7 +416,7 @@ void LightTableWindow::setupActions()
     d->navigateByPairAction = new KToggleAction(KIcon("system-run"), i18n("By Pair"), this);
     d->navigateByPairAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_P);
     d->navigateByPairAction->setEnabled(false);
-    d->navigateByPairAction->setWhatsThis(i18n("Navigate by pair with all items"));
+    d->navigateByPairAction->setWhatsThis(i18n("Navigate by pairs with all items"));
     connect(d->navigateByPairAction, SIGNAL(triggered()), this, SLOT(slotToggleNavigateByPair()));
     actionCollection()->addAction("lighttable_navigatebypair", d->navigateByPairAction);
 

@@ -197,7 +197,7 @@ CameraSelection::CameraSelection( QWidget* parent )
     d->umsMountURL = new KUrlRequester( QString("/mnt/camera"), umsMountBox);
     d->umsMountURL->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly);
     d->umsMountURL->setWhatsThis(i18n("<p>Set here the mount path to use on your computer. This "
-                                      "option is only required if you use an <b>USB Mass Storage</b> "
+                                      "option is only required if you use a <b>USB Mass Storage</b> "
                                       "camera.</p>"));
 
     gLayout4->addWidget(umsMountLabel);
@@ -215,15 +215,15 @@ CameraSelection::CameraSelection( QWidget* parent )
                             .scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     QLabel* link = new QLabel(box2);
-    link->setText(i18n("<p>To set an <b>USB Mass Storage</b> camera<br>"
-                       "(which appears like a removable drive), please<br>"
+    link->setText(i18n("<p>To set a <b>USB Mass Storage</b> camera<br>"
+                       "(which looks like a removable drive when mounted on your desktop), please<br>"
                        "use <a href=\"umscamera\">%1</a> from camera list.</p>", 
                        d->UMSCameraNameShown));
 
     QLabel* link2 = new QLabel(box2);
     link2->setText(i18n("<p>To set a <b>Generic PTP USB Device</b><br>"
-                        "(which use Picture Transfer Protocol), please<br>"
-                        "use <a href=\"ptpcamera\">%1</a> from camera list.</p>",
+                        "(which uses Picture Transfer Protocol), please<br>"
+                        "use <a href=\"ptpcamera\">%1</a> from the camera list.</p>",
                         d->PTPCameraNameShown));
 
     QLabel* explanation = new QLabel(box2);
