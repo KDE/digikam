@@ -129,7 +129,7 @@ SetupMime::SetupMime(QWidget* parent )
     QWhatsThis::add( d->movieFileFilterEdit, i18n("<p>Here you can set the extensions of movie files "
                                                   "to be displayed in Albums (such as MPEG or AVI); "
                                                   "clicking on these files will "
-                                                  "opened them with the default KDE movie player."));
+                                                  "open them with the default KDE movie player."));
     movieFileFilterLabel->setBuddy(d->movieFileFilterEdit);
     hbox2->setStretchFactor(d->movieFileFilterEdit, 10);
 
