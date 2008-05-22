@@ -173,18 +173,18 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     QButtonGroup *behaviourOptions = new QButtonGroup(d->behaviourGB);
 
     d->defaultApplyICC = new QRadioButton(d->behaviourGB);
-    d->defaultApplyICC->setText(i18n("Apply when opening an image in Image Editor"));
-    d->defaultApplyICC->setWhatsThis( i18n("<p>If this option is selected, digiKam applies the "
-                     "Workspace default color profile to an image without asking when this has no "
-                     "embedded profile, or the embedded profile is not the same as the workspace "
+    d->defaultApplyICC->setText(i18n("Apply when opening an image in the Image Editor"));
+    d->defaultApplyICC->setWhatsThis( i18n("<p>If this option is enabled, digiKam applies the "
+                     "Workspace default color profile to an image, without prompting you about missing "
+                     "embedded profiles or embedded profiles different from the workspace "
                      "profile.</p>"));
     behaviourOptions->addButton(d->defaultApplyICC);
 
     d->defaultAskICC = new QRadioButton(d->behaviourGB);
-    d->defaultAskICC->setText(i18n("Ask when opening an image in Image Editor"));
-    d->defaultAskICC->setWhatsThis( i18n("<p>If this option is selected, digiKam asks to the user "
+    d->defaultAskICC->setText(i18n("Ask when opening an image in the Image Editor"));
+    d->defaultAskICC->setWhatsThis( i18n("<p>If this option is enabled, digiKam asks the user "
                      "before it applies the Workspace default color profile to an image which has no "
-                     "embedded profile or, if the image has an embedded profile, this is not the same "
+                     "embedded profile or, if the image has an embedded profile, when it's not the same "
                      "as the workspace profile.</p>"));
     behaviourOptions->addButton(d->defaultAskICC);
 
@@ -194,7 +194,7 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     d->cmToolInRawLoading = new QCheckBox(hbox);
     d->cmToolInRawLoading->setText(i18n("Launch Color Management plugin with RAW files"));
     d->cmToolInRawLoading->setWhatsThis( i18n("Enable this option if you want to launch the color "
-                     "management image plugin when a RAW file is loaded in editor."));
+                     "management image plugin when a RAW file is loaded in the editor."));
 
     vlay3->addWidget(d->defaultApplyICC);
     vlay3->addWidget(d->defaultAskICC);
@@ -239,7 +239,7 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     d->managedView->setText(i18n("Use color managed view (warning: slow)"));
     d->managedView->setWhatsThis( i18n("<p>Turn on this option if "
                      "you want to use your <b>Monitor Color Profile</b> to show your pictures in "
-                     "Image Editor window with a color correction adapted to your monitor. "
+                     "the Image Editor window with a color correction adapted to your monitor. "
                      "Warning: this option can take a while to render "
                      "pictures on the screen, especially with a slow computer.</p>"));
 
@@ -249,7 +249,7 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     d->monitorProfilesKC = new SqueezedComboBox(d->profilesGB);
     d->monitorProfiles->setBuddy(d->monitorProfilesKC);
     d->monitorProfilesKC->setWhatsThis( i18n("<p>Select the color profile for your monitor here. "
-                     "You need to toggle on <b>Use color managed view</b> option to use this "
+                     "You need to enable the <b>Use color managed view</b> option to use this "
                      "profile.</p>"));
 
     d->infoMonitorProfiles = new QPushButton(d->profilesGB);
@@ -291,7 +291,7 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     proofProfiles->setBuddy(d->proofProfilesKC);
     d->proofProfilesKC->setWhatsThis( i18n("<p>You must select the profile for your output device "
                      "(usually, your printer). This profile will be used to do a soft proof, so you will "
-                     "be able to preview how an image will be rendered in an output device.</p>"));
+                     "be able to preview how an image will be rendered via an output device.</p>"));
 
     d->infoProofProfiles = new QPushButton(d->profilesGB);
     d->infoProofProfiles->setIcon(SmallIcon("document-properties"));
