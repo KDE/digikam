@@ -191,15 +191,15 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
     d->rightClickActionComboBox = new QComboBox(false, interfaceOptionsGroup);
     d->rightClickActionComboBox->insertItem(i18n("Show embedded preview"), AlbumSettings::ShowPreview);
     d->rightClickActionComboBox->insertItem(i18n("Start image editor"), AlbumSettings::StartEditor);
-    QToolTip::add( d->rightClickActionComboBox, i18n("<p>Select the right action to do when you "
-                                                     "right click with mouse button on thumbnail."));
+    QToolTip::add( d->rightClickActionComboBox, i18n("<p>Here, choose what should happen when you "
+                                                     "right-click on a thumbnail."));
     ifaceSettingsLayout->addMultiCellWidget(rightClickLabel, 2 ,2, 0, 0);
     ifaceSettingsLayout->addMultiCellWidget(d->rightClickActionComboBox, 2, 2, 1, 4);
 
-    d->previewLoadFullImageSize = new QCheckBox(i18n("Embedded preview load full image size"), interfaceOptionsGroup);
-    QWhatsThis::add( d->previewLoadFullImageSize, i18n("<p>Set this option to load full image size "
-                     "with embedded preview instead a reduced one. Because this option will take more time "
-                     "to load image, use it only if you have a fast computer."));
+    d->previewLoadFullImageSize = new QCheckBox(i18n("Embedded preview loads full image size"), interfaceOptionsGroup);
+    QWhatsThis::add( d->previewLoadFullImageSize, i18n("<p>Set this option to load the full image size "
+                     "with an embedded preview, instead a reduced one. Because this option will take more time "
+                     "to load images, use it only if you have a fast computer."));
     ifaceSettingsLayout->addMultiCellWidget(d->previewLoadFullImageSize, 3, 3, 0, 4);
 
     layout->addWidget(interfaceOptionsGroup);
@@ -278,7 +278,7 @@ void SetupGeneral::slotChangeAlbumPath(const QString &result)
 {
     if (KURL(result).equals(KURL(QDir::homeDirPath()), true)) 
     {
-        KMessageBox::sorry(0, i18n("Sorry; cannot use home directory as album library."));
+        KMessageBox::sorry(0, i18n("Sorry you can't use your home directory as album library."));
         return;
     }
 
