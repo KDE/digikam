@@ -11,7 +11,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 003 ==> 161085 : Zoom steps in image editor
 004 ==> 162247 : The photos thumbnails list would be better if in the end of an album/date/tag start the next.
 005 ==> 160523 : Crash when saving picture as new nameafter resizing.
-006 ==> 
+006 ==> 162428 : debug info needed ?
+007 ==> 
 
 **********************************************************************************************
 
