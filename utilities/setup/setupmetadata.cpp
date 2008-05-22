@@ -132,14 +132,14 @@ SetupMetadata::SetupMetadata(QWidget* parent )
                                               "into the JFIF section, EXIF tag, and IPTC tag."));
 
     d->saveDateTimeBox = new QCheckBox(commonGroup);
-    d->saveDateTimeBox->setText(i18n("&Save image timestamp as tags"));
+    d->saveDateTimeBox->setText(i18n("&Save image timestamps as tags"));
     QWhatsThis::add( d->saveDateTimeBox, i18n("<p>Turn this option on to store the image date and time "
                                               "into the EXIF and IPTC tags."));
 
     d->saveRatingBox = new QCheckBox(commonGroup);
     d->saveRatingBox->setText(i18n("&Save image rating as tags"));
     QWhatsThis::add( d->saveRatingBox, i18n("<p>Turn this option on to store the image rating "
-                                            "into EXIF tag and IPTC <i>Urgency</i> tag."));
+                                            "in the EXIF tag and IPTC <i>Urgency</i> tag."));
 
     // --------------------------------------------------------
 

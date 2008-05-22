@@ -243,9 +243,9 @@ void Setup::slotOkClicked()
     if (d->metadataPage->exifAutoRotateAsChanged())
     {
         QString msg = i18n("The Exif auto-rotate thumbnails option has been changed.\n"
-                           "Do you want to rebuild all albums items thumbnails now?\n\n"
+                           "Do you want to rebuild all albums' items' thumbnails now?\n\n"
                            "Note: thumbnail processing can take a while! You can start "
-                           "this job later using \"Tools\" menu.");
+                           "this job later from the \"Tools\" menu.");
         int result = KMessageBox::warningYesNo(this, msg);
         if (result != KMessageBox::Yes)
             return;

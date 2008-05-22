@@ -132,34 +132,34 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
     QVGroupBox *iconTextGroup = new QVGroupBox(i18n("Thumbnail Information"), parent);
       
     d->iconShowNameBox = new QCheckBox(i18n("Show file &name"), iconTextGroup);
-    QWhatsThis::add( d->iconShowNameBox, i18n("<p>Set this option to show file name below image thumbnail."));
+    QWhatsThis::add( d->iconShowNameBox, i18n("<p>Set this option to show the file name below the image thumbnail."));
 
     d->iconShowSizeBox = new QCheckBox(i18n("Show file si&ze"), iconTextGroup);
-    QWhatsThis::add( d->iconShowSizeBox, i18n("<p>Set this option to show file size below image thumbnail."));
+    QWhatsThis::add( d->iconShowSizeBox, i18n("<p>Set this option to show the file size below the image thumbnail."));
 
     d->iconShowDateBox = new QCheckBox(i18n("Show camera creation &date"), iconTextGroup);
-    QWhatsThis::add( d->iconShowDateBox, i18n("<p>Set this option to show camera creation date "
-                                              "below image thumbnail."));
+    QWhatsThis::add( d->iconShowDateBox, i18n("<p>Set this option to show the camera creation date "
+                                              "below the image thumbnail."));
 
     d->iconShowModDateBox = new QCheckBox(i18n("Show file &modification date"), iconTextGroup);
-    QWhatsThis::add( d->iconShowModDateBox, i18n("<p>Set this option to show file modification date "
-                                                 "below image thumbnail."));
+    QWhatsThis::add( d->iconShowModDateBox, i18n("<p>Set this option to show the file modification date "
+                                                 "below the image thumbnail."));
 
     d->iconShowCommentsBox = new QCheckBox(i18n("Show digiKam &captions"), iconTextGroup);
-    QWhatsThis::add( d->iconShowCommentsBox, i18n("<p>Set this option to show digiKam captions "
-                                                  "below image thumbnail."));
+    QWhatsThis::add( d->iconShowCommentsBox, i18n("<p>Set this option to show the digiKam captions "
+                                                  "below the image thumbnail."));
 
     d->iconShowTagsBox = new QCheckBox(i18n("Show digiKam &tags"), iconTextGroup);
-    QWhatsThis::add( d->iconShowTagsBox, i18n("<p>Set this option to show digiKam tags "
-                                              "below image thumbnail."));
+    QWhatsThis::add( d->iconShowTagsBox, i18n("<p>Set this option to show the digiKam tags "
+                                              "below the image thumbnail."));
 
     d->iconShowRatingBox = new QCheckBox(i18n("Show digiKam &rating"), iconTextGroup);
-    QWhatsThis::add( d->iconShowRatingBox, i18n("<p>Set this option to show digiKam rating "
-                                                "below image thumbnail."));
+    QWhatsThis::add( d->iconShowRatingBox, i18n("<p>Set this option to show the digiKam rating "
+                                                "below the image thumbnail."));
 
     d->iconShowResolutionBox = new QCheckBox(i18n("Show ima&ge dimensions (warning: slow)"), iconTextGroup);
-    QWhatsThis::add( d->iconShowResolutionBox, i18n("<p>Set this option to show image size in pixels "
-                                                    "below image thumbnail."));
+    QWhatsThis::add( d->iconShowResolutionBox, i18n("<p>Set this option to show the image size in pixels "
+                                                    "below the image thumbnail."));
 
     layout->addWidget(iconTextGroup);
 
