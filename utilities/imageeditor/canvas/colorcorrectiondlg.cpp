@@ -64,7 +64,7 @@ ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
     setButtonText(Cancel, i18n("Do Nothing"));
     setButtonTip(Cancel,  i18n("Do not change the image"));
     setButtonText(Apply,  i18n("Assign"));
-    setButtonTip(Apply,   i18n("Embed only the color workspace profile to the image without changing the image"));
+    setButtonTip(Apply,   i18n("Only embed the color workspace profile in the image, don't change the image"));
 
     QFileInfo fi(file);
     setCaption(fi.fileName());
@@ -88,7 +88,7 @@ ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
     
     if (m_iccTrans->embeddedProfile().isEmpty())
     {
-        message->setText(i18n("<p>This image has not been assigned any color profile.</p>"
+        message->setText(i18n("<p>This image has not been assigned a color profile.</p>"
                               "<p>Do you want to convert it to your workspace color profile?</p>"));
                               
         line->hide();
@@ -99,7 +99,7 @@ ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
     else
     {
         message->setText(i18n("<p>This image has been assigned to a color profile that does not "
-                              "match with your default workspace color profile.</p>"
+                              "match your default workspace color profile.</p>"
                               "<p>Do you want to convert it to your workspace color profile?</p>"));
     }
     
