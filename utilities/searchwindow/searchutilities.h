@@ -43,6 +43,7 @@
 
 class QVBoxLayout;
 class QTextEdit;
+class QTimeLine;
 class KPushButton;
 
 namespace Digikam
@@ -156,6 +157,53 @@ protected:
     Qt::ArrowType m_arrowType;
     int           m_size;
     int           m_margin;
+};
+
+class AnimatedClearButton : public QWidget
+{
+    Q_OBJECT
+
+public:
+
+    AnimatedClearButton(QWidget *parent = 0);
+
+    QSize sizeHint () const;
+
+    void setPixmap(const QPixmap& p);
+    QPixmap pixmap();
+
+    /// Set visible, possibly with animation
+    void animateVisible(bool visible);
+    /// Set visible without animation
+    void setDirectlyVisible(bool visible);
+
+    /** This parameter determines the bahavior when the animation
+     *  to hide the widget has finished:
+     *  If stayVisible is true, the widget remains visible,
+     *  but paints nothing.
+     *  If stayVisible is false, setVisible(false) is called,
+     *  which removes the widget for layouting etc.
+     *  Default: false */
+    bool stayVisibleWhenAnimatedOut(bool stayVisible);
+
+signals:
+
+    void clicked();
+
+protected:
+
+    virtual void paintEvent(QPaintEvent *event);
+    virtual void mouseReleaseEvent(QMouseEvent* event);
+
+protected slots:
+
+    void animationFinished();
+    void updateAnimationSettings();
+
+private:
+    QTimeLine *m_timeline;
+    QPixmap    m_pixmap;
+    bool       m_stayAlwaysVisible;
 };
 
 class StyleSheetDebugger : public QWidget

@@ -34,10 +34,12 @@
 #include <QStyle>
 #include <QStyleOption>
 #include <QTextEdit>
+#include <QTimeLine>
 #include <QVBoxLayout>
 
 // KDE includes
 
+#include <kglobalsettings.h>
 #include <klocale.h>
 #include <kstandardguiitem.h>
 #include <kpushbutton.h>
@@ -359,6 +361,169 @@ void ArrowClickLabel::paintEvent(QPaintEvent*)
 QSize ArrowClickLabel::sizeHint() const
 {
     return QSize(m_size + 2*m_margin, m_size + 2*m_margin);
+}
+
+// ----------------------------------- //
+
+// Copied from klineedit_p.h,
+// Copyright (C) 2007 Aaron Seigo <aseigo@kde.org>
+
+AnimatedClearButton::AnimatedClearButton(QWidget *parent)
+    : QWidget(parent)
+{
+    m_stayAlwaysVisible = false;
+    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+    m_timeline = new QTimeLine(200, this);
+    m_timeline->setFrameRange(0, 255);
+    m_timeline->setCurveShape(QTimeLine::EaseInOutCurve);
+    m_timeline->setDirection(QTimeLine::Forward);
+    connect(m_timeline, SIGNAL(finished()), this, SLOT(animationFinished()));
+    connect(m_timeline, SIGNAL(frameChanged(int)), this, SLOT(update()));
+
+    connect(KGlobalSettings::self(), SIGNAL(settingsChanged(int)), this, SLOT(updateAnimationSettings()));
+}
+
+QSize AnimatedClearButton::sizeHint () const
+{
+    QFontMetrics fm(font());
+    return QSize(m_pixmap.width(), fm.lineSpacing());
+}
+
+bool AnimatedClearButton::stayVisibleWhenAnimatedOut(bool stayVisible)
+{
+    m_stayAlwaysVisible = stayVisible;
+}
+
+void AnimatedClearButton::animateVisible(bool visible)
+{
+    // skip animation if widget is not visible
+    if (!isVisible())
+        setDirectlyVisible(visible);
+
+    if (visible) {
+        if (m_timeline->direction() == QTimeLine::Forward) {
+            return;
+        }
+
+        m_timeline->setDirection(QTimeLine::Forward);
+        m_timeline->setDuration(150);
+        if (!m_stayAlwaysVisible)
+            show();
+    }
+    else {
+        if (m_timeline->direction() == QTimeLine::Backward) {
+            return;
+        }
+
+        m_timeline->setDirection(QTimeLine::Backward);
+        m_timeline->setDuration(250);
+    }
+
+    if (KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects) {
+        if (m_timeline->state() != QTimeLine::Running)
+            m_timeline->start();
+    }
+    else
+    {
+        if (!m_stayAlwaysVisible)
+            setVisible(m_timeline->direction() == QTimeLine::Forward);
+    }
+}
+
+void AnimatedClearButton::setDirectlyVisible(bool visible)
+{
+    // We dont overload setVisible() here. QWidget::setVisible is virtual,
+    // and we dont want to replace it in all occurrences.
+    // Most notably, we want to call the QWidget version from animateVisible above.
+
+    if (visible) {
+        if (m_timeline->direction() == QTimeLine::Forward) {
+            return;
+        }
+
+        // these need to be set as paintEvent depends on these values
+        m_timeline->setDirection(QTimeLine::Forward);
+        m_timeline->setCurrentTime(150);
+    } else {
+        if (m_timeline->direction() == QTimeLine::Backward) {
+            return;
+        }
+
+        // these need to be set as paintEvent depends on these values
+        m_timeline->setDirection(QTimeLine::Backward);
+        m_timeline->setCurrentTime(0);
+    }
+
+    if (m_stayAlwaysVisible)
+        update();
+    else
+        setVisible(m_timeline->direction() == QTimeLine::Forward);
+}
+
+void AnimatedClearButton::setPixmap(const QPixmap& p)
+{
+    m_pixmap = p;
+}
+
+QPixmap AnimatedClearButton::pixmap()
+{
+    return m_pixmap;
+}
+
+void AnimatedClearButton::updateAnimationSettings()
+{
+    bool animationsEnabled = KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects;
+
+    // We need to set the current time in the case that we had the clear
+    // button shown, for it being painted on the paintEvent(). Otherwise
+    // it wont be painted, resulting (m->timeLine->currentTime() == 0) true,
+    // and therefore a bad painting. This is needed for the case that we
+    // come from a non animated widget and want it animated. (ereslibre)
+    if (animationsEnabled && m_timeline->direction() == QTimeLine::Forward) {
+        m_timeline->setCurrentTime(150);
+    }
+}
+
+void AnimatedClearButton::paintEvent(QPaintEvent *event)
+{
+    Q_UNUSED(event)
+
+    if (KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects) {
+        if (m_pixmap.isNull() || m_timeline->currentTime() == 0) {
+            return;
+        }
+
+        QPainter p(this);
+        p.setOpacity(m_timeline->currentValue());
+        p.drawPixmap((width() - m_pixmap.width()) / 2,
+                    (height() - m_pixmap.height()) / 2,
+                    m_pixmap);
+    } else {
+        QPainter p(this);
+        p.setOpacity(1); // make sure
+        p.drawPixmap((width() - m_pixmap.width()) / 2,
+                    (height() - m_pixmap.height()) / 2,
+                    m_pixmap);
+    }
+}
+
+void AnimatedClearButton::animationFinished()
+{
+    if (m_timeline->direction() == QTimeLine::Forward) {
+        update();
+    } else {
+        if (!m_stayAlwaysVisible)
+            hide();
+    }
+}
+
+void AnimatedClearButton::mouseReleaseEvent(QMouseEvent* event)
+{
+    if (event->button() == Qt::LeftButton)
+    {
+        emit clicked();
+    }
 }
 
 // ----------------------------------- //
