@@ -86,6 +86,10 @@ public:
     enum WidgetRectType { LabelAndValueWidgetRects, ValueWidgetRectsOnly };
     QList<QRect> widgetRects(WidgetRectType = ValueWidgetRectsOnly) const;
 
+protected slots:
+
+    void clearButtonClicked();
+
 protected:
 
     virtual void setupValueWidgets(QGridLayout *layout, int row, int column) = 0;
@@ -94,16 +98,23 @@ protected:
     virtual void setValueWidgetsVisible(bool visible) = 0;
     virtual QList<QRect> valueWidgetRects() const = 0;
 
+    void setValidValueState(bool valueIsValid);
+
     QString m_name;
 
     QLabel *m_label;
     QLabel *m_detailLabel;
 
+    AnimatedClearButton *m_clearButton;
+
     bool    m_categoryLabelVisible;
+    bool    m_valueIsValid;
 };
 
 class SearchFieldText : public SearchField
 {
+    Q_OBJECT
+
 public:
 
     SearchFieldText(QObject *parent);
@@ -114,6 +125,10 @@ public:
     virtual void setValueWidgetsVisible(bool visible);
     virtual void reset();
     virtual QList<QRect> valueWidgetRects() const;
+
+protected slots:
+
+    void valueChanged(const QString &text);
 
 protected:
 
@@ -200,6 +215,8 @@ protected:
 
 class SearchFieldRangeDate : public SearchField
 {
+    Q_OBJECT
+
 public:
 
     enum Type
@@ -219,6 +236,10 @@ public:
 
     void setBetweenText(const QString &between);
     void setBoundary(QDateTime min, QDateTime max);
+
+protected slots:
+
+    void valueChanged();
 
 protected:
 

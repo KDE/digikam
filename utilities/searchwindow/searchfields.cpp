@@ -23,6 +23,7 @@
 
 // Qt includes
 
+#include <QApplication>
 #include <QCheckBox>
 #include <QDoubleSpinBox>
 #include <QGridLayout>
@@ -36,6 +37,7 @@
 
 // KDE includes
 
+#include <kiconloader.h>
 #include <klocale.h>
 #include <klineedit.h>
 #include <ksqueezedtextlabel.h>
@@ -423,7 +425,10 @@ SearchField::SearchField(QObject *parent)
     m_label       = new QLabel;
     m_detailLabel = new QLabel;
 
+    m_clearButton = new AnimatedClearButton;
+
     m_categoryLabelVisible = true;
+    m_valueIsValid = false;
 }
 
 void SearchField::setup(QGridLayout *layout, int line)
@@ -440,7 +445,26 @@ void SearchField::setup(QGridLayout *layout, int line)
     layout->setColumnStretch(6, 1);
 
     setupLabels(layout, line);
+    // value widgets can use columns 3,4,5.
+    // In the case of "from ... to ..." fields, column 3 and 5 can contain spin boxes etc.,
+    // and 4 can contain a label in between.
+    // In other cases, a widget or sublayout spanning the three columns is recommended.
     setupValueWidgets(layout, line, 3);
+
+    // setup the clear button that appears dynamically
+    if (qApp->isLeftToRight()) {
+        m_clearButton->setPixmap(SmallIcon("edit-clear-locationbar-rtl", 0, KIconLoader::DefaultState));
+    } else {
+        m_clearButton->setPixmap(SmallIcon("edit-clear-locationbar-ltr", 0, KIconLoader::DefaultState));
+    }
+    // Important: Dont cause relayouting when button gets hidden/shown!
+    m_clearButton->stayVisibleWhenAnimatedOut(true);
+    m_clearButton->setToolTip(i18n("Reset contents"));
+
+    connect(m_clearButton, SIGNAL(clicked()),
+            this, SLOT(clearButtonClicked()));
+
+    layout->addWidget(m_clearButton, line, 7);
 }
 
 void SearchField::setupLabels(QGridLayout *layout, int line)
@@ -471,6 +495,9 @@ void SearchField::setVisible(bool visible)
 {
     m_label->setVisible(visible && m_categoryLabelVisible);
     m_detailLabel->setVisible(visible);
+    // Note: setVisible visibility is independent from animateVisible visibility!
+    m_clearButton->setVisible(visible);
+    m_clearButton->setDirectlyVisible(m_valueIsValid);
     setValueWidgetsVisible(visible);
 }
 
@@ -509,6 +536,21 @@ QList<QRect> SearchField::widgetRects(WidgetRectType type) const
     return rects;
 }
 
+void SearchField::clearButtonClicked()
+{
+    reset();
+}
+
+void SearchField::setValidValueState(bool valueIsValid)
+{
+    if (valueIsValid != m_valueIsValid)
+    {
+        m_valueIsValid = valueIsValid;
+        // Note: setVisible visibility is independent from animateVisible visibility!
+        m_clearButton->animateVisible(m_valueIsValid);
+    }
+}
+
 // ----------------------------------- //
 
 SearchFieldText::SearchFieldText(QObject *parent)
@@ -520,6 +562,9 @@ void SearchFieldText::setupValueWidgets(QGridLayout *layout, int row, int column
 {
     m_edit = new QLineEdit;
     layout->addWidget(m_edit, row, column, 1, 3);
+
+    connect(m_edit, SIGNAL(textChanged(const QString &)),
+            this, SLOT(valueChanged(const QString &)));
 }
 
 void SearchFieldText::read(SearchXmlCachingReader &reader)
@@ -554,6 +599,11 @@ QList<QRect> SearchFieldText::valueWidgetRects() const
     QList<QRect> rects;
     rects << m_edit->geometry();
     return rects;
+}
+
+void SearchFieldText::valueChanged(const QString &text)
+{
+    setValidValueState(!text.isEmpty());
 }
 
 // ----------------------------------- //
@@ -637,6 +687,12 @@ void SearchFieldRangeDate::setupValueWidgets(QGridLayout *layout, int row, int c
         hbox->addWidget(m_endLabel);
         hbox->addStretch(1);*/
     }
+
+    connect(m_firstDateEdit, SIGNAL(dateChanged(const QDate &)),
+            this, SLOT(valueChanged()));
+
+    connect(m_secondDateEdit, SIGNAL(dateChanged(const QDate &)),
+            this, SLOT(valueChanged()));
 }
 
 void SearchFieldRangeDate::setBetweenText(const QString &between)
@@ -761,6 +817,11 @@ QList<QRect> SearchFieldRangeDate::valueWidgetRects() const
     return rects;
 }
 
+void SearchFieldRangeDate::valueChanged()
+{
+    setValidValueState(m_firstDateEdit->date().isValid() || m_secondDateEdit->date().isValid());
+}
+
 // ----------------------------------- //
 
 SearchFieldRangeInt::SearchFieldRangeInt(QObject *parent)
@@ -876,10 +937,18 @@ void SearchFieldRangeInt::setBoundary(int min, int max, int step)
 
 void SearchFieldRangeInt::valueChanged()
 {
+    bool validValue = false;
     if (m_secondBox->value() != m_secondBox->minimum())
+    {
         m_firstBox->setRange(m_min, m_secondBox->value());
+        validValue = true;
+    }
     if (m_firstBox->value() != m_firstBox->minimum())
+    {
         m_secondBox->setRange(m_firstBox->value(), m_max);
+        validValue = true;
+    }
+    setValidValueState(validValue);
 }
 
 void SearchFieldRangeInt::reset()
@@ -1014,10 +1083,18 @@ void SearchFieldRangeDouble::setFactor(double factor)
 
 void SearchFieldRangeDouble::valueChanged()
 {
+    bool validValue = false;
     if (m_secondBox->value() != m_secondBox->minimum())
+    {
         m_firstBox->setRange(m_min, m_secondBox->value());
+        validValue = true;
+    }
     if (m_firstBox->value() != m_firstBox->minimum())
+    {
         m_secondBox->setRange(m_firstBox->value(), m_max);
+        validValue = true;
+    }
+    setValidValueState(validValue);
 }
 
 void SearchFieldRangeDouble::reset()
@@ -1097,14 +1174,17 @@ void SearchFieldChoice::updateComboText()
     if (checkedChoices.isEmpty())
     {
         m_comboBox->setLabelText(m_anyText);
+        setValidValueState(false);
     }
     else if (checkedChoices.count() == 1)
     {
         m_comboBox->setLabelText(checkedChoices.first());
+        setValidValueState(true);
     }
     else
     {
         m_comboBox->setLabelText(i18n("Any of: %1", checkedChoices.join(", ")));
+        setValidValueState(true);
     }
 }
 
@@ -1451,13 +1531,16 @@ void SearchFieldAlbum::updateComboText()
     if (checkedAlbums.isEmpty())
     {
         m_comboBox->setLineEditText(m_anyText);
+        setValidValueState(false);
     }
     else if (checkedAlbums.count() == 1)
     {
         m_comboBox->setLineEditText(checkedAlbums.first()->title());
+        setValidValueState(true);
     }
     else
     {
+        setValidValueState(true);
         if (m_type == TypeAlbum)
             m_comboBox->setLineEditText(i18n("%1 Albums selected", checkedAlbums.count()));
         else
@@ -1617,6 +1700,8 @@ void SearchFieldRating::firstValueChanged()
         if (first > second)
             m_secondBox->setRatingValue(RatingComboBox::Null);
     }
+
+    setValidValueState(first != RatingComboBox::Null || second != RatingComboBox::Null);
 }
 
 void SearchFieldRating::secondValueChanged()
@@ -1631,6 +1716,8 @@ void SearchFieldRating::secondValueChanged()
         if (first > second)
             m_firstBox->setRatingValue(second);
     }
+
+    setValidValueState(first != RatingComboBox::Null || second != RatingComboBox::Null);
 }
 
 void SearchFieldRating::reset()
