@@ -107,7 +107,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
                           BarIcon("colorize", KIcon::SizeMedium));
     d->iccPage = new Digikam::SetupICC(d->page_icc, this);
 
-    d->page_iofiles = addPage(i18n("Save Images"), i18n("Save Images Files Settings"),
+    d->page_iofiles = addPage(i18n("Save Images"), i18n("Save Images' Files' Settings"),
                               BarIcon("filesave", KIcon::SizeMedium));
     d->iofilesPage = new Digikam::SetupIOFiles(d->page_iofiles);
     
