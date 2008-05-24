@@ -119,7 +119,7 @@ IF(MARBLEWIDGET_FOUND)
 ENDIF(MARBLEWIDGET_FOUND)
 
 SET_TARGET_PROPERTIES(digikam PROPERTIES VERSION 1.0.0 SOVERSION 1 )
-INSTALL(TARGETS digikam DESTINATION ${LIB_INSTALL_DIR} )
+INSTALL(TARGETS digikam ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 
 # Shared libdigikamdatabase ########################################################
@@ -138,7 +138,7 @@ TARGET_LINK_LIBRARIES(digikamdatabase
               )
 
 SET_TARGET_PROPERTIES(digikamdatabase PROPERTIES VERSION 1.0.0 SOVERSION 1 )
-INSTALL(TARGETS digikamdatabase DESTINATION ${LIB_INSTALL_DIR} )
+INSTALL(TARGETS digikamdatabase ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 
 # digiKam binary progam #########################################################
