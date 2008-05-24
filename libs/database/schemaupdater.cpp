@@ -114,7 +114,7 @@ bool SchemaUpdater::startUpdates()
             DError() << "DBVersion not available! Giving up schema upgrading." << endl;
             QString errorMsg = i18n(
                     "The database is not valid: "
-                    "The \"DBVersion\" setting does not exist. "
+                    "the \"DBVersion\" setting does not exist. "
                     "The current database schema version cannot be verified. "
                     "Try to start with an empty database. "
                                    );
@@ -206,7 +206,7 @@ bool SchemaUpdater::startUpdates()
         // No legacy handling: start with a fresh db
         if (!createDatabase() || !createFilterSettings())
         {
-            QString errorMsg = i18n("Failed to create tables on database.\n ")
+            QString errorMsg = i18n("Failed to create tables in database.\n ")
                                     + m_access->backend()->lastError();
             m_access->setLastError(errorMsg);
             if (m_observer)
