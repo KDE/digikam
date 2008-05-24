@@ -1,3 +1,273 @@
+0.9.4-beta5 2008-05-25
+-------------------------------------------------------------------------
+
+2008-05-24 06:43  cgilles
+
+        * digikam.lsm: update
+
+2008-05-24 06:40  cgilles
+
+        * digikam.lsm: update
+
+2008-05-24 06:35  cgilles
+
+        * NEWS: preparing 0.9.4-beta5
+
+2008-05-24 05:23  doerr
+
+        * showfoto/setup/setup.cpp: CCBUGS: fixed for KDE3 implementation
+
+2008-05-24 04:51  doerr
+
+        * utilities/cameragui/cameracontroller.cpp,
+          utilities/cameragui/cameraiconview.cpp,
+          utilities/cameragui/cameraui.cpp,
+          utilities/cameragui/gpcamera.cpp,
+          utilities/cameragui/renamecustomizer.cpp,
+          utilities/cameragui/umscamera.cpp,
+          utilities/lighttable/lighttablewindow.cpp,
+          utilities/setup/setupmetadata.cpp: CCBUGS: 147597 Fixed 131-145,
+          thats the original bug report from Clytie, will have to check the
+          rest
+
+2008-05-22 18:32  doerr
+
+        * utilities/imageeditor/canvas/colorcorrectiondlg.cpp,
+          utilities/imageeditor/tools/imageresize.cpp,
+          utilities/setup/cameraselection.cpp,
+          utilities/setup/setupgeneral.cpp: CCBUGS: 147597 Fixed 121-130
+          and remark from Andi Clemens
+
+2008-05-22 10:13  doerr
+
+        * utilities/setup/setupgeneral.cpp, utilities/setup/setupicc.cpp:
+          CCBUGS: 147597 Fixed 110-120
+
+2008-05-22 08:35  cgilles
+
+        * NEWS: update
+
+2008-05-22 06:16  doerr
+
+        * utilities/setup/setupmime.cpp: CCBUGS: 147597 Fixed 103-109,
+          could not find 104
+
+2008-05-22 06:06  doerr
+
+        * utilities/setup/setup.cpp, utilities/setup/setupgeneral.cpp,
+          utilities/setup/setupmetadata.cpp, utilities/setup/setupmime.cpp,
+          utilities/setup/setupslideshow.cpp: CCBUGS: 147597 Fixed 103-109,
+          could not find 104
+
+2008-05-19 18:07  cgilles
+
+        * NEWS: update
+
+2008-05-19 17:09  cgilles
+
+        * NEWS: update
+
+2008-05-19 11:10  cgilles
+
+        * digikam/timelineview.cpp, digikam/timelineview.h: polish
+
+2008-05-19 07:36  cgilles
+
+        * libs/dimg/dimgscale.cpp: backport commit #809386 from KDE4
+
+2008-05-18 19:32  doerr
+
+        * imageplugins/coreplugin/imageeffect_redeye.cpp,
+          utilities/batch/batchalbumssyncmetadata.cpp,
+          utilities/batch/batchsyncmetadata.cpp,
+          utilities/batch/batchthumbsgenerator.cpp,
+          utilities/cameragui/cameraui.cpp,
+          utilities/setup/setuplighttable.cpp: CCBUGS: 147597 Fixed 91-102
+
+2008-05-18 15:21  doerr
+
+        * imageplugins/coreplugin/imageeffect_bwsepia.cpp: CCBUGS: 147597
+          Fixed 83-90
+
+2008-05-17 13:36  doerr
+
+        * imageplugins/coreplugin/imageeffect_bwsepia.cpp,
+          imageplugins/coreplugin/ratiocrop/imageeffect_ratiocrop.cpp:
+          CCBUGS: 147597 Fixed 80-82
+
+2008-05-17 12:07  cgilles
+
+        * utilities/imageeditor/canvas/canvas.cpp: polish
+
+2008-05-16 19:27  abaecker
+
+        * NEWS, utilities/imageeditor/canvas/canvas.cpp,
+          utilities/imageeditor/canvas/canvas.h: When changing the zoom in
+          the image editor, snap to 50%, 100% and fit-to-window.
+
+          CCBUGS: 161085
+          TODO:KDE4PORT
+
+2008-05-16 14:13  cgilles
+
+        * utilities/lighttable/lighttableview.cpp,
+          utilities/lighttable/lighttableview.h: polish
+
+2008-05-16 13:48  cgilles
+
+        * NEWS: update
+
+2008-05-16 13:46  cgilles
+
+        * digikam/albumwidgetstack.cpp, digikam/albumwidgetstack.h,
+          digikam/digikamview.cpp, libs/widgets/common/previewwidget.cpp,
+          libs/widgets/common/previewwidget.h,
+          utilities/imageeditor/canvas/canvas.cpp,
+          utilities/imageeditor/canvas/canvas.h,
+          utilities/imageeditor/editor/editorwindow.cpp,
+          utilities/lighttable/lighttableview.cpp,
+          utilities/lighttable/lighttableview.h,
+          utilities/lighttable/lighttablewindow.cpp: digiKam from KDE3
+          branch : patch from Arnd to fix points 1/ and 2/ from B.K.O
+          #155046
+          CCBUGS: 155046
+
+2008-05-16 08:47  cgilles
+
+        * libs/widgets/common/dpopupmenu.cpp,
+          libs/widgets/common/dpopupmenu.h: polish
+
+2008-05-15 19:35  cgilles
+
+        * NEWS: update
+
+2008-05-15 19:31  cgilles
+
+        * libs/dimg/loaders/tiffloader.cpp, libs/dimg/loaders/tiffloader.h:
+          fix crash with libtiff when we set alpha channel to new tiff file
+          BUGS: 162132
+
+2008-05-15 13:56  cgilles
+
+        * libs/jpegutils/jpegutils.cpp, project/project.kdevelop,
+          utilities/imageeditor/canvas/dimginterface.cpp: set IPTC preview
+          to 1280x1024 instead 800x600
+
+2008-05-12 19:46  doerr
+
+        * imageplugins/coreplugin/imageeffect_iccproof.cpp: CCBUGS: 147597
+          Fixed 74-79
+
+2008-05-12 19:23  doerr
+
+        * imageplugins/coreplugin/imageeffect_iccproof.cpp: CCBUGS: 147597
+          Fixed 72-73
+
+2008-05-12 18:44  doerr
+
+        * imageplugins/coreplugin/hsl/imageeffect_hsl.cpp,
+          imageplugins/coreplugin/imageeffect_iccproof.cpp,
+          imageplugins/coreplugin/sharpnesseditor/imageeffect_sharpen.cpp,
+          imageplugins/infrared/imageeffect_infrared.cpp: CCBUGS: 147597
+          Fixed 66-71
+
+2008-05-11 07:26  cgilles
+
+        * utilities/imageeditor/editor/imageiface.cpp,
+          utilities/imageeditor/editor/imageiface.h: use const ref
+
+2008-05-07 11:58  cgilles
+
+        * libs/jpegutils/transupp.cpp: polish
+
+2008-05-07 11:53  cgilles
+
+        * libs/jpegutils/transupp.cpp: polish
+
+2008-05-06 12:53  cgilles
+
+        * data/themes/Dessert: polish
+
+2008-05-05 12:54  cgilles
+
+        * utilities/lighttable/lighttablewindow.cpp: disable slideshow if
+          no item is selected
+
+2008-05-05 12:46  cgilles
+
+        * utilities/lighttable/lighttablewindow.cpp: fix crash if slideshow
+          is started with an empty list of items
+
+2008-05-05 12:40  cgilles
+
+        * utilities/imageeditor/editor/editorwindow.cpp: disable slideshow
+          action
+
+2008-05-05 12:30  cgilles
+
+        * showfoto/showfoto.cpp: backport commit #804240 from KDE4
+
+2008-05-05 06:18  cgilles
+
+        * libs/dialogs/rawcameradlg.cpp: fix layout
+
+2008-05-04 20:07  cgilles
+
+        * libs/dialogs/rawcameradlg.cpp: backport commit #804008 from KDE4
+
+2008-05-02 07:31  cgilles
+
+        * NEWS: update
+
+2008-05-02 07:29  cgilles
+
+        * digikam/version.h: update
+
+2008-05-02 07:29  cgilles
+
+        * digikam.lsm: update
+
+2008-05-02 06:55  cgilles
+
+        * README: update
+
+2008-05-01 12:27  cgilles
+
+        * digikam/albummanager.cpp, digikam/albummanager.h: use C++ header
+          instead C ANsi
+
+2008-04-29 11:52  cgilles
+
+        * libs/widgets/iccprofiles/cietonguewidget.cpp,
+          libs/widgets/iccprofiles/cietonguewidget.h: polish
+
+2008-04-29 11:48  cgilles
+
+        * libs/widgets/imageplugins/imageguidewidget.cpp,
+          libs/widgets/imageplugins/imageguidewidget.h: use const ref
+
+2008-04-28 14:03  cgilles
+
+        * libs/widgets/metadata/metadatalistview.cpp,
+          libs/widgets/metadata/metadatalistview.h: use const ref.
+
+2008-04-26 08:13  cgilles
+
+        * ChangeLog: preparing 0.9.4-beta4
+
+2008-04-26 08:01  cgilles
+
+        * release_digikam.rb: update
+
+2008-04-26 07:59  cgilles
+
+        * NEWS: preparing 0.9.4-beta4
+
+2008-04-26 07:57  cgilles
+
+        * digikam.lsm: update
+
+
 0.9.4-beta4 2008-04-27
 -------------------------------------------------------------------------
 
