@@ -458,8 +458,8 @@ bool UMSCamera::cameraSummary(QString& summary)
 bool UMSCamera::cameraManual(QString& manual)
 {
     manual = QString(i18n("For more information about the <b>Mounted Camera</b> driver, "
-                          "please read the digiKam manual on <b>Supported Digital Still "
-                          "Cameras</b> section."));
+                          "please read <b>Supported Digital Still "
+                          "Cameras</b> section in the digiKam manual."));
     return true;
 }
 
@@ -467,7 +467,7 @@ bool UMSCamera::cameraAbout(QString& about)
 {
     about = QString(i18n("The <b>Mounted Camera</b> driver is a simple interface to a camera disk "
                          "mounted locally on your system.<br><br>"
-                         "It doesn't use any libgphoto2 drivers.<br><br>"
+                         "It doesn't use libgphoto2 drivers.<br><br>"
                          "To report any problems with this driver, please contact the digiKam team at:<br><br>"
                          "http://www.digikam.org/?q=contact"));
     return true;

@@ -500,7 +500,7 @@ void LightTableWindow::setupAccelerators()
     d->accelerators = new KAccel(this);
 
     d->accelerators->insert("Exit fullscreen", i18n("Exit Fullscreen mode"),
-                    i18n("Exit from fullscreen viewing mode"),
+                    i18n("Exit fullscreen viewing mode"),
                     Key_Escape, this, SLOT(slotEscapePressed()),
                     false, true);
 
@@ -535,7 +535,7 @@ void LightTableWindow::setupAccelerators()
                     false, true);
     
     d->accelerators->insert("Zoom Plus Key_Minus", i18n("Zoom out"),
-                    i18n("Zoom out of image"),
+                    i18n("Zoom out from image"),
                     Key_Minus, d->previewView, SLOT(slotDecreaseZoom()),
                     false, true);
 }

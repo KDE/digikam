@@ -257,7 +257,7 @@ void CameraThread::run()
                 event->map.insert("folders", QVariant(flist));
                 QApplication::postEvent(parent, event);
             
-                sendInfo(i18n("Listing folders is complete..."));
+                sendInfo(i18n("The folders have been listed."));
     
                 break;
             }
@@ -265,7 +265,7 @@ void CameraThread::run()
             {
                 QString folder = cmd->map["folder"].asString();
                 
-                sendInfo(i18n("Listing files in %1...").arg(folder));
+                sendInfo(i18n("The files in %1 have been listed.").arg(folder));
     
                 GPItemInfoList itemsList;
                 // setting getImageDimensions to false is a huge speedup for UMSCamera

@@ -113,13 +113,13 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     d->savePhotographerIdIptcBox = new QCheckBox(IptcGroup);
     d->savePhotographerIdIptcBox->setText(i18n("&Save default photographer identity as tags"));
     QWhatsThis::add( d->savePhotographerIdIptcBox, i18n("<p>Turn this option on to store the default "
-                                                        "photographer identity into the IPTC tags. You can set this "
+                                                        "photographer identity in the IPTC tags. You can set this "
                                                         "value in the Identity setup page."));
 
     d->saveCreditsIptcBox = new QCheckBox(IptcGroup);
     d->saveCreditsIptcBox->setText(i18n("&Save default credit and copyright identity as tags"));
     QWhatsThis::add( d->saveCreditsIptcBox, i18n("<p>Turn this option on to store the default "
-                                                 "credit and copyright identity into the IPTC tags. "
+                                                 "credit and copyright identity in the IPTC tags. "
                                                  "You can set this value in the Identity setup page."));
 
     // --------------------------------------------------------
@@ -129,12 +129,12 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     d->saveCommentsBox = new QCheckBox(commonGroup);
     d->saveCommentsBox->setText(i18n("&Save image captions as embedded text"));
     QWhatsThis::add( d->saveCommentsBox, i18n("<p>Turn this option on to store image captions "
-                                              "into the JFIF section, EXIF tag, and IPTC tag."));
+                                              "in the JFIF section, EXIF tag, and IPTC tag."));
 
     d->saveDateTimeBox = new QCheckBox(commonGroup);
     d->saveDateTimeBox->setText(i18n("&Save image timestamps as tags"));
     QWhatsThis::add( d->saveDateTimeBox, i18n("<p>Turn this option on to store the image date and time "
-                                              "into the EXIF and IPTC tags."));
+                                              "in the EXIF and IPTC tags."));
 
     d->saveRatingBox = new QCheckBox(commonGroup);
     d->saveRatingBox->setText(i18n("&Save image rating as tags"));

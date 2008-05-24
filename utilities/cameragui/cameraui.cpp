@@ -279,10 +279,10 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     albumVlay->addStretch();
 
     QWhatsThis::add( albumBox, i18n("<p>Set how digiKam creates albums automatically when downloading."));
-    QWhatsThis::add( d->autoAlbumExtCheck, i18n("<p>Toggle on this option if you want to download your "
+    QWhatsThis::add( d->autoAlbumExtCheck, i18n("<p>Enable this option if you want to download your "
                      "pictures into automatically created file extension-based sub-albums of the destination "
                      "album. This way, you can separate JPEG and RAW files as they are downloaded from your camera."));
-    QWhatsThis::add( d->autoAlbumDateCheck, i18n("<p>Toggle on this option if you want to "
+    QWhatsThis::add( d->autoAlbumDateCheck, i18n("<p>Enable this option if you want to "
                      "download your pictures into automatically created file date-based sub-albums "
                      "of the destination album."));
     QWhatsThis::add( d->folderDateFormat, i18n("<p>Select your preferred date format used to "
@@ -321,17 +321,17 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
 
     QWhatsThis::add( onFlyBox, i18n("<p>Set here all options to fix/transform JPEG files automatically "
                      "as they are downloaded."));
-    QWhatsThis::add( d->autoRotateCheck, i18n("<p>Toggle on this option if you want images automatically "
+    QWhatsThis::add( d->autoRotateCheck, i18n("<p>Enable this option if you want images automatically "
                      "rotated or flipped using EXIF information provided by the camera."));
-    QWhatsThis::add( d->setPhotographerId, i18n("<p>Toggle on this option to store the default "
+    QWhatsThis::add( d->setPhotographerId, i18n("<p>Enable this option to store the default "
                      "photographer identity in the IPTC tags using digiKam's metadata settings."));
-    QWhatsThis::add( d->setCredits, i18n("<p>Toggle on this option to store the default credit "
+    QWhatsThis::add( d->setCredits, i18n("<p>Enable this option to store the default credit "
                      "and copyright information in the IPTC tags using digiKam's metadata settings."));
-    QWhatsThis::add( d->fixDateTimeCheck, i18n("<p>Toggle on this option to set date and time metadata "
+    QWhatsThis::add( d->fixDateTimeCheck, i18n("<p>Enable this option to set date and time metadata "
                      "tags to the right values if your camera does not set "
                      "these tags correctly when pictures are taken. The values will "
                      "be saved in the DateTimeDigitized and DateTimeCreated EXIF/IPTC fields."));
-    QWhatsThis::add( d->convertJpegCheck, i18n("<p>Toggle on this option to automatically convert "
+    QWhatsThis::add( d->convertJpegCheck, i18n("<p>Enable this option to automatically convert "
                      "all JPEG files to a lossless image format. <b>Note:</b> Image conversion can take a "
                      "while on a slow computer."));
     QWhatsThis::add( d->losslessFormat, i18n("<p>Select your preferred lossless image file format to "
@@ -406,8 +406,8 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     d->imageMenu->insertSeparator();
     d->imageMenu->insertItem(i18n("Select &New Items"), d->view, SLOT(slotSelectNew()), 0, 3);
     d->imageMenu->insertSeparator();
-    d->imageMenu->insertItem(i18n("Increase Thumbs"),   this,    SLOT(slotIncreaseThumbSize()), CTRL+Key_Plus, 4);
-    d->imageMenu->insertItem(i18n("Decrease Thumbs"),   this,    SLOT(slotDecreaseThumbSize()), CTRL+Key_Minus, 5);
+    d->imageMenu->insertItem(i18n("Increase thumbnail size"),   this,    SLOT(slotIncreaseThumbSize()), CTRL+Key_Plus, 4);
+    d->imageMenu->insertItem(i18n("Decrease thumbnail size"),   this,    SLOT(slotDecreaseThumbSize()), CTRL+Key_Minus, 5);
     d->imageMenu->insertSeparator();
     d->imageMenu->insertItem(i18n("Toggle Lock"),       this,    SLOT(slotToggleLock()), 0, 6);
     actionButton(User3)->setPopup(d->imageMenu);    
@@ -1351,7 +1351,7 @@ void CameraUI::slotDeleteSelected()
     // If we want to delete some locked files, just give a feedback to user.
     if (!lockedList.isEmpty())
     {
-        QString infoMsg(i18n("The items listed below are locked by the camera (read-only). "
+        QString infoMsg(i18n("The items listed below are locked by camera (read-only). "
                              "These items will not be deleted. If you really want to delete these items, "
                              "please unlock them and try again."));
         KMessageBox::informationList(this, infoMsg, lockedList, i18n("Information"));

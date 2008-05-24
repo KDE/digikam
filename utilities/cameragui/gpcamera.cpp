@@ -958,11 +958,11 @@ bool GPCamera::cameraSummary(QString& summary)
                    "Model: %2\n"
                    "Port: %3\n"
                    "Path: %4\n\n"
-                   "Thumbnail support: %5\n"
-                   "Delete items support: %6\n"
-                   "Upload items support: %7\n"
-                   "Directory creation support: %8\n"
-                   "Directory deletion support: %9\n\n")
+                   "Thumbnails: %5\n"
+                   "Delete items: %6\n"
+                   "Upload items: %7\n"
+                   "Create directories: %8\n"
+                   "Delete directories: %9\n\n")
                    .arg(title())
                    .arg(model())
                    .arg(port())

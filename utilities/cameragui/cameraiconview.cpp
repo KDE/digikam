@@ -607,7 +607,7 @@ void CameraIconView::uploadItemPopupMenu(const KURL::List& srcURLs)
 {
     KPopupMenu popMenu(this);
     popMenu.insertTitle(SmallIcon("digikam"), d->cameraUI->cameraTitle());
-    popMenu.insertItem( SmallIcon("goto"), i18n("&Upload into camera"), 10 );
+    popMenu.insertItem( SmallIcon("goto"), i18n("&Upload to camera"), 10 );
     popMenu.insertSeparator(-1);
     popMenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );
 
