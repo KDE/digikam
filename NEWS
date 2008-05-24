@@ -1,8 +1,10 @@
 **********************************************************************************************
 
-digiKam 0.9.4-beta5 - Release date: 2008-05-??
+digiKam 0.9.4-beta5 - Release date: 2008-05-25
 
 NEW FEATURES:
+
+General        : English words review in whole GUI by Oliver Doer
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
@@ -12,7 +14,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 004 ==> 162247 : The photos thumbnails list would be better if in the end of an album/date/tag start the next.
 005 ==> 160523 : Crash when saving picture as new nameafter resizing.
 006 ==> 162428 : debug info needed ?
-007 ==> 
+007 ==> 147597 : Typos in the digiKam KDE3 PO file.
 
 **********************************************************************************************
 
