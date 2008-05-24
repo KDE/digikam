@@ -1167,12 +1167,12 @@ bool GPCamera::cameraSummary(QString& summary)
                     port(),
                     path());
 
-    summary += i18n("Thumbnail support: <b>%1</b><br>"
-                    "Capture image support: <b>%2</b><br>"
-                    "Delete items support: <b>%3</b><br>"
-                    "Upload items support: <b>%4</b><br>"
-                    "Directory creation support: <b>%5</b><br>"
-                    "Directory deletion support: <b>%6</b><br><br>",
+    summary += i18n("Thumbnails: <b>%1</b><br>"
+                    "Capture image: <b>%2</b><br>"
+                    "Delete items: <b>%3</b><br>"
+                    "Upload items: <b>%4</b><br>"
+                    "Create directories: <b>%5</b><br>"
+                    "Delete Directories: <b>%6</b><br><br>",
                     thumbnailSupport()    ? i18n("yes") : i18n("no"),
                     captureImageSupport() ? i18n("yes") : i18n("no"),
                     deleteSupport()       ? i18n("yes") : i18n("no"),

@@ -368,7 +368,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
             d->camera->getAllFolders(d->camera->path(), folderList);
 
             emit signalFolderList(folderList);
-            sendInfo(i18n("Listing folders is complete..."));
+            sendInfo(i18n("The folders have been listed."));
 
             break;
         }
@@ -390,7 +390,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
                 emit signalFileList(itemsList);
             }
 
-            sendInfo(i18n("Listing files in %1 is complete", folder));
+            sendInfo(i18n("The files in %1 have been listed.", folder));
 
             break;
         }

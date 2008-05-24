@@ -210,10 +210,10 @@ void CameraUI::setupUserArea()
     albumVlay->setSpacing(KDialog::spacingHint());
 
     albumBox->setWhatsThis( i18n("<p>Set how digiKam creates albums automatically when downloading."));
-    d->autoAlbumExtCheck->setWhatsThis( i18n("<p>Toggle on this option if you want to download your "
+    d->autoAlbumExtCheck->setWhatsThis( i18n("<p>Enable this option if you want to download your "
                      "pictures into automatically created file extension-based sub-albums of the destination "
                      "album. This way, you can separate JPEG and RAW files as they are downloaded from your camera."));
-    d->autoAlbumDateCheck->setWhatsThis( i18n("<p>Toggle on this option if you want to "
+    d->autoAlbumDateCheck->setWhatsThis( i18n("<p>Enable this option if you want to "
                      "download your pictures into automatically created file date-based sub-albums "
                      "of the destination album."));
     d->folderDateFormat->setWhatsThis( i18n("<p>Select your preferred date format used to "
@@ -255,17 +255,17 @@ void CameraUI::setupUserArea()
 
     onFlyBox->setWhatsThis( i18n("<p>Set here all options to fix/transform JPEG files automatically "
                      "as they are downloaded."));
-    d->autoRotateCheck->setWhatsThis( i18n("<p>Toggle on this option if you want images automatically "
+    d->autoRotateCheck->setWhatsThis( i18n("<p>Enable this option if you want images automatically "
                      "rotated or flipped using EXIF information provided by the camera."));
-    d->setPhotographerId->setWhatsThis( i18n("<p>Toggle on this option to store the default "
+    d->setPhotographerId->setWhatsThis( i18n("<p>Enable this option to store the default "
                      "photographer identity in the XMP and IPTC tags using digiKam's metadata settings."));
-    d->setCredits->setWhatsThis( i18n("<p>Toggle on this option to store the default credit "
+    d->setCredits->setWhatsThis( i18n("<p>Enable this option to store the default credit "
                      "and copyright information in the XMP and IPTC tags using digiKam's metadata settings."));
-    d->fixDateTimeCheck->setWhatsThis( i18n("<p>Toggle on this option to set date and time metadata "
+    d->fixDateTimeCheck->setWhatsThis( i18n("<p>Enable this option to set date and time metadata "
                      "tags to the right values if your camera does not set "
                      "these tags correctly when pictures are taken. The values will "
                      "be saved in the DateTimeDigitized and DateTimeCreated EXIF, XMP, and IPTC tags."));
-    d->convertJpegCheck->setWhatsThis( i18n("<p>Toggle on this option to automatically convert "
+    d->convertJpegCheck->setWhatsThis( i18n("<p>Enable this option to automatically convert "
                      "all JPEG files to a lossless image format. <b>Note:</b> Image conversion can take a "
                      "while on a slow computer."));
     d->losslessFormat->setWhatsThis( i18n("<p>Select your preferred lossless image file format to "
@@ -1484,7 +1484,7 @@ void CameraUI::slotDeleteSelected()
     // If we want to delete some locked files, just give a feedback to user.
     if (!lockedList.isEmpty())
     {
-        QString infoMsg(i18n("The items listed below are locked by the camera (read-only). "
+        QString infoMsg(i18n("The items listed below are locked by camera (read-only). "
                              "These items will not be deleted. If you really want to delete these items, "
                              "please unlock them and try again."));
         KMessageBox::informationList(this, infoMsg, lockedList, i18n("Information"));

@@ -496,12 +496,12 @@ bool UMSCamera::cameraSummary(QString& summary)
                     port(),
                     path());
 
-    summary += i18n("Thumbnail support: <b>%1</b><br>"
-                    "Capture image support: <b>%2</b><br>"
-                    "Delete items support: <b>%3</b><br>"
-                    "Upload items support: <b>%4</b><br>"
-                    "Directory creation support: <b>%5</b><br>"
-                    "Directory deletion support: <b>%6</b><br><br>",
+    summary += i18n("Thumbnails: <b>%1</b><br>"
+                    "Capture image: <b>%2</b><br>"
+                    "Delete items: <b>%3</b><br>"
+                    "Upload items: <b>%4</b><br>"
+                    "Create directories: <b>%5</b><br>"
+                    "Delete directories: <b>%6</b><br><br>",
                     thumbnailSupport()    ? i18n("yes") : i18n("no"),
                     captureImageSupport() ? i18n("yes") : i18n("no"),
                     deleteSupport()       ? i18n("yes") : i18n("no"),
@@ -514,8 +514,8 @@ bool UMSCamera::cameraSummary(QString& summary)
 bool UMSCamera::cameraManual(QString& manual)
 {
     manual = QString(i18n("For more information about the <b>Mounted Camera</b> driver, "
-                          "please read the digiKam manual on <b>Supported Digital Still "
-                          "Cameras</b> section."));
+                          "please read the <b>Supported Digital Still "
+                          "Cameras</b> section in the digiKam manual."));
     return true;
 }
 
@@ -523,7 +523,7 @@ bool UMSCamera::cameraAbout(QString& about)
 {
     about = QString(i18n("The <b>Mounted Camera</b> driver is a simple interface to a camera disk "
                          "mounted locally on your system.<br><br>"
-                         "It doesn't use any libgphoto2 drivers.<br><br>"
+                         "It doesn't use libgphoto2 drivers.<br><br>"
                          "To report any problems with this driver, please contact the digiKam team at:<br><br>"
                          "http://www.digikam.org/?q=contact"));
     return true;

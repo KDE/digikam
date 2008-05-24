@@ -180,12 +180,12 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     QLabel* prefixLabel   = new QLabel(i18n("Prefix:"), d->renameCustomBox);
     d->renameCustomPrefix = new KLineEdit(d->renameCustomBox);
     d->focusedWidget = d->renameCustomPrefix;
-    d->renameCustomPrefix->setWhatsThis( i18n("<p>Set the prefix which will be prepended to "
+    d->renameCustomPrefix->setWhatsThis( i18n("<p>Set the prefix which will be added to "
                                               "the image filenames."));
 
     QLabel* suffixLabel   = new QLabel(i18n("Suffix:"), d->renameCustomBox);
     d->renameCustomSuffix = new KLineEdit(d->renameCustomBox);
-    d->renameCustomSuffix->setWhatsThis( i18n("<p>Set the suffix which will be postpended to "
+    d->renameCustomSuffix->setWhatsThis( i18n("<p>Set the suffix which will be added to "
                                               "the image filenames."));
 
     d->addDateTimeBox = new QCheckBox( i18n("Add Date && Time"), d->renameCustomBox );
@@ -200,16 +200,16 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     d->dateTimeFormat->insertItem(RenameCustomizerPriv::TextDateFormat,  i18n("Full Text"));
     d->dateTimeFormat->insertItem(RenameCustomizerPriv::LocalDateFormat, i18n("Local Settings"));
     d->dateTimeFormat->insertItem(RenameCustomizerPriv::Advanced,        i18n("Advanced..."));
-    d->dateTimeFormat->setWhatsThis( i18n("<p>Select your preferred date format used to "
-                    "create the new albums. The options available are:</p>"
+    d->dateTimeFormat->setWhatsThis( i18n("<p>Select your preferred date format for "
+                    "creating the new albums. The options available are:</p>"
                     "<p><b>Standard</b>: the date format that has been used as a standard by digiKam. "
                     "E.g.: <i>20060824T142618</i></p>"
-                    "<p/><b>ISO</b>: the date format is in accordance with ISO 8601 "
+                    "<p/><b>ISO</b>: the date format according to ISO 8601 "
                     "(YYYY-MM-DD). E.g.: <i>2006-08-24T14:26:18</i></p>"
-                    "<p><b>Full Text</b>: the date format is in a user-readable string. "
+                    "<p><b>Full Text</b>: the date format is a user-readable string. "
                     "E.g.: <i>Thu Aug 24 14:26:18 2006</i></p>"
                     "<p><b>Local Settings</b>: the date format depending on the KDE control panel settings.</p>"
-                    "<p><b>Advanced:</b> allows to specify a custom date format.</p>"));
+                    "<p><b>Advanced:</b> allows the user to specify a custom date format.</p>"));
 
     d->dateTimeButton = new QPushButton(SmallIcon("configure"), QString(), dateTimeWidget);
     QSizePolicy policy = d->dateTimeButton->sizePolicy();
