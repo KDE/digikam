@@ -199,7 +199,7 @@ if(LENSFUN_FOUND)
 else(LENSFUN_FOUND)
   message("-- liblensfun library found....... NO")
   message("")
-  message("digiKam will be compiled without LensCorrection Editor plugin.")
+  message("digiKam will be compiled without lens auto-correction image editor plugin.")
   message("")
 endif(LENSFUN_FOUND)
 
