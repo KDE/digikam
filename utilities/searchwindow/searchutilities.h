@@ -184,7 +184,7 @@ public:
      *  If stayVisible is false, setVisible(false) is called,
      *  which removes the widget for layouting etc.
      *  Default: false */
-    bool stayVisibleWhenAnimatedOut(bool stayVisible);
+    void stayVisibleWhenAnimatedOut(bool stayVisible);
 
 signals:
 

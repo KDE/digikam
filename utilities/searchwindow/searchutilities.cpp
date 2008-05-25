@@ -39,6 +39,7 @@
 
 // KDE includes
 
+#include <kdeversion.h>
 #include <kglobalsettings.h>
 #include <klocale.h>
 #include <kstandardguiitem.h>
@@ -390,7 +391,7 @@ QSize AnimatedClearButton::sizeHint () const
     return QSize(m_pixmap.width(), fm.lineSpacing());
 }
 
-bool AnimatedClearButton::stayVisibleWhenAnimatedOut(bool stayVisible)
+void AnimatedClearButton::stayVisibleWhenAnimatedOut(bool stayVisible)
 {
     m_stayAlwaysVisible = stayVisible;
 }
@@ -420,10 +421,15 @@ void AnimatedClearButton::animateVisible(bool visible)
         m_timeline->setDuration(250);
     }
 
+#if KDE_IS_VERSION(4,0,64)
     if (KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects) {
         if (m_timeline->state() != QTimeLine::Running)
             m_timeline->start();
     }
+#else
+    if (m_timeline->state() != QTimeLine::Running)
+        m_timeline->start();
+#endif
     else
     {
         if (!m_stayAlwaysVisible)
@@ -473,7 +479,11 @@ QPixmap AnimatedClearButton::pixmap()
 
 void AnimatedClearButton::updateAnimationSettings()
 {
+#if KDE_IS_VERSION(4,0,64)
     bool animationsEnabled = KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects;
+#else
+    bool animationsEnabled = true;
+#endif
 
     // We need to set the current time in the case that we had the clear
     // button shown, for it being painted on the paintEvent(). Otherwise
