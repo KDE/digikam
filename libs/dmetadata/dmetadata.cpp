@@ -887,25 +887,25 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field)
             return fromIptcOrXmp("Iptc.Application2.SpecialInstructions", "Xmp.photoshop.Instructions");
 
         case MetadataInfo::IptcCoreCountryCode:
-            return fromIptcOrXmp("Iptc.Application2.CountryCode", "Xmp.Iptc4xmpCore.CountryCode");
+            return fromIptcOrXmp("Iptc.Application2.CountryCode", "Xmp.iptc.CountryCode");
         case MetadataInfo::IptcCoreCountry:
             return fromIptcOrXmp("Iptc.Application2.CountryName", "Xmp.photoshop.Country");
         case MetadataInfo::IptcCoreCity:
             return fromIptcOrXmp("Iptc.Application2.City", "Xmp.photoshop.City");
         case MetadataInfo::IptcCoreLocation:
-            return fromIptcOrXmp("Iptc.Application2.SubLocation", "Xmp.Iptc4xmpCore.Location");
+            return fromIptcOrXmp("Iptc.Application2.SubLocation", "Xmp.iptc.Location");
         case MetadataInfo::IptcCoreProvinceState:
             return fromIptcOrXmp("Iptc.Application2.ProvinceState", "Xmp.photoshop.State");
         case MetadataInfo::IptcCoreIntellectualGenre:
             // TODO: find out correct Iptc tag
-            return fromIptcOrXmp(/*"Iptc.Application2.ObjectAttribute"?*/ 0, "Xmp.Iptc4xmpCore.IntellectualGenre");
+            return fromIptcOrXmp(/*"Iptc.Application2.ObjectAttribute"?*/ 0, "Xmp.iptc.IntellectualGenre");
         case MetadataInfo::IptcCoreJobID:
             return fromIptcOrXmp("Iptc.Application2.TransmissionReference", "Xmp.photoshop.TransmissionReference");
         case MetadataInfo::IptcCoreScene:
-            return fromXmpList("Xmp.Iptc4xmpCore.Scene");
+            return fromXmpList("Xmp.iptc.Scene");
         case MetadataInfo::IptcCoreSubjectCode:
         {
-            QVariant var = fromXmpList("Xmp.Iptc4xmpCore.SubjectCode");
+            QVariant var = fromXmpList("Xmp.iptc.SubjectCode");
             if (!var.isNull())
                 return var;
 
@@ -940,9 +940,9 @@ QString DMetadata::valueToString (const QVariant &value, MetadataInfo::Field fie
             switch (value.toInt())
             {
                 // Example why the English text differs from the enum names: ORIENTATION_ROT_90.
-                // Rotation by 90° is right (clockwise) rotation.
+                // Rotation by 90ï¿½ is right (clockwise) rotation.
                 // But: The enum names describe what needs to be done to get the image right again.
-                // And an image that needs to be rotated 90° is currently rotated 270° = left.
+                // And an image that needs to be rotated 90ï¿½ is currently rotated 270ï¿½ = left.
 
                 case ORIENTATION_UNSPECIFIED:
                     return i18n("Unspecified");
@@ -1007,7 +1007,7 @@ QString DMetadata::valueToString (const QVariant &value, MetadataInfo::Field fie
                 return QString();
             QString direction = (directionRef == 'W') ?
                                 i18nc("For use in longitude coordinate", "West") : i18nc("For use in longitude coordinate'' East", "East");
-            return QString("%1°%2'%L3'' %4").arg(degrees).arg(minutes).arg(seconds, 'f').arg(direction);
+            return QString("%1ï¿½%2'%L3'' %4").arg(degrees).arg(minutes).arg(seconds, 'f').arg(direction);
         }
         case MetadataInfo::LongitudeNumber:
         {
@@ -1017,7 +1017,7 @@ QString DMetadata::valueToString (const QVariant &value, MetadataInfo::Field fie
             convertToUserPresentableNumbers(false, value.toDouble(), &degrees, &minutes, &seconds, &directionRef);
             QString direction = (directionRef == 'W') ?
                                 i18nc("For use in longitude coordinate", "West") : i18nc("For use in longitude coordinate'' East", "East");
-            return QString("%1°%2'%L3'' %4").arg(degrees).arg(minutes).arg(seconds, 'f').arg(direction);
+            return QString("%1ï¿½%2'%L3'' %4").arg(degrees).arg(minutes).arg(seconds, 'f').arg(direction);
         }
         case MetadataInfo::Latitude:
         {
@@ -1028,7 +1028,7 @@ QString DMetadata::valueToString (const QVariant &value, MetadataInfo::Field fie
                 return QString();
             QString direction = (directionRef == 'N') ?
                                 i18nc("For use in latitude coordinate", "North") : i18nc("For use in latitude coordinate'' South", "South");
-            return QString("%1°%2'%L3'' %4").arg(degrees).arg(minutes).arg(seconds, 'f').arg(direction);
+            return QString("%1ï¿½%2'%L3'' %4").arg(degrees).arg(minutes).arg(seconds, 'f').arg(direction);
         }
         case MetadataInfo::LatitudeNumber:
         {
@@ -1038,7 +1038,7 @@ QString DMetadata::valueToString (const QVariant &value, MetadataInfo::Field fie
             convertToUserPresentableNumbers(false, value.toDouble(), &degrees, &minutes, &seconds, &directionRef);
             QString direction = (directionRef == 'N') ?
                                 i18nc("For use in latitude coordinate", "North") : i18nc("For use in latitude coordinate'' East", "North");
-            return QString("%1°%2'%L3'' %4").arg(degrees).arg(minutes).arg(seconds, 'f').arg(direction);
+            return QString("%1ï¿½%2'%L3'' %4").arg(degrees).arg(minutes).arg(seconds, 'f').arg(direction);
         }
         case MetadataInfo::Altitude:
         {
