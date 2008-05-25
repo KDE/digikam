@@ -59,6 +59,7 @@
 #include "albumdb.h"
 #include "album.h"
 #include "albumsettings.h"
+#include "albumlister.h"
 #include "albumthumbnailloader.h"
 #include "tageditdlg.h"
 #include "navigatebarwidget.h"
@@ -473,6 +474,7 @@ void ImageDescEditTab::slotApplyAllChanges()
 
     // we are now changing attributes ourselves
     d->ignoreImageAttributesWatch = true;
+    AlbumLister::instance()->blockSignals(true);
     AlbumManager::instance()->albumDB()->beginTransaction();
     int i=0;
     for (ImageInfo *info = d->currInfos.first(); info; info = d->currInfos.next())
@@ -486,6 +488,7 @@ void ImageDescEditTab::slotApplyAllChanges()
         if (progressInfo)
             kapp->processEvents();
     }
+    AlbumLister::instance()->blockSignals(false);
     AlbumManager::instance()->albumDB()->commitTransaction();
 
     d->ignoreImageAttributesWatch = false;
