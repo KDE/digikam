@@ -2242,19 +2242,22 @@ void AlbumIconView::slotAssignRating(int rating)
     AlbumManager::instance()->albumDB()->beginTransaction();
     for (IconItem *it = firstItem() ; it ; it = it->nextItem())
     {
-        if (it->isSelected())
+        if (it && it->isSelected())
         {
-            AlbumIconItem *albumItem = static_cast<AlbumIconItem *>(it);
-            ImageInfo* info          = albumItem->imageInfo();
+            AlbumIconItem *albumItem = dynamic_cast<AlbumIconItem *>(it);
+            if (albumItem)
+            {
+                ImageInfo* info = albumItem->imageInfo();
 
-            MetadataHub hub;
-            hub.load(info);
-            hub.setRating(rating);
-            hub.write(info, MetadataHub::PartialWrite);
-            hub.write(info->filePath(), MetadataHub::FullWriteIfChanged);
+                MetadataHub hub;
+                hub.load(info);
+                hub.setRating(rating);
+                hub.write(info, MetadataHub::PartialWrite);
+                hub.write(info->filePath(), MetadataHub::FullWriteIfChanged);
 
-            emit signalProgressValue((int)((i++/cnt)*100.0));
-            kapp->processEvents();
+                emit signalProgressValue((int)((i++/cnt)*100.0));
+                kapp->processEvents();
+            }
         }
     }
     AlbumManager::instance()->albumDB()->commitTransaction();
