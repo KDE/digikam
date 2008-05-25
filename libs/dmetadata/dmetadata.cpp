@@ -1007,9 +1007,9 @@ QString DMetadata::valueToString (const QVariant &value, MetadataInfo::Field fie
                 return QString();
             QString direction = (directionRef == 'W') ?
                                 i18nc("For use in longitude coordinate", "West") : i18nc("For use in longitude coordinate", "East");
-            return QString("%1%2%3%4%L5%6 %7").arg(degrees).arg(QChar(0xB0)
-                                              .arg(minutes).arg(QChar(0x2032)
-                                              .arg(seconds, 'f').arg(QChar(0x2033).arg(direction);
+            return QString("%1%2%3%4%L5%6 %7").arg(degrees).arg(QChar(0xB0))
+                                              .arg(minutes).arg(QChar(0x2032))
+                                              .arg(seconds, 'f').arg(QChar(0x2033)).arg(direction);
         }
         case MetadataInfo::LongitudeNumber:
         {
@@ -1019,9 +1019,9 @@ QString DMetadata::valueToString (const QVariant &value, MetadataInfo::Field fie
             convertToUserPresentableNumbers(false, value.toDouble(), &degrees, &minutes, &seconds, &directionRef);
             QString direction = (directionRef == 'W') ?
                                 i18nc("For use in longitude coordinate", "West") : i18nc("For use in longitude coordinate", "East");
-            return QString("%1%2%3%4%L5%6 %7").arg(degrees).arg(QChar(0xB0)
-                                              .arg(minutes).arg(QChar(0x2032)
-                                              .arg(seconds, 'f').arg(QChar(0x2033).arg(direction);
+            return QString("%1%2%3%4%L5%6 %7").arg(degrees).arg(QChar(0xB0))
+                                              .arg(minutes).arg(QChar(0x2032))
+                                              .arg(seconds, 'f').arg(QChar(0x2033)).arg(direction);
         }
         case MetadataInfo::Latitude:
         {
@@ -1032,9 +1032,9 @@ QString DMetadata::valueToString (const QVariant &value, MetadataInfo::Field fie
                 return QString();
             QString direction = (directionRef == 'N') ?
                                 i18nc("For use in latitude coordinate", "North") : i18nc("For use in latitude coordinate", "South");
-            return QString("%1%2%3%4%L5%6 %7").arg(degrees).arg(QChar(0xB0)
-                                              .arg(minutes).arg(QChar(0x2032)
-                                              .arg(seconds, 'f').arg(QChar(0x2033).arg(direction);
+            return QString("%1%2%3%4%L5%6 %7").arg(degrees).arg(QChar(0xB0))
+                                              .arg(minutes).arg(QChar(0x2032))
+                                              .arg(seconds, 'f').arg(QChar(0x2033)).arg(direction);
         }
         case MetadataInfo::LatitudeNumber:
         {
@@ -1044,9 +1044,9 @@ QString DMetadata::valueToString (const QVariant &value, MetadataInfo::Field fie
             convertToUserPresentableNumbers(false, value.toDouble(), &degrees, &minutes, &seconds, &directionRef);
             QString direction = (directionRef == 'N') ?
                                 i18nc("For use in latitude coordinate", "North") : i18nc("For use in latitude coordinate", "North");
-            return QString("%1%2%3%4%L5%6 %7").arg(degrees).arg(QChar(0xB0)
-                                              .arg(minutes).arg(QChar(0x2032)
-                                              .arg(seconds, 'f').arg(QChar(0x2033).arg(direction);
+            return QString("%1%2%3%4%L5%6 %7").arg(degrees).arg(QChar(0xB0))
+                                              .arg(minutes).arg(QChar(0x2032))
+                                              .arg(seconds, 'f').arg(QChar(0x2033)).arg(direction);
         }
         case MetadataInfo::Altitude:
         {
