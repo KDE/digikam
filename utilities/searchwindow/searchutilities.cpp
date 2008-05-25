@@ -499,8 +499,11 @@ void AnimatedClearButton::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event)
 
-    if (KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects) {
-        if (m_pixmap.isNull() || m_timeline->currentTime() == 0) {
+#if KDE_IS_VERSION(4,0,64)
+    if (KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects) 
+    {
+        if (m_pixmap.isNull() || m_timeline->currentTime() == 0) 
+        {
             return;
         }
 
@@ -509,13 +512,17 @@ void AnimatedClearButton::paintEvent(QPaintEvent *event)
         p.drawPixmap((width() - m_pixmap.width()) / 2,
                     (height() - m_pixmap.height()) / 2,
                     m_pixmap);
-    } else {
+    }
+    else
+#else
+    {
         QPainter p(this);
         p.setOpacity(1); // make sure
         p.drawPixmap((width() - m_pixmap.width()) / 2,
                     (height() - m_pixmap.height()) / 2,
                     m_pixmap);
     }
+#endif
 }
 
 void AnimatedClearButton::animationFinished()
