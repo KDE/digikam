@@ -114,13 +114,13 @@
     <run>
       <directoryradio>build</directoryradio>
       <customdirectory>/</customdirectory>
-      <mainprogram>/home/gilles/Documents/Devel/SVN/branches/graphics/digikam/digikam/digikam</mainprogram>
+      <mainprogram>/home/gilles/Documents/devel/SVN/branch/kde3/graphics/digikam/digikam/digikam</mainprogram>
       <programargs/>
       <terminal>false</terminal>
       <autocompile>false</autocompile>
       <envvars/>
       <globaldebugarguments/>
-      <globalcwd>/home/gilles/Documents/Devel/SVN/branches/graphics/digikam/project/../..</globalcwd>
+      <globalcwd/>
       <useglobalprogram>true</useglobalprogram>
       <autoinstall>false</autoinstall>
       <autokdesu>false</autokdesu>

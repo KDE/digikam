@@ -42,6 +42,7 @@
 
 #include "ddebug.h"
 #include "albumiconitem.h"
+#include "albumlister.h"
 #include "albummanager.h"
 #include "albumdb.h"
 #include "album.h"
@@ -403,6 +404,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
             emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
                                        i18n("Assign tag to images. Please wait..."));
 
+            AlbumLister::instance()->blockSignals(true);
             AlbumManager::instance()->albumDB()->beginTransaction();
             int i=0;
             for (QValueList<int>::const_iterator it = imageIDs.begin();
@@ -420,6 +422,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
                 emit signalProgressValue((int)((i++/(float)imageIDs.count())*100.0));
                 kapp->processEvents();
             }
+            AlbumLister::instance()->blockSignals(false);
             AlbumManager::instance()->albumDB()->commitTransaction();
 
             ImageAttributesWatch::instance()->imagesChanged(destAlbum->id());

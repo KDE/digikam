@@ -1657,6 +1657,7 @@ void AlbumIconView::changeTagOnImageInfos(const QPtrList<ImageInfo> &list, const
     float cnt = list.count();
     int i = 0;
 
+    d->imageLister->blockSignals(true);
     AlbumManager::instance()->albumDB()->beginTransaction();
     for (QPtrList<ImageInfo>::const_iterator it = list.begin(); it != list.end(); ++it)
     {
@@ -1678,6 +1679,7 @@ void AlbumIconView::changeTagOnImageInfos(const QPtrList<ImageInfo> &list, const
             kapp->processEvents();
         }
     }
+    d->imageLister->blockSignals(false);
     AlbumManager::instance()->albumDB()->commitTransaction();
 
     if (d->currentAlbum && d->currentAlbum->type() == Album::TAG)

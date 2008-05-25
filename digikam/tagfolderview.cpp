@@ -44,6 +44,7 @@
 #include "albumdb.h"
 #include "albummanager.h"
 #include "albumsettings.h"
+#include "albumlister.h"
 #include "syncjob.h"
 #include "tageditdlg.h"
 #include "dragobjects.h"
@@ -944,6 +945,7 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
             emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
                                        i18n("Assigning image tags. Please wait..."));
 
+            AlbumLister::instance()->blockSignals(true);
             d->albumMan->albumDB()->beginTransaction();
             int i=0;
             for (QValueList<int>::const_iterator it = imageIDs.begin();
@@ -961,8 +963,9 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
                 emit signalProgressValue((int)((i++/(float)imageIDs.count())*100.0));
                 kapp->processEvents();
             }
+            AlbumLister::instance()->blockSignals(false);
             d->albumMan->albumDB()->commitTransaction();
-            
+
             ImageAttributesWatch::instance()->imagesChanged(destAlbum->id());
 
             emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
