@@ -1604,31 +1604,31 @@ void AlbumIconView::contentsDropEvent(QDropEvent *e)
 void AlbumIconView::changeTagOnImageInfos(const ImageInfoList &list, const QList<int> &tagIDs, bool addOrRemove, bool progress)
 {
     float cnt = list.count();
-    int i = 0;
+    int i     = 0;
 
+    d->imageLister->blockSignals(true);
+    DatabaseTransaction transaction;
+    foreach(const ImageInfo &info, list)
     {
-        DatabaseTransaction transaction;
-        foreach(const ImageInfo &info, list)
+        MetadataHub hub;
+
+        hub.load(info);
+
+        for (QList<int>::const_iterator tagIt = tagIDs.begin(); tagIt != tagIDs.end(); ++tagIt)
         {
-            MetadataHub hub;
+            hub.setTag(*tagIt, addOrRemove);
+        }
 
-            hub.load(info);
+        hub.write(info, MetadataHub::PartialWrite);
+        hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
 
-            for (QList<int>::const_iterator tagIt = tagIDs.begin(); tagIt != tagIDs.end(); ++tagIt)
-            {
-                hub.setTag(*tagIt, addOrRemove);
-            }
-
-            hub.write(info, MetadataHub::PartialWrite);
-            hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
-
-            if (progress)
-            {
-                emit signalProgressValue((int)((i++/cnt)*100.0));
-                kapp->processEvents();
-            }
+        if (progress)
+        {
+            emit signalProgressValue((int)((i++/cnt)*100.0));
+            kapp->processEvents();
         }
     }
+    d->imageLister->blockSignals(false);
 
     if (d->currentAlbum && d->currentAlbum->type() == Album::TAG)
     {
@@ -2234,17 +2234,18 @@ void AlbumIconView::slotAssignRating(int rating)
     int   i   = 0;
     float cnt = (float)countSelected();
     rating    = qMin(RatingMax, qMax(RatingMin, rating));
+    MetadataHub hub;
 
+    DatabaseTransaction transaction;
+    for (IconItem *it = firstItem() ; it ; it = it->nextItem())
     {
-        DatabaseTransaction transaction;
-        for (IconItem *it = firstItem() ; it ; it = it->nextItem())
+        if (it->isSelected())
         {
-            if (it->isSelected())
+            AlbumIconItem *albumItem = dynamic_cast<AlbumIconItem *>(it);
+            if (albumItem)
             {
-                AlbumIconItem *albumItem = static_cast<AlbumIconItem *>(it);
-                ImageInfo info           = albumItem->imageInfo();
+                ImageInfo info = albumItem->imageInfo();
 
-                MetadataHub hub;
                 hub.load(info);
                 hub.setRating(rating);
                 hub.write(info, MetadataHub::PartialWrite);
@@ -2255,6 +2256,7 @@ void AlbumIconView::slotAssignRating(int rating)
             }
         }
     }
+    d->imageLister->blockSignals(false);
 
     emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
     updateContents();

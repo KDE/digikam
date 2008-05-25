@@ -61,6 +61,7 @@
 #include "albumdb.h"
 #include "album.h"
 #include "albumsettings.h"
+#include "albumlister.h"
 #include "albumthumbnailloader.h"
 #include "databasetransaction.h"
 #include "tageditdlg.h"
@@ -484,21 +485,24 @@ void ImageDescEditTab::slotApplyAllChanges()
 
     // we are now changing attributes ourselves
     d->ignoreImageAttributesWatch = true;
-    int i=0;
-    {
-        DatabaseTransaction transaction;
-        foreach(const ImageInfo &info, d->currInfos)
-        {
-            // apply to database
-            d->hub.write(info);
-            // apply to file metadata
-            d->hub.write(info.filePath(), MetadataHub::FullWrite, writeSettings);
 
-            emit signalProgressValue((int)((i++/(float)d->currInfos.count())*100.0));
-            if (progressInfo)
-                kapp->processEvents();
-        }
+    int i=0;
+    AlbumLister::instance()->blockSignals(true);
+    DatabaseTransaction transaction;
+
+    foreach(const ImageInfo &info, d->currInfos)
+    {
+        // apply to database
+        d->hub.write(info);
+        // apply to file metadata
+        d->hub.write(info.filePath(), MetadataHub::FullWrite, writeSettings);
+
+        emit signalProgressValue((int)((i++/(float)d->currInfos.count())*100.0));
+        if (progressInfo)
+            kapp->processEvents();
     }
+    AlbumLister::instance()->blockSignals(false);
+
     d->ignoreImageAttributesWatch = false;
 
     emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
@@ -574,22 +578,24 @@ void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
                                i18n("Reading metadata from files. Please wait..."));
 
     d->ignoreImageAttributesWatch = true;
-    int i=0;
-    {
-        DatabaseTransaction transaction;
-        foreach(const ImageInfo &info, d->currInfos)
-        {
-            // A batch operation: a hub for each single file, not the common hub
-            MetadataHub fileHub(MetadataHub::NewTagsImport);
-            // read in from DMetadata
-            fileHub.load(info.filePath());
-            // write out to database
-            fileHub.write(info);
+    int i = 0;
+    DatabaseTransaction transaction;
+    AlbumLister::instance()->blockSignals(true);
 
-            emit signalProgressValue((int)((i++/(float)d->currInfos.count())*100.0));
-            kapp->processEvents();
-        }
+    foreach(const ImageInfo &info, d->currInfos)
+    {
+        // A batch operation: a hub for each single file, not the common hub
+        MetadataHub fileHub(MetadataHub::NewTagsImport);
+        // read in from DMetadata
+        fileHub.load(info.filePath());
+        // write out to database
+        fileHub.write(info);
+
+        emit signalProgressValue((int)((i++/(float)d->currInfos.count())*100.0));
+        kapp->processEvents();
     }
+    AlbumLister::instance()->blockSignals(false);
+
     d->ignoreImageAttributesWatch = false;
 
     emit signalProgressBarMode(StatusProgressBar::TextMode, QString());

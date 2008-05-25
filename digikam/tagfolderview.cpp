@@ -44,6 +44,7 @@
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "albumthumbnailloader.h"
+#include "albumlister.h"
 #include "databasetransaction.h"
 #include "ddragobjects.h"
 #include "folderitem.h"
@@ -942,25 +943,25 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
             emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, 
                                        i18n("Assigning image tags. Please wait..."));
 
-            int i=0;
+            int i = 0;
+            AlbumLister::instance()->blockSignals(true);
+            DatabaseTransaction transaction;
+            MetadataHub         hub;
+
+            for (QList<int>::const_iterator it = imageIDs.begin(); it != imageIDs.end(); ++it)
             {
-                DatabaseTransaction transaction;
-                for (QList<int>::const_iterator it = imageIDs.begin();
-                    it != imageIDs.end(); ++it)
-                {
-                    // create temporary ImageInfo object
-                    ImageInfo info(*it);
+                // create temporary ImageInfo object
+                ImageInfo info(*it);
 
-                    MetadataHub hub;
-                    hub.load(info);
-                    hub.setTag(destAlbum, true);
-                    hub.write(info, MetadataHub::PartialWrite);
-                    hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
+                hub.load(info);
+                hub.setTag(destAlbum, true);
+                hub.write(info, MetadataHub::PartialWrite);
+                hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
 
-                    emit signalProgressValue((int)((i++/(float)imageIDs.count())*100.0));
-                    kapp->processEvents();
-                }
+                emit signalProgressValue((int)((i++/(float)imageIDs.count())*100.0));
+                kapp->processEvents();
             }
+            AlbumLister::instance()->blockSignals(false);
 
             emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
         }
