@@ -2239,17 +2239,18 @@ void AlbumIconView::slotAssignRating(int rating)
     float cnt = (float)countSelected();
     rating    = QMIN(RatingMax, QMAX(RatingMin, rating));
 
+    MetadataHub hub;
+    d->imageLister->blockSignals(true);
     AlbumManager::instance()->albumDB()->beginTransaction();
     for (IconItem *it = firstItem() ; it ; it = it->nextItem())
     {
-        if (it && it->isSelected())
+        if (it->isSelected())
         {
-            AlbumIconItem *albumItem = dynamic_cast<AlbumIconItem *>(it);
+            AlbumIconItem *albumItem = dynamic_cast<AlbumIconItem*>(it);
             if (albumItem)
             {
                 ImageInfo* info = albumItem->imageInfo();
 
-                MetadataHub hub;
                 hub.load(info);
                 hub.setRating(rating);
                 hub.write(info, MetadataHub::PartialWrite);
@@ -2260,6 +2261,7 @@ void AlbumIconView::slotAssignRating(int rating)
             }
         }
     }
+    d->imageLister->blockSignals(false);
     AlbumManager::instance()->albumDB()->commitTransaction();
 
     emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
