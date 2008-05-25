@@ -178,13 +178,13 @@ void ImageDialogPreview::showPreview(const KURL& url)
             else dateTime = KGlobal::locale()->formatDateTime(info.dateTime, true, true);
 
             if (info.aperture.isEmpty()) aperture = unavailable; 
-            else aperture = i18n("f/%1").arg(info.aperture);
+            else aperture = info.aperture;
 
             if (info.focalLength.isEmpty()) focalLength = unavailable; 
-            else focalLength = i18n("%1 mm").arg(info.focalLength);
+            else focalLength = info.focalLength;
 
             if (info.exposureTime.isEmpty()) exposureTime = unavailable; 
-            else exposureTime = i18n("1/%1 s").arg(info.exposureTime);
+            else exposureTime = info.exposureTime;
 
             if (info.sensitivity.isEmpty()) sensitivity = unavailable; 
             else sensitivity = i18n("%1 ISO").arg(info.sensitivity);
