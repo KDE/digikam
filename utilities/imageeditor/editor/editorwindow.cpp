@@ -1549,8 +1549,6 @@ bool EditorWindow::startingSaveAs(const KURL& url)
     QString fileName = info.baseName(false) + QString(".") + ext;
     imageFileSaveDialog.setSelection(fileName);
 
-    options->slotImageFileSelected(fileName);
-
     // Start dialog and check if canceled.
     if ( imageFileSaveDialog.exec() != KFileDialog::Accepted )
        return false;
