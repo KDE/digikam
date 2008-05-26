@@ -80,15 +80,15 @@ public:
     KUrl       url() const;
     KUrl::List urls() const;
 
-    bool    singleSelect() const;
-    QString fileformats() const;
+    bool       singleSelect() const;
+    QString    fileFormats() const;
 
     static KUrl::List getImageURLs(QWidget* parent, const KUrl& url, const QString& caption=QString());
     static KUrl getImageURL(QWidget* parent, const KUrl& url, const QString& caption=QString());
 
 private:
 
-    ImageDialogPrivate* d;
+    ImageDialogPrivate *d;
 };
 
 } // namespace Digikam
