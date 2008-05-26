@@ -1,5 +1,16 @@
 **********************************************************************************************
 
+digiKam 0.9.4-RC - Release date: 2008-06-??
+
+NEW FEATURES:
+
+BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+
+001 ==> 162496 : When Digikam saves file as JPEG - JPG options are not always presented.
+002 ==> 
+
+**********************************************************************************************
+
 digiKam 0.9.4-beta5 - Release date: 2008-05-25
 
 NEW FEATURES:
