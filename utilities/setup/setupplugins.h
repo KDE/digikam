@@ -6,7 +6,7 @@
  * Date        : 2004-01-02
  * Description : setup Kipi plugins tab.
  * 
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,7 +36,7 @@ class SetupPluginsPriv;
 class SetupPlugins : public QWidget
 {
     Q_OBJECT
-    
+
 public:
 
     SetupPlugins(QWidget* parent = 0);
@@ -47,7 +47,7 @@ public:
 
 private:
 
-    SetupPluginsPriv* d;    
+    SetupPluginsPriv* d;
 };
 
 }  // namespace Digikam

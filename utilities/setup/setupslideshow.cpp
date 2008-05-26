@@ -75,17 +75,17 @@ public:
     KIntNumInput *delayInput;
 };
 
-SetupSlideShow::SetupSlideShow(QWidget* parent )
+SetupSlideShow::SetupSlideShow(QWidget* parent)
               : QWidget(parent)
 {
     d = new SetupSlideShowPriv;
-    QVBoxLayout *layout = new QVBoxLayout( this );
+    QVBoxLayout *layout = new QVBoxLayout(this);
 
     d->delayInput = new KIntNumInput(5, this);
     d->delayInput->setRange(1, 3600, 1);
     d->delayInput->setSliderEnabled(true);
     d->delayInput->setLabel( i18n("&Delay between images:"), Qt::AlignLeft|Qt::AlignTop );
-    d->delayInput->setWhatsThis( i18n("<p>The delay, in seconds, between images."));
+    d->delayInput->setWhatsThis(i18n("<p>The delay, in seconds, between images."));
 
     d->startWithCurrent = new QCheckBox(i18n("Start with current image"), this);
     d->startWithCurrent->setWhatsThis( i18n("<p>If this option is enabled, the Slideshow will be started "
@@ -130,6 +130,8 @@ SetupSlideShow::SetupSlideShow(QWidget* parent )
     layout->addWidget(d->printComment);
     layout->addWidget(d->printRating);
     layout->addStretch();
+    layout->setMargin(0);
+    layout->setSpacing(KDialog::spacingHint());
 
     readSettings();
 }

@@ -7,7 +7,7 @@
  * Description : Color management setup tab.
  *
  * Copyright (C) 2005-2007 by F.J. Cruz <fj.cruz@supercable.es>
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -148,8 +148,7 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
 {
     d = new SetupICCPriv();
     d->mainDialog = dialog;
-    QVBoxLayout *layout = new QVBoxLayout( this );
-    layout->setSpacing(KDialog::spacingHint());
+    QVBoxLayout *layout = new QVBoxLayout(this);
 
     // --------------------------------------------------------
 
@@ -203,13 +202,11 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     vlay3->setSpacing(0);
 
     grid->addWidget(d->enableColorManagement, 0, 0, 1, 1);
-    grid->addWidget(lcmsLogoLabel, 0, 2, 1, 1);
-    grid->addWidget(d->behaviourGB, 1, 0, 1, 3 );
+    grid->addWidget(lcmsLogoLabel,            0, 2, 1, 1);
+    grid->addWidget(d->behaviourGB,           1, 0, 1, 3 );
     grid->setColumnStretch(1, 10);
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(0);
-
-    layout->addWidget(colorPolicy);
 
     // --------------------------------------------------------
 
@@ -227,8 +224,6 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     vlay->addWidget(d->defaultPathKU);
     vlay->setMargin(KDialog::spacingHint());
     vlay->setSpacing(0);
-
-    layout->addWidget(d->defaultPathGB);
 
     // --------------------------------------------------------
 
@@ -298,30 +293,28 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     d->infoProofProfiles->setWhatsThis( i18n("<p>You can use this button to get more detailed "
                      "information about the selected soft proof profile.</p>"));
 
-    grid2->addWidget(d->managedView, 0, 0, 1, 4 );
-    grid2->addWidget(d->monitorIcon, 1, 0, 1, 1);
-    grid2->addWidget(d->monitorProfiles, 1, 1, 1, 1);
-    grid2->addWidget(d->monitorProfilesKC, 1, 2, 1, 1);
+    grid2->addWidget(d->managedView,         0, 0, 1, 4 );
+    grid2->addWidget(d->monitorIcon,         1, 0, 1, 1);
+    grid2->addWidget(d->monitorProfiles,     1, 1, 1, 1);
+    grid2->addWidget(d->monitorProfilesKC,   1, 2, 1, 1);
     grid2->addWidget(d->infoMonitorProfiles, 1, 3, 1, 1);
-    grid2->addWidget(workIcon, 2, 0, 1, 1);
-    grid2->addWidget(workProfiles, 2, 1, 1, 1);
-    grid2->addWidget(d->workProfilesKC, 2, 2, 1, 1);
-    grid2->addWidget(d->infoWorkProfiles, 2, 3, 1, 1);
-    grid2->addWidget(inIcon, 3, 0, 1, 1);
-    grid2->addWidget(inProfiles, 3, 1, 1, 1);
-    grid2->addWidget(d->inProfilesKC, 3, 2, 1, 1);
-    grid2->addWidget(d->infoInProfiles, 3, 3, 1, 1);
-    grid2->addWidget(proofIcon, 4, 0, 1, 1);
-    grid2->addWidget(proofProfiles, 4, 1, 1, 1);
-    grid2->addWidget(d->proofProfilesKC, 4, 2, 1, 1);
-    grid2->addWidget(d->infoProofProfiles, 4, 3, 1, 1);
+    grid2->addWidget(workIcon,               2, 0, 1, 1);
+    grid2->addWidget(workProfiles,           2, 1, 1, 1);
+    grid2->addWidget(d->workProfilesKC,      2, 2, 1, 1);
+    grid2->addWidget(d->infoWorkProfiles,    2, 3, 1, 1);
+    grid2->addWidget(inIcon,                 3, 0, 1, 1);
+    grid2->addWidget(inProfiles,             3, 1, 1, 1);
+    grid2->addWidget(d->inProfilesKC,        3, 2, 1, 1);
+    grid2->addWidget(d->infoInProfiles,      3, 3, 1, 1);
+    grid2->addWidget(proofIcon,              4, 0, 1, 1);
+    grid2->addWidget(proofProfiles,          4, 1, 1, 1);
+    grid2->addWidget(d->proofProfilesKC,     4, 2, 1, 1);
+    grid2->addWidget(d->infoProofProfiles,   4, 3, 1, 1);
     grid2->setMargin(KDialog::spacingHint());
     grid2->setSpacing(0);
     grid2->setColumnStretch(2, 10);
 
-    layout->addWidget(d->profilesGB);
-
-     // --------------------------------------------------------
+    // --------------------------------------------------------
 
     d->advancedSettingsGB = new QGroupBox(i18n("Advanced Settings"), this);
     QGridLayout* grid3    = new QGridLayout(d->advancedSettingsGB);
@@ -364,14 +357,19 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
                      "<p>This intent is most suitable for business graphics such as charts, where it is more important that the "
                      "colors be vivid and contrast well with each other rather than a specific color.</p></li></ul>"));
 
-    grid3->addWidget(d->bpcAlgorithm, 0, 0, 1, 2 );
-    grid3->addWidget(lablel, 1, 0, 1, 1);
+    grid3->addWidget(d->bpcAlgorithm,      0, 0, 1, 2);
+    grid3->addWidget(lablel,               1, 0, 1, 1);
     grid3->addWidget(d->renderingIntentKC, 1, 1, 1, 1);
     grid3->setMargin(KDialog::spacingHint());
     grid3->setSpacing(0);
 
+    layout->addWidget(colorPolicy);
+    layout->addWidget(d->defaultPathGB);
+    layout->addWidget(d->profilesGB);
     layout->addWidget(d->advancedSettingsGB);
     layout->addStretch();
+    layout->setMargin(0);
+    layout->setSpacing(KDialog::spacingHint());
 
     // --------------------------------------------------------
 
