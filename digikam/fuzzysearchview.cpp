@@ -390,7 +390,7 @@ void FuzzySearchView::slotAlbumSelected(SAlbum* salbum)
     if (!salbum) 
         return;
 
-    // NOTE: There is nothing to display in scketch widget. Database do not store the scketch image.
+    // NOTE: There is nothing to display in sketch widget. Database do not store the sketch image.
 
     AlbumManager::instance()->setCurrentAlbum(salbum);
 }
