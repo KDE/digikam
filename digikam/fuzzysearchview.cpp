@@ -252,8 +252,7 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    slotVChanged();
-    d->sketchWidget->setPenWidth(d->penSize->value());
+    readConfig();
     slotCheckNameEditConditions();
 }
 
@@ -286,8 +285,8 @@ void FuzzySearchView::slotHSChanged(int h, int s)
 
 void FuzzySearchView::slotVChanged()
 {
-    int hue      = d->hsSelector->xValue();
-    int sat      = d->hsSelector->yValue();
+    int hue      = d->vSelector->hue();
+    int sat      = d->vSelector->saturation();
     int val      = d->vSelector->value();
     QColor color = QColor::fromHsv(hue, sat, val);
 
@@ -296,31 +295,29 @@ void FuzzySearchView::slotVChanged()
 
 void FuzzySearchView::readConfig()
 {
-/*    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(QString("TimeLine SideBar"));
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(QString("FuzzySearch SideBar"));
 
-    d->timeUnitCB->setCurrentIndex(group.readEntry("Histogram TimeUnit", (int)TimeLineWidget::Month));
-    slotTimeUnitChanged(d->timeUnitCB->currentIndex());
-
-    int id = group.readEntry("Histogram Scale", (int)TimeLineWidget::LinScale);
-    if ( d->scaleBG->button( id ) )
-       d->scaleBG->button( id )->setChecked(true);
-    slotScaleChanged(d->scaleBG->checkedId());
-
-    QDateTime now = QDateTime::currentDateTime();
-    d->timeLineWidget->setCursorDateTime(group.readEntry("Cursor Position", now));
-    d->timeLineWidget->setCurrentIndex(d->timeLineWidget->indexForCursorDateTime());*/
+    d->penSize->setValue(group.readEntry("Pen Size", 10));
+    d->results->setValue(group.readEntry("Result items", 10));
+    d->hsSelector->setXValue(group.readEntry("Pen Hue", 0));
+    d->hsSelector->setYValue(group.readEntry("Pen Saturation", 0));
+    d->vSelector->setValue(group.readEntry("Pen Value", 0));
+    d->hsSelector->updateContents();
+    slotHSChanged(d->hsSelector->xValue(), d->hsSelector->yValue());
+    d->sketchWidget->setPenWidth(d->penSize->value());
 }
 
 void FuzzySearchView::writeConfig()
 {
-/*
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(QString("TimeLine SideBar"));
-    group.writeEntry("Histogram TimeUnit", d->timeUnitCB->currentIndex());
-    group.writeEntry("Histogram Scale", d->scaleBG->checkedId());
-    group.writeEntry("Cursor Position", d->timeLineWidget->cursorDateTime());
-    group.sync();*/
+    KConfigGroup group        = config->group(QString("FuzzySearch SideBar"));
+    group.writeEntry("Pen Size",       d->penSize->value());
+    group.writeEntry("Result items",   d->results->value());
+    group.writeEntry("Pen Hue",        d->hsSelector->xValue());
+    group.writeEntry("Pen Saturation", d->hsSelector->yValue());
+    group.writeEntry("Pen Value",      d->vSelector->value());
+    group.sync();
 }
 
 void FuzzySearchView::setActive(bool val)
