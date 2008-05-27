@@ -136,7 +136,7 @@ void TimeLineFolderView::slotTextSearchFilterChanged(const QString& filter)
         TimeLineFolderItem* viewItem = (TimeLineFolderItem*) salbum->extraData(this);
 
         if (salbum->title().toLower().contains(search) &&
-            !salbum->isNormalSearch() && 
+            salbum->isTimelineSearch() && 
             salbum->title() != currentTimeLineSearchName())
         {
             atleastOneMatch = true;
