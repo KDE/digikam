@@ -54,7 +54,7 @@ public:
 
 private:
 
-    QByteArray fileToString(const QString &aFileName);
+    QByteArray fileToString(const QString& aFileName);
     QString    infoPage();
     void       updateInfoPageCss();
 

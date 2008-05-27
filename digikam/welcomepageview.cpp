@@ -85,7 +85,7 @@ WelcomePageView::~WelcomePageView()
         m_infoPageCssFile->remove();
 }
 
-void WelcomePageView::slotUrlOpen(const KUrl &url)
+void WelcomePageView::slotUrlOpen(const KUrl& url)
 {
    KToolInvocation::invokeBrowser(url.url());
 }
@@ -98,15 +98,15 @@ QString WelcomePageView::infoPage()
     newFeatures << i18n("Multimedia files handling using KDE4 Phonon interface");
     newFeatures << i18n("Geolocation performed using KDE4 Marble interface");
     newFeatures << i18n("XMP metadata support");
-    newFeatures << i18n("A new camera interface");
-    newFeatures << i18n("A new tool to capture photographs from Camera");
     newFeatures << i18n("The database file can be stored on a customized place to support remote album library paths");
     newFeatures << i18n("Support of multiple roots album paths");
-    newFeatures << i18n("Thumbnails-bar integration with preview mode and in editor for easy navigation between images");
+    newFeatures << i18n("Thumbnails-bar integration with preview mode and editor for easy navigation between images");
     newFeatures << i18n("Supports the latest camera RAW files");
-    newFeatures << i18n("New tool based on LensFun library to fix lens defaults automatically");
-    newFeatures << i18n("New tool to perform fuzzy searches based on sketch drawing template");
-    newFeatures << i18n("New tool to perform advanced searches based on main photo meta-informations");
+    newFeatures << i18n("A new camera interface");
+    newFeatures << i18n("A new tool to capture photographs from Camera");
+    newFeatures << i18n("A new tool based on LensFun library to fix lens defaults automatically");
+    newFeatures << i18n("A new tool to perform fuzzy searches based on sketch drawing template");
+    newFeatures << i18n("A new tool to perform advanced searches based on photo meta-informations");
 
     QString featureItems;
     for ( int i = 0 ; i < newFeatures.count() ; i++ )
@@ -147,7 +147,7 @@ QString WelcomePageView::infoPage()
     QString(digikam_version),            // %1 : current digiKam version
     "help:/digikam/index.html",          // %2 : digiKam help:// Url
     "http://www.digikam.org",            // %3 : digiKam homepage Url
-    "0.9.3",                             // %4 : prior digiKam version
+    "0.9.4",                             // %4 : prior digiKam version
     featureItems,                        // %5 : prior KDE version
     QString(),                           // %6 : generated list of new features
     QString());                          // %7 : previous digiKam release.
@@ -155,7 +155,7 @@ QString WelcomePageView::infoPage()
     return info;
 }
 
-QByteArray WelcomePageView::fileToString(const QString &aFileName)
+QByteArray WelcomePageView::fileToString(const QString& aFileName)
 {
     QByteArray   result;
     QFileInfo    info(aFileName);
