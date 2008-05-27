@@ -26,15 +26,17 @@
 
 // Qt includes.
 
-#include <QFrame>
-#include <QImage>
+#include <QWidget>
 
 namespace Digikam
 {
 
+class SAlbum;
+class SearchTextBar;
+class FuzzySearchFolderView;
 class FuzzySearchViewPriv;
 
-class FuzzySearchView : public QFrame
+class FuzzySearchView : public QWidget
 {
     Q_OBJECT
 
@@ -43,21 +45,29 @@ public:
     FuzzySearchView(QWidget *parent=0);
     ~FuzzySearchView();
 
-    void setActive(bool val);
+    FuzzySearchFolderView* folderView() const;
+    SearchTextBar* searchBar() const;
 
-    static QString currentHaarSearchName();
+    void setActive(bool val);
 
 private: 
 
     void readConfig();
     void writeConfig();
+    void createNewFuzzySearchAlbum(const QString& name);
+    bool checkName(QString& name);
+    bool checkAlbum(const QString& name) const;
 
 private slots:
 
     void slotHSChanged(int h, int s);
     void slotVChanged();
-    void slotResultsChanged();
-    void slotSketchChanged(const QImage&);
+    void slotClear();
+    void slotDirty();
+    void slotSaveSelection();
+    void slotAlbumSelected(SAlbum*);
+    void slotCheckAboutSelection();
+    void slotRenameAlbum(SAlbum*);
 
 private:
 

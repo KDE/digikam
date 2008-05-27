@@ -23,10 +23,12 @@
 
 // Qt includes.
 
+#include <QImage>
 #include <QLabel>
 #include <QFrame>
 #include <QLayout>
 #include <QPushButton>
+#include <QSpinBox>
 
 // KDE include.
 
@@ -40,8 +42,8 @@
 #include <kmessagebox.h>
 #include <khuesaturationselect.h>
 #include <kcolorvalueselector.h>
-#include <knuminput.h>
 #include <khbox.h>
+#include <kinputdialog.h>
 
 // Local includes.
 
@@ -50,7 +52,9 @@
 #include "ddebug.h"
 #include "haariface.h"
 #include "searchxml.h"
+#include "searchtextbar.h"
 #include "sketchwidget.h"
+#include "fuzzysearchfolderview.h"
 #include "fuzzysearchview.h"
 #include "fuzzysearchview.moc"
 
@@ -64,55 +68,69 @@ public:
 
     FuzzySearchViewPriv()
     {
-        sketchWidget = 0;
-        hsSelector   = 0;
-        vSelector    = 0;
-        penSize      = 0;
-        results      = 0;
-        clearButton  = 0;
+        sketchWidget          = 0;
+        hsSelector            = 0;
+        vSelector             = 0;
+        penSize               = 0;
+        results               = 0;
+        resetButton           = 0;
+        saveButton            = 0;
+        nameEdit              = 0;
+        searchFuzzyBar        = 0;
+        fuzzySearchFolderView = 0;
     }
 
-    QPushButton            *clearButton;
+    QPushButton            *resetButton;
+    QPushButton            *saveButton;
 
-    KIntNumInput           *penSize;
-    KIntNumInput           *results;
+    QSpinBox               *penSize;
+    QSpinBox               *results;
+
+    KLineEdit              *nameEdit;
 
     KHueSaturationSelector *hsSelector;
 
     KColorValueSelector    *vSelector;
 
+    SearchTextBar          *searchFuzzyBar;
+
+    FuzzySearchFolderView  *fuzzySearchFolderView;
+
     SketchWidget           *sketchWidget;
 };
 
 FuzzySearchView::FuzzySearchView(QWidget *parent)
-               : QFrame(parent)
+               : QWidget(parent)
 {
     d = new FuzzySearchViewPriv;
     setAttribute(Qt::WA_DeleteOnClose);
-    setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
-    setLineWidth(1);
 
-    QGridLayout *grid = new QGridLayout(this);
+    QVBoxLayout *vlay = new QVBoxLayout(this);
+    QFrame *panel     = new QFrame(this);
+    panel->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+    panel->setLineWidth(1);
+
+    QGridLayout *grid = new QGridLayout(panel);
 
     // ---------------------------------------------------------------
 
-    QWidget *box      = new QWidget(this);
-    QVBoxLayout *vlay = new QVBoxLayout(box);
-    KHBox *drawingBox = new KHBox(box);
-    d->sketchWidget   = new SketchWidget(drawingBox);
+    QWidget *box       = new QWidget(panel);
+    QVBoxLayout *vlay2 = new QVBoxLayout(box);
+    KHBox *drawingBox  = new KHBox(box);
+    d->sketchWidget    = new SketchWidget(drawingBox);
     drawingBox->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     drawingBox->setLineWidth(1);
 
-    vlay->addStretch(10);
-    vlay->addWidget(drawingBox, 0, Qt::AlignCenter);
-    vlay->addStretch(10);
-    vlay->setMargin(0);
-    vlay->setSpacing(0);
+    vlay2->addStretch(10);
+    vlay2->addWidget(drawingBox, 0, Qt::AlignCenter);
+    vlay2->addStretch(10);
+    vlay2->setMargin(0);
+    vlay2->setSpacing(0);
 
     // ---------------------------------------------------------------
 
-    d->hsSelector = new KHueSaturationSelector(this);
-    d->vSelector  = new KColorValueSelector(this);
+    d->hsSelector = new KHueSaturationSelector(panel);
+    d->vSelector  = new KColorValueSelector(panel);
     d->hsSelector->setMinimumSize(200, 142);
     d->vSelector->setMinimumSize(26, 142);
 
@@ -122,34 +140,49 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    KHBox *hbox        = new KHBox(this);
-    QLabel *brushLabel = new QLabel(i18n("Brush size:"), hbox);
-    d->penSize         = new KIntNumInput(hbox);
-    d->penSize->setRange(1, 40, 1);
-    d->penSize->setSliderEnabled(false);
+    KHBox *hbox          = new KHBox(panel);
+    QLabel *brushLabel   = new QLabel(i18n("Brush size:"), hbox);
+    d->penSize           = new QSpinBox(hbox);
+    d->penSize->setRange(1, 40);
+    d->penSize->setSingleStep(1);
     d->penSize->setValue(10);
     d->penSize->setWhatsThis(i18n("<p>Set here the brush size in pixels used to draw sketch."));
+
+    QLabel *resultsLabel = new QLabel(i18n("Results:"), hbox);
+    d->results           = new QSpinBox(hbox);
+    d->results->setRange(1, 50);
+    d->results->setSingleStep(1);
+    d->results->setValue(10);
+    d->results->setWhatsThis(i18n("<p>Set here the number of items to find."));
+
     hbox->setStretchFactor(brushLabel, 10);
+    hbox->setStretchFactor(resultsLabel, 10);
     hbox->setMargin(0);
     hbox->setSpacing(KDialog::spacingHint());
 
     // ---------------------------------------------------------------
 
-    d->clearButton = new QPushButton(i18n("Clear"), this);
-    d->clearButton->setWhatsThis(i18n("<p>Use this button to clear sketch contents."));
-
-    // ---------------------------------------------------------------
-
-    KHBox *hbox2         = new KHBox(this);
-    QLabel *resultsLabel = new QLabel(i18n("Results:"), hbox2);
-    d->results           = new KIntNumInput(hbox2);
-    d->results->setRange(1, 50, 1);
-    d->results->setSliderEnabled(false);
-    d->results->setValue(10);
-    d->results->setWhatsThis(i18n("<p>Set here the number of items to find."));
-    hbox2->setStretchFactor(resultsLabel, 10);
+    KHBox *hbox2 = new KHBox(panel);
     hbox2->setMargin(0);
     hbox2->setSpacing(KDialog::spacingHint());
+
+    d->resetButton = new QPushButton(hbox2);
+    d->resetButton->setIcon(SmallIcon("document-revert"));
+    d->resetButton->setToolTip(i18n("Clear sketch"));
+    d->resetButton->setWhatsThis(i18n("<p>Use this button to clear sketch contents."));
+
+    d->nameEdit    = new KLineEdit(hbox2);
+    d->nameEdit->setWhatsThis(i18n("<p>Enter the name of the current fuzzy search to save in the "
+                                   "\"My Fuzzy Searches\" view"));
+
+    d->saveButton  = new QPushButton(hbox2);
+    d->saveButton->setIcon(SmallIcon("document-save"));
+    d->saveButton->setEnabled(false);
+    d->saveButton->setToolTip(i18n("Save current search to a new virtual Album"));
+    d->saveButton->setWhatsThis(i18n("<p>If you press this button, current "
+                                     "fuzzy search will be saved to a new search "
+                                     "virtual Album using name "
+                                     "set on the left side."));
 
     // ---------------------------------------------------------------
 
@@ -157,14 +190,40 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     grid->addWidget(d->hsSelector,  1, 0, 1, 2);
     grid->addWidget(d->vSelector,   1, 2, 1, 1);
     grid->addWidget(hbox,           2, 0, 1, 3);
-    grid->addWidget(d->clearButton, 3, 0, 1, 3);
-    grid->addWidget(hbox2,          4, 0, 1, 3);
+    grid->addWidget(hbox2,          3, 0, 1, 3);
     grid->setRowStretch(5, 10);
     grid->setColumnStretch(1, 10);
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
 
     // ---------------------------------------------------------------
+
+    d->fuzzySearchFolderView = new FuzzySearchFolderView(this);
+    d->searchFuzzyBar        = new SearchTextBar(this, "FuzzySearchViewSearchFuzzyBar");
+
+    // ---------------------------------------------------------------
+
+    vlay->addWidget(panel);
+    vlay->addWidget(d->fuzzySearchFolderView);
+    vlay->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
+                                  QSizePolicy::Minimum, QSizePolicy::Minimum));
+    vlay->addWidget(d->searchFuzzyBar);
+    vlay->setMargin(0);
+    vlay->setSpacing(0);
+
+    // ---------------------------------------------------------------
+
+    connect(d->fuzzySearchFolderView, SIGNAL(signalAlbumSelected(SAlbum*)),
+            this, SLOT(slotAlbumSelected(SAlbum*)));
+
+    connect(d->fuzzySearchFolderView, SIGNAL(signalRenameAlbum(SAlbum*)),
+            this, SLOT(slotRenameAlbum(SAlbum*)));
+
+    connect(d->fuzzySearchFolderView, SIGNAL(signalTextSearchFilterMatch(bool)),
+            d->searchFuzzyBar, SLOT(slotSearchResult(bool)));
+
+    connect(d->searchFuzzyBar, SIGNAL(textChanged(const QString&)),
+            d->fuzzySearchFolderView, SLOT(slotTextSearchFilterChanged(const QString&)));
 
     connect(d->hsSelector, SIGNAL(valueChanged(int, int)),
             this, SLOT(slotHSChanged(int, int)));
@@ -176,13 +235,19 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
             d->sketchWidget, SLOT(setPenWidth(int)));
 
     connect(d->results, SIGNAL(valueChanged(int)),
-            this, SLOT(slotResultsChanged()));
+            this, SLOT(slotDirty()));
 
-    connect(d->clearButton, SIGNAL(clicked()),
-            d->sketchWidget, SLOT(slotClear()));
+    connect(d->resetButton, SIGNAL(clicked()),
+            this, SLOT(slotClear()));
 
     connect(d->sketchWidget, SIGNAL(signalSketchChanged(const QImage&)),
-            this, SLOT(slotSketchChanged(const QImage&)));
+            this, SLOT(slotDirty()));
+
+    connect(d->saveButton, SIGNAL(clicked()),
+            this, SLOT(slotSaveSelection()));
+
+    connect(d->nameEdit, SIGNAL(textChanged(const QString&)),
+            this, SLOT(slotCheckAboutSelection()));
 
     // ---------------------------------------------------------------
 
@@ -196,9 +261,14 @@ FuzzySearchView::~FuzzySearchView()
     delete d;
 }
 
-QString FuzzySearchView::currentHaarSearchName()
+FuzzySearchFolderView* FuzzySearchView::folderView() const
 {
-    return QString("_Current_Haar_Search_");
+    return d->fuzzySearchFolderView;
+}
+
+SearchTextBar* FuzzySearchView::searchBar() const
+{
+    return d->searchFuzzyBar;
 }
 
 void FuzzySearchView::slotHSChanged(int h, int s)
@@ -220,34 +290,6 @@ void FuzzySearchView::slotVChanged()
     QColor color = QColor::fromHsv(hue, sat, val);
 
     d->sketchWidget->setPenColor(color);
-}
-
-void FuzzySearchView::slotResultsChanged()
-{
-    slotSketchChanged(d->sketchWidget->sketchImage());
-}
-
-void FuzzySearchView::slotSketchChanged(const QImage& img)
-{
-    // We query database here
-
-    HaarIface haarIface;
-    //QList<qlonglong> list = haarIface.bestMatchesForImage(img, d->results->value(), HaarIface::HanddrawnSketch);
-    //DDebug() << "Sketch Fuzzy Search Results: " << list << endl;
-
-    SearchXmlWriter writer;
-
-    writer.writeGroup();
-    writer.writeField("similarity", SearchXml::Like);
-    writer.writeAttribute("type", "signature"); // we pass a signature
-    writer.writeAttribute("numberofresults", QString::number(d->results->value()));
-    writer.writeAttribute("sketchtype", "handdrawn");
-    writer.writeValue(haarIface.signatureAsText(img));
-    writer.finishField();
-    writer.finishGroup();
-
-    SAlbum* album = AlbumManager::instance()->createSAlbum(currentHaarSearchName(), DatabaseSearch::HaarSearch, writer.xml());
-    AlbumManager::instance()->setCurrentAlbum(album);
 }
 
 void FuzzySearchView::readConfig()
@@ -281,29 +323,146 @@ void FuzzySearchView::writeConfig()
 
 void FuzzySearchView::setActive(bool val)
 {
-/*    if (d->timeLineFolderView->selectedItem()) 
+    if (d->fuzzySearchFolderView->selectedItem()) 
     {
-        d->timeLineFolderView->setActive(val);
+        d->fuzzySearchFolderView->setActive(val);
     }
     else if (val)
     {
-        int totalCount = 0;
-        DateRangeList list = d->timeLineWidget->selectedDateRange(totalCount);
-        if (list.isEmpty())
+        AlbumList sList = AlbumManager::instance()->allSAlbums();
+        for (AlbumList::iterator it = sList.begin(); it != sList.end(); ++it)
         {
-            AlbumManager::instance()->setCurrentAlbum(0);
+            SAlbum* salbum = (SAlbum*)(*it);
+            if (salbum->title() == d->fuzzySearchFolderView->currentFuzzySearchName())
+                AlbumManager::instance()->setCurrentAlbum(salbum);
         }
-        else
-        {
-            AlbumList sList = AlbumManager::instance()->allSAlbums();
-            for (AlbumList::iterator it = sList.begin(); it != sList.end(); ++it)
-            {
-                SAlbum* salbum = (SAlbum*)(*it);
-                if (salbum->title() == d->timeLineFolderView->currentTimeLineSearchName())
-                    AlbumManager::instance()->setCurrentAlbum(salbum);
-            }
-        }
-    }*/
+    }
+}
+
+void FuzzySearchView::slotSaveSelection()
+{
+    QString name = d->nameEdit->text();
+    if (!checkName(name)) 
+        return;
+    createNewFuzzySearchAlbum(name);
+}
+
+void FuzzySearchView::slotDirty()
+{
+    createNewFuzzySearchAlbum(FuzzySearchFolderView::currentFuzzySearchName());
+}
+
+void FuzzySearchView::createNewFuzzySearchAlbum(const QString& name)
+{
+    if (d->sketchWidget->isClear())
+    {
+        AlbumManager::instance()->setCurrentAlbum(0);
+        return;
+    }
+
+    // We query database here
+
+    HaarIface haarIface;
+    SearchXmlWriter writer;
+
+    writer.writeGroup();
+    writer.writeField("similarity", SearchXml::Like);
+    writer.writeAttribute("type", "signature"); // we pass a signature
+    writer.writeAttribute("numberofresults", QString::number(d->results->value()));
+    writer.writeAttribute("sketchtype", "handdrawn");
+    writer.writeValue(haarIface.signatureAsText(d->sketchWidget->sketchImage()));
+    writer.finishField();
+    writer.finishGroup();
+
+    SAlbum* album = AlbumManager::instance()->createSAlbum(name, DatabaseSearch::HaarSearch, writer.xml());
+    AlbumManager::instance()->setCurrentAlbum(album);
+}
+
+void FuzzySearchView::slotAlbumSelected(SAlbum* salbum)
+{
+    if (!salbum) 
+    {
+        d->sketchWidget->slotClear();
+        return;
+    }
+
+    // NOTE: There is nothing to display in scketch widget. Database do not store the scketch image.
+    d->sketchWidget->slotClear();
+
+    AlbumManager::instance()->setCurrentAlbum(salbum);
+}
+
+void FuzzySearchView::slotClear()
+{
+    d->sketchWidget->slotClear();
+    slotCheckAboutSelection();
+    AlbumManager::instance()->setCurrentAlbum(0);
+}
+
+bool FuzzySearchView::checkName(QString& name)
+{
+    bool checked = checkAlbum(name);
+
+    while (!checked) 
+    {
+        QString label = i18n( "Search name already exists.\n"
+                              "Please enter a new name:" );
+        bool ok;
+        QString newTitle = KInputDialog::getText(i18n("Name exists"), label, name, &ok, this);
+        if (!ok) return false;
+
+        name    = newTitle;
+        checked = checkAlbum(name);
+    }
+
+    return true;
+}
+
+bool FuzzySearchView::checkAlbum(const QString& name) const
+{
+    AlbumList list = AlbumManager::instance()->allSAlbums();
+
+    for (AlbumList::Iterator it = list.begin() ; it != list.end() ; ++it)
+    {
+        SAlbum *album = (SAlbum*)(*it);
+        if ( album->title() == name )
+            return false;
+    }
+    return true;
+}
+
+void FuzzySearchView::slotCheckAboutSelection()
+{
+    if (d->sketchWidget->isClear())
+    {
+        d->nameEdit->setEnabled(true);
+
+        if (!d->nameEdit->text().isEmpty())
+            d->saveButton->setEnabled(true);
+    }
+    else
+    {
+        d->nameEdit->setEnabled(false);
+        d->saveButton->setEnabled(false);
+    }
+}
+
+void FuzzySearchView::slotRenameAlbum(SAlbum* salbum)
+{
+    if (!salbum) return;
+
+    QString oldName(salbum->title());
+    bool    ok;
+
+    QString name = KInputDialog::getText(i18n("Rename Album (%1)").arg(oldName), 
+                                          i18n("Enter new album name:"),
+                                          oldName, &ok, this);
+
+    if (!ok || name == oldName || name.isEmpty()) return;
+
+    if (!checkName(name)) return;
+
+    AlbumManager::instance()->updateSAlbum(salbum, salbum->query(), name);
 }
 
 }  // NameSpace Digikam

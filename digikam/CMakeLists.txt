@@ -185,6 +185,7 @@ SET(digikam_bin_SRCS
                      folderitem.cpp 
                      folderview.cpp 
                      fuzzysearchview.cpp
+                     fuzzysearchfolderview.cpp
                      iconview.cpp 
                      icongroupitem.cpp 
                      iconitem.cpp 

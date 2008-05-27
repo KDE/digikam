@@ -79,6 +79,7 @@
 #include "datefolderview.h"
 #include "tagfolderview.h"
 #include "fuzzysearchview.h"
+#include "fuzzysearchfolderview.h"
 #include "searchfolderview.h"
 #include "searchtabheader.h"
 #include "statusprogressbar.h"
@@ -674,8 +675,14 @@ void DigikamView::slotAlbumAdded(Album *album)
             }
             case Album::SEARCH:
             {
-                d->searchSearchBar->completionObject()->addItem(album->title());
-                d->timeLineView->searchBar()->completionObject()->addItem(album->title());
+                SAlbum* salbum = (SAlbum*)(album);
+                if (salbum->isNormalSearch() || salbum->isKeywordSearch() || salbum->isAdvancedSearch())
+                    d->searchSearchBar->completionObject()->addItem(salbum->title());
+                else if (salbum->isTimelineSearch())
+                    d->timeLineView->searchBar()->completionObject()->addItem(salbum->title());
+                else if (salbum->isHaarSearch())
+                    d->fuzzySearchView->searchBar()->completionObject()->addItem(salbum->title());
+
                 break;
             }
             default:
@@ -721,8 +728,14 @@ void DigikamView::slotAlbumDeleted(Album *album)
             }
             case Album::SEARCH:
             {
-                d->searchSearchBar->completionObject()->removeItem(album->title());
-                d->timeLineView->searchBar()->completionObject()->removeItem(album->title());
+                SAlbum* salbum = (SAlbum*)(album);
+                if (salbum->isNormalSearch() || salbum->isKeywordSearch() || salbum->isAdvancedSearch())
+                    d->searchSearchBar->completionObject()->removeItem(salbum->title());
+                else if (salbum->isTimelineSearch())
+                    d->timeLineView->searchBar()->completionObject()->removeItem(salbum->title());
+                else if (salbum->isHaarSearch())
+                    d->fuzzySearchView->searchBar()->completionObject()->removeItem(salbum->title());
+
                 break;
             }
             default:
@@ -762,11 +775,23 @@ void DigikamView::slotAlbumRenamed(Album *album)
             }
             case Album::SEARCH:
             {
-                d->searchSearchBar->completionObject()->addItem(album->title());
-                d->searchFolderView->slotTextSearchFilterChanged(d->searchSearchBar->text());
+                SAlbum* salbum = (SAlbum*)(album);
+                if (salbum->isNormalSearch() || salbum->isKeywordSearch() || salbum->isAdvancedSearch())
+                {
+                    d->searchSearchBar->completionObject()->addItem(salbum->title());
+                    d->searchFolderView->slotTextSearchFilterChanged(d->searchSearchBar->text());
+                }
+                else if (salbum->isTimelineSearch())
+                {
+                    d->timeLineView->searchBar()->completionObject()->addItem(salbum->title());
+                    d->timeLineView->folderView()->slotTextSearchFilterChanged(d->timeLineView->searchBar()->text());
+                }
+                else if (salbum->isHaarSearch())
+                {
+                    d->fuzzySearchView->searchBar()->completionObject()->addItem(salbum->title());
+                    d->fuzzySearchView->folderView()->slotTextSearchFilterChanged(d->fuzzySearchView->searchBar()->text());
+                }
 
-                d->timeLineView->searchBar()->completionObject()->addItem(album->title());
-                d->timeLineView->folderView()->slotTextSearchFilterChanged(d->timeLineView->searchBar()->text());
                 break;
             }
             default:
@@ -790,6 +815,7 @@ void DigikamView::slotAlbumsCleared()
 
     d->searchSearchBar->completionObject()->clear();
     d->timeLineView->searchBar()->completionObject()->clear();
+    d->fuzzySearchView->searchBar()->completionObject()->clear();
 }
 
 void DigikamView::slotAlbumHistoryBack(int steps)
@@ -853,6 +879,14 @@ void DigikamView::changeAlbumFromHistory(Album *album, QWidget *widget)
             v->setSelected(item);
         }
         else if (TimeLineView *v = dynamic_cast<TimeLineView*>(widget))
+        {
+            item = (Q3ListViewItem*)album->extraData(v->folderView());
+            if(!item) return;
+
+            v->folderView()->setSelected(item, true);
+            v->folderView()->ensureItemVisible(item);
+        }
+        else if (FuzzySearchView *v = dynamic_cast<FuzzySearchView*>(widget))
         {
             item = (Q3ListViewItem*)album->extraData(v->folderView());
             if(!item) return;
@@ -1447,6 +1481,7 @@ void DigikamView::slotLeftSidebarChangedTab(QWidget* w)
     d->tagFolderView->setActive(w == d->tagBox);
     d->searchFolderView->setActive(w == d->searchBox);
     d->timeLineView->setActive(w == d->timeLineView);
+    d->fuzzySearchView->setActive(w == d->fuzzySearchView);
 }
 
 void DigikamView::slotAssignRating(int rating)
