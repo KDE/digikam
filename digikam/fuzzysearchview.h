@@ -66,7 +66,7 @@ private slots:
     void slotDirty();
     void slotSaveSelection();
     void slotAlbumSelected(SAlbum*);
-    void slotCheckAboutSelection();
+    void slotCheckNameEditConditions();
     void slotRenameAlbum(SAlbum*);
 
 private:

@@ -206,7 +206,7 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
 
     vlay->addWidget(panel);
     vlay->addWidget(d->fuzzySearchFolderView);
-    vlay->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
+    vlay->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
                                   QSizePolicy::Minimum, QSizePolicy::Minimum));
     vlay->addWidget(d->searchFuzzyBar);
     vlay->setMargin(0);
@@ -248,12 +248,13 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
             this, SLOT(slotSaveSelection()));
 
     connect(d->nameEdit, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotCheckAboutSelection()));
+            this, SLOT(slotCheckNameEditConditions()));
 
     // ---------------------------------------------------------------
 
     slotVChanged();
     d->sketchWidget->setPenWidth(d->penSize->value());
+    slotCheckNameEditConditions();
 }
 
 FuzzySearchView::~FuzzySearchView()
@@ -351,7 +352,7 @@ void FuzzySearchView::slotSaveSelection()
 
 void FuzzySearchView::slotDirty()
 {
-    slotCheckAboutSelection();
+    slotCheckNameEditConditions();
     createNewFuzzySearchAlbum(FuzzySearchFolderView::currentFuzzySearchName());
 }
 
@@ -395,7 +396,7 @@ void FuzzySearchView::slotAlbumSelected(SAlbum* salbum)
 void FuzzySearchView::slotClear()
 {
     d->sketchWidget->slotClear();
-    slotCheckAboutSelection();
+    slotCheckNameEditConditions();
     AlbumManager::instance()->setCurrentAlbum(0);
 }
 
@@ -431,7 +432,7 @@ bool FuzzySearchView::checkAlbum(const QString& name) const
     return true;
 }
 
-void FuzzySearchView::slotCheckAboutSelection()
+void FuzzySearchView::slotCheckNameEditConditions()
 {
     if (!d->sketchWidget->isClear())
     {
