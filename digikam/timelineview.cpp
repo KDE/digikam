@@ -195,6 +195,7 @@ TimeLineView::TimeLineView(QWidget *parent)
                                       "dates selection from time-line will be "
                                       "clear."));
     d->nameEdit    = new KLineEdit(hbox2);
+    d->nameEdit->setClearButtonShown(true);
     d->nameEdit->setWhatsThis(i18n("<p>Enter the name of the current dates search to save in the "
                                    "\"My Date Searches\" view"));
 

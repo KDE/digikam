@@ -172,6 +172,7 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     d->resetButton->setWhatsThis(i18n("<p>Use this button to clear sketch contents."));
 
     d->nameEdit    = new KLineEdit(hbox2);
+    d->nameEdit->setClearButtonShown(true);
     d->nameEdit->setWhatsThis(i18n("<p>Enter the name of the current fuzzy search to save in the "
                                    "\"My Fuzzy Searches\" view"));
 
@@ -350,6 +351,7 @@ void FuzzySearchView::slotSaveSelection()
 
 void FuzzySearchView::slotDirty()
 {
+    slotCheckAboutSelection();
     createNewFuzzySearchAlbum(FuzzySearchFolderView::currentFuzzySearchName());
 }
 
@@ -380,7 +382,7 @@ void FuzzySearchView::createNewFuzzySearchAlbum(const QString& name)
 
 void FuzzySearchView::slotAlbumSelected(SAlbum* salbum)
 {
-    d->sketchWidget->slotClear();
+    slotClear();
 
     if (!salbum) 
         return;
@@ -431,7 +433,7 @@ bool FuzzySearchView::checkAlbum(const QString& name) const
 
 void FuzzySearchView::slotCheckAboutSelection()
 {
-    if (d->sketchWidget->isClear())
+    if (!d->sketchWidget->isClear())
     {
         d->nameEdit->setEnabled(true);
 
