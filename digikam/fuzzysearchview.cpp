@@ -95,7 +95,7 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     QGridLayout *grid = new QGridLayout(this);
 
     // ---------------------------------------------------------------
-        
+
     QWidget *box      = new QWidget(this);
     QVBoxLayout *vlay = new QVBoxLayout(box);
     KHBox *drawingBox = new KHBox(box);

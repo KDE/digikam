@@ -183,7 +183,7 @@ void TimeLineFolderView::slotAlbumAdded(Album* a)
     SAlbum *salbum  = dynamic_cast<SAlbum*>(a);
     if (!salbum) return;
 
-    if (salbum->isNormalSearch())
+    if (!salbum->isTimelineSearch())
         return;
 
     // We will ignore the internal Dates Search Album used to perform selection from timeline.

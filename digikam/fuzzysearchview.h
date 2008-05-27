@@ -45,7 +45,7 @@ public:
 
     void setActive(bool val);
 
-    QString currentHaarSearchName();
+    static QString currentHaarSearchName();
 
 private: 
 
