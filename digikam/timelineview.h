@@ -47,7 +47,7 @@ public:
     TimeLineView(QWidget *parent=0);
     ~TimeLineView();
 
-    TimeLineFolderView *folderView() const;
+    TimeLineFolderView* folderView() const;
     SearchTextBar* searchBar() const;
 
     void setActive(bool val);

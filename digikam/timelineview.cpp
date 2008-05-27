@@ -74,10 +74,10 @@ public:
         cursorCountLabel      = 0;
         timeLineWidget        = 0;
         timer                 = 0;
-        resetButton           = 0;
-        saveButton            = 0;
         scrollBar             = 0;
         timeLineFolderView    = 0;
+        resetButton           = 0;
+        saveButton            = 0;
         nameEdit              = 0;
         searchDateBar         = 0;
     }
@@ -90,10 +90,10 @@ public:
 
     QButtonGroup       *scaleBG;
 
+    QLabel             *cursorCountLabel;
+
     QPushButton        *resetButton;
     QPushButton        *saveButton;
-
-    QLabel             *cursorCountLabel;
 
     KLineEdit          *nameEdit;
 
