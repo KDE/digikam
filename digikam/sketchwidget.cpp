@@ -42,12 +42,14 @@ public:
 
     SketchWidgetPriv()
     {
+        isClear  = true;
         drawing  = false;
         penWidth = 10;
         penColor = Qt::black;
         pixmap   = QPixmap(256, 256);
     }
 
+    bool    isClear;
     bool    drawing;
 
     int     penWidth;
@@ -72,6 +74,11 @@ SketchWidget::SketchWidget(QWidget *parent)
 SketchWidget::~SketchWidget()
 {
     delete d;
+}
+
+bool SketchWidget::isClear() const
+{
+    return d->isClear;
 }
 
 QColor SketchWidget::penColor() const
@@ -101,6 +108,7 @@ void SketchWidget::setPenWidth(int newWidth)
 
 void SketchWidget::slotClear()
 {
+    d->isClear = true;
     d->pixmap.fill(qRgb(255, 255, 255));
     update();
 }
@@ -111,6 +119,7 @@ void SketchWidget::mousePressEvent(QMouseEvent *event)
     {
         d->lastPoint = event->pos();
         d->drawing   = true;
+        d->isClear   = false;
     }
 }
 

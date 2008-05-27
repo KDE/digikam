@@ -44,6 +44,7 @@ public:
 
     QColor penColor() const;
     int    penWidth() const;
+    bool   isClear()  const;
 
     QImage sketchImage() const;
 
