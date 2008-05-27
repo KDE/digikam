@@ -7,7 +7,7 @@
  * Description : digiKam image editor to adjust Hue, Saturation,
  *               and Lightness of picture.
  *
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -91,22 +91,22 @@ private:
 
     uchar                        *m_destinationPreviewData;
 
-    QComboBox                    *m_channelCB;    
-    
-    QButtonGroup                 *m_scaleBG;  
-    
+    QComboBox                    *m_channelCB;
+
+    QButtonGroup                 *m_scaleBG;
+
     KDoubleNumInput              *m_hInput;
     KDoubleNumInput              *m_sInput;
     KDoubleNumInput              *m_lInput;
 
     KHueSaturationSelector       *m_HSSelector;
 
-    HSPreviewWidget              *m_HSPreview;    
+    HSPreviewWidget              *m_HSPreview;
 
     Digikam::ImageWidget         *m_previewWidget;
 
     Digikam::ColorGradientWidget *m_hGradient;
-    
+
     Digikam::HistogramWidget     *m_histogramWidget;
 };
 

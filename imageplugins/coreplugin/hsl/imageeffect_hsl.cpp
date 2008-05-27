@@ -7,7 +7,7 @@
  * Description : digiKam image editor to adjust Hue, Saturation,
  *               and Lightness of picture.
  *
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -81,7 +81,7 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
     setPreviewAreaWidget(m_previewWidget); 
 
     // -------------------------------------------------------------
-    
+
     QWidget *gboxSettings     = new QWidget(mainWidget());
     QGridLayout* gridSettings = new QGridLayout( gboxSettings );
 
@@ -107,19 +107,19 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
                                 "If the image's maximal counts are small, you can use the linear scale.<p>"
                                 "Logarithmic scale can be used when the maximal counts are big; "
                                 "if it is used, all values (small and large) will be visible on the graph."));
-    
+
     QPushButton *linHistoButton = new QPushButton( scaleBox );
     linHistoButton->setToolTip( i18n( "<p>Linear" ) );
     linHistoButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/histogram-lin.png")));
     linHistoButton->setCheckable(true);
     m_scaleBG->addButton(linHistoButton, Digikam::HistogramWidget::LinScaleHistogram);
-    
+
     QPushButton *logHistoButton = new QPushButton( scaleBox );
     logHistoButton->setToolTip( i18n( "<p>Logarithmic" ) );
     logHistoButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/histogram-log.png")));
     logHistoButton->setCheckable(true);
     m_scaleBG->addButton(logHistoButton, Digikam::HistogramWidget::LogScaleHistogram);
-    
+
     hlay->setMargin(0);
     hlay->setSpacing(0);
     hlay->addWidget(linHistoButton);
@@ -133,7 +133,7 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
     l1->addWidget(m_channelCB);
     l1->addStretch(10);
     l1->addWidget(scaleBox);
-    
+
     // -------------------------------------------------------------
 
     KVBox *histoBox   = new KVBox(gboxSettings);
@@ -145,7 +145,7 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
     space->setFixedHeight(1);    
     m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, histoBox );
     m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
-    
+
 
     // -------------------------------------------------------------
 
@@ -177,20 +177,20 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
     m_lInput->setDecimals(2);
     m_lInput->setRange(-100.0, 100.0, 0.01, true);
     m_lInput->setValue(0.0);
-    m_lInput->setWhatsThis( i18n("<p>Set here the lightness adjustment of the image."));    
+    m_lInput->setWhatsThis( i18n("<p>Set here the lightness adjustment of the image."));
 
     // -------------------------------------------------------------
 
-    gridSettings->addLayout(l1, 0, 0, 1, 5 );
-    gridSettings->addWidget(histoBox, 1, 0, 2, 5 );
-    gridSettings->addWidget(m_HSSelector, 3, 0, 1, 5 );
-    gridSettings->addWidget(m_HSPreview, 4, 0, 1, 5 );
-    gridSettings->addWidget(label2, 5, 0, 1, 5 );
-    gridSettings->addWidget(m_hInput, 6, 0, 1, 5 );
-    gridSettings->addWidget(label3, 7, 0, 1, 5 );
-    gridSettings->addWidget(m_sInput, 8, 0, 1, 5 );
-    gridSettings->addWidget(label4, 9, 0, 1, 5 );
-    gridSettings->addWidget(m_lInput, 10, 0, 1, 5 );
+    gridSettings->addLayout(l1,           0, 0, 1, 5);
+    gridSettings->addWidget(histoBox,     1, 0, 2, 5);
+    gridSettings->addWidget(m_HSSelector, 3, 0, 1, 5);
+    gridSettings->addWidget(m_HSPreview,  4, 0, 1, 5);
+    gridSettings->addWidget(label2,       5, 0, 1, 5);
+    gridSettings->addWidget(m_hInput,     6, 0, 1, 5);
+    gridSettings->addWidget(label3,       7, 0, 1, 5);
+    gridSettings->addWidget(m_sInput,     8, 0, 1, 5);
+    gridSettings->addWidget(label4,       9, 0, 1, 5);
+    gridSettings->addWidget(m_lInput,    10, 0, 1, 5);
     gridSettings->setRowStretch(11, 10);
     gridSettings->setMargin(spacingHint());
     gridSettings->setSpacing(spacingHint());
