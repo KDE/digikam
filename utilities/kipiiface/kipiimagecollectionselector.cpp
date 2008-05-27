@@ -46,7 +46,7 @@
 #include "treefolderitem.h"
 #include "searchfolderview.h"
 #include "timelinefolderview.h"
-#include "fuzzysearchview.h"
+#include "fuzzysearchfolderview.h"
 #include "kipiinterface.h"
 #include "kipiimagecollection.h"
 #include "kipiimagecollectionselector.h"
@@ -217,7 +217,7 @@ void KipiImageCollectionSelector::populateTreeView(const AlbumList& aList, QTree
             if (salbum && 
                 (salbum->title() == SearchFolderView::currentSearchViewSearchName() ||
                  salbum->title() == TimeLineFolderView::currentTimeLineSearchName() ||
-                 salbum->title() == FuzzySearchView::currentHaarSearchName() ))
+                 salbum->title() == FuzzySearchFolderView::currentFuzzySearchName()))
                 continue;
 
             item = new TreeAlbumCheckListItem(pitem, album);
