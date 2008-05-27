@@ -344,6 +344,7 @@ void FuzzySearchView::slotSaveSelection()
     QString name = d->nameEdit->text();
     if (!checkName(name)) 
         return;
+
     createNewFuzzySearchAlbum(name);
 }
 
@@ -354,11 +355,10 @@ void FuzzySearchView::slotDirty()
 
 void FuzzySearchView::createNewFuzzySearchAlbum(const QString& name)
 {
+    AlbumManager::instance()->setCurrentAlbum(0);
+
     if (d->sketchWidget->isClear())
-    {
-        AlbumManager::instance()->setCurrentAlbum(0);
         return;
-    }
 
     // We query database here
 
@@ -380,14 +380,12 @@ void FuzzySearchView::createNewFuzzySearchAlbum(const QString& name)
 
 void FuzzySearchView::slotAlbumSelected(SAlbum* salbum)
 {
+    d->sketchWidget->slotClear();
+
     if (!salbum) 
-    {
-        d->sketchWidget->slotClear();
         return;
-    }
 
     // NOTE: There is nothing to display in scketch widget. Database do not store the scketch image.
-    d->sketchWidget->slotClear();
 
     AlbumManager::instance()->setCurrentAlbum(salbum);
 }
