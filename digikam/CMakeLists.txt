@@ -238,7 +238,7 @@ ENDIF(KDEPIMLIBS_FOUND)
 
 SET_TARGET_PROPERTIES(digikam_bin PROPERTIES OUTPUT_NAME digikam)
 
-INSTALL(TARGETS digikam_bin DESTINATION ${BIN_INSTALL_DIR})
+INSTALL(TARGETS digikam_bin ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 # Others Files to install #######################################################
