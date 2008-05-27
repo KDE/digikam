@@ -46,6 +46,7 @@
 #include "treefolderitem.h"
 #include "searchfolderview.h"
 #include "timelinefolderview.h"
+#include "fuzzysearchview.h"
 #include "kipiinterface.h"
 #include "kipiimagecollection.h"
 #include "kipiimagecollectionselector.h"
@@ -215,9 +216,10 @@ void KipiImageCollectionSelector::populateTreeView(const AlbumList& aList, QTree
             SAlbum* salbum = dynamic_cast<SAlbum*>(album);
             if (salbum && 
                 (salbum->title() == SearchFolderView::currentSearchViewSearchName() ||
-                 salbum->title() == TimeLineFolderView::currentTimeLineSearchName()))
+                 salbum->title() == TimeLineFolderView::currentTimeLineSearchName() ||
+                 salbum->title() == FuzzySearchView::currentHaarSearchName() ))
                 continue;
-            
+
             item = new TreeAlbumCheckListItem(pitem, album);
         }
 
@@ -236,10 +238,12 @@ void KipiImageCollectionSelector::populateTreeView(const AlbumList& aList, QTree
                     SAlbum* salbum = dynamic_cast<SAlbum*>(album);
                     if (salbum)
                     {
-                        if (salbum->isNormalSearch())
-                            item->setIcon(0, KIcon("edit-find"));
-                        else
+                        if (salbum->isTimelineSearch())
                             item->setIcon(0, KIcon("clock"));
+                        else if (salbum->isHaarSearch())
+                            item->setIcon(0, KIcon("tools-wizard"));
+                        else
+                            item->setIcon(0, KIcon("edit-find"));
                     }
                 }
             }
