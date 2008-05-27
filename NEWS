@@ -7,7 +7,8 @@ NEW FEATURES:
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 162496 : When Digikam saves file as JPEG - JPG options are not always presented.
-002 ==> 
+002 ==> 160740 : Handbook says that libgphoto2 is required but does not say whether it should be compiled with exif support.
+003 ==> 
 
 **********************************************************************************************
 
