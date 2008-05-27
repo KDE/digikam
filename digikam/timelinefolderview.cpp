@@ -257,7 +257,7 @@ void TimeLineFolderView::slotContextMenu(Q3ListViewItem* item, const QPoint&, in
 
     KMenu popmenu(this);
     popmenu.addTitle(SmallIcon("digikam"), i18n("My Date Searches"));
-    QAction *renSearch = popmenu.addAction(SmallIcon("pencil"), i18n("Rename..."));
+    QAction *renSearch = popmenu.addAction(SmallIcon("edit-rename"), i18n("Rename..."));
     QAction *delSearch = popmenu.addAction(SmallIcon("edit-delete"), i18n("Delete"));
     QAction *choice    = popmenu.exec(QCursor::pos());
     if (choice)
