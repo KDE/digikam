@@ -305,9 +305,9 @@ void FuzzySearchView::readConfig()
 
     d->penSize->setValue(group.readEntry("Pen Size", 10));
     d->results->setValue(group.readEntry("Result items", 10));
-    d->hsSelector->setXValue(group.readEntry("Pen Hue", 0));
-    d->hsSelector->setYValue(group.readEntry("Pen Saturation", 0));
-    d->vSelector->setValue(group.readEntry("Pen Value", 0));
+    d->hsSelector->setXValue(group.readEntry("Pen Hue", 180));
+    d->hsSelector->setYValue(group.readEntry("Pen Saturation", 128));
+    d->vSelector->setValue(group.readEntry("Pen Value", 255));
     d->hsSelector->updateContents();
     slotHSChanged(d->hsSelector->xValue(), d->hsSelector->yValue());
     d->sketchWidget->setPenWidth(d->penSize->value());
@@ -346,7 +346,7 @@ void FuzzySearchView::setActive(bool val)
 void FuzzySearchView::slotSaveSelection()
 {
     QString name = d->nameEdit->text();
-    if (!checkName(name)) 
+    if (!checkName(name))
         return;
 
     createNewFuzzySearchAlbum(name);
@@ -372,7 +372,7 @@ void FuzzySearchView::createNewFuzzySearchAlbum(const QString& name)
 
     writer.writeGroup();
     writer.writeField("similarity", SearchXml::Like);
-    writer.writeAttribute("type", "signature"); // we pass a signature
+    writer.writeAttribute("type", "signature");         // we pass a signature
     writer.writeAttribute("numberofresults", QString::number(d->results->value()));
     writer.writeAttribute("sketchtype", "handdrawn");
     writer.writeValue(haarIface.signatureAsText(d->sketchWidget->sketchImage()));
@@ -457,7 +457,7 @@ void FuzzySearchView::slotRenameAlbum(SAlbum* salbum)
     QString oldName(salbum->title());
     bool    ok;
 
-    QString name = KInputDialog::getText(i18n("Rename Album (%1)").arg(oldName), 
+    QString name = KInputDialog::getText(i18n("Rename Album (%1)").arg(oldName),
                                           i18n("Enter new album name:"),
                                           oldName, &ok, this);
 
