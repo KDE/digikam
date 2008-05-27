@@ -135,6 +135,7 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     d->vSelector->setMinimumSize(26, 142);
     d->hsSelector->setChooserMode(ChooserValue);
     d->vSelector->setChooserMode(ChooserValue);
+    d->hsSelector->setColorValue(255);
 
     QString tips(i18n("<p>Set here the brush color used to draw sketch."));
     d->hsSelector->setWhatsThis(tips);
@@ -290,9 +291,6 @@ void FuzzySearchView::slotVChanged()
     int hue      = d->vSelector->hue();
     int sat      = d->vSelector->saturation();
     int val      = d->vSelector->value();
-    d->hsSelector->setColorValue(val);
-    d->hsSelector->updateContents();
-    d->hsSelector->repaint();
     QColor color = QColor::fromHsv(hue, sat, val);
 
     d->sketchWidget->setPenColor(color);
