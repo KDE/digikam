@@ -1,4 +1,4 @@
-digiKam 0.10.0 - Release date: 2008-xx-xx
+digiKam 0.10.0 - Release date: 2008-09-xx
 
 NEW FEATURES:
 
@@ -21,8 +21,10 @@ CameraGUI      : New bargraph to display camera media free-space.
 AlbumGUI       : Added Thumbbar with Preview mode to easy navigate between pictures.
 AlbumGUI       : Integration of Simple Text Search tool to left sidebar as Amarok.
 AlbumGUI       : New advanced Search tools. Re-design of Search backend, based on XML.
-                 Re-design of search dialog for a better usability. 
-		 Searches based on metadata and image properties are now possible.
+                 Re-design of search dialog for a better usability.
+                 Searches based on metadata and image properties are now possible.
+AlbumGUI       : New fuzzy Search tools based on sketch drawing template. 
+                 Fuzzy searches backend use an Haar wevelet interface.
 
 ImageEditor    : Added Thumbbar to easy navigate between pictures.
 ImageEditor    : New plugin based on LensFun library (http://lensfun.berlios.de) to correct automaticaly lens aberrations.
