@@ -172,6 +172,7 @@ ImageEffect_RedEye::ImageEffect_RedEye(QWidget* parent)
     m_HSSelector->setWhatsThis(i18n("<p>Sets a custom color when re-colorizing the eyes."));
     m_HSSelector->setMinimumSize(200, 142);
     m_HSSelector->setChooserMode(ChooserValue);
+    m_HSSelector->setColorValue(255);
     m_VSelector->setChooserMode(ChooserValue);
     m_VSelector->setMinimumSize(26, 142);
 
@@ -416,8 +417,8 @@ void ImageEffect_RedEye::redEyeFilter(Digikam::DImg& selection)
 
     selection          = mask.copy();
     float redThreshold = m_redThreshold->value()/10.0;
-    int hue            = m_HSSelector->xValue();
-    int sat            = m_HSSelector->yValue();
+    int hue            = m_VSelector->hue();
+    int sat            = m_VSelector->saturation();
     int val            = m_VSelector->value();
     QColor coloring    = QColor::fromHsv(hue, sat, val);
 
