@@ -29,6 +29,10 @@
 #include <QPoint>
 #include <QMouseEvent>
 
+// KDE includes.
+
+#include <klocale.h>
+
 // Local includes.
 
 #include "sketchwidget.h"
@@ -118,9 +122,15 @@ void SketchWidget::mousePressEvent(QMouseEvent *e)
 {
     if (e->button() == Qt::LeftButton) 
     {
+        if (d->isClear)
+        {
+            d->pixmap.fill(qRgb(255, 255, 255));
+            d->isClear = false;
+            update();
+        }
+
         d->lastPoint = e->pos();
         d->drawing   = true;
-        d->isClear   = false;
     }
 }
 
@@ -151,8 +161,16 @@ void SketchWidget::mouseReleaseEvent(QMouseEvent *e)
 
 void SketchWidget::paintEvent(QPaintEvent*)
 {
-    QPainter painter(this);
-    painter.drawPixmap(QPoint(0, 0), d->pixmap);
+    QPainter p(this);
+    if (d->isClear)
+    {
+        p.drawText(0, 0, width(), height(), Qt::AlignCenter,
+                   i18n("Draw a sketch here\nto perform a\nFuzzy search"));
+    }
+    else
+    {
+        p.drawPixmap(QPoint(0, 0), d->pixmap);
+    }
 }
 
 void SketchWidget::drawLineTo(const QPoint& endPoint)
