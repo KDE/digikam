@@ -76,7 +76,7 @@ namespace Digikam
 
 void TIFFLoader::dimg_tiff_warning(const char* module, const char* format, va_list warnings)
 {
-#ifdef ENABLE_DEBUG_MESSAGES    
+#ifdef ENABLE_DEBUG_MESSAGES
     char message[4096];
     vsnprintf(message, 4096, format, warnings);
     DDebug() << module <<  "::" <<  message << endl;
@@ -89,7 +89,7 @@ void TIFFLoader::dimg_tiff_warning(const char* module, const char* format, va_li
 
 void TIFFLoader::dimg_tiff_error(const char* module, const char* format, va_list errors)
 {
-#ifdef ENABLE_DEBUG_MESSAGES    
+#ifdef ENABLE_DEBUG_MESSAGES
     char message[4096];
     vsnprintf(message, 4096, format, errors);
     DDebug() << module << "::" << message << endl;
@@ -128,7 +128,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         return false;
     }
 
-#ifdef ENABLE_DEBUG_MESSAGES    
+#ifdef ENABLE_DEBUG_MESSAGES
     TIFFPrintDirectory(tif, stdout, 0);
 #endif
 
@@ -306,7 +306,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                 ushort *dataPtr  = (ushort*)(data + offset);
                 ushort *p;
 
-                // tiff data is read as BGR or ABGR
+                // tiff data is read as BGR or ABGR or Greyscale
 
                 if (samples_per_pixel == 3)
                 {
@@ -334,6 +334,33 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                     }
 
                     offset += bytesRead/6 * 8;
+                }
+                else if (samples_per_pixel == 1)   // See B.K.O #148400: Greyscale pictures only have _one_ sample per pixel
+                {
+                    for (int i=0; i < bytesRead/2; i++)
+                    {
+                        // We have to read two bytes for one pixel
+                        p = dataPtr;
+
+                        // See B.K.O #148037 : take a care about byte order with Motorola computers.
+                        if (QImage::systemByteOrder() == QImage::BigEndian)     // PPC
+                        {
+                            p[3] = 0xFFFF;
+                            p[0] = *stripPtr;
+                            p[1] = *stripPtr;
+                            p[2] = *stripPtr++;
+                        }
+                        else
+                        {
+                            p[0] = *stripPtr;      // RGB have to be set to the _same_ value
+                            p[1] = *stripPtr;
+                            p[2] = *stripPtr++;
+                            p[3] = 0xFFFF;         // set alpha to 100%
+                        }
+                        dataPtr += 4;
+                    }
+
+                    offset += bytesRead*4;         // The _byte_offset in the data array is, of course, four times bytesRead
                 }
                 else
                 {
@@ -560,7 +587,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     metaData.setIptc(m_image->getIptc());
     metaData.setXmp(m_image->getXmp());
 
-    // Standard IPTC tag (available with libtiff 3.6.1)    
+    // Standard IPTC tag (available with libtiff 3.6.1)
 
     QByteArray ba = metaData.getIptc(true);
     if (!ba.isEmpty()) 
@@ -570,7 +597,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 #endif
     }
 
-    // Standard XMP tag (available with libtiff 3.6.1)    
+    // Standard XMP tag (available with libtiff 3.6.1)
 
     if (metaData.hasXmp())
     {
@@ -600,29 +627,29 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 #if defined(TIFFTAG_EXIFIFD)
     long sub_offset=0;
     TIFFSetField(tif, TIFFTAG_SUBIFD, 1, &sub_offset);
-#endif  
+#endif
 
 #if defined(EXIFTAG_EXPOSURETIME)
     tiffSetExifDataTag(tif, EXIFTAG_EXPOSURETIME,             &metaData, "Exif.Photo.ExposureTime");
-#endif  
+#endif
 #if defined(EXIFTAG_FNUMBER)
     tiffSetExifDataTag(tif, EXIFTAG_FNUMBER,                  &metaData, "Exif.Photo.FNumber");
-#endif  
+#endif
 #if defined(EXIFTAG_EXPOSUREPROGRAM)
     tiffSetExifDataTag(tif, EXIFTAG_EXPOSUREPROGRAM,          &metaData, "Exif.Photo.ExposureProgram");
-#endif  
+#endif
 #if defined(EXIFTAG_SPECTRALSENSITIVITY)
     tiffSetExifAsciiTag(tif, EXIFTAG_SPECTRALSENSITIVITY,     &metaData, "Exif.Photo.SpectralSensitivity");
 #endif
 #if defined(EXIFTAG_ISOSPEEDRATINGS)
     tiffSetExifDataTag(tif, EXIFTAG_ISOSPEEDRATINGS,          &metaData, "Exif.Photo.ISOSpeedRatings");
-#endif  
+#endif
 #if defined(EXIFTAG_OECF)
     tiffSetExifDataTag(tif, EXIFTAG_OECF,                     &metaData, "Exif.Photo.OECF");
-#endif  
+#endif
 #if defined(EXIFTAG_EXIFVERSION)
     tiffSetExifDataTag(tif, EXIFTAG_EXIFVERSION,              &metaData, "Exif.Photo.ExifVersion");
-#endif  
+#endif
 #if defined(EXIFTAG_DATETIMEORIGINAL)
     tiffSetExifAsciiTag(tif, EXIFTAG_DATETIMEORIGINAL,        &metaData, "Exif.Photo.DateTimeOriginal");
 #endif
@@ -631,13 +658,13 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 #endif
 #if defined(EXIFTAG_COMPONENTSCONFIGURATION)
     tiffSetExifDataTag(tif, EXIFTAG_COMPONENTSCONFIGURATION,  &metaData, "Exif.Photo.ComponentsConfiguration");
-#endif  
+#endif
 #if defined(EXIFTAG_COMPRESSEDBITSPERPIXEL)
     tiffSetExifDataTag(tif, EXIFTAG_COMPRESSEDBITSPERPIXEL,   &metaData, "Exif.Photo.CompressedBitsPerPixel");
-#endif  
+#endif
 #if defined(EXIFTAG_SHUTTERSPEEDVALUE)
     tiffSetExifDataTag(tif, EXIFTAG_SHUTTERSPEEDVALUE,        &metaData, "Exif.Photo.ShutterSpeedValue");
-#endif  
+#endif
 #if defined(EXIFTAG_APERTUREVALUE)
     tiffSetExifDataTag(tif, EXIFTAG_APERTUREVALUE,            &metaData, "Exif.Photo.ApertureValue");
 #endif
@@ -760,13 +787,13 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 #endif
 #if defined(EXIFTAG_SHARPNESS)
     tiffSetExifDataTag(tif, EXIFTAG_SHARPNESS,                &metaData, "Exif.Photo.Sharpness");
-#endif 
+#endif
 #if defined(EXIFTAG_DEVICESETTINGDESCRIPTION)
     tiffSetExifDataTag(tif, EXIFTAG_DEVICESETTINGDESCRIPTION, &metaData, "Exif.Photo.DeviceSettingDescription");
-#endif 
+#endif
 #if defined(EXIFTAG_SUBJECTDISTANCERANGE)
     tiffSetExifDataTag(tif, EXIFTAG_SUBJECTDISTANCERANGE,     &metaData, "Exif.Photo.SubjectDistanceRange");
-#endif 
+#endif
 #if defined(EXIFTAG_IMAGEUNIQUEID)
     tiffSetExifAsciiTag(tif, EXIFTAG_IMAGEUNIQUEID,           &metaData, "Exif.Photo.ImageUniqueID");
 #endif
@@ -971,12 +998,12 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
 bool TIFFLoader::hasAlpha() const
 {
-    return m_hasAlpha;    
+    return m_hasAlpha;
 }
 
 bool TIFFLoader::sixteenBit() const
 {
-    return m_sixteenBit;    
+    return m_sixteenBit;
 }
 
 void TIFFLoader::tiffSetExifAsciiTag(TIFF* tif, ttag_t tiffTag, 
