@@ -79,30 +79,30 @@ public:
         hsSelector            = 0;
         vSelector             = 0;
         penSize               = 0;
-        results               = 0;
-        results2              = 0;
+        resultsSketch         = 0;
+        resultsImage          = 0;
         resetButton           = 0;
-        saveButton            = 0;
-        saveButton2           = 0;
-        nameEdit              = 0;
-        nameEdit2             = 0;
+        saveBtnSketch         = 0;
+        saveBtnImage          = 0;
+        nameEditSketch        = 0;
+        nameEditImage         = 0;
         searchFuzzyBar        = 0;
         fuzzySearchFolderView = 0;
         tabWidget             = 0;
     }
 
     QPushButton            *resetButton;
-    QPushButton            *saveButton;
-    QPushButton            *saveButton2;
+    QPushButton            *saveBtnSketch;
+    QPushButton            *saveBtnImage;
 
     QSpinBox               *penSize;
-    QSpinBox               *results;
-    QSpinBox               *results2;
+    QSpinBox               *resultsSketch;
+    QSpinBox               *resultsImage;
 
     QLabel                 *imageWidget;
 
-    KLineEdit              *nameEdit;
-    KLineEdit              *nameEdit2;
+    KLineEdit              *nameEditSketch;
+    KLineEdit              *nameEditImage;
 
     KTabWidget             *tabWidget;
 
@@ -150,11 +150,11 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
 
     KHBox *hbox3          = new KHBox(imagePanel);
     QLabel *resultsLabel2 = new QLabel(i18n("Results:"), hbox3);
-    d->results2           = new QSpinBox(hbox3);
-    d->results2->setRange(1, 50);
-    d->results2->setSingleStep(1);
-    d->results2->setValue(10);
-    d->results2->setWhatsThis(i18n("<p>Set here the number of duplicate items to find."));
+    d->resultsImage       = new QSpinBox(hbox3);
+    d->resultsImage->setRange(1, 50);
+    d->resultsImage->setSingleStep(1);
+    d->resultsImage->setValue(10);
+    d->resultsImage->setWhatsThis(i18n("<p>Set here the number of duplicate items to find."));
 
     hbox3->setStretchFactor(resultsLabel2, 10);
     hbox3->setMargin(0);
@@ -162,23 +162,23 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    KHBox *hbox4 = new KHBox(imagePanel);
+    KHBox *hbox4     = new KHBox(imagePanel);
     hbox4->setMargin(0);
     hbox4->setSpacing(KDialog::spacingHint());
 
-    d->nameEdit2    = new KLineEdit(hbox4);
-    d->nameEdit2->setClearButtonShown(true);
-    d->nameEdit2->setWhatsThis(i18n("<p>Enter the name of the current image duplicate search to save in the "
-                                    "\"My Fuzzy Searches\" view"));
+    d->nameEditImage = new KLineEdit(hbox4);
+    d->nameEditImage->setClearButtonShown(true);
+    d->nameEditImage->setWhatsThis(i18n("<p>Enter the name of the current image duplicate search to save in the "
+                                        "\"My Fuzzy Searches\" view"));
 
-    d->saveButton2  = new QPushButton(hbox4);
-    d->saveButton2->setIcon(SmallIcon("document-save"));
-    d->saveButton2->setEnabled(false);
-    d->saveButton2->setToolTip(i18n("Save current duplicate search to a new virtual Album"));
-    d->saveButton2->setWhatsThis(i18n("<p>If you press this button, current "
-                                      "image duplicate search will be saved to a new search "
-                                      "virtual Album using name "
-                                      "set on the left side."));
+    d->saveBtnImage  = new QPushButton(hbox4);
+    d->saveBtnImage->setIcon(SmallIcon("document-save"));
+    d->saveBtnImage->setEnabled(false);
+    d->saveBtnImage->setToolTip(i18n("Save current duplicate search to a new virtual Album"));
+    d->saveBtnImage->setWhatsThis(i18n("<p>If you press this button, current "
+                                       "image duplicate search will be saved to a new search "
+                                       "virtual Album using name "
+                                       "set on the left side."));
 
     // ---------------------------------------------------------------
 
@@ -226,20 +226,20 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    KHBox *hbox          = new KHBox(sketchPanel);
-    QLabel *brushLabel   = new QLabel(i18n("Brush size:"), hbox);
-    d->penSize           = new QSpinBox(hbox);
+    KHBox *hbox        = new KHBox(sketchPanel);
+    QLabel *brushLabel = new QLabel(i18n("Brush size:"), hbox);
+    d->penSize         = new QSpinBox(hbox);
     d->penSize->setRange(1, 40);
     d->penSize->setSingleStep(1);
     d->penSize->setValue(10);
     d->penSize->setWhatsThis(i18n("<p>Set here the brush size in pixels used to draw sketch."));
 
     QLabel *resultsLabel = new QLabel(i18n("Results:"), hbox);
-    d->results           = new QSpinBox(hbox);
-    d->results->setRange(1, 50);
-    d->results->setSingleStep(1);
-    d->results->setValue(10);
-    d->results->setWhatsThis(i18n("<p>Set here the number of items to find using sketch."));
+    d->resultsSketch     = new QSpinBox(hbox);
+    d->resultsSketch->setRange(1, 50);
+    d->resultsSketch->setSingleStep(1);
+    d->resultsSketch->setValue(10);
+    d->resultsSketch->setWhatsThis(i18n("<p>Set here the number of items to find using sketch."));
 
     hbox->setStretchFactor(brushLabel, 10);
     hbox->setStretchFactor(resultsLabel, 10);
@@ -248,28 +248,28 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    KHBox *hbox2 = new KHBox(sketchPanel);
+    KHBox *hbox2      = new KHBox(sketchPanel);
     hbox2->setMargin(0);
     hbox2->setSpacing(KDialog::spacingHint());
 
-    d->resetButton = new QPushButton(hbox2);
+    d->resetButton    = new QPushButton(hbox2);
     d->resetButton->setIcon(SmallIcon("document-revert"));
     d->resetButton->setToolTip(i18n("Clear sketch"));
     d->resetButton->setWhatsThis(i18n("<p>Use this button to clear sketch contents."));
 
-    d->nameEdit    = new KLineEdit(hbox2);
-    d->nameEdit->setClearButtonShown(true);
-    d->nameEdit->setWhatsThis(i18n("<p>Enter the name of the current sketch search to save in the "
-                                   "\"My Fuzzy Searches\" view"));
+    d->nameEditSketch = new KLineEdit(hbox2);
+    d->nameEditSketch->setClearButtonShown(true);
+    d->nameEditSketch->setWhatsThis(i18n("<p>Enter the name of the current sketch search to save in the "
+                                         "\"My Fuzzy Searches\" view"));
 
-    d->saveButton  = new QPushButton(hbox2);
-    d->saveButton->setIcon(SmallIcon("document-save"));
-    d->saveButton->setEnabled(false);
-    d->saveButton->setToolTip(i18n("Save current sketch search to a new virtual Album"));
-    d->saveButton->setWhatsThis(i18n("<p>If you press this button, current "
-                                     "fuzzy search will be saved to a new search "
-                                     "virtual Album using name "
-                                     "set on the left side."));
+    d->saveBtnSketch  = new QPushButton(hbox2);
+    d->saveBtnSketch->setIcon(SmallIcon("document-save"));
+    d->saveBtnSketch->setEnabled(false);
+    d->saveBtnSketch->setToolTip(i18n("Save current sketch search to a new virtual Album"));
+    d->saveBtnSketch->setWhatsThis(i18n("<p>If you press this button, current "
+                                        "fuzzy search will be saved to a new search "
+                                        "virtual Album using name "
+                                        "set on the left side."));
 
     // ---------------------------------------------------------------
 
@@ -323,7 +323,7 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     connect(d->penSize, SIGNAL(valueChanged(int)),
             d->sketchWidget, SLOT(setPenWidth(int)));
 
-    connect(d->results, SIGNAL(valueChanged(int)),
+    connect(d->resultsSketch, SIGNAL(valueChanged(int)),
             this, SLOT(slotDirty()));
 
     connect(d->resetButton, SIGNAL(clicked()),
@@ -332,10 +332,10 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     connect(d->sketchWidget, SIGNAL(signalSketchChanged(const QImage&)),
             this, SLOT(slotDirty()));
 
-    connect(d->saveButton, SIGNAL(clicked()),
+    connect(d->saveBtnSketch, SIGNAL(clicked()),
             this, SLOT(slotSaveSelection()));
 
-    connect(d->nameEdit, SIGNAL(textChanged(const QString&)),
+    connect(d->nameEditSketch, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotCheckNameEditConditions()));
 
     // ---------------------------------------------------------------
@@ -358,7 +358,7 @@ void FuzzySearchView::readConfig()
     d->tabWidget->setCurrentIndex(group.readEntry("FuzzySearch Tab",
                                   (int)FuzzySearchViewPriv::SKETCH));
     d->penSize->setValue(group.readEntry("Pen Size", 10));
-    d->results->setValue(group.readEntry("Result items", 10));
+    d->resultsSketch->setValue(group.readEntry("Result items", 10));
     d->hsSelector->setXValue(group.readEntry("Pen Hue", 180));
     d->hsSelector->setYValue(group.readEntry("Pen Saturation", 128));
     d->vSelector->setValue(group.readEntry("Pen Value", 255));
@@ -373,7 +373,7 @@ void FuzzySearchView::writeConfig()
     KConfigGroup group        = config->group(QString("FuzzySearch SideBar"));
     group.writeEntry("FuzzySearch Tab", d->tabWidget->currentIndex());
     group.writeEntry("Pen Size",        d->penSize->value());
-    group.writeEntry("Result items",    d->results->value());
+    group.writeEntry("Result items",    d->resultsSketch->value());
     group.writeEntry("Pen Hue",         d->hsSelector->xValue());
     group.writeEntry("Pen Saturation",  d->hsSelector->yValue());
     group.writeEntry("Pen Value",       d->vSelector->value());
@@ -431,7 +431,7 @@ void FuzzySearchView::setActive(bool val)
 
 void FuzzySearchView::slotSaveSelection()
 {
-    QString name = d->nameEdit->text();
+    QString name = d->nameEditSketch->text();
     if (!checkName(name))
         return;
 
@@ -459,7 +459,7 @@ void FuzzySearchView::createNewFuzzySearchAlbum(const QString& name)
     writer.writeGroup();
     writer.writeField("similarity", SearchXml::Like);
     writer.writeAttribute("type", "signature");         // we pass a signature
-    writer.writeAttribute("numberofresults", QString::number(d->results->value()));
+    writer.writeAttribute("numberofresults", QString::number(d->resultsSketch->value()));
     writer.writeAttribute("sketchtype", "handdrawn");
     writer.writeValue(haarIface.signatureAsText(d->sketchWidget->sketchImage()));
     writer.finishField();
@@ -524,15 +524,15 @@ void FuzzySearchView::slotCheckNameEditConditions()
 {
     if (!d->sketchWidget->isClear())
     {
-        d->nameEdit->setEnabled(true);
+        d->nameEditSketch->setEnabled(true);
 
-        if (!d->nameEdit->text().isEmpty())
-            d->saveButton->setEnabled(true);
+        if (!d->nameEditSketch->text().isEmpty())
+            d->saveBtnSketch->setEnabled(true);
     }
     else
     {
-        d->nameEdit->setEnabled(false);
-        d->saveButton->setEnabled(false);
+        d->nameEditSketch->setEnabled(false);
+        d->saveBtnSketch->setEnabled(false);
     }
 }
 
