@@ -343,7 +343,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                         p = dataPtr;
 
                         // See B.K.O #148037 : take a care about byte order with Motorola computers.
-                        if (QImage::systemByteOrder() == QImage::BigEndian)     // PPC
+                        if (QSysInfo::ByteOrder == QSysInfo::BigEndian)     // PPC
                         {
                             p[3] = 0xFFFF;
                             p[0] = *stripPtr;
