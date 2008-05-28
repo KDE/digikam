@@ -44,6 +44,7 @@
 #include <kcolorvalueselector.h>
 #include <khbox.h>
 #include <kinputdialog.h>
+#include <ktabwidget.h>
 
 // Local includes.
 
@@ -66,6 +67,12 @@ class FuzzySearchViewPriv
 
 public:
 
+    enum FuzzySearchTab
+    {
+        IMAGE=0,
+        SKETCH
+    };
+
     FuzzySearchViewPriv()
     {
         sketchWidget          = 0;
@@ -73,20 +80,31 @@ public:
         vSelector             = 0;
         penSize               = 0;
         results               = 0;
+        results2              = 0;
         resetButton           = 0;
         saveButton            = 0;
+        saveButton2           = 0;
         nameEdit              = 0;
+        nameEdit2             = 0;
         searchFuzzyBar        = 0;
         fuzzySearchFolderView = 0;
+        tabWidget             = 0;
     }
 
     QPushButton            *resetButton;
     QPushButton            *saveButton;
+    QPushButton            *saveButton2;
 
     QSpinBox               *penSize;
     QSpinBox               *results;
+    QSpinBox               *results2;
+
+    QLabel                 *imageWidget;
 
     KLineEdit              *nameEdit;
+    KLineEdit              *nameEdit2;
+
+    KTabWidget             *tabWidget;
 
     KHueSaturationSelector *hsSelector;
 
@@ -105,19 +123,84 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     d = new FuzzySearchViewPriv;
     setAttribute(Qt::WA_DeleteOnClose);
 
-    QVBoxLayout *vlay = new QVBoxLayout(this);
-    QFrame *panel     = new QFrame(this);
-    panel->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
-    panel->setLineWidth(1);
+    QVBoxLayout *vlay    = new QVBoxLayout(this);
+    d->tabWidget         = new KTabWidget(this);
 
-    QGridLayout *grid = new QGridLayout(panel);
+    // ---------------------------------------------------------------
+    // Image Panel
+
+    QWidget *imagePanel = new QWidget(this);
+    QGridLayout *grid   = new QGridLayout(imagePanel);
+
+    QWidget *box2       = new QWidget(imagePanel);
+    QVBoxLayout *vlay3  = new QVBoxLayout(box2);
+    KHBox *imageBox     = new KHBox(box2);
+    d->imageWidget      = new QLabel(imageBox);
+    d->imageWidget->setFixedSize(256, 256);
+    imageBox->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+    imageBox->setLineWidth(1);
+
+    vlay3->addStretch(10);
+    vlay3->addWidget(imageBox, 0, Qt::AlignCenter);
+    vlay3->addStretch(10);
+    vlay3->setMargin(0);
+    vlay3->setSpacing(0);
 
     // ---------------------------------------------------------------
 
-    QWidget *box       = new QWidget(panel);
-    QVBoxLayout *vlay2 = new QVBoxLayout(box);
-    KHBox *drawingBox  = new KHBox(box);
-    d->sketchWidget    = new SketchWidget(drawingBox);
+    KHBox *hbox3          = new KHBox(imagePanel);
+    QLabel *resultsLabel2 = new QLabel(i18n("Results:"), hbox3);
+    d->results2           = new QSpinBox(hbox3);
+    d->results2->setRange(1, 50);
+    d->results2->setSingleStep(1);
+    d->results2->setValue(10);
+    d->results2->setWhatsThis(i18n("<p>Set here the number of duplicate items to find."));
+
+    hbox3->setStretchFactor(resultsLabel2, 10);
+    hbox3->setMargin(0);
+    hbox3->setSpacing(KDialog::spacingHint());
+
+    // ---------------------------------------------------------------
+
+    KHBox *hbox4 = new KHBox(imagePanel);
+    hbox4->setMargin(0);
+    hbox4->setSpacing(KDialog::spacingHint());
+
+    d->nameEdit2    = new KLineEdit(hbox4);
+    d->nameEdit2->setClearButtonShown(true);
+    d->nameEdit2->setWhatsThis(i18n("<p>Enter the name of the current image duplicate search to save in the "
+                                    "\"My Fuzzy Searches\" view"));
+
+    d->saveButton2  = new QPushButton(hbox4);
+    d->saveButton2->setIcon(SmallIcon("document-save"));
+    d->saveButton2->setEnabled(false);
+    d->saveButton2->setToolTip(i18n("Save current duplicate search to a new virtual Album"));
+    d->saveButton2->setWhatsThis(i18n("<p>If you press this button, current "
+                                      "image duplicate search will be saved to a new search "
+                                      "virtual Album using name "
+                                      "set on the left side."));
+
+    // ---------------------------------------------------------------
+
+    grid->addWidget(box2,  0, 0, 1, 3);
+    grid->addWidget(hbox3, 1, 0, 1, 3);
+    grid->addWidget(hbox4, 2, 0, 1, 3);
+    grid->setRowStretch(3, 10);
+    grid->setColumnStretch(1, 10);
+    grid->setMargin(KDialog::spacingHint());
+    grid->setSpacing(KDialog::spacingHint());
+
+    d->tabWidget->insertTab(FuzzySearchViewPriv::IMAGE, imagePanel, i18n("Image"));
+
+    // ---------------------------------------------------------------
+    // Sketch Panel
+
+    QWidget *sketchPanel = new QWidget(this);
+    QGridLayout *grid2   = new QGridLayout(sketchPanel);
+    QWidget *box         = new QWidget(sketchPanel);
+    QVBoxLayout *vlay2   = new QVBoxLayout(box);
+    KHBox *drawingBox    = new KHBox(box);
+    d->sketchWidget      = new SketchWidget(drawingBox);
     drawingBox->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     drawingBox->setLineWidth(1);
 
@@ -129,8 +212,8 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    d->hsSelector = new KHueSaturationSelector(panel);
-    d->vSelector  = new KColorValueSelector(panel);
+    d->hsSelector = new KHueSaturationSelector(sketchPanel);
+    d->vSelector  = new KColorValueSelector(sketchPanel);
     d->hsSelector->setMinimumSize(200, 142);
     d->vSelector->setMinimumSize(26, 142);
     d->hsSelector->setChooserMode(ChooserValue);
@@ -143,7 +226,7 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    KHBox *hbox          = new KHBox(panel);
+    KHBox *hbox          = new KHBox(sketchPanel);
     QLabel *brushLabel   = new QLabel(i18n("Brush size:"), hbox);
     d->penSize           = new QSpinBox(hbox);
     d->penSize->setRange(1, 40);
@@ -156,7 +239,7 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     d->results->setRange(1, 50);
     d->results->setSingleStep(1);
     d->results->setValue(10);
-    d->results->setWhatsThis(i18n("<p>Set here the number of items to find."));
+    d->results->setWhatsThis(i18n("<p>Set here the number of items to find using sketch."));
 
     hbox->setStretchFactor(brushLabel, 10);
     hbox->setStretchFactor(resultsLabel, 10);
@@ -165,7 +248,7 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    KHBox *hbox2 = new KHBox(panel);
+    KHBox *hbox2 = new KHBox(sketchPanel);
     hbox2->setMargin(0);
     hbox2->setSpacing(KDialog::spacingHint());
 
@@ -176,13 +259,13 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
 
     d->nameEdit    = new KLineEdit(hbox2);
     d->nameEdit->setClearButtonShown(true);
-    d->nameEdit->setWhatsThis(i18n("<p>Enter the name of the current fuzzy search to save in the "
+    d->nameEdit->setWhatsThis(i18n("<p>Enter the name of the current sketch search to save in the "
                                    "\"My Fuzzy Searches\" view"));
 
     d->saveButton  = new QPushButton(hbox2);
     d->saveButton->setIcon(SmallIcon("document-save"));
     d->saveButton->setEnabled(false);
-    d->saveButton->setToolTip(i18n("Save current search to a new virtual Album"));
+    d->saveButton->setToolTip(i18n("Save current sketch search to a new virtual Album"));
     d->saveButton->setWhatsThis(i18n("<p>If you press this button, current "
                                      "fuzzy search will be saved to a new search "
                                      "virtual Album using name "
@@ -190,15 +273,17 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    grid->addWidget(box,            0, 0, 1, 3);
-    grid->addWidget(d->hsSelector,  1, 0, 1, 2);
-    grid->addWidget(d->vSelector,   1, 2, 1, 1);
-    grid->addWidget(hbox,           2, 0, 1, 3);
-    grid->addWidget(hbox2,          3, 0, 1, 3);
-    grid->setRowStretch(5, 10);
-    grid->setColumnStretch(1, 10);
-    grid->setMargin(KDialog::spacingHint());
-    grid->setSpacing(KDialog::spacingHint());
+    grid2->addWidget(box,            0, 0, 1, 3);
+    grid2->addWidget(d->hsSelector,  1, 0, 1, 2);
+    grid2->addWidget(d->vSelector,   1, 2, 1, 1);
+    grid2->addWidget(hbox,           2, 0, 1, 3);
+    grid2->addWidget(hbox2,          3, 0, 1, 3);
+    grid2->setRowStretch(5, 10);
+    grid2->setColumnStretch(1, 10);
+    grid2->setMargin(KDialog::spacingHint());
+    grid2->setSpacing(KDialog::spacingHint());
+
+    d->tabWidget->insertTab(FuzzySearchViewPriv::SKETCH, sketchPanel, i18n("Sketch"));
 
     // ---------------------------------------------------------------
 
@@ -207,7 +292,7 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    vlay->addWidget(panel);
+    vlay->addWidget(d->tabWidget);
     vlay->addWidget(d->fuzzySearchFolderView);
     vlay->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
                                   QSizePolicy::Minimum, QSizePolicy::Minimum));
@@ -265,6 +350,36 @@ FuzzySearchView::~FuzzySearchView()
     delete d;
 }
 
+void FuzzySearchView::readConfig()
+{
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(QString("FuzzySearch SideBar"));
+
+    d->tabWidget->setCurrentIndex(group.readEntry("FuzzySearch Tab",
+                                  (int)FuzzySearchViewPriv::SKETCH));
+    d->penSize->setValue(group.readEntry("Pen Size", 10));
+    d->results->setValue(group.readEntry("Result items", 10));
+    d->hsSelector->setXValue(group.readEntry("Pen Hue", 180));
+    d->hsSelector->setYValue(group.readEntry("Pen Saturation", 128));
+    d->vSelector->setValue(group.readEntry("Pen Value", 255));
+    d->hsSelector->updateContents();
+    slotHSChanged(d->hsSelector->xValue(), d->hsSelector->yValue());
+    d->sketchWidget->setPenWidth(d->penSize->value());
+}
+
+void FuzzySearchView::writeConfig()
+{
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(QString("FuzzySearch SideBar"));
+    group.writeEntry("FuzzySearch Tab", d->tabWidget->currentIndex());
+    group.writeEntry("Pen Size",        d->penSize->value());
+    group.writeEntry("Result items",    d->results->value());
+    group.writeEntry("Pen Hue",         d->hsSelector->xValue());
+    group.writeEntry("Pen Saturation",  d->hsSelector->yValue());
+    group.writeEntry("Pen Value",       d->vSelector->value());
+    group.sync();
+}
+
 FuzzySearchFolderView* FuzzySearchView::folderView() const
 {
     return d->fuzzySearchFolderView;
@@ -294,33 +409,6 @@ void FuzzySearchView::slotVChanged()
     QColor color = QColor::fromHsv(hue, sat, val);
 
     d->sketchWidget->setPenColor(color);
-}
-
-void FuzzySearchView::readConfig()
-{
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(QString("FuzzySearch SideBar"));
-
-    d->penSize->setValue(group.readEntry("Pen Size", 10));
-    d->results->setValue(group.readEntry("Result items", 10));
-    d->hsSelector->setXValue(group.readEntry("Pen Hue", 180));
-    d->hsSelector->setYValue(group.readEntry("Pen Saturation", 128));
-    d->vSelector->setValue(group.readEntry("Pen Value", 255));
-    d->hsSelector->updateContents();
-    slotHSChanged(d->hsSelector->xValue(), d->hsSelector->yValue());
-    d->sketchWidget->setPenWidth(d->penSize->value());
-}
-
-void FuzzySearchView::writeConfig()
-{
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(QString("FuzzySearch SideBar"));
-    group.writeEntry("Pen Size",       d->penSize->value());
-    group.writeEntry("Result items",   d->results->value());
-    group.writeEntry("Pen Hue",        d->hsSelector->xValue());
-    group.writeEntry("Pen Saturation", d->hsSelector->yValue());
-    group.writeEntry("Pen Value",      d->vSelector->value());
-    group.sync();
 }
 
 void FuzzySearchView::setActive(bool val)
