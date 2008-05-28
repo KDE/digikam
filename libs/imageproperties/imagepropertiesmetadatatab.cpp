@@ -60,7 +60,7 @@ public:
 
     enum MetadataTab
     {
-        EXIF,
+        EXIF=0,
         MAKERNOTE,
         IPTC,
         GPS
