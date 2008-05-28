@@ -48,6 +48,7 @@ INCLUDE_DIRECTORIES(
                      ../utilities/batch
                      ../utilities/lighttable
                      ../utilities/searchwindow
+                     ../utilities/fuzzysearch
                      ../digikam
                      ../
                      # config-digikam.h
@@ -155,6 +156,7 @@ SET(digikam_bin_SRCS
                      ${libthemeengine_SRCS}
                      ${libkipiiface_SRCS}
                      ${libsearchwindow_SRCS}
+                     ${libfuzzysearch_SRCS}
 
                      album.cpp 
                      albumiconview.cpp 
@@ -184,8 +186,6 @@ SET(digikam_bin_SRCS
                      firstrun.cpp 
                      folderitem.cpp 
                      folderview.cpp 
-                     fuzzysearchview.cpp
-                     fuzzysearchfolderview.cpp
                      iconview.cpp 
                      icongroupitem.cpp 
                      iconitem.cpp 
@@ -206,7 +206,6 @@ SET(digikam_bin_SRCS
                      scancontroller.cpp
                      searchfolderview.cpp 
                      searchtabheader.cpp
-                     sketchwidget.cpp
                      syncjob.cpp 
                      tageditdlg.cpp 
                      tagfolderview.cpp 

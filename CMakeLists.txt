@@ -451,6 +451,12 @@ SET(libdimgeditortools_SRCS
      ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/tools/imageresize.cpp
    )
 
+SET(libthemeengine_SRCS
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/themeengine/theme.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/themeengine/texture.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/themeengine/themeengine.cpp
+   )
+
 # ==================================================================================================
 # Showfoto target parts
 
@@ -475,12 +481,6 @@ SET(libdialogs_SRCS
 
 SET(libdeletedialog_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/deletedialog.cpp
-   )
-
-SET(libthemeengine_SRCS
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/themeengine/theme.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/themeengine/texture.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/themeengine/themeengine.cpp
    )
 
 SET(libsetup_SRCS
@@ -647,6 +647,12 @@ SET(libsearchwindow_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow/comboboxutilities.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow/ratingsearchutilities.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow/choicesearchutilities.cpp
+   )
+
+SET(libfuzzysearch_SRCS
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/fuzzysearch/fuzzysearchfolderview.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/fuzzysearch/fuzzysearchview.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/fuzzysearch/sketchwidget.cpp
    )
 
 ADD_SUBDIRECTORY( data )
