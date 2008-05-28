@@ -67,6 +67,7 @@ SketchWidget::SketchWidget(QWidget *parent)
     d = new SketchWidgetPriv;
 
     setAttribute(Qt::WA_StaticContents);
+    setMouseTracking(true);
     setFixedSize(256, 256);
     slotClear();
 }
@@ -113,27 +114,36 @@ void SketchWidget::slotClear()
     update();
 }
 
-void SketchWidget::mousePressEvent(QMouseEvent *event)
+void SketchWidget::mousePressEvent(QMouseEvent *e)
 {
-    if (event->button() == Qt::LeftButton) 
+    if (e->button() == Qt::LeftButton) 
     {
-        d->lastPoint = event->pos();
+        d->lastPoint = e->pos();
         d->drawing   = true;
         d->isClear   = false;
     }
 }
 
-void SketchWidget::mouseMoveEvent(QMouseEvent *event)
+void SketchWidget::mouseMoveEvent(QMouseEvent *e)
 {
-    if ((event->buttons() & Qt::LeftButton) && d->drawing)
-        drawLineTo(event->pos());
+    if (rect().contains(e->x(), e->y()))
+    {
+        setCursor(Qt::CrossCursor);
+
+        if ((e->buttons() & Qt::LeftButton) && d->drawing)
+            drawLineTo(e->pos());
+    }
+    else
+    {
+        unsetCursor();
+    }
 }
 
-void SketchWidget::mouseReleaseEvent(QMouseEvent *event)
+void SketchWidget::mouseReleaseEvent(QMouseEvent *e)
 {
-    if (event->button() == Qt::LeftButton && d->drawing) 
+    if (e->button() == Qt::LeftButton && d->drawing) 
     {
-        drawLineTo(event->pos());
+        drawLineTo(e->pos());
         d->drawing = false;
         emit signalSketchChanged(sketchImage());
     }
