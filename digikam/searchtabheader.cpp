@@ -196,6 +196,7 @@ SearchTabHeader::SearchTabHeader(QWidget *parent)
     QLabel *searchLabel  = new QLabel(i18n("Search:"));
     d->keywordEdit       = new KeywordLineEdit;
     d->keywordEdit->setClearButtonShown(true);
+    d->keywordEdit->setClickMessage(i18n("Enter keywords here..."));
 
     d->advancedEditLabel = new QPushButton(i18n("Advanced Search..."));
 
