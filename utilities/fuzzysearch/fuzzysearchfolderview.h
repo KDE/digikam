@@ -46,7 +46,8 @@ public:
     ~FuzzySearchFolderView();
 
     void searchDelete(SAlbum* album);
-    static QString currentFuzzySearchName();
+    static QString currentFuzzySketchSearchName();
+    static QString currentFuzzyImageSearchName();
 
 signals:
 
@@ -60,9 +61,10 @@ public slots:
 
 private slots:
 
-    void slotAlbumAdded(Album* album);
-    void slotAlbumDeleted(Album* album);
-    void slotAlbumRenamed(Album* album);
+    void slotAlbumAdded(Album*);
+    void slotAlbumDeleted(Album*);
+    void slotAlbumRenamed(Album*);
+    void slotAlbumCurrentChanged(Album*);
     void slotSelectionChanged();
     void slotContextMenu(Q3ListViewItem*, const QPoint&, int);
 

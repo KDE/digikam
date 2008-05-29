@@ -75,6 +75,8 @@ private:
 
 private slots:
 
+    void slotTabChanged(int);
+
     void slotHSChanged(int h, int s);
     void slotVChanged();
     void slotClearSketch();

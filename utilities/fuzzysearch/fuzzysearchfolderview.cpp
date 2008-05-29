@@ -89,7 +89,7 @@ private:
 };
 
 FuzzySearchFolderView::FuzzySearchFolderView(QWidget* parent)
-                  : FolderView(parent, "FuzzySearchFolderView")
+                     : FolderView(parent, "FuzzySearchFolderView")
 {
     addColumn(i18n("My Fuzzy Searches"));
     setResizeMode(Q3ListView::LastColumn);
@@ -107,6 +107,9 @@ FuzzySearchFolderView::FuzzySearchFolderView(QWidget* parent)
     connect(AlbumManager::instance(), SIGNAL(signalAlbumRenamed(Album*)),
         this, SLOT(slotAlbumRenamed(Album*)));
 
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumCurrentChanged(Album*)),
+        this, SLOT(slotAlbumCurrentChanged(Album*)));
+
     connect(this, SIGNAL(contextMenuRequested(Q3ListViewItem*, const QPoint&, int)),
             this, SLOT(slotContextMenu(Q3ListViewItem*, const QPoint&, int)));
 
@@ -118,9 +121,14 @@ FuzzySearchFolderView::~FuzzySearchFolderView()
 {
 }
 
-QString FuzzySearchFolderView::currentFuzzySearchName()
+QString FuzzySearchFolderView::currentFuzzySketchSearchName()
 {
-    return QString("_Current_Fuzzy_Search_");
+    return QString("_Current_Fuzzy_Sketch_Search_");
+}
+
+QString FuzzySearchFolderView::currentFuzzyImageSearchName()
+{
+    return QString("_Current_Fuzzy_Image_Search_");
 }
 
 void FuzzySearchFolderView::slotTextSearchFilterChanged(const QString& filter)
@@ -137,7 +145,8 @@ void FuzzySearchFolderView::slotTextSearchFilterChanged(const QString& filter)
 
         if (salbum->title().toLower().contains(search) &&
             salbum->isHaarSearch() && 
-            salbum->title() != currentFuzzySearchName())
+            salbum->title() != currentFuzzySketchSearchName() && 
+            salbum->title() != currentFuzzyImageSearchName())
         {
             atleastOneMatch = true;
 
@@ -159,6 +168,10 @@ void FuzzySearchFolderView::slotTextSearchFilterChanged(const QString& filter)
 void FuzzySearchFolderView::searchDelete(SAlbum* album)
 {
     if (!album)
+        return;
+
+    if (album->title() == currentFuzzySketchSearchName() ||
+        album->title() == currentFuzzyImageSearchName())
         return;
 
     // Make sure that a complicated search is not deleted accidentally
@@ -186,12 +199,30 @@ void FuzzySearchFolderView::slotAlbumAdded(Album* a)
     if (!salbum->isHaarSearch())
         return;
 
-    // We will ignore the internal Fuzzy Search Album.
-    if (salbum->title() == currentFuzzySearchName()) 
-        return;
-
     FuzzySearchFolderItem* item = new FuzzySearchFolderItem(this, salbum);
     item->setPixmap(0, SmallIcon("tools-wizard", AlbumSettings::instance()->getDefaultTreeIconSize()));
+
+    if (salbum->title() == currentFuzzySketchSearchName())
+        item->setText(0, i18n("Current Fuzzy Sketch Search"));
+
+    if (salbum->title() == currentFuzzyImageSearchName())
+        item->setText(0, i18n("Current Fuzzy Image Search"));
+}
+
+void FuzzySearchFolderView::slotAlbumCurrentChanged(Album* a)
+{
+    if (!a || a->type() != Album::SEARCH)
+        return;
+
+    SAlbum *salbum  = dynamic_cast<SAlbum*>(a);
+    if (!salbum) return;
+
+    if (!salbum->isHaarSearch())
+        return;
+
+    FuzzySearchFolderItem* item = (FuzzySearchFolderItem*) salbum->extraData(this);
+    if (item)
+        setCurrentItem(item);
 }
 
 void FuzzySearchFolderView::slotAlbumDeleted(Album* a)

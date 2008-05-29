@@ -95,6 +95,8 @@ public:
         tabWidget             = 0;
         imageInfo             = 0;
         thumbLoadThread       = 0;
+        imageSAlbum           = 0;
+        sketchSAlbum          = 0;
     }
 
     QPushButton            *resetButton;
@@ -125,6 +127,9 @@ public:
     SketchWidget           *sketchWidget;
 
     ThumbnailLoadThread    *thumbLoadThread;
+
+    SAlbum                 *imageSAlbum;
+    SAlbum                 *sketchSAlbum;
 };
 
 FuzzySearchView::FuzzySearchView(QWidget *parent)
@@ -150,7 +155,7 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     KHBox *imageBox     = new KHBox(box2);
     d->imageWidget      = new QLabel(imageBox);
     d->imageWidget->setFixedSize(256, 256);
-    d->imageWidget->setText(i18n("Drag & drop an image here\nto perform\nDuplicates search"));
+    d->imageWidget->setText(i18n("Drag & drop an image here\nto perform similar\nitems to search"));
     d->imageWidget->setAlignment(Qt::AlignCenter);
     imageBox->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     imageBox->setLineWidth(1);
@@ -169,7 +174,7 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     d->resultsImage->setRange(1, 50);
     d->resultsImage->setSingleStep(1);
     d->resultsImage->setValue(10);
-    d->resultsImage->setWhatsThis(i18n("<p>Set here the number of duplicate items to find."));
+    d->resultsImage->setWhatsThis(i18n("<p>Set here the number of similar items to find."));
 
     hbox3->setStretchFactor(resultsLabel2, 10);
     hbox3->setMargin(0);
@@ -183,16 +188,16 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
 
     d->nameEditImage = new KLineEdit(hbox4);
     d->nameEditImage->setClearButtonShown(true);
-    d->nameEditImage->setWhatsThis(i18n("<p>Enter the name of the current image duplicate search to save in the "
+    d->nameEditImage->setWhatsThis(i18n("<p>Enter the name of the current similar image search to save in the "
                                         "\"My Fuzzy Searches\" view"));
 
     d->saveBtnImage  = new QPushButton(hbox4);
     d->saveBtnImage->setIcon(SmallIcon("document-save"));
     d->saveBtnImage->setEnabled(false);
-    d->saveBtnImage->setToolTip(i18n("Save current duplicate search to a new virtual Album"));
+    d->saveBtnImage->setToolTip(i18n("Save current similar image search to a new virtual Album"));
     d->saveBtnImage->setWhatsThis(i18n("<p>If you press this button, current "
-                                       "image duplicate search will be saved to a new search "
-                                       "virtual Album using name "
+                                       "similar image search will be saved to a new search "
+                                       "virtual album using name "
                                        "set on the left side."));
 
     // ---------------------------------------------------------------
@@ -281,9 +286,9 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     d->saveBtnSketch->setIcon(SmallIcon("document-save"));
     d->saveBtnSketch->setEnabled(false);
     d->saveBtnSketch->setToolTip(i18n("Save current sketch search to a new virtual Album"));
-    d->saveBtnSketch->setWhatsThis(i18n("<p>If you press this button, current "
+    d->saveBtnSketch->setWhatsThis(i18n("<p>If you press this button, current sketch "
                                         "fuzzy search will be saved to a new search "
-                                        "virtual Album using name "
+                                        "virtual album using name "
                                         "set on the left side."));
 
     // ---------------------------------------------------------------
@@ -316,6 +321,9 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     vlay->setSpacing(0);
 
     // ---------------------------------------------------------------
+
+    connect(d->tabWidget, SIGNAL(currentChanged(int)),
+            this, SLOT(slotTabChanged(int)));
 
     connect(d->fuzzySearchFolderView, SIGNAL(signalAlbumSelected(SAlbum*)),
             this, SLOT(slotAlbumSelected(SAlbum*)));
@@ -417,6 +425,23 @@ SearchTextBar* FuzzySearchView::searchBar() const
     return d->searchFuzzyBar;
 }
 
+void FuzzySearchView::slotTabChanged(int tab)
+{
+    switch(tab)
+    {
+        case FuzzySearchViewPriv::IMAGE:
+        {
+            AlbumManager::instance()->setCurrentAlbum(d->imageSAlbum);
+            break;
+        }
+        default:  // SKETCH
+        {
+            AlbumManager::instance()->setCurrentAlbum(d->sketchSAlbum);
+            break;
+        }
+    }
+}
+
 void FuzzySearchView::slotHSChanged(int h, int s)
 {
     d->vSelector->blockSignals(true);
@@ -446,13 +471,7 @@ void FuzzySearchView::setActive(bool val)
     }
     else if (val)
     {
-        AlbumList sList = AlbumManager::instance()->allSAlbums();
-        for (AlbumList::iterator it = sList.begin(); it != sList.end(); ++it)
-        {
-            SAlbum* salbum = (SAlbum*)(*it);
-            if (salbum->title() == d->fuzzySearchFolderView->currentFuzzySearchName())
-                AlbumManager::instance()->setCurrentAlbum(salbum);
-        }
+        slotTabChanged(d->tabWidget->currentIndex());
     }
 }
 
@@ -468,7 +487,7 @@ void FuzzySearchView::slotSaveSketchSAlbum()
 void FuzzySearchView::slotDirtySketch()
 {
     slotCheckNameEditSketchConditions();
-    createNewFuzzySearchAlbumFromSketch(FuzzySearchFolderView::currentFuzzySearchName());
+    createNewFuzzySearchAlbumFromSketch(FuzzySearchFolderView::currentFuzzySketchSearchName());
 }
 
 void FuzzySearchView::createNewFuzzySearchAlbumFromSketch(const QString& name)
@@ -492,8 +511,9 @@ void FuzzySearchView::createNewFuzzySearchAlbumFromSketch(const QString& name)
     writer.finishField();
     writer.finishGroup();
 
-    SAlbum* album = AlbumManager::instance()->createSAlbum(name, DatabaseSearch::HaarSearch, writer.xml());
-    AlbumManager::instance()->setCurrentAlbum(album);
+    SAlbum* salbum = AlbumManager::instance()->createSAlbum(name, DatabaseSearch::HaarSearch, writer.xml());
+    AlbumManager::instance()->setCurrentAlbum(salbum);
+    d->sketchSAlbum = salbum;
 }
 
 void FuzzySearchView::slotAlbumSelected(SAlbum* salbum)
@@ -517,10 +537,12 @@ void FuzzySearchView::slotAlbumSelected(SAlbum* salbum)
     {
         d->tabWidget->setCurrentIndex((int)FuzzySearchViewPriv::IMAGE);
         setImageId(reader.valueToLongLong());
+        d->imageSAlbum = salbum;
     }
     else
     {
         d->tabWidget->setCurrentIndex((int)FuzzySearchViewPriv::SKETCH);
+        d->sketchSAlbum = salbum;
     }
 }
 
@@ -583,6 +605,10 @@ void FuzzySearchView::slotRenameAlbum(SAlbum* salbum)
 {
     if (!salbum) return;
 
+    if (salbum->title() == FuzzySearchFolderView::currentFuzzySketchSearchName() ||
+        salbum->title() == FuzzySearchFolderView::currentFuzzyImageSearchName())
+        return;
+
     QString oldName(salbum->title());
     bool    ok;
 
@@ -620,7 +646,7 @@ void FuzzySearchView::dropEvent(QDropEvent *e)
 
         setImageId(imageIDs.first());
         slotCheckNameEditImageConditions();
-        createNewFuzzySearchAlbumFromImage(FuzzySearchFolderView::currentFuzzySearchName());
+        createNewFuzzySearchAlbumFromImage(FuzzySearchFolderView::currentFuzzyImageSearchName());
 
         e->acceptProposedAction();
     }
@@ -663,8 +689,9 @@ void FuzzySearchView::createNewFuzzySearchAlbumFromImage(const QString& name)
     writer.finishField();
     writer.finishGroup();
 
-    SAlbum* album = AlbumManager::instance()->createSAlbum(name, DatabaseSearch::HaarSearch, writer.xml());
-    AlbumManager::instance()->setCurrentAlbum(album);
+    SAlbum* salbum = AlbumManager::instance()->createSAlbum(name, DatabaseSearch::HaarSearch, writer.xml());
+    AlbumManager::instance()->setCurrentAlbum(salbum);
+    d->imageSAlbum = salbum;
 }
 
 void FuzzySearchView::slotCheckNameEditImageConditions()

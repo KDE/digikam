@@ -217,7 +217,8 @@ void KipiImageCollectionSelector::populateTreeView(const AlbumList& aList, QTree
             if (salbum && 
                 (salbum->title() == SearchFolderView::currentSearchViewSearchName() ||
                  salbum->title() == TimeLineFolderView::currentTimeLineSearchName() ||
-                 salbum->title() == FuzzySearchFolderView::currentFuzzySearchName()))
+                 salbum->title() == FuzzySearchFolderView::currentFuzzySketchSearchName() ||
+                 salbum->title() == FuzzySearchFolderView::currentFuzzyImageSearchName()))
                 continue;
 
             item = new TreeAlbumCheckListItem(pitem, album);
