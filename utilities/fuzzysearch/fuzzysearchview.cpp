@@ -559,11 +559,13 @@ void FuzzySearchView::slotAlbumSelected(SAlbum* salbum)
     {
         setImageId(reader.valueToLongLong());
         d->imageSAlbum = salbum;
+        d->tabWidget->setCurrentIndex((int)FuzzySearchViewPriv::IMAGE);
     }
     else
     {
-        d->tabWidget->setCurrentIndex((int)FuzzySearchViewPriv::SKETCH);
         d->sketchSAlbum = salbum;
+        d->tabWidget->setCurrentIndex((int)FuzzySearchViewPriv::SKETCH);
+
     }
 }
 
@@ -668,6 +670,7 @@ void FuzzySearchView::dropEvent(QDropEvent *e)
         setImageId(imageIDs.first());
         slotCheckNameEditImageConditions();
         createNewFuzzySearchAlbumFromImage(FuzzySearchFolderView::currentFuzzyImageSearchName());
+        d->tabWidget->setCurrentIndex((int)FuzzySearchViewPriv::IMAGE);
 
         e->acceptProposedAction();
     }
@@ -688,7 +691,6 @@ void FuzzySearchView::setImageId(qlonglong imageid)
     d->labelFile->setText(d->imageInfo->name());
     d->labelFolder->setText(d->imageInfo->fileUrl().directory());
     d->thumbLoadThread->find(d->imageInfo->fileUrl().path());
-    d->tabWidget->setCurrentIndex((int)FuzzySearchViewPriv::IMAGE);
 }
 
 void FuzzySearchView::setImageInfo(const ImageInfo& info)
@@ -696,6 +698,7 @@ void FuzzySearchView::setImageInfo(const ImageInfo& info)
     setImageId(info.id());
     slotCheckNameEditImageConditions();
     createNewFuzzySearchAlbumFromImage(FuzzySearchFolderView::currentFuzzyImageSearchName());
+    d->tabWidget->setCurrentIndex((int)FuzzySearchViewPriv::IMAGE);
 }
 
 void FuzzySearchView::slotThumbnailLoaded(const LoadingDescription& desc, const QPixmap& pix)
