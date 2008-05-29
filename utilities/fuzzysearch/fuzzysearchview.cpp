@@ -45,6 +45,7 @@
 #include <khbox.h>
 #include <kinputdialog.h>
 #include <ktabwidget.h>
+#include <ksqueezedtextlabel.h>
 
 // Local includes.
 
@@ -118,6 +119,9 @@ public:
 
     KColorValueSelector    *vSelector;
 
+    KSqueezedTextLabel     *labelFile;
+    KSqueezedTextLabel     *labelFolder;
+
     ImageInfo              *imageInfo;
 
     SearchTextBar          *searchFuzzyBar;
@@ -168,6 +172,18 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
 
     // ---------------------------------------------------------------
 
+    QLabel *file   = new QLabel(i18n("<b>File</b>:"), imagePanel);
+    d->labelFile   = new KSqueezedTextLabel(0, imagePanel);
+    QLabel *folder = new QLabel(i18n("<b>Folder</b>:"), imagePanel);
+    d->labelFolder = new KSqueezedTextLabel(0, imagePanel);
+    int hgt        = fontMetrics().height()-2;
+    file->setMaximumHeight(hgt);
+    folder->setMaximumHeight(hgt);
+    d->labelFile->setMaximumHeight(hgt);
+    d->labelFolder->setMaximumHeight(hgt);
+
+    // ---------------------------------------------------------------
+
     KHBox *hbox3          = new KHBox(imagePanel);
     QLabel *resultsLabel2 = new QLabel(i18n("Results:"), hbox3);
     d->resultsImage       = new QSpinBox(hbox3);
@@ -202,10 +218,14 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    grid->addWidget(box2,  0, 0, 1, 3);
-    grid->addWidget(hbox3, 1, 0, 1, 3);
-    grid->addWidget(hbox4, 2, 0, 1, 3);
-    grid->setRowStretch(3, 10);
+    grid->addWidget(box2,           0, 0, 1, 3);
+    grid->addWidget(file,           1, 0, 1, 1);
+    grid->addWidget(d->labelFile,   1, 1, 1, 1);
+    grid->addWidget(folder,         2, 0, 1, 1);
+    grid->addWidget(d->labelFolder, 2, 1, 1, 1);
+    grid->addWidget(hbox3,          3, 0, 1, 3);
+    grid->addWidget(hbox4,          4, 0, 1, 3);
+    grid->setRowStretch(5, 10);
     grid->setColumnStretch(1, 10);
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
@@ -658,6 +678,8 @@ void FuzzySearchView::setImageId(qlonglong imageid)
             delete d->imageInfo;
 
         d->imageInfo = new ImageInfo(imageid);
+        d->labelFile->setText(d->imageInfo->name());
+        d->labelFolder->setText(d->imageInfo->fileUrl().directory());
         d->thumbLoadThread->find(d->imageInfo->fileUrl().path());
         d->tabWidget->setCurrentIndex((int)FuzzySearchViewPriv::IMAGE);
 }
@@ -665,7 +687,8 @@ void FuzzySearchView::setImageId(qlonglong imageid)
 void FuzzySearchView::slotThumbnailLoaded(const LoadingDescription& desc, const QPixmap& pix)
 {
     if (d->imageInfo && KUrl(desc.filePath) == d->imageInfo->fileUrl())
-        d->imageWidget->setPixmap(pix);
+        d->imageWidget->setPixmap(pix.scaled(256, 256, Qt::KeepAspectRatio,
+                                             Qt::SmoothTransformation));
 }
 
 void FuzzySearchView::createNewFuzzySearchAlbumFromImage(const QString& name)
