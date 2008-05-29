@@ -9,7 +9,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 001 ==> 162496 : When Digikam saves file as JPEG - JPG options are not always presented.
 002 ==> 160740 : Handbook says that libgphoto2 is required but does not say whether it should be compiled with exif support.
 003 ==> 148400 : Problem loading 16bit Grayscale TIFF image.
-004 ==> 
+004 ==> 160925 : digiKam crash, I don't know why, but I have the bugreport.
+005 ==> 
 
 **********************************************************************************************
 
