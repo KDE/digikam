@@ -348,7 +348,10 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
             this, SLOT(slotDirtySketch()));
 
     connect(d->saveBtnSketch, SIGNAL(clicked()),
-            this, SLOT(slotSaveSketch()));
+            this, SLOT(slotSaveSketchSAlbum()));
+
+    connect(d->saveBtnImage, SIGNAL(clicked()),
+            this, SLOT(slotSaveImageSAlbum()));
 
     connect(d->nameEditSketch, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotCheckNameEditSketchConditions()));
@@ -453,7 +456,7 @@ void FuzzySearchView::setActive(bool val)
     }
 }
 
-void FuzzySearchView::slotSaveSketch()
+void FuzzySearchView::slotSaveSketchSAlbum()
 {
     QString name = d->nameEditSketch->text();
     if (!checkName(name))
@@ -678,6 +681,15 @@ void FuzzySearchView::slotCheckNameEditImageConditions()
         d->nameEditImage->setEnabled(false);
         d->saveBtnImage->setEnabled(false);
     }
+}
+
+void FuzzySearchView::slotSaveImageSAlbum()
+{
+    QString name = d->nameEditImage->text();
+    if (!checkName(name))
+        return;
+
+    createNewFuzzySearchAlbumFromImage(name);
 }
 
 }  // NameSpace Digikam

@@ -79,14 +79,14 @@ private slots:
     void slotVChanged();
     void slotClearSketch();
     void slotDirtySketch();
-    void slotSaveSketch();
+    void slotSaveSketchSAlbum();
     void slotCheckNameEditSketchConditions();
 
     void slotAlbumSelected(SAlbum*);
     void slotRenameAlbum(SAlbum*);
 
+    void slotSaveImageSAlbum();
     void slotCheckNameEditImageConditions();
-
     void slotThumbnailLoaded(const LoadingDescription&, const QPixmap&);
 
 private:
