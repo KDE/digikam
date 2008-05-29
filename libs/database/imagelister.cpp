@@ -477,6 +477,8 @@ void ImageLister::listHaarSearch(ImageListerReceiver *receiver, const QString &x
         numberOfResults = qMax(numResultsString.toString().toInt(), 1);
     if (sketchTypeString == "handdrawn")
         sketchType = HaarIface::HanddrawnSketch;
+    else
+        sketchType = HaarIface::ScannedSketch;
 
     QList<qlonglong> list;
     if (type == "signature")
