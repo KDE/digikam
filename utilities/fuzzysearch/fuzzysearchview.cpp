@@ -538,8 +538,6 @@ void FuzzySearchView::createNewFuzzySearchAlbumFromSketch(const QString& name)
 
 void FuzzySearchView::slotAlbumSelected(SAlbum* salbum)
 {
-    slotClearSketch();
-
     if (!salbum) 
         return;
 
