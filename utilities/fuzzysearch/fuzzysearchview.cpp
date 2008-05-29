@@ -343,7 +343,7 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
             this, SLOT(slotClearSketch()));
 
     connect(d->sketchWidget, SIGNAL(signalSketchChanged(const QImage&)),
-            this, SLOT(slotDirty()));
+            this, SLOT(slotDirtySketch()));
 
     connect(d->saveBtnSketch, SIGNAL(clicked()),
             this, SLOT(slotSaveSketch()));
@@ -596,10 +596,10 @@ void FuzzySearchView::dropEvent(QDropEvent *e)
         if (imageIDs.isEmpty())
             return;
 
-        if (d->imageInfo) delete d->imageInfo;
+        if (d->imageInfo) 
+            delete d->imageInfo;
 
         d->imageInfo = new ImageInfo(imageIDs.first());
-        DDebug() << "Droped Image: " << d->imageInfo->fileUrl() << endl;
         d->thumbLoadThread->find(d->imageInfo->fileUrl().path());
         slotCheckNameEditImageConditions();
         createNewFuzzySearchAlbumFromImage(FuzzySearchFolderView::currentFuzzySearchName());
