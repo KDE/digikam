@@ -511,7 +511,7 @@ void LightTableBar::startDrag()
     imageIDs.append(item->info().id());
     albumIDs.append(item->info().albumId());
 
-    QPixmap icon(DesktopIcon("image", 48));
+    QPixmap icon(DesktopIcon("image-jpeg2000", 48));
     int w = icon.width();
     int h = icon.height();
 
