@@ -51,10 +51,14 @@
 #include "album.h"
 #include "albummanager.h"
 #include "ddebug.h"
+#include "ddragobjects.h"
+#include "imageinfo.h"
 #include "haariface.h"
 #include "searchxml.h"
 #include "searchtextbar.h"
 #include "sketchwidget.h"
+#include "thumbnailsize.h"
+#include "thumbnailloadthread.h"
 #include "fuzzysearchfolderview.h"
 #include "fuzzysearchview.h"
 #include "fuzzysearchview.moc"
@@ -89,6 +93,8 @@ public:
         searchFuzzyBar        = 0;
         fuzzySearchFolderView = 0;
         tabWidget             = 0;
+        imageInfo             = 0;
+        thumbLoadThread       = 0;
     }
 
     QPushButton            *resetButton;
@@ -110,18 +116,25 @@ public:
 
     KColorValueSelector    *vSelector;
 
+    ImageInfo              *imageInfo;
+
     SearchTextBar          *searchFuzzyBar;
 
     FuzzySearchFolderView  *fuzzySearchFolderView;
 
     SketchWidget           *sketchWidget;
+
+    ThumbnailLoadThread    *thumbLoadThread;
 };
 
 FuzzySearchView::FuzzySearchView(QWidget *parent)
                : QWidget(parent)
 {
     d = new FuzzySearchViewPriv;
+    d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
+
     setAttribute(Qt::WA_DeleteOnClose);
+    setAcceptDrops(true);
 
     QVBoxLayout *vlay    = new QVBoxLayout(this);
     d->tabWidget         = new KTabWidget(this);
@@ -336,12 +349,19 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
             this, SLOT(slotSaveSketch()));
 
     connect(d->nameEditSketch, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotCheckNameEditConditions()));
+            this, SLOT(slotCheckNameEditSketchConditions()));
+
+    connect(d->nameEditImage, SIGNAL(textChanged(const QString&)),
+            this, SLOT(slotCheckNameEditImageConditions()));
+
+    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
+            this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
 
     // ---------------------------------------------------------------
 
     readConfig();
-    slotCheckNameEditConditions();
+    slotCheckNameEditSketchConditions();
+    slotCheckNameEditImageConditions();
 }
 
 FuzzySearchView::~FuzzySearchView()
@@ -440,7 +460,7 @@ void FuzzySearchView::slotSaveSketch()
 
 void FuzzySearchView::slotDirtySketch()
 {
-    slotCheckNameEditConditions();
+    slotCheckNameEditSketchConditions();
     createNewFuzzySearchAlbumFromSketch(FuzzySearchFolderView::currentFuzzySearchName());
 }
 
@@ -469,37 +489,6 @@ void FuzzySearchView::createNewFuzzySearchAlbumFromSketch(const QString& name)
     AlbumManager::instance()->setCurrentAlbum(album);
 }
 
-void FuzzySearchView::createNewFuzzySearchAlbumFromImage(const QString& name)
-{
-    AlbumManager::instance()->setCurrentAlbum(0);
-
-/*  TODO: check image id from d->imageWidget
-    if (!d->imageWidget->imageId())
-        return;
-*/
-    // We query database here
-
-    HaarIface haarIface;
-    SearchXmlWriter writer;
-
-    writer.writeGroup();
-    writer.writeField("similarity", SearchXml::Like);
-    writer.writeAttribute("type", "imageid");
-    writer.writeAttribute("numberofresults", QString::number(d->resultsImage->value()));
-
-    // TODO: Check is handdraw is right here
-    writer.writeAttribute("sketchtype", "handdrawn");
-
-    /* TODO: use image id from d->imageWidget
-    writer.writeValue(d->imageWidget->imageId());*/
-
-    writer.finishField();
-    writer.finishGroup();
-
-    SAlbum* album = AlbumManager::instance()->createSAlbum(name, DatabaseSearch::HaarSearch, writer.xml());
-    AlbumManager::instance()->setCurrentAlbum(album);
-}
-
 void FuzzySearchView::slotAlbumSelected(SAlbum* salbum)
 {
     // FIXME: check fuzzy search type here : scketch or image
@@ -516,7 +505,7 @@ void FuzzySearchView::slotAlbumSelected(SAlbum* salbum)
 void FuzzySearchView::slotClearSketch()
 {
     d->sketchWidget->slotClear();
-    slotCheckNameEditConditions();
+    slotCheckNameEditSketchConditions();
     AlbumManager::instance()->setCurrentAlbum(0);
 }
 
@@ -552,7 +541,7 @@ bool FuzzySearchView::checkAlbum(const QString& name) const
     return true;
 }
 
-void FuzzySearchView::slotCheckNameEditConditions()
+void FuzzySearchView::slotCheckNameEditSketchConditions()
 {
     if (!d->sketchWidget->isClear())
     {
@@ -576,14 +565,94 @@ void FuzzySearchView::slotRenameAlbum(SAlbum* salbum)
     bool    ok;
 
     QString name = KInputDialog::getText(i18n("Rename Album (%1)").arg(oldName),
-                                          i18n("Enter new album name:"),
-                                          oldName, &ok, this);
+                                         i18n("Enter new album name:"),
+                                         oldName, &ok, this);
 
     if (!ok || name == oldName || name.isEmpty()) return;
 
     if (!checkName(name)) return;
 
     AlbumManager::instance()->updateSAlbum(salbum, salbum->query(), name);
+}
+
+void FuzzySearchView::dragEnterEvent(QDragEnterEvent *e)
+{
+    if(DItemDrag::canDecode(e->mimeData()))
+        e->acceptProposedAction();
+}
+
+void FuzzySearchView::dropEvent(QDropEvent *e)
+{
+    if(DItemDrag::canDecode(e->mimeData()))
+    {
+        KUrl::List urls;
+        KUrl::List kioURLs;
+        QList<int> albumIDs;
+        QList<int> imageIDs;
+
+        if (!DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs))
+            return;
+
+        if (imageIDs.isEmpty())
+            return;
+
+        if (d->imageInfo) delete d->imageInfo;
+
+        d->imageInfo = new ImageInfo(imageIDs.first());
+        DDebug() << "Droped Image: " << d->imageInfo->fileUrl() << endl;
+        d->thumbLoadThread->find(d->imageInfo->fileUrl().path());
+        slotCheckNameEditImageConditions();
+        createNewFuzzySearchAlbumFromImage(FuzzySearchFolderView::currentFuzzySearchName());
+
+        e->acceptProposedAction();
+    }
+}
+
+void FuzzySearchView::slotThumbnailLoaded(const LoadingDescription& desc, const QPixmap& pix)
+{
+    if (d->imageInfo && KUrl(desc.filePath) == d->imageInfo->fileUrl())
+        d->imageWidget->setPixmap(pix);
+}
+
+void FuzzySearchView::createNewFuzzySearchAlbumFromImage(const QString& name)
+{
+    AlbumManager::instance()->setCurrentAlbum(0);
+
+    if (!d->imageInfo)
+        return;
+
+    // We query database here
+
+    HaarIface haarIface;
+    SearchXmlWriter writer;
+
+    writer.writeGroup();
+    writer.writeField("similarity", SearchXml::Like);
+    writer.writeAttribute("type", "imageid");
+    writer.writeAttribute("numberofresults", QString::number(d->resultsImage->value()));
+    writer.writeAttribute("sketchtype", "scanned");
+    writer.writeValue(d->imageInfo->id());
+    writer.finishField();
+    writer.finishGroup();
+
+    SAlbum* album = AlbumManager::instance()->createSAlbum(name, DatabaseSearch::HaarSearch, writer.xml());
+    AlbumManager::instance()->setCurrentAlbum(album);
+}
+
+void FuzzySearchView::slotCheckNameEditImageConditions()
+{
+    if (!d->imageInfo)
+    {
+        d->nameEditImage->setEnabled(true);
+
+        if (!d->nameEditImage->text().isEmpty())
+            d->saveBtnImage->setEnabled(true);
+    }
+    else
+    {
+        d->nameEditImage->setEnabled(false);
+        d->saveBtnImage->setEnabled(false);
+    }
 }
 
 }  // NameSpace Digikam

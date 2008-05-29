@@ -28,11 +28,16 @@
 
 #include <QWidget>
 
+class QDragEnterEvent;
+class QDropEvent;
+class QPixmap;
+
 namespace Digikam
 {
 
 class SAlbum;
 class SearchTextBar;
+class LoadingDescription;
 class FuzzySearchFolderView;
 class FuzzySearchViewPriv;
 
@@ -50,7 +55,12 @@ public:
 
     void setActive(bool val);
 
-private: 
+protected:
+
+    void dragEnterEvent(QDragEnterEvent *e);
+    void dropEvent(QDropEvent *e);
+
+private:
 
     void readConfig();
     void writeConfig();
@@ -68,9 +78,14 @@ private slots:
     void slotClearSketch();
     void slotDirtySketch();
     void slotSaveSketch();
+    void slotCheckNameEditSketchConditions();
+
     void slotAlbumSelected(SAlbum*);
-    void slotCheckNameEditConditions();
     void slotRenameAlbum(SAlbum*);
+
+    void slotCheckNameEditImageConditions();
+
+    void slotThumbnailLoaded(const LoadingDescription&, const QPixmap&);
 
 private:
 
