@@ -601,6 +601,7 @@ void FuzzySearchView::dropEvent(QDropEvent *e)
 
         d->imageInfo = new ImageInfo(imageIDs.first());
         d->thumbLoadThread->find(d->imageInfo->fileUrl().path());
+        d->tabWidget->setCurrentIndex((int)FuzzySearchViewPriv::IMAGE);
         slotCheckNameEditImageConditions();
         createNewFuzzySearchAlbumFromImage(FuzzySearchFolderView::currentFuzzySearchName());
 
