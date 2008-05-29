@@ -128,6 +128,7 @@ public slots:
     void slotImageAddToLightTable();
     void slotImagePreview();
     void slotImageEdit();
+    void slotImageFindSimilar();
     void slotImageExifOrientation(int orientation);
     void slotImageRename(AlbumIconItem* iconItem=0);
     void slotImageDelete();

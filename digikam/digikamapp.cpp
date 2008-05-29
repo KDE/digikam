@@ -635,6 +635,13 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
+    d->imageFindSimilarAction = new KAction(KIcon("tools-wizard"), i18n("Find Similiar..."), this);
+    d->imageFindSimilarAction->setWhatsThis(i18n("Find similar images using selected item as reference."));
+    connect(d->imageFindSimilarAction, SIGNAL(triggered()), d->view, SLOT(slotImageFindSimilar()));
+    actionCollection()->addAction("image_find_similar", d->imageFindSimilarAction);
+
+    // -----------------------------------------------------------
+
     d->imageRenameAction = new KAction(KIcon("edit-rename"), i18n("Rename..."), this);
     d->imageRenameAction->setShortcut(Qt::Key_F2);
     d->imageRenameAction->setWhatsThis(i18n("Change the filename of the currently selected item."));

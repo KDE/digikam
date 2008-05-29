@@ -36,6 +36,7 @@ namespace Digikam
 {
 
 class SAlbum;
+class ImageInfo;
 class SearchTextBar;
 class LoadingDescription;
 class FuzzySearchFolderView;
@@ -54,6 +55,7 @@ public:
     SearchTextBar* searchBar() const;
 
     void setActive(bool val);
+    void setImageInfo(const ImageInfo& info);
 
 protected:
 
@@ -62,10 +64,10 @@ protected:
 
 private:
 
+    void setImageId(qlonglong imageid);
+
     void readConfig();
     void writeConfig();
-
-    void setImageId(qlonglong imageid);
 
     void createNewFuzzySearchAlbumFromSketch(const QString& name);
     void createNewFuzzySearchAlbumFromImage(const QString& name);

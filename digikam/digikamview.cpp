@@ -644,8 +644,6 @@ void DigikamView::slotEditTag()
 
 void DigikamView::slotNewKeywordSearch()
 {
-    if (d->leftSideBar->getActiveTab() != d->searchBox)
-        d->leftSideBar->setActiveTab(d->searchBox);
     d->searchTabHeader->newKeywordSearch();
 }
 
@@ -1362,6 +1360,18 @@ void DigikamView::imageEdit(AlbumIconItem *iconItem)
     }
 
     d->iconView->slotDisplayItem(item);
+}
+
+void DigikamView::slotImageFindSimilar()
+{
+    AlbumIconItem *currItem = dynamic_cast<AlbumIconItem*>(d->iconView->currentItem());
+    if (currItem)
+    {
+        d->fuzzySearchView->setImageInfo(currItem->imageInfo());
+
+        if (d->leftSideBar->getActiveTab() != d->fuzzySearchView)
+            d->leftSideBar->setActiveTab(d->fuzzySearchView);
+    }
 }
 
 void DigikamView::slotImageExifOrientation(int orientation)

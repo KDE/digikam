@@ -632,6 +632,14 @@
     <projectname>project</projectname>
     <projectname>project</projectname>
     <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
+    <projectname>project</projectname>
   </general>
   <kdevfileview>
     <groups>
@@ -730,7 +738,7 @@
     <run>
       <directoryradio>build</directoryradio>
       <customdirectory>/</customdirectory>
-      <mainprogram>/home/gilles/Documents/Devel/SVN/trunk/graphics/digikam/digikam/digikam</mainprogram>
+      <mainprogram>/home/gilles/Documents/devel/SVN/trunk/graphics/digikam/digikam/digikam</mainprogram>
       <programargs/>
       <terminal>false</terminal>
       <autocompile>false</autocompile>
@@ -746,7 +754,7 @@
         <envvar value="/opt/kde4/lib/kde4/plugins" name="QT_PLUGIN_PATH" />
       </envvars>
       <globaldebugarguments/>
-      <globalcwd>/home/gilles/Documents/Devel/SVN/trunk/graphics/digikam/project/../..</globalcwd>
+      <globalcwd/>
       <useglobalprogram>true</useglobalprogram>
       <autoinstall>false</autoinstall>
       <autokdesu>false</autokdesu>

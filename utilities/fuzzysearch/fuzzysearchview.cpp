@@ -555,7 +555,6 @@ void FuzzySearchView::slotAlbumSelected(SAlbum* salbum)
 
     if (type == "imageid")
     {
-        d->tabWidget->setCurrentIndex((int)FuzzySearchViewPriv::IMAGE);
         setImageId(reader.valueToLongLong());
         d->imageSAlbum = salbum;
     }
@@ -674,14 +673,21 @@ void FuzzySearchView::dropEvent(QDropEvent *e)
 
 void FuzzySearchView::setImageId(qlonglong imageid)
 {
-        if (d->imageInfo) 
-            delete d->imageInfo;
+    if (d->imageInfo) 
+        delete d->imageInfo;
 
-        d->imageInfo = new ImageInfo(imageid);
-        d->labelFile->setText(d->imageInfo->name());
-        d->labelFolder->setText(d->imageInfo->fileUrl().directory());
-        d->thumbLoadThread->find(d->imageInfo->fileUrl().path());
-        d->tabWidget->setCurrentIndex((int)FuzzySearchViewPriv::IMAGE);
+    d->imageInfo = new ImageInfo(imageid);
+    d->labelFile->setText(d->imageInfo->name());
+    d->labelFolder->setText(d->imageInfo->fileUrl().directory());
+    d->thumbLoadThread->find(d->imageInfo->fileUrl().path());
+    d->tabWidget->setCurrentIndex((int)FuzzySearchViewPriv::IMAGE);
+}
+
+void FuzzySearchView::setImageInfo(const ImageInfo& info)
+{
+    setImageId(info.id());
+    slotCheckNameEditImageConditions();
+    createNewFuzzySearchAlbumFromImage(FuzzySearchFolderView::currentFuzzyImageSearchName());
 }
 
 void FuzzySearchView::slotThumbnailLoaded(const LoadingDescription& desc, const QPixmap& pix)
