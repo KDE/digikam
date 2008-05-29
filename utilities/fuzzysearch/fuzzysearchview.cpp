@@ -435,16 +435,16 @@ void FuzzySearchView::slotSaveSelection()
     if (!checkName(name))
         return;
 
-    createNewFuzzySearchAlbum(name);
+    createNewFuzzySearchAlbumFromSketch(name);
 }
 
 void FuzzySearchView::slotDirty()
 {
     slotCheckNameEditConditions();
-    createNewFuzzySearchAlbum(FuzzySearchFolderView::currentFuzzySearchName());
+    createNewFuzzySearchAlbumFromSketch(FuzzySearchFolderView::currentFuzzySearchName());
 }
 
-void FuzzySearchView::createNewFuzzySearchAlbum(const QString& name)
+void FuzzySearchView::createNewFuzzySearchAlbumFromSketch(const QString& name)
 {
     AlbumManager::instance()->setCurrentAlbum(0);
 
@@ -462,6 +462,37 @@ void FuzzySearchView::createNewFuzzySearchAlbum(const QString& name)
     writer.writeAttribute("numberofresults", QString::number(d->resultsSketch->value()));
     writer.writeAttribute("sketchtype", "handdrawn");
     writer.writeValue(haarIface.signatureAsText(d->sketchWidget->sketchImage()));
+    writer.finishField();
+    writer.finishGroup();
+
+    SAlbum* album = AlbumManager::instance()->createSAlbum(name, DatabaseSearch::HaarSearch, writer.xml());
+    AlbumManager::instance()->setCurrentAlbum(album);
+}
+
+void FuzzySearchView::createNewFuzzySearchAlbumFromImage(const QString& name)
+{
+    AlbumManager::instance()->setCurrentAlbum(0);
+
+/*  TODO: check image id from d->imageWidget
+    if (!d->imageWidget->imageId())
+        return;
+*/
+    // We query database here
+
+    HaarIface haarIface;
+    SearchXmlWriter writer;
+
+    writer.writeGroup();
+    writer.writeField("similarity", SearchXml::Like);
+    writer.writeAttribute("type", "imageid");
+    writer.writeAttribute("numberofresults", QString::number(d->resultsImage->value()));
+
+    // TODO: Check is handdraw is right here
+    writer.writeAttribute("sketchtype", "handdrawn");
+
+    /* TODO: use image id from d->imageWidget
+    writer.writeValue(d->imageWidget->imageId());*/
+
     writer.finishField();
     writer.finishGroup();
 

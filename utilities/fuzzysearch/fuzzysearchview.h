@@ -54,7 +54,10 @@ private:
 
     void readConfig();
     void writeConfig();
-    void createNewFuzzySearchAlbum(const QString& name);
+
+    void createNewFuzzySearchAlbumFromSketch(const QString& name);
+    void createNewFuzzySearchAlbumFromImage(const QString& name);
+
     bool checkName(QString& name);
     bool checkAlbum(const QString& name) const;
 
