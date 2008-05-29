@@ -150,6 +150,8 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     KHBox *imageBox     = new KHBox(box2);
     d->imageWidget      = new QLabel(imageBox);
     d->imageWidget->setFixedSize(256, 256);
+    d->imageWidget->setText(i18n("Drag & drop an image here\nto perform\nDuplicates search"));
+    d->imageWidget->setAlignment(Qt::AlignCenter);
     imageBox->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     imageBox->setLineWidth(1);
 
