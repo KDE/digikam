@@ -379,11 +379,12 @@ void FuzzySearchView::readConfig()
 
     d->tabWidget->setCurrentIndex(group.readEntry("FuzzySearch Tab",
                                   (int)FuzzySearchViewPriv::SKETCH));
-    d->penSize->setValue(group.readEntry("Pen Size", 10));
-    d->resultsSketch->setValue(group.readEntry("Result items", 10));
-    d->hsSelector->setXValue(group.readEntry("Pen Hue", 180));
-    d->hsSelector->setYValue(group.readEntry("Pen Saturation", 128));
-    d->vSelector->setValue(group.readEntry("Pen Value", 255));
+    d->penSize->setValue(group.readEntry("Pen Sketch Size", 10));
+    d->resultsSketch->setValue(group.readEntry("Result Sketch items", 10));
+    d->hsSelector->setXValue(group.readEntry("Pen Sketch Hue", 180));
+    d->hsSelector->setYValue(group.readEntry("Pen Sketch Saturation", 128));
+    d->vSelector->setValue(group.readEntry("Pen Sketch Value", 255));
+    d->resultsImage->setValue(group.readEntry("Result Image items", 10));
     d->hsSelector->updateContents();
     slotHSChanged(d->hsSelector->xValue(), d->hsSelector->yValue());
     d->sketchWidget->setPenWidth(d->penSize->value());
@@ -393,12 +394,13 @@ void FuzzySearchView::writeConfig()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(QString("FuzzySearch SideBar"));
-    group.writeEntry("FuzzySearch Tab", d->tabWidget->currentIndex());
-    group.writeEntry("Pen Size",        d->penSize->value());
-    group.writeEntry("Result items",    d->resultsSketch->value());
-    group.writeEntry("Pen Hue",         d->hsSelector->xValue());
-    group.writeEntry("Pen Saturation",  d->hsSelector->yValue());
-    group.writeEntry("Pen Value",       d->vSelector->value());
+    group.writeEntry("FuzzySearch Tab",        d->tabWidget->currentIndex());
+    group.writeEntry("Pen Sketch Size",        d->penSize->value());
+    group.writeEntry("Result Sketch items",    d->resultsSketch->value());
+    group.writeEntry("Pen Sketch Hue",         d->hsSelector->xValue());
+    group.writeEntry("Pen Sketch Saturation",  d->hsSelector->yValue());
+    group.writeEntry("Pen Sketch Value",       d->vSelector->value());
+    group.writeEntry("Result Image items",     d->resultsImage->value());
     group.sync();
 }
 
