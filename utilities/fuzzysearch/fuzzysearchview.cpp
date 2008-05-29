@@ -666,7 +666,7 @@ void FuzzySearchView::createNewFuzzySearchAlbumFromImage(const QString& name)
 
 void FuzzySearchView::slotCheckNameEditImageConditions()
 {
-    if (!d->imageInfo)
+    if (d->imageInfo)
     {
         d->nameEditImage->setEnabled(true);
 
