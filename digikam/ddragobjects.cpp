@@ -80,16 +80,14 @@ bool DItemDrag::decode(const QMimeData* e,
     kioUrls.clear();
     albumIDs.clear();
     imageIDs.clear();
-    KUrl url;
 
     QByteArray ba = e->data("digikam/item-ids");
     if (ba.size())
     {
         QDataStream ds(&ba, QIODevice::ReadOnly);
-        if(!ds.atEnd())
+        if (!ds.atEnd())
         {
-            ds >> url;
-            urls.append(url);
+            ds >> urls;
         }
     }
 
@@ -101,28 +99,23 @@ bool DItemDrag::decode(const QMimeData* e,
 
         if (albumarray.size() && imagearray.size() && kioarray.size())
         {
-            int id;
-
             QDataStream dsAlbums(&albumarray, QIODevice::ReadOnly);
-            while (!dsAlbums.atEnd())
+            if (!dsAlbums.atEnd())
             {
-                dsAlbums >> id;
-                albumIDs.append(id);
+                dsAlbums >> albumIDs;
             }
 
             QDataStream dsImages(&imagearray, QIODevice::ReadOnly);
-            while (!dsImages.atEnd())
+            if (!dsImages.atEnd())
             {
-                dsImages >> id;
-                imageIDs.append(id);
+                dsImages >> imageIDs;
             }
 
             KUrl u;
             QDataStream dsKio(&kioarray, QIODevice::ReadOnly);
-            while (!dsKio.atEnd())
+            if (!dsKio.atEnd())
             {
-                dsKio >> u;
-                kioUrls.append(u);
+                dsKio >> kioUrls;
             }
 
             return true;
@@ -217,8 +210,7 @@ bool DAlbumDrag::decode(const QMimeData* e, KUrl::List &urls, int &albumID)
         QDataStream ds(&ba, QIODevice::ReadOnly);
         if(!ds.atEnd())
         {
-            ds >> url;
-            urls.append(url);
+            ds >> urls;
         }
     }
 
