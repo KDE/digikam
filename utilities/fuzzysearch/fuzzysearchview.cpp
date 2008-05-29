@@ -340,6 +340,8 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     vlay->setMargin(0);
     vlay->setSpacing(0);
 
+    readConfig();
+
     // ---------------------------------------------------------------
 
     connect(d->tabWidget, SIGNAL(currentChanged(int)),
@@ -369,6 +371,9 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     connect(d->resultsSketch, SIGNAL(valueChanged(int)),
             this, SLOT(slotDirtySketch()));
 
+    connect(d->resultsImage, SIGNAL(valueChanged(int)),
+            this, SLOT(slotResultsImageChanged()));
+
     connect(d->resetButton, SIGNAL(clicked()),
             this, SLOT(slotClearSketch()));
 
@@ -392,7 +397,6 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    readConfig();
     slotCheckNameEditSketchConditions();
     slotCheckNameEditImageConditions();
 }
@@ -667,6 +671,12 @@ void FuzzySearchView::dropEvent(QDropEvent *e)
 
         e->acceptProposedAction();
     }
+}
+
+void FuzzySearchView::slotResultsImageChanged()
+{
+    if (d->imageInfo)
+        setImageInfo(*d->imageInfo);
 }
 
 void FuzzySearchView::setImageId(qlonglong imageid)

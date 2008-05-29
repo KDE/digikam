@@ -89,6 +89,8 @@ private slots:
     void slotAlbumSelected(SAlbum*);
     void slotRenameAlbum(SAlbum*);
 
+    void slotResultsImageChanged();
+
     void slotSaveImageSAlbum();
     void slotCheckNameEditImageConditions();
     void slotThumbnailLoaded(const LoadingDescription&, const QPixmap&);
