@@ -70,6 +70,9 @@ SketchWidget::SketchWidget(QWidget *parent)
 {
     d = new SketchWidgetPriv;
 
+    setWhatsThis(i18n("You simply draw here a rough sketch of what you want to find "
+                      "and digiKam will displays the best matches in thumbnail view."));
+
     setAttribute(Qt::WA_StaticContents);
     setMouseTracking(true);
     setFixedSize(256, 256);
