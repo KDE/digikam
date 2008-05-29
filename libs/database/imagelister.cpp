@@ -7,19 +7,19 @@
  * Description : Listing information from database.
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // C++ includes.
@@ -466,11 +466,11 @@ void ImageLister::listHaarSearch(ImageListerReceiver *receiver, const QString &x
         return;
     }
 
-    QStringRef type = reader.attributes().value("type");
+    QStringRef type             = reader.attributes().value("type");
     QStringRef numResultsString = reader.attributes().value("numberofresults");
     QStringRef sketchTypeString = reader.attributes().value("sketchtype");
 
-    int numberOfResults = 20;
+    int numberOfResults              = 20;
     HaarIface::SketchType sketchType = HaarIface::ScannedSketch;
 
     if (!numResultsString.isNull())
@@ -489,7 +489,7 @@ void ImageLister::listHaarSearch(ImageListerReceiver *receiver, const QString &x
     }
     else if (type == "imageid")
     {
-        int id = reader.valueToLongLong();
+        qlonglong id = reader.valueToLongLong();
         HaarIface iface;
         list = iface.bestMatchesForImage(id, numberOfResults, sketchType);
     }
@@ -588,6 +588,5 @@ void ImageLister::listFromIdList(ImageListerReceiver *receiver, QList<qlonglong>
         receiver->receive(record);
     }
 }
-
 
 }  // namespace Digikam
