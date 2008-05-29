@@ -495,7 +495,6 @@ void FuzzySearchView::createNewFuzzySearchAlbumFromSketch(const QString& name)
 
 void FuzzySearchView::slotAlbumSelected(SAlbum* salbum)
 {
-    // FIXME: check fuzzy search type here : scketch or image
     slotClearSketch();
 
     if (!salbum) 
@@ -504,6 +503,22 @@ void FuzzySearchView::slotAlbumSelected(SAlbum* salbum)
     // NOTE: There is nothing to display in sketch widget. Database do not store the sketch image.
 
     AlbumManager::instance()->setCurrentAlbum(salbum);
+
+    SearchXmlReader reader(salbum->query());
+    reader.readToFirstField();
+    QStringRef type             = reader.attributes().value("type");
+    QStringRef numResultsString = reader.attributes().value("numberofresults");
+    QStringRef sketchTypeString = reader.attributes().value("sketchtype");
+
+    if (type == "imageid")
+    {
+        d->tabWidget->setCurrentIndex((int)FuzzySearchViewPriv::IMAGE);
+        setImageId(reader.valueToLongLong());
+    }
+    else
+    {
+        d->tabWidget->setCurrentIndex((int)FuzzySearchViewPriv::SKETCH);
+    }
 }
 
 void FuzzySearchView::slotClearSketch()
@@ -600,17 +615,22 @@ void FuzzySearchView::dropEvent(QDropEvent *e)
         if (imageIDs.isEmpty())
             return;
 
-        if (d->imageInfo) 
-            delete d->imageInfo;
-
-        d->imageInfo = new ImageInfo(imageIDs.first());
-        d->thumbLoadThread->find(d->imageInfo->fileUrl().path());
-        d->tabWidget->setCurrentIndex((int)FuzzySearchViewPriv::IMAGE);
+        setImageId(imageIDs.first());
         slotCheckNameEditImageConditions();
         createNewFuzzySearchAlbumFromImage(FuzzySearchFolderView::currentFuzzySearchName());
 
         e->acceptProposedAction();
     }
+}
+
+void FuzzySearchView::setImageId(qlonglong imageid)
+{
+        if (d->imageInfo) 
+            delete d->imageInfo;
+
+        d->imageInfo = new ImageInfo(imageid);
+        d->thumbLoadThread->find(d->imageInfo->fileUrl().path());
+        d->tabWidget->setCurrentIndex((int)FuzzySearchViewPriv::IMAGE);
 }
 
 void FuzzySearchView::slotThumbnailLoaded(const LoadingDescription& desc, const QPixmap& pix)

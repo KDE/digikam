@@ -65,6 +65,8 @@ private:
     void readConfig();
     void writeConfig();
 
+    void setImageId(qlonglong imageid);
+
     void createNewFuzzySearchAlbumFromSketch(const QString& name);
     void createNewFuzzySearchAlbumFromImage(const QString& name);
 
