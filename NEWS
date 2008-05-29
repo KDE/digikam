@@ -25,6 +25,8 @@ AlbumGUI       : New advanced Search tools. Re-design of Search backend, based o
                  Searches based on metadata and image properties are now possible.
 AlbumGUI       : New fuzzy Search tools based on sketch drawing template. 
                  Fuzzy searches backend use an Haar wevelet interface.
+                 You simply draw a rough sketch of what you want to find and digiKam displays 
+                 for you a thumbnail view of the best matches.
 
 ImageEditor    : Added Thumbbar to easy navigate between pictures.
 ImageEditor    : New plugin based on LensFun library (http://lensfun.berlios.de) to correct automaticaly lens aberrations.
