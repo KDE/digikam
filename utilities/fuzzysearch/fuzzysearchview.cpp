@@ -324,16 +324,16 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
             d->sketchWidget, SLOT(setPenWidth(int)));
 
     connect(d->resultsSketch, SIGNAL(valueChanged(int)),
-            this, SLOT(slotDirty()));
+            this, SLOT(slotDirtySketch()));
 
     connect(d->resetButton, SIGNAL(clicked()),
-            this, SLOT(slotClear()));
+            this, SLOT(slotClearSketch()));
 
     connect(d->sketchWidget, SIGNAL(signalSketchChanged(const QImage&)),
             this, SLOT(slotDirty()));
 
     connect(d->saveBtnSketch, SIGNAL(clicked()),
-            this, SLOT(slotSaveSelection()));
+            this, SLOT(slotSaveSketch()));
 
     connect(d->nameEditSketch, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotCheckNameEditConditions()));
@@ -429,7 +429,7 @@ void FuzzySearchView::setActive(bool val)
     }
 }
 
-void FuzzySearchView::slotSaveSelection()
+void FuzzySearchView::slotSaveSketch()
 {
     QString name = d->nameEditSketch->text();
     if (!checkName(name))
@@ -438,7 +438,7 @@ void FuzzySearchView::slotSaveSelection()
     createNewFuzzySearchAlbumFromSketch(name);
 }
 
-void FuzzySearchView::slotDirty()
+void FuzzySearchView::slotDirtySketch()
 {
     slotCheckNameEditConditions();
     createNewFuzzySearchAlbumFromSketch(FuzzySearchFolderView::currentFuzzySearchName());
@@ -502,7 +502,8 @@ void FuzzySearchView::createNewFuzzySearchAlbumFromImage(const QString& name)
 
 void FuzzySearchView::slotAlbumSelected(SAlbum* salbum)
 {
-    slotClear();
+    // FIXME: check fuzzy search type here : scketch or image
+    slotClearSketch();
 
     if (!salbum) 
         return;
@@ -512,7 +513,7 @@ void FuzzySearchView::slotAlbumSelected(SAlbum* salbum)
     AlbumManager::instance()->setCurrentAlbum(salbum);
 }
 
-void FuzzySearchView::slotClear()
+void FuzzySearchView::slotClearSketch()
 {
     d->sketchWidget->slotClear();
     slotCheckNameEditConditions();

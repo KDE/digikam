@@ -65,9 +65,9 @@ private slots:
 
     void slotHSChanged(int h, int s);
     void slotVChanged();
-    void slotClear();
-    void slotDirty();
-    void slotSaveSelection();
+    void slotClearSketch();
+    void slotDirtySketch();
+    void slotSaveSketch();
     void slotAlbumSelected(SAlbum*);
     void slotCheckNameEditConditions();
     void slotRenameAlbum(SAlbum*);
