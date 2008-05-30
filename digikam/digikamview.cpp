@@ -80,6 +80,8 @@
 #include "tagfolderview.h"
 #include "fuzzysearchview.h"
 #include "fuzzysearchfolderview.h"
+#include "gpssearchview.h"
+#include "gpssearchfolderview.h"
 #include "searchfolderview.h"
 #include "searchtabheader.h"
 #include "statusprogressbar.h"
@@ -127,6 +129,7 @@ public:
         selectionTimer        = 0;
         thumbSizeTimer        = 0;
         fuzzySearchView       = 0;
+        gpsSearchView         = 0;
         needDispatchSelection = false;
         cancelSlideShow       = false;
         thumbSize             = ThumbnailSize::Medium;
@@ -171,6 +174,7 @@ public:
     SearchTabHeader          *searchTabHeader;
     TagFilterView            *tagFilterView;
     FuzzySearchView          *fuzzySearchView;
+    GPSSearchView            *gpsSearchView;
 };
 
 DigikamView::DigikamView(QWidget *parent)
@@ -227,6 +231,7 @@ DigikamView::DigikamView(QWidget *parent)
     d->dateFolderView   = new DateFolderView(this);
     d->timeLineView     = new TimeLineView(this);
     d->fuzzySearchView  = new FuzzySearchView(this);
+    d->gpsSearchView    = new GPSSearchView(this);
 
     d->leftSideBar->appendTab(d->folderBox, SmallIcon("folder-image"), i18n("Albums"));
     d->leftSideBar->appendTab(d->dateFolderView, SmallIcon("view-calendar-list"), i18n("Calendar"));
@@ -234,6 +239,7 @@ DigikamView::DigikamView(QWidget *parent)
     d->leftSideBar->appendTab(d->timeLineView, SmallIcon("clock"), i18n("Timeline"));
     d->leftSideBar->appendTab(d->searchBox, SmallIcon("edit-find"), i18n("Searches"));
     d->leftSideBar->appendTab(d->fuzzySearchView, SmallIcon("tools-wizard"), i18n("Fuzzy Searches"));
+    d->leftSideBar->appendTab(d->gpsSearchView, SmallIcon("applications-internet"), i18n("Map Searches"));
 
     // To the right.
 
@@ -680,6 +686,8 @@ void DigikamView::slotAlbumAdded(Album *album)
                     d->timeLineView->searchBar()->completionObject()->addItem(salbum->title());
                 else if (salbum->isHaarSearch())
                     d->fuzzySearchView->searchBar()->completionObject()->addItem(salbum->title());
+                else  // map search
+                    d->gpsSearchView->searchBar()->completionObject()->addItem(salbum->title());
 
                 break;
             }
@@ -733,6 +741,8 @@ void DigikamView::slotAlbumDeleted(Album *album)
                     d->timeLineView->searchBar()->completionObject()->removeItem(salbum->title());
                 else if (salbum->isHaarSearch())
                     d->fuzzySearchView->searchBar()->completionObject()->removeItem(salbum->title());
+                else  // map search
+                    d->gpsSearchView->searchBar()->completionObject()->removeItem(salbum->title());
 
                 break;
             }
@@ -789,6 +799,11 @@ void DigikamView::slotAlbumRenamed(Album *album)
                     d->fuzzySearchView->searchBar()->completionObject()->addItem(salbum->title());
                     d->fuzzySearchView->folderView()->slotTextSearchFilterChanged(d->fuzzySearchView->searchBar()->text());
                 }
+                else  // map search
+                {
+                    d->gpsSearchView->searchBar()->completionObject()->addItem(salbum->title());
+                    d->gpsSearchView->folderView()->slotTextSearchFilterChanged(d->gpsSearchView->searchBar()->text());
+                }
 
                 break;
             }
@@ -814,6 +829,7 @@ void DigikamView::slotAlbumsCleared()
     d->searchSearchBar->completionObject()->clear();
     d->timeLineView->searchBar()->completionObject()->clear();
     d->fuzzySearchView->searchBar()->completionObject()->clear();
+    d->gpsSearchView->searchBar()->completionObject()->clear();
 }
 
 void DigikamView::slotAlbumHistoryBack(int steps)
@@ -1492,6 +1508,7 @@ void DigikamView::slotLeftSidebarChangedTab(QWidget* w)
     d->searchFolderView->setActive(w == d->searchBox);
     d->timeLineView->setActive(w == d->timeLineView);
     d->fuzzySearchView->setActive(w == d->fuzzySearchView);
+    d->gpsSearchView->setActive(w == d->gpsSearchView);
 }
 
 void DigikamView::slotAssignRating(int rating)

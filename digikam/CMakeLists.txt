@@ -49,6 +49,7 @@ INCLUDE_DIRECTORIES(
                      ../utilities/lighttable
                      ../utilities/searchwindow
                      ../utilities/fuzzysearch
+                     ../utilities/gpssearch
                      ../digikam
                      ../
                      # config-digikam.h
@@ -157,6 +158,7 @@ SET(digikam_bin_SRCS
                      ${libkipiiface_SRCS}
                      ${libsearchwindow_SRCS}
                      ${libfuzzysearch_SRCS}
+                     ${libgpssearch_SRCS}
 
                      album.cpp 
                      albumiconview.cpp 

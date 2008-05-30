@@ -655,6 +655,12 @@ SET(libfuzzysearch_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/fuzzysearch/sketchwidget.cpp
    )
 
+SET(libgpssearch_SRCS
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/gpssearch/gpssearchfolderview.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/gpssearch/gpssearchview.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/gpssearch/gpssearchwidget.cpp
+   )
+
 ADD_SUBDIRECTORY( data )
 ADD_SUBDIRECTORY( libs )
 ADD_SUBDIRECTORY( utilities )

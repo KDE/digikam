@@ -1,8 +1,4 @@
 
-include_directories(../digikam 
-                    ../libs/dimg 
-                   )
-
 add_subdirectory(scripts)
 add_subdirectory(setup)
 add_subdirectory(imageeditor)
@@ -13,3 +9,4 @@ add_subdirectory(lighttable)
 add_subdirectory(cameragui)
 add_subdirectory(fuzzysearch)
 add_subdirectory(searchwindow)
+add_subdirectory(gpssearch)

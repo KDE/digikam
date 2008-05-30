@@ -47,6 +47,7 @@
 #include "searchfolderview.h"
 #include "timelinefolderview.h"
 #include "fuzzysearchfolderview.h"
+#include "gpssearchfolderview.h"
 #include "kipiinterface.h"
 #include "kipiimagecollection.h"
 #include "kipiimagecollectionselector.h"
@@ -215,10 +216,11 @@ void KipiImageCollectionSelector::populateTreeView(const AlbumList& aList, QTree
 
             SAlbum* salbum = dynamic_cast<SAlbum*>(album);
             if (salbum && 
-                (salbum->title() == SearchFolderView::currentSearchViewSearchName() ||
-                 salbum->title() == TimeLineFolderView::currentTimeLineSearchName() ||
+                (salbum->title() == SearchFolderView::currentSearchViewSearchName()       ||
+                 salbum->title() == TimeLineFolderView::currentTimeLineSearchName()       ||
                  salbum->title() == FuzzySearchFolderView::currentFuzzySketchSearchName() ||
-                 salbum->title() == FuzzySearchFolderView::currentFuzzyImageSearchName()))
+                 salbum->title() == FuzzySearchFolderView::currentFuzzyImageSearchName()  ||
+                 salbum->title() == GPSSearchFolderView::currentGPSSearchName()))
                 continue;
 
             item = new TreeAlbumCheckListItem(pitem, album);

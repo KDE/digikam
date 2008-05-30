@@ -1,0 +1,364 @@
+/* ============================================================
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2008-05-30
+ * Description : GPS search sidebar tab contents.
+ *
+ * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * ============================================================ */
+
+// Qt includes.
+
+#include <QImage>
+#include <QLabel>
+#include <QFrame>
+#include <QLayout>
+#include <QPushButton>
+#include <QStyle>
+
+// KDE include.
+
+#include <khbox.h>
+#include <klocale.h>
+#include <kconfig.h>
+#include <kdialog.h>
+#include <kiconloader.h>
+#include <kapplication.h>
+#include <kstandarddirs.h>
+#include <kmessagebox.h>
+#include <khbox.h>
+#include <kinputdialog.h>
+
+// Local includes.
+
+#include "album.h"
+#include "albummanager.h"
+#include "ddebug.h"
+#include "imageinfo.h"
+#include "searchxml.h"
+#include "searchtextbar.h"
+#include "gpssearchwidget.h"
+#include "gpssearchfolderview.h"
+#include "gpssearchview.h"
+#include "gpssearchview.moc"
+
+namespace Digikam
+{
+
+class GPSSearchViewPriv
+{
+
+public:
+
+    GPSSearchViewPriv()
+    {
+        gpsSearchWidget     = 0;
+        saveBtn             = 0;
+        nameEdit            = 0;
+        searchGPSBar        = 0;
+        gpsSearchFolderView = 0;
+    }
+
+    QPushButton            *saveBtn;
+
+    KLineEdit              *nameEdit;
+
+    SearchTextBar          *searchGPSBar;
+
+    GPSSearchFolderView    *gpsSearchFolderView;
+
+    GPSSearchWidget        *gpsSearchWidget;
+};
+
+GPSSearchView::GPSSearchView(QWidget *parent)
+             : QWidget(parent)
+{
+    d = new GPSSearchViewPriv;
+
+    setAttribute(Qt::WA_DeleteOnClose);
+    setAcceptDrops(true);
+
+    // ---------------------------------------------------------------
+
+    QVBoxLayout *vlay  = new QVBoxLayout(this);
+
+    QFrame *mapPanel   = new QFrame(this);
+    QVBoxLayout *vlay2 = new QVBoxLayout(mapPanel);
+    d->gpsSearchWidget = new GPSSearchWidget(mapPanel);
+
+    mapPanel->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+    mapPanel->setLineWidth(style()->pixelMetric(QStyle::PM_DefaultFrameWidth));
+
+    vlay2->addWidget(d->gpsSearchWidget);
+    vlay2->setMargin(0);
+    vlay2->setSpacing(0);
+
+    // ---------------------------------------------------------------
+
+    KHBox *hbox = new KHBox(this);
+    hbox->setMargin(0);
+    hbox->setSpacing(KDialog::spacingHint());
+
+    d->nameEdit = new KLineEdit(hbox);
+    d->nameEdit->setClearButtonShown(true);
+    d->nameEdit->setWhatsThis(i18n("<p>Enter the name of the current map search to save in the "
+                                   "\"My Map Searches\" view"));
+
+    d->saveBtn  = new QPushButton(hbox);
+    d->saveBtn->setIcon(SmallIcon("document-save"));
+    d->saveBtn->setEnabled(false);
+    d->saveBtn->setToolTip(i18n("Save current sketch search to a new virtual Album"));
+    d->saveBtn->setWhatsThis(i18n("<p>If you press this button, current map search "
+                                  "will be saved to a new search "
+                                  "virtual album using name "
+                                  "set on the left side."));
+
+    // ---------------------------------------------------------------
+
+    d->gpsSearchFolderView = new GPSSearchFolderView(this);
+    d->searchGPSBar        = new SearchTextBar(this, "GPSSearchViewSearchGPSBar");
+
+    // ---------------------------------------------------------------
+
+    vlay->addWidget(mapPanel);
+    vlay->addWidget(hbox);
+    vlay->addWidget(d->gpsSearchFolderView);
+    vlay->addWidget(d->searchGPSBar);
+    vlay->setStretchFactor(mapPanel, 10);
+    vlay->setMargin(0);
+    vlay->setSpacing(KDialog::spacingHint());
+
+    readConfig();
+
+    // ---------------------------------------------------------------
+/*
+    connect(d->gpsSearchFolderView, SIGNAL(signalAlbumSelected(SAlbum*)),
+            this, SLOT(slotAlbumSelected(SAlbum*)));
+
+    connect(d->gpsSearchFolderView, SIGNAL(signalRenameAlbum(SAlbum*)),
+            this, SLOT(slotRenameAlbum(SAlbum*)));
+
+    connect(d->gpsSearchFolderView, SIGNAL(signalTextSearchFilterMatch(bool)),
+            d->searchGPSBar, SLOT(slotSearchResult(bool)));
+
+    connect(d->searchGPSBar, SIGNAL(textChanged(const QString&)),
+            d->gpsSearchFolderView, SLOT(slotTextSearchFilterChanged(const QString&)));
+
+    connect(d->saveBtn, SIGNAL(clicked()),
+            this, SLOT(slotSaveGPSSAlbum()));
+
+    connect(d->nameEdit, SIGNAL(textChanged(const QString&)),
+            this, SLOT(slotCheckNameEditGPSConditions()));
+*/
+    // ---------------------------------------------------------------
+
+    slotCheckNameEditGPSConditions();
+}
+
+GPSSearchView::~GPSSearchView()
+{
+    writeConfig();
+    delete d;
+}
+
+void GPSSearchView::readConfig()
+{
+/*    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(QString("GPSSearch SideBar"));
+
+    d->tabWidget->setCurrentIndex(group.readEntry("GPSSearch Tab",
+                                  (int)GPSSearchViewPriv::SKETCH));
+    d->penSize->setValue(group.readEntry("Pen Sketch Size", 10));
+    d->resultsSketch->setValue(group.readEntry("Result Sketch items", 10));
+    d->hsSelector->setXValue(group.readEntry("Pen Sketch Hue", 180));
+    d->hsSelector->setYValue(group.readEntry("Pen Sketch Saturation", 128));
+    d->vSelector->setValue(group.readEntry("Pen Sketch Value", 255));
+    d->resultsImage->setValue(group.readEntry("Result Image items", 10));
+    d->hsSelector->updateContents();
+    slotHSChanged(d->hsSelector->xValue(), d->hsSelector->yValue());
+    d->sketchWidget->setPenWidth(d->penSize->value());*/
+}
+
+void GPSSearchView::writeConfig()
+{
+/*    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(QString("GPSSearch SideBar"));
+    group.writeEntry("GPSSearch Tab",        d->tabWidget->currentIndex());
+    group.writeEntry("Pen Sketch Size",        d->penSize->value());
+    group.writeEntry("Result Sketch items",    d->resultsSketch->value());
+    group.writeEntry("Pen Sketch Hue",         d->hsSelector->xValue());
+    group.writeEntry("Pen Sketch Saturation",  d->hsSelector->yValue());
+    group.writeEntry("Pen Sketch Value",       d->vSelector->value());
+    group.writeEntry("Result Image items",     d->resultsImage->value());
+    group.sync();*/
+}
+
+GPSSearchFolderView* GPSSearchView::folderView() const
+{
+    return d->gpsSearchFolderView;
+}
+
+SearchTextBar* GPSSearchView::searchBar() const
+{
+    return d->searchGPSBar;
+}
+
+void GPSSearchView::setActive(bool val)
+{
+    if (d->gpsSearchFolderView->selectedItem()) 
+    {
+        d->gpsSearchFolderView->setActive(val);
+    }
+    else if (val)
+    {
+        // TODO
+    }
+}
+
+void GPSSearchView::slotSaveGPSSAlbum()
+{
+    QString name = d->nameEdit->text();
+    if (!checkName(name))
+        return;
+
+    createNewGPSSearchAlbum(name);
+}
+
+void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
+{
+/*TODO    AlbumManager::instance()->setCurrentAlbum(0);
+
+    if (d->sketchWidget->isClear())
+        return;
+
+    // We query database here
+
+    HaarIface haarIface;
+    SearchXmlWriter writer;
+
+    writer.writeGroup();
+    writer.writeField("similarity", SearchXml::Like);
+    writer.writeAttribute("type", "signature");         // we pass a signature
+    writer.writeAttribute("numberofresults", QString::number(d->resultsSketch->value()));
+    writer.writeAttribute("sketchtype", "handdrawn");
+    writer.writeValue(haarIface.signatureAsText(d->sketchWidget->sketchImage()));
+    writer.finishField();
+    writer.finishGroup();
+
+    SAlbum* salbum = AlbumManager::instance()->createSAlbum(name, DatabaseSearch::HaarSearch, writer.xml());
+    AlbumManager::instance()->setCurrentAlbum(salbum);
+*/
+}
+
+void GPSSearchView::slotAlbumSelected(SAlbum* salbum)
+{
+    if (!salbum) 
+        return;
+
+    AlbumManager::instance()->setCurrentAlbum(salbum);
+/*
+    SearchXmlReader reader(salbum->query());
+    reader.readToFirstField();
+    QStringRef type             = reader.attributes().value("type");
+    QStringRef numResultsString = reader.attributes().value("numberofresults");
+    QStringRef sketchTypeString = reader.attributes().value("sketchtype");
+
+    if (type == "imageid")
+    {
+        setImageId(reader.valueToLongLong());
+        d->imageSAlbum = salbum;
+        d->tabWidget->setCurrentIndex((int)GPSSearchViewPriv::IMAGE);
+    }
+    else
+    {
+        d->sketchSAlbum = salbum;
+        d->tabWidget->setCurrentIndex((int)GPSSearchViewPriv::SKETCH);
+
+    }*/
+}
+
+
+bool GPSSearchView::checkName(QString& name)
+{
+    bool checked = checkAlbum(name);
+
+    while (!checked) 
+    {
+        QString label = i18n( "Search name already exists.\n"
+                              "Please enter a new name:" );
+        bool ok;
+        QString newTitle = KInputDialog::getText(i18n("Name exists"), label, name, &ok, this);
+        if (!ok) return false;
+
+        name    = newTitle;
+        checked = checkAlbum(name);
+    }
+
+    return true;
+}
+
+bool GPSSearchView::checkAlbum(const QString& name) const
+{
+    AlbumList list = AlbumManager::instance()->allSAlbums();
+
+    for (AlbumList::Iterator it = list.begin() ; it != list.end() ; ++it)
+    {
+        SAlbum *album = (SAlbum*)(*it);
+        if ( album->title() == name )
+            return false;
+    }
+    return true;
+}
+
+void GPSSearchView::slotCheckNameEditGPSConditions()
+{
+/*    if (!d->sketchWidget->isClear())
+    {
+        d->nameEditSketch->setEnabled(true);
+
+        if (!d->nameEditSketch->text().isEmpty())
+            d->saveBtnSketch->setEnabled(true);
+    }
+    else
+    {
+        d->nameEditSketch->setEnabled(false);
+        d->saveBtnSketch->setEnabled(false);
+    }*/
+}
+
+void GPSSearchView::slotRenameAlbum(SAlbum* salbum)
+{
+    if (!salbum) return;
+
+    if (salbum->title() == GPSSearchFolderView::currentGPSSearchName())
+        return;
+
+    QString oldName(salbum->title());
+    bool    ok;
+
+    QString name = KInputDialog::getText(i18n("Rename Album (%1)").arg(oldName),
+                                         i18n("Enter new album name:"),
+                                         oldName, &ok, this);
+
+    if (!ok || name == oldName || name.isEmpty()) return;
+
+    if (!checkName(name)) return;
+
+    AlbumManager::instance()->updateSAlbum(salbum, salbum->query(), name);
+}
+
+}  // NameSpace Digikam
