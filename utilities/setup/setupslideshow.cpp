@@ -95,7 +95,7 @@ SetupSlideShow::SetupSlideShow(QWidget* parent )
     QWhatsThis::add( d->printName, i18n("<p>Print the image file name at the bottom of the screen."));
 
     d->printDate = new QCheckBox(i18n("Print image creation date"), parent);
-    QWhatsThis::add( d->printDate, i18n("<p>Print the image creation at the bottom of the screen."));
+    QWhatsThis::add( d->printDate, i18n("<p>Print the image creation time/date at the bottom of the screen."));
 
     d->printApertureFocal = new QCheckBox(i18n("Print camera aperture and focal length"), parent);
     QWhatsThis::add( d->printApertureFocal, i18n("<p>Print the camera aperture and focal length at the bottom of the screen."));
