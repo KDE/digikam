@@ -58,22 +58,25 @@ using namespace std;
 namespace Digikam
 {
 
+/** This class encapsulates the Haar signature in a QByteArray
+ *  that can be stored as a BLOB in the database.
+ *
+ *  Reading and writing is done in a platform-independent manner, which
+ *  induces a certain overhead, but which is necessary IMO. 
+ */
 class DatabaseBlob
 {
-    /** This class encapsulates the Haar signature in a QByteArray
-     *  that can be stored as a BLOB in the database.
-     */
-    /*  Reading and writing is done in a platform-independent manner, which
-     *  induces a certain overhead, but which is necessary IMO. */
+
 public:
 
     enum { Version = 1 };
 
-    DatabaseBlob()
-    {
-    }
+public:
 
-    /** Read the QByteArray into the Haar::SignatureData. */
+    DatabaseBlob(){}
+
+    /** Read the QByteArray into the Haar::SignatureData. 
+     */
     void read(const QByteArray &array, Haar::SignatureData *data)
     {
         QDataStream stream(array);
@@ -119,6 +122,7 @@ public:
 
 class HaarIfacePriv
 {
+
 public:
 
     HaarIfacePriv()
@@ -435,173 +439,5 @@ QImage HaarIface::loadQImage(const QString &filename)
 
     return image;
 }
-
-/*
-/ ** sig1,2,3 are int arrays of lenght NUM_COEFS
-    avgl is the average luminance
-    thresd is the limit similarity threshold. Only images with score > thresd will be a result
-    `sketch' tells which set of haar weights to use
-    sigs is the source to query on (map of signatures)
-    every search result is removed from sigs. (right now this functn is only used by clusterSim)
-* /
-HaarIface::long_list HaarIface::queryImgDataForThres(sigMap* tsigs, Haar::Idx* sig1, Haar::Idx* sig2, Haar::Idx* sig3,
-                                                     double* avgl, float thresd, int sketch)
-{
-    int        idx, c;
-    int        pn;
-    long_list  res;
-    Haar::Idx *sig[3] = {sig1, sig2, sig3};
-
-    for (sigIterator sit = (*tsigs).begin(); sit != (*tsigs).end(); sit++)
-    {
-        // TODO: do I really need to score every single sig on db?
-        (*sit).second->score = 0;
-        for (c = 0; c < 3; c++)
-        {
-            (*sit).second->score += s_haar_weights[sketch][0][c] * fabs((*sit).second->avgl[c]-avgl[c]);
-        }
-    }
-
-    for (int b = 0; b < NUM_COEFS; b++)
-    {
-        // for every coef on a sig
-        for ( c = 0; c < 3; c++)
-        {
-            pn  = sig[c][b] <= 0;
-            idx = (sig[c][b] - pn) ^ -pn;
-
-            // update the score of every image which has this coef
-            long_listIterator end = m_imgbuckets[c][pn][idx].end();
-            for (long_listIterator uit = m_imgbuckets[c][pn][idx].begin(); uit != end; uit++)
-            {
-                if ((*tsigs).count((*uit)))
-                    (*tsigs)[(*uit)]->score -= s_haar_weights[sketch][m_imgBin[idx]][c];
-            }
-        }
-    }
-
-    for (sigIterator sit = (*tsigs).begin(); sit != (*tsigs).end(); sit++)
-    {
-        if ((*sit).second->score < thresd)
-        {
-            res.push_back((*sit).second->id);
-            (*tsigs).erase((*sit).second->id);
-        }
-    }
-    return res;
-}
-
-HaarIface::long_list HaarIface::queryImgDataForThresFast(sigMap* tsigs, double* avgl, float thresd, int sketch)
-{
-    // will only look for average luminance
-    long_list res;
-
-    for (sigIterator sit = (*tsigs).begin(); sit != (*tsigs).end(); sit++)
-    {
-        (*sit).second->score = 0;
-        for (int c = 0; c < 3; c++)
-        {
-            (*sit).second->score += s_haar_weights[sketch][0][c] * fabs((*sit).second->avgl[c]-avgl[c]);
-        }
-
-        if ((*sit).second->score < thresd)
-        {
-            res.push_back((*sit).second->id);
-            (*tsigs).erase((*sit).second->id);
-        }
-    }
-    return res;
-}
-
-/ ** Cluster by similarity. Returns list of list of long ints (img ids)
-* /
-HaarIface::long_list_2 HaarIface::clusterSim(float thresd, bool fast)
-{
-    // will hold a list of lists. ie. a list of clusters
-    long_list_2 res;
-
-    // temporary map of sigs, as soon as an image becomes part of a cluster, it's removed from this map
-    sigMap wSigs(m_sigs);
-
-    // temporary map of sigs, as soon as an image becomes part of a cluster, it's removed from this map
-    sigMap wSigsTrack(m_sigs);
-
-    for (sigIterator sit = wSigs.begin(); sit != wSigs.end(); sit++)
-    {
-        // for every img on db
-        long_list res2;
-
-        if (fast)
-        {
-            res2 = queryImgDataForThresFast(&wSigs, (*sit).second->avgl, thresd, 1);
-        }
-        else
-        {
-            res2 = queryImgDataForThres(&wSigs, 
-                                        (*sit).second->sig1, (*sit).second->sig2, (*sit).second->sig3,
-                                        (*sit).second->avgl, thresd, 1);
-        }
-        //    continue;
-        long int hid = (*sit).second->id;
-        //    if ()
-        wSigs.erase(hid);
-        if (res2.size() <= 1)
-        {
-            // everything already added to a cluster sim. Bail out immediately, otherwise next iteration
-            // will segfault when incrementing sit
-            if (wSigs.size() <= 1)
-                break;
-
-            continue;
-        }
-        res2.push_front(hid);
-        res.push_back(res2);
-        if (wSigs.size() <= 1)  break;
-        // sigIterator sit2 = wSigs.end();
-        // sigIterator sit3 = sit++;
-    }
-    return res;
-}
-
-/ ** return the average luminance difference
-* /
-double HaarIface::calcAvglDiff(long int id1, long int id2)
-{
-    if (!m_sigs.count(id1))
-        return 0;
-
-    if (!m_sigs.count(id2))
-        return 0;
-
-    return fabs(m_sigs[id1]->avgl[0] - m_sigs[id2]->avgl[0]) +
-           fabs(m_sigs[id1]->avgl[1] - m_sigs[id2]->avgl[1]) +
-           fabs(m_sigs[id1]->avgl[2] - m_sigs[id2]->avgl[2]);
-}
-
-/ ** use it to tell the content-based difference between two images
-* /
-double HaarIface::calcDiff(long int id1, long int id2)
-{
-    double diff        = calcAvglDiff(id1, id2);
-    Haar::Idx *sig1[3] = {m_sigs[id1]->sig1, m_sigs[id1]->sig2, m_sigs[id1]->sig3};
-    Haar::Idx *sig2[3] = {m_sigs[id2]->sig1, m_sigs[id2]->sig2, m_sigs[id2]->sig3};
-
-    for (int b = 0; b < NUM_COEFS; b++)
-    {
-        for (int c = 0; c < 3; c++)
-        {
-            for (int b2 = 0; b2 < NUM_COEFS; b2++)
-            {
-                if (sig2[c][b2] == sig1[c][b])
-                {
-                    diff -= s_haar_weights[0][m_imgBin[abs(sig1[c][b])]][c];
-                }
-            }
-        }
-    }
-
-  return diff;
-}
-*/
 
 }  // namespace Digikam

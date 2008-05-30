@@ -55,35 +55,39 @@ namespace Haar
  */
 static const float s_haar_weights[2][6][3] =
 {
-     // For scanned picture (sketch=0):
-     //   Y      I      Q        idx  total occurs
-        {{ 5.00, 19.21, 34.37 },   // 0   58.58       1 (`DC' component)
-         { 0.83,  1.26,  0.36 },   // 1    2.45       3
-         { 1.01,  0.44,  0.45 },   // 2    1.90       5
-         { 0.52,  0.53,  0.14 },   // 3    1.19       7
-         { 0.47,  0.28,  0.18 },   // 4    0.93       9
-         { 0.30,  0.14,  0.27 }},  // 5    0.71       16384-25=16359
+    // For scanned picture (sketch=0):
+    //   Y      I      Q         idx  total       occurs
+    {{ 5.00, 19.21, 34.37 },   // 0   58.58       1 (`DC' component)
+     { 0.83,  1.26,  0.36 },   // 1    2.45       3
+     { 1.01,  0.44,  0.45 },   // 2    1.90       5
+     { 0.52,  0.53,  0.14 },   // 3    1.19       7
+     { 0.47,  0.28,  0.18 },   // 4    0.93       9
+     { 0.30,  0.14,  0.27 }},  // 5    0.71       16384-25=16359
 
-     // For handdrawn/painted sketch (sketch=1):
-     //   Y      I      Q
-        {{ 4.04, 15.14, 22.62 },
-         { 0.78,  0.92,  0.40 },
-         { 0.46,  0.53,  0.63 },
-         { 0.42,  0.26,  0.25 },
-         { 0.41,  0.14,  0.15 },
-         { 0.32,  0.07,  0.38 }}
+    // For handdrawn/painted sketch (sketch=1):
+    //   Y      I      Q
+    {{ 4.04, 15.14, 22.62 },
+     { 0.78,  0.92,  0.40 },
+     { 0.46,  0.53,  0.63 },
+     { 0.42,  0.26,  0.25 },
+     { 0.41,  0.14,  0.15 },
+     { 0.32,  0.07,  0.38 }}
 };
 
-/** Number of pixels on one side of image; required to be a power of 2. */
+/** Number of pixels on one side of image; required to be a power of 2.
+ */
 enum { NumberOfPixels = 128 };
 
-/** Total pixels in a square image. */
+/** Total pixels in a square image.
+ */
 enum { NumberOfPixelsSquared = NumberOfPixels * NumberOfPixels };
 
-/** Number of Haar coeffients we retain as signature for an image. */
+/** Number of Haar coeffients we retain as signature for an image.
+ */
 enum { NumberOfCoefficients = 40 };
 
 typedef double Unit;
+
 // Keep this definition constant at qint32 (guaranteed binary size!)
 typedef qint32 Idx;
 
@@ -98,18 +102,30 @@ public:
     void fillPixelData(const DImg &image);
 };
 
+// ---------------------------------------------------------------------------------
+
 class SignatureData
 {
+
 public:
-    Haar::Idx sig[3][Haar::NumberOfCoefficients];  // Y/I/Q positions with largest magnitude
-    double    avg[3];                              // YIQ for position [0,0]
+
+    /** Y/I/Q positions with largest magnitude
+     */
+    Haar::Idx sig[3][Haar::NumberOfCoefficients];
+
+    /** YIQ for position [0,0]
+     */
+    double    avg[3];
 };
 
+// ---------------------------------------------------------------------------------
+
+/** This class provides very fast lookup if a certain pixel
+ *  is set (positive or negative) in the loaded coefficient set.
+ */
 class SignatureMap
 {
-    /** This class provides very fast lookup if a certain pixel
-     *  is set (positive or negative) in the loaded coefficient set.
-     */
+
 public:
 
     typedef bool MapIndexType;
@@ -149,43 +165,51 @@ public:
     MapIndexType *indexList;
 };
 
+// ---------------------------------------------------------------------------------
+
 class WeightBin
 {
-    public:
 
-        WeightBin();
+public:
 
-        /** Fixed weight mask for pixel positions (i,j).
-            Each entry x = i*NUM_PIXELS + j, gets value max(i,j) saturated at 5.
-            To be treated as a constant.
-        */
-        unsigned char m_bin[16384];
+    WeightBin();
 
-        unsigned char bin(int index) { return m_bin[index]; }
-        unsigned char binAbs(int index) { return (index > 0) ? m_bin[index] : m_bin[-index]; }
+    /** Fixed weight mask for pixel positions (i,j).
+        Each entry x = i*NUM_PIXELS + j, gets value max(i,j) saturated at 5.
+        To be treated as a constant.
+    */
+    unsigned char m_bin[16384];
+
+    unsigned char bin(int index)    { return m_bin[index];                               }
+    unsigned char binAbs(int index) { return (index > 0) ? m_bin[index] : m_bin[-index]; }
 };
+
+// ---------------------------------------------------------------------------------
 
 class Weights
 {
-    public:
-        enum SketchType
-        {
-            ScannedSketch = 0,
-            PaintedSketch = 1
-        };
+public:
 
-        Weights(SketchType type = ScannedSketch)
-        : m_type(type)
-        {
-        }
+    enum SketchType
+    {
+        ScannedSketch = 0,
+        PaintedSketch = 1
+    };
 
-        float weight(int weight, int channel) { return s_haar_weights[(int)m_type][weight][channel]; }
-        float weightForAverage(int channel) { return s_haar_weights[(int)m_type][0][channel]; }
+    Weights(SketchType type = ScannedSketch)
+    : m_type(type)
+    {
+    }
 
-    private:
+    float weight(int weight, int channel) { return s_haar_weights[(int)m_type][weight][channel]; }
+    float weightForAverage(int channel)   { return s_haar_weights[(int)m_type][0][channel];      }
 
-        SketchType m_type;
+private:
+
+    SketchType m_type;
 };
+
+// ---------------------------------------------------------------------------------
 
 class Calculator
 {
@@ -195,10 +219,9 @@ public:
     Calculator();
     ~Calculator();
 
-    int     calcHaar(ImageData *imageData, SignatureData *sigData);
+    int  calcHaar(ImageData *imageData, SignatureData *sigData);
 
-    void    transform(ImageData *data);
-    //void transformChar(unsigned char* c1, unsigned char* c2, unsigned char* c3, Unit* a, Unit* b, Unit* c);
+    void transform(ImageData *data);
 
 private:
 

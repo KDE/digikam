@@ -51,13 +51,15 @@ namespace Digikam
 namespace Haar
 {
 
-
-/** Signature structure   */
+/** Signature structure
+ */
 class valStruct
 {
+
 public:
+
     Unit d;   // [f]abs(a[i])
-    int  i;         // index i of a[i]
+    int  i;   // index i of a[i]
 
     bool operator< (const valStruct &right) const
     {
@@ -67,11 +69,12 @@ public:
 
 typedef std::priority_queue<valStruct> valqueue;
 
-// ------------------------- //
+// --------------------------------------------------------------------
 
+/** Write pixels of a QImage in three arrays (one per color channel, pixels linearly)
+ */
 void ImageData::fillPixelData(const QImage &im)
 {
-    // Write pixels of a QImage in three arrays (one per color channel, pixels linearly)
     QImage image = im.scaled(Haar::NumberOfPixels, Haar::NumberOfPixels, Qt::IgnoreAspectRatio);
     int cn = 0;
     for (int h = 0; h < Haar::NumberOfPixels; h++)
@@ -90,9 +93,12 @@ void ImageData::fillPixelData(const QImage &im)
     }
 }
 
+// --------------------------------------------------------------------
+
+/** Write pixels of a DImg in three arrays (one per color channel, pixels linearly)
+ */
 void ImageData::fillPixelData(const DImg &im)
 {
-    // Write pixels of a DImg in three arrays (one per color channel, pixels linearly)
     DImg image(im);
     image.convertToEightBit();
     image = image.smoothScale(Haar::NumberOfPixels, Haar::NumberOfPixels, Qt::IgnoreAspectRatio);
@@ -112,9 +118,10 @@ void ImageData::fillPixelData(const DImg &im)
     }
 }
 
-// ------------------------- //
+// --------------------------------------------------------------------
 
-/** Setup initial fixed Haar weights that each coefficient represents */
+/** Setup initial fixed Haar weights that each coefficient represents
+ */
 WeightBin::WeightBin()
 {
     int i, j;
@@ -145,7 +152,7 @@ WeightBin::WeightBin()
     }
 }
 
-// ------------------------- //
+// --------------------------------------------------------------------
 
 Calculator::Calculator()
 {
@@ -230,28 +237,6 @@ void Calculator::haar2D(Unit a[])
         a[i] *= C;
     }
 }
-
-/** Do the Haar tensorial 2d transform itself.
-    Here input RGB data is in unsigned char arrays ([0..255])
-    Results are available in a, b, and c.
-*/
-/*
-void Calculator::transformChar(unsigned char* c1, unsigned char* c2, unsigned char* c3,
-                         Unit* a, Unit* b, Unit* c)
-{
-    Unit *p = a;
-    Unit *q = b;
-    Unit *r = c;
-
-    for (int i = 0; i < NumberOfPixelsSquared; i++)
-    {
-        *p++ = *c1++;
-        *q++ = *c2++;
-        *r++ = *c3++;
-    }
-    transform(a, b, c);
-}
-*/
 
 /** Do the Haar tensorial 2d transform itself.
     Here input is RGB data [0..255] in Unit arrays.
@@ -368,4 +353,4 @@ int Calculator::calcHaar(ImageData *data, SignatureData *sigData)
 
 } // namespace Haar
 
-}  // namespace Digikam
+} // namespace Digikam
