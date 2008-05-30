@@ -149,7 +149,8 @@ void XmpWidget::buildView()
 
 QString XmpWidget::getTagTitle(const QString& key)
 {
-    QString title = DMetadata::getXmpTagTitle(key.toAscii());
+    DMetadata metadataIface;
+    QString title = metadataIface.getXmpTagTitle(key.toAscii());
 
     if (title.isEmpty())
         return key.section('.', -1);
@@ -159,7 +160,8 @@ QString XmpWidget::getTagTitle(const QString& key)
 
 QString XmpWidget::getTagDescription(const QString& key)
 {
-    QString desc = DMetadata::getXmpTagDescription(key.toAscii());
+    DMetadata metadataIface;
+    QString desc = metadataIface.getXmpTagDescription(key.toAscii());
 
     if (desc.isEmpty())
         return i18n("No description available");

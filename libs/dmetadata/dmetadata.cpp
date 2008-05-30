@@ -929,6 +929,8 @@ QVariantList DMetadata::getMetadataFields(const MetadataFields &fields)
 
 QString DMetadata::valueToString (const QVariant &value, MetadataInfo::Field field)
 {
+    KExiv2 exiv2Iface;
+
     switch (field)
     {
         case MetadataInfo::Rating:
@@ -965,36 +967,36 @@ QString DMetadata::valueToString (const QVariant &value, MetadataInfo::Field fie
             }
 
         case MetadataInfo::Make:
-            return createExifUserStringFromValue("Exif.Image.Make", value);
+            return exiv2Iface.createExifUserStringFromValue("Exif.Image.Make", value);
         case MetadataInfo::Model:
-            return createExifUserStringFromValue("Exif.Image.Model", value);
+            return exiv2Iface.createExifUserStringFromValue("Exif.Image.Model", value);
         case MetadataInfo::Lens:
             // heterogenous source, non-standardized string
             return value.toString();
         case MetadataInfo::Aperture:
-            return createExifUserStringFromValue("Exif.Photo.FNumber", value);
+            return exiv2Iface.createExifUserStringFromValue("Exif.Photo.FNumber", value);
         case MetadataInfo::FocalLength:
-            return createExifUserStringFromValue("Exif.Photo.FocalLength", value);
+            return exiv2Iface.createExifUserStringFromValue("Exif.Photo.FocalLength", value);
         case MetadataInfo::FocalLengthIn35mm:
-            return createExifUserStringFromValue("Exif.Photo.FocalLengthIn35mmFilm", value);
+            return exiv2Iface.createExifUserStringFromValue("Exif.Photo.FocalLengthIn35mmFilm", value);
         case MetadataInfo::ExposureTime:
-            return createExifUserStringFromValue("Exif.Photo.ExposureTime", value);
+            return exiv2Iface.createExifUserStringFromValue("Exif.Photo.ExposureTime", value);
         case MetadataInfo::ExposureProgram:
-            return createExifUserStringFromValue("Exif.Photo.ExposureProgram", value);
+            return exiv2Iface.createExifUserStringFromValue("Exif.Photo.ExposureProgram", value);
         case MetadataInfo::ExposureMode:
-            return createExifUserStringFromValue("Exif.Photo.ExposureMode", value);
+            return exiv2Iface.createExifUserStringFromValue("Exif.Photo.ExposureMode", value);
         case MetadataInfo::Sensitivity:
-            return createExifUserStringFromValue("Exif.Photo.ISOSpeedRatings", value);
+            return exiv2Iface.createExifUserStringFromValue("Exif.Photo.ISOSpeedRatings", value);
         case MetadataInfo::FlashMode:
-            return createExifUserStringFromValue("Exif.Photo.Flash", value);
+            return exiv2Iface.createExifUserStringFromValue("Exif.Photo.Flash", value);
         case MetadataInfo::WhiteBalance:
-            return createExifUserStringFromValue("Exif.Photo.WhiteBalance", value);
+            return exiv2Iface.createExifUserStringFromValue("Exif.Photo.WhiteBalance", value);
         case MetadataInfo::MeteringMode:
-            return createExifUserStringFromValue("Exif.Photo.MeteringMode", value);
+            return exiv2Iface.createExifUserStringFromValue("Exif.Photo.MeteringMode", value);
         case MetadataInfo::SubjectDistance:
-            return createExifUserStringFromValue("Exif.Photo.SubjectDistance", value);
+            return exiv2Iface.createExifUserStringFromValue("Exif.Photo.SubjectDistance", value);
         case MetadataInfo::SubjectDistanceCategory:
-            return createExifUserStringFromValue("Exif.Photo.SubjectDistanceRange", value);
+            return exiv2Iface.createExifUserStringFromValue("Exif.Photo.SubjectDistanceRange", value);
         case MetadataInfo::WhiteBalanceColorTemperature:
             return i18nc("Temperature in Kelvin", "%1 K", value.toInt());
 

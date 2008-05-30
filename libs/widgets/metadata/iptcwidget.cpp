@@ -135,7 +135,8 @@ void IptcWidget::buildView()
 
 QString IptcWidget::getTagTitle(const QString& key)
 {
-    QString title = DMetadata::getIptcTagTitle(key.toAscii());
+    DMetadata metadataIface;
+    QString title = metadataIface.getIptcTagTitle(key.toAscii());
 
     if (title.isEmpty())
         return key.section('.', -1);
@@ -145,7 +146,8 @@ QString IptcWidget::getTagTitle(const QString& key)
 
 QString IptcWidget::getTagDescription(const QString& key)
 {
-    QString desc = DMetadata::getIptcTagDescription(key.toAscii());
+    DMetadata metadataIface;
+    QString desc = metadataIface.getIptcTagDescription(key.toAscii());
 
     if (desc.isEmpty())
         return i18n("No description available");

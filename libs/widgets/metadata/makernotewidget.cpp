@@ -177,7 +177,8 @@ void MakerNoteWidget::buildView()
 
 QString MakerNoteWidget::getTagTitle(const QString& key)
 {
-    QString title = DMetadata::getExifTagTitle(key.toAscii());
+    DMetadata metadataIface;
+    QString title = metadataIface.getExifTagTitle(key.toAscii());
 
     if (title.isEmpty())
         return key.section('.', -1);
@@ -187,7 +188,8 @@ QString MakerNoteWidget::getTagTitle(const QString& key)
 
 QString MakerNoteWidget::getTagDescription(const QString& key)
 {
-    QString desc = DMetadata::getExifTagDescription(key.toAscii());
+    DMetadata metadataIface;
+    QString desc = metadataIface.getExifTagDescription(key.toAscii());
 
     if (desc.isEmpty())
         return i18n("No description available");
