@@ -249,9 +249,20 @@ PAlbum::PAlbum(const QString& title)
       : Album(Album::PHYSICAL, 0, true)
 {
     setTitle(title);
-    m_albumRootId = -1;
-    m_parentPath   = "/";
-    m_date        = QDate::currentDate();
+    m_isAlbumRootAlbum = false;
+    m_albumRootId      = -1;
+    m_parentPath       = "/";
+    m_path             = QString();
+}
+
+PAlbum::PAlbum(int albumRoot, const QString &label)
+      : Album(Album::PHYSICAL, -albumRoot, false)
+{
+    setTitle(label);
+    m_albumRootId      = albumRoot;
+    m_isAlbumRootAlbum = true;
+    m_parentPath       = "/";
+    m_path             = QString();
 }
 
 PAlbum::PAlbum(int albumRoot, const QString &parentPath, const QString& title, int id)
@@ -260,12 +271,19 @@ PAlbum::PAlbum(int albumRoot, const QString &parentPath, const QString& title, i
     // If path is /holidays/2007, title is only "2007", path is "/holidays"
     setTitle(title);
     m_albumRootId = albumRoot;
-    m_parentPath   = parentPath + "/";
+    m_isAlbumRootAlbum = false;
+    m_parentPath  = parentPath + "/";
+    m_path        = title;
     m_date        = QDate::currentDate();
 }
 
 PAlbum::~PAlbum()
 {
+}
+
+bool PAlbum::isAlbumRoot() const
+{
+    return m_isAlbumRootAlbum;
 }
 
 void PAlbum::setCaption(const QString& caption)
@@ -324,7 +342,7 @@ QString PAlbum::url() const
 
 QString PAlbum::albumPath() const
 {
-    return m_parentPath + title();
+    return m_parentPath + m_path;
 }
 
 DatabaseUrl PAlbum::kurl() const

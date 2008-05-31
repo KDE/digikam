@@ -302,7 +302,11 @@ class PAlbum : public Album
 {
 public:
 
+    /// Constructor for root album
     PAlbum(const QString& title);
+    /// Constructor for album root albums
+    PAlbum(int albumRoot, const QString &label);
+    /// Constructor for normal albums
     PAlbum(int albumRoot, const QString &parentPath, const QString& title, int id);
     ~PAlbum();
 
@@ -323,6 +327,8 @@ public:
     QString     icon() const;
     KUrl        iconKURL() const;
 
+    bool        isAlbumRoot() const;
+
     KDE_DEPRECATED QString     url() const;
     KDE_DEPRECATED DatabaseUrl kurl() const;
 
@@ -330,10 +336,13 @@ private:
 
     int        m_albumRootId;
 
+    QString    m_path;
     QString    m_parentPath;
     QString    m_collection;
     QString    m_caption;
     QString    m_icon;
+
+    bool       m_isAlbumRootAlbum;
 
     QDate      m_date;
 
