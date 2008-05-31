@@ -53,4 +53,9 @@ QString CollectionLocation::albumRootPath() const
     return m_path;
 }
 
+QString CollectionLocation::label() const
+{
+    return m_label;
+}
+
 }  // namespace Digikam
