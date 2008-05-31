@@ -117,7 +117,7 @@ int AlbumDB::addAlbumRoot(AlbumRoot::Type type, const QString &identifier, const
 {
     QVariant id;
     d->db->execSql( QString("REPLACE INTO AlbumRoots (type, label, status, identifier, specificPath) "
-                            "VALUES(?, 0, ?, ?);"),
+                            "VALUES(?, ?, 0, ?, ?);"),
                     (int)type, label, identifier, specificPath, 0, &id);
 
     d->db->recordChangeset(AlbumRootChangeset(id.toInt(), AlbumRootChangeset::Added));
