@@ -340,37 +340,45 @@ void ScanController::connectCollectionScanner(CollectionScanner *scanner)
 
 void ScanController::slotTotalFilesToScan(int count)
 {
-    d->progressDialog->incrementMaximum(count);
+    if (d->progressDialog)
+        d->progressDialog->incrementMaximum(count);
 }
 
 void ScanController::slotStartScanningAlbum(const QString &albumRoot, const QString &album)
 {
     Q_UNUSED(albumRoot);
-    d->progressDialog->addedAction(d->albumPixmap(), " " + album);
+    if (d->progressDialog)
+        d->progressDialog->addedAction(d->albumPixmap(), " " + album);
 }
 
 void ScanController::slotFinishedScanningAlbum(const QString &, const QString &, int filesScanned)
 {
-    d->progressDialog->advance(filesScanned);
+    if (d->progressDialog)
+        d->progressDialog->advance(filesScanned);
 }
 
 void ScanController::slotStartScanningAlbumRoot(const QString &albumRoot)
 {
-    d->progressDialog->addedAction(d->rootPixmap(), albumRoot);
+    if (d->progressDialog)
+        d->progressDialog->addedAction(d->rootPixmap(), albumRoot);
 }
 
 void ScanController::slotStartScanningForStaleAlbums()
 {
     QString message = i18n("Scanning for removed albums");
-    if (d->splash) d->splash->message(message, Qt::AlignLeft, Qt::white);
-    else d->progressDialog->addedAction(d->actionPixmap(), message);
+    if (d->splash)
+        d->splash->message(message, Qt::AlignLeft, Qt::white);
+    else if (d->progressDialog)
+        d->progressDialog->addedAction(d->actionPixmap(), message);
 }
 
 void ScanController::slotStartScanningAlbumRoots()
 {
     QString message = i18n("Scanning images in individual albums");
-    if (d->splash) d->splash->message(message, Qt::AlignLeft, Qt::white);
-    else d->progressDialog->addedAction(d->actionPixmap(), message);
+    if (d->splash)
+        d->splash->message(message, Qt::AlignLeft, Qt::white);
+    else if (d->progressDialog)
+        d->progressDialog->addedAction(d->actionPixmap(), message);
 }
 
 void ScanController::moreSchemaUpdateSteps(int numberOfSteps)
@@ -390,10 +398,13 @@ void ScanController::slotProgressFromInitialization(const QString& message, int 
 {
     // main thread
 
-    if (d->splash) d->splash->message(message, Qt::AlignLeft, Qt::white);
-    else d->progressDialog->addedAction(d->actionPixmap(), message);
-
-    d->progressDialog->advance(numberOfSteps);
+    if (d->splash)
+        d->splash->message(message, Qt::AlignLeft, Qt::white);
+    else if (d->progressDialog)
+    {
+        d->progressDialog->addedAction(d->actionPixmap(), message);
+        d->progressDialog->advance(numberOfSteps);
+    }
 }
 
 void ScanController::finishedSchemaUpdate(UpdateResult result)
@@ -423,8 +434,10 @@ void ScanController::slotErrorFromInitialization(const QString &errorMessage)
 {
     // main thread
     QString message = i18n("Error");
-    if (d->splash) d->splash->message(message, Qt::AlignLeft, Qt::white);
-    else d->progressDialog->addedAction(d->errorPixmap(), message);
+    if (d->splash)
+        d->splash->message(message, Qt::AlignLeft, Qt::white);
+    else if (d->progressDialog)
+        d->progressDialog->addedAction(d->errorPixmap(), message);
 
     KMessageBox::error(d->progressDialog, errorMessage);
 }
