@@ -57,6 +57,10 @@ public:
     void setActive(bool val);
     void setImageInfo(const ImageInfo& info);
 
+signals:
+
+    void signalUpdateFingerPrints();
+
 protected:
 
     void dragEnterEvent(QDragEnterEvent *e);
@@ -94,6 +98,8 @@ private slots:
     void slotSaveImageSAlbum();
     void slotCheckNameEditImageConditions();
     void slotThumbnailLoaded(const LoadingDescription&, const QPixmap&);
+
+    void slotFindDuplicates();
 
 private:
 

@@ -425,6 +425,9 @@ void DigikamView::setupConnections()
     connect(d->parent, SIGNAL(signalResetTagFilters()),
             d->tagFilterView, SLOT(slotResetTagFilters()));
 
+    connect(d->fuzzySearchView, SIGNAL(signalUpdateFingerPrints()),
+            d->parent, SLOT(slotRebuildAllFingerPrints()));
+
     // -- Filter Bars Connections ---------------------------------
 
     connect(d->folderSearchBar, SIGNAL(textChanged(const QString&)),
@@ -491,7 +494,6 @@ void DigikamView::setupConnections()
 
     connect(d->albumWidgetStack, SIGNAL(signalUrlSelected(const KUrl&)),
             this, SLOT(slotSelectItemByUrl(const KUrl&)));
-
 
     // -- Selection timer ---------------
 

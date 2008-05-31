@@ -29,6 +29,8 @@
 #include <QLayout>
 #include <QPushButton>
 #include <QSpinBox>
+#include <QTreeWidget>
+#include <QHeaderView>
 
 // KDE include.
 
@@ -42,7 +44,7 @@
 #include <kmessagebox.h>
 #include <khuesaturationselect.h>
 #include <kcolorvalueselector.h>
-#include <khbox.h>
+#include <kvbox.h>
 #include <kinputdialog.h>
 #include <ktabwidget.h>
 #include <ksqueezedtextlabel.h>
@@ -74,8 +76,9 @@ public:
 
     enum FuzzySearchTab
     {
-        IMAGE=0,
-        SKETCH
+        SIMILARS=0,
+        SKETCH,
+        DUPLICATES,
     };
 
     FuzzySearchViewPriv()
@@ -98,17 +101,27 @@ public:
         thumbLoadThread       = 0;
         imageSAlbum           = 0;
         sketchSAlbum          = 0;
+        listView              = 0;
+        folderView            = 0;
+        scanDuplicatesBtn     = 0;
+        updateFingerPrtBtn    = 0;
     }
 
     QPushButton            *resetButton;
     QPushButton            *saveBtnSketch;
     QPushButton            *saveBtnImage;
+    QPushButton            *scanDuplicatesBtn;
+    QPushButton            *updateFingerPrtBtn;
 
     QSpinBox               *penSize;
     QSpinBox               *resultsSketch;
     QSpinBox               *resultsImage;
 
     QLabel                 *imageWidget;
+
+    QTreeWidget            *listView;
+
+    KVBox                  *folderView;
 
     KLineEdit              *nameEditSketch;
     KLineEdit              *nameEditImage;
@@ -149,11 +162,10 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     d->tabWidget         = new KTabWidget(this);
 
     // ---------------------------------------------------------------
-    // Image Panel
+    // Find Similar Images Panel
 
     QWidget *imagePanel = new QWidget(this);
     QGridLayout *grid   = new QGridLayout(imagePanel);
-
     QWidget *box2       = new QWidget(imagePanel);
     QVBoxLayout *vlay3  = new QVBoxLayout(box2);
     KHBox *imageBox     = new KHBox(box2);
@@ -230,7 +242,7 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
 
-    d->tabWidget->insertTab(FuzzySearchViewPriv::IMAGE, imagePanel, i18n("Image"));
+    d->tabWidget->insertTab(FuzzySearchViewPriv::SIMILARS, imagePanel, i18n("Image"));
 
     // ---------------------------------------------------------------
     // Sketch Panel
@@ -326,17 +338,49 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     d->tabWidget->insertTab(FuzzySearchViewPriv::SKETCH, sketchPanel, i18n("Sketch"));
 
     // ---------------------------------------------------------------
+    // Find Duplicates Panel
 
-    d->fuzzySearchFolderView = new FuzzySearchFolderView(this);
-    d->searchFuzzyBar        = new SearchTextBar(this, "FuzzySearchViewSearchFuzzyBar");
+    QWidget *findDuplicatesPanel = new QWidget(this);
+    QGridLayout *grid3           = new QGridLayout(findDuplicatesPanel);
+    d->listView                  = new QTreeWidget(findDuplicatesPanel);
+    d->listView->setRootIsDecorated(false);
+    d->listView->setSelectionMode(QAbstractItemView::SingleSelection);
+    d->listView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    d->listView->setAllColumnsShowFocus(true);
+    d->listView->setColumnCount(2);
+    d->listView->setWhatsThis(i18n("<p>This shows all duplicates items find in whole collections."));
+    d->listView->header()->hide();
+
+    d->updateFingerPrtBtn = new QPushButton(i18n("Update finger-prints"), findDuplicatesPanel);
+    d->updateFingerPrtBtn->setWhatsThis(i18n("<p>Use this button to scan whole collection to find all "
+                                              "duplicates items."));
+
+    d->scanDuplicatesBtn = new QPushButton(i18n("Find duplicates"), findDuplicatesPanel);
+    d->scanDuplicatesBtn->setWhatsThis(i18n("<p>Use this button to scan whole collection to find all "
+                                            "duplicates items."));
+
+    grid3->addWidget(d->listView,           0, 0, 1, 3);
+    grid3->addWidget(d->updateFingerPrtBtn, 1, 0, 1, 3);
+    grid3->addWidget(d->scanDuplicatesBtn,  2, 0, 1, 3);
+    grid3->setRowStretch(0, 10);
+    grid3->setColumnStretch(1, 10);
+    grid3->setMargin(KDialog::spacingHint());
+    grid3->setSpacing(KDialog::spacingHint());
+
+    d->tabWidget->insertTab(FuzzySearchViewPriv::DUPLICATES, findDuplicatesPanel, i18n("Duplicates"));
+
+    // ---------------------------------------------------------------
+
+    d->folderView            = new KVBox(this);
+    d->fuzzySearchFolderView = new FuzzySearchFolderView(d->folderView);
+    d->searchFuzzyBar        = new SearchTextBar(d->folderView, "FuzzySearchViewSearchFuzzyBar");
+    d->folderView->setSpacing(KDialog::spacingHint());
+    d->folderView->setMargin(0);
 
     // ---------------------------------------------------------------
 
     vlay->addWidget(d->tabWidget);
-    vlay->addWidget(d->fuzzySearchFolderView);
-    vlay->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
-                                  QSizePolicy::Minimum, QSizePolicy::Minimum));
-    vlay->addWidget(d->searchFuzzyBar);
+    vlay->addWidget(d->folderView);
     vlay->setMargin(0);
     vlay->setSpacing(0);
 
@@ -394,6 +438,12 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
 
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
             this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
+
+    connect(d->updateFingerPrtBtn, SIGNAL(clicked()),
+            this, SIGNAL(signalUpdateFingerPrints()));
+
+    connect(d->scanDuplicatesBtn, SIGNAL(clicked()),
+            this, SLOT(slotFindDuplicates()));
 
     // ---------------------------------------------------------------
 
@@ -453,14 +503,22 @@ void FuzzySearchView::slotTabChanged(int tab)
 {
     switch(tab)
     {
-        case FuzzySearchViewPriv::IMAGE:
+        case FuzzySearchViewPriv::SIMILARS:
         {
             AlbumManager::instance()->setCurrentAlbum(d->imageSAlbum);
+            d->folderView->setVisible(true);
             break;
         }
-        default:  // SKETCH
+        case FuzzySearchViewPriv::SKETCH:
         {
             AlbumManager::instance()->setCurrentAlbum(d->sketchSAlbum);
+            d->folderView->setVisible(true);
+            break;
+        }
+        default:  // DUPLICATES
+        {
+            AlbumManager::instance()->setCurrentAlbum(0);     // FIXME
+            d->folderView->setVisible(false);
             break;
         }
     }
@@ -559,7 +617,7 @@ void FuzzySearchView::slotAlbumSelected(SAlbum* salbum)
     {
         setImageId(reader.valueToLongLong());
         d->imageSAlbum = salbum;
-        d->tabWidget->setCurrentIndex((int)FuzzySearchViewPriv::IMAGE);
+        d->tabWidget->setCurrentIndex((int)FuzzySearchViewPriv::SIMILARS);
     }
     else
     {
@@ -670,7 +728,7 @@ void FuzzySearchView::dropEvent(QDropEvent *e)
         setImageId(imageIDs.first());
         slotCheckNameEditImageConditions();
         createNewFuzzySearchAlbumFromImage(FuzzySearchFolderView::currentFuzzyImageSearchName());
-        d->tabWidget->setCurrentIndex((int)FuzzySearchViewPriv::IMAGE);
+        d->tabWidget->setCurrentIndex((int)FuzzySearchViewPriv::SIMILARS);
 
         e->acceptProposedAction();
     }
@@ -698,7 +756,7 @@ void FuzzySearchView::setImageInfo(const ImageInfo& info)
     setImageId(info.id());
     slotCheckNameEditImageConditions();
     createNewFuzzySearchAlbumFromImage(FuzzySearchFolderView::currentFuzzyImageSearchName());
-    d->tabWidget->setCurrentIndex((int)FuzzySearchViewPriv::IMAGE);
+    d->tabWidget->setCurrentIndex((int)FuzzySearchViewPriv::SIMILARS);
 }
 
 void FuzzySearchView::slotThumbnailLoaded(const LoadingDescription& desc, const QPixmap& pix)
@@ -757,6 +815,11 @@ void FuzzySearchView::slotSaveImageSAlbum()
         return;
 
     createNewFuzzySearchAlbumFromImage(name);
+}
+
+void FuzzySearchView::slotFindDuplicates()
+{
+    // TODO
 }
 
 }  // NameSpace Digikam
