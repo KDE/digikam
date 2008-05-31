@@ -440,4 +440,36 @@ QImage HaarIface::loadQImage(const QString &filename)
     return image;
 }
 
+QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QList<qlonglong>& images2Scan)
+{
+    QMap< qlonglong, QList<qlonglong> > resultsMap;
+    QList<qlonglong>::const_iterator    it = images2Scan.begin();
+    QList<qlonglong>::const_iterator    it2;
+    QList<qlonglong>                    list;
+    bool                                find = false;
+
+    while (it != images2Scan.end())
+    {
+        list = bestMatchesForImage(*it, 20, ScannedSketch);
+        if (!list.isEmpty())
+        {
+            // we will check if the duplicates already exist in the map.
+            find = false;
+            for (it2 = list.begin(); it2 != list.end(); ++it2)
+            {
+                if (resultsMap.find(*it2) != resultsMap.end())
+                {
+                    find = true;
+                    break;
+                }
+            }
+
+            if (!find)
+                resultsMap.insert(*it, list);
+        }
+    };
+
+    return resultsMap;
+}
+
 }  // namespace Digikam

@@ -29,6 +29,8 @@
 // Qt includes.
 
 #include <QString>
+#include <QMap>
+#include <QList>
 
 // Local includes.
 
@@ -84,6 +86,12 @@ public:
      *  and encode it to Ascii data. Can be used for bestMatchesForSignature. 
      */
     QString signatureAsText(const QImage &image);
+
+    /** Fill a map of duplicates images found over a list of image to scan.
+     *  For each map item, the result values is list of candidate images which are duplicates of the key image.
+     *  All images are referenced by id from database.
+     */
+    QMap< qlonglong, QList<qlonglong> > findDuplicates(const QList<qlonglong>& images2Scan);
 
 private:
 
