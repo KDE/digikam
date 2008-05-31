@@ -257,7 +257,8 @@ public:
     {
         Unknown,
         Added,
-        Deleted
+        Deleted,
+        PropertiesChanged
     };
 
     AlbumRootChangeset();
