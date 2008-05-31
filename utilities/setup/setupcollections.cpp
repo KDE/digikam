@@ -277,9 +277,9 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
 
     QLabel *databasePathLabel = new QLabel(i18n("Here you can enter the location on your computer "
                                                 "where the digiKam database file will be stored. "
-                                                "It is only one DB file common to all album roots.\n "
+                                                "It is only one DB file common to all album roots.\n"
                                                 "Write access is required to be able to edit image "
-                                                "properties. \nPlease note that you cannot use a "
+                                                "properties.\nPlease note that you cannot use a "
                                                 "remote file system here, such as NFS."),
                                            dbPathBox);
     databasePathLabel->setWordWrap(true);
