@@ -295,18 +295,21 @@ void AlbumSelectDialog::slotUser1()
     if (!ok)
         return;
 
-    // if we create an album under root, need to supply the album root path.
-    QString albumRootPath;
+    PAlbum *newAlbum;
+    QString errMsg;
     if (album->isRoot())
     {
+        // if we create an album under root, need to supply the album root path.
         // TODO: Let user choose an album root
-        albumRootPath = CollectionManager::instance()->oneAlbumRootPath();
+        newAlbum = AlbumManager::instance()->createPAlbum(CollectionManager::instance()->oneAlbumRootPath(),
+                                                          newAlbumName, QString(), QDate::currentDate(), QString(), errMsg);
+    }
+    else
+    {
+        newAlbum = AlbumManager::instance()->createPAlbum(album, newAlbumName, QString(),
+                                                          QDate::currentDate(), QString(), errMsg);
     }
 
-    QString errMsg;
-    PAlbum* newAlbum = AlbumManager::instance()->createPAlbum(album, albumRootPath, newAlbumName,
-                                                              QString(), QDate::currentDate(),
-                                                              QString(), errMsg);
     if (!newAlbum)
     {
         KMessageBox::error(this, errMsg);

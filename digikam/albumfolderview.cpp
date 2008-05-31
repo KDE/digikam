@@ -717,8 +717,14 @@ void AlbumFolderView::albumNew(AlbumFolderViewItem *item)
     }
 
     QString errMsg;
-    PAlbum* album = d->albumMan->createPAlbum(parent, albumRootPath, title, comments,
-                                              date, collection, errMsg);
+    PAlbum* album;
+    if (parent->isRoot())
+        album = d->albumMan->createPAlbum(albumRootPath, title, comments,
+                                          date, collection, errMsg);
+    else
+        album = d->albumMan->createPAlbum(parent, title, comments,
+                                          date, collection, errMsg);
+
     if (!album)
     {
         KMessageBox::error(0, errMsg);

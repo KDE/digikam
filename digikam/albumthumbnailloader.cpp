@@ -139,7 +139,7 @@ QPixmap AlbumThumbnailLoader::getStandardAlbumRootIcon(RelativeSize relativeSize
 
 QPixmap AlbumThumbnailLoader::getStandardAlbumIcon(PAlbum *album, RelativeSize relativeSize)
 {
-    if (album->isRoot())
+    if (album->isRoot() || album->isAlbumRoot())
         return getStandardAlbumRootIcon(relativeSize);
     else
         return getStandardAlbumIcon(relativeSize);

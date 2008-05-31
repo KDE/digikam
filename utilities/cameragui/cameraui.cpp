@@ -1742,7 +1742,7 @@ bool CameraUI::createAutoAlbum(const KUrl& parentURL, const QString& sub,
     }
     QString albumRootPath = CollectionManager::instance()->albumRootPath(parentURL);
 
-    return aman->createPAlbum(parent, albumRootPath, sub, QString(""), date, QString(""), errMsg);
+    return aman->createPAlbum(albumRootPath, sub, QString(""), date, QString(""), errMsg);
 }
 
 void CameraUI::addFileExtension(const QString& ext)
