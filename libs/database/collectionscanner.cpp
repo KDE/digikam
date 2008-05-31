@@ -153,6 +153,13 @@ void CollectionScanner::partialScan(const QString &filePath)
 
 void CollectionScanner::partialScan(const QString &albumRoot, const QString& album)
 {
+    if (album.isEmpty())
+    {
+        // If you want to scan the album root, pass "/"
+        DWarning() << "partialScan(QString, QString) called with empty album";
+        return;
+    }
+
     loadNameFilters();
 
     CollectionLocation location = CollectionManager::instance()->locationForAlbumRootPath(albumRoot);
@@ -163,7 +170,13 @@ void CollectionScanner::partialScan(const QString &albumRoot, const QString& alb
         return;
     }
 
-    scanAlbum(location, album);
+    //TODO: This can be optimized, no need to always scan the whole location
+    scanForStaleAlbums(QList<CollectionLocation>() << location);
+
+    if (album == "/")
+        scanAlbumRoot(location);
+    else
+        scanAlbum(location, album);
 }
 
 void CollectionScanner::scanFile(const QString &albumRoot, const QString &album, const QString &fileName)
@@ -252,6 +265,7 @@ void CollectionScanner::scanForStaleAlbums(QList<CollectionLocation> locations)
     foreach (int albumId, toBeDeleted)
     {
         access.db()->removeItemsFromAlbum(albumId);
+        access.db()->deleteAlbum(albumId);
     }
 
     if (d->wantSignals)
