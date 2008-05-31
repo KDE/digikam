@@ -224,9 +224,8 @@ public:
      * recommended to connect to that signal to get notification of new album added
      * @return the newly created PAlbum or 0 if it fails
      * @param parent  The parent album under which to create the new Album.
+     *                Parent must not be root. Otherwise, use the other variants of this method.
      *                If parent is root, the albumRootPath must be supplied.
-     * @param albumRootPath The album root path of the new album. This parameter will be
-     *                      ignored if parent is not root. It must be supplied if parent is root.
      * @param name    the name of the new album
      * @param caption the caption for the new album
      * @param date    the date for the new album
@@ -234,7 +233,25 @@ public:
      * @param errMsg  this will contain the error message describing why the
      * operation failed
      */
-    PAlbum* createPAlbum(PAlbum* parent, const QString& albumRootPath, const QString& name,
+    PAlbum* createPAlbum(PAlbum* parent, const QString& name,
+                         const QString& caption, const QDate& date,
+                         const QString& collection,
+                         QString& errMsg);
+
+    /**
+     * Overloaded method. Here you can supply an albumRootPath which must
+     * correspond to an available collection location.
+     */
+    PAlbum* createPAlbum(const QString& albumRootPath, const QString& name,
+                         const QString& caption, const QDate& date,
+                         const QString& collection,
+                         QString& errMsg);
+
+    /**
+     * Overloaded method. Here you can supply a collection location (which
+     * must be available).
+     */
+    PAlbum* createPAlbum(const CollectionLocation &location, const QString& name,
                          const QString& caption, const QDate& date,
                          const QString& collection,
                          QString& errMsg);
@@ -451,6 +468,9 @@ private:
     void removePAlbum(PAlbum *album);
     void insertTAlbum(TAlbum *album, TAlbum *parent);
     void removeTAlbum(TAlbum *album);
+
+    void addAlbumRoot(const CollectionLocation &location);
+    void removeAlbumRoot(const CollectionLocation &location);
 
     /**
      * Scan albums directly from database and creates new PAlbums

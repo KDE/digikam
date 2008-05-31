@@ -41,6 +41,7 @@ extern "C"
 
 // Qt includes.
 
+#include <QApplication>
 #include <QHash>
 #include <QList>
 #include <QFile>
@@ -167,6 +168,7 @@ public:
 
     QHash<int,Album *>          allAlbumsIdHash;
     QHash<PAlbumPath, PAlbum*>  albumPathHash;
+    QHash<int, PAlbum*>         albumRootAlbumHash;
 
     Album                      *currentAlbum;
 };
@@ -406,18 +408,6 @@ void AlbumManager::startScan()
         mName = QString("INotify");
     DDebug() << "KDirWatch method = " << mName << endl;
 
-    // listen to location status changes
-    connect(CollectionManager::instance(), SIGNAL(locationStatusChanged(const CollectionLocation &, int)),
-            this, SLOT(slotCollectionLocationStatusChanged(const CollectionLocation &, int)));
-
-    // add album roots to dir watch
-    QStringList albumRootPaths = CollectionManager::instance()->allAvailableAlbumRootPaths();
-    for (QStringList::iterator it = albumRootPaths.begin(); it != albumRootPaths.end(); ++it)
-    {
-        if (!d->dirWatch->contains(*it))
-            d->dirWatch->addDir(*it, KDirWatch::WatchSubDirs);
-    }
-
     // create root albums
     d->rootPAlbum = new PAlbum(i18n("My Albums"));
     insertPAlbum(d->rootPAlbum, 0);
@@ -429,6 +419,15 @@ void AlbumManager::startScan()
 
     d->rootDAlbum = new DAlbum(QDate(), true);
 
+    // listen to location status changes
+    connect(CollectionManager::instance(), SIGNAL(locationStatusChanged(const CollectionLocation &, int)),
+            this, SLOT(slotCollectionLocationStatusChanged(const CollectionLocation &, int)));
+
+    // create albums for album roots
+    QList<CollectionLocation> locations = CollectionManager::instance()->allAvailableLocations();
+    foreach(const CollectionLocation location, locations)
+        addAlbumRoot(location);
+
     // reload albums
     refresh();
 
@@ -437,14 +436,47 @@ void AlbumManager::startScan()
 
 void AlbumManager::slotCollectionLocationStatusChanged(const CollectionLocation &location, int oldStatus)
 {
-    if (location.status() == CollectionLocation::LocationAvailable)
+    if (location.status() == CollectionLocation::LocationAvailable
+        && oldStatus != CollectionLocation::LocationAvailable)
     {
-        if (!d->dirWatch->contains(location.albumRootPath()))
-             d->dirWatch->addDir(location.albumRootPath(), KDirWatch::WatchSubDirs);
+        addAlbumRoot(location);
     }
-    else if (oldStatus == CollectionLocation::LocationAvailable)
+    else if (oldStatus == CollectionLocation::LocationAvailable
+             && location.status() != CollectionLocation::LocationAvailable)
     {
-        d->dirWatch->removeDir(location.albumRootPath());
+        removeAlbumRoot(location);
+    }
+}
+
+void AlbumManager::addAlbumRoot(const CollectionLocation &location)
+{
+    if (!d->dirWatch->contains(location.albumRootPath()))
+        d->dirWatch->addDir(location.albumRootPath(), KDirWatch::WatchSubDirs);
+
+    PAlbum *album = d->albumRootAlbumHash.value(location.id());
+    if (!album)
+    {
+        // Create a PAlbum for the Album Root. Do not yet insert into tree.
+        QString label = location.label();
+        if (label.isEmpty())
+            label = location.albumRootPath();
+        album = new PAlbum(location.id(), label);
+
+        // insert album root created into hash and tree
+        d->albumRootAlbumHash.insert(location.id(), album);
+        insertPAlbum(album, d->rootPAlbum);
+    }
+}
+
+void AlbumManager::removeAlbumRoot(const CollectionLocation &location)
+{
+    d->dirWatch->removeDir(location.albumRootPath());
+    // retrieve and remove from hash
+    PAlbum *album = d->albumRootAlbumHash.take(location.id());
+    if (album)
+    {
+        // delete album and all its children
+        removePAlbum(album);
     }
 }
 
@@ -458,14 +490,14 @@ void AlbumManager::refresh()
 
 void AlbumManager::scanPAlbums()
 {
-    // first insert all the current PAlbums into a map for quick lookup
+    // first insert all the current normal PAlbums into a map for quick lookup
     QHash<int, PAlbum *> oldAlbums;
-
     AlbumIterator it(d->rootPAlbum);
     while (it.current())
     {
         PAlbum* a = (PAlbum*)(*it);
-        oldAlbums[a->id()] = a;
+        if (!a->isAlbumRoot())
+            oldAlbums[a->id()] = a;
         ++it;
     }
 
@@ -474,14 +506,6 @@ void AlbumManager::scanPAlbums()
 
     qSort(currentAlbums);
 
-    /*
-    // cache location status
-    QList<CollectionLocation> allLocations = CollectionManager::instance()->allLocations();
-    QHash<int, CollectionLocation::Status> statusHash;
-    foreach (const CollectionLocation &location, allLocations)
-        statusHash[location->id()] = location.status();
-    */
-
     QList<AlbumInfo> newAlbums;
 
     // go through all the Albums and see which ones are already present
@@ -489,7 +513,6 @@ void AlbumManager::scanPAlbums()
     {
         // check that location of album is available
         if (CollectionManager::instance()->locationForAlbumRootId(info.albumRootId).isAvailable())
-        //if (statusHash.value(info.albumRootId) == CollectionLocation::LocationAvailable)
         {
             if (oldAlbums.contains(info.id))
                 oldAlbums.remove(info.id);
@@ -535,7 +558,13 @@ void AlbumManager::scanPAlbums()
 
         PAlbum* parent;
         if (parentPath.isEmpty())
-            parent = d->rootPAlbum;
+        {
+            // if there is only one album root, we use the (single) root album
+            if (d->albumRootAlbumHash.count() == 1)
+                parent = d->rootPAlbum;
+            else
+                parent = d->albumRootAlbumHash.value(info.albumRootId);
+        }
         else
             parent = d->albumPathHash.value(PAlbumPath(info.albumRootId, parentPath));
 
@@ -950,8 +979,39 @@ SAlbum* AlbumManager::findSAlbum(const QString &name) const
     return 0;
 }
 
+PAlbum* AlbumManager::createPAlbum(const QString& albumRootPath, const QString& name,
+                                   const QString& caption, const QDate& date,
+                                   const QString& collection,
+                                   QString& errMsg)
+{
+    CollectionLocation location = CollectionManager::instance()->locationForAlbumRootPath(albumRootPath);
+    return createPAlbum(location, name, caption, date, collection, errMsg);
+}
+
+PAlbum* AlbumManager::createPAlbum(const CollectionLocation &location, const QString& name,
+                                   const QString& caption, const QDate& date,
+                                   const QString& collection,
+                                   QString& errMsg)
+{
+    if (location.isNull() || !location.isAvailable())
+    {
+        errMsg = i18n("The collection location supplied is invalid or currently not available.");
+        return 0;
+    }
+
+    PAlbum *album = d->albumRootAlbumHash.value(location.id());
+
+    if (!album)
+    {
+        errMsg = "No album for collection location: Internal error";
+        return 0;
+    }
+
+    return createPAlbum(album, name, caption, date, collection, errMsg);
+}
+
+
 PAlbum* AlbumManager::createPAlbum(PAlbum* parent,
-                                   const QString& albumRoot,
                                    const QString& name,
                                    const QString& caption,
                                    const QDate& date,
@@ -977,27 +1037,16 @@ PAlbum* AlbumManager::createPAlbum(PAlbum* parent,
         return 0;
     }
 
-    QString albumRootPath;
-    QString albumPath;
     if (parent->isRoot())
     {
-        if (albumRoot.isNull())
-        {
-            errMsg = i18n("No album root path supplied");
-            return 0;
-        }
-        albumRootPath = albumRoot;
-        albumPath     = "/" + name;
-    }
-    else
-    {
-        albumRootPath = parent->albumRootPath();
-        albumPath     = parent->albumPath() + "/" + name;
+        errMsg = i18n("createPAlbum does not accept the root album as parent.");
+        return 0;
     }
 
-    int albumRootId = CollectionManager::instance()->locationForAlbumRootPath(albumRootPath).id();
+    QString albumPath     = parent->albumPath() + "/" + name;
+    int albumRootId       = parent->albumRootId();
 
-    // first check if we have another album with the same name
+    // first check if we have a sibling album with the same name
     PAlbum *child = (PAlbum *)parent->m_firstChild;
     while (child)
     {
@@ -1013,20 +1062,9 @@ PAlbum* AlbumManager::createPAlbum(PAlbum* parent,
     url.addPath(name);
     KUrl fileUrl = url.fileUrl();
 
-    //TODO: Use KIO::NetAccess?
-    // make the directory synchronously, so that we can add the
-    // album info to the database directly
-    if (::mkdir(QFile::encodeName(fileUrl.path()), 0777) != 0)
+    if (!KIO::NetAccess::mkdir(fileUrl, qApp->activeWindow()))
     {
-        if (errno == EEXIST)
-            errMsg = i18n("Another file or folder with same name exists");
-        else if (errno == EACCES)
-            errMsg = i18n("Access denied to path");
-        else if (errno == ENOSPC)
-            errMsg = i18n("Disk is full");
-        else
-            errMsg = i18n("Unknown error"); // being lazy
-
+        errMsg = i18n("Failed to create directory,");
         return 0;
     }
 
@@ -1038,7 +1076,11 @@ PAlbum* AlbumManager::createPAlbum(PAlbum* parent,
         return 0;
     }
 
-    PAlbum *album       = new PAlbum(albumRootId, parent->albumPath(), name, id);
+    QString parentPath;
+    if (!parent->isAlbumRoot())
+        parentPath = parent->albumPath();
+
+    PAlbum *album       = new PAlbum(albumRootId, parentPath, name, id);
     album->m_caption    = caption;
     album->m_collection = collection;
     album->m_date       = date;
@@ -1060,6 +1102,12 @@ bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName,
     if (album == d->rootPAlbum)
     {
         errMsg = i18n("Cannot rename root album");
+        return false;
+    }
+
+    if (album->isAlbumRoot())
+    {
+        errMsg = i18n("Cannot rename album root album");
         return false;
     }
 
@@ -1088,6 +1136,7 @@ bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName,
     u      = u.upUrl();
     u.addPath(newName);
 
+    //TODO: Use KIO::NetAccess
     if (::rename(QFile::encodeName(album->folderPath()),
                  QFile::encodeName(u.path(KUrl::RemoveTrailingSlash))) != 0)
     {
@@ -1818,6 +1867,8 @@ void AlbumManager::slotDirty(const QString& path)
             d->dbPathModificationDateList = modList;
         }
     }
+
+    ScanController::instance()->scheduleCollectionScan(path);
 
     /*
     KUrl fileUrl;
