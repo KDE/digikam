@@ -409,9 +409,11 @@ QList<qlonglong> HaarIface::bestMatches(Haar::SignatureData *querySig, int numbe
             }
         }
     }
+
+/*
     for (QMap<float, qlonglong>::iterator it = bestMatches.begin(); it != bestMatches.end(); ++it)
         DDebug() << it.key() << it.value();
-
+*/
     return bestMatches.values();
 }
 
