@@ -126,6 +126,11 @@ public:
         m_type = type;
     }
 
+    void setLabel(const QString &label)
+    {
+        m_label = label;
+    }
+
     QString identifier;
     QString specificPath;
     bool available;
@@ -528,7 +533,7 @@ void CollectionManager::refresh()
     updateLocations();
 }
 
-CollectionLocation CollectionManager::addLocation(const KUrl &fileUrl)
+CollectionLocation CollectionManager::addLocation(const KUrl &fileUrl, const QString &label)
 {
     DDebug() << "addLocation " << fileUrl << endl;
     QString path = fileUrl.path(KUrl::RemoveTrailingSlash);
@@ -544,19 +549,19 @@ CollectionLocation CollectionManager::addLocation(const KUrl &fileUrl)
         DatabaseAccess access;
         // volume.path has a trailing slash. We want to split in front of this.
         QString specificPath = path.mid(volume.path.length() - 1);
-        CollectionLocation::Type type;
+        AlbumRoot::Type type;
         if (volume.isRemovable)
-            type = CollectionLocation::TypeVolumeRemovable;
+            type = AlbumRoot::VolumeRemovable;
         else
-            type = CollectionLocation::TypeVolumeHardWired;
+            type = AlbumRoot::VolumeHardWired;
 
-        access.db()->addAlbumRoot(type, d->volumeIdentifier(volume), specificPath);
+        access.db()->addAlbumRoot(type, d->volumeIdentifier(volume), specificPath, label);
     }
     else
     {
         DWarning() << "Unable to identify a path with Solid. Adding the location with path only." << endl;
-        DatabaseAccess().db()->addAlbumRoot(CollectionLocation::TypeVolumeHardWired,
-                                            d->volumeIdentifier(path), "/");
+        DatabaseAccess().db()->addAlbumRoot(AlbumRoot::VolumeHardWired,
+                                            d->volumeIdentifier(path), "/", label);
     }
 
     // Do not emit the locationAdded signal here, it is done in updateLocations()
@@ -674,6 +679,21 @@ void CollectionManager::removeLocation(const CollectionLocation &location)
     // Do not emit the locationRemoved signal here, it is done in updateLocations()
 
     updateLocations();
+}
+
+void CollectionManager::setLabel(const CollectionLocation &location, const QString &label)
+{
+    DatabaseAccess access;
+
+    AlbumRootLocation *albumLoc = d->locations.value(location.id());
+    if (!albumLoc)
+        return;
+
+    // update db
+    access.db()->setAlbumRootLabel(albumLoc->id(), label);
+
+    // update local structure
+    albumLoc->setLabel(label);
 }
 
 QList<CollectionLocation> CollectionManager::allLocations()

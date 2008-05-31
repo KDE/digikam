@@ -69,8 +69,10 @@ public:
      * Type and availability will be detected.
      * On failure returns null. This would be the case if the given
      * url is already contained in another collection location.
+     * You may pass an optional user-visible label that will be stored in the database.
+     * The label has no further meaning and can be freely chosen.
      */
-    CollectionLocation addLocation(const KUrl &fileUrl);
+    CollectionLocation addLocation(const KUrl &fileUrl, const QString &label = QString());
 
     enum LocationCheckResult
     {
@@ -97,6 +99,11 @@ public:
      * location will be removed from the database, all tags will be lost.
      */
     void removeLocation(const CollectionLocation &location);
+
+    /**
+     * Sets the label of the given location
+     */
+    void setLabel(const CollectionLocation &location, const QString &label);
 
     /**
      * Returns a list of all CollectionLocations stored in the database
