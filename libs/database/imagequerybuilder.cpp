@@ -43,6 +43,7 @@
 // Local includes.
 
 #include "ddebug.h"
+#include "databaseaccess.h"
 #include "albumdb.h"
 #include "geodetictools.h"
 #include "imagequerybuilder.h"
@@ -461,11 +462,29 @@ void ImageQueryBuilder::buildField(QString &sql, SearchXmlCachingReader &reader,
     FieldQueryBuilder fieldQuery(sql, reader, boundValues, hooks, relation);
     if (name == "albumid")
     {
-        fieldQuery.addIntField("Images.album");
+        if (relation == SearchXml::Equal || relation == SearchXml::Unequal)
+        {
+            fieldQuery.addIntField("Images.album");
+        }
+        else if (relation == SearchXml::InTree)
+        {
+            // see also: AlbumDB::getItemNamesInAlbum
+            int albumID = reader.valueToInt();
+            DatabaseAccess access;
+            KUrl url(access.db()->getAlbumRelativePath(albumID));
+            int rootId = access.db()->getAlbumRootId(albumID);
+            sql += "(Images.album IN "
+                   "   (SELECT DISTINCT id "
+                   "    FROM Albums "
+                   "    WHERE albumRoot=? AND (relativePath=? OR relativePath LIKE ?)) )";
+            *boundValues << rootId << url.path() << url.path() + "/%";
+        }
     }
     else if (name == "albumname")
     {
-        fieldQuery.addStringField("Albums.relativePath");
+        //NOTE: InTree like above not implemented (but not used)
+        if (relation == SearchXml::Equal)
+            fieldQuery.addStringField("Albums.relativePath");
     }
     else if (name == "albumcaption")
     {
