@@ -348,7 +348,7 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     d->listView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     d->listView->setAllColumnsShowFocus(true);
     d->listView->setColumnCount(2);
-    d->listView->setWhatsThis(i18n("<p>This shows all duplicates items find in whole collections."));
+    d->listView->setWhatsThis(i18n("<p>This shows all duplicates items found in whole collections."));
     d->listView->header()->hide();
 
     d->updateFingerPrtBtn = new QPushButton(i18n("Update finger-prints"), findDuplicatesPanel);
