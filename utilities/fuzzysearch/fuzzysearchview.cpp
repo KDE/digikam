@@ -53,6 +53,8 @@
 
 #include "album.h"
 #include "albummanager.h"
+#include "albumdb.h"
+#include "databaseaccess.h"
 #include "ddebug.h"
 #include "ddragobjects.h"
 #include "imageinfo.h"
@@ -819,7 +821,27 @@ void FuzzySearchView::slotSaveImageSAlbum()
 
 void FuzzySearchView::slotFindDuplicates()
 {
-    // TODO
+    AlbumDB *db                 = DatabaseAccess().db();
+    QList<AlbumShortInfo> aList = db->getAlbumShortInfos();
+    QList<qlonglong> idList;
+
+    // Get all items DB id from all albums and all collections
+    for (QList<AlbumShortInfo>::const_iterator it = aList.begin(); it != aList.end(); ++it)
+    {
+        idList += db->getItemIDsInAlbum((*it).id);
+    }
+
+    HaarIface haarIface;
+    QMap< qlonglong, QList<qlonglong> > results = haarIface.findDuplicates(idList);
+
+    DDebug() << "Find duplicates (" << idList.count() << " items):" << endl;
+
+    for (QMap< qlonglong, QList<qlonglong> >::const_iterator it = results.begin();
+         it != results.end(); ++it)
+    {
+        DDebug() << "id: " << it.key() << " => " << it.value() << endl;
+    }
+
 }
 
 }  // NameSpace Digikam
