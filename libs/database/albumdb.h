@@ -121,22 +121,16 @@ public:
     QList<AlbumRootInfo> getAlbumRoots();
 
     /**
-     * Returns all albums with a specified status and their attributes in the database
-     * @param status The status that the requested album roots shall have
-     * @return a list of albums and their attributes
-     */
-    //QList<AlbumRootInfo> getAlbumRootsWithStatus(int status);
-
-    /**
      * Add a new album to the database with the given attributes
      * @param type The type of the album root
      * @param absolutePath The last absolute path in the file system.
      *                     The usage of this parameter is up to the CollectionManager
      * @param uuid         The volume UUID of the volume this album root is contained on.
      * @param specificPath The path specific to volume
+     * @param label        An (optional) user-visible label
      * @returns the album root id of the newly created root
      */
-    int addAlbumRoot(int type, const QString &identifier, const QString &specificPath);
+    int addAlbumRoot(AlbumRoot::Type type, const QString &identifier, const QString &specificPath, const QString &label);
 
     /**
      * Deletes an album  root from the database.
@@ -145,17 +139,15 @@ public:
     void deleteAlbumRoot(int rootId);
 
     /**
-     * Returns the status of the album root with the given id,
-     * or -1 if no such album root exists.
+     * Changes the label of the specified album root
+     * @param rootId the id of the album root
      */
-    //int getAlbumRootStatus(int rootId);
+    void setAlbumRootLabel(int rootId, const QString &newLabel);
 
     /**
-     * Sets the status and absolutePath of the album root with given id.
-     * @param status The new status
-     * @param absolutePath The new absolute path. If this is null, it will not be changed.
+     * Sets the type of the specified album root to a new value.
      */
-    //void setAlbumRootStatus(int rootId, int status, const QString &absolutePath = QString());
+    void changeAlbumRootType(int rootId, AlbumRoot::Type newType);
 
     // ----------- Album Listing operations -----------
     /**

@@ -62,6 +62,7 @@ public:
     AlbumRootInfo() : id(0), type(AlbumRoot::UndefinedType) {};
 
     int id;
+    QString label;
     AlbumRoot::Type type;
     int status;
     QString identifier;

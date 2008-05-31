@@ -89,12 +89,14 @@ QList<AlbumRootInfo> AlbumDB::getAlbumRoots()
     QList<AlbumRootInfo> list;
 
     QList<QVariant> values;
-    d->db->execSql( "SELECT id, status, type, identifier, specificPath FROM AlbumRoots;", &values );
+    d->db->execSql( "SELECT id, label, status, type, identifier, specificPath FROM AlbumRoots;", &values );
 
     for (QList<QVariant>::iterator it = values.begin(); it != values.end();)
     {
         AlbumRootInfo info;
         info.id           = (*it).toInt();
+        ++it;
+        info.label        = (*it).toString();
         ++it;
         info.status       = (*it).toInt();
         ++it;
@@ -111,43 +113,12 @@ QList<AlbumRootInfo> AlbumDB::getAlbumRoots()
     return list;
 }
 
-/*
-QList<AlbumRootInfo> AlbumDB::getAlbumRootsWithStatus(int status)
-{
-    QList<AlbumRootInfo> list;
-
-    QList<QVariant> values;
-    d->db->execSql( "SELECT id, absolutePath, type, uuid, specificPath FROM AlbumRoots "
-                    " WHERE status=?;", status, &values );
-
-    for (QList<QVariant>::iterator it = values.begin(); it != values.end();)
-    {
-        AlbumRootInfo info;
-        info.id           = (*it).toInt();
-        ++it;
-        info.status       = status;
-        info.absolutePath = (*it).toString();
-        ++it;
-        info.type         = (*it).toInt();
-        ++it;
-        info.uuid         = (*it).toString();
-        ++it;
-        info.specificPath = (*it).toString();
-        ++it;
-
-        list << info;
-    }
-
-    return list;
-}
-*/
-
-int AlbumDB::addAlbumRoot(int type, const QString &identifier, const QString &specificPath)
+int AlbumDB::addAlbumRoot(AlbumRoot::Type type, const QString &identifier, const QString &specificPath, const QString &label)
 {
     QVariant id;
-    d->db->execSql( QString("REPLACE INTO AlbumRoots (type, status, identifier, specificPath) "
+    d->db->execSql( QString("REPLACE INTO AlbumRoots (type, label, status, identifier, specificPath) "
                             "VALUES(?, 0, ?, ?);"),
-                    type, identifier, specificPath, 0, &id);
+                    (int)type, label, identifier, specificPath, 0, &id);
 
     d->db->recordChangeset(AlbumRootChangeset(id.toInt(), AlbumRootChangeset::Added));
     return id.toInt();
@@ -160,32 +131,21 @@ void AlbumDB::deleteAlbumRoot(int rootId)
     d->db->recordChangeset(AlbumRootChangeset(rootId, AlbumRootChangeset::Deleted));
 }
 
-/*
-int AlbumDB::getAlbumRootStatus(int rootId)
+void AlbumDB::setAlbumRootLabel(int rootId, const QString &newLabel)
 {
-    QList<QVariant> values;
-
-    d->db->execSql( QString("SELECT status FROM AlbumRoots WHERE id=?;"),
-                    rootId, &values );
-
-    if (!values.isEmpty())
-        return values.first().toInt();
-    else
-        return -1;
+    d->db->execSql( QString("UPDATE AlbumRoots SET label=? WHERE id=?;"),
+                    newLabel, rootId);
+    d->db->recordChangeset(AlbumRootChangeset(rootId, AlbumRootChangeset::PropertiesChanged));
 }
-*/
 
-/*
-void AlbumDB::setAlbumRootStatus(int rootId, int status, const QString &absolutePath)
+void AlbumDB::changeAlbumRootType(int rootId, AlbumRoot::Type newType)
 {
-    if (absolutePath.isNull())
-        d->db->execSql( QString("UPDATE AlbumRoots SET status=? WHERE id=?;"),
-                        status, rootId );
-    else
-        d->db->execSql( QString("UPDATE AlbumRoots SET status=?, absolutePath=? WHERE id=?;"),
-                        status, absolutePath, rootId );
+    d->db->execSql( QString("UPDATE AlbumRoots SET type=? WHERE id=?;"),
+                    (int)newType, rootId);
+    d->db->recordChangeset(AlbumRootChangeset(rootId, AlbumRootChangeset::PropertiesChanged));
 }
-*/
+
+
 
 AlbumInfo::List AlbumDB::scanAlbums()
 {
