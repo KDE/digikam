@@ -635,7 +635,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->imageFindSimilarAction = new KAction(KIcon("tools-wizard"), i18n("Find Similiar..."), this);
+    d->imageFindSimilarAction = new KAction(KIcon("tools-wizard"), i18n("Find Similar..."), this);
     d->imageFindSimilarAction->setWhatsThis(i18n("Find similar images using selected item as reference."));
     connect(d->imageFindSimilarAction, SIGNAL(triggered()), d->view, SLOT(slotImageFindSimilar()));
     actionCollection()->addAction("image_find_similar", d->imageFindSimilarAction);
