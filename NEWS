@@ -4,6 +4,8 @@ digiKam 0.9.4-RC - Release date: 2008-06-??
 
 NEW FEATURES:
 
+General        : duing a bug in Sqlite, libsqlite depency fixed to >= 3.5.9.
+
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 162496 : When Digikam saves file as JPEG - JPG options are not always presented.
@@ -11,7 +13,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 003 ==> 148400 : Problem loading 16bit Grayscale TIFF image.
 004 ==> 160925 : digiKam crash, I don't know why, but I have the bugreport.
 005 ==> 162691 : 0.9.4 beta5 compile error imagehistogram.cpp.
-006 ==> 
+006 ==> 160966 : Some searches don't work properly with the new sqlite3-3.5.8.
+007 ==> 
 
 **********************************************************************************************
 
