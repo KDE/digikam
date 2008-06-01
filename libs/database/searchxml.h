@@ -73,7 +73,8 @@ namespace SearchXml
         OneOf,
         InTree,
         NotInTree,
-        Near
+        Near,
+        Inside
     };
 
     template <typename T>

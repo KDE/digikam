@@ -239,6 +239,8 @@ SearchXml::Relation SearchXmlReader::readRelation(const QString &attributeName,
         return SearchXml::NotInTree;
     else if (relation == "near")
         return SearchXml::Near;
+    else if (relation == "inside")
+        return SearchXml::Inside;
 
     return defaultRelation;
 }
@@ -457,6 +459,9 @@ void SearchXmlWriter::writeRelation(const QString &attributeName, SearchXml::Rel
             break;
         case SearchXml::Near:
             writeAttribute(attributeName, "near");
+            break;
+        case SearchXml::Inside:
+            writeAttribute(attributeName, "inside");
             break;
     }
 }
