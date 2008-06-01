@@ -451,6 +451,34 @@ public:
 
             sql += " ) ";
         }
+        else if (relation == SearchXml::Inside)
+        {
+            // First read attributes
+            QStringRef type = reader.attributes().value("type");
+            // Search type, currently only "rectangle"
+            if (type != "rectangle")
+                return;
+
+            // Get a list of doubles:
+            // Longitude and Latitude in (decimal) degrees
+            QList<double> list = reader.valueToDoubleList();
+            if (list.size() < 4)
+                return;
+            // the list contains (lon1,lat1), (lon2,lat2) in this order,
+            // like (x,y), (right,bottom) of a rectangle,
+            // or like (West,North), (East,South),
+            // where the searched region contains any lon,lat
+            //  where lon1 > lon > lon2 and lat1 < lat < lat2.
+            double lon1,lat1,lon2,lat2;
+            lon1 = list[0];
+            lat1 = list[1];
+            lon2 = list[2];
+            lat2 = list[3];
+
+            sql += " ( ImagePositions.LongitudeNumber > ? AND ImagePositions.LatitudeNumber < ? "
+                   "   AND ImagePositions.LongitudeNumber < ? AND ImagePositions.LatitudeNumber > ? ) ";
+            *boundValues << lon1 << lat1 << lon2 << lat2;
+        }
     }
 };
 
