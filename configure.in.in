@@ -78,7 +78,7 @@ AC_LANG_RESTORE
 LIB_SQLITE3=""
 
 if test x$PKGCONFIGFOUND = xyes; then
-   KDE_PKG_CHECK_MODULES(SQLITE, sqlite3 >= 3.0, have_sqlite3=yes,have_sqlite3=no)
+   KDE_PKG_CHECK_MODULES(SQLITE, sqlite3 >= 3.5.9, have_sqlite3=yes,have_sqlite3=no)
 
    if test x$have_sqlite3 = xyes; then
       LIB_SQLITE3=`pkg-config --libs sqlite3`

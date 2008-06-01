@@ -7,8 +7,10 @@ echo "-- digiKam configure results -------------------"
 if test "x$have_sqlite3" != "xyes"; then
   echo "-- libsqlite3 library found....... NO"
   echo ""
-  echo "digiKam needs sqlite3. You need to install sqlite3 3.x, e.g. from"
-  echo "http://www.sqlite.org"
+  echo "digiKam needs libsqlite3 library development package."
+  echo "You need to install the right version first."
+  echo "Look depencies description from README for details."
+  echo "libsqlite3 website is http://www.sqlite.org"
   echo ""
   all_tests=bad
 else
@@ -18,30 +20,23 @@ fi
 if test -z "$GPHOTO_CONFIG" ; then
   echo "-- libgphoto2 library found....... NO"
   echo ""
-  echo "digiKam needs libgphoto2. You need to install libgphoto2, e.g. from"
-  echo "http://www.gphoto.org/download.html"
+  echo "digiKam needs libgphoto2 library development package."
+  echo "You need to install the right version first."
+  echo "Look depencies description from README for details."
+  echo "libgphoto2 website is http://www.gphoto.org"
   echo ""
   all_tests=bad
 else
   echo "-- libgphoto2 library found....... YES"
 fi
 
-if test "x$have_libkipi" != "xyes"; then
-  echo "-- libkipi library found.......... NO"
-  echo ""
-  echo "digiKam needs libkipi library >= 0.1.5. You need to install libkipi first"
-  echo "libkipi website is at http://www.kipi-plugins.org"
-  echo ""
-  all_tests=bad
-else
-  echo "-- libkipi library found.......... YES"
-fi
-
 if test "x$have_tiff" != "xyes"; then
   echo "-- libtiff library found.......... NO"
   echo ""
-  echo "digiKam needs libtiff. You need to install the libtiff development package."
-  echo "libtiff website is at http://www.remotesensing.org/libtiff"
+  echo "digiKam needs libtiff library development package."
+  echo "You need to install the right version first."
+  echo "Look depencies description from README for details."
+  echo "libtiff website is http://www.remotesensing.org/libtiff"
   echo ""
   all_tests=bad
 else
@@ -51,8 +46,10 @@ fi
 if test "x$have_png" != "xyes"; then
   echo "-- libpng library found........... NO"
   echo ""
-  echo "digiKam needs libpng. You need to install the correct version (>= 1.2.7)."
-  echo "Libpng website is at http://www.libpng.org/pub/png/libpng.html"
+  echo "digiKam needs libpng library development package."
+  echo "You need to install the right version first."
+  echo "Look depencies description from README for details."
+  echo "libpng website is http://www.libpng.org/pub/png/libpng.html"
   echo ""
   all_tests=bad
 else
@@ -62,9 +59,10 @@ fi
 if test "x$have_jasper" != "xyes"; then
   echo "-- libjasper library found........ NO"
   echo ""
-  echo "digiKam needs libjasper to support JPEG2000. "
-  echo "You need to install the correct version (>= 1.7.0)."
-  echo "Libjasper website is at http://www.ece.uvic.ca/~mdadams/jasper"
+  echo "digiKam needs libjasper library development package."
+  echo "You need to install the right version first."
+  echo "Look depencies description from README for details."
+  echo "libjasper website is http://www.ece.uvic.ca/~mdadams/jasper"
   echo "Important note: libjasper has to be configured with --enable-shared=yes"
   echo "as otherwise the required dynamic libraries are not created."
   echo ""
@@ -76,19 +74,36 @@ fi
 if test "x$have_lcms" != "xyes"; then
   echo "-- liblcms library found.......... NO"
   echo ""
-  echo "digiKam needs Lcms library. You need to install the lcms development package."
-  echo "Lcms website is at http://www.littlecms.com"
+  echo "digiKam needs liblcms library development package."
+  echo "You need to install the right version first."
+  echo "Look depencies description from README for details."
+  echo "liblcms website is http://www.littlecms.com"
   echo ""
   all_tests=bad
 else
   echo "-- liblcms library found.......... YES"
 fi
 
+if test "x$have_libkipi" != "xyes"; then
+  echo "-- libkipi library found.......... NO"
+  echo ""
+  echo "digiKam needs libkipi library development package."
+  echo "You need to install the right version first."
+  echo "Look depencies description from README for details."
+  echo "libkipi website is http://www.kipi-plugins.org"
+  echo ""
+  all_tests=bad
+else
+  echo "-- libkipi library found.......... YES"
+fi
+
 if test "x$have_libkexiv2" != "xyes"; then
   echo "-- libkexiv2 library found........ NO"
   echo ""
-  echo "digiKam needs libkexiv2 library >= 0.1.6. You need to install libkexiv2 first"
-  echo "libkexiv2 website is at http://www.kipi-plugins.org"
+  echo "digiKam needs libkexiv2 library development package."
+  echo "You need to install the right version first."
+  echo "Look depencies description from README for details."
+  echo "libkexiv2 website is http://www.kipi-plugins.org"
   echo ""
   all_tests=bad
 else
@@ -98,7 +113,9 @@ fi
 if test "x$have_libkdcraw" != "xyes"; then
   echo "-- libkdcraw library found........ NO"
   echo ""
-  echo "digiKam needs libkdcraw library >= 0.1.4. You need to install libkdcraw first"
+  echo "digiKam needs libkdcraw library development package."
+  echo "You need to install the right version first."
+  echo "Look depencies description from README for details."
   echo "libkdcraw website is at http://www.kipi-plugins.org"
   echo ""
   all_tests=bad
