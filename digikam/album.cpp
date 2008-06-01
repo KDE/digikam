@@ -556,6 +556,11 @@ bool SAlbum::isHaarSearch() const
     return m_type == DatabaseSearch::HaarSearch;
 }
 
+bool SAlbum::isMapSearch() const
+{
+    return m_type == DatabaseSearch::MapSearch;
+}
+
 // --------------------------------------------------------------------------
 
 AlbumIterator::AlbumIterator(Album *album)
