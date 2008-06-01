@@ -31,7 +31,7 @@ kio_digikamthumbnail_la_LDFLAGS = -module -avoid-version $(KDE_PLUGIN) $(all_lib
 
 kio_digikamtags_la_SOURCES = digikamtags.cpp sqlitedb.cpp
 
-kio_digikamtags_la_LIBADD  = $(LIB_KIO)  $(LIB_SQLITE3)
+kio_digikamtags_la_LIBADD  = $(LIB_KIO) $(top_builddir)/digikam/libs/sqlite3/libsqlite3.la 
 
 kio_digikamtags_la_LDFLAGS = -module -avoid-version $(all_libraries) $(KDE_PLUGIN) 
 
@@ -40,7 +40,7 @@ kio_digikamtags_la_LDFLAGS = -module -avoid-version $(all_libraries) $(KDE_PLUGI
 kio_digikamalbums_la_SOURCES = digikamalbums.cpp sqlitedb.cpp
 
 kio_digikamalbums_la_LIBADD  = $(top_builddir)/digikam/libs/jpegutils/libjpegutils.la \
-	                           $(LIB_KIO) $(LIB_SQLITE3) \
+	                           $(LIB_KIO) $(top_builddir)/digikam/libs/sqlite3/libsqlite3.la \
 	                           $(top_builddir)/digikam/libs/dimg/libdimg.la 
 
 kio_digikamalbums_la_LDFLAGS = -module -avoid-version $(all_libraries) $(KDE_PLUGIN) 
@@ -49,7 +49,7 @@ kio_digikamalbums_la_LDFLAGS = -module -avoid-version $(all_libraries) $(KDE_PLU
 
 kio_digikamdates_la_SOURCES = digikamdates.cpp sqlitedb.cpp
 
-kio_digikamdates_la_LIBADD  = $(LIB_KIO) $(LIB_SQLITE3)
+kio_digikamdates_la_LIBADD  = $(LIB_KIO) $(top_builddir)/digikam/libs/sqlite3/libsqlite3.la
 
 kio_digikamdates_la_LDFLAGS = -module -avoid-version $(all_libraries) $(KDE_PLUGIN) 
 
@@ -57,6 +57,6 @@ kio_digikamdates_la_LDFLAGS = -module -avoid-version $(all_libraries) $(KDE_PLUG
 
 kio_digikamsearch_la_SOURCES = digikamsearch.cpp sqlitedb.cpp
 
-kio_digikamsearch_la_LIBADD  = $(LIB_KIO) $(LIB_SQLITE3)
+kio_digikamsearch_la_LIBADD  = $(LIB_KIO) $(top_builddir)/digikam/libs/sqlite3/libsqlite3.la
 
 kio_digikamsearch_la_LDFLAGS = -module -avoid-version $(all_libraries) $(KDE_PLUGIN) 

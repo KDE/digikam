@@ -29,7 +29,7 @@
 
 extern "C"
 {
-#include <sqlite3.h>
+#include "sqlite3.h"
 #include <sys/time.h>
 }
 

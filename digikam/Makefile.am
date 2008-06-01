@@ -1,6 +1,7 @@
 METASOURCES = AUTO
 
 INCLUDES = -I$(top_srcdir)/digikam/libs/sqlite2 \
+	   -I$(top_srcdir)/digikam/libs/sqlite3 \
 	   -I$(top_srcdir)/digikam/libs/histogram \
 	   -I$(top_srcdir)/digikam/libs/levels \
 	   -I$(top_srcdir)/digikam/libs/curves \
@@ -102,13 +103,13 @@ libdigikam_la_SOURCES = kdateedit.cpp \
 	                welcomepageview.cpp 
 
 libdigikam_la_LIBADD = $(LIB_KIO) \
-	               $(LIB_SQLITE3) \
 	               $(LIB_KABC) \
 	               $(LIB_KHTML) \
 	               $(LIBKIPI_LIBS) \
 	               $(LIBKEXIV2_LIBS) \
 	               $(LIB_KUTILS) \
 	               $(top_builddir)/digikam/libs/sqlite2/libsqlite2.la \
+	               $(top_builddir)/digikam/libs/sqlite3/libsqlite3.la \
 	               $(top_builddir)/digikam/libs/thumbbar/libthumbbar.la \
 	               $(top_builddir)/digikam/libs/themeengine/libthemeengine.la \
 	               $(top_builddir)/digikam/libs/widgets/libwidgets.la \

@@ -71,26 +71,6 @@ AC_LANG_RESTORE
 
 # -----------------------------------------------------------------
 #
-# Check for libsqlite3
-#
-# -----------------------------------------------------------------
-
-LIB_SQLITE3=""
-
-if test x$PKGCONFIGFOUND = xyes; then
-   KDE_PKG_CHECK_MODULES(SQLITE, sqlite3 >= 3.5.9, have_sqlite3=yes,have_sqlite3=no)
-
-   if test x$have_sqlite3 = xyes; then
-      LIB_SQLITE3=`pkg-config --libs sqlite3`
-   else
-      DO_NOT_COMPILE="$DO_NOT_COMPILE digikam"
-   fi
-fi
-
-AC_SUBST(LIB_SQLITE3)
-
-# -----------------------------------------------------------------
-#
 # Check for liblcms
 #
 # -----------------------------------------------------------------
