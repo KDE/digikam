@@ -168,7 +168,7 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface *iface, Q
 
     connect(d->tagsSearchBar, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotTagsSearchTextChanged(const QString&)));
-               
+
     connect(d->searchesSearchBar, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotSearchesSearchTextChanged(const QString&)));
 }
@@ -245,6 +245,8 @@ void KipiImageCollectionSelector::populateTreeView(const AlbumList& aList, QTree
                             item->setIcon(0, KIcon("clock"));
                         else if (salbum->isHaarSearch())
                             item->setIcon(0, KIcon("tools-wizard"));
+                        else if (salbum->isMapSearch())
+                            item->setIcon(0, KIcon("applications-internet"));
                         else
                             item->setIcon(0, KIcon("edit-find"));
                     }
