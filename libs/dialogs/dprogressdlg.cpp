@@ -112,6 +112,7 @@ DProgressDlg::DProgressDlg(QWidget *parent, const QString &caption)
     d->actionsList->setAllColumnsShowFocus(true);
     d->actionsList->setColumnCount(2);
     d->actionsList->header()->hide();
+    d->actionsList->setColumnWidth(0, 40);
     d->actionsList->setIconSize(QSize(32, 32));
 
     QStringList labels;
