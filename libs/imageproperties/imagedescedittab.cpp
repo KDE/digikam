@@ -501,6 +501,7 @@ void ImageDescEditTab::slotApplyAllChanges()
     d->revertBtn->setEnabled(false);
 
     updateRecentTags();
+    updateTagsView();
 }
 
 void ImageDescEditTab::slotRevertAllChanges()
