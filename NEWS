@@ -14,7 +14,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 004 ==> 160925 : digiKam crash, I don't know why, but I have the bugreport.
 005 ==> 162691 : 0.9.4 beta5 compile error imagehistogram.cpp.
 006 ==> 160966 : Some searches don't work properly with the new sqlite3-3.5.8.
-007 ==> 
+007 ==> 162245 : Assigned tag list not updated correctly when "show assigned tags" filter is active.
+008 ==> 
 
 **********************************************************************************************
 
