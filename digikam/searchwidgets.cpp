@@ -351,19 +351,34 @@ void SearchAdvancedRule::setValueWidget(valueWidgetTypes oldType, valueWidgetTyp
         AlbumList tList = aManager->allTAlbums();
 
         m_itemsIndexIDMap.clear();
-        int index = 0;
+        
+        // First we need to sort the tags.
+        // We create a map with the album tagPath as key, so that it is
+        // automatically sorted.
+        typedef QMap<QString, int> sortedList;
+        sortedList sTList;
+        sTList.clear();
+        
         for ( AlbumList::Iterator it = tList.begin();
               it != tList.end(); ++it )
         {
             TAlbum *album = (TAlbum*)(*it);
             if ( !album->isRoot() )
             {
-                m_valueCombo->insertSqueezedItem( album->tagPath(false), index );
-                m_itemsIndexIDMap.insert( index, album->id() );
-                ++index;
+                sTList.insert(album->tagPath(true), album->id());
             }
         }
-
+        
+        // Then we iterate over the sorted list and fill the combobox
+        int index = 0;
+        for (sortedList::Iterator it = sTList.begin();
+             it != sTList.end(); ++it)
+        {
+            m_valueCombo->insertSqueezedItem( it.key(), index );
+            m_itemsIndexIDMap.insert( index, it.data() );
+            ++index;
+        }
+        
         m_valueCombo->show();
 
         connect( m_valueCombo, SIGNAL( activated(int) ),
