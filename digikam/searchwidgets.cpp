@@ -357,7 +357,6 @@ void SearchAdvancedRule::setValueWidget(valueWidgetTypes oldType, valueWidgetTyp
         // automatically sorted.
         typedef QMap<QString, int> sortedList;
         sortedList sTList;
-        sTList.clear();
         
         for ( AlbumList::Iterator it = tList.begin();
               it != tList.end(); ++it )
@@ -369,7 +368,7 @@ void SearchAdvancedRule::setValueWidget(valueWidgetTypes oldType, valueWidgetTyp
             }
         }
         
-        // Then we iterate over the sorted list and fill the combobox
+        // Now we can iterate over the sorted list and fill the combobox
         int index = 0;
         for (sortedList::Iterator it = sTList.begin();
              it != sTList.end(); ++it)
