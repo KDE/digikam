@@ -189,7 +189,7 @@ void GPSSearchFolderView::slotAlbumAdded(Album* a)
     SAlbum *salbum  = dynamic_cast<SAlbum*>(a);
     if (!salbum) return;
 
-    if (!salbum->isHaarSearch())
+    if (!salbum->isMapSearch())
         return;
 
     GPSSearchFolderItem* item = new GPSSearchFolderItem(this, salbum);
@@ -207,10 +207,8 @@ void GPSSearchFolderView::slotAlbumCurrentChanged(Album* a)
     SAlbum *salbum  = dynamic_cast<SAlbum*>(a);
     if (!salbum) return;
 
-/* FIXME
-    if (!salbum->isHaarSearch())
+    if (!salbum->isMapSearch())
         return;
-*/
 
     GPSSearchFolderItem* item = (GPSSearchFolderItem*) salbum->extraData(this);
     if (item)
