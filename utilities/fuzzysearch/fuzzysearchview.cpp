@@ -23,6 +23,7 @@
 
 // Qt includes.
 
+#include <QTime>
 #include <QImage>
 #include <QLabel>
 #include <QFrame>
@@ -831,17 +832,23 @@ void FuzzySearchView::slotFindDuplicates()
         idList += db->getItemIDsInAlbum((*it).id);
     }
 
+    QTime duration;
+    duration.start();
+
     HaarIface haarIface;
     QMap< qlonglong, QList<qlonglong> > results = haarIface.findDuplicates(idList);
 
-    DDebug() << "Find duplicates (" << idList.count() << " items):" << endl;
+    QTime t;
+    t = t.addMSecs(duration.elapsed());
+
+    DDebug() << "Find duplicates (" << idList.count() << " scanned items in " 
+             << t.toString() << "seconds ):" << endl;
 
     for (QMap< qlonglong, QList<qlonglong> >::const_iterator it = results.begin();
          it != results.end(); ++it)
     {
         DDebug() << "id: " << it.key() << " => " << it.value() << endl;
     }
-
 }
 
 }  // NameSpace Digikam
