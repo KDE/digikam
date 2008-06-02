@@ -5,6 +5,7 @@ digiKam 0.9.4-RC - Release date: 2008-06-??
 NEW FEATURES:
 
 General        : external libsqlite3 depency removed. sqlite3 source code is now included in digiKam core.
+                 (see B.K.O #160966)
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
