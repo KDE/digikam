@@ -778,7 +778,6 @@ void FuzzySearchView::createNewFuzzySearchAlbumFromImage(const QString& name)
 
     // We query database here
 
-    HaarIface haarIface;
     SearchXmlWriter writer;
 
     writer.writeGroup();
