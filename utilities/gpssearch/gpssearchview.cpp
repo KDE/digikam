@@ -145,7 +145,7 @@ GPSSearchView::GPSSearchView(QWidget *parent)
     readConfig();
 
     // ---------------------------------------------------------------
-/*
+
     connect(d->gpsSearchFolderView, SIGNAL(signalAlbumSelected(SAlbum*)),
             this, SLOT(slotAlbumSelected(SAlbum*)));
 
@@ -163,7 +163,7 @@ GPSSearchView::GPSSearchView(QWidget *parent)
 
     connect(d->nameEdit, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotCheckNameEditGPSConditions()));
-*/
+
     // ---------------------------------------------------------------
 
     slotCheckNameEditGPSConditions();
@@ -177,7 +177,8 @@ GPSSearchView::~GPSSearchView()
 
 void GPSSearchView::readConfig()
 {
-/*    KSharedConfig::Ptr config = KGlobal::config();
+/*  FIXME
+    KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(QString("GPSSearch SideBar"));
 
     d->tabWidget->setCurrentIndex(group.readEntry("GPSSearch Tab",
@@ -195,7 +196,8 @@ void GPSSearchView::readConfig()
 
 void GPSSearchView::writeConfig()
 {
-/*    KSharedConfig::Ptr config = KGlobal::config();
+/*  FIXME
+    KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(QString("GPSSearch SideBar"));
     group.writeEntry("GPSSearch Tab",        d->tabWidget->currentIndex());
     group.writeEntry("Pen Sketch Size",        d->penSize->value());
@@ -240,28 +242,31 @@ void GPSSearchView::slotSaveGPSSAlbum()
 
 void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
 {
-/*TODO    AlbumManager::instance()->setCurrentAlbum(0);
+    AlbumManager::instance()->setCurrentAlbum(0);
 
-    if (d->sketchWidget->isClear())
+    if (!d->gpsSearchWidget->asSelection())
         return;
 
     // We query database here
 
-    HaarIface haarIface;
-    SearchXmlWriter writer;
+    QRectF coordinateRectangle = d->gpsSearchWidget->selectionCoordinates();
+    QList<double> coordinates;
+    // coordinates as lon1, lat1,lon2, lat2  or West, North, East, South
+    coordinates << coordinateRectangle.left() << coordinateRectangle.top()
+                << coordinateRectangle.right() << coordinateRectangle.bottom();
 
+    SearchXmlWriter writer;
     writer.writeGroup();
-    writer.writeField("similarity", SearchXml::Like);
-    writer.writeAttribute("type", "signature");         // we pass a signature
-    writer.writeAttribute("numberofresults", QString::number(d->resultsSketch->value()));
-    writer.writeAttribute("sketchtype", "handdrawn");
-    writer.writeValue(haarIface.signatureAsText(d->sketchWidget->sketchImage()));
+    writer.writeField("position", SearchXml::Inside);
+    writer.writeAttribute("type", "rectangle");
+    writer.writeValue(coordinates);
     writer.finishField();
     writer.finishGroup();
 
+    /* FIXME
     SAlbum* salbum = AlbumManager::instance()->createSAlbum(name, DatabaseSearch::HaarSearch, writer.xml());
     AlbumManager::instance()->setCurrentAlbum(salbum);
-*/
+    */
 }
 
 void GPSSearchView::slotAlbumSelected(SAlbum* salbum)
@@ -270,7 +275,8 @@ void GPSSearchView::slotAlbumSelected(SAlbum* salbum)
         return;
 
     AlbumManager::instance()->setCurrentAlbum(salbum);
-/*
+
+/*  FIXME
     SearchXmlReader reader(salbum->query());
     reader.readToFirstField();
     QStringRef type             = reader.attributes().value("type");
@@ -287,7 +293,6 @@ void GPSSearchView::slotAlbumSelected(SAlbum* salbum)
     {
         d->sketchSAlbum = salbum;
         d->tabWidget->setCurrentIndex((int)GPSSearchViewPriv::SKETCH);
-
     }*/
 }
 
@@ -326,18 +331,18 @@ bool GPSSearchView::checkAlbum(const QString& name) const
 
 void GPSSearchView::slotCheckNameEditGPSConditions()
 {
-/*    if (!d->sketchWidget->isClear())
+    if (d->gpsSearchWidget->asSelection())
     {
-        d->nameEditSketch->setEnabled(true);
+        d->nameEdit->setEnabled(true);
 
-        if (!d->nameEditSketch->text().isEmpty())
-            d->saveBtnSketch->setEnabled(true);
+        if (!d->nameEdit->text().isEmpty())
+            d->saveBtn->setEnabled(true);
     }
     else
     {
-        d->nameEditSketch->setEnabled(false);
-        d->saveBtnSketch->setEnabled(false);
-    }*/
+        d->nameEdit->setEnabled(false);
+        d->saveBtn->setEnabled(false);
+    }
 }
 
 void GPSSearchView::slotRenameAlbum(SAlbum* salbum)

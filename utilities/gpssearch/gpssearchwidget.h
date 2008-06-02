@@ -27,6 +27,7 @@
 // Qt includes.
 
 #include <QLabel>
+#include <QRect>
 
 // Local includes.
 
@@ -52,6 +53,10 @@ public:
     GPSSearchWidget(QWidget *parent=0);
     ~GPSSearchWidget();
 
+    bool asSelection() const;
+
+    QRectF selectionCoordinates() const;
+
 private:
 
     GPSSearchWidgetPriv *d;
@@ -67,6 +72,11 @@ public:
 
     GPSSearchWidget(QWidget *parent=0);
     ~GPSSearchWidget();
+
+    bool asSelection() const { return false; };
+
+    QRectF selectionCoordinates() const { return QRectF(); };
+
 };
 
 #endif // HAVE_MARBLEWIDGET

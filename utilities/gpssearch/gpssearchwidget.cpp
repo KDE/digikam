@@ -21,11 +21,6 @@
  *
  * ============================================================ */
 
-// Qt includes.
-
-#include <QLabel>
-#include <QPoint>
-
 // KDE includes.
 
 #include <klocale.h>
@@ -62,6 +57,18 @@ GPSSearchWidget::GPSSearchWidget(QWidget *parent)
 GPSSearchWidget::~GPSSearchWidget()
 {
     delete d;
+}
+
+bool GPSSearchWidget::asSelection() const
+{
+    // FIXME
+    return false;
+}
+
+QRectF GPSSearchWidget::selectionCoordinates() const
+{
+    // FIXME
+    return QRectF();
 }
 
 #else // // HAVE_MARBLEWIDGET
