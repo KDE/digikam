@@ -688,7 +688,7 @@ void DigikamView::slotAlbumAdded(Album *album)
                     d->timeLineView->searchBar()->completionObject()->addItem(salbum->title());
                 else if (salbum->isHaarSearch())
                     d->fuzzySearchView->searchBar()->completionObject()->addItem(salbum->title());
-                else  // map search
+                else if (salbum->isMapSearch())
                     d->gpsSearchView->searchBar()->completionObject()->addItem(salbum->title());
 
                 break;
@@ -743,7 +743,7 @@ void DigikamView::slotAlbumDeleted(Album *album)
                     d->timeLineView->searchBar()->completionObject()->removeItem(salbum->title());
                 else if (salbum->isHaarSearch())
                     d->fuzzySearchView->searchBar()->completionObject()->removeItem(salbum->title());
-                else  // map search
+                else if (salbum->isMapSearch())
                     d->gpsSearchView->searchBar()->completionObject()->removeItem(salbum->title());
 
                 break;
@@ -801,7 +801,7 @@ void DigikamView::slotAlbumRenamed(Album *album)
                     d->fuzzySearchView->searchBar()->completionObject()->addItem(salbum->title());
                     d->fuzzySearchView->folderView()->slotTextSearchFilterChanged(d->fuzzySearchView->searchBar()->text());
                 }
-                else  // map search
+                else if (salbum->isMapSearch())
                 {
                     d->gpsSearchView->searchBar()->completionObject()->addItem(salbum->title());
                     d->gpsSearchView->folderView()->slotTextSearchFilterChanged(d->gpsSearchView->searchBar()->text());
