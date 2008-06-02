@@ -835,7 +835,7 @@ void LightTableWindow::setLeftRightItems(const ImageInfoList &list)
 
     ImageInfo *info = l.first();
 
-    LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(d->barView->findItemByInfo(info));
+    LightTableBarItem *ltItem = d->barView->findItemByInfo(info);
 
 
     if (l.count()==1)
@@ -1139,7 +1139,12 @@ void LightTableWindow::slotRemoveItem(ImageInfo* info)
         {
             // See if there is an item next to the left one:
             LightTableBarItem *ltItem = d->barView->findItemByInfo(new_linfo);
-            LightTableBarItem* next   = dynamic_cast<LightTableBarItem*>(ltItem->next());
+            LightTableBarItem* next = 0;
+            // re-check if ltItem is really set
+            if (ltItem)
+            {
+                next = dynamic_cast<LightTableBarItem*>(ltItem->next());
+            }
             if (next)
             {
                 new_rinfo = next->info();
@@ -1147,11 +1152,17 @@ void LightTableWindow::slotRemoveItem(ImageInfo* info)
             else
             {
                 // If there is no item to the right of new_linfo
-                // then we can choose the first item for new_rinfo
+                // then we can choose the last item for new_rinfo
                 // (as we made sure that there are at least two items)
-                LightTableBarItem* first = dynamic_cast<LightTableBarItem*>(d->barView->firstItem());
-                new_rinfo = first->info();
+                LightTableBarItem* last = dynamic_cast<LightTableBarItem*>(d->barView->lastItem());
+                new_rinfo = last->info();
             }
+        }
+        // otherwise select the first image in thumbbar
+        else
+        {
+            LightTableBarItem* first = dynamic_cast<LightTableBarItem*>(d->barView->firstItem());
+            new_rinfo = first->info();
         }
     }
 
