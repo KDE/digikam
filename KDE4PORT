@@ -111,8 +111,8 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
     gpiteminfo.cpp                      Gilles                 X       DONE
     renamecustomizer.cpp                Gilles                 X       DONE
     umscamera.cpp                       Gilles                 X       DONE
-|---fuzzysearch                         Gilles                 X       DONE        DONE
-|---gpssearch                           Gilles                 X       DONE        DONE
+|---fuzzysearch                         Gilles                 X       DONE        
+|---gpssearch                           Gilles                 X       DONE        
 |---hotplug                             Laurent                        DONE        -
 |---imageeditor
 |-----canvas  
@@ -139,6 +139,7 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
 |---searchwindow                        Marcel                 X       DONE        DONE
 |---setup                               Gilles          X      X       DONE        DONE
 |---slideshow                           Laurent         X      X       DONE        DONE
+|---timeline                            Gilles                 X       DONE        DONE
 
 |-kioslave
     digikamalbums.cpp                   Marcel                 X       DONE        DONE
@@ -198,9 +199,6 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
     tagfilterview.cpp                   Gilles                 X       DONE       DONE
     tagfolderview.cpp                   Gilles                 X       DONE       DONE
     tagspopupmenu.cpp                   Gilles                 X       DONE       DONE
-    timelinefolderview.cpp              Gilles                 X       DONE       DONE
-    timelineview.cpp                    Gilles                 X       DONE       DONE
-    timelinewidget.cpp                  Gilles                 X       DONE       DONE
     treefolderitem.cpp                  Gilles                 X       DONE       DONE
     welcomepageview.cpp                 Laurent                X       DONE       DONE
 
