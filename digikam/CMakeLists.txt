@@ -210,8 +210,6 @@ SET(digikam_bin_SRCS
                      ratingpopupmenu.cpp 
                      ratingwidget.cpp 
                      scancontroller.cpp
-                     searchfolderview.cpp 
-                     searchtabheader.cpp
                      syncjob.cpp 
                      tageditdlg.cpp 
                      tagfolderview.cpp 

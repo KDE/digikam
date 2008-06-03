@@ -193,7 +193,6 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
     monthwidget.cpp                     Gilles                 X       DONE
     ratingpopupmenu.cpp                 Gilles                 X       DONE       DONE
     ratingwidget.cpp                    Gilles                 X       DONE       DONE
-    searchfolderview.cpp                Gilles                 X       DONE       DONE
     syncjob.cpp                         Gilles                 X       DONE       DONE
     tageditdlg.cpp                      Gilles                 X       DONE       DONE
     tagfilterview.cpp                   Gilles                 X       DONE       DONE

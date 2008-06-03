@@ -1153,7 +1153,7 @@ void LightTableWindow::slotRemoveItem(const ImageInfo &info)
         {
             // See if there is an item next to the left one:
             LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(d->barView->findItemByInfo(new_linfo));
-            LightTableBarItem* next = 0;
+            LightTableBarItem* next   = 0;
             if (ltItem)
             {
                 next = dynamic_cast<LightTableBarItem*>(ltItem->next());
