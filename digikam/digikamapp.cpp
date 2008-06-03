@@ -2025,12 +2025,12 @@ void DigikamApp::loadPlugins()
 
 void DigikamApp::slotKipiPluginPlug()
 {
-    unplugActionList( QString::fromLatin1("file_actions_export") );
-    unplugActionList( QString::fromLatin1("file_actions_import") );
-    unplugActionList( QString::fromLatin1("image_actions") );
-    unplugActionList( QString::fromLatin1("tool_actions") );
-    unplugActionList( QString::fromLatin1("batch_actions") );
-    unplugActionList( QString::fromLatin1("album_actions") );
+    unplugActionList(QString::fromLatin1("file_actions_export"));
+    unplugActionList(QString::fromLatin1("file_actions_import"));
+    unplugActionList(QString::fromLatin1("image_actions"));
+    unplugActionList(QString::fromLatin1("tool_actions"));
+    unplugActionList(QString::fromLatin1("batch_actions"));
+    unplugActionList(QString::fromLatin1("album_actions"));
 
     d->kipiImageActions.clear();
     d->kipiFileActionsExport.clear();
@@ -2061,29 +2061,29 @@ void DigikamApp::slotKipiPluginPlug()
 
         QList<KAction*> actions = plugin->actions();
 
-        for( QList<KAction*>::Iterator it2 = actions.begin(); it2 != actions.end(); ++it2 )
+        for(QList<KAction*>::Iterator it2 = actions.begin(); it2 != actions.end(); ++it2)
         {
-            if ( plugin->category(*it2) == KIPI::IMAGESPLUGIN )
+            if (plugin->category(*it2) == KIPI::ImagesPlugin)
             {
                 d->kipiImageActions.append(*it2);
             }
-            else if ( plugin->category(*it2) == KIPI::EXPORTPLUGIN )
+            else if (plugin->category(*it2) == KIPI::ExportPlugin)
             {
                 d->kipiFileActionsExport.append(*it2);
             }
-            else if ( plugin->category(*it2) == KIPI::IMPORTPLUGIN )
+            else if (plugin->category(*it2) == KIPI::ImportPlugin)
             {
                 d->kipiFileActionsImport.append(*it2);
             }
-            else if ( plugin->category(*it2) == KIPI::TOOLSPLUGIN )
+            else if (plugin->category(*it2) == KIPI::ToolsPlugin)
             {
                 d->kipiToolsActions.append(*it2);
             }
-            else if ( plugin->category(*it2) == KIPI::BATCHPLUGIN )
+            else if (plugin->category(*it2) == KIPI::BatchPlugin)
             {
                 d->kipiBatchActions.append(*it2);
             }
-            else if ( plugin->category(*it2) == KIPI::COLLECTIONSPLUGIN )
+            else if (plugin->category(*it2) == KIPI::CollectionsPlugin)
             {
                 d->kipiAlbumActions.append(*it2);
             }
@@ -2094,12 +2094,12 @@ void DigikamApp::slotKipiPluginPlug()
 
     // Create GUI menu in according with plugins.
 
-    plugActionList( QString::fromLatin1("file_actions_export"), d->kipiFileActionsExport );
-    plugActionList( QString::fromLatin1("file_actions_import"), d->kipiFileActionsImport );
-    plugActionList( QString::fromLatin1("image_actions"),       d->kipiImageActions );
-    plugActionList( QString::fromLatin1("tool_actions"),        d->kipiToolsActions );
-    plugActionList( QString::fromLatin1("batch_actions"),       d->kipiBatchActions );
-    plugActionList( QString::fromLatin1("album_actions"),       d->kipiAlbumActions );
+    plugActionList(QString::fromLatin1("file_actions_export"), d->kipiFileActionsExport);
+    plugActionList(QString::fromLatin1("file_actions_import"), d->kipiFileActionsImport);
+    plugActionList(QString::fromLatin1("image_actions"),       d->kipiImageActions);
+    plugActionList(QString::fromLatin1("tool_actions"),        d->kipiToolsActions);
+    plugActionList(QString::fromLatin1("batch_actions"),       d->kipiBatchActions);
+    plugActionList(QString::fromLatin1("album_actions"),       d->kipiAlbumActions);
 }
 
 void DigikamApp::populateThemes()
