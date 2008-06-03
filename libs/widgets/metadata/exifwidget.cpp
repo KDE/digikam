@@ -153,7 +153,8 @@ void ExifWidget::buildView()
 
 QString ExifWidget::getTagTitle(const QString& key)
 {
-    QString title = DMetadata::getExifTagTitle(key.ascii());
+    DMetadata meta;
+    QString title = meta.getExifTagTitle(key.ascii());
 
     if (title.isEmpty())
         return key.section('.', -1);
@@ -163,7 +164,8 @@ QString ExifWidget::getTagTitle(const QString& key)
 
 QString ExifWidget::getTagDescription(const QString& key)
 {
-    QString desc = DMetadata::getExifTagDescription(key.ascii());
+    DMetadata meta;
+    QString desc = meta.getExifTagDescription(key.ascii());
 
     if (desc.isEmpty())
         return i18n("No description available");
