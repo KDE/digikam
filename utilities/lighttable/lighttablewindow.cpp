@@ -832,7 +832,7 @@ void LightTableWindow::setLeftRightItems(const ImageInfoList &list)
     ImageInfo info            = l.first();
     LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(d->barView->findItemByInfo(info));
 
-    if (l.count()==1)
+    if (l.count() ==1 )
     {
         // Just one item; this is used for the left panel.
         d->barView->setOnLeftPanel(info);
@@ -1020,7 +1020,7 @@ void LightTableWindow::slotRemoveItem(const ImageInfo &info)
     // To describe them, 4 images A B C D are used
     // and the subscript _L and _ R  mark the currently
     // active item on the left and right panel
-  
+
     bool leftPanelActive = false;
     ImageInfo curr_linfo = d->previewView->leftImageInfo();
     ImageInfo curr_rinfo = d->previewView->rightImageInfo();
@@ -1153,19 +1153,29 @@ void LightTableWindow::slotRemoveItem(const ImageInfo &info)
         {
             // See if there is an item next to the left one:
             LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(d->barView->findItemByInfo(new_linfo));
-            LightTableBarItem* next   = dynamic_cast<LightTableBarItem*>(ltItem->next());
+            LightTableBarItem* next = 0;
+            if (ltItem)
+            {
+                next = dynamic_cast<LightTableBarItem*>(ltItem->next());
+            }
             if (next)
             {
                 new_rinfo = next->info();
-            } 
+            }
             else
             {
                 // If there is no item to the right of new_linfo
-                // then we can choose the first item for new_rinfo
+                // then we can choose the last item for new_rinfo
                 // (as we made sure that there are at least two items)
-                LightTableBarItem* first = dynamic_cast<LightTableBarItem*>(d->barView->firstItem());
-                new_rinfo = first->info();
+                LightTableBarItem* last = dynamic_cast<LightTableBarItem*>(d->barView->lastItem());
+                new_rinfo               = last->info();
             }
+        }
+        else
+        {
+            // otherwise select the first image in thumbbar
+            LightTableBarItem* first = dynamic_cast<LightTableBarItem*>(d->barView->firstItem());
+            new_rinfo                = first->info();
         }
     }
 
@@ -1199,7 +1209,7 @@ void LightTableWindow::slotRemoveItem(const ImageInfo &info)
         {
             LightTableBarItem *ltItem = dynamic_cast<LightTableBarItem*>(d->barView->findItemByInfo(new_linfo));
             d->barView->setSelectedItem(ltItem);
-        } 
+        }
     }
     else
     {
