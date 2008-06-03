@@ -5,7 +5,7 @@
  *
  * Date        : 2002-16-10
  * Description : album icon view 
- * 
+ *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2002-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
@@ -15,12 +15,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // C Ansi includes.
@@ -80,6 +80,7 @@ extern "C"
 #include <kinputdialog.h>
 #include <kio/jobuidelegate.h>
 #include <kmimetypetrader.h>
+#include <kstandardaction.h>
 
 // LibKipi includes.
 
