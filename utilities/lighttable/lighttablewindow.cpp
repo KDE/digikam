@@ -186,7 +186,7 @@ void LightTableWindow::setupUserArea()
     QWidget* centralW = new QWidget(d->hSplitter);
     QVBoxLayout *vlay = new QVBoxLayout(centralW);
     d->vSplitter      = new QSplitter(Qt::Vertical, centralW);
-    d->barView        = new LightTableBar(d->vSplitter, ThumbBarView::Horizontal, 
+    d->barView        = new LightTableBar(d->vSplitter, ThumbBarView::Horizontal,
                                           AlbumSettings::instance()->getExifRotate());
     d->previewView    = new LightTableView(d->vSplitter);
     vlay->addWidget(d->vSplitter);
@@ -533,7 +533,7 @@ void LightTableWindow::setupAccelerators()
                     i18n("Zoom in on image"),
                     Key_Plus, d->previewView, SLOT(slotIncreaseZoom()),
                     false, true);
-    
+
     d->accelerators->insert("Zoom Plus Key_Minus", i18n("Zoom out"),
                     i18n("Zoom out from image"),
                     Key_Minus, d->previewView, SLOT(slotDecreaseZoom()),
@@ -610,19 +610,19 @@ void LightTableWindow::refreshStatusBar()
     switch (d->barView->countItems())
     {
         case 0:
-            d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, 
-                                                  i18n("No item on Light Table"));   
+            d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode,
+                                                  i18n("No item on Light Table"));
             break;
         case 1:
-            d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, 
-                                                  i18n("1 item on Light Table"));   
+            d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode,
+                                                  i18n("1 item on Light Table"));
             break;
         default:
-            d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, 
+            d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode,
                                                   i18n("%1 items on Light Table")
-                                                  .arg(d->barView->countItems()));   
+                                                  .arg(d->barView->countItems()));
             break;
-    }  
+    }
 }
 
 void LightTableWindow::slotItemsUpdated(const KURL::List& urls)
@@ -788,7 +788,7 @@ void LightTableWindow::slotLeftDroppedItems(const ImageInfoList& list)
     loadImageInfos(list, info, true);
 
     // We will check if first item from list is already stored in thumbbar
-    // Note that the thumbbar stores all ImageInfo reference 
+    // Note that the thumbbar stores all ImageInfo reference
     // in memory for preview object.
     LightTableBarItem *item = d->barView->findItemByInfo(info);
     if (item) 
@@ -796,10 +796,10 @@ void LightTableWindow::slotLeftDroppedItems(const ImageInfoList& list)
         slotSetItemOnLeftPanel(item->info());
         // One approach is to make this item the current one, via
         //    d->barView->setSelectedItem(item);
-        // However, this is not good, because this also sets 
+        // However, this is not good, because this also sets
         // the right thumb to the same image.
-        // Therefore we use setLeftRightItems if there is more than 
-        // one item in the list of dropped images.        
+        // Therefore we use setLeftRightItems if there is more than
+        // one item in the list of dropped images.
     }
     setLeftRightItems(list);
 }
@@ -813,7 +813,7 @@ void LightTableWindow::slotRightDroppedItems(const ImageInfoList& list)
     setLeftRightItems(list);
 
     // We will check if first item from list is already stored in thumbbar
-    // Note that the thumbbar stores all ImageInfo reference 
+    // Note that the thumbbar stores all ImageInfo reference
     // in memory for preview object.
     LightTableBarItem *item = d->barView->findItemByInfo(info);
     if (item) 
@@ -829,16 +829,13 @@ void LightTableWindow::setLeftRightItems(const ImageInfoList &list)
 {
     ImageInfoList l = list;
 
-    if (l.count()==0)
+    if (l.count() ==0 )
         return;
 
-
-    ImageInfo *info = l.first();
-
+    ImageInfo *info           = l.first();
     LightTableBarItem *ltItem = d->barView->findItemByInfo(info);
 
-
-    if (l.count()==1)
+    if (l.count() ==1 )
     {
         // Just one item; this is used for the left panel.
         d->barView->setOnLeftPanel(info);
@@ -876,9 +873,7 @@ void LightTableWindow::setLeftRightItems(const ImageInfoList &list)
             d->barView->setSelectedItem(ltItem); 
             d->barView->ensureItemVisible(ltItem);
         }
-
     }
-
 }
 
 void LightTableWindow::slotSetItemLeft()
@@ -1139,7 +1134,7 @@ void LightTableWindow::slotRemoveItem(ImageInfo* info)
         {
             // See if there is an item next to the left one:
             LightTableBarItem *ltItem = d->barView->findItemByInfo(new_linfo);
-            LightTableBarItem* next = 0;
+            LightTableBarItem* next   = 0;
             // re-check if ltItem is really set
             if (ltItem)
             {
@@ -1155,14 +1150,14 @@ void LightTableWindow::slotRemoveItem(ImageInfo* info)
                 // then we can choose the last item for new_rinfo
                 // (as we made sure that there are at least two items)
                 LightTableBarItem* last = dynamic_cast<LightTableBarItem*>(d->barView->lastItem());
-                new_rinfo = last->info();
+                new_rinfo               = last->info();
             }
         }
-        // otherwise select the first image in thumbbar
         else
         {
+            // otherwise select the first image in thumbbar
             LightTableBarItem* first = dynamic_cast<LightTableBarItem*>(d->barView->firstItem());
-            new_rinfo = first->info();
+            new_rinfo                = first->info();
         }
     }
 
@@ -1309,7 +1304,7 @@ void LightTableWindow::slideShow(bool startWithCurrent, SlideShowSettings& setti
         kapp->processEvents();
     }
 
-    d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, QString());   
+    d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, QString());
     refreshStatusBar();
 
     if (!d->cancelSlideShow)
@@ -1583,7 +1578,7 @@ void LightTableWindow::slotRightZoomFactorChanged(double zoom)
 
 void LightTableWindow::slotToggleSyncPreview()
 {
-    d->previewView->setSyncPreview(d->syncPreviewAction->isChecked());    
+    d->previewView->setSyncPreview(d->syncPreviewAction->isChecked());
 }
 
 void LightTableWindow::slotToggleOnSyncPreview(bool t)
