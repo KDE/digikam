@@ -111,6 +111,8 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
     gpiteminfo.cpp                      Gilles                 X       DONE
     renamecustomizer.cpp                Gilles                 X       DONE
     umscamera.cpp                       Gilles                 X       DONE
+|---fuzzysearch                         Gilles                 X       DONE        DONE
+|---gpssearch                           Gilles                 X       DONE        DONE
 |---hotplug                             Laurent                        DONE        -
 |---imageeditor
 |-----canvas  
