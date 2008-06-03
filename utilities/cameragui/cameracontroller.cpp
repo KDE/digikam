@@ -22,6 +22,11 @@
  *
  * ============================================================ */
 
+extern "C"
+{
+#include <unistd.h>
+}
+
 // C++ includes.
 
 #include <typeinfo>
