@@ -650,6 +650,12 @@ SET(libgpssearch_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/utilities/gpssearch/gpssearchwidget.cpp
    )
 
+SET(libtimeline_SRCS
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/timeline/timelinefolderview.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/timeline/timelineview.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utilities/timeline/timelinewidget.cpp
+   )
+
 ADD_SUBDIRECTORY( data )
 ADD_SUBDIRECTORY( libs )
 ADD_SUBDIRECTORY( utilities )

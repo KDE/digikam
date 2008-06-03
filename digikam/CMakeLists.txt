@@ -51,8 +51,10 @@ INCLUDE_DIRECTORIES(
                      ../utilities/searchwindow
                      ../utilities/fuzzysearch
                      ../utilities/gpssearch
+                     ../utilities/timeline
                      ../digikam
                      ../
+                     
                      # config-digikam.h
                      ${CMAKE_CURRENT_BINARY_DIR}/../
                      # external library paths
@@ -160,6 +162,7 @@ SET(digikam_bin_SRCS
                      ${libsearchwindow_SRCS}
                      ${libfuzzysearch_SRCS}
                      ${libgpssearch_SRCS}
+                     ${libtimeline_SRCS}
 
                      album.cpp 
                      albumiconview.cpp 
@@ -215,9 +218,6 @@ SET(digikam_bin_SRCS
                      tagfilterview.cpp 
                      treefolderitem.cpp 
                      tagspopupmenu.cpp 
-                     timelinefolderview.cpp
-                     timelineview.cpp
-                     timelinewidget.cpp
                      welcomepageview.cpp 
     )
 
