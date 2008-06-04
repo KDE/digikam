@@ -107,6 +107,7 @@ QString WelcomePageView::infoPage()
     newFeatures << i18n("A new tool based on LensFun library to fix lens defaults automatically");
     newFeatures << i18n("A new tool to perform fuzzy searches based on sketch drawing template");
     newFeatures << i18n("A new tool to perform advanced searches based on photo meta-informations");
+    newFeatures << i18n("A new tool to perform searches over a map");
 
     QString featureItems;
     for ( int i = 0 ; i < newFeatures.count() ; i++ )
