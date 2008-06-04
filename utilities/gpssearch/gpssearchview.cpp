@@ -257,11 +257,11 @@ void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
 
     // We query database here
 
-    QRectF coordinateRectangle = d->gpsSearchWidget->selectionCoordinates();
-    QList<double> coordinates;
-    // coordinates as lon1, lat1,lon2, lat2  or West, North, East, South
-    coordinates << coordinateRectangle.left() << coordinateRectangle.top()
-                << coordinateRectangle.right() << coordinateRectangle.bottom();
+    // NOTE: coordinates as lon1, lat1, lon2, lat2 (or West, North, East, South)
+    // as left/top, right/bottom rectangle.
+    QList<double> coordinates = d->gpsSearchWidget->selectionCoordinates();
+
+    DDebug() << "Coordinates area to use: " << coordinates << endl;
 
     SearchXmlWriter writer;
     writer.writeGroup();
@@ -271,10 +271,8 @@ void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
     writer.finishField();
     writer.finishGroup();
 
-    /* FIXME
-    SAlbum* salbum = AlbumManager::instance()->createSAlbum(name, DatabaseSearch::HaarSearch, writer.xml());
+    SAlbum* salbum = AlbumManager::instance()->createSAlbum(name, DatabaseSearch::MapSearch, writer.xml());
     AlbumManager::instance()->setCurrentAlbum(salbum);
-    */
 }
 
 void GPSSearchView::slotAlbumSelected(SAlbum* salbum)

@@ -27,7 +27,7 @@
 // Qt includes.
 
 #include <QLabel>
-#include <QRect>
+#include <QList>
 
 // Local includes.
 
@@ -55,7 +55,7 @@ public:
 
     bool asSelection() const;
 
-    QRectF selectionCoordinates() const;
+    QList<double> selectionCoordinates() const;
 
 signals:
 
@@ -63,7 +63,7 @@ signals:
 
 private slots:
 
-    void slotNewSelection(const QRectF&);
+    void slotNewSelection(const QList<double>&);
 
 private:
 

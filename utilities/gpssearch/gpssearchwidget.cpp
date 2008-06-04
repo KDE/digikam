@@ -40,7 +40,7 @@ public:
 
     GPSSearchWidgetPriv(){}
 
-    QRectF selection;
+    QList<double> selection;
 };
 
 GPSSearchWidget::GPSSearchWidget(QWidget *parent)
@@ -52,8 +52,8 @@ GPSSearchWidget::GPSSearchWidget(QWidget *parent)
     setMapThemeId("earth/srtm/srtm.dgml");
 #endif // MARBLE_VERSION
 
-    connect(this, SIGNAL(newSelection(const QRectF&)),
-            this, SLOT(slotNewSelection(const QRectF&)));
+    connect(this, SIGNAL(newSelection(const QList<double>&)),
+            this, SLOT(slotNewSelection(const QList<double>&)));
 }
 
 GPSSearchWidget::~GPSSearchWidget()
@@ -63,15 +63,15 @@ GPSSearchWidget::~GPSSearchWidget()
 
 bool GPSSearchWidget::asSelection() const
 {
-    return d->selection.isValid();
+    return !d->selection.isEmpty();
 }
 
-QRectF GPSSearchWidget::selectionCoordinates() const
+QList<double> GPSSearchWidget::selectionCoordinates() const
 {
     return d->selection;
 }
 
-void GPSSearchWidget::slotNewSelection(const QRectF& sel)
+void GPSSearchWidget::slotNewSelection(const QList<double>& sel)
 {
     d->selection = sel;
     emit signalNewSelection();
