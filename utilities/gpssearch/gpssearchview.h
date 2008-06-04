@@ -73,6 +73,8 @@ private slots:
     void slotSaveGPSSAlbum();
     void slotCheckNameEditGPSConditions();
 
+    void slotSelectionChanged();
+
 private:
 
     GPSSearchViewPriv *d;

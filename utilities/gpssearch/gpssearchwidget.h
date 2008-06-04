@@ -57,6 +57,14 @@ public:
 
     QRectF selectionCoordinates() const;
 
+signals:
+
+    void signalNewSelection();
+
+private slots:
+
+    void slotNewSelection(const QRectF&);
+
 private:
 
     GPSSearchWidgetPriv *d;
@@ -77,6 +85,9 @@ public:
 
     QRectF selectionCoordinates() const { return QRectF(); };
 
+signals:
+
+    void signalNewSelection();
 };
 
 #endif // HAVE_MARBLEWIDGET

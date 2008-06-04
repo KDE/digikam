@@ -38,10 +38,9 @@ class GPSSearchWidgetPriv
 {
 public:
 
-    GPSSearchWidgetPriv()
-    {
-    }
+    GPSSearchWidgetPriv(){}
 
+    QRectF selection;
 };
 
 GPSSearchWidget::GPSSearchWidget(QWidget *parent)
@@ -52,6 +51,9 @@ GPSSearchWidget::GPSSearchWidget(QWidget *parent)
 #ifdef MARBLE_VERSION
     setMapThemeId("earth/srtm/srtm.dgml");
 #endif // MARBLE_VERSION
+
+    connect(this, SIGNAL(newSelection(const QRectF&)),
+            this, SLOT(slotNewSelection(const QRectF&)));
 }
 
 GPSSearchWidget::~GPSSearchWidget()
@@ -61,14 +63,18 @@ GPSSearchWidget::~GPSSearchWidget()
 
 bool GPSSearchWidget::asSelection() const
 {
-    // FIXME
-    return false;
+    return d->selection.isValid();
 }
 
 QRectF GPSSearchWidget::selectionCoordinates() const
 {
-    // FIXME
-    return QRectF();
+    return d->selection;
+}
+
+void GPSSearchWidget::slotNewSelection(const QRectF& sel)
+{
+    d->selection = sel;
+    emit signalNewSelection();
 }
 
 #else // // HAVE_MARBLEWIDGET

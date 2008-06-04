@@ -164,6 +164,9 @@ GPSSearchView::GPSSearchView(QWidget *parent)
     connect(d->nameEdit, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotCheckNameEditGPSConditions()));
 
+    connect(d->gpsSearchWidget, SIGNAL(signalNewSelection()),
+            this, SLOT(slotSelectionChanged()));
+
     // ---------------------------------------------------------------
 
     slotCheckNameEditGPSConditions();
@@ -238,6 +241,11 @@ void GPSSearchView::slotSaveGPSSAlbum()
         return;
 
     createNewGPSSearchAlbum(name);
+}
+
+void GPSSearchView::slotSelectionChanged()
+{
+    createNewGPSSearchAlbum(GPSSearchFolderView::currentGPSSearchName());
 }
 
 void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
