@@ -304,6 +304,10 @@ SET(libdmetadata_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/geodetictools.cpp
    )
 
+# CImg.h version 1.2.8 do not compile fine with gcc 4.3.
+# See B.K.O #163118: digikam-0.9.4_beta5 compilation hangs with gcc 4.3
+# This is a temporary solution until CImg.h will be fixed.
+KDE4_NO_ENABLE_FINAL(libgreycstoration)
 SET(libgreycstoration_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/greycstoration/greycstorationiface.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/greycstoration/greycstorationwidget.cpp
@@ -322,6 +326,10 @@ SET(libimageproperties_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/worldmapwidget.cpp
    )
 
+# --enable-final triggers: http://bugs.kde.org/show_bug.cgi?id=126326
+# digikam: camera download: auto-rotated images lose EXIF info ...
+# So make sure nofinal is always used here!
+KDE4_NO_ENABLE_FINAL(libjpegutils)
 SET(libjpegutils_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/jpegutils.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/transupp.cpp
@@ -331,6 +339,9 @@ SET(liblevels_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/levels/imagelevels.cpp
    )
 
+# Gilles Caulier 12/01/06: lprof implementation is C not C++ and do not
+# support 'nofinal' compilation option.
+KDE4_NO_ENABLE_FINAL(liblprof)
 SET(liblprof_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/lprof/cmshull.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/lprof/cmslm.cpp
