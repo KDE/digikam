@@ -27,6 +27,7 @@ AlbumGUI       : New fuzzy Search tools based on sketch drawing template.
                  Fuzzy searches backend use an Haar wevelet interface.
                  You simply draw a rough sketch of what you want to find and digiKam displays 
                  for you a thumbnail view of the best matches.
+AlbumGUI       : New Search tools based on marble widget to find pictures over a map. 
 
 ImageEditor    : Added Thumbbar to easy navigate between pictures.
 ImageEditor    : New plugin based on LensFun library (http://lensfun.berlios.de) to correct automaticaly lens aberrations.
@@ -58,4 +59,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 021 ==> 147636 : GUI error in advaced searches: lots of free space.
 022 ==> 158866 : Advanced Search on Tags a mess.
 023 ==> 149026 : Search including sub-albums.
-024 ==> 
+024 ==> 153070 : Search for image by geo location.
+025 ==> 
