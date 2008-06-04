@@ -67,7 +67,7 @@ public:
         /// Returns the Album::Type of the associated album
         AlbumTypeRole = Qt::UserRole,
         /// Returns a pointer to the associated Album object
-        AlbumPointerRole = Qt::UserRole + 1,
+        AlbumPointerRole = Qt::UserRole + 1
     };
 
     /**

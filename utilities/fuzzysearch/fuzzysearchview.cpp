@@ -81,7 +81,7 @@ public:
     {
         SIMILARS=0,
         SKETCH,
-        DUPLICATES,
+        DUPLICATES
     };
 
     FuzzySearchViewPriv()

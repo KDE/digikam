@@ -247,7 +247,7 @@ namespace KeywordSearch
         adds newEntry as another (single) keyword to the string,
         returning the combined result. */
     DIGIKAM_EXPORT QString merge(const QString &previousContent, const QString &newEntry);
-};
+}
 
 class DIGIKAM_EXPORT KeywordSearchReader : public SearchXmlReader
 {

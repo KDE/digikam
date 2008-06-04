@@ -83,7 +83,7 @@ public:
 
     bool asSelection() const { return false; };
 
-    QRectF selectionCoordinates() const { return QRectF(); };
+    QList<double> selectionCoordinates() const { return QList<double>(); };
 
 signals:
 
