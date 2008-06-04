@@ -281,6 +281,9 @@ void SearchAdvancedRule::slotKeyChanged(int id)
 
 void SearchAdvancedRule::setValueWidget(valueWidgetTypes oldType, valueWidgetTypes newType)
 {
+    // this map is used to sort album and tag list combobox
+    typedef QMap<QString, int> sortedList;
+    
     if (oldType == newType)
         return;
 
@@ -324,18 +327,31 @@ void SearchAdvancedRule::setValueWidget(valueWidgetTypes oldType, valueWidgetTyp
         AlbumList aList = aManager->allPAlbums();
 
         m_itemsIndexIDMap.clear();
-        int index = 0;
+        
+        // First we need to sort the album list.
+        // We create a map with the album url as key, so that it is
+        // automatically sorted.
+        sortedList sAList;
+        
         for ( AlbumList::Iterator it = aList.begin();
               it != aList.end(); ++it )
         {
             PAlbum *album = (PAlbum*)(*it);
             if ( !album->isRoot() )
             {
-                m_valueCombo->insertSqueezedItem( album->url().remove(0,1), index );
-                m_itemsIndexIDMap.insert(index, album->id());
-                index++;
+                sAList.insert(album->url().remove(0,1), album->id());
             }
         }
+        
+        // Now we can iterate over the sorted list and fill the combobox
+        int index = 0;
+        for ( sortedList::Iterator it = sAList.begin();
+              it != sAList.end(); ++it )
+        {
+            m_valueCombo->insertSqueezedItem( it.key(), index );
+            m_itemsIndexIDMap.insert(index, it.data());
+            index++;
+            }
 
         m_valueCombo->show();
 
@@ -355,7 +371,6 @@ void SearchAdvancedRule::setValueWidget(valueWidgetTypes oldType, valueWidgetTyp
         // First we need to sort the tags.
         // We create a map with the album tagPath as key, so that it is
         // automatically sorted.
-        typedef QMap<QString, int> sortedList;
         sortedList sTList;
         
         for ( AlbumList::Iterator it = tList.begin();
@@ -364,7 +379,7 @@ void SearchAdvancedRule::setValueWidget(valueWidgetTypes oldType, valueWidgetTyp
             TAlbum *album = (TAlbum*)(*it);
             if ( !album->isRoot() )
             {
-                sTList.insert(album->tagPath(true), album->id());
+                sTList.insert(album->tagPath(false), album->id());
             }
         }
         
