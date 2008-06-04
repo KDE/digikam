@@ -13,6 +13,7 @@ URL
     http://techbase.kde.org/Development/Tutorials/KDE4_Porting_Guide#CMake
     http://www.cmake.org/Wiki/CMake_Useful_Variables
     http://www.kdedevelopers.org/node/1743
+    http://websvn.kde.org/trunk/KDE/kdelibs/cmake/modules/FindKDE4Internal.cmake?view=markup
 		    
 * Port to QT4/KDE4.
     Overview documentation
