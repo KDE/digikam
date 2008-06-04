@@ -272,19 +272,20 @@ QList<qlonglong> HaarIface::bestMatchesForImage(const QImage& image, int numberO
 
 QList<qlonglong> HaarIface::bestMatchesForImage(qlonglong imageid, int numberOfResults, SketchType type)
 {
-    QList<QVariant> values;
-    DatabaseAccess().backend()->execSql(QString("SELECT matrix FROM ImageHaarMatrix WHERE imageid=?"),
-                                        imageid, &values);
-
-    if (values.isEmpty())
+    Haar::SignatureData sig;
+    if (!retrieveSignatureFromDB(imageid, &sig))
         return QList<qlonglong>();
 
-    DatabaseBlob blob;
-    Haar::SignatureData sig;
-
-    blob.read(values.first().toByteArray(), &sig);
-
     return bestMatches(&sig, numberOfResults, type);
+}
+
+QList<qlonglong> HaarIface::bestMatchesForImageWithThreshold(qlonglong imageid, double requiredPercentage, SketchType type)
+{
+    Haar::SignatureData sig;
+    if (!retrieveSignatureFromDB(imageid, &sig))
+        return QList<qlonglong>();
+
+    return bestMatchesWithThreshold(&sig, requiredPercentage, type);
 }
 
 QList<qlonglong> HaarIface::bestMatchesForFile(const QString& filename, int numberOfResults, SketchType type)
@@ -309,6 +310,89 @@ QList<qlonglong> HaarIface::bestMatchesForSignature(const QString& signature, in
 
 QList<qlonglong> HaarIface::bestMatches(Haar::SignatureData *querySig, int numberOfResults, SketchType type)
 {
+    QMap<qlonglong, double> scores = searchDatabase(querySig, type);
+
+    // Find out the best matches, those with the lowest score
+    // We make use of the feature that QMap keys are sorted in ascending order
+    // Of course, images can have the same score, so we need a multi map
+    QMultiMap<double, qlonglong> bestMatches;
+    bool initialFill = false;
+    double score, worstScore, bestScore;
+    qlonglong id;
+    for (QMap<qlonglong, double>::iterator it = scores.begin(); it != scores.end(); ++it)
+    {
+        score = it.value();
+        id    = it.key();
+
+        if (!initialFill)
+        {
+            // as long as the maximum number of results is not reached, just fill up the map
+            bestMatches.insert(score, id);
+            initialFill = (bestMatches.size() >= numberOfResults);
+        }
+        else
+        {
+            // find the last entry, the one with the highest (=worst) score
+            QMap<double, qlonglong>::iterator last = bestMatches.end();
+            --last;
+            worstScore = last.key();
+            // if the new entry has a higher score, put it in the list and remove that last one
+            if (score < worstScore)
+            {
+                bestMatches.erase(last);
+                bestMatches.insert(score, id);
+            }
+            else if (score == worstScore)
+            {
+                bestScore = bestMatches.begin().key();
+                // if the score is identical for all entries, increase the maximum result number
+                if (score == bestScore)
+                    bestMatches.insert(score, id);
+            }
+        }
+    }
+
+/*
+    for (QMap<double, qlonglong>::iterator it = bestMatches.begin(); it != bestMatches.end(); ++it)
+        DDebug() << it.key() << it.value();
+*/
+    return bestMatches.values();
+}
+
+QList<qlonglong> HaarIface::bestMatchesWithThreshold(Haar::SignatureData *querySig, double requiredPercentage, SketchType type)
+{
+    QMap<qlonglong, double> scores = searchDatabase(querySig, type);
+    double lowest, highest;
+    getBestAndWorstPossibleScore(querySig, type, &lowest, &highest);
+    double range = highest - lowest;
+    double requiredScore = lowest + range * (1.0 - requiredPercentage);
+    DDebug() << "Possible scores" << lowest << highest << requiredScore;
+
+    QMultiMap<double, qlonglong> bestMatches;
+    double score, percentage;
+    qlonglong id;
+    for (QMap<qlonglong, double>::iterator it = scores.begin(); it != scores.end(); ++it)
+    {
+        score = it.value();
+        id    = it.key();
+
+        if (score <= requiredScore)
+        {
+            percentage = 1.0 - (score - lowest) / range;
+            bestMatches.insert(percentage, id);
+        }
+    }
+
+    for (QMultiMap<double, qlonglong>::iterator it = bestMatches.begin(); it != bestMatches.end(); ++it)
+    {
+        DDebug() << it.key() << it.value();
+    }
+    return bestMatches.values();
+}
+
+/// This method is the core functionality: It assigns a score to every image in the db
+QMap<qlonglong, double> HaarIface::searchDatabase(Haar::SignatureData *querySig, SketchType type)
+{
     d->createWeightBin();
     // The table of constant weight factors applied to each channel and bin
     Haar::Weights weights((Haar::Weights::SketchType)type);
@@ -322,7 +406,7 @@ QList<qlonglong> HaarIface::bestMatches(Haar::SignatureData *querySig, int numbe
 
     // Map imageid -> score. Lowest score is best.
     // any newly inserted value will be initialized with a score of 0, as required
-    QMap<qlonglong, float> scores;
+    QMap<qlonglong, double> scores;
 
     // Variables for data read from DB
     DatabaseBlob blob;
@@ -333,7 +417,7 @@ QList<qlonglong> HaarIface::bestMatches(Haar::SignatureData *querySig, int numbe
     QSqlQuery query;
     query = access.backend()->prepareQuery(QString("SELECT imageid, matrix FROM ImageHaarMatrix"));
     if (!access.backend()->exec(query))
-        return QList<qlonglong>();
+        return scores;
 
     // We don't use DatabaseBackend's convenience calls, as the result set is large
     // and we try to avoid copying in a temporary QList<QVariant>
@@ -343,7 +427,7 @@ QList<qlonglong> HaarIface::bestMatches(Haar::SignatureData *querySig, int numbe
         blob.read(query.value(1).toByteArray(), &targetSig);
 
         // this is a reference
-        float &score = scores[imageid];
+        double &score = scores[imageid];
 
         // Step 1: Initialize scores with average intensity values of all three channels
         for (int channel=0; channel<3; channel++)
@@ -370,51 +454,7 @@ QList<qlonglong> HaarIface::bestMatches(Haar::SignatureData *querySig, int numbe
         }
     }
 
-    // Find out the best matches, those with the lowest score
-    // We make use of the feature that QMap keys are sorted in ascending order
-    // Of course, images can have the same score, so we need a multi map
-    QMultiMap<float, qlonglong> bestMatches;
-    bool initialFill = false;
-    float score, worstScore, bestScore;
-    qlonglong id;
-    for (QMap<qlonglong, float>::iterator it = scores.begin(); it != scores.end(); ++it)
-    {
-        score = it.value();
-        id    = it.key();
-
-        if (!initialFill)
-        {
-            // as long as the maximum number of results is not reached, just fill up the map
-            bestMatches.insert(score, id);
-            initialFill = (bestMatches.size() >= numberOfResults);
-        }
-        else
-        {
-            // find the last entry, the one with the highest (=worst) score
-            QMap<float, qlonglong>::iterator last = bestMatches.end();
-            --last;
-            worstScore = last.key();
-            // if the new entry has a higher score, put it in the list and remove that last one
-            if (score < worstScore)
-            {
-                bestMatches.erase(last);
-                bestMatches.insert(score, id);
-            }
-            else if (score == worstScore)
-            {
-                bestScore = bestMatches.begin().key();
-                // if the score is identical for all entries, increase the maximum result number
-                if (score == bestScore)
-                    bestMatches.insert(score, id);
-            }
-        }
-    }
-
-/*
-    for (QMap<float, qlonglong>::iterator it = bestMatches.begin(); it != bestMatches.end(); ++it)
-        DDebug() << it.key() << it.value();
-*/
-    return bestMatches.values();
+    return scores;
 }
 
 QImage HaarIface::loadQImage(const QString &filename)
@@ -442,6 +482,53 @@ QImage HaarIface::loadQImage(const QString &filename)
     return image;
 }
 
+bool HaarIface::retrieveSignatureFromDB(qlonglong imageid, Haar::SignatureData *sig)
+{
+    QList<QVariant> values;
+    DatabaseAccess().backend()->execSql(QString("SELECT matrix FROM ImageHaarMatrix WHERE imageid=?"),
+                                        imageid, &values);
+
+    if (values.isEmpty())
+        return false;
+
+    DatabaseBlob blob;
+
+    blob.read(values.first().toByteArray(), sig);
+    return true;
+}
+
+void HaarIface::getBestAndWorstPossibleScore(Haar::SignatureData *sig, SketchType type,
+                                             double *lowestAndBestScore, double *highestAndWorstScore)
+{
+    Haar::Weights weights((Haar::Weights::SketchType)type);
+    double score = 0;
+
+    // In the first step, the score is initialized with the weighted color channel averages.
+    // We dont know the target channel average here, we only now its not negative => assume 0
+    for (int channel=0; channel<3; channel++)
+    {
+        score += weights.weightForAverage(channel) * fabs( sig->avg[channel] /*- targetSig.avg[channel]*/ );
+    }
+
+    *highestAndWorstScore = score;
+
+    // Next consideration: The lowest possible score is reached if the signature is identical.
+    // The first step (see above) will result in 0 - skip it.
+    // In the second step, for every coefficient in the sig that have query and target in common,
+    // so in our case all 3*40, subtract the specifically assigned weighting.
+    score = 0;
+    for (int channel=0; channel<3; channel++)
+    {
+        Haar::Idx *coefs = sig->sig[channel];
+        for (int coef = 0; coef < Haar::NumberOfCoefficients; coef++)
+        {
+            score -= weights.weight(d->bin->binAbs(coefs[coef]), channel);
+        }
+    }
+
+    *lowestAndBestScore = score;
+}
+
 QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QList<qlonglong>& images2Scan)
 {
     QMap< qlonglong, QList<qlonglong> > resultsMap;
@@ -452,7 +539,8 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QList<qlongl
 
     while (it != images2Scan.end())
     {
-        list = bestMatchesForImage(*it, 20, ScannedSketch);
+        //list = bestMatchesForImage(*it, 20, ScannedSketch);
+        list = bestMatchesForImageWithThreshold(*it, 0.9, ScannedSketch);
         if (!list.isEmpty())
         {
             // we will check if the duplicates already exist in the map.

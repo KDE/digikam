@@ -75,17 +75,30 @@ public:
     bool indexImage(qlonglong imageid, const QImage &image);
     bool indexImage(qlonglong imageid, const DImg &image);
 
-    /** Searches the database for the best matches for the specified query image. 
+    /** Searches the database for the best matches for the specified query image.
+     *  The numberOfResults best matches are returned.
      */
     QList<qlonglong> bestMatchesForImage(qlonglong imageid, int numberOfResults=20, SketchType type=ScannedSketch);
     QList<qlonglong> bestMatchesForImage(const QImage& image, int numberOfResults=20, SketchType type=ScannedSketch);
     QList<qlonglong> bestMatchesForFile(const QString& filename, int numberOfResults=20, SketchType type=ScannedSketch);
     QList<qlonglong> bestMatchesForSignature(const QString& signature, int numberOfResults=20, SketchType type=ScannedSketch);
 
+    /** Searches the database for the best matches for the specified query image.
+     *  All matches with a similarity above a given threshold are returned.
+     *  The threshold is in the range 0..1, with 1 meaning identical signature.
+     */
+    QList<qlonglong> bestMatchesForImageWithThreshold(qlonglong imageid, double requiredPercentage, SketchType type=ScannedSketch);
+
     /** Calculates the Haar signature, bring it in a form as stored in the DB,
      *  and encode it to Ascii data. Can be used for bestMatchesForSignature. 
      */
     QString signatureAsText(const QImage &image);
+
+    /** For a given signature, find out the highest and lowest possible score
+     *  that any other signature could reach, compared to the given signature.
+     */
+    void getBestAndWorstPossibleScore(Haar::SignatureData *querySig, SketchType type,
+                                      double *lowestAndBestScore, double *highestAndWorstScore);
 
     /** Fill a map of duplicates images found over a list of image to scan.
      *  For each map item, the result values is list of candidate images which are duplicates of the key image.
@@ -96,10 +109,14 @@ public:
 private:
 
     QImage loadQImage(const QString &filename);
+    bool   retrieveSignatureFromDB(qlonglong imageid, Haar::SignatureData *sig);
 
     bool   indexImage(qlonglong imageid);
 
     QList<qlonglong> bestMatches(Haar::SignatureData *data, int numberOfResults, SketchType type);
+    QList<qlonglong> bestMatchesWithThreshold(Haar::SignatureData *querySig, double requiredPercentage, SketchType type);
+
+    QMap<qlonglong, double> searchDatabase(Haar::SignatureData *data, SketchType type);
 
 private:
 
