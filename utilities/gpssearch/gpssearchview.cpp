@@ -232,6 +232,7 @@ void GPSSearchView::slotSaveGPSSAlbum()
 
 void GPSSearchView::slotSelectionChanged()
 {
+    slotCheckNameEditGPSConditions();
     createNewGPSSearchAlbum(GPSSearchFolderView::currentGPSSearchName());
 }
 
@@ -269,7 +270,16 @@ void GPSSearchView::slotAlbumSelected(SAlbum* salbum)
 
     AlbumManager::instance()->setCurrentAlbum(salbum);
 
-    //FIXME: set selection aera in marble widget
+    SearchXmlReader reader(salbum->query());
+    reader.readToFirstField();
+    QStringRef type = reader.attributes().value("type");
+
+    if (type == "rectangle")
+    {
+        QList<double> list;
+        list << reader.valueToLongLong();
+        d->gpsSearchWidget->setSelectionCoordinates(list);
+    }
 }
 
 bool GPSSearchView::checkName(QString& name)

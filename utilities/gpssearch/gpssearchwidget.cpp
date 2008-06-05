@@ -27,6 +27,7 @@
 
 // Local includes.
 
+#include "ddebug.h"
 #include "gpssearchwidget.h"
 
 namespace Digikam
@@ -71,23 +72,17 @@ QList<double> GPSSearchWidget::selectionCoordinates() const
     return d->selection;
 }
 
+void GPSSearchWidget::setSelectionCoordinates(const QList<double>& sel)
+{
+    d->selection = sel;
+    DDebug() << "Set new selection area: " << d->selection << endl;
+    // TODO : set selection area in marble widget.
+}
+
 void GPSSearchWidget::slotNewSelection(const QList<double>& sel)
 {
     d->selection = sel;
     emit signalNewSelection();
-}
-
-#else // // HAVE_MARBLEWIDGET
-
-GPSSearchWidget::GPSSearchWidget(QWidget *parent)
-               : QLabel(parent)
-{
-    setText(i18n("Geolocation using Marble not available"));
-    setWordWrap(true);
-}
-
-GPSSearchWidget::~GPSSearchWidget()
-{
 }
 
 #endif // HAVE_MARBLEWIDGET

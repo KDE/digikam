@@ -56,6 +56,7 @@ public:
     bool asSelection() const;
 
     QList<double> selectionCoordinates() const;
+    void setSelectionCoordinates(const QList<double>&);
 
 signals:
 
@@ -70,7 +71,7 @@ private:
     GPSSearchWidgetPriv *d;
 };
 
-#else // // HAVE_MARBLEWIDGET
+#else // HAVE_MARBLEWIDGET
 
 class GPSSearchWidget : public QLabel
 {
@@ -78,12 +79,25 @@ class GPSSearchWidget : public QLabel
 
 public:
 
-    GPSSearchWidget(QWidget *parent=0);
-    ~GPSSearchWidget();
+    GPSSearchWidget(QWidget *parent=0)
+    {
+        setText(i18n("Geolocation using Marble not available"));
+        setWordWrap(true);
+    };
+
+    ~GPSSearchWidget(){};
 
     bool asSelection() const { return false; };
 
     QList<double> selectionCoordinates() const { return QList<double>(); };
+    void setSelectionCoordinates(const QList<double>&){};
+
+    int zoom(){ return 5; };
+    double centerLongitude(){ return 0.0; };
+    double centerLatitude(){ return 0.0; };
+    void zoomView(int) {};
+    void setCenterLongitude(double) {};
+    void setCenterLatitude(double) {};
 
 signals:
 
