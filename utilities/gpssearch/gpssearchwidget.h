@@ -29,6 +29,10 @@
 #include <QLabel>
 #include <QList>
 
+// KDE includes.
+
+#include <klocale.h>
+
 // Local includes.
 
 #include "config-digikam.h"
