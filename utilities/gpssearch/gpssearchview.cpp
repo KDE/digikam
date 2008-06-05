@@ -261,7 +261,7 @@ void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
     // as left/top, right/bottom rectangle.
     QList<double> coordinates = d->gpsSearchWidget->selectionCoordinates();
 
-    DDebug() << "Coordinates area to use: " << coordinates << endl;
+    DDebug() << "West, North, East, South: " << coordinates << endl;
 
     SearchXmlWriter writer;
     writer.writeGroup();
@@ -282,7 +282,8 @@ void GPSSearchView::slotAlbumSelected(SAlbum* salbum)
 
     AlbumManager::instance()->setCurrentAlbum(salbum);
 
-/*  FIXME
+/*  FIXME: make selection in marble widget
+
     SearchXmlReader reader(salbum->query());
     reader.readToFirstField();
     QStringRef type             = reader.attributes().value("type");
@@ -301,7 +302,6 @@ void GPSSearchView::slotAlbumSelected(SAlbum* salbum)
         d->tabWidget->setCurrentIndex((int)GPSSearchViewPriv::SKETCH);
     }*/
 }
-
 
 bool GPSSearchView::checkName(QString& name)
 {
