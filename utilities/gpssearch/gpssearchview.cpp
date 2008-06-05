@@ -279,6 +279,7 @@ void GPSSearchView::slotAlbumSelected(SAlbum* salbum)
         QList<double> list;
         list << reader.valueToDoubleList();
         d->gpsSearchWidget->setSelectionCoordinates(list);
+        slotCheckNameEditGPSConditions();
     }
 }
 
