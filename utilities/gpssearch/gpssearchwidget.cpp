@@ -52,7 +52,7 @@ GPSSearchWidget::GPSSearchWidget(QWidget *parent)
     setMapThemeId("earth/srtm/srtm.dgml");
 #endif // MARBLE_VERSION
 
-    connect(this, SIGNAL(newSelection(const QList<double>&)),
+    connect(this, SIGNAL(regionSelected(const QList<double>&)),
             this, SLOT(slotNewSelection(const QList<double>&)));
 }
 

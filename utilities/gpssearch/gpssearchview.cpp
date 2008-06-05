@@ -180,36 +180,23 @@ GPSSearchView::~GPSSearchView()
 
 void GPSSearchView::readConfig()
 {
-/*  FIXME
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(QString("GPSSearch SideBar"));
 
-    d->tabWidget->setCurrentIndex(group.readEntry("GPSSearch Tab",
-                                  (int)GPSSearchViewPriv::SKETCH));
-    d->penSize->setValue(group.readEntry("Pen Sketch Size", 10));
-    d->resultsSketch->setValue(group.readEntry("Result Sketch items", 10));
-    d->hsSelector->setXValue(group.readEntry("Pen Sketch Hue", 180));
-    d->hsSelector->setYValue(group.readEntry("Pen Sketch Saturation", 128));
-    d->vSelector->setValue(group.readEntry("Pen Sketch Value", 255));
-    d->resultsImage->setValue(group.readEntry("Result Image items", 10));
-    d->hsSelector->updateContents();
-    slotHSChanged(d->hsSelector->xValue(), d->hsSelector->yValue());
-    d->sketchWidget->setPenWidth(d->penSize->value());*/
+    d->gpsSearchWidget->zoomView(group.readEntry("Zoom Level", 5));
+    // Default GPS location : Paris
+    d->gpsSearchWidget->setCenterLongitude(group.readEntry("Longitude", 2.3455810546875));
+    d->gpsSearchWidget->setCenterLatitude(group.readEntry("Latitude", 48.850258199721495));
 }
 
 void GPSSearchView::writeConfig()
 {
-/*  FIXME
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(QString("GPSSearch SideBar"));
-    group.writeEntry("GPSSearch Tab",        d->tabWidget->currentIndex());
-    group.writeEntry("Pen Sketch Size",        d->penSize->value());
-    group.writeEntry("Result Sketch items",    d->resultsSketch->value());
-    group.writeEntry("Pen Sketch Hue",         d->hsSelector->xValue());
-    group.writeEntry("Pen Sketch Saturation",  d->hsSelector->yValue());
-    group.writeEntry("Pen Sketch Value",       d->vSelector->value());
-    group.writeEntry("Result Image items",     d->resultsImage->value());
-    group.sync();*/
+    group.writeEntry("Zoom Level", d->gpsSearchWidget->zoom());
+    group.writeEntry("Longitude",  d->gpsSearchWidget->centerLongitude());
+    group.writeEntry("Latitude",   d->gpsSearchWidget->centerLatitude());
+    group.sync();
 }
 
 GPSSearchFolderView* GPSSearchView::folderView() const
@@ -282,25 +269,7 @@ void GPSSearchView::slotAlbumSelected(SAlbum* salbum)
 
     AlbumManager::instance()->setCurrentAlbum(salbum);
 
-/*  FIXME: make selection in marble widget
-
-    SearchXmlReader reader(salbum->query());
-    reader.readToFirstField();
-    QStringRef type             = reader.attributes().value("type");
-    QStringRef numResultsString = reader.attributes().value("numberofresults");
-    QStringRef sketchTypeString = reader.attributes().value("sketchtype");
-
-    if (type == "imageid")
-    {
-        setImageId(reader.valueToLongLong());
-        d->imageSAlbum = salbum;
-        d->tabWidget->setCurrentIndex((int)GPSSearchViewPriv::IMAGE);
-    }
-    else
-    {
-        d->sketchSAlbum = salbum;
-        d->tabWidget->setCurrentIndex((int)GPSSearchViewPriv::SKETCH);
-    }*/
+    //FIXME: set selection aera in marble widget
 }
 
 bool GPSSearchView::checkName(QString& name)
