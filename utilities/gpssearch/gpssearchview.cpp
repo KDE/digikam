@@ -277,7 +277,7 @@ void GPSSearchView::slotAlbumSelected(SAlbum* salbum)
     if (type == "rectangle")
     {
         QList<double> list;
-        list << reader.valueToLongLong();
+        list << reader.valueToDoubleList();
         d->gpsSearchWidget->setSelectionCoordinates(list);
     }
 }
