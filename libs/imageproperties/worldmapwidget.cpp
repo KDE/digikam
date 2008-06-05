@@ -98,7 +98,7 @@ WorldMapWidget::WorldMapWidget(int w, int h, QWidget *parent)
     d->marbleWidget->setWordWrap(true);
 #endif // HAVE_MARBLEWIDGET
 
-    QVBoxLayout *vlay = new QVBoxLayout(this);    
+    QVBoxLayout *vlay = new QVBoxLayout(this);
     vlay->addWidget(d->marbleWidget);
     vlay->setMargin(0);
     vlay->setSpacing(0);
@@ -127,9 +127,7 @@ void WorldMapWidget::setGPSPosition(double lat, double lng, double alt, const QD
     d->dt        = dt;
     d->url       = url;
 
-    // NOTE: There is no method currently to place a mark over the map in Marble 0.5.1.
-    // The only way is to use a temporary KML file with all informations that 
-    // we need.
+    // To place mark over a map in marble canvas, we will use KML data
 
     QDomDocument       kmlDocument;
     QDomImplementation impl;
@@ -151,6 +149,19 @@ void WorldMapWidget::setGPSPosition(double lat, double lng, double alt, const QD
     QDomElement kmlTimeStamp = addKmlElement(kmlDocument, kmlPlacemark, "TimeStamp");
     addKmlTextElement(kmlDocument, kmlTimeStamp, "when", d->dt.toString("yyyy-MM-ddThh:mm:ssZ"));
 
+#ifdef HAVE_MARBLEWIDGET
+
+#ifdef MARBLE_VERSION
+
+    // For Marble > 0.5.1
+    d->marbleWidget->setHome(lng, lat);
+    d->marbleWidget->centerOn(lng, lat);
+    d->marbleWidget->addPlaceMarkData(kmlDocument.toString());
+
+#else // MARBLE_VERSION
+
+    // For Marble 0.5.1, there is no method to place a mark over the map using string.
+    // The only way is to use a temp file with all KML informations.
     KTemporaryFile KMLFile;
     KMLFile.setSuffix(".kml");
     KMLFile.setAutoRemove(true);
@@ -161,10 +172,12 @@ void WorldMapWidget::setGPSPosition(double lat, double lng, double alt, const QD
     stream << kmlDocument.toString();
     file.close();
 
-#ifdef HAVE_MARBLEWIDGET
     d->marbleWidget->setHome(lng, lat);
     d->marbleWidget->centerOn(lng, lat);
     d->marbleWidget->addPlaceMarkFile(KMLFile.fileName());
+
+#endif // MARBLE_VERSION
+
 #endif // HAVE_MARBLEWIDGET
 }
 
@@ -175,7 +188,8 @@ QDomElement WorldMapWidget::addKmlElement(QDomDocument &kmlDocument, QDomElement
     return kmlElement;
 }
 
-QDomElement WorldMapWidget::addKmlTextElement(QDomDocument &kmlDocument, QDomElement &target, const QString& tag, const QString& text)
+QDomElement WorldMapWidget::addKmlTextElement(QDomDocument &kmlDocument, QDomElement &target,
+                                              const QString& tag, const QString& text)
 {
     QDomElement kmlElement  = kmlDocument.createElement(tag);
     target.appendChild(kmlElement);
