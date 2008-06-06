@@ -366,7 +366,6 @@ QList<qlonglong> HaarIface::bestMatchesWithThreshold(Haar::SignatureData *queryS
     getBestAndWorstPossibleScore(querySig, type, &lowest, &highest);
     double range = highest - lowest;
     double requiredScore = lowest + range * (1.0 - requiredPercentage);
-    DDebug() << "Possible scores" << lowest << highest << requiredScore;
 
     QMultiMap<double, qlonglong> bestMatches;
     double score, percentage;
@@ -383,10 +382,16 @@ QList<qlonglong> HaarIface::bestMatchesWithThreshold(Haar::SignatureData *queryS
         }
     }
 
-    for (QMultiMap<double, qlonglong>::iterator it = bestMatches.begin(); it != bestMatches.end(); ++it)
+    // Debug output
+    if (bestMatches.count() > 1)
     {
-        DDebug() << it.key() << it.value();
+        DDebug() << "Duplicates with id and score:";
+        for (QMultiMap<double, qlonglong>::iterator it = bestMatches.begin(); it != bestMatches.end(); ++it)
+        {
+            DDebug() << it.value() << QString::number(it.key() * 100)+QChar('%');
+        }
     }
+    // We may want to return the map itself, or a list with pairs id - percentage
     return bestMatches.values();
 }
 
@@ -532,17 +537,21 @@ void HaarIface::getBestAndWorstPossibleScore(Haar::SignatureData *sig, SketchTyp
 QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QList<qlonglong>& images2Scan)
 {
     QMap< qlonglong, QList<qlonglong> > resultsMap;
-    QList<qlonglong>::const_iterator    it = images2Scan.begin();
+    QList<qlonglong>::const_iterator    it;
     QList<qlonglong>::const_iterator    it2;
     QList<qlonglong>                    list;
     bool                                find = false;
 
-    while (it != images2Scan.end())
+    for (it = images2Scan.begin(); it != images2Scan.end(); ++it)
     {
         //list = bestMatchesForImage(*it, 20, ScannedSketch);
+        // find images with at least 90% similarity
         list = bestMatchesForImageWithThreshold(*it, 0.9, ScannedSketch);
         if (!list.isEmpty())
         {
+            // the list will usually contain one image: the original. Filter out.
+            if (list.count() == 1 && list.first() == *it)
+                continue;
             // we will check if the duplicates already exist in the map.
             find = false;
             for (it2 = list.begin(); it2 != list.end(); ++it2)
@@ -557,8 +566,6 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QList<qlongl
             if (!find)
                 resultsMap.insert(*it, list);
         }
-
-        ++it;
     };
 
     return resultsMap;
