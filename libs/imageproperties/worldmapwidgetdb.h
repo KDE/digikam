@@ -3,10 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2006-02-20
+ * Date        : 2008-06-06
  * Description : a widget to display GPS info on a world map
  * 
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,52 +21,36 @@
  * 
  * ============================================================ */
 
-#ifndef WORLDMAPWIDGET_H
-#define WORLDMAPWIDGET_H
-
-// Qt includes.
-
-#include <QFrame>
-#include <QDateTime>
-#include <QDomDocument>
-
-// KDE includes.
-
-#include <kurl.h>
+#ifndef WORLDMAPWIDGETDB_H
+#define WORLDMAPWIDGETDB_H
 
 // Local includes
 
 #include "digikam_export.h"
+#include "imageinfo.h"
+#include "worldmapwidget.h"
 
 namespace Digikam
 {
 
-class WorldMapWidgetPriv;
+class WorldMapWidgetDBPriv;
 
-class DIGIKAM_EXPORT WorldMapWidget : public QFrame
+class DIGIKAM_EXPORT WorldMapWidgetDB : public WorldMapWidget
 {
 Q_OBJECT
 
 public:
 
-    WorldMapWidget(int w, int h, QWidget *parent);
-    virtual ~WorldMapWidget();
+    WorldMapWidgetDB(int w, int h, QWidget *parent);
+    virtual ~WorldMapWidgetDB();
 
-    void   setGPSPosition(double lat, double lng, double alt, const QDateTime& dt, const KUrl& url);
-
-    double getLatitude();
-    double getLongitude();
+    void setGPSPositions(const ImageInfoList& list);
 
 private:
 
-    QDomElement addKmlElement(QDomDocument &kmlDocument, QDomElement &target, const QString& tag);
-    QDomElement addKmlTextElement(QDomDocument &kmlDocument, QDomElement &target, const QString& tag, const QString& text);
-
-private:
-
-    WorldMapWidgetPriv *d;
+    WorldMapWidgetDBPriv *d;
 };
 
 }  // namespace Digikam
 
-#endif /* WORLDMAPWIDGET_H */
+#endif /* WORLDMAPWIDGETDB_H */
