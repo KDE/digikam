@@ -390,9 +390,7 @@ public:
             calc.setDirection(180, distance);
             rect.setBottom(calc.destinationGeographicPoint().y());
 
-            sql += " ImagePositions.LongitudeNumber > ? AND ImagePositions.LatitudeNumber < ? "
-                   " AND ImagePositions.LongitudeNumber < ? AND ImagePositions.LatitudeNumber > ? ";
-            *boundValues << rect.x() << rect.y() << rect.right() << rect.bottom();
+            addRectanglePositionSearch(rect.x(), rect.y(), rect.right(), rect.bottom());
 
             if (radiusSearch)
             {
@@ -468,16 +466,35 @@ public:
             // like (x,y), (right,bottom) of a rectangle,
             // or like (West,North), (East,South),
             // where the searched region contains any lon,lat
-            //  where lon1 > lon > lon2 and lat1 < lat < lat2.
+            //  where lon1 < lon < lon2 and lat1 < lat < lat2.
             double lon1,lat1,lon2,lat2;
             lon1 = list[0];
             lat1 = list[1];
             lon2 = list[2];
             lat2 = list[3];
 
-            sql += " ( ImagePositions.LongitudeNumber > ? AND ImagePositions.LatitudeNumber < ? "
-                   "   AND ImagePositions.LongitudeNumber < ? AND ImagePositions.LatitudeNumber > ? ) ";
+            sql += " ( ";
+            addRectanglePositionSearch(lon1, lat1, lon2, lat2);
+            sql += " ) ";
+        }
+    }
+
+    void addRectanglePositionSearch(double lon1, double lat1, double lon2, double lat2)
+    {
+        // lon1 is always West of lon2. If the rectangle crosses 180° longitude, we have to treat a special case.
+        if (lon1 <= lon2)
+        {
+            sql += " ImagePositions.LongitudeNumber > ? AND ImagePositions.LatitudeNumber < ? "
+                   " AND ImagePositions.LongitudeNumber < ? AND ImagePositions.LatitudeNumber > ? ";
             *boundValues << lon1 << lat1 << lon2 << lat2;
+        }
+        else
+        {
+            // this effectively means splitting the rectangle is two parts, one East, one West
+            // to the 180° line. But no need to check for less/greater than -180/180°.
+            sql += " (ImagePositions.LongitudeNumber > ? OR ImagePositions.LongitudeNumber < ?) "
+                   " AND ImagePositions.LatitudeNumber < ? AND ImagePositions.LatitudeNumber > ? ";
+            *boundValues << lon1 << lon2 << lat1 << lat2;
         }
     }
 };
