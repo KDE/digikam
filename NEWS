@@ -19,7 +19,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 008 ==> 158866 : Advanced Search on Tags a mess.
 009 ==> 162814 : digiKam crashes when using light table (page down).
 010 ==> 163151 : Red eye correction doesn't work fine.
-011 ==> 
+011 ==> 163227 : Searching for tag names in simple and advanced search doesn't work.
+012 ==> 
 
 **********************************************************************************************
 

@@ -60,7 +60,7 @@ namespace Digikam
 {
 
 static const int RuleKeyTableCount = 11;
-static const int RuleOpTableCount  = 16;
+static const int RuleOpTableCount  = 18;
 
 static struct
 {
@@ -97,6 +97,8 @@ RuleOpTable[] =
     { I18N_NOOP("Does Not Equal"),     "NE",           SearchAdvancedRule::LINEEDIT },
     { I18N_NOOP("Equals"),             "EQ",           SearchAdvancedRule::ALBUMS   },
     { I18N_NOOP("Does Not Equal"),     "NE",           SearchAdvancedRule::ALBUMS   },
+    { I18N_NOOP("Contains"),           "LIKE",         SearchAdvancedRule::ALBUMS   },
+    { I18N_NOOP("Does Not Contain"),   "NLIKE",        SearchAdvancedRule::ALBUMS   },
     { I18N_NOOP("Equals"),             "EQ",           SearchAdvancedRule::TAGS     },
     { I18N_NOOP("Does Not Equal"),     "NE",           SearchAdvancedRule::TAGS     },
     { I18N_NOOP("Contains"),           "LIKE",         SearchAdvancedRule::TAGS     },
@@ -153,7 +155,11 @@ SearchAdvancedRule::SearchAdvancedRule(QWidget* parent, SearchAdvancedRule::Opti
         m_key->insertItem( i18n(RuleKeyTable[i].keyText), i );
 
     m_operator = new QComboBox( m_hbox );
-    m_operator->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
+    m_operator->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Minimum );
+    // prepopulate the operator widget to get optimal size
+    for (int i=0; i< RuleOpTableCount; i++)
+        m_operator->insertItem( i18n(RuleOpTable[i].keyText), i );
+    m_operator->adjustSize();
 
     m_valueBox = new QHBox( m_hbox );
     m_widgetType = NOWIDGET;
@@ -262,6 +268,9 @@ void SearchAdvancedRule::slotKeyChanged(int id)
     QString currentOperator = m_operator->currentText();
     valueWidgetTypes currentType = m_widgetType;
 
+    // we need to save the current size of the operator combobox
+    // otherise clear() will shrink it
+    QSize curSize = m_operator->size();
     m_operator->clear();
     m_widgetType = RuleKeyTable[id].cat;
 
@@ -275,14 +284,14 @@ void SearchAdvancedRule::slotKeyChanged(int id)
                 m_operator->setCurrentText( currentOperator );
         }
     }
-    m_operator->adjustSize();
+    m_operator->setFixedSize(curSize);
     setValueWidget( currentType, m_widgetType );
 }
 
 void SearchAdvancedRule::setValueWidget(valueWidgetTypes oldType, valueWidgetTypes newType)
 {
     // this map is used to sort album and tag list combobox
-    typedef QMap<QString, int> sortedList;
+    typedef QMap<QString, int> SortedList;
     
     if (oldType == newType)
         return;
@@ -311,7 +320,7 @@ void SearchAdvancedRule::setValueWidget(valueWidgetTypes oldType, valueWidgetTyp
     else if (newType == LINEEDIT)
     {
         m_lineEdit = new QLineEdit( m_valueBox, "lineedit" );
-        m_lineEdit->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
+        m_lineEdit->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
         m_lineEdit->show();
 
         connect( m_lineEdit, SIGNAL ( textChanged(const QString&) ),
@@ -331,7 +340,7 @@ void SearchAdvancedRule::setValueWidget(valueWidgetTypes oldType, valueWidgetTyp
         // First we need to sort the album list.
         // We create a map with the album url as key, so that it is
         // automatically sorted.
-        sortedList sAList;
+        SortedList sAList;
         
         for ( AlbumList::Iterator it = aList.begin();
               it != aList.end(); ++it )
@@ -345,7 +354,7 @@ void SearchAdvancedRule::setValueWidget(valueWidgetTypes oldType, valueWidgetTyp
         
         // Now we can iterate over the sorted list and fill the combobox
         int index = 0;
-        for ( sortedList::Iterator it = sAList.begin();
+        for ( SortedList::Iterator it = sAList.begin();
               it != sAList.end(); ++it )
         {
             m_valueCombo->insertSqueezedItem( it.key(), index );
@@ -371,7 +380,7 @@ void SearchAdvancedRule::setValueWidget(valueWidgetTypes oldType, valueWidgetTyp
         // First we need to sort the tags.
         // We create a map with the album tagPath as key, so that it is
         // automatically sorted.
-        sortedList sTList;
+        SortedList sTList;
         
         for ( AlbumList::Iterator it = tList.begin();
               it != tList.end(); ++it )
@@ -385,7 +394,7 @@ void SearchAdvancedRule::setValueWidget(valueWidgetTypes oldType, valueWidgetTyp
         
         // Now we can iterate over the sorted list and fill the combobox
         int index = 0;
-        for (sortedList::Iterator it = sTList.begin();
+        for (SortedList::Iterator it = sTList.begin();
              it != sTList.end(); ++it)
         {
             m_valueCombo->insertSqueezedItem( it.key(), index );
