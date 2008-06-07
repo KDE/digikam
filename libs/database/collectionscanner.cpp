@@ -110,6 +110,9 @@ void CollectionScanner::completeScan()
 {
     emit startCompleteScan();
 
+    // lock database
+    DatabaseTransaction transaction;
+
     loadNameFilters();
 
     //TODO: Implement a mechanism to watch for album root changes while we keep this list
@@ -228,7 +231,6 @@ void CollectionScanner::scanAlbumRoot(const CollectionLocation &location)
     }
     */
 
-    DatabaseTransaction transaction;
     // scan album that covers the root directory of this album root,
     // all contained albums, and their subalbums recursively.
     scanAlbum(location, "/");
@@ -265,12 +267,14 @@ void CollectionScanner::scanForStaleAlbums(QList<CollectionLocation> locations)
         }
     }
 
-    DatabaseTransaction transaction;
-    DatabaseAccess access;
-    foreach (int albumId, toBeDeleted)
     {
-        access.db()->removeItemsFromAlbum(albumId);
-        access.db()->deleteAlbum(albumId);
+        DatabaseAccess access;
+        DatabaseTransaction transaction(&access);
+        foreach (int albumId, toBeDeleted)
+        {
+            access.db()->removeItemsFromAlbum(albumId);
+            access.db()->deleteAlbum(albumId);
+        }
     }
 
     if (d->wantSignals)
