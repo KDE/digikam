@@ -1858,12 +1858,12 @@ void AlbumManager::slotDatesJobData(KIO::Job*, const QByteArray& data)
 void AlbumManager::slotDirty(const QString& path)
 {
     DDebug() << "AlbumManager::slotDirty" << path << endl;
-    QDir dir(path);
 
     // Filter out dirty signals triggered by changes on the database file
     DatabaseParameters params = DatabaseAccess::parameters();
     if (params.isSQLite())
     {
+        QDir dir(path);
         QFileInfo dbFile(params.SQLiteDatabaseFile());
 
         // is the signal for the directory containing the database file?
@@ -1876,13 +1876,14 @@ void AlbumManager::slotDirty(const QString& path)
             // build list
             foreach (const QFileInfo &info, fileInfoList)
             {
-                modList << info.lastModified();
+                if (info != dbFile)
+                    modList << info.lastModified();
             }
 
             // check for equality
             if (modList == d->dbPathModificationDateList)
             {
-                DDebug() << "Filtering out db file triggered dir watch signal" << endl;
+                DDebug() << "Filtering out db-file-triggered dir watch signal" << endl;
                 // we can skip the signal
                 return;
             }
