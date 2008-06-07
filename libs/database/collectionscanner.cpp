@@ -219,14 +219,19 @@ void CollectionScanner::scanAlbumRoot(const CollectionLocation &location)
     if (d->wantSignals)
         emit startScanningAlbumRoot(location.albumRootPath());
 
+    /*
     QDir dir(location.albumRootPath());
     QStringList fileList(dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot));
-
-    DatabaseTransaction transaction;
     for (QStringList::iterator fileIt = fileList.begin(); fileIt != fileList.end(); ++fileIt)
     {
         scanAlbum(location, '/' + (*fileIt));
     }
+    */
+
+    DatabaseTransaction transaction;
+    // scan album that covers the root directory of this album root,
+    // all contained albums, and their subalbums recursively.
+    scanAlbum(location, "/");
 
     if (d->wantSignals)
         emit finishedScanningAlbumRoot(location.albumRootPath());
@@ -377,7 +382,13 @@ void CollectionScanner::scanAlbum(const CollectionLocation &location, const QStr
         }
         else if ( fi->isDir() )
         {
-            scanAlbum( location, album + '/' + fi->fileName() );
+            QString subalbum;
+            if (album == "/")
+                subalbum = '/' + fi->fileName();
+            else
+                subalbum = album + '/' + fi->fileName();
+
+            scanAlbum( location, subalbum );
         }
     }
 
