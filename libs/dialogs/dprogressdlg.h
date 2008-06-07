@@ -70,6 +70,7 @@ Q_OBJECT
     void setValue(int value);
 
     void setButtonText(const QString &text);
+    void setButtonGuiItem(const KGuiItem &item);
     void addedAction(const QPixmap& pix, const QString &text);
     void reset();
 

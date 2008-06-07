@@ -152,6 +152,11 @@ void DProgressDlg::setButtonText(const QString &text)
     KDialog::setButtonText(Cancel, text);
 }
 
+void DProgressDlg::setButtonGuiItem(const KGuiItem &item)
+{
+    KDialog::setButtonGuiItem(Cancel, item);
+}
+
 void DProgressDlg::addedAction(const QPixmap& itemPix, const QString &text)
 {
     QPixmap pix = itemPix;
