@@ -258,6 +258,7 @@ PAlbum::PAlbum(const QString& title)
 PAlbum::PAlbum(int albumRoot, const QString &label)
       : Album(Album::PHYSICAL, -albumRoot, false)
 {
+    // set the id to the negative album root id (line above). AlbumManager may change that later.
     setTitle(label);
     m_albumRootId      = albumRoot;
     m_isAlbumRootAlbum = true;

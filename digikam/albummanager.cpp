@@ -456,7 +456,7 @@ void AlbumManager::addAlbumRoot(const CollectionLocation &location)
     PAlbum *album = d->albumRootAlbumHash.value(location.id());
     if (!album)
     {
-        // Create a PAlbum for the Album Root. Do not yet insert into tree.
+        // Create a PAlbum for the Album Root.
         QString label = location.label();
         if (label.isEmpty())
             label = location.albumRootPath();
@@ -504,6 +504,7 @@ void AlbumManager::scanPAlbums()
     // scan db and get a list of all albums
     QList<AlbumInfo> currentAlbums = DatabaseAccess().db()->scanAlbums();
 
+    // sort by relative path so that parents are created before children
     qSort(currentAlbums);
 
     QList<AlbumInfo> newAlbums;
@@ -544,48 +545,71 @@ void AlbumManager::scanPAlbums()
         removePAlbum(album);
     }
 
+    // sort by relative path so that parents are created before children
     qSort(newAlbums);
 
+    // create all new albums
     foreach (const AlbumInfo &info, newAlbums)
     {
-        if (info.relativePath.isEmpty() || info.relativePath == "/")
+        if (info.relativePath.isEmpty())
             continue;
 
-        // last section, no slash
-        QString name = info.relativePath.section('/', -1, -1);
-        // all but last sections, leading slash, no trailing slash
-        QString parentPath = info.relativePath.section('/', 0, -2);
-
-        PAlbum* parent;
-        if (parentPath.isEmpty())
+        PAlbum *album, *parent;
+        bool needInsert;
+        if (info.relativePath == "/")
         {
-            // if there is only one album root, we use the (single) root album
-            if (d->albumRootAlbumHash.count() == 1)
-                parent = d->rootPAlbum;
-            else
-                parent = d->albumRootAlbumHash.value(info.albumRootId);
+            // albums that represent the root directory of an album root
+            parent = d->rootPAlbum;
+            album  = d->albumRootAlbumHash.value(info.albumRootId);
+            needInsert = false;
+
+            // it has been created from the collection location
+            // with album root id, parentPath "/" and a name, but no album id yet.
+            album->m_id = info.id;
+            // update hashes after setting id
+            d->albumPathHash.remove(album);
+            d->allAlbumsIdHash.remove(album->globalID());
+            d->albumPathHash[album]  = album;
+            d->allAlbumsIdHash[album->globalID()] = album;
         }
         else
-            parent = d->albumPathHash.value(PAlbumPath(info.albumRootId, parentPath));
-
-        if (!parent)
         {
-            DWarning() <<  "Could not find parent with url: "
-                       << parentPath << " for: " << info.relativePath << endl;
-            continue;
+
+            // last section, no slash
+            QString name = info.relativePath.section('/', -1, -1);
+            // all but last sections, leading slash, no trailing slash
+            QString parentPath = info.relativePath.section('/', 0, -2);
+
+            if (parentPath.isEmpty())
+                parent = d->albumRootAlbumHash.value(info.albumRootId);
+            else
+                parent = d->albumPathHash.value(PAlbumPath(info.albumRootId, parentPath));
+
+            if (!parent)
+            {
+                DError() <<  "Could not find parent with url: "
+                         << parentPath << " for: " << info.relativePath << endl;
+                continue;
+            }
+
+            // Create the new album
+            album       = new PAlbum(info.albumRootId, parentPath, name, info.id);
+            needInsert  = true;
         }
 
-        // Create the new album
-        PAlbum* album       = new PAlbum(info.albumRootId, parentPath, name, info.id);
         album->m_caption    = info.caption;
         album->m_collection = info.collection;
         album->m_date       = info.date;
 
-        QString albumRootPath = CollectionManager::instance()->albumRootPath(info.iconAlbumRootId);
-        if (!albumRootPath.isNull())
-            album->m_icon = albumRootPath + info.iconRelativePath;
+        if (info.iconAlbumRootId)
+        {
+            QString albumRootPath = CollectionManager::instance()->albumRootPath(info.iconAlbumRootId);
+            if (!albumRootPath.isNull())
+                album->m_icon = albumRootPath + info.iconRelativePath;
+        }
 
-        insertPAlbum(album, parent);
+        if (needInsert)
+            insertPAlbum(album, parent);
     }
 
     getAlbumItemsCount();
