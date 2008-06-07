@@ -90,13 +90,16 @@ public:
             return;
         }
 
+        stream.setVersion(QDataStream::Qt_4_3);
+
         // read averages
         for (int i=0; i<3; i++)
             stream >> data->avg[i];
 
         // read coefficients
         for (int i=0; i<3; i++)
-            stream.readRawData((char*)data->sig[i], sizeof(qint32[Haar::NumberOfCoefficients]));
+            for (int j=0; j<Haar::NumberOfCoefficients; j++)
+                stream >> data->sig[i][j];
     }
 
     QByteArray write(Haar::SignatureData *data)
@@ -104,6 +107,7 @@ public:
         QByteArray array;
         array.reserve(sizeof(qint32) + 3*sizeof(double) + 3*sizeof(qint32)*Haar::NumberOfCoefficients);
         QDataStream stream(&array, QIODevice::WriteOnly);
+        stream.setVersion(QDataStream::Qt_4_3);
 
         // write version
         stream << (qint32)Version;
@@ -114,7 +118,8 @@ public:
 
         // write coefficients
         for (int i=0; i<3; i++)
-            stream.writeRawData((char*)data->sig[i], sizeof(qint32[Haar::NumberOfCoefficients]));
+            for (int j=0; j<Haar::NumberOfCoefficients; j++)
+                stream << data->sig[i][j];
 
         return array;
     }
