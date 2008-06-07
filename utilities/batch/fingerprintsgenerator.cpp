@@ -36,6 +36,7 @@
 #include <kcodecs.h>
 #include <klocale.h>
 #include <kapplication.h>
+#include <kstandardguiitem.h>
 
 // Local includes.
 
@@ -147,6 +148,7 @@ void FingerPrintsGenerator::complete()
     t = t.addMSecs(d->duration.elapsed());
     setLabel(i18n("<b>Update of finger-prints database done</b>"));
     setTitle(i18n("Duration: %1", t.toString()));
+    setButtonGuiItem(KStandardGuiItem::ok());
     setButtonText(i18n("&Close"));
     emit signalRebuildAllFingerPrintsDone();
 }
