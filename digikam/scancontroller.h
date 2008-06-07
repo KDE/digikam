@@ -73,6 +73,7 @@ public:
     /**
      * Carries out a complete collection scan, providing progress feedback.
      * Synchronous, returns when ready.
+     * The database will be locked while the scan is running.
      */
     void completeCollectionScan(SplashScreen *splash=0);
 

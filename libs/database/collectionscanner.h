@@ -56,6 +56,7 @@ public:
      * Carries out a full scan on all available parts of the collection.
      * Only a full scan can finally remove deleted files from the database,
      * only a full scan will mark the database as scanned.
+     * The database will be locked while running (Note: this is not done for partialScans).
      */
     void completeScan();
 
