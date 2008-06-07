@@ -1515,6 +1515,9 @@ void SearchFieldAlbum::setupValueWidgets(QGridLayout *layout, int row, int colum
     m_comboBox->installView();
     m_comboBox->view()->setSortingEnabled(true);
     m_comboBox->view()->sortByColumn(0, Qt::AscendingOrder);
+    m_comboBox->view()->collapseAll();
+    if (m_type == TypeAlbum)
+        m_comboBox->view()->expandToDepth(0);
     updateComboText();
 
     layout->addWidget(m_comboBox, row, column, 1, 3);
