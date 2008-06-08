@@ -175,13 +175,20 @@ public:
      */
     QString   comment() const;
 
+    /**
+     * Returns the rating
+     */
     int       rating() const;
 
     /**
-     * @return a list of names of all tags assigned to this item
-     * @see tagPaths
+     * Returns the category of the item: Image, Audio, Video
      */
-    //QStringList tagNames() const;
+    DatabaseItem::Category category() const;
+
+    /** Returns the image format / mimetype as a standardized
+     *  string (see DBSCHEMA.ods).
+     */
+    QString   format() const;
 
     /**
      * @return a list of IDs of tags assigned to this item
@@ -256,7 +263,7 @@ public:
      * @return an ImageInfo object of the new item
      */
     //TODO: Move to album?
-    KDE_DEPRECATED ImageInfo   copyItem(int dstAlbumID, const QString &dstFileName);
+    ImageInfo   copyItem(int dstAlbumID, const QString &dstFileName);
 
     /**
      * refresh the properties of the imageinfo. it reads the database

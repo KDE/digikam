@@ -53,10 +53,13 @@ ImageInfoData::ImageInfoData()
     albumRootId    = -1;
 
     rating         = -1;
+    category       = DatabaseItem::UndefinedCategory;
     fileSize       = 0;
 
     defaultCommentCached    = false;
     ratingCached            = false;
+    categoryCached          = false;
+    formatCached            = false;
     creationDateCached      = false;
     modificationDateCached  = false;
     fileSizeCached          = false;
@@ -79,6 +82,8 @@ ImageInfo::ImageInfo(const ImageListerRecord &record)
     m_data->name           = record.name;
 
     m_data->rating           = record.rating;
+    m_data->category         = record.category;
+    m_data->format           = record.format;
     m_data->creationDate     = record.creationDate;
     m_data->modificationDate = record.modificationDate;
     m_data->fileSize         = record.fileSize;
@@ -276,6 +281,38 @@ int ImageInfo::rating() const
         m_data.constCastData()->ratingCached = true;
     }
     return m_data->rating;
+}
+
+QString ImageInfo::format() const
+{
+    if (!m_data)
+        return 0;
+
+    DatabaseAccess access;
+    if (!m_data->formatCached)
+    {
+        QVariantList values = access.db()->getImageInformation(m_data->id, DatabaseFields::Format);
+        if (!values.isEmpty())
+            m_data.constCastData()->format = values.first().toString();
+        m_data.constCastData()->formatCached = true;
+    }
+    return m_data->format;
+}
+
+DatabaseItem::Category ImageInfo::category() const
+{
+    if (!m_data)
+        return DatabaseItem::UndefinedCategory;
+
+    DatabaseAccess access;
+    if (!m_data->categoryCached)
+    {
+        QVariantList values = access.db()->getImagesFields(m_data->id, DatabaseFields::Category);
+        if (!values.isEmpty())
+            m_data.constCastData()->category = (DatabaseItem::Category)values.first().toInt();
+        m_data.constCastData()->categoryCached = true;
+    }
+    return m_data->category;
 }
 
 QDateTime ImageInfo::dateTime() const

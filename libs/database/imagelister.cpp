@@ -72,6 +72,8 @@ QDataStream &operator<<(QDataStream &os, const ImageListerRecord &record)
     os << record.name;
 
     os << record.rating;
+    os << (int)record.category;
+    os << record.format;
     os << record.creationDate;
     os << record.modificationDate;
     os << record.fileSize;
@@ -82,12 +84,16 @@ QDataStream &operator<<(QDataStream &os, const ImageListerRecord &record)
 
 QDataStream &operator>>(QDataStream &ds, ImageListerRecord &record)
 {
+    int category;
     ds >> record.imageID;
     ds >> record.albumID;
     ds >> record.albumRootID;
     ds >> record.name;
 
     ds >> record.rating;
+    ds >> category;
+    record.category = (DatabaseItem::Category)category;
+    ds >> record.format;
     ds >> record.creationDate;
     ds >> record.modificationDate;
     ds >> record.fileSize;
@@ -201,7 +207,8 @@ void ImageLister::listAlbum(ImageListerReceiver *receiver,
     QList<QVariant> values;
 
     QString query = "SELECT DISTINCT Images.id, Images.name, Images.album, "
-                    "       ImageInformation.rating, ImageInformation.creationDate, "
+                    "       ImageInformation.rating, Images.category, "
+                    "       ImageInformation.format, ImageInformation.creationDate, "
                     "       Images.modificationDate, Images.fileSize, "
                     "       ImageInformation.width, ImageInformation.height "
                     " FROM Images "
@@ -235,6 +242,10 @@ void ImageLister::listAlbum(ImageListerReceiver *receiver,
         ++it;
         record.rating            = (*it).toInt();
         ++it;
+        record.category          = (DatabaseItem::Category)(*it).toInt();
+        ++it;
+        record.format            = (*it).toString();
+        ++it;
         record.creationDate      = QDateTime::fromString((*it).toString(), Qt::ISODate);
         ++it;
         record.modificationDate  = QDateTime::fromString((*it).toString(), Qt::ISODate);
@@ -260,7 +271,8 @@ void ImageLister::listTag(ImageListerReceiver *receiver, int tagId)
 
     QString query = QString( "SELECT DISTINCT Images.id, Images.name, Images.album, "
                              "       Albums.albumRoot, "
-                             "       ImageInformation.rating, ImageInformation.creationDate, "
+                             "       ImageInformation.rating, Images.category, "
+                             "       ImageInformation.format, ImageInformation.creationDate, "
                              "       Images.modificationDate, Images.fileSize, "
                              "       ImageInformation.width, ImageInformation.height "
                              " FROM Images "
@@ -292,6 +304,10 @@ void ImageLister::listTag(ImageListerReceiver *receiver, int tagId)
         ++it;
         record.rating            = (*it).toInt();
         ++it;
+        record.category          = (DatabaseItem::Category)(*it).toInt();
+        ++it;
+        record.format            = (*it).toString();
+        ++it;
         record.creationDate      = QDateTime::fromString((*it).toString(), Qt::ISODate);
         ++it;
         record.modificationDate  = QDateTime::fromString((*it).toString(), Qt::ISODate);
@@ -317,7 +333,8 @@ void ImageLister::listDateRange(ImageListerReceiver *receiver, const QDate &star
         DatabaseAccess access;
         access.backend()->execSql(QString("SELECT DISTINCT Images.id, Images.name, Images.album, "
                                           "       Albums.albumRoot, "
-                                          "       ImageInformation.rating, ImageInformation.creationDate, "
+                                          "       ImageInformation.rating, Images.category, "
+                                          "       ImageInformation.format, ImageInformation.creationDate, "
                                           "       Images.modificationDate, Images.fileSize, "
                                           "       ImageInformation.width, ImageInformation.height "
                                           " FROM Images "
@@ -345,6 +362,10 @@ void ImageLister::listDateRange(ImageListerReceiver *receiver, const QDate &star
         record.albumRootID       = (*it).toInt();
         ++it;
         record.rating            = (*it).toInt();
+        ++it;
+        record.category          = (DatabaseItem::Category)(*it).toInt();
+        ++it;
+        record.format            = (*it).toString();
         ++it;
         record.creationDate      = QDateTime::fromString((*it).toString(), Qt::ISODate);
         ++it;
@@ -378,7 +399,8 @@ void ImageLister::listSearch(ImageListerReceiver *receiver,
     // query head
     sqlQuery = "SELECT DISTINCT Images.id, Images.name, Images.album, "
                "       Albums.albumRoot, "
-               "       ImageInformation.rating, ImageInformation.creationDate, "
+               "       ImageInformation.rating, Images.category, "
+               "       ImageInformation.format, ImageInformation.creationDate, "
                "       Images.modificationDate, Images.fileSize, "
                "       ImageInformation.width, ImageInformation.height, "
                "       ImagePositions.latitudeNumber, ImagePositions.longitudeNumber "
@@ -430,6 +452,10 @@ void ImageLister::listSearch(ImageListerReceiver *receiver,
         record.albumRootID       = (*it).toInt();
         ++it;
         record.rating            = (*it).toInt();
+        ++it;
+        record.category          = (DatabaseItem::Category)(*it).toInt();
+        ++it;
+        record.format            = (*it).toString();
         ++it;
         record.creationDate      = QDateTime::fromString((*it).toString(), Qt::ISODate);
         ++it;
@@ -528,7 +554,8 @@ void ImageLister::listFromIdList(ImageListerReceiver *receiver, QList<qlonglong>
         QSqlQuery query = access.backend()->prepareQuery(QString(
                              "SELECT DISTINCT Images.id, Images.name, Images.album, "
                              "       Albums.albumRoot, "
-                             "       ImageInformation.rating, ImageInformation.creationDate, "
+                             "       ImageInformation.rating, Images.category, "
+                             "       ImageInformation.format, ImageInformation.creationDate, "
                              "       Images.modificationDate, Images.fileSize, "
                              "       ImageInformation.width, ImageInformation.height "
                              " FROM Images "
@@ -571,6 +598,10 @@ void ImageLister::listFromIdList(ImageListerReceiver *receiver, QList<qlonglong>
         record.albumRootID       = (*it).toInt();
         ++it;
         record.rating            = (*it).toInt();
+        ++it;
+        record.category          = (DatabaseItem::Category)(*it).toInt();
+        ++it;
+        record.format            = (*it).toString();
         ++it;
         record.creationDate      = QDateTime::fromString((*it).toString(), Qt::ISODate);
         ++it;

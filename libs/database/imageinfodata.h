@@ -35,6 +35,7 @@
 
 #include "databaseurl.h"
 #include "dshareddata.h"
+#include "albuminfo.h"
 
 namespace Digikam
 {
@@ -58,6 +59,8 @@ public:
 
     QString    defaultComment;
     int        rating;
+    DatabaseItem::Category category;
+    QString    format;
     QDateTime  creationDate;
     QDateTime  modificationDate;
     uint       fileSize;
@@ -66,6 +69,8 @@ public:
 
     bool       defaultCommentCached   : 1;
     bool       ratingCached           : 1;
+    bool       categoryCached         : 1;
+    bool       formatCached           : 1;
     bool       creationDateCached     : 1;
     bool       modificationDateCached : 1;
     bool       fileSizeCached         : 1;

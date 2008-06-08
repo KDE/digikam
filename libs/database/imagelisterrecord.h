@@ -35,6 +35,7 @@
 // KDE includes.
 
 #include "digikam_export.h"
+#include "albuminfo.h"
 
 namespace Digikam
 {
@@ -59,6 +60,8 @@ public:
     QString    name;
 
     int        rating;
+    DatabaseItem::Category category;
+    QString    format;
     QDateTime  creationDate;
     QDateTime  modificationDate;
     int        fileSize;
