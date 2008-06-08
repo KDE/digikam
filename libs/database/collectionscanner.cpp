@@ -90,7 +90,7 @@ void CollectionScanner::setSignalsEnabled(bool on)
 void CollectionScanner::loadNameFilters()
 {
     QStringList imageFilter, audioFilter, videoFilter;
-    DatabaseAccess().db()->getFilterSettings(imageFilter, audioFilter, videoFilter);
+    DatabaseAccess().db()->getFilterSettings(&imageFilter, &videoFilter, &audioFilter);
 
     // one list for filtering when listing a dir, with wildcard globbing
     foreach (const QString &suffix, imageFilter)
