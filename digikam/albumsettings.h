@@ -98,16 +98,13 @@ public:
     void setItemRightClickAction(const ItemRightClickAction action);
     ItemRightClickAction getItemRightClickAction() const;
 
-    void setImageFileFilter(const QString& filter);
     QString getImageFileFilter() const;
+    void addToImageFileFilter(const QString &extensions);
 
-    void setMovieFileFilter(const QString& filter);
     QString getMovieFileFilter() const;
 
-    void setAudioFileFilter(const QString& filter);
     QString getAudioFileFilter() const;
 
-    void setRawFileFilter(const QString& filter);
     QString getRawFileFilter() const;
 
     bool    addImageFileExtension(const QString& ext);
@@ -247,11 +244,6 @@ public:
 
     void    setApplySidebarChangesDirectly(bool val);
     bool    getApplySidebarChangesDirectly() const;
-
-    QString getDefaultImageFileFilter() const;
-    QString getDefaultMovieFileFilter() const;
-    QString getDefaultAudioFileFilter() const;
-    QString getDefaultRawFileFilter() const;
 
     void setPreviewLoadFullImageSize(bool val);
     bool getPreviewLoadFullImageSize() const;

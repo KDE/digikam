@@ -40,6 +40,8 @@
 
 #include "thumbnailsize.h"
 #include "mimefilter.h"
+#include "databaseaccess.h"
+#include "albumdb.h"
 #include "albumlister.h"
 #include "albumsettings.h"
 
@@ -129,14 +131,6 @@ public:
     // database settings
     QString                             albumLibraryPath;
     QString                             databaseFilePath;
-    QString                             imageFilefilter;
-    QString                             movieFilefilter;
-    QString                             audioFilefilter;
-    QString                             rawFilefilter;
-    QString                             defaultImageFilefilter;
-    QString                             defaultMovieFilefilter;
-    QString                             defaultAudioFilefilter;
-    QString                             defaultRawFilefilter;
 
     // album settings
     QStringList                         albumCollectionNames;
@@ -189,28 +183,9 @@ void AlbumSettings::init()
     d->imageSortOrder               = AlbumSettings::ByIName;
     d->itemRightClickAction         = AlbumSettings::ShowPreview;
 
-    d->defaultImageFilefilter       = "*.jpg *.jpeg *.jpe "               // JPEG
-                                      "*.jp2 *.jpx *.jpc *.pgx "          // JPEG-2000
-                                      "*.tif *.tiff "                     // TIFF
-                                      "*.png *.gif *.bmp *.xpm *.ppm *.pnm *.xcf *.pcx";
-			 
-    d->defaultMovieFilefilter       = "*.mpeg *.mpg *.mpo *.mpe "         // MPEG
-                                      "*.avi *.mov *.wmf *.asf *.mp4 *.3gp";
-			 
-    d->defaultAudioFilefilter       = "*.ogg *.mp3 *.wma *.wav";
-
-    // RAW files estentions supported by dcraw program and 
-    // defines to digikam/libs/dcraw/rawfiles.h
-    d->defaultRawFilefilter         = QString(KDcrawIface::DcrawBinary::instance()->rawFiles());
-
-    d->imageFilefilter              = d->defaultImageFilefilter;
-    d->movieFilefilter              = d->defaultMovieFilefilter;
-    d->audioFilefilter              = d->defaultAudioFilefilter;
-    d->rawFilefilter                = d->defaultRawFilefilter;
-
     d->thumbnailSize                = ThumbnailSize::Medium;
     d->treeThumbnailSize            = 32;
- 
+
     d->ratingFilterCond             = AlbumLister::GreaterEqualCondition;
 
     d->showToolTips                 = true;
@@ -295,11 +270,6 @@ void AlbumSettings::readSettings()
                                                                          "Item Right Click Action",
                                                                           (int)AlbumSettings::ShowPreview));
 
-#warning File formats are now stored in the database. Remove this here and update settings tab.
-    d->imageFilefilter              = group.readEntry("File Filter", d->imageFilefilter);
-    d->movieFilefilter              = group.readEntry("Movie File Filter", d->movieFilefilter);
-    d->audioFilefilter              = group.readEntry("Audio File Filter", d->audioFilefilter);
-    d->rawFilefilter                = group.readEntry("Raw File Filter", d->rawFilefilter);
     d->thumbnailSize                = group.readEntry("Default Icon Size", (int)ThumbnailSize::Medium);
     d->treeThumbnailSize            = group.readEntry("Default Tree Icon Size", (int)ThumbnailSize::Tiny);
     d->currentTheme                 = group.readEntry("Theme", i18n("Default"));
@@ -392,10 +362,6 @@ void AlbumSettings::saveSettings()
     group.writeEntry("Album Sort Order", (int)d->albumSortOrder);
     group.writeEntry("Image Sort Order", (int)d->imageSortOrder);
     group.writeEntry("Item Right Click Action", (int)d->itemRightClickAction);
-    group.writeEntry("File Filter", d->imageFilefilter);
-    group.writeEntry("Movie File Filter", d->movieFilefilter);
-    group.writeEntry("Audio File Filter", d->audioFilefilter);
-    group.writeEntry("Raw File Filter", d->rawFilefilter);
     group.writeEntry("Default Icon Size", QString::number(d->thumbnailSize));
     group.writeEntry("Default Tree Icon Size", QString::number(d->treeThumbnailSize));
     group.writeEntry("Rating Filter Condition", d->ratingFilterCond);
@@ -568,64 +534,74 @@ AlbumSettings::ItemRightClickAction AlbumSettings::getItemRightClickAction() con
     return d->itemRightClickAction;
 }
 
-void AlbumSettings::setImageFileFilter(const QString& filter)
-{
-    d->imageFilefilter = filter;
-}
-
 QString AlbumSettings::getImageFileFilter() const
 {
-    return d->imageFilefilter;
-}
-
-void AlbumSettings::setMovieFileFilter(const QString& filter)
-{
-    d->movieFilefilter = filter;
+    QStringList imageSettings;
+    DatabaseAccess().db()->getFilterSettings(&imageSettings, 0, 0);
+    QStringList wildcards;
+    foreach (const QString &suffix, imageSettings)
+        wildcards << "*." + suffix;
+    return wildcards.join(" ");
 }
 
 QString AlbumSettings::getMovieFileFilter() const
 {
-    return d->movieFilefilter;
-}
-
-void AlbumSettings::setAudioFileFilter(const QString& filter)
-{
-    d->audioFilefilter = filter;
+    QStringList movieSettings;
+    DatabaseAccess().db()->getFilterSettings(0, &movieSettings, 0);
+    QStringList wildcards;
+    foreach (const QString &suffix, movieSettings)
+        wildcards << "*." + suffix;
+    return wildcards.join(" ");
 }
 
 QString AlbumSettings::getAudioFileFilter() const
 {
-    return d->audioFilefilter;
-}
-
-void AlbumSettings::setRawFileFilter(const QString& filter)
-{
-    d->rawFilefilter = filter;
+    QStringList audioSettings;
+    DatabaseAccess().db()->getFilterSettings(0, 0, &audioSettings);
+    QStringList wildcards;
+    foreach (const QString &suffix, audioSettings)
+        wildcards << "*." + suffix;
+    return wildcards.join(" ");
 }
 
 QString AlbumSettings::getRawFileFilter() const
 {
-    return d->rawFilefilter;
-}
+    QStringList supportedRaws = KDcrawIface::DcrawBinary::rawFilesList();
+    QStringList imageSettings;
+    DatabaseAccess().db()->getFilterSettings(&imageSettings, 0, 0);
 
-bool AlbumSettings::addImageFileExtension(const QString& newExt)
-{
-    if ( d->imageFilefilter.split(" ", QString::SkipEmptyParts).contains(newExt) ||
-         d->movieFilefilter.split(" ", QString::SkipEmptyParts).contains(newExt) ||
-         d->audioFilefilter.split(" ", QString::SkipEmptyParts).contains(newExt) ||
-         d->rawFilefilter.split(  " ", QString::SkipEmptyParts).contains(newExt) )
-         return false; 
+    // form intersection: those extensions that are supported as RAW as well in the list of allowed extensions
+    for (QStringList::iterator it = supportedRaws.begin(); it != supportedRaws.end(); )
+    {
+        if (imageSettings.contains(*it))
+            ++it;
+        else
+            it = supportedRaws.erase(it);
+    }
 
-    d->imageFilefilter = d->imageFilefilter + ' ' + newExt;
-    return true;
+    QStringList wildcards;
+    foreach (const QString &suffix, supportedRaws)
+        wildcards << "*." + suffix;
+    return wildcards.join(" ");
 }
 
 QString AlbumSettings::getAllFileFilter() const
 {
-    return d->imageFilefilter + ' '
-        +  d->movieFilefilter + ' '
-        +  d->audioFilefilter + ' '
-        +  d->rawFilefilter;
+    QStringList imageFilter, audioFilter, videoFilter;
+    DatabaseAccess().db()->getFilterSettings(&imageFilter, &audioFilter, &videoFilter);
+    QStringList wildcards;
+    foreach (const QString &suffix, imageFilter)
+        wildcards << "*." + suffix;
+    foreach (const QString &suffix, audioFilter)
+        wildcards << "*." + suffix;
+    foreach (const QString &suffix, videoFilter)
+        wildcards << "*." + suffix;
+    return wildcards.join(" ");
+}
+
+void AlbumSettings::addToImageFileFilter(const QString &extensions)
+{
+    DatabaseAccess().db()->addToUserImageFilterSettings(extensions);
 }
 
 void AlbumSettings::setDefaultIconSize(int val)
@@ -1102,26 +1078,6 @@ bool AlbumSettings::showToolTipsIsValid() const
     }
 
     return false;
-}
-
-QString AlbumSettings::getDefaultImageFileFilter() const
-{
-    return d->defaultImageFilefilter;
-}
-
-QString AlbumSettings::getDefaultMovieFileFilter() const
-{
-    return d->defaultMovieFilefilter;
-}
-
-QString AlbumSettings::getDefaultAudioFileFilter() const
-{
-    return d->defaultAudioFilefilter;
-}
-
-QString AlbumSettings::getDefaultRawFileFilter() const
-{
-    return d->defaultRawFilefilter;
 }
 
 void AlbumSettings::setPreviewLoadFullImageSize(bool val)
