@@ -80,13 +80,15 @@ public:
      * Get the settings for the file name filters of this database.
      * Returns a list with lowercase suffixes only, no wildcards added ("png", not "*.png")
      * Returned is a joint result of main and user settings.
+     * If you are not interested in a specific value, pass 0.
      */
-    void getFilterSettings(QStringList &imageFilter, QStringList &videoFilter, QStringList &audioFilter);
+    void getFilterSettings(QStringList *imageFilter, QStringList *videoFilter, QStringList *audioFilter);
 
     /**
      * Returns the user-configurable filter settings.
+     * If you are not interested in a specific value, pass 0.
      */
-    void getUserFilterSettings(QString &imageFilterString, QString &videoFilterString, QString &audioFilterString);
+    void getUserFilterSettings(QString *imageFilterString, QString *videoFilterString, QString *audioFilterString);
 
     /**
      * Sets the main filter settings of the database. Should only be called at schema update.
@@ -105,6 +107,11 @@ public:
      * Extra whitespace, dots and wildcard characters (*.) are removed.
      */
     void setUserFilterSettings(const QString &imageFilterString, const QString &videoFilterString, const QString &audioFilterString);
+
+    /**
+     * Adds the given filters to the user image filter settings
+     */
+    void addToUserImageFilterSettings(const QString &filterString);
 
     /**
      * Returns a UUID for the database file.

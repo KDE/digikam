@@ -622,27 +622,40 @@ static QStringList joinMainAndUserFilterString(const QString &filter, const QStr
     return filterSet.toList();
 }
 
-void AlbumDB::getFilterSettings(QStringList &imageFilter, QStringList &videoFilter, QStringList &audioFilter)
+void AlbumDB::getFilterSettings(QStringList *imageFilter, QStringList *videoFilter, QStringList *audioFilter)
 {
     QString imageFormats, videoFormats, audioFormats, userImageFormats, userVideoFormats, userAudioFormats;
 
-    imageFormats = getSetting("databaseImageFormats");
-    videoFormats = getSetting("databaseVideoFormats");
-    audioFormats = getSetting("databaseAudioFormats");
-    userImageFormats = getSetting("databaseUserImageFormats");
-    userVideoFormats = getSetting("databaseUserVideoFormats");
-    userAudioFormats = getSetting("databaseUserAudioFormats");
+    if (imageFilter)
+    {
+        imageFormats = getSetting("databaseImageFormats");
+        userImageFormats = getSetting("databaseUserImageFormats");
+        *imageFilter = joinMainAndUserFilterString(imageFormats, userImageFormats);
+    }
 
-    imageFilter = joinMainAndUserFilterString(imageFormats, userImageFormats);
-    videoFilter = joinMainAndUserFilterString(videoFormats, userVideoFormats);
-    audioFilter = joinMainAndUserFilterString(audioFormats, userAudioFormats);
+    if (videoFilter)
+    {
+        videoFormats = getSetting("databaseVideoFormats");
+        userVideoFormats = getSetting("databaseUserVideoFormats");
+        *videoFilter = joinMainAndUserFilterString(videoFormats, userVideoFormats);
+    }
+
+    if (audioFilter)
+    {
+        audioFormats = getSetting("databaseAudioFormats");
+        userAudioFormats = getSetting("databaseUserAudioFormats");
+        *audioFilter = joinMainAndUserFilterString(audioFormats, userAudioFormats);
+    }
 }
 
-void AlbumDB::getUserFilterSettings(QString &imageFilterString, QString &videoFilterString, QString &audioFilterString)
+void AlbumDB::getUserFilterSettings(QString *imageFilterString, QString *videoFilterString, QString *audioFilterString)
 {
-    imageFilterString = getSetting("databaseUserImageFormats");
-    videoFilterString = getSetting("databaseUserVideoFormats");
-    audioFilterString = getSetting("databaseUserAudioFormats");
+    if (imageFilterString)
+        *imageFilterString = getSetting("databaseUserImageFormats");
+    if (videoFilterString)
+        *videoFilterString = getSetting("databaseUserVideoFormats");
+    if (audioFilterString)
+        *audioFilterString = getSetting("databaseUserAudioFormats");
 }
 
 void AlbumDB::setFilterSettings(const QStringList &imageFilter, const QStringList &videoFilter, const QStringList &audioFilter)
@@ -696,6 +709,22 @@ void AlbumDB::setUserFilterSettings(const QStringList &imageFilter, const QStrin
     setSetting("databaseUserImageFormats", imageFilter.join(";"));
     setSetting("databaseUserVideoFormats", videoFilter.join(";"));
     setSetting("databaseUserAudioFormats", audioFilter.join(";"));
+}
+
+void AlbumDB::addToUserImageFilterSettings(const QString &filterString)
+{
+    QStringList addList = cleanUserFilterString(filterString);
+
+    QStringList currentList = getSetting("databaseUserImageFormats").split(';', QString::SkipEmptyParts);
+
+    // merge lists
+    foreach(const QString &addedFilter, addList)
+    {
+        if (!currentList.contains(addedFilter))
+            currentList << addedFilter;
+    }
+
+    setSetting("databaseUserImageFormats", currentList.join(";"));
 }
 
 QUuid AlbumDB::databaseUuid()
