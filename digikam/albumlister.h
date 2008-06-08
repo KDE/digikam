@@ -104,8 +104,6 @@ public:
      */
     void refresh();
 
-    void setNamesFilter(const QString& namesFilter);
-
     void setDayFilter(const QList<QDateTime>& days);
 
     void setTagFilter(const QList<int>& tags, const MatchingCondition& matchingCond,

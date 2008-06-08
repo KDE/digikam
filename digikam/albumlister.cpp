@@ -76,7 +76,6 @@ public:
         filterTimer    = 0;
         job            = 0;
         currAlbum      = 0;
-        namesFilter    = "*";
         mimeTypeFilter = MimeFilter::AllFiles;
         ratingCond     = AlbumLister::GreaterEqualCondition;
         matchingCond   = AlbumLister::OrCondition;
@@ -90,7 +89,6 @@ public:
     int                             recurseAlbums;
     int                             recurseTags;
 
-    QString                         namesFilter;
     QString                         textFilter;
 
     QMap<qlonglong, ImageInfo>      itemMap;
@@ -457,11 +455,6 @@ void AlbumLister::stop()
         d->job->kill();
         d->job = 0;
     }
-}
-
-void AlbumLister::setNamesFilter(const QString& namesFilter)
-{
-    d->namesFilter = namesFilter;
 }
 
 void AlbumLister::invalidateItem(const ImageInfo &item)
