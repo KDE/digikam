@@ -52,15 +52,7 @@ public:
     ImageInfoJobPriv()
     {
         job         = 0;
-
-        AlbumSettings *settings = AlbumSettings::instance();
-        imagefilter = settings->getImageFileFilter().toLower() +
-                      settings->getImageFileFilter().toUpper() +
-                      settings->getRawFileFilter().toLower()   +
-                      settings->getRawFileFilter().toUpper();
     }
-
-    QString            imagefilter; 
 
     KIO::TransferJob  *job;
 };
@@ -87,7 +79,7 @@ void ImageInfoJob::allItemsFromAlbum(Album *album)
         return;
 
     ImageLister lister;
-    d->job = lister.startListJob(album->kurl());//, d->imagefilter, false);
+    d->job = lister.startListJob(album->kurl());
 
     connect(d->job, SIGNAL(result(KJob*)),
             this, SLOT(slotResult(KJob*)));

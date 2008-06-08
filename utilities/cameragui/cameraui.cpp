@@ -1747,18 +1747,7 @@ bool CameraUI::createAutoAlbum(const KUrl& parentURL, const QString& sub,
 
 void CameraUI::addFileExtension(const QString& ext)
 {
-    AlbumSettings* settings = AlbumSettings::instance();
-    if (!settings)
-        return;
-
-    if (settings->getImageFileFilter().toUpper().contains(ext.toUpper()) ||
-        settings->getMovieFileFilter().toUpper().contains(ext.toUpper()) ||
-        settings->getAudioFileFilter().toUpper().contains(ext.toUpper()) ||
-        settings->getRawFileFilter().toUpper().contains(ext.toUpper()))
-        return;
-
-    settings->setImageFileFilter(settings->getImageFileFilter() + QString(" *.") + ext);
-    emit signalAlbumSettingsChanged();
+    AlbumSettings::instance()->addToImageFileFilter(ext);
 }
 
 void CameraUI::slotFirstItem()
