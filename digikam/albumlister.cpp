@@ -353,55 +353,48 @@ bool AlbumLister::matchesFilter(const ImageInfo &info, bool &foundText)
 
     // -- Filter by mime type -----------------------------------------------------
 
-    QFileInfo fi(info.filePath());
-    QString mimeType = fi.suffix().toUpper();
-
     switch(d->mimeTypeFilter)
     {
+        // info.format is a standardized string: Only one possibility per mime type
         case MimeFilter::JPGFiles:
         {
-            if (mimeType != QString("JPG") && mimeType != QString("JPE") &&
-                mimeType != QString("JPEG"))
+            if (info.format() != "JPG")
                 match = false;
             break;
         }
         case MimeFilter::PNGFiles:
         {
-            if (mimeType != QString("PNG"))
+            if (info.format() != "PNG")
                 match = false;
             break;
         }
         case MimeFilter::TIFFiles:
         {
-            if (mimeType != QString("TIF") && mimeType != QString("TIFF"))
+            if (info.format() != "TIFF")
                 match = false;
             break;
         }
         case MimeFilter::NoRAWFiles:
         {
-            QString rawFilesExt(AlbumSettings::instance()->getRawFileFilter());
-            if (rawFilesExt.toUpper().contains(mimeType))
+            if (info.format().startsWith("RAW"))
                 match = false;
             break;
         }
         case MimeFilter::RAWFiles:
         {
-            QString rawFilesExt(AlbumSettings::instance()->getRawFileFilter());
-            if (!rawFilesExt.toUpper().contains(mimeType))
+            if (!info.format().startsWith("RAW"))
                 match = false;
             break;
         }
         case MimeFilter::MoviesFiles:
         {
-            QString moviesFilesExt(AlbumSettings::instance()->getMovieFileFilter());
-            if (!moviesFilesExt.toUpper().contains(mimeType))
+            if (!info.category() == DatabaseItem::Video)
                 match = false;
             break;
         }
         case MimeFilter::AudioFiles:
         {
-            QString audioFilesExt(AlbumSettings::instance()->getAudioFileFilter());
-            if (!audioFilesExt.toUpper().contains(mimeType))
+            if (!info.category() == DatabaseItem::Audio)
                 match = false;
             break;
         }
