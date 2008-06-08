@@ -100,7 +100,6 @@ BatchThumbsGenerator::~BatchThumbsGenerator()
 void BatchThumbsGenerator::slotRebuildThumbs()
 {
     setTitle(i18n("Processing..."));
-    QString filesFilter   = AlbumSettings::instance()->getAllFileFilter();
     AlbumList palbumList  = AlbumManager::instance()->allPAlbums();
 
     // Get all digiKam albums collection pictures path.
@@ -112,22 +111,7 @@ void BatchThumbsGenerator::slotRebuildThumbs()
         if ((*it)->isRoot())
             continue;
 
-        QStringList albumItemsPath;
-        {
-            DatabaseAccess access;
-            albumItemsPath = access.db()->getItemURLsInAlbum((*it)->id());
-        }
-
-        QStringList pathSorted;
-        for (QStringList::iterator it2 = albumItemsPath.begin();
-             !d->cancel && (it2 != albumItemsPath.end()); ++it2)
-        {
-            QFileInfo fi(*it2);
-            if (filesFilter.contains(fi.suffix()))
-                pathSorted.append(*it2);
-        }
-
-        d->allPicturesPath += pathSorted;
+        d->allPicturesPath += DatabaseAccess().db()->getItemURLsInAlbum((*it)->id());
     }
 
     setMaximum(d->allPicturesPath.count());
