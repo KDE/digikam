@@ -107,10 +107,6 @@ void BatchThumbsGenerator::slotRebuildThumbs()
     for (AlbumList::Iterator it = palbumList.begin();
          !d->cancel && (it != palbumList.end()); ++it )
     {
-        // Don't use the root album
-        if ((*it)->isRoot())
-            continue;
-
         d->allPicturesPath += DatabaseAccess().db()->getItemURLsInAlbum((*it)->id());
     }
 
