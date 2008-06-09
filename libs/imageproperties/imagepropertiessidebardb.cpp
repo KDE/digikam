@@ -276,13 +276,20 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         {
             ImagePosition pos = d->currentInfos.first().imagePosition();
             if (pos.isEmpty())
+            {
                 m_gpsTab->setCurrentURL();
+            }
             else
-                m_gpsTab->setGPSInfo(pos.latitudeNumber(), 
-                                     pos.longitudeNumber(), 
-                                     pos.altitude(), 
-                                     d->currentInfos.first().dateTime(),
-                                     d->currentInfos.first().fileUrl());
+            {
+                GPSInfo info;
+                info.latitude  = pos.latitudeNumber();
+                info.longitude = pos.longitudeNumber();
+                info.altitude  = pos.altitude();
+                info.dateTime  = d->currentInfos.first().dateTime();
+                info.url       = d->currentInfos.first().fileUrl();
+                m_gpsTab->setGPSInfoList(GPSInfoList() << info);
+            }
+
             m_dirtyGpsTab = true;
         }
     }
@@ -313,8 +320,19 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         }
         else if (tab == m_gpsTab && !m_dirtyGpsTab)
         {
-            // No multiple selection supported.
-            m_gpsTab->setCurrentURL();
+            GPSInfoList list;
+            for (ImageInfoList::const_iterator it = d->currentInfos.begin(); it != d->currentInfos.end(); ++it)
+            {
+                GPSInfo info;
+                info.latitude  = (*it).imagePosition().latitudeNumber();
+                info.longitude = (*it).imagePosition().longitudeNumber();
+                info.altitude  = (*it).imagePosition().altitude();
+                info.dateTime  = (*it).dateTime();
+                info.url       = (*it).fileUrl();
+                list.append(info);
+            }
+            m_gpsTab->setGPSInfoList(list);
+
             m_dirtyGpsTab = true;
         }
     }

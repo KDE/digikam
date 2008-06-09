@@ -48,7 +48,6 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 // Local includes.
 
 #include "ddebug.h"
-#include "worldmapwidget.h"
 #include "imagepropertiesgpstab.h"
 #include "imagepropertiesgpstab.moc"
 
@@ -246,7 +245,15 @@ void ImagePropertiesGPSTab::setMetadata(const DMetadata& meta, const KUrl& url)
     double alt, lat, lon;
     QDateTime dt = meta.getImageDateTime();
     if (meta.getGPSInfo(alt, lat, lon))
-        setGPSInfo(lat, lon, alt, dt, url);
+    {
+        GPSInfo gpsInfo;
+        gpsInfo.longitude = lon;
+        gpsInfo.latitude  = lat;
+        gpsInfo.altitude  = alt;
+        gpsInfo.dateTime  = dt;
+        gpsInfo.url       = url;
+        setGPSInfoList(GPSInfoList() << gpsInfo);
+    }
     else
         setGPSInfo();
 }
@@ -257,17 +264,18 @@ void ImagePropertiesGPSTab::setGPSInfo()
     d->latitude->setText(QString());
     d->longitude->setText(QString());
     d->date->setText(QString());
+    d->map->setGPSPositions(GPSInfoList());
     setEnabled(false);
 }
 
-void ImagePropertiesGPSTab::setGPSInfo(double lat, double lon, long alt, const QDateTime& dt, const KUrl& url)
+void ImagePropertiesGPSTab::setGPSInfoList(const GPSInfoList& list)
 {
-    d->altitude->setText(QString("%1 m").arg(QString::number(alt)));
-    d->latitude->setText(QString::number(lat));
-    d->longitude->setText(QString::number(lon));
-    d->date->setText(KGlobal::locale()->formatDateTime(dt, KLocale::ShortDate, true));
+    d->altitude->setText(QString("%1 m").arg(QString::number(list.first().altitude)));
+    d->latitude->setText(QString::number(list.first().latitude));
+    d->longitude->setText(QString::number(list.first().longitude));
+    d->date->setText(KGlobal::locale()->formatDateTime(list.first().dateTime, KLocale::ShortDate, true));
     setEnabled(true);
-    d->map->setGPSPosition(lat, lon, alt, dt, url);
+    d->map->setGPSPositions(list);
 }
 
 }  // namespace Digikam

@@ -5,7 +5,7 @@
  *
  * Date        : 2006-02-20
  * Description : a widget to display GPS info on a world map
- * 
+ *
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -13,12 +13,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -54,21 +54,9 @@ class WorldMapWidgetPriv
 
 public:
 
-    WorldMapWidgetPriv()
-    {
-        latitude     = 0;
-        longitude    = 0;
-        altitude     = 0;
-        marbleWidget = 0;
-    }
+    WorldMapWidgetPriv(){};
 
-    double        latitude;
-    double        longitude;
-    double        altitude;
-
-    QDateTime     dt;
-
-    KUrl          url;
+    GPSInfoList   list;
 
 #ifdef HAVE_MARBLEWIDGET
     MarbleWidget *marbleWidget;
@@ -111,21 +99,17 @@ WorldMapWidget::~WorldMapWidget()
 
 double WorldMapWidget::getLatitude()
 {
-    return d->latitude;
+    return d->list.first().latitude;
 }
 
 double WorldMapWidget::getLongitude()
 {
-    return d->longitude;
+    return d->list.first().longitude;
 }
 
-void WorldMapWidget::setGPSPosition(double lat, double lng, double alt, const QDateTime& dt, const KUrl& url)
+void WorldMapWidget::setGPSPositions(const GPSInfoList& list)
 {
-    d->latitude  = lat;
-    d->longitude = lng;
-    d->altitude  = alt;
-    d->dt        = dt;
-    d->url       = url;
+    d->list = list;
 
     // To place mark over a map in marble canvas, we will use KML data
 
@@ -138,24 +122,43 @@ void WorldMapWidget::setGPSPosition(double lat, double lng, double alt, const QD
 
     QDomElement kmlAlbum     = addKmlElement(kmlDocument, kmlRoot, "Document");
     QDomElement kmlName      = addKmlTextElement(kmlDocument, kmlAlbum, "name", "Geolocation");
-    QDomElement kmlPlacemark = addKmlElement(kmlDocument, kmlAlbum, "Placemark");
-    addKmlTextElement(kmlDocument, kmlPlacemark, "name", d->url.fileName());
 
-    QDomElement kmlGeometry  = addKmlElement(kmlDocument, kmlPlacemark, "Point");
-    addKmlTextElement(kmlDocument, kmlGeometry, "coordinates", QString("%1,%2").arg(lng).arg(lat));
-    addKmlTextElement(kmlDocument, kmlGeometry, "altitudeMode", "clampToGround");
-    addKmlTextElement(kmlDocument, kmlGeometry, "extrude", "1");
+    double lng = 0;
+    double lat = 0;
 
-    QDomElement kmlTimeStamp = addKmlElement(kmlDocument, kmlPlacemark, "TimeStamp");
-    addKmlTextElement(kmlDocument, kmlTimeStamp, "when", d->dt.toString("yyyy-MM-ddThh:mm:ssZ"));
+    if (!d->list.isEmpty())
+    {
+        for (GPSInfoList::const_iterator it = d->list.begin(); it != d->list.end(); ++it)
+        {
+            QDomElement kmlPlacemark = addKmlElement(kmlDocument, kmlAlbum, "Placemark");
+            addKmlTextElement(kmlDocument, kmlPlacemark, "name", (*it).url.fileName());
+
+            QDomElement kmlGeometry  = addKmlElement(kmlDocument, kmlPlacemark, "Point");
+            addKmlTextElement(kmlDocument, kmlGeometry, "coordinates", QString("%1,%2")
+                            .arg((*it).longitude)
+                            .arg((*it).latitude));
+            addKmlTextElement(kmlDocument, kmlGeometry, "altitudeMode", "clampToGround");
+            addKmlTextElement(kmlDocument, kmlGeometry, "extrude", "1");
+
+            QDomElement kmlTimeStamp = addKmlElement(kmlDocument, kmlPlacemark, "TimeStamp");
+            addKmlTextElement(kmlDocument, kmlTimeStamp, "when",
+                              (*it).dateTime.toString("yyyy-MM-ddThh:mm:ssZ"));
+        }
+
+        lng = d->list.first().longitude;
+        lat = d->list.first().latitude;
+    }
 
 #ifdef HAVE_MARBLEWIDGET
 
 #ifdef MARBLE_VERSION
 
     // For Marble > 0.5.1
-    d->marbleWidget->setHome(lng, lat);
-    d->marbleWidget->centerOn(lng, lat);
+    if (!d->list.isEmpty())
+    {
+        d->marbleWidget->setHome(lng, lat);
+        d->marbleWidget->centerOn(lng, lat);
+    }
     d->marbleWidget->addPlaceMarkData(kmlDocument.toString());
 
 #else // MARBLE_VERSION
@@ -172,8 +175,11 @@ void WorldMapWidget::setGPSPosition(double lat, double lng, double alt, const QD
     stream << kmlDocument.toString();
     file.close();
 
-    d->marbleWidget->setHome(lng, lat);
-    d->marbleWidget->centerOn(lng, lat);
+    if (!d->list.isEmpty())
+    {
+        d->marbleWidget->setHome(lng, lat);
+        d->marbleWidget->centerOn(lng, lat);
+    }
     d->marbleWidget->addPlaceMarkFile(KMLFile.fileName());
 
 #endif // MARBLE_VERSION

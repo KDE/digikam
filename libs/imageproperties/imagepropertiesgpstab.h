@@ -37,6 +37,7 @@
 // Local includes
 
 #include "dmetadata.h"
+#include "worldmapwidget.h"
 #include "digikam_export.h"
 
 namespace Digikam
@@ -64,7 +65,7 @@ public:
     ~ImagePropertiesGPSTab();
 
     void setGPSInfo();
-    void setGPSInfo(double lat, double lon, long alt, const QDateTime& dt, const KUrl& url);
+    void setGPSInfoList(const GPSInfoList& list);
     void setCurrentURL(const KUrl& url=KUrl());
 
     void setMetadata(const DMetadata& meta, const KUrl& url);
