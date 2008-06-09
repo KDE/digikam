@@ -13,12 +13,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 /*
@@ -270,11 +270,30 @@ void ImagePropertiesGPSTab::setGPSInfo()
 
 void ImagePropertiesGPSTab::setGPSInfoList(const GPSInfoList& list)
 {
-    d->altitude->setText(QString("%1 m").arg(QString::number(list.first().altitude)));
-    d->latitude->setText(QString::number(list.first().latitude));
-    d->longitude->setText(QString::number(list.first().longitude));
-    d->date->setText(KGlobal::locale()->formatDateTime(list.first().dateTime, KLocale::ShortDate, true));
-    setEnabled(true);
+    // Clear info label
+    d->altitude->setText(QString());
+    d->latitude->setText(QString());
+    d->longitude->setText(QString());
+    d->date->setText(QString());
+
+    if (list.count() == 0)
+    {
+        setEnabled(false);
+    }
+    else if (list.count() == 1)
+    {
+        d->altitude->setText(QString("%1 m").arg(QString::number(list.first().altitude)));
+        d->latitude->setText(QString::number(list.first().latitude));
+        d->longitude->setText(QString::number(list.first().longitude));
+        d->date->setText(KGlobal::locale()->formatDateTime(list.first().dateTime, 
+                                                           KLocale::ShortDate, true));
+        setEnabled(true);
+    }
+    else if (list.count() > 1)
+    {
+        setEnabled(true);
+    }
+
     d->map->setGPSPositions(list);
 }
 
