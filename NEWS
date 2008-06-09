@@ -62,4 +62,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 023 ==> 149026 : Search including sub-albums.
 024 ==> 153070 : Search for image by geo location.
 025 ==> 154764 : Pictures saved into root album folder are not shown.
-026 ==> 
+026 ==> 162678 : digiKam crashed while loading.
+027 ==> 
