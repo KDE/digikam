@@ -107,19 +107,15 @@ void FingerPrintsGenerator::slotRebuildFingerPrints()
 
     // Get all digiKam albums collection pictures path.
 
-    for (AlbumList::Iterator it = palbumList.begin();
-         !d->cancel && (it != palbumList.end()); ++it )
-    {
-        // Don't use the root album
-        if ((*it)->isRoot())
-            continue;
+    DatabaseAccess access;
 
+    for (AlbumList::Iterator it = palbumList.begin();
+         !d->cancel && (it != palbumList.end()); ++it)
+    {
         QStringList albumItemsPath;
         {
-            DatabaseAccess access;
             albumItemsPath = access.db()->getItemURLsInAlbum((*it)->id());
         }
-
         d->allPicturesPath += albumItemsPath;
     }
 
