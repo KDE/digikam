@@ -60,4 +60,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 022 ==> 158866 : Advanced Search on Tags a mess.
 023 ==> 149026 : Search including sub-albums.
 024 ==> 153070 : Search for image by geo location.
-025 ==> 
+025 ==> 154764 : Pictures saved into root album folder are not shown.
+026 ==> 
