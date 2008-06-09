@@ -112,11 +112,7 @@ void FingerPrintsGenerator::slotRebuildFingerPrints()
     for (AlbumList::Iterator it = palbumList.begin();
          !d->cancel && (it != palbumList.end()); ++it)
     {
-        QStringList albumItemsPath;
-        {
-            albumItemsPath = access.db()->getItemURLsInAlbum((*it)->id());
-        }
-        d->allPicturesPath += albumItemsPath;
+        d->allPicturesPath += access.db()->getItemURLsInAlbum((*it)->id());
     }
 
     setMaximum(d->allPicturesPath.count());
