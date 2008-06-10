@@ -264,10 +264,13 @@ bool AlbumManager::setDatabase(const QString &dbPath, bool priority)
 
     d->albumPathHash.clear();
     d->allAlbumsIdHash.clear();
+    d->albumRootAlbumHash.clear();
 
+    // deletes all child albums as well
     delete d->rootPAlbum;
     delete d->rootTAlbum;
     delete d->rootDAlbum;
+    delete d->rootSAlbum;
 
     d->rootPAlbum = 0;
     d->rootTAlbum = 0;
@@ -436,15 +439,23 @@ void AlbumManager::startScan()
 
 void AlbumManager::slotCollectionLocationStatusChanged(const CollectionLocation &location, int oldStatus)
 {
+    // not before initialization
+    if (!d->rootPAlbum)
+        return;
+
     if (location.status() == CollectionLocation::LocationAvailable
         && oldStatus != CollectionLocation::LocationAvailable)
     {
         addAlbumRoot(location);
+        // New albums have possibly appeared
+        scanPAlbums();
     }
     else if (oldStatus == CollectionLocation::LocationAvailable
              && location.status() != CollectionLocation::LocationAvailable)
     {
         removeAlbumRoot(location);
+        // Albums have possibly disappeared
+        scanPAlbums();
     }
 }
 
@@ -496,7 +507,9 @@ void AlbumManager::scanPAlbums()
     while (it.current())
     {
         PAlbum* a = (PAlbum*)(*it);
-        if (!a->isAlbumRoot())
+        // Album root album have -1 immediately after their creation.
+        // We want to recognize them as new albums then.
+        if (a->id() != -1)
             oldAlbums[a->id()] = a;
         ++it;
     }
@@ -558,23 +571,33 @@ void AlbumManager::scanPAlbums()
         bool needInsert;
         if (info.relativePath == "/")
         {
-            // albums that represent the root directory of an album root
+            // Albums that represent the root directory of an album root
+            // We have them as here new albums first time after their creation
+
             parent = d->rootPAlbum;
             album  = d->albumRootAlbumHash.value(info.albumRootId);
             needInsert = false;
 
+            if (!album)
+            {
+                DError() << "Did not find album root album in hash";
+                continue;
+            }
+
+            // remove from hashes
+            d->albumPathHash.remove(album);
+            d->allAlbumsIdHash.remove(album->globalID());
+
             // it has been created from the collection location
             // with album root id, parentPath "/" and a name, but no album id yet.
             album->m_id = info.id;
+
             // update hashes after setting id
-            d->albumPathHash.remove(album);
-            d->allAlbumsIdHash.remove(album->globalID());
-            d->albumPathHash[album]  = album;
+            d->albumPathHash[album] = album;
             d->allAlbumsIdHash[album->globalID()] = album;
         }
         else
         {
-
             // last section, no slash
             QString name = info.relativePath.section('/', -1, -1);
             // all but last sections, leading slash, no trailing slash
