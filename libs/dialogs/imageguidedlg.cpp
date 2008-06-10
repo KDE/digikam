@@ -169,7 +169,7 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
     QString desc;
 
     if (guideVisible)
-        desc = i18n("<p>This is the the image filter effect preview. "
+        desc = i18n("<p>This is the image filter effect preview. "
                     "If you move the mouse cursor on this area, "
                     "a vertical and horizontal dashed line will be draw "
                     "to guide you in adjusting the filter settings. "
