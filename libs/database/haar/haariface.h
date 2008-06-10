@@ -106,10 +106,14 @@ public:
      */
     QMap< qlonglong, QList<qlonglong> > findDuplicates(const QList<qlonglong>& images2Scan);
 
+    /** Retrieve the Haar signature from database using image id.
+        Return true is item signature exist or false.
+     */
+    bool retrieveSignatureFromDB(qlonglong imageid, Haar::SignatureData *sig);
+
 private:
 
     QImage loadQImage(const QString &filename);
-    bool   retrieveSignatureFromDB(qlonglong imageid, Haar::SignatureData *sig);
 
     bool   indexImage(qlonglong imageid);
 
