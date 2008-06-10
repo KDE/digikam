@@ -67,7 +67,7 @@ public:
 
     static int preferredSize();
 
-    /** Adds an image to the index in the database. 
+    /** Adds an image to the index in the database.
      */
     bool indexImage(const QString& filename);
     bool indexImage(const QString& filename, const QImage &image);
@@ -90,7 +90,7 @@ public:
     QList<qlonglong> bestMatchesForImageWithThreshold(qlonglong imageid, double requiredPercentage, SketchType type=ScannedSketch);
 
     /** Calculates the Haar signature, bring it in a form as stored in the DB,
-     *  and encode it to Ascii data. Can be used for bestMatchesForSignature. 
+     *  and encode it to Ascii data. Can be used for bestMatchesForSignature.
      */
     QString signatureAsText(const QImage &image);
 
@@ -107,7 +107,7 @@ public:
     QMap< qlonglong, QList<qlonglong> > findDuplicates(const QList<qlonglong>& images2Scan);
 
     /** Retrieve the Haar signature from database using image id.
-        Return true is item signature exist or false.
+     *  Return true if item signature exist else false.
      */
     bool retrieveSignatureFromDB(qlonglong imageid, Haar::SignatureData *sig);
 
