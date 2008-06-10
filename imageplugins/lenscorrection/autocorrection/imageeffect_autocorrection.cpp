@@ -96,7 +96,7 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
     // -------------------------------------------------------------
 
     m_showGrid   = new QCheckBox(i18n("Show grid"), m_settingsWidget);
-    m_showGrid->setWhatsThis(i18n("Set on this option to show a grid over preview to vizualize "
+    m_showGrid->setWhatsThis(i18n("Set on this option to show a grid over preview to visualize "
                                  "lens distortion correction applied."));
 
     m_filterCCA  = new QCheckBox(i18n("Chromatic Aberration"), m_settingsWidget);
