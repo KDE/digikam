@@ -154,7 +154,7 @@ int main(int argc, char *argv[])
                           "kde at ralfhoelzer dot com");
 
     aboutData.addCredit ( ki18n("Risto Saukonpaa"),
-                          ki18n("Design, icons, logo, banner, mocup, beta tester"),
+                          ki18n("Design, icons, logo, banner, mockup, beta tester"),
                           "paristo at gmail dot com");
 
     aboutData.addCredit ( ki18n("Mikolaj Machowski"),
