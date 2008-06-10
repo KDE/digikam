@@ -300,7 +300,7 @@ void KLFDeviceSelector::findFromMetadata()
     if (temp.isEmpty())
     {
         // From standard Xmp.
-        temp = m_metadata.getExifTagString("Xmp.exif.SubjectDistance");
+        temp = m_metadata.getXmpTagString("Xmp.exif.SubjectDistance");
         if (temp.isEmpty())
         {
             // From Canon Makernote.
