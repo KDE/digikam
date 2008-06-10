@@ -2188,13 +2188,20 @@ void DigikamApp::slotSyncAllPicturesMetadataDone()
 
 void DigikamApp::slotRebuildAllFingerPrints()
 {
-    QString msg = i18n("Rebuilding all image finger-prints can take some time.\n"
-                       "Do you want to continue?");
-    int result = KMessageBox::warningContinueCancel(this, msg);
-    if (result != KMessageBox::Continue)
+    QString msg = i18n("Image finger-prints computation can take a while.\n"
+                       "What do you want to do?\n"
+                       "- Rebuild all finger-prints (long)\n"
+                       "- Scan for non-recorded items in database (faster)");
+    int result = KMessageBox::questionYesNoCancel(this, msg,
+                                                  i18n("Warning"), 
+                                                  KGuiItem(i18n("Rebuild All")),
+                                                  KGuiItem(i18n("Scan")));
+
+    if (result == KMessageBox::Cancel)
         return;
 
-    FingerPrintsGenerator *fingerprintsGenerator = new FingerPrintsGenerator(this);
+    FingerPrintsGenerator *fingerprintsGenerator = new FingerPrintsGenerator(this, 
+                                                       result == KMessageBox::Yes ? true : false);
 
     connect(fingerprintsGenerator, SIGNAL(signalRebuildAllFingerPrintsDone()),
             this, SLOT(slotRebuildAllFingerPrintsDone()));
