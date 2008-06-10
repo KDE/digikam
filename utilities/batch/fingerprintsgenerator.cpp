@@ -13,12 +13,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // QT includes.
@@ -47,6 +47,7 @@
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "databaseaccess.h"
+#include "haar.h"
 #include "haariface.h"
 #include "previewloadthread.h"
 #include "fingerprintsgenerator.h"
@@ -62,11 +63,13 @@ public:
     FingerPrintsGeneratorPriv()
     {
         cancel            = false;
+        rebuildAll        = true;
         previewLoadThread = 0;
         duration.start();
     }
 
     bool               cancel;
+    bool               rebuildAll;
 
     QTime              duration;
 
@@ -77,10 +80,11 @@ public:
     HaarIface          haarIface;
 };
 
-FingerPrintsGenerator::FingerPrintsGenerator(QWidget* parent)
+FingerPrintsGenerator::FingerPrintsGenerator(QWidget* parent, bool rebuildAll)
                      : DProgressDlg(parent)
 {
     d = new FingerPrintsGeneratorPriv;
+    d->rebuildAll        = rebuildAll;
     d->previewLoadThread = new PreviewLoadThread();
 
     connect(d->previewLoadThread, SIGNAL(signalImageLoaded(const LoadingDescription&, const DImg&)),
@@ -105,14 +109,32 @@ void FingerPrintsGenerator::slotRebuildFingerPrints()
     setTitle(i18n("Processing..."));
     AlbumList palbumList = AlbumManager::instance()->allPAlbums();
 
-    // Get all digiKam albums collection pictures path.
+    // Get all digiKam albums collection pictures path, deending of d->rebuildAll flag.
 
-    DatabaseAccess access;
+    DatabaseAccess      access;
+    Haar::SignatureData sig;
 
     for (AlbumList::Iterator it = palbumList.begin();
          !d->cancel && (it != palbumList.end()); ++it)
     {
-        d->allPicturesPath += access.db()->getItemURLsInAlbum((*it)->id());
+
+        if (d->rebuildAll)
+        {
+            d->allPicturesPath += access.db()->getItemURLsInAlbum((*it)->id());
+        }
+        else
+        {
+            QMap<qlonglong, QString> itemsMap = access.db()->getItemIDsAndURLsInAlbum((*it)->id());
+
+            for (QMap<qlonglong, QString>::const_iterator it2 = itemsMap.begin();
+                !d->cancel && (it2 != itemsMap.end()); ++it2)
+            {
+                if (!d->haarIface.retrieveSignatureFromDB(it2.key(), &sig))
+                {
+                    d->allPicturesPath += it2.value();
+                }
+            }
+        }
     }
 
     setMaximum(d->allPicturesPath.count());
