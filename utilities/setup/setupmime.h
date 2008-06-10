@@ -53,7 +53,9 @@ private slots:
     void slotRevertImageFileFilter();
     void slotRevertMovieFileFilter();
     void slotRevertAudioFileFilter();
-    void slotRevertRawFileFilter();
+    void slotShowCurrentImageSettings();
+    void slotShowCurrentMovieSettings();
+    void slotShowCurrentAudioSettings();
 
 private:
 

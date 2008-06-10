@@ -29,6 +29,7 @@
 #include <QToolButton>
 #include <QGridLayout>
 #include <QVBoxLayout>
+#include <QWhatsThis>
 
 // KDE includes.
 
@@ -55,25 +56,28 @@ public:
 
     SetupMimePriv()
     {
+        imageFileFilterLabel     = 0;
+        movieFileFilterLabel     = 0;
+        audioFileFilterLabel     = 0;
         imageFileFilterEdit      = 0;
         movieFileFilterEdit      = 0;
         audioFileFilterEdit      = 0;
-        rawFileFilterEdit        = 0;
         revertImageFileFilterBtn = 0;
         revertMovieFileFilterBtn = 0;
         revertAudioFileFilterBtn = 0;
-        revertRawFileFilterBtn   = 0;
     }
+
+    QLabel      *imageFileFilterLabel;
+    QLabel      *movieFileFilterLabel;
+    QLabel      *audioFileFilterLabel;
 
     QToolButton *revertImageFileFilterBtn;
     QToolButton *revertMovieFileFilterBtn;
     QToolButton *revertAudioFileFilterBtn;
-    QToolButton *revertRawFileFilterBtn;
 
     QLineEdit   *imageFileFilterEdit;
     QLineEdit   *movieFileFilterEdit;
     QLineEdit   *audioFileFilterEdit;
-    QLineEdit   *rawFileFilterEdit;
 };
 
 SetupMime::SetupMime(QWidget* parent)
@@ -85,12 +89,10 @@ SetupMime::SetupMime(QWidget* parent)
     // --------------------------------------------------------
 
     QLabel *explanationLabel = new QLabel;
-    explanationLabel->setText(i18n("<qt><p>Digikam supports most common image formats - "
-                                   "most notably among others JPEG, PNG, TIFF, JPEG2000, "
-                                   "and a large number of RAW image formats - "
-                                   "as well as common video and audio formats.</p> "
+    explanationLabel->setText(i18n("<qt><p>Digikam supports the image formats that digital cameras produce, "
+                                   "a few other important image formats, as well as common video and audio formats.</p> "
                                    "<p>If you have special needs, you can adjust here the list of supported "
-                                   "image formats. Add your file extensions to the lists of either image, "
+                                   "formats. Add your file extensions to the lists of either image, "
                                    "audio or video files.</p></qt>"));
     explanationLabel->setWordWrap(true);
 
@@ -102,8 +104,8 @@ SetupMime::SetupMime(QWidget* parent)
     QLabel *logoLabel1 = new QLabel(imageFileFilterBox);
     logoLabel1->setPixmap(DesktopIcon("image-jpeg2000"));
 
-    QLabel *imageFileFilterLabel = new QLabel(imageFileFilterBox);
-    imageFileFilterLabel->setText(i18n("Add &image file extensions:"));
+    d->imageFileFilterLabel = new QLabel(imageFileFilterBox);
+    d->imageFileFilterLabel->setText(i18n("<qt>Customize &image file extensions (<a href=image>Current settings</a>):"));
     
     KHBox *hbox1 = new KHBox(imageFileFilterBox);    
     d->imageFileFilterEdit = new QLineEdit(hbox1);
@@ -115,7 +117,7 @@ SetupMime::SetupMime(QWidget* parent)
                                                "from the database.</p>"
                                                "<p><b>Attention:</b> Removing files from the database means losing "
                                                "all their tags and ratings!<p>"));
-    imageFileFilterLabel->setBuddy(d->imageFileFilterEdit);
+    d->imageFileFilterLabel->setBuddy(d->imageFileFilterEdit);
     hbox1->setStretchFactor(d->imageFileFilterEdit, 10);
 
     d->revertImageFileFilterBtn = new QToolButton(hbox1);
@@ -123,7 +125,7 @@ SetupMime::SetupMime(QWidget* parent)
     d->revertImageFileFilterBtn->setToolTip(i18n("Revert to default settings"));
 
     grid1->addWidget(logoLabel1, 0, 0, 2, 1);
-    grid1->addWidget(imageFileFilterLabel, 0, 1, 1, 1);
+    grid1->addWidget(d->imageFileFilterLabel, 0, 1, 1, 1);
     grid1->addWidget(hbox1, 1, 1, 1, 1);
     grid1->setColumnStretch(1, 10);
     grid1->setMargin(KDialog::spacingHint());
@@ -137,8 +139,8 @@ SetupMime::SetupMime(QWidget* parent)
     QLabel *logoLabel2 = new QLabel(movieFileFilterBox);
     logoLabel2->setPixmap(DesktopIcon("video-mpeg"));
 
-    QLabel *movieFileFilterLabel = new QLabel(movieFileFilterBox);
-    movieFileFilterLabel->setText(i18n("Add &movie file extensions:"));
+    d->movieFileFilterLabel = new QLabel(movieFileFilterBox);
+    d->movieFileFilterLabel->setText(i18n("Customize &movie file extensions (<a href=video>Current settings</a>):"));
 
     KHBox *hbox2 = new KHBox(movieFileFilterBox);    
     d->movieFileFilterEdit = new QLineEdit(hbox2);
@@ -150,7 +152,7 @@ SetupMime::SetupMime(QWidget* parent)
                                                "You can as well remove file formats that are supported by default "
                                                "by prepending a minus sign: \"-avi\" will remove all AVI files "
                                                "from the database.</p>"));
-    movieFileFilterLabel->setBuddy(d->movieFileFilterEdit);
+    d->movieFileFilterLabel->setBuddy(d->movieFileFilterEdit);
     hbox2->setStretchFactor(d->movieFileFilterEdit, 10);
 
     d->revertMovieFileFilterBtn = new QToolButton(hbox2);
@@ -158,7 +160,7 @@ SetupMime::SetupMime(QWidget* parent)
     d->revertMovieFileFilterBtn->setToolTip(i18n("Revert to default settings"));
 
     grid2->addWidget(logoLabel2, 0, 0, 2, 1);
-    grid2->addWidget(movieFileFilterLabel, 0, 1, 1, 1);
+    grid2->addWidget(d->movieFileFilterLabel, 0, 1, 1, 1);
     grid2->addWidget(hbox2, 1, 1, 1, 1);
     grid2->setColumnStretch(1, 10);
     grid2->setMargin(KDialog::spacingHint());
@@ -172,8 +174,8 @@ SetupMime::SetupMime(QWidget* parent)
     QLabel *logoLabel3 = new QLabel(audioFileFilterBox);
     logoLabel3->setPixmap(DesktopIcon("audio-basic"));
 
-    QLabel *audioFileFilterLabel = new QLabel(audioFileFilterBox);
-    audioFileFilterLabel->setText(i18n("Add &audio file extensions:"));
+    d->audioFileFilterLabel = new QLabel(audioFileFilterBox);
+    d->audioFileFilterLabel->setText(i18n("Customize &audio file extensions (<a href=audio>Current settings</a>):"));
 
     KHBox *hbox3 = new KHBox(audioFileFilterBox);  
     d->audioFileFilterEdit = new QLineEdit(hbox3);
@@ -185,7 +187,7 @@ SetupMime::SetupMime(QWidget* parent)
                                                "You can as well remove file formats that are supported by default "
                                                "by prepending a minus sign: \"-mp3\" will for example remove all MP3 files "
                                                "from the database.</p>"));
-    audioFileFilterLabel->setBuddy(d->audioFileFilterEdit);
+    d->audioFileFilterLabel->setBuddy(d->audioFileFilterEdit);
     hbox3->setStretchFactor(d->audioFileFilterEdit, 10);
 
     d->revertAudioFileFilterBtn = new QToolButton(hbox3);
@@ -193,7 +195,7 @@ SetupMime::SetupMime(QWidget* parent)
     d->revertAudioFileFilterBtn->setToolTip(i18n("Revert to default settings"));
 
     grid3->addWidget(logoLabel3, 0, 0, 2, 1);
-    grid3->addWidget(audioFileFilterLabel, 0, 1, 1, 1);
+    grid3->addWidget(d->audioFileFilterLabel, 0, 1, 1, 1);
     grid3->addWidget(hbox3, 1, 1, 1, 1);
     grid3->setColumnStretch(1, 10);
     grid3->setMargin(KDialog::spacingHint());
@@ -252,8 +254,14 @@ SetupMime::SetupMime(QWidget* parent)
     connect(d->revertAudioFileFilterBtn, SIGNAL(clicked()),
             this, SLOT(slotRevertAudioFileFilter()));
 
-    connect(d->revertRawFileFilterBtn, SIGNAL(clicked()),
-            this, SLOT(slotRevertRawFileFilter()));
+    connect(d->imageFileFilterLabel, SIGNAL(linkActivated(const QString &)),
+            this, SLOT(slotShowCurrentImageSettings()));
+
+    connect(d->movieFileFilterLabel, SIGNAL(linkActivated(const QString &)),
+            this, SLOT(slotShowCurrentMovieSettings()));
+
+    connect(d->audioFileFilterLabel, SIGNAL(linkActivated(const QString &)),
+            this, SLOT(slotShowCurrentAudioSettings()));
 
     // --------------------------------------------------------
 
@@ -267,8 +275,6 @@ SetupMime::~SetupMime()
 
 void SetupMime::applySettings()
 {
-    //TODO: fix crash
-    return;
     // Display warning if user removes a core format
     QStringList coreImageFormats, removedImageFormats;
     coreImageFormats << "jpg" << "jpeg" << "jpe"               // JPEG
@@ -328,9 +334,34 @@ void SetupMime::slotRevertAudioFileFilter()
     d->audioFileFilterEdit->setText(QString());
 }
 
-void SetupMime::slotRevertRawFileFilter()
+void SetupMime::slotShowCurrentImageSettings()
 {
-    d->rawFileFilterEdit->setText(QString());
+    QStringList imageList;
+    DatabaseAccess().db()->getFilterSettings(&imageList, 0, 0);
+    QString text = i18n("<p>Files with these extensions will be recognized as images "
+                        "and included into the database:<br> <code>%1</code></p>",
+                        imageList.join(" "));
+    QWhatsThis::showText(d->imageFileFilterLabel->mapToGlobal(QPoint(0,0)), text, d->imageFileFilterLabel);
+}
+
+void SetupMime::slotShowCurrentMovieSettings()
+{
+    QStringList movieList;
+    DatabaseAccess().db()->getFilterSettings(0, &movieList, 0);
+    QString text = i18n("<p>Files with these extensions will be recognized as movie files "
+                        "and included into the database:<br> <code>%1</code></p>",
+                        movieList.join(" "));
+    QWhatsThis::showText(d->movieFileFilterLabel->mapToGlobal(QPoint(0,0)), text, d->movieFileFilterLabel);
+}
+
+void SetupMime::slotShowCurrentAudioSettings()
+{
+    QStringList audioList;
+    DatabaseAccess().db()->getFilterSettings(0, 0, &audioList);
+    QString text = i18n("<p>Files with these extensions will be recognized as audio files "
+                        "and included into the database:<br> <code>%1</code></p>",
+                        audioList.join(" "));
+    QWhatsThis::showText(d->audioFileFilterLabel->mapToGlobal(QPoint(0,0)), text, d->audioFileFilterLabel);
 }
 
 }  // namespace Digikam
