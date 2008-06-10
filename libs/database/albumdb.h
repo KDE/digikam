@@ -15,12 +15,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 /** @file albumdb.h */
@@ -35,6 +35,7 @@
 #include <QStringList>
 #include <QDateTime>
 #include <QPair>
+#include <QMap>
 #include <QUuid>
 
 // KDE includes.
@@ -542,12 +543,21 @@ public:
      */
     QStringList getItemURLsInAlbum(int albumID, ItemSortOrder order = NoItemSorting);
 
-     /**
-      * Given a albumID, get a list of Ids of all items in the album
-      * @param  albumID the id of the album
-      * @return a list of Ids for the items in the album.
-      */
+    /**
+     * Given a albumID, get a list of Ids of all items in the album
+     * @param  albumID the id of the album
+     * @return a list of Ids for the items in the album.
+     */
     QList<qlonglong> getItemIDsInAlbum(int albumID);
+
+    /**
+     * Given a albumID, get a map of Ids and urls of all items in the album
+     * NOTE: Uses the CollectionManager
+     * @param  albumID the id of the album
+     * @return a map of Ids and urls for the items in the album. The urls are the
+     * absolute path of the items
+     */
+    QMap<qlonglong, QString> getItemIDsAndURLsInAlbum(int albumID);
 
     /**
      * Given a tagid, get a list of the url of all items in the tag
