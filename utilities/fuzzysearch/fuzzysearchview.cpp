@@ -26,6 +26,7 @@
 #include <QTime>
 #include <QImage>
 #include <QLabel>
+#include <QTimer>
 #include <QFrame>
 #include <QLayout>
 #include <QPushButton>
@@ -108,6 +109,8 @@ public:
         folderView            = 0;
         scanDuplicatesBtn     = 0;
         updateFingerPrtBtn    = 0;
+        timerSketch           = 0;
+        timerImage            = 0;
     }
 
     QPushButton            *resetButton;
@@ -121,6 +124,9 @@ public:
     QSpinBox               *levelImage;
 
     QLabel                 *imageWidget;
+
+    QTimer                 *timerSketch;
+    QTimer                 *timerImage;
 
     QTreeWidget            *listView;
 
@@ -419,10 +425,10 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
             d->sketchWidget, SLOT(setPenWidth(int)));
 
     connect(d->resultsSketch, SIGNAL(valueChanged(int)),
-            this, SLOT(slotDirtySketch()));
+            this, SLOT(slotResultsSketchChanged()));
 
     connect(d->levelImage, SIGNAL(valueChanged(int)),
-            this, SLOT(slotResultsImageChanged()));
+            this, SLOT(slotLevelImageChanged()));
 
     connect(d->resetButton, SIGNAL(clicked()),
             this, SLOT(slotClearSketch()));
@@ -460,6 +466,8 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
 FuzzySearchView::~FuzzySearchView()
 {
     writeConfig();
+    delete d->timerSketch;
+    delete d->timerImage;
     delete d;
 }
 
@@ -570,6 +578,21 @@ void FuzzySearchView::slotSaveSketchSAlbum()
         return;
 
     createNewFuzzySearchAlbumFromSketch(name);
+}
+
+void FuzzySearchView::slotResultsSketchChanged()
+{
+    if (d->timerSketch)
+    {
+       d->timerSketch->stop();
+       delete d->timerSketch;
+    }
+
+    d->timerSketch = new QTimer( this );
+    connect( d->timerSketch, SIGNAL(timeout()),
+             this, SLOT(slotDirtySketch()) );
+    d->timerSketch->setSingleShot(true);
+    d->timerSketch->start(500);
 }
 
 void FuzzySearchView::slotDirtySketch()
@@ -741,7 +764,22 @@ void FuzzySearchView::dropEvent(QDropEvent *e)
     }
 }
 
-void FuzzySearchView::slotResultsImageChanged()
+void FuzzySearchView::slotLevelImageChanged()
+{
+    if (d->timerImage)
+    {
+       d->timerImage->stop();
+       delete d->timerImage;
+    }
+
+    d->timerImage = new QTimer( this );
+    connect( d->timerImage, SIGNAL(timeout()),
+             this, SLOT(slotTimerImageDone()) );
+    d->timerImage->setSingleShot(true);
+    d->timerImage->start(500);
+}
+
+void FuzzySearchView::slotTimerImageDone()
 {
     if (d->imageInfo)
         setImageInfo(*d->imageInfo);

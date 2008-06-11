@@ -86,20 +86,23 @@ private slots:
     void slotHSChanged(int h, int s);
     void slotVChanged();
     void slotClearSketch();
-    void slotDirtySketch();
     void slotSaveSketchSAlbum();
     void slotCheckNameEditSketchConditions();
 
     void slotAlbumSelected(SAlbum*);
     void slotRenameAlbum(SAlbum*);
 
-    void slotResultsImageChanged();
-
     void slotSaveImageSAlbum();
     void slotCheckNameEditImageConditions();
     void slotThumbnailLoaded(const LoadingDescription&, const QPixmap&);
 
     void slotFindDuplicates();
+
+    void slotResultsSketchChanged();
+    void slotDirtySketch();
+
+    void slotLevelImageChanged();
+    void slotTimerImageDone();
 
 private:
 
