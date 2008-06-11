@@ -877,7 +877,7 @@ void FuzzySearchView::slotFindDuplicates()
     duration.start();
 
     HaarIface haarIface;
-    QMap< qlonglong, QList<qlonglong> > results = haarIface.findDuplicates(idList);
+    QMap< qlonglong, QList<qlonglong> > results = haarIface.findDuplicates(idList, 0.9);
 
     QTime t;
     t = t.addMSecs(duration.elapsed());
