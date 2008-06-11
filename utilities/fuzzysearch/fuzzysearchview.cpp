@@ -91,7 +91,7 @@ public:
         vSelector             = 0;
         penSize               = 0;
         resultsSketch         = 0;
-        resultsImage          = 0;
+        levelImage            = 0;
         resetButton           = 0;
         saveBtnSketch         = 0;
         saveBtnImage          = 0;
@@ -118,7 +118,7 @@ public:
 
     QSpinBox               *penSize;
     QSpinBox               *resultsSketch;
-    QSpinBox               *resultsImage;
+    QSpinBox               *levelImage;
 
     QLabel                 *imageWidget;
 
@@ -200,12 +200,15 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     // ---------------------------------------------------------------
 
     KHBox *hbox3          = new KHBox(imagePanel);
-    QLabel *resultsLabel2 = new QLabel(i18n("Results:"), hbox3);
-    d->resultsImage       = new QSpinBox(hbox3);
-    d->resultsImage->setRange(1, 50);
-    d->resultsImage->setSingleStep(1);
-    d->resultsImage->setValue(10);
-    d->resultsImage->setWhatsThis(i18n("<p>Set here the number of similar items to find."));
+    QLabel *resultsLabel2 = new QLabel(i18n("Threshold (%):"), hbox3);
+    d->levelImage         = new QSpinBox(hbox3);
+    d->levelImage->setRange(1, 100);
+    d->levelImage->setSingleStep(1);
+    d->levelImage->setValue(90);
+    d->levelImage->setWhatsThis(i18n("<p><p>Select here the approximate threshold "
+                                     "value, as a percentage. "
+                                     "This value is used by the algorithm to distinguish two "
+                                     "similar images. The default value is 90."));
 
     hbox3->setStretchFactor(resultsLabel2, 10);
     hbox3->setMargin(0);
@@ -418,7 +421,7 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     connect(d->resultsSketch, SIGNAL(valueChanged(int)),
             this, SLOT(slotDirtySketch()));
 
-    connect(d->resultsImage, SIGNAL(valueChanged(int)),
+    connect(d->levelImage, SIGNAL(valueChanged(int)),
             this, SLOT(slotResultsImageChanged()));
 
     connect(d->resetButton, SIGNAL(clicked()),
@@ -472,7 +475,7 @@ void FuzzySearchView::readConfig()
     d->hsSelector->setXValue(group.readEntry("Pen Sketch Hue", 180));
     d->hsSelector->setYValue(group.readEntry("Pen Sketch Saturation", 128));
     d->vSelector->setValue(group.readEntry("Pen Sketch Value", 255));
-    d->resultsImage->setValue(group.readEntry("Result Image items", 10));
+    d->levelImage->setValue(group.readEntry("Similars Threshold", 90));
     d->hsSelector->updateContents();
     slotHSChanged(d->hsSelector->xValue(), d->hsSelector->yValue());
     d->sketchWidget->setPenWidth(d->penSize->value());
@@ -488,7 +491,7 @@ void FuzzySearchView::writeConfig()
     group.writeEntry("Pen Sketch Hue",         d->hsSelector->xValue());
     group.writeEntry("Pen Sketch Saturation",  d->hsSelector->yValue());
     group.writeEntry("Pen Sketch Value",       d->vSelector->value());
-    group.writeEntry("Result Image items",     d->resultsImage->value());
+    group.writeEntry("Similars Threshold",     d->levelImage->value());
     group.sync();
 }
 
@@ -614,6 +617,7 @@ void FuzzySearchView::slotAlbumSelected(SAlbum* salbum)
     reader.readToFirstField();
     QStringRef type             = reader.attributes().value("type");
     QStringRef numResultsString = reader.attributes().value("numberofresults");
+    QStringRef thresholdString  = reader.attributes().value("threshold");
     QStringRef sketchTypeString = reader.attributes().value("sketchtype");
 
     if (type == "imageid")
@@ -783,7 +787,7 @@ void FuzzySearchView::createNewFuzzySearchAlbumFromImage(const QString& name)
     writer.writeGroup();
     writer.writeField("similarity", SearchXml::Like);
     writer.writeAttribute("type", "imageid");
-    writer.writeAttribute("numberofresults", QString::number(d->resultsImage->value()));
+    writer.writeAttribute("threshold", QString::number(d->levelImage->value()/100.0));
     writer.writeAttribute("sketchtype", "scanned");
     writer.writeValue(d->imageInfo->id());
     writer.finishField();
