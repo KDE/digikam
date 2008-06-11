@@ -165,7 +165,7 @@ QImage SketchWidget::sketchImage() const
 void SketchWidget::setSketchImage(const QImage& image)
 {
     d->isClear = false;
-    d->pixmap = QPixmap::fromImage(image);
+    d->pixmap  = QPixmap::fromImage(image);
     d->drawEventList.clear();
     update();
 }
