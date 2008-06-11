@@ -614,7 +614,7 @@ void FuzzySearchView::createNewFuzzySearchAlbumFromSketch(const QString& name)
     SearchXmlWriter writer;
 
     // TODO: Marcel, you can use this xml data to store sketch image in database
-    QString xmlSketchImage = d->sketchWidget->sketchImageAsXML();
+    QString xmlSketchImage = d->sketchWidget->sketchImageToXML();
 
     writer.writeGroup();
     writer.writeField("similarity", SearchXml::Like);

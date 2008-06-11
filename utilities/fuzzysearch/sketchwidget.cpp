@@ -123,7 +123,7 @@ int SketchWidget::penWidth() const
     return d->penWidth;
 }
 
-QString SketchWidget::sketchImageAsXML()
+QString SketchWidget::sketchImageToXML()
 {
     QDomDocument sketchDoc;
     QDomElement  imageElem = sketchDoc.createElement(QString::fromLatin1("SketchImage"));
@@ -148,9 +148,26 @@ QString SketchWidget::sketchImageAsXML()
     return xml;
 }
 
+void SketchWidget::setSketchImageFromXML(const QString& /*xml*/)
+{
+    d->isClear = false;
+
+    // TODO
+
+    update();
+}
+
 QImage SketchWidget::sketchImage() const
 {
     return d->pixmap.toImage();
+}
+
+void SketchWidget::setSketchImage(const QImage& image)
+{
+    d->isClear = false;
+    d->pixmap = QPixmap::fromImage(image);
+    d->drawEventList.clear();
+    update();
 }
 
 void SketchWidget::setPenColor(const QColor &newColor)

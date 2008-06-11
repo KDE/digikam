@@ -49,11 +49,14 @@ public:
     bool    isClear()  const;
 
     QImage  sketchImage() const;
+    void    setSketchImage(const QImage& image);
+
 
     /** This method return the drawing line history
      *  as XML, to be stored in database as SAlbum data.
      */
-    QString sketchImageAsXML();
+    QString sketchImageToXML();
+    void setSketchImageFromXML(const QString& xml);
 
 signals:
 
