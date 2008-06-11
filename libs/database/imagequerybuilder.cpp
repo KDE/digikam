@@ -527,9 +527,7 @@ void ImageQueryBuilder::buildField(QString &sql, SearchXmlCachingReader &reader,
     }
     else if (name == "albumname")
     {
-        //NOTE: InTree like above not implemented (but not used)
-        if (relation == SearchXml::Equal)
-            fieldQuery.addStringField("Albums.relativePath");
+        fieldQuery.addStringField("Albums.relativePath");
     }
     else if (name == "albumcaption")
     {
