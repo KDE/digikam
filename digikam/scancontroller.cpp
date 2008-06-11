@@ -177,6 +177,17 @@ ScanController::ScanController()
 
 ScanController::~ScanController()
 {
+    shutDown();
+
+    delete d->progressDialog;
+    delete d;
+}
+
+void ScanController::shutDown()
+{
+    if (!isRunning())
+        return;
+
     d->running = false;
     {
         QMutexLocker lock(&d->mutex);
@@ -184,9 +195,6 @@ ScanController::~ScanController()
     }
 
     wait();
-
-    delete d->progressDialog;
-    delete d;
 }
 
 void ScanController::createProgressDialog()

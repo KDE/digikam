@@ -55,6 +55,7 @@ class DIGIKAM_EXPORT ScanController : public QThread, public InitializationObser
 public:
 
     static ScanController *instance();
+    void shutDown();
 
     enum Advice
     {

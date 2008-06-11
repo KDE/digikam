@@ -234,6 +234,7 @@ DigikamApp::~DigikamApp()
     AlbumSettings::instance()->setShowThumbbar(d->showBarAction->isChecked());
     AlbumSettings::instance()->saveSettings();
 
+    ScanController::instance()->shutDown();
     AlbumLister::cleanUp();
     ImageAttributesWatch::cleanUp();
     LoadingCacheInterface::cleanUp();
