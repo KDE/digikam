@@ -27,6 +27,8 @@
 // Qt includes.
 
 #include <QWidget>
+#include <QDomDocument>
+#include <QDomElement>
 
 namespace Digikam
 {
@@ -42,11 +44,16 @@ public:
     SketchWidget(QWidget *parent=0);
     ~SketchWidget();
 
-    QColor penColor() const;
-    int    penWidth() const;
-    bool   isClear()  const;
+    QColor  penColor() const;
+    int     penWidth() const;
+    bool    isClear()  const;
 
-    QImage sketchImage() const;
+    QImage  sketchImage() const;
+
+    /** This method return the drawing line history
+     *  as XML, to be stored in database as SAlbum data.
+     */
+    QString sketchImageAsXML();
 
 signals:
 
@@ -68,6 +75,8 @@ protected:
 private:
 
     void drawLineTo(const QPoint& endPoint);
+    QDomElement addXmlTextElement(QDomDocument &document, QDomElement &target,
+                                  const QString& tag, const QString& text);
 
 private:
 

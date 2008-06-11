@@ -23,6 +23,7 @@
 
 // Qt includes.
 
+#include <QMap>
 #include <QPainter>
 #include <QColor>
 #include <QPixmap>
@@ -35,10 +36,31 @@
 
 // Local includes.
 
+#include "ddebug.h"
 #include "sketchwidget.h"
 
 namespace Digikam
 {
+
+class DrawEvent
+{
+public:
+
+    DrawEvent(int width, const QColor& color, const QPoint& begin, const QPoint& end)
+    {
+        penWidth   = width;
+        penColor   = color;
+        beginPoint = begin;
+        endPoint   = end;
+    }
+
+    int    penWidth;
+
+    QColor penColor;
+
+    QPoint beginPoint;
+    QPoint endPoint;
+};
 
 class SketchWidgetPriv
 {
@@ -53,16 +75,18 @@ public:
         pixmap   = QPixmap(256, 256);
     }
 
-    bool    isClear;
-    bool    drawing;
+    bool                 isClear;
+    bool                 drawing;
 
-    int     penWidth;
+    int                  penWidth;
 
-    QColor  penColor;
+    QColor               penColor;
 
-    QPixmap pixmap;
+    QPixmap              pixmap;
 
-    QPoint  lastPoint;
+    QPoint               lastPoint;
+
+    QMap<int, DrawEvent> drawEventList;
 };
 
 SketchWidget::SketchWidget(QWidget *parent)
@@ -95,12 +119,37 @@ QColor SketchWidget::penColor() const
 }
 
 int SketchWidget::penWidth() const
-{ 
+{
     return d->penWidth;
 }
 
+QString SketchWidget::sketchImageAsXML()
+{
+    QDomDocument sketchDoc;
+    QDomElement  imageElem = sketchDoc.createElement(QString::fromLatin1("SketchImage"));
+    sketchDoc.appendChild(imageElem);
+
+    QMap<int, DrawEvent>::const_iterator it;
+
+    for (it = d->drawEventList.begin(); it != d->drawEventList.end(); ++it)
+    {
+        QDomElement line = sketchDoc.createElement("Line");
+        imageElem.appendChild(line);
+        addXmlTextElement(sketchDoc, line, "Id",     QString::number(it.key()));
+        addXmlTextElement(sketchDoc, line, "Size",   QString::number(it.value().penWidth));
+        addXmlTextElement(sketchDoc, line, "Color",  it.value().penColor.name());
+        addXmlTextElement(sketchDoc, line, "BeginX", QString::number(it.value().beginPoint.x()));
+        addXmlTextElement(sketchDoc, line, "BeginY", QString::number(it.value().beginPoint.y()));
+        addXmlTextElement(sketchDoc, line, "EndX",   QString::number(it.value().endPoint.x()));
+        addXmlTextElement(sketchDoc, line, "EndY",   QString::number(it.value().endPoint.y()));
+    }
+
+    QString xml = sketchDoc.toString();
+    return xml;
+}
+
 QImage SketchWidget::sketchImage() const
-{ 
+{
     return d->pixmap.toImage();
 }
 
@@ -118,6 +167,7 @@ void SketchWidget::slotClear()
 {
     d->isClear = true;
     d->pixmap.fill(qRgb(255, 255, 255));
+    d->drawEventList.clear();
     update();
 }
 
@@ -144,7 +194,12 @@ void SketchWidget::mouseMoveEvent(QMouseEvent *e)
         setCursor(Qt::CrossCursor);
 
         if ((e->buttons() & Qt::LeftButton) && d->drawing)
-            drawLineTo(e->pos());
+        {
+            QPoint currentPos = e->pos();
+            drawLineTo(currentPos);
+            d->drawEventList.insert(d->drawEventList.size()+1, 
+                                    DrawEvent(d->penWidth, d->penColor, d->lastPoint, currentPos));
+        }
     }
     else
     {
@@ -156,7 +211,10 @@ void SketchWidget::mouseReleaseEvent(QMouseEvent *e)
 {
     if (e->button() == Qt::LeftButton && d->drawing) 
     {
-        drawLineTo(e->pos());
+        QPoint currentPos = e->pos();
+        drawLineTo(currentPos);
+        d->drawEventList.insert(d->drawEventList.size()+1, 
+                                DrawEvent(d->penWidth, d->penColor, d->lastPoint, currentPos));
         d->drawing = false;
         emit signalSketchChanged(sketchImage());
     }
@@ -187,6 +245,16 @@ void SketchWidget::drawLineTo(const QPoint& endPoint)
     update(QRect(d->lastPoint, endPoint).normalized().adjusted(-rad, -rad, +rad, +rad));
 
     d->lastPoint = endPoint;
+}
+
+QDomElement SketchWidget::addXmlTextElement(QDomDocument &document, QDomElement &target,
+                                              const QString& tag, const QString& text)
+{
+    QDomElement element  = document.createElement(tag);
+    target.appendChild(element);
+    QDomText textElement = document.createTextNode(text);
+    element.appendChild(textElement);
+    return element;
 }
 
 }  // namespace Digikam
