@@ -539,7 +539,7 @@ void HaarIface::getBestAndWorstPossibleScore(Haar::SignatureData *sig, SketchTyp
     *lowestAndBestScore = score;
 }
 
-QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QList<qlonglong>& images2Scan)
+QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QList<qlonglong>& images2Scan, double requiredPercentage)
 {
     QMap< qlonglong, QList<qlonglong> > resultsMap;
     QList<qlonglong>::const_iterator    it;
@@ -551,7 +551,7 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QList<qlongl
     {
         //list = bestMatchesForImage(*it, 20, ScannedSketch);
         // find images with at least 90% similarity
-        list = bestMatchesForImageWithThreshold(*it, 0.9, ScannedSketch);
+        list = bestMatchesForImageWithThreshold(*it, requiredPercentage, ScannedSketch);
         if (!list.isEmpty())
         {
             // the list will usually contain one image: the original. Filter out.

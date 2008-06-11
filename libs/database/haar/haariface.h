@@ -103,8 +103,9 @@ public:
     /** Fill a map of duplicates images found over a list of image to scan.
      *  For each map item, the result values is list of candidate images which are duplicates of the key image.
      *  All images are referenced by id from database.
+     *  The threshold is in the range 0..1, with 1 meaning identical signature.
      */
-    QMap< qlonglong, QList<qlonglong> > findDuplicates(const QList<qlonglong>& images2Scan);
+    QMap< qlonglong, QList<qlonglong> > findDuplicates(const QList<qlonglong>& images2Scan, double requiredPercentage);
 
     /** Retrieve the Haar signature from database using image id.
      *  Return true if item signature exist else false.
