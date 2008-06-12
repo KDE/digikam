@@ -468,8 +468,14 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     connect(d->nameEditSketch, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotCheckNameEditSketchConditions()));
 
+    connect(d->nameEditSketch, SIGNAL(returnPressed(const QString&)),
+            d->saveBtnSketch, SLOT(animateClick()));
+
     connect(d->nameEditImage, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotCheckNameEditImageConditions()));
+
+    connect(d->nameEditImage, SIGNAL(returnPressed(const QString&)),
+            d->saveBtnImage, SLOT(animateClick()));
 
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
             this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
