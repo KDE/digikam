@@ -199,15 +199,26 @@ void SketchWidget::slotUndo()
 {
     if (d->eventIndex == -1) return;
     d->eventIndex--;
-    replayEvents(d->eventIndex);
-    emit signalSketchChanged(sketchImage());
-    emit signalUndoRedoStateChanged(d->eventIndex != -1, d->eventIndex != d->drawEventList.count() - 1);
+    if (d->eventIndex == -1)
+    {
+        d->isClear    = true;
+        d->pixmap.fill(qRgb(255, 255, 255));
+        update();
+        emit signalUndoRedoStateChanged(false, true);
+    }
+    else
+    {
+        replayEvents(d->eventIndex);
+        emit signalSketchChanged(sketchImage());
+        emit signalUndoRedoStateChanged(d->eventIndex != -1, d->eventIndex != d->drawEventList.count() - 1);
+    }
 }
 
 void SketchWidget::slotRedo()
 {
     if (d->eventIndex == d->drawEventList.count() - 1) return;
     d->eventIndex++;
+    d->isClear = false;
     replayEvents(d->eventIndex);
     emit signalSketchChanged(sketchImage());
     emit signalUndoRedoStateChanged(d->eventIndex != -1, d->eventIndex != d->drawEventList.count() - 1);
@@ -410,6 +421,12 @@ void SketchWidget::addPath(QXmlStreamReader &reader)
                 // draw line
                 event.path.lineTo(end);
             }
+        }
+        else if (element == QXmlStreamReader::EndElement)
+        {
+            // we have finished
+            if (reader.name() == "Path")
+                break;
         }
     }
 
