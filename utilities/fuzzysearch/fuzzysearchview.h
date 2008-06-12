@@ -100,6 +100,7 @@ private slots:
 
     void slotDirtySketch();
     void slotTimerSketchDone();
+    void slotUndoRedoStateChanged(bool, bool);
 
     void slotLevelImageChanged();
     void slotTimerImageDone();

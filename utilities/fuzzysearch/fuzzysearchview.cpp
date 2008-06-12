@@ -301,12 +301,14 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     d->undoBtnSketch->setIcon(SmallIcon("edit-undo"));
     d->undoBtnSketch->setToolTip(i18n("Undo last draw on sketch"));
     d->undoBtnSketch->setWhatsThis(i18n("<p>Use this button to undo last drawing action on sketch."));
+    d->undoBtnSketch->setEnabled(false);
 
     d->redoBtnSketch   = new QPushButton(hbox);
     d->redoBtnSketch->setAutoRepeat(true);
     d->redoBtnSketch->setIcon(SmallIcon("edit-redo"));
     d->redoBtnSketch->setToolTip(i18n("Redo last draw on sketch"));
     d->redoBtnSketch->setWhatsThis(i18n("<p>Use this button to redo last drawing action on sketch."));
+    d->redoBtnSketch->setEnabled(false);
 
     QLabel *brushLabel = new QLabel(i18n("Pen:"), hbox);
     d->penSize         = new QSpinBox(hbox);
@@ -453,6 +455,9 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     connect(d->sketchWidget, SIGNAL(signalSketchChanged(const QImage&)),
             this, SLOT(slotDirtySketch()));
 
+    connect(d->sketchWidget, SIGNAL(signalUndoRedoStateChanged(bool, bool)),
+            this, SLOT(slotUndoRedoStateChanged(bool, bool)));
+
     connect(d->undoBtnSketch, SIGNAL(clicked()),
             d->sketchWidget, SLOT(slotUndo()));
 
@@ -586,6 +591,12 @@ void FuzzySearchView::slotVChanged()
     QColor color = QColor::fromHsv(hue, sat, val);
 
     d->sketchWidget->setPenColor(color);
+}
+
+void FuzzySearchView::slotUndoRedoStateChanged(bool hasUndo, bool hasRedo)
+{
+    d->undoBtnSketch->setEnabled(hasUndo);
+    d->redoBtnSketch->setEnabled(hasRedo);
 }
 
 void FuzzySearchView::setActive(bool val)
