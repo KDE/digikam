@@ -51,7 +51,6 @@ public:
     QImage  sketchImage() const;
     void    setSketchImage(const QImage& image);
 
-
     /** This method return the drawing line history
      *  as XML, to be stored in database as SAlbum data.
      */
@@ -67,6 +66,8 @@ public slots:
     void setPenColor(const QColor& newColor);
     void setPenWidth(int newWidth);
     void slotClear();
+    void slotUndo();
+    void slotRedo();
 
 protected:
 
@@ -77,7 +78,9 @@ protected:
 
 private:
 
+    void replayEvents(int index);
     void drawLineTo(const QPoint& endPoint);
+    void drawLineTo(int width, const QColor& color, const QPoint& start, const QPoint& end);
     QDomElement addXmlTextElement(QDomDocument &document, QDomElement &target,
                                   const QString& tag, const QString& text);
 

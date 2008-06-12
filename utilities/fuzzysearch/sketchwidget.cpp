@@ -46,13 +46,19 @@ class DrawEvent
 {
 public:
 
+    DrawEvent()
+    {
+        penWidth = 10;
+        penColor = Qt::black;
+    };
+
     DrawEvent(int width, const QColor& color, const QPoint& begin, const QPoint& end)
     {
         penWidth   = width;
         penColor   = color;
         beginPoint = begin;
         endPoint   = end;
-    }
+    };
 
     int    penWidth;
 
@@ -68,17 +74,19 @@ public:
 
     SketchWidgetPriv()
     {
-        isClear  = true;
-        drawing  = false;
-        penWidth = 10;
-        penColor = Qt::black;
-        pixmap   = QPixmap(256, 256);
+        isClear    = true;
+        drawing    = false;
+        penWidth   = 10;
+        penColor   = Qt::black;
+        pixmap     = QPixmap(256, 256);
+        eventIndex = 0;
     }
 
     bool                 isClear;
     bool                 drawing;
 
     int                  penWidth;
+    int                  eventIndex;
 
     QColor               penColor;
 
@@ -108,9 +116,23 @@ SketchWidget::~SketchWidget()
     delete d;
 }
 
+void SketchWidget::slotClear()
+{
+    d->isClear    = true;
+    d->eventIndex = 0;
+    d->pixmap.fill(qRgb(255, 255, 255));
+    d->drawEventList.clear();
+    update();
+}
+
 bool SketchWidget::isClear() const
 {
     return d->isClear;
+}
+
+void SketchWidget::setPenColor(const QColor &newColor)
+{
+    d->penColor = newColor;
 }
 
 QColor SketchWidget::penColor() const
@@ -118,9 +140,45 @@ QColor SketchWidget::penColor() const
     return d->penColor;
 }
 
+void SketchWidget::setPenWidth(int newWidth)
+{
+    d->penWidth = newWidth;
+}
+
 int SketchWidget::penWidth() const
 {
     return d->penWidth;
+}
+
+void SketchWidget::slotUndo()
+{
+    if (d->eventIndex == 0) return;
+    d->eventIndex--;
+    replayEvents(d->eventIndex);
+    emit signalSketchChanged(sketchImage());
+}
+
+void SketchWidget::slotRedo()
+{
+    if (d->eventIndex == d->drawEventList.count()) return;
+    d->eventIndex++;
+    replayEvents(d->eventIndex);
+    emit signalSketchChanged(sketchImage());
+}
+
+void SketchWidget::replayEvents(int index)
+{
+    d->pixmap.fill(qRgb(255, 255, 255));
+
+    DrawEvent drawEvent;
+
+    for (int i = 0; i < index; i++)
+    {
+        drawEvent = d->drawEventList[i];
+        drawLineTo(drawEvent.penWidth, drawEvent.penColor, drawEvent.beginPoint, drawEvent.endPoint);
+    }
+
+    update();
 }
 
 QString SketchWidget::sketchImageToXML()
@@ -154,6 +212,7 @@ void SketchWidget::setSketchImageFromXML(const QString& /*xml*/)
 
     // TODO
 
+    d->eventIndex = d->drawEventList.count();
     update();
 }
 
@@ -164,26 +223,9 @@ QImage SketchWidget::sketchImage() const
 
 void SketchWidget::setSketchImage(const QImage& image)
 {
-    d->isClear = false;
-    d->pixmap  = QPixmap::fromImage(image);
-    d->drawEventList.clear();
-    update();
-}
-
-void SketchWidget::setPenColor(const QColor &newColor)
-{
-    d->penColor = newColor;
-}
-
-void SketchWidget::setPenWidth(int newWidth)
-{
-    d->penWidth = newWidth;
-}
-
-void SketchWidget::slotClear()
-{
-    d->isClear = true;
-    d->pixmap.fill(qRgb(255, 255, 255));
+    d->isClear    = false;
+    d->pixmap     = QPixmap::fromImage(image);
+    d->eventIndex = 0;
     d->drawEventList.clear();
     update();
 }
@@ -201,6 +243,11 @@ void SketchWidget::mousePressEvent(QMouseEvent *e)
 
         d->lastPoint = e->pos();
         d->drawing   = true;
+
+        for (int i = d->eventIndex + 1; i <= d->drawEventList.count(); i++)
+        {
+            d->drawEventList.remove(i);
+        }
     }
 }
 
@@ -213,9 +260,9 @@ void SketchWidget::mouseMoveEvent(QMouseEvent *e)
         if ((e->buttons() & Qt::LeftButton) && d->drawing)
         {
             QPoint currentPos = e->pos();
-            drawLineTo(currentPos);
-            d->drawEventList.insert(d->drawEventList.size()+1, 
+            d->drawEventList.insert(d->eventIndex++,
                                     DrawEvent(d->penWidth, d->penColor, d->lastPoint, currentPos));
+            drawLineTo(currentPos);
         }
     }
     else
@@ -226,12 +273,12 @@ void SketchWidget::mouseMoveEvent(QMouseEvent *e)
 
 void SketchWidget::mouseReleaseEvent(QMouseEvent *e)
 {
-    if (e->button() == Qt::LeftButton && d->drawing) 
+    if (e->button() == Qt::LeftButton && d->drawing)
     {
         QPoint currentPos = e->pos();
-        drawLineTo(currentPos);
-        d->drawEventList.insert(d->drawEventList.size()+1, 
+        d->drawEventList.insert(d->eventIndex++,
                                 DrawEvent(d->penWidth, d->penColor, d->lastPoint, currentPos));
+        drawLineTo(currentPos);
         d->drawing = false;
         emit signalSketchChanged(sketchImage());
     }
@@ -253,19 +300,23 @@ void SketchWidget::paintEvent(QPaintEvent*)
 
 void SketchWidget::drawLineTo(const QPoint& endPoint)
 {
+    drawLineTo(d->penWidth, d->penColor, d->lastPoint, endPoint);
+}
+
+void SketchWidget::drawLineTo(int width, const QColor& color, const QPoint& start, const QPoint& end)
+{
     QPainter painter(&d->pixmap);
-    painter.setPen(QPen(d->penColor, d->penWidth, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-    painter.drawLine(d->lastPoint, endPoint);
+    painter.setPen(QPen(color, width, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    painter.drawLine(start, end);
 
-    int rad = (d->penWidth / 2) + 2;
+    int rad = (width / 2) + 2;
 
-    update(QRect(d->lastPoint, endPoint).normalized().adjusted(-rad, -rad, +rad, +rad));
-
-    d->lastPoint = endPoint;
+    update(QRect(start, end).normalized().adjusted(-rad, -rad, +rad, +rad));
+    d->lastPoint = end;
 }
 
 QDomElement SketchWidget::addXmlTextElement(QDomDocument &document, QDomElement &target,
-                                              const QString& tag, const QString& text)
+                                            const QString& tag, const QString& text)
 {
     QDomElement element  = document.createElement(tag);
     target.appendChild(element);

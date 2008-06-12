@@ -95,6 +95,8 @@ public:
         levelImage            = 0;
         resetButton           = 0;
         saveBtnSketch         = 0;
+        undoBtnSketch         = 0;
+        redoBtnSketch         = 0;
         saveBtnImage          = 0;
         nameEditSketch        = 0;
         nameEditImage         = 0;
@@ -115,6 +117,8 @@ public:
 
     QPushButton            *resetButton;
     QPushButton            *saveBtnSketch;
+    QPushButton            *undoBtnSketch;
+    QPushButton            *redoBtnSketch;
     QPushButton            *saveBtnImage;
     QPushButton            *scanDuplicatesBtn;
     QPushButton            *updateFingerPrtBtn;
@@ -291,14 +295,27 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     // ---------------------------------------------------------------
 
     KHBox *hbox        = new KHBox(sketchPanel);
-    QLabel *brushLabel = new QLabel(i18n("Brush size:"), hbox);
+
+    d->undoBtnSketch   = new QPushButton(hbox);
+    d->undoBtnSketch->setAutoRepeat(true);
+    d->undoBtnSketch->setIcon(SmallIcon("edit-undo"));
+    d->undoBtnSketch->setToolTip(i18n("Undo last draw on sketch"));
+    d->undoBtnSketch->setWhatsThis(i18n("<p>Use this button to undo last drawing action on sketch."));
+
+    d->redoBtnSketch   = new QPushButton(hbox);
+    d->redoBtnSketch->setAutoRepeat(true);
+    d->redoBtnSketch->setIcon(SmallIcon("edit-redo"));
+    d->redoBtnSketch->setToolTip(i18n("Redo last draw on sketch"));
+    d->redoBtnSketch->setWhatsThis(i18n("<p>Use this button to redo last drawing action on sketch."));
+
+    QLabel *brushLabel = new QLabel(i18n("Pen:"), hbox);
     d->penSize         = new QSpinBox(hbox);
     d->penSize->setRange(1, 40);
     d->penSize->setSingleStep(1);
     d->penSize->setValue(10);
     d->penSize->setWhatsThis(i18n("<p>Set here the brush size in pixels used to draw sketch."));
 
-    QLabel *resultsLabel = new QLabel(i18n("Results:"), hbox);
+    QLabel *resultsLabel = new QLabel(i18n("Items:"), hbox);
     d->resultsSketch     = new QSpinBox(hbox);
     d->resultsSketch->setRange(1, 50);
     d->resultsSketch->setSingleStep(1);
@@ -425,7 +442,7 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
             d->sketchWidget, SLOT(setPenWidth(int)));
 
     connect(d->resultsSketch, SIGNAL(valueChanged(int)),
-            this, SLOT(slotResultsSketchChanged()));
+            this, SLOT(slotDirtySketch()));
 
     connect(d->levelImage, SIGNAL(valueChanged(int)),
             this, SLOT(slotLevelImageChanged()));
@@ -435,6 +452,12 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
 
     connect(d->sketchWidget, SIGNAL(signalSketchChanged(const QImage&)),
             this, SLOT(slotDirtySketch()));
+
+    connect(d->undoBtnSketch, SIGNAL(clicked()),
+            d->sketchWidget, SLOT(slotUndo()));
+
+    connect(d->redoBtnSketch, SIGNAL(clicked()),
+            d->sketchWidget, SLOT(slotRedo()));
 
     connect(d->saveBtnSketch, SIGNAL(clicked()),
             this, SLOT(slotSaveSketchSAlbum()));
@@ -580,7 +603,7 @@ void FuzzySearchView::slotSaveSketchSAlbum()
     createNewFuzzySearchAlbumFromSketch(name);
 }
 
-void FuzzySearchView::slotResultsSketchChanged()
+void FuzzySearchView::slotDirtySketch()
 {
     if (d->timerSketch)
     {
@@ -590,12 +613,12 @@ void FuzzySearchView::slotResultsSketchChanged()
 
     d->timerSketch = new QTimer( this );
     connect( d->timerSketch, SIGNAL(timeout()),
-             this, SLOT(slotDirtySketch()) );
+             this, SLOT(slotTimerSketchDone()) );
     d->timerSketch->setSingleShot(true);
     d->timerSketch->start(500);
 }
 
-void FuzzySearchView::slotDirtySketch()
+void FuzzySearchView::slotTimerSketchDone()
 {
     slotCheckNameEditSketchConditions();
     createNewFuzzySearchAlbumFromSketch(FuzzySearchFolderView::currentFuzzySketchSearchName());
@@ -866,6 +889,7 @@ void FuzzySearchView::slotSaveImageSAlbum()
 
 void FuzzySearchView::slotFindDuplicates()
 {
+/*
     AlbumDB *db                 = DatabaseAccess().db();
     QList<AlbumShortInfo> aList = db->getAlbumShortInfos();
     QList<qlonglong> idList;
@@ -893,6 +917,7 @@ void FuzzySearchView::slotFindDuplicates()
     {
         DDebug() << "id: " << it.key() << " => " << it.value() << endl;
     }
+*/
 }
 
 }  // NameSpace Digikam

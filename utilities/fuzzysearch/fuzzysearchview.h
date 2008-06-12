@@ -98,8 +98,8 @@ private slots:
 
     void slotFindDuplicates();
 
-    void slotResultsSketchChanged();
     void slotDirtySketch();
+    void slotTimerSketchDone();
 
     void slotLevelImageChanged();
     void slotTimerImageDone();
