@@ -13,12 +13,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -286,6 +286,9 @@ TimeLineView::TimeLineView(QWidget *parent)
 
     connect(d->nameEdit, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotCheckAboutSelection()));
+
+    connect(d->nameEdit, SIGNAL(returnPressed(const QString&)),
+            d->saveButton, SLOT(animateClick()));
 }
 
 TimeLineView::~TimeLineView()
