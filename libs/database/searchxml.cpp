@@ -245,11 +245,48 @@ SearchXml::Relation SearchXmlReader::readRelation(const QString &attributeName,
     return defaultRelation;
 }
 
+bool SearchXmlReader::readToStartOfElement(const QString &elementName)
+{
+    // go to next start element
+    forever {
+        bool atStart = isStartElement();
+        if (atStart)
+            break;
+        switch (QXmlStreamReader::readNext()) {
+            case StartElement:
+                atStart = true;
+            default:
+                break;
+            case EndDocument:
+                return false;
+        }
+    }
+
+    int stack = 1;
+    forever {
+        switch (QXmlStreamReader::readNext()) {
+            case StartElement:
+            {
+                if (name() == elementName)
+                    return true;
+                stack++;
+            }
+            case EndElement:
+                if (!--stack)
+                    return false;
+            case EndDocument:
+                return false;
+            default:
+                break;
+        }
+    }
+    return false;
+}
+
 void SearchXmlReader::readToEndOfElement()
 {
     int stack = 1;
     if (isStartElement()) {
-        QString result;
         forever {
             switch (QXmlStreamReader::readNext()) {
                 case StartElement:

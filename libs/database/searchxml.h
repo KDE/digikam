@@ -138,6 +138,12 @@ public:
     QList<double>       valueToDoubleList();
     QStringList         valueToStringList();
 
+    /** General helper method: Reads XML a start element with the given
+     *  name is found. The method goes to the next start element, and from
+     *  there down the hierarchy, but not further up in the hierarchy.
+     *  Returns false if the element is not found.
+     */
+    bool readToStartOfElement(const QString &name);
     /** General helper method: Reads XML until the end element of the current
         start element in reached.
      */
