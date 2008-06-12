@@ -27,8 +27,8 @@
 // Qt includes.
 
 #include <QWidget>
-#include <QDomDocument>
-#include <QDomElement>
+#include <QXmlStreamReader>
+#include <QXmlStreamWriter>
 
 namespace Digikam
 {
@@ -54,13 +54,15 @@ public:
     /** This method return the drawing line history
      *  as XML, to be stored in database as SAlbum data.
      */
+    void sketchImageToXML(QXmlStreamWriter &writer);
     QString sketchImageToXML();
 
     /** This method set sketch image using XML data based 
      *  on drawing line history.
      *  Retrun true if data are imported sucessfully.
      */
-    bool setSketchImageFromXML(const QString& xml);
+    bool setSketchImageFromXML(QXmlStreamReader &reader);
+    bool setSketchImageFromXML(const QString &xml);
 
 signals:
 
@@ -86,8 +88,10 @@ private:
     void replayEvents(int index);
     void drawLineTo(const QPoint& endPoint);
     void drawLineTo(int width, const QColor& color, const QPoint& start, const QPoint& end);
-    QDomElement addXmlTextElement(QDomDocument &document, QDomElement &target,
-                                  const QString& tag, const QString& text);
+    void drawPath(int width, const QColor& color, const QPainterPath &path);
+    void addPath(QXmlStreamReader &reader);
+    //QDomElement addXmlTextElement(QDomDocument &document, QDomElement &target,
+      //                            const QString& tag, const QString& text);
 
 private:
 
