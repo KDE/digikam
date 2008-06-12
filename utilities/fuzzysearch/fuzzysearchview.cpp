@@ -653,15 +653,13 @@ void FuzzySearchView::createNewFuzzySearchAlbumFromSketch(const QString& name)
     HaarIface haarIface;
     SearchXmlWriter writer;
 
-    // TODO: Marcel, you can use this xml data to store sketch image in database
-    QString xmlSketchImage = d->sketchWidget->sketchImageToXML();
-
     writer.writeGroup();
     writer.writeField("similarity", SearchXml::Like);
     writer.writeAttribute("type", "signature");         // we pass a signature
     writer.writeAttribute("numberofresults", QString::number(d->resultsSketch->value()));
     writer.writeAttribute("sketchtype", "handdrawn");
     writer.writeValue(haarIface.signatureAsText(d->sketchWidget->sketchImage()));
+    d->sketchWidget->sketchImageToXML(writer);
     writer.finishField();
     writer.finishGroup();
 
@@ -692,10 +690,12 @@ void FuzzySearchView::slotAlbumSelected(SAlbum* salbum)
         d->imageSAlbum = salbum;
         d->tabWidget->setCurrentIndex((int)FuzzySearchViewPriv::SIMILARS);
     }
-    else
+    else if (type == "signature")
     {
         d->sketchSAlbum = salbum;
         d->tabWidget->setCurrentIndex((int)FuzzySearchViewPriv::SKETCH);
+        if (reader.readToStartOfElement("SketchImage"))
+            d->sketchWidget->setSketchImageFromXML(reader);
 
     }
 }
