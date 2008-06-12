@@ -320,6 +320,9 @@ void SketchWidget::mousePressEvent(QMouseEvent *e)
         d->lastPoint = e->pos();
         d->drawing   = true;
 
+	// Remove all draw events from history map which are upper than current index.
+	// If user redo actions and make new draw events, theses one will be queued at 
+	// end of history and will remplace removed items.
         for (int i = d->eventIndex + 1; i <= d->drawEventList.count(); i++)
         {
             d->drawEventList.remove(i);
