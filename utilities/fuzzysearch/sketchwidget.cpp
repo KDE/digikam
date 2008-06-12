@@ -117,7 +117,6 @@ public:
         drawEventList << event;
 
         eventIndex = drawEventList.count() - 1;
-        DDebug() << "startDrawEvent" << eventIndex;
     }
 
     DrawEvent &currentDrawEvent()
@@ -166,6 +165,7 @@ void SketchWidget::slotClear()
     d->pixmap.fill(qRgb(255, 255, 255));
     d->drawEventList.clear();
     update();
+    emit signalUndoRedoStateChanged(false, false);
 }
 
 bool SketchWidget::isClear() const
@@ -201,14 +201,16 @@ void SketchWidget::slotUndo()
     d->eventIndex--;
     replayEvents(d->eventIndex);
     emit signalSketchChanged(sketchImage());
+    emit signalUndoRedoStateChanged(d->eventIndex != -1, d->eventIndex != d->drawEventList.count() - 1);
 }
 
 void SketchWidget::slotRedo()
 {
-    if (d->eventIndex == d->drawEventList.count()) return;
+    if (d->eventIndex == d->drawEventList.count() - 1) return;
     d->eventIndex++;
     replayEvents(d->eventIndex);
     emit signalSketchChanged(sketchImage());
+    emit signalUndoRedoStateChanged(d->eventIndex != -1, d->eventIndex != d->drawEventList.count() - 1);
 }
 
 void SketchWidget::replayEvents(int index)
@@ -255,7 +257,6 @@ void SketchWidget::sketchImageToXML(QXmlStreamWriter &writer)
 {
     writer.writeStartElement("SketchImage");
 
-    DDebug() << "sketchImageToXML" << d->eventIndex << d->drawEventList.size();
     for (int i=0; i<=d->eventIndex; i++)
     {
         const DrawEvent &event = d->drawEventList[i];
@@ -352,6 +353,7 @@ bool SketchWidget::setSketchImageFromXML(QXmlStreamReader &reader)
     d->eventIndex = d->drawEventList.count() - 1;
     // apply events to our pixmap
     replayEvents(d->eventIndex);
+    emit signalUndoRedoStateChanged(d->eventIndex != -1, false);
 
     return true;
 }
@@ -514,6 +516,7 @@ void SketchWidget::setSketchImage(const QImage& image)
     d->pixmap     = QPixmap::fromImage(image);
     d->eventIndex = -1;
     d->drawEventList.clear();
+    emit signalUndoRedoStateChanged(false, false);
     update();
 }
 
@@ -562,6 +565,7 @@ void SketchWidget::mouseReleaseEvent(QMouseEvent *e)
         d->currentDrawEvent().lineTo(currentPos);
         d->drawing = false;
         emit signalSketchChanged(sketchImage());
+        emit signalUndoRedoStateChanged(true, false);
     }
 }
 

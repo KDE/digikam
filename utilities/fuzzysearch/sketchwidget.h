@@ -67,6 +67,7 @@ public:
 signals:
 
     void signalSketchChanged(const QImage&);
+    void signalUndoRedoStateChanged(bool hasUndo, bool hasRedo);
 
 public slots:
 
