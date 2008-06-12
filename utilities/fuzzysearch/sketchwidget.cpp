@@ -206,14 +206,90 @@ QString SketchWidget::sketchImageToXML()
     return xml;
 }
 
-void SketchWidget::setSketchImageFromXML(const QString& /*xml*/)
+bool SketchWidget::setSketchImageFromXML(const QString& xml)
 {
-    d->isClear = false;
+    QDomDocument sketchDoc;
+    QString      error;
+    int          row, col;
 
-    // TODO
+    if (!sketchDoc.setContent(xml, &error, &row, &col))
+    {
+        DDebug() << "Error to import Sketch XML data:" << endl;
+        DDebug() << error << " :: row=" << row << " , col=" << col << endl;
+        return false;
+    }
+
+    QDomElement imageElem = sketchDoc.documentElement();
+    if (imageElem.tagName() != QString::fromLatin1("SketchImage"))
+        return false;
+
+    d->isClear = false;
+    d->drawEventList.clear();
+
+    for (QDomNode nLine = imageElem.firstChild();
+         !nLine.isNull(); nLine = nLine.nextSibling())
+    {
+        QDomElement lineElem = nLine.toElement();
+        if (lineElem.isNull()) continue;
+        if (lineElem.tagName() != "Line") continue;
+
+        int       indexEvent = -1;
+        DrawEvent drawEvent;
+        QString   temp;
+
+        for (QDomNode nLineMeta = lineElem.firstChild();
+             !nLineMeta.isNull(); nLineMeta = nLineMeta.nextSibling())
+        {
+            QDomElement lineMetaElem = nLineMeta.toElement();
+
+            if (lineMetaElem.isNull()) 
+            {
+                continue;
+            }
+            else if (lineMetaElem.tagName() == QString("Id"))
+            {
+                temp       = lineMetaElem.text();
+                indexEvent = temp.toInt();
+            }
+            else if (lineMetaElem.tagName() == QString("Size"))
+            {
+                temp               = lineMetaElem.text();
+                drawEvent.penWidth = temp.toInt();
+            }
+            else if (lineMetaElem.tagName() == QString("Color"))
+            {
+                temp = lineMetaElem.text();
+                drawEvent.penColor.setNamedColor(temp);
+            }
+            else if (lineMetaElem.tagName() == QString("BeginX"))
+            {
+                temp = lineMetaElem.text();
+                drawEvent.beginPoint.setX(temp.toInt());
+            }
+            else if (lineMetaElem.tagName() == QString("BeginY"))
+            {
+                temp = lineMetaElem.text();
+                drawEvent.beginPoint.setY(temp.toInt());
+            }
+            else if (lineMetaElem.tagName() == QString("EndX"))
+            {
+                temp = lineMetaElem.text();
+                drawEvent.endPoint.setX(temp.toInt());
+            }
+            else if (lineMetaElem.tagName() == QString("EndY"))
+            {
+                temp = lineMetaElem.text();
+                drawEvent.endPoint.setY(temp.toInt());
+
+                d->drawEventList.insert(indexEvent, drawEvent);
+            }
+        }
+    }
 
     d->eventIndex = d->drawEventList.count();
-    update();
+    replayEvents(d->eventIndex);
+
+    return true;
 }
 
 QImage SketchWidget::sketchImage() const

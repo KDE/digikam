@@ -55,7 +55,12 @@ public:
      *  as XML, to be stored in database as SAlbum data.
      */
     QString sketchImageToXML();
-    void setSketchImageFromXML(const QString& xml);
+
+    /** This method set sketch image using XML data based 
+     *  on drawing line history.
+     *  Retrun true if data are imported sucessfully.
+     */
+    bool setSketchImageFromXML(const QString& xml);
 
 signals:
 
