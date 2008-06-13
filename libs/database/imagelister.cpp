@@ -123,48 +123,6 @@ KIO::TransferJob *ImageLister::startListJob(const DatabaseUrl &url, int extraVal
     return new KIO::SpecialJob(url, ba);
 }
 
-KIO::TransferJob *ImageLister::startScanJob(const DatabaseUrl &url, const QString &filter, int extraValue)
-{
-    QByteArray ba;
-    QDataStream ds(&ba, QIODevice::WriteOnly);
-    ds << url;
-    ds << filter;
-    if (extraValue != -1)
-        ds << extraValue;
-
-    return new KIO::SpecialJob(url, ba);
-}
-
-QSize ImageLister::retrieveDimension(const QString &filePath)
-{
-    QFileInfo fileInfo(filePath);
-    QString rawFilesExt(KDcrawIface::DcrawBinary::instance()->rawFiles());
-    QString ext = fileInfo.suffix().toUpper();
-
-    if (!ext.isEmpty() && rawFilesExt.toUpper().contains(ext))
-    {
-        Digikam::DMetadata metaData(filePath);
-        return metaData.getImageDimensions();
-    }
-    else
-    {
-        KFileMetaInfo metaInfo(filePath, QString(), KFileMetaInfo::TechnicalInfo);
-        if (metaInfo.isValid())
-        {
-            //TODO: KDE4PORT: Find out the correct key values. Strigi analyzers are used.
-            // If necessary, use exiv2 and/or strigi directly.
-            KFileMetaInfoItem itemWidth = metaInfo.item("image.width");
-            KFileMetaInfoItem itemHeight = metaInfo.item("image.height");
-            if (itemWidth.isValid() && itemHeight.isValid())
-            {
-                return QSize(itemWidth.value().toInt(), itemHeight.value().toInt());
-            }
-        }
-    }
-    return QSize();
-}
-
-
 void ImageLister::list(ImageListerReceiver *receiver, const DatabaseUrl &url)
 {
     if (url.isAlbumUrl())

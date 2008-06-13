@@ -58,12 +58,6 @@ public:
      */
     static KIO::TransferJob *startListJob(const DatabaseUrl &url, int extraValue = -1);
 
-    /**
-     * Create a TransferJob for the scanning part of the "special" method of the albums ioslave,
-     * referenced by the URL. Filter and extraValue will be added to the job data.
-     */
-    static KIO::TransferJob *startScanJob(const DatabaseUrl &url, const QString &filter, int extraValue);
-
     ImageLister();
 
     /**
@@ -111,11 +105,6 @@ public:
      */
     void listHaarSearch(ImageListerReceiver *receiver,
                         const QString &xml);
-
-    /**
-     * Tool method to retrieve the dimension from a file. Not a database query, slow!
-     */
-    static QSize retrieveDimension(const QString &filePath);
 
 private:
 
