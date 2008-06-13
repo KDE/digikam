@@ -2,6 +2,7 @@ METASOURCES = AUTO
 
 INCLUDES = -I$(top_srcdir)/digikam/libs/jpegutils \
 	       -I$(top_srcdir)/digikam/libs/dimg \
+	       -I$(top_srcdir)/digikam/libs/sqlite3 \
 	       -I$(top_srcdir)/digikam/libs/dmetadata \
 	       -I$(top_srcdir)/digikam/digikam \
 	       $(LIBKEXIV2_CFLAGS) $(LIBKDCRAW_CFLAGS) \
