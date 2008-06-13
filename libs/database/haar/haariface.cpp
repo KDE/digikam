@@ -539,6 +539,19 @@ void HaarIface::getBestAndWorstPossibleScore(Haar::SignatureData *sig, SketchTyp
     *lowestAndBestScore = score;
 }
 
+QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicatesInAlbums(const QList<int> &albums2Scan, double requiredPercentage)
+{
+    QList<qlonglong> idList;
+
+    // Get all items DB id from all albums and all collections
+    foreach(int albumId, albums2Scan)
+    {
+        idList << DatabaseAccess().db()->getItemIDsInAlbum(albumId);
+    }
+
+    return findDuplicates(idList, requiredPercentage);
+}
+
 QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QList<qlonglong>& images2Scan, double requiredPercentage)
 {
     QMap< qlonglong, QList<qlonglong> > resultsMap;
