@@ -137,7 +137,8 @@ namespace DatabaseSearch
         LegacyUrlSearch,
         TimeLineSearch,
         HaarSearch,
-        MapSearch
+        MapSearch,
+        DuplicatesSearch
     };
 }
 

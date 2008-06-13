@@ -562,6 +562,11 @@ bool SAlbum::isMapSearch() const
     return m_type == DatabaseSearch::MapSearch;
 }
 
+bool SAlbum::isDuplicatesSearch() const
+{
+    return m_type == DatabaseSearch::DuplicatesSearch;
+}
+
 // --------------------------------------------------------------------------
 
 AlbumIterator::AlbumIterator(Album *album)

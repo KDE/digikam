@@ -438,6 +438,7 @@ public:
     bool                 isTimelineSearch() const;
     bool                 isHaarSearch() const;
     bool                 isMapSearch() const;
+    bool                 isDuplicatesSearch() const;
 
 private:
 
