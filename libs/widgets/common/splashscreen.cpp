@@ -24,10 +24,12 @@
 
 // Qt includes.
 
+#include <QApplication>
 #include <QTimer>
 #include <QFont>
 #include <QString>
 #include <QColor>
+#include <QTime>
 
 // KDE includes.
 
@@ -38,7 +40,7 @@
 #include <kcomponentdata.h>
 
 // Local includes.
-
+#include "ddebug.h"
 #include "splashscreen.h"
 #include "splashscreen.moc"
 
@@ -63,6 +65,8 @@ public:
     QString string;
 
     QColor  color;
+
+    QTime   lastStateUpdateTime;
 };
 
 SplashScreen::SplashScreen()
@@ -90,8 +94,13 @@ SplashScreen::~SplashScreen()
 
 void SplashScreen::animate()
 {
-    d->state = ((d->state + 1) % (2*d->progressBarSize-1));
-    repaint();
+    QTime currentTime = QTime::currentTime();
+    if (d->lastStateUpdateTime.msecsTo(currentTime) > 100)
+    {
+        d->state = ((d->state + 1) % (2*d->progressBarSize-1));
+        d->lastStateUpdateTime = currentTime;
+    }
+    update();
 }
 
 void SplashScreen::message( const QString &message, int alignment, const QColor &color)
@@ -101,6 +110,7 @@ void SplashScreen::message( const QString &message, int alignment, const QColor 
     d->alignment = alignment;
     QSplashScreen::showMessage(d->string, d->alignment, d->color);
     animate();
+    qApp->processEvents();
 }
 
 void SplashScreen::drawContents(QPainter* painter)

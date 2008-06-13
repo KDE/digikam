@@ -193,9 +193,6 @@ DigikamApp::DigikamApp()
 
     KDcrawIface::DcrawBinary::instance()->checkSystem();
 
-    // Actual file scanning is done in main() - is this necessary here?
-    //AlbumManager::instance()->setLibraryPath(AlbumSettings::instance()->getAlbumLibraryPath());
-
     // Read albums from database
     if(d->splashScreen)
         d->splashScreen->message(i18n("Reading database"), Qt::AlignLeft, Qt::white);
