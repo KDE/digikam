@@ -149,7 +149,6 @@ INSTALL(TARGETS digikamdatabase ${INSTALL_TARGETS_DEFAULT_ARGS} )
 # digiKam binary progam #########################################################
 
 SET(digikam_bin_SRCS
-                     ${libcommonwidgets_SRCS}
                      ${libdimgimagewindow_SRCS}
                      ${libdeletedialog_SRCS}
                      ${libimagepropertiesdigikam_SRCS}

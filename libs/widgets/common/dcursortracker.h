@@ -65,7 +65,7 @@ private:
 /**
  * A specialized CursorTracker class, which looks like a tool tip.
  */
-class DTipTracker : public DCursorTracker 
+class DIGIKAM_EXPORT DTipTracker : public DCursorTracker 
 {
 
 public:
