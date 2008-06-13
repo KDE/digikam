@@ -7,6 +7,7 @@
  * Description : a widget to draw sketch.
  *
  * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -237,33 +238,6 @@ void SketchWidget::replayEvents(int index)
     update();
 }
 
-/*
-QString SketchWidget::sketchImageToXML()
-{
-    QDomDocument sketchDoc;
-    QDomElement  imageElem = sketchDoc.createElement(QString::fromLatin1("SketchImage"));
-    sketchDoc.appendChild(imageElem);
-
-    QMap<int, DrawEvent>::const_iterator it;
-
-    for (it = d->drawEventList.begin(); it != d->drawEventList.end(); ++it)
-    {
-        QDomElement line = sketchDoc.createElement("Line");
-        imageElem.appendChild(line);
-        addXmlTextElement(sketchDoc, line, "Id",     QString::number(it.key()));
-        addXmlTextElement(sketchDoc, line, "Size",   QString::number(it.value().penWidth));
-        addXmlTextElement(sketchDoc, line, "Color",  it.value().penColor.name());
-        addXmlTextElement(sketchDoc, line, "BeginX", QString::number(it.value().beginPoint.x()));
-        addXmlTextElement(sketchDoc, line, "BeginY", QString::number(it.value().beginPoint.y()));
-        addXmlTextElement(sketchDoc, line, "EndX",   QString::number(it.value().endPoint.x()));
-        addXmlTextElement(sketchDoc, line, "EndY",   QString::number(it.value().endPoint.y()));
-    }
-
-    QString xml = sketchDoc.toString();
-    return xml;
-}
-*/
-
 void SketchWidget::sketchImageToXML(QXmlStreamWriter &writer)
 {
     writer.writeStartElement("SketchImage");
@@ -433,95 +407,6 @@ void SketchWidget::addPath(QXmlStreamReader &reader)
     d->drawEventList << event;
 }
 
-/*
-bool SketchWidget::setSketchImageFromXML(const QString& xml)
-{
-    QDomDocument sketchDoc;
-    QString      error;
-    int          row, col;
-
-    if (!sketchDoc.setContent(xml, &error, &row, &col))
-    {
-        DDebug() << "Error to import Sketch XML data:" << endl;
-        DDebug() << error << " :: row=" << row << " , col=" << col << endl;
-        return false;
-    }
-
-    QDomElement imageElem = sketchDoc.documentElement();
-    if (imageElem.tagName() != QString::fromLatin1("SketchImage"))
-        return false;
-
-    d->isClear = false;
-    d->drawEventList.clear();
-
-    for (QDomNode nLine = imageElem.firstChild();
-         !nLine.isNull(); nLine = nLine.nextSibling())
-    {
-        QDomElement lineElem = nLine.toElement();
-        if (lineElem.isNull()) continue;
-        if (lineElem.tagName() != "Line") continue;
-
-        int       indexEvent = -1;
-        DrawEvent drawEvent;
-        QString   temp;
-
-        for (QDomNode nLineMeta = lineElem.firstChild();
-             !nLineMeta.isNull(); nLineMeta = nLineMeta.nextSibling())
-        {
-            QDomElement lineMetaElem = nLineMeta.toElement();
-
-            if (lineMetaElem.isNull()) 
-            {
-                continue;
-            }
-            else if (lineMetaElem.tagName() == QString("Id"))
-            {
-                temp       = lineMetaElem.text();
-                indexEvent = temp.toInt();
-            }
-            else if (lineMetaElem.tagName() == QString("Size"))
-            {
-                temp               = lineMetaElem.text();
-                drawEvent.penWidth = temp.toInt();
-            }
-            else if (lineMetaElem.tagName() == QString("Color"))
-            {
-                temp = lineMetaElem.text();
-                drawEvent.penColor.setNamedColor(temp);
-            }
-            else if (lineMetaElem.tagName() == QString("BeginX"))
-            {
-                temp = lineMetaElem.text();
-                drawEvent.beginPoint.setX(temp.toInt());
-            }
-            else if (lineMetaElem.tagName() == QString("BeginY"))
-            {
-                temp = lineMetaElem.text();
-                drawEvent.beginPoint.setY(temp.toInt());
-            }
-            else if (lineMetaElem.tagName() == QString("EndX"))
-            {
-                temp = lineMetaElem.text();
-                drawEvent.endPoint.setX(temp.toInt());
-            }
-            else if (lineMetaElem.tagName() == QString("EndY"))
-            {
-                temp = lineMetaElem.text();
-                drawEvent.endPoint.setY(temp.toInt());
-
-                d->drawEventList.insert(indexEvent, drawEvent);
-            }
-        }
-    }
-
-    d->eventIndex = d->drawEventList.count();
-    replayEvents(d->eventIndex);
-
-    return true;
-}
-*/
-
-
 QImage SketchWidget::sketchImage() const
 {
     return d->pixmap.toImage();
@@ -626,17 +511,5 @@ void SketchWidget::drawPath(int width, const QColor& color, const QPainterPath &
     update(path.boundingRect().toRect());
     d->lastPoint = path.currentPosition().toPoint();
 }
-
-/*
-QDomElement SketchWidget::addXmlTextElement(QDomDocument &document, QDomElement &target,
-                                            const QString& tag, const QString& text)
-{
-    QDomElement element  = document.createElement(tag);
-    target.appendChild(element);
-    QDomText textElement = document.createTextNode(text);
-    element.appendChild(textElement);
-    return element;
-}
-*/
 
 }  // namespace Digikam

@@ -7,6 +7,7 @@
  * Description : Fuzzy search sidebar tab contents.
  *
  * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -184,7 +185,7 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     KHBox *imageBox     = new KHBox(box2);
     d->imageWidget      = new QLabel(imageBox);
     d->imageWidget->setFixedSize(256, 256);
-    d->imageWidget->setText(i18n("Drag & drop an image here\nto perform similar\nitems to search"));
+    d->imageWidget->setText(i18n("Drag & drop an image here\nto perform similar\nitems search"));
     d->imageWidget->setAlignment(Qt::AlignCenter);
     imageBox->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     imageBox->setLineWidth(1);
