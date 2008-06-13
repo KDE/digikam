@@ -539,7 +539,8 @@ void HaarIface::getBestAndWorstPossibleScore(Haar::SignatureData *sig, SketchTyp
     *lowestAndBestScore = score;
 }
 
-QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicatesInAlbums(const QList<int> &albums2Scan, double requiredPercentage)
+QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicatesInAlbums(const QList<int> &albums2Scan,
+        double requiredPercentage, HaarProgressObserver *observer)
 {
     QList<qlonglong> idList;
 
@@ -549,16 +550,29 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicatesInAlbums(const QLis
         idList << DatabaseAccess().db()->getItemIDsInAlbum(albumId);
     }
 
-    return findDuplicates(idList, requiredPercentage);
+    return findDuplicates(idList, requiredPercentage, observer);
 }
 
-QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QList<qlonglong>& images2Scan, double requiredPercentage)
+QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QList<qlonglong>& images2Scan,
+        double requiredPercentage, HaarProgressObserver *observer)
 {
     QMap< qlonglong, QList<qlonglong> > resultsMap;
     QList<qlonglong>::const_iterator    it;
     QList<qlonglong>::const_iterator    it2;
     QList<qlonglong>                    list;
     bool                                find = false;
+
+    int                                 total = 0;
+    int                                 progress = 0;
+    int                                 lastProgress = 0;
+    int                                 progressStep = 50;
+
+    if (observer)
+    {
+        int total = images2Scan.size();
+        progressStep = qMax(progressStep, total / 100);
+        observer->totalNumberToScan(total);
+    }
 
     for (it = images2Scan.begin(); it != images2Scan.end(); ++it)
     {
@@ -583,6 +597,13 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QList<qlongl
 
             if (!find)
                 resultsMap.insert(*it, list);
+        }
+
+        progress++;
+        if (observer && (progress == total || progress % progressStep == 0) )
+        {
+            observer->scanProgress(progress - lastProgress);
+            lastProgress = progress;
         }
     };
 
