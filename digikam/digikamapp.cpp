@@ -2021,7 +2021,7 @@ void DigikamApp::loadPlugins()
     // Setting the initial menu options after all plugins have been loaded
     d->view->slotAlbumSelected(AlbumManager::instance()->currentAlbum());
 
-    d->imagePluginsLoader = new ImagePluginLoader(this, d->splashScreen);
+    new ImagePluginLoader(this, d->splashScreen);
 }
 
 void DigikamApp::slotKipiPluginPlug()

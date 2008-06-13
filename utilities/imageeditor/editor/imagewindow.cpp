@@ -189,6 +189,8 @@ ImageWindow::ImageWindow()
     // Load image plugins to GUI
 
     m_imagePluginLoader = ImagePluginLoader::instance();
+    // take ownership of object - we need it in our destructor
+    m_imagePluginLoader->setParent(this);
     loadImagePlugins();
 
     // Create context menu.
@@ -216,8 +218,6 @@ ImageWindow::~ImageWindow()
     m_instance = 0;
 
     unLoadImagePlugins();
-
-    // No need to delete m_imagePluginLoader instance here, it will be done by main interface.
 
     delete d->rightSidebar;
     delete d->thumbBar;

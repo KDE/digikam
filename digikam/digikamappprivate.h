@@ -142,7 +142,6 @@ public:
         forwardSignalMapper                  = 0;
         backwardSignalMapper                 = 0;
         dcopIface                            = 0;
-        imagePluginsLoader                   = 0;
         kipiInterface                        = 0;
         cameraList                           = 0;
         statusProgressBar                    = 0;
@@ -275,7 +274,6 @@ public:
     AlbumIconViewFilter                *albumIconViewFilter;
     SplashScreen                       *splashScreen;
     DCOPIface                          *dcopIface;
-    ImagePluginLoader                  *imagePluginsLoader;
     KipiInterface                      *kipiInterface;
     DigikamView                        *view;
     CameraList                         *cameraList;
