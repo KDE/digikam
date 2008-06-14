@@ -2,7 +2,8 @@
 INCLUDE_DIRECTORIES(../digikam
                     ../libs/dmetadata 
                     ../libs/dimg 
-                    ../libs/database 
+                    ../libs/database
+                    ../libs/database/haar
                     ../libs/database/sqlite2
                    )
 
