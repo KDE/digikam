@@ -548,6 +548,13 @@ void AlbumDB::deleteSearch(int searchID)
     d->db->recordChangeset(SearchChangeset(searchID, SearchChangeset::Deleted));
 }
 
+void AlbumDB::deleteSearches(DatabaseSearch::Type type)
+{
+    d->db->execSql( QString("DELETE FROM Searches WHERE type=?"),
+                    type );
+    d->db->recordChangeset(SearchChangeset(0, SearchChangeset::Deleted));
+}
+
 QString AlbumDB::getSearchQuery(int searchId)
 {
     QList<QVariant> values;

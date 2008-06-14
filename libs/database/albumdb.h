@@ -439,6 +439,11 @@ public:
     void deleteSearch(int searchID);
 
     /**
+     * Delete all search with the given type
+     */
+    void deleteSearches(DatabaseSearch::Type type);
+
+    /**
      * Get information about the specified search
      */
     SearchInfo getSearchInfo(int searchId);
