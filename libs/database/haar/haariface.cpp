@@ -48,8 +48,10 @@
 #include "dimg.h"
 #include "imageinfo.h"
 #include "databaseaccess.h"
+#include "databasetransaction.h"
 #include "albumdb.h"
 #include "databasebackend.h"
+#include "searchxml.h"
 #include "haar.h"
 #include "haariface.h"
 
@@ -539,6 +541,44 @@ void HaarIface::getBestAndWorstPossibleScore(Haar::SignatureData *sig, SketchTyp
     *lowestAndBestScore = score;
 }
 
+void HaarIface::rebuildDuplicatesAlbums(const QList<int> &albums2Scan, double requiredPercentage,
+                                        HaarProgressObserver *observer)
+{
+    // Carry out search. This takes long.
+    QMap< qlonglong, QList<qlonglong> > results = findDuplicatesInAlbums(albums2Scan, requiredPercentage, observer);
+
+    // Build search XML from the results. Store list of ids of similar images.
+    QMap<QString, QString> queries;
+    for (QMap< qlonglong, QList<qlonglong> >::const_iterator it = results.begin(); it != results.end(); ++it)
+    {
+        SearchXmlWriter writer;
+        writer.writeGroup();
+        writer.writeField("imageid", SearchXml::OneOf);
+        writer.writeValue(it.value());
+        writer.finishField();
+        writer.finishGroup();
+        writer.finish();
+        // Use the id of the first duplicate as name of the search
+        queries.insert(QString::number(it.key()), writer.xml());
+    }
+
+    // Write search albums to database
+    {
+        DatabaseAccess access;
+        DatabaseTransaction transaction(&access);
+
+        // delete all old searches
+        access.db()->deleteSearches(DatabaseSearch::DuplicatesSearch);
+
+        // create new groups
+        for(QMap<QString, QString>::iterator it = queries.begin(); it != queries.end(); ++it)
+        {
+            access.db()->addSearch(DatabaseSearch::DuplicatesSearch, it.key(), it.value());
+        }
+    }
+}
+
+
 QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicatesInAlbums(const QList<int> &albums2Scan,
         double requiredPercentage, HaarProgressObserver *observer)
 {
@@ -564,7 +604,6 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QList<qlongl
 
     int                                 total = 0;
     int                                 progress = 0;
-    int                                 lastProgress = 0;
     int                                 progressStep = 50;
 
     if (observer)
@@ -602,8 +641,7 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QList<qlongl
         progress++;
         if (observer && (progress == total || progress % progressStep == 0) )
         {
-            observer->scanProgress(progress - lastProgress);
-            lastProgress = progress;
+            observer->processedNumber(progress);
         }
     };
 

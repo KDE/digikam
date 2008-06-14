@@ -51,10 +51,10 @@ namespace Haar
 class HaarProgressObserver
 {
 public:
-    virtual ~HaarProgressObserver();
+    virtual ~HaarProgressObserver() {};
 
     virtual void totalNumberToScan(int number) = 0;
-    virtual void scanProgress(int additionalScannedNumber) = 0;
+    virtual void processedNumber(int numberThatHasBeenProcessed) = 0;
 };
 
 class HaarIfacePriv;
