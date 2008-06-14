@@ -106,6 +106,9 @@ private slots:
     void slotLevelImageChanged();
     void slotTimerImageDone();
 
+    void slotDuplicatesSearchTotalAmount(KJob *, KJob::Unit, qulonglong);
+    void slotDuplicatesSearchProcessedAmount(KJob *, KJob::Unit, qulonglong);
+
 private:
 
     FuzzySearchViewPriv *d;

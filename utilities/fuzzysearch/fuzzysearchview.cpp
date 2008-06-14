@@ -65,6 +65,7 @@
 #include "searchxml.h"
 #include "searchtextbar.h"
 #include "sketchwidget.h"
+#include "imagelister.h"
 #include "thumbnailsize.h"
 #include "thumbnailloadthread.h"
 #include "fuzzysearchfolderview.h"
@@ -905,8 +906,34 @@ void FuzzySearchView::slotSaveImageSAlbum()
     createNewFuzzySearchAlbumFromImage(name);
 }
 
+void FuzzySearchView::slotDuplicatesSearchTotalAmount(KJob *job, KJob::Unit unit, qulonglong amount)
+{
+    DDebug() << "Total amount" << amount;
+}
+
+void FuzzySearchView::slotDuplicatesSearchProcessedAmount(KJob *job, KJob::Unit unit, qulonglong amount)
+{
+    DDebug() << "Processed amount" << amount;
+}
+
 void FuzzySearchView::slotFindDuplicates()
 {
+    AlbumList albums = AlbumManager::instance()->allPAlbums();
+    QStringList idsStringList;
+    foreach(Album *a, albums)
+        idsStringList << QString::number(a->id());
+
+    KIO::Job *job = ImageLister::startListJob(DatabaseUrl::searchUrl(-1));
+    job->addMetaData("duplicates", "true");
+    job->addMetaData("albumids", idsStringList.join(","));
+    job->addMetaData("threshold", QString::number(0.9));
+
+    connect(job, SIGNAL(result(KJob*)),
+            this, SLOT(slotResult(KJob*)));
+    connect(job, SIGNAL(totalAmount(KJob *, KJob::Unit, qulonglong)),
+            this, SLOT(slotDuplicatesSearchTotalAmount(KJob *, KJob::Unit, qulonglong)));
+    connect(job, SIGNAL(processedAmount(KJob *, KJob::Unit, qulonglong)),
+            this, SLOT(slotDuplicatesSearchProcessedAmount(KJob *, KJob::Unit, qulonglong)));
 /*
     AlbumDB *db                 = DatabaseAccess().db();
     QList<AlbumShortInfo> aList = db->getAlbumShortInfos();
