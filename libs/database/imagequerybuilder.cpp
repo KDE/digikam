@@ -289,6 +289,24 @@ public:
         }
     }
 
+    void addLongListField(const QString &name)
+    {
+        if (relation == SearchXml::OneOf)
+        {
+            QList<qlonglong> values = reader.valueToLongLongList();
+            sql += " (" + name + " IN (";
+            AlbumDB::addBoundValuePlaceholders(sql, values.size());
+            sql += ") ";
+            foreach (qlonglong v, values)
+                *boundValues << v;
+            sql += " ) ";
+        }
+        else
+        {
+            addIntField(name);
+        }
+    }
+
     void addIntBitmaskField(const QString &name)
     {
         if (relation == SearchXml::OneOf)
@@ -608,6 +626,10 @@ void ImageQueryBuilder::buildField(QString &sql, SearchXmlCachingReader &reader,
     {
         sql += " (Images.id NOT IN "
                "   (SELECT imageid FROM ImageTags)) ";
+    }
+    else if (name == "imageid")
+    {
+        fieldQuery.addLongListField("Images.id");
     }
     else if (name == "filename")
     {
