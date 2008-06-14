@@ -161,6 +161,24 @@ QList<int> SearchXmlReader::valueToIntList()
     return list;
 }
 
+QList<qlonglong> SearchXmlReader::valueToLongLongList()
+{
+    QList<qlonglong> list;
+
+    while (!atEnd())
+    {
+        QXmlStreamReader::readNext();
+
+        if (name() != "listitem")
+            break;
+
+        if (isStartElement())
+            list << readElementText().toLongLong();
+    }
+
+    return list;
+}
+
 QList<double> SearchXmlReader::valueToDoubleList()
 {
     QList<double> list;
@@ -397,7 +415,7 @@ void SearchXmlWriter::writeValue(const QDateTime &dateTime)
     writeCharacters(dateTime.toString(Qt::ISODate));
 }
 
-void SearchXmlWriter::writeValue(const QList<int> valueList)
+void SearchXmlWriter::writeValue(const QList<int> &valueList)
 {
     QString listitem("listitem");
     foreach(int i, valueList)
@@ -406,7 +424,16 @@ void SearchXmlWriter::writeValue(const QList<int> valueList)
     }
 }
 
-void SearchXmlWriter::writeValue(const QList<double> valueList, int precision)
+void SearchXmlWriter::writeValue(const QList<qlonglong> &valueList)
+{
+    QString listitem("listitem");
+    foreach(int i, valueList)
+    {
+        writeTextElement(listitem, QString::number(i));
+    }
+}
+
+void SearchXmlWriter::writeValue(const QList<double> &valueList, int precision)
 {
     QString listitem("listitem");
     foreach(double i, valueList)
@@ -415,7 +442,7 @@ void SearchXmlWriter::writeValue(const QList<double> valueList, int precision)
     }
 }
 
-void SearchXmlWriter::writeValue(const QStringList valueList)
+void SearchXmlWriter::writeValue(const QStringList &valueList)
 {
     QString listitem("listitem");
     foreach(const QString &str, valueList)
@@ -812,6 +839,17 @@ QList<int> SearchXmlCachingReader::valueToIntList()
     foreach (const QString &s, list)
         intList << s.toInt();
     return intList;
+}
+
+QList<qlonglong> SearchXmlCachingReader::valueToLongLongList()
+{
+    // with no QVariant support for QList<qlonglong>,
+    // we convert here from string list (equivalent result)
+    QStringList list = valueToStringList();
+    QList<qlonglong> qlonglongList;
+    foreach (const QString &s, list)
+        qlonglongList << s.toLongLong();
+    return qlonglongList;
 }
 
 QList<double> SearchXmlCachingReader::valueToDoubleList()
