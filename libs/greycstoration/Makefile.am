@@ -1,11 +1,9 @@
 METASOURCES = AUTO
 
-KDE_CXXFLAGS = $(USE_EXCEPTIONS) -w 
-
-# CImg.h version 1.2.8 do not compile fine with gcc 4.3. 
+# CImg.h version 1.2.8 do not compile fine with gcc 4.3.x 
 # See B.K.O #163118: digikam-0.9.4_beta5 compilation hangs with gcc 4.3
-# This is a temporary solution until CImg.h will be fixed.
-KDE_OPTION = nofinal
+# Using -fno-tree-pre is work around this problem.
+KDE_CXXFLAGS = $(USE_EXCEPTIONS) -w -fno-tree-pre
 
 noinst_LTLIBRARIES = libgreycstoration.la
 
