@@ -35,6 +35,7 @@
 
 #undef DDebug
 #undef kDebug
+#undef kWarning
 
 namespace Digikam
 {
