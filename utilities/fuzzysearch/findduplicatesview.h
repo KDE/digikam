@@ -28,11 +28,40 @@
 // Qt includes.
 
 #include <QWidget>
+#include <QPixmap>
+
+// Local includes.
+
+#include "treefolderitem.h"
 
 class KJob;
 
 namespace Digikam
 {
+
+class SAlbum;
+
+class FindDuplicatesAlbumItem : public TreeFolderItem
+{
+
+public:
+
+    FindDuplicatesAlbumItem(QTreeWidget* parent, SAlbum* album);
+    virtual ~FindDuplicatesAlbumItem();
+
+    SAlbum* album() const;
+    int id() const;
+
+private:
+
+    void setThumb(const QPixmap& pix);
+
+private:
+
+    SAlbum *m_album;
+};
+
+// -------------------------------------------------------------------
 
 class FindDuplicatesViewPriv;
 

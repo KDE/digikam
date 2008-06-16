@@ -22,20 +22,19 @@
  *
  * ============================================================ */
 
+#define ICONSIZE 64
+
 // Qt includes.
 
-#include <QLabel>
 #include <QLayout>
+#include <QPainter>
 #include <QPushButton>
 #include <QTreeWidget>
-#include <QHeaderView>
 
 // KDE include.
 
 #include <klocale.h>
 #include <kdialog.h>
-#include <kiconloader.h>
-#include <kapplication.h>
 
 // Local includes.
 
@@ -45,16 +44,64 @@
 #include "databaseaccess.h"
 #include "ddebug.h"
 #include "imageinfo.h"
+#include "imagelister.h"
 #include "haariface.h"
 #include "searchxml.h"
 #include "searchtextbar.h"
-#include "imagelister.h"
-#include "treefolderitem.h"
+#include "thumbnailloadthread.h"
 #include "findduplicatesview.h"
 #include "findduplicatesview.moc"
 
 namespace Digikam
 {
+
+FindDuplicatesAlbumItem::FindDuplicatesAlbumItem(QTreeWidget* parent, SAlbum* album)
+                       : TreeFolderItem(parent, QString())
+{
+    m_album = album;
+    if (m_album)
+    {
+        m_album->setExtraData(treeWidget(), this);
+
+        bool ok = false;
+        int refImgId = m_album->title().toLongLong(&ok);
+        if (ok)
+        {
+            QPixmap   pix;
+            ImageInfo info(refImgId);
+            setText(0, info.name());
+            ThumbnailLoadThread::defaultThread()->find(info.fileUrl().path(), pix);
+            setThumb(pix);
+        }
+    }
+}
+
+FindDuplicatesAlbumItem::~FindDuplicatesAlbumItem()
+{
+    if (m_album)
+        m_album->removeExtraData(treeWidget());
+}
+
+void FindDuplicatesAlbumItem::setThumb(const QPixmap& pix)
+{
+    QPixmap pixmap(ICONSIZE+2, ICONSIZE+2);
+    pixmap.fill(Qt::color0);
+    QPainter p(&pixmap);
+    p.drawPixmap((pixmap.width()/2) - (pix.width()/2), (pixmap.height()/2) - (pix.height()/2), pix);
+    setIcon(0, QIcon(pixmap));
+}
+
+SAlbum* FindDuplicatesAlbumItem::album() const
+{
+    return m_album;
+}
+
+int FindDuplicatesAlbumItem::id() const
+{
+    return album() ? album()->id() : 0;
+}
+
+// ------------------------------------------------------------------------
 
 class FindDuplicatesViewPriv
 {
@@ -68,10 +115,10 @@ public:
         updateFingerPrtBtn = 0;
     }
 
-    QPushButton *scanDuplicatesBtn;
-    QPushButton *updateFingerPrtBtn;
+    QPushButton         *scanDuplicatesBtn;
+    QPushButton         *updateFingerPrtBtn;
 
-    QTreeWidget *listView;
+    QTreeWidget         *listView;
 };
 
 FindDuplicatesView::FindDuplicatesView(QWidget *parent)
@@ -87,6 +134,7 @@ FindDuplicatesView::FindDuplicatesView(QWidget *parent)
     d->listView->setSelectionMode(QAbstractItemView::SingleSelection);
     d->listView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     d->listView->setAllColumnsShowFocus(true);
+    d->listView->setIconSize(QSize(ICONSIZE, ICONSIZE));
     d->listView->setColumnCount(1);
     d->listView->setHeaderLabels(QStringList() << i18n("My Duplicates Searches"));
 
@@ -148,8 +196,7 @@ void FindDuplicatesView::populateTreeView()
         SAlbum* salbum = dynamic_cast<SAlbum*>(*it);
         if (salbum && salbum->isDuplicatesSearch())
         {
-            TreeAlbumItem *item = new TreeAlbumItem(d->listView, salbum);
-            item->setIcon(0, KIcon("edit-find"));
+            new FindDuplicatesAlbumItem(d->listView, salbum);
         }
     }
 }
