@@ -32,8 +32,6 @@
 #include <QLayout>
 #include <QPushButton>
 #include <QSpinBox>
-#include <QTreeWidget>
-#include <QHeaderView>
 
 // KDE include.
 
@@ -68,7 +66,7 @@
 #include "imagelister.h"
 #include "thumbnailsize.h"
 #include "thumbnailloadthread.h"
-#include "treefolderitem.h"
+#include "findduplicatesview.h"
 #include "fuzzysearchfolderview.h"
 #include "fuzzysearchview.h"
 #include "fuzzysearchview.moc"
@@ -110,10 +108,7 @@ public:
         thumbLoadThread       = 0;
         imageSAlbum           = 0;
         sketchSAlbum          = 0;
-        listView              = 0;
         folderView            = 0;
-        scanDuplicatesBtn     = 0;
-        updateFingerPrtBtn    = 0;
         timerSketch           = 0;
         timerImage            = 0;
     }
@@ -123,8 +118,6 @@ public:
     QPushButton            *undoBtnSketch;
     QPushButton            *redoBtnSketch;
     QPushButton            *saveBtnImage;
-    QPushButton            *scanDuplicatesBtn;
-    QPushButton            *updateFingerPrtBtn;
 
     QSpinBox               *penSize;
     QSpinBox               *resultsSketch;
@@ -134,8 +127,6 @@ public:
 
     QTimer                 *timerSketch;
     QTimer                 *timerImage;
-
-    QTreeWidget            *listView;
 
     KVBox                  *folderView;
 
@@ -374,34 +365,7 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     // ---------------------------------------------------------------
     // Find Duplicates Panel
 
-    QWidget *findDuplicatesPanel = new QWidget(this);
-    QGridLayout *grid3           = new QGridLayout(findDuplicatesPanel);
-    d->listView                  = new QTreeWidget(findDuplicatesPanel);
-    d->listView->setRootIsDecorated(false);
-    d->listView->setSelectionMode(QAbstractItemView::SingleSelection);
-    d->listView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    d->listView->setAllColumnsShowFocus(true);
-    d->listView->setColumnCount(1);
-    d->listView->setHeaderLabels(QStringList() << i18n("My Duplicates Searches"));
-
-    d->listView->setWhatsThis(i18n("<p>This shows all duplicates items found in whole collections."));
-
-    d->updateFingerPrtBtn = new QPushButton(i18n("Update finger-prints"), findDuplicatesPanel);
-    d->updateFingerPrtBtn->setWhatsThis(i18n("<p>Use this button to scan whole collection to find all "
-                                              "duplicates items."));
-
-    d->scanDuplicatesBtn = new QPushButton(i18n("Find duplicates"), findDuplicatesPanel);
-    d->scanDuplicatesBtn->setWhatsThis(i18n("<p>Use this button to scan whole collection to find all "
-                                            "duplicates items."));
-
-    grid3->addWidget(d->listView,           0, 0, 1, 3);
-    grid3->addWidget(d->updateFingerPrtBtn, 1, 0, 1, 3);
-    grid3->addWidget(d->scanDuplicatesBtn,  2, 0, 1, 3);
-    grid3->setRowStretch(0, 10);
-    grid3->setColumnStretch(1, 10);
-    grid3->setMargin(KDialog::spacingHint());
-    grid3->setSpacing(KDialog::spacingHint());
-
+    FindDuplicatesView *findDuplicatesPanel = new FindDuplicatesView(this);
     d->tabWidget->insertTab(FuzzySearchViewPriv::DUPLICATES, findDuplicatesPanel, i18n("Duplicates"));
 
     // ---------------------------------------------------------------
@@ -489,11 +453,8 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
             this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
 
-    connect(d->updateFingerPrtBtn, SIGNAL(clicked()),
+    connect(findDuplicatesPanel, SIGNAL(signalUpdateFingerPrints()),
             this, SIGNAL(signalUpdateFingerPrints()));
-
-    connect(d->scanDuplicatesBtn, SIGNAL(clicked()),
-            this, SLOT(slotFindDuplicates()));
 
     // ---------------------------------------------------------------
 
@@ -903,92 +864,6 @@ void FuzzySearchView::slotSaveImageSAlbum()
         return;
 
     createNewFuzzySearchAlbumFromImage(name);
-}
-
-// ---------------------------------------------------------------------------------------------
-// Find Duplicates methods.
-
-void FuzzySearchView::slotDuplicatesSearchTotalAmount(KJob* /*job*/, KJob::Unit /*unit*/, qulonglong amount)
-{
-    DDebug() << "Total amount" << amount;
-}
-
-void FuzzySearchView::slotDuplicatesSearchProcessedAmount(KJob* /*job*/, KJob::Unit /*unit*/, qulonglong amount)
-{
-    DDebug() << "Processed amount" << amount;
-}
-
-void FuzzySearchView::slotDuplicatesSearchResult(KJob*)
-{
-    populateTreeView();
-}
-
-void FuzzySearchView::populateTreeView()
-{
-    d->listView->clear();
-
-    const AlbumList& aList = AlbumManager::instance()->allSAlbums();
-
-    for (AlbumList::const_iterator it = aList.begin(); it != aList.end(); ++it)
-    {
-        SAlbum* salbum = dynamic_cast<SAlbum*>(*it);
-        if (salbum && salbum->isDuplicatesSearch())
-        {
-            TreeAlbumItem *item = new TreeAlbumItem(d->listView, salbum);
-            item->setIcon(0, KIcon("edit-find"));
-        }
-    }
-}
-
-void FuzzySearchView::slotFindDuplicates()
-{
-    AlbumList albums = AlbumManager::instance()->allPAlbums();
-    QStringList idsStringList;
-    foreach(Album *a, albums)
-        idsStringList << QString::number(a->id());
-
-    KIO::Job *job = ImageLister::startListJob(DatabaseUrl::searchUrl(-1));
-    job->addMetaData("duplicates", "true");
-    job->addMetaData("albumids", idsStringList.join(","));
-    job->addMetaData("threshold", QString::number(0.5));
-
-    connect(job, SIGNAL(result(KJob*)),
-            this, SLOT(slotDuplicatesSearchResult(KJob*)));
-
-    connect(job, SIGNAL(totalAmount(KJob *, KJob::Unit, qulonglong)),
-            this, SLOT(slotDuplicatesSearchTotalAmount(KJob *, KJob::Unit, qulonglong)));
-
-    connect(job, SIGNAL(processedAmount(KJob *, KJob::Unit, qulonglong)),
-            this, SLOT(slotDuplicatesSearchProcessedAmount(KJob *, KJob::Unit, qulonglong)));
-/*
-    AlbumDB *db                 = DatabaseAccess().db();
-    QList<AlbumShortInfo> aList = db->getAlbumShortInfos();
-    QList<qlonglong> idList;
-
-    // Get all items DB id from all albums and all collections
-    for (QList<AlbumShortInfo>::const_iterator it = aList.begin(); it != aList.end(); ++it)
-    {
-        idList += db->getItemIDsInAlbum((*it).id);
-    }
-
-    QTime duration;
-    duration.start();
-
-    HaarIface haarIface;
-    QMap< qlonglong, QList<qlonglong> > results = haarIface.findDuplicates(idList, 0.9);
-
-    QTime t;
-    t = t.addMSecs(duration.elapsed());
-
-    DDebug() << "Find duplicates (" << idList.count() << " scanned items in " 
-             << t.toString() << "seconds ):" << endl;
-
-    for (QMap< qlonglong, QList<qlonglong> >::const_iterator it = results.begin();
-         it != results.end(); ++it)
-    {
-        DDebug() << "id: " << it.key() << " => " << it.value() << endl;
-    }
-*/
 }
 
 }  // NameSpace Digikam
