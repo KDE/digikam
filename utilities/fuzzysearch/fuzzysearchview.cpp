@@ -68,6 +68,7 @@
 #include "imagelister.h"
 #include "thumbnailsize.h"
 #include "thumbnailloadthread.h"
+#include "treefolderitem.h"
 #include "fuzzysearchfolderview.h"
 #include "fuzzysearchview.h"
 #include "fuzzysearchview.moc"
@@ -380,9 +381,10 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     d->listView->setSelectionMode(QAbstractItemView::SingleSelection);
     d->listView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     d->listView->setAllColumnsShowFocus(true);
-    d->listView->setColumnCount(2);
+    d->listView->setColumnCount(1);
+    d->listView->setHeaderLabels(QStringList() << i18n("My Duplicates Searches"));
+
     d->listView->setWhatsThis(i18n("<p>This shows all duplicates items found in whole collections."));
-    d->listView->header()->hide();
 
     d->updateFingerPrtBtn = new QPushButton(i18n("Update finger-prints"), findDuplicatesPanel);
     d->updateFingerPrtBtn->setWhatsThis(i18n("<p>Use this button to scan whole collection to find all "
@@ -906,14 +908,36 @@ void FuzzySearchView::slotSaveImageSAlbum()
 // ---------------------------------------------------------------------------------------------
 // Find Duplicates methods.
 
-void FuzzySearchView::slotDuplicatesSearchTotalAmount(KJob *job, KJob::Unit unit, qulonglong amount)
+void FuzzySearchView::slotDuplicatesSearchTotalAmount(KJob* /*job*/, KJob::Unit /*unit*/, qulonglong amount)
 {
     DDebug() << "Total amount" << amount;
 }
 
-void FuzzySearchView::slotDuplicatesSearchProcessedAmount(KJob *job, KJob::Unit unit, qulonglong amount)
+void FuzzySearchView::slotDuplicatesSearchProcessedAmount(KJob* /*job*/, KJob::Unit /*unit*/, qulonglong amount)
 {
     DDebug() << "Processed amount" << amount;
+}
+
+void FuzzySearchView::slotDuplicatesSearchResult(KJob*)
+{
+    populateTreeView();
+}
+
+void FuzzySearchView::populateTreeView()
+{
+    d->listView->clear();
+
+    const AlbumList& aList = AlbumManager::instance()->allSAlbums();
+
+    for (AlbumList::const_iterator it = aList.begin(); it != aList.end(); ++it)
+    {
+        SAlbum* salbum = dynamic_cast<SAlbum*>(*it);
+        if (salbum && salbum->isDuplicatesSearch())
+        {
+            TreeAlbumItem *item = new TreeAlbumItem(d->listView, salbum);
+            item->setIcon(0, KIcon("edit-find"));
+        }
+    }
 }
 
 void FuzzySearchView::slotFindDuplicates()
@@ -926,10 +950,10 @@ void FuzzySearchView::slotFindDuplicates()
     KIO::Job *job = ImageLister::startListJob(DatabaseUrl::searchUrl(-1));
     job->addMetaData("duplicates", "true");
     job->addMetaData("albumids", idsStringList.join(","));
-    job->addMetaData("threshold", QString::number(0.9));
+    job->addMetaData("threshold", QString::number(0.5));
 
     connect(job, SIGNAL(result(KJob*)),
-            this, SLOT(slotResult(KJob*)));
+            this, SLOT(slotDuplicatesSearchResult(KJob*)));
 
     connect(job, SIGNAL(totalAmount(KJob *, KJob::Unit, qulonglong)),
             this, SLOT(slotDuplicatesSearchTotalAmount(KJob *, KJob::Unit, qulonglong)));

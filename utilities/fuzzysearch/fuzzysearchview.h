@@ -80,6 +80,8 @@ private:
     bool checkName(QString& name);
     bool checkAlbum(const QString& name) const;
 
+    void populateTreeView();
+
 private slots:
 
     void slotTabChanged(int);
@@ -106,8 +108,9 @@ private slots:
     void slotLevelImageChanged();
     void slotTimerImageDone();
 
-    void slotDuplicatesSearchTotalAmount(KJob *, KJob::Unit, qulonglong);
-    void slotDuplicatesSearchProcessedAmount(KJob *, KJob::Unit, qulonglong);
+    void slotDuplicatesSearchTotalAmount(KJob*, KJob::Unit, qulonglong);
+    void slotDuplicatesSearchProcessedAmount(KJob*, KJob::Unit, qulonglong);
+    void slotDuplicatesSearchResult(KJob*);
 
 private:
 
