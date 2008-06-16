@@ -30,6 +30,10 @@
 #include <QWidget>
 #include <QPixmap>
 
+// KDE includes.
+
+#include <kurl.h>
+
 // Local includes.
 
 #include "imageinfo.h"
@@ -45,9 +49,8 @@ namespace Digikam
 
 class SAlbum;
 
-class FindDuplicatesAlbumItem : public /*QObject, */TreeFolderItem
+class FindDuplicatesAlbumItem : public TreeFolderItem
 {
-//    Q_OBJECT
 
 public:
 
@@ -55,12 +58,10 @@ public:
     virtual ~FindDuplicatesAlbumItem();
 
     SAlbum* album() const;
-    int id() const;
-/*
-private slots:
+    KUrl    refUrl();
 
-    void slotThumbnailLoaded(const LoadingDescription&, const QPixmap& pix);
-*/
+    void setThumb(const QPixmap& pix);
+
 private:
 
     SAlbum    *m_album;
@@ -96,6 +97,8 @@ private slots:
     void slotDuplicatesSearchTotalAmount(KJob*, KJob::Unit, qulonglong);
     void slotDuplicatesSearchProcessedAmount(KJob*, KJob::Unit, qulonglong);
     void slotDuplicatesSearchResult(KJob*);
+
+    void slotThumbnailLoaded(const LoadingDescription&, const QPixmap&);
 
 private:
 

@@ -55,7 +55,7 @@ namespace Digikam
 {
 
 FindDuplicatesAlbumItem::FindDuplicatesAlbumItem(QTreeWidget* parent, SAlbum* album)
-                       : /*QObject(parent), */TreeFolderItem(parent, QString())
+                       : TreeFolderItem(parent, QString())
 {
     m_album = album;
     if (m_album)
@@ -64,11 +64,6 @@ FindDuplicatesAlbumItem::FindDuplicatesAlbumItem(QTreeWidget* parent, SAlbum* al
 
         m_info = ImageInfo(m_album->title().toLongLong());
         setText(0, m_info.name());
-
-        /*connect(ThumbnailLoadThread::defaultThread(), SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
-                this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
-
-        ThumbnailLoadThread::defaultThread()->find(m_info.fileUrl().path());*/
     }
 }
 
@@ -77,30 +72,25 @@ FindDuplicatesAlbumItem::~FindDuplicatesAlbumItem()
     if (m_album)
         m_album->removeExtraData(treeWidget());
 }
-/*
-void FindDuplicatesAlbumItem::slotThumbnailLoaded(const LoadingDescription& desc, const QPixmap& pix)
+
+void FindDuplicatesAlbumItem::setThumb(const QPixmap& pix)
 {
-    if (desc.filePath == m_info.fileUrl().path())
-    {
-        QPixmap thumb = pix;
-        thumb         = thumb.scaled(ICONSIZE, ICONSIZE, Qt::KeepAspectRatio);
-        QPixmap pixmap(ICONSIZE+2, ICONSIZE+2);
-        pixmap.fill(Qt::color0);
-        QPainter p(&pixmap);
-        p.drawPixmap((pixmap.width()/2) - (thumb.width()/2),
-                     (pixmap.height()/2) - (thumb.height()/2), thumb);
-        setIcon(0, QIcon(pixmap));
-    }
+    QPixmap pixmap(ICONSIZE+2, ICONSIZE+2);
+    pixmap.fill(Qt::color0);
+    QPainter p(&pixmap);
+    p.drawPixmap((pixmap.width()/2) - (pix.width()/2),
+                 (pixmap.height()/2) - (pix.height()/2), pix);
+    setIcon(0, QIcon(pixmap));
 }
-*/
+
 SAlbum* FindDuplicatesAlbumItem::album() const
 {
     return m_album;
 }
 
-int FindDuplicatesAlbumItem::id() const
+KUrl FindDuplicatesAlbumItem::refUrl()
 {
-    return album() ? album()->id() : 0;
+    return m_info.fileUrl();
 }
 
 // ------------------------------------------------------------------------
@@ -116,6 +106,7 @@ public:
         scanDuplicatesBtn  = 0;
         updateFingerPrtBtn = 0;
         progressBar        = 0;
+        thumbLoadThread    = 0;
     }
 
     QPushButton         *scanDuplicatesBtn;
@@ -124,12 +115,15 @@ public:
     QProgressBar        *progressBar;
 
     QTreeWidget         *listView;
+
+    ThumbnailLoadThread *thumbLoadThread;
 };
 
 FindDuplicatesView::FindDuplicatesView(QWidget *parent)
                   : QWidget(parent)
 {
     d = new FindDuplicatesViewPriv;
+    d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
 
     setAttribute(Qt::WA_DeleteOnClose);
 
@@ -176,6 +170,9 @@ FindDuplicatesView::FindDuplicatesView(QWidget *parent)
 
     connect(d->listView, SIGNAL(itemClicked(QTreeWidgetItem*, int)),
             this, SLOT(slotDuplicatesAlbumActived(QTreeWidgetItem*, int)));
+
+    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
+            this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
 }
 
 FindDuplicatesView::~FindDuplicatesView()
@@ -192,8 +189,28 @@ void FindDuplicatesView::populateTreeView()
         SAlbum* salbum = dynamic_cast<SAlbum*>(*it);
         if (salbum && salbum->isDuplicatesSearch())
         {
-            new FindDuplicatesAlbumItem(d->listView, salbum);
+            FindDuplicatesAlbumItem *item = new FindDuplicatesAlbumItem(d->listView, salbum);
+            ThumbnailLoadThread::defaultThread()->find(item->refUrl().path());
         }
+    }
+}
+
+void FindDuplicatesView::slotThumbnailLoaded(const LoadingDescription& desc, const QPixmap& pix)
+{
+    QTreeWidgetItemIterator it(d->listView);
+    while (*it)
+    {
+        FindDuplicatesAlbumItem* item = dynamic_cast<FindDuplicatesAlbumItem*>(*it);
+        if (item->refUrl().path() == desc.filePath)
+        {
+            if (pix.isNull())
+                item->setThumb(SmallIcon("image-x-generic", ICONSIZE, KIconLoader::DisabledState));
+            else
+                item->setThumb(pix.scaled(ICONSIZE, ICONSIZE, Qt::KeepAspectRatio));
+
+            return;
+        }
+        ++it;
     }
 }
 
