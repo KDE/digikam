@@ -124,6 +124,8 @@ void kio_digikamsearch::special(const QByteArray& data)
         }
 
         // get info about threshold
+        // If threshold value cannot be converted from string, we will use 0.4 instead.
+        // 40% sound like the minimum value to use to have suitable results.
         bool ok;
         double threshold = thresholdString.toDouble(&ok);
         if (!ok)
