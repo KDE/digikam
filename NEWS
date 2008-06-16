@@ -29,6 +29,8 @@ AlbumGUI       : New fuzzy Search tools based on sketch drawing template.
                  You simply draw a rough sketch of what you want to find and digiKam displays 
                  for you a thumbnail view of the best matches.
 AlbumGUI       : New Search tools based on marble widget to find pictures over a map. 
+AlbumGUI       : New Search tools to find similar images against a reference image. 
+AlbumGUI       : New Search tools to find duplicates images around whole collections. 
 
 ImageEditor    : Added Thumbbar to easy navigate between pictures.
 ImageEditor    : New plugin based on LensFun library (http://lensfun.berlios.de) to correct automaticaly lens aberrations.
@@ -63,4 +65,10 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 024 ==> 153070 : Search for image by geo location.
 025 ==> 154764 : Pictures saved into root album folder are not shown.
 026 ==> 162678 : digiKam crashed while loading.
-027 ==> 
+027 ==> 104067 : Duplicate image finder should offer more actions on duplicate images found.
+028 ==> 107095 : Double image removal: Use trashcan.
+029 ==> 112473 : findimages shows only small thumbnails.
+030 ==> 150077 : Find Duplicate Images tool quite unusable on many images (a couple of issues).
+031 ==> 161858 : Find Duplicate Image fails with Canon Raw Files.
+032 ==> 162152 : Wish: Batch Duplicate Image Management.
+033 ==> 
