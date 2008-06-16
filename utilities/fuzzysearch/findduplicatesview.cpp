@@ -55,7 +55,7 @@ namespace Digikam
 {
 
 FindDuplicatesAlbumItem::FindDuplicatesAlbumItem(QTreeWidget* parent, SAlbum* album)
-                       : QObject(parent), TreeFolderItem(parent, QString())
+                       : /*QObject(parent), */TreeFolderItem(parent, QString())
 {
     m_album = album;
     if (m_album)
@@ -65,10 +65,10 @@ FindDuplicatesAlbumItem::FindDuplicatesAlbumItem(QTreeWidget* parent, SAlbum* al
         m_info = ImageInfo(m_album->title().toLongLong());
         setText(0, m_info.name());
 
-        connect(ThumbnailLoadThread::defaultThread(), SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
+        /*connect(ThumbnailLoadThread::defaultThread(), SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
                 this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
 
-        ThumbnailLoadThread::defaultThread()->find(m_info.fileUrl().path());
+        ThumbnailLoadThread::defaultThread()->find(m_info.fileUrl().path());*/
     }
 }
 
@@ -77,7 +77,7 @@ FindDuplicatesAlbumItem::~FindDuplicatesAlbumItem()
     if (m_album)
         m_album->removeExtraData(treeWidget());
 }
-
+/*
 void FindDuplicatesAlbumItem::slotThumbnailLoaded(const LoadingDescription& desc, const QPixmap& pix)
 {
     if (desc.filePath == m_info.fileUrl().path())
@@ -92,7 +92,7 @@ void FindDuplicatesAlbumItem::slotThumbnailLoaded(const LoadingDescription& desc
         setIcon(0, QIcon(pixmap));
     }
 }
-
+*/
 SAlbum* FindDuplicatesAlbumItem::album() const
 {
     return m_album;
@@ -174,8 +174,8 @@ FindDuplicatesView::FindDuplicatesView(QWidget *parent)
     connect(d->scanDuplicatesBtn, SIGNAL(clicked()),
             this, SLOT(slotFindDuplicates()));
 
-    connect(d->listView, SIGNAL(itemActivated(QTreeWidgetItem*, int)),
-            this, SLOT(slotDuplicatesAlbumActived(QTreeWidgetItem*)));
+    connect(d->listView, SIGNAL(itemClicked(QTreeWidgetItem*, int)),
+            this, SLOT(slotDuplicatesAlbumActived(QTreeWidgetItem*, int)));
 }
 
 FindDuplicatesView::~FindDuplicatesView()
@@ -244,15 +244,11 @@ void FindDuplicatesView::slotDuplicatesSearchResult(KJob*)
     populateTreeView();
 }
 
-void FindDuplicatesView::slotDuplicatesAlbumActived(QTreeWidgetItem* item)
+void FindDuplicatesView::slotDuplicatesAlbumActived(QTreeWidgetItem* item, int)
 {
     FindDuplicatesAlbumItem* sitem = dynamic_cast<FindDuplicatesAlbumItem*>(item);
     if (sitem)
-    {
         AlbumManager::instance()->setCurrentAlbum(sitem->album());
-    }
-
-    //TODO
 }
 
 }  // NameSpace Digikam

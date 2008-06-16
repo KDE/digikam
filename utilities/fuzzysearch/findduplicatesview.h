@@ -45,9 +45,9 @@ namespace Digikam
 
 class SAlbum;
 
-class FindDuplicatesAlbumItem : public QObject, TreeFolderItem
+class FindDuplicatesAlbumItem : public /*QObject, */TreeFolderItem
 {
-    Q_OBJECT
+//    Q_OBJECT
 
 public:
 
@@ -56,11 +56,11 @@ public:
 
     SAlbum* album() const;
     int id() const;
-
+/*
 private slots:
 
     void slotThumbnailLoaded(const LoadingDescription&, const QPixmap& pix);
-
+*/
 private:
 
     SAlbum    *m_album;
@@ -91,7 +91,7 @@ private:
 private slots:
 
     void slotFindDuplicates();
-    void slotDuplicatesAlbumActived(QTreeWidgetItem*);
+    void slotDuplicatesAlbumActived(QTreeWidgetItem*, int);
 
     void slotDuplicatesSearchTotalAmount(KJob*, KJob::Unit, qulonglong);
     void slotDuplicatesSearchProcessedAmount(KJob*, KJob::Unit, qulonglong);
