@@ -29,6 +29,7 @@
 #include <QLayout>
 #include <QPainter>
 #include <QPushButton>
+#include <QProgressBar>
 #include <QTreeWidget>
 
 // KDE include.
@@ -114,10 +115,13 @@ public:
         listView           = 0;
         scanDuplicatesBtn  = 0;
         updateFingerPrtBtn = 0;
+        progressBar        = 0;
     }
 
     QPushButton         *scanDuplicatesBtn;
     QPushButton         *updateFingerPrtBtn;
+
+    QProgressBar        *progressBar;
 
     QTreeWidget         *listView;
 };
@@ -129,8 +133,8 @@ FindDuplicatesView::FindDuplicatesView(QWidget *parent)
 
     setAttribute(Qt::WA_DeleteOnClose);
 
-    QGridLayout *grid3           = new QGridLayout(this);
-    d->listView                  = new QTreeWidget(this);
+    QGridLayout *grid = new QGridLayout(this);
+    d->listView       = new QTreeWidget(this);
     d->listView->setRootIsDecorated(false);
     d->listView->setSelectionMode(QAbstractItemView::SingleSelection);
     d->listView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -142,20 +146,25 @@ FindDuplicatesView::FindDuplicatesView(QWidget *parent)
     d->listView->setWhatsThis(i18n("<p>This shows all duplicates items found in whole collections."));
 
     d->updateFingerPrtBtn = new QPushButton(i18n("Update finger-prints"), this);
+    d->updateFingerPrtBtn->setIcon(KIcon("run-build"));
     d->updateFingerPrtBtn->setWhatsThis(i18n("<p>Use this button to scan whole collection to find all "
                                               "duplicates items."));
 
     d->scanDuplicatesBtn = new QPushButton(i18n("Find duplicates"), this);
+    d->scanDuplicatesBtn->setIcon(KIcon("system-search"));
     d->scanDuplicatesBtn->setWhatsThis(i18n("<p>Use this button to scan whole collection to find all "
                                             "duplicates items."));
 
-    grid3->addWidget(d->listView,           0, 0, 1, 3);
-    grid3->addWidget(d->updateFingerPrtBtn, 1, 0, 1, 3);
-    grid3->addWidget(d->scanDuplicatesBtn,  2, 0, 1, 3);
-    grid3->setRowStretch(0, 10);
-    grid3->setColumnStretch(1, 10);
-    grid3->setMargin(KDialog::spacingHint());
-    grid3->setSpacing(KDialog::spacingHint());
+    d->progressBar = new QProgressBar(this);
+
+    grid->addWidget(d->listView,           0, 0, 1, 3);
+    grid->addWidget(d->updateFingerPrtBtn, 1, 0, 1, 3);
+    grid->addWidget(d->scanDuplicatesBtn,  2, 0, 1, 1);
+    grid->addWidget(d->progressBar,        2, 1, 1, 2);
+    grid->setRowStretch(0, 10);
+    grid->setColumnStretch(1, 10);
+    grid->setMargin(KDialog::spacingHint());
+    grid->setSpacing(KDialog::spacingHint());
 
     // ---------------------------------------------------------------
 
@@ -173,8 +182,6 @@ FindDuplicatesView::~FindDuplicatesView()
 
 void FindDuplicatesView::populateTreeView()
 {
-    d->listView->clear();
-
     const AlbumList& aList = AlbumManager::instance()->allSAlbums();
 
     for (AlbumList::const_iterator it = aList.begin(); it != aList.end(); ++it)
@@ -189,6 +196,11 @@ void FindDuplicatesView::populateTreeView()
 
 void FindDuplicatesView::slotFindDuplicates()
 {
+    d->listView->clear();
+    d->scanDuplicatesBtn->setEnabled(false);
+    d->updateFingerPrtBtn->setEnabled(false);
+    d->progressBar->setEnabled(true);
+
     AlbumList albums = AlbumManager::instance()->allPAlbums();
     QStringList idsStringList;
     foreach(Album *a, albums)
@@ -211,16 +223,21 @@ void FindDuplicatesView::slotFindDuplicates()
 
 void FindDuplicatesView::slotDuplicatesSearchTotalAmount(KJob* /*job*/, KJob::Unit /*unit*/, qulonglong amount)
 {
-    DDebug() << "Total amount" << amount;
+    d->progressBar->setMinimum(0);
+    d->progressBar->setMaximum(amount);
 }
 
 void FindDuplicatesView::slotDuplicatesSearchProcessedAmount(KJob* /*job*/, KJob::Unit /*unit*/, qulonglong amount)
 {
-    DDebug() << "Processed amount" << amount;
+    d->progressBar->setValue(amount);
 }
 
 void FindDuplicatesView::slotDuplicatesSearchResult(KJob*)
 {
+    d->scanDuplicatesBtn->setEnabled(true);
+    d->updateFingerPrtBtn->setEnabled(true);
+    d->progressBar->reset();
+    d->progressBar->setEnabled(false);
     populateTreeView();
 }
 

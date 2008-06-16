@@ -252,8 +252,6 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
 
-    d->tabWidget->insertTab(FuzzySearchViewPriv::SIMILARS, imagePanel, i18n("Image"));
-
     // ---------------------------------------------------------------
     // Find by Sketch Panel
 
@@ -360,12 +358,12 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     grid2->setMargin(KDialog::spacingHint());
     grid2->setSpacing(KDialog::spacingHint());
 
-    d->tabWidget->insertTab(FuzzySearchViewPriv::SKETCH, sketchPanel, i18n("Sketch"));
-
     // ---------------------------------------------------------------
     // Find Duplicates Panel
 
     FindDuplicatesView *findDuplicatesPanel = new FindDuplicatesView(this);
+
+    d->tabWidget->insertTab(FuzzySearchViewPriv::SIMILARS,   imagePanel,          i18n("Image"));    d->tabWidget->insertTab(FuzzySearchViewPriv::SKETCH,     sketchPanel,         i18n("Sketch"));
     d->tabWidget->insertTab(FuzzySearchViewPriv::DUPLICATES, findDuplicatesPanel, i18n("Duplicates"));
 
     // ---------------------------------------------------------------
