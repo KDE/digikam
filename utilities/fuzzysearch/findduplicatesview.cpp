@@ -173,6 +173,9 @@ FindDuplicatesView::FindDuplicatesView(QWidget *parent)
 
     connect(d->scanDuplicatesBtn, SIGNAL(clicked()),
             this, SLOT(slotFindDuplicates()));
+
+    connect(d->listView, SIGNAL(itemActivated(QTreeWidgetItem*, int)),
+            this, SLOT(slotDuplicatesAlbumActived(QTreeWidgetItem*)));
 }
 
 FindDuplicatesView::~FindDuplicatesView()
@@ -239,6 +242,17 @@ void FindDuplicatesView::slotDuplicatesSearchResult(KJob*)
     d->progressBar->reset();
     d->progressBar->setEnabled(false);
     populateTreeView();
+}
+
+void FindDuplicatesView::slotDuplicatesAlbumActived(QTreeWidgetItem* item)
+{
+    FindDuplicatesAlbumItem* sitem = dynamic_cast<FindDuplicatesAlbumItem*>(item);
+    if (sitem)
+    {
+        AlbumManager::instance()->setCurrentAlbum(sitem->album());
+    }
+
+    //TODO
 }
 
 }  // NameSpace Digikam

@@ -36,6 +36,8 @@
 #include "thumbnailloadthread.h"
 #include "treefolderitem.h"
 
+class QTreeWidgetItem;
+
 class KJob;
 
 namespace Digikam
@@ -89,6 +91,7 @@ private:
 private slots:
 
     void slotFindDuplicates();
+    void slotDuplicatesAlbumActived(QTreeWidgetItem*);
 
     void slotDuplicatesSearchTotalAmount(KJob*, KJob::Unit, qulonglong);
     void slotDuplicatesSearchProcessedAmount(KJob*, KJob::Unit, qulonglong);
