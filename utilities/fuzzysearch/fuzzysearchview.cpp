@@ -263,7 +263,7 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     d->tabWidget->insertTab(FuzzySearchViewPriv::SIMILARS, imagePanel, i18n("Image"));
 
     // ---------------------------------------------------------------
-    // Sketch Panel
+    // Find by Sketch Panel
 
     QWidget *sketchPanel = new QWidget(this);
     QGridLayout *grid2   = new QGridLayout(sketchPanel);
@@ -675,8 +675,6 @@ void FuzzySearchView::slotAlbumSelected(SAlbum* salbum)
     if (!salbum) 
         return;
 
-    // NOTE: There is nothing to display in sketch widget. Database do not store the sketch image.
-
     AlbumManager::instance()->setCurrentAlbum(salbum);
 
     SearchXmlReader reader(salbum->query());
@@ -698,7 +696,6 @@ void FuzzySearchView::slotAlbumSelected(SAlbum* salbum)
         d->tabWidget->setCurrentIndex((int)FuzzySearchViewPriv::SKETCH);
         if (reader.readToStartOfElement("SketchImage"))
             d->sketchWidget->setSketchImageFromXML(reader);
-
     }
 }
 
@@ -906,6 +903,9 @@ void FuzzySearchView::slotSaveImageSAlbum()
     createNewFuzzySearchAlbumFromImage(name);
 }
 
+// ---------------------------------------------------------------------------------------------
+// Find Duplicates methods.
+
 void FuzzySearchView::slotDuplicatesSearchTotalAmount(KJob *job, KJob::Unit unit, qulonglong amount)
 {
     DDebug() << "Total amount" << amount;
@@ -930,8 +930,10 @@ void FuzzySearchView::slotFindDuplicates()
 
     connect(job, SIGNAL(result(KJob*)),
             this, SLOT(slotResult(KJob*)));
+
     connect(job, SIGNAL(totalAmount(KJob *, KJob::Unit, qulonglong)),
             this, SLOT(slotDuplicatesSearchTotalAmount(KJob *, KJob::Unit, qulonglong)));
+
     connect(job, SIGNAL(processedAmount(KJob *, KJob::Unit, qulonglong)),
             this, SLOT(slotDuplicatesSearchProcessedAmount(KJob *, KJob::Unit, qulonglong)));
 /*
