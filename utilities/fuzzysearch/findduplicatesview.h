@@ -32,6 +32,8 @@
 
 // Local includes.
 
+#include "imageinfo.h"
+#include "thumbnailloadthread.h"
 #include "treefolderitem.h"
 
 class KJob;
@@ -41,8 +43,9 @@ namespace Digikam
 
 class SAlbum;
 
-class FindDuplicatesAlbumItem : public TreeFolderItem
+class FindDuplicatesAlbumItem : public QObject, TreeFolderItem
 {
+    Q_OBJECT
 
 public:
 
@@ -52,13 +55,14 @@ public:
     SAlbum* album() const;
     int id() const;
 
+private slots:
+
+    void slotThumbnailLoaded(const LoadingDescription&, const QPixmap& pix);
+
 private:
 
-    void setThumb(const QPixmap& pix);
-
-private:
-
-    SAlbum *m_album;
+    SAlbum    *m_album;
+    ImageInfo  m_info;
 };
 
 // -------------------------------------------------------------------

@@ -43,12 +43,10 @@
 #include "albumdb.h"
 #include "databaseaccess.h"
 #include "ddebug.h"
-#include "imageinfo.h"
 #include "imagelister.h"
 #include "haariface.h"
 #include "searchxml.h"
 #include "searchtextbar.h"
-#include "thumbnailloadthread.h"
 #include "findduplicatesview.h"
 #include "findduplicatesview.moc"
 
@@ -56,23 +54,20 @@ namespace Digikam
 {
 
 FindDuplicatesAlbumItem::FindDuplicatesAlbumItem(QTreeWidget* parent, SAlbum* album)
-                       : TreeFolderItem(parent, QString())
+                       : QObject(parent), TreeFolderItem(parent, QString())
 {
     m_album = album;
     if (m_album)
     {
         m_album->setExtraData(treeWidget(), this);
 
-        bool ok = false;
-        int refImgId = m_album->title().toLongLong(&ok);
-        if (ok)
-        {
-            QPixmap   pix;
-            ImageInfo info(refImgId);
-            setText(0, info.name());
-            ThumbnailLoadThread::defaultThread()->find(info.fileUrl().path(), pix);
-            setThumb(pix);
-        }
+        m_info = ImageInfo(m_album->title().toLongLong());
+        setText(0, m_info.name());
+
+        connect(ThumbnailLoadThread::defaultThread(), SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
+                this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
+
+        ThumbnailLoadThread::defaultThread()->find(m_info.fileUrl().path());
     }
 }
 
@@ -82,13 +77,19 @@ FindDuplicatesAlbumItem::~FindDuplicatesAlbumItem()
         m_album->removeExtraData(treeWidget());
 }
 
-void FindDuplicatesAlbumItem::setThumb(const QPixmap& pix)
+void FindDuplicatesAlbumItem::slotThumbnailLoaded(const LoadingDescription& desc, const QPixmap& pix)
 {
-    QPixmap pixmap(ICONSIZE+2, ICONSIZE+2);
-    pixmap.fill(Qt::color0);
-    QPainter p(&pixmap);
-    p.drawPixmap((pixmap.width()/2) - (pix.width()/2), (pixmap.height()/2) - (pix.height()/2), pix);
-    setIcon(0, QIcon(pixmap));
+    if (desc.filePath == m_info.fileUrl().path())
+    {
+        QPixmap thumb = pix;
+        thumb         = thumb.scaled(ICONSIZE, ICONSIZE, Qt::KeepAspectRatio);
+        QPixmap pixmap(ICONSIZE+2, ICONSIZE+2);
+        pixmap.fill(Qt::color0);
+        QPainter p(&pixmap);
+        p.drawPixmap((pixmap.width()/2) - (thumb.width()/2),
+                     (pixmap.height()/2) - (thumb.height()/2), thumb);
+        setIcon(0, QIcon(pixmap));
+    }
 }
 
 SAlbum* FindDuplicatesAlbumItem::album() const
@@ -170,21 +171,6 @@ FindDuplicatesView::~FindDuplicatesView()
     delete d;
 }
 
-void FindDuplicatesView::slotDuplicatesSearchTotalAmount(KJob* /*job*/, KJob::Unit /*unit*/, qulonglong amount)
-{
-    DDebug() << "Total amount" << amount;
-}
-
-void FindDuplicatesView::slotDuplicatesSearchProcessedAmount(KJob* /*job*/, KJob::Unit /*unit*/, qulonglong amount)
-{
-    DDebug() << "Processed amount" << amount;
-}
-
-void FindDuplicatesView::slotDuplicatesSearchResult(KJob*)
-{
-    populateTreeView();
-}
-
 void FindDuplicatesView::populateTreeView()
 {
     d->listView->clear();
@@ -221,35 +207,21 @@ void FindDuplicatesView::slotFindDuplicates()
 
     connect(job, SIGNAL(processedAmount(KJob *, KJob::Unit, qulonglong)),
             this, SLOT(slotDuplicatesSearchProcessedAmount(KJob *, KJob::Unit, qulonglong)));
-/*
-    AlbumDB *db                 = DatabaseAccess().db();
-    QList<AlbumShortInfo> aList = db->getAlbumShortInfos();
-    QList<qlonglong> idList;
+}
 
-    // Get all items DB id from all albums and all collections
-    for (QList<AlbumShortInfo>::const_iterator it = aList.begin(); it != aList.end(); ++it)
-    {
-        idList += db->getItemIDsInAlbum((*it).id);
-    }
+void FindDuplicatesView::slotDuplicatesSearchTotalAmount(KJob* /*job*/, KJob::Unit /*unit*/, qulonglong amount)
+{
+    DDebug() << "Total amount" << amount;
+}
 
-    QTime duration;
-    duration.start();
+void FindDuplicatesView::slotDuplicatesSearchProcessedAmount(KJob* /*job*/, KJob::Unit /*unit*/, qulonglong amount)
+{
+    DDebug() << "Processed amount" << amount;
+}
 
-    HaarIface haarIface;
-    QMap< qlonglong, QList<qlonglong> > results = haarIface.findDuplicates(idList, 0.9);
-
-    QTime t;
-    t = t.addMSecs(duration.elapsed());
-
-    DDebug() << "Find duplicates (" << idList.count() << " scanned items in " 
-             << t.toString() << "seconds ):" << endl;
-
-    for (QMap< qlonglong, QList<qlonglong> >::const_iterator it = results.begin();
-         it != results.end(); ++it)
-    {
-        DDebug() << "id: " << it.key() << " => " << it.value() << endl;
-    }
-*/
+void FindDuplicatesView::slotDuplicatesSearchResult(KJob*)
+{
+    populateTreeView();
 }
 
 }  // NameSpace Digikam
