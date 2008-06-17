@@ -59,7 +59,7 @@ public:
 private:
 
     SAlbum    *m_album;
-    ImageInfo  m_info;
+    ImageInfo  m_refImgInfo;
 };
 
 }  // NameSpace Digikam

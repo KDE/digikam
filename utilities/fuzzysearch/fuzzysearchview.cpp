@@ -363,7 +363,8 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
 
     FindDuplicatesView *findDuplicatesPanel = new FindDuplicatesView(this);
 
-    d->tabWidget->insertTab(FuzzySearchViewPriv::SIMILARS,   imagePanel,          i18n("Image"));    d->tabWidget->insertTab(FuzzySearchViewPriv::SKETCH,     sketchPanel,         i18n("Sketch"));
+    d->tabWidget->insertTab(FuzzySearchViewPriv::SIMILARS,   imagePanel,          i18n("Image"));
+    d->tabWidget->insertTab(FuzzySearchViewPriv::SKETCH,     sketchPanel,         i18n("Sketch"));
     d->tabWidget->insertTab(FuzzySearchViewPriv::DUPLICATES, findDuplicatesPanel, i18n("Duplicates"));
 
     // ---------------------------------------------------------------
@@ -633,7 +634,7 @@ void FuzzySearchView::createNewFuzzySearchAlbumFromSketch(const QString& name)
 
 void FuzzySearchView::slotAlbumSelected(SAlbum* salbum)
 {
-    if (!salbum) 
+    if (!salbum || !salbum->isHaarSearch()) 
         return;
 
     AlbumManager::instance()->setCurrentAlbum(salbum);

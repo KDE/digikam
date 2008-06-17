@@ -31,6 +31,7 @@
 #include <QPushButton>
 #include <QProgressBar>
 #include <QTreeWidget>
+#include <QHeaderView>
 
 // KDE include.
 
@@ -91,9 +92,10 @@ FindDuplicatesView::FindDuplicatesView(QWidget *parent)
     d->listView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     d->listView->setAllColumnsShowFocus(true);
     d->listView->setIconSize(QSize(ICONSIZE, ICONSIZE));
-    d->listView->setColumnCount(1);
-    d->listView->setHeaderLabels(QStringList() << i18n("My Duplicates Searches"));
-
+    d->listView->setSortingEnabled(true);
+    d->listView->setColumnCount(2);
+    d->listView->setHeaderLabels(QStringList() << i18n("Ref. images") << i18n("Items"));
+    d->listView->header()->setResizeMode(QHeaderView::Stretch);
     d->listView->setWhatsThis(i18n("<p>This shows all duplicates items found in whole collections."));
 
     d->updateFingerPrtBtn = new QPushButton(i18n("Update finger-prints"), this);
@@ -150,6 +152,9 @@ void FindDuplicatesView::populateTreeView()
             ThumbnailLoadThread::defaultThread()->find(item->refUrl().path());
         }
     }
+
+    d->listView->sortByColumn(1, Qt::DescendingOrder);
+    d->listView->resizeColumnToContents(0);
 }
 
 void FindDuplicatesView::slotThumbnailLoaded(const LoadingDescription& desc, const QPixmap& pix)

@@ -34,6 +34,7 @@
 
 #include "album.h"
 #include "ddebug.h"
+#include "searchxml.h"
 #include "findduplicatesalbumitem.h"
 
 namespace Digikam
@@ -47,8 +48,14 @@ FindDuplicatesAlbumItem::FindDuplicatesAlbumItem(QTreeWidget* parent, SAlbum* al
     {
         m_album->setExtraData(treeWidget(), this);
 
-        m_info = ImageInfo(m_album->title().toLongLong());
-        setText(0, m_info.name());
+        m_refImgInfo = ImageInfo(m_album->title().toLongLong());
+        setText(0, m_refImgInfo.name());
+
+        SearchXmlReader reader(m_album->query());
+        reader.readToFirstField();
+        QList<int> list;
+        list << reader.valueToIntList();
+        setText(1, QString::number(list.count()));
     }
 }
 
@@ -76,7 +83,7 @@ SAlbum* FindDuplicatesAlbumItem::album() const
 
 KUrl FindDuplicatesAlbumItem::refUrl() const
 {
-    return m_info.fileUrl();
+    return m_refImgInfo.fileUrl();
 }
 
 }  // NameSpace Digikam
