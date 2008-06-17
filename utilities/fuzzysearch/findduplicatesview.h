@@ -30,15 +30,9 @@
 #include <QWidget>
 #include <QPixmap>
 
-// KDE includes.
-
-#include <kurl.h>
-
 // Local includes.
 
-#include "imageinfo.h"
 #include "thumbnailloadthread.h"
-#include "treefolderitem.h"
 
 class QTreeWidgetItem;
 
@@ -46,29 +40,6 @@ class KJob;
 
 namespace Digikam
 {
-
-class SAlbum;
-
-class FindDuplicatesAlbumItem : public TreeFolderItem
-{
-
-public:
-
-    FindDuplicatesAlbumItem(QTreeWidget* parent, SAlbum* album);
-    virtual ~FindDuplicatesAlbumItem();
-
-    SAlbum* album() const;
-    KUrl    refUrl();
-
-    void setThumb(const QPixmap& pix);
-
-private:
-
-    SAlbum    *m_album;
-    ImageInfo  m_info;
-};
-
-// -------------------------------------------------------------------
 
 class FindDuplicatesViewPriv;
 

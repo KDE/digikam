@@ -45,55 +45,12 @@
 #include "databaseaccess.h"
 #include "ddebug.h"
 #include "imagelister.h"
-#include "haariface.h"
-#include "searchxml.h"
-#include "searchtextbar.h"
+#include "findduplicatesalbumitem.h"
 #include "findduplicatesview.h"
 #include "findduplicatesview.moc"
 
 namespace Digikam
 {
-
-FindDuplicatesAlbumItem::FindDuplicatesAlbumItem(QTreeWidget* parent, SAlbum* album)
-                       : TreeFolderItem(parent, QString())
-{
-    m_album = album;
-    if (m_album)
-    {
-        m_album->setExtraData(treeWidget(), this);
-
-        m_info = ImageInfo(m_album->title().toLongLong());
-        setText(0, m_info.name());
-    }
-}
-
-FindDuplicatesAlbumItem::~FindDuplicatesAlbumItem()
-{
-    if (m_album)
-        m_album->removeExtraData(treeWidget());
-}
-
-void FindDuplicatesAlbumItem::setThumb(const QPixmap& pix)
-{
-    QPixmap pixmap(ICONSIZE+2, ICONSIZE+2);
-    pixmap.fill(Qt::color0);
-    QPainter p(&pixmap);
-    p.drawPixmap((pixmap.width()/2) - (pix.width()/2),
-                 (pixmap.height()/2) - (pix.height()/2), pix);
-    setIcon(0, QIcon(pixmap));
-}
-
-SAlbum* FindDuplicatesAlbumItem::album() const
-{
-    return m_album;
-}
-
-KUrl FindDuplicatesAlbumItem::refUrl()
-{
-    return m_info.fileUrl();
-}
-
-// ------------------------------------------------------------------------
 
 class FindDuplicatesViewPriv
 {
@@ -241,13 +198,13 @@ void FindDuplicatesView::slotFindDuplicates()
             this, SLOT(slotDuplicatesSearchProcessedAmount(KJob *, KJob::Unit, qulonglong)));
 }
 
-void FindDuplicatesView::slotDuplicatesSearchTotalAmount(KJob* /*job*/, KJob::Unit /*unit*/, qulonglong amount)
+void FindDuplicatesView::slotDuplicatesSearchTotalAmount(KJob*, KJob::Unit, qulonglong amount)
 {
     d->progressBar->setMinimum(0);
     d->progressBar->setMaximum(amount);
 }
 
-void FindDuplicatesView::slotDuplicatesSearchProcessedAmount(KJob* /*job*/, KJob::Unit /*unit*/, qulonglong amount)
+void FindDuplicatesView::slotDuplicatesSearchProcessedAmount(KJob*, KJob::Unit, qulonglong amount)
 {
     d->progressBar->setValue(amount);
 }
