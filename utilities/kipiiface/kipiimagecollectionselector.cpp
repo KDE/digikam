@@ -14,12 +14,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -148,9 +148,9 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface *iface, Q
 
     // ------------------------------------------------------------------------------------
 
-    populateTreeView(AlbumManager::instance()->allPAlbums(), d->albumsView); 
-    populateTreeView(AlbumManager::instance()->allTAlbums(), d->tagsView); 
-    populateTreeView(AlbumManager::instance()->allSAlbums(), d->searchesView); 
+    populateTreeView(AlbumManager::instance()->allPAlbums(), d->albumsView);
+    populateTreeView(AlbumManager::instance()->allTAlbums(), d->tagsView);
+    populateTreeView(AlbumManager::instance()->allSAlbums(), d->searchesView);
 
     // ------------------------------------------------------------------------------------
 
@@ -220,7 +220,8 @@ void KipiImageCollectionSelector::populateTreeView(const AlbumList& aList, QTree
                  salbum->title() == TimeLineFolderView::currentTimeLineSearchName()       ||
                  salbum->title() == FuzzySearchFolderView::currentFuzzySketchSearchName() ||
                  salbum->title() == FuzzySearchFolderView::currentFuzzyImageSearchName()  ||
-                 salbum->title() == GPSSearchFolderView::currentGPSSearchName()))
+                 salbum->title() == GPSSearchFolderView::currentGPSSearchName()           ||
+                 salbum->isDuplicatesSearch()))
                 continue;
 
             item = new TreeAlbumCheckListItem(pitem, album);
@@ -239,7 +240,7 @@ void KipiImageCollectionSelector::populateTreeView(const AlbumList& aList, QTree
                 else
                 {
                     SAlbum* salbum = dynamic_cast<SAlbum*>(album);
-                    if (salbum)
+                    if (salbum && !salbum->isDuplicatesSearch())
                     {
                         if (salbum->isTimelineSearch())
                             item->setIcon(0, KIcon("clock"));
