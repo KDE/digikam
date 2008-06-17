@@ -13,12 +13,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef TREEFOLDERITEM_H
@@ -36,11 +36,13 @@ class QTreeWidget;
 
 namespace Digikam
 {
+
 class Album;
 class TreeFolderView;
 
 class DIGIKAM_EXPORT TreeFolderItem : public QTreeWidgetItem
 {
+
 public:
 
     TreeFolderItem(QTreeWidget* parent, const QString& text, bool special=false);
@@ -100,6 +102,7 @@ private:
 
 class DIGIKAM_EXPORT TreeAlbumCheckListItem : public TreeAlbumItem
 {
+
 public:
 
     TreeAlbumCheckListItem(QTreeWidget* parent, Album* album);

@@ -13,12 +13,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -42,10 +42,13 @@ TreeFolderItem::TreeFolderItem(QTreeWidget *parent, const QString& text, bool sp
 
     if (special)
     {
-        QFont f = font(0);
-        f.setItalic(true);
-        setFont(0, f);
-        setForeground(0, treeWidget()->palette().link());
+        for (int i=0 ; i < columnCount() ; i++)
+        {
+            QFont f = font(i);
+            f.setItalic(true);
+            setFont(i, f);
+            setForeground(i, treeWidget()->palette().link());
+        }
         setForegroundBrush(treeWidget()->palette().link());
     }
 
@@ -60,10 +63,13 @@ TreeFolderItem::TreeFolderItem(QTreeWidgetItem *parent, const QString& text, boo
 
     if (special)
     {
-        QFont f = font(0);
-        f.setItalic(true);
-        setFont(0, f);
-        setForeground(0, treeWidget()->palette().link());
+        for (int i=0 ; i < columnCount() ; i++)
+        {
+            QFont f = font(i);
+            f.setItalic(true);
+            setFont(i, f);
+            setForeground(i, treeWidget()->palette().link());
+        }
         setForegroundBrush(treeWidget()->palette().link());
     }
 
@@ -77,12 +83,15 @@ TreeFolderItem::~TreeFolderItem()
 void TreeFolderItem::setFocus(bool b)
 {
     m_focus = b;
-    setForeground(0, m_focus ? treeWidget()->palette().link() 
-                             : foregroundBrush());
-    QColor hb = treeWidget()->palette().highlight().color();
-    hb.setAlpha(127);
-    setBackground(0, m_focus ? QBrush(hb)
-                             : treeWidget()->palette().base());
+    for (int i=0 ; i < columnCount() ; i++)
+    {
+        setForeground(i, m_focus ? treeWidget()->palette().link() 
+                                 : foregroundBrush());
+        QColor hb = treeWidget()->palette().highlight().color();
+        hb.setAlpha(127);
+        setBackground(i, m_focus ? QBrush(hb)
+                                 : treeWidget()->palette().base());
+    }
 }
 
 bool TreeFolderItem::focus() const
@@ -104,6 +113,7 @@ void TreeFolderItem::setForegroundBrush(const QBrush& brush)
 {
     m_foregroundBrush = brush;
 }
+
 // ------------------------------------------------------------------------------------
 
 TreeFolderCheckListItem::TreeFolderCheckListItem(QTreeWidget *parent, const QString& text)
