@@ -113,7 +113,7 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
     renamecustomizer.cpp                Gilles                 X       DONE
     umscamera.cpp                       Gilles                 X       DONE
 |---fuzzysearch                         Gilles                 X       DONE        
-|---gpssearch                           Gilles                 X       DONE        
+|---gpssearch                           Gilles                 X       DONE                 Require Marble widget selection patch.
 |---hotplug                             Laurent                        DONE        -
 |---imageeditor
 |-----canvas  
