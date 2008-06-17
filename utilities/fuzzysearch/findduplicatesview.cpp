@@ -191,7 +191,7 @@ void FindDuplicatesView::slotFindDuplicates()
     KIO::Job *job = ImageLister::startListJob(DatabaseUrl::searchUrl(-1));
     job->addMetaData("duplicates", "true");
     job->addMetaData("albumids", idsStringList.join(","));
-    job->addMetaData("threshold", QString::number(0.5));
+    job->addMetaData("threshold", QString::number(0.9));
 
     connect(job, SIGNAL(result(KJob*)),
             this, SLOT(slotDuplicatesSearchResult(KJob*)));
