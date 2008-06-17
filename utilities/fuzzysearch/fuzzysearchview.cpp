@@ -514,6 +514,33 @@ SearchTextBar* FuzzySearchView::searchBar() const
     return d->searchFuzzyBar;
 }
 
+void FuzzySearchView::setActive(bool val)
+{
+    int tab = d->tabWidget->currentIndex();
+
+    switch(tab)
+    {
+        case FuzzySearchViewPriv::SIMILARS:
+        {
+            if (d->fuzzySearchFolderView->selectedItem()) 
+                d->fuzzySearchFolderView->setActive(val);
+            break;
+        }
+        case FuzzySearchViewPriv::SKETCH:
+        {
+            if (d->fuzzySearchFolderView->selectedItem()) 
+                d->fuzzySearchFolderView->setActive(val);
+            break;
+        }
+        default:  // DUPLICATES
+        {
+            break;
+        }
+    }
+
+    slotTabChanged(tab);
+}
+
 void FuzzySearchView::slotTabChanged(int tab)
 {
     switch(tab)
@@ -564,18 +591,6 @@ void FuzzySearchView::slotUndoRedoStateChanged(bool hasUndo, bool hasRedo)
 {
     d->undoBtnSketch->setEnabled(hasUndo);
     d->redoBtnSketch->setEnabled(hasRedo);
-}
-
-void FuzzySearchView::setActive(bool val)
-{
-    if (d->fuzzySearchFolderView->selectedItem()) 
-    {
-        d->fuzzySearchFolderView->setActive(val);
-    }
-    else if (val)
-    {
-        slotTabChanged(d->tabWidget->currentIndex());
-    }
 }
 
 void FuzzySearchView::slotSaveSketchSAlbum()
