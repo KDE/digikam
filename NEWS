@@ -23,6 +23,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 012 ==> 163474 : Config UI using external media.
 013 ==> 156420 : Canon EOS 400D, no thumbnails displayed then digikam segfaults.
 014 ==> 163118 : digikam-0.9.4_beta5 compilation hangs with gcc 4.3.
+015 ==> 164301 : Filter Albums sub-tree names too, when using quickfilter on icon view.
 
 **********************************************************************************************
 

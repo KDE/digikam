@@ -430,8 +430,11 @@ bool AlbumLister::matchesFilter(const ImageInfo* info, bool &foundText)
         foundText = false;
         if (settings->getIconShowName())
         {
-            if (info->name().lower().contains(d->textFilter.lower()))
+            if (info->name().lower().contains(d->textFilter.lower()) ||
+                info->album()->title().lower().contains(d->textFilter.lower()))
+            {
                 foundText = true;
+            }
         }
         if (settings->getIconShowComments())
         {
