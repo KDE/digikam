@@ -538,7 +538,8 @@ void FuzzySearchView::setActive(bool val)
         }
     }
 
-    slotTabChanged(tab);
+    if (val)
+        slotTabChanged(tab);
 }
 
 void FuzzySearchView::slotTabChanged(int tab)
