@@ -139,6 +139,17 @@ FindDuplicatesView::~FindDuplicatesView()
     delete d;
 }
 
+SAlbum* FindDuplicatesView::currentFindDuplicatesAlbum() const
+{
+    SAlbum *salbum = 0;
+
+    FindDuplicatesAlbumItem* item = dynamic_cast<FindDuplicatesAlbumItem*>(d->listView->currentItem());
+    if (item)
+        salbum = item->album();
+
+    return salbum;
+}
+
 void FindDuplicatesView::populateTreeView()
 {
     const AlbumList& aList = AlbumManager::instance()->allSAlbums();

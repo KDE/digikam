@@ -52,6 +52,8 @@ public:
     FindDuplicatesView(QWidget *parent=0);
     ~FindDuplicatesView();
 
+    SAlbum* currentFindDuplicatesAlbum() const;
+
 signals:
 
     void signalUpdateFingerPrints();

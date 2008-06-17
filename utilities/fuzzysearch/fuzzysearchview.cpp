@@ -111,6 +111,7 @@ public:
         folderView            = 0;
         timerSketch           = 0;
         timerImage            = 0;
+        findDuplicatesPanel   = 0;
     }
 
     QPushButton            *resetButton;
@@ -151,6 +152,8 @@ public:
     SketchWidget           *sketchWidget;
 
     ThumbnailLoadThread    *thumbLoadThread;
+
+    FindDuplicatesView     *findDuplicatesPanel;
 
     SAlbum                 *imageSAlbum;
     SAlbum                 *sketchSAlbum;
@@ -361,11 +364,11 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     // ---------------------------------------------------------------
     // Find Duplicates Panel
 
-    FindDuplicatesView *findDuplicatesPanel = new FindDuplicatesView(this);
+    d->findDuplicatesPanel = new FindDuplicatesView(this);
 
-    d->tabWidget->insertTab(FuzzySearchViewPriv::SIMILARS,   imagePanel,          i18n("Image"));
-    d->tabWidget->insertTab(FuzzySearchViewPriv::SKETCH,     sketchPanel,         i18n("Sketch"));
-    d->tabWidget->insertTab(FuzzySearchViewPriv::DUPLICATES, findDuplicatesPanel, i18n("Duplicates"));
+    d->tabWidget->insertTab(FuzzySearchViewPriv::SIMILARS,   imagePanel,             i18n("Image"));
+    d->tabWidget->insertTab(FuzzySearchViewPriv::SKETCH,     sketchPanel,            i18n("Sketch"));
+    d->tabWidget->insertTab(FuzzySearchViewPriv::DUPLICATES, d->findDuplicatesPanel, i18n("Duplicates"));
 
     // ---------------------------------------------------------------
 
@@ -452,7 +455,7 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
             this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
 
-    connect(findDuplicatesPanel, SIGNAL(signalUpdateFingerPrints()),
+    connect(d->findDuplicatesPanel, SIGNAL(signalUpdateFingerPrints()),
             this, SIGNAL(signalUpdateFingerPrints()));
 
     // ---------------------------------------------------------------
@@ -529,7 +532,7 @@ void FuzzySearchView::slotTabChanged(int tab)
         }
         default:  // DUPLICATES
         {
-            AlbumManager::instance()->setCurrentAlbum(0);     // FIXME
+            AlbumManager::instance()->setCurrentAlbum(d->findDuplicatesPanel->currentFindDuplicatesAlbum());
             d->folderView->setVisible(false);
             break;
         }
