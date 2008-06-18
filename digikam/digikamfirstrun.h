@@ -33,6 +33,10 @@
 
 #include "digikam_export.h"
 
+class QLabel;
+
+class KUrlRequester;
+
 namespace Digikam
 {
 
@@ -53,7 +57,9 @@ protected slots:
 
 private:
 
-    FirstRunWidget *m_ui;
+    QLabel        *m_pixLabel;
+
+    KUrlRequester *m_path;
 };
 
 }  // namespace Digikam

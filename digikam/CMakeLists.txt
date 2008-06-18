@@ -54,7 +54,7 @@ INCLUDE_DIRECTORIES(
                      ../utilities/timeline
                      ../digikam
                      ../
-                     
+
                      # config-digikam.h
                      ${CMAKE_CURRENT_BINARY_DIR}/../
                      # external library paths
@@ -188,7 +188,6 @@ SET(digikam_bin_SRCS
                      digikamview.cpp 
                      dio.cpp 
                      ddragobjects.cpp 
-                     firstrun.cpp 
                      folderitem.cpp 
                      folderview.cpp 
                      iconview.cpp 
@@ -225,7 +224,7 @@ KDE4_ADD_EXECUTABLE(digikam_bin ${digikam_bin_SRCS})
 TARGET_LINK_LIBRARIES(digikam_bin
                       ${KDE4_KPARTS_LIBS}
                       ${KDE4_PHONON_LIBS}
-                      ${STRIGI_LIBRARIES} 
+                      ${STRIGI_LIBRARIES}
                       ${GPHOTO2_LIBRARIES}
                       digikam
                       digikamdatabase
