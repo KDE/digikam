@@ -472,6 +472,8 @@ FuzzySearchView::~FuzzySearchView()
     delete d;
 }
 
+// Common methods ----------------------------------------------------------------------
+
 void FuzzySearchView::readConfig()
 {
     KSharedConfig::Ptr config = KGlobal::config();
@@ -567,6 +569,91 @@ void FuzzySearchView::slotTabChanged(int tab)
     }
 }
 
+void FuzzySearchView::slotAlbumSelected(SAlbum* salbum)
+{
+    if (!salbum || !salbum->isHaarSearch()) 
+        return;
+
+    AlbumManager::instance()->setCurrentAlbum(salbum);
+
+    SearchXmlReader reader(salbum->query());
+    reader.readToFirstField();
+    QStringRef type             = reader.attributes().value("type");
+    QStringRef numResultsString = reader.attributes().value("numberofresults");
+    QStringRef thresholdString  = reader.attributes().value("threshold");
+    QStringRef sketchTypeString = reader.attributes().value("sketchtype");
+
+    if (type == "imageid")
+    {
+        setImageId(reader.valueToLongLong());
+        d->imageSAlbum = salbum;
+        d->tabWidget->setCurrentIndex((int)FuzzySearchViewPriv::SIMILARS);
+    }
+    else if (type == "signature")
+    {
+        d->sketchSAlbum = salbum;
+        d->tabWidget->setCurrentIndex((int)FuzzySearchViewPriv::SKETCH);
+        if (reader.readToStartOfElement("SketchImage"))
+            d->sketchWidget->setSketchImageFromXML(reader);
+    }
+}
+
+bool FuzzySearchView::checkName(QString& name)
+{
+    bool checked = checkAlbum(name);
+
+    while (!checked) 
+    {
+        QString label = i18n( "Search name already exists.\n"
+                              "Please enter a new name:" );
+        bool ok;
+        QString newTitle = KInputDialog::getText(i18n("Name exists"), label, name, &ok, this);
+        if (!ok) return false;
+
+        name    = newTitle;
+        checked = checkAlbum(name);
+    }
+
+    return true;
+}
+
+bool FuzzySearchView::checkAlbum(const QString& name) const
+{
+    AlbumList list = AlbumManager::instance()->allSAlbums();
+
+    for (AlbumList::Iterator it = list.begin() ; it != list.end() ; ++it)
+    {
+        SAlbum *album = (SAlbum*)(*it);
+        if ( album->title() == name )
+            return false;
+    }
+    return true;
+}
+
+void FuzzySearchView::slotRenameAlbum(SAlbum* salbum)
+{
+    if (!salbum) return;
+
+    if (salbum->title() == FuzzySearchFolderView::currentFuzzySketchSearchName() ||
+        salbum->title() == FuzzySearchFolderView::currentFuzzyImageSearchName())
+        return;
+
+    QString oldName(salbum->title());
+    bool    ok;
+
+    QString name = KInputDialog::getText(i18n("Rename Album (%1)").arg(oldName),
+                                         i18n("Enter new album name:"),
+                                         oldName, &ok, this);
+
+    if (!ok || name == oldName || name.isEmpty()) return;
+
+    if (!checkName(name)) return;
+
+    AlbumManager::instance()->updateSAlbum(salbum, salbum->query(), name);
+}
+
+// Sketch Searches methods -----------------------------------------------------------------------
+
 void FuzzySearchView::slotHSChanged(int h, int s)
 {
     d->vSelector->blockSignals(true);
@@ -651,72 +738,11 @@ void FuzzySearchView::createNewFuzzySearchAlbumFromSketch(const QString& name)
     d->sketchSAlbum = salbum;
 }
 
-void FuzzySearchView::slotAlbumSelected(SAlbum* salbum)
-{
-    if (!salbum || !salbum->isHaarSearch()) 
-        return;
-
-    AlbumManager::instance()->setCurrentAlbum(salbum);
-
-    SearchXmlReader reader(salbum->query());
-    reader.readToFirstField();
-    QStringRef type             = reader.attributes().value("type");
-    QStringRef numResultsString = reader.attributes().value("numberofresults");
-    QStringRef thresholdString  = reader.attributes().value("threshold");
-    QStringRef sketchTypeString = reader.attributes().value("sketchtype");
-
-    if (type == "imageid")
-    {
-        setImageId(reader.valueToLongLong());
-        d->imageSAlbum = salbum;
-        d->tabWidget->setCurrentIndex((int)FuzzySearchViewPriv::SIMILARS);
-    }
-    else if (type == "signature")
-    {
-        d->sketchSAlbum = salbum;
-        d->tabWidget->setCurrentIndex((int)FuzzySearchViewPriv::SKETCH);
-        if (reader.readToStartOfElement("SketchImage"))
-            d->sketchWidget->setSketchImageFromXML(reader);
-    }
-}
-
 void FuzzySearchView::slotClearSketch()
 {
     d->sketchWidget->slotClear();
     slotCheckNameEditSketchConditions();
     AlbumManager::instance()->setCurrentAlbum(0);
-}
-
-bool FuzzySearchView::checkName(QString& name)
-{
-    bool checked = checkAlbum(name);
-
-    while (!checked) 
-    {
-        QString label = i18n( "Search name already exists.\n"
-                              "Please enter a new name:" );
-        bool ok;
-        QString newTitle = KInputDialog::getText(i18n("Name exists"), label, name, &ok, this);
-        if (!ok) return false;
-
-        name    = newTitle;
-        checked = checkAlbum(name);
-    }
-
-    return true;
-}
-
-bool FuzzySearchView::checkAlbum(const QString& name) const
-{
-    AlbumList list = AlbumManager::instance()->allSAlbums();
-
-    for (AlbumList::Iterator it = list.begin() ; it != list.end() ; ++it)
-    {
-        SAlbum *album = (SAlbum*)(*it);
-        if ( album->title() == name )
-            return false;
-    }
-    return true;
 }
 
 void FuzzySearchView::slotCheckNameEditSketchConditions()
@@ -735,27 +761,7 @@ void FuzzySearchView::slotCheckNameEditSketchConditions()
     }
 }
 
-void FuzzySearchView::slotRenameAlbum(SAlbum* salbum)
-{
-    if (!salbum) return;
-
-    if (salbum->title() == FuzzySearchFolderView::currentFuzzySketchSearchName() ||
-        salbum->title() == FuzzySearchFolderView::currentFuzzyImageSearchName())
-        return;
-
-    QString oldName(salbum->title());
-    bool    ok;
-
-    QString name = KInputDialog::getText(i18n("Rename Album (%1)").arg(oldName),
-                                         i18n("Enter new album name:"),
-                                         oldName, &ok, this);
-
-    if (!ok || name == oldName || name.isEmpty()) return;
-
-    if (!checkName(name)) return;
-
-    AlbumManager::instance()->updateSAlbum(salbum, salbum->query(), name);
-}
+// Similars Searches methods ----------------------------------------------------------------------
 
 void FuzzySearchView::dragEnterEvent(QDragEnterEvent *e)
 {
