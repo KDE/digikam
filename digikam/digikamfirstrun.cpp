@@ -104,6 +104,7 @@ DigikamFirstRun::DigikamFirstRun(QWidget* parent)
     vlayout->addWidget(textLabel2);
     vlayout->addWidget(line1);
     vlayout->addLayout(grid);
+    vlayout->addStretch(10);
     vlayout->setMargin(0);
     vlayout->setSpacing(KDialog::spacingHint());
 

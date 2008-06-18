@@ -292,7 +292,8 @@ int main(int argc, char *argv[])
         // Run the first run
         Digikam::DigikamFirstRun *firstRun = new Digikam::DigikamFirstRun();
         app.setTopWidget(firstRun);
-        firstRun->exec();
+        if (firstRun->exec() == QDialog::Rejected)
+            return 1;
 
         group     = config->group("Album Settings");
         dbPath    = group.readEntry("Database File Path", QString());
