@@ -366,7 +366,8 @@ QList<qlonglong> HaarIface::bestMatches(Haar::SignatureData *querySig, int numbe
     return bestMatches.values();
 }
 
-QList<qlonglong> HaarIface::bestMatchesWithThreshold(Haar::SignatureData *querySig, double requiredPercentage, SketchType type)
+QList<qlonglong> HaarIface::bestMatchesWithThreshold(Haar::SignatureData *querySig, double requiredPercentage,
+                                                     SketchType type)
 {
     QMap<qlonglong, double> scores = searchDatabase(querySig, type);
     double lowest, highest;
@@ -471,7 +472,7 @@ QMap<qlonglong, double> HaarIface::searchDatabase(Haar::SignatureData *querySig,
 
 QImage HaarIface::loadQImage(const QString &filename)
 {
-    // TODO: Can be optimized using DImg.
+    // NOTE: Can be optimized using DImg.
 
     QImage image;
     if (isJpegImage(filename))
@@ -580,7 +581,7 @@ void HaarIface::rebuildDuplicatesAlbums(const QList<int> &albums2Scan, double re
 
 
 QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicatesInAlbums(const QList<int> &albums2Scan,
-        double requiredPercentage, HaarProgressObserver *observer)
+                                               double requiredPercentage, HaarProgressObserver *observer)
 {
     QList<qlonglong> idList;
 
@@ -594,7 +595,7 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicatesInAlbums(const QLis
 }
 
 QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QList<qlonglong>& images2Scan,
-        double requiredPercentage, HaarProgressObserver *observer)
+                                               double requiredPercentage, HaarProgressObserver *observer)
 {
     QMap< qlonglong, QList<qlonglong> > resultsMap;
     QList<qlonglong>::const_iterator    it;
@@ -604,11 +605,11 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QList<qlongl
 
     int                                 total = 0;
     int                                 progress = 0;
-    int                                 progressStep = 50;
+    int                                 progressStep = 20;
 
     if (observer)
     {
-        int total = images2Scan.size();
+        total        = images2Scan.count();
         progressStep = qMax(progressStep, total / 100);
         observer->totalNumberToScan(total);
     }
@@ -620,30 +621,31 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QList<qlongl
         list = bestMatchesForImageWithThreshold(*it, requiredPercentage, ScannedSketch);
         if (!list.isEmpty())
         {
-            // the list will usually contain one image: the original. Filter out.
-            if (list.count() == 1 && list.first() == *it)
-                continue;
-            // we will check if the duplicates already exist in the map.
             find = false;
-            for (it2 = list.begin(); it2 != list.end(); ++it2)
-            {
-                if (resultsMap.find(*it2) != resultsMap.end())
-                {
-                    find = true;
-                    break;
-                }
-            }
 
-            if (!find)
-                resultsMap.insert(*it, list);
+            // the list will usually contain one image: the original. Filter out.
+            if (!(list.count() == 1 && list.first() == *it))
+            {
+                // we will check if the duplicates already exist in the map.
+                for (it2 = list.begin(); it2 != list.end(); ++it2)
+                {
+                    if (resultsMap.find(*it2) != resultsMap.end())
+                    {
+                        find = true;
+                        break;
+                    }
+                }
+
+                if (find)
+                    resultsMap.insert(*it, list);
+            }
         }
 
         progress++;
-        if (observer && (progress == total || progress % progressStep == 0) )
-        {
+
+        if (observer && (progress != total || progress % progressStep == 0) )
             observer->processedNumber(progress);
-        }
-    };
+    }
 
     return resultsMap;
 }
