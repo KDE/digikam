@@ -202,11 +202,12 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
 
     // --------------------------------------------------------
 
-    QGroupBox *albumPathBox = new QGroupBox(i18n("Roots Album Path"), this);
+    QGroupBox *albumPathBox = new QGroupBox(i18n("Root Album Paths"), this);
     QGridLayout* grid       = new QGridLayout(albumPathBox);
 
-    QLabel *albumPathLabel  = new QLabel(i18n("Here you can set the paths to the root albums with your "
-                                              "images. Write access is necessary to edit your images.\n"
+    QLabel *albumPathLabel  = new QLabel(i18n("Here you can set all root album paths used to host "
+                                              "your images. Write access is necessary to be able "
+                                              "to edit images.\n"
                                               "You can use removable media and remote "
                                               "file systems shared over NFS for example."),
                                          albumPathBox);
@@ -233,10 +234,10 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
     d->removeButton  = new QPushButton(albumPathBox);
     d->replaceButton = new QPushButton(albumPathBox);
 
-    d->newButton->setText( i18n( "&New" ) );
-    d->addButton->setText( i18n( "&Add" ) );
-    d->removeButton->setText( i18n( "&Remove" ) );
-    d->replaceButton->setText( i18n( "&Replace" ) );
+    d->newButton->setText(i18n("&New"));
+    d->addButton->setText(i18n("&Add"));
+    d->removeButton->setText(i18n("&Remove"));
+    d->replaceButton->setText(i18n("&Replace"));
 
     d->newButton->setIcon(SmallIcon("folder-new"));
     d->addButton->setIcon(SmallIcon("list-add"));
@@ -275,9 +276,9 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
     QGroupBox *dbPathBox = new QGroupBox(i18n("Database File Path"), this);
     QVBoxLayout *vlay    = new QVBoxLayout(dbPathBox);
 
-    QLabel *databasePathLabel = new QLabel(i18n("Here you can enter the location on your computer "
+    QLabel *databasePathLabel = new QLabel(i18n("Here you can set the location on your computer "
                                                 "where the digiKam database file will be stored. "
-                                                "There is only one common database file for all roots album.\n"
+                                                "There is only one common database file for all root albums.\n"
                                                 "Write access is required to be able to edit image "
                                                 "properties.\nPlease note that you cannot use a "
                                                 "remote file system here, such as NFS."),
@@ -533,7 +534,7 @@ void SetupCollections::slotChangeAlbumPath(const KUrl &result)
 {
     if (KUrl(result).equals(KUrl(QDir::homePath()), KUrl::CompareWithoutTrailingSlash))
     {
-        KMessageBox::sorry(0, i18n("Sorry you can't use your home directory as an album library."));
+        KMessageBox::sorry(0, i18n("Sorry you can't use your home directory as root album path."));
     }
     else
     {
@@ -601,13 +602,13 @@ bool SetupCollections::checkForCollection(const QString& name, const QString& pa
         {
             if (lvItem->name() == name)
             {
-                KMessageBox::information(0, i18n("A collection named \"%1\" already exist.", name));
+                KMessageBox::information(0, i18n("A root album named \"%1\" already exist.", name));
                 return false;
             }
 
             if (lvItem->path() == path)
             {
-                KMessageBox::information(0, i18n("A collection with the path \"%1\" already exist.", path));
+                KMessageBox::information(0, i18n("A root album set with path \"%1\" already exist.", path));
                 return false;
             }
         }
