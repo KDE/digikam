@@ -247,12 +247,12 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
     d->removeButton->setEnabled(false);
     d->replaceButton->setEnabled(false);
 
-    d->nameLabel     = new QLabel(i18n("Name:"), albumPathBox);
-    d->nameEdit      = new KLineEdit(albumPathBox);
+    d->nameLabel = new QLabel(i18n("Name:"), albumPathBox);
+    d->nameEdit  = new KLineEdit(albumPathBox);
     d->nameEdit->setClearButtonShown(true);
 
-    d->pathLabel     = new QLabel(i18n("Path:"), albumPathBox);
-    d->pathEdit = new KUrlRequester(albumPathBox);
+    d->pathLabel = new QLabel(i18n("Path:"), albumPathBox);
+    d->pathEdit  = new KUrlRequester(albumPathBox);
     d->pathEdit->setMode(KFile::Directory | KFile::LocalOnly | KFile::ExistingOnly);
 
     grid->addWidget(albumPathLabel,   0, 0, 1, 3);
@@ -447,6 +447,7 @@ void SetupCollections::slotSelectionChanged(QTreeWidgetItem *item, int)
     d->nameEdit->setText(colItem->name());
     d->pathEdit->setUrl(colItem->path());
     d->pathEdit->setEnabled(colItem->pathIsEditable());
+    d->pathLabel->setEnabled(colItem->pathIsEditable());
     checkforAddButton();
 }
 
@@ -455,6 +456,7 @@ void SetupCollections::slotNewCollectionItem()
     d->removeButton->setEnabled(false);
     d->replaceButton->setEnabled(false);
     d->pathEdit->setEnabled(true);
+    d->pathLabel->setEnabled(true);
     d->pathEdit->clear();
     d->nameEdit->clear();
     d->nameEdit->setFocus();
