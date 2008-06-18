@@ -176,7 +176,6 @@ DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT     
     digikamview.cpp                     Gilles                 X       DONE
     dio.cpp                             Laurent                X       DONE
     ddragobjects.cpp                    Gilles                 X       DONE       DONE
-    firstrun.cpp                        Gilles                 X       DONE       DONE
     folderitem.cpp                      Gilles                 X       DONE
     folderview.cpp                      Gilles                 X       DONE
     icongroupitem.cpp                   Gilles                 X       DONE
