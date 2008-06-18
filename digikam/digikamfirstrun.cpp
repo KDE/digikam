@@ -7,7 +7,7 @@
  * Description : dialog displayed at the first digiKam run
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,19 +21,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
-// C Ansi includes.
-
-extern "C"
-{
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
-}
-
-// C++ Includes.
-
-#include <iostream>
 
 // Qt includes.
 
@@ -70,17 +57,15 @@ extern "C"
 namespace Digikam
 {
 
-using namespace std;
-
 DigikamFirstRun::DigikamFirstRun(QWidget* parent)
                : KDialog(parent)
 {
     setModal(true);
     setButtons(Help|Ok|Cancel);
     setDefaultButton(Ok);
-    setCaption(i18n( "Album Library Path" ));
+    setCaption(i18n("Album Library Path"));
     setHelp("firstrundialog.anchor", "digikam");
-    
+
     m_ui = new FirstRunWidget(this);
     setMainWidget(m_ui);
 
@@ -89,8 +74,9 @@ DigikamFirstRun::DigikamFirstRun(QWidget* parent)
                                "include the slash in the translation", "/Pictures"));
     m_ui->m_path->setMode(KFile::Directory | KFile::LocalOnly);
 
-    m_ui->m_pixLabel->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
-                            .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    m_ui->m_pixLabel->setPixmap(QPixmap(KStandardDirs::locate("data",
+                                        "digikam/data/logo-digikam.png"))
+                                .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     m_ui->setMinimumSize(450, m_ui->sizeHint().height());
 
     connect(this, SIGNAL(okClicked()),
@@ -104,7 +90,7 @@ DigikamFirstRun::~DigikamFirstRun()
 void DigikamFirstRun::slotOk()
 {
     QString albumLibraryFolder = m_ui->m_path->url().path();
-    
+
     if (albumLibraryFolder.isEmpty())
     {
         KMessageBox::sorry(this, i18n("You must select a folder for digiKam to "
@@ -125,7 +111,7 @@ void DigikamFirstRun::slotOk()
     }
 
     QDir targetPath(albumLibraryFolder);
-    
+
     if (!targetPath.exists())
     {
         int rc = KMessageBox::questionYesNo(this,
@@ -153,7 +139,7 @@ void DigikamFirstRun::slotOk()
     }
 
     QFileInfo path(albumLibraryFolder);
-    
+
     if (!path.isWritable()) 
     {
         KMessageBox::information(this, i18n("No write access for this path.\n"
