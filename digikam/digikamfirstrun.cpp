@@ -59,7 +59,7 @@ DigikamFirstRun::DigikamFirstRun(QWidget* parent)
     setModal(true);
     setButtons(Help|Ok|Cancel);
     setDefaultButton(Ok);
-    setCaption(i18n("Album Library Path"));
+    setCaption(i18n("First Run"));
     setHelp("firstrundialog.anchor", "digikam");
 
     QWidget *widget = new QWidget(this);
@@ -67,7 +67,7 @@ DigikamFirstRun::DigikamFirstRun(QWidget* parent)
 
     QVBoxLayout *vlayout = new QVBoxLayout(widget);
     QLabel *textLabel2   = new QLabel(widget);
-    textLabel2->setText(i18n( "<b>Local Root Collection Path</b>"));
+    textLabel2->setText(i18n( "<b>Setting-Up First Local Root Album Path</b>"));
 
     KSeparator *line1    = new KSeparator(Qt::Horizontal, widget);
     QGridLayout *grid    = new QGridLayout();
@@ -77,7 +77,7 @@ DigikamFirstRun::DigikamFirstRun(QWidget* parent)
                                   "digikam/data/logo-digikam.png"))
                           .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
-    m_path       = new KUrlRequester(widget);
+    m_path = new KUrlRequester(widget);
     m_path->setMode(KFile::LocalOnly | KFile::Directory);
     m_path->setUrl(QDir::homePath() + i18nc("This is a path name so you should "
                    "include the slash in the translation", "/Pictures"));
@@ -86,13 +86,13 @@ DigikamFirstRun::DigikamFirstRun(QWidget* parent)
     QLabel *textLabel1 = new QLabel(widget);
     textLabel1->setAlignment(Qt::AlignVCenter);
     textLabel1->setWordWrap(true);
-    textLabel1->setText(i18n("<p>digiKam use root collection path to store the photo albums "
-                             "which you create in <b>My Albums</b> view from left side-bar. "
+    textLabel1->setText(i18n("<p>digiKam use root album paths to store your photo albums "
+                             "created in <b>My Albums</b> view from left side-bar. "
                              "Below, please select which folder you would like "
-                             "digiKam to use as first root collection path from your local "
+                             "digiKam to use as first root album path from your local "
                              "file system.</p>" 
-                             "<p><b>Note: you can set other root collection path later using "
-                             "settings panel. Removable media and shared file system are "
+                             "<p><b>Note: you can set other root album paths later using "
+                             "digiKam settings panel. Removable media and shared file system are "
                              "supported.</b></p>") );
 
     grid->addWidget(m_pixLabel, 0, 0, 2, 1);
@@ -104,8 +104,6 @@ DigikamFirstRun::DigikamFirstRun(QWidget* parent)
     vlayout->addWidget(textLabel2);
     vlayout->addWidget(line1);
     vlayout->addLayout(grid);
-    vlayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
-                                     QSizePolicy::Minimum, QSizePolicy::MinimumExpanding));
     vlayout->setMargin(0);
     vlayout->setSpacing(KDialog::spacingHint());
 
