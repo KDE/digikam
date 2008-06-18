@@ -260,17 +260,19 @@ int main(int argc, char *argv[])
     KApplication app;
 
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("General Settings");
-    QString version = group.readEntry("Version", QString());
+    KConfigGroup group        = config->group("General Settings");
+    QString version           = group.readEntry("Version", QString());
 
-    group = config->group("Album Settings");
-    QString dbPath = group.readEntry("Database File Path", QString());
-    QString albumPath = group.readEntry("Album Path", QString());
+    group                     = config->group("Album Settings");
+    QString dbPath            = group.readEntry("Database File Path", QString());
+    QString albumPath         = group.readEntry("Album Path", QString());
+
     // 0.9 legacy
     if (dbPath.isEmpty())
         dbPath = albumPath;
 
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
+
     // TEMPORARY SOLUTION
     bool priorityAlbumPath = false;
     if (args && args->isSet("album-root"))
@@ -290,8 +292,15 @@ int main(int argc, char *argv[])
         // Run the first run
         Digikam::DigikamFirstRun *firstRun = new Digikam::DigikamFirstRun();
         app.setTopWidget(firstRun);
-        firstRun->show();
-        return app.exec();
+        firstRun->exec();
+
+        group     = config->group("Album Settings");
+        dbPath    = group.readEntry("Database File Path", QString());
+        albumPath = group.readEntry("Album Path", QString());
+
+        // 0.9 legacy
+        if (dbPath.isEmpty())
+            dbPath = albumPath;
     }
 
     // initialize database

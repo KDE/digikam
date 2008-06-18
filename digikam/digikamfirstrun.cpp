@@ -154,19 +154,11 @@ void DigikamFirstRun::slotOk()
 
     group = config->group("Album Settings");
     group.writeEntry("Album Path", albumLibraryFolder);
+    group.writeEntry("Database File Path", albumLibraryFolder);
 
     config->sync();
 
     KDialog::accept();
-
-    QString ErrorMsg, URL;
-
-    if (KToolInvocation::startServiceByDesktopName("digikam", URL , &ErrorMsg) > 0)
-    {
-        DError() << ErrorMsg << endl;
-        KMessageBox::sorry(this, i18n("Cannot restart digiKam automatically.\n"
-                                      "Please restart digiKam manually."));
-    }
 }
 
 }  // namespace Digikam
