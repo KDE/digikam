@@ -70,11 +70,11 @@ void kio_digikamsearch::special(const QByteArray& data)
 
     kDebug() << "kio_digikamsearch::special " << kurl;
 
+    Digikam::DatabaseUrl dbUrl(kurl);
+    Digikam::DatabaseAccess::setParameters(dbUrl);
+
     if (!duplicates)
     {
-        Digikam::DatabaseUrl dbUrl(kurl);
-        Digikam::DatabaseAccess::setParameters(dbUrl);
-
         int id = dbUrl.searchId();
         Digikam::SearchInfo info = Digikam::DatabaseAccess().db()->getSearchInfo(id);
 
