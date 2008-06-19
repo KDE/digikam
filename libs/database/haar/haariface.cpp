@@ -636,7 +636,7 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QList<qlongl
                     }
                 }
 
-                if (find)
+                if (!find)
                     resultsMap.insert(*it, list);
             }
         }
