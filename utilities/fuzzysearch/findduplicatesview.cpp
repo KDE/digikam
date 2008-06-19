@@ -132,6 +132,9 @@ FindDuplicatesView::FindDuplicatesView(QWidget *parent)
 
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
             this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
+
+    connect(AlbumManager::instance(), SIGNAL(signalAllAlbumsLoaded()),
+            this, SLOT(populateTreeView()));
 }
 
 FindDuplicatesView::~FindDuplicatesView()

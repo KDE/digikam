@@ -58,12 +58,9 @@ signals:
 
     void signalUpdateFingerPrints();
 
-private:
-
-    void populateTreeView();
-
 private slots:
 
+    void populateTreeView();
     void slotFindDuplicates();
     void slotDuplicatesAlbumActived(QTreeWidgetItem*, int);
 
