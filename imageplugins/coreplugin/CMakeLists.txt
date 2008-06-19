@@ -39,6 +39,10 @@ SET(libclapack_SRCS
     ../../imageplugins/coreplugin/sharpnesseditor/clapack/xerbla.c
    )
 
+foreach(_curentfile ${libclapack_SRCS})
+    set_source_files_properties(${_curentfile} PROPERTIES COMPILE_FLAGS -w )
+endforeach(_curentfile ${libclapack_SRCS})
+
 SET(digikamimageplugin_core_PART_SRCS 
     ${libclapack_SRCS} 
     ../../imageplugins/coreplugin/imageplugin_core.cpp 
