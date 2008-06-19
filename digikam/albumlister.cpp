@@ -430,8 +430,7 @@ bool AlbumLister::matchesFilter(const ImageInfo* info, bool &foundText)
         foundText = false;
         if (settings->getIconShowName())
         {
-            if (info->name().lower().contains(d->textFilter.lower()) ||
-                info->album()->title().lower().contains(d->textFilter.lower()))
+            if (info->name().lower().contains(d->textFilter.lower()))
             {
                 foundText = true;
             }
@@ -449,6 +448,11 @@ bool AlbumLister::matchesFilter(const ImageInfo* info, bool &foundText)
                 if ((*it).lower().contains(d->textFilter.lower()))
                     foundText = true;
             }
+        }
+        // check for folder names
+        if (info->album()->title().lower().contains(d->textFilter.lower()))
+        {
+            foundText = true;
         }
         match &= foundText;
     }
