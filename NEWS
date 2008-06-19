@@ -71,4 +71,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 030 ==> 150077 : Find Duplicate Images tool quite unusable on many images (a couple of issues).
 031 ==> 161858 : Find Duplicate Image fails with Canon Raw Files.
 032 ==> 162152 : Wish: Batch Duplicate Image Management.
-033 ==> 
+033 ==> 164418 : GPS window zoom possibility.
+034 ==> 
