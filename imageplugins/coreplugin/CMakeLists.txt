@@ -39,9 +39,10 @@ SET(libclapack_SRCS
     ../../imageplugins/coreplugin/sharpnesseditor/clapack/xerbla.c
    )
 
-foreach(_curentfile ${libclapack_SRCS})
-    set_source_files_properties(${_curentfile} PROPERTIES COMPILE_FLAGS -w )
-endforeach(_curentfile ${libclapack_SRCS})
+# Disable Clapack C code warnings.
+FOREACH(_curentfile ${libclapack_SRCS})
+    SET_SOURCE_FILES_PROPERTIES(${_curentfile} PROPERTIES COMPILE_FLAGS -w )
+ENDFOREACH(_curentfile ${libclapack_SRCS})
 
 SET(digikamimageplugin_core_PART_SRCS 
     ${libclapack_SRCS} 
