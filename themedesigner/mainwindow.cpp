@@ -182,13 +182,13 @@ MainWindow::MainWindow()
     QHBoxLayout* buttonLayout = new QHBoxLayout();
 
     QPushButton* loadButton = new QPushButton(this);
-    loadButton->setText("&Load");
+    loadButton->setText(i18n("&Load"));
 
     QPushButton* saveButton = new QPushButton(this);
-    saveButton->setText("&Save");
+    saveButton->setText(i18n("&Save"));
 
     QPushButton* closeButton = new QPushButton(this);
-    closeButton->setText("&Close");
+    closeButton->setText(i18n("&Close"));
 
     buttonLayout->setMargin(5);
     buttonLayout->setSpacing(5);
@@ -288,7 +288,7 @@ void MainWindow::slotSave()
     QFile file(path);
     if (!file.open(IO_WriteOnly))
     {
-        KMessageBox::error(this, "Failed to open file for writing");
+        KMessageBox::error(this, i18n("Failed to open file for writing"));
         return;
     }
 
