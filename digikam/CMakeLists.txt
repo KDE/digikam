@@ -129,10 +129,14 @@ INSTALL(TARGETS digikam ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 # Shared libdigikamdatabase ########################################################
 
-SET(digikamdatabase_LIB_SRCS
-                      ${libdatabase_SRCS}
-                      ${libhaar_SRCS}
-                      ${libsqlite2_SRCS}
+# Disable libsqlite2 C code warnings.
+FOREACH(_curentfile ${libsqlite2_SRCS})
+    SET_SOURCE_FILES_PROPERTIES(${_curentfile} PROPERTIES COMPILE_FLAGS -w)
+ENDFOREACH(_curentfile ${libsqlite2_SRCS})
+
+SET(digikamdatabase_LIB_SRCS ${libdatabase_SRCS}
+                             ${libhaar_SRCS}
+                             ${libsqlite2_SRCS}
    )
 
 KDE4_ADD_LIBRARY(digikamdatabase SHARED ${digikamdatabase_LIB_SRCS})
@@ -140,7 +144,7 @@ KDE4_ADD_LIBRARY(digikamdatabase SHARED ${digikamdatabase_LIB_SRCS})
 TARGET_LINK_LIBRARIES(digikamdatabase
                       digikam
                       ${QT_QTSQL_LIBRARY}
-              )
+                     )
 
 SET_TARGET_PROPERTIES(digikamdatabase PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 INSTALL(TARGETS digikamdatabase ${INSTALL_TARGETS_DEFAULT_ARGS} )
