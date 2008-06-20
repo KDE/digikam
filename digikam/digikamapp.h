@@ -106,6 +106,7 @@ private:
     void loadCameras();
     void populateThemes();
     void fillSolidMenus();
+    void runFingerPrintsGenerator(bool rebuildAll);
 
 private slots:
 
