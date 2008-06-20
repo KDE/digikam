@@ -71,20 +71,17 @@ DigikamFirstRun::DigikamFirstRun(QWidget* parent)
 
     KSeparator *line1    = new KSeparator(Qt::Horizontal, widget);
     QGridLayout *grid    = new QGridLayout();
-    m_pixLabel           = new QLabel(widget);
-    m_pixLabel->setAlignment(Qt::AlignTop);
-    m_pixLabel->setPixmap(QPixmap(KStandardDirs::locate("data",
-                                  "digikam/data/logo-digikam.png"))
-                          .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    QLabel *pixLabel     = new QLabel(widget);
+    pixLabel->setAlignment(Qt::AlignTop);
+    pixLabel->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
+                        .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
-    m_path = new KUrlRequester(widget);
-    m_path->setMode(KFile::LocalOnly | KFile::Directory);
-    m_path->setUrl(QDir::homePath() + i18nc("This is a path name so you should "
-                   "include the slash in the translation", "/Pictures"));
-    m_path->setMode(KFile::Directory | KFile::LocalOnly);
+    m_rootAlbumPath = new KUrlRequester(widget);
+    m_rootAlbumPath->setMode(KFile::Directory | KFile::LocalOnly);
+    m_rootAlbumPath->setUrl(QDir::homePath() + i18nc("This is a path name so you should "
+                            "include the slash in the translation", "/Pictures"));
 
     QLabel *textLabel1 = new QLabel(widget);
-    textLabel1->setAlignment(Qt::AlignVCenter);
     textLabel1->setWordWrap(true);
     textLabel1->setText(i18n("<p>digiKam use root album paths to store your photo albums "
                              "created in <b>My Albums</b> view from left side-bar. "
@@ -92,12 +89,12 @@ DigikamFirstRun::DigikamFirstRun(QWidget* parent)
                              "digiKam to use as first root album path from your local "
                              "file system.</p>" 
                              "<p><b>Note: you can set other root album paths later using "
-                             "digiKam settings panel. Removable media and shared file system are "
+                             "digiKam settings panel. Removable medias and shared files system are "
                              "supported.</b></p>") );
 
-    grid->addWidget(m_pixLabel, 0, 0, 2, 1);
-    grid->addWidget(textLabel1, 0, 1, 1, 1);
-    grid->addWidget(m_path,     1, 1, 1, 1);
+    grid->addWidget(pixLabel,        0, 0, 2, 1);
+    grid->addWidget(textLabel1,      0, 1, 1, 1);
+    grid->addWidget(m_rootAlbumPath, 1, 1, 1, 1);
     grid->setMargin(0);
     grid->setSpacing(KDialog::spacingHint());
 
@@ -118,30 +115,43 @@ DigikamFirstRun::~DigikamFirstRun()
 {
 }
 
-void DigikamFirstRun::slotOk()
+void DigikamFirstRun::saveSettings(const QString& rootAlbumFolder)
 {
-    QString albumLibraryFolder = m_path->url().path();
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group("General Settings");
+    group.writeEntry("Version", digikam_version);
 
-    if (albumLibraryFolder.isEmpty())
+    group = config->group("Album Settings");
+    group.writeEntry("Album Path", rootAlbumFolder);
+    group.writeEntry("Database File Path", rootAlbumFolder);
+
+    config->sync();
+}
+
+bool DigikamFirstRun::checkRootAlbum(QString& rootAlbumFolder)
+{
+    rootAlbumFolder = m_rootAlbumPath->url().path();
+
+    if (rootAlbumFolder.isEmpty())
     {
         KMessageBox::sorry(this, i18n("You must select a folder for digiKam to "
-                                      "use as the Album Library folder."));
-        return;
+                                      "use as the Root Album Path."));
+        return false;
     }
 
-    if (!albumLibraryFolder.startsWith("/"))
+    if (!rootAlbumFolder.startsWith("/"))
     {
-        albumLibraryFolder.prepend(QDir::homePath());
+        rootAlbumFolder.prepend(QDir::homePath());
     }
 
-    if (KUrl(albumLibraryFolder).equals(KUrl(QDir::homePath()), KUrl::CompareWithoutFragment))
+    if (KUrl(rootAlbumFolder).equals(KUrl(QDir::homePath()), KUrl::CompareWithoutFragment))
     {
         KMessageBox::sorry(this, i18n("digiKam cannot use your home folder as "
-                                      "the Album Library folder."));
-        return;
+                                      "Root Album Path."));
+        return false;
     }
 
-    QDir targetPath(albumLibraryFolder);
+    QDir targetPath(rootAlbumFolder);
 
     if (!targetPath.exists())
     {
@@ -149,45 +159,45 @@ void DigikamFirstRun::slotOk()
                                    i18n("<qt>The folder you selected does not exist: "
                                         "<p><b>%1</b></p>"
                                         "Would you like digiKam to create it?</qt>",
-                                        albumLibraryFolder),
+                                        rootAlbumFolder),
                                    i18n("Create Folder?"));
 
         if (rc == KMessageBox::No)
         {
-            return;
+            return false;
         }
 
-        if (!targetPath.mkdir(albumLibraryFolder))
+        if (!targetPath.mkdir(rootAlbumFolder))
         {
             KMessageBox::sorry(this,
                                i18n("<qt>digiKam could not create the folder shown below. "
                                     "Please select a different location."
-                                    "<p><b>%1</b></p></qt>", albumLibraryFolder),
+                                    "<p><b>%1</b></p></qt>", rootAlbumFolder),
                                i18n("Create Folder Failed"));
-            return;
+            return false;
         }
     }
 
-    QFileInfo path(albumLibraryFolder);
+    QFileInfo path(rootAlbumFolder);
 
     if (!path.isWritable()) 
     {
         KMessageBox::information(this, i18n("No write access for this path.\n"
                                             "Warning: the comment and tag features "
                                             "will not work."));
-        return;
+        return false;
     }
 
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("General Settings");
-    group.writeEntry("Version", digikam_version);
+    return true;
+}
 
-    group = config->group("Album Settings");
-    group.writeEntry("Album Path", albumLibraryFolder);
-    group.writeEntry("Database File Path", albumLibraryFolder);
+void DigikamFirstRun::slotOk()
+{
+    QString rootAlbumFolder;
+    if (!checkRootAlbum(rootAlbumFolder))
+        return;
 
-    config->sync();
-
+    saveSettings(rootAlbumFolder);
     KDialog::accept();
 }
 

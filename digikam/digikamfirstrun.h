@@ -33,8 +33,6 @@
 
 #include "digikam_export.h"
 
-class QLabel;
-
 class KUrlRequester;
 
 namespace Digikam
@@ -57,9 +55,12 @@ protected slots:
 
 private:
 
-    QLabel        *m_pixLabel;
+    void saveSettings(const QString& rootAlbumFolder);
+    bool checkRootAlbum(QString& rootAlbumFolder);
 
-    KUrlRequester *m_path;
+private:
+
+    KUrlRequester *m_rootAlbumPath;
 };
 
 }  // namespace Digikam
