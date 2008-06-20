@@ -266,19 +266,19 @@ void DImgInterface::slotImageLoaded(const LoadingDescription &loadingDescription
 
         if (d->image.attribute("format").toString() == QString("RAW"))
             d->rotatedOrFlipped = true;
-    
+
         if (d->exifOrient && 
-	    (d->image.attribute("format").toString() == QString("JPEG") ||
-	     d->image.attribute("format").toString() == QString("PNG")  ||
-	     d->image.attribute("format").toString() == QString("TIFF")))
-    	    exifRotate(d->filename);
-        
+            (d->image.attribute("format").toString() == QString("JPEG") ||
+             d->image.attribute("format").toString() == QString("PNG")  ||
+             d->image.attribute("format").toString() == QString("TIFF")))
+             exifRotate(d->filename);
+
         if (d->cmSettings->enableCMSetting)
         {
             if ((d->image.attribute("format").toString() == QString("RAW"))  && (d->cmSettings->CMInRawLoadingSetting) )
             {
                 // With RAW files, we load the Color Management image plugin.
-                emit signalColorManagementTool();        
+                emit signalColorManagementTool();
             }
             else if (QFile::exists(d->cmSettings->workspaceSetting))
             {
@@ -339,7 +339,7 @@ void DImgInterface::slotImageLoaded(const LoadingDescription &loadingDescription
                 else
                 {
                     trans.getEmbeddedProfile( d->image );
-    
+
                     // Ask or apply?
                     if (d->cmSettings->askOrApplySetting)
                     {
@@ -419,7 +419,7 @@ bool DImgInterface::exifRotated()
 void DImgInterface::exifRotate(const QString& filename)
 {
     // Rotate image based on EXIF rotate tag
-    
+
     DMetadata metadata(filename);
     DMetadata::ImageOrientation orientation = metadata.getImageOrientation();
 
@@ -468,7 +468,7 @@ void DImgInterface::exifRotate(const QString& filename)
 
 void DImgInterface::setExifOrient(bool exifOrient)
 {
-    d->exifOrient = exifOrient;    
+    d->exifOrient = exifOrient;
 }
 
 void DImgInterface::undo()
@@ -602,7 +602,7 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iof
         // JPEG file, we remove IPTC preview.
         meta.removeIptcTag("Iptc.Application2.Preview");
         meta.removeIptcTag("Iptc.Application2.PreviewFormat");
-        meta.removeIptcTag("Iptc.Application2.PreviewVersion");        
+        meta.removeIptcTag("Iptc.Application2.PreviewVersion");
     }
 
     // Update Exif thumbnail.
@@ -711,7 +711,7 @@ bool DImgInterface::imageValid()
 
 int DImgInterface::width()
 {
-    return d->width;    
+    return d->width;
 }
 
 int DImgInterface::height()
@@ -721,7 +721,7 @@ int DImgInterface::height()
 
 int DImgInterface::origWidth()
 {
-    return d->origWidth;    
+    return d->origWidth;
 }
 
 int DImgInterface::origHeight()
@@ -780,7 +780,7 @@ void DImgInterface::paintOnDevice(QPaintDevice* p,
     d->cmod.applyBCG(img);
     img.convertDepth(32);
     QPainter painter(p);
-    
+
     if (d->cmSettings->enableCMSetting && d->cmSettings->managedViewSetting)
     {
         QPixmap pix(img.convertToPixmap(&d->monitorICCtrans));
@@ -1139,7 +1139,7 @@ void DImgInterface::setEmbeddedICCToOriginalImage( QString profilePath)
         DWarning() << "d->image is NULL" << endl;
         return;
     }
-     
+
      DDebug() << "Embedding profile: " << profilePath << endl;
      d->image.getICCProfilFromFile( QFile::encodeName(profilePath));
      setModified();
@@ -1232,7 +1232,7 @@ ICCSettingsContainer* DImgInterface::getICCSettings()
 }
 
 QPixmap DImgInterface::convertToPixmap(DImg& img)
-{    
+{
     if (d->cmSettings->enableCMSetting && d->cmSettings->managedViewSetting)
         return img.convertToPixmap(&d->monitorICCtrans);
 
@@ -1250,4 +1250,3 @@ QColor DImgInterface::overExposureColor()
 }
 
 }  // namespace Digikam
-
