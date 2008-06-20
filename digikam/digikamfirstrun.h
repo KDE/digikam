@@ -55,12 +55,14 @@ protected slots:
 
 private:
 
-    void saveSettings(const QString& rootAlbumFolder);
+    void saveSettings(const QString& rootAlbumFolder, const QString& dbFolder);
     bool checkRootAlbum(QString& rootAlbumFolder);
+    bool checkDatabase(QString& dbFolder);
 
 private:
 
     KUrlRequester *m_rootAlbumPath;
+    KUrlRequester *m_dbPath;
 };
 
 }  // namespace Digikam

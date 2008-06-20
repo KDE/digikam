@@ -67,6 +67,7 @@ extern "C"
 // Local includes.
 
 #include "version.h"
+#include "ddebug.h"
 #include "albummanager.h"
 #include "databaseaccess.h"
 #include "databaseparameters.h"
@@ -298,11 +299,10 @@ int main(int argc, char *argv[])
         group     = config->group("Album Settings");
         dbPath    = group.readEntry("Database File Path", QString());
         albumPath = group.readEntry("Album Path", QString());
-
-        // 0.9 legacy
-        if (dbPath.isEmpty())
-            dbPath = albumPath;
     }
+
+    DDebug() << "Root Album Path: " << albumPath << endl;
+    DDebug() << "Database Path: " << dbPath << endl;
 
     // initialize database
     Digikam::AlbumManager* man = Digikam::AlbumManager::instance();
