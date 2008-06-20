@@ -6,7 +6,8 @@ NEW FEATURES:
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 164301 : Filter Albums sub-tree names too, when using quickfilter on icon view.
-002 ==> 
+002 ==> 164482 : place filename of image in klipper/paste buffer from thumbnail right mouse button context menu.
+003 ==> 
 
 **********************************************************************************************
 digiKam 0.9.4-RC1 - Release date: 2008-06-17
