@@ -41,7 +41,7 @@
 
 int main(int argc, char** argv)
 {
-    KAboutData aboutData("digikamthemedesigner", 0,
+    KAboutData aboutData("digikamthemedesigner", "digikam",
                          ki18n("digiKam Theme Designer"),
                          digiKamVersion().toAscii(),
                          ki18n("A Color Theme Designer for digiKam"),
