@@ -3,7 +3,7 @@ IF(NOT WIN32)
 ENDIF(NOT WIN32)
 
 #Require by Greycstoration algorithm (CImg.h)
-ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
 
 INCLUDE_DIRECTORIES(
                      # basic libs
