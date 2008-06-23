@@ -216,8 +216,9 @@ CameraSelection::CameraSelection( QWidget* parent )
 
     QLabel* link = new QLabel(box2);
     link->setText(i18n("<p>To set a <b>USB Mass Storage</b> camera<br>"
-                       "(which looks like a removable drive when mounted on your desktop), please<br>"
-                       "use <a href=\"umscamera\">%1</a> from camera list.</p>", 
+                       "(which looks like a removable drive when mounted<br>"
+                       "on your desktop), please use<br>"
+                       "<a href=\"umscamera\">%1</a> from camera list.</p>", 
                        d->UMSCameraNameShown));
 
     QLabel* link2 = new QLabel(box2);
