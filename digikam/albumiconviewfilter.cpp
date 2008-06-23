@@ -21,6 +21,11 @@
  *
  * ============================================================ */
 
+/* FIXME : There is a problem with Qt4.3 if statusbar host a KLineEdit: 
+           digiKam crash. Text Filter bar is temporaly replaced 
+           by a simple QLineEdit.*/
+//#define HACK_KLINEEDIT 1
+
 // KDE includes.
 
 #include <klocale.h>
@@ -52,8 +57,11 @@ public:
         led              = 0;
     }
 
+#ifdef HACK_KLINEEDIT
+    SearchTextBar *textFilter;
+#else
     QLineEdit     *textFilter;
-//    SearchTextBar *textFilter;
+#endif
 
     StatusLed     *led;
 
@@ -78,15 +86,13 @@ AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
                               "GREEN: filter(s) matches at least one item.\n\n"
                               "Any mouse button click will reset all filters."));
 
-/* FIXME : There is a problem with Qt4.3 if statusbar host a KLineEdit: 
-           digiKam crash. Text Filter bar is temporaly replaced 
-           by a simple QLineEdit.
-
-    d->textFilter = new SearchTextBar(this);
+#ifdef HACK_KLINEEDIT
+    d->textFilter = new SearchTextBar(this, "AlbumIconViewFilterSearchTextBar");
     d->textFilter->setEnableTextQueryCompletion(true);
-*/
-
+#else
     d->textFilter = new QLineEdit(this);
+#endif
+
     d->textFilter->setToolTip(i18n("Text quick filter (search)"));
     d->textFilter->setWhatsThis(i18n("Enter search patterns to quickly filter this view on "
                                      "file names, captions (comments), and tags"));
@@ -106,8 +112,10 @@ AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
     connect(d->textFilter, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotTextFilterChanged(const QString&)));
 
-    //connect(AlbumLister::instance(), SIGNAL(signalItemsTextFilterMatch(bool)),
-    //        d->textFilter, SLOT(slotSearchResult(bool)));
+#ifdef HACK_KLINEEDIT
+    connect(AlbumLister::instance(), SIGNAL(signalItemsTextFilterMatch(bool)),
+            d->textFilter, SLOT(slotSearchResult(bool)));
+#endif
 
     connect(AlbumLister::instance(), SIGNAL(signalItemsFilterMatch(bool)),
             this, SLOT(slotItemsFilterMatch(bool)));
