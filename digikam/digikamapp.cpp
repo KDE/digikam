@@ -300,13 +300,13 @@ void DigikamApp::show()
                            "Do you want to build all finger-prints now ?\n"
                            "Note: This process can take a while. You can run it "
                            "later using 'Tools/Rebuild all FingerPrints'");
-        int result = KMessageBox::questionYesNo(this, msg, i18n("Warning"));
+        int result = KMessageBox::questionYesNo(this, msg, i18n("Warning"),
+                                                KStandardGuiItem::yes(),
+                                                KStandardGuiItem::no(),
+                                                QString("FingerPrintsGeneratorFirstRun"));
 
         if (result == KMessageBox::Yes)
-        {
             runFingerPrintsGenerator(true);
-            d->config->group("General Settings").writeEntry("Finger Prints Generator First Run", true);
-        }
     }
 
     // Init album icon view zoom factor.
@@ -2232,7 +2232,7 @@ void DigikamApp::runFingerPrintsGenerator(bool rebuildAll)
 
 void DigikamApp::slotRebuildAllFingerPrintsDone()
 {
-    // TODO : do something here...
+    d->config->group("General Settings").writeEntry("Finger Prints Generator First Run", true);
 }
 
 void DigikamApp::slotDonateMoney()
