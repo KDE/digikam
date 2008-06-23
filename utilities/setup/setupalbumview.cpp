@@ -123,7 +123,7 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
     d->iconShowRatingBox->setWhatsThis( i18n("<p>Set this option to show the digiKam rating "
                                              "below the image thumbnail."));
 
-    d->iconShowResolutionBox = new QCheckBox(i18n("Show ima&ge dimensions (warning: slow)"), iconTextGroup);
+    d->iconShowResolutionBox = new QCheckBox(i18n("Show ima&ge dimensions"), iconTextGroup);
     d->iconShowResolutionBox->setWhatsThis( i18n("<p>Set this option to show the image size in pixels "
                                                  "below the image thumbnail."));
 
