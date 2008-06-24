@@ -72,4 +72,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 031 ==> 161858 : Find Duplicate Image fails with Canon Raw Files.
 032 ==> 162152 : Wish: Batch Duplicate Image Management.
 033 ==> 164418 : GPS window zoom possibility.
-034 ==> 
+034 ==> 117287 : search albums on read only album path.
+035 ==> 
+
