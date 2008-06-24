@@ -95,24 +95,24 @@ MainWindow::MainWindow()
     QGroupBox *groupBox = new QGroupBox(this);
     QVBoxLayout* vlay   = new QVBoxLayout(groupBox);
 
-    QLabel* label1  = new QLabel("Property: ", groupBox);
+    QLabel* label1  = new QLabel(i18n("Property: "), groupBox);
     m_propertyCombo = new QComboBox(groupBox);
 
-    m_bevelLabel = new QLabel("Bevel: ", groupBox);
+    m_bevelLabel = new QLabel(i18n("Bevel: "), groupBox);
     m_bevelCombo = new QComboBox(groupBox);
 
-    m_gradientLabel = new QLabel("Gradient: ", groupBox);
+    m_gradientLabel = new QLabel(i18n("Gradient: "), groupBox);
     m_gradientCombo = new QComboBox(groupBox);
 
-    m_begColorLabel = new QLabel("Start Color: ", groupBox);
+    m_begColorLabel = new QLabel(i18n("Start Color: "), groupBox);
     m_begColorBtn   = new KColorButton(groupBox);
 
-    m_endColorLabel = new QLabel("End Color: ", groupBox);
+    m_endColorLabel = new QLabel(i18n("End Color: "), groupBox);
     m_endColorBtn   = new KColorButton(groupBox);
 
-    m_addBorderCheck = new QCheckBox("Add Border", groupBox);
+    m_addBorderCheck = new QCheckBox(i18n("Add Border"), groupBox);
 
-    m_borderColorLabel = new QLabel("Border Color: ", groupBox);
+    m_borderColorLabel = new QLabel(i18n("Border Color: "), groupBox);
     m_borderColorBtn   = new KColorButton(groupBox);
 
     vlay->setAlignment(Qt::AlignTop);
