@@ -424,9 +424,6 @@ void ShowFoto::setupUserArea()
     KConfigGroup group        = config->group("ImageViewer Settings");
 
     QWidget* widget = new QWidget(this);
-    QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
-    rightSzPolicy.setHorizontalStretch(2);
-    rightSzPolicy.setVerticalStretch(1);
 
     if(!group.readEntry("HorizontalThumbbar", false)) // Vertical thumbbar layout
     {
@@ -434,9 +431,8 @@ void ShowFoto::setupUserArea()
         m_splitter        = new QSplitter(widget);
         d->thumbBar       = new Digikam::ThumbBarView(m_splitter, Qt::Vertical);
         m_canvas          = new Digikam::Canvas(m_splitter);
-
-        m_canvas->setSizePolicy(rightSzPolicy);
         m_canvas->makeDefaultEditingCanvas();
+        m_splitter->setStretchFactor(1, 10);      // set Canvas default size to max.
 
         d->rightSidebar   = new Digikam::ImagePropertiesSideBar(widget, m_splitter, Digikam::Sidebar::DockRight);
         d->rightSidebar->setObjectName("ShowFoto Sidebar Right");
@@ -454,8 +450,6 @@ void ShowFoto::setupUserArea()
         m_vSplitter       = new QSplitter(Qt::Vertical, widget2);
         m_canvas          = new Digikam::Canvas(m_vSplitter);
         d->thumbBar       = new Digikam::ThumbBarView(m_vSplitter, Qt::Horizontal);
-
-        m_canvas->setSizePolicy(rightSzPolicy);
         m_canvas->makeDefaultEditingCanvas();
 
         m_vSplitter->setFrameStyle( QFrame::NoFrame );
@@ -475,6 +469,10 @@ void ShowFoto::setupUserArea()
         hlay->addWidget(d->rightSidebar);
         hlay->setSpacing(0);
         hlay->setMargin(0);
+        //hlay->setStretchFactor(m_splitter, 10);
+
+        m_splitter->setStretchFactor(0, 10);      // set Canvas+thummbar container default size to max.
+        m_vSplitter->setStretchFactor(0, 10);     // set Canvas default size to max.
     }
 
     m_splitter->setFrameStyle( QFrame::NoFrame );
