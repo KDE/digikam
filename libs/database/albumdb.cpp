@@ -1357,6 +1357,38 @@ void AlbumDB::setImageCopyrightProperty(qlonglong imageID, const QString &proper
                     imageID, property, value, extraValue);
 }
 
+bool AlbumDB::hasHaarFingerprints()
+{
+    QList<QVariant> values;
+
+    d->db->execSql( QString("SELECT imageid FROM ImageHaarMatrix "
+                            "WHERE matrix IS NOT NULL LIMIT 1;"),
+                    &values);
+
+    // return true if there is at least one fingerprint
+    return !values.isEmpty();
+}
+
+QList<qlonglong> AlbumDB::getDirtyOrMissingFingerprints()
+{
+    QList<qlonglong> itemIDs;
+    QList<QVariant> values;
+
+    d->db->execSql( QString("SELECT id FROM Images "
+                            "LEFT OUTER JOIN ImageHaarMatrix ON Images.id=ImageHaarMatrix.imageid "
+                            " WHERE ImageHaarMatrix.imageid IS NULL "
+                            "  OR Images.modificationDate != ImageHaarMatrix.modificationDate "
+                            "  OR Images.uniqueHash != ImageHaarMatrix.modificationDate; "),
+                    &values );
+
+    for (QList<QVariant>::iterator it = values.begin(); it != values.end(); ++it)
+    {
+        itemIDs << (*it).toLongLong();
+    }
+
+    return itemIDs;
+}
+
 
 QStringList AlbumDB::imagesFieldList(DatabaseFields::Images fields)
 {

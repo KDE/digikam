@@ -831,6 +831,19 @@ public:
                                    CopyrightPropertyUnique uniqueness = PropertyUnique);
 
     /**
+     * Returns if there are valid entries in the ImageHaarMatrix table.
+     * Returns false if the table is empty.
+     */
+    bool hasHaarFingerprints();
+
+    /**
+     * Returns a list of all images where the Haar fingerprint has either not been generated
+     * yet, or is outdated because the file is identified as changed since
+     * the generation of the fingerprint.
+     */
+    QList<qlonglong> getDirtyOrMissingFingerprints();
+
+    /**
      * Get the datetime for the item
      * @param imageID the ID of the item
      * @return the datetime for the item
