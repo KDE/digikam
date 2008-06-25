@@ -205,7 +205,7 @@ ImageWindow::ImageWindow()
 
     readSettings();
     applySettings();
-    setAutoSaveSettings("ImageViewer Settings");
+    setAutoSaveSettings("ImageViewer Settings", true);
 
     //-------------------------------------------------------------
 

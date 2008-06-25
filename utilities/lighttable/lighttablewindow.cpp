@@ -120,7 +120,7 @@ LightTableWindow::LightTableWindow()
 
     readSettings();
     applySettings();
-    setAutoSaveSettings("LightTable Settings");
+    setAutoSaveSettings("LightTable Settings", true);
 }
 
 LightTableWindow::~LightTableWindow()

@@ -281,7 +281,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
 
     readSettings();
     applySettings();
-    setAutoSaveSettings("ImageViewer Settings");
+    setAutoSaveSettings("ImageViewer Settings", true);
 
     // -- Load current items ---------------------------
 

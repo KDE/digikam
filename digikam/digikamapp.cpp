@@ -205,7 +205,7 @@ DigikamApp::DigikamApp()
     // Load Themes
     populateThemes();
 
-    setAutoSaveSettings();
+    setAutoSaveSettings("General Settings", true);
 }
 
 DigikamApp::~DigikamApp()

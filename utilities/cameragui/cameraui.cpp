@@ -142,7 +142,7 @@ CameraUI::CameraUI(QWidget* parent, const QString& cameraTitle,
     // -- Read settings --------------------------------------------------
 
     readSettings();
-    setAutoSaveSettings("Camera Settings");
+    setAutoSaveSettings("Camera Settings", true);
 
 
     // -- Init. camera controller ----------------------------------------
