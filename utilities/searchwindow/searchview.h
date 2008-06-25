@@ -131,6 +131,7 @@ protected slots:
 
     void setTheme();
     void slotAddGroupButton();
+    void slotResetButton();
     void startAnimation();
     void animationFrame(int);
     void timeLineFinished();
@@ -168,6 +169,7 @@ signals:
     void cancelPressed();
     void tryoutPressed();
     void addGroupPressed();
+    void resetPressed();
 
 protected:
 
@@ -177,6 +179,7 @@ protected:
     QHBoxLayout                *m_mainLayout;
     KDialogButtonBox           *m_buttonBox;
     KPushButton                *m_addGroupsButton;
+    KPushButton                *m_resetButton;
 };
 
 }

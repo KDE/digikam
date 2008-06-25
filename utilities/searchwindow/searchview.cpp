@@ -200,6 +200,9 @@ void SearchView::setBottomBar(SearchViewBottomBar *bar)
 
     connect(d->bar, SIGNAL(addGroupPressed()),
             this, SLOT(slotAddGroupButton()));
+
+    connect(d->bar, SIGNAL(resetPressed()),
+            this, SLOT(slotResetButton()));
 }
 
 void SearchView::read(const QString &xml)
@@ -239,6 +242,14 @@ SearchGroup *SearchView::createSearchGroup()
 void SearchView::slotAddGroupButton()
 {
     addSearchGroup();
+}
+
+void SearchView::slotResetButton()
+{
+    while (m_groups.size() > 1)
+        delete m_groups.takeLast();
+
+    m_groups.first()->reset();
 }
 
 QString SearchView::write()
@@ -418,7 +429,15 @@ SearchViewBottomBar::SearchViewBottomBar(SearchViewThemedPartsCache * cache, QWi
     m_addGroupsButton->setText(i18n("Add Search Group"));
     connect(m_addGroupsButton, SIGNAL(clicked()),
             this, SIGNAL(addGroupPressed()));
-    m_mainLayout->addWidget(m_addGroupsButton, 0, Qt::AlignLeft);
+    m_mainLayout->addWidget(m_addGroupsButton);
+
+    m_resetButton = new KPushButton(KStandardGuiItem::reset());
+    //m_addGroupsButton->setText(i18n("Reset"));
+    connect(m_resetButton, SIGNAL(clicked()),
+            this, SIGNAL(resetPressed()));
+    m_mainLayout->addWidget(m_resetButton);
+
+    m_mainLayout->addStretch(1);
 
     m_buttonBox = new KDialogButtonBox(this);
     m_buttonBox->addButton(KStandardGuiItem::ok(),
@@ -433,7 +452,7 @@ SearchViewBottomBar::SearchViewBottomBar(SearchViewThemedPartsCache * cache, QWi
                            QDialogButtonBox::ApplyRole,
                            this,
                            SIGNAL(tryoutPressed()));
-    m_mainLayout->addWidget(m_buttonBox, 0, Qt::AlignRight);
+    m_mainLayout->addWidget(m_buttonBox);
 
     setLayout(m_mainLayout);
 }
