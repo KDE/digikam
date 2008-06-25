@@ -469,7 +469,6 @@ void ShowFoto::setupUserArea()
         hlay->addWidget(d->rightSidebar);
         hlay->setSpacing(0);
         hlay->setMargin(0);
-        //hlay->setStretchFactor(m_splitter, 10);
 
         m_splitter->setStretchFactor(0, 10);      // set Canvas+thummbar container default size to max.
         m_vSplitter->setStretchFactor(0, 10);     // set Canvas default size to max.
