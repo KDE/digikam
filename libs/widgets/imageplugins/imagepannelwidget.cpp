@@ -5,7 +5,7 @@
  *
  * Date        : 2005-07-01
  * Description : a widget to draw a control pannel image tool.
- * 
+ *
  * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -13,12 +13,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -74,7 +74,7 @@ public:
         separateView       = 0;
         progressBar        = 0;
         settingsSideBar    = 0;
-        splitter           = 0;        
+        splitter           = 0;
         settingsLayout     = 0;
         settings           = 0;
         previewWidget      = 0;
@@ -83,29 +83,29 @@ public:
     }
 
     QGridLayout        *mainLayout;
-    
+
     QButtonGroup       *separateView;
-    
+
     QString             settingsSection;
-    
+
     QWidget            *settings;
     QWidget            *previewWidget;
     QWidget            *sepaBBox;
-    
+
     QVBoxLayout        *settingsLayout;
-        
+
     QSplitter          *splitter;
-    
+
     QProgressBar       *progressBar;
-    
+
     ImageRegionWidget  *imageRegionWidget;
     ImagePanIconWidget *imagePanIconWidget;
-    
+
     Sidebar            *settingsSideBar;
 
     StatusZoomBar      *zoomBar;
 };
-    
+
 ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSection, 
                                      QWidget *parent, int separateViewMode)
                  : KHBox(parent)
@@ -119,8 +119,9 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
 
     d->splitter->setFrameStyle( QFrame::NoFrame );
     d->splitter->setFrameShadow( QFrame::Plain );
-    d->splitter->setFrameShape( QFrame::NoFrame );    
+    d->splitter->setFrameShape( QFrame::NoFrame );
     d->splitter->setOpaqueResize(false);
+    d->splitter->setStretchFactor(0, 10);     // set previewview default size to max.
 
     // -------------------------------------------------------------
 
@@ -137,25 +138,20 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
                                              "image to change the clip focus."));
     l1->addWidget(d->imageRegionWidget, 0);
 
-    QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
-    rightSzPolicy.setHorizontalStretch(2);
-    rightSzPolicy.setVerticalStretch(1);
-    d->previewWidget->setSizePolicy(rightSzPolicy);
-
     // -------------------------------------------------------------
-    
+
     d->zoomBar = new StatusZoomBar(d->previewWidget);
     d->zoomBar->setWhatsThis(i18n("<p>Here set the zoom factor of the preview area."));
 
     // -------------------------------------------------------------
-    
+
     d->sepaBBox       = new QWidget(d->previewWidget);
     QHBoxLayout *hlay = new QHBoxLayout(d->sepaBBox);
     d->separateView   = new QButtonGroup(d->sepaBBox);
     d->separateView->setExclusive(true);
     hlay->setSpacing(0);
     hlay->setMargin(0);
-    
+
     if (separateViewMode == SeparateViewDuplicate ||
         separateViewMode == SeparateViewAll)
     {
@@ -168,7 +164,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
                                               "horizontally, displaying the original and target image "
                                               "at the same time. The target is duplicated from the original "
                                               "below the red dashed line." ) );
-        
+
        QPushButton *duplicateVerButton = new QPushButton( d->sepaBBox );
        d->separateView->addButton(duplicateVerButton, ImageRegionWidget::SeparateViewDuplicateVert);
        hlay->addWidget(duplicateVerButton);
@@ -179,7 +175,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
                                               "at the same time. The target is duplicated from the original to "
                                               "the right of the red dashed line." ) );
     }
-        
+
     if (separateViewMode == SeparateViewNormal ||
         separateViewMode == SeparateViewAll)
     {
@@ -192,7 +188,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
                                               "horizontally, displaying the original and target image "
                                               "at the same time. The original is above the "
                                               "red dashed line, the target below it." ) );
-        
+
        QPushButton *separateVerButton = new QPushButton( d->sepaBBox );
        d->separateView->addButton(separateVerButton, ImageRegionWidget::SeparateViewVertical);
        hlay->addWidget(separateVerButton);
@@ -203,7 +199,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
                                               "at the same time. The original is to the left of the "
                                               "red dashed line, the target to the right of it." ) );
     }
-       
+
     QPushButton *noSeparateButton = new QPushButton( d->sepaBBox );
     d->separateView->addButton(noSeparateButton, ImageRegionWidget::SeparateViewNone);
     hlay->addWidget(noSeparateButton);
@@ -211,21 +207,21 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
     noSeparateButton->setCheckable(true);
     noSeparateButton->setWhatsThis( i18n( "<p>If you enable this option, the preview area will not "
                                           "be separated." ) );
-    
+
     // -------------------------------------------------------------
-    
+
     d->progressBar = new QProgressBar(d->previewWidget);
     d->progressBar->setWhatsThis(i18n("<p>This is the percentage of the task which has been completed up to this point."));
     d->progressBar->setValue(0);
     d->progressBar->setMaximum(100);
     d->progressBar->setMaximumHeight( fontMetrics().height()+4 );
-    
+
     QLabel *space = new QLabel(d->previewWidget);
     space->setFixedWidth(KDialog::spacingHint());
 
     // -------------------------------------------------------------
-        
-    d->mainLayout->addWidget(preview,        0, 0, 2, 5 );
+
+    d->mainLayout->addWidget(preview,        0, 0, 2, 5);
     d->mainLayout->addWidget(d->zoomBar,     2, 0, 1, 1);
     d->mainLayout->addWidget(d->progressBar, 2, 2, 1, 1);
     d->mainLayout->addWidget(space,          2, 3, 1, 1);
@@ -242,9 +238,9 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
     d->settingsSideBar = new Sidebar(this, Sidebar::DockRight);
     d->settingsSideBar->setObjectName(sbName.toAscii());
     d->settingsSideBar->setSplitter(d->splitter);
-    
+
     d->settings       = new QWidget(d->settingsSideBar);
-    d->settingsLayout = new QVBoxLayout(d->settings);    
+    d->settingsLayout = new QVBoxLayout(d->settings);
 
     QFrame *frame3 = new QFrame(d->settings);
     frame3->setFrameStyle(QFrame::Panel|QFrame::Sunken);
@@ -267,12 +263,12 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
     d->settingsSideBar->loadViewState();
 
     // -------------------------------------------------------------
-    
+
     setProgressVisible(false);
     QTimer::singleShot(0, this, SLOT(slotInitGui())); 
-    
+
     // -------------------------------------------------------------
-    
+
     connect(d->imageRegionWidget, SIGNAL(signalContentsMovedEvent(bool)),
             this, SLOT(slotOriginalImageRegionChanged(bool)));
 
@@ -281,10 +277,10 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
 
     connect(d->imagePanIconWidget, SIGNAL(signalSelectionTakeFocus()),
             this, SLOT(slotPanIconTakeFocus()));
-            
+
     connect(d->separateView, SIGNAL(buttonReleased(int)),
             d->imageRegionWidget, SLOT(slotSeparateViewToggled(int)));
-    
+
     connect(d->separateView, SIGNAL(buttonReleased(int)),
             d->imagePanIconWidget, SLOT(slotSeparateViewToggled(int)));
 
@@ -308,11 +304,20 @@ ImagePannelWidget::~ImagePannelWidget()
 void ImagePannelWidget::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(d->settingsSection);
-    int mode = group.readEntry("Separate View", (int)ImageRegionWidget::SeparateViewDuplicateVert);
-    mode     = qMax((int)ImageRegionWidget::SeparateViewHorizontal, mode);
-    mode     = qMin((int)ImageRegionWidget::SeparateViewDuplicateHorz, mode);
-    
+    KConfigGroup group        = config->group(d->settingsSection);
+
+    if (group.hasKey("SplitterState")) 
+    {
+        QByteArray state;
+        state = group.readEntry("SplitterState", state);
+        d->splitter->restoreState(QByteArray::fromBase64(state));
+    }
+
+    int mode                  = group.readEntry("Separate View",
+                                                (int)ImageRegionWidget::SeparateViewDuplicateVert);
+    mode                      = qMax((int)ImageRegionWidget::SeparateViewHorizontal, mode);
+    mode                      = qMin((int)ImageRegionWidget::SeparateViewDuplicateHorz, mode);
+
     d->imageRegionWidget->blockSignals(true);
     d->imagePanIconWidget->blockSignals(true);
     d->separateView->blockSignals(true);
@@ -323,12 +328,13 @@ void ImagePannelWidget::readSettings()
     d->imagePanIconWidget->blockSignals(false);
     d->separateView->blockSignals(false);
 }
-    
+
 void ImagePannelWidget::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(d->settingsSection);
-    group.writeEntry( "Separate View", d->separateView->checkedId() );
+    KConfigGroup group        = config->group(d->settingsSection);
+    group.writeEntry("SplitterState", d->splitter->saveState().toBase64());
+    group.writeEntry("Separate View", d->separateView->checkedId());
     config->sync();
 }
 
@@ -470,7 +476,7 @@ DImg ImagePannelWidget::getOriginalRegionImage()
 void ImagePannelWidget::setPreviewImage(DImg img)
 {
     d->imageRegionWidget->updatePreviewImage(&img);
-}    
+}
 
 void ImagePannelWidget::setCenterImageRegionPosition()
 {

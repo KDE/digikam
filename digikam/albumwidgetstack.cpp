@@ -99,7 +99,7 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
     d->splitter->setFrameShadow( QFrame::Plain );
     d->splitter->setFrameShape( QFrame::NoFrame );
     d->splitter->setOpaqueResize(false);
-    d->splitter->setStretchFactor(0, 10);
+    d->splitter->setStretchFactor(0, 10);     // set previewview default size to max.
 
     d->welcomePageView  = new WelcomePageView(this);
     d->mediaPlayerView  = new MediaPlayerView(this);

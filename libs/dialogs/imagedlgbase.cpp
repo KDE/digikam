@@ -9,7 +9,7 @@
  *               designed to accept custom widgets in
  *               preview and settings area.
  *
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -190,12 +190,12 @@ ImageDlgBase::~ImageDlgBase()
     delete d;
 }
 
-void ImageDlgBase::readSettings(void)
+void ImageDlgBase::readSettings()
 {
-    QList<int> list;
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(d->name + QString(" Tool Dialog"));
-    if (group.hasKey("SplitterState")) {
+    KConfigGroup group        = config->group(d->name + QString(" Tool Dialog"));
+    if (group.hasKey("SplitterState")) 
+    {
         QByteArray state;
         state = group.readEntry("SplitterState", state);
         d->splitter->restoreState(QByteArray::fromBase64(state));
@@ -207,7 +207,7 @@ void ImageDlgBase::readSettings(void)
 void ImageDlgBase::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(d->name + QString(" Tool Dialog"));
+    KConfigGroup group        = config->group(d->name + QString(" Tool Dialog"));
     group.writeEntry("SplitterState", d->splitter->saveState().toBase64());
     saveDialogSize(group);
     config->sync();
@@ -265,11 +265,8 @@ void ImageDlgBase::setAboutData(KAboutData *about)
 
 void ImageDlgBase::setPreviewAreaWidget(QWidget *w)
 {
-    w->setParent( d->splitter );
-    QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
-    rightSzPolicy.setHorizontalStretch(2);
-    rightSzPolicy.setVerticalStretch(1);
-    w->setSizePolicy(rightSzPolicy);
+    w->setParent(d->splitter);
+    d->splitter->setStretchFactor(0, 10);      // set widget default size to max.
 }
 
 void ImageDlgBase::setUserAreaWidget(QWidget *w)

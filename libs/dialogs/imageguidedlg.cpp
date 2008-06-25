@@ -187,18 +187,14 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
     d->splitter->setFrameShadow( QFrame::Plain );
     d->splitter->setFrameShape( QFrame::NoFrame );
     d->splitter->setOpaqueResize(false);
-
-    QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
-    rightSzPolicy.setHorizontalStretch(2);
-    rightSzPolicy.setVerticalStretch(1);
-    m_imagePreviewWidget->setSizePolicy(rightSzPolicy);
+    d->splitter->setStretchFactor(0, 10);      // set imagewidget default size to max.
 
     QString sbName(d->name + QString(" Image Plugin Sidebar"));
     d->settingsSideBar = new Sidebar(d->hbox, Sidebar::DockRight);
     d->settingsSideBar->setObjectName(sbName.toAscii());
     d->settingsSideBar->setSplitter(d->splitter);
 
-    d->mainLayout->addWidget(d->hbox, 1, 0, 2, 2 );
+    d->mainLayout->addWidget(d->hbox, 1, 0, 2, 2);
     d->mainLayout->setColumnStretch(0, 10);
     d->mainLayout->setRowStretch(2, 10);
     d->mainLayout->setMargin(0);
@@ -272,9 +268,8 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
 
     // Reading splitter sizes here prevent flicker effect in dialog.
 
-    QList<int> list;
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(d->name + QString(" Tool Dialog"));
+    KConfigGroup group        = config->group(d->name + QString(" Tool Dialog"));
     if (group.hasKey("SplitterState")) 
     {
         QByteArray state;

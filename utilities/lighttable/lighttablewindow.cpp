@@ -137,7 +137,6 @@ void LightTableWindow::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("LightTable Settings");
-    QList<int> list;
     if (group.hasKey("Vertical Splitter State")) 
     {
         QByteArray state;
@@ -176,7 +175,7 @@ void LightTableWindow::applySettings()
     d->previewView->setLoadFullImageSize(group.readEntry("Load Full Image size", false));
     refreshView();
  }
- 
+
 void LightTableWindow::refreshView()
 {
     d->leftSidebar->refreshTagsView();
@@ -217,15 +216,19 @@ void LightTableWindow::setupUserArea()
     hlay->addWidget(d->rightSidebar);
     hlay->setSpacing(0);
     hlay->setMargin(0);
+    hlay->setStretchFactor(d->hSplitter, 10);
 
     d->hSplitter->setFrameStyle( QFrame::NoFrame );
     d->hSplitter->setFrameShadow( QFrame::Plain );
     d->hSplitter->setFrameShape( QFrame::NoFrame );
     d->hSplitter->setOpaqueResize(false);
+    d->hSplitter->setStretchFactor(1, 10);      // set previewview+thumbbar container default size to max.
+
     d->vSplitter->setFrameStyle( QFrame::NoFrame );
     d->vSplitter->setFrameShadow( QFrame::Plain );
     d->vSplitter->setFrameShape( QFrame::NoFrame );
     d->vSplitter->setOpaqueResize(false);
+    d->vSplitter->setStretchFactor(1, 10);      // set previewview default size to max.
 
     setCentralWidget(mainW);
 }

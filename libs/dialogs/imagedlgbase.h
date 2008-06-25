@@ -8,20 +8,20 @@
  *               filter interface. The dialog layout is 
  *               designed to accept custom widgets in 
  *               preview and settings area.
- * 
- * Copyright 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ *
+ * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef IMAGEDLGBASE_H
@@ -56,7 +56,7 @@ class DIGIKAM_EXPORT ImageDlgBase : public KDialog
 public:
 
     ImageDlgBase(QWidget *parent, QString title, QString name, 
-                 bool loadFileSettings=true, 
+                 bool loadFileSettings=true,
                  bool tryAction=false);
     ~ImageDlgBase();
 
@@ -76,9 +76,9 @@ protected:
 
     void closeEvent(QCloseEvent *e);
     virtual void finalRendering(){};
-    virtual void writeUserSettings(void){};
-    virtual void readUserSettings(void){ slotDefault(); };
-    virtual void resetValues(void){};
+    virtual void writeUserSettings(){};
+    virtual void readUserSettings(){ slotDefault(); };
+    virtual void resetValues(){};
 
 private slots:
 
@@ -89,8 +89,8 @@ private slots:
 
 private:
 
-    void readSettings(void);
-    void writeSettings(void);
+    void readSettings();
+    void writeSettings();
 
 private:
 

@@ -5,22 +5,22 @@
  *
  * Date        : 2004-09-16
  * Description : Camera interface
- * 
+ *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -162,21 +162,16 @@ CameraUI::~CameraUI()
 
 void CameraUI::setupUserArea()
 {
-    KHBox* widget = new KHBox(this);
-    d->splitter   = new QSplitter(widget);
-    d->view       = new CameraIconView(this, d->splitter);
-
-    QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
-    rightSzPolicy.setHorizontalStretch(2);
-    rightSzPolicy.setVerticalStretch(1);
-    d->view->setSizePolicy(rightSzPolicy);
-
+    KHBox* widget   = new KHBox(this);
+    d->splitter     = new QSplitter(widget);
+    d->view         = new CameraIconView(this, d->splitter);
     d->rightSidebar = new ImagePropertiesSideBarCamGui(widget, d->splitter, Sidebar::DockRight, true);
     d->rightSidebar->setObjectName("CameraGui Sidebar Right");
     d->splitter->setFrameStyle( QFrame::NoFrame );
     d->splitter->setFrameShadow( QFrame::Plain );
     d->splitter->setFrameShape( QFrame::NoFrame );
     d->splitter->setOpaqueResize(false);
+    d->splitter->setStretchFactor(0, 10);      // set iconview default size to max.
 
     // -------------------------------------------------------------------------
 
