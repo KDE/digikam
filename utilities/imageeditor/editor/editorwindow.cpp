@@ -732,7 +732,7 @@ void EditorWindow::slotZoomTo100Percents()
 void EditorWindow::slotZoomSelected()
 {
     QString txt = d->zoomCombo->currentText();
-    txt = txt.left(txt.indexOf('%'));
+    txt         = txt.left(txt.indexOf('%'));
     slotZoomTextChanged(txt);
 }
 
@@ -803,21 +803,15 @@ void EditorWindow::unLoadImagePlugins()
 void EditorWindow::readStandardSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("ImageViewer Settings");
+    KConfigGroup group        = config->group("ImageViewer Settings");
 
     // Restore Canvas layout
-    QSizePolicy szPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
-    szPolicy.setHorizontalStretch(2);
-    szPolicy.setVerticalStretch(1);
-    QList<int> list;
     if(group.hasKey("Vertical Splitter Sizes") && m_vSplitter)
     {
         QByteArray state;
         state = group.readEntry("Vertical Splitter State", state);
         m_vSplitter->restoreState(QByteArray::fromBase64(state));
     }
-    else
-        m_canvas->setSizePolicy(szPolicy);
 
     // Restore full screen Mode
     if (group.readEntry("FullScreen", false))
@@ -916,18 +910,12 @@ void EditorWindow::applyStandardSettings()
 
     // -- GUI Settings -------------------------------------------------------
 
-    QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
-    rightSzPolicy.setHorizontalStretch(2);
-    rightSzPolicy.setVerticalStretch(1);
-    QList<int> list;
     if (group.hasKey("Splitter State")) 
     {
         QByteArray state;
         state = group.readEntry("Splitter State", state);
         m_splitter->restoreState(QByteArray::fromBase64(state));
     }
-    else
-        m_canvas->setSizePolicy(rightSzPolicy);
 
     d->fullScreenHideToolBar = group.readEntry("FullScreen Hide ToolBar", false);
     m_fullScreenHideThumbBar = group.readEntry("FullScreenHideThumbBar", true);
