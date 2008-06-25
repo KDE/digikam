@@ -45,7 +45,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 004 ==> 149966 : Alternative IPTC Keyword Separator (dot notation).
 005 ==> 129437 : Album could point to network path. Now it's impossible to view photos from shared network drive.
 006 ==> 137694 : Allow album pictures to be stored on network devices.
-007 ==> 114682 : Wish: about library path.
+007 ==> 114682 : About library path.
 008 ==> 122516 : Album Path cannot be on Network device (Unmounted).
 009 ==> 107871 : Allow multiple album library path.
 010 ==> 105645 : Impossible to not copy images in ~/Pictures.
@@ -70,8 +70,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 029 ==> 112473 : findimages shows only small thumbnails.
 030 ==> 150077 : Find Duplicate Images tool quite unusable on many images (a couple of issues).
 031 ==> 161858 : Find Duplicate Image fails with Canon Raw Files.
-032 ==> 162152 : Wish: Batch Duplicate Image Management.
+032 ==> 162152 : Batch Duplicate Image Management.
 033 ==> 164418 : GPS window zoom possibility.
-034 ==> 117287 : search albums on read only album path.
-035 ==> 
+034 ==> 117287 : Search albums on read only album path.
+035 ==> 164600 : No picture in view pane.
+036 ==>
 
