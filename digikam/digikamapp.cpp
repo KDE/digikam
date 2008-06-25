@@ -290,25 +290,6 @@ void DigikamApp::show()
 
     KDcrawIface::DcrawBinary::instance()->checkReport();
 
-    // Check if Finger Print Generator have be run already.
-
-    if(!d->config->group("General Settings").readEntry("Finger Prints Generator First Run", false))
-    {
-        QString msg = i18n("Image finger-prints generator have never been run on this computer. "
-                           "If finger-prints are not generated over your collections, all "
-                           "Fuzzy Search Tools will not be suitable.\n"
-                           "Do you want to build all finger-prints now ?\n"
-                           "Note: This process can take a while. You can run it "
-                           "later using 'Tools/Rebuild all FingerPrints'");
-        int result = KMessageBox::questionYesNo(this, msg, i18n("Warning"),
-                                                KStandardGuiItem::yes(),
-                                                KStandardGuiItem::no(),
-                                                QString("FingerPrintsGeneratorFirstRun"));
-
-        if (result == KMessageBox::Yes)
-            runFingerPrintsGenerator(true);
-    }
-
     // Init album icon view zoom factor.
     slotThumbSizeChanged(AlbumSettings::instance()->getDefaultIconSize());
     slotZoomSliderChanged(AlbumSettings::instance()->getDefaultIconSize());

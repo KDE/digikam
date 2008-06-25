@@ -112,6 +112,7 @@ public:
         timerSketch           = 0;
         timerImage            = 0;
         findDuplicatesPanel   = 0;
+        fingerprintsChecked   = false;
     }
 
     QPushButton            *resetButton;
@@ -157,6 +158,8 @@ public:
 
     SAlbum                 *imageSAlbum;
     SAlbum                 *sketchSAlbum;
+
+    bool                    fingerprintsChecked;
 };
 
 FuzzySearchView::FuzzySearchView(QWidget *parent)
@@ -518,6 +521,27 @@ SearchTextBar* FuzzySearchView::searchBar() const
 
 void FuzzySearchView::setActive(bool val)
 {
+    // at first occasion, warn if no fingerprints are available
+    if (val && !d->fingerprintsChecked && isVisible())
+    {
+        if (!DatabaseAccess().db()->hasHaarFingerprints())
+        {
+            QString msg = i18n("Image fingerprints have not yet been generated for your collection. "
+                               "The Fuzzy Search Tools will not be operational "
+                               "without pregenerated fingerprints.\n"
+                               "Do you want to build fingerprints now?\n"
+                               "Note: This process can take a while. You can run it "
+                               "any time later using 'Tools/Rebuild all FingerPrints'");
+            int result = KMessageBox::questionYesNo(this, msg, i18n("No Fingerprints"));
+
+            if (result == KMessageBox::Yes)
+            {
+                emit signalUpdateFingerPrints();
+            }
+        }
+        d->fingerprintsChecked = true;
+    }
+
     int tab = d->tabWidget->currentIndex();
 
     switch(tab)
