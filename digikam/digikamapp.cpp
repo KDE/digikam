@@ -966,6 +966,14 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
+    QAction* duplicatesAction = actionCollection()->addAction(KStandardAction::Find, "find_duplicates",
+                                                              d->view, SLOT(slotNewDuplicatesSearch()));
+    duplicatesAction->setText(i18n("Find Duplicates..."));
+    duplicatesAction->setIcon(BarIcon("tools-wizard"));
+    duplicatesAction->setShortcut(Qt::CTRL+Qt::Key_D);
+
+    // -----------------------------------------------------------
+
     KAction *ltAction = new KAction(KIcon("lighttable"), i18n("Light Table"), this);
     ltAction->setShortcut(Qt::SHIFT+Qt::Key_F6);
     connect(ltAction, SIGNAL(triggered()), d->view, SLOT(slotLightTable()));

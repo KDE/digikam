@@ -122,6 +122,7 @@ public slots:
     // Search action slots
     void slotNewKeywordSearch();
     void slotNewAdvancedSearch();
+    void slotNewDuplicatesSearch();
 
     // Image action slots
     void slotImageLightTable();

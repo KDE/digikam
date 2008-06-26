@@ -657,6 +657,13 @@ void DigikamView::slotNewAdvancedSearch()
     d->searchTabHeader->newAdvancedSearch();
 }
 
+void DigikamView::slotNewDuplicatesSearch()
+{
+    if (d->leftSideBar->getActiveTab() != d->fuzzySearchView)
+        d->leftSideBar->setActiveTab(d->fuzzySearchView);
+    d->fuzzySearchView->newDuplicatesSearch();
+}
+
 void DigikamView::slotAlbumAdded(Album *album)
 {
     if (!album->isRoot())

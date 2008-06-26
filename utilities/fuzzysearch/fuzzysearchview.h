@@ -58,6 +58,8 @@ public:
     void setActive(bool val);
     void setImageInfo(const ImageInfo& info);
 
+    void newDuplicatesSearch();
+
 signals:
 
     void signalUpdateFingerPrints();

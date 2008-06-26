@@ -477,6 +477,11 @@ FuzzySearchView::~FuzzySearchView()
 
 // Common methods ----------------------------------------------------------------------
 
+void FuzzySearchView::newDuplicatesSearch()
+{
+    d->tabWidget->setCurrentIndex(FuzzySearchViewPriv::DUPLICATES);
+}
+
 void FuzzySearchView::readConfig()
 {
     KSharedConfig::Ptr config = KGlobal::config();
