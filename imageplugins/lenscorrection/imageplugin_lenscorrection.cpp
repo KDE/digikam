@@ -81,7 +81,10 @@ ImagePlugin_LensCorrection::~ImagePlugin_LensCorrection()
 
 void ImagePlugin_LensCorrection::setEnabledActions(bool enable)
 {
+#ifdef HAVE_LENSFUN
     m_autoCorrectionAction->setEnabled(enable);
+#endif // HAVE_LENSFUN
+
     m_lensdistortionAction->setEnabled(enable);
     m_antivignettingAction->setEnabled(enable);
 }
