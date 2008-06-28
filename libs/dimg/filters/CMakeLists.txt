@@ -1,4 +1,4 @@
 INSTALL( FILES  bcgmodifier.h hslmodifier.h dimgthreadedfilter.h dimgimagefilters.h 
                 icctransform.h colormodifier.h dimgsharpen.h dimggaussianblur.h  
-         DESTINATION ${INCLUDE_INSTALL_DIR}/digikam )
+         DESTINATION ${INCLUDE_INSTALL_DIR}/digikam COMPONENT Devel )
 

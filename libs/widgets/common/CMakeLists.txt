@@ -13,5 +13,5 @@ INSTALL(FILES histogramwidget.h
               paniconwidget.h 
               previewwidget.h  
 	      searchtextbar.h
-         DESTINATION ${INCLUDE_INSTALL_DIR}/digikam)
+         DESTINATION ${INCLUDE_INSTALL_DIR}/digikam COMPONENT Devel)
 

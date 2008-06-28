@@ -7,5 +7,5 @@ INSTALL( FILES dimg.h
                dcolorcomposer.h 
                dcolorblend.h 
                ddebug.h 
-         DESTINATION ${INCLUDE_INSTALL_DIR}/digikam 
+         DESTINATION ${INCLUDE_INSTALL_DIR}/digikam COMPONENT Devel 
        )

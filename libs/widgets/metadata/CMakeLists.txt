@@ -6,4 +6,4 @@ INSTALL( FILES exifwidget.h
                metadatalistview.h 
                metadatawidget.h
 	       xmpwidget.h
-         DESTINATION ${INCLUDE_INSTALL_DIR}/digikam )
+         DESTINATION ${INCLUDE_INSTALL_DIR}/digikam COMPONENT Devel)
