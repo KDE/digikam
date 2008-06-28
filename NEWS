@@ -74,5 +74,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 033 ==> 164418 : GPS window zoom possibility.
 034 ==> 117287 : Search albums on read only album path.
 035 ==> 164600 : No picture in view pane.
-036 ==>
+036 ==> 164973 : Showfoto crashed at startup.
+037 ==> 
 
