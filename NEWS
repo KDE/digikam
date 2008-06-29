@@ -76,6 +76,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 035 ==> 164600 : No picture in view pane.
 036 ==> 164973 : Showfoto crashed at startup.
 037 ==> 165275 : build-failure - imageresize.cpp - 'KToolInvocation' has not been declared.
-038 ==> 
+038 ==> 165292 : albumwidgetstack.cpp can't find Phonon/MediaObject.
+039 ==> 
 
 
