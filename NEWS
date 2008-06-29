@@ -75,5 +75,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 034 ==> 117287 : Search albums on read only album path.
 035 ==> 164600 : No picture in view pane.
 036 ==> 164973 : Showfoto crashed at startup.
-037 ==> 
+037 ==> 165275 : build-failure - imageresize.cpp - 'KToolInvocation' has not been declared.
+038 ==> 
+
 
