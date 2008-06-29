@@ -32,9 +32,9 @@
 
 #include <kdialog.h>
 #include <klocale.h>
-#include <Phonon/SeekSlider>
-#include <Phonon/VideoPlayer>
-#include <Phonon/VideoWidget>
+#include <phonon/seekslider.h>
+#include <phonon/videoplayer.h>
+#include <phonon/videowidget.h>
 
 // Local includes.
 
