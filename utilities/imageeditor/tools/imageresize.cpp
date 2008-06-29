@@ -60,7 +60,7 @@
 #include <knuminput.h>
 #include <kglobalsettings.h>
 #include <kglobal.h>
-#include <KToolInvocation>
+#include <ktoolinvocation.h>
 
 // Digikam includes.
 
