@@ -78,6 +78,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 037 ==> 165275 : build-failure - imageresize.cpp - 'KToolInvocation' has not been declared.
 038 ==> 165292 : albumwidgetstack.cpp can't find Phonon/MediaObject.
 039 ==> 165341 : Crash when changing histogram channel when welcome page is shown.
-040 ==> 
+040 ==> 165318 : digiKam doesn't start because of SQL.
+041 ==> 
 
 
