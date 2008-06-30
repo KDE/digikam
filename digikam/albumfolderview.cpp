@@ -1487,21 +1487,17 @@ void AlbumFolderView::clearEmptyGroupItems()
     QList<AlbumFolderViewItem*> deleteItems;
 
     for (QList<AlbumFolderViewItem*>::iterator it=d->groupItems.begin();
-         it != d->groupItems.end(); ++it)
+         it != d->groupItems.end(); )
     {
         AlbumFolderViewItem* groupItem = *it;
 
         if (!groupItem->firstChild())
         {
-            deleteItems.append(groupItem);
+            it = d->groupItems.erase(it);
+            delete groupItem;
         }
-    }
-
-    for (QList<AlbumFolderViewItem*>::iterator it=deleteItems.begin();
-         it != deleteItems.end(); ++it)
-    {
-        d->groupItems.erase(it);
-        delete *it;
+        else
+            ++it;
     }
 }
 
@@ -1521,7 +1517,7 @@ void AlbumFolderView::refresh()
 void AlbumFolderView::slotRefresh(const QMap<int, int>& albumsStatMap)
 {
     Q3ListViewItemIterator it(this);
-    
+
     while (it.current())
     {
         AlbumFolderViewItem* item = dynamic_cast<AlbumFolderViewItem*>(*it);
