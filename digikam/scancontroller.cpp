@@ -301,7 +301,11 @@ void ScanController::run()
 
         if (doInit)
         {
+            // pass "this" as InitializationObserver
             bool success = DatabaseAccess::checkReadyForUse(this);
+            // If d->advice has not been adjusted to a value indicating failure, do this here
+            if (!success && d->advice == Success)
+                d->advice = ContinueWithoutDatabase;
             emit databaseInitialized(success);
         }
         else if (doScan)
@@ -320,6 +324,7 @@ void ScanController::run()
     }
 }
 
+// (also implementing InitializationObserver)
 void ScanController::connectCollectionScanner(CollectionScanner *scanner)
 {
     scanner->setSignalsEnabled(true);
@@ -389,6 +394,7 @@ void ScanController::slotStartScanningAlbumRoots()
         d->progressDialog->addedAction(d->actionPixmap(), message);
 }
 
+// implementing InitializationObserver
 void ScanController::moreSchemaUpdateSteps(int numberOfSteps)
 {
     // not from main thread
@@ -396,6 +402,7 @@ void ScanController::moreSchemaUpdateSteps(int numberOfSteps)
     emit incrementProgressDialog(numberOfSteps);
 }
 
+// implementing InitializationObserver
 void ScanController::schemaUpdateProgress(const QString &message, int numberOfSteps)
 {
     // not from main thread
@@ -415,6 +422,7 @@ void ScanController::slotProgressFromInitialization(const QString& message, int 
     }
 }
 
+// implementing InitializationObserver
 void ScanController::finishedSchemaUpdate(UpdateResult result)
 {
     // not from main thread
@@ -432,6 +440,7 @@ void ScanController::finishedSchemaUpdate(UpdateResult result)
     }
 }
 
+// implementing InitializationObserver
 void ScanController::error(const QString &errorMessage)
 {
     // not from main thread
