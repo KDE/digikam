@@ -49,7 +49,9 @@ class DatabaseAccessStaticPriv
 {
 public:
     DatabaseAccessStaticPriv()
-    : backend(0), db(0), infoCache(0), databaseWatch(0), mutex(QMutex::Recursive) // create a recursive mutex
+    : backend(0), db(0), infoCache(0), databaseWatch(0),
+      mutex(QMutex::Recursive), // create a recursive mutex
+      initializing(false)
     {
         // create a unique identifier for this application (as an application accessing a database
         applicationIdentifier = QUuid::createUuid();
@@ -64,6 +66,8 @@ public:
     QMutex mutex;
     QString lastError;
     QUuid applicationIdentifier;
+
+    bool initializing;
 };
 
 DatabaseAccessStaticPriv *DatabaseAccess::d = 0;
@@ -71,11 +75,16 @@ DatabaseAccessStaticPriv *DatabaseAccess::d = 0;
 DatabaseAccess::DatabaseAccess()
 {
     d->mutex.lock();
-    if (!d->backend->isOpen())
+    if (!d->backend->isOpen() && !d->initializing)
     {
+        // avoid endless loops
+        d->initializing = true;
+
         d->backend->open(d->parameters);
         d->databaseWatch->setDatabaseIdentifier(d->db->databaseUuid());
         CollectionManager::instance()->refresh();
+
+        d->initializing = false;
     }
 }
 
@@ -194,17 +203,25 @@ bool DatabaseAccess::checkReadyForUse(InitializationObserver *observer)
         }
     }
 
+    // avoid endless loops (if called methods create new DatabaseAccess objects)
+    d->initializing = true;
+
     // update schema
     SchemaUpdater updater(&access);
     updater.setObserver(observer);
     if (!d->backend->initSchema(&updater))
+    {
+        d->initializing = false;
         return false;
+    }
 
     // set identifier again
     d->databaseWatch->setDatabaseIdentifier(d->db->databaseUuid());
 
     // initialize CollectionManager
     CollectionManager::instance()->refresh();
+
+    d->initializing = false;
 
     return d->backend->isReady();
 }
