@@ -69,7 +69,6 @@ public:
         dragSwitchId     = -1;
 
         stack            = 0;
-        splitter         = 0;
         dragSwitchTimer  = 0;
     }
 
@@ -84,7 +83,6 @@ public:
     int             dragSwitchId;
 
     QStackedWidget *stack;
-    QSplitter      *splitter;
     QSize           bigSize;
     QTimer         *dragSwitchTimer; 
 };
