@@ -114,10 +114,9 @@ void Sidebar::setSplitter(QSplitter *sp)
 void Sidebar::loadViewState()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(QString("%1").arg(objectName()));
-
-    int tab        = group.readEntry("ActiveTab", 0);
-    bool minimized = group.readEntry("Minimized", d->minimizedDefault);
+    KConfigGroup group        = config->group(QString("%1").arg(objectName()));
+    int tab                   = group.readEntry("ActiveTab", 0);
+    bool minimized            = group.readEntry("Minimized", d->minimizedDefault);
 
     if (minimized)
     {
@@ -135,7 +134,7 @@ void Sidebar::loadViewState()
 void Sidebar::saveViewState()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(QString("%1").arg(objectName()));
+    KConfigGroup group        = config->group(QString("%1").arg(objectName()));
     group.writeEntry("ActiveTab", d->activeTab);
     group.writeEntry("Minimized", d->minimized);
     config->sync();
