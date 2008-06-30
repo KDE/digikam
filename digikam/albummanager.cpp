@@ -721,8 +721,8 @@ void AlbumManager::scanTAlbums()
             TAlbum* album = *iter;
             if (album->m_id == 0)
                 continue;
-            
-            TAlbum* parent = *tagHash.find(album->m_pid);
+
+            TAlbum* parent = tagHash.value(album->m_pid);
             if (parent)
             {
                 album->setParent(parent);
