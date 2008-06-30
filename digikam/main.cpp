@@ -29,6 +29,7 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QFile>
+#include <QSqlDatabase>
 
 // KDE includes
 
@@ -303,6 +304,15 @@ int main(int argc, char *argv[])
 
     DDebug() << "Root Album Path: " << albumPath << endl;
     DDebug() << "Database Path: " << dbPath << endl;
+
+    // Check if SQLite Qt4 plugin is available.
+
+    if (!QSqlDatabase::isDriverAvailable("QSQLITE"))
+    {
+        DDebug() << "Qt4 SQlite database plugin is not available. "
+                    "Please install it!" << endl;
+        return 1;
+    }
 
     // initialize database
     Digikam::AlbumManager* man = Digikam::AlbumManager::instance();
