@@ -190,7 +190,7 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
     d->splitter->setStretchFactor(0, 10);      // set imagewidget default size to max.
 
     QString sbName(d->name + QString(" Image Plugin Sidebar"));
-    d->settingsSideBar = new Sidebar(d->hbox, Sidebar::DockRight);
+    d->settingsSideBar = new Sidebar(d->hbox, KMultiTabBar::Right);
     d->settingsSideBar->setObjectName(sbName.toAscii());
     d->settingsSideBar->setSplitter(d->splitter);
 

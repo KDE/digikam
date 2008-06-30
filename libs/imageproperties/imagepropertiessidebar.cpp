@@ -58,7 +58,8 @@ namespace Digikam
 {
 
 ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget *parent,
-                                               QSplitter *splitter, Side side, 
+                                               QSplitter *splitter,
+                                               KMultiTabBarPosition side,
                                                bool mimimizedDefault)
                       : Sidebar(parent, side, mimimizedDefault)
 {

@@ -165,7 +165,7 @@ void CameraUI::setupUserArea()
     KHBox* widget   = new KHBox(this);
     d->splitter     = new QSplitter(widget);
     d->view         = new CameraIconView(this, d->splitter);
-    d->rightSidebar = new ImagePropertiesSideBarCamGui(widget, d->splitter, Sidebar::DockRight, true);
+    d->rightSidebar = new ImagePropertiesSideBarCamGui(widget, d->splitter, KMultiTabBar::Right, true);
     d->rightSidebar->setObjectName("CameraGui Sidebar Right");
     d->splitter->setFrameStyle( QFrame::NoFrame );
     d->splitter->setFrameShadow( QFrame::Plain );

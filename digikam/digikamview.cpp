@@ -183,7 +183,7 @@ DigikamView::DigikamView(QWidget *parent)
     d = new DigikamViewPriv;
     d->parent       = static_cast<DigikamApp *>(parent);
     d->albumManager = AlbumManager::instance();
-    d->leftSideBar  = new Sidebar(this, Sidebar::DockLeft);
+    d->leftSideBar  = new Sidebar(this, KMultiTabBar::Left);
     d->leftSideBar->setObjectName("Digikam Left Sidebar");
 
     d->splitter = new QSplitter(this);
@@ -196,7 +196,7 @@ DigikamView::DigikamView(QWidget *parent)
     d->albumWidgetStack = new AlbumWidgetStack(d->splitter);
     d->splitter->setStretchFactor(1, 10);      // set AlbumWidgetStack default size to max.
     d->iconView         = d->albumWidgetStack->albumIconView();
-    d->rightSideBar     = new ImagePropertiesSideBarDB(this, d->splitter, Sidebar::DockRight, true);
+    d->rightSideBar     = new ImagePropertiesSideBarDB(this, d->splitter, KMultiTabBar::Right, true);
     d->rightSideBar->setObjectName("Digikam Right Sidebar");
 
     // To the left.

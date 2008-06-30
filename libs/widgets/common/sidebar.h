@@ -7,7 +7,7 @@
  * Description : a widget to manage sidebar in gui.
  *
  * Copyright (C) 2005-2006 by Joern Ahrens <joern.ahrens@kdemail.net>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -56,22 +56,15 @@ class DIGIKAM_EXPORT Sidebar : public KMultiTabBar
 public:
 
     /**
-     * The side where the bar should be visible
-     */
-    enum Side
-    {
-        DockLeft,
-        DockRight
-    };
-
-    /**
      * Creates a new sidebar
      * @param parent sidebar's parent
      * @param name the name of the widget is used to store its state to config
      * @param side where the sidebar should be displayed. At the left or right border.
-     * @param minimizedDefault hide the sidebar when the program is started the first time?
+                   Use KMultiTabBar::Left or KMultiTabBar::Right.
+     * @param minimizedDefault hide the sidebar when the program is started the first time.
      */
-    Sidebar(QWidget *parent, Side side=DockLeft, bool mimimizedDefault=false);
+    Sidebar(QWidget *parent, KMultiTabBarPosition side=KMultiTabBar::Left, 
+            bool mimimizedDefault=false);
     virtual ~Sidebar();
 
     /**

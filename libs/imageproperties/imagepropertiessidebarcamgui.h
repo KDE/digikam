@@ -53,7 +53,7 @@ class DIGIKAM_EXPORT ImagePropertiesSideBarCamGui : public Sidebar
 public:
 
     ImagePropertiesSideBarCamGui(QWidget* parent, QSplitter *splitter,
-                                 Side side=Sidebar::DockLeft, bool mimimizedDefault=false);
+                                 KMultiTabBarPosition side=KMultiTabBar::Left, bool mimimizedDefault=false);
 
     ~ImagePropertiesSideBarCamGui();
 

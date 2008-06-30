@@ -54,7 +54,7 @@ class DIGIKAM_EXPORT ImagePropertiesSideBar : public Sidebar
 public:
 
     ImagePropertiesSideBar(QWidget* parent, QSplitter *splitter,
-                           Side side=Sidebar::DockLeft, bool mimimizedDefault=false);
+                           KMultiTabBarPosition side=KMultiTabBar::Left, bool mimimizedDefault=false);
     ~ImagePropertiesSideBar();
 
     virtual void itemChanged(const KUrl& url, const QRect &rect = QRect(), DImg *img = 0);

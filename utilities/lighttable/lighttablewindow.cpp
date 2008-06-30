@@ -196,7 +196,7 @@ void LightTableWindow::setupUserArea()
     QWidget* mainW    = new QWidget(this);
     d->hSplitter      = new QSplitter(Qt::Horizontal, mainW);
     QHBoxLayout *hlay = new QHBoxLayout(mainW);
-    d->leftSidebar    = new ImagePropertiesSideBarDB(mainW, d->hSplitter, Sidebar::DockLeft, true);
+    d->leftSidebar    = new ImagePropertiesSideBarDB(mainW, d->hSplitter, KMultiTabBar::Left, true);
 
     QWidget* centralW = new QWidget(d->hSplitter);
     QVBoxLayout *vlay = new QVBoxLayout(centralW);
@@ -205,7 +205,7 @@ void LightTableWindow::setupUserArea()
                                           AlbumSettings::instance()->getExifRotate());
     d->previewView    = new LightTableView(d->vSplitter);
 
-    d->rightSidebar   = new ImagePropertiesSideBarDB(mainW, d->hSplitter, Sidebar::DockRight, true);
+    d->rightSidebar   = new ImagePropertiesSideBarDB(mainW, d->hSplitter, KMultiTabBar::Right, true);
 
     vlay->addWidget(d->vSplitter);
     vlay->setSpacing(0);

@@ -235,7 +235,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
     // -------------------------------------------------------------
 
     QString sbName(d->settingsSection + QString(" Image Plugin Sidebar"));
-    d->settingsSideBar = new Sidebar(this, Sidebar::DockRight);
+    d->settingsSideBar = new Sidebar(this, KMultiTabBar::Right);
     d->settingsSideBar->setObjectName(sbName.toAscii());
     d->settingsSideBar->setSplitter(d->splitter);
 

@@ -300,7 +300,7 @@ void ImageWindow::setupUserArea()
         m_canvas->makeDefaultEditingCanvas();
         m_splitter->setStretchFactor(1, 10);      // set Canvas default size to max.
 
-        d->rightSidebar  = new ImagePropertiesSideBarDB(widget, m_splitter, Sidebar::DockRight, true);
+        d->rightSidebar   = new ImagePropertiesSideBarDB(widget, m_splitter, KMultiTabBar::Right, true);
         d->rightSidebar->setObjectName("ImageEditor Right Sidebar");
 
         hlay->addWidget(m_splitter);
@@ -328,7 +328,7 @@ void ImageWindow::setupUserArea()
         vlay->setMargin(0);
 
         QHBoxLayout *hlay = new QHBoxLayout(widget);
-        d->rightSidebar   = new ImagePropertiesSideBarDB(widget, m_splitter, Sidebar::DockRight, true);
+        d->rightSidebar   = new ImagePropertiesSideBarDB(widget, m_splitter, KMultiTabBar::Right, true);
         d->rightSidebar->setObjectName("ImageEditor Right Sidebar");
 
         hlay->addWidget(m_splitter);

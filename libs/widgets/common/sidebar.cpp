@@ -7,7 +7,7 @@
  * Description : a widget to manage sidebar in gui.
  *
  * Copyright (C) 2005-2006 by Joern Ahrens <joern.ahrens@kdemail.net>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>  
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>  
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -87,16 +87,13 @@ public:
     QSplitter      *splitter;
     QSize           bigSize;
     QTimer         *dragSwitchTimer; 
-
-    Sidebar::Side   side;
 };
 
-Sidebar::Sidebar(QWidget *parent, Side side, bool minimizedDefault)
-       : KMultiTabBar(KMultiTabBar::Left, parent)
+Sidebar::Sidebar(QWidget *parent, KMultiTabBarPosition side, bool minimizedDefault)
+       : KMultiTabBar(side, parent)
 {
     d = new SidebarPriv;
     d->minimizedDefault = minimizedDefault;
-    d->side             = side;
     d->dragSwitchTimer  = new QTimer(this);
 
     connect(d->dragSwitchTimer, SIGNAL(timeout()),
@@ -114,11 +111,6 @@ Sidebar::~Sidebar()
 void Sidebar::setSplitter(QSplitter *sp)
 {
     d->stack = new QStackedWidget(sp);
-
-    if(d->side == DockLeft)
-        setPosition(KMultiTabBar::Left);
-    else
-        setPosition(KMultiTabBar::Right);
 }
 
 void Sidebar::loadViewState()

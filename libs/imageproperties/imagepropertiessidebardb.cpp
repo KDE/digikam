@@ -8,7 +8,7 @@
  *               digiKam database.
  *
  * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -83,7 +83,7 @@ public:
 };
 
 ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, QSplitter *splitter,
-                                                   Side side, bool mimimizedDefault)
+                                                   KMultiTabBarPosition side, bool mimimizedDefault)
                         : ImagePropertiesSideBar(parent, splitter, side, mimimizedDefault)
 {
     // Navigate bar is disabled by passing false to parent class constructor, and tab constructors
