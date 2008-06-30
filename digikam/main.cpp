@@ -309,8 +309,8 @@ int main(int argc, char *argv[])
 
     if (!QSqlDatabase::isDriverAvailable("QSQLITE"))
     {
-        DDebug() << "Qt4 SQlite database plugin is not available. "
-                    "Please install it!" << endl;
+        KMessageBox::error(0, i18n("Qt4 SQlite database plugin is not available. "
+                                   "Please install it!"));
         return 1;
     }
 
