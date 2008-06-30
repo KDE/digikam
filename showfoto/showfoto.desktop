@@ -78,4 +78,4 @@ Type=Application
 MimeType=image/gif;image/x-xpm;image/x-xbm;image/jpeg;image/png;image/tiff;image/x-bmp;image/x-psd;image/x-eim;image/x-portable-bitmap;image/x-portable-pixmap;image/x-portable-greymap;image/x-raw;
 Terminal=false
 Categories=Qt;KDE;Graphics;
-DocPath=showfoto/index.html
+X-DocPath=showfoto/index.html
