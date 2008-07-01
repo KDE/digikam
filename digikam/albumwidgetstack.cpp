@@ -86,10 +86,10 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
     d = new AlbumWidgetStackPriv;
 
     d->albumIconView    = new AlbumIconView(this);
-
     d->splitter         = new QSplitter(Qt::Vertical, this);
     d->imagePreviewView = new ImagePreviewView(d->splitter, this);
-    d->thumbBar         = new ImagePreviewBar(d->splitter, Qt::Horizontal);
+    d->thumbBar         = new ImagePreviewBar(d->splitter, Qt::Horizontal,
+                                              AlbumSettings::instance()->getExifRotate());
 
     // To prevent flicker effect with content when user change icon view filter 
     // if scrollbar appears or disapears.
@@ -99,7 +99,8 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
     d->splitter->setFrameShadow( QFrame::Plain );
     d->splitter->setFrameShape( QFrame::NoFrame );
     d->splitter->setOpaqueResize(false);
-    d->splitter->setStretchFactor(0, 10);     // set previewview default size to max.
+    d->splitter->setStretchFactor(0, 10);
+    d->splitter->setStretchFactor(1, 2);
 
     d->welcomePageView  = new WelcomePageView(this);
     d->mediaPlayerView  = new MediaPlayerView(this);

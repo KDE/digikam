@@ -194,7 +194,6 @@ DigikamView::DigikamView(QWidget *parent)
     d->leftSideBar->setObjectName("Digikam Left Sidebar");
     d->splitter->setParent(this);
 
-
     d->albumWidgetStack = new AlbumWidgetStack(d->splitter);
     d->splitter->setStretchFactor(1, 10);      // set AlbumWidgetStack default size to max.
     d->iconView         = d->albumWidgetStack->albumIconView();
