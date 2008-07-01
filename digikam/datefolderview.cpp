@@ -181,7 +181,7 @@ DateFolderView::DateFolderView(QWidget* parent)
               : KVBox(parent)
 {
     d = new DateFolderViewPriv;
-    d->listview  = new FolderView(this);
+    d->listview  = new FolderView(this, "DateFolderView");
     d->monthview = new MonthWidget(this);
 
     d->listview->addColumn(i18n("My Calendar"));
