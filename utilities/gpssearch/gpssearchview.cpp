@@ -344,7 +344,7 @@ void GPSSearchView::slotRenameAlbum(SAlbum* salbum)
     QString oldName(salbum->title());
     bool    ok;
 
-    QString name = KInputDialog::getText(i18n("Rename Album (%1)").arg(oldName),
+    QString name = KInputDialog::getText(i18n("Rename Album (%1)",oldName),
                                          i18n("Enter new album name:"),
                                          oldName, &ok, this);
 
