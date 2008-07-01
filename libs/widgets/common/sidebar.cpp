@@ -59,13 +59,9 @@ public:
         minimizedDefault = false;
         minimized        = false;
         isMinimized      = false;
-
         tabs             = 0;
         activeTab        = -1;
-        minSize          = 0;
-        maxSize          = 0;
         dragSwitchId     = -1;
-
         stack            = 0;
         dragSwitchTimer  = 0;
     }
@@ -76,12 +72,9 @@ public:
 
     int             tabs;
     int             activeTab;
-    int             minSize;
-    int             maxSize;
     int             dragSwitchId;
 
     QStackedWidget *stack;
-    QSize           bigSize;
     QTimer         *dragSwitchTimer; 
 };
 
@@ -109,19 +102,20 @@ void Sidebar::loadViewState()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(QString("%1").arg(objectName()));
-    int tab                   = group.readEntry("ActiveTab", 0);
+    int tab                   = group.readEntry("ActiveTab", -1);
     bool minimized            = group.readEntry("Minimized", d->minimizedDefault);
 
     if (minimized)
     {
         d->activeTab = tab;
-        //setTab(d->activeTab, true);
+        setTab(d->activeTab, false);
         d->stack->setCurrentIndex(d->activeTab);
+        shrink();
         emit signalChangedTab(d->stack->currentWidget());
+        return;
     }
-    else
-        d->activeTab = -1;
 
+    d->activeTab = -1;
     clicked(tab);
 }
 
@@ -232,18 +226,7 @@ QWidget* Sidebar::getActiveTab()
 void Sidebar::shrink()
 {
     d->minimized = true;
-    d->bigSize   = size();
-    d->minSize   = minimumWidth();
-    d->maxSize   = maximumWidth();
-
     d->stack->hide();
-
-    KMultiTabBarTab* tab = this->tab(0);
-    if (tab)
-        setFixedWidth(tab->width());
-    else
-        setFixedWidth(width());
-
     emit signalViewChanged();
 }
 
@@ -251,9 +234,6 @@ void Sidebar::expand()
 {
     d->minimized = false;
     d->stack->show();
-    resize(d->bigSize);
-    setMinimumWidth(d->minSize);
-    setMaximumWidth(d->maxSize);
     emit signalViewChanged();
 }
 
