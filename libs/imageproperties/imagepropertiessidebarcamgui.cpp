@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2006-02-08
- * Description : simple image properties side bar used by 
+ * Description : simple image properties side bar used by
  *               camera gui.
  *
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-// Qt includes. 
- 
+// Qt includes.
+
 #include <QSplitter>
 
 // KDE includes.
@@ -95,14 +95,12 @@ ImagePropertiesSideBarCamGui::ImagePropertiesSideBarCamGui(QWidget *parent,
                                                            QSplitter *splitter,
                                                            KMultiTabBarPosition side,
                                                            bool mimimizedDefault)
-                            : Sidebar(parent, side, mimimizedDefault)
+                            : Sidebar(parent, splitter, side, mimimizedDefault)
 {
     d = new ImagePropertiesSideBarCamGuiPriv;
     d->cameraItemTab = new CameraItemPropertiesTab(parent);
     d->metadataTab   = new ImagePropertiesMetaDataTab(parent);
     d->gpsTab        = new ImagePropertiesGPSTab(parent);
-
-    setSplitter(splitter);
 
     appendTab(d->cameraItemTab, SmallIcon("document-properties"), i18n("Properties"));
     appendTab(d->metadataTab, SmallIcon("exifinfo"), i18n("Metadata"));

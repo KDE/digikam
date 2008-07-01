@@ -61,7 +61,7 @@ ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget *parent,
                                                QSplitter *splitter,
                                                KMultiTabBarPosition side,
                                                bool mimimizedDefault)
-                      : Sidebar(parent, side, mimimizedDefault)
+                      : Sidebar(parent, splitter, side, mimimizedDefault)
 {
     m_image              = 0;
     m_currentRect        = QRect();
@@ -74,8 +74,6 @@ ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget *parent,
     m_metadataTab   = new ImagePropertiesMetaDataTab(parent);
     m_colorTab      = new ImagePropertiesColorsTab(parent);
     m_gpsTab        = new ImagePropertiesGPSTab(parent);
-
-    setSplitter(splitter);
 
     appendTab(m_propertiesTab, SmallIcon("document-properties"), i18n("Properties"));
     appendTab(m_metadataTab, SmallIcon("exifinfo"), i18n("Metadata"));

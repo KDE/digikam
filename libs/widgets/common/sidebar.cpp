@@ -14,7 +14,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -85,11 +85,12 @@ public:
     QTimer         *dragSwitchTimer; 
 };
 
-Sidebar::Sidebar(QWidget *parent, KMultiTabBarPosition side, bool minimizedDefault)
+Sidebar::Sidebar(QWidget *parent, QSplitter *sp, KMultiTabBarPosition side, bool minimizedDefault)
        : KMultiTabBar(side, parent)
 {
     d = new SidebarPriv;
     d->minimizedDefault = minimizedDefault;
+    d->stack            = new QStackedWidget(sp);
     d->dragSwitchTimer  = new QTimer(this);
 
     connect(d->dragSwitchTimer, SIGNAL(timeout()),
@@ -102,11 +103,6 @@ Sidebar::~Sidebar()
 {
     saveViewState();
     delete d;
-}
-
-void Sidebar::setSplitter(QSplitter *sp)
-{
-    d->stack = new QStackedWidget(sp);
 }
 
 void Sidebar::loadViewState()

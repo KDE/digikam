@@ -14,7 +14,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -56,21 +56,17 @@ public:
     /**
      * Creates a new sidebar
      * @param parent sidebar's parent
-     * @param name the name of the widget is used to store its state to config
+     * @param sp sets the splitter, which should handle the width. The splitter normally
+     *           is part of the main view. Internally, the width of the widget stack can 
+     *           be changed by a QSplitter.
      * @param side where the sidebar should be displayed. At the left or right border.
                    Use KMultiTabBar::Left or KMultiTabBar::Right.
      * @param minimizedDefault hide the sidebar when the program is started the first time.
      */
-    Sidebar(QWidget *parent, KMultiTabBarPosition side=KMultiTabBar::Left, 
+    Sidebar(QWidget *parent, QSplitter *sp, KMultiTabBarPosition side=KMultiTabBar::Left,
             bool mimimizedDefault=false);
-    virtual ~Sidebar();
 
-    /**
-     * The width of the widget stack can be changed by a QSplitter.
-     * @param sp sets the splitter, which should handle the width. The splitter normally
-     *           is part of the main view.
-     */
-    void setSplitter(QSplitter *sp);
+    virtual ~Sidebar();
 
     /**
      * Appends a new tab to the sidebar

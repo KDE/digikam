@@ -183,8 +183,6 @@ DigikamView::DigikamView(QWidget *parent)
     d = new DigikamViewPriv;
     d->parent       = static_cast<DigikamApp *>(parent);
     d->albumManager = AlbumManager::instance();
-    d->leftSideBar  = new Sidebar(this, KMultiTabBar::Left);
-    d->leftSideBar->setObjectName("Digikam Left Sidebar");
 
     d->splitter = new QSplitter(this);
     d->splitter->setFrameStyle( QFrame::NoFrame );
@@ -192,7 +190,9 @@ DigikamView::DigikamView(QWidget *parent)
     d->splitter->setFrameShape( QFrame::NoFrame );
     d->splitter->setOpaqueResize(false);
 
-    d->leftSideBar->setSplitter(d->splitter);
+    d->leftSideBar  = new Sidebar(this, d->splitter, KMultiTabBar::Left);
+    d->leftSideBar->setObjectName("Digikam Left Sidebar");
+
     d->albumWidgetStack = new AlbumWidgetStack(d->splitter);
     d->splitter->setStretchFactor(1, 10);      // set AlbumWidgetStack default size to max.
     d->iconView         = d->albumWidgetStack->albumIconView();
