@@ -22,9 +22,7 @@
  *
  * ============================================================ */
 
-/** @file sidebar.cpp */
-
-// QT includes.
+// Qt includes.
 
 #include <QSplitter>
 #include <QStackedWidget>

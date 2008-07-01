@@ -22,8 +22,6 @@
  *
  * ============================================================ */
 
-/** @file sidebar.h */
-
 #ifndef _SIDEBAR_H_
 #define _SIDEBAR_H_
 
@@ -73,7 +71,6 @@ public:
      *           is part of the main view.
      */
     void setSplitter(QSplitter *sp);
-    void setSplitterSizePolicy(QSizePolicy p);
 
     /**
      * Appends a new tab to the sidebar
