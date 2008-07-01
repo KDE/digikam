@@ -231,7 +231,7 @@ void ImagePropertiesSideBar::setImagePropertiesInformations(const KUrl& url)
 
                 QString quality = meta.group("Jpeg EXIF Data").item("JPEG quality").value().toString();
                 quality.isEmpty() ? compression = unavailable :
-                                    compression = i18n("JPEG quality %1").arg(quality);
+                                    compression = i18n("JPEG quality %1",quality);
                 bitDepth    = meta.group("Jpeg EXIF Data").item("BitDepth").value().toString();
                 colorMode   = meta.group("Jpeg EXIF Data").item("ColorMode").value().toString();
             }
