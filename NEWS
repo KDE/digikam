@@ -80,6 +80,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 039 ==> 165341 : Crash when changing histogram channel when welcome page is shown.
 040 ==> 165318 : digiKam doesn't start because of SQL.
 041 ==> 165342 : Crash when changing album sort modus.
-042 ==> 
+042 ==> 165338 : Right sidebar initally too big.
+043 ==> 
 
 
