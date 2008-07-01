@@ -518,17 +518,19 @@ CollectionManager::~CollectionManager()
 
 void CollectionManager::refresh()
 {
-    DatabaseAccess access;
-
-    // clear list
-    foreach (AlbumRootLocation *location, d->locations)
     {
-        CollectionLocation::Status oldStatus = location->status();
-        location->setStatus(CollectionLocation::LocationDeleted);
-        emit locationStatusChanged(*location, oldStatus);
-        delete location;
+        DatabaseAccess access;
+
+        // clear list
+        foreach (AlbumRootLocation *location, d->locations)
+        {
+            CollectionLocation::Status oldStatus = location->status();
+            location->setStatus(CollectionLocation::LocationDeleted);
+            emit locationStatusChanged(*location, oldStatus);
+            delete location;
+        }
+        d->locations.clear();
     }
-    d->locations.clear();
 
     updateLocations();
 }
@@ -668,13 +670,15 @@ CollectionManager::LocationCheckResult CollectionManager::checkLocation(const KU
 
 void CollectionManager::removeLocation(const CollectionLocation &location)
 {
-    DatabaseAccess access;
+    {
+        DatabaseAccess access;
 
-    AlbumRootLocation *albumLoc = d->locations.value(location.id());
-    if (!albumLoc)
-        return;
+        AlbumRootLocation *albumLoc = d->locations.value(location.id());
+        if (!albumLoc)
+            return;
 
-    access.db()->deleteAlbumRoot(albumLoc->id());
+        access.db()->deleteAlbumRoot(albumLoc->id());
+    }
 
     // Do not emit the locationRemoved signal here, it is done in updateLocations()
 
@@ -896,8 +900,13 @@ void CollectionManager::deviceChange(const QString &udi)
 void CollectionManager::updateLocations()
 {
     // get information from Solid
-    QList<SolidVolumeInfo> volumes = d->listVolumes();
-    //DDebug() << "updateLocations: Have " << volumes.count() << endl;
+    QList<SolidVolumeInfo> volumes;
+    {
+        // Absolutely ensure that the db mutex is not held when emitting the blocking queued signal
+        DatabaseAccessUnlock unlock;
+        DatabaseAccess::assertNoLock(); //TODO: Remove after beta
+        volumes = d->listVolumes();
+    }
 
     {
         DatabaseAccess access;

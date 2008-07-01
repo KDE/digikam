@@ -51,7 +51,7 @@ public:
     DatabaseAccessStaticPriv()
     : backend(0), db(0), infoCache(0), databaseWatch(0),
       mutex(QMutex::Recursive), // create a recursive mutex
-      initializing(false)
+      initializing(false), lockCount(0)
     {
         // create a unique identifier for this application (as an application accessing a database
         applicationIdentifier = QUuid::createUuid();
@@ -68,6 +68,25 @@ public:
     QUuid applicationIdentifier;
 
     bool initializing;
+    int  lockCount;
+};
+
+class DatabaseAccessMutexLocker : public QMutexLocker
+{
+public:
+
+    DatabaseAccessMutexLocker(DatabaseAccessStaticPriv *d)
+    : QMutexLocker(&d->mutex), d(d)
+    {
+        d->lockCount++;
+    }
+
+    ~DatabaseAccessMutexLocker()
+    {
+        d->lockCount--;
+    }
+
+    DatabaseAccessStaticPriv *d;
 };
 
 DatabaseAccessStaticPriv *DatabaseAccess::d = 0;
@@ -75,6 +94,7 @@ DatabaseAccessStaticPriv *DatabaseAccess::d = 0;
 DatabaseAccess::DatabaseAccess()
 {
     d->mutex.lock();
+    d->lockCount++;
     if (!d->backend->isOpen() && !d->initializing)
     {
         // avoid endless loops
@@ -90,6 +110,7 @@ DatabaseAccess::DatabaseAccess()
 
 DatabaseAccess::~DatabaseAccess()
 {
+    d->lockCount--;
     d->mutex.unlock();
 }
 
@@ -98,6 +119,13 @@ DatabaseAccess::DatabaseAccess(bool)
     // private constructor, when mutex is locked and
     // backend should not be checked
     d->mutex.lock();
+    d->lockCount++;
+}
+
+//TODO: Remove after beta
+void DatabaseAccess::assertNoLock()
+{
+    Q_ASSERT(d->lockCount == 0);
 }
 
 AlbumDB *DatabaseAccess::db() const
@@ -137,7 +165,7 @@ void DatabaseAccess::setParameters(const DatabaseParameters &parameters, Applica
         d = new DatabaseAccessStaticPriv();
     }
 
-    QMutexLocker lock(&d->mutex);
+    DatabaseAccessMutexLocker lock(d);
 
     if (d->parameters == parameters)
         return;
@@ -240,7 +268,7 @@ void DatabaseAccess::cleanUpDatabase()
 {
     if (d)
     {
-        QMutexLocker lock(&d->mutex);
+        DatabaseAccessMutexLocker locker(d);
         d->backend->close();
         delete d->db;
         delete d->backend;
@@ -248,5 +276,43 @@ void DatabaseAccess::cleanUpDatabase()
     delete d;
     d = 0;
 }
+
+DatabaseAccessUnlock::DatabaseAccessUnlock()
+{
+    // acquire lock
+    DatabaseAccess::d->mutex.lock();
+    // store lock count
+    count = DatabaseAccess::d->lockCount;
+    // set lock count to 0
+    DatabaseAccess::d->lockCount = 0;
+    // unlock
+    for (int i=0; i<count; i++)
+        DatabaseAccess::d->mutex.unlock();
+    // drop lock acquired in first line. Mutex is now free.
+    DatabaseAccess::d->mutex.unlock();
+}
+
+DatabaseAccessUnlock::DatabaseAccessUnlock(DatabaseAccess *)
+{
+    // With the passed pointer, we have assured that the mutex is acquired
+    // Store lock count
+    count = DatabaseAccess::d->lockCount;
+    // set lock count to 0
+    DatabaseAccess::d->lockCount = 0;
+    // unlock
+    for (int i=0; i<count; i++)
+        DatabaseAccess::d->mutex.unlock();
+    // Mutex is now free
+}
+
+DatabaseAccessUnlock::~DatabaseAccessUnlock()
+{
+    // lock as often as it was locked before
+    for (int i=0; i<count; i++)
+        DatabaseAccess::d->mutex.lock();
+    // update lock count
+    DatabaseAccess::d->lockCount = count;
+}
+
 
 }  // namespace Digikam

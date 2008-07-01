@@ -137,11 +137,34 @@ public:
       */
     void setLastError(const QString &error);
 
+    static void assertNoLock();
+
 private:
 
     DatabaseAccess(bool);
 
+    friend class DatabaseAccessUnlock;
     static DatabaseAccessStaticPriv *d;
+};
+
+class DatabaseAccessUnlock
+{
+public:
+
+    /** Acquire an object of this class if you want to assure
+     *  that the DatabaseAccess is _not_ held during the lifetime of the object.
+     *  At creation, the lock is obtained shortly, then all locks are released.
+     *  At destruction, all locks are acquired again.
+     *  If you need to access any locked structures during lifetime, acquire a new
+     *  DatabaseAccess.
+     */
+    DatabaseAccessUnlock();
+    DatabaseAccessUnlock(DatabaseAccess *access);
+    ~DatabaseAccessUnlock();
+
+private:
+
+    int count;
 };
 
 }  // namespace Digikam
