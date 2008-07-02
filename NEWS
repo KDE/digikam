@@ -10,7 +10,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 003 ==> 164536 : Add adjust mid range color levels.
 004 ==> 164615 : Image detail info about geometry (X-pixel / Y-pixel) missed.
 005 ==> 149654 : fullscreen icon changes image's zoom to 100% (should fit to screen).
-006 ==> 
+006 ==> 162688 : Digikam RC5, can't see scroll bar sliders in dark theme
+007 ==> 
 
 **********************************************************************************************
 digiKam 0.9.4-RC1 - Release date: 2008-06-17
