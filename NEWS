@@ -1,5 +1,5 @@
 **********************************************************************************************
-digiKam 0.9.4-RC2 - Release date: 2008-06-??
+digiKam 0.9.4-RC2 - Release date: 2008-07-06
 
 NEW FEATURES:
 
@@ -11,7 +11,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 004 ==> 164615 : Image detail info about geometry (X-pixel / Y-pixel) missed.
 005 ==> 149654 : fullscreen icon changes image's zoom to 100% (should fit to screen).
 006 ==> 162688 : Digikam RC5, can't see scroll bar sliders in dark theme
-007 ==> 
+007 ==> 161212 : switch to full screen resets X11.
+008 ==> 
 
 **********************************************************************************************
 digiKam 0.9.4-RC1 - Release date: 2008-06-17
