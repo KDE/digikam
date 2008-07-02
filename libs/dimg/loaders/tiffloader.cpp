@@ -31,12 +31,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // This line must be commented to prevent any latency time
@@ -46,7 +46,7 @@
 
 // C ansi includes.
 
-extern "C" 
+extern "C"
 {
 #include <tiffvers.h>
 }
@@ -606,7 +606,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 #endif
     }
 
-    // Standard Exif Ascii tags (available with libtiff 3.6.1)    
+    // Standard Exif Ascii tags (available with libtiff 3.6.1)
 
     tiffSetExifAsciiTag(tif, TIFFTAG_DOCUMENTNAME,            metaData, "Exif.Image.DocumentName");
     tiffSetExifAsciiTag(tif, TIFFTAG_IMAGEDESCRIPTION,        metaData, "Exif.Image.ImageDescription");
@@ -622,186 +622,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     soft.append(QString(" ( %1 )").arg(libtiffver));
     TIFFSetField(tif, TIFFTAG_SOFTWARE, (const char*)soft.toAscii().data());
 
-    // Standard Exif.Photo tags (available with libtiff 3.8.2).  
-/*
-#if defined(TIFFTAG_EXIFIFD)
-    long sub_offset=0;
-    TIFFSetField(tif, TIFFTAG_SUBIFD, 1, &sub_offset);
-#endif
-
-#if defined(EXIFTAG_EXPOSURETIME)
-    tiffSetExifDataTag(tif, EXIFTAG_EXPOSURETIME,             &metaData, "Exif.Photo.ExposureTime");
-#endif
-#if defined(EXIFTAG_FNUMBER)
-    tiffSetExifDataTag(tif, EXIFTAG_FNUMBER,                  &metaData, "Exif.Photo.FNumber");
-#endif
-#if defined(EXIFTAG_EXPOSUREPROGRAM)
-    tiffSetExifDataTag(tif, EXIFTAG_EXPOSUREPROGRAM,          &metaData, "Exif.Photo.ExposureProgram");
-#endif
-#if defined(EXIFTAG_SPECTRALSENSITIVITY)
-    tiffSetExifAsciiTag(tif, EXIFTAG_SPECTRALSENSITIVITY,     &metaData, "Exif.Photo.SpectralSensitivity");
-#endif
-#if defined(EXIFTAG_ISOSPEEDRATINGS)
-    tiffSetExifDataTag(tif, EXIFTAG_ISOSPEEDRATINGS,          &metaData, "Exif.Photo.ISOSpeedRatings");
-#endif
-#if defined(EXIFTAG_OECF)
-    tiffSetExifDataTag(tif, EXIFTAG_OECF,                     &metaData, "Exif.Photo.OECF");
-#endif
-#if defined(EXIFTAG_EXIFVERSION)
-    tiffSetExifDataTag(tif, EXIFTAG_EXIFVERSION,              &metaData, "Exif.Photo.ExifVersion");
-#endif
-#if defined(EXIFTAG_DATETIMEORIGINAL)
-    tiffSetExifAsciiTag(tif, EXIFTAG_DATETIMEORIGINAL,        &metaData, "Exif.Photo.DateTimeOriginal");
-#endif
-#if defined(EXIFTAG_DATETIMEDIGITIZED)
-    tiffSetExifAsciiTag(tif, EXIFTAG_DATETIMEDIGITIZED,       &metaData, "Exif.Photo.DateTimeDigitized");
-#endif
-#if defined(EXIFTAG_COMPONENTSCONFIGURATION)
-    tiffSetExifDataTag(tif, EXIFTAG_COMPONENTSCONFIGURATION,  &metaData, "Exif.Photo.ComponentsConfiguration");
-#endif
-#if defined(EXIFTAG_COMPRESSEDBITSPERPIXEL)
-    tiffSetExifDataTag(tif, EXIFTAG_COMPRESSEDBITSPERPIXEL,   &metaData, "Exif.Photo.CompressedBitsPerPixel");
-#endif
-#if defined(EXIFTAG_SHUTTERSPEEDVALUE)
-    tiffSetExifDataTag(tif, EXIFTAG_SHUTTERSPEEDVALUE,        &metaData, "Exif.Photo.ShutterSpeedValue");
-#endif
-#if defined(EXIFTAG_APERTUREVALUE)
-    tiffSetExifDataTag(tif, EXIFTAG_APERTUREVALUE,            &metaData, "Exif.Photo.ApertureValue");
-#endif
-#if defined(EXIFTAG_BRIGHTNESSVALUE)
-    tiffSetExifDataTag(tif, EXIFTAG_BRIGHTNESSVALUE,          &metaData, "Exif.Photo.BrightnessValue");
-#endif
-#if defined(EXIFTAG_EXPOSUREBIASVALUE)
-    tiffSetExifDataTag(tif, EXIFTAG_EXPOSUREBIASVALUE,        &metaData, "Exif.Photo.ExposureBiasValue");
-#endif
-#if defined(EXIFTAG_MAXAPERTUREVALUE)
-    tiffSetExifDataTag(tif, EXIFTAG_MAXAPERTUREVALUE,         &metaData, "Exif.Photo.MaxApertureValue");
-#endif
-#if defined(EXIFTAG_SUBJECTDISTANCE)
-    tiffSetExifDataTag(tif, EXIFTAG_SUBJECTDISTANCE,          &metaData, "Exif.Photo.SubjectDistance");
-#endif
-#if defined(EXIFTAG_METERINGMODE)
-    tiffSetExifDataTag(tif, EXIFTAG_METERINGMODE,             &metaData, "Exif.Photo.MeteringMode");
-#endif
-#if defined(EXIFTAG_LIGHTSOURCE)
-    tiffSetExifDataTag(tif, EXIFTAG_LIGHTSOURCE,              &metaData, "Exif.Photo.LightSource");
-#endif
-#if defined(EXIFTAG_FLASH)
-    tiffSetExifDataTag(tif, EXIFTAG_FLASH,                    &metaData, "Exif.Photo.Flash");
-#endif
-#if defined(EXIFTAG_FOCALLENGTH)
-    tiffSetExifDataTag(tif, EXIFTAG_FOCALLENGTH,              &metaData, "Exif.Photo.FocalLength");
-#endif
-#if defined(EXIFTAG_SUBJECTAREA)
-    tiffSetExifDataTag(tif, EXIFTAG_SUBJECTAREA,              &metaData, "Exif.Photo.SubjectArea");
-#endif
-#if defined(EXIFTAG_MAKERNOTE)
-    tiffSetExifDataTag(tif, EXIFTAG_MAKERNOTE,                &metaData, "Exif.Photo.MakerNote");
-#endif
-#if defined(EXIFTAG_USERCOMMENT)   
-    tiffSetExifDataTag(tif, EXIFTAG_USERCOMMENT,              &metaData, "Exif.Photo.UserComment");
-#endif
-#if defined(EXIFTAG_SUBSECTIME)
-    tiffSetExifAsciiTag(tif, EXIFTAG_SUBSECTIME,              &metaData, "Exif.Photo.SubSecTime");
-#endif
-#if defined(EXIFTAG_SUBSECTIMEORIGINAL)
-    tiffSetExifAsciiTag(tif, EXIFTAG_SUBSECTIMEORIGINAL,      &metaData, "Exif.Photo.SubSecTimeOriginal");
-#endif
-#if defined(EXIFTAG_SUBSECTIMEDIGITIZED)
-    tiffSetExifAsciiTag(tif, EXIFTAG_SUBSECTIMEDIGITIZED,     &metaData, "Exif.Photo.SubSecTimeDigitized");
-#endif
-#if defined(EXIFTAG_FLASHPIXVERSION)
-    tiffSetExifDataTag(tif, EXIFTAG_FLASHPIXVERSION,          &metaData, "Exif.Photo.FlashpixVersion");
-#endif
-#if defined(EXIFTAG_COLORSPACE)
-    tiffSetExifDataTag(tif, EXIFTAG_COLORSPACE,               &metaData, "Exif.Photo.ColorSpace");
-#endif
-#if defined(EXIFTAG_PIXELXDIMENSION)
-    tiffSetExifDataTag(tif, EXIFTAG_PIXELXDIMENSION,          &metaData, "Exif.Photo.PixelXDimension");
-#endif
-#if defined(EXIFTAG_PIXELYDIMENSION)
-    tiffSetExifDataTag(tif, EXIFTAG_PIXELYDIMENSION,          &metaData, "Exif.Photo.PixelYDimension");
-#endif
-#if defined(EXIFTAG_RELATEDSOUNDFILE)
-    tiffSetExifAsciiTag(tif, EXIFTAG_RELATEDSOUNDFILE,        &metaData, "Exif.Photo.RelatedSoundFile");
-#endif
-#if defined(EXIFTAG_FLASHENERGY)
-    tiffSetExifDataTag(tif, EXIFTAG_FLASHENERGY,              &metaData, "Exif.Photo.FlashEnergy");
-#endif
-#if defined(EXIFTAG_SPATIALFREQUENCYRESPONSE)
-    tiffSetExifDataTag(tif, EXIFTAG_SPATIALFREQUENCYRESPONSE, &metaData, "Exif.Photo.SpatialFrequencyResponse");
-#endif
-#if defined(EXIFTAG_FOCALPLANEXRESOLUTION)
-    tiffSetExifDataTag(tif, EXIFTAG_FOCALPLANEXRESOLUTION,    &metaData, "Exif.Photo.FocalPlaneXResolution");
-#endif
-#if defined(EXIFTAG_FOCALPLANEYRESOLUTION)
-    tiffSetExifDataTag(tif, EXIFTAG_FOCALPLANEYRESOLUTION,    &metaData, "Exif.Photo.FocalPlaneYResolution");
-#endif
-#if defined(EXIFTAG_FOCALPLANERESOLUTIONUNIT)
-    tiffSetExifDataTag(tif, EXIFTAG_FOCALPLANERESOLUTIONUNIT, &metaData, "Exif.Photo.FocalPlaneResolutionUnit");
-#endif
-#if defined(EXIFTAG_SUBJECTLOCATION)
-    tiffSetExifDataTag(tif, EXIFTAG_SUBJECTLOCATION,          &metaData, "Exif.Photo.SubjectLocation");
-#endif
-#if defined(EXIFTAG_EXPOSUREINDEX)
-    tiffSetExifDataTag(tif, EXIFTAG_EXPOSUREINDEX,            &metaData, "Exif.Photo.ExposureIndex");
-#endif
-#if defined(EXIFTAG_SENSINGMETHOD)
-    tiffSetExifDataTag(tif, EXIFTAG_SENSINGMETHOD,            &metaData, "Exif.Photo.SensingMethod");
-#endif
-#if defined(EXIFTAG_FILESOURCE)
-    tiffSetExifDataTag(tif, EXIFTAG_FILESOURCE,               &metaData, "Exif.Photo.FileSource");
-#endif
-#if defined(EXIFTAG_SCENETYPE)
-    tiffSetExifDataTag(tif, EXIFTAG_SCENETYPE,                &metaData, "Exif.Photo.SceneType");
-#endif
-#if defined(EXIFTAG_CFAPATTERN)
-    tiffSetExifDataTag(tif, EXIFTAG_CFAPATTERN,               &metaData, "Exif.Photo.CFAPattern");
-#endif
-#if defined(EXIFTAG_CUSTOMRENDERED)
-    tiffSetExifDataTag(tif, EXIFTAG_CUSTOMRENDERED,           &metaData, "Exif.Photo.CustomRendered");
-#endif
-#if defined(EXIFTAG_EXPOSUREMODE)
-    tiffSetExifDataTag(tif, EXIFTAG_EXPOSUREMODE,             &metaData, "Exif.Photo.ExposureMode");
-#endif
-#if defined(EXIFTAG_WHITEBALANCE)
-    tiffSetExifDataTag(tif, EXIFTAG_WHITEBALANCE,             &metaData, "Exif.Photo.WhiteBalance");
-#endif
-#if defined(EXIFTAG_DIGITALZOOMRATIO)
-    tiffSetExifDataTag(tif, EXIFTAG_DIGITALZOOMRATIO,         &metaData, "Exif.Photo.DigitalZoomRatio");
-#endif
-#if defined(EXIFTAG_FOCALLENGTHIN35MMFILM)
-    tiffSetExifDataTag(tif, EXIFTAG_FOCALLENGTHIN35MMFILM,    &metaData, "Exif.Photo.FocalLengthIn35mmFilm");
-#endif
-#if defined(EXIFTAG_SCENECAPTURETYPE)
-    tiffSetExifDataTag(tif, EXIFTAG_SCENECAPTURETYPE,         &metaData, "Exif.Photo.SceneCaptureType");
-#endif
-#if defined(EXIFTAG_GAINCONTROL)
-    tiffSetExifDataTag(tif, EXIFTAG_GAINCONTROL,              &metaData, "Exif.Photo.GainControl");
-#endif
-#if defined(EXIFTAG_CONTRAST)
-    tiffSetExifDataTag(tif, EXIFTAG_CONTRAST,                 &metaData, "Exif.Photo.Contrast");
-#endif
-#if defined(EXIFTAG_SATURATION)
-    tiffSetExifDataTag(tif, EXIFTAG_SATURATION,               &metaData, "Exif.Photo.Saturation");
-#endif
-#if defined(EXIFTAG_SHARPNESS)
-    tiffSetExifDataTag(tif, EXIFTAG_SHARPNESS,                &metaData, "Exif.Photo.Sharpness");
-#endif
-#if defined(EXIFTAG_DEVICESETTINGDESCRIPTION)
-    tiffSetExifDataTag(tif, EXIFTAG_DEVICESETTINGDESCRIPTION, &metaData, "Exif.Photo.DeviceSettingDescription");
-#endif
-#if defined(EXIFTAG_SUBJECTDISTANCERANGE)
-    tiffSetExifDataTag(tif, EXIFTAG_SUBJECTDISTANCERANGE,     &metaData, "Exif.Photo.SubjectDistanceRange");
-#endif
-#if defined(EXIFTAG_IMAGEUNIQUEID)
-    tiffSetExifAsciiTag(tif, EXIFTAG_IMAGEUNIQUEID,           &metaData, "Exif.Photo.ImageUniqueID");
-#endif
-
-#if defined(TIFFTAG_EXIFIFD)
-    TIFFSetField(tif, TIFFTAG_EXIFIFD, sub_offset);
-#endif
-*/
+    // NOTE: All others Exif tags will be written by Exiv2 (<= 0.18)
 
     // -------------------------------------------------------------------
     // Write ICC profil.
@@ -810,7 +631,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
     if (!profile_rawdata.isEmpty())
     {
-#if defined(TIFFTAG_ICCPROFILE)    
+#if defined(TIFFTAG_ICCPROFILE)
         TIFFSetField(tif, TIFFTAG_ICCPROFILE, (uint32)profile_rawdata.size(), (uchar *)profile_rawdata.data());
 #endif
     }
@@ -1010,7 +831,7 @@ void TIFFLoader::tiffSetExifAsciiTag(TIFF* tif, ttag_t tiffTag,
                                      const DMetadata &metaData, const char* exifTagName)
 {
     QByteArray tag = metaData.getExifTagData(exifTagName);
-    if (!tag.isEmpty()) 
+    if (!tag.isEmpty())
     {
         QByteArray str(tag.data(), tag.size());
         TIFFSetField(tif, tiffTag, (const char*)str);
@@ -1021,7 +842,7 @@ void TIFFLoader::tiffSetExifDataTag(TIFF* tif, ttag_t tiffTag,
                                     const DMetadata &metaData, const char* exifTagName)
 {
     QByteArray tag = metaData.getExifTagData(exifTagName);
-    if (!tag.isEmpty()) 
+    if (!tag.isEmpty())
     {
         TIFFSetField (tif, tiffTag, (uint32)tag.size(), (char *)tag.data());
     }
