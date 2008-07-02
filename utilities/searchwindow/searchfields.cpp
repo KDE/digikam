@@ -1084,14 +1084,18 @@ void SearchFieldRangeDouble::setFactor(double factor)
 void SearchFieldRangeDouble::valueChanged()
 {
     bool validValue = false;
-    if (m_secondBox->value() != m_secondBox->minimum())
+    bool firstAtMinimum = (m_firstBox->value() == m_firstBox->minimum());
+    bool secondAtMinimum = (m_secondBox->value() == m_secondBox->minimum());
+    if (!secondAtMinimum)
     {
         m_firstBox->setRange(m_min, m_secondBox->value());
         validValue = true;
     }
-    if (m_firstBox->value() != m_firstBox->minimum())
+    if (!firstAtMinimum)
     {
         m_secondBox->setRange(m_firstBox->value(), m_max);
+        if (secondAtMinimum)
+            m_secondBox->setValue(m_secondBox->minimum());
         validValue = true;
     }
     setValidValueState(validValue);
