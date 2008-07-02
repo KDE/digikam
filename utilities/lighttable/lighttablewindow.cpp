@@ -1174,12 +1174,6 @@ void LightTableWindow::slotRemoveItem(const ImageInfo &info)
                 new_rinfo               = last->info();
             }
         }
-        else
-        {
-            // otherwise select the first image in thumbbar
-            LightTableBarItem* first = dynamic_cast<LightTableBarItem*>(d->barView->firstItem());
-            new_rinfo                = first->info();
-        }
     }
 
     // Check if left and right are set to the same
