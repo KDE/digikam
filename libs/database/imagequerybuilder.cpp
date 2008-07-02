@@ -346,8 +346,9 @@ public:
             QStringList values = reader.valueToStringList();
             sql += " (" + name + " IN (";
             AlbumDB::addBoundValuePlaceholders(sql, values.size());
-            sql += ") ";
-            *boundValues << values;
+            sql += ") ) ";
+            foreach(const QString &value, values)
+                *boundValues << value;
         }
         else
         {
@@ -536,11 +537,16 @@ void ImageQueryBuilder::buildField(QString &sql, SearchXmlCachingReader &reader,
             DatabaseAccess access;
             KUrl url(access.db()->getAlbumRelativePath(albumID));
             int rootId = access.db()->getAlbumRootId(albumID);
+            QString childrenWildcard;
+            if (url.path() == "/")
+                childrenWildcard = "/%";
+            else
+                childrenWildcard = url.path() + "/%";
             sql += "(Images.album IN "
                    "   (SELECT DISTINCT id "
                    "    FROM Albums "
                    "    WHERE albumRoot=? AND (relativePath=? OR relativePath LIKE ?)) )";
-            *boundValues << rootId << url.path() << url.path() + "/%";
+            *boundValues << rootId << url.path() << childrenWildcard;
         }
     }
     else if (name == "albumname")
