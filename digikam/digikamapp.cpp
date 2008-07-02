@@ -276,12 +276,10 @@ void DigikamApp::show()
     }
 
     // Report errors from dcraw detection.
-
     KDcrawIface::DcrawBinary::instance()->checkReport();
 
     // Init album icon view zoom factor. 
     slotThumbSizeChanged(d->albumSettings->getDefaultIconSize());
-    slotZoomSliderChanged(d->albumSettings->getDefaultIconSize());
 }
 
 const QPtrList<KAction>& DigikamApp::menuImageActions()
@@ -1759,7 +1757,6 @@ void DigikamApp::slotToggleFullScreen()
         d->view->hideSideBars();
 
         showFullScreen();
-
         d->fullScreen = true;
     }
 }

@@ -218,7 +218,7 @@ public:
     KAction               *selectInvertAction;
 
     // View Actions
-    KAction               *fullScreenAction;
+    KToggleAction         *fullScreenAction;
     KActionMenu           *slideShowAction;
     KAction               *slideShowAllAction;
     KAction               *slideShowSelectionAction;
