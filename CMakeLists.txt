@@ -232,6 +232,25 @@ ADD_CUSTOM_TARGET(svnversion
                   ALL DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/digikam/svnversion.h")
 
 # ==================================================================================================
+# get the gcc version
+
+IF(CMAKE_COMPILER_IS_GNUCXX)
+  EXEC_PROGRAM(${CMAKE_CXX_COMPILER} ARGS --version OUTPUT_VARIABLE VERSION_GCC_INFO)
+  STRING(REGEX MATCH " [34]\\.[0-9]\\.[0-9]" GCC_VERSION "${VERSION_GCC_INFO}")
+  
+  # gcc on mac just reports: "gcc (GCC) 3.3 20030304 ..." without the patch level, handle this here:
+  IF(NOT GCC_VERSION)
+    STRING(REGEX REPLACE ".*\\(GCC\\).* ([34]\\.[0-9]) .*" "\\1.0" GCC_VERSION "${VERSION_GCC_INFO}")
+  ENDIF (NOT GCC_VERSION)
+  MACRO_ENSURE_VERSION_RANGE("4.3.0" "${GCC_VERSION}" "4.3.2" GCC_VERSION_BAD)
+
+  IF(GCC_VERSION_BAD)
+      MESSAGE(STATUS "Warning, you using a bugous GCC version (${GCC_VERSION})")
+      ADD_DEFINITIONS(-fno-tree-pre)
+  ENDIF(GCC_VERSION_BAD)
+ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+
+# ==================================================================================================
 # Definitions and includes rules
 
 ADD_DEFINITIONS(${QT_DEFINITIONS}
