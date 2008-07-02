@@ -234,6 +234,10 @@ ADD_CUSTOM_TARGET(svnversion
 # ==================================================================================================
 # get the gcc version
 
+# CImg.h version 1.2.8 do not compile fine with gcc 4.3.x
+# See B.K.O #163118: digikam-0.9.4_beta5 compilation hangs with gcc 4.3
+# Using -fno-tree-pre is work around this problem.
+
 IF(CMAKE_COMPILER_IS_GNUCXX)
   EXEC_PROGRAM(${CMAKE_CXX_COMPILER} ARGS --version OUTPUT_VARIABLE VERSION_GCC_INFO)
   STRING(REGEX MATCH " [34]\\.[0-9]\\.[0-9]" GCC_VERSION "${VERSION_GCC_INFO}")
