@@ -580,7 +580,6 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
     // -------------------------------------------------------------------
     // Write meta-data Tags contents. 
-    // TODO : - this code will be removed when Exiv2 will support TIFF in writing mode
 
     DMetadata metaData;
     metaData.setExif(m_image->getExif());
