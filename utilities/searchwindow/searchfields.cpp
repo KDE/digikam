@@ -1199,19 +1199,19 @@ void SearchFieldChoice::read(SearchXmlCachingReader &reader)
     if (relation == SearchXml::OneOf)
     {
         if (m_type == QVariant::Int)
-            m_model->setChecked(reader.valueToIntList());
+            m_model->setChecked<int>(reader.valueToIntList());
         else if (m_type == QVariant::String)
-            m_model->setChecked(reader.valueToStringList());
+            m_model->setChecked<QString>(reader.valueToStringList());
     }
     else
     {
         if (m_type == QVariant::Int)
         {
-            m_model->setChecked(reader.valueToInt(), relation);
+            m_model->setChecked<int>(reader.valueToInt(), relation);
         }
         else if (m_type == QVariant::String)
         {
-            m_model->setChecked(reader.value(), relation);
+            m_model->setChecked<QString>(reader.value(), relation);
         }
     }
 }
