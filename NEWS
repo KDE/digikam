@@ -13,7 +13,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 006 ==> 162688 : Digikam RC5, can't see scroll bar sliders in dark theme.
 007 ==> 161212 : Switch to full screen resets X11.
 008 ==> 164432 : Compilation fails with gcc 3.
-009 ==> 
 
 **********************************************************************************************
 digiKam 0.9.4-RC1 - Release date: 2008-06-17
