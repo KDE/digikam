@@ -1,4 +1,13 @@
 **********************************************************************************************
+digiKam 0.9.4 - Release date: 2008-07-xx
+
+NEW FEATURES:
+
+BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+
+001 ==> 164392 : Can't compile digikam with missing libkdcraw.
+
+**********************************************************************************************
 digiKam 0.9.4-RC2 - Release date: 2008-07-06
 
 NEW FEATURES:
