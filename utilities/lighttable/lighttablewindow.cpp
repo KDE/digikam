@@ -546,7 +546,6 @@ void LightTableWindow::slotThumbbarDroppedItems(const ImageInfoList& list)
     // Setting the third parameter of loadImageInfos to true 
     // means that the images are added to the presently available images.
     loadImageInfos(list, 0, true);
-    setLeftRightItems(list);
 }
 
 // We get here either
@@ -801,7 +800,6 @@ void LightTableWindow::slotLeftDroppedItems(const ImageInfoList& list)
         // Therefore we use setLeftRightItems if there is more than
         // one item in the list of dropped images.
     }
-    setLeftRightItems(list);
 }
 
 // Deal with one (or more) items dropped onto the right panel
@@ -810,7 +808,6 @@ void LightTableWindow::slotRightDroppedItems(const ImageInfoList& list)
     ImageInfo *info = *(list.begin());
     // add the image to the existing images
     loadImageInfos(list, info, true);
-    setLeftRightItems(list);
 
     // We will check if first item from list is already stored in thumbbar
     // Note that the thumbbar stores all ImageInfo reference
@@ -825,17 +822,17 @@ void LightTableWindow::slotRightDroppedItems(const ImageInfoList& list)
 }
 
 // Set the images for the left and right panel.
-void LightTableWindow::setLeftRightItems(const ImageInfoList &list)
+void LightTableWindow::setLeftRightItems(const ImageInfoList &list, bool addTo)
 {
     ImageInfoList l = list;
 
-    if (l.count() ==0 )
+    if (l.count() == 0)
         return;
 
     ImageInfo *info           = l.first();
     LightTableBarItem *ltItem = d->barView->findItemByInfo(info);
 
-    if (l.count() ==1 )
+    if (l.count() == 1 && !addTo)
     {
         // Just one item; this is used for the left panel.
         d->barView->setOnLeftPanel(info);
@@ -848,12 +845,15 @@ void LightTableWindow::setLeftRightItems(const ImageInfoList &list)
     if (ltItem)
     {
         // The first item is used for the left panel.
-        d->barView->setOnLeftPanel(info);
-        slotSetItemOnLeftPanel(info);
+        if (!addTo)
+        {
+            d->barView->setOnLeftPanel(info);
+            slotSetItemOnLeftPanel(info);
+        }
 
         // The subsequent item is used for the right panel.
         LightTableBarItem* next = dynamic_cast<LightTableBarItem*>(ltItem->next());
-        if (next)
+        if (next && !addTo)
         {
             d->barView->setOnRightPanel(next->info());
             slotSetItemOnRightPanel(next->info());
