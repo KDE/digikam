@@ -215,7 +215,14 @@ DigikamApp::~DigikamApp()
     // Close and delete image editor instance.
 
     if (ImageWindow::imagewindowCreated())
+    {
+        // Delete after close
+        ImageWindow::imagewindow()->setAttribute(Qt::WA_DeleteOnClose, true);
+        // pass ownership of object - needed by ImageWindow destructor
+        d->imagePluginsLoader->setParent(ImageWindow::imagewindow());
+        // close the window
         ImageWindow::imagewindow()->close();
+    }
 
     // Close and delete light table instance.
 
@@ -2026,7 +2033,7 @@ void DigikamApp::loadPlugins()
     // Setting the initial menu options after all plugins have been loaded
     d->view->slotAlbumSelected(AlbumManager::instance()->currentAlbum());
 
-    new ImagePluginLoader(this, d->splashScreen);
+    d->imagePluginsLoader = new ImagePluginLoader(this, d->splashScreen);
 }
 
 void DigikamApp::slotKipiPluginPlug()

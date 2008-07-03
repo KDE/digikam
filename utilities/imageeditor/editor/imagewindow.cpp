@@ -178,6 +178,8 @@ ImageWindow::ImageWindow()
 {
     d = new ImageWindowPriv;
     m_instance = this;
+    // We dont want to be deleted on close
+    setAttribute(Qt::WA_DeleteOnClose, false);
     setAcceptDrops(true); 
 
     // -- Build the GUI -------------------------------
@@ -189,8 +191,6 @@ ImageWindow::ImageWindow()
     // Load image plugins to GUI
 
     m_imagePluginLoader = ImagePluginLoader::instance();
-    // take ownership of object - we need it in our destructor
-    m_imagePluginLoader->setParent(this);
     loadImagePlugins();
 
     // Create context menu.
