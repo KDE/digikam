@@ -1,5 +1,348 @@
-0.9.4-beta5 2008-05-25
+0.9.4-rc2 2008-07-03
 -------------------------------------------------------------------------
+2008-07-03 10:13  aclemens
+
+    * NEWS, digikam.lsm, digikam/version.h, release_digikam.rb,
+      release_digikam_docs.rb: preparing 0.9.4-rc2 release
+
+2008-07-03 09:09  cgilles
+
+    * NEWS: update
+
+2008-07-03 09:08  cgilles
+
+    * NEWS, configure.in.in, libs/greycstoration/Makefile.am: digiKam
+      from KDE3 branch : use KDE_CHECK_COMPILER_FLAG to test if gcc
+      -fno-tree-pre is available instead an harcoded option passed in
+      makefile.
+      BUGS: 164432
+
+2008-07-02 22:46  aclemens
+
+    * NEWS: polish
+
+2008-07-02 22:45  aclemens
+
+    * NEWS: update
+
+2008-07-02 22:36  aclemens
+
+    * utilities/lighttable/lighttablewindow.cpp: If only one image is
+      left in thumbbar and it is removed from the list, lighttable
+      crashes. Again this is the same nullpointer issue as mentioned in
+      this bugreport and has been fixed now.
+      
+      CCBUGS:162814
+
+2008-07-02 11:55  aclemens
+
+    * NEWS: this bug (#162688) is not a digiKam related problem
+
+2008-07-02 11:45  aclemens
+
+    * NEWS, digikam/digikamapp.cpp, digikam/digikamappprivate.h: fixed
+      image resize issue when switching to fullscreen mode
+      
+      BUG:149654
+
+2008-07-02 09:21  cgilles
+
+    * libs/dimg/loaders/tiffloader.cpp: polish
+
+2008-06-30 04:28  cgilles
+
+    * digikam/digikam.desktop, showfoto/showfoto.desktop: patch from
+      Carsten Lohrke to fix .desktop file to foolow last change from
+      FreeDesktop spec.
+      http://www.freedesktop.org/wiki/Specifications/desktop-entry-spec
+
+2008-06-22 14:57  scripty
+
+    * digikam/digikam.desktop, kioslave/digikamtags.protocol,
+      showfoto/showfoto.desktop: SVN_SILENT made messages (.desktop
+      file)
+
+2008-06-21 20:11  cgilles
+
+    * NEWS: update
+
+2008-06-20 19:31  cgilles
+
+    * NEWS: update
+
+2008-06-20 04:17  cgilles
+
+    * NEWS: update
+
+2008-06-19 12:53  aclemens
+
+    * digikam/albumlister.cpp: fixed searching for folder names
+      
+      CCBUGS:164301
+
+2008-06-17 14:41  cgilles
+
+    * NEWS: update
+
+2008-06-17 14:09  aclemens
+
+    * NEWS, digikam/albumlister.cpp: Album names are searched as well
+      now when using the quickfilter.
+      
+      BUG:164301
+
+2008-06-17 09:14  cgilles
+
+    * NEWS: update
+
+2008-06-17 07:14  cgilles
+
+    * AUTHORS: update
+
+2008-06-17 06:31  cgilles
+
+    * digikam.lsm: update
+
+2008-06-17 06:30  cgilles
+
+    * release_digikam.rb: update
+
+2008-06-17 06:30  cgilles
+
+    * digikam/version.h: preapring 0.9.4-rc1 release
+
+2008-06-16 10:23  cgilles
+
+    * NEWS: updtae
+      BUG: 163118
+
+2008-06-15 17:31  cgilles
+
+    * libs/greycstoration/Makefile.am: try to fix broken compilation
+      with GCC 4.3.x
+      CCBUGS: 163118
+
+2008-06-13 17:26  cgilles
+
+    * NEWS: update
+
+2008-06-13 09:40  cgilles
+
+    * kioslave/Makefile.am: compile
+
+2008-06-12 07:26  cgilles
+
+    * digikam/timelineview.cpp: backport commit #819798 from KDE4
+
+2008-06-09 18:35  cgilles
+
+    * NEWS: update
+
+2008-06-07 10:43  aclemens
+
+    * NEWS, digikam/searchwidgets.cpp, kioslave/digikamsearch.cpp:
+      fixes the following issues:
+      
+      * simple and advanced search doesn't work for "tag names"
+      * new operators for "album" search added (LIKE, NLIKE) to be
+      consistant with "tag" search
+      * lineedit widget in advanced search needs to expand, it was too
+      short if window is resized
+      * some items in the operator combobox were not readable, because
+      the box was resized on key change. Now the box is prepopulated
+      with all operators first and its size is restored on every key
+      change.
+      
+      BUG: 163227
+
+2008-06-04 10:27  aclemens
+
+    * digikam/searchwidgets.cpp: digiKam from KDE3 branch: The album
+      combobox is also sorted now and the leading slash from the sorted
+      tag list has been removed to match the appearance of the album
+      list
+
+2008-06-04 08:09  cgilles
+
+    * libs/greycstoration/Makefile.am: disable final options to compile
+      CImg.h version 1.2.8.
+      This is a temporally solution util a fix is apply to CImg
+      CCBUGS: 163118
+
+2008-06-03 16:18  cgilles
+
+    * NEWS: update
+
+2008-06-03 10:00  cgilles
+
+    * utilities/lighttable/lighttablewindow.cpp: polish
+
+2008-06-03 07:51  cgilles
+
+    * utilities/cameragui/cameracontroller.cpp: compile
+
+2008-06-03 07:44  cgilles
+
+    * libs/widgets/metadata/exifwidget.cpp,
+      libs/widgets/metadata/gpswidget.cpp,
+      libs/widgets/metadata/iptcwidget.cpp,
+      libs/widgets/metadata/makernotewidget.cpp: compile
+
+2008-06-02 19:52  aclemens
+
+    * NEWS, utilities/lighttable/lighttablewindow.cpp: digiKam from
+      KDE3 branch: fixed null-pointer issue when removing the last item
+      in lighttable thumbbar
+      
+      CCBUGS: 162814
+      TODO: KDE4PORT
+
+2008-06-02 19:47  aclemens
+
+    * digikam/searchwidgets.cpp: digiKam from KDE3 branch: code cleanup
+      
+      BUG: 158866
+
+2008-06-02 19:43  aclemens
+
+    * NEWS, digikam/searchwidgets.cpp: digiKam from KDE3 branch: tags
+      have to be sorted before inserting them into the advanced search
+      widget
+
+2008-06-02 19:33  cgilles
+
+    * NEWS: digiKam from KDE3 branch: update NEWS file
+
+2008-06-02 06:32  cgilles
+
+    * NEWS: update
+
+2008-06-02 06:31  cgilles
+
+    * libs/imageproperties/imagedescedittab.cpp: digiKam from KDE3
+      branch : update tag view afetr to have apply changes from
+      Captions & Tags sidebar tab
+      BUGS: 162245
+
+2008-06-01 12:43  cgilles
+
+    * NEWS, README, configure.in.bot, configure.in.in,
+      digikam/Makefile.am, digikam/albumdb.cpp, kioslave/Makefile.am,
+      kioslave/sqlitedb.cpp, libs/Makefile.am, libs/sqlite3,
+      libs/sqlite3/Makefile.am, libs/sqlite3/sqlite3.c,
+      libs/sqlite3/sqlite3.h: digiKAm from KDE3 branch : sqlite 3.5.9
+      code source inclusion to digiKam core.
+      duing a wrong package config provided in sqlite3 package, it's
+      impossible to find the right version installed on computer.
+      Including sqlite3 directly on digiKam will solve this problem,
+      prevents all future bug reports, and reduce depencies.
+      CCBUGS: 160966
+
+2008-06-01 10:31  cgilles
+
+    * NEWS: update
+
+2008-06-01 10:30  cgilles
+
+    * README, configure.in.bot, configure.in.in: digiKam from KDE3
+      branch : fix libsqlite depency >= 3.5.9 release
+      BUGS: 160966
+
+2008-05-31 13:13  cgilles
+
+    * NEWS: update
+
+2008-05-30 08:15  cgilles
+
+    * utilities/setup/setupslideshow.cpp: fix i18n
+
+2008-05-29 04:26  cgilles
+
+    * NEWS: update
+
+2008-05-28 16:27  cgilles
+
+    * NEWS: update
+
+2008-05-28 16:26  cgilles
+
+    * libs/dimg/loaders/tiffloader.cpp, libs/dimg/loaders/tiffloader.h:
+      digikam from KDE3 branch : patch from Maximilian Schultz to
+      support Grayscale tiff image
+      BUGS: 148400
+
+2008-05-28 11:11  cgilles
+
+    * libs/imageproperties/imagepropertiesmetadatatab.cpp: polish
+
+2008-05-27 20:27  cgilles
+
+    * imageplugins/coreplugin/imageeffect_redeye.cpp,
+      imageplugins/coreplugin/imageeffect_redeye.h: digiKam from KDE3
+      branch : Red Eyes tool : fix precision problem from
+      QColor::hsh(). Use KColor instead.
+
+2008-05-27 13:04  cgilles
+
+    * NEWS: update
+
+2008-05-26 14:16  cgilles
+
+    * digikam/version.h: update
+
+2008-05-26 14:15  cgilles
+
+    * digikam.lsm: update
+
+2008-05-26 14:15  cgilles
+
+    * NEWS: update
+
+2008-05-26 14:13  cgilles
+
+    * utilities/imageeditor/editor/editorwindow.cpp: digiKam from KDE3
+      branch: set properlly the file mime type in save as dialog from
+      editor.
+      BUGS: 162496
+
+2008-05-25 16:31  cgilles
+
+    * digikam/albumiconview.cpp, digikam/tagfilterview.cpp,
+      digikam/tagfolderview.cpp,
+      libs/imageproperties/talbumlistview.cpp,
+      project/project.kdevelop: Same problem here with tags assignement
+      and tags filter about AlbumLister handling
+      CCBUGS: 161369
+
+2008-05-25 16:19  cgilles
+
+    * libs/imageproperties/imagedescedittab.cpp: same problem here. we
+      need to block AlbumLister when Rating is assigned
+      CCBUGS: 161369
+
+2008-05-25 16:01  cgilles
+
+    * digikam/albumiconview.cpp: second try to fix Rating assign from
+      keybord shortcuts
+      CCBUGS: 161369
+
+2008-05-25 13:48  cgilles
+
+    * digikam/albumiconview.cpp: try to fix crash with rating keyboard
+      shortcuts.
+      CCBUGS: 161369
+
+2008-05-25 09:52  cgilles
+
+    * libs/dialogs/imagedialog.cpp: fix i18n
+
+2008-05-24 06:58  cgilles
+
+    * ChangeLog: update
+
+2008-05-24 06:50  cgilles
+
+    * release_digikam.rb: update
 
 2008-05-24 06:43  cgilles
 
