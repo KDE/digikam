@@ -4,6 +4,22 @@ dnl about additional packages to install.
 echo ""
 echo "-- digiKam configure results -------------------"
 
+if test "x$included_sqlite3" = "xno"; then
+    if test "x$have_sqlite3" != "xyes"; then
+        echo "-- libsqlite3 library found....... NO"
+        echo ""
+        echo "digiKam have been set to be compiled using shared libsqlite3 library."
+        echo "digiKam needs libsqlite3 library development package."
+        echo "You need to install the right version first."
+        echo "Look depencies description from README for details."
+        echo "libsqlite3 website is http://www.sqlite.org"
+        echo ""
+        all_tests=bad
+    else
+        echo "-- libsqlite3 library found....... YES"
+    fi
+fi
+
 if test -z "$GPHOTO_CONFIG" ; then
   echo "-- libgphoto2 library found....... NO"
   echo ""

@@ -299,6 +299,42 @@ fi
 
 #------------------------------------------------------------------
 #
+# Check for local/shared sqlite3
+#
+#------------------------------------------------------------------
+
+LIB_SQLITE3=""
+
+AC_ARG_WITH(included-sqlite3,
+    AC_HELP_STRING([--without-included-sqlite3],[build digiKam using system sqlite3 library]),
+    [included_sqlite3=$withval],
+    [included_sqlite3=yes]
+)
+
+if test x$included_sqlite3 = xno; then
+    if test x$PKGCONFIGFOUND = xyes; then
+        PKG_CHECK_MODULES(SQLITE, sqlite3 >= 3.5, have_sqlite3=yes,have_sqlite3=no)
+
+        if test x$have_sqlite3 = xyes; then
+            ## AC_DEFINE(HAVE_SQLITE3, 1, [have SQLite3 database library])
+            LIB_SQLITE3=`pkg-config --libs sqlite3`
+        else
+            # We don't support not having sqlite3 anymore
+            DO_NOT_COMPILE="digikam $DO_NOT_COMPILE"
+        fi
+    fi
+fi
+
+AC_SUBST(LIB_SQLITE3)
+AM_CONDITIONAL(with_included_sqlite3, [test x$included_sqlite3 = xyes])
+
+###############################################################################
+# END SQLITE CHECK
+###############################################################################
+
+
+#------------------------------------------------------------------
+#
 # NFS is Evil (sqlite makes use of file locking for allowing 
 # multiple processes to access the database. but on many 
 # nfs implementations, this file locking is horribly broken and

@@ -96,6 +96,7 @@ liblcms    >= 1.14.x                       http://www.littlecms.com
 libtiff    >= 3.6.x (>=3.8.2 recommended)  http://www.remotesensing.org/libtiff
 libpng     >= 1.2.x                        http://www.libpng.org/pub/png/libpng.html
 libjasper  >= 1.7.x                        http://www.ece.uvic.ca/~mdadams/jasper
+libsqlite3 >= 3.5.9 (optional)             http://www.sqlite.org
 
 Note : all library dependencies require development and binary packages installed on your
 computer to compile digiKam.

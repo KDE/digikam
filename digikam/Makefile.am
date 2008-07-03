@@ -1,7 +1,11 @@
 METASOURCES = AUTO
 
+if with_included_sqlite3
+    LIB_SQLITE3_LOCAL = $(top_builddir)/digikam/libs/sqlite3/libsqlite3.la
+    SQLITE3_INCLUDES = -I$(top_srcdir)/digikam/libs/sqlite3
+endif
+
 INCLUDES = -I$(top_srcdir)/digikam/libs/sqlite2 \
-	   -I$(top_srcdir)/digikam/libs/sqlite3 \
 	   -I$(top_srcdir)/digikam/libs/histogram \
 	   -I$(top_srcdir)/digikam/libs/levels \
 	   -I$(top_srcdir)/digikam/libs/curves \
@@ -22,6 +26,7 @@ INCLUDES = -I$(top_srcdir)/digikam/libs/sqlite2 \
 	   -I$(top_srcdir)/digikam/utilities/slideshow \
 	   -I$(top_srcdir)/digikam/utilities/batch \
 	   -I$(top_srcdir)/digikam/utilities/lighttable \
+	   $(SQLITE3_INCLUDES) \
 	   $(LIBKEXIV2_CFLAGS) \
 	   $(LIBKIPI_CFLAGS) \
 	   $(LIBKDCRAW_CFLAGS) \
@@ -102,14 +107,17 @@ libdigikam_la_SOURCES = kdateedit.cpp \
 	                upgradedb_sqlite2tosqlite3.cpp \
 	                welcomepageview.cpp 
 
-libdigikam_la_LIBADD = $(LIB_KIO) \
+# NOTE: if local libsqlite3 is used LIB_SQLITE3 is null.
+#       if shared libsqlite3 is used LIB_SQLITE3_LOCAL is null.
+libdigikam_la_LIBADD = $(LIB_SQLITE3) \
+	               $(LIB_SQLITE3_LOCAL) \
+	               $(LIB_KIO) \
 	               $(LIB_KABC) \
 	               $(LIB_KHTML) \
 	               $(LIBKIPI_LIBS) \
 	               $(LIBKEXIV2_LIBS) \
 	               $(LIB_KUTILS) \
 	               $(top_builddir)/digikam/libs/sqlite2/libsqlite2.la \
-	               $(top_builddir)/digikam/libs/sqlite3/libsqlite3.la \
 	               $(top_builddir)/digikam/libs/thumbbar/libthumbbar.la \
 	               $(top_builddir)/digikam/libs/themeengine/libthemeengine.la \
 	               $(top_builddir)/digikam/libs/widgets/libwidgets.la \
