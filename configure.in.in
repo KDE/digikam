@@ -321,3 +321,15 @@ if test "x$enable_nfs_hack" = "xyes"; then
    AC_MSG_NOTICE([NFS hack enabled. Make sure you know what you are doing])
 fi
 
+#------------------------------------------------------------------
+#
+# get the gcc version
+#
+# CImg.h version 1.2.8 do not compile fine with gcc 4.3.x
+# See B.K.O #163118: digikam-0.9.4_beta5 compilation hangs with gcc 4.3
+# Using -fno-tree-pre is work around this problem.
+#
+#------------------------------------------------------------------
+
+KDE_CHECK_COMPILER_FLAG(fno-tree-pre,[CXXFLAGS="-fno-tree-pre $CXXFLAGS"])
+
