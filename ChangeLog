@@ -56,12 +56,6 @@
       FreeDesktop spec.
       http://www.freedesktop.org/wiki/Specifications/desktop-entry-spec
 
-2008-06-22 14:57  scripty
-
-    * digikam/digikam.desktop, kioslave/digikamtags.protocol,
-      showfoto/showfoto.desktop: SVN_SILENT made messages (.desktop
-      file)
-
 2008-06-21 20:11  cgilles
 
     * NEWS: update
@@ -1041,12 +1035,6 @@
           
           CCBUGS: 160323
           TODO:KDE4PORT
-
-2008-04-09 10:24  scripty
-
-        * /branches/extragear/kde3/graphics/digikam/imageplugins/hotpixels/digikamimageplugin_hotpixels.desktop,
-          /branches/extragear/kde3/graphics/digikam/imageplugins/infrared/digikamimageplugin_infrared.desktop:
-          SVN_SILENT made messages (.desktop file)
 
 2008-04-08 22:35  cgilles
 
