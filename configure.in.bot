@@ -6,6 +6,7 @@ echo "-- digiKam configure results -------------------"
 
 if test "x$included_sqlite3" = "xno"; then
     if test "x$have_sqlite3" != "xyes"; then
+        echo "-- using internal libsqlite3...... NO"
         echo "-- libsqlite3 library found....... NO"
         echo ""
         echo "digiKam have been set to be compiled using shared libsqlite3 library."
@@ -16,8 +17,11 @@ if test "x$included_sqlite3" = "xno"; then
         echo ""
         all_tests=bad
     else
+        echo "-- using internal libsqlite3...... NO"
         echo "-- libsqlite3 library found....... YES"
     fi
+else
+    echo "-- using internal libsqlite3...... YES"
 fi
 
 if test -z "$GPHOTO_CONFIG" ; then
