@@ -3,6 +3,8 @@
 # Generates a release tarball from KDE SVN
 #
 # Copyright (C) 2007-2008 Harald Sitter <harald@getamarok.com>
+# 
+# https://code.edge.launchpad.net/~apachelogger/+junk/extragear-release-script
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
