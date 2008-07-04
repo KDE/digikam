@@ -1,4 +1,7 @@
-digiKam 0.10.0 - Release date: 2008-09-xx
+digiKam 0.10.0-beta1 - Release date: 2008-09-06
+
+IMPORTANT: This is a beta release : do not use yet in production !!!
+====================================================================
 
 NEW FEATURES:
 
@@ -81,6 +84,4 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 040 ==> 165318 : digiKam doesn't start because of SQL.
 041 ==> 165342 : Crash when changing album sort modus.
 042 ==> 165338 : Right sidebar initally too big.
-043 ==> 
-
 
