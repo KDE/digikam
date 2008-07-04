@@ -31,7 +31,7 @@
 // KDE includes.
 
 #include <kurl.h>
-#include <Phonon/MediaObject>
+#include <phonon/mediaobject.h>
 
 // Local includes
 
