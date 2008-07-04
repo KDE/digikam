@@ -13,7 +13,10 @@
 **
 ** @(#) $Id$
 */
+#ifdef HAVE_CONFIG
 #include "config.h"
+#endif
+
 #include "sqlite.h"
 #include "hash.h"
 #include "parse.h"
