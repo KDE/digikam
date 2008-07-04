@@ -22,7 +22,6 @@
 
 # DOC TODO
 def fetchSource()
-    bar  = @dlg.progressbar("fetching source code",1)
     FileUtils.rm_rf( @folder )
     FileUtils.rm_rf( "#{@folder}.tar.bz2" )
 
@@ -41,36 +40,32 @@ def fetchSource()
     puts "Fetching source from #{branch}...\n\n"
     # TODO: ruby-svn
     system("svn co #{@repo}/#{COMPONENT}/#{SECTION}/#{NAME} #{@folder}")
-
-    bar.progress = 1
-    bar.close
 end
 
 # Removes all .svn directories, creates a tar.bz2 and removes the source folder.
 # You probably want to run this command as one of the last actions, since for
 # example tagging heavily depends on the presence of the .svn directories.
 def createTar()
+    puts("creating tarball...")
     baseDir()
-    bar  = @dlg.progressbar("creating tarball",4)
     system("find #{@folder} -name .svn | xargs rm -rf")
-    bar.progress = 1
     system("tar -cf #{@folder}.tar #{@folder}")
-    bar.progress = 2
     system("bzip2 #{@folder}.tar")
-    bar.progress = 3
     FileUtils.rm_rf(@folder)
-    bar.close
+    puts("tarball created...")
 end
 
 # Create and output checksums for the created tarball
 # * MD5
 # * SHA1
 def createCheckSums()
-    @md5sum = system("md5sum #{@folder}.tar.bz2")
-    puts("MD5Sum: #{@md5sum}")
+    puts("#########################################")
 
-    @sha1sum = `sha1sum #{@folder}.tar.bz2`
-    puts("SHA1Sum: #{@sha1sum}")
+    @md5sum = %x[md5sum #{@folder}.tar.bz2]
+    puts("MD5Sum: #{@md5sum.split(" ")[0]}")
+
+    @sha1sum = %x[sha1sum #{@folder}.tar.bz2]
+    puts("SHA1Sum: #{@sha1sum.split(" ")[0]}")
 end
 
 # TODO

@@ -33,6 +33,36 @@ require 'lib/libtag.rb'
 
 # digikam-only changes
 def digikam()
+    puts("Running digikam-only changes")
+    srcDir()
+
+    # change version in CMakeLists.txt
+    version       = @version.split(".")
+    majorversion  = version[0]
+    minorversion  = version[1]
+    patchversion  = version[2].split("-")[0]
+    suffixversion = version[2].split("-")[1]
+
+    file = File.new( "CMakeLists.txt", File::RDWR )
+    str = file.read()
+    file.rewind()
+    file.truncate( 0 )
+    str.sub!( /SET\(DIGIKAM_MAJOR_VERSION \".*\"\)/, "SET\(DIGIKAM_MAJOR_VERSION \"#{majorversion}\"\)" )
+    str.sub!( /SET\(DIGIKAM_MINOR_VERSION \".*\"\)/, "SET\(DIGIKAM_MINOR_VERSION \"#{minorversion}\"\)" )
+    str.sub!( /SET\(DIGIKAM_PATCH_VERSION \".*\"\)/, "SET\(DIGIKAM_PATCH_VERSION \"#{patchversion}\"\)" )
+    unless suffixversion.empty?()
+        str.sub!( /SET\(DIGIKAM_SUFFIX_VERSION \".*\"\)/, "SET\(DIGIKAM_SUFFIX_VERSION \"-#{suffixversion}\"\)" )
+    end
+    file << str
+    file.close()
+
+    # remove unnecessary stuff from tarball
+    toberemoved = ["project"]
+    for object in toberemoved
+        FileUtils.rm_rf(object)
+    end
+
+    baseDir()
 end
 
 informationQuery()
@@ -48,9 +78,11 @@ fetchTranslations()
 
 createTranslationStats()
 
-# TODO: Broken
+# TODO: currently broken
 # createTag()
 
-# digikam()
+digikam()
 
 createTar()
+
+createCheckSums()

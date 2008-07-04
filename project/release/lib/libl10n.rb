@@ -25,7 +25,6 @@ require 'lib/libkdialog.rb'
 @dlg = KDialog.new("#{NAME} release script","start-here")
 
 def fetchTranslations()
-    bar  = @dlg.progressbar("preparing l10n processing",1)
     srcDir()
     Dir.mkdir("l10n")
     Dir.mkdir("po")
@@ -34,14 +33,8 @@ def fetchTranslations()
     @translations = []
     subdirs       = false
 
-    bar.maxvalue = l10nlangs.count("\n")
-    step         = 0
-
     for lang in l10nlangs
         lang.chomp!()
-        bar.label    = "processing po/#{lang}"
-        bar.progress = step
-        step        += 1
 
         pofilename = "l10n-kde4/#{lang}/messages/#{COMPONENT}-#{SECTION}"
         # TODO: ruby-svn
@@ -69,7 +62,6 @@ def fetchTranslations()
 
         subdirs = true
     end
-    bar.close
 
     if subdirs
         # create po's cmake file
@@ -108,9 +100,6 @@ def fetchDocumentation()
     @docs     = []
     subdirs   = false
 
-    bar.maxvalue = l10nlangs.count( "\n" )
-    step         = 0
-
     system("svn co #{@repo}/#{COMPONENT}/#{SECTION}/doc/#{NAME} doc/en_US")
     cmakefile = File.new( "doc/en_US/CMakeLists.txt", File::CREAT | File::RDWR | File::TRUNC )
     cmakefile << "kde4_create_handbook(index.docbook INSTALL_DESTINATION \${HTML_INSTALL_DIR}/\${CURRENT_LANG}/ SUBDIR #{NAME} )\n"
@@ -119,9 +108,6 @@ def fetchDocumentation()
     # docs
     for lang in l10nlangs
         lang.chomp!()
-        bar.label    = "processing #{lang}'s #{NAME} documentation"
-        bar.progress = step
-        step        += 1
 
         docdirname = "l10n-kde4/#{lang}/docs/#{COMPONENT}-#{SECTION}/#{NAME}"
         # TODO: ruby-svn
@@ -146,7 +132,6 @@ def fetchDocumentation()
 
         subdirs = true
     end
-    bar.close
 
     srcDir()
 
