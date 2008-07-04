@@ -27,6 +27,11 @@ SET(DIGIKAM_VERSION_STRING
 # ==================================================================================================
 # Depencies
 
+FIND_PACKAGE(KDE4 REQUIRED)
+INCLUDE(KDE4Defaults)
+INCLUDE(MacroLibrary)
+INCLUDE(MacroOptionalAddSubdirectory)
+
 INCLUDE(FindPackageHandleStandardArgs)
 
 MACRO_OPTIONAL_FIND_PACKAGE(LCMS)
