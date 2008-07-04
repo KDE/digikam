@@ -50,6 +50,7 @@ end
 # You probably want to run this command as one of the last actions, since for
 # example tagging heavily depends on the presence of the .svn directories.
 def createTar()
+    baseDir()
     bar  = @dlg.progressbar("creating tarball",4)
     system("find #{@folder} -name .svn | xargs rm -rf")
     bar.progress = 1

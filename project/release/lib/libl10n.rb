@@ -58,7 +58,7 @@ def fetchTranslations()
         # create lang's cmake files
         cmakefile = File.new( "#{dest}/CMakeLists.txt", File::CREAT | File::RDWR | File::TRUNC )
         cmakefile << "file(GLOB _po_files *.po)\n"
-        cmakefile << "GETTEXT_PROCESS_PO_FILES(${CURRENT_LANG} ALL INSTALL_DESTINATION ${LOCALE_INSTALL_DIR} ${_po_files} )\n"
+        cmakefile << "GETTEXT_PROCESS_PO_FILES(#{lang} ALL INSTALL_DESTINATION ${LOCALE_INSTALL_DIR} ${_po_files} )\n"
         cmakefile.close()
 
         # add to SVN in case we are tagging
@@ -186,7 +186,7 @@ def createTranslationStats()
     @cnotshow = 0  #all not-shown
     @cper     = 0  #percentage
     puts(Dir.pwd)
-    @file     = "../amarok-l10n-#{@version}.html"
+    @file     = "../#{NAME}-l10n-#{@version}.html"
     puts(@file)
 
     def calcPercentage( per )
@@ -204,7 +204,7 @@ def createTranslationStats()
         <html>
         <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Statistics of Amarok #{@version} translations</title>
+        <title>Statistics of #{NAME} #{@version} translations</title>
         </head>
         <body>
         <a name="__top"><p align="center"><a name="statistics of amarok #{@version} translations">
@@ -249,7 +249,7 @@ def createTranslationStats()
         Dir.chdir("po/#{lang}")
 
         # grab statistics data
-        `msgfmt --statistics amarok.po 2> tmp.txt`
+        system("msgfmt --statistics #{NAME}.po 2> tmp.txt")
         term = `cat tmp.txt`
         File.delete("tmp.txt")
 
