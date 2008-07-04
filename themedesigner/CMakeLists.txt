@@ -42,7 +42,6 @@ INCLUDE_DIRECTORIES(
                      ../digikam
                      ../
 
-                     ${CMAKE_BINARY_DIR}/digikam/digikam
                      # config-digikam.h
                      ${CMAKE_CURRENT_BINARY_DIR}/../
 
