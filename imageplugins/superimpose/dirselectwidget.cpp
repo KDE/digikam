@@ -33,7 +33,7 @@
 // KDE includes
 
 #include <klocale.h>
-#include <KFileTreeBranch>
+#include <kfiletreebranch.h>
 
 // Local includes.
 
