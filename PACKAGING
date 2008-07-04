@@ -6,33 +6,18 @@ Notice to make release tarballs from SVN
 
 1/ Update the release info in digikam/CMakeLists.txt and commit it to svn.
   
-2/ Edited release_digikam.rb and release_digikam_docs.rb script. Update these settings :
-   - version.
-   - svnbase (your own svn access that  you used for checkout must appear here. In case of pb, eliminate the others).
-   - addPo (for example addPo = ["showfoto"] if showofoto is include in digikam tarball).
-   
-Note : docs must be set to 'no' because the documentation must be packaged in a separate tarball to decrease the source code tarball size. There is a seperate script to generate this.
 
 3/ Commit changed files to svn.
 
 4/ Backup old ChangeLog file to ChangeLog.old.
 
-5a/ Create a fresh ChangeLog file using svn2cl script. Just run it from main digiKam root directory.
-    Please check if ChangeLog file is updated properly.
+5/ Create a fresh ChangeLog file using svn2cl script. Just run it from main digiKam root directory.
+   Please check if ChangeLog file is updated properly.
 
-svn2cl can be dowloaded at this url: http://ch.tudelft.nl/~arthur/svn2cl/
-Just copying this tarball content on digikam root directory to use it.
+   svn2cl can be dowloaded at this url: http://ch.tudelft.nl/~arthur/svn2cl/
+   Just copying this tarball content on digikam root directory to use it.
 
-Note : svn2cl need xsltproc program. Please install it before. (check libxslt-proc package).
-
-5b) Alternatively:
-	* check Changelog for last change, modify release_digikam(imageplguins)_cl.sh
-	  (use last-rev+1 or date) and run it.
-	* add a version header and release date for the new release, include the generated
-	  Changelog.new-entries at the top of Changelog. Check if the last
-	  entry of the new-entries is not already in the old Changelog entries
-	* commit the new changelog
-        * skip item 6 and 7 below
+   Note : svn2cl need xsltproc program. Please install it before. (check libxslt-proc package).
 
 6/ Copy last changes of fresh ChangeLog file to ChangeLog.old using a simple text editor. 
    Place a release tag at the top of ChangeLog. Remove all 'scripty' entries in log.
@@ -44,7 +29,10 @@ Note : svn2cl need xsltproc program. Please install it before. (check libxslt-pr
    last major release. Look into ML, changelog and use BKO filter for bug summaries.
    Commit to svn.
 
-8/ Run release_digikam.rb script and the release_digikam_docs.rb ($ ruby foo.rb)
+8/ Run project/release/release_digikam.rb script to release digiKam source tarball.
+   Run project/release/release_digikam_docs.rb script to release documentation tarball.
+   
+   Note : the documentation must be packaged in a separate tarball to decrease the source code tarball size.
 
 9/ When tarball is created, decompress it in a temp folder and try to compile it to prevent any problems.
 
