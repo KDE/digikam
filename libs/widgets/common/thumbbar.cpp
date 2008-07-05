@@ -98,6 +98,7 @@ public:
     int                         maxTileSize;
 
     QTimer                     *timer;
+    QTimer                     *preloadTimer;
 
     QPoint                      dragStartPos;
 
@@ -148,6 +149,8 @@ ThumbBarView::ThumbBarView(QWidget* parent, int orientation, bool exifRotate,
     d->toolTipSettings = settings;
     d->toolTip         = new ThumbBarToolTip(this);
     d->timer           = new QTimer(this);
+    d->preloadTimer    = new QTimer(this);
+    d->preloadTimer->setSingleShot(true);
     d->thumbLoadThread = ThumbnailLoadThread::defaultThumbBarThread();
     d->thumbLoadThread->setExifRotate(exifRotate);
     d->maxTileSize     = d->thumbLoadThread->maximumThumbnailSize();
@@ -157,6 +160,13 @@ ThumbBarView::ThumbBarView(QWidget* parent, int orientation, bool exifRotate,
 
     connect(d->timer, SIGNAL(timeout()),
             this, SLOT(slotUpdate()));
+
+    connect(d->preloadTimer, SIGNAL(timeout()),
+            this, SLOT(slotPreload()));
+
+    // trigger preloading after scrolling
+    connect(this, SIGNAL(contentsMoving(int,int)),
+            this, SLOT(triggerPreload()));
 
     viewport()->setMouseTracking(true);
     viewport()->setAcceptDrops(true);
@@ -271,6 +281,11 @@ void ThumbBarView::triggerUpdate()
 {
     d->timer->setSingleShot(true);
     d->timer->start(0);
+}
+
+void ThumbBarView::triggerPreload()
+{
+    d->preloadTimer->start(50);
 }
 
 ThumbBarItem* ThumbBarView::currentItem() const
@@ -400,6 +415,11 @@ bool ThumbBarView::pixmapForItem(ThumbBarItem *item, QPixmap &pix) const
     {
         return d->thumbLoadThread->find(item->url().path(), pix, d->tileSize);
     }
+}
+
+void ThumbBarView::preloadPixmapForItem(ThumbBarItem *item) const
+{
+    d->thumbLoadThread->find(item->url().path(), qMin(d->tileSize, d->maxTileSize));
 }
 
 void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
@@ -688,10 +708,6 @@ void ThumbBarView::rearrangeItems()
     {
         item->d->pos = pos;
         pos += d->tileSize + 2*d->margin;
-        /*
-        if (!(item->d->pixmap))
-            urlList.append(item->d->url);
-        */
         item = item->d->next;
     }
 
@@ -700,13 +716,9 @@ void ThumbBarView::rearrangeItems()
     else
         resizeContents(d->count*(d->tileSize+2*d->margin), visibleHeight());
 
-    /*
-    if (!urlList.isEmpty())
-    {
-        for (KUrl::List::const_iterator it = urlList.begin() ; it != urlList.end() ; ++it)
-            d->thumbLoadThread->find((*it).path(), d->tileSize);
-    }
-    */
+    // only trigger preload if we have valid arranged items
+    if (d->count)
+        triggerPreload();
 }
 
 void ThumbBarView::repaintItem(ThumbBarItem* item)
@@ -724,6 +736,45 @@ void ThumbBarView::slotUpdate()
 {
     rearrangeItems();
     viewport()->update();
+}
+
+void ThumbBarView::slotPreload()
+{
+    // we get items in an area visibleWidth() to the left and right of the visible area
+    if (getOrientation() == Qt::Vertical)
+    {
+        int y1 = contentsY() - visibleHeight();
+        int y2 = contentsY();
+        int y3 = contentsY() + visibleHeight();
+        int y4 = contentsY() + 2* visibleHeight();
+
+        for (ThumbBarItem *item = firstItem(); item; item = item->next())
+        {
+            int pos = item->position();
+            if ( (y1 <= pos && pos <= y2) || (y3 <= pos && pos <= y4))
+                preloadPixmapForItem(item);
+
+            if (pos > y4)
+                break;
+        }
+    }
+    else
+    {
+        int x1 = contentsX() - visibleWidth();
+        int x2 = contentsX();
+        int x3 = contentsX() + visibleWidth();
+        int x4 = contentsX() + 2* visibleWidth();
+
+        for (ThumbBarItem *item = firstItem(); item; item = item->next())
+        {
+            int pos = item->position();
+            if ( (x1 <= pos && pos <= x2) || (x3 <= pos && pos <= x4))
+                preloadPixmapForItem(item);
+
+            if (pos > x4)
+                break;
+        }
+    }
 }
 
 void ThumbBarView::slotGotThumbnail(const LoadingDescription& desc, const QPixmap& pix)

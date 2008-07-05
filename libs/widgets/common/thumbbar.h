@@ -141,6 +141,7 @@ protected:
     int  getMargin();
 
     bool pixmapForItem(ThumbBarItem *item, QPixmap &pix) const;
+    void preloadPixmapForItem(ThumbBarItem *item) const;
 
     void resizeEvent(QResizeEvent*);
     void contentsMousePressEvent(QMouseEvent*);
@@ -160,6 +161,8 @@ protected:
 protected slots:
 
     void slotUpdate();
+    virtual void slotPreload();
+    void triggerPreload();
 
 private slots:
 
