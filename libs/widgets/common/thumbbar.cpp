@@ -120,15 +120,12 @@ public:
     ThumbBarItemPriv()
     {
         pos    = 0;
-        pixmap = 0;
         next   = 0;
         prev   = 0;
         view   = 0;
     }
 
     int           pos;
-
-    QPixmap       pixmap;
 
     KUrl          url;
 
@@ -149,7 +146,7 @@ ThumbBarView::ThumbBarView(QWidget* parent, int orientation, bool exifRotate,
     d->toolTipSettings = settings;
     d->toolTip         = new ThumbBarToolTip(this);
     d->timer           = new QTimer(this);
-    d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
+    d->thumbLoadThread = ThumbnailLoadThread::defaultThumbBarThread();
     d->thumbLoadThread->setExifRotate(exifRotate);
 
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
@@ -375,9 +372,13 @@ void ThumbBarView::invalidateThumb(ThumbBarItem* item)
 {
     if (!item) return;
 
-    item->d->pixmap = QPixmap();
     d->thumbLoadThread->deleteThumbnail(item->url().path());
-    d->thumbLoadThread->find(item->url().path());
+    d->thumbLoadThread->find(item->url().path(), d->tileSize);
+}
+
+bool ThumbBarView::pixmapForItem(ThumbBarItem *item, QPixmap &pix) const
+{
+    return d->thumbLoadThread->find(item->url().path(), pix, d->tileSize);
 }
 
 void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
@@ -417,9 +418,10 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
 
                 p.drawRect(tile);
 
-                if (item->hasPixmap())
+                QPixmap pix;
+                if (pixmapForItem(item, pix))
                 {
-                    QPixmap pix = item->pixmap().scaled(d->tileSize, d->tileSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+                    //QPixmap pix = item->pixmap().scaled(d->tileSize, d->tileSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
                     int x = (tile.width()  - pix.width())/2;
                     int y = (tile.height() - pix.height())/2;
                     p.drawPixmap(x, y, pix);
@@ -443,9 +445,9 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
 
                 p.drawRect(tile);
 
-                if (item->hasPixmap())
+                QPixmap pix;
+                if (pixmapForItem(item, pix))
                 {
-                    QPixmap pix = item->pixmap().scaled(d->tileSize, d->tileSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
                     int x = (tile.width()  - pix.width())/2;
                     int y = (tile.height() - pix.height())/2;
                     p.drawPixmap(x, y, pix);
@@ -665,8 +667,10 @@ void ThumbBarView::rearrangeItems()
     {
         item->d->pos = pos;
         pos += d->tileSize + 2*d->margin;
+        /*
         if (!(item->d->pixmap))
             urlList.append(item->d->url);
+        */
         item = item->d->next;
     }
 
@@ -675,11 +679,13 @@ void ThumbBarView::rearrangeItems()
     else
         resizeContents(d->count*(d->tileSize+2*d->margin), visibleHeight());
 
+    /*
     if (!urlList.isEmpty())
     {
         for (KUrl::List::const_iterator it = urlList.begin() ; it != urlList.end() ; ++it)
-            d->thumbLoadThread->find((*it).path());
+            d->thumbLoadThread->find((*it).path(), d->tileSize);
     }
+    */
 }
 
 void ThumbBarView::repaintItem(ThumbBarItem* item)
@@ -708,7 +714,6 @@ void ThumbBarView::slotGotThumbnail(const LoadingDescription& desc, const QPixma
             return;
 
         ThumbBarItem* item = *it;
-        item->setPixmap(pix);
         item->repaint();
     }
 }
@@ -788,21 +793,6 @@ QRect ThumbBarItem::rect() const
 int ThumbBarItem::position() const
 {
     return d->pos;
-}
-
-bool ThumbBarItem::hasPixmap() const
-{
-    return !d->pixmap.isNull();
-}
-
-QPixmap ThumbBarItem::pixmap() const
-{
-    return d->pixmap;
-}
-
-void ThumbBarItem::setPixmap(const QPixmap &pixmap)
-{
-    d->pixmap = pixmap;
 }
 
 void ThumbBarItem::repaint()

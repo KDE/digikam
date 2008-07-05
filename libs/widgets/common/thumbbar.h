@@ -140,6 +140,8 @@ protected:
     int  getTileSize();
     int  getMargin();
 
+    bool pixmapForItem(ThumbBarItem *item, QPixmap &pix) const;
+
     void resizeEvent(QResizeEvent*);
     void contentsMousePressEvent(QMouseEvent*);
     void contentsMouseMoveEvent(QMouseEvent*);
@@ -185,10 +187,6 @@ public:
     ThumbBarItem* prev() const;
     int           position() const;
     QRect         rect() const;
-    bool          hasPixmap() const;
-    QPixmap       pixmap() const;
-
-    void          setPixmap(const QPixmap& pixmap);
 
     void          repaint();
 
