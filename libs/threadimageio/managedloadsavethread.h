@@ -115,6 +115,7 @@ protected:
               LoadingPolicy policy = LoadingPolicyAppend, AccessMode mode = AccessModeReadWrite);
     void loadPreview(LoadingDescription description);
     void loadThumbnail(LoadingDescription description);
+    void preloadThumbnail(LoadingDescription description);
     void prependThumbnailGroup(QList<LoadingDescription> descriptions);
 
 private:

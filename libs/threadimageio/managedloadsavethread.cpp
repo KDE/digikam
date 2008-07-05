@@ -190,15 +190,13 @@ void ManagedLoadSaveThread::load(LoadingDescription description, LoadingMode loa
                 break;
             //DDebug() << "LoadingPolicyAppend, Existing task " << existingTask << ", m_currentTask " << m_currentTask << endl;
             // append new loading task, put it in front of preloading tasks
-            for (int i = 0; i<m_todo.count(); i++)
+            int i;
+            for (i = 0; i<m_todo.count(); i++)
             {
-                LoadSaveTask *task = m_todo[i];
-                if ( (loadingTask = checkLoadingTask(task, LoadingTaskFilterPreloading)) )
-                {
-                    m_todo.insert(i, createLoadingTask(description, false, loadingMode, accessMode));
+                if (checkLoadingTask(m_todo[i], LoadingTaskFilterPreloading))
                     break;
-                }
             }
+            m_todo.insert(i, createLoadingTask(description, false, loadingMode, accessMode));
             break;
         case LoadingPolicyPreload:
             // append to the very end of the list
@@ -251,7 +249,6 @@ void ManagedLoadSaveThread::loadPreview(LoadingDescription description)
 
 void ManagedLoadSaveThread::loadThumbnail(LoadingDescription description)
 {
-    // This is simply appending.
     // Thumbnail threads typically only support thumbnail tasks,
     // so no need to differentiate with normal loading tasks.
 
@@ -265,8 +262,28 @@ void ManagedLoadSaveThread::loadThumbnail(LoadingDescription description)
         return;
     }
 
+    // append new loading task, put it in front of preloading tasks
+    m_todo.prepend(new ThumbnailLoadingTask(this, description));
+
     // append new loading task
-    m_todo.append(new ThumbnailLoadingTask(this, description));
+    m_condVar.wakeAll();
+}
+
+void ManagedLoadSaveThread::preloadThumbnail(LoadingDescription description)
+{
+    QMutexLocker lock(&m_mutex);
+    LoadingTask *existingTask = findExistingTask(description);
+
+    // reuse task if it exists
+    if (existingTask)
+        return;
+
+    // create new loading task
+    ThumbnailLoadingTask *task = new ThumbnailLoadingTask(this, description);
+    // mark as preload task
+    task->setStatus(LoadingTask::LoadingTaskStatusPreloading);
+    // append to the end of the list
+    m_todo.append(task);
     m_condVar.wakeAll();
 }
 
