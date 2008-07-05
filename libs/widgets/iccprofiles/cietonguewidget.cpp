@@ -170,12 +170,14 @@ public:
         loadingImageMode     = false;
         loadingImageSucess   = false;
         blinkFlag            = false;
+        needUpdatePixmap     = false;
     }
 
     bool             profileDataAvailable;
     bool             loadingImageMode;
     bool             loadingImageSucess;
     bool             blinkFlag;
+    bool             needUpdatePixmap;
 
     double           gridside;
 
@@ -268,8 +270,8 @@ bool CIETongueWidget::setProfileData(const QByteArray &profileData)
     d->loadingImageMode = false;
 
     d->blinkTimer->stop();
-    updatePixmap();
-    repaint();
+    d->needUpdatePixmap = true;
+    update();
     return (d->profileDataAvailable);
 }
 
@@ -299,8 +301,8 @@ bool CIETongueWidget::setProfileFromFile(const KUrl& file)
     }
 
     d->blinkTimer->stop();
-    updatePixmap();
-    repaint();
+    d->needUpdatePixmap = true;
+    update();
     return (d->profileDataAvailable);
 }
 
@@ -688,8 +690,7 @@ void CIETongueWidget::loadingStarted()
 {
     d->loadingImageMode   = true;
     d->loadingImageSucess = false;
-    updatePixmap();
-    repaint();
+    update();
     d->blinkTimer->start(200);
 }
 
@@ -698,92 +699,13 @@ void CIETongueWidget::loadingFailed()
     d->blinkTimer->stop();
     d->loadingImageMode   = false;
     d->loadingImageSucess = false;
-    updatePixmap();
-    repaint();
+    update();
 }
 
 void CIETongueWidget::updatePixmap()
 {
+    d->needUpdatePixmap = false;
     d->pixmap = QPixmap(size());
-
-    // Widget is disable : drawing grayed frame.
-
-    if ( !isEnabled() )
-    {
-        d->painter.begin(&d->pixmap);
-        d->painter.fillRect(0, 0, size().width(), size().height(), 
-                            palette().color(QPalette::Disabled, QPalette::Background));
-
-        QPen pen(palette().color(QPalette::Disabled, QPalette::Foreground));
-        pen.setStyle(Qt::SolidLine);
-        pen.setWidth(1);
-
-        d->painter.setPen(pen);
-        d->painter.drawRect(0, 0, width(), height());
-        d->painter.end();
-
-        QPainter p2(this);
-        p2.drawPixmap(0, 0, d->pixmap);
-        p2.end();
-        return;
-    }
-
-    // Loading image mode.
-
-    if (d->loadingImageMode && !d->loadingImageSucess)
-    {
-        d->painter.begin(&d->pixmap);
-        d->painter.fillRect(0, 0, size().width(), size().height(),
-                            palette().color(QPalette::Disabled, QPalette::Background));
-
-        QPen pen(palette().color(QPalette::Disabled, QPalette::Foreground));
-        pen.setStyle(Qt::SolidLine);
-        pen.setWidth(1);
-
-        d->painter.setPen(pen);
-        d->painter.drawRect(0, 0, width(), height());
-
-        if (d->blinkFlag)
-            d->painter.setPen(Qt::green);
-        else 
-            d->painter.setPen(Qt::darkGreen);
-
-        d->painter.drawText(0, 0, size().width(), size().height(), Qt::AlignCenter,
-                            i18n("Loading image..."));
-
-        d->painter.end();
-
-        QPainter p2(this);
-        p2.drawPixmap(0, 0, d->pixmap);
-        p2.end();
-        return;
-    }
-
-    // No profile data to show.
-
-    if (!d->profileDataAvailable || (!d->loadingImageMode && !d->loadingImageSucess))
-    {
-        d->painter.begin(&d->pixmap);
-        d->painter.fillRect(0, 0, size().width(), size().height(),
-                            palette().color(QPalette::Disabled, QPalette::Background));
-
-        QPen pen(palette().color(QPalette::Disabled, QPalette::Foreground));
-        pen.setStyle(Qt::SolidLine);
-        pen.setWidth(1);
-
-        d->painter.setPen(pen);
-        d->painter.drawRect(0, 0, width(), height());
-        d->painter.setPen(Qt::red);
-        d->painter.drawText(0, 0, size().width(), size().height(), Qt::AlignCenter,
-                            i18n("No profile available..."));
-
-        d->painter.end();
-
-        QPainter p2(this);
-        p2.drawPixmap(0, 0, d->pixmap);
-        p2.end();
-        return;
-    }
 
     // Draw the CIE tongue curve.
 
@@ -826,15 +748,84 @@ void CIETongueWidget::updatePixmap()
 
 void CIETongueWidget::paintEvent(QPaintEvent*)
 {
-    QPainter p2(this);
-    p2.drawPixmap(0, 0, d->pixmap);
-    p2.end();
+    QPainter p(this);
+
+    // Widget is disable : drawing grayed frame.
+
+    if ( !isEnabled() )
+    {
+        p.begin(&d->pixmap);
+        p.fillRect(0, 0, size().width(), size().height(),
+                            palette().color(QPalette::Disabled, QPalette::Background));
+
+        QPen pen(palette().color(QPalette::Disabled, QPalette::Foreground));
+        pen.setStyle(Qt::SolidLine);
+        pen.setWidth(1);
+
+        p.setPen(pen);
+        p.drawRect(0, 0, width(), height());
+
+        return;
+    }
+
+    // Loading image mode.
+
+    if (d->loadingImageMode && !d->loadingImageSucess)
+    {
+        p.begin(&d->pixmap);
+        p.fillRect(0, 0, size().width(), size().height(),
+                            palette().color(QPalette::Disabled, QPalette::Background));
+
+        QPen pen(palette().color(QPalette::Disabled, QPalette::Foreground));
+        pen.setStyle(Qt::SolidLine);
+        pen.setWidth(1);
+
+        p.setPen(pen);
+        p.drawRect(0, 0, width(), height());
+
+        if (d->blinkFlag)
+            p.setPen(Qt::green);
+        else 
+            p.setPen(Qt::darkGreen);
+
+        p.drawText(0, 0, size().width(), size().height(), Qt::AlignCenter,
+                            i18n("Loading image..."));
+
+        return;
+    }
+
+    // No profile data to show.
+
+    if (!d->profileDataAvailable || (!d->loadingImageMode && !d->loadingImageSucess))
+    {
+        p.begin(&d->pixmap);
+        p.fillRect(0, 0, size().width(), size().height(),
+                            palette().color(QPalette::Disabled, QPalette::Background));
+
+        QPen pen(palette().color(QPalette::Disabled, QPalette::Foreground));
+        pen.setStyle(Qt::SolidLine);
+        pen.setWidth(1);
+
+        p.setPen(pen);
+        p.drawRect(0, 0, width(), height());
+        p.setPen(Qt::red);
+        p.drawText(0, 0, size().width(), size().height(), Qt::AlignCenter,
+                            i18n("No profile available..."));
+
+        return;
+    }
+
+    // Create CIE tongue if needed
+    if (d->needUpdatePixmap)
+        updatePixmap();
+
+    // draw prerendered tongue
+    p.drawPixmap(0, 0, d->pixmap);
 }
 
 void CIETongueWidget::slotBlinkTimerDone()
 {
-    updatePixmap();
-    repaint();
+    update();
     d->blinkFlag = !d->blinkFlag;
     d->blinkTimer->start( 200 );
 }
