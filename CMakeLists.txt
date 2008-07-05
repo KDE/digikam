@@ -279,6 +279,7 @@ INCLUDE_DIRECTORIES(${KIPI_INCLUDE_DIR}
                     ${KDE4_INCLUDE_DIR}
                     ${QT_INCLUDES}
                     ${GPHOTO2_INCLUDE_DIR}
+                    ${CMAKE_CURRENT_BINARY_DIR}/digikam
                    )
 
 IF(MARBLEWIDGET_FOUND)
