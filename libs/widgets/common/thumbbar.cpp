@@ -85,6 +85,7 @@ public:
         count           = 0;
         thumbLoadThread = 0;
         tileSize        = ThumbnailSize::Small;
+        maxTileSize     = 256;
     }
 
     bool                        clearing;
@@ -94,6 +95,7 @@ public:
     int                         count;
     int                         tileSize;
     int                         orientation;
+    int                         maxTileSize;
 
     QTimer                     *timer;
 
@@ -148,6 +150,7 @@ ThumbBarView::ThumbBarView(QWidget* parent, int orientation, bool exifRotate,
     d->timer           = new QTimer(this);
     d->thumbLoadThread = ThumbnailLoadThread::defaultThumbBarThread();
     d->thumbLoadThread->setExifRotate(exifRotate);
+    d->maxTileSize     = d->thumbLoadThread->maximumThumbnailSize();
 
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
             this, SLOT(slotGotThumbnail(const LoadingDescription&, const QPixmap&)));
@@ -378,7 +381,25 @@ void ThumbBarView::invalidateThumb(ThumbBarItem* item)
 
 bool ThumbBarView::pixmapForItem(ThumbBarItem *item, QPixmap &pix) const
 {
-    return d->thumbLoadThread->find(item->url().path(), pix, d->tileSize);
+    if (d->tileSize > d->maxTileSize)
+    {
+        //TODO: Install a widget maximum size to prevent this situation
+        bool hasPixmap = d->thumbLoadThread->find(item->url().path(), pix, d->maxTileSize);
+        if (hasPixmap)
+        {
+            DWarning() << "Thumbbar: Requested thumbnail size" << d->tileSize
+                       << "is larger than the maximum thumbnail size" << d->maxTileSize
+                       << ". Returning a scaled-up image.";
+            pix = pix.scaled(d->tileSize, d->tileSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            return true;
+        }
+        else
+            return false;
+    }
+    else
+    {
+        return d->thumbLoadThread->find(item->url().path(), pix, d->tileSize);
+    }
 }
 
 void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
