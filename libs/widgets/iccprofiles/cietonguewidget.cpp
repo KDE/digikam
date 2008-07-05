@@ -754,7 +754,6 @@ void CIETongueWidget::paintEvent(QPaintEvent*)
 
     if ( !isEnabled() )
     {
-        p.begin(&d->pixmap);
         p.fillRect(0, 0, size().width(), size().height(),
                             palette().color(QPalette::Disabled, QPalette::Background));
 
@@ -772,7 +771,6 @@ void CIETongueWidget::paintEvent(QPaintEvent*)
 
     if (d->loadingImageMode && !d->loadingImageSucess)
     {
-        p.begin(&d->pixmap);
         p.fillRect(0, 0, size().width(), size().height(),
                             palette().color(QPalette::Disabled, QPalette::Background));
 
@@ -798,7 +796,6 @@ void CIETongueWidget::paintEvent(QPaintEvent*)
 
     if (!d->profileDataAvailable || (!d->loadingImageMode && !d->loadingImageSucess))
     {
-        p.begin(&d->pixmap);
         p.fillRect(0, 0, size().width(), size().height(),
                             palette().color(QPalette::Disabled, QPalette::Background));
 
