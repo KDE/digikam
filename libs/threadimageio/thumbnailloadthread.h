@@ -104,6 +104,12 @@ public:
     void setThumbnailSize(int size);
 
     /**
+     * Returns the maximum possible size of a thumbnail.
+     * If you request a larger size, the thumbnail will not load.
+     */
+    static int maximumThumbnailSize();
+
+    /**
      * Specify if the thumbnails shall be rotated by exif.
      * Note: This only applies to newly created thumbnails. The rotation state of thumbnails
      * found in the disk cache is unknown, so they are not rotated.

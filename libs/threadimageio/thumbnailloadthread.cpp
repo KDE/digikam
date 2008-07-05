@@ -105,6 +105,11 @@ void ThumbnailLoadThread::setThumbnailSize(int size)
     d->size = size;
 }
 
+int ThumbnailLoadThread::maximumThumbnailSize()
+{
+    return 256;
+}
+
 void ThumbnailLoadThread::setExifRotate(int exifRotate)
 {
     d->exifRotate = exifRotate;
