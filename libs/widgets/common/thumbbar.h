@@ -162,7 +162,8 @@ protected slots:
 
     void slotUpdate();
     virtual void slotPreload();
-    void triggerPreload();
+    void slotContentsMoved();
+    void checkPreload();
 
 private slots:
 

@@ -390,6 +390,8 @@ void ImagePreviewBar::viewportPaintEvent(QPaintEvent* e)
         p5.drawPixmap(0, 0, bgPix);
         p5.end();
     }
+
+    checkPreload();
 }
 
 void ImagePreviewBar::slotThemeChanged()

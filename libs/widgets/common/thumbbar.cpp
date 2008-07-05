@@ -78,6 +78,7 @@ public:
     {
         dragging        = false;
         clearing        = false;
+        needPreload     = false;
         toolTip         = 0;
         firstItem       = 0;
         lastItem        = 0;
@@ -90,6 +91,7 @@ public:
 
     bool                        clearing;
     bool                        dragging;
+    bool                        needPreload;
 
     const int                   margin;
     int                         count;
@@ -164,9 +166,8 @@ ThumbBarView::ThumbBarView(QWidget* parent, int orientation, bool exifRotate,
     connect(d->preloadTimer, SIGNAL(timeout()),
             this, SLOT(slotPreload()));
 
-    // trigger preloading after scrolling
     connect(this, SIGNAL(contentsMoving(int,int)),
-            this, SLOT(triggerPreload()));
+            this, SLOT(slotContentsMoved()));
 
     viewport()->setMouseTracking(true);
     viewport()->setAcceptDrops(true);
@@ -281,11 +282,6 @@ void ThumbBarView::triggerUpdate()
 {
     d->timer->setSingleShot(true);
     d->timer->start(0);
-}
-
-void ThumbBarView::triggerPreload()
-{
-    d->preloadTimer->start(50);
 }
 
 ThumbBarItem* ThumbBarView::currentItem() const
@@ -419,7 +415,7 @@ bool ThumbBarView::pixmapForItem(ThumbBarItem *item, QPixmap &pix) const
 
 void ThumbBarView::preloadPixmapForItem(ThumbBarItem *item) const
 {
-    d->thumbLoadThread->find(item->url().path(), qMin(d->tileSize, d->maxTileSize));
+    d->thumbLoadThread->preload(item->url().path(), qMin(d->tileSize, d->maxTileSize));
 }
 
 void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
@@ -498,6 +494,8 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
             }
         }
     }
+
+    checkPreload();
 }
 
 void ThumbBarView::contentsMousePressEvent(QMouseEvent* e)
@@ -718,7 +716,7 @@ void ThumbBarView::rearrangeItems()
 
     // only trigger preload if we have valid arranged items
     if (d->count)
-        triggerPreload();
+        d->needPreload = true;
 }
 
 void ThumbBarView::repaintItem(ThumbBarItem* item)
@@ -738,9 +736,23 @@ void ThumbBarView::slotUpdate()
     viewport()->update();
 }
 
+void ThumbBarView::checkPreload()
+{
+    if (d->needPreload && !d->preloadTimer->isActive())
+        d->preloadTimer->start(50);
+}
+
+void ThumbBarView::slotContentsMoved()
+{
+    d->needPreload = true;
+}
+
 void ThumbBarView::slotPreload()
 {
+    d->needPreload = false;
     // we get items in an area visibleWidth() to the left and right of the visible area
+    QRect visibleArea(contentsX(), contentsY(), visibleWidth(), visibleHeight());
+
     if (getOrientation() == Qt::Vertical)
     {
         int y1 = contentsY() - visibleHeight();
@@ -752,7 +764,10 @@ void ThumbBarView::slotPreload()
         {
             int pos = item->position();
             if ( (y1 <= pos && pos <= y2) || (y3 <= pos && pos <= y4))
-                preloadPixmapForItem(item);
+            {
+                if (!item->rect().intersects(visibleArea))
+                    preloadPixmapForItem(item);
+            }
 
             if (pos > y4)
                 break;
@@ -769,7 +784,10 @@ void ThumbBarView::slotPreload()
         {
             int pos = item->position();
             if ( (x1 <= pos && pos <= x2) || (x3 <= pos && pos <= x4))
-                preloadPixmapForItem(item);
+            {
+                if (!item->rect().intersects(visibleArea))
+                    preloadPixmapForItem(item);
+            }
 
             if (pos > x4)
                 break;
