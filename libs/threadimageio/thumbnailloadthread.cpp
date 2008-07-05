@@ -65,7 +65,9 @@ public:
     QHash<KUrl, LoadingDescription> kdeJobHash;
 };
 
+K_GLOBAL_STATIC(ThumbnailLoadThread, defaultIconViewObject)
 K_GLOBAL_STATIC(ThumbnailLoadThread, defaultObject)
+K_GLOBAL_STATIC(ThumbnailLoadThread, defaultThumbBarObject)
 
 ThumbnailLoadThread::ThumbnailLoadThread()
 {
@@ -83,9 +85,19 @@ ThumbnailLoadThread::~ThumbnailLoadThread()
     delete d;
 }
 
+ThumbnailLoadThread *ThumbnailLoadThread::defaultIconViewThread()
+{
+    return defaultIconViewObject;
+}
+
 ThumbnailLoadThread *ThumbnailLoadThread::defaultThread()
 {
     return defaultObject;
+}
+
+ThumbnailLoadThread *ThumbnailLoadThread::defaultThumbBarThread()
+{
+    return defaultThumbBarObject;
 }
 
 void ThumbnailLoadThread::setThumbnailSize(int size)
@@ -130,8 +142,13 @@ ThumbnailCreator *ThumbnailLoadThread::thumbnailCreator() const
 
 bool ThumbnailLoadThread::find(const QString &filePath, QPixmap &retPixmap)
 {
+    return find(filePath, retPixmap, d->size);
+}
+
+bool ThumbnailLoadThread::find(const QString &filePath, QPixmap &retPixmap, int size)
+{
     const QPixmap *pix;
-    LoadingDescription description(filePath, d->size, d->exifRotate, LoadingDescription::PreviewParameters::Thumbnail);
+    LoadingDescription description(filePath, size, d->exifRotate, LoadingDescription::PreviewParameters::Thumbnail);
 
     {
         LoadingCache *cache = LoadingCache::cache();
@@ -151,8 +168,13 @@ bool ThumbnailLoadThread::find(const QString &filePath, QPixmap &retPixmap)
 
 void ThumbnailLoadThread::find(const QString &filePath)
 {
+    find(filePath, d->size);
+}
+
+void ThumbnailLoadThread::find(const QString &filePath, int size)
+{
     const QPixmap *pix;
-    LoadingDescription description(filePath, d->size, d->exifRotate, LoadingDescription::PreviewParameters::Thumbnail);
+    LoadingDescription description(filePath, size, d->exifRotate, LoadingDescription::PreviewParameters::Thumbnail);
 
     {
         LoadingCache *cache = LoadingCache::cache();

@@ -51,10 +51,12 @@ public:
     ~ThumbnailLoadThread();
 
     /**
-     * Returns the application-wide default thumbnail thread.
+     * Return application-wide default thumbnail threads.
      * It is perfectly all right to create an extra object of the class,
-     * but for some purposes it will be useful to have one default thread.
+     * but it is useful to have default object
      */
+    static ThumbnailLoadThread *defaultIconViewThread();
+    static ThumbnailLoadThread *defaultThumbBarThread();
     static ThumbnailLoadThread *defaultThread();
 
     /**
@@ -67,12 +69,22 @@ public:
     bool find(const QString &filePath, QPixmap &pixmap);
 
     /**
+     * Same as above, but does not use the global size, but an extra specified size.
+     */
+    bool find(const QString &filePath, QPixmap &pixmap, int size);
+
+    /**
      * Find a thumbnail.
      * This method sends the signals and does not return values like the method above.
      * If you certainly need asynchronous return, connect with Qt::QueuedConnection to the signals.
      * If you connect directly, the signals may be sent from within the method call.
      */
     void find(const QString &filePath);
+
+    /**
+     * Same as above, but does not use the global size, but an extra specified size.
+     */
+    void find(const QString &filePath, int size);
 
     /**
      * Load a thumbnail.
