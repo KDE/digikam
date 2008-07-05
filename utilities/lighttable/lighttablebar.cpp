@@ -371,10 +371,9 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
                         p.drawRect(0, 0, tile.width(), tile.height());
                     }
 
-                    if (!item->pixmap().isNull())
+                    QPixmap pix;
+                    if (pixmapForItem(item, pix))
                     {
-                        QPixmap pix = item->pixmap().scaled(getTileSize(), getTileSize(),
-                                                            Qt::KeepAspectRatio, Qt::SmoothTransformation);
                         int x = (tile.width()  - pix.width())/2;
                         int y = (tile.height() - pix.height())/2;
 
@@ -430,10 +429,9 @@ void LightTableBar::viewportPaintEvent(QPaintEvent* e)
                         p.drawRect(0, 0, tile.width(), tile.height());
                     }
 
-                    if (!item->pixmap().isNull())
+                    QPixmap pix;
+                    if (pixmapForItem(item, pix))
                     {
-                        QPixmap pix = item->pixmap().scaled(getTileSize(), getTileSize(),
-                                                            Qt::KeepAspectRatio, Qt::SmoothTransformation);
                         int x = (tile.width() - pix.width())/2;
                         int y = (tile.height()- pix.height())/2;
                         p.drawPixmap(x, y, pix);
