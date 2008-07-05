@@ -45,8 +45,9 @@ class LoadingCachePriv
 {
 public:
 
-    LoadingCachePriv() : mutex(QMutex::Recursive)
+    LoadingCachePriv()
     {
+        // Note: Dont make the mutex recursive, we need to use a wait condition on it
         watch = 0;
     }
 
@@ -89,8 +90,12 @@ LoadingCache::LoadingCache()
     connect(d->watch, SIGNAL(dirty(const QString &)),
             this, SLOT(slotFileDirty(const QString &)));
 
+    // Make sure the signal gets here directly from the event loop.
+    // If putImage is called from the main thread, with CacheLock,
+    // a deadlock would result (mutex is not recursive)
     connect(this, SIGNAL(signalUpdateDirWatch()),
-            this, SLOT(slotUpdateDirWatch()));
+            this, SLOT(slotUpdateDirWatch()),
+            Qt::QueuedConnection);
 
     // good place to call it here as LoadingCache is a singleton
     qRegisterMetaType<LoadingDescription>("LoadingDescription");
