@@ -196,7 +196,31 @@ void ThumbnailLoadThread::find(const QString &filePath, int size)
     load(description);
 }
 
-void ThumbnailLoadThread::load(const LoadingDescription &constDescription)
+void ThumbnailLoadThread::preload(const QString &filePath)
+{
+    preload(filePath, d->size);
+}
+
+void ThumbnailLoadThread::preload(const QString &filePath, int size)
+{
+    LoadingDescription description(filePath, size, d->exifRotate, LoadingDescription::PreviewParameters::Thumbnail);
+
+    {
+        LoadingCache *cache = LoadingCache::cache();
+        LoadingCache::CacheLock lock(cache);
+        if (cache->retrieveThumbnailPixmap(description.cacheKey()))
+            return;
+    }
+
+    load(description, true);
+}
+
+void ThumbnailLoadThread::load(const LoadingDescription &desc)
+{
+    load(desc, false);
+}
+
+void ThumbnailLoadThread::load(const LoadingDescription &constDescription, bool preload)
 {
     LoadingDescription description(constDescription);
 
@@ -212,7 +236,10 @@ void ThumbnailLoadThread::load(const LoadingDescription &constDescription)
         return;
     }
 
-    ManagedLoadSaveThread::loadThumbnail(description);
+    if (preload)
+        ManagedLoadSaveThread::preloadThumbnail(description);
+    else
+        ManagedLoadSaveThread::loadThumbnail(description);
 }
 
 void ThumbnailLoadThread::slotThumbnailLoaded(const LoadingDescription &description, const QImage& thumb)

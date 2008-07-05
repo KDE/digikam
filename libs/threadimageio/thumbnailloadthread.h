@@ -87,6 +87,12 @@ public:
     void find(const QString &filePath, int size);
 
     /**
+     * Preload the thumbnail.
+     */
+    void preload(const QString &filePath);
+    void preload(const QString &filePath, int size);
+
+    /**
      * Load a thumbnail.
      * You do not need to use this method directly, it will not access the pixmap cache. Use find().
      * The LoadingDescription shall be constructed with the constructor for preview/thumbnail jobs.
@@ -172,6 +178,7 @@ public:
 
 private:
 
+    void load(const LoadingDescription &description, bool preload);
     void loadWithKDE(const LoadingDescription &description);
     QPixmap surrogatePixmap(const LoadingDescription &loadingDescription);
 
