@@ -249,7 +249,7 @@ AlbumIconView::AlbumIconView(QWidget* parent)
 
     // -- Pixmap manager connections ------------------------------------
 
-    connect(ThumbnailLoadThread::defaultThread(), SIGNAL(signalThumbnailLoaded(const LoadingDescription &, const QPixmap&)),
+    connect(ThumbnailLoadThread::defaultIconViewThread(), SIGNAL(signalThumbnailLoaded(const LoadingDescription &, const QPixmap&)),
             this, SLOT(slotThumbnailLoaded(const LoadingDescription &, const QPixmap&)));
 
     // -- ImageAttributesWatch connections ------------------------------
@@ -294,7 +294,7 @@ void AlbumIconView::applySettings(const AlbumSettings* settings)
     d->imageLister->stop();
     clear();
 
-    ThumbnailLoadThread::defaultThread()->setThumbnailSize(d->thumbSize.size());
+    ThumbnailLoadThread::defaultIconViewThread()->setThumbnailSize(d->thumbSize.size());
 
     if (d->currentAlbum)
     {
@@ -310,7 +310,7 @@ void AlbumIconView::setThumbnailSize(const ThumbnailSize& thumbSize)
         clear();
 
         d->thumbSize = thumbSize;
-        ThumbnailLoadThread::defaultThread()->setThumbnailSize(d->thumbSize.size());
+        ThumbnailLoadThread::defaultIconViewThread()->setThumbnailSize(d->thumbSize.size());
 
         updateRectsAndPixmaps();
 

@@ -239,7 +239,7 @@ void AlbumIconItem::paintItem(QPainter *p)
     d->dirty = true;
 
     QPixmap thumbnail;
-    if (ThumbnailLoadThread::defaultThread()->find(d->info.filePath(), thumbnail))
+    if (ThumbnailLoadThread::defaultIconViewThread()->find(d->info.filePath(), thumbnail))
     {
         r = d->view->itemPixmapRect();
         p->drawPixmap(r.x() + (r.width()-thumbnail.width())/2,
