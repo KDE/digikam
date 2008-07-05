@@ -85,4 +85,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 041 ==> 165342 : Crash when changing album sort modus.
 042 ==> 165338 : Right sidebar initally too big.
 043 ==> 165280 : Sqlite2 component build failure.
+044 ==> 165769 : adjustcurves.cpp - can't find version.h
 
