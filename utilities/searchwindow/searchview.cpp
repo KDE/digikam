@@ -73,7 +73,8 @@ void AbstractSearchGroupContainer::removeSearchGroup(SearchGroup *group)
         return;
     }
     m_groups.removeAll(group);
-    delete group;
+    // This method call may arise from an event handler of a widget within group. Defer deletion.
+    group->deleteLater();
 }
 
 void AbstractSearchGroupContainer::startReadingGroups(SearchXmlCachingReader &)
@@ -339,14 +340,17 @@ void SearchView::setTheme()
 
     QFont f = font();
     QString fontSizeLarger;
+    QString fontSizeSmaller;
     if (f.pointSizeF() == -1)
     {
         // set pixel size
         fontSizeLarger = QString::number(f.pixelSize() + 2) + "px";
+        fontSizeSmaller = QString::number(f.pixelSize() - 2) + "px";
     }
     else
     {
         fontSizeLarger = QString::number(f.pointSizeF() + 2) + "pt";
+        fontSizeSmaller = QString::number(f.pointSizeF() - 2) + "pt";
     }
 
     QString sheet =
@@ -364,6 +368,8 @@ void SearchView::setTheme()
             "#SearchGroupLabel_RemoveLabel "
             " { color: "
               + ThemeEngine::instance()->textSelColor().name() + ";"
+            "   font-style: italic; "
+            "   text-decoration: underline; "
             " } "
             "#SearchFieldGroupLabel_Label "
             " { color: "
