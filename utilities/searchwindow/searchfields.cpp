@@ -1767,6 +1767,9 @@ void SearchFieldColorDepth::setupValueWidgets(QGridLayout *layout, int row, int 
     m_comboBox->addItem(i18n("8 bits per channel"), 8);
 
     m_comboBox->setCurrentIndex(0);
+
+    connect(m_comboBox, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(indexChanged(int)));
 }
 
 void SearchFieldColorDepth::read(SearchXmlCachingReader &reader)
@@ -1812,6 +1815,11 @@ QList<QRect> SearchFieldColorDepth::valueWidgetRects() const
     QList<QRect> rects;
     rects << m_comboBox->geometry();
     return rects;
+}
+
+void SearchFieldColorDepth::indexChanged(int index)
+{
+    setValidValueState(index != 0);
 }
 
 }

@@ -353,6 +353,8 @@ protected:
 
 class SearchFieldColorDepth : public SearchField
 {
+    Q_OBJECT
+
 public:
 
     SearchFieldColorDepth(QObject *parent);
@@ -363,6 +365,10 @@ public:
     virtual void reset();
     virtual void setValueWidgetsVisible(bool visible);
     virtual QList<QRect> valueWidgetRects() const;
+
+protected slots:
+
+    void indexChanged(int);
 
 protected:
 
