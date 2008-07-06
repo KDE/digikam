@@ -54,10 +54,6 @@ ThumbnailLoadingTask::ThumbnailLoadingTask(LoadSaveThread* thread, LoadingDescri
 {
     ThumbnailLoadThread *thumbThread = dynamic_cast<ThumbnailLoadThread *>(thread);
     m_creator = thumbThread->thumbnailCreator();
-
-    m_creator->setThumbnailSize(description.previewParameters.size);
-    m_creator->setExifRotate(description.previewParameters.exifRotate);
-    m_creator->setLoadingProperties(this, description.rawDecodingSettings);
 }
 
 
@@ -65,6 +61,11 @@ void ThumbnailLoadingTask::execute()
 {
     if (m_loadingTaskStatus == LoadingTaskStatusStopping)
         return;
+
+    // initialize creator
+    m_creator->setThumbnailSize(m_loadingDescription.previewParameters.size);
+    m_creator->setExifRotate(m_loadingDescription.previewParameters.exifRotate);
+    m_creator->setLoadingProperties(this, m_loadingDescription.rawDecodingSettings);
 
     QImage qimage;
 
