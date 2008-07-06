@@ -7,7 +7,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 164392 : Can't compile digikam with missing libkdcraw.
 002 ==> 160617 : Same image gets opened to both sides of view when draggin image to right side.
-003 ==> 
+003 ==> 165823 : Digikam crashes if last picture is removed from lighttable.
+004 ==> 
 
 **********************************************************************************************
 digiKam 0.9.4-RC2 - Release date: 2008-07-06
