@@ -179,7 +179,7 @@ SetupMime::SetupMime(QWidget* parent)
 
     KHBox *hbox3 = new KHBox(audioFileFilterBox);  
     d->audioFileFilterEdit = new QLineEdit(hbox3);
-    d->audioFileFilterEdit->setWhatsThis( i18n("<p>Here you can add extra extensions of video files "
+    d->audioFileFilterEdit->setWhatsThis( i18n("<p>Here you can add extra extensions of audio files "
                                                "to be displayed in Albums. Just write \"xyz abc\" "
                                                "to support files with the *.xyz and *.abc extensions. "
                                                "Clicking on these files will "
