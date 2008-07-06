@@ -263,7 +263,7 @@ SearchField *SearchField::createField(const QString &name, SearchFieldGroup *par
         field->setText(i18n("Exposure"), i18n("Exposure time"));
         field->setBetweenText("-");
         field->setNumberPrefixAndSuffix("1/", "s");
-        field->setBoundary(1, 4000, 10);
+        field->setBoundary(0, 4000, 10);
         return field;
     }
     else if (name == "exposureprogram")
@@ -885,8 +885,12 @@ void SearchFieldRangeInt::read(SearchXmlCachingReader &reader)
 void SearchFieldRangeInt::write(SearchXmlWriter &writer)
 {
     if (m_firstBox->value() != m_firstBox->minimum()
+        && m_secondBox->value() != m_secondBox->minimum()
         && m_firstBox->value() == m_secondBox->value())
     {
+        //TODO: This condition is never met due to the second clause.
+        // Right value is either displayed empty (minimum, greater than left)
+        // or one step larger than left
         writer.writeField(m_name, SearchXml::Equal);
         writer.writeValue(m_firstBox->value());
         writer.finishField();
@@ -902,7 +906,7 @@ void SearchFieldRangeInt::write(SearchXmlWriter &writer)
         if (m_secondBox->value() != m_secondBox->minimum())
         {
             writer.writeField(m_name, SearchXml::LessThanOrEqual);
-            writer.writeValue(m_firstBox->value());
+            writer.writeValue(m_secondBox->value());
             writer.finishField();
         }
     }
@@ -938,14 +942,18 @@ void SearchFieldRangeInt::setBoundary(int min, int max, int step)
 void SearchFieldRangeInt::valueChanged()
 {
     bool validValue = false;
-    if (m_secondBox->value() != m_secondBox->minimum())
+    bool firstAtMinimum = (m_firstBox->value() == m_firstBox->minimum());
+    bool secondAtMinimum = (m_secondBox->value() == m_secondBox->minimum());
+    if (!secondAtMinimum)
     {
         m_firstBox->setRange(m_min, m_secondBox->value());
         validValue = true;
     }
-    if (m_firstBox->value() != m_firstBox->minimum())
+    if (!firstAtMinimum)
     {
         m_secondBox->setRange(m_firstBox->value(), m_max);
+        if (secondAtMinimum)
+            m_secondBox->setValue(m_secondBox->minimum());
         validValue = true;
     }
     setValidValueState(validValue);
@@ -1018,8 +1026,10 @@ void SearchFieldRangeDouble::read(SearchXmlCachingReader &reader)
 void SearchFieldRangeDouble::write(SearchXmlWriter &writer)
 {
     if (m_firstBox->value() != m_firstBox->minimum()
+        && m_secondBox->value() != m_secondBox->minimum()
         && m_firstBox->value() == m_secondBox->value())
     {
+        //TODO: See SearchFieldRangeInt
         writer.writeField(m_name, SearchXml::Equal);
         writer.writeValue(m_firstBox->value() * m_factor);
         writer.finishField();
@@ -1035,7 +1045,7 @@ void SearchFieldRangeDouble::write(SearchXmlWriter &writer)
         if (m_secondBox->value() != m_secondBox->minimum())
         {
             writer.writeField(m_name, SearchXml::LessThanOrEqual);
-            writer.writeValue(m_firstBox->value() * m_factor);
+            writer.writeValue(m_secondBox->value() * m_factor);
             writer.finishField();
         }
     }
@@ -1763,8 +1773,8 @@ void SearchFieldColorDepth::setupValueWidgets(QGridLayout *layout, int row, int 
     layout->addWidget(m_comboBox, row, column);
 
     m_comboBox->addItem(i18n("any color depth"));
-    m_comboBox->addItem(i18n("16 bits per channel"), 16);
-    m_comboBox->addItem(i18n("8 bits per channel"), 8);
+    m_comboBox->addItem(i18n("8 bits per channel"), 16);
+    m_comboBox->addItem(i18n("16 bits per channel"), 8);
 
     m_comboBox->setCurrentIndex(0);
 
