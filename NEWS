@@ -31,7 +31,7 @@ digiKam 0.9.4-RC1 - Release date: 2008-06-17
 
 NEW FEATURES:
 
-General        : external libsqlite3 depency removed. sqlite3 source code is now included in digiKam core.
+General        : external libsqlite3 dependency removed. sqlite3 source code is now included in digiKam core.
                  (see B.K.O #160966)
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
@@ -83,7 +83,7 @@ General        : New dialog to list all RAW camera supported. A search camera mo
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 121309 : Camera list sorted by brand.
-002 ==> 137836 : Usability: Configure camera gui add and auto-detect camera.
+002 ==> 137836 : Usability: Configure camera GUI add and auto-detect camera.
 003 ==> 160323 : Changing the album name from sth to #sth and then to zsth causes the album to be deleted along with the files.
 004 ==> 145083 : Space and Shift-Space isn't used for navigation between images.
 005 ==> 158696 : digiKam image viewer crashes when "Save As" is clicked.
@@ -93,7 +93,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 009 ==> 148976 : digiKam Deleted 2.3 g of Pictures.
 010 ==> 145252 : Umask settings used for album directory, not for image files.
 011 ==> 125775 : digiKam way to save and delete "Searches".
-012 ==> 150908 : Canon g3 not recognised works version 0.9.1.
+012 ==> 150908 : Canon g3 not recognized works version 0.9.1.
 013 ==> 152092 : Showfoto crashes ( signal 11 ) on exit.
 014 ==> 160840 : Wrong filtering on Album-Subtree-View.
 015 ==> 160846 : Blurred preview of pics.
@@ -113,13 +113,13 @@ AlbumGUI       : Auto-completion in all search text filter.
 General        : Creation of tags simplified everywhere. Multiple Tags hierarchy can be 
                  created at the same time. Tags creation dialog re-designed.
 		 
-Showfoto       : New open image file dialog with photo thumbnail/informations.
+Showfoto       : New open image file dialog with photo thumbnail/information.
 
-ImageEditor    : New saveas image file dialog with photo thumbnail/informations.
+ImageEditor    : New saveas image file dialog with photo thumbnail/information.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-001 ==> 159806 : Cannot display nikon d3 raw files.
+001 ==> 159806 : Cannot display Nikon d3 raw files.
 002 ==> 148935 : digiKam hot pixel plugin can not read canon RAW files.
 003 ==> 158776 : Confirm tag delete if tag assigned to photos.
 004 ==> 148520 : Change of rating causes high CPU load.
@@ -163,7 +163,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 015 ==> 147600 : Showfoto Open folder - files shown in reverse order.
 016 ==> 149851 : Showfoto asks if you want to save changes when deleting photo, if changes have been made.
 017 ==> 138378 : Showfoto opens file browser window to last the folder used upon startup.
-018 ==> 148964 : images are blur only inside shofoto.
+018 ==> 148964 : images are blur only inside showFoto.
 019 ==> 146938 : Themes Don't Apply To All Panels.
 020 ==> 135378 : Single-click on picture open it in editor.
 021 ==> 142469 : Splash screen to be the very first thing.
@@ -177,7 +177,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 029 ==> 128377 : Adjust levels: histograms don't match, bad "auto level" function.
 030 ==> 141755 : Sidebar: Hide unused tabs, Add tooltips. 
 031 ==> 146068 : Mixer does not work for green and blue selected as main channel and monochrome mode.
-032 ==> 135931 : Reorganise Batch Processing tools from 'Image' and 'Tools' menus.
+032 ==> 135931 : Reorganize Batch Processing tools from 'Image' and 'Tools' menus.
 033 ==> 159664 : Background color of live/quick filter not updated on folder/date change.
 
 **********************************************************************************************
