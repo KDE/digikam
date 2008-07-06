@@ -344,15 +344,61 @@ public:
         if (relation == SearchXml::OneOf)
         {
             QStringList values = reader.valueToStringList();
-            sql += " (" + name + " IN (";
-            AlbumDB::addBoundValuePlaceholders(sql, values.size());
-            sql += ") ) ";
+            if (values.isEmpty())
+                return;
+            QStringList simpleValues, wildcards;
             foreach(const QString &value, values)
-                *boundValues << value;
+            {
+                if (value.contains("*"))
+                    wildcards << value;
+                else
+                    simpleValues << value;
+            }
+            bool firstCondition = true;
+            sql += " (";
+            if (!simpleValues.isEmpty())
+            {
+                firstCondition = false;
+                sql += name + " IN (";
+                AlbumDB::addBoundValuePlaceholders(sql, simpleValues.size());
+                foreach(const QString &value, simpleValues)
+                    *boundValues << value;
+                sql += " ) ";
+            }
+            if (!wildcards.isEmpty())
+            {
+                foreach(QString wildcard, wildcards)
+                {
+                    if (!firstCondition)
+                    {
+                        sql += " OR ";
+                        firstCondition = false;
+                    }
+                    wildcard.replace("*", "%");
+                    sql += name + " ";
+                    ImageQueryBuilder::addSqlRelation(sql, SearchXml::Like);
+                    sql += " ?";
+                    *boundValues << wildcard;
+                }
+            }
+            sql += ") ";
         }
         else
         {
-            addStringField(name);
+            QString value = reader.value();
+            if (relation == SearchXml::Like && value.contains("*"))
+            {
+                // Handle special case: * denotes the place if the wildcard,
+                // dont automatically prepend and append %
+                sql += " (" + name + " ";
+                ImageQueryBuilder::addSqlRelation(sql, SearchXml::Like);
+                sql += " ?) ";
+                QString wildcard = reader.value();
+                wildcard.replace("*", "%");
+                *boundValues << wildcard;
+            }
+            else
+                addStringField(name);
         }
     }
 
