@@ -179,6 +179,7 @@ SearchField *SearchField::createField(const QString &name, SearchFieldGroup *par
         QStringList formats;
         formats << "JPG" << "JPEG";
         formats << "PNG" << "PNG";
+        formats << "RAW*" << "RAW";
         formats << "TIFF" << "TIFF";
         formats << "PPM" << "PPM";
         formats << "JP2K" << "JPEG 2000";
@@ -1221,7 +1222,9 @@ void SearchFieldChoice::read(SearchXmlCachingReader &reader)
         }
         else if (m_type == QVariant::String)
         {
-            m_model->setChecked<QString>(reader.value(), relation);
+            // The testRelation magic only really makes sense for integers. "Like" is not implemented.
+            //m_model->setChecked<QString>(reader.value(), relation);
+            m_model->setChecked<QString>(reader.value());
         }
     }
 }
@@ -1254,12 +1257,18 @@ void SearchFieldChoice::write(SearchXmlWriter &writer)
         {
             if (v.size() == 1)
             {
-                writer.writeField(m_name, SearchXml::Equal);
+                // For choice string fields, we have the possibility to specify the wildcard
+                // position with the position of *.
+                if (v.first().contains("*"))
+                    writer.writeField(m_name, SearchXml::Like);
+                else
+                    writer.writeField(m_name, SearchXml::Equal);
                 writer.writeValue(v.first());
                 writer.finishField();
             }
             else
             {
+                // OneOf handles wildcards automatically
                 writer.writeField(m_name, SearchXml::OneOf);
                 writer.writeValue(v);
                 writer.finishField();
@@ -1773,8 +1782,8 @@ void SearchFieldColorDepth::setupValueWidgets(QGridLayout *layout, int row, int 
     layout->addWidget(m_comboBox, row, column);
 
     m_comboBox->addItem(i18n("any color depth"));
-    m_comboBox->addItem(i18n("8 bits per channel"), 16);
-    m_comboBox->addItem(i18n("16 bits per channel"), 8);
+    m_comboBox->addItem(i18n("8 bits per channel"), 8);
+    m_comboBox->addItem(i18n("16 bits per channel"), 16);
 
     m_comboBox->setCurrentIndex(0);
 
