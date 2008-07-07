@@ -215,6 +215,35 @@ QStringList SearchXmlReader::valueToStringList()
     return list;
 }
 
+QList<int> SearchXmlReader::valueToIntOrIntList()
+{
+    QList<int> list;
+
+    // poke at next token
+    QXmlStreamReader::TokenType token = QXmlStreamReader::readNext();
+
+    // Found text? Treat text as with valueToInt(), return single element list
+    if (token == QXmlStreamReader::Characters)
+    {
+        list << text().toString().toInt();
+        readToEndOfElement();
+        return list;
+    }
+
+    // treat as with valueToIntList()
+    while (!atEnd())
+    {
+        if (token != QXmlStreamReader::StartElement || name() != "listitem")
+            break;
+
+        list << readElementText().toInt();
+
+        token = QXmlStreamReader::readNext();
+    }
+
+    return list;
+}
+
 SearchXml::Operator SearchXmlReader::readOperator(const QString &attributeName,
                                                   SearchXml::Operator defaultOperator) const
 {
@@ -871,6 +900,25 @@ QStringList SearchXmlCachingReader::valueToStringList()
         m_readValue = true;
     }
     return m_value.toStringList();
+}
+
+QList<int> SearchXmlCachingReader::valueToIntOrIntList()
+{
+    if (!m_readValue)
+    {
+        QList<int> intList = SearchXmlReader::valueToIntOrIntList();
+        QList<QVariant> varList;
+        foreach(int v, intList)
+            varList << v;
+        m_value = varList;
+        m_readValue = true;
+        return intList;
+    }
+    QList<int> intList;
+    QList<QVariant> varList = m_value.toList();
+    foreach (const QVariant &var, varList)
+        intList << var.toInt();
+    return intList;
 }
 
 

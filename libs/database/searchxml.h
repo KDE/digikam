@@ -139,6 +139,8 @@ public:
     QList<double>       valueToDoubleList();
     QStringList         valueToStringList();
 
+    QList<int>          valueToIntOrIntList();
+
     /** General helper method: Reads XML a start element with the given
      *  name is found. The method goes to the next start element, and from
      *  there down the hierarchy, but not further up in the hierarchy.
@@ -316,6 +318,7 @@ public:
     QList<qlonglong>    valueToLongLongList();
     QList<double>       valueToDoubleList();
     QStringList         valueToStringList();
+    QList<int>          valueToIntOrIntList();
 
 protected:
 
