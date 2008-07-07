@@ -840,8 +840,10 @@ public:
      * Returns a list of all images where the Haar fingerprint has either not been generated
      * yet, or is outdated because the file is identified as changed since
      * the generation of the fingerprint.
+     * Return image ids or item URLs.
      */
     QList<qlonglong> getDirtyOrMissingFingerprints();
+    QStringList getDirtyOrMissingFingerprintURLs();
 
     /**
      * Get the datetime for the item
