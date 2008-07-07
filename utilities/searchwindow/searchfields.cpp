@@ -1576,28 +1576,39 @@ void SearchFieldAlbum::updateComboText()
 
 void SearchFieldAlbum::read(SearchXmlCachingReader &reader)
 {
-    int id = reader.valueToInt();
-    Album *a = 0;
-    if (m_type == TypeAlbum)
-        a = AlbumManager::instance()->findPAlbum(id);
-    else if (m_type == TypeTag)
-        a = AlbumManager::instance()->findTAlbum(id);
+    QList<int> ids = reader.valueToIntOrIntList();
+    foreach(int id, ids)
+    {
+        Album *a = 0;
+        if (m_type == TypeAlbum)
+            a = AlbumManager::instance()->findPAlbum(id);
+        else if (m_type == TypeTag)
+            a = AlbumManager::instance()->findTAlbum(id);
 
-    if (!a)
-        DDebug() << "Search: Did not find album for ID" << id << "given in Search XML";
+        if (!a)
+            DDebug() << "Search: Did not find album for ID" << id << "given in Search XML";
 
-    m_model->setChecked(a, true);
+        m_model->setChecked(a, true);
+    }
 }
 
 void SearchFieldAlbum::write(SearchXmlWriter &writer)
 {
     QList<Album *> checkedAlbums = m_model->checkedAlbums();
+
+    if (checkedAlbums.isEmpty())
+        return;
+
+    QList<int> albumIds;
     foreach(Album *album, checkedAlbums)
-    {
-        writer.writeField(m_name, SearchXml::InTree);
-        writer.writeValue(album->id());
-        writer.finishField();
-    }
+        albumIds << album->id();
+
+    writer.writeField(m_name, SearchXml::InTree);
+    if (albumIds.size() > 1)
+        writer.writeValue(albumIds);
+    else
+        writer.writeValue(albumIds.first());
+    writer.finishField();
 }
 
 void SearchFieldAlbum::reset()
