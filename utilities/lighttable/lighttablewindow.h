@@ -58,7 +58,7 @@ public:
     static bool              lightTableWindowCreated();
 
     void loadImageInfos(const ImageInfoList &list, const ImageInfo &imageInfoCurrent, bool addTo);
-    void setLeftRightItems(const ImageInfoList &list);
+    void setLeftRightItems(const ImageInfoList &list, bool addTo);
     void applySettings();
     void refreshView();
 
