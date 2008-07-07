@@ -1,5 +1,5 @@
 ------------------------------------------------------------------------------------
-0.9.0 TODO LIST
+0.9.x TODO LIST
 ------------------------------------------------------------------------------------
 
 * right hand side sidebar (allee):
@@ -39,7 +39,7 @@
                 ditto for unmounting in usm case 
 
 ------------------------------------------------------------------------------------
-LATER 0.9.3 TODO LIST
+LATER 0.9.4 TODO LIST
 ------------------------------------------------------------------------------------
 
 * Improving metadata support:
@@ -50,18 +50,14 @@ LATER 0.9.3 TODO LIST
 
 * Database:
    - Implement versioning of picture based on Image editor 'Action List' feature.
-   - New option to set digiKam tags on the fly.
 
 * New CD/DVD album folders+database backup/restore tool :
    - Take a look of music database backup in amarok.
    - Take a look of image database backup in showimg.
     
 * Showfoto improvements :
-   - Add DCOP interface.
-   - Add Support KURL for better konqueror interactions.
+   - Add DBUS interface.
+   - Add Support KUrl for better konqueror interactions.
 
 * General:
    - Custom ordering of images
-   - Post conversion to qlistview: allow selection of multiple albums/tags/dates:
-     1/ instead of a "current album" there will a list of "current urls"
-     2/ will lead to widesweeping changes all over the core and the kioslaves
