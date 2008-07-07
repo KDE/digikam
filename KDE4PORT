@@ -33,7 +33,7 @@ URL
 LIST OF BUGZILLA FILES NOT YET BACKPORTED FROM KDE3 BRANCH:
 -----------------------------------------------------------      
       		      
-160617: Same image gets opened to both sides of view when draggin image to right side. (Andi)
+
 
 LIST OF DIRECTORIES PORTED BY DEVELOPPERS:
 ------------------------------------------
