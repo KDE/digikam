@@ -4,6 +4,7 @@ DEVELOPPERS WHO WORKS ON DIGIKAM KDE4 PORT:
 Gilles Caulier <caulier dot gilles at gmail dot com>
 Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
 Laurent Montel <montel at kde dot org>
+Andi Clemens <andi dot clemens at gmx dot net>
 
 URL
 ---
@@ -32,14 +33,14 @@ URL
 LIST OF BUGZILLA FILES NOT YET BACKPORTED FROM KDE3 BRANCH:
 -----------------------------------------------------------      
       		      
-147426: Search for non-voted pics (http://bugs.kde.org/show_bug.cgi?id=147426)
+160617: Same image gets opened to both sides of view when draggin image to right side. (Andi)
 
 LIST OF DIRECTORIES PORTED BY DEVELOPPERS:
 ------------------------------------------
                                                         DEPENCIES
                                                         +-------+
                                                        /         \     CODE    REGRESSION
-DIRECTORIES / FILES                    ASSIGNED     SHOWFOTO DIGIKAM   PORT      TESTS      REMARKS
+DIRECTORIES / FILES                     DONE BY     SHOWFOTO DIGIKAM   PORT      TESTS      REMARKS
 
 |-libs
 |---curves                              Gilles          X      X       DONE        DONE
