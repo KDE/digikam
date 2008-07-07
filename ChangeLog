@@ -1,5 +1,308 @@
-0.10.0-beta1 06-07-2008
+0.10.0-beta1 07-07-2008
 ---------------------------------------------------------------------------
+
+2008-07-06 20:56  mwiesweg
+
+	* utilities/searchwindow/searchfields.cpp: Add the necessary code
+	  to use a wildcard in the format search field. This finally
+	  allows to search for the RAW image format.
+	  Fix color channel field again.
+
+2008-07-06 20:56  mwiesweg
+
+	* libs/database/imagequerybuilder.cpp: Add some magic to
+	  addChoiceStringField which knows how to handle wildcards
+	  appearing
+	  in the values. The wildcard is *, % seems too SQL specific for
+	  me.
+
+2008-07-06 19:30  mwiesweg
+
+	* libs/threadimageio/thumbnailtask.cpp: Fix crash: Set all
+	  parameters only at execution time,
+	  constructor may be a long time before, and the creator is shared
+	  between tasks!
+
+2008-07-06 19:30  mwiesweg
+
+	* utilities/searchwindow/searchfields.cpp: - fix exposure time:
+	  steps are 10, 20, 30 not 11, 21, 31
+	  - fix valueChanged for Int as we did for Double fields
+	  - fix write() for Int and Double, see comment.
+	  There's still a TODO to achieve the Equal search
+	  - fix channel search, it's first 8bit then 16 bit
+
+2008-07-06 07:00  doerr
+
+	* utilities/setup/setupmime.cpp: fixed typo in the file extension
+	  section
+
+2008-07-05 21:16  mwiesweg
+
+	* libs/threadimageio/loadingcache.cpp: Revert 799499 and apply a
+	  differnet solution:
+	  
+	  We cannot use a recursive mutex, we need to wait on it with a
+	  cond var,
+	  and that doesnt work with recursive mutexes.
+	  To avoid the deadlock from 799499, make the updateDirWatch signal
+	  queued.
+
+2008-07-05 21:16  mwiesweg
+
+	* utilities/searchwindow/searchview.cpp: - use deleteLater for
+	  deleting a group. There is a warning on the console that you
+	  shall not delete a widget from within its event handler (deleting
+	  the Remove Group label)
+	  
+	  - make the Remove Group label underlined and italic, to
+	  distinguish it as clickable
+
+2008-07-05 21:16  mwiesweg
+
+	* libs/widgets/iccprofiles/cietonguewidget.cpp: Remove leftover
+	  QPainter::begin
+
+2008-07-05 20:19  mwiesweg
+
+	* libs/widgets/iccprofiles/cietonguewidget.cpp: All the "Widget
+	  painting can only begin as a result of a paintEvent" warnings
+	  came from here.
+	  Dont attempt to draw the pixmap on the widget outside
+	  paintEvent().
+	  Make painting more relaxed; for the simple cases (disabled,
+	  loading), draw directly. Only cache
+	  the tongue itself on a separate pixmap. Update pixmap only on
+	  request.
+
+2008-07-05 19:48  mwiesweg
+
+	* utilities/searchwindow/searchfields.cpp,
+	  utilities/searchwindow/searchfields.h: Show the Clear indicator
+	  for the color channel search field
+
+2008-07-05 19:48  mwiesweg
+
+	* digikam/imagepreviewbar.cpp, libs/widgets/common/thumbbar.cpp,
+	  libs/widgets/common/thumbbar.h,
+	  utilities/lighttable/lighttablebar.cpp: Preloading in thumbbar,
+	  second revision:
+	  The conditions for triggering a preload are adjusted as follows:
+	  Scrolling or rearranging sets a flag that a preload is needed.
+	  Only after drawing (which requests to load the thumbnails) the
+	  preloading
+	  is then scheduled.
+	  For me the result are now quite good. With slow to medium-fast
+	  scrolling,
+	  all thumbnails appear immediately.
+
+2008-07-05 19:48  mwiesweg
+
+	* libs/threadimageio/thumbnailloadthread.cpp,
+	  libs/threadimageio/thumbnailloadthread.h: Add support for
+	  preloading thumbnails
+
+2008-07-05 19:48  mwiesweg
+
+	* libs/threadimageio/managedloadsavethread.cpp,
+	  libs/threadimageio/managedloadsavethread.h: Tweak thumbnail
+	  loading:
+	  - prepend a new thumbnail to the list, instead of appending. This
+	  can lead to much
+	  faster display when medium-fast scrolling in icon view.
+	  A side effect is that thumbnail are sometimes visibly loaded
+	  bottom up.
+	  To circumvent this, the view would need to call
+	  prependThumbnailGroup().
+	  - add a method to preload thumbnails
+	  
+	  - fix a bug in the LoadingPolicyPrepend implementation for normal
+	  loading tasks
+
+2008-07-05 19:48  mwiesweg
+
+	* libs/widgets/common/thumbbar.cpp, libs/widgets/common/thumbbar.h:
+	  Preload the next few thumbnails that will become visible in
+	  either direction.
+
+2008-07-05 14:32  mwiesweg
+
+	* libs/widgets/common/thumbbar.cpp: Add special handling for the
+	  case the the requested tile size is larger
+	  
+	  than the allowed maximum thumbnail size.
+	  In this case, we scale up the image, which results in bad-quality
+	  blurred
+	  versions pretending to be larger than the contained information
+	  allows.
+	  
+	  I think we should set the thumbbar's maximum size so that the
+	  user
+	  cannot drag it larger than for the 256 thumbnails.
+
+2008-07-05 14:32  mwiesweg
+
+	* libs/threadimageio/thumbnailloadthread.cpp,
+	  libs/threadimageio/thumbnailloadthread.h: Retrieve the maximum
+	  size that a thumbnail can have
+
+2008-07-05 14:32  mwiesweg
+
+	* digikam/imagepreviewbar.cpp,
+	  utilities/lighttable/lighttablebar.cpp: Use new method from
+	  parent class
+
+2008-07-05 14:31  mwiesweg
+
+	* libs/widgets/common/thumbbar.cpp, libs/widgets/common/thumbbar.h:
+	  By caching all thumbnails for all items in a thumbbar we create a
+	  number of problems,
+	  
+	  especially if the album (all of whose items are in the thumbbar)
+	  has more than 100 images:
+	  - the global cache policy is circumvented
+	  - implicitly cached objects, if another instance is kept, will
+	  not be removed
+	  from the QCache. This can lead to a situation where the thumbbar
+	  items
+	  block the whole cache, and new items cannot be stored. The
+	  iconview
+	  depends on at least all visible items available from the cache
+	  - smooth scaling at painting is slow, caching a pixmap of the
+	  right size
+	  is much faster for drawing
+	  - with even larger albums, think of a search album, memory usage
+	  can be huge
+	  
+	  This commit brings the thumbbar to the same behavior used by icon
+	  view,
+	  taking pixmaps from the cache or triggering to load them.
+	  We can implement more preloading (the next x items etc.) if we
+	  need it.
+
+2008-07-05 14:31  mwiesweg
+
+	* digikam/albumiconitem.cpp, digikam/albumiconview.cpp: Use
+	  defaultIconViewThread for IconView
+
+2008-07-05 14:31  mwiesweg
+
+	* libs/threadimageio/thumbnailloadthread.cpp,
+	  libs/threadimageio/thumbnailloadthread.h: Introduce two more
+	  default thread objects. We use default threads everywhere,
+	  
+	  it's better to have separate threads e.g. in the icon view and in
+	  the thumbbar,
+	  but it's ok to share threads between all thumbbars.
+	  
+	  Add versions of the find methods that override the default
+	  thumbnail size.
+	  Using a global size per thread looks better API-wise but does not
+	  carry
+	  well with the way we share the threads. Need to look at some
+	  places still
+	  if they properly set the size.
+
+2008-07-05 12:05  aclemens
+
+	* NEWS: update
+
+2008-07-05 11:42  pino
+
+	* CMakeLists.txt: include the directory where the generated
+	  version.h is
+
+2008-07-04 15:12  cgilles
+
+	* PACKAGING: update
+
+2008-07-04 15:02  cgilles
+
+	* themedesigner/CMakeLists.txt: compile as stand alone
+
+2008-07-04 14:59  cgilles
+
+	* imageplugins/superimpose/dirselectwidget.cpp: compile as stand
+	  alone
+
+2008-07-04 14:29  cgilles
+
+	* imageplugins/CMakeLists.txt: compile as stand alone
+
+2008-07-04 13:53  cgilles
+
+	* digikam/mediaplayerview.h: compile as stand alone
+
+2008-07-04 13:50  cgilles
+
+	* project/release/lib/libl10n.rb,
+	  project/release/lib/librelease.rb,
+	  project/release/release_digikam.rb: improvement of release script
+	  again
+
+2008-07-04 12:04  cgilles
+
+	* release_digikam.rb: rm obsolete file
+
+2008-07-04 11:59  cgilles
+
+	* NEWS: update
+
+2008-07-04 11:58  cgilles
+
+	* libs/database/sqlite2/sqliteInt.h: compile as stand alone
+	  BUGS: 165280
+
+2008-07-04 11:34  cgilles
+
+	* project/release/lib/libl10n.rb,
+	  project/release/lib/librelease.rb,
+	  project/release/release_digikam.rb: update release script
+
+2008-07-04 10:53  cgilles
+
+	* CMakeLists.txt: to be able to compile digiKam as standalone
+
+2008-07-04 10:15  cgilles
+
+	* project/release/release_digikam.rb: add url of original source
+	  code
+
+2008-07-04 10:15  cgilles
+
+	* project/release, project/release/lib,
+	  project/release/lib/libbase.rb,
+	  project/release/lib/libkdialog.rb,
+	  project/release/lib/libl10n.rb,
+	  project/release/lib/librelease.rb, project/release/lib/libtag.rb,
+	  project/release/release_digikam.rb: new release script taken from
+	  Amarok team (Harald Sitter). Thanks to Lydia Pintscher for help
+	  by IRC
+
+2008-07-04 10:12  cgilles
+
+	* release_digikam_cl.sh, release_digikam_docs.rb,
+	  release_digikam_kde3.rb: remove obsolete scripts
+
+2008-07-04 08:35  cgilles
+
+	* ChangeLog: preapring 0.10.0-beta1
+
+2008-07-04 07:34  cgilles
+
+	* NEWS.0.9.4: add 0.9.4 news
+
+2008-07-04 07:33  cgilles
+
+	* CMakeLists.txt: hey !!!! ==> preparing digiKam 0.10.0-beta1 !!!
+
+2008-07-04 07:31  cgilles
+
+	* NEWS: proparing 0.10.0-beta1
+
+2008-07-04 07:30  cgilles
+
+	* README: update
 
 2008-07-03 18:34  mwiesweg
 
