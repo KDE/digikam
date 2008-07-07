@@ -114,27 +114,17 @@ void FingerPrintsGenerator::slotRebuildFingerPrints()
     DatabaseAccess      access;
     Haar::SignatureData sig;
 
-    for (AlbumList::Iterator it = palbumList.begin();
-         !d->cancel && (it != palbumList.end()); ++it)
+    if (d->rebuildAll)
     {
-
-        if (d->rebuildAll)
+        for (AlbumList::Iterator it = palbumList.begin();
+             !d->cancel && (it != palbumList.end()); ++it)
         {
-            d->allPicturesPath += access.db()->getItemURLsInAlbum((*it)->id());
+            d->allPicturesPath += DatabaseAccess().db()->getItemURLsInAlbum((*it)->id());
         }
-        else
-        {
-            QMap<qlonglong, QString> itemsMap = access.db()->getItemIDsAndURLsInAlbum((*it)->id());
-
-            for (QMap<qlonglong, QString>::const_iterator it2 = itemsMap.begin();
-                !d->cancel && (it2 != itemsMap.end()); ++it2)
-            {
-                if (!d->haarIface.retrieveSignatureFromDB(it2.key(), &sig))
-                {
-                    d->allPicturesPath += it2.value();
-                }
-            }
-        }
+    }
+    else
+    {
+        d->allPicturesPath = DatabaseAccess().db()->getDirtyOrMissingFingerprintURLs();
     }
 
     setMaximum(d->allPicturesPath.count());
