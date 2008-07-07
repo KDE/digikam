@@ -164,6 +164,7 @@ public:
     void setNoValueText(const QString &text);
     void setNumberPrefixAndSuffix(const QString &prefix, const QString &suffix);
     void setBoundary(int min, int max, int step = 1);
+    void setUseReciprocal(bool reciprocal);
 
 protected slots:
 
@@ -173,6 +174,7 @@ protected:
 
     int             m_min;
     int             m_max;
+    bool            m_reciprocal;
     QSpinBox       *m_firstBox;
     QSpinBox       *m_secondBox;
     QLabel         *m_betweenLabel;

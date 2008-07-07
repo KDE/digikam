@@ -21,6 +21,10 @@
  * 
  * ============================================================ */
 
+// C++ includes
+
+#include <cmath>
+
 // Qt includes
 
 #include <QApplication>
@@ -265,6 +269,7 @@ SearchField *SearchField::createField(const QString &name, SearchFieldGroup *par
         field->setBetweenText("-");
         field->setNumberPrefixAndSuffix("1/", "s");
         field->setBoundary(0, 4000, 10);
+        field->setUseReciprocal(true); // it's 1/250, not 250 as in the spin box
         return field;
     }
     else if (name == "exposureprogram")
@@ -826,7 +831,7 @@ void SearchFieldRangeDate::valueChanged()
 // ----------------------------------- //
 
 SearchFieldRangeInt::SearchFieldRangeInt(QObject *parent)
-    : SearchField(parent), m_min(0), m_max(100),
+    : SearchField(parent), m_min(0), m_max(100), m_reciprocal(false),
       m_firstBox(0), m_secondBox(0)
 {
     m_betweenLabel = new QLabel;
@@ -860,26 +865,49 @@ void SearchFieldRangeInt::setupValueWidgets(QGridLayout *layout, int row, int co
 void SearchFieldRangeInt::read(SearchXmlCachingReader &reader)
 {
     SearchXml::Relation relation = reader.fieldRelation();
-    switch (relation)
+    if (m_reciprocal)
     {
-        case SearchXml::GreaterThanOrEqual:
-            m_firstBox->setValue(reader.valueToInt());
-            break;
-        case SearchXml::GreaterThan:
-            m_firstBox->setValue(reader.valueToInt() - 1);
-            break;
-        case SearchXml::LessThanOrEqual:
-            m_secondBox->setValue(reader.valueToInt());
-            break;
-        case SearchXml::LessThan:
-            m_secondBox->setValue(reader.valueToInt() + 1);
-            break;
-        case SearchXml::Equal:
-            m_firstBox->setValue(reader.valueToInt());
-            m_secondBox->setValue(reader.valueToInt());
-            break;
-        default:
-            break;
+        switch (relation)
+        {
+            case SearchXml::LessThanOrEqual:
+            case SearchXml::LessThan:
+                m_firstBox->setValue(lround(1.0 / reader.valueToDouble()));
+                break;
+            case SearchXml::GreaterThanOrEqual:
+            case SearchXml::GreaterThan:
+                m_secondBox->setValue(lround(1.0 / reader.valueToDouble()));
+                break;
+            case SearchXml::Equal:
+                m_firstBox->setValue(lround(1.0 / reader.valueToDouble()));
+                m_secondBox->setValue(lround(1.0 / reader.valueToDouble()));
+                break;
+            default:
+                break;
+        }
+    }
+    else
+    {
+        switch (relation)
+        {
+            case SearchXml::GreaterThanOrEqual:
+                m_firstBox->setValue(reader.valueToInt());
+                break;
+            case SearchXml::GreaterThan:
+                m_firstBox->setValue(reader.valueToInt() - 1);
+                break;
+            case SearchXml::LessThanOrEqual:
+                m_secondBox->setValue(reader.valueToInt());
+                break;
+            case SearchXml::LessThan:
+                m_secondBox->setValue(reader.valueToInt() + 1);
+                break;
+            case SearchXml::Equal:
+                m_firstBox->setValue(reader.valueToInt());
+                m_secondBox->setValue(reader.valueToInt());
+                break;
+            default:
+                break;
+        }
     }
 }
 
@@ -893,21 +921,40 @@ void SearchFieldRangeInt::write(SearchXmlWriter &writer)
         // Right value is either displayed empty (minimum, greater than left)
         // or one step larger than left
         writer.writeField(m_name, SearchXml::Equal);
-        writer.writeValue(m_firstBox->value());
+        if (m_reciprocal)
+            writer.writeValue( 1.0 / (double)m_firstBox->value());
+        else
+            writer.writeValue(m_firstBox->value());
         writer.finishField();
     }
     else
     {
         if (m_firstBox->value() != m_firstBox->minimum())
         {
-            writer.writeField(m_name, SearchXml::GreaterThanOrEqual);
-            writer.writeValue(m_firstBox->value());
+            if (m_reciprocal)
+            {
+                writer.writeField(m_name, SearchXml::LessThanOrEqual);
+                writer.writeValue(1.0 / (double)m_firstBox->value());
+            }
+            else
+            {
+                writer.writeField(m_name, SearchXml::GreaterThanOrEqual);
+                writer.writeValue(m_firstBox->value());
+            }
             writer.finishField();
         }
         if (m_secondBox->value() != m_secondBox->minimum())
         {
-            writer.writeField(m_name, SearchXml::LessThanOrEqual);
-            writer.writeValue(m_secondBox->value());
+            if (m_reciprocal)
+            {
+                writer.writeField(m_name, SearchXml::GreaterThanOrEqual);
+                writer.writeValue(1.0 / (double)m_secondBox->value());
+            }
+            else
+            {
+                writer.writeField(m_name, SearchXml::LessThanOrEqual);
+                writer.writeValue(m_secondBox->value());
+            }
             writer.finishField();
         }
     }
@@ -938,6 +985,11 @@ void SearchFieldRangeInt::setBoundary(int min, int max, int step)
     m_secondBox->setRange(min, max);
     m_secondBox->setSingleStep(step);
     m_secondBox->setValue(min);
+}
+
+void SearchFieldRangeInt::setUseReciprocal(bool reciprocal)
+{
+    m_reciprocal = reciprocal;
 }
 
 void SearchFieldRangeInt::valueChanged()
