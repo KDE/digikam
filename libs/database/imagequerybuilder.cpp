@@ -369,15 +369,12 @@ public:
             {
                 foreach(QString wildcard, wildcards)
                 {
-                    if (!firstCondition)
-                    {
-                        sql += " OR ";
-                        firstCondition = false;
-                    }
+                    ImageQueryBuilder::addSqlOperator(sql, SearchXml::Or, firstCondition);
+                    firstCondition = false;
                     wildcard.replace("*", "%");
-                    sql += name + " ";
+                    sql += " " + name + " ";
                     ImageQueryBuilder::addSqlRelation(sql, SearchXml::Like);
-                    sql += " ?";
+                    sql += " ? ";
                     *boundValues << wildcard;
                 }
             }
@@ -579,20 +576,34 @@ void ImageQueryBuilder::buildField(QString &sql, SearchXmlCachingReader &reader,
         else if (relation == SearchXml::InTree)
         {
             // see also: AlbumDB::getItemNamesInAlbum
-            int albumID = reader.valueToInt();
-            DatabaseAccess access;
-            KUrl url(access.db()->getAlbumRelativePath(albumID));
-            int rootId = access.db()->getAlbumRootId(albumID);
-            QString childrenWildcard;
-            if (url.path() == "/")
-                childrenWildcard = "/%";
-            else
-                childrenWildcard = url.path() + "/%";
+            QList<int> ids = reader.valueToIntOrIntList();
+
+            if (ids.isEmpty())
+                return;
+
             sql += "(Images.album IN "
                    "   (SELECT DISTINCT id "
-                   "    FROM Albums "
-                   "    WHERE albumRoot=? AND (relativePath=? OR relativePath LIKE ?)) )";
-            *boundValues << rootId << url.path() << childrenWildcard;
+                   "    FROM Albums WHERE ";
+            bool firstCondition = true;
+            foreach(int albumID, ids)
+            {
+                addSqlOperator(sql, SearchXml::Or, firstCondition);
+                firstCondition = false;
+
+                DatabaseAccess access;
+                KUrl url(access.db()->getAlbumRelativePath(albumID));
+                int rootId = access.db()->getAlbumRootId(albumID);
+
+                QString childrenWildcard;
+                if (url.path() == "/")
+                    childrenWildcard = "/%";
+                else
+                    childrenWildcard = url.path() + "/%";
+
+                sql += " ( albumRoot=? AND (relativePath=? OR relativePath LIKE ?) ) ";
+                *boundValues << rootId << url.path() << childrenWildcard;
+            }
+            sql += " ))";
         }
     }
     else if (name == "albumname")
@@ -623,19 +634,30 @@ void ImageQueryBuilder::buildField(QString &sql, SearchXmlCachingReader &reader,
                    "    WHERE tagid = ?)) ";
             *boundValues << reader.valueToInt();
         }
-        else if (relation == SearchXml::InTree)
+        else if (relation == SearchXml::InTree || relation == SearchXml::NotInTree)
         {
-            sql += " (Images.id IN "
-                   "   (SELECT ImageTags.imageid FROM ImageTags JOIN TagsTree on ImageTags.tagid = TagsTree.id "
-                   "    WHERE TagsTree.pid = ? OR ImageTags.tagid = ? )) ";
-            *boundValues << reader.valueToInt() << reader.valueToInt();
-        }
-        else if (relation == SearchXml::NotInTree)
-        {
-            sql += " (Images.id NOT IN "
-                   "   (SELECT ImageTags.imageid FROM ImageTags JOIN TagsTree on ImageTags.tagid = TagsTree.id "
-                   "    WHERE TagsTree.pid = ? OR ImageTags.tagid = ? )) ";
-            *boundValues << reader.valueToInt() << reader.valueToInt();
+            QList<int> ids = reader.valueToIntOrIntList();
+
+            if (ids.isEmpty())
+                return;
+
+            if (relation == SearchXml::InTree)
+                sql += " (Images.id IN ";
+            else
+                sql += " (Images.id NOT IN ";
+            sql += "   (SELECT ImageTags.imageid FROM ImageTags JOIN TagsTree on ImageTags.tagid = TagsTree.id "
+                   "    WHERE ";
+
+            bool firstCondition = true;
+            foreach(int tagID, ids)
+            {
+                addSqlOperator(sql, SearchXml::Or, firstCondition);
+                firstCondition = false;
+                sql += " (TagsTree.pid = ? OR ImageTags.tagid = ? ) ";
+                *boundValues << tagID << tagID;
+            }
+
+            sql += " )) ";
         }
     }
     else if (name == "tagname")
