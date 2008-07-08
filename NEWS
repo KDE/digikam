@@ -9,7 +9,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 002 ==> 160617 : Same image gets opened to both sides of view when draggin image to right side.
 003 ==> 165823 : Digikam crashes if last picture is removed from lighttable.
 004 ==> 165921 : Translation bug: Missing german translation.
-005 ==> 
+005 ==> 130906 : Allow user to click text of tags to tag an image (not checkbox only).
+006 ==> 
 
 **********************************************************************************************
 digiKam 0.9.4-RC2 - Release date: 2008-07-06
