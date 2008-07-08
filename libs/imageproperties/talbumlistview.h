@@ -96,10 +96,6 @@ protected:
 private slots:
 
     void slotRefresh(const QMap<int, int>&);
-
-private:
-
-    bool mouseInItemRect(Q3ListViewItem* item, int x) const;
 };
 
 }  // NameSpace Digikam
