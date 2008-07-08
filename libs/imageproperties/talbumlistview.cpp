@@ -190,20 +190,6 @@ void TAlbumListView::stateChanged(TAlbumCheckListItem *item)
     emit signalItemStateChanged(item);
 }
 
-bool TAlbumListView::mouseInItemRect(QListViewItem* item, int x) const
-{
-    if (!item)
-        return false;
-
-    x += contentsX();
-
-    int offset = treeStepSize()*(item->depth() + (rootIsDecorated() ? 1 : 0));
-    offset    += itemMargin();
-    int width  = item->width(fontMetrics(), this, 0);
-
-    return (x > offset && x < (offset + width));
-}
-
 QDragObject* TAlbumListView::dragObject()
 {
     TAlbumCheckListItem *item = dynamic_cast<TAlbumCheckListItem*>(dragItem());

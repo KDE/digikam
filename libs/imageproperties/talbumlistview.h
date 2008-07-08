@@ -95,10 +95,6 @@ protected:
 private slots:
 
     void slotRefresh(const QMap<int, int>&);
-
-private:
-
-    bool mouseInItemRect(QListViewItem* item, int x) const;
 };
 
 }  // NameSpace Digikam
