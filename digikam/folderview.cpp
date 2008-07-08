@@ -203,13 +203,13 @@ void FolderView::contentsMousePressEvent(QMouseEvent *e)
     QPoint vp            = contentsToViewport(e->pos());
     Q3ListViewItem *item = itemAt(vp);
 
+    // With Check Box item, we will toggle on/off item using middle mouse button.
+    // See B.K.O #130906
     FolderCheckListItem *citem = dynamic_cast<FolderCheckListItem*>(item);
-    if(citem && e->button() == Qt::MidButton) 
+    if(citem && e->button() == Qt::MidButton && mouseInItemRect(item, e->pos().x()))
     {
-        bool isOn = citem->isOn();
         Q3ListView::contentsMousePressEvent(e);
-        // Restore the status of checkbox. 
-        citem->setOn(isOn);
+        citem->setOn(!citem->isOn());
         return;
     }
 
@@ -343,7 +343,13 @@ bool FolderView::mouseInItemRect(Q3ListViewItem* item, int x) const
     offset    += itemMargin();
     int width  = item->width(fontMetrics(), this, 0);
 
-    return (x > offset && x < (offset + width));
+    int boxsize = 0;
+    FolderCheckListItem* citem = dynamic_cast<FolderCheckListItem*>(item);
+    if (citem && 
+        ((citem->type() == Q3CheckListItem::CheckBox) || (citem->type() == Q3CheckListItem::CheckBoxController)))
+        boxsize = style()->pixelMetric(QStyle::PM_CheckListButtonSize, 0, this);
+
+    return (x > (offset + boxsize) && x < (offset + boxsize + width));
 }
 
 void FolderView::slotThemeChanged()
