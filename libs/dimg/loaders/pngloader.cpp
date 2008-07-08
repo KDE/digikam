@@ -941,7 +941,10 @@ size_t PNGLoader::copyString(char *destination, const char *source, const size_t
     {
         if (length != 0)
             *q='\0';
-  
+
+        do
+        {
+        }  
         while (*p++ != '\0');
     }
     
