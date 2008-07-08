@@ -113,6 +113,9 @@ TARGET_LINK_LIBRARIES(digikam
                       ${PNG_LIBRARIES}
                       ${LCMS_LIBRARIES}
                       ${JASPER_LIBRARIES}
+                      
+                      # Require by CImg library which use pthread internally.
+                      ${CMAKE_THREAD_LIBS_INIT} 
 
                       ${KDCRAW_LIBRARIES}
                       ${KEXIV2_LIBRARIES}
