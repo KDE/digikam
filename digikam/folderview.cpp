@@ -26,6 +26,7 @@
 
 #include <qpixmap.h>
 #include <qvaluelist.h>
+#include <qstyle.h>
 
 // KDE includes.
 
@@ -202,13 +203,13 @@ void FolderView::contentsMousePressEvent(QMouseEvent *e)
     QPoint vp           = contentsToViewport(e->pos());
     QListViewItem *item = itemAt(vp);
 
+    // With Check Box item, we will toggle on/off item using middle mouse button.
+    // See B.K.O #130906
     FolderCheckListItem *citem = dynamic_cast<FolderCheckListItem*>(item);
-    if(citem && e->button() == MidButton) 
+    if(citem && e->button() == MidButton && mouseInItemRect(item, e->pos().x()))
     {
-        bool isOn = citem->isOn();
         QListView::contentsMousePressEvent(e);
-        // Restore the status of checkbox. 
-        citem->setOn(isOn);
+        citem->setOn(!citem->isOn());
         return;
     }
 
@@ -341,7 +342,13 @@ bool FolderView::mouseInItemRect(QListViewItem* item, int x) const
     offset    += itemMargin();
     int width  = item->width(fontMetrics(), this, 0);
 
-    return (x > offset && x < (offset + width));
+    int boxsize = 0;
+    FolderCheckListItem* citem = dynamic_cast<FolderCheckListItem*>(item);
+    if (citem && 
+        ((citem->type() == QCheckListItem::CheckBox) || (citem->type() == QCheckListItem::CheckBoxController)))
+        boxsize = style().pixelMetric(QStyle::PM_CheckListButtonSize, this);
+
+    return (x > (offset + boxsize) && x < (offset + boxsize + width));
 }
 
 void FolderView::slotThemeChanged()
