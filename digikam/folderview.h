@@ -14,7 +14,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -71,8 +71,6 @@ public:
     QPixmap  itemBasePixmapRegular() const;
     QPixmap  itemBasePixmapSelected() const;
 
-    bool mouseInItemRect(Q3ListViewItem* item, int x) const;
-
 protected:
 
     void contentsMousePressEvent(QMouseEvent *e);
@@ -87,7 +85,7 @@ protected:
 
     void startDrag();
     Q3ListViewItem* dragItem() const;
-    virtual QDrag* makeDragObject(){ return 0; };
+    virtual QDrag* makeDragObject() { return 0; };
 
     void resizeEvent(QResizeEvent* e);
     void fontChange(const QFont& oldFont);
@@ -115,6 +113,8 @@ private slots:
     void slotIconSizeChanged();
 
 private:
+
+    bool mouseInItemRect(Q3ListViewItem* item, int x) const;
 
     FolderViewPriv *d;
 };

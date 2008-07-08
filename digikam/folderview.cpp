@@ -217,6 +217,7 @@ void FolderView::contentsMousePressEvent(QMouseEvent *e)
 
     if(item && e->button() == Qt::LeftButton) 
     {
+        // Prepare D&D if necessary
         d->dragStartPos = e->pos();
         d->dragItem     = item;
         return;
@@ -225,7 +226,17 @@ void FolderView::contentsMousePressEvent(QMouseEvent *e)
 
 void FolderView::contentsMouseReleaseEvent(QMouseEvent *e)
 {
+    QPoint vp               = contentsToViewport(e->pos());
+    Q3ListViewItem *item    = itemAt(vp);
+
     Q3ListView::contentsMouseReleaseEvent(e);
+
+    if (item && e->button() == Qt::LeftButton)
+    {
+        // See B.K.O #126871: collapse/expand treeview using left mouse button single click.
+        if (mouseInItemRect(item, e->pos().x()))
+            item->setOpen(!item->isOpen());
+    }
 
     d->dragItem = 0;
 }
