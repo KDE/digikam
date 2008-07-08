@@ -64,6 +64,8 @@ public:
     QPixmap  itemBasePixmapRegular() const;
     QPixmap  itemBasePixmapSelected() const;
 
+    bool mouseInItemRect(QListViewItem* item, int x) const;
+
 protected:
 
     void contentsMousePressEvent(QMouseEvent *e);
@@ -93,8 +95,6 @@ protected:
      * writes the views state to disk
      */
     virtual void saveViewState();
-
-    bool mouseInItemRect(QListViewItem* item, int x) const;
 
 protected slots:
 
