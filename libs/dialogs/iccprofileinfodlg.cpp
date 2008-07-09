@@ -5,8 +5,8 @@
  *
  * Date        : 2006-02-16
  * Description : a dialog to display icc profile information.
- * 
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ *
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -45,13 +45,13 @@ ICCProfileInfoDlg::ICCProfileInfoDlg(QWidget* parent, const QString& profilePath
     setHelp("iccprofile.anchor", "digikam");
 
     ICCProfileWidget *profileWidget = new ICCProfileWidget(this, 340, 256);
-    
+
     if (profileData.isEmpty())
         profileWidget->loadFromURL(KUrl(profilePath));
     else
-        profileWidget->loadFromData(profilePath, profileData); 
+        profileWidget->loadFromProfileData(profilePath, profileData);
 
-    setMainWidget(profileWidget); 
+    setMainWidget(profileWidget);
 }
 
 ICCProfileInfoDlg::~ICCProfileInfoDlg()

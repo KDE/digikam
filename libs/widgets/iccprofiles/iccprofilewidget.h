@@ -5,7 +5,7 @@
  *
  * Date        : 2006-06-23
  * Description : a tab widget to display ICC profile infos
- * 
+ *
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -13,12 +13,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef ICCPROFILEWIDGET_H
@@ -42,15 +42,15 @@ class ICCProfileWidgetPriv;
 class DIGIKAM_EXPORT ICCProfileWidget : public MetadataWidget
 {
     Q_OBJECT
-    
+
 public:
 
     ICCProfileWidget(QWidget* parent, int w=256, int h=256);
     ~ICCProfileWidget();
 
     bool    loadFromURL(const KUrl& url);
-    bool    loadFromData(const QString& fileName, const QByteArray& data=QByteArray());
-    
+    bool    loadFromProfileData(const QString& fileName, const QByteArray& data=QByteArray());
+
     QString getTagDescription(const QString& key);
     QString getTagTitle(const QString& key);
 
@@ -62,15 +62,15 @@ public:
     bool  setProfileData(const QByteArray& data=QByteArray());
     const QByteArray& getProfileData();
 
-protected slots:    
-    
+protected slots:
+
     virtual void slotSaveMetadataToFile();
-    
+
 private:
 
     bool decodeMetadata();
     void buildView();
-    
+
 private:
 
     ICCProfileWidgetPriv *d;

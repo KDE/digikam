@@ -819,7 +819,7 @@ void ImagePropertiesColorsTab::getICCData()
     else
     {
         d->embedded_profile = d->image.getICCProfil();
-        d->iccProfileWidget->loadFromData(d->currentFilePath, d->embedded_profile);
+        d->iccProfileWidget->loadFromProfileData(d->currentFilePath, d->embedded_profile);
     }
 }
 

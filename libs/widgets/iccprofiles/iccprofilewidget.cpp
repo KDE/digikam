@@ -2,10 +2,10 @@
  *
  * This file is a part of digiKam project
  * http://www.digikam.org
- * 
+ *
  * Date        : 2006-06-23
  * Description : a tab widget to display ICC profile infos
- * 
+ *
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -13,12 +13,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -115,7 +115,6 @@ public:
     ICCTagInfoMap    iccTagsDescription;
 };
 
-
 ICCProfileWidget::ICCProfileWidget(QWidget* parent, int w, int h)
                 : MetadataWidget(parent)
 {
@@ -187,7 +186,7 @@ ICCProfileWidget::~ICCProfileWidget()
 bool ICCProfileWidget::setProfileData(const QByteArray& data)
 {
     d->profileData = data;
-    
+
     // Cleanup all metadata contents.
     setMetadataMap();
 
@@ -202,7 +201,7 @@ bool ICCProfileWidget::setProfileData(const QByteArray& data)
         enabledToolButtons(true);
     else
         enabledToolButtons(false);
-    
+
     // Refresh view using decoded metadata.
     buildView();
     return true;
@@ -271,7 +270,7 @@ bool ICCProfileWidget::loadFromURL(const KUrl& url)
     return true;
 }
 
-bool ICCProfileWidget::loadFromData(const QString& fileName, const QByteArray& data)
+bool ICCProfileWidget::loadFromProfileData(const QString& fileName, const QByteArray& data)
 {
     setFileName(fileName);
     return(setProfileData(data));
