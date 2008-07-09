@@ -235,12 +235,49 @@ void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
 
 void KipiImageInfo::delAttributes(const QStringList& res)
 {
-    // TODO: implement me.
+
+    PAlbum* p = parentAlbum();
+    if (p)
+    {
+        // Remove all tags of a picture from database.
+        if (res.contains("tags") != res.end())
+        {
+            DatabaseAccess access;
+            access.db()->removeItemAllTags(m_info.id());
+        }
+
+        // Remove digiKam Rating of picture from database.
+        if (res.contains("rating"))
+        {
+            m_info.setRating(RatingMin);
+        }
+
+        // GPS location management from plugins.
+
+        if (res.contains("gpslocation"))
+        {
+            ImagePosition position = m_info.imagePosition();
+            position.remove();
+            position.apply();
+        }
+
+        // TODO: add here a kipi-plugins access to future picture attributes stored by digiKam database
+    }
+
+    // To update sidebar content. Some kipi-plugins use this way to refresh sidebar 
+    // using an empty QMap().
+    ImageAttributesWatch::instance()->fileMetadataChanged(_url);
 }
 
 void KipiImageInfo::clearAttributes()
 {
-    // TODO: implement me.
+    QStringList attr;
+    attr.append("tags");
+    attr.append("rating");
+    attr.append("gpslocation");
+    // TODO: add here a kipi-plugins access to future picture attributes stored by digiKam database
+
+    delAttributes(attr);
 }
 
 int KipiImageInfo::angle()
