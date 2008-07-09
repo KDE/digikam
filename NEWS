@@ -11,7 +11,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 004 ==> 165921 : Translation bug: Missing german translation.
 005 ==> 130906 : Allow user to click text of tags to tag an image (not checkbox only).
 006 ==> 126871 : Click on parent folder in tree should generate a reaction.
-007 ==> 
+007 ==> 162812 : Sharpen slider enhancement refresh previews continuously.
+008 ==> 
 
 **********************************************************************************************
 digiKam 0.9.4-RC2 - Release date: 2008-07-06
