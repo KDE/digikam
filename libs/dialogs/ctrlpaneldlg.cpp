@@ -130,6 +130,9 @@ CtrlPanelDlg::CtrlPanelDlg(QWidget* parent, QString title, QString name,
     showButton(User3, loadFileSettings);
     showButton(Try, tryAction);
 
+    // disable Abort button on startup
+    enableButton(User1, false);
+
     restoreDialogSize(KGlobal::config()->group(name + QString(" Tool Dialog")));
 
     // -------------------------------------------------------------
