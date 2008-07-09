@@ -120,6 +120,9 @@ CtrlPanelDlg::CtrlPanelDlg(QWidget* parent, QString title, QString name,
     showButton(User3, loadFileSettings);
     showButton(Try, tryAction);
 
+    // disable Abort button on startup
+    enableButton(User1, false);
+
     resize(configDialogSize(name + QString(" Tool Dialog")));
     QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
     
