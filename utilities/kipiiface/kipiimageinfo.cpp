@@ -240,7 +240,7 @@ void KipiImageInfo::delAttributes(const QStringList& res)
     if (p)
     {
         // Remove all tags of a picture from database.
-        if (res.contains("tags") != res.end())
+        if (res.contains("tags"))
         {
             DatabaseAccess access;
             access.db()->removeItemAllTags(m_info.id());
