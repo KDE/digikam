@@ -313,6 +313,10 @@ bool ShowFoto::queryClose()
     if (d->currentItem && !promptUserSave(d->currentItem->url()))
         return false;
 
+    // put right side bar in a defined state
+    emit signalNoCurrentItem();
+    m_canvas->resetImage();
+
     return true;
 }
 
