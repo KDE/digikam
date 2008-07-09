@@ -33,7 +33,7 @@
    Written by Denis Oliver Kropp <dok@directfb.org>,
               Andreas Hundt <andi@fischlustig.de>,
               Sven Neumann <neo@directfb.org>,
-              Ville Syrjälä <syrjala@sci.fi> and
+              Ville Syrjï¿½lï¿½ <syrjala@sci.fi> and
               Claudio Ciccani <klan@users.sf.net>.
 
 */
@@ -53,6 +53,7 @@ class DColorComposerPorterDuffNone : public DColorComposer
 {
 public:
     virtual void compose(DColor &dest, DColor src);
+    virtual void compose(DColor &dest, DColor src, MultiplicationFlags multiplicationFlags);
 };
 
 class DColorComposerPorterDuffClear : public DColorComposer
@@ -73,54 +74,63 @@ class DColorComposerPorterDuffSrcOver : public DColorComposer
 {
 public:
     virtual void compose(DColor &dest, DColor src);
+    virtual void compose(DColor &dest, DColor src, MultiplicationFlags multiplicationFlags);
 };
 
 class DColorComposerPorterDuffDstOver : public DColorComposer
 {
 public:
     virtual void compose(DColor &dest, DColor src);
+    virtual void compose(DColor &dest, DColor src, MultiplicationFlags multiplicationFlags);
 };
 
 class DColorComposerPorterDuffSrcIn : public DColorComposer
 {
 public:
     virtual void compose(DColor &dest, DColor src);
+    virtual void compose(DColor &dest, DColor src, MultiplicationFlags multiplicationFlags);
 };
 
 class DColorComposerPorterDuffDstIn : public DColorComposer
 {
 public:
     virtual void compose(DColor &dest, DColor src);
+    virtual void compose(DColor &dest, DColor src, MultiplicationFlags multiplicationFlags);
 };
 
 class DColorComposerPorterDuffSrcOut : public DColorComposer
 {
 public:
     virtual void compose(DColor &dest, DColor src);
+    virtual void compose(DColor &dest, DColor src, MultiplicationFlags multiplicationFlags);
 };
 
 class DColorComposerPorterDuffDstOut : public DColorComposer
 {
 public:
     virtual void compose(DColor &dest, DColor src);
+    virtual void compose(DColor &dest, DColor src, MultiplicationFlags multiplicationFlags);
 };
 
 class DColorComposerPorterDuffSrcAtop : public DColorComposer
 {
-    public:
-        virtual void compose(DColor &dest, DColor src);
+public:
+    virtual void compose(DColor &dest, DColor src);
+    virtual void compose(DColor &dest, DColor src, MultiplicationFlags multiplicationFlags);
 };
 
 class DColorComposerPorterDuffDstAtop : public DColorComposer
 {
-    public:
-        virtual void compose(DColor &dest, DColor src);
+public:
+    virtual void compose(DColor &dest, DColor src);
+    virtual void compose(DColor &dest, DColor src, MultiplicationFlags multiplicationFlags);
 };
 
 class DColorComposerPorterDuffXor : public DColorComposer
 {
-    public:
-        virtual void compose(DColor &dest, DColor src);
+public:
+    virtual void compose(DColor &dest, DColor src);
+    virtual void compose(DColor &dest, DColor src, MultiplicationFlags multiplicationFlags);
 };
 
 // Porter-Duff None
@@ -146,6 +156,12 @@ void DColorComposerPorterDuffNone::compose(DColor &dest, DColor src)
         dest.blendAdd(src);
         dest.blendClamp8();
     }
+}
+
+void DColorComposerPorterDuffNone::compose(DColor &dest, DColor src, MultiplicationFlags multiplicationFlags)
+{
+    // Explicit implementation to please gcc 4.1
+    DColorComposer::compose(dest, src, multiplicationFlags);
 }
 
 // Porter-Duff Clear
@@ -205,6 +221,12 @@ void DColorComposerPorterDuffSrcOver::compose(DColor &dest, DColor src)
     }
 }
 
+void DColorComposerPorterDuffSrcOver::compose(DColor &dest, DColor src, MultiplicationFlags multiplicationFlags)
+{
+    // Explicit implementation to please gcc 4.1
+    DColorComposer::compose(dest, src, multiplicationFlags);
+}
+
 // Porter-Duff Dst over
 // component = (source * (1.0-da) + destination * 1)
 // Src blending function Inv Dst Alpha
@@ -227,6 +249,12 @@ void DColorComposerPorterDuffDstOver::compose(DColor &dest, DColor src)
     }
 }
 
+void DColorComposerPorterDuffDstOver::compose(DColor &dest, DColor src, MultiplicationFlags multiplicationFlags)
+{
+    // Explicit implementation to please gcc 4.1
+    DColorComposer::compose(dest, src, multiplicationFlags);
+}
+
 // Porter-Duff Src In
 // component = (source * da + destination * 0)
 // Src blending function Dst Alpha
@@ -247,6 +275,12 @@ void DColorComposerPorterDuffSrcIn::compose(DColor &dest, DColor src)
         dest.blendAdd(src);
         dest.blendClamp8();
     }
+}
+
+void DColorComposerPorterDuffSrcIn::compose(DColor &dest, DColor src, MultiplicationFlags multiplicationFlags)
+{
+    // Explicit implementation to please gcc 4.1
+    DColorComposer::compose(dest, src, multiplicationFlags);
 }
 
 // Porter-Duff Dst In
@@ -272,6 +306,12 @@ void DColorComposerPorterDuffDstIn::compose(DColor &dest, DColor src)
     }
 }
 
+void DColorComposerPorterDuffDstIn::compose(DColor &dest, DColor src, MultiplicationFlags multiplicationFlags)
+{
+    // Explicit implementation to please gcc 4.1
+    DColorComposer::compose(dest, src, multiplicationFlags);
+}
+
 // Porter-Duff Src Out
 // component = (source * (1-da) + destination * 0)
 // Src blending function Inv Dst Alpha
@@ -292,6 +332,12 @@ void DColorComposerPorterDuffSrcOut::compose(DColor &dest, DColor src)
         dest.blendAdd(src);
         dest.blendClamp8();
     }
+}
+
+void DColorComposerPorterDuffSrcOut::compose(DColor &dest, DColor src, MultiplicationFlags multiplicationFlags)
+{
+    // Explicit implementation to please gcc 4.1
+    DColorComposer::compose(dest, src, multiplicationFlags);
 }
 
 // Porter-Duff Dst Out
@@ -317,6 +363,12 @@ void DColorComposerPorterDuffDstOut::compose(DColor &dest, DColor src)
     }
 }
 
+void DColorComposerPorterDuffDstOut::compose(DColor &dest, DColor src, MultiplicationFlags multiplicationFlags)
+{
+    // Explicit implementation to please gcc 4.1
+    DColorComposer::compose(dest, src, multiplicationFlags);
+}
+
 // Porter-Duff Src Atop
 // component = (source * da + destination * (1-sa))
 // Src blending function Dst Alpha
@@ -338,6 +390,12 @@ void DColorComposerPorterDuffSrcAtop::compose(DColor &dest, DColor src)
         dest.blendAdd(src);
         dest.blendClamp8();
     }
+}
+
+void DColorComposerPorterDuffSrcAtop::compose(DColor &dest, DColor src, MultiplicationFlags multiplicationFlags)
+{
+    // Explicit implementation to please gcc 4.1
+    DColorComposer::compose(dest, src, multiplicationFlags);
 }
 
 // Porter-Duff Dst Atop
@@ -363,6 +421,12 @@ void DColorComposerPorterDuffDstAtop::compose(DColor &dest, DColor src)
     }
 }
 
+void DColorComposerPorterDuffDstAtop::compose(DColor &dest, DColor src, MultiplicationFlags multiplicationFlags)
+{
+    // Explicit implementation to please gcc 4.1
+    DColorComposer::compose(dest, src, multiplicationFlags);
+}
+
 // Porter-Duff Xor
 // component = (source * (1-da) + destination * (1-sa))
 // Src blending function Inv Dst Alpha
@@ -384,6 +448,12 @@ void DColorComposerPorterDuffXor::compose(DColor &dest, DColor src)
         dest.blendAdd(src);
         dest.blendClamp8();
     }
+}
+
+void DColorComposerPorterDuffXor::compose(DColor &dest, DColor src, MultiplicationFlags multiplicationFlags)
+{
+    // Explicit implementation to please gcc 4.1
+    DColorComposer::compose(dest, src, multiplicationFlags);
 }
 
 // ----------------------------------------------------------
