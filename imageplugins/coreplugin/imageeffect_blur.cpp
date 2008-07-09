@@ -13,12 +13,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -51,16 +51,16 @@ namespace DigikamImagesPluginCore
 {
 
 ImageEffect_Blur::ImageEffect_Blur(QWidget* parent)
-                : Digikam::CtrlPanelDlg(parent, i18n("Apply Gaussian Blur on Photograph"), 
-                                        "gaussianblur")
+        : Digikam::CtrlPanelDlg(parent, i18n("Apply Gaussian Blur on Photograph"),
+                                "gaussianblur", false, true, true)
 {
     setHelp("blursharpentool.anchor", "digikam");
-    
+
     QWidget *gboxSettings     = new QWidget(m_imagePreviewWidget);
     QGridLayout* gridSettings = new QGridLayout( gboxSettings );
 
     QLabel *label = new QLabel(i18n("Smoothness:"), gboxSettings);
-    
+
     m_radiusInput = new KIntNumInput(gboxSettings);
     m_radiusInput->setRange(0, 100, 1);
     m_radiusInput->setSliderEnabled(true);
@@ -75,11 +75,6 @@ ImageEffect_Blur::ImageEffect_Blur(QWidget* parent)
     gridSettings->setSpacing(spacingHint());
 
     m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
-        
-    // -------------------------------------------------------------
-    
-    connect(m_radiusInput, SIGNAL(valueChanged(int)),
-            this, SLOT(slotTimer()));
 }
 
 ImageEffect_Blur::~ImageEffect_Blur()
@@ -106,16 +101,16 @@ void ImageEffect_Blur::resetValues(void)
     m_radiusInput->blockSignals(true);
     m_radiusInput->setValue(0);
     m_radiusInput->blockSignals(false);
-} 
+}
 
 void ImageEffect_Blur::prepareEffect()
 {
     m_radiusInput->setEnabled(false);
-    
+
     Digikam::DImg img = m_imagePreviewWidget->getOriginalRegionImage();
-        
+
     m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>
-                       (new Digikam::DImgGaussianBlur(&img, this, m_radiusInput->value()));    
+                       (new Digikam::DImgGaussianBlur(&img, this, m_radiusInput->value()));
 }
 
 void ImageEffect_Blur::prepareFinal()
