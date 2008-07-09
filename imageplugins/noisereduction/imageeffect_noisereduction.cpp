@@ -5,20 +5,20 @@
  *
  * Date        : 2004-08-24
  * Description : a plugin to reduce CCD noise.
- * 
+ *
  * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * 
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -62,39 +62,39 @@ namespace DigikamNoiseReductionImagesPlugin
 {
 
 ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent)
-                          : Digikam::CtrlPanelDlg(parent, i18n("Noise Reduction"),
-                                                  "noisereduction", true, false, true,
-                                                  Digikam::ImagePannelWidget::SeparateViewAll)
+        : Digikam::CtrlPanelDlg(parent, i18n("Noise Reduction"),
+                                "noisereduction", true, true, true,
+                                Digikam::ImagePannelWidget::SeparateViewAll)
 {
     QString whatsThis;
-    
+
     KAboutData* about = new KAboutData("digikam",
-                                       I18N_NOOP("Noise Reduction"), 
+                                       I18N_NOOP("Noise Reduction"),
                                        digikam_version,
                                        I18N_NOOP("A noise reduction image filter plugin for digiKam."),
                                        KAboutData::License_GPL,
-                                       "(c) 2004-2008, Gilles Caulier", 
+                                       "(c) 2004-2008, Gilles Caulier",
                                        0,
                                        "http://www.digikam.org");
-    
+
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at gmail dot com");
 
     about->addAuthor("Peter Heckert", I18N_NOOP("Noise Reduction algorithm. Developer"),
                      "peter dot heckert at arcor dot de");
-                     
+
     setAboutData(about);
-   
+
     // -------------------------------------------------------------
 
     QTabWidget *mainTab = new QTabWidget(m_imagePreviewWidget);
-    
+
     QWidget* firstPage = new QWidget( mainTab );
-    QGridLayout* gridSettings = new QGridLayout( firstPage, 6, 1, spacingHint());    
+    QGridLayout* gridSettings = new QGridLayout( firstPage, 6, 1, spacingHint());
     mainTab->addTab( firstPage, i18n("Details") );
-    
+
     QLabel *label1 = new QLabel(i18n("Radius:"), firstPage);
-    
+
     m_radiusInput = new KDoubleNumInput(firstPage);
     m_radiusInput->setPrecision(1);
     m_radiusInput->setRange(0.0, 10.0, 0.1, true);
@@ -109,36 +109,36 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent)
 
     gridSettings->addMultiCellWidget(label1, 0, 0, 0, 0);
     gridSettings->addMultiCellWidget(m_radiusInput, 0, 0, 1, 1);
-    
+
     // -------------------------------------------------------------
 
     QLabel *label3 = new QLabel(i18n("Threshold:"), firstPage);
-    
+
     m_thresholdInput = new KDoubleNumInput(firstPage);
     m_thresholdInput->setPrecision(2);
     m_thresholdInput->setRange(0.0, 1.0, 0.01, true);
     QWhatsThis::add( m_thresholdInput, i18n("<p><b>Threshold</b>: use the slider for coarse adjustment, "
-                     "and the spin control for fine adjustment to control edge detection sensitivity. "
-                     "This value should be set so that edges and details are clearly visible "
-                     "and noise is smoothed out. "
-                     "Adjustment must be made carefully, because the gap between \"noisy\", "
-                     "\"smooth\", and \"blur\" is very small. Adjust it as carefully as you would adjust "
-                     "the focus of a camera."));
+                                            "and the spin control for fine adjustment to control edge detection sensitivity. "
+                                            "This value should be set so that edges and details are clearly visible "
+                                            "and noise is smoothed out. "
+                                            "Adjustment must be made carefully, because the gap between \"noisy\", "
+                                            "\"smooth\", and \"blur\" is very small. Adjust it as carefully as you would adjust "
+                                            "the focus of a camera."));
 
     gridSettings->addMultiCellWidget(label3, 1, 1, 0, 0);
     gridSettings->addMultiCellWidget(m_thresholdInput, 1, 1, 1, 1);
-                                                      
+
     // -------------------------------------------------------------
-  
+
     QLabel *label4 = new QLabel(i18n("Texture:"), firstPage);
-    
+
     m_textureInput = new KDoubleNumInput(firstPage);
     m_textureInput->setPrecision(2);
     m_textureInput->setRange(-0.99, 0.99, 0.01, true);
     QWhatsThis::add( m_textureInput, i18n("<p><b>Texture</b>: this control sets the texture accuracy. "
-                "This value can be used, to get more or less texture accuracy. When decreased, "
-                "then noise and texture are blurred out, when increased then texture is "
-                "amplified, but also noise will increase. It has almost no effect on image edges."));
+                                          "This value can be used, to get more or less texture accuracy. When decreased, "
+                                          "then noise and texture are blurred out, when increased then texture is "
+                                          "amplified, but also noise will increase. It has almost no effect on image edges."));
 
     gridSettings->addMultiCellWidget(label4, 2, 2, 0, 0);
     gridSettings->addMultiCellWidget(m_textureInput, 2, 2, 1, 1);
@@ -146,32 +146,32 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent)
     // -------------------------------------------------------------
 
     QLabel *label7 = new QLabel(i18n("Sharpness:"), firstPage);  // Filter setting "Lookahead".
-    
+
     m_sharpnessInput = new KDoubleNumInput(firstPage);
     m_sharpnessInput->setPrecision(2);
     m_sharpnessInput->setRange(0.0, 1.0, 0.1, true);
     QWhatsThis::add( m_sharpnessInput, i18n("<p><b>Sharpness</b>: "
-            "This value improves the frequency response for the filter. "
-            "When it is too strong then not all noise can be removed, or spike noise may appear. "
-            "Set it near to maximum, if you want to remove very weak noise or JPEG-artifacts, "
-            "without losing detail."));
-       
+                                            "This value improves the frequency response for the filter. "
+                                            "When it is too strong then not all noise can be removed, or spike noise may appear. "
+                                            "Set it near to maximum, if you want to remove very weak noise or JPEG-artifacts, "
+                                            "without losing detail."));
+
     gridSettings->addMultiCellWidget(label7, 3, 3, 0, 0);
     gridSettings->addMultiCellWidget(m_sharpnessInput, 3, 3, 1, 1);
 
     // -------------------------------------------------------------
 
     QLabel *label5 = new QLabel(i18n("Edge Lookahead:"), firstPage);     // Filter setting "Sharp".
-    
+
     m_lookaheadInput = new KDoubleNumInput(firstPage);
     m_lookaheadInput->setPrecision(2);
     m_lookaheadInput->setRange(0.01, 20.0, 0.01, true);
     QWhatsThis::add( m_lookaheadInput, i18n("<p><b>Edge</b>: "
-           "This value defines the pixel distance to which the filter looks ahead for edges. "
-           "When this value is increased, then spike noise is erased. "
-           "You can eventually re-adjust the <b>Edge</b> filter, when you have changed this setting. "
-           "When this value is too high, the adaptive filter can no longer accurately track "
-           "image details, and noise or blurring can occur."));
+                                            "This value defines the pixel distance to which the filter looks ahead for edges. "
+                                            "When this value is increased, then spike noise is erased. "
+                                            "You can eventually re-adjust the <b>Edge</b> filter, when you have changed this setting. "
+                                            "When this value is too high, the adaptive filter can no longer accurately track "
+                                            "image details, and noise or blurring can occur."));
 
     gridSettings->addMultiCellWidget(label5, 4, 4, 0, 0);
     gridSettings->addMultiCellWidget(m_lookaheadInput, 4, 4, 1, 1);
@@ -179,14 +179,14 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent)
     // -------------------------------------------------------------
 
     QLabel *label10 = new QLabel(i18n("Erosion:"), firstPage);
-    
+
     m_phaseInput = new KDoubleNumInput(firstPage);
     m_phaseInput->setPrecision(1);
     m_phaseInput->setRange(0.5, 20.0, 0.5, true);
     QWhatsThis::add( m_phaseInput, i18n("<p><b>Erosion</b>: "
-                "Use this to increase edge noise erosion and spike noise erosion "
-                "(noise is removed by erosion)."));
-    
+                                        "Use this to increase edge noise erosion and spike noise erosion "
+                                        "(noise is removed by erosion)."));
+
     gridSettings->addMultiCellWidget(label10, 5, 5, 0, 0);
     gridSettings->addMultiCellWidget(m_phaseInput, 5, 5, 1, 1);
     gridSettings->setColStretch(1, 10);
@@ -195,105 +195,105 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent)
     // -------------------------------------------------------------
 
     QWidget* secondPage = new QWidget( mainTab );
-    QGridLayout* gridSettings2 = new QGridLayout( secondPage, 4, 1, spacingHint());    
+    QGridLayout* gridSettings2 = new QGridLayout( secondPage, 4, 1, spacingHint());
     mainTab->addTab( secondPage, i18n("Advanced") );
-    
+
     QLabel *label2 = new QLabel(i18n("Luminance:"), secondPage);
-    
+
     m_lumToleranceInput = new KDoubleNumInput(secondPage);
     m_lumToleranceInput->setPrecision(1);
     m_lumToleranceInput->setRange(0.0, 1.0, 0.1, true);
     QWhatsThis::add( m_lumToleranceInput, i18n("<p><b>Luminance</b>: this control sets the luminance tolerance of the image."
-                "We recommend using either the <b>Color</b> or the <b>Luminance</b> tolerance settings "
-                "to make an image correction, not both at the same time. These settings "
-                "do not influence the main smoothing process controlled by the <b>Details</b> "
-                "settings."));
+                     "We recommend using either the <b>Color</b> or the <b>Luminance</b> tolerance settings "
+                     "to make an image correction, not both at the same time. These settings "
+                     "do not influence the main smoothing process controlled by the <b>Details</b> "
+                     "settings."));
 
     gridSettings2->addMultiCellWidget(label2, 0, 0, 0, 0);
-    gridSettings2->addMultiCellWidget(m_lumToleranceInput, 0, 0, 1, 1);                         
-    
+    gridSettings2->addMultiCellWidget(m_lumToleranceInput, 0, 0, 1, 1);
+
     // -------------------------------------------------------------
 
     QLabel *label6 = new QLabel(i18n("Color:"), secondPage);
-    
+
     m_csmoothInput = new KDoubleNumInput(secondPage);
     m_csmoothInput->setPrecision(1);
     m_csmoothInput->setRange(0.0, 1.0, 0.1, true);
     QWhatsThis::add( m_csmoothInput, i18n("<p><b>Color</b>: this control sets the color tolerance of the image. It is "
-                "recommended using either the <b>Color</b> or the <b>Luminance</b> tolerance "
-                "to make image correction, not both at the same time. These settings "
-                "do not influence the main smoothing process controlled by the <b>Details</b> "
-                "settings."));
+                                          "recommended using either the <b>Color</b> or the <b>Luminance</b> tolerance "
+                                          "to make image correction, not both at the same time. These settings "
+                                          "do not influence the main smoothing process controlled by the <b>Details</b> "
+                                          "settings."));
 
     gridSettings2->addMultiCellWidget(label6, 1, 1, 0, 0);
     gridSettings2->addMultiCellWidget(m_csmoothInput, 1, 1, 1, 1);
-    
+
     // -------------------------------------------------------------
 
     QLabel *label8 = new QLabel(i18n("Gamma:"), secondPage);
-    
+
     m_gammaInput = new KDoubleNumInput(secondPage);
     m_gammaInput->setPrecision(1);
     m_gammaInput->setRange(0.3, 3.0, 0.1, true);
     QWhatsThis::add( m_gammaInput, i18n("<p><b>Gamma</b>: this control sets the gamma tolerance of the image. This value "
-                "can be used to increase the tolerance values for darker areas (which commonly "
-                "are noisier). This results in more blur for shadow areas."));
-    
+                                        "can be used to increase the tolerance values for darker areas (which commonly "
+                                        "are noisier). This results in more blur for shadow areas."));
+
     gridSettings2->addMultiCellWidget(label8, 2, 2, 0, 0);
     gridSettings2->addMultiCellWidget(m_gammaInput, 2, 2, 1, 1);
 
     // -------------------------------------------------------------
 
     QLabel *label9 = new QLabel(i18n("Damping:"), secondPage);
-    
+
     m_dampingInput = new KDoubleNumInput(secondPage);
     m_dampingInput->setPrecision(1);
     m_dampingInput->setRange(0.5, 20.0, 0.5, true);
     QWhatsThis::add( m_dampingInput, i18n("<p><b>Damping</b>: this control sets the phase-jitter damping adjustment. "
-                "This value defines how fast the adaptive filter-radius reacts to luminance "
-                "variations. If increased, then edges appear smoother; if too high, then blur "
-                "may occur. If at minimum, then noise and phase jitter at the edges can occur. It "
-                "can suppress spike noise when increased, and this is the preferred method to "
-                "remove it."));
-    
+                                          "This value defines how fast the adaptive filter-radius reacts to luminance "
+                                          "variations. If increased, then edges appear smoother; if too high, then blur "
+                                          "may occur. If at minimum, then noise and phase jitter at the edges can occur. It "
+                                          "can suppress spike noise when increased, and this is the preferred method to "
+                                          "remove it."));
+
     gridSettings2->addMultiCellWidget(label9, 3, 3, 0, 0);
     gridSettings2->addMultiCellWidget(m_dampingInput, 3, 3, 1, 1);
     gridSettings2->setColStretch(1, 10);
     gridSettings2->setRowStretch(4, 10);
 
     m_imagePreviewWidget->setUserAreaWidget(mainTab);
-    
+
     // -------------------------------------------------------------
-    
-    connect(m_radiusInput, SIGNAL(valueChanged(double)),
-            this, SLOT(slotTimer()));            
 
-    connect(m_lumToleranceInput, SIGNAL(valueChanged(double)),
-            this, SLOT(slotTimer()));            
-
-    connect(m_thresholdInput, SIGNAL(valueChanged(double)),
-            this, SLOT(slotTimer()));            
-           
-    connect(m_textureInput, SIGNAL(valueChanged(double)),
-            this, SLOT(slotTimer()));            
-
-    connect(m_sharpnessInput, SIGNAL(valueChanged(double)),
-            this, SLOT(slotTimer()));           
-
-    connect(m_csmoothInput, SIGNAL(valueChanged(double)),
-            this, SLOT(slotTimer()));            
-
-    connect(m_lookaheadInput, SIGNAL(valueChanged(double)),
-            this, SLOT(slotTimer()));            
-
-    connect(m_gammaInput, SIGNAL(valueChanged(double)),
-            this, SLOT(slotTimer()));            
-           
-    connect(m_dampingInput, SIGNAL(valueChanged(double)),
-            this, SLOT(slotTimer()));            
-
-    connect(m_phaseInput, SIGNAL(valueChanged(double)),
-            this, SLOT(slotTimer()));   
+//     connect(m_radiusInput, SIGNAL(valueChanged(double)),
+//             this, SLOT(slotTimer()));
+// 
+//     connect(m_lumToleranceInput, SIGNAL(valueChanged(double)),
+//             this, SLOT(slotTimer()));
+// 
+//     connect(m_thresholdInput, SIGNAL(valueChanged(double)),
+//             this, SLOT(slotTimer()));
+// 
+//     connect(m_textureInput, SIGNAL(valueChanged(double)),
+//             this, SLOT(slotTimer()));
+// 
+//     connect(m_sharpnessInput, SIGNAL(valueChanged(double)),
+//             this, SLOT(slotTimer()));
+// 
+//     connect(m_csmoothInput, SIGNAL(valueChanged(double)),
+//             this, SLOT(slotTimer()));
+// 
+//     connect(m_lookaheadInput, SIGNAL(valueChanged(double)),
+//             this, SLOT(slotTimer()));
+// 
+//     connect(m_gammaInput, SIGNAL(valueChanged(double)),
+//             this, SLOT(slotTimer()));
+// 
+//     connect(m_dampingInput, SIGNAL(valueChanged(double)),
+//             this, SLOT(slotTimer()));
+// 
+//     connect(m_phaseInput, SIGNAL(valueChanged(double)),
+//             this, SLOT(slotTimer()));
 }
 
 ImageEffect_NoiseReduction::~ImageEffect_NoiseReduction()
@@ -381,7 +381,7 @@ void ImageEffect_NoiseReduction::resetValues()
     m_gammaInput->setEnabled(true);
     m_dampingInput->setEnabled(true);
     m_phaseInput->setEnabled(true);
-                    
+
     m_radiusInput->setValue(1.0);
     m_lumToleranceInput->setValue(1.0);
     m_thresholdInput->setValue(0.08);
@@ -392,7 +392,7 @@ void ImageEffect_NoiseReduction::resetValues()
     m_gammaInput->setValue(1.4);
     m_dampingInput->setValue(5.0);
     m_phaseInput->setValue(1.0);
-    
+
     m_radiusInput->setEnabled(false);
     m_lumToleranceInput->setEnabled(false);
     m_thresholdInput->setEnabled(false);
@@ -417,7 +417,7 @@ void ImageEffect_NoiseReduction::prepareEffect()
     m_gammaInput->setEnabled(false);
     m_dampingInput->setEnabled(false);
     m_phaseInput->setEnabled(false);
-    
+
     double r  = m_radiusInput->value();
     double l  = m_lumToleranceInput->value();
     double th = m_thresholdInput->value();
@@ -428,7 +428,7 @@ void ImageEffect_NoiseReduction::prepareEffect()
     double g  = m_gammaInput->value();
     double d  = m_dampingInput->value();
     double p  = m_phaseInput->value();
-    
+
     Digikam::DImg image = m_imagePreviewWidget->getOriginalRegionImage();
 
     m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(new NoiseReduction(&image,
@@ -447,7 +447,7 @@ void ImageEffect_NoiseReduction::prepareFinal()
     m_gammaInput->setEnabled(false);
     m_dampingInput->setEnabled(false);
     m_phaseInput->setEnabled(false);
-    
+
     double r  = m_radiusInput->value();
     double l  = m_lumToleranceInput->value();
     double th = m_thresholdInput->value();
@@ -478,25 +478,25 @@ void ImageEffect_NoiseReduction::putFinalData(void)
 void ImageEffect_NoiseReduction::slotUser3()
 {
     KURL loadRestorationFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
-                                            QString( "*" ), this,
-                                            QString( i18n("Photograph Noise Reduction Settings File to Load")) );
-    if( loadRestorationFile.isEmpty() )
-       return;
+                               QString( "*" ), this,
+                               QString( i18n("Photograph Noise Reduction Settings File to Load")) );
+    if ( loadRestorationFile.isEmpty() )
+        return;
 
     QFile file(loadRestorationFile.path());
-    
-    if ( file.open(IO_ReadOnly) )   
+
+    if ( file.open(IO_ReadOnly) )
     {
         QTextStream stream( &file );
         if ( stream.readLine() != "# Photograph Noise Reduction Configuration File" )
         {
-           KMessageBox::error(this, 
-                        i18n("\"%1\" is not a Photograph Noise Reduction settings text file.")
-                        .arg(loadRestorationFile.fileName()));
-           file.close();            
-           return;
+            KMessageBox::error(this,
+                               i18n("\"%1\" is not a Photograph Noise Reduction settings text file.")
+                               .arg(loadRestorationFile.fileName()));
+            file.close();
+            return;
         }
-        
+
         blockSignals(true);
         m_radiusInput->setValue( stream.readLine().toDouble() );
         m_lumToleranceInput->setValue( stream.readLine().toDouble() );
@@ -509,44 +509,44 @@ void ImageEffect_NoiseReduction::slotUser3()
         m_dampingInput->setValue( stream.readLine().toDouble() );
         m_phaseInput->setValue( stream.readLine().toDouble() );
         blockSignals(false);
-        slotEffect();  
+//         slotEffect();
     }
     else
         KMessageBox::error(this, i18n("Cannot load settings from the Photograph Noise Reduction text file."));
 
-    file.close();             
+    file.close();
 }
 
 void ImageEffect_NoiseReduction::slotUser2()
 {
     KURL saveRestorationFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
-                                            QString( "*" ), this,
-                                            QString( i18n("Photograph Noise Reduction Settings File to Save")) );
-    if( saveRestorationFile.isEmpty() )
-       return;
+                               QString( "*" ), this,
+                               QString( i18n("Photograph Noise Reduction Settings File to Save")) );
+    if ( saveRestorationFile.isEmpty() )
+        return;
 
     QFile file(saveRestorationFile.path());
-    
-    if ( file.open(IO_WriteOnly) )   
+
+    if ( file.open(IO_WriteOnly) )
     {
-        QTextStream stream( &file );        
-        stream << "# Photograph Noise Reduction Configuration File\n";    
-        stream << m_radiusInput->value() << "\n";    
-        stream << m_lumToleranceInput->value() << "\n";    
-        stream << m_thresholdInput->value() << "\n";    
-        stream << m_textureInput->value() << "\n";    
-        stream << m_sharpnessInput->value() << "\n";    
-        stream << m_csmoothInput->value() << "\n";    
-        stream << m_lookaheadInput->value() << "\n";    
-        stream << m_gammaInput->value() << "\n";    
-        stream << m_dampingInput->value() << "\n";    
-        stream << m_phaseInput->value() << "\n";    
+        QTextStream stream( &file );
+        stream << "# Photograph Noise Reduction Configuration File\n";
+        stream << m_radiusInput->value() << "\n";
+        stream << m_lumToleranceInput->value() << "\n";
+        stream << m_thresholdInput->value() << "\n";
+        stream << m_textureInput->value() << "\n";
+        stream << m_sharpnessInput->value() << "\n";
+        stream << m_csmoothInput->value() << "\n";
+        stream << m_lookaheadInput->value() << "\n";
+        stream << m_gammaInput->value() << "\n";
+        stream << m_dampingInput->value() << "\n";
+        stream << m_phaseInput->value() << "\n";
 
     }
     else
         KMessageBox::error(this, i18n("Cannot save settings to the Photograph Noise Reduction text file."));
-    
-    file.close();        
+
+    file.close();
 }
 
 }  // NameSpace DigikamNoiseReductionImagesPlugin
