@@ -111,9 +111,6 @@ void FingerPrintsGenerator::slotRebuildFingerPrints()
 
     // Get all digiKam albums collection pictures path, deending of d->rebuildAll flag.
 
-    DatabaseAccess      access;
-    Haar::SignatureData sig;
-
     if (d->rebuildAll)
     {
         for (AlbumList::Iterator it = palbumList.begin();
