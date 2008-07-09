@@ -548,8 +548,6 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
     if (data.isEmpty())
         return;
 
-    bool matchForText = false;
-    bool match        = false;
     ImageInfoList newItemsList;
     ImageInfoList newFilteredItemsList;
 
@@ -586,26 +584,19 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
         ImageInfo info(record);
 
         if (matchesFilter(info, foundText))
-        {
-            match = true;
             newFilteredItemsList.append(info);
-        }
 
         newItemsList.append(info);
         d->itemList.append(info);
-
-        if (foundText)
-            matchForText = true;
     }
-
-    emit signalItemsTextFilterMatch(matchForText);
-    emit signalItemsFilterMatch(match);
 
     if (!newFilteredItemsList.isEmpty())
         emit signalNewFilteredItems(newFilteredItemsList);
 
     if (!newItemsList.isEmpty())
         emit signalNewItems(newItemsList);
+
+    slotFilterItems();
 }
 
 }  // namespace Digikam
