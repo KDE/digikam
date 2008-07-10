@@ -119,7 +119,7 @@ void BatchAlbumsSyncMetadata::parseAlbum()
     else if (!(*d->albumsIt)->isRoot())
     {
         d->imageInfoJob->allItemsFromAlbum(*d->albumsIt);
-        DDebug() << "Sync Items from Album :" << (*d->albumsIt)->kurl().directory() << endl;
+        DDebug() << "Sync Items from Album :" << (*d->albumsIt)->databaseUrl().directory() << endl;
     }
     else
     {

@@ -411,7 +411,7 @@ QString TAlbum::prettyUrl() const
     return u;
 }
 
-DatabaseUrl TAlbum::kurl() const
+DatabaseUrl TAlbum::databaseUrl() const
 {
     return DatabaseUrl::fromTagIds(tagIDs());
 }
@@ -472,7 +472,7 @@ DAlbum::Range DAlbum::range() const
     return m_range;
 }
 
-DatabaseUrl DAlbum::kurl() const
+DatabaseUrl DAlbum::databaseUrl() const
 {
     if (m_range == Month)
         return DatabaseUrl::fromDateForMonth(m_date);
@@ -499,7 +499,7 @@ void SAlbum::setSearch(DatabaseSearch::Type type, const QString &query)
     m_query = query;
 }
 
-DatabaseUrl SAlbum::kurl() const
+DatabaseUrl SAlbum::databaseUrl() const
 {
     return DatabaseUrl::searchUrl(id());
 }

@@ -791,7 +791,7 @@ void AlbumFolderView::addAlbumChildrenToList(KUrl::List &list, Album *album)
     // simple recursive helper function
     if (album)
     {
-        list.append(album->kurl());
+        list.append(album->databaseUrl());
         AlbumIterator it(album);
         while(it.current())
         {

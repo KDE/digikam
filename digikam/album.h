@@ -154,7 +154,7 @@ public:
     /**
      * @return the kde url of the album
      */
-    virtual DatabaseUrl kurl() const = 0;
+    virtual DatabaseUrl databaseUrl() const = 0;
 
     /**
      * @return true is the album is a Root Album
@@ -362,7 +362,7 @@ public:
      *         The root TAlbum returns "/" resp. "".
      */
     QString     tagPath(bool leadingSlash = true) const;
-    DatabaseUrl kurl() const;
+    DatabaseUrl databaseUrl() const;
     QString     prettyUrl() const;
     QString     icon() const;
     QList<int>  tagIDs() const;
@@ -396,7 +396,7 @@ public:
 
     QDate date() const;
     Range range() const;
-    DatabaseUrl kurl() const;
+    DatabaseUrl databaseUrl() const;
 
 private:
 
@@ -421,7 +421,7 @@ public:
     SAlbum(const QString &title, int id, bool root=false);
     ~SAlbum();
 
-    DatabaseUrl          kurl() const;
+    DatabaseUrl          databaseUrl() const;
     QString              query() const;
     DatabaseSearch::Type type() const;
     bool                 isNormalSearch() const;

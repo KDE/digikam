@@ -151,7 +151,7 @@ void SearchFolderView::slotTextSearchFilterChanged(const QString& filter)
     AlbumList sList = AlbumManager::instance()->allSAlbums();
     for (AlbumList::iterator it = sList.begin(); it != sList.end(); ++it)
     {
-        SAlbum* salbum             = (SAlbum*)(*it);
+        SAlbum* salbum = (SAlbum*)(*it);
         if (!salbum->isNormalSearch())
             continue;
 
@@ -159,7 +159,7 @@ void SearchFolderView::slotTextSearchFilterChanged(const QString& filter)
 
         // Check if a special url query exist to identify a SAlbum dedicaced to Date Search
         // used with TimeLine.
-        KUrl url     = salbum->kurl();
+        KUrl url = salbum->databaseUrl();
 
         if (salbum->title().toLower().contains(search))
         {

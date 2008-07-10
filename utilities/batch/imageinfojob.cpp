@@ -79,7 +79,7 @@ void ImageInfoJob::allItemsFromAlbum(Album *album)
         return;
 
     ImageLister lister;
-    d->job = lister.startListJob(album->kurl());
+    d->job = lister.startListJob(album->databaseUrl());
 
     connect(d->job, SIGNAL(result(KJob*)),
             this, SLOT(slotResult(KJob*)));

@@ -161,7 +161,7 @@ void AlbumLister::openAlbum(Album *album)
     if (!album)
         return;
 
-    startListJob(album->kurl());
+    startListJob(album->databaseUrl());
 }
 
 void AlbumLister::refresh()
@@ -183,7 +183,7 @@ void AlbumLister::refresh()
         d->itemMap.insert(it->id(), *it);
     }
 
-    startListJob(d->currAlbum->kurl());
+    startListJob(d->currAlbum->databaseUrl());
 }
 
 void AlbumLister::startListJob(const KUrl &url)
