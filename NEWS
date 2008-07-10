@@ -3,6 +3,10 @@ digiKam 0.9.4 - Release date: 2008-07-xx
 
 NEW FEATURES:
 
+General        : for packaging, an external libsqlite3 dependency can be used instead internal version.
+                 (see B.K.O #160966)
+General        : Updated internal CImg library to last stable 1.2.9 (released at 2008/06/26).
+
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 164392 : Can't compile digikam with missing libkdcraw.
@@ -18,6 +22,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 digiKam 0.9.4-RC2 - Release date: 2008-07-06
 
 NEW FEATURES:
+
+General        : external libsqlite3 dependency removed. sqlite3 source code is now included in digiKam core.
+                 (see B.K.O #160966)
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
