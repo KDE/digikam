@@ -1286,12 +1286,12 @@ void AlbumIconView::startDrag()
 void AlbumIconView::contentsDragMoveEvent(QDragMoveEvent *e)
 {
     if (!d->currentAlbum || (DAlbumDrag::canDecode(e->mimeData()) ||
-                             !KUrl::List::canDecode(e->mimeData())          &&
+                            (!KUrl::List::canDecode(e->mimeData())          &&
                              !DCameraDragObject::canDecode(e->mimeData())   &&
                              !DTagListDrag::canDecode(e->mimeData())        &&
                              !DTagDrag::canDecode(e->mimeData())            &&
                              !DCameraItemListDrag::canDecode(e->mimeData()) &&
-                             !DItemDrag::canDecode(e->mimeData())))
+                             !DItemDrag::canDecode(e->mimeData()))))
     {
         e->ignore();
         return;
@@ -1302,12 +1302,12 @@ void AlbumIconView::contentsDragMoveEvent(QDragMoveEvent *e)
 void AlbumIconView::contentsDropEvent(QDropEvent *e)
 {
     if (!d->currentAlbum || (DAlbumDrag::canDecode(e->mimeData()) ||
-                             !KUrl::List::canDecode(e->mimeData())          &&
+                            (!KUrl::List::canDecode(e->mimeData())          &&
                              !DCameraDragObject::canDecode(e->mimeData())   &&
                              !DTagListDrag::canDecode(e->mimeData())        &&
                              !DTagDrag::canDecode(e->mimeData())            &&
                              !DCameraItemListDrag::canDecode(e->mimeData()) &&
-                             !DItemDrag::canDecode(e->mimeData())))
+                             !DItemDrag::canDecode(e->mimeData()))))
     {
         e->ignore();
         return;
