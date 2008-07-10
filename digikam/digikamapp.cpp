@@ -227,7 +227,10 @@ DigikamApp::~DigikamApp()
     // Close and delete light table instance.
 
     if (LightTableWindow::lightTableWindowCreated())
+    {
+        LightTableWindow::lightTableWindow()->setAttribute(Qt::WA_DeleteOnClose, true);
         LightTableWindow::lightTableWindow()->close();
+    }
 
     if (d->view)
         delete d->view;

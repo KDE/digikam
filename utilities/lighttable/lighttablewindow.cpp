@@ -100,6 +100,8 @@ LightTableWindow::LightTableWindow()
 
     setWindowFlags(Qt::Window);
     setCaption(i18n("Light Table"));
+    // We dont want to be deleted on close
+    setAttribute(Qt::WA_DeleteOnClose, false);
 
     // -- Build the GUI -------------------------------
 
