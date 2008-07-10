@@ -912,7 +912,7 @@ QDrag* AlbumFolderView::makeDragObject()
         return 0;
 
     QDrag *drag = new QDrag(this);
-    drag->setMimeData(new DAlbumDrag(album->kurl(), album->id()));
+    drag->setMimeData(new DAlbumDrag(album->databaseUrl(), album->id()));
     drag->setPixmap(*item->pixmap(0));
 
     return drag;
@@ -1033,7 +1033,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
                     // move dragItem below dropItem
                     destAlbum = itemDrop->album();
                 }
-                KIO::Job* job = DIO::move(album->kurl(), destAlbum->kurl());
+                KIO::Job* job = DIO::move(album->databaseUrl(), destAlbum->databaseUrl());
                 connect(job, SIGNAL(result(KJob*)),
                         this, SLOT(slotDIOResult(KJob*)));
             }
@@ -1158,7 +1158,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
 
         if (move)
         {
-            KIO::Job* job = DIO::move(extUrls, destAlbum->kurl());
+            KIO::Job* job = DIO::move(extUrls, destAlbum->databaseUrl());
             connect(job, SIGNAL(result(KJob*)),
                     this, SLOT(slotDIOResult(KJob*)));
 
@@ -1171,7 +1171,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
         }
         else if (copy)
         {
-            KIO::Job* job = DIO::copy(extUrls, destAlbum->kurl());
+            KIO::Job* job = DIO::copy(extUrls, destAlbum->databaseUrl());
             connect(job, SIGNAL(result(KJob*)),
                     this, SLOT(slotDIOResult(KJob*)));
         }
@@ -1229,7 +1229,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
         if (destAlbum->isRoot())
             return;
 
-        KUrl destURL(destAlbum->kurl());
+        KUrl destURL(destAlbum->databaseUrl());
 
         KUrl::List srcURLs = KUrl::List::fromMimeData(e->mimeData());
 
@@ -1264,13 +1264,13 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
 
         if (move)
         {
-            KIO::Job* job = DIO::move(srcURLs, destAlbum->kurl());
+            KIO::Job* job = DIO::move(srcURLs, destAlbum->databaseUrl());
             connect(job, SIGNAL(result(KJob*)),
                     this, SLOT(slotDIOResult(KJob*)));
         }
         else if (copy)
         {
-            KIO::Job* job = DIO::copy(srcURLs, destAlbum->kurl());
+            KIO::Job* job = DIO::copy(srcURLs, destAlbum->databaseUrl());
             connect(job, SIGNAL(result(KJob*)),
                     this, SLOT(slotDIOResult(KJob*)));
         }
