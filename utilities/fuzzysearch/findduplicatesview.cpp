@@ -135,6 +135,15 @@ FindDuplicatesView::FindDuplicatesView(QWidget *parent)
 
     connect(AlbumManager::instance(), SIGNAL(signalAllAlbumsLoaded()),
             this, SLOT(populateTreeView()));
+
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumAdded(Album*)),
+            this, SLOT(slotAlbumAdded(Album*)));
+
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumDeleted(Album*)),
+            this, SLOT(slotAlbumDeleted(Album*)));
+
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumsCleared()),
+            this, SLOT(slotClear()));
 }
 
 FindDuplicatesView::~FindDuplicatesView()
@@ -160,15 +169,60 @@ void FindDuplicatesView::populateTreeView()
     for (AlbumList::const_iterator it = aList.begin(); it != aList.end(); ++it)
     {
         SAlbum* salbum = dynamic_cast<SAlbum*>(*it);
-        if (salbum && salbum->isDuplicatesSearch())
+        if (salbum && salbum->isDuplicatesSearch() && !salbum->extraData(this))
         {
             FindDuplicatesAlbumItem *item = new FindDuplicatesAlbumItem(d->listView, salbum);
+            salbum->setExtraData(this, item);
             ThumbnailLoadThread::defaultThread()->find(item->refUrl().path());
         }
     }
 
     d->listView->sortByColumn(1, Qt::DescendingOrder);
     d->listView->resizeColumnToContents(0);
+}
+
+void FindDuplicatesView::slotAlbumAdded(Album* a)
+{
+    if (!a || a->type() != Album::SEARCH)
+        return;
+
+    SAlbum *salbum  = (SAlbum*)a;
+
+    if (!salbum->isDuplicatesSearch())
+        return;
+
+    if (!salbum->extraData(this))
+    {
+        FindDuplicatesAlbumItem *item = new FindDuplicatesAlbumItem(d->listView, salbum);
+        salbum->setExtraData(this, item);
+        ThumbnailLoadThread::defaultThread()->find(item->refUrl().path());
+    }
+}
+
+void FindDuplicatesView::slotAlbumDeleted(Album* a)
+{
+    if (!a || a->type() != Album::SEARCH)
+        return;
+
+    SAlbum* album = (SAlbum*)a;
+
+    FindDuplicatesAlbumItem* item = (FindDuplicatesAlbumItem*) album->extraData(this);
+    if (item)
+    {
+        a->removeExtraData(item);
+        delete item;
+    }
+}
+
+void FindDuplicatesView::slotClear()
+{
+    for(QTreeWidgetItemIterator it(d->listView); *it; ++it)
+    {
+        SAlbum *salbum = static_cast<FindDuplicatesAlbumItem*>(*it)->album();
+        if (salbum)
+            salbum->removeExtraData(this);
+    }
+    d->listView->clear();
 }
 
 void FindDuplicatesView::slotThumbnailLoaded(const LoadingDescription& desc, const QPixmap& pix)
@@ -192,7 +246,7 @@ void FindDuplicatesView::slotThumbnailLoaded(const LoadingDescription& desc, con
 
 void FindDuplicatesView::slotFindDuplicates()
 {
-    d->listView->clear();
+    slotClear();
     d->scanDuplicatesBtn->setEnabled(false);
     d->updateFingerPrtBtn->setEnabled(false);
     d->progressBar->setEnabled(true);
