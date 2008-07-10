@@ -15,12 +15,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -247,7 +247,7 @@ void AlbumSelectDialog::slotSelectionChanged()
 {
     QTreeWidgetItem* selItem = d->folderView->currentItem();
 
-    if (!selItem || (selItem == d->folderView->topLevelItem(0)) &&
+    if ((!selItem || (selItem == d->folderView->topLevelItem(0))) &&
         !d->allowRootSelection)
     {
         enableButtonOk(false);
@@ -338,7 +338,7 @@ PAlbum* AlbumSelectDialog::selectAlbum(QWidget* parent,
         return 0;
 
     TreeAlbumItem* item = (TreeAlbumItem*) dlg.d->folderView->currentItem();
-    if (!item || (item == dlg.d->folderView->topLevelItem(0)) &&
+    if ((!item || (item == dlg.d->folderView->topLevelItem(0))) &&
         !allowRootSelection)
     {
         return 0;
