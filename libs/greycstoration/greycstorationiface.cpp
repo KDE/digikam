@@ -44,9 +44,6 @@
 #include <pthread.h>
 #endif
 
-#include "CImg.h"
-using namespace cimg_library;
-
 /** Number of children threads used to run Greystoration algorithm */ 
 #define COMPUTATION_THREAD 2
 
@@ -58,6 +55,12 @@ using namespace cimg_library;
 #include "ddebug.h"
 #include "greycstorationsettings.h"
 #include "greycstorationiface.h"
+
+// CImg includes.
+
+#include "CImg.h"
+
+using namespace cimg_library;
 
 namespace Digikam
 {

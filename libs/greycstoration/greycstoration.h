@@ -248,6 +248,7 @@ CImg& greycstoration_run(const float amplitude=50, const float sharpness=0.7f, c
 CImg& greycstoration_patch_run(const unsigned int patch_size=5, const float sigma_p=10, const float sigma_s=100,
                                const unsigned int lookup_size=20, const bool fast_approx=true,
                                const unsigned int tile=0, const unsigned int tile_border=0, const unsigned int nb_threads=1) {
+
   static const CImg<unsigned char> empty_mask;
   if (greycstoration_is_running())
     throw CImgInstanceException("CImg<T>::greycstoration_run() : A GREYCstoration thread is already running on"
@@ -314,7 +315,6 @@ CImg& greycstoration_patch_run(const unsigned int patch_size=5, const float sigm
   }
   return *this;
 }
-
 
 //------------------------------------------------------------------------------
 // GREYCstoration private functions.
