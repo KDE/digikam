@@ -46,8 +46,6 @@ FindDuplicatesAlbumItem::FindDuplicatesAlbumItem(QTreeWidget* parent, SAlbum* al
     m_album = album;
     if (m_album)
     {
-        m_album->setExtraData(treeWidget(), this);
-
         m_refImgInfo = ImageInfo(m_album->title().toLongLong());
         setText(0, m_refImgInfo.name());
 
@@ -61,8 +59,6 @@ FindDuplicatesAlbumItem::FindDuplicatesAlbumItem(QTreeWidget* parent, SAlbum* al
 
 FindDuplicatesAlbumItem::~FindDuplicatesAlbumItem()
 {
-    if (m_album)
-        m_album->removeExtraData(treeWidget());
 }
 
 void FindDuplicatesAlbumItem::setThumb(const QPixmap& pix)
