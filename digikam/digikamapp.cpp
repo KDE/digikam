@@ -2203,17 +2203,17 @@ void DigikamApp::slotRebuildAllFingerPrints()
 {
     QString msg = i18n("Image finger-prints computation can take a while.\n"
                        "What do you want to do?\n"
-                       "- Rebuild all finger-prints (long)\n"
-                       "- Scan for non-recorded items in database (faster)");
+                       "- Scan for changed or non-recorded items in database\n"
+                       "- Rebuild all fingerprints (long)");
     int result = KMessageBox::questionYesNoCancel(this, msg,
-                                                  i18n("Warning"), 
-                                                  KGuiItem(i18n("Rebuild All")),
-                                                  KGuiItem(i18n("Scan")));
+                                                  i18n("Warning"),
+                                                  KGuiItem(i18n("Scan")),
+                                                  KGuiItem(i18n("Rebuild All")));
 
     if (result == KMessageBox::Cancel)
         return;
 
-    runFingerPrintsGenerator(result == KMessageBox::Yes ? true : false);
+    runFingerPrintsGenerator(result == KMessageBox::Yes ? false : true);
 }
 
 void DigikamApp::runFingerPrintsGenerator(bool rebuildAll)
