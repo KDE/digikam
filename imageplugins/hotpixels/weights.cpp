@@ -5,21 +5,21 @@
  *
  * Date        : 2005-03-27
  * Description : a class to calculate filter weights
- * 
+ *
  * Copyright (C) 2005-2006 by Unai Garro <ugarro at users dot sourceforge dot net>
  * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * 
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // C++ includes.
@@ -35,7 +35,7 @@ namespace DigikamHotPixelsImagesPlugin
 
 Weights::Weights(const Weights &w)
 {
-    (*this) = w;    
+    (*this) = w;
 }
 
 void Weights::operator=(const Weights &w)
@@ -46,17 +46,17 @@ void Weights::operator=(const Weights &w)
     mCoefficientNumber = w.coefficientNumber();
     mTwoDim            = w.twoDim();
     mPolynomeOrder     = w.polynomeOrder();
-    
+
     // Allocate memory and copy weights
     // if the original one was calculated
-    
+
     if (!w.weightMatrices()) return;
     else
     {
         double*** origMatrices = w.weightMatrices();
         // Allocate mPositions.count() matrices
         mWeightMatrices        = new double**[mPositions.count()]; 
-    
+
         for (int i=0 ; i < mPositions.count() ; i++)
         {
             // Allocate mHeight rows on each position
@@ -75,26 +75,26 @@ void Weights::operator=(const Weights &w)
         }
     }
 }
-    
+
 void Weights::calculateWeights()
 {
     mCoefficientNumber = (mTwoDim ? ((size_t)mPolynomeOrder + 1) * ((size_t)mPolynomeOrder + 1)
                                   : (size_t)mPolynomeOrder + 1);
-    double *matrix;  /* num_coeff * num_coeff */
-    double *vector0; /* mPositions.count()   * num_coeff */
-    double *vector1; /* mPositions.count()   * num_coeff */
-    size_t ix,iy,i,j;
-    int x, y;
-    
+    double *matrix;     /* num_coeff * num_coeff */
+    double *vector0;    /* mPositions.count()   * num_coeff */
+    double *vector1;    /* mPositions.count()   * num_coeff */
+    size_t  ix,iy,i,j;
+    int     x, y;
+
     // Determine coordinates of pixels to be sampled
-    
+
     if (mTwoDim)
     {
 
-	int iPolynomeOrder = (int) mPolynomeOrder; //lets avoid signed/unsigned comparison warnings
-	int iHeight        = (int) height(); 
-	int iWidth         = (int) width();  
-	
+    int iPolynomeOrder = (int) mPolynomeOrder; //lets avoid signed/unsigned comparison warnings
+    int iHeight        = (int) height();
+    int iWidth         = (int) width();
+
         for (y = -iPolynomeOrder; y < iHeight + iPolynomeOrder; ++y)
         {
             for (x = -iPolynomeOrder; x < iWidth + iPolynomeOrder; ++x)
@@ -107,7 +107,7 @@ void Weights::calculateWeights()
                     || (y < 0 && x >= 0 && x < iWidth ) || (y >= iHeight && x >= 0 && x < iWidth))
                 {
                     QPoint position(x,y);
-		            mPositions.append(position);
+                    mPositions.append(position);
                 }
             }
         }
@@ -130,19 +130,19 @@ void Weights::calculateWeights()
     }
 
     // Allocate memory.
-    
+
     matrix  = new double[mCoefficientNumber * mCoefficientNumber];
     vector0 = new double[mPositions.count() * mCoefficientNumber];
     vector1 = new double[mPositions.count() * mCoefficientNumber];
-    
+
     // Calculate coefficient matrix and vectors
-    
+
     for (iy = 0; iy < mCoefficientNumber; ++iy)
     {
         for (ix = 0; ix < mCoefficientNumber; ++ix)
             matrix [iy*mCoefficientNumber+ix] = 0.0;
 
-        for (j = 0; j < mPositions.count(); ++j)
+        for (j = 0; j < (size_t)mPositions.count(); ++j)
         {
             vector0 [iy * mPositions.count() + j] = polyTerm (iy, mPositions [j].x(), 
                     mPositions [j].y(), mPolynomeOrder);
@@ -154,14 +154,14 @@ void Weights::calculateWeights()
     }
 
     // Invert matrix.
-    
+
     matrixInv (matrix, mCoefficientNumber);
 
     // Multiply inverse matrix with vector.
-    
+
     for (iy = 0; iy < mCoefficientNumber; ++iy)
     {
-        for (j = 0; j < mPositions.count(); ++j)
+        for (j = 0; j < (size_t)mPositions.count(); ++j)
         {
             vector1 [iy * mPositions.count() + j] = 0.0;
 
@@ -174,11 +174,11 @@ void Weights::calculateWeights()
     }
 
     // Store weights
-    
+
     // Allocate mPositions.count() matrices.
     mWeightMatrices = new double**[mPositions.count()]; 
-    
-    for (i=0 ; i < mPositions.count() ; i++)
+
+    for (i=0 ; i < (size_t)mPositions.count() ; i++)
     {
         // Allocate mHeight rows on each position
         mWeightMatrices[i] = new double*[mHeight];
@@ -194,7 +194,7 @@ void Weights::calculateWeights()
     {
         for (x = 0; x < (int) mWidth; ++x)
         {
-            for (j = 0; j < mPositions.count(); ++j)
+            for (j = 0; j < (size_t)mPositions.count(); ++j)
             {
                 mWeightMatrices [j][y][x] = 0.0;
 
@@ -206,7 +206,7 @@ void Weights::calculateWeights()
             }
         }
     }
-    
+
     delete[] vector1;
     delete[] vector0;
     delete[] matrix;
@@ -221,24 +221,24 @@ bool Weights::operator==(const Weights& ws) const
             );
 }
 
- //Invert a quadratic matrix. 
+ //Invert a quadratic matrix.
 void Weights::matrixInv (double *const a, const size_t size)
 {
     double *const b = new double[size * size];
     size_t ix, iy, j;
 
-    // Copy matrix to new location.  
-    
+    // Copy matrix to new location.
+
     memcpy (b, a, sizeof (double) * size * size);
 
-    // Set destination matrix to unit matrix. 
-    
+    // Set destination matrix to unit matrix.
+
     for (iy = 0; iy < size; ++iy)
         for (ix = 0; ix < size; ++ix)
             a [iy * size + ix] = ix == iy ? 1.0 : 0.0;
 
-    // Convert matrix to upper triangle form.  
-    
+    // Convert matrix to upper triangle form.
+
     for (iy = 0; iy < size - 1; ++iy)
     {
         for (j = iy + 1; j < size; ++j)
@@ -254,7 +254,7 @@ void Weights::matrixInv (double *const a, const size_t size)
     }
 
     // Convert matrix to diagonal form.  
-    
+
     for (iy = size - 1; iy > 0; --iy)
     {
         for (j = 0; j < iy; ++j)
@@ -267,7 +267,7 @@ void Weights::matrixInv (double *const a, const size_t size)
     }
 
     // Convert matrix to unit matrix.
-    
+
     for (iy = 0; iy < size; ++iy)
         for (ix = 0; ix < size; ++ix)
             a [iy * size + ix] /= b [iy * size + iy];
