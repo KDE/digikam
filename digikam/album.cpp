@@ -336,19 +336,9 @@ QDate PAlbum::date() const
     return m_date;
 }
 
-QString PAlbum::url() const
-{
-    return albumPath();
-}
-
 QString PAlbum::albumPath() const
 {
     return m_parentPath + m_path;
-}
-
-DatabaseUrl PAlbum::kurl() const
-{
-    return databaseUrl();
 }
 
 DatabaseUrl PAlbum::databaseUrl() const

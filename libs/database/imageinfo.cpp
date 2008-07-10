@@ -7,19 +7,19 @@
  * Description : Handling accesss to one image and associated data
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 /** @file imageinfo.cpp */
@@ -48,13 +48,13 @@ namespace Digikam
 
 ImageInfoData::ImageInfoData()
 {
-    id             = -1;
-    albumId        = -1;
-    albumRootId    = -1;
+    id                      = -1;
+    albumId                 = -1;
+    albumRootId             = -1;
 
-    rating         = -1;
-    category       = DatabaseItem::UndefinedCategory;
-    fileSize       = 0;
+    rating                  = -1;
+    category                = DatabaseItem::UndefinedCategory;
+    fileSize                = 0;
 
     defaultCommentCached    = false;
     ratingCached            = false;
@@ -75,25 +75,25 @@ ImageInfo::ImageInfo()
 ImageInfo::ImageInfo(const ImageListerRecord &record)
 {
     DatabaseAccess access;
-    m_data = access.imageInfoCache()->infoForId(record.imageID);
+    m_data                         = access.imageInfoCache()->infoForId(record.imageID);
 
-    m_data->albumId        = record.albumID;
-    m_data->albumRootId    = record.albumRootID;
-    m_data->name           = record.name;
+    m_data->albumId                = record.albumID;
+    m_data->albumRootId            = record.albumRootID;
+    m_data->name                   = record.name;
 
-    m_data->rating           = record.rating;
-    m_data->category         = record.category;
-    m_data->format           = record.format;
-    m_data->creationDate     = record.creationDate;
-    m_data->modificationDate = record.modificationDate;
-    m_data->fileSize         = record.fileSize;
-    m_data->imageSize        = record.imageSize;
+    m_data->rating                 = record.rating;
+    m_data->category               = record.category;
+    m_data->format                 = record.format;
+    m_data->creationDate           = record.creationDate;
+    m_data->modificationDate       = record.modificationDate;
+    m_data->fileSize               = record.fileSize;
+    m_data->imageSize              = record.imageSize;
 
-    m_data->ratingCached            = true;
-    m_data->creationDateCached      = true;
-    m_data->modificationDateCached  = true;
-    m_data->fileSizeCached          = true;
-    m_data->imageSizeCached         = true;
+    m_data->ratingCached           = true;
+    m_data->creationDateCached     = true;
+    m_data->modificationDateCached = true;
+    m_data->fileSizeCached         = true;
+    m_data->imageSizeCached        = true;
 }
 
 ImageInfo::ImageInfo(qlonglong ID)
@@ -101,10 +101,10 @@ ImageInfo::ImageInfo(qlonglong ID)
     DatabaseAccess access;
     m_data = access.imageInfoCache()->infoForId(ID);
     // retrieve immutable values now, the rest on demand
-    ItemShortInfo info = access.db()->getItemShortInfo(ID);
-    m_data->albumId        = info.albumID;
-    m_data->albumRootId    = info.albumRootID;
-    m_data->name           = info.itemName;
+    ItemShortInfo info  = access.db()->getItemShortInfo(ID);
+    m_data->albumId     = info.albumID;
+    m_data->albumRootId = info.albumRootID;
+    m_data->name        = info.itemName;
 
     //m_data->url     = DatabaseUrl::fromAlbumAndName(info.itemName, info.album,
       //                                              CollectionManager::instance()->albumRootPath(info.albumRootId));
@@ -137,7 +137,7 @@ ImageInfo::ImageInfo(const KUrl &url)
     m_data->albumId     = albumId;
     m_data->albumRootId = location.id();
     m_data->name        = name;
-    //m_data->url     = DatabaseUrl::fromAlbumAndName(name, album, location->albumRootPath());
+    //m_data->url         = DatabaseUrl::fromAlbumAndName(name, album, location->albumRootPath());
 }
 
 ImageInfo::~ImageInfo()
@@ -215,7 +215,6 @@ uint ImageInfo::hash() const
  * The id and albumId are the exception to this rule, as they are
  * primitive and will never change during the lifetime of an object.
  */
-
 qlonglong ImageInfo::id() const
 {
     return m_data ? m_data->id : -1;
@@ -395,19 +394,9 @@ KUrl ImageInfo::fileUrl() const
     return databaseUrl().fileUrl();
 }
 
-KUrl ImageInfo::kurl() const
-{
-    return fileUrl();
-}
-
 QString ImageInfo::filePath() const
 {
     return fileUrl().path();
-}
-
-KUrl ImageInfo::kurlForKIO() const
-{
-    return databaseUrl();
 }
 
 ImageComments ImageInfo::imageComments(DatabaseAccess &access) const

@@ -7,14 +7,14 @@
  * Description : Handling accesss to one image and associated data
  *
  * Copyright 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright 2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -59,7 +59,6 @@ class ImageInfoData;
  * The ImageInfo class contains provides access to the database for a single image.
  * The properties can be read and written. Information will be cached.
  */
-
 class DIGIKAM_EXPORT ImageInfo
 {
 public:
@@ -145,20 +144,10 @@ public:
     KUrl       fileUrl() const;
 
     /**
-     * Equivalent to fileUrl()
-     */
-    KDE_DEPRECATED KUrl      kurl() const;
-
-    /**
      * Equivalent to fileUrl().path()
      */
     // Deprecate?
     QString   filePath() const;
-
-    /**
-     * Equivalent to databaseUrl()
-     */
-    KDE_DEPRECATED KUrl      kurlForKIO() const;
 
     /**
      * @return the unique image id for this item
