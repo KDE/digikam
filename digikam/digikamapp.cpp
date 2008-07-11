@@ -73,9 +73,22 @@
 
 #include <libkipi/plugin.h>
 
-// LibKDcraw includes.
+// Libkexiv2 includes.
 
+#include <libkexiv2/kexiv2.h>
+
+// Libkdcraw includes.
+
+#include <libkdcraw/kdcraw.h>
 #include <libkdcraw/dcrawbinary.h>
+
+// C Ansi includes.
+
+extern "C"
+{
+#include <gphoto2-version.h>
+#include <png.h>
+}
 
 // Local includes.
 
@@ -104,6 +117,7 @@
 #include "batchalbumssyncmetadata.h"
 #include "fingerprintsgenerator.h"
 #include "rawcameradlg.h"
+#include "libsinfodlg.h"
 #include "dlogoaction.h"
 #include "dio.h"
 #include "digikamadaptor.h"
@@ -901,6 +915,12 @@ void DigikamApp::setupActions()
     d->rawCameraListAction = new KAction(KIcon("kdcraw"), i18n("RAW camera supported"), this);
     connect(d->rawCameraListAction, SIGNAL(triggered()), this, SLOT(slotRawCameraList()));
     actionCollection()->addAction("help_rawcameralist", d->rawCameraListAction);
+
+    // -----------------------------------------------------------
+
+    d->libsInfoAction = new KAction(KIcon("info"), i18n("Components info"), this);
+    connect(d->libsInfoAction, SIGNAL(triggered()), this, SLOT(slotLibrariesInfo()));
+    actionCollection()->addAction("help_librariesinfo", d->libsInfoAction);
 
     // -----------------------------------------------------------
 
@@ -2010,6 +2030,28 @@ void DigikamApp::slotShowKipiHelp()
 void DigikamApp::slotRawCameraList()
 {
     RawCameraDlg dlg(this);
+    dlg.exec();
+}
+
+void DigikamApp::slotLibrariesInfo()
+{
+    QMap<QString, QString> list;
+    list.insert(i18n("LibQt"),                            qVersion());
+    list.insert(i18n("LibKDE"),                           KDE::versionString());
+    list.insert(i18n("LibKipi"),                          KIPI::Interface::version());
+    list.insert(i18n("LibKdcraw"),                        KDcrawIface::KDcraw::version());
+    list.insert(i18n("Dcraw program"),                    KDcrawIface::DcrawBinary::internalVersion());
+    list.insert(i18n("LibKExiv2"),                        KExiv2Iface::KExiv2::version());
+    list.insert(i18n("LibExiv2"),                         KExiv2Iface::KExiv2::Exiv2Version());
+    list.insert(i18n("Exiv2 support XMP metadata"),       KExiv2Iface::KExiv2::supportXmp() ? 
+                                                          i18n("Yes") : i18n("No"));
+    list.insert(i18n("Exiv2 can write metadata to Tiff"), KExiv2Iface::KExiv2::supportTiffWritting() ? 
+                                                          i18n("Yes") : i18n("No"));
+    list.insert(i18n("LibPNG"),                           QString(PNG_LIBPNG_VER_STRING));
+    list.insert(i18n("LibGphoto2"),                       QString(gp_library_version(GP_VERSION_SHORT)[0]));
+
+    LibsInfoDlg dlg(this);
+    dlg.setLibsInfoMap(list);
     dlg.exec();
 }
 

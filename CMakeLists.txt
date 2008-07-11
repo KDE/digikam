@@ -506,6 +506,7 @@ SET(libdialogs_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/dprogressdlg.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/imagedialog.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/rawcameradlg.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/libsinfodlg.cpp
    )
 
 SET(libdeletedialog_SRCS

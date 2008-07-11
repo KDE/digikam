@@ -119,6 +119,7 @@ private slots:
     void slotDonateMoney();
     void slotContribute();
     void slotRawCameraList();
+    void slotLibrariesInfo();
 
     void slotRecurseAlbums(bool);
     void slotRecurseTags(bool);

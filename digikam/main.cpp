@@ -44,27 +44,6 @@
 #include <kdeversion.h>
 #include <kmessagebox.h>
 
-// KIPI Includes.
-
-#include <libkipi/interface.h>
-
-// Libkexiv2 includes.
-
-#include <libkexiv2/kexiv2.h>
-
-// Libkdcraw includes.
-
-#include <libkdcraw/kdcraw.h>
-#include <libkdcraw/dcrawbinary.h>
-
-// C Ansi includes.
-
-extern "C"
-{
-#include <gphoto2-version.h>
-#include <png.h>
-}
-
 // Local includes.
 
 #include "version.h"
@@ -80,31 +59,6 @@ extern "C"
 
 int main(int argc, char *argv[])
 {
-    QString DcrawVer    = KDcrawIface::DcrawBinary::internalVersion();
-
-    QString Exiv2Ver    = KExiv2Iface::KExiv2::Exiv2Version();
-
-    QString Gphoto2Ver  = QString(gp_library_version(GP_VERSION_SHORT)[0]);
-
-    QString XmpSupport  = KExiv2Iface::KExiv2::supportXmp() ? I18N_NOOP("yes") : I18N_NOOP("no");
-
-    KLocalizedString libInfo = ki18n("Using Kipi library version %1\n"
-                                     "Using KDcraw library version %2\n"
-                                     "Using Dcraw program version %3\n"
-                                     "Using PNG library version %4\n"
-                                     "Using Gphoto2 library version %5\n"
-                                     "Using KExiv2 library version %6\n"
-                                     "Using Exiv2 library version %7\n"
-                                     "XMP support available: %8")
-                               .subs(KIPI::Interface::version())
-                               .subs(KDcrawIface::KDcraw::version())
-                               .subs(DcrawVer)
-                               .subs(PNG_LIBPNG_VER_STRING)
-                               .subs(Gphoto2Ver)
-                               .subs(KExiv2Iface::KExiv2::version())
-                               .subs(Exiv2Ver)
-                               .subs(XmpSupport);
-
     KAboutData aboutData( "digikam", 0,
                           ki18n("digiKam"),
                           digiKamVersion().toAscii(),
@@ -114,8 +68,6 @@ int main(int argc, char *argv[])
                           ki18n("(c) 2002-2008, digiKam developers team"),
                           KLocalizedString(),
                           "http://www.digikam.org");
-
-    aboutData.setOtherText(libInfo);
 
     aboutData.addAuthor ( ki18n("Caulier Gilles"),
                           ki18n("Main developer and coordinator"),

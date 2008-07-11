@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="49" name="digikam" >
+<gui version="50" name="digikam" >
 
  <MenuBar>
 
@@ -119,6 +119,7 @@
 
   <Menu name="help"><Text>&amp;Help</Text>
     <Action name="help_rawcameralist"/>
+    <Action name="help_librariesinfo"/>
     <Action name="help_kipi"/>
     <Action name="help_tipofday"/>
     <Separator/>
