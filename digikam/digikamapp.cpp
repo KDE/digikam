@@ -927,7 +927,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->libsInfoAction = new KAction(KIcon("info"), i18n("Components info"), this);
+    d->libsInfoAction = new KAction(KIcon("help-about"), i18n("Components info"), this);
     connect(d->libsInfoAction, SIGNAL(triggered()), this, SLOT(slotComponentsInfo()));
     actionCollection()->addAction("help_librariesinfo", d->libsInfoAction);
 
