@@ -130,6 +130,8 @@ DProgressDlg::DProgressDlg(QWidget *parent, const QString &caption)
 
     connect(this, SIGNAL(cancelClicked()),
             this, SLOT(slotCancel()));
+            
+    reset();
 }
 
 DProgressDlg::~DProgressDlg()
