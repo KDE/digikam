@@ -69,6 +69,11 @@
 #include <solid/camera.h>
 #include <solid/predicate.h>
 
+#include "config-digikam.h"
+#ifdef HAVE_MARBLEWIDGET
+#include <marble/global.h>
+#endif // HAVE_MARBLEWIDGET
+
 // libKipi includes.
 
 #include <libkipi/plugin.h>
@@ -2052,6 +2057,11 @@ void DigikamApp::slotComponentsInfo()
     list.insert(i18n("LibPNG"),                           QString(PNG_LIBPNG_VER_STRING));
     list.insert(i18n("LibTIFF"),                          QString(TIFFLIB_VERSION_STR).replace('\n', ' '));
     list.insert(i18n("LibJPEG"),                          QString::number(JPEG_LIB_VERSION));
+
+#ifdef HAVE_MARBLEWIDGET
+    list.insert(i18n("Marble widget"),                    QString(MARBLE_VERSION_STRING));
+#endif HAVE_MARBLEWIDGET
+
     list.insert(i18n("LibGphoto2"),                       QString(gp_library_version(GP_VERSION_SHORT)[0]));
 
     LibsInfoDlg dlg(this);
