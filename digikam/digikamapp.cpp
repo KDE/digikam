@@ -89,6 +89,7 @@ extern "C"
 #include <gphoto2-version.h>
 #include <png.h>
 #include <tiffvers.h>
+#include <jpeglib.h>
 }
 
 // Local includes.
@@ -2049,7 +2050,8 @@ void DigikamApp::slotComponentsInfo()
     list.insert(i18n("Exiv2 can write metadata to Tiff"), KExiv2Iface::KExiv2::supportTiffWritting() ? 
                                                           i18n("Yes") : i18n("No"));
     list.insert(i18n("LibPNG"),                           QString(PNG_LIBPNG_VER_STRING));
-    list.insert(i18n("LibTiff"),                          QString(TIFFLIB_VERSION_STR).replace('\n', ' '));
+    list.insert(i18n("LibTIFF"),                          QString(TIFFLIB_VERSION_STR).replace('\n', ' '));
+    list.insert(i18n("LibJPEG"),                          QString::number(JPEG_LIB_VERSION));
     list.insert(i18n("LibGphoto2"),                       QString(gp_library_version(GP_VERSION_SHORT)[0]));
 
     LibsInfoDlg dlg(this);
