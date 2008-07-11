@@ -458,7 +458,7 @@ void CameraUI::setupActions()
     connect(d->rawCameraListAction, SIGNAL(triggered()), this, SLOT(slotRawCameraList()));
     actionCollection()->addAction("cameraui_rawcameralist", d->rawCameraListAction);
 
-    d->libsInfoAction = new KAction(KIcon("info"), i18n("Components info"), this);
+    d->libsInfoAction = new KAction(KIcon("help-about"), i18n("Components info"), this);
     connect(d->libsInfoAction, SIGNAL(triggered()), this, SLOT(slotComponentsInfo()));
     actionCollection()->addAction("cameraui_librariesinfo", d->libsInfoAction);
 

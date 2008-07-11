@@ -522,7 +522,7 @@ void EditorWindow::setupStandardActions()
     connect(d->rawCameraListAction, SIGNAL(triggered()), this, SLOT(slotRawCameraList()));
     actionCollection()->addAction("editorwindow_rawcameralist", d->rawCameraListAction);
 
-    d->libsInfoAction = new KAction(KIcon("info"), i18n("Components info"), this);
+    d->libsInfoAction = new KAction(KIcon("help-about"), i18n("Components info"), this);
     connect(d->libsInfoAction, SIGNAL(triggered()), this, SLOT(slotComponentsInfo()));
     actionCollection()->addAction("editorwindow_librariesinfo", d->libsInfoAction);
 

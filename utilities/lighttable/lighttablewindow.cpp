@@ -509,7 +509,7 @@ void LightTableWindow::setupActions()
     connect(d->rawCameraListAction, SIGNAL(triggered()), this, SLOT(slotRawCameraList()));
     actionCollection()->addAction("lighttable_rawcameralist", d->rawCameraListAction);
 
-    d->libsInfoAction = new KAction(KIcon("info"), i18n("Components info"), this);
+    d->libsInfoAction = new KAction(KIcon("help-about"), i18n("Components info"), this);
     connect(d->libsInfoAction, SIGNAL(triggered()), this, SLOT(slotComponentsInfo()));
     actionCollection()->addAction("lighttable_librariesinfo", d->libsInfoAction);
 
