@@ -1,7 +1,18 @@
-digiKam 0.10.0-beta1 - Release date: 2008-07-07
+digiKam 0.10.0-beta2 - Release date: 2008-07-27
 
 IMPORTANT: This is a beta release : do not use yet in production !!!
 ====================================================================
+
+NEW FEATURES:
+
+General        : New option in Help menu to list all main components/libraries used by digiKam.
+
+BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+
+001 ==>
+
+*********************************************************************************************************
+digiKam 0.10.0-beta1 - Release date: 2008-07-07
 
 NEW FEATURES:
 
