@@ -76,7 +76,7 @@ public:
         gfact = 1.0;
     }
 
-    float                  gfact;           
+    float                  gfact;
 
     int                    mode;            // The interface running mode.
 
@@ -125,6 +125,11 @@ GreycstorationIface::~GreycstorationIface()
     delete d;
 }
 
+QString GreycstorationIface::cimgVersionString()
+{
+    return QString::number(cimg_version);
+}
+
 // We need to re-implemente this method from DImgThreadedFilter class because
 // target image size can be different from original if d->mode = Resize.
 
@@ -143,7 +148,7 @@ void GreycstorationIface::cancelFilter()
     if (d->img.greycstoration_is_running())
     {
         // If the user abort, we stop the algorithm.
-        DDebug() << "Stop Greycstoration computation..." << endl;    
+        DDebug() << "Stop Greycstoration computation..." << endl;
         d->img.greycstoration_stop();
     }
 
@@ -443,11 +448,11 @@ void GreycstorationIface::iterationLoop(uint iter)
                 mp = p;
             }
         }
-    }    
+    }
     while (d->img.greycstoration_is_running() && !m_cancel);
 
     // A delay is require here. I suspect a sync problem between threads 
-    // used by GreycStoration algorithm. 
+    // used by GreycStoration algorithm.
     usleep(100000);
 }
 
