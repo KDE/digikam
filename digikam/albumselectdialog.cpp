@@ -240,6 +240,12 @@ void AlbumSelectDialog::slotAlbumDeleted(Album* album)
 
 void AlbumSelectDialog::slotAlbumsCleared()
 {
+    for(QTreeWidgetItemIterator it(d->folderView); *it; ++it)
+    {
+        Album *album = static_cast<TreeAlbumItem*>(*it)->album();
+        if (album)
+            album->removeExtraData(d->folderView);
+    }
     d->folderView->clear();
 }
 
