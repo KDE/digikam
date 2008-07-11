@@ -50,7 +50,7 @@ public:
     LibsInfoDlg(QWidget* parent);
     ~LibsInfoDlg();
 
-    void setLibsInfoMap(const QMap<QString, QString>& list);
+    void setComponentsInfoMap(const QMap<QString, QString>& list);
 
 private slots:
 

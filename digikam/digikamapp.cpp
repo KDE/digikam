@@ -88,6 +88,7 @@ extern "C"
 {
 #include <gphoto2-version.h>
 #include <png.h>
+#include <tiffvers.h>
 }
 
 // Local includes.
@@ -919,7 +920,7 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------
 
     d->libsInfoAction = new KAction(KIcon("info"), i18n("Components info"), this);
-    connect(d->libsInfoAction, SIGNAL(triggered()), this, SLOT(slotLibrariesInfo()));
+    connect(d->libsInfoAction, SIGNAL(triggered()), this, SLOT(slotComponentsInfo()));
     actionCollection()->addAction("help_librariesinfo", d->libsInfoAction);
 
     // -----------------------------------------------------------
@@ -2033,7 +2034,7 @@ void DigikamApp::slotRawCameraList()
     dlg.exec();
 }
 
-void DigikamApp::slotLibrariesInfo()
+void DigikamApp::slotComponentsInfo()
 {
     QMap<QString, QString> list;
     list.insert(i18n("LibQt"),                            qVersion());
@@ -2048,10 +2049,11 @@ void DigikamApp::slotLibrariesInfo()
     list.insert(i18n("Exiv2 can write metadata to Tiff"), KExiv2Iface::KExiv2::supportTiffWritting() ? 
                                                           i18n("Yes") : i18n("No"));
     list.insert(i18n("LibPNG"),                           QString(PNG_LIBPNG_VER_STRING));
+    list.insert(i18n("LibTiff"),                          QString(TIFFLIB_VERSION_STR).replace('\n', ' '));
     list.insert(i18n("LibGphoto2"),                       QString(gp_library_version(GP_VERSION_SHORT)[0]));
 
     LibsInfoDlg dlg(this);
-    dlg.setLibsInfoMap(list);
+    dlg.setComponentsInfoMap(list);
     dlg.exec();
 }
 
