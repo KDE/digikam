@@ -32,7 +32,7 @@ INCLUDE_DIRECTORIES( ../showfoto/setup
                      ../
 
                      # version.h
-                     ${CMAKE_CURRENT_BINARY_DIR}/digikam
+                     ${CMAKE_CURRENT_BINARY_DIR}/../
                      # external library paths
                      ${LCMS_INCLUDE_DIR}
                    )
