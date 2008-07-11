@@ -77,6 +77,7 @@
 // libKipi includes.
 
 #include <libkipi/plugin.h>
+#include <libkipi/interface.h>
 
 // Libkexiv2 includes.
 
@@ -2211,7 +2212,7 @@ void DigikamApp::slotDatabaseRescan()
     ScanController::instance()->completeCollectionScan();
 
     d->view->refreshView();
-    
+
     if (ImageWindow::imagewindowCreated())
         ImageWindow::imagewindow()->refreshView();
 
@@ -2356,7 +2357,7 @@ void DigikamApp::slotImportAddImages()
 {
     QString path = KFileDialog::getExistingDirectory(KGlobalSettings::documentPath(), this, 
                                 i18n("Select folder to parse"));
-  
+
     if(path.isEmpty())
         return;
 

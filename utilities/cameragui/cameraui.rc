@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="18" name="cameraui" >
+<gui version="19" name="cameraui" >
 
 <MenuBar>
 
@@ -11,7 +11,7 @@
         <Separator />
         <Action name="cameraui_close" />
     </Menu>
-    
+
     <Menu name="Edit" >
     <text>&amp;Edit</text>
         <Action name="cameraui_selectall" />
@@ -20,7 +20,7 @@
         <Separator />
         <Action name="cameraui_selectnewitems" />
     </Menu>
-    
+
     <Menu name="Image" ><text>&amp;Image</text>
         <Action name="cameraui_imageview" />
         <Separator />
@@ -37,7 +37,7 @@
         <Separator />
         <Action name="cameraui_imagelock" />
     </Menu>
-  
+
     <Menu name="View" ><text>&amp;View</text>
         <Action name="cameraui_fullscreen" />
         <Separator/>
@@ -47,10 +47,11 @@
 
     <Menu name="help" ><text>&amp;Help</text>
         <Action name="cameraui_rawcameralist"/>
+        <Action name="cameraui_librariesinfo"/>
         <Action name="cameraui_donatemoney" />
         <Action name="cameraui_contribute" />
     </Menu>
-  
+
     <Merge/>
 
     <Menu name="settings" noMerge="1"><Text>&amp;Settings</Text>
@@ -61,28 +62,28 @@
         <Action name="theme_menu" />
         <Action name="options_configure_keybinding"/>
         <Action name="options_configure_toolbars"/>
-        <Action name="options_configure" />        
+        <Action name="options_configure" />
     </Menu>
 
 </MenuBar>
 
 <ToolBar name="ToolBar" ><text>Main Toolbar</text>
-     <Action name="cameraui_cancelprocess" /> 
+     <Action name="cameraui_cancelprocess" />
      <Separator/>
      <Action name="cameraui_imageview" />
      <Action name="cameraui_imagedownloadselected" />
      <Action name="cameraui_imageupload" />
      <Action name="cameraui_imagelock" />
-     <Separator/>     
+     <Separator/>
      <Action name="cameraui_capture" />
-     <Separator/>     
+     <Separator/>
      <Action name="cameraui_fullscreen" />
      <Merge />
-     <WeakSeparator/>     
-     <Action name="logo_action" />	      
-     <Action name="anim_action" />        
+     <WeakSeparator/>
+     <Action name="logo_action" />
+     <Action name="anim_action" />
 </ToolBar>
- 
+
 <ActionProperties/>
 
 </gui>

@@ -170,7 +170,7 @@ private slots:
     void slotImportAddImages();
     void slotImportAddFolders();
     void slotDIOResult(KJob*);
-    
+
     void slotToggleShowBar();
 
 private:

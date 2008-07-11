@@ -141,6 +141,7 @@ private slots:
     void slotNewToolbarConfig();
     void slotSetup();
     void slotRawCameraList();
+    void slotComponentsInfo();
 
     void slotThemeChanged();
     void slotChangeTheme(const QString& theme);

@@ -33,22 +33,6 @@
 #include <kglobal.h>
 #include <kimageio.h>
 
-// Libkexiv2 includes.
-
-#include <libkexiv2/kexiv2.h>
-
-// Libkdcraw includes.
-
-#include <libkdcraw/kdcraw.h>
-#include <libkdcraw/dcrawbinary.h>
-
-// C Ansi includes.
-
-extern "C"
-{
-#include <png.h>
-}
-
 // Local includes.
 
 #include "version.h"
@@ -56,36 +40,15 @@ extern "C"
 
 int main(int argc, char *argv[])
 {
-    QString DcrawVer    = KDcrawIface::DcrawBinary::internalVersion();
-
-    QString Exiv2Ver    = KExiv2Iface::KExiv2::Exiv2Version();
-
-    QString XmpSupport  = KExiv2Iface::KExiv2::supportXmp() ? I18N_NOOP("yes") : I18N_NOOP("no");
-
-    KLocalizedString libInfo = ki18n("Using KDcraw library version %1\n"
-                                     "Using Dcraw program version %2\n"
-                                     "Using PNG library version %3\n"
-                                     "Using KExiv2 library version %4\n"
-                                     "Using Exiv2 library version %5\n"
-                                     "XMP support available: %6")
-                               .subs(KDcrawIface::KDcraw::version())
-                               .subs(DcrawVer)
-                               .subs(PNG_LIBPNG_VER_STRING)
-                               .subs(KExiv2Iface::KExiv2::version())
-                               .subs(Exiv2Ver)
-                               .subs(XmpSupport);
-
     KAboutData aboutData( "showfoto", 0,
                           ki18n("showFoto"),
-                          digiKamVersion().toAscii(),                    // NOTE: showfoto version = digiKam version
+                          digiKamVersion().toAscii(),  // NOTE: showfoto version = digiKam version
                           ki18n("Manage your photographs like a professional "
                                 "with the power of open source"),
                           KAboutData::License_GPL,
                           ki18n("(c) 2002-2008, digiKam developers team"),
                           KLocalizedString(),
                           "http://www.digikam.org");
-
-    aboutData.setOtherText(libInfo);
 
     aboutData.addAuthor ( ki18n("Caulier Gilles"),
                           ki18n("Main developer and coordinator"),

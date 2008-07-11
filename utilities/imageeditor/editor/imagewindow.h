@@ -137,6 +137,8 @@ private slots:
 
     void slotChangeTheme(const QString& theme);
 
+    void slotComponentsInfo();
+
 private:
 
     ImageWindowPriv    *d;

@@ -29,6 +29,7 @@ INCLUDE_DIRECTORIES( ../showfoto/setup
                      ../utilities/imageeditor/tools 
                      ../utilities/slideshow 
                      ../digikam 
+                     ../
 
                      # version.h
                      ${CMAKE_CURRENT_BINARY_DIR}/../digikam

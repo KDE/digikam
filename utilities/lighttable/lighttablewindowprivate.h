@@ -80,14 +80,15 @@ public:
         zoomPlusAction         = 0;
         zoomMinusAction        = 0;
         statusProgressBar      = 0;
-        leftZoomBar            = 0;  
-        rightZoomBar           = 0;  
+        leftZoomBar            = 0;
+        rightZoomBar           = 0;
         forwardAction          = 0;
         backwardAction         = 0;
         firstAction            = 0;
         lastAction             = 0;
         navigateByPairAction   = 0;
         rawCameraListAction    = 0;
+        libsInfoAction         = 0;
         themeMenuAction        = 0;
         contributeAction       = 0;
     }
@@ -130,6 +131,7 @@ public:
     KAction                  *donateMoneyAction;
     KAction                  *contributeAction;
     KAction                  *rawCameraListAction;
+    KAction                  *libsInfoAction;
 
     KSelectAction            *themeMenuAction;
 

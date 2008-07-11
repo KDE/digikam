@@ -206,6 +206,8 @@ protected slots:
     virtual void slotContextMenu()=0;
     virtual void slotRevert()=0;
 
+    virtual void slotComponentsInfo()=0;
+
 private slots:
 
     void slotToggleUnderExposureIndicator();

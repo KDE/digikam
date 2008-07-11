@@ -82,6 +82,7 @@ public:
         undoSignalMapper       = 0;
         redoSignalMapper       = 0;
         rawCameraListAction    = 0;
+        libsInfoAction         = 0;
         contributeAction       = 0;
     }
 
@@ -118,6 +119,7 @@ public:
     KAction                   *selectAllAction;
     KAction                   *selectNoneAction;
     KAction                   *rawCameraListAction;
+    KAction                   *libsInfoAction;
 
     QSignalMapper             *undoSignalMapper;
     QSignalMapper             *redoSignalMapper;
