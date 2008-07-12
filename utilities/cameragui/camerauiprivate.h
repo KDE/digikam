@@ -147,7 +147,7 @@ public:
     QComboBox                    *losslessFormat;
     QComboBox                    *folderDateFormat;
 
-    QSplitter                    *splitter;
+    SidebarSplitter              *splitter;
 
     QDateTime                     lastAccess;
 

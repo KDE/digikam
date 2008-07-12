@@ -58,6 +58,7 @@ class SavingContextContainer;
 class StatusProgressBar;
 class SlideShowSettings;
 class ThumbBarView;
+class SidebarSplitter;
 class EditorWindowPriv;
 
 class DIGIKAM_EXPORT EditorWindow : public KXmlGuiWindow
@@ -89,7 +90,7 @@ protected:
 
     QColor                   m_bgColor;
 
-    QSplitter               *m_splitter;
+    SidebarSplitter         *m_splitter;
     QSplitter               *m_vSplitter;
 
     KAction                 *m_saveAction;

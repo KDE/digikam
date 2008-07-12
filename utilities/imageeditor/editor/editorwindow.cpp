@@ -100,6 +100,7 @@
 #include "savingcontextcontainer.h"
 #include "loadingcacheinterface.h"
 #include "slideshowsettings.h"
+#include "sidebar.h"
 #include "themeengine.h"
 #include "thumbbar.h"
 #include "rawcameradlg.h"
@@ -914,12 +915,7 @@ void EditorWindow::applyStandardSettings()
 
     // -- GUI Settings -------------------------------------------------------
 
-    if (group.hasKey("Splitter State")) 
-    {
-        QByteArray state;
-        state = group.readEntry("Splitter State", state);
-        m_splitter->restoreState(QByteArray::fromBase64(state));
-    }
+    m_splitter->restoreState(group);
 
     d->fullScreenHideToolBar = group.readEntry("FullScreen Hide ToolBar", false);
     m_fullScreenHideThumbBar = group.readEntry("FullScreenHideThumbBar", true);
@@ -950,7 +946,7 @@ void EditorWindow::saveStandardSettings()
     KConfigGroup group = config->group("ImageViewer Settings");
 
     group.writeEntry("AutoZoom", d->zoomFitToWindowAction->isChecked());
-    group.writeEntry("Splitter State", m_splitter->saveState().toBase64());
+    m_splitter->saveState(group);
     if (m_vSplitter)
         group.writeEntry("Vertical Splitter State", m_vSplitter->saveState().toBase64());
 

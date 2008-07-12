@@ -40,6 +40,7 @@ class QWidget;
 namespace Digikam
 {
 
+class SidebarSplitter;
 class GPItemInfo;
 class CameraIconView;
 class CameraIconViewItem;
@@ -52,7 +53,7 @@ class DIGIKAM_EXPORT ImagePropertiesSideBarCamGui : public Sidebar
 
 public:
 
-    ImagePropertiesSideBarCamGui(QWidget* parent, QSplitter *splitter,
+    ImagePropertiesSideBarCamGui(QWidget* parent, SidebarSplitter *splitter,
                                  KMultiTabBarPosition side=KMultiTabBar::Left, bool mimimizedDefault=false);
 
     ~ImagePropertiesSideBarCamGui();

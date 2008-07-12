@@ -141,7 +141,7 @@ public:
     int                       initialAlbumID;
     int                       thumbSize;
 
-    QSplitter                *splitter;
+    SidebarSplitter          *splitter;
 
     QTimer                   *selectionTimer;
     QTimer                   *thumbSizeTimer;
@@ -184,7 +184,7 @@ DigikamView::DigikamView(QWidget *parent)
     d->parent       = static_cast<DigikamApp *>(parent);
     d->albumManager = AlbumManager::instance();
 
-    d->splitter = new QSplitter;
+    d->splitter = new SidebarSplitter;
     d->splitter->setFrameStyle( QFrame::NoFrame );
     d->splitter->setFrameShadow( QFrame::Plain );
     d->splitter->setFrameShape( QFrame::NoFrame );
@@ -502,14 +502,7 @@ void DigikamView::loadViewState()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("MainWindow");
 
-    DDebug() << "DigikamView::loadViewState()" << endl;
-    if (group.hasKey("SplitterState")) 
-    {
-        QByteArray state;
-        state = group.readEntry("SplitterState", state);
-        d->splitter->restoreState(QByteArray::fromBase64(state));
-    }
-
+    d->splitter->restoreState(group);
     d->initialAlbumID = group.readEntry("InitialAlbumID", 0);
 }
 
@@ -517,7 +510,7 @@ void DigikamView::saveViewState()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("MainWindow");
-    group.writeEntry("SplitterState", d->splitter->saveState().toBase64());
+    d->splitter->saveState(group);
 
     Album *album = AlbumManager::instance()->currentAlbum();
     if(album)

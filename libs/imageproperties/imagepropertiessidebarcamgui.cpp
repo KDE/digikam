@@ -92,7 +92,7 @@ public:
 };
 
 ImagePropertiesSideBarCamGui::ImagePropertiesSideBarCamGui(QWidget *parent,
-                                                           QSplitter *splitter,
+                                                           SidebarSplitter *splitter,
                                                            KMultiTabBarPosition side,
                                                            bool mimimizedDefault)
                             : Sidebar(parent, splitter, side, mimimizedDefault)

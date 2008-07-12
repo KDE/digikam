@@ -94,7 +94,7 @@ public:
 
     QVBoxLayout        *settingsLayout;
 
-    QSplitter          *splitter;
+    SidebarSplitter    *splitter;
 
     QProgressBar       *progressBar;
 
@@ -113,7 +113,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
     d = new ImagePannelWidgetPriv;
     setAttribute(Qt::WA_DeleteOnClose);
     d->settingsSection = settingsSection;
-    d->splitter        = new QSplitter(this);
+    d->splitter        = new SidebarSplitter(this);
     d->previewWidget   = new QWidget(d->splitter);
     d->mainLayout      = new QGridLayout(d->previewWidget);
 
@@ -305,12 +305,7 @@ void ImagePannelWidget::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->settingsSection);
 
-    if (group.hasKey("SplitterState")) 
-    {
-        QByteArray state;
-        state = group.readEntry("SplitterState", state);
-        d->splitter->restoreState(QByteArray::fromBase64(state));
-    }
+    d->splitter->restoreState(group);
 
     int mode                  = group.readEntry("Separate View",
                                                 (int)ImageRegionWidget::SeparateViewDuplicateVert);
@@ -332,7 +327,7 @@ void ImagePannelWidget::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->settingsSection);
-    group.writeEntry("SplitterState", d->splitter->saveState().toBase64());
+    d->splitter->saveState(group);
     group.writeEntry("Separate View", d->separateView->checkedId());
     config->sync();
 }

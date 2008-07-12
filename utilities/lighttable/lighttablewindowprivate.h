@@ -100,7 +100,7 @@ public:
     bool                      removeFullScreenButton;
     bool                      cancelSlideShow;
 
-    QSplitter                *hSplitter;
+    SidebarSplitter          *hSplitter;
     QSplitter                *vSplitter;
 
     QAction                  *setItemLeftAction;

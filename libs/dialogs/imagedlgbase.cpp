@@ -90,7 +90,7 @@ public:
 
     KHBox          *hbox;
 
-    QSplitter      *splitter;
+    SidebarSplitter*splitter;
 
     KAboutData     *aboutData;
 
@@ -135,7 +135,7 @@ ImageDlgBase::ImageDlgBase(QWidget* parent, QString title, QString name,
     // -------------------------------------------------------------
 
     d->hbox     = new KHBox(mainWidget());
-    d->splitter = new QSplitter(d->hbox);
+    d->splitter = new SidebarSplitter(d->hbox);
     d->splitter->setFrameStyle( QFrame::NoFrame );
     d->splitter->setFrameShadow( QFrame::Plain );
     d->splitter->setFrameShape( QFrame::NoFrame );
@@ -194,12 +194,7 @@ void ImageDlgBase::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->name + QString(" Tool Dialog"));
-    if (group.hasKey("SplitterState")) 
-    {
-        QByteArray state;
-        state = group.readEntry("SplitterState", state);
-        d->splitter->restoreState(QByteArray::fromBase64(state));
-    }
+    d->splitter->restoreState(group);
 
     readUserSettings();
 }
@@ -208,7 +203,7 @@ void ImageDlgBase::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->name + QString(" Tool Dialog"));
-    group.writeEntry("SplitterState", d->splitter->saveState().toBase64());
+    d->splitter->saveState(group);
     saveDialogSize(group);
     config->sync();
 }

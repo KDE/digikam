@@ -190,7 +190,7 @@ CameraUI::~CameraUI()
 void CameraUI::setupUserArea()
 {
     KHBox* widget   = new KHBox(this);
-    d->splitter     = new QSplitter(widget);
+    d->splitter     = new SidebarSplitter(widget);
     d->view         = new CameraIconView(this, d->splitter);
     d->rightSidebar = new ImagePropertiesSideBarCamGui(widget, d->splitter, KMultiTabBar::Right, true);
     d->rightSidebar->setObjectName("CameraGui Sidebar Right");
@@ -684,12 +684,7 @@ void CameraUI::readSettings()
 
     d->view->setThumbnailSize(group.readEntry("ThumbnailSize", (int)ThumbnailSize::Large));
 
-    if (group.hasKey("Splitter State")) 
-    {
-        QByteArray state;
-        state = group.readEntry("Splitter State", state);
-        d->splitter->restoreState(QByteArray::fromBase64(state));
-    }
+    d->splitter->restoreState(group);
 
     d->dateTimeEdit->setEnabled(d->fixDateTimeCheck->isChecked());
     d->losslessFormat->setEnabled(convertLosslessJpegFiles());
@@ -713,8 +708,8 @@ void CameraUI::saveSettings()
     group.writeEntry("ConvertJpeg", convertLosslessJpegFiles());
     group.writeEntry("LossLessFormat", d->losslessFormat->currentIndex());
     group.writeEntry("ThumbnailSize", d->view->thumbnailSize());
-    group.writeEntry("Splitter State", d->splitter->saveState().toBase64());
     group.writeEntry("FolderDateFormat", d->folderDateFormat->currentIndex());
+    d->splitter->saveState(group);
     config->sync();
 }
 

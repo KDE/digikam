@@ -82,7 +82,7 @@ public:
     bool                  hasImageInfoOwnership;
 };
 
-ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, QSplitter *splitter,
+ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, SidebarSplitter *splitter,
                                                    KMultiTabBarPosition side, bool mimimizedDefault)
                         : ImagePropertiesSideBar(parent, splitter, side, mimimizedDefault)
 {

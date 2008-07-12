@@ -172,12 +172,7 @@ void LightTableWindow::readSettings()
         d->vSplitter->restoreState(QByteArray::fromBase64(state));
     }
 
-    if (group.hasKey("Horizontal Splitter State")) 
-    {
-        QByteArray state;
-        state = group.readEntry("Horizontal Splitter State", state);
-        d->hSplitter->restoreState(QByteArray::fromBase64(state));
-    }
+    d->hSplitter->restoreState(group, "Horizontal Splitter State");
 
     d->navigateByPairAction->setChecked(group.readEntry("Navigate By Pair", false));
     slotToggleNavigateByPair();
@@ -188,7 +183,7 @@ void LightTableWindow::writeSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("LightTable Settings");
     group.writeEntry("Vertical Splitter State", d->vSplitter->saveState().toBase64());
-    group.writeEntry("Horizontal Splitter State", d->hSplitter->saveState().toBase64());
+    d->hSplitter->saveState(group, "Horizontal Splitter State");
     group.writeEntry("Navigate By Pair", d->navigateByPairAction->isChecked());
     config->sync();
 }
@@ -222,7 +217,7 @@ void LightTableWindow::closeEvent(QCloseEvent* e)
 void LightTableWindow::setupUserArea()
 {
     QWidget* mainW    = new QWidget(this);
-    d->hSplitter      = new QSplitter(Qt::Horizontal, mainW);
+    d->hSplitter      = new SidebarSplitter(Qt::Horizontal, mainW);
     QHBoxLayout *hlay = new QHBoxLayout(mainW);
     d->leftSidebar    = new ImagePropertiesSideBarDB(mainW, d->hSplitter, KMultiTabBar::Left, true);
 

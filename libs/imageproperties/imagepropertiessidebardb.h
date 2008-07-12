@@ -36,7 +36,6 @@
 #include "imagepropertiessidebar.h"
 #include "digikam_export.h"
 
-class QSplitter;
 class QWidget;
 class QRect;
 
@@ -44,6 +43,7 @@ namespace Digikam
 {
 
 class DImg;
+class SidebarSplitter;
 class ImageInfo;
 class ImageChangeset;
 class ImagePropertiesSideBarDBPriv;
@@ -54,7 +54,7 @@ class DIGIKAM_EXPORT ImagePropertiesSideBarDB : public ImagePropertiesSideBar
 
 public:
 
-    ImagePropertiesSideBarDB(QWidget* parent, QSplitter *splitter,
+    ImagePropertiesSideBarDB(QWidget* parent, SidebarSplitter *splitter,
                              KMultiTabBarPosition side=KMultiTabBar::Left,
                              bool mimimizedDefault=false);
 
