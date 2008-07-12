@@ -28,6 +28,7 @@
 // Qt includes.
 
 #include <QPixmap>
+#include <QSplitter>
 
 // KDE includes.
 
@@ -43,6 +44,8 @@ namespace Digikam
 {
 
 class SidebarPriv;
+class SidebarSplitterPriv;
+class SidebarSplitter;
 
 /**
  * This class handles a sidebar view
@@ -63,7 +66,7 @@ public:
                    Use KMultiTabBar::Left or KMultiTabBar::Right.
      * @param minimizedDefault hide the sidebar when the program is started the first time.
      */
-    Sidebar(QWidget *parent, QSplitter *sp, KMultiTabBarPosition side=KMultiTabBar::Left,
+    Sidebar(QWidget *parent, SidebarSplitter *sp, KMultiTabBarPosition side=KMultiTabBar::Left,
             bool mimimizedDefault=false);
 
     virtual ~Sidebar();
@@ -152,7 +155,54 @@ signals:
 
 private:
 
+    friend class SidebarSplitter;
     SidebarPriv* d;
+};
+
+class DIGIKAM_EXPORT SidebarSplitter : public QSplitter
+{
+    Q_OBJECT
+
+public:
+
+    /**
+     *  This is a QSplitter with better support for storing its state
+     *  in config files, especially if Sidebars are contained in the splitter.
+     */
+    SidebarSplitter(QWidget *parent = 0);
+    SidebarSplitter(Qt::Orientation orientation, QWidget *parent = 0);
+
+    ~SidebarSplitter();
+
+    /**
+     * Saves the splitter state to group, handling minimized sidebars correctly.
+     * If key is 0 (default), the config key will be "SplitterState".
+     */
+    void saveState(KConfigGroup &group, const char *key = 0);
+    /**
+     * Restores the splitter state from group, handling minimized sidebars correctly.
+     * If key is 0 (default), the config key will be "SplitterState".
+     */
+    void restoreState(KConfigGroup &group, const char *key = 0);
+
+    /**
+     * Returns the value of sizes() that corresponds to the given Sidebar
+     */
+    int size(Sidebar *bar) const;
+    /**
+     * Sets the splitter size for the given sidebar to size.
+     * Special value -1: Sets the minimum size hint of the widget.
+     */
+    void setSize(Sidebar *bar, int size);
+
+private slots:
+
+    void slotSplitterMoved(int pos, int index);
+
+private:
+
+    friend class Sidebar;
+    SidebarSplitterPriv *d;
 };
 
 }  // namespace Digikam

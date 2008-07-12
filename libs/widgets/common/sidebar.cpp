@@ -64,6 +64,7 @@ public:
         dragSwitchId     = -1;
         stack            = 0;
         dragSwitchTimer  = 0;
+        restoreSize      = 0;
     }
 
     bool            minimizedDefault;
@@ -74,17 +75,31 @@ public:
     int             activeTab;
     int             dragSwitchId;
 
+    int             restoreSize;
+
     QStackedWidget *stack;
-    QTimer         *dragSwitchTimer; 
+    SidebarSplitter*splitter;
+    QTimer         *dragSwitchTimer;
 };
 
-Sidebar::Sidebar(QWidget *parent, QSplitter *sp, KMultiTabBarPosition side, bool minimizedDefault)
+class SidebarSplitterPriv
+{
+public:
+
+    QList<Sidebar*> sidebars;
+};
+
+
+Sidebar::Sidebar(QWidget *parent, SidebarSplitter *sp, KMultiTabBarPosition side, bool minimizedDefault)
        : KMultiTabBar(side, parent)
 {
     d = new SidebarPriv;
     d->minimizedDefault = minimizedDefault;
     d->stack            = new QStackedWidget(sp);
+    d->splitter         = sp;
     d->dragSwitchTimer  = new QTimer(this);
+
+    d->splitter->d->sidebars << this;
 
     connect(d->dragSwitchTimer, SIGNAL(timeout()),
             this, SLOT(slotDragSwitchTimer()));
@@ -95,6 +110,8 @@ Sidebar::Sidebar(QWidget *parent, QSplitter *sp, KMultiTabBarPosition side, bool
 Sidebar::~Sidebar()
 {
     saveViewState();
+    if (d->splitter)
+        d->splitter->d->sidebars.removeAll(this);
     delete d;
 }
 
@@ -104,6 +121,7 @@ void Sidebar::loadViewState()
     KConfigGroup group        = config->group(QString("%1").arg(objectName()));
     int tab                   = group.readEntry("ActiveTab", -1);
     bool minimized            = group.readEntry("Minimized", d->minimizedDefault);
+    d->restoreSize            = group.readEntry("RestoreSize", -1);
 
     if (minimized)
     {
@@ -125,6 +143,7 @@ void Sidebar::saveViewState()
     KConfigGroup group        = config->group(QString("%1").arg(objectName()));
     group.writeEntry("ActiveTab", d->activeTab);
     group.writeEntry("Minimized", d->minimized);
+    group.writeEntry("RestoreSize", d->minimized ? d->restoreSize : -1);
     config->sync();
 }
 
@@ -226,6 +245,12 @@ QWidget* Sidebar::getActiveTab()
 void Sidebar::shrink()
 {
     d->minimized = true;
+
+    // store the size that we had. We may later need it when we restore to visible.
+    int currentSize = d->splitter->size(this);
+    if (currentSize)
+        d->restoreSize = currentSize;
+
     d->stack->hide();
     emit signalViewChanged();
 }
@@ -234,6 +259,15 @@ void Sidebar::expand()
 {
     d->minimized = false;
     d->stack->show();
+
+    // Do not expand to size 0 (only splitter handle visible)
+    // but either to previous size, or the minimum size hint
+    if (d->splitter->size(this) == 0)
+    {
+        setTab(d->activeTab, true);
+        d->splitter->setSize(this, d->restoreSize ? d->restoreSize : -1);
+    }
+
     emit signalViewChanged();
 }
 
@@ -294,5 +328,137 @@ void Sidebar::slotDragSwitchTimer()
 {
     clicked(d->dragSwitchId);
 }
+
+
+// ----------------------------------------------
+
+SidebarSplitter::SidebarSplitter(QWidget *parent)
+    : QSplitter(parent)
+{
+    d = new SidebarSplitterPriv;
+
+    connect(this, SIGNAL(splitterMoved(int,int)),
+            this, SLOT(slotSplitterMoved(int,int)));
+}
+
+SidebarSplitter::SidebarSplitter(Qt::Orientation orientation, QWidget *parent)
+    : QSplitter(orientation, parent)
+{
+    d = new SidebarSplitterPriv;
+
+    connect(this, SIGNAL(splitterMoved(int,int)),
+            this, SLOT(slotSplitterMoved(int,int)));
+}
+
+SidebarSplitter::~SidebarSplitter()
+{
+    // retreat cautiously from sidebars that live longer
+    foreach(Sidebar *sidebar, d->sidebars)
+        sidebar->d->splitter = 0;
+
+    delete d;
+}
+
+void SidebarSplitter::restoreState(KConfigGroup &group, const char *key)
+{
+    if (!key)
+        key = "SplitterState";
+
+    if (group.hasKey(key))
+    {
+        QByteArray state;
+        state = group.readEntry(key, state);
+        QSplitter::restoreState(QByteArray::fromBase64(state));
+    }
+}
+
+void SidebarSplitter::saveState(KConfigGroup &group, const char *key)
+{
+    if (!key)
+        key = "SplitterState";
+    group.writeEntry(key, QSplitter::saveState().toBase64());
+}
+
+int SidebarSplitter::size(Sidebar *bar) const
+{
+    int index = indexOf(bar->d->stack);
+    if (index == -1)
+        return -1;
+
+    return sizes()[index];
+}
+
+void SidebarSplitter::setSize(Sidebar *bar, int size)
+{
+    int index = indexOf(bar->d->stack);
+    if (index == -1)
+        return;
+
+    // special case: Use minimum size hint
+    if (size == -1)
+    {
+        if (orientation() == Qt::Horizontal)
+            size = bar->d->stack->minimumSizeHint().width();
+        if (orientation() == Qt::Vertical)
+            size = bar->d->stack->minimumSizeHint().height();
+    }
+
+    QList<int> sizeList = sizes();
+    sizeList[index] = size;
+    setSizes(sizeList);
+}
+
+void SidebarSplitter::slotSplitterMoved(int pos, int index)
+{
+    Q_UNUSED(pos);
+
+    // When the user moves the splitter so that size is 0 (collapsed),
+    // it may be difficult to restore the sidebar as clicking the buttons
+    // has no effect (only hides/shows the splitter handle)
+    // So we want to transform this size-0-sidebar
+    // to a sidebar that is shrunk (d->stack hidden)
+    // and can be restored by clicking a tab bar button
+
+    // We need to look at the widget between index-1 and index
+    // and the one between index and index+1
+
+    QList<int> sizeList = sizes();
+    // Is there a sidebar with size 0 before index
+    if (index > 0 && sizeList[index-1] == 0)
+    {
+        QWidget *w = widget(index-1);
+        foreach(Sidebar *sidebar, d->sidebars)
+        {
+            if (w == sidebar->d->stack)
+            {
+                if (!sidebar->d->minimized)
+                {
+                    sidebar->setTab(sidebar->d->activeTab, false);
+                    sidebar->shrink();
+                }
+                break;
+            }
+        }
+    }
+
+    // Is there a sidebar with size 0 after index?
+    if (sizeList[index] == 0)
+    {
+        QWidget *w = widget(index);
+        foreach(Sidebar *sidebar, d->sidebars)
+        {
+            if (w == sidebar->d->stack)
+            {
+                if (!sidebar->d->minimized)
+                {
+                    sidebar->setTab(sidebar->d->activeTab, false);
+                    sidebar->shrink();
+                }
+                break;
+            }
+        }
+    }
+}
+
 
 }  // namespace Digikam
