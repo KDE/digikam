@@ -1,5 +1,175 @@
-0.9.4-rc2 2008-07-03
+0.9.4 2008-07-13
 -------------------------------------------------------------------------
+2008-07-11 14:19  cgilles
+
+    * NEWS: update
+
+2008-07-10 14:31  cgilles
+
+    * NEWS: update
+
+2008-07-10 14:27  cgilles
+
+    * libs/greycstoration/CImg.h, libs/greycstoration/greycstoration.h,
+      libs/greycstoration/greycstorationiface.cpp,
+      libs/greycstoration/greycstorationiface.h: digiKam from KDE3
+      branch: update internal CImg library to 1.2.9
+
+2008-07-09 20:52  aclemens
+
+    * imageplugins/noisereduction/imageeffect_noisereduction.cpp: added
+      "Try" button to this filter dialog to avoid filter rendering on
+      every settings change or zoom action.
+
+2008-07-09 19:29  aclemens
+
+    * imageplugins/coreplugin/imageeffect_blur.cpp: added "Try" button
+      to this filter dialog to avoid filter rendering on every settings
+      change or zoom action.
+
+2008-07-09 18:22  aclemens
+
+    * NEWS: update
+
+2008-07-09 18:04  aclemens
+
+    * imageplugins/coreplugin/sharpnesseditor/imageeffect_sharpen.cpp:
+      added "Try" button to this filter dialog to avoid filter
+      rendering on every settings change or zoom action.
+
+2008-07-09 17:18  aclemens
+
+    * libs/dialogs/ctrlpaneldlg.cpp: abort button should be disabled by
+      default
+
+2008-07-09 15:47  aclemens
+
+    * digikam/albumlister.cpp: When using a quick filter on an album in
+      recursive view mode, the indicator lamp sometimes shows a wrong
+      status. Filtering is now done after the whole recursive album
+      view is generated, so that the lamp can set its state correctly.
+      
+      CCBUGS:161369
+
+2008-07-09 10:25  aclemens
+
+    * showfoto/showfoto.cpp: cache files were not removed when closing
+      showFoto because the closeEvent from ImageEditorWindow was not
+      processed at all. This was fixed by putting all essential content
+      of closeEvent() into the queryClose() method of showFoto.
+
+2008-07-08 13:41  aclemens
+
+    * NEWS, digikam/folderview.cpp, digikam/folderview.h: Single click
+      action on the folder icon or name will expand / collapse the
+      underlying tree.
+      
+      BUGS:126871
+
+2008-07-08 13:13  cgilles
+
+    * libs/dimg/loaders/pngloader.cpp: fix broken compilation with gcc
+      4.3.1
+
+2008-07-08 10:43  cgilles
+
+    * NEWS: update
+
+2008-07-08 10:37  cgilles
+
+    * digikam/folderview.cpp: digiKam from KDE3 branch : toggle on/of
+      tag check box item using middle mouse button.
+      BUGS: 130906
+
+2008-07-08 10:21  cgilles
+
+    * digikam/folderview.h: set this method as public
+
+2008-07-08 10:20  cgilles
+
+    * libs/imageproperties/talbumlistview.cpp,
+      libs/imageproperties/talbumlistview.h: Do not re-implement this
+      method here. It already exist in parent class
+
+2008-07-08 08:59  cgilles
+
+    * project/project.kdevelop: update
+
+2008-07-07 12:57  cgilles
+
+    * NEWS: update
+
+2008-07-07 06:58  cgilles
+
+    * TODO: update
+
+2008-07-06 17:05  aclemens
+
+    * NEWS: fixed some typos
+
+2008-07-06 09:20  aclemens
+
+    * NEWS: update
+
+2008-07-03 20:37  cgilles
+
+    * configure.in.bot: more debug message
+
+2008-07-03 20:25  cgilles
+
+    * README, configure.in.bot, configure.in.in, digikam/Makefile.am,
+      kioslave/Makefile.am, libs/Makefile.am: digiKam from KDE3 branch
+    : add rule to compile and link with an external libsqlite3 shared
+      lib instead embeded version include in digiKam
+      Note : embeded version is always compiled by default if nothing
+      is set with .configure script. Packagers, please take a care.
+      BUGS: 160966
+
+2008-07-03 17:09  aclemens
+
+    * NEWS: update
+
+2008-07-03 17:06  aclemens
+
+    * digikam/albumiconview.cpp,
+      utilities/lighttable/lighttablewindow.cpp,
+      utilities/lighttable/lighttablewindow.h: fixed drag & drop
+      behavior of lighttable.
+      
+      1. drop image(s) in left pane:
+      the image will be displayed in the left pane
+      
+      2. drop image(s) in right pane:
+      the image will be displayed in the right pane
+      
+      3. fill light table (F6):
+      the first image of the added images will be displayed in the
+      left, the
+      second in the right pane. All the others are added to the
+      thumbbar.
+      
+      4. append images to light table (CTRL+F6):
+      Images are only appended to thumbbar, not displayed
+      automatically.
+      
+      5. drop images in thumbbar:
+      Images are only appended to thumbbar, not displayed
+      automatically.
+      
+      CCBUGS:160617
+
+2008-07-03 16:24  cgilles
+
+    * NEWS: update
+
+2008-07-03 10:36  aclemens
+
+    * ChangeLog: update
+
+2008-07-03 10:35  aclemens
+
+    * ChangeLog: update
+
 2008-07-03 10:13  aclemens
 
     * NEWS, digikam.lsm, digikam/version.h, release_digikam.rb,
