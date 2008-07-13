@@ -325,7 +325,7 @@ void ImageEffect_ColorFX::slotEffectTypeChanged(int type)
 
        case Vivid:
           m_levelInput->setRange(0, 50, 1, true);
-          m_levelInput->setValue(10);
+          m_levelInput->setValue(5);
           m_iterationInput->setEnabled(false);
           m_iterationLabel->setEnabled(false);
           break;
