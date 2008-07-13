@@ -195,10 +195,14 @@ public:
     CollectionImageChangeset &operator<<(const QDBusArgument &argument);
     const CollectionImageChangeset &operator>>(QDBusArgument &argument) const;
 
+    /** Specification of this changeset.
+     *  All special cases where the returned list may be empty are noted above.
+     *  The lists are valid unless such a case is explicitly mentioned.
+     */
     QList<qlonglong> ids() const;
     bool containsImage(qlonglong id) const;
     QList<int> albums() const;
-    bool containsAlbum(int id);
+    bool containsAlbum(int id) const;
     Operation operation() const;
 
 private:

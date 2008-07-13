@@ -222,7 +222,7 @@ QList<int> CollectionImageChangeset::albums() const
     return m_albums;
 }
 
-bool CollectionImageChangeset::containsAlbum(int id)
+bool CollectionImageChangeset::containsAlbum(int id) const
 {
     return m_albums.contains(id);
 }
