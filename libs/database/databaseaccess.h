@@ -128,7 +128,7 @@ public:
     ImageInfoCache *imageInfoCache() const;
 
     /**
-      * Return the DatabaseWatch. This object is not for public use outside libs/database/
+      * Return the DatabaseWatch.
       */
     static DatabaseWatch *databaseWatch();
 

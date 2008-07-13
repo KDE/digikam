@@ -47,6 +47,8 @@ class DIGIKAM_EXPORT DatabaseWatch : public QObject
 
 signals:
 
+    /** Retrieve the DatabaseWatch object from DatabaseAccess::databaseWatch(). */
+
     /**
      * Notifies of changes in the database.
      * Connect to the set of signals that you are interested in.
