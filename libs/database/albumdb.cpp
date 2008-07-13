@@ -2714,6 +2714,7 @@ void AlbumDB::moveItem(int srcAlbumID, const QString& srcName,
     d->db->execSql( QString("UPDATE Images SET album=?, name=? "
                             "WHERE id=?;"),
                     dstAlbumID, dstName, imageId );
+    d->db->recordChangeset(CollectionImageChangeset(imageId, srcAlbumID, CollectionImageChangeset::Moved));
     d->db->recordChangeset(CollectionImageChangeset(imageId, srcAlbumID, CollectionImageChangeset::Removed));
     d->db->recordChangeset(CollectionImageChangeset(imageId, dstAlbumID, CollectionImageChangeset::Added));
 }
@@ -2747,6 +2748,7 @@ int AlbumDB::copyItem(int srcAlbumID, const QString& srcName,
         return -1;
 
     d->db->recordChangeset(ImageChangeset(id.toLongLong(), DatabaseFields::ImagesAll));
+    d->db->recordChangeset(CollectionImageChangeset(id.toLongLong(), srcAlbumID, CollectionImageChangeset::Copied));
     d->db->recordChangeset(CollectionImageChangeset(id.toLongLong(), dstAlbumID, CollectionImageChangeset::Added));
 
     // copy all other tables

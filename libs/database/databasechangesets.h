@@ -129,24 +129,40 @@ public:
     enum Operation
     {
         Unknown,
+
+        /** "Added" indicates that images have been added to albums. */
         Added,
+
         /** "Removed" indicates that an image has been removed from the given album,
          *  and has possibly set a status of Removed and a null Album (though this can
          *  already have changed to valid values), but the image-specific tables have not been removed. */
         Removed,
+
         /** "RemovedAll" indicates that for all entries in the specified album, the "Removed" operation
          *  has been carried out. This is equivalent to a "Removed" changesets with all image ids in the
          *  list, but for RemovedAll, the list may not be explicitly given (may be empty). */
         RemovedAll,
+
         /** "Deleted" indicates that the image-specific tables have been removed from the database.
          *  While "Removed" means all data is still there, though possibly not accessible from an album,
          *  this means all data has been irreversibly deleted. */
         Deleted,
+
         /** Special combination: Images which has the "Removed" status have now been "Delete"d.
          *  A changeset with Removed or RemovedAll is guaranteed to have been sent anytime before.
          *  Image ids nor albums ids may or may be not available in any combination. */
         RemovedDeleted,
+
+        /** Images have been moved. This is extra information; a Removed and then an Added changeset
+         *  are guaranteed to be sent subsequently.
+         *  Album is the source album.
+         */
         Moved,
+
+        /** Images have been copied. This is extra information; an Added changeset
+         *  is guaranteed to be sent subsequently.
+         *  Album is the source album.
+         */
         Copied
     };
 
