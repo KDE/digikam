@@ -54,6 +54,8 @@ extern "C"
 // Local includes.
 
 #include "ddebug.h"
+#include "databaseaccess.h"
+#include "databasewatch.h"
 #include "imagelister.h"
 #include "mimefilter.h"
 #include "album.h"
@@ -74,6 +76,7 @@ public:
         untaggedFilter = false;
         ratingFilter   = 0;
         filterTimer    = 0;
+        refreshTimer   = 0;
         job            = 0;
         currAlbum      = 0;
         mimeTypeFilter = MimeFilter::AllFiles;
@@ -98,10 +101,13 @@ public:
     QList<int>                      tagFilter;
 
     QTimer                         *filterTimer;
+    QTimer                         *refreshTimer;
 
     KIO::TransferJob               *job;
 
     ImageInfoList                   itemList;
+
+    QSet<qlonglong>                 itemListSet;
 
     Album                          *currAlbum;
 
@@ -133,9 +139,17 @@ AlbumLister::AlbumLister()
 
     d = new AlbumListerPriv;
     d->filterTimer = new QTimer(this);
+    d->refreshTimer = new QTimer(this);
+    d->refreshTimer->setSingleShot(true);
 
     connect(d->filterTimer, SIGNAL(timeout()),
             this, SLOT(slotFilterItems()));
+
+    connect(d->refreshTimer, SIGNAL(timeout()),
+            this, SLOT(slotNextRefresh()));
+
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(const CollectionImageChangeset &)),
+            this, SLOT(slotCollectionImageChange(const CollectionImageChangeset &)));
 }
 
 AlbumLister::~AlbumLister()
@@ -150,6 +164,7 @@ void AlbumLister::openAlbum(Album *album)
     d->filterTimer->stop();
     emit signalClear();
     d->itemList.clear();
+    d->itemListSet.clear();
     d->itemMap.clear();
 
     if (d->job)
@@ -184,6 +199,16 @@ void AlbumLister::refresh()
     }
 
     startListJob(d->currAlbum->databaseUrl());
+}
+
+void AlbumLister::slotNextRefresh()
+{
+    // Refresh, unless job is running, then postpone restart until job is finished
+    // Rationale: Let the job run, dont stop it possibly several times
+    if (d->job)
+        d->refreshTimer->start(50);
+    else
+        refresh();
 }
 
 void AlbumLister::startListJob(const KUrl &url)
@@ -449,6 +474,7 @@ void AlbumLister::stop()
     emit signalClear();
 
     d->itemList.clear();
+    d->itemListSet.clear();
     d->itemMap.clear();
 
     if (d->job)
@@ -535,6 +561,7 @@ void AlbumLister::slotResult(KJob* job)
         emit signalDeleteItem(it.value());
         emit signalDeleteFilteredItem(it.value());
         d->itemList.removeAll(it.value());
+        d->itemListSet.remove(it.key());
     }
 
     d->itemMap.clear();
@@ -570,6 +597,7 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
                 emit signalDeleteItem(info);
                 emit signalDeleteFilteredItem(info);
                 d->itemList.removeAll(info);
+                d->itemListSet.remove(info.id());
             }
             else
             {
@@ -588,6 +616,7 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
 
         newItemsList.append(info);
         d->itemList.append(info);
+        d->itemListSet.insert(info.id());
     }
 
     if (!newFilteredItemsList.isEmpty())
@@ -597,6 +626,51 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
         emit signalNewItems(newItemsList);
 
     slotFilterItems();
+}
+
+void AlbumLister::slotCollectionImageChange(const CollectionImageChangeset &changeset)
+{
+    bool doRefresh = false;
+
+    switch (changeset.operation())
+    {
+        case CollectionImageChangeset::Added:
+            switch(d->currAlbum->type())
+            {
+                case Album::PHYSICAL:
+                    // that's easy: try if our album is affected
+                    doRefresh = changeset.containsAlbum(d->currAlbum->id());
+                    break;
+                default:
+                    // we cannot easily know if we are affected
+                    doRefresh = true;
+                    break;
+            }
+
+        case CollectionImageChangeset::Removed:
+        case CollectionImageChangeset::RemovedAll:
+            // is one of our images affected?
+            foreach(qlonglong id, changeset.ids())
+            {
+                // if one matching image id is found, trigger a refresh
+                if (d->itemListSet.contains(id))
+                {
+                    doRefresh = true;
+                    break;
+                }
+            }
+            break;
+
+        default:
+            break;
+    }
+
+    if (doRefresh)
+    {
+        // use timer: there may be several signals in a row
+        if (!d->refreshTimer->isActive())
+            d->refreshTimer->start(100);
+    }
 }
 
 }  // namespace Digikam

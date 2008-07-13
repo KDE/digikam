@@ -49,6 +49,7 @@ class KJob;
 namespace Digikam
 {
 
+class CollectionImageChangeset;
 class Album;
 class AlbumListerPriv;
 
@@ -143,6 +144,9 @@ private slots:
 
     void slotResult(KJob* job);
     void slotData(KIO::Job* job, const QByteArray& data);
+
+    void slotNextRefresh();
+    void slotCollectionImageChange(const CollectionImageChangeset &changeset);
 
 private:
 
