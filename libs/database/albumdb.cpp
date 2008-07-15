@@ -1376,9 +1376,10 @@ QList<qlonglong> AlbumDB::getDirtyOrMissingFingerprints()
 
     d->db->execSql( QString("SELECT id FROM Images "
                             "LEFT OUTER JOIN ImageHaarMatrix ON Images.id=ImageHaarMatrix.imageid "
-                            " WHERE ImageHaarMatrix.imageid IS NULL "
-                            "  OR Images.modificationDate != ImageHaarMatrix.modificationDate "
-                            "  OR Images.uniqueHash != ImageHaarMatrix.uniqueHash; "),
+                            " WHERE Images.status=1 AND "
+                            " ( ImageHaarMatrix.imageid IS NULL "
+                            "   OR Images.modificationDate != ImageHaarMatrix.modificationDate "
+                            "   OR Images.uniqueHash != ImageHaarMatrix.uniqueHash ); "),
                     &values );
 
     for (QList<QVariant>::iterator it = values.begin(); it != values.end(); ++it)
@@ -1396,9 +1397,10 @@ QStringList AlbumDB::getDirtyOrMissingFingerprintURLs()
     d->db->execSql( QString("SELECT Albums.albumRoot, Albums.relativePath, Images.name FROM Images "
                             "LEFT OUTER JOIN ImageHaarMatrix ON Images.id=ImageHaarMatrix.imageid "
                             "LEFT OUTER JOIN Albums ON Albums.id=Images.album "
-                            " WHERE ImageHaarMatrix.imageid IS NULL "
-                            "  OR Images.modificationDate != ImageHaarMatrix.modificationDate "
-                            "  OR Images.uniqueHash != ImageHaarMatrix.uniqueHash; "),
+                            " WHERE Images.status=1 AND "
+                            " ( ImageHaarMatrix.imageid IS NULL "
+                            "   OR Images.modificationDate != ImageHaarMatrix.modificationDate "
+                            "   OR Images.uniqueHash != ImageHaarMatrix.uniqueHash ); "),
                     &values );
 
     QStringList urls;
@@ -2450,7 +2452,7 @@ QStringList AlbumDB::getItemURLsInTag(int tagID, bool recursive)
     d->db->execSql( QString("SELECT Albums.albumRoot, Albums.relativePath, Images.name "
                             "FROM Images "
                             "  LEFT OUTER JOIN Albums ON Albums.id=Images.album "
-                            "WHERE Images.id IN (%1);")
+                            "WHERE Images.status=1 AND Images.id IN (%1);")
                     .arg(imagesIdClause), boundValues, &values );
 
     QStringList urls;
@@ -2479,11 +2481,15 @@ QList<qlonglong> AlbumDB::getItemIDsInTag(int tagID, bool recursive)
 
     if (recursive)
         d->db->execSql( QString("SELECT imageid FROM ImageTags "
-                                " WHERE tagid=? "
-                                " OR tagid IN (SELECT id FROM TagsTree WHERE pid=?);"),
+                                " LEFT JOIN Images ON ImageTags.imageid=Images.id "
+                                " WHERE Images.status=1 AND "
+                                " ( tagid=? "
+                                "   OR tagid IN (SELECT id FROM TagsTree WHERE pid=?) );"),
                         tagID, tagID, &values );
     else
-        d->db->execSql( QString("SELECT imageid FROM ImageTags WHERE tagid=?;"),
+        d->db->execSql( QString("SELECT imageid FROM ImageTags "
+                                " LEFT JOIN Images ON ImageTags.imageid=Images.id "
+                                " WHERE Images.status=1 AND tagid=?;"),
                  tagID, &values );
 
     for (QList<QVariant>::iterator it = values.begin(); it != values.end(); ++it)
