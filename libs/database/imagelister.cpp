@@ -171,7 +171,7 @@ void ImageLister::listAlbum(ImageListerReceiver *receiver,
                     "       ImageInformation.width, ImageInformation.height "
                     " FROM Images "
                     "       LEFT OUTER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
-                    " WHERE ";
+                    " WHERE Images.status=1 AND ";
 
     if (m_recursive)
     {
@@ -236,16 +236,20 @@ void ImageLister::listTag(ImageListerReceiver *receiver, int tagId)
                              " FROM Images "
                              "       LEFT OUTER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
                              "       LEFT OUTER JOIN Albums ON Albums.id=Images.album "
-                             " WHERE Images.id IN "
+                             " WHERE Images.status=1 AND Images.id IN "
                              "       (SELECT imageid FROM ImageTags "
                              "        WHERE tagid=? ");
 
     if (m_recursive)
+    {
         query += "OR tagid IN (SELECT id FROM TagsTree WHERE pid=?)); ";
+        DatabaseAccess().backend()->execSql( query, tagId, tagId, &values );
+    }
     else
+    {
         query += "); ";
-
-    DatabaseAccess().backend()->execSql( query, tagId, tagId, &values );
+        DatabaseAccess().backend()->execSql( query, tagId, &values );
+    }
 
     int width, height;
     for (QList<QVariant>::iterator it = values.begin(); it != values.end();)
@@ -298,7 +302,8 @@ void ImageLister::listDateRange(ImageListerReceiver *receiver, const QDate &star
                                           " FROM Images "
                                           "       LEFT OUTER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
                                           "       LEFT OUTER JOIN Albums ON Albums.id=Images.album "
-                                          " WHERE ImageInformation.creationDate < ? "
+                                          " WHERE Images.status=1 "
+                                          "   AND ImageInformation.creationDate < ? "
                                           "   AND ImageInformation.creationDate >= ? "
                                           " ORDER BY Albums.id;"),
                                   QDateTime(endDate).toString(Qt::ISODate),
@@ -367,7 +372,7 @@ void ImageLister::listSearch(ImageListerReceiver *receiver,
                "       LEFT OUTER JOIN ImageMetadata    ON Images.id=ImageMetadata.imageid "
                "       LEFT OUTER JOIN ImagePositions   ON Images.id=ImagePositions.imageid "
                "       LEFT OUTER JOIN Albums           ON Albums.id=Images.album "
-               "WHERE ";
+               "WHERE Images.status=1 AND ";
 
     // query body
     ImageQueryBuilder builder;
@@ -525,7 +530,7 @@ void ImageLister::listFromIdList(ImageListerReceiver *receiver, QList<qlonglong>
                              " FROM Images "
                              "       LEFT OUTER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
                              "       LEFT OUTER JOIN Albums ON Albums.id=Images.album "
-                             " WHERE Images.id = ?;"
+                             " WHERE Images.status=1 AND Images.id = ?;"
                                                                 ));
 
         foreach(qlonglong id, imageIds)
