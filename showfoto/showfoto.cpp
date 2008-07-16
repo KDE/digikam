@@ -652,7 +652,7 @@ void ShowFoto::toggleGUI2FullScreen()
         d->rightSidebar->restore();
 
         // If Hide Thumbbar option is checked, restore it.
-        if (!m_showBarAction->isChecked())
+        if (m_showBarAction->isChecked())
             d->thumbBar->show();
     }
     else
