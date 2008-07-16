@@ -9,7 +9,8 @@ General        : New option in Help menu to list all main components/libraries u
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-001 ==>
+001 ==> 166472 : Thumbnail bar gone in image editor when switching back from fullscreen.
+002 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta1 - Release date: 2008-07-07
