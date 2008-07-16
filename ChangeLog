@@ -1,5 +1,28 @@
 0.9.4 2008-07-13
 -------------------------------------------------------------------------
+2008-07-16 14:03  aclemens
+
+    * showfoto/showfoto.cpp: When leaving fullscreen mode, the thumbbar
+      was gone. This happenend because the state of the thumbbar was
+      always toggled.
+      
+      CCBUGS:166472
+
+2008-07-13 14:38  gkulzer
+
+    * imageplugins/colorfx/imageeffect_colorfx.cpp: reduce default from
+      10 to 5, 10 is always a bit too much, whereas 5 is mostly right
+      from my experience.
+
+2008-07-13 13:22  aclemens
+
+    * ChangeLog, NEWS: preparing 0.9.4 release
+
+2008-07-13 12:57  aclemens
+
+    * digikam.lsm, digikam/version.h, release_digikam.rb: preparing
+      0.9.4 release
+      
 2008-07-11 14:19  cgilles
 
     * NEWS: update
