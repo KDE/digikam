@@ -1,5 +1,5 @@
 **********************************************************************************************
-digiKam 0.9.4 - Release date: 2008-07-13
+digiKam 0.9.4 - Release date: 2008-07-16
 
 NEW FEATURES:
 
@@ -17,6 +17,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 006 ==> 126871 : Click on parent folder in tree should generate a reaction.
 007 ==> 162812 : Sharpen slider enhancement refresh previews continuously.
 008 ==> 166274 : Rename files on download from camera.
+009 ==> 166472 : Thumbnail bar gone in image editor when switching back from fullscreen.
 
 **********************************************************************************************
 digiKam 0.9.4-RC2 - Release date: 2008-07-06
