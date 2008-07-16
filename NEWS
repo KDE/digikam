@@ -10,7 +10,10 @@ General        : New option in Help menu to list all main components/libraries u
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 166472 : Thumbnail bar gone in image editor when switching back from fullscreen.
-002 ==> 
+002 ==> 166663 : Tags not showing pictures without "Include Tag Subtree".
+003 ==> 166616 : Filmstrip mode in View.
+004 ==> 165885 : Thumbnails and images are NOT displayed in the main view center pane.
+005 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta1 - Release date: 2008-07-07
