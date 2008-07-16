@@ -18,6 +18,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 007 ==> 162812 : Sharpen slider enhancement refresh previews continuously.
 008 ==> 166274 : Rename files on download from camera.
 009 ==> 166472 : Thumbnail bar gone in image editor when switching back from fullscreen.
+010 ==> 166540 : Showfoto always prints filename.
 
 **********************************************************************************************
 digiKam 0.9.4-RC2 - Release date: 2008-07-06
