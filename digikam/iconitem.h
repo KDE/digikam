@@ -61,7 +61,8 @@ public:
     void  setSelected(bool val, bool cb=true);
     bool  isSelected() const;
 
-    void  repaint(bool force=true);
+    void  repaint();
+    void  update();
 
     IconView* iconView() const;
 

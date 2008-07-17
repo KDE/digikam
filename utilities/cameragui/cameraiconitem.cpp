@@ -322,7 +322,7 @@ void CameraIconViewItem::paintItem(QPainter *p)
 void CameraIconViewItem::setDownloadName(const QString& downloadName)
 {
     d->downloadName = downloadName;
-    repaint();
+    update();
 }
 
 QString CameraIconViewItem::getDownloadName() const
@@ -333,7 +333,7 @@ QString CameraIconViewItem::getDownloadName() const
 void CameraIconViewItem::setDownloaded(int status)
 {
     d->itemInfo->downloaded = status;
-    repaint();
+    update();
 }
 
 void CameraIconViewItem::toggleLock()
@@ -343,7 +343,7 @@ void CameraIconViewItem::toggleLock()
     else 
         d->itemInfo->writePermissions = 0;
 
-    repaint();
+    update();
 }
 
 void CameraIconViewItem::calcRect(const QString& itemName, const QString& downloadName)

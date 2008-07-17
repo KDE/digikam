@@ -237,7 +237,7 @@ void CameraIconView::setThumbnail(const QString& folder, const QString& filename
         return;
 
     item->setThumbnail(image);
-    item->repaint();
+    item->update();
 }
 
 void CameraIconView::ensureItemVisible(CameraIconViewItem *item)
