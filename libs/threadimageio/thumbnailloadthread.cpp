@@ -44,6 +44,19 @@
 namespace Digikam
 {
 
+class ThumbnailResult
+{
+public:
+
+    ThumbnailResult(LoadingDescription description, QImage image)
+    : loadingDescription(description), image(image)
+    {
+    }
+
+    LoadingDescription loadingDescription;
+    QImage             image;
+};
+
 class ThumbnailLoadThreadPriv
 {
 public:
@@ -55,6 +68,7 @@ public:
         highlight     = true;
         sendSurrogate = true;
         creator       = 0;
+        notifiedForResults = false;
     }
 
     ThumbnailCreator *creator;
@@ -63,6 +77,10 @@ public:
     bool highlight;
     bool sendSurrogate;
     QHash<KUrl, LoadingDescription> kdeJobHash;
+
+    bool notifiedForResults;
+    QList<ThumbnailResult> collectedResults;
+    QMutex resultsMutex;
 };
 
 K_GLOBAL_STATIC(ThumbnailLoadThread, defaultIconViewObject)
@@ -128,11 +146,11 @@ void ThumbnailLoadThread::setSendSurrogatePixmap(bool send)
 void ThumbnailLoadThread::setPixmapRequested(bool wantPixmap)
 {
     if (wantPixmap)
-        connect(this, SIGNAL(signalThumbnailLoaded(const LoadingDescription &, const QImage&)),
-                this, SLOT(slotThumbnailLoaded(const LoadingDescription &, const QImage&)));
+        connect(this, SIGNAL(thumbnailsAvailable()),
+                this, SLOT(slotThumbnailsAvailable()));
     else
-        disconnect(this, SIGNAL(signalThumbnailLoaded(const LoadingDescription &, const QImage&)),
-                   this, SLOT(slotThumbnailLoaded(const LoadingDescription &, const QImage&)));
+        disconnect(this, SIGNAL(thumbnailsAvailable()),
+                   this, SLOT(slotThumbnailsAvailable()));
 }
 
 void ThumbnailLoadThread::setHighlightPixmap(bool highlight)
@@ -240,6 +258,42 @@ void ThumbnailLoadThread::load(const LoadingDescription &constDescription, bool 
         ManagedLoadSaveThread::preloadThumbnail(description);
     else
         ManagedLoadSaveThread::loadThumbnail(description);
+}
+
+// virtual method overridden from LoadSaveNotifier, implemented first by LoadSaveThread
+// called by ThumbnailTask from working thread
+void ThumbnailLoadThread::thumbnailLoaded(const LoadingDescription &loadingDescription, const QImage& img)
+{
+    // call parent to send signalThumbnailLoaded(LoadingDescription, QImage) - signal is part of public API
+    ManagedLoadSaveThread::thumbnailLoaded(loadingDescription, img);
+
+    // Store result in our list and fire one signal
+    // This means there can be several results per pixmap,
+    // to speed up cases where inter-thread communication is the limiting factor
+    QMutexLocker lock(&d->resultsMutex);
+    d->collectedResults << ThumbnailResult(loadingDescription, img);
+    // only sent signal when flag indicates there is no signal on the way currently
+    if (!d->notifiedForResults)
+    {
+        d->notifiedForResults = true;
+        emit thumbnailsAvailable();
+    }
+}
+
+void ThumbnailLoadThread::slotThumbnailsAvailable()
+{
+    // harvest collected results safely into our thread
+    QList<ThumbnailResult> results;
+    {
+        QMutexLocker lock(&d->resultsMutex);
+        results = d->collectedResults;
+        d->collectedResults.clear();
+        // reset flag so that for next result, the signal is sent again
+        d->notifiedForResults = false;
+    }
+
+    foreach(const ThumbnailResult &result, results)
+        slotThumbnailLoaded(result.loadingDescription, result.image);
 }
 
 void ThumbnailLoadThread::slotThumbnailLoaded(const LoadingDescription &description, const QImage& thumb)

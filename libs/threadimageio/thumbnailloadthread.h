@@ -176,14 +176,24 @@ public:
     // For internal use - may only be used from the thread
     ThumbnailCreator *thumbnailCreator() const;
 
+protected:
+
+    virtual void thumbnailLoaded(const LoadingDescription &loadingDescription, const QImage& img);
+
 private:
 
     void load(const LoadingDescription &description, bool preload);
     void loadWithKDE(const LoadingDescription &description);
     QPixmap surrogatePixmap(const LoadingDescription &loadingDescription);
 
+signals:
+
+    // For internal use
+    void thumbnailsAvailable();
+
 private slots:
 
+    void slotThumbnailsAvailable();
     void slotThumbnailLoaded(const LoadingDescription &loadingDescription, const QImage& thumb);
     void gotKDEPreview(const KFileItem &, const QPixmap &pix);
     void failedKDEPreview(const KFileItem &);
