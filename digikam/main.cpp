@@ -84,6 +84,11 @@ int main(int argc, char *argv[])
                           "arnd dot baecker at web dot de",
                           "http://www.digikam.org/?q=blog/133");
 
+    aboutData.addAuthor ( "Andi Clemens",
+                          I18N_NOOP("Developer"),
+                          "andi dot clemens at gmx dot net",
+                          "http://www.digikam.org/?q=blog/135");
+
     aboutData.addAuthor ( ki18n("Francisco J. Cruz"),
                           ki18n("Developer"),
                           "fj dot cruz at supercable dot es",
