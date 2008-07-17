@@ -143,7 +143,8 @@ void BatchThumbsGenerator::slotGotThumbnail(const LoadingDescription& desc, cons
 {
     addedAction(pix, desc.filePath);
     advance(1);
-    d->allPicturesPath.removeFirst();
+    if (!d->allPicturesPath.isEmpty() && d->allPicturesPath.first() == desc.filePath)
+        d->allPicturesPath.removeFirst();
     if (d->allPicturesPath.isEmpty())
         complete();
     else
