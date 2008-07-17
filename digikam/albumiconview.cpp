@@ -1775,6 +1775,17 @@ void AlbumIconView::slotThumbnailLoaded(const LoadingDescription &loadingDescrip
     iconItem->update();
 }
 
+void AlbumIconView::prepareRepaint(const QList<IconItem *> &itemsToRepaint)
+{
+    QStringList filePaths;
+    foreach(IconItem *iconItem, itemsToRepaint)
+    {
+        AlbumIconItem *item = static_cast<AlbumIconItem *>(iconItem);
+        filePaths << item->filePath();
+    }
+    ThumbnailLoadThread::defaultIconViewThread()->findGroup(filePaths);
+}
+
 void AlbumIconView::slotSelectionChanged()
 {
     if (firstSelectedItem())

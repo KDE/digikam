@@ -173,6 +173,8 @@ protected:
     void contentsDragMoveEvent(QDragMoveEvent *e);
     void contentsDropEvent(QDropEvent *e);
 
+    void prepareRepaint(const QList<IconItem *> &itemsToRepaint);
+
     bool acceptToolTip(IconItem *item, const QPoint &mousePos);
 
 private slots:
