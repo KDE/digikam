@@ -1772,7 +1772,7 @@ void AlbumIconView::slotThumbnailLoaded(const LoadingDescription &loadingDescrip
     if (!iconItem)
         return;
 
-    iconItem->repaint();
+    iconItem->update();
 }
 
 void AlbumIconView::slotSelectionChanged()
