@@ -9,7 +9,7 @@
 
 name       = "digikam"
 egmodule   = "graphics"
-version    = "doc-0.9.4"
+version    = "doc-0.9.5-svn"
 docs       = "yes"
 
 # The last one will be taken

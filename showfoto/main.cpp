@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
 
     KAboutData aboutData( "showfoto",
                           I18N_NOOP("showFoto"),
-                          "0.8.0",
+                          "0.9.0-svn",
                           Description.latin1(),
                           KAboutData::License_GPL,
                           I18N_NOOP("(c) 2004-2008, digiKam developers team"),
