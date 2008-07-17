@@ -51,6 +51,7 @@ public:
     ~AlbumIconItem();
 
     ImageInfo imageInfo() const;
+    QString   filePath() const;
 
     QRect thumbnailRect() const;
 

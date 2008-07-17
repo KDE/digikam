@@ -159,6 +159,11 @@ ImageInfo AlbumIconItem::imageInfo() const
     return d->info;
 }
 
+QString AlbumIconItem::filePath() const
+{
+    return d->info.filePath();
+}
+
 int AlbumIconItem::compare(IconItem *item)
 {
     const AlbumSettings *settings = d->view->settings();
