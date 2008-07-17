@@ -762,6 +762,7 @@ void IconView::viewportPaintEvent(QPaintEvent* pe)
     }
 
     // now paint any items which intersect
+    QList<IconItem*> itemsToRepaint;
     for (IconViewPriv::ItemContainer* c = d->firstContainer; c;
          c = c->next)
     {
@@ -771,20 +772,31 @@ void IconView::viewportPaintEvent(QPaintEvent* pe)
             {
                 if (contentsPaintRect.intersects(item->rect()))
                 {
-                    QRect viewportRect = contentsRectToViewport(item->rect());
-                    //painter.save();
-                    painter.translate(viewportRect.x(), viewportRect.y());
-                    item->paintItem(&painter);
-                    painter.translate( - viewportRect.x(), - viewportRect.y());
-                    //painter.restore();
-                    unpaintedRegion -= QRegion(viewportRect);
+                    itemsToRepaint << item;
                 }
             }
         }
     }
 
+    prepareRepaint(itemsToRepaint);
+
+    foreach(IconItem *item, itemsToRepaint)
+    {
+         QRect viewportRect = contentsRectToViewport(item->rect());
+         //painter.save();
+         painter.translate(viewportRect.x(), viewportRect.y());
+         item->paintItem(&painter);
+         painter.translate( - viewportRect.x(), - viewportRect.y());
+         //painter.restore();
+         unpaintedRegion -= QRegion(viewportRect);
+    }
+
     painter.setClipRegion(unpaintedRegion);
     painter.fillRect(pe->rect(), palette().color(QPalette::Base));
+}
+
+void IconView::prepareRepaint(const QList<IconItem *> &)
+{
 }
 
 QRect IconView::contentsRectToViewport(const QRect& r) const
