@@ -87,6 +87,13 @@ public:
     void find(const QString &filePath, int size);
 
     /**
+     * Find a group of thumbnails. The items will be loaded in order and signals will be sent.
+     * Can be used to ensure that thumbnails are loaded in a particular order
+     */
+    void findGroup(const QStringList &filePaths);
+    void findGroup(const QStringList &filePaths, int size);
+
+    /**
      * Preload the thumbnail.
      */
     void preload(const QString &filePath);
@@ -185,6 +192,7 @@ private:
     void load(const LoadingDescription &description, bool preload);
     void loadWithKDE(const LoadingDescription &description);
     QPixmap surrogatePixmap(const LoadingDescription &loadingDescription);
+    bool checkSize(int size);
 
 signals:
 

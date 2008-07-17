@@ -214,6 +214,30 @@ void ThumbnailLoadThread::find(const QString &filePath, int size)
     load(description);
 }
 
+void ThumbnailLoadThread::findGroup(const QStringList &filePaths)
+{
+    findGroup(filePaths, d->size);
+}
+
+void ThumbnailLoadThread::findGroup(const QStringList &filePaths, int size)
+{
+    if (!checkSize(size))
+        return;
+
+    QList<LoadingDescription> descriptions;
+    {
+        LoadingCache *cache = LoadingCache::cache();
+        LoadingCache::CacheLock lock(cache);
+        foreach(const QString filePath, filePaths)
+        {
+            LoadingDescription description(filePath, size, d->exifRotate, LoadingDescription::PreviewParameters::Thumbnail);
+            if (!cache->retrieveThumbnailPixmap(description.cacheKey()))
+                descriptions << description;
+        }
+    }
+    ManagedLoadSaveThread::prependThumbnailGroup(descriptions);
+}
+
 void ThumbnailLoadThread::preload(const QString &filePath)
 {
     preload(filePath, d->size);
@@ -242,22 +266,29 @@ void ThumbnailLoadThread::load(const LoadingDescription &constDescription, bool 
 {
     LoadingDescription description(constDescription);
 
-    if (description.previewParameters.size <= 0)
-    {
-        DError() << "ThumbnailLoadThread::load: No thumbnail size specified. Refusing to load thumbnail." << endl;
+    if (!checkSize(description.previewParameters.size))
         return;
-    }
-    else if (description.previewParameters.size > 256)
-    {
-        DError() << "ThumbnailLoadThread::load: Thumbnail size " << description.previewParameters.size
-                 << " is larger than 256. Refusing to load." << endl;
-        return;
-    }
 
     if (preload)
         ManagedLoadSaveThread::preloadThumbnail(description);
     else
         ManagedLoadSaveThread::loadThumbnail(description);
+}
+
+bool ThumbnailLoadThread::checkSize(int size)
+{
+    if (size <= 0)
+    {
+        DError() << "ThumbnailLoadThread::load: No thumbnail size specified. Refusing to load thumbnail." << endl;
+        return false;
+    }
+    else if (size > 256)
+    {
+        DError() << "ThumbnailLoadThread::load: Thumbnail size " << size
+                 << " is larger than 256. Refusing to load." << endl;
+        return false;
+    }
+    return true;
 }
 
 // virtual method overridden from LoadSaveNotifier, implemented first by LoadSaveThread
