@@ -1,5 +1,5 @@
 **********************************************************************************************
-digiKam 0.9.5 - Release date: 2008-??-??
+digiKam 0.9.5-svn - Release date: 2008-??-??
 
 NEW FEATURES:
 
@@ -7,4 +7,3 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 166867 : Digikam crashes when starting.
 002 ==> 
-
