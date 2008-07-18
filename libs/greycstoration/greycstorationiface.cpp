@@ -22,7 +22,7 @@
  * ============================================================ */
 
 /** Don't use CImg interface (keyboard/mouse interaction) */
-#define cimg_display_type 0
+#define cimg_display 0
 /** Only print debug information on the console */
 #define cimg_debug 1
 
