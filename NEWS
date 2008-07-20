@@ -6,4 +6,5 @@ NEW FEATURES:
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 166867 : Digikam crashes when starting.
-002 ==> 
+002 ==> 167026 : Crash on startup Directory ImageSubIfd0 not valid.
+003 ==>  
