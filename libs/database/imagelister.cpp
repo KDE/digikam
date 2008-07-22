@@ -372,7 +372,7 @@ void ImageLister::listSearch(ImageListerReceiver *receiver,
                "       LEFT OUTER JOIN ImageMetadata    ON Images.id=ImageMetadata.imageid "
                "       LEFT OUTER JOIN ImagePositions   ON Images.id=ImagePositions.imageid "
                "       LEFT OUTER JOIN Albums           ON Albums.id=Images.album "
-               "WHERE Images.status=1 AND ";
+               "WHERE Images.status=1 AND ( ";
 
     // query body
     ImageQueryBuilder builder;
@@ -381,9 +381,9 @@ void ImageLister::listSearch(ImageListerReceiver *receiver,
     DDebug() << "Search query:\n" << sqlQuery;
 
     if (limit > 0)
-        sqlQuery += QString(" LIMIT %1; ").arg(limit);
+        sqlQuery += QString(" ) LIMIT %1; ").arg(limit);
     else
-        sqlQuery += ";";
+        sqlQuery += " );";
 
     bool executionSuccess;
     {
