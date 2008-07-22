@@ -169,6 +169,8 @@ QImage ThumbnailCreator::load(const QString &path)
     if (regenerate)
     {
         bool fromEmbeddedPreview = false;
+        bool failedAtDImg = false;
+        bool failedAtJPEGScaled = false;
 
         // -- Get the image preview --------------------------------
 
@@ -188,12 +190,14 @@ QImage ThumbnailCreator::load(const QString &path)
             {
                 // use jpegutils
                 loadJPEGScaled(qimage, path, d->cachedSize);
+                failedAtJPEGScaled = qimage.isNull();
             }
             else if (ext == QString("PNG")
                      || ext == QString("TIFF")
                      || ext == QString("TIF"))
             {
                 qimage = loadWithDImg(path);
+                failedAtDImg = qimage.isNull();
             }
         }
 
@@ -211,14 +215,14 @@ QImage ThumbnailCreator::load(const QString &path)
         }
 
         // Try JPEG anyway
-        if (qimage.isNull())
+        if (qimage.isNull() && !failedAtJPEGScaled)
         {
             // use jpegutils
             loadJPEGScaled(qimage, path, d->cachedSize);
         }
 
         // DImg-dependent loading methods: TIFF, PNG, everything supported by QImage
-        if (qimage.isNull())
+        if (qimage.isNull() && !failedAtDImg)
         {
             qimage = loadWithDImg(path);
         }
