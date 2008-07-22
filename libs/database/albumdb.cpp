@@ -1780,7 +1780,9 @@ QStringList AlbumDB::getAllItemURLsWithoutDate()
 QList<QDateTime> AlbumDB::getAllCreationDates()
 {
     QList<QVariant> values;
-    d->db->execSql( "SELECT creationDate FROM ImageInformation;", &values );
+    d->db->execSql( "SELECT creationDate FROM ImageInformation "
+                    " LEFT JOIN Images ON Images.id=ImageInformation.imageid "
+                    " WHERE Images.status=1;", &values );
 
     QList<QDateTime> list;
     foreach (const QVariant &value, values)
@@ -1794,7 +1796,9 @@ QList<QDateTime> AlbumDB::getAllCreationDates()
 QMap<QDateTime, int> AlbumDB::getAllCreationDatesAndNumberOfImages()
 {
     QList<QVariant> values;
-    d->db->execSql( "SELECT creationDate FROM ImageInformation;", &values );
+    d->db->execSql( "SELECT creationDate FROM ImageInformation "
+                    " LEFT JOIN Images ON Images.id=ImageInformation.imageid "
+                    " WHERE Images.status=1;", &values );
 
     QMap<QDateTime, int> datesStatMap;
     foreach (const QVariant &value, values)
@@ -1819,7 +1823,7 @@ QMap<int, int> AlbumDB::getNumberOfImagesInAlbums()
 {
     QList<QVariant> values;
 
-    d->db->execSql( "SELECT album FROM Images;", &values );
+    d->db->execSql( "SELECT album FROM Images WHERE Images.status=1;", &values );
 
     QMap<int, int>  albumsStatMap;
     int             albumID;
@@ -1843,7 +1847,9 @@ QMap<int, int> AlbumDB::getNumberOfImagesInTags()
 {
     QList<QVariant> values;
 
-    d->db->execSql( "SELECT tagid FROM ImageTags;", &values );
+    d->db->execSql( "SELECT tagid FROM ImageTags "
+                    " LEFT JOIN Images ON Images.id=ImageTags.imageid "
+                    " WHERE Images.status=1;", &values );
 
     QMap<int, int> tagsStatMap;
     int            tagID;
