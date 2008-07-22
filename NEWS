@@ -13,7 +13,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 002 ==> 166663 : Tags not showing pictures without "Include Tag Subtree".
 003 ==> 166616 : Filmstrip mode in View.
 004 ==> 165885 : Thumbnails and images are NOT displayed in the main view center pane.
-005 ==> 
+005 ==> 167139 : Crash if Exif.GPSInfo.GPSAltitude is empty.
+006 ==> 167168 : Timeline view shows redundant extra sections.
+007 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta1 - Release date: 2008-07-07
