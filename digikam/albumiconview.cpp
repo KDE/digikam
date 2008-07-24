@@ -110,6 +110,7 @@ extern "C"
 #include "dpopupmenu.h"
 #include "tagspopupmenu.h"
 #include "ratingpopupmenu.h"
+#include "scancontroller.h"
 #include "thumbnailloadthread.h"
 #include "cameraui.h"
 #include "ddragobjects.h"
@@ -1606,6 +1607,7 @@ void AlbumIconView::changeTagOnImageInfos(const ImageInfoList &list, const QList
     int i     = 0;
 
     d->imageLister->blockSignals(true);
+    ScanController::instance()->suspendCollectionScan();
     DatabaseTransaction transaction;
     foreach(const ImageInfo &info, list)
     {
@@ -1627,6 +1629,7 @@ void AlbumIconView::changeTagOnImageInfos(const ImageInfoList &list, const QList
             kapp->processEvents();
         }
     }
+    ScanController::instance()->resumeCollectionScan();
     d->imageLister->blockSignals(false);
 
     if (d->currentAlbum && d->currentAlbum->type() == Album::TAG)
@@ -2246,6 +2249,8 @@ void AlbumIconView::slotAssignRating(int rating)
     rating    = qMin(RatingMax, qMax(RatingMin, rating));
     MetadataHub hub;
 
+    d->imageLister->blockSignals(true);
+    ScanController::instance()->suspendCollectionScan();
     DatabaseTransaction transaction;
     for (IconItem *it = firstItem() ; it ; it = it->nextItem())
     {
@@ -2266,6 +2271,7 @@ void AlbumIconView::slotAssignRating(int rating)
             }
         }
     }
+    ScanController::instance()->resumeCollectionScan();
     d->imageLister->blockSignals(false);
 
     emit signalProgressBarMode(StatusProgressBar::TextMode, QString());

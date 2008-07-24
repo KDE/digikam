@@ -54,6 +54,7 @@
 #include "ddragobjects.h"
 #include "imageattributeswatch.h"
 #include "albumthumbnailloader.h"
+#include "scancontroller.h"
 #include "statusprogressbar.h"
 #include "talbumlistview.h"
 #include "talbumlistview.moc"
@@ -385,6 +386,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
             int i = 0;
             AlbumLister::instance()->blockSignals(true);
             DatabaseTransaction transaction;
+            ScanController::instance()->suspendCollectionScan();
             MetadataHub         hub;
 
             for (QList<int>::const_iterator it = imageIDs.begin(); it != imageIDs.end(); ++it)
@@ -400,6 +402,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
                 emit signalProgressValue((int)((i++/(float)imageIDs.count())*100.0));
                 kapp->processEvents();
             }
+            ScanController::instance()->resumeCollectionScan();
             AlbumLister::instance()->blockSignals(false);
 
             //ImageAttributesWatch::instance().imagesChanged(destAlbum->id());

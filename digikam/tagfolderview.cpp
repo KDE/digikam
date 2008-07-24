@@ -52,6 +52,7 @@
 #include "imageattributeswatch.h"
 #include "imageinfo.h"
 #include "metadatahub.h"
+#include "scancontroller.h"
 #include "syncjob.h"
 #include "statusprogressbar.h"
 #include "tageditdlg.h"
@@ -945,6 +946,7 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
 
             int i = 0;
             AlbumLister::instance()->blockSignals(true);
+            ScanController::instance()->suspendCollectionScan();
             DatabaseTransaction transaction;
             MetadataHub         hub;
 
@@ -961,6 +963,7 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
                 emit signalProgressValue((int)((i++/(float)imageIDs.count())*100.0));
                 kapp->processEvents();
             }
+            ScanController::instance()->resumeCollectionScan();
             AlbumLister::instance()->blockSignals(false);
 
             emit signalProgressBarMode(StatusProgressBar::TextMode, QString());

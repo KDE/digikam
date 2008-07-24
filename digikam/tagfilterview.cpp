@@ -60,6 +60,7 @@
 #include "imageattributeswatch.h"
 #include "imageinfo.h"
 #include "metadatahub.h"
+#include "scancontroller.h"
 #include "statusprogressbar.h"
 #include "syncjob.h"
 #include "tageditdlg.h"
@@ -624,6 +625,7 @@ void TagFilterView::contentsDropEvent(QDropEvent *e)
                                        i18n("Assigning image tags. Please wait..."));
 
             AlbumLister::instance()->blockSignals(true);
+            ScanController::instance()->suspendCollectionScan();
             DatabaseTransaction transaction;
             MetadataHub         hub;
             int i=0;
@@ -641,6 +643,7 @@ void TagFilterView::contentsDropEvent(QDropEvent *e)
                 emit signalProgressValue((int)((i++/(float)imageIDs.count())*100.0));
                 kapp->processEvents();
             }
+            ScanController::instance()->resumeCollectionScan();
             AlbumLister::instance()->blockSignals(false);
 
             emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
