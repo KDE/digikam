@@ -47,6 +47,7 @@
 #include "collectionmanager.h"
 #include "collectionlocation.h"
 #include "databaseaccess.h"
+#include "databasebackend.h"
 #include "databasetransaction.h"
 #include "imagescanner.h"
 #include "collectionscanner.h"
@@ -160,6 +161,14 @@ void CollectionScanner::partialScan(const QString &albumRoot, const QString& alb
     {
         // If you want to scan the album root, pass "/"
         DWarning() << "partialScan(QString, QString) called with empty album";
+        return;
+    }
+
+    if (DatabaseAccess().backend()->isInTransaction())
+    {
+        // Install ScanController::instance()->suspendCollectionScan around your DatabaseTransaction
+        DError() << "Detected an active database transaction when starting a collection scan. "
+                    "Please report this error.";
         return;
     }
 
