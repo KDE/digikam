@@ -52,6 +52,7 @@ public:
         q               = backend;
         status          = DatabaseBackend::Unavailable;
         watch           = 0;
+        isInTransaction = false;
     }
 
     // "A connection can only be used from within the thread that created it.
@@ -153,6 +154,8 @@ public:
     QHash<QThread*, int> databasesValid;
     // for recursive transactions
     QHash<QThread*, int> transactionCount;
+
+    bool isInTransaction;
 
     DatabaseParameters parameters;
 
@@ -415,7 +418,7 @@ bool DatabaseBackend::exec(QSqlQuery &query)
         // Use DatabaseAccess::lastError?
         DDebug() << "Failure executing query: " << endl;
         DDebug() << query.executedQuery() << endl;
-        DDebug() << query.lastError().text() << endl;
+        DDebug() << query.lastError().text() << query.lastError().number() << endl;
         DDebug() << "Bound values: " << query.boundValues().values() << endl;
         return false;
     }
@@ -433,7 +436,7 @@ bool DatabaseBackend::execBatch(QSqlQuery &query)
         // Use DatabaseAccess::lastError?
         DDebug() << "Failure executing batch query: " << endl;
         DDebug() << query.executedQuery() << endl;
-        DDebug() << query.lastError().text() << endl;
+        DDebug() << query.lastError().text() << query.lastError().number() << endl;
         DDebug() << "Bound values: " << query.boundValues().values() << endl;
         return false;
     }
@@ -453,13 +456,24 @@ QSqlQuery DatabaseBackend::prepareQuery(const QString &sql)
 void DatabaseBackend::beginTransaction()
 {
     if (d->incrementTransactionCount())
+    {
         d->databaseForThread().transaction();
+        d->isInTransaction = true;
+    }
 }
 
 void DatabaseBackend::commitTransaction()
 {
     if (d->decrementTransactionCount())
+    {
         d->databaseForThread().commit();
+        d->isInTransaction = false;
+    }
+}
+
+bool DatabaseBackend::isInTransaction() const
+{
+    return d->isInTransaction;
 }
 
 void DatabaseBackend::rollbackTransaction()

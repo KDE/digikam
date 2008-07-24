@@ -171,6 +171,13 @@ public:
      * Rollback the current database transaction
      */
     void rollbackTransaction();
+    /**
+     * Returns if the database is (in any thread) in a transaction.
+     * Note that a transaction does not require holding DatabaseAccess.
+     * Note that this does not give information about other processes
+     * locking the database.
+     */
+    bool isInTransaction() const;
 
     /**
      * Return a list with the names of the tables in the database
