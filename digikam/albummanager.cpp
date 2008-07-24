@@ -171,6 +171,22 @@ public:
     QHash<int, PAlbum*>         albumRootAlbumHash;
 
     Album                      *currentAlbum;
+
+
+    QList<QDateTime> buildDirectoryModList(const QFileInfo &dbFile)
+    {
+        // retrieve modification dates
+        QList<QDateTime> modList;
+        QFileInfoList fileInfoList = dbFile.dir().entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
+
+        // build list
+        foreach (const QFileInfo &info, fileInfoList)
+        {
+            if (info != dbFile)
+                modList << info.lastModified();
+        }
+        return modList;
+    }
 };
 
 class AlbumManagerCreator { public: AlbumManager object; };
@@ -385,6 +401,14 @@ bool AlbumManager::setDatabase(const QString &dbPath, bool priority)
             exit(0);
 
         DatabaseAccess().db()->setSetting("Locale",currLocale);
+    }
+
+    // set an initial modification list to filter out KDirWatch signals caused by database operations
+    DatabaseParameters params = DatabaseAccess::parameters();
+    if (params.isSQLite())
+    {
+        QFileInfo dbFile(params.SQLiteDatabaseFile());
+        d->dbPathModificationDateList = d->buildDirectoryModList(dbFile);
     }
 
     return true;
@@ -1893,15 +1917,7 @@ void AlbumManager::slotDirty(const QString& path)
         if (dbFile.dir() == dir)
         {
             // retrieve modification dates
-            QList<QDateTime> modList;
-            QFileInfoList fileInfoList = dir.entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
-
-            // build list
-            foreach (const QFileInfo &info, fileInfoList)
-            {
-                if (info != dbFile)
-                    modList << info.lastModified();
-            }
+            QList<QDateTime> modList = d->buildDirectoryModList(dbFile);
 
             // check for equality
             if (modList == d->dbPathModificationDateList)
@@ -1917,27 +1933,6 @@ void AlbumManager::slotDirty(const QString& path)
     }
 
     ScanController::instance()->scheduleCollectionScan(path);
-
-    /*
-    KUrl fileUrl;
-    // we need to provide a trailing slash to DatabaseUrl to mark it as a directory
-    fileUrl.setPath(QDir::cleanPath(path) + '/');
-    DatabaseUrl url = DatabaseUrl::fromFileUrl(fileUrl, CollectionManager::instance()->albumRoot(fileUrl));
-
-    if (d->dirtyAlbums.contains(url.url()))
-        return;
-
-    DDebug() << "Dirty: " << url.fileUrl().path() << endl;
-    d->dirtyAlbums.append(url.url());
-
-    if (DIO::running())
-        return;
-
-    KUrl u(d->dirtyAlbums.first());
-    d->dirtyAlbums.pop_front();
-
-    DIO::scan(u);
-    */
 }
 
 }  // namespace Digikam
