@@ -23,6 +23,7 @@
 
 // Qt includes
 
+#include <QApplication>
 #include <QCoreApplication>
 #include <QHash>
 #include <QSqlDatabase>
@@ -411,21 +412,56 @@ QSqlQuery DatabaseBackend::execQuery(const QString& sql)
     return query;
 }
 
+// For whatever reason, these methods are "static protected"
+class sotoSleep : public QThread
+{
+public:
+    static void sleep(unsigned long secs)
+    {
+        QThread::sleep(secs);
+    }
+    static void msleep(unsigned long msecs)
+    {
+        QThread::msleep(msecs);
+    }
+    static void usleep(unsigned long usecs)
+    {
+        QThread::usleep(usecs);
+    }
+};
+
 bool DatabaseBackend::exec(QSqlQuery &query)
 {
     if (!query.exec())
     {
-        // Use DatabaseAccess::lastError?
+        if (d->parameters.isSQLite() && query.lastError().number() == 5)
+        {
+            int limit;
+            bool success = false;
+            QApplication *app = qobject_cast<QApplication *>(QCoreApplication::instance());
+            if (!app)
+            {
+                int limit = 10;
+                DDebug() << "Detected locked database file. Waiting 10s trying again.";
+
+                do
+                {
+                    sotoSleep::sleep(1);
+                    limit--;
+                    if (query.exec())
+                        return true;
+                }
+                while (limit > 0 && query.lastError().number() == 5);
+            }
+            else
+                DWarning() << "Detected locked database file. There is an active transaction.";
+        }
         DDebug() << "Failure executing query: " << endl;
         DDebug() << query.executedQuery() << endl;
         DDebug() << query.lastError().text() << query.lastError().number() << endl;
         DDebug() << "Bound values: " << query.boundValues().values() << endl;
         return false;
     }
-    /*else
-    {
-        DDebug() << "Successfully executed: " << endl << query.executedQuery() << endl;
-    }*/
     return true;
 }
 
