@@ -84,6 +84,16 @@ public:
      */
     void scheduleCollectionScan(const QString &path);
 
+    /** Temporarilly suspend collection scanning.
+     *  All scheduled scanning tasks are queued
+     *  and will be done when resumeCollectionScan()
+     *  has been called.
+     *  Calling these methods is recursive, you must resume
+     *  as often as you called suspend.
+     */
+    void suspendCollectionScan();
+    void resumeCollectionScan();
+
 signals:
 
     void databaseInitialized(bool success);

@@ -72,6 +72,7 @@ public:
         running             = false;
         needsInitialization = false;
         needsCompleteScan   = false;
+        scanSuspended       = 0;
         eventLoop           = 0;
         showTimer           = 0;
         advice              = ScanController::Success;
@@ -80,6 +81,7 @@ public:
     bool                 running;
     bool                 needsInitialization;
     bool                 needsCompleteScan;
+    int                  scanSuspended;
 
     QStringList          scanTasks;
 
@@ -272,6 +274,22 @@ void ScanController::scheduleCollectionScan(const QString &path)
     d->condVar.wakeAll();
 }
 
+void ScanController::suspendCollectionScan()
+{
+    QMutexLocker lock(&d->mutex);
+    d->scanSuspended++;
+}
+
+void ScanController::resumeCollectionScan()
+{
+    QMutexLocker lock(&d->mutex);
+    if (d->scanSuspended)
+        d->scanSuspended--;
+    if (!d->scanSuspended)
+        d->condVar.wakeAll();
+}
+
+
 void ScanController::run()
 {
     while (d->running)
@@ -290,7 +308,7 @@ void ScanController::run()
                 d->needsCompleteScan = false;
                 doScan = true;
             }
-            else if (!d->scanTasks.isEmpty())
+            else if (!d->scanTasks.isEmpty() && !d->scanSuspended)
             {
                 doPartialScan = true;
                 task = d->scanTasks.takeFirst();
