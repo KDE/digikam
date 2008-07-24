@@ -54,7 +54,7 @@ namespace DigikamBlurFXImagesPlugin
 {
 
 ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent)
-                  : Digikam::CtrlPanelDlg(parent, i18n("Apply Blurring Special Effect to Photograph"),
+                  : Digikam::CtrlPanelDlg(parent, i18n("Assortment of blurring special effects"),
                                           "blurfx", false, false, true,
                                           Digikam::ImagePannelWidget::SeparateViewAll)
 {
@@ -63,7 +63,7 @@ ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent)
     KAboutData* about = new KAboutData("digikam", 0,
                                        ki18n("Blur Effects"),
                                        digiKamVersion().toAscii(),
-                                       ki18n("A digiKam image plugin to apply blurring special effect "
+                                       ki18n("A digiKam image plugin to apply blurring special effects "
                                        "to an image."),
                                        KAboutData::License_GPL,
                                        ki18n("(c) 2005, Gilles Caulier\n"
