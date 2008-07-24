@@ -66,6 +66,7 @@
 #include "databasetransaction.h"
 #include "tageditdlg.h"
 #include "ratingwidget.h"
+#include "scancontroller.h"
 #include "talbumlistview.h"
 #include "tagfilterview.h"
 #include "imageinfo.h"
@@ -472,8 +473,6 @@ void ImageDescEditTab::slotApplyAllChanges()
         return;
 
     bool progressInfo = (d->currInfos.count() > 1);
-    emit signalProgressBarMode(StatusProgressBar::ProgressBarMode,
-                               i18n("Applying changes to images. Please wait..."));
     MetadataWriteSettings writeSettings = MetadataHub::defaultWriteSettings();
 
     // debugging - use this to indicate reentry from event loop (kapp->processEvents)
@@ -485,24 +484,48 @@ void ImageDescEditTab::slotApplyAllChanges()
 
     // we are now changing attributes ourselves
     d->ignoreImageAttributesWatch = true;
-
-    int i=0;
     AlbumLister::instance()->blockSignals(true);
-    DatabaseTransaction transaction;
+    ScanController::instance()->suspendCollectionScan();
 
-    foreach(const ImageInfo &info, d->currInfos)
+    // update database information
     {
-        // apply to database
-        d->hub.write(info);
-        // apply to file metadata
-        d->hub.write(info.filePath(), MetadataHub::FullWrite, writeSettings);
+        emit signalProgressBarMode(StatusProgressBar::ProgressBarMode,
+                                i18n("Applying changes to images. Please wait..."));
+        int i=0;
 
-        emit signalProgressValue((int)((i++/(float)d->currInfos.count())*100.0));
-        if (progressInfo)
-            kapp->processEvents();
+        DatabaseTransaction transaction;
+
+        foreach(const ImageInfo &info, d->currInfos)
+        {
+            // apply to database
+            d->hub.write(info);
+
+            emit signalProgressValue((int)((i++/(float)d->currInfos.count())*100.0));
+            if (progressInfo)
+                kapp->processEvents();
+        }
     }
-    AlbumLister::instance()->blockSignals(false);
 
+    // update file metadata
+    {
+        emit signalProgressBarMode(StatusProgressBar::ProgressBarMode,
+                                   i18n("Writing metadata to files. Please wait..."));
+        int i = 0;
+
+        foreach(const ImageInfo &info, d->currInfos)
+        {
+            // apply to file metadata
+            d->hub.write(info.filePath(), MetadataHub::FullWrite, writeSettings);
+
+            emit signalProgressValue((int)((i++/(float)d->currInfos.count())*100.0));
+            if (progressInfo)
+                kapp->processEvents();
+        }
+
+    }
+
+    ScanController::instance()->resumeCollectionScan();
+    AlbumLister::instance()->blockSignals(false);
     d->ignoreImageAttributesWatch = false;
 
     emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
