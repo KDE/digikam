@@ -14,7 +14,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -54,7 +54,7 @@ class ThumbBarToolTip;
 class ThumbBarViewPriv;
 class ThumbBarItemPriv;
 
-class DIGIKAM_EXPORT ThumbBarToolTipSettings 
+class DIGIKAM_EXPORT ThumbBarToolTipSettings
 {
 public:
 
@@ -109,6 +109,7 @@ public:
     void triggerUpdate();
 
     void removeItem(ThumbBarItem* item);
+    void takeItem(ThumbBarItem* item);
 
     void setSelected(ThumbBarItem* item);
     void ensureItemVisible(ThumbBarItem* item);

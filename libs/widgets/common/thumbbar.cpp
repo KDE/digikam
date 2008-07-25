@@ -5,28 +5,28 @@
  *
  * Date        : 2004-11-22
  * Description : a bar widget to display image thumbnails
- * 
+ *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * 
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // C++ includes.
 
 #include <cmath>
 
-// Qt includes. 
+// Qt includes.
 
 #include <QHash>
 #include <QToolTip>
@@ -173,7 +173,7 @@ ThumbBarView::ThumbBarView(QWidget* parent, int orientation, bool exifRotate,
     viewport()->setAcceptDrops(true);
 
     setFrameStyle(QFrame::NoFrame);
-    setAcceptDrops(true); 
+    setAcceptDrops(true);
 
     if (d->orientation == Qt::Vertical)
         setHScrollBarMode(Q3ScrollView::AlwaysOff);
@@ -183,8 +183,8 @@ ThumbBarView::ThumbBarView(QWidget* parent, int orientation, bool exifRotate,
 
 ThumbBarView::~ThumbBarView()
 {
-    // Delete all hash items 
-    while (!d->itemHash.isEmpty()) 
+    // Delete all hash items
+    while (!d->itemHash.isEmpty())
     {
         ThumbBarItem *value = *d->itemHash.begin();
         d->itemHash.erase(d->itemHash.begin());
@@ -537,7 +537,7 @@ void ThumbBarView::contentsMouseReleaseEvent(QMouseEvent *e)
 {
     d->dragging = false;
     ThumbBarItem *item = findItem(e->pos());
-    if (item) 
+    if (item)
     {
         emit signalUrlSelected(item->url());
         emit signalItemSelected(item);
@@ -648,7 +648,7 @@ void ThumbBarView::insertItem(ThumbBarItem* item)
     emit signalItemAdded();
 }
 
-void ThumbBarView::removeItem(ThumbBarItem* item)
+void ThumbBarView::takeItem(ThumbBarItem* item)
 {
     if (!item) return;
 
@@ -686,13 +686,17 @@ void ThumbBarView::removeItem(ThumbBarItem* item)
         }
     }
 
-    delete d->itemHash.take(item->url());
-
     if (!d->clearing)
         triggerUpdate();
 
     if (d->count == 0)
         emit signalItemSelected(0);
+}
+
+void ThumbBarView::removeItem(ThumbBarItem* item)
+{
+    if (!item) return;
+    delete d->itemHash.take(item->url());
 }
 
 void ThumbBarView::rearrangeItems()
@@ -810,7 +814,7 @@ void ThumbBarView::slotGotThumbnail(const LoadingDescription& desc, const QPixma
 
 bool ThumbBarView::event(QEvent *event)
 {
-    if (event->type() == QEvent::ToolTip) 
+    if (event->type() == QEvent::ToolTip)
     {
         QHelpEvent *helpEvent = dynamic_cast<QHelpEvent *>(event);
         if (helpEvent)
@@ -844,8 +848,7 @@ ThumbBarItem::ThumbBarItem(ThumbBarView* view, const KUrl& url)
 
 ThumbBarItem::~ThumbBarItem()
 {
-    d->view->removeItem(this);
-
+    d->view->takeItem(this);
     delete d;
 }
 
@@ -892,7 +895,7 @@ void ThumbBarItem::repaint()
 
 // -------------------------------------------------------------------------
 
-ThumbBarToolTip::ThumbBarToolTip(ThumbBarView* parent) 
+ThumbBarToolTip::ThumbBarToolTip(ThumbBarView* parent)
                : m_maxStringLen(30), m_view(parent)
 {
     m_headBeg = QString("<tr bgcolor=\"#73CAE6\"><td colspan=\"2\">"
@@ -968,7 +971,7 @@ QString ThumbBarToolTip::tipContents(ThumbBarItem* item) const
         if (settings.showFileSize)
         {
             tipText += m_cellBeg + i18n("Size:") + m_cellMid;
-            str = i18n("%1 (%2)", KIO::convertSize(fi.size()), 
+            str = i18n("%1 (%2)", KIO::convertSize(fi.size()),
                                   KGlobal::locale()->formatNumber(fi.size(),
                                   0));
             tipText += str + m_cellEnd;
@@ -1066,7 +1069,7 @@ QString ThumbBarToolTip::tipContents(ThumbBarItem* item) const
 
                 if (photoInfo.focalLength35mm.isEmpty())
                     str += QString(" / %1").arg(photoInfo.focalLength.isEmpty() ? unavailable : photoInfo.focalLength);
-                else 
+                else
                     str += QString(" / %1").arg(i18n("%1 (35mm: %2)",
                            photoInfo.focalLength, photoInfo.focalLength35mm));
 
@@ -1078,7 +1081,7 @@ QString ThumbBarToolTip::tipContents(ThumbBarItem* item) const
             {
                 str = QString("%1 / %2").arg(photoInfo.exposureTime.isEmpty() ? unavailable :
                                              photoInfo.exposureTime)
-                                        .arg(photoInfo.sensitivity.isEmpty() ? unavailable : 
+                                        .arg(photoInfo.sensitivity.isEmpty() ? unavailable :
                                              i18n("%1 ISO", photoInfo.sensitivity));
                 if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
                 metaStr += m_cellBeg + i18n("Exposure/Sensitivity:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
@@ -1093,7 +1096,7 @@ QString ThumbBarToolTip::tipContents(ThumbBarItem* item) const
                     str = photoInfo.exposureMode;
                 else if (photoInfo.exposureMode.isEmpty() && !photoInfo.exposureProgram.isEmpty())
                     str = photoInfo.exposureProgram;
-                else 
+                else
                     str = QString("%1 / %2").arg(photoInfo.exposureMode).arg(photoInfo.exposureProgram);
                 if (str.length() > m_maxStringLen) str = str.left(m_maxStringLen-3) + "...";
                 metaStr += m_cellBeg + i18n("Mode/Program:") + m_cellMid + Qt::escape( str ) + m_cellEnd;
