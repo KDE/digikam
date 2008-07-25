@@ -15,7 +15,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 004 ==> 165885 : Thumbnails and images are NOT displayed in the main view center pane.
 005 ==> 167139 : Crash if Exif.GPSInfo.GPSAltitude is empty.
 006 ==> 167168 : Timeline view shows redundant extra sections.
-007 ==> 
+007 ==> 166440 : Removing images from Light Table is not working properly.
+008 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta1 - Release date: 2008-07-07
