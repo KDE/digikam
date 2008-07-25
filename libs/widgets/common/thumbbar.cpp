@@ -597,7 +597,7 @@ void ThumbBarView::clear(bool updateView)
     while (item)
     {
         ThumbBarItem *tmp = item->d->next;
-        delete d->itemHash.take(item->url());
+        delete item;
         item = tmp;
     }
 
@@ -686,6 +686,8 @@ void ThumbBarView::takeItem(ThumbBarItem* item)
         }
     }
 
+    d->itemHash.remove(item->url());
+
     if (!d->clearing)
         triggerUpdate();
 
@@ -696,7 +698,7 @@ void ThumbBarView::takeItem(ThumbBarItem* item)
 void ThumbBarView::removeItem(ThumbBarItem* item)
 {
     if (!item) return;
-    delete d->itemHash.take(item->url());
+    delete item;
 }
 
 void ThumbBarView::rearrangeItems()
