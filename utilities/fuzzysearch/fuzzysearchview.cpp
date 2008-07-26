@@ -156,8 +156,8 @@ public:
 
     FindDuplicatesView     *findDuplicatesPanel;
 
-    SAlbum                 *imageSAlbum;
-    SAlbum                 *sketchSAlbum;
+    AlbumPointer<SAlbum>    imageSAlbum;
+    AlbumPointer<SAlbum>    sketchSAlbum;
 
     bool                    fingerprintsChecked;
 };
