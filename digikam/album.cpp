@@ -57,6 +57,7 @@ Album::~Album()
     if (m_parent)
         m_parent->removeChild(this);
     clear();
+    AlbumManager::internalInstance->notifyAlbumDeletion(this);
 }
 
 void Album::setParent(Album* parent)

@@ -70,18 +70,6 @@ public:
     };
 
     /**
-     * Destructor
-     *
-     * this will also recursively delete all child Albums
-     */
-    virtual ~Album();
-
-    /**
-     * Delete all child albums and also remove any associated extra data
-     */
-    void    clear();
-
-    /**
      * @return the parent album for this album
      */
     Album*  parent() const;
@@ -224,6 +212,18 @@ protected:
      * Constructor
      */
     Album(Album::Type type, int id, bool root);
+
+    /**
+     * Destructor
+     *
+     * this will also recursively delete all child Albums
+     */
+    virtual ~Album();
+
+    /**
+     * Delete all child albums and also remove any associated extra data
+     */
+    void    clear();
 
     /**
      * @internal use only

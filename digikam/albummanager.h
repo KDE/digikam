@@ -469,6 +469,8 @@ private:
     void insertTAlbum(TAlbum *album, TAlbum *parent);
     void removeTAlbum(TAlbum *album);
 
+    void notifyAlbumDeletion(Album *album);
+
     void addAlbumRoot(const CollectionLocation &location);
     void removeAlbumRoot(const CollectionLocation &location);
 
@@ -503,9 +505,60 @@ private:
     void getAlbumItemsCount();
     void getTagItemsCount();
 
+    template <class T> friend class AlbumPointer;
+    friend class Album;
+    static AlbumManager *internalInstance;
+    void addGuardedPointer(Album *a, Album **pointer);
+    void removeGuardedPointer(Album *a, Album **pointer);
+    void changeGuardedPointer(Album *oldAlbum, Album *a, Album **pointer);
+    void invalidateGuardedPointers(Album *album);
+
 private:
 
     AlbumManagerPriv *d;
+};
+
+/**
+ * You can use AlbumPointer to store a guarded pointer to Album
+ * or one of the subclasses (use template parameter).
+ * The pointer will be set to 0 when the album object is deleted.
+ */
+template <class T = Album>
+class AlbumPointer
+{
+public:
+    AlbumPointer() : album(0) {}
+    AlbumPointer(T *a) : album(a)
+    { AlbumManager::instance()->addGuardedPointer(album, &album); }
+    AlbumPointer(const AlbumPointer<T> &p) : album(p.album)
+    { AlbumManager::instance()->addGuardedPointer(album, &album); }
+
+    ~AlbumPointer()
+    { AlbumManager::instance()->removeGuardedPointer(album, &album); }
+
+    AlbumPointer<T> operator=(T* a)
+    {
+        Album *oldAlbum = album;
+        album = a;
+        AlbumManager::instance()->changeGuardedPointer(oldAlbum, album, &album);
+        return *this;
+    }
+    AlbumPointer<T> operator=(const AlbumPointer<T> &p)
+    {
+        Album *oldAlbum = album;
+        album = p.album;
+        AlbumManager::instance()->changeGuardedPointer(oldAlbum, album, &album);
+        return *this;
+    }
+
+    T* operator->() const { return static_cast<T*>(const_cast<Album*>(album)); }
+    T& operator*() const { return *static_cast<T*>(const_cast<Album*>(album)); }
+    operator T*() const { return static_cast<T*>(const_cast<Album*>(album)); }
+
+private:
+
+    friend class AlbumManager;
+    Album *album;
 };
 
 }  // namespace Digikam

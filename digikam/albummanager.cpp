@@ -47,6 +47,7 @@ extern "C"
 #include <QFile>
 #include <QDir>
 #include <QByteArray>
+#include <QMultiHash>
 #include <QTextCodec>
 
 // KDE includes.
@@ -170,6 +171,8 @@ public:
     QHash<PAlbumPath, PAlbum*>  albumPathHash;
     QHash<int, PAlbum*>         albumRootAlbumHash;
 
+    QMultiHash<Album*, Album**> guardedPointers;
+
     Album                      *currentAlbum;
 
 
@@ -192,6 +195,9 @@ public:
 class AlbumManagerCreator { public: AlbumManager object; };
 K_GLOBAL_STATIC(AlbumManagerCreator, creator)
 
+// A friend-class shortcut to circumvent accessing this from within the destructor
+AlbumManager *AlbumManager::internalInstance = 0;
+
 AlbumManager* AlbumManager::instance()
 {
     return &creator->object;
@@ -200,6 +206,7 @@ AlbumManager* AlbumManager::instance()
 AlbumManager::AlbumManager()
 {
     d = new AlbumManagerPriv;
+    internalInstance = this;
 }
 
 AlbumManager::~AlbumManager()
@@ -229,6 +236,7 @@ AlbumManager::~AlbumManager()
 
     delete d->dirWatch;
 
+    internalInstance = 0;
     delete d;
 }
 
@@ -1050,6 +1058,38 @@ SAlbum* AlbumManager::findSAlbum(const QString &name) const
     return 0;
 }
 
+void AlbumManager::addGuardedPointer(Album *album, Album **pointer)
+{
+    if (album)
+        d->guardedPointers.insert(album, pointer);
+}
+
+void AlbumManager::removeGuardedPointer(Album *album, Album **pointer)
+{
+    if (album)
+        d->guardedPointers.remove(album, pointer);
+}
+
+void AlbumManager::changeGuardedPointer(Album *oldAlbum, Album *album, Album **pointer)
+{
+    if (oldAlbum)
+        d->guardedPointers.remove(oldAlbum, pointer);
+    if (album)
+        d->guardedPointers.insert(album, pointer);
+}
+
+void AlbumManager::invalidateGuardedPointers(Album *album)
+{
+    if (!album)
+        return;
+    QMultiHash<Album*, Album**>::iterator it = d->guardedPointers.find(album);
+    for( ; it != d->guardedPointers.end() && it.key() == album; ++it)
+    {
+        if (it.value())
+            *(it.value()) = 0;
+    }
+}
+
 PAlbum* AlbumManager::createPAlbum(const QString& albumRootPath, const QString& name,
                                    const QString& caption, const QDate& date,
                                    const QString& collection,
@@ -1643,7 +1683,7 @@ void AlbumManager::removePAlbum(PAlbum *album)
         d->currentAlbum = 0;
         emit signalAlbumCurrentChanged(0);
     }
-    
+
     emit signalAlbumDeleted(album);
     delete album;
     emit signalAlbumHasBeenDeleted(album);
@@ -1690,6 +1730,11 @@ void AlbumManager::removeTAlbum(TAlbum *album)
     emit signalAlbumDeleted(album);
     delete album;
     emit signalAlbumHasBeenDeleted(album);
+}
+
+void AlbumManager::notifyAlbumDeletion(Album *album)
+{
+    invalidateGuardedPointers(album);
 }
 
 void AlbumManager::emitAlbumItemsSelected(bool val)
