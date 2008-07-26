@@ -432,11 +432,10 @@ void TimeLineView::createNewDateSearchAlbum(const QString& name)
     QDateTime start, end;
     DateRangeList list = d->timeLineWidget->selectedDateRange(totalCount);
 
+    AlbumManager::instance()->setCurrentAlbum(0);
+
     if (list.isEmpty())
-    {
-        AlbumManager::instance()->setCurrentAlbum(0);
         return;
-    }
 
     d->timeLineFolderView->blockSignals(true);
     d->timeLineFolderView->clearSelection();
