@@ -162,8 +162,12 @@ public:
     void removeThumbnails();
     /**
      * Sets the size of the thumbnail cache
-     *  @param numberOfImages The maximum number of thumbnails in QImage format that will be cached
-     *  @param numberOfPixmaps The maximum number of thumbnails in QPixmap format that will be cached
+     *  @param numberOfImages The maximum number of thumbnails of size 256 in QImage format
+                              that will be cached. If the size of the images is smaller, a larger
+                              number will be cached.
+     *  @param numberOfPixmaps The maximum number of thumbnails of size 256 in QPixmap format
+                              that will be cached. If the size of the images is smaller, a larger
+                              number will be cached.
      * Note: The main cache is unaffected by this method,
      *       and setCacheSize takes megabytes as parameter.
      * Note: A good caching strategy will be to set one of the numbers to 0

@@ -254,12 +254,14 @@ const QPixmap *LoadingCache::retrieveThumbnailPixmap(const QString &cacheKey)
 
 void LoadingCache::putThumbnail(const QString &cacheKey, const QImage &thumb)
 {
-    d->thumbnailImageCache.insert(cacheKey, new QImage(thumb));
+    int cost = thumb.numBytes();
+    d->thumbnailImageCache.insert(cacheKey, new QImage(thumb), cost);
 }
 
 void LoadingCache::putThumbnail(const QString &cacheKey, const QPixmap &thumb)
 {
-    d->thumbnailPixmapCache.insert(cacheKey, new QPixmap(thumb));
+    int cost = thumb.width() * thumb.height() * thumb.depth() / 8;
+    d->thumbnailPixmapCache.insert(cacheKey, new QPixmap(thumb), cost);
 }
 
 void LoadingCache::removeThumbnail(const QString &cacheKey)
@@ -276,8 +278,8 @@ void LoadingCache::removeThumbnails()
 
 void LoadingCache::setThumbnailCacheSize(int numberOfQImages, int numberOfQPixmaps)
 {
-    d->thumbnailImageCache.setMaxCost(numberOfQImages);
-    d->thumbnailPixmapCache.setMaxCost(numberOfQPixmaps);
+    d->thumbnailImageCache.setMaxCost(numberOfQImages * 256 * 256 * 4);
+    d->thumbnailPixmapCache.setMaxCost(numberOfQPixmaps * 256 * 256 * QPixmap::defaultDepth() / 8);
 }
 
 //---------------------------------------------------------------------------------------------------
