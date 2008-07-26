@@ -16,7 +16,10 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 005 ==> 167139 : Crash if Exif.GPSInfo.GPSAltitude is empty.
 006 ==> 167168 : Timeline view shows redundant extra sections.
 007 ==> 166440 : Removing images from Light Table is not working properly.
-008 ==> 
+008 ==> 166484 : digiKam crashes when changing some settings and using "find similar" after the changes made
+009 ==> 167124 : Timeline view not updated when changing selected time range
+010 ==> 166564 : Display of *already* *created* thumbnails is slow
+011 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta1 - Release date: 2008-07-07
