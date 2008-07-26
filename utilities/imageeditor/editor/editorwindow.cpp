@@ -452,7 +452,7 @@ void EditorWindow::setupStandardActions()
 
     // -- Standard 'Transform' menu actions ---------------------------------------------
 
-    d->resizeAction = new KAction(KIcon("resize_image"), i18n("&Resize..."), this);
+    d->resizeAction = new KAction(KIcon("transform-scale"), i18n("&Resize..."), this);
     connect(d->resizeAction, SIGNAL(triggered()), this, SLOT(slotResize()));
     actionCollection()->addAction("editorwindow_resize", d->resizeAction);
 
@@ -466,13 +466,13 @@ void EditorWindow::setupStandardActions()
 
     // -- Standard 'Flip' menu actions ---------------------------------------------
 
-    d->flipHorizAction = new KAction(KIcon("flip-horizontal"), i18n("Flip Horizontally"), this);
+    d->flipHorizAction = new KAction(KIcon("object-flip-horizontal"), i18n("Flip Horizontally"), this);
     d->flipHorizAction->setShortcut(Qt::CTRL+Qt::Key_Asterisk);
     connect(d->flipHorizAction, SIGNAL(triggered()), m_canvas, SLOT(slotFlipHoriz()));
     actionCollection()->addAction("editorwindow_flip_horiz", d->flipHorizAction);
     d->flipHorizAction->setEnabled(false);
 
-    d->flipVertAction = new KAction(KIcon("flip-vertical"), i18n("Flip Vertically"), this);
+    d->flipVertAction = new KAction(KIcon("object-flip-vertical"), i18n("Flip Vertically"), this);
     d->flipVertAction->setShortcut(Qt::CTRL+Qt::Key_Slash);
     connect(d->flipVertAction, SIGNAL(triggered()), m_canvas, SLOT(slotFlipVert()));
     actionCollection()->addAction("editorwindow_flip_vert", d->flipVertAction);

@@ -43,7 +43,7 @@ K_EXPORT_PLUGIN ( InsertTextFactory("digikamimageplugin_inserttext") )
 ImagePlugin_InsertText::ImagePlugin_InsertText(QObject *parent, const QVariantList &)
                       : Digikam::ImagePlugin(parent, "ImagePlugin_InsertText")
 {
-    m_insertTextAction = new KAction(KIcon("inserttext"), i18n("Insert Text..."), this);
+    m_insertTextAction = new KAction(KIcon("insert-text"), i18n("Insert Text..."), this);
     m_insertTextAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_T));
 
     connect(m_insertTextAction, SIGNAL(triggered(bool) ),
