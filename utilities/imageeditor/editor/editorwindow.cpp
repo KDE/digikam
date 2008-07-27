@@ -456,7 +456,7 @@ void EditorWindow::setupStandardActions()
     connect(d->resizeAction, SIGNAL(triggered()), this, SLOT(slotResize()));
     actionCollection()->addAction("editorwindow_resize", d->resizeAction);
 
-    d->cropAction = new KAction(KIcon("crop"), i18n("Crop"), this);
+    d->cropAction = new KAction(KIcon("transform-crop-and-resize"), i18n("Crop"), this);
     d->cropAction->setShortcut(Qt::CTRL+Qt::Key_X);
     connect(d->cropAction, SIGNAL(triggered()), m_canvas, SLOT(slotCrop()));
     actionCollection()->addAction("editorwindow_crop", d->cropAction);
