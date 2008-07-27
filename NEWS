@@ -1,11 +1,14 @@
 **********************************************************************************************
-digiKam 0.9.5-svn - Release date: 2008-??-??
+digiKam 0.9.5-beta1 - Release date: 2008-??-??
 
 NEW FEATURES:
+
+
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 166867 : Digikam crashes when starting.
 002 ==> 167026 : Crash on startup Directory ImageSubIfd0 not valid.
 003 ==> 146870 : Don't reduce size of image when rotating.
-004 ==> 
+004 ==> 167528 : Remove hotlinking URL from tips.
+005 ==> 
