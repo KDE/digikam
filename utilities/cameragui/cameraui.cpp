@@ -1117,8 +1117,8 @@ void CameraUI::slotUploadItems(const KUrl::List& urls)
                                           "to upload pictures.\n\n"
                                           "Space require: %1\n"
                                           "Available free space: %2",
-                                    KIO::convertSizeFromKiB(totalKbSize)),
-                                    KIO::convertSizeFromKiB(d->cameraFreeSpace->kBAvail()));
+                                    KIO::convertSizeFromKiB(totalKbSize),
+                                    KIO::convertSizeFromKiB(d->cameraFreeSpace->kBAvail())));
             return;
         } 
     }
@@ -1209,8 +1209,8 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
                                       "to download and process selected pictures from camera.\n\n"
                                       "Estimated space require: %1\n"
                                       "Available free space: %2",
-                                 KIO::convertSizeFromKiB(dSize)),
-                                 KIO::convertSizeFromKiB(d->albumLibraryFreeSpace->kBAvail()));
+                                 KIO::convertSizeFromKiB(dSize),
+                                 KIO::convertSizeFromKiB(d->albumLibraryFreeSpace->kBAvail())));
         return;
     }
 
