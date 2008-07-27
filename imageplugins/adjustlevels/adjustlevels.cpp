@@ -282,7 +282,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
 
     m_pickBlack = new QPushButton(m_pickerBox);
     m_pickerColorButtonGroup->addButton(m_pickBlack, BlackTonal);
-    m_pickBlack->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/color-picker-black.png")));
+    m_pickBlack->setIcon(KIcon("color-picker-black.png"));
     m_pickBlack->setCheckable(true);
     m_pickBlack->setToolTip( i18n( "All channels shadow tone color picker" ) );
     m_pickBlack->setWhatsThis( i18n("<p>With this button, you can pick the color from original "
@@ -291,7 +291,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
 
     m_pickGray  = new QPushButton(m_pickerBox);
     m_pickerColorButtonGroup->addButton(m_pickGray, GrayTonal);
-    m_pickGray->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/color-picker-grey.png")));
+    m_pickGray->setIcon(KIcon("color-picker-grey.png"));
     m_pickGray->setCheckable(true);
     m_pickGray->setToolTip( i18n( "All channels middle tone color picker" ) );
     m_pickGray->setWhatsThis( i18n("<p>With this button, you can pick the color from original "
@@ -300,7 +300,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
 
     m_pickWhite = new QPushButton(m_pickerBox);
     m_pickerColorButtonGroup->addButton(m_pickWhite, WhiteTonal);
-    m_pickWhite->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/color-picker-white.png")));
+    m_pickWhite->setIcon(KIcon("color-picker-white.png"));
     m_pickWhite->setCheckable(true);
     m_pickWhite->setToolTip( i18n( "All channels highlight tone color picker" ) );
     m_pickWhite->setWhatsThis( i18n("<p>With this button, you can pick the color from original "
