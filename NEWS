@@ -23,8 +23,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 012 ==> 167379 : Image selection for export plugin.
 013 ==> 166622 : Confusing Add Images use.
 014 ==> 166576 : digiKam quits when running "Rebuild all Thumbnail Images" twice.
-015 ==> 
-
+015 ==> 167562 : Image Editor Shortcut Keys under Edit redo/undo are missing in GUI.
+016 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta1 - Release date: 2008-07-07
