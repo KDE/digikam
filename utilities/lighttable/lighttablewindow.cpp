@@ -378,13 +378,13 @@ void LightTableWindow::setupActions()
     d->forwardAction->setShortcut( KShortcut(Qt::Key_Next, Qt::Key_Space) );
 
     d->firstAction = new KAction(KIcon("go-first"), i18n("&First"), this);
-    d->firstAction->setShortcut(KStandardShortcut::Begin);
+    d->firstAction->setShortcut(KStandardShortcut::begin());
     d->firstAction->setEnabled(false);
     connect(d->firstAction, SIGNAL(triggered()), this, SLOT(slotFirst()));
     actionCollection()->addAction("lighttable_first", d->firstAction);
 
     d->lastAction = new KAction(KIcon("go-last"), i18n("&Last"), this);
-    d->lastAction->setShortcut(KStandardShortcut::End);
+    d->lastAction->setShortcut(KStandardShortcut::end());
     d->lastAction->setEnabled(false);
     connect(d->lastAction, SIGNAL(triggered()), this, SLOT(slotLast()));
     actionCollection()->addAction("lighttable_last", d->lastAction);
