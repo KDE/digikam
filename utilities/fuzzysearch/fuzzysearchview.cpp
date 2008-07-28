@@ -280,8 +280,8 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
 
     d->hsSelector = new KHueSaturationSelector(sketchPanel);
     d->vSelector  = new KColorValueSelector(sketchPanel);
-    d->hsSelector->setMinimumSize(200, 128);
-    d->vSelector->setMinimumSize(26, 128);
+    d->hsSelector->setMinimumSize(200, 96);
+    d->vSelector->setMinimumSize(26, 96);
     d->hsSelector->setChooserMode(ChooserValue);
     d->vSelector->setChooserMode(ChooserValue);
     d->hsSelector->setColorValue(255);
