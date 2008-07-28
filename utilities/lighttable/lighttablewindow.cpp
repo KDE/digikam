@@ -1190,10 +1190,10 @@ void LightTableWindow::slotRemoveItem(const ImageInfo &info)
             else
             {
                 // If there is no item to the right of new_linfo
-                // then we can choose the last item for new_rinfo
+                // then we can choose the first item for new_rinfo
                 // (as we made sure that there are at least two items)
-                LightTableBarItem* last = dynamic_cast<LightTableBarItem*>(d->barView->lastItem());
-                new_rinfo               = last->info();
+                LightTableBarItem* first = dynamic_cast<LightTableBarItem*>(d->barView->firstItem());
+                new_rinfo               = first->info();
             }
         }
     }
