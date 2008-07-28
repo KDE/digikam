@@ -6,7 +6,7 @@
  * Date        : 2005-02-14
  * Description : a plugin to insert a text over an image.
  * 
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,7 +43,7 @@ ImagePlugin_InsertText::ImagePlugin_InsertText(QObject *parent, const char*, con
                       : Digikam::ImagePlugin(parent, "ImagePlugin_InsertText")
 {
     m_insertTextAction = new KAction(i18n("Insert Text..."), "inserttext", 
-                         CTRL+Key_T, 
+                         SHIFT+CTRL+Key_T, 
                          this, SLOT(slotInsertText()),
                          actionCollection(), "imageplugin_inserttext");
 
@@ -66,4 +66,3 @@ void ImagePlugin_InsertText::slotInsertText()
     DigikamInsertTextImagesPlugin::ImageEffect_InsertText dlg(parentWidget());
     dlg.exec();
 }
-
