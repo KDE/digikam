@@ -25,9 +25,6 @@ INSTALL(FILES image-full.png
               image-selection.png
               histogram-lin.png
               histogram-log.png
-              color-picker-black.png
-              color-picker-grey.png
-              color-picker-white.png
               banner-digikam.png
               logo-digikam.png
               logo-gphoto.png
