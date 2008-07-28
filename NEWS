@@ -20,7 +20,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 009 ==> 167124 : Timeline view not updated when changing selected time range.
 010 ==> 166564 : Display of *already* *created* thumbnails is slow.
 011 ==> 166483 : Error in "not enough disk space" error message.
-012 ==> 
+012 ==> 167379 : Image selection for export plugin.
+013 ==> 
 
 
 *********************************************************************************************************
