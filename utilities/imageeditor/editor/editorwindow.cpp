@@ -277,12 +277,12 @@ void EditorWindow::setupStandardActions()
     m_forwardAction->setShortcut( KShortcut(Qt::Key_PageDown, Qt::Key_Space) );
 
     m_firstAction = new KAction(KIcon("go-first"), i18n("&First"), this);
-    m_firstAction->setShortcut(KStandardShortcut::Begin);
+    m_firstAction->setShortcut(KStandardShortcut::begin());
     connect(m_firstAction, SIGNAL(triggered()), this, SLOT(slotFirst()));
     actionCollection()->addAction("editorwindow_first", m_firstAction);
 
     m_lastAction = new KAction(KIcon("go-last"), i18n("&Last"), this);
-    m_lastAction->setShortcut(KStandardShortcut::End);
+    m_lastAction->setShortcut(KStandardShortcut::end());
     connect(m_lastAction, SIGNAL(triggered()), this, SLOT(slotLast()));
     actionCollection()->addAction("editorwindow_last", m_lastAction);
 
@@ -320,7 +320,7 @@ void EditorWindow::setupStandardActions()
 
 
     m_undoAction = new KToolBarPopupAction(KIcon("edit-undo"), i18n("Undo"), this);
-    m_undoAction->setShortcut(KStandardShortcut::Undo);
+    m_undoAction->setShortcut(KStandardShortcut::undo());
     m_undoAction->setEnabled(false);
     actionCollection()->addAction("editorwindow_undo", m_undoAction);
 
@@ -339,7 +339,7 @@ void EditorWindow::setupStandardActions()
     d->undoSignalMapper->setMapping(m_undoAction, 1);
 
     m_redoAction = new KToolBarPopupAction(KIcon("edit-redo"), i18n("Redo"), this);
-    m_redoAction->setShortcut(KStandardShortcut::Redo);
+    m_redoAction->setShortcut(KStandardShortcut::redo());
     m_redoAction->setEnabled(false);
     actionCollection()->addAction("editorwindow_redo", m_redoAction);
 
