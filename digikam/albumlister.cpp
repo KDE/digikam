@@ -630,6 +630,9 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
 
 void AlbumLister::slotCollectionImageChange(const CollectionImageChangeset &changeset)
 {
+    if (!d->currAlbum)
+        return;
+
     bool doRefresh = false;
 
     switch (changeset.operation())
