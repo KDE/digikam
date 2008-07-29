@@ -273,7 +273,7 @@ ADD_DEFINITIONS(-DQT3_SUPPORT
                 -DQT3_SUPPORT_WARNINGS
                )
 
-# Enable C++ Exceptions support, require by Greycstoration algorithm (CImg.h) and Jasper toolkit (JPEG2000)
+# Enable C++ Exceptions support, require by Greycstoration algorithm (CImg.h)
 ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
 
 INCLUDE_DIRECTORIES(${KIPI_INCLUDE_DIR}
