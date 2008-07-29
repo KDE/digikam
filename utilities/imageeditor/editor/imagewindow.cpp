@@ -210,7 +210,7 @@ ImageWindow::ImageWindow()
     m_instance = this;
     // We dont want to be deleted on close
     setAttribute(Qt::WA_DeleteOnClose, false);
-    setAcceptDrops(true); 
+    setAcceptDrops(true);
 
     // -- Build the GUI -------------------------------
 
@@ -426,23 +426,23 @@ void ImageWindow::setupActions()
 
     d->fileDeletePermanentlyAction = new KAction(KIcon("edit-delete"), i18n("Delete File Permanently"), this);
     d->fileDeletePermanentlyAction->setShortcut(Qt::SHIFT+Qt::Key_Delete);
-    connect(d->fileDeletePermanentlyAction, SIGNAL(triggered()), 
+    connect(d->fileDeletePermanentlyAction, SIGNAL(triggered()),
             this, SLOT(slotDeleteCurrentItemPermanently()));
     actionCollection()->addAction("image_delete_permanently", d->fileDeletePermanentlyAction);
 
     // These two actions are hidden, no menu entry, no toolbar entry, no shortcut.
     // Power users may add them.
 
-    d->fileDeletePermanentlyDirectlyAction = new KAction(KIcon("edit-delete"), 
+    d->fileDeletePermanentlyDirectlyAction = new KAction(KIcon("edit-delete"),
                                                  i18n("Delete Permanently without Confirmation"), this);
-    connect(d->fileDeletePermanentlyDirectlyAction, SIGNAL(triggered()), 
+    connect(d->fileDeletePermanentlyDirectlyAction, SIGNAL(triggered()),
             this, SLOT(slotDeleteCurrentItemPermanentlyDirectly()));
     actionCollection()->addAction("image_delete_permanently_directly",
                                   d->fileDeletePermanentlyDirectlyAction);
 
-    d->fileTrashDirectlyAction = new KAction(KIcon("user-trash"), 
+    d->fileTrashDirectlyAction = new KAction(KIcon("user-trash"),
                                      i18n("Move to Trash without Confirmation"), this);
-    connect(d->fileTrashDirectlyAction, SIGNAL(triggered()), 
+    connect(d->fileTrashDirectlyAction, SIGNAL(triggered()),
             this, SLOT(slotTrashCurrentItemDirectly()));
     actionCollection()->addAction("image_trash_directly", d->fileTrashDirectlyAction);
 
@@ -783,20 +783,20 @@ void ImageWindow::slotUpdateItemInfo()
 
     m_rotatedOrFlipped = false;
 
-    QString text = i18nc("<Image file name> (<Image number> of <Images in album>)", 
-                         "%1 (%2 of %3)", d->urlCurrent.fileName(), 
+    QString text = i18nc("<Image file name> (<Image number> of <Images in album>)",
+                         "%1 (%2 of %3)", d->urlCurrent.fileName(),
                                           QString::number(index+1),
                                           QString::number(d->urlList.count()));
     m_nameLabel->setText(text);
 
-    if (d->urlList.count() == 1) 
+    if (d->urlList.count() == 1)
     {
         m_backwardAction->setEnabled(false);
         m_forwardAction->setEnabled(false);
         m_firstAction->setEnabled(false);
         m_lastAction->setEnabled(false);
     }
-    else 
+    else
     {
         m_backwardAction->setEnabled(true);
         m_forwardAction->setEnabled(true);
@@ -804,13 +804,13 @@ void ImageWindow::slotUpdateItemInfo()
         m_lastAction->setEnabled(true);
     }
 
-    if (index == 0) 
+    if (index == 0)
     {
         m_backwardAction->setEnabled(false);
         m_firstAction->setEnabled(false);
     }
 
-    if (index == d->urlList.count()-1) 
+    if (index == d->urlList.count()-1)
     {
         m_forwardAction->setEnabled(false);
         m_lastAction->setEnabled(false);
@@ -835,7 +835,7 @@ void ImageWindow::slotUpdateItemInfo()
 
 bool ImageWindow::setup(bool iccSetupPage)
 {
-    Setup setup(this, 0, iccSetupPage ? Setup::ICCPage : Setup::LastPageUsed);    
+    Setup setup(this, 0, iccSetupPage ? Setup::ICCPage : Setup::LastPageUsed);
 
     if (setup.exec() != QDialog::Accepted)
         return false;
@@ -852,8 +852,8 @@ void ImageWindow::toggleGUI2FullScreen()
     {
         d->rightSidebar->restore();
 
-        // If Hide Thumbbar option is checked, restore it.
-        if (!m_showBarAction->isChecked())
+        // If show Thumbbar option is checked, restore it.
+        if (m_showBarAction->isChecked())
             d->thumbBar->show();
     }
     else
@@ -1146,7 +1146,7 @@ void ImageWindow::slotFileMetadataChanged(const KUrl &url)
 
 void ImageWindow::slotFilePrint()
 {
-    printImage(d->urlCurrent); 
+    printImage(d->urlCurrent);
 }
 
 void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
@@ -1161,7 +1161,7 @@ void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
     {
         // We have started image editor from Album GUI. we get picture comments from database.
 
-        m_nameLabel->progressBarMode(StatusProgressBar::CancelProgressBarMode, 
+        m_nameLabel->progressBarMode(StatusProgressBar::CancelProgressBarMode,
                                     i18n("Preparing slideshow. Please wait..."));
 
         cnt = (float)d->imageInfoList.count();
@@ -1183,19 +1183,19 @@ void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
     {
         // We have started image editor from Camera GUI. we get picture comments from metadata.
 
-        m_nameLabel->progressBarMode(StatusProgressBar::CancelProgressBarMode, 
+        m_nameLabel->progressBarMode(StatusProgressBar::CancelProgressBarMode,
                                     i18n("Preparing slideshow. Please wait..."));
 
         cnt = (float)d->urlList.count();
         DMetadata meta;
 
-        for (KUrl::List::Iterator it = d->urlList.begin() ; 
+        for (KUrl::List::Iterator it = d->urlList.begin() ;
              !m_cancelSlideShow && (it != d->urlList.end()) ; ++it)
         {
             SlidePictureInfo pictInfo;
             meta.load((*it).path());
             pictInfo.comment   = meta.getImageComment();
-            pictInfo.photoInfo = meta.getPhotographInformations(); 
+            pictInfo.photoInfo = meta.getPhotographInformations();
             settings.pictInfoMap.insert(*it, pictInfo);
 
             m_nameLabel->setProgressValue((int)((i++/cnt)*100.0));
@@ -1203,7 +1203,7 @@ void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
         }
     }
 
-    m_nameLabel->progressBarMode(StatusProgressBar::TextMode, QString());   
+    m_nameLabel->progressBarMode(StatusProgressBar::TextMode, QString());
 
     if (!m_cancelSlideShow)
     {
@@ -1265,12 +1265,12 @@ void ImageWindow::dropEvent(QDropEvent *e)
         QString ATitle;
         AlbumManager* man  = AlbumManager::instance();
         PAlbum* palbum     = man->findPAlbum(albumIDs.first());
-        if (palbum) ATitle = palbum->title();  
+        if (palbum) ATitle = palbum->title();
 
         TAlbum* talbum     = man->findTAlbum(albumIDs.first());
-        if (talbum) ATitle = talbum->title();  
+        if (talbum) ATitle = talbum->title();
 
-        loadImageInfos(imageInfoList, imageInfoList.first(), 
+        loadImageInfos(imageInfoList, imageInfoList.first(),
                        i18n("Album \"%1\"",ATitle), true);
         e->accept();
     }
@@ -1295,9 +1295,9 @@ void ImageWindow::dropEvent(QDropEvent *e)
 
         QString ATitle;
         PAlbum* palbum     = man->findPAlbum(albumIDs.first());
-        if (palbum) ATitle = palbum->title();  
+        if (palbum) ATitle = palbum->title();
 
-        loadImageInfos(imageInfoList, imageInfoList.first(), 
+        loadImageInfos(imageInfoList, imageInfoList.first(),
                        i18n("Album \"%1\"",ATitle), true);
         e->accept();
     }
@@ -1329,11 +1329,11 @@ void ImageWindow::dropEvent(QDropEvent *e)
         TAlbum* talbum     = man->findTAlbum(tagID);
         if (talbum) ATitle = talbum->title();
 
-        loadImageInfos(imageInfoList, imageInfoList.first(), 
+        loadImageInfos(imageInfoList, imageInfoList.first(),
                        i18n("Album \"%1\"",ATitle), true);
         e->accept();
     }
-    else 
+    else
     {
         e->ignore();
     }
@@ -1371,9 +1371,9 @@ void ImageWindow::slotComponentsInfo()
     list.insert(i18n("Dcraw program"),                    KDcrawIface::DcrawBinary::internalVersion());
     list.insert(i18n("LibKExiv2"),                        KExiv2Iface::KExiv2::version());
     list.insert(i18n("LibExiv2"),                         KExiv2Iface::KExiv2::Exiv2Version());
-    list.insert(i18n("Exiv2 support XMP metadata"),       KExiv2Iface::KExiv2::supportXmp() ? 
+    list.insert(i18n("Exiv2 support XMP metadata"),       KExiv2Iface::KExiv2::supportXmp() ?
                                                           i18n("Yes") : i18n("No"));
-    list.insert(i18n("Exiv2 can write metadata to Tiff"), KExiv2Iface::KExiv2::supportTiffWritting() ? 
+    list.insert(i18n("Exiv2 can write metadata to Tiff"), KExiv2Iface::KExiv2::supportTiffWritting() ?
                                                           i18n("Yes") : i18n("No"));
     list.insert(i18n("LibPNG"),                           QString(PNG_LIBPNG_VER_STRING));
     list.insert(i18n("LibTIFF"),                          QString(TIFFLIB_VERSION_STR).replace('\n', ' '));

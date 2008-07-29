@@ -185,7 +185,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
 
     // -- Show splash at start ----------------------------
 
-    KGlobal::dirs()->addResourceDir("data", KStandardDirs::installPath("data") + QString("digikam")); 
+    KGlobal::dirs()->addResourceDir("data", KStandardDirs::installPath("data") + QString("digikam"));
     KIconLoader::global()->addAppDir("digikam");
 
     KSharedConfig::Ptr config = KGlobal::config();
@@ -516,7 +516,7 @@ void ShowFoto::setupActions()
 
     // Extra 'File' menu actions ---------------------------------------------
 
-    d->fileOpenAction = actionCollection()->addAction(KStandardAction::Open, "showfoto_open_file", 
+    d->fileOpenAction = actionCollection()->addAction(KStandardAction::Open, "showfoto_open_file",
                                                       this, SLOT(slotOpenFile()));
 
     d->openFilesInFolderAction = new KAction(KIcon("folder-image"), i18n("Open folder"), this);
@@ -651,7 +651,7 @@ void ShowFoto::toggleGUI2FullScreen()
     {
         d->rightSidebar->restore();
 
-        // If Hide Thumbbar option is checked, restore it.
+        // If show Thumbbar option is checked, restore it.
         if (m_showBarAction->isChecked())
             d->thumbBar->show();
     }
@@ -721,7 +721,7 @@ void ShowFoto::slotChanged()
             Digikam::DImg* img = m_canvas->interface()->getImg();
             d->rightSidebar->itemChanged(d->currentItem->url(), sel, img);
         }
-    }    
+    }
 }
 
 void ShowFoto::slotUndoStateChanged(bool moreUndo, bool moreRedo, bool canSave)
@@ -730,15 +730,15 @@ void ShowFoto::slotUndoStateChanged(bool moreUndo, bool moreRedo, bool canSave)
     m_undoAction->setEnabled(moreUndo);
     m_redoAction->setEnabled(moreRedo);
     m_saveAction->setEnabled(canSave);
-    
+
     if (!moreUndo)
-        m_rotatedOrFlipped = false;        
+        m_rotatedOrFlipped = false;
 }
 
 void ShowFoto::toggleActions(bool val)
 {
     toggleStandardActions(val);
-        
+
     // if BCG actions exists then toggle it.
     if (d->BCGAction)
         d->BCGAction->setEnabled(val);
@@ -752,12 +752,12 @@ void ShowFoto::slotFilePrint()
 bool ShowFoto::setup(bool iccSetupPage)
 {
     Setup setup(this, 0, iccSetupPage ? Setup::ICCPage : Setup::LastPageUsed);
-    
+
     if (setup.exec() != QDialog::Accepted)
         return false;
 
     KGlobal::config()->sync();
-    
+
     applySettings();
 
     if ( d->itemsNb == 0 )
@@ -772,15 +772,15 @@ bool ShowFoto::setup(bool iccSetupPage)
 void ShowFoto::slotUpdateItemInfo()
 {
     d->itemsNb = d->thumbBar->countItems();
-    
+
     m_rotatedOrFlipped = false;
     int index = 0;
     QString text;
-    
+
     if (d->itemsNb > 0)
     {
         index = 1;
-        
+
         for (Digikam::ThumbBarItem *item = d->thumbBar->firstItem(); item; item = item->next())
         {
             if (item->url().equals(d->currentItem->url()))
@@ -790,20 +790,20 @@ void ShowFoto::slotUpdateItemInfo()
             index++;
         }
 
-        text = i18nc("<Image file name> (<Image number> of <Images in album>)", 
-                     "%1 (%2 of %3)", d->currentItem->url().fileName(), 
+        text = i18nc("<Image file name> (<Image number> of <Images in album>)",
+                     "%1 (%2 of %3)", d->currentItem->url().fileName(),
                                       index, d->itemsNb);
-    
+
         setCaption(d->currentItem->url().directory());
     }
-    else 
+    else
     {
         text = "";
         setCaption("");
     }
-    
+
     m_nameLabel->setText(text);
-    
+
     toggleNavigation( index );
 }
 
@@ -849,7 +849,7 @@ void ShowFoto::openFolder(const KUrl& url)
         filter.append (" *.JPE");
     }
 
-    // Added RAW files estentions supported by dcraw program and 
+    // Added RAW files estentions supported by dcraw program and
     // defines to digikam/libs/dcraw/rawfiles.h
     filter.append (" ");
     filter.append ( QString(KDcrawIface::DcrawBinary::instance()->rawFiles()) );
@@ -919,7 +919,7 @@ void ShowFoto::slotOpenFilesInFolder()
     if (d->currentItem && !promptUserSave(d->currentItem->url()))
         return;
 
-    KUrl url(KFileDialog::getExistingDirectory(d->lastOpenedDirectory.directory(), 
+    KUrl url(KFileDialog::getExistingDirectory(d->lastOpenedDirectory.directory(),
                                                this, i18n("Open Images From Folder")));
 
     if (!url.isEmpty())
@@ -975,28 +975,28 @@ void ShowFoto::slotBackward()
 
 void ShowFoto::toggleNavigation(int index)
 {
-    if ( d->itemsNb == 0 || d->itemsNb == 1 ) 
+    if ( d->itemsNb == 0 || d->itemsNb == 1 )
     {
         m_backwardAction->setEnabled(false);
         m_forwardAction->setEnabled(false);
         m_firstAction->setEnabled(false);
         m_lastAction->setEnabled(false);
     }
-    else 
+    else
     {
         m_backwardAction->setEnabled(true);
         m_forwardAction->setEnabled(true);
         m_firstAction->setEnabled(true);
         m_lastAction->setEnabled(true);
     }
-    
-    if (index == 1) 
+
+    if (index == 1)
     {
         m_backwardAction->setEnabled(false);
         m_firstAction->setEnabled(false);
     }
 
-    if (index == d->itemsNb) 
+    if (index == d->itemsNb)
     {
         m_forwardAction->setEnabled(false);
         m_lastAction->setEnabled(false);
@@ -1015,7 +1015,7 @@ void ShowFoto::slotLoadingStarted(const QString& filename)
 void ShowFoto::slotLoadingFinished(const QString& filename, bool success)
 {
     Digikam::EditorWindow::slotLoadingFinished(filename, success);
-    
+
     // Here we re-enable specific actions on showfoto.
     d->openFilesInFolderAction->setEnabled(true);
     d->fileOpenAction->setEnabled(true);
@@ -1098,7 +1098,7 @@ void ShowFoto::slotDeleteCurrentItem()
 
     if (!d->deleteItem2Trash)
     {
-        QString warnMsg(i18n("About to delete file \"%1\"\nAre you sure?", 
+        QString warnMsg(i18n("About to delete file \"%1\"\nAre you sure?",
                         urlCurrent.fileName()));
         if (KMessageBox::warningContinueCancel(this,
                                                warnMsg,
@@ -1191,10 +1191,10 @@ void ShowFoto::slideShow(bool startWithCurrent, Digikam::SlideShowSettings& sett
     m_cancelSlideShow = false;
     Digikam::DMetadata meta;
 
-    m_nameLabel->progressBarMode(Digikam::StatusProgressBar::CancelProgressBarMode, 
+    m_nameLabel->progressBarMode(Digikam::StatusProgressBar::CancelProgressBarMode,
                                  i18n("Preparing slideshow. Please wait..."));
 
-    for (KUrl::List::Iterator it = settings.fileList.begin() ; 
+    for (KUrl::List::Iterator it = settings.fileList.begin() ;
          !m_cancelSlideShow && (it != settings.fileList.end()) ; ++it)
     {
         Digikam::SlidePictureInfo pictInfo;
@@ -1207,7 +1207,7 @@ void ShowFoto::slideShow(bool startWithCurrent, Digikam::SlideShowSettings& sett
         kapp->processEvents();
     }
 
-    m_nameLabel->progressBarMode(Digikam::StatusProgressBar::TextMode, QString());   
+    m_nameLabel->progressBarMode(Digikam::StatusProgressBar::TextMode, QString());
 
     if (!m_cancelSlideShow)
     {
@@ -1236,9 +1236,9 @@ void ShowFoto::slotComponentsInfo()
     list.insert(i18n("Dcraw program"),                    KDcrawIface::DcrawBinary::internalVersion());
     list.insert(i18n("LibKExiv2"),                        KExiv2Iface::KExiv2::version());
     list.insert(i18n("LibExiv2"),                         KExiv2Iface::KExiv2::Exiv2Version());
-    list.insert(i18n("Exiv2 support XMP metadata"),       KExiv2Iface::KExiv2::supportXmp() ? 
+    list.insert(i18n("Exiv2 support XMP metadata"),       KExiv2Iface::KExiv2::supportXmp() ?
                                                           i18n("Yes") : i18n("No"));
-    list.insert(i18n("Exiv2 can write metadata to Tiff"), KExiv2Iface::KExiv2::supportTiffWritting() ? 
+    list.insert(i18n("Exiv2 can write metadata to Tiff"), KExiv2Iface::KExiv2::supportTiffWritting() ?
                                                           i18n("Yes") : i18n("No"));
     list.insert(i18n("LibPNG"),                           QString(PNG_LIBPNG_VER_STRING));
     list.insert(i18n("LibTIFF"),                          QString(TIFFLIB_VERSION_STR).replace('\n', ' '));
