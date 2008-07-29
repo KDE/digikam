@@ -286,6 +286,9 @@ IF(MARBLEWIDGET_FOUND)
     INCLUDE_DIRECTORIES(${LIBMARBLEWIDGET_INCLUDE_DIR})
 ENDIF(MARBLEWIDGET_FOUND)
 
+#Require by Greycstoration algorithm (CImg.h)
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
+
 # ==================================================================================================
 # Common targets parts
 
