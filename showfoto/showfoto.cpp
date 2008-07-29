@@ -370,7 +370,7 @@ void ShowFoto::show()
 
     // Report errors from dcraw detection.
 
-    KDcrawIface::DcrawBinary::instance()->checkReport();  
+    KDcrawIface::DcrawBinary::instance()->checkReport();
 }
 
 void ShowFoto::setupConnections()
@@ -408,7 +408,7 @@ void ShowFoto::setupUserArea()
         m_canvas->setSizePolicy(rightSzPolicy);
         m_canvas->makeDefaultEditingCanvas();
 
-        d->rightSidebar   = new Digikam::ImagePropertiesSideBar(widget, "ShowFoto Sidebar Right", m_splitter, 
+        d->rightSidebar   = new Digikam::ImagePropertiesSideBar(widget, "ShowFoto Sidebar Right", m_splitter,
                                                                 Digikam::Sidebar::Right);
 
         hlay->addWidget(m_splitter);
@@ -434,7 +434,7 @@ void ShowFoto::setupUserArea()
         vlay->addWidget(d->vSplitter);
 
         QHBoxLayout *hlay = new QHBoxLayout(widget);
-        d->rightSidebar   = new Digikam::ImagePropertiesSideBar(widget, "ShowFoto Sidebar Right", m_splitter, 
+        d->rightSidebar   = new Digikam::ImagePropertiesSideBar(widget, "ShowFoto Sidebar Right", m_splitter,
                                                                 Digikam::Sidebar::Right);
         hlay->addWidget(m_splitter);
         hlay->addWidget(d->rightSidebar);
@@ -445,7 +445,7 @@ void ShowFoto::setupUserArea()
     m_splitter->setFrameShape( QFrame::NoFrame );
     m_splitter->setOpaqueResize(false);
     setCentralWidget(widget);
-    d->rightSidebar->loadViewState();    
+    d->rightSidebar->loadViewState();
 }
 
 void ShowFoto::setupActions()
@@ -475,7 +475,7 @@ void ShowFoto::setupActions()
 
     // Extra 'View' menu actions ---------------------------------------------
 
-    d->showBarAction = new KToggleAction(i18n("Show Thumbnails"), 0, 
+    d->showBarAction = new KToggleAction(i18n("Show Thumbnails"), 0,
                                          CTRL+Key_T,
                                          this, SLOT(slotToggleShowBar()),
                                          actionCollection(), "shofoto_showthumbs");
@@ -490,10 +490,10 @@ void ShowFoto::setupActions()
 void ShowFoto::readSettings()
 {
     readStandardSettings();
-    
+
     KConfig* config = kapp->config();
     config->setGroup("ImageViewer Settings");
-    
+
     d->showBarAction->setChecked(config->readBoolEntry("Show Thumbnails", true));
     slotToggleShowBar();
 
@@ -503,7 +503,7 @@ void ShowFoto::readSettings()
     QSizePolicy szPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
     if(config->hasKey("Vertical Splitter Sizes") && d->vSplitter)
         d->vSplitter->setSizes(config->readIntListEntry("Vertical Splitter Sizes"));
-    else 
+    else
         m_canvas->setSizePolicy(szPolicy);
 
     Digikam::ThemeEngine::instance()->setCurrentTheme(config->readEntry("Theme", i18n("Default")));
@@ -512,10 +512,10 @@ void ShowFoto::readSettings()
 void ShowFoto::saveSettings()
 {
     saveStandardSettings();
-    
+
     KConfig* config = kapp->config();
     config->setGroup("ImageViewer Settings");
-    
+
     config->writeEntry("Last Opened Directory", d->lastOpenedDirectory.path() );
     config->writeEntry("Show Thumbnails", d->showBarAction->isChecked());
 
@@ -524,7 +524,7 @@ void ShowFoto::saveSettings()
 
     config->writeEntry("Theme", Digikam::ThemeEngine::instance()->getCurrentThemeName());
 
-    config->sync();    
+    config->sync();
 }
 
 void ShowFoto::applySettings()
@@ -552,7 +552,7 @@ void ShowFoto::applySettings()
     d->thumbBar->setExifRotate(exifRotate);
 
     m_setExifOrientationTag   = config->readBoolEntry("EXIF Set Orientation", true);
-    
+
     d->fullScreenHideThumbBar = config->readBoolEntry("FullScreenHideThumbBar", true);
 
     Digikam::ThumbBarToolTipSettings settings;
@@ -615,7 +615,7 @@ void ShowFoto::slotOpenURL(const KURL& url)
 #else
     KIO::NetAccess::download(url, localFile);
 #endif
-    
+
     m_canvas->load(localFile, m_IOFileSettings);
 
     // TODO : add preload here like in ImageWindow::slotLoadCurrent() ???
@@ -627,7 +627,7 @@ void ShowFoto::toggleGUI2FullScreen()
     {
         d->rightSidebar->restore();
 
-        // If Hide Thumbbar option is checked, restore it.
+        // If show Thumbbar option is checked, restore it.
         if (d->showBarAction->isChecked())
             d->thumbBar->show();
     }
@@ -701,7 +701,7 @@ void ShowFoto::slotChanged()
             Digikam::DImg* img = m_canvas->interface()->getImg();
             d->rightSidebar->itemChanged(d->currentItem->url(), sel, img);
         }
-    }    
+    }
 }
 
 void ShowFoto::slotUndoStateChanged(bool moreUndo, bool moreRedo, bool canSave)
@@ -710,15 +710,15 @@ void ShowFoto::slotUndoStateChanged(bool moreUndo, bool moreRedo, bool canSave)
     m_undoAction->setEnabled(moreUndo);
     m_redoAction->setEnabled(moreRedo);
     m_saveAction->setEnabled(canSave);
-    
+
     if (!moreUndo)
-        m_rotatedOrFlipped = false;        
+        m_rotatedOrFlipped = false;
 }
 
 void ShowFoto::toggleActions(bool val)
 {
     toggleStandardActions(val);
-        
+
     // if BCG actions exists then toggle it.
     if (d->BCGAction)
         d->BCGAction->setEnabled(val);
@@ -732,12 +732,12 @@ void ShowFoto::slotFilePrint()
 bool ShowFoto::setup(bool iccSetupPage)
 {
     Setup setup(this, 0, iccSetupPage ? Setup::ICCPage : Setup::LastPageUsed);
-    
+
     if (setup.exec() != QDialog::Accepted)
         return false;
 
     kapp->config()->sync();
-    
+
     applySettings();
 
     if ( d->itemsNb == 0 )
@@ -752,15 +752,15 @@ bool ShowFoto::setup(bool iccSetupPage)
 void ShowFoto::slotUpdateItemInfo(void)
 {
     d->itemsNb = d->thumbBar->countItems();
-    
+
     m_rotatedOrFlipped = false;
     int index = 0;
     QString text;
-    
+
     if (d->itemsNb > 0)
     {
         index = 1;
-        
+
         for (Digikam::ThumbBarItem *item = d->thumbBar->firstItem(); item; item = item->next())
         {
             if (item->url().equals(d->currentItem->url()))
@@ -774,10 +774,10 @@ void ShowFoto::slotUpdateItemInfo(void)
                    i18n(" (%2 of %3)")
                    .arg(QString::number(index))
                    .arg(QString::number(d->itemsNb));
-    
+
         setCaption(d->currentItem->url().directory());
     }
-    else 
+    else
     {
         text = "";
         setCaption("");
@@ -829,10 +829,10 @@ void ShowFoto::openFolder(const KURL& url)
         filter.append (" *.JPE");
     }
 
-    // Added RAW files estentions supported by dcraw program and 
+    // Added RAW files estentions supported by dcraw program and
     // defines to digikam/libs/dcraw/rawfiles.h
     filter.append (" ");
-    filter.append ( QString(KDcrawIface::DcrawBinary::instance()->rawFiles()) );  
+    filter.append ( QString(KDcrawIface::DcrawBinary::instance()->rawFiles()) );
     filter.append (" ");
 
     QString patterns = filter.lower();
@@ -900,7 +900,7 @@ void ShowFoto::slotOpenFilesInFolder()
     if (d->currentItem && !promptUserSave(d->currentItem->url()))
         return;
 
-    KURL url(KFileDialog::getExistingDirectory(d->lastOpenedDirectory.directory(), 
+    KURL url(KFileDialog::getExistingDirectory(d->lastOpenedDirectory.directory(),
                                                this, i18n("Open Images From Folder")));
 
     if (!url.isEmpty())
@@ -956,28 +956,28 @@ void ShowFoto::slotBackward()
 
 void ShowFoto::toggleNavigation(int index)
 {
-    if ( d->itemsNb == 0 || d->itemsNb == 1 ) 
+    if ( d->itemsNb == 0 || d->itemsNb == 1 )
     {
         m_backwardAction->setEnabled(false);
         m_forwardAction->setEnabled(false);
         m_firstAction->setEnabled(false);
         m_lastAction->setEnabled(false);
     }
-    else 
+    else
     {
         m_backwardAction->setEnabled(true);
         m_forwardAction->setEnabled(true);
         m_firstAction->setEnabled(true);
         m_lastAction->setEnabled(true);
     }
-    
-    if (index == 1) 
+
+    if (index == 1)
     {
         m_backwardAction->setEnabled(false);
         m_firstAction->setEnabled(false);
     }
 
-    if (index == d->itemsNb) 
+    if (index == d->itemsNb)
     {
         m_forwardAction->setEnabled(false);
         m_lastAction->setEnabled(false);
@@ -996,7 +996,7 @@ void ShowFoto::slotLoadingStarted(const QString& filename)
 void ShowFoto::slotLoadingFinished(const QString& filename, bool success)
 {
     Digikam::EditorWindow::slotLoadingFinished(filename, success);
-    
+
     // Here we re-enable specific actions on showfoto.
     d->openFilesInFolderAction->setEnabled(true);
     d->fileOpenAction->setEnabled(true);
@@ -1151,7 +1151,7 @@ void ShowFoto::slotDeleteCurrentItemResult( KIO::Job * job )
     else
     {
         // If there is an image after the deleted one, make that selected.
-        if (nextItem) 
+        if (nextItem)
             d->thumbBar->setSelected(nextItem);
 
         d->currentItem = d->thumbBar->currentItem();
@@ -1179,10 +1179,10 @@ void ShowFoto::slideShow(bool startWithCurrent, Digikam::SlideShowSettings& sett
     Digikam::DMetadata meta;
     m_cancelSlideShow = false;
 
-    m_nameLabel->progressBarMode(Digikam::StatusProgressBar::CancelProgressBarMode, 
+    m_nameLabel->progressBarMode(Digikam::StatusProgressBar::CancelProgressBarMode,
                                  i18n("Preparing slideshow. Please wait..."));
 
-    for (KURL::List::Iterator it = settings.fileList.begin() ; 
+    for (KURL::List::Iterator it = settings.fileList.begin() ;
          !m_cancelSlideShow && (it != settings.fileList.end()) ; ++it)
     {
         Digikam::SlidePictureInfo pictInfo;
@@ -1195,14 +1195,14 @@ void ShowFoto::slideShow(bool startWithCurrent, Digikam::SlideShowSettings& sett
         kapp->processEvents();
     }
 
-    m_nameLabel->progressBarMode(Digikam::StatusProgressBar::TextMode, QString());   
+    m_nameLabel->progressBarMode(Digikam::StatusProgressBar::TextMode, QString());
 
     if (!m_cancelSlideShow)
     {
         Digikam::SlideShow *slide = new Digikam::SlideShow(settings);
         if (startWithCurrent)
             slide->setCurrent(d->currentItem->url());
-    
+
         slide->show();
     }
 }
