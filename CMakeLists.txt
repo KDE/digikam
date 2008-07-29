@@ -273,6 +273,9 @@ ADD_DEFINITIONS(-DQT3_SUPPORT
                 -DQT3_SUPPORT_WARNINGS
                )
 
+# Enable C++ Exceptions support, require by Greycstoration algorithm (CImg.h) and Jasper toolkit (JPEG2000)
+ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
+
 INCLUDE_DIRECTORIES(${KIPI_INCLUDE_DIR}
                     ${KEXIV2_INCLUDE_DIR}
                     ${KDCRAW_INCLUDE_DIR}
@@ -285,9 +288,6 @@ INCLUDE_DIRECTORIES(${KIPI_INCLUDE_DIR}
 IF(MARBLEWIDGET_FOUND)
     INCLUDE_DIRECTORIES(${LIBMARBLEWIDGET_INCLUDE_DIR})
 ENDIF(MARBLEWIDGET_FOUND)
-
-#Require by Greycstoration algorithm (CImg.h) and Jasper toolkit (JPEG2000)
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
 
 # ==================================================================================================
 # Common targets parts
