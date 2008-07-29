@@ -286,7 +286,7 @@ IF(MARBLEWIDGET_FOUND)
     INCLUDE_DIRECTORIES(${LIBMARBLEWIDGET_INCLUDE_DIR})
 ENDIF(MARBLEWIDGET_FOUND)
 
-#Require by Greycstoration algorithm (CImg.h)
+#Require by Greycstoration algorithm (CImg.h) and Jasper toolkit (JPEG2000)
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
 
 # ==================================================================================================
