@@ -25,74 +25,74 @@
  *
  * ============================================================ */
 
-// C Ansi includes.
+// C ANSI includes
 
 extern "C"
 {
 #include <unistd.h>
 }
 
-// C++ includes.
+// C++ includes
 
 #include <cstdio>
 
-// Qt includes.
+// Qt includes
 
-#include <QList>
+#include <QCursor>
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
+#include <QFrame>
+#include <QHBoxLayout>
 #include <QLabel>
 #include <QLayout>
-#include <QSplitter>
-#include <QDir>
-#include <QFileInfo>
-#include <QFile>
-#include <QCursor>
+#include <QList>
 #include <QProgressBar>
-#include <QHBoxLayout>
-#include <QFrame>
+#include <QSplitter>
 #include <QVBoxLayout>
 
-// KDE includes.
+// KDE includes
 
-#include <kcursor.h>
 #include <kaction.h>
 #include <kactioncollection.h>
-#include <ktoggleaction.h>
 #include <kactionmenu.h>
-#include <ktoolbarpopupaction.h>
-#include <kstandardaction.h>
 #include <kapplication.h>
 #include <kconfig.h>
-#include <klocale.h>
-#include <kmenubar.h>
-#include <kimageio.h>
-#include <kmessagebox.h>
+#include <kcursor.h>
+#include <kfiledialog.h>
 #include <kglobal.h>
-#include <kstandarddirs.h>
+#include <kglobalsettings.h>
 #include <kiconloader.h>
-#include <kio/netaccess.h>
+#include <kimageio.h>
 #include <kio/copyjob.h>
 #include <kio/deletejob.h>
+#include <kio/netaccess.h>
+#include <klocale.h>
+#include <kmenubar.h>
+#include <kmessagebox.h>
 #include <kprotocolinfo.h>
-#include <kglobalsettings.h>
-#include <kfiledialog.h>
-#include <ktoolbar.h>
+#include <kstandardaction.h>
+#include <kstandarddirs.h>
 #include <kstatusbar.h>
+#include <ktoggleaction.h>
+#include <ktoolbar.h>
+#include <ktoolbarpopupaction.h>
 
 #include "config-digikam.h"
 #ifdef HAVE_MARBLEWIDGET
 #include <marble/global.h>
 #endif // HAVE_MARBLEWIDGET
 
-// Libkexiv2 includes.
+// Libkexiv2 includes
 
 #include <libkexiv2/kexiv2.h>
 
-// Libkdcraw includes.
+// Libkdcraw includes
 
 #include <libkdcraw/kdcraw.h>
 #include <libkdcraw/dcrawbinary.h>
 
-// C Ansi includes.
+// C ANSI includes
 
 extern "C"
 {
@@ -101,31 +101,31 @@ extern "C"
 #include <jpeglib.h>
 }
 
-// Local includes.
+// local includes
 
 #include "ddebug.h"
-#include "dpopupmenu.h"
-#include "dmetadata.h"
 #include "canvas.h"
-#include "thumbbar.h"
-#include "imagepropertiessidebar.h"
+#include "dimginterface.h"
+#include "dmetadata.h"
+#include "dpopupmenu.h"
+#include "greycstorationiface.h"
+#include "iccsettingscontainer.h"
+#include "imagedialog.h"
 #include "imageplugin.h"
 #include "imagepluginloader.h"
-#include "imagedialog.h"
-#include "dimginterface.h"
-#include "greycstorationiface.h"
+#include "imagepropertiessidebar.h"
+#include "iofilesettingscontainer.h"
 #include "libsinfodlg.h"
 #include "loadingcache.h"
-#include "splashscreen.h"
-#include "slideshow.h"
-#include "setup.h"
-#include "setupicc.h"
-#include "statusprogressbar.h"
-#include "iccsettingscontainer.h"
-#include "iofilesettingscontainer.h"
 #include "loadingcacheinterface.h"
 #include "savingcontextcontainer.h"
+#include "setup.h"
+#include "setupicc.h"
+#include "slideshow.h"
+#include "splashscreen.h"
+#include "statusprogressbar.h"
 #include "themeengine.h"
+#include "thumbbar.h"
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
 #include "showfoto.h"
@@ -645,32 +645,14 @@ void ShowFoto::slotOpenUrl(const KUrl& url)
     // TODO : add preload here like in ImageWindow::slotLoadCurrent() ???
 }
 
-void ShowFoto::toggleGUI2FullScreen()
-{
-    if (m_fullScreen)
-    {
-        d->rightSidebar->restore();
-
-        // If show Thumbbar option is checked, restore it.
-        if (m_showBarAction->isChecked())
-            d->thumbBar->show();
-    }
-    else
-    {
-        d->rightSidebar->backup();
-
-        // If Hide Thumbbar option is checked, catch it if necessary.
-        if (m_showBarAction->isChecked())
-        {
-            if (m_fullScreenHideThumbBar)
-                d->thumbBar->hide();
-        }
-    }
-}
-
 Digikam::ThumbBarView *ShowFoto::thumbBar() const
 {
     return d->thumbBar;
+}
+
+Digikam::Sidebar *ShowFoto::rightSidebar() const
+{
+    return (dynamic_cast<Digikam::Sidebar*>(d->rightSidebar));
 }
 
 void ShowFoto::slotChangeBCG()

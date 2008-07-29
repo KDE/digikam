@@ -25,16 +25,16 @@
 #ifndef IMAGEWINDOW_H
 #define IMAGEWINDOW_H
 
-// Qt includes.
+// Qt includes
 
-#include <QString>
 #include <QCloseEvent>
+#include <QString>
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 
-// Local includes.
+// local includes
 
 #include "editorwindow.h"
 #include "imageinfo.h"
@@ -91,19 +91,19 @@ private:
     void setupActions();
     void setupConnections();
     void setupUserArea();
-    void toggleGUI2FullScreen();
 
     bool save();
     bool saveAs();
 
     void saveIsComplete();
-    void saveAsIsComplete(); 
+    void saveAsIsComplete();
     void setViewToURL(const KUrl &url);
     void deleteCurrentItem(bool ask, bool permanently);
 
     void slideShow(bool startWithCurrent, SlideShowSettings& settings);
 
     ThumbBarView *thumbBar() const;
+    Sidebar *rightSidebar() const;
 
     ImageWindow();
 

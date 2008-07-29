@@ -2,7 +2,7 @@
  *
  * This file is a part of digiKam project
  * http://www.digikam.org
- * 
+ *
  * Date        : 2006-01-20
  * Description : main image editor GUI implementation
  *
@@ -24,42 +24,43 @@
 #ifndef EDITORWINDOW_H
 #define EDITORWINDOW_H
 
-// Qt includes.
+// Qt includes
 
 #include <QColor>
-#include <QString>
 #include <QRect>
+#include <QString>
 
-// KDE includes.
+// KDE includes
 
 #include <kxmlguiwindow.h>
 #include <kurl.h>
 
-// Local includes.
+// local includes
 
 #include "digikam_export.h"
 
 class QSplitter;
 class QLabel;
 
-class KToolBarPopupAction;
 class KAction;
 class KSelectAction;
 class KToggleAction;
+class KToolBarPopupAction;
 
 namespace Digikam
 {
 
-class DPopupMenu;
 class Canvas;
-class ImagePluginLoader;
-class IOFileSettingsContainer;
-class SavingContextContainer;
-class StatusProgressBar;
-class SlideShowSettings;
-class ThumbBarView;
-class SidebarSplitter;
+class DPopupMenu;
 class EditorWindowPriv;
+class IOFileSettingsContainer;
+class ImagePluginLoader;
+class SavingContextContainer;
+class Sidebar;
+class SidebarSplitter;
+class SlideShowSettings;
+class StatusProgressBar;
+class ThumbBarView;
 
 class DIGIKAM_EXPORT EditorWindow : public KXmlGuiWindow
 {
@@ -148,20 +149,22 @@ protected:
     virtual void readSettings()               { readStandardSettings();     };
     virtual void saveSettings()               { saveStandardSettings();     };
     virtual void toggleActions(bool val)      { toggleStandardActions(val); };
-    virtual void toggleGUI2FullScreen()       {};
+
+    void toggleGUI2FullScreen();
 
     virtual ThumbBarView *thumbBar() const=0;
+    virtual Sidebar *rightSidebar() const=0;
 
     virtual void slideShow(bool startWithCurrent, SlideShowSettings& settings)=0;
 
     virtual void setupConnections()=0;
     virtual void setupActions()=0;
     virtual void setupUserArea()=0;
-    virtual bool saveAs()=0; 
+    virtual bool saveAs()=0;
     virtual bool save()=0;
 
     virtual void saveIsComplete()=0;
-    virtual void saveAsIsComplete()=0; 
+    virtual void saveAsIsComplete()=0;
 
 protected slots:
 

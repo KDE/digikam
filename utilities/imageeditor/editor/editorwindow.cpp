@@ -2,7 +2,7 @@
  *
  * This file is a part of digiKam project
  * http://www.digikam.org
- * 
+ *
  * Date        : 2006-01-20
  * Description : main image editor GUI implementation
  *
@@ -25,85 +25,85 @@
 
 #include <cmath>
 
-// Qt includes.
+// Qt includes
 
+#include <QByteArray>
+#include <QCursor>
+#include <QDir>
+#include <QEventLoop>
+#include <QFile>
+#include <QFileInfo>
+#include <QImageReader>
 #include <QLabel>
 #include <QLayout>
-#include <QToolButton>
-#include <QSplitter>
-#include <QDir>
-#include <QFileInfo>
-#include <QFile>
-#include <QCursor>
-#include <QTimer>
-#include <QByteArray>
 #include <QProgressBar>
-#include <QWidgetAction>
-#include <QImageReader>
-#include <QEventLoop>
 #include <QSignalMapper>
+#include <QSplitter>
+#include <QTimer>
+#include <QToolButton>
+#include <QWidgetAction>
 
-// KDE includes.
+// KDE includes
 
-#include <kxmlguifactory.h>
-#include <ktoolinvocation.h>
+#include <kaboutdata.h>
 #include <kaction.h>
-#include <kselectaction.h>
 #include <kactioncollection.h>
 #include <kapplication.h>
-#include <kconfig.h>
-#include <klocale.h>
-#include <kglobal.h>
-#include <kstandarddirs.h>
-#include <kiconloader.h>
-#include <kedittoolbar.h>
-#include <kaboutdata.h>
-#include <kcursor.h>
-#include <kstandardaction.h>
-#include <kstandardshortcut.h>
-#include <kfiledialog.h>
-#include <kmenubar.h>
-#include <kimageio.h>
-#include <kmessagebox.h>
-#include <kio/netaccess.h>
-#include <kio/job.h>
-#include <kprotocolinfo.h>
-#include <kglobalsettings.h>
-#include <ktoolbar.h>
-#include <kstatusbar.h>
-#include <kwindowsystem.h>
 #include <kcombobox.h>
-#include <ktoggleaction.h>
-#include <kshortcutsdialog.h>
-#include <ktoolbarpopupaction.h>
+#include <kconfig.h>
+#include <kcursor.h>
+#include <kedittoolbar.h>
+#include <kfiledialog.h>
+#include <kglobal.h>
+#include <kglobalsettings.h>
+#include <kiconloader.h>
+#include <kimageio.h>
+#include <kio/job.h>
+#include <kio/netaccess.h>
+#include <klocale.h>
+#include <kmenubar.h>
+#include <kmessagebox.h>
+#include <kprotocolinfo.h>
+#include <kselectaction.h>
 #include <kservice.h>
 #include <kservicetype.h>
 #include <kservicetypetrader.h>
+#include <kshortcutsdialog.h>
+#include <kstandardaction.h>
+#include <kstandarddirs.h>
+#include <kstandardshortcut.h>
+#include <kstatusbar.h>
+#include <ktoggleaction.h>
 #include <ktogglefullscreenaction.h>
+#include <ktoolbar.h>
+#include <ktoolbarpopupaction.h>
+#include <ktoolinvocation.h>
+#include <kwindowsystem.h>
+#include <kxmlguifactory.h>
 
-// Local includes.
+// local includes
 
 #include "ddebug.h"
-#include "dpopupmenu.h"
 #include "canvas.h"
 #include "dimginterface.h"
+#include "dpopupmenu.h"
+#include "exposurecontainer.h"
+#include "filesaveoptionsbox.h"
+#include "iccsettingscontainer.h"
+#include "imagedialog.h"
 #include "imageplugin.h"
 #include "imagepluginloader.h"
-#include "imageresize.h"
 #include "imageprint.h"
-#include "imagedialog.h"
-#include "filesaveoptionsbox.h"
-#include "statusprogressbar.h"
-#include "iccsettingscontainer.h"
-#include "exposurecontainer.h"
+#include "imageresize.h"
 #include "iofilesettingscontainer.h"
-#include "savingcontextcontainer.h"
 #include "loadingcacheinterface.h"
-#include "slideshowsettings.h"
+#include "rawcameradlg.h"
+#include "savingcontextcontainer.h"
 #include "sidebar.h"
+#include "slideshowsettings.h"
+#include "statusprogressbar.h"
 #include "themeengine.h"
 #include "thumbbar.h"
-#include "rawcameradlg.h"
 #include "editorwindowprivate.h"
 #include "editorwindow.h"
 #include "editorwindow.moc"
@@ -168,21 +168,21 @@ void EditorWindow::setupContextMenu()
 {
     m_contextMenu         = new DPopupMenu(this);
     KActionCollection *ac = actionCollection();
-    if (ac->action("editorwindow_backward")) 
+    if (ac->action("editorwindow_backward"))
         m_contextMenu->addAction(ac->action("editorwindow_backward"));
-    if (ac->action("editorwindow_forward")) 
+    if (ac->action("editorwindow_forward"))
         m_contextMenu->addAction(ac->action("editorwindow_forward"));
     m_contextMenu->addSeparator();
-    if (ac->action("editorwindow_slideshow")) 
+    if (ac->action("editorwindow_slideshow"))
         m_contextMenu->addAction(ac->action("editorwindow_slideshow"));
     if (ac->action("editorwindow_rotate_left"))
         m_contextMenu->addAction(ac->action("editorwindow_rotate_left"));
     if (ac->action("editorwindow_rotate_right"))
         m_contextMenu->addAction(ac->action("editorwindow_rotate_right"));
-    if (ac->action("editorwindow_crop")) 
+    if (ac->action("editorwindow_crop"))
         m_contextMenu->addAction(ac->action("editorwindow_crop"));
     m_contextMenu->addSeparator();
-    if (ac->action("editorwindow_delete")) 
+    if (ac->action("editorwindow_delete"))
         m_contextMenu->addAction(ac->action("editorwindow_delete"));
 }
 
@@ -309,7 +309,7 @@ void EditorWindow::setupStandardActions()
     connect(m_fileDeleteAction, SIGNAL(triggered()), this, SLOT(slotDeleteCurrentItem()));
     actionCollection()->addAction("editorwindow_delete", m_fileDeleteAction);
 
-    actionCollection()->addAction(KStandardAction::Close, "editorwindow_close", 
+    actionCollection()->addAction(KStandardAction::Close, "editorwindow_close",
                                   this, SLOT(close()));
 
     // -- Standard 'Edit' menu actions ---------------------------------------------
@@ -428,20 +428,20 @@ void EditorWindow::setupStandardActions()
     connect(d->slideShowAction, SIGNAL(triggered()), this, SLOT(slotToggleSlideShow()));
     actionCollection()->addAction("editorwindow_slideshow", d->slideShowAction);
 
-    d->viewUnderExpoAction = new KToggleAction(KIcon("underexposure"), 
+    d->viewUnderExpoAction = new KToggleAction(KIcon("underexposure"),
                                                i18n("Under-Exposure Indicator"), this);
-    d->viewUnderExpoAction->setShortcut(Qt::Key_F10); 
+    d->viewUnderExpoAction->setShortcut(Qt::Key_F10);
     connect(d->viewUnderExpoAction, SIGNAL(triggered()), this, SLOT(slotToggleUnderExposureIndicator()));
     actionCollection()->addAction("editorwindow_underexposure", d->viewUnderExpoAction);
 
-    d->viewOverExpoAction = new KToggleAction(KIcon("overexposure"), 
+    d->viewOverExpoAction = new KToggleAction(KIcon("overexposure"),
                                               i18n("Over-Exposure Indicator"), this);
-    d->viewOverExpoAction->setShortcut(Qt::Key_F11); 
+    d->viewOverExpoAction->setShortcut(Qt::Key_F11);
     connect(d->viewOverExpoAction, SIGNAL(triggered()), this, SLOT(slotToggleOverExposureIndicator()));
     actionCollection()->addAction("editorwindow_overexposure", d->viewOverExpoAction);
 
     d->viewCMViewAction = new KToggleAction(KIcon("video-display"), i18n("Color Managed View"), this);
-    d->viewCMViewAction->setShortcut(Qt::Key_F12); 
+    d->viewCMViewAction->setShortcut(Qt::Key_F12);
     connect(d->viewCMViewAction, SIGNAL(triggered()), this, SLOT(slotToggleColorManagedView()));
     actionCollection()->addAction("editorwindow_cmview", d->viewCMViewAction);
 
@@ -502,7 +502,7 @@ void EditorWindow::setupStandardActions()
 
     m_themeMenuAction = new KSelectAction(i18n("&Themes"), this);
     m_themeMenuAction->setItems(ThemeEngine::instance()->themeNames());
-    connect(m_themeMenuAction, SIGNAL(triggered(const QString&)), 
+    connect(m_themeMenuAction, SIGNAL(triggered(const QString&)),
             this, SLOT(slotChangeTheme(const QString&)));
     actionCollection()->addAction("theme_menu", m_themeMenuAction);
 
@@ -755,7 +755,7 @@ void EditorWindow::slotZoomChanged(double zoom)
     d->zoomMinusAction->setEnabled(!m_canvas->minZoom());
 
     d->zoomCombo->blockSignals(true);
-    d->zoomCombo->setItemText(d->zoomCombo->currentIndex(), 
+    d->zoomCombo->setItemText(d->zoomCombo->currentIndex(),
                               QString::number(lround(zoom*100.0)) + QString("%"));
     d->zoomCombo->blockSignals(false);
 }
@@ -796,7 +796,7 @@ void EditorWindow::unLoadImagePlugins()
 
     foreach (ImagePlugin *plugin, pluginList)
     {
-        if (plugin) 
+        if (plugin)
         {
             guiFactory()->removeClient(plugin);
             plugin->setParentWidget(0);
@@ -890,7 +890,7 @@ void EditorWindow::applyStandardSettings()
     // If digiKam Color Management is enable, no need to correct color of decoded RAW image,
     // else, sRGB color workspace will be used.
 
-    if (d->ICCSettings->enableCMSetting) 
+    if (d->ICCSettings->enableCMSetting)
         m_IOFileSettings->rawDecodingSettings.outputColorSpace = KDcrawIface::RawDecodingSettings::RAWCOLOR;
     else
         m_IOFileSettings->rawDecodingSettings.outputColorSpace = KDcrawIface::RawDecodingSettings::SRGB;
@@ -922,7 +922,7 @@ void EditorWindow::applyStandardSettings()
 
     slotThemeChanged();
 
-    // -- Exposure Indicators Settings --------------------------------------- 
+    // -- Exposure Indicators Settings ---------------------------------------
 
     QColor black(Qt::black);
     QColor white(Qt::white);
@@ -993,7 +993,7 @@ void EditorWindow::toggleStandardActions(bool val)
 
     foreach (ImagePlugin *plugin, pluginList)
     {
-        if (plugin) 
+        if (plugin)
         {
             plugin->setEnabledActions(val);
         }
@@ -1096,8 +1096,8 @@ bool EditorWindow::promptForOverWrite()
     QFileInfo fi(m_canvas->currentImageFilePath());
     QString warnMsg(i18n("About to overwrite file \"%1\"\nAre you sure?", fi.fileName()));
     return (KMessageBox::warningContinueCancel(this,
-                                               warnMsg, 
-                                               i18n("Warning"), 
+                                               warnMsg,
+                                               i18n("Warning"),
                                                KGuiItem(i18n("Overwrite")),
                                                KStandardGuiItem::cancel(),
                                                QString("editorWindowSaveOverwrite"))
@@ -1126,7 +1126,7 @@ bool EditorWindow::promptUserSave(const KUrl& url)
         {
             bool saving = false;
 
-            if (m_canvas->isReadOnly()) 
+            if (m_canvas->isReadOnly())
                 saving = saveAs();
             else if (promptForOverWrite())
                 saving = save();
@@ -1199,7 +1199,7 @@ void EditorWindow::slotSelected(bool val)
     QList<ImagePlugin*> pluginList = m_imagePluginLoader->pluginList();
     foreach (ImagePlugin *plugin, pluginList)
     {
-        if (plugin) 
+        if (plugin)
         {
             plugin->setEnabledSelectionActions(val);
         }
@@ -1213,7 +1213,7 @@ void EditorWindow::slotSelected(bool val)
     if (val)
         d->selectLabel->setText(QString("(%1, %2) (%3 x %4)").arg(sel.x()).arg(sel.y())
                                .arg(sel.width()).arg(sel.height()));
-    else 
+    else
         d->selectLabel->setText(i18n("No selection"));
 }
 
@@ -1460,7 +1460,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     QString originalFormat = m_canvas->currentImageFileFormat().toLower();
     // inspired by kimageio.cpp, typeForMime(). This here is "mimeForType".
     KService::List services = KServiceTypeTrader::self()->query("QImageIOPlugins");
-    foreach(const KService::Ptr &service, services) 
+    foreach(const KService::Ptr &service, services)
     {
         if (service->property("X-KDE-ImageFormat").toStringList().contains(originalFormat))
         {
@@ -1475,7 +1475,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     m_savingContext->srcURL = url;
 
     FileSaveOptionsBox *options = new FileSaveOptionsBox();
-    KFileDialog imageFileSaveDialog(m_savingContext->srcURL.isLocalFile() ? 
+    KFileDialog imageFileSaveDialog(m_savingContext->srcURL.isLocalFile() ?
                                     m_savingContext->srcURL : KUrl(QDir::homePath()),
                                     QString(),
                                     this,
@@ -1659,7 +1659,7 @@ bool EditorWindow::moveFile()
 
     // For new files respect the umask setting.
     mode_t filePermissions = (S_IREAD | S_IWRITE | S_IROTH | S_IWOTH | S_IRGRP | S_IWGRP) & ~curr_umask;
-    
+
     // For existing files, use the mode of the original file.
     if (m_savingContext->destinationExisted)
     {
@@ -1698,9 +1698,9 @@ void EditorWindow::slotToggleColorManagedView()
         d->ICCSettings->managedViewSetting = cmv;
         m_canvas->setICCSettings(d->ICCSettings);
 
-        // Save Color Managed View setting in config file. For performance 
-        // reason, no need to flush file, it cached in memory and will be flushed 
-        // to disk at end of session.  
+        // Save Color Managed View setting in config file. For performance
+        // reason, no need to flush file, it cached in memory and will be flushed
+        // to disk at end of session.
         KSharedConfig::Ptr config = KGlobal::config();
         KConfigGroup group = config->group("Color Management");
         group.writeEntry("ManagedView", cmv);
@@ -1746,8 +1746,8 @@ void EditorWindow::slotToggleUnderExposureIndicator()
 
 void EditorWindow::setUnderExposureToolTip(bool uei)
 {
-    d->underExposureIndicator->setToolTip( 
-                  uei ? i18n("Under-Exposure indicator is enabled") 
+    d->underExposureIndicator->setToolTip(
+                  uei ? i18n("Under-Exposure indicator is enabled")
                       : i18n("Under-Exposure indicator is disabled"));
 }
 
@@ -1767,8 +1767,8 @@ void EditorWindow::slotToggleOverExposureIndicator()
 
 void EditorWindow::setOverExposureToolTip(bool oei)
 {
-    d->overExposureIndicator->setToolTip( 
-                  oei ? i18n("Over-Exposure indicator is enabled") 
+    d->overExposureIndicator->setToolTip(
+                  oei ? i18n("Over-Exposure indicator is enabled")
                       : i18n("Over-Exposure indicator is disabled"));
 }
 
@@ -1844,6 +1844,29 @@ void EditorWindow::slotToggleShowBar()
         thumbBar()->show();
     else
         thumbBar()->hide();
+}
+
+void EditorWindow::toggleGUI2FullScreen()
+{
+    if (m_fullScreen)
+    {
+        rightSidebar()->restore();
+
+        // If Show Thumbbar option is checked, restore it.
+        if (m_showBarAction->isChecked())
+            thumbBar()->show();
+    }
+    else
+    {
+        rightSidebar()->backup();
+
+        // If Show Thumbbar option is checked, catch it if necessary.
+        if (m_showBarAction->isChecked())
+        {
+            if (m_fullScreenHideThumbBar)
+                thumbBar()->hide();
+        }
+    }
 }
 
 }  // namespace Digikam

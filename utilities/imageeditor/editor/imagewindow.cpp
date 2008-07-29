@@ -26,112 +26,112 @@
 
 #include <cstdio>
 
-// Qt includes.
+// Qt includes
 
-#include <QProgressBar>
-#include <QTimer>
-#include <QLabel>
-#include <QImage>
-#include <QSplitter>
-#include <QPainter>
-#include <QPixmap>
-#include <QHBoxLayout>
-#include <QFrame>
+#include <QCloseEvent>
 #include <QDragMoveEvent>
 #include <QDropEvent>
-#include <QCloseEvent>
+#include <QFrame>
+#include <QHBoxLayout>
+#include <QImage>
+#include <QLabel>
+#include <QPainter>
+#include <QPixmap>
+#include <QProgressBar>
+#include <QSplitter>
+#include <QTimer>
 
-// KDE includes.
+// KDE includes
 
-#include <kcursor.h>
-#include <klocale.h>
-#include <kconfig.h>
-#include <kstandarddirs.h>
-#include <kapplication.h>
-#include <kmessagebox.h>
-#include <ktemporaryfile.h>
-#include <kimageio.h>
-#include <kfiledialog.h>
-#include <kdeversion.h>
-#include <kmenubar.h>
-#include <ktoolbar.h>
 #include <kaction.h>
-#include <ktoggleaction.h>
 #include <kactioncollection.h>
-#include <kstdaccel.h>
-#include <kstandardaction.h>
-#include <ktoolbarpopupaction.h>
-#include <kstdguiitem.h>
-#include <kstatusbar.h>
-#include <kwindowsystem.h>
+#include <kapplication.h>
+#include <kconfig.h>
+#include <kcursor.h>
+#include <kdeversion.h>
+#include <kfiledialog.h>
 #include <kglobal.h>
+#include <kimageio.h>
+#include <klocale.h>
+#include <kmenubar.h>
+#include <kmessagebox.h>
 #include <kselectaction.h>
+#include <kstandardaction.h>
+#include <kstandarddirs.h>
+#include <kstatusbar.h>
+#include <kstdaccel.h>
+#include <kstdguiitem.h>
+#include <ktemporaryfile.h>
+#include <ktoggleaction.h>
+#include <ktoolbar.h>
+#include <ktoolbarpopupaction.h>
+#include <kwindowsystem.h>
 
 #include "config-digikam.h"
 #ifdef HAVE_MARBLEWIDGET
 #include <marble/global.h>
 #endif // HAVE_MARBLEWIDGET
 
-// libKipi includes.
+// libKipi includes
 
 #include <libkipi/interface.h>
 
-// Libkexiv2 includes.
+// Libkexiv2 includes
 
 #include <libkexiv2/kexiv2.h>
 
-// Libkdcraw includes.
+// Libkdcraw includes
 
 #include <libkdcraw/kdcraw.h>
 #include <libkdcraw/dcrawbinary.h>
 
-// C Ansi includes.
+// C ANSI includes
 
 extern "C"
 {
 #include <gphoto2-version.h>
+#include <jpeglib.h>
 #include <png.h>
 #include <tiffvers.h>
-#include <jpeglib.h>
 }
 
-// Local includes.
+// local includes
 
-#include "constants.h"
 #include "ddebug.h"
-#include "dlogoaction.h"
-#include "dpopupmenu.h"
-#include "ddragobjects.h"
-#include "canvas.h"
-#include "dimginterface.h"
-#include "dimg.h"
-#include "dmetadata.h"
-#include "imageplugin.h"
-#include "imagepluginloader.h"
-#include "imageprint.h"
-#include "imagepreviewbar.h"
-#include "albummanager.h"
 #include "album.h"
 #include "albumdb.h"
-#include "databaseaccess.h"
+#include "albummanager.h"
 #include "albumsettings.h"
-#include "syncjob.h"
-#include "imageinfo.h"
-#include "imagepropertiessidebardb.h"
-#include "tagspopupmenu.h"
-#include "ratingpopupmenu.h"
-#include "slideshow.h"
-#include "setup.h"
-#include "greycstorationiface.h"
-#include "libsinfodlg.h"
-#include "iccsettingscontainer.h"
-#include "iofilesettingscontainer.h"
-#include "loadingcacheinterface.h"
-#include "savingcontextcontainer.h"
-#include "statusprogressbar.h"
-#include "imageattributeswatch.h"
+#include "canvas.h"
+#include "constants.h"
+#include "databaseaccess.h"
+#include "ddragobjects.h"
 #include "deletedialog.h"
+#include "dimg.h"
+#include "dimginterface.h"
+#include "dlogoaction.h"
+#include "dmetadata.h"
+#include "dpopupmenu.h"
+#include "greycstorationiface.h"
+#include "iccsettingscontainer.h"
+#include "imageattributeswatch.h"
+#include "imageinfo.h"
+#include "imageplugin.h"
+#include "imagepluginloader.h"
+#include "imagepreviewbar.h"
+#include "imageprint.h"
+#include "imagepropertiessidebardb.h"
+#include "iofilesettingscontainer.h"
+#include "libsinfodlg.h"
+#include "loadingcacheinterface.h"
 #include "metadatahub.h"
+#include "ratingpopupmenu.h"
+#include "savingcontextcontainer.h"
+#include "setup.h"
+#include "slideshow.h"
+#include "statusprogressbar.h"
+#include "syncjob.h"
+#include "tagspopupmenu.h"
 #include "themeengine.h"
 #include "imagewindow.h"
 #include "imagewindow.moc"
@@ -846,29 +846,6 @@ bool ImageWindow::setup(bool iccSetupPage)
     return true;
 }
 
-void ImageWindow::toggleGUI2FullScreen()
-{
-    if (m_fullScreen)
-    {
-        d->rightSidebar->restore();
-
-        // If show Thumbbar option is checked, restore it.
-        if (m_showBarAction->isChecked())
-            d->thumbBar->show();
-    }
-    else
-    {
-        d->rightSidebar->backup();
-
-        // If Hide Thumbbar option is checked, catch it if necessary.
-        if (m_showBarAction->isChecked())
-        {
-            if (m_fullScreenHideThumbBar)
-                d->thumbBar->hide();
-        }
-    }
-}
-
 void ImageWindow::saveIsComplete()
 {
     // With save(), we do not reload the image but just continue using the data.
@@ -1359,6 +1336,11 @@ void ImageWindow::slotChangeTheme(const QString& theme)
 ThumbBarView *ImageWindow::thumbBar() const
 {
     return (dynamic_cast<ThumbBarView*>(d->thumbBar));
+}
+
+Sidebar *ImageWindow::rightSidebar() const
+{
+    return (dynamic_cast<Sidebar*>(d->rightSidebar));
 }
 
 void ImageWindow::slotComponentsInfo()
