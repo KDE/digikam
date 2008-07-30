@@ -199,6 +199,8 @@ protected slots:
     virtual void slotSetup(){ setup(); };
     virtual void slotChangeTheme(const QString& theme);
 
+    virtual void slotComponentsInfo();
+
     virtual void slotFilePrint()=0;
     virtual void slotDeleteCurrentItem()=0;
     virtual void slotBackward()=0;
@@ -209,8 +211,6 @@ protected slots:
     virtual void slotChanged()=0;
     virtual void slotContextMenu()=0;
     virtual void slotRevert()=0;
-
-    virtual void slotComponentsInfo()=0;
 
 private slots:
 

@@ -122,8 +122,6 @@ private slots:
     void slotContextMenu();
     void slotRevert();
 
-    void slotComponentsInfo();
-
 private:
 
     ShowFotoPriv* d;

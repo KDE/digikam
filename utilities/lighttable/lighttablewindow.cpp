@@ -49,37 +49,15 @@
 #include <kglobal.h>
 #include <ktoolbar.h>
 
-#include "config-digikam.h"
-#ifdef HAVE_MARBLEWIDGET
-#include <marble/global.h>
-#endif // HAVE_MARBLEWIDGET
-
-// libKipi includes.
-
-#include <libkipi/interface.h>
-
-// Libkexiv2 includes.
-
-#include <libkexiv2/kexiv2.h>
-
 // Libkdcraw includes.
 
-#include <libkdcraw/kdcraw.h>
 #include <libkdcraw/dcrawbinary.h>
-
-// C Ansi includes.
-
-extern "C"
-{
-#include <gphoto2-version.h>
-#include <png.h>
-#include <tiffvers.h>
-#include <jpeglib.h>
-}
 
 // Local includes.
 
+#include "componentsinfo.h"
 #include "ddebug.h"
+#include "digikamapp.h"
 #include "themeengine.h"
 #include "dimg.h"
 #include "dlogoaction.h"
@@ -88,11 +66,9 @@ extern "C"
 #include "albummanager.h"
 #include "deletedialog.h"
 #include "imagewindow.h"
+#include "rawcameradlg.h"
 #include "slideshow.h"
 #include "setup.h"
-#include "greycstorationiface.h"
-#include "rawcameradlg.h"
-#include "libsinfodlg.h"
 #include "syncjob.h"
 #include "thumbnailsize.h"
 #include "lighttablepreview.h"
@@ -1625,32 +1601,7 @@ void LightTableWindow::slotChangeTheme(const QString& theme)
 
 void LightTableWindow::slotComponentsInfo()
 {
-    QMap<QString, QString> list;
-    list.insert(i18n("LibQt"),                            qVersion());
-    list.insert(i18n("LibKDE"),                           KDE::versionString());
-    list.insert(i18n("LibKipi"),                          KIPI::Interface::version());
-    list.insert(i18n("LibKdcraw"),                        KDcrawIface::KDcraw::version());
-    list.insert(i18n("Dcraw program"),                    KDcrawIface::DcrawBinary::internalVersion());
-    list.insert(i18n("LibKExiv2"),                        KExiv2Iface::KExiv2::version());
-    list.insert(i18n("LibExiv2"),                         KExiv2Iface::KExiv2::Exiv2Version());
-    list.insert(i18n("Exiv2 support XMP metadata"),       KExiv2Iface::KExiv2::supportXmp() ?
-                                                          i18n("Yes") : i18n("No"));
-    list.insert(i18n("Exiv2 can write metadata to Tiff"), KExiv2Iface::KExiv2::supportTiffWritting() ?
-                                                          i18n("Yes") : i18n("No"));
-    list.insert(i18n("LibPNG"),                           QString(PNG_LIBPNG_VER_STRING));
-    list.insert(i18n("LibTIFF"),                          QString(TIFFLIB_VERSION_STR).replace('\n', ' '));
-    list.insert(i18n("LibJPEG"),                          QString::number(JPEG_LIB_VERSION));
-    list.insert(i18n("LibCImg"),                          GreycstorationIface::cimgVersionString());
-
-#ifdef HAVE_MARBLEWIDGET
-    list.insert(i18n("Marble widget"),                    QString(MARBLE_VERSION_STRING));
-#endif //HAVE_MARBLEWIDGET
-
-    list.insert(i18n("LibGphoto2"),                       QString(gp_library_version(GP_VERSION_SHORT)[0]));
-
-    LibsInfoDlg dlg(this);
-    dlg.setComponentsInfoMap(list);
-    dlg.exec();
+    showDigikamComponentsInfo();
 }
 
 }  // namespace Digikam

@@ -96,6 +96,7 @@
 #include "imageprint.h"
 #include "imageresize.h"
 #include "iofilesettingscontainer.h"
+#include "libsinfodlg.h"
 #include "loadingcacheinterface.h"
 #include "rawcameradlg.h"
 #include "savingcontextcontainer.h"
@@ -1867,6 +1868,12 @@ void EditorWindow::toggleGUI2FullScreen()
                 thumbBar()->hide();
         }
     }
+}
+
+void EditorWindow::slotComponentsInfo()
+{
+    LibsInfoDlg dlg(this);
+    dlg.exec();
 }
 
 }  // namespace Digikam
