@@ -453,11 +453,6 @@ PhotoInfoContainer DMetadata::getPhotographInformations() const
 
 bool DMetadata::getImageTagsPath(QStringList& tagsPath) const
 {
-    // Standard Xmp namespace do not provide a place to store Tags Path list as well.
-    // We will use a private namespace for that.
-    if (!registerXmpNameSpace("http://www.digikam.org/ns/1.0/", "digiKam"))
-        return false;
-
     // Try to get Tags Path list from Xmp in first.
     tagsPath = getXmpTagStringSeq("Xmp.digiKam.TagsList", false);
     if (!tagsPath.isEmpty())
@@ -484,11 +479,6 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath) const
 {
     // NOTE : with digiKam 0.9.x, we have used Iptc Keywords for that.
     // Now this way is obsolete, and we use Xmp instead.
-
-    // Standard Xmp namespace do not provide a place to store Tags path as well.
-    // We will use a private namespace for that.
-    if (!registerXmpNameSpace("http://www.digikam.org/ns/1.0/", "digiKam"))
-        return false;
 
     // Remove the old Tags path list from metadata if already exist.
     if (removeXmpTag("Xmp.digiKam.TagsList", false))
