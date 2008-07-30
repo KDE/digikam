@@ -436,8 +436,6 @@ bool DatabaseBackend::exec(QSqlQuery &query)
     {
         if (d->parameters.isSQLite() && query.lastError().number() == 5)
         {
-            int limit;
-            bool success = false;
             QApplication *app = qobject_cast<QApplication *>(QCoreApplication::instance());
             if (!app)
             {
