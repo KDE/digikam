@@ -454,7 +454,6 @@ void ShowFoto::setupUserArea()
         m_splitter        = new Digikam::SidebarSplitter(widget);
         d->thumbBar       = new Digikam::ThumbBarView(m_splitter, Qt::Vertical);
         m_canvas          = new Digikam::Canvas(m_splitter);
-        m_canvas->makeDefaultEditingCanvas();
         m_splitter->setStretchFactor(1, 10);      // set Canvas default size to max.
 
         d->rightSidebar   = new Digikam::ImagePropertiesSideBar(widget, m_splitter, KMultiTabBar::Right);
@@ -473,7 +472,6 @@ void ShowFoto::setupUserArea()
         m_vSplitter       = new QSplitter(Qt::Vertical, widget2);
         m_canvas          = new Digikam::Canvas(m_vSplitter);
         d->thumbBar       = new Digikam::ThumbBarView(m_vSplitter, Qt::Horizontal);
-        m_canvas->makeDefaultEditingCanvas();
 
         m_vSplitter->setFrameStyle( QFrame::NoFrame );
         m_vSplitter->setFrameShadow( QFrame::Plain );
@@ -497,6 +495,8 @@ void ShowFoto::setupUserArea()
         m_splitter->setStretchFactor(0, 10);      // set Canvas+thumbbar container default size to max.
         m_vSplitter->setStretchFactor(0, 10);     // set Canvas default size to max.
     }
+
+    m_canvas->makeDefaultEditingCanvas();
 
     m_splitter->setFrameStyle( QFrame::NoFrame );
     m_splitter->setFrameShadow( QFrame::Plain );
