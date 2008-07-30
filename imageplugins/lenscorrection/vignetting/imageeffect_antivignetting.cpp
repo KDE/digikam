@@ -47,6 +47,7 @@
 // Local includes.
 
 #include "version.h"
+#include "daboutdata.h"
 #include "ddebug.h"
 #include "bcgmodifier.h"
 #include "imageiface.h"
@@ -73,7 +74,7 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
                                        KAboutData::License_GPL,
                                        ki18n("(c) 2004-2008, Gilles Caulier"),
                                        KLocalizedString(),
-                                       "http://www.digikam.org");
+                                       Digikam::webProjectUrl().url().toUtf8());
 
     about->addAuthor(ki18n("Gilles Caulier"), ki18n("Author and maintainer"),
                      "caulier dot gilles at gmail dot com");

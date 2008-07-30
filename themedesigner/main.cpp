@@ -36,6 +36,7 @@
 
 // Local includes.
 
+#include "daboutdata.h"
 #include "version.h"
 #include "mainwindow.h"
 
@@ -44,25 +45,13 @@ int main(int argc, char** argv)
     KAboutData aboutData("digikamthemedesigner", "digikam",
                          ki18n("digiKam Theme Designer"),
                          digiKamVersion().toAscii(),
-                         ki18n("A Color Theme Designer for digiKam"),
+                         Digikam::slogan(),
                          KAboutData::License_GPL,
-                         ki18n("(c) 2002-2008, digiKam developers team"),
+                         Digikam::copyright(),
                          KLocalizedString(),
-                         "http://www.digikam.org");
+                         Digikam::webProjectUrl().url().toUtf8());
 
-    aboutData.addAuthor(ki18n("Caulier Gilles"),
-                        ki18n("Main developer and coordinator"),
-                        "caulier dot gilles at gmail dot com",
-                        "http://www.digikam.org/?q=blog/3");
-
-    aboutData.addAuthor(ki18n("Marcel Wiesweg"),
-                        ki18n("Developer"),
-                        "marcel dot wiesweg at gmx dot de",
-                        "http://www.digikam.org/?q=blog/8");
-
-    aboutData.addAuthor(ki18n("Renchi Raju"),
-                        ki18n("Developer"),
-                        "renchi at pooh dot tam dot uiuc dot edu");
+    Digikam::authorsRegistration(aboutData);
 
     KCmdLineArgs::init(argc, argv, &aboutData);
 

@@ -46,7 +46,6 @@
 
 // Local includes.
 
-#include "version.h"
 #include "ddebug.h"
 #include "daboutdata.h"
 #include "albummanager.h"
@@ -57,6 +56,7 @@
 #include "collectionlocation.h"
 #include "digikamapp.h"
 #include "digikamfirstrun.h"
+#include "version.h"
 
 int main(int argc, char *argv[])
 {

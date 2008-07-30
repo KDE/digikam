@@ -53,6 +53,7 @@
 // Local includes.
 
 #include "version.h"
+#include "daboutdata.h"
 #include "ddebug.h"
 #include "dimg.h"
 #include "dimgimagefilters.h"
@@ -84,7 +85,7 @@ ImageEffect_ColorFX::ImageEffect_ColorFX(QWidget* parent)
                             KAboutData::License_GPL,
                             ki18n("(c) 2004-2005, Renchi Raju\n(c) 2006-2007, Gilles Caulier"),
                             KLocalizedString(),
-                            "http://www.digikam.org");
+                            Digikam::webProjectUrl().url().toUtf8());
 
     about->addAuthor(ki18n("Renchi Raju"), ki18n("Original Author"),
                      "renchi@pooh.tam.uiuc.edu");

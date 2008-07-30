@@ -45,6 +45,7 @@
 
 // Local includes.
 
+#include "daboutdata.h"
 #include "ddebug.h"
 #include "version.h"
 #include "themeengine.h"
@@ -148,7 +149,7 @@ QString WelcomePageView::infoPage()
 
     QString(digikam_version),            // %1 : current digiKam version
     "help:/digikam/index.html",          // %2 : digiKam help:// Url
-    "http://www.digikam.org",            // %3 : digiKam homepage Url
+    webProjectUrl().url(),               // %3 : digiKam homepage Url
     "0.9.4",                             // %4 : prior digiKam version
     featureItems,                        // %5 : prior KDE version
     QString(),                           // %6 : generated list of new features

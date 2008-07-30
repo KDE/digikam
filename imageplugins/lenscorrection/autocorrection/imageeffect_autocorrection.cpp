@@ -46,6 +46,7 @@
 // Local includes.
 
 #include "version.h"
+#include "daboutdata.h"
 #include "ddebug.h"
 #include "dmetadata.h"
 #include "imageiface.h"
@@ -73,7 +74,7 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
                                        ki18n("(c) 2008, Adrian Schroeter\n"
                                        "(c) 2008, Gilles Caulier"),
                                        KLocalizedString(),
-                                       "http://www.digikam.org");
+                                       Digikam::webProjectUrl().url().toUtf8());
 
     about->addAuthor(ki18n("Adrian Schroeter"), ki18n("Author and maintainer"),
                      "adrian at suse dot de");

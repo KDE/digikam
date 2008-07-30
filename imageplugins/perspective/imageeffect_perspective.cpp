@@ -51,6 +51,7 @@
 // Local includes.
 
 #include "version.h"
+#include "daboutdata.h"
 #include "ddebug.h"
 #include "dimg.h"
 #include "imageiface.h"
@@ -77,7 +78,7 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
                                        ki18n("(c) 2005-2006, Gilles Caulier\n"
                                        "(c) 2006-2008, Gilles Caulier and Marcel Wiesweg"),
                                        KLocalizedString(),
-                                       "http://www.digikam.org");
+                                       Digikam::webProjectUrl().url().toUtf8());
 
     about->addAuthor(ki18n("Gilles Caulier"), ki18n("Author and maintainer"),
                      "caulier dot gilles at gmail dot com");

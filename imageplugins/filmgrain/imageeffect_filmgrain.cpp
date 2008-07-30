@@ -44,6 +44,7 @@
 // Local includes.
 
 #include "version.h"
+#include "daboutdata.h"
 #include "ddebug.h"
 #include "dimg.h"
 #include "imageiface.h"
@@ -71,7 +72,7 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent)
                                        ki18n("(c) 2004-2005, Gilles Caulier\n"
                                        "(c) 2006-2007, Gilles Caulier and Marcel Wiesweg"),
                                        KLocalizedString(),
-                                       "http://www.digikam.org");
+                                       Digikam::webProjectUrl().url().toUtf8());
 
     about->addAuthor(ki18n("Gilles Caulier"), ki18n("Author and maintainer"),
                      "caulier dot gilles at gmail dot com");

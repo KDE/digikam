@@ -46,6 +46,7 @@
 // Local includes.
 
 #include "version.h"
+#include "daboutdata.h"
 #include "ddebug.h"
 #include "dimg.h"
 #include "imageiface.h"
@@ -76,7 +77,7 @@ ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent)
                                        KAboutData::License_GPL,
                                        ki18n("(c) 2005-2006, Unai Garro\n(c) 2005-2008, Gilles Caulier"),
                                        KLocalizedString(),
-                                       "http://www.digikam.org");
+                                       Digikam::webProjectUrl().url().toUtf8());
 
     about->addAuthor(ki18n("Unai Garro"), ki18n("Author and maintainer"),
                      "ugarro at sourceforge dot net");

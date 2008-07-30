@@ -35,8 +35,8 @@
 
 // Local includes.
 
-#include "version.h"
 #include "daboutdata.h"
+#include "version.h"
 #include "showfoto.h"
 
 int main(int argc, char *argv[])
