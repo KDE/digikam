@@ -69,8 +69,7 @@ SuperImposeWidget::SuperImposeWidget(int w, int h, QWidget *parent)
 
 SuperImposeWidget::~SuperImposeWidget()
 {
-    if(m_pixmap) 
-       delete m_pixmap;
+    delete m_pixmap;
 }
 
 Digikam::DImg SuperImposeWidget::makeSuperImpose(void)
