@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2008-07-30
- * Description : digiKam project authors registration.
+ * Description : digiKam about data.
  *
  * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef AUTHORS_REGISTRATION_H
-#define AUTHORS_REGISTRATION_H
+#ifndef DABOUT_DATA_H
+#define DABOUT_DATA_H
 
 // Qt includes.
 
@@ -30,11 +30,29 @@
 
 // KDE includes.
 
+#include <kurl.h>
 #include <klocale.h>
 #include <kaboutdata.h>
+#include <klocalizedstring.h>
 
 namespace Digikam
 {
+
+static inline KLocalizedString slogan()
+{
+    return ki18n("Manage your photographs like a professional "
+                 "with the power of open source");
+}
+
+static inline KLocalizedString copyright()
+{
+    return ki18n("(c) 2002-2008, digiKam developers team");
+}
+
+static inline KUrl webProjectUrl()
+{
+    return KUrl("http://www.digikam.org");
+}
 
 static inline void authorsRegistration(KAboutData& aboutData)
 {
@@ -180,4 +198,4 @@ static inline void authorsRegistration(KAboutData& aboutData)
 
 }  // namespace Digikam
 
-#endif // AUTHORS_REGISTRATION_H
+#endif // DABOUT_DATA_H

@@ -36,20 +36,19 @@
 // Local includes.
 
 #include "version.h"
-#include "authorsregistration.h"
+#include "daboutdata.h"
 #include "showfoto.h"
 
 int main(int argc, char *argv[])
 {
-    KAboutData aboutData( "showfoto", 0,
-                          ki18n("showFoto"),
-                          digiKamVersion().toAscii(),  // NOTE: showfoto version = digiKam version
-                          ki18n("Manage your photographs like a professional "
-                                "with the power of open source"),
-                          KAboutData::License_GPL,
-                          ki18n("(c) 2002-2008, digiKam developers team"),
-                          KLocalizedString(),
-                          "http://www.digikam.org");
+    KAboutData aboutData("showfoto", 0,
+                         ki18n("showFoto"),
+                         digiKamVersion().toAscii(),  // NOTE: showfoto version = digiKam version
+                         Digikam::slogan(),
+                         KAboutData::License_GPL,
+                         Digikam::copyright(),
+                         KLocalizedString(),
+                         Digikam::webProjectUrl().url().toUtf8());
 
     Digikam::authorsRegistration(aboutData);
 
