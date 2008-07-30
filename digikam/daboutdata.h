@@ -38,7 +38,7 @@
 namespace Digikam
 {
 
-static inline KLocalizedString slogan()
+static inline KLocalizedString digiKamSlogan()
 {
     return ki18n("Manage your photographs like a professional "
                  "with the power of open source");

@@ -67,6 +67,7 @@ extern "C"
 
 // Local includes.
 
+#include "daboutdata.h"
 #include "greycstorationiface.h"
 #include "libsinfodlg.h"
 #include "libsinfodlg.moc"
@@ -117,10 +118,10 @@ LibsInfoDlg::LibsInfoDlg(QWidget *parent)
     QLabel *header = new QLabel(page);
     header->setWordWrap(true);
     header->setText(i18n("<font size=\"5\">%1</font><br><b>Version %2</b>"
-                         "<p>Manage your photographs like a professional "
-                         "with the power of open source</p>",
+                         "<p>%3</p>",
                     KGlobal::mainComponent().aboutData()->programName(),
-                    KGlobal::mainComponent().aboutData()->version()));
+                    KGlobal::mainComponent().aboutData()->version(),
+                    digiKamSlogan().toString()));
 
     // --------------------------------------------------------
 

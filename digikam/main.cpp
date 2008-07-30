@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
     KAboutData aboutData("digikam", 0,
                          ki18n("digiKam"),
                          digiKamVersion().toAscii(),
-                         Digikam::slogan(),
+                         Digikam::digiKamSlogan(),
                          KAboutData::License_GPL,
                          Digikam::copyright(),
                          KLocalizedString(),

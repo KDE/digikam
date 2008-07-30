@@ -234,8 +234,7 @@ void WelcomePageView::slotThemeChanged()
 
     QString fontSize         = QString::number(12);
     QString appTitle         = i18n("digiKam");
-    QString slogan           = i18n("Manage your photographs like a professional "
-                                    "with the power of open source");
+    QString slogan           = digiKamSlogan().toString();
     QString locationHtml     = KStandardDirs::locate("data", "digikam/about/main.html");
     QString locationRtl      = KStandardDirs::locate("data", "digikam/about/infopage_rtl.css" );
     QString rtl              = kapp->isRightToLeft() ? QString("@import \"%1\";" ).arg(locationRtl)
