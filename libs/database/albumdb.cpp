@@ -938,7 +938,6 @@ QList<int> AlbumDB::getItemCommonTagIDs(const QList<qlonglong>& imageIDList)
     {
         sql += QString(" OR imageid=? ");
         boundValues << (*it);
-        ++it;
     }
 
     sql += QString(";");
