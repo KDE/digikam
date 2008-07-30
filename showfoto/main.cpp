@@ -36,6 +36,7 @@
 // Local includes.
 
 #include "version.h"
+#include "authorsregistration.h"
 #include "showfoto.h"
 
 int main(int argc, char *argv[])
@@ -50,68 +51,7 @@ int main(int argc, char *argv[])
                           KLocalizedString(),
                           "http://www.digikam.org");
 
-    aboutData.addAuthor ( ki18n("Caulier Gilles"),
-                          ki18n("Main developer and coordinator"),
-                          "caulier dot gilles at gmail dot com",
-                          "http://www.digikam.org/?q=blog/3");
-
-    aboutData.addAuthor ( ki18n("Marcel Wiesweg"),
-                          ki18n("Developer"),
-                          "marcel dot wiesweg at gmx dot de",
-                          "http://www.digikam.org/?q=blog/8");
-
-    aboutData.addAuthor ( ki18n("Arnd Baecker"),
-                          ki18n("Developer"),
-                          "arnd dot baecker at web dot de",
-                          "http://www.digikam.org/?q=blog/133");
-
-    aboutData.addAuthor ( ki18n("Andi Clemens"),
-                          ki18n("Developer"),
-                          "andi dot clemens at gmx dot net",
-                          "http://www.digikam.org/?q=blog/135");
-
-    aboutData.addAuthor ( ki18n("Francisco J. Cruz"),
-                          ki18n("Developer"),
-                          "fj dot cruz at supercable dot es",
-                          "http://www.digikam.org/?q=blog/5");
-
-    aboutData.addAuthor ( ki18n("Renchi Raju"),
-                          ki18n("Developer (2002-2005)"),
-                          "renchi at pooh dot tam dot uiuc dot edu");
-
-    aboutData.addAuthor ( ki18n("Joern Ahrens (2004-2005)"),
-                          ki18n("Developer"),
-                          "joern dot ahrens at kdemail dot net",
-                          "http://www.digikam.org/?q=blog/1");
-
-    aboutData.addAuthor ( ki18n("Tom Albers"),
-                          ki18n("Developer (2004-2005)"),
-                          "tomalbers at kde dot nl",
-                          "http://www.omat.nl/drupal/?q=blog/1");
-
-    aboutData.addAuthor ( ki18n("Ralf Holzer"),
-                          ki18n("Developer (2004)"),
-                          "kde at ralfhoelzer dot com");
-
-    aboutData.addCredit ( ki18n("Risto Saukonpaa"),
-                          ki18n("Design, icons, logo, banner, mockup, beta tester"),
-                          "paristo at gmail dot com");
-
-    aboutData.addCredit ( ki18n("Achim Bohnet"),
-                          ki18n("Bug reports and patches"),
-                          "ach at mpe dot mpg dot de");
-
-    aboutData.addCredit ( ki18n("Luka Renko"),
-                          ki18n("Developer"),
-                          "lure at kubuntu dot org");
-
-    aboutData.addCredit ( ki18n("Angelo Naselli"),
-                          ki18n("Developer"),
-                          "a dot naselli at libero dot it");
-
-    aboutData.addCredit ( ki18n("Fabien Salvi"),
-                          ki18n("Webmaster"),
-                          "fabien dot ubuntu at gmail dot com");
+    Digikam::authorsRegistration(aboutData);
 
     KCmdLineArgs::init( argc, argv, &aboutData );
 
