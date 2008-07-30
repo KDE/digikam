@@ -44,6 +44,11 @@
 #include <kdeversion.h>
 #include <kmessagebox.h>
 
+// Libkexiv2 includes
+
+#include <libkexiv2/version.h>
+#include <libkexiv2/kexiv2.h>
+
 // Local includes.
 
 #include "ddebug.h"
@@ -79,6 +84,10 @@ int main(int argc, char *argv[])
     options.add("download-from <path>", ki18n("Open camera dialog at <path>"));
     options.add("album-root <path>", ki18n("Start digikam with the album root <path>"));
     KCmdLineArgs::addCmdLineOptions( options );
+
+#if KEXIV2_VERSION >= 0x000300
+    KExiv2Iface::KExiv2::initializeExiv2();
+#endif
 
     KApplication app;
 

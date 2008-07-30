@@ -33,6 +33,11 @@
 #include <kglobal.h>
 #include <kimageio.h>
 
+// Libkexiv2 includes
+
+#include <libkexiv2/version.h>
+#include <libkexiv2/kexiv2.h>
+
 // Local includes.
 
 #include "daboutdata.h"
@@ -59,6 +64,10 @@ int main(int argc, char *argv[])
     KCmdLineArgs::addCmdLineOptions( options );
 
     KGlobal::locale()->setMainCatalog( "digikam" );
+
+#if KEXIV2_VERSION >= 0x000300
+    KExiv2Iface::KExiv2::initializeExiv2();
+#endif
 
     KApplication app;
 
