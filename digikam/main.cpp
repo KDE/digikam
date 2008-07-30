@@ -174,4 +174,8 @@ int main(int argc, char *argv[])
     KTipDialog::showMultiTip(0, tipsFiles, false);
 
     return app.exec();
+
+#if KEXIV2_VERSION >= 0x000300
+    KExiv2Iface::KExiv2::cleanupExiv2();
+#endif
 }
