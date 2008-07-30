@@ -218,6 +218,9 @@ void ThumbBarView::resizeEvent(QResizeEvent* e)
 
 void ThumbBarView::setExifRotate(bool exifRotate)
 {
+    if (d->exifRotate == exifRotate)
+	return;
+	
     d->exifRotate = exifRotate;
     QString thumbCacheDir = QDir::homeDirPath() + "/.thumbnails/";
 
