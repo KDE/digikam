@@ -36,6 +36,7 @@
 // Local includes.
 
 #include "ddebug.h"
+#include "thumbnailsize.h"
 #include "thumbnailtask.h"
 #include "thumbnailcreator.h"
 #include "thumbnailloadthread.h"
@@ -63,7 +64,7 @@ public:
 
     ThumbnailLoadThreadPriv()
     {
-        size          = 128;
+        size          = ThumbnailSize::Medium;
         exifRotate    = true;
         highlight     = true;
         sendSurrogate = true;
@@ -125,7 +126,7 @@ void ThumbnailLoadThread::setThumbnailSize(int size)
 
 int ThumbnailLoadThread::maximumThumbnailSize()
 {
-    return 256;
+    return ThumbnailSize::Huge;
 }
 
 void ThumbnailLoadThread::setExifRotate(int exifRotate)
@@ -282,10 +283,10 @@ bool ThumbnailLoadThread::checkSize(int size)
         DError() << "ThumbnailLoadThread::load: No thumbnail size specified. Refusing to load thumbnail." << endl;
         return false;
     }
-    else if (size > 256)
+    else if (size > ThumbnailSize::Huge)
     {
         DError() << "ThumbnailLoadThread::load: Thumbnail size " << size
-                 << " is larger than 256. Refusing to load." << endl;
+                 << " is larger than " << ThumbnailSize::Huge << ". Refusing to load." << endl;
         return false;
     }
     return true;
@@ -367,6 +368,7 @@ void ThumbnailLoadThread::loadWithKDE(const LoadingDescription &description)
 
     connect(job, SIGNAL(gotPreview(const KFileItem &, const QPixmap &)),
             this, SLOT(gotKDEPreview(const KFileItem &, const QPixmap &)));
+
     connect(job, SIGNAL(failed(const KFileItem &)),
             this, SLOT(failedKDEPreview(const KFileItem &)));
 }
@@ -462,7 +464,5 @@ void ThumbnailLoadThread::deleteThumbnail(const QString &filePath)
 
     ThumbnailCreator::deleteThumbnailsFromDisk(filePath);
 }
-
-
 
 }   // namespace Digikam
