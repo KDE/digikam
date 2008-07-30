@@ -304,6 +304,8 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
     applySettings();
     setAutoSaveSettings("ImageViewer Settings", true);
 
+    d->rightSidebar->loadViewState();
+
     // -- Load current items ---------------------------
 
     for (KUrl::List::const_iterator it = urlList.begin();
@@ -501,7 +503,6 @@ void ShowFoto::setupUserArea()
     m_splitter->setFrameShape( QFrame::NoFrame );
     m_splitter->setOpaqueResize(false);
     setCentralWidget(widget);
-    d->rightSidebar->loadViewState();
 }
 
 void ShowFoto::setupActions()
