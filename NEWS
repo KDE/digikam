@@ -27,7 +27,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 016 ==> 167561 : Crash when moving albums.
 017 ==> 167529 : Image Editor not working correctly after setting "use horizontal thumbbar" option.
 018 ==> 167621 : digiKam crashes when trying to remove a tag with the context menu.
-019 ==> 
+019 ==> 165348 : Problems when trying to import KDE3 data.
+020 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta1 - Release date: 2008-07-07
