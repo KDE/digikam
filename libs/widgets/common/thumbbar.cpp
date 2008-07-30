@@ -176,9 +176,15 @@ ThumbBarView::ThumbBarView(QWidget* parent, int orientation, bool exifRotate,
     setAcceptDrops(true);
 
     if (d->orientation == Qt::Vertical)
+    {
+        setMaximumWidth(d->maxTileSize + 2*d->margin + verticalScrollBar()->sizeHint().width());
         setHScrollBarMode(Q3ScrollView::AlwaysOff);
+    }
     else
+    {
+        setMaximumHeight(d->maxTileSize + 2*d->margin + horizontalScrollBar()->sizeHint().height());
         setVScrollBarMode(Q3ScrollView::AlwaysOff);
+    }
 }
 
 ThumbBarView::~ThumbBarView()
