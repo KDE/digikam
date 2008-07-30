@@ -223,6 +223,9 @@ void ThumbBarView::resizeEvent(QResizeEvent* e)
 
 void ThumbBarView::setExifRotate(bool exifRotate)
 {
+    if (d->thumbLoadThread->exifRotate() == exifRotate)
+        return;
+
     d->thumbLoadThread->setExifRotate(exifRotate);
 
     for (ThumbBarItem *item = d->firstItem; item; item = item->d->next)
