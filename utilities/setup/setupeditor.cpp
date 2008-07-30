@@ -39,6 +39,7 @@
 #include <kapplication.h>
 #include <kglobal.h>
 #include <kvbox.h>
+#include <kaboutdata.h>
 
 // Local includes.
 
@@ -75,7 +76,7 @@ public:
     KColorButton *overExposureColor;
 };
 
-SetupEditor::SetupEditor(QWidget* parent )
+SetupEditor::SetupEditor(QWidget* parent)
            : QWidget(parent)
 {
     d = new SetupEditorPriv;
@@ -102,7 +103,8 @@ SetupEditor::SetupEditor(QWidget* parent )
     d->backgroundColor->setWhatsThis( i18n("<p>Customize the background color to use "
                                            "in the image editor area.") );
 
-    d->horizontalThumbBar = new QCheckBox(i18n("Use &horizontal thumbbar (needs to restart digiKam)"),
+    d->horizontalThumbBar = new QCheckBox(i18n("Use &horizontal thumbbar (needs to restart %1)",
+                                               KGlobal::mainComponent().aboutData()->programName()),
                                           interfaceOptionsGroup);
     d->horizontalThumbBar->setWhatsThis( i18n("<p>If this option is enabled, the thumbnails bar will be displayed "
                                               "horizontally behind the image area. You need to restart editor "
