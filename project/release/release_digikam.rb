@@ -78,8 +78,7 @@ fetchTranslations()
 
 createTranslationStats()
 
-# TODO: currently broken
-# createTag()
+createTag()
 
 digikam()
 
