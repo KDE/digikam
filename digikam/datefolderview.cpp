@@ -5,7 +5,7 @@
  *
  * Date        : 2005-04-27
  * Description : a folder view for date albums.
- * 
+ *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -14,12 +14,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -188,7 +188,7 @@ DateFolderView::DateFolderView(QWidget* parent)
               : QVBox(parent, "DateFolderView")
 {
     d = new DateFolderViewPriv;
-    d->listview  = new FolderView(this);
+    d->listview  = new FolderView(this, "DateListView");
     d->monthview = new MonthWidget(this);
 
     d->listview->addColumn(i18n("My Calendar"));
@@ -333,15 +333,15 @@ void DateFolderView::loadViewState()
     config->setGroup(name());
 
     QString selected;
-    if(config->hasKey("LastSelectedItem"))
+    if(config->hasKey("Last Selected Date"))
     {
-        selected = config->readEntry("LastSelectedItem");
+        selected = config->readEntry("Last Selected Date");
     }
 
     QStringList openFolders;
-    if(config->hasKey("OpenFolders"))
+    if(config->hasKey("Open Date Folders"))
     {
-        openFolders = config->readListEntry("OpenFolders");
+        openFolders = config->readListEntry("Open Date Folders");
     }
 
     DateFolderItem *item;
@@ -359,6 +359,28 @@ void DateFolderView::loadViewState()
         if(id == selected)
             d->listview->setSelected(item, true);
     }
+}
+
+void DateFolderView::saveViewState()
+{
+    KConfig *config = kapp->config();
+    config->setGroup(name());
+
+    DateFolderItem *item = dynamic_cast<DateFolderItem*>(d->listview->selectedItem());
+    if(item)
+        config->writeEntry("Last Selected Date", item->date());
+
+    QStringList openFolders;
+    QListViewItemIterator it(d->listview);
+    item = dynamic_cast<DateFolderItem*>(d->listview->firstChild());
+    while(item)
+    {
+        // Storing the years only, a month cannot be open
+        if(item && d->listview->isOpen(item))
+            openFolders.push_back(item->date());
+        item = dynamic_cast<DateFolderItem*>(item->nextSibling());
+    }
+    config->writeEntry("Open Date Folders", openFolders);
 }
 
 void DateFolderView::gotoDate(const QDate& dt)
@@ -383,28 +405,6 @@ void DateFolderView::gotoDate(const QDate& dt)
             }
         }
     }
-}
-
-void DateFolderView::saveViewState()
-{
-    KConfig *config = kapp->config();
-    config->setGroup(name());
-
-    DateFolderItem *item = dynamic_cast<DateFolderItem*>(d->listview->selectedItem());
-    if(item)
-        config->writeEntry("LastSelectedItem", item->date());
-
-    QStringList openFolders;
-    QListViewItemIterator it(d->listview);
-    item = dynamic_cast<DateFolderItem*>(d->listview->firstChild());
-    while(item)
-    {
-        // Storing the years only, a month cannot be open
-        if(item && d->listview->isOpen(item))
-            openFolders.push_back(item->date());
-        item = dynamic_cast<DateFolderItem*>(item->nextSibling());
-    }
-    config->writeEntry("OpenFolders", openFolders);
 }
 
 void DateFolderView::setSelected(QListViewItem *item)
