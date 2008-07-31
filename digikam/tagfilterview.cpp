@@ -270,7 +270,7 @@ public:
 };
 
 TagFilterView::TagFilterView(QWidget* parent)
-             : FolderView(parent)
+             : FolderView(parent, "TagFilterView")
 {
     d = new TagFilterViewPrivate;
     d->timer = new QTimer(this);
