@@ -180,8 +180,10 @@ public:
 DateFolderView::DateFolderView(QWidget* parent)
               : KVBox(parent)
 {
+    setObjectName("DateFolderView");
+
     d = new DateFolderViewPriv;
-    d->listview  = new FolderView(this, "DateFolderView");
+    d->listview  = new FolderView(this, "DateListView");
     d->monthview = new MonthWidget(this);
 
     d->listview->addColumn(i18n("My Calendar"));
@@ -324,18 +326,18 @@ void DateFolderView::slotSelectionChanged()
 void DateFolderView::loadViewState()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(objectName());
+    KConfigGroup group        = config->group(objectName());
 
     QString selected;
-    if(group.hasKey("LastSelectedItem"))
+    if(group.hasKey("Last Selected Date"))
     {
-        selected = group.readEntry("LastSelectedItem", QString());
+        selected = group.readEntry("Last Selected Date", QString());
     }
 
     QStringList openFolders;
-    if(group.hasKey("OpenFolders"))
+    if(group.hasKey("Open Date Folders"))
     {
-        openFolders = group.readEntry("OpenFolders", QStringList());
+        openFolders = group.readEntry("Open Date Folders", QStringList());
     }
 
     DateFolderItem *item;
@@ -353,6 +355,28 @@ void DateFolderView::loadViewState()
         if(id == selected)
             d->listview->setSelected(item, true);
     }
+}
+
+void DateFolderView::saveViewState()
+{
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(objectName());
+
+    DateFolderItem *item = dynamic_cast<DateFolderItem*>(d->listview->selectedItem());
+    if(item)
+        group.writeEntry("Last Selected Date", item->date());
+
+    QStringList openFolders;
+    Q3ListViewItemIterator it(d->listview);
+    item = dynamic_cast<DateFolderItem*>(d->listview->firstChild());
+    while(item)
+    {
+        // Storing the years only, a month cannot be open
+        if(item && d->listview->isOpen(item))
+            openFolders.push_back(item->date());
+        item = dynamic_cast<DateFolderItem*>(item->nextSibling());
+    }
+    group.writeEntry("Open Date Folders", openFolders);
 }
 
 void DateFolderView::gotoDate(const QDate& dt)
@@ -377,28 +401,6 @@ void DateFolderView::gotoDate(const QDate& dt)
             }
         }
     }
-}
-
-void DateFolderView::saveViewState()
-{
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(objectName());
-
-    DateFolderItem *item = dynamic_cast<DateFolderItem*>(d->listview->selectedItem());
-    if(item)
-        group.writeEntry("LastSelectedItem", item->date());
-
-    QStringList openFolders;
-    Q3ListViewItemIterator it(d->listview);
-    item = dynamic_cast<DateFolderItem*>(d->listview->firstChild());
-    while(item)
-    {
-        // Storing the years only, a month cannot be open
-        if(item && d->listview->isOpen(item))
-            openFolders.push_back(item->date());
-        item = dynamic_cast<DateFolderItem*>(item->nextSibling());
-    }
-    group.writeEntry("OpenFolders", openFolders);
 }
 
 void DateFolderView::setSelected(Q3ListViewItem *item)
