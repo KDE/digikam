@@ -1,3 +1,1102 @@
+0.10.0-beta2 31-07-2008
+---------------------------------------------------------------------------
+
+2008-07-30 18:15  cgilles
+
+	* README: update
+
+2008-07-30 17:10  cgilles
+
+	* NEWS: update
+
+2008-07-30 15:03  cgilles
+
+	* digikam/main.cpp, showfoto/main.cpp: cleanup Exiv2 at end of
+	  digiKam or Showfoto instance
+	  CCBUGS: 166424
+
+2008-07-30 14:36  cgilles
+
+	* digikam/main.cpp, showfoto/main.cpp: initialize Adobe XMP SDK
+	  before to play with Kexiv2
+
+2008-07-30 14:13  cgilles
+
+	* AUTHORS: update
+
+2008-07-30 14:12  cgilles
+
+	* NEWS: update
+
+2008-07-30 13:59  cgilles
+
+	* libs/dmetadata/dmetadata.cpp: remove hardcoded digiKam XMP
+	  namespace registration. This one is now included into Exiv2 0.18
+	  CCBUGS: 166424
+
+2008-07-30 13:18  mwiesweg
+
+	* libs/database/albumdb.cpp: Remove extra ++it
+	  
+	  BUG: 167561
+
+2008-07-30 13:13  cgilles
+
+	* libs/dialogs/libsinfodlg.cpp: fix compile with KExiv2 from KDE4.1
+
+2008-07-30 11:32  cgilles
+
+	* themedesigner/main.cpp: compile
+
+2008-07-30 11:30  cgilles
+
+	* digikam/daboutdata.h, digikam/main.cpp,
+	  digikam/welcomepageview.cpp, libs/dialogs/libsinfodlg.cpp,
+	  showfoto/main.cpp: factorize slogan
+
+2008-07-30 11:15  cgilles
+
+	* digikam/main.cpp, digikam/welcomepageview.cpp,
+	  imageplugins/adjustcurves/adjustcurves.cpp,
+	  imageplugins/adjustlevels/adjustlevels.cpp,
+	  imageplugins/blurfx/imageeffect_blurfx.cpp,
+	  imageplugins/border/imageeffect_border.cpp,
+	  imageplugins/channelmixer/channelmixer.cpp,
+	  imageplugins/colorfx/imageeffect_colorfx.cpp,
+	  imageplugins/distortionfx/imageeffect_distortionfx.cpp,
+	  imageplugins/emboss/imageeffect_emboss.cpp,
+	  imageplugins/filmgrain/imageeffect_filmgrain.cpp,
+	  imageplugins/freerotation/imageeffect_freerotation.cpp,
+	  imageplugins/hotpixels/imageeffect_hotpixels.cpp,
+	  imageplugins/infrared/imageeffect_infrared.cpp,
+	  imageplugins/inpainting/imageeffect_inpainting.cpp,
+	  imageplugins/inserttext/imageeffect_inserttext.cpp,
+	  imageplugins/lenscorrection/autocorrection/imageeffect_autocorrection.cpp,
+	  imageplugins/lenscorrection/distortion/imageeffect_lensdistortion.cpp,
+	  imageplugins/lenscorrection/vignetting/imageeffect_antivignetting.cpp,
+	  imageplugins/noisereduction/imageeffect_noisereduction.cpp,
+	  imageplugins/perspective/imageeffect_perspective.cpp,
+	  imageplugins/raindrop/imageeffect_raindrop.cpp,
+	  imageplugins/restoration/imageeffect_restoration.cpp,
+	  imageplugins/sheartool/imageeffect_sheartool.cpp,
+	  imageplugins/superimpose/imageeffect_superimpose.cpp,
+	  imageplugins/texture/imageeffect_texture.cpp,
+	  libs/widgets/common/dlogoaction.cpp, showfoto/main.cpp,
+	  themedesigner/main.cpp: factorize digiKam url
+
+2008-07-30 11:02  cgilles
+
+	* digikam/authorsregistration.h, digikam/daboutdata.h,
+	  digikam/main.cpp, showfoto/main.cpp: factorize more and more
+	  about data
+
+2008-07-30 10:40  cgilles
+
+	* digikam/authorsregistration.h, digikam/main.cpp,
+	  showfoto/main.cpp: factorize aboutdata code
+
+2008-07-30 09:24  cgilles
+
+	* digikam/componentsinfo.h, digikam/digikamapp.cpp,
+	  libs/dialogs/libsinfodlg.cpp, showfoto/showfoto.cpp,
+	  showfoto/showfoto.h, utilities/cameragui/cameraui.cpp,
+	  utilities/imageeditor/editor/editorwindow.cpp,
+	  utilities/imageeditor/editor/editorwindow.h,
+	  utilities/imageeditor/editor/imagewindow.cpp,
+	  utilities/lighttable/lighttablewindow.cpp: factorize code about
+	  components info dialog
+
+2008-07-30 09:06  cgilles
+
+	* libs/database/databasebackend.cpp: fix warnings
+
+2008-07-30 07:44  cgilles
+
+	* digikam/thumbnailsize.h, libs/threadimageio/thumbnailsize.h: it's
+	  more logic to have thumb size interface here
+
+2008-07-30 07:44  cgilles
+
+	* project/project.kdevelop: update
+
+2008-07-30 07:43  cgilles
+
+	* libs/widgets/common/thumbbar.cpp: limit thumbbar size
+
+2008-07-30 07:40  cgilles
+
+	* libs/threadimageio/thumbnailloadthread.cpp: use global constant
+
+2008-07-30 07:33  mlaurent
+
+	* imageplugins/superimpose/superimposewidget.cpp: Not necessary to
+	  test it
+
+2008-07-30 07:20  cgilles
+
+	* NEWS: update
+
+2008-07-30 07:19  cgilles
+
+	* libs/widgets/common/thumbbar.cpp: backport commit #839499 from
+	  KDE3 branch
+	  BUG: 167529
+
+2008-07-30 06:40  cgilles
+
+	* utilities/setup/setupeditor.cpp: this panel is shared between
+	  Showfoto and digiKam. we need to take a care about application
+	  name.
+
+2008-07-30 06:19  cgilles
+
+	* utilities/imageeditor/editor/imagewindow.cpp: factorize
+
+2008-07-30 06:19  cgilles
+
+	* showfoto/showfoto.cpp: factorize
+
+2008-07-30 06:14  cgilles
+
+	* showfoto/showfoto.cpp: polish
+
+2008-07-29 19:46  aclemens
+
+	* showfoto/showfoto.cpp, showfoto/showfoto.h,
+	  utilities/imageeditor/editor/editorwindow.cpp,
+	  utilities/imageeditor/editor/editorwindow.h,
+	  utilities/imageeditor/editor/imagewindow.cpp,
+	  utilities/imageeditor/editor/imagewindow.h: Move
+	  toggleGUI2FullScreen() from ShowFoto and ImageWindow to
+	  EditorWindow and implement 2
+	  virtual functions thumbBar() and rightSidebar() which return the
+	  appropriate
+	  widget for the toggleGUI2FullScreen method.
+	  
+	  CCBUGS:166472
+
+2008-07-29 19:44  cgilles
+
+	* libs/dimg/loaders/jp2kloader.cpp: polish
+
+2008-07-29 19:42  cgilles
+
+	* CMakeLists.txt: polish
+
+2008-07-29 17:03  cgilles
+
+	* CMakeLists.txt: this is the right sentence to enable C++
+	  exceptions support
+
+2008-07-29 15:06  aclemens
+
+	* showfoto/showfoto.cpp,
+	  utilities/imageeditor/editor/imagewindow.cpp: When leaving
+	  fullscreen mode, the thumbbar was not restored altough "Show
+	  Thumbbar" is checked.
+	  
+	  CCBUGS:166472
+
+2008-07-29 14:09  cgilles
+
+	* digikam/CMakeLists.txt: remove c++ exception
+
+2008-07-29 14:09  cgilles
+
+	* CMakeLists.txt: add comments
+
+2008-07-29 14:08  cgilles
+
+	* CMakeLists.txt: use C++ exception on the top level
+
+2008-07-29 14:07  cgilles
+
+	* libs/dimg/loaders/jp2kloader.cpp, libs/dimg/loaders/jp2kloader.h:
+	  Bug fix: prevent crash with JPEG200 loader if an exception is
+	  generated by Jasper toolkit.
+
+2008-07-29 12:48  cgilles
+
+	* NEWS: update
+
+2008-07-28 20:49  aclemens
+
+	* utilities/setup/setupeditor.cpp: changed comment concerning use
+	  of horizontal bar in image editor
+	  
+	  CCBUGS:167529
+
+2008-07-28 17:24  mwiesweg
+
+	* digikam/albumlister.cpp: Check for null pointer
+	  
+	  CCBUG: 167561
+
+2008-07-28 13:24  aclemens
+
+	* utilities/lighttable/lighttablewindow.cpp: If the left panel item
+	  is the last item in the thumbbar and the right panel item the
+	  second last (left to the current_left item), set the left panel
+	  item to the current_right and the right panel item to the first
+	  item of the thumbbar.
+	  
+	  CCBUGS:167571
+
+2008-07-28 12:32  aclemens
+
+	* utilities/lighttable/lighttablewindow.cpp: Fixed the activation
+	  of the current active panel. If the left panel item is removed,
+	  the right panel should be activated.
+	  
+	  CCBUGS:167571
+
+2008-07-28 12:14  cgilles
+
+	* utilities/fuzzysearch/fuzzysearchview.cpp: optimize space
+	  CCBUGS: 165321
+
+2008-07-28 11:34  cgilles
+
+	* imageplugins/inserttext/imageplugin_inserttext.cpp,
+	  imageplugins/inserttext/imageplugin_inserttext.h: Set
+	  SHIFT+CTRL+T shortcut to InsertText to prevent conflict with
+	  image editor thumbbar shortcut
+
+2008-07-28 10:45  cgilles
+
+	* NEWS: update
+
+2008-07-28 10:45  cgilles
+
+	* digikam/digikamapp.cpp: fix KStandardShortcut call
+	  BUGS: 167562
+
+2008-07-28 10:44  cgilles
+
+	* utilities/lighttable/lighttablewindow.cpp: fix KStandardShortcut
+	  call
+	  CCBUGS: 167562
+
+2008-07-28 10:41  cgilles
+
+	* utilities/imageeditor/editor/editorwindow.cpp: fix
+	  KStandardShortcut call
+	  CCBUGS: 167562
+
+2008-07-28 10:38  cgilles
+
+	* project/project.kdevelop: update
+
+2008-07-28 09:36  cgilles
+
+	* NEWS: update
+
+2008-07-28 09:35  cgilles
+
+	* NEWS: update
+
+2008-07-28 09:31  cgilles
+
+	* NEWS: update
+
+2008-07-28 06:09  nlecureuil
+
+	* data/pics/CMakeLists.txt: clean CMakeLists from removed images
+
+2008-07-27 21:08  johann_ol
+
+	* data/pics/digitalcam.png: useless now
+
+2008-07-27 20:42  johann_ol
+
+	* data/pics/color-picker-black.png,
+	  data/pics/color-picker-grey.png,
+	  data/pics/color-picker-white.png,
+	  imageplugins/adjustcurves/adjustcurves.cpp,
+	  imageplugins/adjustlevels/adjustlevels.cpp: using now reals icons
+	  for color picker
+
+2008-07-27 14:53  johann_ol
+
+	* data/icons/hi128-action-crop.png,
+	  data/icons/hi16-action-crop.png, data/icons/hi22-action-crop.png,
+	  data/icons/hi32-action-crop.png, data/icons/hi48-action-crop.png,
+	  data/icons/hi64-action-crop.png,
+	  utilities/imageeditor/editor/editorwindow.cpp: make digikam using
+	  the new oxygen icon
+
+2008-07-27 13:01  cgilles
+
+	* NEWS: update
+
+2008-07-27 13:00  cgilles
+
+	* utilities/cameragui/cameraui.cpp: fix i18n
+	  BUGS: 166483
+
+2008-07-27 12:54  cgilles
+
+	* tips: backport #838273
+	  CCBUGS: 167528
+
+2008-07-26 21:46  johann_ol
+
+	* data/icons/hi128-action-inserttext.png,
+	  data/icons/hi16-action-flip-horizontal.png,
+	  data/icons/hi16-action-flip-vertical.png,
+	  data/icons/hi16-action-inserttext.png,
+	  data/icons/hi22-action-flip-horizontal.png,
+	  data/icons/hi22-action-flip-vertical.png,
+	  data/icons/hi22-action-inserttext.png,
+	  data/icons/hi32-action-flip-horizontal.png,
+	  data/icons/hi32-action-flip-vertical.png,
+	  data/icons/hi32-action-inserttext.png,
+	  data/icons/hi48-action-flip-horizontal.png,
+	  data/icons/hi48-action-flip-vertical.png,
+	  data/icons/hi48-action-inserttext.png,
+	  data/icons/hi64-action-inserttext.png,
+	  data/icons/hisc-action-inserttext.svgz,
+	  imageplugins/inserttext/imageplugin_inserttext.cpp,
+	  utilities/imageeditor/editor/editorwindow.cpp: making Dikicam
+	  using the right (oxygen) icons for inserttext, flip horizontal
+	  and vertical
+
+2008-07-26 20:28  mwiesweg
+
+	* NEWS: update
+
+2008-07-26 20:28  mwiesweg
+
+	* libs/threadimageio/loadingcache.cpp,
+	  libs/threadimageio/loadingcache.h: Calculate cache cost of
+	  thumbnail cache based on used memory, not simply
+	  
+	  the number of cached thumbnails. This means for thumbnails of
+	  size 64
+	  there will be 16 times more (*) thumbnails cached than for size
+	  256.
+	  
+	  (*) For QPixmaps, memory usage is not directly accessible. I use
+	  size and depth
+	  and calculate the max cost based on the display's default depth.
+	  
+	  CCBUG: 166564
+
+2008-07-26 19:48  mwiesweg
+
+	* utilities/timeline/timelineview.cpp: Always set current album to
+	  0 first, if we later select the same
+	  
+	  album as before (with a changed query though) the album
+	  would not be reloaded
+	  
+	  BUG: 167124
+
+2008-07-26 17:45  mwiesweg
+
+	* utilities/fuzzysearch/fuzzysearchview.cpp: Use AlbumPointer for
+	  storing SAlbums
+	  
+	  BUG: 166484
+
+2008-07-26 17:44  mwiesweg
+
+	* digikam/album.cpp, digikam/album.h, digikam/albummanager.cpp,
+	  digikam/albummanager.h: The class AlbumPointer provides a guarded
+	  pointer to Album* or one of the
+	  subclasses. When the album is deleted, the pointer is set to 0.
+	  Implementation is inspired by QPointer<>.
+	  
+	  Accompanying changes: Make Album destructor protected. This
+	  should only be
+	  accessible from AlbumManager. Install a private shortcut to
+	  access
+	  AlbumManager instance from Album (for updating guarded pointers).
+	  K_GLOBAL_STATIC instance is not accessible from call stacks going
+	  out from the destructor.
+	  
+	  CCBUG: 166484
+
+2008-07-25 17:09  aclemens
+
+	* NEWS.0.9.4: merge with NEWS.0.9.4 from KDE3 branch
+
+2008-07-25 13:13  mwiesweg
+
+	* libs/widgets/common/thumbbar.cpp: Move hash modification to
+	  take(), so that removing from destructor does this as well.
+
+2008-07-25 09:41  aclemens
+
+	* NEWS: update
+
+2008-07-25 09:04  aclemens
+
+	* libs/widgets/common/thumbbar.cpp, libs/widgets/common/thumbbar.h:
+	  Images get removed twice from the thumbbar view when removing
+	  them via keyboard shortcut or context menu. This happened due to
+	  the use of the ThumbBarView::removeItem() method in the
+	  appropriate slot as well as in the destructor of a ThumbBarItem.
+	  To obtain backward compatibility we move the context of
+	  removeItem() into a new method takeItem() and call this new
+	  method from within the destructor of a ThumbBarItem, removeItem
+	  only calls delete now.
+	  This way we can remove an item "the old way" but also by calling
+	  just delete.
+	  Somehow the KDE3 branch is not affected by this because the
+	  destructor is never called at all (I don't know why).
+	  
+	  CCBUGS:166440
+
+2008-07-24 13:53  mwiesweg
+
+	* digikam/albumiconview.cpp, digikam/tagfilterview.cpp,
+	  digikam/tagfolderview.cpp,
+	  libs/imageproperties/talbumlistview.cpp: Wrap
+	  DatabaseTransactions in suspend/resumeCollectionScan.
+	  In the future, it could be more elegant to separate: First all db
+	  updating,
+	  then file metadata writing.
+
+2008-07-24 13:53  mwiesweg
+
+	* libs/imageproperties/imagedescedittab.cpp: Add
+	  suspend/resumeCollection scan. Split database updating (fast)
+	  and file writing to different scopes of progress bar.
+
+2008-07-24 13:53  mwiesweg
+
+	* digikam/albummanager.cpp: For filtering out KDirWatch signals
+	  that were created by an operation
+	  on the SQLite database file:
+	  Move modification date list creation to a method.
+	  Create an initial list at startup, so that the very first
+	  database change is detected and filtered out just as all further.
+
+2008-07-24 13:53  mwiesweg
+
+	* libs/database/collectionscanner.cpp: Check if we are in a
+	  transaction, and refuse to start.
+	  DatabaseTransactions should now be enclosed by suspending and
+	  resuming
+	  the collection scan from ScanController.
+	  If this error message is printed, this would have been missing.
+
+2008-07-24 13:53  mwiesweg
+
+	* digikam/scancontroller.cpp, digikam/scancontroller.h: Add calls
+	  to suspend and resume collection scanning
+
+2008-07-24 13:53  mwiesweg
+
+	* libs/database/databasebackend.cpp: Add some code to detect
+	  locked-database errors for SQLite.
+	  
+	  we cannot do anything from within this method, holding
+	  DatabaseAccess lock.
+
+2008-07-24 13:53  mwiesweg
+
+	* libs/database/databasebackend.cpp,
+	  libs/database/databasebackend.h: Add method to find out if
+	  current process is in db transaction
+
+2008-07-24 09:27  gkulzer
+
+	* imageplugins/blurfx/imageeffect_blurfx.cpp: polish window header
+
+2008-07-22 17:09  aclemens
+
+	* NEWS: update
+
+2008-07-22 16:59  mwiesweg
+
+	* libs/database/albumdb.cpp: Add missing status check in a few more
+	  places.
+	  
+	  BUG: 167168
+
+2008-07-22 16:59  mwiesweg
+
+	* libs/database/imagelister.cpp: Add parentheses so that the
+	  condition takes effect
+
+2008-07-22 16:59  mwiesweg
+
+	* libs/threadimageio/thumbnailcreator.cpp: If a method failed once,
+	  no need to try it again
+
+2008-07-18 08:03  abaecker
+
+	* libs/greycstoration/greycstorationiface.cpp: Disable the use of
+	  X11 for greycstoration; with last CImg.h 1.2.9, the switch
+	  "cimg_display_type" has been renamed to "cimg_display".
+
+2008-07-17 19:49  mwiesweg
+
+	* digikam/main.cpp, showfoto/main.cpp: Make it compile
+
+2008-07-17 19:49  mwiesweg
+
+	* digikam/albumiconview.cpp, digikam/albumiconview.h: Make use of
+	  the prepareRepaint method (called before each repaint)
+	  
+	  to restore the good old behavior that thumbnail are loaded
+	  top-to-bottom
+	  (by prepending the whole group as one)
+	  
+	  CCBUG: 166564
+
+2008-07-17 19:49  mwiesweg
+
+	* digikam/albumiconitem.cpp, digikam/albumiconitem.h: Access file
+	  path
+
+2008-07-17 19:49  mwiesweg
+
+	* digikam/iconview.cpp, digikam/iconview.h: Insert a method called
+	  before a repaint with all items that are going to be repainted,
+	  for them to
+	  
+	  be prepared in any kind by subclasses.
+
+2008-07-17 19:49  mwiesweg
+
+	* libs/threadimageio/thumbnailloadthread.cpp,
+	  libs/threadimageio/thumbnailloadthread.h: Add methods findGroup()
+	  for easy access to ManagedLoadSaveThread::prependThumbnailGroup
+
+2008-07-17 19:49  mwiesweg
+
+	* libs/threadimageio/thumbnailloadthread.cpp,
+	  libs/threadimageio/thumbnailloadthread.h: Install a shortcut to
+	  rule out that inter-thread signalling can become
+	  
+	  a limiting factor for thumbnail loading performance
+	  
+	  CCBUG: 166564
+
+2008-07-17 19:49  mwiesweg
+
+	* digikam/albumiconview.cpp: Use update, not repaint. Avoids a
+	  repaint cycle synchronous after
+	  
+	  each delivered thumbnail.
+	  
+	  CCBUG: 166564
+
+2008-07-17 19:49  mwiesweg
+
+	* digikam/iconitem.cpp, digikam/iconitem.h,
+	  utilities/cameragui/cameraiconitem.cpp,
+	  utilities/cameragui/cameraiconview.cpp: Clarify API: repaint is
+	  repaint, update is update.
+	  
+	  Prefer update.
+
+2008-07-17 19:49  mwiesweg
+
+	* utilities/batch/batchthumbsgenerator.cpp: Be more cautious: When
+	  using a shared thread, signals may come for other images as well
+	  
+	  BUG: 166576
+
+2008-07-17 12:48  aclemens
+
+	* digikam/main.cpp, showfoto/main.cpp: added developer "Andi
+	  Clemens" to digiKam and showFoto
+
+2008-07-16 18:37  aclemens
+
+	* NEWS: update
+
+2008-07-16 14:12  aclemens
+
+	* NEWS: update
+
+2008-07-16 14:05  aclemens
+
+	* showfoto/showfoto.cpp: backport commit #833245 from KDE3 branch
+	  
+	  CCBUGS:166472
+
+2008-07-15 20:01  mwiesweg
+
+	* libs/database/albumdb.cpp: More fixes: Do not return images with
+	  status Removed in these methods
+
+2008-07-15 20:00  mwiesweg
+
+	* libs/database/imagelister.cpp: - fix number of bound parameter
+	  for non-recursive tag listing
+	  - always check for Images.status == Visible, so that Removed
+	  images are never shown
+	  
+	  BUG: 166663
+
+2008-07-13 15:36  mwiesweg
+
+	* digikam/albumlister.cpp, digikam/albumlister.h: Use DatabaseWatch
+	  signals to listen to adding and removal of images and update the
+	  icon view accordingly.
+
+2008-07-13 15:36  mwiesweg
+
+	* libs/database/databasechangesets.cpp,
+	  libs/database/databasechangesets.h: Add missing const
+
+2008-07-13 15:36  mwiesweg
+
+	* libs/database/databaseaccess.h, libs/database/databasewatch.h:
+	  Update docs
+
+2008-07-13 15:36  mwiesweg
+
+	* libs/database/albumdb.cpp, libs/database/databasechangesets.h:
+	  Add API docs.
+	  
+	  When moving or copying, set the respective changesets
+	  additionally to removed/added
+
+2008-07-13 14:42  gkulzer
+
+	* imageplugins/colorfx/imageeffect_colorfx.cpp: reduce default from
+	  10 to 5, 10 is always a bit too much, whereas 5 is mostly right
+	  from my experience.
+
+2008-07-12 20:38  mwiesweg
+
+	* digikam/digikamview.cpp, libs/dialogs/imagedlgbase.cpp,
+	  libs/dialogs/imageguidedlg.cpp,
+	  libs/imageproperties/imagepropertiessidebar.cpp,
+	  libs/imageproperties/imagepropertiessidebar.h,
+	  libs/imageproperties/imagepropertiessidebarcamgui.cpp,
+	  libs/imageproperties/imagepropertiessidebarcamgui.h,
+	  libs/imageproperties/imagepropertiessidebardb.cpp,
+	  libs/imageproperties/imagepropertiessidebardb.h,
+	  libs/widgets/imageplugins/imagepannelwidget.cpp,
+	  showfoto/showfoto.cpp, utilities/cameragui/cameraui.cpp,
+	  utilities/cameragui/camerauiprivate.h,
+	  utilities/imageeditor/editor/editorwindow.cpp,
+	  utilities/imageeditor/editor/editorwindow.h,
+	  utilities/imageeditor/editor/imagewindow.cpp,
+	  utilities/lighttable/lighttablewindow.cpp,
+	  utilities/lighttable/lighttablewindowprivate.h: Use
+	  SidebarSplitter everywhere
+
+2008-07-12 20:38  mwiesweg
+
+	* libs/widgets/common/sidebar.cpp, libs/widgets/common/sidebar.h:
+	  Expensive solution for a small annoying and serious bug:
+	  When the sidebar was hidden, then digikam closed, after
+	  restarting
+	  clicking on a tab bar button would show the sidebar at size 0
+	  (only handle visible), which is a difficult to understand
+	  situation.
+	  
+	  Solution:
+	  Use a dedicated QSplitter subclass the cooperates closely with
+	  the Sidebars it contains.
+	  
+	  Solves the bug. When the user now moves the splitter handle so
+	  that
+	  the sidebar collapses, this is recognized and the transformed as
+	  if the sidebar was hidden by clicking on a button.
+	  After expanding the sidebar, no size of 0 (only handle visible)
+	  will be tolerated, in case of doubt the minimum size hint is
+	  used.
+	  
+	  The SidebarSplitter class contains also the code to save and
+	  restore
+	  state directly from a KConfig group, removing a lot of duplicate
+	  fiveliners in various classes.
+
+2008-07-11 21:39  cgilles
+
+	* showfoto/CMakeLists.txt: compile
+
+2008-07-11 18:44  cgilles
+
+	* showfoto/CMakeLists.txt: compile
+
+2008-07-11 16:52  cgilles
+
+	* digikam/digikamapp.cpp: use Oxygen icon
+
+2008-07-11 16:51  cgilles
+
+	* utilities/cameragui/cameraui.cpp,
+	  utilities/imageeditor/editor/editorwindow.cpp,
+	  utilities/lighttable/lighttablewindow.cpp: use Oxygen icon
+
+2008-07-11 14:45  cgilles
+
+	* libs/dialogs/dprogressdlg.cpp: revert. Marcel, there is a little
+	  problem when you play with Dprogress dialog at the startup with
+	  ScanController (disable Splash to see what i mean)
+	  The progress bar still to 100% during few second before to start
+	  to zero and show real progress.
+	  CCMAIL: marcel.wiesweg@gmx.de
+
+2008-07-11 14:30  mwiesweg
+
+	* digikam/CMakeLists.txt: Apparently some setups require this
+
+2008-07-11 14:28  cgilles
+
+	* libs/dialogs/dprogressdlg.cpp: reset progress bar at start up
+
+2008-07-11 14:16  cgilles
+
+	* utilities/cameragui/cameraui.cpp,
+	  utilities/imageeditor/editor/editorwindow.cpp: polish
+
+2008-07-11 14:09  cgilles
+
+	* digikam/digikamapp.cpp, digikam/digikamapp.h,
+	  project/project.kdevelop, showfoto/CMakeLists.txt,
+	  showfoto/main.cpp, showfoto/showfoto.cpp, showfoto/showfoto.h,
+	  showfoto/showfotoui.rc, utilities/cameragui/cameraui.cpp,
+	  utilities/cameragui/cameraui.h, utilities/cameragui/cameraui.rc,
+	  utilities/cameragui/camerauiprivate.h,
+	  utilities/imageeditor/editor/digikamimagewindowui.rc,
+	  utilities/imageeditor/editor/editorwindow.h,
+	  utilities/imageeditor/editor/editorwindowprivate.h,
+	  utilities/imageeditor/editor/imagewindow.cpp,
+	  utilities/imageeditor/editor/imagewindow.h,
+	  utilities/lighttable/lighttablewindow.cpp,
+	  utilities/lighttable/lighttablewindow.h,
+	  utilities/lighttable/lighttablewindowprivate.h,
+	  utilities/lighttable/lighttablewindowui.rc: digiKam from trunk:
+	  add components info dialog to showfoto, image editor, light table
+	  and camera interface.
+
+2008-07-11 13:06  mwiesweg
+
+	* digikam/albumselectdialog.cpp: Remove extradata before using
+	  clear()
+
+2008-07-11 11:18  cgilles
+
+	* NEWS: update
+
+2008-07-11 11:12  cgilles
+
+	* digikam/digikamapp.cpp: add CImg version info
+
+2008-07-11 11:11  cgilles
+
+	* libs/greycstoration/greycstorationiface.cpp,
+	  libs/greycstoration/greycstorationiface.h: new method to get CImg
+	  version string
+
+2008-07-11 11:01  cgilles
+
+	* digikam/digikamapp.cpp: add marble widget info
+
+2008-07-11 10:51  cgilles
+
+	* digikam/digikamapp.cpp: add libjpeg info
+
+2008-07-11 10:31  cgilles
+
+	* digikam/digikamapp.cpp, digikam/digikamapp.h,
+	  libs/dialogs/libsinfodlg.cpp, libs/dialogs/libsinfodlg.h: add lib
+	  tiff info
+
+2008-07-11 10:18  cgilles
+
+	* CMakeLists.txt, digikam/digikamapp.cpp, digikam/digikamapp.h,
+	  digikam/digikamappprivate.h, digikam/digikamui.rc,
+	  digikam/main.cpp, libs/dialogs/CMakeLists.txt,
+	  libs/dialogs/libsinfodlg.cpp, libs/dialogs/libsinfodlg.h,
+	  project/project.kdevelop: digiKam from trunk : new dialog to show
+	  all components and libraries informations used by digiKam
+
+2008-07-10 20:44  mwiesweg
+
+	* utilities/fuzzysearch/findduplicatesview.cpp,
+	  utilities/fuzzysearch/findduplicatesview.h: - Handle
+	  signalAlbumAdded, signalAlbumDeleted, signalAlbumsCleared
+	  - control the extraData only from here, with this pointer as key
+	  
+	  This fixes a crash on exit when the setup had been accessed
+	  before
+	  (albums had been reloaded, but items had old deleted albums
+	  stored)
+
+2008-07-10 20:44  mwiesweg
+
+	* utilities/fuzzysearch/findduplicatesalbumitem.cpp: We cannot
+	  control extraData from here: treeWidget() is 0 in destructor
+	  (item is removed before it is deleted)
+
+2008-07-10 20:44  mwiesweg
+
+	* digikam/digikamapp.cpp,
+	  utilities/lighttable/lighttablewindow.cpp: Control the
+	  WA_DeleteOnClose flag for lighttable as well
+
+2008-07-10 20:44  mwiesweg
+
+	* digikam/digikamapp.cpp: Make the smart
+	  rebuild-only-needed-fingerprints the default
+
+2008-07-10 17:14  cgilles
+
+	* digikam/album.cpp, digikam/album.h, digikam/albumfolderview.cpp,
+	  digikam/albumlister.cpp,
+	  utilities/batch/batchalbumssyncmetadata.cpp,
+	  utilities/batch/imageinfojob.cpp,
+	  utilities/searchwindow/searchfolderview.cpp: compile : kurl() =>
+	  databaseUrl()
+
+2008-07-10 16:46  cgilles
+
+	* digikam/album.cpp, digikam/album.h, libs/database/imageinfo.cpp,
+	  libs/database/imageinfo.h: remove depreciate methods
+
+2008-07-10 15:03  cgilles
+
+	* imageplugins/hotpixels/weights.cpp,
+	  imageplugins/hotpixels/weights.h: fix gcc 4.3.1. warnings
+
+2008-07-10 14:57  cgilles
+
+	* imageplugins/hotpixels/hotpixel.h,
+	  imageplugins/hotpixels/hotpixelfixer.cpp,
+	  imageplugins/hotpixels/hotpixelfixer.h: fix gcc 4.3.1 warnings
+
+2008-07-10 14:50  cgilles
+
+	* digikam/albumselectdialog.cpp: fix gcc 4.3.1 warnings
+
+2008-07-10 14:45  cgilles
+
+	* digikam/albumfolderview.cpp: fix depreciates
+
+2008-07-10 14:42  cgilles
+
+	* digikam/albumiconview.cpp: fix gcc 4.3.1 warnings
+
+2008-07-10 14:26  cgilles
+
+	* libs/greycstoration/greycstorationiface.cpp,
+	  libs/greycstoration/greycstorationiface.h: polish
+
+2008-07-10 14:22  cgilles
+
+	* libs/greycstoration/CImg.h, libs/greycstoration/greycstoration.h,
+	  libs/greycstoration/greycstorationiface.cpp: digiKam from trunk :
+	  update internal CImg library to 1.2.9
+
+2008-07-10 11:32  mlaurent
+
+	* utilities/gpssearch/gpssearchwidget.cpp: Thissignal doesn't exist
+	  now
+
+2008-07-09 20:53  aclemens
+
+	* imageplugins/noisereduction/imageeffect_noisereduction.cpp:
+	  backport commit #830144 from KDE3 branch
+
+2008-07-09 19:37  aclemens
+
+	* imageplugins/coreplugin/imageeffect_blur.cpp: backport commit
+	  #830107 frm KDE3 branch
+
+2008-07-09 18:31  sitter
+
+	* COPYING.LIB: add LGPL for digikam/digikam_export.h
+
+2008-07-09 18:17  aclemens
+
+	* imageplugins/coreplugin/sharpnesseditor/imageeffect_sharpen.cpp:
+	  backport commit #830084 from KDE3 branch
+	  CCBUGS:162812
+
+2008-07-09 17:54  cgilles
+
+	* libs/dimg/dcolorcomposer.cpp: fix gcc 4.3.x warnings
+
+2008-07-09 17:24  aclemens
+
+	* libs/dialogs/ctrlpaneldlg.cpp: backport commit #830067 from KDE3
+	  branch
+	  CCBUGS:162812
+
+2008-07-09 15:57  aclemens
+
+	* digikam/albumlister.cpp: backport commit #830037 from KDE3 branch
+	  
+	  BUGS:161369
+
+2008-07-09 09:33  cgilles
+
+	* utilities/kipiiface/kipiimageinfo.cpp: compile
+
+2008-07-09 09:20  cgilles
+
+	* utilities/kipiiface/kipiimageinfo.cpp: digiKam from trunk:
+	  Kipi-interface : implement delAttributes() and clearAttributes()
+
+2008-07-09 08:33  cgilles
+
+	* utilities/batch/fingerprintsgenerator.cpp: fix warnings
+
+2008-07-09 08:30  cgilles
+
+	* libs/dialogs/iccprofileinfodlg.cpp,
+	  libs/dialogs/iccprofileinfodlg.h,
+	  libs/imageproperties/imagepropertiescolorstab.cpp,
+	  libs/widgets/iccprofiles/iccprofilewidget.cpp,
+	  libs/widgets/iccprofiles/iccprofilewidget.h: fix GCC 4.3.x
+	  warnings
+
+2008-07-08 18:11  cgilles
+
+	* digikam/CMakeLists.txt: CImg library compiled in digiKam core,
+	  need pthread to be linked properlly. Reported by Debian packagers
+	  team
+
+2008-07-08 15:08  cgilles
+
+	* CMakeLists.txt: update version
+
+2008-07-08 14:09  aclemens
+
+	* digikam/folderview.cpp, digikam/folderview.h: backport commit
+	  #829440from KDE3 branch
+	  CCBUGS: 126871
+
+2008-07-08 12:41  cgilles
+
+	* libs/dimg/loaders/pngloader.cpp: fix broken compilation with gcc
+	  4.3.1
+
+2008-07-08 11:34  cgilles
+
+	* digikam/folderview.cpp: backport commit #829376 from KDE3 branch
+	  CCBUGS: 130906
+
+2008-07-08 10:26  cgilles
+
+	* digikam/folderview.h, libs/imageproperties/talbumlistview.cpp,
+	  libs/imageproperties/talbumlistview.h: backport commit #829373
+	  and #829372 from KDE3
+
+2008-07-08 09:00  cgilles
+
+	* project/project.kdevelop: update
+
+2008-07-08 06:35  cgilles
+
+	* NEWS: update
+
+2008-07-08 06:22  cgilles
+
+	* NEWS: update
+
+2008-07-07 21:11  mwiesweg
+
+	* utilities/batch/fingerprintsgenerator.cpp: Use the
+	  getDirtyOrMissingFingerprintURLs for the faster method of
+	  rebuilding all fingerprints.
+	  This methods gets missing fingerprints, but as well all images
+	  that were touched
+	  (by modification data and file contents hash). This means you can
+	  edit your pictures,
+	  and this option will rebuild only the edited pictures.
+
+2008-07-07 21:11  mwiesweg
+
+	* libs/database/albumdb.cpp, libs/database/albumdb.h: Add a method
+	  to retrieve item URLs for dirty fingerprint images.
+	  Fix all other methods returning URLs so that they dont return
+	  double slashes for album root albums (not fatal in paths, but not
+	  perfect enough for my taste)
+
+2008-07-07 20:23  mwiesweg
+
+	* utilities/searchwindow/searchfields.cpp,
+	  utilities/searchwindow/searchfields.h: For use with the
+	  exposuretime field, add an option to SearchFieldRangeInt
+	  to store the reciprocal value in XML (as double, with inverted
+	  operators)
+	  This is necessary for exposure time: People enter 1/50, the spin
+	  box reads 50,
+	  but we really need 1/50. TODO for the future: Make a spin box
+	  that goes beyond
+	  1/1 and that follows the convention (15, 30, 50, 60, 90, 125...)
+
+2008-07-07 17:59  mwiesweg
+
+	* utilities/searchwindow/searchfields.cpp: SearchFieldAlbum:
+	  Support writing a list of album ids in one field instead of
+	  one field for each album id.
+	  Fields were grouped by the group-wide field operator, specified
+	  by the user, usually AND. This does not work for albums and tags,
+	  the user selects images in either album, not in both.
+
+2008-07-07 17:58  mwiesweg
+
+	* libs/database/imagequerybuilder.cpp: - support lists of ids for
+	  "albumid" and "tagid" fields.
+	  The ids are integrated in one single sub-select.
+	  - fix using addSqlOperator for addChoiceString
+
+2008-07-07 17:58  mwiesweg
+
+	* libs/database/searchxml.cpp, libs/database/searchxml.h: Add
+	  method valueToIntOrIntList (in original and cached version)
+	  that works with either a single int value (written with
+	  writeValue(int))
+	  or a list int value (writeValue(QList<int>))
+
+2008-07-07 13:18  cgilles
+
+	* NEWS: polish
+
+2008-07-07 08:11  cgilles
+
+	* NEWS: update
+
+2008-07-07 08:11  cgilles
+
+	* ChangeLog: update
+
+2008-07-07 07:32  cgilles
+
+	* KDE4PORT: update
+
+2008-07-07 07:31  aclemens
+
+	* digikam/albumiconview.cpp,
+	  utilities/lighttable/lighttablewindow.cpp,
+	  utilities/lighttable/lighttablewindow.h: backport commit #827717
+	  from KDE3 branch
+	  CCBUGS:160617
+
+2008-07-07 06:57  cgilles
+
+	* TODO: update
+
+2008-07-07 06:57  cgilles
+
+	* TODO: update
+
+2008-07-07 06:55  cgilles
+
+	* digikam.lsm.cmake: update
+
+2008-07-07 06:54  cgilles
+
+	* KDE4PORT: update
+
+2008-07-07 06:48  cgilles
+
+	* NEWS.0.9.4: update
+
 0.10.0-beta1 07-07-2008
 ---------------------------------------------------------------------------
 
