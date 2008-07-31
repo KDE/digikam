@@ -12,7 +12,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 166310 : Preview not working in image effect dialogs.
 002 ==> 167571 : Unnatural order when removing images from light table.
-003 ==> 
+003 ==> 167139 : Crash if Exif.GPSInfo.GPSAltitude is empty.
+004 ==> 
 
 *********************************************************************************************************
 digiKam 0.10.0-beta2 - Release date: 2008-07-31
