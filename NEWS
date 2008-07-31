@@ -12,4 +12,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 003 ==> 146870 : Don't reduce size of image when rotating.
 004 ==> 167528 : Remove hotlinking URL from tips.
 005 ==> 167343 : Albums view corrupted and unusable.
-006 ==> 
+006 ==> 146033 : When switching with Page* image jumps.
+007 ==> 
