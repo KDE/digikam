@@ -163,7 +163,7 @@ void TAlbumCheckListItem::setStatus(MetadataHub::TagStatus status)
 // ------------------------------------------------------------------------
 
 TAlbumListView::TAlbumListView(QWidget* parent)
-              : FolderView(parent)
+              : FolderView(parent, "TAlbumListView")
 {
     addColumn(i18n("Tags"));
     header()->hide();
