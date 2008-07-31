@@ -154,13 +154,13 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
 
     QPushButton *linHistoButton = new QPushButton( scaleBox );
     linHistoButton->setToolTip( i18n( "<p>Linear" ) );
-    linHistoButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/histogram-lin.png")));
+    linHistoButton->setIcon(KIcon("view-object-histogram-linear"));
     linHistoButton->setCheckable(true);
     m_scaleBG->addButton(linHistoButton, Digikam::CurvesWidget::LinScaleHistogram);
 
     QPushButton *logHistoButton = new QPushButton( scaleBox );
     logHistoButton->setToolTip( i18n( "<p>Logarithmic" ) );
-    logHistoButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/histogram-log.png")));
+    logHistoButton->setIcon(KIcon("view-object-histogram-logarithmic"));
     logHistoButton->setCheckable(true);
     m_scaleBG->addButton(logHistoButton, Digikam::CurvesWidget::LogScaleHistogram);
 

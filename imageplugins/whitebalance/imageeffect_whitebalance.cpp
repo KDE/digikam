@@ -148,14 +148,14 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
     QPushButton *linHistoButton = new QPushButton( scaleBox );
     linHistoButton->setToolTip( i18n( "<p>Linear" ) );
     m_scaleBG->addButton(linHistoButton, Digikam::HistogramWidget::LinScaleHistogram);
-    linHistoButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/histogram-lin.png")));
+    linHistoButton->setIcon(KIcon("view-object-histogram-linear"));
     linHistoButton->setCheckable(true);
     hlay1->addWidget(linHistoButton);
 
     QPushButton *logHistoButton = new QPushButton( scaleBox );
     logHistoButton->setToolTip( i18n( "<p>Logarithmic" ) );
     m_scaleBG->addButton(logHistoButton, Digikam::HistogramWidget::LogScaleHistogram);
-    logHistoButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/histogram-log.png")));
+    logHistoButton->setIcon(KIcon("view-object-histogram-logarithmic"));
     logHistoButton->setCheckable(true);
     hlay1->addWidget(logHistoButton);
     hlay1->setMargin(0);
