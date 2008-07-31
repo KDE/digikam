@@ -1,4 +1,4 @@
-digiKam 0.10.0-beta2 - Release date: 2008-07-27
+digiKam 0.10.0-beta2 - Release date: 2008-07-31
 
 IMPORTANT: This is a beta release : do not use yet in production !!!
 ====================================================================
@@ -28,7 +28,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 017 ==> 167529 : Image Editor not working correctly after setting "use horizontal thumbbar" option.
 018 ==> 167621 : digiKam crashes when trying to remove a tag with the context menu.
 019 ==> 165348 : Problems when trying to import KDE3 data.
-020 ==> 
+020 ==> 166424 : Crash when editing Caption with Digikam4 SVN.
 
 *********************************************************************************************************
 digiKam 0.10.0-beta1 - Release date: 2008-07-07
