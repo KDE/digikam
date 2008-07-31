@@ -47,8 +47,8 @@ MACRO_OPTIONAL_FIND_PACKAGE(Kipi)
 # ==================================================================================================
 # Optional depencies
 
-MACRO_OPTIONAL_FIND_PACKAGE(KdepimLibs)
-MACRO_BOOL_TO_01(KDEPIMLIBS_FOUND HAVE_KDEPIMLIBS)
+#MACRO_OPTIONAL_FIND_PACKAGE(KdepimLibs)
+#MACRO_BOOL_TO_01(KDEPIMLIBS_FOUND HAVE_KDEPIMLIBS)
 
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 
@@ -68,7 +68,9 @@ CONFIGURE_FILE(config-digikam.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-digikam
 # Log messages
 
 message(STATUS "")
-message(STATUS " digiKam dependencies results -------------------")
+message(STATUS "----------------------------------------------------------------------------------")
+message(STATUS " digiKam ${DIGIKAM_VERSION_STRING} dependencies results")
+message(STATUS "")
 
 if(QT_QTSQL_FOUND)
   message(STATUS " Qt4 SQL module found........... YES")
@@ -205,7 +207,7 @@ else(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND GPHOTO2_FOUND AN
   set(DIGIKAM_CAN_BE_COMPILE false)
 endif(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND GPHOTO2_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KIPI_FOUND)
 
-message(STATUS "------------------------------------------------")
+message(STATUS "----------------------------------------------------------------------------------")
 message(STATUS "")
 
 IF(DIGIKAM_CAN_BE_COMPILE)
