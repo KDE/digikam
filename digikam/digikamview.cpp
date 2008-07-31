@@ -232,7 +232,7 @@ DigikamView::DigikamView(QWidget *parent)
     d->leftSideBar->appendTab(d->folderBox, SmallIcon("folder-image"), i18n("Albums"));
     d->leftSideBar->appendTab(d->dateFolderView, SmallIcon("view-calendar-list"), i18n("Calendar"));
     d->leftSideBar->appendTab(d->tagBox, SmallIcon("tag"), i18n("Tags"));
-    d->leftSideBar->appendTab(d->timeLineView, SmallIcon("clock"), i18n("Timeline"));
+    d->leftSideBar->appendTab(d->timeLineView, SmallIcon("player-time"), i18n("Timeline"));
     d->leftSideBar->appendTab(d->searchBox, SmallIcon("edit-find"), i18n("Searches"));
     d->leftSideBar->appendTab(d->fuzzySearchView, SmallIcon("tools-wizard"), i18n("Fuzzy Searches"));
     d->leftSideBar->appendTab(d->gpsSearchView, SmallIcon("applications-internet"), i18n("Map Searches"));
