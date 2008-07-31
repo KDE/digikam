@@ -78,7 +78,8 @@ fetchTranslations()
 
 createTranslationStats()
 
-createTag()
+# Do not work yet.
+#createTag()
 
 digikam()
 
