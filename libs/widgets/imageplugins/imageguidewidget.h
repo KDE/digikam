@@ -5,7 +5,7 @@
  *
  * Date        : 2004-08-20
  * Description : a widget to display an image with guides
- * 
+ *
  * Copyright (C) 2004-2008 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -13,12 +13,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef IMAGEGUIDEWIDGET_H
@@ -88,9 +88,9 @@ public:
                      const QColor& guideColor=Qt::red, int guideSize=1, 
                      bool blink=false, bool useImageSelection=false);
     ~ImageGuideWidget();
-        
+
     ImageIface* imageIface();
-    
+
     QPoint getSpotPosition();
     DColor getSpotColor(int getColorFrom);
     void   setSpotVisible(bool spotVisible, bool blink=false);
@@ -99,13 +99,13 @@ public:
     void   updatePreview();
 
 public slots:
-        
+
     void slotChangeGuideColor(const QColor &color);
-    void slotChangeGuideSize(int size);    
+    void slotChangeGuideSize(int size);
     void slotChangeRenderingPreviewMode(int mode);
-    void slotToggleUnderExposure(bool);    
-    void slotToggleOverExposure(bool);    
-    
+    void slotToggleUnderExposure(bool);
+    void slotToggleOverExposure(bool);
+
 signals:
 
     void spotPositionChangedFromOriginal(const Digikam::DColor &color, const QPoint &position);
@@ -113,7 +113,7 @@ signals:
     void signalResized();
 
 protected:
-    
+
     void paintEvent(QPaintEvent*);
     void resizeEvent(QResizeEvent*);
     void timerEvent(QTimerEvent*);
@@ -122,14 +122,14 @@ protected:
     void mouseMoveEvent(QMouseEvent*);
     void enterEvent(QEvent*);
     void leaveEvent(QEvent*);
-    
+
 private:
 
     void updatePixmap();
 
 private:
 
-    ImageGuideWidgetPriv* d;    
+    ImageGuideWidgetPriv* d;
 };
 
 }  // NameSpace Digikam

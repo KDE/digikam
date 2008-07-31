@@ -13,12 +13,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -30,8 +30,8 @@
 #include <QTimer>
 #include <QRect>
 #include <QBrush>
-#include <QFont> 
-#include <QFontMetrics> 
+#include <QFont>
+#include <QFontMetrics>
 #include <QTimerEvent>
 #include <QPaintEvent>
 #include <QResizeEvent>
@@ -78,7 +78,7 @@ public:
     bool        onMouseMovePreviewToggled;
     bool        underExposureIndicator;
     bool        overExposureIndicator;
-    
+
     int         width;
     int         height;
     int         timerID;
@@ -89,15 +89,15 @@ public:
 
     // Current spot position in preview coordinates.
     QPoint      spot;
-    
+
     QRect       rect;
-    
+
     QColor      guideColor;
-        
+
     QPixmap    *pixmap;
-    
+
     ImageIface *iface;
-    
+
     DImg        preview;
 };
 
@@ -112,7 +112,7 @@ ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent,
     d->guideMode   = guideMode;
     d->guideColor  = guideColor;
     d->guideSize   = guideSize;
-    
+
     setMinimumSize(w, h);
     setMouseTracking(true);
     setAttribute(Qt::WA_DeleteOnClose);
@@ -138,13 +138,13 @@ ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent,
 ImageGuideWidget::~ImageGuideWidget()
 {
     delete d->iface;
-    
+
     if (d->timerID)
         killTimer(d->timerID);
-           
+
     if (d->pixmap)
         delete d->pixmap;
-        
+
     delete d;
 }
 
@@ -158,12 +158,12 @@ void ImageGuideWidget::slotToggleUnderExposure(bool u)
     d->underExposureIndicator = u;
     updatePreview();
 }
-    
+
 void ImageGuideWidget::slotToggleOverExposure(bool o)
 {
     d->overExposureIndicator = o;
     updatePreview();
-}    
+}
 
 void ImageGuideWidget::resetSpotPosition()
 {
@@ -203,7 +203,7 @@ DColor ImageGuideWidget::getSpotColor(int getColorFrom)
 void ImageGuideWidget::setSpotVisible(bool spotVisible, bool blink)
 {
     d->spotVisible = spotVisible;
-    
+
     if (blink)
     {
         if (d->spotVisible)
@@ -214,7 +214,7 @@ void ImageGuideWidget::setSpotVisible(bool spotVisible, bool blink)
             d->timerID = 0;
         }
     }
-       
+
     updatePreview();
 }
 
@@ -237,7 +237,7 @@ void ImageGuideWidget::updatePixmap()
     QRect textRect, fontRect;
     QFontMetrics fontMt = p.fontMetrics();
     p.setPen(QPen(Qt::red, 1)) ;
-    
+
     d->pixmap->fill(palette().color(QPalette::Background));
 
     if (d->renderingPreviewMode == PreviewOriginalImage ||
@@ -256,9 +256,14 @@ void ImageGuideWidget::updatePixmap()
     else if (d->renderingPreviewMode == PreviewTargetImage || d->renderingPreviewMode == NoPreviewMode ||
             (d->renderingPreviewMode == PreviewToggleOnMouseOver && d->onMouseMovePreviewToggled == true ))
     {
-        d->iface->paint(d->pixmap, d->rect.x(), d->rect.y(),
-                        d->rect.width(), d->rect.height(), 
-                        d->underExposureIndicator, d->overExposureIndicator);
+        d->iface->paint(d->pixmap, 
+                        d->rect.x(), 
+                        d->rect.y(),
+                        d->rect.width(), 
+                        d->rect.height(), 
+                        d->underExposureIndicator, 
+                        d->overExposureIndicator, 
+                        &p);
 
         if (d->renderingPreviewMode == PreviewTargetImage ||
             d->renderingPreviewMode == PreviewToggleOnMouseOver)
@@ -287,7 +292,8 @@ void ImageGuideWidget::updatePixmap()
                             d->rect.width()/2,
                             d->rect.height(), 
                             d->underExposureIndicator, 
-                            d->overExposureIndicator);
+                            d->overExposureIndicator, 
+                            &p);
         }
         else
         {
@@ -298,7 +304,8 @@ void ImageGuideWidget::updatePixmap()
                             d->rect.width(),
                             d->rect.height(), 
                             d->underExposureIndicator, 
-                            d->overExposureIndicator);
+                            d->overExposureIndicator, 
+                            &p);
 
             // Drawing the original image under the target.
             p.drawPixmap(d->rect.x(), d->rect.y(), d->iface->convertToPixmap(d->preview),
@@ -334,7 +341,7 @@ void ImageGuideWidget::updatePixmap()
         fontRect = fontMt.boundingRect(0, 0, d->rect.width(), d->rect.height(), 0, text);
         textRect.setTopLeft(QPoint(d->rect.x() + 20, d->rect.y() + 20));
         textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2 ) );
-        p.fillRect(textRect, QBrush(QColor(250, 250, 255)) );
+        p.fillRect(textRect, QBrush(QColor(250, 250, 255)));
         p.drawRect(textRect);
         p.drawText(textRect, Qt::AlignCenter, text);
     }
@@ -353,7 +360,8 @@ void ImageGuideWidget::updatePixmap()
                             d->rect.width(),
                             d->rect.height()/2, 
                             d->underExposureIndicator, 
-                            d->overExposureIndicator);
+                            d->overExposureIndicator,
+                            &p);
         }
         else
         {
@@ -364,7 +372,8 @@ void ImageGuideWidget::updatePixmap()
                             d->rect.width(),
                             d->rect.height(), 
                             d->underExposureIndicator, 
-                            d->overExposureIndicator);
+                            d->overExposureIndicator,
+                            &p);
 
             // Drawing the original image under the target.
             p.drawPixmap(d->rect.x(), d->rect.y(), d->iface->convertToPixmap(d->preview),
@@ -409,7 +418,7 @@ void ImageGuideWidget::updatePixmap()
        // Adapt spot from image coordinate to widget coordinate.
        int xspot = d->spot.x() + d->rect.x();
        int yspot = d->spot.y() + d->rect.y();
-       
+
        switch (d->guideMode)
        {
           case HVGuideMode:
@@ -422,7 +431,7 @@ void ImageGuideWidget::updatePixmap()
              p.drawLine(d->rect.left() + d->flicker, yspot, d->rect.right() - d->flicker, yspot);
              break;
           }
-            
+
           case PickColorMode:
           {
              p.setPen(QPen(d->guideColor, 1, Qt::SolidLine));
@@ -436,12 +445,12 @@ void ImageGuideWidget::updatePixmap()
                 p.setPen(QPen(Qt::white, 1, Qt::SolidLine));
                 p.drawEllipse( xspot-5, yspot-5, 11, 11 );
              }
-                
+
              break;
           }
        }
     }
-    
+
     p.end();
 }
 
@@ -518,7 +527,7 @@ void ImageGuideWidget::mouseReleaseEvent(QMouseEvent *e)
        updatePreview();
        d->spot.setX(e->x()-d->rect.x());
        d->spot.setY(e->y()-d->rect.y());
-       
+
        DColor color;
        QPoint point = getSpotPosition();
 

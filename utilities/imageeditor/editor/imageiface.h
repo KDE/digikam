@@ -61,9 +61,9 @@ public:
 
     /** Use this method to use the current selection in editor instead the full 
         image to render the preview.
-    */    
+    */
     void setPreviewType(bool useSelect=false);
- 
+
     /** Return 'true' if the preview is rendered using the current selection in editor.
         Return 'false' if the preview is rendered using the full image in editor.
     */
@@ -187,7 +187,8 @@ public:
         at x|y, with given maximum width and height.
     */
     void paint(QPaintDevice* device, int x, int y, int w, int h,
-               bool underExposure=false, bool overExposure=false);
+               bool underExposure=false, bool overExposure=false,
+               QPainter *painter=0);
 
 private:
 

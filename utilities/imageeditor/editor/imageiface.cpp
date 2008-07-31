@@ -70,7 +70,7 @@ public:
     QPixmap qcheck;
     QPixmap qpix;
     QBitmap qmask;
-    
+
     DImg    previewImage;
     DImg    targetPreviewImage;
 };
@@ -380,7 +380,7 @@ PhotoInfoContainer ImageIface::getPhotographInformations() const
 }
 
 void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h,
-                       bool underExposure, bool overExposure)
+                       bool underExposure, bool overExposure, QPainter *painter)
 {
     QPainter p(&d->qpix);
 
@@ -390,7 +390,7 @@ void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h,
         {
             p.drawTiledPixmap(0, 0, d->qpix.width(), d->qpix.height(), d->qcheck);
         }
-        
+
         QPixmap pixImage;
         ICCSettingsContainer *iccSettings = DImgInterface::defaultInterface()->getICCSettings();
 
@@ -433,9 +433,16 @@ void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h,
 
     p.end();
 
-    QPainter p2(device);
-    p2.drawPixmap(x, y, d->qpix, 0, 0, d->qpix.width(), d->qpix.height());
-    p2.end();    
+    if (!painter)
+    {
+        QPainter p2(device);
+        p2.drawPixmap(x, y, d->qpix, 0, 0, d->qpix.width(), d->qpix.height());
+        p2.end();
+    }
+    else
+    {
+        painter->drawPixmap(x, y, d->qpix, 0, 0, d->qpix.width(), d->qpix.height());
+    }
 }
 
 }   // namespace Digikam
