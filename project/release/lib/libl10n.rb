@@ -93,7 +93,6 @@ end
 
 
 def fetchDocumentation()
-    bar  = @dlg.progressbar("preparing doc processing",1)
     srcDir()
 
     l10nlangs = `svn cat #{@repo}/l10n-kde4/subdirs`.chomp!()

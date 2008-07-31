@@ -28,7 +28,7 @@
 def tagSource()
     Dir.chdir( BASEPATH + "/" + @folder )
 
-    @tag = "#{@protocol}://#{@user}.kde.org/home/kde/tags/#{NAME}/#{@version}"
+    @tag1 = "#{@protocol}://#{@user}.kde.org/home/kde/tags/#{NAME}/#{@version}"
 
     `svn mkdir -m "Create tag #{NAME} #{@version} root directory" #{@tag1}`
     `svn cp -m "Tag #{NAME} #{@version}." #{@repo}/#{COMPONENT}/#{SECTION}/#{NAME} #{@tag1}`
@@ -45,7 +45,7 @@ def tagTranslations()
     Dir.chdir( BASEPATH + "/" + @folder )
     `svn co -N #{@tag1} tagging`
 
-    @tag1 = "#{@protocol}://#{@user}.kde.org/home/kde/tags/#{NAME}/#{@version}/po"
+    tag = "#{@protocol}://#{@user}.kde.org/home/kde/tags/#{NAME}/#{@version}/po"
 
     `svn mkdir -m "Create tag #{NAME} #{@version} po directory" #{tag}`
     `svn up tagging/po`
