@@ -84,7 +84,7 @@ private:
 
     void loadCurrentList(const QString& caption, bool allowSaving);
     void closeEvent(QCloseEvent* e);
-    
+
     void dragMoveEvent(QDragMoveEvent *e);
     void dropEvent(QDropEvent *e);
 
@@ -97,7 +97,7 @@ private:
     bool saveAs();
 
     void saveIsComplete();
-    void saveAsIsComplete(); 
+    void saveAsIsComplete();
     void setViewToURL(const KURL &url);
     void deleteCurrentItem(bool ask, bool permanently);
 
@@ -128,6 +128,13 @@ private slots:
 
     void slotAssignTag(int tagID);
     void slotRemoveTag(int tagID);
+
+    void slotAssignRatingNoStar();
+    void slotAssignRatingOneStar();
+    void slotAssignRatingTwoStar();
+    void slotAssignRatingThreeStar();
+    void slotAssignRatingFourStar();
+    void slotAssignRatingFiveStar();
     void slotAssignRating(int rating);
 
     void slotFileMetadataChanged(const KURL &);

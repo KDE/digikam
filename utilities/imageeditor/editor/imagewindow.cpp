@@ -166,7 +166,7 @@ ImageWindow::ImageWindow()
 {
     d = new ImageWindowPriv;
     m_instance = this;
-    setAcceptDrops(true); 
+    setAcceptDrops(true);
 
     // -- Build the GUI -------------------------------
 
@@ -303,22 +303,22 @@ void ImageWindow::setupActions()
     // -- Rating actions ---------------------------------------------------------------
 
     d->star0 = new KAction(i18n("Assign Rating \"No Stars\""), CTRL+Key_0,
-                          d->rightSidebar, SLOT(slotAssignRatingNoStar()),
+                          this, SLOT(slotAssignRatingNoStar()),
                           actionCollection(), "imageview_ratenostar");
     d->star1 = new KAction(i18n("Assign Rating \"One Star\""), CTRL+Key_1,
-                          d->rightSidebar, SLOT(slotAssignRatingOneStar()),
+                          this, SLOT(slotAssignRatingOneStar()),
                           actionCollection(), "imageview_rateonestar");
     d->star2 = new KAction(i18n("Assign Rating \"Two Stars\""), CTRL+Key_2,
-                          d->rightSidebar, SLOT(slotAssignRatingTwoStar()),
+                          this, SLOT(slotAssignRatingTwoStar()),
                           actionCollection(), "imageview_ratetwostar");
     d->star3 = new KAction(i18n("Assign Rating \"Three Stars\""), CTRL+Key_3,
-                          d->rightSidebar, SLOT(slotAssignRatingThreeStar()),
+                          this, SLOT(slotAssignRatingThreeStar()),
                           actionCollection(), "imageview_ratethreestar");
     d->star4 = new KAction(i18n("Assign Rating \"Four Stars\""), CTRL+Key_4,
-                          d->rightSidebar, SLOT(slotAssignRatingFourStar()),
+                          this, SLOT(slotAssignRatingFourStar()),
                           actionCollection(), "imageview_ratefourstar");
     d->star5 = new KAction(i18n("Assign Rating \"Five Stars\""), CTRL+Key_5,
-                          d->rightSidebar, SLOT(slotAssignRatingFiveStar()),
+                          this, SLOT(slotAssignRatingFiveStar()),
                           actionCollection(), "imageview_ratefivestar");
 
     // -- Special Delete actions ---------------------------------------------------------------
@@ -481,7 +481,7 @@ void ImageWindow::slotForward()
     KURL::List::iterator it = d->urlList.find(d->urlCurrent);
     int index = d->imageInfoList.find(d->imageInfoCurrent);
 
-    if (it != d->urlList.end()) 
+    if (it != d->urlList.end())
     {
         if (d->urlCurrent != d->urlList.last())
         {
@@ -501,7 +501,7 @@ void ImageWindow::slotBackward()
     KURL::List::iterator it = d->urlList.find(d->urlCurrent);
     int index = d->imageInfoList.find(d->imageInfoCurrent);
 
-    if (it != d->urlList.begin()) 
+    if (it != d->urlList.begin())
     {
         if (d->urlCurrent != d->urlList.first())
         {
@@ -572,12 +572,12 @@ void ImageWindow::slotContextMenu()
             separatorID2 = m_contextMenu->insertSeparator();
 
             // Assign Star Rating -------------------------------------------
-        
+
             ratingMenu = new RatingPopupMenu();
-            
+
             connect(ratingMenu, SIGNAL(activated(int)),
                     this, SLOT(slotAssignRating(int)));
-        
+
             m_contextMenu->insertItem(i18n("Assign Rating"), ratingMenu);
         }
 
@@ -658,6 +658,36 @@ void ImageWindow::slotRemoveTag(int tagID)
     }
 }
 
+void ImageWindow::slotAssignRatingNoStar()
+{
+    slotAssignRating(0);
+}
+
+void ImageWindow::slotAssignRatingOneStar()
+{
+    slotAssignRating(1);
+}
+
+void ImageWindow::slotAssignRatingTwoStar()
+{
+    slotAssignRating(2);
+}
+
+void ImageWindow::slotAssignRatingThreeStar()
+{
+    slotAssignRating(3);
+}
+
+void ImageWindow::slotAssignRatingFourStar()
+{
+    slotAssignRating(4);
+}
+
+void ImageWindow::slotAssignRatingFiveStar()
+{
+    slotAssignRating(5);
+}
+
 void ImageWindow::slotAssignRating(int rating)
 {
     rating = QMIN(RatingMax, QMAX(RatingMin, rating));
@@ -676,20 +706,20 @@ void ImageWindow::slotUpdateItemInfo()
     uint index = d->urlList.findIndex(d->urlCurrent);
 
     m_rotatedOrFlipped = false;
-    
+
     QString text = d->urlCurrent.filename() + i18n(" (%2 of %3)")
                                              .arg(QString::number(index+1))
                                              .arg(QString::number(d->urlList.count()));
     m_nameLabel->setText(text);
 
-    if (d->urlList.count() == 1) 
+    if (d->urlList.count() == 1)
     {
         m_backwardAction->setEnabled(false);
         m_forwardAction->setEnabled(false);
         m_firstAction->setEnabled(false);
         m_lastAction->setEnabled(false);
     }
-    else 
+    else
     {
         m_backwardAction->setEnabled(true);
         m_forwardAction->setEnabled(true);
@@ -697,13 +727,13 @@ void ImageWindow::slotUpdateItemInfo()
         m_lastAction->setEnabled(true);
     }
 
-    if (index == 0) 
+    if (index == 0)
     {
         m_backwardAction->setEnabled(false);
         m_firstAction->setEnabled(false);
     }
 
-    if (index == d->urlList.count()-1) 
+    if (index == d->urlList.count()-1)
     {
         m_forwardAction->setEnabled(false);
         m_lastAction->setEnabled(false);
@@ -728,7 +758,7 @@ void ImageWindow::slotUpdateItemInfo()
 
 bool ImageWindow::setup(bool iccSetupPage)
 {
-    Setup setup(this, 0, iccSetupPage ? Setup::IccProfiles : Setup::LastPageUsed);    
+    Setup setup(this, 0, iccSetupPage ? Setup::IccProfiles : Setup::LastPageUsed);
 
     if (setup.exec() != QDialog::Accepted)
         return false;
@@ -763,7 +793,7 @@ void ImageWindow::saveIsComplete()
     KURL::List::iterator it = d->urlList.find(d->urlCurrent);
     setViewToURL(*it);
 
-    if (++it != d->urlList.end()) 
+    if (++it != d->urlList.end())
     {
         m_canvas->preload((*it).path());
     }
@@ -832,7 +862,7 @@ void ImageWindow::saveAsIsComplete()
         // all that is done in slotLoadCurrent, except for loading
         KURL::List::iterator it = d->urlList.find(d->urlCurrent);
 
-        if (it != d->urlList.end()) 
+        if (it != d->urlList.end())
         {
             setViewToURL(*it);
             m_canvas->preload((*++it).path());
@@ -1007,7 +1037,7 @@ void ImageWindow::slotFileMetadataChanged(const KURL &url)
 
 void ImageWindow::slotFilePrint()
 {
-    printImage(d->urlCurrent); 
+    printImage(d->urlCurrent);
 };
 
 void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
@@ -1022,12 +1052,12 @@ void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
     {
         // We have started image editor from Album GUI. we get picture comments from database.
 
-        m_nameLabel->progressBarMode(StatusProgressBar::CancelProgressBarMode, 
+        m_nameLabel->progressBarMode(StatusProgressBar::CancelProgressBarMode,
                                     i18n("Preparing slideshow. Please wait..."));
 
         cnt = (float)d->imageInfoList.count();
 
-        for (ImageInfo *info = d->imageInfoList.first() ; 
+        for (ImageInfo *info = d->imageInfoList.first() ;
              !m_cancelSlideShow && info ; info = d->imageInfoList.next())
         {
             SlidePictureInfo pictInfo;
@@ -1040,8 +1070,8 @@ void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
                 pictInfo.photoInfo = meta.getPhotographInformations();
             }
 
-            // In case of dateTime extraction from metadata failed 
-            pictInfo.photoInfo.dateTime = info->dateTime(); 
+            // In case of dateTime extraction from metadata failed
+            pictInfo.photoInfo.dateTime = info->dateTime();
             settings.pictInfoMap.insert(info->kurl(), pictInfo);
 
             m_nameLabel->setProgressValue((int)((i++/cnt)*100.0));
@@ -1052,18 +1082,18 @@ void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
     {
         // We have started image editor from Camera GUI. we get picture comments from metadata.
 
-        m_nameLabel->progressBarMode(StatusProgressBar::CancelProgressBarMode, 
+        m_nameLabel->progressBarMode(StatusProgressBar::CancelProgressBarMode,
                                     i18n("Preparing slideshow. Please wait..."));
 
         cnt = (float)d->urlList.count();
 
-        for (KURL::List::Iterator it = d->urlList.begin() ; 
+        for (KURL::List::Iterator it = d->urlList.begin() ;
              !m_cancelSlideShow && (it != d->urlList.end()) ; ++it)
         {
             SlidePictureInfo pictInfo;
             meta.load((*it).path());
             pictInfo.comment   = meta.getImageComment();
-            pictInfo.photoInfo = meta.getPhotographInformations(); 
+            pictInfo.photoInfo = meta.getPhotographInformations();
             settings.pictInfoMap.insert(*it, pictInfo);
 
             m_nameLabel->setProgressValue((int)((i++/cnt)*100.0));
@@ -1071,7 +1101,7 @@ void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
         }
     }
 
-    m_nameLabel->progressBarMode(StatusProgressBar::TextMode, QString());   
+    m_nameLabel->progressBarMode(StatusProgressBar::TextMode, QString());
 
     if (!m_cancelSlideShow)
     {
@@ -1133,12 +1163,12 @@ void ImageWindow::dropEvent(QDropEvent *e)
         QString ATitle;
         AlbumManager* man  = AlbumManager::instance();
         PAlbum* palbum     = man->findPAlbum(albumIDs.first());
-        if (palbum) ATitle = palbum->title();  
+        if (palbum) ATitle = palbum->title();
 
         TAlbum* talbum     = man->findTAlbum(albumIDs.first());
-        if (talbum) ATitle = talbum->title();  
+        if (talbum) ATitle = talbum->title();
 
-        loadImageInfos(imageInfoList, imageInfoList.first(), 
+        loadImageInfos(imageInfoList, imageInfoList.first(),
                        i18n("Album \"%1\"").arg(ATitle), true);
         e->accept();
     }
@@ -1163,9 +1193,9 @@ void ImageWindow::dropEvent(QDropEvent *e)
 
         QString ATitle;
         PAlbum* palbum     = man->findPAlbum(albumIDs.first());
-        if (palbum) ATitle = palbum->title();  
+        if (palbum) ATitle = palbum->title();
 
-        loadImageInfos(imageInfoList, imageInfoList.first(), 
+        loadImageInfos(imageInfoList, imageInfoList.first(),
                        i18n("Album \"%1\"").arg(ATitle), true);
         e->accept();
     }
@@ -1195,13 +1225,13 @@ void ImageWindow::dropEvent(QDropEvent *e)
 
         QString ATitle;
         TAlbum* talbum     = man->findTAlbum(tagID);
-        if (talbum) ATitle = talbum->title();  
+        if (talbum) ATitle = talbum->title();
 
-        loadImageInfos(imageInfoList, imageInfoList.first(), 
+        loadImageInfos(imageInfoList, imageInfoList.first(),
                        i18n("Album \"%1\"").arg(ATitle), true);
         e->accept();
-    }   
-    else 
+    }
+    else
     {
         e->ignore();
     }
