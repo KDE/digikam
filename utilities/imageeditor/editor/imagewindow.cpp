@@ -363,32 +363,32 @@ void ImageWindow::setupActions()
 
     d->star0 = new KAction(i18n("Assign Rating \"No Stars\""), this);
     d->star0->setShortcut(Qt::CTRL+Qt::Key_0);
-    connect(d->star0, SIGNAL(triggered()), d->rightSidebar, SLOT(slotAssignRatingNoStar()));
+    connect(d->star0, SIGNAL(triggered()), this, SLOT(slotAssignRatingNoStar()));
     actionCollection()->addAction("imageview_ratenostar", d->star0);
 
     d->star1 = new KAction(i18n("Assign Rating \"One Star\""), this);
     d->star1->setShortcut(Qt::CTRL+Qt::Key_1);
-    connect(d->star1, SIGNAL(triggered()), d->rightSidebar, SLOT(slotAssignRatingOneStar()));
+    connect(d->star1, SIGNAL(triggered()), this, SLOT(slotAssignRatingOneStar()));
     actionCollection()->addAction("imageview_rateonestar", d->star1);
 
     d->star2 = new KAction(i18n("Assign Rating \"Two Stars\""), this);
     d->star2->setShortcut(Qt::CTRL+Qt::Key_2);
-    connect(d->star2, SIGNAL(triggered()), d->rightSidebar, SLOT(slotAssignRatingTwoStar()));
+    connect(d->star2, SIGNAL(triggered()), this, SLOT(slotAssignRatingTwoStar()));
     actionCollection()->addAction("imageview_ratetwostar", d->star2);
 
     d->star3 = new KAction(i18n("Assign Rating \"Three Stars\""), this);
     d->star3->setShortcut(Qt::CTRL+Qt::Key_3);
-    connect(d->star3, SIGNAL(triggered()), d->rightSidebar, SLOT(slotAssignRatingThreeStar()));
+    connect(d->star3, SIGNAL(triggered()), this, SLOT(slotAssignRatingThreeStar()));
     actionCollection()->addAction("imageview_ratethreestar", d->star3);
 
     d->star4 = new KAction(i18n("Assign Rating \"Four Stars\""), this);
     d->star4->setShortcut(Qt::CTRL+Qt::Key_4);
-    connect(d->star4, SIGNAL(triggered()), d->rightSidebar, SLOT(slotAssignRatingFourStar()));
+    connect(d->star4, SIGNAL(triggered()), this, SLOT(slotAssignRatingFourStar()));
     actionCollection()->addAction("imageview_ratefourstar", d->star4);
 
     d->star5 = new KAction(i18n("Assign Rating \"Five Stars\""), this);
     d->star5->setShortcut(Qt::CTRL+Qt::Key_5);
-    connect(d->star5, SIGNAL(triggered()), d->rightSidebar, SLOT(slotAssignRatingFiveStar()));
+    connect(d->star5, SIGNAL(triggered()), this, SLOT(slotAssignRatingFiveStar()));
     actionCollection()->addAction("imageview_ratefivestar", d->star5);
 
     // -- Special Delete actions ---------------------------------------------------------------
@@ -733,6 +733,36 @@ void ImageWindow::slotRemoveTag(int tagID)
         hub.write(d->imageInfoCurrent, MetadataHub::PartialWrite);
         hub.write(d->imageInfoCurrent.filePath(), MetadataHub::FullWriteIfChanged);
     }
+}
+
+void ImageWindow::slotAssignRatingNoStar()
+{
+    slotAssignRating(0);
+}
+
+void ImageWindow::slotAssignRatingOneStar()
+{
+    slotAssignRating(1);
+}
+
+void ImageWindow::slotAssignRatingTwoStar()
+{
+    slotAssignRating(2);
+}
+
+void ImageWindow::slotAssignRatingThreeStar()
+{
+    slotAssignRating(3);
+}
+
+void ImageWindow::slotAssignRatingFourStar()
+{
+    slotAssignRating(4);
+}
+
+void ImageWindow::slotAssignRatingFiveStar()
+{
+    slotAssignRating(5);
 }
 
 void ImageWindow::slotAssignRating(int rating)

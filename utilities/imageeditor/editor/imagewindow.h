@@ -131,6 +131,13 @@ private slots:
 
     void slotAssignTag(int tagID);
     void slotRemoveTag(int tagID);
+
+    void slotAssignRatingNoStar();
+    void slotAssignRatingOneStar();
+    void slotAssignRatingTwoStar();
+    void slotAssignRatingThreeStar();
+    void slotAssignRatingFourStar();
+    void slotAssignRatingFiveStar();
     void slotAssignRating(int rating);
 
     void slotFileMetadataChanged(const KUrl &);
