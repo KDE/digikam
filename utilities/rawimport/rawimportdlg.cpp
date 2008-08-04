@@ -189,7 +189,7 @@ RawImportDlg::RawImportDlg(const ImageInfo& info, QWidget *parent)
                                              "of the selected image channel. This one is re-computed at any "
                                              "settings changes."));
     QLabel *space = new QLabel(histoBox);
-    space->setFixedHeight(1);    
+    space->setFixedHeight(1);
     d->hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, histoBox );
     d->hGradient->setColors( QColor( "black" ), QColor( "white" ) );
 
@@ -217,14 +217,24 @@ RawImportDlg::RawImportDlg(const ImageInfo& info, QWidget *parent)
     connect(d->scaleBG, SIGNAL(released(int)),
             this, SLOT(slotScaleChanged(int)));
 
-    connect(d->previewWidget, SIGNAL(signalPreviewed(const DImg&)),
+    connect(d->previewWidget, SIGNAL(signalLoadingStarted()),
             this, SLOT(slotPreviewed(const DImg&)));
+
+    connect(d->previewWidget, SIGNAL(signalImageLoaded(const DImg&)),
+            this, SLOT(slotImageLoaded(const DImg&)));
+
+    connect(d->previewWidget, SIGNAL(signalLoadingStarted()),
+            this, SLOT(slotLoadingStarted()));
+
+    connect(d->previewWidget, SIGNAL(signalLoadingFailed()),
+            this, SLOT(slotLoadingFailed()));
 
     // ---------------------------------------------------------------
 
     busy(false);
     readSettings();
     d->previewWidget->setImageInfo(&d->info);
+    slotUser1();
 }
 
 RawImportDlg::~RawImportDlg()
@@ -371,6 +381,8 @@ void RawImportDlg::slotUser3()
 
 void RawImportDlg::busy(bool val)
 {
+    if (val) d->previewWidget->setCursor(KCursor::waitCursor());
+    else d->previewWidget->unsetCursor();
     d->decodingSettingsBox->setEnabled(!val);
     enableButton (User1, !val);
     enableButton (User2, !val);
@@ -378,44 +390,23 @@ void RawImportDlg::busy(bool val)
     enableButton (Close, !val);
 }
 
-void RawImportDlg::identified(const QString&, const QString& identity, const QPixmap& preview)
+void RawImportDlg::slotLoadingStarted()
 {
-//    d->previewWidget->setInfo(d->inputFileName + QString(" :\n") + identity, Qt::white, preview);
+    d->histogramWidget->setDataLoading();
+    busy(true);
 }
 
-void RawImportDlg::previewing(const QString&)
-{
-/*
-    d->previewWidget->setCursor( KCursor::waitCursor() );
-*/
-}
-
-void RawImportDlg::slotPreviewed(const DImg& img)
+void RawImportDlg::slotImageLoaded(const DImg& img)
 {
     d->histogramWidget->stopHistogramComputation();
     d->histogramWidget->updateData(img.bits(), img.width(), img.height(), img.sixteenBit(), 0, 0, 0, true);
+    busy(false);
 }
 
-void RawImportDlg::previewFailed(const QString&)
+void RawImportDlg::slotLoadingFailed()
 {
-/*    d->previewWidget->unsetCursor();
-    d->previewWidget->setInfo(i18n("Failed to generate preview"), Qt::red);*/
-}
-
-void RawImportDlg::processing(const QString&)
-{
-/*  d->previewWidget->setCursor( KCursor::waitCursor() );
-*/
-}
-
-void RawImportDlg::processed(const QString&, const QString& tmpFile)
-{
-}
-
-void RawImportDlg::processingFailed(const QString&)
-{
-/*    d->previewWidget->unsetCursor();
-    d->previewWidget->setInfo(i18n("Failed to convert Raw image"), Qt::red);*/
+    d->histogramWidget->setLoadingFailed();
+    busy(false);
 }
 
 void RawImportDlg::slotChannelChanged(int channel)

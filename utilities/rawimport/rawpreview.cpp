@@ -162,6 +162,7 @@ void RawPreview::setDecodingSettings(const KDcrawIface::RawDecodingSettings& set
         }
 
         d->loadThread->load(LoadingDescription(d->imageInfo->kurl().path(), settings));
+        emit signalLoadingStarted();
     }
 }
 
@@ -184,11 +185,12 @@ void RawPreview::slotImageLoaded(const LoadingDescription &description, const DI
         p.end();
         // three copies - but the image is small
         setImage(DImg(pix.convertToImage()));
+        emit signalLoadingFailed();
     }
     else
     {
         setImage(image);
-        emit signalPreviewed(image);
+        emit signalImageLoaded(image);
     }
 
     unsetCursor();
@@ -317,7 +319,7 @@ void RawPreview::resetPreview()
     d->preview   = DImg();
     d->imageInfo = 0;
 
-    updateZoomAndSize(true);
+    updateZoomAndSize(false);
 }
 
 void RawPreview::paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh)

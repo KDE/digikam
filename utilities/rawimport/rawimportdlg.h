@@ -62,10 +62,6 @@ public:
     RawImportDlg(const ImageInfo& info, QWidget *parent);
     ~RawImportDlg();
 
-public slots:
-
-    void slotPreviewed(const DImg& img);
-
 protected:
 
     void closeEvent(QCloseEvent *e);
@@ -77,16 +73,11 @@ private:
 
     void busy(bool busy);
 
-    void identified(const QString&, const QString& identity, const QPixmap& preview);
-
-    void previewing(const QString&);
-    void previewFailed(const QString&);
-
-    void processing(const QString&);
-    void processed(const QString&, const QString& tmpFile);
-    void processingFailed(const QString&);
-
 private slots:
+
+    void slotImageLoaded(const DImg& img);
+    void slotLoadingFailed();
+    void slotLoadingStarted();
 
     void slotDefault();
     void slotClose();

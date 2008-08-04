@@ -62,7 +62,9 @@ public:
 
 signals:
 
-    void signalPreviewed(const DImg&);
+    void signalLoadingStarted();
+    void signalLoadingFailed();
+    void signalImageLoaded(const DImg&);
 
 protected:
 
