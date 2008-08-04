@@ -188,6 +188,7 @@ void RawPreview::slotImageLoaded(const LoadingDescription &description, const DI
     else
     {
         setImage(image);
+        emit signalPreviewed(image);
     }
 
     unsetCursor();

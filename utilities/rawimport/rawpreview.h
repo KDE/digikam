@@ -60,6 +60,10 @@ public:
     void setImageInfo(ImageInfo *info);
     void setDecodingSettings(const KDcrawIface::RawDecodingSettings& settings);
 
+signals:
+
+    void signalPreviewed(const DImg&);
+
 protected:
 
     void resizeEvent(QResizeEvent* e);

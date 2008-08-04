@@ -27,21 +27,21 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qtooltip.h>
+#include <qwhatsthis.h>
 #include <qfileinfo.h>
-#include <qevent.h>
+#include <qhbuttongroup.h> 
+#include <qcombobox.h>
+#include <qlabel.h>
 #include <qpushbutton.h>
-#include <qfile.h>
+#include <qvbox.h>
 
 // KDE includes.
 
 #include <kcursor.h>
 #include <klocale.h>
-#include <kmessagebox.h>
 #include <kconfig.h>
 #include <kapplication.h>
-#include <khelpmenu.h>
 #include <kiconloader.h>
-#include <kpopupmenu.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
 
@@ -51,6 +51,9 @@
 
 // Local includes.
 
+#include "imagehistogram.h"
+#include "histogramwidget.h"
+#include "colorgradientwidget.h"
 #include "rawpreview.h"
 #include "rawimportdlg.h"
 #include "rawimportdlg.moc"
@@ -62,11 +65,41 @@ class RawImportDlgPriv
 {
 public:
 
+    enum HistogramScale
+    {
+        Linear=0,
+        Logarithmic
+    };
+
+    enum ColorChannel
+    {
+        LuminosityChannel=0,
+        RedChannel,
+        GreenChannel,
+        BlueChannel
+    };
+
+public:
+
     RawImportDlgPriv()
     {
         previewWidget       = 0;
         decodingSettingsBox = 0;
+        channelCB           = 0;
+        effectType          = 0;
+        scaleBG             = 0;
+        hGradient           = 0;
+        histogramWidget     = 0;
     }
+
+    QComboBox                        *channelCB;
+    QComboBox                        *effectType;
+
+    QHButtonGroup                    *scaleBG;
+
+    ColorGradientWidget              *hGradient;
+
+    HistogramWidget                  *histogramWidget;
 
     ImageInfo                         info;
 
@@ -75,8 +108,8 @@ public:
     KDcrawIface::DcrawSettingsWidget *decodingSettingsBox;
 };
 
-RawImportDlg::RawImportDlg(const ImageInfo& info, QWidget */*parent*/)
-            : KDialogBase(0, 0, false, i18n("Raw Import"),
+RawImportDlg::RawImportDlg(const ImageInfo& info, QWidget *parent)
+            : KDialogBase(parent, 0, false, i18n("Raw Import"),
                           Help|Default|User1|User2|User3|Close, Close, true,
                           i18n("&Preview"), i18n("&Load"), i18n("&Abort"))
 {
@@ -87,10 +120,81 @@ RawImportDlg::RawImportDlg(const ImageInfo& info, QWidget */*parent*/)
     setMainWidget(page);
     QGridLayout *mainLayout = new QGridLayout(page, 1, 1, 0, spacingHint());
     d->previewWidget        = new RawPreview(page);
-    d->decodingSettingsBox  = new KDcrawIface::DcrawSettingsWidget(page, true, true, false);
 
-    mainLayout->addMultiCellWidget(d->previewWidget,       0, 1, 0, 0);
-    mainLayout->addMultiCellWidget(d->decodingSettingsBox, 0, 0, 1, 1);
+    // ---------------------------------------------------------------
+
+    QWidget *gboxSettings     = new QWidget(page);
+    QGridLayout* gridSettings = new QGridLayout(gboxSettings, 4, 4, spacingHint());
+
+    QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
+    label1->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
+    d->channelCB = new QComboBox( false, gboxSettings );
+    d->channelCB->insertItem( i18n("Luminosity") );
+    d->channelCB->insertItem( i18n("Red") );
+    d->channelCB->insertItem( i18n("Green") );
+    d->channelCB->insertItem( i18n("Blue") );
+    QWhatsThis::add(d->channelCB, i18n("<p>Select the histogram channel to display here:<p>"
+                                       "<b>Luminosity</b>: display the image's luminosity values.<p>"
+                                       "<b>Red</b>: display the red image-channel values.<p>"
+                                       "<b>Green</b>: display the green image-channel values.<p>"
+                                       "<b>Blue</b>: display the blue image-channel values.<p>"));
+
+    d->scaleBG = new QHButtonGroup(gboxSettings);
+    d->scaleBG->setExclusive(true);
+    d->scaleBG->setFrameShape(QFrame::NoFrame);
+    d->scaleBG->setInsideMargin( 0 );
+    QWhatsThis::add(d->scaleBG, i18n("<p>Select the histogram scale here.<p>"
+                                     "If the image's maximal counts are small, you can use the linear scale.<p>"
+                                     "Logarithmic scale can be used when the maximal counts are big; "
+                                     "if it is used, all values (small and large) will be visible on the graph."));
+
+    QPushButton *linHistoButton = new QPushButton( d->scaleBG );
+    QToolTip::add( linHistoButton, i18n( "<p>Linear" ) );
+    d->scaleBG->insert(linHistoButton, Digikam::HistogramWidget::LinScaleHistogram);
+    KGlobal::dirs()->addResourceType("histogram-lin", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    QString directory = KGlobal::dirs()->findResourceDir("histogram-lin", "histogram-lin.png");
+    linHistoButton->setPixmap( QPixmap( directory + "histogram-lin.png" ) );
+    linHistoButton->setToggleButton(true);
+
+    QPushButton *logHistoButton = new QPushButton( d->scaleBG );
+    QToolTip::add( logHistoButton, i18n( "<p>Logarithmic" ) );
+    d->scaleBG->insert(logHistoButton, Digikam::HistogramWidget::LogScaleHistogram);
+    KGlobal::dirs()->addResourceType("histogram-log", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    directory = KGlobal::dirs()->findResourceDir("histogram-log", "histogram-log.png");
+    logHistoButton->setPixmap( QPixmap( directory + "histogram-log.png" ) );
+    logHistoButton->setToggleButton(true);
+
+    QHBoxLayout* l1 = new QHBoxLayout();
+    l1->addWidget(label1);
+    l1->addWidget(d->channelCB);
+    l1->addStretch(10);
+    l1->addWidget(d->scaleBG);
+
+    // ---------------------------------------------------------------
+
+    QVBox *histoBox   = new QVBox(gboxSettings);
+    d->histogramWidget = new Digikam::HistogramWidget(256, 140, histoBox, false, true, true);
+    QWhatsThis::add(d->histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing "
+                                             "of the selected image channel. This one is re-computed at any "
+                                             "settings changes."));
+    QLabel *space = new QLabel(histoBox);
+    space->setFixedHeight(1);    
+    d->hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, histoBox );
+    d->hGradient->setColors( QColor( "black" ), QColor( "white" ) );
+
+    // ---------------------------------------------------------------
+
+    d->decodingSettingsBox  = new KDcrawIface::DcrawSettingsWidget(gboxSettings, true, true, false);
+
+    gridSettings->addMultiCellLayout(l1,                     0, 0, 0, 4);
+    gridSettings->addMultiCellWidget(histoBox,               1, 2, 0, 4);
+    gridSettings->addMultiCellWidget(d->decodingSettingsBox, 3, 3, 0, 4);
+    gridSettings->setRowStretch(4, 10);
+
+    // ---------------------------------------------------------------
+
+    mainLayout->addMultiCellWidget(d->previewWidget, 0, 1, 0, 0);
+    mainLayout->addMultiCellWidget(gboxSettings,     0, 0, 1, 1);
     mainLayout->setColStretch(0, 10);
     mainLayout->setRowStretch(1, 10);
 
@@ -109,6 +213,17 @@ RawImportDlg::RawImportDlg(const ImageInfo& info, QWidget */*parent*/)
 
     // ---------------------------------------------------------------
 
+    connect(d->channelCB, SIGNAL(activated(int)),
+            this, SLOT(slotChannelChanged(int)));
+
+    connect(d->scaleBG, SIGNAL(released(int)),
+            this, SLOT(slotScaleChanged(int)));
+
+    connect(d->previewWidget, SIGNAL(signalPreviewed(const DImg&)),
+            this, SLOT(slotPreviewed(const DImg&)));
+
+    // ---------------------------------------------------------------
+
     busy(false);
     readSettings();
     d->previewWidget->setImageInfo(&d->info);
@@ -122,14 +237,12 @@ RawImportDlg::~RawImportDlg()
 void RawImportDlg::closeEvent(QCloseEvent *e)
 {
     if (!e) return;
-//    m_thread->cancel();
     saveSettings();
     e->accept();
 }
 
 void RawImportDlg::slotClose()
 {
- //   m_thread->cancel();
     saveSettings();
     KDialogBase::slotClose();
 }
@@ -206,64 +319,56 @@ void RawImportDlg::slotHelp()
 void RawImportDlg::slotUser1()
 {
     KDcrawIface::RawDecodingSettings rawDecodingSettings;
-    rawDecodingSettings.whiteBalance               = d->decodingSettingsBox->whiteBalance();
-    rawDecodingSettings.customWhiteBalance         = d->decodingSettingsBox->customWhiteBalance();
-    rawDecodingSettings.customWhiteBalanceGreen    = d->decodingSettingsBox->customWhiteBalanceGreen();
-    rawDecodingSettings.RGBInterpolate4Colors      = d->decodingSettingsBox->useFourColor();
-    rawDecodingSettings.unclipColors               = d->decodingSettingsBox->unclipColor();
-    rawDecodingSettings.DontStretchPixels          = d->decodingSettingsBox->useDontStretchPixels();
-    rawDecodingSettings.enableNoiseReduction       = d->decodingSettingsBox->useNoiseReduction();
-    rawDecodingSettings.brightness                 = d->decodingSettingsBox->brightness();
-    rawDecodingSettings.enableBlackPoint           = d->decodingSettingsBox->useBlackPoint();
-    rawDecodingSettings.blackPoint                 = d->decodingSettingsBox->blackPoint();
-    rawDecodingSettings.NRThreshold                = d->decodingSettingsBox->NRThreshold();
-    rawDecodingSettings.enableCACorrection         = d->decodingSettingsBox->useCACorrection();
-    rawDecodingSettings.caMultiplier[0]            = d->decodingSettingsBox->caRedMultiplier();
-    rawDecodingSettings.caMultiplier[1]            = d->decodingSettingsBox->caBlueMultiplier();
-    rawDecodingSettings.RAWQuality                 = d->decodingSettingsBox->quality();
-    rawDecodingSettings.outputColorSpace           = d->decodingSettingsBox->outputColorSpace();
+    rawDecodingSettings.whiteBalance            = d->decodingSettingsBox->whiteBalance();
+    rawDecodingSettings.customWhiteBalance      = d->decodingSettingsBox->customWhiteBalance();
+    rawDecodingSettings.customWhiteBalanceGreen = d->decodingSettingsBox->customWhiteBalanceGreen();
+    rawDecodingSettings.RGBInterpolate4Colors   = d->decodingSettingsBox->useFourColor();
+    rawDecodingSettings.unclipColors            = d->decodingSettingsBox->unclipColor();
+    rawDecodingSettings.DontStretchPixels       = d->decodingSettingsBox->useDontStretchPixels();
+    rawDecodingSettings.enableNoiseReduction    = d->decodingSettingsBox->useNoiseReduction();
+    rawDecodingSettings.brightness              = d->decodingSettingsBox->brightness();
+    rawDecodingSettings.enableBlackPoint        = d->decodingSettingsBox->useBlackPoint();
+    rawDecodingSettings.blackPoint              = d->decodingSettingsBox->blackPoint();
+    rawDecodingSettings.NRThreshold             = d->decodingSettingsBox->NRThreshold();
+    rawDecodingSettings.enableCACorrection      = d->decodingSettingsBox->useCACorrection();
+    rawDecodingSettings.caMultiplier[0]         = d->decodingSettingsBox->caRedMultiplier();
+    rawDecodingSettings.caMultiplier[1]         = d->decodingSettingsBox->caBlueMultiplier();
+    rawDecodingSettings.RAWQuality              = d->decodingSettingsBox->quality();
+    rawDecodingSettings.outputColorSpace        = d->decodingSettingsBox->outputColorSpace();
+
+    // We will load an half size image to speed up preview computing.
+    rawDecodingSettings.halfSizeColorImage      = true;
 
     d->previewWidget->setDecodingSettings(rawDecodingSettings);
 }
 
-// 'Convert' dialog button.
+// 'Load' dialog button.
 void RawImportDlg::slotUser2()
 {
     KDcrawIface::RawDecodingSettings rawDecodingSettings;
-    rawDecodingSettings.whiteBalance               = d->decodingSettingsBox->whiteBalance();
-    rawDecodingSettings.customWhiteBalance         = d->decodingSettingsBox->customWhiteBalance();
-    rawDecodingSettings.customWhiteBalanceGreen    = d->decodingSettingsBox->customWhiteBalanceGreen();
-    rawDecodingSettings.RGBInterpolate4Colors      = d->decodingSettingsBox->useFourColor();
-    rawDecodingSettings.unclipColors               = d->decodingSettingsBox->unclipColor();
-    rawDecodingSettings.DontStretchPixels          = d->decodingSettingsBox->useDontStretchPixels();
-    rawDecodingSettings.enableNoiseReduction       = d->decodingSettingsBox->useNoiseReduction();
-    rawDecodingSettings.brightness                 = d->decodingSettingsBox->brightness();
-    rawDecodingSettings.enableBlackPoint           = d->decodingSettingsBox->useBlackPoint();
-    rawDecodingSettings.blackPoint                 = d->decodingSettingsBox->blackPoint();
-    rawDecodingSettings.NRThreshold                = d->decodingSettingsBox->NRThreshold();
-    rawDecodingSettings.enableCACorrection         = d->decodingSettingsBox->useCACorrection();
-    rawDecodingSettings.caMultiplier[0]            = d->decodingSettingsBox->caRedMultiplier();
-    rawDecodingSettings.caMultiplier[1]            = d->decodingSettingsBox->caBlueMultiplier();
-    rawDecodingSettings.RAWQuality                 = d->decodingSettingsBox->quality();
-    rawDecodingSettings.outputColorSpace           = d->decodingSettingsBox->outputColorSpace();
-/*
-    d->thread->setRawDecodingSettings(rawDecodingSettings, d->saveSettingsBox->fileFormat());
-    d->thread->processRawFile(KURL(d->inputFile));
-    if (!d->thread->running())
-        d->thread->start();*/
+    rawDecodingSettings.whiteBalance            = d->decodingSettingsBox->whiteBalance();
+    rawDecodingSettings.customWhiteBalance      = d->decodingSettingsBox->customWhiteBalance();
+    rawDecodingSettings.customWhiteBalanceGreen = d->decodingSettingsBox->customWhiteBalanceGreen();
+    rawDecodingSettings.RGBInterpolate4Colors   = d->decodingSettingsBox->useFourColor();
+    rawDecodingSettings.unclipColors            = d->decodingSettingsBox->unclipColor();
+    rawDecodingSettings.DontStretchPixels       = d->decodingSettingsBox->useDontStretchPixels();
+    rawDecodingSettings.enableNoiseReduction    = d->decodingSettingsBox->useNoiseReduction();
+    rawDecodingSettings.brightness              = d->decodingSettingsBox->brightness();
+    rawDecodingSettings.enableBlackPoint        = d->decodingSettingsBox->useBlackPoint();
+    rawDecodingSettings.blackPoint              = d->decodingSettingsBox->blackPoint();
+    rawDecodingSettings.NRThreshold             = d->decodingSettingsBox->NRThreshold();
+    rawDecodingSettings.enableCACorrection      = d->decodingSettingsBox->useCACorrection();
+    rawDecodingSettings.caMultiplier[0]         = d->decodingSettingsBox->caRedMultiplier();
+    rawDecodingSettings.caMultiplier[1]         = d->decodingSettingsBox->caBlueMultiplier();
+    rawDecodingSettings.RAWQuality              = d->decodingSettingsBox->quality();
+    rawDecodingSettings.outputColorSpace        = d->decodingSettingsBox->outputColorSpace();
+
+    // TODO : Load in image editor with these settings.
 }
 
 // 'Abort' dialog button.
 void RawImportDlg::slotUser3()
 {
-//    d->thread->cancel();
-}
-
-void RawImportDlg::slotIdentify()
-{
-/*    d->thread->identifyRawFile(KURL(d->inputFile), true);
-    if (!d->thread->running())
-        d->thread->start();*/
 }
 
 void RawImportDlg::busy(bool val)
@@ -287,220 +392,66 @@ void RawImportDlg::previewing(const QString&)
 */
 }
 
-void RawImportDlg::previewed(const QString&, const QString& tmpFile)
+void RawImportDlg::slotPreviewed(const DImg& img)
 {
-/*    d->previewWidget->unsetCursor();
-    d->blinkPreviewTimer->stop();
-    d->previewWidget->load(tmpFile);
-    ::remove(QFile::encodeName(tmpFile));*/
+    d->histogramWidget->stopHistogramComputation();
+    d->histogramWidget->updateData(img.bits(), img.width(), img.height(), img.sixteenBit(), 0, 0, 0, true);
 }
 
 void RawImportDlg::previewFailed(const QString&)
 {
 /*    d->previewWidget->unsetCursor();
-    d->blinkPreviewTimer->stop();
     d->previewWidget->setInfo(i18n("Failed to generate preview"), Qt::red);*/
 }
 
 void RawImportDlg::processing(const QString&)
 {
-/*    d->convertBlink = false;
-    d->previewWidget->setCursor( KCursor::waitCursor() );
-    d->blinkConvertTimer->start(200);*/
+/*  d->previewWidget->setCursor( KCursor::waitCursor() );
+*/
 }
 
 void RawImportDlg::processed(const QString&, const QString& tmpFile)
 {
-/*    d->previewWidget->unsetCursor();
-    d->blinkConvertTimer->stop();
-    d->previewWidget->load(tmpFile);
-    QString filter("*.");
-    QString ext;
-
-    switch(d->saveSettingsBox->fileFormat())
-    {
-        case SaveSettingsWidget::OUTPUT_JPEG:
-            ext = "jpg";
-            break;
-        case SaveSettingsWidget::OUTPUT_TIFF:
-            ext = "tif";
-            break;
-        case SaveSettingsWidget::OUTPUT_PPM:
-            ext = "ppm";
-            break;
-        case SaveSettingsWidget::OUTPUT_PNG:
-            ext = "png";
-            break;
-    }
-
-    filter += ext;
-    QFileInfo fi(d->inputFile);
-    QString destFile = fi.dirPath(true) + QString("/") + fi.baseName() + QString(".") + ext;
-
-    if (d->saveSettingsBox->conflictRule() != SaveSettingsWidget::OVERWRITE)
-    {
-        struct stat statBuf;
-        if (::stat(QFile::encodeName(destFile), &statBuf) == 0) 
-        {
-            KIO::RenameDlg dlg(this, i18n("Save Raw Image converted from '%1' as").arg(fi.fileName()),
-                               tmpFile, destFile,
-                               KIO::RenameDlg_Mode(KIO::M_SINGLE | KIO::M_OVERWRITE | KIO::M_SKIP));
-
-            switch (dlg.exec())
-            {
-                case KIO::R_CANCEL:
-                case KIO::R_SKIP:
-                {
-                    destFile = QString();
-                    break;
-                }
-                case KIO::R_RENAME:
-                {
-                    destFile = dlg.newDestURL().path();
-                    break;
-                }
-                default:    // Overwrite.
-                    break;
-            }
-        }
-    }
-
-    if (!destFile.isEmpty()) 
-    {
-        if (::rename(QFile::encodeName(tmpFile), QFile::encodeName(destFile)) != 0)
-        {
-            KMessageBox::error(this, i18n("Failed to save image %1").arg( destFile ));
-        }
-    }*/
 }
 
 void RawImportDlg::processingFailed(const QString&)
 {
 /*    d->previewWidget->unsetCursor();
-    d->blinkConvertTimer->stop();
     d->previewWidget->setInfo(i18n("Failed to convert Raw image"), Qt::red);*/
 }
 
-void RawImportDlg::slotPreviewBlinkTimerDone()
+void RawImportDlg::slotChannelChanged(int channel)
 {
-/*    QString preview = i18n("Generating Preview...");
-
-    if (d->previewBlink)
-        d->previewWidget->setInfo(preview, Qt::green);
-    else
-        d->previewWidget->setInfo(preview, Qt::darkGreen);
-
-    d->previewBlink = !d->previewBlink;
-    d->blinkPreviewTimer->start(200);*/
-}
-
-void RawImportDlg::slotConvertBlinkTimerDone()
-{
-/*    QString convert = i18n("Converting Raw Image...");
-
-    if (d->convertBlink)
-        d->previewWidget->setInfo(convert, Qt::green);
-    else
-        d->previewWidget->setInfo(convert, Qt::darkGreen);
-
-    d->convertBlink = !d->convertBlink;
-    d->blinkConvertTimer->start(200);*/
-}
-
-void RawImportDlg::customEvent(QCustomEvent *event)
-{
-/*    if (!event) return;
-
-    EventData *d = (EventData*) event->data();
-    if (!d) return;
-
-    QString text;
-
-    if (d->starting)            // Something have been started...
+    switch(channel)
     {
-        switch (d->action) 
-        {
-            case(IDENTIFY_FULL): 
-                break;
-            case(PREVIEW):
-            {
-                busy(true);
-                previewing(d->filePath);
-                break;
-            }
-            case(PROCESS):
-            {
-                busy(true);
-                processing(d->filePath);
-                break;
-            }
-            default: 
-            {
-                kdWarning( 51000 ) << "KIPIRawConverterPlugin: Unknown event" << endl;
-                break;
-            }
-        }
-    }
-    else
-    {
-        if (!d->success)        // Something is failed...
-        {
-            switch (d->action) 
-            {
-                case(IDENTIFY_FULL): 
-                    break;
-                case(PREVIEW):
-                {
-                    previewFailed(d->filePath);
-                    busy(false);
-                    break;
-                }
-                case(PROCESS):
-                {
-                    processingFailed(d->filePath);
-                    busy(false);
-                    break;
-                }
-                default: 
-                {
-                    kdWarning( 51000 ) << "KIPIRawConverterPlugin: Unknown event" << endl;
-                    break;
-                }
-            }
-        }
-        else                    // Something is done...
-        {
-            switch (d->action)
-            {
-                case(IDENTIFY_FULL): 
-                {
-                    QPixmap pix = QPixmap(d->image.scale(256, 256, QImage::ScaleMin));
-                    identified(d->filePath, d->message, pix);
-                    busy(false);
-                    break;
-                }
-                case(PREVIEW):
-                {
-                    previewed(d->filePath, d->destPath);
-                    busy(false);
-                    break;
-                }
-                case(PROCESS):
-                {
-                    processed(d->filePath, d->destPath);
-                    busy(false);
-                    break;
-                }
-                default: 
-                {
-                    kdWarning( 51000 ) << "KIPIRawConverterPlugin: Unknown event" << endl;
-                    break;
-                }
-            }
-        }
+        case RawImportDlgPriv::LuminosityChannel:
+            d->histogramWidget->m_channelType = Digikam::HistogramWidget::ValueHistogram;
+            d->hGradient->setColors( QColor( "black" ), QColor( "white" ) );
+            break;
+
+        case RawImportDlgPriv::RedChannel:
+            d->histogramWidget->m_channelType = Digikam::HistogramWidget::RedChannelHistogram;
+            d->hGradient->setColors( QColor( "black" ), QColor( "red" ) );
+            break;
+
+        case RawImportDlgPriv::GreenChannel:
+            d->histogramWidget->m_channelType = Digikam::HistogramWidget::GreenChannelHistogram;
+            d->hGradient->setColors( QColor( "black" ), QColor( "green" ) );
+            break;
+
+        case RawImportDlgPriv::BlueChannel:
+            d->histogramWidget->m_channelType = Digikam::HistogramWidget::BlueChannelHistogram;
+            d->hGradient->setColors( QColor( "black" ), QColor( "blue" ) );
+            break;
     }
 
-    delete d;*/
+    d->histogramWidget->repaint(false);
+}
+
+void RawImportDlg::slotScaleChanged(int scale)
+{
+    d->histogramWidget->m_scaleType = scale;
+    d->histogramWidget->repaint(false);
 }
 
 } // NameSpace Digikam

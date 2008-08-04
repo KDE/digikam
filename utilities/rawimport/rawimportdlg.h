@@ -47,6 +47,7 @@ class DcrawSettingsWidget;
 namespace Digikam
 {
 
+class DImg;
 class RawPreview;
 class ActionThread;
 class SaveSettingsWidget;
@@ -61,9 +62,12 @@ public:
     RawImportDlg(const ImageInfo& info, QWidget *parent);
     ~RawImportDlg();
 
+public slots:
+
+    void slotPreviewed(const DImg& img);
+
 protected:
 
-    void customEvent(QCustomEvent *event);
     void closeEvent(QCloseEvent *e);
 
 private:
@@ -76,7 +80,6 @@ private:
     void identified(const QString&, const QString& identity, const QPixmap& preview);
 
     void previewing(const QString&);
-    void previewed(const QString&, const QString& tmpFile);
     void previewFailed(const QString&);
 
     void processing(const QString&);
@@ -92,10 +95,8 @@ private slots:
     void slotUser2();
     void slotUser3();
 
-    void slotIdentify();
-
-    void slotPreviewBlinkTimerDone();
-    void slotConvertBlinkTimerDone();
+    void slotChannelChanged(int channel);
+    void slotScaleChanged(int scale);
 
 private:
 

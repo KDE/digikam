@@ -7,6 +7,7 @@ librawimport_la_SOURCES = rawpreview.cpp rawimportdlg.cpp
 librawimport_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LIB_KDEPRINT) 
 
 INCLUDES= -I$(top_srcdir)/digikam/digikam \
+	  -I$(top_srcdir)/digikam/libs/histogram \
 	  -I$(top_srcdir)/digikam/libs/dmetadata \
 	  -I$(top_srcdir)/digikam/libs/dimg \
 	  -I$(top_srcdir)/digikam/libs/dimg/filters \
