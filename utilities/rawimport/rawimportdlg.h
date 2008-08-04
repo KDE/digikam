@@ -78,6 +78,7 @@ private slots:
     void slotImageLoaded(const DImg& img);
     void slotLoadingFailed();
     void slotLoadingStarted();
+    void slotLoadingProgress(float progress);
 
     void slotDefault();
     void slotClose();

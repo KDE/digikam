@@ -180,7 +180,6 @@ void RawPreview::slotLoadingProgress(const LoadingDescription& description, floa
     if (description.filePath != d->imageInfo->kurl().path())
         return;
 
-    DDebug() << "Loading progress: " << progress << endl;
     emit signalLoadingProgress(progress);
 }
 

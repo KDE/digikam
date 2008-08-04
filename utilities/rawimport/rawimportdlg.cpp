@@ -22,14 +22,12 @@
 
 // Qt includes.
 
-#include <qtimer.h>
 #include <qframe.h>
-#include <qlabel.h>
 #include <qlayout.h>
 #include <qtooltip.h>
 #include <qwhatsthis.h>
 #include <qfileinfo.h>
-#include <qhbuttongroup.h> 
+#include <qhbuttongroup.h>
 #include <qcombobox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
@@ -51,6 +49,7 @@
 
 // Local includes.
 
+#include "ddebug.h"
 #include "imagehistogram.h"
 #include "histogramwidget.h"
 #include "colorgradientwidget.h"
@@ -231,6 +230,9 @@ RawImportDlg::RawImportDlg(const ImageInfo& info, QWidget *parent)
     connect(d->previewWidget, SIGNAL(signalLoadingFailed()),
             this, SLOT(slotLoadingFailed()));
 
+    connect(d->previewWidget, SIGNAL(signalLoadingProgress(float)),
+            this, SLOT(slotLoadingProgress(float)));
+
     // ---------------------------------------------------------------
 
     busy(false);
@@ -399,6 +401,12 @@ void RawImportDlg::slotLoadingStarted()
 {
     d->histogramWidget->setDataLoading();
     busy(true);
+}
+
+void RawImportDlg::slotLoadingProgress(float progress)
+{
+    DDebug() << "Loading progress: " << progress << endl;
+    // TODO: play with Histogram widget to show progress info
 }
 
 void RawImportDlg::slotImageLoaded(const DImg& img)
