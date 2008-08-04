@@ -161,7 +161,8 @@ void RawPreview::setDecodingSettings(const KDcrawIface::RawDecodingSettings& set
                     this, SLOT(slotImageLoaded(const LoadingDescription&, const DImg&)));
         }
 
-        d->loadThread->load(LoadingDescription(d->imageInfo->kurl().path(), settings));
+        d->loadThread->load(LoadingDescription(d->imageInfo->kurl().path(), settings), 
+                            ManagedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
         emit signalLoadingStarted();
     }
 }
