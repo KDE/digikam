@@ -60,6 +60,8 @@ public:
     void setImageInfo(ImageInfo *info);
     void setDecodingSettings(const KDcrawIface::RawDecodingSettings& settings);
 
+    void cancelLoading();
+
 signals:
 
     void signalLoadingStarted();

@@ -220,7 +220,7 @@ RawImportDlg::RawImportDlg(const ImageInfo& info, QWidget *parent)
             this, SLOT(slotScaleChanged(int)));
 
     connect(d->previewWidget, SIGNAL(signalLoadingStarted()),
-            this, SLOT(slotPreviewed(const DImg&)));
+            this, SLOT(slotLoadingStarted()));
 
     connect(d->previewWidget, SIGNAL(signalImageLoaded(const DImg&)),
             this, SLOT(slotImageLoaded(const DImg&)));
@@ -379,6 +379,9 @@ void RawImportDlg::slotUser2()
 // 'Abort' dialog button.
 void RawImportDlg::slotUser3()
 {
+    d->previewWidget->cancelLoading();
+    d->histogramWidget->stopHistogramComputation();
+    busy(false);
 }
 
 void RawImportDlg::busy(bool val)

@@ -58,7 +58,7 @@
 #include "dmetadata.h"
 #include "metadatahub.h"
 #include "paniconwidget.h"
-#include "loadsavethread.h"
+#include "managedloadsavethread.h"
 #include "loadingdescription.h"
 #include "themeengine.h"
 #include "rawpreview.h"
@@ -81,19 +81,19 @@ public:
         currentFitWindowZoom = 0;
     }
 
-    double          currentFitWindowZoom;
+    double                 currentFitWindowZoom;
 
-    QToolButton    *cornerButton;
+    QToolButton           *cornerButton;
 
-    KPopupFrame    *panIconPopup;
+    KPopupFrame           *panIconPopup;
 
-    PanIconWidget  *panIconWidget;
+    PanIconWidget         *panIconWidget;
 
-    DImg            preview;
+    DImg                   preview;
 
-    ImageInfo      *imageInfo;
+    ImageInfo             *imageInfo;
 
-    LoadSaveThread *loadThread;
+    ManagedLoadSaveThread *loadThread;
 };
 
 RawPreview::RawPreview(QWidget *parent)
@@ -156,7 +156,7 @@ void RawPreview::setDecodingSettings(const KDcrawIface::RawDecodingSettings& set
 
         if (!d->loadThread)
         {
-            d->loadThread = new LoadSaveThread();
+            d->loadThread = new ManagedLoadSaveThread();
             connect(d->loadThread, SIGNAL(signalImageLoaded(const LoadingDescription&, const DImg&)),
                     this, SLOT(slotImageLoaded(const LoadingDescription&, const DImg&)));
         }
@@ -164,6 +164,11 @@ void RawPreview::setDecodingSettings(const KDcrawIface::RawDecodingSettings& set
         d->loadThread->load(LoadingDescription(d->imageInfo->kurl().path(), settings));
         emit signalLoadingStarted();
     }
+}
+
+void RawPreview::cancelLoading()
+{
+    d->loadThread->stopLoading(d->imageInfo->kurl().path());
 }
 
 void RawPreview::slotImageLoaded(const LoadingDescription &description, const DImg& image)
