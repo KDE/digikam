@@ -132,7 +132,7 @@ void RawPreview::setImage(const DImg& image)
 {
     d->preview = image;
 
-    updateZoomAndSize(true);
+    updateZoomAndSize(false);
 
     viewport()->setUpdatesEnabled(true);
     viewport()->update();

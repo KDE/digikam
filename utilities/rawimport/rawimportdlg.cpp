@@ -116,6 +116,17 @@ RawImportDlg::RawImportDlg(const ImageInfo& info, QWidget *parent)
     d = new RawImportDlgPriv;
     d->info = info;
 
+    setButtonTip(User1, i18n("<p>Generate a Preview from current settings. "
+                             "Uses a simple bilinear interpolation for "
+                             "quick results."));
+
+    setButtonTip(User2, i18n("<p>Load image to editor using current settings."));
+
+    setButtonTip(User3, i18n("<p>Abort the current Preview"));
+
+    setButtonTip(Close, i18n("<p>Exit Raw Import Tool"));
+
+
     QWidget *page = new QWidget(this);
     setMainWidget(page);
     QGridLayout *mainLayout = new QGridLayout(page, 1, 1, 0, spacingHint());
@@ -197,19 +208,6 @@ RawImportDlg::RawImportDlg(const ImageInfo& info, QWidget *parent)
     mainLayout->addMultiCellWidget(gboxSettings,     0, 0, 1, 1);
     mainLayout->setColStretch(0, 10);
     mainLayout->setRowStretch(1, 10);
-
-    // ---------------------------------------------------------------
-
-    setButtonTip( User1, i18n("<p>Generate a Preview from current settings. "
-                              "Uses a simple bilinear interpolation for "
-                              "quick results."));
-
-    setButtonTip( User2, i18n("<p>Convert the Raw Image from current settings. "
-                              "This uses a high-quality adaptive algorithm."));
-
-    setButtonTip( User3, i18n("<p>Abort the current Raw file conversion"));
-
-    setButtonTip( Close, i18n("<p>Exit Raw Converter"));
 
     // ---------------------------------------------------------------
 
