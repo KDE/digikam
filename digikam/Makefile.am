@@ -22,6 +22,7 @@ INCLUDES = -I$(top_srcdir)/digikam/libs/sqlite2 \
 	   -I$(top_srcdir)/digikam/utilities/cameragui \
 	   -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	   -I$(top_srcdir)/digikam/utilities/imageeditor/canvas \
+	   -I$(top_srcdir)/digikam/utilities/rawimport \
 	   -I$(top_srcdir)/digikam/utilities/setup \
 	   -I$(top_srcdir)/digikam/utilities/slideshow \
 	   -I$(top_srcdir)/digikam/utilities/batch \
@@ -133,6 +134,7 @@ libdigikam_la_LIBADD = $(LIB_SQLITE3) \
 	               $(top_builddir)/digikam/utilities/imageeditor/canvas/libdimgcanvas.la \
 	               $(top_builddir)/digikam/utilities/imageeditor/editor/libdimgeditor.la \
 	               $(top_builddir)/digikam/utilities/setup/libsetup.la \
+	               $(top_builddir)/digikam/utilities/rawimport/librawimport.la \
 	               $(top_builddir)/digikam/utilities/lighttable/liblighttable.la
 
 libdigikam_la_LDFLAGS = $(LIBKEXIV2_LIBS) $(all_libraries) $(KDE_RPATH) -no-undefined
