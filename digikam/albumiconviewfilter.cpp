@@ -21,14 +21,10 @@
  *
  * ============================================================ */
 
-/* FIXME : There is a problem with Qt4.3 if statusbar host a KLineEdit: 
-           digiKam crash. Text Filter bar is temporaly replaced 
-           by a simple QLineEdit.*/
-//#define HACK_KLINEEDIT 1
-
 // KDE includes.
 
 #include <klocale.h>
+#include <kdeversion.h>
 #include <kdialog.h>
 
 // Local includes.
@@ -51,13 +47,16 @@ public:
 
     AlbumIconViewFilterPriv()
     {
-        textFilter       = 0;
-        mimeFilter       = 0;
-        ratingFilter     = 0;
-        led              = 0;
+        textFilter   = 0;
+        mimeFilter   = 0;
+        ratingFilter = 0;
+        led          = 0;
     }
 
-#ifdef HACK_KLINEEDIT
+/* NOTE: There is a problem with Qt4.3 and KDE < 4.1.0 if statusbar host a KLineEdit: 
+         digiKam crash. Text Filter bar is replaced by a simple QLineEdit in this case. 
+ */
+#if KDE_IS_VERSION(4,1,0)
     SearchTextBar *textFilter;
 #else
     QLineEdit     *textFilter;
@@ -86,7 +85,7 @@ AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
                               "GREEN: filter(s) matches at least one item.\n\n"
                               "Any mouse button click will reset all filters."));
 
-#ifdef HACK_KLINEEDIT
+#if KDE_IS_VERSION(4,1,0)
     d->textFilter = new SearchTextBar(this, "AlbumIconViewFilterSearchTextBar");
     d->textFilter->setEnableTextQueryCompletion(true);
 #else
@@ -112,7 +111,7 @@ AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
     connect(d->textFilter, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotTextFilterChanged(const QString&)));
 
-#ifdef HACK_KLINEEDIT
+#if KDE_IS_VERSION(4,1,0)
     connect(AlbumLister::instance(), SIGNAL(signalItemsTextFilterMatch(bool)),
             d->textFilter, SLOT(slotSearchResult(bool)));
 #endif
