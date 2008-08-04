@@ -159,6 +159,9 @@ void RawPreview::setDecodingSettings(const KDcrawIface::RawDecodingSettings& set
             d->loadThread = new ManagedLoadSaveThread();
             connect(d->loadThread, SIGNAL(signalImageLoaded(const LoadingDescription&, const DImg&)),
                     this, SLOT(slotImageLoaded(const LoadingDescription&, const DImg&)));
+
+            connect(d->loadThread, SIGNAL(signalLoadingProgress(const LoadingDescription&, float)),
+                    this, SLOT(slotLoadingProgress(const LoadingDescription&, float)));
         }
 
         d->loadThread->load(LoadingDescription(d->imageInfo->kurl().path(), settings), 
@@ -172,7 +175,16 @@ void RawPreview::cancelLoading()
     d->loadThread->stopLoading(d->imageInfo->kurl().path());
 }
 
-void RawPreview::slotImageLoaded(const LoadingDescription &description, const DImg& image)
+void RawPreview::slotLoadingProgress(const LoadingDescription& description, float progress)
+{
+    if (description.filePath != d->imageInfo->kurl().path())
+        return;
+
+    DDebug() << "Loading progress: " << progress << endl;
+    emit signalLoadingProgress(progress);
+}
+
+void RawPreview::slotImageLoaded(const LoadingDescription& description, const DImg& image)
 {
     if (description.filePath != d->imageInfo->kurl().path())
         return;

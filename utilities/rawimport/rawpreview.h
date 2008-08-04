@@ -65,6 +65,7 @@ public:
 signals:
 
     void signalLoadingStarted();
+    void signalLoadingProgress(float);
     void signalLoadingFailed();
     void signalImageLoaded(const DImg&);
 
@@ -74,7 +75,8 @@ protected:
 
 private slots:
 
-    void slotImageLoaded(const LoadingDescription &loadingDescription, const DImg &image);
+    void slotLoadingProgress(const LoadingDescription& description, float progress);
+    void slotImageLoaded(const LoadingDescription& description, const DImg &image);
     void slotThemeChanged();
     void slotCornerButtonPressed();
     void slotPanIconSelectionMoved(const QRect&, bool);
