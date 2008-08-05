@@ -5,20 +5,20 @@
  *
  * Date        : 2004-07-21
  * Description : a widget to display an image histogram.
- * 
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ *
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef HISTOGRAMWIDGET_H
@@ -124,9 +124,9 @@ public:
     void setDataLoading();
     void setLoadingFailed();
 
-    void setHistogramGuideByColor(DColor color);
+    void setHistogramGuideByColor(const DColor& color);
 
-    void reset(void);
+    void reset();
 
 public:
 
@@ -140,36 +140,35 @@ public:
 
 signals:
 
-    void signalIntervalChanged( int min, int max );
-    void signalMaximumValueChanged( int );
-    void signalHistogramComputationDone( bool );
-    void signalHistogramComputationFailed( void );
+    void signalIntervalChanged(int min, int max);
+    void signalMaximumValueChanged(int);
+    void signalHistogramComputationDone(bool);
+    void signalHistogramComputationFailed();
 
 public slots:
 
-    void slotMinValueChanged( int min );
-    void slotMaxValueChanged( int max );
+    void slotMinValueChanged(int min);
+    void slotMaxValueChanged(int max);
 
 protected slots:
 
-    void slotBlinkTimerDone( void );
+    void slotBlinkTimerDone();
 
 protected:
 
-    void paintEvent( QPaintEvent * );
-    void mousePressEvent ( QMouseEvent * e );
-    void mouseReleaseEvent ( QMouseEvent * e );
-    void mouseMoveEvent ( QMouseEvent * e );
+    void paintEvent(QPaintEvent*);
+    void mousePressEvent(QMouseEvent*);
+    void mouseReleaseEvent(QMouseEvent*);
+    void mouseMoveEvent(QMouseEvent*);
 
 private :
 
-    void customEvent(QCustomEvent *event);
+    void customEvent(QCustomEvent*);
     void notifyValuesChanged();
 
 private:
 
     HistogramWidgetPriv* d;
-
 };
 
 }  // namespace Digikam
