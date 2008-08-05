@@ -423,7 +423,6 @@ void HistogramWidget::paintEvent(QPaintEvent*)
        QPainter p1;
        p1.begin(&pm, this);
        p1.fillRect(0, 0, width(), height(), palette().active().background());
-
        p1.drawPixmap(width()/2 - asize /2, asize, anim);
        p1.setPen(QPen(palette().active().text()));
 
