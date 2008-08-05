@@ -165,18 +165,17 @@ public:
         Measurement.Patches  = 0;
         Measurement.Allowed  = 0;
         blinkTimer           = 0;
+        pos                  = 0;
 
         profileDataAvailable = true;
         loadingImageMode     = false;
         loadingImageSucess   = false;
-        blinkFlag            = false;
         needUpdatePixmap     = false;
     }
 
     bool             profileDataAvailable;
     bool             loadingImageMode;
     bool             loadingImageSucess;
-    bool             blinkFlag;
     bool             needUpdatePixmap;
 
     double           gridside;
@@ -185,6 +184,7 @@ public:
     int              yBias;
     int              pxcols;
     int              pxrows;
+    int              pos;           // Position of animation during loading/calculation.
 
     QPainter         painter;
     QPixmap          pixmap;
@@ -688,6 +688,7 @@ void CIETongueWidget::drawWhitePoint()
 
 void CIETongueWidget::loadingStarted()
 {
+    d->pos                = 0;
     d->loadingImageMode   = true;
     d->loadingImageSucess = false;
     update();
@@ -697,6 +698,7 @@ void CIETongueWidget::loadingStarted()
 void CIETongueWidget::loadingFailed()
 {
     d->blinkTimer->stop();
+    d->pos                = 0;
     d->loadingImageMode   = false;
     d->loadingImageSucess = false;
     update();
@@ -754,8 +756,8 @@ void CIETongueWidget::paintEvent(QPaintEvent*)
 
     if ( !isEnabled() )
     {
-        p.fillRect(0, 0, size().width(), size().height(),
-                            palette().color(QPalette::Disabled, QPalette::Background));
+        p.fillRect(0, 0, width(), height(),
+                   palette().color(QPalette::Disabled, QPalette::Background));
 
         QPen pen(palette().color(QPalette::Disabled, QPalette::Foreground));
         pen.setStyle(Qt::SolidLine);
@@ -771,23 +773,38 @@ void CIETongueWidget::paintEvent(QPaintEvent*)
 
     if (d->loadingImageMode && !d->loadingImageSucess)
     {
-        p.fillRect(0, 0, size().width(), size().height(),
-                            palette().color(QPalette::Disabled, QPalette::Background));
+        // In first, we draw an animation.
 
+        int asize = 24;
+        QPixmap anim(asize, asize);
+        QPainter p2;
+        p2.begin(&anim);
+        p2.fillRect(0, 0, asize, asize, palette().color(QPalette::Disabled, QPalette::Background));
+        p2.translate(asize/2, asize/2);
+
+        d->pos = (d->pos + 10) % 360;
+        p2.setPen(QPen(palette().color(QPalette::Disabled, QPalette::Foreground)));
+
+        p2.rotate(d->pos);
+        for ( int i=0 ; i<12 ; i++ )
+        {
+            p2.drawLine(asize/2-5, 0, asize/2-2, 0);
+            p2.rotate(30);
+        }
+        p2.end();
+
+        // ... and we render busy text.
+
+        p.fillRect(0, 0, width(), height(), palette().color(QPalette::Disabled, QPalette::Background));
+        p.drawPixmap(width()/2 - asize /2, asize, anim);
         QPen pen(palette().color(QPalette::Disabled, QPalette::Foreground));
         pen.setStyle(Qt::SolidLine);
         pen.setWidth(1);
 
         p.setPen(pen);
         p.drawRect(0, 0, width(), height());
-
-        if (d->blinkFlag)
-            p.setPen(Qt::green);
-        else 
-            p.setPen(Qt::darkGreen);
-
-        p.drawText(0, 0, size().width(), size().height(), Qt::AlignCenter,
-                            i18n("Loading image..."));
+        p.drawText(0, 0, width(), height(), Qt::AlignCenter,
+                   i18n("Loading image..."));
 
         return;
     }
@@ -796,8 +813,8 @@ void CIETongueWidget::paintEvent(QPaintEvent*)
 
     if (!d->profileDataAvailable || (!d->loadingImageMode && !d->loadingImageSucess))
     {
-        p.fillRect(0, 0, size().width(), size().height(),
-                            palette().color(QPalette::Disabled, QPalette::Background));
+        p.fillRect(0, 0, width(), height(),
+                   palette().color(QPalette::Disabled, QPalette::Background));
 
         QPen pen(palette().color(QPalette::Disabled, QPalette::Foreground));
         pen.setStyle(Qt::SolidLine);
@@ -806,8 +823,8 @@ void CIETongueWidget::paintEvent(QPaintEvent*)
         p.setPen(pen);
         p.drawRect(0, 0, width(), height());
         p.setPen(Qt::red);
-        p.drawText(0, 0, size().width(), size().height(), Qt::AlignCenter,
-                            i18n("No profile available..."));
+        p.drawText(0, 0, width(), height(), Qt::AlignCenter,
+                   i18n("No profile available..."));
 
         return;
     }
@@ -823,7 +840,6 @@ void CIETongueWidget::paintEvent(QPaintEvent*)
 void CIETongueWidget::slotBlinkTimerDone()
 {
     update();
-    d->blinkFlag = !d->blinkFlag;
     d->blinkTimer->start( 200 );
 }
 

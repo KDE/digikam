@@ -6,7 +6,7 @@
  * Date        : 2006-01-10
  * Description : a widget to display CIE tongue from
  * an ICC profile.
- * 
+ *
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Any source code are inspired from lprof project and
@@ -17,12 +17,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef CIETONGUEWIDGET_H
@@ -79,7 +79,7 @@ protected:
     void drawTongueGrid();
     void drawLabels();
 
-    QRgb colorByCoord(double x, double y);  
+    QRgb colorByCoord(double x, double y);
     void drawSmallElipse(LPcmsCIExyY xyY, BYTE r, BYTE g, BYTE b, int sz);
 
     void paintEvent( QPaintEvent * );
