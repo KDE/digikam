@@ -290,7 +290,6 @@ void HistogramWidget::setDataLoading()
         d->inInitialRepaintWait = true;
         d->pos                  = 0;
         d->blinkTimer->start( 100 );
-        //repaint(false);
     }
 }
 
