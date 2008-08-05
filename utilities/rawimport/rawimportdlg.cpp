@@ -121,7 +121,7 @@ RawImportDlg::RawImportDlg(const ImageInfo& info, QWidget *parent)
                              "Uses a simple bilinear interpolation for "
                              "quick results."));
 
-    setButtonTip(User2, i18n("<p>Load image to editor using current settings."));
+    setButtonTip(User2, i18n("<p>Import image to editor using current settings."));
 
     setButtonTip(User3, i18n("<p>Abort the current Preview"));
 
