@@ -116,6 +116,7 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
     d = new RawImportDlgPriv;
     d->url = url;
 
+    setHelp("rawimport.anchor", "digikam");
     setCaption(i18n("Raw Import - %1").arg(d->url.fileName()));
 
     setButtonTip(User1, i18n("<p>Generate a Raw image preview using current settings."));
@@ -266,6 +267,12 @@ void RawImportDlg::slotDefault()
     d->decodingSettingsBox->setDefaultSettings();
 }
 
+void RawImportDlg::slotOk()
+{
+    saveSettings();
+    KDialogBase::slotOk();
+}
+
 void RawImportDlg::readSettings()
 {
     KConfig* config = kapp->config();
@@ -324,11 +331,6 @@ void RawImportDlg::saveSettings()
 
     saveDialogSize(*config, QString("RAW Import Dialog"));
     config->sync();
-}
-
-void RawImportDlg::slotHelp()
-{
-    KApplication::kApplication()->invokeHelp("rawimport", "digikam");
 }
 
 KDcrawIface::RawDecodingSettings RawImportDlg::rawDecodingSettings()
