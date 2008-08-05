@@ -90,8 +90,7 @@ SyncJob::SyncJob()
 
 SyncJob::~SyncJob()
 {
-    if (d->thumbnail)
-        delete d->thumbnail;
+    delete d->thumbnail;
 
     d->thumbnail = 0;
     delete d;
@@ -147,8 +146,7 @@ void SyncJob::slotResult( KJob *job )
 
 QPixmap SyncJob::getTagThumbnailPriv(TAlbum *album)
 {
-    if (d->thumbnail)
-        delete d->thumbnail;
+    delete d->thumbnail;
 
     d->thumbnail = new QPixmap();
 
