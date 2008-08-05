@@ -1873,12 +1873,25 @@ void DigikamApp::slotKipiPluginPlug()
             else if ( plugin->category(*it2) == KIPI::COLLECTIONSPLUGIN )
                popup = &d->kipiAlbumActions;
 
+            // List of obsolete kipi-plugins to not load.
+
+            QStringList pluginActionsDisabled;
+            pluginActionsDisabled << QString("raw_converter_single");  // Obsolete Since 0.9.5 and new Raw Import tool.
+            QString actionName((*it2)->name());
+
             // Plug the KIPI plugins actions in according with the KAction method.
 
-            if ( popup )
-               popup->append( *it2 );
+            if (popup)
+            {
+                if (!pluginActionsDisabled.contains(actionName))
+                    popup->append( *it2 );
+                else
+                    DDebug() << "Plugin '" << actionName << "' disabled." << endl;
+            }
             else
-               DDebug() << "No menu found for a plugin!!!" << endl;
+            {
+                DDebug() << "No menu found for plugin '" << actionName << "' !!!" << endl;
+            }
         }
 
         plugin->actionCollection()->readShortcutSettings();
