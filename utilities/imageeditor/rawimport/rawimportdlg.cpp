@@ -23,7 +23,6 @@
 // Qt includes.
 
 #include <qstring.h>
-#include <qframe.h>
 #include <qlayout.h>
 #include <qtooltip.h>
 #include <qwhatsthis.h>
@@ -42,11 +41,11 @@
 #include <kapplication.h>
 #include <kiconloader.h>
 #include <kstandarddirs.h>
-#include <kdebug.h>
 
 // LibKDcraw includes.
 
 #include <libkdcraw/dcrawsettingswidget.h>
+#include <libkdcraw/rawdecodingsettings.h>
 
 // Local includes.
 

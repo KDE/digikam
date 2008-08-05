@@ -30,22 +30,19 @@
 
 // Local includes
 
+#include "dimg.h"
 #include "digikam_export.h"
 
 class QCloseEvent;
 
 namespace KDcrawIface
 {
-class DcrawSettingsWidget;
+class RawDecodingSettings;
 }
 
 namespace Digikam
 {
 
-class DImg;
-class RawPreview;
-class ActionThread;
-class SaveSettingsWidget;
 class RawImportDlgPriv;
 
 class DIGIKAM_EXPORT RawImportDlg : public KDialogBase
