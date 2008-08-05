@@ -5,20 +5,20 @@
  *
  * Date        : 2004-12-01
  * Description : a widget di draw an histogram curve.
- * 
- * Copyright (C) 2004-2005 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ *
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef CURVESWIDGET_H
@@ -62,7 +62,7 @@ public:
         LinScaleHistogram=0,      // Linear scale.
         LogScaleHistogram         // Logarithmic scale.
     };
-    
+
 public:
 
     CurvesWidget(int w, int h,                         // Widget size.
@@ -72,34 +72,34 @@ public:
                  QWidget *parent=0,                    // Parent widget instance.
                  bool readOnly=false);                 // If true : widget with full edition mode capabilities.
                                                        // If false : display curve data only without edition.
-                 
+
     ~CurvesWidget();
 
     // Stop current histogram computations.
     void stopHistogramComputation(void);
-    
+
     void reset(void);
     void curveTypeChanged(void);
     void setCurveGuide(DColor color);
-    
+
 public:
-    
+
     int             m_channelType;     // Channel type to draw.
     int             m_scaleType;       // Scale to use for drawing.
 
     ImageHistogram *m_imageHistogram;
 
 signals:
-    
+
     void signalMouseMoved( int x, int y );
     void signalCurvesChanged(void);
     void signalHistogramComputationDone(void);
     void signalHistogramComputationFailed(void);
 
 protected slots:
-    
+
     void slotBlinkTimerDone( void );
-            
+
 protected:
 
     void paintEvent( QPaintEvent * );
@@ -107,15 +107,15 @@ protected:
     void mouseReleaseEvent ( QMouseEvent * e );
     void mouseMoveEvent ( QMouseEvent * e );
     void leaveEvent ( QEvent * );
-    
+
 private:
-        
+
     void customEvent(QCustomEvent *event);
 
 private:
 
     CurvesWidgetPriv* d;
-    
+
 };
 
 }  // NameSpace Digikam
