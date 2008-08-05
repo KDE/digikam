@@ -82,6 +82,7 @@ private slots:
 
     void slotChannelChanged(int channel);
     void slotScaleChanged(int scale);
+    void slotColorsChanged(int color);
 
 private:
 

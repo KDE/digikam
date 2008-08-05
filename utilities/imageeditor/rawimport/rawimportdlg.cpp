@@ -75,7 +75,15 @@ public:
         LuminosityChannel=0,
         RedChannel,
         GreenChannel,
-        BlueChannel
+        BlueChannel,
+        ColorChannels
+    };
+
+    enum AllColorsColorType
+    {
+        AllColorsRed=0,
+        AllColorsGreen,
+        AllColorsBlue
     };
 
 public:
@@ -85,6 +93,7 @@ public:
         previewWidget       = 0;
         decodingSettingsBox = 0;
         channelCB           = 0;
+        colorsCB            = 0;
         effectType          = 0;
         scaleBG             = 0;
         hGradient           = 0;
@@ -93,6 +102,7 @@ public:
 
     QComboBox                        *channelCB;
     QComboBox                        *effectType;
+    QComboBox                        *colorsCB;
 
     QHButtonGroup                    *scaleBG;
 
@@ -138,7 +148,7 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
     // ---------------------------------------------------------------
 
     QWidget *gboxSettings     = new QWidget(page);
-    QGridLayout* gridSettings = new QGridLayout(gboxSettings, 4, 4, spacingHint());
+    QGridLayout* gridSettings = new QGridLayout(gboxSettings, 5, 4, spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
     label1->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
@@ -147,11 +157,13 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
     d->channelCB->insertItem( i18n("Red") );
     d->channelCB->insertItem( i18n("Green") );
     d->channelCB->insertItem( i18n("Blue") );
+    d->channelCB->insertItem( i18n("Colors") );
     QWhatsThis::add(d->channelCB, i18n("<p>Select the histogram channel to display here:<p>"
                                        "<b>Luminosity</b>: display the image's luminosity values.<p>"
                                        "<b>Red</b>: display the red image-channel values.<p>"
                                        "<b>Green</b>: display the green image-channel values.<p>"
-                                       "<b>Blue</b>: display the blue image-channel values.<p>"));
+                                       "<b>Blue</b>: display the blue image-channel values.<p>"
+                                       "<b>Colors</b>: Display all color channel values at the same time."));
 
     d->scaleBG = new QHButtonGroup(gboxSettings);
     d->scaleBG->setExclusive(true);
@@ -184,9 +196,26 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
     l1->addStretch(10);
     l1->addWidget(d->scaleBG);
 
+    QLabel *label10 = new QLabel(i18n("Colors:"), gboxSettings);
+    label10->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
+    d->colorsCB = new QComboBox( false, gboxSettings );
+    d->colorsCB->insertItem( i18n("Red") );
+    d->colorsCB->insertItem( i18n("Green") );
+    d->colorsCB->insertItem( i18n("Blue") );
+    d->colorsCB->setEnabled( false );
+    QWhatsThis::add( d->colorsCB, i18n("<p>Select the main color displayed with Colors Channel mode here:<p>"
+                                       "<b>Red</b>: Draw the red image channel in the foreground.<p>"
+                                       "<b>Green</b>: Draw the green image channel in the foreground.<p>"
+                                       "<b>Blue</b>: Draw the blue image channel in the foreground.<p>"));
+
+    QHBoxLayout* l2 = new QHBoxLayout();
+    l2->addWidget(label10);
+    l2->addWidget(d->colorsCB);
+    l2->addStretch(10);
+
     // ---------------------------------------------------------------
 
-    QVBox *histoBox   = new QVBox(gboxSettings);
+    QVBox *histoBox    = new QVBox(gboxSettings);
     d->histogramWidget = new Digikam::HistogramWidget(256, 140, histoBox, false, true, true);
     QWhatsThis::add(d->histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing "
                                              "of the selected image channel. This one is re-computed at any "
@@ -201,9 +230,10 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
     d->decodingSettingsBox  = new KDcrawIface::DcrawSettingsWidget(gboxSettings, true, true, false);
 
     gridSettings->addMultiCellLayout(l1,                     0, 0, 0, 4);
-    gridSettings->addMultiCellWidget(histoBox,               1, 2, 0, 4);
-    gridSettings->addMultiCellWidget(d->decodingSettingsBox, 3, 3, 0, 4);
-    gridSettings->setRowStretch(4, 10);
+    gridSettings->addMultiCellLayout(l2,                     1, 1, 0, 4);
+    gridSettings->addMultiCellWidget(histoBox,               2, 3, 0, 4);
+    gridSettings->addMultiCellWidget(d->decodingSettingsBox, 4, 4, 0, 4);
+    gridSettings->setRowStretch(5, 10);
 
     // ---------------------------------------------------------------
 
@@ -219,6 +249,9 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
 
     connect(d->scaleBG, SIGNAL(released(int)),
             this, SLOT(slotScaleChanged(int)));
+
+    connect(d->colorsCB, SIGNAL(activated(int)),
+            this, SLOT(slotColorsChanged(int)));
 
     connect(d->previewWidget, SIGNAL(signalLoadingStarted()),
             this, SLOT(slotLoadingStarted()));
@@ -413,23 +446,33 @@ void RawImportDlg::slotChannelChanged(int channel)
     switch(channel)
     {
         case RawImportDlgPriv::LuminosityChannel:
-            d->histogramWidget->m_channelType = Digikam::HistogramWidget::ValueHistogram;
+            d->histogramWidget->m_channelType = HistogramWidget::ValueHistogram;
             d->hGradient->setColors( QColor( "black" ), QColor( "white" ) );
+            d->colorsCB->setEnabled(false);
             break;
 
         case RawImportDlgPriv::RedChannel:
-            d->histogramWidget->m_channelType = Digikam::HistogramWidget::RedChannelHistogram;
+            d->histogramWidget->m_channelType = HistogramWidget::RedChannelHistogram;
             d->hGradient->setColors( QColor( "black" ), QColor( "red" ) );
+            d->colorsCB->setEnabled(false);
             break;
 
         case RawImportDlgPriv::GreenChannel:
-            d->histogramWidget->m_channelType = Digikam::HistogramWidget::GreenChannelHistogram;
+            d->histogramWidget->m_channelType = HistogramWidget::GreenChannelHistogram;
             d->hGradient->setColors( QColor( "black" ), QColor( "green" ) );
+            d->colorsCB->setEnabled(false);
             break;
 
         case RawImportDlgPriv::BlueChannel:
-            d->histogramWidget->m_channelType = Digikam::HistogramWidget::BlueChannelHistogram;
+            d->histogramWidget->m_channelType = HistogramWidget::BlueChannelHistogram;
             d->hGradient->setColors( QColor( "black" ), QColor( "blue" ) );
+            d->colorsCB->setEnabled(false);
+            break;
+
+        case RawImportDlgPriv::ColorChannels:
+            d->histogramWidget->m_channelType = HistogramWidget::ColorChannelsHistogram;
+            d->hGradient->setColors( QColor( "black" ), QColor( "white" ) );
+            d->colorsCB->setEnabled(true);
             break;
     }
 
@@ -439,6 +482,26 @@ void RawImportDlg::slotChannelChanged(int channel)
 void RawImportDlg::slotScaleChanged(int scale)
 {
     d->histogramWidget->m_scaleType = scale;
+    d->histogramWidget->repaint(false);
+}
+
+void RawImportDlg::slotColorsChanged(int color)
+{
+    switch(color)
+    {
+        case RawImportDlgPriv::AllColorsGreen:
+            d->histogramWidget->m_colorType = HistogramWidget::GreenColor;
+            break;
+
+        case RawImportDlgPriv::AllColorsBlue:
+            d->histogramWidget->m_colorType = HistogramWidget::BlueColor;
+            break;
+
+        default:          // Red.
+            d->histogramWidget->m_colorType = HistogramWidget::RedColor;
+            break;
+    }
+
     d->histogramWidget->repaint(false);
 }
 
