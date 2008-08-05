@@ -413,8 +413,7 @@ void RawImportDlg::busy(bool val)
     else d->previewWidget->unsetCursor();
     d->decodingSettingsBox->setEnabled(!val);
     enableButton (User1, !val);
-    enableButton (User2, !val);
-    enableButton (User3, val);
+    enableButton (User2, val);
     enableButton (Close, !val);
 }
 
