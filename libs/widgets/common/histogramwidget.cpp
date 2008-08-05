@@ -6,7 +6,7 @@
  * Date        : 2004-07-21
  * Description : a widget to display an image histogram.
  *
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Some code parts are inspired from from gimp 2.0
  * Copyright (C) 1995 Spencer Kimball and Peter Mattis
@@ -71,19 +71,18 @@ public:
         HistogramCompleted,       // Histogram values calculation completed.
         HistogramFailed           // Histogram values calculation failed.
     };
-    
+
     HistogramWidgetPriv()
     {
-        renderingType = HistogramWidget::FullImageHistogram;
-        blinkTimer   = 0;
-        sixteenBits  = false;
-        inSelected   = false;
-        blinkFlag    = false;
-        clearFlag    = HistogramNone;
-        xmin         = 0.0;
-        xmax         = 0.0;
-        range        = 255;
-        guideVisible = false;
+        renderingType        = HistogramWidget::FullImageHistogram;
+        blinkTimer           = 0;
+        sixteenBits          = false;
+        inSelected           = false;
+        clearFlag            = HistogramNone;
+        xmin                 = 0.0;
+        xmax                 = 0.0;
+        range                = 255;
+        guideVisible         = false;
         inInitialRepaintWait = false;
     }
 
@@ -95,14 +94,14 @@ public:
     double  xmax;
     int     range;
     int     clearFlag;          // Clear drawing zone with message.
+    int     pos;                // Position of animation during loading/calculation.
 
     bool    sixteenBits;
     bool    guideVisible;       // Display color guide.
     bool    statisticsVisible;  // Display tooltip histogram statistics.
     bool    inSelected;
     bool    selectMode;         // If true, a part of the histogram can be selected !
-    bool    blinkFlag;
-    bool    blinkComputation;   // If true, a message will be displayed during histogram computation,
+    bool    showProgress;       // If true, a message will be displayed during histogram computation,
                                 // else nothing (limit flicker effect in widget especially for small
                                 // image/computation time).
     bool    inInitialRepaintWait;
@@ -116,11 +115,11 @@ public:
 
 HistogramWidget::HistogramWidget(int w, int h, 
                                  QWidget *parent, bool selectMode,
-                                 bool blinkComputation, bool statisticsVisible)
+                                 bool showProgress, bool statisticsVisible)
                : QWidget(parent)
 {
     d = new HistogramWidgetPriv;
-    setup(w, h, selectMode, blinkComputation, statisticsVisible);
+    setup(w, h, selectMode, showProgress, statisticsVisible);
     setAttribute(Qt::WA_DeleteOnClose);
 
     m_imageHistogram     = 0L;
@@ -133,12 +132,12 @@ HistogramWidget::HistogramWidget(int w, int h,
                                  uchar *i_data, uint i_w, uint i_h,
                                  bool i_sixteenBits,
                                  QWidget *parent, bool selectMode,
-                                 bool blinkComputation, bool statisticsVisible)
+                                 bool showProgress, bool statisticsVisible)
                : QWidget(parent)
 {
     d = new HistogramWidgetPriv;
     d->sixteenBits = i_sixteenBits;
-    setup(w, h, selectMode, blinkComputation, statisticsVisible);
+    setup(w, h, selectMode, showProgress, statisticsVisible);
     setAttribute(Qt::WA_DeleteOnClose);
 
     m_imageHistogram     = new ImageHistogram(i_data, i_w, i_h, i_sixteenBits);
@@ -156,12 +155,12 @@ HistogramWidget::HistogramWidget(int w, int h,
                                  uchar *s_data, uint s_w, uint s_h,
                                  bool i_sixteenBits,
                                  QWidget *parent, bool selectMode,
-                                 bool blinkComputation, bool statisticsVisible)
+                                 bool showProgress, bool statisticsVisible)
                : QWidget(parent)
 {
     d = new HistogramWidgetPriv;
     d->sixteenBits = i_sixteenBits;
-    setup(w, h, selectMode, blinkComputation, statisticsVisible);
+    setup(w, h, selectMode, showProgress, statisticsVisible);
     setAttribute(Qt::WA_DeleteOnClose);
 
     m_imageHistogram     = new ImageHistogram(i_data, i_w, i_h, i_sixteenBits);
@@ -183,17 +182,17 @@ HistogramWidget::~HistogramWidget()
     if (m_selectionHistogram)
        delete m_selectionHistogram;
 
-    delete d;       
+    delete d;
 }
 
-void HistogramWidget::setup(int w, int h, bool selectMode, bool blinkComputation, bool statisticsVisible)
+void HistogramWidget::setup(int w, int h, bool selectMode, bool showProgress, bool statisticsVisible)
 {
     m_channelType        = ValueHistogram;
     m_scaleType          = LogScaleHistogram;
     m_colorType          = RedColor;
     d->statisticsVisible = statisticsVisible;
     d->selectMode        = selectMode;
-    d->blinkComputation  = blinkComputation;
+    d->showProgress      = showProgress;
 
     setMouseTracking(true);
     setMinimumSize(w, h);
@@ -213,7 +212,7 @@ void HistogramWidget::connectHistogram(const ImageHistogram *histogram)
             this, SLOT(slotCalculationFinished(const ImageHistogram *, bool)));
 }
 
-void HistogramWidget::setHistogramGuideByColor(DColor color)
+void HistogramWidget::setHistogramGuideByColor(const DColor& color)
 {
     d->guideVisible = true;
     d->colorGuide   = color;
@@ -246,7 +245,7 @@ void HistogramWidget::setRenderingType(HistogramRenderingType type)
     }
 }
 
-void HistogramWidget::reset(void)
+void HistogramWidget::reset()
 {
     d->guideVisible = false;
     repaint();
@@ -356,21 +355,22 @@ void HistogramWidget::setDataLoading()
         // enter initial repaint wait, repaint only after waiting
         // a short time so that very fast computation does not create flicker
         d->inInitialRepaintWait = true;
+        d->pos                  = 0;
         d->blinkTimer->start( 100 );
-        //repaint();
     }
 }
 
 void HistogramWidget::setLoadingFailed()
 {
     d->clearFlag = HistogramWidgetPriv::HistogramFailed;
+    d->pos       = 0;
     d->blinkTimer->stop();
     d->inInitialRepaintWait = false;
     repaint();
     setCursor( Qt::ArrowCursor );
 }
 
-void HistogramWidget::stopHistogramComputation(void)
+void HistogramWidget::stopHistogramComputation()
 {
     if (m_imageHistogram)
        m_imageHistogram->stopCalculation();
@@ -379,15 +379,16 @@ void HistogramWidget::stopHistogramComputation(void)
        m_selectionHistogram->stopCalculation();
 
     d->blinkTimer->stop();
+    d->pos = 0;
 }
 
 void HistogramWidget::updateData(uchar *i_data, uint i_w, uint i_h,
                                  bool i_sixteenBits,
                                  uchar *s_data, uint s_w, uint s_h,
-                                 bool blinkComputation)
+                                 bool showProgress)
 {
-    d->blinkComputation = blinkComputation;
-    d->sixteenBits      = i_sixteenBits;
+    d->showProgress = showProgress;
+    d->sixteenBits  = i_sixteenBits;
 
     // We are deleting the histogram data, so we must not use it to draw any more.
     d->clearFlag = HistogramWidgetPriv::HistogramNone;
@@ -425,9 +426,9 @@ void HistogramWidget::updateData(uchar *i_data, uint i_w, uint i_h,
 
 void HistogramWidget::updateSelectionData(uchar *s_data, uint s_w, uint s_h,
                                           bool i_sixteenBits,
-                                          bool blinkComputation)
+                                          bool showProgress)
 {
-    d->blinkComputation = blinkComputation;
+    d->showProgress = showProgress;
 
     // Remove old histogram data from memory.
 
@@ -442,9 +443,8 @@ void HistogramWidget::updateSelectionData(uchar *s_data, uint s_w, uint s_h,
         m_selectionHistogram->calculateInThread();
 }
 
-void HistogramWidget::slotBlinkTimerDone( void )
+void HistogramWidget::slotBlinkTimerDone()
 {
-    d->blinkFlag = !d->blinkFlag;
     d->inInitialRepaintWait = false;
     repaint();
     d->blinkTimer->start( 200 );
@@ -455,17 +455,17 @@ void HistogramWidget::paintEvent( QPaintEvent * )
     // Widget is disabled, not initialized,
     // or loading, but no message shall be drawn:
     // Drawing grayed frame.
-    if (  !isEnabled() ||
-           d->clearFlag == HistogramWidgetPriv::HistogramNone ||
-         (!d->blinkComputation && (d->clearFlag == HistogramWidgetPriv::HistogramStarted ||
-                                   d->clearFlag == HistogramWidgetPriv::HistogramDataLoading))
+    if ( !isEnabled() ||
+         d->clearFlag == HistogramWidgetPriv::HistogramNone ||
+         (!d->showProgress && (d->clearFlag == HistogramWidgetPriv::HistogramStarted ||
+                               d->clearFlag == HistogramWidgetPriv::HistogramDataLoading))
        )
     {
        QPixmap pm(size());
        QPainter p1;
        p1.begin(&pm);
        p1.initFrom(this);
-       p1.fillRect(0, 0, size().width(), size().height(),  
+       p1.fillRect(0, 0, width(), height(),
                    palette().color(QPalette::Disabled, QPalette::Background));
 
        QPen pen(palette().color(QPalette::Disabled, QPalette::Foreground));
@@ -483,28 +483,45 @@ void HistogramWidget::paintEvent( QPaintEvent * )
     }
     // Image data is loading or histogram is being computed:
     // Draw message.
-    else if (  d->blinkComputation &&
+    else if (  d->showProgress &&
               (d->clearFlag == HistogramWidgetPriv::HistogramStarted ||
                d->clearFlag == HistogramWidgetPriv::HistogramDataLoading)
             )
     {
+       // In first, we draw an animation.
+
+       int asize = 24;
+       QPixmap anim(asize, asize);
+       QPainter p0;
+       p0.begin(&anim);
+       p0.fillRect(0, 0, asize, asize, Qt::white);
+       p0.translate(asize/2, asize/2);
+
+       d->pos = (d->pos + 10) % 360;
+       p0.setPen(palette().color(QPalette::Active, QPalette::Text));
+       p0.rotate(d->pos);
+       for ( int i=0 ; i<12 ; i++ )
+       {
+           p0.drawLine(asize/2-5, 0, asize/2-2, 0);
+           p0.rotate(30);
+       }
+       p0.end();
+
+       // ... and we render busy text.
+
        QPixmap pm(size());
        QPainter p1;
        p1.begin(&pm);
        p1.initFrom(this);
-       p1.fillRect(0, 0, size().width(), size().height(), Qt::white);
-
-       if (d->blinkFlag)
-           p1.setPen(Qt::green);
-       else 
-           p1.setPen(Qt::darkGreen);
+       p1.fillRect(0, 0, width(), height(), Qt::white);
+       p1.drawPixmap(width()/2 - asize /2, asize, anim);
 
        if (d->clearFlag == HistogramWidgetPriv::HistogramDataLoading)
-           p1.drawText(0, 0, size().width(), size().height(), Qt::AlignCenter,
+           p1.drawText(0, 0, width(), height(), Qt::AlignCenter,
                        i18n("Loading image..."));
        else 
-           p1.drawText(0, 0, size().width(), size().height(), Qt::AlignCenter,
-                  i18n("Histogram\ncalculation\nin progress..."));
+           p1.drawText(0, 0, width(), height(), Qt::AlignCenter,
+                  i18n("Histogram calculation..."));
        p1.end();
 
        QPainter p2(this);
@@ -520,9 +537,9 @@ void HistogramWidget::paintEvent( QPaintEvent * )
        QPainter p1;
        p1.begin(&pm);
        p1.initFrom(this);
-       p1.fillRect(0, 0, size().width(), size().height(), Qt::white);
+       p1.fillRect(0, 0, width(), height(), Qt::white);
        p1.setPen(Qt::red);
-       p1.drawText(0, 0, size().width(), size().height(), Qt::AlignCenter,
+       p1.drawText(0, 0, width(), height(), Qt::AlignCenter,
                   i18n("Histogram\ncalculation\nfailed."));
        p1.end();
 
@@ -554,29 +571,29 @@ void HistogramWidget::paintEvent( QPaintEvent * )
     switch(m_channelType)
     {
        case HistogramWidget::GreenChannelHistogram:    // Green channel.
-          max = histogram->getMaximum(ImageHistogram::GreenChannel);  
+          max = histogram->getMaximum(ImageHistogram::GreenChannel);
           break;
 
        case HistogramWidget::BlueChannelHistogram:     // Blue channel.
-          max = histogram->getMaximum(ImageHistogram::BlueChannel);    
+          max = histogram->getMaximum(ImageHistogram::BlueChannel);
           break;
 
        case HistogramWidget::RedChannelHistogram:      // Red channel.
-          max = histogram->getMaximum(ImageHistogram::RedChannel); 
+          max = histogram->getMaximum(ImageHistogram::RedChannel);
           break;
 
        case HistogramWidget::AlphaChannelHistogram:    // Alpha channel.
-          max = histogram->getMaximum(ImageHistogram::AlphaChannel);  
+          max = histogram->getMaximum(ImageHistogram::AlphaChannel);
           break;
 
        case HistogramWidget::ColorChannelsHistogram:   // All color channels.
           max = qMax (qMax (histogram->getMaximum(ImageHistogram::RedChannel),
                             histogram->getMaximum(ImageHistogram::GreenChannel)),
-                      histogram->getMaximum(ImageHistogram::BlueChannel));  
+                      histogram->getMaximum(ImageHistogram::BlueChannel));
           break;
 
        case HistogramWidget::ValueHistogram:           // Luminosity.
-          max = histogram->getMaximum(ImageHistogram::ValueChannel); 
+          max = histogram->getMaximum(ImageHistogram::ValueChannel);
           break;
     }
 
@@ -607,7 +624,7 @@ void HistogramWidget::paintEvent( QPaintEvent * )
       double value = 0.0; 
       double value_r = 0.0, value_g = 0.0, value_b = 0.0; // For all color channels.
       int    i, j;
-    
+
       i = (x * histogram->getHistogramSegment()) / wWidth;
       j = ((x + 1) * histogram->getHistogramSegment()) / wWidth;
 
@@ -622,29 +639,29 @@ void HistogramWidget::paintEvent( QPaintEvent * )
           switch(m_channelType)
           {
              case HistogramWidget::GreenChannelHistogram:    // Green channel.
-                v = histogram->getValue(ImageHistogram::GreenChannel, i++);   
+                v = histogram->getValue(ImageHistogram::GreenChannel, i++);
                 break;
 
              case HistogramWidget::BlueChannelHistogram:     // Blue channel.
-                v = histogram->getValue(ImageHistogram::BlueChannel, i++);   
+                v = histogram->getValue(ImageHistogram::BlueChannel, i++);
                 break;
 
              case HistogramWidget::RedChannelHistogram:      // Red channel.
-                v = histogram->getValue(ImageHistogram::RedChannel, i++);    
+                v = histogram->getValue(ImageHistogram::RedChannel, i++);
                 break;
 
              case HistogramWidget::AlphaChannelHistogram:    // Alpha channel.
-                v = histogram->getValue(ImageHistogram::AlphaChannel, i++);   
+                v = histogram->getValue(ImageHistogram::AlphaChannel, i++);
                 break;
 
              case HistogramWidget::ColorChannelsHistogram:   // All color channels.
-                vr = histogram->getValue(ImageHistogram::RedChannel, i++);   
-                vg = histogram->getValue(ImageHistogram::GreenChannel, i);   
-                vb = histogram->getValue(ImageHistogram::BlueChannel, i);   
+                vr = histogram->getValue(ImageHistogram::RedChannel, i++);
+                vg = histogram->getValue(ImageHistogram::GreenChannel, i);
+                vb = histogram->getValue(ImageHistogram::BlueChannel, i);
                 break;
 
              case HistogramWidget::ValueHistogram:           // Luminosity.
-                v = histogram->getValue(ImageHistogram::ValueChannel, i++);   
+                v = histogram->getValue(ImageHistogram::ValueChannel, i++);
                 break;
           }
 
@@ -890,11 +907,11 @@ void HistogramWidget::paintEvent( QPaintEvent * )
                  p1.drawLine(x, wHeight, x, wHeight - yg);
 
                  p1.setPen(QPen(Qt::white, 1, Qt::SolidLine));
-                 p1.drawLine(x, wHeight - qMax(qMax(yr, yg), yb), x, 0);                 
+                 p1.drawLine(x, wHeight - qMax(qMax(yr, yg), yb), x, 0);
                  p1.setPen(QPen(Qt::gray, 1, Qt::SolidLine));
-                 p1.drawLine(x, wHeight - yb -1, x, wHeight - yb);                 
-                 p1.drawLine(x, wHeight - yr -1, x, wHeight - yr);                 
-                 p1.drawLine(x, wHeight - yg -1, x, wHeight - yg);                 
+                 p1.drawLine(x, wHeight - yb -1, x, wHeight - yb);
+                 p1.drawLine(x, wHeight - yr -1, x, wHeight - yr);
+                 p1.drawLine(x, wHeight - yg -1, x, wHeight - yg);
 
                  if ( x == wWidth/4 || x == wWidth/2 || x == 3*wWidth/4 )
                  {
@@ -906,18 +923,18 @@ void HistogramWidget::paintEvent( QPaintEvent * )
 
                default:
                  p1.setPen(QPen(Qt::red, 1, Qt::SolidLine));
-                 p1.drawLine(x, wHeight, x, wHeight - yr);                 
+                 p1.drawLine(x, wHeight, x, wHeight - yr);
                  p1.setPen(QPen(Qt::green, 1, Qt::SolidLine));
-                 p1.drawLine(x, wHeight, x, wHeight - yg);                 
+                 p1.drawLine(x, wHeight, x, wHeight - yg);
                  p1.setPen(QPen(Qt::blue, 1, Qt::SolidLine));
-                 p1.drawLine(x, wHeight, x, wHeight - yb);                 
+                 p1.drawLine(x, wHeight, x, wHeight - yb);
 
                  p1.setPen(QPen(Qt::white, 1, Qt::SolidLine));
-                 p1.drawLine(x, wHeight - qMax(qMax(yr, yg), yb), x, 0);                 
+                 p1.drawLine(x, wHeight - qMax(qMax(yr, yg), yb), x, 0);
                  p1.setPen(QPen(Qt::gray, 1, Qt::SolidLine));
-                 p1.drawLine(x, wHeight - yr -1, x, wHeight - yr);                 
-                 p1.drawLine(x, wHeight - yg -1, x, wHeight - yg);                 
-                 p1.drawLine(x, wHeight - yb -1, x, wHeight - yb);                 
+                 p1.drawLine(x, wHeight - yr -1, x, wHeight - yr);
+                 p1.drawLine(x, wHeight - yg -1, x, wHeight - yg);
+                 p1.drawLine(x, wHeight - yb -1, x, wHeight - yb);
 
                  if ( x == wWidth/4 || x == wWidth/2 || x == 3*wWidth/4 )
                  {
@@ -944,15 +961,15 @@ void HistogramWidget::paintEvent( QPaintEvent * )
              guidePos = d->colorGuide.red();
              break;
 
-          case HistogramWidget::GreenChannelHistogram:    
+          case HistogramWidget::GreenChannelHistogram:
              guidePos = d->colorGuide.green();
              break;
 
-          case HistogramWidget::BlueChannelHistogram:     
+          case HistogramWidget::BlueChannelHistogram:
              guidePos = d->colorGuide.blue();
              break;
 
-          case HistogramWidget::ValueHistogram:    
+          case HistogramWidget::ValueHistogram:
              guidePos = qMax(qMax(d->colorGuide.red(), d->colorGuide.green()), d->colorGuide.blue());
              break;
 
@@ -967,11 +984,11 @@ void HistogramWidget::paintEvent( QPaintEvent * )
           p1.drawLine(xGuide, 0, xGuide, wHeight);  
 
           QString string = i18n("x:%1",guidePos);
-          QFontMetrics fontMt( string );       
+          QFontMetrics fontMt( string );
           QRect rect = fontMt.boundingRect(0, 0, wWidth, wHeight, 0, string); 
           p1.setPen(QPen(Qt::red, 1, Qt::SolidLine));
           rect.moveTop(1);
-             
+
           if (xGuide < wWidth/2)
           {
              rect.moveLeft(xGuide);
@@ -1110,7 +1127,7 @@ void HistogramWidget::notifyValuesChanged()
     emit signalIntervalChanged( (int)(d->xmin * d->range), d->xmax == 0.0 ? d->range : (int)(d->xmax * d->range) );
 }
 
-void HistogramWidget::slotMinValueChanged( int min )
+void HistogramWidget::slotMinValueChanged(int min)
 {
     if ( d->selectMode == true && d->clearFlag == HistogramWidgetPriv::HistogramCompleted )
     {
@@ -1128,7 +1145,7 @@ void HistogramWidget::slotMinValueChanged( int min )
     }
 }
 
-void HistogramWidget::slotMaxValueChanged( int max )
+void HistogramWidget::slotMaxValueChanged(int max)
 {
     if ( d->selectMode == true && d->clearFlag == HistogramWidgetPriv::HistogramCompleted ) 
     {
@@ -1147,5 +1164,3 @@ void HistogramWidget::slotMaxValueChanged( int max )
 }
 
 }  // namespace Digikam
-
-

@@ -5,20 +5,20 @@
  *
  * Date        : 2004-07-21
  * Description : a widget to display an image histogram.
- * 
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ *
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef HISTOGRAMWIDGET_H
@@ -82,7 +82,7 @@ public:
     /** Constructor without image data. Needed to use updateData() method after to create instance.*/
     HistogramWidget(int w, int h,                              // Widget size.
                     QWidget *parent=0, bool selectMode=true,
-                    bool blinkComputation=true,
+                    bool showProgress=true,
                     bool statisticsVisible=false);
 
     /** Constructor with image data and without image selection data.*/
@@ -90,7 +90,7 @@ public:
                     uchar *i_data, uint i_w, uint i_h,         // Full image info.
                     bool i_sixteenBits,                        // 8 or 16 bits image.
                     QWidget *parent=0, bool selectMode=true,
-                    bool blinkComputation=true,
+                    bool showProgress=true,
                     bool statisticsVisible=false);
 
     /** Constructor with image data and image selection data.*/
@@ -99,35 +99,35 @@ public:
                     uchar *s_data, uint s_w, uint s_h,         // Image selection info.
                     bool i_sixteenBits,                        // 8 or 16 bits image.
                     QWidget *parent=0, bool selectMode=true,
-                    bool blinkComputation=true,
+                    bool showProgress=true,
                     bool statisticsVisible=false);
 
     void setup(int w, int h, bool selectMode=true,
-               bool blinkComputation=true,
+               bool showProgress=true,
                bool statisticsVisible=false);
 
     ~HistogramWidget();
 
     /** Stop current histogram computations.*/
-    void stopHistogramComputation(void);
+    void stopHistogramComputation();
 
     /** Update full image histogram data methods.*/
     void updateData(uchar *i_data, uint i_w, uint i_h,
                     bool i_sixteenBits,                        // 8 or 16 bits image.
                     uchar *s_data=0, uint s_w=0, uint s_h=0, 
-                    bool blinkComputation=true);
+                    bool showProgress=true);
 
     /** Update image selection histogram data methods.*/
     void updateSelectionData(uchar *s_data, uint s_w, uint s_h,
                              bool i_sixteenBits,               // 8 or 16 bits image.
-                             bool blinkComputation=true);
+                             bool showProgress=true);
 
     void setDataLoading();
     void setLoadingFailed();
 
-    void setHistogramGuideByColor(DColor color);
+    void setHistogramGuideByColor(const DColor& color);
 
-    void reset(void);
+    void reset();
 
 public:
 
@@ -141,19 +141,19 @@ public:
 
 signals:
 
-    void signalIntervalChanged( int min, int max );
-    void signalMaximumValueChanged( int );
-    void signalHistogramComputationDone( bool );
-    void signalHistogramComputationFailed( void );
+    void signalIntervalChanged(int min, int max);
+    void signalMaximumValueChanged(int);
+    void signalHistogramComputationDone(bool);
+    void signalHistogramComputationFailed();
 
 public slots:
 
-    void slotMinValueChanged( int min );
-    void slotMaxValueChanged( int max );
+    void slotMinValueChanged(int min);
+    void slotMaxValueChanged(int max);
 
 protected slots:
 
-    void slotBlinkTimerDone( void );
+    void slotBlinkTimerDone();
     void slotCalculationStarted(const ImageHistogram *histogram);
     void slotCalculationFinished(const ImageHistogram *histogram, bool success);
 
