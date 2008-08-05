@@ -99,6 +99,11 @@ SetupEditor::SetupEditor(QWidget* parent )
 
     d->hideToolBar = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"), interfaceOptionsGroup);
 
+    d->useRawImportTool = new QCheckBox(i18n("Use Raw Import Tool to handle Raw image"), interfaceOptionsGroup);
+    QWhatsThis::add(d->useRawImportTool, i18n("<p>Set on this option to use Raw Import "
+                                              "tool before to load a Raw image, "
+                                              "to customize indeep the decoding settings."));
+
     // --------------------------------------------------------
 
     QVGroupBox *exposureOptionsGroup = new QVGroupBox(i18n("Exposure Indicators"), parent);
@@ -119,13 +124,8 @@ SetupEditor::SetupEditor(QWidget* parent )
 
     // --------------------------------------------------------
 
-    d->useRawImportTool = new QCheckBox(i18n("Use Raw Import Tool to handle Raw image by default"), parent);
-    QWhatsThis::add(d->useRawImportTool, i18n("<p>Set on this option to use Raw Import tool before to load a Raw image, "
-                                               "to customize indeep the decoding settings."));
-
     layout->addWidget(interfaceOptionsGroup);
     layout->addWidget(exposureOptionsGroup);
-    layout->addWidget(d->useRawImportTool);
     layout->addStretch();
 
     // --------------------------------------------------------
