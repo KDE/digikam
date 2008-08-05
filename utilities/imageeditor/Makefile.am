@@ -1,1 +1,1 @@
-SUBDIRS = canvas tools editor 
+SUBDIRS = canvas tools editor rawimport 
