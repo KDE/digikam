@@ -23,21 +23,16 @@
 #ifndef RAWIMPORTDLG_H
 #define RAWIMPORTDLG_H
 
-// Qt includes.
-
-#include <qstring.h>
-
 // KDE includes.
 
 #include <kdialogbase.h>
+#include <kurl.h>
 
-// Local includes.
+// Local includes
 
-#include <imageinfo.h>
+#include "digikam_export.h"
 
 class QCloseEvent;
-class QCustomEvent;
-class QTimer;
 
 namespace KDcrawIface
 {
@@ -53,13 +48,13 @@ class ActionThread;
 class SaveSettingsWidget;
 class RawImportDlgPriv;
 
-class RawImportDlg : public KDialogBase
+class DIGIKAM_EXPORT RawImportDlg : public KDialogBase
 {
     Q_OBJECT
 
 public:
 
-    RawImportDlg(const ImageInfo& info, QWidget *parent);
+    RawImportDlg(const KURL& info, QWidget *parent);
     ~RawImportDlg();
 
 protected:

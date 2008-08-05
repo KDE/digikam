@@ -22,6 +22,7 @@
 
 // Qt includes.
 
+#include <qstring.h>
 #include <qframe.h>
 #include <qlayout.h>
 #include <qtooltip.h>
@@ -100,22 +101,22 @@ public:
 
     HistogramWidget                  *histogramWidget;
 
-    ImageInfo                         info;
+    KURL                              url;
 
     RawPreview                       *previewWidget;
 
     KDcrawIface::DcrawSettingsWidget *decodingSettingsBox;
 };
 
-RawImportDlg::RawImportDlg(const ImageInfo& info, QWidget *parent)
+RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
             : KDialogBase(parent, 0, false, QString(),
                           Help|Default|User1|User2|User3|Cancel, Cancel, true,
                           i18n("&Preview"), i18n("&Import"), i18n("&Abort"))
 {
     d = new RawImportDlgPriv;
-    d->info = info;
+    d->url = url;
 
-    setCaption(i18n("Raw Import - %1").arg(d->info.name()));
+    setCaption(i18n("Raw Import - %1").arg(d->url.fileName()));
 
     setButtonTip(User1, i18n("<p>Generate a Preview from current settings. "
                              "Uses a simple bilinear interpolation for "
@@ -237,7 +238,7 @@ RawImportDlg::RawImportDlg(const ImageInfo& info, QWidget *parent)
 
     busy(false);
     readSettings();
-    d->previewWidget->setImageInfo(&d->info);
+    d->previewWidget->setUrl(d->url);
     slotUser1();
 }
 

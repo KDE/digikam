@@ -23,6 +23,7 @@
 
 // Qt includes.
 
+#include <qstring.h>
 #include <qpainter.h>
 #include <qcursor.h>
 #include <qstring.h>
@@ -51,12 +52,7 @@
 
 #include "dimg.h"
 #include "ddebug.h"
-#include "albumdb.h"
-#include "albummanager.h"
-#include "albumsettings.h"
-#include "imageinfo.h"
 #include "dmetadata.h"
-#include "metadatahub.h"
 #include "paniconwidget.h"
 #include "managedloadsavethread.h"
 #include "loadingdescription.h"
@@ -77,7 +73,7 @@ public:
         panIconWidget        = 0;
         cornerButton         = 0;
         loadThread           = 0;
-        imageInfo            = 0;
+        url                  = 0;
         currentFitWindowZoom = 0;
     }
 
@@ -91,7 +87,7 @@ public:
 
     DImg                   preview;
 
-    ImageInfo             *imageInfo;
+    KURL                   url;
 
     ManagedLoadSaveThread *loadThread;
 };
@@ -143,14 +139,14 @@ DImg& RawPreview::getImage() const
     return d->preview;
 }
 
-void RawPreview::setImageInfo(ImageInfo* info)
+void RawPreview::setUrl(const KURL& url)
 {
-    d->imageInfo = info;
+    d->url = url;
 }
 
 void RawPreview::setDecodingSettings(const KDcrawIface::RawDecodingSettings& settings)
 {
-    if (d->imageInfo)
+    if (!d->url.isEmpty())
     {
         setCursor(KCursor::waitCursor());
 
@@ -164,7 +160,7 @@ void RawPreview::setDecodingSettings(const KDcrawIface::RawDecodingSettings& set
                     this, SLOT(slotLoadingProgress(const LoadingDescription&, float)));
         }
 
-        d->loadThread->load(LoadingDescription(d->imageInfo->kurl().path(), settings), 
+        d->loadThread->load(LoadingDescription(d->url.path(), settings), 
                             ManagedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
         emit signalLoadingStarted();
     }
@@ -172,12 +168,12 @@ void RawPreview::setDecodingSettings(const KDcrawIface::RawDecodingSettings& set
 
 void RawPreview::cancelLoading()
 {
-    d->loadThread->stopLoading(d->imageInfo->kurl().path());
+    d->loadThread->stopLoading(d->url.path());
 }
 
 void RawPreview::slotLoadingProgress(const LoadingDescription& description, float progress)
 {
-    if (description.filePath != d->imageInfo->kurl().path())
+    if (description.filePath != d->url.path())
         return;
 
     emit signalLoadingProgress(progress);
@@ -185,7 +181,7 @@ void RawPreview::slotLoadingProgress(const LoadingDescription& description, floa
 
 void RawPreview::slotImageLoaded(const LoadingDescription& description, const DImg& image)
 {
-    if (description.filePath != d->imageInfo->kurl().path())
+    if (description.filePath != d->url.path())
         return;
 
     if (image.isNull())
@@ -193,12 +189,11 @@ void RawPreview::slotImageLoaded(const LoadingDescription& description, const DI
         QPixmap pix(visibleWidth(), visibleHeight());
         pix.fill(ThemeEngine::instance()->baseColor());
         QPainter p(&pix);
-        QFileInfo info(d->imageInfo->kurl().path());
         p.setPen(QPen(ThemeEngine::instance()->textRegColor()));
         p.drawText(0, 0, pix.width(), pix.height(),
                    Qt::AlignCenter|Qt::WordBreak, 
                    i18n("Cannot decode RAW image for\n\"%1\"")
-                   .arg(info.fileName()));
+                   .arg(d->url.fileName()));
         p.end();
         // three copies - but the image is small
         setImage(DImg(pix.convertToImage()));
@@ -290,7 +285,7 @@ void RawPreview::resizeEvent(QResizeEvent* e)
 
     QScrollView::resizeEvent(e);
 
-    if (!d->imageInfo)
+    if (!d->url.isEmpty())
         d->cornerButton->hide(); 
 
     updateZoomAndSize(false);
@@ -333,8 +328,8 @@ bool RawPreview::previewIsNull()
 
 void RawPreview::resetPreview()
 {
-    d->preview   = DImg();
-    d->imageInfo = 0;
+    d->preview = DImg();
+    d->url     = KURL();
 
     updateZoomAndSize(false);
 }

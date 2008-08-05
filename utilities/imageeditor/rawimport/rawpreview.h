@@ -26,8 +26,11 @@
 
 // Qt includes.
 
-#include <qstring.h>
 #include <qimage.h>
+
+// KDE includes.
+
+#include <kurl.h>
 
 // Local includes
 
@@ -41,7 +44,6 @@ namespace Digikam
 {
 
 class LoadingDescription;
-class ImageInfo;
 class RawPreviewPriv;
 
 class DIGIKAM_EXPORT RawPreview : public PreviewWidget
@@ -57,7 +59,7 @@ public:
     void setImage(const DImg& image);
     DImg& getImage() const;
 
-    void setImageInfo(ImageInfo *info);
+    void setUrl(const KURL& url);
     void setDecodingSettings(const KDcrawIface::RawDecodingSettings& settings);
 
     void cancelLoading();
