@@ -3,7 +3,7 @@ digiKam 0.9.5-beta1 - Release date: 2008-??-??
 
 NEW FEATURES:
 
-
+Image Editor   : New Raw import tool to handle Raw pictures with customized decoding settings.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
@@ -14,4 +14,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 005 ==> 167343 : Albums view corrupted and unusable.
 006 ==> 146033 : When switching with Page* image jumps.
 007 ==> 127242 : Flashing 'histogram calculation in progress' is a bit annoying.
-008 ==> 
+008 ==> 150457 : more raw controls in color managment pop-up please.
+009 ==> 155074 : Edit Image should allow chance to adjust RAW conversion parameters.
+010 ==> 155076 : RAW Conversion UI Needs to be more generic.
+011 ==> 142975 : Better support for RAW photo handling.
+012 ==> 
