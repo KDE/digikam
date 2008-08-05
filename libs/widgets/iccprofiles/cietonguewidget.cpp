@@ -163,17 +163,16 @@ public:
         Measurement.Patches  = 0;
         Measurement.Allowed  = 0;
         blinkTimer           = 0;
+        pos                  = 0;
 
         profileDataAvailable = true;
         loadingImageMode     = false;
         loadingImageSucess   = false;
-        blinkFlag            = false;
     }
 
     bool             profileDataAvailable;
     bool             loadingImageMode;
     bool             loadingImageSucess;
-    bool             blinkFlag;
 
     double           gridside;
 
@@ -181,6 +180,7 @@ public:
     int              yBias;
     int              pxcols;
     int              pxrows;
+    int              pos;           // Position of animation during loading/calculation.
 
     QPainter         painter;
     QPixmap          pixmap;
@@ -201,7 +201,7 @@ CIETongueWidget::CIETongueWidget(int w, int h, QWidget *parent, cmsHPROFILE hMon
     d = new CIETongueWidgetPriv;
     d->blinkTimer = new QTimer( this );
     setMinimumSize(w, h);
-    cmsErrorAction(LCMS_ERROR_SHOW);    
+    cmsErrorAction(LCMS_ERROR_SHOW);
 
     if (hMonitor)
         d->hMonitorProfile = hMonitor;
@@ -237,7 +237,7 @@ int CIETongueWidget::grids(double val) const
 }
 
 bool CIETongueWidget::setProfileData(const QByteArray &profileData)
-{    
+{
     if (!profileData.isEmpty())
     {
         cmsHPROFILE hProfile = cmsOpenProfileFromMem(profileData.data(),
@@ -263,7 +263,7 @@ bool CIETongueWidget::setProfileData(const QByteArray &profileData)
     }
 
     d->loadingImageMode = false;
-    
+
     d->blinkTimer->stop();
     repaint(false);
     return (d->profileDataAvailable);
@@ -499,7 +499,7 @@ void CIETongueWidget::drawTongueAxis()
         biasedText(xstart - grids(11), d->pxrows + grids(15), s);
 
         s.sprintf("0.%d", 10 - y);
-        biasedLine(0, ystart, grids(3), ystart);    
+        biasedLine(0, ystart, grids(3), ystart);
         biasedText(grids(-25), ystart + grids(5), s);
     }
 }
@@ -584,7 +584,7 @@ void CIETongueWidget::drawPatches()
         if (d->Measurement.Allowed[i])
         {
             LPcmsCIEXYZ XYZ = &p ->XYZ;
-            cmsCIExyY xyY;              
+            cmsCIExyY xyY;
             cmsXYZ2xyY(&xyY, XYZ);
 
             drawSmallElipse(&xyY,  0, 0, 0, 4);
@@ -681,6 +681,7 @@ void CIETongueWidget::drawWhitePoint()
 
 void CIETongueWidget::loadingStarted()
 {
+    d->pos                = 0;
     d->loadingImageMode   = true;
     d->loadingImageSucess = false;
     repaint(false);
@@ -690,6 +691,7 @@ void CIETongueWidget::loadingStarted()
 void CIETongueWidget::loadingFailed()
 {
     d->blinkTimer->stop();
+    d->pos                = 0;
     d->loadingImageMode   = false;
     d->loadingImageSucess = false;
     repaint(false);
@@ -717,15 +719,31 @@ void CIETongueWidget::paintEvent( QPaintEvent * )
 
     if (d->loadingImageMode && !d->loadingImageSucess)
     {
+        // In first, we draw an animation.
+
+        int asize = 24;
+        QPixmap anim(asize, asize);
+        QPainter p2;
+        p2.begin(&anim, this);
+        p2.fillRect(0, 0, asize, asize, palette().disabled().background());
+        p2.translate(asize/2, asize/2);
+
+        d->pos = (d->pos + 10) % 360;
+        p2.setPen(QPen(palette().disabled().foreground()));
+        p2.rotate(d->pos);
+        for ( int i=0 ; i<12 ; i++ )
+        {
+            p2.drawLine(asize/2-5, 0, asize/2-2, 0);
+            p2.rotate(30);
+        }
+
+        // ... and we render busy text.
+
         d->painter.begin(&d->pixmap);
         d->painter.fillRect(0, 0, size().width(), size().height(), palette().disabled().background());
+        d->painter.drawPixmap(width()/2 - asize /2, asize, anim);
         d->painter.setPen(QPen(palette().disabled().foreground(), 1, Qt::SolidLine));
         d->painter.drawRect(0, 0, width(), height());
-
-        if (d->blinkFlag)
-            d->painter.setPen(Qt::green);
-        else 
-            d->painter.setPen(Qt::darkGreen);
 
         d->painter.drawText(0, 0, size().width(), size().height(), Qt::AlignCenter,
                             i18n("Loading image..."));
@@ -792,8 +810,7 @@ void CIETongueWidget::paintEvent( QPaintEvent * )
 
 void CIETongueWidget::slotBlinkTimerDone()
 {
-    repaint(false);     
-    d->blinkFlag = !d->blinkFlag;
+    repaint(false);
     d->blinkTimer->start( 200 );
 }
 
