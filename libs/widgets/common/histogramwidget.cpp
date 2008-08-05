@@ -494,7 +494,7 @@ void HistogramWidget::paintEvent( QPaintEvent * )
        QPixmap anim(asize, asize);
        QPainter p0;
        p0.begin(&anim);
-       p0.fillRect(0, 0, asize, asize, Qt::white);
+       p0.fillRect(0, 0, asize, asize, palette().color(QPalette::Active, QPalette::Background));
        p0.translate(asize/2, asize/2);
 
        d->pos = (d->pos + 10) % 360;
@@ -513,15 +513,16 @@ void HistogramWidget::paintEvent( QPaintEvent * )
        QPainter p1;
        p1.begin(&pm);
        p1.initFrom(this);
-       p1.fillRect(0, 0, width(), height(), Qt::white);
+       p1.fillRect(0, 0, width(), height(), palette().color(QPalette::Active, QPalette::Background));
        p1.drawPixmap(width()/2 - asize /2, asize, anim);
+       p1.setPen(palette().color(QPalette::Active, QPalette::Text));
 
        if (d->clearFlag == HistogramWidgetPriv::HistogramDataLoading)
            p1.drawText(0, 0, width(), height(), Qt::AlignCenter,
                        i18n("Loading image..."));
        else 
            p1.drawText(0, 0, width(), height(), Qt::AlignCenter,
-                  i18n("Histogram calculation..."));
+                       i18n("Histogram calculation..."));
        p1.end();
 
        QPainter p2(this);
@@ -537,10 +538,10 @@ void HistogramWidget::paintEvent( QPaintEvent * )
        QPainter p1;
        p1.begin(&pm);
        p1.initFrom(this);
-       p1.fillRect(0, 0, width(), height(), Qt::white);
-       p1.setPen(Qt::red);
+       p1.fillRect(0, 0, width(), height(), palette().color(QPalette::Active, QPalette::Background));
+       p1.setPen(palette().color(QPalette::Active, QPalette::Text));
        p1.drawText(0, 0, width(), height(), Qt::AlignCenter,
-                  i18n("Histogram\ncalculation\nfailed."));
+                   i18n("Histogram\ncalculation\nfailed."));
        p1.end();
 
        QPainter p2(this);

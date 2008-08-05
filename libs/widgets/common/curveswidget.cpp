@@ -249,11 +249,11 @@ void CurvesWidget::paintEvent( QPaintEvent * )
         QPixmap anim(asize, asize);
         QPainter p2;
         p2.begin(&anim);
-        p2.fillRect(0, 0, asize, asize, Qt::white);
+        p2.fillRect(0, 0, asize, asize, palette().color(QPalette::Disabled, QPalette::Background));
         p2.translate(asize/2, asize/2);
 
         d->pos = (d->pos + 10) % 360;
-        p2.setPen(QPen(colorGroup().text()));
+        p2.setPen(palette().color(QPalette::Disabled, QPalette::Foreground));
         p2.rotate(d->pos);
         for ( int i=0 ; i<12 ; i++ )
         {
@@ -268,9 +268,9 @@ void CurvesWidget::paintEvent( QPaintEvent * )
         QPainter p1;
         p1.begin(&pm);
         p1.initFrom(this);
-        p1.fillRect(0, 0, width(), height(), Qt::white);
+        p1.fillRect(0, 0, width(), height(), palette().color(QPalette::Active, QPalette::Background));
         p1.drawPixmap(width()/2 - asize /2, asize, anim);
-
+        p1.setPen(palette().color(QPalette::Active, QPalette::Text));
         p1.drawText(0, 0, width(), height(), Qt::AlignCenter,
                     i18n("Histogram calculation..."));
         p1.end();
@@ -283,8 +283,8 @@ void CurvesWidget::paintEvent( QPaintEvent * )
         QPainter p1;
         p1.begin(&pm);
         p1.initFrom(this);
-        p1.fillRect(0, 0, width(), height(), Qt::white);
-        p1.setPen(Qt::red);
+        p1.fillRect(0, 0, width(), height(), palette().color(QPalette::Active, QPalette::Background));
+        p1.setPen(palette().color(QPalette::Active, QPalette::Text));
         p1.drawText(0, 0, width(), height(), Qt::AlignCenter,
                     i18n("Histogram\ncalculation\nfailed."));
         p1.end();
@@ -309,23 +309,23 @@ void CurvesWidget::paintEvent( QPaintEvent * )
     switch(m_channelType)
     {
        case CurvesWidget::GreenChannelHistogram:    // Green channel.
-          max = histogram->getMaximum(ImageHistogram::GreenChannel);  
+          max = histogram->getMaximum(ImageHistogram::GreenChannel);
           break;
 
        case CurvesWidget::BlueChannelHistogram:     // Blue channel.
-          max = histogram->getMaximum(ImageHistogram::BlueChannel);    
+          max = histogram->getMaximum(ImageHistogram::BlueChannel);
           break;
 
        case CurvesWidget::RedChannelHistogram:      // Red channel.
-          max = histogram->getMaximum(ImageHistogram::RedChannel); 
+          max = histogram->getMaximum(ImageHistogram::RedChannel);
           break;
 
        case CurvesWidget::AlphaChannelHistogram:    // Alpha channel.
-          max = histogram->getMaximum(ImageHistogram::AlphaChannel);  
+          max = histogram->getMaximum(ImageHistogram::AlphaChannel);
           break;
 
        case CurvesWidget::ValueHistogram:           // Luminosity.
-          max = histogram->getMaximum(ImageHistogram::ValueChannel); 
+          max = histogram->getMaximum(ImageHistogram::ValueChannel);
           break;
     }
 
@@ -457,7 +457,7 @@ void CurvesWidget::paintEvent( QPaintEvent * )
 
          if (curvePoint.x() >= 0)
          {
-             p1.drawEllipse( ((curvePoint.x() * wWidth) / histogram->getHistogramSegment()) - 2, 
+             p1.drawEllipse( ((curvePoint.x() * wWidth) / histogram->getHistogramSegment()) - 2,
                              wHeight - 2 - ((curvePoint.y() * wHeight) / histogram->getHistogramSegment()),
                              4, 4 );
          }
@@ -508,11 +508,11 @@ void CurvesWidget::paintEvent( QPaintEvent * )
                 guidePos = d->colorGuide.blue();
                 break;
 
-            case CurvesWidget::ValueHistogram:    
+            case CurvesWidget::ValueHistogram:
                 guidePos = qMax(qMax(d->colorGuide.red(), d->colorGuide.green()), d->colorGuide.blue());
                 break;
 
-            default:                                     // Alpha.
+            default:                  // Alpha.
                 guidePos = -1;
                 break;
         }
@@ -559,7 +559,7 @@ void CurvesWidget::paintEvent( QPaintEvent * )
     p2.end();
 }
 
-void CurvesWidget::mousePressEvent ( QMouseEvent * e )
+void CurvesWidget::mousePressEvent( QMouseEvent * e )
 {
     if (d->readOnlyMode) return;
 
@@ -648,7 +648,7 @@ void CurvesWidget::mousePressEvent ( QMouseEvent * e )
     repaint();
 }
 
-void CurvesWidget::mouseReleaseEvent ( QMouseEvent * e )
+void CurvesWidget::mouseReleaseEvent( QMouseEvent * e )
 {
     if (d->readOnlyMode) return;
 
@@ -662,7 +662,7 @@ void CurvesWidget::mouseReleaseEvent ( QMouseEvent * e )
     emit signalCurvesChanged();
 }
 
-void CurvesWidget::mouseMoveEvent ( QMouseEvent * e )
+void CurvesWidget::mouseMoveEvent( QMouseEvent * e )
 {
    if (d->readOnlyMode) return;
 
@@ -704,7 +704,7 @@ void CurvesWidget::mouseMoveEvent ( QMouseEvent * e )
          if (d->grabPoint == -1)   // If no point is grabbed...
          {
             if ( d->curves->getCurvePointX(m_channelType, closest_point) != -1 )
-               setCursor( Qt::ArrowCursor );    
+               setCursor( Qt::ArrowCursor );
             else
                setCursor( Qt::CrossCursor );
          }

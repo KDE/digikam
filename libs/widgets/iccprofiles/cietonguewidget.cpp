@@ -779,11 +779,11 @@ void CIETongueWidget::paintEvent(QPaintEvent*)
         QPixmap anim(asize, asize);
         QPainter p2;
         p2.begin(&anim);
-        p2.fillRect(0, 0, asize, asize, palette().color(QPalette::Disabled, QPalette::Background));
+        p2.fillRect(0, 0, asize, asize, palette().color(QPalette::Active, QPalette::Background));
         p2.translate(asize/2, asize/2);
 
         d->pos = (d->pos + 10) % 360;
-        p2.setPen(QPen(palette().color(QPalette::Disabled, QPalette::Foreground)));
+        p2.setPen(QPen(palette().color(QPalette::Active, QPalette::Text)));
 
         p2.rotate(d->pos);
         for ( int i=0 ; i<12 ; i++ )
@@ -795,9 +795,9 @@ void CIETongueWidget::paintEvent(QPaintEvent*)
 
         // ... and we render busy text.
 
-        p.fillRect(0, 0, width(), height(), palette().color(QPalette::Disabled, QPalette::Background));
+        p.fillRect(0, 0, width(), height(), palette().color(QPalette::Active, QPalette::Background));
         p.drawPixmap(width()/2 - asize /2, asize, anim);
-        QPen pen(palette().color(QPalette::Disabled, QPalette::Foreground));
+        QPen pen(palette().color(QPalette::Active, QPalette::Text));
         pen.setStyle(Qt::SolidLine);
         pen.setWidth(1);
 
@@ -813,10 +813,8 @@ void CIETongueWidget::paintEvent(QPaintEvent*)
 
     if (!d->profileDataAvailable || (!d->loadingImageMode && !d->loadingImageSucess))
     {
-        p.fillRect(0, 0, width(), height(),
-                   palette().color(QPalette::Disabled, QPalette::Background));
-
-        QPen pen(palette().color(QPalette::Disabled, QPalette::Foreground));
+        p.fillRect(0, 0, width(), height(), palette().color(QPalette::Active, QPalette::Background));
+        QPen pen(palette().color(QPalette::Active, QPalette::Text));
         pen.setStyle(Qt::SolidLine);
         pen.setWidth(1);
 
