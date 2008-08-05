@@ -84,6 +84,7 @@ WelcomePageView::~WelcomePageView()
 {
     if (m_infoPageCssFile)
         m_infoPageCssFile->remove();
+    delete m_infoPageCssFile;
 }
 
 void WelcomePageView::slotUrlOpen(const KUrl& url)
@@ -225,6 +226,7 @@ void WelcomePageView::slotThemeChanged()
 {
     if (m_infoPageCssFile)
         m_infoPageCssFile->remove();
+    delete m_infoPageCssFile;
 
     m_infoPageCssFile = new KTemporaryFile;
     m_infoPageCssFile->setSuffix(".css");
