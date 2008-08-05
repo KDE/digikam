@@ -79,10 +79,10 @@ public:
         grabPoint    = -1;
         last         = 0;
         guideVisible = false;
-        blinkFlag    = false;
         xMouseOver   = -1;
         yMouseOver   = -1;
         clearFlag    = HistogramNone;
+        pos          = 0;
     }
 
     int          clearFlag;          // Clear drawing zone with message.
@@ -92,9 +92,9 @@ public:
     int          last;
     int          xMouseOver;
     int          yMouseOver;
+    int          pos;                // Position of animation during loading/calculation.
 
     bool         sixteenBits;
-    bool         blinkFlag;
     bool         readOnlyMode;
     bool         guideVisible;
 
@@ -141,21 +141,21 @@ CurvesWidget::~CurvesWidget()
     delete d;
 }
 
-void CurvesWidget::reset(void)
+void CurvesWidget::reset()
 {
     d->grabPoint   = -1;
     d->guideVisible = false;
     repaint(false);
 }
 
-void CurvesWidget::setCurveGuide(DColor color)
+void CurvesWidget::setCurveGuide(const DColor& color)
 {
     d->guideVisible = true;
     d->colorGuide   = color;
     repaint(false);
 }
 
-void CurvesWidget::curveTypeChanged(void)
+void CurvesWidget::curveTypeChanged()
 {
     switch ( d->curves->getCurveType(m_channelType) )
        {
@@ -223,17 +223,17 @@ void CurvesWidget::customEvent(QCustomEvent *event)
     delete ed;
 }
 
-void CurvesWidget::stopHistogramComputation(void)
+void CurvesWidget::stopHistogramComputation()
 {
     if (m_imageHistogram)
        m_imageHistogram->stopCalcHistogramValues();
 
     d->blinkTimer->stop();
+    d->pos = 0;
 }
 
-void CurvesWidget::slotBlinkTimerDone( void )
+void CurvesWidget::slotBlinkTimerDone()
 {
-    d->blinkFlag = !d->blinkFlag;
     repaint(false);
     d->blinkTimer->start( 200 );
 }
@@ -242,18 +242,34 @@ void CurvesWidget::paintEvent( QPaintEvent * )
 {
     if (d->clearFlag == CurvesWidgetPriv::HistogramStarted)
     {
+       // In first, we draw an animation.
+
+       int asize = 24;
+       QPixmap anim(asize, asize);
+       QPainter p2;
+       p2.begin(&anim, this);
+       p2.fillRect(0, 0, asize, asize, Qt::white);
+       p2.translate(asize/2, asize/2);
+
+       d->pos = (d->pos + 10) % 360;
+       p2.setPen(QPen(colorGroup().text()));
+       p2.rotate(d->pos);
+       for ( int i=0 ; i<12 ; i++ )
+       {
+           p2.drawLine(asize/2-5, 0, asize/2-2, 0);
+           p2.rotate(30);
+       }
+
+       // ... and we render busy text.
+
        QPixmap pm(size());
        QPainter p1;
        p1.begin(&pm, this);
-       p1.fillRect(0, 0, size().width(), size().height(), Qt::white);
+       p1.fillRect(0, 0, width(), height(), Qt::white);
+       p1.drawPixmap(width()/2 - asize /2, asize, anim);
 
-       if (d->blinkFlag)
-           p1.setPen(Qt::green);
-       else 
-           p1.setPen(Qt::darkGreen);
-
-       p1.drawText(0, 0, size().width(), size().height(), Qt::AlignCenter,
-                  i18n("Histogram\ncalculation\nin progress..."));
+       p1.drawText(0, 0, width(), height(), Qt::AlignCenter,
+                  i18n("Histogram calculation..."));
        p1.end();
        bitBlt(this, 0, 0, &pm);
        return;
@@ -264,9 +280,9 @@ void CurvesWidget::paintEvent( QPaintEvent * )
        QPixmap pm(size());
        QPainter p1;
        p1.begin(&pm, this);
-       p1.fillRect(0, 0, size().width(), size().height(), Qt::white);
+       p1.fillRect(0, 0, width(), height(), Qt::white);
        p1.setPen(Qt::red);
-       p1.drawText(0, 0, size().width(), size().height(), Qt::AlignCenter,
+       p1.drawText(0, 0, width(), height(), Qt::AlignCenter,
                   i18n("Histogram\ncalculation\nfailed."));
        p1.end();
        bitBlt(this, 0, 0, &pm);

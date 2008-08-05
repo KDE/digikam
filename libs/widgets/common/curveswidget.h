@@ -76,11 +76,11 @@ public:
     ~CurvesWidget();
 
     // Stop current histogram computations.
-    void stopHistogramComputation(void);
+    void stopHistogramComputation();
 
-    void reset(void);
-    void curveTypeChanged(void);
-    void setCurveGuide(DColor color);
+    void reset();
+    void curveTypeChanged();
+    void setCurveGuide(const DColor& color);
 
 public:
 
@@ -92,13 +92,13 @@ public:
 signals:
 
     void signalMouseMoved( int x, int y );
-    void signalCurvesChanged(void);
-    void signalHistogramComputationDone(void);
-    void signalHistogramComputationFailed(void);
+    void signalCurvesChanged();
+    void signalHistogramComputationDone();
+    void signalHistogramComputationFailed();
 
 protected slots:
 
-    void slotBlinkTimerDone( void );
+    void slotBlinkTimerDone();
 
 protected:
 
