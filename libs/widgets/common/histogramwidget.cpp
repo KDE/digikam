@@ -404,11 +404,11 @@ void HistogramWidget::paintEvent(QPaintEvent*)
        QPixmap anim(asize, asize);
        QPainter p2;
        p2.begin(&anim, this);
-       p2.fillRect(0, 0, asize, asize, Qt::white);
+       p2.fillRect(0, 0, asize, asize, palette().active().background());
        p2.translate(asize/2, asize/2);
 
        d->pos = (d->pos + 10) % 360;
-       p2.setPen(QPen(colorGroup().text()));
+       p2.setPen(QPen(palette().active().text()));
        p2.rotate(d->pos);
        for ( int i=0 ; i<12 ; i++ )
        {
@@ -422,10 +422,10 @@ void HistogramWidget::paintEvent(QPaintEvent*)
        QPixmap pm(size());
        QPainter p1;
        p1.begin(&pm, this);
-       p1.fillRect(0, 0, width(), height(), Qt::white);
+       p1.fillRect(0, 0, width(), height(), palette().active().background());
 
        p1.drawPixmap(width()/2 - asize /2, asize, anim);
-       p1.setPen(Qt::darkGray);
+       p1.setPen(QPen(palette().active().text()));
 
        if (d->clearFlag == HistogramWidgetPriv::HistogramDataLoading)
            p1.drawText(0, 0, width(), height(), Qt::AlignCenter,
@@ -445,8 +445,8 @@ void HistogramWidget::paintEvent(QPaintEvent*)
        QPixmap pm(size());
        QPainter p1;
        p1.begin(&pm, this);
-       p1.fillRect(0, 0, width(), height(), Qt::white);
-       p1.setPen(Qt::red);
+       p1.fillRect(0, 0, width(), height(), palette().active().background());
+       p1.setPen(QPen(palette().active().text()));
        p1.drawText(0, 0, width(), height(), Qt::AlignCenter,
                   i18n("Histogram\ncalculation\nfailed."));
        p1.end();
@@ -525,7 +525,7 @@ void HistogramWidget::paintEvent(QPaintEvent*)
 
     for (x = 0 ; x < wWidth ; x++)
     {
-      double value = 0.0; 
+      double value   = 0.0;
       double value_r = 0.0, value_g = 0.0, value_b = 0.0; // For all color channels.
       int    i, j;
 

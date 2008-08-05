@@ -697,7 +697,7 @@ void CIETongueWidget::loadingFailed()
     repaint(false);
 }
 
-void CIETongueWidget::paintEvent( QPaintEvent * )
+void CIETongueWidget::paintEvent(QPaintEvent*)
 {
     d->pixmap = QPixmap(size());
     d->pixmap.setOptimization(QPixmap::BestOptim);
@@ -725,11 +725,11 @@ void CIETongueWidget::paintEvent( QPaintEvent * )
         QPixmap anim(asize, asize);
         QPainter p2;
         p2.begin(&anim, this);
-        p2.fillRect(0, 0, asize, asize, palette().disabled().background());
+        p2.fillRect(0, 0, asize, asize, palette().active().background());
         p2.translate(asize/2, asize/2);
 
         d->pos = (d->pos + 10) % 360;
-        p2.setPen(QPen(palette().disabled().foreground()));
+        p2.setPen(QPen(palette().active().text()));
         p2.rotate(d->pos);
         for ( int i=0 ; i<12 ; i++ )
         {
@@ -741,11 +741,10 @@ void CIETongueWidget::paintEvent( QPaintEvent * )
         // ... and we render busy text.
 
         d->painter.begin(&d->pixmap);
-        d->painter.fillRect(0, 0, size().width(), size().height(), palette().disabled().background());
+        d->painter.fillRect(0, 0, size().width(), size().height(), palette().active().background());
         d->painter.drawPixmap(width()/2 - asize /2, asize, anim);
-        d->painter.setPen(QPen(palette().disabled().foreground(), 1, Qt::SolidLine));
+        d->painter.setPen(QPen(palette().active().text(), 1, Qt::SolidLine));
         d->painter.drawRect(0, 0, width(), height());
-
         d->painter.drawText(0, 0, size().width(), size().height(), Qt::AlignCenter,
                             i18n("Loading image..."));
 
@@ -759,10 +758,9 @@ void CIETongueWidget::paintEvent( QPaintEvent * )
     if (!d->profileDataAvailable || (!d->loadingImageMode && !d->loadingImageSucess))
     {
         d->painter.begin(&d->pixmap);
-        d->painter.fillRect(0, 0, size().width(), size().height(), palette().disabled().background());
-        d->painter.setPen(QPen(palette().disabled().foreground(), 1, Qt::SolidLine));
+        d->painter.fillRect(0, 0, size().width(), size().height(), palette().active().background());
+        d->painter.setPen(QPen(palette().active().text(), 1, Qt::SolidLine));
         d->painter.drawRect(0, 0, width(), height());
-        d->painter.setPen(Qt::red);
         d->painter.drawText(0, 0, size().width(), size().height(), Qt::AlignCenter,
                             i18n("No profile available..."));
 
