@@ -734,13 +734,11 @@ void LightTableWindow::slotItemSelected(const ImageInfo &info)
         {
             if (!curr->prev())
             {
-                d->backwardAction->setEnabled(false);
                 d->firstAction->setEnabled(false);
             }
 
             if (!curr->next())
             {
-                d->forwardAction->setEnabled(false);
                 d->lastAction->setEnabled(false);
             }
 
@@ -1546,15 +1544,27 @@ void LightTableWindow::slotToggleOnSyncPreview(bool t)
 void LightTableWindow::slotBackward()
 {
     ThumbBarItem* curr = d->barView->currentItem();
-    if (curr && curr->prev())
-        d->barView->setSelected(curr->prev());
+    ThumbBarItem* last = d->barView->lastItem();
+    if (curr)
+    {
+        if (curr->prev())
+            d->barView->setSelected(curr->prev());
+        else
+            d->barView->setSelected(last);
+    }
 }
 
 void LightTableWindow::slotForward()
 {
     ThumbBarItem* curr = d->barView->currentItem();
-    if (curr && curr->next())
-        d->barView->setSelected(curr->next());
+    ThumbBarItem* first = d->barView->firstItem();
+    if (curr)
+    {
+        if (curr->next())
+            d->barView->setSelected(curr->next());
+        else
+            d->barView->setSelected(first);
+    }
 }
 
 void LightTableWindow::slotFirst()
