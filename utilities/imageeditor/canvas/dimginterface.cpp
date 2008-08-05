@@ -195,7 +195,7 @@ void DImgInterface::load(const QString& filename, IOFileSettingsContainer *iofil
     d->iofileSettings = iofileSettings;
     d->parent         = parent;
 
-    if (d->iofileSettings->useRAWImport)
+    if (d->iofileSettings->useRAWImport && DImg::fileFormat(d->filename) == DImg::RAW)
     {
         RawImportDlg importDlg(KURL(d->filename), parent);
         if (importDlg.exec() == QDialog::Accepted)
