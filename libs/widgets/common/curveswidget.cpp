@@ -259,6 +259,7 @@ void CurvesWidget::paintEvent( QPaintEvent * )
            p2.drawLine(asize/2-5, 0, asize/2-2, 0);
            p2.rotate(30);
        }
+       p2.end();
 
        // ... and we render busy text.
 
