@@ -70,6 +70,7 @@ public:
         colorBox              = 0;
         sortOrderComboBox     = 0;
         sortReverse           = 0;
+        useRawImportTool      = 0;
     }
 
     QHBox        *colorBox;
@@ -83,6 +84,7 @@ public:
     QCheckBox    *exifRotateBox;
     QCheckBox    *exifSetOrientationBox;
     QCheckBox    *themebackgroundColor;
+    QCheckBox    *useRawImportTool;
 
     QComboBox    *sortOrderComboBox;
 
@@ -107,7 +109,7 @@ SetupEditor::SetupEditor(QWidget* parent )
     QWhatsThis::add( d->themebackgroundColor, i18n("<p>Enable this option to use the background theme "
                                               "color in the image editor area") );
 
-    d->colorBox                  = new QHBox(interfaceOptionsGroup);    
+    d->colorBox                  = new QHBox(interfaceOptionsGroup);
     QLabel *backgroundColorlabel = new QLabel( i18n("&Background color:"), d->colorBox);
     d->backgroundColor           = new KColorButton(d->colorBox);
     backgroundColorlabel->setBuddy(d->backgroundColor);
@@ -121,6 +123,11 @@ SetupEditor::SetupEditor(QWidget* parent )
                                                  "the image area. You need to restart showFoto for this option take effect.<p>"));
     d->useTrash   = new QCheckBox(i18n("&Deleting items should move them to trash"), interfaceOptionsGroup);
     d->showSplash = new QCheckBox(i18n("&Show splash screen at startup"), interfaceOptionsGroup);
+
+    d->useRawImportTool = new QCheckBox(i18n("Use Raw Import Tool to handle Raw image"), interfaceOptionsGroup);
+    QWhatsThis::add(d->useRawImportTool, i18n("<p>Set on this option to use Raw Import "
+                                              "tool before to load a Raw image, "
+                                              "to customize indeep the decoding settings."));
 
     // --------------------------------------------------------
 
@@ -212,6 +219,7 @@ void SetupEditor::readSettings()
     d->overExposureColor->setColor(config->readColorEntry("OverExposureColor", &Black));
     d->sortOrderComboBox->setCurrentItem(config->readNumEntry("SortOrder", 0));
     d->sortReverse->setChecked(config->readBoolEntry("ReverseSort", false));
+    d->useRawImportTool->setChecked(config->readBoolEntry("UseRawImportTool", false));
 }
 
 void SetupEditor::applySettings()
@@ -231,6 +239,7 @@ void SetupEditor::applySettings()
     config->writeEntry("OverExposureColor", d->overExposureColor->color());
     config->writeEntry("SortOrder", d->sortOrderComboBox->currentItem());
     config->writeEntry("ReverseSort", d->sortReverse->isChecked());
+    config->writeEntry("UseRawImportTool", d->useRawImportTool->isChecked());
     config->sync();
 }
 
