@@ -403,10 +403,8 @@ void RawImportDlg::slotLoadingStarted()
     busy(true);
 }
 
-void RawImportDlg::slotLoadingProgress(float progress)
+void RawImportDlg::slotLoadingProgress(float /*progress*/)
 {
-    DDebug() << "Loading progress: " << progress << endl;
-    // TODO: play with Histogram widget to show progress info
 }
 
 void RawImportDlg::slotImageLoaded(const DImg& img)
