@@ -110,24 +110,25 @@ public:
 
 RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
             : KDialogBase(parent, 0, false, QString(),
-                          Help|Default|User1|User2|User3|Cancel, Cancel, true,
-                          i18n("&Preview"), i18n("&Import"), i18n("&Abort"))
+                          Help|Default|User1|User2|Ok|Cancel, Cancel, true,
+                          i18n("&Preview"), i18n("&Abort"))
 {
     d = new RawImportDlgPriv;
     d->url = url;
 
     setCaption(i18n("Raw Import - %1").arg(d->url.fileName()));
 
-    setButtonTip(User1, i18n("<p>Generate a Preview from current settings. "
-                             "Uses a simple bilinear interpolation for "
-                             "quick results."));
+    setButtonTip(User1, i18n("<p>Generate a Raw image preview using current settings."));
+    setButtonTip(User2, i18n("<p>Abort the current Raw image preview"));
 
-    setButtonTip(User2, i18n("<p>Import image to editor using current settings."));
+    setButtonText(Ok, i18n("&Import"));
+    setButtonTip(Ok, i18n("<p>Import image to editor using current settings."));
 
-    setButtonTip(User3, i18n("<p>Abort the current Preview"));
+    setButtonText(Cancel, i18n("&Use Default"));
+    setButtonTip(Cancel, i18n("<p>Use general Raw decoding settings to load this image in editor."));
 
-    setButtonTip(Close, i18n("<p>Exit Raw Import Tool"));
-
+    setButtonText(Default, i18n("&Reset"));
+    setButtonTip(Default, i18n("<p>Reset these settings to default values."));
 
     QWidget *page = new QWidget(this);
     setMainWidget(page);
@@ -270,6 +271,7 @@ void RawImportDlg::readSettings()
     KConfig* config = kapp->config();
     config->setGroup("RAW Import Settings");
 
+    d->decodingSettingsBox->setSixteenBits(config->readBoolEntry("SixteenBitsImage", false));
     d->decodingSettingsBox->setWhiteBalance((KDcrawIface::RawDecodingSettings::WhiteBalance)
                                             config->readNumEntry("White Balance",
                                             KDcrawIface::RawDecodingSettings::CAMERA));
@@ -295,31 +297,32 @@ void RawImportDlg::readSettings()
         (KDcrawIface::RawDecodingSettings::OutputColorSpace)config->readNumEntry("Output Color Space", 
             (int)(KDcrawIface::RawDecodingSettings::SRGB))); 
 
-    resize(configDialogSize(*config, QString("Raw Import Dialog")));
+    resize(configDialogSize(*config, QString("RAW Import Dialog")));
 }
 
 void RawImportDlg::saveSettings()
 {
     KConfig* config = kapp->config();
     config->setGroup("RAW Import Settings");
-    config->writeEntry("White Balance", d->decodingSettingsBox->whiteBalance());
-    config->writeEntry("Custom White Balance", d->decodingSettingsBox->customWhiteBalance());
+    config->writeEntry("SixteenBitsImage",           d->decodingSettingsBox->sixteenBits());
+    config->writeEntry("White Balance",              d->decodingSettingsBox->whiteBalance());
+    config->writeEntry("Custom White Balance",       d->decodingSettingsBox->customWhiteBalance());
     config->writeEntry("Custom White Balance Green", d->decodingSettingsBox->customWhiteBalanceGreen());
-    config->writeEntry("Four Color RGB", d->decodingSettingsBox->useFourColor());
-    config->writeEntry("Unclip Color", d->decodingSettingsBox->unclipColor());
-    config->writeEntry("Dont Stretch Pixels", d->decodingSettingsBox->useDontStretchPixels());
-    config->writeEntry("Use Noise Reduction", d->decodingSettingsBox->useNoiseReduction());
-    config->writeEntry("Brightness Multiplier", d->decodingSettingsBox->brightness());
-    config->writeEntry("Use Black Point", d->decodingSettingsBox->useBlackPoint());
-    config->writeEntry("Black Point", d->decodingSettingsBox->blackPoint());
-    config->writeEntry("NR Threshold", d->decodingSettingsBox->NRThreshold());
-    config->writeEntry("EnableCACorrection", d->decodingSettingsBox->useCACorrection());
-    config->writeEntry("caRedMultiplier", d->decodingSettingsBox->caRedMultiplier());
-    config->writeEntry("caBlueMultiplier", d->decodingSettingsBox->caBlueMultiplier());
-    config->writeEntry("Decoding Quality", (int)d->decodingSettingsBox->quality());
-    config->writeEntry("Output Color Space", (int)d->decodingSettingsBox->outputColorSpace());
+    config->writeEntry("Four Color RGB",             d->decodingSettingsBox->useFourColor());
+    config->writeEntry("Unclip Color",               d->decodingSettingsBox->unclipColor());
+    config->writeEntry("Dont Stretch Pixels",        d->decodingSettingsBox->useDontStretchPixels());
+    config->writeEntry("Use Noise Reduction",        d->decodingSettingsBox->useNoiseReduction());
+    config->writeEntry("Brightness Multiplier",      d->decodingSettingsBox->brightness());
+    config->writeEntry("Use Black Point",            d->decodingSettingsBox->useBlackPoint());
+    config->writeEntry("Black Point",                d->decodingSettingsBox->blackPoint());
+    config->writeEntry("NR Threshold",               d->decodingSettingsBox->NRThreshold());
+    config->writeEntry("EnableCACorrection",         d->decodingSettingsBox->useCACorrection());
+    config->writeEntry("caRedMultiplier",            d->decodingSettingsBox->caRedMultiplier());
+    config->writeEntry("caBlueMultiplier",           d->decodingSettingsBox->caBlueMultiplier());
+    config->writeEntry("Decoding Quality",           (int)d->decodingSettingsBox->quality());
+    config->writeEntry("Output Color Space",         (int)d->decodingSettingsBox->outputColorSpace());
 
-    saveDialogSize(*config, QString("Raw Import Dialog"));
+    saveDialogSize(*config, QString("RAW Import Dialog"));
     config->sync();
 }
 
@@ -328,59 +331,42 @@ void RawImportDlg::slotHelp()
     KApplication::kApplication()->invokeHelp("rawimport", "digikam");
 }
 
+KDcrawIface::RawDecodingSettings RawImportDlg::rawDecodingSettings()
+{
+    KDcrawIface::RawDecodingSettings settings;
+    settings.sixteenBitsImage        = d->decodingSettingsBox->sixteenBits();
+    settings.whiteBalance            = d->decodingSettingsBox->whiteBalance();
+    settings.customWhiteBalance      = d->decodingSettingsBox->customWhiteBalance();
+    settings.customWhiteBalanceGreen = d->decodingSettingsBox->customWhiteBalanceGreen();
+    settings.RGBInterpolate4Colors   = d->decodingSettingsBox->useFourColor();
+    settings.unclipColors            = d->decodingSettingsBox->unclipColor();
+    settings.DontStretchPixels       = d->decodingSettingsBox->useDontStretchPixels();
+    settings.enableNoiseReduction    = d->decodingSettingsBox->useNoiseReduction();
+    settings.brightness              = d->decodingSettingsBox->brightness();
+    settings.enableBlackPoint        = d->decodingSettingsBox->useBlackPoint();
+    settings.blackPoint              = d->decodingSettingsBox->blackPoint();
+    settings.NRThreshold             = d->decodingSettingsBox->NRThreshold();
+    settings.enableCACorrection      = d->decodingSettingsBox->useCACorrection();
+    settings.caMultiplier[0]         = d->decodingSettingsBox->caRedMultiplier();
+    settings.caMultiplier[1]         = d->decodingSettingsBox->caBlueMultiplier();
+    settings.RAWQuality              = d->decodingSettingsBox->quality();
+    settings.outputColorSpace        = d->decodingSettingsBox->outputColorSpace();
+    return settings;
+}
+
 // 'Preview' dialog button.
 void RawImportDlg::slotUser1()
 {
-    KDcrawIface::RawDecodingSettings rawDecodingSettings;
-    rawDecodingSettings.whiteBalance            = d->decodingSettingsBox->whiteBalance();
-    rawDecodingSettings.customWhiteBalance      = d->decodingSettingsBox->customWhiteBalance();
-    rawDecodingSettings.customWhiteBalanceGreen = d->decodingSettingsBox->customWhiteBalanceGreen();
-    rawDecodingSettings.RGBInterpolate4Colors   = d->decodingSettingsBox->useFourColor();
-    rawDecodingSettings.unclipColors            = d->decodingSettingsBox->unclipColor();
-    rawDecodingSettings.DontStretchPixels       = d->decodingSettingsBox->useDontStretchPixels();
-    rawDecodingSettings.enableNoiseReduction    = d->decodingSettingsBox->useNoiseReduction();
-    rawDecodingSettings.brightness              = d->decodingSettingsBox->brightness();
-    rawDecodingSettings.enableBlackPoint        = d->decodingSettingsBox->useBlackPoint();
-    rawDecodingSettings.blackPoint              = d->decodingSettingsBox->blackPoint();
-    rawDecodingSettings.NRThreshold             = d->decodingSettingsBox->NRThreshold();
-    rawDecodingSettings.enableCACorrection      = d->decodingSettingsBox->useCACorrection();
-    rawDecodingSettings.caMultiplier[0]         = d->decodingSettingsBox->caRedMultiplier();
-    rawDecodingSettings.caMultiplier[1]         = d->decodingSettingsBox->caBlueMultiplier();
-    rawDecodingSettings.RAWQuality              = d->decodingSettingsBox->quality();
-    rawDecodingSettings.outputColorSpace        = d->decodingSettingsBox->outputColorSpace();
+    KDcrawIface::RawDecodingSettings settings = rawDecodingSettings();
 
     // We will load an half size image to speed up preview computing.
-    rawDecodingSettings.halfSizeColorImage      = true;
+    settings.halfSizeColorImage = true;
 
-    d->previewWidget->setDecodingSettings(rawDecodingSettings);
-}
-
-// 'Load' dialog button.
-void RawImportDlg::slotUser2()
-{
-    KDcrawIface::RawDecodingSettings rawDecodingSettings;
-    rawDecodingSettings.whiteBalance            = d->decodingSettingsBox->whiteBalance();
-    rawDecodingSettings.customWhiteBalance      = d->decodingSettingsBox->customWhiteBalance();
-    rawDecodingSettings.customWhiteBalanceGreen = d->decodingSettingsBox->customWhiteBalanceGreen();
-    rawDecodingSettings.RGBInterpolate4Colors   = d->decodingSettingsBox->useFourColor();
-    rawDecodingSettings.unclipColors            = d->decodingSettingsBox->unclipColor();
-    rawDecodingSettings.DontStretchPixels       = d->decodingSettingsBox->useDontStretchPixels();
-    rawDecodingSettings.enableNoiseReduction    = d->decodingSettingsBox->useNoiseReduction();
-    rawDecodingSettings.brightness              = d->decodingSettingsBox->brightness();
-    rawDecodingSettings.enableBlackPoint        = d->decodingSettingsBox->useBlackPoint();
-    rawDecodingSettings.blackPoint              = d->decodingSettingsBox->blackPoint();
-    rawDecodingSettings.NRThreshold             = d->decodingSettingsBox->NRThreshold();
-    rawDecodingSettings.enableCACorrection      = d->decodingSettingsBox->useCACorrection();
-    rawDecodingSettings.caMultiplier[0]         = d->decodingSettingsBox->caRedMultiplier();
-    rawDecodingSettings.caMultiplier[1]         = d->decodingSettingsBox->caBlueMultiplier();
-    rawDecodingSettings.RAWQuality              = d->decodingSettingsBox->quality();
-    rawDecodingSettings.outputColorSpace        = d->decodingSettingsBox->outputColorSpace();
-
-    // TODO : Load in image editor with these settings.
+    d->previewWidget->setDecodingSettings(settings);
 }
 
 // 'Abort' dialog button.
-void RawImportDlg::slotUser3()
+void RawImportDlg::slotUser2()
 {
     d->previewWidget->cancelLoading();
     d->histogramWidget->stopHistogramComputation();

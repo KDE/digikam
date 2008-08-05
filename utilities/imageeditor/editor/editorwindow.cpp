@@ -934,6 +934,8 @@ void EditorWindow::applyStandardSettings()
     m_IOFileSettings->rawDecodingSettings.caMultiplier[1]         = config->readDoubleNumEntry("caBlueMultiplier", 1.0);
     m_IOFileSettings->rawDecodingSettings.brightness              = config->readDoubleNumEntry("RAWBrightness", 1.0);
 
+    m_IOFileSettings->useRAWImport                                = config->readBoolEntry("UseRawImportTool", false);
+
     // -- GUI Settings -------------------------------------------------------
 
     QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);

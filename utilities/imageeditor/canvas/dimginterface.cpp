@@ -60,6 +60,7 @@
 #include "icctransform.h"
 #include "exposurecontainer.h"
 #include "iofilesettingscontainer.h"
+#include "rawimportdlg.h"
 #include "sharedloadsavethread.h"
 #include "dmetadata.h"
 #include "dimginterface.h"
@@ -194,9 +195,21 @@ void DImgInterface::load(const QString& filename, IOFileSettingsContainer *iofil
     d->iofileSettings = iofileSettings;
     d->parent         = parent;
 
-    d->thread->load( LoadingDescription(d->filename, iofileSettings->rawDecodingSettings),
-                     SharedLoadSaveThread::AccessModeReadWrite,
-                     SharedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
+    if (d->iofileSettings->useRAWImport)
+    {
+        RawImportDlg importDlg(KURL(d->filename), parent);
+        if (importDlg.exec() == QDialog::Accepted)
+        {
+            d->thread->load(LoadingDescription(d->filename, importDlg.rawDecodingSettings()),
+                            SharedLoadSaveThread::AccessModeReadWrite,
+                            SharedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
+            return;
+        }
+    }
+
+    d->thread->load(LoadingDescription(d->filename, iofileSettings->rawDecodingSettings),
+                    SharedLoadSaveThread::AccessModeReadWrite,
+                    SharedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
 }
 
 void DImgInterface::resetImage()

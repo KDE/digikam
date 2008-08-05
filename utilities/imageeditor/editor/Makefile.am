@@ -6,7 +6,8 @@ libdimgeditor_la_SOURCES = editorwindow.cpp imageiface.cpp imagewindow.cpp
 
 libdimgeditor_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LIB_KDEPRINT) 
 
-libdimgeditor_la_LIBADD = $(top_builddir)/digikam/utilities/imageeditor/tools/libdimgeditortools.la 
+libdimgeditor_la_LIBADD = $(top_builddir)/digikam/utilities/imageeditor/tools/libdimgeditortools.la \
+	                      $(top_builddir)/digikam/utilities/imageeditor/rawimport/librawimport.la 
 
 libshowfoto_la_SOURCES = editorwindow.cpp imageiface.cpp 
 
@@ -17,7 +18,8 @@ libshowfoto_la_LIBADD = $(top_builddir)/digikam/libs/dimg/libdimg.la \
 	                $(top_builddir)/digikam/libs/widgets/libwidgets.la \
 	                $(top_builddir)/digikam/libs/greycstoration/libgreycstoration.la \
 	                $(top_builddir)/digikam/utilities/imageeditor/canvas/libdimgcanvas.la \
-	                $(top_builddir)/digikam/utilities/imageeditor/tools/libdimgeditortools.la 
+	                $(top_builddir)/digikam/utilities/imageeditor/tools/libdimgeditortools.la \
+	                $(top_builddir)/digikam/utilities/imageeditor/rawimport/librawimport.la 
 
 INCLUDES = -I$(top_srcdir)/digikam/digikam \
 	   -I$(top_srcdir)/digikam/libs/widgets/common \

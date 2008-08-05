@@ -57,6 +57,8 @@ public:
     RawImportDlg(const KURL& info, QWidget *parent);
     ~RawImportDlg();
 
+    KDcrawIface::RawDecodingSettings rawDecodingSettings();
+
 protected:
 
     void closeEvent(QCloseEvent *e);
@@ -80,7 +82,6 @@ private slots:
     void slotHelp();
     void slotUser1();
     void slotUser2();
-    void slotUser3();
 
     void slotChannelChanged(int channel);
     void slotScaleChanged(int scale);
