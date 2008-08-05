@@ -5,7 +5,7 @@
  *
  * Date        : 2002-16-10
  * Description : main digiKam interface implementation
- * 
+ *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu> 
  * Copyright (C)      2006 by Tom Albers <tomalbers@kde.nl>
  * Copyright (C) 2002-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -15,12 +15,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -1111,7 +1111,7 @@ void DigikamApp::slotAboutToShowForwardMenu()
     d->forwardActionMenu->popupMenu()->clear();
     QStringList titles;
     d->view->getForwardHistory(titles);
-    
+
     if(!titles.isEmpty())
     {
         int id = 1;
@@ -1126,7 +1126,7 @@ void DigikamApp::slotAboutToShowForwardMenu()
 void DigikamApp::slotAlbumSelected(bool val)
 {
     Album *album = d->albumManager->currentAlbum();
-    
+
     if(album && !val)
     {
         // No PAlbum is selected
@@ -1147,7 +1147,7 @@ void DigikamApp::slotAlbumSelected(bool val)
         d->openInKonquiAction->setEnabled(false);
         d->newAction->setEnabled(false);
         d->albumImportAction->setEnabled(false);
-        
+
         KAction *action;
         for (action = d->kipiFileActionsImport.first(); action;
              action = d->kipiFileActionsImport.next())
@@ -1170,7 +1170,7 @@ void DigikamApp::slotAlbumSelected(bool val)
         d->openInKonquiAction->setEnabled(true);
         d->newAction->setEnabled(true);
         d->albumImportAction->setEnabled(true);
-        
+
         KAction *action;
         for (action = d->kipiFileActionsImport.first(); action; 
              action = d->kipiFileActionsImport.next())
@@ -1181,8 +1181,8 @@ void DigikamApp::slotAlbumSelected(bool val)
         for (action = d->kipiFileActionsExport.first(); action; 
              action = d->kipiFileActionsExport.next())
         {
-            action->setEnabled(true);    
-        }        
+            action->setEnabled(true);
+        }
     }
     else if(album && album->isRoot() && album->type() == Album::PHYSICAL)
     {
@@ -1190,7 +1190,6 @@ void DigikamApp::slotAlbumSelected(bool val)
         d->deleteAction->setEnabled(false);
         d->addImagesAction->setEnabled(false);
         d->propsEditAction->setEnabled(false);
-       
 
         if(album->type() == Album::PHYSICAL)
         {
@@ -1202,9 +1201,9 @@ void DigikamApp::slotAlbumSelected(bool val)
         {
             d->newAction->setEnabled(false);
             d->openInKonquiAction->setEnabled(false);
-            d->albumImportAction->setEnabled(false);            
+            d->albumImportAction->setEnabled(false);
         }
-        
+
         KAction *action;
         for (action = d->kipiFileActionsImport.first(); action; 
              action = d->kipiFileActionsImport.next())
@@ -1224,7 +1223,7 @@ void DigikamApp::slotTagSelected(bool val)
 {
     Album *album = d->albumManager->currentAlbum();
     if (!album) return;
-    
+
     if(!val)
     {
         d->deleteTagAction->setEnabled(false);
@@ -1234,7 +1233,7 @@ void DigikamApp::slotTagSelected(bool val)
     {
         d->deleteTagAction->setEnabled(true);
         d->editTagAction->setEnabled(true);
-        
+
         KAction *action;
         for (action = d->kipiFileActionsImport.first(); action;
              action = d->kipiFileActionsImport.next())
@@ -1252,7 +1251,7 @@ void DigikamApp::slotTagSelected(bool val)
     {
         d->deleteTagAction->setEnabled(false);
         d->editTagAction->setEnabled(false);
-        
+
         KAction *action;
         for (action = d->kipiFileActionsImport.first(); action; 
              action = d->kipiFileActionsImport.next())
@@ -1303,7 +1302,7 @@ void DigikamApp::slotImageSelected(const QPtrList<ImageInfo>& list, bool hasPrev
                     break;
 
                 index++;
-            }    
+            }
 
             text = selection.first()->kurl().fileName()  
                                    + i18n(" (%1 of %2)")
@@ -1334,7 +1333,8 @@ void DigikamApp::slotProgressValue(int count)
 
 void DigikamApp::slotExit()
 {
-    if (d->fullScreen) {
+    if (d->fullScreen) 
+    {
         slotToggleFullScreen();
         QTimer::singleShot(0, this, SLOT(close()));
     }
@@ -1376,7 +1376,9 @@ QString DigikamApp::convertToLocalUrl( const QString& folder )
                 return slreply[9];
             else
                 return slreply[6];
-        } else {
+        }
+        else 
+        {
             DWarning() << "dcop call failed\n";
         }
 
@@ -1535,14 +1537,14 @@ void DigikamApp::slotCameraAdded(CameraType *ctype)
 void DigikamApp::slotCameraMediaMenu()
 {
     d->mediaItems.clear();
-    
+
     d->cameraMediaList->clear();
     d->cameraMediaList->insertItem(i18n("No media devices found"), 0);
     d->cameraMediaList->setItemEnabled(0, false);
-        
+
     KURL kurl("media:/");
     KIO::ListJob *job = KIO::listDir(kurl, false, false);
-    
+
     connect( job, SIGNAL(entries(KIO::Job*,const KIO::UDSEntryList&)),
              this, SLOT(slotCameraMediaMenuEntries(KIO::Job*,const KIO::UDSEntryList&)) );
 }
@@ -1601,7 +1603,7 @@ void DigikamApp::slotCameraAutoDetect()
     bool retry = false;
 
     CameraType* ctype = d->cameraList->autoDetect(retry);
-    
+
     if (!ctype && retry)
     {
         QTimer::singleShot(0, this, SLOT(slotCameraAutoDetect()));
@@ -1671,7 +1673,7 @@ void DigikamApp::slotSetupChanged()
 
     d->view->applySettings();
     d->albumIconViewFilter->readSettings();
-    
+
     AlbumThumbnailLoader::instance()->setThumbnailSize(d->albumSettings->getDefaultTreeIconSize());
 
     if (ImageWindow::imagewindowCreated())
@@ -1718,7 +1720,7 @@ void DigikamApp::slotConfToolbars()
         plugActionList( QString::fromLatin1("album_actions"), d->kipiAlbumActions );
         plugActionList( QString::fromLatin1("file_actions_export"), d->kipiFileActionsExport );
     }
-    
+
     delete dlg;
 }
 
@@ -1961,7 +1963,7 @@ void DigikamApp::slotRebuildAllThumbs()
         return;
 
     BatchThumbsGenerator *thumbsGenerator = new BatchThumbsGenerator(this);
-    
+
     connect(thumbsGenerator, SIGNAL(signalRebuildAllThumbsDone()),
             this, SLOT(slotRebuildAllThumbsDone()));
 
@@ -2039,13 +2041,13 @@ void DigikamApp::slotTogglePreview(bool t)
     d->imagePreviewAction->setChecked(t);
 
     // Here, we will toggle some menu actions depending of current Mode.
-    
+
     // Select menu.
     d->selectAllAction->setEnabled(!t);
     d->selectNoneAction->setEnabled(!t);
     d->selectInvertAction->setEnabled(!t);
 
-    // View menu     
+    // View menu
     d->albumSortAction->setEnabled(!t);
     d->imageSortAction->setEnabled(!t);
     d->zoomTo100percents->setEnabled(t);
