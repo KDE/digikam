@@ -136,7 +136,7 @@ EditorWindow::EditorWindow(const char *name)
     m_rotatedOrFlipped       = false;
     m_setExifOrientationTag  = true;
     m_cancelSlideShow        = false;
-    
+
     // Settings containers instance.
 
     d->ICCSettings      = new ICCSettingsContainer();
@@ -540,7 +540,7 @@ void EditorWindow::setupStandardAccelerators()
                     i18n("Zoom in on Image"),
                     Key_Plus, this, SLOT(slotIncreaseZoom()),
                     false, true);
-    
+
     d->accelerators->insert("Zoom Plus Key_Minus", i18n("Zoom Out"),
                     i18n("Zoom out of Image"),
                     Key_Minus, this, SLOT(slotDecreaseZoom()),
@@ -681,7 +681,7 @@ void EditorWindow::slotAboutToShowRedoMenu()
     if(!titles.isEmpty())
     {
         int id = 1;
-        QStringList::Iterator iter = titles.begin();        
+        QStringList::Iterator iter = titles.begin();
         for(; iter != titles.end(); ++iter,++id)
         {
             m_redoAction->popupMenu()->insertItem(*iter, id);
@@ -935,13 +935,13 @@ void EditorWindow::applyStandardSettings()
     m_IOFileSettings->rawDecodingSettings.brightness              = config->readDoubleNumEntry("RAWBrightness", 1.0);
 
     // -- GUI Settings -------------------------------------------------------
-    
+
     QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
     if(config->hasKey("Splitter Sizes"))
         m_splitter->setSizes(config->readIntListEntry("Splitter Sizes"));
     else 
         m_canvas->setSizePolicy(rightSzPolicy);
-    
+
     d->fullScreenHideToolBar = config->readBoolEntry("FullScreen Hide ToolBar", false);
 
     slotThemeChanged();
@@ -968,7 +968,7 @@ void EditorWindow::saveStandardSettings()
 {
     KConfig* config = kapp->config();
     config->setGroup("ImageViewer Settings");
-    
+
     config->writeEntry("AutoZoom", d->zoomFitToWindowAction->isChecked());
     config->writeEntry("Splitter Sizes", m_splitter->sizes());
 
@@ -1011,7 +1011,7 @@ void EditorWindow::toggleStandardActions(bool val)
     }
 
     QPtrList<ImagePlugin> pluginList = m_imagePluginLoader->pluginList();
-    
+
     for (ImagePlugin* plugin = pluginList.first();
          plugin; plugin = pluginList.next())
     {
@@ -1039,16 +1039,16 @@ void EditorWindow::slotToggleFullScreen()
         rightDock()->show();
         topDock()->show();
         bottomDock()->show();
-        
+
         QObject* obj = child("ToolBar","KToolBar");
-        
+
         if (obj)
         {
             KToolBar* toolBar = static_cast<KToolBar*>(obj);
-            
+
             if (m_fullScreenAction->isPlugged(toolBar) && d->removeFullScreenButton)
                 m_fullScreenAction->unplug(toolBar);
-                
+
             if (toolBar->isHidden())
                 showToolBars();
         }
@@ -1077,7 +1077,7 @@ void EditorWindow::slotToggleFullScreen()
     else  // go to fullscreen
     {
         m_canvas->setBackgroundColor(QColor(Qt::black));
-        
+
         // hide the menubar and the statusbar
         menuBar()->hide();
         statusBar()->hide();
@@ -1085,13 +1085,13 @@ void EditorWindow::slotToggleFullScreen()
         leftDock()->hide();
         rightDock()->hide();
         bottomDock()->hide();
-        
+
         QObject* obj = child("ToolBar","KToolBar");
-        
+
         if (obj)
         {
             KToolBar* toolBar = static_cast<KToolBar*>(obj);
-            
+
             if (d->fullScreenHideToolBar)
             {
                 hideToolBars();
@@ -1285,8 +1285,8 @@ void EditorWindow::hideToolBars()
 
     for(;it.current()!=0L; ++it)
     {
-        bar=it.current();
-        
+        bar = it.current();
+
         if (bar->area()) 
             bar->area()->hide();
         else 
@@ -1301,8 +1301,8 @@ void EditorWindow::showToolBars()
 
     for( ; it.current()!=0L ; ++it)
     {
-        bar=it.current();
-        
+        bar = it.current();
+
         if (bar->area())
             bar->area()->show();
         else
@@ -1366,7 +1366,7 @@ void EditorWindow::slotSave()
 void EditorWindow::slotSavingStarted(const QString& /*filename*/)
 {
     setCursor( KCursor::waitCursor() );
-    
+
     // Disable actions as appropriate during saving
     emit signalNoCurrentItem();
     toggleActions(false);
@@ -1413,7 +1413,7 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
         finishSaving(true);
 
         saveIsComplete();
-        
+
         // Take all actions necessary to update information and re-enable sidebar
         slotChanged();
     }
@@ -1568,7 +1568,7 @@ bool EditorWindow::startingSaveAs(const KURL& url)
 
         QFileInfo fi(newURL.path());
         m_savingContext->format = fi.extension(false);
-        
+
         if ( m_savingContext->format.isEmpty() )
         {
             // If format is empty then file format is same as that of the original file.
@@ -1601,7 +1601,7 @@ bool EditorWindow::startingSaveAs(const KURL& url)
             }
         }
     }
-    
+
     if (!newURL.isValid())
     {
         KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to\n\"%2\".")
@@ -1615,7 +1615,7 @@ bool EditorWindow::startingSaveAs(const KURL& url)
     config->sync();
 
     // if new and original url are equal use slotSave() ------------------------------
-    
+
     KURL currURL(m_savingContext->srcURL);
     currURL.cleanPath();
     newURL.cleanPath();
@@ -1627,7 +1627,7 @@ bool EditorWindow::startingSaveAs(const KURL& url)
     }
 
     // Check for overwrite ----------------------------------------------------------
-    
+
     QFileInfo fi(newURL.path());
     m_savingContext->destinationExisted = fi.exists();
     if ( m_savingContext->destinationExisted )
@@ -1707,7 +1707,7 @@ bool EditorWindow::moveFile()
 
     // For new files respect the umask setting.
     mode_t filePermissions = (S_IREAD | S_IWRITE | S_IROTH | S_IWOTH | S_IRGRP | S_IWGRP) & ~curr_umask;
-    
+
     // For existing files, use the mode of the original file.
     if (m_savingContext->destinationExisted)
     {
@@ -1745,7 +1745,7 @@ void EditorWindow::slotToggleColorManagedView()
         cmv = !d->ICCSettings->managedViewSetting;
         d->ICCSettings->managedViewSetting = cmv;
         m_canvas->setICCSettings(d->ICCSettings);
-    
+
         // Save Color Managed View setting in config file. For performance 
         // reason, no need to flush file, it cached in memory and will be flushed 
         // to disk at end of session.  
@@ -1759,7 +1759,7 @@ void EditorWindow::slotToggleColorManagedView()
     setColorManagedViewIndicatorToolTip(d->ICCSettings->enableCMSetting, cmv);
     d->cmViewIndicator->blockSignals(false);
     d->viewCMViewAction->blockSignals(false);
-}    
+}
 
 void EditorWindow::setColorManagedViewIndicatorToolTip(bool available, bool cmv)
 {
@@ -1791,7 +1791,7 @@ void EditorWindow::slotToggleUnderExposureIndicator()
     setUnderExposureToolTip(uei);
     d->underExposureIndicator->blockSignals(false);
     d->viewUnderExpoAction->blockSignals(false);
-}    
+}
 
 void EditorWindow::setUnderExposureToolTip(bool uei)
 {
