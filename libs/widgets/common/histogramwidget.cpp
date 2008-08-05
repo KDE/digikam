@@ -97,7 +97,7 @@ public:
     bool    statisticsVisible;  // Display tooltip histogram statistics.
     bool    inSelected;
     bool    selectMode;         // If true, a part of the histogram can be selected !
-    bool    blinkComputation;   // If true, a message will be displayed during histogram computation,
+    bool    showProgress;       // If true, a message will be displayed during histogram computation,
                                 // else nothing (limit flicker effect in widget especially for small
                                 // image/computation time).
     bool    inInitialRepaintWait;
@@ -111,11 +111,11 @@ public:
 
 HistogramWidget::HistogramWidget(int w, int h, 
                                  QWidget *parent, bool selectMode,
-                                 bool blinkComputation, bool statisticsVisible)
+                                 bool showProgress, bool statisticsVisible)
                : QWidget(parent, 0, Qt::WDestructiveClose)
 {
     d = new HistogramWidgetPriv;
-    setup(w, h, selectMode, blinkComputation, statisticsVisible);
+    setup(w, h, selectMode, showProgress, statisticsVisible);
 
     m_imageHistogram     = 0L;
     m_selectionHistogram = 0L;
@@ -127,12 +127,12 @@ HistogramWidget::HistogramWidget(int w, int h,
                                  uchar *i_data, uint i_w, uint i_h,
                                  bool i_sixteenBits,
                                  QWidget *parent, bool selectMode,
-                                 bool blinkComputation, bool statisticsVisible)
+                                 bool showProgress, bool statisticsVisible)
                : QWidget(parent, 0, Qt::WDestructiveClose)
 {
     d = new HistogramWidgetPriv;
     d->sixteenBits = i_sixteenBits;
-    setup(w, h, selectMode, blinkComputation, statisticsVisible);
+    setup(w, h, selectMode, showProgress, statisticsVisible);
 
     m_imageHistogram     = new ImageHistogram(i_data, i_w, i_h, i_sixteenBits, this);
     m_selectionHistogram = 0L;
@@ -145,12 +145,12 @@ HistogramWidget::HistogramWidget(int w, int h,
                                  uchar *s_data, uint s_w, uint s_h,
                                  bool i_sixteenBits,
                                  QWidget *parent, bool selectMode,
-                                 bool blinkComputation, bool statisticsVisible)
+                                 bool showProgress, bool statisticsVisible)
                : QWidget(parent, 0, Qt::WDestructiveClose)
 {
     d = new HistogramWidgetPriv;
     d->sixteenBits = i_sixteenBits;
-    setup(w, h, selectMode, blinkComputation, statisticsVisible);
+    setup(w, h, selectMode, showProgress, statisticsVisible);
 
     m_imageHistogram     = new ImageHistogram(i_data, i_w, i_h, i_sixteenBits, this);
     m_selectionHistogram = new ImageHistogram(s_data, s_w, s_h, i_sixteenBits, this);
@@ -169,7 +169,7 @@ HistogramWidget::~HistogramWidget()
     delete d;
 }
 
-void HistogramWidget::setup(int w, int h, bool selectMode, bool blinkComputation, bool statisticsVisible)
+void HistogramWidget::setup(int w, int h, bool selectMode, bool showProgress, bool statisticsVisible)
 {
     m_channelType        = ValueHistogram;
     m_scaleType          = LogScaleHistogram;
@@ -177,7 +177,7 @@ void HistogramWidget::setup(int w, int h, bool selectMode, bool blinkComputation
     m_renderingType      = FullImageHistogram;
     d->statisticsVisible = statisticsVisible;
     d->selectMode        = selectMode;
-    d->blinkComputation  = blinkComputation;
+    d->showProgress      = showProgress;
 
     setMouseTracking(true);
     setMinimumSize(w, h);
@@ -319,10 +319,10 @@ void HistogramWidget::stopHistogramComputation()
 void HistogramWidget::updateData(uchar *i_data, uint i_w, uint i_h,
                                  bool i_sixteenBits,
                                  uchar *s_data, uint s_w, uint s_h,
-                                 bool blinkComputation)
+                                 bool showProgress)
 {
-    d->blinkComputation = blinkComputation;
-    d->sixteenBits      = i_sixteenBits;
+    d->showProgress = showProgress;
+    d->sixteenBits  = i_sixteenBits;
 
     // We are deleting the histogram data, so we must not use it to draw any more.
     d->clearFlag = HistogramWidgetPriv::HistogramNone;
@@ -351,9 +351,9 @@ void HistogramWidget::updateData(uchar *i_data, uint i_w, uint i_h,
 
 void HistogramWidget::updateSelectionData(uchar *s_data, uint s_w, uint s_h,
                                           bool i_sixteenBits,
-                                          bool blinkComputation)
+                                          bool showProgress)
 {
-    d->blinkComputation = blinkComputation;
+    d->showProgress = showProgress;
 
     // Remove old histogram data from memory.
 
@@ -376,10 +376,10 @@ void HistogramWidget::paintEvent(QPaintEvent*)
     // Widget is disabled, not initialized, 
     // or loading, but no message shall be drawn:
     // Drawing grayed frame.
-    if (  !isEnabled() ||
-           d->clearFlag == HistogramWidgetPriv::HistogramNone ||
-         (!d->blinkComputation && (d->clearFlag == HistogramWidgetPriv::HistogramStarted ||
-                                   d->clearFlag == HistogramWidgetPriv::HistogramDataLoading))
+    if ( !isEnabled() ||
+         d->clearFlag == HistogramWidgetPriv::HistogramNone ||
+         (!d->showProgress && (d->clearFlag == HistogramWidgetPriv::HistogramStarted ||
+                               d->clearFlag == HistogramWidgetPriv::HistogramDataLoading))
        )
     {
        QPixmap pm(size());
@@ -394,7 +394,7 @@ void HistogramWidget::paintEvent(QPaintEvent*)
     }
     // Image data is loading or histogram is being computed:
     // Draw message.
-    else if (  d->blinkComputation &&
+    else if ( d->showProgress &&
               (d->clearFlag == HistogramWidgetPriv::HistogramStarted ||
                d->clearFlag == HistogramWidgetPriv::HistogramDataLoading)
             )
@@ -422,7 +422,7 @@ void HistogramWidget::paintEvent(QPaintEvent*)
        QPixmap pm(size());
        QPainter p1;
        p1.begin(&pm, this);
-       p1.fillRect(0, 0, size().width(), size().height(), Qt::white);
+       p1.fillRect(0, 0, width(), height(), Qt::white);
 
        p1.drawPixmap(width()/2 - asize /2, asize, anim);
        p1.setPen(Qt::darkGray);
@@ -445,9 +445,9 @@ void HistogramWidget::paintEvent(QPaintEvent*)
        QPixmap pm(size());
        QPainter p1;
        p1.begin(&pm, this);
-       p1.fillRect(0, 0, size().width(), size().height(), Qt::white);
+       p1.fillRect(0, 0, width(), height(), Qt::white);
        p1.setPen(Qt::red);
-       p1.drawText(0, 0, size().width(), size().height(), Qt::AlignCenter,
+       p1.drawText(0, 0, width(), height(), Qt::AlignCenter,
                   i18n("Histogram\ncalculation\nfailed."));
        p1.end();
        bitBlt(this, 0, 0, &pm);

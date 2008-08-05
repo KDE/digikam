@@ -81,7 +81,7 @@ public:
     /** Constructor without image data. Needed to use updateData() method after to create instance.*/
     HistogramWidget(int w, int h,                              // Widget size.
                     QWidget *parent=0, bool selectMode=true,
-                    bool blinkComputation=true,
+                    bool showProgress=true,
                     bool statisticsVisible=false);
 
     /** Constructor with image data and without image selection data.*/
@@ -89,7 +89,7 @@ public:
                     uchar *i_data, uint i_w, uint i_h,         // Full image info.
                     bool i_sixteenBits,                        // 8 or 16 bits image.
                     QWidget *parent=0, bool selectMode=true,
-                    bool blinkComputation=true,
+                    bool showProgress=true,
                     bool statisticsVisible=false);
 
     /** Constructor with image data and image selection data.*/
@@ -98,11 +98,11 @@ public:
                     uchar *s_data, uint s_w, uint s_h,         // Image selection info.
                     bool i_sixteenBits,                        // 8 or 16 bits image.
                     QWidget *parent=0, bool selectMode=true,
-                    bool blinkComputation=true,
+                    bool showProgress=true,
                     bool statisticsVisible=false);
 
     void setup(int w, int h, bool selectMode=true,
-               bool blinkComputation=true,
+               bool showProgress=true,
                bool statisticsVisible=false);
 
     ~HistogramWidget();
@@ -114,12 +114,12 @@ public:
     void updateData(uchar *i_data, uint i_w, uint i_h,
                     bool i_sixteenBits,                        // 8 or 16 bits image.
                     uchar *s_data=0, uint s_w=0, uint s_h=0, 
-                    bool blinkComputation=true);
+                    bool showProgress=true);
 
     /** Update image selection histogram data methods.*/
     void updateSelectionData(uchar *s_data, uint s_w, uint s_h,
                              bool i_sixteenBits,               // 8 or 16 bits image.
-                             bool blinkComputation=true);
+                             bool showProgress=true);
 
     void setDataLoading();
     void setLoadingFailed();
