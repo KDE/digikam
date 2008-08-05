@@ -110,7 +110,7 @@ public:
 RawImportDlg::RawImportDlg(const ImageInfo& info, QWidget *parent)
             : KDialogBase(parent, 0, false, QString(),
                           Help|Default|User1|User2|User3|Cancel, Cancel, true,
-                          i18n("&Preview"), i18n("&Load"), i18n("&Abort"))
+                          i18n("&Preview"), i18n("&Import"), i18n("&Abort"))
 {
     d = new RawImportDlgPriv;
     d->info = info;
