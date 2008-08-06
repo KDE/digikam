@@ -77,12 +77,24 @@ SetupDcraw::SetupDcraw(QWidget* parent )
     layout->addWidget(d->dcrawSettings);
     layout->addStretch();
 
+    connect(d->dcrawSettings, SIGNAL(signalSixteenBitsImageToggled(bool)),
+            this, SLOT(slotSixteenBitsImageToggled(bool)));
+
     readSettings();
 }
 
 SetupDcraw::~SetupDcraw()
 {
     delete d;
+}
+
+void SetupDcraw::slotSixteenBitsImageToggled(bool)
+{
+#if KDCRAW_VERSION >= 0x000105
+    // Dcraw do not provide a way to set brigness of image in 16 bits color depth.
+    // We always set on this option. We drive brightness adjustment in digiKam Raw image loader.
+    d->dcrawSettings->setEnabledBrightnessSettings(true);
+#endif
 }
 
 void SetupDcraw::applySettings()
