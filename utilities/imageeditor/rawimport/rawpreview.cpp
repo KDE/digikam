@@ -25,34 +25,20 @@
 
 #include <qstring.h>
 #include <qpainter.h>
-#include <qcursor.h>
-#include <qstring.h>
-#include <qvaluevector.h>
-#include <qfileinfo.h>
 #include <qtoolbutton.h>
 #include <qtooltip.h>
 #include <qpixmap.h>
 
 // KDE includes.
 
-#include <kdialogbase.h>
 #include <klocale.h>
-#include <kservice.h>
-#include <krun.h>
-#include <ktrader.h>
-#include <kmimetype.h>
-#include <kiconloader.h>
 #include <kcursor.h>
 #include <kdatetbl.h>
 #include <kiconloader.h>
-#include <kprocess.h>
-#include <kapplication.h>
 
 // Local includes.
 
-#include "dimg.h"
 #include "ddebug.h"
-#include "dmetadata.h"
 #include "paniconwidget.h"
 #include "managedloadsavethread.h"
 #include "loadingdescription.h"
@@ -97,6 +83,7 @@ RawPreview::RawPreview(QWidget *parent)
 {
     d = new RawPreviewPriv;
 
+    setMinimumWidth(640);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     d->cornerButton = new QToolButton(this);
