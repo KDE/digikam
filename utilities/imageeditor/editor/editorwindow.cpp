@@ -81,6 +81,10 @@
 #include <kwindowsystem.h>
 #include <kxmlguifactory.h>
 
+// LibKDcraw includes.
+
+#include <libkdcraw/version.h>
+
 // local includes
 
 #include "ddebug.h"
@@ -913,6 +917,12 @@ void EditorWindow::applyStandardSettings()
     m_IOFileSettings->rawDecodingSettings.caMultiplier[0]         = group.readEntry("caRedMultiplier", 1.0);
     m_IOFileSettings->rawDecodingSettings.caMultiplier[1]         = group.readEntry("caBlueMultiplier", 1.0);
     m_IOFileSettings->rawDecodingSettings.brightness              = group.readEntry("RAWBrightness", 1.0);
+    m_IOFileSettings->rawDecodingSettings.enableBlackPoint        = group.readEntry("EnableBlackPoint", false);
+    m_IOFileSettings->rawDecodingSettings.blackPoint              = group.readEntry("BlackPoint", 0);
+#if KDCRAW_VERSION >= 0x000105
+    m_IOFileSettings->rawDecodingSettings.enableWhitePoint        = group.readEntry("EnableWhitePoint", false);
+    m_IOFileSettings->rawDecodingSettings.whitePoint              = group.readEntry("WhitePoint", 0);
+#endif
 
     // -- GUI Settings -------------------------------------------------------
 
