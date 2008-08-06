@@ -26,7 +26,6 @@
 #include <qlayout.h>
 #include <qtooltip.h>
 #include <qwhatsthis.h>
-#include <qfileinfo.h>
 #include <qhbuttongroup.h>
 #include <qcombobox.h>
 #include <qlabel.h>
