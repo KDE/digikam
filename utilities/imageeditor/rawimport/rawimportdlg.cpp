@@ -237,6 +237,7 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
 
     // ---------------------------------------------------------------
 
+
     connect(d->channelCB, SIGNAL(activated(int)),
             this, SLOT(slotChannelChanged(int)));
 
@@ -260,6 +261,9 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
 
     connect(d->previewWidget, SIGNAL(signalLoadingProgress(float)),
             this, SLOT(slotLoadingProgress(float)));
+
+    connect(d->decodingSettingsBox, SIGNAL(signalSixteenBitsImageToggled(bool)),
+            this, SLOT(slotSixteenBitsImageToggled(bool)));
 
     // ---------------------------------------------------------------
 
@@ -296,6 +300,15 @@ void RawImportDlg::slotOk()
 {
     saveSettings();
     KDialogBase::slotOk();
+}
+
+void RawImportDlg::slotSixteenBitsImageToggled(bool)
+{
+#if KDCRAW_VERSION >= 0x000105
+    // Dcraw do not provide a way to set brigness of image in 16 bits color depth.
+    // We always set on this option. We drive brightness adjustment in digiKam Raw image loader.
+    d->decodingSettingsBox->setEnabledBrightnessSettings(true);
+#endif
 }
 
 void RawImportDlg::readSettings()

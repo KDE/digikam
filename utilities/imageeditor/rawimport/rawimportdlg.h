@@ -84,6 +84,8 @@ private slots:
     void slotScaleChanged(int scale);
     void slotColorsChanged(int color);
 
+    void slotSixteenBitsImageToggled(bool);
+
 private:
 
     RawImportDlgPriv *d;
