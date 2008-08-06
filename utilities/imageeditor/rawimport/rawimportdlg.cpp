@@ -34,6 +34,7 @@
 
 // KDE includes.
 
+#include <knuminput.h>
 #include <kcursor.h>
 #include <klocale.h>
 #include <kconfig.h>
@@ -45,11 +46,11 @@
 
 #include <libkdcraw/version.h>
 #include <libkdcraw/dcrawsettingswidget.h>
-#include <libkdcraw/rawdecodingsettings.h>
 
 // Local includes.
 
 #include "ddebug.h"
+#include "drawdecoding.h"
 #include "imagedialog.h"
 #include "imagehistogram.h"
 #include "histogramwidget.h"
@@ -94,19 +95,27 @@ public:
         hGradient           = 0;
         histogramWidget     = 0;
         infoBox             = 0;
+        advExposureBox      = 0;
     }
+
+    QWidget                          *advExposureBox;
 
     QComboBox                        *channelCB;
     QComboBox                        *effectType;
     QComboBox                        *colorsCB;
 
+    QLabel                           *gammaLabel;
+
     QHButtonGroup                    *scaleBG;
+
+    KDoubleNumInput                  *gammaSpinBox;
+
+    KURL                              url;
 
     ColorGradientWidget              *hGradient;
 
     HistogramWidget                  *histogramWidget;
 
-    KURL                              url;
 
     ImageDialogPreview               *infoBox;
 
@@ -219,8 +228,28 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
     d->decodingSettingsBox = new KDcrawIface::DcrawSettingsWidget(gboxSettings, true, true, false);
     d->infoBox             = new ImageDialogPreview(d->decodingSettingsBox);
     d->infoBox->showPreview(d->url);
+
+    d->advExposureBox              = new QWidget(d->decodingSettingsBox);
+    QGridLayout* advExposureLayout = new QGridLayout(d->advExposureBox, 2, 2);
+
+    d->gammaLabel   = new QLabel(i18n("Gamma:"), d->advExposureBox);
+    d->gammaSpinBox = new KDoubleNumInput(d->advExposureBox);
+    d->gammaSpinBox->setPrecision(2);
+    d->gammaSpinBox->setRange(0.1, 3.0, 0.01, true);
+    d->gammaSpinBox->setValue(1.0);
+    QWhatsThis::add(d->gammaSpinBox, i18n("<p><b>Gamma</b><p>"
+                    "Set here the gamma adjustement of the image"));
+
+    advExposureLayout->addMultiCellWidget(d->gammaLabel,   0, 0, 0, 0);
+    advExposureLayout->addMultiCellWidget(d->gammaSpinBox, 0, 0, 1, 2);
+    advExposureLayout->setRowStretch(2, 10);
+    advExposureLayout->setSpacing(KDialog::spacingHint());
+    advExposureLayout->setMargin(KDialog::spacingHint());
+
+    d->decodingSettingsBox->insertTab(d->advExposureBox, i18n("Exposure"));
     d->decodingSettingsBox->insertTab(d->infoBox, i18n("Infos"));
 
+    // ---------------------------------------------------------------
 
     gridSettings->addMultiCellWidget(label1,                 0, 0, 0, 0);
     gridSettings->addMultiCellWidget(d->channelCB,           0, 0, 1, 1);
@@ -302,6 +331,7 @@ void RawImportDlg::slotClose()
 void RawImportDlg::slotDefault()
 {
     d->decodingSettingsBox->setDefaultSettings();
+    d->gammaSpinBox->setValue(1.0);
 }
 
 void RawImportDlg::slotOk()
@@ -329,9 +359,9 @@ void RawImportDlg::readSettings()
     d->colorsCB->setCurrentItem(config->readNumEntry("Histogram Color", RawImportDlgPriv::AllColorsRed));
 
     d->decodingSettingsBox->setSixteenBits(config->readBoolEntry("SixteenBitsImage", false));
-    d->decodingSettingsBox->setWhiteBalance((KDcrawIface::RawDecodingSettings::WhiteBalance)
+    d->decodingSettingsBox->setWhiteBalance((DRawDecoding::WhiteBalance)
                                             config->readNumEntry("White Balance",
-                                            KDcrawIface::RawDecodingSettings::CAMERA));
+                                            DRawDecoding::CAMERA));
     d->decodingSettingsBox->setCustomWhiteBalance(config->readNumEntry("Custom White Balance", 6500));
     d->decodingSettingsBox->setCustomWhiteBalanceGreen(config->readDoubleNumEntry("Custom White Balance Green", 1.0));
     d->decodingSettingsBox->setFourColor(config->readBoolEntry("Four Color RGB", false));
@@ -351,12 +381,14 @@ void RawImportDlg::readSettings()
     d->decodingSettingsBox->setcaBlueMultiplier(config->readDoubleNumEntry("caBlueMultiplier", 1.0));
 
     d->decodingSettingsBox->setQuality(
-        (KDcrawIface::RawDecodingSettings::DecodingQuality)config->readNumEntry("Decoding Quality", 
-            (int)(KDcrawIface::RawDecodingSettings::BILINEAR))); 
+        (DRawDecoding::DecodingQuality)config->readNumEntry("Decoding Quality", 
+            (int)(DRawDecoding::BILINEAR))); 
 
     d->decodingSettingsBox->setOutputColorSpace(
-        (KDcrawIface::RawDecodingSettings::OutputColorSpace)config->readNumEntry("Output Color Space", 
-            (int)(KDcrawIface::RawDecodingSettings::SRGB))); 
+        (DRawDecoding::OutputColorSpace)config->readNumEntry("Output Color Space", 
+            (int)(DRawDecoding::SRGB))); 
+
+    d->gammaSpinBox->setValue(config->readDoubleNumEntry("Gamma", 1.0));
 
     resize(configDialogSize(*config, QString("RAW Import Dialog")));
 
@@ -395,14 +427,15 @@ void RawImportDlg::saveSettings()
     config->writeEntry("caBlueMultiplier",           d->decodingSettingsBox->caBlueMultiplier());
     config->writeEntry("Decoding Quality",           (int)d->decodingSettingsBox->quality());
     config->writeEntry("Output Color Space",         (int)d->decodingSettingsBox->outputColorSpace());
+    config->writeEntry("Gamma",                      d->gammaSpinBox->value());
 
     saveDialogSize(*config, QString("RAW Import Dialog"));
     config->sync();
 }
 
-KDcrawIface::RawDecodingSettings RawImportDlg::rawDecodingSettings()
+DRawDecoding RawImportDlg::rawDecodingSettings()
 {
-    KDcrawIface::RawDecodingSettings settings;
+    DRawDecoding settings;
     settings.sixteenBitsImage        = d->decodingSettingsBox->sixteenBits();
     settings.whiteBalance            = d->decodingSettingsBox->whiteBalance();
     settings.customWhiteBalance      = d->decodingSettingsBox->customWhiteBalance();
@@ -424,13 +457,15 @@ KDcrawIface::RawDecodingSettings RawImportDlg::rawDecodingSettings()
     settings.caMultiplier[1]         = d->decodingSettingsBox->caBlueMultiplier();
     settings.RAWQuality              = d->decodingSettingsBox->quality();
     settings.outputColorSpace        = d->decodingSettingsBox->outputColorSpace();
+    settings.gamma                   = d->gammaSpinBox->value();
+
     return settings;
 }
 
 // 'Preview' dialog button.
 void RawImportDlg::slotUser1()
 {
-    KDcrawIface::RawDecodingSettings settings = rawDecodingSettings();
+    DRawDecoding settings = rawDecodingSettings();
 
     // We will load an half size image to speed up preview computing.
     settings.halfSizeColorImage = true;

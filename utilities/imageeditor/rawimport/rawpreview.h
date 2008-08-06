@@ -60,7 +60,7 @@ public:
     DImg& getImage() const;
 
     void setUrl(const KURL& url);
-    void setDecodingSettings(const KDcrawIface::RawDecodingSettings& settings);
+    void setDecodingSettings(const DRawDecoding& settings);
 
     void cancelLoading();
 

@@ -54,7 +54,7 @@ public:
     RawImportDlg(const KURL& info, QWidget *parent);
     ~RawImportDlg();
 
-    KDcrawIface::RawDecodingSettings rawDecodingSettings();
+    DRawDecoding rawDecodingSettings();
 
 protected:
 

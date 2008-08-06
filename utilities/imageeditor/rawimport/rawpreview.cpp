@@ -131,7 +131,7 @@ void RawPreview::setUrl(const KURL& url)
     d->url = url;
 }
 
-void RawPreview::setDecodingSettings(const KDcrawIface::RawDecodingSettings& settings)
+void RawPreview::setDecodingSettings(const DRawDecoding& settings)
 {
     if (!d->url.isEmpty())
     {
