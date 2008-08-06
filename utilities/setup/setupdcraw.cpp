@@ -2,10 +2,10 @@
  *
  * This file is a part of digiKam project
  * http://www.digikam.org
- * 
+ *
  * Date        : 2007-02-06
  * Description : setup RAW decoding settings.
- * 
+ *
  * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -72,12 +72,24 @@ SetupDcraw::SetupDcraw(QWidget* parent )
     layout->addWidget(d->dcrawSettings);
     layout->addStretch();
 
+    connect(d->dcrawSettings, SIGNAL(signalSixteenBitsImageToggled(bool)),
+            this, SLOT(slotSixteenBitsImageToggled(bool)));
+
     readSettings();
 }
 
 SetupDcraw::~SetupDcraw()
 {
     delete d;
+}
+
+void SetupDcraw::slotSixteenBitsImageToggled(bool)
+{
+#if KDCRAW_VERSION >= 0x000300
+    // Dcraw do not provide a way to set brigness of image in 16 bits color depth.
+    // We always set on this option. We drive brightness adjustment in digiKam Raw image loader.
+    d->dcrawSettings->setEnabledBrightnessSettings(true);
+#endif
 }
 
 void SetupDcraw::applySettings()
@@ -100,7 +112,7 @@ void SetupDcraw::applySettings()
     group.writeEntry("RAWQuality",              (int)d->dcrawSettings->quality());
     group.writeEntry("EnableBlackPoint",        d->dcrawSettings->useBlackPoint());
     group.writeEntry("BlackPoint",              d->dcrawSettings->blackPoint());
-#if KDCRAW_VERSION >= 0x000105
+#if KDCRAW_VERSION >= 0x000300
     group.writeEntry("EnableWhitePoint",        d->dcrawSettings->useWhitePoint());
     group.writeEntry("WhitePoint",              d->dcrawSettings->whitePoint());
 #endif
@@ -131,7 +143,7 @@ void SetupDcraw::readSettings()
     d->dcrawSettings->setBrightness(group.readEntry("RAWBrightness", 1.0));
     d->dcrawSettings->setUseBlackPoint(group.readEntry("EnableBlackPoint", false));
     d->dcrawSettings->setBlackPoint(group.readEntry("BlackPoint", 0));
-#if KDCRAW_VERSION >= 0x000105
+#if KDCRAW_VERSION >= 0x000300
     d->dcrawSettings->setUseWhitePoint(group.readEntry("EnableWhitePoint", false));
     d->dcrawSettings->setWhitePoint(group.readEntry("WhitePoint", 0));
 #endif
