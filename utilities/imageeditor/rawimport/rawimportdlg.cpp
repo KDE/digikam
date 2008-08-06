@@ -139,13 +139,13 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
 
     QWidget *page = new QWidget(this);
     setMainWidget(page);
-    QGridLayout *mainLayout = new QGridLayout(page, 1, 1, 0, spacingHint());
+    QGridLayout *mainLayout = new QGridLayout(page, 1, 1);
     d->previewWidget        = new RawPreview(page);
 
     // ---------------------------------------------------------------
 
     QWidget *gboxSettings     = new QWidget(page);
-    QGridLayout* gridSettings = new QGridLayout(gboxSettings, 5, 4, spacingHint());
+    QGridLayout* gridSettings = new QGridLayout(gboxSettings, 5, 4);
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
     label1->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
@@ -213,7 +213,7 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    d->decodingSettingsBox  = new KDcrawIface::DcrawSettingsWidget(gboxSettings, true, true, false);
+    d->decodingSettingsBox = new KDcrawIface::DcrawSettingsWidget(gboxSettings, true, true, false);
 
     gridSettings->addMultiCellWidget(label1,                 0, 0, 0, 0);
     gridSettings->addMultiCellWidget(d->channelCB,           0, 0, 1, 1);
@@ -224,6 +224,8 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
     gridSettings->addMultiCellWidget(d->decodingSettingsBox, 4, 4, 0, 4);
     gridSettings->setRowStretch(5, 10);
     gridSettings->setColStretch(2, 10);
+    gridSettings->setSpacing(spacingHint());
+    gridSettings->setMargin(0);
 
     // ---------------------------------------------------------------
 
@@ -231,6 +233,8 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
     mainLayout->addMultiCellWidget(gboxSettings,     0, 0, 1, 1);
     mainLayout->setColStretch(0, 10);
     mainLayout->setRowStretch(1, 10);
+    mainLayout->setSpacing(spacingHint());
+    mainLayout->setMargin(0);
 
     // ---------------------------------------------------------------
 
