@@ -44,6 +44,7 @@
 
 // LibKDcraw includes.
 
+#include <libkdcraw/version.h>
 #include <libkdcraw/dcrawsettingswidget.h>
 
 // Local includes.
@@ -88,20 +89,26 @@ void SetupDcraw::applySettings()
 {
     KConfig* config = kapp->config();
     config->setGroup("ImageViewer Settings");
-    config->writeEntry("SixteenBitsImage", d->dcrawSettings->sixteenBits());
-    config->writeEntry("WhiteBalance", d->dcrawSettings->whiteBalance());
-    config->writeEntry("CustomWhiteBalance", d->dcrawSettings->customWhiteBalance());
+    config->writeEntry("SixteenBitsImage",        d->dcrawSettings->sixteenBits());
+    config->writeEntry("WhiteBalance",            d->dcrawSettings->whiteBalance());
+    config->writeEntry("CustomWhiteBalance",      d->dcrawSettings->customWhiteBalance());
     config->writeEntry("CustomWhiteBalanceGreen", d->dcrawSettings->customWhiteBalanceGreen());
-    config->writeEntry("RGBInterpolate4Colors", d->dcrawSettings->useFourColor());
-    config->writeEntry("DontStretchPixels", d->dcrawSettings->useDontStretchPixels());
-    config->writeEntry("EnableNoiseReduction", d->dcrawSettings->useNoiseReduction());
-    config->writeEntry("NRThreshold", d->dcrawSettings->NRThreshold());
-    config->writeEntry("EnableCACorrection", d->dcrawSettings->useCACorrection());
-    config->writeEntry("caRedMultiplier", d->dcrawSettings->caRedMultiplier());
-    config->writeEntry("caBlueMultiplier", d->dcrawSettings->caBlueMultiplier());
-    config->writeEntry("UnclipColors", d->dcrawSettings->unclipColor());
-    config->writeEntry("RAWBrightness", d->dcrawSettings->brightness());
-    config->writeEntry("RAWQuality", d->dcrawSettings->quality());
+    config->writeEntry("RGBInterpolate4Colors",   d->dcrawSettings->useFourColor());
+    config->writeEntry("DontStretchPixels",       d->dcrawSettings->useDontStretchPixels());
+    config->writeEntry("EnableNoiseReduction",    d->dcrawSettings->useNoiseReduction());
+    config->writeEntry("NRThreshold",             d->dcrawSettings->NRThreshold());
+    config->writeEntry("EnableCACorrection",      d->dcrawSettings->useCACorrection());
+    config->writeEntry("caRedMultiplier",         d->dcrawSettings->caRedMultiplier());
+    config->writeEntry("caBlueMultiplier",        d->dcrawSettings->caBlueMultiplier());
+    config->writeEntry("UnclipColors",            d->dcrawSettings->unclipColor());
+    config->writeEntry("RAWBrightness",           d->dcrawSettings->brightness());
+    config->writeEntry("RAWQuality",              d->dcrawSettings->quality());
+    config->writeEntry("EnableBlackPoint",        d->dcrawSettings->useBlackPoint());
+    config->writeEntry("BlackPoint",              d->dcrawSettings->blackPoint());
+#if KDCRAW_VERSION >= 0x000105
+    config->writeEntry("EnableWhitePoint",        d->dcrawSettings->useWhitePoint());
+    config->writeEntry("WhitePoint",              d->dcrawSettings->whitePoint());
+#endif
     config->sync();
 }
 
@@ -127,6 +134,12 @@ void SetupDcraw::readSettings()
                                   config->readNumEntry("RAWQuality",
                                   KDcrawIface::RawDecodingSettings::BILINEAR));
     d->dcrawSettings->setBrightness(config->readDoubleNumEntry("RAWBrightness", 1.0));
+    d->dcrawSettings->setUseBlackPoint(config->readBoolEntry("EnableBlackPoint", false));
+    d->dcrawSettings->setBlackPoint(config->readNumEntry("BlackPoint", 0));
+#if KDCRAW_VERSION >= 0x000105
+    d->dcrawSettings->setUseWhitePoint(config->readBoolEntry("EnableWhitePoint", false));
+    d->dcrawSettings->setWhitePoint(config->readNumEntry("WhitePoint", 0));
+#endif
 }
 
 }  // namespace Digikam
