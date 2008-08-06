@@ -2,7 +2,7 @@
  *
  * This file is a part of digiKam project
  * http://www.digikam.org
- * 
+ *
  * Date        : 2006-01-20
  * Description : main image editor GUI implementation
  *
@@ -560,18 +560,18 @@ void EditorWindow::setupStatusBar()
 {
     m_nameLabel = new StatusProgressBar(statusBar());
     m_nameLabel->setAlignment(Qt::AlignCenter);
-    m_nameLabel->setMaximumHeight(fontMetrics().height()+2);    
+    m_nameLabel->setMaximumHeight(fontMetrics().height()+2);
     statusBar()->addWidget(m_nameLabel, 100);
 
     d->selectLabel = new QLabel(i18n("No selection"), statusBar());
     d->selectLabel->setAlignment(Qt::AlignCenter);
-    d->selectLabel->setMaximumHeight(fontMetrics().height()+2);   
+    d->selectLabel->setMaximumHeight(fontMetrics().height()+2);
     statusBar()->addWidget(d->selectLabel, 100);
     QToolTip::add(d->selectLabel, i18n("Information about current selection area"));
 
     m_resLabel  = new QLabel(statusBar());
     m_resLabel->setAlignment(Qt::AlignCenter);
-    m_resLabel->setMaximumHeight(fontMetrics().height()+2);   
+    m_resLabel->setMaximumHeight(fontMetrics().height()+2);
     statusBar()->addWidget(m_resLabel, 100);
     QToolTip::add(m_resLabel, i18n("Information about image size"));
 
@@ -937,7 +937,7 @@ void EditorWindow::applyStandardSettings()
     m_IOFileSettings->rawDecodingSettings.caMultiplier[0]         = config->readDoubleNumEntry("caRedMultiplier", 1.0);
     m_IOFileSettings->rawDecodingSettings.caMultiplier[1]         = config->readDoubleNumEntry("caBlueMultiplier", 1.0);
     m_IOFileSettings->rawDecodingSettings.brightness              = config->readDoubleNumEntry("RAWBrightness", 1.0);
-    m_IOFileSettings->rawDecodingSettings.enableBlackPoint           = config->readBoolEntry("EnableBlackPoint", false);
+    m_IOFileSettings->rawDecodingSettings.enableBlackPoint        = config->readBoolEntry("EnableBlackPoint", false);
     m_IOFileSettings->rawDecodingSettings.blackPoint              = config->readNumEntry("BlackPoint", 0);
 #if KDCRAW_VERSION >= 0x000105
     m_IOFileSettings->rawDecodingSettings.enableWhitePoint        = config->readBoolEntry("EnableWhitePoint", false);
@@ -1109,7 +1109,7 @@ void EditorWindow::slotToggleFullScreen()
                 hideToolBars();
             }
             else
-            {   
+            {
                 showToolBars();
 
                 if ( !m_fullScreenAction->isPlugged(toolBar) )
@@ -1117,7 +1117,7 @@ void EditorWindow::slotToggleFullScreen()
                     m_fullScreenAction->plug(toolBar);
                     d->removeFullScreenButton=true;
                 }
-                else    
+                else
                 {
                     // If FullScreen button is enable in toolbar settings
                     // We don't remove it when we out of fullscreen mode.
@@ -1753,7 +1753,7 @@ void EditorWindow::slotToggleColorManagedView()
     d->viewCMViewAction->blockSignals(true);
     bool cmv = false;
     if (d->ICCSettings->enableCMSetting)
-    {    
+    {
         cmv = !d->ICCSettings->managedViewSetting;
         d->ICCSettings->managedViewSetting = cmv;
         m_canvas->setICCSettings(d->ICCSettings);
