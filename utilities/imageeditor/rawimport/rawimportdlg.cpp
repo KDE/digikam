@@ -44,6 +44,7 @@
 
 // LibKDcraw includes.
 
+#include <libkdcraw/version.h>
 #include <libkdcraw/dcrawsettingswidget.h>
 #include <libkdcraw/rawdecodingsettings.h>
 
@@ -316,6 +317,10 @@ void RawImportDlg::readSettings()
     d->decodingSettingsBox->setBrightness(config->readDoubleNumEntry("Brightness Multiplier", 1.0));
     d->decodingSettingsBox->setUseBlackPoint(config->readBoolEntry("Use Black Point", false));
     d->decodingSettingsBox->setBlackPoint(config->readNumEntry("Black Point", 0));
+#if KDCRAW_VERSION >= 0x000105
+    d->decodingSettingsBox->setUseWhitePoint(config->readBoolEntry("Use White Point", false));
+    d->decodingSettingsBox->setWhitePoint(config->readNumEntry("White Point", 0));
+#endif
     d->decodingSettingsBox->setNRThreshold(config->readNumEntry("NR Threshold", 100));
     d->decodingSettingsBox->setUseCACorrection(config->readBoolEntry("EnableCACorrection", false));
     d->decodingSettingsBox->setcaRedMultiplier(config->readDoubleNumEntry("caRedMultiplier", 1.0));
@@ -356,6 +361,10 @@ void RawImportDlg::saveSettings()
     config->writeEntry("Brightness Multiplier",      d->decodingSettingsBox->brightness());
     config->writeEntry("Use Black Point",            d->decodingSettingsBox->useBlackPoint());
     config->writeEntry("Black Point",                d->decodingSettingsBox->blackPoint());
+#if KDCRAW_VERSION >= 0x000105
+    config->writeEntry("Use White Point",            d->decodingSettingsBox->useWhitePoint());
+    config->writeEntry("White Point",                d->decodingSettingsBox->whitePoint());
+#endif
     config->writeEntry("NR Threshold",               d->decodingSettingsBox->NRThreshold());
     config->writeEntry("EnableCACorrection",         d->decodingSettingsBox->useCACorrection());
     config->writeEntry("caRedMultiplier",            d->decodingSettingsBox->caRedMultiplier());
@@ -381,6 +390,10 @@ KDcrawIface::RawDecodingSettings RawImportDlg::rawDecodingSettings()
     settings.brightness              = d->decodingSettingsBox->brightness();
     settings.enableBlackPoint        = d->decodingSettingsBox->useBlackPoint();
     settings.blackPoint              = d->decodingSettingsBox->blackPoint();
+#if KDCRAW_VERSION >= 0x000105
+    settings.enableWhitePoint        = d->decodingSettingsBox->useWhitePoint();
+    settings.whitePoint              = d->decodingSettingsBox->whitePoint();
+#endif
     settings.NRThreshold             = d->decodingSettingsBox->NRThreshold();
     settings.enableCACorrection      = d->decodingSettingsBox->useCACorrection();
     settings.caMultiplier[0]         = d->decodingSettingsBox->caRedMultiplier();
