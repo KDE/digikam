@@ -119,8 +119,7 @@ public:
 
 RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
             : KDialogBase(parent, 0, false, QString(),
-                          Help|Default|User1|User2|Ok|Cancel, Cancel, true,
-                          i18n("&Preview"), i18n("&Abort"))
+                          Help|Default|User1|User2|Ok|Cancel, Cancel, true)
 {
     d = new RawImportDlgPriv;
     d->url = url;
@@ -128,7 +127,10 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
     setHelp("rawimport.anchor", "digikam");
     setCaption(i18n("Raw Import - %1").arg(d->url.fileName()));
 
+    setButtonText(User1, i18n("&Preview"));
     setButtonTip(User1, i18n("<p>Generate a Raw image preview using current settings."));
+
+    setButtonText(User2, i18n("&Abort"));
     setButtonTip(User2, i18n("<p>Abort the current Raw image preview"));
 
     setButtonText(Ok, i18n("&Import"));
@@ -152,7 +154,7 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
     label1->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
-    d->channelCB = new QComboBox( false, gboxSettings );
+    d->channelCB   = new QComboBox( false, gboxSettings );
     d->channelCB->insertItem( i18n("Luminosity") );
     d->channelCB->insertItem( i18n("Red") );
     d->channelCB->insertItem( i18n("Green") );
@@ -176,7 +178,7 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
 
     QPushButton *linHistoButton = new QPushButton( d->scaleBG );
     QToolTip::add( linHistoButton, i18n( "<p>Linear" ) );
-    d->scaleBG->insert(linHistoButton, Digikam::HistogramWidget::LinScaleHistogram);
+    d->scaleBG->insert(linHistoButton, HistogramWidget::LinScaleHistogram);
     KGlobal::dirs()->addResourceType("histogram-lin", KGlobal::dirs()->kde_default("data") + "digikam/data");
     QString directory = KGlobal::dirs()->findResourceDir("histogram-lin", "histogram-lin.png");
     linHistoButton->setPixmap( QPixmap( directory + "histogram-lin.png" ) );
@@ -184,17 +186,11 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
 
     QPushButton *logHistoButton = new QPushButton( d->scaleBG );
     QToolTip::add( logHistoButton, i18n( "<p>Logarithmic" ) );
-    d->scaleBG->insert(logHistoButton, Digikam::HistogramWidget::LogScaleHistogram);
+    d->scaleBG->insert(logHistoButton, HistogramWidget::LogScaleHistogram);
     KGlobal::dirs()->addResourceType("histogram-log", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("histogram-log", "histogram-log.png");
     logHistoButton->setPixmap( QPixmap( directory + "histogram-log.png" ) );
     logHistoButton->setToggleButton(true);
-
-    QHBoxLayout* l1 = new QHBoxLayout();
-    l1->addWidget(label1);
-    l1->addWidget(d->channelCB);
-    l1->addStretch(10);
-    l1->addWidget(d->scaleBG);
 
     QLabel *label10 = new QLabel(i18n("Colors:"), gboxSettings);
     label10->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
@@ -208,32 +204,31 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
                                        "<b>Green</b>: Draw the green image channel in the foreground.<p>"
                                        "<b>Blue</b>: Draw the blue image channel in the foreground.<p>"));
 
-    QHBoxLayout* l2 = new QHBoxLayout();
-    l2->addWidget(label10);
-    l2->addWidget(d->colorsCB);
-    l2->addStretch(10);
-
     // ---------------------------------------------------------------
 
     QVBox *histoBox    = new QVBox(gboxSettings);
-    d->histogramWidget = new Digikam::HistogramWidget(256, 140, histoBox, false, true, true);
+    d->histogramWidget = new HistogramWidget(256, 140, histoBox, false, true, true);
     QWhatsThis::add(d->histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing "
                                              "of the selected image channel. This one is re-computed at any "
                                              "settings changes."));
     QLabel *space = new QLabel(histoBox);
     space->setFixedHeight(1);
-    d->hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, histoBox );
+    d->hGradient  = new ColorGradientWidget( ColorGradientWidget::Horizontal, 10, histoBox );
     d->hGradient->setColors( QColor( "black" ), QColor( "white" ) );
 
     // ---------------------------------------------------------------
 
     d->decodingSettingsBox  = new KDcrawIface::DcrawSettingsWidget(gboxSettings, true, true, false);
 
-    gridSettings->addMultiCellLayout(l1,                     0, 0, 0, 4);
-    gridSettings->addMultiCellLayout(l2,                     1, 1, 0, 4);
+    gridSettings->addMultiCellWidget(label1,                 0, 0, 0, 0);
+    gridSettings->addMultiCellWidget(d->channelCB,           0, 0, 1, 1);
+    gridSettings->addMultiCellWidget(d->scaleBG,             0, 0, 4, 4);
+    gridSettings->addMultiCellWidget(label10,                1, 1, 0, 0);
+    gridSettings->addMultiCellWidget(d->colorsCB,            1, 1, 1, 1);
     gridSettings->addMultiCellWidget(histoBox,               2, 3, 0, 4);
     gridSettings->addMultiCellWidget(d->decodingSettingsBox, 4, 4, 0, 4);
     gridSettings->setRowStretch(5, 10);
+    gridSettings->setColStretch(2, 10);
 
     // ---------------------------------------------------------------
 
