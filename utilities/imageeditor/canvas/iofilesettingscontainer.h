@@ -24,12 +24,9 @@
 #ifndef IOFILESETTINGSCONTAINER_H
 #define IOFILESETTINGSCONTAINER_H
 
-// LibKDcraw includes.
-
-#include <libkdcraw/rawdecodingsettings.h>
-
 // Local includes.
 
+#include "drawdecoding.h"
 #include "digikam_export.h"
 
 namespace Digikam
@@ -79,7 +76,7 @@ public:
     // ------------------------------------------------------
     // RAW File decoding options :
 
-    KDcrawIface::RawDecodingSettings rawDecodingSettings;
+    DRawDecoding rawDecodingSettings;
 };
 
 }  // namespace Digikam

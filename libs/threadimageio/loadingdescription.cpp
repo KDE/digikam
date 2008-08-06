@@ -38,10 +38,10 @@ bool LoadingDescription::PreviewParameters::operator==(const PreviewParameters &
 LoadingDescription::LoadingDescription(const QString &filePath)
     : filePath(filePath)
 {
-    rawDecodingSettings = KDcrawIface::RawDecodingSettings();
+    rawDecodingSettings = DRawDecoding();
 }
 
-LoadingDescription::LoadingDescription(const QString &filePath, KDcrawIface::RawDecodingSettings settings)
+LoadingDescription::LoadingDescription(const QString &filePath, DRawDecoding settings)
     : filePath(filePath), rawDecodingSettings(settings)
 {
 }
@@ -49,7 +49,7 @@ LoadingDescription::LoadingDescription(const QString &filePath, KDcrawIface::Raw
 LoadingDescription::LoadingDescription(const QString &filePath, int size, bool exifRotate)
     : filePath(filePath)
 {
-    rawDecodingSettings = KDcrawIface::RawDecodingSettings();
+    rawDecodingSettings = DRawDecoding();
     previewParameters.isPreview  = false;
     previewParameters.size       = size;
     previewParameters.exifRotate = exifRotate;
@@ -121,7 +121,7 @@ bool LoadingDescription::equalsOrBetterThan(const LoadingDescription &other) con
     // Preview parameters must have the same size, or other has no size restriction.
     // All raw decoding settings must be equal, only the half size parameter is allowed to vary.
 
-    KDcrawIface::RawDecodingSettings fullSize = other.rawDecodingSettings;
+    DRawDecoding fullSize = other.rawDecodingSettings;
     fullSize.halfSizeColorImage = false;
 
     return filePath == other.filePath &&

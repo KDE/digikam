@@ -917,21 +917,21 @@ void EditorWindow::applyStandardSettings()
     // else, sRGB color workspace will be used.
 
     if (d->ICCSettings->enableCMSetting) 
-        m_IOFileSettings->rawDecodingSettings.outputColorSpace = KDcrawIface::RawDecodingSettings::RAWCOLOR;
+        m_IOFileSettings->rawDecodingSettings.outputColorSpace = DRawDecoding::RAWCOLOR;
     else
-        m_IOFileSettings->rawDecodingSettings.outputColorSpace = KDcrawIface::RawDecodingSettings::SRGB;
+        m_IOFileSettings->rawDecodingSettings.outputColorSpace = DRawDecoding::SRGB;
 
     m_IOFileSettings->rawDecodingSettings.sixteenBitsImage        = config->readBoolEntry("SixteenBitsImage", false);
-    m_IOFileSettings->rawDecodingSettings.whiteBalance            = (KDcrawIface::RawDecodingSettings::WhiteBalance)config->readNumEntry("WhiteBalance",
-                                                                    KDcrawIface::RawDecodingSettings::CAMERA);
+    m_IOFileSettings->rawDecodingSettings.whiteBalance            = (DRawDecoding::WhiteBalance)config->readNumEntry("WhiteBalance",
+                                                                    DRawDecoding::CAMERA);
     m_IOFileSettings->rawDecodingSettings.customWhiteBalance      = config->readNumEntry("CustomWhiteBalance", 6500);
     m_IOFileSettings->rawDecodingSettings.customWhiteBalanceGreen = config->readDoubleNumEntry("CustomWhiteBalanceGreen", 1.0);
     m_IOFileSettings->rawDecodingSettings.RGBInterpolate4Colors   = config->readBoolEntry("RGBInterpolate4Colors", false);
     m_IOFileSettings->rawDecodingSettings.DontStretchPixels       = config->readBoolEntry("DontStretchPixels", false);
     m_IOFileSettings->rawDecodingSettings.enableNoiseReduction    = config->readBoolEntry("EnableNoiseReduction", false);
     m_IOFileSettings->rawDecodingSettings.unclipColors            = config->readNumEntry("UnclipColors", 0);
-    m_IOFileSettings->rawDecodingSettings.RAWQuality              = (KDcrawIface::RawDecodingSettings::DecodingQuality)config->readNumEntry("RAWQuality",
-                                                                    KDcrawIface::RawDecodingSettings::BILINEAR);
+    m_IOFileSettings->rawDecodingSettings.RAWQuality              = (DRawDecoding::DecodingQuality)config->readNumEntry("RAWQuality",
+                                                                    DRawDecoding::BILINEAR);
     m_IOFileSettings->rawDecodingSettings.NRThreshold             = config->readNumEntry("NRThreshold", 100);
     m_IOFileSettings->rawDecodingSettings.enableCACorrection      = config->readBoolEntry("EnableCACorrection", false);
     m_IOFileSettings->rawDecodingSettings.caMultiplier[0]         = config->readDoubleNumEntry("caRedMultiplier", 1.0);

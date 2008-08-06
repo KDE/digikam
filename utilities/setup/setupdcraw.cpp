@@ -49,6 +49,7 @@
 
 // Local includes.
 
+#include "drawdecoding.h"
 #include "setupdcraw.h"
 #include "setupdcraw.moc"
 
@@ -136,15 +137,15 @@ void SetupDcraw::readSettings()
     d->dcrawSettings->setcaBlueMultiplier(config->readDoubleNumEntry("caBlueMultiplier", 1.0));
     d->dcrawSettings->setDontStretchPixels(config->readBoolEntry("DontStretchPixels", false));
     d->dcrawSettings->setUnclipColor(config->readNumEntry("UnclipColors", 0));
-    d->dcrawSettings->setWhiteBalance((KDcrawIface::RawDecodingSettings::WhiteBalance)
+    d->dcrawSettings->setWhiteBalance((DRawDecoding::WhiteBalance)
                                       config->readNumEntry("WhiteBalance",
-                                      KDcrawIface::RawDecodingSettings::CAMERA));
+                                      DRawDecoding::CAMERA));
     d->dcrawSettings->setCustomWhiteBalance(config->readNumEntry("CustomWhiteBalance", 6500));
     d->dcrawSettings->setCustomWhiteBalanceGreen(config->readDoubleNumEntry("CustomWhiteBalanceGreen", 1.0));
     d->dcrawSettings->setFourColor(config->readBoolEntry("RGBInterpolate4Colors", false));
-    d->dcrawSettings->setQuality((KDcrawIface::RawDecodingSettings::DecodingQuality)
+    d->dcrawSettings->setQuality((DRawDecoding::DecodingQuality)
                                   config->readNumEntry("RAWQuality",
-                                  KDcrawIface::RawDecodingSettings::BILINEAR));
+                                  DRawDecoding::BILINEAR));
     d->dcrawSettings->setBrightness(config->readDoubleNumEntry("RAWBrightness", 1.0));
     d->dcrawSettings->setUseBlackPoint(config->readBoolEntry("EnableBlackPoint", false));
     d->dcrawSettings->setBlackPoint(config->readNumEntry("BlackPoint", 0));

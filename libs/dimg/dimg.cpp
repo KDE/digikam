@@ -73,14 +73,14 @@ DImg::DImg()
 }
 
 DImg::DImg(const QCString& filePath, DImgLoaderObserver *observer,
-           KDcrawIface::RawDecodingSettings rawDecodingSettings)
+           DRawDecoding rawDecodingSettings)
     : m_priv(new DImgPrivate)
 {
     load(filePath, observer, rawDecodingSettings);
 }
 
 DImg::DImg(const QString& filePath, DImgLoaderObserver *observer,
-           KDcrawIface::RawDecodingSettings rawDecodingSettings)
+           DRawDecoding rawDecodingSettings)
     : m_priv(new DImgPrivate)
 {
     load(filePath, observer, rawDecodingSettings);
@@ -318,7 +318,7 @@ void DImg::setImageData(bool null, uint width, uint height, bool sixteenBit, boo
 
 
 bool DImg::load(const QString& filePath, DImgLoaderObserver *observer,
-                KDcrawIface::RawDecodingSettings rawDecodingSettings)
+                DRawDecoding rawDecodingSettings)
 {
     FORMAT format = fileFormat(filePath);
 

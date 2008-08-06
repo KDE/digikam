@@ -38,19 +38,22 @@
 // Local includes.
 
 #include "ddebug.h"
+#include "drawdecoding.h"
 #include "imagehistogram.h"
 #include "dimg.h"
 #include "dimgloaderobserver.h"
+#include "whitebalance.h"
 #include "rawloader.h"
 #include "rawloader.moc"
 
 namespace Digikam
 {
 
-RAWLoader::RAWLoader(DImg* image, KDcrawIface::RawDecodingSettings rawDecodingSettings)
+RAWLoader::RAWLoader(DImg* image, DRawDecoding rawDecodingSettings)
          : DImgLoader(image)
 {
     m_rawDecodingSettings = rawDecodingSettings;
+    m_customRawSettings   = rawDecodingSettings;
     m_observer            = 0;
 }
 
@@ -149,7 +152,7 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
         // No auto white balance and no gamma adjustemnts are performed. Image is a black hole.
         // We need to reproduce all dcraw 8 bits color depth adjustements here.
 
-        if (m_rawDecodingSettings.outputColorSpace != KDcrawIface::RawDecodingSettings::RAWCOLOR)
+        if (m_rawDecodingSettings.outputColorSpace != DRawDecoding::RAWCOLOR)
         {
             ImageHistogram histogram(image, width, height, true);
 
@@ -242,31 +245,44 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
         imageData() = image;
     }
 
+    imageWidth()  = width;
+    imageHeight() = height;
+
+    WhiteBalance wb(m_rawDecodingSettings.sixteenBitsImage);
+    wb.whiteBalance(imageData(), imageWidth(), imageHeight(), m_rawDecodingSettings.sixteenBitsImage, 
+                    0.0,                        // black
+                    0.0,                        // exposure
+                    6500.0,                     // temperature (neutral)
+                    1.0,                        // green
+                    0.5,                        // dark
+                    m_customRawSettings.gamma,  // gamma
+                    1.0);                       // saturation
+
     //----------------------------------------------------------
     // Assign the right color-space profile.
 
     KGlobal::dirs()->addResourceType("profiles", KGlobal::dirs()->kde_default("data") + "digikam/profiles");
     switch(m_rawDecodingSettings.outputColorSpace)
     {
-        case KDcrawIface::RawDecodingSettings::SRGB:
+        case DRawDecoding::SRGB:
         {
             QString directory = KGlobal::dirs()->findResourceDir("profiles", "srgb.icm");
             m_image->getICCProfilFromFile(directory + "srgb.icm");
             break;
         }
-        case KDcrawIface::RawDecodingSettings::ADOBERGB:
+        case DRawDecoding::ADOBERGB:
         {
             QString directory = KGlobal::dirs()->findResourceDir("profiles", "adobergb.icm");
             m_image->getICCProfilFromFile(directory + "adobergb.icm");
             break;
         }
-        case KDcrawIface::RawDecodingSettings::WIDEGAMMUT:
+        case DRawDecoding::WIDEGAMMUT:
         {
             QString directory = KGlobal::dirs()->findResourceDir("profiles", "widegamut.icm");
             m_image->getICCProfilFromFile(directory + "widegamut.icm");
             break;
         }
-        case KDcrawIface::RawDecodingSettings::PROPHOTO:
+        case DRawDecoding::PROPHOTO:
         {
             QString directory = KGlobal::dirs()->findResourceDir("profiles", "prophoto.icm");
             m_image->getICCProfilFromFile(directory + "prophoto.icm");
@@ -279,8 +295,6 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
 
     //----------------------------------------------------------
 
-    imageWidth()  = width;
-    imageHeight() = height;
     imageSetAttribute("format", "RAW");
 
     return true;

@@ -91,7 +91,7 @@ void BlackFrameParser::parseBlackFrame(const KURL &url)
                 this, SLOT(slotLoadImageFromUrlComplete(const LoadingDescription&, const DImg&)));
     }
 
-    LoadingDescription desc = LoadingDescription(m_localFile, KDcrawIface::RawDecodingSettings());
+    LoadingDescription desc = LoadingDescription(m_localFile, DRawDecoding());
     m_imageLoaderThread->load(desc);
 }
 

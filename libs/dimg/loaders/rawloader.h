@@ -29,10 +29,10 @@
 // LibKDcraw includes.
 
 #include <libkdcraw/kdcraw.h>
-#include <libkdcraw/rawdecodingsettings.h>
 
 // Local includes.
 
+#include "drawdecoding.h"
 #include "dimgloader.h"
 #include "digikam_export.h"
 
@@ -46,7 +46,7 @@ class DIGIKAM_EXPORT RAWLoader : public KDcrawIface::KDcraw, public DImgLoader
 
 public:
 
-    RAWLoader(DImg* image, KDcrawIface::RawDecodingSettings rawDecodingSettings=KDcrawIface::RawDecodingSettings());
+    RAWLoader(DImg* image, DRawDecoding rawDecodingSettings=DRawDecoding());
 
     bool load(const QString& filePath, DImgLoaderObserver *observer=0);
 
@@ -73,6 +73,7 @@ private:
 private:
 
     DImgLoaderObserver *m_observer;
+    DRawDecoding        m_customRawSettings;
 };
 
 }  // NameSpace Digikam
