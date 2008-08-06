@@ -50,6 +50,7 @@
 // Local includes.
 
 #include "ddebug.h"
+#include "imagedialog.h"
 #include "imagehistogram.h"
 #include "histogramwidget.h"
 #include "colorgradientwidget.h"
@@ -92,6 +93,7 @@ public:
         scaleBG             = 0;
         hGradient           = 0;
         histogramWidget     = 0;
+        infoBox             = 0;
     }
 
     QComboBox                        *channelCB;
@@ -105,6 +107,8 @@ public:
     HistogramWidget                  *histogramWidget;
 
     KURL                              url;
+
+    ImageDialogPreview               *infoBox;
 
     RawPreview                       *previewWidget;
 
@@ -213,6 +217,10 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
     // ---------------------------------------------------------------
 
     d->decodingSettingsBox = new KDcrawIface::DcrawSettingsWidget(gboxSettings, true, true, false);
+    d->infoBox             = new ImageDialogPreview(d->decodingSettingsBox);
+    d->infoBox->showPreview(d->url);
+    d->decodingSettingsBox->insertTab(d->infoBox, i18n("Infos"));
+
 
     gridSettings->addMultiCellWidget(label1,                 0, 0, 0, 0);
     gridSettings->addMultiCellWidget(d->channelCB,           0, 0, 1, 1);
