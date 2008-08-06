@@ -2,11 +2,11 @@
  *
  * This file is a part of digiKam project
  * http://www.digikam.org
- * 
+ *
  * Date        : 2006-12-20
  * Description : a widget to display a welcome page 
  *               on root album.
- * 
+ *
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -14,7 +14,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-// Qt includes. 
+// Qt includes.
 
 #include <qwidget.h>
 #include <qfile.h>
@@ -100,10 +100,10 @@ QString WelcomePageView::infoPage()
 {
     QString info =
         i18n(
-        "%1: digiKam version; " 
+        "%1: digiKam version; "
         "%2: help:// URL; "
         "%3: homepage URL; "
-        "%4: prior digiKam version; " 
+        "%4: prior digiKam version; "
         "%5: prior KDE version; "
         "%6: generated list of new features; "
         "%7: First-time user text (only shown on first start); "
@@ -113,8 +113,8 @@ QString WelcomePageView::infoPage()
         "digiKam is a photo management program for the K Desktop Environment. "
         "It is designed to import, organize, and export your digital photographs on your computer."
         "</p><p>You are currently in the Album view mode of digiKam. The Albums are the real "
-	"containers where your files are stored, they are identical with the folders "
-	"on disk.</p>\n<ul><li>"
+        "containers where your files are stored, they are identical with the folders "
+        "on disk.</p>\n<ul><li>"
         "digiKam has many powerful features which are described in the "
         "<a href=\"%2\">documentation</a></li>\n"
         "<li>The <a href=\"%3\">digiKam homepage</A> provides information about "
@@ -142,30 +142,31 @@ QString WelcomePageView::infoPage()
     newFeatures << i18n("Advanced RAW image decoding settings");
     newFeatures << i18n("Fast RAW preview");
     newFeatures << i18n("RAW Metadata support");
+    newFeatures << i18n("Camera Interface used as generic import tool");
     newFeatures << i18n("New advanced camera download options");
     newFeatures << i18n("New advanced tag management");
     newFeatures << i18n("New zooming/panning support in preview mode");
     newFeatures << i18n("New Light Table provides easy comparison for similar images");
-    newFeatures << i18n("Camera Interface used as generic import tool");
     newFeatures << i18n("New text, mime-type, and rating filters to search contents on icon view");
     newFeatures << i18n("New options to easy navigate between albums, tags and collections");
     newFeatures << i18n("New options to recursively show the contents of sub-folders");
     newFeatures << i18n("New text filter to search contents on folder views");
     newFeatures << i18n("New options to count of items on all folder views");
     newFeatures << i18n("New tool to perform dates search around whole albums collection: Time-Line");
+    newFeatures << i18n("New tool to import RAW files in editor with customized decoding settings");
 
     QString featureItems;
     for ( uint i = 0 ; i < newFeatures.count() ; i++ )
         featureItems += i18n("<li>%1</li>\n").arg( newFeatures[i] );
-    
-    info = info.arg( featureItems );
-    
-    // Add first-time user text (only shown on first start).
-    info = info.arg( QString() ); 
 
-    // Generated list of important changes    
-    info = info.arg( QString() ); 
-    
+    info = info.arg( featureItems );
+
+    // Add first-time user text (only shown on first start).
+    info = info.arg( QString() );
+
+    // Generated list of important changes
+    info = info.arg( QString() );
+
     return info;
 }
 
@@ -176,12 +177,12 @@ QCString WelcomePageView::fileToString(const QString &aFileName)
     unsigned int readLen;
     unsigned int len = info.size();
     QFile file(aFileName);
-    
+
     if (aFileName.isEmpty() || len <= 0 || 
         !info.exists() || info.isDir() || !info.isReadable() ||
         !file.open(IO_Raw|IO_ReadOnly)) 
         return QCString();
-    
+
     result.resize(len + 2);
     readLen = file.readBlock(result.data(), len);
     if (1 && result[len-1]!='\n')
@@ -190,10 +191,10 @@ QCString WelcomePageView::fileToString(const QString &aFileName)
         readLen++;
     }
     result[len] = '\0';
-    
+
     if (readLen < len)
         return QCString();
-    
+
     return result;
 }
 
