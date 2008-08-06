@@ -47,8 +47,8 @@ MACRO_OPTIONAL_FIND_PACKAGE(Kipi)
 # ==================================================================================================
 # Optional depencies
 
-#MACRO_OPTIONAL_FIND_PACKAGE(KdepimLibs)
-#MACRO_BOOL_TO_01(KDEPIMLIBS_FOUND HAVE_KDEPIMLIBS)
+MACRO_OPTIONAL_FIND_PACKAGE(KdepimLibs)
+MACRO_BOOL_TO_01(KDEPIMLIBS_FOUND HAVE_KDEPIMLIBS)
 
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 
