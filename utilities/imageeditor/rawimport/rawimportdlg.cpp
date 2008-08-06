@@ -64,12 +64,6 @@ class RawImportDlgPriv
 {
 public:
 
-    enum HistogramScale
-    {
-        Linear=0,
-        Logarithmic
-    };
-
     enum ColorChannel
     {
         LuminosityChannel=0,
@@ -305,6 +299,10 @@ void RawImportDlg::readSettings()
     KConfig* config = kapp->config();
     config->setGroup("RAW Import Settings");
 
+    d->channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", RawImportDlgPriv::LuminosityChannel));
+    d->scaleBG->setButton(config->readNumEntry("Histogram Scale", HistogramWidget::LogScaleHistogram));
+    d->colorsCB->setCurrentItem(config->readNumEntry("Histogram Color", RawImportDlgPriv::AllColorsRed));
+
     d->decodingSettingsBox->setSixteenBits(config->readBoolEntry("SixteenBitsImage", false));
     d->decodingSettingsBox->setWhiteBalance((KDcrawIface::RawDecodingSettings::WhiteBalance)
                                             config->readNumEntry("White Balance",
@@ -332,12 +330,21 @@ void RawImportDlg::readSettings()
             (int)(KDcrawIface::RawDecodingSettings::SRGB))); 
 
     resize(configDialogSize(*config, QString("RAW Import Dialog")));
+
+    slotChannelChanged(d->channelCB->currentItem());
+    slotScaleChanged(d->scaleBG->selectedId());
+    slotColorsChanged(d->colorsCB->currentItem());
 }
 
 void RawImportDlg::saveSettings()
 {
     KConfig* config = kapp->config();
     config->setGroup("RAW Import Settings");
+
+    config->writeEntry("Histogram Channel",          d->channelCB->currentItem());
+    config->writeEntry("Histogram Scale",            d->scaleBG->selectedId());
+    config->writeEntry("Histogram Color",            d->colorsCB->currentItem());
+
     config->writeEntry("SixteenBitsImage",           d->decodingSettingsBox->sixteenBits());
     config->writeEntry("White Balance",              d->decodingSettingsBox->whiteBalance());
     config->writeEntry("Custom White Balance",       d->decodingSettingsBox->customWhiteBalance());
