@@ -150,7 +150,7 @@ void ImageDialogPreview::showPreview(const KUrl& url)
             if (info.model.isEmpty()) model = unavailable;
             else model = info.model;
 
-            if (info.dateTime.isValid()) dateTime = unavailable;
+            if (!info.dateTime.isValid()) dateTime = unavailable;
             else dateTime = KGlobal::locale()->formatDateTime(info.dateTime, KLocale::ShortDate, true);
 
             if (info.aperture.isEmpty()) aperture = unavailable; 

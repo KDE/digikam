@@ -51,10 +51,13 @@ public:
 
     QSize sizeHint() const;
 
+public slots:
+
+    void showPreview(const KUrl &url);
+
 private slots:
 
     void showPreview();
-    void showPreview(const KUrl &url);
     void slotThumbnail(const LoadingDescription& desc, const QPixmap& pix);
     void clearPreview();
 
