@@ -69,11 +69,11 @@ public:
 
     KPopupFrame           *panIconPopup;
 
+    KURL                   url;
+
     PanIconWidget         *panIconWidget;
 
     DImg                   preview;
-
-    KURL                   url;
 
     ManagedLoadSaveThread *loadThread;
 };
@@ -147,7 +147,7 @@ void RawPreview::setDecodingSettings(const KDcrawIface::RawDecodingSettings& set
                     this, SLOT(slotLoadingProgress(const LoadingDescription&, float)));
         }
 
-        d->loadThread->load(LoadingDescription(d->url.path(), settings), 
+        d->loadThread->load(LoadingDescription(d->url.path(), settings),
                             ManagedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
         emit signalLoadingStarted();
     }
