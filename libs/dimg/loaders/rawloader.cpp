@@ -73,7 +73,7 @@ bool RAWLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     // the method checkExifWorkingColorSpace() like with JPEG, PNG, and TIFF loaders, 
     // because RAW file are always in linear mode.
 
-    int width, height, rgbmax;
+    int        width, height, rgbmax;
     QByteArray data;
     if (!KDcrawIface::KDcraw::decodeRAWImage(filePath, m_rawDecodingSettings, 
                                              data, width, height, rgbmax))
@@ -170,6 +170,9 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
 
                 if (white < val) white = (float)val;
             }
+
+            white *= 1.0 / m_rawDecodingSettings.brightness;
+
             DDebug() << "White Point: " << white << endl;
 
             // Compute the Gamma lut accordingly.
@@ -248,25 +251,25 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
         case KDcrawIface::RawDecodingSettings::SRGB:
         {
             QString directory = KGlobal::dirs()->findResourceDir("profiles", "srgb.icm");
-            m_image->getICCProfilFromFile(directory + "srgb.icm"); 
+            m_image->getICCProfilFromFile(directory + "srgb.icm");
             break;
         }
         case KDcrawIface::RawDecodingSettings::ADOBERGB:
         {
             QString directory = KGlobal::dirs()->findResourceDir("profiles", "adobergb.icm");
-            m_image->getICCProfilFromFile(directory + "adobergb.icm"); 
+            m_image->getICCProfilFromFile(directory + "adobergb.icm");
             break;
         }
         case KDcrawIface::RawDecodingSettings::WIDEGAMMUT:
         {
             QString directory = KGlobal::dirs()->findResourceDir("profiles", "widegamut.icm");
-            m_image->getICCProfilFromFile(directory + "widegamut.icm"); 
+            m_image->getICCProfilFromFile(directory + "widegamut.icm");
             break;
         }
         case KDcrawIface::RawDecodingSettings::PROPHOTO:
         {
             QString directory = KGlobal::dirs()->findResourceDir("profiles", "prophoto.icm");
-            m_image->getICCProfilFromFile(directory + "prophoto.icm"); 
+            m_image->getICCProfilFromFile(directory + "prophoto.icm");
             break;
         }
         default:
