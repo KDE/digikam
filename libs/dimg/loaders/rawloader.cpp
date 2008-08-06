@@ -154,7 +154,7 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
             ImageHistogram histogram(image, width, height, true);
 
             int perc, val, total;
-            float white=0.0, r;
+            float white=0.0, r, gamma=2.222222;
             unsigned short lut[65536];
 
             // Search 99th percentile white level.
@@ -180,7 +180,7 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
             for (int i=0; i < 65536; i++) 
             {
                 r = i / white;
-                val = (int)(65536.0 * (r <= 0.018 ? r*4.5 : pow(r,0.45)*1.099-0.099));
+                val = (int)(65536.0 * (r <= 0.018 ? r*4.5 : pow(r, 1.0/gamma) * 1.099-0.099));
                 if (val > 65535) val = 65535;
                 lut[i] = val;
             }
