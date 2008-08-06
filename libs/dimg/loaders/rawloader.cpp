@@ -66,7 +66,7 @@ bool RAWLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     if (m_loadFlags & LoadImageData)
     {
-        int width, height, rgbmax;
+        int        width, height, rgbmax;
         QByteArray data;
         if (!KDcrawIface::KDcraw::decodeRAWImage(filePath, m_rawDecodingSettings,
              data, width, height, rgbmax))
@@ -177,6 +177,8 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
 
                 if (white < val) white = (float)val;
             }
+
+            white *= 1.0 / m_rawDecodingSettings.brightness;
             DDebug() << "White Point: " << white << endl;
 
             // Compute the Gamma lut accordingly.
