@@ -31,6 +31,7 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qvbox.h>
+#include <qsplitter.h>
 
 // KDE includes.
 
@@ -96,6 +97,7 @@ public:
         histogramWidget     = 0;
         infoBox             = 0;
         advExposureBox      = 0;
+        splitter            = 0;
     }
 
     QWidget                          *advExposureBox;
@@ -105,6 +107,8 @@ public:
     QComboBox                        *colorsCB;
 
     QLabel                           *gammaLabel;
+
+    QSplitter                        *splitter;
 
     QHButtonGroup                    *scaleBG;
 
@@ -149,14 +153,22 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
     setButtonText(Default, i18n("&Reset"));
     setButtonTip(Default, i18n("<p>Reset these settings to default values."));
 
-    QWidget *page = new QWidget(this);
+    QHBox *page    = new QHBox(this);
     setMainWidget(page);
-    QGridLayout *mainLayout = new QGridLayout(page, 1, 1);
-    d->previewWidget        = new RawPreview(page);
+    d->splitter      = new QSplitter(page);
+    d->previewWidget = new RawPreview(d->splitter);
+
+    QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
+    d->previewWidget->setSizePolicy(rightSzPolicy);
+
+    d->splitter->setFrameStyle( QFrame::NoFrame );
+    d->splitter->setFrameShadow( QFrame::Plain );
+    d->splitter->setFrameShape( QFrame::NoFrame );
+    d->splitter->setOpaqueResize(false);
 
     // ---------------------------------------------------------------
 
-    QWidget *gboxSettings     = new QWidget(page);
+    QWidget *gboxSettings     = new QWidget(d->splitter);
     QGridLayout* gridSettings = new QGridLayout(gboxSettings, 5, 4);
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
@@ -225,7 +237,7 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    d->decodingSettingsBox = new KDcrawIface::DcrawSettingsWidget(gboxSettings, true, true, false);
+    d->decodingSettingsBox = new KDcrawIface::DcrawSettingsWidget(gboxSettings, true, true, true);
     d->infoBox             = new ImageDialogPreview(d->decodingSettingsBox);
     d->infoBox->showPreview(d->url);
 
@@ -246,8 +258,8 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
     advExposureLayout->setSpacing(KDialog::spacingHint());
     advExposureLayout->setMargin(KDialog::spacingHint());
 
-    d->decodingSettingsBox->insertTab(d->advExposureBox, i18n("Exposure"));
-    d->decodingSettingsBox->insertTab(d->infoBox, i18n("Infos"));
+    d->decodingSettingsBox->addItem(d->advExposureBox, i18n("Exposure"));
+    d->decodingSettingsBox->addItem(d->infoBox, i18n("Infos"));
 
     // ---------------------------------------------------------------
 
@@ -265,13 +277,13 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    mainLayout->addMultiCellWidget(d->previewWidget, 0, 1, 0, 0);
+/*    mainLayout->addMultiCellWidget(d->previewWidget, 0, 1, 0, 0);
     mainLayout->addMultiCellWidget(gboxSettings,     0, 0, 1, 1);
     mainLayout->setColStretch(0, 10);
     mainLayout->setRowStretch(1, 10);
     mainLayout->setSpacing(spacingHint());
     mainLayout->setMargin(0);
-
+*/
     // ---------------------------------------------------------------
 
 
