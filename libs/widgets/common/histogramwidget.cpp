@@ -622,8 +622,6 @@ void HistogramWidget::paintEvent( QPaintEvent * )
     p1.begin(&pm);
     p1.initFrom(this);
     p1.fillRect(0, 0, width(), height(), palette().color(QPalette::Active, QPalette::Background));
-    p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
-    p1.drawRect(0, 0, width(), height());
 
     // Drawing selection or all histogram values.
 
@@ -1053,6 +1051,8 @@ void HistogramWidget::paintEvent( QPaintEvent * )
        this->setToolTip( tipText);
     }
 
+    p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
+    p1.drawRect(0, 0, width(), height());
     p1.end();
 
     QPainter p2(this);
