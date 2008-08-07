@@ -69,6 +69,7 @@ private:
 
     void setWaitingDataProgress(double value);
     void setRecievingDataProgress(double value);
+    void postProcessing();
 
 private:
 

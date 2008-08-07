@@ -245,19 +245,6 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
         imageData() = image;
     }
 
-    imageWidth()  = width;
-    imageHeight() = height;
-
-    WhiteBalance wb(m_rawDecodingSettings.sixteenBitsImage);
-    wb.whiteBalance(imageData(), imageWidth(), imageHeight(), m_rawDecodingSettings.sixteenBitsImage, 
-                    0.0,                        // black
-                    0.0,                        // exposure
-                    6500.0,                     // temperature (neutral)
-                    1.0,                        // green
-                    0.5,                        // dark
-                    m_customRawSettings.gamma,  // gamma
-                    1.0);                       // saturation
-
     //----------------------------------------------------------
     // Assign the right color-space profile.
 
@@ -295,9 +282,30 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
 
     //----------------------------------------------------------
 
+
+    imageWidth()  = width;
+    imageHeight() = height;
     imageSetAttribute("format", "RAW");
 
+    postProcessing();
+
     return true;
+}
+
+void RAWLoader::postProcessing()
+{
+    if (!m_customRawSettings.postProcessingSettingsIsDirty())
+        return;
+
+    WhiteBalance wb(m_rawDecodingSettings.sixteenBitsImage);
+    wb.whiteBalance(imageData(), imageWidth(), imageHeight(), m_rawDecodingSettings.sixteenBitsImage,
+                    0.0,                                // black
+                    m_customRawSettings.exposureComp,   // exposure
+                    6500.0,                             // temperature (neutral)
+                    1.0,                                // green
+                    0.5,                                // dark
+                    m_customRawSettings.gamma,          // gamma
+                    m_customRawSettings.saturation);    // saturation
 }
 
 }  // NameSpace Digikam

@@ -96,6 +96,10 @@ public:
         histogramWidget     = 0;
         infoBox             = 0;
         advExposureBox      = 0;
+        gammaLabel          = 0;
+        gammaSpinBox        = 0;
+        saturationLabel     = 0;
+        saturationInput     = 0;
     }
 
     QWidget                          *advExposureBox;
@@ -105,17 +109,18 @@ public:
     QComboBox                        *colorsCB;
 
     QLabel                           *gammaLabel;
+    QLabel                           *saturationLabel;
 
     QHButtonGroup                    *scaleBG;
 
     KDoubleNumInput                  *gammaSpinBox;
+    KDoubleNumInput                  *saturationInput;
 
     KURL                              url;
 
     ColorGradientWidget              *hGradient;
 
     HistogramWidget                  *histogramWidget;
-
 
     ImageDialogPreview               *infoBox;
 
@@ -240,8 +245,17 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
     QWhatsThis::add(d->gammaSpinBox, i18n("<p><b>Gamma</b><p>"
                     "Set here the gamma adjustement of the image"));
 
-    advExposureLayout->addMultiCellWidget(d->gammaLabel,   0, 0, 0, 0);
-    advExposureLayout->addMultiCellWidget(d->gammaSpinBox, 0, 0, 1, 2);
+    d->saturationLabel = new QLabel(i18n("Saturation:"), d->advExposureBox);
+    d->saturationInput = new KDoubleNumInput(d->advExposureBox);
+    d->saturationInput->setPrecision(2);
+    d->saturationInput->setRange(0.0, 2.0, 0.01, true);
+    QWhatsThis::add( d->saturationInput, i18n("<p>Set here the saturation value."));
+
+
+    advExposureLayout->addMultiCellWidget(d->gammaLabel,      0, 0, 0, 0);
+    advExposureLayout->addMultiCellWidget(d->gammaSpinBox,    0, 0, 1, 2);
+    advExposureLayout->addMultiCellWidget(d->saturationLabel, 1, 1, 0, 0);
+    advExposureLayout->addMultiCellWidget(d->saturationInput, 1, 1, 1, 2);
     advExposureLayout->setRowStretch(2, 10);
     advExposureLayout->setSpacing(KDialog::spacingHint());
     advExposureLayout->setMargin(KDialog::spacingHint());
@@ -338,6 +352,7 @@ void RawImportDlg::slotDefault()
 {
     d->decodingSettingsBox->setDefaultSettings();
     d->gammaSpinBox->setValue(1.0);
+    d->saturationInput->setValue(1.0);
 }
 
 void RawImportDlg::slotOk()
@@ -395,6 +410,7 @@ void RawImportDlg::readSettings()
             (int)(DRawDecoding::SRGB))); 
 
     d->gammaSpinBox->setValue(config->readDoubleNumEntry("Gamma", 1.0));
+    d->saturationInput->setValue(config->readDoubleNumEntry("Saturation", 1.0));
 
     resize(configDialogSize(*config, QString("RAW Import Dialog")));
 
@@ -433,7 +449,9 @@ void RawImportDlg::saveSettings()
     config->writeEntry("caBlueMultiplier",           d->decodingSettingsBox->caBlueMultiplier());
     config->writeEntry("Decoding Quality",           (int)d->decodingSettingsBox->quality());
     config->writeEntry("Output Color Space",         (int)d->decodingSettingsBox->outputColorSpace());
+
     config->writeEntry("Gamma",                      d->gammaSpinBox->value());
+    config->writeEntry("Saturation",                 d->saturationInput->value());
 
     saveDialogSize(*config, QString("RAW Import Dialog"));
     config->sync();
@@ -463,7 +481,9 @@ DRawDecoding RawImportDlg::rawDecodingSettings()
     settings.caMultiplier[1]         = d->decodingSettingsBox->caBlueMultiplier();
     settings.RAWQuality              = d->decodingSettingsBox->quality();
     settings.outputColorSpace        = d->decodingSettingsBox->outputColorSpace();
+
     settings.gamma                   = d->gammaSpinBox->value();
+    settings.saturation              = d->saturationInput->value();
 
     return settings;
 }
