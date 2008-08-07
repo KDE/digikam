@@ -83,7 +83,7 @@ static inline void authorsRegistration(KAboutData& aboutData)
 
     aboutData.addAuthor ( ki18n("Renchi Raju"),
                           ki18n("Developer (2002-2005)"),
-                          "renchi at pooh.tam.uiuc.edu");
+                          "renchi at pooh dot tam dot uiuc dot edu");
 
     aboutData.addAuthor ( ki18n("Joern Ahrens"),
                           ki18n("Developer (2004-2005)"),
@@ -129,7 +129,7 @@ static inline void authorsRegistration(KAboutData& aboutData)
 
     aboutData.addCredit ( ki18n("Gregory Kokanosky"),
                           ki18n("Developer"),
-                          "gregory dot kokanosky at free.fr");
+                          "gregory dot kokanosky at free dot fr");
 
     aboutData.addCredit ( ki18n("Rune Laursen"),
                           ki18n("Danish translations"),
@@ -185,7 +185,7 @@ static inline void authorsRegistration(KAboutData& aboutData)
 
     aboutData.addCredit ( ki18n("Aaron Seigo"),
                           ki18n("Various usability fixes and general application polishing"),
-                          "aseigo at kde.org");
+                          "aseigo at kde dot org");
 
     aboutData.addCredit ( ki18n("Yves Chaufour"),
                           ki18n("digiKam website, Feedback"),
