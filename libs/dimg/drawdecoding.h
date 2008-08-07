@@ -42,34 +42,46 @@ class DIGIKAM_EXPORT DRawDecoding : public KDcrawIface::RawDecodingSettings
 
 public:
 
-    /** Standard constructor with default settings */
+    /** Standard constructor with default settings 
+     */
     DRawDecoding()
     {
         gamma        = 1.0;
         saturation   = 1.0;
         exposureComp = 0.0;
+        contrast     = 0.0;
     };
 
-    /** Standard destructor */
+    /** Standard destructor 
+     */
     virtual ~DRawDecoding(){};
 
-    /** Method to use a settings to optimize time loading, for exemple to compute image histogram */
+    /** Method to use a settings to optimize time loading, for exemple to compute image histogram 
+     */
     void optimizeTimeLoading()
     {
         KDcrawIface::RawDecodingSettings::optimizeTimeLoading();
         gamma        = 1.0;
         saturation   = 1.0;
         exposureComp = 0.0;
+        contrast     = 0.0;
     };
 
+    /** Method to check is a post-processing setting have been changed 
+     */
     bool postProcessingSettingsIsDirty()
     {
-        return (gamma        != 1.0 || 
-                saturation   != 1.0 || 
+        return (contrast     != 0.0 ||
+                gamma        != 1.0 ||
+                saturation   != 1.0 ||
                 exposureComp != 0.0);
     }
 
 public:
+
+    /** Contrast correction value.
+    */
+    double contrast;
 
     /** Gamma correction value.
     */
