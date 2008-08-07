@@ -148,19 +148,18 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
     setHelp("rawimport.anchor", "digikam");
     setCaption(i18n("Raw Import - %1").arg(d->url.fileName()));
 
-    setButtonText(User1, i18n("&Preview"));
+    setButtonGuiItem(User1, KGuiItem(i18n("&Preview"), "run"));
     setButtonTip(User1, i18n("<p>Generate a Raw image preview using current settings."));
 
-    setButtonText(User2, i18n("&Abort"));
+    setButtonGuiItem(User2, KGuiItem(i18n("&Abort"), "stop"));
     setButtonTip(User2, i18n("<p>Abort the current Raw image preview"));
 
     setButtonText(Ok, i18n("&Import"));
     setButtonTip(Ok, i18n("<p>Import image to editor using current settings."));
 
-    setButtonText(Cancel, i18n("&Use Default"));
+    setButtonGuiItem(Cancel, KGuiItem(i18n("&Use General"), "gohome"));
     setButtonTip(Cancel, i18n("<p>Use general Raw decoding settings to load this image in editor."));
 
-    setButtonText(Default, i18n("&Reset"));
     setButtonTip(Default, i18n("<p>Reset these settings to default values."));
 
     QWidget *page = new QWidget(this);
