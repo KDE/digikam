@@ -427,6 +427,7 @@ void RawImportDlg::readSettings()
     d->saturationInput->setValue(config->readDoubleNumEntry("Saturation", 1.0));
     d->fineExposureInput->setValue(config->readDoubleNumEntry("FineExposure", 0.0));
 
+    d->decodingSettingsBox->setCurrentIndex(config->readNumEntry("Settings Tab", 0));
     resize(configDialogSize(*config, QString("RAW Import Dialog")));
 
     slotChannelChanged(d->channelCB->currentItem());
@@ -470,6 +471,7 @@ void RawImportDlg::saveSettings()
     config->writeEntry("Saturation",                 d->saturationInput->value());
     config->writeEntry("FineExposure",               d->fineExposureInput->value());
 
+    config->writeEntry("Settings Tab", d->decodingSettingsBox->currentIndex());
     saveDialogSize(*config, QString("RAW Import Dialog"));
     config->sync();
 }
