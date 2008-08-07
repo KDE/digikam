@@ -6,7 +6,7 @@
  * Date        : 2004-12-01
  * Description : a widget to draw an histogram curve
  *
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -269,6 +269,8 @@ void CurvesWidget::paintEvent( QPaintEvent * )
         p1.begin(&pm);
         p1.initFrom(this);
         p1.fillRect(0, 0, width(), height(), palette().color(QPalette::Active, QPalette::Background));
+        p1.setPen(QPen(Qt::black, 1, Qt::SolidLine));
+        p1.drawRect(0, 0, width(), height());
         p1.drawPixmap(width()/2 - asize /2, asize, anim);
         p1.setPen(palette().color(QPalette::Active, QPalette::Text));
         p1.drawText(0, 0, width(), height(), Qt::AlignCenter,
@@ -284,6 +286,8 @@ void CurvesWidget::paintEvent( QPaintEvent * )
         p1.begin(&pm);
         p1.initFrom(this);
         p1.fillRect(0, 0, width(), height(), palette().color(QPalette::Active, QPalette::Background));
+        p1.setPen(QPen(Qt::black, 1, Qt::SolidLine));
+        p1.drawRect(0, 0, width(), height());
         p1.setPen(palette().color(QPalette::Active, QPalette::Text));
         p1.drawText(0, 0, width(), height(), Qt::AlignCenter,
                     i18n("Histogram\ncalculation\nfailed."));
