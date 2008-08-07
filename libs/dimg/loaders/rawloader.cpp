@@ -41,6 +41,7 @@
 #include "imagehistogram.h"
 #include "dimg.h"
 #include "dimgloaderobserver.h"
+#include "bcgmodifier.h"
 #include "whitebalance.h"
 #include "rawloader.h"
 #include "rawloader.moc"
@@ -296,15 +297,26 @@ void RAWLoader::postProcessing()
     if (!m_customRawSettings.postProcessingSettingsIsDirty())
         return;
 
-    WhiteBalance wb(m_rawDecodingSettings.sixteenBitsImage);
-    wb.whiteBalance(imageData(), imageWidth(), imageHeight(), m_rawDecodingSettings.sixteenBitsImage,
-                    0.0,                                // black
-                    m_customRawSettings.exposureComp,   // exposure
-                    6500.0,                             // temperature (neutral)
-                    1.0,                                // green
-                    0.5,                                // dark
-                    m_customRawSettings.gamma,          // gamma
-                    m_customRawSettings.saturation);    // saturation
+    if (m_customRawSettings.exposureComp != 0.0 || m_customRawSettings.saturation != 1.0)
+    {
+        WhiteBalance wb(m_rawDecodingSettings.sixteenBitsImage);
+        wb.whiteBalance(imageData(), imageWidth(), imageHeight(), m_rawDecodingSettings.sixteenBitsImage,
+                        0.0,                                // black
+                        m_customRawSettings.exposureComp,   // exposure
+                        6500.0,                             // temperature (neutral)
+                        1.0,                                // green
+                        0.5,                                // dark
+                        1.0,                                // gamma
+                        m_customRawSettings.saturation);    // saturation
+    }
+
+    if (m_customRawSettings.gamma != 1.0 || m_customRawSettings.contrast != 0.0)
+    {
+        BCGModifier bcg;
+        bcg.setGamma(m_customRawSettings.gamma);
+        bcg.setContrast(m_customRawSettings.contrast);
+        bcg.applyBCG(imageData(), imageWidth(), imageHeight(), m_rawDecodingSettings.sixteenBitsImage);
+    }
 }
 
 }  // NameSpace Digikam
