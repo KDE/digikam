@@ -238,7 +238,7 @@ void CurvesWidget::slotBlinkTimerDone()
     d->blinkTimer->start( 200 );
 }
 
-void CurvesWidget::paintEvent( QPaintEvent * )
+void CurvesWidget::paintEvent(QPaintEvent*)
 {
     if (d->clearFlag == CurvesWidgetPriv::HistogramStarted)
     {
@@ -267,6 +267,8 @@ void CurvesWidget::paintEvent( QPaintEvent * )
        QPainter p1;
        p1.begin(&pm, this);
        p1.fillRect(0, 0, width(), height(), palette().active().background());
+       p1.setPen(QPen(Qt::black, 1, Qt::SolidLine));
+       p1.drawRect(0, 0, width(), height());
        p1.drawPixmap(width()/2 - asize /2, asize, anim);
        p1.setPen(QPen(palette().active().text()));
        p1.drawText(0, 0, width(), height(), Qt::AlignCenter,
@@ -282,6 +284,8 @@ void CurvesWidget::paintEvent( QPaintEvent * )
        QPainter p1;
        p1.begin(&pm, this);
        p1.fillRect(0, 0, width(), height(), palette().active().background());
+       p1.setPen(QPen(Qt::black, 1, Qt::SolidLine));
+       p1.drawRect(0, 0, width(), height());
        p1.setPen(QPen(palette().active().text()));
        p1.drawText(0, 0, width(), height(), Qt::AlignCenter,
                    i18n("Histogram\ncalculation\nfailed."));
