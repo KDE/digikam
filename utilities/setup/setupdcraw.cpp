@@ -116,6 +116,7 @@ void SetupDcraw::applySettings()
 #if KDCRAW_VERSION >= 0x000300
     group.writeEntry("EnableWhitePoint",        d->dcrawSettings->useWhitePoint());
     group.writeEntry("WhitePoint",              d->dcrawSettings->whitePoint());
+    group.writeEntry("MedianFilterPasses",      d->dcrawSettings->medianFilterPasses());
 #endif
     config->sync();
 }
@@ -147,6 +148,7 @@ void SetupDcraw::readSettings()
 #if KDCRAW_VERSION >= 0x000300
     d->dcrawSettings->setUseWhitePoint(group.readEntry("EnableWhitePoint", false));
     d->dcrawSettings->setWhitePoint(group.readEntry("WhitePoint", 0));
+    d->dcrawSettings->setMedianFilterPasses(group.readEntry("MedianFilterPasses", 0));
 #endif
 }
 

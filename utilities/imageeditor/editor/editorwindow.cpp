@@ -922,6 +922,7 @@ void EditorWindow::applyStandardSettings()
 #if KDCRAW_VERSION >= 0x000105
     m_IOFileSettings->rawDecodingSettings.enableWhitePoint        = group.readEntry("EnableWhitePoint", false);
     m_IOFileSettings->rawDecodingSettings.whitePoint              = group.readEntry("WhitePoint", 0);
+    m_IOFileSettings->rawDecodingSettings.medianFilterPasses      = group.readEntry("MedianFilterPasses", 0);
 #endif
 
     // -- GUI Settings -------------------------------------------------------
