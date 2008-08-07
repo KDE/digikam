@@ -408,6 +408,7 @@ void RawImportDlg::readSettings()
 #if KDCRAW_VERSION >= 0x000105
     d->decodingSettingsBox->setUseWhitePoint(config->readBoolEntry("Use White Point", false));
     d->decodingSettingsBox->setWhitePoint(config->readNumEntry("White Point", 0));
+    d->decodingSettingsBox->setMedianFilterPasses(config->readNumEntry("Median Filter Passes", 0));
 #endif
     d->decodingSettingsBox->setNRThreshold(config->readNumEntry("NR Threshold", 100));
     d->decodingSettingsBox->setUseCACorrection(config->readBoolEntry("EnableCACorrection", false));
@@ -456,6 +457,7 @@ void RawImportDlg::saveSettings()
 #if KDCRAW_VERSION >= 0x000105
     config->writeEntry("Use White Point",            d->decodingSettingsBox->useWhitePoint());
     config->writeEntry("White Point",                d->decodingSettingsBox->whitePoint());
+    config->writeEntry("MedianFilterPasses",         d->decodingSettingsBox->medianFilterPasses());
 #endif
     config->writeEntry("NR Threshold",               d->decodingSettingsBox->NRThreshold());
     config->writeEntry("EnableCACorrection",         d->decodingSettingsBox->useCACorrection());
@@ -489,6 +491,7 @@ DRawDecoding RawImportDlg::rawDecodingSettings()
 #if KDCRAW_VERSION >= 0x000105
     settings.enableWhitePoint        = d->decodingSettingsBox->useWhitePoint();
     settings.whitePoint              = d->decodingSettingsBox->whitePoint();
+    settings.medianFilterPasses      = d->decodingSettingsBox->medianFilterPasses();
 #endif
     settings.NRThreshold             = d->decodingSettingsBox->NRThreshold();
     settings.enableCACorrection      = d->decodingSettingsBox->useCACorrection();

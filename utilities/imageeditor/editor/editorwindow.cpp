@@ -942,6 +942,7 @@ void EditorWindow::applyStandardSettings()
 #if KDCRAW_VERSION >= 0x000105
     m_IOFileSettings->rawDecodingSettings.enableWhitePoint        = config->readBoolEntry("EnableWhitePoint", false);
     m_IOFileSettings->rawDecodingSettings.whitePoint              = config->readNumEntry("WhitePoint", 0);
+    m_IOFileSettings->rawDecodingSettings.medianFilterPasses      = config->readNumEntry("MedianFilterPasses", 0);
 #endif
 
     m_IOFileSettings->useRAWImport                                = config->readBoolEntry("UseRawImportTool", false);
