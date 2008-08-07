@@ -385,6 +385,8 @@ void HistogramWidget::paintEvent(QPaintEvent*)
        QPainter p1;
        p1.begin(&pm, this);
        p1.fillRect(0, 0, size().width(), size().height(),  palette().disabled().background());
+       p1.setPen(QPen(palette().active().foreground(), 1, Qt::SolidLine));
+       p1.drawRect(0, 0, width(), height());
        p1.setPen(QPen(palette().disabled().foreground(), 1, Qt::SolidLine));
        p1.drawRect(0, 0, width(), height());
        p1.end();
@@ -423,6 +425,8 @@ void HistogramWidget::paintEvent(QPaintEvent*)
        QPainter p1;
        p1.begin(&pm, this);
        p1.fillRect(0, 0, width(), height(), palette().active().background());
+       p1.setPen(QPen(palette().active().foreground(), 1, Qt::SolidLine));
+       p1.drawRect(0, 0, width(), height());
        p1.drawPixmap(width()/2 - asize /2, asize, anim);
        p1.setPen(QPen(palette().active().text()));
 
@@ -431,7 +435,7 @@ void HistogramWidget::paintEvent(QPaintEvent*)
                        i18n("Loading image..."));
        else 
            p1.drawText(0, 0, width(), height(), Qt::AlignCenter,
-                  i18n("Histogram calculation..."));
+                       i18n("Histogram calculation..."));
        p1.end();
 
        bitBlt(this, 0, 0, &pm);
@@ -445,9 +449,11 @@ void HistogramWidget::paintEvent(QPaintEvent*)
        QPainter p1;
        p1.begin(&pm, this);
        p1.fillRect(0, 0, width(), height(), palette().active().background());
+       p1.setPen(QPen(palette().active().foreground(), 1, Qt::SolidLine));
+       p1.drawRect(0, 0, width(), height());
        p1.setPen(QPen(palette().active().text()));
        p1.drawText(0, 0, width(), height(), Qt::AlignCenter,
-                  i18n("Histogram\ncalculation\nfailed."));
+                   i18n("Histogram\ncalculation\nfailed."));
        p1.end();
        bitBlt(this, 0, 0, &pm);
        return;
@@ -520,6 +526,8 @@ void HistogramWidget::paintEvent(QPaintEvent*)
     QPainter p1;
     p1.begin(&pm, this);
     p1.fillRect(0, 0, width(), height(), palette().active().background());
+    p1.setPen(QPen(palette().active().foreground(), 1, Qt::SolidLine));
+    p1.drawRect(0, 0, width(), height());
 
     // Drawing selection or all histogram values.
 
@@ -949,10 +957,6 @@ void HistogramWidget::paintEvent(QPaintEvent*)
        QToolTip::add( this, tipText);
     }
 
-    // Drawing frame.
-
-    p1.setPen(QPen(palette().active().foreground(), 1, Qt::SolidLine));
-    p1.drawRect(0, 0, width(), height());
     p1.end();
     bitBlt(this, 0, 0, &pm);
 }
