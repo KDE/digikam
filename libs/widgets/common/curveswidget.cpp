@@ -249,11 +249,11 @@ void CurvesWidget::paintEvent( QPaintEvent * )
         QPixmap anim(asize, asize);
         QPainter p2;
         p2.begin(&anim);
-        p2.fillRect(0, 0, asize, asize, palette().color(QPalette::Disabled, QPalette::Background));
+        p2.fillRect(0, 0, asize, asize, palette().color(QPalette::Active, QPalette::Background));
         p2.translate(asize/2, asize/2);
 
         d->pos = (d->pos + 10) % 360;
-        p2.setPen(palette().color(QPalette::Disabled, QPalette::Foreground));
+        p2.setPen(palette().color(QPalette::Active, QPalette::Foreground));
         p2.rotate(d->pos);
         for ( int i=0 ; i<12 ; i++ )
         {
@@ -269,7 +269,7 @@ void CurvesWidget::paintEvent( QPaintEvent * )
         p1.begin(&pm);
         p1.initFrom(this);
         p1.fillRect(0, 0, width(), height(), palette().color(QPalette::Active, QPalette::Background));
-        p1.setPen(QPen(Qt::black, 1, Qt::SolidLine));
+        p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
         p1.drawRect(0, 0, width(), height());
         p1.drawPixmap(width()/2 - asize /2, asize, anim);
         p1.setPen(palette().color(QPalette::Active, QPalette::Text));
@@ -286,7 +286,7 @@ void CurvesWidget::paintEvent( QPaintEvent * )
         p1.begin(&pm);
         p1.initFrom(this);
         p1.fillRect(0, 0, width(), height(), palette().color(QPalette::Active, QPalette::Background));
-        p1.setPen(QPen(Qt::black, 1, Qt::SolidLine));
+        p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
         p1.drawRect(0, 0, width(), height());
         p1.setPen(palette().color(QPalette::Active, QPalette::Text));
         p1.drawText(0, 0, width(), height(), Qt::AlignCenter,
@@ -417,32 +417,14 @@ void CurvesWidget::paintEvent( QPaintEvent * )
 
         // Drawing histogram
 
-        p1.setPen(QPen(Qt::lightGray, 1, Qt::SolidLine));
+        p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
         p1.drawLine(x, wHeight, x, wHeight - y);
-        p1.setPen(QPen(Qt::white, 1, Qt::SolidLine));
+        p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Background), 1, Qt::SolidLine));
         p1.drawLine(x, wHeight - y, x, 0);
 
         // Drawing curves.
 
-        switch(m_channelType)
-        {
-            case CurvesWidget::RedChannelHistogram:      // Red channel.
-                p1.setPen(QPen(Qt::darkRed, 1, Qt::SolidLine));
-                break;
-
-            case CurvesWidget::GreenChannelHistogram:    // Green channel.
-                p1.setPen(QPen(Qt::darkGreen, 1, Qt::SolidLine));
-                break;
-
-            case CurvesWidget::BlueChannelHistogram:     // Blue channel.
-                p1.setPen(QPen(Qt::darkBlue, 1, Qt::SolidLine));
-                break;
-
-            default:                                     // Luminosity or Alpha.
-                p1.setPen(QPen(Qt::black, 1, Qt::SolidLine));
-                break;
-        }
-
+        p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Link), 1, Qt::SolidLine));
         p1.drawLine(x - 1, wHeight - ((curvePrevVal * wHeight) / histogram->getHistogramSegment()),
                     x,     wHeight - ((curveVal * wHeight) / histogram->getHistogramSegment()));
 
@@ -470,7 +452,7 @@ void CurvesWidget::paintEvent( QPaintEvent * )
 
    // Drawing black/middle/highlight tone grid separators.
 
-   p1.setPen(QPen(Qt::gray, 1, Qt::SolidLine));
+   p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Base), 1, Qt::SolidLine));
    p1.drawLine(wWidth/4, 0, wWidth/4, wHeight);
    p1.drawLine(wWidth/2, 0, wWidth/2, wHeight);
    p1.drawLine(3*wWidth/4, 0, 3*wWidth/4, wHeight);
@@ -554,7 +536,7 @@ void CurvesWidget::paintEvent( QPaintEvent * )
 
     // Drawing frame.
 
-    p1.setPen(QPen(Qt::black, 1, Qt::SolidLine));
+    p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
     p1.drawRect(0, 0, width(), height());
     p1.end();
 
