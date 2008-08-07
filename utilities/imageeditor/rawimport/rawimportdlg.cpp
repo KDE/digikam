@@ -258,8 +258,13 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
     advExposureLayout->setSpacing(KDialog::spacingHint());
     advExposureLayout->setMargin(KDialog::spacingHint());
 
+#if KDCRAW_VERSION >= 0x000105
     d->decodingSettingsBox->addItem(d->advExposureBox, i18n("Exposure"));
     d->decodingSettingsBox->addItem(d->infoBox, i18n("Infos"));
+#else
+    d->decodingSettingsBox->insertTab(d->advExposureBox, i18n("Exposure"));
+    d->decodingSettingsBox->insertTab(d->infoBox, i18n("Infos"));
+#endif
 
     // ---------------------------------------------------------------
 
