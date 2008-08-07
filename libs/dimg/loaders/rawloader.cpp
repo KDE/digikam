@@ -41,6 +41,7 @@
 #include "dimg.h"
 #include "dimgloaderobserver.h"
 #include "imagehistogram.h"
+#include "bcgmodifier.h"
 #include "whitebalance.h"
 #include "rawloader.h"
 #include "rawloader.moc"
