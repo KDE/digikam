@@ -100,6 +100,8 @@ public:
         gammaSpinBox        = 0;
         saturationLabel     = 0;
         saturationInput     = 0;
+        fineExposureLabel   = 0;
+        fineExposureInput   = 0;
     }
 
     QWidget                          *advExposureBox;
@@ -110,11 +112,13 @@ public:
 
     QLabel                           *gammaLabel;
     QLabel                           *saturationLabel;
+    QLabel                           *fineExposureLabel;
 
     QHButtonGroup                    *scaleBG;
 
     KDoubleNumInput                  *gammaSpinBox;
     KDoubleNumInput                  *saturationInput;
+    KDoubleNumInput                  *fineExposureInput;
 
     KURL                              url;
 
@@ -235,28 +239,36 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
     d->infoBox->showPreview(d->url);
 
     d->advExposureBox              = new QWidget(d->decodingSettingsBox);
-    QGridLayout* advExposureLayout = new QGridLayout(d->advExposureBox, 2, 2);
+    QGridLayout* advExposureLayout = new QGridLayout(d->advExposureBox, 3, 2);
 
     d->gammaLabel   = new QLabel(i18n("Gamma:"), d->advExposureBox);
     d->gammaSpinBox = new KDoubleNumInput(d->advExposureBox);
     d->gammaSpinBox->setPrecision(2);
     d->gammaSpinBox->setRange(0.1, 3.0, 0.01, true);
     d->gammaSpinBox->setValue(1.0);
-    QWhatsThis::add(d->gammaSpinBox, i18n("<p><b>Gamma</b><p>"
-                    "Set here the gamma adjustement of the image"));
+    QWhatsThis::add(d->gammaSpinBox, i18n("Set here the gamma adjustement of the image"));
 
     d->saturationLabel = new QLabel(i18n("Saturation:"), d->advExposureBox);
     d->saturationInput = new KDoubleNumInput(d->advExposureBox);
     d->saturationInput->setPrecision(2);
     d->saturationInput->setRange(0.0, 2.0, 0.01, true);
-    QWhatsThis::add( d->saturationInput, i18n("<p>Set here the saturation value."));
+    QWhatsThis::add( d->saturationInput, i18n("<p>Set here the color saturation correction."));
+
+    d->fineExposureLabel = new QLabel(i18n("Exposure:"), d->advExposureBox);
+    d->fineExposureInput = new KDoubleNumInput(d->advExposureBox);
+    d->fineExposureInput->setPrecision(2);
+    d->fineExposureInput->setRange(-0.5, 0.5, 0.01, true);
+    QWhatsThis::add(d->fineExposureInput, i18n("<p>This value in E.V will be used to perform "
+                                               "an exposure compensation of the image."));
 
 
-    advExposureLayout->addMultiCellWidget(d->gammaLabel,      0, 0, 0, 0);
-    advExposureLayout->addMultiCellWidget(d->gammaSpinBox,    0, 0, 1, 2);
-    advExposureLayout->addMultiCellWidget(d->saturationLabel, 1, 1, 0, 0);
-    advExposureLayout->addMultiCellWidget(d->saturationInput, 1, 1, 1, 2);
-    advExposureLayout->setRowStretch(2, 10);
+    advExposureLayout->addMultiCellWidget(d->gammaLabel,        0, 0, 0, 0);
+    advExposureLayout->addMultiCellWidget(d->gammaSpinBox,      0, 0, 1, 2);
+    advExposureLayout->addMultiCellWidget(d->saturationLabel,   1, 1, 0, 0);
+    advExposureLayout->addMultiCellWidget(d->saturationInput,   1, 1, 1, 2);
+    advExposureLayout->addMultiCellWidget(d->fineExposureLabel, 2, 2, 0, 0);
+    advExposureLayout->addMultiCellWidget(d->fineExposureInput, 2, 2, 1, 2);
+    advExposureLayout->setRowStretch(3, 10);
     advExposureLayout->setSpacing(KDialog::spacingHint());
     advExposureLayout->setMargin(KDialog::spacingHint());
 
@@ -353,6 +365,7 @@ void RawImportDlg::slotDefault()
     d->decodingSettingsBox->setDefaultSettings();
     d->gammaSpinBox->setValue(1.0);
     d->saturationInput->setValue(1.0);
+    d->fineExposureInput->setValue(0.0);
 }
 
 void RawImportDlg::slotOk()
@@ -411,6 +424,7 @@ void RawImportDlg::readSettings()
 
     d->gammaSpinBox->setValue(config->readDoubleNumEntry("Gamma", 1.0));
     d->saturationInput->setValue(config->readDoubleNumEntry("Saturation", 1.0));
+    d->fineExposureInput->setValue(config->readDoubleNumEntry("FineExposure", 0.0));
 
     resize(configDialogSize(*config, QString("RAW Import Dialog")));
 
@@ -452,6 +466,7 @@ void RawImportDlg::saveSettings()
 
     config->writeEntry("Gamma",                      d->gammaSpinBox->value());
     config->writeEntry("Saturation",                 d->saturationInput->value());
+    config->writeEntry("FineExposure",               d->fineExposureInput->value());
 
     saveDialogSize(*config, QString("RAW Import Dialog"));
     config->sync();
@@ -484,6 +499,7 @@ DRawDecoding RawImportDlg::rawDecodingSettings()
 
     settings.gamma                   = d->gammaSpinBox->value();
     settings.saturation              = d->saturationInput->value();
+    settings.exposureComp            = d->fineExposureInput->value();
 
     return settings;
 }
