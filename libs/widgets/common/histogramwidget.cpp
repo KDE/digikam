@@ -519,6 +519,7 @@ void HistogramWidget::paintEvent(QPaintEvent*)
     QPixmap pm(size());
     QPainter p1;
     p1.begin(&pm, this);
+    p1.fillRect(0, 0, width(), height(), palette().active().background());
 
     // Drawing selection or all histogram values.
 
@@ -638,16 +639,16 @@ void HistogramWidget::paintEvent(QPaintEvent*)
          {
             if ( x >= (int)(d->xmin * wWidth) && x <= (int)(d->xmax * wWidth) )
             {
-               p1.setPen(QPen(Qt::black, 1, Qt::SolidLine));
+               p1.setPen(QPen(palette().active().foreground(), 1, Qt::SolidLine));
                p1.drawLine(x, wHeight, x, 0);
                p1.setPen(QPen(Qt::lightGray, 1, Qt::SolidLine));
                p1.drawLine(x, wHeight, x, wHeight - y);
             }
             else 
             {
-               p1.setPen(QPen(Qt::black, 1, Qt::SolidLine));
+               p1.setPen(QPen(palette().active().foreground(), 1, Qt::SolidLine));
                p1.drawLine(x, wHeight, x, wHeight - y);
-               p1.setPen(QPen(Qt::white, 1, Qt::SolidLine));
+               p1.setPen(QPen(palette().active().background(), 1, Qt::SolidLine));
                p1.drawLine(x, wHeight - y, x, 0);
 
                if ( x == wWidth/4 || x == wWidth/2 || x == 3*wWidth/4 )
@@ -659,9 +660,9 @@ void HistogramWidget::paintEvent(QPaintEvent*)
          }
          else
          {
-            p1.setPen(QPen(Qt::black, 1, Qt::SolidLine));
+            p1.setPen(QPen(palette().active().foreground(), 1, Qt::SolidLine));
             p1.drawLine(x, wHeight, x, wHeight - y);
-            p1.setPen(QPen(Qt::white, 1, Qt::SolidLine));
+            p1.setPen(QPen(palette().active().background(), 1, Qt::SolidLine));
             p1.drawLine(x, wHeight - y, x, 0);
 
             if ( x == wWidth/4 || x == wWidth/2 || x == 3*wWidth/4 )
@@ -677,7 +678,7 @@ void HistogramWidget::paintEvent(QPaintEvent*)
          {
              if ( x >= (int)(d->xmin * wWidth) && x <= (int)(d->xmax * wWidth) )
             {
-               p1.setPen(QPen(Qt::black, 1, Qt::SolidLine));
+               p1.setPen(QPen(palette().active().foreground(), 1, Qt::SolidLine));
                p1.drawLine(x, wHeight, x, 0);
                p1.setPen(QPen(Qt::lightGray, 1, Qt::SolidLine));
 
@@ -710,7 +711,7 @@ void HistogramWidget::paintEvent(QPaintEvent*)
                     p1.setPen(QPen(Qt::red, 1, Qt::SolidLine));
                     p1.drawLine(x, wHeight, x, wHeight - yr);
 
-                    p1.setPen(QPen(Qt::white, 1, Qt::SolidLine));
+                    p1.setPen(QPen(palette().active().background(), 1, Qt::SolidLine));
                     p1.drawLine(x, wHeight - QMAX(QMAX(yr, yg), yb), x, 0);
                     p1.setPen(QPen(Qt::gray, 1, Qt::SolidLine));
                     p1.drawLine(x, wHeight - yg -1, x, wHeight - yg);
@@ -733,7 +734,7 @@ void HistogramWidget::paintEvent(QPaintEvent*)
                     p1.setPen(QPen(Qt::green, 1, Qt::SolidLine));
                     p1.drawLine(x, wHeight, x, wHeight - yg);
 
-                    p1.setPen(QPen(Qt::white, 1, Qt::SolidLine));
+                    p1.setPen(QPen(palette().active().background(), 1, Qt::SolidLine));
                     p1.drawLine(x, wHeight - QMAX(QMAX(yr, yg), yb), x, 0);
                     p1.setPen(QPen(Qt::gray, 1, Qt::SolidLine));
                     p1.drawLine(x, wHeight - yb -1, x, wHeight - yb);
@@ -756,7 +757,7 @@ void HistogramWidget::paintEvent(QPaintEvent*)
                     p1.setPen(QPen(Qt::blue, 1, Qt::SolidLine));
                     p1.drawLine(x, wHeight, x, wHeight - yb);
 
-                    p1.setPen(QPen(Qt::white, 1, Qt::SolidLine));
+                    p1.setPen(QPen(palette().active().background(), 1, Qt::SolidLine));
                     p1.drawLine(x, wHeight - QMAX(QMAX(yr, yg), yb), x, 0);
                     p1.setPen(QPen(Qt::gray, 1, Qt::SolidLine));
                     p1.drawLine(x, wHeight - yr -1, x, wHeight - yr);
@@ -786,7 +787,7 @@ void HistogramWidget::paintEvent(QPaintEvent*)
                  p1.setPen(QPen(Qt::red, 1, Qt::SolidLine));
                  p1.drawLine(x, wHeight, x, wHeight - yr);
 
-                 p1.setPen(QPen(Qt::white, 1, Qt::SolidLine));
+                 p1.setPen(QPen(palette().active().background(), 1, Qt::SolidLine));
                  p1.drawLine(x, wHeight - QMAX(QMAX(yr, yg), yb), x, 0);
                  p1.setPen(QPen(Qt::gray, 1, Qt::SolidLine));
                  p1.drawLine(x, wHeight - yg -1, x, wHeight - yg);
@@ -809,7 +810,7 @@ void HistogramWidget::paintEvent(QPaintEvent*)
                  p1.setPen(QPen(Qt::green, 1, Qt::SolidLine));
                  p1.drawLine(x, wHeight, x, wHeight - yg);
 
-                 p1.setPen(QPen(Qt::white, 1, Qt::SolidLine));
+                 p1.setPen(QPen(palette().active().background(), 1, Qt::SolidLine));
                  p1.drawLine(x, wHeight - QMAX(QMAX(yr, yg), yb), x, 0);
                  p1.setPen(QPen(Qt::gray, 1, Qt::SolidLine));
                  p1.drawLine(x, wHeight - yb -1, x, wHeight - yb);
@@ -832,7 +833,7 @@ void HistogramWidget::paintEvent(QPaintEvent*)
                  p1.setPen(QPen(Qt::blue, 1, Qt::SolidLine));
                  p1.drawLine(x, wHeight, x, wHeight - yb);
 
-                 p1.setPen(QPen(Qt::white, 1, Qt::SolidLine));
+                 p1.setPen(QPen(palette().active().background(), 1, Qt::SolidLine));
                  p1.drawLine(x, wHeight - QMAX(QMAX(yr, yg), yb), x, 0);
                  p1.setPen(QPen(Qt::gray, 1, Qt::SolidLine));
                  p1.drawLine(x, wHeight - yr -1, x, wHeight - yr);
@@ -950,7 +951,7 @@ void HistogramWidget::paintEvent(QPaintEvent*)
 
     // Drawing frame.
 
-    p1.setPen(QPen(Qt::black, 1, Qt::SolidLine));
+    p1.setPen(QPen(palette().active().foreground(), 1, Qt::SolidLine));
     p1.drawRect(0, 0, width(), height());
     p1.end();
     bitBlt(this, 0, 0, &pm);
