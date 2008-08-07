@@ -56,7 +56,7 @@ public:
     QString error;
 
     DImgLoaderObserver *observer;
-    KDcrawIface::RawDecodingSettings rawSettings;
+    DRawDecoding rawSettings;
 };
 
 }  // namespace Digikam

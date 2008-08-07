@@ -896,22 +896,22 @@ void EditorWindow::applyStandardSettings()
     // else, sRGB color workspace will be used.
 
     if (d->ICCSettings->enableCMSetting)
-        m_IOFileSettings->rawDecodingSettings.outputColorSpace = KDcrawIface::RawDecodingSettings::RAWCOLOR;
+        m_IOFileSettings->rawDecodingSettings.outputColorSpace = DRawDecoding::RAWCOLOR;
     else
-        m_IOFileSettings->rawDecodingSettings.outputColorSpace = KDcrawIface::RawDecodingSettings::SRGB;
+        m_IOFileSettings->rawDecodingSettings.outputColorSpace = DRawDecoding::SRGB;
 
     m_IOFileSettings->rawDecodingSettings.sixteenBitsImage        = group.readEntry("SixteenBitsImage", false);
-    m_IOFileSettings->rawDecodingSettings.whiteBalance            = (KDcrawIface::RawDecodingSettings::WhiteBalance)group.readEntry("WhiteBalance",
-                                                                    (int)KDcrawIface::RawDecodingSettings::CAMERA);
+    m_IOFileSettings->rawDecodingSettings.whiteBalance            = (DRawDecoding::WhiteBalance)group.readEntry("WhiteBalance",
+                                                                    (int)DRawDecoding::CAMERA);
     m_IOFileSettings->rawDecodingSettings.customWhiteBalance      = group.readEntry("CustomWhiteBalance", 6500);
     m_IOFileSettings->rawDecodingSettings.customWhiteBalanceGreen = group.readEntry("CustomWhiteBalanceGreen", 1.0);
     m_IOFileSettings->rawDecodingSettings.RGBInterpolate4Colors   = group.readEntry("RGBInterpolate4Colors", false);
     m_IOFileSettings->rawDecodingSettings.DontStretchPixels       = group.readEntry("DontStretchPixels", false);
     m_IOFileSettings->rawDecodingSettings.enableNoiseReduction    = group.readEntry("EnableNoiseReduction", false);
     m_IOFileSettings->rawDecodingSettings.unclipColors            = group.readEntry("UnclipColors", 0);
-    m_IOFileSettings->rawDecodingSettings.RAWQuality              = (KDcrawIface::RawDecodingSettings::DecodingQuality)
+    m_IOFileSettings->rawDecodingSettings.RAWQuality              = (DRawDecoding::DecodingQuality)
                                                                     group.readEntry("RAWQuality",
-                                                                    (int)KDcrawIface::RawDecodingSettings::BILINEAR);
+                                                                    (int)DRawDecoding::BILINEAR);
     m_IOFileSettings->rawDecodingSettings.NRThreshold             = group.readEntry("NRThreshold", 100);
     m_IOFileSettings->rawDecodingSettings.enableCACorrection      = group.readEntry("EnableCACorrection", false);
     m_IOFileSettings->rawDecodingSettings.caMultiplier[0]         = group.readEntry("caRedMultiplier", 1.0);

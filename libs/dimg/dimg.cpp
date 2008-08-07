@@ -76,14 +76,14 @@ DImg::DImg()
 }
 
 DImg::DImg(const QByteArray& filePath, DImgLoaderObserver *observer,
-           KDcrawIface::RawDecodingSettings rawDecodingSettings)
+           DRawDecoding rawDecodingSettings)
     : m_priv(new DImgPrivate)
 {
     load(filePath, observer, rawDecodingSettings);
 }
 
 DImg::DImg(const QString& filePath, DImgLoaderObserver *observer,
-           KDcrawIface::RawDecodingSettings rawDecodingSettings)
+           DRawDecoding rawDecodingSettings)
     : m_priv(new DImgPrivate)
 {
     load(filePath, observer, rawDecodingSettings);
@@ -311,17 +311,17 @@ bool DImg::loadImageInfo(const QString& filePath, bool loadMetadata, bool loadIC
     if (loadUniqueHash)
         loadFlags |= DImgLoader::LoadUniqueHash;
 
-    return load(filePath, loadFlags, 0, KDcrawIface::RawDecodingSettings());
+    return load(filePath, loadFlags, 0, DRawDecoding());
 }
 
 bool DImg::load(const QString& filePath, DImgLoaderObserver *observer,
-                KDcrawIface::RawDecodingSettings rawDecodingSettings)
+                DRawDecoding rawDecodingSettings)
 {
     return load(filePath, DImgLoader::LoadAll, observer, rawDecodingSettings);
 }
 
 bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *observer,
-                KDcrawIface::RawDecodingSettings rawDecodingSettings)
+                DRawDecoding rawDecodingSettings)
 {
     FORMAT format = fileFormat(filePath);
     DImgLoader::LoadFlags loadFlags = (DImgLoader::LoadFlags)loadFlagsInt;

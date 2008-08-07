@@ -77,7 +77,7 @@ public:
      * For raw files:
      * Stores filePath and RawDecodingSettings
      */
-    LoadingDescription(const QString &filePath, KDcrawIface::RawDecodingSettings settings);
+    LoadingDescription(const QString &filePath, DRawDecoding settings);
 
     /**
      * For preview and thumbnail jobs:
@@ -94,7 +94,7 @@ public:
                        PreviewParameters::PreviewType = PreviewParameters::PreviewImage);
 
     QString                          filePath;
-    KDcrawIface::RawDecodingSettings rawDecodingSettings;
+    DRawDecoding rawDecodingSettings;
     PreviewParameters                previewParameters;
 
     /**

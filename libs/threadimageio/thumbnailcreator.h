@@ -36,12 +36,9 @@
 
 #include <kfileitem.h>
 
-// LibKDcraw includes.
-
-#include <libkdcraw/rawdecodingsettings.h>
-
 // Local includes
 
+#include "drawdecoding.h"
 #include "digikam_export.h"
 
 namespace Digikam
@@ -81,7 +78,7 @@ public:
      * is created by loading with DImg.
      * Note that DImg is not used in most cases (Raw files, JPEG)
      */
-    void setLoadingProperties(DImgLoaderObserver *observer, KDcrawIface::RawDecodingSettings settings);
+    void setLoadingProperties(DImgLoaderObserver *observer, DRawDecoding settings);
 
     /**
      * Set the exif rotation property.

@@ -42,6 +42,7 @@
 
 // Local includes.
 
+#include "drawdecoding.h"
 #include "setupdcraw.h"
 #include "setupdcraw.moc"
 
@@ -131,15 +132,15 @@ void SetupDcraw::readSettings()
     d->dcrawSettings->setcaBlueMultiplier(group.readEntry("caBlueMultiplier", 1.0));
     d->dcrawSettings->setDontStretchPixels(group.readEntry("DontStretchPixels", false));
     d->dcrawSettings->setUnclipColor(group.readEntry("UnclipColors", 0));
-    d->dcrawSettings->setWhiteBalance((KDcrawIface::RawDecodingSettings::WhiteBalance)
+    d->dcrawSettings->setWhiteBalance((DRawDecoding::WhiteBalance)
                                       group.readEntry("WhiteBalance",
-                                      (int)KDcrawIface::RawDecodingSettings::CAMERA));
+                                      (int)DRawDecoding::CAMERA));
     d->dcrawSettings->setCustomWhiteBalance(group.readEntry("CustomWhiteBalance", 6500));
     d->dcrawSettings->setCustomWhiteBalanceGreen(group.readEntry("CustomWhiteBalanceGreen", 1.0));
     d->dcrawSettings->setFourColor(group.readEntry("RGBInterpolate4Colors", false));
-    d->dcrawSettings->setQuality((KDcrawIface::RawDecodingSettings::DecodingQuality)
+    d->dcrawSettings->setQuality((DRawDecoding::DecodingQuality)
                                   group.readEntry("RAWQuality",
-                                  (int)KDcrawIface::RawDecodingSettings::BILINEAR));
+                                  (int)DRawDecoding::BILINEAR));
     d->dcrawSettings->setBrightness(group.readEntry("RAWBrightness", 1.0));
     d->dcrawSettings->setUseBlackPoint(group.readEntry("EnableBlackPoint", false));
     d->dcrawSettings->setBlackPoint(group.readEntry("BlackPoint", 0));

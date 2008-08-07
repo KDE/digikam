@@ -111,7 +111,7 @@ void ThumbnailCreator::setRemoveAlphaChannel(bool removeAlpha)
 }
 
 
-void ThumbnailCreator::setLoadingProperties(DImgLoaderObserver *observer, KDcrawIface::RawDecodingSettings settings)
+void ThumbnailCreator::setLoadingProperties(DImgLoaderObserver *observer, DRawDecoding settings)
 {
     d->observer = observer;
     d->rawSettings = settings;

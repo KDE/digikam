@@ -41,16 +41,18 @@
 #include "dimg.h"
 #include "dimgloaderobserver.h"
 #include "imagehistogram.h"
+#include "whitebalance.h"
 #include "rawloader.h"
 #include "rawloader.moc"
 
 namespace Digikam
 {
 
-RAWLoader::RAWLoader(DImg* image, KDcrawIface::RawDecodingSettings rawDecodingSettings)
+RAWLoader::RAWLoader(DImg* image, DRawDecoding rawDecodingSettings)
          : DImgLoader(image)
 {
     m_rawDecodingSettings = rawDecodingSettings;
+    m_customRawSettings   = rawDecodingSettings;
     m_observer            = 0;
 }
 
@@ -155,7 +157,7 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
         // No auto white balance and no gamma adjustemnts are performed. Image is a black hole.
         // We need to reproduce all dcraw 8 bits color depth adjustements here.
 
-        if (m_rawDecodingSettings.outputColorSpace != KDcrawIface::RawDecodingSettings::RAWCOLOR)
+        if (m_rawDecodingSettings.outputColorSpace != DRawDecoding::RAWCOLOR)
         {
             ImageHistogram histogram(image, width, height, true);
             histogram.calculate();
@@ -179,6 +181,7 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
             }
 
             white *= 1.0 / m_rawDecodingSettings.brightness;
+
             DDebug() << "White Point: " << white << endl;
 
             // Compute the Gamma lut accordingly.
@@ -254,22 +257,22 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
     QString filePath = KStandardDirs::installPath("data") + QString("libkdcraw/profiles/");
     switch(m_rawDecodingSettings.outputColorSpace)
     {
-        case KDcrawIface::RawDecodingSettings::SRGB:
+        case DRawDecoding::SRGB:
         {
             filePath.append("srgb.icm");
             break;
         }
-        case KDcrawIface::RawDecodingSettings::ADOBERGB:
+        case DRawDecoding::ADOBERGB:
         {
             filePath.append("adobergb.icm");
             break;
         }
-        case KDcrawIface::RawDecodingSettings::WIDEGAMMUT:
+        case DRawDecoding::WIDEGAMMUT:
         {
             filePath.append("widegamut.icm");
             break;
         }
-        case KDcrawIface::RawDecodingSettings::PROPHOTO:
+        case DRawDecoding::PROPHOTO:
         {
             filePath.append("prophoto.icm");
             break;
@@ -287,7 +290,25 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
     imageSetAttribute("originalColorModel", DImg::COLORMODELRAW);
     imageSetAttribute("originalBitDepth", 16);
 
+    postProcessing();
+
     return true;
+}
+
+void RAWLoader::postProcessing()
+{
+    if (!m_customRawSettings.postProcessingSettingsIsDirty())
+        return;
+
+    WhiteBalance wb(m_rawDecodingSettings.sixteenBitsImage);
+    wb.whiteBalance(imageData(), imageWidth(), imageHeight(), m_rawDecodingSettings.sixteenBitsImage,
+                    0.0,                                // black
+                    m_customRawSettings.exposureComp,   // exposure
+                    6500.0,                             // temperature (neutral)
+                    1.0,                                // green
+                    0.5,                                // dark
+                    m_customRawSettings.gamma,          // gamma
+                    m_customRawSettings.saturation);    // saturation
 }
 
 }  // NameSpace Digikam

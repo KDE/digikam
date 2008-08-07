@@ -35,14 +35,11 @@
 #include <QPixmap>
 #include <QVariant>
 
-// LibKDcraw includes.
-
-#include <libkdcraw/rawdecodingsettings.h>
-
 // Local includes.
 
 #include "digikam_export.h"
 #include "dshareddata.h"
+#include "drawdecoding.h"
 #include "dcolor.h"
 #include "dcolorcomposer.h"
 
@@ -115,11 +112,11 @@ public:
 
     /** Load image using QByteArray as file path */
     DImg(const QByteArray& filePath, DImgLoaderObserver *observer = 0,
-         KDcrawIface::RawDecodingSettings rawDecodingSettings=KDcrawIface::RawDecodingSettings());
+         DRawDecoding rawDecodingSettings=DRawDecoding());
 
     /** Load image using QString as file path */
     DImg(const QString& filePath, DImgLoaderObserver *observer = 0,
-         KDcrawIface::RawDecodingSettings rawDecodingSettings=KDcrawIface::RawDecodingSettings());
+         DRawDecoding rawDecodingSettings=DRawDecoding());
 
     /** Copy image: Creates a shallow copy that refers to the same shared data.
         The two images will be equal. Call detach() or copy() to create deep copies.
@@ -190,7 +187,7 @@ public:
 
 
     bool        load(const QString& filePath, DImgLoaderObserver *observer = 0,
-                     KDcrawIface::RawDecodingSettings rawDecodingSettings=KDcrawIface::RawDecodingSettings());
+                     DRawDecoding rawDecodingSettings=DRawDecoding());
 
     bool        save(const QString& filePath, const QString& format, DImgLoaderObserver *observer = 0);
 
@@ -399,7 +396,7 @@ private:
 private:
 
     bool        load(const QString& filePath, int loadFlags, DImgLoaderObserver *observer,
-                     KDcrawIface::RawDecodingSettings rawDecodingSettings=KDcrawIface::RawDecodingSettings());
+                     DRawDecoding rawDecodingSettings=DRawDecoding());
     void       copyMetaData(const DImgPrivate *src);
     void       copyImageData(const DImgPrivate *src);
     void       setImageData(bool null, uint width, uint height, bool sixteenBit, bool alpha);
