@@ -38,7 +38,6 @@
 // Local includes.
 
 #include "ddebug.h"
-#include "drawdecoding.h"
 #include "imagehistogram.h"
 #include "dimg.h"
 #include "dimgloaderobserver.h"
