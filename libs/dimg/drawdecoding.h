@@ -4,8 +4,9 @@
  * http://www.digikam.org
  *
  * Date        : 2008-08-06
- * Description : Raw decoding settings for digiKam
- *               Standard libkdcraw parameters + few customized one.
+ * Description : Raw decoding settings for digiKam:
+ *               standard libkdcraw parameters plus
+ *               few customized for post processing.
  *
  * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -44,7 +45,9 @@ public:
     /** Standard constructor with default settings */
     DRawDecoding()
     {
-        gamma = 2.222222;
+        gamma        = 1.0;
+        saturation   = 1.0;
+        exposureComp = 0.0;
     };
 
     /** Standard destructor */
@@ -54,14 +57,31 @@ public:
     void optimizeTimeLoading()
     {
         KDcrawIface::RawDecodingSettings::optimizeTimeLoading();
-        gamma = 2.222222;
+        gamma        = 1.0;
+        saturation   = 1.0;
+        exposureComp = 0.0;
     };
+
+    bool postProcessingSettingsIsDirty()
+    {
+        return (gamma        != 1.0 || 
+                saturation   != 1.0 || 
+                exposureComp != 0.0);
+    }
 
 public:
 
     /** Gamma correction value.
     */
     double gamma;
+
+    /** Color saturation correction value.
+    */
+    double saturation;
+
+    /** Exposure compensation value.
+    */
+    double exposureComp;
 };
 
 }  // namespace Digikam
