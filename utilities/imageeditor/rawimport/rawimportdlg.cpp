@@ -102,6 +102,8 @@ public:
         saturationInput     = 0;
         fineExposureLabel   = 0;
         fineExposureInput   = 0;
+        contrastSpinBox     = 0;
+        contrastLabel       = 0;
     }
 
     QWidget                          *advExposureBox;
@@ -110,11 +112,14 @@ public:
     QComboBox                        *effectType;
     QComboBox                        *colorsCB;
 
+    QLabel                           *contrastLabel;
     QLabel                           *gammaLabel;
     QLabel                           *saturationLabel;
     QLabel                           *fineExposureLabel;
 
     QHButtonGroup                    *scaleBG;
+
+    KIntNumInput                     *contrastSpinBox;
 
     KDoubleNumInput                  *gammaSpinBox;
     KDoubleNumInput                  *saturationInput;
@@ -239,7 +244,13 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
     d->infoBox->showPreview(d->url);
 
     d->advExposureBox              = new QWidget(d->decodingSettingsBox);
-    QGridLayout* advExposureLayout = new QGridLayout(d->advExposureBox, 3, 2);
+    QGridLayout* advExposureLayout = new QGridLayout(d->advExposureBox, 4, 2);
+
+    d->contrastLabel   = new QLabel(i18n("Contrast:"), d->advExposureBox);
+    d->contrastSpinBox = new KIntNumInput(d->advExposureBox);
+    d->contrastSpinBox->setRange(-100, 100, 1, true);
+    d->contrastSpinBox->setValue(0);
+    QWhatsThis::add(d->contrastSpinBox, i18n("<p>Set here the contrast adjustment of the image."));
 
     d->gammaLabel   = new QLabel(i18n("Gamma:"), d->advExposureBox);
     d->gammaSpinBox = new KDoubleNumInput(d->advExposureBox);
@@ -261,15 +272,16 @@ RawImportDlg::RawImportDlg(const KURL& url, QWidget *parent)
     QWhatsThis::add(d->fineExposureInput, i18n("<p>This value in E.V will be used to perform "
                                                "an exposure compensation of the image."));
 
-
-    advExposureLayout->addMultiCellWidget(d->gammaLabel,        0, 0, 0, 0);
-    advExposureLayout->addMultiCellWidget(d->gammaSpinBox,      0, 0, 1, 2);
-    advExposureLayout->addMultiCellWidget(d->saturationLabel,   1, 1, 0, 0);
-    advExposureLayout->addMultiCellWidget(d->saturationInput,   1, 1, 1, 2);
-    advExposureLayout->addMultiCellWidget(d->fineExposureLabel, 2, 2, 0, 0);
-    advExposureLayout->addMultiCellWidget(d->fineExposureInput, 2, 2, 1, 2);
-    advExposureLayout->setRowStretch(3, 10);
-    advExposureLayout->setSpacing(KDialog::spacingHint());
+    advExposureLayout->addMultiCellWidget(d->contrastLabel,     0, 0, 0, 0);
+    advExposureLayout->addMultiCellWidget(d->contrastSpinBox,   0, 0, 1, 2);
+    advExposureLayout->addMultiCellWidget(d->gammaLabel,        1, 1, 0, 0);
+    advExposureLayout->addMultiCellWidget(d->gammaSpinBox,      1, 1, 1, 2);
+    advExposureLayout->addMultiCellWidget(d->saturationLabel,   2, 2, 0, 0);
+    advExposureLayout->addMultiCellWidget(d->saturationInput,   2, 2, 1, 2);
+    advExposureLayout->addMultiCellWidget(d->fineExposureLabel, 3, 3, 0, 0);
+    advExposureLayout->addMultiCellWidget(d->fineExposureInput, 3, 3, 1, 2);
+    advExposureLayout->setRowStretch(4, 10);
+    advExposureLayout->setSpacing(0);
     advExposureLayout->setMargin(KDialog::spacingHint());
 
 #if KDCRAW_VERSION >= 0x000105
@@ -363,6 +375,7 @@ void RawImportDlg::slotClose()
 void RawImportDlg::slotDefault()
 {
     d->decodingSettingsBox->setDefaultSettings();
+    d->contrastSpinBox->setValue(0);
     d->gammaSpinBox->setValue(1.0);
     d->saturationInput->setValue(1.0);
     d->fineExposureInput->setValue(0.0);
@@ -423,6 +436,7 @@ void RawImportDlg::readSettings()
         (DRawDecoding::OutputColorSpace)config->readNumEntry("Output Color Space", 
             (int)(DRawDecoding::SRGB))); 
 
+    d->contrastSpinBox->setValue(config->readNumEntry("Constrast", 0));
     d->gammaSpinBox->setValue(config->readDoubleNumEntry("Gamma", 1.0));
     d->saturationInput->setValue(config->readDoubleNumEntry("Saturation", 1.0));
     d->fineExposureInput->setValue(config->readDoubleNumEntry("FineExposure", 0.0));
@@ -467,6 +481,7 @@ void RawImportDlg::saveSettings()
     config->writeEntry("Decoding Quality",           (int)d->decodingSettingsBox->quality());
     config->writeEntry("Output Color Space",         (int)d->decodingSettingsBox->outputColorSpace());
 
+    config->writeEntry("Constrast",                  d->contrastSpinBox->value());
     config->writeEntry("Gamma",                      d->gammaSpinBox->value());
     config->writeEntry("Saturation",                 d->saturationInput->value());
     config->writeEntry("FineExposure",               d->fineExposureInput->value());
@@ -502,6 +517,7 @@ DRawDecoding RawImportDlg::rawDecodingSettings()
     settings.RAWQuality              = d->decodingSettingsBox->quality();
     settings.outputColorSpace        = d->decodingSettingsBox->outputColorSpace();
 
+    settings.contrast                = (double)(d->contrastSpinBox->value()/100.0) + 1.00;
     settings.gamma                   = d->gammaSpinBox->value();
     settings.saturation              = d->saturationInput->value();
     settings.exposureComp            = d->fineExposureInput->value();
