@@ -270,7 +270,7 @@ void CurvesWidget::paintEvent( QPaintEvent * )
         p1.initFrom(this);
         p1.fillRect(0, 0, width(), height(), palette().color(QPalette::Active, QPalette::Background));
         p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
-        p1.drawRect(0, 0, width(), height());
+        p1.drawRect(0, 0, width()-1, height()-1);
         p1.drawPixmap(width()/2 - asize /2, asize, anim);
         p1.setPen(palette().color(QPalette::Active, QPalette::Text));
         p1.drawText(0, 0, width(), height(), Qt::AlignCenter,
@@ -287,7 +287,7 @@ void CurvesWidget::paintEvent( QPaintEvent * )
         p1.initFrom(this);
         p1.fillRect(0, 0, width(), height(), palette().color(QPalette::Active, QPalette::Background));
         p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
-        p1.drawRect(0, 0, width(), height());
+        p1.drawRect(0, 0, width()-1, height()-1);
         p1.setPen(palette().color(QPalette::Active, QPalette::Text));
         p1.drawText(0, 0, width(), height(), Qt::AlignCenter,
                     i18n("Histogram\ncalculation\nfailed."));
@@ -299,7 +299,7 @@ void CurvesWidget::paintEvent( QPaintEvent * )
     }
 
     int    x, y;
-    int    wWidth = width();
+    int    wWidth  = width();
     int    wHeight = height();
     double max;
     class ImageHistogram *histogram; 
@@ -358,7 +358,7 @@ void CurvesWidget::paintEvent( QPaintEvent * )
 
     for (x = 0 ; x < wWidth ; x++)
     {
-        double value = 0.0; 
+        double value = 0.0;
         int    i, j;
         int    curveVal;
 
@@ -424,7 +424,7 @@ void CurvesWidget::paintEvent( QPaintEvent * )
 
         // Drawing curves.
 
-        p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Link), 1, Qt::SolidLine));
+        p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Link), 2, Qt::SolidLine));
         p1.drawLine(x - 1, wHeight - ((curvePrevVal * wHeight) / histogram->getHistogramSegment()),
                     x,     wHeight - ((curveVal * wHeight) / histogram->getHistogramSegment()));
 
@@ -537,7 +537,7 @@ void CurvesWidget::paintEvent( QPaintEvent * )
     // Drawing frame.
 
     p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
-    p1.drawRect(0, 0, width(), height());
+    p1.drawRect(0, 0, width()-1, height()-1);
     p1.end();
 
     QPainter p2(this);
