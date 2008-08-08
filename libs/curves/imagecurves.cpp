@@ -595,7 +595,7 @@ void ImageCurves::setCurvePoints(int channel, const QPolygon& vals)
 {
     if ( d->curves &&
          channel>=0 && channel<5 && 
-         vals.size() != 16 )
+         vals.size() == 16 )
     {
         for (int j = 0 ; j < 17 ; j++)
             setCurvePoint(channel, j, vals.point(j));
