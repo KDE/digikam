@@ -29,7 +29,7 @@
 // Qt includes.
 
 #include <QPoint>
-#include <QPointArray>
+#include <QPolygon>
 
 // KDE includes.
 
@@ -79,7 +79,7 @@ public:
     void   setCurveType(int channel, CurveType type);
 
     void   setCurvePoint(int channel, int point, const QPoint& val);
-    void   setCurvePoints(int channel, const QPointArray& vals);
+    void   setCurvePoints(int channel, const QPolygon& vals);
 
     int    getCurveValue(int channel, int bin);
     int    getCurvePointX(int channel, int point);
@@ -87,7 +87,7 @@ public:
     int    getCurveType(int channel);
 
     QPoint getCurvePoint(int channel, int point);
-    QPointArray getCurvePoints(int channel);
+    QPolygon getCurvePoints(int channel);
 
     // Methods for to save/load the curves values to/from a Gimp curves text file.
 

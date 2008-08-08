@@ -527,9 +527,9 @@ QPoint ImageCurves::getCurvePoint(int channel, int point)
     return QPoint(-1, -1);
 }
 
-QPointArray ImageCurves::getCurvePoints(int channel)
+QPolygon ImageCurves::getCurvePoints(int channel)
 {
-    QPointArray array(16);
+    QPolygon array(16);
 
     if ( d->curves &&
          channel>=0 && channel<5)
@@ -591,7 +591,7 @@ void ImageCurves::setCurvePoint(int channel, int point, const QPoint& val)
     }
 }
 
-void ImageCurves::setCurvePoints(int channel, const QPointArray& vals)
+void ImageCurves::setCurvePoints(int channel, const QPolygon& vals)
 {
     if ( d->curves &&
          channel>=0 && channel<5 && 
