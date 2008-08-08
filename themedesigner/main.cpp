@@ -5,7 +5,7 @@
  *
  * Date        : 2004-02-12
  * Description : main program from digiKam theme designer
- * 
+ *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi at pooh.tam.uiuc.edu>
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -14,12 +14,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -49,7 +49,7 @@ static KCmdLineOptions options[] =
 
 int main(int argc, char** argv)
 {
-    KAboutData aboutData("digikamthemedesigner", 
+    KAboutData aboutData("digikamthemedesigner",
                      I18N_NOOP("digiKam Theme Designer"),
                      digikam_version,
                      description,
@@ -70,7 +70,7 @@ int main(int argc, char** argv)
 
     aboutData.addAuthor ( "Renchi Raju",
                           I18N_NOOP("Developer"),
-                          "renchi at pooh.tam.uiuc.edu",
+                          "renchi at pooh dot tam dot uiuc dot edu",
                           0);
 
     KCmdLineArgs::init(argc, argv, &aboutData);
@@ -78,7 +78,7 @@ int main(int argc, char** argv)
 
     KGlobal::locale()->setMainCatalogue( "digikam" );
 
-    KApplication app; 
+    KApplication app;
     Digikam::MainWindow *im = new Digikam::MainWindow();
     app.setMainWidget(im);
     im->resize(800, 600);

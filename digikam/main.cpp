@@ -5,7 +5,7 @@
  *
  * Date        : 2002-07-28
  * Description : main program from digiKam
- * 
+ *
  * Copyright (C) 2002-2006 by Renchi Raju <renchi at pooh.tam.uiuc.edu>
  * Copyright (C) 2002-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -14,12 +14,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifdef HAVE_CONFIG_H
@@ -34,7 +34,7 @@
 #include <qfile.h>
 
 // KDE includes
- 
+
 #include <kcmdlineargs.h>
 #include <kapplication.h>
 #include <kaboutdata.h>
@@ -104,8 +104,8 @@ int main(int argc, char *argv[])
     Kexiv2Ver = KExiv2Iface::KExiv2::version();
 #endif
 
-    QString libInfo     = QString(I18N_NOOP("Using Kipi library version %1")).arg(KipiVer) + 
-                          QString("\n") + 
+    QString libInfo     = QString(I18N_NOOP("Using Kipi library version %1")).arg(KipiVer) +
+                          QString("\n") +
                           QString(I18N_NOOP("Using KExiv2 library version %1")).arg(Kexiv2Ver) +
                           QString("\n") +
                           QString(I18N_NOOP("Using Exiv2 library version %1")).arg(Exiv2Ver) +
@@ -158,7 +158,7 @@ int main(int argc, char *argv[])
 
     aboutData.addAuthor ( "Renchi Raju",
                           I18N_NOOP("Developer (2002-2005)"),
-                          "renchi at pooh.tam.uiuc.edu",
+                          "renchi at pooh dot tam dot uiuc dot edu",
                           0);
 
     aboutData.addAuthor ( "Joern Ahrens",
@@ -208,7 +208,7 @@ int main(int argc, char *argv[])
 
     aboutData.addCredit ( "Gregory Kokanosky",
                           I18N_NOOP("Developer"),
-                          "gregory dot kokanosky at free.fr",
+                          "gregory dot kokanosky at free dot fr",
                           0);
 
     aboutData.addCredit ( "Rune Laursen",
@@ -278,7 +278,7 @@ int main(int argc, char *argv[])
 
     aboutData.addCredit ( "Aaron Seigo",
                           I18N_NOOP("Various usability fixes and general application polishing"),
-                          "aseigo at kde.org",
+                          "aseigo at kde dot org",
                           0);
 
     aboutData.addCredit ( "Yves Chaufour",
@@ -292,7 +292,7 @@ int main(int argc, char *argv[])
                           0);
 
     KCmdLineArgs::init( argc, argv, &aboutData );
-    KCmdLineArgs::addCmdLineOptions( options ); 
+    KCmdLineArgs::addCmdLineOptions( options );
 
     KApplication app;
 
@@ -308,7 +308,7 @@ int main(int argc, char *argv[])
     // storage was implemented
 
     if (version.startsWith("0.5") ||
-        !dirInfo.exists() || 
+        !dirInfo.exists() ||
         !dirInfo.isDir())
     {
         // Run the first run
