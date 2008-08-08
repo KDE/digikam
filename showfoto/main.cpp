@@ -89,7 +89,7 @@ int main(int argc, char *argv[])
                           QString("\n") +
                           QString(I18N_NOOP("Using PNG library version %1")).arg(PNG_LIBPNG_VER_STRING);
 
-    QString Description = Digikam::digiKamSlogan();
+    QString Description = Digikam::showFotoDescription();
 
     KAboutData aboutData( "showfoto",
                           I18N_NOOP("showFoto"),

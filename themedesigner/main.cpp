@@ -40,7 +40,7 @@
 #include "version.h"
 #include "mainwindow.h"
 
-static const char *description = I18N_NOOP("A Color Theme Designer for digiKam");
+static const char *description = Digikam::themeDesignerDescription();
 
 static KCmdLineOptions options[] =
 {

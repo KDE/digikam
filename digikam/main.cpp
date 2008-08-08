@@ -119,7 +119,7 @@ int main(int argc, char *argv[])
                           QString("\n") +
                           QString(I18N_NOOP("Using Gphoto2 library version %1")).arg(Gphoto2Ver);
 
-    QString description = Digikam::digiKamSlogan();
+    QString description = Digikam::digiKamDescription();
 
     KAboutData aboutData( "digikam",
                           I18N_NOOP("digiKam"),

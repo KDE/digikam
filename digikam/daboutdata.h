@@ -37,14 +37,19 @@
 namespace Digikam
 {
 
-static inline const char* digiKamSlogan()
+static inline const char* digiKamDescription()
 {
-    // FIXME: Should we use the new slogan from KDE4
-    //        or the old general description?
+    return I18N_NOOP("A Photo-Management Application for KDE");
+}
 
-    //return I18N_NOOP("A Photo-Management Application for KDE");
-    return I18N_NOOP("Manage your photographs like a professional "
-            "with the power of open source");
+static inline const char* showFotoDescription()
+{
+    return I18N_NOOP("KDE Photo Viewer and Editor");
+}
+
+static inline const char* themeDesignerDescription()
+{
+    return I18N_NOOP("A Color Theme Designer for digiKam");
 }
 
 static inline const char* copyright()
