@@ -29,11 +29,10 @@
 
 #include <klocale.h>
 #include <kdialog.h>
-#include <kcolorbutton.h>
-#include <knuminput.h>
 #include <kconfig.h>
 #include <kapplication.h>
 #include <kglobal.h>
+#include <kiconloader.h>
 
 // LibKDcraw includes.
 
@@ -70,6 +69,11 @@ SetupDcraw::SetupDcraw(QWidget* parent )
     layout->setSpacing(0);
     layout->setMargin(0);
     d->dcrawSettings    = new KDcrawIface::DcrawSettingsWidget(this, true, false);
+#if KDCRAW_VERSION >= 0x000300
+    d->dcrawSettings->setItemIcon(0, SmallIcon("kdcraw"));
+    d->dcrawSettings->setItemIcon(1, SmallIcon("whitebalance"));
+    d->dcrawSettings->setItemIcon(2, SmallIcon("lensdistortion"));
+#endif
     layout->addWidget(d->dcrawSettings);
     layout->addStretch();
 
