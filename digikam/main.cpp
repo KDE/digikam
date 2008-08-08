@@ -71,7 +71,6 @@ extern "C"
 // Local includes.
 
 #include "daboutdata.h"
-#include "version.h"
 #include "albumdb.h"
 #include "digikamapp.h"
 #include "digikamfirstrun.h"

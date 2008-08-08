@@ -41,7 +41,6 @@
 
 // Local includes.
 
-#include "version.h"
 #include "daboutdata.h"
 #include "imageiface.h"
 #include "imagewidget.h"

@@ -61,8 +61,8 @@ extern "C"
 
 // Local includes.
 
+#include "daboutdata.h"
 #include "ddebug.h"
-#include "version.h"
 #include "firstrun.h"
 #include "digikamfirstrun.h"
 #include "digikamfirstrun.moc"
@@ -80,17 +80,17 @@ DigikamFirstRun::DigikamFirstRun(KConfig* config, QWidget* parent,
 {
     setHelp("firstrundialog.anchor", "digikam");
     setWFlags(fl);
-    
+
     m_config = config;
     m_ui     = new FirstRunWidget(this);
     setMainWidget(m_ui);
-    m_ui->m_path->setURL(QDir::homeDirPath() + 
+    m_ui->m_path->setURL(QDir::homeDirPath() +
                          i18n("This is a path name so you should "
                               "include the slash in the translation","/Pictures"));
     m_ui->m_path->setMode(KFile::Directory | KFile::LocalOnly);
 
     KIconLoader* iconLoader = KApplication::kApplication()->iconLoader();
-    m_ui->m_pixLabel->setPixmap(iconLoader->loadIcon("digikam", KIcon::NoGroup, 
+    m_ui->m_pixLabel->setPixmap(iconLoader->loadIcon("digikam", KIcon::NoGroup,
                                 128, KIcon::DefaultState, 0, true));
     m_ui->setMinimumSize(450, m_ui->sizeHint().height());
 }
@@ -102,7 +102,7 @@ DigikamFirstRun::~DigikamFirstRun()
 void DigikamFirstRun::slotOk()
 {
     QString albumLibraryFolder = m_ui->m_path->url();
-    
+
     if (albumLibraryFolder.isEmpty())
     {
         KMessageBox::sorry(this, i18n("You must select a folder for digiKam to "
@@ -123,7 +123,7 @@ void DigikamFirstRun::slotOk()
     }
 
     QDir targetPath(albumLibraryFolder);
-    
+
     if (!targetPath.exists())
     {
         int rc = KMessageBox::questionYesNo(this,
@@ -151,8 +151,8 @@ void DigikamFirstRun::slotOk()
     }
 
     QFileInfo path(albumLibraryFolder);
-    
-    if (!path.isWritable()) 
+
+    if (!path.isWritable())
     {
         KMessageBox::information(this, i18n("No write access for this path.\n"
                                             "Warning: the comment and tag features "

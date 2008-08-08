@@ -34,9 +34,13 @@
 #include <klocale.h>
 #include <kaboutdata.h>
 
+
+static const char digikam_version[]     = "0.9.5-svn";
+static const char showfoto_version[]    = "0.9.0-svn";
+
+
 namespace Digikam
 {
-
 static inline const char* digiKamDescription()
 {
     return I18N_NOOP("A Photo-Management Application for KDE");

@@ -37,7 +37,6 @@
 // Local includes.
 
 #include "daboutdata.h"
-#include "version.h"
 #include "mainwindow.h"
 
 static const char *description = Digikam::themeDesignerDescription();

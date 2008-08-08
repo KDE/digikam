@@ -50,7 +50,6 @@
 
 // Local includes.
 
-#include "version.h"
 #include "daboutdata.h"
 #include "ddebug.h"
 #include "imageiface.h"

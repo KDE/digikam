@@ -40,7 +40,6 @@
 
 // Local includes.
 
-#include "version.h"
 #include "daboutdata.h"
 #include "welcomepageview.h"
 #include "welcomepageview.moc"

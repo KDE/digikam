@@ -73,7 +73,6 @@
 
 // Local includes.
 
-#include "version.h"
 #include "daboutdata.h"
 #include "dimg.h"
 #include "ddebug.h"

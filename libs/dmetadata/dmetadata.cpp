@@ -14,12 +14,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -34,8 +34,8 @@
 
 // Local includes.
 
+#include "daboutdata.h"
 #include "constants.h"
-#include "version.h"
 #include "ddebug.h"
 #include "dmetadata.h"
 
@@ -138,7 +138,7 @@ QString DMetadata::getImageComment() const
 
     if (!getExif().isEmpty())
     {
-        QString exifComment = getExifComment();     
+        QString exifComment = getExifComment();
         if (!exifComment.isEmpty())
             return exifComment;
     }
@@ -160,7 +160,7 @@ bool DMetadata::setImageComment(const QString& comment)
     //See bug #139313: An empty string is also a valid value
     //if (comment.isEmpty())
     //    return false;
-    
+
     DDebug() << getFilePath() << " ==> Comment: " << comment << endl;
 
     if (!setProgramId())
@@ -210,8 +210,8 @@ int DMetadata::getImageRating() const
         return -1;
 
     // Check Exif rating tag set by Windows Vista
-    // Note : no need to check rating in percent tags (Exif.image.0x4747) here because 
-    // its appear always with rating tag value (Exif.image.0x4749). 
+    // Note : no need to check rating in percent tags (Exif.image.0x4747) here because
+    // its appear always with rating tag value (Exif.image.0x4749).
 
     if (!getExif().isEmpty())
     {
@@ -219,7 +219,7 @@ int DMetadata::getImageRating() const
         if (getExifTagLong("Exif.Image.0x4746", rating))
         {
             if (rating >= RatingMin && rating <= RatingMax)
-                return rating;            
+                return rating;
         }
     }
 
@@ -228,7 +228,7 @@ int DMetadata::getImageRating() const
     if (!getIptc().isEmpty())
     {
         QString IptcUrgency(getIptcTagData("Iptc.Application2.Urgency"));
-        
+
         if (!IptcUrgency.isEmpty())
         {
             if (IptcUrgency == QString("1"))
@@ -330,7 +330,7 @@ bool DMetadata::setImageRating(int rating)
     return true;
 }
 
-bool DMetadata::setIptcTag(const QString& text, int maxLength, const char* debugLabel, const char* tagKey) 
+bool DMetadata::setIptcTag(const QString& text, int maxLength, const char* debugLabel, const char* tagKey)
 {
     QString truncatedText = text;
     truncatedText.truncate(maxLength);
@@ -371,7 +371,7 @@ bool DMetadata::setProgramId(bool on)
         QString software("digiKam");
         return setImageProgramId(software, version);
     }
- 
+
     return true;
 }
 
@@ -411,8 +411,8 @@ PhotoInfoContainer DMetadata::getPhotographInformations() const
 }
 
 /**
-The following methods set and get an XML dataset into a private IPTC.Application2 tags 
-to backup digiKam image properties. The XML text data are compressed using zlib and stored 
+The following methods set and get an XML dataset into a private IPTC.Application2 tags
+to backup digiKam image properties. The XML text data are compressed using zlib and stored
 like a byte array. The XML text data format are like below:
 
 <?xml version="1.0" encoding="UTF-8"?>
@@ -429,8 +429,8 @@ like a byte array. The XML text data format are like below:
 
 */
 
-bool DMetadata::getXMLImageProperties(QString& comments, QDateTime& date, 
-                                      int& rating, QStringList& tagsPath) 
+bool DMetadata::getXMLImageProperties(QString& comments, QDateTime& date,
+                                      int& rating, QStringList& tagsPath)
 {
     rating = 0;
 
@@ -448,7 +448,7 @@ bool DMetadata::getXMLImageProperties(QString& comments, QDateTime& date,
     if (!xmlDoc.setContent(doc, true, &error, &row, &col))
     {
         DDebug() << doc << endl;
-        DDebug() << error << " :: row=" << row << " , col=" << col << endl; 
+        DDebug() << error << " :: row=" << row << " , col=" << col << endl;
         return false;
     }
 
@@ -457,16 +457,16 @@ bool DMetadata::getXMLImageProperties(QString& comments, QDateTime& date,
         return false;
 
     for (QDomNode node = rootElem.firstChild();
-         !node.isNull(); node = node.nextSibling()) 
+         !node.isNull(); node = node.nextSibling())
     {
         QDomElement e = node.toElement();
-        QString name  = e.tagName(); 
-        QString val   = e.attribute(QString::fromLatin1("value")); 
+        QString name  = e.tagName();
+        QString val   = e.attribute(QString::fromLatin1("value"));
 
         if (name == QString::fromLatin1("comments"))
         {
             comments = val;
-        }    
+        }
         else if (name == QString::fromLatin1("date"))
         {
             if (val.isEmpty()) continue;
@@ -482,17 +482,17 @@ bool DMetadata::getXMLImageProperties(QString& comments, QDateTime& date,
         else if (name == QString::fromLatin1("tagslist"))
         {
             for (QDomNode node2 = e.firstChild();
-                !node2.isNull(); node2 = node2.nextSibling()) 
+                !node2.isNull(); node2 = node2.nextSibling())
             {
                 QDomElement e2 = node2.toElement();
-                QString name2  = e2.tagName(); 
+                QString name2  = e2.tagName();
                 QString val2   = e2.attribute(QString::fromLatin1("path"));
 
                 if (name2 == QString::fromLatin1("tag"))
                 {
                     if (val2.isEmpty()) continue;
                     tagsPath.append(val2);
-                }     
+                }
             }
         }
     }
@@ -500,15 +500,15 @@ bool DMetadata::getXMLImageProperties(QString& comments, QDateTime& date,
     return true;
 }
 
-bool DMetadata::setXMLImageProperties(const QString& comments, const QDateTime& date, 
+bool DMetadata::setXMLImageProperties(const QString& comments, const QDateTime& date,
                                       int rating, const QStringList& tagsPath)
 {
     QDomDocument xmlDoc;
-    
+
     xmlDoc.appendChild(xmlDoc.createProcessingInstruction( QString::fromLatin1("xml"),
                        QString::fromLatin1("version=\"1.0\" encoding=\"UTF-8\"") ) );
 
-    QDomElement propertiesElem = xmlDoc.createElement(QString::fromLatin1("digikamproperties")); 
+    QDomElement propertiesElem = xmlDoc.createElement(QString::fromLatin1("digikamproperties"));
     xmlDoc.appendChild( propertiesElem );
 
     QDomElement c = xmlDoc.createElement(QString::fromLatin1("comments"));
@@ -523,7 +523,7 @@ bool DMetadata::setXMLImageProperties(const QString& comments, const QDateTime& 
     r.setAttribute(QString::fromLatin1("value"), rating);
     propertiesElem.appendChild(r);
 
-    QDomElement tagsElem = xmlDoc.createElement(QString::fromLatin1("tagslist")); 
+    QDomElement tagsElem = xmlDoc.createElement(QString::fromLatin1("tagslist"));
     propertiesElem.appendChild(tagsElem);
 
     QStringList path = tagsPath;
