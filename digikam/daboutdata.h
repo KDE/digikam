@@ -31,7 +31,6 @@
 
 // KDE includes.
 
-#include <kurl.h>
 #include <klocale.h>
 #include <kaboutdata.h>
 
@@ -40,7 +39,8 @@ namespace Digikam
 
 static inline const char* digiKamSlogan()
 {
-    // FIXME: Should we use the new slogan or the old general description?
+    // FIXME: Should we use the new slogan from KDE4
+    //        or the old general description?
 
     //return I18N_NOOP("A Photo-Management Application for KDE");
     return I18N_NOOP("Manage your photographs like a professional "
