@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-11-22
- * Description : showfoto is a stand alone version of image 
+ * Description : showfoto is a stand alone version of image
  *               editor with no support of digiKam database.
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
@@ -56,6 +56,7 @@ extern "C"
 
 // Local includes.
 
+#include "daboutdata.h"
 #include "showfoto.h"
 
 static KCmdLineOptions options[] =
@@ -71,7 +72,7 @@ int main(int argc, char *argv[])
     QString Exiv2Ver    = KExiv2Iface::KExiv2::Exiv2Version();
 
     QString Kexiv2Ver;
-    
+
 #if KEXIV2_VERSION <= 0x000106
     Kexiv2Ver = QString(kexiv2_version);
 #else
@@ -79,97 +80,29 @@ int main(int argc, char *argv[])
 #endif
 
     QString libInfo     = QString(I18N_NOOP("Using KExiv2 library version %1")).arg(Kexiv2Ver) +
-                          QString("\n") +                           
+                          QString("\n") +
                           QString(I18N_NOOP("Using Exiv2 library version %1")).arg(Exiv2Ver) +
-                          QString("\n") +                           
+                          QString("\n") +
                           QString(I18N_NOOP("Using KDcraw library version %1")).arg(KDcrawIface::KDcraw::version()) +
-                          QString("\n") +                           
+                          QString("\n") +
                           QString(I18N_NOOP("Using Dcraw program version %1")).arg(DcrawVer) +
-                          QString("\n") +                           
+                          QString("\n") +
                           QString(I18N_NOOP("Using PNG library version %1")).arg(PNG_LIBPNG_VER_STRING);
 
-    QString Description = i18n("KDE Photo Viewer and Editor");
+    QString Description = Digikam::digiKamSlogan();
 
     KAboutData aboutData( "showfoto",
                           I18N_NOOP("showFoto"),
                           "0.9.0-svn",
                           Description.latin1(),
                           KAboutData::License_GPL,
-                          I18N_NOOP("(c) 2004-2008, digiKam developers team"),
+                          Digikam::copyright(),
                           0,
-                          "http://www.digikam.org");
+                          Digikam::webProjectUrl());
 
     aboutData.setOtherText(libInfo.latin1());
 
-    aboutData.addAuthor ( "Caulier Gilles",
-                          I18N_NOOP("Main developer and coordinator"),
-                          "caulier dot gilles at gmail dot com",
-                          "http://www.digikam.org/?q=blog/3");
-
-    aboutData.addAuthor ( "Marcel Wiesweg",
-                          I18N_NOOP("Developer"),
-                          "marcel dot wiesweg at gmx dot de",
-                          "http://www.digikam.org/?q=blog/8");
-
-    aboutData.addAuthor ( "Arnd Baecker",
-                          I18N_NOOP("Developer"),
-                          "arnd dot baecker at web dot de",
-                          "http://www.digikam.org/?q=blog/133");
-
-    aboutData.addAuthor ( "Andi Clemens",
-                          I18N_NOOP("Developer"),
-                          "andi dot clemens at gmx dot net",
-                          "http://www.digikam.org/?q=blog/135");
-
-    aboutData.addAuthor ( "Francisco J. Cruz",
-                          I18N_NOOP("Developer"),
-                          "fj dot cruz at supercable dot es",
-                          "http://www.digikam.org/?q=blog/5");
-
-    aboutData.addAuthor ( "Renchi Raju",
-                          I18N_NOOP("Developer (2002-2005"),
-                          "renchi at pooh dot tam dot uiuc dot edu",
-                          0);
-    
-    aboutData.addAuthor ( "Joern Ahrens",
-                          I18N_NOOP("Developer (2004-2005)"),
-                          "joern dot ahrens at kdemail dot net",
-                          "http://www.digikam.org/?q=blog/1");
-    
-    aboutData.addAuthor ( "Tom Albers",
-                          I18N_NOOP("Developer (2004-2005)"),
-                          "tomalbers at kde dot nl",
-                          "http://www.omat.nl/drupal/?q=blog/1");
-
-    aboutData.addAuthor ( "Ralf Holzer",
-                          I18N_NOOP("Developer (2004)"),
-                          "kde at ralfhoelzer dot com",
-                          0);
-
-    aboutData.addCredit ( "Mikolaj Machowski",
-                          I18N_NOOP("Bug reports and patches"),
-                          "mikmach at wp dot pl",
-                          0);
-
-    aboutData.addCredit ( "Achim Bohnet",
-                          I18N_NOOP("Bug reports and patches"),
-                          "ach at mpe dot mpg dot de",
-                          0);
-
-    aboutData.addCredit ( "Luka Renko",
-                          I18N_NOOP("Developer"),
-                          "lure at kubuntu dot org",
-                          0);
-
-    aboutData.addCredit ( "Angelo Naselli",
-                          I18N_NOOP("Developer"),
-                          "anaselli at linux dot it",
-                          0);
-
-    aboutData.addCredit ( "Fabien Salvi",
-                          I18N_NOOP("Webmaster"),
-                          "fabien dot ubuntu at gmail dot com",
-                          0);
+    Digikam::authorsRegistration(aboutData);
 
     KCmdLineArgs::init( argc, argv, &aboutData );
     KCmdLineArgs::addCmdLineOptions( options );
@@ -190,7 +123,7 @@ int main(int argc, char *argv[])
     ShowFoto::ShowFoto *w = new ShowFoto::ShowFoto(urlList);
     app.setMainWidget(w);
     w->show();
-    
+
     return app.exec();
 
     delete w;
